@@ -12,8 +12,6 @@ npm install
 
 ```bash
 npm run dev
-# or
-yarn dev
 ```
 
 ## Running the app locally with Docker (optional):
