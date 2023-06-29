@@ -1,0 +1,12 @@
+version: '1'
+
+services:
+  app:
+    image: research-catalog
+    build: .
+    ports:
+      - 3000:3000
+    volumes:
+      - ./pages:/app/pages
+      - ./styles:/app/styles
+      
