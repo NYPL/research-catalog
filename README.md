@@ -9,3 +9,9 @@ npm run dev
 # or
 yarn dev
 ```
+
+Running the app locally with Docker:
+
+```bash
+docker-compose up --build --force-recreate
+```
