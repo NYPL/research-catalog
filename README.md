@@ -8,7 +8,7 @@ Install the required packages
 npm install
 ```
 
-Run the development server locally:
+## Running the app locally with npm:
 
 ```bash
 npm run dev
@@ -16,8 +16,18 @@ npm run dev
 yarn dev
 ```
 
-Running the app locally with Docker:
+## Running the app locally with Docker (optional):
 
-```bash
-docker-compose up --build --force-recreate
-```
+Docker is a platform that allows reproducible development environments to be created and run across different local and production/test environments.
+
+Running the app locally via Docker is optional for now, and provided as an alternative to `npm run dev`.
+
+Steps to run Docker container locally:
+
+1. [Download](https://docs.docker.com/get-docker/) and install Docker.
+
+2. `cd` into research-catalog repo
+
+3. Run `docker-compose up --build --force-recreate`
+
+4. Check that app is being served at http://localhost:3000/
