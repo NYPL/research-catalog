@@ -2,7 +2,13 @@ This is the new [NYPL Reserach Catalog](https://www.nypl.org/research/research-c
 
 ## Getting Started
 
-Running the development server locally:
+Install the required packages
+
+```bash
+npm install
+```
+
+Run the development server locally:
 
 ```bash
 npm run dev
