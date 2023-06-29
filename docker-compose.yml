@@ -3,7 +3,11 @@ version: '1'
 services:
   app:
     image: research-catalog
-    build: .
+    build:
+        context: .
+        args:
+            - NODE_ENV=local
+        dockerfile: Dockerfile.development
     ports:
       - 3000:3000
     volumes:
