@@ -10,11 +10,6 @@ import {
 const Layout = ({children}) => {
   return (
     <DSProvider>
-      {/* NYPL Header script and container */}
-      <Script strategy="lazyOnload"
-              src={`${process.env.NEXT_PUBLIC_NYPL_HEADER_URL}/header.min.js?containerId=nypl-header`}/>
-      <div id="nypl-header" className={styles.nyplHeader}></div>
-
       <Breadcrumbs breadcrumbsType="research" breadcrumbsData={[
         {url: "#", text: "Home"},
         {url: "#", text: "Research"},
@@ -27,11 +22,6 @@ const Layout = ({children}) => {
       <div className={styles.maxWidthContainer}>
         {children}
       </div>
-
-      {/* NYPL Footer script and container */}
-      <Script strategy="lazyOnload"
-              src={`${process.env.NEXT_PUBLIC_NYPL_HEADER_URL}/footer.min.js?containerId=nypl-footer`}/>
-      <div id="nypl-footer"></div>
     </DSProvider>
   )
 }
