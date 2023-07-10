@@ -16,6 +16,7 @@ function App({Component, pageProps}) {
       <div className={styles.appContainer}>
         <Component {...pageProps} />
       </div>
+
       {/* NYPL Footer script and container */}
       <Script strategy="lazyOnload"
               src={`${process.env.NEXT_PUBLIC_NYPL_HEADER_URL}/footer.min.js?containerId=nypl-footer`}/>
