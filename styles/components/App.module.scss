@@ -13,3 +13,9 @@
     min-height: 205px;
   }
 }
+
+.appContainer {
+  margin: 0 auto;
+  max-width: $nypl-max-width;
+  padding: 0 var(--nypl-space-s);
+}
