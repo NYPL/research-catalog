@@ -1,5 +1,5 @@
 import Head from "next/head"
-import { Breadcrumbs } from '@nypl/design-system-react-components';
+import { Heading } from '@nypl/design-system-react-components';
 
 export default function Home() {
   return (
@@ -8,7 +8,7 @@ export default function Home() {
         <title>NYPL Research Catalog</title>
       </Head>
       <main>
-        <h1>NYPL Research Catalog</h1>
+
       </main>
     </>
   )

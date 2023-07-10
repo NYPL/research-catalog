@@ -19,3 +19,17 @@
   max-width: $nypl-max-width;
   padding: 0 var(--nypl-space-s);
 }
+
+.researchHeadingContainer {
+  background-color: var(--nypl-colors-section-research-primary);
+  padding-bottom: var(--nypl-space-xs);
+  padding-top: var(--nypl-space-l);
+
+  h1 {
+    margin: 0 auto;
+    max-width: $nypl-max-width;
+    padding: 0 var(--nypl-space-s);
+    width: 100%;
+    color: var(--nypl-colors-ui-white);
+  }
+}
