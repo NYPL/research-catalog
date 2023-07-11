@@ -1,4 +1,3 @@
-import Script from "next/script";
 import styles from "../styles/components/App.module.scss"
 import "@nypl/design-system-react-components/dist/styles.css";
 import {
