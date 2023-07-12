@@ -3,8 +3,29 @@
 
 .subNav {
   @include maxWidth;
+  color: $white;
+
+  ul {
+    padding: var(--nypl-space-xs) 0;
+    list-style: none;
+    display: flex;
+
+    li {
+      &:not(:last-child) {
+        &:after {
+          content: '|';
+          padding: 0 var(--nypl-space-xxs);
+        }
+      }
+    }
+  }
   a {
     color: $white;
     text-decoration: none;
+
+    &:hover {
+      color: $white;
+      text-decoration: underline;
+    }
   }
 }

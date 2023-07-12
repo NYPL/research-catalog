@@ -3,6 +3,7 @@ import {
 } from '@nypl/design-system-react-components'
 import Link from 'next/link'
 import type { ReactElement } from 'react'
+import styles from '../../styles/components/SubNavLink.module.scss'
 
 interface SubNavLinkProps {
   active?: boolean,
@@ -13,7 +14,7 @@ interface SubNavLinkProps {
 const SubNavLink = ({ active, href, children }: SubNavLinkProps) => {
   return (
     <Link href={href} passHref>
-      <DSLink className={active && 'active'}>
+      <DSLink className={active && styles.active}>
         {children}
       </DSLink>
     </Link>

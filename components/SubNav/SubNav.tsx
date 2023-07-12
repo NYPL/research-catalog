@@ -3,7 +3,11 @@ import styles from '../../styles/components/SubNav.module.scss'
 const SubNav = () => {
   return (
     <nav className={styles.subNav}>
-      <SubNavLink href="#" active>Text</SubNavLink>
+      <ul>
+        <li><SubNavLink href="/" active>Search</SubNavLink></li>
+        <li><SubNavLink href="/subject_headings">Search</SubNavLink></li>
+        <li><SubNavLink href="/account">My Account</SubNavLink></li>
+      </ul>
     </nav>
   )
 }
