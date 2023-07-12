@@ -1,6 +1,7 @@
 import styles from "../styles/components/App.module.scss"
 import "@nypl/design-system-react-components/dist/styles.css";
 import {
+  TemplateAppContainer,
   Breadcrumbs,
   DSProvider,
   Heading
@@ -9,18 +10,23 @@ import {
 const Layout = ({children}) => {
   return (
     <DSProvider>
-      <Breadcrumbs breadcrumbsType="research" breadcrumbsData={[
-        {url: "#", text: "Home"},
-        {url: "#", text: "Research"},
-        {url: "#", text: "Research Catalog"},
-      ]}/>
-
-      <header className={styles.researchHeadingContainer}>
-        <Heading id="heading-h1" level="one" text="Research Catalog" />
-      </header>
-      <div className={styles.maxWidthContainer}>
-        {children}
-      </div>
+      <TemplateAppContainer
+        aboveHeader={
+          <Breadcrumbs breadcrumbsType="research" breadcrumbsData={[
+            {url: "#", text: "Home"},
+            {url: "#", text: "Research"},
+            {url: "#", text: "Research Catalog"},
+          ]}
+          />
+        }
+        header={
+          <header className={styles.researchHeadingContainer}>
+            <Heading id="heading-h1" level="one" text="Research Catalog"/>
+          </header>
+        }
+        contentPrimary={children}
+      >
+      </TemplateAppContainer>
     </DSProvider>
   )
 }
