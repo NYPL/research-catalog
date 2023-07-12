@@ -1,0 +1,14 @@
+{
+  "rewrites": [
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "research-catalog"
+        }
+      ],
+      "destination": "/research/research-catalog"
+    }
+  ]
+}
