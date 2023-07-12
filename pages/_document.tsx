@@ -6,11 +6,11 @@ export default function Document() {
 
     <Html lang='en'>
       <style>{`
-        #Header-Placeholder {
+        #nypl-header {
           min-height: 70px;
          }
         @media screen and (min-width: 1024px) {
-          #Header-Placeholder {
+          #nypl-header {
             min-height: 230px;
           }
         }
