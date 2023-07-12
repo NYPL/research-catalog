@@ -16,7 +16,7 @@ export default function Document() {
         }
       `}</style>
       <Head>
-        <meta name='description' content='NYPL Research Catalog' />
+        <meta name='description' content='Research Catalog | NYPL' />
       </Head>
       <body>
       {/* NYPL Header script and container */}

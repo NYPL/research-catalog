@@ -1,19 +1,21 @@
 import {
   Link as DSLink
 } from '@nypl/design-system-react-components'
-import classNames from 'classnames'
 import Link from 'next/link'
+import type { ReactElement } from 'react'
 
-type SubNavLinkProps = {
-  active: boolean,
+interface SubNavLinkProps {
+  active?: boolean,
   href: string,
-  children: string,
-};
+  children: string | ReactElement,
+}
 
 const SubNavLink = ({ active, href, children }: SubNavLinkProps) => {
   return (
-    <Link href={href} className={classNames()} passHref>
-      <DSLink type='action'>{children}</DSLink>
+    <Link href={href} passHref>
+      <DSLink className={active && 'active'}>
+        {children}
+      </DSLink>
     </Link>
   )
 }

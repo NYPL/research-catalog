@@ -1,0 +1,15 @@
+@import "../utils/mixins";
+@import "../utils/breakpoints";
+
+.researchHeadingContainer {
+  background-color: var(--nypl-colors-section-research-primary);
+
+  h1 {
+    @include maxWidth;
+    margin: 0 auto;
+    max-width: $nypl-max-width;
+    padding: var(--nypl-space-l) var(--nypl-space-s) var(--nypl-space-xs);
+    width: 100%;
+    color: var(--nypl-colors-ui-white);
+  }
+}

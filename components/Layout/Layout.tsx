@@ -1,4 +1,4 @@
-import styles from '../../styles/components/App.module.scss'
+import styles from '../../styles/components/Layout.module.scss'
 import '@nypl/design-system-react-components/dist/styles.css'
 import {
   TemplateAppContainer,
@@ -6,6 +6,7 @@ import {
   DSProvider,
   Heading
 } from '@nypl/design-system-react-components'
+import SubNav from '../SubNav/SubNav'
 
 const Layout = ({ children }) => {
   return (
@@ -20,9 +21,10 @@ const Layout = ({ children }) => {
           />
         }
         header={
-          <header className={styles.researchHeadingContainer}>
+          <div className={styles.researchHeadingContainer}>
             <Heading id='heading-h1' level='one' text='Research Catalog' />
-          </header>
+            <SubNav />
+          </div>
         }
         contentPrimary={children}
       >
