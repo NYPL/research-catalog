@@ -1,0 +1,26 @@
+// Recurring DS colors used throughout the app
+// assigned as SCSS variables.
+
+$black: var(--nypl-colors-ui-black);
+$white: var(--nypl-colors-ui-white);
+
+$borderDefault: var(--nypl-colors-ui-border-default);
+$bgDefault: var(--nypl-colors-ui-bg-default);
+$bgHover: var(--nypl-colors-ui-bg-hover);
+
+$grayDark: var(--nypl-colors-ui-gray-dark);
+$grayMedium: var(--nypl-colors-ui-gray-medium);
+$grayLightCool: var(--nypl-colors-ui-gray-light-cool);
+$grayXLightCool: var(--nypl-colors-ui-gray-x-light-cool);
+$grayXXLightCool: var(--nypl-colors-ui-gray-xx-light-cool);
+$grayXLightWarm: var(--nypl-colors-ui-gray-x-light-warm);
+
+$linkPrimary: var(--nypl-colors-ui-link-primary);
+$linkSecondary: var(--nypl-colors-ui-link-secondary);
+
+$brandPrimary: var(--nypl-colors-brand-primary);
+$researchPrimary: var(--nypl-colors-section-research-primary);
+
+$successPrimary: var(--nypl-colors-ui-success-primary);
+$errorPrimary: var(--nypl-colors-ui-error-primary);
+$warningPrimary: var(--nypl-colors-ui-warning-primary);

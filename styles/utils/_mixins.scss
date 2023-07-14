@@ -1,5 +1,13 @@
+@import "../utils/breakpoints";
+
 @mixin media($min-width) {
   @media (min-width: $min-width) {
     @content;
   }
+}
+
+@mixin maxWidth {
+  margin: 0 auto;
+  max-width: $nypl-max-width;
+  padding: 0 var(--nypl-space-s);
 }

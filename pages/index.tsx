@@ -1,4 +1,5 @@
-import Head from "next/head"
+import Head from 'next/head'
+import Layout from '../components/Layout/Layout'
 
 export default function Home() {
   return (
@@ -7,7 +8,9 @@ export default function Home() {
         <title>NYPL Research Catalog</title>
       </Head>
       <main>
-        <h1>NYPL Research Catalog</h1>
+        <Layout>
+
+        </Layout>
       </main>
     </>
   )
