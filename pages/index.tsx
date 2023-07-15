@@ -1,5 +1,6 @@
 import Head from 'next/head'
-import Layout from '../components/Layout/Layout'
+import Layout from '@/components/Layout/Layout'
+import Search from '@/components/SearchForm/Search'
 
 export default function Home() {
   return (
@@ -9,7 +10,7 @@ export default function Home() {
       </Head>
       <main>
         <Layout>
-
+          <></>
         </Layout>
       </main>
     </>
