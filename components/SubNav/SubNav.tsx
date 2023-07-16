@@ -1,5 +1,5 @@
-import SubNavLink from '@/components/SubNav/SubNavLink'
-import styles from '@/styles/components/SubNav.module.scss'
+import SubNavLink from "@/components/SubNav/SubNavLink"
+import styles from "@/styles/components/SubNav.module.scss"
 
 const SubNav = () => {
   return (

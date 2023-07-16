@@ -1,14 +1,14 @@
-import type { ReactElement } from 'react'
-import styles from '@/styles/components/Layout.module.scss'
-import '@nypl/design-system-react-components/dist/styles.css'
+import type { ReactElement } from "react"
+import styles from "@/styles/components/Layout.module.scss"
+import "@nypl/design-system-react-components/dist/styles.css"
 import {
   TemplateAppContainer,
   Breadcrumbs,
   DSProvider,
   Heading,
-} from '@nypl/design-system-react-components'
-import SubNav from '@/components/SubNav/SubNav'
-import Search from '@/components/SearchForm/Search'
+} from "@nypl/design-system-react-components"
+import SubNav from "@/components/SubNav/SubNav"
+import Search from "@/components/SearchForm/Search"
 
 interface LayoutProps {
   showSearch?: boolean
@@ -23,9 +23,9 @@ const Layout = ({ children, showSearch = true }: LayoutProps) => {
           <Breadcrumbs
             breadcrumbsType="research"
             breadcrumbsData={[
-              { url: '#', text: 'Home' },
-              { url: '#', text: 'Research' },
-              { url: '#', text: 'Research Catalog' },
+              { url: "#", text: "Home" },
+              { url: "#", text: "Research" },
+              { url: "#", text: "Research Catalog" },
             ]}
           />
         }
