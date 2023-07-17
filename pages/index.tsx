@@ -48,7 +48,7 @@ export default function Home() {
           <ImageCard imageSrc="https://cdn-petrol.nypl.org/sites/default/media/styles/extralarge/public/archives-portal.jpg?itok=-oYtHmeO">
             <>
               <Heading level="four">
-                <Link href="/research/collections" passHref>
+                <Link href="https://nypl.org/research/collections" passHref>
                   <DSLink>Collections</DSLink>
                 </Link>
               </Heading>
@@ -62,7 +62,10 @@ export default function Home() {
           <ImageCard imageSrc="https://cdn-petrol.nypl.org/sites/default/media/styles/extralarge/public/sasb.jpg?itok=sdQBITR7">
             <>
               <Heading level="four">
-                <Link href="/locations/map?libraries=research" passHref>
+                <Link
+                  href="https://nypl.org/locations/map?libraries=research"
+                  passHref
+                >
                   <DSLink>Locations</DSLink>
                 </Link>
               </Heading>
@@ -76,7 +79,7 @@ export default function Home() {
           <ImageCard imageSrc="https://cdn-petrol.nypl.org/sites/default/media/styles/extralarge/public/divisions.jpg?itok=O4uSedcp">
             <>
               <Heading level="four">
-                <Link href="/about/divisions" passHref>
+                <Link href="https://nypl.org/about/divisions" passHref>
                   <DSLink>Divisions</DSLink>
                 </Link>
               </Heading>
@@ -90,7 +93,7 @@ export default function Home() {
           <ImageCard imageSrc="https://cdn-petrol.nypl.org/sites/default/media/styles/extralarge/public/plan-you-visit.jpg?itok=scG6cFgy">
             <>
               <Heading level="four">
-                <Link href="/research/support" passHref>
+                <Link href="https://nypl.org/research/support" passHref>
                   <DSLink>Support</DSLink>
                 </Link>
               </Heading>
@@ -104,7 +107,7 @@ export default function Home() {
           <ImageCard imageSrc="https://cdn-petrol.nypl.org/sites/default/media/styles/extralarge/public/research-services.jpg?itok=rSo9t1VF">
             <>
               <Heading level="four">
-                <Link href="/research/services" passHref>
+                <Link href="https://nypl.org/research/services" passHref>
                   <DSLink>Services</DSLink>
                 </Link>
               </Heading>
