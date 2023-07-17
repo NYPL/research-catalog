@@ -1,7 +1,7 @@
-import { Link as DSLink } from '@nypl/design-system-react-components'
-import Link from 'next/link'
-import type { ReactElement } from 'react'
-import styles from '@/styles/components/SubNavLink.module.scss'
+import { Link as DSLink } from "@nypl/design-system-react-components"
+import Link from "next/link"
+import type { ReactElement } from "react"
+import styles from "@/styles/components/SubNavLink.module.scss"
 
 interface SubNavLinkProps {
   active?: boolean
