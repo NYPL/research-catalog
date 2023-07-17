@@ -4,7 +4,7 @@
 
 .searchContainer {
   background-color: $grayXLightCool;
-  padding: var(--nypl-space-l) 0;
+  padding: var(--nypl-space-l) 0 var(--nypl-space-xs);
 }
 
 .searchFormContainer {
@@ -37,4 +37,8 @@
 .advancedSearchContainer {
   display: flex;
   justify-content: flex-end;
+
+  a {
+    margin-top: var(--nypl-space-xxs);
+  }
 }
