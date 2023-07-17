@@ -11,3 +11,25 @@
   max-width: $nypl-max-width;
   padding: 0 var(--nypl-space-s);
 }
+
+@mixin maxWidth {
+  margin: 0 auto;
+  max-width: $nypl-max-width;
+  padding: 0 var(--nypl-space-s);
+}
+
+@mixin flexContainer {
+  display: flex;
+}
+
+@mixin quarterWidth {
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: 25%;
+}
+
+@mixin threeQuarterWidth {
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: 75%;
+}

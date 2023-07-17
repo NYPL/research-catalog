@@ -1,6 +1,7 @@
 import Head from "next/head"
 import Link from "next/link"
 import Layout from "@/components/Layout/Layout"
+import ImageCard from "@/components/ImageCard/ImageCard"
 import { Heading, Link as DSLink } from "@nypl/design-system-react-components"
 
 export default function Home() {
@@ -15,7 +16,7 @@ export default function Home() {
             <Heading level="two">
               Explore the Library&apos;s Vast Research Collections & More
             </Heading>
-            <div className="nypl-column-full">
+            <div>
               <p>
                 Discover millions of items from The New York Public
                 Library&apos;s Stephen A. Schwarzman Building, Schomburg Center
@@ -48,17 +49,8 @@ export default function Home() {
             </div>
             <div>
               <Heading level="three">Research at NYPL</Heading>
-
-              <div className="nypl-row nypl-quarter-image">
-                <div className="nypl-column-one-quarter">
-                  <img
-                    className="nypl-quarter-image"
-                    src="https://cdn-petrol.nypl.org/sites/default/media/styles/extralarge/public/archives-portal.jpg?itok=-oYtHmeO"
-                    alt=""
-                    role="presentation"
-                  />
-                </div>
-                <div className="nypl-column-three-quarters image-column-three-quarters">
+              <ImageCard imageSrc="https://cdn-petrol.nypl.org/sites/default/media/styles/extralarge/public/archives-portal.jpg?itok=-oYtHmeO">
+                <>
                   <Heading level="four">
                     <Link href="/research/collections" passHref>
                       <DSLink>Collections</DSLink>
@@ -68,19 +60,11 @@ export default function Home() {
                     Discover our world-renowned research collections, featuring
                     more than 46 million items.
                   </p>
-                </div>
-              </div>
+                </>
+              </ImageCard>
 
-              <div className="nypl-row nypl-quarter-image">
-                <div className="nypl-column-one-quarter">
-                  <img
-                    className="nypl-quarter-image"
-                    src="https://cdn-petrol.nypl.org/sites/default/media/styles/extralarge/public/sasb.jpg?itok=sdQBITR7"
-                    alt=""
-                    role="presentation"
-                  />
-                </div>
-                <div className="nypl-column-three-quarters image-column-three-quarters">
+              <ImageCard imageSrc="https://cdn-petrol.nypl.org/sites/default/media/styles/extralarge/public/sasb.jpg?itok=sdQBITR7">
+                <>
                   <Heading level="four">
                     <Link href="/locations/map?libraries=research" passHref>
                       <DSLink>Locations</DSLink>
@@ -90,19 +74,11 @@ export default function Home() {
                     Access items, one-on-one reference help, and dedicated
                     research study rooms.
                   </p>
-                </div>
-              </div>
+                </>
+              </ImageCard>
 
-              <div className="nypl-row nypl-quarter-image">
-                <div className="nypl-column-one-quarter">
-                  <img
-                    className="nypl-quarter-image"
-                    src="https://cdn-petrol.nypl.org/sites/default/media/styles/extralarge/public/divisions.jpg?itok=O4uSedcp"
-                    alt=""
-                    role="presentation"
-                  />
-                </div>
-                <div className="nypl-column-three-quarters image-column-three-quarters">
+              <ImageCard imageSrc="https://cdn-petrol.nypl.org/sites/default/media/styles/extralarge/public/divisions.jpg?itok=O4uSedcp">
+                <>
                   <Heading level="four">
                     <Link href="/about/divisions" passHref>
                       <DSLink>Divisions</DSLink>
@@ -112,19 +88,11 @@ export default function Home() {
                     Learn about the subject and media specializations of our
                     research divisions.
                   </p>
-                </div>
-              </div>
+                </>
+              </ImageCard>
 
-              <div className="nypl-row nypl-quarter-image">
-                <div className="nypl-column-one-quarter">
-                  <img
-                    className="nypl-quarter-image"
-                    src="https://cdn-petrol.nypl.org/sites/default/media/styles/extralarge/public/plan-you-visit.jpg?itok=scG6cFgy"
-                    alt=""
-                    role="presentation"
-                  />
-                </div>
-                <div className="nypl-column-three-quarters image-column-three-quarters">
+              <ImageCard imageSrc="https://cdn-petrol.nypl.org/sites/default/media/styles/extralarge/public/plan-you-visit.jpg?itok=scG6cFgy">
+                <>
                   <Heading level="four">
                     <Link href="/research/support" passHref>
                       <DSLink>Support</DSLink>
@@ -134,19 +102,11 @@ export default function Home() {
                     Plan your in-person research visit and discover resources
                     for scholars and writers.
                   </p>
-                </div>
-              </div>
+                </>
+              </ImageCard>
 
-              <div className="nypl-row nypl-quarter-image">
-                <div className="nypl-column-one-quarter">
-                  <img
-                    className="nypl-quarter-image"
-                    src="https://cdn-petrol.nypl.org/sites/default/media/styles/extralarge/public/research-services.jpg?itok=rSo9t1VF"
-                    alt=""
-                    role="presentation"
-                  />
-                </div>
-                <div className="nypl-column-three-quarters image-column-three-quarters">
+              <ImageCard imageSrc="https://cdn-petrol.nypl.org/sites/default/media/styles/extralarge/public/research-services.jpg?itok=rSo9t1VF">
+                <>
                   <Heading level="four">
                     <Link href="/research/services" passHref>
                       <DSLink>Services</DSLink>
@@ -156,8 +116,8 @@ export default function Home() {
                     Explore services for online and remote researchers, as well
                     as our interlibrary services.
                   </p>
-                </div>
-              </div>
+                </>
+              </ImageCard>
             </div>
           </>
         </Layout>

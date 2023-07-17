@@ -1,0 +1,16 @@
+@import "../utils/mixins";
+@import "../utils/breakpoints";
+
+.imageCardContainer {
+  @include flexContainer;
+  margin-bottom: var(--nypl-space-m);
+}
+
+.imageCardImage {
+  @include quarterWidth;
+}
+
+.imageCardBody {
+  @include threeQuarterWidth;
+  padding-left: var(--nypl-space-s);
+}
