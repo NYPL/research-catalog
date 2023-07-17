@@ -1,9 +1,5 @@
 import styles from "@/styles/components/Search.module.scss"
-import {
-  SearchBar,
-  Link as DSLink,
-  TextInput,
-} from "@nypl/design-system-react-components"
+import { SearchBar, Link as DSLink } from "@nypl/design-system-react-components"
 import Link from "next/link"
 
 const Search = () => {
@@ -28,9 +24,11 @@ const Search = () => {
               ],
             }}
             textInputProps={{
-              labelText: 'Search by keyword, title, journal title, or author/contributor',
-              name: 'q',
-              placeholder: 'Keyword, title, journal title, or author/contributor',
+              labelText:
+                "Search by keyword, title, journal title, or author/contributor",
+              name: "q",
+              placeholder:
+                "Keyword, title, journal title, or author/contributor",
             }}
           />
         </div>
