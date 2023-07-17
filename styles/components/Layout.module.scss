@@ -6,8 +6,6 @@
 
   h1 {
     @include maxWidth;
-    margin: 0 auto;
-    max-width: $nypl-max-width;
     padding: var(--nypl-space-l) var(--nypl-space-s) var(--nypl-space-xs);
     width: 100%;
     color: var(--nypl-colors-ui-white);
