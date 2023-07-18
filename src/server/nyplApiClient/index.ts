@@ -1,6 +1,11 @@
 import NyplApiClient from "@nypl/nypl-data-api-client"
 import aws from "aws-sdk"
-import { string } from "prop-types"
+
+interface KMSCache {
+  clients: string[]
+  clientId: string
+  clientSecret: string
+}
 
 const config: any = {
   api: {
@@ -71,7 +76,7 @@ const clientSecret =
   process.env.clientSecret || process.env.PLATFORM_API_CLIENT_SECRET
 
 const keys = [clientId, clientSecret]
-const CACHE = { clients: [], clientSecret: string, clientId: string }
+const CACHE: KMSCache = { clients: [], clientSecret, clientId }
 
 const nyplApiClient = async (options = { apiName: "platform" }) => {
   const { apiName } = options
