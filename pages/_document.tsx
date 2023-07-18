@@ -1,5 +1,4 @@
 import { Html, Head, Main, NextScript } from "next/document"
-import Script from "next/script"
 
 export default function Document() {
   return (
@@ -19,17 +18,17 @@ export default function Document() {
       </Head>
       <body>
         {/* NYPL Header script and container */}
-        <Script
-          strategy="lazyOnload"
+        <script
           src={`${process.env.NYPL_HEADER_URL}/header.min.js?containerId=nypl-header`}
+          async
         />
         <div id="nypl-header"></div>
         <Main />
         <NextScript />
         {/* NYPL Footer script and container */}
-        <Script
-          strategy="lazyOnload"
+        <script
           src={`${process.env.NYPL_HEADER_URL}/footer.min.js?containerId=nypl-footer`}
+          async
         />
         <div id="nypl-footer"></div>
       </body>
