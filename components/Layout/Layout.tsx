@@ -15,26 +15,26 @@ interface LayoutProps {
   children: ReactElement
 }
 
-const Layout = ({ children, showSearch = true }: LayoutProps) => {
+const Layout = ({ children, showSearch = false }: LayoutProps) => {
   return (
     <DSProvider>
       <TemplateAppContainer
-        aboveHeader={
-          <Breadcrumbs
-            breadcrumbsType="research"
-            breadcrumbsData={[
-              { url: "#", text: "Home" },
-              { url: "#", text: "Research" },
-              { url: "#", text: "Research Catalog" },
-            ]}
-          />
-        }
-        header={
-          <div className={styles.researchHeadingContainer}>
-            <Heading id="heading-h1" level="one" text="Research Catalog" />
-            <SubNav />
-            {showSearch && <Search />}
-          </div>
+        breakout={
+          <>
+            <Breadcrumbs
+              breadcrumbsType="research"
+              breadcrumbsData={[
+                { url: "#", text: "Home" },
+                { url: "#", text: "Research" },
+                { url: "#", text: "Research Catalog" },
+              ]}
+            />
+            <div className={styles.researchHeadingContainer}>
+              <Heading id="heading-h1" level="one" text="Research Catalog" />
+              <SubNav />
+              {showSearch && <Search />}
+            </div>
+          </>
         }
         contentPrimary={children}
       ></TemplateAppContainer>
