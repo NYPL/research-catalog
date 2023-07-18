@@ -1,9 +1,8 @@
 @import "../utils/mixins";
-@import "../utils/colors";
 
 .subNav {
   @include maxWidth;
-  color: $white;
+  color: var(--nypl-colors-ui-white);
 
   ul {
     padding: var(--nypl-space-xs) 0;
@@ -22,11 +21,11 @@
   }
 
   a {
-    color: $white;
+    color: var(--nypl-colors-ui-white);
     text-decoration: none;
 
     &:hover {
-      color: $white;
+      color: var(--nypl-colors-ui-white);
       text-decoration: underline;
     }
   }

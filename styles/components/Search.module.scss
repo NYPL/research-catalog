@@ -1,16 +1,14 @@
-@import "../utils/colors";
 @import "../utils/mixins";
-@import "../utils/breakpoints";
 
 .searchContainer {
-  background-color: $grayXLightCool;
+  background-color: var(--nypl-colors-ui-gray-x-light-cool);
   padding: var(--nypl-space-l) 0 var(--nypl-space-xs);
 }
 
 .searchFormContainer {
   @include maxWidth;
 
-  @include media($nypl-breakpoint-large) {
+  @include media(var(--nypl-breakpoint-xl)) {
     > div {
       width: 85%;
     }

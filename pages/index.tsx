@@ -1,6 +1,5 @@
 import Head from "next/head"
 import Link from "next/link"
-import Layout from "@/components/Layout/Layout"
 import {
   Heading,
   SimpleGrid,
@@ -63,7 +62,7 @@ export default function Home() {
           layout="row"
         >
           <CardHeading level="four">
-            <Link href="/research/collections" passHref>
+            <Link href="https://nypl.org/research/collections" passHref>
               <DSLink>Collections</DSLink>
             </Link>
           </CardHeading>
@@ -84,7 +83,10 @@ export default function Home() {
           layout="row"
         >
           <CardHeading level="four">
-            <Link href="/locations/map?libraries=research" passHref>
+            <Link
+              href="https://nypl.org/locations/map?libraries=research"
+              passHref
+            >
               <DSLink>Locations</DSLink>
             </Link>
           </CardHeading>
@@ -105,7 +107,7 @@ export default function Home() {
           layout="row"
         >
           <CardHeading level="four">
-            <Link href="/about/divisions" passHref>
+            <Link href="https://nypl.org/about/divisions" passHref>
               <DSLink>Divisions</DSLink>
             </Link>
           </CardHeading>
@@ -126,7 +128,7 @@ export default function Home() {
           layout="row"
         >
           <CardHeading level="four">
-            <Link href="/research/support" passHref>
+            <Link href="https://nypl.org/research/support" passHref>
               <DSLink>Support</DSLink>
             </Link>
           </CardHeading>
@@ -147,7 +149,7 @@ export default function Home() {
           layout="row"
         >
           <CardHeading level="four">
-            <Link href="/research/services" passHref>
+            <Link href="https://nypl.org/research/services" passHref>
               <DSLink>Services</DSLink>
             </Link>
           </CardHeading>
