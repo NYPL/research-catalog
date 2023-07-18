@@ -8,7 +8,7 @@ interface SubNavLinkProps {
   children: string | ReactElement
 }
 
-const SubNavLink = ({ active, href, children }: SubNavLinkProps) => {
+const SubNavLink = ({ active = false, href, children }: SubNavLinkProps) => {
   return (
     <Link href={href} passHref>
       <DSLink fontWeight={active && 700}>{children}</DSLink>
