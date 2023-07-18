@@ -3,7 +3,7 @@ import styles from "@/styles/components/SubNav.module.scss"
 
 const SubNav = () => {
   return (
-    <nav className={styles.subNav}>
+    <nav className={styles.subNav} aria-label="Research Catalog main menu">
       <ul>
         <li>
           <SubNavLink href="/" active>
@@ -11,7 +11,9 @@ const SubNav = () => {
           </SubNavLink>
         </li>
         <li>
-          <SubNavLink href="/subject_headings">Search</SubNavLink>
+          <SubNavLink href="/subject_headings">
+            Subject Heading Explorer
+          </SubNavLink>
         </li>
         <li>
           <SubNavLink href="/account">My Account</SubNavLink>
