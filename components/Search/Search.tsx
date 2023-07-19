@@ -8,7 +8,7 @@ import { SearchBar } from "@nypl/design-system-react-components"
  */
 const Search = () => {
   return (
-    <section role="search" className={styles.searchContainer}>
+    <div className={styles.searchContainer}>
       <div className={styles.searchFormContainer}>
         <div className={styles.searchBarContainer}>
           <SearchBar
@@ -40,7 +40,7 @@ const Search = () => {
           <RCLink href={"/search/advanced"}>Advanced Search</RCLink>
         </div>
       </div>
-    </section>
+    </div>
   )
 }
 
