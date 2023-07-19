@@ -8,13 +8,17 @@ import {
   Heading,
 } from "@nypl/design-system-react-components"
 import SubNav from "@/components/SubNav/SubNav"
-import Search from "@/components/SearchForm/Search"
+import Search from "@/components/Search/Search"
 
 interface LayoutProps {
   showSearch?: boolean
   children: ReactElement
 }
 
+/**
+ * The Layout component wraps the TemplateAppContainer from the DS and
+ * controls the rendering of Research Catalog header components per-page.
+ */
 const Layout = ({ children, showSearch = false }: LayoutProps) => {
   return (
     <DSProvider>

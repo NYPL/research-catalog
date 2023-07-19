@@ -2,6 +2,10 @@ import styles from "@/styles/components/Search.module.scss"
 import { SearchBar, Link as DSLink } from "@nypl/design-system-react-components"
 import Link from "next/link"
 
+/**
+ * The Search component renders and controls the Search form and
+ * advanced search link.
+ */
 const Search = () => {
   return (
     <section role="search" className={styles.searchContainer}>
