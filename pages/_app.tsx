@@ -1,5 +1,6 @@
 import Head from "next/head"
 import Layout from "@/components/Layout/Layout"
+import "@nypl/design-system-react-components/dist/styles.css"
 
 function App({ Component, pageProps, router }) {
   return (

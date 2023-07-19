@@ -1,6 +1,5 @@
 import type { ReactElement } from "react"
 import styles from "@/styles/components/Layout.module.scss"
-import "@nypl/design-system-react-components/dist/styles.css"
 import {
   TemplateAppContainer,
   Breadcrumbs,
