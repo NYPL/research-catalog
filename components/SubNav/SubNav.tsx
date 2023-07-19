@@ -1,4 +1,4 @@
-import SubNavLink from "@/components/SubNav/SubNavLink"
+import RCLink from "@/components/RCLink/RCLink"
 import styles from "@/styles/components/SubNav.module.scss"
 import { useRouter } from "next/router"
 
@@ -13,25 +13,22 @@ const SubNav = () => {
     <nav className={styles.subNav} aria-label="Research Catalog main menu">
       <ul>
         <li>
-          <SubNavLink href="/" active={router.pathname === "/"}>
+          <RCLink href="/" active={router.pathname === "/"}>
             Search
-          </SubNavLink>
+          </RCLink>
         </li>
         <li>
-          <SubNavLink
+          <RCLink
             href="/subject_headings"
             active={router.pathname.includes("/subject_headings")}
           >
             Subject Heading Explorer
-          </SubNavLink>
+          </RCLink>
         </li>
         <li>
-          <SubNavLink
-            href="/account"
-            active={router.pathname.includes("/account")}
-          >
+          <RCLink href="/account" active={router.pathname.includes("/account")}>
             My Account
-          </SubNavLink>
+          </RCLink>
         </li>
       </ul>
     </nav>

@@ -1,6 +1,6 @@
 import styles from "@/styles/components/Search.module.scss"
+import RCLink from "@/components/RCLink/RCLink"
 import { SearchBar, Link as DSLink } from "@nypl/design-system-react-components"
-import Link from "next/link"
 
 /**
  * The Search component renders and controls the Search form and
@@ -37,9 +37,7 @@ const Search = () => {
           />
         </div>
         <div className={styles.advancedSearchContainer}>
-          <Link href={"/search/advanced"} passHref>
-            <DSLink>Advanced Search</DSLink>
-          </Link>
+          <RCLink href={"/search/advanced"}>Advanced Search</RCLink>
         </div>
       </div>
     </section>

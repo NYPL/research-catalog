@@ -1,12 +1,11 @@
 import Head from "next/head"
-import Link from "next/link"
+import RCLink from "@/components/RCLink/RCLink"
 import {
   Heading,
   SimpleGrid,
   Card,
   CardHeading,
   CardContent,
-  Link as DSLink,
 } from "@nypl/design-system-react-components"
 
 export default function Home() {
@@ -25,24 +24,21 @@ export default function Home() {
           Culture, and The New York Public Library for the Performing Arts.
           Plus, access materials from library collections at Columbia
           University, Harvard University, and Princeton University.{" "}
-          <Link
-            href="https://www.nypl.org/research/collections/about/shared-collection-catalog"
-            passHref
-          >
-            <DSLink>Learn more.</DSLink>
-          </Link>
+          <RCLink href="https://www.nypl.org/research/collections/about/shared-collection-catalog">
+            Learn more.
+          </RCLink>
         </p>
         <p>
           Please note that the Research Catalog does not include circulating
           materials. For books and more that you can check out to take home
           please visit our{" "}
-          <Link href="https://browse.nypl.org" passHref>
-            <DSLink>circulating branch catalog.</DSLink>
-          </Link>{" "}
+          <RCLink href="https://browse.nypl.org">
+            circulating branch catalog.
+          </RCLink>{" "}
           The{" "}
-          <Link href="https://legacycatalog.nypl.org/" passHref>
-            <DSLink>legacy research catalog</DSLink>
-          </Link>{" "}
+          <RCLink href="https://legacycatalog.nypl.org/">
+            legacy research catalog
+          </RCLink>{" "}
           is still available, but does not include all of our Scan & Deliver
           options or the Columbia University, Harvard University, and Princeton
           University material from the Shared Collection.
@@ -62,9 +58,9 @@ export default function Home() {
           layout="row"
         >
           <CardHeading level="four">
-            <Link href="https://nypl.org/research/collections" passHref>
-              <DSLink>Collections</DSLink>
-            </Link>
+            <RCLink href="https://nypl.org/research/collections">
+              Collections
+            </RCLink>
           </CardHeading>
           <CardContent>
             <p>
@@ -83,12 +79,9 @@ export default function Home() {
           layout="row"
         >
           <CardHeading level="four">
-            <Link
-              href="https://nypl.org/locations/map?libraries=research"
-              passHref
-            >
-              <DSLink>Locations</DSLink>
-            </Link>
+            <RCLink href="https://nypl.org/locations/map?libraries=research">
+              Locations
+            </RCLink>
           </CardHeading>
           <CardContent>
             <p>
@@ -107,9 +100,7 @@ export default function Home() {
           layout="row"
         >
           <CardHeading level="four">
-            <Link href="https://nypl.org/about/divisions" passHref>
-              <DSLink>Divisions</DSLink>
-            </Link>
+            <RCLink href="https://nypl.org/about/divisions">Divisions</RCLink>
           </CardHeading>
           <CardContent>
             <p>
@@ -128,9 +119,7 @@ export default function Home() {
           layout="row"
         >
           <CardHeading level="four">
-            <Link href="https://nypl.org/research/support" passHref>
-              <DSLink>Support</DSLink>
-            </Link>
+            <RCLink href="https://nypl.org/research/support">Support</RCLink>
           </CardHeading>
           <CardContent>
             <p>
@@ -149,9 +138,7 @@ export default function Home() {
           layout="row"
         >
           <CardHeading level="four">
-            <Link href="https://nypl.org/research/services" passHref>
-              <DSLink>Services</DSLink>
-            </Link>
+            <RCLink href="https://nypl.org/research/services">Services</RCLink>
           </CardHeading>
           <CardContent>
             <p>
