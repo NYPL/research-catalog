@@ -40,7 +40,7 @@ const Layout = ({ children, showSearch = false }: LayoutProps) => {
           </>
         }
         contentPrimary={children}
-      ></TemplateAppContainer>
+      >
     </DSProvider>
   )
 }
