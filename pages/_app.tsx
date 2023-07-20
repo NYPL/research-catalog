@@ -3,9 +3,7 @@ import Layout from "@/components/Layout/Layout"
 import "@nypl/design-system-react-components/dist/styles.css"
 
 function activePage(pathname) {
-  if (pathname === "/") {
-    return "search"
-  } else if (/subject_headings/.test(pathname)) {
+  if (/subject_headings/.test(pathname)) {
     return "shep"
   } else if (/account/.test(pathname)) {
     return "account"
