@@ -8,9 +8,10 @@ import {
 } from "@nypl/design-system-react-components"
 import SubNav from "@/components/SubNav/SubNav"
 import Search from "@/components/Search/Search"
+import { RCPage } from "@/config/types"
 
 interface LayoutProps {
-  showSearch?: boolean
+  activePage?: RCPage
   children: ReactElement
 }
 
@@ -18,7 +19,9 @@ interface LayoutProps {
  * The Layout component wraps the TemplateAppContainer from the DS and
  * controls the rendering of Research Catalog header components per-page.
  */
-const Layout = ({ children, showSearch = false }: LayoutProps) => {
+const Layout = ({ children, activePage }: LayoutProps) => {
+  const showSearch = activePage === "search"
+
   return (
     <DSProvider>
       <TemplateAppContainer
@@ -27,14 +30,17 @@ const Layout = ({ children, showSearch = false }: LayoutProps) => {
             <Breadcrumbs
               breadcrumbsType="research"
               breadcrumbsData={[
-                { url: "#", text: "Home" },
-                { url: "#", text: "Research" },
-                { url: "#", text: "Research Catalog" },
+                { url: "https://nypl.org", text: "Home" },
+                { url: "https://www.nypl.org/research", text: "Research" },
+                {
+                  url: "https://www.nypl.org/research/research-catalog",
+                  text: "Research Catalog",
+                },
               ]}
             />
             <div className={styles.researchHeadingContainer}>
               <Heading id="heading-h1" level="one" text="Research Catalog" />
-              <SubNav />
+              <SubNav activePage={activePage} />
               {showSearch && <Search />}
             </div>
           </>
