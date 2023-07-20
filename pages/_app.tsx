@@ -4,12 +4,13 @@ import "@nypl/design-system-react-components/dist/styles.css"
 import { getActivePage } from "@/utils/utils"
 
 function App({ Component, pageProps, router }) {
+  const activePage = getActivePage(router.pathname)
   return (
     <>
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <Layout activePage={getActivePage(router.pathname)}>
+      <Layout activePage={activePage}>
         <Component {...pageProps} />
       </Layout>
     </>
