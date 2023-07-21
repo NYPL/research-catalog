@@ -15,7 +15,7 @@ const SubNav = ({ activePage }: SubNavProps) => {
     <nav className={styles.subNav} aria-label="Research Catalog main menu">
       <ul>
         <li>
-          
+
           <RCLink href="/" active={activePage === "search"}>
             Search
           </RCLink>
