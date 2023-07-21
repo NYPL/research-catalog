@@ -6,6 +6,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint . --fix",
+    "prettier": "prettier --write .",
     "prepare": "husky install"
   },
   "dependencies": {
