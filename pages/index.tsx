@@ -1,5 +1,5 @@
 import Head from "next/head"
-import RCLink from "@/components/RCLink/RCLink"
+import RCLink from "../components/RCLink/RCLink"
 import {
   Heading,
   SimpleGrid,

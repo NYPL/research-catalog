@@ -1,5 +1,5 @@
-import RCLink from "@/components/RCLink/RCLink"
-import styles from "@/styles/components/SubNav.module.scss"
+import RCLink from "../../components/RCLink/RCLink"
+import styles from "../../styles/components/SubNav.module.scss"
 import type { RCPage } from "@/config/types"
 
 interface SubNavProps {
