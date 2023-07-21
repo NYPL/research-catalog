@@ -31,5 +31,6 @@ module.exports = {
     "@typescript-eslint/prefer-nullish-coalescing": ["off"],
     "@typescript-eslint/strict-boolean-expressions": ["off"],
     "@typescript-eslint/explicit-function-return-type": ["off"],
+    "@typescript-eslint/consistent-type-imports": "error",
   },
 }

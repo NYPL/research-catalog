@@ -1,6 +1,6 @@
 import { Link as DSLink } from "@nypl/design-system-react-components"
 import Link from "next/link"
-import type { ReactNode } from "react"
+import { type ReactNode } from "react"
 
 interface RCLinkProps {
   active?: boolean
