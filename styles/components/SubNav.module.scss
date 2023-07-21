@@ -1,0 +1,32 @@
+@import "../utils/mixins";
+
+.subNav {
+  @include maxWidth;
+  color: var(--nypl-colors-ui-white);
+
+  ul {
+    padding: var(--nypl-space-xs) 0;
+    margin: 0;
+    list-style: none;
+    display: flex;
+
+    li {
+      &:not(:last-child) {
+        &:after {
+          content: '|';
+          padding: 0 var(--nypl-space-xxs);
+        }
+      }
+    }
+  }
+
+  a {
+    color: var(--nypl-colors-ui-white);
+    text-decoration: none;
+
+    &:hover {
+      color: var(--nypl-colors-ui-white);
+      text-decoration: underline;
+    }
+  }
+}
