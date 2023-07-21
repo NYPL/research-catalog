@@ -35,8 +35,9 @@
     "typescript": "5.0.4"
   },
   "lint-staged": {
-    "*.ts, *.tsx": [
-      "npx prettier --write"
+    "**/*.{js,jsx,json}": [
+      "eslint . --fix",
+      "prettier --write ."
     ]
   }
 }
