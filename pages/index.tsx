@@ -1,5 +1,6 @@
 import Head from "next/head"
 import RCLink from "../components/RCLink/RCLink"
+import nyplApiClient from "../src/server/nyplApiClient"
 import {
   Heading,
   SimpleGrid,
@@ -150,4 +151,18 @@ export default function Home() {
       </SimpleGrid>
     </div>
   )
+}
+
+export async function getServerSideProps() {
+  await nyplApiClient()
+  await nyplApiClient({ apiName: "discovery" })
+    .then((client) => {
+      return client.get(`/discovery/resources`)
+    })
+    .then((response) => console.log({ response }))
+  return {
+    props: {
+      data: "data",
+    },
+  }
 }
