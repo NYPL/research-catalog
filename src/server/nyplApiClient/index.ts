@@ -71,9 +71,8 @@ if (kmsEnvironment === "encrypted") {
   }
 }
 
-const clientId = process.env.clientId || process.env.PLATFORM_API_CLIENT_ID
-const clientSecret =
-  process.env.clientSecret || process.env.PLATFORM_API_CLIENT_SECRET
+const clientId = process.env.PLATFORM_API_CLIENT_ID
+const clientSecret = process.env.PLATFORM_API_CLIENT_SECRET
 
 const keys = [clientId, clientSecret]
 const CACHE: KMSCache = { clients: [], clientSecret, clientId }
