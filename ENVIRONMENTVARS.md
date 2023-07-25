@@ -3,10 +3,8 @@
 ## Table of Contents
 
 - [General Information](#general-information)
-- [Server and Application-wide Variables](#server-and-application-wide-variables)
 - [Application Variables](#application-variables)
-- [Testing](#testing)
-- [AWS Elastic Beanstalk Environment Variables](#aws-elastic-beanstalk-environment-variables)
+- [AWS ECS Environment Variables](#aws-ecs-environment-variables)
 
 ## General Information
 
@@ -18,10 +16,6 @@ Generally, environment variables are meant to be read through the `process.env` 
 
 If an environment variable is updated, make sure to restart the server for the application to pick up the new value.
 
-## Server and Application-wide Variables
-
-These variables are used to configure server settings and application-wide settings.
-
 ## Application Variables
 
 These environment variables control how certain elements on the page render and where to fetch data.
@@ -30,13 +24,13 @@ These environment variables control how certain elements on the page render and 
 | -------- | ---- | ------------- |------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `NYPL_HEADER_URL` | string | "https://ds-header.nypl.org" | The base URL of the NYPL envionment-specific header and footer scripts.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 
-## AWS Elastic Beanstalk Environment Variables
+## AWS ECS Environment Variables
 
-As previously mentioned in the [README](README.md), we are using environment variables to make authorized requests to NYPL's API platform. In order to be secure, we are encrypting and decrypting those environment variables using AWS KMS. Please get these variables from someone in the NYPL Digital Department.
+As previously mentioned in the [README](README.md), we are using environment variables to make authorized requests to NYPL's API platform. In order to be secure, we are encrypting and decrypting those environment variables using AWS KMS. Please get these variables from someone on the LSP team.
 
 | Variable | Description |
 | -------- | ----------- |
-| `KMS_ENV` | Determines whether to interpret ..CLIENT_ID and ..CLIENT_SECRET variables as "encrypted" or "unencrypted". Default "encrypted". | 
+| `KMS_ENV` | Determines whether to interpret CLIENT_ID and CLIENT_SECRET variables as "encrypted" or "unencrypted". Default "encrypted". | 
 | `PLATFORM_API_CLIENT_ID` | Platform client id. If KMS_ENV is "encrypted", this value must be encrypted. |
 | `PLATFORM_API_CLIENT_SECRET` | Platform client secret. If KMS_ENV is "encrypted", this value must be encrypted. |
 
@@ -51,6 +45,8 @@ In order to encrypt, please download and install the `aws` [cli tool](https://aw
 The `aws kms encrypt` commands returns and object with a `CiphertextBlob` property. Since we only want that value, we use the `--query` flag to retrieve just that. This value can be copied and pasted into the AWS EBS configuration in the UI for the app's environment.
 
 More information can be found in the [encrypt docs](http://docs.aws.amazon.com/cli/latest/reference/kms/encrypt.html).
+
+Alternatively, you can use the [kms-util](https://github.com/NYPL-discovery/kms-util) helper package."
 
 NOTE: This value is base64 encoded, so when decoding make sure to decode using base64.
 
