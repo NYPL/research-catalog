@@ -30,13 +30,12 @@ As previously mentioned in the [README](README.md), we are using environment var
 
 | Variable | Description |
 | -------- | ----------- |
-| `KMS_ENV` | Determines whether to interpret CLIENT_ID and CLIENT_SECRET variables as "encrypted" or "unencrypted". Default "encrypted". | 
-| `PLATFORM_API_CLIENT_ID` | Platform client id. If KMS_ENV is "encrypted", this value must be encrypted. |
-| `PLATFORM_API_CLIENT_SECRET` | Platform client secret. If KMS_ENV is "encrypted", this value must be encrypted. |
+| `PLATFORM_API_CLIENT_ID` | Platform client id. This value must be encrypted. |
+| `PLATFORM_API_CLIENT_SECRET` | Platform client secret. This value must be encrypted. |
 
 ### Encrypting
 
-Two variables are assumed encrypted when `KMS_ENV` is "encrypted": `PLATFORM_API_CLIENT_ID` and `PLATFORM_API_CLIENT_SECRET`. We need these variables to create an instance of the `nypl-data-api-client` npm package and make authorized requests to the NYPL Digital API endpoints. This is needed for the Discovery UI app to make requests itself to the APIs.
+`PLATFORM_API_CLIENT_ID` and `PLATFORM_API_CLIENT_SECRET` are assumed to be encrypted. We need these variables to create an instance of the `nypl-data-api-client` npm package and make authorized requests to the NYPL Digital API endpoints. This is needed for the Discovery UI app to make requests itself to the APIs.
 
 In order to encrypt, please download and install the `aws` [cli tool](https://aws.amazon.com/cli/). The command to encrypt is
 
