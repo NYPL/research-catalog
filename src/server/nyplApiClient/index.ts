@@ -42,8 +42,8 @@ const config: any = {
 }
 const appEnvironment = process.env.APP_ENV || "production"
 const kmsEnvironment = process.env.KMS_ENV || "encrypted"
-let decryptKMS
-let kms
+let decryptKMS: (key: string) => Promise<any>
+let kms: any
 
 if (kmsEnvironment === "encrypted") {
   kms = new aws.KMS({
@@ -58,7 +58,7 @@ if (kmsEnvironment === "encrypted") {
     const { Plaintext } = await kms.decrypt(params).promise()
 
     return await new Promise((resolve, reject) => {
-      kms.decrypt(params, (err, data) => {
+      kms.decrypt(params, (err: Error) => {
         if (err) {
           console.log({ err })
           reject(err)
