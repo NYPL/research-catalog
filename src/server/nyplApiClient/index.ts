@@ -49,7 +49,6 @@ if (kmsEnvironment === "encrypted") {
   kms = new aws.KMS({
     region: "us-east-1",
   })
-  // console.log({kms})
 
   decryptKMS = async (key: string) => {
     console.log("Decrypt func INPUT: " + key)
