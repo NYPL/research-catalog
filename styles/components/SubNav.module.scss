@@ -13,7 +13,7 @@
     li {
       &:not(:last-child) {
         &:after {
-          content: '|';
+          content: "|";
           padding: 0 var(--nypl-space-xxs);
         }
       }

@@ -5,7 +5,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint . --fix",
+    "prettier": "prettier --write .",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@nypl/design-system-react-components": "^1.6.1",
@@ -27,8 +29,16 @@
     "eslint-plugin-n": "^15.7.0",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-react": "^7.32.2",
+    "husky": "^8.0.0",
+    "lint-staged": "^13.2.3",
     "prettier": "^2.8.8",
     "sass": "^1.63.6",
     "typescript": "5.0.4"
+  },
+  "lint-staged": {
+    "**/*.{ts,tsx,json,sass}": [
+      "eslint . --fix",
+      "prettier --write ."
+    ]
   }
 }
