@@ -20,17 +20,17 @@ If an environment variable is updated, make sure to restart the server for the a
 
 These environment variables control how certain elements on the page render and where to fetch data.
 
-| Variable | Type | Value Example | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| -------- | ---- | ------------- |------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `NYPL_HEADER_URL` | string | "https://ds-header.nypl.org" | The base URL of the NYPL envionment-specific header and footer scripts.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| Variable          | Type   | Value Example                | Description                                                              |
+|-------------------|--------|------------------------------|--------------------------------------------------------------------------|
+| `NYPL_HEADER_URL` | string | "https://ds-header.nypl.org" | The base URL of the NYPL environment-specific header and footer scripts. |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 
 ## AWS ECS Environment Variables
 
 As previously mentioned in the [README](README.md), we are using environment variables to make authorized requests to NYPL's API platform. In order to be secure, we are encrypting and decrypting those environment variables using AWS KMS. Please get these variables from someone on the LSP team.
 
-| Variable | Description |
-| -------- | ----------- |
-| `PLATFORM_API_CLIENT_ID` | Platform client id. This value must be encrypted. |
+| Variable                     | Description                                           |
+|------------------------------|-------------------------------------------------------|
+| `PLATFORM_API_CLIENT_ID`     | Platform client id. This value must be encrypted.     |
 | `PLATFORM_API_CLIENT_SECRET` | Platform client secret. This value must be encrypted. |
 
 ### Encrypting
@@ -45,10 +45,10 @@ The `aws kms encrypt` commands returns and object with a `CiphertextBlob` proper
 
 More information can be found in the [encrypt docs](http://docs.aws.amazon.com/cli/latest/reference/kms/encrypt.html).
 
-Alternatively, you can use the [kms-util](https://github.com/NYPL-discovery/kms-util) helper package."
+Alternatively, you can use the [kms-util](https://github.com/NYPL-discovery/kms-util) helper package.
 
 NOTE: This value is base64 encoded, so when decoding make sure to decode using base64.
 
 ### Decrypting
 
-In order to decrypt, we are using the `aws-sdk` npm module. Please check the [nyplApiClient](src/server/nyplApiClient/index.js) file for more information and implementation on decryption.
+In order to decrypt, we are using the `aws-sdk` npm module. Please check the [nyplApiClient](src/server/nyplApiClient/index.ts) file for more information and implementation on decryption.
