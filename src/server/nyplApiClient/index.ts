@@ -1,5 +1,6 @@
 import NyplApiClient from "@nypl/nypl-data-api-client"
 import aws from "aws-sdk"
+import { apiConfig } from "../../../config/config"
 
 interface KMSCache {
   clients: string[]
@@ -7,40 +8,12 @@ interface KMSCache {
   clientSecret: string
 }
 
-const config: any = {
-  api: {
-    platform: {
-      development:
-        process.env.PLATFORM_API_BASE_URL ||
-        "https://qa-platform.nypl.org/api/v0.1",
-      production:
-        process.env.PLATFORM_API_BASE_URL ||
-        "https://platform.nypl.org/api/v0.1",
-    },
-    // The 'discovery' base URL should use DISCOVERY_API_BASE_URL if set,
-    // falling back on PLATFORM_API_BASE_URL if set,
-    // and finally falling back on a sensible default.
-    discovery: {
-      development:
-        process.env.DISCOVERY_API_BASE_URL ||
-        process.env.PLATFORM_API_BASE_URL ||
-        "https://qa-platform.nypl.org/api/v0.1",
-      production:
-        process.env.DISCOVERY_API_BASE_URL ||
-        process.env.PLATFORM_API_BASE_URL ||
-        "https://platform.nypl.org/api/v0.1",
-    },
-    drbb: {
-      development:
-        process.env.DRB_API_BASE_URL || "http://drb-api-qa.nypl.org/search/",
-      production:
-        process.env.DRB_API_BASE_URL ||
-        "https://digital-research-books-api.nypl.org/v3/sfr/search",
-    },
-  },
-  tokenUrl: "https://isso.nypl.org/",
-}
 const appEnvironment = process.env.APP_ENV || "production"
+const clientId = process.env.PLATFORM_API_CLIENT_ID
+const clientSecret = process.env.PLATFORM_API_CLIENT_SECRET
+
+const keys = [clientId, clientSecret]
+const CACHE: KMSCache = { clients: [], clientSecret, clientId }
 
 const kms: aws.KMS = new aws.KMS({
   region: "us-east-1",
@@ -66,19 +39,13 @@ const decryptKMS = async (key: string) => {
   })
 }
 
-const clientId = process.env.PLATFORM_API_CLIENT_ID
-const clientSecret = process.env.PLATFORM_API_CLIENT_SECRET
-
-const keys = [clientId, clientSecret]
-const CACHE: KMSCache = { clients: [], clientSecret, clientId }
-
 const nyplApiClient = async (options = { apiName: "platform" }) => {
   const { apiName } = options
   if (CACHE.clients[apiName]) {
     return await Promise.resolve(CACHE.clients[apiName])
   }
 
-  const baseUrl = config.api[apiName][appEnvironment]
+  const baseUrl = apiConfig.baseUrls[apiName][appEnvironment]
 
   return await new Promise((resolve, reject) => {
     Promise.all(keys.map(decryptKMS))
@@ -87,7 +54,7 @@ const nyplApiClient = async (options = { apiName: "platform" }) => {
           base_url: baseUrl,
           oauth_key: decryptedClientId,
           oauth_secret: decryptedClientSecret,
-          oauth_url: config.tokenUrl,
+          oauth_url: apiConfig.tokenUrl,
         })
 
         CACHE.clientId = clientId
