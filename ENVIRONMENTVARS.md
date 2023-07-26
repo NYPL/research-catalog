@@ -12,7 +12,7 @@ Environment variables are used in this code repository to control how the applic
 
 General environment variables are declared in the `.env.example` file. A copy of this file should be made and saved as `.env.local` where real values should be added.
 
-Generally, environment variables are meant to be read through the `process.env` object _on the server_. Variables intended for use on the client side should be prefaced with NEXT_PUBLIC_ per Next's [docs](https://nextjs.org/docs/pages/building-your-application/configuring/environment-variables).
+Generally, environment variables are meant to be read through the `process.env` object _on the server_. Variables intended for use on the client side should be prefaced with NEXT*PUBLIC* per Next's [docs](https://nextjs.org/docs/pages/building-your-application/configuring/environment-variables).
 
 If an environment variable is updated, make sure to restart the server for the application to pick up the new value.
 
@@ -21,15 +21,15 @@ If an environment variable is updated, make sure to restart the server for the a
 These environment variables control how certain elements on the page render and where to fetch data.
 
 | Variable          | Type   | Value Example                | Description                                                              |
-|-------------------|--------|------------------------------|--------------------------------------------------------------------------|
-| `NYPL_HEADER_URL` | string | "https://ds-header.nypl.org" | The base URL of the NYPL environment-specific header and footer scripts. |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| ----------------- | ------ | ---------------------------- | ------------------------------------------------------------------------ | --- |
+| `NYPL_HEADER_URL` | string | "https://ds-header.nypl.org" | The base URL of the NYPL environment-specific header and footer scripts. |     |
 
 ## AWS ECS Environment Variables
 
 As previously mentioned in the [README](README.md), we are using environment variables to make authorized requests to NYPL's API platform. In order to be secure, we are encrypting and decrypting those environment variables using AWS KMS. Please get these variables from someone on the LSP team.
 
 | Variable                     | Description                                           |
-|------------------------------|-------------------------------------------------------|
+| ---------------------------- | ----------------------------------------------------- |
 | `PLATFORM_API_CLIENT_ID`     | Platform client id. This value must be encrypted.     |
 | `PLATFORM_API_CLIENT_SECRET` | Platform client secret. This value must be encrypted. |
 
