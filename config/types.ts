@@ -12,5 +12,5 @@ export interface searchParams {
   clearTitle?: string
   clearSubject?: string
   clearContributor?: string
-  identifierNumbers?: string
+  identifierNumbers?: Record<string, string>
 }
