@@ -1,11 +1,17 @@
 export type RCPage = "search" | "shep" | "account" | ""
 
+export interface Item {
+  result: {
+    uri: string
+  }
+}
+
 export interface SearchFilters {
   materialType?: string[]
   language?: string[]
   subjectLiteral?: string[]
-  dateAfter: string
-  dateBefore: string
+  dateAfter?: string
+  dateBefore?: string
 }
 
 export interface IdentifierNumbers {
@@ -13,7 +19,7 @@ export interface IdentifierNumbers {
   isbn?: string
   oclc?: string
   lccn?: string
-  redirectOnMatch?: string
+  redirectOnMatch?: boolean
 }
 
 export interface SearchParams {
@@ -29,4 +35,9 @@ export interface SearchParams {
   clearSubject?: string
   clearContributor?: string
   identifierNumbers?: IdentifierNumbers
+}
+
+export interface SearchResultsResponse {
+  totalResults: number
+  itemListElement: Item[]
 }
