@@ -1,4 +1,9 @@
-import type { RCPage, searchParams } from "../config/types"
+import type {
+  RCPage,
+  SearchParams,
+  SearchFilters,
+  IdentifierNumbers,
+} from "../config/types"
 
 import { isArray, isEmpty, mapObject, forEach } from "underscore"
 
@@ -47,16 +52,16 @@ const getFieldParam = (field: string = ""): string => {
   return `&search_scope=${field}`
 }
 
-const getIdentifierQuery = (identifierNumbers: Record<string, string> = {}) =>
+const getIdentifierQuery = (identifierNumbers: IdentifierNumbers) =>
   Object.entries(identifierNumbers)
-    .map(([key, value]) => (value ? `&${key}=${value}` : ""))
+    .map(([key, value]) => (value ? `&${key}=${value as string}` : ""))
     .join("")
 
 /**
  * getFilterParam
  * Get the search params from the filter values.
  */
-const getFilterParam = (filters: Record<string, Record<string, string>>) => {
+const getFilterParam = (filters: SearchFilters) => {
   let strSearch = ""
 
   if (!isEmpty(filters)) {
@@ -98,7 +103,7 @@ const getFilterParam = (filters: Record<string, Record<string, string>>) => {
  * const apiQuery3 = apiQueryFunc({ page: 3, q: 'hamlet' });
  * // apiQuery3 === 'q=hamlet&page=3'
  */
-export const basicQuery = (searchParams: searchParams = {}) => {
+export const basicQuery = (searchParams: SearchParams = {}) => {
   return ({
     sortBy,
     field,
@@ -112,7 +117,7 @@ export const basicQuery = (searchParams: searchParams = {}) => {
     clearSubject,
     clearContributor,
     identifierNumbers,
-  }: searchParams) => {
+  }: SearchParams) => {
     const sortQuery = getSortQuery(sortBy || searchParams.sortBy)
     const fieldQuery = getFieldParam(field || searchParams.field)
     const filterQuery = getFilterParam(
