@@ -36,7 +36,7 @@ jobs:
         - |
             MANIFEST=$(aws ecr batch-get-image --repository-name research-catalog --image-ids imageTag="$ENV-latest" --output json | jq --raw-output --join-output '.images[0].imageManifest')
             aws ecr batch-delete-image --repository-name research-catalog --image-ids imageTag="$ENV-previous" || true
-            aws ecr put-image --repository-name research-catalog --image-tag "$ENV-previous" --image-manifest "$MANIFEST"
+            aws ecr put-image --repository-name research-catalog --image-tag "$ENV-previous" --image-manifest "$MANIFEST" || true
         - docker push "$ECR_URL:$LOCAL_TAG_NAME"
 
     - stage: deploy qa
