@@ -1,7 +1,12 @@
-import type { SearchParams, SearchResultsResponse } from "../../config/types"
+import type {
+  IdentifierNumbers,
+  SearchParams,
+  SearchFilters,
+  SearchResultsResponse,
+} from "../../config/types"
 import type { NextApiRequest, NextApiResponse } from "next"
 import nyplApiClient from "../../src/server/nyplApiClient"
-import { basicQuery } from "../../utils/searchUtils"
+import { basicQuery, getSearchParams } from "../../utils/searchUtils"
 import { standardizeBibId } from "../../utils/bibUtils"
 import { RESULTS_PER_PAGE } from "../../config/constants"
 
@@ -43,7 +48,7 @@ export async function fetchResults(
     page: string
   ) => void,
   nextResponse: NextApiResponse,
-  features: string[]
+  features?: string[]
 ): Promise<any> {
   if (field === "standard_number") {
     searchKeywords = standardizeBibId(searchKeywords)
@@ -82,6 +87,79 @@ export async function fetchResults(
     .catch(console.error)
 }
 
-async function handler(req: NextApiRequest, res: NextApiResponse) {}
+async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method === "GET") {
+    const {
+      page,
+      q,
+      contributor,
+      title,
+      subject,
+      sort,
+      order,
+      fieldQuery,
+      filters,
+      issn,
+      isbn,
+      oclc,
+      lccn,
+      redirectOnMatch,
+    } = getSearchParams(req.query)
+
+    const identifierNumbers: IdentifierNumbers = {
+      issn,
+      isbn,
+      oclc,
+      lccn,
+      redirectOnMatch,
+    }
+
+    const sortBy = sort.length
+      ? [sort, order].filter((field) => field.length).join("_")
+      : "relevance"
+
+    // If user is making a search for periodicals,
+    // add an issuance filter on the serial field and
+    // switch field from 'journal_title' to 'title'
+    let apiQueryField = fieldQuery
+    const additionalFilters: SearchFilters = {}
+    if (fieldQuery === "journal_title") {
+      additionalFilters.issuance = ["urn:biblevel:s"]
+      apiQueryField = "title"
+    }
+
+    const apiQueryFilters: SearchFilters = { ...filters, ...additionalFilters }
+
+    await fetchResults(
+      {
+        searchKeywords: q,
+        contributor,
+        title,
+        subject,
+        page,
+        sortBy,
+        field: apiQueryField,
+        selectedFilters: apiQueryFilters,
+        identifierNumbers,
+      },
+      order,
+      (apiFilters, searchResults, pageQuery) => {
+        res.status(200).json({
+          filters: apiFilters,
+          searchResults,
+          page: pageQuery,
+          selectedFilters: createSelectedFiltersHash(filters, apiFilters),
+          searchKeywords: q,
+          sortBy,
+          field: fieldQuery,
+          contributor,
+          title,
+          subject,
+        })
+      },
+      res
+    )
+  }
+}
 
 export default handler

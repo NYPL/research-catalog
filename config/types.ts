@@ -12,6 +12,7 @@ export interface SearchFilters {
   subjectLiteral?: string[]
   dateAfter?: string
   dateBefore?: string
+  issuance?: string[]
 }
 
 export interface IdentifierNumbers {
@@ -35,6 +36,16 @@ export interface SearchParams {
   clearSubject?: string
   clearContributor?: string
   identifierNumbers?: IdentifierNumbers
+}
+
+export interface SearchQueryParams extends SearchParams, IdentifierNumbers {
+  per_page?: string
+  q?: string
+  sort?: string
+  sort_direction?: string
+  sort_scope?: string
+  search_scope?: string
+  filters?: SearchFilters
 }
 
 export interface SearchResultsResponse {

@@ -1,11 +1,14 @@
 import type {
   RCPage,
   SearchParams,
+  SearchQueryParams,
   SearchFilters,
   IdentifierNumbers,
 } from "../config/types"
 
-import { isArray, isEmpty, mapObject, forEach } from "underscore"
+import { RESULTS_PER_PAGE } from "../config/constants"
+
+import { isArray, isEmpty, mapObject, forEach, findWhere } from "underscore"
 
 /**
  * getActivePage(pathname)
@@ -156,4 +159,122 @@ export const basicQuery = (searchParams: SearchParams = {}) => {
 
     return completeQuery ? `q=${completeQuery}` : ""
   }
+}
+
+/**
+ * getReqParams
+ * Read each query param from the request object in API route handler and return its value or
+ * default value.
+ */
+export function getSearchParams(query: SearchQueryParams) {
+  const page = query.page || "1"
+  const perPage = query.per_page || RESULTS_PER_PAGE.toString()
+  const q = query.q || ""
+  const sort = query.sort || ""
+  const order = query.sort_direction || ""
+  const sortQuery = query.sort_scope || ""
+  const fieldQuery = query.search_scope || ""
+  const filters = query.filters || {}
+
+  const {
+    contributor,
+    title,
+    subject,
+    issn,
+    isbn,
+    oclc,
+    lccn,
+    redirectOnMatch,
+  } = query
+
+  return {
+    contributor,
+    title,
+    subject,
+    page,
+    perPage,
+    q,
+    sort,
+    order,
+    sortQuery,
+    fieldQuery,
+    filters,
+    issn,
+    isbn,
+    oclc,
+    lccn,
+    redirectOnMatch,
+  }
+}
+
+export const createSelectedFiltersHash = (
+  filters: SearchFilters,
+  apiFilters: SearchFilters
+) => {
+  const selectedFilters = {
+    materialType: [],
+    language: [],
+    dateAfter: "",
+    dateBefore: "",
+    subjectLiteral: [],
+  }
+  if (!isEmpty(filters)) {
+    mapObject(filters, (value, key) => {
+      let filterObj: Record<string, string>
+      if (key === "dateAfter" || key === "dateBefore") {
+        selectedFilters[key] = value
+      } else if (key === "subjectLiteral") {
+        const subjectLiteralValues = isArray(value) ? value : [value]
+        subjectLiteralValues.forEach((subjectLiteralValue) => {
+          selectedFilters[key].push({
+            selected: true,
+            value: subjectLiteralValue,
+            label: subjectLiteralValue,
+          })
+        })
+      } else if (isArray(value) && value.length) {
+        if (!selectedFilters[key]) {
+          selectedFilters[key] = []
+        }
+        forEach(value, (filterValue) => {
+          filterObj = findWhere(apiFilters.itemListElement, { field: key })
+          const foundFilter = isEmpty(filterObj)
+            ? {}
+            : findWhere(filterObj.values, { value: filterValue })
+
+          if (
+            foundFilter &&
+            !findWhere(selectedFilters[key], { id: foundFilter.value })
+          ) {
+            selectedFilters[key].push({
+              selected: true,
+              value: foundFilter.value,
+              label: foundFilter.label || foundFilter.value,
+              count: foundFilter.count,
+            })
+          }
+        })
+      } else if (typeof value === "string") {
+        filterObj = findWhere(apiFilters.itemListElement, { field: key })
+        const foundFilter = isEmpty(filterObj)
+          ? {}
+          : findWhere(filterObj.values, { value })
+
+        if (
+          foundFilter &&
+          !findWhere(selectedFilters[key], { id: foundFilter.value })
+        ) {
+          selectedFilters[key] = [
+            {
+              selected: true,
+              value: foundFilter.value,
+              label: foundFilter.label || foundFilter.value,
+              count: foundFilter.count,
+            },
+          ]
+        }
+      }
+    })
+  }
+  return selectedFilters
 }
