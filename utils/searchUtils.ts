@@ -4,6 +4,7 @@ import type {
   SearchQueryParams,
   SearchFilters,
   IdentifierNumbers,
+  SearchResultsResponse,
 } from "../config/types"
 
 import { RESULTS_PER_PAGE } from "../config/constants"
@@ -209,7 +210,7 @@ export function getSearchParams(query: SearchQueryParams) {
 
 export const createSelectedFiltersHash = (
   filters: SearchFilters,
-  apiFilters: SearchFilters
+  apiFilters: SearchResultsResponse
 ) => {
   const selectedFilters = {
     materialType: [],
@@ -220,7 +221,7 @@ export const createSelectedFiltersHash = (
   }
   if (!isEmpty(filters)) {
     mapObject(filters, (value, key) => {
-      let filterObj: Record<string, string>
+      let filterObj
       if (key === "dateAfter" || key === "dateBefore") {
         selectedFilters[key] = value
       } else if (key === "subjectLiteral") {

@@ -6,7 +6,11 @@ import type {
 } from "../../config/types"
 import type { NextApiRequest, NextApiResponse } from "next"
 import nyplApiClient from "../../src/server/nyplApiClient"
-import { basicQuery, getSearchParams } from "../../utils/searchUtils"
+import {
+  basicQuery,
+  createSelectedFiltersHash,
+  getSearchParams,
+} from "../../utils/searchUtils"
 import { standardizeBibId } from "../../utils/bibUtils"
 import { RESULTS_PER_PAGE } from "../../config/constants"
 
@@ -20,8 +24,8 @@ const createAPIQuery = basicQuery({
 
 async function nyplApiClientCall(query: string, urlEnabledFeatures?: string[]) {
   const requestOptions =
-    process.env.features.includes("on-site-edd") ||
-    urlEnabledFeatures.includes("on-site-edd")
+    process.env.features?.includes("on-site-edd") ||
+    urlEnabledFeatures?.includes("on-site-edd")
       ? { headers: { "X-Features": "on-site-edd" } }
       : {}
   return await nyplApiClient({ apiName: "discovery" }).then((client) =>

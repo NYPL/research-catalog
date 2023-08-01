@@ -7,7 +7,8 @@
     "start": "next start",
     "lint": "eslint . --fix",
     "prettier": "prettier --write .",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "tsc": "tsc"
   },
   "dependencies": {
     "@nypl/design-system-react-components": "^1.6.1",
