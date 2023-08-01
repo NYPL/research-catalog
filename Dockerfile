@@ -1,7 +1,7 @@
 FROM node:16-alpine AS production
 
-RUN apt-get update
-RUN apt-get upgrade -y
+#RUN apt-get update
+#RUN apt-get upgrade -y
 
 WORKDIR /app
 
