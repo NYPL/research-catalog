@@ -1,7 +1,7 @@
 import "@nypl/design-system-react-components/dist/styles.css"
 import Head from "next/head"
 import Layout from "../components/Layout/Layout"
-import { getActivePage } from "../utils/searchUtils"
+import { getActivePage } from "../utils/appUtils"
 
 function App({ Component, pageProps, router }) {
   const activePage = getActivePage(router.pathname)

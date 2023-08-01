@@ -1,5 +1,4 @@
 import type {
-  RCPage,
   SearchParams,
   SearchQueryParams,
   SearchFilters,
@@ -9,25 +8,13 @@ import type {
 
 import { RESULTS_PER_PAGE } from "../config/constants"
 
-import { isArray, isEmpty, mapObject, forEach, findWhere } from "underscore"
-
-/**
- * getActivePage(pathname)
- * Returns the Research Catalog page ID for a given pathname.
- * Used for determining the current page for activating menu links and
- * conditionally rendering the Search form.
- */
-export const getActivePage = (pathname: string): RCPage => {
-  if (pathname === "/") {
-    return "search"
-  } else if (pathname.includes("subject_headings")) {
-    return "shep"
-  } else if (pathname.includes("account")) {
-    return "account"
-  } else {
-    return ""
-  }
-}
+import {
+  isArray as _isArray,
+  isEmpty as _isEmpty,
+  mapObject as _mapObject,
+  forEach as _forEach,
+  findWhere as _findWhere,
+} from "underscore"
 
 /**
  * getSortQuery
@@ -68,11 +55,11 @@ const getIdentifierQuery = (identifierNumbers: IdentifierNumbers) =>
 const getFilterParam = (filters: SearchFilters) => {
   let strSearch = ""
 
-  if (!isEmpty(filters)) {
-    mapObject(filters, (val, key) => {
+  if (!_isEmpty(filters)) {
+    _mapObject(filters, (val, key) => {
       // Property contains an array of its selected filter values:
-      if (val?.length && isArray(val)) {
-        forEach(val, (filter, index) => {
+      if (val?.length && _isArray(val)) {
+        _forEach(val, (filter, index) => {
           if (filter.value && filter.value !== "") {
             strSearch += `&filters[${key}][${index}]=${encodeURIComponent(
               filter.value
@@ -219,13 +206,13 @@ export const createSelectedFiltersHash = (
     dateBefore: "",
     subjectLiteral: [],
   }
-  if (!isEmpty(filters)) {
-    mapObject(filters, (value, key) => {
+  if (!_isEmpty(filters)) {
+    _mapObject(filters, (value, key) => {
       let filterObj
       if (key === "dateAfter" || key === "dateBefore") {
         selectedFilters[key] = value
       } else if (key === "subjectLiteral") {
-        const subjectLiteralValues = isArray(value) ? value : [value]
+        const subjectLiteralValues = _isArray(value) ? value : [value]
         subjectLiteralValues.forEach((subjectLiteralValue) => {
           selectedFilters[key].push({
             selected: true,
@@ -233,19 +220,19 @@ export const createSelectedFiltersHash = (
             label: subjectLiteralValue,
           })
         })
-      } else if (isArray(value) && value.length) {
+      } else if (_isArray(value) && value.length) {
         if (!selectedFilters[key]) {
           selectedFilters[key] = []
         }
-        forEach(value, (filterValue) => {
-          filterObj = findWhere(apiFilters.itemListElement, { field: key })
-          const foundFilter = isEmpty(filterObj)
+        _forEach(value, (filterValue) => {
+          filterObj = _findWhere(apiFilters.itemListElement, { field: key })
+          const foundFilter = _isEmpty(filterObj)
             ? {}
-            : findWhere(filterObj.values, { value: filterValue })
+            : _findWhere(filterObj.values, { value: filterValue })
 
           if (
             foundFilter &&
-            !findWhere(selectedFilters[key], { id: foundFilter.value })
+            !_findWhere(selectedFilters[key], { id: foundFilter.value })
           ) {
             selectedFilters[key].push({
               selected: true,
@@ -256,14 +243,14 @@ export const createSelectedFiltersHash = (
           }
         })
       } else if (typeof value === "string") {
-        filterObj = findWhere(apiFilters.itemListElement, { field: key })
-        const foundFilter = isEmpty(filterObj)
+        filterObj = _findWhere(apiFilters.itemListElement, { field: key })
+        const foundFilter = _isEmpty(filterObj)
           ? {}
-          : findWhere(filterObj.values, { value })
+          : _findWhere(filterObj.values, { value })
 
         if (
           foundFilter &&
-          !findWhere(selectedFilters[key], { id: foundFilter.value })
+          !_findWhere(selectedFilters[key], { id: foundFilter.value })
         ) {
           selectedFilters[key] = [
             {
