@@ -14,7 +14,7 @@ import {
 
 /**
  * getSortQuery
- * Get the sort type and order and pass it in URL query form.
+ * Get the sort type and order and format into query param snippet.
  */
 function getSortQuery(sortBy: string = "", order: string = ""): string {
   const reset = sortBy === "relevance"
@@ -114,7 +114,7 @@ export function getQueryString({
 
 /**
  * mapQueryToSearchParams
- * Maps the query param structure from the request to a SearchParams object, which is expected by the fetch helper
+ * Maps the query param structure from the request to a SearchParams object, which is expected by fetchResults
  */
 export function mapQueryToSearchParams({
   q,
