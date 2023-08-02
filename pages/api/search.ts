@@ -7,56 +7,18 @@ import type {
 import type { NextApiRequest, NextApiResponse } from "next"
 import nyplApiClient from "../../src/server/nyplApiClient"
 import { getSearchQuery, getSearchParams } from "../../src/utils/searchUtils"
-import { standardizeBibId } from "../../src/utils/bibUtils"
 import { RESULTS_PER_PAGE } from "../../src/config/constants"
 
-async function nyplApiClientCall(query: string, urlEnabledFeatures?: string[]) {
-  const requestOptions =
-    process.env.features?.includes("on-site-edd") ||
-    urlEnabledFeatures?.includes("on-site-edd")
-      ? { headers: { "X-Features": "on-site-edd" } }
-      : {}
-  return await nyplApiClient({ apiName: "discovery" }).then((client) =>
-    client.get(`/discovery/resources${query}`, requestOptions)
-  )
-}
-
 export async function fetchResults(
-  {
-    searchKeywords = "",
-    contributor,
-    title,
-    subject,
-    page,
-    sortBy,
-    field,
-    selectedFilters,
-    identifierNumbers,
-  }: SearchParams,
-  order: string,
+  searchParams: SearchParams,
   callback: (
     results: SearchResultsResponse,
     aggregations: SearchResultsResponse,
     page: string
   ) => void,
-  nextResponse: NextApiResponse,
-  features?: string[]
+  nextResponse: NextApiResponse
 ): Promise<any> {
-  if (field === "standard_number") {
-    searchKeywords = standardizeBibId(searchKeywords)
-  }
-
-  const encodedQueryString: string = getSearchQuery({
-    searchKeywords,
-    contributor,
-    title,
-    subject,
-    sortBy: sortBy ? `${sortBy}_${order}` : "",
-    selectedFilters,
-    field,
-    page,
-    identifierNumbers,
-  })
+  const encodedQueryString = getSearchQuery(searchParams)
 
   const aggregationQuery = `/aggregations?${encodedQueryString}`
   const resultsQuery = `?${encodedQueryString}&per_page=${RESULTS_PER_PAGE.toString()}`
@@ -65,17 +27,22 @@ export async function fetchResults(
   //  - search results
   //  - aggregations
   Promise.all([
-    nyplApiClientCall(resultsQuery, features),
-    nyplApiClientCall(aggregationQuery, features),
+    await nyplApiClient({ apiName: "discovery" }).then((client) =>
+      client.get(`/discovery/resources${resultsQuery}`)
+    ),
+    await nyplApiClient({ apiName: "discovery" }).then((client) =>
+      client.get(`/discovery/resources${aggregationQuery}`)
+    ),
   ])
-    .then((response: [SearchResultsResponse, SearchResultsResponse]) => {
-      const [results, aggregations] = response
-      console.log(aggregations)
-      if (identifierNumbers.redirectOnMatch && results.totalResults === 1) {
+    .then(([results, aggregations]) => {
+      if (
+        searchParams.identifierNumbers.redirectOnMatch &&
+        results.totalResults === 1
+      ) {
         const bnumber = results.itemListElement[0].result.uri
-        return nextResponse.redirect(`/bib/${bnumber}`)
+        return nextResponse.redirect(`/bib/${bnumber as string}`)
       }
-      callback(results, aggregations, page)
+      callback(results, aggregations, searchParams.page)
     })
     .catch(console.error)
 }
@@ -134,8 +101,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         field: apiQueryField,
         selectedFilters: apiQueryFilters,
         identifierNumbers,
+        order,
       },
-      order,
       (apiFilters, searchResults, pageQuery) => {
         res.status(200).json({
           filters: apiFilters,

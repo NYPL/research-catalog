@@ -13,18 +13,18 @@ import {
   mapObject as _mapObject,
   forEach as _forEach,
 } from "underscore"
+import { standardizeBibId } from "./bibUtils"
 
 /**
  * getSortQuery
  * Get the sort type and order and pass it in URL query form.
  */
-const getSortQuery = (sortBy: string = ""): string => {
+const getSortQuery = (sortBy: string = "", order: string = ""): string => {
   const reset = sortBy === "relevance"
   let sortQuery = ""
 
-  if (sortBy && !reset) {
-    const [sort, order] = sortBy.split("_")
-    sortQuery = `&sort=${sort}&sort_direction=${order}`
+  if (sortBy?.length && !reset) {
+    sortQuery = `&sort=${sortBy}&sort_direction=${order}`
   }
 
   return sortQuery
@@ -86,6 +86,7 @@ const getFilterQuery = (filters: SearchFilters) => {
 export const getSearchQuery = ({
   sortBy = "relevance",
   field = "all",
+  order,
   selectedFilters = {},
   identifierNumbers = {},
   searchKeywords,
@@ -93,24 +94,22 @@ export const getSearchQuery = ({
   title,
   subject,
   page,
-  clearTitle,
-  clearSubject,
-  clearContributor,
 }: SearchParams) => {
-  const searchKeywordsQuery = searchKeywords
-    ? `${encodeURIComponent(searchKeywords)}`
-    : ""
-  const sortQuery = getSortQuery(sortBy)
+  searchKeywords =
+    field === "standard_number"
+      ? standardizeBibId(searchKeywords)
+      : searchKeywords
+  const searchKeywordsQuery = encodeURIComponent(searchKeywords)
+  const sortQuery = getSortQuery(sortBy, order)
   const filterQuery = getFilterQuery(selectedFilters)
   const fieldQuery = getFieldQuery(field)
   const identifierQuery = getIdentifierQuery(identifierNumbers)
   const pageQuery = page && page !== "1" ? `&page=${page}` : ""
 
   // advanced search query
-  const contributorQuery =
-    contributor && !clearContributor ? `&contributor=${contributor}` : ""
-  const titleQuery = title && !clearTitle ? `&title=${title}` : ""
-  const subjectQuery = subject && !clearSubject ? `&subject=${subject}` : ""
+  const contributorQuery = contributor ? `&contributor=${contributor}` : ""
+  const titleQuery = title ? `&title=${title}` : ""
+  const subjectQuery = subject ? `&subject=${subject}` : ""
   const advancedQuery = `${contributorQuery}${titleQuery}${subjectQuery}`
 
   const completeQuery = `${searchKeywordsQuery}${advancedQuery}${filterQuery}${sortQuery}${fieldQuery}${pageQuery}${identifierQuery}`

@@ -25,15 +25,13 @@ export interface IdentifierNumbers {
 export interface SearchParams {
   sortBy?: string
   field?: string
+  order?: string
   selectedFilters?: SearchFilters
   searchKeywords?: string
   contributor?: string
   title?: string
   subject?: string
   page?: string
-  clearTitle?: string
-  clearSubject?: string
-  clearContributor?: string
   identifierNumbers?: IdentifierNumbers
 }
 
