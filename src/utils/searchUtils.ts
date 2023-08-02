@@ -81,6 +81,10 @@ function getFilterQuery(filters: SearchFilters) {
   return filterQuery
 }
 
+/**
+ * getQueryString
+ * Builds a query string from a SearchParams object, setting defaults on some undefined params.
+ */
 export function getQueryString({
   sortBy = "relevance",
   field = "all",
