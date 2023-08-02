@@ -36,7 +36,7 @@ export async function fetchResults(
         }
       : {}
 
-  const encodedQueryString = getQueryString({
+  const queryString = getQueryString({
     ...searchParams,
     ...journalParams,
     // standardize bib ID if search field is set to "standard_number"
@@ -46,8 +46,8 @@ export async function fetchResults(
         : searchKeywords,
   })
 
-  const aggregationQuery = `/aggregations?${encodedQueryString}`
-  const resultsQuery = `?${encodedQueryString}&per_page=${RESULTS_PER_PAGE.toString()}`
+  const aggregationQuery = `/aggregations?${queryString}`
+  const resultsQuery = `?${queryString}&per_page=${RESULTS_PER_PAGE.toString()}`
 
   // Get the following in parallel:
   //  - search results
