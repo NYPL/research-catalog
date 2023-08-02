@@ -3,8 +3,9 @@ import { Heading } from "@nypl/design-system-react-components"
 import { useEffect } from "react"
 
 export default function Search() {
+  // Temp function to test out client side fetching until Search UI is completed.
   function getSearchResults() {
-    fetch("/research/research-catalog/api/search?q=diego")
+    fetch("/research/research-catalog/api/search?q=test")
       .then(async (response) => await response.json())
       .then((data) => {
         console.log(data)
