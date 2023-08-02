@@ -1,30 +1,30 @@
 language: minimal
 
 services:
-- docker
+  - docker
 
 branches:
   only:
-  - qa
-  - production
+    - qa
+    - production
 
 jobs:
   include:
     - stage: docker build
       if: (branch = qa or branch = production)
       before_install:
-      - if [[ $TRAVIS_BRANCH == "qa" ]];
-        then
+        - if [[ $TRAVIS_BRANCH == "qa" ]];
+          then
           export ENV="qa";
-        fi
-      - if [[ "$TRAVIS_BRANCH" == "production" ]];
-        then
+          fi
+        - if [[ "$TRAVIS_BRANCH" == "production" ]];
+          then
           export ENV="production";
-        fi
+          fi
       env:
-      - ECR_URL=946183545209.dkr.ecr.us-east-1.amazonaws.com/research-catalog
-      - AWS_DEFAULT_REGION=us-east-1 
-      - AWS_REGION=us-east-1 
+        - ECR_URL=946183545209.dkr.ecr.us-east-1.amazonaws.com/research-catalog
+        - AWS_DEFAULT_REGION=us-east-1
+        - AWS_REGION=us-east-1
       install:
         - pip install --user awscli
         - export LOCAL_TAG_NAME="${ENV}-latest"
@@ -34,29 +34,29 @@ jobs:
         - docker tag "$LOCAL_TAG_NAME" "$ECR_URL:$LOCAL_TAG_NAME"
         # Re-tag last latest image just in case
         - |
-            MANIFEST=$(aws ecr batch-get-image --repository-name research-catalog --image-ids imageTag="$ENV-latest" --output json | jq --raw-output --join-output '.images[0].imageManifest')
-            aws ecr batch-delete-image --repository-name research-catalog --image-ids imageTag="$ENV-previous" || true
-            aws ecr put-image --repository-name research-catalog --image-tag "$ENV-previous" --image-manifest "$MANIFEST" || true
+          MANIFEST=$(aws ecr batch-get-image --repository-name research-catalog --image-ids imageTag="$ENV-latest" --output json | jq --raw-output --join-output '.images[0].imageManifest')
+          aws ecr batch-delete-image --repository-name research-catalog --image-ids imageTag="$ENV-previous" || true
+          aws ecr put-image --repository-name research-catalog --image-tag "$ENV-previous" --image-manifest "$MANIFEST" || true
         - docker push "$ECR_URL:$LOCAL_TAG_NAME"
 
     - stage: deploy qa
       if: branch IN (qa) AND type != pull_request
       env:
-      - AWS_DEFAULT_REGION=us-east-1
-      - AWS_REGION=us-east-1
-      - CLUSTER_NAME=research-catalog-qa
+        - AWS_DEFAULT_REGION=us-east-1
+        - AWS_REGION=us-east-1
+        - CLUSTER_NAME=research-catalog-qa
       install:
-      - pip install --user awscli
+        - pip install --user awscli
       script:
       #- aws ecs update-service --cluster $CLUSTER_NAME --service $CLUSTER_NAME --force-new-deployment
 
     - stage: deploy production
       if: branch IN (production) AND type != pull_request
       env:
-      - AWS_DEFAULT_REGION=us-east-1
-      - AWS_REGION=us-east-1
-      - CLUSTER_NAME=research-catalog-production
+        - AWS_DEFAULT_REGION=us-east-1
+        - AWS_REGION=us-east-1
+        - CLUSTER_NAME=research-catalog-production
       install:
-      - pip install --user awscli
+        - pip install --user awscli
       script:
       #- aws ecs update-service --cluster $CLUSTER_NAME --service $CLUSTER_NAME --force-new-deployment
