@@ -1,4 +1,7 @@
-// transform bib id to have lower case prefix (b, hb, cb, pb) and trim check digit
+/**
+ * standardizeBibId
+ * Transforms bib id to have lower case prefix (b, hb, cb, pb) and trim check digit
+ */
 export function standardizeBibId(bibId: string): string {
   // nypl bib ids could have a 9th digit, a check digit which can be 0-9 or x.
   const nypl = bibId.match(/^([bB])(\d{8})[\dxX]?$/)
