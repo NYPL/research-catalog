@@ -1,10 +1,3 @@
-export interface Item {
-  result?: {
-    uri?: string
-  }
-  field?: string
-}
-
 export interface SearchFilters {
   materialType?: string[]
   language?: string[]
@@ -23,11 +16,11 @@ export interface IdentifierNumbers {
 }
 
 export interface SearchParams {
-  sortBy?: string
+  searchKeywords?: string
   field?: string
+  sortBy?: string
   order?: string
   selectedFilters?: SearchFilters
-  searchKeywords?: string
   contributor?: string
   title?: string
   subject?: string
@@ -35,7 +28,7 @@ export interface SearchParams {
   identifierNumbers?: IdentifierNumbers
 }
 
-export interface SearchQueryParams extends SearchParams, IdentifierNumbers {
+export interface QueryParams extends SearchParams, IdentifierNumbers {
   per_page?: string
   q?: string
   sort?: string
@@ -47,5 +40,12 @@ export interface SearchQueryParams extends SearchParams, IdentifierNumbers {
 
 export interface SearchResultsResponse {
   totalResults: number
-  itemListElement: Item[]
+  itemListElement: SearchResultsItem[]
+}
+
+export interface SearchResultsItem {
+  result?: {
+    uri?: string
+  }
+  field?: string
 }
