@@ -3,16 +3,16 @@ import type {
   SearchParams,
   SearchFilters,
   SearchResultsResponse,
-} from "../../config/types"
+} from "../../src/config/types"
 import type { NextApiRequest, NextApiResponse } from "next"
 import nyplApiClient from "../../src/server/nyplApiClient"
 import {
   basicQuery,
   createSelectedFiltersHash,
   getSearchParams,
-} from "../../utils/searchUtils"
-import { standardizeBibId } from "../../utils/bibUtils"
-import { RESULTS_PER_PAGE } from "../../config/constants"
+} from "../../src/utils/searchUtils"
+import { standardizeBibId } from "../../src/utils/bibUtils"
+import { RESULTS_PER_PAGE } from "../../src/config/constants"
 
 const createAPIQuery = basicQuery({
   searchKeywords: "",

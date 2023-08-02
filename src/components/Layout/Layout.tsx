@@ -1,13 +1,13 @@
 import { type ReactElement } from "react"
-import styles from "../../styles/components/Layout.module.scss"
+import styles from "../../../styles/components/Layout.module.scss"
 import {
   TemplateAppContainer,
   Breadcrumbs,
   DSProvider,
   Heading,
 } from "@nypl/design-system-react-components"
-import SubNav from "../../components/SubNav/SubNav"
-import Search from "../../components/Search/Search"
+import SubNav from "../SubNav/SubNav"
+import Search from "../Search/Search"
 import { type RCPage } from "../../config/types"
 
 interface LayoutProps {

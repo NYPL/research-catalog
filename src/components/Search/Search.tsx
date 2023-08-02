@@ -1,5 +1,5 @@
-import styles from "../..//styles/components/Search.module.scss"
-import RCLink from "../../components/RCLink/RCLink"
+import styles from "../../../styles/components/Search.module.scss"
+import RCLink from "../RCLink/RCLink"
 import { SearchBar } from "@nypl/design-system-react-components"
 
 /**
