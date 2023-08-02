@@ -8,7 +8,7 @@ import {
 } from "@nypl/design-system-react-components"
 import SubNav from "../SubNav/SubNav"
 import Search from "../Search/Search"
-import { type RCPage } from "../../config/types"
+import { type RCPage } from "../../types/pageTypes"
 
 interface LayoutProps {
   activePage?: RCPage

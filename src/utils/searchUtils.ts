@@ -4,7 +4,7 @@ import type {
   SearchFilters,
   IdentifierNumbers,
   SearchResultsResponse,
-} from "../config/types"
+} from "../types/searchTypes"
 
 import { RESULTS_PER_PAGE } from "../config/constants"
 

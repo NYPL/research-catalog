@@ -1,6 +1,6 @@
 import RCLink from "../RCLink/RCLink"
 import styles from "../../../styles/components/SubNav.module.scss"
-import { type RCPage } from "../../config/types"
+import { type RCPage } from "../../types/pageTypes"
 
 interface SubNavProps {
   activePage: RCPage

@@ -1,5 +1,3 @@
-export type RCPage = "search" | "shep" | "account" | ""
-
 export interface Item {
   result?: {
     uri?: string

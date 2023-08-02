@@ -3,7 +3,7 @@ import type {
   SearchParams,
   SearchFilters,
   SearchResultsResponse,
-} from "../../src/config/types"
+} from "../../src/types/searchTypes"
 import type { NextApiRequest, NextApiResponse } from "next"
 import nyplApiClient from "../../src/server/nyplApiClient"
 import {
