@@ -36,7 +36,7 @@ export async function fetchResults(
   order: string,
   callback: (
     results: SearchResultsResponse,
-    aggregations: Record<string, string>,
+    aggregations: SearchResultsResponse,
     page: string
   ) => void,
   nextResponse: NextApiResponse,
@@ -68,8 +68,9 @@ export async function fetchResults(
     nyplApiClientCall(resultsQuery, features),
     nyplApiClientCall(aggregationQuery, features),
   ])
-    .then((response: [SearchResultsResponse, Record<string, string>]) => {
+    .then((response: [SearchResultsResponse, SearchResultsResponse]) => {
       const [results, aggregations] = response
+      console.log(aggregations)
       if (identifierNumbers.redirectOnMatch && results.totalResults === 1) {
         const bnumber = results.itemListElement[0].result.uri
         return nextResponse.redirect(`/bib/${bnumber}`)
