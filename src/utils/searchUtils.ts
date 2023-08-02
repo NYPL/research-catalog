@@ -3,7 +3,6 @@ import type {
   SearchQueryParams,
   SearchFilters,
   IdentifierNumbers,
-  SearchResultsResponse,
 } from "../types/searchTypes"
 
 import { RESULTS_PER_PAGE } from "../config/constants"
@@ -13,7 +12,6 @@ import {
   isEmpty as _isEmpty,
   mapObject as _mapObject,
   forEach as _forEach,
-  findWhere as _findWhere,
 } from "underscore"
 
 /**
@@ -33,26 +31,30 @@ const getSortQuery = (sortBy: string = ""): string => {
 }
 
 /**
- * getFieldParam
+ * getFieldQuery
  * Get the search param from the field selected.
  */
-const getFieldParam = (field: string = ""): string => {
+const getFieldQuery = (field: string = ""): string => {
   if (!field || field.trim() === "all") {
     return ""
   }
   return `&search_scope=${field}`
 }
 
+/**
+ * getIdentifierQuery
+ * Get the identifier query string from the identifier numbers.
+ */
 const getIdentifierQuery = (identifierNumbers: IdentifierNumbers) =>
   Object.entries(identifierNumbers)
     .map(([key, value]) => (value ? `&${key}=${value as string}` : ""))
     .join("")
 
 /**
- * getFilterParam
+ * getFilterQuery
  * Get the search params from the filter values.
  */
-const getFilterParam = (filters: SearchFilters) => {
+const getFilterQuery = (filters: SearchFilters) => {
   let strSearch = ""
 
   if (!_isEmpty(filters)) {
@@ -81,72 +83,39 @@ const getFilterParam = (filters: SearchFilters) => {
   return strSearch
 }
 
-/**
- * basicQuery
- * A curry function that will take in a search parameters object and return a function that will
- * overwrite whatever values it needs to overwrite to create the needed API query.
- * @example
- * const apiQueryFunc = basicQuery(this.props);
- * const apiQuery = apiQueryFunc();
- * // apiQuery === 'q='
- * const apiQuery2 = apiQueryFunc({ page: 3 });
- * // apiQuery2 === 'q=&page=3'
- * const apiQuery3 = apiQueryFunc({ page: 3, q: 'hamlet' });
- * // apiQuery3 === 'q=hamlet&page=3'
- */
-export const basicQuery = (searchParams: SearchParams = {}) => {
-  return ({
-    sortBy,
-    field,
-    selectedFilters,
-    searchKeywords,
-    contributor,
-    title,
-    subject,
-    page,
-    clearTitle,
-    clearSubject,
-    clearContributor,
-    identifierNumbers,
-  }: SearchParams) => {
-    const sortQuery = getSortQuery(sortBy || searchParams.sortBy)
-    const fieldQuery = getFieldParam(field || searchParams.field)
-    const filterQuery = getFilterParam(
-      selectedFilters || searchParams.selectedFilters
-    )
-    const identifierQuery = getIdentifierQuery(
-      identifierNumbers || searchParams.identifierNumbers
-    )
-    // `searchKeywords` can be an empty string, so check if it's undefined instead.
-    const query =
-      searchKeywords !== undefined
-        ? searchKeywords
-        : searchParams.searchKeywords
-    const searchKeywordsQuery = query ? `${encodeURIComponent(query)}` : ""
-    let pageQuery =
-      searchParams.page && searchParams.page !== "1"
-        ? `&page=${searchParams.page}`
-        : ""
-    pageQuery = page && page !== "1" ? `&page=${page}` : pageQuery
-    pageQuery = page === "1" ? "" : pageQuery
-    const contributorQuery =
-      (contributor || searchParams.contributor) && !clearContributor
-        ? `&contributor=${contributor || searchParams.contributor}`
-        : ""
-    const titleQuery =
-      (title || searchParams.title) && !clearTitle
-        ? `&title=${title || searchParams.title}`
-        : ""
-    const subjectQuery =
-      (subject || searchParams.subject) && !clearSubject
-        ? `&subject=${subject || searchParams.subject}`
-        : ""
-    const advancedQuery = `${contributorQuery}${titleQuery}${subjectQuery}`
+export const getSearchQuery = ({
+  sortBy = "relevance",
+  field = "all",
+  selectedFilters = {},
+  identifierNumbers = {},
+  searchKeywords,
+  contributor,
+  title,
+  subject,
+  page,
+  clearTitle,
+  clearSubject,
+  clearContributor,
+}: SearchParams) => {
+  const searchKeywordsQuery = searchKeywords
+    ? `${encodeURIComponent(searchKeywords)}`
+    : ""
+  const sortQuery = getSortQuery(sortBy)
+  const filterQuery = getFilterQuery(selectedFilters)
+  const fieldQuery = getFieldQuery(field)
+  const identifierQuery = getIdentifierQuery(identifierNumbers)
+  const pageQuery = page && page !== "1" ? `&page=${page}` : ""
 
-    const completeQuery = `${searchKeywordsQuery}${advancedQuery}${filterQuery}${sortQuery}${fieldQuery}${pageQuery}${identifierQuery}`
+  // advanced search query
+  const contributorQuery =
+    contributor && !clearContributor ? `&contributor=${contributor}` : ""
+  const titleQuery = title && !clearTitle ? `&title=${title}` : ""
+  const subjectQuery = subject && !clearSubject ? `&subject=${subject}` : ""
+  const advancedQuery = `${contributorQuery}${titleQuery}${subjectQuery}`
 
-    return completeQuery ? `q=${completeQuery}` : ""
-  }
+  const completeQuery = `${searchKeywordsQuery}${advancedQuery}${filterQuery}${sortQuery}${fieldQuery}${pageQuery}${identifierQuery}`
+
+  return completeQuery?.length ? `q=${completeQuery}` : ""
 }
 
 /**
@@ -195,74 +164,76 @@ export function getSearchParams(query: SearchQueryParams) {
   }
 }
 
-export const createSelectedFiltersHash = (
-  filters: SearchFilters,
-  apiFilters: SearchResultsResponse
-) => {
-  const selectedFilters = {
-    materialType: [],
-    language: [],
-    dateAfter: "",
-    dateBefore: "",
-    subjectLiteral: [],
-  }
-  if (!_isEmpty(filters)) {
-    _mapObject(filters, (value, key) => {
-      let filterObj
-      if (key === "dateAfter" || key === "dateBefore") {
-        selectedFilters[key] = value
-      } else if (key === "subjectLiteral") {
-        const subjectLiteralValues = _isArray(value) ? value : [value]
-        subjectLiteralValues.forEach((subjectLiteralValue) => {
-          selectedFilters[key].push({
-            selected: true,
-            value: subjectLiteralValue,
-            label: subjectLiteralValue,
-          })
-        })
-      } else if (_isArray(value) && value.length) {
-        if (!selectedFilters[key]) {
-          selectedFilters[key] = []
-        }
-        _forEach(value, (filterValue) => {
-          filterObj = _findWhere(apiFilters.itemListElement, { field: key })
-          const foundFilter = _isEmpty(filterObj)
-            ? {}
-            : _findWhere(filterObj.values, { value: filterValue })
+// TODO: Refactor filter hash building utility
 
-          if (
-            foundFilter &&
-            !_findWhere(selectedFilters[key], { id: foundFilter.value })
-          ) {
-            selectedFilters[key].push({
-              selected: true,
-              value: foundFilter.value,
-              label: foundFilter.label || foundFilter.value,
-              count: foundFilter.count,
-            })
-          }
-        })
-      } else if (typeof value === "string") {
-        filterObj = _findWhere(apiFilters.itemListElement, { field: key })
-        const foundFilter = _isEmpty(filterObj)
-          ? {}
-          : _findWhere(filterObj.values, { value })
-
-        if (
-          foundFilter &&
-          !_findWhere(selectedFilters[key], { id: foundFilter.value })
-        ) {
-          selectedFilters[key] = [
-            {
-              selected: true,
-              value: foundFilter.value,
-              label: foundFilter.label || foundFilter.value,
-              count: foundFilter.count,
-            },
-          ]
-        }
-      }
-    })
-  }
-  return selectedFilters
-}
+// export const createSelectedFiltersHash = (
+//   filters: SearchFilters,
+//   apiFilters: SearchResultsResponse
+// ) => {
+//   const selectedFilters = {
+//     materialType: [],
+//     language: [],
+//     dateAfter: "",
+//     dateBefore: "",
+//     subjectLiteral: [],
+//   }
+//   if (!_isEmpty(filters)) {
+//     _mapObject(filters, (value, key) => {
+//       let filterObj
+//       if (key === "dateAfter" || key === "dateBefore") {
+//         selectedFilters[key] = value
+//       } else if (key === "subjectLiteral") {
+//         const subjectLiteralValues = _isArray(value) ? value : [value]
+//         subjectLiteralValues.forEach((subjectLiteralValue) => {
+//           selectedFilters[key].push({
+//             selected: true,
+//             value: subjectLiteralValue,
+//             label: subjectLiteralValue,
+//           })
+//         })
+//       } else if (_isArray(value) && value.length) {
+//         if (!selectedFilters[key]) {
+//           selectedFilters[key] = []
+//         }
+//         _forEach(value, (filterValue) => {
+//           filterObj = _findWhere(apiFilters.itemListElement, { field: key })
+//           const foundFilter = _isEmpty(filterObj)
+//             ? {}
+//             : _findWhere(filterObj.values, { value: filterValue })
+//
+//           if (
+//             foundFilter &&
+//             !_findWhere(selectedFilters[key], { id: foundFilter.value })
+//           ) {
+//             selectedFilters[key].push({
+//               selected: true,
+//               value: foundFilter.value,
+//               label: foundFilter.label || foundFilter.value,
+//               count: foundFilter.count,
+//             })
+//           }
+//         })
+//       } else if (typeof value === "string") {
+//         filterObj = _findWhere(apiFilters.itemListElement, { field: key })
+//         const foundFilter = _isEmpty(filterObj)
+//           ? {}
+//           : _findWhere(filterObj.values, { value })
+//
+//         if (
+//           foundFilter &&
+//           !_findWhere(selectedFilters[key], { id: foundFilter.value })
+//         ) {
+//           selectedFilters[key] = [
+//             {
+//               selected: true,
+//               value: foundFilter.value,
+//               label: foundFilter.label || foundFilter.value,
+//               count: foundFilter.count,
+//             },
+//           ]
+//         }
+//       }
+//     })
+//   }
+//   return selectedFilters
+// }

@@ -6,21 +6,9 @@ import type {
 } from "../../src/types/searchTypes"
 import type { NextApiRequest, NextApiResponse } from "next"
 import nyplApiClient from "../../src/server/nyplApiClient"
-import {
-  basicQuery,
-  createSelectedFiltersHash,
-  getSearchParams,
-} from "../../src/utils/searchUtils"
+import { getSearchQuery, getSearchParams } from "../../src/utils/searchUtils"
 import { standardizeBibId } from "../../src/utils/bibUtils"
 import { RESULTS_PER_PAGE } from "../../src/config/constants"
-
-const createAPIQuery = basicQuery({
-  searchKeywords: "",
-  sortBy: "relevance",
-  field: "all",
-  selectedFilters: {},
-  identifierNumbers: {},
-})
 
 async function nyplApiClientCall(query: string, urlEnabledFeatures?: string[]) {
   const requestOptions =
@@ -58,7 +46,7 @@ export async function fetchResults(
     searchKeywords = standardizeBibId(searchKeywords)
   }
 
-  const encodedQueryString: string = createAPIQuery({
+  const encodedQueryString: string = getSearchQuery({
     searchKeywords,
     contributor,
     title,
@@ -152,7 +140,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           filters: apiFilters,
           searchResults,
           page: pageQuery,
-          selectedFilters: createSelectedFiltersHash(filters, apiFilters),
+          selectedFilters: {},
           searchKeywords: q,
           sortBy,
           field: fieldQuery,
