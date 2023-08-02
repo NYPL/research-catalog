@@ -61,14 +61,6 @@ export async function fetchResults(
     ),
   ])
     .then(([results, aggregations]) => {
-      // TODO: find out why we are redirecting based on identifierNumbers
-      if (
-        searchParams.identifierNumbers.redirectOnMatch &&
-        results.totalResults === 1
-      ) {
-        const bnumber = results.itemListElement[0].result.uri
-        return nextResponse.redirect(`/bib/${bnumber as string}`)
-      }
       onSuccess(results, aggregations, searchParams.page)
     })
     .catch(console.error)

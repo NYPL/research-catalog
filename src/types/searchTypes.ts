@@ -12,7 +12,6 @@ export interface IdentifierNumbers {
   isbn?: string
   oclc?: string
   lccn?: string
-  redirectOnMatch?: boolean
 }
 
 export interface SearchParams {

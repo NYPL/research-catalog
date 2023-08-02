@@ -131,7 +131,6 @@ export function mapQueryToSearchParams({
   isbn,
   oclc,
   lccn,
-  redirectOnMatch,
 }: QueryParams): SearchParams {
   return {
     searchKeywords: q,
@@ -147,7 +146,6 @@ export function mapQueryToSearchParams({
       isbn,
       oclc,
       lccn,
-      redirectOnMatch,
     },
   }
 }
