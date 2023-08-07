@@ -2,11 +2,12 @@ module.exports = {
   env: {
     browser: true,
     es2021: true,
+    node: true,
   },
   extends: [
-    "next/core-web-vitals",
-    "plugin:react/recommended",
-    "standard-with-typescript",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
     "prettier",
   ],
   overrides: [
@@ -19,7 +20,6 @@ module.exports = {
   ],
   parserOptions: {
     ecmaVersion: "latest",
-    sourceType: "module",
   },
   parser: "@typescript-eslint/parser",
   plugins: ["@typescript-eslint"],

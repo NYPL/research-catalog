@@ -21,9 +21,8 @@ export async function fetchResults(
     results: SearchResultsResponse,
     aggregations: SearchResultsResponse,
     page: string
-  ) => void,
-  nextResponse: NextApiResponse
-): Promise<any> {
+  ) => void
+): Promise<void> {
   const { searchKeywords, field, selectedFilters } = searchParams
 
   // If user is making a search for periodicals,
@@ -76,17 +75,13 @@ export async function fetchResults(
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "GET") {
     const searchParams = mapQueryToSearchParams(req.query)
-    await fetchResults(
-      searchParams,
-      (results, aggregations, page) => {
-        res.status(200).json({
-          results,
-          aggregations,
-          page,
-        })
-      },
-      res
-    )
+    await fetchResults(searchParams, (results, aggregations, page) => {
+      res.status(200).json({
+        results,
+        aggregations,
+        page,
+      })
+    })
   }
 }
 

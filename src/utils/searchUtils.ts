@@ -16,7 +16,7 @@ import type {
  * getSortQuery
  * Get the sort type and order and format into query param snippet.
  */
-function getSortQuery(sortBy: string = "", order: string = ""): string {
+function getSortQuery(sortBy = "", order = ""): string {
   const reset = sortBy === "relevance"
   let sortQuery = ""
 
@@ -31,7 +31,7 @@ function getSortQuery(sortBy: string = "", order: string = ""): string {
  * getFieldQuery
  * Get the search param from the field selected.
  */
-function getFieldQuery(field: string = ""): string {
+function getFieldQuery(field = ""): string {
   if (!field || field.trim() === "all") {
     return ""
   }

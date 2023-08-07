@@ -14,6 +14,7 @@ const Search = () => {
         <div className={styles.searchBarContainer}>
           <SearchBar
             id="mainContent"
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
             onSubmit={() => {}}
             labelText="Search Bar Label"
             selectProps={{
