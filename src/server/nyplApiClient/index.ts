@@ -1,5 +1,6 @@
 import NyplApiClient from "@nypl/nypl-data-api-client"
 import aws from "aws-sdk"
+
 import { apiConfig } from "../../config/config"
 
 interface KMSCache {

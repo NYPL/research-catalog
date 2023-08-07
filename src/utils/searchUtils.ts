@@ -1,16 +1,16 @@
-import type {
-  SearchParams,
-  QueryParams,
-  SearchFilters,
-  IdentifierNumbers,
-} from "../types/searchTypes"
-
 import {
   isArray as _isArray,
   isEmpty as _isEmpty,
   mapObject as _mapObject,
   forEach as _forEach,
 } from "underscore"
+
+import type {
+  SearchParams,
+  QueryParams,
+  SearchFilters,
+  IdentifierNumbers,
+} from "../types/searchTypes"
 
 /**
  * getSortQuery

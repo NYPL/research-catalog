@@ -1,5 +1,6 @@
-import "@nypl/design-system-react-components/dist/styles.css"
 import Head from "next/head"
+import "@nypl/design-system-react-components/dist/styles.css"
+
 import Layout from "../src/components/Layout/Layout"
 import { getActivePage } from "../src/utils/appUtils"
 

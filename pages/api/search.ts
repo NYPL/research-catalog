@@ -1,17 +1,18 @@
+import type { NextApiRequest, NextApiResponse } from "next"
+
 import type {
   SearchParams,
   SearchResultsResponse,
 } from "../../src/types/searchTypes"
-import type { NextApiRequest, NextApiResponse } from "next"
+import {
+  DISCOVERY_API_SEARCH_ROUTE,
+  RESULTS_PER_PAGE,
+} from "../../src/config/constants"
 import nyplApiClient from "../../src/server/nyplApiClient"
 import {
   getQueryString,
   mapQueryToSearchParams,
 } from "../../src/utils/searchUtils"
-import {
-  DISCOVERY_API_SEARCH_ROUTE,
-  RESULTS_PER_PAGE,
-} from "../../src/config/constants"
 import { standardizeBibId } from "../../src/utils/bibUtils"
 
 export async function fetchResults(

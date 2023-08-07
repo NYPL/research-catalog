@@ -1,5 +1,4 @@
 import Head from "next/head"
-import RCLink from "../src/components/RCLink/RCLink"
 import {
   Heading,
   SimpleGrid,
@@ -7,6 +6,8 @@ import {
   CardHeading,
   CardContent,
 } from "@nypl/design-system-react-components"
+
+import RCLink from "../src/components/RCLink/RCLink"
 
 export default function Home() {
   return (

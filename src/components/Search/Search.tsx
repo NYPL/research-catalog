@@ -1,6 +1,7 @@
+import { SearchBar } from "@nypl/design-system-react-components"
+
 import styles from "../../../styles/components/Search.module.scss"
 import RCLink from "../RCLink/RCLink"
-import { SearchBar } from "@nypl/design-system-react-components"
 
 /**
  * The Search component renders and controls the Search form and
