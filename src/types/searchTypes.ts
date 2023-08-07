@@ -1,10 +1,16 @@
+// TODO: These should eventually outline the allowed string values for each filter
+type MaterialType = string
+type Language = string
+type SubjectLiteral = string
+type Issuance = string
+
 export interface SearchFilters {
-  materialType?: string[]
-  language?: string[]
-  subjectLiteral?: string[]
+  materialType?: MaterialType | MaterialType[]
+  language?: Language | Language[]
+  subjectLiteral?: SubjectLiteral | SubjectLiteral[]
+  issuance?: Issuance | Issuance[]
   dateAfter?: string
   dateBefore?: string
-  issuance?: string[]
 }
 
 export interface Identifiers {
