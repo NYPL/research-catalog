@@ -22,7 +22,7 @@ export async function fetchResults(
     aggregations: SearchResultsResponse,
     page: string
   ) => void
-): Promise<void> {
+): Promise<any> {
   const { searchKeywords, field, selectedFilters } = searchParams
 
   // If user is making a search for periodicals,
