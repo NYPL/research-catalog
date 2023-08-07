@@ -36,14 +36,17 @@ export async function fetchResults(
         }
       : {}
 
+  // If user is making a search for bib number (i.e. field set to "standard_number"),
+  // standardize the bib ID and pass it as the search keywords
+  const keywordsOrBibId =
+    field === "standard_number"
+      ? standardizeBibId(searchKeywords)
+      : searchKeywords
+
   const queryString = getQueryString({
     ...searchParams,
     ...journalParams,
-    // standardize bib ID if search field is set to "standard_number"
-    searchKeywords:
-      field === "standard_number"
-        ? standardizeBibId(searchKeywords)
-        : searchKeywords,
+    searchKeywords: keywordsOrBibId,
   })
 
   const aggregationQuery = `/aggregations?${queryString}`
