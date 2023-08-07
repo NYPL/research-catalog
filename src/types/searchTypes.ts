@@ -7,7 +7,7 @@ export interface SearchFilters {
   issuance?: string[]
 }
 
-export interface IdentifierNumbers {
+export interface Identifiers {
   issn?: string
   isbn?: string
   oclc?: string
@@ -24,10 +24,10 @@ export interface SearchParams {
   title?: string
   subject?: string
   page?: string
-  identifierNumbers?: IdentifierNumbers
+  identifiers?: Identifiers
 }
 
-export interface QueryParams extends SearchParams, IdentifierNumbers {
+export interface QueryParams extends SearchParams, Identifiers {
   per_page?: string
   q?: string
   sort?: string

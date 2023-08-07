@@ -9,7 +9,7 @@ import type {
   SearchParams,
   QueryParams,
   SearchFilters,
-  IdentifierNumbers,
+  Identifiers,
 } from "../types/searchTypes"
 
 /**
@@ -42,8 +42,8 @@ function getFieldQuery(field = ""): string {
  * getIdentifierQuery
  * Get the identifier query string from the identifier numbers.
  */
-function getIdentifierQuery(identifierNumbers: IdentifierNumbers): string {
-  return Object.entries(identifierNumbers)
+function getIdentifierQuery(identifiers: Identifiers): string {
+  return Object.entries(identifiers)
     .map(([key, value]) => (value ? `&${key}=${value as string}` : ""))
     .join("")
 }
@@ -90,7 +90,7 @@ export function getQueryString({
   field = "all",
   order,
   selectedFilters = {},
-  identifierNumbers = {},
+  identifiers = {},
   searchKeywords,
   contributor,
   title,
@@ -102,7 +102,7 @@ export function getQueryString({
 
   const filterQuery = getFilterQuery(selectedFilters)
   const fieldQuery = getFieldQuery(field)
-  const identifierQuery = getIdentifierQuery(identifierNumbers)
+  const identifierQuery = getIdentifierQuery(identifiers)
   const pageQuery = page !== "1" ? `&page=${page}` : ""
 
   // advanced search query
@@ -145,7 +145,7 @@ export function mapQueryToSearchParams({
     subject,
     sortBy: sort,
     order: sort_direction,
-    identifierNumbers: {
+    identifiers: {
       issn,
       isbn,
       oclc,
