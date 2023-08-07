@@ -1,18 +1,17 @@
-import type { NextApiRequest, NextApiResponse } from "next"
-
 import type {
   SearchParams,
   SearchResultsResponse,
 } from "../../src/types/searchTypes"
-import {
-  DISCOVERY_API_SEARCH_ROUTE,
-  RESULTS_PER_PAGE,
-} from "../../src/config/constants"
+import type { NextApiRequest, NextApiResponse } from "next"
 import nyplApiClient from "../../src/server/nyplApiClient"
 import {
   getQueryString,
   mapQueryToSearchParams,
 } from "../../src/utils/searchUtils"
+import {
+  DISCOVERY_API_SEARCH_ROUTE,
+  RESULTS_PER_PAGE,
+} from "../../src/config/constants"
 import { standardizeBibId } from "../../src/utils/bibUtils"
 
 export async function fetchResults(
@@ -21,8 +20,9 @@ export async function fetchResults(
     results: SearchResultsResponse,
     aggregations: SearchResultsResponse,
     page: string
-  ) => void
-): Promise<void> {
+  ) => void,
+  nextResponse: NextApiResponse
+): Promise<any> {
   const { searchKeywords, field, selectedFilters } = searchParams
 
   // If user is making a search for periodicals,
@@ -75,13 +75,17 @@ export async function fetchResults(
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "GET") {
     const searchParams = mapQueryToSearchParams(req.query)
-    await fetchResults(searchParams, (results, aggregations, page) => {
-      res.status(200).json({
-        results,
-        aggregations,
-        page,
-      })
-    })
+    await fetchResults(
+      searchParams,
+      (results, aggregations, page) => {
+        res.status(200).json({
+          results,
+          aggregations,
+          page,
+        })
+      },
+      res
+    )
   }
 }
 
