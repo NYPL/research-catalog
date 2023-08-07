@@ -25,6 +25,13 @@ export async function fetchResults(
 ): Promise<void> {
   const { searchKeywords, field, selectedFilters } = searchParams
 
+  // If user is making a search for bib number (i.e. field set to "standard_number"),
+  // standardize the bib ID and pass it as the search keywords
+  const keywordsOrBibId =
+    field === "standard_number"
+      ? standardizeBibId(searchKeywords)
+      : searchKeywords
+
   // If user is making a search for periodicals,
   // add an issuance filter on the serial field and
   // switch field from "journal_title" to "title"
@@ -35,13 +42,6 @@ export async function fetchResults(
           selectedFilters: { ...selectedFilters, issuance: ["urn:biblevel:s"] },
         }
       : {}
-
-  // If user is making a search for bib number (i.e. field set to "standard_number"),
-  // standardize the bib ID and pass it as the search keywords
-  const keywordsOrBibId =
-    field === "standard_number"
-      ? standardizeBibId(searchKeywords)
-      : searchKeywords
 
   const queryString = getQueryString({
     ...searchParams,
