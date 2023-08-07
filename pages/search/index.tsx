@@ -8,7 +8,7 @@ export default function Search() {
     fetch("/research/research-catalog/api/search?q=test")
       .then(async (response) => await response.json())
       .then((data) => {
-        console.log(data)
+        console.log("API response data", data)
       })
       .catch((error) => {
         console.error(error)
