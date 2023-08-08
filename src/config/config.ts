@@ -1,4 +1,4 @@
-export const apiConfig: any = {
+export const apiConfig = {
   baseUrls: {
     platform: {
       development:

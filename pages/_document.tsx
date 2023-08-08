@@ -9,7 +9,7 @@ export default function Document() {
          }
         @media screen and (min-width: 1024px) {
           #nypl-header {
-            min-height: 230px;
+            min-height: 205px;
           }
         }
       `}</style>

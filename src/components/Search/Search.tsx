@@ -1,6 +1,7 @@
-import styles from "../..//styles/components/Search.module.scss"
-import RCLink from "../../components/RCLink/RCLink"
 import { SearchBar } from "@nypl/design-system-react-components"
+
+import styles from "../../../styles/components/Search.module.scss"
+import RCLink from "../RCLink/RCLink"
 
 /**
  * The Search component renders and controls the Search form and
@@ -13,6 +14,7 @@ const Search = () => {
         <div className={styles.searchBarContainer}>
           <SearchBar
             id="mainContent"
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
             onSubmit={() => {}}
             labelText="Search Bar Label"
             selectProps={{

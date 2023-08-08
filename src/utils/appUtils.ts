@@ -1,4 +1,4 @@
-import { type RCPage } from "../config/types"
+import type { RCPage } from "../types/pageTypes"
 
 /**
  * getActivePage(pathname)
