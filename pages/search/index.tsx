@@ -1,22 +1,10 @@
 import Head from "next/head"
 import { Heading } from "@nypl/design-system-react-components"
-import { useEffect } from "react"
 
-export default function Search() {
-  // Temp function to test out client side fetching until SearchForm UI is completed.
-  function getSearchResults() {
-    fetch("/research/research-catalog/api/search?q=test")
-      .then(async (response) => await response.json())
-      .then((data) => {
-        console.log("API response data", data)
-      })
-      .catch((error) => {
-        console.error(error)
-      })
-  }
-  useEffect(() => {
-    getSearchResults()
-  }, [])
+import { fetchResults } from "../api/search"
+
+export default function Search({ results }) {
+  console.log(JSON.parse(results))
   return (
     <div style={{ paddingBottom: "var(--nypl-space-l)" }}>
       <Head>
@@ -25,4 +13,13 @@ export default function Search() {
       <Heading level="two">Search Results</Heading>
     </div>
   )
+}
+
+export async function getServerSideProps() {
+  const results = await fetchResults({ searchKeywords: "cat" })
+  return {
+    props: {
+      results: JSON.stringify(results),
+    },
+  }
 }

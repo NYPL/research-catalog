@@ -21,7 +21,7 @@ const SearchForm = () => {
       searchKeywords: target.q.value,
     }
     const queryString = getQueryString(searchParams)
-    console.log(queryString)
+
     await router.push(`/search/?${queryString}`)
   }
 
@@ -33,7 +33,6 @@ const SearchForm = () => {
             id="mainContent"
             action="/research/research-catalog/search"
             method="get"
-            // eslint-disable-next-line @typescript-eslint/no-empty-function
             onSubmit={handleSubmit}
             labelText="Search Bar Label"
             selectProps={{
