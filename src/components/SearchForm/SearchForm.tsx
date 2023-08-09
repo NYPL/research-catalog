@@ -1,4 +1,5 @@
 import { SearchBar } from "@nypl/design-system-react-components"
+import type { SyntheticEvent } from "react"
 
 import styles from "../../../styles/components/Search.module.scss"
 import RCLink from "../RCLink/RCLink"
@@ -8,14 +9,21 @@ import RCLink from "../RCLink/RCLink"
  * advanced search link.
  */
 const SearchForm = () => {
+  const handleSubmit = (event: SyntheticEvent) => {
+    event.preventDefault()
+    console.log("Submit")
+  }
+
   return (
     <div className={styles.searchContainer}>
       <div className={styles.searchContainerInner}>
         <div className={styles.searchBarContainer}>
           <SearchBar
             id="mainContent"
+            action="/research/research-catalog/search"
+            method="get"
             // eslint-disable-next-line @typescript-eslint/no-empty-function
-            onSubmit={() => {}}
+            onSubmit={handleSubmit}
             labelText="Search Bar Label"
             selectProps={{
               labelText: "Select a category",
