@@ -4,13 +4,13 @@ import styles from "../../../styles/components/Search.module.scss"
 import RCLink from "../RCLink/RCLink"
 
 /**
- * The Search component renders and controls the Search form and
+ * The SearchForm component renders and controls the Search form and
  * advanced search link.
  */
-const Search = () => {
+const SearchForm = () => {
   return (
     <div className={styles.searchContainer}>
-      <div className={styles.searchFormContainer}>
+      <div className={styles.searchContainerInner}>
         <div className={styles.searchBarContainer}>
           <SearchBar
             id="mainContent"
@@ -39,11 +39,11 @@ const Search = () => {
           />
         </div>
         <div className={styles.advancedSearchContainer}>
-          <RCLink href={"/search/advanced"}>Advanced Search</RCLink>
+          <RCLink href={"/search/advanced"}>Advanced SearchForm</RCLink>
         </div>
       </div>
     </div>
   )
 }
 
-export default Search
+export default SearchForm
