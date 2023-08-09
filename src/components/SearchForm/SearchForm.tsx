@@ -1,17 +1,28 @@
 import { SearchBar } from "@nypl/design-system-react-components"
+import { useRouter } from "next/router"
 import type { SyntheticEvent } from "react"
 
 import styles from "../../../styles/components/Search.module.scss"
 import RCLink from "../RCLink/RCLink"
+import { getQueryString } from "../../utils/searchUtils"
+import type { SearchFormEvent } from "../../types/searchTypes"
 
 /**
  * The SearchForm component renders and controls the Search form and
  * advanced search link.
  */
 const SearchForm = () => {
-  const handleSubmit = (event: SyntheticEvent) => {
-    event.preventDefault()
-    console.log("Submit")
+  const router = useRouter()
+
+  const handleSubmit = async (e: SyntheticEvent) => {
+    e.preventDefault()
+    const target = e.target as typeof e.target & SearchFormEvent
+    const searchParams = {
+      searchKeywords: target.q.value,
+    }
+    const queryString = getQueryString(searchParams)
+    console.log(queryString)
+    await router.push(`/search/?${queryString}`)
   }
 
   return (

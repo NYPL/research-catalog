@@ -43,6 +43,20 @@ export interface QueryParams extends SearchParams, Identifiers {
   filters?: SearchFilters
 }
 
+export interface QueryParams extends SearchParams, Identifiers {
+  per_page?: string
+  q?: string
+  sort?: string
+  sort_direction?: string
+  sort_scope?: string
+  search_scope?: string
+  filters?: SearchFilters
+}
+
+export interface SearchFormEvent {
+  q: { value: string }
+}
+
 export interface SearchResultsResponse {
   totalResults: number
   itemListElement: SearchResultsItem[]
