@@ -3,22 +3,28 @@ import { Heading } from "@nypl/design-system-react-components"
 import { useEffect, useState } from "react"
 
 import { fetchResults } from "../api/search"
-import { getQueryString } from "../../src/utils/searchUtils"
+import {
+  getQueryString,
+  mapQueryToSearchParams,
+} from "../../src/utils/searchUtils"
 
 export default function Search({
-  results,
-  searchParams = { searchKeywords: "cat" },
+  serverResults,
+  defaultSearchParams = { searchKeywords: "cat" },
 }) {
-  const [searchResults, setSearchResults] = useState(results)
+  const [searchResults, setSearchResults] = useState(serverResults)
+  const [searchParams, setSearchParams] = useState(defaultSearchParams)
 
   useEffect(() => {
-    const queryString = getQueryString(searchParams)
-    fetch(`/research/research-catalog/api/search?${queryString}`)
-      .then((response) => response.json())
-      .then((resultsData) => {
-        setSearchResults(resultsData)
-      })
-  }, [searchParams])
+    if (!serverResults) {
+      const queryString = getQueryString(searchParams)
+      fetch(`/research/research-catalog/api/search?${queryString}`)
+        .then((response) => response.json())
+        .then((resultsData) => {
+          setSearchResults(resultsData)
+        })
+    }
+  }, [serverResults, searchParams])
 
   return (
     <div style={{ paddingBottom: "var(--nypl-space-l)" }}>
@@ -26,15 +32,19 @@ export default function Search({
         <title>NYPL Research Catalog</title>
       </Head>
       <Heading level="two">Search Results</Heading>
+      <button onClick={() => setSearchParams({ searchKeywords: "dog" })}>
+        Update Search Params
+      </button>
+      <div>{JSON.stringify(searchResults)}</div>
     </div>
   )
 }
 
-export async function getServerSideProps() {
-  const results = await fetchResults({ searchKeywords: "cat" })
+export async function getServerSideProps({ query }) {
+  const results = await fetchResults(mapQueryToSearchParams(query))
   return {
     props: {
-      results: JSON.stringify(results),
+      serverResults: JSON.stringify(results),
     },
   }
 }

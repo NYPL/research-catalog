@@ -44,7 +44,12 @@ export interface QueryParams extends SearchParams, Identifiers {
 }
 
 export interface SearchFormEvent {
-  q: { value: string }
+  q?: { value: string }
+  per_page?: { value: string }
+  sort?: { value: string }
+  sort_direction?: { value: string }
+  sort_scope?: { value: string }
+  search_scope?: { value: string }
 }
 
 export interface SearchResultsResponse {
