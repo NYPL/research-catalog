@@ -1,3 +1,4 @@
+export const BASE_URL = "/research/research-catalog"
 export const RESULTS_PER_PAGE = 50
 
 // API Routes

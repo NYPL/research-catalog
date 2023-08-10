@@ -6,6 +6,7 @@ import styles from "../../../styles/components/Search.module.scss"
 import RCLink from "../RCLink/RCLink"
 import { getQueryString } from "../../utils/searchUtils"
 import type { SearchFormEvent } from "../../types/searchTypes"
+import { BASE_URL } from "../../config/constants"
 
 /**
  * The SearchForm component renders and controls the Search form and
@@ -31,7 +32,7 @@ const SearchForm = () => {
         <div className={styles.searchBarContainer}>
           <SearchBar
             id="mainContent"
-            action="/research/research-catalog/search"
+            action={`${BASE_URL}/search`}
             method="get"
             onSubmit={handleSubmit}
             labelText="Search Bar Label"

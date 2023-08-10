@@ -10,6 +10,7 @@ import {
 } from "../../src/utils/searchUtils"
 import SearchResults from "../../src/components/SearchResults/SearchResults"
 import type { SearchParams } from "../../src/types/searchTypes"
+import { BASE_URL } from "../../src/config/constants"
 
 export default function Search({ results }) {
   const { query } = useRouter()
@@ -21,7 +22,7 @@ export default function Search({ results }) {
 
   function fetchResultsFromClient(searchParams: SearchParams) {
     const queryString = getQueryString(searchParams)
-    fetch(`/research/research-catalog/api/search?${queryString}`)
+    fetch(`${BASE_URL}/api/search?${queryString}`)
       .then((response) => response.json())
       .then((resultsData) => {
         setSearchResults(resultsData)
@@ -29,7 +30,6 @@ export default function Search({ results }) {
   }
 
   useEffect(() => {
-    // only fetch results on client side not server-side rendered
     fetchResultsFromClient(searchParams)
   }, [searchParams])
 
