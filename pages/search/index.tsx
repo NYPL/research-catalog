@@ -42,7 +42,11 @@ export default function Search({ results }) {
       <Head>
         <title>NYPL Research Catalog</title>
       </Head>
-      <Heading level="two">Search Results</Heading>
+      <Heading level="three">
+        {`Displaying 1-50 of ${searchResults.results.totalResults.toLocaleString()} results for keyword "${
+          searchParams.searchKeywords
+        }"`}
+      </Heading>
       {searchResults && <SearchResults {...searchResults} />}
     </div>
   )
