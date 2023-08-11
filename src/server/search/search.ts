@@ -1,14 +1,14 @@
 import type {
   SearchParams,
   SearchResultsResponse,
-} from "../../src/types/searchTypes"
+} from "../../types/searchTypes"
 import {
   DISCOVERY_API_SEARCH_ROUTE,
   RESULTS_PER_PAGE,
-} from "../../src/config/constants"
-import nyplApiClient from "../../src/server/nyplApiClient"
-import { getQueryString } from "../../src/utils/searchUtils"
-import { standardizeBibId } from "../../src/utils/bibUtils"
+} from "../../config/constants"
+import nyplApiClient from "../nyplApiClient/index"
+import { getQueryString } from "../../utils/searchUtils"
+import { standardizeBibId } from "../../utils/bibUtils"
 
 export async function fetchResults(
   searchParams: SearchParams
