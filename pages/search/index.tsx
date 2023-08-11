@@ -12,12 +12,13 @@ import SearchResults from "../../src/components/SearchResults/SearchResults"
 import type { SearchParams } from "../../src/types/searchTypes"
 import { BASE_URL } from "../../src/config/constants"
 
+/**
+ * The Search page is responsible for fetching and displaying the Search results,
+ * as well as displaying and controlling pagination and search filters.
+ */
 export default function Search({ results }) {
   const { query } = useRouter()
 
-  const [searchParams, setSearchParams] = useState(
-    mapQueryToSearchParams(query)
-  )
   const [searchResults, setSearchResults] = useState(results)
 
   function fetchResultsFromClient(searchParams: SearchParams) {
@@ -29,12 +30,19 @@ export default function Search({ results }) {
       })
   }
 
+  /**
+   * This useEffect fetches the search results on the client-side fetch whenever the route
+   * changes (particularly the query string).
+   *
+   * NB: This currently fires even when the results are fetched via SSR.
+   *
+   * TODO: Modify this to fetch the results only on Search Form submissions or
+   * when the results have not already been fetched via SSR (https://jira.nypl.org/browse/SCC-3715)
+   *
+   */
   useEffect(() => {
-    fetchResultsFromClient(searchParams)
-  }, [searchParams])
-
-  useEffect(() => {
-    setSearchParams(mapQueryToSearchParams(query))
+    const params = mapQueryToSearchParams(query)
+    fetchResultsFromClient(params)
   }, [query])
 
   return (
@@ -44,7 +52,7 @@ export default function Search({ results }) {
       </Head>
       <Heading level="three">
         {`Displaying 1-50 of ${searchResults.results.totalResults.toLocaleString()} results for keyword "${
-          searchParams.searchKeywords
+          query.q
         }"`}
       </Heading>
       {searchResults && <SearchResults {...searchResults} />}
