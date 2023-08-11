@@ -20,6 +20,7 @@ const SearchForm = () => {
     const target = e.target as typeof e.target & SearchFormEvent
     const searchParams = {
       searchKeywords: target.q.value,
+      field: target.search_scope.value,
     }
     const queryString = getQueryString(searchParams)
 
