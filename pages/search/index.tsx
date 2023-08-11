@@ -7,7 +7,7 @@ import {
 } from "@nypl/design-system-react-components"
 import { useRouter } from "next/router"
 
-import { fetchResults } from "../../src/server/search/search"
+import { fetchResults } from "../api/search"
 import { mapQueryToSearchParams } from "../../src/utils/searchUtils"
 import RCLink from "../../src/components/RCLink/RCLink"
 import type { SearchResultsItem } from "../../src/types/searchTypes"
