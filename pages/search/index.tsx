@@ -1,5 +1,10 @@
 import Head from "next/head"
-import { Heading } from "@nypl/design-system-react-components"
+import {
+  Card,
+  CardHeading,
+  Heading,
+  SimpleGrid,
+} from "@nypl/design-system-react-components"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 
@@ -8,9 +13,12 @@ import {
   getQueryString,
   mapQueryToSearchParams,
 } from "../../src/utils/searchUtils"
-import SearchResults from "../../src/components/SearchResults/SearchResults"
-import type { SearchParams } from "../../src/types/searchTypes"
 import { BASE_URL } from "../../src/config/constants"
+import RCLink from "../../src/components/RCLink/RCLink"
+import type {
+  SearchResultsItem,
+  SearchParams,
+} from "../../src/types/searchTypes"
 
 /**
  * The Search page is responsible for fetching and displaying the Search results,
@@ -20,6 +28,14 @@ export default function Search({ results }) {
   const { query } = useRouter()
 
   const [searchResults, setSearchResults] = useState(results)
+
+  /**
+   * TODO: We will likely need to elevate SearchParams state or move to context in order to keep the
+   * search form in sync with the query params
+   */
+  const [searchParams, setSearchParams] = useState(
+    mapQueryToSearchParams(query)
+  )
 
   function fetchResultsFromClient(searchParams: SearchParams) {
     const queryString = getQueryString(searchParams)
@@ -42,6 +58,7 @@ export default function Search({ results }) {
    */
   useEffect(() => {
     const params = mapQueryToSearchParams(query)
+    setSearchParams(params)
     fetchResultsFromClient(params)
   }, [query])
 
@@ -50,12 +67,37 @@ export default function Search({ results }) {
       <Head>
         <title>NYPL Research Catalog</title>
       </Head>
-      <Heading level="three">
-        {`Displaying 1-50 of ${searchResults.results.totalResults.toLocaleString()} results for keyword "${
-          query.q
-        }"`}
-      </Heading>
-      {searchResults && <SearchResults {...searchResults} />}
+      {searchResults?.results?.totalResults ? (
+        <>
+          <Heading level="three">
+            {`Displaying 1-50 of ${searchResults.results.totalResults.toLocaleString()} results for keyword "${
+              searchParams.searchKeywords
+            }"`}
+          </Heading>
+          <SimpleGrid columns={1} gap="grid.m">
+            {searchResults.results.itemListElement.map(
+              (result: SearchResultsItem) => {
+                // TODO: Create SearchResult component to manage result display (https://jira.nypl.org/browse/SCC-3714)
+                return (
+                  <Card key={result.result["@id"]}>
+                    <CardHeading level="four">
+                      <RCLink href="/bib">
+                        {result.result["titleDisplay"][0]}
+                      </RCLink>
+                    </CardHeading>
+                  </Card>
+                )
+              }
+            )}
+          </SimpleGrid>
+        </>
+      ) : (
+        /**
+         * TODO: The logic and copy for different scenarios will need to be added when
+         * filters are implemented
+         */
+        <Heading level="three">No results. Try a different search.</Heading>
+      )}
     </div>
   )
 }
