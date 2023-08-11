@@ -1,5 +1,3 @@
-import type { NextApiRequest, NextApiResponse } from "next"
-
 import type {
   SearchParams,
   SearchResultsResponse,
@@ -9,10 +7,7 @@ import {
   RESULTS_PER_PAGE,
 } from "../../src/config/constants"
 import nyplApiClient from "../../src/server/nyplApiClient"
-import {
-  getQueryString,
-  mapQueryToSearchParams,
-} from "../../src/utils/searchUtils"
+import { getQueryString } from "../../src/utils/searchUtils"
 import { standardizeBibId } from "../../src/utils/bibUtils"
 
 export async function fetchResults(
@@ -70,19 +65,3 @@ export async function fetchResults(
       return Promise.reject("Error fetching Search Results")
     })
 }
-
-/**
- * Default API route handler for Search
- * Calls a helper function that maps the query params object to a SearchParams object
- * It is then passed to fetchResults, which fetches the results and returns a JSON response
- * via its onSuccess callback on a successful fetch
- */
-async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method === "GET") {
-    const searchParams = mapQueryToSearchParams(req.query)
-    const response = await fetchResults(searchParams)
-    res.status(200).json(response)
-  }
-}
-
-export default handler
