@@ -23,7 +23,6 @@ jobs:
           export ENV="production";
           export HEADER_URL="https://ds-header.nypl.org";
           fi
-        fi
       env:
         - ECR_URL=946183545209.dkr.ecr.us-east-1.amazonaws.com/research-catalog
         - AWS_DEFAULT_REGION=us-east-1
