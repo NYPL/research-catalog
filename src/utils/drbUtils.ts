@@ -39,9 +39,7 @@ function getDRBAdvancedQuery(params: SearchQueryParams): string {
 /**
  *  Given a hash of SearchFilters, returns an array of DRBFilters as expected by the DRB API
  */
-const mapSearchFiltersToDRBFilters = (
-  filters: SearchFilters = {}
-): DRBFilters => {
+function mapSearchFiltersToDRBFilters(filters: SearchFilters = {}): DRBFilters {
   let drbFilters = [] as DRBFilters
 
   if (filters.dateAfter) drbFilters.push(`startYear:${filters.dateAfter}`)
@@ -61,7 +59,7 @@ const mapSearchFiltersToDRBFilters = (
 /**
  *  Given a hash of SearchQueryParams, returns a hash representing an equivalent query against DRB API
  */
-export function mapSearchQueryParamsToDRBQueryParams(
+function mapSearchQueryParamsToDRBQueryParams(
   params: SearchQueryParams
 ): DRBQueryParams {
   const { q, search_scope, sort, sort_direction, filters, per_page } = params
