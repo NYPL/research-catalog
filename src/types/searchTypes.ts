@@ -2,12 +2,14 @@
 type MaterialType = string
 type Language = string
 type SubjectLiteral = string
+type ContributorLiteral = string
 type Issuance = string
 
 export interface SearchFilters {
   materialType?: MaterialType | MaterialType[]
   language?: Language | Language[]
   subjectLiteral?: SubjectLiteral | SubjectLiteral[]
+  contributorLiteral?: ContributorLiteral | ContributorLiteral[]
   issuance?: Issuance | Issuance[]
   dateAfter?: string
   dateBefore?: string
@@ -33,14 +35,18 @@ export interface SearchParams {
   identifiers?: Identifiers
 }
 
-export interface QueryParams extends SearchParams, Identifiers {
-  per_page?: string
+export interface SearchQueryParams extends Identifiers {
   q?: string
+  contributor?: string
+  title?: string
+  subject?: string
+  filters?: SearchFilters
   sort?: string
   sort_direction?: string
   sort_scope?: string
   search_scope?: string
-  filters?: SearchFilters
+  page?: string
+  per_page?: string
 }
 
 export interface SearchFormEvent {
