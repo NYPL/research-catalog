@@ -1,4 +1,8 @@
-import type { SearchQueryParams, SearchFilters } from "../types/searchTypes"
+import type {
+  SearchQueryParams,
+  SearchFilters,
+  SearchParams,
+} from "../types/searchTypes"
 import type { DRBQueryParams, DRBFilters } from "../types/drbTypes"
 
 const searchFieldToDRBFieldMap = {
@@ -57,9 +61,9 @@ const mapSearchFiltersToDRBFilters = (
 /**
  *  Given a hash of SearchQueryParams, returns a hash representing an equivalent query against DRB API
  */
-export const mapSearchQueryParamsToDRBQueryParams = (
+export function mapSearchQueryParamsToDRBQueryParams(
   params: SearchQueryParams
-): DRBQueryParams => {
+): DRBQueryParams {
   const { q, search_scope, sort, sort_direction, filters, per_page } = params
 
   const keywordQuery = getDRBKeywordQuery(q, search_scope)
@@ -110,4 +114,42 @@ export const mapSearchQueryParamsToDRBQueryParams = (
   }
 
   return drbQuery
+}
+
+/**
+ *  Given a hash DRBQueryParams, e.g.
+ *    {
+ *      query: [ 'keyword:toast', 'subject:snacks' ],
+ *      page: 1
+ *    }
+ *
+ *  returns a URI encoded query string representation of the values, e.g.
+ *    "query=keyword:toast,subject:snacks&page=1"
+ */
+export function getQueryStringFromDRBParams(params: DRBQueryParams): string {
+  return (
+    "?" +
+    (params &&
+      Object.keys(params)
+        .reduce((pairs, key) => {
+          // Get array of values for this key
+          let values = params[key]
+          if (!Array.isArray(values)) values = [values]
+          values = values.map(encodeURIComponent)
+          return pairs.concat(
+            // Join values with ','
+            [encodeURIComponent(key), values.join(",")].join("=")
+          )
+        }, [])
+        .join("&"))
+  )
+}
+/**
+ * Given a SearchParams hash, return a DRB query string
+ */
+export function getDRBQueryStringFromSearchParams(
+  searchParams: SearchParams
+): string {
+  const drbParams = mapSearchQueryParamsToDRBQueryParams(searchParams)
+  return getQueryStringFromDRBParams(drbParams)
 }
