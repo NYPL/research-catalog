@@ -1,7 +1,7 @@
 import type { SearchQueryParams, SearchFilters } from "../types/searchTypes"
 import type { DRBQueryParams, DRBFilters } from "../types/drbTypes"
 
-const mapSearchFieldToDRBField = {
+const searchFieldToDRBFieldMap = {
   all: "keyword",
   contributor: "author",
   standard_number: "standardNumber",
@@ -25,7 +25,7 @@ function getDRBAdvancedQuery(params: SearchQueryParams): string {
     .map((fieldType) => {
       const fieldValue = params[fieldType]
       return (
-        fieldValue && `${mapSearchFieldToDRBField[fieldType]}:${fieldValue}`
+        fieldValue && `${searchFieldToDRBFieldMap[fieldType]}:${fieldValue}`
       )
     })
     .filter((str) => str)
