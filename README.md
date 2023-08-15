@@ -1,6 +1,6 @@
 This is the new [NYPL Reserach Catalog](https://www.nypl.org/research/research-catalog) front end built in [Next.js](https://nextjs.org/).
 
-## Getting Started
+## Getting Started!
 
 Install the required packages
 
