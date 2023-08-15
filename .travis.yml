@@ -7,13 +7,14 @@ branches:
   only:
     - qa
     - production
+    - merge-main-qa
 
 jobs:
   include:
     - stage: docker build
       if: (branch = qa or branch = production)
       before_install:
-        - if [[ $TRAVIS_BRANCH == "qa" ]];
+        - if [[ $TRAVIS_BRANCH == "merge-main-qa" ]];
           then
           export ENV="qa";
           export HEADER_URL="https://qa-ds-header.nypl.org";
@@ -42,7 +43,7 @@ jobs:
         - docker push "$ECR_URL:$LOCAL_TAG_NAME"
 
     - stage: deploy qa
-      if: branch IN (qa) AND type != pull_request
+      if: branch IN (merge-main-qa) AND type != pull_request
       env:
         - AWS_DEFAULT_REGION=us-east-1
         - AWS_REGION=us-east-1
