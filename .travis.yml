@@ -43,7 +43,7 @@ jobs:
         - docker push "$ECR_URL:$LOCAL_TAG_NAME"
 
     - stage: deploy qa
-      if: branch IN (update-qa) AND type != pull_request
+      if: branch IN (update-qa)
       env:
         - AWS_DEFAULT_REGION=us-east-1
         - AWS_REGION=us-east-1
