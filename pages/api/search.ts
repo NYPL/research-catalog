@@ -8,7 +8,7 @@ import {
   DISCOVERY_API_SEARCH_ROUTE,
   RESULTS_PER_PAGE,
 } from "../../src/config/constants"
-import nyplApiClient from "../../src/server/nyplApiClient"
+import nyplApiClient from "../../src/server/nyplApiClient/index"
 import {
   getQueryString,
   mapQueryToSearchParams,
@@ -16,13 +16,8 @@ import {
 import { standardizeBibId } from "../../src/utils/bibUtils"
 
 export async function fetchResults(
-  searchParams: SearchParams,
-  onSuccess: (
-    results: SearchResultsResponse,
-    aggregations: SearchResultsResponse,
-    page: string
-  ) => void
-): Promise<void> {
+  searchParams: SearchParams
+): Promise<SearchResultsResponse | void> {
   const { searchKeywords, field, selectedFilters } = searchParams
 
   // If user is making a search for bib number (i.e. field set to "standard_number"),
@@ -55,7 +50,7 @@ export async function fetchResults(
   // Get the following in parallel:
   //  - search results
   //  - aggregations
-  Promise.all([
+  return Promise.all([
     await nyplApiClient({ apiName: "discovery" }).then((client) =>
       client.get(`${DISCOVERY_API_SEARCH_ROUTE}${resultsQuery}`)
     ),
@@ -64,9 +59,16 @@ export async function fetchResults(
     ),
   ])
     .then(([results, aggregations]) => {
-      onSuccess(results, aggregations, searchParams.page)
+      return Promise.resolve({
+        results,
+        aggregations,
+        page: searchParams.page,
+      })
     })
-    .catch(console.error)
+    .catch((error) => {
+      console.error(error)
+      return Promise.reject("Error fetching Search Results")
+    })
 }
 
 /**
@@ -78,13 +80,8 @@ export async function fetchResults(
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "GET") {
     const searchParams = mapQueryToSearchParams(req.query)
-    await fetchResults(searchParams, (results, aggregations, page) => {
-      res.status(200).json({
-        results,
-        aggregations,
-        page,
-      })
-    })
+    const response = await fetchResults(searchParams)
+    res.status(200).json(response)
   }
 }
 

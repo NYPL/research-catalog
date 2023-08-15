@@ -9,7 +9,8 @@ import {
 import { type RCPage } from "../../types/pageTypes"
 import styles from "../../../styles/components/Layout.module.scss"
 import SubNav from "../SubNav/SubNav"
-import Search from "../Search/Search"
+import SearchForm from "../SearchForm/SearchForm"
+import { BASE_URL } from "../../config/constants"
 
 interface LayoutProps {
   activePage?: RCPage
@@ -34,7 +35,7 @@ const Layout = ({ children, activePage }: LayoutProps) => {
                 { url: "https://nypl.org", text: "Home" },
                 { url: "https://www.nypl.org/research", text: "Research" },
                 {
-                  url: "https://www.nypl.org/research/research-catalog",
+                  url: `https://www.nypl.org${BASE_URL}`,
                   text: "Research Catalog",
                 },
               ]}
@@ -42,7 +43,7 @@ const Layout = ({ children, activePage }: LayoutProps) => {
             <div className={styles.researchHeadingContainer}>
               <Heading id="heading-h1" level="one" text="Research Catalog" />
               <SubNav activePage={activePage} />
-              {showSearch && <Search />}
+              {showSearch && <SearchForm />}
             </div>
           </>
         }
