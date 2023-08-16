@@ -1,4 +1,3 @@
-import { useEffect } from "react"
 import { Heading } from "@nypl/design-system-react-components"
 import useSWRImmutable from "swr/immutable"
 
