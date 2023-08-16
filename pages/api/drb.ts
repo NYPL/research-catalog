@@ -7,6 +7,9 @@ import { DRB_API_NAME } from "../../src/config/constants"
 import { getDRBQueryStringFromSearchParams } from "../../src/utils/drbUtils"
 import { mapQueryToSearchParams } from "../../src/utils/searchUtils"
 
+/**
+ * Getter function for DRB results. Accepts a SearchParams object as an argument.
+ */
 export async function fetchDRBResults(
   searchParams: SearchParams
 ): Promise<DRBResultsResponse | string> {
@@ -30,6 +33,7 @@ export async function fetchDRBResults(
 
 /**
  * Default API route handler for ResearchNow DRB
+ * Expects the same query parameters as the Search endpoint
  */
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "GET") {

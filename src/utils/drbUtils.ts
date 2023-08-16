@@ -160,7 +160,7 @@ export function getQueryStringFromDRBQueryParams(
 }
 
 /**
- * Given a SearchParams hash, return a DRB query string
+ * Given a SearchParams hash, return a DRB query string.
  */
 export function getDRBQueryStringFromSearchParams(
   searchParams: SearchParams
