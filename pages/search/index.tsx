@@ -1,6 +1,4 @@
 import Head from "next/head"
-import { useMemo } from "react"
-import { encode } from "querystring"
 import {
   Card,
   CardHeading,
@@ -9,10 +7,11 @@ import {
 } from "@nypl/design-system-react-components"
 import { useRouter } from "next/router"
 
-import { fetchResults } from "../api/search"
-import { mapQueryToSearchParams } from "../../src/utils/searchUtils"
 import RCLink from "../../src/components/RCLink/RCLink"
 import DRBContainer from "../../src/components/DRBContainer/DRBContainer"
+import { fetchResults } from "../api/search"
+import { mapQueryToSearchParams } from "../../src/utils/searchUtils"
+import { mapSearchParamsToDRBParams } from "../../src/utils/drbUtils"
 import type { SearchResultsItem } from "../../src/types/searchTypes"
 
 /**
@@ -22,15 +21,8 @@ import type { SearchResultsItem } from "../../src/types/searchTypes"
 export default function Search({ results }) {
   const { query } = useRouter()
 
-  /**
-   * Memoize DRB query string to avoid re-renders/fetches for the same query parameters
-   */
-  const drbQuery = useMemo(() => {
-    const drbQueryParams = { page: null, ...query }
-    return new URLSearchParams(encode(drbQueryParams))
-  }, [query])
-
   const searchParams = mapQueryToSearchParams(query)
+  const drbParams = mapSearchParamsToDRBParams(searchParams)
 
   return (
     <div style={{ paddingBottom: "var(--nypl-space-l)" }}>
@@ -60,7 +52,7 @@ export default function Search({ results }) {
               }
             )}
           </SimpleGrid>
-          <DRBContainer drbQuery={drbQuery} />
+          <DRBContainer searchParams={drbParams} />
         </div>
       ) : (
         /**

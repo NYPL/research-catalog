@@ -1,24 +1,27 @@
+import { useEffect, useState } from "react"
 import { Heading } from "@nypl/design-system-react-components"
 
-import type { DRBResultsResponse } from "../../types/drbTypes"
-import { useEffect, useState } from "react"
 import { BASE_URL } from "../../config/constants"
+import type { SearchParams } from "../../types/searchTypes"
+import type { DRBResultsResponse } from "../../types/drbTypes"
+import { getQueryString } from "../../utils/searchUtils"
 
 interface DRBContainerProps {
-  drbQuery: URLSearchParams
+  searchParams: SearchParams
 }
 
 /**
  * The DRBContainer fetches and displays DRB search results
  */
-const DRBContainer = ({ drbQuery }: DRBContainerProps) => {
+const DRBContainer = ({ searchParams }: DRBContainerProps) => {
+  const searchQuery = getQueryString(searchParams)
   const [drbResults, setDrbResults] = useState({} as DRBResultsResponse)
   const [drbLoading, setDrbLoading] = useState(true)
   const [drbError, setDrbError] = useState(false)
 
   useEffect(() => {
     setDrbLoading(true)
-    fetch(BASE_URL + "/api/drb?" + drbQuery)
+    fetch(BASE_URL + "/api/drb?" + searchQuery)
       .then((results) => results.json())
       .then((data) => {
         setDrbLoading(false)
@@ -29,7 +32,11 @@ const DRBContainer = ({ drbQuery }: DRBContainerProps) => {
         setDrbLoading(false)
         setDrbError(true)
       })
-  }, [drbQuery])
+  }, [searchQuery])
+
+  useEffect(() => {
+    console.log("re-render")
+  }, [])
 
   return drbLoading ? (
     <div>Loading</div>

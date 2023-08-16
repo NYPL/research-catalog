@@ -135,6 +135,7 @@ export function mapQueryToSearchParams({
   isbn,
   oclc,
   lccn,
+  filters,
 }: SearchQueryParams): SearchParams {
   return {
     searchKeywords: q,
@@ -145,6 +146,7 @@ export function mapQueryToSearchParams({
     subject,
     sortBy: sort,
     order: sort_direction,
+    selectedFilters: filters,
     identifiers: {
       issn,
       isbn,

@@ -5,6 +5,7 @@ import type { DRBResultsResponse } from "../../src/types/drbTypes"
 import nyplApiClient from "../../src/server/nyplApiClient/index"
 import { DRB_API_NAME } from "../../src/config/constants"
 import { getDRBQueryStringFromSearchParams } from "../../src/utils/drbUtils"
+import { mapQueryToSearchParams } from "../../src/utils/searchUtils"
 
 export async function fetchDRBResults(
   searchParams: SearchParams
@@ -32,8 +33,8 @@ export async function fetchDRBResults(
  */
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "GET") {
-    const drbQueryParams = req.query
-    const response = await fetchDRBResults(drbQueryParams)
+    const searchParams = mapQueryToSearchParams(req.query)
+    const response = await fetchDRBResults(searchParams)
     res.status(200).json(response)
   }
 }

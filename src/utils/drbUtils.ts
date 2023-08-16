@@ -3,16 +3,31 @@ import type {
   SearchFilters,
   SearchParams,
 } from "../types/searchTypes"
-import type { DRBQueryParams, DRBFilters } from "../types/drbTypes"
+import type { DRBParams, DRBQueryParams, DRBFilters } from "../types/drbTypes"
 import { DRB_RESULTS_PER_PAGE } from "../config/constants"
 
-const searchFieldToDRBFieldMap = {
+const mapSearchFieldToDRBField = {
   all: "keyword",
   contributor: "author",
   standard_number: "standardNumber",
   title: "title",
   subject: "subject",
   date: "date",
+}
+
+/**
+ * Utility function to strip non-DRB fields from Search Params
+ * This is used in the Search page to memoize the DRB params when fields change in the SearchParams (e.g. page).
+ * It may also be useful if DRB params diverge from search params in the future.
+ */
+export function mapSearchParamsToDRBParams({
+  searchKeywords,
+  field,
+  sortBy,
+  order,
+  selectedFilters,
+}: SearchParams): DRBParams {
+  return { searchKeywords, field, sortBy, order, selectedFilters }
 }
 
 /**
@@ -30,7 +45,7 @@ function getDRBAdvancedQuery(params: SearchQueryParams): string {
     .map((fieldType) => {
       const fieldValue = params[fieldType]
       return (
-        fieldValue && `${searchFieldToDRBFieldMap[fieldType]}:${fieldValue}`
+        fieldValue && `${mapSearchFieldToDRBField[fieldType]}:${fieldValue}`
       )
     })
     .filter((str) => str)
@@ -60,19 +75,10 @@ function mapSearchFiltersToDRBFilters(filters: SearchFilters = {}): DRBFilters {
 /**
  *  Given a hash of SearchQueryParams, returns a hash representing an equivalent query against DRB API
  */
-function mapSearchQueryParamsToDRBQueryParams(
-  params: SearchQueryParams
-): DRBQueryParams {
-  const {
-    q,
-    search_scope,
-    sort,
-    sort_direction,
-    filters,
-    per_page = DRB_RESULTS_PER_PAGE,
-  } = params
+function mapDRBParamsToDRBQueryParams(params: DRBParams): DRBQueryParams {
+  const { searchKeywords, field, sortBy, order, selectedFilters } = params
 
-  const keywordQuery = getDRBKeywordQuery(q, search_scope)
+  const keywordQuery = getDRBKeywordQuery(searchKeywords, field)
   const advancedQuery = getDRBAdvancedQuery(params)
 
   const mainQuery = keywordQuery + (advancedQuery ? "," : "") + advancedQuery
@@ -83,12 +89,12 @@ function mapSearchQueryParamsToDRBQueryParams(
     source: "catalog",
   }
 
-  if (sort) {
-    const sortDirection = sort_direction || (sort === "date" ? "desc" : "asc")
-    drbQuery.sort = [sort, sortDirection].join(":")
+  if (sortBy) {
+    const sortDirection = order || (sortBy === "date" ? "desc" : "asc")
+    drbQuery.sort = [sortBy, sortDirection].join(":")
   }
 
-  if (per_page) drbQuery.size = per_page
+  drbQuery.size = DRB_RESULTS_PER_PAGE
 
   const {
     subjectLiteral,
@@ -96,7 +102,7 @@ function mapSearchQueryParamsToDRBQueryParams(
     language,
     dateAfter,
     dateBefore,
-  } = filters || {}
+  } = selectedFilters || {}
 
   // DRB doesn't handle subject or contributor in `filter` param, so handle
   // them separately:
@@ -132,7 +138,9 @@ function mapSearchQueryParamsToDRBQueryParams(
  *  returns a URI encoded query string representation of the values, e.g.
  *    "query=keyword:toast,subject:snacks&page=1"
  */
-export function getQueryStringFromDRBParams(params: DRBQueryParams): string {
+export function getQueryStringFromDRBQueryParams(
+  params: DRBQueryParams
+): string {
   return (
     "?" +
     (params &&
@@ -150,12 +158,14 @@ export function getQueryStringFromDRBParams(params: DRBQueryParams): string {
         .join("&"))
   )
 }
+
 /**
  * Given a SearchParams hash, return a DRB query string
  */
 export function getDRBQueryStringFromSearchParams(
   searchParams: SearchParams
 ): string {
-  const drbParams = mapSearchQueryParamsToDRBQueryParams(searchParams)
-  return getQueryStringFromDRBParams(drbParams)
+  const drbParams = mapSearchParamsToDRBParams(searchParams)
+  const drbQueryParams = mapDRBParamsToDRBQueryParams(drbParams)
+  return getQueryStringFromDRBQueryParams(drbQueryParams)
 }
