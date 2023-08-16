@@ -1,4 +1,6 @@
 import Head from "next/head"
+import { useMemo } from "react"
+import { encode } from "querystring"
 import {
   Card,
   CardHeading,
@@ -19,8 +21,16 @@ import type { SearchResultsItem } from "../../src/types/searchTypes"
  */
 export default function Search({ results }) {
   const { query } = useRouter()
+
+  /**
+   * Memoize DRB query string to avoid re-renders/fetches for the same query parameters
+   */
+  const drbQuery = useMemo(() => {
+    const drbQueryParams = { page: null, ...query }
+    return new URLSearchParams(encode(drbQueryParams))
+  }, [query])
+
   const searchParams = mapQueryToSearchParams(query)
-  const drbResults = {}
 
   return (
     <div style={{ paddingBottom: "var(--nypl-space-l)" }}>
@@ -50,7 +60,7 @@ export default function Search({ results }) {
               }
             )}
           </SimpleGrid>
-          <DRBContainer results={drbResults} />
+          <DRBContainer drbQuery={drbQuery} />
         </div>
       ) : (
         /**
