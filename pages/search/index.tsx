@@ -10,6 +10,7 @@ import { useRouter } from "next/router"
 import { fetchResults } from "../api/search"
 import { mapQueryToSearchParams } from "../../src/utils/searchUtils"
 import RCLink from "../../src/components/RCLink/RCLink"
+import DRBContainer from "../../src/components/DRBContainer/DRBContainer"
 import type { SearchResultsItem } from "../../src/types/searchTypes"
 
 /**
@@ -19,6 +20,7 @@ import type { SearchResultsItem } from "../../src/types/searchTypes"
 export default function Search({ results }) {
   const { query } = useRouter()
   const searchParams = mapQueryToSearchParams(query)
+  const drbResults = {}
 
   return (
     <div style={{ paddingBottom: "var(--nypl-space-l)" }}>
@@ -26,13 +28,13 @@ export default function Search({ results }) {
         <title>NYPL Research Catalog</title>
       </Head>
       {results?.results?.totalResults ? (
-        <>
-          <Heading level="three">
-            {`Displaying 1-50 of ${results.results.totalResults.toLocaleString()} results for keyword "${
-              searchParams.searchKeywords
-            }"`}
-          </Heading>
+        <div style={{ display: "flex" }}>
           <SimpleGrid columns={1} gap="grid.m">
+            <Heading level="three">
+              {`Displaying 1-50 of ${results.results.totalResults.toLocaleString()} results for keyword "${
+                searchParams.searchKeywords
+              }"`}
+            </Heading>
             {results.results.itemListElement.map(
               (result: SearchResultsItem) => {
                 // TODO: Create SearchResult component to manage result display (https://jira.nypl.org/browse/SCC-3714)
@@ -48,7 +50,8 @@ export default function Search({ results }) {
               }
             )}
           </SimpleGrid>
-        </>
+          <DRBContainer results={drbResults} />
+        </div>
       ) : (
         /**
          * TODO: The logic and copy for different scenarios will need to be added when
