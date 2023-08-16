@@ -13,22 +13,34 @@ interface DRBContainerProps {
  */
 const DRBContainer = ({ drbQuery }: DRBContainerProps) => {
   const [drbResults, setDrbResults] = useState({} as DRBResultsResponse)
+  const [drbLoading, setDrbLoading] = useState(true)
+  const [drbError, setDrbError] = useState(false)
 
   useEffect(() => {
+    setDrbLoading(true)
     fetch(BASE_URL + "/api/drb?" + drbQuery)
       .then((results) => results.json())
-      .then((data) => setDrbResults(data))
+      .then((data) => {
+        setDrbLoading(false)
+        return setDrbResults(data)
+      })
+      .catch((error) => {
+        console.error(error)
+        setDrbLoading(false)
+        setDrbError(true)
+      })
   }, [drbQuery])
 
-  return (
+  return drbLoading ? (
+    <div>Loading</div>
+  ) : (
     <div>
       <Heading>Results from Digital Research Books Beta</Heading>
-      {drbResults?.works &&
-        drbResults.works.map((drbWork) => (
-          <div className="user" key={Math.random()}>
-            {drbWork.title}
-          </div>
-        ))}
+      {!drbError && drbResults?.works ? (
+        drbResults.works.map((drbWork) => <>{drbWork.title}</>)
+      ) : (
+        <div>There was an error getting DRB results. Please try again.</div>
+      )}
     </div>
   )
 }
