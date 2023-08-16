@@ -50,7 +50,7 @@ jobs:
       install:
         - pip install --user awscli
       script:
-      - aws ecs update-service --cluster $CLUSTER_NAME --service $CLUSTER_NAME --force-new-deployment
+        - aws ecs update-service --cluster $CLUSTER_NAME --service $CLUSTER_NAME --force-new-deployment
 
     - stage: deploy production
       if: branch IN (production) AND type != pull_request

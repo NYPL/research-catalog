@@ -95,7 +95,7 @@ export function getQueryString({
   contributor,
   title,
   subject,
-  page = "1",
+  page = 1,
 }: SearchParams): string {
   const searchKeywordsQuery = encodeURIComponent(searchKeywords)
   const sortQuery = getSortQuery(sortBy, order)
@@ -103,7 +103,7 @@ export function getQueryString({
   const filterQuery = getFilterQuery(selectedFilters)
   const fieldQuery = getFieldQuery(field)
   const identifierQuery = getIdentifierQuery(identifiers)
-  const pageQuery = page !== "1" ? `&page=${page}` : ""
+  const pageQuery = page !== 1 ? `&page=${page}` : ""
 
   // advanced search query
   const contributorQuery = contributor ? `&contributor=${contributor}` : ""

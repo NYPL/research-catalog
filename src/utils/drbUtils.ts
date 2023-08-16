@@ -4,6 +4,7 @@ import type {
   SearchParams,
 } from "../types/searchTypes"
 import type { DRBQueryParams, DRBFilters } from "../types/drbTypes"
+import { DRB_RESULTS_PER_PAGE } from "../config/constants"
 
 const searchFieldToDRBFieldMap = {
   all: "keyword",
@@ -62,7 +63,14 @@ function mapSearchFiltersToDRBFilters(filters: SearchFilters = {}): DRBFilters {
 function mapSearchQueryParamsToDRBQueryParams(
   params: SearchQueryParams
 ): DRBQueryParams {
-  const { q, search_scope, sort, sort_direction, filters, per_page } = params
+  const {
+    q,
+    search_scope,
+    sort,
+    sort_direction,
+    filters,
+    per_page = DRB_RESULTS_PER_PAGE,
+  } = params
 
   const keywordQuery = getDRBKeywordQuery(q, search_scope)
   const advancedQuery = getDRBAdvancedQuery(params)
