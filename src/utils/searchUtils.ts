@@ -118,7 +118,7 @@ export function getQueryString({
 
 /**
  * mapQueryToSearchParams
- * Maps the query param structure from the request to a SearchParams object, which is expected by fetchResults
+ * Maps the SearchQueryParams structure from the request to a SearchParams object, which is expected by fetchResults
  */
 export function mapQueryToSearchParams({
   q,

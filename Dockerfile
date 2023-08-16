@@ -3,6 +3,9 @@ FROM node:16-alpine AS production
 #RUN apt-get update
 #RUN apt-get upgrade -y
 
+ARG HEADER_URL
+ENV HEADER_URL=${HEADER_URL}
+
 WORKDIR /app
 
 ENV PATH /app/node_modules/.bin:$PATH
