@@ -1,3 +1,5 @@
+import type { SearchResultsAPIResponse } from "./searchTypes"
+
 export interface DRBQueryParams {
   query: string[]
   page: number
@@ -8,3 +10,8 @@ export interface DRBQueryParams {
 }
 
 export type DRBFilters = string[]
+
+export interface DRBResultsResponse {
+  response?: SearchResultsAPIResponse
+  researchNowQueryString?: string
+}

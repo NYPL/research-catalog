@@ -5,6 +5,7 @@ import type {
   SearchResultsResponse,
 } from "../../src/types/searchTypes"
 import {
+  DISCOVERY_API_NAME,
   DISCOVERY_API_SEARCH_ROUTE,
   RESULTS_PER_PAGE,
 } from "../../src/config/constants"
@@ -51,10 +52,10 @@ export async function fetchResults(
   //  - search results
   //  - aggregations
   return Promise.all([
-    await nyplApiClient({ apiName: "discovery" }).then((client) =>
+    await nyplApiClient({ apiName: DISCOVERY_API_NAME }).then((client) =>
       client.get(`${DISCOVERY_API_SEARCH_ROUTE}${resultsQuery}`)
     ),
-    await nyplApiClient({ apiName: "discovery" }).then((client) =>
+    await nyplApiClient({ apiName: DISCOVERY_API_NAME }).then((client) =>
       client.get(`${DISCOVERY_API_SEARCH_ROUTE}${aggregationQuery}`)
     ),
   ])
