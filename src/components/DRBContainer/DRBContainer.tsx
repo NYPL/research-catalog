@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { Heading } from "@nypl/design-system-react-components"
+import useSWRImmutable from "swr/immutable"
 
 import { BASE_URL } from "../../config/constants"
 import type { SearchParams } from "../../types/searchTypes"
-import type { DRBResultsResponse } from "../../types/drbTypes"
+import type { DRBWork } from "../../types/drbTypes"
 import { getQueryString } from "../../utils/searchUtils"
 
 interface DRBContainerProps {
@@ -15,32 +16,20 @@ interface DRBContainerProps {
  */
 const DRBContainer = ({ searchParams }: DRBContainerProps) => {
   const searchQuery = getQueryString(searchParams)
-  const [drbResults, setDrbResults] = useState({} as DRBResultsResponse)
-  const [drbLoading, setDrbLoading] = useState(true)
-  const [drbError, setDrbError] = useState(false)
+  const drbUrl = `${BASE_URL}/api/drb?${searchQuery}`
+  const fetcher = (url: string) => fetch(url).then((res) => res.json())
 
-  useEffect(() => {
-    setDrbLoading(true)
-    fetch(BASE_URL + "/api/drb?" + searchQuery)
-      .then((results) => results.json())
-      .then((data) => {
-        setDrbLoading(false)
-        return setDrbResults(data)
-      })
-      .catch((error) => {
-        console.error(error)
-        setDrbLoading(false)
-        setDrbError(true)
-      })
-  }, [searchQuery])
+  const { data, error, isValidating } = useSWRImmutable(drbUrl, fetcher)
 
-  return drbLoading ? (
+  return isValidating ? (
     <div>Loading</div>
   ) : (
     <div>
       <Heading>Results from Digital Research Books Beta</Heading>
-      {!drbError && drbResults?.works ? (
-        drbResults.works.map((drbWork) => <>{drbWork.title}</>)
+      {!error && data?.works ? (
+        data.works.map((drbWork: DRBWork) => (
+          <div key={drbWork.uuid}>{drbWork.title}</div>
+        ))
       ) : (
         <div>There was an error getting DRB results. Please try again.</div>
       )}

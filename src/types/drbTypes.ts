@@ -24,8 +24,9 @@ export interface DRBQueryParams {
 
 export type DRBFilters = string[]
 
-interface DRBWork {
+export interface DRBWork {
   title?: string
+  uuid?: string
 }
 
 export interface DRBResultsResponse {
