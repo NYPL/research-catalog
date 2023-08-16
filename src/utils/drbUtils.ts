@@ -16,9 +16,9 @@ const mapSearchFieldToDRBField = {
 }
 
 /**
- * Utility function to strip non-DRB fields from Search Params
- * This is used in the Search page to memoize the DRB params when fields change in the SearchParams (e.g. page).
- * It may also be useful if DRB params diverge from search params in the future.
+ * Utility function to map SearchParams to DRBParams
+ * DRBParams is currently a subset of SearchParams but this is helpful for preventing
+ * DRB re-renders/fetches on SearchParams changes which are irrelevant to DRB.
  */
 export function mapSearchParamsToDRBParams({
   searchKeywords,
