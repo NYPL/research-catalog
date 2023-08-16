@@ -17,9 +17,12 @@ export async function fetchDRBResults(
 
   // Return a promise resolving the DRB API response and the query string used
   return drbCall.then(({ data }) => {
+    if (!data || !data.works) {
+      Promise.reject(new Error("No data in DRB response"))
+    }
     return {
-      response: data,
-      researchNowQueryString: drbQueryString,
+      works: data.works,
+      totalWorks: data.totalWorks,
     }
   })
 }
