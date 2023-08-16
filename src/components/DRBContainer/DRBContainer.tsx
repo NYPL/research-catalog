@@ -34,10 +34,6 @@ const DRBContainer = ({ searchParams }: DRBContainerProps) => {
       })
   }, [searchQuery])
 
-  useEffect(() => {
-    console.log("re-render")
-  }, [])
-
   return drbLoading ? (
     <div>Loading</div>
   ) : (

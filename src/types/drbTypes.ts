@@ -1,4 +1,4 @@
-import { Identifiers, SearchFilters } from "./searchTypes"
+import type { Identifiers, SearchFilters } from "./searchTypes"
 
 export interface DRBParams {
   searchKeywords?: string
