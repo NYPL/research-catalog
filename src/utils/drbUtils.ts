@@ -1,9 +1,5 @@
-import type {
-  SearchQueryParams,
-  SearchFilters,
-  SearchParams,
-} from "../types/searchTypes"
-import type { DRBParams, DRBQueryParams, DRBFilters } from "../types/drbTypes"
+import type { SearchFilters, SearchParams } from "../types/searchTypes"
+import type { DRBQueryParams, DRBFilters } from "../types/drbTypes"
 import { DRB_RESULTS_PER_PAGE } from "../config/constants"
 
 const mapSearchFieldToDRBField = {
@@ -16,9 +12,9 @@ const mapSearchFieldToDRBField = {
 }
 
 /**
- * Utility function to map SearchParams to DRBParams
- * DRBParams is currently a subset of SearchParams but this is helpful for preventing
- * DRB re-renders/fetches on SearchParams changes which are irrelevant to DRB.
+ * Utility function to remove fields from SearchParams that aren't needed for DRB requests.
+ * Helpful for preventing DRB re-renders/fetches on SearchParams changes which are irrelevant
+ * to DRB (e.g. page).
  */
 export function mapSearchParamsToDRBParams({
   searchKeywords,
@@ -26,8 +22,20 @@ export function mapSearchParamsToDRBParams({
   sortBy,
   order,
   selectedFilters,
-}: SearchParams): DRBParams {
-  return { searchKeywords, field, sortBy, order, selectedFilters }
+  contributor,
+  title,
+  subject,
+}: SearchParams): SearchParams {
+  return {
+    searchKeywords,
+    field,
+    sortBy,
+    order,
+    selectedFilters,
+    contributor,
+    title,
+    subject,
+  }
 }
 
 /**
@@ -40,7 +48,7 @@ function getDRBKeywordQuery(keywords = "*", field = "keyword"): string {
 /**
  *  Given a hash of SearchQueryParams, format and return an advanced field query string expected by the DRB API
  */
-function getDRBAdvancedQuery(params: SearchQueryParams): string {
+function getDRBAdvancedQuery(params: SearchParams): string {
   return ["contributor", "title", "subject"]
     .map((fieldType) => {
       const fieldValue = params[fieldType]
@@ -73,9 +81,9 @@ function mapSearchFiltersToDRBFilters(filters: SearchFilters = {}): DRBFilters {
 }
 
 /**
- *  Given a hash of SearchQueryParams, returns a hash representing an equivalent query against DRB API
+ *  Given a hash of SearchParams, returns a hash representing an equivalent query against DRB API
  */
-function mapDRBParamsToDRBQueryParams(params: DRBParams): DRBQueryParams {
+function mapSearchParamsToDRBQueryParams(params: SearchParams): DRBQueryParams {
   const { searchKeywords, field, sortBy, order, selectedFilters } = params
 
   const keywordQuery = getDRBKeywordQuery(searchKeywords, field)
@@ -165,7 +173,6 @@ export function getQueryStringFromDRBQueryParams(
 export function getDRBQueryStringFromSearchParams(
   searchParams: SearchParams
 ): string {
-  const drbParams = mapSearchParamsToDRBParams(searchParams)
-  const drbQueryParams = mapDRBParamsToDRBQueryParams(drbParams)
+  const drbQueryParams = mapSearchParamsToDRBQueryParams(searchParams)
   return getQueryStringFromDRBQueryParams(drbQueryParams)
 }
