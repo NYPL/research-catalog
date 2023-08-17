@@ -12,23 +12,24 @@ import { mapQueryToSearchParams } from "../../src/utils/searchUtils"
  */
 export async function fetchDRBResults(
   searchParams: SearchParams
-): Promise<DRBResultsResponse | string> {
+): Promise<DRBResultsResponse | Error> {
   const drbQueryString = getDRBQueryStringFromSearchParams(searchParams)
 
-  const drbCall = nyplApiClient({ apiName: DRB_API_NAME }).then((client) =>
-    client.get(drbQueryString)
-  )
-
-  // Return a promise resolving the DRB API response and the query string used
-  return drbCall.then(({ data }) => {
-    if (!data || !data.works) {
-      Promise.reject(new Error("No data in DRB response"))
-    }
-    return {
-      works: data.works,
-      totalWorks: data.totalWorks,
-    }
-  })
+  return nyplApiClient({ apiName: DRB_API_NAME })
+    .then((client) => client.get(drbQueryString))
+    .then(({ data }) => {
+      if (!data || !data.works) {
+        Promise.reject(new Error("No data in DRB response"))
+      }
+      return {
+        works: data.works,
+        totalWorks: data.totalWorks,
+      }
+    })
+    .catch((error) => {
+      console.error(error)
+      return error
+    })
 }
 
 /**
