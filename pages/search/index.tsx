@@ -11,7 +11,6 @@ import RCLink from "../../src/components/RCLink/RCLink"
 import DRBContainer from "../../src/components/DRBContainer/DRBContainer"
 import { fetchResults } from "../api/search"
 import { mapQueryToSearchParams } from "../../src/utils/searchUtils"
-import { mapSearchParamsToDRBParams } from "../../src/utils/drbUtils"
 import type { SearchResultsItem } from "../../src/types/searchTypes"
 
 /**
@@ -22,7 +21,9 @@ export default function Search({ results }) {
   const { query } = useRouter()
 
   const searchParams = mapQueryToSearchParams(query)
-  const drbParams = mapSearchParamsToDRBParams(searchParams)
+
+  // Remove page and identifiers fields from drbParams to prevent re-fetches
+  const drbParams = { ...searchParams, page: undefined, identifiers: undefined }
 
   return (
     <div style={{ paddingBottom: "var(--nypl-space-l)" }}>

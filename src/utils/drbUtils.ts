@@ -12,33 +12,6 @@ const mapSearchFieldToDRBField = {
 }
 
 /**
- * Utility function to remove fields from SearchParams that aren't needed for DRB requests.
- * Helpful for preventing DRB re-renders/fetches on SearchParams changes which are irrelevant
- * to DRB (e.g. page).
- */
-export function mapSearchParamsToDRBParams({
-  searchKeywords,
-  field,
-  sortBy,
-  order,
-  selectedFilters,
-  contributor,
-  title,
-  subject,
-}: SearchParams): SearchParams {
-  return {
-    searchKeywords,
-    field,
-    sortBy,
-    order,
-    selectedFilters,
-    contributor,
-    title,
-    subject,
-  }
-}
-
-/**
  *  Given a keyword and a search field, format and return a keyword query string expected by the DRB API
  */
 function getDRBKeywordQuery(keywords = "*", field = "keyword"): string {
