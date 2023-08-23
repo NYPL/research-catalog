@@ -37,7 +37,7 @@ function getDRBAdvancedQuery(params: SearchParams): string {
  *  Given a hash of SearchFilters, returns an array of DRBFilters as expected by the DRB API
  */
 function mapSearchFiltersToDRBFilters(filters: SearchFilters = {}): DRBFilters {
-  let drbFilters = [] as DRBFilters
+  let drbFilters: DRBFilters = []
 
   if (filters.dateAfter) drbFilters.push(`startYear:${filters.dateAfter}`)
   if (filters.dateBefore) drbFilters.push(`endYear:${filters.dateBefore}`)
