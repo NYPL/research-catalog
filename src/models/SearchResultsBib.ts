@@ -1,15 +1,21 @@
+import { isEmpty as _isEmpty } from "underscore"
+
 import type { SearchResult } from "../types/searchTypes"
 
 export default class SearchResultsBib {
   id: string
   title: string
+  yearPublished?: string
+  materialType?: string
 
   constructor(result: SearchResult) {
     this.id = result["@id"]
-    this.title = this.getBibTitle(result)
+    this.title = this.getTitle(result)
+    this.yearPublished = this.getYear(result)
+    this.materialType = result.materialType[0]?.prefLabel || null
   }
 
-  getBibTitle(result: SearchResult) {
+  getTitle(result: SearchResult) {
     if (!result.titleDisplay || !result.titleDisplay.length) {
       const author =
         result.creatorLiteral && result.creatorLiteral.length
@@ -20,5 +26,21 @@ export default class SearchResultsBib {
         : ""
     }
     return result.titleDisplay[0]
+  }
+
+  getYear(result: SearchResult) {
+    const { dateStartYear, dateEndYear } = result
+
+    const displayStartYear: string =
+      dateStartYear === 999 ? "unknown" : dateStartYear.toString()
+    const displayEndYear: string =
+      dateEndYear === 9999 ? "present" : dateEndYear.toString()
+
+    if (dateStartYear && dateEndYear) {
+      return `${displayStartYear}-${displayEndYear}`
+    } else if (dateStartYear) {
+      return displayStartYear
+    }
+    return null
   }
 }

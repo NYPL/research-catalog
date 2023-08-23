@@ -1,9 +1,11 @@
 // TODO: These should eventually outline the allowed string values for each filter
-type MaterialType = string
 type Language = string
 type SubjectLiteral = string
 type ContributorLiteral = string
 type Issuance = string
+type MaterialType = {
+  prefLabel?: string
+}
 
 export interface SearchFilters {
   materialType?: MaterialType | MaterialType[]
@@ -71,9 +73,12 @@ export interface SearchResultsItem {
 }
 
 export interface SearchResult {
-  "@id": string
+  "@id"?: string
   uri?: string
   titleDisplay?: string[]
   creatorLiteral?: string[]
   title?: string[]
+  materialType?: MaterialType[]
+  dateStartYear?: number
+  dateEndYear?: number
 }
