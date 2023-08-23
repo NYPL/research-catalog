@@ -34,12 +34,8 @@ Running the app locally via Docker is optional for now, and provided as an alter
 
 ## Client and Server-Side Data Fetching
 
-Page components on the Research Catalog make use of Next's getServerSideProps function to fetch data on the server at request time, populating the 
-component's props before the initial page load.
+Page components on the Research Catalog make use of Next's getServerSideProps function to fetch data on the server at request time, populating the component's props before the initial page load.
 
-When getServerSideProps is used to fetch the initial data, Next automatically handles client-side data re-hydration on route changes without reloading the page. 
-This eliminates the need for manual client-side data fetching/re-hydration in most cases.
+When getServerSideProps is used to fetch the initial data, Next automatically handles client-side data re-hydration on route changes without reloading the page. This eliminates the need for manual client-side data fetching/re-hydration in most cases.
 
-For instances where manual client-side data fetching is preferable (e.g. when we don't want data fetching to block the initial page load), we 
-employ the [`SWR`](https://www.npmjs.com/package/swr) module. SWR provides hooks that handles the typical boilerplate for fetching data and setting 
-loading and error states, as well as optimizations such as caching.
+For instances where manual client-side data fetching is preferable (e.g. when we don't want data fetching to block the initial page load), we employ the [`SWR`](https://www.npmjs.com/package/swr) module. SWR provides hooks that handles the typical boilerplate for fetching data and setting loading and error states, as well as optimizations such as caching.
