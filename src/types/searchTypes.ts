@@ -66,8 +66,12 @@ export interface SearchResultsAPIResponse {
 }
 
 export interface SearchResultsItem {
-  result?: {
-    uri?: string
-  }
+  result?: SearchResult
   field?: string
+}
+
+export interface SearchResult {
+  "@id": string
+  uri?: string
+  titleDisplay?: string[]
 }

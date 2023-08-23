@@ -11,6 +11,7 @@ import { fetchResults } from "../api/search"
 import { mapQueryToSearchParams } from "../../src/utils/searchUtils"
 import RCLink from "../../src/components/RCLink/RCLink"
 import type { SearchResultsItem } from "../../src/types/searchTypes"
+import SearchResultsBib from "../../src/models/SearchResultsBib"
 
 /**
  * The Search page is responsible for fetching and displaying the Search results,
@@ -20,12 +21,17 @@ export default function Search({ results }) {
   const { query } = useRouter()
   const searchParams = mapQueryToSearchParams(query)
 
+  const searchResultBibs = results?.results?.itemListElement.map(
+    (result: SearchResultsItem) => new SearchResultsBib(result?.result)
+  )
+  const totalResults: number = results?.results?.totalResults
+
   return (
     <div style={{ paddingBottom: "var(--nypl-space-l)" }}>
       <Head>
         <title>NYPL Research Catalog</title>
       </Head>
-      {results?.results?.totalResults ? (
+      {totalResults ? (
         <>
           <Heading level="three">
             {`Displaying 1-50 of ${results.results.totalResults.toLocaleString()} results for keyword "${
@@ -33,20 +39,16 @@ export default function Search({ results }) {
             }"`}
           </Heading>
           <SimpleGrid columns={1} gap="grid.m">
-            {results.results.itemListElement.map(
-              (result: SearchResultsItem) => {
-                // TODO: Create SearchResult component to manage result display (https://jira.nypl.org/browse/SCC-3714)
-                return (
-                  <Card key={result.result["@id"]}>
-                    <CardHeading level="four">
-                      <RCLink href="/bib">
-                        {result.result["titleDisplay"][0]}
-                      </RCLink>
-                    </CardHeading>
-                  </Card>
-                )
-              }
-            )}
+            {searchResultBibs.map((bib: SearchResultsBib) => {
+              // TODO: Create SearchResult component to manage result display (https://jira.nypl.org/browse/SCC-3714)
+              return (
+                <Card key={bib.id}>
+                  <CardHeading level="four">
+                    <RCLink href="/bib">{bib.title}</RCLink>
+                  </CardHeading>
+                </Card>
+              )
+            })}
           </SimpleGrid>
         </>
       ) : (
