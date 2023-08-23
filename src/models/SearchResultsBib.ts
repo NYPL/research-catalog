@@ -1,5 +1,3 @@
-import { isEmpty as _isEmpty } from "underscore"
-
 import type { SearchResult } from "../types/searchTypes"
 
 export default class SearchResultsBib {
