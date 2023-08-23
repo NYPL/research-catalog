@@ -25,6 +25,7 @@ export default function Search({ results }) {
     (result: SearchResultsItem) => new SearchResultsBib(result?.result)
   )
   const totalResults: number = results?.results?.totalResults
+  console.log(results?.results?.itemListElement)
 
   return (
     <div style={{ paddingBottom: "var(--nypl-space-l)" }}>

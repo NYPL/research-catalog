@@ -74,4 +74,6 @@ export interface SearchResult {
   "@id": string
   uri?: string
   titleDisplay?: string[]
+  creatorLiteral?: string[]
+  title?: string[]
 }
