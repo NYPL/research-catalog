@@ -30,8 +30,6 @@ export default function Search({ results }) {
     }
     return new SearchResultsBib(result?.result)
   })
-  console.log(searchResultBibs)
-  console.log(results?.results?.itemListElement)
 
   return (
     <div style={{ paddingBottom: "var(--nypl-space-l)" }}>
@@ -51,7 +49,7 @@ export default function Search({ results }) {
               return (
                 <Card key={bib.id}>
                   <CardHeading level="four">
-                    <RCLink href="/bib">{bib.title}</RCLink>
+                    <RCLink href={bib.url}>{bib.title}</RCLink>
                   </CardHeading>
                 </Card>
               )

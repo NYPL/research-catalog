@@ -1,26 +1,56 @@
 import type { SearchResult } from "../types/searchTypes"
-import { BASE_URL } from "../config/constants"
+import type { ElectronicResource } from "../types/bibTypes"
 
 export default class SearchResultsBib {
   id: string
   title: string
-  url: string
   yearPublished?: string
   materialType?: string
   publicationStatement?: string
+  eResources?: ElectronicResource[]
+  numPhysicalItems: number
 
   constructor(result: SearchResult) {
     this.id = result["@id"] ? result["@id"].substring(4) : ""
-    this.title = this.getTitle(result)
-    this.url = `${BASE_URL}/bib/${this.id}`
-    this.yearPublished = this.getYear(result)
+    this.title = this.getTitleFromResult(result)
+    this.yearPublished = this.getYearFromResult(result)
     this.materialType = result.materialType[0]?.prefLabel || null
     this.publicationStatement = result.publicationStatement?.length
       ? result.publicationStatement[0]
       : null
+    this.eResources = result.electronicResources || null
+    this.numPhysicalItems = result.numItemsTotal || 0
   }
 
-  getTitle(result: SearchResult) {
+  get url() {
+    return `/bib/${this.id}`
+  }
+
+  get numElectronicResources() {
+    return this.eResources?.length || 0
+  }
+
+  get hasPhysicalItems() {
+    return this.numPhysicalItems > 0
+  }
+
+  get numItems() {
+    return this.hasPhysicalItems
+      ? this.numPhysicalItems
+      : this.numElectronicResources
+  }
+
+  get resourceType() {
+    return this.hasPhysicalItems ? "Item" : "Resource"
+  }
+
+  get itemMessage() {
+    return `${this.numItems} ${this.resourceType}${
+      this.numItems !== 1 ? "s" : ""
+    }`
+  }
+
+  getTitleFromResult(result: SearchResult) {
     if (!result.titleDisplay || !result.titleDisplay.length) {
       const author =
         result.creatorLiteral && result.creatorLiteral.length
@@ -33,7 +63,7 @@ export default class SearchResultsBib {
     return result.titleDisplay[0]
   }
 
-  getYear(result: SearchResult) {
+  getYearFromResult(result: SearchResult) {
     const { dateStartYear, dateEndYear } = result
 
     const displayStartYear: string =

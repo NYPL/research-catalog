@@ -1,4 +1,5 @@
-// TODO: These should eventually outline the allowed string values for each filter
+import type { ElectronicResource } from "./bibTypes"
+
 type Language = string
 type SubjectLiteral = string
 type ContributorLiteral = string
@@ -82,4 +83,6 @@ export interface SearchResult {
   publicationStatement?: string[]
   dateStartYear?: number
   dateEndYear?: number
+  electronicResources?: ElectronicResource[]
+  numItemsTotal?: number
 }
