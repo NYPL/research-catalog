@@ -30,7 +30,7 @@ export default function Search({ results }) {
     }
     return new SearchResultsBib(result?.result)
   })
-
+  console.log(searchResultBibs)
   console.log(results?.results?.itemListElement)
 
   return (

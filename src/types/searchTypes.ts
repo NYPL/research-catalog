@@ -79,6 +79,7 @@ export interface SearchResult {
   creatorLiteral?: string[]
   title?: string[]
   materialType?: MaterialType[]
+  publicationStatement?: string[]
   dateStartYear?: number
   dateEndYear?: number
 }
