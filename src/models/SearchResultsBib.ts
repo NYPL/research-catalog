@@ -7,7 +7,7 @@ export default class SearchResultsBib {
   yearPublished?: string
   materialType?: string
   publicationStatement?: string
-  eResources?: ElectronicResource[]
+  electronicResources?: ElectronicResource[]
   numPhysicalItems: number
 
   constructor(result: SearchResult) {
@@ -18,7 +18,7 @@ export default class SearchResultsBib {
     this.publicationStatement = result.publicationStatement?.length
       ? result.publicationStatement[0]
       : null
-    this.eResources = result.electronicResources || null
+    this.electronicResources = result.electronicResources || null
     this.numPhysicalItems = result.numItemsTotal || 0
   }
 
@@ -27,7 +27,7 @@ export default class SearchResultsBib {
   }
 
   get numElectronicResources() {
-    return this.eResources?.length || 0
+    return this.electronicResources?.length || 0
   }
 
   get hasPhysicalItems() {
