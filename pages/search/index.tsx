@@ -28,7 +28,7 @@ export default function Search({ results }) {
     if (_isEmpty(result) || (result.result && _isEmpty(result.result))) {
       return null
     }
-    return new SearchResultsBib(result?.result)
+    return new SearchResultsBib(result.result)
   })
 
   return (
