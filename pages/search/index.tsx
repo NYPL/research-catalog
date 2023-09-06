@@ -24,12 +24,13 @@ export default function Search({ results }) {
 
   const { itemListElement, totalResults } = results.results
 
-  const searchResultBibs = itemListElement.map((result: SearchResultsItem) => {
-    if (isEmpty(result) || (result.result && isEmpty(result.result))) {
-      return null
-    }
-    return new SearchResultsBib(result.result)
-  })
+  const searchResultBibs = itemListElement
+    .filter((result: SearchResultsItem) => {
+      return !(isEmpty(result) || (result.result && isEmpty(result.result)))
+    })
+    .map((result: SearchResultsItem) => {
+      return new SearchResultsBib(result.result)
+    })
 
   return (
     <div style={{ paddingBottom: "var(--nypl-space-l)" }}>
