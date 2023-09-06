@@ -6,7 +6,7 @@ import {
   SimpleGrid,
 } from "@nypl/design-system-react-components"
 import { useRouter } from "next/router"
-import { isEmpty as _isEmpty } from "underscore"
+import { isEmpty } from "underscore"
 
 import { fetchResults } from "../api/search"
 import { mapQueryToSearchParams } from "../../src/utils/searchUtils"
@@ -25,7 +25,7 @@ export default function Search({ results }) {
   const { itemListElement, totalResults } = results.results
 
   const searchResultBibs = itemListElement.map((result: SearchResultsItem) => {
-    if (_isEmpty(result) || (result.result && _isEmpty(result.result))) {
+    if (isEmpty(result) || (result.result && isEmpty(result.result))) {
       return null
     }
     return new SearchResultsBib(result.result)
