@@ -23,29 +23,32 @@ interface LayoutProps {
  */
 const Layout = ({ children, activePage }: LayoutProps) => {
   const showSearch = activePage === "search"
+  const showHeader = activePage !== "404"
 
   return (
     <DSProvider>
       <TemplateAppContainer
         breakout={
-          <>
-            <Breadcrumbs
-              breadcrumbsType="research"
-              breadcrumbsData={[
-                { url: "https://nypl.org", text: "Home" },
-                { url: "https://www.nypl.org/research", text: "Research" },
-                {
-                  url: `https://www.nypl.org${BASE_URL}`,
-                  text: "Research Catalog",
-                },
-              ]}
-            />
-            <div className={styles.researchHeadingContainer}>
-              <Heading id="heading-h1" level="one" text="Research Catalog" />
-              <SubNav activePage={activePage} />
-              {showSearch && <SearchForm />}
-            </div>
-          </>
+          showHeader && (
+            <>
+              <Breadcrumbs
+                breadcrumbsType="research"
+                breadcrumbsData={[
+                  { url: "https://nypl.org", text: "Home" },
+                  { url: "https://www.nypl.org/research", text: "Research" },
+                  {
+                    url: `https://www.nypl.org${BASE_URL}`,
+                    text: "Research Catalog",
+                  },
+                ]}
+              />
+              <div className={styles.researchHeadingContainer}>
+                <Heading id="heading-h1" level="one" text="Research Catalog" />
+                <SubNav activePage={activePage} />
+                {showSearch && <SearchForm />}
+              </div>
+            </>
+          )
         }
         contentPrimary={children}
       />
