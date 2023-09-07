@@ -7,7 +7,6 @@ import type { RCPage } from "../types/pageTypes"
  * conditionally rendering the Search.
  */
 export const getActivePage = (pathname: string): RCPage => {
-  console.log(pathname)
   if (pathname === "/" || pathname.includes("search")) {
     return "search"
   } else if (pathname.includes("subject_headings")) {
