@@ -4,25 +4,27 @@ export default function Document() {
   return (
     <Html lang="en">
       <style>{`
-        #nypl-header {
-          min-height: 70px;
-         }
-        @media screen and (min-width: 1024px) {
-          #nypl-header {
-            min-height: 205px;
-          }
+        #Header-Placeholder {
+        min-height: 62px;
+      }
+      @media screen and (min-width: 832px) {
+        #Header-Placeholder {
+          min-height: 130px;
         }
+      }
       `}</style>
       <Head>
         <meta name="description" content="Research Catalog | NYPL" />
       </Head>
       <body>
         {/* NYPL Header script and container */}
-        <script
-          src={`${process.env.NYPL_HEADER_URL}/header.min.js?containerId=nypl-header`}
-          async
-        />
-        <div id="nypl-header"></div>
+        <div id="Header-Placeholder">
+          <div id="nypl-header"></div>
+          <script
+            src={`${process.env.NYPL_HEADER_URL}/header.min.js?containerId=nypl-header`}
+            async
+          />
+        </div>
         <Main />
         <NextScript />
         {/* NYPL Footer script and container */}
