@@ -1,4 +1,5 @@
 export const BASE_URL = "/research/research-catalog"
+export const SITE_NAME = "NYPL Research Catalog"
 export const RESULTS_PER_PAGE = 50
 
 // URLs

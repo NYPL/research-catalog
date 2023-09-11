@@ -11,6 +11,7 @@ import { fetchResults } from "../api/search"
 import { mapQueryToSearchParams } from "../../src/utils/searchUtils"
 import RCLink from "../../src/components/RCLink/RCLink"
 import type { SearchResultsItem } from "../../src/types/searchTypes"
+import { SITE_NAME } from "../../src/config/constants"
 
 /**
  * The Search page is responsible for fetching and displaying the Search results,
@@ -23,7 +24,7 @@ export default function Search({ results }) {
   return (
     <div style={{ paddingBottom: "var(--nypl-space-l)" }}>
       <Head>
-        <title>NYPL Research Catalog</title>
+        <title>Search Results | {SITE_NAME}</title>
       </Head>
       {results?.results?.totalResults ? (
         <>
