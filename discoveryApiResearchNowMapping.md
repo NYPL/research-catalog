@@ -118,7 +118,7 @@ Single quotes (') are used for frontend terminology. Italics are used to describ
 e.g. `filters`) is used for the parameters the respective APIs except.
 
 | Discovery front end                           | Discovery API                                         | ResearchNow API                                 |
-|-----------------------------------------------|-------------------------------------------------------|-------------------------------------------------|
+| --------------------------------------------- | ----------------------------------------------------- | ----------------------------------------------- |
 | _Search field_                                | `q`                                                   | `queries`, "value"                              |
 | _Search field dropdown_                       | `search_scope`                                        | `queries`, "field"                              |
 | <ul>'All Fields'                              | <ul>"all"                                             | <ul>"keyword"                                   |
@@ -153,9 +153,7 @@ digital formats (pdf, epub, and html). The latter to physical material type.
     {
       "@type": "searchResult",
       "result": {
-        "@type": [
-          "string"
-        ],
+        "@type": ["string"],
         "@id": "string",
         "carrierType": [
           {
@@ -164,21 +162,15 @@ digital formats (pdf, epub, and html). The latter to physical material type.
             "prefLabel": "string"
           }
         ],
-        "creatorLiteral": [
-          "string"
-        ],
-        "contributorLiteral": [
-          "string"
-        ],
+        "creatorLiteral": ["string"],
+        "contributorLiteral": ["string"],
         "created": "string",
         "createdYear": 0,
         "dateStartYear": 0,
         "depiction": "string",
         "description": "string",
         "endYear": 0,
-        "extent": [
-          "string"
-        ],
+        "extent": ["string"],
         "holdingCount": 0,
         "issuance": [
           {
@@ -212,9 +204,7 @@ digital formats (pdf, epub, and html). The latter to physical material type.
               }
             ],
             "idBarcode": "string",
-            "identifier": [
-              "string"
-            ],
+            "identifier": ["string"],
             "owner": [
               {
                 "@type": "string",
@@ -222,13 +212,9 @@ digital formats (pdf, epub, and html). The latter to physical material type.
                 "prefLabel": "string"
               }
             ],
-            "requestable": [
-              true
-            ],
+            "requestable": [true],
             "eddRequestable": true,
-            "shelfMark": [
-              "string"
-            ],
+            "shelfMark": ["string"],
             "status": [
               {
                 "@type": "string",
@@ -269,15 +255,9 @@ digital formats (pdf, epub, and html). The latter to physical material type.
           }
         ],
         "numAvailable": 0,
-        "placeOfPublication": [
-          "string"
-        ],
-        "prefLabel": [
-          "string"
-        ],
-        "roles:ROLE": [
-          "string"
-        ],
+        "placeOfPublication": ["string"],
+        "prefLabel": ["string"],
+        "roles:ROLE": ["string"],
         "startYear": 0,
         "subject": [
           {
@@ -287,15 +267,9 @@ digital formats (pdf, epub, and html). The latter to physical material type.
           }
         ],
         "suppressed": true,
-        "title": [
-          "string"
-        ],
-        "titleDisplay": [
-          "string"
-        ],
-        "type": [
-          "nypl:Item"
-        ],
+        "title": ["string"],
+        "titleDisplay": ["string"],
+        "type": ["nypl:Item"],
         "uri": "string"
       }
     }
@@ -321,12 +295,8 @@ digital formats (pdf, epub, and html). The latter to physical material type.
       ]
     },
     "paging": {
-      "prev_page_sort": [
-        "string"
-      ],
-      "next_page_sort": [
-        "string"
-      ]
+      "prev_page_sort": ["string"],
+      "next_page_sort": ["string"]
     },
     "works": [
       {
@@ -336,17 +306,13 @@ digital formats (pdf, epub, and html). The latter to physical material type.
         "uuid": "string",
         "title": "string",
         "sort_title": "string",
-        "sub_title": [
-          "string"
-        ],
+        "sub_title": ["string"],
         "medium": "string",
         "series": "string",
         "series_position": 0,
         "edition_count": 0,
         "edition_range": "string",
-        "sort": [
-          "string"
-        ],
+        "sort": ["string"],
         "agents": [
           {
             "name": "string",
@@ -358,9 +324,7 @@ digital formats (pdf, epub, and html). The latter to physical material type.
             "death_date_display": "string"
           }
         ],
-        "alt_titles": [
-          "string"
-        ],
+        "alt_titles": ["string"],
         "instances": [
           {
             "date_modified": "2020-06-01T20:30:37.458Z",
