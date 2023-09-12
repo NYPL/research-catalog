@@ -12,16 +12,16 @@
 - `page` string
 - `per_page` integer
 - `sort` integer
-    - "relevance", "title", "creator", "date"
+  - "relevance", "title", "creator", "date"
 - `sort_direction` string
-    - "asc", "desc"
-    - title defaults to asc, date defaults to desc, creator defaults to asc, relevance is fixed desc
+  - "asc", "desc"
+  - title defaults to asc, date defaults to desc, creator defaults to asc, relevance is fixed desc
 - `search_scope` string
-    - "all", "title", "contributor", "subject", "series", "callnumber", "standard_number"
+  - "all", "title", "contributor", "subject", "series", "callnumber", "standard_number"
 - `filters` string
-    - "owner", "subjectLiteral", "holdingLocation", "deliveryLocation", "language", "materialType", "mediaType", "
-      carrierType", "publisher", "contributor", "creator", "issuance", "createdYear", "dateAfter"', or "dateBefore"
-    - Specify a hash of filters to apply, where keys are from terms above
+  - "owner", "subjectLiteral", "holdingLocation", "deliveryLocation", "language", "materialType", "mediaType", "
+    carrierType", "publisher", "contributor", "creator", "issuance", "createdYear", "dateAfter"', or "dateBefore"
+  - Specify a hash of filters to apply, where keys are from terms above
 
 ## ResearchNow API
 
@@ -34,21 +34,21 @@
 ### Parameters
 
 - `queries` array of objects
-    - Objects for the queries are formatted as `{"field": filter, "value": value}`
+  - Objects for the queries are formatted as `{"field": filter, "value": value}`
 - `filters` array of objects
-    - Objects for the filters are formatted as `{"filter": filter, "value": value}`
+  - Objects for the filters are formatted as `{"filter": filter, "value": value}`
 - `field` string
-    - "keyword", "title", "author", "standardNumber" (ISBN, ISSN, LCCN and OCLC) and "subject"
+  - "keyword", "title", "author", "standardNumber" (ISBN, ISSN, LCCN and OCLC) and "subject"
 - `query` string
 - `recordType`
-    - Internal record type to return with the work. Either instances or editions.
+  - Internal record type to return with the work. Either instances or editions.
 - `page` integer (0 indexed)
 - `per_page` integer
 - `sort` array of objects
-    - Objects are formatted as `{"field": field, "dir": dir}`
+  - Objects are formatted as `{"field": field, "dir": dir}`
 - `language` array of languages
 - `years`
-    - This should be formatted as `{"start": year, "end": year}`.
+  - This should be formatted as `{"start": year, "end": year}`.
 
 For the DRBB/SCC integration, the DRBB data is fetched using a POST request with a body
 containing `page`, `per_page`, `filters` (years, languages), and `queries` (author/contributor, subject).
@@ -118,7 +118,7 @@ Single quotes (') are used for frontend terminology. Italics are used to describ
 e.g. `filters`) is used for the parameters the respective APIs except.
 
 | Research Catalog front end                    | Discovery API                                         | ResearchNow API                                 |
-|-----------------------------------------------|-------------------------------------------------------|-------------------------------------------------|
+| --------------------------------------------- | ----------------------------------------------------- | ----------------------------------------------- |
 | _Search field_                                | `q`                                                   | `queries`, "value"                              |
 | _Search field dropdown_                       | `search_scope`                                        | `queries`, "field"                              |
 | <ul>'All Fields'                              | <ul>"all"                                             | <ul>"keyword"                                   |
@@ -153,9 +153,7 @@ digital formats (pdf, epub, and html). The latter to physical material type.
     {
       "@type": "searchResult",
       "result": {
-        "@type": [
-          "string"
-        ],
+        "@type": ["string"],
         "@id": "string",
         "carrierType": [
           {
@@ -164,21 +162,15 @@ digital formats (pdf, epub, and html). The latter to physical material type.
             "prefLabel": "string"
           }
         ],
-        "creatorLiteral": [
-          "string"
-        ],
-        "contributorLiteral": [
-          "string"
-        ],
+        "creatorLiteral": ["string"],
+        "contributorLiteral": ["string"],
         "created": "string",
         "createdYear": 0,
         "dateStartYear": 0,
         "depiction": "string",
         "description": "string",
         "endYear": 0,
-        "extent": [
-          "string"
-        ],
+        "extent": ["string"],
         "holdingCount": 0,
         "issuance": [
           {
@@ -212,9 +204,7 @@ digital formats (pdf, epub, and html). The latter to physical material type.
               }
             ],
             "idBarcode": "string",
-            "identifier": [
-              "string"
-            ],
+            "identifier": ["string"],
             "owner": [
               {
                 "@type": "string",
@@ -222,13 +212,9 @@ digital formats (pdf, epub, and html). The latter to physical material type.
                 "prefLabel": "string"
               }
             ],
-            "requestable": [
-              true
-            ],
+            "requestable": [true],
             "eddRequestable": true,
-            "shelfMark": [
-              "string"
-            ],
+            "shelfMark": ["string"],
             "status": [
               {
                 "@type": "string",
@@ -269,15 +255,9 @@ digital formats (pdf, epub, and html). The latter to physical material type.
           }
         ],
         "numAvailable": 0,
-        "placeOfPublication": [
-          "string"
-        ],
-        "prefLabel": [
-          "string"
-        ],
-        "roles:ROLE": [
-          "string"
-        ],
+        "placeOfPublication": ["string"],
+        "prefLabel": ["string"],
+        "roles:ROLE": ["string"],
         "startYear": 0,
         "subject": [
           {
@@ -287,15 +267,9 @@ digital formats (pdf, epub, and html). The latter to physical material type.
           }
         ],
         "suppressed": true,
-        "title": [
-          "string"
-        ],
-        "titleDisplay": [
-          "string"
-        ],
-        "type": [
-          "nypl:Item"
-        ],
+        "title": ["string"],
+        "titleDisplay": ["string"],
+        "type": ["nypl:Item"],
         "uri": "string"
       }
     }
@@ -321,12 +295,8 @@ digital formats (pdf, epub, and html). The latter to physical material type.
       ]
     },
     "paging": {
-      "prev_page_sort": [
-        "string"
-      ],
-      "next_page_sort": [
-        "string"
-      ]
+      "prev_page_sort": ["string"],
+      "next_page_sort": ["string"]
     },
     "works": [
       {
@@ -336,17 +306,13 @@ digital formats (pdf, epub, and html). The latter to physical material type.
         "uuid": "string",
         "title": "string",
         "sort_title": "string",
-        "sub_title": [
-          "string"
-        ],
+        "sub_title": ["string"],
         "medium": "string",
         "series": "string",
         "series_position": 0,
         "edition_count": 0,
         "edition_range": "string",
-        "sort": [
-          "string"
-        ],
+        "sort": ["string"],
         "agents": [
           {
             "name": "string",
@@ -358,9 +324,7 @@ digital formats (pdf, epub, and html). The latter to physical material type.
             "death_date_display": "string"
           }
         ],
-        "alt_titles": [
-          "string"
-        ],
+        "alt_titles": ["string"],
         "instances": [
           {
             "date_modified": "2020-06-01T20:30:37.458Z",
