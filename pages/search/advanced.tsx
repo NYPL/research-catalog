@@ -8,7 +8,7 @@ import {
 } from "@nypl/design-system-react-components"
 
 import { BASE_URL, SITE_NAME } from "../../src/config/constants"
-import { searchAggregations } from "../../src/config/aggregations"
+import { languages } from "../../src/utils/advancedSearchUtils"
 import styles from "../../styles/components/AdvancedSearch.module.scss"
 
 /**
@@ -16,15 +16,6 @@ import styles from "../../styles/components/AdvancedSearch.module.scss"
  * as well as displaying and controlling pagination and search filters.
  */
 export default function AdvancedSearch() {
-  const languages = [
-    {
-      value: "",
-      label: "-- Any -- ",
-    },
-  ].concat(
-    searchAggregations.language.sort((a, b) => (a.label > b.label ? 1 : -1))
-  )
-
   return (
     <div
       className={styles.advancedSearchContainer}
