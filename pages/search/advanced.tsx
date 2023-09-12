@@ -71,23 +71,23 @@ export default function AdvancedSearch() {
               Date
             </Label>
             <FormRow id="dates" className={styles.dateFields}>
-              <FormField>
+              <FormField className={styles.dateField}>
                 <TextInput
                   id="dateAfter"
                   labelText="From"
                   type="text"
                   name="dateAfter"
-                  placeholder="1900"
                 />
+                <p>E.g. 1901</p>
               </FormField>
-              <FormField>
+              <FormField className={styles.dateField}>
                 <TextInput
                   id="dateBefore"
                   labelText="To"
                   type="text"
                   name="dateBefore"
-                  placeholder="2000"
                 />
+                <p>E.g. 2000</p>
               </FormField>
             </FormRow>
           </Fieldset>
