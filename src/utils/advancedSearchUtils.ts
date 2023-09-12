@@ -1,6 +1,6 @@
 import { searchAggregations } from "../config/aggregations"
 
-export const languages = [
+export const languageOptions = [
   {
     value: "",
     label: "-- Any -- ",

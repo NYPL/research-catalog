@@ -8,7 +8,7 @@ import {
 } from "@nypl/design-system-react-components"
 
 import { BASE_URL, SITE_NAME } from "../../src/config/constants"
-import { languages } from "../../src/utils/advancedSearchUtils"
+import { languageOptions } from "../../src/utils/advancedSearchUtils"
 import styles from "../../styles/components/AdvancedSearch.module.scss"
 
 /**
@@ -53,7 +53,7 @@ export default function AdvancedSearch() {
               labelText="Language"
               aria-labelledby="languageSelect-label"
             >
-              {languages.map((language) => {
+              {languageOptions.map((language) => {
                 return (
                   <option value={language.value} key={language.value}>
                     {language.label}
