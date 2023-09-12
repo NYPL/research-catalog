@@ -12,13 +12,17 @@
   }
 }
 
-.dateFields {
+.dateField {
+  margin-bottom: var(--nypl-space-xs);
+
+  input {
+    margin-bottom: 0;
+  }
+}
+
+.dateFields,
+.dateField > div {
   @media (max-width: $nypl-breakpoint-large) {
     display: block !important;
   }
 }
-
-.dateField {
-  display: block !important;
-}
-

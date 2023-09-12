@@ -6,6 +6,7 @@ import {
   Fieldset,
   Label,
   TextInput,
+  DatePicker,
   Select,
   Heading,
   SimpleGrid,
@@ -72,22 +73,22 @@ export default function AdvancedSearch() {
             </Label>
             <FormRow id="dates" className={styles.dateFields}>
               <FormField className={styles.dateField}>
-                <TextInput
+                <DatePicker
                   id="dateAfter"
+                  dateType="year"
                   labelText="From"
-                  type="text"
-                  name="dateAfter"
+                  helperText="e.g. 1901"
+                  initialDate={null}
                 />
-                <p>E.g. 1901</p>
               </FormField>
               <FormField className={styles.dateField}>
-                <TextInput
+                <DatePicker
                   id="dateBefore"
+                  dateType="year"
                   labelText="To"
-                  type="text"
-                  name="dateBefore"
+                  helperText="e.g. 2000"
+                  initialDate={null}
                 />
-                <p>E.g. 2000</p>
               </FormField>
             </FormRow>
           </Fieldset>
