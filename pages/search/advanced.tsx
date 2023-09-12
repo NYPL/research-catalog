@@ -1,18 +1,75 @@
 import Head from "next/head"
+import {
+  Form,
+  TextInput,
+  Select,
+  Heading,
+  SimpleGrid,
+} from "@nypl/design-system-react-components"
 
-import { SITE_NAME } from "../../src/config/constants"
+import { BASE_URL, SITE_NAME } from "../../src/config/constants"
+import { searchAggregations } from "../../src/config/aggregations"
 
 /**
  * The Search page is responsible for fetching and displaying the Search results,
  * as well as displaying and controlling pagination and search filters.
  */
 export default function AdvancedSearch() {
+  const languages = [
+    {
+      value: "",
+      label: "-- Any -- ",
+    },
+  ].concat(
+    searchAggregations.language.sort((a, b) => (a.label > b.label ? 1 : -1))
+  )
+
   return (
     <div style={{ paddingBottom: "var(--nypl-space-l)" }}>
       <Head>
         <title>Advanced Search | {SITE_NAME}</title>
       </Head>
-      <div>Advanced Search</div>
+      <Heading level="two">Advanced Search</Heading>
+      <Form id="advancedSearchForm" method="post" action={`${BASE_URL}/search`}>
+        <SimpleGrid columns={2} gap="grid.m">
+          <fieldset>
+            <TextInput
+              id="searchKeywords"
+              labelText="Keyword"
+              type="text"
+              name="searchKeywords"
+            />
+            <TextInput id="title" labelText="Title" type="text" name="title" />
+            <TextInput
+              id="contributor"
+              labelText="Author"
+              type="text"
+              name="contributor"
+            />
+            <TextInput
+              id="subject"
+              labelText="Subject"
+              type="text"
+              name="subject"
+            />
+            <Select
+              id="languageSelect"
+              name="language"
+              labelText="Language"
+              aria-labelledby="languageSelect-label"
+            >
+              {languages.map((language) => {
+                return (
+                  <option value={language.value} key={language.value}>
+                    {language.label}
+                  </option>
+                )
+              })}
+            </Select>
+          </fieldset>
+          <fieldset></fieldset>
+        </SimpleGrid>
+      </Form>
     </div>
   )
 }
