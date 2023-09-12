@@ -117,8 +117,8 @@ frontend functionality.
 Single quotes (') are used for frontend terminology. Italics are used to describe frontend features. Code styling (
 e.g. `filters`) is used for the parameters the respective APIs except.
 
-| Discovery front end                           | Discovery API                                         | ResearchNow API                                 |
-| --------------------------------------------- | ----------------------------------------------------- | ----------------------------------------------- |
+| Research Catalog front end                    | Discovery API                                         | ResearchNow API                                 |
+|-----------------------------------------------| ----------------------------------------------------- | ----------------------------------------------- |
 | _Search field_                                | `q`                                                   | `queries`, "value"                              |
 | _Search field dropdown_                       | `search_scope`                                        | `queries`, "field"                              |
 | <ul>'All Fields'                              | <ul>"all"                                             | <ul>"keyword"                                   |
