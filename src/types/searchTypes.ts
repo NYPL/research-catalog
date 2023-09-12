@@ -58,12 +58,12 @@ export interface SearchFormEvent {
 }
 
 export interface SearchResultsResponse {
-  results?: SearchResultsAPIResponse
-  aggregations?: SearchResultsAPIResponse
+  results?: SearchResults
+  aggregations?: SearchResults
   page: string
 }
 
-export interface SearchResultsAPIResponse {
+export interface SearchResults {
   totalResults: number
   itemListElement: SearchResultsElement[]
 }
