@@ -1,6 +1,10 @@
 import Head from "next/head"
 import {
   Form,
+  FormField,
+  FormRow,
+  Fieldset,
+  Label,
   TextInput,
   Select,
   Heading,
@@ -27,7 +31,7 @@ export default function AdvancedSearch() {
       <Heading level="two">Advanced Search</Heading>
       <Form id="advancedSearchForm" method="post" action={`${BASE_URL}/search`}>
         <SimpleGrid columns={2} gap="grid.m">
-          <fieldset>
+          <Fieldset id="advancedSearchLeft">
             <TextInput
               id="searchKeywords"
               labelText="Keyword"
@@ -61,8 +65,32 @@ export default function AdvancedSearch() {
                 )
               })}
             </Select>
-          </fieldset>
-          <fieldset></fieldset>
+          </Fieldset>
+          <Fieldset id="advancedSearchRight">
+            <Label htmlFor="dates" id="dates-label">
+              Date
+            </Label>
+            <FormRow id="dates" className={styles.dateFields}>
+              <FormField>
+                <TextInput
+                  id="dateAfter"
+                  labelText="From"
+                  type="text"
+                  name="dateAfter"
+                  placeholder="1900"
+                />
+              </FormField>
+              <FormField>
+                <TextInput
+                  id="dateBefore"
+                  labelText="To"
+                  type="text"
+                  name="dateBefore"
+                  placeholder="2000"
+                />
+              </FormField>
+            </FormRow>
+          </Fieldset>
         </SimpleGrid>
       </Form>
     </div>
