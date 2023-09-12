@@ -9,6 +9,7 @@ import {
 
 import { BASE_URL, SITE_NAME } from "../../src/config/constants"
 import { searchAggregations } from "../../src/config/aggregations"
+import styles from "../../styles/components/AdvancedSearch.module.scss"
 
 /**
  * The Search page is responsible for fetching and displaying the Search results,
@@ -25,7 +26,10 @@ export default function AdvancedSearch() {
   )
 
   return (
-    <div style={{ paddingBottom: "var(--nypl-space-l)" }}>
+    <div
+      className={styles.advancedSearchContainer}
+      style={{ paddingBottom: "var(--nypl-space-l)" }}
+    >
       <Head>
         <title>Advanced Search | {SITE_NAME}</title>
       </Head>
