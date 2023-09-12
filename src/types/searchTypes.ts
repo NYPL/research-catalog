@@ -65,10 +65,10 @@ export interface SearchResultsResponse {
 
 export interface SearchResultsAPIResponse {
   totalResults: number
-  itemListElement: SearchResultsItem[]
+  itemListElement: SearchResultsElement[]
 }
 
-export interface SearchResultsItem {
+export interface SearchResultsElement {
   result?: SearchResult
   field?: string
 }

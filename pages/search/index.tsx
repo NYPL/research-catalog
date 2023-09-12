@@ -11,7 +11,7 @@ import { isEmpty } from "underscore"
 import { fetchResults } from "../api/search"
 import { mapQueryToSearchParams } from "../../src/utils/searchUtils"
 import RCLink from "../../src/components/RCLink/RCLink"
-import type { SearchResultsItem } from "../../src/types/searchTypes"
+import type { SearchResultsElement } from "../../src/types/searchTypes"
 import SearchResultsBib from "../../src/models/SearchResultsBib"
 
 /**
@@ -25,10 +25,10 @@ export default function Search({ results }) {
   const { itemListElement, totalResults } = results.results
 
   const searchResultBibs = itemListElement
-    .filter((result: SearchResultsItem) => {
+    .filter((result: SearchResultsElement) => {
       return !(isEmpty(result) || (result.result && isEmpty(result.result)))
     })
-    .map((result: SearchResultsItem) => {
+    .map((result: SearchResultsElement) => {
       return new SearchResultsBib(result.result)
     })
 
