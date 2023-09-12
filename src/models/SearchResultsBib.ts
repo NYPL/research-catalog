@@ -1,6 +1,17 @@
 import type { SearchResult } from "../types/searchTypes"
 import type { ElectronicResource } from "../types/bibTypes"
 
+/**
+ * The SearchResultsBib class contains the data and getter functions
+ * for a single Search Results Bib entity.
+ *
+ * Search Results returned from the API are mapped and initialized into
+ * SearchResultsBib objects in the SearchResults component.
+ *
+ * Certain string fields (e.g. publicationStatement) returned from the API are
+ * formatted as a single item in an array. These fields are extracted and parsed
+ * into simple string attributes via the object's constructor.
+ */
 export default class SearchResultsBib {
   id: string
   title: string
