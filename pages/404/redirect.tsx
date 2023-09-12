@@ -1,5 +1,5 @@
 import Head from "next/head"
-import { Heading } from "@nypl/design-system-react-components"
+import { Box, Heading } from "@nypl/design-system-react-components"
 
 import RCLink from "../../src/components/RCLink/RCLink"
 import {
@@ -9,7 +9,7 @@ import {
 
 export default function Redirect404() {
   return (
-    <div style={{ paddingBottom: "var(--nypl-space-l)" }}>
+    <Box pb="l">
       <Head>
         <title>404 Not Found</title>
       </Head>
@@ -27,6 +27,6 @@ export default function Redirect404() {
           <RCLink href={LEGACY_CATALOG_URL}>Legacy Catalog</RCLink>
         </p>
       </div>
-    </div>
+    </Box>
   )
 }

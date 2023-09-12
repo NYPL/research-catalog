@@ -1,5 +1,6 @@
 import Head from "next/head"
 import {
+  Box,
   Card,
   CardHeading,
   Heading,
@@ -26,7 +27,7 @@ export default function Search({ results }) {
   const drbParams = { ...searchParams, page: undefined, identifiers: undefined }
 
   return (
-    <div style={{ paddingBottom: "var(--nypl-space-l)" }}>
+    <Box pb="l">
       <Head>
         <title>NYPL Research Catalog</title>
       </Head>
@@ -62,7 +63,7 @@ export default function Search({ results }) {
          */
         <Heading level="three">No results. Try a different search.</Heading>
       )}
-    </div>
+    </Box>
   )
 }
 

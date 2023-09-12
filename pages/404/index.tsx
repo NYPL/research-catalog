@@ -1,12 +1,12 @@
 import Head from "next/head"
-import { Heading } from "@nypl/design-system-react-components"
+import { Box, Heading } from "@nypl/design-system-react-components"
 
 import RCLink from "../../src/components/RCLink/RCLink"
 import { LEGACY_CATALOG_URL } from "../../src/config/constants"
 
 export default function Custom404() {
   return (
-    <div style={{ paddingBottom: "var(--nypl-space-l)" }}>
+    <Box pb="l">
       <Head>
         <title>404 Not Found</title>
       </Head>
@@ -20,6 +20,6 @@ export default function Custom404() {
           materials.
         </p>
       </div>
-    </div>
+    </Box>
   )
 }

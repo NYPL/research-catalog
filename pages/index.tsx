@@ -1,5 +1,6 @@
 import Head from "next/head"
 import {
+  Box,
   Heading,
   SimpleGrid,
   Card,
@@ -11,7 +12,7 @@ import RCLink from "../src/components/RCLink/RCLink"
 
 export default function Home() {
   return (
-    <div style={{ paddingBottom: "var(--nypl-space-l)" }}>
+    <Box pb="l">
       <Head>
         <title>NYPL Research Catalog</title>
       </Head>
@@ -149,6 +150,6 @@ export default function Home() {
           </CardContent>
         </Card>
       </SimpleGrid>
-    </div>
+    </Box>
   )
 }
