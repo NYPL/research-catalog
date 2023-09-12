@@ -19,7 +19,8 @@
 - `search_scope` string
   - "all", "title", "contributor", "subject", "series", "callnumber", "standard_number"
 - `filters` string
-  - "owner", "subjectLiteral", "holdingLocation", "deliveryLocation", "language", "materialType", "mediaType", "carrierType", "publisher", "contributor", "creator", "issuance", "createdYear", "dateAfter"', or "dateBefore"
+  - "owner", "subjectLiteral", "holdingLocation", "deliveryLocation", "language", "materialType", "mediaType", "
+    carrierType", "publisher", "contributor", "creator", "issuance", "createdYear", "dateAfter"', or "dateBefore"
   - Specify a hash of filters to apply, where keys are from terms above
 
 ## ResearchNow API
@@ -49,7 +50,8 @@
 - `years`
   - This should be formatted as `{"start": year, "end": year}`.
 
-For the DRBB/SCC integration, the DRBB data is fetched using a POST request with a body containing `page`, `per_page`, `filters` (years, languages), and `queries` (author/contributor, subject).
+For the DRBB/SCC integration, the DRBB data is fetched using a POST request with a body
+containing `page`, `per_page`, `filters` (years, languages), and `queries` (author/contributor, subject).
 
 ## Example Translation
 
@@ -63,20 +65,40 @@ would translate to a POST request with this body for ResearchNow's search endpoi
 
 ```json
 {
-	"queries":[
-		{"field":"title","query":"hello"},
-		{"field":"subject","query":"United States"}
-	],
-	"page":0,
-	"sort":[{"field":"title","dir":"asc"}],
-  "filters":[
-    {"field":"language","value":"eng"},
-    {"field":"language","value":"ger"},
-    {"field":"years","value":{
-      "start": 1993,
-      "end": 2020,
-    }},
-  ]}
+  "queries": [
+    {
+      "field": "title",
+      "query": "hello"
+    },
+    {
+      "field": "subject",
+      "query": "United States"
+    }
+  ],
+  "page": 0,
+  "sort": [
+    {
+      "field": "title",
+      "dir": "asc"
+    }
+  ],
+  "filters": [
+    {
+      "field": "language",
+      "value": "eng"
+    },
+    {
+      "field": "language",
+      "value": "ger"
+    },
+    {
+      "field": "years",
+      "value": {
+        "start": 1993,
+        "end": 2020
+      }
+    }
+  ]
 }
 ```
 
@@ -88,12 +110,15 @@ would translate to a POST request with this body for ResearchNow's search endpoi
 
 ## API Parameters Comparison
 
-This table lists, in the first column, the frontend features related to searching and search filters available from the frontend. The 2nd and 3rd column list out the Discovery API and ResearchNow API parameters that correlate to that frontend functionality.
+This table lists, in the first column, the frontend features related to searching and search filters available from the
+frontend. The 2nd and 3rd column list out the Discovery API and ResearchNow API parameters that correlate to that
+frontend functionality.
 
-Single quotes (') are used for frontend terminology. Italics are used to describe frontend features. Code styling (e.g. `filters`) is used for the parameters the respective APIs except.
+Single quotes (') are used for frontend terminology. Italics are used to describe frontend features. Code styling (
+e.g. `filters`) is used for the parameters the respective APIs except.
 
 | Discovery front end                           | Discovery API                                         | ResearchNow API                                 |
-| --------------------------------------------- | ----------------------------------------------------- | ----------------------------------------------- |
+|-----------------------------------------------|-------------------------------------------------------|-------------------------------------------------|
 | _Search field_                                | `q`                                                   | `queries`, "value"                              |
 | _Search field dropdown_                       | `search_scope`                                        | `queries`, "field"                              |
 | <ul>'All Fields'                              | <ul>"all"                                             | <ul>"keyword"                                   |
@@ -113,7 +138,8 @@ Single quotes (') are used for frontend terminology. Italics are used to describ
 | _Sorting_                                     | `sort`                                                | `sort[field]`                                   |
 |                                               | `sort_direction`                                      | `sort[direction]`                               |
 
-\* ResearchNow's `format` parameter does not correspond to the `materialType` in Discovery API. The former relates to digital formats (pdf, epub, and html). The latter to physical material type.
+\* ResearchNow's `format` parameter does not correspond to the `materialType` in Discovery API. The former relates to
+digital formats (pdf, epub, and html). The latter to physical material type.
 
 ## API Response Structure
 
@@ -127,7 +153,9 @@ Single quotes (') are used for frontend terminology. Italics are used to describ
     {
       "@type": "searchResult",
       "result": {
-        "@type": ["string"],
+        "@type": [
+          "string"
+        ],
         "@id": "string",
         "carrierType": [
           {
@@ -136,15 +164,21 @@ Single quotes (') are used for frontend terminology. Italics are used to describ
             "prefLabel": "string"
           }
         ],
-        "creatorLiteral": ["string"],
-        "contributorLiteral": ["string"],
+        "creatorLiteral": [
+          "string"
+        ],
+        "contributorLiteral": [
+          "string"
+        ],
         "created": "string",
         "createdYear": 0,
         "dateStartYear": 0,
         "depiction": "string",
         "description": "string",
         "endYear": 0,
-        "extent": ["string"],
+        "extent": [
+          "string"
+        ],
         "holdingCount": 0,
         "issuance": [
           {
@@ -178,7 +212,9 @@ Single quotes (') are used for frontend terminology. Italics are used to describ
               }
             ],
             "idBarcode": "string",
-            "identifier": ["string"],
+            "identifier": [
+              "string"
+            ],
             "owner": [
               {
                 "@type": "string",
@@ -186,9 +222,13 @@ Single quotes (') are used for frontend terminology. Italics are used to describ
                 "prefLabel": "string"
               }
             ],
-            "requestable": [true],
+            "requestable": [
+              true
+            ],
             "eddRequestable": true,
-            "shelfMark": ["string"],
+            "shelfMark": [
+              "string"
+            ],
             "status": [
               {
                 "@type": "string",
@@ -229,9 +269,15 @@ Single quotes (') are used for frontend terminology. Italics are used to describ
           }
         ],
         "numAvailable": 0,
-        "placeOfPublication": ["string"],
-        "prefLabel": ["string"],
-        "roles:ROLE": ["string"],
+        "placeOfPublication": [
+          "string"
+        ],
+        "prefLabel": [
+          "string"
+        ],
+        "roles:ROLE": [
+          "string"
+        ],
         "startYear": 0,
         "subject": [
           {
@@ -241,9 +287,15 @@ Single quotes (') are used for frontend terminology. Italics are used to describ
           }
         ],
         "suppressed": true,
-        "title": ["string"],
-        "titleDisplay": ["string"],
-        "type": ["nypl:Item"],
+        "title": [
+          "string"
+        ],
+        "titleDisplay": [
+          "string"
+        ],
+        "type": [
+          "nypl:Item"
+        ],
         "uri": "string"
       }
     }
@@ -269,8 +321,12 @@ Single quotes (') are used for frontend terminology. Italics are used to describ
       ]
     },
     "paging": {
-      "prev_page_sort": ["string"],
-      "next_page_sort": ["string"]
+      "prev_page_sort": [
+        "string"
+      ],
+      "next_page_sort": [
+        "string"
+      ]
     },
     "works": [
       {
@@ -280,13 +336,17 @@ Single quotes (') are used for frontend terminology. Italics are used to describ
         "uuid": "string",
         "title": "string",
         "sort_title": "string",
-        "sub_title": ["string"],
+        "sub_title": [
+          "string"
+        ],
         "medium": "string",
         "series": "string",
         "series_position": 0,
         "edition_count": 0,
         "edition_range": "string",
-        "sort": ["string"],
+        "sort": [
+          "string"
+        ],
         "agents": [
           {
             "name": "string",
@@ -298,7 +358,9 @@ Single quotes (') are used for frontend terminology. Italics are used to describ
             "death_date_display": "string"
           }
         ],
-        "alt_titles": ["string"],
+        "alt_titles": [
+          "string"
+        ],
         "instances": [
           {
             "date_modified": "2020-06-01T20:30:37.458Z",
