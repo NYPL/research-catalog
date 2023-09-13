@@ -20,9 +20,28 @@
   }
 }
 
-.dateFields,
-.dateField > div {
+.formField {
+  display: block !important;
+}
+
+.dateFields {
   @media (max-width: $nypl-breakpoint-large) {
     display: block !important;
+    margin-bottom: var(--nypl-space-m);
+  }
+}
+
+.formField > div,
+.formatFields > div {
+  @media (max-width: $nypl-breakpoint-large) {
+    display: block !important;
+  }
+}
+
+.checkbox {
+  margin-bottom: var(--nypl-space-s);
+
+  span {
+    font-weight: bold;
   }
 }

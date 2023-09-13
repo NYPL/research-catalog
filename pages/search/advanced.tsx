@@ -10,10 +10,14 @@ import {
   Select,
   Heading,
   SimpleGrid,
+  Checkbox,
 } from "@nypl/design-system-react-components"
 
 import { BASE_URL, SITE_NAME } from "../../src/config/constants"
-import { languageOptions } from "../../src/utils/advancedSearchUtils"
+import {
+  languageOptions,
+  materialTypeOptions,
+} from "../../src/utils/advancedSearchUtils"
 import styles from "../../styles/components/AdvancedSearch.module.scss"
 
 /**
@@ -72,7 +76,7 @@ export default function AdvancedSearch() {
               Date
             </Label>
             <FormRow id="dates" className={styles.dateFields}>
-              <FormField className={styles.dateField}>
+              <FormField className={styles.formField}>
                 <DatePicker
                   id="dateAfter"
                   dateType="year"
@@ -81,7 +85,7 @@ export default function AdvancedSearch() {
                   initialDate={null}
                 />
               </FormField>
-              <FormField className={styles.dateField}>
+              <FormField className={styles.formField}>
                 <DatePicker
                   id="dateBefore"
                   dateType="year"
@@ -91,6 +95,41 @@ export default function AdvancedSearch() {
                 />
               </FormField>
             </FormRow>
+            <Label htmlFor="formats" id="formats-label">
+              Format
+            </Label>
+            <Fieldset id="formats" className={styles.formatFields}>
+              <FormRow>
+                <FormField className={styles.formField}>
+                  {materialTypeOptions.slice(0, 4).map((materialType) => {
+                    return (
+                      <Checkbox
+                        className={styles.checkbox}
+                        id={materialType.value}
+                        key={materialType.value}
+                        labelText={materialType.label}
+                        name={materialType.value}
+                        value={materialType.value}
+                      />
+                    )
+                  })}
+                </FormField>
+                <FormField className={styles.formField}>
+                  {materialTypeOptions.slice(4).map((materialType) => {
+                    return (
+                      <Checkbox
+                        className={styles.checkbox}
+                        id={materialType.value}
+                        key={materialType.value}
+                        labelText={materialType.label}
+                        name={materialType.value}
+                        value={materialType.value}
+                      />
+                    )
+                  })}
+                </FormField>
+              </FormRow>
+            </Fieldset>
           </Fieldset>
         </SimpleGrid>
       </Form>
