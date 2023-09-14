@@ -23,7 +23,7 @@ export default function Document() {
         <div id="Header-Placeholder">
           <div id="nypl-header"></div>
           <script
-            src={`${process.env.NEXT_PUBLIC_NYPL_HEADER_URL}/header.min.js?containerId=nypl-header`}
+            src={`${process.env.NYPL_HEADER_URL}/header.min.js?containerId=nypl-header`}
             async
           />
         </div>
@@ -31,7 +31,7 @@ export default function Document() {
         <NextScript />
         {/* NYPL Footer script and container */}
         <script
-          src={`${process.env.NEXT_PUBLIC_NYPL_HEADER_URL}/footer.min.js?containerId=nypl-footer`}
+          src={`${process.env.NYPL_HEADER_URL}/footer.min.js?containerId=nypl-footer`}
           async
         />
         <div id="nypl-footer"></div>
