@@ -26,11 +26,11 @@
 
 .dateFields {
   @media (max-width: $nypl-breakpoint-large) {
-    display: block !important;
     margin-bottom: var(--nypl-space-m);
   }
 }
 
+.dateFields,
 .formField > div,
 .formatFields > div {
   @media (max-width: $nypl-breakpoint-large) {
