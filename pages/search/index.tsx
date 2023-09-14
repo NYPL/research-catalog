@@ -6,12 +6,14 @@ import {
   SimpleGrid,
 } from "@nypl/design-system-react-components"
 import { useRouter } from "next/router"
+import { isEmpty } from "underscore"
 
 import RCLink from "../../src/components/RCLink/RCLink"
 import DRBContainer from "../../src/components/DRBContainer/DRBContainer"
 import { fetchResults } from "../api/search"
 import { mapQueryToSearchParams } from "../../src/utils/searchUtils"
-import type { SearchResultsItem } from "../../src/types/searchTypes"
+import type { SearchResultsElement } from "../../src/types/searchTypes"
+import SearchResultsBib from "../../src/models/SearchResultsBib"
 
 /**
  * The Search page is responsible for fetching and displaying the Search results,
@@ -24,37 +26,42 @@ export default function Search({ results }) {
 
   // Remove page and identifiers fields from drbParams to prevent re-fetches
   const drbParams = { ...searchParams, page: undefined, identifiers: undefined }
+  const { itemListElement, totalResults } = results.results
+
+  const searchResultBibs = itemListElement
+    .filter((result: SearchResultsElement) => {
+      return !(isEmpty(result) || (result.result && isEmpty(result.result)))
+    })
+    .map((result: SearchResultsElement) => {
+      return new SearchResultsBib(result.result)
+    })
 
   return (
     <div style={{ paddingBottom: "var(--nypl-space-l)" }}>
       <Head>
         <title>NYPL Research Catalog</title>
       </Head>
-      {results?.results?.totalResults ? (
-        <div style={{ display: "flex" }}>
+      {totalResults ? (
+        <>
+          <Heading level="three">
+            {`Displaying 1-50 of ${results.results.totalResults.toLocaleString()} results for keyword "${
+              searchParams.searchKeywords
+            }"`}
+          </Heading>
           <SimpleGrid columns={1} gap="grid.m">
-            <Heading level="three">
-              {`Displaying 1-50 of ${results.results.totalResults.toLocaleString()} results for keyword "${
-                searchParams.searchKeywords
-              }"`}
-            </Heading>
-            {results.results.itemListElement.map(
-              (result: SearchResultsItem) => {
-                // TODO: Create SearchResult component to manage result display (https://jira.nypl.org/browse/SCC-3714)
-                return (
-                  <Card key={result.result["@id"]}>
-                    <CardHeading level="four">
-                      <RCLink href="/bib">
-                        {result.result["titleDisplay"][0]}
-                      </RCLink>
-                    </CardHeading>
-                  </Card>
-                )
-              }
-            )}
+            {searchResultBibs.map((bib: SearchResultsBib) => {
+              // TODO: Create SearchResult component to manage result display (https://jira.nypl.org/browse/SCC-3714)
+              return (
+                <Card key={bib.id}>
+                  <CardHeading level="four">
+                    <RCLink href={bib.url}>{bib.title}</RCLink>
+                  </CardHeading>
+                </Card>
+              )
+            })}
           </SimpleGrid>
           <DRBContainer searchParams={drbParams} />
-        </div>
+        </>
       ) : (
         /**
          * TODO: The logic and copy for different scenarios will need to be added when
