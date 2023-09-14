@@ -42,13 +42,13 @@ export default function Search({ results }) {
         <title>NYPL Research Catalog</title>
       </Head>
       {totalResults ? (
-        <>
-          <Heading level="three">
-            {`Displaying 1-50 of ${results.results.totalResults.toLocaleString()} results for keyword "${
-              searchParams.searchKeywords
-            }"`}
-          </Heading>
+        <div style={{ display: "flex" }}>
           <SimpleGrid columns={1} gap="grid.m">
+            <Heading level="three">
+              {`Displaying 1-50 of ${results.results.totalResults.toLocaleString()} results for keyword "${
+                searchParams.searchKeywords
+              }"`}
+            </Heading>
             {searchResultBibs.map((bib: SearchResultsBib) => {
               // TODO: Create SearchResult component to manage result display (https://jira.nypl.org/browse/SCC-3714)
               return (
@@ -61,7 +61,7 @@ export default function Search({ results }) {
             })}
           </SimpleGrid>
           <DRBContainer searchParams={drbParams} />
-        </>
+        </div>
       ) : (
         /**
          * TODO: The logic and copy for different scenarios will need to be added when
