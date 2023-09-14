@@ -9,7 +9,7 @@ import {
 
 export default function Redirect404() {
   return (
-    <div style={{ paddingBottom: "var(--nypl-space-l)" }}>
+    <>
       <Head>
         <title>404 Not Found</title>
       </Head>
@@ -27,6 +27,6 @@ export default function Redirect404() {
           <RCLink href={LEGACY_CATALOG_URL}>Legacy Catalog</RCLink>
         </p>
       </div>
-    </div>
+    </>
   )
 }

@@ -11,7 +11,7 @@ import RCLink from "../src/components/RCLink/RCLink"
 
 export default function Home() {
   return (
-    <div style={{ paddingBottom: "var(--nypl-space-l)" }}>
+    <>
       <Head>
         <title>NYPL Research Catalog</title>
       </Head>
@@ -149,6 +149,6 @@ export default function Home() {
           </CardContent>
         </Card>
       </SimpleGrid>
-    </div>
+    </>
   )
 }

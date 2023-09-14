@@ -37,7 +37,7 @@ export default function Search({ results }) {
     })
 
   return (
-    <div style={{ paddingBottom: "var(--nypl-space-l)" }}>
+    <>
       <Head>
         <title>NYPL Research Catalog</title>
       </Head>
@@ -69,7 +69,7 @@ export default function Search({ results }) {
          */
         <Heading level="three">No results. Try a different search.</Heading>
       )}
-    </div>
+    </>
   )
 }
 
