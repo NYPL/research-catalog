@@ -11,6 +11,8 @@ import {
   Heading,
   SimpleGrid,
   Checkbox,
+  HorizontalRule,
+  Button,
 } from "@nypl/design-system-react-components"
 
 import { BASE_URL, SITE_NAME } from "../../src/config/constants"
@@ -34,7 +36,12 @@ export default function AdvancedSearch() {
         <title>Advanced Search | {SITE_NAME}</title>
       </Head>
       <Heading level="two">Advanced Search</Heading>
-      <Form id="advancedSearchForm" method="post" action={`${BASE_URL}/search`}>
+      <Form
+        id="advancedSearchForm"
+        className={styles.advancedSearchForm}
+        method="post"
+        action={`${BASE_URL}/search`}
+      >
         <SimpleGrid columns={2} gap="grid.m">
           <Fieldset id="advancedSearchLeft">
             <TextInput
@@ -132,6 +139,23 @@ export default function AdvancedSearch() {
             </Fieldset>
           </Fieldset>
         </SimpleGrid>
+        <HorizontalRule />
+        <div
+          id="advancedSearchButtons"
+          className={styles.advancedSearchButtons}
+        >
+          <Button id="advancedSearchSubmit" type="submit">
+            Submit
+          </Button>
+          <Button
+            buttonType="secondary"
+            className="clearButton"
+            id="advancedSearchClear"
+            type="button"
+          >
+            Clear
+          </Button>
+        </div>
       </Form>
     </div>
   )

@@ -20,7 +20,8 @@
   }
 }
 
-.formField {
+.formField,
+.advancedSearchForm > div {
   display: block !important;
 }
 
@@ -43,5 +44,23 @@
 
   span {
     font-weight: bold;
+  }
+}
+
+.advancedSearchButtons {
+  display: block;
+  width: 91%;
+
+  @include media($nypl-breakpoint-medium) {
+    justify-content: flex-end;
+    display: flex;
+  }
+
+  button {
+    margin: 5px;
+    width: 100%;
+    @include media($nypl-breakpoint-medium) {
+      width: 139px;
+    }
   }
 }
