@@ -60,7 +60,7 @@ export interface SearchFormEvent {
 export interface SearchResultsResponse {
   results?: SearchResults
   aggregations?: SearchResults
-  page: string
+  page: number
 }
 
 export interface SearchResults {
