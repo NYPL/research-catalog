@@ -4,7 +4,6 @@ FROM node:16-alpine AS production
 #RUN apt-get upgrade -y
 
 ARG HEADER_URL
-ENV HEADER_URL=${HEADER_URL}
 
 WORKDIR /app
 
@@ -22,6 +21,7 @@ RUN npm install
 # Add application code.
 COPY . .
 
+ENV NEXT_PUBLIC_HEADER_URL=${HEADER_URL}
 RUN npm run build
 
 # Explicitly set port 3000 as open to requests.
