@@ -21,12 +21,12 @@ import SearchResultsBib from "../../src/models/SearchResultsBib"
  */
 export default function Search({ results }) {
   const { query } = useRouter()
+  const { itemListElement, totalResults } = results.results
 
   const searchParams = mapQueryToSearchParams(query)
 
   // Remove page and identifiers fields from drbParams to prevent re-fetches
   const drbParams = { ...searchParams, page: undefined, identifiers: undefined }
-  const { itemListElement, totalResults } = results.results
 
   const searchResultBibs = itemListElement
     .filter((result: SearchResultsElement) => {
