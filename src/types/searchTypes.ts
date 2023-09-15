@@ -49,9 +49,17 @@ export interface SearchQueryParams extends Identifiers {
   per_page?: string
 }
 
+type SearchFormField = { value: string }
+
 export interface SearchFormEvent {
-  q?: { value: string }
-  search_scope?: { value: string }
+  q?: SearchFormField
+  search_scope?: SearchFormField
+  contributor?: SearchFormField
+  subject?: SearchFormField
+  language?: SearchFormField
+  dateBefore?: SearchFormField
+  dateAfter?: SearchFormField
+  materialType?: SearchFormField
 }
 
 export interface SearchResultsResponse {
