@@ -59,9 +59,6 @@ export default function AdvancedSearch() {
       },
     }
     const queryString = getQueryString(searchParams)
-    console.log(searchParams)
-    console.log(queryString)
-
     await router.push(`/search/?${queryString}`)
   }
 
