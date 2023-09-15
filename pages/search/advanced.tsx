@@ -1,5 +1,6 @@
 import Head from "next/head"
 import { useRouter } from "next/router"
+import { useRef } from "react"
 import type { SyntheticEvent } from "react"
 import {
   Form,
@@ -17,6 +18,8 @@ import {
   Button,
 } from "@nypl/design-system-react-components"
 
+import type { TextInputRefType } from "@nypl/design-system-react-components"
+
 import { BASE_URL, SITE_NAME } from "../../src/config/constants"
 import {
   languageOptions,
@@ -32,6 +35,16 @@ import { getQueryString } from "../../src/utils/searchUtils"
  */
 export default function AdvancedSearch() {
   const router = useRouter()
+
+  // Input refs used for clearing values
+  const searchKeywordsRef = useRef<TextInputRefType>(null)
+  const titleRef = useRef<TextInputRefType>(null)
+  const contributorRef = useRef<TextInputRefType>(null)
+  const subjectRef = useRef<TextInputRefType>(null)
+  const languageRef = useRef<HTMLSelectElement>(null)
+  const dateAfterRef = useRef<TextInputRefType>(null)
+  const dateBeforeRef = useRef<TextInputRefType>(null)
+  const checkBoxesRef = useRef([])
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
@@ -62,6 +75,22 @@ export default function AdvancedSearch() {
     await router.push(`/search/?${queryString}`)
   }
 
+  const handleClear = () => {
+    searchKeywordsRef.current.value = ""
+    titleRef.current.value = ""
+    contributorRef.current.value = ""
+    subjectRef.current.value = ""
+    languageRef.current.value = ""
+    dateAfterRef.current.value = ""
+    dateBeforeRef.current.value = ""
+    checkBoxesRef.current[0].checked = false
+
+    // clear all checkboxes
+    for (let i = 0; i < checkBoxesRef.current.length; i++) {
+      checkBoxesRef.current[i].checked = false
+    }
+  }
+
   return (
     <div
       className={styles.advancedSearchContainer}
@@ -85,25 +114,39 @@ export default function AdvancedSearch() {
               labelText="Keywords"
               type="text"
               name="q"
+              value=""
+              ref={searchKeywordsRef}
             />
-            <TextInput id="title" labelText="Title" type="text" name="title" />
+            <TextInput
+              id="title"
+              labelText="Title"
+              type="text"
+              name="title"
+              value=""
+              ref={titleRef}
+            />
             <TextInput
               id="contributor"
               labelText="Author"
               type="text"
               name="contributor"
+              value=""
+              ref={contributorRef}
             />
             <TextInput
               id="subject"
               labelText="Subject"
               type="text"
               name="subject"
+              value=""
+              ref={subjectRef}
             />
             <Select
               id="languageSelect"
               name="language"
               labelText="Language"
               aria-labelledby="languageSelect-label"
+              ref={languageRef}
             >
               {languageOptions.map((language) => {
                 return (
@@ -126,7 +169,8 @@ export default function AdvancedSearch() {
                   dateType="year"
                   labelText="From"
                   helperText="e.g. 1901"
-                  initialDate={null}
+                  initialDate=""
+                  ref={dateAfterRef}
                 />
               </FormField>
               <FormField className={styles.formField}>
@@ -136,7 +180,8 @@ export default function AdvancedSearch() {
                   dateType="year"
                   labelText="To"
                   helperText="e.g. 2000"
-                  initialDate={null}
+                  initialDate=""
+                  ref={dateBeforeRef}
                 />
               </FormField>
             </FormRow>
@@ -146,21 +191,26 @@ export default function AdvancedSearch() {
             <Fieldset id="formats" className={styles.formatFields}>
               <FormRow>
                 <FormField className={styles.formField}>
-                  {materialTypeOptions.slice(0, 4).map((materialType) => {
-                    return (
-                      <Checkbox
-                        className={styles.checkbox}
-                        id={materialType.value}
-                        key={materialType.value}
-                        labelText={materialType.label}
-                        name={materialType.value}
-                        value={materialType.value}
-                      />
-                    )
-                  })}
+                  {materialTypeOptions
+                    .slice(0, 4)
+                    .map((materialType, index) => {
+                      return (
+                        <Checkbox
+                          className={styles.checkbox}
+                          id={materialType.value}
+                          key={materialType.value}
+                          labelText={materialType.label}
+                          name={materialType.value}
+                          value={materialType.value}
+                          ref={(element) => {
+                            checkBoxesRef.current[index] = element
+                          }}
+                        />
+                      )
+                    })}
                 </FormField>
                 <FormField className={styles.formField}>
-                  {materialTypeOptions.slice(4).map((materialType) => {
+                  {materialTypeOptions.slice(4).map((materialType, index) => {
                     return (
                       <Checkbox
                         className={styles.checkbox}
@@ -169,6 +219,9 @@ export default function AdvancedSearch() {
                         labelText={materialType.label}
                         name={materialType.value}
                         value={materialType.value}
+                        ref={(element) => {
+                          checkBoxesRef.current[index + 4] = element
+                        }}
                       />
                     )
                   })}
@@ -186,10 +239,11 @@ export default function AdvancedSearch() {
             Submit
           </Button>
           <Button
+            type="button"
             buttonType="secondary"
             className="clearButton"
             id="advancedSearchClear"
-            type="button"
+            onClick={handleClear}
           >
             Clear
           </Button>
