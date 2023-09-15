@@ -54,6 +54,7 @@ type SearchFormField = { value: string }
 export interface SearchFormEvent {
   q?: SearchFormField
   search_scope?: SearchFormField
+  title?: SearchFormField
   contributor?: SearchFormField
   subject?: SearchFormField
   language?: SearchFormField

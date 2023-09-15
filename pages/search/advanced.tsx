@@ -48,6 +48,7 @@ export default function AdvancedSearch() {
 
     const searchParams = {
       searchKeywords: target.q.value,
+      title: target.title.value,
       contributor: target.contributor.value,
       subject: target.subject.value,
       selectedFilters: {
