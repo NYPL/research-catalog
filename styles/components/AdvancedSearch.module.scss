@@ -57,7 +57,7 @@
   }
 
   button {
-    margin: 5px;
+    margin: var(--nypl-space-xxs);
     width: 100%;
     @include media($nypl-breakpoint-medium) {
       width: 139px;
