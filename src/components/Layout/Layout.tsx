@@ -9,7 +9,8 @@ import {
 import { type RCPage } from "../../types/pageTypes"
 import styles from "../../../styles/components/Layout.module.scss"
 import SubNav from "../SubNav/SubNav"
-import Search from "../Search/Search"
+import SearchForm from "../SearchForm/SearchForm"
+import { BASE_URL } from "../../config/constants"
 
 interface LayoutProps {
   activePage?: RCPage
@@ -22,29 +23,32 @@ interface LayoutProps {
  */
 const Layout = ({ children, activePage }: LayoutProps) => {
   const showSearch = activePage === "search"
+  const showHeader = activePage !== "404"
 
   return (
     <DSProvider>
       <TemplateAppContainer
         breakout={
-          <>
-            <Breadcrumbs
-              breadcrumbsType="research"
-              breadcrumbsData={[
-                { url: "https://nypl.org", text: "Home" },
-                { url: "https://www.nypl.org/research", text: "Research" },
-                {
-                  url: "https://www.nypl.org/research/research-catalog",
-                  text: "Research Catalog",
-                },
-              ]}
-            />
-            <div className={styles.researchHeadingContainer}>
-              <Heading id="heading-h1" level="one" text="Research Catalog" />
-              <SubNav activePage={activePage} />
-              {showSearch && <Search />}
-            </div>
-          </>
+          showHeader && (
+            <>
+              <Breadcrumbs
+                breadcrumbsType="research"
+                breadcrumbsData={[
+                  { url: "https://nypl.org", text: "Home" },
+                  { url: "https://www.nypl.org/research", text: "Research" },
+                  {
+                    url: `https://www.nypl.org${BASE_URL}`,
+                    text: "Research Catalog",
+                  },
+                ]}
+              />
+              <div className={styles.researchHeadingContainer}>
+                <Heading id="heading-h1" level="one" text="Research Catalog" />
+                <SubNav activePage={activePage} />
+                {showSearch && <SearchForm />}
+              </div>
+            </>
+          )
         }
         contentPrimary={children}
       />

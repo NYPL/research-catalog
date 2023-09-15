@@ -25,4 +25,4 @@ Running the app locally via Docker is optional for now, and provided as an alter
 1. [Download](https://docs.docker.com/get-docker/) and install Docker.
 2. `cd` into research-catalog repo
 3. Run `docker-compose up --build --force-recreate`
-4. Check that app is being served at http://localhost:3000/
+4. Check that app is being served at http://localhost:8080/research/research-catalog

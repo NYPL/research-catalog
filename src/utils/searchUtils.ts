@@ -7,7 +7,7 @@ import {
 
 import type {
   SearchParams,
-  QueryParams,
+  SearchQueryParams,
   SearchFilters,
   Identifiers,
 } from "../types/searchTypes"
@@ -118,7 +118,7 @@ export function getQueryString({
 
 /**
  * mapQueryToSearchParams
- * Maps the query param structure from the request to a SearchParams object, which is expected by fetchResults
+ * Maps the SearchQueryParams structure from the request to a SearchParams object, which is expected by fetchResults
  */
 export function mapQueryToSearchParams({
   q,
@@ -135,7 +135,7 @@ export function mapQueryToSearchParams({
   isbn,
   oclc,
   lccn,
-}: QueryParams): SearchParams {
+}: SearchQueryParams): SearchParams {
   return {
     searchKeywords: q,
     field: search_scope,

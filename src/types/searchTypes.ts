@@ -1,13 +1,18 @@
-// TODO: These should eventually outline the allowed string values for each filter
-type MaterialType = string
+import type { ElectronicResource } from "./bibTypes"
+
 type Language = string
 type SubjectLiteral = string
+type ContributorLiteral = string
 type Issuance = string
+type MaterialType = {
+  prefLabel?: string
+}
 
 export interface SearchFilters {
   materialType?: MaterialType | MaterialType[]
   language?: Language | Language[]
   subjectLiteral?: SubjectLiteral | SubjectLiteral[]
+  contributorLiteral?: ContributorLiteral | ContributorLiteral[]
   issuance?: Issuance | Issuance[]
   dateAfter?: string
   dateBefore?: string
@@ -33,24 +38,51 @@ export interface SearchParams {
   identifiers?: Identifiers
 }
 
-export interface QueryParams extends SearchParams, Identifiers {
-  per_page?: string
+export interface SearchQueryParams extends Identifiers {
   q?: string
+  contributor?: string
+  title?: string
+  subject?: string
+  filters?: SearchFilters
   sort?: string
   sort_direction?: string
   sort_scope?: string
   search_scope?: string
-  filters?: SearchFilters
+  page?: string
+  per_page?: string
+}
+
+export interface SearchFormEvent {
+  q?: { value: string }
+  search_scope?: { value: string }
 }
 
 export interface SearchResultsResponse {
-  totalResults: number
-  itemListElement: SearchResultsItem[]
+  results?: SearchResults
+  aggregations?: SearchResults
+  page: string
 }
 
-export interface SearchResultsItem {
-  result?: {
-    uri?: string
-  }
+export interface SearchResults {
+  totalResults: number
+  itemListElement: SearchResultsElement[]
+}
+
+export interface SearchResultsElement {
+  result?: SearchResult
   field?: string
+}
+
+export interface SearchResult {
+  "@id"?: string
+  uri?: string
+  titleDisplay?: string[]
+  creatorLiteral?: string[]
+  title?: string[]
+  materialType?: MaterialType[]
+  publicationStatement?: string[]
+  dateStartYear?: number
+  dateEndYear?: number
+  electronicResources?: ElectronicResource[]
+  numItemsTotal?: number
 }

@@ -6,7 +6,7 @@
   padding: var(--nypl-space-l) 0 var(--nypl-space-xs);
 }
 
-.searchFormContainer {
+.searchContainerInner {
   @include maxWidth;
 
   @include media($nypl-max-width) {

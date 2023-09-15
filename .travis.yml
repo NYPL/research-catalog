@@ -23,7 +23,6 @@ jobs:
           export ENV="production";
           export HEADER_URL="https://ds-header.nypl.org";
           fi
-        fi
       env:
         - ECR_URL=946183545209.dkr.ecr.us-east-1.amazonaws.com/research-catalog
         - AWS_DEFAULT_REGION=us-east-1
@@ -51,7 +50,7 @@ jobs:
       install:
         - pip install --user awscli
       script:
-      - aws ecs update-service --cluster $CLUSTER_NAME --service $CLUSTER_NAME --force-new-deployment
+        - aws ecs update-service --cluster $CLUSTER_NAME --service $CLUSTER_NAME --force-new-deployment
 
     - stage: deploy production
       if: branch IN (production) AND type != pull_request
