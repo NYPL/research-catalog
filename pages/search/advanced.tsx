@@ -2,8 +2,7 @@ import Head from "next/head"
 import { useEffect, useReducer } from "react"
 import { useRouter } from "next/router"
 import type { SyntheticEvent } from "react"
-import type {
-  FullDateType} from "@nypl/design-system-react-components";
+import type { FullDateType } from "@nypl/design-system-react-components"
 import {
   Form,
   FormField,
@@ -18,7 +17,7 @@ import {
   CheckboxGroup,
   Checkbox,
   HorizontalRule,
-  Button
+  Button,
 } from "@nypl/design-system-react-components"
 
 import { BASE_URL, SITE_NAME } from "../../src/config/constants"
@@ -170,7 +169,7 @@ export default function AdvancedSearch() {
                   dateType="year"
                   labelText="From"
                   helperText="e.g. 1901"
-                  initialDate=""
+                  initialDate={searchFormState["selectedFilters"].dateAfter}
                   onChange={(e) => handleDateChange("dateAfter", e)}
                 />
               </FormField>
@@ -181,7 +180,7 @@ export default function AdvancedSearch() {
                   dateType="year"
                   labelText="To"
                   helperText="e.g. 2000"
-                  initialDate=""
+                  initialDate={searchFormState["selectedFilters"].dateBefore}
                   onChange={(e) => handleDateChange("dateBefore", e)}
                 />
               </FormField>

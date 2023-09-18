@@ -14,6 +14,8 @@ export const initialSearchFormState = {
   subject: "",
   selectedFilters: {
     language: "",
+    dateBefore: "",
+    dateAfter: "",
   },
 }
 
