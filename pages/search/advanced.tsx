@@ -1,6 +1,6 @@
 import Head from "next/head"
 import { useRouter } from "next/router"
-import { useRef, useState } from "react"
+import { useState } from "react"
 import type { SyntheticEvent } from "react"
 import {
   Form,
@@ -18,8 +18,6 @@ import {
   Button,
 } from "@nypl/design-system-react-components"
 
-import type { TextInputRefType } from "@nypl/design-system-react-components"
-
 import { BASE_URL, SITE_NAME } from "../../src/config/constants"
 import {
   textInputFields,
@@ -36,17 +34,6 @@ import { getQueryString } from "../../src/utils/searchUtils"
  */
 export default function AdvancedSearch() {
   const router = useRouter()
-
-  // Input refs used for clearing values
-  const textInputsRef = useRef([])
-  const languageRef = useRef<HTMLSelectElement>(null)
-  const dateAfterRef = useRef<TextInputRefType>(null)
-  const dateBeforeRef = useRef<TextInputRefType>(null)
-
-  // Use state instead of refs for checkboxes to visually update chakra UI when resetting all checkboxes
-  const [checkboxesState, setCheckboxesState] = useState(
-    new Array(materialTypeOptions.length).fill(false)
-  )
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
@@ -78,24 +65,17 @@ export default function AdvancedSearch() {
     await router.push(`/search/?${queryString}`)
   }
 
-  const handleCheckboxClick = (value: boolean, index: number) => {
-    // clone checkboxes array to update the checked fields state at index
-    const updatedCheckboxes = [...checkboxesState]
-    updatedCheckboxes[index] = value
-    setCheckboxesState(updatedCheckboxes)
-  }
-
-  const handleClear = () => {
+  const handleClear = (e: SyntheticEvent) => {
     // clear text input refs
-    for (let i = 0; i < textInputsRef.current.length; i++) {
-      textInputsRef.current[i].value = ""
-    }
-    languageRef.current.value = ""
-    dateAfterRef.current.value = ""
-    dateBeforeRef.current.value = ""
+    e.preventDefault()
+    Array.from(document.getElementsByTagName("input")).forEach((input) => {
+      input.value = ""
+      input.checked = false
+    })
 
-    // clear checkbox values in state
-    setCheckboxesState(new Array(materialTypeOptions.length).fill(false))
+    Array.from(document.getElementsByTagName("select")).forEach((select) => {
+      select.value = ""
+    })
   }
 
   return (
@@ -125,9 +105,6 @@ export default function AdvancedSearch() {
                   name={name}
                   value=""
                   key={key}
-                  ref={(element) => {
-                    textInputsRef.current[index] = element
-                  }}
                 />
               )
             })}
@@ -136,7 +113,6 @@ export default function AdvancedSearch() {
               name="language"
               labelText="Language"
               aria-labelledby="languageSelect-label"
-              ref={languageRef}
             >
               {languageOptions.map((language) => {
                 return (
@@ -160,7 +136,6 @@ export default function AdvancedSearch() {
                   labelText="From"
                   helperText="e.g. 1901"
                   initialDate=""
-                  ref={dateAfterRef}
                 />
               </FormField>
               <FormField className={styles.formField}>
@@ -171,7 +146,6 @@ export default function AdvancedSearch() {
                   labelText="To"
                   helperText="e.g. 2000"
                   initialDate=""
-                  ref={dateBeforeRef}
                 />
               </FormField>
             </FormRow>
@@ -192,10 +166,6 @@ export default function AdvancedSearch() {
                           labelText={materialType.label}
                           name={materialType.value}
                           value={materialType.value}
-                          onChange={(e) => {
-                            handleCheckboxClick(e.target.checked, index)
-                          }}
-                          isChecked={checkboxesState[index]}
                         />
                       )
                     })}
@@ -210,10 +180,6 @@ export default function AdvancedSearch() {
                         labelText={materialType.label}
                         name={materialType.value}
                         value={materialType.value}
-                        onChange={(e) => {
-                          handleCheckboxClick(e.target.checked, index + 4)
-                        }}
-                        isChecked={checkboxesState[index + 4]}
                       />
                     )
                   })}
