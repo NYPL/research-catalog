@@ -29,7 +29,10 @@ import {
   materialTypeOptions,
 } from "../../src/utils/advancedSearchUtils"
 import styles from "../../styles/components/AdvancedSearch.module.scss"
-import type { SearchFormEvent } from "../../src/types/searchTypes"
+import type {
+  SearchFormEvent,
+  SearchFormActionType,
+} from "../../src/types/searchTypes"
 import { getQueryString } from "../../src/utils/searchUtils"
 
 /**
@@ -47,31 +50,23 @@ export default function AdvancedSearch() {
     console.log(searchFormState)
   }, [searchFormState])
 
-  const handleTextInputChange = (e: SyntheticEvent) => {
+  const handleInputChange = (e: SyntheticEvent, type: SearchFormActionType) => {
     e.preventDefault()
     const target = e.target as HTMLInputElement
     dispatch({
-      type: "text_input_change",
+      type: type,
       field: target.name,
       payload: target.value,
     })
   }
 
-  const handleFilterChange = (e: SyntheticEvent) => {
-    e.preventDefault()
-    const target = e.target as HTMLInputElement
-    dispatch({
-      type: "selected_filter_change",
-      field: target.name,
-      payload: target.value,
-    })
-  }
+  const handleDateChange = (field: string, e: FullDateType) => {
+    const yearString = e.startDate?.getFullYear()?.toString()
 
-  const handleDateChange = (name: string, e: FullDateType) => {
     dispatch({
-      type: "selected_filter_change",
-      field: name,
-      payload: e.startDate?.getFullYear()?.toString() || "",
+      type: "filter_change",
+      field: field,
+      payload: yearString || "",
     })
   }
 
@@ -136,7 +131,7 @@ export default function AdvancedSearch() {
                   name={name}
                   value={searchFormState[name]}
                   key={name}
-                  onChange={(e) => handleTextInputChange(e)}
+                  onChange={(e) => handleInputChange(e, "input_change")}
                 />
               )
             })}
@@ -146,7 +141,7 @@ export default function AdvancedSearch() {
               labelText="Language"
               aria-labelledby="languageSelect-label"
               value={searchFormState["selectedFilters"].language}
-              onChange={(e) => handleFilterChange(e)}
+              onChange={(e) => handleInputChange(e, "filter_change")}
             >
               {languageOptions.map((language) => {
                 return (

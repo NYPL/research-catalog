@@ -5,13 +5,13 @@ export const searchFormReducer = (
   action: SearchFormAction
 ) => {
   switch (action.type) {
-    case "text_input_change": {
+    case "input_change": {
       return {
         ...formState,
         [action.field]: action.payload,
       }
     }
-    case "selected_filter_change": {
+    case "filter_change": {
       return {
         ...formState,
         selectedFilters: {

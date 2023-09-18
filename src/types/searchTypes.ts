@@ -97,8 +97,13 @@ export interface SearchResult {
   numItemsTotal?: number
 }
 
+export type SearchFormActionType =
+  | "input_change"
+  | "filter_change"
+  | "form_reset"
+
 export interface SearchFormAction {
-  type: "text_input_change" | "selected_filter_change" | "form_reset"
+  type: SearchFormActionType
   field?: string
   payload: string | number | SearchParams | SearchFilters
 }
