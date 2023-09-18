@@ -17,6 +17,7 @@ import {
   Checkbox,
   HorizontalRule,
   Button,
+  FullDateType,
 } from "@nypl/design-system-react-components"
 
 import { BASE_URL, SITE_NAME } from "../../src/config/constants"
@@ -47,6 +48,7 @@ export default function AdvancedSearch() {
   }, [searchFormState])
 
   const handleTextInputChange = (e: SyntheticEvent) => {
+    e.preventDefault()
     const target = e.target as HTMLInputElement
     dispatch({
       type: "text_input_change",
@@ -56,11 +58,20 @@ export default function AdvancedSearch() {
   }
 
   const handleFilterChange = (e: SyntheticEvent) => {
+    e.preventDefault()
     const target = e.target as HTMLInputElement
     dispatch({
       type: "selected_filter_change",
       field: target.name,
       payload: target.value,
+    })
+  }
+
+  const handleDateChange = (name: string, e: FullDateType) => {
+    dispatch({
+      type: "selected_filter_change",
+      field: name,
+      payload: e.startDate?.getFullYear()?.toString() || "",
     })
   }
 
@@ -159,6 +170,7 @@ export default function AdvancedSearch() {
                   labelText="From"
                   helperText="e.g. 1901"
                   initialDate=""
+                  onChange={(e) => handleDateChange("dateAfter", e)}
                 />
               </FormField>
               <FormField>
@@ -169,6 +181,7 @@ export default function AdvancedSearch() {
                   labelText="To"
                   helperText="e.g. 2000"
                   initialDate=""
+                  onChange={(e) => handleDateChange("dateBefore", e)}
                 />
               </FormField>
             </FormRow>

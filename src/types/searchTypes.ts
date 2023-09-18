@@ -100,5 +100,5 @@ export interface SearchResult {
 export interface SearchFormAction {
   type: "text_input_change" | "selected_filter_change" | "form_reset"
   field?: string
-  payload: string | SearchParams | SearchFilters
+  payload: string | number | SearchParams | SearchFilters
 }
