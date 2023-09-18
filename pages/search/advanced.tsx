@@ -30,7 +30,7 @@ import {
 } from "../../src/utils/advancedSearchUtils"
 import styles from "../../styles/components/AdvancedSearch.module.scss"
 import type {
-  SearchFormEvent,
+  SearchParams,
   SearchFormActionType,
 } from "../../src/types/searchTypes"
 import { getQueryString } from "../../src/utils/searchUtils"
@@ -77,31 +77,8 @@ export default function AdvancedSearch() {
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
-    const target = e.target as typeof e.target & SearchFormEvent
 
-    // Build an array of selected material types
-    const selectedMaterialTypes = materialTypeOptions
-      .filter((materialTypeOption) => {
-        return target[materialTypeOption.value].checked
-      })
-      .map((selectedMaterialTypeOption) => {
-        return { value: selectedMaterialTypeOption.value }
-      })
-
-    const searchParams = {
-      searchKeywords: target.q.value,
-      title: target.title.value,
-      contributor: target.contributor.value,
-      subject: target.subject.value,
-      selectedFilters: {
-        language: target.language.value,
-        dateBefore: target.dateBefore.value,
-        dateAfter: target.dateAfter.value,
-        materialType: selectedMaterialTypes,
-      },
-    }
-
-    const queryString = getQueryString(searchParams)
+    const queryString = getQueryString(searchFormState as SearchParams)
     await router.push(`/search/?${queryString}`)
   }
 

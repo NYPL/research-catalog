@@ -27,7 +27,7 @@ export interface Identifiers {
 }
 
 export interface SearchParams {
-  searchKeywords?: string
+  q?: string
   field?: string
   sortBy?: string
   order?: string
