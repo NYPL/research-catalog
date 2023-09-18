@@ -1,5 +1,12 @@
 import { searchAggregations } from "../config/aggregations"
 
+export const textInputFields = [
+  { key: "searchKeywords", label: "Keywords" },
+  { key: "title", label: "Title" },
+  { key: "contributor", label: "Author" },
+  { key: "subject", label: "Subject" },
+]
+
 // Returns an object of Language options types derived from the aggregations sorted by label text,
 // including the empty default option of "Any".
 export const languageOptions = [

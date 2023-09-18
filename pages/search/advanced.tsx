@@ -1,6 +1,6 @@
 import Head from "next/head"
 import { useRouter } from "next/router"
-import { useRef, useState, useEffect } from "react"
+import { useRef, useState } from "react"
 import type { SyntheticEvent } from "react"
 import {
   Form,
@@ -22,6 +22,7 @@ import type { TextInputRefType } from "@nypl/design-system-react-components"
 
 import { BASE_URL, SITE_NAME } from "../../src/config/constants"
 import {
+  textInputFields,
   languageOptions,
   materialTypeOptions,
 } from "../../src/utils/advancedSearchUtils"
@@ -37,10 +38,7 @@ export default function AdvancedSearch() {
   const router = useRouter()
 
   // Input refs used for clearing values
-  const searchKeywordsRef = useRef<TextInputRefType>(null)
-  const titleRef = useRef<TextInputRefType>(null)
-  const contributorRef = useRef<TextInputRefType>(null)
-  const subjectRef = useRef<TextInputRefType>(null)
+  const textInputsRef = useRef([])
   const languageRef = useRef<HTMLSelectElement>(null)
   const dateAfterRef = useRef<TextInputRefType>(null)
   const dateBeforeRef = useRef<TextInputRefType>(null)
@@ -86,13 +84,15 @@ export default function AdvancedSearch() {
   }
 
   const handleClear = () => {
-    searchKeywordsRef.current.value = ""
-    titleRef.current.value = ""
-    contributorRef.current.value = ""
-    subjectRef.current.value = ""
+    // clear text input refs
+    for (let i = 0; i < textInputsRef.current.length; i++) {
+      textInputsRef.current[i].value = ""
+    }
     languageRef.current.value = ""
     dateAfterRef.current.value = ""
     dateBeforeRef.current.value = ""
+
+    // clear checkbox values in state
     setCheckboxesState(new Array(materialTypeOptions.length).fill(false))
   }
 
@@ -114,38 +114,21 @@ export default function AdvancedSearch() {
       >
         <SimpleGrid columns={2} gap="grid.m">
           <Fieldset id="advancedSearchLeft">
-            <TextInput
-              id="searchKeywords"
-              labelText="Keywords"
-              type="text"
-              name="q"
-              ref={searchKeywordsRef}
-              value=""
-            />
-            <TextInput
-              id="title"
-              labelText="Title"
-              type="text"
-              name="title"
-              ref={titleRef}
-              value=""
-            />
-            <TextInput
-              id="contributor"
-              labelText="Author"
-              type="text"
-              name="contributor"
-              ref={contributorRef}
-              value=""
-            />
-            <TextInput
-              id="subject"
-              labelText="Subject"
-              type="text"
-              name="subject"
-              ref={subjectRef}
-              value=""
-            />
+            {textInputFields.map(({ key, label }, index) => {
+              return (
+                <TextInput
+                  id={key}
+                  labelText={label}
+                  type="text"
+                  name={key}
+                  value=""
+                  key={key}
+                  ref={(element) => {
+                    textInputsRef.current[index] = element
+                  }}
+                />
+              )
+            })}
             <Select
               id="languageSelect"
               name="language"
