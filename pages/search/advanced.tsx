@@ -2,6 +2,8 @@ import Head from "next/head"
 import { useEffect, useReducer } from "react"
 import { useRouter } from "next/router"
 import type { SyntheticEvent } from "react"
+import type {
+  FullDateType} from "@nypl/design-system-react-components";
 import {
   Form,
   FormField,
@@ -16,8 +18,7 @@ import {
   CheckboxGroup,
   Checkbox,
   HorizontalRule,
-  Button,
-  FullDateType,
+  Button
 } from "@nypl/design-system-react-components"
 
 import { BASE_URL, SITE_NAME } from "../../src/config/constants"
