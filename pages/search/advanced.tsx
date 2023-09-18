@@ -88,7 +88,6 @@ export default function AdvancedSearch() {
       <Heading level="two">Advanced Search</Heading>
       <Form
         id="advancedSearchForm"
-        className={styles.advancedSearchForm}
         method="post"
         action={`${BASE_URL}/search`}
         onSubmit={handleSubmit}
@@ -126,8 +125,8 @@ export default function AdvancedSearch() {
             <Label htmlFor="dates" id="dates-label">
               Date
             </Label>
-            <FormRow id="dates" className={styles.dateFields}>
-              <FormField className={styles.formField}>
+            <FormRow id="dates">
+              <FormField>
                 <DatePicker
                   id="dateAfter"
                   nameFrom="dateAfter"
@@ -137,7 +136,7 @@ export default function AdvancedSearch() {
                   initialDate=""
                 />
               </FormField>
-              <FormField className={styles.formField}>
+              <FormField>
                 <DatePicker
                   id="dateBefore"
                   nameFrom="dateBefore"
@@ -151,7 +150,7 @@ export default function AdvancedSearch() {
             <Label htmlFor="formats" id="formats-label">
               Format
             </Label>
-            <Fieldset id="formats" className={styles.formatFields}>
+            <Fieldset id="formats">
               <FormRow>
                 <FormField className={styles.formField}>
                   {materialTypeOptions.slice(0, 4).map((materialType) => {
@@ -167,7 +166,7 @@ export default function AdvancedSearch() {
                     )
                   })}
                 </FormField>
-                <FormField className={styles.formField}>
+                <FormField>
                   {materialTypeOptions.slice(4).map((materialType) => {
                     return (
                       <Checkbox

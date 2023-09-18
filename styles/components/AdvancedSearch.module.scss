@@ -1,44 +1,6 @@
 @import "../utils/mixins";
 @import "../utils/breakpoints";
 
-.advancedSearchContainer {
-  fieldset {
-    @include media($nypl-breakpoint-large) {
-      margin-right: var(--nypl-space-xxl);
-    }
-  }
-  input {
-    margin-bottom: var(--nypl-space-xs);
-  }
-}
-
-.dateField {
-  margin-bottom: var(--nypl-space-xs);
-
-  input {
-    margin-bottom: 0;
-  }
-}
-
-.formField,
-.advancedSearchForm > div {
-  display: block !important;
-}
-
-.dateFields {
-  @media (max-width: $nypl-breakpoint-large) {
-    margin-bottom: var(--nypl-space-m);
-  }
-}
-
-.dateFields,
-.formField > div,
-.formatFields > div {
-  @media (max-width: $nypl-breakpoint-large) {
-    display: block !important;
-  }
-}
-
 .checkbox {
   margin-bottom: var(--nypl-space-s);
 
