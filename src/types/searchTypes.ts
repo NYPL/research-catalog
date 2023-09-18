@@ -96,3 +96,9 @@ export interface SearchResult {
   electronicResources?: ElectronicResource[]
   numItemsTotal?: number
 }
+
+export interface SearchFormAction {
+  type: string
+  field: string
+  payload: string
+}
