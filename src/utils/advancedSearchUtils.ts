@@ -1,17 +1,20 @@
 import { searchAggregations } from "../config/aggregations"
 
 export const textInputFields = [
-  { key: "searchKeywords", name: "q", label: "Keywords" },
-  { key: "title", name: "title", label: "Title" },
-  { key: "contributor", name: "contributor", label: "Author" },
-  { key: "subject", name: "subject", label: "Subject" },
+  { name: "searchKeywords", label: "Keywords" },
+  { name: "title", label: "Title" },
+  { name: "contributor", label: "Author" },
+  { name: "subject", label: "Subject" },
 ]
 
 export const initialSearchFormState = {
-  q: "",
+  searchKeywords: "",
   title: "",
   contributor: "",
   subject: "",
+  selectedFilters: {
+    language: "",
+  },
 }
 
 // Returns an object of Language options types derived from the aggregations sorted by label text,

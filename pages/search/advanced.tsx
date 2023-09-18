@@ -43,13 +43,22 @@ export default function AdvancedSearch() {
     initialSearchFormState
   )
   useEffect(() => {
-    // console.log(searchFormState)
+    console.log(searchFormState)
   }, [searchFormState])
 
-  const handleTextInput = (e: SyntheticEvent) => {
+  const handleTextInputChange = (e: SyntheticEvent) => {
     const target = e.target as HTMLInputElement
     dispatch({
-      type: "text_input",
+      type: "text_input_change",
+      field: target.name,
+      payload: target.value,
+    })
+  }
+
+  const handleFilterChange = (e: SyntheticEvent) => {
+    const target = e.target as HTMLInputElement
+    dispatch({
+      type: "selected_filter_change",
       field: target.name,
       payload: target.value,
     })
@@ -107,16 +116,16 @@ export default function AdvancedSearch() {
       >
         <SimpleGrid columns={2} gap="grid.m">
           <Fieldset id="advancedSearchLeft">
-            {textInputFields.map(({ key, name, label }) => {
+            {textInputFields.map(({ name, label }) => {
               return (
                 <TextInput
-                  id={key}
+                  id={name}
                   labelText={label}
                   type="text"
                   name={name}
                   value={searchFormState[name]}
-                  key={key}
-                  onChange={(e) => handleTextInput(e)}
+                  key={name}
+                  onChange={(e) => handleTextInputChange(e)}
                 />
               )
             })}
@@ -125,6 +134,8 @@ export default function AdvancedSearch() {
               name="language"
               labelText="Language"
               aria-labelledby="languageSelect-label"
+              value={searchFormState["selectedFilters"].language}
+              onChange={(e) => handleFilterChange(e)}
             >
               {languageOptions.map((language) => {
                 return (
