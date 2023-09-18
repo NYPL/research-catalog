@@ -96,7 +96,7 @@ export default function AdvancedSearch() {
       >
         <SimpleGrid columns={2} gap="grid.m">
           <Fieldset id="advancedSearchLeft">
-            {textInputFields.map(({ key, name, label }, index) => {
+            {textInputFields.map(({ key, name, label }) => {
               return (
                 <TextInput
                   id={key}
@@ -155,23 +155,21 @@ export default function AdvancedSearch() {
             <Fieldset id="formats" className={styles.formatFields}>
               <FormRow>
                 <FormField className={styles.formField}>
-                  {materialTypeOptions
-                    .slice(0, 4)
-                    .map((materialType, index) => {
-                      return (
-                        <Checkbox
-                          className={styles.checkbox}
-                          id={materialType.value}
-                          key={materialType.value}
-                          labelText={materialType.label}
-                          name={materialType.value}
-                          value={materialType.value}
-                        />
-                      )
-                    })}
+                  {materialTypeOptions.slice(0, 4).map((materialType) => {
+                    return (
+                      <Checkbox
+                        className={styles.checkbox}
+                        id={materialType.value}
+                        key={materialType.value}
+                        labelText={materialType.label}
+                        name={materialType.value}
+                        value={materialType.value}
+                      />
+                    )
+                  })}
                 </FormField>
                 <FormField className={styles.formField}>
-                  {materialTypeOptions.slice(4).map((materialType, index) => {
+                  {materialTypeOptions.slice(4).map((materialType) => {
                     return (
                       <Checkbox
                         className={styles.checkbox}
