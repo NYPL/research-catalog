@@ -66,7 +66,7 @@ export default function AdvancedSearch() {
   }
 
   const handleClear = (e: SyntheticEvent) => {
-    // clear text input refs
+    // clear text inputs
     e.preventDefault()
     Array.from(document.getElementsByTagName("input")).forEach((input) => {
       input.value = ""
