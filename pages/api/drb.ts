@@ -15,21 +15,17 @@ export async function fetchDRBResults(
 ): Promise<DRBResultsResponse | Error> {
   const drbQueryString = getDRBQueryStringFromSearchParams(searchParams)
 
-  return nyplApiClient({ apiName: DRB_API_NAME })
-    .then((client) => client.get(drbQueryString))
-    .then(({ data }) => {
-      if (!data || !data.works) {
-        Promise.reject(new Error("No data in DRB response"))
-      }
-      return {
-        works: data.works,
-        totalWorks: data.totalWorks,
-      }
-    })
-    .catch((error) => {
-      console.error(error)
-      return error
-    })
+  try {
+    const client = await nyplApiClient({ apiName: DRB_API_NAME })
+    const data = await client.get(drbQueryString).data
+
+    return {
+      works: data.works,
+      totalWorks: data.totalWorks,
+    }
+  } catch (error) {
+    return Error(error)
+  }
 }
 
 /**
