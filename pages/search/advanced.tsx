@@ -1,6 +1,6 @@
 import Head from "next/head"
 import { useRouter } from "next/router"
-import { useRef } from "react"
+import { useRef, useState, useEffect } from "react"
 import type { SyntheticEvent } from "react"
 import {
   Form,
@@ -44,7 +44,9 @@ export default function AdvancedSearch() {
   const languageRef = useRef<HTMLSelectElement>(null)
   const dateAfterRef = useRef<TextInputRefType>(null)
   const dateBeforeRef = useRef<TextInputRefType>(null)
-  const checkBoxesRef = useRef([])
+  const [checkboxesState, setCheckboxesState] = useState(
+    new Array(materialTypeOptions.length).fill(false)
+  )
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
@@ -71,8 +73,16 @@ export default function AdvancedSearch() {
         materialType: selectedMaterialTypes,
       },
     }
+
     const queryString = getQueryString(searchParams)
     await router.push(`/search/?${queryString}`)
+  }
+
+  const handleCheckboxClick = (value: boolean, index: number) => {
+    // clone checkboxes array to update the checked fields state at index
+    const updatedCheckboxes = [...checkboxesState]
+    updatedCheckboxes[index] = value
+    setCheckboxesState(updatedCheckboxes)
   }
 
   const handleClear = () => {
@@ -83,12 +93,7 @@ export default function AdvancedSearch() {
     languageRef.current.value = ""
     dateAfterRef.current.value = ""
     dateBeforeRef.current.value = ""
-    checkBoxesRef.current[0].checked = false
-
-    // clear all checkboxes
-    for (let i = 0; i < checkBoxesRef.current.length; i++) {
-      checkBoxesRef.current[i].checked = false
-    }
+    setCheckboxesState(new Array(materialTypeOptions.length).fill(false))
   }
 
   return (
@@ -114,32 +119,32 @@ export default function AdvancedSearch() {
               labelText="Keywords"
               type="text"
               name="q"
-              value=""
               ref={searchKeywordsRef}
+              value=""
             />
             <TextInput
               id="title"
               labelText="Title"
               type="text"
               name="title"
-              value=""
               ref={titleRef}
+              value=""
             />
             <TextInput
               id="contributor"
               labelText="Author"
               type="text"
               name="contributor"
-              value=""
               ref={contributorRef}
+              value=""
             />
             <TextInput
               id="subject"
               labelText="Subject"
               type="text"
               name="subject"
-              value=""
               ref={subjectRef}
+              value=""
             />
             <Select
               id="languageSelect"
@@ -202,9 +207,10 @@ export default function AdvancedSearch() {
                           labelText={materialType.label}
                           name={materialType.value}
                           value={materialType.value}
-                          ref={(element) => {
-                            checkBoxesRef.current[index] = element
+                          onChange={(e) => {
+                            handleCheckboxClick(e.target.checked, index)
                           }}
+                          isChecked={checkboxesState[index]}
                         />
                       )
                     })}
@@ -219,9 +225,10 @@ export default function AdvancedSearch() {
                         labelText={materialType.label}
                         name={materialType.value}
                         value={materialType.value}
-                        ref={(element) => {
-                          checkBoxesRef.current[index + 4] = element
+                        onChange={(e) => {
+                          handleCheckboxClick(e.target.checked, index + 4)
                         }}
+                        isChecked={checkboxesState[index + 4]}
                       />
                     )
                   })}
