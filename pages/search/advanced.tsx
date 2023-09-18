@@ -1,6 +1,5 @@
 import Head from "next/head"
 import { useRouter } from "next/router"
-import { useState } from "react"
 import type { SyntheticEvent } from "react"
 import {
   Form,
