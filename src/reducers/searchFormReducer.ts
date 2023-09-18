@@ -5,11 +5,14 @@ export const searchFormReducer = (
   action: SearchFormAction
 ) => {
   switch (action.type) {
-    case "HANDLE_TEXT_INPUT": {
+    case "text_input": {
       return {
         ...formState,
         [action.field]: action.payload,
       }
+    }
+    case "form_reset": {
+      return action.payload
     }
     default:
       return formState

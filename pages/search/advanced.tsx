@@ -49,7 +49,7 @@ export default function AdvancedSearch() {
   const handleTextInput = (e: SyntheticEvent) => {
     const target = e.target as HTMLInputElement
     dispatch({
-      type: "HANDLE_TEXT_INPUT",
+      type: "text_input",
       field: target.name,
       payload: target.value,
     })
@@ -86,16 +86,8 @@ export default function AdvancedSearch() {
   }
 
   const handleClear = (e: SyntheticEvent) => {
-    // clear text inputs
     e.preventDefault()
-    Array.from(document.getElementsByTagName("input")).forEach((input) => {
-      input.value = ""
-      input.checked = false
-    })
-
-    Array.from(document.getElementsByTagName("select")).forEach((select) => {
-      select.value = ""
-    })
+    dispatch({ type: "form_reset", payload: initialSearchFormState })
   }
 
   return (
@@ -122,7 +114,7 @@ export default function AdvancedSearch() {
                   labelText={label}
                   type="text"
                   name={name}
-                  value=""
+                  value={searchFormState[name]}
                   key={key}
                   onChange={(e) => handleTextInput(e)}
                 />
