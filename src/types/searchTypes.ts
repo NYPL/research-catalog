@@ -6,7 +6,7 @@ type ContributorLiteral = string
 type Issuance = string
 type MaterialType = {
   value?: string
-  label?: string
+  prefLabel?: string
 }
 
 export interface SearchFilters {
