@@ -31,8 +31,8 @@ import type { SearchFormEvent } from "../../src/types/searchTypes"
 import { getQueryString } from "../../src/utils/searchUtils"
 
 /**
- * The Search page is responsible for fetching and displaying the Search results,
- * as well as displaying and controlling pagination and search filters.
+ * The Advanced Search page is responsible for displaying the Advanced Search form fields and
+ * buttons that clear the fields and submit a search request.
  */
 export default function AdvancedSearch() {
   const router = useRouter()
@@ -42,6 +42,8 @@ export default function AdvancedSearch() {
   const languageRef = useRef<HTMLSelectElement>(null)
   const dateAfterRef = useRef<TextInputRefType>(null)
   const dateBeforeRef = useRef<TextInputRefType>(null)
+
+  // Use state instead of refs for checkboxes to visually update chakra UI when resetting all checkboxes
   const [checkboxesState, setCheckboxesState] = useState(
     new Array(materialTypeOptions.length).fill(false)
   )
@@ -108,19 +110,19 @@ export default function AdvancedSearch() {
       <Form
         id="advancedSearchForm"
         className={styles.advancedSearchForm}
-        method="get"
+        method="post"
         action={`${BASE_URL}/search`}
         onSubmit={handleSubmit}
       >
         <SimpleGrid columns={2} gap="grid.m">
           <Fieldset id="advancedSearchLeft">
-            {textInputFields.map(({ key, label }, index) => {
+            {textInputFields.map(({ key, name, label }, index) => {
               return (
                 <TextInput
                   id={key}
                   labelText={label}
                   type="text"
-                  name={key}
+                  name={name}
                   value=""
                   key={key}
                   ref={(element) => {
