@@ -1,5 +1,5 @@
 import Head from "next/head"
-import { useEffect, useReducer } from "react"
+import { useReducer } from "react"
 import { useRouter } from "next/router"
 import type { SyntheticEvent } from "react"
 import type { FullDateType } from "@nypl/design-system-react-components"
@@ -46,9 +46,6 @@ export default function AdvancedSearch() {
     searchFormReducer,
     initialSearchFormState
   )
-  useEffect(() => {
-    console.log(searchFormState)
-  }, [searchFormState])
 
   const handleInputChange = (e: SyntheticEvent, type: SearchFormActionType) => {
     e.preventDefault()
