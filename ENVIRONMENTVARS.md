@@ -21,8 +21,8 @@ If an environment variable is updated, make sure to restart the server for the a
 These environment variables control how certain elements on the page render and where to fetch data.
 
 | Variable          | Type   | Value Example                | Description                                                              |
-| ----------------- | ------ | ---------------------------- | ------------------------------------------------------------------------ | --- |
-| `NYPL_HEADER_URL` | string | "https://ds-header.nypl.org" | The base URL of the NYPL environment-specific header and footer scripts. |     |
+| ----------------- | ------ | ---------------------------- | ------------------------------------------------------------------------ |
+| `NYPL_HEADER_URL` | string | "https://ds-header.nypl.org" | The base URL of the NYPL environment-specific header and footer scripts. |
 
 ## AWS ECS Environment Variables
 

@@ -6,12 +6,14 @@ import {
   SimpleGrid,
 } from "@nypl/design-system-react-components"
 import { useRouter } from "next/router"
+import { isEmpty } from "underscore"
 
 import { fetchResults } from "../api/search"
 import { mapQueryToSearchParams } from "../../src/utils/searchUtils"
 import RCLink from "../../src/components/RCLink/RCLink"
-import type { SearchResultsItem } from "../../src/types/searchTypes"
+import type { SearchResultsElement } from "../../src/types/searchTypes"
 import { SITE_NAME } from "../../src/config/constants"
+import SearchResultsBib from "../../src/models/SearchResultsBib"
 
 /**
  * The Search page is responsible for fetching and displaying the Search results,
@@ -21,12 +23,22 @@ export default function Search({ results }) {
   const { query } = useRouter()
   const searchParams = mapQueryToSearchParams(query)
 
+  const { itemListElement, totalResults } = results.results
+
+  const searchResultBibs = itemListElement
+    .filter((result: SearchResultsElement) => {
+      return !(isEmpty(result) || (result.result && isEmpty(result.result)))
+    })
+    .map((result: SearchResultsElement) => {
+      return new SearchResultsBib(result.result)
+    })
+
   return (
     <div style={{ paddingBottom: "var(--nypl-space-l)" }}>
       <Head>
         <title>Search Results | {SITE_NAME}</title>
       </Head>
-      {results?.results?.totalResults ? (
+      {totalResults ? (
         <>
           <Heading level="three">
             {`Displaying 1-50 of ${results.results.totalResults.toLocaleString()} results for keyword "${
@@ -34,20 +46,16 @@ export default function Search({ results }) {
             }"`}
           </Heading>
           <SimpleGrid columns={1} gap="grid.m">
-            {results.results.itemListElement.map(
-              (result: SearchResultsItem) => {
-                // TODO: Create SearchResult component to manage result display (https://jira.nypl.org/browse/SCC-3714)
-                return (
-                  <Card key={result.result["@id"]}>
-                    <CardHeading level="four">
-                      <RCLink href="/bib">
-                        {result.result["titleDisplay"][0]}
-                      </RCLink>
-                    </CardHeading>
-                  </Card>
-                )
-              }
-            )}
+            {searchResultBibs.map((bib: SearchResultsBib) => {
+              // TODO: Create SearchResult component to manage result display (https://jira.nypl.org/browse/SCC-3714)
+              return (
+                <Card key={bib.id}>
+                  <CardHeading level="four">
+                    <RCLink href={bib.url}>{bib.title}</RCLink>
+                  </CardHeading>
+                </Card>
+              )
+            })}
           </SimpleGrid>
         </>
       ) : (
