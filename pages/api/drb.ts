@@ -17,7 +17,7 @@ export async function fetchDRBResults(
 
   try {
     const client = await nyplApiClient({ apiName: DRB_API_NAME })
-    const data = await client.get(drbQueryString).data
+    const { data } = await client.get(drbQueryString)
 
     return {
       works: data.works,
