@@ -105,5 +105,5 @@ export type SearchFormActionType =
 export interface SearchFormAction {
   type: SearchFormActionType
   field?: string
-  payload: string | number | SearchParams | SearchFilters
+  payload: SearchParams | SearchFilters | string | string[]
 }

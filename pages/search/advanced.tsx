@@ -70,6 +70,14 @@ export default function AdvancedSearch() {
     })
   }
 
+  const handleCheckboxChange = (types: string[]) => {
+    dispatch({
+      type: "filter_change",
+      field: "materialType",
+      payload: types,
+    })
+  }
+
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
     const target = e.target as typeof e.target & SearchFormEvent
@@ -180,7 +188,13 @@ export default function AdvancedSearch() {
                 />
               </FormField>
             </FormRow>
-            <CheckboxGroup id="formats" name="formats" labelText="Formats">
+            <CheckboxGroup
+              id="formats"
+              name="formats"
+              labelText="Formats"
+              onChange={handleCheckboxChange}
+              value={searchFormState["selectedFilters"].materialType}
+            >
               {materialTypeOptions.map((materialType) => {
                 return (
                   <Checkbox

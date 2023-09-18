@@ -16,6 +16,7 @@ export const initialSearchFormState = {
     language: "",
     dateBefore: "",
     dateAfter: "",
+    materialType: [],
   },
 }
 
