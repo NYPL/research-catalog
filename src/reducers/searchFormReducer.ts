@@ -1,7 +1,7 @@
-import type { SearchFormEvent, SearchFormAction } from "../types/searchTypes"
+import type { SearchQueryParams, SearchFormAction } from "../types/searchTypes"
 
 export const searchFormReducer = (
-  formState: SearchFormEvent,
+  formState: SearchQueryParams,
   action: SearchFormAction
 ) => {
   switch (action.type) {

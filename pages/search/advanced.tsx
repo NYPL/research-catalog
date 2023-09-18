@@ -1,4 +1,5 @@
 import Head from "next/head"
+import { useEffect, useReducer } from "react"
 import { useRouter } from "next/router"
 import type { SyntheticEvent } from "react"
 import {
@@ -19,7 +20,9 @@ import {
 } from "@nypl/design-system-react-components"
 
 import { BASE_URL, SITE_NAME } from "../../src/config/constants"
+import { searchFormReducer } from "../../src/reducers/searchFormReducer"
 import {
+  initialSearchFormState,
   textInputFields,
   languageOptions,
   materialTypeOptions,
@@ -34,6 +37,23 @@ import { getQueryString } from "../../src/utils/searchUtils"
  */
 export default function AdvancedSearch() {
   const router = useRouter()
+
+  const [searchFormState, dispatch] = useReducer(
+    searchFormReducer,
+    initialSearchFormState
+  )
+  useEffect(() => {
+    // console.log(searchFormState)
+  }, [searchFormState])
+
+  const handleTextInput = (e: SyntheticEvent) => {
+    const target = e.target as HTMLInputElement
+    dispatch({
+      type: "HANDLE_TEXT_INPUT",
+      field: target.name,
+      payload: target.value,
+    })
+  }
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
@@ -104,6 +124,7 @@ export default function AdvancedSearch() {
                   name={name}
                   value=""
                   key={key}
+                  onChange={(e) => handleTextInput(e)}
                 />
               )
             })}

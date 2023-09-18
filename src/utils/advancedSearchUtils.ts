@@ -7,6 +7,13 @@ export const textInputFields = [
   { key: "subject", name: "subject", label: "Subject" },
 ]
 
+export const initialSearchFormState = {
+  q: "",
+  title: "",
+  contributor: "",
+  subject: "",
+}
+
 // Returns an object of Language options types derived from the aggregations sorted by label text,
 // including the empty default option of "Any".
 export const languageOptions = [
