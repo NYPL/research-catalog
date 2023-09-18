@@ -12,6 +12,7 @@ import {
   Select,
   Heading,
   SimpleGrid,
+  CheckboxGroup,
   Checkbox,
   HorizontalRule,
   Button,
@@ -147,41 +148,20 @@ export default function AdvancedSearch() {
                 />
               </FormField>
             </FormRow>
-            <Label htmlFor="formats" id="formats-label">
-              Format
-            </Label>
-            <Fieldset id="formats">
-              <FormRow>
-                <FormField className={styles.formField}>
-                  {materialTypeOptions.slice(0, 4).map((materialType) => {
-                    return (
-                      <Checkbox
-                        className={styles.checkbox}
-                        id={materialType.value}
-                        key={materialType.value}
-                        labelText={materialType.label}
-                        name={materialType.value}
-                        value={materialType.value}
-                      />
-                    )
-                  })}
-                </FormField>
-                <FormField>
-                  {materialTypeOptions.slice(4).map((materialType) => {
-                    return (
-                      <Checkbox
-                        className={styles.checkbox}
-                        id={materialType.value}
-                        key={materialType.value}
-                        labelText={materialType.label}
-                        name={materialType.value}
-                        value={materialType.value}
-                      />
-                    )
-                  })}
-                </FormField>
-              </FormRow>
-            </Fieldset>
+            <CheckboxGroup id="formats" name="formats" labelText="Formats">
+              {materialTypeOptions.map((materialType) => {
+                return (
+                  <Checkbox
+                    className={styles.checkbox}
+                    id={materialType.value}
+                    key={materialType.value}
+                    labelText={materialType.label}
+                    name={materialType.value}
+                    value={materialType.value}
+                  />
+                )
+              })}
+            </CheckboxGroup>
           </Fieldset>
         </SimpleGrid>
         <HorizontalRule />
@@ -195,7 +175,6 @@ export default function AdvancedSearch() {
           <Button
             type="button"
             buttonType="secondary"
-            className="clearButton"
             id="advancedSearchClear"
             onClick={handleClear}
           >
