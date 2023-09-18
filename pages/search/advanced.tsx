@@ -44,7 +44,7 @@ export default function AdvancedSearch() {
         return target[materialTypeOption.value].checked
       })
       .map((selectedMaterialTypeOption) => {
-        return selectedMaterialTypeOption.value
+        return { key: selectedMaterialTypeOption.value }
       })
 
     const searchParams = {

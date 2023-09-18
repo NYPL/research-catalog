@@ -5,6 +5,7 @@ type SubjectLiteral = string
 type ContributorLiteral = string
 type Issuance = string
 type MaterialType = {
+  key?: string
   prefLabel?: string
 }
 
