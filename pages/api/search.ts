@@ -59,6 +59,7 @@ export async function fetchResults(
       client.get(`${DISCOVERY_API_SEARCH_ROUTE}${aggregationQuery}`)
     ),
   ])
+
   try {
     return {
       results,
