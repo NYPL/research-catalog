@@ -25,7 +25,7 @@ export default class SearchResultsBib {
     this.id = result["@id"] ? result["@id"].substring(4) : ""
     this.title = this.getTitleFromResult(result)
     this.yearPublished = this.getYearFromResult(result)
-    this.materialType = result.materialType[0]?.prefLabel || null
+    this.materialType = result.materialType[0]?.label || null
     this.publicationStatement = result.publicationStatement?.length
       ? result.publicationStatement[0]
       : null

@@ -5,8 +5,8 @@ type SubjectLiteral = string
 type ContributorLiteral = string
 type Issuance = string
 type MaterialType = {
-  key?: string
-  prefLabel?: string
+  value?: string
+  label?: string
 }
 
 export interface SearchFilters {
