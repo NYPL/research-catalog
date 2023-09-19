@@ -1,5 +1,6 @@
 import { type ReactElement } from "react"
 import {
+  Box,
   TemplateAppContainer,
   Breadcrumbs,
   DSProvider,
@@ -50,7 +51,7 @@ const Layout = ({ children, activePage }: LayoutProps) => {
             </>
           )
         }
-        contentPrimary={children}
+        contentPrimary={<Box pb="l">{children}</Box>}
       />
     </DSProvider>
   )

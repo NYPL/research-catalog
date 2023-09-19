@@ -5,6 +5,7 @@ import type {
   SearchResultsResponse,
 } from "../../src/types/searchTypes"
 import {
+  DISCOVERY_API_NAME,
   DISCOVERY_API_SEARCH_ROUTE,
   RESULTS_PER_PAGE,
 } from "../../src/config/constants"
@@ -17,7 +18,7 @@ import { standardizeBibId } from "../../src/utils/bibUtils"
 
 export async function fetchResults(
   searchParams: SearchParams
-): Promise<SearchResultsResponse | void> {
+): Promise<SearchResultsResponse | Error> {
   const { searchKeywords, field, selectedFilters } = searchParams
 
   // If user is making a search for bib number (i.e. field set to "standard_number"),
@@ -50,25 +51,22 @@ export async function fetchResults(
   // Get the following in parallel:
   //  - search results
   //  - aggregations
-  return Promise.all([
-    await nyplApiClient({ apiName: "discovery" }).then((client) =>
-      client.get(`${DISCOVERY_API_SEARCH_ROUTE}${resultsQuery}`)
-    ),
-    await nyplApiClient({ apiName: "discovery" }).then((client) =>
-      client.get(`${DISCOVERY_API_SEARCH_ROUTE}${aggregationQuery}`)
-    ),
+  const client = await nyplApiClient({ apiName: DISCOVERY_API_NAME })
+
+  const [results, aggregations] = await Promise.all([
+    await client.get(`${DISCOVERY_API_SEARCH_ROUTE}${resultsQuery}`),
+    await client.get(`${DISCOVERY_API_SEARCH_ROUTE}${aggregationQuery}`),
   ])
-    .then(([results, aggregations]) => {
-      return Promise.resolve({
-        results,
-        aggregations,
-        page: searchParams.page,
-      })
-    })
-    .catch((error) => {
-      console.error(error)
-      return Promise.reject("Error fetching Search Results")
-    })
+
+  try {
+    return {
+      results,
+      aggregations,
+      page: searchParams.page,
+    }
+  } catch (error) {
+    return new Error("Error fetching Search Results")
+  }
 }
 
 /**

@@ -12,7 +12,7 @@ import { SITE_NAME } from "../src/config/constants"
 
 export default function Home() {
   return (
-    <div style={{ paddingBottom: "var(--nypl-space-l)" }}>
+    <>
       <Head>
         <title>{SITE_NAME}</title>
       </Head>
@@ -150,6 +150,6 @@ export default function Home() {
           </CardContent>
         </Card>
       </SimpleGrid>
-    </div>
+    </>
   )
 }
