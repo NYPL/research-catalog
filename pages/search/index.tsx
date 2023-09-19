@@ -42,7 +42,7 @@ export default function Search({ results }) {
         <>
           <Heading level="three">
             {`Displaying 1-50 of ${results.results.totalResults.toLocaleString()} results for keyword "${
-              searchParams.q
+              searchParams.searchKeywords
             }"`}
           </Heading>
           <SimpleGrid columns={1} gap="grid.m">

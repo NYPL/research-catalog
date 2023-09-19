@@ -2,14 +2,14 @@ import type { SearchParams } from "../types/searchTypes"
 import { searchAggregations } from "../config/aggregations"
 
 export const textInputFields = [
-  { name: "q", label: "Keywords" },
+  { name: "searchKeywords", label: "Keywords" },
   { name: "title", label: "Title" },
   { name: "contributor", label: "Author" },
   { name: "subject", label: "Subject" },
 ]
 
 export const initialSearchFormState: SearchParams = {
-  q: "",
+  searchKeywords: "",
   title: "",
   contributor: "",
   subject: "",

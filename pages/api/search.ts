@@ -18,11 +18,14 @@ import { standardizeBibId } from "../../src/utils/bibUtils"
 export async function fetchResults(
   searchParams: SearchParams
 ): Promise<SearchResultsResponse | void> {
-  const { q, field, selectedFilters } = searchParams
+  const { searchKeywords, field, selectedFilters } = searchParams
 
   // If user is making a search for bib number (i.e. field set to "standard_number"),
   // standardize the bib ID and pass it as the search keywords
-  const keywordsOrBibId = field === "standard_number" ? standardizeBibId(q) : q
+  const keywordsOrBibId =
+    field === "standard_number"
+      ? standardizeBibId(searchKeywords)
+      : searchKeywords
 
   // If user is making a search for periodicals,
   // add an issuance filter on the serial field and
@@ -38,7 +41,7 @@ export async function fetchResults(
   const queryString = getQueryString({
     ...searchParams,
     ...journalParams,
-    q: keywordsOrBibId,
+    searchKeywords: keywordsOrBibId,
   })
 
   const aggregationQuery = `/aggregations?${queryString}`
