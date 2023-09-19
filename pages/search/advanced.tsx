@@ -52,9 +52,15 @@ export default function AdvancedSearch() {
     e.preventDefault()
     alert && setAlert(false)
     const target = e.target as HTMLInputElement
+
+    // Find SearchParams key name from form field name. Important for allowing the form to work with JS disabled.
+    const searchParamsKey = textInputFields.find(
+      (input) => input.name === target.name
+    ).key
+
     dispatch({
       type: type,
-      field: target.name,
+      field: searchParamsKey,
       payload: target.value,
     })
   }
@@ -120,7 +126,7 @@ export default function AdvancedSearch() {
       >
         <FormRow gap="grid.m">
           <FormField id="advancedSearchLeft">
-            {textInputFields.map(({ name, label }) => {
+            {textInputFields.map(({ name, key, label }) => {
               return (
                 <TextInput
                   id={name}
@@ -128,7 +134,7 @@ export default function AdvancedSearch() {
                   type="text"
                   name={name}
                   value={searchFormState[name]}
-                  key={name}
+                  key={key}
                   onChange={(e) => handleInputChange(e, "input_change")}
                 />
               )
