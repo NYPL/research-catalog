@@ -6,7 +6,7 @@ import { LEGACY_CATALOG_URL } from "../../src/config/constants"
 
 export default function Custom404() {
   return (
-    <div style={{ paddingBottom: "var(--nypl-space-l)" }}>
+    <>
       <Head>
         <title>404 Not Found</title>
       </Head>
@@ -20,6 +20,6 @@ export default function Custom404() {
           materials.
         </p>
       </div>
-    </div>
+    </>
   )
 }
