@@ -97,6 +97,12 @@ export interface SearchResult {
   numItemsTotal?: number
 }
 
+export interface SearchFormInputField {
+  name: string
+  key: string
+  label: string
+}
+
 export type SearchFormActionType =
   | "input_change"
   | "filter_change"
