@@ -9,7 +9,7 @@ import {
   Form,
   FormField,
   FormRow,
-  Label,
+  Fieldset,
   TextInput,
   DatePicker,
   Select,
@@ -151,33 +151,32 @@ export default function AdvancedSearch() {
             </Select>
           </FormField>
           <FormField id="advancedSearchRight">
-            <Label htmlFor="dates" id="dates-label">
-              Date
-            </Label>
-            <FormRow id="dates">
-              <FormField>
-                <DatePicker
-                  id="dateAfter"
-                  nameFrom="dateAfter"
-                  dateType="year"
-                  labelText="From"
-                  helperText="e.g. 1901"
-                  initialDate={searchFormState["selectedFilters"].dateAfter}
-                  onChange={(e) => handleDateChange("dateAfter", e)}
-                />
-              </FormField>
-              <FormField>
-                <DatePicker
-                  id="dateBefore"
-                  nameFrom="dateBefore"
-                  dateType="year"
-                  labelText="To"
-                  helperText="e.g. 2000"
-                  initialDate={searchFormState["selectedFilters"].dateBefore}
-                  onChange={(e) => handleDateChange("dateBefore", e)}
-                />
-              </FormField>
-            </FormRow>
+            <Fieldset legendText="Date" id="dates">
+              <FormRow id="dates">
+                <FormField>
+                  <DatePicker
+                    id="dateAfter"
+                    nameFrom="dateAfter"
+                    dateType="year"
+                    labelText="From"
+                    helperText="e.g. 1901"
+                    initialDate={searchFormState["selectedFilters"].dateAfter}
+                    onChange={(e) => handleDateChange("dateAfter", e)}
+                  />
+                </FormField>
+                <FormField>
+                  <DatePicker
+                    id="dateBefore"
+                    nameFrom="dateBefore"
+                    dateType="year"
+                    labelText="To"
+                    helperText="e.g. 2000"
+                    initialDate={searchFormState["selectedFilters"].dateBefore}
+                    onChange={(e) => handleDateChange("dateBefore", e)}
+                  />
+                </FormField>
+              </FormRow>
+            </Fieldset>
             <CheckboxGroup
               id="formats"
               name="formats"
