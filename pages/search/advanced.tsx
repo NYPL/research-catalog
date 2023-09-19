@@ -1,9 +1,12 @@
 import Head from "next/head"
-import { useReducer } from "react"
+import { useState, useReducer } from "react"
 import { useRouter } from "next/router"
 import type { SyntheticEvent } from "react"
 import type { FullDateType } from "@nypl/design-system-react-components"
 import {
+  Heading,
+  SimpleGrid,
+  Notification,
   Form,
   FormField,
   FormRow,
@@ -12,8 +15,6 @@ import {
   TextInput,
   DatePicker,
   Select,
-  Heading,
-  SimpleGrid,
   CheckboxGroup,
   Checkbox,
   HorizontalRule,
@@ -42,6 +43,8 @@ import { getQueryString } from "../../src/utils/searchUtils"
 export default function AdvancedSearch() {
   const router = useRouter()
 
+  const [alert, setAlert] = useState(false)
+
   const [searchFormState, dispatch] = useReducer(
     searchFormReducer,
     initialSearchFormState
@@ -49,6 +52,7 @@ export default function AdvancedSearch() {
 
   const handleInputChange = (e: SyntheticEvent, type: SearchFormActionType) => {
     e.preventDefault()
+    alert && setAlert(false)
     const target = e.target as HTMLInputElement
     dispatch({
       type: type,
@@ -58,6 +62,7 @@ export default function AdvancedSearch() {
   }
 
   const handleDateChange = (field: string, e: FullDateType) => {
+    alert && setAlert(false)
     const yearString = e.startDate?.getFullYear()?.toString()
 
     dispatch({
@@ -68,6 +73,7 @@ export default function AdvancedSearch() {
   }
 
   const handleCheckboxChange = (types: string[]) => {
+    alert && setAlert(false)
     dispatch({
       type: "filter_change",
       field: "materialType",
@@ -79,7 +85,11 @@ export default function AdvancedSearch() {
     e.preventDefault()
 
     const queryString = getQueryString(searchFormState as SearchParams)
-    await router.push(`/search/?${queryString}`)
+    if (!queryString.length) {
+      setAlert(true)
+    } else {
+      await router.push(`/search/?${queryString}`)
+    }
   }
 
   const handleClear = (e: SyntheticEvent) => {
@@ -95,6 +105,14 @@ export default function AdvancedSearch() {
       <Head>
         <title>Advanced Search | {SITE_NAME}</title>
       </Head>
+      {alert && (
+        <Notification
+          notificationType="warning"
+          notificationContent={
+            <>Please enter at least one field to submit an advanced search.</>
+          }
+        />
+      )}
       <Heading level="two">Advanced Search</Heading>
       <Form
         id="advancedSearchForm"
