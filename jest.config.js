@@ -1,5 +1,5 @@
 module.exports = {
-  collectCoverage: true,
+  collectCoverage: false,
   // on node 14.x coverage provider v8 offers good speed and more or less good report
   coverageProvider: "v8",
   collectCoverageFrom: [
@@ -21,17 +21,21 @@ module.exports = {
 
     // Handle image imports
     // https://jestjs.io/docs/webpack#handling-static-assets
-    "^.+\\.(png|jpg|jpeg|gif|webp|avif|ico|bmp|svg)$/i": `<rootDir>/__mocks__/fileMock.js`,
+    "^.+\\.(png|jpg|jpeg|gif|webp|avif|ico|bmp|svg)$/i":
+      "<rootDir>/__mocks__/fileMock.js",
 
-    // Handle module aliases
+    // Handle page module aliases
+    "^@/src/pages/(.*)$": "<rootDir>/pages/$1",
+
+    // Handle component module aliases
     "^@/src/components/(.*)$": "<rootDir>/components/$1",
   },
-  // Add more setup options before each test is run
+  // Add more setup options before each __tests__ is run
   // setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   testPathIgnorePatterns: ["<rootDir>/node_modules/", "<rootDir>/.next/"],
   testEnvironment: "jsdom",
   transform: {
-    // Use babel-jest to transpile tests with the next/babel preset
+    // Use babel-jest to transpile __tests__ with the next/babel preset
     // https://jestjs.io/docs/configuration#transform-objectstring-pathtotransformer--pathtotransformer-object
     "^.+\\.(js|jsx|ts|tsx)$": ["babel-jest", { presets: ["next/babel"] }],
   },
