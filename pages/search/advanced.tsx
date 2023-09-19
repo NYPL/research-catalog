@@ -120,8 +120,8 @@ export default function AdvancedSearch() {
         action={`${BASE_URL}/search`}
         onSubmit={handleSubmit}
       >
-        <SimpleGrid columns={2} gap="grid.m">
-          <Fieldset id="advancedSearchLeft">
+        <FormRow gap="grid.m">
+          <FormField id="advancedSearchLeft">
             {textInputFields.map(({ name, label }) => {
               return (
                 <TextInput
@@ -151,8 +151,8 @@ export default function AdvancedSearch() {
                 )
               })}
             </Select>
-          </Fieldset>
-          <Fieldset id="advancedSearchRight">
+          </FormField>
+          <FormField id="advancedSearchRight">
             <Label htmlFor="dates" id="dates-label">
               Date
             </Label>
@@ -200,8 +200,8 @@ export default function AdvancedSearch() {
                 )
               })}
             </CheckboxGroup>
-          </Fieldset>
-        </SimpleGrid>
+          </FormField>
+        </FormRow>
         <HorizontalRule />
         <div
           id="advancedSearchButtons"
