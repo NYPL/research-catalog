@@ -51,13 +51,11 @@ export async function fetchResults(
   // Get the following in parallel:
   //  - search results
   //  - aggregations
+  const client = await nyplApiClient({ apiName: DISCOVERY_API_NAME })
+
   const [results, aggregations] = await Promise.all([
-    await nyplApiClient({ apiName: DISCOVERY_API_NAME }).then((client) =>
-      client.get(`${DISCOVERY_API_SEARCH_ROUTE}${resultsQuery}`)
-    ),
-    await nyplApiClient({ apiName: DISCOVERY_API_NAME }).then((client) =>
-      client.get(`${DISCOVERY_API_SEARCH_ROUTE}${aggregationQuery}`)
-    ),
+    await client.get(`${DISCOVERY_API_SEARCH_ROUTE}${resultsQuery}`),
+    await client.get(`${DISCOVERY_API_SEARCH_ROUTE}${aggregationQuery}`),
   ])
 
   try {
