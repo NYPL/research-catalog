@@ -122,7 +122,7 @@ export default function AdvancedSearch() {
         onSubmit={handleSubmit}
       >
         <FormRow gap="grid.m">
-          <FormField id="advancedSearchLeft">
+          <FormField id="advancedSearchLeft" gap="grid.s">
             {textInputFields.map(({ name, key, label }) => {
               return (
                 <TextInput
@@ -153,9 +153,9 @@ export default function AdvancedSearch() {
               })}
             </Select>
           </FormField>
-          <FormField id="advancedSearchRight">
+          <FormField id="advancedSearchRight" gap="grid.s">
             <Fieldset legendText="Date" id="dates">
-              <FormRow id="dates">
+              <FormRow id="dates" gap="grid.m">
                 <FormField>
                   <DatePicker
                     id="dateAfter"
