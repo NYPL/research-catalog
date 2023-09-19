@@ -102,10 +102,7 @@ export default function AdvancedSearch() {
   }
 
   return (
-    <div
-      className={styles.advancedSearchContainer}
-      style={{ paddingBottom: "var(--nypl-space-l)" }}
-    >
+    <>
       <Head>
         <title>Advanced Search | {SITE_NAME}</title>
       </Head>
@@ -223,6 +220,6 @@ export default function AdvancedSearch() {
           </Button>
         </div>
       </Form>
-    </div>
+    </>
   )
 }
