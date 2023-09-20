@@ -40,6 +40,11 @@
     "sass": "^1.63.6",
     "typescript": "5.0.4"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "lint-staged": {
     "**/*.{ts,tsx,json,sass}": [
       "eslint . --fix",
