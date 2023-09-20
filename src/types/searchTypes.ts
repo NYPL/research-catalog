@@ -27,7 +27,7 @@ export interface Identifiers {
 }
 
 export interface SearchParams {
-  searchKeywords?: string
+  q?: string
   field?: string
   sortBy?: string
   order?: string
@@ -99,7 +99,6 @@ export interface SearchResult {
 
 export interface SearchFormInputField {
   name: string
-  key: string
   label: string
 }
 

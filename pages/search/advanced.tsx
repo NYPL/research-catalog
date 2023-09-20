@@ -53,16 +53,9 @@ export default function AdvancedSearch() {
     alert && setAlert(false)
     const target = e.target as HTMLInputElement
 
-    // SearchParams key lookup based on the field name.
-    // This allows the SearchParams structure to be used for query string building
-    // while preserving the default field name attributes that are necessary when JS is disabled.
-    const searchParamsKey = textInputFields.find(
-      (input) => input.name === target.name
-    )?.key
-
     dispatch({
       type: type,
-      field: searchParamsKey || target.name,
+      field: target.name,
       payload: target.value,
     })
   }

@@ -47,7 +47,7 @@ export default function Search({ results }) {
           <SimpleGrid columns={1} gap="grid.m">
             <Heading level="three">
               {`Displaying 1-50 of ${results.results.totalResults.toLocaleString()} results for keyword "${
-                searchParams.searchKeywords
+                searchParams.q
               }"`}
             </Heading>
             {searchResultBibs.map((bib: SearchResultsBib) => {
