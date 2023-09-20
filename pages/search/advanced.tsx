@@ -194,7 +194,6 @@ export default function AdvancedSearch() {
                     id={materialType.value}
                     key={materialType.value}
                     labelText={materialType.label}
-                    name={materialType.value}
                     value={materialType.value}
                   />
                 )
