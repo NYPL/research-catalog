@@ -6,7 +6,8 @@
     "build": "next build",
     "start": "next start",
     "local-prod": "next build && next start -p 8080",
-    "lint": "eslint . --fix",
+    "check-types": "tsc --noemit",
+    "lint": "eslint . --fix && npm run check-types",
     "prettier": "prettier --write .",
     "prepare": "husky install"
   },
@@ -39,11 +40,6 @@
     "prettier": "^2.8.8",
     "sass": "^1.63.6",
     "typescript": "5.0.4"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
   },
   "lint-staged": {
     "**/*.{ts,tsx,json,sass}": [

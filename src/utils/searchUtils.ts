@@ -91,13 +91,13 @@ export function getQueryString({
   order,
   selectedFilters = {},
   identifiers = {},
-  searchKeywords,
+  q,
   contributor,
   title,
   subject,
   page = 1,
 }: SearchParams): string {
-  const searchKeywordsQuery = encodeURIComponent(searchKeywords)
+  const searchKeywordsQuery = encodeURIComponent(q)
   const sortQuery = getSortQuery(sortBy, order)
 
   const filterQuery = getFilterQuery(selectedFilters)
@@ -138,7 +138,7 @@ export function mapQueryToSearchParams({
   filters,
 }: SearchQueryParams): SearchParams {
   return {
-    searchKeywords: q,
+    q,
     field: search_scope,
     page,
     contributor,
