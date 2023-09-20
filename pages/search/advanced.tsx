@@ -118,7 +118,7 @@ export default function AdvancedSearch() {
       >
         <FormRow gap="grid.m">
           <FormField id="advancedSearchLeft" gap="grid.s">
-            {textInputFields.map(({ name, key, label }) => {
+            {textInputFields.map(({ name, label }) => {
               return (
                 <TextInput
                   id={name}
@@ -126,7 +126,7 @@ export default function AdvancedSearch() {
                   type="text"
                   name={name}
                   value={searchFormState[name]}
-                  key={key}
+                  key={name}
                   onChange={(e) => handleInputChange(e, "input_change")}
                 />
               )
