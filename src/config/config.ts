@@ -1,4 +1,4 @@
-export const apiConfig: any = {
+export const apiConfig = {
   baseUrls: {
     platform: {
       development:
@@ -21,12 +21,12 @@ export const apiConfig: any = {
         process.env.PLATFORM_API_BASE_URL ||
         "https://platform.nypl.org/api/v0.1",
     },
-    drbb: {
+    drb: {
       development:
         process.env.DRB_API_BASE_URL || "http://drb-api-qa.nypl.org/search/",
       production:
         process.env.DRB_API_BASE_URL ||
-        "https://digital-research-books-api.nypl.org/v3/sfr/search",
+        "https://digital-research-books-api.nypl.org/search",
     },
   },
   tokenUrl: "https://isso.nypl.org/",

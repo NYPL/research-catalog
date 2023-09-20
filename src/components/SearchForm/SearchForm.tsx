@@ -1,19 +1,41 @@
-import styles from "../..//styles/components/Search.module.scss"
-import RCLink from "../../components/RCLink/RCLink"
 import { SearchBar } from "@nypl/design-system-react-components"
+import { useRouter } from "next/router"
+import type { SyntheticEvent } from "react"
+
+import styles from "../../../styles/components/Search.module.scss"
+import RCLink from "../RCLink/RCLink"
+import { getQueryString } from "../../utils/searchUtils"
+import type { SearchFormEvent } from "../../types/searchTypes"
+import { BASE_URL } from "../../config/constants"
 
 /**
- * The Search component renders and controls the Search form and
+ * The SearchForm component renders and controls the Search form and
  * advanced search link.
  */
-const Search = () => {
+const SearchForm = () => {
+  const router = useRouter()
+
+  const handleSubmit = async (e: SyntheticEvent) => {
+    e.preventDefault()
+    const target = e.target as typeof e.target & SearchFormEvent
+    const searchParams = {
+      searchKeywords: target.q.value,
+      field: target.search_scope.value,
+    }
+    const queryString = getQueryString(searchParams)
+
+    await router.push(`/search/?${queryString}`)
+  }
+
   return (
     <div className={styles.searchContainer}>
-      <div className={styles.searchFormContainer}>
+      <div className={styles.searchContainerInner}>
         <div className={styles.searchBarContainer}>
           <SearchBar
             id="mainContent"
-            onSubmit={() => {}}
+            action={`${BASE_URL}/search`}
+            method="get"
+            onSubmit={handleSubmit}
             labelText="Search Bar Label"
             selectProps={{
               labelText: "Select a category",
@@ -44,4 +66,4 @@ const Search = () => {
   )
 }
 
-export default Search
+export default SearchForm
