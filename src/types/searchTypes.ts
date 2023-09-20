@@ -34,7 +34,7 @@ export interface SearchParams {
   contributor?: string
   title?: string
   subject?: string
-  page?: string
+  page?: number
   identifiers?: Identifiers
 }
 
@@ -48,8 +48,8 @@ export interface SearchQueryParams extends Identifiers {
   sort_direction?: string
   sort_scope?: string
   search_scope?: string
-  page?: string
-  per_page?: string
+  page?: number
+  per_page?: number
 }
 
 export interface SearchFormEvent {
@@ -60,7 +60,7 @@ export interface SearchFormEvent {
 export interface SearchResultsResponse {
   results?: SearchResults
   aggregations?: SearchResults
-  page: string
+  page: number
 }
 
 export interface SearchResults {
