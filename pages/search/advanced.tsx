@@ -1,6 +1,7 @@
 import Head from "next/head"
 import { useState, useReducer } from "react"
 import { useRouter } from "next/router"
+import { debounce } from "underscore"
 import type { SyntheticEvent } from "react"
 import type { FullDateType } from "@nypl/design-system-react-components"
 import {
@@ -40,6 +41,7 @@ import { getQueryString } from "../../src/utils/searchUtils"
  */
 export default function AdvancedSearch() {
   const router = useRouter()
+  const debounceInterval = 500
 
   const [alert, setAlert] = useState(false)
 
@@ -127,7 +129,10 @@ export default function AdvancedSearch() {
                   name={name}
                   value={searchFormState[name]}
                   key={name}
-                  onChange={(e) => handleInputChange(e, "input_change")}
+                  onChange={debounce(
+                    (e) => handleInputChange(e, "input_change"),
+                    debounceInterval
+                  )}
                 />
               )
             })}
@@ -159,7 +164,10 @@ export default function AdvancedSearch() {
                     labelText="From"
                     helperText="e.g. 1901"
                     initialDate={searchFormState["selectedFilters"].dateAfter}
-                    onChange={(e) => handleDateChange("dateAfter", e)}
+                    onChange={debounce(
+                      (e) => handleDateChange("dateAfter", e),
+                      debounceInterval
+                    )}
                   />
                 </FormField>
                 <FormField>
@@ -170,7 +178,10 @@ export default function AdvancedSearch() {
                     labelText="To"
                     helperText="e.g. 2000"
                     initialDate={searchFormState["selectedFilters"].dateBefore}
-                    onChange={(e) => handleDateChange("dateBefore", e)}
+                    onChange={debounce(
+                      (e) => handleDateChange("dateBefore", e),
+                      debounceInterval
+                    )}
                   />
                 </FormField>
               </FormRow>
