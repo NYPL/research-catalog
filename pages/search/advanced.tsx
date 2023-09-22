@@ -196,7 +196,6 @@ export default function AdvancedSearch() {
               {materialTypeOptions.map((materialType) => {
                 return (
                   <Checkbox
-                    className={styles.checkbox}
                     id={materialType.value}
                     key={materialType.value}
                     labelText={materialType.label}
