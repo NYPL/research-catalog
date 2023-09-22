@@ -1,5 +1,5 @@
 import Head from "next/head"
-import { useState, useReducer } from "react"
+import { useState, useReducer, useEffect } from "react"
 import { useRouter } from "next/router"
 import { debounce } from "underscore"
 import type { SyntheticEvent } from "react"
@@ -10,7 +10,6 @@ import {
   Form,
   FormField,
   FormRow,
-  Fieldset,
   TextInput,
   DatePicker,
   Select,
@@ -50,6 +49,10 @@ export default function AdvancedSearch() {
     initialSearchFormState
   )
 
+  useEffect(() => {
+    console.log(searchFormState)
+  }, [searchFormState])
+
   const handleInputChange = (e: SyntheticEvent, type: SearchFormActionType) => {
     e.preventDefault()
     alert && setAlert(false)
@@ -62,14 +65,24 @@ export default function AdvancedSearch() {
     })
   }
 
-  const handleDateChange = (field: string, e: FullDateType) => {
+  const handleDateChange = (e: FullDateType) => {
     alert && setAlert(false)
-    const yearString = e.startDate?.getFullYear()?.toString()
+    console.log(e)
+    const startDateString = e.startDate?.getFullYear()?.toString()
+    const endDateString = e.endDate?.getFullYear()?.toString()
+    console.log("startDateString", startDateString)
+    console.log("endDateString", endDateString)
 
     dispatch({
       type: "filter_change",
-      field: field,
-      payload: yearString || "",
+      field: "dateAfter",
+      payload: startDateString || "",
+    })
+
+    dispatch({
+      type: "filter_change",
+      field: "dateBefore",
+      payload: endDateString || "",
     })
   }
 
@@ -154,38 +167,20 @@ export default function AdvancedSearch() {
             </Select>
           </FormField>
           <FormField id="advancedSearchRight" gap="grid.s">
-            <Fieldset legendText="Date" id="dates">
-              <FormRow id="dates" gap="grid.m">
-                <FormField>
-                  <DatePicker
-                    id="dateAfter"
-                    nameFrom="dateAfter"
-                    dateType="year"
-                    labelText="From"
-                    helperText="e.g. 1901"
-                    initialDate={searchFormState["selectedFilters"].dateAfter}
-                    onChange={debounce(
-                      (e) => handleDateChange("dateAfter", e),
-                      debounceInterval
-                    )}
-                  />
-                </FormField>
-                <FormField>
-                  <DatePicker
-                    id="dateBefore"
-                    nameFrom="dateBefore"
-                    dateType="year"
-                    labelText="To"
-                    helperText="e.g. 2000"
-                    initialDate={searchFormState["selectedFilters"].dateBefore}
-                    onChange={debounce(
-                      (e) => handleDateChange("dateBefore", e),
-                      debounceInterval
-                    )}
-                  />
-                </FormField>
-              </FormRow>
-            </Fieldset>
+            <DatePicker
+              dateType="year"
+              helperTextFrom="e.g. 1901"
+              helperTextTo="e.g. 2000"
+              id="date-range"
+              invalidText="Please select a valid date range."
+              isDateRange
+              labelText="Dates"
+              nameFrom="dateAfter"
+              nameTo="dateBefore"
+              initialDate={searchFormState["selectedFilters"].dateAfter}
+              initialDateTo={searchFormState["selectedFilters"].dateBefore}
+              onChange={debounce((e) => handleDateChange(e), debounceInterval)}
+            />
             <CheckboxGroup
               id="formats"
               name="formats"

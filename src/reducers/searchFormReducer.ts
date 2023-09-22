@@ -15,6 +15,7 @@ export const searchFormReducer = (
       return {
         ...formState,
         selectedFilters: {
+          ...formState.selectedFilters,
           [action.field]: action.payload,
         },
       }
