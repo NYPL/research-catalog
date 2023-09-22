@@ -1,5 +1,5 @@
 import Head from "next/head"
-import { useState, useReducer, useEffect } from "react"
+import { useState, useReducer } from "react"
 import { useRouter } from "next/router"
 import { debounce } from "underscore"
 import type { SyntheticEvent } from "react"
@@ -48,10 +48,6 @@ export default function AdvancedSearch() {
     searchFormReducer,
     initialSearchFormState
   )
-
-  useEffect(() => {
-    console.log(searchFormState)
-  }, [searchFormState])
 
   const handleInputChange = (e: SyntheticEvent, type: SearchFormActionType) => {
     e.preventDefault()
