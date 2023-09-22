@@ -63,11 +63,8 @@ export default function AdvancedSearch() {
 
   const handleDateChange = (e: FullDateType) => {
     alert && setAlert(false)
-    console.log(e)
     const startDateString = e.startDate?.getFullYear()?.toString()
     const endDateString = e.endDate?.getFullYear()?.toString()
-    console.log("startDateString", startDateString)
-    console.log("endDateString", endDateString)
 
     dispatch({
       type: "filter_change",
