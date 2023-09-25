@@ -186,7 +186,7 @@ export default function AdvancedSearch() {
                   "grid-template-columns": "repeat(2, minmax(0, 1fr))",
                   "grid-gap": "var(--nypl-space-s)",
                   div: {
-                    marginTop: 0,
+                    marginTop: "0 !important",
                   },
                 },
               }}
