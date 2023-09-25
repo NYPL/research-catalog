@@ -180,6 +180,16 @@ export default function AdvancedSearch() {
               labelText="Formats"
               onChange={handleCheckboxChange}
               value={searchFormState["selectedFilters"].materialType}
+              sx={{
+                "> div": {
+                  display: "grid",
+                  "grid-template-columns": "repeat(2, minmax(0, 1fr))",
+                  "grid-gap": "var(--nypl-space-s)",
+                  "> div": {
+                    marginTop: 0,
+                  },
+                },
+              }}
             >
               {materialTypeOptions.map((materialType) => {
                 return (
