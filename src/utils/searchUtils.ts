@@ -12,6 +12,8 @@ import type {
   Identifiers,
 } from "../types/searchTypes"
 
+import { initialSearchFormState } from "./advancedSearchUtils"
+
 /**
  * getSortQuery
  * Get the sort type and order and format into query param snippet.
@@ -116,6 +118,21 @@ export function getQueryString({
   return completeQuery?.length ? `q=${completeQuery}` : ""
 }
 
+// Filter search query param object by filter key and return an array of values.
+// This is necessary due to the way Next.js parses nested query params as array locations in its keys
+// e.g. { "filters['materialTypes'][0]" = "foo" }
+function getQueryValuesByKey(
+  queries: Record<string, string>,
+  key: string
+): string[] {
+  const filteredKeys = Object.keys(queries).filter((queryKey) =>
+    queryKey.includes(key)
+  )
+
+  // Return an array of the filtered keys' values
+  return filteredKeys.map((filteredKey) => queries[filteredKey])
+}
+
 /**
  * mapQueryToSearchParams
  * Maps the SearchQueryParams structure from the request to a SearchParams object, which is expected by fetchResults
@@ -135,8 +152,20 @@ export function mapQueryToSearchParams({
   isbn,
   oclc,
   lccn,
-  filters,
+  ...rest
 }: SearchQueryParams): SearchParams {
+  const filterQueries = rest as Record<string, string>
+  const filterKeys = Object.keys(initialSearchFormState.selectedFilters)
+
+  const selectedFilters = {} as SearchFilters
+
+  filterKeys.forEach((filterKey) => {
+    const queryValues = getQueryValuesByKey(filterQueries, filterKey)
+    if (queryValues.length) {
+      selectedFilters[filterKey] = queryValues
+    }
+  })
+
   return {
     q,
     field: search_scope,
@@ -146,7 +175,7 @@ export function mapQueryToSearchParams({
     subject,
     sortBy: sort,
     order: sort_direction,
-    selectedFilters: filters,
+    selectedFilters,
     identifiers: {
       issn,
       isbn,

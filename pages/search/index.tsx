@@ -34,6 +34,7 @@ export default function Search({ results }) {
       return !(isEmpty(result) || (result.result && isEmpty(result.result)))
     })
     .map((result: SearchResultsElement) => {
+      console.log(result.result)
       return new SearchResultsBib(result.result)
     })
 

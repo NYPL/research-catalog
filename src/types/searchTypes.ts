@@ -4,13 +4,15 @@ type Language = string
 type SubjectLiteral = string
 type ContributorLiteral = string
 type Issuance = string
+type MaterialTypeFilter = string
+
 type MaterialType = {
   value?: string
   prefLabel?: string
 }
 
 export interface SearchFilters {
-  materialType?: MaterialType | MaterialType[]
+  materialType?: MaterialTypeFilter | MaterialTypeFilter[]
   language?: Language | Language[]
   subjectLiteral?: SubjectLiteral | SubjectLiteral[]
   contributorLiteral?: ContributorLiteral | ContributorLiteral[]
