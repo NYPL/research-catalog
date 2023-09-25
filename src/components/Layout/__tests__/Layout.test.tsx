@@ -1,7 +1,7 @@
 import React from "react"
 import { render, screen } from "@testing-library/react"
 import "@testing-library/jest-dom"
-import Layout from "../../../src/components/Layout/Layout"
+import Layout from "../Layout"
 
 describe("Layout", () => {
   it("should render an H1", () => {
