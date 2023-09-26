@@ -121,17 +121,17 @@ export function getQueryString({
 // Filter search query param object by filter key and return an array of values.
 // This is necessary due to the way Next.js parses nested query params as array locations in its keys
 // e.g. { "filters['materialTypes'][0]" = "foo" }
-function getQueryValuesByKey(
-  queries: Record<string, string>,
-  key: string
-): string[] {
-  const filteredKeys = Object.keys(queries).filter((queryKey) =>
-    queryKey.includes(key)
-  )
-
-  // Return an array of the filtered keys' values
-  return filteredKeys.map((filteredKey) => queries[filteredKey])
-}
+// function getQueryValuesByKey(
+//   queries: Record<string, string>,
+//   key: string
+// ): string[] {
+//   const filteredKeys = Object.keys(queries).filter((queryKey) =>
+//     queryKey.includes(key)
+//   )
+//
+//   // Return an array of the filtered keys' values
+//   return filteredKeys.map((filteredKey) => queries[filteredKey])
+// }
 
 /**
  * mapQueryToSearchParams
@@ -152,19 +152,21 @@ export function mapQueryToSearchParams({
   isbn,
   oclc,
   lccn,
-  ...rest
-}: SearchQueryParams): SearchParams {
-  const filterQueries = rest as Record<string, string>
-  const filterKeys = Object.keys(initialSearchFormState.selectedFilters)
-
-  const selectedFilters = {} as SearchFilters
-
-  filterKeys.forEach((filterKey) => {
-    const queryValues = getQueryValuesByKey(filterQueries, filterKey)
-    if (queryValues.length) {
-      selectedFilters[filterKey] = queryValues
-    }
-  })
+  filters,
+}: // ...rest
+SearchQueryParams): SearchParams {
+  // const filterQueries = rest as Record<string, string>
+  // const filterKeys = Object.keys(initialSearchFormState.selectedFilters)
+  //
+  // const selectedFilters = {} as SearchFilters
+  //
+  // filterKeys.forEach((filterKey) => {
+  //   const queryValues = getQueryValuesByKey(filterQueries, filterKey)
+  //   if (queryValues.length) {
+  //     selectedFilters[filterKey] = queryValues
+  //   }
+  // })
+  console.log(filters)
 
   return {
     q,
@@ -175,7 +177,7 @@ export function mapQueryToSearchParams({
     subject,
     sortBy: sort,
     order: sort_direction,
-    selectedFilters,
+    selectedFilters: filters,
     identifiers: {
       issn,
       isbn,

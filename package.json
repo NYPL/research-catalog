@@ -20,12 +20,14 @@
     "aws-sdk": "2.99.0",
     "eslint-config-next": "13.4.7",
     "next": "12.3.4",
+    "qs": "^6.11.2",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "swr": "2.2.1",
     "underscore": "^1.13.6"
   },
   "devDependencies": {
+    "@types/qs": "^6.9.8",
     "@types/underscore": "^1.11.6",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "eslint": "^8.45.0",

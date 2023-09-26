@@ -7,6 +7,7 @@ import {
 } from "@nypl/design-system-react-components"
 import { useRouter } from "next/router"
 import { isEmpty } from "underscore"
+import { parse } from "qs"
 
 import RCLink from "../../src/components/RCLink/RCLink"
 import DRBContainer from "../../src/components/DRBContainer/DRBContainer"
@@ -74,8 +75,9 @@ export default function Search({ results }) {
   )
 }
 
-export async function getServerSideProps({ query }) {
-  const results = await fetchResults(mapQueryToSearchParams(query))
+export async function getServerSideProps({ resolvedUrl }) {
+  const queryString = resolvedUrl.split("?")[1]
+  const results = await fetchResults(mapQueryToSearchParams(parse(queryString)))
   return {
     props: {
       results: JSON.parse(JSON.stringify(results)),
