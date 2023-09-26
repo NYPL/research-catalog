@@ -48,7 +48,7 @@ const DRB = ({ searchParams }: DRBProps) => {
           <RCLink href={DRB_ABOUT_URL}>Read more about the project</RCLink>.
         </Text>
         {!error && data?.works ? (
-          <SimpleGrid columns={1}>
+          <SimpleGrid columns={1} gap="s">
             {data.works.map((drbWork: DRBWork) => (
               <DRBItem key={drbWork.uuid} drbWork={drbWork} />
             ))}
