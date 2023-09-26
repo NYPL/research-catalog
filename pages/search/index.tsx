@@ -3,7 +3,9 @@ import {
   Card,
   CardHeading,
   Heading,
-  SimpleGrid,
+  TemplateContent,
+  TemplateContentPrimary,
+  TemplateContentSidebar,
 } from "@nypl/design-system-react-components"
 import { useRouter } from "next/router"
 import { isEmpty } from "underscore"
@@ -42,8 +44,8 @@ export default function Search({ results }) {
         <title>NYPL Research Catalog</title>
       </Head>
       {totalResults ? (
-        <div style={{ display: "flex" }}>
-          <SimpleGrid columns={1} gap="grid.m">
+        <TemplateContent sidebar="right">
+          <TemplateContentPrimary>
             <Heading level="three">
               {`Displaying 1-50 of ${results.results.totalResults.toLocaleString()} results for keyword "${
                 searchParams.searchKeywords
@@ -59,9 +61,11 @@ export default function Search({ results }) {
                 </Card>
               )
             })}
-          </SimpleGrid>
-          <DRBContainer searchParams={drbParams} />
-        </div>
+          </TemplateContentPrimary>
+          <TemplateContentSidebar>
+            <DRBContainer searchParams={drbParams} />
+          </TemplateContentSidebar>
+        </TemplateContent>
       ) : (
         /**
          * TODO: The logic and copy for different scenarios will need to be added when
