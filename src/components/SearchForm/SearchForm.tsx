@@ -56,6 +56,9 @@ const SearchForm = () => {
               placeholder:
                 "Keyword, title, journal title, or author/contributor",
             }}
+            sx={{
+              ".chakra-select__icon-wrapper": { "z-index": "999 !important" },
+            }}
           />
         </div>
         <div className={styles.advancedSearchContainer}>
