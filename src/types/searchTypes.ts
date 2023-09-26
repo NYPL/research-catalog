@@ -33,7 +33,7 @@ export interface SearchParams {
   field?: string
   sortBy?: string
   order?: string
-  selectedFilters?: SearchFilters
+  filters?: SearchFilters
   contributor?: string
   title?: string
   subject?: string
