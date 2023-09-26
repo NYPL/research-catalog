@@ -19,7 +19,7 @@ import { standardizeBibId } from "../../src/utils/bibUtils"
 export async function fetchResults(
   searchParams: SearchParams
 ): Promise<SearchResultsResponse | Error> {
-  const { q, field, selectedFilters } = searchParams
+  const { q, field, filters } = searchParams
 
   // If user is making a search for bib number (i.e. field set to "standard_number"),
   // standardize the bib ID and pass it as the search keywords
@@ -32,7 +32,7 @@ export async function fetchResults(
     field === "journal_title"
       ? {
           field: "title",
-          selectedFilters: { ...selectedFilters, issuance: ["urn:biblevel:s"] },
+          filters: { ...filters, issuance: ["urn:biblevel:s"] },
         }
       : {}
 

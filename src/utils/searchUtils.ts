@@ -91,7 +91,7 @@ export function getQueryString({
   sortBy = "relevance",
   field = "all",
   order,
-  selectedFilters = {},
+  filters = {},
   identifiers = {},
   q,
   contributor,
@@ -102,7 +102,7 @@ export function getQueryString({
   const searchKeywordsQuery = encodeURIComponent(q)
   const sortQuery = getSortQuery(sortBy, order)
 
-  const filterQuery = getFilterQuery(selectedFilters)
+  const filterQuery = getFilterQuery(filters)
   const fieldQuery = getFieldQuery(field)
   const identifierQuery = getIdentifierQuery(identifiers)
   const pageQuery = page !== 1 ? `&page=${page}` : ""
@@ -148,7 +148,7 @@ export function mapQueryToSearchParams({
     subject,
     sortBy: sort,
     order: sort_direction,
-    selectedFilters: filters,
+    filters,
     identifiers: {
       issn,
       isbn,
