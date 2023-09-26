@@ -73,7 +73,7 @@ export async function fetchResults(
  * via its onSuccess callback on a successful fetch
  */
 async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method === "POST") {
+  if (req.method === "GET") {
     const searchParams = mapQueryToSearchParams(req.query)
     const response = await fetchResults(searchParams)
     res.status(200).json(response)

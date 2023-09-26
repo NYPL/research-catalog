@@ -120,7 +120,7 @@ export default function AdvancedSearch() {
       <Heading level="two">Advanced Search</Heading>
       <Form
         id="advancedSearchForm"
-        method="post"
+        method="get"
         action={`${BASE_URL}/search`}
         onSubmit={handleSubmit}
       >
