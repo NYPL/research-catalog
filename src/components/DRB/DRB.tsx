@@ -3,6 +3,7 @@ import {
   CardHeading,
   CardContent,
   Text,
+  SimpleGrid,
 } from "@nypl/design-system-react-components"
 import useSWRImmutable from "swr/immutable"
 
@@ -15,6 +16,10 @@ import { getQueryString } from "../../utils/searchUtils"
 
 interface DRBProps {
   searchParams: SearchParams
+}
+
+interface DRBItemProps {
+  drbWork: DRBWork
 }
 
 /**
@@ -43,12 +48,26 @@ const DRB = ({ searchParams }: DRBProps) => {
           <RCLink href={DRB_ABOUT_URL}>Read more about the project</RCLink>.
         </Text>
         {!error && data?.works ? (
-          data.works.map((drbWork: DRBWork) => (
-            <div key={drbWork.uuid}>{drbWork.title}</div>
-          ))
+          <SimpleGrid columns={1}>
+            {data.works.map((drbWork: DRBWork) => (
+              <DRBItem key={drbWork.uuid} drbWork={drbWork} />
+            ))}
+          </SimpleGrid>
         ) : (
           <div>There was an error getting DRB results. Please try again.</div>
         )}
+      </CardContent>
+    </Card>
+  )
+}
+
+const DRBItem = ({ drbWork }: DRBItemProps) => {
+  const { title } = drbWork
+  console.log(drbWork)
+  return (
+    <Card backgroundColor="var(--nypl-colors-ui-bg-default)">
+      <CardContent>
+        <RCLink href={""}>{title}</RCLink>
       </CardContent>
     </Card>
   )
