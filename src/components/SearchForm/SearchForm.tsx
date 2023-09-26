@@ -34,7 +34,7 @@ const SearchForm = () => {
           <SearchBar
             id="mainContent"
             action={`${BASE_URL}/search`}
-            method="post"
+            method="get"
             onSubmit={handleSubmit}
             labelText="Search Bar Label"
             selectProps={{
