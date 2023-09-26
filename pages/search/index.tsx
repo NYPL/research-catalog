@@ -11,7 +11,7 @@ import { useRouter } from "next/router"
 import { isEmpty } from "underscore"
 
 import RCLink from "../../src/components/RCLink/RCLink"
-import DRBContainer from "../../src/components/DRBContainer/DRBContainer"
+import DRB from "../../src/components/DRB/DRB"
 import { fetchResults } from "../api/search"
 import { mapQueryToSearchParams } from "../../src/utils/searchUtils"
 import type { SearchResultsElement } from "../../src/types/searchTypes"
@@ -63,7 +63,7 @@ export default function Search({ results }) {
             })}
           </TemplateContentPrimary>
           <TemplateContentSidebar>
-            <DRBContainer searchParams={drbParams} />
+            <DRB searchParams={drbParams} />
           </TemplateContentSidebar>
         </TemplateContent>
       ) : (
