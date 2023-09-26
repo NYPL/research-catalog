@@ -123,7 +123,6 @@ export default function AdvancedSearch() {
         method="post"
         action={`${BASE_URL}/search`}
         onSubmit={handleSubmit}
-        gap="grid.s"
       >
         <FormRow gap="grid.m">
           <FormField id="advancedSearchLeft" gap="grid.s">
@@ -205,7 +204,7 @@ export default function AdvancedSearch() {
             </CheckboxGroup>
           </FormField>
         </FormRow>
-        <HorizontalRule />
+        <HorizontalRule sx={{ margin: 0 }} />
         <ButtonGroup
           id="advancedSearchButtons"
           buttonWidth="default"
