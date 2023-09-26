@@ -1,4 +1,5 @@
 import type { RCPage } from "../types/pageTypes"
+import { PATHS } from "../config/constants"
 
 /**
  * getActivePage(pathname)
@@ -7,15 +8,11 @@ import type { RCPage } from "../types/pageTypes"
  * conditionally rendering the Search.
  */
 export const getActivePage = (pathname: string): RCPage => {
-  if (pathname === "/" || pathname === "/search") {
+  if (pathname === PATHS.HOME || pathname === PATHS.SEARCH) {
     return "search"
-  } else if (pathname.includes("advanced")) {
+  } else if (pathname === PATHS.ADVANCED_SEARCH) {
     return "advanced"
-  } else if (pathname.includes("subject_headings")) {
-    return "shep"
-  } else if (pathname.includes("account")) {
-    return "account"
-  } else if (pathname.includes("404")) {
+  } else if (pathname === PATHS["404"] || pathname === PATHS["404_REDIRECT"]) {
     return "404"
   } else {
     return ""
