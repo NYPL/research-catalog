@@ -16,6 +16,7 @@ import {
   CheckboxGroup,
   Checkbox,
   HorizontalRule,
+  ButtonGroup,
   Button,
 } from "@nypl/design-system-react-components"
 
@@ -27,7 +28,6 @@ import {
   languageOptions,
   materialTypeOptions,
 } from "../../src/utils/advancedSearchUtils"
-import styles from "../../styles/components/AdvancedSearch.module.scss"
 import type {
   SearchParams,
   SearchFormActionType,
@@ -123,6 +123,7 @@ export default function AdvancedSearch() {
         method="post"
         action={`${BASE_URL}/search`}
         onSubmit={handleSubmit}
+        gap="grid.s"
       >
         <FormRow gap="grid.m">
           <FormField id="advancedSearchLeft" gap="grid.s">
@@ -205,22 +206,27 @@ export default function AdvancedSearch() {
           </FormField>
         </FormRow>
         <HorizontalRule />
-        <div
+        <ButtonGroup
           id="advancedSearchButtons"
-          className={styles.advancedSearchButtons}
+          buttonWidth="default"
+          sx={{
+            gap: "var(--nypl-space-xs)",
+            marginLeft: "auto",
+          }}
         >
-          <Button id="advancedSearchSubmit" type="submit">
+          <Button id="advancedSearchSubmit" type="submit" size="large">
             Submit
           </Button>
           <Button
             type="button"
-            buttonType="secondary"
             id="advancedSearchClear"
+            buttonType="secondary"
             onClick={handleClear}
+            size="large"
           >
             Clear
           </Button>
-        </div>
+        </ButtonGroup>
       </Form>
     </>
   )
