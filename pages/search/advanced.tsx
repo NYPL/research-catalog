@@ -211,7 +211,7 @@ export default function AdvancedSearch() {
           id="advancedSearchButtons"
           buttonWidth="default"
           sx={{
-            gap: "var(--nypl-space-xs)",
+            gap: "xs",
             marginLeft: "auto",
           }}
         >
