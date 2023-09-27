@@ -1,9 +1,12 @@
 import Head from "next/head"
-import { useState, useReducer } from "react"
+import { useState, useReducer, useRef } from "react"
 import { useRouter } from "next/router"
 import { debounce } from "underscore"
 import type { SyntheticEvent } from "react"
-import type { FullDateType } from "@nypl/design-system-react-components"
+import type {
+  FullDateType,
+  TextInputRefType,
+} from "@nypl/design-system-react-components"
 import {
   Heading,
   Notification,
@@ -16,6 +19,7 @@ import {
   CheckboxGroup,
   Checkbox,
   HorizontalRule,
+  ButtonGroup,
   Button,
 } from "@nypl/design-system-react-components"
 
@@ -27,7 +31,6 @@ import {
   languageOptions,
   materialTypeOptions,
 } from "../../src/utils/advancedSearchUtils"
-import styles from "../../styles/components/AdvancedSearch.module.scss"
 import type {
   SearchParams,
   SearchFormActionType,
@@ -40,6 +43,7 @@ import { getQueryString } from "../../src/utils/searchUtils"
  */
 export default function AdvancedSearch() {
   const router = useRouter()
+  const inputRef = useRef<TextInputRefType>()
   const debounceInterval = 500
 
   const [alert, setAlert] = useState(false)
@@ -101,6 +105,7 @@ export default function AdvancedSearch() {
 
   const handleClear = (e: SyntheticEvent) => {
     e.preventDefault()
+    inputRef.current.value = ""
     dispatch({ type: "form_reset", payload: initialSearchFormState })
   }
 
@@ -120,6 +125,8 @@ export default function AdvancedSearch() {
       <Heading level="two">Advanced Search</Heading>
       <Form
         id="advancedSearchForm"
+        // We are using a post request on advanced search when JS is disabled so that we can build the query
+        // string correctly on the server and redirect the user to the search results.
         method="post"
         action={`${BASE_URL}/search`}
         onSubmit={handleSubmit}
@@ -139,6 +146,7 @@ export default function AdvancedSearch() {
                     (e) => handleInputChange(e, "input_change"),
                     debounceInterval
                   )}
+                  ref={inputRef}
                 />
               )
             })}
@@ -204,23 +212,28 @@ export default function AdvancedSearch() {
             </CheckboxGroup>
           </FormField>
         </FormRow>
-        <HorizontalRule />
-        <div
+        <HorizontalRule sx={{ margin: 0 }} />
+        <ButtonGroup
           id="advancedSearchButtons"
-          className={styles.advancedSearchButtons}
+          buttonWidth="default"
+          sx={{
+            gap: "xs",
+            marginLeft: "auto",
+          }}
         >
-          <Button id="advancedSearchSubmit" type="submit">
+          <Button id="advancedSearchSubmit" type="submit" size="large">
             Submit
           </Button>
           <Button
             type="button"
-            buttonType="secondary"
             id="advancedSearchClear"
+            buttonType="secondary"
             onClick={handleClear}
+            size="large"
           >
             Clear
           </Button>
-        </div>
+        </ButtonGroup>
       </Form>
     </>
   )
