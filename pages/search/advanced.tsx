@@ -120,7 +120,9 @@ export default function AdvancedSearch() {
       <Heading level="two">Advanced Search</Heading>
       <Form
         id="advancedSearchForm"
-        method="get"
+        // We are using a post request on advanced search when JS is disabled so that we can build the query
+        // string correctly on the server and redirect the user to the search results.
+        method="post"
         action={`${BASE_URL}/search`}
         onSubmit={handleSubmit}
       >
