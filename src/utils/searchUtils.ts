@@ -115,7 +115,7 @@ export function getQueryString({
 
   const completeQuery = `${searchKeywordsQuery}${advancedQuery}${filterQuery}${sortQuery}${fieldQuery}${pageQuery}${identifierQuery}`
 
-  return completeQuery?.length ? `q=${completeQuery}` : ""
+  return completeQuery?.length ? `?q=${completeQuery}` : ""
 }
 
 /**
@@ -154,6 +154,36 @@ export function mapQueryToSearchParams({
       isbn,
       oclc,
       lccn,
+    },
+  }
+}
+
+/**
+ * mapRequestBodyToSearchParams
+ * Maps the POST request body from an JS disabled advanced search to a SearchParams object
+ */
+export function mapRequestBodyToSearchParams({
+  q,
+  page,
+  contributor,
+  title,
+  subject,
+  language,
+  materialType,
+  dateAfter,
+  dateBefore,
+}): SearchParams {
+  return {
+    q,
+    page,
+    contributor,
+    title,
+    subject,
+    filters: {
+      materialType,
+      language,
+      dateAfter,
+      dateBefore,
     },
   }
 }

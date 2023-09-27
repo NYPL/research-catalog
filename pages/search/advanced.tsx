@@ -99,7 +99,7 @@ export default function AdvancedSearch() {
     if (!queryString.length) {
       setAlert(true)
     } else {
-      await router.push(`/search/?${queryString}`)
+      await router.push(`/search/${queryString}`)
     }
   }
 
@@ -128,7 +128,7 @@ export default function AdvancedSearch() {
         // We are using a post request on advanced search when JS is disabled so that we can build the query
         // string correctly on the server and redirect the user to the search results.
         method="post"
-        action={`${BASE_URL}/search`}
+        action={`${BASE_URL}/api/search`}
         onSubmit={handleSubmit}
       >
         <FormRow gap="grid.m">
@@ -184,7 +184,7 @@ export default function AdvancedSearch() {
             />
             <CheckboxGroup
               id="formats"
-              name="formats"
+              name="materialType"
               labelText="Formats"
               onChange={handleCheckboxChange}
               value={searchFormState["filters"].materialType}
