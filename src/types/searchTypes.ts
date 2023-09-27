@@ -5,6 +5,7 @@ type SubjectLiteral = string
 type ContributorLiteral = string
 type Issuance = string
 type MaterialType = {
+  value?: string
   prefLabel?: string
 }
 
@@ -26,7 +27,7 @@ export interface Identifiers {
 }
 
 export interface SearchParams {
-  searchKeywords?: string
+  q?: string
   field?: string
   sortBy?: string
   order?: string
@@ -52,9 +53,18 @@ export interface SearchQueryParams extends Identifiers {
   per_page?: number
 }
 
+type SearchFormField = { value: string }
+
 export interface SearchFormEvent {
-  q?: { value: string }
-  search_scope?: { value: string }
+  q?: SearchFormField
+  search_scope?: SearchFormField
+  title?: SearchFormField
+  contributor?: SearchFormField
+  subject?: SearchFormField
+  language?: SearchFormField
+  dateBefore?: SearchFormField
+  dateAfter?: SearchFormField
+  materialType?: SearchFormField
 }
 
 export interface SearchResultsResponse {
@@ -85,4 +95,20 @@ export interface SearchResult {
   dateEndYear?: number
   electronicResources?: ElectronicResource[]
   numItemsTotal?: number
+}
+
+export interface SearchFormInputField {
+  name: string
+  label: string
+}
+
+export type SearchFormActionType =
+  | "input_change"
+  | "filter_change"
+  | "form_reset"
+
+export interface SearchFormAction {
+  type: SearchFormActionType
+  field?: string
+  payload: SearchParams | SearchFilters | string | string[]
 }

@@ -8,12 +8,13 @@ import {
 } from "@nypl/design-system-react-components"
 
 import RCLink from "../src/components/RCLink/RCLink"
+import { SITE_NAME } from "../src/config/constants"
 
 export default function Home() {
   return (
     <>
       <Head>
-        <title>NYPL Research Catalog</title>
+        <title>{SITE_NAME}</title>
       </Head>
       <Heading level="two">
         Explore the Library&apos;s Vast Research Collections & More
