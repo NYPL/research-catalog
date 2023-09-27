@@ -57,9 +57,9 @@ function mapSearchFiltersToDRBFilters(filters: SearchFilters = {}): DRBFilters {
  *  Given a hash of SearchParams, returns a hash representing an equivalent query against DRB API
  */
 function mapSearchParamsToDRBQueryParams(params: SearchParams): DRBQueryParams {
-  const { searchKeywords, field, sortBy, order, selectedFilters } = params
+  const { q, field, sortBy, order, selectedFilters } = params
 
-  const keywordQuery = getDRBKeywordQuery(searchKeywords, field)
+  const keywordQuery = getDRBKeywordQuery(q, field)
   const advancedQuery = getDRBAdvancedQuery(params)
 
   const mainQuery = keywordQuery + (advancedQuery ? "," : "") + advancedQuery
