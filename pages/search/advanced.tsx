@@ -1,9 +1,12 @@
 import Head from "next/head"
-import { useState, useReducer } from "react"
+import { useState, useReducer, useRef } from "react"
 import { useRouter } from "next/router"
 import { debounce } from "underscore"
 import type { SyntheticEvent } from "react"
-import type { FullDateType } from "@nypl/design-system-react-components"
+import type {
+  FullDateType,
+  TextInputRefType,
+} from "@nypl/design-system-react-components"
 import {
   Heading,
   Notification,
@@ -40,6 +43,7 @@ import { getQueryString } from "../../src/utils/searchUtils"
  */
 export default function AdvancedSearch() {
   const router = useRouter()
+  const inputRef = useRef<TextInputRefType>()
   const debounceInterval = 500
 
   const [alert, setAlert] = useState(false)
@@ -101,6 +105,7 @@ export default function AdvancedSearch() {
 
   const handleClear = (e: SyntheticEvent) => {
     e.preventDefault()
+    inputRef.current.value = ""
     dispatch({ type: "form_reset", payload: initialSearchFormState })
   }
 
@@ -141,6 +146,7 @@ export default function AdvancedSearch() {
                     (e) => handleInputChange(e, "input_change"),
                     debounceInterval
                   )}
+                  ref={inputRef}
                 />
               )
             })}
