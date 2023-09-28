@@ -44,7 +44,7 @@ import { getQueryString } from "../../src/utils/searchUtils"
 export default function AdvancedSearch() {
   const router = useRouter()
   const inputRef = useRef<TextInputRefType>()
-  const debounceInterval = 50
+  const debounceInterval = 20
 
   const [alert, setAlert] = useState(false)
 
