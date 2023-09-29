@@ -26,7 +26,7 @@ export default function Home() {
           Culture, and The New York Public Library for the Performing Arts.
           Plus, access materials from library collections at Columbia
           University, Harvard University, and Princeton University.{" "}
-          <RCLink href="https://www.nypl.org/research/collections/about/shared-collection-catalog">
+          <RCLink href="/research/collections/about/shared-collection-catalog">
             Learn more.
           </RCLink>
         </p>
@@ -34,7 +34,7 @@ export default function Home() {
           Please note that the Research Catalog does not include circulating
           materials. For books and more that you can check out to take home
           please visit our{" "}
-          <RCLink href="https://browse.nypl.org">
+          <RCLink href="https://nypl.na2.iiivega.com/">
             circulating branch catalog.
           </RCLink>{" "}
           The{" "}
@@ -60,7 +60,7 @@ export default function Home() {
           layout="row"
         >
           <CardHeading level="four">
-            <RCLink href="https://nypl.org/research/collections">
+            <RCLink href="/research/collections">
               Collections
             </RCLink>
           </CardHeading>
@@ -81,7 +81,7 @@ export default function Home() {
           layout="row"
         >
           <CardHeading level="four">
-            <RCLink href="https://nypl.org/locations/map?libraries=research">
+            <RCLink href="/locations/map?libraries=research">
               Locations
             </RCLink>
           </CardHeading>
@@ -121,7 +121,7 @@ export default function Home() {
           layout="row"
         >
           <CardHeading level="four">
-            <RCLink href="https://nypl.org/research/support">Support</RCLink>
+            <RCLink href="/research/support">Support</RCLink>
           </CardHeading>
           <CardContent>
             <p>
@@ -140,7 +140,7 @@ export default function Home() {
           layout="row"
         >
           <CardHeading level="four">
-            <RCLink href="https://nypl.org/research/services">Services</RCLink>
+            <RCLink href="/research/services">Services</RCLink>
           </CardHeading>
           <CardContent>
             <p>
