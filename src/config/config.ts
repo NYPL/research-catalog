@@ -1,5 +1,5 @@
-export const apiConfig = {
-  baseUrls: {
+export const appConfig = {
+  apiUrls: {
     platform: {
       development:
         process.env.PLATFORM_API_BASE_URL ||
@@ -28,6 +28,13 @@ export const apiConfig = {
         process.env.DRB_API_BASE_URL ||
         "https://digital-research-books-api.nypl.org/search",
     },
+  },
+  externalUrls: {
+    drbFrontEnd: "https://digital-research-books-beta.nypl.org",
+    drbAbout:
+      "https://digital-research-books-beta.nypl.org/about?source=catalog",
+    circulatingCatalog: "https://nypl.na2.iiivega.com/",
+    legacyCatalog: "https://legacycatalog.nypl.org/",
   },
   tokenUrl: "https://isso.nypl.org/",
 }

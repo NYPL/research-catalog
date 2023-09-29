@@ -1,7 +1,7 @@
 import NyplApiClient from "@nypl/nypl-data-api-client"
 import aws from "aws-sdk"
 
-import { apiConfig } from "../../config/config"
+import { appConfig } from "../../config/config"
 
 interface KMSCache {
   clients: string[]
@@ -46,7 +46,7 @@ const nyplApiClient = async (options = { apiName: "platform" }) => {
     return await Promise.resolve(CACHE.clients[apiName])
   }
 
-  const baseUrl = apiConfig.baseUrls[apiName][appEnvironment]
+  const baseUrl = appConfig.apiUrls[apiName][appEnvironment]
 
   return await new Promise((resolve, reject) => {
     Promise.all(keys.map(decryptKMS))
@@ -55,7 +55,7 @@ const nyplApiClient = async (options = { apiName: "platform" }) => {
           base_url: baseUrl,
           oauth_key: decryptedClientId,
           oauth_secret: decryptedClientSecret,
-          oauth_url: apiConfig.tokenUrl,
+          oauth_url: appConfig.tokenUrl,
         })
 
         CACHE.clientId = clientId
