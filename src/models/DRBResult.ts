@@ -6,6 +6,7 @@ import type {
   EditionLink,
 } from "../types/drbTypes"
 import { readOnlineMediaTypes } from "../utils/drbUtils"
+import { appConfig } from "../config/config"
 
 /**
  * The DRBResult class contains the data and getter functions
@@ -35,20 +36,24 @@ export default class DRBResult {
     )
   }
 
-  get selectedLink(): EditionLink | null {
+  get readOnlineUrl(): string | null {
     const { items } = this.selectedEdition
     if (!items) return null
     let selectedLink: EditionLink
     const selectedItem = items.find((item) =>
       item.links.find((link) => {
         selectedLink = link
-        // See above for media types that are used for "Read Online" links
         return readOnlineMediaTypes.indexOf(link.mediaType) > -1
       })
     )
 
-    if (!selectedItem || !selectedLink || !selectedLink.url) return null
-    return selectedLink
+    if (!selectedItem || !selectedLink || !selectedLink.url) {
+      return null
+    } else {
+      return `${
+        appConfig.externalUrls.drbFrontEnd[appConfig.environment]
+      }/read/${selectedLink.link_id}`
+    }
   }
 
   getAuthorsFromWork(work: DRBWork): Author[] | Agent[] {
