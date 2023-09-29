@@ -36,6 +36,7 @@ export interface Author {
 }
 
 export interface Agent {
+  name: string
   roles: string[]
 }
 

@@ -1,8 +1,15 @@
 import type { SearchFilters, SearchParams } from "../types/searchTypes"
-import type { DRBQueryParams, DRBFilters, DRBWork } from "../types/drbTypes"
+import type {
+  DRBQueryParams,
+  DRBFilters,
+  DRBWork,
+  Author,
+  Agent,
+} from "../types/drbTypes"
 import DRBResult from "../models/DRBResult"
 import { DRB_RESULTS_PER_PAGE } from "../config/constants"
 import { isEmpty } from "underscore"
+import { appConfig } from "../config/config"
 
 const mapSearchFieldToDRBField = {
   all: "keyword",
@@ -169,3 +176,9 @@ export const readOnlineMediaTypes = [
   "text/html",
 ]
 export const downloadMediaTypes = ["application/epub+zip", "application/pdf"]
+
+export function getAuthorURL(author: Author | Agent) {
+  return `${
+    appConfig.externalUrls.drbFrontEnd[appConfig.environment]
+  }/search?query=${`author:${author.name}&source=catalog`}`
+}

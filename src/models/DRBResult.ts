@@ -28,11 +28,10 @@ export default class DRBResult {
     this.authors = this.getAuthorsFromWork(work)
   }
 
-  // Constructs the external url with the source parameter added (?source=catalog)
-  get urlWithSourceParam(): string {
+  get url(): string {
     return `${appConfig.externalUrls.drbFrontEnd[appConfig.environment]}/work/${
       this.id
-    }?source=catalog`
+    }&source=catalog`
   }
 
   get selectedEdition(): Edition {
