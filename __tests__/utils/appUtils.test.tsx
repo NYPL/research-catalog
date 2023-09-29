@@ -6,7 +6,7 @@ describe("appUtils", () => {
     it("should return search for / or /search", () => {
       expect(getActivePage(PATHS.HOME)).toBe("search")
       expect(getActivePage(PATHS.SEARCH)).toBe("search")
-    }) 
+    })
     it("should return advanced for ADVANCED SEARCH", () => {
       expect(getActivePage(PATHS.ADVANCED_SEARCH)).toBe("advanced")
     })
