@@ -13,6 +13,7 @@ import DRBContainer from "../../src/components/DRBContainer/DRBContainer"
 import { fetchResults } from "../api/search"
 import { mapQueryToSearchParams } from "../../src/utils/searchUtils"
 import type { SearchResultsElement } from "../../src/types/searchTypes"
+import { SITE_NAME } from "../../src/config/constants"
 import SearchResultsBib from "../../src/models/SearchResultsBib"
 
 /**
@@ -39,14 +40,14 @@ export default function Search({ results }) {
   return (
     <>
       <Head>
-        <title>NYPL Research Catalog</title>
+        <title>Search Results | {SITE_NAME}</title>
       </Head>
       {totalResults ? (
         <div style={{ display: "flex" }}>
           <SimpleGrid columns={1} gap="grid.m">
             <Heading level="three">
               {`Displaying 1-50 of ${results.results.totalResults.toLocaleString()} results for keyword "${
-                searchParams.searchKeywords
+                searchParams.q
               }"`}
             </Heading>
             {searchResultBibs.map((bib: SearchResultsBib) => {
