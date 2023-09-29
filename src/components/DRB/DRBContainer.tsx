@@ -10,7 +10,7 @@ import useSWRImmutable from "swr/immutable"
 
 import { appConfig } from "../../config/config"
 import RCLink from "../RCLink/RCLink"
-import DRBItem from "./DRBItem"
+import DRBResult from "./DRBResult"
 import styles from "../../../styles/components/DRB.module.scss"
 import { BASE_URL } from "../../config/constants"
 import type { SearchParams } from "../../types/searchTypes"
@@ -57,7 +57,7 @@ const DRBContainer = ({ searchParams }: DRBProps) => {
               {data.works.map(
                 (work: DRBWork) =>
                   work?.uuid &&
-                  work?.title && <DRBItem key={work.uuid} work={work} />
+                  work?.title && <DRBResult key={work.uuid} work={work} />
               )}
             </SimpleGrid>
             {data.totalWorks && (

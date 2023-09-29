@@ -11,7 +11,7 @@ interface DRBItemProps {
 /**
  * The DRBContainer fetches and displays DRBContainer search results
  */
-const DRBItem = ({ work }: DRBItemProps) => {
+const DRBResult = ({ work }: DRBItemProps) => {
   const { title, editions } = work
   console.log(editions)
 
@@ -38,4 +38,4 @@ const DRBItem = ({ work }: DRBItemProps) => {
   )
 }
 
-export default DRBItem
+export default DRBResult
