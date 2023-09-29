@@ -5,6 +5,7 @@ import {
   Card,
   CardHeading,
   CardContent,
+  Link,
 } from "@nypl/design-system-react-components"
 
 import RCLink from "../src/components/RCLink/RCLink"
@@ -26,9 +27,9 @@ export default function Home() {
           Culture, and The New York Public Library for the Performing Arts.
           Plus, access materials from library collections at Columbia
           University, Harvard University, and Princeton University.{" "}
-          <RCLink href="/research/collections/about/shared-collection-catalog">
+          <Link href="/research/collections/about/shared-collection-catalog">
             Learn more.
-          </RCLink>
+          </Link>
         </p>
         <p>
           Please note that the Research Catalog does not include circulating
@@ -60,9 +61,7 @@ export default function Home() {
           layout="row"
         >
           <CardHeading level="four">
-            <RCLink href="/research/collections">
-              Collections
-            </RCLink>
+            <Link href="/research/collections">Collections</Link>
           </CardHeading>
           <CardContent>
             <p>
@@ -81,9 +80,7 @@ export default function Home() {
           layout="row"
         >
           <CardHeading level="four">
-            <RCLink href="/locations/map?libraries=research">
-              Locations
-            </RCLink>
+            <Link href="/locations/map?libraries=research">Locations</Link>
           </CardHeading>
           <CardContent>
             <p>
@@ -102,7 +99,7 @@ export default function Home() {
           layout="row"
         >
           <CardHeading level="four">
-            <RCLink href="https://nypl.org/about/divisions">Divisions</RCLink>
+            <Link href="/about/divisions">Divisions</Link>
           </CardHeading>
           <CardContent>
             <p>
@@ -121,7 +118,7 @@ export default function Home() {
           layout="row"
         >
           <CardHeading level="four">
-            <RCLink href="/research/support">Support</RCLink>
+            <Link href="/research/support">Support</Link>
           </CardHeading>
           <CardContent>
             <p>
@@ -140,7 +137,7 @@ export default function Home() {
           layout="row"
         >
           <CardHeading level="four">
-            <RCLink href="/research/services">Services</RCLink>
+            <Link href="/research/services">Services</Link>
           </CardHeading>
           <CardContent>
             <p>
