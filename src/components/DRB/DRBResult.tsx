@@ -13,14 +13,14 @@ interface DRBItemProps {
  */
 const DRBResult = ({ work }: DRBItemProps) => {
   const { title, editions } = work
-  console.log(editions)
 
-  // const editions = work.editions
-  //
-  // // Get authors from `authors` property (DRB v4) or `agents` property (DRB v3)
-  // const authors = work.authors
-  //   ? work.authors
-  //   : work.agents.filter((agent) => agent.roles.includes("author"))
+  // Get authors from `authors` property (DRB v4) or `agents` property (DRB v3)
+  const authors = work.authors
+    ? work.authors
+    : work.agents.filter((agent) => agent.roles.includes("author"))
+
+  console.log(authors)
+  console.log(editions)
 
   return (
     <Card

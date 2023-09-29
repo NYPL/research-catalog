@@ -9,26 +9,36 @@ export interface DRBQueryParams {
 
 export type DRBFilters = string[]
 
-export interface Edition {
-  title: string
-  items?: EditionItem[]
-}
-
-export interface EditionItem {
-  links?: EditionLink[]
-}
-
-type EditionLink = {
-  link_id: string
+export interface DRBResultsResponse {
+  works?: DRBWork[]
+  totalWorks?: number
 }
 
 export interface DRBWork {
   title?: string
   uuid?: string
   editions?: Edition[]
+  authors?: Author[]
+  agents?: Agent[]
 }
 
-export interface DRBResultsResponse {
-  works?: DRBWork[]
-  totalWorks?: number
+export interface Edition {
+  title: string
+  items?: EditionItem[]
+}
+
+export interface EditionItem {
+  links: EditionLink[]
+}
+
+export interface Author {
+  name: string
+}
+
+export interface Agent {
+  roles: string[]
+}
+
+type EditionLink = {
+  link_id: string
 }
