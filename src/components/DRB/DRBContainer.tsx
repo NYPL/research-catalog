@@ -4,13 +4,14 @@ import {
   CardContent,
   Text,
   SimpleGrid,
+  Link as DSLink,
 } from "@nypl/design-system-react-components"
 import useSWRImmutable from "swr/immutable"
 
 import { appConfig } from "../../config/config"
 import RCLink from "../RCLink/RCLink"
-import { Link as DSLink } from "@nypl/design-system-react-components"
-import styles from "../../../styles/components/DRBContainer.module.scss"
+import DRBItem from "./DRBItem"
+import styles from "../../../styles/components/DRB.module.scss"
 import { BASE_URL } from "../../config/constants"
 import type { SearchParams } from "../../types/searchTypes"
 import type { DRBWork } from "../../types/drbTypes"
@@ -54,19 +55,7 @@ const DRBContainer = ({ searchParams }: DRBProps) => {
           <>
             <SimpleGrid columns={1} gap="s" pb="s">
               {data.works.map((drbWork: DRBWork) => (
-                <Card
-                  key={drbWork.uuid}
-                  backgroundColor="var(--nypl-colors-ui-bg-default)"
-                  className={styles.drbContainer}
-                >
-                  <CardContent>
-                    <RCLink href="/">
-                      <Text size="body2" noSpace>
-                        {drbWork.title}
-                      </Text>
-                    </RCLink>
-                  </CardContent>
-                </Card>
+                <DRBItem key={drbWork.uuid} drbWork={drbWork} />
               ))}
             </SimpleGrid>
             {data.totalWorks && (
