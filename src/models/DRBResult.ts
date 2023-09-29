@@ -36,7 +36,8 @@ export default class DRBResult {
     )
   }
 
-  get readOnlineUrl(): string | null {
+  // TODO: Check to see if selectedItem is necessary
+  get readOnlineLink(): EditionLink | null {
     const { items } = this.selectedEdition
     if (!items) return null
     let selectedLink: EditionLink
@@ -47,13 +48,9 @@ export default class DRBResult {
       })
     )
 
-    if (!selectedItem || !selectedLink || !selectedLink.url) {
-      return null
-    } else {
-      return `${
-        appConfig.externalUrls.drbFrontEnd[appConfig.environment]
-      }/read/${selectedLink.link_id}`
-    }
+    return !selectedItem || !selectedLink || !selectedLink.link_id
+      ? null
+      : selectedLink
   }
 
   getAuthorsFromWork(work: DRBWork): Author[] | Agent[] {
