@@ -8,7 +8,7 @@ import {
 import useSWRImmutable from "swr/immutable"
 
 import RCLink from "../RCLink/RCLink"
-import styles from "../../../styles/components/DRB.module.scss"
+import styles from "../../../styles/components/DRBContainer.module.scss"
 import { BASE_URL, DRB_ABOUT_URL } from "../../config/constants"
 import type { SearchParams } from "../../types/searchTypes"
 import type { DRBWork } from "../../types/drbTypes"
@@ -18,14 +18,10 @@ interface DRBProps {
   searchParams: SearchParams
 }
 
-interface DRBItemProps {
-  drbWork: DRBWork
-}
-
 /**
- * The DRB fetches and displays DRB search results
+ * The DRBContainer fetches and displays DRBContainer search results
  */
-const DRB = ({ searchParams }: DRBProps) => {
+const DRBContainer = ({ searchParams }: DRBProps) => {
   const searchQuery = getQueryString(searchParams)
   const drbUrl = `${BASE_URL}/api/drb?${searchQuery}`
   const fetcher = (url: string) => fetch(url).then((res) => res.json())
@@ -50,7 +46,17 @@ const DRB = ({ searchParams }: DRBProps) => {
         {!error && data?.works ? (
           <SimpleGrid columns={1} gap="s">
             {data.works.map((drbWork: DRBWork) => (
-              <DRBItem key={drbWork.uuid} drbWork={drbWork} />
+              <Card
+                key={drbWork.uuid}
+                backgroundColor="var(--nypl-colors-ui-bg-default)"
+                className={styles.drbContainer}
+              >
+                <CardContent>
+                  <RCLink href={""}>
+                    <Text size="body2">{drbWork.title}</Text>
+                  </RCLink>
+                </CardContent>
+              </Card>
             ))}
           </SimpleGrid>
         ) : (
@@ -61,16 +67,4 @@ const DRB = ({ searchParams }: DRBProps) => {
   )
 }
 
-const DRBItem = ({ drbWork }: DRBItemProps) => {
-  const { title } = drbWork
-  console.log(drbWork)
-  return (
-    <Card backgroundColor="var(--nypl-colors-ui-bg-default)">
-      <CardContent>
-        <RCLink href={""}>{title}</RCLink>
-      </CardContent>
-    </Card>
-  )
-}
-
-export default DRB
+export default DRBContainer

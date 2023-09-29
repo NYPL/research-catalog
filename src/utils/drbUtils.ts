@@ -12,14 +12,14 @@ const mapSearchFieldToDRBField = {
 }
 
 /**
- *  Given a keyword and a search field, format and return a keyword query string expected by the DRB API
+ *  Given a keyword and a search field, format and return a keyword query string expected by the DRBContainer API
  */
 function getDRBKeywordQuery(keywords = "*", field = "keyword"): string {
   return `${field}:${keywords}`
 }
 
 /**
- *  Given a hash of SearchQueryParams, format and return an advanced field query string expected by the DRB API
+ *  Given a hash of SearchQueryParams, format and return an advanced field query string expected by the DRBContainer API
  */
 function getDRBAdvancedQuery(params: SearchParams): string {
   return ["contributor", "title", "subject"]
@@ -34,7 +34,7 @@ function getDRBAdvancedQuery(params: SearchParams): string {
 }
 
 /**
- *  Given a hash of SearchFilters, returns an array of DRBFilters as expected by the DRB API
+ *  Given a hash of SearchFilters, returns an array of DRBFilters as expected by the DRBContainer API
  */
 function mapSearchFiltersToDRBFilters(filters: SearchFilters = {}): DRBFilters {
   let drbFilters: DRBFilters = []
@@ -54,7 +54,7 @@ function mapSearchFiltersToDRBFilters(filters: SearchFilters = {}): DRBFilters {
 }
 
 /**
- *  Given a hash of SearchParams, returns a hash representing an equivalent query against DRB API
+ *  Given a hash of SearchParams, returns a hash representing an equivalent query against DRBContainer API
  */
 function mapSearchParamsToDRBQueryParams(params: SearchParams): DRBQueryParams {
   const { q, field, sortBy, order, selectedFilters } = params
@@ -85,7 +85,7 @@ function mapSearchParamsToDRBQueryParams(params: SearchParams): DRBQueryParams {
     dateBefore,
   } = selectedFilters || {}
 
-  // DRB doesn't handle subject or contributor in `filter` param, so handle
+  // DRBContainer doesn't handle subject or contributor in `filter` param, so handle
   // them separately:
   if (subjectLiteral) {
     drbQuery.query = drbQuery.query.concat(
@@ -141,7 +141,7 @@ export function getQueryStringFromDRBQueryParams(
 }
 
 /**
- * Given a SearchParams hash, return a DRB query string.
+ * Given a SearchParams hash, return a DRBContainer query string.
  */
 export function getDRBQueryStringFromSearchParams(
   searchParams: SearchParams

@@ -10,7 +10,7 @@ import { isEmpty } from "underscore"
 
 import RCLink from "../../src/components/RCLink/RCLink"
 import Layout from "../../src/components/Layout/Layout"
-import DRB from "../../src/components/DRB/DRB"
+import DRBContainer from "../../src/components/DRB/DRBContainer"
 import { fetchResults } from "../api/search"
 import { mapQueryToSearchParams } from "../../src/utils/searchUtils"
 import type { SearchResultsElement } from "../../src/types/searchTypes"
@@ -43,7 +43,10 @@ export default function Search({ results }) {
       <Head>
         <title>Search Results | {SITE_NAME}</title>
       </Head>
-      <Layout activePage="search" sidebar={<DRB searchParams={drbParams} />}>
+      <Layout
+        activePage="search"
+        sidebar={<DRBContainer searchParams={drbParams} />}
+      >
         {totalResults ? (
           <>
             <Heading level="three">
