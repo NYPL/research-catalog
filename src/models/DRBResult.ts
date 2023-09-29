@@ -3,7 +3,6 @@ import type {
   Edition,
   Author,
   Agent,
-  EditionItem,
   EditionLink,
 } from "../types/drbTypes"
 import { readOnlineMediaTypes } from "../utils/drbUtils"
