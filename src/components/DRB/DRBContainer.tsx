@@ -10,13 +10,16 @@ import useSWRImmutable from "swr/immutable"
 
 import { appConfig } from "../../config/config"
 import RCLink from "../RCLink/RCLink"
-import DRBResult from "./DRBResult"
+import DRBCard from "./DRBCard"
 import styles from "../../../styles/components/DRB.module.scss"
 import { BASE_URL } from "../../config/constants"
 import type { SearchParams } from "../../types/searchTypes"
-import type { DRBWork } from "../../types/drbTypes"
+import type DRBResult from "../../models/DRBResult"
 import { getQueryString } from "../../utils/searchUtils"
-import { getDRBQueryStringFromSearchParams } from "../../utils/drbUtils"
+import {
+  getDRBQueryStringFromSearchParams,
+  mapWorksToDRBResults,
+} from "../../utils/drbUtils"
 
 interface DRBProps {
   searchParams: SearchParams
@@ -32,6 +35,8 @@ const DRBContainer = ({ searchParams }: DRBProps) => {
   const fetcher = (url: string) => fetch(url).then((res) => res.json())
 
   const { data, error, isValidating } = useSWRImmutable(drbUrl, fetcher)
+
+  const drbResults = mapWorksToDRBResults(data?.works)
 
   return isValidating ? (
     <Card className={styles.drbContainer}>
@@ -51,14 +56,12 @@ const DRBContainer = ({ searchParams }: DRBProps) => {
           </RCLink>
           .
         </Text>
-        {!error && data.works ? (
+        {!error && drbResults?.length ? (
           <>
             <SimpleGrid columns={1} gap="s" pb="s">
-              {data.works.map(
-                (work: DRBWork) =>
-                  work?.uuid &&
-                  work?.title && <DRBResult key={work.uuid} work={work} />
-              )}
+              {drbResults.map((result: DRBResult) => (
+                <DRBCard key={result.id} drbResult={result} />
+              ))}
             </SimpleGrid>
             {data.totalWorks && (
               <DSLink

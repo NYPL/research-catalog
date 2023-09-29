@@ -1,27 +1,17 @@
 import { Card, CardContent, Text } from "@nypl/design-system-react-components"
 
 import RCLink from "../RCLink/RCLink"
-import type { DRBWork } from "../../types/drbTypes"
+import type DRBResult from "../../models/DRBResult"
 import styles from "../../../styles/components/DRB.module.scss"
 
-interface DRBItemProps {
-  work: DRBWork
+interface DRBCardProps {
+  drbResult: DRBResult
 }
 
 /**
  * The DRBContainer fetches and displays DRBContainer search results
  */
-const DRBResult = ({ work }: DRBItemProps) => {
-  const { title, editions } = work
-
-  // Get authors from `authors` property (DRB v4) or `agents` property (DRB v3)
-  const authors = work.authors
-    ? work.authors
-    : work.agents.filter((agent) => agent.roles.includes("author"))
-
-  console.log(authors)
-  console.log(editions)
-
+const DRBCard = ({ drbResult }: DRBCardProps) => {
   return (
     <Card
       backgroundColor="var(--nypl-colors-ui-bg-default)"
@@ -30,7 +20,7 @@ const DRBResult = ({ work }: DRBItemProps) => {
       <CardContent>
         <RCLink href="/">
           <Text size="body2" noSpace>
-            {title}
+            {drbResult.title}
           </Text>
         </RCLink>
       </CardContent>
@@ -38,4 +28,4 @@ const DRBResult = ({ work }: DRBItemProps) => {
   )
 }
 
-export default DRBResult
+export default DRBCard

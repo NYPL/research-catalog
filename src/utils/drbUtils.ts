@@ -1,6 +1,8 @@
 import type { SearchFilters, SearchParams } from "../types/searchTypes"
-import type { DRBQueryParams, DRBFilters } from "../types/drbTypes"
+import type { DRBQueryParams, DRBFilters, DRBWork } from "../types/drbTypes"
+import DRBResult from "../models/DRBResult"
 import { DRB_RESULTS_PER_PAGE } from "../config/constants"
+import { isEmpty } from "underscore"
 
 const mapSearchFieldToDRBField = {
   all: "keyword",
@@ -148,6 +150,17 @@ export function getDRBQueryStringFromSearchParams(
 ): string {
   const drbQueryParams = mapSearchParamsToDRBQueryParams(searchParams)
   return getQueryStringFromDRBQueryParams(drbQueryParams)
+}
+
+export function mapWorksToDRBResults(works: DRBWork[]): DRBResult[] | null {
+  if (!works) return null
+  return works
+    .filter((work: DRBWork) => {
+      return !isEmpty(work) || !work.uuid || !work.title
+    })
+    .map((work: DRBWork) => {
+      return new DRBResult(work)
+    })
 }
 
 export const readOnlineMediaTypes = [

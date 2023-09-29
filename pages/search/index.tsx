@@ -50,7 +50,7 @@ export default function Search({ results }) {
         {totalResults ? (
           <>
             <Heading level="three">
-              {`Displaying 1-50 of ${results.results.totalResults.toLocaleString()} results for keyword "${
+              {`Displaying 1-50 of ${totalResults.toLocaleString()} results for keyword "${
                 searchParams.q
               }"`}
             </Heading>
