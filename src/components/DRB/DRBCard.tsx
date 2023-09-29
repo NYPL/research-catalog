@@ -18,7 +18,7 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
       className={styles.drbContainer}
     >
       <CardContent>
-        <RCLink href="/">
+        <RCLink href={drbResult.urlWithSourceParam}>
           <Text size="body2" noSpace>
             {drbResult.title}
           </Text>

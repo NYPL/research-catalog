@@ -6,6 +6,7 @@ import type {
   EditionLink,
 } from "../types/drbTypes"
 import { readOnlineMediaTypes, downloadMediaTypes } from "../utils/drbUtils"
+import { appConfig } from "../config/config"
 
 /**
  * The DRBResult class contains the data and getter functions
@@ -25,6 +26,13 @@ export default class DRBResult {
     this.title = work.title
     this.editions = work.editions
     this.authors = this.getAuthorsFromWork(work)
+  }
+
+  // Constructs the external url with the source parameter added (?source=catalog)
+  get urlWithSourceParam(): string {
+    return `${appConfig.externalUrls.drbFrontEnd[appConfig.environment]}/work/${
+      this.id
+    }?source=catalog`
   }
 
   get selectedEdition(): Edition {
