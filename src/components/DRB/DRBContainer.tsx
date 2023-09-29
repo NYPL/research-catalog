@@ -62,7 +62,9 @@ const DRBContainer = ({ searchParams }: DRBProps) => {
             </SimpleGrid>
             {data.totalWorks && (
               <DSLink
-                href={`${appConfig.externalUrls.drbFrontEnd}/search${drbQuery}`}
+                href={`${
+                  appConfig.externalUrls.drbFrontEnd[appConfig.environment]
+                }/search${drbQuery}`}
                 target="_blank"
               >
                 <Text size="body2" noSpace isBold>

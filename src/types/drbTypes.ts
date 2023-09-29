@@ -39,6 +39,8 @@ export interface Agent {
   roles: string[]
 }
 
-type EditionLink = {
+export interface EditionLink {
   link_id: string
+  mediaType: string
+  url?: string
 }

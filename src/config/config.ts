@@ -1,4 +1,5 @@
 export const appConfig = {
+  environment: process.env.APP_ENV || "production",
   apiUrls: {
     platform: {
       development:
@@ -30,7 +31,15 @@ export const appConfig = {
     },
   },
   externalUrls: {
-    drbFrontEnd: "https://digital-research-books-beta.nypl.org",
+    drbFrontEnd: {
+      development:
+        "http://sfr-front-end-development.us-east-1.elasticbeanstalk.com",
+      production: "https://digital-research-books-beta.nypl.org",
+    },
+    drbEreader: {
+      development: "https://researchnow-reader.nypl.org",
+      production: "https://digital-research-books-reader.nypl.org",
+    },
     drbAbout:
       "https://digital-research-books-beta.nypl.org/about?source=catalog",
     circulatingCatalog: "https://nypl.na2.iiivega.com/",
