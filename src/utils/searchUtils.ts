@@ -162,17 +162,18 @@ export function mapQueryToSearchParams({
  * mapRequestBodyToSearchParams
  * Maps the POST request body from an JS disabled advanced search to a SearchParams object
  */
-export function mapRequestBodyToSearchParams({
-  q,
-  page,
-  contributor,
-  title,
-  subject,
-  language,
-  materialType,
-  dateAfter,
-  dateBefore,
-}): SearchParams {
+export function mapRequestBodyToSearchParams(reqBody): SearchParams {
+  const {
+    q,
+    page,
+    contributor,
+    title,
+    subject,
+    language,
+    materialType,
+    dateAfter,
+    dateBefore,
+  } = reqBody
   return {
     q,
     page,
