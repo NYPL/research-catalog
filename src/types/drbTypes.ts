@@ -43,4 +43,5 @@ export interface EditionLink {
   link_id: string
   mediaType: string
   url?: string
+  download?: string
 }

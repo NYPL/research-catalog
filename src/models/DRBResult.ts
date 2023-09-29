@@ -5,8 +5,7 @@ import type {
   Agent,
   EditionLink,
 } from "../types/drbTypes"
-import { readOnlineMediaTypes } from "../utils/drbUtils"
-import { appConfig } from "../config/config"
+import { readOnlineMediaTypes, downloadMediaTypes } from "../utils/drbUtils"
 
 /**
  * The DRBResult class contains the data and getter functions
@@ -51,6 +50,22 @@ export default class DRBResult {
     return !selectedItem || !selectedLink || !selectedLink.link_id
       ? null
       : selectedLink
+  }
+
+  get downloadLink(): EditionLink | null {
+    const { items } = this.selectedEdition
+    if (!items) return null
+
+    let downloadLink: EditionLink
+    items.find((item) =>
+      item.links.find((link) => {
+        downloadLink = link
+        // See above for downloadable media types
+        return downloadMediaTypes.indexOf(link.mediaType) > -1
+      })
+    )
+
+    return !downloadLink || !downloadLink.download ? null : downloadLink
   }
 
   getAuthorsFromWork(work: DRBWork): Author[] | Agent[] {
