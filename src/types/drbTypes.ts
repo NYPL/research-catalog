@@ -9,9 +9,23 @@ export interface DRBQueryParams {
 
 export type DRBFilters = string[]
 
+export interface Edition {
+  title: string
+  items?: EditionItem[]
+}
+
+export interface EditionItem {
+  links?: EditionLink[]
+}
+
+type EditionLink = {
+  link_id: string
+}
+
 export interface DRBWork {
   title?: string
   uuid?: string
+  editions?: Edition[]
 }
 
 export interface DRBResultsResponse {

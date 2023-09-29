@@ -149,3 +149,10 @@ export function getDRBQueryStringFromSearchParams(
   const drbQueryParams = mapSearchParamsToDRBQueryParams(searchParams)
   return getQueryStringFromDRBQueryParams(drbQueryParams)
 }
+
+export const readOnlineMediaTypes = [
+  "application/epub+xml",
+  "application/webpub+json",
+  "text/html",
+]
+export const downloadMediaTypes = ["application/epub+zip", "application/pdf"]

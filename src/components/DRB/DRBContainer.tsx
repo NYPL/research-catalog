@@ -54,9 +54,11 @@ const DRBContainer = ({ searchParams }: DRBProps) => {
         {!error && data.works ? (
           <>
             <SimpleGrid columns={1} gap="s" pb="s">
-              {data.works.map((drbWork: DRBWork) => (
-                <DRBItem key={drbWork.uuid} drbWork={drbWork} />
-              ))}
+              {data.works.map(
+                (work: DRBWork) =>
+                  work?.uuid &&
+                  work?.title && <DRBItem key={work.uuid} work={work} />
+              )}
             </SimpleGrid>
             {data.totalWorks && (
               <DSLink

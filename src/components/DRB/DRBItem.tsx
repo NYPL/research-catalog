@@ -5,23 +5,32 @@ import type { DRBWork } from "../../types/drbTypes"
 import styles from "../../../styles/components/DRB.module.scss"
 
 interface DRBItemProps {
-  drbWork: DRBWork
+  work: DRBWork
 }
 
 /**
  * The DRBContainer fetches and displays DRBContainer search results
  */
-const DRBItem = ({ drbWork }: DRBItemProps) => {
+const DRBItem = ({ work }: DRBItemProps) => {
+  const { title, editions } = work
+  console.log(editions)
+
+  // const editions = work.editions
+  //
+  // // Get authors from `authors` property (DRB v4) or `agents` property (DRB v3)
+  // const authors = work.authors
+  //   ? work.authors
+  //   : work.agents.filter((agent) => agent.roles.includes("author"))
+
   return (
     <Card
-      key={drbWork.uuid}
       backgroundColor="var(--nypl-colors-ui-bg-default)"
       className={styles.drbContainer}
     >
       <CardContent>
         <RCLink href="/">
           <Text size="body2" noSpace>
-            {drbWork.title}
+            {title}
           </Text>
         </RCLink>
       </CardContent>
