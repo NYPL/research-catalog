@@ -14,15 +14,16 @@ import SearchForm from "../SearchForm/SearchForm"
 import { BASE_URL } from "../../config/constants"
 
 interface LayoutProps {
-  activePage?: RCPage
   children: ReactElement
+  sidebar?: ReactElement
+  activePage?: RCPage
 }
 
 /**
  * The Layout component wraps the TemplateAppContainer from the DS and
  * controls the rendering of Research Catalog header components per-page.
  */
-const Layout = ({ children, activePage }: LayoutProps) => {
+const Layout = ({ children, sidebar, activePage }: LayoutProps) => {
   const showSearch = activePage === "search"
   const showHeader = activePage !== "404"
 
@@ -51,7 +52,15 @@ const Layout = ({ children, activePage }: LayoutProps) => {
             </>
           )
         }
+        sidebar={sidebar ? "right" : "none"}
         contentPrimary={<Box pb="l">{children}</Box>}
+        contentSidebar={
+          sidebar && (
+            <Box pb="l">
+              <div>{sidebar}</div>
+            </Box>
+          )
+        }
       />
     </DSProvider>
   )

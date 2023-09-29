@@ -3,14 +3,13 @@ import {
   Card,
   CardHeading,
   Heading,
-  TemplateContent,
-  TemplateContentPrimary,
-  TemplateContentSidebar,
+  SimpleGrid,
 } from "@nypl/design-system-react-components"
 import { useRouter } from "next/router"
 import { isEmpty } from "underscore"
 
 import RCLink from "../../src/components/RCLink/RCLink"
+import Layout from "../../src/components/Layout/Layout"
 import DRB from "../../src/components/DRB/DRB"
 import { fetchResults } from "../api/search"
 import { mapQueryToSearchParams } from "../../src/utils/searchUtils"
@@ -44,36 +43,34 @@ export default function Search({ results }) {
       <Head>
         <title>Search Results | {SITE_NAME}</title>
       </Head>
-      {totalResults ? (
-        <TemplateContent sidebar="right">
-          <TemplateContentPrimary>
+      <Layout activePage="search" sidebar={<DRB searchParams={drbParams} />}>
+        {totalResults ? (
+          <>
             <Heading level="three">
               {`Displaying 1-50 of ${results.results.totalResults.toLocaleString()} results for keyword "${
                 searchParams.q
               }"`}
             </Heading>
-            {searchResultBibs.map((bib: SearchResultsBib) => {
-              // TODO: Create SearchResult component to manage result display (https://jira.nypl.org/browse/SCC-3714)
-              return (
-                <Card key={bib.id}>
-                  <CardHeading level="four">
-                    <RCLink href={bib.url}>{bib.title}</RCLink>
-                  </CardHeading>
-                </Card>
-              )
-            })}
-          </TemplateContentPrimary>
-          <TemplateContentSidebar>
-            <DRB searchParams={drbParams} />
-          </TemplateContentSidebar>
-        </TemplateContent>
-      ) : (
-        /**
-         * TODO: The logic and copy for different scenarios will need to be added when
-         * filters are implemented
-         */
-        <Heading level="three">No results. Try a different search.</Heading>
-      )}
+            <SimpleGrid columns={1}>
+              {searchResultBibs.map((bib: SearchResultsBib) => {
+                return (
+                  <Card key={bib.id}>
+                    <CardHeading level="four">
+                      <RCLink href={bib.url}>{bib.title}</RCLink>
+                    </CardHeading>
+                  </Card>
+                )
+              })}
+            </SimpleGrid>
+          </>
+        ) : (
+          /**
+           * TODO: The logic and copy for different scenarios will need to be added when
+           * filters are implemented
+           */
+          <Heading level="three">No results. Try a different search.</Heading>
+        )}
+      </Layout>
     </>
   )
 }
