@@ -75,6 +75,14 @@ export default function Search({ results }) {
   )
 }
 
+/**
+ * resolvedUrl is the original URL of the search page including the search query parameters.
+ * It is provided by Next.js as an attribute of the context object that is passed to getServerSideProps.
+ *
+ * Here it is used to construct a SearchParams object from the parsed query parameters in order to fetch the
+ * relevant search results on the server side (via fetchResults).
+ *
+ */
 export async function getServerSideProps({ resolvedUrl }) {
   // Remove everything before the query string delineator '?', necessary for correctly parsing the 'q' param.
   const queryString = resolvedUrl.slice(resolvedUrl.indexOf("?") + 1)
