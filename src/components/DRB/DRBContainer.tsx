@@ -11,7 +11,6 @@ import useSWRImmutable from "swr/immutable"
 import { appConfig } from "../../config/config"
 import RCLink from "../RCLink/RCLink"
 import DRBCard from "./DRBCard"
-import styles from "../../../styles/components/DRB.module.scss"
 import { BASE_URL } from "../../config/constants"
 import type { SearchParams } from "../../types/searchTypes"
 import type DRBResult from "../../models/DRBResult"
@@ -39,11 +38,11 @@ const DRBContainer = ({ searchParams }: DRBProps) => {
   const drbResults = mapWorksToDRBResults(data?.works)
 
   return isValidating ? (
-    <Card className={styles.drbContainer}>
+    <Card>
       <CardContent>Loading</CardContent>
     </Card>
   ) : (
-    <Card isBordered className={styles.drbContainer}>
+    <Card isBordered>
       <CardHeading level="three">
         Results from Digital Research Books Beta
       </CardHeading>

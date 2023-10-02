@@ -3,7 +3,6 @@ import { Card, CardContent, Text } from "@nypl/design-system-react-components"
 import RCLink from "../RCLink/RCLink"
 import type DRBResult from "../../models/DRBResult"
 import { getAuthorURL } from "../../utils/drbUtils"
-import styles from "../../../styles/components/DRB.module.scss"
 import type { Author, Agent } from "../../types/drbTypes"
 
 interface DRBCardProps {
@@ -17,15 +16,19 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
   return (
     <Card
       backgroundColor="var(--nypl-colors-ui-bg-default)"
-      className={styles.drbContainer}
+      sx={{
+        padding: "var(--nypl-space-xs)",
+      }}
     >
       <CardContent>
         <RCLink href={drbResult.url}>
-          <Text size="body2">{drbResult.title}</Text>
+          <Text size="body2" noSpace isBold>
+            {drbResult.title}
+          </Text>
         </RCLink>
 
         {drbResult?.authors && (
-          <Text size="body2">
+          <Text size="body2" noSpace>
             By{" "}
             {drbResult.authors.map((author: Author | Agent, index: number) => (
               <>
