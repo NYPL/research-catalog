@@ -7,6 +7,7 @@ import type {
 import {
   DISCOVERY_API_NAME,
   DISCOVERY_API_SEARCH_ROUTE,
+  DRB_API_NAME,
   RESULTS_PER_PAGE,
 } from "../../src/config/constants"
 import nyplApiClient from "../../src/server/nyplApiClient/index"
@@ -15,6 +16,7 @@ import {
   mapQueryToSearchParams,
 } from "../../src/utils/searchUtils"
 import { standardizeBibId } from "../../src/utils/bibUtils"
+import { getDRBQueryStringFromSearchParams } from "../../src/utils/drbUtils"
 
 export async function fetchResults(
   searchParams: SearchParams
@@ -36,29 +38,36 @@ export async function fetchResults(
         }
       : {}
 
-  const queryString = getQueryString({
+  const modifiedSearchParams = {
     ...searchParams,
     ...journalParams,
     q: keywordsOrBibId,
-  })
+  }
+
+  const queryString = getQueryString(modifiedSearchParams)
 
   const aggregationQuery = `/aggregations?${queryString}`
   const resultsQuery = `?${queryString}&per_page=${RESULTS_PER_PAGE.toString()}`
+  const drbQuery = getDRBQueryStringFromSearchParams(modifiedSearchParams)
 
   // Get the following in parallel:
   //  - search results
   //  - aggregations
+  //  - drb results
   const client = await nyplApiClient({ apiName: DISCOVERY_API_NAME })
+  const drbClient = await nyplApiClient({ apiName: DRB_API_NAME })
 
-  const [results, aggregations] = await Promise.all([
+  const [results, aggregations, drbResults] = await Promise.all([
     await client.get(`${DISCOVERY_API_SEARCH_ROUTE}${resultsQuery}`),
     await client.get(`${DISCOVERY_API_SEARCH_ROUTE}${aggregationQuery}`),
+    await drbClient.get(drbQuery),
   ])
 
   try {
     return {
       results,
       aggregations,
+      drbResults,
       page: searchParams.page,
     }
   } catch (error) {

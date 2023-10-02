@@ -13,6 +13,7 @@ import Layout from "../../src/components/Layout/Layout"
 import DRBContainer from "../../src/components/DRB/DRBContainer"
 import { fetchResults } from "../api/search"
 import { mapQueryToSearchParams } from "../../src/utils/searchUtils"
+import { mapWorksToDRBResults } from "../../src/utils/drbUtils"
 import type { SearchResultsElement } from "../../src/types/searchTypes"
 import { SITE_NAME } from "../../src/config/constants"
 import SearchResultsBib from "../../src/models/SearchResultsBib"
@@ -24,12 +25,12 @@ import SearchResultsBib from "../../src/models/SearchResultsBib"
 export default function Search({ results }) {
   const { query } = useRouter()
   const { itemListElement, totalResults } = results.results
+  const drbResponse = results.drbResults?.data
+  const drbWorks = drbResponse?.works
 
   const searchParams = mapQueryToSearchParams(query)
 
-  // Remove page and identifiers fields from drbParams to prevent re-fetches
-  const drbParams = { ...searchParams, page: undefined, identifiers: undefined }
-
+  // Map Search Results from response to SearchResultBib objects
   const searchResultBibs = itemListElement
     .filter((result: SearchResultsElement) => {
       return !(isEmpty(result) || (result.result && isEmpty(result.result)))
@@ -38,6 +39,9 @@ export default function Search({ results }) {
       return new SearchResultsBib(result.result)
     })
 
+  // Map DRB Works from response to DRBResult objects
+  const drbResults = mapWorksToDRBResults(drbWorks)
+
   return (
     <>
       <Head>
@@ -45,7 +49,13 @@ export default function Search({ results }) {
       </Head>
       <Layout
         activePage="search"
-        sidebar={<DRBContainer searchParams={drbParams} />}
+        sidebar={
+          <DRBContainer
+            drbResults={drbResults}
+            totalWorks={drbResponse.totalWorks}
+            searchParams={searchParams}
+          />
+        }
       >
         {totalResults ? (
           <>

@@ -1,4 +1,5 @@
 import type { ElectronicResource } from "./bibTypes"
+import type { DRBResults } from "./drbTypes"
 
 type Language = string
 type SubjectLiteral = string
@@ -70,6 +71,7 @@ export interface SearchFormEvent {
 export interface SearchResultsResponse {
   results?: SearchResults
   aggregations?: SearchResults
+  drbResults?: DRBResults
   page: number
 }
 

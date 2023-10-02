@@ -9,7 +9,7 @@ export interface DRBQueryParams {
 
 export type DRBFilters = string[]
 
-export interface DRBResultsResponse {
+export interface DRBResults {
   works?: DRBWork[]
   totalWorks?: number
 }

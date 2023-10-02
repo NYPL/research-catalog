@@ -6,42 +6,27 @@ import {
   SimpleGrid,
   Link as DSLink,
 } from "@nypl/design-system-react-components"
-import useSWRImmutable from "swr/immutable"
 
 import { appConfig } from "../../config/config"
 import RCLink from "../RCLink/RCLink"
 import DRBCard from "./DRBCard"
-import { BASE_URL } from "../../config/constants"
-import type { SearchParams } from "../../types/searchTypes"
 import type DRBResult from "../../models/DRBResult"
-import { getQueryString } from "../../utils/searchUtils"
-import {
-  getDRBQueryStringFromSearchParams,
-  mapWorksToDRBResults,
-} from "../../utils/drbUtils"
+import type { SearchParams } from "../../types/searchTypes"
+import { getDRBQueryStringFromSearchParams } from "../../utils/drbUtils"
 
 interface DRBProps {
+  drbResults: DRBResult[]
+  totalWorks: number
   searchParams: SearchParams
 }
 
 /**
  * The DRBContainer fetches and displays DRBContainer search results
  */
-const DRBContainer = ({ searchParams }: DRBProps) => {
-  const searchQuery = getQueryString(searchParams)
-  const drbUrl = `${BASE_URL}/api/drb?${searchQuery}`
+const DRBContainer = ({ drbResults, totalWorks, searchParams }: DRBProps) => {
   const drbQuery = getDRBQueryStringFromSearchParams(searchParams)
-  const fetcher = (url: string) => fetch(url).then((res) => res.json())
 
-  const { data, error, isValidating } = useSWRImmutable(drbUrl, fetcher)
-
-  const drbResults = mapWorksToDRBResults(data?.works)
-
-  return isValidating ? (
-    <Card>
-      <CardContent>Loading</CardContent>
-    </Card>
-  ) : (
+  return (
     <Card isBordered>
       <CardHeading level="three">
         Results from Digital Research Books Beta
@@ -55,14 +40,14 @@ const DRBContainer = ({ searchParams }: DRBProps) => {
           </RCLink>
           .
         </Text>
-        {!error && drbResults?.length ? (
+        {drbResults?.length ? (
           <>
             <SimpleGrid columns={1} gap="s" pb="s">
               {drbResults.map((result: DRBResult) => (
                 <DRBCard key={result.id} drbResult={result} />
               ))}
             </SimpleGrid>
-            {data.totalWorks && (
+            {totalWorks && (
               <DSLink
                 href={`${
                   appConfig.externalUrls.drbFrontEnd[appConfig.environment]
@@ -70,9 +55,8 @@ const DRBContainer = ({ searchParams }: DRBProps) => {
                 target="_blank"
               >
                 <Text size="body2" noSpace isBold>
-                  See {data.totalWorks.toLocaleString()} result
-                  {data.totalWorks === 1 ? "" : "s"} from Digital Research Books
-                  Beta
+                  See {totalWorks.toLocaleString()} result
+                  {totalWorks === 1 ? "" : "s"} from Digital Research Books Beta
                 </Text>
               </DSLink>
             )}
