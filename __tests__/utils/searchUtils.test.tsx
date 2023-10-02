@@ -3,16 +3,20 @@ import {
   mapQueryToSearchParams,
   mapRequestBodyToSearchParams,
 } from "../../src/utils/searchUtils"
+import { queryParamsEquality } from "./utils"
+
+const checkQueryParamsEquality = queryParamsEquality(getQueryString)
 
 describe("searchUtils", () => {
   describe("getQueryString", () => {
-    it("should create query strings with comma delimited values", () => {
+    it("", () => {
+      const testQuery = "?q=shel%20silverstein&search_scope=contributor"
       expect(
-        getQueryString({
+        checkQueryParamsEquality(testQuery, {
           q: "shel silverstein",
           field: "contributor",
         })
-      ).toBe("?q=shel%20silverstein&search_scope=contributor")
+      ).toBe(true)
     })
   })
   describe("mapQueryToSearchParams", () => {

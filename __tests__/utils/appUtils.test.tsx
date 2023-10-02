@@ -17,5 +17,8 @@ describe("appUtils", () => {
     it("should return an empty string for all other cases", () => {
       expect(getActivePage("spaghetti")).toBe("")
     })
+    it("should handle an empty string", () => {
+      expect(getActivePage("")).toBe("")
+    })
   })
 })
