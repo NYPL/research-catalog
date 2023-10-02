@@ -2,6 +2,7 @@ import {
   Card,
   CardContent,
   Text,
+  Box,
   Link as DSLink,
 } from "@nypl/design-system-react-components"
 
@@ -27,13 +28,11 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
     >
       <CardContent>
         <DSLink href={drbResult.url} target="_blank">
-          <Text size="body2" noSpace isBold>
-            {drbResult.title}
-          </Text>
+          <Text size="body2">{drbResult.title}</Text>
         </DSLink>
 
         {drbResult?.authors && (
-          <Text size="body2" noSpace>
+          <Text size="body2">
             By{" "}
             {drbResult.authors.map((author: Author | Agent, index: number) => (
               <>
@@ -47,19 +46,27 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
         )}
 
         {drbResult?.readOnlineUrl && (
-          <DSLink href={drbResult.readOnlineUrl} target="_blank">
-            <Text size="body2" noSpace>
-              Read Online
-            </Text>
+          <DSLink
+            href={drbResult.readOnlineUrl}
+            target="_blank"
+            type="buttonPrimary"
+            mb="s"
+          >
+            Read Online
           </DSLink>
         )}
 
         {drbResult?.downloadLink && (
           <DSLink href={drbResult.downloadLink.url} target="_blank">
-            <Text size="body2" noSpace>
-              <DownloadIcon />
-              Download
-              {drbResult.downloadLink.mediaType || ""}
+            <Text
+              size="body2"
+              sx={{ display: "flex", alignItems: "center" }}
+              noSpace
+            >
+              <Box pr="xxs" sx={{ display: "flex", alignItems: "center" }}>
+                <DownloadIcon />
+              </Box>{" "}
+              Download {drbResult.downloadLink.mediaType || ""}
             </Text>
           </DSLink>
         )}

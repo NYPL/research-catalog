@@ -9,3 +9,6 @@ export const DRB_API_NAME = "drb"
 
 // API Routes
 export const DISCOVERY_API_SEARCH_ROUTE = "/discovery/resources"
+
+// Query params
+export const sourceParam = "?source=catalog"

@@ -5,6 +5,7 @@ import type {
   Agent,
   EditionLink,
 } from "../types/drbTypes"
+import { sourceParam } from "../config/constants"
 import { readOnlineMediaTypes, downloadMediaTypes } from "../utils/drbUtils"
 import { appConfig } from "../config/config"
 
@@ -31,7 +32,7 @@ export default class DRBResult {
   get url(): string {
     return `${appConfig.externalUrls.drbFrontEnd[appConfig.environment]}/work/${
       this.id
-    }&source=catalog`
+    }${sourceParam}`
   }
 
   get selectedEdition(): Edition {
@@ -69,12 +70,21 @@ export default class DRBResult {
     items.find((item) =>
       item.links.find((link) => {
         downloadLink = link
-        // See above for downloadable media types
         return downloadMediaTypes.indexOf(link.mediaType) > -1
       })
     )
 
-    return !downloadLink || !downloadLink.download ? null : downloadLink
+    // Format media type to show label in all uppercase (e.g. EPUB)
+    downloadLink.mediaType = downloadLink.mediaType
+      .replace(/(application|text)\/|\+zip/gi, "")
+      .toUpperCase()
+
+    // Add https if not present in download link and add source="catalog" query param
+    downloadLink.url = downloadLink.url.startsWith("http")
+      ? `${downloadLink.url}${sourceParam}`
+      : `https://${downloadLink.url}/${sourceParam}`
+
+    return !downloadLink?.download || !downloadLink?.url ? null : downloadLink
   }
 
   getAuthorsFromWork(work: DRBWork): Author[] | Agent[] {
