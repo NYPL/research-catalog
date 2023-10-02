@@ -160,7 +160,6 @@ export function mapQueryToSearchParams({
 export function mapElementsToSearchResultsBibs(
   elements: SearchResultsElement[]
 ): SearchResultsBib[] | null {
-  if (!elements) return null
   return elements
     .filter((result) => {
       return !(isEmpty(result) || (result.result && isEmpty(result.result)))
