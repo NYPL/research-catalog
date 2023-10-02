@@ -33,8 +33,6 @@ module.exports = {
   // Add more setup options before each __tests__ is run
   // setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   testPathIgnorePatterns: ["<rootDir>/node_modules/", "<rootDir>/.next/"],
-  // only files with .test in the file name will be run as part of npm test
-  testMatch: ["**/?(*.)+(test).[jt]s?(x)"],
   testEnvironment: "jsdom",
   transform: {
     // Use babel-jest to transpile __tests__ with the next/babel preset
