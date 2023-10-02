@@ -6,17 +6,18 @@ import {
   SimpleGrid,
 } from "@nypl/design-system-react-components"
 import { useRouter } from "next/router"
-import { isEmpty } from "underscore"
 
 import RCLink from "../../src/components/RCLink/RCLink"
 import Layout from "../../src/components/Layout/Layout"
 import DRBContainer from "../../src/components/DRB/DRBContainer"
 import { fetchResults } from "../api/search"
-import { mapQueryToSearchParams } from "../../src/utils/searchUtils"
+import {
+  mapQueryToSearchParams,
+  mapElementsToSearchResultsBibs,
+} from "../../src/utils/searchUtils"
 import { mapWorksToDRBResults } from "../../src/utils/drbUtils"
-import type { SearchResultsElement } from "../../src/types/searchTypes"
 import { SITE_NAME } from "../../src/config/constants"
-import SearchResultsBib from "../../src/models/SearchResultsBib"
+import type SearchResultsBib from "../../src/models/SearchResultsBib"
 
 /**
  * The Search page is responsible for fetching and displaying the Search results,
@@ -24,20 +25,17 @@ import SearchResultsBib from "../../src/models/SearchResultsBib"
  */
 export default function Search({ results }) {
   const { query } = useRouter()
-  const { itemListElement, totalResults } = results.results
+  const { itemListElement: searchResultsElements, totalResults } =
+    results.results
+
   const drbResponse = results.drbResults?.data
   const drbWorks = drbResponse?.works
 
+  // TODO: Move this to global context
   const searchParams = mapQueryToSearchParams(query)
 
-  // Map Search Results from response to SearchResultBib objects
-  const searchResultBibs = itemListElement
-    .filter((result: SearchResultsElement) => {
-      return !(isEmpty(result) || (result.result && isEmpty(result.result)))
-    })
-    .map((result: SearchResultsElement) => {
-      return new SearchResultsBib(result.result)
-    })
+  // Map Search Results Elements from response to SearchResultBib objects
+  const searchResultBibs = mapElementsToSearchResultsBibs(searchResultsElements)
 
   // Map DRB Works from response to DRBResult objects
   const drbResults = mapWorksToDRBResults(drbWorks)
@@ -50,11 +48,13 @@ export default function Search({ results }) {
       <Layout
         activePage="search"
         sidebar={
-          <DRBContainer
-            drbResults={drbResults}
-            totalWorks={drbResponse.totalWorks}
-            searchParams={searchParams}
-          />
+          drbResponse && (
+            <DRBContainer
+              drbResults={drbResults}
+              totalWorks={drbResponse.totalWorks}
+              searchParams={searchParams}
+            />
+          )
         }
       >
         {totalResults ? (

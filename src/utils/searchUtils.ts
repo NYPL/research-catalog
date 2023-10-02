@@ -1,16 +1,13 @@
-import {
-  isArray as _isArray,
-  isEmpty as _isEmpty,
-  mapObject as _mapObject,
-  forEach as _forEach,
-} from "underscore"
+import { isArray, isEmpty, mapObject, forEach } from "underscore"
 
 import type {
   SearchParams,
   SearchQueryParams,
   SearchFilters,
   Identifiers,
+  SearchResultsElement,
 } from "../types/searchTypes"
+import SearchResultsBib from "../models/SearchResultsBib"
 
 /**
  * getSortQuery
@@ -55,11 +52,11 @@ function getIdentifierQuery(identifiers: Identifiers): string {
 function getFilterQuery(filters: SearchFilters) {
   let filterQuery = ""
 
-  if (!_isEmpty(filters)) {
-    _mapObject(filters, (val, key) => {
+  if (!isEmpty(filters)) {
+    mapObject(filters, (val, key) => {
       // Property contains an array of its selected filter values:
-      if (val?.length && _isArray(val)) {
-        _forEach(val, (filter, index) => {
+      if (val?.length && isArray(val)) {
+        forEach(val, (filter, index) => {
           if (filter.value && filter.value !== "") {
             filterQuery += `&filters[${key}][${index}]=${encodeURIComponent(
               filter.value
@@ -154,4 +151,17 @@ export function mapQueryToSearchParams({
       lccn,
     },
   }
+}
+
+export function mapElementsToSearchResultsBibs(
+  elements: SearchResultsElement[]
+): SearchResultsBib[] | null {
+  if (!elements) return null
+  return elements
+    .filter((result) => {
+      return !(isEmpty(result) || (result.result && isEmpty(result.result)))
+    })
+    .map((result) => {
+      return new SearchResultsBib(result.result)
+    })
 }
