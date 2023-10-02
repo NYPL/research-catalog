@@ -153,6 +153,10 @@ export function mapQueryToSearchParams({
   }
 }
 
+/**
+ * mapElementsToSearchResultsBibs
+ * Maps the SearchResultsElement structure from the search results response to an array of SearchResultsBib objects
+ */
 export function mapElementsToSearchResultsBibs(
   elements: SearchResultsElement[]
 ): SearchResultsBib[] | null {
