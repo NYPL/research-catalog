@@ -48,7 +48,7 @@ export default function Search({ results }) {
       <Layout
         activePage="search"
         sidebar={
-          drbResponse && (
+          drbResponse.totalWorks && (
             <DRBContainer
               drbResults={drbResults}
               totalWorks={drbResponse.totalWorks}
