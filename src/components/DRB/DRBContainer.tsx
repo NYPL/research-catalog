@@ -41,29 +41,23 @@ const DRBContainer = ({ drbResults, totalWorks, searchParams }: DRBProps) => {
           </RCLink>
           .
         </Text>
-        {drbResults?.length ? (
-          <>
-            <SimpleGrid columns={1} gap="s" pb="s">
-              {drbResults.map((result: DRBResult) => (
-                <DRBCard key={result.id} drbResult={result} />
-              ))}
-            </SimpleGrid>
-            {totalWorks && (
-              <DSLink
-                href={`${
-                  appConfig.externalUrls.drbFrontEnd[appConfig.environment]
-                }/search${drbQuery}`}
-                target="_blank"
-              >
-                <Text size="body2" noSpace isBold>
-                  See {totalWorks.toLocaleString()} result
-                  {totalWorks === 1 ? "" : "s"} from Digital Research Books Beta
-                </Text>
-              </DSLink>
-            )}
-          </>
-        ) : (
-          <div>There was an error getting DRB results. Please try again.</div>
+        <SimpleGrid columns={1} gap="s" pb="s">
+          {drbResults.map((result: DRBResult) => (
+            <DRBCard key={result.id} drbResult={result} />
+          ))}
+        </SimpleGrid>
+        {totalWorks && (
+          <DSLink
+            href={`${
+              appConfig.externalUrls.drbFrontEnd[appConfig.environment]
+            }/search${drbQuery}`}
+            target="_blank"
+          >
+            <Text size="body2" noSpace isBold>
+              See {totalWorks.toLocaleString()} result
+              {totalWorks === 1 ? "" : "s"} from Digital Research Books Beta
+            </Text>
+          </DSLink>
         )}
       </CardContent>
     </Card>
