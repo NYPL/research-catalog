@@ -17,6 +17,7 @@ import { getDRBQueryStringFromSearchParams } from "../../utils/drbUtils"
 interface DRBProps {
   drbResults: DRBResult[]
   totalWorks: number
+  // TODO: Get these from context when SearchParamsContext is added
   searchParams: SearchParams
 }
 
