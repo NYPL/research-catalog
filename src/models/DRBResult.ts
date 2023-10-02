@@ -43,7 +43,7 @@ export default class DRBResult {
   }
 
   // TODO: Check to see if selectedItem is necessary
-  get readOnlineLink(): EditionLink | null {
+  get readOnlineUrl(): string | null {
     const { items } = this.selectedEdition
     if (!items) return null
     let selectedLink: EditionLink
@@ -56,7 +56,9 @@ export default class DRBResult {
 
     return !selectedItem || !selectedLink || !selectedLink.link_id
       ? null
-      : selectedLink
+      : `${appConfig.externalUrls.drbFrontEnd[appConfig.environment]}/read/${
+          selectedLink.link_id
+        }`
   }
 
   get downloadLink(): EditionLink | null {

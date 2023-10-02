@@ -1,9 +1,14 @@
-import { Card, CardContent, Text } from "@nypl/design-system-react-components"
+import {
+  Card,
+  CardContent,
+  Text,
+  Link as DSLink,
+} from "@nypl/design-system-react-components"
 
-import RCLink from "../RCLink/RCLink"
 import type DRBResult from "../../models/DRBResult"
 import { getAuthorURL } from "../../utils/drbUtils"
 import type { Author, Agent } from "../../types/drbTypes"
+import DownloadIcon from "../../client/icons/Download"
 
 interface DRBCardProps {
   drbResult: DRBResult
@@ -21,11 +26,11 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
       }}
     >
       <CardContent>
-        <RCLink href={drbResult.url}>
+        <DSLink href={drbResult.url} target="_blank">
           <Text size="body2" noSpace isBold>
             {drbResult.title}
           </Text>
-        </RCLink>
+        </DSLink>
 
         {drbResult?.authors && (
           <Text size="body2" noSpace>
@@ -33,10 +38,30 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
             {drbResult.authors.map((author: Author | Agent, index: number) => (
               <>
                 {index > 0 && ","}
-                <RCLink href={getAuthorURL(author)}>{author.name}</RCLink>
+                <DSLink href={getAuthorURL(author)} target="_blank">
+                  {author.name}
+                </DSLink>
               </>
             ))}
           </Text>
+        )}
+
+        {drbResult?.readOnlineUrl && (
+          <DSLink href={drbResult.readOnlineUrl} target="_blank">
+            <Text size="body2" noSpace>
+              Read Online
+            </Text>
+          </DSLink>
+        )}
+
+        {drbResult?.downloadLink && (
+          <DSLink href={drbResult.downloadLink.url} target="_blank">
+            <Text size="body2" noSpace>
+              <DownloadIcon />
+              Download
+              {drbResult.downloadLink.mediaType || ""}
+            </Text>
+          </DSLink>
         )}
       </CardContent>
     </Card>
