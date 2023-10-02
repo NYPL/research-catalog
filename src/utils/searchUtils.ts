@@ -21,9 +21,10 @@ import type {
 function getSortQuery(sortBy = "", order = ""): string {
   const reset = sortBy === "relevance"
   let sortQuery = ""
+  const sortDirectionQuery = order === "" ? "" : `&sort_direction=${order}`
 
   if (sortBy?.length && !reset) {
-    sortQuery = `&sort=${sortBy}&sort_direction=${order}`
+    sortQuery = `&sort=${sortBy}${sortDirectionQuery}`
   }
 
   return sortQuery
@@ -85,7 +86,7 @@ function getFilterQuery(filters: SearchFilters) {
 
 /**
  * getQueryString
- * Builds a query string from a SearchParams object, setting defaults on some undefined params.
+ * Builds a query string from a SearchParams object
  */
 export function getQueryString({
   sortBy = "relevance",

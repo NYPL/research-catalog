@@ -3,18 +3,21 @@ import {
   mapQueryToSearchParams,
   mapRequestBodyToSearchParams,
 } from "../../../src/utils/searchUtils"
-import { queryParamsEquality } from "../../helpers/searchUtils"
+import { queryParamsEquality } from "../../helpers/searchHelpers"
 
 const checkQueryParamsEquality = queryParamsEquality(getQueryString)
 
 describe("searchUtils", () => {
   describe("getQueryString", () => {
-    it("", () => {
-      const testQuery = "?q=shel%20silverstein&search_scope=contributor"
+    it("constructs a basic query", () => {
+      const testQuery =
+        "?q=shel%20silverstein&search_scope=contributor&sort=datePublished&sort_direction=asc"
       expect(
         checkQueryParamsEquality(testQuery, {
           q: "shel silverstein",
           field: "contributor",
+          sortBy: "datePublished",
+          order: "asc",
         })
       ).toBe(true)
     })
