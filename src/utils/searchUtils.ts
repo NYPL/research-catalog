@@ -12,8 +12,6 @@ import type {
   Identifiers,
 } from "../types/searchTypes"
 
-// import { initialSearchFormState } from "./advancedSearchUtils"
-
 /**
  * getSortQuery
  * Get the sort type and order and format into query param snippet.
