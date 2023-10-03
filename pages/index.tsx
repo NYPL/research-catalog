@@ -30,15 +30,15 @@ export default function Home() {
               Black Culture, and The New York Public Library for the Performing
               Arts. Plus, access materials from library collections at Columbia
               University, Harvard University, and Princeton University.{" "}
-              <RCLink href="https://www.nypl.org/research/collections/about/shared-collection-catalog">
+              <Link href="/research/collections/about/shared-collection-catalog">
                 Learn more.
-              </RCLink>
+              </Link>
             </p>
             <p>
               Please note that the Research Catalog does not include circulating
               materials. For books and more that you can check out to take home
               please visit our{" "}
-              <RCLink href="https://browse.nypl.org">
+              <RCLink href="https://nypl.na2.iiivega.com/">
                 circulating branch catalog.
               </RCLink>{" "}
               The{" "}
@@ -64,9 +64,7 @@ export default function Home() {
               layout="row"
             >
               <CardHeading level="four">
-                <RCLink href="https://nypl.org/research/collections">
-                  Collections
-                </RCLink>
+                <Link href="/research/collections">Collections</Link>
               </CardHeading>
               <CardContent>
                 <p>
@@ -85,9 +83,7 @@ export default function Home() {
               layout="row"
             >
               <CardHeading level="four">
-                <RCLink href="https://nypl.org/locations/map?libraries=research">
-                  Locations
-                </RCLink>
+                <Link href="/locations/map?libraries=research">Locations</Link>
               </CardHeading>
               <CardContent>
                 <p>
@@ -106,9 +102,7 @@ export default function Home() {
               layout="row"
             >
               <CardHeading level="four">
-                <RCLink href="https://nypl.org/about/divisions">
-                  Divisions
-                </RCLink>
+                <Link href="/about/divisions">Divisions</Link>
               </CardHeading>
               <CardContent>
                 <p>
@@ -127,9 +121,7 @@ export default function Home() {
               layout="row"
             >
               <CardHeading level="four">
-                <RCLink href="https://nypl.org/research/support">
-                  Support
-                </RCLink>
+                <Link href="/research/support">Support</Link>
               </CardHeading>
               <CardContent>
                 <p>
@@ -148,9 +140,7 @@ export default function Home() {
               layout="row"
             >
               <CardHeading level="four">
-                <RCLink href="https://nypl.org/research/services">
-                  Services
-                </RCLink>
+                <Link href="/research/services">Services</Link>
               </CardHeading>
               <CardContent>
                 <p>
