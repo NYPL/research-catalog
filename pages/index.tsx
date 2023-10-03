@@ -9,7 +9,8 @@ import {
 
 import RCLink from "../src/components/RCLink/RCLink"
 import {
-  SITE_NAME, CIRCULATING_CATALOG_URL,
+  SITE_NAME,
+  CIRCULATING_CATALOG_URL,
   LEGACY_CATALOG_URL,
 } from "../src/config/constants"
 
@@ -40,10 +41,7 @@ export default function Home() {
           <RCLink href={CIRCULATING_CATALOG_URL}>
             circulating branch catalog.
           </RCLink>{" "}
-          The{" "}
-          <RCLink href={LEGACY_CATALOG_URL}>
-            legacy research catalog
-          </RCLink>{" "}
+          The <RCLink href={LEGACY_CATALOG_URL}>legacy research catalog</RCLink>{" "}
           is still available, but does not include all of our Scan & Deliver
           options or the Columbia University, Harvard University, and Princeton
           University material from the Shared Collection.
