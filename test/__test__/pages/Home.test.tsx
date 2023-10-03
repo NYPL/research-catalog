@@ -11,4 +11,10 @@ describe("Home", () => {
     const headerText = "Explore the Library's Vast Research Collections & More"
     expect(header).toHaveTextContent(headerText)
   })
+  it("should render H4's", () => {
+    render(<Home />)
+    
+    const headersLevel4 = screen.getAllByRole("heading", { level: 4 })
+    expect(headersLevel4).toHaveLength(5)
+  })
 })

@@ -11,6 +11,7 @@
     "prettier": "prettier --write .",
     "prepare": "husky install",
     "test": "jest",
+    "test-watch": "jest --watch",
     "coverage": "jest --coverage"
   },
   "dependencies": {

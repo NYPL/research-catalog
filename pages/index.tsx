@@ -8,7 +8,10 @@ import {
 } from "@nypl/design-system-react-components"
 
 import RCLink from "../src/components/RCLink/RCLink"
-import { SITE_NAME } from "../src/config/constants"
+import {
+  SITE_NAME, CIRCULATING_CATALOG_URL,
+  LEGACY_CATALOG_URL,
+} from "../src/config/constants"
 
 export default function Home() {
   return (
@@ -34,11 +37,11 @@ export default function Home() {
           Please note that the Research Catalog does not include circulating
           materials. For books and more that you can check out to take home
           please visit our{" "}
-          <RCLink href="https://browse.nypl.org">
+          <RCLink href={CIRCULATING_CATALOG_URL}>
             circulating branch catalog.
           </RCLink>{" "}
           The{" "}
-          <RCLink href="https://legacycatalog.nypl.org/">
+          <RCLink href={LEGACY_CATALOG_URL}>
             legacy research catalog
           </RCLink>{" "}
           is still available, but does not include all of our Scan & Deliver
