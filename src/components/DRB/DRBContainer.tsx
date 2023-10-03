@@ -13,6 +13,7 @@ import DRBCard from "./DRBCard"
 import type DRBResult from "../../models/DRBResult"
 import type { SearchParams } from "../../types/searchTypes"
 import { getDRBQueryStringFromSearchParams } from "../../utils/drbUtils"
+import { DRB_BASE_URL } from "../../config/constants"
 
 interface DRBProps {
   drbResults: DRBResult[]
@@ -47,12 +48,7 @@ const DRBContainer = ({ drbResults, totalWorks, searchParams }: DRBProps) => {
           ))}
         </SimpleGrid>
         {totalWorks && (
-          <DSLink
-            href={`${
-              appConfig.externalUrls.drbFrontEnd[appConfig.environment]
-            }/search${drbQuery}`}
-            target="_blank"
-          >
+          <DSLink href={`${DRB_BASE_URL}/search${drbQuery}`} target="_blank">
             <Text size="body2" noSpace isBold>
               See {totalWorks.toLocaleString()} result
               {totalWorks === 1 ? "" : "s"} from Digital Research Books Beta

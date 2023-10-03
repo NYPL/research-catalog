@@ -5,10 +5,8 @@ import type {
   Agent,
   EditionLink,
 } from "../types/drbTypes"
-import { sourceParam } from "../config/constants"
+import { SOURCE_PARAM, DRB_BASE_URL } from "../config/constants"
 import { readOnlineMediaTypes, downloadMediaTypes } from "../utils/drbUtils"
-import { appConfig } from "../config/config"
-
 /**
  * The DRBResult class contains the data and getter functions
  * for a single DRB search result entity.
@@ -30,9 +28,7 @@ export default class DRBResult {
   }
 
   get url(): string {
-    return `${appConfig.externalUrls.drbFrontEnd[appConfig.environment]}/work/${
-      this.id
-    }${sourceParam}`
+    return `${DRB_BASE_URL}/work/${this.id}${SOURCE_PARAM}`
   }
 
   get selectedEdition(): Edition {
@@ -43,48 +39,60 @@ export default class DRBResult {
     )
   }
 
-  // TODO: Check to see if selectedItem is necessary
   get readOnlineUrl(): string | null {
-    const { items } = this.selectedEdition
-    if (!items) return null
+    if (!this.selectedEdition.items) return null
+
+    // Populate selected link with first item on the selected edition that includes
+    // a link with a media type included in the readOnlineMediaTypes array.
     let selectedLink: EditionLink
-    const selectedItem = items.find((item) =>
+    this.selectedEdition.items.find((item) =>
       item.links.find((link) => {
         selectedLink = link
         return readOnlineMediaTypes.indexOf(link.mediaType) > -1
       })
     )
 
-    return !selectedItem || !selectedLink || !selectedLink.link_id
+    // Return null if no selected link is found. Otherwise, return the URL
+    return !selectedLink?.link_id
       ? null
-      : `${appConfig.externalUrls.drbFrontEnd[appConfig.environment]}/read/${
-          selectedLink.link_id
-        }`
+      : `${DRB_BASE_URL}/read/${selectedLink.link_id}`
   }
 
   get downloadLink(): EditionLink | null {
-    const { items } = this.selectedEdition
-    if (!items) return null
+    if (!this.selectedEdition.items) return null
 
+    // Populate download link with first item on the selected edition that includes
+    // a link with a media type included in the downloadMediaTypes array.
     let downloadLink: EditionLink
-    items.find((item) =>
+    this.selectedEdition.items.find((item) =>
       item.links.find((link) => {
         downloadLink = link
         return downloadMediaTypes.indexOf(link.mediaType) > -1
       })
     )
 
+    const formattedDownloadLink = this.formatDownloadLink(downloadLink)
+
+    return !formattedDownloadLink?.download || !formattedDownloadLink?.url
+      ? null
+      : formattedDownloadLink
+  }
+
+  // Formats the download link media type and url for rendering
+  formatDownloadLink(downloadLink: EditionLink) {
+    const formattedDownloadLink: EditionLink = downloadLink
+
     // Format media type to show label in all uppercase (e.g. EPUB)
-    downloadLink.mediaType = downloadLink.mediaType
+    formattedDownloadLink.mediaType = downloadLink.mediaType
       .replace(/(application|text)\/|\+zip/gi, "")
       .toUpperCase()
 
     // Add https if not present in download link and add source="catalog" query param
-    downloadLink.url = downloadLink.url.startsWith("http")
-      ? `${downloadLink.url}${sourceParam}`
-      : `https://${downloadLink.url}/${sourceParam}`
+    formattedDownloadLink.url = downloadLink.url.startsWith("http")
+      ? `${downloadLink.url}${SOURCE_PARAM}`
+      : `https://${downloadLink.url}/${SOURCE_PARAM}`
 
-    return !downloadLink?.download || !downloadLink?.url ? null : downloadLink
+    return formattedDownloadLink
   }
 
   getAuthorsFromWork(work: DRBWork): Author[] | Agent[] {

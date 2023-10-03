@@ -7,7 +7,7 @@ import type {
   Agent,
 } from "../types/drbTypes"
 import DRBResult from "../models/DRBResult"
-import { DRB_RESULTS_PER_PAGE } from "../config/constants"
+import { DRB_RESULTS_PER_PAGE, SOURCE_PARAM } from "../config/constants"
 import { isEmpty } from "underscore"
 import { appConfig } from "../config/config"
 
@@ -180,5 +180,5 @@ export const downloadMediaTypes = ["application/epub+zip", "application/pdf"]
 export function getAuthorURL(author: Author | Agent) {
   return `${
     appConfig.externalUrls.drbFrontEnd[appConfig.environment]
-  }/search?query=${`author:${author.name}&source=catalog`}`
+  }/search?query=${`author:${author.name}${SOURCE_PARAM}`}`
 }
