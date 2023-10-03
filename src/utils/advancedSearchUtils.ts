@@ -13,7 +13,7 @@ export const initialSearchFormState: SearchParams = {
   title: "",
   contributor: "",
   subject: "",
-  selectedFilters: {
+  filters: {
     language: "",
     dateBefore: "",
     dateAfter: "",

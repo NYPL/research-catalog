@@ -6,6 +6,7 @@ import {
   SimpleGrid,
 } from "@nypl/design-system-react-components"
 import { useRouter } from "next/router"
+import { parse } from "qs"
 
 import RCLink from "../../src/components/RCLink/RCLink"
 import Layout from "../../src/components/Layout/Layout"
@@ -88,8 +89,18 @@ export default function Search({ results }) {
   )
 }
 
-export async function getServerSideProps({ query }) {
-  const results = await fetchResults(mapQueryToSearchParams(query))
+/**
+ * resolvedUrl is the original URL of the search page including the search query parameters.
+ * It is provided by Next.js as an attribute of the context object that is passed to getServerSideProps.
+ *
+ * Here it is used to construct a SearchParams object from the parsed query parameters in order to fetch the
+ * relevant search results on the server side (via fetchResults).
+ *
+ */
+export async function getServerSideProps({ resolvedUrl }) {
+  // Remove everything before the query string delineator '?', necessary for correctly parsing the 'q' param.
+  const queryString = resolvedUrl.slice(resolvedUrl.indexOf("?") + 1)
+  const results = await fetchResults(mapQueryToSearchParams(parse(queryString)))
   return {
     props: {
       results: JSON.parse(JSON.stringify(results)),
