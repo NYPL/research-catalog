@@ -50,7 +50,7 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
             href={drbResult.readOnlineUrl}
             target="_blank"
             type="buttonPrimary"
-            mb="s"
+            mb={drbResult?.downloadLink ? "s" : ""}
           >
             Read Online
           </DSLink>
