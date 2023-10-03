@@ -44,7 +44,7 @@ import { getQueryString } from "../../src/utils/searchUtils"
 export default function AdvancedSearch() {
   const router = useRouter()
   const inputRef = useRef<TextInputRefType>()
-  const debounceInterval = 500
+  const debounceInterval = 20
 
   const [alert, setAlert] = useState(false)
 
@@ -99,7 +99,7 @@ export default function AdvancedSearch() {
     if (!queryString.length) {
       setAlert(true)
     } else {
-      await router.push(`/search/?${queryString}`)
+      await router.push(`/search/${queryString}`)
     }
   }
 
@@ -128,7 +128,7 @@ export default function AdvancedSearch() {
         // We are using a post request on advanced search when JS is disabled so that we can build the query
         // string correctly on the server and redirect the user to the search results.
         method="post"
-        action={`${BASE_URL}/search`}
+        action={`${BASE_URL}/api/search`}
         onSubmit={handleSubmit}
       >
         <FormRow gap="grid.m">
@@ -155,7 +155,7 @@ export default function AdvancedSearch() {
               name="language"
               labelText="Language"
               aria-labelledby="languageSelect-label"
-              value={searchFormState["selectedFilters"].language}
+              value={searchFormState["filters"].language}
               onChange={(e) => handleInputChange(e, "filter_change")}
             >
               {languageOptions.map((language) => {
@@ -178,16 +178,16 @@ export default function AdvancedSearch() {
               labelText="Dates"
               nameFrom="dateAfter"
               nameTo="dateBefore"
-              initialDate={searchFormState["selectedFilters"].dateAfter}
-              initialDateTo={searchFormState["selectedFilters"].dateBefore}
+              initialDate={searchFormState["filters"].dateAfter}
+              initialDateTo={searchFormState["filters"].dateBefore}
               onChange={debounce((e) => handleDateChange(e), debounceInterval)}
             />
             <CheckboxGroup
               id="formats"
-              name="formats"
+              name="materialType"
               labelText="Formats"
               onChange={handleCheckboxChange}
-              value={searchFormState["selectedFilters"].materialType}
+              value={searchFormState["filters"].materialType}
               sx={{
                 "> div": {
                   display: "grid",

@@ -14,8 +14,8 @@ export const searchFormReducer = (
     case "filter_change": {
       return {
         ...formState,
-        selectedFilters: {
-          ...formState.selectedFilters,
+        filters: {
+          ...formState.filters,
           [action.field]: action.payload,
         },
       }

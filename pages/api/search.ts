@@ -5,6 +5,8 @@ import type {
   SearchResultsResponse,
 } from "../../src/types/searchTypes"
 import {
+  BASE_URL,
+  PATHS,
   DISCOVERY_API_NAME,
   DISCOVERY_API_SEARCH_ROUTE,
   RESULTS_PER_PAGE,
@@ -13,13 +15,14 @@ import nyplApiClient from "../../src/server/nyplApiClient/index"
 import {
   getQueryString,
   mapQueryToSearchParams,
+  mapRequestBodyToSearchParams,
 } from "../../src/utils/searchUtils"
 import { standardizeBibId } from "../../src/utils/bibUtils"
 
 export async function fetchResults(
   searchParams: SearchParams
 ): Promise<SearchResultsResponse | Error> {
-  const { q, field, selectedFilters } = searchParams
+  const { q, field, filters } = searchParams
 
   // If user is making a search for bib number (i.e. field set to "standard_number"),
   // standardize the bib ID and pass it as the search keywords
@@ -32,7 +35,7 @@ export async function fetchResults(
     field === "journal_title"
       ? {
           field: "title",
-          selectedFilters: { ...selectedFilters, issuance: ["urn:biblevel:s"] },
+          filters: { ...filters, issuance: ["urn:biblevel:s"] },
         }
       : {}
 
@@ -42,8 +45,8 @@ export async function fetchResults(
     q: keywordsOrBibId,
   })
 
-  const aggregationQuery = `/aggregations?${queryString}`
-  const resultsQuery = `?${queryString}&per_page=${RESULTS_PER_PAGE.toString()}`
+  const aggregationQuery = `/aggregations${queryString}`
+  const resultsQuery = `${queryString}&per_page=${RESULTS_PER_PAGE.toString()}`
 
   // Get the following in parallel:
   //  - search results
@@ -77,6 +80,14 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     const searchParams = mapQueryToSearchParams(req.query)
     const response = await fetchResults(searchParams)
     res.status(200).json(response)
+  }
+  // If we emit a POST request to the route handler, we are likely submitting an advanced search
+  // with JS disabled. In this case, parse the request body and redirect to the results page.
+  if (req.method === "POST") {
+    const body = await req.body
+    const searchParams = mapRequestBodyToSearchParams(body)
+    const queryString = getQueryString(searchParams)
+    res.redirect(BASE_URL + PATHS.SEARCH + queryString)
   }
 }
 

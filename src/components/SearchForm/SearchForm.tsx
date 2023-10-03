@@ -6,7 +6,7 @@ import styles from "../../../styles/components/Search.module.scss"
 import RCLink from "../RCLink/RCLink"
 import { getQueryString } from "../../utils/searchUtils"
 import type { SearchFormEvent } from "../../types/searchTypes"
-import { BASE_URL } from "../../config/constants"
+import { BASE_URL, PATHS } from "../../config/constants"
 
 /**
  * The SearchForm component renders and controls the Search form and
@@ -24,7 +24,7 @@ const SearchForm = () => {
     }
     const queryString = getQueryString(searchParams)
 
-    await router.push(`/search/?${queryString}`)
+    await router.push(`${PATHS.SEARCH}${queryString}`)
   }
 
   return (

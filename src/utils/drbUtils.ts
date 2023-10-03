@@ -57,7 +57,7 @@ function mapSearchFiltersToDRBFilters(filters: SearchFilters = {}): DRBFilters {
  *  Given a hash of SearchParams, returns a hash representing an equivalent query against DRB API
  */
 function mapSearchParamsToDRBQueryParams(params: SearchParams): DRBQueryParams {
-  const { q, field, sortBy, order, selectedFilters } = params
+  const { q, field, sortBy, order, filters } = params
 
   const keywordQuery = getDRBKeywordQuery(q, field)
   const advancedQuery = getDRBAdvancedQuery(params)
@@ -83,7 +83,7 @@ function mapSearchParamsToDRBQueryParams(params: SearchParams): DRBQueryParams {
     language,
     dateAfter,
     dateBefore,
-  } = selectedFilters || {}
+  } = filters || {}
 
   // DRB doesn't handle subject or contributor in `filter` param, so handle
   // them separately:
