@@ -160,7 +160,7 @@ export default function AdvancedSearch() {
                   name="language"
                   labelText="Language"
                   aria-labelledby="languageSelect-label"
-                  value={searchFormState["selectedFilters"].language}
+                  value={searchFormState["filters"].language}
                   onChange={(e) => handleInputChange(e, "filter_change")}
                 >
                   {languageOptions.map((language) => {
@@ -183,8 +183,8 @@ export default function AdvancedSearch() {
                   labelText="Dates"
                   nameFrom="dateAfter"
                   nameTo="dateBefore"
-                  initialDate={searchFormState["selectedFilters"].dateAfter}
-                  initialDateTo={searchFormState["selectedFilters"].dateBefore}
+                  initialDate={searchFormState["filters"].dateAfter}
+                  initialDateTo={searchFormState["filters"].dateBefore}
                   onChange={debounce(
                     (e) => handleDateChange(e),
                     debounceInterval
@@ -195,7 +195,7 @@ export default function AdvancedSearch() {
                   name="formats"
                   labelText="Formats"
                   onChange={handleCheckboxChange}
-                  value={searchFormState["selectedFilters"].materialType}
+                  value={searchFormState["filters"].materialType}
                   sx={{
                     "> div": {
                       display: "grid",
