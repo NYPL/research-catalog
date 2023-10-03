@@ -13,7 +13,7 @@ describe("Home", () => {
   })
   it("should render H4's", () => {
     render(<Home />)
-    
+
     const headersLevel4 = screen.getAllByRole("heading", { level: 4 })
     expect(headersLevel4).toHaveLength(5)
   })

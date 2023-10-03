@@ -13,7 +13,7 @@ describe("404", () => {
     expect(heading).toHaveTextContent(FourOhFourText)
   })
   it("should have links to circ and legacy catalogs", () => {
-    render(<Custom404/>)
+    render(<Custom404 />)
 
     const links = screen.getAllByRole("link")
     expect(links[0])
