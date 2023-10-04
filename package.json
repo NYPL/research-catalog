@@ -57,7 +57,8 @@
     "next-router-mock": "^0.9.10",
     "prettier": "^2.8.8",
     "sass": "^1.63.6",
-    "typescript": "5.0.4"
+    "typescript": "5.0.4",
+    "user-event": "^4.0.0"
   },
   "lint-staged": {
     "**/*.{ts,tsx,json,sass}": [

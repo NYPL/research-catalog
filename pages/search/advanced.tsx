@@ -94,7 +94,6 @@ export default function AdvancedSearch() {
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
-
     const queryString = getQueryString(searchFormState as SearchParams)
     if (!queryString.length) {
       setAlert(true)
@@ -191,8 +190,8 @@ export default function AdvancedSearch() {
               sx={{
                 "> div": {
                   display: "grid",
-                  "grid-template-columns": "repeat(2, minmax(0, 1fr))",
-                  "grid-gap": "var(--nypl-space-s)",
+                  gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+                  gridGap: "var(--nypl-space-s)",
                   div: {
                     marginTop: "0 !important",
                   },
