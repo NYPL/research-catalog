@@ -1,7 +1,5 @@
 import React from "react"
-import { render, screen, act } from "@testing-library/react"
-import userEvent from "@testing-library/user-event"
-import mockRouter from "next-router-mock"
+import { render, screen } from "@testing-library/react"
 // this import, as well as its use on line 15 is to avoid the following error:
 // TypeError: Cannot use 'in' operator to search for 'beforePopState' in null
 import { MemoryRouterProvider } from "next-router-mock/MemoryRouterProvider"
