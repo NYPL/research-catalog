@@ -12,8 +12,7 @@
     "prepare": "husky install",
     "test": "jest",
     "test-watch": "jest --watch",
-    "coverage": "jest --coverage",
-    "spaghetti": "jest --detectOpenHandles"
+    "coverage": "jest --coverage"
   },
   "dependencies": {
     "@nypl/design-system-react-components": "^1.6.1",

@@ -57,7 +57,6 @@ export default function AdvancedSearch() {
     e.preventDefault()
     alert && setAlert(false)
     const target = e.target as HTMLInputElement
-
     dispatch({
       type: type,
       field: target.name,

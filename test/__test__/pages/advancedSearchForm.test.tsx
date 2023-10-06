@@ -8,8 +8,9 @@ import AdvancedSearch from "../../../pages/search/advanced"
 
 global.console = {
   ...console,
-  warn: jest.fn(),
+  warn: jest.fn(() => ""),
 }
+
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
 describe("Advanced Search Form", () => {
@@ -18,8 +19,15 @@ describe("Advanced Search Form", () => {
       screen.getByRole("button", { name: "Submit" }),
       new MouseEvent("click")
     )
-  xit("displays alert when no fields are submitted", () => {
+  afterEach(async () => {
+    await act(
+      async () =>
+        await userEvent.click(screen.getByRole("button", { name: "Clear" }))
+    )
+  })
+  it("displays alert when no fields are submitted", () => {
     render(<AdvancedSearch />)
+
     submit()
     screen.getByText(
       "Please enter at least one field to submit an advanced search."
@@ -50,6 +58,47 @@ describe("Advanced Search Form", () => {
       submit()
       expect(mockRouter.asPath).toBe(
         "/search?q=&filters%5Blanguage%5D=lang%3Aaze"
+      )
+    })
+  })
+  it("can check material checkboxes", async () => {
+    render(<AdvancedSearch />)
+    await act(async () => {
+      await userEvent.click(screen.getByLabelText("Notated music"))
+      await userEvent.click(screen.getByLabelText("Cartographic"))
+      submit()
+      expect(mockRouter.asPath).toBe(
+        "/search?q=&filters%5BmaterialType%5D%5B0%5D=resourcetypes%3Anot&filters%5BmaterialType%5D%5B1%5D=resourcetypes%3Acar"
+      )
+    })
+  })
+  it("can clear the form", async () => {
+    render(<AdvancedSearch />)
+
+    await act(async () => {
+      const notatedMusic = screen.getByRole("checkbox", {
+        name: "Notated music",
+      })
+      await userEvent.click(notatedMusic)
+      const cartographic = screen.getByLabelText("Cartographic")
+      await userEvent.click(cartographic)
+      await userEvent.selectOptions(
+        screen.getByRole("combobox", { name: "Language" }),
+        "Azerbaijani"
+      )
+      const [keywordInput, contributorInput, titleInput, subjectInput] =
+        screen.getAllByRole("textbox")
+      await userEvent.type(keywordInput, "spaghetti")
+      await userEvent.type(contributorInput, "strega nonna")
+      await userEvent.type(titleInput, "il amore di pasta")
+      await userEvent.type(subjectInput, "italian food")
+
+      await userEvent.click(screen.getByRole("button", { name: "Clear" }))
+      expect(notatedMusic).not.toBeChecked()
+      submit()
+      // presence of alert means the form was cleared before hitting submit
+      screen.getByText(
+        "Please enter at least one field to submit an advanced search."
       )
     })
   })
