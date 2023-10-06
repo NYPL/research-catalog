@@ -1,6 +1,5 @@
 import React from "react"
 import { render, screen, act } from "@testing-library/react"
-import "@testing-library/jest-dom"
 import RCLink from "./RCLink"
 import userEvent from "@testing-library/user-event"
 import { MemoryRouterProvider } from "next-router-mock/MemoryRouterProvider"

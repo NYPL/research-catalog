@@ -1,7 +1,7 @@
 import React from "react"
 import { render, screen, within } from "@testing-library/react"
-import "@testing-library/jest-dom"
-import Layout from "../Layout"
+
+import Layout from "./Layout"
 
 describe("Layout", () => {
   it("should render an H1", () => {
@@ -12,6 +12,7 @@ describe("Layout", () => {
     )
 
     const header = screen.getByRole("heading", { level: 1 })
+
     const headerText = "Research Catalog"
     expect(header).toHaveTextContent(headerText)
   })

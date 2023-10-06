@@ -1,6 +1,6 @@
 import React from "react"
 import { render, screen } from "@testing-library/react"
-import "@testing-library/jest-dom"
+
 import mockRouter from "next-router-mock"
 
 import { results } from "../data/searchResultsManyBibs"

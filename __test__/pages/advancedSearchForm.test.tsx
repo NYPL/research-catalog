@@ -1,16 +1,11 @@
 import React from "react"
 import { fireEvent, render, screen, act } from "@testing-library/react"
-import "@testing-library/jest-dom"
 import mockRouter from "next-router-mock"
 import userEvent from "@testing-library/user-event"
 
 import AdvancedSearch from "../../pages/search/advanced"
 
-global.console = {
-  ...console,
-  warn: jest.fn(() => ""),
-}
-
+// Mock next router
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
 describe("Advanced Search Form", () => {
