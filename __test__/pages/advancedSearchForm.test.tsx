@@ -4,7 +4,7 @@ import "@testing-library/jest-dom"
 import mockRouter from "next-router-mock"
 import userEvent from "@testing-library/user-event"
 
-import AdvancedSearch from "../../../pages/search/advanced"
+import AdvancedSearch from "../../pages/search/advanced"
 
 global.console = {
   ...console,

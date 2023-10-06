@@ -1,5 +1,5 @@
-import { getActivePage } from "../../../src/utils/appUtils"
-import { PATHS } from "../../../src/config/constants"
+import { getActivePage } from "../../src/utils/appUtils"
+import { PATHS } from "../../src/config/constants"
 
 describe("appUtils", () => {
   describe("getActivePage", () => {

@@ -3,9 +3,9 @@ import { render, screen } from "@testing-library/react"
 import "@testing-library/jest-dom"
 import mockRouter from "next-router-mock"
 
-import { results } from "../../data/searchResultsManyBibs"
-import { noBibs } from "../../data/searchResultsNoBibs"
-import SearchResults from "../../../pages/search/index"
+import { results } from "../data/searchResultsManyBibs"
+import { noBibs } from "../data/searchResultsNoBibs"
+import SearchResults from "../../pages/search/index"
 
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 

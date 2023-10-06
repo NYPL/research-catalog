@@ -1,8 +1,8 @@
 import React from "react"
 import { render, screen } from "@testing-library/react"
 import "@testing-library/jest-dom"
-import Custom404 from "../../../pages/404"
-import Redirect404 from "../../../pages/404/redirect"
+import Custom404 from "../../pages/404"
+import Redirect404 from "../../pages/404/redirect"
 
 describe("404", () => {
   it("should display 404 text", () => {
