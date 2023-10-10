@@ -5,11 +5,7 @@ import Layout from "../Layout"
 
 describe("Layout", () => {
   it("should render an H1", () => {
-    render(
-      <Layout>
-        <></>
-      </Layout>
-    )
+    render(<Layout></Layout>)
 
     const header = screen.getByRole("heading", { level: 1 })
     const headerText = "Research Catalog"

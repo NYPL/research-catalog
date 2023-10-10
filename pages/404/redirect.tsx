@@ -12,26 +12,22 @@ export default function Redirect404() {
         <title>404 Not Found</title>
       </Head>
       <Layout activePage="404">
-        <>
-          <Heading level="one">We&apos;re sorry...</Heading>
-          <p>
-            You&apos;ve followed an out-of-date link to our research catalog.
-          </p>
-          <p>
-            You may be able to find what you&apos;re looking for in the{" "}
-            <RCLink href="/">Research Catalog</RCLink> or the{" "}
-            <RCLink href={appConfig.externalUrls.circulatingCatalog}>
-              Circulating Catalog
-            </RCLink>
-            . for research materials.
-          </p>
-          <p>
-            You can also try the{" "}
-            <RCLink href={appConfig.externalUrls.legacyCatalog}>
-              Legacy Catalog
-            </RCLink>
-          </p>
-        </>
+        <Heading level="one">We&apos;re sorry...</Heading>
+        <p>You&apos;ve followed an out-of-date link to our research catalog.</p>
+        <p>
+          You may be able to find what you&apos;re looking for in the{" "}
+          <RCLink href="/">Research Catalog</RCLink> or the{" "}
+          <RCLink href={appConfig.externalUrls.circulatingCatalog}>
+            Circulating Catalog
+          </RCLink>
+          . for research materials.
+        </p>
+        <p>
+          You can also try the{" "}
+          <RCLink href={appConfig.externalUrls.legacyCatalog}>
+            Legacy Catalog
+          </RCLink>
+        </p>
       </Layout>
     </>
   )

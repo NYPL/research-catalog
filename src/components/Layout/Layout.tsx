@@ -1,4 +1,4 @@
-import { type ReactElement } from "react"
+import type { ReactElement, PropsWithChildren } from "react"
 import {
   Box,
   TemplateAppContainer,
@@ -14,7 +14,6 @@ import SearchForm from "../SearchForm/SearchForm"
 import { BASE_URL } from "../../config/constants"
 
 interface LayoutProps {
-  children: ReactElement
   sidebar?: ReactElement
   activePage?: RCPage
 }
@@ -23,7 +22,11 @@ interface LayoutProps {
  * The Layout component wraps the TemplateAppContainer from the DS and
  * controls the rendering of Research Catalog header components per-page.
  */
-const Layout = ({ children, sidebar, activePage }: LayoutProps) => {
+const Layout = ({
+  children,
+  sidebar,
+  activePage,
+}: PropsWithChildren<LayoutProps>) => {
   const showSearch = activePage === "search"
   const showHeader = activePage !== "404"
 

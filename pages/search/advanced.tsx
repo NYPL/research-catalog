@@ -116,134 +116,130 @@ export default function AdvancedSearch() {
         <title>Advanced Search | {SITE_NAME}</title>
       </Head>
       <Layout activePage="advanced">
-        <>
-          {alert && (
-            <Notification
-              notificationType="warning"
-              notificationContent={
-                <>
-                  Please enter at least one field to submit an advanced search.
-                </>
-              }
-            />
-          )}
-          <Heading level="two">Advanced Search</Heading>
-          <Form
-            id="advancedSearchForm"
-            // We are using a post request on advanced search when JS is disabled so that we can build the query
-            // string correctly on the server and redirect the user to the search results.
-            method="post"
-            action={`${BASE_URL}/search`}
-            onSubmit={handleSubmit}
-          >
-            <FormRow gap="grid.m">
-              <FormField id="advancedSearchLeft" gap="grid.s">
-                {textInputFields.map(({ name, label }) => {
+        {alert && (
+          <Notification
+            notificationType="warning"
+            notificationContent={
+              <>Please enter at least one field to submit an advanced search.</>
+            }
+          />
+        )}
+        <Heading level="two">Advanced Search</Heading>
+        <Form
+          id="advancedSearchForm"
+          // We are using a post request on advanced search when JS is disabled so that we can build the query
+          // string correctly on the server and redirect the user to the search results.
+          method="post"
+          action={`${BASE_URL}/search`}
+          onSubmit={handleSubmit}
+        >
+          <FormRow gap="grid.m">
+            <FormField id="advancedSearchLeft" gap="grid.s">
+              {textInputFields.map(({ name, label }) => {
+                return (
+                  <TextInput
+                    id={name}
+                    labelText={label}
+                    type="text"
+                    name={name}
+                    value={searchFormState[name]}
+                    key={name}
+                    onChange={debounce(
+                      (e) => handleInputChange(e, "input_change"),
+                      debounceInterval
+                    )}
+                    ref={inputRef}
+                  />
+                )
+              })}
+              <Select
+                id="languageSelect"
+                name="language"
+                labelText="Language"
+                aria-labelledby="languageSelect-label"
+                value={searchFormState["filters"].language}
+                onChange={(e) => handleInputChange(e, "filter_change")}
+              >
+                {languageOptions.map((language) => {
                   return (
-                    <TextInput
-                      id={name}
-                      labelText={label}
-                      type="text"
-                      name={name}
-                      value={searchFormState[name]}
-                      key={name}
-                      onChange={debounce(
-                        (e) => handleInputChange(e, "input_change"),
-                        debounceInterval
-                      )}
-                      ref={inputRef}
+                    <option value={language.value} key={language.value}>
+                      {language.label}
+                    </option>
+                  )
+                })}
+              </Select>
+            </FormField>
+            <FormField id="advancedSearchRight" gap="grid.s">
+              <DatePicker
+                dateType="year"
+                helperTextFrom="e.g. 1901"
+                helperTextTo="e.g. 2000"
+                id="date-range"
+                invalidText="Please select a valid date range."
+                isDateRange
+                labelText="Dates"
+                nameFrom="dateAfter"
+                nameTo="dateBefore"
+                initialDate={searchFormState["filters"].dateAfter}
+                initialDateTo={searchFormState["filters"].dateBefore}
+                onChange={debounce(
+                  (e) => handleDateChange(e),
+                  debounceInterval
+                )}
+              />
+              <CheckboxGroup
+                id="formats"
+                name="formats"
+                labelText="Formats"
+                onChange={handleCheckboxChange}
+                value={searchFormState["filters"].materialType}
+                sx={{
+                  "> div": {
+                    display: "grid",
+                    "grid-template-columns": "repeat(2, minmax(0, 1fr))",
+                    "grid-gap": "var(--nypl-space-s)",
+                    div: {
+                      marginTop: "0 !important",
+                    },
+                  },
+                }}
+              >
+                {materialTypeOptions.map((materialType) => {
+                  return (
+                    <Checkbox
+                      id={materialType.value}
+                      key={materialType.value}
+                      labelText={materialType.label}
+                      value={materialType.value}
                     />
                   )
                 })}
-                <Select
-                  id="languageSelect"
-                  name="language"
-                  labelText="Language"
-                  aria-labelledby="languageSelect-label"
-                  value={searchFormState["filters"].language}
-                  onChange={(e) => handleInputChange(e, "filter_change")}
-                >
-                  {languageOptions.map((language) => {
-                    return (
-                      <option value={language.value} key={language.value}>
-                        {language.label}
-                      </option>
-                    )
-                  })}
-                </Select>
-              </FormField>
-              <FormField id="advancedSearchRight" gap="grid.s">
-                <DatePicker
-                  dateType="year"
-                  helperTextFrom="e.g. 1901"
-                  helperTextTo="e.g. 2000"
-                  id="date-range"
-                  invalidText="Please select a valid date range."
-                  isDateRange
-                  labelText="Dates"
-                  nameFrom="dateAfter"
-                  nameTo="dateBefore"
-                  initialDate={searchFormState["filters"].dateAfter}
-                  initialDateTo={searchFormState["filters"].dateBefore}
-                  onChange={debounce(
-                    (e) => handleDateChange(e),
-                    debounceInterval
-                  )}
-                />
-                <CheckboxGroup
-                  id="formats"
-                  name="formats"
-                  labelText="Formats"
-                  onChange={handleCheckboxChange}
-                  value={searchFormState["filters"].materialType}
-                  sx={{
-                    "> div": {
-                      display: "grid",
-                      "grid-template-columns": "repeat(2, minmax(0, 1fr))",
-                      "grid-gap": "var(--nypl-space-s)",
-                      div: {
-                        marginTop: "0 !important",
-                      },
-                    },
-                  }}
-                >
-                  {materialTypeOptions.map((materialType) => {
-                    return (
-                      <Checkbox
-                        id={materialType.value}
-                        key={materialType.value}
-                        labelText={materialType.label}
-                        value={materialType.value}
-                      />
-                    )
-                  })}
-                </CheckboxGroup>
-              </FormField>
-            </FormRow>
-            <HorizontalRule sx={{ margin: 0 }} />
-            <ButtonGroup
-              id="advancedSearchButtons"
-              buttonWidth="default"
-              sx={{
-                gap: "xs",
-                marginLeft: "auto",
-              }}
+              </CheckboxGroup>
+            </FormField>
+          </FormRow>
+          <HorizontalRule sx={{ margin: 0 }} />
+          <ButtonGroup
+            id="advancedSearchButtons"
+            buttonWidth="default"
+            sx={{
+              gap: "xs",
+              marginLeft: "auto",
+            }}
+          >
+            <Button id="advancedSearchSubmit" type="submit" size="large">
+              Submit
+            </Button>
+            <Button
+              type="button"
+              id="advancedSearchClear"
+              buttonType="secondary"
+              onClick={handleClear}
+              size="large"
             >
-              <Button id="advancedSearchSubmit" type="submit" size="large">
-                Submit
-              </Button>
-              <Button
-                type="button"
-                id="advancedSearchClear"
-                buttonType="secondary"
-                onClick={handleClear}
-                size="large"
-              >
-                Clear
-              </Button>
-            </ButtonGroup>
-          </Form>
-        </>
+              Clear
+            </Button>
+          </ButtonGroup>
+        </Form>
       </Layout>
     </>
   )
