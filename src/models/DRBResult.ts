@@ -71,11 +71,18 @@ export default class DRBResult {
       })
     )
 
-    const formattedDownloadLink = this.formatDownloadLink(downloadLink)
+    return {
+      link_id: "string",
+      mediaType: "string",
+      url: "string",
+      download: "string",
+    }
 
-    return !formattedDownloadLink?.download || !formattedDownloadLink?.url
-      ? null
-      : formattedDownloadLink
+    // const formattedDownloadLink = this.formatDownloadLink(downloadLink)
+    //
+    // return !formattedDownloadLink?.download || !formattedDownloadLink?.url
+    //   ? null
+    //   : formattedDownloadLink
   }
 
   // Formats the download link media type and url for rendering

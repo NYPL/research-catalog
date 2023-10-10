@@ -2,14 +2,13 @@ import {
   Card,
   CardContent,
   Text,
-  Box,
+  Icon,
   Link as DSLink,
 } from "@nypl/design-system-react-components"
 
 import type DRBResult from "../../models/DRBResult"
 import { getAuthorURL } from "../../utils/drbUtils"
 import type { Author, Agent } from "../../types/drbTypes"
-import DownloadIcon from "../../client/icons/Download"
 
 interface DRBCardProps {
   drbResult: DRBResult
@@ -63,9 +62,12 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
               sx={{ display: "flex", alignItems: "center" }}
               noSpace
             >
-              <Box pr="xxs" sx={{ display: "flex", alignItems: "center" }}>
-                <DownloadIcon />
-              </Box>{" "}
+              <Icon
+                className="more-link"
+                name="download"
+                align="left"
+                sx={{ maxWidth: "var(--nypl-space-xs)" }}
+              />
               Download {drbResult.downloadLink.mediaType || ""}
             </Text>
           </DSLink>
