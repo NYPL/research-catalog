@@ -6,7 +6,7 @@ const checkQueryParamsEquality = queryParamsEquality(
   getDRBQueryStringFromSearchParams
 )
 
-describe("researchNowUtils", () => {
+describe("drbUtils", () => {
   describe("getDRBQueryStringFromSearchParams", () => {
     it("should handle empty query", () => {
       const testQuery = `?query=keyword%3A*&page=1&source=catalog&size=${DRB_RESULTS_PER_PAGE}`
