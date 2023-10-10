@@ -51,6 +51,7 @@ describe("Advanced Search Form", () => {
     act(async () => {
       await userEvent.selectOptions(languageSelect, "Azerbaijani")
       submit()
+      // expect the label for Azerbaijani ("lang:aze") to be in url
       expect(mockRouter.asPath).toBe(
         "/search?q=&filters%5Blanguage%5D=lang%3Aaze"
       )
@@ -62,6 +63,8 @@ describe("Advanced Search Form", () => {
       await userEvent.click(screen.getByLabelText("Notated music"))
       await userEvent.click(screen.getByLabelText("Cartographic"))
       submit()
+      // expect the label for notated music and cartographic
+      // ("resourcetypes:not", "resourcetypes:car") to be in url
       expect(mockRouter.asPath).toBe(
         "/search?q=&filters%5BmaterialType%5D%5B0%5D=resourcetypes%3Anot&filters%5BmaterialType%5D%5B1%5D=resourcetypes%3Acar"
       )
