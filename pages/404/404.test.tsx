@@ -1,8 +1,8 @@
 import React from "react"
 import { render, screen } from "@testing-library/react"
 
-import Custom404 from "../../pages/404"
-import Redirect404 from "../../pages/404/redirect"
+import Custom404 from "."
+import Redirect404 from "./redirect"
 import { LEGACY_CATALOG_URL } from "../../src/config/constants"
 
 describe("404", () => {

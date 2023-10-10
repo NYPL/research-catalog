@@ -3,7 +3,7 @@ import { fireEvent, render, screen, act } from "@testing-library/react"
 import mockRouter from "next-router-mock"
 import userEvent from "@testing-library/user-event"
 
-import AdvancedSearch from "../../pages/search/advanced"
+import AdvancedSearch from "./advanced"
 
 // Mock next router
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
@@ -15,7 +15,7 @@ describe("Advanced Search Form", () => {
       new MouseEvent("click")
     )
   afterEach(async () => {
-    act(
+    await act(
       async () =>
         await userEvent.click(screen.getByRole("button", { name: "Clear" }))
     )
@@ -33,7 +33,7 @@ describe("Advanced Search Form", () => {
 
     const [keywordInput, contributorInput, titleInput, subjectInput] =
       screen.getAllByRole("textbox")
-    act(async () => {
+    await act(async () => {
       await userEvent.type(keywordInput, "spaghetti")
       await userEvent.type(contributorInput, "strega nonna")
       await userEvent.type(titleInput, "il amore di pasta")
@@ -48,7 +48,7 @@ describe("Advanced Search Form", () => {
     render(<AdvancedSearch />)
 
     const languageSelect = screen.getByRole("combobox", { name: "Language" })
-    act(async () => {
+    await act(async () => {
       await userEvent.selectOptions(languageSelect, "Azerbaijani")
       submit()
       // expect the label for Azerbaijani ("lang:aze") to be in url
@@ -59,7 +59,7 @@ describe("Advanced Search Form", () => {
   })
   it("can check material checkboxes", async () => {
     render(<AdvancedSearch />)
-    act(async () => {
+    await act(async () => {
       await userEvent.click(screen.getByLabelText("Notated music"))
       await userEvent.click(screen.getByLabelText("Cartographic"))
       submit()
@@ -73,7 +73,7 @@ describe("Advanced Search Form", () => {
   it("can clear the form", async () => {
     render(<AdvancedSearch />)
 
-    act(async () => {
+    await act(async () => {
       const notatedMusic = screen.getByRole("checkbox", {
         name: "Notated music",
       })
