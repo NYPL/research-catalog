@@ -5,12 +5,12 @@ import userEvent from "@testing-library/user-event"
 import { MemoryRouterProvider } from "next-router-mock/MemoryRouterProvider"
 
 describe("RCLink", () => {
-  it("is bold when active", async () => {
+  it("can take an href", async () => {
     render(<RCLink href="spaghetti">Spaghetti</RCLink>, {
       wrapper: MemoryRouterProvider,
     })
     const link = screen.getByRole("link")
-    await act(async () => {
+    act(async () => {
       await userEvent.click(link)
       expect(link).toHaveAttribute("href", "/spaghetti")
     })

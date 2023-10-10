@@ -15,7 +15,7 @@ describe("Advanced Search Form", () => {
       new MouseEvent("click")
     )
   afterEach(async () => {
-    await act(
+    act(
       async () =>
         await userEvent.click(screen.getByRole("button", { name: "Clear" }))
     )
@@ -33,7 +33,7 @@ describe("Advanced Search Form", () => {
 
     const [keywordInput, contributorInput, titleInput, subjectInput] =
       screen.getAllByRole("textbox")
-    await act(async () => {
+    act(async () => {
       await userEvent.type(keywordInput, "spaghetti")
       await userEvent.type(contributorInput, "strega nonna")
       await userEvent.type(titleInput, "il amore di pasta")
@@ -48,7 +48,7 @@ describe("Advanced Search Form", () => {
     render(<AdvancedSearch />)
 
     const languageSelect = screen.getByRole("combobox", { name: "Language" })
-    await act(async () => {
+    act(async () => {
       await userEvent.selectOptions(languageSelect, "Azerbaijani")
       submit()
       expect(mockRouter.asPath).toBe(
@@ -58,7 +58,7 @@ describe("Advanced Search Form", () => {
   })
   it("can check material checkboxes", async () => {
     render(<AdvancedSearch />)
-    await act(async () => {
+    act(async () => {
       await userEvent.click(screen.getByLabelText("Notated music"))
       await userEvent.click(screen.getByLabelText("Cartographic"))
       submit()
@@ -70,7 +70,7 @@ describe("Advanced Search Form", () => {
   it("can clear the form", async () => {
     render(<AdvancedSearch />)
 
-    await act(async () => {
+    act(async () => {
       const notatedMusic = screen.getByRole("checkbox", {
         name: "Notated music",
       })
