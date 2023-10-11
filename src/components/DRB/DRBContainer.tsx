@@ -15,7 +15,7 @@ import type { SearchParams } from "../../types/searchTypes"
 import { getDRBQueryStringFromSearchParams } from "../../utils/drbUtils"
 import { DRB_BASE_URL } from "../../config/constants"
 
-interface DRBProps {
+interface DRBContainerProps {
   drbResults: DRBResult[]
   totalWorks: number
   // TODO: Get these from context when SearchParamsContext is added
@@ -25,7 +25,11 @@ interface DRBProps {
 /**
  * The DRBContainer fetches and displays DRBContainer search results
  */
-const DRBContainer = ({ drbResults, totalWorks, searchParams }: DRBProps) => {
+const DRBContainer = ({
+  drbResults,
+  totalWorks,
+  searchParams,
+}: DRBContainerProps) => {
   const drbQuery = getDRBQueryStringFromSearchParams(searchParams)
 
   return (
