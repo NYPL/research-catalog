@@ -16,6 +16,7 @@ import { BASE_URL } from "../../config/constants"
 interface LayoutProps {
   sidebar?: ReactElement
   activePage?: RCPage
+  sidebarPosition?: "right" | "left"
 }
 
 /**
@@ -26,6 +27,7 @@ const Layout = ({
   children,
   sidebar,
   activePage,
+  sidebarPosition = "right",
 }: PropsWithChildren<LayoutProps>) => {
   const showSearch = activePage === "search"
   const showHeader = activePage !== "404"
@@ -55,7 +57,7 @@ const Layout = ({
             </>
           )
         }
-        sidebar={sidebar ? "right" : "none"}
+        sidebar={sidebar ? sidebarPosition : "none"}
         contentPrimary={<Box pb="l">{children}</Box>}
         contentSidebar={
           sidebar && (
