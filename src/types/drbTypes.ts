@@ -40,6 +40,8 @@ export interface Agent {
   roles: string[]
 }
 
+/* eslint-disable @typescript-eslint/naming-convention */
+
 export interface EditionLink {
   link_id: string
   mediaType: string

@@ -33,5 +33,20 @@ module.exports = {
     "@typescript-eslint/strict-boolean-expressions": ["off"],
     "@typescript-eslint/explicit-function-return-type": ["off"],
     "@typescript-eslint/consistent-type-imports": "error",
+    "@typescript-eslint/naming-convention": [
+      "warn",
+      {
+        selector: ["typeProperty", "parameter"],
+        format: ["camelCase"],
+      },
+      {
+        selector: ["function"],
+        format: ["camelCase", "PascalCase"],
+      },
+      {
+        selector: "variable",
+        format: ["camelCase", "PascalCase", "UPPER_CASE"],
+      },
+    ],
   },
 }

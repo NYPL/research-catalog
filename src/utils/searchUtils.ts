@@ -114,46 +114,6 @@ export function getQueryString({
 }
 
 /**
- * mapQueryToSearchParams
- * Maps the SearchQueryParams structure from the request to a SearchParams object, which is expected by fetchResults
- */
-export function mapQueryToSearchParams({
-  q,
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  search_scope,
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  sort_direction,
-  page,
-  contributor,
-  title,
-  subject,
-  sort,
-  issn,
-  isbn,
-  oclc,
-  lccn,
-  filters,
-}: SearchQueryParams): SearchParams {
-  return {
-    q,
-    field: search_scope,
-    page,
-    contributor,
-    title,
-    subject,
-    sortBy: sort,
-    order: sort_direction,
-    filters,
-    identifiers: {
-      issn,
-      isbn,
-      oclc,
-      lccn,
-    },
-  }
-}
-
-/**
  * mapRequestBodyToSearchParams
  * Maps the POST request body from an JS disabled advanced search to a SearchParams object
  */
@@ -197,4 +157,44 @@ export function mapElementsToSearchResultsBibs(
     .map((result) => {
       return new SearchResultsBib(result.result)
     })
+}
+
+/* eslint-disable @typescript-eslint/naming-convention */
+
+/**
+ * mapQueryToSearchParams
+ * Maps the SearchQueryParams structure from the request to a SearchParams object, which is expected by fetchResults
+ */
+export function mapQueryToSearchParams({
+  q,
+  search_scope,
+  sort_direction,
+  page,
+  contributor,
+  title,
+  subject,
+  sort,
+  issn,
+  isbn,
+  oclc,
+  lccn,
+  filters,
+}: SearchQueryParams): SearchParams {
+  return {
+    q,
+    field: search_scope,
+    page,
+    contributor,
+    title,
+    subject,
+    sortBy: sort,
+    order: sort_direction,
+    filters,
+    identifiers: {
+      issn,
+      isbn,
+      oclc,
+      lccn,
+    },
+  }
 }

@@ -42,33 +42,7 @@ export interface SearchParams {
   identifiers?: Identifiers
 }
 
-export interface SearchQueryParams extends Identifiers {
-  q?: string
-  contributor?: string
-  title?: string
-  subject?: string
-  filters?: SearchFilters
-  sort?: string
-  sort_direction?: string
-  sort_scope?: string
-  search_scope?: string
-  page?: number
-  per_page?: number
-}
-
 type SearchFormField = { value: string }
-
-export interface SearchFormEvent {
-  q?: SearchFormField
-  search_scope?: SearchFormField
-  title?: SearchFormField
-  contributor?: SearchFormField
-  subject?: SearchFormField
-  language?: SearchFormField
-  dateBefore?: SearchFormField
-  dateAfter?: SearchFormField
-  materialType?: SearchFormField
-}
 
 export interface SearchResultsResponse {
   results?: SearchResults
@@ -87,20 +61,6 @@ export interface SearchResultsElement {
   field?: string
 }
 
-export interface SearchResult {
-  "@id"?: string
-  uri?: string
-  titleDisplay?: string[]
-  creatorLiteral?: string[]
-  title?: string[]
-  materialType?: MaterialType[]
-  publicationStatement?: string[]
-  dateStartYear?: number
-  dateEndYear?: number
-  electronicResources?: ElectronicResource[]
-  numItemsTotal?: number
-}
-
 export interface SearchFormInputField {
   name: string
   label: string
@@ -115,4 +75,46 @@ export interface SearchFormAction {
   type: SearchFormActionType
   field?: string
   payload: SearchParams | SearchFilters | string | string[]
+}
+
+/* eslint-disable @typescript-eslint/naming-convention */
+
+export interface SearchQueryParams extends Identifiers {
+  q?: string
+  contributor?: string
+  title?: string
+  subject?: string
+  filters?: SearchFilters
+  sort?: string
+  sort_direction?: string
+  sort_scope?: string
+  search_scope?: string
+  page?: number
+  per_page?: number
+}
+
+export interface SearchFormEvent {
+  q?: SearchFormField
+  search_scope?: SearchFormField
+  title?: SearchFormField
+  contributor?: SearchFormField
+  subject?: SearchFormField
+  language?: SearchFormField
+  dateBefore?: SearchFormField
+  dateAfter?: SearchFormField
+  materialType?: SearchFormField
+}
+
+export interface SearchResult {
+  "@id"?: string
+  uri?: string
+  titleDisplay?: string[]
+  creatorLiteral?: string[]
+  title?: string[]
+  materialType?: MaterialType[]
+  publicationStatement?: string[]
+  dateStartYear?: number
+  dateEndYear?: number
+  electronicResources?: ElectronicResource[]
+  numItemsTotal?: number
 }
