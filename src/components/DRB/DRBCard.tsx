@@ -66,7 +66,7 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
                 className="more-link"
                 name="download"
                 align="left"
-                sx={{ maxWidth: "var(--nypl-space-xs)" }}
+                size="small"
               />
               Download {drbResult.downloadLink.mediaType || ""}
             </Text>
