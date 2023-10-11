@@ -45,11 +45,11 @@ export default class DRBResult {
     // Populate selected link with first item on the selected edition that includes
     // a link with a media type included in the readOnlineMediaTypes array.
     let selectedLink: EditionLink
-    this.selectedEdition.items.find((item) =>
-      item.links.find((link) => {
-        selectedLink = link
-        return readOnlineMediaTypes.indexOf(link.mediaType) > -1
-      })
+    this.selectedEdition.items.find(
+      (item) =>
+        (selectedLink = item.links.find(
+          (link) => readOnlineMediaTypes.indexOf(link.mediaType) > -1
+        ))
     )
 
     // Return null if no selected link is found. Otherwise, return the URL
@@ -64,11 +64,11 @@ export default class DRBResult {
     // Populate download link with first item on the selected edition that includes
     // a link with a media type included in the downloadMediaTypes array.
     let downloadLink: EditionLink
-    this.selectedEdition.items.find((item) =>
-      item.links.find((link) => {
-        downloadLink = link
-        return downloadMediaTypes.indexOf(link.mediaType) > -1
-      })
+    this.selectedEdition.items.find(
+      (item) =>
+        (downloadLink = item.links.find(
+          (link) => downloadMediaTypes.indexOf(link.mediaType) > -1
+        ))
     )
 
     const formattedDownloadLink = this.formatDownloadLink(downloadLink)
