@@ -1,6 +1,6 @@
-import { getDRBQueryStringFromSearchParams } from "../../../src/utils/drbUtils"
-import { DRB_RESULTS_PER_PAGE } from "../../../src/config/constants"
-import { queryParamsEquality } from "../../helpers/searchHelpers"
+import { getDRBQueryStringFromSearchParams } from "../drbUtils"
+import { DRB_RESULTS_PER_PAGE } from "../../config/constants"
+import { queryParamsEquality } from "../../../__test__/helpers/searchHelpers"
 
 const checkQueryParamsEquality = queryParamsEquality(
   getDRBQueryStringFromSearchParams
