@@ -71,7 +71,8 @@ export default class DRBResult {
         ))
     )
 
-    const formattedDownloadLink = this.formatDownloadLink(downloadLink)
+    const formattedDownloadLink =
+      downloadLink && this.formatDownloadLink(downloadLink)
 
     return !formattedDownloadLink?.download || !formattedDownloadLink?.url
       ? null
