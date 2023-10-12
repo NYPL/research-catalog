@@ -6,7 +6,6 @@ import type {
   SearchFilters,
   Identifiers,
   SearchResultsElement,
-  SearchRequestBody,
 } from "../types/searchTypes"
 import SearchResultsBib from "../models/SearchResultsBib"
 
@@ -120,7 +119,7 @@ export function getQueryString({
  * Maps the POST request body from an JS disabled advanced search to a SearchParams object
  */
 export function mapRequestBodyToSearchParams(
-  reqBody: SearchRequestBody
+  reqBody: SearchParams & SearchFilters
 ): SearchParams {
   const {
     q,
