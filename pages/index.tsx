@@ -11,6 +11,7 @@ import {
 import Layout from "../src/components/Layout/Layout"
 import RCLink from "../src/components/RCLink/RCLink"
 import { SITE_NAME } from "../src/config/constants"
+import { appConfig } from "../src/config/config"
 
 export default function Home() {
   return (
@@ -37,11 +38,11 @@ export default function Home() {
             Please note that the Research Catalog does not include circulating
             materials. For books and more that you can check out to take home
             please visit our{" "}
-            <RCLink href="https://nypl.na2.iiivega.com/">
+            <RCLink href={appConfig.externalUrls.circulatingCatalog}>
               circulating branch catalog.
             </RCLink>{" "}
             The{" "}
-            <RCLink href="https://legacycatalog.nypl.org/">
+            <RCLink href={appConfig.externalUrls.legacyCatalog}>
               legacy research catalog
             </RCLink>{" "}
             is still available, but does not include all of our Scan & Deliver
