@@ -39,6 +39,7 @@ const Layout = ({
           showHeader && (
             <>
               <Breadcrumbs
+                data-testid="layout-breadcrumbs"
                 breadcrumbsType="research"
                 breadcrumbsData={[
                   { url: "https://nypl.org", text: "Home" },

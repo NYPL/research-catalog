@@ -51,6 +51,17 @@ export interface SearchResultsResponse {
   page: number
 }
 
+export interface SearchRequestBody extends SearchFilters, Identifiers {
+  q?: string
+  field?: string
+  sortBy?: string
+  order?: string
+  contributor?: string
+  title?: string
+  subject?: string
+  page?: number
+}
+
 export interface SearchResults {
   totalResults: number
   itemListElement: SearchResultsElement[]
