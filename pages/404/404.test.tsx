@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react"
 
 import Custom404 from "."
 import Redirect404 from "./redirect"
-import { LEGACY_CATALOG_URL } from "../../src/config/constants"
+import { appConfig } from "../../src/config/config"
 
 describe("404", () => {
   it("should display 404 text", () => {
@@ -21,7 +21,10 @@ describe("404", () => {
     const legacyLink = screen.getByRole("link", {
       name: "Legacy Catalog",
     })
-    expect(legacyLink).toHaveAttribute("href", LEGACY_CATALOG_URL)
+    expect(legacyLink).toHaveAttribute(
+      "href",
+      appConfig.externalUrls.legacyCatalog
+    )
   })
 })
 
