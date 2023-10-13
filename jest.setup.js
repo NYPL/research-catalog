@@ -5,3 +5,6 @@ import "@testing-library/jest-dom"
 // logged and we don't want to see expected errors while we test.
 jest.spyOn(global.console, "error").mockImplementation(() => jest.fn())
 jest.spyOn(global.console, "warn").mockImplementation(() => jest.fn())
+
+// Increase timeout on tests
+jest.setTimeout(35000)

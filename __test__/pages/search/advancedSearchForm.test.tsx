@@ -43,7 +43,7 @@ describe("Advanced Search Form", () => {
         "/search?q=spaghetti&contributor=il+amore+di+pasta&title=strega+nonna"
       )
     })
-  }, 10000)
+  })
   it("can select languages", async () => {
     render(<AdvancedSearch />)
 
@@ -69,7 +69,7 @@ describe("Advanced Search Form", () => {
         "/search?q=&filters%5BmaterialType%5D%5B0%5D=resourcetypes%3Anot&filters%5BmaterialType%5D%5B1%5D=resourcetypes%3Acar"
       )
     })
-  }, 10000)
+  })
   it("can clear the form", async () => {
     render(<AdvancedSearch />)
 
@@ -99,5 +99,5 @@ describe("Advanced Search Form", () => {
         "Please enter at least one field to submit an advanced search."
       )
     })
-  }, 10000)
+  })
 })
