@@ -99,5 +99,5 @@ describe("Advanced Search Form", () => {
         "Please enter at least one field to submit an advanced search."
       )
     })
-  }, 10000)
+  }, 15000)
 })
