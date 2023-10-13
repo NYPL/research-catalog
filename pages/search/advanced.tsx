@@ -58,7 +58,6 @@ export default function AdvancedSearch() {
     e.preventDefault()
     alert && setAlert(false)
     const target = e.target as HTMLInputElement
-
     dispatch({
       type: type,
       field: target.name,
@@ -95,7 +94,6 @@ export default function AdvancedSearch() {
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
-
     const queryString = getQueryString(searchFormState as SearchParams)
     if (!queryString.length) {
       setAlert(true)
