@@ -15,7 +15,7 @@ interface DRBContainerProps {
  */
 const DRBContainer = ({ searchParams }: DRBContainerProps) => {
   const searchQuery = getQueryString(searchParams)
-  const drbUrl = `${BASE_URL}/api/drb${searchQuery}`
+  const drbUrl = `${BASE_URL}/api/drb?${searchQuery}`
   const fetcher = (url: string) => fetch(url).then((res) => res.json())
 
   const { data, error, isValidating } = useSWRImmutable(drbUrl, fetcher)

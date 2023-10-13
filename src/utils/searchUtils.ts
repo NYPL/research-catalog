@@ -1,16 +1,13 @@
-import {
-  isArray as _isArray,
-  isEmpty as _isEmpty,
-  mapObject as _mapObject,
-  forEach as _forEach,
-} from "underscore"
+import { isArray, isEmpty, mapObject, forEach } from "underscore"
 
 import type {
   SearchParams,
   SearchQueryParams,
   SearchFilters,
   Identifiers,
+  SearchResultsElement,
 } from "../types/searchTypes"
+import SearchResultsBib from "../models/SearchResultsBib"
 
 /**
  * getSortQuery
@@ -56,11 +53,11 @@ function getIdentifierQuery(identifiers: Identifiers): string {
 function getFilterQuery(filters: SearchFilters) {
   let filterQuery = ""
 
-  if (!_isEmpty(filters)) {
-    _mapObject(filters, (val, key) => {
+  if (!isEmpty(filters)) {
+    mapObject(filters, (val, key) => {
       // Property contains an array of its selected filter values:
-      if (val?.length && _isArray(val)) {
-        _forEach(val, (filter, index) => {
+      if (val?.length && isArray(val)) {
+        forEach(val, (filter, index) => {
           if (filter.value && filter.value !== "") {
             filterQuery += `&filters[${key}][${index}]=${encodeURIComponent(
               filter.value
@@ -118,14 +115,63 @@ export function getQueryString({
 }
 
 /**
+ * mapRequestBodyToSearchParams
+ * Maps the POST request body from an JS disabled advanced search to a SearchParams object
+ */
+export function mapRequestBodyToSearchParams(
+  reqBody: SearchParams & SearchFilters
+): SearchParams {
+  const {
+    q,
+    page,
+    contributor,
+    title,
+    subject,
+    language,
+    materialType,
+    dateAfter,
+    dateBefore,
+  } = reqBody
+  return {
+    q,
+    page,
+    contributor,
+    title,
+    subject,
+    filters: {
+      materialType,
+      language,
+      dateAfter,
+      dateBefore,
+    },
+  }
+}
+
+/**
+ * mapElementsToSearchResultsBibs
+ * Maps the SearchResultsElement structure from the search results response to an array of SearchResultsBib objects
+ */
+export function mapElementsToSearchResultsBibs(
+  elements: SearchResultsElement[]
+): SearchResultsBib[] | null {
+  return elements
+    .filter((result) => {
+      return !(isEmpty(result) || (result.result && isEmpty(result.result)))
+    })
+    .map((result) => {
+      return new SearchResultsBib(result.result)
+    })
+}
+
+/* eslint-disable @typescript-eslint/naming-convention */
+
+/**
  * mapQueryToSearchParams
  * Maps the SearchQueryParams structure from the request to a SearchParams object, which is expected by fetchResults
  */
 export function mapQueryToSearchParams({
   q,
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   search_scope,
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   sort_direction,
   page,
   contributor,
@@ -153,37 +199,6 @@ export function mapQueryToSearchParams({
       isbn,
       oclc,
       lccn,
-    },
-  }
-}
-
-/**
- * mapRequestBodyToSearchParams
- * Maps the POST request body from an JS disabled advanced search to a SearchParams object
- */
-export function mapRequestBodyToSearchParams(reqBody): SearchParams {
-  const {
-    q,
-    page,
-    contributor,
-    title,
-    subject,
-    language,
-    materialType,
-    dateAfter,
-    dateBefore,
-  } = reqBody
-  return {
-    q,
-    page,
-    contributor,
-    title,
-    subject,
-    filters: {
-      materialType,
-      language,
-      dateAfter,
-      dateBefore,
     },
   }
 }

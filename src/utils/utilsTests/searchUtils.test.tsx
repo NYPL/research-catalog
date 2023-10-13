@@ -2,7 +2,7 @@ import {
   getQueryString,
   mapQueryToSearchParams,
   mapRequestBodyToSearchParams,
-} from "../../utils/searchUtils"
+} from "../searchUtils"
 import { queryParamsEquality } from "../../../__test__/helpers/searchHelpers"
 
 const checkQueryParamsEquality = queryParamsEquality(getQueryString)

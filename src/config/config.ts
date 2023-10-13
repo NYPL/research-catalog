@@ -1,5 +1,6 @@
-export const apiConfig = {
-  baseUrls: {
+export const appConfig = {
+  environment: process.env.APP_ENV || "production",
+  apiUrls: {
     platform: {
       development:
         process.env.PLATFORM_API_BASE_URL ||
@@ -28,6 +29,21 @@ export const apiConfig = {
         process.env.DRB_API_BASE_URL ||
         "https://digital-research-books-api.nypl.org/search",
     },
+  },
+  externalUrls: {
+    drbFrontEnd: {
+      development:
+        "http://sfr-front-end-development.us-east-1.elasticbeanstalk.com",
+      production: "https://digital-research-books-beta.nypl.org",
+    },
+    drbEreader: {
+      development: "https://researchnow-reader.nypl.org",
+      production: "https://digital-research-books-reader.nypl.org",
+    },
+    drbAbout:
+      "https://digital-research-books-beta.nypl.org/about?source=catalog",
+    circulatingCatalog: "https://nypl.na2.iiivega.com/",
+    legacyCatalog: "https://legacycatalog.nypl.org/",
   },
   tokenUrl: "https://isso.nypl.org/",
 }

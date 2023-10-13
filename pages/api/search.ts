@@ -9,6 +9,7 @@ import {
   PATHS,
   DISCOVERY_API_NAME,
   DISCOVERY_API_SEARCH_ROUTE,
+  DRB_API_NAME,
   RESULTS_PER_PAGE,
 } from "../../src/config/constants"
 import nyplApiClient from "../../src/server/nyplApiClient/index"
@@ -18,6 +19,7 @@ import {
   mapRequestBodyToSearchParams,
 } from "../../src/utils/searchUtils"
 import { standardizeBibId } from "../../src/utils/bibUtils"
+import { getDRBQueryStringFromSearchParams } from "../../src/utils/drbUtils"
 
 export async function fetchResults(
   searchParams: SearchParams
@@ -39,29 +41,47 @@ export async function fetchResults(
         }
       : {}
 
-  const queryString = getQueryString({
+  const modifiedSearchParams = {
     ...searchParams,
     ...journalParams,
     q: keywordsOrBibId,
-  })
+  }
+
+  const queryString = getQueryString(modifiedSearchParams)
 
   const aggregationQuery = `/aggregations${queryString}`
   const resultsQuery = `${queryString}&per_page=${RESULTS_PER_PAGE.toString()}`
+  const drbQuery = getDRBQueryStringFromSearchParams(modifiedSearchParams)
 
   // Get the following in parallel:
   //  - search results
   //  - aggregations
+  //  - drb results
   const client = await nyplApiClient({ apiName: DISCOVERY_API_NAME })
+  const drbClient = await nyplApiClient({ apiName: DRB_API_NAME })
 
-  const [results, aggregations] = await Promise.all([
-    await client.get(`${DISCOVERY_API_SEARCH_ROUTE}${resultsQuery}`),
-    await client.get(`${DISCOVERY_API_SEARCH_ROUTE}${aggregationQuery}`),
-  ])
+  const [resultsResponse, aggregationsResponse, drbResultsResponse] =
+    await Promise.allSettled([
+      await client.get(`${DISCOVERY_API_SEARCH_ROUTE}${resultsQuery}`),
+      await client.get(`${DISCOVERY_API_SEARCH_ROUTE}${aggregationQuery}`),
+      await drbClient.get(drbQuery),
+    ])
+
+  // Assign results values for each response when status is fulfilled
+  const results =
+    resultsResponse.status === "fulfilled" && resultsResponse.value
+
+  const aggregations =
+    aggregationsResponse.status === "fulfilled" && aggregationsResponse.value
+
+  const drbResults =
+    drbResultsResponse.status === "fulfilled" && drbResultsResponse.value
 
   try {
     return {
       results,
       aggregations,
+      drbResults,
       page: searchParams.page,
     }
   } catch (error) {
