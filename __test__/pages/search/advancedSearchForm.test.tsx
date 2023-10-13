@@ -3,7 +3,7 @@ import { fireEvent, render, screen, act } from "@testing-library/react"
 import mockRouter from "next-router-mock"
 import userEvent from "@testing-library/user-event"
 
-import AdvancedSearch from "./advanced"
+import AdvancedSearch from "../../../pages/search/advanced"
 
 // Mock next router
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
