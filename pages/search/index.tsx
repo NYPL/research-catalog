@@ -11,6 +11,8 @@ import { parse } from "qs"
 import RCLink from "../../src/components/RCLink/RCLink"
 import Layout from "../../src/components/Layout/Layout"
 import DRBContainer from "../../src/components/DRB/DRBContainer"
+import SearchResult from "../../src/components/SearchResult/SearchResult"
+
 import { fetchResults } from "../api/search"
 import {
   mapQueryToSearchParams,
@@ -67,13 +69,7 @@ export default function Search({ results }) {
             </Heading>
             <SimpleGrid columns={1}>
               {searchResultBibs.map((bib: SearchResultsBib) => {
-                return (
-                  <Card key={bib.id}>
-                    <CardHeading level="four">
-                      <RCLink href={bib.url}>{bib.title}</RCLink>
-                    </CardHeading>
-                  </Card>
-                )
+                return <SearchResult key={bib.id} bib={bib} />
               })}
             </SimpleGrid>
           </>
