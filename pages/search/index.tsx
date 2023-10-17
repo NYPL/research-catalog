@@ -1,14 +1,8 @@
 import Head from "next/head"
-import {
-  Card,
-  CardHeading,
-  Heading,
-  SimpleGrid,
-} from "@nypl/design-system-react-components"
+import { Heading, SimpleGrid } from "@nypl/design-system-react-components"
 import { useRouter } from "next/router"
 import { parse } from "qs"
 
-import RCLink from "../../src/components/RCLink/RCLink"
 import Layout from "../../src/components/Layout/Layout"
 import DRBContainer from "../../src/components/DRB/DRBContainer"
 import SearchResult from "../../src/components/SearchResult/SearchResult"
