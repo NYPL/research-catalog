@@ -3,6 +3,8 @@ import {
   CardContent,
   Link as DSLink,
   CardHeading,
+  Box,
+  Text,
 } from "@nypl/design-system-react-components"
 
 import type SearchResultsBib from "../../models/SearchResultsBib"
@@ -22,7 +24,12 @@ const SearchResult = ({ bib }: SearchResultProps) => {
         <DSLink href={`${PATHS.BIB}/${bib.id}`}>{bib.title}</DSLink>
       </CardHeading>
       <CardContent>
-        <ul></ul>
+        <Box>
+          {bib.materialType && <Text>{bib.materialType}</Text>}
+          {bib.publicationStatement && <Text>{bib.publicationStatement}</Text>}
+          {bib.yearPublished && <Text>{bib.yearPublished}</Text>}
+          {bib.itemMessage.length && <Text>{bib.itemMessage}</Text>}
+        </Box>
       </CardContent>
     </Card>
   )
