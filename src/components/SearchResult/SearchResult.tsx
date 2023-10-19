@@ -25,7 +25,7 @@ const SearchResult = ({ bib }: SearchResultProps) => {
         paddingBottom: "var(--nypl-space-m)",
       }}
     >
-      <CardHeading level="four">
+      <CardHeading level="three">
         <DSLink href={`${PATHS.BIB}/${bib.id}`}>{bib.title}</DSLink>
       </CardHeading>
       <CardContent>
