@@ -28,7 +28,7 @@ const SearchResult = ({ bib }: SearchResultProps) => {
           {bib.materialType && <Text>{bib.materialType}</Text>}
           {bib.publicationStatement && <Text>{bib.publicationStatement}</Text>}
           {bib.yearPublished && <Text>{bib.yearPublished}</Text>}
-          {bib.itemMessage.length && <Text>{bib.itemMessage}</Text>}
+          <Text>{bib.itemMessage}</Text>
         </Box>
       </CardContent>
     </Card>
