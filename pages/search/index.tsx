@@ -56,7 +56,7 @@ export default function Search({ results }) {
       >
         {totalResults ? (
           <>
-            <Heading level="two" mb="xl">
+            <Heading level="two" mb="xl" size="heading4">
               {`Displaying 1-50 of ${totalResults.toLocaleString()} results for keyword "${
                 searchParams.q
               }"`}
