@@ -23,7 +23,6 @@ const SearchResult = ({ bib }: SearchResultProps) => {
       sx={{
         borderBottom: "1px solid var(--nypl-colors-ui-border-default)",
         paddingBottom: "var(--nypl-space-m)",
-        marginBottom: "var(--nypl-space-l)",
       }}
     >
       <CardHeading level="three">

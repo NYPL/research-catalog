@@ -56,12 +56,12 @@ export default function Search({ results }) {
       >
         {totalResults ? (
           <>
-            <Heading level="three">
+            <Heading level="three" mb="xl">
               {`Displaying 1-50 of ${totalResults.toLocaleString()} results for keyword "${
                 searchParams.q
               }"`}
             </Heading>
-            <SimpleGrid columns={1}>
+            <SimpleGrid columns={1} gap="grid.xl">
               {searchResultBibs.map((bib: SearchResultsBib) => {
                 return <SearchResult key={bib.id} bib={bib} />
               })}
