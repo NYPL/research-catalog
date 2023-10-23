@@ -61,7 +61,9 @@ export default function Search({ results }) {
         {totalResults ? (
           <>
             <Heading level="three">
-              {`Displaying 1-50 of ${totalResults.toLocaleString()} results for keyword "${
+              {`Displaying ${
+                totalResults > 50 ? "1-50" : totalResults.toLocaleString()
+              } of ${totalResults.toLocaleString()} results for keyword "${
                 searchParams.q
               }"`}
             </Heading>
