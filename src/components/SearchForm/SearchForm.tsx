@@ -28,7 +28,7 @@ const SearchForm = () => {
     await router.push(`${PATHS.SEARCH}${queryString}`)
   }
 
-  const handleInputChange = (
+  const handleChange = (
     e: SyntheticEvent,
     setValue: Dispatch<SetStateAction<string>>
   ) => {
@@ -48,7 +48,7 @@ const SearchForm = () => {
             labelText="Search Bar Label"
             selectProps={{
               value: searchScope,
-              onChange: (e) => handleInputChange(e, setSearchScope),
+              onChange: (e) => handleChange(e, setSearchScope),
               labelText: "Select a category",
               name: "search_scope",
               optionsData: [
@@ -61,7 +61,7 @@ const SearchForm = () => {
               ],
             }}
             textInputProps={{
-              onChange: (e) => handleInputChange(e, setSearchTerm),
+              onChange: (e) => handleChange(e, setSearchTerm),
               value: searchTerm,
               labelText:
                 "Search by keyword, title, journal title, or author/contributor",
