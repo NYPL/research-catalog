@@ -14,7 +14,9 @@ import { BASE_URL, PATHS } from "../../config/constants"
  */
 const SearchForm = () => {
   const router = useRouter()
-  const [searchTerm, setSearchTerm] = useState((router.query.q as string) || "")
+  const [searchTerm, setSearchTerm] = useState(
+    (router?.query?.q as string) || ""
+  )
   const [searchScope, setSearchScope] = useState("all")
 
   const handleSubmit = async (e: SyntheticEvent) => {

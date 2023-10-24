@@ -13,6 +13,9 @@ describe("SearchForm", () => {
       screen.getByRole("button", { name: "Search" }),
       new MouseEvent("click")
     )
+  beforeEach(() => {
+    mockRouter.query.q = ""
+  })
   afterEach(async () => {
     const input = screen.getByRole("textbox")
     await userEvent.clear(input)
@@ -35,7 +38,7 @@ describe("SearchForm", () => {
       await userEvent.selectOptions(searchScopeSelect, "journal_title")
       submit()
       expect(mockRouter.asPath).toBe(
-        "/search?q=spaghettispaghetti&search_scope=journal_title"
+        "/search?q=spaghetti&search_scope=journal_title"
       )
     })
   })
