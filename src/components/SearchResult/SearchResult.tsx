@@ -22,16 +22,14 @@ const SearchResult = ({ bib }: SearchResultProps) => {
     <Card
       sx={{
         borderBottom: "1px solid var(--nypl-colors-ui-border-default)",
-        paddingBottom: "var(--nypl-space-m)",
+        paddingBottom: "m",
       }}
     >
       <CardHeading level="three">
         <DSLink href={`${PATHS.BIB}/${bib.id}`}>{bib.title}</DSLink>
       </CardHeading>
       <CardContent>
-        <Box
-          sx={{ p: { display: "inline", marginRight: "var(--nypl-space-s)" } }}
-        >
+        <Box sx={{ p: { display: "inline", marginRight: "s" } }}>
           {bib.materialType && <Text>{bib.materialType}</Text>}
           {bib.publicationStatement && <Text>{bib.publicationStatement}</Text>}
           {bib.yearPublished && <Text>{bib.yearPublished}</Text>}
