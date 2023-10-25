@@ -1,16 +1,12 @@
 import Head from "next/head"
-import {
-  Card,
-  CardHeading,
-  Heading,
-  SimpleGrid,
-} from "@nypl/design-system-react-components"
+import { Heading, SimpleGrid } from "@nypl/design-system-react-components"
 import { useRouter } from "next/router"
 import { parse } from "qs"
 
-import RCLink from "../../src/components/RCLink/RCLink"
 import Layout from "../../src/components/Layout/Layout"
 import DRBContainer from "../../src/components/DRB/DRBContainer"
+import SearchResult from "../../src/components/SearchResult/SearchResult"
+
 import { fetchResults } from "../api/search"
 import {
   mapQueryToSearchParams,
@@ -60,22 +56,16 @@ export default function Search({ results }) {
       >
         {totalResults ? (
           <>
-            <Heading level="three">
+            <Heading level="two" mb="xl" size="heading4">
               {`Displaying ${
                 totalResults > 50 ? "1-50" : totalResults.toLocaleString()
               } of ${totalResults.toLocaleString()} results for keyword "${
                 searchParams.q
               }"`}
             </Heading>
-            <SimpleGrid columns={1}>
+            <SimpleGrid columns={1} gap="grid.xl">
               {searchResultBibs.map((bib: SearchResultsBib) => {
-                return (
-                  <Card key={bib.id}>
-                    <CardHeading level="four">
-                      <RCLink href={bib.url}>{bib.title}</RCLink>
-                    </CardHeading>
-                  </Card>
-                )
+                return <SearchResult key={bib.id} bib={bib} />
               })}
             </SimpleGrid>
           </>
