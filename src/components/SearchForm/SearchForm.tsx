@@ -7,6 +7,7 @@ import styles from "../../../styles/components/Search.module.scss"
 import RCLink from "../RCLink/RCLink"
 import { getQueryString } from "../../utils/searchUtils"
 import { BASE_URL, PATHS } from "../../config/constants"
+import EDSLink from "../EDSLink"
 
 /**
  * The SearchForm component renders and controls the Search form and
@@ -80,6 +81,7 @@ const SearchForm = () => {
         <div className={styles.advancedSearchContainer}>
           <RCLink href={"/search/advanced"}>Advanced Search</RCLink>
         </div>
+        <EDSLink />
       </div>
     </div>
   )
