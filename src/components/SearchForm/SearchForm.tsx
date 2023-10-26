@@ -63,6 +63,7 @@ const SearchForm = () => {
               ],
             }}
             textInputProps={{
+              isClearable: true,
               onChange: (e) => handleChange(e, setSearchTerm),
               value: searchTerm,
               labelText:
