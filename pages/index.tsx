@@ -20,7 +20,7 @@ export default function Home() {
         <title>{SITE_NAME}</title>
       </Head>
       <Layout activePage="search">
-        <Heading level="two">
+        <Heading level="h2">
           Explore the Library&apos;s Vast Research Collections & More
         </Heading>
         <div>
@@ -51,7 +51,7 @@ export default function Home() {
           </p>
         </div>
         <SimpleGrid columns={1} gap="grid.m">
-          <Heading level="three" noSpace>
+          <Heading level="h3" noSpace>
             Research at NYPL
           </Heading>
           <Card
@@ -63,7 +63,7 @@ export default function Home() {
             }}
             layout="row"
           >
-            <CardHeading level="four">
+            <CardHeading level="h4">
               <Link href="/research/collections">Collections</Link>
             </CardHeading>
             <CardContent>
@@ -82,7 +82,7 @@ export default function Home() {
             }}
             layout="row"
           >
-            <CardHeading level="four">
+            <CardHeading level="h4">
               <Link href="/locations/map?libraries=research">Locations</Link>
             </CardHeading>
             <CardContent>
@@ -101,7 +101,7 @@ export default function Home() {
             }}
             layout="row"
           >
-            <CardHeading level="four">
+            <CardHeading level="h4">
               <Link href="/about/divisions">Divisions</Link>
             </CardHeading>
             <CardContent>
@@ -120,7 +120,7 @@ export default function Home() {
             }}
             layout="row"
           >
-            <CardHeading level="four">
+            <CardHeading level="h4">
               <Link href="/research/support">Support</Link>
             </CardHeading>
             <CardContent>
@@ -139,7 +139,7 @@ export default function Home() {
             }}
             layout="row"
           >
-            <CardHeading level="four">
+            <CardHeading level="h4">
               <Link href="/research/services">Services</Link>
             </CardHeading>
             <CardContent>

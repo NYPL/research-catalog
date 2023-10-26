@@ -25,7 +25,7 @@ const SearchResult = ({ bib }: SearchResultProps) => {
         paddingBottom: "m",
       }}
     >
-      <CardHeading level="three">
+      <CardHeading level="h3">
         <DSLink href={`${PATHS.BIB}/${bib.id}`}>{bib.title}</DSLink>
       </CardHeading>
       <CardContent>

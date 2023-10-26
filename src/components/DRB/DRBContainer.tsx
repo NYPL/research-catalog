@@ -34,7 +34,7 @@ const DRBContainer = ({
 
   return (
     <Card isBordered>
-      <CardHeading level="three">
+      <CardHeading level="h3">
         Results from Digital Research Books Beta
       </CardHeading>
       <CardContent>

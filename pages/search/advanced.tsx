@@ -122,7 +122,7 @@ export default function AdvancedSearch() {
             }
           />
         )}
-        <Heading level="two">Advanced Search</Heading>
+        <Heading level="h2">Advanced Search</Heading>
         <Form
           id="advancedSearchForm"
           // We are using a post request on advanced search when JS is disabled so that we can build the query

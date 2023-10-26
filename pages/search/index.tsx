@@ -56,7 +56,7 @@ export default function Search({ results }) {
       >
         {totalResults ? (
           <>
-            <Heading level="two" mb="xl" size="heading4">
+            <Heading level="h2" mb="xl" size="heading4">
               {`Displaying ${
                 totalResults > 50 ? "1-50" : totalResults.toLocaleString()
               } of ${totalResults.toLocaleString()} results for keyword "${
@@ -74,7 +74,7 @@ export default function Search({ results }) {
            * TODO: The logic and copy for different scenarios will need to be added when
            * filters are implemented
            */
-          <Heading level="three">No results. Try a different search.</Heading>
+          <Heading level="h3">No results. Try a different search.</Heading>
         )}
       </Layout>
     </>
