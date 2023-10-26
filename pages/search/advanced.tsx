@@ -191,7 +191,7 @@ export default function AdvancedSearch() {
                 labelText="Formats"
                 onChange={handleCheckboxChange}
                 value={searchFormState["filters"].materialType}
-                sx={{
+                __css={{
                   "> div": {
                     display: "grid",
                     gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
@@ -215,11 +215,11 @@ export default function AdvancedSearch() {
               </CheckboxGroup>
             </FormField>
           </FormRow>
-          <HorizontalRule sx={{ margin: 0 }} />
+          <HorizontalRule __css={{ margin: 0 }} />
           <ButtonGroup
             id="advancedSearchButtons"
             buttonWidth="default"
-            sx={{
+            __css={{
               gap: "xs",
               marginLeft: "auto",
             }}
