@@ -16,4 +16,24 @@ describe("SubNav", () => {
     const subNavLinks = screen.getAllByRole("link")
     expect(subNavLinks).toHaveLength(3)
   })
+
+  it("labels the active link with aria-current", async () => {
+    const {rerender } = render(<SubNav activePage="search" />, {
+      wrapper: MemoryRouterProvider,
+    })
+    // We expect the first link, "Search", to be active and
+    // have the aria-current attribute set to "page"
+    let subNavLinks = screen.getAllByRole("link")
+    expect(subNavLinks[0]).toHaveAttribute("aria-current", "page")
+    expect(subNavLinks[1]).not.toHaveAttribute("aria-current")
+    expect(subNavLinks[2]).not.toHaveAttribute("aria-current")
+
+    rerender(<SubNav activePage="account" />)
+    // We expect the third link, "My Account", to be active and
+    // have the aria-current attribute set to "page"
+    subNavLinks = screen.getAllByRole("link")
+    expect(subNavLinks[0]).not.toHaveAttribute("aria-current")
+    expect(subNavLinks[1]).not.toHaveAttribute("aria-current")
+    expect(subNavLinks[2]).toHaveAttribute("aria-current", "page")
+  })
 })

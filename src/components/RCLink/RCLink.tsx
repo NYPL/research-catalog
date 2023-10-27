@@ -17,7 +17,9 @@ interface RCLinkProps {
 const RCLink = ({ href, children, active = false, ...rest }: RCLinkProps) => {
   return (
     <Link href={href} passHref>
-      <DSLink fontWeight={active && "bold"} {...rest}>{children}</DSLink>
+      <DSLink fontWeight={active && "bold"} {...rest}>
+        {children}
+      </DSLink>
     </Link>
   )
 }

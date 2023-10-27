@@ -17,21 +17,31 @@ const SubNav = ({ activePage }: SubNavProps) => {
         <li>
           <RCLink
             href="/"
-            aria-current={activePage === "search" || activePage === "advanced" ? "page" : "undefined"}
+            aria-current={
+              activePage === "search" || activePage === "advanced"
+                ? "page"
+                : undefined
+            }
             active={activePage === "search" || activePage === "advanced"}
           >
             Search
           </RCLink>
         </li>
         <li>
-          <RCLink href="/subject_headings" active={activePage === "shep"}
-          aria-current={activePage === "shep" ? "page" : undefined}>
+          <RCLink
+            href="/subject_headings"
+            active={activePage === "shep"}
+            aria-current={activePage === "shep" ? "page" : undefined}
+          >
             Subject Heading Explorer
           </RCLink>
         </li>
         <li>
-          <RCLink href="/account" active={activePage === "account"}
-          aria-current={activePage === "account" ? "page" : undefined}>
+          <RCLink
+            href="/account"
+            active={activePage === "account"}
+            aria-current={activePage === "account" ? "page" : undefined}
+          >
             My Account
           </RCLink>
         </li>
