@@ -30,7 +30,10 @@ export default function Home() {
             Black Culture, and The New York Public Library for the Performing
             Arts. Plus, access materials from library collections at Columbia
             University, Harvard University, and Princeton University.{" "}
-            <Link href="/research/collections/about/shared-collection-catalog">
+            <Link
+              href="/research/collections/about/shared-collection-catalog"
+              aria-label="Learn more about the Research Catalog."
+            >
               Learn more.
             </Link>
           </p>
@@ -56,7 +59,7 @@ export default function Home() {
           </Heading>
           <Card
             imageProps={{
-              alt: "Image of manuscript from NYPL Research Archive",
+              alt: "Manuscript from NYPL Research Archive",
               aspectRatio: "twoByOne",
               size: "large",
               src: "https://cdn-petrol.nypl.org/sites/default/media/styles/extralarge/public/archives-portal.jpg?itok=-oYtHmeO",
@@ -113,7 +116,7 @@ export default function Home() {
           </Card>
           <Card
             imageProps={{
-              alt: "Image of man doing research in Rose main Reading Room",
+              alt: "Man doing research in Rose main Reading Room",
               aspectRatio: "twoByOne",
               size: "large",
               src: "https://cdn-petrol.nypl.org/sites/default/media/styles/extralarge/public/plan-you-visit.jpg?itok=scG6cFgy",
@@ -132,7 +135,7 @@ export default function Home() {
           </Card>
           <Card
             imageProps={{
-              alt: "Image of man wheeling cart in NYPL stacks",
+              alt: "Man wheeling cart in NYPL stacks",
               aspectRatio: "twoByOne",
               size: "large",
               src: "https://cdn-petrol.nypl.org/sites/default/media/styles/extralarge/public/research-services.jpg?itok=rSo9t1VF",
