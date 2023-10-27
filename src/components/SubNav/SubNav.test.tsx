@@ -18,7 +18,7 @@ describe("SubNav", () => {
   })
 
   it("labels the active link with aria-current", async () => {
-    const {rerender } = render(<SubNav activePage="search" />, {
+    const { rerender } = render(<SubNav activePage="search" />, {
       wrapper: MemoryRouterProvider,
     })
     // We expect the first link, "Search", to be active and
