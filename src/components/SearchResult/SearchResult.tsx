@@ -25,10 +25,8 @@ const SearchResult = ({ bib }: SearchResultProps) => {
         paddingBottom: "m",
       }}
     >
-      <CardHeading level="h3" size="heading4">
-        <DSLink href={`${PATHS.BIB}/${bib.id}`} isUnderlined={false}>
-          {bib.title}
-        </DSLink>
+      <CardHeading level="h3" size="heading4" url={`${PATHS.BIB}/${bib.id}`}>
+        {bib.title}
       </CardHeading>
       <CardContent>
         <Box sx={{ p: { display: "inline", marginRight: "s" } }}>

@@ -31,7 +31,11 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
             {drbResult.authors.map((author: Author | Agent, index: number) => (
               <>
                 {index > 0 && ","}
-                <DSLink href={getAuthorURL(author)} target="_blank">
+                <DSLink
+                  href={getAuthorURL(author)}
+                  target="_blank"
+                  isUnderlined={false}
+                >
                   {author.name}
                 </DSLink>
               </>

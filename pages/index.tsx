@@ -63,8 +63,8 @@ export default function Home() {
             }}
             layout="row"
           >
-            <CardHeading level="h4">
-              <Link href="/research/collections">Collections</Link>
+            <CardHeading level="h4" url="/research/collections">
+              Collections
             </CardHeading>
             <CardContent>
               <p>
@@ -82,8 +82,8 @@ export default function Home() {
             }}
             layout="row"
           >
-            <CardHeading level="h4">
-              <Link href="/locations/map?libraries=research">Locations</Link>
+            <CardHeading level="h4" url="/locations/map?libraries=research">
+              Locations
             </CardHeading>
             <CardContent>
               <p>
@@ -101,8 +101,8 @@ export default function Home() {
             }}
             layout="row"
           >
-            <CardHeading level="h4">
-              <Link href="/about/divisions">Divisions</Link>
+            <CardHeading level="h4" url="/about/divisions">
+              Divisions
             </CardHeading>
             <CardContent>
               <p>
@@ -120,8 +120,8 @@ export default function Home() {
             }}
             layout="row"
           >
-            <CardHeading level="h4">
-              <Link href="/research/support">Support</Link>
+            <CardHeading level="h4" url="/research/support">
+              Support
             </CardHeading>
             <CardContent>
               <p>
@@ -139,8 +139,8 @@ export default function Home() {
             }}
             layout="row"
           >
-            <CardHeading level="h4">
-              <Link href="/research/services">Services</Link>
+            <CardHeading level="h4" url="/research/services">
+              Services
             </CardHeading>
             <CardContent>
               <p>
