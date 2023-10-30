@@ -77,7 +77,7 @@ const SearchForm = () => {
           />
         </div>
         <div className={styles.advancedSearchContainer}>
-          <RCLink href={"/search/advanced"} color="ui.link.secondary">
+          <RCLink href={"/search/advanced"}>
             Advanced Search
           </RCLink>
         </div>
