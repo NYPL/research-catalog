@@ -1,7 +1,6 @@
 import {
   Card,
   CardContent,
-  Link as DSLink,
   CardHeading,
   Box,
   Text,
@@ -25,8 +24,8 @@ const SearchResult = ({ bib }: SearchResultProps) => {
         paddingBottom: "m",
       }}
     >
-      <CardHeading level="three">
-        <DSLink href={`${PATHS.BIB}/${bib.id}`}>{bib.title}</DSLink>
+      <CardHeading level="h3" size="heading4" url={`${PATHS.BIB}/${bib.id}`}>
+        {bib.title}
       </CardHeading>
       <CardContent>
         <Box sx={{ p: { display: "inline", marginRight: "s" } }}>

@@ -20,7 +20,7 @@ export default function Home() {
         <title>{SITE_NAME}</title>
       </Head>
       <Layout activePage="search">
-        <Heading level="two">
+        <Heading level="h2">
           Explore the Library&apos;s Vast Research Collections & More
         </Heading>
         <div>
@@ -54,7 +54,7 @@ export default function Home() {
           </p>
         </div>
         <SimpleGrid columns={1} gap="grid.m">
-          <Heading level="three" noSpace>
+          <Heading level="h3" noSpace>
             Research at NYPL
           </Heading>
           <Card
@@ -66,8 +66,8 @@ export default function Home() {
             }}
             layout="row"
           >
-            <CardHeading level="four">
-              <Link href="/research/collections">Collections</Link>
+            <CardHeading level="h4" url="/research/collections">
+              Collections
             </CardHeading>
             <CardContent>
               <p>
@@ -85,8 +85,8 @@ export default function Home() {
             }}
             layout="row"
           >
-            <CardHeading level="four">
-              <Link href="/locations/map?libraries=research">Locations</Link>
+            <CardHeading level="h4" url="/locations/map?libraries=research">
+              Locations
             </CardHeading>
             <CardContent>
               <p>
@@ -104,8 +104,8 @@ export default function Home() {
             }}
             layout="row"
           >
-            <CardHeading level="four">
-              <Link href="/about/divisions">Divisions</Link>
+            <CardHeading level="h4" url="/about/divisions">
+              Divisions
             </CardHeading>
             <CardContent>
               <p>
@@ -123,8 +123,8 @@ export default function Home() {
             }}
             layout="row"
           >
-            <CardHeading level="four">
-              <Link href="/research/support">Support</Link>
+            <CardHeading level="h4" url="/research/support">
+              Support
             </CardHeading>
             <CardContent>
               <p>
@@ -142,8 +142,8 @@ export default function Home() {
             }}
             layout="row"
           >
-            <CardHeading level="four">
-              <Link href="/research/services">Services</Link>
+            <CardHeading level="h4" url="/research/services">
+              Services
             </CardHeading>
             <CardContent>
               <p>

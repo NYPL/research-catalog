@@ -24,6 +24,10 @@
     color: var(--nypl-colors-ui-white);
     text-decoration: none;
 
+    &:visited {
+      color: var(--nypl-colors-ui-white);
+    }
+
     &:hover {
       color: var(--nypl-colors-ui-white);
       text-decoration: underline;
