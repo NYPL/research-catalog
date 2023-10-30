@@ -52,7 +52,11 @@ const DRBContainer = ({
           ))}
         </SimpleGrid>
         {totalWorks && (
-          <DSLink href={`${DRB_BASE_URL}/search${drbQuery}`} target="_blank">
+          <DSLink
+            href={`${DRB_BASE_URL}/search${drbQuery}`}
+            target="_blank"
+            isUnderlined={false}
+          >
             <Text size="body2" noSpace isBold>
               See {totalWorks.toLocaleString()} result
               {totalWorks === 1 ? "" : "s"} from Digital Research Books Beta
