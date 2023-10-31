@@ -12,7 +12,7 @@ interface ItemFilterContainerProps {
 
 const tempInitialFilters = {
   location: ["loc:rc2ma"],
-  format: ["TEXT"],
+  format: ["Text"],
   status: ["status:a"],
 }
 

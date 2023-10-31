@@ -31,7 +31,6 @@ export class LocationFilterData extends ItemFilterData {
   displayOptions(): ItemAggregationOption[] {
     return this.reducedLocations().map((loc) => {
       if (loc.label === "Offsite") {
-        console.log("match")
         return { ...loc, value: "offsite" }
       } else return loc
     })

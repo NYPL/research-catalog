@@ -3,7 +3,7 @@ import {
   Checkbox,
   Button,
 } from "@nypl/design-system-react-components"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import type { Dispatch } from "react"
 
 import type { ItemFilterData } from "../../models/itemFilterData"
@@ -25,13 +25,14 @@ const ItemFilter = ({
 }: ItemFilterProps) => {
   const field = itemFilterData.field()
   const fieldFormatted = itemFilterData.field(true)
-  const [checkBoxGroupValue, setCheckBoxGroupValue] = useState(
-    selectedFilters[field]
-  )
-  const clearFilter = () =>
+  // const [checkBoxGroupValue, setCheckBoxGroupValue] = useState(
+  //   selectedFilters[field]
+  // )
+  const clearFilter = () => {
     setSelectedFilters((prevFilters: selectedFiltersType) => {
       return { ...prevFilters, [field]: [] }
     })
+  }
 
   const handleCheck = (selectedOptions: string[]) => {
     setSelectedFilters((prevFilters: selectedFiltersType) => {
@@ -39,12 +40,10 @@ const ItemFilter = ({
         ...prevFilters,
         [field]: selectedOptions,
       }
-      console.log({ checkBoxGroupValue, newFilterSelection })
-      setCheckBoxGroupValue(selectedOptions)
       return newFilterSelection
     })
   }
-  if (itemFilterData.field() === "text") console.log({ checkBoxGroupValue })
+
   return (
     <>
       <CheckboxGroup
@@ -53,11 +52,8 @@ const ItemFilter = ({
         name={field}
         id={field}
         onChange={handleCheck}
-        value={checkBoxGroupValue}
+        value={selectedFilters[field]}
       >
-        {checkBoxGroupValue.map((val: string) => {
-          return <p key={field + "spaghetti"}>{val}</p>
-        })}
         {itemFilterData.displayOptions().map(({ value, label }: optionType) => {
           return (
             <Checkbox id={value} key={value} value={value} labelText={label} />
