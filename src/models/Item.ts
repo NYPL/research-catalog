@@ -1,5 +1,8 @@
-import type { SearchResultsItem } from "../types/itemTypes"
+import { isEmpty } from "underscore"
+
+import type { SearchResultsItem, ItemStatus } from "../types/itemTypes"
 import type SearchResultsBib from "./SearchResultsBib"
+import { itemAvailabilityKeys } from "../utils/itemUtils"
 
 /**
  * The Item class contains the data and getter functions
@@ -9,6 +12,7 @@ import type SearchResultsBib from "./SearchResultsBib"
 export default class Item {
   id: string
   bib: SearchResultsBib
+  status?: ItemStatus
   itemSource?: string
   accessMessage?: string
   callNumber?: string
@@ -17,11 +21,22 @@ export default class Item {
   constructor(item: SearchResultsItem, bib: SearchResultsBib) {
     this.id = item["@id"] ? item["@id"].substring(4) : ""
     this.bib = bib
+    this.status = item.status.length ? item.status[0] : null
     this.itemSource = item.idNyplSourceId ? item?.idNyplSourceId["@type"] : ""
     this.accessMessage = item.accessMessage.length
       ? item.accessMessage[0]?.prefLabel
       : ""
     this.callNumber = item.shelfMark.length ? item.shelfMark[0] : ""
     this.isElectronicResource = !!item.electronicLocator?.length
+  }
+
+  // Item availability is determined by the existence of status label in the availability keys list
+  get isAvailable(): boolean {
+    // Lowercase and remove non-word characters from status label
+    const availability =
+      !isEmpty(this.status) && this.status?.prefLabel
+        ? this.status.prefLabel.replace(/\W/g, "").toLowerCase()
+        : ""
+    return itemAvailabilityKeys.includes(availability)
   }
 }

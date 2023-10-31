@@ -5,6 +5,7 @@ export interface SearchResultsItem {
   accessMessage?: ItemAccessMessage[]
   shelfMark?: string[]
   electronicLocator?: string[]
+  status?: ItemStatus[]
 }
 
 export interface ItemAccessMessage {
@@ -15,4 +16,9 @@ export interface ItemAccessMessage {
 export interface ItemSourceID {
   "@type": string
   "@value": string
+}
+
+export interface ItemStatus {
+  "@id"?: string
+  prefLabel?: string
 }
