@@ -28,7 +28,7 @@ export class LocationFilterData extends ItemFilterData {
     super(aggs)
   }
 
-  displayOptions(): optionType[] {
+  displayOptions(): ItemAggregationOption[] {
     return this.reducedLocations().map((loc) => {
       if (loc.label === "Offsite") {
         console.log("match")
@@ -37,7 +37,7 @@ export class LocationFilterData extends ItemFilterData {
     })
   }
 
-  recapLocations() {
+  recapLocations(): ItemAggregationOption[] {
     return this.reducedLocations().filter(({ label }) =>
       label.split("loc:")[0].startsWith("rc")
     )
@@ -46,7 +46,7 @@ export class LocationFilterData extends ItemFilterData {
   // There are multiple rc location codes, but we only want to
   // display a single Offsite option in the locations dropdown.This function
   // combines separate offsite location options into one.
-  reducedLocations() {
+  reducedLocations(): ItemAggregationOption[] {
     const reducedOptionsMap = {}
     let count = 0
     this.options

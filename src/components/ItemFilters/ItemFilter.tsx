@@ -40,12 +40,11 @@ const ItemFilter = ({
         [field]: selectedOptions,
       }
       console.log({ checkBoxGroupValue, newFilterSelection })
-      setCheckBoxGroupValue(newFilterSelection)
+      setCheckBoxGroupValue(selectedOptions)
       return newFilterSelection
     })
   }
-  if (itemFilterData.field() === "location") console.log({ checkBoxGroupValue })
-  console.log(field + "displayOptions", itemFilterData.displayOptions())
+  if (itemFilterData.field() === "text") console.log({ checkBoxGroupValue })
   return (
     <>
       <CheckboxGroup
