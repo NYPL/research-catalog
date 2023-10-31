@@ -77,7 +77,11 @@ const SearchForm = () => {
           />
         </div>
         <div className={styles.advancedSearchContainer}>
-          <RCLink href={"/search/advanced"}>Advanced Search</RCLink>
+          {/* Temporary color update. The Header overrides the new
+            DS 2.X CSS color variable values. */}
+          <RCLink href={"/search/advanced"} color="#0069BF">
+            Advanced Search
+          </RCLink>
         </div>
       </div>
     </div>

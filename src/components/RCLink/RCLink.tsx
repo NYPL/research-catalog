@@ -6,6 +6,7 @@ interface RCLinkProps {
   active?: boolean
   href: string
   children: ReactNode
+  color?: string
 }
 
 /**
@@ -15,8 +16,10 @@ interface RCLinkProps {
  */
 const RCLink = ({ href, children, active = false, ...rest }: RCLinkProps) => {
   return (
-    <Link href={href} passHref {...rest}>
-      <DSLink fontWeight={active && "bold"}>{children}</DSLink>
+    <Link href={href} passHref>
+      <DSLink fontWeight={active && "bold"} {...rest}>
+        {children}
+      </DSLink>
     </Link>
   )
 }
