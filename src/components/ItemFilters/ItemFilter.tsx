@@ -3,7 +3,6 @@ import {
   Checkbox,
   Button,
 } from "@nypl/design-system-react-components"
-import { useEffect, useState } from "react"
 import type { Dispatch } from "react"
 
 import type { ItemFilterData } from "../../models/itemFilterData"
@@ -25,9 +24,6 @@ const ItemFilter = ({
 }: ItemFilterProps) => {
   const field = itemFilterData.field()
   const fieldFormatted = itemFilterData.field(true)
-  // const [checkBoxGroupValue, setCheckBoxGroupValue] = useState(
-  //   selectedFilters[field]
-  // )
   const clearFilter = () => {
     setSelectedFilters((prevFilters: selectedFiltersType) => {
       return { ...prevFilters, [field]: [] }
@@ -52,6 +48,9 @@ const ItemFilter = ({
         name={field}
         id={field}
         onChange={handleCheck}
+        // isSelected of the children checkboxes is controlled by this value
+        // attribute. The options whose value attribute match those present in
+        // the CheckboxGroup value array are selected.
         value={selectedFilters[field]}
       >
         {itemFilterData.displayOptions().map(({ value, label }: optionType) => {
