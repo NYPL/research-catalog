@@ -1,44 +1,42 @@
-import {
-  CheckboxGroup,
-  Checkbox,
-  Card,
-} from "@nypl/design-system-react-components"
+import { useState } from "react"
 
-import type {
-  ItemAggregation,
-  option as optionType,
-} from "../../types/filterTypes"
-import { ItemFilterData } from "../../models/itemFilterData"
+import type { ItemAggregation } from "../../types/filterTypes"
+import { ItemFilterData, LocationFilterData } from "../../models/itemFilterData"
+import ItemFilter from "./ItemFilter"
+import React from "react"
+import { combineRecapLocations } from "./utils"
 
 interface ItemFilterContainerProps {
   itemAggs: ItemAggregation[]
 }
 
+const tempInitialFilters = {
+  location: ["loc:rc2ma"],
+  format: ["TEXT"],
+  status: ["status:a"],
+}
+
 const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
-  const filterData = itemAggs.map(
-    (agg: ItemAggregation) => new ItemFilterData(agg)
-  )
-  console.log("filter")
+  const filterData = itemAggs.map((agg: ItemAggregation) => {
+    if (agg.field === "location") return new LocationFilterData(agg)
+    else return new ItemFilterData(agg)
+  })
+  const [selectedFilters, setSelectedFilters] = useState({
+    ...tempInitialFilters,
+    location: combineRecapLocations(tempInitialFilters.location),
+  })
+
   return (
-    <Card>
+    <div>
       {filterData.map((field: ItemFilterData) => (
-        <CheckboxGroup
-          key={field.field}
-          labelText={`${field.field} options`}
-          name={field.field}
-          id={field.field}
-        >
-          {field.options.map((option: optionType) => (
-            <Checkbox
-              id={option.value}
-              key={option.value}
-              value={option.value}
-              labelText={option.label}
-            />
-          ))}
-        </CheckboxGroup>
+        <ItemFilter
+          key={field.field()}
+          itemFilterData={field}
+          setSelectedFilters={setSelectedFilters}
+          selectedFilters={selectedFilters}
+        />
       ))}
-    </Card>
+    </div>
   )
 }
 

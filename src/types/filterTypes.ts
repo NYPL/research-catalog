@@ -1,5 +1,10 @@
 export type locations = string[]
 
+export type selectedFilters = {
+  location: string[]
+  format: string[]
+  status: string[]
+}
 export interface ItemAggregationOption {
   value: string
   count: number
