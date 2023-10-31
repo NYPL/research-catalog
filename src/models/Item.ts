@@ -12,6 +12,7 @@ export default class Item {
   itemSource?: string
   accessMessage?: string
   callNumber?: string
+  isElectronicResource: boolean
 
   constructor(item: SearchResultsItem, bib: SearchResultsBib) {
     this.id = item["@id"] ? item["@id"].substring(4) : ""
@@ -21,5 +22,6 @@ export default class Item {
       ? item.accessMessage[0]?.prefLabel
       : ""
     this.callNumber = item.shelfMark.length ? item.shelfMark[0] : ""
+    this.isElectronicResource = !!item.electronicLocator?.length
   }
 }

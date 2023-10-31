@@ -4,6 +4,7 @@ export interface SearchResultsItem {
   idNyplSourceId?: ItemSourceID
   accessMessage?: ItemAccessMessage[]
   shelfMark?: string[]
+  electronicLocator?: string[]
 }
 
 export interface ItemAccessMessage {
