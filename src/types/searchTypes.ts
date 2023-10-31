@@ -118,3 +118,7 @@ export interface SearchResult {
   electronicResources?: ElectronicResource[]
   numItemsTotal?: number
 }
+
+export interface SearchResultsItem {
+  "@id": string
+}

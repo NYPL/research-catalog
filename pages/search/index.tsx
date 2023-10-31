@@ -32,7 +32,9 @@ export default function Search({ results }) {
   const searchParams = mapQueryToSearchParams(query)
 
   // Map Search Results Elements from response to SearchResultBib objects
+  console.log(searchResultsElements)
   const searchResultBibs = mapElementsToSearchResultsBibs(searchResultsElements)
+  console.log(searchResultBibs)
 
   // Map DRB Works from response to DRBResult objects
   const drbResults = mapWorksToDRBResults(drbWorks)
