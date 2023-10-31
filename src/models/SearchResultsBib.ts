@@ -45,11 +45,11 @@ export default class SearchResultsBib {
     return this.electronicResources?.length || 0
   }
 
-  get hasPhysicalItems() {
-    return !!this.items.length
+  get hasItems() {
+    return this.items.length > 0
   }
 
-  get hasItemTable() {
+  get hasPhysicalItems() {
     return this.numPhysicalItems > 0
   }
 
