@@ -6,6 +6,8 @@ export interface SearchResultsItem {
   shelfMark?: string[]
   electronicLocator?: string[]
   status?: ItemStatus[]
+  enumerationChronology?: string[]
+  formatLiteral: string[]
 }
 
 export interface ItemAccessMessage {

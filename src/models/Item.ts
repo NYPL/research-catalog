@@ -17,17 +17,25 @@ export default class Item {
   accessMessage?: string
   callNumber?: string
   isElectronicResource: boolean
+  volume?: string
+  format?: string
 
   constructor(item: SearchResultsItem, bib: SearchResultsBib) {
     this.id = item["@id"] ? item["@id"].substring(4) : ""
     this.bib = bib
     this.status = item.status.length ? item.status[0] : null
-    this.itemSource = item.idNyplSourceId ? item?.idNyplSourceId["@type"] : ""
-    this.accessMessage = item.accessMessage.length
+    this.itemSource = item.idNyplSourceId ? item?.idNyplSourceId["@type"] : null
+    this.accessMessage = item?.accessMessage.length
       ? item.accessMessage[0]?.prefLabel
       : ""
-    this.callNumber = item.shelfMark.length ? item.shelfMark[0] : ""
-    this.isElectronicResource = !!item.electronicLocator?.length
+    this.callNumber = item?.shelfMark.length ? item.shelfMark[0] : null
+    this.isElectronicResource = !!item?.electronicLocator.length
+    this.volume = item?.enumerationChronology.length
+      ? item.enumerationChronology[0]
+      : null
+    this.format = item?.formatLiteral.length
+      ? item.formatLiteral[0]
+      : bib.materialType
   }
 
   // Item availability is determined by the existence of status label in the availability keys list
