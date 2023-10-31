@@ -13,13 +13,13 @@ export default class Item {
   accessMessage?: string
   callNumber?: string
 
-  constructor(resultsItem: SearchResultsItem, bib: SearchResultsBib) {
-    this.id = resultsItem["@id"] ? resultsItem["@id"].substring(4) : ""
+  constructor(item: SearchResultsItem, bib: SearchResultsBib) {
+    this.id = item["@id"] ? item["@id"].substring(4) : ""
     this.bib = bib
-    this.itemSource = resultsItem.idNyplSourceId
-      ? resultsItem?.idNyplSourceId["@type"]
+    this.itemSource = item.idNyplSourceId ? item?.idNyplSourceId["@type"] : ""
+    this.accessMessage = item.accessMessage.length
+      ? item.accessMessage[0]?.prefLabel
       : ""
-    this.accessMessage = resultsItem.accessMessage[0]?.prefLabel || ""
-    this.callNumber = resultsItem.shelfMark[0] || ""
+    this.callNumber = item.shelfMark.length ? item.shelfMark[0] : ""
   }
 }
