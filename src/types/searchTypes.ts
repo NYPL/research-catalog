@@ -117,6 +117,7 @@ export interface SearchResult {
   dateEndYear?: number
   electronicResources?: ElectronicResource[]
   numItemsTotal?: number
+  items?: SearchResultsItem[]
 }
 
 export interface SearchResultsItem {

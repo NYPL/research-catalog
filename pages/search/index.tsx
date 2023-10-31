@@ -32,7 +32,6 @@ export default function Search({ results }) {
   const searchParams = mapQueryToSearchParams(query)
 
   // Map Search Results Elements from response to SearchResultBib objects
-  console.log(searchResultsElements)
   const searchResultBibs = mapElementsToSearchResultsBibs(searchResultsElements)
   console.log(searchResultBibs)
 
