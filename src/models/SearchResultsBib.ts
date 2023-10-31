@@ -100,7 +100,7 @@ export default class SearchResultsBib {
 
   getItemsFromResult(result: SearchResult): Item[] {
     return result.items.map((item) => {
-      return new Item(item)
+      return new Item(item, this)
     })
   }
 }

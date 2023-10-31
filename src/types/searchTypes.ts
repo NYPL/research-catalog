@@ -1,5 +1,6 @@
 import type { ElectronicResource } from "./bibTypes"
 import type { DRBResults } from "./drbTypes"
+import type { SearchResultsItem } from "./itemTypes"
 
 type Language = string
 type SubjectLiteral = string
@@ -118,8 +119,4 @@ export interface SearchResult {
   electronicResources?: ElectronicResource[]
   numItemsTotal?: number
   items?: SearchResultsItem[]
-}
-
-export interface SearchResultsItem {
-  "@id": string
 }

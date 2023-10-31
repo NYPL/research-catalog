@@ -1,4 +1,5 @@
-import type { SearchResultsItem } from "../types/searchTypes"
+import type { SearchResultsItem } from "../types/itemTypes"
+import type SearchResultsBib from "./SearchResultsBib"
 
 /**
  * The Item class contains the data and getter functions
@@ -7,8 +8,16 @@ import type { SearchResultsItem } from "../types/searchTypes"
  */
 export default class Item {
   id: string
+  bib: SearchResultsBib
+  itemSource?: string
+  accessMessage?: string
 
-  constructor(item: SearchResultsItem) {
-    this.id = item["@id"]
+  constructor(resultsItem: SearchResultsItem, bib: SearchResultsBib) {
+    this.id = resultsItem["@id"] ? resultsItem["@id"].substring(4) : ""
+    this.bib = bib
+    this.itemSource = resultsItem.idNyplSourceId
+      ? resultsItem?.idNyplSourceId["@type"]
+      : ""
+    this.accessMessage = resultsItem?.accessMessage[0]?.prefLabel || ""
   }
 }
