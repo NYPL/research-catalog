@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 export interface SearchResultsItem {
-  "@id": string
-  idNyplSourceId: ItemSourceID
-  accessMessage: ItemAccessMessage[]
+  "@id"?: string
+  idNyplSourceId?: ItemSourceID
+  accessMessage?: ItemAccessMessage[]
+  shelfMark?: string[]
 }
 
 export interface ItemAccessMessage {

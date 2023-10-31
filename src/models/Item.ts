@@ -11,6 +11,7 @@ export default class Item {
   bib: SearchResultsBib
   itemSource?: string
   accessMessage?: string
+  callNumber?: string
 
   constructor(resultsItem: SearchResultsItem, bib: SearchResultsBib) {
     this.id = resultsItem["@id"] ? resultsItem["@id"].substring(4) : ""
@@ -18,6 +19,7 @@ export default class Item {
     this.itemSource = resultsItem.idNyplSourceId
       ? resultsItem?.idNyplSourceId["@type"]
       : ""
-    this.accessMessage = resultsItem?.accessMessage[0]?.prefLabel || ""
+    this.accessMessage = resultsItem.accessMessage[0]?.prefLabel || ""
+    this.callNumber = resultsItem.shelfMark[0] || ""
   }
 }
