@@ -3,14 +3,15 @@ import { isEmpty } from "underscore"
 import type {
   SearchResultsItem,
   ItemStatus,
-  ItemHoldingLocation,
+  ItemLocation,
 } from "../types/itemTypes"
 import type SearchResultsBib from "./SearchResultsBib"
 import {
   itemAvailabilityKeys,
   defaultNYPLLocation,
   nonNYPLReCAPLocation,
-  itemLocationEndpoints,
+  locationLabelToKey,
+  locationEndpointsMap,
 } from "../utils/itemUtils"
 
 /**
@@ -28,7 +29,7 @@ export default class Item {
   isElectronicResource: boolean
   volume?: string
   format?: string
-  holdingLocation?: ItemHoldingLocation
+  location?: ItemLocation
 
   constructor(item: SearchResultsItem, bib: SearchResultsBib) {
     this.id = item["@id"] ? item["@id"].substring(4) : ""
@@ -46,9 +47,7 @@ export default class Item {
     this.format = item.formatLiteral?.length
       ? item.formatLiteral[0]
       : this.bib.materialType
-    this.holdingLocation = item.holdingLocation?.length
-      ? item.holdingLocation[0]
-      : null
+    this.location = this.getLocationFromItem(item)
   }
 
   // Item availability is determined by the existence of status label in the availability keys list
@@ -66,19 +65,25 @@ export default class Item {
     return this.source.indexOf("Recap") !== -1
   }
 
-  // Returns updated location data based on item type
-  get location(): ItemHoldingLocation {
-    let location = defaultNYPLLocation
+  // Pre-processing logic for setting Item location
+  getLocationFromItem(item: SearchResultsItem): ItemLocation {
     if (this.isNonNYPLReCAP) return nonNYPLReCAPLocation
+    let location: ItemLocation
 
-    if (this.holdingLocation) {
-      location = this.holdingLocation
+    // Check for existence of Location object in API response
+    const itemLocationFromAPI = item.holdingLocation?.length
+      ? item.holdingLocation[0]
+      : null
 
-      // parse prefLabel for endpoint lookup
-      const locationKey = location.prefLabel
-        .replace(/SASB/, "Schwarzman")
-        .split(" ")[0]
-      location.branchEndpoint = itemLocationEndpoints[locationKey]
+    // If location exists in the API response, parse the label and set branch endpoint
+    if (itemLocationFromAPI) {
+      location = itemLocationFromAPI
+
+      // Set branch endpoint based on API location label
+      const locationKey = locationLabelToKey(location.prefLabel)
+      location.branchEndpoint = locationEndpointsMap[locationKey]
+    } else {
+      location = defaultNYPLLocation
     }
     return location
   }

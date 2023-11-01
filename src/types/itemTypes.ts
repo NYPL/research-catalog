@@ -10,7 +10,7 @@ export interface SearchResultsItem {
   status?: ItemStatus[]
   enumerationChronology?: string[]
   formatLiteral: string[]
-  holdingLocation: ItemHoldingLocation[]
+  holdingLocation: ItemLocation[]
 }
 
 export interface ItemAccessMessage {
@@ -28,9 +28,11 @@ export interface ItemStatus {
   prefLabel?: string
 }
 
-export interface ItemHoldingLocation {
+export interface ItemLocation {
   "@id"?: string
   prefLabel?: string
   customerCode?: string
-  branchEndpoint?: string
+  branchEndpoint?: ItemLocationEndpoint
 }
+
+export type ItemLocationEndpoint = "schwarzman" | "lpa" | "schomburg"
