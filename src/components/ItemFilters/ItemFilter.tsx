@@ -15,12 +15,15 @@ interface ItemFilterProps {
   itemFilterData: ItemFilterData
   setSelectedFilters: Dispatch<React.SetStateAction<selectedFiltersType>>
   selectedFilters: selectedFiltersType
+  // this type is temporary for dev use only. could end up being different.
+  submitFilters: Dispatch<React.SetStateAction<selectedFiltersType>>
 }
 
 const ItemFilter = ({
   itemFilterData,
   setSelectedFilters,
   selectedFilters,
+  submitFilters,
 }: ItemFilterProps) => {
   const field = itemFilterData.field()
   const fieldFormatted = itemFilterData.field(true)
@@ -43,6 +46,7 @@ const ItemFilter = ({
   return (
     <>
       <CheckboxGroup
+        data-testid="item-filter"
         key={field}
         labelText={fieldFormatted}
         name={field}
@@ -68,7 +72,11 @@ const ItemFilter = ({
         >
           Clear
         </Button>
-        <Button key={`apply-${field}-button`} id="apply-filter-button">
+        <Button
+          key={`apply-${field}-button`}
+          id="apply-filter-button"
+          onClick={() => submitFilters(selectedFilters)}
+        >
           Apply
         </Button>
       </div>
