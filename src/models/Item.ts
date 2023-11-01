@@ -4,7 +4,6 @@ import type {
   SearchResultsItem,
   ItemStatus,
   ItemLocation,
-  ItemIdentifier,
 } from "../types/itemTypes"
 import type SearchResultsBib from "./SearchResultsBib"
 import {
@@ -13,8 +12,6 @@ import {
   nonNYPLReCAPLocation,
   locationLabelToKey,
   locationEndpointsMap,
-  barcodeIdentifiers,
-  getBibIdentifiers,
 } from "../utils/itemUtils"
 
 /**
@@ -54,9 +51,7 @@ export default class Item {
     this.format = item.formatLiteral?.length
       ? item.formatLiteral[0]
       : bib.materialType
-    this.barcode = item.identifier?.length
-      ? this.getBarcodeFromItemIdentifiers(item.identifier)
-      : null
+    this.barcode = item.idBarcode?.length ? item.idBarcode[0] : null
     this.location = this.getLocationFromItem(item)
     this.aeonUrl = item.aeonUrl
     this.isPhysicallyRequestable = item.physRequestable
@@ -97,11 +92,6 @@ export default class Item {
     }
 
     return location
-  }
-
-  getBarcodeFromItemIdentifiers(identifiers: ItemIdentifier[]): string {
-    const bibIdentifiers = getBibIdentifiers(identifiers, barcodeIdentifiers)
-    return bibIdentifiers.barcode || ""
   }
 
   // Determine if item is Non-NYPL ReCAP by existence of "Recap" string in item source attribute
