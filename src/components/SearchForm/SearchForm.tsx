@@ -66,6 +66,7 @@ const SearchForm = () => {
             textInputProps={{
               isClearable: true,
               onChange: (e) => handleChange(e, setSearchTerm),
+              isClearableCallback: () => setSearchTerm(""),
               value: searchTerm,
               labelText:
                 "Search by keyword, title, journal title, or author/contributor",
