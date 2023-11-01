@@ -31,6 +31,9 @@ export default class Item {
   format?: string
   location?: ItemLocation
   aeonUrl?: string
+  isRequestable: boolean
+  isPhysicallyRequestable: boolean
+  isEDDRequestable: boolean
 
   constructor(item: SearchResultsItem, bib: SearchResultsBib) {
     this.id = item["@id"] ? item["@id"].substring(4) : ""
@@ -50,6 +53,9 @@ export default class Item {
       : this.bib.materialType
     this.location = this.getLocationFromItem(item)
     this.aeonUrl = item.aeonUrl
+    this.isRequestable = item.requestable.length ? item.requestable[0] : false
+    this.isPhysicallyRequestable = item.physRequestable
+    this.isEDDRequestable = item.eddRequestable
   }
 
   // Item availability is determined by the existence of status label in the availability keys list
