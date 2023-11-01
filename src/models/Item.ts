@@ -30,6 +30,7 @@ export default class Item {
   volume?: string
   format?: string
   location?: ItemLocation
+  aeonUrl?: string
 
   constructor(item: SearchResultsItem, bib: SearchResultsBib) {
     this.id = item["@id"] ? item["@id"].substring(4) : ""
@@ -48,6 +49,7 @@ export default class Item {
       ? item.formatLiteral[0]
       : this.bib.materialType
     this.location = this.getLocationFromItem(item)
+    this.aeonUrl = item.aeonUrl
   }
 
   // Item availability is determined by the existence of status label in the availability keys list
@@ -60,19 +62,8 @@ export default class Item {
     return itemAvailabilityKeys.includes(availability)
   }
 
-  // Determine if item is Non-NYPL ReCAP by existence of "Recap" string in item source attribute
-  get isNonNYPLReCAP(): boolean {
-    return this.source.indexOf("Recap") !== -1
-  }
-
-  // It's an NYPL-owned ReCAP item if item source is Sierra and location is ReCAP
-  get isNYPLReCAP(): boolean {
-    return this.isSierraItem() && this.locationIsRecap()
-  }
-
-  // It's non-ReCAP NYPL-owned item if item source is Sierra and location is not ReCAP
-  get isNYPLNonReCAP(): boolean {
-    return this.isSierraItem() && !this.locationIsRecap()
+  get isReCAP(): boolean {
+    return this.isNonNYPLReCAP() || this.isNYPLReCAP()
   }
 
   // Pre-processing logic for setting Item holding location
@@ -97,12 +88,27 @@ export default class Item {
     return location
   }
 
+  // Determine if item is Non-NYPL ReCAP by existence of "Recap" string in item source attribute
+  isNonNYPLReCAP(): boolean {
+    return this.source.indexOf("Recap") !== -1
+  }
+
+  // It's an NYPL-owned ReCAP item if item source is Sierra and location is ReCAP
+  isNYPLReCAP(): boolean {
+    return this.isSierraItem() && this.locationIsReCAP()
+  }
+
+  // It's non-ReCAP NYPL-owned item if item source is Sierra and location is not ReCAP
+  isNYPLNonReCAP(): boolean {
+    return this.isSierraItem() && !this.locationIsReCAP()
+  }
+
   isSierraItem(): boolean {
     return this.source === "SierraNypl"
   }
 
   // Determine is item location is ReCAP via the location ID
-  locationIsRecap(): boolean {
+  locationIsReCAP(): boolean {
     return this.location["@id"].substring(4, 6) === "rc"
   }
 }

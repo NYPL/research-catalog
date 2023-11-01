@@ -11,6 +11,7 @@ export interface SearchResultsItem {
   enumerationChronology?: string[]
   formatLiteral: string[]
   holdingLocation: ItemLocation[]
+  aeonUrl?: string
 }
 
 export interface ItemAccessMessage {
