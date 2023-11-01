@@ -65,6 +65,7 @@ const ItemFilter = ({
       </CheckboxGroup>
       <div className="item-filter-buttons">
         <Button
+          data-testid={`clear-${field}-button`}
           key={`clear-${field}-button`}
           buttonType="link"
           id="clear-filter-button"

@@ -1,8 +1,9 @@
 import React from "react"
-import { render, screen } from "@testing-library/react"
+import { render, screen, act } from "@testing-library/react"
 import mockRouter from "next-router-mock"
 
-import FiltersContainer from "../../components/ItemFilters/FiltersContainer"
+import FiltersContainer from "./FiltersContainer"
+import userEvent from "@testing-library/user-event"
 
 // Mock next router
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
@@ -27,6 +28,37 @@ describe("Filters container", () => {
       screen.getByLabelText(label)
     )
     selectedValues.forEach((checkbox) => expect(checkbox).toBeChecked())
+  })
+
+  it("clears selection per filter", async () => {
+    mockRouter.query = {
+      item_location: "loc:rc2ma",
+      item_format: "Text",
+      item_status: "status:a,status:na",
+    }
+    render(<FiltersContainer itemAggs={aggs} />)
+    const clearStatusButton = screen.getByTestId("clear-status-button")
+    const selectedValues = [
+      "Available",
+      "Not available",
+      "Text",
+      "Offsite",
+    ].map((label) => screen.getByLabelText(label))
+    // the values start selected
+    selectedValues.forEach((checkbox) => expect(checkbox).toBeChecked())
+    await act(async () => {
+      await userEvent.click(clearStatusButton)
+      const selectedValues = ["Text", "Offsite"].map((label) =>
+        screen.getByLabelText(label)
+      )
+      const deselectedValues = ["Available", "Not available"].map((label) =>
+        screen.getByLabelText(label)
+      )
+      // Format and location values should remain checked
+      selectedValues.forEach((checkbox) => expect(checkbox).toBeChecked())
+      // Status values should be unchecked
+      deselectedValues.forEach((checkbox) => expect(checkbox).not.toBeChecked())
+    })
   })
 })
 
