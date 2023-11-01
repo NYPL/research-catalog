@@ -1,5 +1,6 @@
 import type { SearchResult } from "../types/searchTypes"
 import type { ElectronicResource } from "../types/bibTypes"
+import Item from "../models/Item"
 
 /**
  * The SearchResultsBib class contains the data and getter functions
@@ -20,6 +21,7 @@ export default class SearchResultsBib {
   publicationStatement?: string
   electronicResources?: ElectronicResource[]
   numPhysicalItems: number
+  items: Item[]
 
   constructor(result: SearchResult) {
     this.id = result["@id"] ? result["@id"].substring(4) : ""
@@ -32,6 +34,7 @@ export default class SearchResultsBib {
       : null
     this.electronicResources = result.electronicResources || null
     this.numPhysicalItems = result.numItemsTotal || 0
+    this.items = this.getItemsFromResult(result)
   }
 
   get url() {
@@ -40,6 +43,10 @@ export default class SearchResultsBib {
 
   get numElectronicResources() {
     return this.electronicResources?.length || 0
+  }
+
+  get hasItems() {
+    return this.items.length > 0
   }
 
   get hasPhysicalItems() {
@@ -89,5 +96,11 @@ export default class SearchResultsBib {
       return displayStartYear
     }
     return null
+  }
+
+  getItemsFromResult(result: SearchResult): Item[] {
+    return result.items.map((item) => {
+      return new Item(item, this)
+    })
   }
 }

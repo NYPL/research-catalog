@@ -4,6 +4,7 @@ export const BASE_URL = "/research/research-catalog"
 export const SITE_NAME = "NYPL Research Catalog"
 export const RESULTS_PER_PAGE = 50
 export const DRB_RESULTS_PER_PAGE = 3
+export const ITEMS_PER_SEARCH_RESULT = 3
 
 // Internal path names
 export const PATHS = {
