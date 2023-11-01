@@ -2,7 +2,7 @@
 
 // Item structure coming from the Search Results API response
 export interface SearchResultsItem {
-  "@id"?: string
+  "@id": string
   idNyplSourceId?: ItemSourceID
   accessMessage?: ItemAccessMessage[]
   shelfMark?: string[]
@@ -14,7 +14,7 @@ export interface SearchResultsItem {
 }
 
 export interface ItemAccessMessage {
-  "@id"?: string
+  "@id": string
   prefLabel?: string
 }
 
@@ -24,12 +24,12 @@ export interface ItemSourceID {
 }
 
 export interface ItemStatus {
-  "@id"?: string
+  "@id": string
   prefLabel?: string
 }
 
 export interface ItemLocation {
-  "@id"?: string
+  "@id": string
   prefLabel?: string
   customerCode?: string
   branchEndpoint?: ItemLocationEndpoint

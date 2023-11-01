@@ -102,6 +102,7 @@ export default class Item {
     return this.source === "SierraNypl"
   }
 
+  // Determine is item location is ReCAP via the location ID
   locationIsRecap(): boolean {
     return this.location["@id"].substring(4, 6) === "rc"
   }
