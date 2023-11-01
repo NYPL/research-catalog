@@ -60,23 +60,19 @@ export default class Item {
     return itemAvailabilityKeys.includes(availability)
   }
 
-  get isSierraItem(): boolean {
-    return this.source === "SierraNypl"
-  }
-
   // Determine if item is Non-NYPL ReCAP by existence of "Recap" string in item source attribute
   get isNonNYPLReCAP(): boolean {
     return this.source.indexOf("Recap") !== -1
   }
 
-  // It's an NYPL-owned ReCAP item if item source is Sierra and location ID contains 'rc'
+  // It's an NYPL-owned ReCAP item if item source is Sierra and location is ReCAP
   get isNYPLReCAP(): boolean {
-    return this.isSierraItem && this.location["@id"].substring(4, 6) === "rc"
+    return this.isSierraItem() && this.locationIsRecap()
   }
 
-  // It's non-ReCAP NYPL-owned item if item source is Sierra and location ID does not contain 'rc'
+  // It's non-ReCAP NYPL-owned item if item source is Sierra and location is not ReCAP
   get isNYPLNonReCAP(): boolean {
-    return this.isSierraItem && this.location["@id"].substring(4, 6) !== "rc"
+    return this.isSierraItem() && !this.locationIsRecap()
   }
 
   // Pre-processing logic for setting Item holding location
@@ -100,5 +96,13 @@ export default class Item {
       location = defaultNYPLLocation
     }
     return location
+  }
+
+  isSierraItem(): boolean {
+    return this.source === "SierraNypl"
+  }
+
+  locationIsRecap(): boolean {
+    return this.location["@id"].substring(4, 6) === "rc"
   }
 }
