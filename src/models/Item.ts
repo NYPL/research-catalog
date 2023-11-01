@@ -1,8 +1,17 @@
 import { isEmpty } from "underscore"
 
-import type { SearchResultsItem, ItemStatus } from "../types/itemTypes"
+import type {
+  SearchResultsItem,
+  ItemStatus,
+  ItemHoldingLocation,
+} from "../types/itemTypes"
 import type SearchResultsBib from "./SearchResultsBib"
-import { itemAvailabilityKeys } from "../utils/itemUtils"
+import {
+  itemAvailabilityKeys,
+  defaultNYPLLocation,
+  nonNYPLReCAPLocation,
+  itemLocationEndpoints,
+} from "../utils/itemUtils"
 
 /**
  * The Item class contains the data and getter functions
@@ -13,19 +22,19 @@ export default class Item {
   id: string
   bib: SearchResultsBib
   status?: ItemStatus
-  itemSource?: string
+  source?: string
   accessMessage?: string
   callNumber?: string
   isElectronicResource: boolean
   volume?: string
   format?: string
-  location?: string
+  holdingLocation?: ItemHoldingLocation
 
   constructor(item: SearchResultsItem, bib: SearchResultsBib) {
     this.id = item["@id"] ? item["@id"].substring(4) : ""
     this.bib = bib
     this.status = item.status?.length ? item.status[0] : null
-    this.itemSource = item.idNyplSourceId ? item.idNyplSourceId["@type"] : null
+    this.source = item.idNyplSourceId ? item.idNyplSourceId["@type"] : null
     this.accessMessage = item.accessMessage?.length
       ? item.accessMessage[0]?.prefLabel
       : ""
@@ -37,6 +46,9 @@ export default class Item {
     this.format = item.formatLiteral?.length
       ? item.formatLiteral[0]
       : this.bib.materialType
+    this.holdingLocation = item.holdingLocation?.length
+      ? item.holdingLocation[0]
+      : null
   }
 
   // Item availability is determined by the existence of status label in the availability keys list
@@ -47,5 +59,27 @@ export default class Item {
         ? this.status.prefLabel.replace(/\W/g, "").toLowerCase()
         : ""
     return itemAvailabilityKeys.includes(availability)
+  }
+
+  // Determine if item is Non-NYPL ReCAP by existence of "Recap" string in item source attribute
+  get isNonNYPLReCAP(): boolean {
+    return this.source.indexOf("Recap") !== -1
+  }
+
+  // Returns updated location data based on item type
+  get location(): ItemHoldingLocation {
+    let location = defaultNYPLLocation
+    if (this.isNonNYPLReCAP) return nonNYPLReCAPLocation
+
+    if (this.holdingLocation) {
+      location = this.holdingLocation
+
+      // parse prefLabel for endpoint lookup
+      const locationKey = location.prefLabel
+        .replace(/SASB/, "Schwarzman")
+        .split(" ")[0]
+      location.branchEndpoint = itemLocationEndpoints[locationKey]
+    }
+    return location
   }
 }

@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+
+// Item structure coming from the Search Results API response
 export interface SearchResultsItem {
   "@id"?: string
   idNyplSourceId?: ItemSourceID
@@ -8,6 +10,7 @@ export interface SearchResultsItem {
   status?: ItemStatus[]
   enumerationChronology?: string[]
   formatLiteral: string[]
+  holdingLocation: ItemHoldingLocation[]
 }
 
 export interface ItemAccessMessage {
@@ -23,4 +26,11 @@ export interface ItemSourceID {
 export interface ItemStatus {
   "@id"?: string
   prefLabel?: string
+}
+
+export interface ItemHoldingLocation {
+  "@id"?: string
+  prefLabel?: string
+  customerCode?: string
+  branchEndpoint?: string
 }
