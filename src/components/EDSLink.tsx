@@ -6,8 +6,8 @@ import React from "react"
  */
 const EDSLink = () => {
   return (
-    <Box mt="s" mb="s">
-      <Text size="body2" className="eds-link">
+    <Box mt="0" mb="0">
+      <Text size="body1" className="eds-link">
         <span style={{ color: "var(--nypl-colors-ui-success-primary)" }}>
           New!
         </span>{" "}

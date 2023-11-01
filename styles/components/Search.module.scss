@@ -13,7 +13,11 @@
 .auxSearchContainer {
   display: flex;
   justify-content: space-between;
-
+  @media (max-width: 400px) {
+    flex-direction: column-reverse;
+    bottom-padding: var(--nypl-space-s);
+    align-items: flex-end;
+  }
   a {
     margin-top: var(--nypl-space-xs);
     margin-bottom: var(--nypl-space-s);
