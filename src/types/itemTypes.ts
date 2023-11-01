@@ -35,4 +35,6 @@ export interface ItemLocation {
   branchEndpoint?: ItemLocationEndpoint
 }
 
+export type ItemLocationKey = "Schwarzman" | "Performing" | "Schomburg"
+
 export type ItemLocationEndpoint = "schwarzman" | "lpa" | "schomburg"

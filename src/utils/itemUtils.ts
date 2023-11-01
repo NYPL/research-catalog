@@ -1,4 +1,8 @@
-import type { ItemLocation } from "../types/itemTypes"
+import type {
+  ItemLocation,
+  ItemLocationEndpoint,
+  ItemLocationKey,
+} from "../types/itemTypes"
 
 export const itemAvailabilityKeys = ["available", "useinlibrary"]
 
@@ -16,12 +20,16 @@ export const nonNYPLReCAPLocation: ItemLocation = {
   customerCode: "",
 }
 
-export const locationEndpointsMap = {
+export const locationEndpointsMap: Record<
+  ItemLocationKey,
+  ItemLocationEndpoint
+> = {
   Schwarzman: "schwarzman",
   Performing: "lpa",
   Schomburg: "schomburg",
 }
 
-export function locationLabelToKey(label: string): string {
-  return label.replace(/SASB/, "Schwarzman").split(" ")[0]
+// Extract location key from the location label in the API response
+export function locationLabelToKey(label: string): ItemLocationKey {
+  return label.replace(/SASB/, "Schwarzman").split(" ")[0] as ItemLocationKey
 }
