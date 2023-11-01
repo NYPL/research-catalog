@@ -4,6 +4,7 @@ import type {
   SearchResultsItem,
   ItemStatus,
   ItemLocation,
+  ItemIdentifier,
 } from "../types/itemTypes"
 import type SearchResultsBib from "./SearchResultsBib"
 import {
@@ -12,6 +13,8 @@ import {
   nonNYPLReCAPLocation,
   locationLabelToKey,
   locationEndpointsMap,
+  barcodeIdentifiers,
+  getBibIdentifiers,
 } from "../utils/itemUtils"
 
 /**
@@ -21,7 +24,7 @@ import {
  */
 export default class Item {
   id: string
-  bib: SearchResultsBib
+  bibId: string
   status?: ItemStatus
   source?: string
   accessMessage?: string
@@ -29,6 +32,7 @@ export default class Item {
   isElectronicResource: boolean
   volume?: string
   format?: string
+  barcode?: string
   location?: ItemLocation
   aeonUrl?: string
   isPhysicallyRequestable: boolean
@@ -36,7 +40,7 @@ export default class Item {
 
   constructor(item: SearchResultsItem, bib: SearchResultsBib) {
     this.id = item["@id"] ? item["@id"].substring(4) : ""
-    this.bib = bib
+    this.bibId = bib.id
     this.status = item.status?.length ? item.status[0] : null
     this.source = item.idNyplSourceId ? item.idNyplSourceId["@type"] : null
     this.accessMessage = item.accessMessage?.length
@@ -49,7 +53,10 @@ export default class Item {
       : null
     this.format = item.formatLiteral?.length
       ? item.formatLiteral[0]
-      : this.bib.materialType
+      : bib.materialType
+    this.barcode = item.identifier?.length
+      ? this.getBarcodeFromItemIdentifiers(item.identifier)
+      : null
     this.location = this.getLocationFromItem(item)
     this.aeonUrl = item.aeonUrl
     this.isPhysicallyRequestable = item.physRequestable
@@ -86,10 +93,15 @@ export default class Item {
 
       // Set branch endpoint based on API location label
       const locationKey = locationLabelToKey(location.prefLabel)
-      location.branchEndpoint = locationEndpointsMap[locationKey]
+      location.endpoint = locationEndpointsMap[locationKey]
     }
 
     return location
+  }
+
+  getBarcodeFromItemIdentifiers(identifiers: ItemIdentifier[]): string {
+    const bibIdentifiers = getBibIdentifiers(identifiers, barcodeIdentifiers)
+    return bibIdentifiers.barcode || ""
   }
 
   // Determine if item is Non-NYPL ReCAP by existence of "Recap" string in item source attribute

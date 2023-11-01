@@ -10,6 +10,7 @@ export interface SearchResultsItem {
   status?: ItemStatus[]
   enumerationChronology?: string[]
   formatLiteral: string[]
+  identifier?: ItemIdentifier[]
   holdingLocation: ItemLocation[]
   aeonUrl?: string
   physRequestable?: boolean
@@ -35,7 +36,12 @@ export interface ItemLocation {
   "@id": string
   prefLabel?: string
   customerCode?: string
-  branchEndpoint?: ItemLocationEndpoint
+  endpoint?: ItemLocationEndpoint
+}
+
+export interface ItemIdentifier {
+  "@type": string
+  "@value": string
 }
 
 export type ItemLocationKey = "Schwarzman" | "Performing" | "Schomburg"
