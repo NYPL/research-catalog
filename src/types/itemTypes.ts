@@ -12,7 +12,6 @@ export interface SearchResultsItem {
   formatLiteral: string[]
   holdingLocation: ItemLocation[]
   aeonUrl?: string
-  requestable?: boolean[]
   physRequestable?: boolean
   eddRequestable?: boolean
 }

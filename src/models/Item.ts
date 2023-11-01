@@ -31,7 +31,6 @@ export default class Item {
   format?: string
   location?: ItemLocation
   aeonUrl?: string
-  isRequestable: boolean
   isPhysicallyRequestable: boolean
   isEDDRequestable: boolean
 
@@ -53,7 +52,6 @@ export default class Item {
       : this.bib.materialType
     this.location = this.getLocationFromItem(item)
     this.aeonUrl = item.aeonUrl
-    this.isRequestable = item.requestable.length ? item.requestable[0] : false
     this.isPhysicallyRequestable = item.physRequestable
     this.isEDDRequestable = item.eddRequestable
   }
