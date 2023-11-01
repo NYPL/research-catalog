@@ -77,8 +77,8 @@ export default class Item {
 
   // Pre-processing logic for setting Item holding location
   getLocationFromItem(item: SearchResultsItem): ItemLocation {
-    if (this.isNonNYPLReCAP) return nonNYPLReCAPLocation
-    let location: ItemLocation
+    let location = defaultNYPLLocation
+    if (this.isNonNYPLReCAP) location = nonNYPLReCAPLocation
 
     // Check for existence of Location object in API response
     const itemLocationFromAPI = item.holdingLocation?.length
@@ -92,9 +92,8 @@ export default class Item {
       // Set branch endpoint based on API location label
       const locationKey = locationLabelToKey(location.prefLabel)
       location.branchEndpoint = locationEndpointsMap[locationKey]
-    } else {
-      location = defaultNYPLLocation
     }
+
     return location
   }
 
