@@ -10,11 +10,12 @@
   @include maxWidth;
 }
 
-.advancedSearchContainer {
+.auxSearchContainer {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
 
   a {
-    margin-top: var(--nypl-space-s);
+    margin-top: var(--nypl-space-xs);
+    margin-bottom: var(--nypl-space-s);
   }
 }

@@ -78,10 +78,10 @@ const SearchForm = () => {
             }}
           />
         </div>
-        <div className={styles.advancedSearchContainer}>
+        <div className={styles.auxSearchContainer}>
+          <EDSLink />
           <RCLink href={"/search/advanced"}>Advanced Search</RCLink>
         </div>
-        <EDSLink />
       </div>
     </div>
   )
