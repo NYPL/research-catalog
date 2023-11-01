@@ -19,6 +19,7 @@ export default class Item {
   isElectronicResource: boolean
   volume?: string
   format?: string
+  location?: string
 
   constructor(item: SearchResultsItem, bib: SearchResultsBib) {
     this.id = item["@id"] ? item["@id"].substring(4) : ""
