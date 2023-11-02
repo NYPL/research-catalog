@@ -4,15 +4,15 @@ import type {
   SearchResultsItem,
   ItemStatus,
   ItemLocation,
+  ItemLocationKey,
 } from "../types/itemTypes"
 import type SearchResultsBib from "./SearchResultsBib"
 import {
-  itemAvailabilityKeys,
-  defaultNYPLLocation,
-  nonNYPLReCAPLocation,
-  locationLabelToKey,
-  locationEndpointsMap,
-} from "../utils/itemUtils"
+  ITEM_AVAILABILITY_KEYS,
+  DEFAULT_NYPL_LOCATION,
+  NON_NYPL_RECAP_LOCATION,
+  LOCATION_ENDPOINTS_MAP,
+} from "../config/constants"
 
 /**
  * The Item class contains the data and getter functions
@@ -65,7 +65,7 @@ export default class Item {
       !isEmpty(this.status) && this.status?.prefLabel
         ? this.status.prefLabel.replace(/\W/g, "").toLowerCase()
         : ""
-    return itemAvailabilityKeys.includes(availability)
+    return ITEM_AVAILABILITY_KEYS.includes(availability)
   }
 
   get isReCAP(): boolean {
@@ -74,8 +74,8 @@ export default class Item {
 
   // Pre-processing logic for setting Item holding location
   getLocationFromItem(item: SearchResultsItem): ItemLocation {
-    let location = defaultNYPLLocation
-    if (this.isNonNYPLReCAP) location = nonNYPLReCAPLocation
+    let location = DEFAULT_NYPL_LOCATION
+    if (this.isNonNYPLReCAP) location = NON_NYPL_RECAP_LOCATION
 
     // Check for existence of Location object in API response
     const itemLocationFromAPI = item.holdingLocation?.length
@@ -87,8 +87,8 @@ export default class Item {
       location = itemLocationFromAPI
 
       // Set branch endpoint based on API location label
-      const locationKey = locationLabelToKey(location.prefLabel)
-      location.endpoint = locationEndpointsMap[locationKey]
+      const locationKey = this.locationLabelToKey(location.prefLabel)
+      location.endpoint = LOCATION_ENDPOINTS_MAP[locationKey]
     }
 
     return location
@@ -116,5 +116,10 @@ export default class Item {
   // Determine is item location is ReCAP via the location ID
   locationIsReCAP(): boolean {
     return this.location["@id"].substring(4, 6) === "rc"
+  }
+
+  // Extract location key from the location label in the API response
+  locationLabelToKey(label: string): ItemLocationKey {
+    return label.replace(/SASB/, "Schwarzman").split(" ")[0] as ItemLocationKey
   }
 }
