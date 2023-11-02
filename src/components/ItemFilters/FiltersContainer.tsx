@@ -23,6 +23,8 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
     status: [],
   })
 
+  const [whichFilterIsOpen, setWhichFilterIsOpen] = useState("")
+
   const [tempQueryDisplay, setTempQueryDisplay] = useState("")
 
   const tempSubmitFilters = () => {
@@ -38,12 +40,16 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
     setSelectedFilters(parseQueryParams(query))
   }, [query])
 
+  useEffect(() => tempSubmitFilters(), [selectedFilters])
+
   useEffect(() => console.log({ tempQueryDisplay }), [tempQueryDisplay])
   return (
     <div>
       <p>{tempQueryDisplay}</p>
       {filterData.map((field: ItemFilterData) => (
         <ItemFilter
+          isOpen={whichFilterIsOpen === field.field()}
+          toggleFilterDisplay={setWhichFilterIsOpen}
           key={field.field()}
           itemFilterData={field}
           setSelectedFilters={setSelectedFilters}

@@ -20,49 +20,52 @@ interface ItemFilterProps {
   selectedFilters: selectedFiltersType
   // this type is temporary for dev use only. could end up being different.
   submitFilters: Dispatch<React.SetStateAction<selectedFiltersType>>
+  isOpen: boolean
+  toggleFilterDisplay: Dispatch<React.SetStateAction<string>>
 }
 
 const ItemFilter = ({
   itemFilterData,
   setSelectedFilters,
   selectedFilters,
-  submitFilters,
+  isOpen,
+  toggleFilterDisplay,
 }: ItemFilterProps) => {
   const field = itemFilterData.field()
   const fieldFormatted = itemFilterData.field(true)
-  const [isOpen, setIsOpen] = useState(false)
+  // const [isOpen, setIsOpen] = useState(false)
   const [selectedOptions, setSelectedOptions] = useState(selectedFilters[field])
 
   const resetToAppliedOptions = () => {
-    handleCheck(selectedFilters[field])
+    updateCheckboxGroupValue(selectedFilters[field])
   }
 
   const clearFilter = () => {
+    setSelectedOptions([])
     setSelectedFilters((prevFilters: selectedFiltersType) => {
       return { ...prevFilters, [field]: [] }
     })
   }
 
   const applyFilter = () => {
+    let newFilterSelection
     setSelectedFilters((prevFilters: selectedFiltersType) => {
-      const newFilterSelection = {
+      newFilterSelection = {
         ...prevFilters,
         [field]: selectedOptions,
       }
-      submitFilters(newFilterSelection)
       return newFilterSelection
     })
   }
 
-  const handleCheck = (data: string[]) => {
+  const updateCheckboxGroupValue = (data: string[]) => {
     setSelectedOptions(data)
   }
 
   const openCloseHandler = () => {
-    setIsOpen((prevIsOpen) => {
-      resetToAppliedOptions()
-      return !prevIsOpen
-    })
+    resetToAppliedOptions()
+    if (isOpen) toggleFilterDisplay("")
+    else toggleFilterDisplay(field)
   }
 
   return (
@@ -74,7 +77,7 @@ const ItemFilter = ({
         // },
         returnFocusOnDeactivate: false,
       }}
-      // active={isOpen}
+      active={isOpen}
       className="item-filter"
     >
       <div>
@@ -98,7 +101,7 @@ const ItemFilter = ({
               key={field}
               name={field}
               id={field}
-              onChange={handleCheck}
+              onChange={updateCheckboxGroupValue}
               // isSelected of the children checkboxes is controlled by this value
               // attribute. The options whose value attribute match those present in
               // the CheckboxGroup value array are selected.

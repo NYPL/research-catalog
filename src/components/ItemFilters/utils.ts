@@ -35,18 +35,20 @@ export const buildQueryParams = (
   { location, format, status }: selectedFiltersType,
   recapLocations: string
 ) => {
-  console.log(location)
   const locs = location.map((loc) => {
-    console.log(recapLocations)
     if (loc === "Offsite") return recapLocations
     else return loc
   })
   const location_query = location.length
     ? "item_location=" + locs.join(",")
     : ""
-  const format_query = format.length ? "item_format=" + format.join(",") : ""
-  const status_query = status.length ? "item_status=" + status.join(",") : ""
+  const format_query = format.length
+    ? "item_format=" + format.join(",") + "&"
+    : ""
+  const status_query = status.length
+    ? "item_status=" + status.join(",") + "&"
+    : ""
 
-  const query = encodeURI(`?${location_query}&${format_query}&${status_query}`)
-  return query.length > 3 ? query : ""
+  const query = encodeURI(`?${location_query}${format_query}${status_query}`)
+  return query.length > 1 ? query : ""
 }

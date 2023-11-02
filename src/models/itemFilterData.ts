@@ -47,12 +47,16 @@ export class LocationFilterData extends ItemFilterData {
   }
 
   recapLocations(): string {
-    return this.options
-      .map(({ value }) => {
-        if (isRecapLocation(value)) {
-          return value
-        }
-      })
-      .join(",")
+    return (
+      this.options
+        .map(({ value }) => {
+          if (isRecapLocation(value)) {
+            return value
+          }
+        })
+        // remove null values
+        .filter((loc) => loc)
+        .join(",")
+    )
   }
 }
