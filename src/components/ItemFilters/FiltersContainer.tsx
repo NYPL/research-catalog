@@ -38,6 +38,7 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
     setSelectedFilters(parseQueryParams(query))
   }, [query])
 
+  useEffect(() => console.log({ tempQueryDisplay }), [tempQueryDisplay])
   return (
     <div>
       <p>{tempQueryDisplay}</p>

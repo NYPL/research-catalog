@@ -4,6 +4,8 @@ import type {
   option as optionType,
 } from "../types/filterTypes"
 
+import { isRecapLocation } from "../components/ItemFilters/utils"
+
 export class ItemFilterData {
   options: ItemAggregationOption[]
   _field: string
@@ -29,42 +31,28 @@ export class LocationFilterData extends ItemFilterData {
   }
 
   displayOptions(): ItemAggregationOption[] {
-    return this.reducedLocations().map((loc) => {
-      if (loc.label === "Offsite") {
-        return { ...loc, value: "Offsite" }
-      } else return loc
+    let offsiteCount = 0
+    const optionsWithoutRecap = this.options.filter(({ value, count }) => {
+      if (isRecapLocation(value)) {
+        offsiteCount += count
+        return false
+      } else return true
     })
+    if (offsiteCount) {
+      return [
+        ...optionsWithoutRecap,
+        { label: "Offsite", value: "Offsite", count: offsiteCount },
+      ]
+    } else return optionsWithoutRecap
   }
 
-  recapLocations(): string[] {
-    return this.reducedLocations()
-      .filter(({ label }) => label.split("loc:")[0].startsWith("rc"))
-      .map((recapOption: ItemAggregationOption) => recapOption.value)
-  }
-
-  // There are multiple rc location codes, but we only want to
-  // display a single Offsite option in the locations dropdown.This function
-  // combines separate Offsite location options into one.
-  reducedLocations(): ItemAggregationOption[] {
-    const reducedOptionsMap = {}
-    let count = 0
-    this.options
-      .filter((option: ItemAggregationOption) => option.label?.length)
-      .forEach((option: ItemAggregationOption) => {
-        let label = option.label
-        if (label.toLowerCase().replace(/[^\w]/g, "") === "offsite") {
-          label = "Offsite"
+  recapLocations(): string {
+    return this.options
+      .map(({ value }) => {
+        if (isRecapLocation(value)) {
+          return value
         }
-        if (!reducedOptionsMap[label]) {
-          reducedOptionsMap[label] = new Set()
-        }
-        reducedOptionsMap[label].add(option.value)
-        count += option.count
       })
-    return Object.keys(reducedOptionsMap).map((label) => ({
-      value: Array.from(reducedOptionsMap[label]).join(","),
-      label: label,
-      count,
-    }))
+      .join(",")
   }
 }

@@ -1,6 +1,6 @@
 import type { selectedFilters as selectedFiltersType } from "../../types/filterTypes"
 
-const isRecapLocation = (loc: string) => {
+export const isRecapLocation = (loc: string) => {
   return loc.split(":")[1].startsWith("rc")
 }
 
@@ -33,10 +33,12 @@ export const parseQueryParams = ({
 
 export const buildQueryParams = (
   { location, format, status }: selectedFiltersType,
-  recapLocations: string[]
+  recapLocations: string
 ) => {
+  console.log(location)
   const locs = location.map((loc) => {
-    if (isRecapLocation(loc)) return recapLocations
+    console.log(recapLocations)
+    if (loc === "Offsite") return recapLocations
     else return loc
   })
   const location_query = location.length
