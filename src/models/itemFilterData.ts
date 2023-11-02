@@ -1,25 +1,25 @@
 import type {
   ItemAggregation,
   ItemAggregationOption,
-  option as optionType,
+  Option,
 } from "../types/filterTypes"
 
 import { isRecapLocation } from "../components/ItemFilters/utils"
 
 export class ItemFilterData {
   options: ItemAggregationOption[]
-  _field: string
+  agg: ItemAggregation
   constructor(agg: ItemAggregation) {
-    this._field = agg.field
+    this.agg = agg
     this.options = agg.values
   }
 
-  displayOptions(): optionType[] {
+  displayOptions(): Option[] {
     return this.options
   }
 
   field(formatted = false) {
-    const f = this._field
+    const f = this.agg.field
     const upperCased = f[0].toUpperCase() + f.substring(1)
     return formatted ? upperCased : f
   }

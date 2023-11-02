@@ -6,20 +6,17 @@ import {
 } from "@nypl/design-system-react-components"
 import type { Dispatch } from "react"
 import FocusTrap from "focus-trap-react"
-import { useState, useRef, useEffect } from "react"
+import { useState } from "react"
 
 import type { ItemFilterData } from "../../models/itemFilterData"
-import type {
-  option as optionType,
-  selectedFilters as selectedFiltersType,
-} from "../../types/filterTypes"
+import type { Option, SelectedFilters } from "../../types/filterTypes"
 
 interface ItemFilterProps {
   itemFilterData: ItemFilterData
-  setSelectedFilters: Dispatch<React.SetStateAction<selectedFiltersType>>
-  selectedFilters: selectedFiltersType
+  setSelectedFilters: Dispatch<React.SetStateAction<SelectedFilters>>
+  selectedFilters: SelectedFilters
   // this type is temporary for dev use only. could end up being different.
-  submitFilters: Dispatch<React.SetStateAction<selectedFiltersType>>
+  submitFilters: Dispatch<React.SetStateAction<SelectedFilters>>
   isOpen: boolean
   toggleFilterDisplay: Dispatch<React.SetStateAction<string>>
 }
@@ -42,14 +39,14 @@ const ItemFilter = ({
 
   const clearFilter = () => {
     setSelectedOptions([])
-    setSelectedFilters((prevFilters: selectedFiltersType) => {
+    setSelectedFilters((prevFilters: SelectedFilters) => {
       return { ...prevFilters, [field]: [] }
     })
   }
 
   const applyFilter = () => {
     let newFilterSelection
-    setSelectedFilters((prevFilters: selectedFiltersType) => {
+    setSelectedFilters((prevFilters: SelectedFilters) => {
       newFilterSelection = {
         ...prevFilters,
         [field]: selectedOptions,
@@ -109,7 +106,7 @@ const ItemFilter = ({
             >
               {itemFilterData
                 .displayOptions()
-                .map(({ value, label }: optionType) => {
+                .map(({ value, label }: Option) => {
                   return (
                     <Checkbox
                       id={value}
