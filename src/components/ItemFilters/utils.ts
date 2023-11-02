@@ -1,4 +1,4 @@
-import type { selectedFilters as selectedFiltersType } from "../../types/filterTypes"
+import type { SelectedFilters } from "../../types/filterTypes"
 
 const isRecapLocation = (loc: string) => {
   return loc.split(":")[1].startsWith("rc")
@@ -11,7 +11,7 @@ export const combineRecapLocations = (locations: string[]) => {
   } else return locations
 }
 
-type bibPageQueryParams = {
+type BibPageQueryParams = {
   item_location?: string
   item_format?: string
   item_status?: string
@@ -21,7 +21,7 @@ export const parseQueryParams = ({
   item_status,
   item_format,
   item_location,
-}: bibPageQueryParams) => {
+}: BibPageQueryParams) => {
   return {
     location: item_location
       ? combineRecapLocations(item_location.split(","))
@@ -32,7 +32,7 @@ export const parseQueryParams = ({
 }
 
 export const buildQueryParams = (
-  { location, format, status }: selectedFiltersType,
+  { location, format, status }: SelectedFilters,
   recapLocations: string[]
 ) => {
   const locs = location.map((loc) => {

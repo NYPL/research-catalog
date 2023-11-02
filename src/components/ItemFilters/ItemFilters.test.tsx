@@ -9,6 +9,11 @@ import userEvent from "@testing-library/user-event"
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
 describe("Filters container", () => {
+  it("renders a single filter", () => {
+    render(<FiltersContainer itemAggs={[aggs[0]]} />)
+    const filters = screen.getAllByTestId("item-filter")
+    expect(filters.length).toBe(1)
+  })
   it("renders three filter boxes", () => {
     render(<FiltersContainer itemAggs={aggs} />)
     const filters = screen.getAllByTestId("item-filter")

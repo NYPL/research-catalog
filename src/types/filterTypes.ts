@@ -1,6 +1,6 @@
-export type locations = string[]
+export type Locations = string[]
 
-export type selectedFilters = {
+export type SelectedFilters = {
   location: string[]
   format: string[]
   status: string[]
@@ -21,7 +21,7 @@ export interface ItemAggregation {
   values: ItemAggregationOption[]
 }
 
-export type option = { value: string; label: string }
+export type Option = { value: string; label: string }
 
 export type ReducedItemAggregation = {
   field: string

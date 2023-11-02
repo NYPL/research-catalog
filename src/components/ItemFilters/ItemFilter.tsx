@@ -6,17 +6,14 @@ import {
 import type { Dispatch } from "react"
 
 import type { ItemFilterData } from "../../models/itemFilterData"
-import type {
-  option as optionType,
-  selectedFilters as selectedFiltersType,
-} from "../../types/filterTypes"
+import type { Option, SelectedFilters } from "../../types/filterTypes"
 
 interface ItemFilterProps {
   itemFilterData: ItemFilterData
-  setSelectedFilters: Dispatch<React.SetStateAction<selectedFiltersType>>
-  selectedFilters: selectedFiltersType
+  setSelectedFilters: Dispatch<React.SetStateAction<SelectedFilters>>
+  selectedFilters: SelectedFilters
   // this type is temporary for dev use only. could end up being different.
-  submitFilters: Dispatch<React.SetStateAction<selectedFiltersType>>
+  submitFilters: Dispatch<React.SetStateAction<SelectedFilters>>
 }
 
 const ItemFilter = ({
@@ -28,13 +25,13 @@ const ItemFilter = ({
   const field = itemFilterData.field()
   const fieldFormatted = itemFilterData.field(true)
   const clearFilter = () => {
-    setSelectedFilters((prevFilters: selectedFiltersType) => {
+    setSelectedFilters((prevFilters: SelectedFilters) => {
       return { ...prevFilters, [field]: [] }
     })
   }
 
   const handleCheck = (selectedOptions: string[]) => {
-    setSelectedFilters((prevFilters: selectedFiltersType) => {
+    setSelectedFilters((prevFilters: SelectedFilters) => {
       const newFilterSelection = {
         ...prevFilters,
         [field]: selectedOptions,
@@ -57,7 +54,7 @@ const ItemFilter = ({
         // the CheckboxGroup value array are selected.
         value={selectedFilters[field]}
       >
-        {itemFilterData.displayOptions().map(({ value, label }: optionType) => {
+        {itemFilterData.displayOptions().map(({ value, label }: Option) => {
           return (
             <Checkbox id={value} key={value} value={value} labelText={label} />
           )
