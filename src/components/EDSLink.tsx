@@ -1,13 +1,15 @@
 import { Box, Text, Link as DSLink } from "@nypl/design-system-react-components"
 import React from "react"
 
+import styles from "../../styles/components/Search.module.scss"
+
 /**
  * Renders a simple link to log out the user out from the Catalog.
  */
 const EDSLink = () => {
   return (
-    <Box mt="0" mb="0">
-      <Text size="body1" className="eds-link">
+    <Box className={styles.edsLink} mt="0" mb="0">
+      <Text size="body2" className="eds-link">
         <span style={{ color: "var(--nypl-colors-ui-success-primary)" }}>
           New!
         </span>{" "}
