@@ -8,7 +8,7 @@ import {
 } from "@nypl/design-system-react-components"
 import type { Dispatch } from "react"
 import FocusTrap from "focus-trap-react"
-import { useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 
 import type { ItemFilterData } from "../../models/itemFilterData"
 import type { Option, SelectedFilters } from "../../types/filterTypes"
@@ -35,9 +35,9 @@ const ItemFilter = ({
   const fieldFormatted = itemFilterData.field(true)
   const [selectedOptions, setSelectedOptions] = useState(selectedFilters[field])
 
-  const resetToAppliedOptions = () => {
+  const resetToAppliedOptions = useCallback(() => {
     updateCheckboxGroupValue(selectedFilters[field])
-  }
+  }, [selectedFilters, field])
 
   const clearFilter = () => {
     setSelectedOptions([])
@@ -62,10 +62,13 @@ const ItemFilter = ({
   }
 
   const openCloseHandler = () => {
-    resetToAppliedOptions()
     if (isOpen) toggleFilterDisplay("")
     else toggleFilterDisplay(field)
   }
+
+  useEffect(() => {
+    if (!isOpen) resetToAppliedOptions()
+  }, [isOpen, resetToAppliedOptions])
 
   return (
     <div>
@@ -115,7 +118,7 @@ const ItemFilter = ({
             <Button
               data-testid={`clear-${field}-button`}
               key={`clear-${field}-button`}
-              buttonType="link"
+              buttonType="text"
               id="clear-filter-button"
               onClick={clearFilter}
             >
