@@ -51,7 +51,7 @@ export default class Item {
       : bib.materialType
     this.barcode = item.idBarcode?.length ? item.idBarcode[0] : null
     this.location = this.getLocationFromItem(item)
-    this.aeonUrl = item.aeonUrl
+    this.aeonUrl = item.aeonUrl?.length ? item.aeonUrl[0] : null
     this.isPhysicallyRequestable = item.physRequestable
     this.isEDDRequestable = item.eddRequestable
   }

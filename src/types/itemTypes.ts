@@ -9,10 +9,10 @@ export interface SearchResultsItem {
   electronicLocator?: string[]
   status?: ItemStatus[]
   enumerationChronology?: string[]
-  formatLiteral: string[]
+  formatLiteral?: string[]
   idBarcode?: string[]
   holdingLocation: ItemLocation[]
-  aeonUrl?: string
+  aeonUrl?: string[]
   physRequestable?: boolean
   eddRequestable?: boolean
 }
