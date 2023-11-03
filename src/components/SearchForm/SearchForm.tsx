@@ -7,6 +7,7 @@ import styles from "../../../styles/components/Search.module.scss"
 import RCLink from "../RCLink/RCLink"
 import { getQueryString } from "../../utils/searchUtils"
 import { BASE_URL, PATHS } from "../../config/constants"
+import EDSLink from "../EDSLink"
 
 /**
  * The SearchForm component renders and controls the Search form and
@@ -63,7 +64,9 @@ const SearchForm = () => {
               ],
             }}
             textInputProps={{
+              isClearable: true,
               onChange: (e) => handleChange(e, setSearchTerm),
+              isClearableCallback: () => setSearchTerm(""),
               value: searchTerm,
               labelText:
                 "Search by keyword, title, journal title, or author/contributor",
@@ -76,8 +79,11 @@ const SearchForm = () => {
             }}
           />
         </div>
-        <div className={styles.advancedSearchContainer}>
-          <RCLink href={"/search/advanced"}>Advanced Search</RCLink>
+        <div className={styles.auxSearchContainer}>
+          <EDSLink />
+          <RCLink className={styles.advancedSearch} href={"/search/advanced"}>
+            Advanced Search
+          </RCLink>
         </div>
       </div>
     </div>
