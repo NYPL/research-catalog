@@ -19,5 +19,21 @@ describe("Item Filter Utils", () => {
       const locations = ["loc:mab", "loc:rc2ma", "loc:rcma2", "loc:rcrc"]
       expect(combineRecapLocations(locations)).toEqual(["loc:mab", "Offsite"])
     })
+    it("does nothing if there are no recap locations", () => {
+      const locations = ["loc:mab", "loc:mac", "loc:spaghetti"]
+      expect(combineRecapLocations(locations)).toEqual([
+        "loc:mab",
+        "loc:mac",
+        "loc:spaghetti",
+      ])
+    })
+    it("replaces offsite locations with no other locations", () => {
+      const locations = ["loc:rc2ma", "loc:rcma2", "loc:rcrc"]
+      expect(combineRecapLocations(locations)).toEqual(["Offsite"])
+    })
+    it("can handle an empty array", () => {
+      const locations = []
+      expect(combineRecapLocations(locations)).toEqual([])
+    })
   })
 })

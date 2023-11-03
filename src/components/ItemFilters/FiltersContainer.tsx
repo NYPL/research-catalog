@@ -48,7 +48,6 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
 
   useEffect(tempSubmitFilters, [selectedFilters, tempSubmitFilters])
 
-  useEffect(() => console.log({ tempQueryDisplay }), [tempQueryDisplay])
   return (
     <div>
       <p>{tempQueryDisplay}</p>

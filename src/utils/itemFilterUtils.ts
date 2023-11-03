@@ -1,11 +1,10 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import type { SelectedFilters } from "../types/filterTypes"
 
 export const isRecapLocation = (loc: string) => {
-  console.log(loc)
   return loc.split(":")[1].startsWith("rc")
 }
 
-/* eslint-disable @typescript-eslint/naming-convention */
 export const combineRecapLocations = (locations: string[]) => {
   if (locations.find(isRecapLocation)) {
     return [...locations.filter((loc) => !isRecapLocation(loc)), "Offsite"]
@@ -37,7 +36,7 @@ export const buildItemFilterQueryParams = (
   recapLocations: string
 ) => {
   const locs = location.map((loc) => {
-    if (isRecapLocation(loc)) return recapLocations
+    if (loc === "Offsite") return recapLocations
     else return loc
   })
   const location_query = location.length

@@ -8,31 +8,67 @@ import userEvent from "@testing-library/user-event"
 // Mock next router
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
+const filterHasSelected = async (checkboxGroupButton, values: string[]) => {
+  await act(async () => {
+    await userEvent.click(checkboxGroupButton)
+    const selectedValues = values.map((label) => screen.getByLabelText(label))
+    const checkboxes = screen.getAllByRole("checkbox", { checked: true })
+    expect(checkboxes.length).toBe(values.length)
+    selectedValues.forEach((checkbox) => {
+      expect(checkbox).toBeChecked()
+    })
+  })
+}
+
+const filterButtons = () => {
+  const locationCheckboxGroupButton = screen.getByTestId("location-item-filter")
+  const statusCheckboxGroupButton = screen.getByTestId("status-item-filter")
+  const formatCheckboxGroupButton = screen.getByTestId("format-item-filter")
+
+  return [
+    locationCheckboxGroupButton,
+    statusCheckboxGroupButton,
+    formatCheckboxGroupButton,
+  ]
+}
+
+const filterNotSelected = async (checkboxGroupButton, values: string[]) => {
+  await act(async () => {
+    await userEvent.click(checkboxGroupButton)
+    const selectedValues = values.map((label) => screen.getByLabelText(label))
+    selectedValues.forEach((checkbox) => {
+      expect(checkbox).not.toBeChecked()
+    })
+  })
+}
+
 describe("Filters container", () => {
   it("renders a single filter", () => {
     render(<FiltersContainer itemAggs={[aggs[0]]} />)
-    const filters = screen.getAllByTestId("item-filter")
+    const filters = screen.getAllByTestId(/item-filter/)
     expect(filters.length).toBe(1)
   })
   it("renders three filter boxes", () => {
     render(<FiltersContainer itemAggs={aggs} />)
-    const filters = screen.getAllByTestId("item-filter")
+    const filters = screen.getAllByTestId(/item-filter/)
     expect(filters.length).toBe(3)
   })
-  it("loads the query into state", () => {
+
+  it("loads the query into state", async () => {
     mockRouter.query = {
       item_location: "loc:rc2ma",
       item_format: "Text",
       item_status: "status:a",
     }
     render(<FiltersContainer itemAggs={aggs} />)
-
-    const checkboxes = screen.getAllByRole("checkbox", { checked: true })
-    expect(checkboxes.length).toBe(3)
-    const selectedValues = ["Available", "Text", "Offsite"].map((label) =>
-      screen.getByLabelText(label)
-    )
-    selectedValues.forEach((checkbox) => expect(checkbox).toBeChecked())
+    const [
+      locationCheckboxGroupButton,
+      statusCheckboxGroupButton,
+      formatCheckboxGroupButton,
+    ] = filterButtons()
+    await filterHasSelected(locationCheckboxGroupButton, ["Offsite"])
+    await filterHasSelected(formatCheckboxGroupButton, ["Text"])
+    await filterHasSelected(statusCheckboxGroupButton, ["Available"])
   })
 
   it("clears selection per filter", async () => {
@@ -42,27 +78,32 @@ describe("Filters container", () => {
       item_status: "status:a,status:na",
     }
     render(<FiltersContainer itemAggs={aggs} />)
-    const clearStatusButton = screen.getByTestId("clear-status-button")
-    const selectedValues = [
+    const [
+      locationCheckboxGroupButton,
+      statusCheckboxGroupButton,
+      formatCheckboxGroupButton,
+    ] = filterButtons()
+
+    // the values start selected
+    await filterHasSelected(locationCheckboxGroupButton, ["Offsite"])
+    await filterHasSelected(formatCheckboxGroupButton, ["Text"])
+    await filterHasSelected(statusCheckboxGroupButton, [
       "Available",
       "Not available",
-      "Text",
-      "Offsite",
-    ].map((label) => screen.getByLabelText(label))
-    // the values start selected
-    selectedValues.forEach((checkbox) => expect(checkbox).toBeChecked())
+    ])
+    const clearStatusButton = screen.getByTestId("clear-status-button")
+
     await act(async () => {
       await userEvent.click(clearStatusButton)
-      const selectedValues = ["Text", "Offsite"].map((label) =>
-        screen.getByLabelText(label)
-      )
-      const deselectedValues = ["Available", "Not available"].map((label) =>
-        screen.getByLabelText(label)
-      )
-      // Format and location values should remain checked
-      selectedValues.forEach((checkbox) => expect(checkbox).toBeChecked())
+      // these filters should be unchanged
+      await filterHasSelected(locationCheckboxGroupButton, ["Offsite"])
+      await filterHasSelected(formatCheckboxGroupButton, ["Text"])
+
       // Status values should be unchecked
-      deselectedValues.forEach((checkbox) => expect(checkbox).not.toBeChecked())
+      await filterNotSelected(statusCheckboxGroupButton, [
+        "Available",
+        "Not available",
+      ])
     })
   })
 })
