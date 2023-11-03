@@ -88,22 +88,23 @@ describe("Item model", () => {
     })
   })
 
-  describe("isRecap", () => {
-    it("determines if an item is reCAP", () => {
-      expect(item.isReCAP).toBe(false)
-
-      const recapItem = new Item(itemNonNYPLReCAP, parentBib)
-      expect(recapItem.isReCAP).toBe(true)
+  describe("ReCAP checks", () => {
+    let nonNyplRecap: Item
+    let nyplRecap: Item
+    beforeEach(() => {
+      nonNyplRecap = new Item(itemNonNYPLReCAP, parentBib)
+      nyplRecap = new Item(itemNYPLReCAP, parentBib)
     })
-  })
 
-  describe("isNYPLReCAP and isNYPLNonReCAP", () => {
+    it("determines if an item is reCAP", () => {
+      expect(nonNyplRecap.isReCAP).toBe(true)
+      expect(nyplRecap.isReCAP).toBe(true)
+    })
+
     it("determines if an item is nypl-owned reCAP or non-nypl Recap", () => {
-      const recapItem = new Item(itemNonNYPLReCAP, parentBib)
-      expect(recapItem.isNYPLReCAP()).toBe(false)
-      expect(recapItem.isNonNYPLReCAP()).toBe(true)
+      expect(nonNyplRecap.isNYPLReCAP()).toBe(false)
+      expect(nonNyplRecap.isNonNYPLReCAP()).toBe(true)
 
-      const nyplRecap = new Item(itemNYPLReCAP, parentBib)
       expect(nyplRecap.isNYPLReCAP()).toBe(true)
       expect(nyplRecap.isNonNYPLReCAP()).toBe(false)
     })
