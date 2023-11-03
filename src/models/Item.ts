@@ -26,7 +26,6 @@ export default class Item {
   source?: string
   accessMessage?: string
   callNumber?: string
-  isElectronicResource: boolean
   volume?: string
   format?: string
   barcode?: string
@@ -44,7 +43,6 @@ export default class Item {
       ? item.accessMessage[0]?.prefLabel
       : ""
     this.callNumber = item.shelfMark.length ? item.shelfMark[0] : null
-    this.isElectronicResource = !!item.electronicLocator?.length
     this.volume = item.enumerationChronology?.length
       ? item.enumerationChronology[0]
       : null
