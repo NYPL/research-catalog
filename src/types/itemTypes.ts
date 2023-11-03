@@ -11,7 +11,7 @@ export interface SearchResultsItem {
   enumerationChronology?: string[]
   formatLiteral?: string[]
   idBarcode?: string[]
-  holdingLocation: ItemLocation[]
+  holdingLocation?: ItemLocation[]
   aeonUrl?: string[]
   physRequestable?: boolean
   eddRequestable?: boolean

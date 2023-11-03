@@ -4,6 +4,7 @@ import {
   itemPhysicallyRequestable,
   itemEddRequestable,
   itemUnavailable,
+  itemReCAP,
 } from "../../../__test__/fixtures/items"
 import { searchResultPhysicalItems } from "../../../__test__/fixtures/searchResultPhysicalItems"
 
@@ -83,6 +84,15 @@ describe("Item model", () => {
 
       const unavailableItem = new Item(itemUnavailable, parentBib)
       expect(unavailableItem.isAvailable).toBe(false)
+    })
+  })
+
+  describe("isRecap", () => {
+    it("determines if an item is reCAP", () => {
+      expect(item.isReCAP).toBe(false)
+
+      const recapItem = new Item(itemReCAP, parentBib)
+      expect(recapItem.isReCAP).toBe(true)
     })
   })
 })

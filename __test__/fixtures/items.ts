@@ -166,3 +166,54 @@ export const itemUnavailable = {
     "@value": "17193499",
   },
 }
+
+export const itemReCAP = {
+  "@id": "res:ci1628993",
+  accessMessage: [
+    {
+      "@id": "accessMessage:2",
+      prefLabel: "Request in advance",
+    },
+  ],
+  catalogItemType: [
+    {
+      "@id": "catalogItemType:1",
+      prefLabel: "non-circ",
+    },
+  ],
+  eddRequestable: true,
+  idBarcode: ["CU63051249"],
+  identifier: [
+    {
+      "@type": "bf:ShelfMark",
+      "@value": "PT2676.L395 L3 1992g",
+    },
+    {
+      "@type": "bf:Barcode",
+      "@value": "CU63051249",
+    },
+  ],
+  owner: [
+    {
+      "@id": "orgs:0002",
+      prefLabel: "Columbia University Libraries",
+    },
+  ],
+  physRequestable: true,
+  physicalLocation: ["PT2676.L395 L3 1992g"],
+  recapCustomerCode: ["CU"],
+  requestable: [true],
+  shelfMark: ["PT2676.L395 L3 1992g"],
+  specRequestable: false,
+  status: [
+    {
+      "@id": "status:a",
+      prefLabel: "Available",
+    },
+  ],
+  uri: "ci1628993",
+  idNyplSourceId: {
+    "@type": "RecapCul",
+    "@value": "1628993",
+  },
+}
