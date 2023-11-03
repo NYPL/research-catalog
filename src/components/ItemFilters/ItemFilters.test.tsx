@@ -72,7 +72,7 @@ describe("Filters container", () => {
       await filterHasSelected(formatCheckboxGroupButton, ["Text"])
 
       // Status values should be unchecked
-      await filterNotSelected(statusCheckboxGroupButton, [
+      await filterHasNotSelected(statusCheckboxGroupButton, [
         "Available",
         "Not available",
       ])
@@ -96,8 +96,37 @@ describe("Filters container", () => {
       expect(applyButton).toBeDisabled()
     })
   })
-})
 
+  it("persists previously applied selection after closing filter without applying", async () => {
+    mockRouter.query = {
+      item_location: "loc:rc2ma",
+      item_format: "Text",
+      item_status: "status:a,status:na",
+    }
+    render(<FiltersContainer itemAggs={aggs} />)
+    const [locationCheckboxGroupButton, statusCheckboxGroupButton] =
+      filterButtons()
+    await act(async () => {
+      await userEvent.click(locationCheckboxGroupButton)
+      const checkbox = screen.getByLabelText(/Main Reading Room/)
+      const offsiteCheckbox = screen.getByLabelText("Offsite")
+      // uncheck Offsite (set from query parsing)
+      await userEvent.click(offsiteCheckbox)
+      // check another location
+      await userEvent.click(checkbox)
+      // don't apply
+
+      // clicking other filter label closes the location filter
+      await userEvent.click(statusCheckboxGroupButton)
+      await userEvent.click(locationCheckboxGroupButton)
+
+      filterHasSelected(locationCheckboxGroupButton, ["Offsite"])
+      filterHasNotSelected(locationCheckboxGroupButton, [
+        "Schwarzman Building - Main Reading Room 315",
+      ])
+    })
+  })
+})
 const filterHasSelected = async (checkboxGroupButton, values: string[]) => {
   await act(async () => {
     await userEvent.click(checkboxGroupButton)
@@ -122,7 +151,7 @@ const filterButtons = () => {
   ]
 }
 
-const filterNotSelected = async (checkboxGroupButton, values: string[]) => {
+const filterHasNotSelected = async (checkboxGroupButton, values: string[]) => {
   await act(async () => {
     await userEvent.click(checkboxGroupButton)
     const selectedValues = values.map((label) => screen.getByLabelText(label))

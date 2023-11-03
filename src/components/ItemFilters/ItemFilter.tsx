@@ -7,7 +7,6 @@ import {
   ButtonGroup,
 } from "@nypl/design-system-react-components"
 import type { Dispatch } from "react"
-import FocusTrap from "focus-trap-react"
 import { useCallback, useEffect, useState } from "react"
 
 import type { ItemFilterData } from "../../models/itemFilterData"
