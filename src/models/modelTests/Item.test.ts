@@ -6,7 +6,7 @@ import {
   itemUnavailable,
   itemNonNYPLReCAP,
   itemNYPLReCAP,
-} from "../../../__test__/fixtures/items"
+} from "../../../__test__/fixtures/itemFixtures"
 import { searchResultPhysicalItems } from "../../../__test__/fixtures/searchResultPhysicalItems"
 
 describe("Item model", () => {

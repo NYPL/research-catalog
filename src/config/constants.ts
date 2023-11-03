@@ -1,9 +1,4 @@
 import { appConfig } from "./config"
-import type {
-  ItemLocation,
-  ItemLocationEndpoint,
-  ItemLocationKey,
-} from "../types/itemTypes"
 
 export const BASE_URL = "/research/research-catalog"
 export const SITE_NAME = "NYPL Research Catalog"
