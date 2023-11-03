@@ -1,7 +1,10 @@
 import Item from "../Item"
 import SearchResultsBib from "../SearchResultsBib"
-import { itemPhysicallyRequestable } from "../../../__test__/fixtures/itemPhysicallyRequestable"
-import { itemEddRequestable } from "../../../__test__/fixtures/itemEddRequestable"
+import {
+  itemPhysicallyRequestable,
+  itemEddRequestable,
+  itemUnavailable,
+} from "../../../__test__/fixtures/items"
 import { searchResultPhysicalItems } from "../../../__test__/fixtures/searchResultPhysicalItems"
 
 describe("Item model", () => {
@@ -68,8 +71,18 @@ describe("Item model", () => {
       expect(item.isEDDRequestable).toBe(false)
 
       const itemEdd = new Item(itemEddRequestable, parentBib)
+
       expect(itemEdd.isEDDRequestable).toBe(true)
       expect(itemEdd.isPhysicallyRequestable).toBe(false)
+    })
+  })
+
+  describe("isAvailable", () => {
+    it("determines if an item is available based on the status label", () => {
+      expect(item.isAvailable).toBe(true)
+
+      const unavailableItem = new Item(itemUnavailable, parentBib)
+      expect(unavailableItem.isAvailable).toBe(false)
     })
   })
 })
