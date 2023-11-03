@@ -40,7 +40,7 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
     setSelectedFilters(parseQueryParams(query))
   }, [query])
 
-  useEffect(() => tempSubmitFilters(), [selectedFilters])
+  useEffect(tempSubmitFilters, [selectedFilters, tempSubmitFilters])
 
   useEffect(() => console.log({ tempQueryDisplay }), [tempQueryDisplay])
   return (

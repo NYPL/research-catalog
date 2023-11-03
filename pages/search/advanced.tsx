@@ -125,7 +125,7 @@ export default function AdvancedSearch() {
             }
           />
         )}
-        <ItemFilterContainer itemAggs={[testItemAggs[0]]} />
+        <ItemFilterContainer itemAggs={testItemAggs} />
         <Heading level="two">Advanced Search</Heading>
         <Form
           id="advancedSearchForm"

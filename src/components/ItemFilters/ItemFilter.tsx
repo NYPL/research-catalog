@@ -3,6 +3,7 @@ import {
   Checkbox,
   Button,
   Icon,
+  Spacer,
 } from "@nypl/design-system-react-components"
 import type { Dispatch } from "react"
 import FocusTrap from "focus-trap-react"
@@ -10,6 +11,7 @@ import { useState } from "react"
 
 import type { ItemFilterData } from "../../models/itemFilterData"
 import type { Option, SelectedFilters } from "../../types/filterTypes"
+import styles from "../../../styles/components/ItemFilters.module.scss"
 
 interface ItemFilterProps {
   itemFilterData: ItemFilterData
@@ -45,7 +47,7 @@ const ItemFilter = ({
   }
 
   const applyFilter = () => {
-    let newFilterSelection
+    let newFilterSelection: SelectedFilters
     setSelectedFilters((prevFilters: SelectedFilters) => {
       newFilterSelection = {
         ...prevFilters,
@@ -86,7 +88,8 @@ const ItemFilter = ({
           type="button"
         >
           {fieldFormatted}
-          {/*{numOfSelections}*/}
+          <Spacer />
+          {`(${selectedOptions.length})`}
           <Icon name={isOpen ? "minus" : "plus"} size="medium" />
         </Button>
         {isOpen && (
@@ -109,6 +112,7 @@ const ItemFilter = ({
                 .map(({ value, label }: Option) => {
                   return (
                     <Checkbox
+                      className={styles.filterOption}
                       id={value}
                       key={value}
                       value={value}
