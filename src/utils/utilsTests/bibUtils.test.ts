@@ -1,4 +1,4 @@
-import { standardizeBibId } from "../../utils/bibUtils"
+import { standardizeBibId } from "../bibUtils"
 
 describe("bibUtils", () => {
   describe("standardizeBibId", () => {

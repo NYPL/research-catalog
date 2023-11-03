@@ -35,30 +35,3 @@ export const SOURCE_PARAM = "?source=catalog"
 // External URLs
 export const DRB_BASE_URL =
   appConfig.externalUrls.drbFrontEnd[appConfig.environment]
-
-// Item config
-
-export const ITEM_AVAILABILITY_KEYS = ["available", "useinlibrary"]
-
-// Default delivery location for an item.
-export const DEFAULT_NYPL_LOCATION: ItemLocation = {
-  "@id": "",
-  prefLabel: "Check with Staff",
-  customerCode: "",
-}
-
-// Default delivery location for a nonNyplRecap item.
-export const NON_NYPL_RECAP_LOCATION: ItemLocation = {
-  "@id": "",
-  prefLabel: "Off-site",
-  customerCode: "",
-}
-
-export const LOCATION_ENDPOINTS_MAP: Record<
-  ItemLocationKey,
-  ItemLocationEndpoint
-> = {
-  Schwarzman: "schwarzman",
-  Performing: "lpa",
-  Schomburg: "schomburg",
-}
