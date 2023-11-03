@@ -5,7 +5,10 @@ import type { ItemAggregation } from "../../types/filterTypes"
 import { ItemFilterData, LocationFilterData } from "../../models/itemFilterData"
 import ItemFilter from "./ItemFilter"
 import React from "react"
-import { buildQueryParams, parseQueryParams } from "./utils"
+import {
+  buildItemFilterQueryParams,
+  parseItemFilterQueryParams,
+} from "../../utils/itemFilterUtils"
 
 interface ItemFilterContainerProps {
   itemAggs: ItemAggregation[]
@@ -32,12 +35,15 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
       (filter) => filter.field() === "location"
     ) as LocationFilterData
     setTempQueryDisplay(
-      buildQueryParams(selectedFilters, locationFilterData.recapLocations())
+      buildItemFilterQueryParams(
+        selectedFilters,
+        locationFilterData.recapLocations()
+      )
     )
   }
 
   useEffect(() => {
-    setSelectedFilters(parseQueryParams(query))
+    setSelectedFilters(parseItemFilterQueryParams(query))
   }, [query])
 
   useEffect(tempSubmitFilters, [selectedFilters, tempSubmitFilters])

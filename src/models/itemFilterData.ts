@@ -4,7 +4,7 @@ import type {
   Option,
 } from "../types/filterTypes"
 
-import { isRecapLocation } from "../components/ItemFilters/utils"
+import { isRecapLocation } from "../utils/itemFilterUtils"
 
 export class ItemFilterData {
   options: ItemAggregationOption[]

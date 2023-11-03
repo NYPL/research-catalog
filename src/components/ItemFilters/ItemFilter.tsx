@@ -82,7 +82,6 @@ const ItemFilter = ({
       <div>
         <Button
           buttonType="secondary"
-          // className={`item-filter-button ${open ? " open" : ""}`}
           id="item-filter-button"
           onClick={openCloseHandler}
           type="button"
