@@ -1,5 +1,9 @@
 import Head from "next/head"
-import { Heading, SimpleGrid } from "@nypl/design-system-react-components"
+import {
+  Heading,
+  SimpleGrid,
+  Pagination,
+} from "@nypl/design-system-react-components"
 import { useRouter } from "next/router"
 import { parse } from "qs"
 
@@ -11,9 +15,10 @@ import { fetchResults } from "../api/search"
 import {
   mapQueryToSearchParams,
   mapElementsToSearchResultsBibs,
+  getQueryString,
 } from "../../src/utils/searchUtils"
 import { mapWorksToDRBResults } from "../../src/utils/drbUtils"
-import { SITE_NAME } from "../../src/config/constants"
+import { SITE_NAME, RESULTS_PER_PAGE } from "../../src/config/constants"
 import type SearchResultsBib from "../../src/models/SearchResultsBib"
 
 /**
@@ -21,7 +26,7 @@ import type SearchResultsBib from "../../src/models/SearchResultsBib"
  * as well as displaying and controlling pagination and search filters.
  */
 export default function Search({ results }) {
-  const { query } = useRouter()
+  const { replace, query } = useRouter()
   const { itemListElement: searchResultsElements, totalResults } =
     results.results
 
@@ -36,6 +41,11 @@ export default function Search({ results }) {
 
   // Map DRB Works from response to DRBResult objects
   const drbResults = mapWorksToDRBResults(drbWorks)
+
+  const handlePageChange = async (page: number) => {
+    const newQuery = getQueryString({ ...searchParams, page })
+    await replace(newQuery)
+  }
 
   return (
     <>
@@ -58,7 +68,9 @@ export default function Search({ results }) {
           <>
             <Heading level="two" mb="xl" size="heading4">
               {`Displaying ${
-                totalResults > 50 ? "1-50" : totalResults.toLocaleString()
+                totalResults > RESULTS_PER_PAGE
+                  ? "1-50"
+                  : totalResults.toLocaleString()
               } of ${totalResults.toLocaleString()} results for keyword "${
                 searchParams.q
               }"`}
@@ -68,6 +80,12 @@ export default function Search({ results }) {
                 return <SearchResult key={bib.id} bib={bib} />
               })}
             </SimpleGrid>
+            <Pagination
+              mt="xl"
+              currentPage={searchParams.page}
+              pageCount={Math.floor(totalResults / RESULTS_PER_PAGE)}
+              onPageChange={handlePageChange}
+            />
           </>
         ) : (
           /**
