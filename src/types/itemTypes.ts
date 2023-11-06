@@ -4,10 +4,10 @@
 export interface SearchResultsItem {
   "@id": string
   idNyplSourceId?: ItemSourceID
-  accessMessage?: ItemAccessMessage[]
+  accessMessage?: JSONLDValue[]
   shelfMark?: string[]
   electronicLocator?: string[]
-  status?: ItemStatus[]
+  status?: JSONLDValue[]
   enumerationChronology?: string[]
   formatLiteral?: string[]
   idBarcode?: string[]
@@ -17,7 +17,7 @@ export interface SearchResultsItem {
   eddRequestable?: boolean
 }
 
-export interface ItemAccessMessage {
+export interface JSONLDValue {
   "@id": string
   prefLabel?: string
 }
@@ -27,14 +27,7 @@ export interface ItemSourceID {
   "@value": string
 }
 
-export interface ItemStatus {
-  "@id": string
-  prefLabel?: string
-}
-
-export interface ItemLocation {
-  "@id": string
-  prefLabel?: string
+export interface ItemLocation extends JSONLDValue {
   customerCode?: string
   endpoint?: ItemLocationEndpoint
 }

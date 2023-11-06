@@ -2,7 +2,7 @@ import { isEmpty } from "underscore"
 
 import type {
   SearchResultsItem,
-  ItemStatus,
+  JSONLDValue,
   ItemLocation,
 } from "../types/itemTypes"
 import { locationLabelToKey } from "../utils/itemUtils"
@@ -22,7 +22,7 @@ import {
 export default class Item {
   id: string
   bibId: string
-  status?: ItemStatus
+  status?: JSONLDValue
   source?: string
   accessMessage?: string
   callNumber?: string
