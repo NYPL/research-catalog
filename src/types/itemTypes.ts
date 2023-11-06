@@ -2,7 +2,7 @@
 
 // Item structure coming from the Search Results API response
 export interface SearchResultsItem {
-  "@id": string
+  uri?: string
   idNyplSourceId?: ItemSourceID
   accessMessage?: JSONLDValue[]
   shelfMark?: string[]

@@ -33,7 +33,7 @@ export default class Item {
   isEDDRequestable: boolean
 
   constructor(item: SearchResultsItem, bib: SearchResultsBib) {
-    this.id = item["@id"] ? item["@id"].substring(4) : ""
+    this.id = item.uri || ""
     this.bibId = bib.id
     this.status = item.status?.length ? item.status[0] : null
     this.source = item.idNyplSourceId ? item.idNyplSourceId["@type"] : null
