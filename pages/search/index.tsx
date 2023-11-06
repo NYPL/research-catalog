@@ -16,6 +16,7 @@ import {
   mapQueryToSearchParams,
   mapElementsToSearchResultsBibs,
   getQueryString,
+  getPaginationOffsetStrings,
 } from "../../src/utils/searchUtils"
 import { mapWorksToDRBResults } from "../../src/utils/drbUtils"
 import { SITE_NAME, RESULTS_PER_PAGE } from "../../src/config/constants"
@@ -35,6 +36,11 @@ export default function Search({ results }) {
 
   // TODO: Move this to global context
   const searchParams = mapQueryToSearchParams(query)
+  const [resultsStart, resultsEnd] = getPaginationOffsetStrings(
+    searchParams.page || 1,
+    RESULTS_PER_PAGE,
+    totalResults
+  )
 
   // Map Search Results Elements from response to SearchResultBib objects
   const searchResultBibs = mapElementsToSearchResultsBibs(searchResultsElements)
@@ -69,7 +75,7 @@ export default function Search({ results }) {
             <Heading level="two" mb="xl" size="heading4">
               {`Displaying ${
                 totalResults > RESULTS_PER_PAGE
-                  ? "1-50"
+                  ? `${resultsStart}-${resultsEnd}`
                   : totalResults.toLocaleString()
               } of ${totalResults.toLocaleString()} results for keyword "${
                 searchParams.q
@@ -83,7 +89,7 @@ export default function Search({ results }) {
             <Pagination
               mt="xl"
               currentPage={searchParams.page}
-              pageCount={Math.floor(totalResults / RESULTS_PER_PAGE)}
+              pageCount={Math.ceil(totalResults / RESULTS_PER_PAGE)}
               onPageChange={handlePageChange}
             />
           </>

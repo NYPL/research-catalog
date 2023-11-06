@@ -8,6 +8,20 @@ import type {
   SearchResultsElement,
 } from "../types/searchTypes"
 import SearchResultsBib from "../models/SearchResultsBib"
+import { RESULTS_PER_PAGE } from "../config/constants"
+
+export function getPaginationOffsetStrings(
+  page: number,
+  limit: number,
+  total: number
+) {
+  const offset = RESULTS_PER_PAGE * page - RESULTS_PER_PAGE
+  const start = offset + 1
+  let end = offset + limit
+  end = end <= total ? end : total
+
+  return [start.toLocaleString(), end.toLocaleString()]
+}
 
 /**
  * getSortQuery
