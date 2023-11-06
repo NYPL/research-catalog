@@ -1,5 +1,3 @@
-import { isEmpty } from "underscore"
-
 import type {
   SearchResultsItem,
   JSONLDValue,
