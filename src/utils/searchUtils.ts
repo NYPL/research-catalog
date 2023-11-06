@@ -18,7 +18,7 @@ export function getPaginationOffsetStrings(
   page: number,
   limit: number,
   total: number
-) {
+): [string, string] {
   const offset = RESULTS_PER_PAGE * page - RESULTS_PER_PAGE
   const start = offset + 1
   let end = offset + limit
