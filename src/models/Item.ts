@@ -8,7 +8,7 @@ import type {
 import { locationLabelToKey } from "../utils/itemUtils"
 import type SearchResultsBib from "./SearchResultsBib"
 import {
-  itemAvailableKeys,
+  itemAvailableIds,
   defaultNYPLLocation,
   nonNYPLDefaultLocation,
   locationEndpointsMap,
@@ -56,14 +56,9 @@ export default class Item {
     this.isEDDRequestable = item.eddRequestable
   }
 
-  // Item availability is determined by the existence of status label in the availability keys list
+  // Item availability is determined by the existence of status id in the availability ids list
   get isAvailable(): boolean {
-    // Lowercase and remove non-word characters from status label
-    const availability =
-      !isEmpty(this.status) && this.status?.prefLabel
-        ? this.status.prefLabel.replace(/\W/g, "").toLowerCase()
-        : ""
-    return itemAvailableKeys.includes(availability)
+    return itemAvailableIds.includes(this.status["@id"])
   }
 
   get isReCAP(): boolean {
