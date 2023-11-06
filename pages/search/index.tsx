@@ -37,10 +37,10 @@ export default function Search({ results }) {
   // TODO: Move this to global context
   const searchParams = mapQueryToSearchParams(query)
   const [resultsStart, resultsEnd] = getPaginationOffsetStrings(
-    searchParams.page || 1,
-    RESULTS_PER_PAGE,
+    searchParams.page,
     totalResults
   )
+  console.log(searchParams)
 
   // Map Search Results Elements from response to SearchResultBib objects
   const searchResultBibs = mapElementsToSearchResultsBibs(searchResultsElements)

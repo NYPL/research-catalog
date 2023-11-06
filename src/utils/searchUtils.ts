@@ -15,13 +15,12 @@ import { RESULTS_PER_PAGE } from "../config/constants"
  * Used to generate search results start and end counts on Search Results page
  */
 export function getPaginationOffsetStrings(
-  page: number,
-  limit: number,
+  page = 1,
   total: number
 ): [string, string] {
   const offset = RESULTS_PER_PAGE * page - RESULTS_PER_PAGE
   const start = offset + 1
-  let end = offset + limit
+  let end = offset + RESULTS_PER_PAGE
   end = end >= total ? total : end
 
   return [start.toLocaleString(), end.toLocaleString()]
