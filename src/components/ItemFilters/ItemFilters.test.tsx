@@ -91,7 +91,6 @@ describe("Filters container", () => {
       // clicking other filter label closes the location filter
       await userEvent.click(statusCheckboxGroupButton)
       await userEvent.click(locationCheckboxGroupButton)
-      console.log("open location second time")
       const applyButton = screen.getByTestId("clear-location-button")
       expect(applyButton).toBeDisabled()
     })

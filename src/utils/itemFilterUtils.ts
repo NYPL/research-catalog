@@ -42,9 +42,9 @@ export const buildItemFilterQueryParams = (
   const location_query = location.length
     ? "item_location=" + locs.join(",")
     : ""
-  const format_query = format.length ? "item_format=" + format.join(",") : ""
-  const status_query = status.length ? "item_status=" + status.join(",") : ""
+  const format_query = format.length ? "&item_format=" + format.join(",") : ""
+  const status_query = status.length ? "&item_status=" + status.join(",") : ""
 
-  const query = encodeURI(`?${location_query}&${format_query}&${status_query}`)
+  const query = encodeURI(`?${location_query}${format_query}${status_query}`)
   return query.length > 3 ? query : ""
 }
