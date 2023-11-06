@@ -10,6 +10,10 @@ import type {
 import SearchResultsBib from "../models/SearchResultsBib"
 import { RESULTS_PER_PAGE } from "../config/constants"
 
+/**
+ * getPaginationOffsetStrings
+ * Used to generate search results start and end counts on Search Results page
+ */
 export function getPaginationOffsetStrings(
   page: number,
   limit: number,
