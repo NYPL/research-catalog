@@ -22,7 +22,7 @@ export function getPaginationOffsetStrings(
   const offset = RESULTS_PER_PAGE * page - RESULTS_PER_PAGE
   const start = offset + 1
   let end = offset + limit
-  end = end <= total ? end : total
+  end = end >= total ? total : end
 
   return [start.toLocaleString(), end.toLocaleString()]
 }
