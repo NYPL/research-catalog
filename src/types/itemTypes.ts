@@ -6,7 +6,6 @@ export interface SearchResultsItem {
   idNyplSourceId?: ItemSourceID
   accessMessage?: JSONLDValue[]
   shelfMark?: string[]
-  electronicLocator?: string[]
   status?: JSONLDValue[]
   enumerationChronology?: string[]
   formatLiteral?: string[]
