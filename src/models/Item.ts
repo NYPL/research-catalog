@@ -8,7 +8,7 @@ import type {
 import { locationLabelToKey } from "../utils/itemUtils"
 import type SearchResultsBib from "./SearchResultsBib"
 import {
-  itemAvailabilityKeys,
+  itemAvailableKeys,
   defaultNYPLLocation,
   nonNYPLDefaultLocation,
   locationEndpointsMap,
@@ -63,7 +63,7 @@ export default class Item {
       !isEmpty(this.status) && this.status?.prefLabel
         ? this.status.prefLabel.replace(/\W/g, "").toLowerCase()
         : ""
-    return itemAvailabilityKeys.includes(availability)
+    return itemAvailableKeys.includes(availability)
   }
 
   get isReCAP(): boolean {

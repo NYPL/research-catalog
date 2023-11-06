@@ -4,7 +4,7 @@ import type {
   ItemLocationEndpoint,
 } from "../types/itemTypes"
 
-export const itemAvailabilityKeys = ["available", "useinlibrary"]
+export const itemAvailableKeys = ["available", "useinlibrary"]
 
 // Default delivery location for an item.
 export const defaultNYPLLocation: ItemLocation = {
