@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useRouter } from "next/router"
+import React from "react"
+import { Text, useCloseDropDown } from "@nypl/design-system-react-components"
 
+import styles from "../../../styles/components/ItemFilters.module.scss"
 import type { ItemAggregation } from "../../types/filterTypes"
 import { ItemFilterData, LocationFilterData } from "../../models/itemFilterData"
 import ItemFilter from "./ItemFilter"
-import React from "react"
 import {
   buildItemFilterQueryParams,
   parseItemFilterQueryParams,
@@ -49,19 +51,24 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
   useEffect(tempSubmitFilters, [selectedFilters, tempSubmitFilters])
 
   return (
-    <div>
+    <div className={styles.filtersContainer}>
+      <Text size="body2" isBold={true}>
+        Filter by
+      </Text>
+      <div className={styles.filterGroup}>
+        {filterData.map((field: ItemFilterData) => (
+          <ItemFilter
+            isOpen={whichFilterIsOpen === field.field()}
+            toggleFilterDisplay={setWhichFilterIsOpen}
+            key={field.field()}
+            itemFilterData={field}
+            setSelectedFilters={setSelectedFilters}
+            selectedFilters={selectedFilters}
+            submitFilters={tempSubmitFilters}
+          />
+        ))}
+      </div>
       <p>{tempQueryDisplay}</p>
-      {filterData.map((field: ItemFilterData) => (
-        <ItemFilter
-          isOpen={whichFilterIsOpen === field.field()}
-          toggleFilterDisplay={setWhichFilterIsOpen}
-          key={field.field()}
-          itemFilterData={field}
-          setSelectedFilters={setSelectedFilters}
-          selectedFilters={selectedFilters}
-          submitFilters={tempSubmitFilters}
-        />
-      ))}
     </div>
   )
 }

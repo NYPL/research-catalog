@@ -1,5 +1,29 @@
 @import "../utils/mixins";
 
-.filterOption {
-  background-color: tomato;
+.itemFilterOptionsContainer {
+  position: absolute;
+  word-wrap: break-word;
+  z-index: 1;
+  background-color: white;
+  width: 230px;
+  padding: 10px;
+  border: 1px solid var(--nypl-colors-ui-gray-medium);
+}
+
+.filtersContainer {
+  background-color: var(--nypl-colors-ui-gray-x-light-cool);
+  padding: 16px;
+  min-height: 128px;
+  z-index: 0;
+}
+
+.filterGroup {
+  display: flex;
+}
+
+.itemFilter {
+  background-color: white;
+  min-width: 125px;
+  display: inline-block;
+  margin-right: var(--nypl-space-xs);
 }

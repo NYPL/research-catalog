@@ -5,9 +5,10 @@ import {
   Icon,
   Spacer,
   ButtonGroup,
+  useCloseDropDown,
 } from "@nypl/design-system-react-components"
 import type { Dispatch } from "react"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useState, useRef } from "react"
 
 import type { ItemFilterData } from "../../models/itemFilterData"
 import type { Option, SelectedFilters } from "../../types/filterTypes"
@@ -33,6 +34,9 @@ const ItemFilter = ({
   const field = itemFilterData.field()
   const fieldFormatted = itemFilterData.field(true)
   const [selectedOptions, setSelectedOptions] = useState(selectedFilters[field])
+
+  // const ref = useRef<HTMLDivElement>(null)
+  // useCloseDropDown(() => toggleFilterDisplay(""), ref)
 
   const resetToAppliedOptions = useCallback(() => {
     updateCheckboxGroupValue(selectedFilters[field])
@@ -70,8 +74,15 @@ const ItemFilter = ({
   }, [isOpen, resetToAppliedOptions])
 
   return (
-    <div>
+    <div className={styles.itemFilter}>
+      {/* <div ref={ref} className={styles.itemFilter}> */}
       <Button
+        className={styles.itemFilterButton}
+        sx={{
+          borderColor: "var(--nypl-colors-ui-gray-medium)",
+          color: "black",
+          width: "100%",
+        }}
         data-testid={field + "-item-filter"}
         buttonType="secondary"
         id="item-filter-button"
@@ -80,11 +91,11 @@ const ItemFilter = ({
       >
         {fieldFormatted}
         <Spacer />
-        {`(${selectedOptions.length})`}
+        {selectedOptions.length > 0 && `(${selectedOptions.length})`}
         <Icon name={isOpen ? "minus" : "plus"} size="medium" />
       </Button>
       {isOpen && (
-        <>
+        <div className={styles.itemFilterOptionsContainer}>
           <CheckboxGroup
             labelText={fieldFormatted}
             showLabel={false}
@@ -131,7 +142,7 @@ const ItemFilter = ({
               Apply
             </Button>
           </ButtonGroup>
-        </>
+        </div>
       )}
     </div>
   )
