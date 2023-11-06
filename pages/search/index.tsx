@@ -40,7 +40,6 @@ export default function Search({ results }) {
     searchParams.page,
     totalResults
   )
-  console.log(searchParams)
 
   // Map Search Results Elements from response to SearchResultBib objects
   const searchResultBibs = mapElementsToSearchResultsBibs(searchResultsElements)
@@ -88,6 +87,7 @@ export default function Search({ results }) {
             </SimpleGrid>
             <Pagination
               mt="xl"
+              initialPage={searchParams.page}
               currentPage={searchParams.page}
               pageCount={Math.ceil(totalResults / RESULTS_PER_PAGE)}
               onPageChange={handlePageChange}

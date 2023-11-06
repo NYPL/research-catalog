@@ -204,7 +204,7 @@ export function mapQueryToSearchParams({
   return {
     q,
     field: search_scope,
-    page,
+    page: parseInt(page),
     contributor,
     title,
     subject,
