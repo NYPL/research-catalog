@@ -96,7 +96,7 @@ export default class Item {
   }
 
   // It's non-ReCAP NYPL-owned item if item source is Sierra and location is not ReCAP
-  isNYPLNonReCAP(): boolean {
+  isOnsite(): boolean {
     return this.isSierraItem() && !this.locationIsReCAP()
   }
 
