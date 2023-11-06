@@ -103,10 +103,10 @@ describe("Item model", () => {
 
     it("determines if an item is nypl-owned reCAP or non-nypl Recap", () => {
       expect(nonNyplRecap.isNYPLReCAP()).toBe(false)
-      expect(nonNyplRecap.isNonNYPLReCAP()).toBe(true)
+      expect(nonNyplRecap.isPartnerReCAP()).toBe(true)
 
       expect(nyplRecap.isNYPLReCAP()).toBe(true)
-      expect(nyplRecap.isNonNYPLReCAP()).toBe(false)
+      expect(nyplRecap.isPartnerReCAP()).toBe(false)
     })
   })
 })

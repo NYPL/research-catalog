@@ -60,13 +60,13 @@ export default class Item {
   }
 
   get isReCAP(): boolean {
-    return this.isNonNYPLReCAP() || this.isNYPLReCAP()
+    return this.isPartnerReCAP() || this.isNYPLReCAP()
   }
 
   // Pre-processing logic for setting Item holding location
   getLocationFromItem(item: SearchResultsItem): ItemLocation {
     let location = defaultNYPLLocation
-    if (this.isNonNYPLReCAP) location = nonNYPLDefaultLocation
+    if (this.isPartnerReCAP) location = nonNYPLDefaultLocation
 
     // Check for existence of Location object in API response
     const itemLocationFromAPI = item.holdingLocation?.length
@@ -86,7 +86,7 @@ export default class Item {
   }
 
   // Determine if item is Non-NYPL ReCAP by existence of "Recap" string in item source attribute
-  isNonNYPLReCAP(): boolean {
+  isPartnerReCAP(): boolean {
     return this.source.indexOf("Recap") !== -1
   }
 
