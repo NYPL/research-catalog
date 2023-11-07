@@ -185,6 +185,7 @@ export function mapElementsToSearchResultsBibs(
 /**
  * mapQueryToSearchParams
  * Maps the SearchQueryParams structure from the request to a SearchParams object, which is expected by fetchResults
+ * It also parses the page from a string to a number, defaulting to 1 if absent
  */
 export function mapQueryToSearchParams({
   q,
