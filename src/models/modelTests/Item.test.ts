@@ -19,7 +19,7 @@ describe("Item model", () => {
   })
 
   describe("constructor", () => {
-    it("initializes the Item ID with the prefix removed if present", () => {
+    it("initializes the Item ID with the with the item's uri field", () => {
       expect(item.id).toBe("i10572545")
     })
 
