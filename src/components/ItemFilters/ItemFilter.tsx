@@ -5,10 +5,9 @@ import {
   Icon,
   Spacer,
   ButtonGroup,
-  useCloseDropDown,
 } from "@nypl/design-system-react-components"
 import type { Dispatch } from "react"
-import { useCallback, useEffect, useState, useRef } from "react"
+import { useCallback, useEffect, useState } from "react"
 
 import type { ItemFilterData } from "../../models/itemFilterData"
 import type { Option, SelectedFilters } from "../../types/filterTypes"
@@ -21,7 +20,7 @@ interface ItemFilterProps {
   // this type is temporary for dev use only. could end up being different.
   submitFilters: Dispatch<React.SetStateAction<SelectedFilters>>
   isOpen: boolean
-  toggleFilterDisplay: Dispatch<React.SetStateAction<string>>
+  setWhichFilterIsOpen: Dispatch<React.SetStateAction<string>>
 }
 
 const ItemFilter = ({
@@ -29,14 +28,11 @@ const ItemFilter = ({
   setSelectedFilters,
   selectedFilters,
   isOpen,
-  toggleFilterDisplay,
+  setWhichFilterIsOpen,
 }: ItemFilterProps) => {
   const field = itemFilterData.field()
   const fieldFormatted = itemFilterData.field(true)
   const [selectedOptions, setSelectedOptions] = useState(selectedFilters[field])
-
-  // const ref = useRef<HTMLDivElement>(null)
-  // useCloseDropDown(() => toggleFilterDisplay(""), ref)
 
   const resetToAppliedOptions = useCallback(() => {
     updateCheckboxGroupValue(selectedFilters[field])
@@ -64,18 +60,14 @@ const ItemFilter = ({
     setSelectedOptions(data)
   }
 
-  const openCloseHandler = () => {
-    if (isOpen) toggleFilterDisplay("")
-    else toggleFilterDisplay(field)
-  }
-
+  // When the filter is close with unapplied options, those options are not
+  // persisted. Instead, reset to the options that were last queried for.
   useEffect(() => {
     if (!isOpen) resetToAppliedOptions()
   }, [isOpen, resetToAppliedOptions])
 
   return (
     <div className={styles.itemFilter}>
-      {/* <div ref={ref} className={styles.itemFilter}> */}
       <Button
         className={styles.itemFilterButton}
         sx={{
@@ -86,7 +78,7 @@ const ItemFilter = ({
         data-testid={field + "-item-filter"}
         buttonType="secondary"
         id="item-filter-button"
-        onClick={openCloseHandler}
+        onClick={() => setWhichFilterIsOpen(isOpen ? "" : field)}
         type="button"
       >
         {fieldFormatted}

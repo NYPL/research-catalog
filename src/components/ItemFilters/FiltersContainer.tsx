@@ -28,6 +28,9 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
     status: [],
   })
 
+  const ref = useRef<HTMLDivElement>(null)
+  useCloseDropDown(() => setWhichFilterIsOpen(""), ref)
+
   const [whichFilterIsOpen, setWhichFilterIsOpen] = useState("")
 
   const [tempQueryDisplay, setTempQueryDisplay] = useState("")
@@ -55,11 +58,11 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
       <Text size="body2" isBold={true}>
         Filter by
       </Text>
-      <div className={styles.filterGroup}>
+      <div className={styles.filterGroup} ref={ref}>
         {filterData.map((field: ItemFilterData) => (
           <ItemFilter
             isOpen={whichFilterIsOpen === field.field()}
-            toggleFilterDisplay={setWhichFilterIsOpen}
+            setWhichFilterIsOpen={setWhichFilterIsOpen}
             key={field.field()}
             itemFilterData={field}
             setSelectedFilters={setSelectedFilters}
