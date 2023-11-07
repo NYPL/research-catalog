@@ -1,5 +1,9 @@
 import Head from "next/head"
-import { Heading, SimpleGrid } from "@nypl/design-system-react-components"
+import {
+  Heading,
+  SimpleGrid,
+  Select,
+} from "@nypl/design-system-react-components"
 import { useRouter } from "next/router"
 import { parse } from "qs"
 
@@ -11,6 +15,7 @@ import { fetchResults } from "../api/search"
 import {
   mapQueryToSearchParams,
   mapElementsToSearchResultsBibs,
+  getQueryString,
 } from "../../src/utils/searchUtils"
 import { mapWorksToDRBResults } from "../../src/utils/drbUtils"
 import { SITE_NAME } from "../../src/config/constants"
@@ -21,7 +26,7 @@ import type SearchResultsBib from "../../src/models/SearchResultsBib"
  * as well as displaying and controlling pagination and search filters.
  */
 export default function Search({ results }) {
-  const { query } = useRouter()
+  const { replace, query } = useRouter()
   const { itemListElement: searchResultsElements, totalResults } =
     results.results
 
@@ -37,6 +42,11 @@ export default function Search({ results }) {
   // Map DRB Works from response to DRBResult objects
   const drbResults = mapWorksToDRBResults(drbWorks)
 
+  const handleSortChange = async (e) => {
+    const newQuery = getQueryString({ ...searchParams, sortBy: e.target.value })
+    await replace(newQuery)
+  }
+
   return (
     <>
       <Head>
@@ -45,13 +55,28 @@ export default function Search({ results }) {
       <Layout
         activePage="search"
         sidebar={
-          drbResponse?.totalWorks && (
-            <DRBContainer
-              drbResults={drbResults}
-              totalWorks={drbResponse.totalWorks}
-              searchParams={searchParams}
-            />
-          )
+          <>
+            {totalResults && (
+              <Select
+                name="sort_direction"
+                id="search-results-sort"
+                labelText="Sort by"
+                mb="l"
+                onChange={handleSortChange}
+                value={searchParams.sortBy}
+              >
+                <option value="relevance">Relevance</option>
+                <option value="relevance2">Relevance2</option>
+              </Select>
+            )}
+            {drbResponse?.totalWorks && (
+              <DRBContainer
+                drbResults={drbResults}
+                totalWorks={drbResponse.totalWorks}
+                searchParams={searchParams}
+              />
+            )}
+          </>
         }
       >
         {totalResults ? (
