@@ -167,7 +167,7 @@ export const itemUnavailable = {
   },
 }
 
-export const itemNonNYPLReCAP = {
+export const itemPartnerReCAP = {
   "@id": "res:ci1628993",
   accessMessage: [
     {

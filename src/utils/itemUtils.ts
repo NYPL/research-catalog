@@ -13,8 +13,8 @@ export const defaultNYPLLocation: ItemLocation = {
   customerCode: "",
 }
 
-// Default delivery location for a nonNyplRecap item.
-export const nonNYPLDefaultLocation: ItemLocation = {
+// Default delivery location for a partner Recap item.
+export const partnerDefaultLocation: ItemLocation = {
   "@id": "",
   prefLabel: "Off-site",
   customerCode: "",

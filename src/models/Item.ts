@@ -8,7 +8,7 @@ import type SearchResultsBib from "./SearchResultsBib"
 import {
   itemAvailableIds,
   defaultNYPLLocation,
-  nonNYPLDefaultLocation,
+  partnerDefaultLocation,
   locationEndpointsMap,
 } from "../utils/itemUtils"
 
@@ -66,7 +66,7 @@ export default class Item {
   // Pre-processing logic for setting Item holding location
   getLocationFromItem(item: SearchResultsItem): ItemLocation {
     let location = defaultNYPLLocation
-    if (this.isPartnerReCAP) location = nonNYPLDefaultLocation
+    if (this.isPartnerReCAP) location = partnerDefaultLocation
 
     // Check for existence of Location object in API response
     const itemLocationFromAPI = item.holdingLocation?.length

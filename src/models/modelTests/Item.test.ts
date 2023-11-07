@@ -4,7 +4,7 @@ import {
   itemPhysicallyRequestable,
   itemEddRequestable,
   itemUnavailable,
-  itemNonNYPLReCAP,
+  itemPartnerReCAP,
   itemNYPLReCAP,
 } from "../../../__test__/fixtures/itemFixtures"
 import { searchResultPhysicalItems } from "../../../__test__/fixtures/searchResultPhysicalItems"
@@ -89,21 +89,21 @@ describe("Item model", () => {
   })
 
   describe("ReCAP checks", () => {
-    let nonNyplRecap: Item
+    let partnerRecap: Item
     let nyplRecap: Item
     beforeEach(() => {
-      nonNyplRecap = new Item(itemNonNYPLReCAP, parentBib)
+      partnerRecap = new Item(itemPartnerReCAP, parentBib)
       nyplRecap = new Item(itemNYPLReCAP, parentBib)
     })
 
     it("determines if an item is reCAP", () => {
-      expect(nonNyplRecap.isReCAP).toBe(true)
+      expect(partnerRecap.isReCAP).toBe(true)
       expect(nyplRecap.isReCAP).toBe(true)
     })
 
     it("determines if an item is nypl-owned reCAP or non-nypl Recap", () => {
-      expect(nonNyplRecap.isNYPLReCAP()).toBe(false)
-      expect(nonNyplRecap.isPartnerReCAP()).toBe(true)
+      expect(partnerRecap.isNYPLReCAP()).toBe(false)
+      expect(partnerRecap.isPartnerReCAP()).toBe(true)
 
       expect(nyplRecap.isNYPLReCAP()).toBe(true)
       expect(nyplRecap.isPartnerReCAP()).toBe(false)
