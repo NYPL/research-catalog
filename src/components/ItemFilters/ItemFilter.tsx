@@ -17,6 +17,7 @@ interface ItemFilterProps {
   submitFilters: Dispatch<React.SetStateAction<AppliedFilters>>
   isOpen: boolean
   setWhichFilterIsOpen: Dispatch<React.SetStateAction<string>>
+  className: string
 }
 
 const ItemFilter = ({
@@ -42,49 +43,39 @@ const ItemFilter = ({
   useEffect(() => {
     if (!isOpen) resetToAppliedOptions()
   }, [isOpen, resetToAppliedOptions])
-
+  console.log(isOpen)
   return (
-    <div className={styles.itemFilter}>
-      <ItemFilterLabel
+    <div className={styles.itemFilterOptionsContainer}>
+      <CheckboxGroup
+        labelText={field}
+        showLabel={false}
+        key={field}
+        name={field}
+        id={field}
+        onChange={updateCheckboxGroupValue}
+        // isSelected of the children checkboxes is controlled by this value
+        // attribute. The options whose value attribute match those present in
+        // the CheckboxGroup value array are selected.
+        value={selectedOptions}
+      >
+        {itemFilterData.displayOptions().map(({ value, label }: Option) => {
+          return (
+            <Checkbox
+              className={styles.filterOption}
+              id={value}
+              key={value}
+              value={value}
+              labelText={label}
+            />
+          )
+        })}
+      </CheckboxGroup>
+      <ItemFilterButtons
         field={field}
         selectedOptions={selectedOptions}
-        setWhichFilterIsOpen={setWhichFilterIsOpen}
-        isOpen={isOpen}
+        setSelectedOptions={setSelectedOptions}
+        setAppliedFilters={setAppliedFilters}
       />
-      {isOpen && (
-        <div className={styles.itemFilterOptionsContainer}>
-          <CheckboxGroup
-            labelText={field}
-            showLabel={false}
-            key={field}
-            name={field}
-            id={field}
-            onChange={updateCheckboxGroupValue}
-            // isSelected of the children checkboxes is controlled by this value
-            // attribute. The options whose value attribute match those present in
-            // the CheckboxGroup value array are selected.
-            value={selectedOptions}
-          >
-            {itemFilterData.displayOptions().map(({ value, label }: Option) => {
-              return (
-                <Checkbox
-                  className={styles.filterOption}
-                  id={value}
-                  key={value}
-                  value={value}
-                  labelText={label}
-                />
-              )
-            })}
-          </CheckboxGroup>
-          <ItemFilterButtons
-            field={field}
-            selectedOptions={selectedOptions}
-            setSelectedOptions={setSelectedOptions}
-            setAppliedFilters={setAppliedFilters}
-          />
-        </div>
-      )}
     </div>
   )
 }

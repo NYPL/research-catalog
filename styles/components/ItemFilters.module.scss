@@ -1,13 +1,12 @@
 @import "../utils/mixins";
 
 .itemFilterOptionsContainer {
-  position: absolute;
+  box-sizing: border-box;
+  padding: 10px;
   word-wrap: break-word;
   z-index: 1;
-  background-color: white;
-  width: 230px;
-  padding: 10px;
-  border: 1px solid var(--nypl-colors-ui-gray-medium);
+  max-width: 230px;
+  margin: 0px;
 }
 
 .filtersContainer {
@@ -20,11 +19,21 @@
 .filterGroup {
   display: flex;
   width: fit-content;
+  button[id*="accordion"] {
+    width: 230px;
+    margin-right: var(--nypl-space-xs);
+  }
+  div[id*="accordion-panel"] {
+    box-sizing: border-box;
+    background-color: white;
+    padding: 0px;
+  }
 }
 
 .itemFilter {
+  justify-content: space-between;
+  padding: 0px;
   background-color: white;
-  width: 125px;
+  width: inherit;
   display: inline-block;
-  margin-right: var(--nypl-space-xs);
 }

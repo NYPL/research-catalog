@@ -1,7 +1,12 @@
 import { useEffect, useRef, useState } from "react"
 import { useRouter } from "next/router"
 import React from "react"
-import { Text, useCloseDropDown } from "@nypl/design-system-react-components"
+import type { AccordionTypes } from "@nypl/design-system-react-components"
+import {
+  Text,
+  useCloseDropDown,
+  Accordion,
+} from "@nypl/design-system-react-components"
 
 import styles from "../../../styles/components/ItemFilters.module.scss"
 import type { ItemAggregation } from "../../types/filterTypes"
@@ -29,7 +34,7 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
   })
 
   const ref = useRef<HTMLDivElement>(null)
-  useCloseDropDown(() => setWhichFilterIsOpen(""), ref)
+  // useCloseDropDown(() => setWhichFilterIsOpen(""), ref)
 
   const [whichFilterIsOpen, setWhichFilterIsOpen] = useState("")
 
@@ -53,24 +58,38 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
 
   useEffect(tempSubmitFilters, [activeFilters, tempSubmitFilters])
 
+  const accordionData = filterData.map((field: ItemFilterData) => {
+    const fieldFormatted =
+      field.field[0].toUpperCase() + field.field.substring(1)
+    return {
+      isAlwaysRendered: true,
+      accordionType: "default" as AccordionTypes,
+      label: fieldFormatted,
+      panel: (
+        <ItemFilter
+          isOpen={true}
+          className={styles.itemFilter}
+          setWhichFilterIsOpen={setWhichFilterIsOpen}
+          key={field.field}
+          itemFilterData={field}
+          setAppliedFilters={setAppliedFilters}
+          activeFilters={activeFilters}
+          submitFilters={tempSubmitFilters}
+        />
+      ),
+    }
+  })
+
   return (
     <div className={styles.filtersContainer}>
       <Text data-testid="filter-text" size="body2" isBold={true}>
         Filter by
       </Text>
-      <div className={styles.filterGroup} ref={ref}>
-        {filterData.map((field: ItemFilterData) => (
-          <ItemFilter
-            isOpen={whichFilterIsOpen === field.field}
-            setWhichFilterIsOpen={setWhichFilterIsOpen}
-            key={field.field}
-            itemFilterData={field}
-            setAppliedFilters={setAppliedFilters}
-            activeFilters={activeFilters}
-            submitFilters={tempSubmitFilters}
-          />
-        ))}
-      </div>
+      <Accordion
+        // className={styles.filterGroup}
+        ref={ref}
+        accordionData={accordionData}
+      />
       <p>{tempQueryDisplay}</p>
     </div>
   )

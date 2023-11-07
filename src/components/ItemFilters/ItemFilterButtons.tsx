@@ -2,6 +2,7 @@ import { ButtonGroup, Button } from "@nypl/design-system-react-components"
 import type { Dispatch } from "react"
 
 import type { AppliedFilters, Option } from "../../../src/types/filterTypes"
+import styles from "../../../styles/components/ItemFilters.module.scss"
 
 interface ItemFilterButtonProps {
   selectedOptions: string[]
@@ -35,7 +36,7 @@ const ItemFilterButtons = ({
   }
   return (
     <ButtonGroup
-      className="item-filter-buttons"
+      className={styles.ItemFilterButtons}
       isDisabled={selectedOptions.length === 0}
     >
       <Button
