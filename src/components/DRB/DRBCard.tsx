@@ -19,14 +19,9 @@ interface DRBCardProps {
  */
 const DRBCard = ({ drbResult }: DRBCardProps) => {
   return (
-    <Card
-      backgroundColor="var(--nypl-colors-ui-bg-default)"
-      sx={{
-        padding: "var(--nypl-space-xs)",
-      }}
-    >
+    <Card backgroundColor="var(--nypl-colors-ui-bg-default)" p="xs">
       <CardContent>
-        <DSLink href={drbResult.url} target="_blank">
+        <DSLink href={drbResult.url} target="_blank" isUnderlined={false}>
           <Text size="body2">{drbResult.title}</Text>
         </DSLink>
 
@@ -36,7 +31,11 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
             {drbResult.authors.map((author: Author | Agent, index: number) => (
               <>
                 {index > 0 && ","}
-                <DSLink href={getAuthorURL(author)} target="_blank">
+                <DSLink
+                  href={getAuthorURL(author)}
+                  target="_blank"
+                  isUnderlined={false}
+                >
                   {author.name}
                 </DSLink>
               </>
@@ -44,19 +43,24 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
           </Text>
         )}
 
-        {drbResult?.readOnlineUrl && (
+        {drbResult.readOnlineUrl && (
           <DSLink
             href={drbResult.readOnlineUrl}
             target="_blank"
             type="buttonPrimary"
-            mb={drbResult?.downloadLink ? "s" : ""}
+            mb={drbResult.downloadLink ? "s" : ""}
+            isUnderlined={false}
           >
             Read Online
           </DSLink>
         )}
 
-        {drbResult?.downloadLink && (
-          <DSLink href={drbResult.downloadLink.url} target="_blank">
+        {drbResult.downloadLink && (
+          <DSLink
+            href={drbResult.downloadLink.url}
+            target="_blank"
+            isUnderlined={false}
+          >
             <Text
               size="body2"
               sx={{ display: "flex", alignItems: "center" }}

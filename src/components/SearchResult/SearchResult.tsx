@@ -1,12 +1,12 @@
 import {
   Card,
   CardContent,
-  Link as DSLink,
   CardHeading,
   Box,
   Text,
 } from "@nypl/design-system-react-components"
 
+import RCLink from "../RCLink/RCLink"
 import type SearchResultsBib from "../../models/SearchResultsBib"
 import { PATHS } from "../../config/constants"
 
@@ -25,8 +25,8 @@ const SearchResult = ({ bib }: SearchResultProps) => {
         paddingBottom: "m",
       }}
     >
-      <CardHeading level="three">
-        <DSLink href={`${PATHS.BIB}/${bib.id}`}>{bib.title}</DSLink>
+      <CardHeading level="h3" size="heading4">
+        <RCLink href={`${PATHS.BIB}/${bib.id}`}>{bib.title}</RCLink>
       </CardHeading>
       <CardContent>
         <Box sx={{ p: { display: "inline", marginRight: "s" } }}>
