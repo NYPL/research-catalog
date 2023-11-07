@@ -6,6 +6,7 @@ import type {
   SearchFilters,
   Identifiers,
   SearchResultsElement,
+  SortKey,
 } from "../types/searchTypes"
 import SearchResultsBib from "../models/SearchResultsBib"
 
@@ -166,6 +167,18 @@ export function mapElementsToSearchResultsBibs(
 /* eslint-disable @typescript-eslint/naming-convention */
 
 /**
+ * sortOptions
+ * The allowed keys for the sort field and their respective labels
+ */
+export const sortOptions: Record<SortKey, string> = {
+  relevance: "Relevance",
+  title_asc: "Title (A - Z)",
+  title_desc: "Title (Z - A)",
+  date_asc: "Date (Old to New)",
+  date_desc: "Date (New to Old)",
+}
+
+/**
  * mapQueryToSearchParams
  * Maps the SearchQueryParams structure from the request to a SearchParams object, which is expected by fetchResults
  */
@@ -191,7 +204,7 @@ export function mapQueryToSearchParams({
     contributor,
     title,
     subject,
-    sortBy: sort,
+    sortBy: sort as SortKey,
     order: sort_direction,
     filters,
     identifiers: {

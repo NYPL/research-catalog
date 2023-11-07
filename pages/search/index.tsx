@@ -16,6 +16,7 @@ import {
   mapQueryToSearchParams,
   mapElementsToSearchResultsBibs,
   getQueryString,
+  sortOptions,
 } from "../../src/utils/searchUtils"
 import { mapWorksToDRBResults } from "../../src/utils/drbUtils"
 import { SITE_NAME } from "../../src/config/constants"
@@ -65,8 +66,11 @@ export default function Search({ results }) {
                 onChange={handleSortChange}
                 value={searchParams.sortBy}
               >
-                <option value="relevance">Relevance</option>
-                <option value="relevance2">Relevance2</option>
+                {Object.keys(sortOptions).map((key) => (
+                  <option value={key} key={`sort-by-${key}`}>
+                    {sortOptions[key]}
+                  </option>
+                ))}
               </Select>
             )}
             {drbResponse?.totalWorks && (

@@ -80,7 +80,7 @@ function mapSearchParamsToDRBQueryParams(params: SearchParams): DRBQueryParams {
   }
 
   if (sortBy) {
-    const sortDirection = order || (sortBy === "date" ? "desc" : "asc")
+    const sortDirection = order || (sortBy === "date_desc" ? "desc" : "asc")
     drbQuery.sort = [sortBy, sortDirection].join(":")
   }
 
