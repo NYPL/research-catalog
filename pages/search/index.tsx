@@ -44,7 +44,8 @@ export default function Search({ results }) {
   const drbResults = mapWorksToDRBResults(drbWorks)
 
   const handleSortChange = async (e) => {
-    const newQuery = getQueryString({ ...searchParams, sortBy: e.target.value })
+    const [sortBy, order] = e.target.value.split("_")
+    const newQuery = getQueryString({ ...searchParams, sortBy, order })
     await replace(newQuery)
   }
 
@@ -64,7 +65,11 @@ export default function Search({ results }) {
                 labelText="Sort by"
                 mb="l"
                 onChange={handleSortChange}
-                value={searchParams.sortBy}
+                value={
+                  searchParams.order
+                    ? `${searchParams.sortBy}_${searchParams.order}`
+                    : searchParams.sortBy
+                }
               >
                 {Object.keys(sortOptions).map((key) => (
                   <option value={key} key={`sort-by-${key}`}>

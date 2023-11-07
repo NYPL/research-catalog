@@ -7,6 +7,7 @@ import type {
   Identifiers,
   SearchResultsElement,
   SortKey,
+  SortOrder,
 } from "../types/searchTypes"
 import SearchResultsBib from "../models/SearchResultsBib"
 
@@ -170,7 +171,7 @@ export function mapElementsToSearchResultsBibs(
  * sortOptions
  * The allowed keys for the sort field and their respective labels
  */
-export const sortOptions: Record<SortKey, string> = {
+export const sortOptions: Record<string, string> = {
   relevance: "Relevance",
   title_asc: "Title (A - Z)",
   title_desc: "Title (Z - A)",
@@ -205,7 +206,7 @@ export function mapQueryToSearchParams({
     title,
     subject,
     sortBy: sort as SortKey,
-    order: sort_direction,
+    order: sort_direction as SortOrder,
     filters,
     identifiers: {
       issn,

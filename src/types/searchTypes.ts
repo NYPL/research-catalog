@@ -33,7 +33,7 @@ export interface SearchParams {
   q?: string
   field?: string
   sortBy?: SortKey
-  order?: string
+  order?: SortOrder
   filters?: SearchFilters
   contributor?: string
   title?: string
@@ -42,12 +42,8 @@ export interface SearchParams {
   identifiers?: Identifiers
 }
 
-export type SortKey =
-  | "relevance"
-  | "title_asc"
-  | "title_desc"
-  | "date_asc"
-  | "date_desc"
+export type SortKey = "relevance" | "title" | "date"
+export type SortOrder = "asc" | "desc"
 
 type SearchFormField = { value: string }
 
