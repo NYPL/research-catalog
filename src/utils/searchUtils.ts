@@ -140,7 +140,7 @@ export function mapRequestBodyToSearchParams(
 ): SearchParams {
   const {
     q,
-    page,
+    page = 1,
     contributor,
     title,
     subject,
