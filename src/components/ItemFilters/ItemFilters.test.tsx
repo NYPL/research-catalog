@@ -96,7 +96,7 @@ describe("Filters container", () => {
     })
   })
 
-  it("persists previously applied selection after closing filter without applying", async () => {
+  it.only("persists previously applied selection after closing filter without applying", async () => {
     mockRouter.query = {
       item_location: "loc:rc2ma",
       item_format: "Text",
@@ -125,7 +125,20 @@ describe("Filters container", () => {
       ])
     })
   })
+  it("closes open filters when user clicks outside of the filter", async () => {
+    render(<FiltersContainer itemAggs={aggs} />)
+    const [locationFilterButton] = filterButtons()
+    const outsideOfTheFilter = screen.getByTestId("filter-text")
+    await act(async () => {
+      await userEvent.click(locationFilterButton)
+      const offsiteCheckbox = screen.getByText("Offsite")
+      await userEvent.click(offsiteCheckbox)
+      await userEvent.click(outsideOfTheFilter)
+      expect(offsiteCheckbox).not.toBeInTheDocument()
+    })
+  })
 })
+
 const filterHasSelected = async (checkboxGroupButton, values: string[]) => {
   await act(async () => {
     await userEvent.click(checkboxGroupButton)

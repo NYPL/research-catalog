@@ -22,7 +22,7 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
     if (agg.field === "location") return new LocationFilterData(agg)
     else return new ItemFilterData(agg)
   })
-  const [selectedFilters, setSelectedFilters] = useState({
+  const [activeFilters, setAppliedFilters] = useState({
     location: [],
     format: [],
     status: [],
@@ -37,36 +37,36 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
 
   const tempSubmitFilters = () => {
     const locationFilterData = filterData.find(
-      (filter) => filter.field() === "location"
+      (filter) => filter.field === "location"
     ) as LocationFilterData
     setTempQueryDisplay(
       buildItemFilterQueryParams(
-        selectedFilters,
+        activeFilters,
         locationFilterData.recapLocations()
       )
     )
   }
 
   useEffect(() => {
-    setSelectedFilters(parseItemFilterQueryParams(query))
+    setAppliedFilters(parseItemFilterQueryParams(query))
   }, [query])
 
-  useEffect(tempSubmitFilters, [selectedFilters, tempSubmitFilters])
+  useEffect(tempSubmitFilters, [activeFilters, tempSubmitFilters])
 
   return (
     <div className={styles.filtersContainer}>
-      <Text size="body2" isBold={true}>
+      <Text data-testid="filter-text" size="body2" isBold={true}>
         Filter by
       </Text>
       <div className={styles.filterGroup} ref={ref}>
         {filterData.map((field: ItemFilterData) => (
           <ItemFilter
-            isOpen={whichFilterIsOpen === field.field()}
+            isOpen={whichFilterIsOpen === field.field}
             setWhichFilterIsOpen={setWhichFilterIsOpen}
-            key={field.field()}
+            key={field.field}
             itemFilterData={field}
-            setSelectedFilters={setSelectedFilters}
-            selectedFilters={selectedFilters}
+            setAppliedFilters={setAppliedFilters}
+            activeFilters={activeFilters}
             submitFilters={tempSubmitFilters}
           />
         ))}

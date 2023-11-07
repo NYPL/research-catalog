@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import type { SelectedFilters } from "../types/filterTypes"
+import type { AppliedFilters } from "../types/filterTypes"
 
 export const isRecapLocation = (loc: string) => {
   return loc.split(":")[1].startsWith("rc")
@@ -32,7 +32,7 @@ export const parseItemFilterQueryParams = ({
 }
 
 export const buildItemFilterQueryParams = (
-  { location, format, status }: SelectedFilters,
+  { location, format, status }: AppliedFilters,
   recapLocations: string
 ) => {
   const locs = location.map((loc) => {

@@ -1,6 +1,6 @@
 export type Locations = string[]
 
-export type SelectedFilters = {
+export type AppliedFilters = {
   location: string[]
   format: string[]
   status: string[]

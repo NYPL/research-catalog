@@ -9,19 +9,15 @@ import { isRecapLocation } from "../utils/itemFilterUtils"
 export class ItemFilterData {
   options: ItemAggregationOption[]
   agg: ItemAggregation
+  field: string
   constructor(agg: ItemAggregation) {
     this.agg = agg
     this.options = agg.values
+    this.field = agg.field
   }
 
   displayOptions(): Option[] {
     return this.options
-  }
-
-  field(formatted = false) {
-    const f = this.agg.field
-    const upperCased = f[0].toUpperCase() + f.substring(1)
-    return formatted ? upperCased : f
   }
 }
 

@@ -19,11 +19,12 @@
 
 .filterGroup {
   display: flex;
+  width: fit-content;
 }
 
 .itemFilter {
   background-color: white;
-  min-width: 125px;
+  width: 125px;
   display: inline-block;
   margin-right: var(--nypl-space-xs);
 }

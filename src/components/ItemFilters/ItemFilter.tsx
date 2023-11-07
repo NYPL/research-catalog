@@ -1,60 +1,37 @@
-import {
-  CheckboxGroup,
-  Checkbox,
-  Button,
-  Icon,
-  Spacer,
-  ButtonGroup,
-} from "@nypl/design-system-react-components"
+import { CheckboxGroup, Checkbox } from "@nypl/design-system-react-components"
 import type { Dispatch } from "react"
 import { useCallback, useEffect, useState } from "react"
 
 import type { ItemFilterData } from "../../models/itemFilterData"
-import type { Option, SelectedFilters } from "../../types/filterTypes"
+import type { Option, AppliedFilters } from "../../types/filterTypes"
 import styles from "../../../styles/components/ItemFilters.module.scss"
+
+import ItemFilterButtons from "./ItemFilterButtons"
+import ItemFilterLabel from "./ItemFilterLabel"
 
 interface ItemFilterProps {
   itemFilterData: ItemFilterData
-  setSelectedFilters: Dispatch<React.SetStateAction<SelectedFilters>>
-  selectedFilters: SelectedFilters
+  setAppliedFilters: Dispatch<React.SetStateAction<AppliedFilters>>
+  activeFilters: AppliedFilters
   // this type is temporary for dev use only. could end up being different.
-  submitFilters: Dispatch<React.SetStateAction<SelectedFilters>>
+  submitFilters: Dispatch<React.SetStateAction<AppliedFilters>>
   isOpen: boolean
   setWhichFilterIsOpen: Dispatch<React.SetStateAction<string>>
 }
 
 const ItemFilter = ({
   itemFilterData,
-  setSelectedFilters,
-  selectedFilters,
+  setAppliedFilters,
+  activeFilters,
   isOpen,
   setWhichFilterIsOpen,
 }: ItemFilterProps) => {
-  const field = itemFilterData.field()
-  const fieldFormatted = itemFilterData.field(true)
-  const [selectedOptions, setSelectedOptions] = useState(selectedFilters[field])
+  const field = itemFilterData.field
+  const [selectedOptions, setSelectedOptions] = useState(activeFilters[field])
 
   const resetToAppliedOptions = useCallback(() => {
-    updateCheckboxGroupValue(selectedFilters[field])
-  }, [selectedFilters, field])
-
-  const clearFilter = () => {
-    setSelectedOptions([])
-    setSelectedFilters((prevFilters: SelectedFilters) => {
-      return { ...prevFilters, [field]: [] }
-    })
-  }
-
-  const applyFilter = () => {
-    let newFilterSelection: SelectedFilters
-    setSelectedFilters((prevFilters: SelectedFilters) => {
-      newFilterSelection = {
-        ...prevFilters,
-        [field]: selectedOptions,
-      }
-      return newFilterSelection
-    })
-  }
+    updateCheckboxGroupValue(activeFilters[field])
+  }, [activeFilters, field])
 
   const updateCheckboxGroupValue = (data: string[]) => {
     setSelectedOptions(data)
@@ -68,28 +45,16 @@ const ItemFilter = ({
 
   return (
     <div className={styles.itemFilter}>
-      <Button
-        className={styles.itemFilterButton}
-        sx={{
-          borderColor: "var(--nypl-colors-ui-gray-medium)",
-          color: "black",
-          width: "100%",
-        }}
-        data-testid={field + "-item-filter"}
-        buttonType="secondary"
-        id="item-filter-button"
-        onClick={() => setWhichFilterIsOpen(isOpen ? "" : field)}
-        type="button"
-      >
-        {fieldFormatted}
-        <Spacer />
-        {selectedOptions.length > 0 && `(${selectedOptions.length})`}
-        <Icon name={isOpen ? "minus" : "plus"} size="medium" />
-      </Button>
+      <ItemFilterLabel
+        field={field}
+        selectedOptions={selectedOptions}
+        setWhichFilterIsOpen={setWhichFilterIsOpen}
+        isOpen={isOpen}
+      />
       {isOpen && (
         <div className={styles.itemFilterOptionsContainer}>
           <CheckboxGroup
-            labelText={fieldFormatted}
+            labelText={field}
             showLabel={false}
             key={field}
             name={field}
@@ -112,28 +77,12 @@ const ItemFilter = ({
               )
             })}
           </CheckboxGroup>
-
-          <ButtonGroup
-            className="item-filter-buttons"
-            isDisabled={selectedOptions.length === 0}
-          >
-            <Button
-              data-testid={`clear-${field}-button`}
-              key={`clear-${field}-button`}
-              buttonType="text"
-              id="clear-filter-button"
-              onClick={clearFilter}
-            >
-              Clear
-            </Button>
-            <Button
-              key={`apply-${field}-button`}
-              id="apply-filter-button"
-              onClick={applyFilter}
-            >
-              Apply
-            </Button>
-          </ButtonGroup>
+          <ItemFilterButtons
+            field={field}
+            selectedOptions={selectedOptions}
+            setSelectedOptions={setSelectedOptions}
+            setAppliedFilters={setAppliedFilters}
+          />
         </div>
       )}
     </div>
