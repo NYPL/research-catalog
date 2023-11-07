@@ -49,7 +49,6 @@ describe("searchUtils", () => {
           page: "2",
         })
       ).toEqual({
-        identifiers: {},
         page: 2,
       })
     })

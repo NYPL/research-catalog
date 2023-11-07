@@ -201,6 +201,7 @@ export function mapQueryToSearchParams({
   lccn,
   filters,
 }: SearchQueryParams): SearchParams {
+  const hasIdentifiers = issn || isbn || oclc || lccn
   return {
     q,
     field: search_scope,
@@ -211,7 +212,7 @@ export function mapQueryToSearchParams({
     sortBy: sort,
     order: sort_direction,
     filters,
-    identifiers: {
+    identifiers: hasIdentifiers && {
       issn,
       isbn,
       oclc,
