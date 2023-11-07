@@ -6,6 +6,7 @@ interface RCLinkProps {
   active?: boolean
   href: string
   children: ReactNode
+  className?: string
   color?: string
 }
 
@@ -14,10 +15,16 @@ interface RCLinkProps {
  * Next's Link component to allow for correct navigation in Next per the design system's
  * docs. It also includes an 'active' prop used for styling the SubNav component.
  */
-const RCLink = ({ href, children, active = false, ...rest }: RCLinkProps) => {
+const RCLink = ({
+  className,
+  href,
+  children,
+  active = false,
+  ...rest
+}: RCLinkProps) => {
   return (
     <Link href={href} passHref>
-      <DSLink fontWeight={active && "bold"} {...rest}>
+      <DSLink className={className} fontWeight={active && "bold"} {...rest}>
         {children}
       </DSLink>
     </Link>

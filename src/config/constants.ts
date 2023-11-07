@@ -1,7 +1,7 @@
 import { appConfig } from "./config"
 
 export const BASE_URL = "/research/research-catalog"
-export const SITE_NAME = "NYPL Research Catalog"
+export const SITE_NAME = "Research Catalog | NYPL"
 export const RESULTS_PER_PAGE = 50
 export const DRB_RESULTS_PER_PAGE = 3
 
