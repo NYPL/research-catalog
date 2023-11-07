@@ -18,11 +18,19 @@
         }
       }
     }
+    @media screen and (max-width: 400px) {
+      display: flex;
+      flex-direction: column;
+    }
   }
 
   a {
     color: var(--nypl-colors-ui-white);
     text-decoration: none;
+
+    &:visited {
+      color: var(--nypl-colors-ui-white);
+    }
 
     &:hover {
       color: var(--nypl-colors-ui-white);
