@@ -1,4 +1,5 @@
 import React from "react"
+import userEvent from "@testing-library/user-event"
 import { render, screen } from "@testing-library/react"
 
 import mockRouter from "next-router-mock"
@@ -22,6 +23,20 @@ describe("Search Results page", () => {
       )
       const cards = screen.getAllByRole("heading", { level: 3 })
       expect(cards).toHaveLength(50)
+    })
+    it("renders the sort select field and updates the query string in the url on changes", async () => {
+      const query = "spaghetti"
+      await mockRouter.push(`/search?q=${query}`)
+      render(<SearchResults results={results} />)
+
+      const sortSelect = screen.getByLabelText("Sort by")
+      expect(sortSelect).toHaveValue("relevance")
+      await userEvent.selectOptions(sortSelect, "Title (A - Z)")
+      expect(sortSelect).toHaveValue("title_asc")
+
+      expect(mockRouter.asPath).toBe(
+        "/?q=spaghetti&sort=title&sort_direction=asc"
+      )
     })
   })
   describe("No bibs", () => {
