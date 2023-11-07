@@ -20,7 +20,7 @@ export default function Home() {
         <title>{SITE_NAME}</title>
       </Head>
       <Layout activePage="search">
-        <Heading level="two">
+        <Heading level="h2">
           Explore the Library&apos;s Vast Research Collections & More
         </Heading>
         <div>
@@ -30,7 +30,10 @@ export default function Home() {
             Black Culture, and The New York Public Library for the Performing
             Arts. Plus, access materials from library collections at Columbia
             University, Harvard University, and Princeton University.{" "}
-            <Link href="/research/collections/about/shared-collection-catalog">
+            <Link
+              href="/research/collections/about/shared-collection-catalog"
+              aria-label="Learn more about the Research Catalog."
+            >
               Learn more.
             </Link>
           </p>
@@ -51,20 +54,20 @@ export default function Home() {
           </p>
         </div>
         <SimpleGrid columns={1} gap="grid.m">
-          <Heading level="three" noSpace>
+          <Heading level="h3" noSpace>
             Research at NYPL
           </Heading>
           <Card
             imageProps={{
-              alt: "Image of manuscript from NYPL Research Archive",
+              alt: "Manuscript from NYPL Research Archive",
               aspectRatio: "twoByOne",
               size: "large",
               src: "https://cdn-petrol.nypl.org/sites/default/media/styles/extralarge/public/archives-portal.jpg?itok=-oYtHmeO",
             }}
             layout="row"
           >
-            <CardHeading level="four">
-              <Link href="/research/collections">Collections</Link>
+            <CardHeading level="h4" url="/research/collections">
+              Collections
             </CardHeading>
             <CardContent>
               <p>
@@ -82,8 +85,8 @@ export default function Home() {
             }}
             layout="row"
           >
-            <CardHeading level="four">
-              <Link href="/locations/map?libraries=research">Locations</Link>
+            <CardHeading level="h4" url="/locations/map?libraries=research">
+              Locations
             </CardHeading>
             <CardContent>
               <p>
@@ -101,8 +104,8 @@ export default function Home() {
             }}
             layout="row"
           >
-            <CardHeading level="four">
-              <Link href="/about/divisions">Divisions</Link>
+            <CardHeading level="h4" url="/about/divisions">
+              Divisions
             </CardHeading>
             <CardContent>
               <p>
@@ -113,15 +116,15 @@ export default function Home() {
           </Card>
           <Card
             imageProps={{
-              alt: "Image of man doing research in Rose main Reading Room",
+              alt: "Man doing research in Rose main Reading Room",
               aspectRatio: "twoByOne",
               size: "large",
               src: "https://cdn-petrol.nypl.org/sites/default/media/styles/extralarge/public/plan-you-visit.jpg?itok=scG6cFgy",
             }}
             layout="row"
           >
-            <CardHeading level="four">
-              <Link href="/research/support">Support</Link>
+            <CardHeading level="h4" url="/research/support">
+              Support
             </CardHeading>
             <CardContent>
               <p>
@@ -132,15 +135,15 @@ export default function Home() {
           </Card>
           <Card
             imageProps={{
-              alt: "Image of man wheeling cart in NYPL stacks",
+              alt: "Man wheeling cart in NYPL stacks",
               aspectRatio: "twoByOne",
               size: "large",
               src: "https://cdn-petrol.nypl.org/sites/default/media/styles/extralarge/public/research-services.jpg?itok=rSo9t1VF",
             }}
             layout="row"
           >
-            <CardHeading level="four">
-              <Link href="/research/services">Services</Link>
+            <CardHeading level="h4" url="/research/services">
+              Services
             </CardHeading>
             <CardContent>
               <p>
