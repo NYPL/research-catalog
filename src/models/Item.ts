@@ -1,16 +1,14 @@
-import { isEmpty } from "underscore"
-
 import type {
   SearchResultsItem,
-  ItemStatus,
+  JSONLDValue,
   ItemLocation,
 } from "../types/itemTypes"
+import { locationLabelToKey } from "../utils/itemUtils"
 import type SearchResultsBib from "./SearchResultsBib"
 import {
-  itemAvailabilityKeys,
+  itemAvailableIds,
   defaultNYPLLocation,
-  nonNYPLReCAPLocation,
-  locationLabelToKey,
+  nonNYPLDefaultLocation,
   locationEndpointsMap,
 } from "../utils/itemUtils"
 
@@ -22,11 +20,10 @@ import {
 export default class Item {
   id: string
   bibId: string
-  status?: ItemStatus
+  status?: JSONLDValue
   source?: string
   accessMessage?: string
   callNumber?: string
-  isElectronicResource: boolean
   volume?: string
   format?: string
   barcode?: string
@@ -36,7 +33,7 @@ export default class Item {
   isEDDRequestable: boolean
 
   constructor(item: SearchResultsItem, bib: SearchResultsBib) {
-    this.id = item["@id"] ? item["@id"].substring(4) : ""
+    this.id = item.uri || ""
     this.bibId = bib.id
     this.status = item.status?.length ? item.status[0] : null
     this.source = item.idNyplSourceId ? item.idNyplSourceId["@type"] : null
@@ -44,7 +41,6 @@ export default class Item {
       ? item.accessMessage[0]?.prefLabel
       : ""
     this.callNumber = item.shelfMark.length ? item.shelfMark[0] : null
-    this.isElectronicResource = !!item.electronicLocator?.length
     this.volume = item.enumerationChronology?.length
       ? item.enumerationChronology[0]
       : null
@@ -53,29 +49,24 @@ export default class Item {
       : bib.materialType
     this.barcode = item.idBarcode?.length ? item.idBarcode[0] : null
     this.location = this.getLocationFromItem(item)
-    this.aeonUrl = item.aeonUrl
+    this.aeonUrl = item.aeonUrl?.length ? item.aeonUrl[0] : null
     this.isPhysicallyRequestable = item.physRequestable
     this.isEDDRequestable = item.eddRequestable
   }
 
-  // Item availability is determined by the existence of status label in the availability keys list
+  // Item availability is determined by the existence of status id in the availability ids list
   get isAvailable(): boolean {
-    // Lowercase and remove non-word characters from status label
-    const availability =
-      !isEmpty(this.status) && this.status?.prefLabel
-        ? this.status.prefLabel.replace(/\W/g, "").toLowerCase()
-        : ""
-    return itemAvailabilityKeys.includes(availability)
+    return itemAvailableIds.includes(this.status["@id"])
   }
 
   get isReCAP(): boolean {
-    return this.isNonNYPLReCAP() || this.isNYPLReCAP()
+    return this.isPartnerReCAP() || this.isNYPLReCAP()
   }
 
   // Pre-processing logic for setting Item holding location
   getLocationFromItem(item: SearchResultsItem): ItemLocation {
     let location = defaultNYPLLocation
-    if (this.isNonNYPLReCAP) location = nonNYPLReCAPLocation
+    if (this.isPartnerReCAP) location = nonNYPLDefaultLocation
 
     // Check for existence of Location object in API response
     const itemLocationFromAPI = item.holdingLocation?.length
@@ -95,7 +86,7 @@ export default class Item {
   }
 
   // Determine if item is Non-NYPL ReCAP by existence of "Recap" string in item source attribute
-  isNonNYPLReCAP(): boolean {
+  isPartnerReCAP(): boolean {
     return this.source.indexOf("Recap") !== -1
   }
 
@@ -105,7 +96,7 @@ export default class Item {
   }
 
   // It's non-ReCAP NYPL-owned item if item source is Sierra and location is not ReCAP
-  isNYPLNonReCAP(): boolean {
+  isOnsite(): boolean {
     return this.isSierraItem() && !this.locationIsReCAP()
   }
 

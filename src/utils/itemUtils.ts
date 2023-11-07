@@ -1,10 +1,10 @@
 import type {
+  ItemLocationKey,
   ItemLocation,
   ItemLocationEndpoint,
-  ItemLocationKey,
 } from "../types/itemTypes"
 
-export const itemAvailabilityKeys = ["available", "useinlibrary"]
+export const itemAvailableIds = ["status:a", "status:o"]
 
 // Default delivery location for an item.
 export const defaultNYPLLocation: ItemLocation = {
@@ -14,7 +14,7 @@ export const defaultNYPLLocation: ItemLocation = {
 }
 
 // Default delivery location for a nonNyplRecap item.
-export const nonNYPLReCAPLocation: ItemLocation = {
+export const nonNYPLDefaultLocation: ItemLocation = {
   "@id": "",
   prefLabel: "Off-site",
   customerCode: "",

@@ -2,22 +2,21 @@
 
 // Item structure coming from the Search Results API response
 export interface SearchResultsItem {
-  "@id": string
+  uri?: string
   idNyplSourceId?: ItemSourceID
-  accessMessage?: ItemAccessMessage[]
+  accessMessage?: JSONLDValue[]
   shelfMark?: string[]
-  electronicLocator?: string[]
-  status?: ItemStatus[]
+  status?: JSONLDValue[]
   enumerationChronology?: string[]
-  formatLiteral: string[]
+  formatLiteral?: string[]
   idBarcode?: string[]
-  holdingLocation: ItemLocation[]
-  aeonUrl?: string
+  holdingLocation?: ItemLocation[]
+  aeonUrl?: string[]
   physRequestable?: boolean
   eddRequestable?: boolean
 }
 
-export interface ItemAccessMessage {
+export interface JSONLDValue {
   "@id": string
   prefLabel?: string
 }
@@ -27,14 +26,7 @@ export interface ItemSourceID {
   "@value": string
 }
 
-export interface ItemStatus {
-  "@id": string
-  prefLabel?: string
-}
-
-export interface ItemLocation {
-  "@id": string
-  prefLabel?: string
+export interface ItemLocation extends JSONLDValue {
   customerCode?: string
   endpoint?: ItemLocationEndpoint
 }
