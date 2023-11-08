@@ -5,7 +5,7 @@ import {
   buildItemFilterQueryParams,
   buildAppliedFiltersString,
 } from "../itemFilterUtils"
-import testAggregations from "../../../__test__/fixtures/testAggregations"
+import { normalAggs } from "../../../__test__/fixtures/testAggregations"
 import { ItemFilterData } from "../../models/itemFilterData"
 
 describe("Item Filter Utils", () => {
@@ -13,7 +13,7 @@ describe("Item Filter Utils", () => {
     it("returns true for a recap location", () => {
       expect(isRecapLocation("loc:rc2ma")).toBe(true)
     })
-    it("returns false for a recap location", () => {
+    it("returns false for a non-recap location", () => {
       expect(isRecapLocation("loc:xc")).toBe(false)
     })
   })
@@ -34,7 +34,7 @@ describe("Item Filter Utils", () => {
       const locations = ["loc:rc2ma", "loc:rcma2", "loc:rcrc"]
       expect(combineRecapLocations(locations)).toEqual(["Offsite"])
     })
-    it("can handle an empty array", () => {
+    it("can handle no locations", () => {
       const locations = []
       expect(combineRecapLocations(locations)).toEqual([])
     })
@@ -96,7 +96,7 @@ describe("Item Filter Utils", () => {
       item_status: "status:a",
       item_format: "Text",
     }
-    const aggs = testAggregations.map((agg) => new ItemFilterData(agg))
+    const aggs = normalAggs.map((agg) => new ItemFilterData(agg))
     it("can handle no filters", () => {
       expect(buildAppliedFiltersString({}, 30, [])).toBe("30 Items")
     })

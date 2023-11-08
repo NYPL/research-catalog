@@ -40,14 +40,13 @@ export const buildItemFilterQueryParams = (
     if (loc === "Offsite") return recapLocations
     else return loc
   })
-  const location_query = location.length
-    ? "item_location=" + locs.join(",")
-    : ""
+  const location_query = locs.length ? "item_location=" + locs.join(",") : ""
   const format_query = format.length ? "&item_format=" + format.join(",") : ""
   const status_query = status.length ? "&item_status=" + status.join(",") : ""
 
-  const query = encodeURI(`?${location_query}${format_query}${status_query}`)
-  return query.length > 3 ? query : ""
+  const query = `${location_query}${format_query}${status_query}`
+  if (query.length) return encodeURI("?" + query)
+  else return ""
 }
 
 export const buildAppliedFiltersString = (

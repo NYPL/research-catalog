@@ -5,7 +5,7 @@ import mockRouter from "next-router-mock"
 import FiltersContainer from "./FiltersContainer"
 import userEvent from "@testing-library/user-event"
 
-import aggs from "../../../__test__/fixtures/testAggregations"
+import { normalAggs } from "../../../__test__/fixtures/testAggregations"
 
 // Mock next router
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
@@ -16,12 +16,12 @@ describe("Filters container", () => {
   })
 
   it("renders a single filter", () => {
-    render(<FiltersContainer itemAggs={[aggs[0]]} />)
+    render(<FiltersContainer itemAggs={[normalAggs[0]]} />)
     const filters = screen.getAllByTestId(/item-filter/)
     expect(filters.length).toBe(1)
   })
   it("renders three filter boxes", () => {
-    render(<FiltersContainer itemAggs={aggs} />)
+    render(<FiltersContainer itemAggs={normalAggs} />)
     const filters = screen.getAllByTestId(/item-filter/)
     expect(filters.length).toBe(3)
   })
@@ -32,15 +32,12 @@ describe("Filters container", () => {
       item_format: "Text",
       item_status: "status:a",
     }
-    render(<FiltersContainer itemAggs={aggs} />)
-    const [
-      locationCheckboxGroupButton,
-      statusCheckboxGroupButton,
-      formatCheckboxGroupButton,
-    ] = filterButtons()
-    await filterHasSelected(locationCheckboxGroupButton, ["Offsite"])
-    await filterHasSelected(formatCheckboxGroupButton, ["Text"])
-    await filterHasSelected(statusCheckboxGroupButton, ["Available"])
+    render(<FiltersContainer itemAggs={normalAggs} />)
+    const { locationFilterButton, statusFilterButton, formatFilterButton } =
+      filterButtons()
+    await filterHasSelected(locationFilterButton, ["Offsite"])
+    await filterHasSelected(formatFilterButton, ["Text"])
+    await filterHasSelected(statusFilterButton, ["Available"])
   })
 
   it("clears selection per filter", async () => {
@@ -49,30 +46,24 @@ describe("Filters container", () => {
       item_format: "Text",
       item_status: "status:a,status:na",
     }
-    render(<FiltersContainer itemAggs={aggs} />)
-    const [
-      locationCheckboxGroupButton,
-      statusCheckboxGroupButton,
-      formatCheckboxGroupButton,
-    ] = filterButtons()
+    render(<FiltersContainer itemAggs={normalAggs} />)
+    const { locationFilterButton, statusFilterButton, formatFilterButton } =
+      filterButtons()
 
     // the values start selected
-    await filterHasSelected(locationCheckboxGroupButton, ["Offsite"])
-    await filterHasSelected(formatCheckboxGroupButton, ["Text"])
-    await filterHasSelected(statusCheckboxGroupButton, [
-      "Available",
-      "Not available",
-    ])
+    await filterHasSelected(locationFilterButton, ["Offsite"])
+    await filterHasSelected(formatFilterButton, ["Text"])
+    await filterHasSelected(statusFilterButton, ["Available", "Not available"])
     const clearStatusButton = screen.getByTestId("clear-status-button")
 
     await act(async () => {
       await userEvent.click(clearStatusButton)
       // these filters should be unchanged
-      await filterHasSelected(locationCheckboxGroupButton, ["Offsite"])
-      await filterHasSelected(formatCheckboxGroupButton, ["Text"])
+      await filterHasSelected(locationFilterButton, ["Offsite"])
+      await filterHasSelected(formatFilterButton, ["Text"])
 
       // Status values should be unchecked
-      await filterHasNotSelected(statusCheckboxGroupButton, [
+      await filterHasNotSelected(statusFilterButton, [
         "Available",
         "Not available",
       ])
@@ -80,33 +71,31 @@ describe("Filters container", () => {
   })
 
   it("does not persist selection if filter closes without applying", async () => {
-    render(<FiltersContainer itemAggs={aggs} />)
-    const [locationCheckboxGroupButton, statusCheckboxGroupButton] =
-      filterButtons()
+    render(<FiltersContainer itemAggs={normalAggs} />)
+    const { locationFilterButton, statusFilterButton } = filterButtons()
     await act(async () => {
-      await userEvent.click(locationCheckboxGroupButton)
+      await userEvent.click(locationFilterButton)
       const checkbox = screen.getAllByRole("checkbox")[0]
       await userEvent.click(checkbox)
 
       // clicking other filter label closes the location filter
-      await userEvent.click(statusCheckboxGroupButton)
-      await userEvent.click(locationCheckboxGroupButton)
+      await userEvent.click(statusFilterButton)
+      await userEvent.click(locationFilterButton)
       const applyButton = screen.getByTestId("clear-location-button")
       expect(applyButton).toBeDisabled()
     })
   })
 
-  it.only("persists previously applied selection after closing filter without applying", async () => {
+  it("persists previously applied selection after closing filter without applying", async () => {
     mockRouter.query = {
       item_location: "loc:rc2ma",
       item_format: "Text",
       item_status: "status:a,status:na",
     }
-    render(<FiltersContainer itemAggs={aggs} />)
-    const [locationCheckboxGroupButton, statusCheckboxGroupButton] =
-      filterButtons()
+    render(<FiltersContainer itemAggs={normalAggs} />)
+    const { locationFilterButton, statusFilterButton } = filterButtons()
     await act(async () => {
-      await userEvent.click(locationCheckboxGroupButton)
+      await userEvent.click(locationFilterButton)
       const checkbox = screen.getByLabelText(/Main Reading Room/)
       const offsiteCheckbox = screen.getByLabelText("Offsite")
       // uncheck Offsite (set from query parsing)
@@ -116,18 +105,18 @@ describe("Filters container", () => {
       // don't apply
 
       // clicking other filter label closes the location filter
-      await userEvent.click(statusCheckboxGroupButton)
-      await userEvent.click(locationCheckboxGroupButton)
+      await userEvent.click(statusFilterButton)
+      await userEvent.click(locationFilterButton)
 
-      filterHasSelected(locationCheckboxGroupButton, ["Offsite"])
-      filterHasNotSelected(locationCheckboxGroupButton, [
+      filterHasSelected(locationFilterButton, ["Offsite"])
+      filterHasNotSelected(locationFilterButton, [
         "Schwarzman Building - Main Reading Room 315",
       ])
     })
   })
   it("closes open filters when user clicks outside of the filter", async () => {
-    render(<FiltersContainer itemAggs={aggs} />)
-    const [locationFilterButton] = filterButtons()
+    render(<FiltersContainer itemAggs={normalAggs} />)
+    const { locationFilterButton } = filterButtons()
     const outsideOfTheFilter = screen.getByTestId("filter-text")
     await act(async () => {
       await userEvent.click(locationFilterButton)
@@ -152,15 +141,15 @@ const filterHasSelected = async (checkboxGroupButton, values: string[]) => {
 }
 
 const filterButtons = () => {
-  const locationCheckboxGroupButton = screen.getByTestId("location-item-filter")
-  const statusCheckboxGroupButton = screen.getByTestId("status-item-filter")
-  const formatCheckboxGroupButton = screen.getByTestId("format-item-filter")
+  const locationFilterButton = screen.getByTestId("location-item-filter")
+  const statusFilterButton = screen.getByTestId("status-item-filter")
+  const formatFilterButton = screen.getByTestId("format-item-filter")
 
-  return [
-    locationCheckboxGroupButton,
-    statusCheckboxGroupButton,
-    formatCheckboxGroupButton,
-  ]
+  return {
+    locationFilterButton,
+    statusFilterButton,
+    formatFilterButton,
+  }
 }
 
 const filterHasNotSelected = async (checkboxGroupButton, values: string[]) => {

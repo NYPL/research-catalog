@@ -42,14 +42,14 @@ const ItemFilterButtons = ({
         data-testid={`clear-${field}-button`}
         key={`clear-${field}-button`}
         buttonType="text"
-        id="clear-filter-button"
+        id={`clear-${field}-button`}
         onClick={clearFilter}
       >
         Clear
       </Button>
       <Button
         key={`apply-${field}-button`}
-        id="apply-filter-button"
+        id={`apply-${field}-button`}
         onClick={applyFilter}
       >
         Apply

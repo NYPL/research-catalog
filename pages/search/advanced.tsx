@@ -39,7 +39,7 @@ import type {
 import { getQueryString } from "../../src/utils/searchUtils"
 
 import ItemFilterContainer from "../../src/components/ItemFilters/FiltersContainer"
-import testItemAggs from "../../__test__/fixtures/testAggregations"
+import { normalAggs } from "../../__test__/fixtures/testAggregations"
 
 /**
  * The Advanced Search page is responsible for displaying the Advanced Search form fields and
@@ -125,7 +125,7 @@ export default function AdvancedSearch() {
             }
           />
         )}
-        <ItemFilterContainer itemAggs={testItemAggs} />
+        <ItemFilterContainer itemAggs={normalAggs} />
         <Heading level="two">Advanced Search</Heading>
         <Form
           id="advancedSearchForm"

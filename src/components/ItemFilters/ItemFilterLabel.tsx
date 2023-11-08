@@ -1,7 +1,6 @@
 import { Button, Icon, Spacer } from "@nypl/design-system-react-components"
 import type { Dispatch } from "react"
 
-import styles from "../../../styles/components/ItemFilters.module.scss"
 import type { Option } from "../../types/filterTypes"
 
 interface ItemFilterLabelProps {
@@ -20,9 +19,8 @@ const ItemFilterLabel = ({
   const fieldFormatted = field[0].toUpperCase() + field.substring(1)
   return (
     <Button
-      className={styles.itemFilterButton}
       sx={{
-        borderColor: "var(--nypl-colors-ui-gray-medium)",
+        borderColor: "ui.gray.medium",
         color: "black",
         width: "100%",
       }}
