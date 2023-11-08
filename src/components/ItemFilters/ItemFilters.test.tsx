@@ -40,6 +40,21 @@ describe("Filters container", () => {
     await filterHasSelected(statusFilterButton, ["Available"])
   })
 
+  it("closes open filters when user clicks outside of the filter", async () => {
+    render(<FiltersContainer itemAggs={normalAggs} />)
+    const { locationFilterButton } = filterButtons()
+    const outsideOfTheFilter = screen.getByTestId("filter-text")
+    await act(async () => {
+      await userEvent.click(locationFilterButton)
+      const offsiteCheckbox = screen.getByRole("checkbox", {
+        name: "Offsite",
+      })
+      await userEvent.click(offsiteCheckbox)
+      await userEvent.click(outsideOfTheFilter)
+      expect(offsiteCheckbox).not.toBeInTheDocument()
+    })
+  })
+
   it("clears selection per filter", async () => {
     mockRouter.query = {
       item_location: "loc:rc2ma",
@@ -112,18 +127,6 @@ describe("Filters container", () => {
       filterHasNotSelected(locationFilterButton, [
         "Schwarzman Building - Main Reading Room 315",
       ])
-    })
-  })
-  it("closes open filters when user clicks outside of the filter", async () => {
-    render(<FiltersContainer itemAggs={normalAggs} />)
-    const { locationFilterButton } = filterButtons()
-    const outsideOfTheFilter = screen.getByTestId("filter-text")
-    await act(async () => {
-      await userEvent.click(locationFilterButton)
-      const offsiteCheckbox = screen.getByText("Offsite")
-      await userEvent.click(offsiteCheckbox)
-      await userEvent.click(outsideOfTheFilter)
-      expect(offsiteCheckbox).not.toBeInTheDocument()
     })
   })
 })
