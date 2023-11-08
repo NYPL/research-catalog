@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+import type { ItemFilterData } from "../models/itemFilterData"
 import type { AppliedFilters } from "../types/filterTypes"
 
 export const isRecapLocation = (loc: string) => {
@@ -47,4 +48,29 @@ export const buildItemFilterQueryParams = (
 
   const query = encodeURI(`?${location_query}${format_query}${status_query}`)
   return query.length > 3 ? query : ""
+}
+
+export const buildAppliedFiltersString = (
+  query: BibPageQueryParams,
+  numItems = 20,
+  itemAggs: ItemFilterData[]
+) => {
+  const items = `Item${numItems === 1 ? "" : "s"}`
+  if (Object.keys(query).length === 0) return `${numItems} ${items}`
+  const num = numItems === 0 ? "No" : numItems
+  const numMatchingItems = `${num} ${items} Matching `
+  const filters = Object.keys(query)
+    .map((field: string) => {
+      const queryPerField = query[field]
+      if (queryPerField) {
+        const fieldAggregations = itemAggs.find(
+          (agg: ItemFilterData) => agg.field === field.substring(5)
+        )
+        const labels =
+          fieldAggregations.labelsForConcatenatedValues(queryPerField)
+        return field.substring(5) + ": " + labels
+      }
+    })
+    .filter((filter) => filter)
+  return numMatchingItems + "Filtered by " + filters.join(", ")
 }

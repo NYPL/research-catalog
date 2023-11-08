@@ -19,6 +19,20 @@ export class ItemFilterData {
   displayOptions(): Option[] {
     return this.options
   }
+
+  labelForValue(value: string) {
+    return this.displayOptions().find((opt: Option) => {
+      return opt.value === value
+    })?.label
+  }
+
+  labelsForConcatenatedValues(values: string) {
+    return Array.from(
+      new Set(
+        values.split(",").map((val: string) => `'${this.labelForValue(val)}'`)
+      )
+    ).join(", ")
+  }
 }
 
 export class LocationFilterData extends ItemFilterData {
