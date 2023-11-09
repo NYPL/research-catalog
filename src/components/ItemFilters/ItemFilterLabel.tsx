@@ -20,6 +20,8 @@ const ItemFilterLabel = ({
   return (
     <Button
       sx={{
+        display: "flex",
+        justifyContent: "space-between",
         borderColor: "ui.gray.medium",
         color: "black",
         width: "100%",
@@ -31,8 +33,7 @@ const ItemFilterLabel = ({
       type="button"
     >
       {fieldFormatted}
-      <Spacer />
-      {selectedOptions.length > 0 && `(${selectedOptions.length})`}
+      {selectedOptions.length > 0 && ` (${selectedOptions.length})`}
       <Icon name={isOpen ? "minus" : "plus"} size="medium" />
     </Button>
   )
