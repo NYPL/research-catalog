@@ -1,4 +1,4 @@
-import { Button, Icon, Spacer } from "@nypl/design-system-react-components"
+import { Button, Icon } from "@nypl/design-system-react-components"
 import type { Dispatch } from "react"
 
 import type { Option } from "../../types/filterTypes"
