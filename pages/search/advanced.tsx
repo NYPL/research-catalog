@@ -38,6 +38,9 @@ import type {
 } from "../../src/types/searchTypes"
 import { getQueryString } from "../../src/utils/searchUtils"
 
+import ItemFilterContainer from "../../src/components/ItemFilters/FiltersContainer"
+import { normalAggs } from "../../__test__/fixtures/testAggregations"
+
 /**
  * The Advanced Search page is responsible for displaying the Advanced Search form fields and
  * buttons that clear the fields and submit a search request.
@@ -122,6 +125,7 @@ export default function AdvancedSearch() {
             }
           />
         )}
+        <ItemFilterContainer itemAggs={normalAggs} />
         <Heading level="two">Advanced Search</Heading>
         <Form
           id="advancedSearchForm"
