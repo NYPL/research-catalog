@@ -19,10 +19,14 @@ interface ItemFilterContainerProps {
 
 const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
   const router = useRouter()
-  const filterData = itemAggs.map((agg: ItemAggregation) => {
-    if (agg.field === "location") return new LocationFilterData(agg)
-    else return new ItemFilterData(agg)
-  })
+
+  const filterData = useRef(
+    itemAggs.map((agg: ItemAggregation) => {
+      if (agg.field === "location") return new LocationFilterData(agg)
+      else return new ItemFilterData(agg)
+    })
+  ).current
+
   const [appliedFilters, setAppliedFilters] = useState({
     location: [],
     format: [],
@@ -34,13 +38,7 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
 
   const [whichFilterIsOpen, setWhichFilterIsOpen] = useState("")
 
-  const initAppliedFilters = buildAppliedFiltersString(
-    router.query,
-    20,
-    filterData
-  )
-  const [appliedFiltersDisplay, setAppliedFiltersDisplay] =
-    useState(initAppliedFilters)
+  const [appliedFiltersDisplay, setAppliedFiltersDisplay] = useState("")
 
   const tempSubmitFilters = (selection: string[], field: string) => {
     let newFilters: AppliedFilters
@@ -62,7 +60,10 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
 
   useEffect(() => {
     setAppliedFilters(parseItemFilterQueryParams(router.query))
-  }, [router.query])
+    setAppliedFiltersDisplay(
+      buildAppliedFiltersString(router.query, 20, filterData)
+    )
+  }, [router.query, filterData])
 
   return (
     <div className={styles.filtersContainer}>

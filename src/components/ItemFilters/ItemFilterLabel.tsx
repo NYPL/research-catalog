@@ -6,13 +6,13 @@ import type { Option } from "../../types/filterTypes"
 interface ItemFilterLabelProps {
   setWhichFilterIsOpen: Dispatch<React.SetStateAction<string>>
   field: string
-  selectedOptions: Option[]
+  appliedOptions: Option[]
   isOpen: boolean
 }
 
 const ItemFilterLabel = ({
   field,
-  selectedOptions,
+  appliedOptions,
   setWhichFilterIsOpen,
   isOpen,
 }: ItemFilterLabelProps) => {
@@ -33,7 +33,7 @@ const ItemFilterLabel = ({
       type="button"
     >
       {fieldFormatted}
-      {selectedOptions.length > 0 && ` (${selectedOptions.length})`}
+      {appliedOptions.length > 0 && ` (${appliedOptions.length})`}
       <Icon name={isOpen ? "minus" : "plus"} size="medium" />
     </Button>
   )

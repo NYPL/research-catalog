@@ -46,7 +46,7 @@ const ItemFilter = ({
     <div className={styles.itemFilter}>
       <ItemFilterLabel
         field={field}
-        selectedOptions={selectedOptions}
+        appliedOptions={appliedFilters[field]}
         setWhichFilterIsOpen={setWhichFilterIsOpen}
         isOpen={isOpen}
       />
@@ -78,6 +78,7 @@ const ItemFilter = ({
           </CheckboxGroup>
           <ItemFilterButtons
             field={field}
+            appliedOptions={appliedFilters[field]}
             selectedOptions={selectedOptions}
             setSelectedOptions={setSelectedOptions}
             submitFilters={submitFilters}
