@@ -1,4 +1,4 @@
-import { Button, Icon, Spacer } from "@nypl/design-system-react-components"
+import { Button, Icon } from "@nypl/design-system-react-components"
 import type { Dispatch } from "react"
 
 import type { Option } from "../../types/filterTypes"
@@ -20,6 +20,8 @@ const ItemFilterLabel = ({
   return (
     <Button
       sx={{
+        display: "flex",
+        justifyContent: "space-between",
         borderColor: "ui.gray.medium",
         color: "black",
         width: "100%",
@@ -31,8 +33,7 @@ const ItemFilterLabel = ({
       type="button"
     >
       {fieldFormatted}
-      <Spacer />
-      {selectedOptions.length > 0 && `(${selectedOptions.length})`}
+      {selectedOptions.length > 0 && ` (${selectedOptions.length})`}
       <Icon name={isOpen ? "minus" : "plus"} size="medium" />
     </Button>
   )
