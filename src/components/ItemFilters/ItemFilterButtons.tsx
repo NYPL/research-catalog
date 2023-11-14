@@ -23,7 +23,7 @@ const ItemFilterButtons = ({
     setSelectedOptions([])
     submitFilters([], field)
   }
-  useEffect(() => console.log(appliedOptions), [selectedOptions])
+
   return (
     <ButtonGroup className="item-filter-buttons">
       <Button

@@ -22,15 +22,13 @@ export class ItemFilterData {
 
   labelForValue(value: string) {
     return this.displayOptions().find((opt: Option) => {
-      return opt.value === value
+      return opt.value === value || opt.label === value
     })?.label
   }
 
-  labelsForConcatenatedValues(values: string) {
+  labelsForConcatenatedValues(values: string[]) {
     return Array.from(
-      new Set(
-        values.split(",").map((val: string) => `'${this.labelForValue(val)}'`)
-      )
+      new Set(values.map((val: string) => `'${this.labelForValue(val)}'`))
     ).join(", ")
   }
 }

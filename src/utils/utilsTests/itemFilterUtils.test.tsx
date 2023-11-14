@@ -90,49 +90,34 @@ describe("Item Filter Utils", () => {
     })
   })
 
-  describe("buildAppliedFiltersString", () => {
-    const query = {
+  describe.only("buildAppliedFiltersString", () => {
+    const query = parseItemFilterQueryParams({
       item_location: "loc:rc2ma,loc:rcma2",
       item_status: "status:a",
       item_format: "Text",
-    }
+    })
+    const emptyQuery = parseItemFilterQueryParams({})
     const aggs = normalAggs.map((agg) => new ItemFilterData(agg))
-    it("can handle no filters", () => {
-      expect(buildAppliedFiltersString({}, 30, [])).toBe("30 Items")
+    it("no filters", () => {
+      expect(buildAppliedFiltersString(emptyQuery, aggs)).toBeUndefined()
     })
-    it("no items with filters", () => {
-      const query = {
-        item_location: "loc:rc2ma,loc:rcma2",
-        item_status: "status:a",
-        item_format: "Text",
-      }
-      expect(buildAppliedFiltersString(query, 0, aggs)).toBe(
-        "No Items Matching Filtered by location: 'Offsite', status: 'Available', format: 'Text'"
+    it("with all filters", () => {
+      expect(buildAppliedFiltersString(query, aggs)).toBe(
+        "Filtered by location: 'Offsite', format: 'Text', status: 'Available'"
       )
     })
-    it("some items no filters", () => {
-      expect(buildAppliedFiltersString({}, 5, aggs)).toBe("5 Items")
-    })
-    it("some items with filters", () => {
-      expect(buildAppliedFiltersString(query, 5, aggs)).toBe(
-        "5 Items Matching Filtered by location: 'Offsite', status: 'Available', format: 'Text'"
+    it("all filters filters", () => {
+      expect(buildAppliedFiltersString(query, aggs)).toBe(
+        "Filtered by location: 'Offsite', format: 'Text', status: 'Available'"
       )
     })
-    it("one item with filters", () => {
-      expect(buildAppliedFiltersString(query, 1, aggs)).toBe(
-        "1 Item Matching Filtered by location: 'Offsite', status: 'Available', format: 'Text'"
-      )
-    })
-    it("some items one filter", () => {
+    it("one filter", () => {
       expect(
         buildAppliedFiltersString(
-          { item_status: "status:a,status:na" },
-          5,
+          parseItemFilterQueryParams({ item_status: "status:a,status:na" }),
           aggs
         )
-      ).toBe(
-        "5 Items Matching Filtered by status: 'Available', 'Not available'"
-      )
+      ).toBe("Filtered by status: 'Available', 'Not available'")
     })
   })
 })

@@ -10,6 +10,7 @@ import ItemFilter from "./ItemFilter"
 import {
   buildAppliedFiltersString,
   buildItemFilterQueryString,
+  buildItemsString,
   parseItemFilterQueryParams,
 } from "../../utils/itemFilterUtils"
 
@@ -40,6 +41,8 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
 
   const [appliedFiltersDisplay, setAppliedFiltersDisplay] = useState("")
 
+  const [itemsMatched, setItemsMatched] = useState("")
+
   const tempSubmitFilters = (selection: string[], field: string) => {
     let newFilters: AppliedFilters
     setAppliedFilters((prevFilters) => {
@@ -58,9 +61,10 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
   }
 
   useEffect(() => {
-    setAppliedFilters(parseItemFilterQueryParams(router.query))
+    const parsedParams = parseItemFilterQueryParams(router.query)
+    setAppliedFilters(parsedParams)
     setAppliedFiltersDisplay(
-      buildAppliedFiltersString(router.query, 20, filterData)
+      buildAppliedFiltersString(parsedParams, filterData)
     )
   }, [router.query, filterData])
 
@@ -81,6 +85,7 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
           />
         ))}
       </div>
+      <Text>{itemsMatched}</Text>
       <Text>{appliedFiltersDisplay}</Text>
     </div>
   )

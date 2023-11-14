@@ -51,27 +51,30 @@ export const buildItemFilterQueryString = (
   else return ""
 }
 
-export const buildAppliedFiltersString = (
-  query: BibPageQueryParams,
-  numItems = 20,
-  itemAggs: ItemFilterData[]
-) => {
+export const buildItemsString = (query, numItems = 20) => {
   const items = `Item${numItems === 1 ? "" : "s"}`
   if (Object.keys(query).length === 0) return `${numItems} ${items}`
   const num = numItems === 0 ? "No" : numItems
-  const numMatchingItems = `${num} Matching ${items} `
-  const filters = Object.keys(query)
+  return `${num} Matching ${items} `
+}
+
+export const buildAppliedFiltersString = (
+  appliedFilters: AppliedFilters,
+  itemAggs: ItemFilterData[]
+) => {
+  const filters = Object.keys(appliedFilters)
     .map((field: string) => {
-      const queryPerField = query[field]
-      if (queryPerField) {
+      const appliedFilterPerField = appliedFilters[field]
+      if (appliedFilterPerField.length) {
         const fieldAggregations = itemAggs.find(
-          (agg: ItemFilterData) => agg.field === field.substring(5)
+          (agg: ItemFilterData) => agg.field === field
         )
-        const labels =
-          fieldAggregations.labelsForConcatenatedValues(queryPerField)
-        return field.substring(5) + ": " + labels
+        const labels = fieldAggregations.labelsForConcatenatedValues(
+          appliedFilterPerField
+        )
+        return field + ": " + labels
       }
     })
     .filter((filter) => filter)
-  return numMatchingItems + "Filtered by " + filters.join(", ")
+  if (filters.length) return "Filtered by " + filters.join(", ")
 }
