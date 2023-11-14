@@ -37,7 +37,6 @@ import type {
   SearchFormActionType,
 } from "../../src/types/searchTypes"
 import { getQueryString } from "../../src/utils/searchUtils"
-
 /**
  * The Advanced Search page is responsible for displaying the Advanced Search form fields and
  * buttons that clear the fields and submit a search request.
