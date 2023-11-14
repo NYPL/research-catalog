@@ -11,27 +11,26 @@ import ItemFilterLabel from "./ItemFilterLabel"
 
 interface ItemFilterProps {
   itemFilterData: ItemFilterData
-  setAppliedFilters: Dispatch<React.SetStateAction<AppliedFilters>>
-  activeFilters: AppliedFilters
+  appliedFilters: AppliedFilters
   // this type is temporary for dev use only. could end up being different.
-  submitFilters: Dispatch<React.SetStateAction<AppliedFilters>>
+  submitFilters: (selection: string[], field: string) => void
   isOpen: boolean
   setWhichFilterIsOpen: Dispatch<React.SetStateAction<string>>
 }
 
 const ItemFilter = ({
   itemFilterData,
-  setAppliedFilters,
-  activeFilters,
+  submitFilters,
+  appliedFilters,
   isOpen,
   setWhichFilterIsOpen,
 }: ItemFilterProps) => {
   const field = itemFilterData.field
-  const [selectedOptions, setSelectedOptions] = useState(activeFilters[field])
+  const [selectedOptions, setSelectedOptions] = useState(appliedFilters[field])
 
   const resetToAppliedOptions = useCallback(() => {
-    updateCheckboxGroupValue(activeFilters[field])
-  }, [activeFilters, field])
+    updateCheckboxGroupValue(appliedFilters[field])
+  }, [appliedFilters, field])
 
   const updateCheckboxGroupValue = (data: string[]) => {
     setSelectedOptions(data)
@@ -81,7 +80,7 @@ const ItemFilter = ({
             field={field}
             selectedOptions={selectedOptions}
             setSelectedOptions={setSelectedOptions}
-            setAppliedFilters={setAppliedFilters}
+            submitFilters={submitFilters}
           />
         </div>
       )}

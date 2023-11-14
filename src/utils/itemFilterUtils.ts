@@ -32,7 +32,7 @@ export const parseItemFilterQueryParams = ({
   }
 }
 
-export const buildItemFilterQueryParams = (
+export const buildItemFilterQueryString = (
   { location, format, status }: AppliedFilters,
   recapLocations: string
 ) => {

@@ -4,11 +4,12 @@ import React from "react"
 import { Text, useCloseDropDown } from "@nypl/design-system-react-components"
 
 import styles from "../../../styles/components/ItemFilters.module.scss"
-import type { ItemAggregation } from "../../types/filterTypes"
+import type { AppliedFilters, ItemAggregation } from "../../types/filterTypes"
 import { ItemFilterData, LocationFilterData } from "../../models/itemFilterData"
 import ItemFilter from "./ItemFilter"
 import {
-  buildItemFilterQueryParams,
+  buildAppliedFiltersString,
+  buildItemFilterQueryString,
   parseItemFilterQueryParams,
 } from "../../utils/itemFilterUtils"
 
@@ -17,12 +18,12 @@ interface ItemFilterContainerProps {
 }
 
 const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
-  const { query } = useRouter()
+  const router = useRouter()
   const filterData = itemAggs.map((agg: ItemAggregation) => {
     if (agg.field === "location") return new LocationFilterData(agg)
     else return new ItemFilterData(agg)
   })
-  const [activeFilters, setAppliedFilters] = useState({
+  const [appliedFilters, setAppliedFilters] = useState({
     location: [],
     format: [],
     status: [],
@@ -33,25 +34,35 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
 
   const [whichFilterIsOpen, setWhichFilterIsOpen] = useState("")
 
-  const [tempQueryDisplay, setTempQueryDisplay] = useState("")
+  const initAppliedFilters = buildAppliedFiltersString(
+    router.query,
+    20,
+    filterData
+  )
+  const [appliedFiltersDisplay, setAppliedFiltersDisplay] =
+    useState(initAppliedFilters)
 
-  const tempSubmitFilters = () => {
+  const tempSubmitFilters = (selection: string[], field: string) => {
+    let newFilters: AppliedFilters
+    setAppliedFilters((prevFilters) => {
+      newFilters = { ...prevFilters, [field]: selection }
+      return newFilters
+    })
     const locationFilterData = filterData.find(
       (filter) => filter.field === "location"
     ) as LocationFilterData
-    setTempQueryDisplay(
-      buildItemFilterQueryParams(
-        activeFilters,
-        locationFilterData.recapLocations()
-      )
+    const url = buildItemFilterQueryString(
+      newFilters,
+      locationFilterData.recapLocations()
     )
+    // console.log("spaghetti")
+    router.push("/search/advanced" + url)
+    setAppliedFiltersDisplay(url)
   }
 
   useEffect(() => {
-    setAppliedFilters(parseItemFilterQueryParams(query))
-  }, [query])
-
-  useEffect(tempSubmitFilters, [activeFilters, tempSubmitFilters])
+    setAppliedFilters(parseItemFilterQueryParams(router.query))
+  }, [router.query])
 
   return (
     <div className={styles.filtersContainer}>
@@ -65,13 +76,12 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
             setWhichFilterIsOpen={setWhichFilterIsOpen}
             key={field.field}
             itemFilterData={field}
-            setAppliedFilters={setAppliedFilters}
-            activeFilters={activeFilters}
+            appliedFilters={appliedFilters}
             submitFilters={tempSubmitFilters}
           />
         ))}
       </div>
-      <p>{tempQueryDisplay}</p>
+      <Text>{appliedFiltersDisplay}</Text>
     </div>
   )
 }

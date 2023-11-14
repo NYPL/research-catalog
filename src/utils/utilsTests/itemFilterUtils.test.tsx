@@ -2,7 +2,7 @@ import {
   isRecapLocation,
   combineRecapLocations,
   parseItemFilterQueryParams,
-  buildItemFilterQueryParams,
+  buildItemFilterQueryString,
   buildAppliedFiltersString,
 } from "../itemFilterUtils"
 import { normalAggs } from "../../../__test__/fixtures/testAggregations"
@@ -73,7 +73,7 @@ describe("Item Filter Utils", () => {
         status: ["status:a", "status:na"],
       }
       const recapLocations = "loc:rc2ma,loc:rc3ma,loc:rc4ma"
-      expect(buildItemFilterQueryParams(query, recapLocations)).toBe(
+      expect(buildItemFilterQueryString(query, recapLocations)).toBe(
         "?item_location=loc:abc,loc:rc2ma,loc:rc3ma,loc:rc4ma&item_format=Text&item_status=status:a,status:na"
       )
     })
@@ -84,7 +84,7 @@ describe("Item Filter Utils", () => {
         status: [],
       }
       const recapLocations = "loc:rc2ma,loc:rc3ma,loc:rc4ma"
-      expect(buildItemFilterQueryParams(query, recapLocations)).toBe(
+      expect(buildItemFilterQueryString(query, recapLocations)).toBe(
         "?item_location=loc:abc,loc:rc2ma,loc:rc3ma,loc:rc4ma"
       )
     })

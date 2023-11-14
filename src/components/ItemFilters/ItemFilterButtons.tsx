@@ -1,38 +1,26 @@
 import { ButtonGroup, Button } from "@nypl/design-system-react-components"
 import type { Dispatch } from "react"
 
-import type { AppliedFilters, Option } from "../../../src/types/filterTypes"
+import type { Option } from "../../../src/types/filterTypes"
 
 interface ItemFilterButtonProps {
   selectedOptions: string[]
   field: string
   setSelectedOptions: Dispatch<React.SetStateAction<Option[]>>
-  setAppliedFilters: Dispatch<React.SetStateAction<AppliedFilters>>
+  submitFilters: (selection: string[], field: string) => void
 }
 
 const ItemFilterButtons = ({
   selectedOptions,
   field,
   setSelectedOptions,
-  setAppliedFilters,
+  submitFilters,
 }: ItemFilterButtonProps) => {
   const clearFilter = () => {
     setSelectedOptions([])
-    setAppliedFilters((prevFilters: AppliedFilters) => {
-      return { ...prevFilters, [field]: [] }
-    })
+    submitFilters([], field)
   }
 
-  const applyFilter = () => {
-    let newFilterSelection: AppliedFilters
-    setAppliedFilters((prevFilters: AppliedFilters) => {
-      newFilterSelection = {
-        ...prevFilters,
-        [field]: selectedOptions,
-      }
-      return newFilterSelection
-    })
-  }
   return (
     <ButtonGroup
       className="item-filter-buttons"
@@ -50,7 +38,7 @@ const ItemFilterButtons = ({
       <Button
         key={`apply-${field}-button`}
         id={`apply-${field}-button`}
-        onClick={applyFilter}
+        onClick={() => submitFilters(selectedOptions, field)}
       >
         Apply
       </Button>
