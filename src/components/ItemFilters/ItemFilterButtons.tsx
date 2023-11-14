@@ -27,7 +27,7 @@ const ItemFilterButtons = ({
   return (
     <ButtonGroup className="item-filter-buttons">
       <Button
-        isDisabled={appliedOptions.length === 0 || selectedOptions.length === 0}
+        isDisabled={selectedOptions.length === 0}
         data-testid={`clear-${field}-button`}
         key={`clear-${field}-button`}
         buttonType="text"
@@ -37,7 +37,7 @@ const ItemFilterButtons = ({
         Clear
       </Button>
       <Button
-        isDisabled={selectedOptions.length === 0}
+        isDisabled={appliedOptions.length === 0 && selectedOptions.length === 0}
         key={`apply-${field}-button`}
         id={`apply-${field}-button`}
         onClick={() => submitFilters(selectedOptions, field)}

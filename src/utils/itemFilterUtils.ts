@@ -59,7 +59,7 @@ export const buildAppliedFiltersString = (
   const items = `Item${numItems === 1 ? "" : "s"}`
   if (Object.keys(query).length === 0) return `${numItems} ${items}`
   const num = numItems === 0 ? "No" : numItems
-  const numMatchingItems = `${num} ${items} Matching `
+  const numMatchingItems = `${num} Matching ${items} `
   const filters = Object.keys(query)
     .map((field: string) => {
       const queryPerField = query[field]
