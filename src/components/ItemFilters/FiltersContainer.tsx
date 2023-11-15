@@ -41,9 +41,9 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
 
   const [appliedFiltersDisplay, setAppliedFiltersDisplay] = useState("")
 
-  const [itemsMatched, setItemsMatched] = useState("")
+  const [itemsMatched] = useState(buildItemsString(router.query))
 
-  const tempSubmitFilters = (selection: string[], field: string) => {
+  const submitFilters = (selection: string[], field: string) => {
     let newFilters: AppliedFilters
     setAppliedFilters((prevFilters) => {
       newFilters = { ...prevFilters, [field]: selection }
@@ -81,7 +81,7 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
             key={field.field}
             itemFilterData={field}
             appliedFilters={appliedFilters}
-            submitFilters={tempSubmitFilters}
+            submitFilters={submitFilters}
           />
         ))}
       </div>
