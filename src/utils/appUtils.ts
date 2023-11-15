@@ -15,6 +15,8 @@ export const getActivePage = (pathname: string): RCPage => {
     return "shep"
   } else if (pathname.includes("account")) {
     return "account"
+  } else if (pathname.includes("bib")) {
+    return "bib"
   } else if (pathname.includes("404")) {
     return "404"
   } else {

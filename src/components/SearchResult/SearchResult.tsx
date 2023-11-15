@@ -35,7 +35,10 @@ const SearchResult = ({ bib }: SearchResultProps) => {
           {bib.publicationStatement && <Text>{bib.publicationStatement}</Text>}
           {bib.yearPublished && <Text>{bib.yearPublished}</Text>}
           <Text>{bib.itemMessage}</Text>
-          <ItemTable items={bib.items} />
+          <ItemTable
+            items={bib.items}
+            isArchiveCollection={bib.isArchiveCollection}
+          />
         </Box>
       </CardContent>
     </Card>

@@ -33,3 +33,22 @@ export const locationEndpointsMap: Record<
 export function locationLabelToKey(label: string): ItemLocationKey {
   return label.replace(/SASB/, "Schwarzman").split(" ")[0] as ItemLocationKey
 }
+
+export const getItemTableHeadings = (
+  isDesktop = true,
+  isBibPage = false,
+  isArchiveCollection = false,
+  includeVolColumn = false
+) => {
+  const volColumnHeading = isArchiveCollection ? "Vol/Date" : "Container"
+
+  return [
+    ...(isBibPage ? ["Status"] : []),
+    ...(!includeVolColumn ? [volColumnHeading] : []),
+    "Format",
+    ...(!includeVolColumn && !isDesktop ? ["Call Number"] : []),
+    ...(isBibPage && isDesktop ? ["Access"] : []),
+    ...(isDesktop ? ["Call Number"] : []),
+    ...(isDesktop ? ["Item Location"] : []),
+  ]
+}

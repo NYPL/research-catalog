@@ -1,5 +1,6 @@
 import type { SearchResult } from "../types/searchTypes"
 import type { ElectronicResource } from "../types/bibTypes"
+import type { JSONLDValue } from "../types/itemTypes"
 import Item from "../models/Item"
 
 /**
@@ -20,6 +21,7 @@ export default class SearchResultsBib {
   materialType?: string
   publicationStatement?: string
   electronicResources?: ElectronicResource[]
+  issuance?: JSONLDValue
   numPhysicalItems: number
   items: Item[]
 
@@ -33,6 +35,7 @@ export default class SearchResultsBib {
       ? result.publicationStatement[0]
       : null
     this.electronicResources = result.electronicResources || null
+    this.issuance = (result.issuance?.length && result.issuance[0]) || null
     this.numPhysicalItems = result.numItemsTotal || 0
     this.items = this.getItemsFromResult(result)
   }
@@ -43,6 +46,11 @@ export default class SearchResultsBib {
 
   get numElectronicResources() {
     return this.electronicResources?.length || 0
+  }
+
+  // Used to determine the Volume column text in the ItemTable
+  get isArchiveCollection() {
+    return this.issuance["@id"] === "urn:biblevel:c"
   }
 
   get hasItems() {
