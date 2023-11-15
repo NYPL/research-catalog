@@ -7,6 +7,7 @@ import {
 } from "@nypl/design-system-react-components"
 
 import RCLink from "../RCLink/RCLink"
+import ItemTable from "../ItemTable/ItemTable"
 import type SearchResultsBib from "../../models/SearchResultsBib"
 import { PATHS } from "../../config/constants"
 
@@ -34,6 +35,7 @@ const SearchResult = ({ bib }: SearchResultProps) => {
           {bib.publicationStatement && <Text>{bib.publicationStatement}</Text>}
           {bib.yearPublished && <Text>{bib.yearPublished}</Text>}
           <Text>{bib.itemMessage}</Text>
+          <ItemTable />
         </Box>
       </CardContent>
     </Card>
