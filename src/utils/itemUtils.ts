@@ -44,7 +44,7 @@ export const getItemTableHeadings = (
 
   return [
     ...(isBibPage ? ["Status"] : []),
-    ...(!includeVolColumn ? [volColumnHeading] : []),
+    ...(includeVolColumn ? [volColumnHeading] : []),
     "Format",
     ...(!includeVolColumn && !isDesktop ? ["Call Number"] : []),
     ...(isBibPage && isDesktop ? ["Access"] : []),

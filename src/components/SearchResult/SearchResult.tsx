@@ -4,12 +4,16 @@ import {
   CardHeading,
   Box,
   Text,
+  useNYPLBreakpoints,
 } from "@nypl/design-system-react-components"
+import { useRouter } from "next/router"
 
 import RCLink from "../RCLink/RCLink"
 import ItemTable from "../ItemTable/ItemTable"
 import type SearchResultsBib from "../../models/SearchResultsBib"
+import ItemTableData from "../../models/ItemTableData"
 import { PATHS } from "../../config/constants"
+import { getActivePage } from "../../utils/appUtils"
 
 interface SearchResultProps {
   bib: SearchResultsBib
@@ -19,6 +23,14 @@ interface SearchResultProps {
  * The SearchResult component displays a single search result element.
  */
 const SearchResult = ({ bib }: SearchResultProps) => {
+  const { pathname } = useRouter()
+  const isBibPage = getActivePage(pathname) === "bib"
+  const { isLargerThanLarge: isDesktop } = useNYPLBreakpoints()
+  const itemTableData = new ItemTableData(bib.items, {
+    isBibPage,
+    isDesktop,
+    isArchiveCollection: bib.isArchiveCollection,
+  })
   return (
     <Card
       sx={{
@@ -35,10 +47,7 @@ const SearchResult = ({ bib }: SearchResultProps) => {
           {bib.publicationStatement && <Text>{bib.publicationStatement}</Text>}
           {bib.yearPublished && <Text>{bib.yearPublished}</Text>}
           <Text>{bib.itemMessage}</Text>
-          <ItemTable
-            items={bib.items}
-            isArchiveCollection={bib.isArchiveCollection}
-          />
+          <ItemTable itemTableData={itemTableData} />
         </Box>
       </CardContent>
     </Card>

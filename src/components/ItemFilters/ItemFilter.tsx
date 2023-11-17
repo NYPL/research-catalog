@@ -2,7 +2,7 @@ import { CheckboxGroup, Checkbox } from "@nypl/design-system-react-components"
 import type { Dispatch } from "react"
 import { useCallback, useEffect, useState } from "react"
 
-import type { ItemFilterData } from "../../models/itemFilterData"
+import type { ItemFilterData } from "../../models/ItemFilterData"
 import type { Option, AppliedFilters } from "../../types/filterTypes"
 import styles from "../../../styles/components/ItemFilters.module.scss"
 

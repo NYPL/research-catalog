@@ -5,7 +5,7 @@ import { Text, useCloseDropDown } from "@nypl/design-system-react-components"
 
 import styles from "../../../styles/components/ItemFilters.module.scss"
 import type { ItemAggregation } from "../../types/filterTypes"
-import { ItemFilterData, LocationFilterData } from "../../models/itemFilterData"
+import { ItemFilterData, LocationFilterData } from "../../models/ItemFilterData"
 import ItemFilter from "./ItemFilter"
 import {
   buildItemFilterQueryParams,

@@ -34,3 +34,9 @@ export interface ItemLocation extends JSONLDValue {
 export type ItemLocationKey = "Schwarzman" | "Performing" | "Schomburg"
 
 export type ItemLocationEndpoint = "schwarzman" | "lpa" | "schomburg"
+
+export interface ItemTableParams {
+  isDesktop?: boolean
+  isBibPage?: boolean
+  isArchiveCollection?: boolean
+}
