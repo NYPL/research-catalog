@@ -10,9 +10,11 @@ interface ItemTableProps {
  * The ItemTable displays the Item info, StatusLinks, and RequestButtons
  */
 const ItemTable = ({ itemTableData }: ItemTableProps) => {
-  console.log(itemTableData)
   return (
-    <Table columnHeaders={[]} tableData={[["test", "test2"]]}>
+    <Table
+      columnHeaders={itemTableData.tableHeadings}
+      tableData={[["test", "test2"]]}
+    >
       Items
     </Table>
   )

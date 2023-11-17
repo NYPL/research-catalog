@@ -14,7 +14,6 @@ export default class ItemTableData {
   isDesktop: boolean
   isBibPage: boolean
   isArchiveCollection: boolean
-  tableHeadings: string[]
   tableData: string[][]
 
   constructor(items: Item[], itemTableParams: ItemTableParams) {
@@ -22,11 +21,34 @@ export default class ItemTableData {
     this.isDesktop = itemTableParams.isDesktop
     this.isBibPage = itemTableParams.isBibPage
     this.isArchiveCollection = itemTableParams.isArchiveCollection
-    this.tableHeadings = []
     this.tableData = [[]]
+  }
+
+  get tableHeadings(): string[] {
+    return [
+      ...(this.hasStatusColumn() ? ["Status"] : []),
+      ...(this.hasVolumeColumn() ? [this.volumeColumnHeading()] : []),
+      "Format",
+      ...(!this.hasVolumeColumn() && !this.isDesktop ? ["Call Number"] : []),
+      ...(this.isBibPage && this.isDesktop ? ["Access"] : []),
+      ...(this.isDesktop ? ["Call Number"] : []),
+      ...(this.hasLocationColumn ? ["Item Location"] : []),
+    ]
   }
 
   hasVolumeColumn(): boolean {
     return this.items.some((item) => item.volume?.length) && this.isBibPage
+  }
+
+  hasStatusColumn(): boolean {
+    return this.isBibPage
+  }
+
+  hasLocationColumn(): boolean {
+    return this.isDesktop
+  }
+
+  volumeColumnHeading(): string {
+    return this.isArchiveCollection ? "Vol/Date" : "Container"
   }
 }
