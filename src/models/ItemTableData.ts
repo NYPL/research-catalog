@@ -37,7 +37,7 @@ export default class ItemTableData {
   }
 
   hasVolumeColumn(): boolean {
-    return this.items.some((item) => item.volume?.length) && this.isBibPage
+    return this.items.some((item) => item.volume) && this.isBibPage
   }
 
   hasStatusColumn(): boolean {
