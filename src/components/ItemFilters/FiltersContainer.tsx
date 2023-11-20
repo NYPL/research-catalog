@@ -1,7 +1,11 @@
-import { useEffect, useRef, useState } from "react"
+import { useMemo, useRef, useState } from "react"
 import { useRouter } from "next/router"
 import React from "react"
-import { Text, useCloseDropDown } from "@nypl/design-system-react-components"
+import {
+  Heading,
+  Text,
+  useCloseDropDown,
+} from "@nypl/design-system-react-components"
 
 import styles from "../../../styles/components/ItemFilters.module.scss"
 import type { AppliedFilters, ItemAggregation } from "../../types/filterTypes"
@@ -27,19 +31,16 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
       else return new ItemFilterData(agg)
     })
   ).current
-
-  const [appliedFilters, setAppliedFilters] = useState({
-    location: [],
-    format: [],
-    status: [],
-  })
-
+  const parsedParams = parseItemFilterQueryParams(router.query)
+  const [appliedFilters, setAppliedFilters] = useState(parsedParams)
+  const appliedFiltersDisplay = buildAppliedFiltersString(
+    parsedParams,
+    filterData
+  )
   const ref = useRef<HTMLDivElement>(null)
   useCloseDropDown(() => setWhichFilterIsOpen(""), ref)
 
   const [whichFilterIsOpen, setWhichFilterIsOpen] = useState("")
-
-  const [appliedFiltersDisplay, setAppliedFiltersDisplay] = useState("")
 
   const [itemsMatched] = useState(buildItemsString(router.query))
 
@@ -57,16 +58,12 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
       locationFilterData.recapLocations()
     )
     router.push("/search/advanced" + url)
-    setAppliedFiltersDisplay(url)
   }
 
-  useEffect(() => {
+  useMemo(() => {
     const parsedParams = parseItemFilterQueryParams(router.query)
     setAppliedFilters(parsedParams)
-    setAppliedFiltersDisplay(
-      buildAppliedFiltersString(parsedParams, filterData)
-    )
-  }, [router.query, filterData])
+  }, [router.query])
 
   return (
     <div className={styles.filtersContainer}>
@@ -85,7 +82,7 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
           />
         ))}
       </div>
-      <Text>{itemsMatched}</Text>
+      <Heading level="h3">{itemsMatched}</Heading>
       <Text>{appliedFiltersDisplay}</Text>
     </div>
   )
