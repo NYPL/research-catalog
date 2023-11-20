@@ -39,14 +39,9 @@ export const normalAggs = [
         label: "Text",
       },
       {
-        value: "AUG. 23, 2021-CURRENT",
+        value: "E-BOOK",
         count: 109,
-        label: "AUG. 23, 2021-CURRENT",
-      },
-      {
-        value: "FEB. 15/22, 2021 - AUG. 16, 2021",
-        count: 24,
-        label: "FEB. 15/22, 2021 - AUG. 16, 2021",
+        label: "E-BOOK",
       },
     ],
   },

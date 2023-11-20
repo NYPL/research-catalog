@@ -2,9 +2,12 @@ import { useMemo, useRef, useState } from "react"
 import { useRouter } from "next/router"
 import React from "react"
 import {
+  SimpleGrid,
+  Box,
   Heading,
   Text,
   useCloseDropDown,
+  useNYPLBreakpoints,
 } from "@nypl/design-system-react-components"
 
 import styles from "../../../styles/components/ItemFilters.module.scss"
@@ -24,6 +27,10 @@ interface ItemFilterContainerProps {
 
 const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
   const router = useRouter()
+  const { isLargerThanMedium } = useNYPLBreakpoints()
+  const filterClassName = isLargerThanMedium
+    ? styles.filterGroup
+    : styles.filterGroupMobile
 
   const filterData = useRef(
     itemAggs.map((agg: ItemAggregation) => {
@@ -31,6 +38,7 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
       else return new ItemFilterData(agg)
     })
   ).current
+
   const parsedParams = parseItemFilterQueryParams(router.query)
   const [appliedFilters, setAppliedFilters] = useState(parsedParams)
   const appliedFiltersDisplay = buildAppliedFiltersString(
@@ -41,7 +49,6 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
   useCloseDropDown(() => setWhichFilterIsOpen(""), ref)
 
   const [whichFilterIsOpen, setWhichFilterIsOpen] = useState("")
-
   const [itemsMatched] = useState(buildItemsString(router.query))
 
   const submitFilters = (selection: string[], field: string) => {
@@ -66,11 +73,11 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
   }, [router.query])
 
   return (
-    <div className={styles.filtersContainer}>
+    <Box className={styles.filtersContainer}>
       <Text data-testid="filter-text" size="body2" isBold={true}>
         Filter by
       </Text>
-      <div className={styles.filterGroup} ref={ref}>
+      <div className={filterClassName} ref={ref}>
         {filterData.map((field: ItemFilterData) => (
           <ItemFilter
             isOpen={whichFilterIsOpen === field.field}
@@ -82,9 +89,11 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
           />
         ))}
       </div>
-      <Heading level="h3">{itemsMatched}</Heading>
+      <Heading level="h3" size="heading6">
+        {itemsMatched}
+      </Heading>
       <Text>{appliedFiltersDisplay}</Text>
-    </div>
+    </Box>
   )
 }
 

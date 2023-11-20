@@ -5,7 +5,7 @@
   word-wrap: break-word;
   z-index: 1;
   background-color: white;
-  width: 230px;
+  width: 200px;
   padding: 10px;
   border: 1px solid var(--nypl-colors-ui-gray-medium);
 }
@@ -19,12 +19,25 @@
 
 .filterGroup {
   display: flex;
+  // flex-wrap: wrap;
   width: fit-content;
+}
+
+.filterGroupMobile {
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  & .itemFilterOptionsContainer {
+    position: relative;
+  }
+  & .itemFilter {
+    margin-bottom: var(--nypl-space-xs);
+  }
 }
 
 .itemFilter {
   background-color: white;
-  width: 230px;
+  width: 200px;
   display: inline-block;
   margin-right: var(--nypl-space-s);
 }
