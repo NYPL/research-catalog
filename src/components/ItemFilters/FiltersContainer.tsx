@@ -5,6 +5,7 @@ import {
   Heading,
   Text,
   useCloseDropDown,
+  useNYPLBreakpoints,
 } from "@nypl/design-system-react-components"
 
 import styles from "../../../styles/components/ItemFilters.module.scss"
@@ -24,7 +25,6 @@ interface ItemFilterContainerProps {
 
 const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
   const router = useRouter()
-
   const filterData = useRef(
     itemAggs.map((agg: ItemAggregation) => {
       if (agg.field === "location") return new LocationFilterData(agg)
@@ -45,11 +45,7 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
   const [itemsMatched] = useState(buildItemsString(router.query))
 
   const submitFilters = (selection: string[], field: string) => {
-    let newFilters: AppliedFilters
-    setAppliedFilters((prevFilters) => {
-      newFilters = { ...prevFilters, [field]: selection }
-      return newFilters
-    })
+    const newFilters = { ...appliedFilters, [field]: selection }
     const locationFilterData = filterData.find(
       (filter) => filter.field === "location"
     ) as LocationFilterData
@@ -82,7 +78,9 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
           />
         ))}
       </div>
-      <Heading level="h3">{itemsMatched}</Heading>
+      <Heading level="h3" size="heading6">
+        {itemsMatched}
+      </Heading>
       <Text>{appliedFiltersDisplay}</Text>
     </div>
   )
