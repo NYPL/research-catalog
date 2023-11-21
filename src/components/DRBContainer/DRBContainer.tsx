@@ -1,7 +1,7 @@
 import { Heading } from "@nypl/design-system-react-components"
 import useSWRImmutable from "swr/immutable"
 
-import { BASE_URL } from "../../config/constants"
+import { BASE_URL, DRB_API_SEARCH_ROUTE } from "../../config/constants"
 import type { SearchParams } from "../../types/searchTypes"
 import type { DRBWork } from "../../types/drbTypes"
 import { getQueryString } from "../../utils/searchUtils"
@@ -15,7 +15,7 @@ interface DRBContainerProps {
  */
 const DRBContainer = ({ searchParams }: DRBContainerProps) => {
   const searchQuery = getQueryString(searchParams)
-  const drbUrl = `${BASE_URL}/api/drb?${searchQuery}`
+  const drbUrl = `${BASE_URL}${DRB_API_SEARCH_ROUTE}?${searchQuery}`
   const fetcher = (url: string) => fetch(url).then((res) => res.json())
 
   const { data, error, isValidating } = useSWRImmutable(drbUrl, fetcher)

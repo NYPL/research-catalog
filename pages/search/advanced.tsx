@@ -37,7 +37,6 @@ import type {
   SearchFormActionType,
 } from "../../src/types/searchTypes"
 import { getQueryString } from "../../src/utils/searchUtils"
-
 /**
  * The Advanced Search page is responsible for displaying the Advanced Search form fields and
  * buttons that clear the fields and submit a search request.
@@ -122,7 +121,7 @@ export default function AdvancedSearch() {
             }
           />
         )}
-        <Heading level="two">Advanced Search</Heading>
+        <Heading level="h2">Advanced Search</Heading>
         <Form
           id="advancedSearchForm"
           // We are using a post request on advanced search when JS is disabled so that we can build the query
@@ -191,7 +190,7 @@ export default function AdvancedSearch() {
                 labelText="Formats"
                 onChange={handleCheckboxChange}
                 value={searchFormState["filters"].materialType}
-                sx={{
+                __css={{
                   "> div": {
                     display: "grid",
                     gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
@@ -215,11 +214,11 @@ export default function AdvancedSearch() {
               </CheckboxGroup>
             </FormField>
           </FormRow>
-          <HorizontalRule sx={{ margin: 0 }} />
+          <HorizontalRule __css={{ margin: 0 }} />
           <ButtonGroup
             id="advancedSearchButtons"
             buttonWidth="default"
-            sx={{
+            __css={{
               gap: "xs",
               marginLeft: "auto",
             }}

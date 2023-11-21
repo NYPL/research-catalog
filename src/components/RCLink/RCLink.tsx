@@ -7,6 +7,7 @@ interface RCLinkProps {
   href: string
   children: ReactNode
   className?: string
+  color?: string
 }
 
 /**
@@ -22,8 +23,8 @@ const RCLink = ({
   ...rest
 }: RCLinkProps) => {
   return (
-    <Link href={href} passHref {...rest}>
-      <DSLink className={className} fontWeight={active && "bold"}>
+    <Link href={href} passHref>
+      <DSLink className={className} fontWeight={active && "bold"} {...rest}>
         {children}
       </DSLink>
     </Link>
