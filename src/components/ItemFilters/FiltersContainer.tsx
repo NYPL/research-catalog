@@ -63,9 +63,9 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
 
   return (
     <Box className={styles.filtersContainer}>
-      <Text data-testid="filter-text" size="body2" isBold={true}>
+      <Heading data-testid="filter-text" level="h4" size="heading6">
         Filter by
-      </Text>
+      </Heading>
       <div className={styles.filterGroup} ref={ref}>
         {filterData.map((field: ItemFilterData) => (
           <ItemFilter
@@ -79,12 +79,20 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
         ))}
       </div>
 
-      <Text>
-        <Heading level="h3" size="heading6">
-          {itemsMatched}
-        </Heading>
-        {appliedFiltersDisplay}
-      </Text>
+      {/* TODO: Heading levels for the bib page need to be ironed out. This
+      h4 is based on the assumption that there is an H3 above the item filters
+      that says "Items in the library and Offsite"  
+
+      NB: suggested approach for adding clear button is to make this a grid and 
+      have the button be in the second column*/}
+      <Heading
+        mt="s"
+        subtitle={appliedFiltersDisplay}
+        level="h4"
+        size="heading6"
+      >
+        {itemsMatched}
+      </Heading>
     </Box>
   )
 }
