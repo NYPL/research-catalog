@@ -89,8 +89,8 @@ export interface SearchQueryParams extends Identifiers {
   title?: string
   subject?: string
   filters?: SearchFilters
-  sort?: string
-  sort_direction?: string
+  sort?: SortKey
+  sort_direction?: SortOrder
   sort_scope?: string
   search_scope?: string
   page?: number

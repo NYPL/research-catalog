@@ -30,7 +30,7 @@ describe("searchUtils", () => {
           isbn: "456",
           search_scope: "contributor",
           sort_direction: "asc",
-          sort: "spaghetti",
+          sort: "relevance",
         })
       ).toEqual({
         identifiers: {
@@ -39,7 +39,7 @@ describe("searchUtils", () => {
         },
         field: "contributor",
         order: "asc",
-        sortBy: "spaghetti",
+        sortBy: "relevance",
       })
     })
   })

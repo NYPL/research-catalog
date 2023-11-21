@@ -6,8 +6,6 @@ import type {
   SearchFilters,
   Identifiers,
   SearchResultsElement,
-  SortKey,
-  SortOrder,
 } from "../types/searchTypes"
 import SearchResultsBib from "../models/SearchResultsBib"
 
@@ -205,8 +203,8 @@ export function mapQueryToSearchParams({
     contributor,
     title,
     subject,
-    sortBy: sort as SortKey,
-    order: sort_direction as SortOrder,
+    sortBy: sort,
+    order: sort_direction,
     filters,
     identifiers: {
       issn,
