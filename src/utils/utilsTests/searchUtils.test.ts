@@ -1,4 +1,5 @@
 import {
+  getPaginationOffsetStrings,
   getQueryString,
   mapQueryToSearchParams,
   mapRequestBodyToSearchParams,
@@ -72,6 +73,23 @@ describe("searchUtils", () => {
           dateBefore: "1902",
         },
       })
+    })
+  })
+  describe("getPaginationOffsetStrings", () => {
+    it("returns a tuple of strings with the correct start and end values for the first page", () => {
+      const [start, end] = getPaginationOffsetStrings(1, 1200)
+      expect(start).toEqual("1")
+      expect(end).toEqual("50")
+    })
+    it("returns a tuple of strings with the correct start and end values for any given page", () => {
+      const [start, end] = getPaginationOffsetStrings(5, 1200)
+      expect(start).toEqual("201")
+      expect(end).toEqual("250")
+    })
+    it("correctly sets the end value for the last page", () => {
+      const [start, end] = getPaginationOffsetStrings(24, 1195)
+      expect(start).toEqual("1,151")
+      expect(end).toEqual("1,195")
     })
   })
 })
