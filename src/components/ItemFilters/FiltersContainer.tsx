@@ -2,14 +2,14 @@ import { useMemo, useRef, useState } from "react"
 import { useRouter } from "next/router"
 import React from "react"
 import {
+  Box,
   Heading,
   Text,
   useCloseDropDown,
-  useNYPLBreakpoints,
 } from "@nypl/design-system-react-components"
 
 import styles from "../../../styles/components/ItemFilters.module.scss"
-import type { AppliedFilters, ItemAggregation } from "../../types/filterTypes"
+import type { ItemAggregation } from "../../types/filterTypes"
 import { ItemFilterData, LocationFilterData } from "../../models/itemFilterData"
 import ItemFilter from "./ItemFilter"
 import {
@@ -62,7 +62,7 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
   }, [router.query])
 
   return (
-    <div className={styles.filtersContainer}>
+    <Box className={styles.filtersContainer}>
       <Text data-testid="filter-text" size="body2" isBold={true}>
         Filter by
       </Text>
@@ -78,11 +78,14 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
           />
         ))}
       </div>
-      <Heading level="h3" size="heading6">
-        {itemsMatched}
-      </Heading>
-      <Text>{appliedFiltersDisplay}</Text>
-    </div>
+
+      <Text>
+        <Heading level="h3" size="heading6">
+          {itemsMatched}
+        </Heading>
+        {appliedFiltersDisplay}
+      </Text>
+    </Box>
   )
 }
 
