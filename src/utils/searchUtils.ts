@@ -185,6 +185,7 @@ export function mapElementsToSearchResultsBibs(
 /**
  * mapQueryToSearchParams
  * Maps the SearchQueryParams structure from the request to a SearchParams object, which is expected by fetchResults
+ * It also parses the results page number from a string, defaulting to 1 if absent
  */
 export function mapQueryToSearchParams({
   q,
@@ -201,6 +202,7 @@ export function mapQueryToSearchParams({
   lccn,
   filters,
 }: SearchQueryParams): SearchParams {
+  const hasIdentifiers = issn || isbn || oclc || lccn
   return {
     q,
     field: search_scope,
@@ -211,7 +213,7 @@ export function mapQueryToSearchParams({
     sortBy: sort,
     order: sort_direction,
     filters,
-    identifiers: {
+    identifiers: hasIdentifiers && {
       issn,
       isbn,
       oclc,

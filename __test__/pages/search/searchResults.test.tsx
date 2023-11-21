@@ -1,4 +1,5 @@
 import React from "react"
+import userEvent from "@testing-library/user-event"
 import { render, screen } from "@testing-library/react"
 
 import mockRouter from "next-router-mock"
@@ -22,6 +23,16 @@ describe("Search Results page", () => {
       )
       const cards = screen.getAllByRole("heading", { level: 3 })
       expect(cards).toHaveLength(50)
+    })
+    it("displays pagination and updates the router on page button clicks", async () => {
+      const query = "spaghetti"
+      await mockRouter.push(`/search?q=${query}`)
+      render(<SearchResults results={results} />)
+      screen.getByLabelText("Pagination")
+
+      const pageButton = screen.getByLabelText("Page 2")
+      await userEvent.click(pageButton)
+      expect(mockRouter.asPath).toBe("/?q=spaghetti&page=2")
     })
   })
   describe("No bibs", () => {

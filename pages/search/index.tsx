@@ -86,6 +86,7 @@ export default function Search({ results }) {
               })}
             </SimpleGrid>
             <Pagination
+              id="results-pagination"
               mt="xl"
               initialPage={searchParams.page}
               currentPage={searchParams.page}

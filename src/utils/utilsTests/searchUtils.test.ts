@@ -23,7 +23,7 @@ describe("searchUtils", () => {
     })
   })
   describe("mapQueryToSearchParams", () => {
-    it("should consolidate identifiers and change some keys", () => {
+    it("should consolidate identifiers, change some keys, and initializes the page number to 1", () => {
       expect(
         mapQueryToSearchParams({
           issn: "123",
@@ -37,9 +37,19 @@ describe("searchUtils", () => {
           issn: "123",
           isbn: "456",
         },
+        page: 1,
         field: "contributor",
         order: "asc",
         sortBy: "spaghetti",
+      })
+    })
+    it("parses the page number query string value into a number", () => {
+      expect(
+        mapQueryToSearchParams({
+          page: "2",
+        })
+      ).toEqual({
+        page: 2,
       })
     })
   })
@@ -54,6 +64,7 @@ describe("searchUtils", () => {
       })
       expect(params).toEqual({
         q: "spaghetti",
+        page: 1,
         filters: {
           language: "igbo",
           materialType: "scroll",
