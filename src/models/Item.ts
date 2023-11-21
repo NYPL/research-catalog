@@ -40,7 +40,7 @@ export default class Item {
     this.accessMessage = item.accessMessage?.length
       ? item.accessMessage[0]?.prefLabel
       : ""
-    this.callNumber = item.shelfMark.length ? item.shelfMark[0] : null
+    this.callNumber = item.shelfMark?.length ? item.shelfMark[0] : null
     this.volume = item.enumerationChronology?.length
       ? item.enumerationChronology[0]
       : null

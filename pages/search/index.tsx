@@ -45,8 +45,7 @@ export default function Search({ results }) {
 
   const handleSortChange = async (e) => {
     const [sortBy, order] = e.target.value.split("_")
-    const newQuery = getQueryString({ ...searchParams, sortBy, order })
-    await replace(newQuery)
+    await replace(getQueryString({ ...searchParams, sortBy, order }))
   }
 
   return (
