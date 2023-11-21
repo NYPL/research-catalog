@@ -27,7 +27,7 @@ import type SearchResultsBib from "../../src/models/SearchResultsBib"
  * as well as displaying and controlling pagination and search filters.
  */
 export default function Search({ results }) {
-  const { replace, query } = useRouter()
+  const { push, query } = useRouter()
   const { itemListElement: searchResultsElements, totalResults } =
     results.results
 
@@ -45,7 +45,7 @@ export default function Search({ results }) {
 
   const handleSortChange = async (e) => {
     const [sortBy, order] = e.target.value.split("_")
-    await replace(getQueryString({ ...searchParams, sortBy, order }))
+    await push(getQueryString({ ...searchParams, sortBy, order }))
   }
 
   return (
