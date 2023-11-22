@@ -31,13 +31,17 @@ describe("Advanced Search Form", () => {
   it("can set keyword, contributor, title, subject", async () => {
     render(<AdvancedSearch />)
 
-    const [keywordInput, contributorInput, titleInput, subjectInput] =
-      screen.getAllByRole("textbox")
+    const [keywordInput, contributorInput, titleInput, subjectInput] = [
+      "Keywords",
+      "Title",
+      "Author",
+      "Subject",
+    ].map((field) => screen.getByLabelText(field))
     await act(async () => {
+      await userEvent.type(subjectInput, "italian food")
       await userEvent.type(keywordInput, "spaghetti")
       await userEvent.type(contributorInput, "strega nonna")
       await userEvent.type(titleInput, "il amore di pasta")
-      await userEvent.type(subjectInput, "italian food")
       submit()
       expect(mockRouter.asPath).toBe(
         "/search?q=spaghetti&contributor=il+amore+di+pasta&title=strega+nonna&subject=italian+food"
