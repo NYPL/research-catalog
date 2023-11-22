@@ -10,39 +10,19 @@
   border: 1px solid var(--nypl-colors-ui-gray-medium);
 }
 
-.outerFiltersContainer {
+.filtersContainer {
+  display: flex;
+  flex-wrap: wrap;
   background-color: var(--nypl-colors-ui-gray-x-light-cool);
   padding: 16px;
   min-height: 128px;
   z-index: 0;
 }
 
-.innerFiltersContainer {
-  display: flex;
-  // flex-wrap: wrap;
-}
-
-.filterGroup {
-  display: flex;
-  // flex-direction: column;
-  flex-wrap: wrap;
-  // width: fit-content;
-}
-
-.filterHeading {
-  flex-basis: 100%;
-}
-
 .filterGroupMobile {
   flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  // width: fit-content;
   & .itemFilterOptionsContainer {
     position: relative;
-  }
-  & .itemFilter {
-    margin-right: 0px;
   }
 }
 

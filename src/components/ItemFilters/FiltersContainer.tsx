@@ -76,8 +76,8 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
   }, [router.query])
 
   return (
-    <Box className={styles.outerFiltersContainer}>
-      <Box className={styles.innerFiltersContainer} sx={{ display: "flex" }}>
+    <>
+      <Box className={styles.filtersContainer} sx={{ display: "flex" }}>
         <Card className={filterGroupClassName} ref={ref}>
           <CardHeading level="h3" size="heading6">
             Filter by
@@ -123,7 +123,7 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
         {itemsMatched}
       </Heading>
       <Text>{appliedFiltersDisplay}</Text>
-    </Box>
+    </>
   )
 }
 
