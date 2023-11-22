@@ -40,7 +40,7 @@ describe("Advanced Search Form", () => {
       await userEvent.type(subjectInput, "italian food")
       submit()
       expect(mockRouter.asPath).toBe(
-        "/search?q=spaghetti&contributor=il+amore+di+pasta&title=strega+nonna"
+        "/search?q=spaghetti&contributor=il+amore+di+pasta&title=strega+nonna&subject=italian+food"
       )
     })
   })
