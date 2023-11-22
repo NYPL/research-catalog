@@ -11,6 +11,7 @@ import {
   useNYPLBreakpoints,
   CardHeading,
   CardContent,
+  SimpleGrid,
 } from "@nypl/design-system-react-components"
 
 import styles from "../../../styles/components/ItemFilters.module.scss"
@@ -79,26 +80,28 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
     <>
       <Box className={styles.filtersContainer} sx={{ display: "flex" }}>
         <Card className={filterGroupClassName} ref={ref}>
-          <CardHeading level="h3" size="heading6">
+          <CardHeading level="h3" size="body2">
             Filter by
           </CardHeading>
           <CardContent>
-            {filterData.map((field: ItemFilterData) => (
-              <ItemFilter
-                isOpen={whichFilterIsOpen === field.field}
-                setWhichFilterIsOpen={setWhichFilterIsOpen}
-                key={field.field}
-                itemFilterData={field}
-                appliedFilters={appliedFilters}
-                submitFilters={submitFilters}
-              />
-            ))}
+            <SimpleGrid gap="nypl-s">
+              {filterData.map((field: ItemFilterData) => (
+                <ItemFilter
+                  isOpen={whichFilterIsOpen === field.field}
+                  setWhichFilterIsOpen={setWhichFilterIsOpen}
+                  key={field.field}
+                  itemFilterData={field}
+                  appliedFilters={appliedFilters}
+                  submitFilters={submitFilters}
+                />
+              ))}
+            </SimpleGrid>
           </CardContent>
         </Card>
         <Card className={filterGroupClassName}>
           <CardHeading
             level="h3"
-            size="heading6"
+            size="body2"
             data-testid="filter-text"
             isBold={true}
           >

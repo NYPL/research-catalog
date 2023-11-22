@@ -5,7 +5,7 @@
   word-wrap: break-word;
   z-index: 1;
   background-color: white;
-  min-width: 230px;
+  width: 230px;
   padding: 10px;
   border: 1px solid var(--nypl-colors-ui-gray-medium);
 }
@@ -23,13 +23,17 @@
   flex-grow: 1;
   & .itemFilterOptionsContainer {
     position: relative;
+    min-width: 230px;
+  }
+  & .itemFilter {
+    margin-right: 0px;
+    // min-width: 230px;
   }
 }
 
 .itemFilter {
   background-color: white;
   min-width: 230px;
-  display: inline-block;
   margin-right: var(--nypl-space-s);
   margin-bottom: var(--nypl-space-xs);
 }
