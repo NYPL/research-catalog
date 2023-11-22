@@ -4,6 +4,7 @@ import {
   SimpleGrid,
   Select,
 } from "@nypl/design-system-react-components"
+import type { ChangeEvent } from "react"
 import { useRouter } from "next/router"
 import { parse } from "qs"
 
@@ -18,6 +19,7 @@ import {
   getQueryString,
   sortOptions,
 } from "../../src/utils/searchUtils"
+import type { SortKey, SortOrder } from "../../src/types/searchTypes"
 import { mapWorksToDRBResults } from "../../src/utils/drbUtils"
 import { SITE_NAME } from "../../src/config/constants"
 import type SearchResultsBib from "../../src/models/SearchResultsBib"
@@ -43,9 +45,17 @@ export default function Search({ results }) {
   // Map DRB Works from response to DRBResult objects
   const drbResults = mapWorksToDRBResults(drbWorks)
 
-  const handleSortChange = async (e) => {
-    const [sortBy, order] = e.target.value.split("_")
-    await push(getQueryString({ ...searchParams, sortBy, order }))
+  const handleSortChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    const selectedSortOption = e.target.value
+    // Extract sort key and order from selected sort option using "_" delineator
+    const [sortBy, order] = selectedSortOption.split("_") as [
+      SortKey,
+      SortOrder | undefined
+    ]
+    // Push the new query values, removing the page number if set.
+    await push(
+      getQueryString({ ...searchParams, sortBy, order, page: undefined })
+    )
   }
 
   return (
