@@ -5,7 +5,7 @@
   word-wrap: break-word;
   z-index: 1;
   background-color: white;
-  width: 230px;
+  width: inherit;
   padding: 10px;
   border: 1px solid var(--nypl-colors-ui-gray-medium);
 }
@@ -23,11 +23,9 @@
   flex-grow: 1;
   & .itemFilterOptionsContainer {
     position: relative;
-    min-width: 230px;
   }
   & .itemFilter {
     margin-right: 0px;
-    // min-width: 230px;
   }
 }
 

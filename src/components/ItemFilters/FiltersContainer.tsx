@@ -68,6 +68,7 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
       newFilters,
       locationFilterData.recapLocations()
     )
+    setWhichFilterIsOpen("")
     router.push("/search/advanced" + url)
   }
 
