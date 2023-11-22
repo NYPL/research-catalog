@@ -90,7 +90,7 @@ describe("Item Filter Utils", () => {
     })
   })
 
-  describe.only("buildAppliedFiltersString", () => {
+  describe("buildAppliedFiltersString", () => {
     const query = parseItemFilterQueryParams({
       item_location: "loc:rc2ma,loc:rcma2",
       item_status: "status:a",

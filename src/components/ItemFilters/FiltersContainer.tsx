@@ -2,7 +2,7 @@ import { useMemo, useRef, useState } from "react"
 import { useRouter } from "next/router"
 import React from "react"
 import {
-  SimpleGrid,
+  SearchBar,
   Box,
   Heading,
   Text,
@@ -28,7 +28,7 @@ interface ItemFilterContainerProps {
 const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
   const router = useRouter()
   const { isLargerThanMedium } = useNYPLBreakpoints()
-  const filterClassName = isLargerThanMedium
+  const filterGroupClassName = isLargerThanMedium
     ? styles.filterGroup
     : styles.filterGroupMobile
 
@@ -73,22 +73,40 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
   }, [router.query])
 
   return (
-    <Box className={styles.filtersContainer}>
-      <Text data-testid="filter-text" size="body2" isBold={true}>
-        Filter by
-      </Text>
-      <div className={filterClassName} ref={ref}>
-        {filterData.map((field: ItemFilterData) => (
-          <ItemFilter
-            isOpen={whichFilterIsOpen === field.field}
-            setWhichFilterIsOpen={setWhichFilterIsOpen}
-            key={field.field}
-            itemFilterData={field}
-            appliedFilters={appliedFilters}
-            submitFilters={submitFilters}
+    <Box className={styles.outerFiltersContainer}>
+      <Box className={styles.innerFiltersContainer} sx={{ display: "flex" }}>
+        <div className={filterGroupClassName} ref={ref}>
+          <Text data-testid="filter-text" size="body2" isBold={true}>
+            Filter by
+          </Text>
+          {filterData.map((field: ItemFilterData) => (
+            <ItemFilter
+              isOpen={whichFilterIsOpen === field.field}
+              setWhichFilterIsOpen={setWhichFilterIsOpen}
+              key={field.field}
+              itemFilterData={field}
+              appliedFilters={appliedFilters}
+              submitFilters={submitFilters}
+            />
+          ))}
+        </div>
+        <Box className={filterGroupClassName}>
+          <Text data-testid="filter-text" size="body2" isBold={true}>
+            Search by Year
+          </Text>
+          <SearchBar
+            id="year-filter"
+            labelText="Apply"
+            textInputProps={{
+              defaultValue: "Horizon",
+              isClearable: true,
+              labelText: "Item Search",
+              name: "textInputName",
+            }}
+            onSubmit={() => console.log("spaghetti!")}
           />
-        ))}
-      </div>
+        </Box>
+      </Box>
       <Heading level="h3" size="heading6">
         {itemsMatched}
       </Heading>
