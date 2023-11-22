@@ -2,12 +2,15 @@ import { useMemo, useRef, useState } from "react"
 import { useRouter } from "next/router"
 import React from "react"
 import {
+  Card,
   SearchBar,
   Box,
   Heading,
   Text,
   useCloseDropDown,
   useNYPLBreakpoints,
+  CardHeading,
+  CardContent,
 } from "@nypl/design-system-react-components"
 
 import styles from "../../../styles/components/ItemFilters.module.scss"
@@ -75,37 +78,46 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
   return (
     <Box className={styles.outerFiltersContainer}>
       <Box className={styles.innerFiltersContainer} sx={{ display: "flex" }}>
-        <div className={filterGroupClassName} ref={ref}>
-          <Text data-testid="filter-text" size="body2" isBold={true}>
+        <Card className={filterGroupClassName} ref={ref}>
+          <CardHeading level="h3" size="heading6">
             Filter by
-          </Text>
-          {filterData.map((field: ItemFilterData) => (
-            <ItemFilter
-              isOpen={whichFilterIsOpen === field.field}
-              setWhichFilterIsOpen={setWhichFilterIsOpen}
-              key={field.field}
-              itemFilterData={field}
-              appliedFilters={appliedFilters}
-              submitFilters={submitFilters}
-            />
-          ))}
-        </div>
-        <Box className={filterGroupClassName}>
-          <Text data-testid="filter-text" size="body2" isBold={true}>
+          </CardHeading>
+          <CardContent>
+            {filterData.map((field: ItemFilterData) => (
+              <ItemFilter
+                isOpen={whichFilterIsOpen === field.field}
+                setWhichFilterIsOpen={setWhichFilterIsOpen}
+                key={field.field}
+                itemFilterData={field}
+                appliedFilters={appliedFilters}
+                submitFilters={submitFilters}
+              />
+            ))}
+          </CardContent>
+        </Card>
+        <Card className={filterGroupClassName}>
+          <CardHeading
+            level="h3"
+            size="heading6"
+            data-testid="filter-text"
+            isBold={true}
+          >
             Search by Year
-          </Text>
-          <SearchBar
-            id="year-filter"
-            labelText="Apply"
-            textInputProps={{
-              defaultValue: "Horizon",
-              isClearable: true,
-              labelText: "Item Search",
-              name: "textInputName",
-            }}
-            onSubmit={() => console.log("spaghetti!")}
-          />
-        </Box>
+          </CardHeading>
+          <CardContent>
+            <SearchBar
+              id="year-filter"
+              labelText="Apply"
+              textInputProps={{
+                defaultValue: "Horizon",
+                isClearable: true,
+                labelText: "Item Search",
+                name: "textInputName",
+              }}
+              onSubmit={() => console.log("spaghetti!")}
+            />
+          </CardContent>
+        </Card>
       </Box>
       <Heading level="h3" size="heading6">
         {itemsMatched}
