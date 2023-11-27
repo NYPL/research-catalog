@@ -41,20 +41,21 @@ const Layout = ({
 
   const [loading, setLoading] = useState(false)
 
+  // Loading state
   useEffect(() => {
-    const start = () => {
+    const loadingStart = () => {
       setLoading(true)
     }
-    const end = () => {
+    const loadingEnd = () => {
       setLoading(false)
     }
-    Router.events.on("routeChangeStart", start)
-    Router.events.on("routeChangeComplete", end)
-    Router.events.on("routeChangeError", end)
+    Router.events.on("routeChangeStart", loadingStart)
+    Router.events.on("routeChangeComplete", loadingEnd)
+    Router.events.on("routeChangeError", loadingEnd)
     return () => {
-      Router.events.off("routeChangeStart", start)
-      Router.events.off("routeChangeComplete", end)
-      Router.events.off("routeChangeError", end)
+      Router.events.off("routeChangeStart", loadingStart)
+      Router.events.off("routeChangeComplete", loadingEnd)
+      Router.events.off("routeChangeError", loadingEnd)
     }
   }, [])
 
