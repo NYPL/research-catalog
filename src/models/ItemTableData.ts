@@ -1,7 +1,7 @@
 import type { ReactElement } from "react"
 
 import type Item from "./Item"
-import type { ItemTableParams, ItemLocation } from "../types/itemTypes"
+import type { ItemTableParams } from "../types/itemTypes"
 import StatusLinks from "../components/ItemTable/StatusLinks"
 
 /**

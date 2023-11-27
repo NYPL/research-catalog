@@ -6,7 +6,6 @@ import {
   Text,
   useNYPLBreakpoints,
 } from "@nypl/design-system-react-components"
-import { useRouter } from "next/router"
 
 import RCLink from "../RCLink/RCLink"
 import ItemTable from "../ItemTable/ItemTable"
