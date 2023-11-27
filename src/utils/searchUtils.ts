@@ -8,6 +8,44 @@ import type {
   SearchResultsElement,
 } from "../types/searchTypes"
 import SearchResultsBib from "../models/SearchResultsBib"
+import { RESULTS_PER_PAGE } from "../config/constants"
+
+/**
+ * getPaginationOffsetStrings
+ * Used to generate search results start and end counts on Search Results page
+ */
+export function getPaginationOffsetStrings(
+  page = 1,
+  total: number
+): [string, string] {
+  const offset = RESULTS_PER_PAGE * page - RESULTS_PER_PAGE
+  const start = offset + 1
+  let end = offset + RESULTS_PER_PAGE
+  end = end >= total ? total : end
+
+  return [start.toLocaleString(), end.toLocaleString()]
+}
+
+/**
+ * getSearchResultsHeading
+ * Used to generate the search results heading text (Displaying 100 results for keyword "cats")
+ * TODO: Make search query type (i.e. "Keyword") dynamic
+ */
+export function getSearchResultsHeading(
+  page: number,
+  totalResults: number,
+  query: string
+): string {
+  const [resultsStart, resultsEnd] = getPaginationOffsetStrings(
+    page,
+    totalResults
+  )
+  return `Displaying ${
+    totalResults > RESULTS_PER_PAGE
+      ? `${resultsStart}-${resultsEnd}`
+      : totalResults.toLocaleString()
+  } of ${totalResults.toLocaleString()} results for keyword "${query}"`
+}
 
 /**
  * getSortQuery
@@ -123,7 +161,7 @@ export function mapRequestBodyToSearchParams(
 ): SearchParams {
   const {
     q,
-    page,
+    page = 1,
     contributor,
     title,
     subject,
@@ -166,8 +204,21 @@ export function mapElementsToSearchResultsBibs(
 /* eslint-disable @typescript-eslint/naming-convention */
 
 /**
+ * sortOptions
+ * The allowed keys for the sort field and their respective labels
+ */
+export const sortOptions: Record<string, string> = {
+  relevance: "Relevance",
+  title_asc: "Title (A - Z)",
+  title_desc: "Title (Z - A)",
+  date_asc: "Date (Old to New)",
+  date_desc: "Date (New to Old)",
+}
+
+/**
  * mapQueryToSearchParams
  * Maps the SearchQueryParams structure from the request to a SearchParams object, which is expected by fetchResults
+ * It also parses the results page number from a string, defaulting to 1 if absent
  */
 export function mapQueryToSearchParams({
   q,
@@ -184,17 +235,18 @@ export function mapQueryToSearchParams({
   lccn,
   filters,
 }: SearchQueryParams): SearchParams {
+  const hasIdentifiers = issn || isbn || oclc || lccn
   return {
     q,
     field: search_scope,
-    page,
+    page: page ? parseInt(page) : 1,
     contributor,
     title,
     subject,
     sortBy: sort,
     order: sort_direction,
     filters,
-    identifiers: {
+    identifiers: hasIdentifiers && {
       issn,
       isbn,
       oclc,
