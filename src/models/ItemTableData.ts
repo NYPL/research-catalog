@@ -14,37 +14,43 @@ export default class ItemTableData {
   isDesktop: boolean
   isBibPage: boolean
   isArchiveCollection: boolean
-  tableData: string[][]
 
   constructor(items: Item[], itemTableParams: ItemTableParams) {
     this.items = items
     this.isDesktop = itemTableParams.isDesktop
     this.isBibPage = itemTableParams.isBibPage
     this.isArchiveCollection = itemTableParams.isArchiveCollection
-    this.tableData = [[]]
   }
 
   get tableHeadings(): string[] {
     return [
-      ...(this.hasStatusColumn() ? ["Status"] : []),
-      ...(this.hasVolumeColumn() ? [this.volumeColumnHeading()] : []),
+      ...(this.showStatusColumn() ? ["Status"] : []),
+      ...(this.showVolumeColumn() ? [this.volumeColumnHeading()] : []),
       "Format",
-      ...(!this.hasVolumeColumn() && !this.isDesktop ? ["Call Number"] : []),
-      ...(this.isBibPage && this.isDesktop ? ["Access"] : []),
+      ...(!this.showVolumeColumn() && !this.isDesktop ? ["Call Number"] : []),
+      ...(this.showAccessColumn() ? ["Access"] : []),
       ...(this.isDesktop ? ["Call Number"] : []),
-      ...(this.hasLocationColumn ? ["Item Location"] : []),
+      ...(this.showLocationColumn ? ["Item Location"] : []),
     ]
   }
 
-  hasVolumeColumn(): boolean {
+  get tableData(): string[][] {
+    return [["test1", "test2"]]
+  }
+
+  showVolumeColumn(): boolean {
     return this.items.some((item) => item.volume) && this.isBibPage
   }
 
-  hasStatusColumn(): boolean {
+  showStatusColumn(): boolean {
     return this.isBibPage
   }
 
-  hasLocationColumn(): boolean {
+  showAccessColumn(): boolean {
+    return this.isBibPage && this.isDesktop
+  }
+
+  showLocationColumn(): boolean {
     return this.isDesktop
   }
 

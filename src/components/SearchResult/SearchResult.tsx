@@ -13,7 +13,6 @@ import ItemTable from "../ItemTable/ItemTable"
 import type SearchResultsBib from "../../models/SearchResultsBib"
 import ItemTableData from "../../models/ItemTableData"
 import { PATHS } from "../../config/constants"
-import { getActivePage } from "../../utils/appUtils"
 
 interface SearchResultProps {
   bib: SearchResultsBib
@@ -23,11 +22,9 @@ interface SearchResultProps {
  * The SearchResult component displays a single search result element.
  */
 const SearchResult = ({ bib }: SearchResultProps) => {
-  const { pathname } = useRouter()
-  const isBibPage = getActivePage(pathname) === "bib"
   const { isLargerThanLarge: isDesktop } = useNYPLBreakpoints()
   const itemTableData = new ItemTableData(bib.items, {
-    isBibPage,
+    isBibPage: false,
     isDesktop,
     isArchiveCollection: bib.isArchiveCollection,
   })
