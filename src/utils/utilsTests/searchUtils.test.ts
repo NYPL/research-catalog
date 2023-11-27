@@ -32,7 +32,7 @@ describe("searchUtils", () => {
           isbn: "456",
           search_scope: "contributor",
           sort_direction: "asc",
-          sort: "spaghetti",
+          sort: "relevance",
         })
       ).toEqual({
         identifiers: {
@@ -42,7 +42,7 @@ describe("searchUtils", () => {
         page: 1,
         field: "contributor",
         order: "asc",
-        sortBy: "spaghetti",
+        sortBy: "relevance",
       })
     })
     it("parses the page number query string value into a number", () => {

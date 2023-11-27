@@ -204,6 +204,18 @@ export function mapElementsToSearchResultsBibs(
 /* eslint-disable @typescript-eslint/naming-convention */
 
 /**
+ * sortOptions
+ * The allowed keys for the sort field and their respective labels
+ */
+export const sortOptions: Record<string, string> = {
+  relevance: "Relevance",
+  title_asc: "Title (A - Z)",
+  title_desc: "Title (Z - A)",
+  date_asc: "Date (Old to New)",
+  date_desc: "Date (New to Old)",
+}
+
+/**
  * mapQueryToSearchParams
  * Maps the SearchQueryParams structure from the request to a SearchParams object, which is expected by fetchResults
  * It also parses the results page number from a string, defaulting to 1 if absent
