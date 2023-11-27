@@ -2,6 +2,7 @@ import Head from "next/head"
 import {
   Heading,
   SimpleGrid,
+  Pagination,
   Select,
 } from "@nypl/design-system-react-components"
 import type { ChangeEvent } from "react"
@@ -14,6 +15,7 @@ import SearchResult from "../../src/components/SearchResult/SearchResult"
 
 import { fetchResults } from "../api/search"
 import {
+  getSearchResultsHeading,
   mapQueryToSearchParams,
   mapElementsToSearchResultsBibs,
   getQueryString,
@@ -21,7 +23,7 @@ import {
 } from "../../src/utils/searchUtils"
 import type { SortKey, SortOrder } from "../../src/types/searchTypes"
 import { mapWorksToDRBResults } from "../../src/utils/drbUtils"
-import { SITE_NAME } from "../../src/config/constants"
+import { SITE_NAME, RESULTS_PER_PAGE } from "../../src/config/constants"
 import type SearchResultsBib from "../../src/models/SearchResultsBib"
 
 /**
@@ -44,6 +46,11 @@ export default function Search({ results }) {
 
   // Map DRB Works from response to DRBResult objects
   const drbResults = mapWorksToDRBResults(drbWorks)
+
+  const handlePageChange = async (page: number) => {
+    const newQuery = getQueryString({ ...searchParams, page })
+    await push(newQuery)
+  }
 
   const handleSortChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const selectedSortOption = e.target.value
@@ -100,17 +107,25 @@ export default function Search({ results }) {
         {totalResults ? (
           <>
             <Heading level="h2" mb="xl" size="heading4">
-              {`Displaying ${
-                totalResults > 50 ? "1-50" : totalResults.toLocaleString()
-              } of ${totalResults.toLocaleString()} results for keyword "${
+              {getSearchResultsHeading(
+                searchParams.page,
+                totalResults,
                 searchParams.q
-              }"`}
+              )}
             </Heading>
             <SimpleGrid columns={1} gap="grid.xl">
               {searchResultBibs.map((bib: SearchResultsBib) => {
                 return <SearchResult key={bib.id} bib={bib} />
               })}
             </SimpleGrid>
+            <Pagination
+              id="results-pagination"
+              mt="xl"
+              initialPage={searchParams.page}
+              currentPage={searchParams.page}
+              pageCount={Math.ceil(totalResults / RESULTS_PER_PAGE)}
+              onPageChange={handlePageChange}
+            />
           </>
         ) : (
           /**
