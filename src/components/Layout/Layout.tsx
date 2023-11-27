@@ -1,10 +1,17 @@
-import type { ReactElement, PropsWithChildren } from "react"
+import {
+  useEffect,
+  useState,
+  type ReactElement,
+  type PropsWithChildren,
+} from "react"
+import Router from "next/router"
 import {
   Box,
   TemplateAppContainer,
   Breadcrumbs,
   DSProvider,
   Heading,
+  SkeletonLoader,
 } from "@nypl/design-system-react-components"
 
 import { type RCPage } from "../../types/pageTypes"
@@ -31,6 +38,25 @@ const Layout = ({
 }: PropsWithChildren<LayoutProps>) => {
   const showSearch = activePage === "search"
   const showHeader = activePage !== "404"
+
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    const start = () => {
+      setLoading(true)
+    }
+    const end = () => {
+      setLoading(false)
+    }
+    Router.events.on("routeChangeStart", start)
+    Router.events.on("routeChangeComplete", end)
+    Router.events.on("routeChangeError", end)
+    return () => {
+      Router.events.off("routeChangeStart", start)
+      Router.events.off("routeChangeComplete", end)
+      Router.events.off("routeChangeError", end)
+    }
+  }, [])
 
   return (
     <DSProvider>
@@ -59,11 +85,17 @@ const Layout = ({
           )
         }
         sidebar={sidebar ? sidebarPosition : "none"}
-        contentPrimary={<Box pb="l">{children}</Box>}
+        contentPrimary={
+          <Box pb="l">
+            {loading ? <SkeletonLoader showImage={false} /> : children}
+          </Box>
+        }
         contentSidebar={
           sidebar && (
             <Box pb="l">
-              <div>{sidebar}</div>
+              <div>
+                {loading ? <SkeletonLoader showImage={false} /> : sidebar}
+              </div>
             </Box>
           )
         }
