@@ -94,9 +94,7 @@ const Layout = ({
         contentSidebar={
           sidebar && (
             <Box pb="l">
-              <div>
-                {loading ? <SkeletonLoader showImage={false} /> : sidebar}
-              </div>
+              {loading ? <SkeletonLoader showImage={false} /> : sidebar}
             </Box>
           )
         }
