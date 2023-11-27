@@ -10,14 +10,12 @@ interface ItemTableProps {
  * The ItemTable displays the Item info, StatusLinks, and RequestButtons
  */
 const ItemTable = ({ itemTableData }: ItemTableProps) => {
-  console.log(itemTableData.isBibPage)
   return (
     <Table
+      __css={{ "table-layout": "fixed", width: "full" }}
       columnHeaders={itemTableData.tableHeadings}
       tableData={itemTableData.tableData}
-    >
-      Items
-    </Table>
+    />
   )
 }
 

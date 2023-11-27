@@ -44,7 +44,7 @@ const SearchResult = ({ bib }: SearchResultProps) => {
           {bib.publicationStatement && <Text>{bib.publicationStatement}</Text>}
           {bib.yearPublished && <Text>{bib.yearPublished}</Text>}
           <Text>{bib.itemMessage}</Text>
-          <ItemTable itemTableData={itemTableData} />
+          {bib.items?.length && <ItemTable itemTableData={itemTableData} />}
         </Box>
       </CardContent>
     </Card>

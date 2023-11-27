@@ -1,5 +1,8 @@
+import type { ReactElement } from "react"
+
 import type Item from "./Item"
-import type { ItemTableParams } from "../types/itemTypes"
+import type { ItemTableParams, ItemLocation } from "../types/itemTypes"
+import StatusLinks from "../components/ItemTable/StatusLinks"
 
 /**
  * The ItemTable class converts a Bib's item data to the format
@@ -34,8 +37,20 @@ export default class ItemTableData {
     ]
   }
 
-  get tableData(): string[][] {
-    return [["test1", "test2"]]
+  get tableData(): (string | ReactElement)[][] {
+    return this.items.map((item) => {
+      return [
+        ...(this.showStatusColumn() ? [StatusLinks()] : []),
+        ...(this.showVolumeColumn() ? [item.volume] : []),
+        item.format,
+        ...(!this.showVolumeColumn() && !this.isDesktop
+          ? [item.callNumber]
+          : []),
+        ...(this.showAccessColumn() ? [item.accessMessage] : []),
+        ...(this.isDesktop ? [item.callNumber] : []),
+        ...(this.showLocationColumn ? [item.location.prefLabel] : []),
+      ]
+    })
   }
 
   showVolumeColumn(): boolean {

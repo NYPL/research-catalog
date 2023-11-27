@@ -81,7 +81,6 @@ export default class Item {
       const locationKey = locationLabelToKey(location.prefLabel)
       location.endpoint = locationEndpointsMap[locationKey]
     }
-
     return location
   }
 
