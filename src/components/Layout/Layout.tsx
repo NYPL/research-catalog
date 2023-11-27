@@ -1,4 +1,4 @@
-import { type ReactElement } from "react"
+import type { ReactElement, PropsWithChildren } from "react"
 import {
   Box,
   TemplateAppContainer,
@@ -14,15 +14,21 @@ import SearchForm from "../SearchForm/SearchForm"
 import { BASE_URL } from "../../config/constants"
 
 interface LayoutProps {
+  sidebar?: ReactElement
   activePage?: RCPage
-  children: ReactElement
+  sidebarPosition?: "right" | "left"
 }
 
 /**
  * The Layout component wraps the TemplateAppContainer from the DS and
  * controls the rendering of Research Catalog header components per-page.
  */
-const Layout = ({ children, activePage }: LayoutProps) => {
+const Layout = ({
+  children,
+  sidebar,
+  activePage,
+  sidebarPosition = "right",
+}: PropsWithChildren<LayoutProps>) => {
   const showSearch = activePage === "search"
   const showHeader = activePage !== "404"
 
@@ -33,6 +39,7 @@ const Layout = ({ children, activePage }: LayoutProps) => {
           showHeader && (
             <>
               <Breadcrumbs
+                data-testid="layout-breadcrumbs"
                 breadcrumbsType="research"
                 breadcrumbsData={[
                   { url: "https://nypl.org", text: "Home" },
@@ -44,14 +51,22 @@ const Layout = ({ children, activePage }: LayoutProps) => {
                 ]}
               />
               <div className={styles.researchHeadingContainer}>
-                <Heading id="heading-h1" level="one" text="Research Catalog" />
+                <Heading id="heading-h1" level="h1" text="Research Catalog" />
                 <SubNav activePage={activePage} />
                 {showSearch && <SearchForm />}
               </div>
             </>
           )
         }
+        sidebar={sidebar ? sidebarPosition : "none"}
         contentPrimary={<Box pb="l">{children}</Box>}
+        contentSidebar={
+          sidebar && (
+            <Box pb="l">
+              <div>{sidebar}</div>
+            </Box>
+          )
+        }
       />
     </DSProvider>
   )

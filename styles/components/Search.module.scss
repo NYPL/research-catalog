@@ -2,40 +2,30 @@
 @import "../utils/breakpoints";
 
 .searchContainer {
-  background-color: var(--nypl-colors-ui-gray-x-light-cool);
+  background-color: var(--nypl-colors-ui-bg-default);
   padding: var(--nypl-space-l) 0 var(--nypl-space-xs);
 }
 
 .searchContainerInner {
   @include maxWidth;
+}
 
-  @include media($nypl-max-width) {
-    > div {
-      width: 85%;
-    }
-  }
-
-  form {
-    select {
-      font-size: 16px;
-    }
-    // Select down SVG arrow:
-    .chakra-select__icon-wrapper {
-      z-index: 999 !important;
-    }
-
-    input::placeholder {
-      font-style: normal;
-      font-size: 16px;
-    }
+.auxSearchContainer {
+  display: flex;
+  justify-content: space-between;
+  margin: var(--nypl-space-xs) 0;
+  @media (max-width: 400px) {
+    flex-direction: column-reverse;
+    bottom-padding: var(--nypl-space-s);
+    align-items: flex-end;
   }
 }
 
-.advancedSearchContainer {
-  display: flex;
-  justify-content: flex-end;
+.advancedSearch {
+  min-width: 127px;
+  margin-bottom: var(--nypl-space-s);
+}
 
-  a {
-    margin-top: var(--nypl-space-xxs);
-  }
+.edsLink {
+  padding-right: var(--nypl-space-xl);
 }

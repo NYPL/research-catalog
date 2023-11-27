@@ -11,10 +11,11 @@
     "prettier": "prettier --write .",
     "prepare": "husky install",
     "test": "jest",
+    "test-watch": "jest --watch",
     "coverage": "jest --coverage"
   },
   "dependencies": {
-    "@nypl/design-system-react-components": "^1.6.1",
+    "@nypl/design-system-react-components": "^2.1.0",
     "@nypl/nypl-data-api-client": "1.0.5",
     "@types/node": "20.3.1",
     "@types/react": "18.2.13",
@@ -22,6 +23,7 @@
     "aws-sdk": "2.99.0",
     "eslint-config-next": "13.4.7",
     "next": "12.3.4",
+    "qs": "^6.11.2",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "swr": "2.2.1",
@@ -35,6 +37,7 @@
     "@testing-library/user-event": "^14.5.1",
     "@types/jest": "^29.5.5",
     "@types/jest-axe": "^3.5.6",
+    "@types/qs": "^6.9.8",
     "@types/underscore": "^1.11.6",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "eslint": "^8.45.0",
@@ -50,9 +53,11 @@
     "jest-axe": "^8.0.0",
     "jest-environment-jsdom": "^29.7.0",
     "lint-staged": "^13.2.3",
+    "next-router-mock": "^0.9.10",
     "prettier": "^2.8.8",
     "sass": "^1.63.6",
-    "typescript": "5.0.4"
+    "typescript": "5.0.4",
+    "user-event": "^4.0.0"
   },
   "lint-staged": {
     "**/*.{ts,tsx,json,sass}": [

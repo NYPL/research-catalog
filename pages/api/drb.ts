@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 
 import type { SearchParams } from "../../src/types/searchTypes"
-import type { DRBResultsResponse } from "../../src/types/drbTypes"
+import type { DRBResults } from "../../src/types/drbTypes"
 import nyplApiClient from "../../src/server/nyplApiClient/index"
 import { DRB_API_NAME } from "../../src/config/constants"
 import { getDRBQueryStringFromSearchParams } from "../../src/utils/drbUtils"
@@ -12,7 +12,7 @@ import { mapQueryToSearchParams } from "../../src/utils/searchUtils"
  */
 export async function fetchDRBResults(
   searchParams: SearchParams
-): Promise<DRBResultsResponse | Error> {
+): Promise<DRBResults | Error> {
   const drbQueryString = getDRBQueryStringFromSearchParams(searchParams)
 
   try {

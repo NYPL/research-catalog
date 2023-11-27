@@ -1,6 +1,15 @@
 import type { SearchFilters, SearchParams } from "../types/searchTypes"
-import type { DRBQueryParams, DRBFilters } from "../types/drbTypes"
-import { DRB_RESULTS_PER_PAGE } from "../config/constants"
+import type {
+  DRBQueryParams,
+  DRBFilters,
+  DRBWork,
+  Author,
+  Agent,
+} from "../types/drbTypes"
+import DRBResult from "../models/DRBResult"
+import { DRB_RESULTS_PER_PAGE, SOURCE_PARAM } from "../config/constants"
+import { isEmpty } from "underscore"
+import { appConfig } from "../config/config"
 
 const mapSearchFieldToDRBField = {
   all: "keyword",
@@ -57,7 +66,7 @@ function mapSearchFiltersToDRBFilters(filters: SearchFilters = {}): DRBFilters {
  *  Given a hash of SearchParams, returns a hash representing an equivalent query against DRB API
  */
 function mapSearchParamsToDRBQueryParams(params: SearchParams): DRBQueryParams {
-  const { q, field, sortBy, order, selectedFilters } = params
+  const { q, field, sortBy, order, filters } = params
 
   const keywordQuery = getDRBKeywordQuery(q, field)
   const advancedQuery = getDRBAdvancedQuery(params)
@@ -83,7 +92,7 @@ function mapSearchParamsToDRBQueryParams(params: SearchParams): DRBQueryParams {
     language,
     dateAfter,
     dateBefore,
-  } = selectedFilters || {}
+  } = filters || {}
 
   // DRB doesn't handle subject or contributor in `filter` param, so handle
   // them separately:
@@ -148,4 +157,28 @@ export function getDRBQueryStringFromSearchParams(
 ): string {
   const drbQueryParams = mapSearchParamsToDRBQueryParams(searchParams)
   return getQueryStringFromDRBQueryParams(drbQueryParams)
+}
+
+export function mapWorksToDRBResults(works: DRBWork[]): DRBResult[] | null {
+  if (!works) return null
+  return works
+    .filter((work: DRBWork) => {
+      return !isEmpty(work) || !work.uuid || !work.title
+    })
+    .map((work: DRBWork) => {
+      return new DRBResult(work)
+    })
+}
+
+export const readOnlineMediaTypes = [
+  "application/epub+xml",
+  "application/webpub+json",
+  "text/html",
+]
+export const downloadMediaTypes = ["application/epub+zip", "application/pdf"]
+
+export function getAuthorURL(author: Author | Agent) {
+  return `${
+    appConfig.externalUrls.drbFrontEnd[appConfig.environment]
+  }/search?query=${`author:${author.name}${SOURCE_PARAM}`}`
 }
