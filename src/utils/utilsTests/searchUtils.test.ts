@@ -3,6 +3,7 @@ import {
   getQueryString,
   mapQueryToSearchParams,
   mapRequestBodyToSearchParams,
+  getSearchResultsHeading,
 } from "../searchUtils"
 import { queryParamsEquality } from "../../../__test__/helpers/searchHelpers"
 
@@ -90,6 +91,20 @@ describe("searchUtils", () => {
       const [start, end] = getPaginationOffsetStrings(24, 1195)
       expect(start).toEqual("1,151")
       expect(end).toEqual("1,195")
+    })
+  })
+  describe("getSearchResultsHeading", () => {
+    it("returns the correct heading string for first page", () => {
+      const heading = getSearchResultsHeading(1, 1200, "cats")
+      expect(heading).toEqual(
+        'Displaying 1-50 of 1,200 results for keyword "cats"'
+      )
+    })
+    it("returns the correct heading string for other pages", () => {
+      const heading = getSearchResultsHeading(5, 1200, "cats")
+      expect(heading).toEqual(
+        'Displaying 201-250 of 1,200 results for keyword "cats"'
+      )
     })
   })
 })
