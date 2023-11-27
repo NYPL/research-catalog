@@ -12,7 +12,7 @@ interface ItemTableProps {
 const ItemTable = ({ itemTableData }: ItemTableProps) => {
   return (
     <Table
-      __css={{ "table-layout": "fixed", width: "full" }}
+      __css={{ tableLayout: "fixed", width: "full" }}
       columnHeaders={itemTableData.tableHeadings}
       tableData={itemTableData.tableData}
     />
