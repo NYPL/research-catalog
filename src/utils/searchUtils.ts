@@ -27,6 +27,27 @@ export function getPaginationOffsetStrings(
 }
 
 /**
+ * getSearchResultsHeading
+ * Used to generate the search results heading text (Displaying 100 results for keyword "cats")
+ * TODO: Make search query type (i.e. "Keyword") dynamic
+ */
+export function getSearchResultsHeading(
+  page: number,
+  totalResults: number,
+  query: string
+): string {
+  const [resultsStart, resultsEnd] = getPaginationOffsetStrings(
+    page,
+    totalResults
+  )
+  return `Displaying ${
+    totalResults > RESULTS_PER_PAGE
+      ? `${resultsStart}-${resultsEnd}`
+      : totalResults.toLocaleString()
+  } of ${totalResults.toLocaleString()} results for keyword "${query}"`
+}
+
+/**
  * getSortQuery
  * Get the sort type and order and format into query param snippet.
  */

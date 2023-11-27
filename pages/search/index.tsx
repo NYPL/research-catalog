@@ -13,10 +13,10 @@ import SearchResult from "../../src/components/SearchResult/SearchResult"
 
 import { fetchResults } from "../api/search"
 import {
+  getSearchResultsHeading,
   mapQueryToSearchParams,
   mapElementsToSearchResultsBibs,
   getQueryString,
-  getPaginationOffsetStrings,
 } from "../../src/utils/searchUtils"
 import { mapWorksToDRBResults } from "../../src/utils/drbUtils"
 import { SITE_NAME, RESULTS_PER_PAGE } from "../../src/config/constants"
@@ -36,10 +36,6 @@ export default function Search({ results }) {
 
   // TODO: Move this to global context
   const searchParams = mapQueryToSearchParams(query)
-  const [resultsStart, resultsEnd] = getPaginationOffsetStrings(
-    searchParams.page,
-    totalResults
-  )
 
   // Map Search Results Elements from response to SearchResultBib objects
   const searchResultBibs = mapElementsToSearchResultsBibs(searchResultsElements)
@@ -72,13 +68,11 @@ export default function Search({ results }) {
         {totalResults ? (
           <>
             <Heading level="h2" mb="xl" size="heading4">
-              {`Displaying ${
-                totalResults > RESULTS_PER_PAGE
-                  ? `${resultsStart}-${resultsEnd}`
-                  : totalResults.toLocaleString()
-              } of ${totalResults.toLocaleString()} results for keyword "${
+              {getSearchResultsHeading(
+                searchParams.page,
+                totalResults,
                 searchParams.q
-              }"`}
+              )}
             </Heading>
             <SimpleGrid columns={1} gap="grid.xl">
               {searchResultBibs.map((bib: SearchResultsBib) => {
