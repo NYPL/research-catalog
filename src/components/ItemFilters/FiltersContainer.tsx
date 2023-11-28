@@ -11,7 +11,6 @@ import {
   useNYPLBreakpoints,
   CardHeading,
   CardContent,
-  SimpleGrid,
 } from "@nypl/design-system-react-components"
 
 import styles from "../../../styles/components/ItemFilters.module.scss"
