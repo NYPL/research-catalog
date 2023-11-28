@@ -17,8 +17,11 @@ const ItemTable = ({ itemTableData }: ItemTableProps) => {
         sx={{
           tableLayout: "fixed",
           width: "full",
-          tr: { border: "0 !important" },
-          "td, td": { paddingTop: "xs", paddingBottom: "xs" },
+          tr: { border: "0 !important", padding: 0 },
+          "th, td, th > span, td > span": {
+            paddingTop: "xs",
+            paddingBottom: "xs",
+          },
         }}
         columnHeaders={itemTableData.tableHeadings}
         tableData={itemTableData.tableData}
