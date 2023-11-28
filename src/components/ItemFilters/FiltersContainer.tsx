@@ -6,7 +6,6 @@ import {
   SearchBar,
   Box,
   Heading,
-  Text,
   useCloseDropDown,
   useNYPLBreakpoints,
   CardHeading,
@@ -14,7 +13,7 @@ import {
 } from "@nypl/design-system-react-components"
 
 import styles from "../../../styles/components/ItemFilters.module.scss"
-import type { AppliedFilters, ItemAggregation } from "../../types/filterTypes"
+import type { ItemAggregation } from "../../types/filterTypes"
 import { ItemFilterData, LocationFilterData } from "../../models/itemFilterData"
 import ItemFilter from "./ItemFilter"
 import {
@@ -42,24 +41,23 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
     })
   ).current
 
-  const parsedParams = parseItemFilterQueryParams(router.query)
-  const [appliedFilters, setAppliedFilters] = useState(parsedParams)
+  const appliedFilters = useMemo(() => {
+    return parseItemFilterQueryParams(router.query)
+  }, [router.query])
+  
   const appliedFiltersDisplay = buildAppliedFiltersString(
-    parsedParams,
+    appliedFilters,
     filterData
   )
   const ref = useRef<HTMLDivElement>(null)
   useCloseDropDown(() => setWhichFilterIsOpen(""), ref)
 
   const [whichFilterIsOpen, setWhichFilterIsOpen] = useState("")
-  const [itemsMatched] = useState(buildItemsString(router.query))
+
+  const itemsMatched = buildItemsString(router.query)
 
   const submitFilters = (selection: string[], field: string) => {
-    let newFilters: AppliedFilters
-    setAppliedFilters((prevFilters) => {
-      newFilters = { ...prevFilters, [field]: selection }
-      return newFilters
-    })
+    const newFilters = { ...appliedFilters, [field]: selection }
     const locationFilterData = filterData.find(
       (filter) => filter.field === "location"
     ) as LocationFilterData
@@ -70,11 +68,6 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
     setWhichFilterIsOpen("")
     router.push("/search/advanced" + url)
   }
-
-  useMemo(() => {
-    const parsedParams = parseItemFilterQueryParams(router.query)
-    setAppliedFilters(parsedParams)
-  }, [router.query])
 
   return (
     <>
