@@ -13,7 +13,7 @@ interface RequestButtonsProps {
  */
 const RequestButtons = ({ item }: RequestButtonsProps) => {
   return (
-    <Box sx={{ a: { marginRight: "xs", marginBottom: "xs" } }} mb="xs">
+    <Box sx={{ a: { marginRight: "xs", marginBottom: "xs" } }} mb="s">
       {item.aeonUrl ? (
         <RCLink
           href={item.aeonUrl}
