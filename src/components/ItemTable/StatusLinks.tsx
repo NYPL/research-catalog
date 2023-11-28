@@ -1,13 +1,20 @@
-import { Button } from "@nypl/design-system-react-components"
+import RequestButtons from "./RequestButtons"
+import type Item from "../../models/Item"
+
+interface StatusLinksProps {
+  item: Item
+}
 
 /**
- * The StatusLinks component appears in the Item Table
+ * The StatusLinks component appears in the Item Table on the Bib Page, or beneath it
+ * in the Search Results
+ *
+ * It displays the Request Buttons and Information Links
  */
-const StatusLinks = () => {
+const StatusLinks = ({ item }: StatusLinksProps) => {
   return (
     <>
-      <Button id="test">Test</Button>
-      <Button id="test2">Test2</Button>
+      <RequestButtons item={item} />
     </>
   )
 }
