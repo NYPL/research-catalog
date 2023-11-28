@@ -18,7 +18,6 @@ const RequestButtons = ({ item }: RequestButtonsProps) => {
         <RCLink
           href={item.aeonUrl}
           type="buttonSecondary"
-          // onClick={TODO: Add ifAvailableHandler handler}
           disabled={!item.isAvailable}
         >
           Request Appointment
@@ -31,7 +30,6 @@ const RequestButtons = ({ item }: RequestButtonsProps) => {
                 item.id
               }?searchKeywords=${"TODO"}`}
               type="buttonSecondary"
-              // onClick={TODO: Add ifAvailableHandler handler}
               disabled={!item.isAvailable}
             >
               Request for On-site Use
@@ -43,7 +41,6 @@ const RequestButtons = ({ item }: RequestButtonsProps) => {
                 item.id
               }/edd?searchKeywords=${"TODO"}`}
               type="buttonSecondary"
-              // onClick={TODO: Add ifAvailableHandler handler}
               disabled={!item.isAvailable}
             >
               Request Scan
