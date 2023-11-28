@@ -11,7 +11,7 @@ import RCLink from "../RCLink/RCLink"
 import ItemTable from "../ItemTable/ItemTable"
 import type SearchResultsBib from "../../models/SearchResultsBib"
 import ItemTableData from "../../models/ItemTableData"
-import { PATHS } from "../../config/constants"
+import { PATHS, ITEMS_PER_SEARCH_RESULT } from "../../config/constants"
 
 interface SearchResultProps {
   bib: SearchResultsBib
@@ -22,11 +22,18 @@ interface SearchResultProps {
  */
 const SearchResult = ({ bib }: SearchResultProps) => {
   const { isLargerThanLarge: isDesktop } = useNYPLBreakpoints()
-  const itemTableData = new ItemTableData(bib.items, {
-    isBibPage: false,
-    isDesktop,
-    isArchiveCollection: bib.isArchiveCollection,
-  })
+
+  // On Search Results, a separate ItemTable is constructed for each item up to the limit set in ITEMS_PER_SEARCH_RESULT.
+  const searchResultItems: ItemTableData[] =
+    bib.hasItems &&
+    bib.items.slice(0, ITEMS_PER_SEARCH_RESULT).map((item) => {
+      return new ItemTableData([item], {
+        isBibPage: false,
+        isDesktop,
+        isArchiveCollection: bib.isArchiveCollection,
+      })
+    })
+
   return (
     <Card
       sx={{
@@ -43,7 +50,13 @@ const SearchResult = ({ bib }: SearchResultProps) => {
           {bib.publicationStatement && <Text>{bib.publicationStatement}</Text>}
           {bib.yearPublished && <Text>{bib.yearPublished}</Text>}
           <Text>{bib.itemMessage}</Text>
-          {bib.items?.length && <ItemTable itemTableData={itemTableData} />}
+          {searchResultItems &&
+            searchResultItems.map((itemTableData) => (
+              <ItemTable
+                itemTableData={itemTableData}
+                key={`search-results-item-${itemTableData.items[0].id}`}
+              />
+            ))}
         </Box>
       </CardContent>
     </Card>

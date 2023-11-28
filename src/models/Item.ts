@@ -11,6 +11,7 @@ import {
   partnerDefaultLocation,
   locationEndpointsMap,
 } from "../utils/itemUtils"
+import { appConfig } from "../config/config"
 
 /**
  * The Item class contains the data and getter functions
@@ -61,6 +62,15 @@ export default class Item {
 
   get isReCAP(): boolean {
     return this.isPartnerReCAP() || this.isNYPLReCAP()
+  }
+
+  get allLocationsClosed(): boolean {
+    const { closedLocations, recapClosedLocations, nonRecapClosedLocations } =
+      appConfig
+
+    return closedLocations
+      .concat(this.isReCAP ? recapClosedLocations : nonRecapClosedLocations)
+      .includes("")
   }
 
   // Pre-processing logic for setting Item holding location
