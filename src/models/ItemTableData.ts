@@ -30,10 +30,9 @@ export default class ItemTableData {
       ...(this.showStatusColumn() ? ["Status"] : []),
       ...(this.showVolumeColumn() ? [this.volumeColumnHeading()] : []),
       "Format",
-      ...(!this.showVolumeColumn() && !this.isDesktop ? ["Call Number"] : []),
+      "Call Number",
       ...(this.showAccessColumn() ? ["Access"] : []),
-      ...(this.isDesktop ? ["Call Number"] : []),
-      ...(this.showLocationColumn ? ["Item Location"] : []),
+      ...(this.showLocationColumn() ? ["Item Location"] : []),
     ]
   }
 
@@ -43,12 +42,9 @@ export default class ItemTableData {
         ...(this.showStatusColumn() ? [StatusLinks({ item })] : []),
         ...(this.showVolumeColumn() ? [item.volume] : []),
         item.format,
-        ...(!this.showVolumeColumn() && !this.isDesktop
-          ? [item.callNumber]
-          : []),
+        item.callNumber,
         ...(this.showAccessColumn() ? [item.accessMessage] : []),
-        ...(this.isDesktop ? [item.callNumber] : []),
-        ...(this.showLocationColumn ? [item.location.prefLabel] : []),
+        ...(this.showLocationColumn() ? [item.location.prefLabel] : []),
       ]
     })
   }

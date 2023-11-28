@@ -18,10 +18,10 @@ const RequestButtons = ({ item }: RequestButtonsProps) => {
         href={`${BASE_URL}/hold/request/${item.bibId}-${item.id}`}
         type="buttonSecondary"
       >
-        Test
+        Request for On-site Use
       </RCLink>
       <RCLink href="test2" type="buttonSecondary">
-        Test2
+        Request Scan
       </RCLink>
     </Box>
   )

@@ -20,16 +20,17 @@ If an environment variable is updated, make sure to restart the server for the a
 
 These environment variables control how certain elements on the page render and where to fetch data.
 
-| Variable          | Type   | Value Example                | Description                                                              |
-| ----------------- | ------ | ---------------------------- | ------------------------------------------------------------------------ |
-| `NYPL_HEADER_URL` | string | "https://ds-header.nypl.org" | The base URL of the NYPL environment-specific header and footer scripts. |
+| Variable           | Type   | Value Example                         | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+|--------------------|--------|---------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `NYPL_HEADER_URL`  | string | "https://ds-header.nypl.org"          | The base URL of the NYPL environment-specific header and footer scripts.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| `CLOSED_LOCATIONS` | string | "all; Library of the Performing Arts" | A semicolon-delimited list of strings. Include quotes around the string. All locations beginning with any string in this list will be removed from the list of request options in the `ElectronicDelivery`, `HoldRequest`, and `ItemTableRow` components. Currently used physical locations: `Schwarzman;Science;Library for the Performing Arts;Schomburg`. To close all locations, add `all`. This will also remove EDD as a request option, the 'Request' buttons, and also disable the hold request/edd forms. If `all` is not present, EDD and 'Request' buttons will still be available. |
 
 ## AWS ECS Environment Variables
 
 As previously mentioned in the [README](README.md), we are using environment variables to make authorized requests to NYPL's API platform. In order to be secure, we are encrypting and decrypting those environment variables using AWS KMS. Please get these variables from someone on the LSP team.
 
 | Variable                     | Description                                           |
-| ---------------------------- | ----------------------------------------------------- |
+|------------------------------|-------------------------------------------------------|
 | `PLATFORM_API_CLIENT_ID`     | Platform client id. This value must be encrypted.     |
 | `PLATFORM_API_CLIENT_SECRET` | Platform client secret. This value must be encrypted. |
 
