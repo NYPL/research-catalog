@@ -14,6 +14,9 @@ const ItemTable = ({ itemTableData }: ItemTableProps) => {
   return (
     <>
       <Table
+        columnHeaders={itemTableData.tableHeadings}
+        tableData={itemTableData.tableData}
+        mb="s"
         sx={{
           tableLayout: "fixed",
           width: "full",
@@ -23,9 +26,6 @@ const ItemTable = ({ itemTableData }: ItemTableProps) => {
             paddingBottom: "xs",
           },
         }}
-        columnHeaders={itemTableData.tableHeadings}
-        tableData={itemTableData.tableData}
-        mb="s"
       />
       {!itemTableData.isBibPage && (
         <RequestButtons item={itemTableData.items[0]} />

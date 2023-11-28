@@ -10,19 +10,48 @@ interface RequestButtonsProps {
 
 /**
  * The StatusLinks component appears in the Item Table
+ * TODO: Pass search keywords to links
  */
 const RequestButtons = ({ item }: RequestButtonsProps) => {
   return (
     <Box sx={{ a: { marginRight: "xs", marginBottom: "xs" } }} mb="xs">
-      <RCLink
-        href={`${BASE_URL}/hold/request/${item.bibId}-${item.id}`}
-        type="buttonSecondary"
-      >
-        Request for On-site Use
-      </RCLink>
-      <RCLink href="test2" type="buttonSecondary">
-        Request Scan
-      </RCLink>
+      {item.aeonUrl ? (
+        <RCLink
+          href={item.aeonUrl}
+          type="buttonSecondary"
+          // onClick={TODO: Add ifAvailableHandler handler}
+          disabled={!item.isAvailable}
+        >
+          Request Appointment
+        </RCLink>
+      ) : (
+        <>
+          {item.isPhysicallyRequestable && (
+            <RCLink
+              href={`/hold/request/${item.bibId}-${
+                item.id
+              }?searchKeywords=${"TODO"}`}
+              type="buttonSecondary"
+              // onClick={TODO: Add ifAvailableHandler handler}
+              disabled={!item.isAvailable}
+            >
+              Request for On-site Use
+            </RCLink>
+          )}
+          {item.isEDDRequestable && (
+            <RCLink
+              href={`/hold/request/${item.bibId}-${
+                item.id
+              }/edd?searchKeywords=${"TODO"}`}
+              type="buttonSecondary"
+              // onClick={TODO: Add ifAvailableHandler handler}
+              disabled={!item.isAvailable}
+            >
+              Request Scan
+            </RCLink>
+          )}
+        </>
+      )}
     </Box>
   )
 }
