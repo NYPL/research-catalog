@@ -38,17 +38,13 @@ const InformationLinks = ({ item }: InformationLinksProps) => {
       )
     } else {
       // Available Onsite item
-      const locationShort = item.location.prefLabel.split("-")[0]
+      console.log(item.location)
       return (
         <Text>
           <span className="available-text">Available </span>
           {"- Can be used on site. Please visit "}
-          <Link
-            href={"https://www.nypl.org/locations/" + item.location.endpoint}
-            target="_blank"
-          >
-            {"New York Public Library - "}
-            {locationShort}
+          <Link href={"/"} target="_blank">
+            {`New York Public Library - ${item.location.prefLabel}`}
           </Link>
           {" to submit a request in person."}
         </Text>
