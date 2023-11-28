@@ -31,11 +31,11 @@ interface ItemFilterContainerProps {
 
 const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
   const router = useRouter()
-  const { isLargerThanMedium } = useNYPLBreakpoints()
-  const filterGroupClassName = isLargerThanMedium
+  const { isLargerThanLarge, isLargerThanMedium } = useNYPLBreakpoints()
+  const filterGroupClassName = isLargerThanLarge
     ? styles.filterGroup
     : styles.filterGroupMobile
-
+  console.log(filterGroupClassName)
   const filterData = useRef(
     itemAggs.map((agg: ItemAggregation) => {
       if (agg.field === "location") return new LocationFilterData(agg)
@@ -79,13 +79,25 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
 
   return (
     <>
-      <Box className={styles.filtersContainer} sx={{ display: "flex" }}>
+      <Box
+        className={styles.filtersContainer}
+        sx={{
+          display: "flex",
+          flexDirection: isLargerThanMedium ? "row" : "column",
+        }}
+      >
         <Card className={filterGroupClassName} ref={ref}>
           <CardHeading level="h3" size="body2">
             Filter by
           </CardHeading>
           <CardContent>
-            <SimpleGrid gap="nypl-s">
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: isLargerThanLarge ? "row" : "column",
+              }}
+              gap="nypl-s"
+            >
               {filterData.map((field: ItemFilterData) => (
                 <ItemFilter
                   isOpen={whichFilterIsOpen === field.field}
@@ -96,7 +108,7 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
                   submitFilters={submitFilters}
                 />
               ))}
-            </SimpleGrid>
+            </Box>
           </CardContent>
         </Card>
         <Card className={filterGroupClassName}>
@@ -113,7 +125,7 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
               id="year-filter"
               labelText="Apply"
               textInputProps={{
-                defaultValue: "Horizon",
+                defaultValue: "YYYY",
                 isClearable: true,
                 labelText: "Item Search",
                 name: "textInputName",

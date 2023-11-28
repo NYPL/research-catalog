@@ -2,8 +2,6 @@
 
 // The gray box that holds the filter groups
 .filtersContainer {
-  display: flex;
-  flex-wrap: wrap;
   background-color: var(--nypl-colors-ui-gray-x-light-cool);
   padding: 16px;
   min-height: 128px;
@@ -15,11 +13,11 @@
 // there are the aggregation filters and the search by year filter
 .filterGroupMobile {
   flex-grow: 1;
-  & .itemFilterOptionsContainer {
+  .itemFilterOptionsContainer {
     position: relative;
     width: inherit;
   }
-  & .itemFilter {
+  .itemFilter {
     margin-right: 0px;
   }
 }
