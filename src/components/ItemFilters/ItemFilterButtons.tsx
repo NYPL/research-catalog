@@ -1,6 +1,5 @@
 import { ButtonGroup, Button } from "@nypl/design-system-react-components"
 import type { Dispatch } from "react"
-import { useEffect } from "react"
 
 import type { Option } from "../../../src/types/filterTypes"
 

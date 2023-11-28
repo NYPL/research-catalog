@@ -4,7 +4,6 @@ import React from "react"
 import {
   Box,
   Heading,
-  Text,
   useCloseDropDown,
 } from "@nypl/design-system-react-components"
 
