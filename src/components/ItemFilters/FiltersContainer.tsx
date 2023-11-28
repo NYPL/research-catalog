@@ -25,16 +25,20 @@ interface ItemFilterContainerProps {
 
 const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
   const router = useRouter()
+
   const filterData = useRef(
     itemAggs.map((agg: ItemAggregation) => {
       if (agg.field === "location") return new LocationFilterData(agg)
       else return new ItemFilterData(agg)
     })
   ).current
-  const parsedParams = parseItemFilterQueryParams(router.query)
-  const [appliedFilters, setAppliedFilters] = useState(parsedParams)
+
+  const appliedFilters = useMemo(() => {
+    return parseItemFilterQueryParams(router.query)
+  }, [router.query])
+
   const appliedFiltersDisplay = buildAppliedFiltersString(
-    parsedParams,
+    appliedFilters,
     filterData
   )
   const ref = useRef<HTMLDivElement>(null)
@@ -42,7 +46,7 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
 
   const [whichFilterIsOpen, setWhichFilterIsOpen] = useState("")
 
-  const [itemsMatched] = useState(buildItemsString(router.query))
+  const itemsMatched = buildItemsString(router.query)
 
   const submitFilters = (selection: string[], field: string) => {
     const newFilters = { ...appliedFilters, [field]: selection }
@@ -55,11 +59,6 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
     )
     router.push("/search/advanced" + url)
   }
-
-  useMemo(() => {
-    const parsedParams = parseItemFilterQueryParams(router.query)
-    setAppliedFilters(parsedParams)
-  }, [router.query])
 
   return (
     <Box className={styles.filtersContainer}>
