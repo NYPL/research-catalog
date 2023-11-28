@@ -13,7 +13,7 @@ interface RequestButtonsProps {
  */
 const RequestButtons = ({ item }: RequestButtonsProps) => {
   return (
-    <Box __css={{ a: { marginRight: "xs", marginBottom: "xs" } }} mb="xs">
+    <Box sx={{ a: { marginRight: "xs", marginBottom: "xs" } }} mb="xs">
       <RCLink
         href={`${BASE_URL}/hold/request/${item.bibId}-${item.id}`}
         type="buttonSecondary"

@@ -45,19 +45,19 @@ const SearchResult = ({ bib }: SearchResultProps) => {
         <RCLink href={`${PATHS.BIB}/${bib.id}`}>{bib.title}</RCLink>
       </CardHeading>
       <CardContent>
-        <Box sx={{ p: { display: "inline", marginRight: "s" } }}>
+        <Box sx={{ p: { display: "inline", marginRight: "s" } }} mb="m">
           {bib.materialType && <Text>{bib.materialType}</Text>}
           {bib.publicationStatement && <Text>{bib.publicationStatement}</Text>}
           {bib.yearPublished && <Text>{bib.yearPublished}</Text>}
           <Text>{bib.itemMessage}</Text>
-          {searchResultItems &&
-            searchResultItems.map((itemTableData) => (
-              <ItemTable
-                itemTableData={itemTableData}
-                key={`search-results-item-${itemTableData.items[0].id}`}
-              />
-            ))}
         </Box>
+        {searchResultItems &&
+          searchResultItems.map((itemTableData) => (
+            <ItemTable
+              itemTableData={itemTableData}
+              key={`search-results-item-${itemTableData.items[0].id}`}
+            />
+          ))}
       </CardContent>
     </Card>
   )
