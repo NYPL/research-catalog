@@ -1,7 +1,8 @@
 import { Table } from "@nypl/design-system-react-components"
 
-import RequestButtons from "./RequestButtons"
 import type ItemTableData from "../../models/ItemTableData"
+import RequestButtons from "./RequestButtons"
+import InformationLinks from "./InformationLinks"
 
 interface ItemTableProps {
   itemTableData: ItemTableData
@@ -28,7 +29,10 @@ const ItemTable = ({ itemTableData }: ItemTableProps) => {
         }}
       />
       {!itemTableData.isBibPage && (
-        <RequestButtons item={itemTableData.items[0]} />
+        <>
+          <RequestButtons item={itemTableData.items[0]} />
+          <InformationLinks item={itemTableData.items[0]} />
+        </>
       )}
     </>
   )

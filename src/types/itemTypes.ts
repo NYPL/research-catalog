@@ -29,6 +29,7 @@ export interface ItemSourceID {
 export interface ItemLocation extends JSONLDValue {
   customerCode?: string
   prefLabel?: string
+  url?: string
   endpoint?: ItemLocationEndpoint
 }
 
