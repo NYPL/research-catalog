@@ -1,7 +1,6 @@
 import { Box } from "@nypl/design-system-react-components"
 import RCLink from "../RCLink/RCLink"
 
-import { BASE_URL } from "../../config/constants"
 import type Item from "../../models/Item"
 
 interface RequestButtonsProps {
