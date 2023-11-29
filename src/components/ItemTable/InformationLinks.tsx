@@ -1,4 +1,4 @@
-import { Text, Link } from "@nypl/design-system-react-components"
+import { Text, Link, Button } from "@nypl/design-system-react-components"
 
 import type Item from "../../models/Item"
 
@@ -19,17 +19,24 @@ const InformationLinks = ({ item }: InformationLinksProps) => {
           href="https://www.nypl.org/help/request-research-materials"
           target="_blank"
         >
-          How do I pick up this item and when will it be ready?
+          <Text size="body2">
+            How do I pick up this item and when will it be ready?
+          </Text>
         </Link>
       )
-    } else if (item.aeonUrl && item.location?.url) {
+    } else if (item.aeonUrl && item.location?.endpoint) {
       return (
         <Text>
-          <span className="available-text">Available by appointment</span>
+          <Text color="ui.success.primary" sx={{ display: "inline" }}>
+            Available by appointment
+          </Text>
           {!item.isReCAP ? (
             <>
-              <span> at </span>
-              <Link href={item.location.url} target="_blank">
+              {" at "}
+              <Link
+                href={`https://www.nypl.org/locations/${item.location.endpoint}`}
+                target="_blank"
+              >
                 {item.location.prefLabel}
               </Link>
             </>
@@ -38,20 +45,46 @@ const InformationLinks = ({ item }: InformationLinksProps) => {
       )
     } else {
       // Available Onsite item
-      console.log(item.location)
+      const locationShort = item.location.prefLabel.split("-")[0]
       return (
         <Text>
-          <span className="available-text">Available </span>
-          {"- Can be used on site. Please visit "}
-          <Link href={"/"} target="_blank">
-            {`New York Public Library - ${item.location.prefLabel}`}
+          <Text color="ui.success.primary" sx={{ display: "inline" }}>
+            Available
+          </Text>
+          {" - Can be used on site. Please visit "}
+          <Link
+            href={`https://www.nypl.org/locations/${item.location.endpoint}`}
+            target="_blank"
+          >
+            {`New York Public Library - ${locationShort}`}
           </Link>
           {" to submit a request in person."}
         </Text>
       )
     }
   } else {
-    return <></>
+    // Not available
+    return (
+      <Text>
+        <Text color="ui.warning.primary" sx={{ display: "inline" }}>
+          Not available
+        </Text>
+        {item.dueDate && ` - In use until ${item.dueDate}`}
+        {" - Please "}
+        <Button
+          id="contact-librarian"
+          buttonType="link"
+          sx={{ display: "inline", fontWeight: "inherit" }}
+          size="large"
+          onClick={() => {
+            console.log("TODO: Trigger Feedback box")
+          }}
+        >
+          contact a librarian
+        </Button>
+        {" for assistance."}
+      </Text>
+    )
   }
 }
 

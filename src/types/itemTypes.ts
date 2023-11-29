@@ -12,6 +12,7 @@ export interface SearchResultsItem {
   idBarcode?: string[]
   holdingLocation?: ItemLocation[]
   aeonUrl?: string[]
+  dueDate?: string[]
   physRequestable?: boolean
   eddRequestable?: boolean
 }
@@ -29,7 +30,6 @@ export interface ItemSourceID {
 export interface ItemLocation extends JSONLDValue {
   customerCode?: string
   prefLabel?: string
-  url?: string
   endpoint?: ItemLocationEndpoint
 }
 

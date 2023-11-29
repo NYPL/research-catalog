@@ -30,6 +30,7 @@ export default class Item {
   barcode?: string
   location?: ItemLocation
   aeonUrl?: string
+  dueDate?: string
   isPhysicallyRequestable: boolean
   isEDDRequestable: boolean
 
@@ -51,6 +52,7 @@ export default class Item {
     this.barcode = item.idBarcode?.length ? item.idBarcode[0] : null
     this.location = this.getLocationFromItem(item)
     this.aeonUrl = item.aeonUrl?.length ? item.aeonUrl[0] : null
+    this.dueDate = item.dueDate?.length ? item.dueDate[0] : null
     this.isPhysicallyRequestable = item.physRequestable
     this.isEDDRequestable = item.eddRequestable
   }
