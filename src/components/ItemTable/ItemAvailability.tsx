@@ -12,6 +12,8 @@ interface ItemAvailabilityProps {
  * TODO: Add Feedback box, Due date, Available font styles
  */
 const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
+  // TODO: Move this logic into a getter function in the Item class that returns an availability status key
+  // and replace this nested If with a simple switch statement
   if (item.isAvailable) {
     if (item.isReCAP && !item.aeonUrl) {
       // Available ReCAP item

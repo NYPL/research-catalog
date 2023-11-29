@@ -24,7 +24,11 @@ export default class ItemTableData {
     this.isBibPage = itemTableParams.isBibPage
     this.isArchiveCollection = itemTableParams.isArchiveCollection
   }
-
+  /**
+   * TODO: Consolidate tableHeadings and tableData into a single object to avoid relying on consistent ordering between the two.
+   * Add getter functions to build the array structures expected by the tableHeadings and tableData props
+   * Extra credit: Create separate prop constructors for Bib page and Search Results to deprecate the excessive showColumn helpers.
+   */
   get tableHeadings(): string[] {
     return [
       ...(this.showStatusColumn() ? ["Status"] : []),
