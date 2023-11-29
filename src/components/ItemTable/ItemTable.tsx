@@ -18,15 +18,17 @@ const ItemTable = ({ itemTableData }: ItemTableProps) => {
         columnHeaders={itemTableData.tableHeadings}
         tableData={itemTableData.tableData}
         mb="s"
-        sx={{
-          tableLayout: "fixed",
-          width: "full",
-          tr: { border: "0 !important", padding: 0 },
-          "th, td, th > span, td > span": {
-            paddingTop: "xs",
-            paddingBottom: "xs",
-          },
-        }}
+        // TODO: These styles approximate those of the old app.
+        // Design will VQA the component with the DS defaults, but leaving this for reference.
+        // sx={{
+        //   tableLayout: "fixed",
+        //   width: "full",
+        //   tr: { border: "0 !important", padding: 0 },
+        //   "th, td, th > span, td > span": {
+        //     paddingTop: "xs",
+        //     paddingBottom: "xs",
+        //   },
+        // }}
       />
       {!itemTableData.isBibPage && (
         <Box mb="s">
