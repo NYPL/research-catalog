@@ -2,6 +2,7 @@ import { useMemo, useRef, useState } from "react"
 import { useRouter } from "next/router"
 import React from "react"
 import {
+  Text,
   Card,
   SearchBar,
   Box,
@@ -44,7 +45,7 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
   const appliedFilters = useMemo(() => {
     return parseItemFilterQueryParams(router.query)
   }, [router.query])
-  
+
   const appliedFiltersDisplay = buildAppliedFiltersString(
     appliedFilters,
     filterData
