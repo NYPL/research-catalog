@@ -1,4 +1,4 @@
-import { mapLocations } from "../utils/itemUtils"
+import { parseLocations } from "../utils/itemUtils"
 
 export const appConfig = {
   environment: process.env.APP_ENV || "production",
@@ -48,7 +48,11 @@ export const appConfig = {
     legacyCatalog: "https://legacycatalog.nypl.org/",
   },
   tokenUrl: "https://isso.nypl.org/",
-  closedLocations: mapLocations(process.env.CLOSED_LOCATIONS),
-  recapClosedLocations: mapLocations(process.env.RECAP_CLOSED_LOCATIONS),
-  nonRecapClosedLocations: mapLocations(process.env.NON_RECAP_CLOSED_LOCATIONS),
+  closedLocations: parseLocations(process.env.NEXT_PUBLIC_CLOSED_LOCATIONS),
+  recapClosedLocations: parseLocations(
+    process.env.NEXT_PUBLIC_RECAP_CLOSED_LOCATIONS
+  ),
+  nonRecapClosedLocations: parseLocations(
+    process.env.NEXT_PUBLIC_NON_RECAP_CLOSED_LOCATIONS
+  ),
 }

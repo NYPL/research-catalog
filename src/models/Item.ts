@@ -72,7 +72,7 @@ export default class Item {
 
     return closedLocations
       .concat(this.isReCAP ? recapClosedLocations : nonRecapClosedLocations)
-      .includes("")
+      .includes("all")
   }
 
   // Pre-processing logic for setting Item holding location

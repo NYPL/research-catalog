@@ -12,6 +12,7 @@ interface RequestButtonsProps {
  * TODO: Pass search keywords to links
  */
 const RequestButtons = ({ item }: RequestButtonsProps) => {
+  if (item.allLocationsClosed) return null
   return (
     <Box sx={{ a: { marginRight: "xs", marginBottom: "xs" } }} mb="s">
       {item.aeonUrl ? (
