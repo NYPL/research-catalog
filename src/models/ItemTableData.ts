@@ -11,6 +11,8 @@ import RequestButtons from "../components/ItemTable/RequestButtons"
  * It factors in additional contextual parameters including whether we're seeing
  * the table in a Search Result or a Bib page, and whether we're on a Desktop
  * or Mobile breakpoint.
+ *
+ * TODO: Remove this class and move functionality to Bib class
  */
 export default class ItemTableData {
   items: Item[]
