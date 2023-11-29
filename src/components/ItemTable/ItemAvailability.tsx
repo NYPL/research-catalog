@@ -1,4 +1,4 @@
-import { Text, Link, Button } from "@nypl/design-system-react-components"
+import { Text, Link, Button, Box } from "@nypl/design-system-react-components"
 
 import type Item from "../../models/Item"
 
@@ -19,18 +19,17 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
         <Link
           href="https://www.nypl.org/help/request-research-materials"
           target="_blank"
+          fontSize="sm"
         >
-          <Text size="body2">
-            How do I pick up this item and when will it be ready?
-          </Text>
+          How do I pick up this item and when will it be ready?
         </Link>
       )
     } else if (item.aeonUrl && item.location?.endpoint) {
       return (
         <Text>
-          <Text color="ui.success.primary" sx={{ display: "inline" }}>
+          <Box as="span" color="ui.success.primary">
             Available by appointment
-          </Text>
+          </Box>
           {!item.isReCAP ? (
             <>
               {" at "}
@@ -49,9 +48,9 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
       const locationShort = item.location.prefLabel.split("-")[0]
       return (
         <Text>
-          <Text color="ui.success.primary" sx={{ display: "inline" }}>
+          <Box as="span" color="ui.success.primary">
             Available
-          </Text>
+          </Box>
           {" - Can be used on site. Please visit "}
           <Link
             href={`https://www.nypl.org/locations/${item.location.endpoint}`}
@@ -67,16 +66,15 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
     // Not available
     return (
       <Text>
-        <Text color="ui.warning.primary" sx={{ display: "inline" }}>
+        <Box as="span" color="ui.warning.primary">
           Not available
-        </Text>
+        </Box>
         {item.dueDate && ` - In use until ${item.dueDate}`}
         {" - Please "}
         <Button
           id="contact-librarian"
           buttonType="link"
-          sx={{ display: "inline", fontWeight: "inherit" }}
-          size="large"
+          sx={{ display: "inline", fontWeight: "inherit", fontSize: "inherit" }}
           onClick={() => {
             console.log("TODO: Trigger Feedback box")
           }}
