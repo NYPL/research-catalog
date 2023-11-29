@@ -14,7 +14,7 @@ import ItemFilter from "./ItemFilter"
 import {
   buildAppliedFiltersString,
   buildItemFilterQueryString,
-  buildItemsString,
+  buildItemsMatchedStringString,
   parseItemFilterQueryParams,
 } from "../../utils/itemFilterUtils"
 
@@ -25,7 +25,7 @@ interface ItemFilterContainerProps {
 const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
   const router = useRouter()
 
-  const filterData = useRef(
+  const filterData = useRef<ItemFilterData[]>(
     itemAggs.map((agg: ItemAggregation) => {
       if (agg.field === "location") return new LocationFilterData(agg)
       else return new ItemFilterData(agg)
@@ -45,7 +45,7 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
 
   const [whichFilterIsOpen, setWhichFilterIsOpen] = useState("")
 
-  const itemsMatched = buildItemsString(router.query)
+  const itemsMatched = buildItemsMatchedStringString(router.query)
 
   const submitFilters = (selection: string[], field: string) => {
     const newFilters = { ...appliedFilters, [field]: selection }

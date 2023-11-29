@@ -51,7 +51,9 @@ export const buildItemFilterQueryString = (
   else return ""
 }
 
-export const buildItemsString = (query, numItems = 20) => {
+// numItems default is for development purposes only. Once data is being
+// passed in to the Item Filters components, this default should be removed.
+export const buildItemsMatchedStringString = (query, numItems = 20) => {
   const items = `Item${numItems === 1 ? "" : "s"}`
   if (Object.keys(query).length === 0) return `${numItems} ${items}`
   const num = numItems === 0 ? "No" : numItems
