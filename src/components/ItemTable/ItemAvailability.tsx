@@ -2,15 +2,16 @@ import { Text, Link, Button } from "@nypl/design-system-react-components"
 
 import type Item from "../../models/Item"
 
-interface InformationLinksProps {
+interface ItemAvailabilityProps {
   item: Item
 }
 
 /**
- * The InformationLinks component appears in the Item Table
+ * The ItemAvailability component appears below the Item table and displays
+ * info about an item's availability.
  * TODO: Add Feedback box, Due date, Available font styles
  */
-const InformationLinks = ({ item }: InformationLinksProps) => {
+const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
   if (item.isAvailable) {
     if (item.isReCAP && !item.aeonUrl) {
       // Available ReCAP item
@@ -88,4 +89,4 @@ const InformationLinks = ({ item }: InformationLinksProps) => {
   }
 }
 
-export default InformationLinks
+export default ItemAvailability
