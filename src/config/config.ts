@@ -46,6 +46,9 @@ export const appConfig = {
       "https://digital-research-books-beta.nypl.org/about?source=catalog",
     circulatingCatalog: "https://nypl.na2.iiivega.com/",
     legacyCatalog: "https://legacycatalog.nypl.org/",
+    locations: "https://www.nypl.org/locations/",
+    researchMaterialsHelp:
+      "https://www.nypl.org/help/request-research-materials",
   },
   tokenUrl: "https://isso.nypl.org/",
   closedLocations: parseLocations(process.env.NEXT_PUBLIC_CLOSED_LOCATIONS),

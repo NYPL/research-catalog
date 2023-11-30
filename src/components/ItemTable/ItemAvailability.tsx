@@ -1,5 +1,6 @@
 import { Text, Link, Button, Box } from "@nypl/design-system-react-components"
 
+import { appConfig } from "../../config/config"
 import type Item from "../../models/Item"
 
 interface ItemAvailabilityProps {
@@ -19,7 +20,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
       // Available ReCAP item
       return (
         <Link
-          href="https://www.nypl.org/help/request-research-materials"
+          href={appConfig.externalUrls.researchMaterialsHelp}
           target="_blank"
           fontSize="sm"
         >
@@ -36,7 +37,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
             <>
               {" at "}
               <Link
-                href={`https://www.nypl.org/locations/${item.location.endpoint}`}
+                href={`${appConfig.externalUrls.locations}${item.location.endpoint}`}
                 target="_blank"
               >
                 {item.location.prefLabel}
@@ -55,7 +56,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
           </Box>
           {" - Can be used on site. Please visit "}
           <Link
-            href={`https://www.nypl.org/locations/${item.location.endpoint}`}
+            href={`${appConfig.externalUrls.locations}${item.location.endpoint}`}
             target="_blank"
           >
             {`New York Public Library - ${locationShort}`}
