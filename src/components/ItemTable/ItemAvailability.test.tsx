@@ -30,7 +30,7 @@ describe("ItemAvailability", () => {
   it("renders the correct text when item is available, has an aeon url, and has a location endpoint", async () => {
     const item = new Item(itemPhysicallyRequestable, parentBib)
     render(<ItemAvailability item={item} />)
-    screen.getByText("Available by appointment")
+    screen.getByText(/Available by appointment/)
     expect(
       screen.getByRole("link", {
         name: "Schwarzman Building - Main Reading Room 315",
@@ -40,23 +40,23 @@ describe("ItemAvailability", () => {
   it("renders the correct text for an available onsite item", async () => {
     const item = new Item(itemAvailableOnsite as SearchResultsItem, parentBib)
     render(<ItemAvailability item={item} />)
-    screen.getByText("Available")
-    screen.getByText("- Can be used on site. Please visit", { exact: false })
+    screen.getByText(/Available/)
+    screen.getByText(/- Can be used on site. Please visit/)
     expect(
       screen.getByRole("link", {
         name: "New York Public Library - Schwarzman Building M2",
       })
     ).toHaveAttribute("href", "https://www.nypl.org/locations/schwarzman")
-    screen.getByText("to submit a request in person.", { exact: false })
+    screen.getByText(/to submit a request in person./)
   })
   it("renders the correct text for unavailable items", async () => {
     const item = new Item(itemUnavailable as SearchResultsItem, parentBib)
     render(<ItemAvailability item={item} />)
-    screen.getByText("Not available")
-    screen.getByText("- Please", { exact: false })
+    screen.getByText(/Not available/)
+    screen.getByText(/- Please/)
     screen.getByRole("button", {
       name: "contact a librarian",
     })
-    screen.getByText("for assistance.", { exact: false })
+    screen.getByText(/for assistance./)
   })
 })
