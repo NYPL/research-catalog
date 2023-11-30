@@ -281,3 +281,57 @@ export const itemNYPLReCAP = {
     "@value": "10572546",
   },
 }
+
+export const itemAvailableOnsite = {
+  "@id": "res:i14119377",
+  "@type": ["bf:Item"],
+  accessMessage: [
+    {
+      "@id": "accessMessage:1",
+      prefLabel: "Use in library",
+    },
+  ],
+  catalogItemType: [
+    {
+      "@id": "catalogItemType:55",
+      prefLabel: "book, limited circ, MaRLI",
+    },
+  ],
+  eddRequestable: true,
+  formatLiteral: ["Text"],
+  holdingLocation: [
+    {
+      "@id": "loc:mal92",
+      prefLabel: "Schwarzman Building M2 - General Research Room 315",
+      endpoint: "schwarzman",
+    },
+  ],
+  idBarcode: ["33433048828085"],
+  identifier: [
+    {
+      "@type": "bf:ShelfMark",
+      "@value": "JFE 93-253",
+    },
+    {
+      "@type": "bf:Barcode",
+      "@value": "33433048828085",
+    },
+  ],
+  m2CustomerCode: ["XF"],
+  physRequestable: true,
+  physicalLocation: ["JFE 93-253"],
+  requestable: [true],
+  shelfMark: ["JFE 93-253"],
+  specRequestable: false,
+  status: [
+    {
+      "@id": "status:a",
+      prefLabel: "Available",
+    },
+  ],
+  uri: "i14119377",
+  idNyplSourceId: {
+    "@type": "SierraNypl",
+    "@value": "14119377",
+  },
+}
