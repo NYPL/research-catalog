@@ -24,6 +24,7 @@ const SearchResult = ({ bib }: SearchResultProps) => {
   const { isLargerThanLarge: isDesktop } = useNYPLBreakpoints()
 
   // On Search Results, a separate ItemTable is constructed for each item up to the limit set in ITEMS_PER_SEARCH_RESULT.
+  // TODO: Move this preprocessing to SearchResultsBib model
   const searchResultItems: ItemTableData[] =
     bib.hasItems &&
     bib.items.slice(0, ITEMS_PER_SEARCH_RESULT).map((item) => {
