@@ -3,7 +3,6 @@ import { render, screen } from "@testing-library/react"
 import ItemAvailability from "./ItemAvailability"
 import Item from "../../models/Item"
 import SearchResultsBib from "../../models/SearchResultsBib"
-import type { SearchResultsItem } from "../../types/itemTypes"
 import {
   itemNYPLReCAP,
   itemPhysicallyRequestable,
@@ -38,7 +37,7 @@ describe("ItemAvailability", () => {
     ).toHaveAttribute("href", "https://www.nypl.org/locations/schwarzman")
   })
   it("renders the correct text for an available onsite item", async () => {
-    const item = new Item(itemAvailableOnsite as SearchResultsItem, parentBib)
+    const item = new Item(itemAvailableOnsite, parentBib)
     render(<ItemAvailability item={item} />)
     screen.getByText(/Available/)
     screen.getByText(/- Can be used on site. Please visit/)
@@ -50,7 +49,7 @@ describe("ItemAvailability", () => {
     screen.getByText(/to submit a request in person./)
   })
   it("renders the correct text for unavailable items", async () => {
-    const item = new Item(itemUnavailable as SearchResultsItem, parentBib)
+    const item = new Item(itemUnavailable, parentBib)
     render(<ItemAvailability item={item} />)
     screen.getByText(/Not available/)
     screen.getByText(/- Please/)

@@ -1,3 +1,5 @@
+import type { ItemLocationEndpoint } from "../../src/types/itemTypes"
+
 export const itemPhysicallyRequestable = {
   "@id": "res:i10572545",
   "@type": ["bf:Item"],
@@ -304,7 +306,7 @@ export const itemAvailableOnsite = {
     {
       "@id": "loc:mal92",
       prefLabel: "Schwarzman Building M2 - General Research Room 315",
-      endpoint: "schwarzman",
+      endpoint: "schwarzman" as ItemLocationEndpoint,
     },
   ],
   idBarcode: ["33433048828085"],
