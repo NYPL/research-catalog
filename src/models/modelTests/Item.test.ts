@@ -54,6 +54,10 @@ describe("Item model", () => {
       expect(item.barcode).toBe("33433090622188")
     })
 
+    it("initializes the Item's due date", () => {
+      expect(item.dueDate).toBe("September 3rd")
+    })
+
     it("initializes the Item's location", () => {
       expect(item.location).toStrictEqual({
         "@id": "loc:mal82",
