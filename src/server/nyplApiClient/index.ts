@@ -72,4 +72,10 @@ const nyplApiClient = async (options = { apiName: "platform" }) => {
   })
 }
 
+export const nyplApiClientGet = endpoint =>
+  nyplApiClient().then(client => client.get(endpoint, { cache: false }))
+
+export const nyplApiClientPost = (endpoint, opts) =>
+  nyplApiClient().then(client => client.post(endpoint, opts))
+
 export default nyplApiClient
