@@ -1,94 +1,77 @@
 import type { NextApiRequest, NextApiResponse } from "next"
+
 import User from "../../../../src/utils/userUtils"
 import { appConfig } from "../../../../src/config/config"
 import { postHoldAPI } from "../../../../src/utils/holdUtils"
 
 /**
- * createHoldRequestServer(req, res, pickedUpBibId = '', pickedUpItemId = '')
+ * createHoldRequest(req, res)
  * The function to make a server side hold request call.
- *
- * @param {req}
- * @param {res}
- * @param {string} pickedUpBibId
- * @param {string} pickedUpItemId
- * @return {function}
  */
-function createHoldRequestServer(
-  req,
-  res,
-  pickedUpBibId = "",
-  pickedUpItemId = ""
-) {
-  res.respond = req.body.serverRedirect === "false" ? res.json : res.redirect
+async function createHoldRequest(req, res) {
   // Ensure user is logged in
-  const requireUser = User.requireUser(req, res)
-  const { redirect } = requireUser
-  if (redirect) return res.json({ redirect: true })
+  const { redirect } = User.requireUser(req, res)
+  if (redirect) return res.redirect(`${appConfig.baseUrl}/404`)
 
-  // NOTE: pickedUpItemId and pickedUpBibId are coming from the EDD form function below:
-  const itemId = req.params.itemId || pickedUpItemId
-  const bibId = req.params.bibId || pickedUpBibId
-  const itemSource = req.params.itemSource || ""
+  const paramString = req.query["bibId-itemId-itemSource"] || ""
+  const [itemId, bibId, itemSource] = paramString.split("-")
+
+  const patronId = req.patronTokenResponse?.decodedPatron?.sub
+
   const pickupLocation = req.body["delivery-location"]
-  const docDeliveryData =
-    req.body.form && pickupLocation === "edd" ? req.body.form : null
+  const docDeliveryData = req.body.form
   const searchKeywordsQuery = req.body["search-keywords"]
     ? `&q=${req.body["search-keywords"]}`
     : ""
 
   if (!bibId || !itemId) {
     // Dummy redirect for now
-    return res.respond(`${appConfig.baseUrl}/someErrorPage`)
+    return res.redirect(`${appConfig.baseUrl}/404`)
   }
 
-  if (pickupLocation === "edd") {
-    const eddSearchKeywordsQuery = req.body["search-keywords"]
-      ? `?q=${req.body["search-keywords"]}`
-      : ""
+  try {
+    const holdData = await postHoldAPI({
+      patronId,
+      itemId,
+      pickupLocation,
+      docDeliveryData,
+      itemSource,
+    })
 
-    return res.respond(
-      `${appConfig.baseUrl}/hold/request/${bibId}-${itemId}/edd${eddSearchKeywordsQuery}`
+    if (holdData.statusCode === 200) {
+      res.redirect(
+        `${appConfig.baseUrl}/hold/confirmation/${bibId}-${itemId}?pickupLocation=` +
+          `${pickupLocation}&requestId=${holdData.data.id}${searchKeywordsQuery}`
+      )
+    } else if (holdData.statusCode === 400) {
+      // TODO make better error handling
+      throw Error("Bad API call")
+    }
+  } catch (error) {
+    // logger.error(
+    //   `Error calling postHoldAPI in createHoldRequest,
+    // bibId: {bibId}, itemId: ${itemId}`,
+    //   error.data.message
+    // )
+    const errorStatus = error.status ? `&errorStatus=${error.status}` : ""
+    const errorMessage =
+      error.statusText || searchKeywordsQuery
+        ? `&errorMessage=${error.statusText}${searchKeywordsQuery}`
+        : ""
+    // Perhaps don't redirect if there is an API error call...
+    res.redirect(
+      `${appConfig.baseUrl}/hold/confirmation/${bibId}-${itemId}?pickupLocation=` +
+        `${pickupLocation}${errorStatus}${errorMessage}`
     )
   }
-
-  return postHoldAPI(
-    req,
-    itemId,
-    pickupLocation,
-    docDeliveryData,
-    itemSource,
-    (response) => {
-      const data = response.data
-      res.respond(
-        `${appConfig.baseUrl}/hold/confirmation/${bibId}-${itemId}?pickupLocation=` +
-          `${pickupLocation}&requestId=${data.id}${searchKeywordsQuery}`
-      )
-    },
-    (error) => {
-      // logger.error(
-      //   `Error calling postHoldAPI in createHoldRequestServer, bibId: {bibId}, itemId: ${itemId}`,
-      //   error.data.message
-      // )
-      console.log({ error })
-      const errorStatus = error.status ? `&errorStatus=${error.status}` : ""
-      const errorMessage =
-        error.statusText || searchKeywordsQuery
-          ? `&errorMessage=${error.statusText}${searchKeywordsQuery}`
-          : ""
-      res.respond(
-        `${appConfig.baseUrl}/hold/confirmation/${bibId}-${itemId}?pickupLocation=` +
-          `${pickupLocation}${errorStatus}${errorMessage}`
-      )
-    }
-  )
 }
 
 /**
- * Default API route handler for ResearchNow DRB
- * Expects the same query parameters as the Search endpoint
+ * Default API route handler for Hold Request API
  */
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "GET") {
+    await createHoldRequest(req, res)
     res.status(200).json(req.query)
   }
 }

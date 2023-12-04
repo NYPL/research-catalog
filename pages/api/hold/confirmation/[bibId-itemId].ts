@@ -1,58 +1,46 @@
 import type { NextApiRequest, NextApiResponse } from "next"
+
 import User from "../../../../src/utils/userUtils"
-import { extend } from "underscore"
 import { nyplApiClientGet } from "../../../../src/server/nyplApiClient"
 import { appConfig } from "../../../../src/config/config"
-
-const extractFeatures = (featuresString) => {
-  if (typeof featuresString !== "string") return []
-  return featuresString.split(",").reduce((features, feature) => {
-    if (feature.length) features.push(feature.trim())
-    return features
-  }, [])
-}
+import { extractFeatures } from "../../../../src/utils/appUtils"
+import { fetchBib } from "../../../../src/utils/bibUtils"
 
 /**
- * confirmRequestServer(req, res, next)
- * The function to return the bib and item data with its delivery locations to confirmation page.
+ * confirmRequest(req, res, next)
+ * The function to return the bib and item data with its delivery locations
+ * to confirmation page.
  *
  * @param {req}
  * @param {res}
- * @param {next}
- * @return {function}
  */
-function confirmRequestServer(req, res, next) {
-  const bibId = req.params.bibId || ""
-  const requireUser = User.requireUser(req, res)
-  const { redirect } = requireUser
+async function confirmRequest(req, res) {
+  const { redirect } = User.requireUser(req, res)
   if (redirect) return false
-  const requestId = req.query.requestId || ""
-  const searchKeywords = req.query.q || ""
-  const errorStatus = req.query.errorStatus ? req.query.errorStatus : null
-  const errorMessage = req.query.errorMessage ? req.query.errorMessage : null
-  const error = extend({}, { errorStatus, errorMessage })
-  const { features } = req.query
+
+  const { bibId = "", itemId } = req.params
+  const {
+    requestId,
+    q: searchKeywords,
+    features,
+    errorStatus,
+    errorMessage,
+  } = req.query
+  const error = { ...errorStatus, ...errorMessage }
   const urlEnabledFeatures = extractFeatures(features)
 
-  const { dispatch } = req.store
+  // This use to call a redux dispatch to update the local server store
+  // with the request and error object. We no longer need to do this and
+  // need to a better way to handle this.
   if (!requestId) {
-    // TODO
-    // dispatch(
-    //   updateHoldRequestPage({
-    //     bib: {},
-    //     searchKeywords,
-    //     error,
-    //     deliveryLocations: [],
-    //   })
-    // )
-    next()
     return false
   }
 
-  const patronId = req.patronTokenResponse.decodedPatron.sub || ""
+  const patronId = req.patronTokenResponse?.decodedPatron?.sub
   let barcode
 
-  return nyplApiClientGet(`/hold-requests/${requestId}`).then((response) => {
+  try {
+    const response = await nyplApiClientGet(`/hold-requests/${requestId}`)
     const patronIdFromHoldRequest = response.data.patron
 
     // The patron who is seeing the confirmation did not make the Hold Request
@@ -60,15 +48,20 @@ function confirmRequestServer(req, res, next) {
       res.status(404).redirect(`${appConfig.baseUrl}/404`)
       return false
     }
-    return true
-  })
+  } catch (error) {
+    console.log("Error retrieving hold request information")
+  }
 
   // Retrieve item
-  //   return Bib.fetchBib(
-  //     bibId,
-  //     (bibResponseData) => {
-  //       const { bib } = bibResponseData
-  //       barcode = LibraryItem.getItem(bib, req.params.itemId).barcode
+  try {
+    const bibResponseData = fetchBib({ bibId })
+    const { bib } = bibResponseData
+
+    // TODO - implement LibraryItem
+    // barcode = LibraryItem.getItem(bib, itemId).barcode
+  } catch (error) {
+    console.log("Error retrieving bib data")
+  }
   //       getDeliveryLocations(
   //         barcode,
   //         patronId,
@@ -85,7 +78,7 @@ function confirmRequestServer(req, res, next) {
   //         },
   //         (deliveryLocationError) => {
   //           logger.error(
-  //             "Error retrieving server side delivery locations in confirmRequestServer" +
+  //             "Error retrieving server side delivery locations in confirmRequest" +
   //               `, bibId: ${bibId}`,
   //             deliveryLocationError
   //           )
@@ -105,7 +98,7 @@ function confirmRequestServer(req, res, next) {
   //     },
   //     (bibResponseError) => {
   //       logger.error(
-  //         `Error retrieving server side bib record in confirmRequestServer, id: ${bibId}`,
+  //         `Error retrieving server side bib record in confirmRequest, id: ${bibId}`,
   //         bibResponseError
   //       )
   //       dispatch(
@@ -126,7 +119,7 @@ function confirmRequestServer(req, res, next) {
   // })
   // .catch((requestIdError) => {
   //   logger.error(
-  //     "Error making a server side Hold Request in confirmRequestServer",
+  //     "Error making a server side Hold Request in confirmRequest",
   //     requestIdError
   //   )
 
@@ -145,8 +138,7 @@ function confirmRequestServer(req, res, next) {
 }
 
 /**
- * Default API route handler for ResearchNow DRB
- * Expects the same query parameters as the Search endpoint
+ * Default API route handler for Hold Confirmation API
  */
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "GET") {

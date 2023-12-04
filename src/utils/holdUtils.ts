@@ -1,54 +1,51 @@
-import { mapObject, isEmpty } from "underscore"
-import { nyplApiClientPost } from "../server/nyplApiClient"
+import { mapObject } from "underscore"
+import { nyplApiClientGet, nyplApiClientPost } from "../server/nyplApiClient"
+import { locationSlugForLocation } from "./locationUtils"
+import locationDetails from "../../locations"
+import { appConfig } from "../config/config"
 // import { isEmail } from "validator"
 
 /**
- * validate(form, cb)
+ * validate(form)
  *
  * @param {object} form
- * @param {function} cb
- * return {boolean}
  */
-export function validate(form, cb) {
+export function validate(form) {
   const fieldsToCheck = {
     emailAddress: {
       // validate: (val) => val.trim().length && isEmail("" + val),
       validate: (val) => val.trim().length,
-      errorMsg:
+      errorMessage:
         "Enter a valid email address. Your request will be delivered to " +
         "the email address you enter above.",
     },
     chapterTitle: {
       validate: (val) => !!val.trim().length,
-      errorMsg:
+      errorMessage:
         "Indicate the title of the chapter or article you are requesting. ",
     },
     startPage: {
       validate: (val) => !!val.trim().length,
-      errorMsg: "Enter a page number. You may request a maximum of 50 pages.",
+      errorMessage:
+        "Enter a page number. You may request a maximum of 50 pages.",
     },
     endPage: {
       validate: (val) => !!val.trim().length,
-      errorMsg: "Enter a page number. You may request a maximum of 50 pages.",
+      errorMessage:
+        "Enter a page number. You may request a maximum of 50 pages.",
     },
   }
 
-  const error = {}
+  const errors = {}
   mapObject(form, (val, key) => {
     const isValid = fieldsToCheck[key] ? fieldsToCheck[key].validate(val) : true
 
     if (!isValid) {
-      error[key] = fieldsToCheck[key].errorMsg
+      errors[key] = fieldsToCheck[key].errorMessage
     }
   })
 
-  cb(error)
-
-  if (!isEmpty(error)) {
-    return false
-  }
-
-  return true
+  return errors
 }
 
 /**
@@ -60,40 +57,127 @@ export function validate(form, cb) {
  * @param {string} pickupLocation
  * @param {object} docDeliveryData
  * @param {string} itemSource The source of the item, either nypl, cul, or pul.
- * @param {function} cb - callback when we have valid response
- * @param {function} errorCb - callback when error
  * @return {function}
  */
-export function postHoldAPI(
-  req,
-  pickedUpItemId,
+export async function postHoldAPI({
+  patronId,
+  itemId,
   pickupLocation,
   docDeliveryData,
   itemSource,
-  cb,
-  errorCb
-) {
-  // retrieve patron info
-  const patronId = req.patronTokenResponse.decodedPatron.sub
+}) {
   const holdRequestEndpoint = "/hold-requests"
-
-  // get item id and pickup location
-  // NOTE: pickedUpItemId and pickedUpBibId are coming from the EDD form function below:
-  let itemId = req.params.itemId || pickedUpItemId
-  itemId = itemId.replace(/\D/g, "")
+  const updatedItemId = itemId.replace(/\D/g, "")
 
   const data = {
     patron: patronId,
-    record: itemId,
+    record: updatedItemId,
     nyplSource: itemSource,
     requestType: pickupLocation === "edd" ? "edd" : "hold",
     recordType: "i",
     pickupLocation: pickupLocation === "edd" ? null : pickupLocation,
-    // neededBy: "2013-03-20",
     numberOfCopies: 1,
     docDeliveryData: pickupLocation === "edd" ? docDeliveryData : null,
   }
   // logger.info("Making hold request in postHoldAPI", data)
 
-  return nyplApiClientPost(holdRequestEndpoint, data).then(cb).catch(errorCb)
+  return nyplApiClientPost(holdRequestEndpoint, data)
+}
+
+/**
+ * mapLocationDetails(locations)
+ * The function attaches `.address` and `.shortName` properties to the
+ * array of locations
+ *
+ * @param {array} locations
+ * @return {array}
+ */
+function mapLocationDetails(locations) {
+  return locations.map((loc) => {
+    const slug = locationSlugForLocation(loc)
+    if (slug && locationDetails[slug]) {
+      const details = locationDetails[slug]
+
+      loc.address = details.address.address1
+      loc.shortName = details["short-name"]
+    }
+    return loc
+  })
+}
+
+/**
+ * modelDeliveryLocationName(prefLabel, shortName)
+ * Renders the names of the radio input fields of delivery locations except EDD.
+ *
+ * @param {String} prefLabel
+ * @param {String} shortName
+ * @return {String}
+ */
+function modelDeliveryLocationName(prefLabel, shortName) {
+  if (prefLabel && typeof prefLabel === "string" && shortName) {
+    const deliveryRoom = prefLabel.split(" - ")[1]
+      ? ` - ${prefLabel.split(" - ")[1]}`
+      : ""
+
+    return `${shortName}${deliveryRoom}`
+  }
+
+  return ""
+}
+
+/**
+ * getDeliveryLocations(barcode, patronId, cb, errorCb)
+ * The function to make a request to get delivery locations of an item.
+ *
+ * @param {string} barcode
+ * @param {string} patronId
+ * @param {function} cb - callback when we have valid response
+ * @param {function} errorCb - callback when error
+ * @return {function}
+ */
+export async function getDeliveryLocations(barcode, patronId, cb, errorCb) {
+  const deliveryEndpoint =
+    `/request/deliveryLocationsByBarcode?barcodes[]=${barcode}` +
+    `&patronId=${patronId}`
+
+  return nyplApiClientGet(deliveryEndpoint)
+    .then((barcodeAPIresponse) => {
+      const eddRequestable =
+        barcodeAPIresponse &&
+        barcodeAPIresponse.itemListElement &&
+        barcodeAPIresponse.itemListElement.length &&
+        barcodeAPIresponse.itemListElement[0].eddRequestable
+          ? barcodeAPIresponse.itemListElement[0].eddRequestable
+          : false
+      let deliveryLocationWithAddress =
+        barcodeAPIresponse &&
+        barcodeAPIresponse.itemListElement &&
+        barcodeAPIresponse.itemListElement.length &&
+        barcodeAPIresponse.itemListElement[0].deliveryLocation
+          ? mapLocationDetails(
+              barcodeAPIresponse.itemListElement[0].deliveryLocation
+            )
+          : []
+
+      const { closedLocations } = appConfig
+      deliveryLocationWithAddress = deliveryLocationWithAddress.filter(
+        (location) =>
+          !closedLocations.some((closedLocation) =>
+            modelDeliveryLocationName(
+              location.prefLabel,
+              location.shortName
+            ).startsWith(closedLocation)
+          )
+      )
+
+      cb(deliveryLocationWithAddress, eddRequestable)
+    })
+    .catch((barcodeAPIError) => {
+      // logger.error(
+      //   "Error attemping to make server side call using nyplApiClient in getDeliveryLocations" +
+      //     `, endpoint: ${deliveryEndpoint}`,
+      //   barcodeAPIError
+      // )
+      errorCb(barcodeAPIError)
+    })
 }

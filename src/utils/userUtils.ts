@@ -1,8 +1,9 @@
 // Placeholder functions for now
+// Could be converted to a class
 
 function requireUser(req, res) {
   return {
-    redirect: {},
+    redirect: false,
   }
 }
 

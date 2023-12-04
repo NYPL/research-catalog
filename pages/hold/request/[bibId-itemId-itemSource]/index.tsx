@@ -1,4 +1,6 @@
 import Head from "next/head"
+import { extractFeatures } from "../../../../src/utils/appUtils"
+import { Heading } from "@nypl/design-system-react-components"
 
 export default function Request() {
   return (
@@ -6,26 +8,15 @@ export default function Request() {
       <Head>
         <title>Request</title>
       </Head>
+      <Heading>Request</Heading>
     </>
   )
 }
 
-const extractFeatures = (featuresString) => {
-  if (typeof featuresString !== "string") return []
-  return featuresString.split(",").reduce((features, feature) => {
-    if (feature.length) features.push(feature.trim())
-    return features
-  }, [])
-}
-
 /**
- * newHoldRequest(req, res, next)
- * The function to return the bib and item data with its delivery locations to the
- * hold request route.
- *
- * @param {req}
- * @param {res}
- * @return {function}
+ * newHoldRequest()
+ * The function to return the bib and item data with its delivery locations
+ * to the hold request route.
  */
 function newHoldRequest(req, res, resolve) {
   console.log("newHoldRequest")

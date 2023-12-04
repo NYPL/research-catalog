@@ -47,4 +47,5 @@ export const appConfig = {
     legacyCatalog: "https://legacycatalog.nypl.org/",
   },
   tokenUrl: "https://isso.nypl.org/",
+  closedLocations: [],
 }
