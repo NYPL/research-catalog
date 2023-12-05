@@ -53,13 +53,12 @@ const SearchForm = ({ loading }: SearchFormProps) => {
 
   return (
     <Box className={styles.searchContainer}>
-      <Box className={styles.searchContainerInner}>
+      <Box className={styles.searchContainerInner} pb="s">
         {loading ? (
           <SkeletonLoader
             showImage={false}
             showHeading={false}
             contentSize={2}
-            pb="s"
           />
         ) : (
           <>
@@ -102,7 +101,7 @@ const SearchForm = ({ loading }: SearchFormProps) => {
                 }}
               />
             </Box>
-            <Box className={styles.auxSearchContainer} pb="s">
+            <Box className={styles.auxSearchContainer}>
               <EDSLink />
               {/* Temporary color update. The Header overrides the new
             DS 2.X CSS color variable values. */}
