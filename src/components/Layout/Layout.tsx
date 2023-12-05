@@ -80,7 +80,7 @@ const Layout = ({
               <div className={styles.researchHeadingContainer}>
                 <Heading id="heading-h1" level="h1" text="Research Catalog" />
                 <SubNav activePage={activePage} />
-                {showSearch && <SearchForm />}
+                {showSearch && <SearchForm loading={loading} />}
               </div>
             </>
           )
