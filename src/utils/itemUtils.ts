@@ -68,7 +68,7 @@ export function formatShelfMarkForSort(shelfMark: string): string {
   )
 }
 
-// Callback function for replacing shelfMark prefixes (box, tube, etc) in formatShelfMarkForSort()
+// Callback for replacing lower-casing shelfMark prefixes (box, tube, etc) and "0"-padding their numbers
 const shelfMarkReplaceCallback = (
   m0,
   fullMatch,
@@ -86,7 +86,7 @@ const shelfMarkReplaceCallback = (
 /**
  * Left-pad a string with "0"s if shorter than a given padding length.
  */
-function padStringWithZeros(str, padLen = 6) {
+function padStringWithZeros(str: string, padLen = 6): string {
   const numZeros = Math.max(0, padLen - str.length)
   return "0".repeat(numZeros) + str
 }
