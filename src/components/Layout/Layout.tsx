@@ -54,7 +54,7 @@ const Layout = ({
                     _focus: {
                       outlineColor: "ui.white",
                     },
-                  }
+                  },
                 }}
               />
               <div className={styles.researchHeadingContainer}>

@@ -30,11 +30,13 @@ const RCLink = ({
         className={className}
         fontWeight={active && "bold"}
         {...rest}
-        __css={hasWhiteFocusRing && {
-          _focus: {
-            outlineColor: "ui.white",
+        __css={
+          hasWhiteFocusRing && {
+            _focus: {
+              outlineColor: "ui.white",
+            },
           }
-        }}
+        }
       >
         {children}
       </DSLink>
