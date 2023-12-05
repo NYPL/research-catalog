@@ -125,8 +125,8 @@ async function newHoldRequest(req, res) {
 /**
  *
  */
-export async function getServerSideProps() {
+export async function getServerSideProps(req, res) {
   // call newHoldRequest function
-
+  await newHoldRequest(req, res)
   return {}
 }
