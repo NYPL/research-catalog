@@ -109,10 +109,6 @@ export default function AdvancedSearch() {
     dispatch({ type: "form_reset", payload: initialSearchFormState })
   }
 
-  const onDateChange = (dateFormName, value: string) => {
-    console.log({ dateFormName, value })
-  }
-
   return (
     <>
       <Head>
@@ -128,10 +124,6 @@ export default function AdvancedSearch() {
           />
         )}
         <Heading level="h2">Advanced Search</Heading>
-        <FieldsetDate
-          appliedFilters={{ dateAfter: "01/01/1992", dateBefore: "01/01/2012" }}
-          onDateChange={onDateChange}
-        />
         <Form
           id="advancedSearchForm"
           // We are using a post request on advanced search when JS is disabled so that we can build the query
