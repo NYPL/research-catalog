@@ -10,6 +10,7 @@ import {
   defaultNYPLLocation,
   partnerDefaultLocation,
   locationEndpointsMap,
+  formatShelfMarkForSort,
 } from "../utils/itemUtils"
 
 /**
@@ -31,6 +32,7 @@ export default class Item {
   aeonUrl?: string
   isPhysicallyRequestable: boolean
   isEDDRequestable: boolean
+  sortableShelfMark?: string
 
   constructor(item: SearchResultsItem, bib: SearchResultsBib) {
     this.id = item.uri || ""
@@ -52,6 +54,7 @@ export default class Item {
     this.aeonUrl = item.aeonUrl?.length ? item.aeonUrl[0] : null
     this.isPhysicallyRequestable = item.physRequestable
     this.isEDDRequestable = item.eddRequestable
+    this.sortableShelfMark = this.getSortableShelfMark(item)
   }
 
   // Item availability is determined by the existence of status id in the availability ids list
@@ -83,6 +86,20 @@ export default class Item {
     }
 
     return location
+  }
+
+  // Pre-processing logic for setting Item sortableShelfMark
+  getSortableShelfMark(item: SearchResultsItem): string {
+    let shelfMarkSort: string
+    // Order by id if we have no call numbers, but make sure these items
+    // go after items with call numbers
+    if (!item.shelfMark?.length) {
+      shelfMarkSort = item.uri ? `b${item.uri}` : "c"
+    } else {
+      // order by call number, put these items first
+      shelfMarkSort = `a${formatShelfMarkForSort(item.shelfMark[0])}`
+    }
+    return shelfMarkSort
   }
 
   // Determine if item is Non-NYPL ReCAP by existence of "Recap" string in item source attribute
