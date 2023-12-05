@@ -1,12 +1,12 @@
-import { DatePicker } from "@nypl/design-system-react-components"
-import type { FullDateType } from "@nypl/design-system-react-components"
+import {
+  DatePicker,
+  type FullDateType,
+} from "@nypl/design-system-react-components"
 
+export type DateFormName = "dateAfter" | "dateBefore"
 interface FieldsetDateProps {
-  appliedFilters: {
-    dateAfter?: string
-    dateBefore?: string
-  }
-  onDateChange: (filterID: string, value: string) => void
+  appliedFilters?: { [key in DateFormName]?: string | null }
+  onDateChange: (dateFormName: DateFormName, value: string) => void
 }
 
 /**
@@ -31,9 +31,11 @@ const FieldsetDate = ({
     if (dateBeforeString) onDateChange("dateBefore", dateBeforeString)
   }
 
+  // The text could be better but this is what is currently used
+  // in production. We can revisit later.
   const helperText =
     "The end year should be the same year as or later than the start year."
-  const errorMessage =
+  const invalidText =
     "Enter a valid range in the Start Year and End Year fields or remove what " +
     "you've entered from those fields."
 
@@ -44,7 +46,7 @@ const FieldsetDate = ({
       helperTextTo="e.g. 2001"
       id="dateAfter"
       helperText={helperText}
-      invalidText={errorMessage}
+      invalidText={invalidText}
       isDateRange
       labelText="Date"
       nameFrom="dateAfter"
