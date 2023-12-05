@@ -18,3 +18,13 @@ export function standardizeBibId(bibId: string): string {
   }
   return bibId
 }
+
+/**
+ * A placeholder for the Bib.fetchBib function. This is located in the older
+ * repo at: src/server/ApiRoutes/Bib.js
+ */
+export function fetchBib({ bibId }, reqOptions, additionalParams = {}) {
+  return {
+    bib: { items: [] },
+  }
+}

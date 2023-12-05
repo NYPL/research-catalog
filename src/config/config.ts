@@ -30,6 +30,7 @@ export const appConfig = {
         "https://digital-research-books-api.nypl.org/search",
     },
   },
+  baseUrl: process.env.BASE_URL || "/research/research-catalog",
   externalUrls: {
     drbFrontEnd: {
       development:
@@ -46,4 +47,5 @@ export const appConfig = {
     legacyCatalog: "https://legacycatalog.nypl.org/",
   },
   tokenUrl: "https://isso.nypl.org/",
+  closedLocations: [],
 }
