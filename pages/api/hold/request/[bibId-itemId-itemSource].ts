@@ -7,6 +7,8 @@ import { postHoldAPI } from "../../../../src/utils/holdUtils"
 /**
  * createHoldRequest(req, res)
  * The function to make a server side hold request call.
+ *
+ * This is based on `createHoldRequestServer` function in DFE.
  */
 async function createHoldRequest(req, res) {
   // Ensure user is logged in
@@ -14,7 +16,7 @@ async function createHoldRequest(req, res) {
   if (redirect) return res.redirect(`${appConfig.baseUrl}/404`)
 
   const paramString = req.query["bibId-itemId-itemSource"] || ""
-  const [itemId, bibId, itemSource] = paramString.split("-")
+  const [bibId, itemId, itemSource] = paramString.split("-")
 
   const patronId = req.patronTokenResponse?.decodedPatron?.sub
 

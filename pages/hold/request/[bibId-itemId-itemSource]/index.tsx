@@ -1,6 +1,17 @@
 import Head from "next/head"
+
 import { extractFeatures } from "../../../../src/utils/appUtils"
 import { Heading } from "@nypl/design-system-react-components"
+import { fetchBib } from "../../../../src/utils/bibUtils"
+import { LibraryItem } from "../../../api/hold/confirmation/[bibId-itemId]"
+import isAeonUrl from "../../../../src/utils/aeonLinkUtils"
+import User from "../../../../src/utils/userUtils"
+import {
+  getDeliveryLocations,
+  mapLocationDetails,
+  modelDeliveryLocationName,
+} from "../../../../src/utils/holdUtils"
+import { appConfig } from "../../../../src/config/config"
 
 export default function Request() {
   return (
@@ -17,76 +28,98 @@ export default function Request() {
  * newHoldRequest()
  * The function to return the bib and item data with its delivery locations
  * to the hold request route.
+ *
+ * This is based on `newHoldRequest` in DFE.
  */
-function newHoldRequest(req, res, resolve) {
-  console.log("newHoldRequest")
-  const bibId =
-    (req.params.bibId || "") +
-    (req.params.itemId ? `-${req.params.itemId}` : "")
-  const patronId = req.patronTokenResponse.decodedPatron
-    ? req.patronTokenResponse.decodedPatron.sub
-    : ""
-  let barcode
+async function newHoldRequest(req, res) {
+  const paramString = req.query["bibId-itemId-itemSource"] || ""
+  const [bibId, itemId, itemSource] = paramString.split("-")
+  const bibAndItemId = (bibId || "") + (itemId ? `-${itemId}` : "")
+  const patronId = req.patronTokenResponse?.decodedPatron?.sub || ""
   const { features } = req.query
   const urlEnabledFeatures = extractFeatures(features)
+  let barcode
 
   // Retrieve item
-  return {}
-  // return Bib.fetchBib(
-  //   bibId,
-  //   (bibResponseData) => {
-  //     const { bib } = bibResponseData
-  //     barcode = LibraryItem.getItem(bib, req.params.itemId).barcode
+  try {
+    const bibResponseData = await fetchBib(
+      { bibId: bibAndItemId },
+      {},
+      {
+        fetchSubjectHeadingData: false,
+        features: urlEnabledFeatures,
+      }
+    )
+    const { bib } = bibResponseData
+    barcode = LibraryItem.getItem(bib, itemId).barcode
+    const urlIsAeon = bib.items
+      .map(({ aeonUrl }) => aeonUrl && aeonUrl[0])
+      .find(isAeonUrl)
 
-  //     const urlIsAeon = bib.items
-  //       .map(({ aeonUrl }) => aeonUrl && aeonUrl[0])
-  //       .find(isAeonUrl)
+    if (urlIsAeon) {
+      res.redirect(urlIsAeon)
+      return { redirect: true }
+    }
 
-  //     if (urlIsAeon) {
-  //       res.redirect(urlIsAeon)
-  //       return resolve({ redirect: true })
-  //     }
+    const { redirect } = User.requireUser(req, res)
+    if (redirect) {
+      return { redirect: redirect }
+    }
 
-  //     const userRedirect = User.requireUser(req, res).redirect
-  //     if (userRedirect) {
-  //       return resolve({ redirect: userRedirect })
-  //     }
-  //     return User.eligibility(req, res).then((eligibilityResponse) => {
-  //       if (eligibilityResponse.redirect) {
-  //         return resolve({ redirect: eligibilityResponse.redirect })
-  //       }
+    const eligibilityResponse = await User.eligibility(req, res)
+    if (eligibilityResponse.redirect) {
+      return { redirect: eligibilityResponse.redirect }
+    }
 
-  //       return getDeliveryLocations(
-  //         barcode,
-  //         patronId,
-  //         (deliveryLocations, isEddRequestable) => {
-  //           resolve({
-  //             bib,
-  //             deliveryLocations,
-  //             isEddRequestable,
-  //           })
-  //         },
-  //         (deliveryLocationsError) => {
-  //           // logger.error(
-  //           //   `Error retrieving serverside delivery locations in newHoldRequest, bibId: ${bibId}`,
-  //           //   deliveryLocationsError,
-  //           // );
+    try {
+      const barcodeAPIresponse = await getDeliveryLocations(barcode, patronId)
+      const isEddRequestable =
+        barcodeAPIresponse &&
+        barcodeAPIresponse.itemListElement &&
+        barcodeAPIresponse.itemListElement.length &&
+        barcodeAPIresponse.itemListElement[0].eddRequestable
+          ? barcodeAPIresponse.itemListElement[0].eddRequestable
+          : false
+      let deliveryLocations =
+        barcodeAPIresponse &&
+        barcodeAPIresponse.itemListElement &&
+        barcodeAPIresponse.itemListElement.length &&
+        barcodeAPIresponse.itemListElement[0].deliveryLocation
+          ? mapLocationDetails(
+              barcodeAPIresponse.itemListElement[0].deliveryLocation
+            )
+          : []
+      const { closedLocations } = appConfig
+      deliveryLocations = deliveryLocations.filter(
+        (location) =>
+          !closedLocations.some((closedLocation) =>
+            modelDeliveryLocationName(
+              location.prefLabel,
+              location.shortName
+            ).startsWith(closedLocation)
+          )
+      )
 
-  //           resolve({
-  //             bib,
-  //             deliveryLocations: [],
-  //             isEddRequestable: false,
-  //           })
-  //         }
-  //       )
-  //     })
-  //   },
-  //   (bibResponseError) => resolve(bibResponseError),
-  //   {
-  //     fetchSubjectHeadingData: false,
-  //     features: urlEnabledFeatures,
-  //   }
-  // )
+      return {
+        bib,
+        deliveryLocations,
+        isEddRequestable,
+      }
+    } catch (error) {
+      console.log(error)
+      // logger.error(
+      //   `Error retrieving serverside delivery locations in newHoldRequest, bibId: ${bibId}`,
+      //   error,
+      // );
+      return {
+        bib,
+        deliveryLocations: [],
+        isEddRequestable: false,
+      }
+    }
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 /**

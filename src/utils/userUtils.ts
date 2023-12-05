@@ -8,7 +8,7 @@ function requireUser(req, res) {
 }
 
 function eligibility(req, res) {
-  return Promise.resolve({})
+  return Promise.resolve({ redirect: false })
 }
 
 const User = {

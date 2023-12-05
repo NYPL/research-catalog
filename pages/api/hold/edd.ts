@@ -8,6 +8,8 @@ import User from "../../../src/utils/userUtils"
 /**
  * eddRequest(req, res)
  * The function to make a server side EDD request.
+ *
+ * This is based on `eddServer` function in DFE.
  */
 async function eddRequest(req, res) {
   const {
