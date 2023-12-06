@@ -89,6 +89,7 @@ export default class Item {
   }
 
   // Pre-processing logic for setting Item sortableShelfMark
+  // TODO: review later to figure out if this is better served in the backend API rather than here
   getSortableShelfMark(item: SearchResultsItem): string {
     let shelfMarkSort: string
     // Order by id if we have no call numbers, but make sure these items

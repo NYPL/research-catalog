@@ -55,6 +55,8 @@ export function locationLabelToKey(label: string): ItemLocationKey {
  *  - v.
  *  - no.
  *  - r.
+ *
+ *  TODO: review later to figure out if this is better served in the backend API rather than here
  */
 export function formatShelfMarkForSort(shelfMark: string): string {
   // NodeJS doesn't have lookbehinds, so fake it with replace callback:
@@ -68,21 +70,6 @@ export function formatShelfMarkForSort(shelfMark: string): string {
   )
 }
 
-// Callback for replacing lower-casing shelfMark prefixes (box, tube, etc) and "0"-padding their numbers
-const shelfMarkReplaceCallback = (
-  m0,
-  fullMatch,
-  label,
-  labelWhitespace,
-  labelText,
-  number
-) =>
-  // If we matched a label, build string from label and then pad number
-  label
-    ? `${label.toLowerCase()}${padStringWithZeros(number)}`
-    : // Otherwise just pad whole match (presumably it's a line terminating num):
-      padStringWithZeros(fullMatch)
-
 /**
  * Left-pad a string with "0"s if shorter than a given padding length.
  */
@@ -90,3 +77,20 @@ function padStringWithZeros(str: string, padLen = 6): string {
   const numZeros = Math.max(0, padLen - str.length)
   return "0".repeat(numZeros) + str
 }
+
+/* eslint-disable @typescript-eslint/naming-convention */
+
+// Callback for replacing lower-casing shelfMark prefixes (box, tube, etc) and "0"-padding their numbers
+const shelfMarkReplaceCallback = (
+  _m0: string,
+  fullMatch: string,
+  label: string,
+  _labelWhitespace: string,
+  _labelText: string,
+  number: string
+) =>
+  // If we matched a label, build string from label and then pad number
+  label
+    ? `${label.toLowerCase()}${padStringWithZeros(number)}`
+    : // Otherwise just pad whole match (presumably it's a line terminating num):
+      padStringWithZeros(fullMatch)

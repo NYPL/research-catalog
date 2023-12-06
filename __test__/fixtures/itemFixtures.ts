@@ -331,3 +331,52 @@ export const itemNoShelfMark = {
     "@value": "10572546",
   },
 }
+
+export const itemNoShelfMarkNoURI = {
+  "@id": "res:i10572546",
+  "@type": ["bf:Item"],
+  accessMessage: [
+    {
+      "@id": "accessMessage:2",
+      prefLabel: "Request in advance",
+    },
+  ],
+  catalogItemType: [
+    {
+      "@id": "catalogItemType:55",
+      prefLabel: "book, limited circ, MaRLI",
+    },
+  ],
+  eddRequestable: true,
+  formatLiteral: ["Text"],
+  holdingLocation: [
+    {
+      "@id": "loc:rc2ma",
+      prefLabel: "Offsite",
+    },
+  ],
+  idBarcode: ["33433077546822"],
+  owner: [
+    {
+      "@id": "orgs:1000",
+      prefLabel: "Stephen A. Schwarzman Building",
+    },
+  ],
+  physRequestable: true,
+  physicalLocation: [
+    "VTI (Prezzolini, G. History of spaghetti eating and cooking for: spaghetti dinner)",
+  ],
+  recapCustomerCode: ["NA"],
+  requestable: [true],
+  specRequestable: false,
+  status: [
+    {
+      "@id": "status:a",
+      prefLabel: "Available",
+    },
+  ],
+  idNyplSourceId: {
+    "@type": "SierraNypl",
+    "@value": "10572546",
+  },
+}

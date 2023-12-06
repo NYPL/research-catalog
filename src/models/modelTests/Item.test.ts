@@ -7,6 +7,7 @@ import {
   itemPartnerReCAP,
   itemNYPLReCAP,
   itemNoShelfMark,
+  itemNoShelfMarkNoURI,
 } from "../../../__test__/fixtures/itemFixtures"
 import { searchResultPhysicalItems } from "../../../__test__/fixtures/searchResultPhysicalItems"
 
@@ -111,7 +112,7 @@ describe("Item model", () => {
     })
   })
 
-  describe("getSortableShelfMark", () => {
+  describe("Sortable shelfMark field creation", () => {
     it("sets the sortableShelfMark with an 'a' prefix when shelfMark field is present", () => {
       const itemWithShelfMark = new Item(itemPhysicallyRequestable, parentBib)
       expect(itemWithShelfMark.sortableShelfMark).toBe("aD-11 002906")
@@ -119,6 +120,13 @@ describe("Item model", () => {
     it("correctly sets the sortableShelfMark as the call number with a 'b' prefix when shelfMark is absent", () => {
       const itemMissingShelfMark = new Item(itemNoShelfMark, parentBib)
       expect(itemMissingShelfMark.sortableShelfMark).toBe("bi10572546")
+    })
+    it("correctly sets the sortableShelfMark to 'c' when shelfMark and URI are absent", () => {
+      const itemMissingShelfMarkAndURI = new Item(
+        itemNoShelfMarkNoURI,
+        parentBib
+      )
+      expect(itemMissingShelfMarkAndURI.sortableShelfMark).toBe("c")
     })
   })
 })
