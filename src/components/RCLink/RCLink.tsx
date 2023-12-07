@@ -12,7 +12,6 @@ interface RCLinkProps {
   className?: string
   color?: string
   type?: LinkTypes
-  isDisabled?: boolean
 }
 
 /**
