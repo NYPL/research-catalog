@@ -7,6 +7,7 @@ import {
 } from "@nypl/design-system-react-components"
 
 import RCLink from "../RCLink/RCLink"
+import ElectronicResourcesLink from "./ElectronicResourcesLink"
 import type SearchResultsBib from "../../models/SearchResultsBib"
 import { PATHS } from "../../config/constants"
 
@@ -29,12 +30,18 @@ const SearchResult = ({ bib }: SearchResultProps) => {
         <RCLink href={`${PATHS.BIB}/${bib.id}`}>{bib.title}</RCLink>
       </CardHeading>
       <CardContent>
-        <Box sx={{ p: { display: "inline", marginRight: "s" } }}>
+        <Box sx={{ p: { display: "inline", marginRight: "s" } }} mb="m">
           {bib.materialType && <Text>{bib.materialType}</Text>}
           {bib.publicationStatement && <Text>{bib.publicationStatement}</Text>}
           {bib.yearPublished && <Text>{bib.yearPublished}</Text>}
           <Text>{bib.itemMessage}</Text>
         </Box>
+        {bib.electronicResources && (
+          <ElectronicResourcesLink
+            bibUrl={bib.url}
+            electronicResources={bib.electronicResources}
+          />
+        )}
       </CardContent>
     </Card>
   )
