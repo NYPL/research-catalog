@@ -17,16 +17,6 @@ export interface SearchResultsItem {
   eddRequestable?: boolean
 }
 
-export interface JSONLDValue {
-  "@id": string
-  prefLabel?: string
-}
-
-export interface ItemSourceID {
-  "@type": string
-  "@value": string
-}
-
 export interface ItemLocation extends JSONLDValue {
   customerCode?: string
   prefLabel?: string
@@ -41,4 +31,16 @@ export interface ItemTableParams {
   isDesktop?: boolean
   isBibPage?: boolean
   isArchiveCollection?: boolean
+}
+
+/* eslint-disable @typescript-eslint/naming-convention */
+
+export interface JSONLDValue {
+  "@id": string
+  prefLabel?: string
+}
+
+export interface ItemSourceID {
+  "@type": string
+  "@value": string
 }
