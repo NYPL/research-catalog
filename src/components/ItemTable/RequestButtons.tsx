@@ -18,8 +18,7 @@ const RequestButtons = ({ item }: RequestButtonsProps) => {
       {item.aeonUrl ? (
         <RCLink
           href={item.aeonUrl}
-          type="buttonSecondary"
-          disabled={!item.isAvailable}
+          type={!item.isAvailable ? "buttonDisabled" : "buttonSecondary"}
         >
           Request Appointment
         </RCLink>
@@ -30,8 +29,7 @@ const RequestButtons = ({ item }: RequestButtonsProps) => {
               href={`/hold/request/${item.bibId}-${
                 item.id
               }?searchKeywords=${"TODO"}`}
-              type="buttonSecondary"
-              disabled={!item.isAvailable}
+              type={!item.isAvailable ? "buttonDisabled" : "buttonSecondary"}
             >
               Request for On-site Use
             </RCLink>
@@ -41,8 +39,7 @@ const RequestButtons = ({ item }: RequestButtonsProps) => {
               href={`/hold/request/${item.bibId}-${
                 item.id
               }/edd?searchKeywords=${"TODO"}`}
-              type="buttonSecondary"
-              disabled={!item.isAvailable}
+              type={!item.isAvailable ? "buttonDisabled" : "buttonSecondary"}
             >
               Request Scan
             </RCLink>
