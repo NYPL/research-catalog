@@ -36,7 +36,7 @@ const SearchResult = ({ bib }: SearchResultProps) => {
           {bib.yearPublished && <Text>{bib.yearPublished}</Text>}
           <Text>{bib.itemMessage}</Text>
         </Box>
-        {bib.electronicResources && (
+        {bib.hasElectronicResources && (
           <ElectronicResourcesLink
             bibUrl={bib.url}
             electronicResources={bib.electronicResources}
