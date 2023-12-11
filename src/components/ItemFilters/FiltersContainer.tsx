@@ -1,14 +1,26 @@
-import { useEffect, useRef, useState } from "react"
+import { useMemo, useRef, useState } from "react"
 import { useRouter } from "next/router"
 import React from "react"
-import { Text, useCloseDropDown } from "@nypl/design-system-react-components"
+import {
+  Text,
+  Card,
+  SearchBar,
+  Box,
+  Heading,
+  useCloseDropDown,
+  useNYPLBreakpoints,
+  CardHeading,
+  CardContent,
+} from "@nypl/design-system-react-components"
 
 import styles from "../../../styles/components/ItemFilters.module.scss"
 import type { ItemAggregation } from "../../types/filterTypes"
 import { ItemFilterData, LocationFilterData } from "../../models/itemFilterData"
 import ItemFilter from "./ItemFilter"
 import {
-  buildItemFilterQueryParams,
+  buildAppliedFiltersString,
+  buildItemFilterQueryString,
+  buildItemsMatchedStringString,
   parseItemFilterQueryParams,
 } from "../../utils/itemFilterUtils"
 
@@ -17,62 +29,110 @@ interface ItemFilterContainerProps {
 }
 
 const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
-  const { query } = useRouter()
-  const filterData = itemAggs.map((agg: ItemAggregation) => {
-    if (agg.field === "location") return new LocationFilterData(agg)
-    else return new ItemFilterData(agg)
-  })
-  const [activeFilters, setAppliedFilters] = useState({
-    location: [],
-    format: [],
-    status: [],
-  })
+  const router = useRouter()
+  const { isLargerThanLarge, isLargerThanMedium } = useNYPLBreakpoints()
+  const filterGroupClassName = isLargerThanLarge
+    ? styles.filterGroup
+    : styles.filterGroupMobile
 
+  const filterData = useRef<ItemFilterData[]>(
+    itemAggs.map((agg: ItemAggregation) => {
+      if (agg.field === "location") return new LocationFilterData(agg)
+      else return new ItemFilterData(agg)
+    })
+  ).current
+
+  const appliedFilters = useMemo(() => {
+    return parseItemFilterQueryParams(router.query)
+  }, [router.query])
+
+  const appliedFiltersDisplay = buildAppliedFiltersString(
+    appliedFilters,
+    filterData
+  )
   const ref = useRef<HTMLDivElement>(null)
   useCloseDropDown(() => setWhichFilterIsOpen(""), ref)
 
   const [whichFilterIsOpen, setWhichFilterIsOpen] = useState("")
 
-  const [tempQueryDisplay, setTempQueryDisplay] = useState("")
+  const itemsMatched = buildItemsMatchedStringString(router.query)
 
-  const tempSubmitFilters = () => {
+  const submitFilters = (selection: string[], field: string) => {
+    const newFilters = { ...appliedFilters, [field]: selection }
     const locationFilterData = filterData.find(
       (filter) => filter.field === "location"
     ) as LocationFilterData
-    setTempQueryDisplay(
-      buildItemFilterQueryParams(
-        activeFilters,
-        locationFilterData.recapLocations()
-      )
+    const url = buildItemFilterQueryString(
+      newFilters,
+      locationFilterData.recapLocations()
     )
+    setWhichFilterIsOpen("")
+    router.push("/search/advanced" + url)
   }
 
-  useEffect(() => {
-    setAppliedFilters(parseItemFilterQueryParams(query))
-  }, [query])
-
-  useEffect(tempSubmitFilters, [activeFilters, tempSubmitFilters])
-
   return (
-    <div className={styles.filtersContainer}>
-      <Text data-testid="filter-text" size="body2" isBold={true}>
-        Filter by
-      </Text>
-      <div className={styles.filterGroup} ref={ref}>
-        {filterData.map((field: ItemFilterData) => (
-          <ItemFilter
-            isOpen={whichFilterIsOpen === field.field}
-            setWhichFilterIsOpen={setWhichFilterIsOpen}
-            key={field.field}
-            itemFilterData={field}
-            setAppliedFilters={setAppliedFilters}
-            activeFilters={activeFilters}
-            submitFilters={tempSubmitFilters}
-          />
-        ))}
-      </div>
-      <p>{tempQueryDisplay}</p>
-    </div>
+    <>
+      <Box
+        className={styles.filtersContainer}
+        sx={{
+          display: "flex",
+          flexDirection: isLargerThanMedium ? "row" : "column",
+        }}
+      >
+        <Card className={filterGroupClassName} ref={ref}>
+          <CardHeading level="h3" size="body2">
+            Filter by
+          </CardHeading>
+          <CardContent>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: isLargerThanLarge ? "row" : "column",
+              }}
+              gap="nypl-s"
+            >
+              {filterData.map((field: ItemFilterData) => (
+                <ItemFilter
+                  isOpen={whichFilterIsOpen === field.field}
+                  setWhichFilterIsOpen={setWhichFilterIsOpen}
+                  key={field.field}
+                  itemFilterData={field}
+                  appliedFilters={appliedFilters}
+                  submitFilters={submitFilters}
+                />
+              ))}
+            </Box>
+          </CardContent>
+        </Card>
+        <Card className={filterGroupClassName}>
+          <CardHeading
+            level="h3"
+            size="body2"
+            data-testid="filter-text"
+            isBold={true}
+          >
+            Search by Year
+          </CardHeading>
+          <CardContent>
+            <SearchBar
+              id="year-filter"
+              labelText="Apply"
+              textInputProps={{
+                defaultValue: "YYYY",
+                isClearable: true,
+                labelText: "Item Search",
+                name: "textInputName",
+              }}
+              onSubmit={() => console.log("spaghetti!")}
+            />
+          </CardContent>
+        </Card>
+      </Box>
+      <Heading level="h3" size="heading6">
+        {itemsMatched}
+      </Heading>
+      <Text>{appliedFiltersDisplay}</Text>
+    </>
   )
 }
 
