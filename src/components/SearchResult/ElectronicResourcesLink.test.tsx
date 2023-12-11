@@ -4,8 +4,8 @@ import ElectronicResourcesLink from "./ElectronicResourcesLink"
 import SearchResultsBib from "../../models/SearchResultsBib"
 import {
   searchResultElectronicResources,
+    searchResultElectronicResourcesNoLabel,
   searchResultMultipleElectronicResources,
-  searchResultMultipleElectronicResourcesNoLabel,
 } from "../../../__test__/fixtures/searchResultElectronicResources"
 
 describe("Electronic Resources Link with a single resource", () => {
@@ -26,23 +26,7 @@ describe("Electronic Resources Link with a single resource", () => {
   })
   it("renders the correct link with the label as the text when only one electronic resource is available", async () => {
     const link = screen.getByRole("link", {
-      name: "https://link.overdrive.com/?websiteId=37&titleId=5312492",
-    })
-    expect(link).toHaveAttribute(
-      "href",
-      "https://link.overdrive.com/?websiteId=37&titleId=5312492"
-    )
-  })
-  it("renders the correct link with the url as the text when only one electronic resource is available and prefLabel not present", async () => {
-    const bib = new SearchResultsBib(searchResultElectronicResources)
-    render(
-      <ElectronicResourcesLink
-        bibUrl={bib.url}
-        electronicResources={bib.electronicResources}
-      />
-    )
-    const link = screen.getByRole("link", {
-      name: "https://link.overdrive.com/?websiteId=37&titleId=5312492",
+      name: "Access eNYPL",
     })
     expect(link).toHaveAttribute(
       "href",
@@ -52,8 +36,8 @@ describe("Electronic Resources Link with a single resource", () => {
 })
 
 describe("Electronic Resources Link with a single resource and no label", () => {
-  it("renders the correct link with the url as the text when only one electronic resource is available and prefLabel not present", async () => {
-    const bib = new SearchResultsBib(searchResultElectronicResources)
+  it("renders the correct link with the url as the text when prefLabel is not available", async () => {
+    const bib = new SearchResultsBib(searchResultElectronicResourcesNoLabel)
     render(
       <ElectronicResourcesLink
         bibUrl={bib.url}
