@@ -1,8 +1,6 @@
 import {
   Box,
   Heading,
-  Text,
-  Icon,
   Link as DSLink,
 } from "@nypl/design-system-react-components"
 
