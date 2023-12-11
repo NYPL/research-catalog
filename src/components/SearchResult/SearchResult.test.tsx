@@ -3,6 +3,7 @@ import { render, screen } from "@testing-library/react"
 import SearchResult from "./SearchResult"
 import SearchResultsBib from "../../models/SearchResultsBib"
 import { searchResultPhysicalItems } from "../../../__test__/fixtures/searchResultPhysicalItems"
+import { searchResultManyPhysicalItems } from "../../../__test__/fixtures/searchResultManyPhysicalItems"
 import { searchResultElectronicResources } from "../../../__test__/fixtures/searchResultElectronicResources"
 
 describe("SearchResult with Physical Items", () => {
@@ -23,6 +24,23 @@ describe("SearchResult with Physical Items", () => {
     screen.getByText("New York, Abelard-Schuman [1955]")
     screen.getByText("1955")
     screen.getByText("2 Items")
+  })
+})
+
+describe("SearchResult with Many Physical Items", () => {
+  beforeEach(() => {
+    const bib = new SearchResultsBib(searchResultManyPhysicalItems)
+    render(<SearchResult bib={bib} />)
+  })
+
+  it("renders a link to the bib page with the correct text when there are more than the set limit of items per search result", async () => {
+    const resultTitleLink = screen.getByRole("link", {
+      name: "View All 4 Items",
+    })
+    expect(resultTitleLink).toHaveAttribute(
+      "href",
+      "/bib/b14753192#items-table"
+    )
   })
 })
 
