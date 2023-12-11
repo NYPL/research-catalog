@@ -32,7 +32,7 @@ const ElectronicResourcesLink = ({
           target="_blank"
           rel="noreferrer"
         >
-          {electronicResources[0].label || electronicResources[0].url}
+          {electronicResources[0].prefLabel || electronicResources[0].url}
         </DSLink>
       ) : (
         <RCLink href={`${bibUrl}#electronic-resources`}>
