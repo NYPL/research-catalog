@@ -4,7 +4,7 @@ import ElectronicResourcesLink from "./ElectronicResourcesLink"
 import SearchResultsBib from "../../models/SearchResultsBib"
 import {
   searchResultElectronicResources,
-    searchResultElectronicResourcesNoLabel,
+  searchResultElectronicResourcesNoLabel,
   searchResultMultipleElectronicResources,
 } from "../../../__test__/fixtures/searchResultElectronicResources"
 
