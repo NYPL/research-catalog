@@ -2,9 +2,15 @@ import { useMemo, useRef, useState } from "react"
 import { useRouter } from "next/router"
 import React from "react"
 import {
+  Text,
+  Card,
+  SearchBar,
   Box,
   Heading,
   useCloseDropDown,
+  useNYPLBreakpoints,
+  CardHeading,
+  CardContent,
 } from "@nypl/design-system-react-components"
 
 import styles from "../../../styles/components/ItemFilters.module.scss"
@@ -24,6 +30,10 @@ interface ItemFilterContainerProps {
 
 const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
   const router = useRouter()
+  const { isLargerThanLarge, isLargerThanMedium } = useNYPLBreakpoints()
+  const filterGroupClassName = isLargerThanLarge
+    ? styles.filterGroup
+    : styles.filterGroupMobile
 
   const filterData = useRef<ItemFilterData[]>(
     itemAggs.map((agg: ItemAggregation) => {
@@ -56,42 +66,73 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
       newFilters,
       locationFilterData.recapLocations()
     )
+    setWhichFilterIsOpen("")
     router.push("/search/advanced" + url)
   }
 
   return (
-    <Box className={styles.filtersContainer}>
-      <Heading data-testid="filter-text" level="h4" size="heading6">
-        Filter by
-      </Heading>
-      <div className={styles.filterGroup} ref={ref}>
-        {filterData.map((field: ItemFilterData) => (
-          <ItemFilter
-            isOpen={whichFilterIsOpen === field.field}
-            setWhichFilterIsOpen={setWhichFilterIsOpen}
-            key={field.field}
-            itemFilterData={field}
-            appliedFilters={appliedFilters}
-            submitFilters={submitFilters}
-          />
-        ))}
-      </div>
-
-      {/* TODO: Heading levels for the bib page need to be ironed out. This
-      h4 is based on the assumption that there is an H3 above the item filters
-      that says "Items in the library and Offsite"  
-
-      NB: suggested approach for adding clear button is to make this a grid and 
-      have the button be in the second column*/}
-      <Heading
-        mt="s"
-        subtitle={appliedFiltersDisplay}
-        level="h4"
-        size="heading6"
+    <>
+      <Box
+        className={styles.filtersContainer}
+        sx={{
+          display: "flex",
+          flexDirection: isLargerThanMedium ? "row" : "column",
+        }}
       >
+        <Card className={filterGroupClassName} ref={ref}>
+          <CardHeading level="h3" size="body2">
+            Filter by
+          </CardHeading>
+          <CardContent>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: isLargerThanLarge ? "row" : "column",
+              }}
+              gap="nypl-s"
+            >
+              {filterData.map((field: ItemFilterData) => (
+                <ItemFilter
+                  isOpen={whichFilterIsOpen === field.field}
+                  setWhichFilterIsOpen={setWhichFilterIsOpen}
+                  key={field.field}
+                  itemFilterData={field}
+                  appliedFilters={appliedFilters}
+                  submitFilters={submitFilters}
+                />
+              ))}
+            </Box>
+          </CardContent>
+        </Card>
+        <Card className={filterGroupClassName}>
+          <CardHeading
+            level="h3"
+            size="body2"
+            data-testid="filter-text"
+            isBold={true}
+          >
+            Search by Year
+          </CardHeading>
+          <CardContent>
+            <SearchBar
+              id="year-filter"
+              labelText="Apply"
+              textInputProps={{
+                defaultValue: "YYYY",
+                isClearable: true,
+                labelText: "Item Search",
+                name: "textInputName",
+              }}
+              onSubmit={() => console.log("spaghetti!")}
+            />
+          </CardContent>
+        </Card>
+      </Box>
+      <Heading level="h3" size="heading6">
         {itemsMatched}
       </Heading>
-    </Box>
+      <Text>{appliedFiltersDisplay}</Text>
+    </>
   )
 }
 

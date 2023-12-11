@@ -1,4 +1,8 @@
-import { CheckboxGroup, Checkbox } from "@nypl/design-system-react-components"
+import {
+  CheckboxGroup,
+  Checkbox,
+  Box,
+} from "@nypl/design-system-react-components"
 import type { Dispatch } from "react"
 import { useCallback, useEffect, useState } from "react"
 
@@ -43,7 +47,7 @@ const ItemFilter = ({
   }, [isOpen, resetToAppliedOptions])
 
   return (
-    <div className={styles.itemFilter}>
+    <Box className={styles.itemFilter}>
       <ItemFilterLabel
         field={field}
         appliedOptions={appliedFilters[field]}
@@ -51,7 +55,7 @@ const ItemFilter = ({
         isOpen={isOpen}
       />
       {isOpen && (
-        <div className={styles.itemFilterOptionsContainer}>
+        <Box className={styles.itemFilterOptionsContainer}>
           <CheckboxGroup
             labelText={field}
             showLabel={false}
@@ -83,9 +87,9 @@ const ItemFilter = ({
             setSelectedOptions={setSelectedOptions}
             submitFilters={submitFilters}
           />
-        </div>
+        </Box>
       )}
-    </div>
+    </Box>
   )
 }
 
