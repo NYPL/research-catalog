@@ -35,20 +35,8 @@ const ElectronicResourcesLink = ({
           {electronicResources[0].prefLabel || electronicResources[0].url}
         </DSLink>
       ) : (
-        <RCLink href={`${bibUrl}#electronic-resources`}>
-          <Text
-            isBold
-            size="body2"
-            sx={{ display: "flex", alignItems: "center" }}
-          >
-            See All Available Online Resources{" "}
-            <Icon
-              iconRotation="rotate270"
-              name="arrow"
-              size="xsmall"
-              ml="xxs"
-            />
-          </Text>
+        <RCLink href={`${bibUrl}#electronic-resources`} type="standalone">
+          See All Available Online Resources
         </RCLink>
       )}
     </Box>

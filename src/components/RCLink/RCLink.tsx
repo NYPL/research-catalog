@@ -1,4 +1,7 @@
-import { Link as DSLink } from "@nypl/design-system-react-components"
+import {
+  Link as DSLink,
+  type LinkTypes,
+} from "@nypl/design-system-react-components"
 import Link from "next/link"
 import { type ReactNode } from "react"
 
@@ -8,6 +11,8 @@ interface RCLinkProps {
   children: ReactNode
   className?: string
   color?: string
+  type?: LinkTypes
+  size?: string
 }
 
 /**
