@@ -5,7 +5,6 @@ import {
   Box,
   Text,
   CardActions,
-  Icon,
 } from "@nypl/design-system-react-components"
 
 import RCLink from "../RCLink/RCLink"
@@ -40,21 +39,8 @@ const SearchResult = ({ bib }: SearchResultProps) => {
         {/* Move the code block below to the conditional for rendering the Item Table */}
         {bib.numPhysicalItems > ITEMS_PER_SEARCH_RESULT && (
           <CardActions>
-            <RCLink href={`${bib.url}#items-table`}>
-              <Text
-                isBold
-                size="body1"
-                noSpace
-                sx={{ display: "flex", alignItems: "center" }}
-              >
-                {`View All ${bib.itemMessage} `}
-                <Icon
-                  iconRotation="rotate270"
-                  name="arrow"
-                  size="xsmall"
-                  ml="xxs"
-                />
-              </Text>
+            <RCLink href={`${bib.url}#items-table`} type="standalone">
+              {`View All ${bib.itemMessage} `}
             </RCLink>
           </CardActions>
         )}
