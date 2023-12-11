@@ -16,7 +16,7 @@ export interface SearchResultsItem {
 
 export interface ItemLocation extends JSONLDValue {
   customerCode?: string
-  endpoint?: string
+  endpoint?: ItemLocationEndpoint
 }
 
 export type ItemLocationKey = "Schwarzman" | "Performing" | "Schomburg"
