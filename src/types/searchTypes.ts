@@ -33,8 +33,8 @@ export interface Identifiers {
 export interface SearchParams {
   q?: string
   field?: string
-  sortBy?: string
-  order?: string
+  sortBy?: SortKey
+  order?: SortOrder
   filters?: SearchFilters
   contributor?: string
   title?: string
@@ -42,6 +42,9 @@ export interface SearchParams {
   page?: number
   identifiers?: Identifiers
 }
+
+export type SortKey = "relevance" | "title" | "date"
+export type SortOrder = "asc" | "desc"
 
 type SearchFormField = { value: string }
 
@@ -86,12 +89,12 @@ export interface SearchQueryParams extends Identifiers {
   title?: string
   subject?: string
   filters?: SearchFilters
-  sort?: string
-  sort_direction?: string
+  sort?: SortKey
+  sort_direction?: SortOrder
   sort_scope?: string
   search_scope?: string
-  page?: number
-  per_page?: number
+  page?: string
+  per_page?: string
 }
 
 export interface SearchFormEvent {
