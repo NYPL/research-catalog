@@ -8,6 +8,7 @@ import {
 } from "@nypl/design-system-react-components"
 
 import RCLink from "../RCLink/RCLink"
+import ElectronicResourcesLink from "./ElectronicResourcesLink"
 import type SearchResultsBib from "../../models/SearchResultsBib"
 import { PATHS, ITEMS_PER_SEARCH_RESULT } from "../../config/constants"
 
@@ -36,6 +37,12 @@ const SearchResult = ({ bib }: SearchResultProps) => {
           {bib.yearPublished && <Text>{bib.yearPublished}</Text>}
           <Text>{bib.itemMessage}</Text>
         </Box>
+        {bib.hasElectronicResources && (
+          <ElectronicResourcesLink
+            bibUrl={bib.url}
+            electronicResources={bib.electronicResources}
+          />
+        )}
         {/* Move the code block below to the conditional for rendering the Item Table */}
         {bib.numPhysicalItems > ITEMS_PER_SEARCH_RESULT && (
           <CardActions>

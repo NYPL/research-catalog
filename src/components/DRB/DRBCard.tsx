@@ -66,12 +66,7 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
               sx={{ display: "flex", alignItems: "center" }}
               noSpace
             >
-              <Icon
-                className="more-link"
-                name="download"
-                align="left"
-                size="small"
-              />
+              <Icon name="download" align="left" size="small" />
               Download {drbResult.downloadLink.mediaType || ""}
             </Text>
           </DSLink>

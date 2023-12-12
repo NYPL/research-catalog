@@ -53,6 +53,10 @@ export default class SearchResultsBib {
     return this.numPhysicalItems > 0
   }
 
+  get hasElectronicResources() {
+    return this.numElectronicResources > 0
+  }
+
   get numItems() {
     return this.hasPhysicalItems
       ? this.numPhysicalItems
