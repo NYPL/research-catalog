@@ -1,4 +1,8 @@
-import { CheckboxGroup, Checkbox } from "@nypl/design-system-react-components"
+import {
+  CheckboxGroup,
+  Checkbox,
+  Box,
+} from "@nypl/design-system-react-components"
 import type { Dispatch } from "react"
 import { useCallback, useEffect, useState } from "react"
 
@@ -11,27 +15,26 @@ import ItemFilterLabel from "./ItemFilterLabel"
 
 interface ItemFilterProps {
   itemFilterData: ItemFilterData
-  setAppliedFilters: Dispatch<React.SetStateAction<AppliedFilters>>
-  activeFilters: AppliedFilters
+  appliedFilters: AppliedFilters
   // this type is temporary for dev use only. could end up being different.
-  submitFilters: Dispatch<React.SetStateAction<AppliedFilters>>
+  submitFilters: (selection: string[], field: string) => void
   isOpen: boolean
   setWhichFilterIsOpen: Dispatch<React.SetStateAction<string>>
 }
 
 const ItemFilter = ({
   itemFilterData,
-  setAppliedFilters,
-  activeFilters,
+  submitFilters,
+  appliedFilters,
   isOpen,
   setWhichFilterIsOpen,
 }: ItemFilterProps) => {
   const field = itemFilterData.field
-  const [selectedOptions, setSelectedOptions] = useState(activeFilters[field])
+  const [selectedOptions, setSelectedOptions] = useState(appliedFilters[field])
 
   const resetToAppliedOptions = useCallback(() => {
-    updateCheckboxGroupValue(activeFilters[field])
-  }, [activeFilters, field])
+    updateCheckboxGroupValue(appliedFilters[field])
+  }, [appliedFilters, field])
 
   const updateCheckboxGroupValue = (data: string[]) => {
     setSelectedOptions(data)
@@ -44,15 +47,15 @@ const ItemFilter = ({
   }, [isOpen, resetToAppliedOptions])
 
   return (
-    <div className={styles.itemFilter}>
+    <Box className={styles.itemFilter}>
       <ItemFilterLabel
         field={field}
-        selectedOptions={selectedOptions}
+        appliedOptions={appliedFilters[field]}
         setWhichFilterIsOpen={setWhichFilterIsOpen}
         isOpen={isOpen}
       />
       {isOpen && (
-        <div className={styles.itemFilterOptionsContainer}>
+        <Box className={styles.itemFilterOptionsContainer}>
           <CheckboxGroup
             labelText={field}
             showLabel={false}
@@ -79,13 +82,14 @@ const ItemFilter = ({
           </CheckboxGroup>
           <ItemFilterButtons
             field={field}
+            appliedOptions={appliedFilters[field]}
             selectedOptions={selectedOptions}
             setSelectedOptions={setSelectedOptions}
-            setAppliedFilters={setAppliedFilters}
+            submitFilters={submitFilters}
           />
-        </div>
+        </Box>
       )}
-    </div>
+    </Box>
   )
 }
 

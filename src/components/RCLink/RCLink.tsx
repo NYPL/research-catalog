@@ -12,6 +12,8 @@ interface RCLinkProps {
   className?: string
   color?: string
   type?: LinkTypes
+  size?: string
+  hasWhiteFocusRing?: boolean
 }
 
 /**
@@ -24,11 +26,23 @@ const RCLink = ({
   href,
   children,
   active = false,
+  hasWhiteFocusRing = false,
   ...rest
 }: RCLinkProps) => {
   return (
     <Link href={href} passHref>
-      <DSLink className={className} fontWeight={active && "bold"} {...rest}>
+      <DSLink
+        className={className}
+        fontWeight={active && "bold"}
+        {...rest}
+        __css={
+          hasWhiteFocusRing && {
+            _focus: {
+              outlineColor: "ui.white",
+            },
+          }
+        }
+      >
         {children}
       </DSLink>
     </Link>

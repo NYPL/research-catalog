@@ -4,13 +4,15 @@ import {
   CardHeading,
   Box,
   Text,
+  CardActions,
   useNYPLBreakpoints,
 } from "@nypl/design-system-react-components"
 
 import RCLink from "../RCLink/RCLink"
+import ElectronicResourcesLink from "./ElectronicResourcesLink"
 import ItemTable from "../ItemTable/ItemTable"
-import type SearchResultsBib from "../../models/SearchResultsBib"
 import ItemTableData from "../../models/ItemTableData"
+import type SearchResultsBib from "../../models/SearchResultsBib"
 import { PATHS, ITEMS_PER_SEARCH_RESULT } from "../../config/constants"
 
 interface SearchResultProps {
@@ -34,7 +36,6 @@ const SearchResult = ({ bib }: SearchResultProps) => {
         isArchiveCollection: bib.isArchiveCollection,
       })
     })
-
   return (
     <Card
       sx={{
@@ -46,19 +47,35 @@ const SearchResult = ({ bib }: SearchResultProps) => {
         <RCLink href={`${PATHS.BIB}/${bib.id}`}>{bib.title}</RCLink>
       </CardHeading>
       <CardContent>
-        <Box sx={{ p: { display: "inline", marginRight: "s" } }} mb="m">
+        <Box sx={{ p: { display: "inline", marginRight: "s" } }}>
           {bib.materialType && <Text>{bib.materialType}</Text>}
           {bib.publicationStatement && <Text>{bib.publicationStatement}</Text>}
           {bib.yearPublished && <Text>{bib.yearPublished}</Text>}
           <Text>{bib.itemMessage}</Text>
         </Box>
-        {searchResultItems &&
-          searchResultItems.map((itemTableData) => (
-            <ItemTable
-              itemTableData={itemTableData}
-              key={`search-results-item-${itemTableData.items[0].id}`}
-            />
-          ))}
+        {bib.hasElectronicResources && (
+          <ElectronicResourcesLink
+            bibUrl={bib.url}
+            electronicResources={bib.electronicResources}
+          />
+        )}
+        {searchResultItems && (
+          <>
+            {searchResultItems.map((itemTableData) => (
+              <ItemTable
+                itemTableData={itemTableData}
+                key={`search-results-item-${itemTableData.items[0].id}`}
+              />
+            ))}
+            {bib.numPhysicalItems > ITEMS_PER_SEARCH_RESULT && (
+              <CardActions>
+                <RCLink href={`${bib.url}#items-table`} type="standalone">
+                  {`View All ${bib.itemMessage} `}
+                </RCLink>
+              </CardActions>
+            )}
+          </>
+        )}
       </CardContent>
     </Card>
   )
