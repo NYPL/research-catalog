@@ -22,7 +22,7 @@ export default class SearchResultsBib {
   materialType?: string
   publicationStatement?: string
   electronicResources?: ElectronicResource[]
-  issuance?: JSONLDValue
+  issuance?: JSONLDValue[]
   numPhysicalItems: number
   items: Item[]
 
@@ -36,7 +36,7 @@ export default class SearchResultsBib {
       ? result.publicationStatement[0]
       : null
     this.electronicResources = result.electronicResources || null
-    this.issuance = (result.issuance?.length && result.issuance[0]) || null
+    this.issuance = (result.issuance?.length && result.issuance) || null
     this.numPhysicalItems = result.numItemsTotal || 0
     this.items = this.getItemsFromResult(result)
   }
@@ -51,7 +51,10 @@ export default class SearchResultsBib {
 
   // Used to determine the Volume column text in the ItemTable
   get isArchiveCollection() {
-    return this.issuance["@id"] === "urn:biblevel:c"
+    return (
+      Array.isArray(this.issuance) &&
+      this.issuance.some((issuance) => issuance["@id"] === "urn:biblevel:c")
+    )
   }
 
   get hasItems() {
