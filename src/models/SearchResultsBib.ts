@@ -2,6 +2,7 @@ import type { SearchResult } from "../types/searchTypes"
 import type { ElectronicResource } from "../types/bibTypes"
 import type { JSONLDValue } from "../types/itemTypes"
 import Item from "../models/Item"
+import { ITEMS_PER_SEARCH_RESULT } from "../config/constants"
 
 /**
  * The SearchResultsBib class contains the data and getter functions
@@ -63,6 +64,10 @@ export default class SearchResultsBib {
 
   get hasElectronicResources() {
     return this.numElectronicResources > 0
+  }
+
+  get showViewAllItemsLink() {
+    return this.numPhysicalItems > ITEMS_PER_SEARCH_RESULT
   }
 
   get numItems() {
