@@ -4,12 +4,13 @@ import {
   CardHeading,
   Box,
   Text,
+  CardActions,
 } from "@nypl/design-system-react-components"
 
 import RCLink from "../RCLink/RCLink"
 import ElectronicResourcesLink from "./ElectronicResourcesLink"
 import type SearchResultsBib from "../../models/SearchResultsBib"
-import { PATHS } from "../../config/constants"
+import { PATHS, ITEMS_PER_SEARCH_RESULT } from "../../config/constants"
 
 interface SearchResultProps {
   bib: SearchResultsBib
@@ -41,6 +42,14 @@ const SearchResult = ({ bib }: SearchResultProps) => {
             bibUrl={bib.url}
             electronicResources={bib.electronicResources}
           />
+        )}
+        {/* Move the code block below to the conditional for rendering the Item Table */}
+        {bib.numPhysicalItems > ITEMS_PER_SEARCH_RESULT && (
+          <CardActions>
+            <RCLink href={`${bib.url}#items-table`} type="standalone">
+              {`View All ${bib.itemMessage} `}
+            </RCLink>
+          </CardActions>
         )}
       </CardContent>
     </Card>
