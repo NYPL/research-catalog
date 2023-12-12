@@ -82,7 +82,7 @@ const SearchForm = () => {
         <div className={styles.auxSearchContainer}>
           {/* Temporary color update. The Header overrides the new
             DS 2.X CSS color variable values. */}
-          <Box className={styles.advancedSearch}>
+          <Box className={styles.searchButtons}>
             <Button id="refine-search" buttonType="secondary">
               Refine Search
             </Button>
