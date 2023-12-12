@@ -1,4 +1,4 @@
-import { SearchBar } from "@nypl/design-system-react-components"
+import { SearchBar, Button, Box } from "@nypl/design-system-react-components"
 import { useRouter } from "next/router"
 import type { SyntheticEvent, Dispatch, SetStateAction } from "react"
 import { useState } from "react"
@@ -80,16 +80,17 @@ const SearchForm = () => {
           />
         </div>
         <div className={styles.auxSearchContainer}>
-          <EDSLink />
           {/* Temporary color update. The Header overrides the new
             DS 2.X CSS color variable values. */}
-          <RCLink
-            className={styles.advancedSearch}
-            href={"/search/advanced"}
-            color="#0069BF"
-          >
-            Advanced Search
-          </RCLink>
+          <Box className={styles.advancedSearch}>
+            <Button id="refine-search" buttonType="secondary">
+              Refine Search
+            </Button>
+            <RCLink href={"/search/advanced"} color="#0069BF">
+              Advanced Search
+            </RCLink>
+          </Box>
+          <EDSLink />
         </div>
       </div>
     </div>
