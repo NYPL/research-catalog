@@ -18,7 +18,7 @@ export const itemPhysicallyRequestable = {
       prefLabel: "book, limited circ, MaRLI",
     },
   ],
-  dueDate: ["September 3rd"],
+  dueDate: ["2023-09-03"],
   eddRequestable: false,
   enumerationChronology: ["no. 4 (2001)"],
   formatLiteral: ["Text"],

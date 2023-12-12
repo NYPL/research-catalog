@@ -57,7 +57,7 @@ describe("Item model", () => {
     })
 
     it("initializes the Item's due date", () => {
-      expect(item.dueDate).toBe("September 3rd")
+      expect(item.dueDate).toBe("2023-09-03")
     })
 
     it("initializes the Item's location", () => {
