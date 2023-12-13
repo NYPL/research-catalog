@@ -6,6 +6,8 @@ import {
   Form,
 } from "@nypl/design-system-react-components"
 import type { SyntheticEvent } from "react"
+import { useState } from "react"
+import { useRouter } from "next/router"
 
 import sampleFilters from "./sampleFilters.json"
 import styles from "../../../styles/components/Search.module.scss"
@@ -18,14 +20,18 @@ interface RefineSearchProps {
 
 const RefineSearch = ({ toggleRefine }: RefineSearchProps) => {
   const fields = [
-    { value: "materialType", label: "Format", selectedOptions: [] },
-    { value: "language", label: "Language", selectedOptions: [] },
-    { value: "dateAfter", label: "Start Year", selectedOptions: [] },
-    { value: "dateBefore", label: "End Year", selectedOptions: [] },
-    { value: "subjectLiteral", label: "Subject", selectedOptions: [] },
+    { value: "materialType", label: "Format" },
+    { value: "language", label: "Language" },
+    { value: "dateAfter", label: "Start Year" },
+    { value: "dateBefore", label: "End Year" },
+    { value: "subjectLiteral", label: "Subject" },
   ]
+  const router = useRouter()
+  console.log(router.query)
+  const [selectedFilters, setSelectedFilters] = useState({})
   // these should be constructed from the url so we can reset to the original search.
   const activeFilters = ["resourcetypes:txt"]
+
   return (
     <Form id="refine-search">
       <HorizontalRule />
