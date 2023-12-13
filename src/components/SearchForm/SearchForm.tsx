@@ -30,6 +30,11 @@ const SearchForm = () => {
     router?.pathname.includes("/search")
   )
 
+  const toggleRefine = () => {
+    setShowRefineButton((prevState) => !prevState)
+    setRefineSearchOpen((prevState) => !prevState)
+  }
+
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
     const searchParams = {
@@ -95,10 +100,7 @@ const SearchForm = () => {
           <Box className={styles.searchButtons}>
             {showRefineButton ? (
               <Button
-                onClick={() => {
-                  setShowRefineButton(false)
-                  setRefineSearchOpen((prevState) => !prevState)
-                }}
+                onClick={toggleRefine}
                 id="refine-search"
                 buttonType="secondary"
               >
@@ -111,7 +113,7 @@ const SearchForm = () => {
               Advanced Search
             </RCLink>
           </Box>
-          {refineSearchOpen && <RefineSearch />}
+          {refineSearchOpen && <RefineSearch toggleRefine={toggleRefine} />}
           <EDSLink />
         </div>
       </div>
