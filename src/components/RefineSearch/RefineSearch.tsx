@@ -5,7 +5,6 @@ import {
   ButtonGroup,
   Form,
 } from "@nypl/design-system-react-components"
-import { useRouter } from "next/router"
 
 import sampleFilters from "./sampleFilters.json"
 import styles from "../../../styles/components/Search.module.scss"
@@ -18,6 +17,7 @@ interface RefineSearchProps {
 
 const RefineSearch = ({ toggleRefine }: RefineSearchProps) => {
   const fields = ["materialType"]
+  // these should be constructed from the url so we can reset to the original search.
   const activeFilters = ["resourcetypes:txt"]
   return (
     <Form id="refine-search">

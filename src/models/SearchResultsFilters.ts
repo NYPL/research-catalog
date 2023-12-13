@@ -7,7 +7,6 @@ class SearchResultsFilters {
   constructor(searchResults, field) {
     const filterOptions = searchResults.filters.itemListElement
     this.options = filterOptions.find((f) => f.id === field).values
-    console.log(searchResults.selectedFilters)
     this.activeFilters = searchResults.selectedFilters[field].map(
       (f) => f.value
     )
