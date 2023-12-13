@@ -1,4 +1,9 @@
-import { SearchBar, Button, Box } from "@nypl/design-system-react-components"
+import {
+  SearchBar,
+  Button,
+  Box,
+  Spacer,
+} from "@nypl/design-system-react-components"
 import { useRouter } from "next/router"
 import type { SyntheticEvent, Dispatch, SetStateAction } from "react"
 import { useState } from "react"
@@ -8,6 +13,7 @@ import RCLink from "../RCLink/RCLink"
 import { getQueryString } from "../../utils/searchUtils"
 import { BASE_URL, PATHS } from "../../config/constants"
 import EDSLink from "../EDSLink"
+import RefineSearch from "../RefineSearch/RefineSearch"
 
 /**
  * The SearchForm component renders and controls the Search form and
@@ -19,6 +25,10 @@ const SearchForm = () => {
     (router?.query?.q as string) || ""
   )
   const [searchScope, setSearchScope] = useState("all")
+  const [refineSearchOpen, setRefineSearchOpen] = useState(false)
+  const [showRefineButton, setShowRefineButton] = useState(
+    router?.pathname.includes("/search")
+  )
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
@@ -83,13 +93,25 @@ const SearchForm = () => {
           {/* Temporary color update. The Header overrides the new
             DS 2.X CSS color variable values. */}
           <Box className={styles.searchButtons}>
-            <Button id="refine-search" buttonType="secondary">
-              Refine Search
-            </Button>
+            {showRefineButton ? (
+              <Button
+                onClick={() => {
+                  setShowRefineButton(false)
+                  setRefineSearchOpen((prevState) => !prevState)
+                }}
+                id="refine-search"
+                buttonType="secondary"
+              >
+                {"Refine Search"}
+              </Button>
+            ) : (
+              <Spacer />
+            )}
             <RCLink href={"/search/advanced"} color="#0069BF">
               Advanced Search
             </RCLink>
           </Box>
+          {refineSearchOpen && <RefineSearch />}
           <EDSLink />
         </div>
       </div>
