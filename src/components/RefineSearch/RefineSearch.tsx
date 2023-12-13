@@ -5,6 +5,7 @@ import {
   ButtonGroup,
   Form,
 } from "@nypl/design-system-react-components"
+import type { SyntheticEvent } from "react"
 
 import sampleFilters from "./sampleFilters.json"
 import styles from "../../../styles/components/Search.module.scss"
@@ -16,7 +17,13 @@ interface RefineSearchProps {
 }
 
 const RefineSearch = ({ toggleRefine }: RefineSearchProps) => {
-  const fields = ["materialType"]
+  const fields = [
+    { value: "materialType", label: "Format", selectedOptions: [] },
+    { value: "language", label: "Language", selectedOptions: [] },
+    { value: "dateAfter", label: "Start Year", selectedOptions: [] },
+    { value: "dateBefore", label: "End Year", selectedOptions: [] },
+    { value: "subjectLiteral", label: "Subject", selectedOptions: [] },
+  ]
   // these should be constructed from the url so we can reset to the original search.
   const activeFilters = ["resourcetypes:txt"]
   return (
@@ -42,14 +49,16 @@ const RefineSearch = ({ toggleRefine }: RefineSearchProps) => {
       <HorizontalRule />
       {fields.map((field) => {
         const filterData = new SearchResultsFilters(sampleFilters, field)
-        return (
-          <RefineSearchCheckBoxField
-            key={field}
-            field={field}
-            activeFilters={activeFilters}
-            options={filterData.options}
-          />
-        )
+        if (filterData.options) {
+          return (
+            <RefineSearchCheckBoxField
+              key={field.label}
+              field={field}
+              activeFilters={activeFilters}
+              options={filterData.options}
+            />
+          )
+        } else return null
       })}
     </Form>
   )

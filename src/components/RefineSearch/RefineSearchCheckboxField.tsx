@@ -6,9 +6,10 @@ import {
 import { useState } from "react"
 
 import type { ItemAggregationOption } from "../../types/filterTypes"
+import styles from "../../../styles/components/Search.module.scss"
 
 interface CheckboxGroupProps {
-  field: string
+  field: { value: string; label: string }
   activeFilters: string[]
   options: ItemAggregationOption[]
 }
@@ -22,12 +23,23 @@ const RefineSearchCheckBoxField = ({
   const updateCheckboxGroupValue = (data: string[]) => {
     setSelectedOptions(data)
   }
+
   return (
     <FormField>
       <CheckboxGroup
-        id={`refine-${field}`}
-        labelText="materialType"
-        name="materialType"
+        id={`refine-${field.label}`}
+        labelText={field.label}
+        name={field.value}
+        __css={{
+          "> div": {
+            display: "grid",
+            gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
+            gridGap: "var(--nypl-space-s)",
+            div: {
+              marginTop: "0 !important",
+            },
+          },
+        }}
         value={selectedOptions}
         onChange={updateCheckboxGroupValue}
       >
