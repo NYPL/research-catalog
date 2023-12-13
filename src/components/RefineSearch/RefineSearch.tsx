@@ -4,22 +4,21 @@ import {
   HorizontalRule,
   ButtonGroup,
   Form,
-  FormField,
-  CheckboxGroup,
-  Checkbox,
 } from "@nypl/design-system-react-components"
+import { useRouter } from "next/router"
 
 import sampleFilters from "./sampleFilters.json"
 import styles from "../../../styles/components/Search.module.scss"
 import SearchResultsFilters from "../../models/SearchResultsFilters"
+import RefineSearchCheckBoxField from "./RefineSearchCheckboxField"
 
 interface RefineSearchProps {
   toggleRefine: () => void
 }
 
 const RefineSearch = ({ toggleRefine }: RefineSearchProps) => {
-  const filterData = new SearchResultsFilters(sampleFilters)
-  console.log(filterData)
+  const fields = ["materialType"]
+  const activeFilters = ["resourcetypes:txt"]
   return (
     <Form id="refine-search">
       <HorizontalRule />
@@ -41,20 +40,17 @@ const RefineSearch = ({ toggleRefine }: RefineSearchProps) => {
         </ButtonGroup>
       </Box>
       <HorizontalRule />
-      <FormField>
-        <CheckboxGroup id="refine-format" labelText="format" name="format">
-          {filterData.format.map(({ value, label }) => {
-            return (
-              <Checkbox
-                id={value}
-                key={value}
-                value={value}
-                labelText={label}
-              />
-            )
-          })}
-        </CheckboxGroup>
-      </FormField>
+      {fields.map((field) => {
+        const filterData = new SearchResultsFilters(sampleFilters, field)
+        return (
+          <RefineSearchCheckBoxField
+            key={field}
+            field={field}
+            activeFilters={activeFilters}
+            options={filterData.options}
+          />
+        )
+      })}
     </Form>
   )
 }

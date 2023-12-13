@@ -1,16 +1,16 @@
+import type { ItemAggregationOption } from "../types/filterTypes"
+
 class SearchResultsFilters {
-  format: []
-  languageFilters: []
-  subjectLiteralFilters: []
-  activeFilters: object
-  constructor(searchResults) {
+  options: ItemAggregationOption[]
+  activeFilters: string[]
+  field: string
+  constructor(searchResults, field) {
     const filterOptions = searchResults.filters.itemListElement
-    this.format = filterOptions.find((f) => f.id === "materialType").values
-    this.languageFilters = filterOptions.find((f) => f.id === "language").values
-    this.subjectLiteralFilters = filterOptions.find(
-      (f) => f.id === "subjectLiteral"
-    ).values
-    this.activeFilters = searchResults.selectedFilters
+    this.options = filterOptions.find((f) => f.id === field).values
+    console.log(searchResults.selectedFilters)
+    this.activeFilters = searchResults.selectedFilters[field].map(
+      (f) => f.value
+    )
   }
 }
 
