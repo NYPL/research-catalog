@@ -18,3 +18,18 @@ export function standardizeBibId(bibId: string): string {
   }
   return bibId
 }
+
+/**
+ * Given a bib ID (e.g. b12082323, pb123456, hb10000202040400) returns true
+ * if it's an NYPL bib ID.
+ */
+export function isNyplBibID(id: string) {
+  return /^b/.test(id)
+}
+
+/**
+ * Given a bib ID, return true if it is an NYPL bnumber and has a 10th character.
+ */
+export function hasCheckDigit(id = "") {
+  return isNyplBibID(id) && id.length === 10
+}
