@@ -14,7 +14,7 @@ import {
 } from "../../src/config/constants"
 import nyplApiClient from "../../src/server/nyplApiClient/index"
 import {
-  getQueryString,
+  getSearchQuery,
   mapQueryToSearchParams,
   mapRequestBodyToSearchParams,
 } from "../../src/utils/searchUtils"
@@ -47,7 +47,7 @@ export async function fetchResults(
     q: keywordsOrBibId,
   }
 
-  const queryString = getQueryString(modifiedSearchParams)
+  const queryString = getSearchQuery(modifiedSearchParams)
 
   const aggregationQuery = `/aggregations${queryString}`
   const resultsQuery = `${queryString}&per_page=${RESULTS_PER_PAGE.toString()}`
@@ -106,7 +106,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {
     const body = await req.body
     const searchParams = mapRequestBodyToSearchParams(body)
-    const queryString = getQueryString(searchParams)
+    const queryString = getSearchQuery(searchParams)
     res.redirect(BASE_URL + PATHS.SEARCH + queryString)
   }
 }

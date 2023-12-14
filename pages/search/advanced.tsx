@@ -36,7 +36,7 @@ import type {
   SearchParams,
   SearchFormActionType,
 } from "../../src/types/searchTypes"
-import { getQueryString } from "../../src/utils/searchUtils"
+import { getSearchQuery } from "../../src/utils/searchUtils"
 
 /**
  * The Advanced Search page is responsible for displaying the Advanced Search form fields and
@@ -94,7 +94,7 @@ export default function AdvancedSearch() {
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
-    const queryString = getQueryString(searchFormState as SearchParams)
+    const queryString = getSearchQuery(searchFormState as SearchParams)
     if (!queryString.length) {
       setAlert(true)
     } else {

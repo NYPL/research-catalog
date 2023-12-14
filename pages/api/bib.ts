@@ -1,11 +1,18 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 
 import type { BibParams, BibResponse } from "../../src/types/bibTypes"
+import { isNyplBibID } from "../../src/utils/bibUtils"
 
 export async function fetchBib({
   id,
+  itemFrom = 0,
+  filterItems = "",
 }: BibParams): Promise<BibResponse | Error> {
   console.log(id)
+  console.log(itemFrom)
+  console.log(filterItems)
+  const isNYPLBib = isNyplBibID(id)
+  console.log(isNYPLBib)
   try {
     return {
       bib: [],

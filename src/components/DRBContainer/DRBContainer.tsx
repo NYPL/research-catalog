@@ -4,7 +4,7 @@ import useSWRImmutable from "swr/immutable"
 import { BASE_URL, DRB_API_SEARCH_ROUTE } from "../../config/constants"
 import type { SearchParams } from "../../types/searchTypes"
 import type { DRBWork } from "../../types/drbTypes"
-import { getQueryString } from "../../utils/searchUtils"
+import { getSearchQuery } from "../../utils/searchUtils"
 
 interface DRBContainerProps {
   searchParams: SearchParams
@@ -14,7 +14,7 @@ interface DRBContainerProps {
  * The DRBContainer fetches and displays DRB search results
  */
 const DRBContainer = ({ searchParams }: DRBContainerProps) => {
-  const searchQuery = getQueryString(searchParams)
+  const searchQuery = getSearchQuery(searchParams)
   const drbUrl = `${BASE_URL}${DRB_API_SEARCH_ROUTE}?${searchQuery}`
   const fetcher = (url: string) => fetch(url).then((res) => res.json())
 
