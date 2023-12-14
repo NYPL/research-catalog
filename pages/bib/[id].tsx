@@ -1,4 +1,5 @@
 import Head from "next/head"
+import { Heading } from "@nypl/design-system-react-components"
 
 import Layout from "../../src/components/Layout/Layout"
 import { PATHS, SITE_NAME } from "../../src/config/constants"
@@ -15,7 +16,9 @@ export default function Bib({ bib, annotatedMarc }) {
       <Head>
         <title>Item Details | {SITE_NAME}</title>
       </Head>
-      <Layout activePage="bib">Bib page</Layout>
+      <Layout activePage="bib">
+        <Heading level="h1">{bib.title[0]}</Heading>
+      </Layout>
     </>
   )
 }
