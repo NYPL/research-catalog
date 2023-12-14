@@ -42,9 +42,11 @@ export async function fetchBib(bibParams: BibParams): Promise<BibResponse> {
     annotatedMarcResponse.status === "fulfilled" && annotatedMarcResponse.value
 
   try {
-    if (!bib || !bib.uri || !id.includes(bib.uri)) {
+    if (!bib) new Error("Bib not found")
+
+    if (!bib.uri || !id.includes(bib.uri))
       new Error("There was a problem with the URI field in the Bib response")
-    }
+
     return {
       bib,
       annotatedMarc: annotatedMarc?.bib || null,
