@@ -3,8 +3,14 @@ export interface ElectronicResource {
 }
 
 export interface BibResponse {
-  bib: []
+  bib?: Bib
   annotatedMarc?: []
+  status: number
+  redirectUrl?: string
+}
+
+export interface Bib {
+  uri?: string
 }
 
 export interface BibParams {

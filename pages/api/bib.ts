@@ -1,18 +1,31 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 
 import type { BibParams, BibResponse } from "../../src/types/bibTypes"
-import { getBibQuery, isNyplBibID } from "../../src/utils/bibUtils"
+import {
+  getBibQuery,
+  isNyplBibID,
+  standardizeBibId,
+} from "../../src/utils/bibUtils"
 import nyplApiClient from "../../src/server/nyplApiClient/"
 import {
   DISCOVERY_API_NAME,
   DISCOVERY_API_SEARCH_ROUTE,
 } from "../../src/config/constants"
 
-export async function fetchBib(
-  bibParams: BibParams
-): Promise<BibResponse | Error> {
+export async function fetchBib(bibParams: BibParams): Promise<BibResponse> {
+  const { id } = bibParams
+  const standardizedId = standardizeBibId(id)
+
+  // Redirect to Bib page with standardized ID
+  if (id !== standardizedId) {
+    return {
+      status: 301,
+      redirectUrl: `/bib/${standardizedId}`,
+    }
+  }
+
   // Don't fetch annotated-marc for partner records:
-  const getAnnotatedMarc = isNyplBibID(bibParams.id)
+  const getAnnotatedMarc = isNyplBibID(id)
 
   const client = await nyplApiClient({ apiName: DISCOVERY_API_NAME })
   const [bibResponse, annotatedMarcResponse] = await Promise.allSettled([
@@ -28,15 +41,19 @@ export async function fetchBib(
   const annotatedMarc =
     annotatedMarcResponse.status === "fulfilled" && annotatedMarcResponse.value
 
-  // console.log(bib)
-  console.log(annotatedMarc.bib)
   try {
+    if (!bib || !bib.uri || !id.includes(bib.uri)) {
+      new Error("There was a problem with the URI field in the Bib response")
+    }
     return {
       bib,
-      annotatedMarc: annotatedMarc.bib ? annotatedMarc : null,
+      annotatedMarc: annotatedMarc?.bib || null,
+      status: 200,
     }
   } catch (error) {
-    return new Error("Error fetching Bib")
+    return {
+      status: 404,
+    }
   }
 }
 
