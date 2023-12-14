@@ -1,8 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 
-import type { BibResponse } from "../../src/types/bibTypes"
+import type { BibParams, BibResponse } from "../../src/types/bibTypes"
 
-export async function fetchBib(id: string): Promise<BibResponse | Error> {
+export async function fetchBib({
+  id,
+}: BibParams): Promise<BibResponse | Error> {
   console.log(id)
   try {
     return {

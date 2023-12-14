@@ -3,6 +3,7 @@ import Head from "next/head"
 import Layout from "../../src/components/Layout/Layout"
 import { SITE_NAME } from "../../src/config/constants"
 import { standardizeBibId } from "../../src/utils/bibUtils"
+import { fetchBib } from "../api/bib"
 
 /**
  * The Bib page is responsible for fetching and displaying a single Bib's details.
@@ -30,6 +31,9 @@ export async function getServerSideProps({ params }) {
       },
     }
   }
+
+  const bib = fetchBib({ id })
+  console.log(bib)
   return {
     props: {
       bib: [],
