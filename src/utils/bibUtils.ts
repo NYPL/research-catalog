@@ -37,14 +37,13 @@ export function hasCheckDigit(id = "") {
 }
 
 /**
- * Given a BibParams object, return a query string for the API call.
+ * Given a BibParams object and an includeAnnotatedMarc boolean, return a query string for the Bib fetch API call.
  */
 export function getBibQuery(
   { id, itemsFrom, itemFilterQuery }: BibParams,
   includeAnnotatedMarc = false
 ) {
   const itemQueries = []
-
   const queryBase = includeAnnotatedMarc ? `${id}.annotated-marc` : id
 
   // Add items_size and items_from params when itemsFrom is defined, even when 0.
