@@ -2,6 +2,7 @@ import Head from "next/head"
 
 import Layout from "../../src/components/Layout/Layout"
 import { SITE_NAME } from "../../src/config/constants"
+import { standardizeBibId } from "../../src/utils/bibUtils"
 
 /**
  * The Bib page is responsible for fetching and displaying a single Bib's details.
@@ -17,10 +18,18 @@ export default function Bib() {
   )
 }
 
-export async function getServerSideProps() {
-  // Remove everything before the query string delineator '?', necessary for correctly parsing the 'q' param.
-  // const queryString = resolvedUrl.slice(resolvedUrl.indexOf("?") + 1)
-  // const results = await fetchResults(mapQueryToSearchParams(parse(queryString)))
+export async function getServerSideProps({ params }) {
+  const { id } = params
+  const standardizedId = standardizeBibId(id)
+
+  if (standardizedId !== id) {
+    return {
+      redirect: {
+        destination: `/bib/${standardizedId}`,
+        permanent: false,
+      },
+    }
+  }
   return {
     props: {
       bib: [],
