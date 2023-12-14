@@ -12,7 +12,7 @@ import {
   DRB_API_NAME,
   RESULTS_PER_PAGE,
 } from "../../src/config/constants"
-import nyplApiClient from "../../src/server/nyplApiClient/index"
+import nyplApiClient from "../../src/server/nyplApiClient"
 import {
   getSearchQuery,
   mapQueryToSearchParams,

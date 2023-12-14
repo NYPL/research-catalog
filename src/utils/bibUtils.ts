@@ -1,3 +1,5 @@
+import type { BibParams } from "../types/bibTypes"
+import { ITEM_BATCH_SIZE } from "../config/constants"
 /**
  * standardizeBibId
  * Transforms bib id to have lower case prefix (b, hb, cb, pb) and trim check digit
@@ -32,4 +34,29 @@ export function isNyplBibID(id: string) {
  */
 export function hasCheckDigit(id = "") {
   return isNyplBibID(id) && id.length === 10
+}
+
+/**
+ * Given a BibParams object, return a query string for the API call.
+ */
+export function getBibQuery(
+  { id, itemsFrom, itemFilterQuery }: BibParams,
+  includeAnnotatedMarc = false
+) {
+  const itemQueries = []
+
+  const queryBase = includeAnnotatedMarc ? `${id}.annotated-marc` : id
+
+  // Add items_size and items_from params when itemsFrom is defined, even when 0.
+  if (typeof itemsFrom !== "undefined")
+    itemQueries.push(`items_size=${ITEM_BATCH_SIZE}&items_from=${itemsFrom}`)
+
+  if (!includeAnnotatedMarc) {
+    if (itemFilterQuery?.length) itemQueries.push(`${itemFilterQuery}`)
+    itemQueries.push("merge_checkin_card_items=true")
+  }
+
+  return itemQueries.length
+    ? queryBase + `?${itemQueries.join("&")}`
+    : queryBase
 }

@@ -4,10 +4,11 @@ export interface ElectronicResource {
 
 export interface BibResponse {
   bib: []
+  annotatedMarc?: []
 }
 
 export interface BibParams {
   id: string
-  itemFrom?: number
-  filterItems?: string
+  itemsFrom?: number
+  itemFilterQuery?: string
 }
