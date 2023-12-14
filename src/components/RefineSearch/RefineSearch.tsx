@@ -6,13 +6,14 @@ import {
   Form,
 } from "@nypl/design-system-react-components"
 import type { SyntheticEvent } from "react"
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { useRouter } from "next/router"
 
 import sampleFilters from "./sampleFilters.json"
 import styles from "../../../styles/components/Search.module.scss"
 import SearchResultsFilters from "../../models/SearchResultsFilters"
 import RefineSearchCheckBoxField from "./RefineSearchCheckboxField"
+import { parseFilters, buildFilters } from "../../utils/refineSearchUtils"
 
 interface RefineSearchProps {
   toggleRefine: () => void
@@ -26,14 +27,34 @@ const RefineSearch = ({ toggleRefine }: RefineSearchProps) => {
     { value: "dateBefore", label: "End Year" },
     { value: "subjectLiteral", label: "Subject" },
   ]
+
   const router = useRouter()
-  console.log(router.query)
-  const [selectedFilters, setSelectedFilters] = useState({})
-  // these should be constructed from the url so we can reset to the original search.
-  const activeFilters = ["resourcetypes:txt"]
+  const [appliedFilters, setAppliedFilters] = useState(
+    parseFilters(router.query)
+  )
+
+  const handleSubmit = (e: SyntheticEvent) => {
+    e.preventDefault()
+    const noFilters = Object.keys(router.query).reduce((acc, param) => {
+      if (!param.includes("filters")) acc[param] = router.query[param]
+      return acc
+    }, {})
+    const updatedQuery = { ...noFilters, ...buildFilters(appliedFilters) }
+    console.log(updatedQuery)
+    router.push({
+      pathname: "/search",
+      query: updatedQuery,
+    })
+    toggleRefine()
+  }
+
+  const handleClear = () => {
+    setAppliedFilters(router.query)
+    toggleRefine()
+  }
 
   return (
-    <Form id="refine-search">
+    <Form id="refine-search" onSubmit={handleSubmit}>
       <HorizontalRule />
       <Box className={styles.refineButtons}>
         <Button
@@ -44,7 +65,12 @@ const RefineSearch = ({ toggleRefine }: RefineSearchProps) => {
           Cancel
         </Button>
         <ButtonGroup className={styles.re}>
-          <Button id="reset-refine" type="reset" buttonType="secondary">
+          <Button
+            onClick={handleClear}
+            id="reset-refine"
+            type="reset"
+            buttonType="secondary"
+          >
             Clear Filters
           </Button>
           <Button id="submit-refine" type="submit" buttonType="secondary">
@@ -58,9 +84,10 @@ const RefineSearch = ({ toggleRefine }: RefineSearchProps) => {
         if (filterData.options) {
           return (
             <RefineSearchCheckBoxField
+              setAppliedFilters={setAppliedFilters}
               key={field.label}
               field={field}
-              activeFilters={activeFilters}
+              appliedFilters={appliedFilters[field.value]}
               options={filterData.options}
             />
           )

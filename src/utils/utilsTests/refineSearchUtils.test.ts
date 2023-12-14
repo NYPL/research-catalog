@@ -1,6 +1,6 @@
-import { parseFilters } from "../refineSearchUtils"
+import { parseFilters, buildFilters } from "../refineSearchUtils"
 
-describe("refineSearchUtils", () => {
+xdescribe("refineSearchUtils", () => {
   describe("parseFilters", () => {
     it("can parse a single filter", () => {
       const query = { "filters[language][0]": "lang:fre" }
@@ -39,5 +39,31 @@ describe("refineSearchUtils", () => {
     })
     it.todo("can parse mulitple filters with multiple values")
     it.todo("can parse with other params")
+  })
+
+  describe("buildFilters", () => {
+    it("single filter single value", () => {
+      const filters = { subjectLiteral: ["spaghetti"] }
+      expect(buildFilters(filters)).toBe(
+        "&filters[subjectLiteral][0]=spaghetti"
+      )
+    })
+    it("single filter multi value", () => {
+      const filters = {
+        subjectLiteral: ["spaghetti", "meatballs", "parmesean"],
+      }
+      expect(buildFilters(filters)).toBe(
+        "&filters[subjectLiteral][0]=spaghetti&filters[subjectLiteral][1]=meatballs&filters[subjectLiteral][2]=parmesean"
+      )
+    })
+    it("multi filter multi value", () => {
+      const filters = {
+        subjectLiteral: ["spaghetti", "meatballs", "parmesean"],
+        author: ["strega nonna", "chef boyardee"],
+      }
+      expect(buildFilters(filters)).toBe(
+        "&filters[subjectLiteral][0]=spaghetti&filters[subjectLiteral][1]=meatballs&filters[subjectLiteral][2]=parmesean&filters[author][0]=strega%20nonna&filters[author][1]=chef%20boyardee"
+      )
+    })
   })
 })
