@@ -1,6 +1,6 @@
 import { parseFilters, buildFilters } from "../refineSearchUtils"
 
-xdescribe("refineSearchUtils", () => {
+describe("refineSearchUtils", () => {
   describe("parseFilters", () => {
     it("can parse a single filter", () => {
       const query = { "filters[language][0]": "lang:fre" }
@@ -44,26 +44,32 @@ xdescribe("refineSearchUtils", () => {
   describe("buildFilters", () => {
     it("single filter single value", () => {
       const filters = { subjectLiteral: ["spaghetti"] }
-      expect(buildFilters(filters)).toBe(
-        "&filters[subjectLiteral][0]=spaghetti"
-      )
+      expect(buildFilters(filters)).toStrictEqual({
+        "filters[subjectLiteral][0]": "spaghetti",
+      })
     })
     it("single filter multi value", () => {
       const filters = {
         subjectLiteral: ["spaghetti", "meatballs", "parmesean"],
       }
-      expect(buildFilters(filters)).toBe(
-        "&filters[subjectLiteral][0]=spaghetti&filters[subjectLiteral][1]=meatballs&filters[subjectLiteral][2]=parmesean"
-      )
+      expect(buildFilters(filters)).toStrictEqual({
+        "filters[subjectLiteral][0]": "spaghetti",
+        "filters[subjectLiteral][1]": "meatballs",
+        "filters[subjectLiteral][2]": "parmesean",
+      })
     })
     it("multi filter multi value", () => {
       const filters = {
         subjectLiteral: ["spaghetti", "meatballs", "parmesean"],
         author: ["strega nonna", "chef boyardee"],
       }
-      expect(buildFilters(filters)).toBe(
-        "&filters[subjectLiteral][0]=spaghetti&filters[subjectLiteral][1]=meatballs&filters[subjectLiteral][2]=parmesean&filters[author][0]=strega%20nonna&filters[author][1]=chef%20boyardee"
-      )
+      expect(buildFilters(filters)).toStrictEqual({
+        "filters[subjectLiteral][0]": "spaghetti",
+        "filters[subjectLiteral][1]": "meatballs",
+        "filters[subjectLiteral][2]": "parmesean",
+        "filters[author][0]": "strega nonna",
+        "filters[author][1]": "chef boyardee",
+      })
     })
   })
 })

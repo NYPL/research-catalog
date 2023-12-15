@@ -6,14 +6,18 @@ import {
   Form,
 } from "@nypl/design-system-react-components"
 import type { SyntheticEvent } from "react"
-import { useState, useRef } from "react"
+import { useState } from "react"
 import { useRouter } from "next/router"
 
 import sampleFilters from "./sampleFilters.json"
 import styles from "../../../styles/components/Search.module.scss"
 import SearchResultsFilters from "../../models/SearchResultsFilters"
 import RefineSearchCheckBoxField from "./RefineSearchCheckboxField"
-import { parseFilters, buildFilters } from "../../utils/refineSearchUtils"
+import {
+  parseFilters,
+  buildFilters,
+  removeFiltersFromQuery,
+} from "../../utils/refineSearchUtils"
 
 interface RefineSearchProps {
   toggleRefine: () => void
@@ -35,12 +39,10 @@ const RefineSearch = ({ toggleRefine }: RefineSearchProps) => {
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault()
-    const noFilters = Object.keys(router.query).reduce((acc, param) => {
-      if (!param.includes("filters")) acc[param] = router.query[param]
-      return acc
-    }, {})
-    const updatedQuery = { ...noFilters, ...buildFilters(appliedFilters) }
-    console.log(updatedQuery)
+    const updatedQuery = {
+      ...removeFiltersFromQuery(router.query),
+      ...buildFilters(appliedFilters),
+    }
     router.push({
       pathname: "/search",
       query: updatedQuery,
@@ -49,7 +51,11 @@ const RefineSearch = ({ toggleRefine }: RefineSearchProps) => {
   }
 
   const handleClear = () => {
-    setAppliedFilters(router.query)
+    setAppliedFilters(removeFiltersFromQuery(router.query))
+    router.push({
+      pathname: "/search",
+      query: removeFiltersFromQuery(router.query),
+    })
     toggleRefine()
   }
 

@@ -9,24 +9,18 @@ export const parseFilters = (queryParams: object) => {
     }, {})
 }
 
-// export const buildFilters = (filters: object) => {
-//   return Object.keys(filters)
-//     .map((field) =>
-//       filters[field]
-//         .map(
-//           (option: string, i: number) =>
-//             `&filters[${field}][${i}]=${encodeURI(option)}`
-//         )
-//         .join("")
-//     )
-//     .join("")
-// }
-
 export const buildFilters = (filters: object) => {
   return Object.keys(filters).reduce((acc, field) => {
     filters[field].forEach(
-      (option, i) => (acc[`filters[${field}][${i}]`] = encodeURI(option))
+      (option, i) => (acc[`filters[${field}][${i}]`] = option)
     )
+    return acc
+  }, {})
+}
+
+export const removeFiltersFromQuery = (filters: object) => {
+  return Object.keys(filters).reduce((acc, field) => {
+    if (!field.includes("filters")) acc[field] = filters[field]
     return acc
   }, {})
 }
