@@ -20,11 +20,10 @@ import {
 import type { SearchResults } from "../../types/searchTypes"
 
 interface RefineSearchProps {
-  toggleRefine: () => void
   aggregations: SearchResults
 }
 
-const RefineSearch = ({ toggleRefine, aggregations }: RefineSearchProps) => {
+const RefineSearch = ({ aggregations }: RefineSearchProps) => {
   const fields = [
     { value: "materialType", label: "Format" },
     { value: "language", label: "Language" },
@@ -51,6 +50,11 @@ const RefineSearch = ({ toggleRefine, aggregations }: RefineSearchProps) => {
     toggleRefine()
   }
 
+  const [refineSearchOpen, setRefineSearchOpen] = useState(false)
+  const toggleRefine = () => {
+    setRefineSearchOpen((prevState) => !prevState)
+  }
+
   const handleClear = () => {
     setAppliedFilters(removeFiltersFromQuery(router.query))
     router.push({
@@ -62,50 +66,60 @@ const RefineSearch = ({ toggleRefine, aggregations }: RefineSearchProps) => {
 
   return (
     <Box className={styles.refineSearchContainer}>
-      <Form
-        className={styles.refineSearchInner}
-        id="refine-search"
-        onSubmit={handleSubmit}
-      >
-        <HorizontalRule />
-        <Box className={styles.refineButtons}>
-          <Button
-            onClick={toggleRefine}
-            id="cancel-refine"
-            buttonType="secondary"
-          >
-            Cancel
-          </Button>
-          <ButtonGroup className={styles.re}>
+      {refineSearchOpen ? (
+        <Button
+          onClick={toggleRefine}
+          id="refine-search"
+          buttonType="secondary"
+        >
+          {"Refine Search"}
+        </Button>
+      ) : (
+        <Form
+          className={styles.refineSearchInner}
+          id="refine-search"
+          onSubmit={handleSubmit}
+        >
+          <HorizontalRule />
+          <Box className={styles.refineButtons}>
             <Button
-              onClick={handleClear}
-              id="reset-refine"
-              type="reset"
+              onClick={toggleRefine}
+              id="cancel-refine"
               buttonType="secondary"
             >
-              Clear Filters
+              Cancel
             </Button>
-            <Button id="submit-refine" type="submit" buttonType="secondary">
-              Apply Filters
-            </Button>
-          </ButtonGroup>
-        </Box>
-        <HorizontalRule />
-        {fields.map((field) => {
-          const filterData = new SearchResultsFilters(aggregations, field)
-          if (filterData.options) {
-            return (
-              <RefineSearchCheckBoxField
-                setAppliedFilters={setAppliedFilters}
-                key={field.label}
-                field={field}
-                appliedFilters={appliedFilters[field.value]}
-                options={filterData.options}
-              />
-            )
-          } else return null
-        })}
-      </Form>
+            <ButtonGroup className={styles.re}>
+              <Button
+                onClick={handleClear}
+                id="reset-refine"
+                type="reset"
+                buttonType="secondary"
+              >
+                Clear Filters
+              </Button>
+              <Button id="submit-refine" type="submit" buttonType="secondary">
+                Apply Filters
+              </Button>
+            </ButtonGroup>
+          </Box>
+          <HorizontalRule />
+          {fields.map((field) => {
+            const filterData = new SearchResultsFilters(aggregations, field)
+            if (filterData.options) {
+              return (
+                <RefineSearchCheckBoxField
+                  setAppliedFilters={setAppliedFilters}
+                  key={field.label}
+                  field={field}
+                  appliedFilters={appliedFilters[field.value]}
+                  options={filterData.options}
+                />
+              )
+            } else return null
+          })}
+        </Form>
+      )}
     </Box>
   )
 }

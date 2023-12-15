@@ -4,8 +4,6 @@ import {
   SimpleGrid,
   Pagination,
   Select,
-  Button,
-  Box,
 } from "@nypl/design-system-react-components"
 import { useState } from "react"
 import type { ChangeEvent } from "react"
@@ -29,6 +27,9 @@ import type { SortKey, SortOrder } from "../../src/types/searchTypes"
 import { mapWorksToDRBResults } from "../../src/utils/drbUtils"
 import { SITE_NAME, RESULTS_PER_PAGE } from "../../src/config/constants"
 import type SearchResultsBib from "../../src/models/SearchResultsBib"
+
+import styles from "../../../styles/components/Search.module.scss"
+import { aggregationsResults } from "../../__test__/fixtures/searchResultsManyBibs"
 
 /**
  * The Search page is responsible for fetching and displaying the Search results,
@@ -69,11 +70,6 @@ export default function Search({ results }) {
     )
   }
 
-  const [refineSearchOpen, setRefineSearchOpen] = useState(false)
-  const toggleRefine = () => {
-    setRefineSearchOpen((prevState) => !prevState)
-  }
-
   return (
     <>
       <Head>
@@ -81,22 +77,7 @@ export default function Search({ results }) {
       </Head>
       <Layout
         activePage="search"
-        refineSearch={
-          refineSearchOpen ? (
-            <RefineSearch
-              aggregations={results.aggregations}
-              toggleRefine={toggleRefine}
-            />
-          ) : (
-            <Button
-              onClick={toggleRefine}
-              id="refine-search"
-              buttonType="secondary"
-            >
-              {"Refine Search"}
-            </Button>
-          )
-        }
+        refineSearch={<RefineSearch aggregations={aggregationsResults} />}
         sidebar={
           <>
             {totalResults && (
