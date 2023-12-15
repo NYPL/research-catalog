@@ -17,8 +17,6 @@ import DRBContainer from "../../src/components/DRB/DRBContainer"
 import SearchResult from "../../src/components/SearchResult/SearchResult"
 import RefineSearch from "../../src/components/RefineSearch/RefineSearch"
 
-import styles from "../../../styles/components/Search.module.scss"
-
 import { fetchResults } from "../api/search"
 import {
   getSearchResultsHeading,
@@ -175,6 +173,7 @@ export default function Search({ results }) {
  *
  */
 export async function getServerSideProps({ resolvedUrl }) {
+  console.log("spaghetti")
   // Remove everything before the query string delineator '?', necessary for correctly parsing the 'q' param.
   const queryString = resolvedUrl.slice(resolvedUrl.indexOf("?") + 1)
   const results = await fetchResults(mapQueryToSearchParams(parse(queryString)))

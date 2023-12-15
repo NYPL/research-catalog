@@ -3,7 +3,11 @@ import { render, screen, act } from "@testing-library/react"
 import mockRouter from "next-router-mock"
 import userEvent from "@testing-library/user-event"
 
-import SearchForm from "../SearchForm/SearchForm"
+import Search from "../../../pages/search/index"
+import {
+  aggregationsResults as aggregations,
+  results,
+} from "../../../__test__/fixtures/searchResultsManyBibs"
 
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
@@ -11,7 +15,7 @@ describe("RefineSearch", () => {
   describe("with initial creatorLiteral filter", () => {
     const setup = () => {
       mockRouter.push("/search?filters[creatorLiteral]=strega nonna")
-      render(<SearchForm />)
+      render(<Search results={{ aggregations, results }} />)
     }
     beforeEach(setup)
     it("should add filters and maintain creatorliteral filter and search params", async () => {
@@ -41,7 +45,7 @@ describe("RefineSearch", () => {
   describe("with search params", () => {
     const setup = () => {
       mockRouter.push("/search?q=spaghetti")
-      render(<SearchForm />)
+      render(<Search results={{ aggregations, results }} />)
     }
     beforeEach(setup)
     it("adding filters should maintain search params", async () => {
@@ -68,7 +72,7 @@ describe("RefineSearch", () => {
   describe("basic filter functionality", () => {
     const setup = () => {
       mockRouter.push("/search")
-      render(<SearchForm />)
+      render(<Search results={{ aggregations, results }} />)
     }
     beforeEach(setup)
     it("applying no filters should return to search results", async () => {
@@ -119,9 +123,6 @@ describe("RefineSearch", () => {
     it("multiple selections for multiple filters", async () => {
       await openRefineSearch()
       await selectSomeFilters([
-        "Cooking, Italian.",
-        "Cooking (Pasta)",
-        "Spaghetti Westerns.",
         "Audio",
         "Moving image",
         "French",
@@ -135,9 +136,25 @@ describe("RefineSearch", () => {
         "filters[language][2]": "lang:ita",
         "filters[materialType][0]": "resourcetypes:aud",
         "filters[materialType][1]": "resourcetypes:mov",
+      })
+    })
+    it("deselecting and applying removes filters", async () => {
+      mockRouter.push({
+        pathname: "/search",
+        query: {
+          "filters[language][0]": "lang:por",
+          "filters[language][1]": "lang:ita",
+          "filters[materialType][0]": "resourcetypes:aud",
+          "filters[subjectLiteral][0]": "Cooking, Italian.",
+        },
+      })
+      await openRefineSearch()
+      // this should actually deselect the filters as it is just clicking on filters
+      await selectSomeFilters(["Italian", "Audio"])
+      await apply()
+      expect(mockRouter.query).toStrictEqual({
+        "filters[language][0]": "lang:por",
         "filters[subjectLiteral][0]": "Cooking, Italian.",
-        "filters[subjectLiteral][1]": "Cooking (Pasta)",
-        "filters[subjectLiteral][2]": "Spaghetti Westerns.",
       })
     })
   })
