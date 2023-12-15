@@ -12,7 +12,6 @@
 
 .auxSearchContainer {
   display: flex;
-  flex-direction: column;
   justify-content: space-between;
   margin: var(--nypl-space-xs) 0;
   @media (max-width: 400px) {
@@ -22,9 +21,7 @@
   }
 }
 
-.searchButtons {
-  display: flex;
-  justify-content: space-between;
+.advancedSearch {
   min-width: 127px;
   margin-bottom: var(--nypl-space-s);
 }
@@ -41,4 +38,11 @@
 .refineCheckboxGroup {
   display: flex;
   flex-wrap: wrap;
+}
+
+.refineSearchContainer {
+  background-color: var(--nypl-colors-ui-bg-default);
+}
+.refineSearchInner {
+  @include maxWidth;
 }

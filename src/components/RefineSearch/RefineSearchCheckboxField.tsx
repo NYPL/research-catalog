@@ -3,11 +3,9 @@ import {
   CheckboxGroup,
   Checkbox,
 } from "@nypl/design-system-react-components"
-import { useState } from "react"
 import type { Dispatch } from "react"
 
 import type { ItemAggregationOption } from "../../types/filterTypes"
-import styles from "../../../styles/components/Search.module.scss"
 
 interface CheckboxGroupProps {
   field: { value: string; label: string }

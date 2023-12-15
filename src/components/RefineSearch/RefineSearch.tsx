@@ -9,7 +9,6 @@ import type { SyntheticEvent } from "react"
 import { useState } from "react"
 import { useRouter } from "next/router"
 
-import sampleFilters from "./sampleFilters.json"
 import styles from "../../../styles/components/Search.module.scss"
 import SearchResultsFilters from "../../models/SearchResultsFilters"
 import RefineSearchCheckBoxField from "./RefineSearchCheckboxField"
@@ -62,46 +61,52 @@ const RefineSearch = ({ toggleRefine, aggregations }: RefineSearchProps) => {
   }
 
   return (
-    <Form id="refine-search" onSubmit={handleSubmit}>
-      <HorizontalRule />
-      <Box className={styles.refineButtons}>
-        <Button
-          onClick={toggleRefine}
-          id="cancel-refine"
-          buttonType="secondary"
-        >
-          Cancel
-        </Button>
-        <ButtonGroup className={styles.re}>
+    <Box className={styles.refineSearchContainer}>
+      <Form
+        className={styles.refineSearchInner}
+        id="refine-search"
+        onSubmit={handleSubmit}
+      >
+        <HorizontalRule />
+        <Box className={styles.refineButtons}>
           <Button
-            onClick={handleClear}
-            id="reset-refine"
-            type="reset"
+            onClick={toggleRefine}
+            id="cancel-refine"
             buttonType="secondary"
           >
-            Clear Filters
+            Cancel
           </Button>
-          <Button id="submit-refine" type="submit" buttonType="secondary">
-            Apply Filters
-          </Button>
-        </ButtonGroup>
-      </Box>
-      <HorizontalRule />
-      {fields.map((field) => {
-        const filterData = new SearchResultsFilters(aggregations, field)
-        if (filterData.options) {
-          return (
-            <RefineSearchCheckBoxField
-              setAppliedFilters={setAppliedFilters}
-              key={field.label}
-              field={field}
-              appliedFilters={appliedFilters[field.value]}
-              options={filterData.options}
-            />
-          )
-        } else return null
-      })}
-    </Form>
+          <ButtonGroup className={styles.re}>
+            <Button
+              onClick={handleClear}
+              id="reset-refine"
+              type="reset"
+              buttonType="secondary"
+            >
+              Clear Filters
+            </Button>
+            <Button id="submit-refine" type="submit" buttonType="secondary">
+              Apply Filters
+            </Button>
+          </ButtonGroup>
+        </Box>
+        <HorizontalRule />
+        {fields.map((field) => {
+          const filterData = new SearchResultsFilters(aggregations, field)
+          if (filterData.options) {
+            return (
+              <RefineSearchCheckBoxField
+                setAppliedFilters={setAppliedFilters}
+                key={field.label}
+                field={field}
+                appliedFilters={appliedFilters[field.value]}
+                options={filterData.options}
+              />
+            )
+          } else return null
+        })}
+      </Form>
+    </Box>
   )
 }
 

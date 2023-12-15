@@ -5,6 +5,7 @@ import {
   Pagination,
   Select,
   Button,
+  Box,
 } from "@nypl/design-system-react-components"
 import { useState } from "react"
 import type { ChangeEvent } from "react"
@@ -15,6 +16,8 @@ import Layout from "../../src/components/Layout/Layout"
 import DRBContainer from "../../src/components/DRB/DRBContainer"
 import SearchResult from "../../src/components/SearchResult/SearchResult"
 import RefineSearch from "../../src/components/RefineSearch/RefineSearch"
+
+import styles from "../../../styles/components/Search.module.scss"
 
 import { fetchResults } from "../api/search"
 import {
@@ -80,6 +83,22 @@ export default function Search({ results }) {
       </Head>
       <Layout
         activePage="search"
+        refineSearch={
+          refineSearchOpen ? (
+            <RefineSearch
+              aggregations={results.aggregations}
+              toggleRefine={toggleRefine}
+            />
+          ) : (
+            <Button
+              onClick={toggleRefine}
+              id="refine-search"
+              buttonType="secondary"
+            >
+              {"Refine Search"}
+            </Button>
+          )
+        }
         sidebar={
           <>
             {totalResults && (
@@ -114,20 +133,6 @@ export default function Search({ results }) {
       >
         {totalResults ? (
           <>
-            {refineSearchOpen ? (
-              <RefineSearch
-                aggregations={results.aggregations}
-                toggleRefine={toggleRefine}
-              />
-            ) : (
-              <Button
-                onClick={toggleRefine}
-                id="refine-search"
-                buttonType="secondary"
-              >
-                {"Refine Search"}
-              </Button>
-            )}
             <Heading level="h2" mb="xl" size="heading4">
               {getSearchResultsHeading(
                 searchParams.page,
