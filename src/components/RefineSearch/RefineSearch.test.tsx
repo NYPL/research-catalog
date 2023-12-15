@@ -4,7 +4,6 @@ import mockRouter from "next-router-mock"
 import userEvent from "@testing-library/user-event"
 
 import SearchForm from "../SearchForm/SearchForm"
-import { select } from "underscore"
 
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 

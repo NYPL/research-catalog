@@ -25,15 +25,6 @@ const SearchForm = () => {
     (router?.query?.q as string) || ""
   )
   const [searchScope, setSearchScope] = useState("all")
-  const [refineSearchOpen, setRefineSearchOpen] = useState(false)
-  const [showRefineButton, setShowRefineButton] = useState(
-    router?.pathname.includes("/search")
-  )
-
-  const toggleRefine = () => {
-    setShowRefineButton((prevState) => !prevState)
-    setRefineSearchOpen((prevState) => !prevState)
-  }
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
@@ -98,22 +89,10 @@ const SearchForm = () => {
           {/* Temporary color update. The Header overrides the new
             DS 2.X CSS color variable values. */}
           <Box className={styles.searchButtons}>
-            {showRefineButton ? (
-              <Button
-                onClick={toggleRefine}
-                id="refine-search"
-                buttonType="secondary"
-              >
-                {"Refine Search"}
-              </Button>
-            ) : (
-              <Spacer />
-            )}
             <RCLink href={"/search/advanced"} color="#0069BF">
               Advanced Search
             </RCLink>
           </Box>
-          {refineSearchOpen && <RefineSearch toggleRefine={toggleRefine} />}
           <EDSLink />
         </div>
       </div>

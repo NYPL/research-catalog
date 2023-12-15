@@ -18,12 +18,14 @@ import {
   buildFilters,
   removeFiltersFromQuery,
 } from "../../utils/refineSearchUtils"
+import type { SearchResults } from "../../types/searchTypes"
 
 interface RefineSearchProps {
   toggleRefine: () => void
+  aggregations: SearchResults
 }
 
-const RefineSearch = ({ toggleRefine }: RefineSearchProps) => {
+const RefineSearch = ({ toggleRefine, aggregations }: RefineSearchProps) => {
   const fields = [
     { value: "materialType", label: "Format" },
     { value: "language", label: "Language" },
@@ -86,7 +88,7 @@ const RefineSearch = ({ toggleRefine }: RefineSearchProps) => {
       </Box>
       <HorizontalRule />
       {fields.map((field) => {
-        const filterData = new SearchResultsFilters(sampleFilters, field)
+        const filterData = new SearchResultsFilters(aggregations, field)
         if (filterData.options) {
           return (
             <RefineSearchCheckBoxField

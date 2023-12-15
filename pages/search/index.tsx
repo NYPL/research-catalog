@@ -4,7 +4,9 @@ import {
   SimpleGrid,
   Pagination,
   Select,
+  Button,
 } from "@nypl/design-system-react-components"
+import { useState } from "react"
 import type { ChangeEvent } from "react"
 import { useRouter } from "next/router"
 import { parse } from "qs"
@@ -12,6 +14,7 @@ import { parse } from "qs"
 import Layout from "../../src/components/Layout/Layout"
 import DRBContainer from "../../src/components/DRB/DRBContainer"
 import SearchResult from "../../src/components/SearchResult/SearchResult"
+import RefineSearch from "../../src/components/RefineSearch/RefineSearch"
 
 import { fetchResults } from "../api/search"
 import {
@@ -65,6 +68,11 @@ export default function Search({ results }) {
     )
   }
 
+  const [refineSearchOpen, setRefineSearchOpen] = useState(false)
+  const toggleRefine = () => {
+    setRefineSearchOpen((prevState) => !prevState)
+  }
+
   return (
     <>
       <Head>
@@ -106,6 +114,20 @@ export default function Search({ results }) {
       >
         {totalResults ? (
           <>
+            {refineSearchOpen ? (
+              <RefineSearch
+                aggregations={results.aggregations}
+                toggleRefine={toggleRefine}
+              />
+            ) : (
+              <Button
+                onClick={toggleRefine}
+                id="refine-search"
+                buttonType="secondary"
+              >
+                {"Refine Search"}
+              </Button>
+            )}
             <Heading level="h2" mb="xl" size="heading4">
               {getSearchResultsHeading(
                 searchParams.page,
