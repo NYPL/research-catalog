@@ -5,7 +5,6 @@ import {
   Pagination,
   Select,
 } from "@nypl/design-system-react-components"
-import { useState } from "react"
 import type { ChangeEvent } from "react"
 import { useRouter } from "next/router"
 import { parse } from "qs"
@@ -28,7 +27,6 @@ import { mapWorksToDRBResults } from "../../src/utils/drbUtils"
 import { SITE_NAME, RESULTS_PER_PAGE } from "../../src/config/constants"
 import type SearchResultsBib from "../../src/models/SearchResultsBib"
 
-import styles from "../../../styles/components/Search.module.scss"
 import { aggregationsResults } from "../../__test__/fixtures/searchResultsManyBibs"
 
 /**

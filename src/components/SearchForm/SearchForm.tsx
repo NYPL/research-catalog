@@ -1,4 +1,4 @@
-import { SearchBar, Box } from "@nypl/design-system-react-components"
+import { SearchBar } from "@nypl/design-system-react-components"
 import { useRouter } from "next/router"
 import type { SyntheticEvent, Dispatch, SetStateAction } from "react"
 import { useState } from "react"

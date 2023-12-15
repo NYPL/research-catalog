@@ -45,4 +45,5 @@
 }
 .refineSearchInner {
   @include maxWidth;
+  padding-bottom: var(--nypl-space-xs);
 }

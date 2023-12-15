@@ -12,7 +12,6 @@ import styles from "../../../styles/components/Layout.module.scss"
 import SubNav from "../SubNav/SubNav"
 import SearchForm from "../SearchForm/SearchForm"
 import { BASE_URL } from "../../config/constants"
-import RefineSearch from "../RefineSearch/RefineSearch"
 
 interface LayoutProps {
   sidebar?: ReactElement

@@ -67,13 +67,15 @@ const RefineSearch = ({ aggregations }: RefineSearchProps) => {
   return (
     <Box className={styles.refineSearchContainer}>
       {refineSearchOpen ? (
-        <Button
-          onClick={toggleRefine}
-          id="refine-search"
-          buttonType="secondary"
-        >
-          {"Refine Search"}
-        </Button>
+        <Box className={styles.refineSearchInner}>
+          <Button
+            onClick={toggleRefine}
+            id="refine-search"
+            buttonType="secondary"
+          >
+            {"Refine Search"}
+          </Button>
+        </Box>
       ) : (
         <Form
           className={styles.refineSearchInner}
