@@ -1,6 +1,11 @@
 import { SearchBar, Box, Spacer } from "@nypl/design-system-react-components"
 import { useRouter } from "next/router"
-import type { SyntheticEvent, Dispatch, SetStateAction } from "react"
+import type {
+  SyntheticEvent,
+  Dispatch,
+  SetStateAction,
+  ReactElement,
+} from "react"
 import { useState } from "react"
 
 import styles from "../../../styles/components/Search.module.scss"
@@ -9,11 +14,14 @@ import { getQueryString } from "../../utils/searchUtils"
 import { BASE_URL, PATHS } from "../../config/constants"
 import EDSLink from "../EDSLink"
 
+interface SearchFormProps {
+  refineSearch?: ReactElement
+}
 /**
  * The SearchForm component renders and controls the Search form and
  * advanced search link.
  */
-const SearchForm = ({ refineSearch }) => {
+const SearchForm = ({ refineSearch }: SearchFormProps) => {
   const router = useRouter()
   const [searchTerm, setSearchTerm] = useState(
     (router?.query?.q as string) || ""
