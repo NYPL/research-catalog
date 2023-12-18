@@ -132,7 +132,7 @@ export const getPickupTimeEstimate = async (
         destinationServiceTime
       ),
     }),
-    rationale: rationaleWithDurations(rationale)
+    rationale: rationaleWithDurations(rationale),
   }
 }
 
@@ -142,9 +142,7 @@ export const rationaleWithDurations = (rationale) => {
 
     const diff = dateDifference(
       new Date(r.time).toISOString(),
-      new Date(
-        rationale[index - 1].time
-      ).toISOString()
+      new Date(rationale[index - 1].time).toISOString()
     )
 
     r.ellapsed = diff.days
