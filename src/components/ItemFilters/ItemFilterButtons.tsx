@@ -1,44 +1,32 @@
 import { ButtonGroup, Button } from "@nypl/design-system-react-components"
 import type { Dispatch } from "react"
 
-import type { AppliedFilters, Option } from "../../../src/types/filterTypes"
+import type { Option } from "../../../src/types/filterTypes"
 
 interface ItemFilterButtonProps {
+  appliedOptions: string[]
   selectedOptions: string[]
   field: string
   setSelectedOptions: Dispatch<React.SetStateAction<Option[]>>
-  setAppliedFilters: Dispatch<React.SetStateAction<AppliedFilters>>
+  submitFilters: (selection: string[], field: string) => void
 }
 
 const ItemFilterButtons = ({
   selectedOptions,
+  appliedOptions,
   field,
   setSelectedOptions,
-  setAppliedFilters,
+  submitFilters,
 }: ItemFilterButtonProps) => {
   const clearFilter = () => {
     setSelectedOptions([])
-    setAppliedFilters((prevFilters: AppliedFilters) => {
-      return { ...prevFilters, [field]: [] }
-    })
+    submitFilters([], field)
   }
 
-  const applyFilter = () => {
-    let newFilterSelection: AppliedFilters
-    setAppliedFilters((prevFilters: AppliedFilters) => {
-      newFilterSelection = {
-        ...prevFilters,
-        [field]: selectedOptions,
-      }
-      return newFilterSelection
-    })
-  }
   return (
-    <ButtonGroup
-      className="item-filter-buttons"
-      isDisabled={selectedOptions.length === 0}
-    >
+    <ButtonGroup className="item-filter-buttons">
       <Button
+        isDisabled={selectedOptions.length === 0}
         data-testid={`clear-${field}-button`}
         key={`clear-${field}-button`}
         buttonType="text"
@@ -48,9 +36,10 @@ const ItemFilterButtons = ({
         Clear
       </Button>
       <Button
+        isDisabled={appliedOptions.length === 0 && selectedOptions.length === 0}
         key={`apply-${field}-button`}
         id={`apply-${field}-button`}
-        onClick={applyFilter}
+        onClick={() => submitFilters(selectedOptions, field)}
       >
         Apply
       </Button>
