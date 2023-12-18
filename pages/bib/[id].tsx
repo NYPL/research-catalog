@@ -9,8 +9,6 @@ import { fetchBib } from "../api/bib"
  * The Bib page is responsible for fetching and displaying a single Bib's details.
  */
 export default function Bib({ bib, annotatedMarc }) {
-  console.log(bib)
-  console.log(annotatedMarc)
   return (
     <>
       <Head>
