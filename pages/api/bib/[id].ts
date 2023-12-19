@@ -4,6 +4,12 @@ import { PATHS } from "../../../src/config/constants"
 
 /**
  * Default API route handler for Bib page
+ *
+ * It handles a get request for a given bib id by internally calling fetchBib
+ * and handling the response based on the status returned there.
+ *
+ * Note: This is primarily used for debugging since the Bib page fetches the
+ * result by calling fetchBib directly in getServerSideProps.
  */
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const id = Array.isArray(req.query.id) ? req.query.id[0] : req.query.id
