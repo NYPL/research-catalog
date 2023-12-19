@@ -9,6 +9,7 @@ import { fetchBib } from "../api/bib"
  * The Bib page is responsible for fetching and displaying a single Bib's details.
  */
 export default function Bib({ bib, annotatedMarc }) {
+  console.log(bib)
   console.log(annotatedMarc)
   return (
     <>
@@ -45,8 +46,8 @@ export async function getServerSideProps({ params }) {
     default:
       return {
         props: {
-          bib: JSON.parse(JSON.stringify(bib)),
-          annotatedMarc: JSON.parse(JSON.stringify(annotatedMarc)),
+          bib,
+          annotatedMarc,
         },
       }
   }

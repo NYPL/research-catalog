@@ -153,7 +153,7 @@ export async function getServerSideProps({ resolvedUrl }) {
   const results = await fetchResults(mapQueryToSearchParams(parse(queryString)))
   return {
     props: {
-      results: JSON.parse(JSON.stringify(results)),
+      results,
     },
   }
 }
