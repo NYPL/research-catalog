@@ -6,7 +6,7 @@ import {
   Form,
 } from "@nypl/design-system-react-components"
 import type { SyntheticEvent } from "react"
-import { useState } from "react"
+import { useState, useRef, useCallback, useMemo } from "react"
 import { useRouter } from "next/router"
 
 import styles from "../../../styles/components/Search.module.scss"
@@ -24,13 +24,13 @@ interface RefineSearchProps {
 }
 
 const RefineSearch = ({ aggregations }: RefineSearchProps) => {
-  const fields = [
+  const fields = useRef([
     { value: "materialType", label: "Format" },
     { value: "language", label: "Language" },
     { value: "dateAfter", label: "Start Year" },
     { value: "dateBefore", label: "End Year" },
     { value: "subjectLiteral", label: "Subject" },
-  ]
+  ]).current
 
   const router = useRouter()
   const [appliedFilters, setAppliedFilters] = useState(
@@ -51,9 +51,9 @@ const RefineSearch = ({ aggregations }: RefineSearchProps) => {
   }
 
   const [refineSearchOpen, setRefineSearchOpen] = useState(false)
-  const toggleRefine = () => {
+  const toggleRefine = useRef(() => {
     setRefineSearchOpen((prevState) => !prevState)
-  }
+  }).current
 
   const handleClear = () => {
     setAppliedFilters(removeFiltersFromQuery(router.query))
