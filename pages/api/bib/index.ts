@@ -1,17 +1,15 @@
-import type { NextApiRequest, NextApiResponse } from "next"
-
-import type { BibParams, BibResponse } from "../../src/types/bibTypes"
+import type { BibParams, BibResponse } from "../../../src/types/bibTypes"
 import {
   getBibQuery,
   isNyplBibID,
   standardizeBibId,
-} from "../../src/utils/bibUtils"
-import nyplApiClient from "../../src/server/nyplApiClient/"
+} from "../../../src/utils/bibUtils"
+import nyplApiClient from "../../../src/server/nyplApiClient"
 import {
   DISCOVERY_API_NAME,
   DISCOVERY_API_SEARCH_ROUTE,
-} from "../../src/config/constants"
-import { appConfig } from "../../src/config/config"
+} from "../../../src/config/constants"
+import { appConfig } from "../../../src/config/config"
 
 export async function fetchBib(bibParams: BibParams): Promise<BibResponse> {
   const { id } = bibParams
@@ -68,17 +66,3 @@ export async function fetchBib(bibParams: BibParams): Promise<BibResponse> {
     }
   }
 }
-
-/**
- * Default API route handler for Bib page
- * Calls a helper function that maps the query params object to a SearchParams object
- * It is then passed to fetchResults, which fetches the results and returns a JSON response
- * via its onSuccess callback on a successful fetch
- */
-async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method === "GET") {
-    res.status(200).json([])
-  }
-}
-
-export default handler

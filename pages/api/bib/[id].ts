@@ -1,0 +1,30 @@
+import type { NextApiRequest, NextApiResponse } from "next"
+import { fetchBib } from "./index"
+import { PATHS } from "../../../src/config/constants"
+
+/**
+ * Default API route handler for Bib page
+ */
+async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const id = Array.isArray(req.query.id) ? req.query.id[0] : req.query.id
+  const { bib, annotatedMarc, status, redirectUrl } = await fetchBib({ id })
+
+  if (req.method === "GET") {
+    switch (status) {
+      case 301:
+        redirectUrl ? res.redirect(redirectUrl) : res.redirect(PATHS["404"])
+        break
+      case 404:
+        res.redirect(PATHS["404"])
+        break
+      default:
+        res.status(200).json({
+          bib,
+          annotatedMarc,
+        })
+        break
+    }
+  }
+}
+
+export default handler
