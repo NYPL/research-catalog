@@ -16,7 +16,6 @@
   },
   "dependencies": {
     "@nypl/design-system-react-components": "^2.1.0",
-    "@nypl/nypl-core-objects": "^2.3.1",
     "@nypl/nypl-data-api-client": "1.0.5",
     "@types/node": "20.3.1",
     "@types/react": "18.2.13",

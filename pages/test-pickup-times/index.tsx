@@ -156,7 +156,7 @@ const TestPickupTimes = (params) => {
   const [currentTime, setCurrentTime] = useState(params.currentTime || "")
 
   const [currentParams, setCurrentParams] = useState({} as CurrentParams)
-  const [error, setError] = useState(null)
+  const [error, setError] = useState(params.error || null)
   const [loading, setLoading] = useState(false)
 
   const [scenario, setScenario] = useState("")
@@ -215,7 +215,6 @@ const TestPickupTimes = (params) => {
       "Current time": currentTime,
     }).forEach(([label, time]) => {
       if (time && !validDate(time)) {
-        console.log("Validating time: ", time)
         setError(`${label} (${requestTime}) is invalid`)
         setLoading(false)
         paramsValid = paramsValid && false
@@ -390,6 +389,7 @@ export async function getServerSideProps({ resolvedUrl }) {
   const type =
     typeof fulfillment === "string" &&
     (/edd$/.test(fulfillment) ? "edd" : "phys")
+  let error = null
   const result = await getPickupTimeEstimate(
     {
       [`${type}Fulfillment`]: fulfillment,
@@ -400,9 +400,9 @@ export async function getServerSideProps({ resolvedUrl }) {
     type,
     requestTime
   ).catch((e) => {
-    return {
-      error: e.message,
-    }
+    error = e.message
+    error += '\n__________________________________' + e.stack
+    return {}
   })
   // const result = null
 
@@ -411,6 +411,7 @@ export async function getServerSideProps({ resolvedUrl }) {
       fulfillment,
       holdingLocation,
       result: JSON.parse(JSON.stringify(result)),
+      error
     },
   }
 }

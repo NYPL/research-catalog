@@ -1,7 +1,6 @@
 import { parse as parseDuration, toSeconds } from "iso8601-duration"
-import nyplCoreObjects from "@nypl/nypl-core-objects"
-const fulfillments = nyplCoreObjects("by-fulfillment")
 import { fetchLocations } from "../../pages/api/locations"
+import { nyplCore } from "./nyplCore"
 
 const cache = {}
 
@@ -47,7 +46,9 @@ export const getPickupTimeEstimate = async (
   if (!["phys", "edd", "spec"].includes(type))
     throw new Error("Invalid type: " + type)
 
+  const fulfillments = await nyplCore("fulfillment")
   const fulfillment = fulfillments[item[`${type}Fulfillment`]]
+  if (!fulfillment) throw new Error(`Invalid fulfillment: ${item[`${type}Fulfillment`]}`)
 
   fromTimestamp = fromTimestamp || module.exports.now()
 
@@ -77,7 +78,6 @@ export const getPickupTimeEstimate = async (
 
   // If offsite:
   if (/^rc/.test(originLocationId)) {
-    // console.log('Adjusting request time of ' + fromTimestamp + ' to service time at ' + originLocationId)
     const originServiceTime = await getServiceTime(
       originLocationId,
       fromTimestamp
@@ -181,7 +181,7 @@ export const addOnsiteTravelDuration = async (serviceTime, locationId) => {
     onsiteTravelDuration = "PT30M"
   } else {
     // If hold placed after opening, travel time depends on location:
-    onsiteTravelDuration = onsiteFulfillmentDuration(locationId)
+    onsiteTravelDuration = await onsiteFulfillmentDuration(locationId)
   }
   return addDuration(serviceTime, onsiteTravelDuration)
 }
@@ -249,7 +249,6 @@ export const makeFriendly = (
     dayOfWeek,
   } = formatDateAndTime(date)
 
-  // console.log(`time btw: ${time} - ${module.exports.now()} === `, days, hours, minutes)
   if (days && days > 5) {
     const weeks = Math.round(days / 7)
     return "in about " + (weeks === 1 ? "a week" : `${weeks} weeks`)
@@ -332,7 +331,7 @@ export const locationId = (item) => {
  *  Given a location id, returns the fulfillment duration as a ISO8601
  *  Duration string
  */
-export const onsiteFulfillmentDuration = (locationId) => {
+export const onsiteFulfillmentDuration = async (locationId) => {
   if (!locationId || locationId.length < 2) return null
 
   const buildingCode = {
@@ -341,6 +340,7 @@ export const onsiteFulfillmentDuration = (locationId) => {
     sc: "sc",
   }[locationId.slice(0, 2)]
 
+  const fulfillments = await nyplCore("fulfillment")
   const fulfillment = fulfillments[`fulfillment:${buildingCode}-onsite`]
   return fulfillment.estimatedTime
 }
@@ -372,7 +372,6 @@ export const getServiceTime = async (
   const holdServiceHours = await getNextServiceHours(locationId, afterTimestamp)
 
   // If we're in the middle of the service window, service-time is now:
-  // console.log('_getServiceTime of ' + locationId, afterTimestamp, holdServiceHours.startTime, maximumTimestamp(afterTimestamp, holdServiceHours.startTime))
   return maximumTimestamp(afterTimestamp, holdServiceHours.startTime)
 }
 
@@ -389,7 +388,6 @@ export const getNextServiceHours = async (
   afterTimestamp = module.exports.now()
 ) => {
   const allHours = await serviceHours(locationId)
-  // console.log(`All hours for ${locationId}`, allHours, afterTimestamp)
   const hours = findNextAvailableHours(allHours, afterTimestamp)
   if (!hours) {
     throw new Error(
@@ -403,7 +401,6 @@ export const getNextServiceHours = async (
       allHours
     )
   }
-  // console.log(`  Next available hours for ${locationId} is ${hours.startTime}`)
   return hours
 }
 
@@ -420,10 +417,6 @@ export const findNextAvailableHours = (
     // Only consider hours that have not passed (in practice, all hours
     // considered will be current or future, but let's be sure)
     .filter((hours) => timestampIsGreater(hours.endTime, afterTimestamp))
-    .map((hours) => {
-      // console.log('Hours matching ' + afterTimestamp + ': ', hours)
-      return hours
-    })
     // Sort hours ascending, so soonest is first:
     .sort((h1, h2) => (timestampIsGreater(h1.startTime, h2.startTime) ? 1 : -1))
     // Get first day:
@@ -439,7 +432,6 @@ export const findNextAvailableHours = (
  */
 export const serviceHours = async (locationId) => {
   const hours = await operatingHours(locationId)
-  // console.log(`Hours for ${locationId}: `, hours)
 
   return hours.map((hours) => {
     // Copy object so we don't mutate original:
@@ -505,7 +497,6 @@ declare global {
  */
 export const nyOffset = (timestamp = module.exports.now()) => {
   try {
-    window
     if (
       typeof window !== "undefined" &&
       window &&
@@ -525,7 +516,7 @@ export const nyOffset = (timestamp = module.exports.now()) => {
       }
     }
   } catch (e) {
-    console.log("failed to access window: ", e)
+    console.error(`Failed to parse nyOffsets from window: ${e.message}`)
   }
 
   return roughNyOffset(timestamp)

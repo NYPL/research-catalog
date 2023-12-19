@@ -120,6 +120,29 @@ jest.mock("../../../pages/api/locations", () => {
 
 describe("pickupTimeEstimator", () => {
   beforeEach(() => {
+    window.fetch = jest.fn()
+      .mockImplementation((url) => {
+        return Promise.resolve({
+          ok: true,
+          json: () => {
+            if (/fulfillment.json$/.test(url)) {
+              return Promise.resolve({
+                "fulfillment:hd-offsite": { estimatedTime: "P2D", label: "Offsite Harvard Depository" },
+                "fulfillment:recap-offsite": { estimatedTime: "P1D", label: "Offsite ReCAP" },
+                "fulfillment:sasb-edd": { estimatedTime: "P2W", label: "EDD Onsite" },
+                "fulfillment:lpa-edd": { estimatedTime: "P2W", label: "EDD Onsite" },
+                "fulfillment:hd-edd": { estimatedTime: "P1W", label: "EDD Harvard Depository" },
+                "fulfillment:sasb-onsite": { estimatedTime: "PT45M", label: "Onsite SASB" },
+                "fulfillment:sc-edd": { estimatedTime: "P2W", label: "EDD Onsite" },
+                "fulfillment:sc-onsite": { estimatedTime: "PT15M", label: "Onsite Schomburg" },
+                "fulfillment:recap-edd": { estimatedTime: "P1W", label: "EDD ReCAP" },
+                "fulfillment:lpa-onsite": { estimatedTime: "PT45M", label: "Onsite LPA" }
+              })
+            }
+          }
+        })
+      })
+
     // Add window global nyOffsets var, emulating a global var set by server
     // for the client, giving the current and future NY TZ offsets
     window.nyOffsets = [
