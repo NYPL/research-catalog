@@ -13,7 +13,7 @@ import { PATHS } from "../../../src/config/constants"
  */
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const id = Array.isArray(req.query.id) ? req.query.id[0] : req.query.id
-  const { bib, annotatedMarc, status, redirectUrl } = await fetchBib({ id })
+  const { bib, annotatedMarc, status, redirectUrl } = await fetchBib(id)
 
   if (req.method === "GET") {
     switch (status) {

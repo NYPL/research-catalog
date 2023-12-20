@@ -1,4 +1,4 @@
-import type { BibParams } from "../types/bibTypes"
+import type { BibParams, BibQueryParams } from "../types/bibTypes"
 import { ITEM_BATCH_SIZE } from "../config/constants"
 /**
  * standardizeBibId
@@ -40,9 +40,12 @@ export function hasCheckDigit(id = "") {
  * Given a BibParams object and an includeAnnotatedMarc boolean, return a query string for the Bib fetch API call.
  */
 export function getBibQuery(
-  { id, itemsFrom, itemFilterQuery }: BibParams,
+  id: string,
+  bibQuery?: BibParams,
   includeAnnotatedMarc = false
 ) {
+  const itemsFrom = bibQuery?.itemsFrom
+  const itemFilterQuery = bibQuery?.itemFilterQuery
   const itemQueries = []
   const queryBase = includeAnnotatedMarc ? `${id}.annotated-marc` : id
 
@@ -58,4 +61,34 @@ export function getBibQuery(
   return itemQueries.length
     ? queryBase + `?${itemQueries.join("&")}`
     : queryBase
+}
+
+/**
+ * Given a comma-separated features string, return an array of individual feature keys.
+ */
+const extractFeatures = (featuresString: string): string[] => {
+  if (typeof featuresString !== "string") return []
+  return featuresString.split(",").reduce((features, feature) => {
+    if (feature.length) features.push(feature.trim())
+    return features
+  }, [])
+}
+
+/* eslint-disable @typescript-eslint/naming-convention */
+
+export function mapQueryToBibParams(bibQuery: BibQueryParams): BibParams {
+  const { features, item_page = 1, items_from } = bibQuery
+  const urlEnabledFeatures = extractFeatures(features)
+
+  const itemFilterQuery = Object.keys(bibQuery)
+    .map((key) => `${key}=${bibQuery[key]}`)
+    .join("&")
+
+  return {
+    features: urlEnabledFeatures,
+    // If items_from is set, use that value, otherwise calculate it
+    // based on the current page and the batch size.
+    itemsFrom: items_from ? items_from : (item_page - 1) * ITEM_BATCH_SIZE,
+    itemFilterQuery,
+  }
 }

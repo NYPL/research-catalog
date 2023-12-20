@@ -11,8 +11,10 @@ import {
 } from "../../../src/config/constants"
 import { appConfig } from "../../../src/config/config"
 
-export async function fetchBib(bibParams: BibParams): Promise<BibResponse> {
-  const { id } = bibParams
+export async function fetchBib(
+  id: string,
+  bibParams?: BibParams
+): Promise<BibResponse> {
   const standardizedId = standardizeBibId(id)
 
   // Redirect to Bib page with standardized version of the Bib ID
@@ -25,11 +27,13 @@ export async function fetchBib(bibParams: BibParams): Promise<BibResponse> {
 
   const client = await nyplApiClient({ apiName: DISCOVERY_API_NAME })
   const [bibResponse, annotatedMarcResponse] = await Promise.allSettled([
-    await client.get(`${DISCOVERY_API_SEARCH_ROUTE}/${getBibQuery(bibParams)}`),
+    await client.get(
+      `${DISCOVERY_API_SEARCH_ROUTE}/${getBibQuery(id, bibParams)}`
+    ),
     // Don't fetch annotated-marc for partner records:
     isNyplBibID(id) &&
       (await client.get(
-        `${DISCOVERY_API_SEARCH_ROUTE}/${getBibQuery(bibParams, true)}`
+        `${DISCOVERY_API_SEARCH_ROUTE}/${getBibQuery(id, bibParams, true)}`
       )),
   ])
 

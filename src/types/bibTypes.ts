@@ -14,7 +14,15 @@ export interface Bib {
 }
 
 export interface BibParams {
-  id: string
   itemsFrom?: number
   itemFilterQuery?: string
+  features?: string[]
+}
+
+/* eslint-disable @typescript-eslint/naming-convention */
+
+export interface BibQueryParams {
+  features?: string
+  item_page?: number
+  items_from?: number
 }

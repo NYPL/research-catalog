@@ -26,7 +26,7 @@ export default function Bib({ bib, annotatedMarc }) {
 export async function getServerSideProps({ params }) {
   const { id } = params
 
-  const { bib, annotatedMarc, status, redirectUrl } = await fetchBib({ id })
+  const { bib, annotatedMarc, status, redirectUrl } = await fetchBib(id)
 
   switch (status) {
     case 301:
