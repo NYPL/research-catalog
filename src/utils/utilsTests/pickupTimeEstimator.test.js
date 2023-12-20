@@ -181,13 +181,12 @@ describe("pickupTimeEstimator", () => {
     mockNowTimestamp = "2023-06-01T12:00:00-04:00"
     jest.spyOn(estimator, "now").mockImplementation(() => mockNowTimestamp)
 
-    // Insist on NY time, unless run with another TZ
-    process.env.TZ = process.env.TZ || "America/New_York"
-
-    // When running tests with TZ set to anything other than ET, let"s expect
-    // all statements about time of day to end in "ET":
-    tzNote =
-      process.env.TZ && process.env.TZ !== "America/New_York" ? " ET" : ""
+    // When tests are run in an environment where the system timezone
+    // (configured via TZ or another means) results in a TZ offset other
+    // than NY, expect estimation strings to be suffixed with " ET":
+    const expectTzNote =
+      estimator.nyOffset() !== new Date(estimator.now()).getTimezoneOffset() / 60
+    tzNote = expectTzNote ? " ET": ""
   })
 
   describe("findNextAvailableHours", () => {
