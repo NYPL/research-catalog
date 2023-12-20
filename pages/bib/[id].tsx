@@ -4,6 +4,7 @@ import { Heading } from "@nypl/design-system-react-components"
 import Layout from "../../src/components/Layout/Layout"
 import { PATHS, SITE_NAME } from "../../src/config/constants"
 import { fetchBib } from "../api/bib"
+import { mapQueryToBibParams } from "../../src/utils/bibUtils"
 
 /**
  * The Bib page is responsible for fetching and displaying a single Bib's details.
@@ -23,10 +24,14 @@ export default function Bib({ bib, annotatedMarc }) {
   )
 }
 
-export async function getServerSideProps({ params }) {
+export async function getServerSideProps({ params, resolvedUrl }) {
   const { id } = params
-
-  const { bib, annotatedMarc, status, redirectUrl } = await fetchBib(id)
+  const queryString = resolvedUrl.slice(resolvedUrl.indexOf("?") + 1)
+  const bibParams = mapQueryToBibParams(queryString)
+  const { bib, annotatedMarc, status, redirectUrl } = await fetchBib(
+    id,
+    bibParams
+  )
 
   switch (status) {
     case 301:
