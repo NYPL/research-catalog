@@ -181,6 +181,9 @@ describe("pickupTimeEstimator", () => {
     mockNowTimestamp = "2023-06-01T12:00:00-04:00"
     jest.spyOn(estimator, "now").mockImplementation(() => mockNowTimestamp)
 
+    // Insist on NY time, unless run with another TZ
+    process.env.TZ = process.env.TZ || "America/New_York"
+
     // When running tests with TZ set to anything other than ET, let"s expect
     // all statements about time of day to end in "ET":
     tzNote =
@@ -284,9 +287,9 @@ describe("pickupTimeEstimator", () => {
     })
 
     it("should return the given time if it falls within the next destination service time", async () => {
-      expect(await estimator.getServiceTime("sc", "2023-06-01T12:00:00-04:00")).toBe(
-        "2023-06-01T12:00:00-04:00"
-      )
+      expect(
+        await estimator.getServiceTime("sc", "2023-06-01T12:00:00-04:00")
+      ).toBe("2023-06-01T12:00:00-04:00")
     })
 
     it("should return the start of the next service time if given time falls outside of service hours", async () => {
