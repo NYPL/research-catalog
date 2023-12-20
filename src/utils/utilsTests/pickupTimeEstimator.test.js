@@ -120,28 +120,57 @@ jest.mock("../../../pages/api/locations", () => {
 
 describe("pickupTimeEstimator", () => {
   beforeEach(() => {
-    window.fetch = jest.fn()
-      .mockImplementation((url) => {
-        return Promise.resolve({
-          ok: true,
-          json: () => {
-            if (/fulfillment.json$/.test(url)) {
-              return Promise.resolve({
-                "fulfillment:hd-offsite": { estimatedTime: "P2D", label: "Offsite Harvard Depository" },
-                "fulfillment:recap-offsite": { estimatedTime: "P1D", label: "Offsite ReCAP" },
-                "fulfillment:sasb-edd": { estimatedTime: "P2W", label: "EDD Onsite" },
-                "fulfillment:lpa-edd": { estimatedTime: "P2W", label: "EDD Onsite" },
-                "fulfillment:hd-edd": { estimatedTime: "P1W", label: "EDD Harvard Depository" },
-                "fulfillment:sasb-onsite": { estimatedTime: "PT45M", label: "Onsite SASB" },
-                "fulfillment:sc-edd": { estimatedTime: "P2W", label: "EDD Onsite" },
-                "fulfillment:sc-onsite": { estimatedTime: "PT15M", label: "Onsite Schomburg" },
-                "fulfillment:recap-edd": { estimatedTime: "P1W", label: "EDD ReCAP" },
-                "fulfillment:lpa-onsite": { estimatedTime: "PT45M", label: "Onsite LPA" }
-              })
-            }
+    window.fetch = jest.fn().mockImplementation((url) => {
+      return Promise.resolve({
+        ok: true,
+        json: () => {
+          if (/fulfillment.json$/.test(url)) {
+            return Promise.resolve({
+              "fulfillment:hd-offsite": {
+                estimatedTime: "P2D",
+                label: "Offsite Harvard Depository",
+              },
+              "fulfillment:recap-offsite": {
+                estimatedTime: "P1D",
+                label: "Offsite ReCAP",
+              },
+              "fulfillment:sasb-edd": {
+                estimatedTime: "P2W",
+                label: "EDD Onsite",
+              },
+              "fulfillment:lpa-edd": {
+                estimatedTime: "P2W",
+                label: "EDD Onsite",
+              },
+              "fulfillment:hd-edd": {
+                estimatedTime: "P1W",
+                label: "EDD Harvard Depository",
+              },
+              "fulfillment:sasb-onsite": {
+                estimatedTime: "PT45M",
+                label: "Onsite SASB",
+              },
+              "fulfillment:sc-edd": {
+                estimatedTime: "P2W",
+                label: "EDD Onsite",
+              },
+              "fulfillment:sc-onsite": {
+                estimatedTime: "PT15M",
+                label: "Onsite Schomburg",
+              },
+              "fulfillment:recap-edd": {
+                estimatedTime: "P1W",
+                label: "EDD ReCAP",
+              },
+              "fulfillment:lpa-onsite": {
+                estimatedTime: "PT45M",
+                label: "Onsite LPA",
+              },
+            })
           }
-        })
+        },
       })
+    })
 
     // Add window global nyOffsets var, emulating a global var set by server
     // for the client, giving the current and future NY TZ offsets
@@ -149,7 +178,7 @@ describe("pickupTimeEstimator", () => {
       { from: "2023-03-10T06:00:00.000Z", offset: 4 },
       { from: "2023-11-05T06:00:00.000Z", offset: 5 },
     ]
-    mockNowTimestamp = "2023-06-01T12:00:00"
+    mockNowTimestamp = "2023-06-01T12:00:00-04:00"
     jest.spyOn(estimator, "now").mockImplementation(() => mockNowTimestamp)
 
     // When running tests with TZ set to anything other than ET, let"s expect
@@ -211,7 +240,7 @@ describe("pickupTimeEstimator", () => {
     })
 
     it("should return tomorrow when called at end of service hours", async () => {
-      mockNowTimestamp = "2023-06-01T18:00:00"
+      mockNowTimestamp = "2023-06-01T18:00:00-04:00"
       expect(await estimator.getNextServiceHours("sc")).toEqual({
         day: "Friday",
         startTime: "2023-06-02T14:00:00.000Z",
@@ -223,11 +252,11 @@ describe("pickupTimeEstimator", () => {
     // Each of these times is afterhours
     ;[
       // 7pm closing:
-      "2023-06-01T19:00:09",
+      "2023-06-01T19:00:09-04:00",
       // 8pm:
-      "2023-06-01T20:00:00",
+      "2023-06-01T20:00:00-04:00",
       // 2am:
-      "2023-06-02T02:00:00",
+      "2023-06-02T02:00:00-04:00",
     ].forEach(async (timestamp) => {
       it(`should return tomorrow when called after service hours (${timestamp})`, async () => {
         mockNowTimestamp = timestamp
@@ -243,7 +272,7 @@ describe("pickupTimeEstimator", () => {
 
   describe("getServiceTime", () => {
     it('should return start of tomorrow"s service time when after hours', async () => {
-      mockNowTimestamp = "2023-06-01T23:00:00"
+      mockNowTimestamp = "2023-06-01T23:00:00-04:00"
       expect(await estimator.getServiceTime("sc")).toBe(
         "2023-06-02T14:00:00.000Z"
       )
@@ -255,8 +284,8 @@ describe("pickupTimeEstimator", () => {
     })
 
     it("should return the given time if it falls within the next destination service time", async () => {
-      expect(await estimator.getServiceTime("sc", "2023-06-01T12:00:00")).toBe(
-        "2023-06-01T12:00:00"
+      expect(await estimator.getServiceTime("sc", "2023-06-01T12:00:00-04:00")).toBe(
+        "2023-06-01T12:00:00-04:00"
       )
     })
 

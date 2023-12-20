@@ -48,7 +48,8 @@ export const getPickupTimeEstimate = async (
 
   const fulfillments = await nyplCore("fulfillment")
   const fulfillment = fulfillments[item[`${type}Fulfillment`]]
-  if (!fulfillment) throw new Error(`Invalid fulfillment: ${item[`${type}Fulfillment`]}`)
+  if (!fulfillment)
+    throw new Error(`Invalid fulfillment: ${item[`${type}Fulfillment`]}`)
 
   fromTimestamp = fromTimestamp || module.exports.now()
 

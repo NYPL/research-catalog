@@ -401,7 +401,7 @@ export async function getServerSideProps({ resolvedUrl }) {
     requestTime
   ).catch((e) => {
     error = e.message
-    error += '\n__________________________________' + e.stack
+    error += "\n__________________________________" + e.stack
     return {}
   })
   // const result = null
@@ -411,7 +411,7 @@ export async function getServerSideProps({ resolvedUrl }) {
       fulfillment,
       holdingLocation,
       result: JSON.parse(JSON.stringify(result)),
-      error
+      error,
     },
   }
 }
