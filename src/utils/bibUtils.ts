@@ -81,6 +81,7 @@ export function mapQueryToBibParams(bibQuery: BibQueryParams): BibParams {
   const urlEnabledFeatures = extractFeatures(features)
 
   const itemFilterQuery = Object.keys(bibQuery)
+    .filter((key) => key !== "items_from")
     .map((key) => `${key}=${bibQuery[key]}`)
     .join("&")
 
