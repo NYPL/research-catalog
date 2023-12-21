@@ -35,6 +35,13 @@ export function locationLabelToKey(label: string): ItemLocationKey {
 }
 
 /**
+ * parseLocations
+ * Takes a semicolon-separated list of locations set in an ENV variable and maps them to an array.
+ */
+export const parseLocations = (locations: string): string[] =>
+  locations ? locations.split(";") : []
+
+/**
  * Format an Item's shelfMark value for sorting by collapsing whitespace and zero-padding
  * anything that looks like a box, volume, or tube number, identified as:
  *  - any number terminating the string, or

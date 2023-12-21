@@ -5,10 +5,13 @@ import {
   Box,
   Text,
   CardActions,
+  useNYPLBreakpoints,
 } from "@nypl/design-system-react-components"
 
 import RCLink from "../RCLink/RCLink"
 import ElectronicResourcesLink from "./ElectronicResourcesLink"
+import ItemTable from "../ItemTable/ItemTable"
+import ItemTableData from "../../models/ItemTableData"
 import type SearchResultsBib from "../../models/SearchResultsBib"
 import { PATHS, ITEMS_PER_SEARCH_RESULT } from "../../config/constants"
 
@@ -20,6 +23,19 @@ interface SearchResultProps {
  * The SearchResult component displays a single search result element.
  */
 const SearchResult = ({ bib }: SearchResultProps) => {
+  const { isLargerThanLarge: isDesktop } = useNYPLBreakpoints()
+
+  // On Search Results, a separate ItemTable is constructed for each item up to the limit set in ITEMS_PER_SEARCH_RESULT.
+  // TODO: Move this preprocessing to SearchResultsBib model
+  const searchResultItems: ItemTableData[] =
+    bib.hasItems &&
+    bib.items.slice(0, ITEMS_PER_SEARCH_RESULT).map((item) => {
+      return new ItemTableData([item], {
+        isBibPage: false,
+        isDesktop,
+        isArchiveCollection: bib.isArchiveCollection,
+      })
+    })
   return (
     <Card
       sx={{
@@ -31,7 +47,7 @@ const SearchResult = ({ bib }: SearchResultProps) => {
         <RCLink href={`${PATHS.BIB}/${bib.id}`}>{bib.title}</RCLink>
       </CardHeading>
       <CardContent>
-        <Box sx={{ p: { display: "inline", marginRight: "s" } }} mb="m">
+        <Box sx={{ p: { display: "inline", marginRight: "s" } }}>
           {bib.materialType && <Text>{bib.materialType}</Text>}
           {bib.publicationStatement && <Text>{bib.publicationStatement}</Text>}
           {bib.yearPublished && <Text>{bib.yearPublished}</Text>}
@@ -43,13 +59,22 @@ const SearchResult = ({ bib }: SearchResultProps) => {
             electronicResources={bib.electronicResources}
           />
         )}
-        {/* Move the code block below to the conditional for rendering the Item Table */}
-        {bib.numPhysicalItems > ITEMS_PER_SEARCH_RESULT && (
-          <CardActions>
-            <RCLink href={`${bib.url}#items-table`} type="standalone">
-              {`View All ${bib.itemMessage} `}
-            </RCLink>
-          </CardActions>
+        {searchResultItems && (
+          <>
+            {searchResultItems.map((itemTableData) => (
+              <ItemTable
+                itemTableData={itemTableData}
+                key={`search-results-item-${itemTableData.items[0].id}`}
+              />
+            ))}
+            {bib.showViewAllItemsLink && (
+              <CardActions>
+                <RCLink href={`${bib.url}#items-table`} type="standalone">
+                  {`View All ${bib.itemMessage} `}
+                </RCLink>
+              </CardActions>
+            )}
+          </>
         )}
       </CardContent>
     </Card>
