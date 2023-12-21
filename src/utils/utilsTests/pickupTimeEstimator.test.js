@@ -185,8 +185,9 @@ describe("pickupTimeEstimator", () => {
     // (configured via TZ or another means) results in a TZ offset other
     // than NY, expect estimation strings to be suffixed with " ET":
     const expectTzNote =
-      estimator.nyOffset() !== new Date(estimator.now()).getTimezoneOffset() / 60
-    tzNote = expectTzNote ? " ET": ""
+      estimator.nyOffset() !==
+      new Date(estimator.now()).getTimezoneOffset() / 60
+    tzNote = expectTzNote ? " ET" : ""
   })
 
   describe("findNextAvailableHours", () => {

@@ -62,17 +62,27 @@ export const getPickupTimeEstimate = async (
   const fulfillmentTimeMinutes = parseOffsiteTravelDuration(
     fulfillment.estimatedTime
   )
+
+  const originLocationId = locationId(item)
+
+  // If fulfillment is 5+ days out, just do a basic estimate:
   if (fulfillmentTimeMinutes > 60 * 24 * 5) {
     const turnaroundTime = addMinutes(fromTimestamp, fulfillmentTimeMinutes)
     rationale.push({ time: turnaroundTime, activity: "turnaround time" })
+
+    // Bump time to next available service time at site:
+    const adjustedTurnaroundTime = await getServiceTime(
+      originLocationId,
+      turnaroundTime
+    )
+    rationale.push({ time: adjustedTurnaroundTime, activity: "adjusted to operating hours" })
+
     return {
-      time: turnaroundTime,
-      estimate: makeFriendly(turnaroundTime),
+      time: adjustedTurnaroundTime,
+      estimate: makeFriendly(adjustedTurnaroundTime, {useRoughDayEstimate: true}),
       rationale,
     }
   }
-
-  const originLocationId = locationId(item)
 
   // Assume onsite request (i.e. already arrived at "destination" building)
   let arrivalAtDestination = fromTimestamp
@@ -213,6 +223,7 @@ export const adjustToSpecialSchedule = (locationId, time): string => {
 type MakeFriendlyOptions = {
   useTodayAtTime?: boolean
   useTodayByTime?: boolean
+  useRoughDayEstimate?: boolean
 }
 
 /**
@@ -235,6 +246,7 @@ export const makeFriendly = (
     {
       useTodayAtTime: false,
       useTodayByTime: false,
+      useRoughDayEstimate: false
     },
     options
   )
@@ -250,6 +262,9 @@ export const makeFriendly = (
     dayOfWeek,
   } = formatDateAndTime(date)
 
+  if (options.useRoughDayEstimate) {
+    return days === 0 ? "today" : `by ${dayOfWeek} (${formattedDate})`
+  }
   if (days && days > 5) {
     const weeks = Math.round(days / 7)
     return "in about " + (weeks === 1 ? "a week" : `${weeks} weeks`)
@@ -294,9 +309,6 @@ export const formatDateAndTime = (date: Date) => {
   const values: DateFormatType = Intl.DateTimeFormat("en", formatOptions)
     .formatToParts(date)
     .reduce((h, part) => Object.assign(h, { [part.type]: part.value }), {})
-
-  // In Node 10, this one comes through all lowercase:
-  // values.dayPeriod = values.dayperiod || values.dayPeriod || ""
 
   values.dayPeriod = values.dayPeriod && values.dayPeriod.toLowerCase()
 
@@ -566,64 +578,64 @@ export const roundToQuarterHour = (date) => {
  *  Given a location id, returns an array of operating hours.
  */
 export const operatingHours = async (locationId) => {
+  // Translate all rc* location ids into special 'rc' code:
+  locationId = /^rc/.test(locationId) ? "rc" : locationId
+
   let hours
   // if cache is less than one hour old, it is still valid
   if (
     cache[locationId] &&
     Date.now() - cache[locationId].updatedAt < MS_PER_HOUR
   ) {
-    return (await cache[locationId].request).hours
+    return (await cache[locationId].request)
   } else {
     cache[locationId] = {}
 
     cache[locationId] = {
       request: fetchLocations({ location_codes: locationId, fields: "hours" })
-        .then(async (resp) => {
-          // FIXME: Until location-service supports RC hours, fake it:
-          if (!resp[locationId][0].hours && /^rc/.test(locationId)) {
-            const hours = await fetchLocations({
+        .then((json) => {
+          if ((!json || !json[locationId] || !json[locationId][0]) && !/^rc/.test(locationId)) {
+            console.error(
+              `Could not find hours for ${locationId} in locations response (${Object.keys(
+                json
+              )})`
+            )
+            return []
+          }
+          return json[locationId].shift().hours
+        })
+        .then(async (hours) => {
+          if (!hours && /^rc/.test(locationId)) {
+            const sasbHours = await fetchLocations({
               location_codes: "ma",
               fields: "hours",
             })
-            const daysWithSaturdayClosed = hours["ma"][0].hours.map((day) => {
+            const daysWithSaturdayClosed = sasbHours["ma"][0].hours.map((day) => {
               if (day.day === "Saturday") {
                 delete day.startTime
                 delete day.endTime
               }
               return day
             })
-            resp = {
-              [locationId]: [{ hours: daysWithSaturdayClosed }],
-            }
+            hours = daysWithSaturdayClosed
           }
 
-          return resp
-        })
-        .then((json) => {
-          if (!json || !json[locationId]) {
-            console.error(
-              `Could not find hours for ${locationId} in locations response (${Object.keys(
-                json
-              )})`
-            )
-            return { hours: [] }
-          }
-          return json[locationId].shift()
+          return hours
         })
         .then((hours) => {
-          if (!hours || !hours.hours) {
+          if (!hours) {
             console.error(`Could not get hours for ${locationId}`)
-            return { hours: [] }
+            return []
           }
 
           // TODO FIXME: LocationsService has a tz offset bug (https://jira.nypl.org/browse/SCC-3884 )
-          const fixLocationServiceTZ = hours.hours.some((hours) => {
+          const fixLocationServiceTZ = hours.some((hours) => {
             const d = new Date(hours.startTime)
             // No library opens before 7am. Assume this is due to a UTC offset on a ET timestamp:
             return d.getHours() <= 7
           })
           if (fixLocationServiceTZ) {
-            hours.hours = hours.hours.map((h) => {
+            hours = hours.map((h) => {
               h.startTime = h.startTime
                 ? h.startTime.replace(/\+00:00$/, "-05:00")
                 : h.startTime
@@ -634,10 +646,10 @@ export const operatingHours = async (locationId) => {
             })
           }
           // Remove days without hours (closed days) because it's impossible to sort them:
-          hours.hours = hours.hours.filter((h) => h.startTime && h.endTime)
+          hours = hours.filter((h) => h.startTime && h.endTime)
 
           // Backfill last week's hours based on this week's hours:
-          const lastWeekHours = hours.hours.map((day) => {
+          const lastWeekHours = hours.map((day) => {
             return {
               startTime: new Date(
                 Date.parse(day.startTime) - 7 * MS_PER_DAY
@@ -647,21 +659,21 @@ export const operatingHours = async (locationId) => {
               ).toISOString(),
             }
           })
-          hours.hours = hours.hours.concat(lastWeekHours)
+          hours = hours.concat(lastWeekHours)
 
           // Sort hours:
-          const sorted = hours.hours.sort((h1, h2) => {
+          const sorted = hours.sort((h1, h2) => {
             const v = h1.startTime < h2.startTime ? -1 : 1
             return v
           })
 
-          return { hours: sorted }
+          return sorted
         }),
       updatedAt: Date.now(),
     }
 
     await cache[locationId].request
-    return (await cache[locationId].request).hours
+    return (await cache[locationId].request)
   }
   return hours
 }

@@ -75,6 +75,12 @@ const scenarios = {
     fulfillment: "fulfillment:recap-offsite",
     deliveryLocation: "mal17",
   },
+  "ReCAP to Rose after 2:30pm cut-off": {
+    holdingLocation: "rc",
+    fulfillment: "fulfillment:recap-offsite",
+    deliveryLocation: "mal",
+    requestTime: todayAt(15),
+  },
   "ReCAP to SC": {
     holdingLocation: "rc",
     fulfillment: "fulfillment:recap-offsite",
@@ -156,7 +162,7 @@ const TestPickupTimes = (params) => {
   const [currentTime, setCurrentTime] = useState(params.currentTime || "")
 
   const [currentParams, setCurrentParams] = useState({} as CurrentParams)
-  const [error, setError] = useState(params.error || null)
+  const error = params.error
   const [loading, setLoading] = useState(false)
 
   const [scenario, setScenario] = useState("")
@@ -206,22 +212,6 @@ const TestPickupTimes = (params) => {
       currentTime,
       scenario,
     })
-
-    let paramsValid = true
-
-    // Validate dates:
-    Object.entries({
-      "Request time": requestTime,
-      "Current time": currentTime,
-    }).forEach(([label, time]) => {
-      if (time && !validDate(time)) {
-        setError(`${label} (${requestTime}) is invalid`)
-        setLoading(false)
-        paramsValid = paramsValid && false
-      }
-    })
-
-    if (!paramsValid) return
   }
 
   return (
@@ -238,7 +228,7 @@ const TestPickupTimes = (params) => {
           // We are using a post request on advanced search when JS is disabled so that we can build the query
           // string correctly on the server and redirect the user to the search results.
           method="post"
-          action={`${BASE_URL}/search`}
+          action={`${BASE_URL}/test-pickup-times`}
         >
           <FormRow gap="grid.m">
             <FormField id="advancedSearchLeft" gap="grid.s">
@@ -259,6 +249,7 @@ const TestPickupTimes = (params) => {
                   )
                 })}
               </Select>
+              <HorizontalRule __css={{ margin: 0 }} />
 
               <TextInput
                 id="holdingLocation"
@@ -318,7 +309,7 @@ const TestPickupTimes = (params) => {
                 ref={inputRef}
               />
             </FormField>
-            <FormField id="advancedSearchRight" gap="grid.s">
+            <FormField id="testPickupTimesRight" gap="grid.s">
               {loading && "Loading ..."}
               {error && <>{error}</>}
               {!loading && !error && result && (
@@ -356,19 +347,6 @@ const TestPickupTimes = (params) => {
               )}
             </FormField>
           </FormRow>
-          <HorizontalRule __css={{ margin: 0 }} />
-          <ButtonGroup
-            id="advancedSearchButtons"
-            buttonWidth="default"
-            __css={{
-              gap: "xs",
-              marginLeft: "auto",
-            }}
-          >
-            <Button id="advancedSearchSubmit" type="submit" size="large">
-              Submit
-            </Button>
-          </ButtonGroup>
         </Form>
       </Layout>
     </>
@@ -378,39 +356,58 @@ const TestPickupTimes = (params) => {
 export async function getServerSideProps({ resolvedUrl }) {
   const queryString = resolvedUrl.slice(resolvedUrl.indexOf("?") + 1)
   const params = parse(queryString)
+  const { deliveryLocation, requestTime, currentTime } = params
   let { fulfillment, holdingLocation } = params
-  const { deliveryLocation, requestTime } = params
   fulfillment = fulfillment || "fulfillment:sasb-onsite"
   holdingLocation = holdingLocation || "mal92"
 
   // Override the pickupTimeEstimator's sense of when "now" is:
-  overrideNow(params.currentTime || new Date().toISOString())
+  overrideNow(currentTime || new Date().toISOString())
+
+  let error = null
+  let paramsValid = true
+
+  // Validate dates:
+  Object.entries({
+    "Request time": requestTime,
+    "Current time": currentTime,
+  }).forEach(([label, time]) => {
+    if (time && !validDate(time)) {
+      error = `${label} (${time}) is invalid`
+      paramsValid = paramsValid && false
+    }
+  })
 
   const type =
     typeof fulfillment === "string" &&
     (/edd$/.test(fulfillment) ? "edd" : "phys")
-  let error = null
-  const result = await getPickupTimeEstimate(
-    {
-      [`${type}Fulfillment`]: fulfillment,
-      holdingLocation: [{ id: holdingLocation }],
-      idNyplSourceId: { "@type": "SierraNypl" },
-    },
-    deliveryLocation,
-    type,
-    requestTime
-  ).catch((e) => {
-    error = e.message
-    error += "\n__________________________________" + e.stack
-    return {}
-  })
-  // const result = null
+
+  let result = null
+  if (paramsValid) {
+    result = await getPickupTimeEstimate(
+      {
+        [`${type}Fulfillment`]: fulfillment,
+        holdingLocation: [{ id: holdingLocation }],
+        idNyplSourceId: { "@type": "SierraNypl" },
+      },
+      deliveryLocation,
+      type,
+      requestTime
+    ).catch((e) => {
+      error = e.message
+      error += "\n__________________________________" + e.stack
+      return {}
+    })
+  }
 
   return {
     props: {
       fulfillment,
       holdingLocation,
-      result: JSON.parse(JSON.stringify(result)),
+      deliveryLocation: deliveryLocation || null,
+      requestTime: requestTime || null,
+      currentTime: currentTime || null,
+      result: result,
       error,
     },
   }
