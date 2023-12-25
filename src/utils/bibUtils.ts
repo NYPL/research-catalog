@@ -30,13 +30,6 @@ export function isNyplBibID(id: string) {
 }
 
 /**
- * Given a bib ID, return true if it is an NYPL bnumber and has a 10th character.
- */
-export function hasCheckDigit(id = "") {
-  return isNyplBibID(id) && id.length === 10
-}
-
-/**
  * Given a BibParams object and an includeAnnotatedMarc boolean, return a query string for the Bib fetch API call.
  */
 export function getBibQuery(
