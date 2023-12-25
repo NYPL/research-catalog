@@ -1,4 +1,4 @@
-import { isNyplBibID, standardizeBibId } from "../bibUtils"
+import { standardizeBibId, isNyplBibID, getBibQuery } from "../bibUtils"
 
 describe("bibUtils", () => {
   describe("standardizeBibId", () => {
@@ -30,8 +30,51 @@ describe("bibUtils", () => {
     })
   })
   describe("isNyplBibID", () => {
-    expect(isNyplBibID("b12082323")).toBe(true)
-    expect(isNyplBibID("pb123456")).toBe(false)
-    expect(isNyplBibID("hb10000202040400")).toBe(false)
+    it("determines if a given bib ID is an NYPL bib id", () => {
+      expect(isNyplBibID("b12082323")).toBe(true)
+      expect(isNyplBibID("pb123456")).toBe(false)
+      expect(isNyplBibID("hb10000202040400")).toBe(false)
+    })
+  })
+  describe("getBibQuery", () => {
+    it("returns the correct query string with a bib ID and no bib params", () => {
+      expect(getBibQuery("b12082323")).toBe(
+        "b12082323?merge_checkin_card_items=true"
+      )
+    })
+    it("returns the correct query string with a bib ID and various combinations of bib params", () => {
+      expect(getBibQuery("b12082323", { itemsFrom: 5 })).toBe(
+        "b12082323?items_size=20&items_from=5&merge_checkin_card_items=true"
+      )
+      expect(
+        getBibQuery("b12082323", { itemFilterQuery: "test_query=true" })
+      ).toBe("b12082323?test_query=true&merge_checkin_card_items=true")
+      expect(
+        getBibQuery("b12082323", {
+          itemsFrom: 5,
+          itemFilterQuery: "test_query=true",
+        })
+      ).toBe(
+        "b12082323?items_size=20&items_from=5&test_query=true&merge_checkin_card_items=true"
+      )
+    })
+    it("returns the correct query string with various combinations of bib params and annotated marc setting enabled", () => {
+      expect(getBibQuery("b12082323", { itemsFrom: 5 }, true)).toBe(
+        "b12082323.annotated-marc?items_size=20&items_from=5"
+      )
+      expect(
+        getBibQuery("b12082323", { itemFilterQuery: "test_query=true" }, true)
+      ).toBe("b12082323.annotated-marc")
+      expect(
+        getBibQuery(
+          "b12082323",
+          {
+            itemsFrom: 5,
+            itemFilterQuery: "test_query=true",
+          },
+          true
+        )
+      ).toBe("b12082323.annotated-marc?items_size=20&items_from=5")
+    })
   })
 })
