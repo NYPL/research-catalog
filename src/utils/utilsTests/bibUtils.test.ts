@@ -1,4 +1,9 @@
-import { standardizeBibId, isNyplBibID, getBibQuery } from "../bibUtils"
+import {
+  standardizeBibId,
+  isNyplBibID,
+  getBibQuery,
+  mapQueryToBibParams,
+} from "../bibUtils"
 
 describe("bibUtils", () => {
   describe("standardizeBibId", () => {
@@ -46,16 +51,16 @@ describe("bibUtils", () => {
       expect(getBibQuery("b12082323", { itemsFrom: 5 })).toBe(
         "b12082323?items_size=20&items_from=5&merge_checkin_card_items=true"
       )
-      expect(
-        getBibQuery("b12082323", { itemFilterQuery: "test_query=true" })
-      ).toBe("b12082323?test_query=true&merge_checkin_card_items=true")
+      expect(getBibQuery("b12082323", { itemFilterQuery: "item_page=5" })).toBe(
+        "b12082323?item_page=5&merge_checkin_card_items=true"
+      )
       expect(
         getBibQuery("b12082323", {
           itemsFrom: 5,
-          itemFilterQuery: "test_query=true",
+          itemFilterQuery: "item_page=5",
         })
       ).toBe(
-        "b12082323?items_size=20&items_from=5&test_query=true&merge_checkin_card_items=true"
+        "b12082323?items_size=20&items_from=5&item_page=5&merge_checkin_card_items=true"
       )
     })
     it("returns the correct query string with various combinations of bib params and annotated marc setting enabled", () => {
@@ -63,18 +68,43 @@ describe("bibUtils", () => {
         "b12082323.annotated-marc?items_size=20&items_from=5"
       )
       expect(
-        getBibQuery("b12082323", { itemFilterQuery: "test_query=true" }, true)
+        getBibQuery("b12082323", { itemFilterQuery: "item_page=5" }, true)
       ).toBe("b12082323.annotated-marc")
       expect(
         getBibQuery(
           "b12082323",
           {
             itemsFrom: 5,
-            itemFilterQuery: "test_query=true",
+            itemFilterQuery: "item_page=5",
           },
           true
         )
       ).toBe("b12082323.annotated-marc?items_size=20&items_from=5")
+    })
+  })
+  describe("mapQueryToBibParams", () => {
+    it("returns a BibParams object based on a bib query object with the correct itemsFrom offset", () => {
+      expect(mapQueryToBibParams({ item_page: 5 })).toStrictEqual({
+        features: [],
+        itemFilterQuery: "item_page=5",
+        itemsFrom: 80,
+      })
+      expect(
+        mapQueryToBibParams({ item_page: 10, features: "feature1,feature2" })
+      ).toStrictEqual({
+        features: ["feature1", "feature2"],
+        itemFilterQuery: "item_page=10&features=feature1,feature2",
+        itemsFrom: 180,
+      })
+    })
+    it("defaults to an item_page of 1", () => {
+      expect(
+        mapQueryToBibParams({ features: "feature1,feature2" })
+      ).toStrictEqual({
+        features: ["feature1", "feature2"],
+        itemFilterQuery: "features=feature1,feature2",
+        itemsFrom: 0,
+      })
     })
   })
 })
