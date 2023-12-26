@@ -1,3 +1,6 @@
+import { Link as DSLink, List } from "@nypl/design-system-react-components"
+
+import RCLink from "../components/RCLink/RCLink"
 import type { ProcessedSearchResult, SearchResult } from "../types/searchTypes"
 import { preProcess } from "../utils/bibModelPreprocessing"
 
@@ -5,7 +8,16 @@ export interface BibField {
   // label is the formatted name of the field, such as "Author"
   label: string
   // value is the array of metadata, such as "["Author One", "Author Two"]"
-  value: string[] | ExternalUrl[]
+  value: string[]
+  // indicates if a linked bib detail is internal, like a link to a creator
+  // literal search, or external, like supplementary content
+  link?: "internal" | "external"
+}
+
+interface LinkedBibField {
+  value: ExternalUrl[]
+  // label is the formatted name of the field, such as "Author"
+  label: string
   // indicates if a linked bib detail is internal, like a link to a creator
   // literal search, or external, like supplementary content
   link?: "internal" | "external"
@@ -19,6 +31,7 @@ interface ExternalUrl {
 export default class Bib {
   bib: ProcessedSearchResult
   creatorLiteral: BibField
+  contributorLiteral: BibField
   issn: BibField
   isbn: BibField
   oclc: BibField
@@ -46,6 +59,11 @@ export default class Bib {
     this.creatorLiteral = this.buildStandardField(
       "creatorLiteral",
       "Author",
+      "internal"
+    )
+    this.contributorLiteral = this.buildStandardField(
+      "contributorLiteral",
+      "Additional Author",
       "internal"
     )
     this.issn = this.buildStandardField("idIssn", "ISSN")
@@ -85,8 +103,8 @@ export default class Bib {
   // a url should be a react router navigation within the app or a full url to
   // leave the catalog.
   buildStandardField(
-    label: string,
     field: string,
+    label: string,
     link?: "internal" | "external"
   ) {
     const bibFieldValue = this.bib[field]
@@ -96,6 +114,48 @@ export default class Bib {
       if (link) field["link"] = link
       return field
     }
+  }
+
+  static buildDetailElement(field: BibField) {
+    return (
+      <>
+        <dt>{field.label}</dt>
+        {field.value.map((val: string, i: number) => {
+          return <dd key={i}>{val}</dd>
+        })}
+      </>
+    )
+  }
+
+  static buildInternalLinkElement(field: BibField, filterField: string) {
+    return (
+      <>
+        <dt>{field.label}</dt>
+        {field.value.map((val: string, i: number) => {
+          const url = `../../search?filters[${filterField}]=${val}`
+          return (
+            <RCLink href={url} key={i}>
+              {val}
+            </RCLink>
+          )
+        })}
+      </>
+    )
+  }
+
+  static buildExternalLinkElement(field: LinkedBibField) {
+    return (
+      <>
+        <dt>{field.label}</dt>
+        {field.value.map((val: ExternalUrl, i: number) => {
+          return (
+            <DSLink href={val.url} key={i}>
+              {val.urlLabel}
+            </DSLink>
+          )
+        })}
+      </>
+    )
   }
 
   get supplementaryContent() {
@@ -119,7 +179,7 @@ export default class Bib {
   }
 
   get topDetails() {
-    return [
+    const elements = [
       "titleDisplay",
       "publicationStatement",
       // external link
@@ -127,8 +187,17 @@ export default class Bib {
       // internal link
       "creatorLiteral",
     ]
-      .map((field) => this[field])
+      .map((apiProperty) => {
+        const field = this[apiProperty]
+        if (!field) return
+        if (!field.link) return Bib.buildDetailElement(field)
+        else if (field.link === "internal")
+          return Bib.buildInternalLinkElement(field, apiProperty)
+        else if (field.link === "external")
+          return Bib.buildExternalLinkElement(field)
+      })
       .filter((f) => f)
+    return <List type="dl">{elements}</List>
   }
 
   get bottomDetails() {
