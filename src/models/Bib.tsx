@@ -1,4 +1,5 @@
 import { Link as DSLink, List } from "@nypl/design-system-react-components"
+import ReactElementToJSXString from "react-element-to-jsx-string"
 
 import RCLink from "../components/RCLink/RCLink"
 import type { ProcessedSearchResult, SearchResult } from "../types/searchTypes"
@@ -15,7 +16,7 @@ export interface BibField {
 }
 
 interface LinkedBibField {
-  value: ExternalUrl[]
+  value: Url[]
   // label is the formatted name of the field, such as "Author"
   label: string
   // indicates if a linked bib detail is internal, like a link to a creator
@@ -23,15 +24,15 @@ interface LinkedBibField {
   link?: "internal" | "external"
 }
 
-interface ExternalUrl {
+interface Url {
   url: string
   urlLabel: string
 }
 
 export default class Bib {
   bib: ProcessedSearchResult
-  creatorLiteral: BibField
-  contributorLiteral: BibField
+  creatorLiteral: LinkedBibField
+  contributorLiteral: LinkedBibField
   issn: BibField
   isbn: BibField
   oclc: BibField
@@ -56,15 +57,13 @@ export default class Bib {
     // as well as interleaving parallels into primary fields
     this.bib = preProcess(bib)
     // this.subjectLiteral = "to do investigate  subject heading api fallback scenario"
-    this.creatorLiteral = this.buildStandardField(
+    this.creatorLiteral = this.buildInternalLinkField(
       "creatorLiteral",
-      "Author",
-      "internal"
+      "Author"
     )
-    this.contributorLiteral = this.buildStandardField(
+    this.contributorLiteral = this.buildInternalLinkField(
       "contributorLiteral",
-      "Additional Author",
-      "internal"
+      "Additional Author"
     )
     this.issn = this.buildStandardField("idIssn", "ISSN")
     this.isbn = this.buildStandardField("idIsbn", "ISBN")
@@ -81,7 +80,8 @@ export default class Bib {
       "Publication Date",
       "serialPublicationDates"
     )
-    this.extent = this.buildStandardField("Description", "extent")
+    // extent has to be concatenated to something
+    // this.extent = this.buildStandardField("Description", "extent")
     this.description = this.buildStandardField("Summary", "description")
     this.donor = this.buildStandardField("Donor/Sponsor", "donor")
     this.seriesStatement = this.buildStandardField(
@@ -102,17 +102,22 @@ export default class Bib {
   // the label used to display the field on the front end. link indicates whether
   // a url should be a react router navigation within the app or a full url to
   // leave the catalog.
-  buildStandardField(
-    field: string,
-    label: string,
-    link?: "internal" | "external"
-  ) {
+  buildStandardField(field: string, label: string) {
     const bibFieldValue = this.bib[field]
     if (!bibFieldValue?.length) return null
-    else {
-      const field = { label, value: bibFieldValue }
-      if (link) field["link"] = link
-      return field
+    return { label, value: bibFieldValue }
+  }
+
+  buildInternalLinkField(field: string, label: string): LinkedBibField {
+    const value = this.bib[field]
+    if (!value?.length) return null
+    return {
+      link: "internal",
+      label,
+      value: value.map((v: string) => {
+        const internalUrl = `../../search?filters[${field}][0]=${v}`
+        return { url: internalUrl, urlLabel: v }
+      }),
     }
   }
 
@@ -147,7 +152,7 @@ export default class Bib {
     return (
       <>
         <dt>{field.label}</dt>
-        {field.value.map((val: ExternalUrl, i: number) => {
+        {field.value.map((val: Url, i: number) => {
           return (
             <DSLink href={val.url} key={i}>
               {val.urlLabel}
@@ -198,6 +203,7 @@ export default class Bib {
           return Bib.buildExternalLinkElement(field)
       })
       .filter((f) => f)
+    console.log(ReactElementToJSXString(<List type="dl">{elements}</List>))
     return <List type="dl">{elements}</List>
   }
 
