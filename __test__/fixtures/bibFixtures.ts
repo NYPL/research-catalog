@@ -1,3 +1,152 @@
+export const bibWithSupplementaryContent = {
+  "@context":
+    "http://discovery-api-production.us-east-1.elasticbeanstalk.com/api/v0.1/discovery/context_all.jsonld",
+  "@type": ["nypl:Item", "nypl:Resource"],
+  "@id": "res:b21255464",
+  carrierType: [
+    {
+      "@id": "carriertypes:nc",
+      prefLabel: "volume",
+    },
+  ],
+  contributorLiteral: ["Long, Ethan", "OverDrive, Inc."],
+  createdString: ["2016"],
+  createdYear: 2016,
+  creatorLiteral: ["Watson, Tom, 1965-"],
+  dateStartYear: 2016,
+  dateString: ["2016"],
+  description: [
+    "When they come across spaghetti in their search for a tug-of-war rope, Stick Dog and his hungry friends go on a quest for more pasta that sees them scale their suburb's tallest mountain and sneak into a restaurant filled with humans.",
+  ],
+  electronicResources: [
+    {
+      url: "http://link.overdrive.com/?websiteID=37&titleID=2559851",
+      prefLabel: "Access eNYPL",
+    },
+  ],
+  extent: ["1 online resource (238 pages) : illustrations."],
+  genreForm: ["Humorous fiction."],
+  idIsbn: ["9780062343239", "0062343238"],
+  idOclc: ["959966725"],
+  identifier: [
+    {
+      "@type": "nypl:Bnumber",
+      "@value": "21255464",
+    },
+    {
+      "@type": "bf:Isbn",
+      "@value": "9780062343239",
+    },
+    {
+      "@type": "bf:Isbn",
+      "@value": "0062343238",
+    },
+    {
+      "@type": "nypl:Oclc",
+      "@value": "959966725",
+    },
+    {
+      "@type": "nypl:Oclc",
+      "@value": "959966725",
+    },
+    {
+      "@type": "bf:Identifier",
+      "@value": "(OCoLC)959966725",
+    },
+  ],
+  issuance: [
+    {
+      "@id": "urn:biblevel:m",
+      prefLabel: "monograph/item",
+    },
+  ],
+  itemAggregations: [
+    {
+      "@type": "nypl:Aggregation",
+      "@id": "res:location",
+      id: "location",
+      field: "location",
+      values: [],
+    },
+    {
+      "@type": "nypl:Aggregation",
+      "@id": "res:format",
+      id: "format",
+      field: "format",
+      values: [
+        {
+          value: "Text",
+          count: 1,
+          label: "Text",
+        },
+      ],
+    },
+    {
+      "@type": "nypl:Aggregation",
+      "@id": "res:status",
+      id: "status",
+      field: "status",
+      values: [],
+    },
+  ],
+  items: [],
+  language: [
+    {
+      "@id": "lang:eng",
+      prefLabel: "English",
+    },
+  ],
+  lccClassification: ["FICTION WAT"],
+  materialType: [
+    {
+      "@id": "resourcetypes:txt",
+      prefLabel: "Text",
+    },
+  ],
+  mediaType: [
+    {
+      "@id": "mediatypes:n",
+      prefLabel: "unmediated",
+    },
+  ],
+  numAvailable: 0,
+  numCheckinCardItems: 0,
+  numElectronicResources: 1,
+  numItemDatesParsed: 0,
+  numItemVolumesParsed: 0,
+  numItems: 0,
+  numItemsMatched: 0,
+  numItemsTotal: 0,
+  nyplSource: ["sierra-nypl"],
+  placeOfPublication: ["New York, NY"],
+  publicationStatement: [
+    "New York, NY : Harper, An Imprint of HarperCollinsPublishers, [2016]",
+  ],
+  publisherLiteral: ["Harper, An Imprint of HarperCollinsPublishers"],
+  subjectLiteral: [
+    "Dogs -- Fiction.",
+    "Pasta products -- Fiction.",
+    "Friendship -- Fiction.",
+    "Illustrated children's books.",
+  ],
+  supplementaryContent: [
+    {
+      "@type": "nypl:SupplementaryContent",
+      label: "Image",
+      url: "http://images.contentreserve.com/ImageType-100/0293-1/{C87D2BB9-0E13-4851-A9E2-547643F41A0E}Img100.jpg",
+    },
+  ],
+  title: ["Stick Dog slurps spaghetti"],
+  titleDisplay: [
+    "Stick Dog slurps spaghetti / by Tom Watson ; [illustrations by Ethan Long based on original sketches by Tom Watson].",
+  ],
+  type: ["nypl:Item"],
+  updatedAt: 1681297059060,
+  uri: "b21255464",
+  suppressed: false,
+  hasItemVolumes: false,
+  hasItemDates: false,
+}
 export const parallelsBibAnnotatedMarc = {
   bib: {
     id: "15349955",

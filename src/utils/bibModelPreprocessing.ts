@@ -30,7 +30,7 @@ const getGroupedNotes = (bib: SearchResult) => {
         if (!groups[noteType]) {
           groups[noteType] = []
         }
-        groups[noteType].push(note)
+        groups[noteType].push(note.prefLabel)
         return groups
       }, {})
   }

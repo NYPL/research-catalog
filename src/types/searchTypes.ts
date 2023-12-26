@@ -109,9 +109,15 @@ export interface SearchFormEvent {
   materialType?: SearchFormField
 }
 
+interface Note {
+  "@type": string
+  noteType: string
+  prefLabel: string
+}
+
 export interface SearchResult {
-  note?: object[]
-  identifier: any
+  note?: Note[]
+  identifier: object[]
   subjectLiteral: string[]
   "@id"?: string
   uri?: string
@@ -150,7 +156,6 @@ interface SupplementaryContent {
   "@type": string
   label: string
   url: string
-  prefLabel: string
 }
 
 export interface AnnotatedMarcFieldValue {

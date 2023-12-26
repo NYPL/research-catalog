@@ -1,10 +1,19 @@
 import type { ProcessedSearchResult, SearchResult } from "../types/searchTypes"
 import { preProcess } from "../utils/bibModelPreprocessing"
 
-interface BibField {
+export interface BibField {
+  // label is the formatted name of the field, such as "Author"
   label: string
-  value: string[]
-  link: "internal" | "external"
+  // value is the array of metadata, such as "["Author One", "Author Two"]"
+  value: string[] | ExternalUrl[]
+  // indicates if a linked bib detail is internal, like a link to a creator
+  // literal search, or external, like supplementary content
+  link?: "internal" | "external"
+}
+
+interface ExternalUrl {
+  url: string
+  urlLabel: string
 }
 
 export default class Bib {
@@ -17,7 +26,6 @@ export default class Bib {
   shelfMark: BibField
   publicationStatement: BibField
   titleDisplay: BibField
-  supplementaryContent: BibField
   partOf: BibField
   serialPublicationDates: BibField
   extent: BibField
@@ -50,11 +58,6 @@ export default class Bib {
       "Publication Statement"
     )
     this.titleDisplay = this.buildStandardField("titleDisplay", "Title")
-    this.supplementaryContent = this.buildStandardField(
-      "supplementaryContent",
-      "Supplementary Content",
-      "external"
-    )
     this.partOf = this.buildStandardField("Found In", "partOf")
     this.serialPublicationDates = this.buildStandardField(
       "Publication Date",
@@ -77,34 +80,51 @@ export default class Bib {
     this.formerTitle = this.buildStandardField("Former Title", "formerTitle")
   }
 
-  // addNotes(){
-  //   this.bib.groupedNotes
-  // }
-
   // field is the discovery-api property that this value is read from. label is
   // the label used to display the field on the front end. link indicates whether
   // a url should be a react router navigation within the app or a full url to
   // leave the catalog.
   buildStandardField(
-    field: string,
     label: string,
+    field: string,
     link?: "internal" | "external"
   ) {
-    const bibField = this.bib[field]
-    if (!bibField?.length) return null
-    else
+    const bibFieldValue = this.bib[field]
+    if (!bibFieldValue?.length) return null
+    else {
+      const field = { label, value: bibFieldValue }
+      if (link) field["link"] = link
+      return field
+    }
+  }
+
+  get supplementaryContent() {
+    if (
+      !this.bib.supplementaryContent?.length &&
+      !this.bib.supplementaryContent[0]?.url
+    ) {
+      return null
+    }
+    const label = "Supplementary Content"
+    const values = this.bib.supplementaryContent.map((sc) => {
       return {
-        label,
-        value: bibField,
-        link,
+        url: sc.url,
+        urlLabel: sc.label,
       }
+    })
+    return {
+      label,
+      value: values,
+    }
   }
 
   get topDetails() {
     return [
-      "title",
+      "titleDisplay",
       "publicationStatement",
+      // external link
       "supplementaryContent",
+      // internal link
       "creatorLiteral",
     ]
       .map((field) => this[field])
