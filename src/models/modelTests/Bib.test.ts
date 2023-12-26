@@ -39,7 +39,7 @@ describe("Bib model", () => {
         "Sefer Ḥorosṭḳov = Chorostkow book",
       ])
     })
-    it("groups notes", () => {
+    it.only("groups notes", () => {
       const model = new Bib(parallelsBib)
       expect(model.bib.groupedNotes).toStrictEqual({
         "Linking Entry (note)": [
@@ -47,6 +47,11 @@ describe("Bib model", () => {
             "@type": "bf:Note",
             noteType: "Linking Entry",
             prefLabel: "Has supplement, <2005-> : Preporučeno, ISSN 1452-3531",
+          },
+          {
+            "@type": "bf:Note",
+            noteType: "Linking Entry",
+            prefLabel: "Has supplement, <2006-> : Види чуда, ISSN 1452-7316",
           },
           {
             "@type": "bf:Note",

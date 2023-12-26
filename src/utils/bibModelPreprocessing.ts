@@ -206,9 +206,9 @@ const matchParallels = (bib: SearchResult) => {
 }
 
 export const preProcess = (bib: SearchResult) => {
-  const groupedNotes = getGroupedNotes(bib)
-  const compressedSubjectLiteral = compressSubjectLiteral(bib)
   const bibWithMatchedParallels = matchParallels(bib)
+  const groupedNotes = getGroupedNotes(bibWithMatchedParallels)
+  const compressedSubjectLiteral = compressSubjectLiteral(bib)
   return { ...bibWithMatchedParallels, groupedNotes, compressedSubjectLiteral }
 }
 
