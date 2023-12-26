@@ -11,6 +11,7 @@ describe("Bib model", () => {
     it("includes url in the field", () => {
       const model = new Bib(bibWithSupplementaryContent)
       expect(model.supplementaryContent).toStrictEqual({
+        link: "external",
         label: "Supplementary Content",
         value: [
           {

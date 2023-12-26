@@ -158,7 +158,7 @@ export default class Bib {
     )
   }
 
-  get supplementaryContent() {
+  get supplementaryContent(): LinkedBibField {
     if (
       !this.bib.supplementaryContent?.length &&
       !this.bib.supplementaryContent[0]?.url
@@ -173,6 +173,7 @@ export default class Bib {
       }
     })
     return {
+      link: "external",
       label,
       value: values,
     }
