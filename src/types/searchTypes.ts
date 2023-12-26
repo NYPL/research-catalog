@@ -110,6 +110,9 @@ export interface SearchFormEvent {
 }
 
 export interface SearchResult {
+  note?: object[]
+  identifier: any
+  subjectLiteral: string[]
   "@id"?: string
   uri?: string
   titleDisplay?: string[]
@@ -122,4 +125,47 @@ export interface SearchResult {
   electronicResources?: ElectronicResource[]
   numItemsTotal?: number
   items?: SearchResultsItem[]
+  parallelTitleDisplay?: string[]
+  supplementaryContent?: SupplementaryContent[]
+  contributorLiteral?: string[]
+}
+
+export interface ProcessedSearchResult extends SearchResult {
+  compressedSubjectLiteral: string[]
+  groupedNotes: object
+}
+
+export interface AnnotatedMarc {
+  id: string
+  nyplSource: string
+  fields: AnnotatedMarcField[]
+}
+
+export interface AnnotatedMarcField {
+  label: string
+  values: AnnotatedMarcFieldValue[]
+}
+
+interface SupplementaryContent {
+  "@type": string
+  label: string
+  url: string
+  prefLabel: string
+}
+
+export interface AnnotatedMarcFieldValue {
+  content: string
+  source: {
+    fieldTag: string
+    marcTag: string
+    ind1?: string
+    ind2?: string
+    content: string | null
+    subfields: MarcSubfield[]
+  }
+}
+
+export interface MarcSubfield {
+  tag: string
+  content: string
 }
