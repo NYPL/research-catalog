@@ -9,19 +9,9 @@ import ReactElementToJSXString from "react-element-to-jsx-string"
 describe("BibDetail component", () => {
   const suppBib = new Bib(bibWithSupplementaryContent)
   const bibWithParallels = new Bib(parallelsBib)
-  xit("single value, no link", () => {
-    console.log(
-      ReactElementToJSXString(Bib.buildDetailElement(suppBib.titleDisplay))
-    )
-  })
+  it.todo("single value, no link")
   it.todo("multiple values, no link")
-  xit("single value, external link", () => {
-    console.log(
-      ReactElementToJSXString(
-        Bib.buildExternalLinkElement(suppBib["supplementaryContent"])
-      )
-    )
-  })
+  it.todo("single value, external link")
 
   it.todo("top details")
   it.todo("multiple values, external link")

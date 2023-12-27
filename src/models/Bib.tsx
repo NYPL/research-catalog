@@ -31,71 +31,12 @@ interface Url {
 
 export default class Bib {
   bib: ProcessedSearchResult
-  creatorLiteral: LinkedBibField
-  contributorLiteral: LinkedBibField
-  issn: BibField
-  isbn: BibField
-  oclc: BibField
-  lccn: BibField
-  shelfMark: BibField
-  publicationStatement: BibField
-  titleDisplay: BibField
-  partOf: BibField
-  serialPublicationDates: BibField
-  extent: BibField
-  description: BibField
-  donor: BibField
-  seriesStatement: BibField
-  uniformTitle: BibField
-  tableOfContents: BibField
-  genreForm: BibField
-  titleAlt: BibField
-  formerTitle: BibField
 
   constructor(bib: SearchResult) {
     // Preprocessing includes grouping notes into an object with labels as keys,
     // as well as interleaving parallels into primary fields
     this.bib = preProcess(bib)
     // this.subjectLiteral = "to do investigate  subject heading api fallback scenario"
-    this.creatorLiteral = this.buildInternalLinkField(
-      "creatorLiteral",
-      "Author"
-    )
-    this.contributorLiteral = this.buildInternalLinkField(
-      "contributorLiteral",
-      "Additional Author"
-    )
-    this.issn = this.buildStandardField("idIssn", "ISSN")
-    this.isbn = this.buildStandardField("idIsbn", "ISBN")
-    this.oclc = this.buildStandardField("idOclc", "OCLC")
-    this.lccn = this.buildStandardField("idLccn", "LCCN")
-    this.shelfMark = this.buildStandardField("shelfMark", "Call Number")
-    this.publicationStatement = this.buildStandardField(
-      "publicationStatement",
-      "Publication Statement"
-    )
-    this.titleDisplay = this.buildStandardField("titleDisplay", "Title")
-    this.partOf = this.buildStandardField("Found In", "partOf")
-    this.serialPublicationDates = this.buildStandardField(
-      "Publication Date",
-      "serialPublicationDates"
-    )
-    // extent has to be concatenated to something
-    // this.extent = this.buildStandardField("Description", "extent")
-    this.description = this.buildStandardField("Summary", "description")
-    this.donor = this.buildStandardField("Donor/Sponsor", "donor")
-    this.seriesStatement = this.buildStandardField(
-      "Series Statement",
-      "seriesStatement"
-    )
-    this.uniformTitle = this.buildStandardField("Uniform Title", "uniformTitle")
-    this.tableOfContents = this.buildStandardField(
-      "Contents",
-      "tableOfContents"
-    )
-    this.genreForm = this.buildStandardField("Genre/Form", "genreForm")
-    this.titleAlt = this.buildStandardField("Alternative Title", "titleAlt")
-    this.formerTitle = this.buildStandardField("Former Title", "formerTitle")
   }
 
   // field is the discovery-api property that this value is read from. label is
@@ -165,7 +106,9 @@ export default class Bib {
 
   get supplementaryContent(): LinkedBibField {
     if (
-      !this.bib.supplementaryContent?.length &&
+      !this.bib.supplementaryContent?.length ||
+      // This is not for a known edge case, just here as a safeguard to avoid
+      // broken a tags.
       !this.bib.supplementaryContent[0]?.url
     ) {
       return null
@@ -186,48 +129,68 @@ export default class Bib {
 
   get topDetails() {
     const elements = [
-      "titleDisplay",
-      "publicationStatement",
+      ["titleDisplay", "Title"],
+      ["publicationStatement", "Published By"],
       // external link
-      "supplementaryContent",
+      ["supplementaryContent", "Supplementary Content"],
       // internal link
-      "creatorLiteral",
+      ["creatorLiteral", "Author"],
     ]
-      .map((apiProperty) => {
-        const field = this[apiProperty]
+      .map(([apiProperty, label]) => {
+        let field
+        if (apiProperty === "supplementaryContent")
+          field = this.supplementaryContent
+        else if (apiProperty === "creatorLiteral")
+          field = this.buildInternalLinkField("creatorLiteral", "Author")
+        else field = this.buildStandardField(apiProperty, label)
         if (!field) return
-        if (!field.link) return Bib.buildDetailElement(field)
-        else if (field.link === "internal")
-          return Bib.buildInternalLinkElement(field, apiProperty)
-        else if (field.link === "external")
-          return Bib.buildExternalLinkElement(field)
+        // if (!field.link) return Bib.buildDetailElement(field)
+        // else if (field.link === "internal")
+        //   return Bib.buildInternalLinkElement(field, apiProperty)
+        // else if (field.link === "external")
+        //   return Bib.buildExternalLinkElement(field)
+        return field
       })
       .filter((f) => f)
-    console.log(ReactElementToJSXString(<List type="dl">{elements}</List>))
-    return <List type="dl">{elements}</List>
+    // return <List type="dl">{elements}</List>
+    return elements
   }
 
   get bottomDetails() {
     return [
-      "contributorLiteral",
-      "partOf",
-      "serialPublicationDates",
-      "extent",
-      "description",
-      "donor",
-      "seriesStatement",
-      "uniformTitle",
-      "titleAlt",
-      "formerTitle",
-      "subjectLiteral",
-      "genreForm",
-      "notes",
-      "tableOfContents",
-      "shelfMark",
-      "isbn",
-      "issn",
-      "oclc",
-      "lccn",
-    ].map((field) => this[field])
+      ["contributorLiteral", "Additional Authors"],
+      ["partOf", "Found In"],
+      ["serialPublicationDates", "Publication Date"],
+      ["extent", "Description"],
+      ["description", "Summary"],
+      ["donor", "Donor/Sponsor"],
+      ["seriesStatement", "Series Statement"],
+      ["uniformTitle", "Uniform Title"],
+      ["titleAlt", "Alternative Title"],
+      ["formerTitle", "Former Title"],
+      ["subjectLiteral", "Subject"],
+      ["genreForm", "Genre/Form"],
+      ["notes", "Notes"],
+      ["tableOfContents", "Contents"],
+      ["shelfMark", "Call Number"],
+      ["isbn", "ISBN"],
+      ["issn", "ISSN"],
+      ["oclc", "OCLC"],
+      ["lccn", "LCCN"],
+    ]
+      .map(([apiProperty, label]) => {
+        let field
+        if (apiProperty === "contributorLiteral")
+          field = this.buildInternalLinkField(
+            "contributorLiteral",
+            "Additional Authors"
+          )
+        // else if (field === "subjectLiteral")
+        //   field =
+        else field = this.buildStandardField(apiProperty, label)
+        if (!field) return
+        return field
+      })
+      .filter((f) => f)
   }
 }

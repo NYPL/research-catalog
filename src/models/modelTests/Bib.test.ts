@@ -7,10 +7,30 @@ import {
 import Bib from "../Bib"
 
 describe("Bib model", () => {
+  const bibWithSupContentModel = new Bib(bibWithSupplementaryContent)
+  const bibWithParallelsModel = new Bib(parallelsBib)
+  describe("standard fields", () => {
+    it("can handle missing field", () => {
+      expect(
+        bibWithSupContentModel.bottomDetails.find(
+          (detail) => detail.label === "Call Number"
+        )
+      ).not.toBeDefined()
+    })
+    it("builds standard fields", () => {
+      expect(
+        bibWithSupContentModel.bottomDetails.find(
+          (detail) => detail.label === "Genre/Form"
+        )
+      ).toStrictEqual({ label: "Genre/Form", value: ["Humorous fiction."] })
+    })
+  })
   describe("external linking fields", () => {
+    it("can handle missing fields", () => {
+      expect(bibWithParallelsModel.supplementaryContent).toBeNull()
+    })
     it("includes url in the field", () => {
-      const model = new Bib(bibWithSupplementaryContent)
-      expect(model.supplementaryContent).toStrictEqual({
+      expect(bibWithSupContentModel.supplementaryContent).toStrictEqual({
         link: "external",
         label: "Supplementary Content",
         value: [
@@ -22,6 +42,36 @@ describe("Bib model", () => {
       })
     })
   })
+  describe("internal linking fields", () => {
+    it("can handle missing fields", () => {
+      const bogusBib = new Bib({
+        ...parallelsBib,
+        contributorLiteral: undefined,
+      })
+      expect(
+        bogusBib.topDetails.find(
+          (detail) => detail.label === "Additional Author"
+        )
+      ).not.toBeDefined()
+    })
+    it("includes prebuilt url", () => {
+      expect(
+        bibWithSupContentModel.topDetails.find(
+          (detail) => detail.label === "Author"
+        )
+      ).toStrictEqual({
+        link: "internal",
+        label: "Author",
+        value: [
+          {
+            urlLabel: "Watson, Tom, 1965-",
+            url: "../../search?filters[creatorLiteral][0]=Watson, Tom, 1965-",
+          },
+        ],
+      })
+    })
+  })
+
   describe("preprocessing", () => {
     it("compresses the subject literal array, no parallel subject literal", () => {
       const model = new Bib(parallelsBib)
