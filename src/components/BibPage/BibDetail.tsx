@@ -4,12 +4,23 @@ import type { BibDetail, Url, LinkedBibDetail } from "../../models/Bib"
 
 import RCLink from "../RCLink/RCLink"
 
+const isRtl = (value: string) => value.substring(0, 1) === "\u200F"
+
+const displayRtl = (value: string) => {
+  return isRtl(value) ? "rtl" : "ltr"
+}
+
 const buildDetailElement = (field: BibDetail) => {
   return (
     <>
       <dt>{field.label}</dt>
       {field.value.map((val: string, i: number) => {
-        return <dd key={i}>{val}</dd>
+        const stringDirection = displayRtl(val)
+        return (
+          <dd dir={stringDirection} key={i}>
+            {val}
+          </dd>
+        )
       })}
     </>
   )
@@ -23,8 +34,9 @@ const buildLinkedElement = (field: LinkedBibDetail) => {
     <>
       <dt>{field.label}</dt>
       {field.value.map((val: Url, i: number) => {
+        const stringDirection = displayRtl(val.urlLabel)
         return (
-          <Link href={val.url} key={i}>
+          <Link dir={stringDirection} href={val.url} key={i}>
             {val.urlLabel}
           </Link>
         )
@@ -40,6 +52,7 @@ const BibDetails = ({ details }: BibDetailsProps) => {
   return (
     <List type="dl">
       {details.map((detail: BibDetail | LinkedBibDetail) => {
+        if (!detail) return
         if ("link" in detail) {
           return buildLinkedElement(detail as LinkedBibDetail)
         } else {

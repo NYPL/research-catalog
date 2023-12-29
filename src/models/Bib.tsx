@@ -132,17 +132,19 @@ export default class Bib {
 
   get holdingsDetails() {
     const holdings = this.bib.holdings
-    if (!holdings) return null
+    if (!holdings) return []
     return [
       { label: "Location", field: "location" },
       { label: "Format", field: "format" },
       { label: "Call Number", field: "shelfMark" },
       { label: "Library Has", field: "holdingStatement" },
       { label: "Notes", field: "notes" },
-    ].map((fieldMapping) => {
-      const detail = this.buildHoldingDetail(fieldMapping)
-      return detail
-    })
+    ]
+      .map((fieldMapping) => {
+        const detail = this.buildHoldingDetail(fieldMapping)
+        return detail
+      })
+      .filter((f) => f)
   }
 
   get bottomDetails() {
