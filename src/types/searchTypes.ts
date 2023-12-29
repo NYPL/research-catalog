@@ -139,6 +139,9 @@ export interface SearchResult {
 export interface ProcessedSearchResult extends SearchResult {
   compressedSubjectLiteral: string[]
   groupedNotes: object
+  extent?: string[]
+  dimensions?: string[]
+  holdings?: object
 }
 
 export interface AnnotatedMarc {
