@@ -116,9 +116,11 @@ interface Note {
 }
 
 export interface SearchResult {
+  extent?: string[]
+  dimensions?: string[]
   note?: Note[]
   identifier: object[]
-  subjectLiteral: string[]
+  subjectLiteral?: string[]
   "@id"?: string
   uri?: string
   titleDisplay?: string[]

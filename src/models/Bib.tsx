@@ -32,14 +32,19 @@ export default class Bib {
     // this.subjectLiteral = "to do investigate  subject heading api fallback scenario"
   }
 
-  // buildHoldingDetail(fieldMapping: {label: string, field: string}){
-
-  // }
+  buildHoldingDetail(fieldMapping: { label: string; field: string }) {
+    const bibFieldValue = this.bib.holdings[fieldMapping.field]
+    return this.buildDetail(fieldMapping.label, bibFieldValue)
+  }
 
   buildStandardDetail(fieldMapping: { label: string; field: string }) {
     const bibFieldValue = this.bib[fieldMapping.field]
-    if (!bibFieldValue?.length) return null
-    return { label: fieldMapping.label, value: bibFieldValue }
+    return this.buildDetail(fieldMapping.label, bibFieldValue)
+  }
+
+  buildDetail(label, value) {
+    if (!value?.length) return null
+    return { label, value }
   }
 
   buildInternalLinkedDetail(fieldMapping: {
@@ -61,15 +66,17 @@ export default class Bib {
   get extent(): BibDetail {
     let modifiedExtent: string[]
     const { extent, dimensions } = this.bib
+    const removeSemiColon = (extent) => [extent[0].replace(/\s*;\s*$/, "")]
     const extentExists = extent && extent[0]
     const dimensionsExists = dimensions && dimensions[0]
     if (!extentExists && !dimensionsExists) return null
     if (!extentExists && dimensionsExists) modifiedExtent = dimensions
+    if (extentExists && !dimensionsExists) {
+      modifiedExtent = removeSemiColon(extent)
+    }
     if (extentExists && dimensionsExists) {
-      const parts = [extent[0].replace(/\s*;\s*$/, "")]
-      if (dimensions && dimensions[0]) {
-        parts.push(dimensions[0])
-      }
+      const parts = removeSemiColon(extent)
+      parts.push(dimensions[0])
       modifiedExtent = [parts.join("; ")]
     }
     return {
@@ -123,19 +130,20 @@ export default class Bib {
       .filter((f) => f)
   }
 
-  // get holdingsDetails() {
-  //   const { holdings } = this.bib.holdings
-  //   if (!holdings) return null
-  //   return [
-  //     { label: "Location", field: "location" },
-  //     { label: "Format", field: "format" },
-  //     { label: "Call Number", field: "shelfMark" },
-  //     { label: "Library Has", field: "holdingStatement" },
-  //     { label: "Notes", field: "notes" },
-  //   ].map((fieldMapping) => {
-  //     const detail = this.buildStandardDetail(fieldMapping)
-  //   })
-  // }
+  get holdingsDetails() {
+    const holdings = this.bib.holdings
+    if (!holdings) return null
+    return [
+      { label: "Location", field: "location" },
+      { label: "Format", field: "format" },
+      { label: "Call Number", field: "shelfMark" },
+      { label: "Library Has", field: "holdingStatement" },
+      { label: "Notes", field: "notes" },
+    ].map((fieldMapping) => {
+      const detail = this.buildHoldingDetail(fieldMapping)
+      return detail
+    })
+  }
 
   get bottomDetails() {
     return [
@@ -167,7 +175,6 @@ export default class Bib {
         //   detail =
         if (fieldMapping.field === "extent") detail = this.extent
         else detail = this.buildStandardDetail(fieldMapping)
-        if (!detail) return
         return detail
       })
       .filter((f) => f)

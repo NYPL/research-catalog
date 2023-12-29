@@ -9,6 +9,55 @@ import Bib from "../Bib"
 describe("Bib model", () => {
   const bibWithSupContentModel = new Bib(bibWithSupplementaryContent)
   const bibWithParallelsModel = new Bib(parallelsBib)
+  describe("extent", () => {
+    it("should add a semicolon after extent if there is not one already", () => {
+      const bib = new Bib({
+        identifier: [{ uri: "123456" }],
+        extent: ["99 bottles of beer"],
+        dimensions: ["99 x 99 cm"],
+      })
+      expect(bib.extent.value[0].includes("; "))
+    })
+    it("should append dimensions to extent", () => {
+      const bib = new Bib({
+        identifier: [{ uri: "123456" }],
+        extent: ["99 bottles of beer"],
+        dimensions: ["99 x 99 cm"],
+      })
+      expect(bib.extent.value[0]).toBe("99 bottles of beer; 99 x 99 cm")
+    })
+    it("should not add semicolon if it already is in extent", () => {
+      const bib = new Bib({
+        identifier: [{ uri: "123456" }],
+        extent: ["700 sheets of woven gold; "],
+        dimensions: ["1 x 1 in."],
+      })
+      expect(bib.extent.value[0]).toBe("700 sheets of woven gold; 1 x 1 in.")
+    })
+    it("should remove semicolon if there is no dimensions", () => {
+      const bib = new Bib({
+        identifier: [{ uri: "123456" }],
+        extent: ["700 sheets of woven gold; "],
+      })
+      const anotherBib = new Bib({
+        identifier: [{ uri: "123456" }],
+        extent: ["700 sheets of woven gold;"],
+      })
+      expect(bib.extent.value[0]).toBe("700 sheets of woven gold")
+      expect(anotherBib.extent.value[0]).toBe("700 sheets of woven gold")
+    })
+    it("should display dimensions if there are dimensions and no extent", () => {
+      const bib = new Bib({
+        identifier: [{ uri: "123456" }],
+        dimensions: ["1,000,000mm x 7ft"],
+      })
+      expect(bib.extent.value[0]).toBe("1,000,000mm x 7ft")
+    })
+    it("should do nothing if there are no dimensions or extent", () => {
+      const bib = new Bib({ identifier: [{ uri: "123456" }] })
+      expect(bib.extent).toBeNull()
+    })
+  })
   describe("standard fields", () => {
     it("can handle missing field", () => {
       expect(
