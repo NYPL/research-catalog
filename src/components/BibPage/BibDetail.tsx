@@ -1,7 +1,6 @@
 import { Link as DSLink, List } from "@nypl/design-system-react-components"
 
 import type { BibDetail, Url, LinkedBibDetail } from "../../models/Bib"
-
 import RCLink from "../RCLink/RCLink"
 
 const isRtl = (value: string) => value.substring(0, 1) === "\u200F"
@@ -27,21 +26,25 @@ const buildDetailElement = (field: BibDetail) => {
 }
 
 const buildLinkedElement = (field: LinkedBibDetail) => {
-  let Link
-  if (field.link === "internal") Link = RCLink
-  else if (field.link === "external") Link = DSLink
   return (
     <>
       <dt>{field.label}</dt>
-      {field.value.map((val: Url, i: number) => {
-        const stringDirection = displayRtl(val.urlLabel)
-        return (
-          <Link dir={stringDirection} href={val.url} key={i}>
-            {val.urlLabel}
-          </Link>
-        )
+      {field.value.map((urlInfo: Url) => {
+        return linkElement(urlInfo, field.link)
       })}
     </>
+  )
+}
+
+const linkElement = (url: Url, link: string) => {
+  let Link
+  if (link === "internal") Link = RCLink
+  else if (link === "external") Link = DSLink
+  const stringDirection = displayRtl(url.urlLabel)
+  return (
+    <Link dir={stringDirection} href={url.url} key={url.url}>
+      {url.urlLabel}
+    </Link>
   )
 }
 

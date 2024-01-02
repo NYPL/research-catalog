@@ -119,30 +119,6 @@ const constructSubjectHeadingsArray = (url = "") => {
 }
 
 /**
- * isRtl(string)
- * Returns true (or false) depending on whether the string needs to be read right to left,
- * by looking for the Unicode Right-to-Left mark (\u200F)
- * @param {string} string
- * @return  {boolean}
- */
-const isRtl = (string) => {
-  if (typeof string !== "string") {
-    return false
-  }
-  return string.substring(0, 1) === "\u200F"
-}
-
-/**
- * stringDirection(string)
- * 'rtl' if the string needs to be read right to left, otherwise null
- * @param {string} string
- * @return {string}
- */
-const stringDirection = (string) => {
-  return isRtl(string) ? "rtl" : null
-}
-
-/**
  * combineMatching(el1, el2)
  * Combines properties from matching (i.e. parallel) elements as necessary
  * Right now, this is only needed to add the 'noteType' in case of parallel notes
@@ -208,6 +184,7 @@ const matchParallels = (bib: SearchResult) => {
 export const preProcess = (bib: SearchResult) => {
   const bibWithMatchedParallels = matchParallels(bib)
   const groupedNotes = getGroupedNotes(bibWithMatchedParallels)
+  console.log(bib.subjectLiteral)
   const compressedSubjectLiteral = compressSubjectLiteral(bib)
   return { ...bibWithMatchedParallels, groupedNotes, compressedSubjectLiteral }
 }
@@ -216,8 +193,6 @@ export {
   compressSubjectLiteral,
   constructSubjectHeadingsArray,
   getGroupedNotes,
-  isRtl,
-  stringDirection,
   interleaveParallel,
   matchParallels,
 }
