@@ -3,7 +3,10 @@ import { Link as DSLink, List } from "@nypl/design-system-react-components"
 import type { BibDetail, Url, LinkedBibDetail } from "../../models/Bib"
 import RCLink from "../RCLink/RCLink"
 
-const isRtl = (value: string) => value.substring(0, 1) === "\u200F"
+const isRtl = (value: string) => {
+  if (!value) return "rtl"
+  value.substring(0, 1) === "\u200F"
+}
 
 const displayRtl = (value: string) => {
   return isRtl(value) ? "rtl" : "ltr"
@@ -21,6 +24,23 @@ const buildDetailElement = (field: BibDetail) => {
           </dd>
         )
       })}
+    </>
+  )
+}
+
+const buildSubjectHeadingElement = (field: LinkedBibDetail) => {
+  const links = field.value.reduce((acc, url, i) => {
+    // Push a divider in between the link elements
+    const divider = <span key={`divider-${i}`}> &gt; </span>
+    const link = linkElement(url, "internal")
+    acc.push(link)
+    if (i < field.value.length) acc.push(divider)
+    return acc
+  }, [])
+  return (
+    <>
+      <dt>{field.label}</dt>
+      {links}
     </>
   )
 }
@@ -56,7 +76,10 @@ const BibDetails = ({ details }: BibDetailsProps) => {
     <List type="dl">
       {details.map((detail: BibDetail | LinkedBibDetail) => {
         if (!detail) return
-        if ("link" in detail) {
+        if (detail.label === "Subjects") {
+          console.log("bib details", detail)
+          return buildSubjectHeadingElement(detail as LinkedBibDetail)
+        } else if ("link" in detail) {
           return buildLinkedElement(detail as LinkedBibDetail)
         } else {
           return buildDetailElement(detail as BibDetail)

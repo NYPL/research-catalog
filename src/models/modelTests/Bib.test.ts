@@ -9,6 +9,56 @@ import Bib from "../Bib"
 describe("Bib model", () => {
   const bibWithSupContentModel = new Bib(bibWithSupplementaryContent)
   const bibWithParallelsModel = new Bib(parallelsBib)
+  const bibWithNoParallelsModel = new Bib(noParallels)
+  describe("subjectHeadings", () => {
+    it("maps single subjects to compound heading url", () => {
+      const filterQueryForSubjectHeading = "filters[subjectLiteral]="
+      const subjectHeadingsObject = {
+        label: "Subjects",
+        value: [
+          [
+            {
+              url: filterQueryForSubjectHeading + "Authors, French",
+              urlLabel: "Authors, French",
+            },
+            {
+              url:
+                filterQueryForSubjectHeading +
+                "Authors, French -- 20th century",
+              urlLabel: "20th century",
+            },
+            {
+              url:
+                filterQueryForSubjectHeading +
+                "Authors, French -- 20th century -- Biography",
+              urlLabel: "Biography",
+            },
+          ],
+          [
+            {
+              url: filterQueryForSubjectHeading + "Autobiographical Narrative",
+              urlLabel: "Autobiographical Narrative",
+            },
+          ],
+          [
+            {
+              url: filterQueryForSubjectHeading + "Cortanze, Gérard de",
+              urlLabel: "Cortanze, Gérard de",
+            },
+            {
+              url:
+                filterQueryForSubjectHeading +
+                "Cortanze, Gérard de -- Childhood and youth",
+              urlLabel: "Childhood and youth",
+            },
+          ],
+        ],
+      }
+      expect(bibWithNoParallelsModel.subjectHeadings).toMatchObject(
+        subjectHeadingsObject
+      )
+    })
+  })
   describe("extent", () => {
     it("should add a semicolon after extent if there is not one already", () => {
       const bib = new Bib({
@@ -122,15 +172,6 @@ describe("Bib model", () => {
   })
 
   describe("preprocessing", () => {
-    it("compresses the subject literal array, no parallel subject literal", () => {
-      const model = new Bib(parallelsBib)
-      expect(model.bib.compressedSubjectLiteral).toStrictEqual([
-        "Civilization",
-        "Serbia > Civilization > Periodicals",
-        "Serbia",
-        "Serbia and Montenegro",
-      ])
-    })
     it("combines parallels and primaries with null values", () => {
       const model = new Bib(parallelsBib)
       expect(model.bib.contributorLiteral).toStrictEqual([
@@ -173,11 +214,6 @@ describe("Bib model", () => {
     it("can handle no parallels, and no notes", () => {
       const model = new Bib(noParallels)
       expect(model.bib.groupedNotes).toStrictEqual({})
-      expect(model.bib.compressedSubjectLiteral).toStrictEqual([
-        "Authors, French > 20th century > Biography",
-        "Autobiographical Narrative",
-        "Cortanze, Gérard de > Childhood and youth",
-      ])
     })
   })
 })

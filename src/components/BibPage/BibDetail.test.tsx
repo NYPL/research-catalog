@@ -15,7 +15,6 @@ jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
 describe("BibDetail component", () => {
   const suppBib = new Bib(bibWithSupplementaryContent)
-  const bibWithParallels = new Bib(parallelsBib)
   const noParallelsBibModel = new Bib(noParallels)
   it("internal link", async () => {
     mockRouter.push("/bib/b12345678")
@@ -46,6 +45,7 @@ describe("BibDetail component", () => {
     })
     const title = screen.getByText("Title")
   })
+  it.todo("subject heading links")
   it.todo("multiple values, no link")
   it.todo("single value, external link")
 

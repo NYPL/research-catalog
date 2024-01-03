@@ -17,6 +17,11 @@ export interface LinkedBibDetail {
   link?: "internal" | "external"
 }
 
+export interface SubjectHeadingDetail {
+  value: Url[][]
+  label: string
+}
+
 export interface Url {
   url: string
   urlLabel: string
@@ -130,6 +135,54 @@ export default class Bib {
       .filter((f) => f)
   }
 
+  /**
+   * constructSubjectHeadingsArray(url)
+   * Creates an array of subject headings from a URL string, broken up
+   * by `>` and divided by `--`.
+   */
+  constructSubjectHeadingsArray(url = "") {
+    let currentArrayString = ""
+
+    if (!url) {
+      return []
+    }
+
+    return url
+      .replace("filters[subjectLiteral]=", "")
+      .split(" -- ")
+      .map((urlString, index) => {
+        const dashDivided = index !== 0 ? " -- " : ""
+        currentArrayString = `${currentArrayString}${dashDivided}${urlString}`
+
+        return currentArrayString
+      })
+  }
+  get subjectHeadings() {
+    const subjectLiteralUrls = this.bib.subjectLiteral.map(
+      (subject: string) => {
+        subject = subject.replace(/\.$/, "")
+        // stackedSubjectHeadings: ["a", "a -- b", "a -- b -- c"]
+        const stackedSubjectHeadings =
+          this.constructSubjectHeadingsArray(subject)
+        const filterQueryForSubjectHeading = "filters[subjectLiteral]="
+        // splitSubjectHeadings: ["a", "b", "c"]
+        const splitSubjectHeadings = subject.split(" -- ")
+        return splitSubjectHeadings.map((heading, index) => {
+          const urlWithFilterQuery = `${filterQueryForSubjectHeading}${stackedSubjectHeadings[index]}`
+          const subjectHeadingUrl = {
+            url: urlWithFilterQuery,
+            urlLabel: heading,
+          }
+          return subjectHeadingUrl
+        })
+      }
+    )
+    return {
+      label: "Subjects",
+      value: subjectLiteralUrls,
+    }
+  }
+
   get holdingsDetails() {
     const holdings = this.bib.holdings
     if (!holdings) return []
@@ -159,7 +212,7 @@ export default class Bib {
       { field: "uniformTitle", label: "Uniform Title" },
       { field: "titleAlt", label: "Alternative Title" },
       { field: "formerTitle", label: "Former Title" },
-      { field: "subjectLiteral", label: "Subject" },
+      { field: "subjectLiteral", label: "Subjects" },
       { field: "genreForm", label: "Genre/Form" },
       { field: "notes", label: "Notes" },
       { field: "tableOfContents", label: "Contents" },
@@ -173,9 +226,9 @@ export default class Bib {
         let detail
         if (fieldMapping.field === "contributorLiteral")
           detail = this.buildInternalLinkedDetail(fieldMapping)
-        // else if (fieldMapping.field === "subjectLiteral")
-        //   detail =
-        if (fieldMapping.field === "extent") detail = this.extent
+        else if (fieldMapping.field === "subjectLiteral")
+          detail = this.subjectHeadings
+        else if (fieldMapping.field === "extent") detail = this.extent
         else detail = this.buildStandardDetail(fieldMapping)
         return detail
       })

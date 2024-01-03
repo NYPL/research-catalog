@@ -39,86 +39,6 @@ const getGroupedNotes = (bib: SearchResult) => {
 }
 
 /**
- * * Given an array of identifier entities and an rdf:type, returns markup to
- * render the values - if any - for the requested type.
- *
- * @param {*} bib
- * @param {*} detailsFields
- * @returns
- */
-// const getIdentifiers = (bib: SearchResult, detailsFields = []) => {
-//   const bibValues = bib?.identifier
-//   const newIdentifiers = {}
-//   bibValues &&
-//     detailsFields.forEach((fieldObject) => {
-//       if (fieldObject.value === "identifier") {
-//         const entities = LibraryItem.getIdentifierEntitiesByType(
-//           [...bibValues],
-//           fieldObject.identifier
-//         )
-//         if (Array.isArray(entities) && entities.length > 0) {
-//           const markup = entities.map((ent, index) => (
-//             <span key={index}>
-//               {ent["@value"]}
-//               {ent.identifierStatus ? <em> ({ent.identifierStatus})</em> : null}
-//             </span>
-//           ))
-//           newIdentifiers[fieldObject.label] = markup
-//         }
-//       }
-//     })
-
-//   return newIdentifiers
-// }
-
-/**
- * compressSubjectLiteral(bib)
- * Updates the string structure of subject literals in the bib.
- *
- * @param {object} Bib object
- * @return {array}
- */
-const compressSubjectLiteral = (bib: SearchResult) => {
-  const subjectLiteral = bib.subjectLiteral
-  if (
-    subjectLiteral &&
-    Array.isArray(subjectLiteral) &&
-    subjectLiteral.length
-  ) {
-    return subjectLiteral.map((item) =>
-      item.replace(/\.$/, "").replace(/--/g, ">")
-    )
-  }
-  return undefined
-}
-
-/**
- * constructSubjectHeadingsArray(url)
- * Creates an array of subject headings from a URL string, broken up
- * by `>` and divided by `--`.
- *
- * @param {string} url
- * @returns {string[]}
- */
-const constructSubjectHeadingsArray = (url = "") => {
-  let currentArrayString = ""
-
-  if (!url) {
-    return []
-  }
-
-  return url
-    .replace("filters[subjectLiteral]=", "")
-    .split(" > ")
-    .map((urlString, index) => {
-      const dashDivided = index !== 0 ? " -- " : ""
-      currentArrayString = `${currentArrayString}${dashDivided}${urlString}`
-
-      return currentArrayString
-    })
-}
-
-/**
  * combineMatching(el1, el2)
  * Combines properties from matching (i.e. parallel) elements as necessary
  * Right now, this is only needed to add the 'noteType' in case of parallel notes
@@ -184,15 +104,7 @@ const matchParallels = (bib: SearchResult) => {
 export const preProcess = (bib: SearchResult) => {
   const bibWithMatchedParallels = matchParallels(bib)
   const groupedNotes = getGroupedNotes(bibWithMatchedParallels)
-  console.log(bib.subjectLiteral)
-  const compressedSubjectLiteral = compressSubjectLiteral(bib)
-  return { ...bibWithMatchedParallels, groupedNotes, compressedSubjectLiteral }
+  return { ...bibWithMatchedParallels, groupedNotes }
 }
 
-export {
-  compressSubjectLiteral,
-  constructSubjectHeadingsArray,
-  getGroupedNotes,
-  interleaveParallel,
-  matchParallels,
-}
+export { getGroupedNotes, interleaveParallel, matchParallels }
