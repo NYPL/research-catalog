@@ -140,22 +140,15 @@ export default class Bib {
    * Creates an array of subject headings from a URL string, broken up
    * by `>` and divided by `--`.
    */
-  constructSubjectHeadingsArray(url = "") {
+  constructSubjectHeadingsArray(subject: string) {
     let currentArrayString = ""
 
-    if (!url) {
-      return []
-    }
+    return subject.split(" -- ").map((urlString, index) => {
+      const dashDivided = index !== 0 ? " -- " : ""
+      currentArrayString = `${currentArrayString}${dashDivided}${urlString}`
 
-    return url
-      .replace("filters[subjectLiteral]=", "")
-      .split(" -- ")
-      .map((urlString, index) => {
-        const dashDivided = index !== 0 ? " -- " : ""
-        currentArrayString = `${currentArrayString}${dashDivided}${urlString}`
-
-        return currentArrayString
-      })
+      return currentArrayString
+    })
   }
   get subjectHeadings() {
     const subjectLiteralUrls = this.bib.subjectLiteral.map(
@@ -164,7 +157,7 @@ export default class Bib {
         // stackedSubjectHeadings: ["a", "a -- b", "a -- b -- c"]
         const stackedSubjectHeadings =
           this.constructSubjectHeadingsArray(subject)
-        const filterQueryForSubjectHeading = "filters[subjectLiteral]="
+        const filterQueryForSubjectHeading = "/search?filters[subjectLiteral]="
         // splitSubjectHeadings: ["a", "b", "c"]
         const splitSubjectHeadings = subject.split(" -- ")
         return splitSubjectHeadings.map((heading, index) => {

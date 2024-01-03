@@ -1,6 +1,11 @@
 import { Link as DSLink, List } from "@nypl/design-system-react-components"
 
-import type { BibDetail, Url, LinkedBibDetail } from "../../models/Bib"
+import type {
+  BibDetail,
+  Url,
+  LinkedBibDetail,
+  SubjectHeadingDetail,
+} from "../../models/Bib"
 import RCLink from "../RCLink/RCLink"
 
 const isRtl = (value: string) => {
@@ -28,15 +33,22 @@ const buildDetailElement = (field: BibDetail) => {
   )
 }
 
-const buildSubjectHeadingElement = (field: LinkedBibDetail) => {
-  const links = field.value.reduce((acc, url, i) => {
-    // Push a divider in between the link elements
-    const divider = <span key={`divider-${i}`}> &gt; </span>
-    const link = linkElement(url, "internal")
-    acc.push(link)
-    if (i < field.value.length) acc.push(divider)
-    return acc
-  }, [])
+const buildSubjectHeadingElement = (field: SubjectHeadingDetail) => {
+  ;[[{ url: "spaghetti", label: "something" }]]
+  const links = field.value.reduce(
+    (acc: JSX.Element[], subjectHeadingUrls, index) => {
+      subjectHeadingUrls.forEach((url: Url) => {
+        // Push a divider in between the link elements
+        const divider = <span key={`divider-${index}`}> &gt; </span>
+        const link = linkElement(url, "internal", true)
+        acc.push(link)
+        if (index < field.value.length) acc.push(divider)
+      })
+      return acc
+    },
+    [] as JSX.Element[]
+  )
+  // [<link><link/><span></><link><link/>]
   return (
     <>
       <dt>{field.label}</dt>
@@ -56,7 +68,7 @@ const buildLinkedElement = (field: LinkedBibDetail) => {
   )
 }
 
-const linkElement = (url: Url, link: string) => {
+const linkElement = (url: Url, link: string, x = false) => {
   let Link
   if (link === "internal") Link = RCLink
   else if (link === "external") Link = DSLink
@@ -74,17 +86,18 @@ interface BibDetailsProps {
 const BibDetails = ({ details }: BibDetailsProps) => {
   return (
     <List type="dl">
-      {details.map((detail: BibDetail | LinkedBibDetail) => {
-        if (!detail) return
-        if (detail.label === "Subjects") {
-          console.log("bib details", detail)
-          return buildSubjectHeadingElement(detail as LinkedBibDetail)
-        } else if ("link" in detail) {
-          return buildLinkedElement(detail as LinkedBibDetail)
-        } else {
-          return buildDetailElement(detail as BibDetail)
+      {details.map(
+        (detail: BibDetail | LinkedBibDetail | SubjectHeadingDetail) => {
+          if (!detail) return
+          if (detail.label === "Subjects") {
+            return buildSubjectHeadingElement(detail as SubjectHeadingDetail)
+          } else if ("link" in detail) {
+            return buildLinkedElement(detail as LinkedBibDetail)
+          } else {
+            return buildDetailElement(detail as BibDetail)
+          }
         }
-      })}
+      )}
     </List>
   )
 }
