@@ -1,4 +1,4 @@
-import { Link as DSLink, List } from "@nypl/design-system-react-components"
+import { Box, Link as DSLink, List } from "@nypl/design-system-react-components"
 
 import type {
   BibDetail,
@@ -33,26 +33,30 @@ const buildDetailElement = (field: BibDetail) => {
   )
 }
 
-const buildSubjectHeadingElement = (field: SubjectHeadingDetail) => {
-  ;[[{ url: "spaghetti", label: "something" }]]
-  const links = field.value.reduce(
-    (acc: JSX.Element[], subjectHeadingUrls, index) => {
-      subjectHeadingUrls.forEach((url: Url) => {
-        // Push a divider in between the link elements
-        const divider = <span key={`divider-${index}`}> &gt; </span>
-        const link = linkElement(url, "internal", true)
-        acc.push(link)
-        if (index < field.value.length) acc.push(divider)
-      })
-      return acc
-    },
-    [] as JSX.Element[]
+const buildSingleSubjectHeadingElement = (subjectHeadingUrls: Url[]) => {
+  const urls = subjectHeadingUrls.reduce((linksPerSubject, url: Url, index) => {
+    // Push a divider in between the link elements
+    const divider = <span key={`divider-${index}`}> &gt; </span>
+    const link = linkElement(url, "internal")
+    linksPerSubject.push(link)
+    if (index < subjectHeadingUrls.length - 1) linksPerSubject.push(divider)
+    return linksPerSubject
+  }, [] as React.JSX.Element[])
+  return urls
+}
+
+const buildCompoundSubjectHeadingElement = (field: SubjectHeadingDetail) => {
+  const subjectHeadingLinksPerSubject = field.value.map(
+    (subjectHeadingUrls: Url[]) => {
+      return buildSingleSubjectHeadingElement(subjectHeadingUrls)
+    }
   )
-  // [<link><link/><span></><link><link/>]
   return (
     <>
       <dt>{field.label}</dt>
-      {links}
+      {subjectHeadingLinksPerSubject.map((subject, i) => (
+        <Box key={"subject-" + i}>{subject}</Box>
+      ))}
     </>
   )
 }
@@ -90,7 +94,9 @@ const BibDetails = ({ details }: BibDetailsProps) => {
         (detail: BibDetail | LinkedBibDetail | SubjectHeadingDetail) => {
           if (!detail) return
           if (detail.label === "Subjects") {
-            return buildSubjectHeadingElement(detail as SubjectHeadingDetail)
+            return buildCompoundSubjectHeadingElement(
+              detail as SubjectHeadingDetail
+            )
           } else if ("link" in detail) {
             return buildLinkedElement(detail as LinkedBibDetail)
           } else {
