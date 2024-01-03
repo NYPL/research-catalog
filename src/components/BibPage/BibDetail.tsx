@@ -72,7 +72,7 @@ const buildLinkedElement = (field: LinkedBibDetail) => {
   )
 }
 
-const linkElement = (url: Url, link: string, x = false) => {
+const linkElement = (url: Url, link: string) => {
   let Link
   if (link === "internal") Link = RCLink
   else if (link === "external") Link = DSLink
