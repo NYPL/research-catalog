@@ -2,7 +2,7 @@ import type { ProcessedSearchResult, SearchResult } from "../types/searchTypes"
 import type { LinkedBibDetail, BibDetail } from "../types/bibDetail"
 import { preProcess } from "../utils/bibModelPreprocessing"
 
-export default class Bib {
+export default class BibDetailsModel {
   bib: ProcessedSearchResult
 
   constructor(bib: SearchResult) {

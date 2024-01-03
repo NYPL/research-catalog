@@ -3,7 +3,7 @@ import {
   bibWithSupplementaryContent,
   noParallels,
 } from "../../../__test__/fixtures/bibFixtures"
-import Bib from "../../models/BibDetails"
+import BibDetailsModel from "../../models/BibDetails"
 import BibDetails from "./BibDetail"
 
 import { render, screen, act } from "@testing-library/react"
@@ -13,8 +13,8 @@ import { MemoryRouterProvider } from "next-router-mock/MemoryRouterProvider"
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
 describe("BibDetail component", () => {
-  const suppBib = new Bib(bibWithSupplementaryContent)
-  const noParallelsBibModel = new Bib(noParallels)
+  const suppBib = new BibDetailsModel(bibWithSupplementaryContent)
+  const noParallelsBibModel = new BibDetailsModel(noParallels)
   it("internal link", async () => {
     mockRouter.push("/bib/b12345678")
     render(<BibDetails details={noParallelsBibModel.topDetails} />, {

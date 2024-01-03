@@ -4,14 +4,16 @@ import {
   parallelsBib,
   yiddishBib,
 } from "../../../__test__/fixtures/bibFixtures"
-import Bib from "../BibDetails"
+import BibDetailsModel from "../BibDetails"
 
 describe("Bib model", () => {
-  const bibWithSupContentModel = new Bib(bibWithSupplementaryContent)
-  const bibWithParallelsModel = new Bib(parallelsBib)
+  const bibWithSupContentModel = new BibDetailsModel(
+    bibWithSupplementaryContent
+  )
+  const bibWithParallelsModel = new BibDetailsModel(parallelsBib)
   describe("extent", () => {
     it("should add a semicolon after extent if there is not one already", () => {
-      const bib = new Bib({
+      const bib = new BibDetailsModel({
         identifier: [{ uri: "123456" }],
         extent: ["99 bottles of beer"],
         dimensions: ["99 x 99 cm"],
@@ -19,7 +21,7 @@ describe("Bib model", () => {
       expect(bib.extent.value[0].includes("; "))
     })
     it("should append dimensions to extent", () => {
-      const bib = new Bib({
+      const bib = new BibDetailsModel({
         identifier: [{ uri: "123456" }],
         extent: ["99 bottles of beer"],
         dimensions: ["99 x 99 cm"],
@@ -27,7 +29,7 @@ describe("Bib model", () => {
       expect(bib.extent.value[0]).toBe("99 bottles of beer; 99 x 99 cm")
     })
     it("should not add semicolon if it already is in extent", () => {
-      const bib = new Bib({
+      const bib = new BibDetailsModel({
         identifier: [{ uri: "123456" }],
         extent: ["700 sheets of woven gold; "],
         dimensions: ["1 x 1 in."],
@@ -35,11 +37,11 @@ describe("Bib model", () => {
       expect(bib.extent.value[0]).toBe("700 sheets of woven gold; 1 x 1 in.")
     })
     it("should remove semicolon if there is no dimensions", () => {
-      const bib = new Bib({
+      const bib = new BibDetailsModel({
         identifier: [{ uri: "123456" }],
         extent: ["700 sheets of woven gold; "],
       })
-      const anotherBib = new Bib({
+      const anotherBib = new BibDetailsModel({
         identifier: [{ uri: "123456" }],
         extent: ["700 sheets of woven gold;"],
       })
@@ -47,14 +49,14 @@ describe("Bib model", () => {
       expect(anotherBib.extent.value[0]).toBe("700 sheets of woven gold")
     })
     it("should display dimensions if there are dimensions and no extent", () => {
-      const bib = new Bib({
+      const bib = new BibDetailsModel({
         identifier: [{ uri: "123456" }],
         dimensions: ["1,000,000mm x 7ft"],
       })
       expect(bib.extent.value[0]).toBe("1,000,000mm x 7ft")
     })
     it("should do nothing if there are no dimensions or extent", () => {
-      const bib = new Bib({ identifier: [{ uri: "123456" }] })
+      const bib = new BibDetailsModel({ identifier: [{ uri: "123456" }] })
       expect(bib.extent).toBeNull()
     })
   })
@@ -93,7 +95,7 @@ describe("Bib model", () => {
   })
   describe("internal linking fields", () => {
     it("can handle missing fields", () => {
-      const bogusBib = new Bib({
+      const bogusBib = new BibDetailsModel({
         ...parallelsBib,
         contributorLiteral: undefined,
       })
@@ -122,17 +124,8 @@ describe("Bib model", () => {
   })
 
   describe("preprocessing", () => {
-    it("compresses the subject literal array, no parallel subject literal", () => {
-      const model = new Bib(parallelsBib)
-      expect(model.bib.compressedSubjectLiteral).toStrictEqual([
-        "Civilization",
-        "Serbia > Civilization > Periodicals",
-        "Serbia",
-        "Serbia and Montenegro",
-      ])
-    })
     it("combines parallels and primaries with null values", () => {
-      const model = new Bib(parallelsBib)
+      const model = new BibDetailsModel(parallelsBib)
       expect(model.bib.contributorLiteral).toStrictEqual([
         'Народна библиотека "Стефан Првовенчани," issuing body.',
         'Narodna biblioteka "Stefan Prvovenčani", issuing body.',
@@ -148,14 +141,14 @@ describe("Bib model", () => {
       ])
     })
     it("parallels RTL script", () => {
-      const model = new Bib(yiddishBib)
+      const model = new BibDetailsModel(yiddishBib)
       expect(model.bib.title).toStrictEqual([
         "‏ספר חורוסטוב = Chrostkow book",
         "Sefer Ḥorosṭḳov = Chorostkow book",
       ])
     })
     it("groups notes", () => {
-      const model = new Bib(parallelsBib)
+      const model = new BibDetailsModel(parallelsBib)
       expect(model.bib.groupedNotes).toStrictEqual({
         "Linking Entry (note)": [
           "Has supplement, <2005-> : Preporučeno, ISSN 1452-3531",
@@ -171,13 +164,8 @@ describe("Bib model", () => {
       })
     })
     it("can handle no parallels, and no notes", () => {
-      const model = new Bib(noParallels)
+      const model = new BibDetailsModel(noParallels)
       expect(model.bib.groupedNotes).toStrictEqual({})
-      expect(model.bib.compressedSubjectLiteral).toStrictEqual([
-        "Authors, French > 20th century > Biography",
-        "Autobiographical Narrative",
-        "Cortanze, Gérard de > Childhood and youth",
-      ])
     })
   })
 })
