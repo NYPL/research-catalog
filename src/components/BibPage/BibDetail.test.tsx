@@ -2,7 +2,6 @@ import userEvent from "@testing-library/user-event"
 import {
   bibWithSupplementaryContent,
   noParallels,
-  parallelsBib,
 } from "../../../__test__/fixtures/bibFixtures"
 import Bib from "../../models/Bib"
 import BibDetails from "./BibDetail"
@@ -15,7 +14,6 @@ jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
 describe("BibDetail component", () => {
   const suppBib = new Bib(bibWithSupplementaryContent)
-  const bibWithParallels = new Bib(parallelsBib)
   const noParallelsBibModel = new Bib(noParallels)
   it("internal link", async () => {
     mockRouter.push("/bib/b12345678")

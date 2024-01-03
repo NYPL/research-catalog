@@ -1,6 +1,6 @@
 import { Link as DSLink, List } from "@nypl/design-system-react-components"
 
-import type { BibDetail, Url, LinkedBibDetail } from "../../models/Bib"
+import type { BibDetail, Url, LinkedBibDetail } from "../../types/bibDetail"
 import RCLink from "../RCLink/RCLink"
 
 const isRtl = (value: string) => value.substring(0, 1) === "\u200F"
