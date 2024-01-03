@@ -5,7 +5,7 @@ import {
   yiddishBib,
 } from "../../__test__/fixtures/bibFixtures"
 import BibDetails from "../../src/components/BibPage/BibDetail"
-import Bib from "../../src/models/Bib"
+import Bib from "../../src/models/BibDetails"
 
 const BibPage = () => {
   const bibModel = new Bib(noParallels)

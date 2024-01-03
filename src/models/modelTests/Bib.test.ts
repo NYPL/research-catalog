@@ -4,7 +4,7 @@ import {
   parallelsBib,
   yiddishBib,
 } from "../../../__test__/fixtures/bibFixtures"
-import Bib from "../Bib"
+import Bib from "../BibDetails"
 
 describe("Bib model", () => {
   const bibWithSupContentModel = new Bib(bibWithSupplementaryContent)

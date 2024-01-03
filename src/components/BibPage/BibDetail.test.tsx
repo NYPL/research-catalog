@@ -3,7 +3,7 @@ import {
   bibWithSupplementaryContent,
   noParallels,
 } from "../../../__test__/fixtures/bibFixtures"
-import Bib from "../../models/Bib"
+import Bib from "../../models/BibDetails"
 import BibDetails from "./BibDetail"
 
 import { render, screen, act } from "@testing-library/react"
