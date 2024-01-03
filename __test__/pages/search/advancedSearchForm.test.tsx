@@ -3,7 +3,10 @@ import { fireEvent, render, screen, act } from "@testing-library/react"
 import mockRouter from "next-router-mock"
 import userEvent from "@testing-library/user-event"
 
-import AdvancedSearch from "../../../pages/search/advanced"
+import AdvancedSearch, {
+  badDateErrorMessage,
+  defaultEmptySearchErrorMessage,
+} from "../../../pages/search/advanced"
 
 // Mock next router
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
@@ -24,9 +27,7 @@ describe("Advanced Search Form", () => {
     render(<AdvancedSearch />)
 
     submit()
-    screen.getByText(
-      "Please enter at least one field to submit an advanced search."
-    )
+    screen.getByText(defaultEmptySearchErrorMessage)
   })
   // this test is broken due to debounce/userEvent/timing weirdness.
   // this functionality works in the browser, but won't include
@@ -82,6 +83,18 @@ describe("Advanced Search Form", () => {
       )
     })
   })
+  it("should throw an error when the date from is bigger than the date to", async () => {
+    render(<AdvancedSearch />)
+    await act(async () => {
+      const dateFromInput = screen.getByLabelText("From")
+      const dateToInput = screen.getByLabelText("To")
+      await userEvent.type(dateFromInput, "1999")
+      await userEvent.type(dateToInput, "1900")
+      submit()
+
+      expect(screen.getByText(badDateErrorMessage)).toBeInTheDocument()
+    })
+  })
   it("can clear the form", async () => {
     render(<AdvancedSearch />)
 
@@ -107,9 +120,9 @@ describe("Advanced Search Form", () => {
       expect(notatedMusic).not.toBeChecked()
       submit()
       // presence of alert means the form was cleared before hitting submit
-      screen.getByText(
-        "Please enter at least one field to submit an advanced search."
-      )
+      expect(
+        screen.getByText(defaultEmptySearchErrorMessage)
+      ).toBeInTheDocument()
     })
   })
 })
