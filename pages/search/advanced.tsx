@@ -85,6 +85,7 @@ export default function AdvancedSearch() {
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
     const queryString = getSearchQuery(searchFormState as SearchParams)
+
     if (!queryString.length) {
       setErrorMessage(defaultEmptySearchErrorMessage)
       setAlert(true)
