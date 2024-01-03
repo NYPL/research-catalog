@@ -2,7 +2,6 @@ import userEvent from "@testing-library/user-event"
 import {
   bibWithSupplementaryContent,
   noParallels,
-  parallelsBib,
 } from "../../../__test__/fixtures/bibFixtures"
 import Bib from "../../models/Bib"
 import BibDetails from "./BibDetail"
@@ -37,7 +36,7 @@ describe("BibDetail component", () => {
     await act(async () => {
       await userEvent.click(supplementaryContent)
     })
-    // what should this test?
+    expect(mockRouter.asPath).not.toContain("nypl")
   })
   it("single value, no link", () => {
     render(<BibDetails details={noParallelsBibModel.topDetails} />, {

@@ -12,7 +12,7 @@ describe("Bib model", () => {
   const bibWithNoParallelsModel = new Bib(noParallels)
   describe("subjectHeadings", () => {
     it("maps single subjects to compound heading url", () => {
-      const filterQueryForSubjectHeading = "filters[subjectLiteral]="
+      const filterQueryForSubjectHeading = "/search?filters[subjectLiteral]="
       const subjectHeadingsObject = {
         label: "Subjects",
         value: [

@@ -1,4 +1,4 @@
-import type { AnnotatedMarc, SearchResult } from "../types/searchTypes"
+import type { SearchResult } from "../types/searchTypes"
 
 const getGroupedNotes = (bib: SearchResult) => {
   const note = bib?.note?.length ? bib.note : null
