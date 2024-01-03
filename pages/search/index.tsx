@@ -18,7 +18,7 @@ import {
   getSearchResultsHeading,
   mapQueryToSearchParams,
   mapElementsToSearchResultsBibs,
-  getQueryString,
+  getSearchQuery,
   sortOptions,
 } from "../../src/utils/searchUtils"
 import type { SortKey, SortOrder } from "../../src/types/searchTypes"
@@ -47,7 +47,7 @@ export default function Search({ results }) {
   const drbResults = mapWorksToDRBResults(drbWorks)
 
   const handlePageChange = async (page: number) => {
-    const newQuery = getQueryString({ ...searchParams, page })
+    const newQuery = getSearchQuery({ ...searchParams, page })
     await push(newQuery)
   }
 
@@ -60,7 +60,7 @@ export default function Search({ results }) {
     ]
     // Push the new query values, removing the page number if set.
     await push(
-      getQueryString({ ...searchParams, sortBy, order, page: undefined })
+      getSearchQuery({ ...searchParams, sortBy, order, page: undefined })
     )
   }
 
@@ -152,7 +152,7 @@ export async function getServerSideProps({ resolvedUrl }) {
   const results = await fetchResults(mapQueryToSearchParams(parse(queryString)))
   return {
     props: {
-      results: JSON.parse(JSON.stringify(results)),
+      results,
     },
   }
 }

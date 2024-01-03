@@ -34,7 +34,7 @@ import type {
   SearchParams,
   SearchFormActionType,
 } from "../../src/types/searchTypes"
-import { getQueryString } from "../../src/utils/searchUtils"
+import { getSearchQuery } from "../../src/utils/searchUtils"
 // import FieldsetDate from "../../src/components/SearchFilters/FieldsetDate"
 
 export const defaultEmptySearchErrorMessage =
@@ -84,7 +84,7 @@ export default function AdvancedSearch() {
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
-    const queryString = getQueryString(searchFormState as SearchParams)
+    const queryString = getSearchQuery(searchFormState as SearchParams)
 
     if (!queryString.length) {
       setErrorMessage(defaultEmptySearchErrorMessage)

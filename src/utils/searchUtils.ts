@@ -118,10 +118,10 @@ function getFilterQuery(filters: SearchFilters) {
 }
 
 /**
- * getQueryString
+ * getSearchQuery
  * Builds a query string from a SearchParams object
  */
-export function getQueryString({
+export function getSearchQuery({
   sortBy = "relevance",
   field = "all",
   order,
