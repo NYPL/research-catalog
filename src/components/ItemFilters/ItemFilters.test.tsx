@@ -46,9 +46,7 @@ describe("Filters container", () => {
     const outsideOfTheFilter = screen.getByTestId("filter-text")
     await act(async () => {
       await userEvent.click(locationFilterButton)
-      const offsiteCheckbox = screen.getByRole("checkbox", {
-        name: "Offsite",
-      })
+      const offsiteCheckbox = screen.getByLabelText("Offsite")
       await userEvent.click(offsiteCheckbox)
       await userEvent.click(outsideOfTheFilter)
       expect(offsiteCheckbox).not.toBeInTheDocument()
