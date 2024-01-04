@@ -44,13 +44,11 @@ describe("Filters container", () => {
     render(<FiltersContainer itemAggs={normalAggs} />)
     const { locationFilterButton } = filterButtons()
     const outsideOfTheFilter = screen.getByTestId("filter-text")
-    await act(async () => {
-      await userEvent.click(locationFilterButton)
-      const offsiteCheckbox = screen.getByLabelText("Offsite")
-      await userEvent.click(offsiteCheckbox)
-      await userEvent.click(outsideOfTheFilter)
-      expect(offsiteCheckbox).not.toBeInTheDocument()
-    })
+    await userEvent.click(locationFilterButton)
+    const offsiteCheckbox = screen.getByLabelText("Offsite")
+    await userEvent.click(offsiteCheckbox)
+    await userEvent.click(outsideOfTheFilter)
+    expect(offsiteCheckbox).not.toBeInTheDocument()
   })
 
   it("clears selection per filter", async () => {
@@ -69,34 +67,30 @@ describe("Filters container", () => {
     await filterHasSelected(statusFilterButton, ["Available", "Not available"])
     const clearStatusButton = screen.getByTestId("clear-status-button")
 
-    await act(async () => {
-      await userEvent.click(clearStatusButton)
-      // these filters should be unchanged
-      await filterHasSelected(locationFilterButton, ["Offsite"])
-      await filterHasSelected(formatFilterButton, ["Text"])
+    await userEvent.click(clearStatusButton)
+    // these filters should be unchanged
+    await filterHasSelected(locationFilterButton, ["Offsite"])
+    await filterHasSelected(formatFilterButton, ["Text"])
 
-      // Status values should be unchecked
-      await filterHasNotSelected(statusFilterButton, [
-        "Available",
-        "Not available",
-      ])
-    })
+    // Status values should be unchecked
+    await filterHasNotSelected(statusFilterButton, [
+      "Available",
+      "Not available",
+    ])
   })
 
   it("does not persist selection if filter closes without applying", async () => {
     render(<FiltersContainer itemAggs={normalAggs} />)
     const { locationFilterButton, statusFilterButton } = filterButtons()
-    await act(async () => {
-      await userEvent.click(locationFilterButton)
-      const checkbox = screen.getAllByRole("checkbox")[0]
-      await userEvent.click(checkbox)
+    await userEvent.click(locationFilterButton)
+    const checkbox = screen.getAllByRole("checkbox")[0]
+    await userEvent.click(checkbox)
 
-      // clicking other filter label closes the location filter
-      await userEvent.click(statusFilterButton)
-      await userEvent.click(locationFilterButton)
-      const applyButton = screen.getByTestId("clear-location-button")
-      expect(applyButton).toBeDisabled()
-    })
+    // clicking other filter label closes the location filter
+    await userEvent.click(statusFilterButton)
+    await userEvent.click(locationFilterButton)
+    const applyButton = screen.getByTestId("clear-location-button")
+    expect(applyButton).toBeDisabled()
   })
 
   it("persists previously applied selection after closing filter without applying", async () => {
@@ -107,37 +101,35 @@ describe("Filters container", () => {
     }
     render(<FiltersContainer itemAggs={normalAggs} />)
     const { locationFilterButton, statusFilterButton } = filterButtons()
-    await act(async () => {
-      await userEvent.click(locationFilterButton)
-      const checkbox = screen.getByLabelText(/Main Reading Room/)
-      const offsiteCheckbox = screen.getByLabelText("Offsite")
-      // uncheck Offsite (set from query parsing)
-      await userEvent.click(offsiteCheckbox)
-      // check another location
-      await userEvent.click(checkbox)
-      // don't apply
-
-      // clicking other filter label closes the location filter
-      await userEvent.click(statusFilterButton)
-      await userEvent.click(locationFilterButton)
-
-      filterHasSelected(locationFilterButton, ["Offsite"])
-      filterHasNotSelected(locationFilterButton, [
-        "Schwarzman Building - Main Reading Room 315",
-      ])
+    await userEvent.click(locationFilterButton)
+    const checkbox = screen.getByLabelText(/Main Reading Room/)
+    const offsiteCheckbox = screen.getByRole("checkbox", {
+      name: "Offsite",
     })
+    // uncheck Offsite (set from query parsing)
+    await userEvent.click(offsiteCheckbox)
+    // check another location
+    await userEvent.click(checkbox)
+    // don't apply
+
+    // clicking other filter label closes the location filter
+    await userEvent.click(statusFilterButton)
+    await userEvent.click(locationFilterButton)
+
+    await filterHasSelected(locationFilterButton, ["Offsite"])
+    await filterHasNotSelected(locationFilterButton, [
+      "Schwarzman Building - Main Reading Room 315",
+    ])
   })
 })
 
 const filterHasSelected = async (checkboxGroupButton, values: string[]) => {
-  await act(async () => {
-    await userEvent.click(checkboxGroupButton)
-    const selectedValues = values.map((label) => screen.getByLabelText(label))
-    const checkboxes = screen.getAllByRole("checkbox", { checked: true })
-    expect(checkboxes.length).toBe(values.length)
-    selectedValues.forEach((checkbox) => {
-      expect(checkbox).toBeChecked()
-    })
+  await userEvent.click(checkboxGroupButton)
+  const selectedValues = values.map((label) => screen.getByLabelText(label))
+  const checkboxes = screen.getAllByRole("checkbox", { checked: true })
+  expect(checkboxes.length).toBe(values.length)
+  selectedValues.forEach((checkbox) => {
+    expect(checkbox).toBeChecked()
   })
 }
 
@@ -154,11 +146,9 @@ const filterButtons = () => {
 }
 
 const filterHasNotSelected = async (checkboxGroupButton, values: string[]) => {
-  await act(async () => {
-    await userEvent.click(checkboxGroupButton)
-    const selectedValues = values.map((label) => screen.getByLabelText(label))
-    selectedValues.forEach((checkbox) => {
-      expect(checkbox).not.toBeChecked()
-    })
+  await userEvent.click(checkboxGroupButton)
+  const selectedValues = values.map((label) => screen.getByLabelText(label))
+  selectedValues.forEach((checkbox) => {
+    expect(checkbox).not.toBeChecked()
   })
 }
