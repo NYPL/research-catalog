@@ -85,44 +85,39 @@ describe("Advanced Search Form", () => {
   })
   it("should throw an error when the date from is bigger than the date to", async () => {
     render(<AdvancedSearch />)
-    await act(async () => {
-      const dateFromInput = screen.getByLabelText("From")
-      const dateToInput = screen.getByLabelText("To")
-      await userEvent.type(dateFromInput, "1999")
-      await userEvent.type(dateToInput, "1900")
-      submit()
 
-      expect(screen.getByText(badDateErrorMessage)).toBeInTheDocument()
-    })
+    const dateFromInput = screen.getByLabelText("From")
+    const dateToInput = screen.getByLabelText("To")
+    await userEvent.type(dateFromInput, "1999")
+    await userEvent.type(dateToInput, "1900")
+    submit()
+
+    expect(screen.getByText(badDateErrorMessage)).toBeInTheDocument()
   })
   it("can clear the form", async () => {
     render(<AdvancedSearch />)
 
-    await act(async () => {
-      const notatedMusic = screen.getByRole("checkbox", {
-        name: "Notated music",
-      })
-      await userEvent.click(notatedMusic)
-      const cartographic = screen.getByLabelText("Cartographic")
-      await userEvent.click(cartographic)
-      await userEvent.selectOptions(
-        screen.getByRole("combobox", { name: "Language" }),
-        "Azerbaijani"
-      )
-      const [keywordInput, contributorInput, titleInput, subjectInput] =
-        screen.getAllByRole("textbox")
-      await userEvent.type(keywordInput, "spaghetti")
-      await userEvent.type(contributorInput, "strega nonna")
-      await userEvent.type(titleInput, "il amore di pasta")
-      await userEvent.type(subjectInput, "italian food")
-
-      await userEvent.click(screen.getByRole("button", { name: "Clear" }))
-      expect(notatedMusic).not.toBeChecked()
-      submit()
-      // presence of alert means the form was cleared before hitting submit
-      expect(
-        screen.getByText(defaultEmptySearchErrorMessage)
-      ).toBeInTheDocument()
+    const notatedMusic = screen.getByRole("checkbox", {
+      name: "Notated music",
     })
+    await userEvent.click(notatedMusic)
+    const cartographic = screen.getByLabelText("Cartographic")
+    await userEvent.click(cartographic)
+    await userEvent.selectOptions(
+      screen.getByRole("combobox", { name: "Language" }),
+      "Azerbaijani"
+    )
+    const [keywordInput, contributorInput, titleInput, subjectInput] =
+      screen.getAllByRole("textbox")
+    await userEvent.type(keywordInput, "spaghetti")
+    await userEvent.type(contributorInput, "strega nonna")
+    await userEvent.type(titleInput, "il amore di pasta")
+    await userEvent.type(subjectInput, "italian food")
+
+    await userEvent.click(screen.getByRole("button", { name: "Clear" }))
+    expect(notatedMusic).not.toBeChecked()
+    submit()
+    // presence of alert means the form was cleared before hitting submit
+    expect(screen.getByText(defaultEmptySearchErrorMessage)).toBeInTheDocument()
   })
 })
