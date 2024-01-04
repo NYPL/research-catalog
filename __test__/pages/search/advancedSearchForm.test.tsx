@@ -93,6 +93,7 @@ describe("Advanced Search Form", () => {
 
     await userEvent.click(screen.getByText("Clear"))
     expect(notatedMusic).not.toBeChecked()
+
     submit()
     // presence of alert means the form was cleared before hitting submit
     screen.getByText(
