@@ -15,6 +15,10 @@ interface UserJwtPayload extends JWTPayload {
   scope: string
 }
 
+/**
+ * Used in Nextjs middleware to check and parse the nyplIdentiyPatron cookie
+ * and then verify it through JWT. The decoded patron information is returned.
+ */
 export default async function initializePatronTokenAuth(req: NextRequest) {
   const nyplIdentityPatron = req.cookies.get("nyplIdentityPatron")
 
