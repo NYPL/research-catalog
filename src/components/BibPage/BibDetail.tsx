@@ -21,14 +21,18 @@ const buildDetailElement = (field: BibDetail) => {
   return (
     <>
       <dt>{field.label}</dt>
-      {field.value.map((val: string, i: number) => {
-        const stringDirection = displayRtl(val)
-        return (
-          <dd dir={stringDirection} key={i}>
-            {val}
-          </dd>
-        )
-      })}
+      <dd>
+        <List data-testId={`${field.label}`} type="ol" noStyling>
+          {field.value.map((val: string, i: number) => {
+            const stringDirection = displayRtl(val)
+            return (
+              <li dir={stringDirection} key={i}>
+                {val}
+              </li>
+            )
+          })}
+        </List>
+      </dd>
     </>
   )
 }
@@ -36,7 +40,12 @@ const buildDetailElement = (field: BibDetail) => {
 const buildSingleSubjectHeadingElement = (subjectHeadingUrls: Url[]) => {
   const urls = subjectHeadingUrls.reduce((linksPerSubject, url: Url, index) => {
     // Push a divider in between the link elements
-    const divider = <span key={`divider-${index}`}> &gt; </span>
+    const divider = (
+      <span data-testid="divider" key={`divider-${index}`}>
+        {" "}
+        &gt;{" "}
+      </span>
+    )
     const link = linkElement(url, "internal")
     linksPerSubject.push(link)
     if (index < subjectHeadingUrls.length - 1) linksPerSubject.push(divider)
@@ -55,7 +64,9 @@ const buildCompoundSubjectHeadingElement = (field: SubjectHeadingDetail) => {
     <>
       <dt>{field.label}</dt>
       {subjectHeadingLinksPerSubject.map((subject, i) => (
-        <Box key={"subject-" + i}>{subject}</Box>
+        <Box data-testid="subjectLinksPer" key={"subject-" + i}>
+          {subject}
+        </Box>
       ))}
     </>
   )

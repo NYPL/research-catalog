@@ -2,6 +2,7 @@ import userEvent from "@testing-library/user-event"
 import {
   bibWithSupplementaryContent,
   noParallels,
+  parallelsBib,
 } from "../../../__test__/fixtures/bibFixtures"
 import Bib from "../../models/Bib"
 import BibDetails from "./BibDetail"
@@ -15,41 +16,84 @@ jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 describe("BibDetail component", () => {
   const suppBib = new Bib(bibWithSupplementaryContent)
   const noParallelsBibModel = new Bib(noParallels)
-  it("internal link", async () => {
-    mockRouter.push("/bib/b12345678")
-    render(<BibDetails details={noParallelsBibModel.topDetails} />, {
-      wrapper: MemoryRouterProvider,
+  const parallelsBibModel = new Bib(parallelsBib)
+  describe("text only details", () => {
+    it("single value", () => {
+      render(<BibDetails details={noParallelsBibModel.topDetails} />, {
+        wrapper: MemoryRouterProvider,
+      })
+      const titleLabel = screen.getByText("Title")
+      const title = screen.getByText("Spaghetti! / Gérard de Cortanze.")
+      expect(titleLabel).toBeInTheDocument()
+      expect(title).toBeInTheDocument()
     })
-    const creatorLiteralLink = screen.getByText("Cortanze, Gérard de.")
-    await act(async () => {
-      await userEvent.click(creatorLiteralLink)
+    it("renders multiple values, primaries and orphaned parallels", () => {
+      render(<BibDetails details={parallelsBibModel.topDetails} />)
+      const publisherDetails = screen.getByTestId("Published By")
+      expect(publisherDetails.children).toHaveLength(3)
     })
-    expect(mockRouter.asPath).toBe(
-      "/search?filters%5BcreatorLiteral%5D%5B0%5D=Cortanze%2C+G%C3%A9rard+de."
-    )
   })
-  it("external link", async () => {
-    render(<BibDetails details={suppBib.topDetails} />, {
-      wrapper: MemoryRouterProvider,
+  describe("linked details", () => {
+    it("internal link", async () => {
+      mockRouter.push("/bib/b12345678")
+      render(<BibDetails details={noParallelsBibModel.topDetails} />, {
+        wrapper: MemoryRouterProvider,
+      })
+      const creatorLiteralLink = screen.getByText("Cortanze, Gérard de.")
+      await act(async () => {
+        await userEvent.click(creatorLiteralLink)
+      })
+      expect(mockRouter.asPath).toBe(
+        "/search?filters%5BcreatorLiteral%5D%5B0%5D=Cortanze%2C+G%C3%A9rard+de."
+      )
     })
-    const supplementaryContent = screen.getByText("Image")
-    await act(async () => {
-      await userEvent.click(supplementaryContent)
+    it("external link", async () => {
+      render(<BibDetails details={suppBib.topDetails} />, {
+        wrapper: MemoryRouterProvider,
+      })
+      const supplementaryContent = screen.getByText("Image")
+      await act(async () => {
+        await userEvent.click(supplementaryContent)
+      })
+      expect(mockRouter.asPath).not.toContain("nypl")
     })
-    expect(mockRouter.asPath).not.toContain("nypl")
   })
-  it("single value, no link", () => {
-    render(<BibDetails details={noParallelsBibModel.topDetails} />, {
-      wrapper: MemoryRouterProvider,
+  describe("subject heading links", () => {
+    let subjectHeadings
+    beforeEach(() => {
+      render(<BibDetails details={noParallelsBibModel.bottomDetails} />, {
+        wrapper: MemoryRouterProvider,
+      })
+      subjectHeadings = screen.getAllByTestId("subjectLinksPer")
     })
-    const title = screen.getByText("Title")
+    it("renders subject link groups per subject literal", () => {
+      expect(subjectHeadings).toHaveLength(
+        noParallelsBibModel.bib.subjectLiteral.length
+      )
+    })
+    it("splits individual subject headings with divider", () => {
+      const greaterThanSigns = screen.getAllByTestId("divider")
+      const numberOfDividersInSubjectLiteral = 3
+      expect(greaterThanSigns).toHaveLength(numberOfDividersInSubjectLiteral)
+    })
+    it("links to stacked subject headings", () => {
+      const authorsSubject = screen.getByText("Authors, French")
+      const authors20Subject = screen.getByText("20th century")
+      const authors20BioSubject = screen.getByText("Biography")
+      expect(authorsSubject).toHaveAttribute(
+        "href",
+        expect.stringContaining(encodeURI("Authors, French"))
+      )
+      expect(authors20Subject).toHaveAttribute(
+        "href",
+        expect.stringContaining(encodeURI("Authors, French -- 20th century"))
+      )
+      expect(authors20BioSubject).toHaveAttribute(
+        "href",
+        expect.stringContaining(
+          encodeURI("Authors, French -- 20th century -- Biography")
+        )
+      )
+    })
   })
-  it.todo("subject heading links")
-  it.todo("multiple values, no link")
-  it.todo("single value, external link")
-
-  it.todo("top details")
-  it.todo("multiple values, external link")
-  it.todo("multiple values, internal link")
-  it.todo("notes")
 })
