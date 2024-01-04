@@ -23,6 +23,7 @@ const SubNav = ({ activePage }: SubNavProps) => {
                 : undefined
             }
             active={activePage === "search" || activePage === "advanced"}
+            hasWhiteFocusRing
           >
             Search
           </RCLink>
@@ -32,6 +33,7 @@ const SubNav = ({ activePage }: SubNavProps) => {
             href="/subject_headings"
             active={activePage === "shep"}
             aria-current={activePage === "shep" ? "page" : undefined}
+            hasWhiteFocusRing
           >
             Subject Heading Explorer
           </RCLink>
@@ -41,6 +43,7 @@ const SubNav = ({ activePage }: SubNavProps) => {
             href="/account"
             active={activePage === "account"}
             aria-current={activePage === "account" ? "page" : undefined}
+            hasWhiteFocusRing
           >
             My Account
           </RCLink>

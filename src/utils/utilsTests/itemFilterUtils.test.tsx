@@ -6,7 +6,7 @@ import {
   buildAppliedFiltersString,
 } from "../itemFilterUtils"
 import { normalAggs } from "../../../__test__/fixtures/testAggregations"
-import { ItemFilterData } from "../../models/itemFilterData"
+import { ItemFilterData } from "../../models/ItemFilterData"
 
 describe("Item Filter Utils", () => {
   describe("isRecapLocation", () => {
