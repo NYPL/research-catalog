@@ -1,3 +1,5 @@
+# Research Catalog README
+
 This is the new [NYPL Research Catalog](https://www.nypl.org/research/research-catalog) front end built in [Next.js](https://nextjs.org/).
 
 ## Local Environment Setup
@@ -17,6 +19,23 @@ npm install
 
 ```bash
 npm run dev
+```
+
+### Local Hosting
+
+In order to successfully log in under a local deployment you'll need to update
+your machine's `etc/hosts` file. This file maps IP addresses to hostnames.
+
+This is necessary because NYPL's authentication system works by reading cookies
+and parsing the patron's encrypted credentials. These cookies only work on
+`.nypl.org` domains, so we need to map our local deployment to a `.nypl.org`
+domain.
+
+Add the following line to your `etc/hosts` file. There is no need to remove or
+update any other configuration in this file.
+
+```
+127.0.0.1       local.nypl.org
 ```
 
 ### Running the app locally with Docker (optional):

@@ -3,6 +3,9 @@ import { render, screen, within } from "@testing-library/react"
 
 import Layout from "./Layout"
 
+// Mock next router
+jest.mock("next/router", () => jest.requireActual("next-router-mock"))
+
 describe("Layout", () => {
   it("should render an H1", () => {
     render(<Layout></Layout>)

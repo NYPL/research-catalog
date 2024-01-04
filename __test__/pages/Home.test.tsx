@@ -3,6 +3,9 @@ import { render, screen } from "@testing-library/react"
 
 import Home from "../../pages/index"
 
+// Mock next router
+jest.mock("next/router", () => jest.requireActual("next-router-mock"))
+
 describe("Home", () => {
   it("should render an H2", () => {
     render(<Home />)

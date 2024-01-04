@@ -85,7 +85,7 @@ const SearchForm = () => {
             DS 2.X CSS color variable values. */}
           <RCLink
             className={styles.advancedSearch}
-            href={"/search/advanced"}
+            href={`${BASE_URL}/search/advanced`}
             color="#0069BF"
           >
             Advanced Search

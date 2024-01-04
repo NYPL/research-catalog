@@ -1,4 +1,3 @@
-import Head from "next/head"
 import {
   Heading,
   SimpleGrid,
@@ -7,11 +6,13 @@ import {
   CardContent,
   Link,
 } from "@nypl/design-system-react-components"
+import Head from "next/head"
 
 import Layout from "../src/components/Layout/Layout"
 import RCLink from "../src/components/RCLink/RCLink"
 import { SITE_NAME } from "../src/config/constants"
 import { appConfig } from "../src/config/config"
+import { getPatronData } from "../src/server/getPatronData"
 
 export default function Home() {
   return (
@@ -156,4 +157,19 @@ export default function Home() {
       </Layout>
     </>
   )
+}
+
+export async function getServerSideProps({ req }) {
+  // Get patron data if the cookie has been parsed in the middleware.
+  // This could be passed down to props for the page component to use.
+  const patronData = await getPatronData({
+    isTokenValid: req.headers["x-is-token-valid"],
+    userId: req.headers["x-user-id"],
+  })
+  console.log("This is just to test patronData", patronData)
+
+  // return props object
+  return {
+    props: {},
+  }
 }

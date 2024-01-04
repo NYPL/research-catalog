@@ -1,6 +1,7 @@
 import RCLink from "../RCLink/RCLink"
 import styles from "../../../styles/components/SubNav.module.scss"
 import { type RCPage } from "../../types/pageTypes"
+import { BASE_URL } from "../../config/constants"
 
 interface SubNavProps {
   activePage: RCPage
@@ -16,7 +17,7 @@ const SubNav = ({ activePage }: SubNavProps) => {
       <ul>
         <li>
           <RCLink
-            href="/"
+            href={BASE_URL}
             aria-current={
               activePage === "search" || activePage === "advanced"
                 ? "page"
