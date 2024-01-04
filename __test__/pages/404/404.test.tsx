@@ -16,11 +16,9 @@ describe("404", () => {
   it("should have links to homepage and legacy catalogs", () => {
     render(<Custom404 />)
 
-    const homeLink = screen.getByRole("link", { name: "Research Catalog" })
+    const homeLink = screen.getByText("Research Catalog")
     expect(homeLink).toHaveAttribute("href", "/")
-    const legacyLink = screen.getByRole("link", {
-      name: "Legacy Catalog",
-    })
+    const legacyLink = screen.getByText("Legacy Catalog")
     expect(legacyLink).toHaveAttribute(
       "href",
       appConfig.externalUrls.legacyCatalog
