@@ -8,14 +8,11 @@ import AdvancedSearch from "../../../pages/search/advanced"
 // Mock next router
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
-describe.only("Advanced Search Form", () => {
+describe("Advanced Search Form", () => {
   const submit = () =>
-    fireEvent(
-      screen.getByRole("button", { name: "Submit" }),
-      new MouseEvent("click")
-    )
+    fireEvent(screen.getByText("Submit"), new MouseEvent("click"))
   afterEach(async () => {
-    await userEvent.click(screen.getByRole("button", { name: "Clear" }))
+    await userEvent.click(screen.getByText("Clear"))
   })
   it("displays alert when no fields are submitted", () => {
     render(<AdvancedSearch />)
@@ -56,7 +53,7 @@ describe.only("Advanced Search Form", () => {
   it("can select languages", async () => {
     render(<AdvancedSearch />)
 
-    const languageSelect = screen.getByRole("combobox", { name: "Language" })
+    const languageSelect = screen.getByLabelText("Language")
     await userEvent.selectOptions(languageSelect, "Azerbaijani")
     submit()
     // expect the label for Azerbaijani ("lang:aze") to be in url
