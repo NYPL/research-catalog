@@ -154,7 +154,6 @@ export default function AdvancedSearch() {
                 id="languageSelect"
                 name="language"
                 labelText="Language"
-                aria-labelledby="languageSelect-label"
                 value={searchFormState["filters"].language}
                 onChange={(e) => handleInputChange(e, "filter_change")}
               >
