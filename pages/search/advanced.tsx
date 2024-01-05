@@ -144,7 +144,11 @@ export default function AdvancedSearch() {
           onSubmit={handleSubmit}
         >
           <FormField
-            sx={{ gridTemplateColumns: "repeat(2, minmax(0, 1fr)) !important" }}
+            sx={{
+              gridTemplateColumns: {
+                md: "repeat(2, minmax(0, 1fr)) !important",
+              },
+            }}
           >
             <FormRow gap="grid.m">
               <FormField id="advancedSearchLeft" gap="grid.s">
@@ -186,7 +190,7 @@ export default function AdvancedSearch() {
                     <Fieldset
                       id="date-fieldset"
                       gridTemplateColumns="repeat(2, minmax(0, 1fr))"
-                      legendText="Dates"
+                      legendText="Date"
                       display="grid"
                       gap="s"
                     >
@@ -226,13 +230,13 @@ export default function AdvancedSearch() {
                 <CheckboxGroup
                   id="formats"
                   name="formats"
-                  labelText="Formats"
+                  labelText="Format"
                   onChange={handleCheckboxChange}
                   value={searchFormState["filters"].materialType}
                   __css={{
                     "> div": {
                       display: "grid",
-                      gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+                      gridTemplateColumns: { md: "repeat(2, minmax(0, 1fr))" },
                       gridGap: "var(--nypl-space-s)",
                       div: {
                         marginTop: "0 !important",
