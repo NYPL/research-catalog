@@ -1,21 +1,14 @@
 import { Box, Link as DSLink, List } from "@nypl/design-system-react-components"
 
+import RCLink from "../RCLink/RCLink"
+
 import type {
   BibDetail,
   Url,
   LinkedBibDetail,
   SubjectHeadingDetail,
-} from "../../models/Bib"
-import RCLink from "../RCLink/RCLink"
-
-const isRtl = (value: string) => {
-  if (!value) return "rtl"
-  value.substring(0, 1) === "\u200F"
-}
-
-const displayRtl = (value: string) => {
-  return isRtl(value) ? "rtl" : "ltr"
-}
+} from "../../types/bibDetail"
+import { displayRtl } from "../../utils/bibDetailUtils"
 
 const buildDetailElement = (field: BibDetail) => {
   return (
@@ -73,20 +66,21 @@ const buildCompoundSubjectHeadingElement = (field: SubjectHeadingDetail) => {
 }
 
 const buildLinkedElement = (field: LinkedBibDetail) => {
+  const internalOrExternal = field.link
   return (
     <>
       <dt>{field.label}</dt>
       {field.value.map((urlInfo: Url) => {
-        return linkElement(urlInfo, field.link)
+        return linkElement(urlInfo, internalOrExternal)
       })}
     </>
   )
 }
 
-const linkElement = (url: Url, link: string) => {
+const linkElement = (url: Url, linkType: string) => {
   let Link
-  if (link === "internal") Link = RCLink
-  else if (link === "external") Link = DSLink
+  if (linkType === "internal") Link = RCLink
+  else if (linkType === "external") Link = DSLink
   const stringDirection = displayRtl(url.urlLabel)
   return (
     <Link dir={stringDirection} href={url.url} key={url.url}>

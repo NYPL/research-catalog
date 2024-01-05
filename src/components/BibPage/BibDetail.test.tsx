@@ -4,7 +4,7 @@ import {
   noParallels,
   parallelsBib,
 } from "../../../__test__/fixtures/bibFixtures"
-import Bib from "../../models/Bib"
+import BibDetailsModel from "../../models/BibDetails"
 import BibDetails from "./BibDetail"
 
 import { render, screen, act } from "@testing-library/react"
@@ -14,9 +14,9 @@ import { MemoryRouterProvider } from "next-router-mock/MemoryRouterProvider"
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
 describe("BibDetail component", () => {
-  const suppBib = new Bib(bibWithSupplementaryContent)
-  const noParallelsBibModel = new Bib(noParallels)
-  const parallelsBibModel = new Bib(parallelsBib)
+  const suppBib = new BibDetailsModel(bibWithSupplementaryContent)
+  const noParallelsBibModel = new BibDetailsModel(noParallels)
+  const parallelsBibModel = new BibDetailsModel(parallelsBib)
   describe("text only details", () => {
     it("single value", () => {
       render(<BibDetails details={noParallelsBibModel.topDetails} />, {
@@ -52,10 +52,10 @@ describe("BibDetail component", () => {
         wrapper: MemoryRouterProvider,
       })
       const supplementaryContent = screen.getByText("Image")
-      await act(async () => {
-        await userEvent.click(supplementaryContent)
-      })
-      expect(mockRouter.asPath).not.toContain("nypl")
+      expect(supplementaryContent).toHaveAttribute(
+        "href",
+        expect.stringContaining("images.contentreserve.com")
+      )
     })
   })
   describe("subject heading links", () => {
