@@ -1,4 +1,4 @@
-import { Box, Link as DSLink, List } from "@nypl/design-system-react-components"
+import { Link as DSLink, List } from "@nypl/design-system-react-components"
 
 import RCLink from "../RCLink/RCLink"
 
@@ -57,9 +57,9 @@ const buildCompoundSubjectHeadingElement = (field: SubjectHeadingDetail) => {
     <>
       <dt>{field.label}</dt>
       {subjectHeadingLinksPerSubject.map((subject, i) => (
-        <Box data-testid="subjectLinksPer" key={"subject-" + i}>
+        <dd data-testid="subjectLinksPer" key={"subject-" + i}>
           {subject}
-        </Box>
+        </dd>
       ))}
     </>
   )
@@ -70,9 +70,11 @@ const buildLinkedElement = (field: LinkedBibDetail) => {
   return (
     <>
       <dt>{field.label}</dt>
-      {field.value.map((urlInfo: Url) => {
-        return linkElement(urlInfo, internalOrExternal)
-      })}
+      <dd>
+        {field.value.map((urlInfo: Url) => {
+          return linkElement(urlInfo, internalOrExternal)
+        })}
+      </dd>
     </>
   )
 }
