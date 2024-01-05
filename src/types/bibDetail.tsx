@@ -18,3 +18,8 @@ export interface Url {
   url: string
   urlLabel: string
 }
+
+export interface FieldMapping {
+  label: string
+  field: string
+}

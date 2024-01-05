@@ -37,6 +37,7 @@ const linkElement = (url: Url, linkType: string) => {
   if (linkType === "internal") Link = RCLink
   else if (linkType === "external") Link = DSLink
   const stringDirection = displayRtl(url.urlLabel)
+  console.log(url)
   return (
     <Link dir={stringDirection} href={url.url} key={url.url}>
       {url.urlLabel}

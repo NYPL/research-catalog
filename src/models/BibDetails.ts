@@ -1,5 +1,9 @@
 import type { ProcessedSearchResult, SearchResult } from "../types/searchTypes"
-import type { LinkedBibDetail, BibDetail } from "../types/bibDetail"
+import type {
+  LinkedBibDetail,
+  BibDetail,
+  FieldMapping,
+} from "../types/bibDetail"
 import { preProcess } from "../utils/bibModelPreprocessing"
 
 export default class BibDetailsModel {
@@ -12,12 +16,12 @@ export default class BibDetailsModel {
     // this.subjectLiteral = "to do investigate  subject heading api fallback scenario"
   }
 
-  buildHoldingDetail(fieldMapping: { label: string; field: string }) {
+  buildHoldingDetail(fieldMapping: FieldMapping) {
     const bibFieldValue = this.bib.holdings[fieldMapping.field]
     return this.buildDetail(fieldMapping.label, bibFieldValue)
   }
 
-  buildStandardDetail(fieldMapping: { label: string; field: string }) {
+  buildStandardDetail(fieldMapping: FieldMapping) {
     const bibFieldValue = this.bib[fieldMapping.field]
     return this.buildDetail(fieldMapping.label, bibFieldValue)
   }

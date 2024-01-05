@@ -33,10 +33,10 @@ describe("BibDetail component", () => {
       wrapper: MemoryRouterProvider,
     })
     const supplementaryContent = screen.getByText("Image")
-    await act(async () => {
-      await userEvent.click(supplementaryContent)
-    })
-    // what should this test?
+    expect(supplementaryContent).toHaveAttribute(
+      "href",
+      expect.stringContaining("images.contentreserve.com")
+    )
   })
   it("single value, no link", () => {
     render(<BibDetails details={noParallelsBibModel.topDetails} />, {
