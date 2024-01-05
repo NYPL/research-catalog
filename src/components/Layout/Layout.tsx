@@ -1,10 +1,17 @@
-import type { ReactElement, PropsWithChildren } from "react"
+import {
+  useEffect,
+  useState,
+  type ReactElement,
+  type PropsWithChildren,
+} from "react"
+import Router from "next/router"
 import {
   Box,
   TemplateAppContainer,
   Breadcrumbs,
   DSProvider,
   Heading,
+  SkeletonLoader,
 } from "@nypl/design-system-react-components"
 
 import { type RCPage } from "../../types/pageTypes"
@@ -31,6 +38,26 @@ const Layout = ({
 }: PropsWithChildren<LayoutProps>) => {
   const showSearch = activePage === "search"
   const showHeader = activePage !== "404"
+
+  const [loading, setLoading] = useState(false)
+
+  // Loading state
+  useEffect(() => {
+    const loadingStart = () => {
+      setLoading(true)
+    }
+    const loadingEnd = () => {
+      setLoading(false)
+    }
+    Router.events.on("routeChangeStart", loadingStart)
+    Router.events.on("routeChangeComplete", loadingEnd)
+    Router.events.on("routeChangeError", loadingEnd)
+    return () => {
+      Router.events.off("routeChangeStart", loadingStart)
+      Router.events.off("routeChangeComplete", loadingEnd)
+      Router.events.off("routeChangeError", loadingEnd)
+    }
+  }, [])
 
   return (
     <DSProvider>
@@ -60,17 +87,21 @@ const Layout = ({
               <div className={styles.researchHeadingContainer}>
                 <Heading id="heading-h1" level="h1" text="Research Catalog" />
                 <SubNav activePage={activePage} />
-                {showSearch && <SearchForm />}
+                {showSearch && <SearchForm loading={loading} />}
               </div>
             </>
           )
         }
         sidebar={sidebar ? sidebarPosition : "none"}
-        contentPrimary={<Box pb="l">{children}</Box>}
+        contentPrimary={
+          <Box pb="l">
+            {loading ? <SkeletonLoader showImage={false} /> : children}
+          </Box>
+        }
         contentSidebar={
           sidebar && (
             <Box pb="l">
-              <div>{sidebar}</div>
+              {loading ? <SkeletonLoader showImage={false} /> : sidebar}
             </Box>
           )
         }
