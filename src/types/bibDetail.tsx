@@ -1,3 +1,8 @@
+export interface SubjectHeadingDetail {
+  value: Url[][]
+  label: string
+}
+
 export interface BibDetail {
   // label is the formatted name of the field, such as "Author"
   label: string
@@ -17,4 +22,9 @@ export interface LinkedBibDetail {
 export interface Url {
   url: string
   urlLabel: string
+}
+
+export interface FieldMapping {
+  label: string
+  field: string
 }
