@@ -2,7 +2,7 @@ import type { SearchParams, SearchFormInputField } from "../types/searchTypes"
 import { searchAggregations } from "../config/aggregations"
 
 export const textInputFields: SearchFormInputField[] = [
-  { name: "q", label: "Keywords" },
+  { name: "q", label: "Keyword" },
   { name: "title", label: "Title" },
   { name: "contributor", label: "Author" },
   { name: "subject", label: "Subject" },
