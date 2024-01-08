@@ -7,7 +7,7 @@ import {
 import BibDetailsModel from "../../models/BibDetails"
 import BibDetails from "./BibDetail"
 
-import { render, screen, act } from "@testing-library/react"
+import { render, screen } from "@testing-library/react"
 import mockRouter from "next-router-mock"
 import { MemoryRouterProvider } from "next-router-mock/MemoryRouterProvider"
 
@@ -40,9 +40,8 @@ describe("BibDetail component", () => {
         wrapper: MemoryRouterProvider,
       })
       const creatorLiteralLink = screen.getByText("Cortanze, Gérard de.")
-      await act(async () => {
-        await userEvent.click(creatorLiteralLink)
-      })
+      await userEvent.click(creatorLiteralLink)
+
       expect(mockRouter.asPath).toBe(
         "/search?filters%5BcreatorLiteral%5D%5B0%5D=Cortanze%2C+G%C3%A9rard+de."
       )
