@@ -9,7 +9,7 @@ describe("RCLink", () => {
     render(<RCLink href="/spaghetti">Spaghetti</RCLink>, {
       wrapper: MemoryRouterProvider,
     })
-    const link = screen.getByRole("link")
+    const link = screen.getByText("Spaghetti")
     await act(async () => {
       await userEvent.click(link)
       expect(link).toHaveAttribute("href", "/spaghetti")

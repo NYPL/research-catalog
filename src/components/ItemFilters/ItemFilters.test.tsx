@@ -46,9 +46,7 @@ describe("Filters container", () => {
     const outsideOfTheFilter = screen.getByTestId("filter-text")
 
     await userEvent.click(locationFilterButton)
-    const offsiteCheckbox = screen.getByRole("checkbox", {
-      name: "Offsite",
-    })
+    const offsiteCheckbox = screen.getByLabelText("Offsite")
     await userEvent.click(offsiteCheckbox)
     await userEvent.click(outsideOfTheFilter)
     expect(offsiteCheckbox).not.toBeInTheDocument()
@@ -85,7 +83,6 @@ describe("Filters container", () => {
   it("does not persist selection if filter closes without applying", async () => {
     render(<FiltersContainer itemAggs={normalAggs} />)
     const { locationFilterButton, statusFilterButton } = filterButtons()
-
     await userEvent.click(locationFilterButton)
     const checkbox = screen.getAllByRole("checkbox")[0]
     await userEvent.click(checkbox)
@@ -105,7 +102,6 @@ describe("Filters container", () => {
     }
     render(<FiltersContainer itemAggs={normalAggs} />)
     const { locationFilterButton, statusFilterButton } = filterButtons()
-
     await userEvent.click(locationFilterButton)
     const checkbox = screen.getByLabelText(/Main Reading Room/)
     const offsiteCheckbox = screen.getByLabelText("Offsite")
