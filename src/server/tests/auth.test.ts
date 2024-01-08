@@ -13,7 +13,7 @@ const mockPatronJwtDecodedObj = {
 
 // Mock the "jose" library that does the JWT verification.
 jest.mock("jose", () => ({
-  importSPKI: async () => Promise.resolve("publicKey"),
+  importSPKI: async () => Promise.resolve("testPublicKey"),
   jwtVerify: async () => ({
     payload: mockPatronJwtDecodedObj,
   }),

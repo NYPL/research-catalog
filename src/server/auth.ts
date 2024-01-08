@@ -20,10 +20,10 @@ interface UserJwtPayload extends JWTPayload {
  * and then verify it through JWT. The decoded patron information is returned.
  */
 export default async function initializePatronTokenAuth(req: NextRequest) {
-  const nyplIdentityPatron = req.cookies.get("nyplIdentityPatron")
+  const nyplIdentityPatron = (req.cookies as any)?.nyplIdentityPatron
 
   const nyplIdentityCookieObject = nyplIdentityPatron
-    ? JSON.parse(nyplIdentityPatron.value)
+    ? JSON.parse(nyplIdentityPatron)
     : {}
   const patronTokenResponse = {
     isTokenValid: false,
@@ -35,7 +35,7 @@ export default async function initializePatronTokenAuth(req: NextRequest) {
   if (nyplIdentityCookieObject.access_token) {
     try {
       const algorithm = "RS256"
-      const publicKey = await importSPKI(appConfig.publicKey, algorithm)
+      const publicKey = await importSPKI(appConfig.jwtPublicKey, algorithm)
       const verified = await jwtVerify(
         nyplIdentityCookieObject.access_token,
         publicKey

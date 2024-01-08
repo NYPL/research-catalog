@@ -58,7 +58,7 @@ export const appConfig = {
   nonRecapClosedLocations: parseLocations(
     process.env.NEXT_PUBLIC_NON_RECAP_CLOSED_LOCATIONS
   ),
-  publicKey: `-----BEGIN PUBLIC KEY-----
+  jwtPublicKey: `-----BEGIN PUBLIC KEY-----
     MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA44ilHg/PxcJYsISHMRyo
     xsmez178qZpkJVXg7rOMVTLZuf05an7Pl+lX4nw/rqcvGQDXyrimciLgLkWu00xh
     m6h6klTeJSNq2DgseF8OMw2olfuBKq1NBQ/vC8U0l5NJu34oSN4/iipgpovqAHHB
