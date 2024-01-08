@@ -2,6 +2,7 @@ import type {
   SearchResultsItem,
   JSONLDValue,
   ItemLocation,
+  ItemLocationEndpoint,
 } from "../types/itemTypes"
 import { locationLabelToKey } from "../utils/itemUtils"
 import type SearchResultsBib from "./SearchResultsBib"
@@ -12,6 +13,7 @@ import {
   locationEndpointsMap,
   formatShelfMarkForSort,
 } from "../utils/itemUtils"
+import { appConfig } from "../config/config"
 
 /**
  * The Item class contains the data and getter functions
@@ -30,6 +32,7 @@ export default class Item {
   barcode?: string
   location?: ItemLocation
   aeonUrl?: string
+  dueDate?: string
   isPhysicallyRequestable: boolean
   isEDDRequestable: boolean
   sortableShelfMark?: string
@@ -52,6 +55,7 @@ export default class Item {
     this.barcode = item.idBarcode?.length ? item.idBarcode[0] : null
     this.location = this.getLocationFromItem(item)
     this.aeonUrl = item.aeonUrl?.length ? item.aeonUrl[0] : null
+    this.dueDate = item.dueDate?.length ? item.dueDate[0] : null
     this.isPhysicallyRequestable = item.physRequestable
     this.isEDDRequestable = item.eddRequestable
     this.sortableShelfMark = this.getSortableShelfMark(item)
@@ -64,6 +68,15 @@ export default class Item {
 
   get isReCAP(): boolean {
     return this.isPartnerReCAP() || this.isNYPLReCAP()
+  }
+
+  get allLocationsClosed(): boolean {
+    const { closedLocations, recapClosedLocations, nonRecapClosedLocations } =
+      appConfig
+
+    return closedLocations
+      .concat(this.isReCAP ? recapClosedLocations : nonRecapClosedLocations)
+      .includes("all")
   }
 
   // Pre-processing logic for setting Item holding location
@@ -82,9 +95,10 @@ export default class Item {
 
       // Set branch endpoint based on API location label
       const locationKey = locationLabelToKey(location.prefLabel)
-      location.endpoint = locationEndpointsMap[locationKey]
+      location.endpoint = locationEndpointsMap[
+        locationKey
+      ] as ItemLocationEndpoint
     }
-
     return location
   }
 
