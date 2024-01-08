@@ -20,14 +20,12 @@ jest.mock("jose", () => ({
 }))
 
 const reqNoCookies = {
-  cookies: { get: () => undefined },
+  cookies: {},
 } as NextRequest
 const reqCookiesWithToken = {
   cookies: {
-    get: () => ({
-      value: '{"access_token":123}',
-    }),
-  },
+    nyplIdentityPatron: '{"access_token":123}',
+  } as any,
 } as NextRequest
 
 describe("initializePatronTokenAuth", () => {

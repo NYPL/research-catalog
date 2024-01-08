@@ -12,7 +12,6 @@ import Layout from "../src/components/Layout/Layout"
 import RCLink from "../src/components/RCLink/RCLink"
 import { SITE_NAME } from "../src/config/constants"
 import { appConfig } from "../src/config/config"
-import { getPatronData } from "../src/server/getPatronData"
 import initializePatronTokenAuth from "../src/server/auth"
 
 export default function Home() {
@@ -161,16 +160,12 @@ export default function Home() {
 }
 
 export async function getServerSideProps({ req }) {
-  // Get patron data if the cookie has been parsed in the middleware.
-  // This could be passed down to props for the page component to use.
+  // Every page that needs patron data must call initializePatronTokenAuth
+  // to find if the token is valid and what the patron id is.
   const patronTokenResponse = await initializePatronTokenAuth(req)
-  // const patronData = await getPatronData({
-  //   isTokenValid: patronTokenResponse?.isTokenValid,
-  //   userId: patronTokenResponse?.decodedPatron?.sub,
-  // })
-  console.log("sevre side props")
-  // console.log(req.cookies)
-  console.log("This is just to test patronTokenResponse", patronTokenResponse)
+  // Now it can be used to get patron data from Sierra or Platform API
+  // or use `isTokenValid` to redirect to login page if it's not valid.
+  console.log("patronTokenResponse is", patronTokenResponse)
 
   // return props object
   return {

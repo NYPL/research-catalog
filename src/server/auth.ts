@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import type { JWTPayload } from "jose"
-import { importSPKI, jwtVerify } from "jose"
+// import type { JWTPayload } from "jose"
+import { importSPKI, jwtVerify, type JWTPayload } from "jose"
 import type { NextRequest } from "next/server"
 
 import { appConfig } from "../config/config"
@@ -20,8 +20,9 @@ interface UserJwtPayload extends JWTPayload {
  * and then verify it through JWT. The decoded patron information is returned.
  */
 export default async function initializePatronTokenAuth(req: NextRequest) {
-  const nyplIdentityPatron = (req.cookies as any)?.nyplIdentityPatron
+  type cookie = typeof req.cookies & { nyplIdentityPatron?: string }
 
+  const nyplIdentityPatron = (req.cookies as cookie)?.nyplIdentityPatron
   const nyplIdentityCookieObject = nyplIdentityPatron
     ? JSON.parse(nyplIdentityPatron)
     : {}
