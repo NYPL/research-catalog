@@ -7,7 +7,7 @@ import type {
   Url,
   LinkedBibDetail,
   SubjectHeadingDetail,
-} from "../../types/bibDetail"
+} from "../../types/bibTypes"
 import { displayRtl } from "../../utils/bibDetailUtils"
 
 const buildDetailElement = (field: BibDetail) => {

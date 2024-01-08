@@ -3,7 +3,7 @@ import type {
   LinkedBibDetail,
   BibDetail,
   FieldMapping,
-} from "../types/bibDetail"
+} from "../types/bibTypes"
 import { preProcess } from "../utils/bibModelPreprocessing"
 
 export default class BibDetailsModel {
