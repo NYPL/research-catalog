@@ -23,7 +23,6 @@ import {
 } from "../../src/utils/searchUtils"
 import type { SortKey, SortOrder } from "../../src/types/searchTypes"
 import { mapWorksToDRBResults } from "../../src/utils/drbUtils"
-import { extractQueryString } from "../../src/utils/appUtils"
 import { SITE_NAME, RESULTS_PER_PAGE } from "../../src/config/constants"
 import type SearchResultsBib from "../../src/models/SearchResultsBib"
 
@@ -148,7 +147,8 @@ export default function Search({ results }) {
  *
  */
 export async function getServerSideProps({ resolvedUrl }) {
-  const queryString = extractQueryString(resolvedUrl)
+  // Remove everything before the query string delineator '?', necessary for correctly parsing the 'q' param.
+  const queryString = resolvedUrl.slice(resolvedUrl.indexOf("?") + 1)
   const results = await fetchResults(mapQueryToSearchParams(parse(queryString)))
   return {
     props: {

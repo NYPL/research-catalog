@@ -2,7 +2,7 @@ import Head from "next/head"
 import { useEffect } from "react"
 import { useRouter } from "next/router"
 import "@nypl/design-system-react-components/dist/styles.css"
-import { trackVirtualPageView, extractQueryString } from "../src/utils/appUtils"
+import { trackVirtualPageView } from "../src/utils/appUtils"
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 function App({ Component, pageProps }) {
@@ -10,11 +10,9 @@ function App({ Component, pageProps }) {
 
   // Track analytics on initial page view
   useEffect(() => {
-    const queryString = extractQueryString(router.asPath)
-    trackVirtualPageView(
-      router.pathname,
-      queryString.length && `?${queryString}`
-    )
+    const path = router.asPath
+    const queryString = path.slice(path.indexOf("?"))
+    trackVirtualPageView(router.pathname, queryString)
   }, [router])
 
   return (

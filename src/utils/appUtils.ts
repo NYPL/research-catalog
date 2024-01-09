@@ -98,8 +98,3 @@ export const trackVirtualPageView = (pathname = "", queryParams = "") => {
     site_section: ADOBE_ANALYTICS_SITE_SECTION,
   })
 }
-
-// Remove everything before the query string delineator '?', necessary for correctly parsing the 'q' param.
-export const extractQueryString = (path: string) => {
-  return path.slice(path.indexOf("?") + 1)
-}
