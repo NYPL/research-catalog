@@ -9,7 +9,7 @@ import {
   FormRow,
   TextInput,
   Select,
-  HorizontalRule
+  HorizontalRule,
 } from "@nypl/design-system-react-components"
 import type { TextInputRefType } from "@nypl/design-system-react-components"
 
@@ -25,7 +25,7 @@ import {
   fulfillmentOptions,
   scenarios,
   scenarioOptions,
-  validDate
+  validDate,
 } from "../../src/utils/testPickupTimesUtils"
 
 interface CurrentParams {
@@ -73,7 +73,11 @@ const TestPickupTimes = (params) => {
 
   useEffect(updateRoute, [currentParams])
 
-  if (currentParams && scenario !== currentParams.scenario && scenarios[scenario]) {
+  if (
+    currentParams &&
+    scenario !== currentParams.scenario &&
+    scenarios[scenario]
+  ) {
     const scenarioParams = scenarios[scenario]
     setHoldingLocation(scenarioParams.holdingLocation || "")
     setFulfillment(scenarioParams.fulfillment || "")

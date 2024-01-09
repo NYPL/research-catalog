@@ -73,11 +73,16 @@ export const getPickupTimeEstimate = async (
       originLocationId,
       turnaroundTime
     )
-    rationale.push({ time: adjustedTurnaroundTime, activity: "adjusted to operating hours" })
+    rationale.push({
+      time: adjustedTurnaroundTime,
+      activity: "adjusted to operating hours",
+    })
 
     return {
       time: adjustedTurnaroundTime,
-      estimate: makeFriendly(adjustedTurnaroundTime, {useRoughDayEstimate: true}),
+      estimate: makeFriendly(adjustedTurnaroundTime, {
+        useRoughDayEstimate: true,
+      }),
       rationale,
     }
   }
@@ -244,7 +249,7 @@ export const makeFriendly = (
     {
       useTodayAtTime: false,
       useTodayByTime: false,
-      useRoughDayEstimate: false
+      useRoughDayEstimate: false,
     },
     options
   )
@@ -585,14 +590,17 @@ export const operatingHours = async (locationId) => {
     cache[locationId] &&
     Date.now() - cache[locationId].updatedAt < MS_PER_HOUR
   ) {
-    return (await cache[locationId].request)
+    return await cache[locationId].request
   } else {
     cache[locationId] = {}
 
     cache[locationId] = {
       request: fetchLocations({ location_codes: locationId, fields: "hours" })
         .then((json) => {
-          if ((!json || !json[locationId] || !json[locationId][0]) && !/^rc/.test(locationId)) {
+          if (
+            (!json || !json[locationId] || !json[locationId][0]) &&
+            !/^rc/.test(locationId)
+          ) {
             console.error(
               `Could not find hours for ${locationId} in locations response (${Object.keys(
                 json
@@ -608,13 +616,15 @@ export const operatingHours = async (locationId) => {
               location_codes: "ma",
               fields: "hours",
             })
-            const daysWithSaturdayClosed = sasbHours["ma"][0].hours.map((day) => {
-              if (day.day === "Saturday") {
-                delete day.startTime
-                delete day.endTime
+            const daysWithSaturdayClosed = sasbHours["ma"][0].hours.map(
+              (day) => {
+                if (day.day === "Saturday") {
+                  delete day.startTime
+                  delete day.endTime
+                }
+                return day
               }
-              return day
-            })
+            )
             hours = daysWithSaturdayClosed
           }
 
@@ -671,7 +681,7 @@ export const operatingHours = async (locationId) => {
     }
 
     await cache[locationId].request
-    return (await cache[locationId].request)
+    return await cache[locationId].request
   }
   return hours
 }
