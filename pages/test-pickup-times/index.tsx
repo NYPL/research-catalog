@@ -9,9 +9,7 @@ import {
   FormRow,
   TextInput,
   Select,
-  HorizontalRule,
-  ButtonGroup,
-  Button,
+  HorizontalRule
 } from "@nypl/design-system-react-components"
 import type { TextInputRefType } from "@nypl/design-system-react-components"
 
@@ -23,111 +21,12 @@ import {
   overrideNow,
 } from "../../src/utils/pickupTimeEstimator"
 
-// Prepare fulfillment dropdown values:
-const fulfillmentOptions = `
-  sasb-onsite	Onsite SASB	PT45M	ma
-  sc-onsite	Onsite Schomburg	PT15M	sc
-  lpa-onsite	Onsite LPA	PT45M	my
-  recap-offsite	Offsite ReCAP	P1D	
-  hd-offsite	Offsite Harvard Depository	P2D	
-  sasb-edd	EDD Onsite	P2W	
-  lpa-edd	EDD Onsite	P2W	
-  sc-edd	EDD Onsite	P2W	
-  recap-edd	EDD ReCAP	P1W	
-  hd-edd	EDD Harvard Depository	P1W
-`
-  .split("\n")
-  .map((l) => l.trim())
-  .filter((l) => l)
-  .map((l) => l.split("\t"))
-  .map((values) => {
-    const [id, label, duration] = values
-    return {
-      value: `fulfillment:${id}`,
-      label: `${id} - ${label} (${duration})`,
-    }
-  })
-
-const todayAt = (hour) => {
-  const now = new Date()
-  now.setHours(hour, 0, 0)
-  return now.toISOString()
-}
-
-const todayNMinutesFromNow = (minutes) => {
-  const date = new Date()
-  date.setTime(date.getTime() + minutes * 60_000)
-  return date.toISOString()
-}
-
-const scenarios = {
-  "ReCAP to any location": {
-    holdingLocation: "rc",
-    fulfillment: "fulfillment:recap-offsite",
-  },
-  "ReCAP to Rose": {
-    holdingLocation: "rc",
-    fulfillment: "fulfillment:recap-offsite",
-    deliveryLocation: "mal",
-  },
-  "ReCAP to 217": {
-    holdingLocation: "rc",
-    fulfillment: "fulfillment:recap-offsite",
-    deliveryLocation: "mal17",
-  },
-  "ReCAP to Rose after 2:30pm cut-off": {
-    holdingLocation: "rc",
-    fulfillment: "fulfillment:recap-offsite",
-    deliveryLocation: "mal",
-    requestTime: todayAt(15),
-  },
-  "ReCAP to SC": {
-    holdingLocation: "rc",
-    fulfillment: "fulfillment:recap-offsite",
-    deliveryLocation: "sc",
-  },
-  "M1 to Rose": {
-    holdingLocation: "mab88",
-    fulfillment: "fulfillment:sasb-onsite",
-    deliveryLocation: "mal",
-  },
-  "M1 to Rose after hours": {
-    holdingLocation: "mab88",
-    fulfillment: "fulfillment:sasb-onsite",
-    deliveryLocation: "mal",
-    requestTime: todayAt(21),
-  },
-  "M1 to Rose, hold placed 30 mins ago": {
-    holdingLocation: "mab88",
-    fulfillment: "fulfillment:sasb-onsite",
-    deliveryLocation: "mal",
-    requestTime: todayNMinutesFromNow(-30),
-  },
-  "SASB EDD": { holdingLocation: "mab88", fulfillment: "fulfillment:sasb-edd" },
-  "ReCAP EDD": {
-    holdingLocation: "rc123",
-    fulfillment: "fulfillment:recap-edd",
-  },
-  "ReCAP EDD, requested 3 days ago": {
-    holdingLocation: "rc123",
-    fulfillment: "fulfillment:recap-edd",
-    requestTime: todayNMinutesFromNow(-60 * 24 * 3),
-  },
-}
-const scenarioOptions = [""]
-  .concat(Object.keys(scenarios))
-  .reduce((a, label) => a.concat([{ label, value: label }]), [])
-
-const validDate = (dateString) => {
-  let time = null
-  try {
-    time = new Date(dateString).getTime()
-  } catch (e) {
-    console.error(`Invalid date: ${dateString}`)
-  }
-
-  return !!time
-}
+import {
+  fulfillmentOptions,
+  scenarios,
+  scenarioOptions,
+  validDate
+} from "../../src/utils/testPickupTimesUtils"
 
 interface CurrentParams {
   fulfillment: string
@@ -139,8 +38,9 @@ interface CurrentParams {
 }
 
 /**
- * The Search page is responsible for fetching and displaying the Search results,
- * as well as displaying and controlling pagination and search filters.
+ * This is a tool for testing pickup time estimates for different permutations
+ * of item, destination, and request time. Although public, it is intended for
+ * internal use.
  */
 const TestPickupTimes = (params) => {
   const router = useRouter()
@@ -163,7 +63,6 @@ const TestPickupTimes = (params) => {
 
   const [currentParams, setCurrentParams] = useState({} as CurrentParams)
   const error = params.error
-  const [loading, setLoading] = useState(false)
 
   const [scenario, setScenario] = useState("")
 
@@ -174,15 +73,13 @@ const TestPickupTimes = (params) => {
 
   useEffect(updateRoute, [currentParams])
 
-  if (currentParams && scenario !== currentParams.scenario) {
+  if (currentParams && scenario !== currentParams.scenario && scenarios[scenario]) {
     const scenarioParams = scenarios[scenario]
-    if (scenarioParams) {
-      setHoldingLocation(scenarioParams.holdingLocation || "")
-      setFulfillment(scenarioParams.fulfillment || "")
-      setDeliveryLocation(scenarioParams.deliveryLocation || "")
-      setRequestTime(scenarioParams.requestTime || "")
-      setCurrentTime(scenarioParams.currentTime || "")
-    }
+    setHoldingLocation(scenarioParams.holdingLocation || "")
+    setFulfillment(scenarioParams.fulfillment || "")
+    setDeliveryLocation(scenarioParams.deliveryLocation || "")
+    setRequestTime(scenarioParams.requestTime || "")
+    setCurrentTime(scenarioParams.currentTime || "")
   }
 
   if (
@@ -192,18 +89,6 @@ const TestPickupTimes = (params) => {
     currentParams.requestTime !== requestTime ||
     currentParams.currentTime !== currentTime
   ) {
-    if (scenario && scenarios[scenario]) {
-      Object.keys(scenarios[scenario]).forEach((key) => {
-        if (scenarios[scenario][key] !== eval(key)) {
-          console.log(
-            "Detected divergence from scenario: ",
-            key,
-            scenarios[scenario][key],
-            eval(key)
-          )
-        }
-      })
-    }
     setCurrentParams({
       fulfillment,
       holdingLocation,
@@ -257,7 +142,6 @@ const TestPickupTimes = (params) => {
                 type="text"
                 name="holdingLocation"
                 value={holdingLocation}
-                key="holdingLocation"
                 onChange={(e) => setHoldingLocation(e.target.value)}
                 ref={inputRef}
               />
@@ -284,7 +168,6 @@ const TestPickupTimes = (params) => {
                 type="text"
                 name="deliveryLocation"
                 value={deliveryLocation}
-                key="deliveryLocation"
                 onChange={(e) => setDeliveryLocation(e.target.value)}
                 ref={inputRef}
               />
@@ -294,7 +177,6 @@ const TestPickupTimes = (params) => {
                 type="text"
                 name="requestTime"
                 value={requestTime}
-                key="requestTime"
                 onChange={(e) => setRequestTime(e.target.value)}
                 ref={inputRef}
               />
@@ -304,15 +186,13 @@ const TestPickupTimes = (params) => {
                 type="text"
                 name="currentTime"
                 value={currentTime}
-                key="currentTime"
                 onChange={(e) => setCurrentTime(e.target.value)}
                 ref={inputRef}
               />
             </FormField>
             <FormField id="testPickupTimesRight" gap="grid.s">
-              {loading && "Loading ..."}
               {error && <>{error}</>}
-              {!loading && !error && result && (
+              {!error && result && (
                 <>
                   <Heading level="h3">Result</Heading>
                   <p>&quot;{result.estimate}&quot;</p>

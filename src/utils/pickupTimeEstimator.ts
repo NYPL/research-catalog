@@ -41,8 +41,6 @@ export const getPickupTimeEstimate = async (
   type = "phys",
   fromTimestamp = module.exports.now()
 ) => {
-  "use server"
-
   if (!["phys", "edd", "spec"].includes(type))
     throw new Error("Invalid type: " + type)
 
