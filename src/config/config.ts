@@ -58,4 +58,12 @@ export const appConfig = {
   nonRecapClosedLocations: parseLocations(
     process.env.NEXT_PUBLIC_NON_RECAP_CLOSED_LOCATIONS
   ),
+  adobeEmbedUrl: {
+    development:
+      process.env.ADOBE_EMBED_URL ||
+      "https://assets.adobedtm.com/1a9376472d37/ddf1bedfe52e/launch-4eefcc91c90e.min.js",
+    production:
+      process.env.ADOBE_EMBED_URL ||
+      "https://assets.adobedtm.com/1a9376472d37/8519dfce636d/launch-672b7e7f98ee.min.js",
+  },
 }

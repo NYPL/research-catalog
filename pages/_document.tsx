@@ -1,4 +1,5 @@
 import { Html, Head, Main, NextScript } from "next/document"
+import { appConfig } from "../src/config/config"
 
 export default function Document() {
   return (
@@ -17,7 +18,7 @@ export default function Document() {
       </style>
       <Head>
         <meta name="description" content="Research Catalog | NYPL" />
-        <script async src={process.env.ADOBE_EMBED_URL} />
+        <script async src={appConfig.adobeEmbedUrl[appConfig.environment]} />
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -25,6 +26,7 @@ export default function Document() {
               window.adobeDataLayer = window.adobeDataLayer || [];
               // Then push in the variables required in the Initial Data Layer Definition
               window.adobeDataLayer.push({disable_page_view: true});
+              ${appConfig.environment}
             `,
           }}
         />
