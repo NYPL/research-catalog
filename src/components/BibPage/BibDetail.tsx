@@ -3,9 +3,8 @@ import {
   DSProvider,
   List,
 } from "@nypl/design-system-react-components"
-
+import styles from "../../../styles/components/BibDetails.module.scss"
 import RCLink from "../RCLink/RCLink"
-
 import type {
   BibDetail,
   Url,
@@ -114,7 +113,11 @@ interface BibDetailsProps {
 const BibDetails = ({ details }: BibDetailsProps) => {
   return (
     <DSProvider>
-      <List type="dl">
+      <List
+        type="dl"
+        className={styles.bibDetails}
+        sx={{ borderBottom: "none" }}
+      >
         {details.map(
           (detail: BibDetail | LinkedBibDetail | SubjectHeadingDetail) => {
             if (!detail) return
