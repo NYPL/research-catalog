@@ -12,6 +12,7 @@ import { parse } from "qs"
 import Layout from "../../src/components/Layout/Layout"
 import DRBContainer from "../../src/components/DRB/DRBContainer"
 import SearchResult from "../../src/components/SearchResult/SearchResult"
+import RefineSearch from "../../src/components/RefineSearch/RefineSearch"
 
 import { fetchResults } from "../api/search"
 import {
@@ -25,6 +26,8 @@ import type { SortKey, SortOrder } from "../../src/types/searchTypes"
 import { mapWorksToDRBResults } from "../../src/utils/drbUtils"
 import { SITE_NAME, RESULTS_PER_PAGE } from "../../src/config/constants"
 import type SearchResultsBib from "../../src/models/SearchResultsBib"
+
+import { aggregationsResults } from "../../__test__/fixtures/searchResultsManyBibs"
 
 /**
  * The Search page is responsible for fetching and displaying the Search results,
@@ -71,6 +74,7 @@ export default function Search({ results }) {
       </Head>
       <Layout
         activePage="search"
+        refineSearch={<RefineSearch aggregations={aggregationsResults} />}
         sidebar={
           <>
             {totalResults && (
@@ -147,6 +151,7 @@ export default function Search({ results }) {
  *
  */
 export async function getServerSideProps({ resolvedUrl }) {
+  console.log("spaghetti")
   // Remove everything before the query string delineator '?', necessary for correctly parsing the 'q' param.
   const queryString = resolvedUrl.slice(resolvedUrl.indexOf("?") + 1)
   const results = await fetchResults(mapQueryToSearchParams(parse(queryString)))

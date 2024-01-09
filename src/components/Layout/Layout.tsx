@@ -17,6 +17,7 @@ interface LayoutProps {
   sidebar?: ReactElement
   activePage?: RCPage
   sidebarPosition?: "right" | "left"
+  refineSearch?: ReactElement
 }
 
 /**
@@ -27,6 +28,7 @@ const Layout = ({
   children,
   sidebar,
   activePage,
+  refineSearch,
   sidebarPosition = "right",
 }: PropsWithChildren<LayoutProps>) => {
   const showSearch = activePage === "search"
@@ -61,6 +63,7 @@ const Layout = ({
                 <Heading id="heading-h1" level="h1" text="Research Catalog" />
                 <SubNav activePage={activePage} />
                 {showSearch && <SearchForm />}
+                {refineSearch}
               </div>
             </>
           )

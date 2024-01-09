@@ -80,9 +80,9 @@ const SearchForm = () => {
           />
         </div>
         <div className={styles.auxSearchContainer}>
-          <EDSLink />
           {/* Temporary color update. The Header overrides the new
             DS 2.X CSS color variable values. */}
+          <EDSLink />
           <RCLink
             className={styles.advancedSearch}
             href={"/search/advanced"}

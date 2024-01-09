@@ -29,3 +29,21 @@
 .edsLink {
   padding-right: var(--nypl-space-xl);
 }
+
+.refineButtons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.refineCheckboxGroup {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.refineSearchContainer {
+  background-color: var(--nypl-colors-ui-bg-default);
+}
+.refineSearchInner {
+  @include maxWidth;
+  padding-bottom: var(--nypl-space-xs);
+}
