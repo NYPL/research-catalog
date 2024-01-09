@@ -8,7 +8,7 @@ import { trackVirtualPageView } from "../src/utils/appUtils"
 function App({ Component, pageProps }) {
   const router = useRouter()
 
-  // Track analytics on initial page view
+  // Track page views to Adobe Analytics
   useEffect(() => {
     const path = router.asPath
     const queryString = path.slice(path.indexOf("?"))
