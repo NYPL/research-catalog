@@ -3,3 +3,5 @@ export const displayRtl = (value: string) => {
 }
 
 const isRtl = (value: string) => value.substring(0, 1) === "\u200F"
+
+export const isItTheLastElement = (i, array) => !(i < array.length - 1)

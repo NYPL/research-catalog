@@ -8,7 +8,7 @@ import BibDetails from "../../src/components/BibPage/BibDetail"
 import BibDetailsModel from "../../src/models/BibDetails"
 
 const BibPage = () => {
-  const bibModel = new BibDetailsModel(noParallels)
+  const bibModel = new BibDetailsModel(parallelsBib)
   const { topDetails, bottomDetails, holdingsDetails } = bibModel
   return [topDetails, bottomDetails, holdingsDetails]
     .filter((d) => d.length)
