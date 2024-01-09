@@ -13,7 +13,7 @@ function App({ Component, pageProps }) {
     const path = router.asPath
     const queryString = path.slice(path.indexOf("?"))
     trackVirtualPageView(router.pathname, queryString)
-  }, [router])
+  }, [router.asPath, router.pathname])
 
   return (
     <>
