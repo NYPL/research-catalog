@@ -17,7 +17,7 @@ export default function Document() {
       </style>
       <Head>
         <meta name="description" content="Research Catalog | NYPL" />
-        <script async src={process.env.NEXT_PUBLIC_ADOBE_EMBED_URL} />
+        <script async src={process.env.ADOBE_EMBED_URL} />
         <script
           dangerouslySetInnerHTML={{
             __html: `
