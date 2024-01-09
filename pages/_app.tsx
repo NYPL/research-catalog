@@ -11,7 +11,10 @@ function App({ Component, pageProps }) {
   // Track analytics on initial page view
   useEffect(() => {
     const queryString = extractQueryString(router.asPath)
-    trackVirtualPageView(router.pathname, queryString)
+    trackVirtualPageView(
+      router.pathname,
+      queryString.length && `?${queryString}`
+    )
   }, [router])
 
   return (
