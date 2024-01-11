@@ -7,8 +7,6 @@ import { trackVirtualPageView } from "../src/utils/appUtils"
 // eslint-disable-next-line @typescript-eslint/naming-convention
 function App({ Component, pageProps }) {
   const router = useRouter()
-  // Prevents double-firing of useEffect on initial page load
-  // const initialized = useRef(false)
 
   // TODO: The code below is a verbose solution for page view tracking
   // in Adobe Analytics that guarantees that page views will only be sent
@@ -16,7 +14,10 @@ function App({ Component, pageProps }) {
   // We should determine if the simple useEffect solution is reliable enough for
   // page view tracking.
 
-  // Track initial page view to Adobe Analytics
+  // // Prevents double-firing of useEffect on initial page load
+  // const initialized = useRef(false)
+
+  // // Track initial page view to Adobe Analytics
   // useEffect(() => {
   //   if (!initialized.current) {
   //     initialized.current = true
