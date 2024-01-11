@@ -77,13 +77,14 @@ const buildCompoundSubjectHeadingElement = (field: SubjectHeadingDetail) => {
   return (
     <>
       <dt>{field.label}</dt>
-      <dd data-testid="subjectLinksPer">
-        {subjectHeadingLinksPerSubject.map((subject, i) => (
-          <>
-            {subject}
-            {!isItTheLastElement(i, subjectHeadingLinksPerSubject) && <br />}
-          </>
-        ))}
+      <dd>
+        <List type="ol">
+          {subjectHeadingLinksPerSubject.map((subject, i) => (
+            <li key={`subject-heading-${i}`} data-testid="subjectLinksPer">
+              {subject}
+            </li>
+          ))}
+        </List>
       </dd>
     </>
   )
@@ -91,7 +92,6 @@ const buildCompoundSubjectHeadingElement = (field: SubjectHeadingDetail) => {
 
 const buildSingleSubjectHeadingElement = (subjectHeadingUrls: Url[]) => {
   const urls = subjectHeadingUrls.reduce((linksPerSubject, url: Url, index) => {
-    // Push a divider in between the link elements
     const divider = (
       <span data-testid="divider" key={`divider-${index}`}>
         {" "}
