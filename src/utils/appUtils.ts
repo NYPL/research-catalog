@@ -2,6 +2,7 @@ import {
   ADOBE_ANALYTICS_SITE_SECTION,
   ADOBE_ANALYTICS_PAGE_NAMES,
   ADOBE_ANALYTICS_RC_PREFIX,
+  BASE_URL,
 } from "../config/constants"
 
 import { standardizeBibId } from "./bibUtils"
@@ -9,7 +10,6 @@ import { standardizeBibId } from "./bibUtils"
 /**
  * adobeAnalyticsParam
  * Utility function that builds a param string as expected by the Adobe Analytics dashboard
- * @param {string} param value of param to be passed into the param string field.
  */
 const adobeAnalyticsParam = (param = "") => {
   return param.length ? `|${param}` : ""
@@ -89,16 +89,20 @@ export const adobeAnalyticsRouteToPageName = (route = "", queryParams = "") => {
 /**
  * Tracks a virtual page view to Adobe Analytics on page navigation.
  */
-export const trackVirtualPageView = (pathname = "", queryParams = "") => {
+export const trackVirtualPageView = (pathname = "") => {
   const adobeDataLayer = window["adobeDataLayer"] || []
-  const route = pathname.toLowerCase()
+  const route = pathname.toLowerCase().replace(BASE_URL, "")
+  const queryIndex = route.indexOf("?")
+  const path = route.substring(0, queryIndex)
+  const queryParams = route.slice(queryIndex)
+
   adobeDataLayer.push({
     page_name: null,
     site_section: null,
   })
   adobeDataLayer.push({
     event: "virtual_page_view",
-    page_name: adobeAnalyticsRouteToPageName(route, queryParams),
+    page_name: adobeAnalyticsRouteToPageName(path, queryParams),
     site_section: ADOBE_ANALYTICS_SITE_SECTION,
   })
 }
