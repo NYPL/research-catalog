@@ -1,5 +1,6 @@
 import { Html, Head, Main, NextScript } from "next/document"
 import { appConfig } from "../src/config/config"
+import Script from "next/script"
 
 export default function Document() {
   return (
@@ -26,7 +27,6 @@ export default function Document() {
               window.adobeDataLayer = window.adobeDataLayer || [];
               // Then push in the variables required in the Initial Data Layer Definition
               window.adobeDataLayer.push({disable_page_view: true});
-              ${appConfig.environment}
             `,
           }}
         />
