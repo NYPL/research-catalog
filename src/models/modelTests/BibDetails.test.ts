@@ -11,6 +11,56 @@ describe("Bib model", () => {
     bibWithSupplementaryContent
   )
   const bibWithParallelsModel = new BibDetailsModel(parallelsBib)
+  const bibWithNoParallelsModel = new BibDetailsModel(noParallels)
+  describe("subjectHeadings", () => {
+    it("maps single subjects to compound heading url", () => {
+      const filterQueryForSubjectHeading = "/search?filters[subjectLiteral]="
+      const subjectHeadingsObject = {
+        label: "Subjects",
+        value: [
+          [
+            {
+              url: filterQueryForSubjectHeading + "Authors, French",
+              urlLabel: "Authors, French",
+            },
+            {
+              url:
+                filterQueryForSubjectHeading +
+                "Authors, French -- 20th century",
+              urlLabel: "20th century",
+            },
+            {
+              url:
+                filterQueryForSubjectHeading +
+                "Authors, French -- 20th century -- Biography",
+              urlLabel: "Biography",
+            },
+          ],
+          [
+            {
+              url: filterQueryForSubjectHeading + "Autobiographical Narrative",
+              urlLabel: "Autobiographical Narrative",
+            },
+          ],
+          [
+            {
+              url: filterQueryForSubjectHeading + "Cortanze, Gérard de",
+              urlLabel: "Cortanze, Gérard de",
+            },
+            {
+              url:
+                filterQueryForSubjectHeading +
+                "Cortanze, Gérard de -- Childhood and youth",
+              urlLabel: "Childhood and youth",
+            },
+          ],
+        ],
+      }
+      expect(bibWithNoParallelsModel.subjectHeadings).toMatchObject(
+        subjectHeadingsObject
+      )
+    })
+  })
   describe("extent", () => {
     it("should add a semicolon after extent if there is not one already", () => {
       const bib = new BibDetailsModel({
