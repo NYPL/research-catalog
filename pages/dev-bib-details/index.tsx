@@ -1,8 +1,8 @@
 import {
-  bibWithSupplementaryContent,
+  // bibWithSupplementaryContent,
   noParallels,
-  parallelsBib,
-  yiddishBib,
+  // parallelsBib,
+  // yiddishBib,
 } from "../../__test__/fixtures/bibFixtures"
 import BibDetails from "../../src/components/BibPage/BibDetail"
 import Layout from "../../src/components/Layout/Layout"
