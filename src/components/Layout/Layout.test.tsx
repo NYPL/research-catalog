@@ -3,6 +3,9 @@ import { render, screen, within } from "@testing-library/react"
 
 import Layout from "./Layout"
 
+// Mock next router
+jest.mock("next/router", () => jest.requireActual("next-router-mock"))
+
 describe("Layout", () => {
   const searchLabel =
     "Search by keyword, title, journal title, or author/contributor"
