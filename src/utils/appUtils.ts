@@ -93,6 +93,10 @@ export const trackVirtualPageView = (pathname = "", queryParams = "") => {
   const adobeDataLayer = window["adobeDataLayer"] || []
   const route = pathname.toLowerCase()
   adobeDataLayer.push({
+    page_name: null,
+    site_section: null,
+  })
+  adobeDataLayer.push({
     event: "virtual_page_view",
     page_name: adobeAnalyticsRouteToPageName(route, queryParams),
     site_section: ADOBE_ANALYTICS_SITE_SECTION,
