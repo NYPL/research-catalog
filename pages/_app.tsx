@@ -11,7 +11,9 @@ function App({ Component, pageProps }) {
   // Track page views to Adobe Analytics
   useEffect(() => {
     const path = router.asPath
+    console.log(router.pathname)
     const queryString = path.slice(path.indexOf("?"))
+    console.log(queryString)
     trackVirtualPageView(router.pathname, queryString)
   }, [router.asPath, router.pathname])
 
