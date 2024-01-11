@@ -24,11 +24,11 @@ function App({ Component, pageProps }) {
       trackVirtualPageView(url)
     }
     // When the component is mounted, subscribe to router changes
-    // and log those page views
+    // and track those page views
     router.events.on("routeChangeComplete", handleRouteChange)
 
     // If the component is unmounted, unsubscribe
-    // from the event with the `off` method
+    // from the event with the "off" method
     return () => {
       router.events.off("routeChangeComplete", handleRouteChange)
     }
