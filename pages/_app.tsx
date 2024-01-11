@@ -10,6 +10,12 @@ function App({ Component, pageProps }) {
   // Prevents double-firing of useEffect on initial page load
   // const initialized = useRef(false)
 
+  // TODO: The code below is a verbose solution for page view tracking
+  // in Adobe Analytics that guarantees that page views will only be sent
+  // on the first app render or on Next route changes.
+  // We should determine if the simple useEffect solution is reliable enough for
+  // page view tracking.
+
   // Track initial page view to Adobe Analytics
   // useEffect(() => {
   //   if (!initialized.current) {
