@@ -4,6 +4,11 @@
   dl > dt,
   dl > dd {
     border: none;
+    ol {
+      // list-style-type: none;
+      list-style: none;
+      padding-left: 0;
+    }
   }
 
   border-bottom: none;
