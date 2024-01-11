@@ -1,6 +1,6 @@
 import {
   Link as DSLink,
-  DSProvider,
+  Heading,
   List,
 } from "@nypl/design-system-react-components"
 import styles from "../../../styles/components/BibDetails.module.scss"
@@ -12,6 +12,41 @@ import type {
   SubjectHeadingDetail,
 } from "../../types/bibTypes"
 import { displayRtl, isItTheLastElement } from "../../utils/bibDetailUtils"
+
+interface BibDetailsProps {
+  details: BibDetail[] | LinkedBibDetail[]
+  heading?: string
+}
+
+const BibDetails = ({ details, heading }: BibDetailsProps) => {
+  return (
+    details?.length > 0 && (
+      <>
+        {heading && <Heading level="three">{heading}</Heading>}
+        <List
+          type="dl"
+          className={styles.bibDetails}
+          sx={{ borderBottom: "none" }}
+        >
+          {details.map(
+            (detail: BibDetail | LinkedBibDetail | SubjectHeadingDetail) => {
+              if (!detail) return
+              if (detail.label === "Subjects") {
+                return buildCompoundSubjectHeadingElement(
+                  detail as SubjectHeadingDetail
+                )
+              } else if ("link" in detail) {
+                return buildLinkedElement(detail as LinkedBibDetail)
+              } else {
+                return buildDetailElement(detail as BibDetail)
+              }
+            }
+          )}
+        </List>
+      </>
+    )
+  )
+}
 
 const buildDetailElement = (field: BibDetail) => {
   return (
@@ -33,34 +68,12 @@ const buildDetailElement = (field: BibDetail) => {
   )
 }
 
-const buildSingleSubjectHeadingElement = (subjectHeadingUrls: Url[]) => {
-  const urls = subjectHeadingUrls.reduce((linksPerSubject, url: Url, index) => {
-    // Push a divider in between the link elements
-    const divider = (
-      <>
-        <span data-testid="divider" key={`divider-${index}`}>
-          {" "}
-          &gt;{" "}
-        </span>
-      </>
-    )
-    const link = linkElement(url, "internal")
-    linksPerSubject.push(link)
-    if (!isItTheLastElement(index, subjectHeadingUrls)) {
-      linksPerSubject.push(divider)
-    }
-    return linksPerSubject
-  }, [] as React.JSX.Element[])
-  return urls
-}
-
 const buildCompoundSubjectHeadingElement = (field: SubjectHeadingDetail) => {
   const subjectHeadingLinksPerSubject = field.value.map(
     (subjectHeadingUrls: Url[]) => {
       return buildSingleSubjectHeadingElement(subjectHeadingUrls)
     }
   )
-
   return (
     <>
       <dt>{field.label}</dt>
@@ -74,6 +87,25 @@ const buildCompoundSubjectHeadingElement = (field: SubjectHeadingDetail) => {
       </dd>
     </>
   )
+}
+
+const buildSingleSubjectHeadingElement = (subjectHeadingUrls: Url[]) => {
+  const urls = subjectHeadingUrls.reduce((linksPerSubject, url: Url, index) => {
+    // Push a divider in between the link elements
+    const divider = (
+      <span data-testid="divider" key={`divider-${index}`}>
+        {" "}
+        &gt;{" "}
+      </span>
+    )
+    const link = linkElement(url, "internal")
+    linksPerSubject.push(link)
+    if (!isItTheLastElement(index, subjectHeadingUrls)) {
+      linksPerSubject.push(divider)
+    }
+    return linksPerSubject
+  }, [] as React.JSX.Element[])
+  return urls
 }
 
 const buildLinkedElement = (field: LinkedBibDetail) => {
@@ -104,36 +136,6 @@ const linkElement = (url: Url, linkType: string) => {
     <Link dir={stringDirection} href={url.url} key={url.url}>
       {url.urlLabel}
     </Link>
-  )
-}
-
-interface BibDetailsProps {
-  details: BibDetail[] | LinkedBibDetail[]
-}
-const BibDetails = ({ details }: BibDetailsProps) => {
-  return (
-    <DSProvider>
-      <List
-        type="dl"
-        className={styles.bibDetails}
-        sx={{ borderBottom: "none" }}
-      >
-        {details.map(
-          (detail: BibDetail | LinkedBibDetail | SubjectHeadingDetail) => {
-            if (!detail) return
-            if (detail.label === "Subjects") {
-              return buildCompoundSubjectHeadingElement(
-                detail as SubjectHeadingDetail
-              )
-            } else if ("link" in detail) {
-              return buildLinkedElement(detail as LinkedBibDetail)
-            } else {
-              return buildDetailElement(detail as BibDetail)
-            }
-          }
-        )}
-      </List>
-    </DSProvider>
   )
 }
 
