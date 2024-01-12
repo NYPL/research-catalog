@@ -1,4 +1,3 @@
-import Head from "next/head"
 import {
   Heading,
   SimpleGrid,
@@ -7,11 +6,13 @@ import {
   CardContent,
   Link,
 } from "@nypl/design-system-react-components"
+import Head from "next/head"
 
 import Layout from "../src/components/Layout/Layout"
 import RCLink from "../src/components/RCLink/RCLink"
 import { SITE_NAME } from "../src/config/constants"
 import { appConfig } from "../src/config/config"
+import initializePatronTokenAuth from "../src/server/auth"
 
 export default function Home() {
   return (
@@ -156,4 +157,18 @@ export default function Home() {
       </Layout>
     </>
   )
+}
+
+export async function getServerSideProps({ req }) {
+  // Every page that needs patron data must call initializePatronTokenAuth
+  // to find if the token is valid and what the patron id is.
+  const patronTokenResponse = await initializePatronTokenAuth(req)
+  // Now it can be used to get patron data from Sierra or Platform API
+  // or use `isTokenValid` to redirect to login page if it's not valid.
+  console.log("patronTokenResponse is", patronTokenResponse)
+
+  // return props object
+  return {
+    props: {},
+  }
 }
