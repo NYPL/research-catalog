@@ -12,7 +12,7 @@ import type {
   SubjectHeadingDetail,
 } from "../../types/bibTypes"
 import { displayRtl, isItTheLastElement } from "../../utils/bibDetailUtils"
-import { ReactNode } from "react"
+import type { ReactNode } from "react"
 
 interface BibDetailsProps {
   details: BibDetail[] | LinkedBibDetail[]
@@ -22,30 +22,28 @@ interface BibDetailsProps {
 const BibDetails = ({ details, heading }: BibDetailsProps) => {
   return (
     details?.length > 0 && (
-      <>
-        {heading && <Heading level="three">{heading}</Heading>}
-        <List
-          noStyling
-          type="dl"
-          className={styles.bibDetails}
-          sx={{ borderBottom: "none" }}
-        >
-          {details.map(
-            (detail: BibDetail | LinkedBibDetail | SubjectHeadingDetail) => {
-              if (!detail) return
-              if (detail.label === "Subjects") {
-                return buildCompoundSubjectHeadingElement(
-                  detail as SubjectHeadingDetail
-                )
-              } else if ("link" in detail) {
-                return buildLinkedElement(detail as LinkedBibDetail)
-              } else {
-                return buildNoLinkElement(detail as BibDetail)
-              }
+      <List
+        title={heading && <Heading level="three">{heading}</Heading>}
+        noStyling
+        type="dl"
+        className={styles.bibDetails}
+        sx={{ borderBottom: "none" }}
+      >
+        {details.map(
+          (detail: BibDetail | LinkedBibDetail | SubjectHeadingDetail) => {
+            if (!detail) return
+            if (detail.label === "Subjects") {
+              return buildCompoundSubjectHeadingElement(
+                detail as SubjectHeadingDetail
+              )
+            } else if ("link" in detail) {
+              return buildLinkedElement(detail as LinkedBibDetail)
+            } else {
+              return buildPlainTextElement(detail as BibDetail)
             }
-          )}
-        </List>
-      </>
+          }
+        )}
+      </List>
     )
   )
 }
@@ -63,7 +61,7 @@ const buildDetailElement = (label: string, listChildren: ReactNode[]) => {
   )
 }
 
-const buildNoLinkElement = (field: BibDetail) => {
+const buildPlainTextElement = (field: BibDetail) => {
   const values = field.value.map((val: string, i: number) => {
     const stringDirection = displayRtl(val)
     return (
@@ -92,6 +90,7 @@ const buildCompoundSubjectHeadingElement = (field: SubjectHeadingDetail) => {
 const buildSingleSubjectHeadingElement = (subjectHeadingUrls: Url[]) => {
   const urls = subjectHeadingUrls.reduce((linksPerSubject, url: Url, index) => {
     const divider = (
+      // this span will render as > in between the divided subject heading links
       <span data-testid="divider" key={`divider-${index}`}>
         {" "}
         &gt;{" "}
