@@ -1075,7 +1075,7 @@ describe("pickupTimeEstimator", () => {
               "2023-12-11T21:00:00+00:00"
             )
           ).estimate
-        ).toBe("Tuesday (12/12) by 11:00am")
+        ).toBe(`Tuesday (12/12) by 11:00am${tzNote}`)
       })
     })
 
