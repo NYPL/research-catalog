@@ -12,6 +12,7 @@ import type {
   SubjectHeadingDetail,
 } from "../../types/bibTypes"
 import { displayRtl, isItTheLastElement } from "../../utils/bibDetailUtils"
+import { ReactNode } from "react"
 
 interface BibDetailsProps {
   details: BibDetail[] | LinkedBibDetail[]
@@ -24,6 +25,7 @@ const BibDetails = ({ details, heading }: BibDetailsProps) => {
       <>
         {heading && <Heading level="three">{heading}</Heading>}
         <List
+          noStyling
           type="dl"
           className={styles.bibDetails}
           sx={{ borderBottom: "none" }}
@@ -38,7 +40,7 @@ const BibDetails = ({ details, heading }: BibDetailsProps) => {
               } else if ("link" in detail) {
                 return buildLinkedElement(detail as LinkedBibDetail)
               } else {
-                return buildDetailElement(detail as BibDetail)
+                return buildNoLinkElement(detail as BibDetail)
               }
             }
           )}
@@ -48,24 +50,29 @@ const BibDetails = ({ details, heading }: BibDetailsProps) => {
   )
 }
 
-const buildDetailElement = (field: BibDetail) => {
+const buildDetailElement = (label: string, listChildren: ReactNode[]) => {
   return (
     <>
-      <dt>{field.label}</dt>
+      <dt>{label}</dt>
       <dd>
-        <List data-testId={`${field.label}`} type="ol">
-          {field.value.map((val: string, i: number) => {
-            const stringDirection = displayRtl(val)
-            return (
-              <li dir={stringDirection} key={i}>
-                {val}
-              </li>
-            )
-          })}
+        <List noStyling data-testId={label} type="ol">
+          {listChildren}
         </List>
       </dd>
     </>
   )
+}
+
+const buildNoLinkElement = (field: BibDetail) => {
+  const values = field.value.map((val: string, i: number) => {
+    const stringDirection = displayRtl(val)
+    return (
+      <li dir={stringDirection} key={i}>
+        {val}
+      </li>
+    )
+  })
+  return buildDetailElement(field.label, values)
 }
 
 const buildCompoundSubjectHeadingElement = (field: SubjectHeadingDetail) => {
@@ -74,20 +81,12 @@ const buildCompoundSubjectHeadingElement = (field: SubjectHeadingDetail) => {
       return buildSingleSubjectHeadingElement(subjectHeadingUrls)
     }
   )
-  return (
-    <>
-      <dt>{field.label}</dt>
-      <dd>
-        <List type="ol">
-          {subjectHeadingLinksPerSubject.map((subject, i) => (
-            <li key={`subject-heading-${i}`} data-testid="subjectLinksPer">
-              {subject}
-            </li>
-          ))}
-        </List>
-      </dd>
-    </>
-  )
+  const values = subjectHeadingLinksPerSubject.map((subject, i) => (
+    <li key={`subject-heading-${i}`} data-testid="subjectLinksPer">
+      {subject}
+    </li>
+  ))
+  return buildDetailElement(field.label, values)
 }
 
 const buildSingleSubjectHeadingElement = (subjectHeadingUrls: Url[]) => {
@@ -110,21 +109,10 @@ const buildSingleSubjectHeadingElement = (subjectHeadingUrls: Url[]) => {
 
 const buildLinkedElement = (field: LinkedBibDetail) => {
   const internalOrExternal = field.link
-  return (
-    <>
-      <dt>{field.label}</dt>
-      <dd>
-        {field.value.map((urlInfo: Url, i: number) => {
-          return (
-            <>
-              {linkElement(urlInfo, internalOrExternal)}
-              {!isItTheLastElement(i, field.value) && <br />}
-            </>
-          )
-        })}
-      </dd>
-    </>
-  )
+  const values = field.value.map((urlInfo: Url, i) => {
+    return <li key={i}>{linkElement(urlInfo, internalOrExternal)}</li>
+  })
+  return buildDetailElement(field.label, values)
 }
 
 const linkElement = (url: Url, linkType: string) => {
