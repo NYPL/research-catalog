@@ -1,4 +1,4 @@
-import type { SearchResult } from "../types/searchTypes"
+import type { SearchResult, Note } from "../types/searchTypes"
 
 const getGroupedNotes = (bib: SearchResult) => {
   const note = bib?.note?.length ? bib.note : null
@@ -7,11 +7,8 @@ const getGroupedNotes = (bib: SearchResult) => {
   /**
    * getNoteType(note)
    * Construct label for a note by adding the word 'Note'
-   *
-   * @param {object} note
-   * @return {string}
    */
-  const getNoteType = (note) => {
+  const getNoteType = (note: Note) => {
     const type = note.noteType || ""
     return type.toLowerCase().includes("note") ? type : `${type} (note)`
   }
@@ -59,12 +56,8 @@ const combineMatching = (el1, el2) =>
  * Example: interleaveParallel ([1, 2, null, 3], [5,6,7,8,9]) =>
  * [1,5,2,6,7,3,8,9].
  * Assumes that arr2 is at least as long as arr1.
- *
- * @param {array} arr1
- * @param {array} arr2
- * @return {array}
  */
-const interleaveParallel = (arr1, arr2) =>
+const interleaveParallel = (arr1: string[], arr2: string[]) =>
   arr2.reduce((acc, el, id) => {
     if (arr1[id]) {
       acc.push(combineMatching(arr1[id], el))
@@ -79,9 +72,7 @@ const interleaveParallel = (arr1, arr2) =>
  * matchParallels(bib)
  * Given a bib object returns a new copy of the bib in which fields with parallels have been rewritten
  * The new rewritten field interleaves the parallel field and the paralleled (i.e. original) field together.
- * Skips over subject fields since these require changes to SHEP
- * @param {object} bib
- * @return {object}
+ * Skips over subject fields since these require changes to SHEP.
  */
 const matchParallels = (bib: SearchResult) => {
   const parallelFieldMatches = Object.keys(bib).map((key) => {

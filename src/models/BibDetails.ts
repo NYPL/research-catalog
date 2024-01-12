@@ -15,6 +15,77 @@ export default class BibDetailsModel {
     this.bib = preProcess(bib)
     // this.subjectLiteral = "to do investigate  subject heading api fallback scenario"
   }
+  get holdingsDetails() {
+    const holdings = this.bib.holdings
+    if (!holdings) return []
+    return [
+      { label: "Location", field: "location" },
+      { label: "Format", field: "format" },
+      { label: "Call Number", field: "shelfMark" },
+      { label: "Library Has", field: "holdingStatement" },
+      { label: "Notes", field: "notes" },
+    ]
+      .map((fieldMapping) => {
+        const detail = this.buildHoldingDetail(fieldMapping)
+        return detail
+      })
+      .filter((f) => f)
+  }
+  get topDetails() {
+    return [
+      { field: "titleDisplay", label: "Title" },
+      { field: "publicationStatement", label: "Published By" },
+      // external link
+      { field: "supplementaryContent", label: "Supplementary Content" },
+      // internal link
+      { field: "creatorLiteral", label: "Author" },
+    ]
+      .map((fieldMapping) => {
+        let detail
+        if (fieldMapping.field === "supplementaryContent")
+          detail = this.supplementaryContent
+        else if (fieldMapping.field === "creatorLiteral")
+          detail = this.buildInternalLinkedDetail(fieldMapping)
+        else detail = this.buildStandardDetail(fieldMapping)
+        if (!detail) return
+        return detail
+      })
+      .filter((f) => f)
+  }
+  get bottomDetails() {
+    return [
+      { field: "contributorLiteral", label: "Additional Authors" },
+      { field: "partOf", label: "Found In" },
+      { field: "serialPublicationDates", label: "Publication Date" },
+      { field: "extent", label: "Description" },
+      { field: "description", label: "Summary" },
+      { field: "donor", label: "Donor/Sponsor" },
+      { field: "seriesStatement", label: "Series Statement" },
+      { field: "uniformTitle", label: "Uniform Title" },
+      { field: "titleAlt", label: "Alternative Title" },
+      { field: "formerTitle", label: "Former Title" },
+      { field: "subjectLiteral", label: "Subjects" },
+      { field: "genreForm", label: "Genre/Form" },
+      { field: "notes", label: "Notes" },
+      { field: "tableOfContents", label: "Contents" },
+      { field: "shelfMark", label: "Call Number" },
+      { field: "isbn", label: "ISBN" },
+      { field: "issn", label: "ISSN" },
+      { field: "oclc", label: "OCLC" },
+      { field: "lccn", label: "LCCN" },
+    ]
+      .map((fieldMapping) => {
+        let detail
+        if (fieldMapping.field === "contributorLiteral")
+          detail = this.buildInternalLinkedDetail(fieldMapping)
+        else if (fieldMapping.field === "subjectLiteral")
+          detail = this.subjectHeadings
+        else if (fieldMapping.field === "extent") detail = this.extent
+        else detail = this.buildStandardDetail(fieldMapping)
+        return detail
+      })
+      .filter((f) => f)
+  }
 
   buildHoldingDetail(fieldMapping: FieldMapping) {
     const bibFieldValue = this.bib.holdings[fieldMapping.field]
@@ -92,43 +163,6 @@ export default class BibDetailsModel {
     }
   }
 
-  get topDetails() {
-    return [
-      { field: "titleDisplay", label: "Title" },
-      { field: "publicationStatement", label: "Published By" },
-      // external link
-      { field: "supplementaryContent", label: "Supplementary Content" },
-      // internal link
-      { field: "creatorLiteral", label: "Author" },
-    ]
-      .map((fieldMapping) => {
-        let detail
-        if (fieldMapping.field === "supplementaryContent")
-          detail = this.supplementaryContent
-        else if (fieldMapping.field === "creatorLiteral")
-          detail = this.buildInternalLinkedDetail(fieldMapping)
-        else detail = this.buildStandardDetail(fieldMapping)
-        if (!detail) return
-        return detail
-      })
-      .filter((f) => f)
-  }
-
-  /**
-   * constructSubjectHeadingsArray(url)
-   * Creates an array of subject headings from a URL string, broken up
-   * by `>` and divided by `--`.
-   */
-  constructSubjectHeadingsArray(subject: string) {
-    let currentArrayString = ""
-
-    return subject.split(" -- ").map((urlString, index) => {
-      const dashDivided = index !== 0 ? " -- " : ""
-      currentArrayString = `${currentArrayString}${dashDivided}${urlString}`
-
-      return currentArrayString
-    })
-  }
   get subjectHeadings() {
     const subjectLiteralUrls = this.bib.subjectLiteral.map(
       (subject: string) => {
@@ -155,55 +189,14 @@ export default class BibDetailsModel {
     }
   }
 
-  get holdingsDetails() {
-    const holdings = this.bib.holdings
-    if (!holdings) return []
-    return [
-      { label: "Location", field: "location" },
-      { label: "Format", field: "format" },
-      { label: "Call Number", field: "shelfMark" },
-      { label: "Library Has", field: "holdingStatement" },
-      { label: "Notes", field: "notes" },
-    ]
-      .map((fieldMapping) => {
-        const detail = this.buildHoldingDetail(fieldMapping)
-        return detail
-      })
-      .filter((f) => f)
-  }
+  constructSubjectHeadingsArray(subject: string) {
+    let currentArrayString = ""
 
-  get bottomDetails() {
-    return [
-      { field: "contributorLiteral", label: "Additional Authors" },
-      { field: "partOf", label: "Found In" },
-      { field: "serialPublicationDates", label: "Publication Date" },
-      { field: "extent", label: "Description" },
-      { field: "description", label: "Summary" },
-      { field: "donor", label: "Donor/Sponsor" },
-      { field: "seriesStatement", label: "Series Statement" },
-      { field: "uniformTitle", label: "Uniform Title" },
-      { field: "titleAlt", label: "Alternative Title" },
-      { field: "formerTitle", label: "Former Title" },
-      { field: "subjectLiteral", label: "Subjects" },
-      { field: "genreForm", label: "Genre/Form" },
-      { field: "notes", label: "Notes" },
-      { field: "tableOfContents", label: "Contents" },
-      { field: "shelfMark", label: "Call Number" },
-      { field: "isbn", label: "ISBN" },
-      { field: "issn", label: "ISSN" },
-      { field: "oclc", label: "OCLC" },
-      { field: "lccn", label: "LCCN" },
-    ]
-      .map((fieldMapping) => {
-        let detail
-        if (fieldMapping.field === "contributorLiteral")
-          detail = this.buildInternalLinkedDetail(fieldMapping)
-        else if (fieldMapping.field === "subjectLiteral")
-          detail = this.subjectHeadings
-        else if (fieldMapping.field === "extent") detail = this.extent
-        else detail = this.buildStandardDetail(fieldMapping)
-        return detail
-      })
-      .filter((f) => f)
+    return subject.split(" -- ").map((urlString, index) => {
+      const dashDivided = index !== 0 ? " -- " : ""
+      currentArrayString = `${currentArrayString}${dashDivided}${urlString}`
+
+      return currentArrayString
+    })
   }
 }

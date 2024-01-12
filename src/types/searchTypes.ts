@@ -109,7 +109,7 @@ export interface SearchFormEvent {
   materialType?: SearchFormField
 }
 
-interface Note {
+export interface Note {
   "@type": string
   noteType: string
   prefLabel: string
