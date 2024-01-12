@@ -1,8 +1,12 @@
 @import "../utils/mixins";
 
-// .bibDetails {
-//   dl > dt,
-//   dl > dd {
-//     border: none;
-//   }
-// }
+.bibDetails {
+  border-bottom: none;
+  dl > dt,
+  dl > dd {
+    border: none;
+  }
+  h3 {
+    border: none;
+  }
+}
