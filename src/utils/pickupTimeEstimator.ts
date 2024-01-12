@@ -122,15 +122,28 @@ export const getPickupTimeEstimate = async (
   )
   rationale.push({
     time: destinationServiceTime,
-    activity: `Destination (${deliveryLocationId}) service time given ${formatDateAndTime(new Date(arrivalAtDestination)).time} arrival`
+    activity: `Destination (${deliveryLocationId}) service time given ${
+      formatDateAndTime(new Date(arrivalAtDestination)).time
+    } arrival`,
   })
 
   // Adjust to special delivery schedules for special rooms:
-  const { hasSpecialDeliverySchedule } = adjustToSpecialSchedule(deliveryLocationId, destinationServiceTime)
+  const { hasSpecialDeliverySchedule } = adjustToSpecialSchedule(
+    deliveryLocationId,
+    destinationServiceTime
+  )
 
   // If delivered to a scholar room and requested at least 30mins before opening, skip travel time:
-  const openingHours = await getNextServiceHours(deliveryLocationId, destinationServiceTime)
-  const skipOnsiteTravelTime = hasSpecialDeliverySchedule && timestampIsLTE(arrivalAtDestination, addMinutes(openingHours.startTime, -30))
+  const openingHours = await getNextServiceHours(
+    deliveryLocationId,
+    destinationServiceTime
+  )
+  const skipOnsiteTravelTime =
+    hasSpecialDeliverySchedule &&
+    timestampIsLTE(
+      arrivalAtDestination,
+      addMinutes(openingHours.startTime, -30)
+    )
 
   let arrivalAtHoldshelf = destinationServiceTime
 
@@ -144,9 +157,15 @@ export const getPickupTimeEstimate = async (
 
   if (hasSpecialDeliverySchedule) {
     let specialDeliveryRationale
-    ; ({ arrivalAtHoldshelf, rationale: specialDeliveryRationale } = adjustToSpecialSchedule(deliveryLocationId, arrivalAtHoldshelf))
+    ;({ arrivalAtHoldshelf, rationale: specialDeliveryRationale } =
+      adjustToSpecialSchedule(deliveryLocationId, arrivalAtHoldshelf))
     rationale = rationale.concat(specialDeliveryRationale)
-    rationale.push({ time: arrivalAtHoldshelf, activity: "Adjusted to special delivery schedule" + (skipOnsiteTravelTime ? " (Skipped on-site travel time.)" : "" )})
+    rationale.push({
+      time: arrivalAtHoldshelf,
+      activity:
+        "Adjusted to special delivery schedule" +
+        (skipOnsiteTravelTime ? " (Skipped on-site travel time.)" : ""),
+    })
   }
 
   // Return the specific `time` and a human readable `estimate` string
@@ -214,8 +233,8 @@ export const addOnsiteTravelDuration = async (serviceTime, locationId) => {
 }
 
 type AdjustToSpecialSchedule = {
-  hasSpecialDeliverySchedule: boolean,
-  arrivalAtHoldshelf: string,
+  hasSpecialDeliverySchedule: boolean
+  arrivalAtHoldshelf: string
   rationale: RationaleEntry[]
 }
 
@@ -223,10 +242,11 @@ type AdjustToSpecialSchedule = {
  *  Given a location id and a timestamp string, returns a new timestamp string
  *  representing the future delivery time for the location given the known
  *  delivery schedule.
- *
- *  TODO: Implement
  */
-export const adjustToSpecialSchedule = (locationId, time): AdjustToSpecialSchedule => {
+export const adjustToSpecialSchedule = (
+  locationId,
+  time
+): AdjustToSpecialSchedule => {
   let hasSpecialDeliverySchedule = false
   const adjustedSpecialScheduleTime = new Date(time)
   const secondFloorScholarRooms = ["mal17", "mala", "malc", "maln", "malw"]
@@ -238,9 +258,11 @@ export const adjustToSpecialSchedule = (locationId, time): AdjustToSpecialSchedu
   // so that the evaluated next delivery for something avail at 10am sharp is 10am
   const specialFudgeMs = -1
   const offsetMs =
-    1000 * 60 * (adjustedSpecialScheduleTime.getTimezoneOffset() - 60 * nyOffset())
-    - adjustedSpecialScheduleTime.getMilliseconds()
-    + specialFudgeMs
+    1000 *
+      60 *
+      (adjustedSpecialScheduleTime.getTimezoneOffset() - 60 * nyOffset()) -
+    adjustedSpecialScheduleTime.getMilliseconds() +
+    specialFudgeMs
 
   // adjust time to simulate being in New York
   adjustedSpecialScheduleTime.setTime(
@@ -248,9 +270,7 @@ export const adjustToSpecialSchedule = (locationId, time): AdjustToSpecialSchedu
   )
 
   const loggableTimestamp = (date) => {
-    return (new Date(
-      date.getTime() - offsetMs + specialFudgeMs
-    )).toISOString()
+    return new Date(date.getTime() - offsetMs + specialFudgeMs).toISOString()
   }
 
   const rationale = []
@@ -268,7 +288,7 @@ export const adjustToSpecialSchedule = (locationId, time): AdjustToSpecialSchedu
       // should be data driven.
       return day > 1 ? 18 : 16
     }
-    getNextHour = (hour) => 2 * (Math.floor(hour / 2 + 1))
+    getNextHour = (hour) => 2 * Math.floor(hour / 2 + 1)
   }
 
   if (mapRooms.includes(locationId)) {
@@ -282,33 +302,43 @@ export const adjustToSpecialSchedule = (locationId, time): AdjustToSpecialSchedu
       // Tues/Wed last delivery 5pm (8pm close), other days 3pm last delivery
       return day === 2 || day === 3 ? 17 : 15
     }
-    getNextHour = (hour) => 2 * (Math.floor(hour / 2 + 0.5)) + 1
+    getNextHour = (hour) => 2 * Math.floor(hour / 2 + 0.5) + 1
   }
 
   if (hasSpecialDeliverySchedule) {
     const nextHour = getNextHour(adjustedSpecialScheduleTime.getHours())
     // set to next hour
     adjustedSpecialScheduleTime.setHours(nextHour, 0, 0, 0)
-    rationale.push({ time: loggableTimestamp(adjustedSpecialScheduleTime), activity: `Next available delivery: ${nextHour}`})
+    rationale.push({
+      time: loggableTimestamp(adjustedSpecialScheduleTime),
+      activity: `Next available delivery: ${nextHour}`,
+    })
 
     // set to day to next day if after last hour
-    if (adjustedSpecialScheduleTime.getHours() > getLastHour(adjustedSpecialScheduleTime)) {
+    if (
+      adjustedSpecialScheduleTime.getHours() >
+      getLastHour(adjustedSpecialScheduleTime)
+    ) {
       adjustedSpecialScheduleTime.setDate(
         adjustedSpecialScheduleTime.getDate() + 1
       )
 
       const firstHour = getFirstHour(adjustedSpecialScheduleTime)
-      adjustedSpecialScheduleTime.setHours(
-        firstHour, 0, 0, 0
-      )
-      rationale.push({ time: loggableTimestamp(adjustedSpecialScheduleTime), activity: "Rolled forward to next scheduled delivery day"})
+      adjustedSpecialScheduleTime.setHours(firstHour, 0, 0, 0)
+      rationale.push({
+        time: loggableTimestamp(adjustedSpecialScheduleTime),
+        activity: "Rolled forward to next scheduled delivery day",
+      })
     }
 
     // set to first hour if before first hour
     const firstHour = getFirstHour(adjustedSpecialScheduleTime)
     if (firstHour > adjustedSpecialScheduleTime.getHours()) {
       adjustedSpecialScheduleTime.setHours(firstHour, 0, 0, 0)
-      rationale.push({ time: loggableTimestamp(adjustedSpecialScheduleTime), activity: "Rolled forward to next first scheduled delivery of the day"})
+      rationale.push({
+        time: loggableTimestamp(adjustedSpecialScheduleTime),
+        activity: "Rolled forward to next first scheduled delivery of the day",
+      })
     }
   }
 
@@ -322,7 +352,7 @@ export const adjustToSpecialSchedule = (locationId, time): AdjustToSpecialSchedu
   return {
     hasSpecialDeliverySchedule,
     arrivalAtHoldshelf,
-    rationale
+    rationale,
   }
 }
 

@@ -106,40 +106,40 @@ const HOURS = {
       day: "Thursday",
       startTime: "2023-06-01T14:00:00+00:00",
       endTime: "2023-06-01T23:00:00+00:00",
-      today: true
+      today: true,
     },
     {
       day: "Friday",
       startTime: "2023-06-02T14:00:00+00:00",
       endTime: "2023-06-02T23:00:00+00:00",
-      nextDeliverableDay: true
+      nextDeliverableDay: true,
     },
     {
       day: "Saturday",
       startTime: "2023-06-03T14:00:00+00:00",
-      endTime: "2023-06-03T23:00:00+00:00"
+      endTime: "2023-06-03T23:00:00+00:00",
     },
     {
       day: "Monday",
       startTime: "2023-06-05T14:00:00+00:00",
-      endTime: "2023-06-05T23:00:00+00:00"
+      endTime: "2023-06-05T23:00:00+00:00",
     },
     {
       day: "Monday",
       startTime: "2023-12-11T14:00:00+00:00",
-      endTime: "2023-12-11T23:00:00+00:00"
+      endTime: "2023-12-11T23:00:00+00:00",
     },
     {
       day: "Tuesday",
       startTime: "2023-06-06T14:00:00+00:00",
-      endTime: "2023-06-06T20:00:00+00:00"
+      endTime: "2023-06-06T20:00:00+00:00",
     },
     {
       day: "Wednesday",
       startTime: "2023-06-07T14:00:00+00:00",
-      endTime: "2023-06-07T20:00:00+00:00"
-    }
-  ]
+      endTime: "2023-06-07T20:00:00+00:00",
+    },
+  ],
 }
 
 jest.mock("../../../pages/api/locations", () => {
@@ -573,7 +573,7 @@ describe("pickupTimeEstimator", () => {
   })
 
   describe("makeFriendly", () => {
-    it("considers 45-59minutes to be \"in an hour\"", () => {
+    it('considers 45-59minutes to be "in an hour"', () => {
       mockNowTimestamp = "2023-06-01T14:30:00.000Z"
       expect(estimator.makeFriendly("2023-06-01T15:15:00.000Z")).toBe(
         "in an hour"
@@ -593,21 +593,21 @@ describe("pickupTimeEstimator", () => {
       )
     })
 
-    it("renders dates happening tomorrow as \"tomorrow\"", () => {
+    it('renders dates happening tomorrow as "tomorrow"', () => {
       mockNowTimestamp = "2023-06-01T14:30:00.000Z"
       expect(estimator.makeFriendly("2023-06-02T14:30:00.000Z")).toBe(
         `tomorrow (6/2) by 10:30am${tzNote}`
       )
     })
 
-    it("renders dates happening today within 45 minutes as \"today by approximately ...\"", () => {
+    it('renders dates happening today within 45 minutes as "today by approximately ..."', () => {
       mockNowTimestamp = "2023-06-01T14:30:00.000Z"
       expect(estimator.makeFriendly("2023-06-01T15:05:00.000Z")).toBe(
         `today by approximately 11:15am${tzNote}`
       )
     })
 
-    it("renders dates happening today within 45 minutes as \"today by approximately ...\"", () => {
+    it('renders dates happening today within 45 minutes as "today by approximately ..."', () => {
       mockNowTimestamp = "2023-06-01T15:10:00.000Z"
       expect(
         estimator.makeFriendly("2023-06-01T15:10:00.000Z", {
@@ -1065,11 +1065,17 @@ describe("pickupTimeEstimator", () => {
 
       it("correctly adjusts to special locations", async () => {
         mockNowTimestamp = "2023-12-10T23:00:00+00:00"
-        window.nyOffsets = [
-          { from: "2023-11-05T06:00:00.000Z", offset: 5 }
-        ]
-        expect((await estimator.getPickupTimeEstimate(item, "mapp8", "phys", "2023-12-11T21:00:00+00:00")).estimate)
-        .toBe("Tuesday (12/12) by 11:00am")
+        window.nyOffsets = [{ from: "2023-11-05T06:00:00.000Z", offset: 5 }]
+        expect(
+          (
+            await estimator.getPickupTimeEstimate(
+              item,
+              "mapp8",
+              "phys",
+              "2023-12-11T21:00:00+00:00"
+            )
+          ).estimate
+        ).toBe("Tuesday (12/12) by 11:00am")
       })
     })
 
@@ -1079,7 +1085,7 @@ describe("pickupTimeEstimator", () => {
       beforeEach(() => {
         window.nyOffsets = [
           { from: "2023-03-10T06:00:00.000Z", offset: 4 },
-          { from: "2023-11-05T06:00:00.000Z", offset: 5 }
+          { from: "2023-11-05T06:00:00.000Z", offset: 5 },
         ]
       })
 
@@ -1087,176 +1093,226 @@ describe("pickupTimeEstimator", () => {
         it("updates correctly on Monday just before first delivery", async () => {
           // Expect an item ready at 10:59am to be delivered at 11am
           dateString = "2023-06-05T14:59:00+00:00"
-          expect((estimator.adjustToSpecialSchedule("mapp8", dateString)).arrivalAtHoldshelf)
-            .toBe("2023-06-05T15:00:00.000Z")
+          expect(
+            estimator.adjustToSpecialSchedule("mapp8", dateString)
+              .arrivalAtHoldshelf
+          ).toBe("2023-06-05T15:00:00.000Z")
         })
 
         it("updates correctly on Monday precisely at first delivery", async () => {
           // Expect an item ready at precisely 11am to be delivered at 11am
           dateString = "2023-06-05T15:00:00+00:00"
-          expect((estimator.adjustToSpecialSchedule("mapp8", dateString)).arrivalAtHoldshelf)
-            .toBe("2023-06-05T15:00:00.000Z")
+          expect(
+            estimator.adjustToSpecialSchedule("mapp8", dateString)
+              .arrivalAtHoldshelf
+          ).toBe("2023-06-05T15:00:00.000Z")
         })
 
         it("updates correctly on Monday after first delivery", async () => {
           // Expect an item ready at 11:01am to be delivered at 1pm
           dateString = "2023-06-05T15:01:00+00:00"
-          expect((estimator.adjustToSpecialSchedule("mapp8", dateString)).arrivalAtHoldshelf)
-            .toBe("2023-06-05T17:00:00.000Z")
+          expect(
+            estimator.adjustToSpecialSchedule("mapp8", dateString)
+              .arrivalAtHoldshelf
+          ).toBe("2023-06-05T17:00:00.000Z")
         })
 
         it("updates correctly on Monday at even times", async () => {
           // Expect an item ready at 12pm Mon to be delivered at 1pm
           dateString = "2023-06-05T16:00:00+00:00"
-          expect((estimator.adjustToSpecialSchedule("mapp8", dateString)).arrivalAtHoldshelf)
-            .toBe("2023-06-05T17:00:00.000Z")
+          expect(
+            estimator.adjustToSpecialSchedule("mapp8", dateString)
+              .arrivalAtHoldshelf
+          ).toBe("2023-06-05T17:00:00.000Z")
         })
 
         it("updates correctly on Monday at even off-hour times", async () => {
           // Expect an item ready at 12:10pm Mon to be delivered at 1pm
           dateString = "2023-06-05T16:10:00+00:00"
-          expect((estimator.adjustToSpecialSchedule("mapp8", dateString)).arrivalAtHoldshelf)
-            .toBe("2023-06-05T17:00:00.000Z")
+          expect(
+            estimator.adjustToSpecialSchedule("mapp8", dateString)
+              .arrivalAtHoldshelf
+          ).toBe("2023-06-05T17:00:00.000Z")
         })
 
         it("updates correctly on Monday just before closing", async () => {
           // Expect an item ready at 2:59pm Mon to be delivered at 3pm
           dateString = "2023-06-05T18:59:00+00:00"
-          expect((estimator.adjustToSpecialSchedule("mapp8", dateString)).arrivalAtHoldshelf)
-            .toBe("2023-06-05T19:00:00.000Z")
+          expect(
+            estimator.adjustToSpecialSchedule("mapp8", dateString)
+              .arrivalAtHoldshelf
+          ).toBe("2023-06-05T19:00:00.000Z")
         })
 
         it("updates correctly on Monday precisely at last delivery", async () => {
           // Expect an item ready at precisely 3pm Mon to be delivered at 3pm
           dateString = "2023-06-05T19:00:00+00:00"
-          expect((estimator.adjustToSpecialSchedule("mapp8", dateString)).arrivalAtHoldshelf)
-            .toBe("2023-06-05T19:00:00.000Z")
+          expect(
+            estimator.adjustToSpecialSchedule("mapp8", dateString)
+              .arrivalAtHoldshelf
+          ).toBe("2023-06-05T19:00:00.000Z")
         })
 
         it("updates correctly on Monday after last delivery", async () => {
           // Expect an item ready at 3:01pm Mon (last delivery 3pm) to be delivered 11am Tues
           dateString = "2023-06-05T19:01:00+00:00"
-          expect((estimator.adjustToSpecialSchedule("mapp8", dateString)).arrivalAtHoldshelf)
-            .toBe("2023-06-06T15:00:00.000Z")
+          expect(
+            estimator.adjustToSpecialSchedule("mapp8", dateString)
+              .arrivalAtHoldshelf
+          ).toBe("2023-06-06T15:00:00.000Z")
         })
 
         it("updates correctly on Tuesday just before opening", async () => {
           // Expect an item ready at 10:59am to be delivered at 11am
           dateString = "2023-06-06T14:59:00+00:00"
-          expect((estimator.adjustToSpecialSchedule("mapp8", dateString)).arrivalAtHoldshelf)
-            .toBe("2023-06-06T15:00:00.000Z")
+          expect(
+            estimator.adjustToSpecialSchedule("mapp8", dateString)
+              .arrivalAtHoldshelf
+          ).toBe("2023-06-06T15:00:00.000Z")
         })
 
         it("updates correctly on Tuesday at opening", async () => {
           // Expect an item ready at precisely 11am Tues to be delivered at 11am
           dateString = "2023-06-06T15:00:00+00:00"
-          expect((estimator.adjustToSpecialSchedule("mapp8", dateString)).arrivalAtHoldshelf)
-            .toBe("2023-06-06T15:00:00.000Z")
+          expect(
+            estimator.adjustToSpecialSchedule("mapp8", dateString)
+              .arrivalAtHoldshelf
+          ).toBe("2023-06-06T15:00:00.000Z")
         })
 
         it("updates correctly on Tuesday after first delivery", async () => {
           // Expect an item ready at 11:01am Tues to be delivered at 1pm
           dateString = "2023-06-06T15:01:00+00:00"
-          expect((estimator.adjustToSpecialSchedule("mapp8", dateString)).arrivalAtHoldshelf)
-            .toBe("2023-06-06T17:00:00.000Z")
+          expect(
+            estimator.adjustToSpecialSchedule("mapp8", dateString)
+              .arrivalAtHoldshelf
+          ).toBe("2023-06-06T17:00:00.000Z")
         })
 
         it("updates correctly on Tuesday after 3", async () => {
           // Expect an item ready at 3:15pm to be delivered at 5pm
           dateString = "2023-06-06T19:15:00+00:00"
-          expect((estimator.adjustToSpecialSchedule("mapp8", dateString)).arrivalAtHoldshelf)
-            .toBe("2023-06-06T21:00:00.000Z")
+          expect(
+            estimator.adjustToSpecialSchedule("mapp8", dateString)
+              .arrivalAtHoldshelf
+          ).toBe("2023-06-06T21:00:00.000Z")
         })
 
         it("updates correctly on Tuesday just before last delivery", async () => {
           // Expect an item ready at 4:59pm Tues to be delivered at 5pm
           dateString = "2023-06-06T20:59:00+00:00"
-          expect((estimator.adjustToSpecialSchedule("mapp8", dateString)).arrivalAtHoldshelf)
-            .toBe("2023-06-06T21:00:00.000Z")
+          expect(
+            estimator.adjustToSpecialSchedule("mapp8", dateString)
+              .arrivalAtHoldshelf
+          ).toBe("2023-06-06T21:00:00.000Z")
         })
 
         it("updates correctly on Tuesday at closing", async () => {
           // Expect an item ready at precisely last delivery of 5pm to be delivered at 5pm
           dateString = "2023-06-06T21:00:00+00:00"
-          expect((estimator.adjustToSpecialSchedule("mapp8", dateString)).arrivalAtHoldshelf)
-            .toBe("2023-06-06T21:00:00.000Z")
+          expect(
+            estimator.adjustToSpecialSchedule("mapp8", dateString)
+              .arrivalAtHoldshelf
+          ).toBe("2023-06-06T21:00:00.000Z")
         })
 
         it("updates correctly on Tuesday after last delivery", async () => {
           // Expect an item ready at 5:01pm Tues to be delivered Wed 11am
           dateString = "2023-06-06T21:01:00+00:00"
-          expect((estimator.adjustToSpecialSchedule("mapp8", dateString)).arrivalAtHoldshelf)
-            .toBe("2023-06-07T15:00:00.000Z")
+          expect(
+            estimator.adjustToSpecialSchedule("mapp8", dateString)
+              .arrivalAtHoldshelf
+          ).toBe("2023-06-07T15:00:00.000Z")
         })
 
         it("updates correctly on Wednesday just before first delivery", async () => {
           // Expect an item ready at 10:59am Wed to be delivered at 11am
           dateString = "2023-06-07T14:59:00+00:00"
-          expect((estimator.adjustToSpecialSchedule("mapp8", dateString)).arrivalAtHoldshelf)
-            .toBe("2023-06-07T15:00:00.000Z")
+          expect(
+            estimator.adjustToSpecialSchedule("mapp8", dateString)
+              .arrivalAtHoldshelf
+          ).toBe("2023-06-07T15:00:00.000Z")
         })
 
         it("updates correctly on Wednesday at opening", async () => {
           // Expect an item ready precisely at first delivery Wed to be delivered at 11am
           dateString = "2023-06-07T15:00:00+00:00"
-          expect((estimator.adjustToSpecialSchedule("mapp8", dateString)).arrivalAtHoldshelf)
-            .toBe("2023-06-07T15:00:00.000Z")
+          expect(
+            estimator.adjustToSpecialSchedule("mapp8", dateString)
+              .arrivalAtHoldshelf
+          ).toBe("2023-06-07T15:00:00.000Z")
         })
 
         it("updates correctly on Wednesday after first delivery", async () => {
           // Expect an item ready at 11:01am Wed to be delivered at 1pm
           dateString = "2023-06-07T15:01:00+00:00"
-          expect((estimator.adjustToSpecialSchedule("mapp8", dateString)).arrivalAtHoldshelf)
-            .toBe("2023-06-07T17:00:00.000Z")
+          expect(
+            estimator.adjustToSpecialSchedule("mapp8", dateString)
+              .arrivalAtHoldshelf
+          ).toBe("2023-06-07T17:00:00.000Z")
         })
 
         it("updates correctly on Wednesday after 3", async () => {
           // Expect an item ready at 3:15 Wed to be delivered at 5pm:
           dateString = "2023-06-07T19:15:00+00:00"
-          expect((estimator.adjustToSpecialSchedule("mapp8", dateString)).arrivalAtHoldshelf)
-            .toBe("2023-06-07T21:00:00.000Z")
+          expect(
+            estimator.adjustToSpecialSchedule("mapp8", dateString)
+              .arrivalAtHoldshelf
+          ).toBe("2023-06-07T21:00:00.000Z")
         })
 
         it("updates correctly on Wednesday just before last delivery", async () => {
           // Expect an item ready at 4:59pm Wed (7pm close) to be delivered at 5pm
           dateString = "2023-06-07T20:59:00+00:00"
-          expect((estimator.adjustToSpecialSchedule("mapp8", dateString)).arrivalAtHoldshelf)
-            .toBe("2023-06-07T21:00:00.000Z")
+          expect(
+            estimator.adjustToSpecialSchedule("mapp8", dateString)
+              .arrivalAtHoldshelf
+          ).toBe("2023-06-07T21:00:00.000Z")
         })
 
         it("updates correctly on Wednesday at closing", async () => {
           // Expect an item ready just before closing Wed 7:59pm (8pm close) to be ready 11am Thurs
           dateString = "2023-06-07T23:59:59+00:00"
-          expect((estimator.adjustToSpecialSchedule("mapp8", dateString)).arrivalAtHoldshelf)
-            .toBe("2023-06-08T15:00:00.000Z")
+          expect(
+            estimator.adjustToSpecialSchedule("mapp8", dateString)
+              .arrivalAtHoldshelf
+          ).toBe("2023-06-08T15:00:00.000Z")
         })
 
         it("updates correctly on Wednesday close to closing", async () => {
           // Expect an item ready at 5:01pm sharp Wed (8pm close) to be ready by Thurs 11am
           dateString = "2023-06-07T21:01:00+00:00"
-          expect((estimator.adjustToSpecialSchedule("mapp8", dateString)).arrivalAtHoldshelf)
-            .toBe("2023-06-08T15:00:00.000Z")
+          expect(
+            estimator.adjustToSpecialSchedule("mapp8", dateString)
+              .arrivalAtHoldshelf
+          ).toBe("2023-06-08T15:00:00.000Z")
         })
 
         it("updates correctly on Thursday after closing", async () => {
           // Expect an item ready by 5:01pm Thurs (7pm close) to be delivered at 11am Fri
           dateString = "2023-06-08T21:01:00+00:00"
-          expect((estimator.adjustToSpecialSchedule("mapp8", dateString)).arrivalAtHoldshelf)
-            .toBe("2023-06-09T15:00:00.000Z")
+          expect(
+            estimator.adjustToSpecialSchedule("mapp8", dateString)
+              .arrivalAtHoldshelf
+          ).toBe("2023-06-09T15:00:00.000Z")
         })
 
         it("updates correctly on Saturday after closing", async () => {
           // Expect an item ready by 3:01pm Sat (closing 7pm) to be delivered Sun 1pm (opening 1pm)
           dateString = "2023-06-10T19:01:00+00:00"
-          expect((estimator.adjustToSpecialSchedule("mapp8", dateString)).arrivalAtHoldshelf)
-            .toBe("2023-06-11T17:00:00.000Z")
+          expect(
+            estimator.adjustToSpecialSchedule("mapp8", dateString)
+              .arrivalAtHoldshelf
+          ).toBe("2023-06-11T17:00:00.000Z")
         })
 
         it("updates correctly on Sunday before opening", async () => {
           // Expect an item ready by 2pm Sun (opening 1pm, historically) to be delivered at 3pm
           dateString = "2023-06-11T18:00:00+00:00"
-          expect((estimator.adjustToSpecialSchedule("mapp8", dateString)).arrivalAtHoldshelf)
-            .toBe("2023-06-11T19:00:00.000Z")
+          expect(
+            estimator.adjustToSpecialSchedule("mapp8", dateString)
+              .arrivalAtHoldshelf
+          ).toBe("2023-06-11T19:00:00.000Z")
         })
       })
 
@@ -1264,83 +1320,107 @@ describe("pickupTimeEstimator", () => {
         it("updates correctly on Tuesday just before opening", async () => {
           // Expect an item ready at 9:59am Tues to be delivered at 10am
           dateString = "2023-06-06T13:59:00+00:00"
-          expect((estimator.adjustToSpecialSchedule("mala", dateString)).arrivalAtHoldshelf)
-            .toBe("2023-06-06T14:00:00.000Z")
+          expect(
+            estimator.adjustToSpecialSchedule("mala", dateString)
+              .arrivalAtHoldshelf
+          ).toBe("2023-06-06T14:00:00.000Z")
         })
 
         it("updates correctly on Tuesday at opening", async () => {
           // Expect an item ready at 10am precisely to be delivered at 10am
           dateString = "2023-06-06T14:00:00+00:00"
-          expect((estimator.adjustToSpecialSchedule("mala", dateString)).arrivalAtHoldshelf)
-            .toBe("2023-06-06T14:00:00.000Z")
+          expect(
+            estimator.adjustToSpecialSchedule("mala", dateString)
+              .arrivalAtHoldshelf
+          ).toBe("2023-06-06T14:00:00.000Z")
         })
 
         it("updates correctly on Tuesday just after opening", async () => {
           // Expect an item ready at 10:01am Tues to be delivered at 12pm
           dateString = "2023-06-06T14:01:00+00:00"
-          expect((estimator.adjustToSpecialSchedule("mala", dateString)).arrivalAtHoldshelf)
-            .toBe("2023-06-06T16:00:00.000Z")
+          expect(
+            estimator.adjustToSpecialSchedule("mala", dateString)
+              .arrivalAtHoldshelf
+          ).toBe("2023-06-06T16:00:00.000Z")
         })
 
         it("updates correctly on Tuesday at odd hours", async () => {
           // Expect an item ready at 10:01am to be delivered at 12pm
           dateString = "2023-06-06T16:01:00+00:00"
-          expect((estimator.adjustToSpecialSchedule("mala", dateString)).arrivalAtHoldshelf)
-            .toBe("2023-06-06T18:00:00.000Z")
+          expect(
+            estimator.adjustToSpecialSchedule("mala", dateString)
+              .arrivalAtHoldshelf
+          ).toBe("2023-06-06T18:00:00.000Z")
         })
 
         it("updates correctly on Tuesday at even times off the hour", async () => {
           // Expect an item ready at 1:15pm Tues to be delivered at 2pm
           dateString = "2023-06-06T17:15:00+00:00"
-          expect((estimator.adjustToSpecialSchedule("mala", dateString)).arrivalAtHoldshelf)
-            .toBe("2023-06-06T18:00:00.000Z")
+          expect(
+            estimator.adjustToSpecialSchedule("mala", dateString)
+              .arrivalAtHoldshelf
+          ).toBe("2023-06-06T18:00:00.000Z")
         })
 
         it("updates correctly on Tuesday immediately before closing", async () => {
           // Expect an item ready at 6:59pm Tues to be delivered Wed 10am
           dateString = "2023-06-06T22:59:59+00:00"
-          expect((estimator.adjustToSpecialSchedule("mala", dateString)).arrivalAtHoldshelf)
-            .toBe("2023-06-07T14:00:00.000Z")
+          expect(
+            estimator.adjustToSpecialSchedule("mala", dateString)
+              .arrivalAtHoldshelf
+          ).toBe("2023-06-07T14:00:00.000Z")
         })
 
         it("updates correctly on Tuesday at closing", async () => {
           // Expect an item ready at precisely 7pm Tues to be delivered 10am Mon
           dateString = "2023-06-06T23:00:00+00:00"
-          expect((estimator.adjustToSpecialSchedule("mala", dateString)).arrivalAtHoldshelf)
-            .toBe("2023-06-07T14:00:00.000Z")
+          expect(
+            estimator.adjustToSpecialSchedule("mala", dateString)
+              .arrivalAtHoldshelf
+          ).toBe("2023-06-07T14:00:00.000Z")
         })
 
         it("updates correctly on Tuesday just after closing", async () => {
           // Expect a request just after at 7pm Tues to be delivered at 10am Wed
           dateString = "2023-06-06T23:01:00+00:00"
-          expect((estimator.adjustToSpecialSchedule("mala", dateString)).arrivalAtHoldshelf)
-            .toBe("2023-06-07T14:00:00.000Z")
+          expect(
+            estimator.adjustToSpecialSchedule("mala", dateString)
+              .arrivalAtHoldshelf
+          ).toBe("2023-06-07T14:00:00.000Z")
         })
 
         it("updates correctly on Saturday just after closing", async () => {
           // Expect a request at precisely 6pm Sat to be delivered at 6pm:
           dateString = "2023-06-10T22:00:00+00:00"
-          expect((estimator.adjustToSpecialSchedule("mala", dateString)).arrivalAtHoldshelf)
-            .toBe("2023-06-10T22:00:00.000Z")
+          expect(
+            estimator.adjustToSpecialSchedule("mala", dateString)
+              .arrivalAtHoldshelf
+          ).toBe("2023-06-10T22:00:00.000Z")
         })
 
         it("updates correctly on Sunday before opening", async () => {
           // Opening Sunday (historically) was 1pm. Expect an item theoretically ready at 10am to be served at 2pm
           dateString = "2023-06-11T14:00:00+00:00"
-          expect((estimator.adjustToSpecialSchedule("mala", dateString)).arrivalAtHoldshelf)
-            .toBe("2023-06-11T18:00:00.000Z")
+          expect(
+            estimator.adjustToSpecialSchedule("mala", dateString)
+              .arrivalAtHoldshelf
+          ).toBe("2023-06-11T18:00:00.000Z")
         })
 
         it("updates correctly on Sunday after closing", async () => {
           dateString = "2023-06-11T21:01:00+00:00"
-          expect((estimator.adjustToSpecialSchedule("mala", dateString)).arrivalAtHoldshelf)
-            .toBe("2023-06-12T14:00:00.000Z")
+          expect(
+            estimator.adjustToSpecialSchedule("mala", dateString)
+              .arrivalAtHoldshelf
+          ).toBe("2023-06-12T14:00:00.000Z")
         })
 
         it("updates correctly on Monday after closing", async () => {
           dateString = "2023-06-12T21:01:00+00:00"
-          expect((estimator.adjustToSpecialSchedule("mala", dateString)).arrivalAtHoldshelf)
-            .toBe("2023-06-13T14:00:00.000Z")
+          expect(
+            estimator.adjustToSpecialSchedule("mala", dateString)
+              .arrivalAtHoldshelf
+          ).toBe("2023-06-13T14:00:00.000Z")
         })
       })
     })
