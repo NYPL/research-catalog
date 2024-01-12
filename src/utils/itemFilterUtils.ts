@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import type { ItemFilterData } from "../models/itemFilterData"
+import type { ItemFilterData } from "../models/ItemFilterData"
 import type { AppliedFilters } from "../types/filterTypes"
 
 export const isRecapLocation = (loc: string) => {

@@ -62,7 +62,7 @@ export const searchResultPhysicalItems = {
         },
       ],
       eddRequestable: true,
-      formatLiteral: ["Text"],
+      formatLiteral: ["Format"],
       holdingLocation: [
         {
           "@id": "loc:mal82",
@@ -119,7 +119,7 @@ export const searchResultPhysicalItems = {
         },
       ],
       eddRequestable: true,
-      formatLiteral: ["Text"],
+      formatLiteral: ["Format"],
       holdingLocation: [
         {
           "@id": "loc:rc2ma",
@@ -177,7 +177,7 @@ export const searchResultPhysicalItems = {
   materialType: [
     {
       "@id": "resourcetypes:txt",
-      prefLabel: "Text",
+      prefLabel: "Material",
     },
   ],
   mediaType: [

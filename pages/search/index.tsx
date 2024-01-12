@@ -43,7 +43,6 @@ export default function Search({ results }) {
 
   // Map Search Results Elements from response to SearchResultBib objects
   const searchResultBibs = mapElementsToSearchResultsBibs(searchResultsElements)
-
   // Map DRB Works from response to DRBResult objects
   const drbResults = mapWorksToDRBResults(drbWorks)
 
@@ -151,6 +150,7 @@ export async function getServerSideProps({ resolvedUrl }) {
   // Remove everything before the query string delineator '?', necessary for correctly parsing the 'q' param.
   const queryString = resolvedUrl.slice(resolvedUrl.indexOf("?") + 1)
   const results = await fetchResults(mapQueryToSearchParams(parse(queryString)))
+
   return {
     props: {
       results: JSON.parse(JSON.stringify(results)),

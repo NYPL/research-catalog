@@ -3,7 +3,13 @@ import { render, screen, within } from "@testing-library/react"
 
 import Layout from "./Layout"
 
+// Mock next router
+jest.mock("next/router", () => jest.requireActual("next-router-mock"))
+
 describe("Layout", () => {
+  const searchLabel =
+    "Search by keyword, title, journal title, or author/contributor"
+
   it("should render an H1", () => {
     render(<Layout></Layout>)
 
@@ -20,11 +26,11 @@ describe("Layout", () => {
   })
   it("should show search", () => {
     render(<Layout activePage="search"></Layout>)
-    screen.getByRole("textbox")
+    screen.getByLabelText(searchLabel)
   })
   it("should show search bar on search page", () => {
     render(<Layout activePage="search"></Layout>)
-    screen.getByRole("textbox")
+    screen.getByLabelText(searchLabel)
   })
   it("should hide header on 404", () => {
     render(<Layout activePage="404"></Layout>)
