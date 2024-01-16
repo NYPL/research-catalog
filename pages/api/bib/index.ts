@@ -38,7 +38,7 @@ export async function fetchBib(
   const annotatedMarc =
     annotatedMarcResponse.status === "fulfilled" && annotatedMarcResponse.value
   try {
-    // If there's a problem with a bib, try to fetch from the Sierra API
+    // If there's a problem with a bib, try to fetch from the Sierra API and redirect to circulating catalog
     if (!bib || !bib.uri || !standardizedId.includes(bib.uri)) {
       // TODO: Check if this ID slicing is correct and if this redirect logic is still accurate
       const sierraBibResponse = await client.get(
@@ -46,7 +46,7 @@ export async function fetchBib(
       )
       if (sierraBibResponse.statusCode === 200) {
         return {
-          status: 301,
+          status: 307,
           redirectUrl: `${appConfig.externalUrls.circulatingCatalog}/iii/encore/record/C__R${standardizedId}`,
         }
       } else {
@@ -55,7 +55,7 @@ export async function fetchBib(
     } else if (id !== standardizedId) {
       // Redirect to Bib page with standardized version of the Bib ID
       return {
-        status: 301,
+        status: 307,
         redirectUrl: `/bib/${standardizedId}`,
       }
     }

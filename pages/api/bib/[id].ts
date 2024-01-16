@@ -22,7 +22,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   if (req.method === "GET") {
     switch (status) {
-      case 301:
+      case 307:
         redirectUrl ? res.redirect(redirectUrl) : res.redirect(PATHS["404"])
         break
       case 404:
