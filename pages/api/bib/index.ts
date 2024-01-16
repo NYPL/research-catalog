@@ -57,8 +57,6 @@ export async function fetchBib(
         new Error("There was a problem fetching the bib from Sierra")
       }
     }
-    // The Bib api in DFE added some additional pre-processing related to holdings and dimensions
-    // TODO: Refactor appendDimensionsToExtent and addHoldingDefinition and move them to the BibPage class
     return {
       bib,
       annotatedMarc: annotatedMarc?.bib || null,
