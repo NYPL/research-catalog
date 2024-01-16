@@ -13,7 +13,7 @@ import { mapQueryToBibParams } from "../../../src/utils/bibUtils"
  * result by calling fetchBib directly in getServerSideProps.
  */
 async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const id = Array.isArray(req.query.id) ? req.query.id[0] : req.query.id
+  const id = req.query.id as string
   const bibParams = mapQueryToBibParams(req.query)
   const { bib, annotatedMarc, status, redirectUrl } = await fetchBib(
     id,
