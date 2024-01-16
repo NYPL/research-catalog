@@ -17,6 +17,14 @@ export async function fetchBib(
 ): Promise<BibResponse> {
   const standardizedId = standardizeBibId(id)
 
+  // Redirect to Bib page with standardized version of the Bib ID
+  if (id !== standardizedId) {
+    return {
+      status: 307,
+      redirectUrl: `/bib/${standardizedId}`,
+    }
+  }
+
   const client = await nyplApiClient({ apiName: DISCOVERY_API_NAME })
   const [bibResponse, annotatedMarcResponse] = await Promise.allSettled([
     await client.get(
@@ -51,12 +59,6 @@ export async function fetchBib(
         }
       } else {
         new Error("There was a problem fetching the bib from Sierra")
-      }
-    } else if (id !== standardizedId) {
-      // Redirect to Bib page with standardized version of the Bib ID
-      return {
-        status: 307,
-        redirectUrl: `/bib/${standardizedId}`,
       }
     }
     return {
