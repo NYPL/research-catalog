@@ -59,4 +59,3 @@ export interface BibQueryParams {
   item_page?: number
   items_from?: number
 }
-
