@@ -11,7 +11,7 @@ import type {
   LinkedBibDetail,
   SubjectHeadingDetail,
 } from "../../types/bibTypes"
-import { displayRtl, isItTheLastElement } from "../../utils/bibDetailUtils"
+import { rtlOrLtr, isItTheLastElement } from "../../utils/bibUtils"
 import type { ReactNode } from "react"
 
 interface BibDetailsProps {
@@ -33,13 +33,13 @@ const BibDetails = ({ details, heading }: BibDetailsProps) => {
           (detail: BibDetail | LinkedBibDetail | SubjectHeadingDetail) => {
             if (!detail) return
             if (detail.label === "Subjects") {
-              return buildCompoundSubjectHeadingElement(
+              return CompoundSubjectHeadingElement(
                 detail as SubjectHeadingDetail
               )
             } else if ("link" in detail) {
-              return buildLinkedElement(detail as LinkedBibDetail)
+              return LinkedDetailElement(detail as LinkedBibDetail)
             } else {
-              return buildPlainTextElement(detail as BibDetail)
+              return PlainTextElement(detail as BibDetail)
             }
           }
         )}
@@ -48,7 +48,7 @@ const BibDetails = ({ details, heading }: BibDetailsProps) => {
   )
 }
 
-const buildDetailElement = (label: string, listChildren: ReactNode[]) => {
+const DetailElement = (label: string, listChildren: ReactNode[]) => {
   return (
     <>
       <dt>{label}</dt>
@@ -61,22 +61,22 @@ const buildDetailElement = (label: string, listChildren: ReactNode[]) => {
   )
 }
 
-const buildPlainTextElement = (field: BibDetail) => {
+const PlainTextElement = (field: BibDetail) => {
   const values = field.value.map((val: string, i: number) => {
-    const stringDirection = displayRtl(val)
+    const stringDirection = rtlOrLtr(val)
     return (
-      <li dir={stringDirection} key={i}>
+      <li dir={stringDirection} key={`${field}-${i}`}>
         {val}
       </li>
     )
   })
-  return buildDetailElement(field.label, values)
+  return DetailElement(field.label, values)
 }
 
-const buildCompoundSubjectHeadingElement = (field: SubjectHeadingDetail) => {
+const CompoundSubjectHeadingElement = (field: SubjectHeadingDetail) => {
   const subjectHeadingLinksPerSubject = field.value.map(
     (subjectHeadingUrls: Url[]) => {
-      return buildSingleSubjectHeadingElement(subjectHeadingUrls)
+      return SingleSubjectHeadingElement(subjectHeadingUrls)
     }
   )
   const values = subjectHeadingLinksPerSubject.map((subject, i) => (
@@ -84,10 +84,10 @@ const buildCompoundSubjectHeadingElement = (field: SubjectHeadingDetail) => {
       {subject}
     </li>
   ))
-  return buildDetailElement(field.label, values)
+  return DetailElement(field.label, values)
 }
 
-const buildSingleSubjectHeadingElement = (subjectHeadingUrls: Url[]) => {
+const SingleSubjectHeadingElement = (subjectHeadingUrls: Url[]) => {
   const urls = subjectHeadingUrls.reduce((linksPerSubject, url: Url, index) => {
     const divider = (
       // this span will render as > in between the divided subject heading links
@@ -96,7 +96,7 @@ const buildSingleSubjectHeadingElement = (subjectHeadingUrls: Url[]) => {
         &gt;{" "}
       </span>
     )
-    const link = linkElement(url, "internal")
+    const link = LinkElement(url, "internal")
     linksPerSubject.push(link)
     if (!isItTheLastElement(index, subjectHeadingUrls)) {
       linksPerSubject.push(divider)
@@ -106,19 +106,21 @@ const buildSingleSubjectHeadingElement = (subjectHeadingUrls: Url[]) => {
   return urls
 }
 
-const buildLinkedElement = (field: LinkedBibDetail) => {
+const LinkedDetailElement = (field: LinkedBibDetail) => {
   const internalOrExternal = field.link
   const values = field.value.map((urlInfo: Url, i) => {
-    return <li key={i}>{linkElement(urlInfo, internalOrExternal)}</li>
+    return (
+      <li key={`${field}-${i}`}>{LinkElement(urlInfo, internalOrExternal)}</li>
+    )
   })
-  return buildDetailElement(field.label, values)
+  return DetailElement(field.label, values)
 }
 
-const linkElement = (url: Url, linkType: string) => {
+const LinkElement = (url: Url, linkType: string) => {
   let Link
   if (linkType === "internal") Link = RCLink
   else if (linkType === "external") Link = DSLink
-  const stringDirection = displayRtl(url.urlLabel)
+  const stringDirection = rtlOrLtr(url.urlLabel)
   return (
     <Link dir={stringDirection} href={url.url} key={url.url}>
       {url.urlLabel}

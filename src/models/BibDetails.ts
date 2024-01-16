@@ -13,7 +13,6 @@ export default class BibDetailsModel {
     // Preprocessing includes grouping notes into an object with labels as keys,
     // as well as interleaving parallels into primary fields
     this.bib = preProcess(bib)
-    // this.subjectLiteral = "to do investigate  subject heading api fallback scenario"
   }
   get holdingsDetails() {
     const holdings = this.bib.holdings
@@ -25,10 +24,7 @@ export default class BibDetailsModel {
       { label: "Library Has", field: "holdingStatement" },
       { label: "Notes", field: "notes" },
     ]
-      .map((fieldMapping) => {
-        const detail = this.buildHoldingDetail(fieldMapping)
-        return detail
-      })
+      .map((fieldMapping) => this.buildHoldingDetail(fieldMapping))
       .filter((f) => f)
   }
   get topDetails() {
@@ -41,14 +37,11 @@ export default class BibDetailsModel {
       { field: "creatorLiteral", label: "Author" },
     ]
       .map((fieldMapping) => {
-        let detail
         if (fieldMapping.field === "supplementaryContent")
-          detail = this.supplementaryContent
+          return this.supplementaryContent
         else if (fieldMapping.field === "creatorLiteral")
-          detail = this.buildInternalLinkedDetail(fieldMapping)
-        else detail = this.buildStandardDetail(fieldMapping)
-        if (!detail) return
-        return detail
+          return this.buildInternalLinkedDetail(fieldMapping)
+        else return this.buildStandardDetail(fieldMapping)
       })
       .filter((f) => f)
   }
@@ -175,11 +168,10 @@ export default class BibDetailsModel {
         const splitSubjectHeadings = subject.split(" -- ")
         return splitSubjectHeadings.map((heading, index) => {
           const urlWithFilterQuery = `${filterQueryForSubjectHeading}${stackedSubjectHeadings[index]}`
-          const subjectHeadingUrl = {
+          return {
             url: urlWithFilterQuery,
             urlLabel: heading,
           }
-          return subjectHeadingUrl
         })
       }
     )
@@ -190,13 +182,18 @@ export default class BibDetailsModel {
   }
 
   constructSubjectHeadingsArray(subject: string) {
-    let currentArrayString = ""
+    // subject = "Italian food -- Spaghetti"
+    let stackedSubjectHeading = ""
 
-    return subject.split(" -- ").map((urlString, index) => {
-      const dashDivided = index !== 0 ? " -- " : ""
-      currentArrayString = `${currentArrayString}${dashDivided}${urlString}`
+    return subject
+      .split(" -- ") // ["Italian food", "spaghetti"]
+      .map((urlString, index) => {
+        const dashDivided = index !== 0 ? " -- " : ""
+        // First iteration "Italian food"
+        // Second iteration "Italian food -- spaghetti"
+        stackedSubjectHeading = `${stackedSubjectHeading}${dashDivided}${urlString}`
 
-      return currentArrayString
-    })
+        return stackedSubjectHeading
+      })
   }
 }

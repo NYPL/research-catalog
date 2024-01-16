@@ -2,8 +2,6 @@ import type { SearchResult, Note } from "../types/searchTypes"
 
 const getGroupedNotes = (bib: SearchResult) => {
   const note = bib?.note?.length ? bib.note : null
-  let notesGroupedByNoteType = {}
-
   /**
    * getNoteType(note)
    * Construct label for a note by adding the word 'Note'
@@ -12,27 +10,23 @@ const getGroupedNotes = (bib: SearchResult) => {
     const type = note.noteType || ""
     return type.toLowerCase().includes("note") ? type : `${type} (note)`
   }
-
-  if (!note) {
-    return notesGroupedByNoteType
-  }
   // Make sure we have at least one note
   if (note && Array.isArray(note)) {
     // Group notes by noteType:
-    notesGroupedByNoteType = note
-      // Make sure all notes are blanknodes:
-      .filter((note) => typeof note === "object")
-      .reduce((groups, note) => {
-        const noteType = getNoteType(note)
-        if (!groups[noteType]) {
-          groups[noteType] = []
-        }
-        groups[noteType].push(note.prefLabel)
-        return groups
-      }, {})
+    return (
+      note
+        // Make sure all notes are blanknodes:
+        .filter((note) => typeof note === "object")
+        .reduce((groups, note) => {
+          const noteType = getNoteType(note)
+          if (!groups[noteType]) {
+            groups[noteType] = []
+          }
+          groups[noteType].push(note.prefLabel)
+          return groups
+        }, {})
+    )
   }
-
-  return notesGroupedByNoteType
 }
 
 /**
