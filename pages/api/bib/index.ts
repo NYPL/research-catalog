@@ -17,23 +17,19 @@ export async function fetchBib(
 ): Promise<BibResponse> {
   const standardizedId = standardizeBibId(id)
 
-  // Redirect to Bib page with standardized version of the Bib ID
-  if (id !== standardizedId) {
-    return {
-      status: 301,
-      redirectUrl: `/bib/${standardizedId}`,
-    }
-  }
-
   const client = await nyplApiClient({ apiName: DISCOVERY_API_NAME })
   const [bibResponse, annotatedMarcResponse] = await Promise.allSettled([
     await client.get(
-      `${DISCOVERY_API_SEARCH_ROUTE}/${getBibQuery(id, bibParams)}`
+      `${DISCOVERY_API_SEARCH_ROUTE}/${getBibQuery(standardizedId, bibParams)}`
     ),
     // Don't fetch annotated-marc for partner records:
-    isNyplBibID(id) &&
+    isNyplBibID(standardizedId) &&
       (await client.get(
-        `${DISCOVERY_API_SEARCH_ROUTE}/${getBibQuery(id, bibParams, true)}`
+        `${DISCOVERY_API_SEARCH_ROUTE}/${getBibQuery(
+          standardizedId,
+          bibParams,
+          true
+        )}`
       )),
   ])
 
@@ -43,18 +39,24 @@ export async function fetchBib(
     annotatedMarcResponse.status === "fulfilled" && annotatedMarcResponse.value
   try {
     // If there's a problem with a bib, try to fetch from the Sierra API
-    if (!bib || !bib.uri || !id.includes(bib.uri)) {
+    if (!bib || !bib.uri || !standardizedId.includes(bib.uri)) {
       // TODO: Check if this ID slicing is correct and if this redirect logic is still accurate
       const sierraBibResponse = await client.get(
-        `/bibs/sierra-nypl/${id.slice(1)}`
+        `/bibs/sierra-nypl/${standardizedId.slice(1)}`
       )
       if (sierraBibResponse.statusCode === 200) {
         return {
           status: 301,
-          redirectUrl: `${appConfig.externalUrls.circulatingCatalog}/iii/encore/record/C__R${id}`,
+          redirectUrl: `${appConfig.externalUrls.circulatingCatalog}/iii/encore/record/C__R${standardizedId}`,
         }
       } else {
         new Error("There was a problem fetching the bib from Sierra")
+      }
+    } else if (id !== standardizedId) {
+      // Redirect to Bib page with standardized version of the Bib ID
+      return {
+        status: 301,
+        redirectUrl: `/bib/${standardizedId}`,
       }
     }
     return {
