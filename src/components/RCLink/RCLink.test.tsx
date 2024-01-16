@@ -6,10 +6,10 @@ import { MemoryRouterProvider } from "next-router-mock/MemoryRouterProvider"
 
 describe("RCLink", () => {
   it("can take an href", async () => {
-    render(<RCLink href="spaghetti">Spaghetti</RCLink>, {
+    render(<RCLink href="/spaghetti">Spaghetti</RCLink>, {
       wrapper: MemoryRouterProvider,
     })
-    const link = screen.getByRole("link")
+    const link = screen.getByText("Spaghetti")
     await act(async () => {
       await userEvent.click(link)
       expect(link).toHaveAttribute("href", "/spaghetti")
