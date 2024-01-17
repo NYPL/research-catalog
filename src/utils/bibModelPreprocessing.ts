@@ -30,34 +30,41 @@ const getGroupedNotes = (bib: SearchResult) => {
 }
 
 /**
- * combineMatching(el1, el2)
  * Combines properties from matching (i.e. parallel) elements as necessary
  * Right now, this is only needed to add the 'noteType' in case of parallel notes
  */
-
-const combineMatching = (el1, el2) =>
-  el2 && el2.noteType
-    ? { noteType: el2.noteType, "@type": el2["@type"], prefLabel: el1 }
-    : el1
+const combineMatching = (primaryValue: string, parallelValue: string | Note) =>
+  parallelValue && parallelValue["noteType"]
+    ? {
+        noteType: parallelValue["noteType"],
+        "@type": parallelValue["@type"],
+        prefLabel: primaryValue,
+      }
+    : primaryValue
 
 /**
- * interleaveParallel(arr1, arr2)
  * Given two arrays, returns the elements interleaved, with falsey elements removed.
  * Also combines data from matching elements when necessary.
  * Example: interleaveParallel ([1, 2, null, 3], [5,6,7,8,9]) =>
  * [1,5,2,6,7,3,8,9].
  * Assumes that arr2 is at least as long as arr1.
  */
-const interleaveParallel = (arr1: string[], arr2: string[]) =>
-  arr2.reduce((acc, el, id) => {
-    if (arr1[id]) {
-      acc.push(combineMatching(arr1[id], el))
+const interleaveParallel = (
+  primaries: string[],
+  parallels: string[] | Note[]
+) => {
+  const interleavedValues = []
+  parallels.map((parallelValue, i) => {
+    if (primaries[i]) {
+      interleavedValues.push(combineMatching(primaries[i], parallelValue))
     }
-    if (el) {
-      acc.push(el)
+    if (parallelValue) {
+      interleavedValues.push(parallelValue)
     }
-    return acc
-  }, [])
+    return interleavedValues
+  })
+  return interleavedValues
+}
 
 /**
  * matchParallels(bib)
