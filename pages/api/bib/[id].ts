@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 import { fetchBib } from "./index"
-import { PATHS } from "../../../src/config/constants"
+import { PATHS, BASE_URL } from "../../../src/config/constants"
 import { mapQueryToBibParams } from "../../../src/utils/bibUtils"
 
 /**
@@ -26,7 +26,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         res.redirect(redirectUrl)
         break
       case 404:
-        res.redirect(PATHS["404"])
+        res.redirect(BASE_URL + PATHS["404"])
         break
       default:
         res.status(200).json({

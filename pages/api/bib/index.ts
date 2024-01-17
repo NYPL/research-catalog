@@ -64,6 +64,16 @@ export async function fetchBib(
         }
       }
     }
+    // The Discovery API currently returns HTML in the bib attribute when it can't find a bib.
+    // TODO: Modify the error response in Discovery API to return a 404 status instead of an HTML string in the bib attribute
+    else if (typeof bib === "string") {
+      console.error(
+        "There was an error fetching the Bib from the Discovery API"
+      )
+      return {
+        status: 404,
+      }
+    }
     return {
       bib,
       annotatedMarc: annotatedMarc?.bib || null,
