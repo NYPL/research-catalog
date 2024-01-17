@@ -20,37 +20,43 @@ describe("Bib model", () => {
         value: [
           [
             {
-              url: filterQueryForSubjectHeading + "Authors, French",
+              url: `${filterQueryForSubjectHeading}${encodeURI(
+                "Authors, French"
+              )}`,
               urlLabel: "Authors, French",
             },
             {
-              url:
-                filterQueryForSubjectHeading +
-                "Authors, French -- 20th century",
+              url: `${filterQueryForSubjectHeading}${encodeURI(
+                "Authors, French -- 20th century"
+              )}`,
               urlLabel: "20th century",
             },
             {
-              url:
-                filterQueryForSubjectHeading +
-                "Authors, French -- 20th century -- Biography",
+              url: `${filterQueryForSubjectHeading}${encodeURI(
+                "Authors, French -- 20th century -- Biography"
+              )}`,
               urlLabel: "Biography",
             },
           ],
           [
             {
-              url: filterQueryForSubjectHeading + "Autobiographical Narrative",
+              url: `${filterQueryForSubjectHeading}${encodeURI(
+                "Autobiographical Narrative"
+              )}`,
               urlLabel: "Autobiographical Narrative",
             },
           ],
           [
             {
-              url: filterQueryForSubjectHeading + "Cortanze, Gérard de",
+              url: `${filterQueryForSubjectHeading}${encodeURI(
+                "Cortanze, Gérard de"
+              )}`,
               urlLabel: "Cortanze, Gérard de",
             },
             {
-              url:
-                filterQueryForSubjectHeading +
-                "Cortanze, Gérard de -- Childhood and youth",
+              url: `${filterQueryForSubjectHeading}${encodeURI(
+                "Cortanze, Gérard de -- Childhood and youth"
+              )}`,
               urlLabel: "Childhood and youth",
             },
           ],
@@ -166,7 +172,7 @@ describe("Bib model", () => {
         value: [
           {
             urlLabel: "Watson, Tom, 1965-",
-            url: "/search?filters[creatorLiteral][0]=Watson, Tom, 1965-",
+            url: "/search?filters[creatorLiteral][0]=Watson,%20Tom,%201965-",
           },
         ],
       })

@@ -1,4 +1,4 @@
-import userEvent from "@testing-library/user-event"
+// import userEvent from "@testing-library/user-event"
 import {
   bibWithSupplementaryContent,
   noParallels,
@@ -40,11 +40,15 @@ describe("BibDetail component", () => {
         wrapper: MemoryRouterProvider,
       })
       const creatorLiteralLink = screen.getByText("Cortanze, Gérard de.")
-      await userEvent.click(creatorLiteralLink)
-
-      expect(mockRouter.asPath).toBe(
-        "/search?filters%5BcreatorLiteral%5D%5B0%5D=Cortanze%2C+G%C3%A9rard+de."
+      expect(creatorLiteralLink).toHaveAttribute(
+        "href",
+        "/search?filters[creatorLiteral][0]=Cortanze,%20G%C3%A9rard%20de."
       )
+      // @TODO: This will work once the Nextjs `Link` component is used again
+      // await userEvent.click(creatorLiteralLink)
+      // expect(mockRouter.asPath).toBe(
+      //   "/search?filters%5BcreatorLiteral%5D%5B0%5D=Cortanze%2C+G%C3%A9rard+de."
+      // )
     })
     it("external link", async () => {
       render(<BibDetails details={suppBib.topDetails} />, {
@@ -81,17 +85,19 @@ describe("BibDetail component", () => {
       const authors20BioSubject = screen.getByText("Biography")
       expect(authorsSubject).toHaveAttribute(
         "href",
-        expect.stringContaining(encodeURI("Authors, French"))
+        `/search?filters[subjectLiteral]=${encodeURI("Authors, French")}`
       )
       expect(authors20Subject).toHaveAttribute(
         "href",
-        expect.stringContaining(encodeURI("Authors, French -- 20th century"))
+        `/search?filters[subjectLiteral]=${encodeURI(
+          "Authors, French -- 20th century"
+        )}`
       )
       expect(authors20BioSubject).toHaveAttribute(
         "href",
-        expect.stringContaining(
-          encodeURI("Authors, French -- 20th century -- Biography")
-        )
+        `/search?filters[subjectLiteral]=${encodeURI(
+          "Authors, French -- 20th century -- Biography"
+        )}`
       )
     })
   })
