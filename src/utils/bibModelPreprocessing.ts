@@ -54,14 +54,13 @@ const interleaveParallel = (
   parallels: string[] | Note[]
 ) => {
   const interleavedValues = []
-  parallels.map((parallelValue, i) => {
+  parallels.forEach((parallelValue, i) => {
     if (primaries[i]) {
       interleavedValues.push(combineMatching(primaries[i], parallelValue))
     }
     if (parallelValue) {
       interleavedValues.push(parallelValue)
     }
-    return interleavedValues
   })
   return interleavedValues
 }
