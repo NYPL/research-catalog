@@ -36,6 +36,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         break
     }
   }
+  if (req.method === "POST") {
+    res
+      .status(500)
+      .json({ error: "Please use a GET request for the Bib API endpoint" })
+  }
 }
 
 export default handler
