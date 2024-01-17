@@ -33,9 +33,6 @@ const getGroupedNotes = (bib: SearchResult) => {
  * combineMatching(el1, el2)
  * Combines properties from matching (i.e. parallel) elements as necessary
  * Right now, this is only needed to add the 'noteType' in case of parallel notes
- * @param {string} el1
- * @param {object} el2
- * @return {object}
  */
 
 const combineMatching = (el1, el2) =>
