@@ -13,7 +13,11 @@ import ElectronicResourcesLink from "./ElectronicResourcesLink"
 import ItemTable from "../ItemTable/ItemTable"
 import ItemTableData from "../../models/ItemTableData"
 import type SearchResultsBib from "../../models/SearchResultsBib"
-import { PATHS, ITEMS_PER_SEARCH_RESULT } from "../../config/constants"
+import {
+  PATHS,
+  ITEMS_PER_SEARCH_RESULT,
+  BASE_URL,
+} from "../../config/constants"
 
 interface SearchResultProps {
   bib: SearchResultsBib
@@ -44,7 +48,7 @@ const SearchResult = ({ bib }: SearchResultProps) => {
       }}
     >
       <CardHeading level="h3" size="heading4">
-        <RCLink href={`${PATHS.BIB}/${bib.id}`}>{bib.title}</RCLink>
+        <RCLink href={`${BASE_URL}${PATHS.BIB}/${bib.id}`}>{bib.title}</RCLink>
       </CardHeading>
       <CardContent>
         <Box sx={{ p: { display: "inline", marginRight: "s" } }}>
