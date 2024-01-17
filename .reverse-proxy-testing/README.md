@@ -4,23 +4,17 @@ This is for locally testing reverse-proxy configurations that map certain site a
 
 ## Requirements
 
- - Need [DFE](https://github.com/NYPl-discovery/discovery-front-end) cloned, installed, and configured
- - Need [RC](https://github.com/NYPL/research-catalog) (this app) cloned, installed, and configured
+ - Need [RC](https://github.com/NYPL/research-catalog) (this app) cloned, installed, and configured (ideally to QA)
  - Need nginx. To install, run `brew install nginx`
 
 ## Starting the reverse proxy
 
-1. Start DFE in a different terminal:
-   - Ensure `.env` has `NODE_ENV=production`
-   - Run `nvm use; npm run dist`
-   - Run `nvm start`
-   - Note the port
-2. Start RC in a different terminal:
-   - Run `nvm run dev`
-3. Start nginx:
-   - Ensure `./rc.conf` has the correct ports for DFE (3001?) and RC (8080?)
-   - Run `./restart-reverse-proxy.sh`
-4. Visit `https://localhost:8081/research/research-catalog`
+1. Start RC in a terminal:
+   - Run `npm run dev`
+3. Start nginx in a different terminal:
+   - Ensure `rc.conf` has the correct port for RC (8080?)
+   - Run `./.reverse-proxy-testing/restart-reverse-proxy.sh`
+4. Visit `http://localhost:8081/research/research-catalog`
 
 ### Restarting
 
@@ -36,7 +30,7 @@ Nginx will continue to listen for requests to `localhost:8081` until you stop it
 
 ## Mappings
 
-See [./rc.conf](rc.conf) for mappings. At writing, RC responsibilities are Home, Search, and Bib Details. DFE will handle SHEP, Account.
+See [./rc.conf](rc.conf) for mappings. At writing, RC responsibilities are Home, Search, and Bib Details. QA DFE will handle SHEP, Account.
 
 ### Known issues
 
