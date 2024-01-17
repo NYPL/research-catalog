@@ -58,7 +58,10 @@ export async function fetchBib(
           redirectUrl: `${appConfig.externalUrls.circulatingCatalog}/iii/encore/record/C__R${standardizedId}`,
         }
       } else {
-        new Error("There was a problem fetching the bib from Sierra")
+        console.error("There was a problem fetching the bib from Sierra")
+        return {
+          status: 404,
+        }
       }
     }
     return {
@@ -67,6 +70,7 @@ export async function fetchBib(
       status: 200,
     }
   } catch (error) {
+    console.error(error.message)
     return {
       status: 404,
     }
