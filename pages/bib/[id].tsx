@@ -37,7 +37,7 @@ export async function getServerSideProps({ params, resolvedUrl }) {
     case 307:
       return {
         redirect: {
-          destination: redirectUrl || PATHS["404"],
+          destination: redirectUrl,
           permanent: false,
         },
       }
