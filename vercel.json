@@ -1,8 +1,8 @@
 {
-  "redirects":[
+  "redirects": [
     {
-      "source":"/",
-      "destination":"/research/research-catalog"
+      "source": "/",
+      "destination": "/research/research-catalog"
     }
   ]
 }
