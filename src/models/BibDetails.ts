@@ -105,7 +105,9 @@ export default class BibDetailsModel {
       link: "internal",
       label: fieldMapping.label,
       value: value.map((v: string) => {
-        const internalUrl = `/search?filters[${fieldMapping.field}][0]=${v}`
+        const internalUrl = `/search?filters[${
+          fieldMapping.field
+        }][0]=${encodeURI(v)}`
         return { url: internalUrl, urlLabel: v }
       }),
     }
@@ -167,7 +169,9 @@ export default class BibDetailsModel {
         // splitSubjectHeadings: ["a", "b", "c"]
         const splitSubjectHeadings = subject.split(" -- ")
         return splitSubjectHeadings.map((heading, index) => {
-          const urlWithFilterQuery = `${filterQueryForSubjectHeading}${stackedSubjectHeadings[index]}`
+          const urlWithFilterQuery = `${filterQueryForSubjectHeading}${encodeURI(
+            stackedSubjectHeadings[index]
+          )}`
           return {
             url: urlWithFilterQuery,
             urlLabel: heading,
