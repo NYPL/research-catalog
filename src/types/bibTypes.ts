@@ -4,6 +4,23 @@ export interface ElectronicResource {
   prefLabel?: string
 }
 
+export interface BibResponse {
+  bib?: Bib
+  annotatedMarc?: []
+  status: 200 | 307 | 404
+  redirectUrl?: string
+}
+
+export interface Bib {
+  uri?: string
+}
+
+export interface BibParams {
+  itemsFrom?: number
+  itemFilterQuery?: string
+  features?: string[]
+}
+
 export interface SubjectHeadingDetail {
   value: Url[][]
   label: string
@@ -33,4 +50,12 @@ export interface Url {
 export interface FieldMapping {
   label: string
   field: string
+}
+
+/* eslint-disable @typescript-eslint/naming-convention */
+
+export interface BibQueryParams {
+  features?: string
+  item_page?: number
+  items_from?: number
 }
