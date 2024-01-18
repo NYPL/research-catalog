@@ -20,7 +20,7 @@ This is for locally testing reverse-proxy configurations that map certain site a
 
 After making changes to `rc.conf`, run:
 
-`./restart-reverse-proxy.sh`
+`./.reverse-proxy-testing/restart-reverse-proxy.sh`
 
 ### Stopping
 
