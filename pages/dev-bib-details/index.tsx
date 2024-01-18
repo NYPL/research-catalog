@@ -1,8 +1,8 @@
 import {
-  bibWithSupplementaryContent,
+  // bibWithSupplementaryContent,
   noParallels,
-  parallelsBib,
-  yiddishBib,
+  // parallelsBib,
+  // yiddishBib,
 } from "../../__test__/fixtures/bibFixtures"
 import BibDetails from "../../src/components/BibPage/BibDetail"
 import Layout from "../../src/components/Layout/Layout"
@@ -14,11 +14,17 @@ const BibPage = () => {
 
   return (
     <Layout>
-      {[topDetails, bottomDetails, holdingsDetails]
-        .filter((d) => d.length)
-        .map((details, i) => (
-          <BibDetails key={i} details={details} />
-        ))}
+      <BibDetails key="top-details" details={topDetails} />
+      <BibDetails
+        heading="Details"
+        key="bottom-details"
+        details={bottomDetails}
+      />
+      <BibDetails
+        heading="Holdings"
+        key="holdings-details"
+        details={holdingsDetails}
+      />
     </Layout>
   )
 }

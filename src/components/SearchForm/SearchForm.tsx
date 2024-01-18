@@ -5,7 +5,7 @@ import { useState } from "react"
 
 import styles from "../../../styles/components/Search.module.scss"
 import RCLink from "../RCLink/RCLink"
-import { getQueryString } from "../../utils/searchUtils"
+import { getSearchQuery } from "../../utils/searchUtils"
 import { BASE_URL, PATHS } from "../../config/constants"
 import EDSLink from "../EDSLink"
 
@@ -26,7 +26,7 @@ const SearchForm = () => {
       q: searchTerm,
       field: searchScope,
     }
-    const queryString = getQueryString(searchParams)
+    const queryString = getSearchQuery(searchParams)
 
     await router.push(`${PATHS.SEARCH}${queryString}`)
   }
