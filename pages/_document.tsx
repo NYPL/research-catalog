@@ -1,6 +1,4 @@
 import { Html, Head, Main, NextScript } from "next/document"
-import Script from "next/script"
-import { appConfig } from "../src/config/config"
 
 export default function Document() {
   return (
@@ -19,17 +17,6 @@ export default function Document() {
       </style>
       <Head>
         <meta name="description" content="Research Catalog | NYPL" />
-        <script async src={appConfig.adobeEmbedUrl[appConfig.environment]} />
-        <Script id="adobeDataLayerDefinition" strategy="beforeInteractive">
-          {`
-              // First define the global variable for the entire data layer array
-              window.adobeDataLayer = window.adobeDataLayer || [];
-              // Then push in the variables required in the Initial Data Layer Definition
-              window.adobeDataLayer.push({
-                disable_page_view: true
-              });
-           `}
-        </Script>
       </Head>
       <body>
         {/* NYPL Header script and container */}
