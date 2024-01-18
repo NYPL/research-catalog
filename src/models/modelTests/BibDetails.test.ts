@@ -215,7 +215,7 @@ describe("Bib model", () => {
     })
     it("can handle no parallels, and no notes", () => {
       const model = new BibDetailsModel(noParallels)
-      expect(model.bib.groupedNotes).toStrictEqual({})
+      expect(model.bib.groupedNotes).toBeUndefined
     })
   })
 })

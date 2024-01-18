@@ -1,5 +1,6 @@
 import type { BibParams, BibQueryParams } from "../types/bibTypes"
 import { ITEM_BATCH_SIZE } from "../config/constants"
+
 /**
  * standardizeBibId
  * Transforms bib id to have lower case prefix (b, hb, cb, pb) and trim check digit
@@ -20,6 +21,16 @@ export function standardizeBibId(bibId: string): string {
   }
   return bibId
 }
+
+export const rtlOrLtr = (value: string) => {
+  return isRtl(value) ? "rtl" : "ltr"
+}
+
+// The "\u200F" right-to-left mark is found at the beginning of fields known
+// to be written in a script that reads from right to left
+const isRtl = (value: string) => value.substring(0, 1) === "\u200F"
+
+export const isItTheLastElement = (i, array) => !(i < array.length - 1)
 
 /**
  * Given a bib ID (e.g. b12082323, pb123456, hb10000202040400) returns true

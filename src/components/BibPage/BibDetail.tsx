@@ -1,117 +1,130 @@
-import { Link as DSLink, List } from "@nypl/design-system-react-components"
-
+import {
+  Link as DSLink,
+  Heading,
+  List,
+} from "@nypl/design-system-react-components"
+import styles from "../../../styles/components/BibDetails.module.scss"
 import RCLink from "../RCLink/RCLink"
-
 import type {
   BibDetail,
   Url,
   LinkedBibDetail,
   SubjectHeadingDetail,
 } from "../../types/bibTypes"
-import { displayRtl } from "../../utils/bibDetailUtils"
+import { rtlOrLtr, isItTheLastElement } from "../../utils/bibUtils"
+import type { ReactNode } from "react"
 
-const buildDetailElement = (field: BibDetail) => {
+interface BibDetailsProps {
+  details: BibDetail[] | LinkedBibDetail[]
+  heading?: string
+}
+
+const BibDetails = ({ details, heading }: BibDetailsProps) => {
+  return (
+    details?.length > 0 && (
+      <List
+        title={heading && <Heading level="three">{heading}</Heading>}
+        noStyling
+        type="dl"
+        className={styles.bibDetails}
+        sx={{ borderBottom: "none" }}
+      >
+        {details.map(
+          (detail: BibDetail | LinkedBibDetail | SubjectHeadingDetail) => {
+            if (!detail) return
+            if (detail.label === "Subjects") {
+              return CompoundSubjectHeadingElement(
+                detail as SubjectHeadingDetail
+              )
+            } else if ("link" in detail) {
+              return LinkedDetailElement(detail as LinkedBibDetail)
+            } else {
+              return PlainTextElement(detail as BibDetail)
+            }
+          }
+        )}
+      </List>
+    )
+  )
+}
+
+const DetailElement = (label: string, listChildren: ReactNode[]) => {
   return (
     <>
-      <dt>{field.label}</dt>
+      <dt>{label}</dt>
       <dd>
-        <List data-testId={`${field.label}`} type="ol" noStyling>
-          {field.value.map((val: string, i: number) => {
-            const stringDirection = displayRtl(val)
-            return (
-              <li dir={stringDirection} key={i}>
-                {val}
-              </li>
-            )
-          })}
+        <List noStyling data-testId={label} type="ol">
+          {listChildren}
         </List>
       </dd>
     </>
   )
 }
 
-const buildSingleSubjectHeadingElement = (subjectHeadingUrls: Url[]) => {
+const PlainTextElement = (field: BibDetail) => {
+  const values = field.value.map((val: string, i: number) => {
+    const stringDirection = rtlOrLtr(val)
+    return (
+      <li dir={stringDirection} key={`${field}-${i}`}>
+        {val}
+      </li>
+    )
+  })
+  return DetailElement(field.label, values)
+}
+
+const CompoundSubjectHeadingElement = (field: SubjectHeadingDetail) => {
+  const subjectHeadingLinksPerSubject = field.value.map(
+    (subjectHeadingUrls: Url[]) => {
+      return SingleSubjectHeadingElement(subjectHeadingUrls)
+    }
+  )
+  const values = subjectHeadingLinksPerSubject.map((subject, i) => (
+    <li key={`subject-heading-${i}`} data-testid="subjectLinksPer">
+      {subject}
+    </li>
+  ))
+  return DetailElement(field.label, values)
+}
+
+const SingleSubjectHeadingElement = (subjectHeadingUrls: Url[]) => {
   const urls = subjectHeadingUrls.reduce((linksPerSubject, url: Url, index) => {
-    // Push a divider in between the link elements
     const divider = (
+      // this span will render as > in between the divided subject heading links
       <span data-testid="divider" key={`divider-${index}`}>
         {" "}
         &gt;{" "}
       </span>
     )
-    const link = linkElement(url, "internal")
+    const link = LinkElement(url, "internal")
     linksPerSubject.push(link)
-    if (index < subjectHeadingUrls.length - 1) linksPerSubject.push(divider)
+    if (!isItTheLastElement(index, subjectHeadingUrls)) {
+      linksPerSubject.push(divider)
+    }
     return linksPerSubject
   }, [] as React.JSX.Element[])
   return urls
 }
 
-const buildCompoundSubjectHeadingElement = (field: SubjectHeadingDetail) => {
-  const subjectHeadingLinksPerSubject = field.value.map(
-    (subjectHeadingUrls: Url[]) => {
-      return buildSingleSubjectHeadingElement(subjectHeadingUrls)
-    }
-  )
-  return (
-    <>
-      <dt>{field.label}</dt>
-      {subjectHeadingLinksPerSubject.map((subject, i) => (
-        <dd data-testid="subjectLinksPer" key={"subject-" + i}>
-          {subject}
-        </dd>
-      ))}
-    </>
-  )
-}
-
-const buildLinkedElement = (field: LinkedBibDetail) => {
+const LinkedDetailElement = (field: LinkedBibDetail) => {
   const internalOrExternal = field.link
-  return (
-    <>
-      <dt>{field.label}</dt>
-      <dd>
-        {field.value.map((urlInfo: Url) => {
-          return linkElement(urlInfo, internalOrExternal)
-        })}
-      </dd>
-    </>
-  )
+  const values = field.value.map((urlInfo: Url, i) => {
+    return (
+      <li key={`${field}-${i}`}>{LinkElement(urlInfo, internalOrExternal)}</li>
+    )
+  })
+  return DetailElement(field.label, values)
 }
 
-const linkElement = (url: Url, linkType: string) => {
+const LinkElement = (url: Url, linkType: string) => {
   let Link
   if (linkType === "internal") Link = RCLink
   else if (linkType === "external") Link = DSLink
-  const stringDirection = displayRtl(url.urlLabel)
+  const stringDirection = rtlOrLtr(url.urlLabel)
   return (
     <Link dir={stringDirection} href={url.url} key={url.url}>
       {url.urlLabel}
     </Link>
-  )
-}
-
-interface BibDetailsProps {
-  details: BibDetail[] | LinkedBibDetail[]
-}
-const BibDetails = ({ details }: BibDetailsProps) => {
-  return (
-    <List type="dl">
-      {details.map(
-        (detail: BibDetail | LinkedBibDetail | SubjectHeadingDetail) => {
-          if (!detail) return
-          if (detail.label === "Subjects") {
-            return buildCompoundSubjectHeadingElement(
-              detail as SubjectHeadingDetail
-            )
-          } else if ("link" in detail) {
-            return buildLinkedElement(detail as LinkedBibDetail)
-          } else {
-            return buildDetailElement(detail as BibDetail)
-          }
-        }
-      )}
-    </List>
   )
 }
 
