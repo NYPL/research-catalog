@@ -76,11 +76,18 @@ const Layout = ({
                     text: "Research Catalog",
                   },
                 ]}
+                __css={{
+                  a: {
+                    _focus: {
+                      outlineColor: "ui.white",
+                    },
+                  },
+                }}
               />
               <div className={styles.researchHeadingContainer}>
                 <Heading id="heading-h1" level="h1" text="Research Catalog" />
                 <SubNav activePage={activePage} />
-                {showSearch && <SearchForm loading={loading} />}
+                {showSearch && <SearchForm />}
               </div>
             </>
           )

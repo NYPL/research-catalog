@@ -1,3 +1,5 @@
+import type { ItemLocationEndpoint } from "../../src/types/itemTypes"
+
 export const itemPhysicallyRequestable = {
   "@id": "res:i10572545",
   "@type": ["bf:Item"],
@@ -16,6 +18,7 @@ export const itemPhysicallyRequestable = {
       prefLabel: "book, limited circ, MaRLI",
     },
   ],
+  dueDate: ["2023-09-03"],
   eddRequestable: false,
   enumerationChronology: ["no. 4 (2001)"],
   formatLiteral: ["Text"],
@@ -276,6 +279,159 @@ export const itemNYPLReCAP = {
     },
   ],
   uri: "i10572546",
+  idNyplSourceId: {
+    "@type": "SierraNypl",
+    "@value": "10572546",
+  },
+}
+
+export const itemAvailableOnsite = {
+  "@id": "res:i14119377",
+  "@type": ["bf:Item"],
+  accessMessage: [
+    {
+      "@id": "accessMessage:1",
+      prefLabel: "Use in library",
+    },
+  ],
+  catalogItemType: [
+    {
+      "@id": "catalogItemType:55",
+      prefLabel: "book, limited circ, MaRLI",
+    },
+  ],
+  eddRequestable: true,
+  formatLiteral: ["Text"],
+  holdingLocation: [
+    {
+      "@id": "loc:mal92",
+      prefLabel: "Schwarzman Building M2 - General Research Room 315",
+      endpoint: "schwarzman" as ItemLocationEndpoint,
+    },
+  ],
+  idBarcode: ["33433048828085"],
+  identifier: [
+    {
+      "@type": "bf:ShelfMark",
+      "@value": "JFE 93-253",
+    },
+    {
+      "@type": "bf:Barcode",
+      "@value": "33433048828085",
+    },
+  ],
+  m2CustomerCode: ["XF"],
+  physRequestable: true,
+  physicalLocation: ["JFE 93-253"],
+  requestable: [true],
+  shelfMark: ["JFE 93-253"],
+  specRequestable: false,
+  status: [
+    {
+      "@id": "status:a",
+      prefLabel: "Available",
+    },
+  ],
+  uri: "i14119377",
+  idNyplSourceId: {
+    "@type": "SierraNypl",
+    "@value": "14119377",
+  },
+}
+
+export const itemNoShelfMark = {
+  "@id": "res:i10572546",
+  "@type": ["bf:Item"],
+  accessMessage: [
+    {
+      "@id": "accessMessage:2",
+      prefLabel: "Request in advance",
+    },
+  ],
+  catalogItemType: [
+    {
+      "@id": "catalogItemType:55",
+      prefLabel: "book, limited circ, MaRLI",
+    },
+  ],
+  eddRequestable: true,
+  formatLiteral: ["Text"],
+  holdingLocation: [
+    {
+      "@id": "loc:rc2ma",
+      prefLabel: "Offsite",
+    },
+  ],
+  idBarcode: ["33433077546822"],
+  owner: [
+    {
+      "@id": "orgs:1000",
+      prefLabel: "Stephen A. Schwarzman Building",
+    },
+  ],
+  physRequestable: true,
+  physicalLocation: [
+    "VTI (Prezzolini, G. History of spaghetti eating and cooking for: spaghetti dinner)",
+  ],
+  recapCustomerCode: ["NA"],
+  requestable: [true],
+  specRequestable: false,
+  status: [
+    {
+      "@id": "status:a",
+      prefLabel: "Available",
+    },
+  ],
+  uri: "i10572546",
+  idNyplSourceId: {
+    "@type": "SierraNypl",
+    "@value": "10572546",
+  },
+}
+
+export const itemNoShelfMarkNoURI = {
+  "@id": "res:i10572546",
+  "@type": ["bf:Item"],
+  accessMessage: [
+    {
+      "@id": "accessMessage:2",
+      prefLabel: "Request in advance",
+    },
+  ],
+  catalogItemType: [
+    {
+      "@id": "catalogItemType:55",
+      prefLabel: "book, limited circ, MaRLI",
+    },
+  ],
+  eddRequestable: true,
+  formatLiteral: ["Text"],
+  holdingLocation: [
+    {
+      "@id": "loc:rc2ma",
+      prefLabel: "Offsite",
+    },
+  ],
+  idBarcode: ["33433077546822"],
+  owner: [
+    {
+      "@id": "orgs:1000",
+      prefLabel: "Stephen A. Schwarzman Building",
+    },
+  ],
+  physRequestable: true,
+  physicalLocation: [
+    "VTI (Prezzolini, G. History of spaghetti eating and cooking for: spaghetti dinner)",
+  ],
+  recapCustomerCode: ["NA"],
+  requestable: [true],
+  specRequestable: false,
+  status: [
+    {
+      "@id": "status:a",
+      prefLabel: "Available",
+    },
+  ],
   idNyplSourceId: {
     "@type": "SierraNypl",
     "@value": "10572546",

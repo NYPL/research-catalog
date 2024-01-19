@@ -2,11 +2,11 @@ import {
   isRecapLocation,
   combineRecapLocations,
   parseItemFilterQueryParams,
-  buildItemFilterQueryParams,
+  buildItemFilterQueryString,
   buildAppliedFiltersString,
 } from "../itemFilterUtils"
 import { normalAggs } from "../../../__test__/fixtures/testAggregations"
-import { ItemFilterData } from "../../models/itemFilterData"
+import { ItemFilterData } from "../../models/ItemFilterData"
 
 describe("Item Filter Utils", () => {
   describe("isRecapLocation", () => {
@@ -73,7 +73,7 @@ describe("Item Filter Utils", () => {
         status: ["status:a", "status:na"],
       }
       const recapLocations = "loc:rc2ma,loc:rc3ma,loc:rc4ma"
-      expect(buildItemFilterQueryParams(query, recapLocations)).toBe(
+      expect(buildItemFilterQueryString(query, recapLocations)).toBe(
         "?item_location=loc:abc,loc:rc2ma,loc:rc3ma,loc:rc4ma&item_format=Text&item_status=status:a,status:na"
       )
     })
@@ -84,55 +84,40 @@ describe("Item Filter Utils", () => {
         status: [],
       }
       const recapLocations = "loc:rc2ma,loc:rc3ma,loc:rc4ma"
-      expect(buildItemFilterQueryParams(query, recapLocations)).toBe(
+      expect(buildItemFilterQueryString(query, recapLocations)).toBe(
         "?item_location=loc:abc,loc:rc2ma,loc:rc3ma,loc:rc4ma"
       )
     })
   })
 
   describe("buildAppliedFiltersString", () => {
-    const query = {
+    const query = parseItemFilterQueryParams({
       item_location: "loc:rc2ma,loc:rcma2",
       item_status: "status:a",
       item_format: "Text",
-    }
+    })
+    const emptyQuery = parseItemFilterQueryParams({})
     const aggs = normalAggs.map((agg) => new ItemFilterData(agg))
-    it("can handle no filters", () => {
-      expect(buildAppliedFiltersString({}, 30, [])).toBe("30 Items")
+    it("no filters", () => {
+      expect(buildAppliedFiltersString(emptyQuery, aggs)).toBeUndefined()
     })
-    it("no items with filters", () => {
-      const query = {
-        item_location: "loc:rc2ma,loc:rcma2",
-        item_status: "status:a",
-        item_format: "Text",
-      }
-      expect(buildAppliedFiltersString(query, 0, aggs)).toBe(
-        "No Items Matching Filtered by location: 'Offsite', status: 'Available', format: 'Text'"
+    it("with all filters", () => {
+      expect(buildAppliedFiltersString(query, aggs)).toBe(
+        "Filtered by location: 'Offsite', format: 'Text', status: 'Available'"
       )
     })
-    it("some items no filters", () => {
-      expect(buildAppliedFiltersString({}, 5, aggs)).toBe("5 Items")
-    })
-    it("some items with filters", () => {
-      expect(buildAppliedFiltersString(query, 5, aggs)).toBe(
-        "5 Items Matching Filtered by location: 'Offsite', status: 'Available', format: 'Text'"
+    it("all filters filters", () => {
+      expect(buildAppliedFiltersString(query, aggs)).toBe(
+        "Filtered by location: 'Offsite', format: 'Text', status: 'Available'"
       )
     })
-    it("one item with filters", () => {
-      expect(buildAppliedFiltersString(query, 1, aggs)).toBe(
-        "1 Item Matching Filtered by location: 'Offsite', status: 'Available', format: 'Text'"
-      )
-    })
-    it("some items one filter", () => {
+    it("one filter", () => {
       expect(
         buildAppliedFiltersString(
-          { item_status: "status:a,status:na" },
-          5,
+          parseItemFilterQueryParams({ item_status: "status:a,status:na" }),
           aggs
         )
-      ).toBe(
-        "5 Items Matching Filtered by status: 'Available', 'Not available'"
-      )
+      ).toBe("Filtered by status: 'Available', 'Not available'")
     })
   })
 })

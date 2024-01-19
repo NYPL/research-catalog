@@ -1,16 +1,16 @@
 import {
   getPaginationOffsetStrings,
-  getQueryString,
+  getSearchQuery,
   mapQueryToSearchParams,
   mapRequestBodyToSearchParams,
   getSearchResultsHeading,
 } from "../searchUtils"
 import { queryParamsEquality } from "../../../__test__/helpers/searchHelpers"
 
-const checkQueryParamsEquality = queryParamsEquality(getQueryString)
+const checkQueryParamsEquality = queryParamsEquality(getSearchQuery)
 
 describe("searchUtils", () => {
-  describe("getQueryString", () => {
+  describe("getSearchQuery", () => {
     it("constructs a basic query", () => {
       const testQuery =
         "?q=shel%20silverstein&search_scope=contributor&sort=datePublished&sort_direction=asc"

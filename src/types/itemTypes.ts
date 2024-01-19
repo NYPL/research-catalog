@@ -12,9 +12,28 @@ export interface SearchResultsItem {
   idBarcode?: string[]
   holdingLocation?: ItemLocation[]
   aeonUrl?: string[]
+  dueDate?: string[]
   physRequestable?: boolean
   eddRequestable?: boolean
 }
+
+export interface ItemLocation extends JSONLDValue {
+  customerCode?: string
+  prefLabel?: string
+  endpoint?: ItemLocationEndpoint
+}
+
+export type ItemLocationKey = "Schwarzman" | "Performing" | "Schomburg"
+
+export type ItemLocationEndpoint = "schwarzman" | "lpa" | "schomburg"
+
+export interface ItemTableParams {
+  isDesktop?: boolean
+  isBibPage?: boolean
+  isArchiveCollection?: boolean
+}
+
+/* eslint-disable @typescript-eslint/naming-convention */
 
 export interface JSONLDValue {
   "@id": string
@@ -25,12 +44,3 @@ export interface ItemSourceID {
   "@type": string
   "@value": string
 }
-
-export interface ItemLocation extends JSONLDValue {
-  customerCode?: string
-  endpoint?: ItemLocationEndpoint
-}
-
-export type ItemLocationKey = "Schwarzman" | "Performing" | "Schomburg"
-
-export type ItemLocationEndpoint = "schwarzman" | "lpa" | "schomburg"

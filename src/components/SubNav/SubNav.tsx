@@ -1,6 +1,7 @@
 import RCLink from "../RCLink/RCLink"
 import styles from "../../../styles/components/SubNav.module.scss"
 import { type RCPage } from "../../types/pageTypes"
+import { BASE_URL } from "../../config/constants"
 
 interface SubNavProps {
   activePage: RCPage
@@ -16,13 +17,14 @@ const SubNav = ({ activePage }: SubNavProps) => {
       <ul>
         <li>
           <RCLink
-            href="/"
+            href={BASE_URL}
             aria-current={
               activePage === "search" || activePage === "advanced"
                 ? "page"
                 : undefined
             }
             active={activePage === "search" || activePage === "advanced"}
+            hasWhiteFocusRing
           >
             Search
           </RCLink>
@@ -32,6 +34,7 @@ const SubNav = ({ activePage }: SubNavProps) => {
             href="/subject_headings"
             active={activePage === "shep"}
             aria-current={activePage === "shep" ? "page" : undefined}
+            hasWhiteFocusRing
           >
             Subject Heading Explorer
           </RCLink>
@@ -41,6 +44,7 @@ const SubNav = ({ activePage }: SubNavProps) => {
             href="/account"
             active={activePage === "account"}
             aria-current={activePage === "account" ? "page" : undefined}
+            hasWhiteFocusRing
           >
             My Account
           </RCLink>
