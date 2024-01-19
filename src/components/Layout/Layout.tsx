@@ -1,10 +1,4 @@
-import {
-  useEffect,
-  useState,
-  type ReactElement,
-  type PropsWithChildren,
-} from "react"
-import Router from "next/router"
+import { type ReactElement, type PropsWithChildren } from "react"
 import {
   Box,
   TemplateAppContainer,
@@ -19,6 +13,7 @@ import styles from "../../../styles/components/Layout.module.scss"
 import SubNav from "../SubNav/SubNav"
 import SearchForm from "../SearchForm/SearchForm"
 import { BASE_URL } from "../../config/constants"
+import useLoading from "../../hooks/useLoading"
 
 interface LayoutProps {
   sidebar?: ReactElement
@@ -39,25 +34,7 @@ const Layout = ({
   const showSearch = activePage === "search"
   const showHeader = activePage !== "404"
 
-  const [loading, setLoading] = useState(false)
-
-  // Loading state
-  useEffect(() => {
-    const loadingStart = () => {
-      setLoading(true)
-    }
-    const loadingEnd = () => {
-      setLoading(false)
-    }
-    Router.events.on("routeChangeStart", loadingStart)
-    Router.events.on("routeChangeComplete", loadingEnd)
-    Router.events.on("routeChangeError", loadingEnd)
-    return () => {
-      Router.events.off("routeChangeStart", loadingStart)
-      Router.events.off("routeChangeComplete", loadingEnd)
-      Router.events.off("routeChangeError", loadingEnd)
-    }
-  }, [])
+  const isLoading = useLoading()
 
   return (
     <DSProvider>
@@ -95,13 +72,13 @@ const Layout = ({
         sidebar={sidebar ? sidebarPosition : "none"}
         contentPrimary={
           <Box pb="l">
-            {loading ? <SkeletonLoader showImage={false} /> : children}
+            {isLoading ? <SkeletonLoader showImage={false} /> : children}
           </Box>
         }
         contentSidebar={
           sidebar && (
             <Box pb="l">
-              {loading ? <SkeletonLoader showImage={false} /> : sidebar}
+              {isLoading ? <SkeletonLoader showImage={false} /> : sidebar}
             </Box>
           )
         }
