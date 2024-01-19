@@ -84,6 +84,39 @@ export default class BibDetailsModel {
       .filter((f) => f)
   }
 
+  buildHoldingDetail(fieldMapping: FieldMapping) {
+    const bibFieldValue = this.bib.holdings[fieldMapping.field]
+    return this.buildDetail(fieldMapping.label, bibFieldValue)
+  }
+
+  buildStandardDetail(fieldMapping: FieldMapping) {
+    const bibFieldValue = this.bib[fieldMapping.field]
+    return this.buildDetail(fieldMapping.label, bibFieldValue)
+  }
+
+  buildDetail(label, value) {
+    if (!value?.length) return null
+    return { label, value }
+  }
+
+  buildInternalLinkedDetail(fieldMapping: {
+    label: string
+    field: string
+  }): LinkedBibDetail {
+    const value = this.bib[fieldMapping.field]
+    if (!value?.length) return null
+    return {
+      link: "internal",
+      label: fieldMapping.label,
+      value: value.map((v: string) => {
+        const internalUrl = `/search?filters[${
+          fieldMapping.field
+        }][0]=${encodeURI(v)}`
+        return { url: internalUrl, urlLabel: v }
+      }),
+    }
+  }
+
   get groupedNotes() {
     const note = this.bib?.note?.length ? this.bib.note : null
 
@@ -178,38 +211,6 @@ export default class BibDetailsModel {
     return Object.assign({}, bib, ...parallelFieldMatches)
   }
 
-  buildHoldingDetail(fieldMapping: FieldMapping) {
-    const bibFieldValue = this.bib.holdings[fieldMapping.field]
-    return this.buildDetail(fieldMapping.label, bibFieldValue)
-  }
-
-  buildStandardDetail(fieldMapping: FieldMapping) {
-    const bibFieldValue = this.bib[fieldMapping.field]
-    return this.buildDetail(fieldMapping.label, bibFieldValue)
-  }
-
-  buildDetail(label, value) {
-    if (!value?.length) return null
-    return { label, value }
-  }
-
-  buildInternalLinkedDetail(fieldMapping: {
-    label: string
-    field: string
-  }): LinkedBibDetail {
-    const value = this.bib[fieldMapping.field]
-    if (!value?.length) return null
-    return {
-      link: "internal",
-      label: fieldMapping.label,
-      value: value.map((v: string) => {
-        const internalUrl = `/search?filters[${
-          fieldMapping.field
-        }][0]=${encodeURI(v)}`
-        return { url: internalUrl, urlLabel: v }
-      }),
-    }
-  }
   get extent(): BibDetail {
     let modifiedExtent: string[]
     const { extent, dimensions } = this.bib
