@@ -5,7 +5,6 @@ import {
   Breadcrumbs,
   DSProvider,
   Heading,
-  SkeletonLoader,
 } from "@nypl/design-system-react-components"
 
 import { type RCPage } from "../../types/pageTypes"
@@ -13,7 +12,6 @@ import styles from "../../../styles/components/Layout.module.scss"
 import SubNav from "../SubNav/SubNav"
 import SearchForm from "../SearchForm/SearchForm"
 import { BASE_URL } from "../../config/constants"
-import useLoading from "../../hooks/useLoading"
 
 interface LayoutProps {
   sidebar?: ReactElement
@@ -33,8 +31,6 @@ const Layout = ({
 }: PropsWithChildren<LayoutProps>) => {
   const showSearch = activePage === "search"
   const showHeader = activePage !== "404"
-
-  const isLoading = useLoading()
 
   return (
     <DSProvider>
@@ -70,18 +66,8 @@ const Layout = ({
           )
         }
         sidebar={sidebar ? sidebarPosition : "none"}
-        contentPrimary={
-          <Box pb="l">
-            {isLoading ? <SkeletonLoader showImage={false} /> : children}
-          </Box>
-        }
-        contentSidebar={
-          sidebar && (
-            <Box pb="l">
-              {isLoading ? <SkeletonLoader showImage={false} /> : sidebar}
-            </Box>
-          )
-        }
+        contentPrimary={<Box pb="l">{children}</Box>}
+        contentSidebar={sidebar && <Box pb="l">{sidebar}</Box>}
       />
     </DSProvider>
   )
