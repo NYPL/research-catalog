@@ -1,19 +1,19 @@
-import type { ProcessedSearchResult, SearchResult } from "../types/searchTypes"
+import type { Bib, Note } from "../types/bibTypes"
 import type {
   LinkedBibDetail,
   BibDetail,
   FieldMapping,
-} from "../types/bibTypes"
-import { preProcess } from "../utils/bibModelPreprocessing"
+} from "../types/bibDetailsTypes"
 
+interface BibDetails extends Bib {
+  groupedNotes: object
+}
 export default class BibDetailsModel {
-  bib: ProcessedSearchResult
-
-  constructor(bib: SearchResult) {
-    // Preprocessing includes grouping notes into an object with labels as keys,
-    // as well as interleaving parallels into primary fields
-    this.bib = preProcess(bib)
+  bib: BibDetails
+  constructor(bib: Bib) {
+    this.bib = this.matchParallels(bib)
   }
+
   get holdingsDetails() {
     const holdings = this.bib.holdings
     if (!holdings) return []
@@ -59,25 +59,123 @@ export default class BibDetailsModel {
       { field: "formerTitle", label: "Former Title" },
       { field: "subjectLiteral", label: "Subjects" },
       { field: "genreForm", label: "Genre/Form" },
-      { field: "notes", label: "Notes" },
+      { field: "note", label: "Notes" },
       { field: "tableOfContents", label: "Contents" },
       { field: "shelfMark", label: "Call Number" },
       { field: "isbn", label: "ISBN" },
       { field: "issn", label: "ISSN" },
       { field: "oclc", label: "OCLC" },
       { field: "lccn", label: "LCCN" },
+      { field: "owner", label: "Owning Institution" },
     ]
       .map((fieldMapping) => {
         let detail
         if (fieldMapping.field === "contributorLiteral")
           detail = this.buildInternalLinkedDetail(fieldMapping)
+        else if (fieldMapping.field === "note") detail = this.groupedNotes
         else if (fieldMapping.field === "subjectLiteral")
           detail = this.subjectHeadings
         else if (fieldMapping.field === "extent") detail = this.extent
+        else if (fieldMapping.field === "owner")
+          detail = this.bib.owner?.prefLabel
         else detail = this.buildStandardDetail(fieldMapping)
         return detail
       })
       .filter((f) => f)
+  }
+
+  get groupedNotes() {
+    const note = this.bib?.note?.length ? this.bib.note : null
+
+    // Make sure we have at least one note
+    if (note && Array.isArray(note)) {
+      // Group notes by noteType:
+      return (
+        note
+          // Make sure all notes are blanknodes:
+          .filter((note) => typeof note === "object")
+          .reduce((groups, note) => {
+            const noteType = this.getNoteType(note)
+            if (!groups[noteType]) {
+              groups[noteType] = []
+            }
+            groups[noteType].push(note.prefLabel)
+            return groups
+          }, {})
+      )
+    }
+  }
+
+  /**
+   * getNoteType(note)
+   * Construct label for a note by adding the word 'Note'
+   */
+  getNoteType = (note: Note) => {
+    const type = note.noteType || ""
+    return type.toLowerCase().includes("note") ? type : `${type} (note)`
+  }
+
+  /**
+   * Combines properties from matching (i.e. parallel) elements as necessary
+   * Right now, this is only needed to add the 'noteType' in case of parallel notes
+   */
+  combineMatching(primaryValue: string, parallelValue: string | Note) {
+    return parallelValue && parallelValue["noteType"]
+      ? {
+          noteType: parallelValue["noteType"],
+          "@type": parallelValue["@type"],
+          prefLabel: primaryValue,
+        }
+      : primaryValue
+  }
+
+  /**
+   * Given two arrays, returns the elements interleaved, with falsey elements removed.
+   * Also combines data from matching elements when necessary.
+   * Example: interleaveParallel ([1, 2, null, 3], [5,6,7,8,9]) =>
+   * [1,5,2,6,7,3,8,9].
+   * Assumes that arr2 is at least as long as arr1.
+   */
+  interleaveParallel(primaries: string[], parallels: string[] | Note[]) {
+    const interleavedValues = []
+    parallels.forEach((parallelValue, i) => {
+      if (primaries[i]) {
+        interleavedValues.push(
+          this.combineMatching(primaries[i], parallelValue)
+        )
+      }
+      if (parallelValue) {
+        interleavedValues.push(parallelValue)
+      }
+    })
+    return interleavedValues
+  }
+
+  /**
+   * matchParallels(bib)
+   * Given a bib object returns a new copy of the bib in which fields with parallels have been rewritten
+   * The new rewritten field interleaves the parallel field and the paralleled (i.e. original) field together.
+   * Skips over subject fields since these require changes to SHEP.
+   */
+  matchParallels(bib: Bib) {
+    const parallelFieldMatches = Object.keys(bib).map((key) => {
+      if (key.match(/subject/i)) {
+        return null
+      }
+      const match = key.match(/parallel(.)(.*)/)
+      const paralleledField = match && `${match[1].toLowerCase()}${match[2]}`
+      const paralleledValues = paralleledField && bib[paralleledField]
+      return (
+        paralleledValues && {
+          [paralleledField]: this.interleaveParallel(
+            bib[key],
+            paralleledValues
+          ),
+        }
+      )
+    })
+
+    return Object.assign({}, bib, ...parallelFieldMatches)
   }
 
   buildHoldingDetail(fieldMapping: FieldMapping) {
@@ -112,7 +210,6 @@ export default class BibDetailsModel {
       }),
     }
   }
-
   get extent(): BibDetail {
     let modifiedExtent: string[]
     const { extent, dimensions } = this.bib
