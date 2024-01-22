@@ -58,6 +58,10 @@ export const appConfig = {
   nonRecapClosedLocations: parseLocations(
     process.env.NEXT_PUBLIC_NON_RECAP_CLOSED_LOCATIONS
   ),
+  nyplHeaderUrl: {
+    development: process.env.NYPL_HEADER_URL || "https://ds-header.nypl.org",
+    production: process.env.NYPL_HEADER_URL || "https://ds-header.nypl.org",
+  },
   adobeEmbedUrl: {
     development:
       process.env.ADOBE_EMBED_URL ||

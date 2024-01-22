@@ -64,11 +64,15 @@ function App({ Component, pageProps }) {
       </Script>
       {/* NYPL Header script */}
       <Script
-        src={`${process.env.NEXT_PUBLIC_NYPL_HEADER_URL}/header.min.js?containerId=nypl-header`}
+        src={`${
+          appConfig.nyplHeaderUrl[appConfig.environment]
+        }/header.min.js?containerId=nypl-header`}
       />
       {/* NYPL Footer script */}
       <Script
-        src={`${process.env.NEXT_PUBLIC_NYPL_HEADER_URL}/footer.min.js?containerId=nypl-footer`}
+        src={`${
+          appConfig.nyplHeaderUrl[appConfig.environment]
+        }/footer.min.js?containerId=nypl-footer`}
       />
 
       <Head>
