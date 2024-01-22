@@ -16,12 +16,12 @@ jobs:
         - if [[ $TRAVIS_BRANCH == "qa" ]];
           then
           export ENV="qa";
-          export NYPL_HEADER_URL="https://qa-ds-header.nypl.org";
+          export NEXT_PUBLIC_NYPL_HEADER_URL="https://qa-ds-header.nypl.org";
           fi
         - if [[ "$TRAVIS_BRANCH" == "production" ]];
           then
           export ENV="production";
-          export NYPL_HEADER_URL="https://ds-header.nypl.org";
+          export NEXT_PUBLIC_NYPL_HEADER_URL="https://ds-header.nypl.org";
           fi
       env:
         - ECR_URL=946183545209.dkr.ecr.us-east-1.amazonaws.com/research-catalog
@@ -32,7 +32,7 @@ jobs:
         - export LOCAL_TAG_NAME="${ENV}-latest"
       script:
         - eval $(aws ecr get-login --no-include-email --region us-east-1)
-        - docker build -t "$LOCAL_TAG_NAME" --build-arg NYPL_HEADER_URL="${NYPL_HEADER_URL}" .
+        - docker build -t "$LOCAL_TAG_NAME" --build-arg NEXT_PUBLIC_NYPL_HEADER_URL="${NEXT_PUBLIC_NYPL_HEADER_URL}" .
         - docker tag "$LOCAL_TAG_NAME" "$ECR_URL:$LOCAL_TAG_NAME"
         # Re-tag last latest image just in case
         - |

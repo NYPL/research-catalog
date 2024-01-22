@@ -3,7 +3,7 @@ FROM node:16-alpine AS production
 #RUN apt-get update
 #RUN apt-get upgrade -y
 
-ARG NYPL_HEADER_URL
+ARG NEXT_PUBLIC_NYPL_HEADER_URL
 
 WORKDIR /app
 
@@ -21,7 +21,7 @@ RUN npm install
 # Add application code.
 COPY . .
 
-ENV NYPL_HEADER_URL=${NYPL_HEADER_URL}
+ENV NEXT_PUBLIC_NYPL_HEADER_URL=${NEXT_PUBLIC_NYPL_HEADER_URL}
 RUN npm run build
 
 # Explicitly set port 3000 as open to requests.
