@@ -4,6 +4,7 @@ import {
   SimpleGrid,
   Pagination,
   Select,
+  SkeletonLoader,
 } from "@nypl/design-system-react-components"
 import type { ChangeEvent } from "react"
 import { useRouter } from "next/router"
@@ -26,6 +27,8 @@ import { mapWorksToDRBResults } from "../../src/utils/drbUtils"
 import { SITE_NAME, RESULTS_PER_PAGE } from "../../src/config/constants"
 import type SearchResultsBib from "../../src/models/SearchResultsBib"
 
+import useLoading from "../../src/hooks/useLoading"
+
 /**
  * The Search page is responsible for fetching and displaying the Search results,
  * as well as displaying and controlling pagination and search filters.
@@ -45,6 +48,8 @@ export default function Search({ results }) {
   const searchResultBibs = mapElementsToSearchResultsBibs(searchResultsElements)
   // Map DRB Works from response to DRBResult objects
   const drbResults = mapWorksToDRBResults(drbWorks)
+
+  const isLoading = useLoading()
 
   const handlePageChange = async (page: number) => {
     const newQuery = getSearchQuery({ ...searchParams, page })
@@ -93,30 +98,40 @@ export default function Search({ results }) {
                 ))}
               </Select>
             )}
-            {drbResponse?.totalWorks && (
-              <DRBContainer
-                drbResults={drbResults}
-                totalWorks={drbResponse.totalWorks}
-                searchParams={searchParams}
-              />
+            {isLoading ? (
+              <SkeletonLoader showImage={false} />
+            ) : (
+              drbResponse?.totalWorks && (
+                <DRBContainer
+                  drbResults={drbResults}
+                  totalWorks={drbResponse.totalWorks}
+                  searchParams={searchParams}
+                />
+              )
             )}
           </>
         }
       >
         {totalResults ? (
           <>
-            <Heading level="h2" mb="xl" size="heading4">
-              {getSearchResultsHeading(
-                searchParams.page,
-                totalResults,
-                searchParams.q
-              )}
-            </Heading>
-            <SimpleGrid columns={1} gap="grid.xl">
-              {searchResultBibs.map((bib: SearchResultsBib) => {
-                return <SearchResult key={bib.id} bib={bib} />
-              })}
-            </SimpleGrid>
+            {isLoading ? (
+              <SkeletonLoader showImage={false} />
+            ) : (
+              <>
+                <Heading level="h2" mb="xl" size="heading4">
+                  {getSearchResultsHeading(
+                    searchParams.page,
+                    totalResults,
+                    searchParams.q
+                  )}
+                </Heading>
+                <SimpleGrid columns={1} gap="grid.xl">
+                  {searchResultBibs.map((bib: SearchResultsBib) => {
+                    return <SearchResult key={bib.id} bib={bib} />
+                  })}
+                </SimpleGrid>
+              </>
+            )}
             <Pagination
               id="results-pagination"
               mt="xl"
