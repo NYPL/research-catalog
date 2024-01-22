@@ -12,6 +12,24 @@ describe("Bib model", () => {
   )
   const bibWithParallelsModel = new BibDetailsModel(parallelsBib)
   const bibWithNoParallelsModel = new BibDetailsModel(noParallels)
+  describe("note", () => {
+    it("groups notes", () => {
+      const model = new BibDetailsModel(parallelsBib)
+      expect(model.groupedNotes).toStrictEqual({
+        "Linking Entry (note)": [
+          "Has supplement, <2005-> : Preporučeno, ISSN 1452-3531",
+
+          "Has supplement, <2006-> : Види чуда, ISSN 1452-7316",
+
+          "Has supplement, <2006-> : Vidi čuda, ISSN 1452-7316",
+        ],
+        "Issued By (note)": ["Issued by: Narodna biblioteka Kraljevo."],
+        "Language (note)": ["Serbian;"],
+        "Source of Description (note)": ["G. 46, 3 (2016)."],
+        "Supplement (note)": ["Has supplement, <2012-2016>: Pojedinačno."],
+      })
+    })
+  })
   describe("subjectHeadings", () => {
     it("maps single subjects to compound heading url", () => {
       const filterQueryForSubjectHeading = "/search?filters[subjectLiteral]="
@@ -179,7 +197,7 @@ describe("Bib model", () => {
     })
   })
 
-  describe("preprocessing", () => {
+  describe("parallels", () => {
     it("combines parallels and primaries with null values", () => {
       const model = new BibDetailsModel(parallelsBib)
       expect(model.bib.contributorLiteral).toStrictEqual([
@@ -203,25 +221,9 @@ describe("Bib model", () => {
         "Sefer Ḥorosṭḳov = Chorostkow book",
       ])
     })
-    it("groups notes", () => {
-      const model = new BibDetailsModel(parallelsBib)
-      expect(model.bib.groupedNotes).toStrictEqual({
-        "Linking Entry (note)": [
-          "Has supplement, <2005-> : Preporučeno, ISSN 1452-3531",
-
-          "Has supplement, <2006-> : Види чуда, ISSN 1452-7316",
-
-          "Has supplement, <2006-> : Vidi čuda, ISSN 1452-7316",
-        ],
-        "Issued By (note)": ["Issued by: Narodna biblioteka Kraljevo."],
-        "Language (note)": ["Serbian;"],
-        "Source of Description (note)": ["G. 46, 3 (2016)."],
-        "Supplement (note)": ["Has supplement, <2012-2016>: Pojedinačno."],
-      })
-    })
     it("can handle no parallels, and no notes", () => {
       const model = new BibDetailsModel(noParallels)
-      expect(model.bib.groupedNotes).toBeUndefined
+      expect(model.groupedNotes).toBeUndefined
     })
   })
 })
