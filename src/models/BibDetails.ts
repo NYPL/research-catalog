@@ -11,7 +11,7 @@ interface BibDetails extends Bib {
 export default class BibDetailsModel {
   bib: BibDetails
   constructor(bib: Bib) {
-    this.bib = this.matchParallels(bib)
+    this.bib = this.matchParallelToPrimaryValues(bib)
   }
 
   get holdingsDetails() {
@@ -152,14 +152,12 @@ export default class BibDetailsModel {
    * Combines properties from matching (i.e. parallel) elements as necessary
    * Right now, this is only needed to add the 'noteType' in case of parallel notes
    */
-  combineMatching(primaryValue: string, parallelValue: string | Note) {
-    return parallelValue && parallelValue["noteType"]
-      ? {
-          noteType: parallelValue["noteType"],
-          "@type": parallelValue["@type"],
-          prefLabel: primaryValue,
-        }
-      : primaryValue
+  combineMatchingNotes(primaryValue: string, parallelValue: string | Note) {
+    return {
+      noteType: parallelValue["noteType"],
+      "@type": parallelValue["@type"],
+      prefLabel: primaryValue,
+    }
   }
 
   /**
@@ -169,13 +167,18 @@ export default class BibDetailsModel {
    * [1,5,2,6,7,3,8,9].
    * Assumes that arr2 is at least as long as arr1.
    */
-  interleaveParallel(primaries: string[], parallels: string[] | Note[]) {
+  interleaveParallelAndPrimaryValues(
+    primaries: string[],
+    parallels: string[] | Note[]
+  ) {
     const interleavedValues = []
     parallels.forEach((parallelValue, i) => {
       if (primaries[i]) {
-        interleavedValues.push(
-          this.combineMatching(primaries[i], parallelValue)
-        )
+        const value =
+          parallelValue && parallelValue["noteType"]
+            ? this.combineMatchingNotes(primaries[i], parallelValue)
+            : primaries[i]
+        interleavedValues.push(value)
       }
       if (parallelValue) {
         interleavedValues.push(parallelValue)
@@ -190,7 +193,7 @@ export default class BibDetailsModel {
    * The new rewritten field interleaves the parallel field and the paralleled (i.e. original) field together.
    * Skips over subject fields since these require changes to SHEP.
    */
-  matchParallels(bib: Bib) {
+  matchParallelToPrimaryValues(bib: Bib) {
     const parallelFieldMatches = Object.keys(bib).map((key) => {
       if (key.match(/subject/i)) {
         return null
@@ -200,7 +203,7 @@ export default class BibDetailsModel {
       const paralleledValues = paralleledField && bib[paralleledField]
       return (
         paralleledValues && {
-          [paralleledField]: this.interleaveParallel(
+          [paralleledField]: this.interleaveParallelAndPrimaryValues(
             bib[key],
             paralleledValues
           ),
