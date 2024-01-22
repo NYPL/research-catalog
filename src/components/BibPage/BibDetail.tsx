@@ -10,7 +10,7 @@ import type {
   Url,
   LinkedBibDetail,
   SubjectHeadingDetail,
-} from "../../types/bibTypes"
+} from "../../types/bibDetailsTypes"
 import { rtlOrLtr, isItTheLastElement } from "../../utils/bibUtils"
 import type { ReactNode } from "react"
 

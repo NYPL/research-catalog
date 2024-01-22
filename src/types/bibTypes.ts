@@ -1,3 +1,49 @@
+/* eslint-disable @typescript-eslint/naming-convention */
+import type { SearchResultsItem, JSONLDValue } from "./itemTypes"
+
+export interface Bib {
+  extent?: string[]
+  dimensions?: string[]
+  note?: Note[]
+  identifier: object[]
+  subjectLiteral?: string[]
+  "@id"?: string
+  uri?: string
+  titleDisplay?: string[]
+  creatorLiteral?: string[]
+  title?: string[]
+  materialType?: MaterialType[]
+  publicationStatement?: string[]
+  dateStartYear?: number
+  dateEndYear?: number
+  electronicResources?: ElectronicResource[]
+  issuance?: JSONLDValue[]
+  numItemsTotal?: number
+  items?: SearchResultsItem[]
+  parallelTitleDisplay?: string[]
+  supplementaryContent?: SupplementaryContent[]
+  contributorLiteral?: string[]
+  holdings?: object
+  owner?: { "@id": string; prefLabel: string }
+}
+
+type MaterialType = {
+  value?: string
+  prefLabel?: string
+}
+
+export interface Note {
+  "@type": string
+  noteType: string
+  prefLabel: string
+}
+
+interface SupplementaryContent {
+  "@type": string
+  label: string
+  url: string
+}
+
 export interface ElectronicResource {
   title?: string
   url?: string
@@ -20,39 +66,6 @@ export interface BibParams {
   itemFilterQuery?: string
   features?: string[]
 }
-
-export interface SubjectHeadingDetail {
-  value: Url[][]
-  label: string
-}
-
-export interface BibDetail {
-  // label is the formatted name of the field, such as "Author"
-  label: string
-  // value is the array of metadata, such as "["Author One", "Author Two"]"
-  value: string[]
-}
-
-export interface LinkedBibDetail {
-  value: Url[]
-  // label is the formatted name of the field, such as "Author"
-  label: string
-  // indicates if a linked bib detail is internal, like a link to a creator
-  // literal search, or external, like supplementary content
-  link?: "internal" | "external"
-}
-
-export interface Url {
-  url: string
-  urlLabel: string
-}
-
-export interface FieldMapping {
-  label: string
-  field: string
-}
-
-/* eslint-disable @typescript-eslint/naming-convention */
 
 export interface BibQueryParams {
   features?: string
