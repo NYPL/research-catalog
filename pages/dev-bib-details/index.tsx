@@ -1,6 +1,6 @@
 import {
-  // bibWithSupplementaryContent,
-  noParallels,
+  bibWithSupplementaryContent,
+  // noParallels,
   // parallelsBib,
   // yiddishBib,
 } from "../../__test__/fixtures/bibFixtures"
@@ -9,7 +9,10 @@ import Layout from "../../src/components/Layout/Layout"
 import BibDetailsModel from "../../src/models/BibDetails"
 
 const BibPage = () => {
-  const bibModel = new BibDetailsModel(noParallels)
+  const bibModel = new BibDetailsModel(
+    bibWithSupplementaryContent.resource,
+    bibWithSupplementaryContent.annotatedMarc
+  )
   const { topDetails, bottomDetails, holdingsDetails } = bibModel
 
   return (

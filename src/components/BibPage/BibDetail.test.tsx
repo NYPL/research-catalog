@@ -14,9 +14,18 @@ import { MemoryRouterProvider } from "next-router-mock/MemoryRouterProvider"
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
 describe("BibDetail component", () => {
-  const suppBib = new BibDetailsModel(bibWithSupplementaryContent)
-  const noParallelsBibModel = new BibDetailsModel(noParallels)
-  const parallelsBibModel = new BibDetailsModel(parallelsBib)
+  const supplementaryContentModel = new BibDetailsModel(
+    bibWithSupplementaryContent.resource,
+    bibWithSupplementaryContent.annotatedMarc
+  )
+  const noParallelsBibModel = new BibDetailsModel(
+    noParallels.resources,
+    noParallels.annotatedMarc
+  )
+  const parallelsBibModel = new BibDetailsModel(
+    parallelsBib.resource,
+    parallelsBib.annotatedMarc
+  )
   describe("text only details", () => {
     it("single value", () => {
       render(<BibDetails details={noParallelsBibModel.topDetails} />, {
@@ -51,7 +60,7 @@ describe("BibDetail component", () => {
       // )
     })
     it("external link", async () => {
-      render(<BibDetails details={suppBib.topDetails} />, {
+      render(<BibDetails details={supplementaryContentModel.topDetails} />, {
         wrapper: MemoryRouterProvider,
       })
       const supplementaryContent = screen.getByText("Image")

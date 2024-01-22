@@ -3,15 +3,39 @@ import type {
   LinkedBibDetail,
   BibDetail,
   FieldMapping,
+  AnnotatedMarcField,
+  Url,
 } from "../types/bibDetailsTypes"
+import type { AnnotatedMarc } from "../types/bibDetailsTypes"
+
+type AnyBibDetail = BibDetail | LinkedBibDetail
 
 interface BibDetails extends Bib {
   groupedNotes: object
 }
 export default class BibDetailsModel {
   bib: BibDetails
-  constructor(bib: Bib) {
+  annotatedMarcFields: AnnotatedMarcField[]
+  constructor(bib: Bib, annotatedMarc?: AnnotatedMarc) {
     this.bib = this.matchParallelToPrimaryValues(bib)
+    this.annotatedMarcFields = annotatedMarc?.bib?.fields
+  }
+
+  annotatedMarcDetails(): AnyBibDetail[] {
+    return this.annotatedMarcFields.map(
+      ({ label, values }: AnnotatedMarcField) => {
+        if (label === "Connect to:") {
+          const urlValues = values.map(({ label, content }) => ({
+            url: content,
+            urlLabel: label,
+          }))
+          return this.buildExternalLinkedDetail("Connect to:", urlValues)
+        } else {
+          const fieldValues = values.map((val) => val.content)
+          return this.buildDetail(label, fieldValues)
+        }
+      }
+    )
   }
 
   get holdingsDetails() {
@@ -46,7 +70,7 @@ export default class BibDetailsModel {
       .filter((f) => f)
   }
   get bottomDetails() {
-    return [
+    const resourceFields = [
       { field: "contributorLiteral", label: "Additional Authors" },
       { field: "partOf", label: "Found In" },
       { field: "serialPublicationDates", label: "Publication Date" },
@@ -57,7 +81,7 @@ export default class BibDetailsModel {
       { field: "uniformTitle", label: "Uniform Title" },
       { field: "titleAlt", label: "Alternative Title" },
       { field: "formerTitle", label: "Former Title" },
-      { field: "subjectLiteral", label: "Subjects" },
+      { field: "subjectLiteral", label: "Subject" },
       { field: "genreForm", label: "Genre/Form" },
       { field: "note", label: "Notes" },
       { field: "tableOfContents", label: "Contents" },
@@ -82,6 +106,27 @@ export default class BibDetailsModel {
         return detail
       })
       .filter((f) => f)
+    const combinedFields = this.combineBibDetailsData(
+      resourceFields,
+      this.annotatedMarcDetails()
+    )
+    return combinedFields
+  }
+
+  combineBibDetailsData = (
+    resourceEndpointDetails: AnyBibDetail[],
+    annotatedMarcDetails: AnyBibDetail[]
+  ) => {
+    const resourceEndpointDetailsLabels = new Set(
+      resourceEndpointDetails.map((detail: { label: string }) => {
+        console.log(detail.label)
+        return detail.label
+      })
+    )
+    const filteredAnnotatedMarcDetails = annotatedMarcDetails.filter(
+      (detail: AnyBibDetail) => !resourceEndpointDetailsLabels.has(detail.label)
+    )
+    return resourceEndpointDetails.concat(filteredAnnotatedMarcDetails)
   }
 
   buildHoldingDetail(fieldMapping: FieldMapping) {
@@ -94,7 +139,7 @@ export default class BibDetailsModel {
     return this.buildDetail(fieldMapping.label, bibFieldValue)
   }
 
-  buildDetail(label, value) {
+  buildDetail(label: string, value: string[]): BibDetail {
     if (!value?.length) return null
     return { label, value }
   }
@@ -115,6 +160,11 @@ export default class BibDetailsModel {
         return { url: internalUrl, urlLabel: v }
       }),
     }
+  }
+
+  buildExternalLinkedDetail(label: string, values: Url[]): LinkedBibDetail {
+    if (!values.length) return null
+    return { link: "external", value: values, label }
   }
 
   get groupedNotes() {
@@ -252,11 +302,7 @@ export default class BibDetailsModel {
         urlLabel: sc.label,
       }
     })
-    return {
-      link: "external",
-      label,
-      value: values,
-    }
+    return this.buildExternalLinkedDetail(label, values)
   }
 
   get subjectHeadings() {
@@ -281,7 +327,7 @@ export default class BibDetailsModel {
       }
     )
     return {
-      label: "Subjects",
+      label: "Subject",
       value: subjectLiteralUrls,
     }
   }

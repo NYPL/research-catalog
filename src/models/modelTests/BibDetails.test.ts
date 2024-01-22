@@ -8,13 +8,25 @@ import BibDetailsModel from "../BibDetails"
 
 describe("Bib model", () => {
   const bibWithSupContentModel = new BibDetailsModel(
-    bibWithSupplementaryContent
+    bibWithSupplementaryContent.resource,
+    bibWithSupplementaryContent.annotatedMarc
   )
-  const bibWithParallelsModel = new BibDetailsModel(parallelsBib)
-  const bibWithNoParallelsModel = new BibDetailsModel(noParallels)
+  const bibWithParallelsModel = new BibDetailsModel(
+    parallelsBib.resource,
+    parallelsBib.annotatedMarc
+  )
+  const bibWithNoParallelsModel = new BibDetailsModel(
+    noParallels.resources,
+    noParallels.annotatedMarc
+  )
+
+  const bibWithRtlParallelsModel = new BibDetailsModel(
+    yiddishBib.resource,
+    yiddishBib.annotatedMarc
+  )
   describe("note", () => {
     it("groups notes", () => {
-      const model = new BibDetailsModel(parallelsBib)
+      const model = bibWithParallelsModel
       expect(model.groupedNotes).toStrictEqual({
         "Linking Entry (note)": [
           "Has supplement, <2005-> : Preporučeno, ISSN 1452-3531",
@@ -34,7 +46,7 @@ describe("Bib model", () => {
     it("maps single subjects to compound heading url", () => {
       const filterQueryForSubjectHeading = "/search?filters[subjectLiteral]="
       const subjectHeadingsObject = {
-        label: "Subjects",
+        label: "Subject",
         value: [
           [
             {
@@ -170,7 +182,7 @@ describe("Bib model", () => {
   describe("internal linking fields", () => {
     it("can handle missing fields", () => {
       const bogusBib = new BibDetailsModel({
-        ...parallelsBib,
+        ...parallelsBib.resource,
         contributorLiteral: undefined,
       })
       expect(
@@ -199,7 +211,7 @@ describe("Bib model", () => {
 
   describe("parallels", () => {
     it("combines parallels and primaries with null values", () => {
-      const model = new BibDetailsModel(parallelsBib)
+      const model = bibWithParallelsModel
       expect(model.bib.contributorLiteral).toStrictEqual([
         'Народна библиотека "Стефан Првовенчани," issuing body.',
         'Narodna biblioteka "Stefan Prvovenčani", issuing body.',
@@ -215,14 +227,14 @@ describe("Bib model", () => {
       ])
     })
     it("parallels RTL script", () => {
-      const model = new BibDetailsModel(yiddishBib)
+      const model = bibWithRtlParallelsModel
       expect(model.bib.title).toStrictEqual([
         "‏ספר חורוסטוב = Chrostkow book",
         "Sefer Ḥorosṭḳov = Chorostkow book",
       ])
     })
     it("can handle no parallels, and no notes", () => {
-      const model = new BibDetailsModel(noParallels)
+      const model = bibWithNoParallelsModel
       expect(model.groupedNotes).toBeUndefined
     })
   })
