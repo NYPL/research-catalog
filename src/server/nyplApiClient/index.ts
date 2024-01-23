@@ -8,8 +8,7 @@ interface KMSCache {
   clientId: string
   clientSecret: string
 }
-console.log(process.env.PLATFORM_API_CLIENT_ID)
-const appEnvironment = process.env.APP_ENV || "production"
+const appEnvironment = process.env.APP_ENV
 const clientId = process.env.PLATFORM_API_CLIENT_ID
 const clientSecret = process.env.PLATFORM_API_CLIENT_SECRET
 

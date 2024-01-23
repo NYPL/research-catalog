@@ -10,12 +10,13 @@ import type {
   Url,
   LinkedBibDetail,
   SubjectHeadingDetail,
+  AnyBibDetail,
 } from "../../types/bibDetailsTypes"
 import { rtlOrLtr, isItTheLastElement } from "../../utils/bibUtils"
 import type { ReactNode } from "react"
 
 interface BibDetailsProps {
-  details: (BibDetail | LinkedBibDetail)[]
+  details: AnyBibDetail[]
   heading?: string
 }
 
@@ -62,10 +63,6 @@ const DetailElement = (label: string, listChildren: ReactNode[]) => {
 }
 
 const PlainTextElement = (field: BibDetail) => {
-  if (!field.value) {
-    console.log(field)
-    return <></>
-  }
   const values = field.value.map((val: string, i: number) => {
     const stringDirection = rtlOrLtr(val)
     return (

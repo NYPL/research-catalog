@@ -26,7 +26,7 @@ describe("Bib model", () => {
     yiddishBib.annotatedMarc
   )
   describe("note", () => {
-    it("groups notes", () => {
+    it("groups notes into an array of {label, value} details", () => {
       const model = bibWithParallelsModel
       expect(model.groupedNotes).toStrictEqual([
         {

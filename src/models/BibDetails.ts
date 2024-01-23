@@ -5,10 +5,10 @@ import type {
   FieldMapping,
   AnnotatedMarcField,
   Url,
+  SubjectHeadingDetail,
+  AnnotatedMarc,
+  AnyBibDetail,
 } from "../types/bibDetailsTypes"
-import type { AnnotatedMarc } from "../types/bibDetailsTypes"
-
-type AnyBibDetail = BibDetail | LinkedBibDetail
 
 export default class BibDetailsModel {
   bib: Bib
@@ -80,7 +80,6 @@ export default class BibDetailsModel {
       { field: "formerTitle", label: "Former Title" },
       { field: "subjectLiteral", label: "Subject" },
       { field: "genreForm", label: "Genre/Form" },
-      { field: "note", label: "Note" },
       { field: "tableOfContents", label: "Contents" },
       { field: "shelfMark", label: "Call Number" },
       { field: "isbn", label: "ISBN" },
@@ -89,25 +88,26 @@ export default class BibDetailsModel {
       { field: "lccn", label: "LCCN" },
       { field: "owner", label: "Owning Institution" },
     ]
-      .map((fieldMapping): AnyBibDetail => {
-        let detail
+      .map((fieldMapping: FieldMapping): AnyBibDetail => {
+        let detail: AnyBibDetail
         if (fieldMapping.field === "contributorLiteral")
           detail = this.buildInternalLinkedDetail(fieldMapping)
-        else if (fieldMapping.field === "note") detail = this.groupedNotes
         else if (fieldMapping.field === "subjectLiteral")
           detail = this.subjectHeadings
         else if (fieldMapping.field === "extent") detail = this.extent
         else if (fieldMapping.field === "owner")
-          detail = this.bib.owner?.prefLabel
+          detail = this.bib.owner && {
+            label: fieldMapping.label,
+            value: [this.bib.owner?.prefLabel],
+          }
         else detail = this.buildStandardDetail(fieldMapping)
         return detail
       })
-      // This flat is just for Notes, which are currently an array of BibDetails
-      .flat()
       .filter((f) => f)
 
+    const fieldsWithNotes = this.addNotes(resourceFields)
     const combinedFields = this.combineBibDetailsData(
-      resourceFields,
+      fieldsWithNotes,
       this.annotatedMarcDetails
     )
     return combinedFields.filter((f) => f)
@@ -164,6 +164,11 @@ export default class BibDetailsModel {
   buildExternalLinkedDetail(label: string, values: Url[]): LinkedBibDetail {
     if (!values.length) return null
     return { link: "external", value: values, label }
+  }
+
+  addNotes(details: AnyBibDetail[]) {
+    if (!this.groupedNotes) return details
+    else return [...details, ...this.groupedNotes]
   }
 
   get groupedNotes(): BibDetail[] {
@@ -305,7 +310,8 @@ export default class BibDetailsModel {
     return this.buildExternalLinkedDetail(label, values)
   }
 
-  get subjectHeadings() {
+  get subjectHeadings(): SubjectHeadingDetail {
+    if (!this.bib.subjectLiteral) return
     const subjectLiteralUrls = this.bib.subjectLiteral.map(
       (subject: string) => {
         subject = subject.replace(/\.$/, "")

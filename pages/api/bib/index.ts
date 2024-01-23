@@ -26,12 +26,6 @@ export async function fetchBib(
   }
 
   const client = await nyplApiClient({ apiName: DISCOVERY_API_NAME })
-  console.log({
-    path: `${DISCOVERY_API_SEARCH_ROUTE}/${getBibQuery(
-      standardizedId,
-      bibParams
-    )}`,
-  })
   const [bibResponse, annotatedMarcResponse] = await Promise.allSettled([
     await client.get(
       `${DISCOVERY_API_SEARCH_ROUTE}/${getBibQuery(standardizedId, bibParams)}`

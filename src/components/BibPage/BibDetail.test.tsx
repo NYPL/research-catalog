@@ -26,6 +26,9 @@ describe("BibDetail component", () => {
     parallelsBib.resource,
     parallelsBib.annotatedMarc
   )
+  describe("bottom details", () => {
+    it.todo("")
+  })
   describe("text only details", () => {
     it("single value", () => {
       render(<BibDetails details={noParallelsBibModel.topDetails} />, {

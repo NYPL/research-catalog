@@ -1,3 +1,5 @@
+export type AnyBibDetail = BibDetail | LinkedBibDetail | SubjectHeadingDetail
+
 export interface SubjectHeadingDetail {
   value: Url[][]
   label: string
