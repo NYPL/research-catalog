@@ -10,19 +10,16 @@ import type { AnnotatedMarc } from "../types/bibDetailsTypes"
 
 type AnyBibDetail = BibDetail | LinkedBibDetail
 
-interface BibDetails extends Bib {
-  groupedNotes: object
-}
 export default class BibDetailsModel {
-  bib: BibDetails
+  bib: Bib
   annotatedMarcFields: AnnotatedMarcField[]
   constructor(bib: Bib, annotatedMarc?: AnnotatedMarc) {
     this.bib = this.matchParallelToPrimaryValues(bib)
-    this.annotatedMarcFields = annotatedMarc?.bib?.fields
+    this.annotatedMarcFields = annotatedMarc?.fields
   }
 
-  annotatedMarcDetails(): AnyBibDetail[] {
-    return this.annotatedMarcFields.map(
+  get annotatedMarcDetails(): AnyBibDetail[] {
+    return this.annotatedMarcFields?.map(
       ({ label, values }: AnnotatedMarcField) => {
         if (label === "Connect to:") {
           const urlValues = values.map(({ label, content }) => ({
@@ -38,7 +35,7 @@ export default class BibDetailsModel {
     )
   }
 
-  get holdingsDetails() {
+  get holdingsDetails(): BibDetail[] {
     const holdings = this.bib.holdings
     if (!holdings) return []
     return [
@@ -51,7 +48,7 @@ export default class BibDetailsModel {
       .map((fieldMapping) => this.buildHoldingDetail(fieldMapping))
       .filter((f) => f)
   }
-  get topDetails() {
+  get topDetails(): AnyBibDetail[] {
     return [
       { field: "titleDisplay", label: "Title" },
       { field: "publicationStatement", label: "Published By" },
@@ -69,7 +66,7 @@ export default class BibDetailsModel {
       })
       .filter((f) => f)
   }
-  get bottomDetails() {
+  get bottomDetails(): AnyBibDetail[] {
     const resourceFields = [
       { field: "contributorLiteral", label: "Additional Authors" },
       { field: "partOf", label: "Found In" },
@@ -83,7 +80,7 @@ export default class BibDetailsModel {
       { field: "formerTitle", label: "Former Title" },
       { field: "subjectLiteral", label: "Subject" },
       { field: "genreForm", label: "Genre/Form" },
-      { field: "note", label: "Notes" },
+      { field: "note", label: "Note" },
       { field: "tableOfContents", label: "Contents" },
       { field: "shelfMark", label: "Call Number" },
       { field: "isbn", label: "ISBN" },
@@ -92,7 +89,7 @@ export default class BibDetailsModel {
       { field: "lccn", label: "LCCN" },
       { field: "owner", label: "Owning Institution" },
     ]
-      .map((fieldMapping) => {
+      .map((fieldMapping): AnyBibDetail => {
         let detail
         if (fieldMapping.field === "contributorLiteral")
           detail = this.buildInternalLinkedDetail(fieldMapping)
@@ -105,12 +102,15 @@ export default class BibDetailsModel {
         else detail = this.buildStandardDetail(fieldMapping)
         return detail
       })
+      // This flat is just for Notes, which are currently an array of BibDetails
+      .flat()
       .filter((f) => f)
+
     const combinedFields = this.combineBibDetailsData(
       resourceFields,
-      this.annotatedMarcDetails()
+      this.annotatedMarcDetails
     )
-    return combinedFields
+    return combinedFields.filter((f) => f)
   }
 
   combineBibDetailsData = (
@@ -119,7 +119,6 @@ export default class BibDetailsModel {
   ) => {
     const resourceEndpointDetailsLabels = new Set(
       resourceEndpointDetails.map((detail: { label: string }) => {
-        console.log(detail.label)
         return detail.label
       })
     )
@@ -167,25 +166,26 @@ export default class BibDetailsModel {
     return { link: "external", value: values, label }
   }
 
-  get groupedNotes() {
+  get groupedNotes(): BibDetail[] {
     const note = this.bib?.note?.length ? this.bib.note : null
 
     // Make sure we have at least one note
     if (note && Array.isArray(note)) {
-      // Group notes by noteType:
-      return (
-        note
-          // Make sure all notes are blanknodes:
-          .filter((note) => typeof note === "object")
-          .reduce((groups, note) => {
-            const noteType = this.getNoteType(note)
-            if (!groups[noteType]) {
-              groups[noteType] = []
-            }
-            groups[noteType].push(note.prefLabel)
-            return groups
-          }, {})
-      )
+      const notesGroupedByNoteType = note
+        .filter((note) => typeof note === "object")
+        .reduce((noteGroups, note) => {
+          const noteType = this.getNoteType(note)
+          if (!noteGroups[noteType]) {
+            noteGroups[noteType] = []
+          }
+          noteGroups[noteType].push(note.prefLabel)
+          return noteGroups
+        }, {})
+      const notesAsDetails = []
+      Object.keys(notesGroupedByNoteType).forEach((key: string) => {
+        notesAsDetails.push({ label: key, value: notesGroupedByNoteType[key] })
+      })
+      return notesAsDetails
     }
   }
 

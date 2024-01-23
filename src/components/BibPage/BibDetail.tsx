@@ -62,6 +62,10 @@ const DetailElement = (label: string, listChildren: ReactNode[]) => {
 }
 
 const PlainTextElement = (field: BibDetail) => {
+  if (!field.value) {
+    console.log(field)
+    return <></>
+  }
   const values = field.value.map((val: string, i: number) => {
     const stringDirection = rtlOrLtr(val)
     return (

@@ -149,674 +149,671 @@ export const bibWithSupplementaryContent = {
     hasItemDates: false,
   },
   annotatedMarc: {
-    bib: {
-      id: "21255464",
-      nyplSource: "sierra-nypl",
-      fields: [
-        {
-          label: "Author",
-          values: [
-            {
-              content: "Watson, Tom, 1965- author.",
-              source: {
-                fieldTag: "a",
-                marcTag: "100",
-                ind1: "1",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "Watson, Tom,",
-                  },
-                  {
-                    tag: "d",
-                    content: "1965-",
-                  },
-                  {
-                    tag: "e",
-                    content: "author.",
-                  },
-                ],
-              },
+    id: "21255464",
+    nyplSource: "sierra-nypl",
+    fields: [
+      {
+        label: "Author",
+        values: [
+          {
+            content: "Watson, Tom, 1965- author.",
+            source: {
+              fieldTag: "a",
+              marcTag: "100",
+              ind1: "1",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Watson, Tom,",
+                },
+                {
+                  tag: "d",
+                  content: "1965-",
+                },
+                {
+                  tag: "e",
+                  content: "author.",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Title",
-          values: [
-            {
-              content:
-                "Stick Dog slurps spaghetti / by Tom Watson ; [illustrations by Ethan Long based on original sketches by Tom Watson].",
-              source: {
-                fieldTag: "t",
-                marcTag: "245",
-                ind1: "1",
-                ind2: "0",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "Stick Dog slurps spaghetti /",
-                  },
-                  {
-                    tag: "c",
-                    content:
-                      "by Tom Watson ; [illustrations by Ethan Long based on original sketches by Tom Watson].",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Title",
+        values: [
+          {
+            content:
+              "Stick Dog slurps spaghetti / by Tom Watson ; [illustrations by Ethan Long based on original sketches by Tom Watson].",
+            source: {
+              fieldTag: "t",
+              marcTag: "245",
+              ind1: "1",
+              ind2: "0",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Stick Dog slurps spaghetti /",
+                },
+                {
+                  tag: "c",
+                  content:
+                    "by Tom Watson ; [illustrations by Ethan Long based on original sketches by Tom Watson].",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Publisher",
-          values: [
-            {
-              content:
-                "New York, NY : Harper, An Imprint of HarperCollinsPublishers, [2016]",
-              source: {
-                fieldTag: "p",
-                marcTag: "264",
-                ind1: " ",
-                ind2: "1",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "New York, NY :",
-                  },
-                  {
-                    tag: "b",
-                    content: "Harper, An Imprint of HarperCollinsPublishers,",
-                  },
-                  {
-                    tag: "c",
-                    content: "[2016]",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Publisher",
+        values: [
+          {
+            content:
+              "New York, NY : Harper, An Imprint of HarperCollinsPublishers, [2016]",
+            source: {
+              fieldTag: "p",
+              marcTag: "264",
+              ind1: " ",
+              ind2: "1",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "New York, NY :",
+                },
+                {
+                  tag: "b",
+                  content: "Harper, An Imprint of HarperCollinsPublishers,",
+                },
+                {
+                  tag: "c",
+                  content: "[2016]",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Edition",
-          values: [
-            {
-              content: "First edition.",
-              source: {
-                fieldTag: "e",
-                marcTag: "250",
-                ind1: " ",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "First edition.",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Edition",
+        values: [
+          {
+            content: "First edition.",
+            source: {
+              fieldTag: "e",
+              marcTag: "250",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "First edition.",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Description",
-          values: [
-            {
-              content: "1 online resource (238 pages) : illustrations.",
-              source: {
-                fieldTag: "r",
-                marcTag: "300",
-                ind1: " ",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "1 online resource (238 pages) :",
-                  },
-                  {
-                    tag: "b",
-                    content: "illustrations.",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Description",
+        values: [
+          {
+            content: "1 online resource (238 pages) : illustrations.",
+            source: {
+              fieldTag: "r",
+              marcTag: "300",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "1 online resource (238 pages) :",
+                },
+                {
+                  tag: "b",
+                  content: "illustrations.",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Type of Content",
-          values: [
-            {
-              content: "text",
-              source: {
-                fieldTag: "r",
-                marcTag: "336",
-                ind1: " ",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "text",
-                  },
-                  {
-                    tag: "b",
-                    content: "[redacted]",
-                  },
-                  {
-                    tag: "2",
-                    content: "[redacted]",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Type of Content",
+        values: [
+          {
+            content: "text",
+            source: {
+              fieldTag: "r",
+              marcTag: "336",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "text",
+                },
+                {
+                  tag: "b",
+                  content: "[redacted]",
+                },
+                {
+                  tag: "2",
+                  content: "[redacted]",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Type of Medium",
-          values: [
-            {
-              content: "computer",
-              source: {
-                fieldTag: "r",
-                marcTag: "337",
-                ind1: " ",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "computer",
-                  },
-                  {
-                    tag: "b",
-                    content: "[redacted]",
-                  },
-                  {
-                    tag: "2",
-                    content: "[redacted]",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Type of Medium",
+        values: [
+          {
+            content: "computer",
+            source: {
+              fieldTag: "r",
+              marcTag: "337",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "computer",
+                },
+                {
+                  tag: "b",
+                  content: "[redacted]",
+                },
+                {
+                  tag: "2",
+                  content: "[redacted]",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Type of Carrier",
-          values: [
-            {
-              content: "online resource",
-              source: {
-                fieldTag: "r",
-                marcTag: "338",
-                ind1: " ",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "online resource",
-                  },
-                  {
-                    tag: "b",
-                    content: "[redacted]",
-                  },
-                  {
-                    tag: "2",
-                    content: "[redacted]",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Type of Carrier",
+        values: [
+          {
+            content: "online resource",
+            source: {
+              fieldTag: "r",
+              marcTag: "338",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "online resource",
+                },
+                {
+                  tag: "b",
+                  content: "[redacted]",
+                },
+                {
+                  tag: "2",
+                  content: "[redacted]",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Summary",
-          values: [
-            {
-              content:
-                "When they come across spaghetti in their search for a tug-of-war rope, Stick Dog and his hungry friends go on a quest for more pasta that sees them scale their suburb's tallest mountain and sneak into a restaurant filled with humans.",
-              source: {
-                fieldTag: "n",
-                marcTag: "520",
-                ind1: " ",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content:
-                      "When they come across spaghetti in their search for a tug-of-war rope, Stick Dog and his hungry friends go on a quest for more pasta that sees them scale their suburb's tallest mountain and sneak into a restaurant filled with humans.",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Summary",
+        values: [
+          {
+            content:
+              "When they come across spaghetti in their search for a tug-of-war rope, Stick Dog and his hungry friends go on a quest for more pasta that sees them scale their suburb's tallest mountain and sneak into a restaurant filled with humans.",
+            source: {
+              fieldTag: "n",
+              marcTag: "520",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content:
+                    "When they come across spaghetti in their search for a tug-of-war rope, Stick Dog and his hungry friends go on a quest for more pasta that sees them scale their suburb's tallest mountain and sneak into a restaurant filled with humans.",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Source of description",
-          values: [
-            {
-              content: "Print version record.",
-              source: {
-                fieldTag: "n",
-                marcTag: "588",
-                ind1: "0",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "Print version record.",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Source of description",
+        values: [
+          {
+            content: "Print version record.",
+            source: {
+              fieldTag: "n",
+              marcTag: "588",
+              ind1: "0",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Print version record.",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Connect to:",
-          values: [
-            {
-              label: "Access eNYPL",
-              content:
-                "http://link.overdrive.com/?websiteID=37&titleID=2559851",
-              source: {
-                fieldTag: "y",
-                marcTag: "856",
-                ind1: "4",
-                ind2: "0",
-                content: null,
-                subfields: [
-                  {
-                    tag: "u",
-                    content:
-                      "http://link.overdrive.com/?websiteID=37&titleID=2559851",
-                  },
-                  {
-                    tag: "y",
-                    content: "[redacted]",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Connect to:",
+        values: [
+          {
+            label: "Access eNYPL",
+            content: "http://link.overdrive.com/?websiteID=37&titleID=2559851",
+            source: {
+              fieldTag: "y",
+              marcTag: "856",
+              ind1: "4",
+              ind2: "0",
+              content: null,
+              subfields: [
+                {
+                  tag: "u",
+                  content:
+                    "http://link.overdrive.com/?websiteID=37&titleID=2559851",
+                },
+                {
+                  tag: "y",
+                  content: "[redacted]",
+                },
+              ],
             },
-            {
-              label: "Image",
-              content:
-                "http://images.contentreserve.com/ImageType-100/0293-1/{C87D2BB9-0E13-4851-A9E2-547643F41A0E}Img100.jpg",
-              source: {
-                fieldTag: "y",
-                marcTag: "856",
-                ind1: "4",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "3",
-                    content: "[redacted]",
-                  },
-                  {
-                    tag: "u",
-                    content:
-                      "http://images.contentreserve.com/ImageType-100/0293-1/{C87D2BB9-0E13-4851-A9E2-547643F41A0E}Img100.jpg",
-                  },
-                ],
-              },
+          },
+          {
+            label: "Image",
+            content:
+              "http://images.contentreserve.com/ImageType-100/0293-1/{C87D2BB9-0E13-4851-A9E2-547643F41A0E}Img100.jpg",
+            source: {
+              fieldTag: "y",
+              marcTag: "856",
+              ind1: "4",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "3",
+                  content: "[redacted]",
+                },
+                {
+                  tag: "u",
+                  content:
+                    "http://images.contentreserve.com/ImageType-100/0293-1/{C87D2BB9-0E13-4851-A9E2-547643F41A0E}Img100.jpg",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Subject",
-          values: [
-            {
-              content: "Dogs -- Fiction.",
-              source: {
-                fieldTag: "d",
-                marcTag: "650",
-                ind1: " ",
-                ind2: "1",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "Dogs",
-                  },
-                  {
-                    tag: "v",
-                    content: "Fiction.",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Subject",
+        values: [
+          {
+            content: "Dogs -- Fiction.",
+            source: {
+              fieldTag: "d",
+              marcTag: "650",
+              ind1: " ",
+              ind2: "1",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Dogs",
+                },
+                {
+                  tag: "v",
+                  content: "Fiction.",
+                },
+              ],
             },
-            {
-              content: "Pasta products -- Fiction.",
-              source: {
-                fieldTag: "d",
-                marcTag: "650",
-                ind1: " ",
-                ind2: "1",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "Pasta products",
-                  },
-                  {
-                    tag: "v",
-                    content: "Fiction.",
-                  },
-                ],
-              },
+          },
+          {
+            content: "Pasta products -- Fiction.",
+            source: {
+              fieldTag: "d",
+              marcTag: "650",
+              ind1: " ",
+              ind2: "1",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Pasta products",
+                },
+                {
+                  tag: "v",
+                  content: "Fiction.",
+                },
+              ],
             },
-            {
-              content: "Friendship -- Fiction.",
-              source: {
-                fieldTag: "d",
-                marcTag: "650",
-                ind1: " ",
-                ind2: "1",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "Friendship",
-                  },
-                  {
-                    tag: "v",
-                    content: "Fiction.",
-                  },
-                ],
-              },
+          },
+          {
+            content: "Friendship -- Fiction.",
+            source: {
+              fieldTag: "d",
+              marcTag: "650",
+              ind1: " ",
+              ind2: "1",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Friendship",
+                },
+                {
+                  tag: "v",
+                  content: "Fiction.",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Genre/Form",
-          values: [
-            {
-              content: "Humorous fiction.",
-              source: {
-                fieldTag: "d",
-                marcTag: "655",
-                ind1: " ",
-                ind2: "7",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "Humorous fiction.",
-                  },
-                  {
-                    tag: "2",
-                    content: "[redacted]",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Genre/Form",
+        values: [
+          {
+            content: "Humorous fiction.",
+            source: {
+              fieldTag: "d",
+              marcTag: "655",
+              ind1: " ",
+              ind2: "7",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Humorous fiction.",
+                },
+                {
+                  tag: "2",
+                  content: "[redacted]",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Subject",
-          values: [
-            {
-              content: "Illustrated children's books.",
-              source: {
-                fieldTag: "d",
-                marcTag: "650",
-                ind1: " ",
-                ind2: "0",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "Illustrated children's books.",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Subject",
+        values: [
+          {
+            content: "Illustrated children's books.",
+            source: {
+              fieldTag: "d",
+              marcTag: "650",
+              ind1: " ",
+              ind2: "0",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Illustrated children's books.",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Genre/Form",
-          values: [
-            {
-              content: "Humorous fiction.",
-              source: {
-                fieldTag: "d",
-                marcTag: "655",
-                ind1: " ",
-                ind2: "7",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "Humorous fiction.",
-                  },
-                  {
-                    tag: "2",
-                    content: "[redacted]",
-                  },
-                  {
-                    tag: "0",
-                    content: "[redacted]",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Genre/Form",
+        values: [
+          {
+            content: "Humorous fiction.",
+            source: {
+              fieldTag: "d",
+              marcTag: "655",
+              ind1: " ",
+              ind2: "7",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Humorous fiction.",
+                },
+                {
+                  tag: "2",
+                  content: "[redacted]",
+                },
+                {
+                  tag: "0",
+                  content: "[redacted]",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Subject",
-          values: [
-            {
-              content: "Illustrated children's books.",
-              source: {
-                fieldTag: "d",
-                marcTag: "650",
-                ind1: " ",
-                ind2: "7",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "Illustrated children's books.",
-                  },
-                  {
-                    tag: "2",
-                    content: "[redacted]",
-                  },
-                  {
-                    tag: "0",
-                    content: "[redacted]",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Subject",
+        values: [
+          {
+            content: "Illustrated children's books.",
+            source: {
+              fieldTag: "d",
+              marcTag: "650",
+              ind1: " ",
+              ind2: "7",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Illustrated children's books.",
+                },
+                {
+                  tag: "2",
+                  content: "[redacted]",
+                },
+                {
+                  tag: "0",
+                  content: "[redacted]",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Genre/Form",
-          values: [
-            {
-              content: "Electronic books.",
-              source: {
-                fieldTag: "d",
-                marcTag: "655",
-                ind1: " ",
-                ind2: "0",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "Electronic books.",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Genre/Form",
+        values: [
+          {
+            content: "Electronic books.",
+            source: {
+              fieldTag: "d",
+              marcTag: "655",
+              ind1: " ",
+              ind2: "0",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Electronic books.",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Added Author",
-          values: [
-            {
-              content: "Long, Ethan, illustrator.",
-              source: {
-                fieldTag: "b",
-                marcTag: "700",
-                ind1: "1",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "Long, Ethan,",
-                  },
-                  {
-                    tag: "e",
-                    content: "illustrator.",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Added Author",
+        values: [
+          {
+            content: "Long, Ethan, illustrator.",
+            source: {
+              fieldTag: "b",
+              marcTag: "700",
+              ind1: "1",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Long, Ethan,",
+                },
+                {
+                  tag: "e",
+                  content: "illustrator.",
+                },
+              ],
             },
-            {
-              content: "OverDrive, Inc.",
-              source: {
-                fieldTag: "b",
-                marcTag: "710",
-                ind1: "2",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "OverDrive, Inc.",
-                  },
-                ],
-              },
+          },
+          {
+            content: "OverDrive, Inc.",
+            source: {
+              fieldTag: "b",
+              marcTag: "710",
+              ind1: "2",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "OverDrive, Inc.",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Other Form:",
-          values: [
-            {
-              content:
-                "Print version: Watson, Tom, 1965- Stick Dog slurps spaghetti. First edition. New York, NY : Harper, An Imprint of HarperCollinsPublishers, [2016] 006234322X (DLC)  2016932092 (OCoLC)935985696",
-              source: {
-                fieldTag: "w",
-                marcTag: "776",
-                ind1: "0",
-                ind2: "8",
-                content: null,
-                subfields: [
-                  {
-                    tag: "i",
-                    content: "Print version:",
-                  },
-                  {
-                    tag: "a",
-                    content: "Watson, Tom, 1965-",
-                  },
-                  {
-                    tag: "t",
-                    content: "Stick Dog slurps spaghetti.",
-                  },
-                  {
-                    tag: "b",
-                    content: "First edition.",
-                  },
-                  {
-                    tag: "d",
-                    content:
-                      "New York, NY : Harper, An Imprint of HarperCollinsPublishers, [2016]",
-                  },
-                  {
-                    tag: "z",
-                    content: "006234322X",
-                  },
-                  {
-                    tag: "w",
-                    content: "(DLC)  2016932092",
-                  },
-                  {
-                    tag: "w",
-                    content: "(OCoLC)935985696",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Other Form:",
+        values: [
+          {
+            content:
+              "Print version: Watson, Tom, 1965- Stick Dog slurps spaghetti. First edition. New York, NY : Harper, An Imprint of HarperCollinsPublishers, [2016] 006234322X (DLC)  2016932092 (OCoLC)935985696",
+            source: {
+              fieldTag: "w",
+              marcTag: "776",
+              ind1: "0",
+              ind2: "8",
+              content: null,
+              subfields: [
+                {
+                  tag: "i",
+                  content: "Print version:",
+                },
+                {
+                  tag: "a",
+                  content: "Watson, Tom, 1965-",
+                },
+                {
+                  tag: "t",
+                  content: "Stick Dog slurps spaghetti.",
+                },
+                {
+                  tag: "b",
+                  content: "First edition.",
+                },
+                {
+                  tag: "d",
+                  content:
+                    "New York, NY : Harper, An Imprint of HarperCollinsPublishers, [2016]",
+                },
+                {
+                  tag: "z",
+                  content: "006234322X",
+                },
+                {
+                  tag: "w",
+                  content: "(DLC)  2016932092",
+                },
+                {
+                  tag: "w",
+                  content: "(OCoLC)935985696",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "ISBN",
-          values: [
-            {
-              content: "9780062343239 (electronic bk.)",
-              source: {
-                fieldTag: "i",
-                marcTag: "020",
-                ind1: " ",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "9780062343239",
-                  },
-                  {
-                    tag: "q",
-                    content: "(electronic bk.)",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "ISBN",
+        values: [
+          {
+            content: "9780062343239 (electronic bk.)",
+            source: {
+              fieldTag: "i",
+              marcTag: "020",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "9780062343239",
+                },
+                {
+                  tag: "q",
+                  content: "(electronic bk.)",
+                },
+              ],
             },
-            {
-              content: "0062343238 (electronic bk.)",
-              source: {
-                fieldTag: "i",
-                marcTag: "020",
-                ind1: " ",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "0062343238",
-                  },
-                  {
-                    tag: "q",
-                    content: "(electronic bk.)",
-                  },
-                ],
-              },
+          },
+          {
+            content: "0062343238 (electronic bk.)",
+            source: {
+              fieldTag: "i",
+              marcTag: "020",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "0062343238",
+                },
+                {
+                  tag: "q",
+                  content: "(electronic bk.)",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Branch Call Number",
-          values: [
-            {
-              content: "eNYPL Book",
-              source: {
-                fieldTag: "c",
-                marcTag: "091",
-                ind1: " ",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "eNYPL Book",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Branch Call Number",
+        values: [
+          {
+            content: "eNYPL Book",
+            source: {
+              fieldTag: "c",
+              marcTag: "091",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "eNYPL Book",
+                },
+              ],
             },
-          ],
-        },
-      ],
-    },
+          },
+        ],
+      },
+    ],
   },
 }
 
@@ -3604,885 +3601,883 @@ export const parallelsBib = {
     hasItemDates: true,
   },
   annotatedMarc: {
-    bib: {
-      id: "15349955",
-      nyplSource: "sierra-nypl",
-      fields: [
-        {
-          label: "Title",
-          values: [
-            {
-              content: "Povelja.",
-              source: {
-                fieldTag: "t",
-                marcTag: "245",
-                ind1: "0",
-                ind2: "0",
-                content: null,
-                subfields: [
-                  {
-                    tag: "6",
-                    content: "[redacted]",
-                  },
-                  {
-                    tag: "a",
-                    content: "Povelja.",
-                  },
-                ],
-              },
+    id: "15349955",
+    nyplSource: "sierra-nypl",
+    fields: [
+      {
+        label: "Title",
+        values: [
+          {
+            content: "Povelja.",
+            source: {
+              fieldTag: "t",
+              marcTag: "245",
+              ind1: "0",
+              ind2: "0",
+              content: null,
+              subfields: [
+                {
+                  tag: "6",
+                  content: "[redacted]",
+                },
+                {
+                  tag: "a",
+                  content: "Povelja.",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Alternate Script for Title",
-          values: [
-            {
-              content: "Повеља.",
-              source: {
-                fieldTag: "y",
-                marcTag: "880",
-                ind1: "0",
-                ind2: "0",
-                content: null,
-                subfields: [
-                  {
-                    tag: "6",
-                    content: "[redacted]",
-                  },
-                  {
-                    tag: "a",
-                    content: "Повеља.",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Alternate Script for Title",
+        values: [
+          {
+            content: "Повеља.",
+            source: {
+              fieldTag: "y",
+              marcTag: "880",
+              ind1: "0",
+              ind2: "0",
+              content: null,
+              subfields: [
+                {
+                  tag: "6",
+                  content: "[redacted]",
+                },
+                {
+                  tag: "a",
+                  content: "Повеља.",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Imprint",
-          values: [
-            {
-              content: "Kraljevo : Slovo, 1985-",
-              source: {
-                fieldTag: "p",
-                marcTag: "260",
-                ind1: " ",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "6",
-                    content: "[redacted]",
-                  },
-                  {
-                    tag: "a",
-                    content: "Kraljevo :",
-                  },
-                  {
-                    tag: "b",
-                    content: "Slovo,",
-                  },
-                  {
-                    tag: "c",
-                    content: "1985-",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Imprint",
+        values: [
+          {
+            content: "Kraljevo : Slovo, 1985-",
+            source: {
+              fieldTag: "p",
+              marcTag: "260",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "6",
+                  content: "[redacted]",
+                },
+                {
+                  tag: "a",
+                  content: "Kraljevo :",
+                },
+                {
+                  tag: "b",
+                  content: "Slovo,",
+                },
+                {
+                  tag: "c",
+                  content: "1985-",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Alternate Script for Imprint",
-          values: [
-            {
-              content: "Краљево : Слово, 1985-",
-              source: {
-                fieldTag: "y",
-                marcTag: "880",
-                ind1: " ",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "6",
-                    content: "[redacted]",
-                  },
-                  {
-                    tag: "a",
-                    content: "Краљево :",
-                  },
-                  {
-                    tag: "b",
-                    content: "Слово,",
-                  },
-                  {
-                    tag: "c",
-                    content: "1985-",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Alternate Script for Imprint",
+        values: [
+          {
+            content: "Краљево : Слово, 1985-",
+            source: {
+              fieldTag: "y",
+              marcTag: "880",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "6",
+                  content: "[redacted]",
+                },
+                {
+                  tag: "a",
+                  content: "Краљево :",
+                },
+                {
+                  tag: "b",
+                  content: "Слово,",
+                },
+                {
+                  tag: "c",
+                  content: "1985-",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Current Publisher",
-          values: [
-            {
-              content:
-                '<2012-2016>: Kraljevo : Narodna biblioteka "Stefan Prvovenčani"',
-              source: {
-                fieldTag: "p",
-                marcTag: "260",
-                ind1: "3",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "6",
-                    content: "[redacted]",
-                  },
-                  {
-                    tag: "3",
-                    content: "<2012-2016>:",
-                  },
-                  {
-                    tag: "a",
-                    content: "Kraljevo :",
-                  },
-                  {
-                    tag: "b",
-                    content: 'Narodna biblioteka "Stefan Prvovenčani"',
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Current Publisher",
+        values: [
+          {
+            content:
+              '<2012-2016>: Kraljevo : Narodna biblioteka "Stefan Prvovenčani"',
+            source: {
+              fieldTag: "p",
+              marcTag: "260",
+              ind1: "3",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "6",
+                  content: "[redacted]",
+                },
+                {
+                  tag: "3",
+                  content: "<2012-2016>:",
+                },
+                {
+                  tag: "a",
+                  content: "Kraljevo :",
+                },
+                {
+                  tag: "b",
+                  content: 'Narodna biblioteka "Stefan Prvovenčani"',
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Alternate Script for Current Publisher",
-          values: [
-            {
-              content:
-                '<2012-2016>: Краљево : Народна библиотека "Стефан Првовенчани"',
-              source: {
-                fieldTag: "y",
-                marcTag: "880",
-                ind1: "3",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "6",
-                    content: "[redacted]",
-                  },
-                  {
-                    tag: "3",
-                    content: "<2012-2016>:",
-                  },
-                  {
-                    tag: "a",
-                    content: "Краљево :",
-                  },
-                  {
-                    tag: "b",
-                    content: 'Народна библиотека "Стефан Првовенчани"',
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Alternate Script for Current Publisher",
+        values: [
+          {
+            content:
+              '<2012-2016>: Краљево : Народна библиотека "Стефан Првовенчани"',
+            source: {
+              fieldTag: "y",
+              marcTag: "880",
+              ind1: "3",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "6",
+                  content: "[redacted]",
+                },
+                {
+                  tag: "3",
+                  content: "<2012-2016>:",
+                },
+                {
+                  tag: "a",
+                  content: "Краљево :",
+                },
+                {
+                  tag: "b",
+                  content: 'Народна библиотека "Стефан Првовенчани"',
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Description",
-          values: [
-            {
-              content: "v. ; 25 cm",
-              source: {
-                fieldTag: "r",
-                marcTag: "300",
-                ind1: " ",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "v. ;",
-                  },
-                  {
-                    tag: "c",
-                    content: "25 cm",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Description",
+        values: [
+          {
+            content: "v. ; 25 cm",
+            source: {
+              fieldTag: "r",
+              marcTag: "300",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "v. ;",
+                },
+                {
+                  tag: "c",
+                  content: "25 cm",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Current Frequency",
-          values: [
-            {
-              content: "3 no. a year, <1998-2016>",
-              source: {
-                fieldTag: "r",
-                marcTag: "310",
-                ind1: " ",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "3 no. a year,",
-                  },
-                  {
-                    tag: "b",
-                    content: "<1998-2016>",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Current Frequency",
+        values: [
+          {
+            content: "3 no. a year, <1998-2016>",
+            source: {
+              fieldTag: "r",
+              marcTag: "310",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "3 no. a year,",
+                },
+                {
+                  tag: "b",
+                  content: "<1998-2016>",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Former Frequency",
-          values: [
-            {
-              content: "Four no. a year, 1986-",
-              source: {
-                fieldTag: "r",
-                marcTag: "321",
-                ind1: " ",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "Four no. a year,",
-                  },
-                  {
-                    tag: "b",
-                    content: "1986-",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Former Frequency",
+        values: [
+          {
+            content: "Four no. a year, 1986-",
+            source: {
+              fieldTag: "r",
+              marcTag: "321",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Four no. a year,",
+                },
+                {
+                  tag: "b",
+                  content: "1986-",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Publication Date",
-          values: [
-            {
-              content:
-                "Nova serija g. 15, br. 1 (1985)-nova serija 27, br. 4 (1997); g. 28, br. 1 (1998)-",
-              source: {
-                fieldTag: "r",
-                marcTag: "362",
-                ind1: "0",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "6",
-                    content: "[redacted]",
-                  },
-                  {
-                    tag: "a",
-                    content:
-                      "Nova serija g. 15, br. 1 (1985)-nova serija 27, br. 4 (1997); g. 28, br. 1 (1998)-",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Publication Date",
+        values: [
+          {
+            content:
+              "Nova serija g. 15, br. 1 (1985)-nova serija 27, br. 4 (1997); g. 28, br. 1 (1998)-",
+            source: {
+              fieldTag: "r",
+              marcTag: "362",
+              ind1: "0",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "6",
+                  content: "[redacted]",
+                },
+                {
+                  tag: "a",
+                  content:
+                    "Nova serija g. 15, br. 1 (1985)-nova serija 27, br. 4 (1997); g. 28, br. 1 (1998)-",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Alternate Script for Publication Date",
-          values: [
-            {
-              content:
-                "Нова серија г. 15, бр. 1 (1985)-нова серија 27, бр. 4 (1997); г. 28, бр. 1 (1998)-",
-              source: {
-                fieldTag: "y",
-                marcTag: "880",
-                ind1: "0",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "6",
-                    content: "[redacted]",
-                  },
-                  {
-                    tag: "a",
-                    content:
-                      "Нова серија г. 15, бр. 1 (1985)-нова серија 27, бр. 4 (1997); г. 28, бр. 1 (1998)-",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Alternate Script for Publication Date",
+        values: [
+          {
+            content:
+              "Нова серија г. 15, бр. 1 (1985)-нова серија 27, бр. 4 (1997); г. 28, бр. 1 (1998)-",
+            source: {
+              fieldTag: "y",
+              marcTag: "880",
+              ind1: "0",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "6",
+                  content: "[redacted]",
+                },
+                {
+                  tag: "a",
+                  content:
+                    "Нова серија г. 15, бр. 1 (1985)-нова серија 27, бр. 4 (1997); г. 28, бр. 1 (1998)-",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Summary",
-          values: [
-            {
-              content:
-                '"Casopis za književnosti, umetnost, kulturu, prosvetna i društvena pitanja."',
-              source: {
-                fieldTag: "n",
-                marcTag: "520",
-                ind1: " ",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "6",
-                    content: "[redacted]",
-                  },
-                  {
-                    tag: "a",
-                    content:
-                      '"Casopis za književnosti, umetnost, kulturu, prosvetna i društvena pitanja."',
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Summary",
+        values: [
+          {
+            content:
+              '"Casopis za književnosti, umetnost, kulturu, prosvetna i društvena pitanja."',
+            source: {
+              fieldTag: "n",
+              marcTag: "520",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "6",
+                  content: "[redacted]",
+                },
+                {
+                  tag: "a",
+                  content:
+                    '"Casopis za književnosti, umetnost, kulturu, prosvetna i društvena pitanja."',
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Alternate Script for Summary",
-          values: [
-            {
-              content:
-                '"Часопис за књижевности, уметност, културу, просветна и друштвена питања."',
-              source: {
-                fieldTag: "y",
-                marcTag: "880",
-                ind1: " ",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "6",
-                    content: "[redacted]",
-                  },
-                  {
-                    tag: "a",
-                    content:
-                      '"Часопис за књижевности, уметност, културу, просветна и друштвена питања."',
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Alternate Script for Summary",
+        values: [
+          {
+            content:
+              '"Часопис за књижевности, уметност, културу, просветна и друштвена питања."',
+            source: {
+              fieldTag: "y",
+              marcTag: "880",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "6",
+                  content: "[redacted]",
+                },
+                {
+                  tag: "a",
+                  content:
+                    '"Часопис за књижевности, уметност, културу, просветна и друштвена питања."',
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Supplement",
-          values: [
-            {
-              content: "Has supplement, <2012-2016>: Pojedinačno.",
-              source: {
-                fieldTag: "n",
-                marcTag: "525",
-                ind1: " ",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "Has supplement, <2012-2016>: Pojedinačno.",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Supplement",
+        values: [
+          {
+            content: "Has supplement, <2012-2016>: Pojedinačno.",
+            source: {
+              fieldTag: "n",
+              marcTag: "525",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Has supplement, <2012-2016>: Pojedinačno.",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Language",
-          values: [
-            {
-              content: "In Serbian (Cyrillic).",
-              source: {
-                fieldTag: "n",
-                marcTag: "546",
-                ind1: " ",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "In Serbian",
-                  },
-                  {
-                    tag: "b",
-                    content: "(Cyrillic).",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Language",
+        values: [
+          {
+            content: "In Serbian (Cyrillic).",
+            source: {
+              fieldTag: "n",
+              marcTag: "546",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "In Serbian",
+                },
+                {
+                  tag: "b",
+                  content: "(Cyrillic).",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Issued By",
-          values: [
-            {
-              content: "Issued by: Narodna biblioteka Kraljevo.",
-              source: {
-                fieldTag: "n",
-                marcTag: "550",
-                ind1: " ",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "6",
-                    content: "[redacted]",
-                  },
-                  {
-                    tag: "a",
-                    content: "Issued by: Narodna biblioteka Kraljevo.",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Issued By",
+        values: [
+          {
+            content: "Issued by: Narodna biblioteka Kraljevo.",
+            source: {
+              fieldTag: "n",
+              marcTag: "550",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "6",
+                  content: "[redacted]",
+                },
+                {
+                  tag: "a",
+                  content: "Issued by: Narodna biblioteka Kraljevo.",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Alternate Script for Issued By",
-          values: [
-            {
-              content: "Issued by: Народна библиотека Краљево.",
-              source: {
-                fieldTag: "y",
-                marcTag: "880",
-                ind1: " ",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "6",
-                    content: "[redacted]",
-                  },
-                  {
-                    tag: "a",
-                    content: "Issued by: Народна библиотека Краљево.",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Alternate Script for Issued By",
+        values: [
+          {
+            content: "Issued by: Народна библиотека Краљево.",
+            source: {
+              fieldTag: "y",
+              marcTag: "880",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "6",
+                  content: "[redacted]",
+                },
+                {
+                  tag: "a",
+                  content: "Issued by: Народна библиотека Краљево.",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Note",
-          values: [
-            {
-              content: "Latest issue consulted: G. 46, 3 (2016).",
-              source: {
-                fieldTag: "n",
-                marcTag: "588",
-                ind1: " ",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "Latest issue consulted: G. 46, 3 (2016).",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Note",
+        values: [
+          {
+            content: "Latest issue consulted: G. 46, 3 (2016).",
+            source: {
+              fieldTag: "n",
+              marcTag: "588",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Latest issue consulted: G. 46, 3 (2016).",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Subject",
-          values: [
-            {
-              content: "Serbia -- Civilization -- Periodicals.",
-              source: {
-                fieldTag: "d",
-                marcTag: "651",
-                ind1: " ",
-                ind2: "0",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "Serbia",
-                  },
-                  {
-                    tag: "x",
-                    content: "Civilization",
-                  },
-                  {
-                    tag: "v",
-                    content: "Periodicals.",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Subject",
+        values: [
+          {
+            content: "Serbia -- Civilization -- Periodicals.",
+            source: {
+              fieldTag: "d",
+              marcTag: "651",
+              ind1: " ",
+              ind2: "0",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Serbia",
+                },
+                {
+                  tag: "x",
+                  content: "Civilization",
+                },
+                {
+                  tag: "v",
+                  content: "Periodicals.",
+                },
+              ],
             },
-            {
-              content: "Civilization.",
-              source: {
-                fieldTag: "d",
-                marcTag: "650",
-                ind1: " ",
-                ind2: "7",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "Civilization.",
-                  },
-                  {
-                    tag: "2",
-                    content: "[redacted]",
-                  },
-                  {
-                    tag: "0",
-                    content: "[redacted]",
-                  },
-                ],
-              },
+          },
+          {
+            content: "Civilization.",
+            source: {
+              fieldTag: "d",
+              marcTag: "650",
+              ind1: " ",
+              ind2: "7",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Civilization.",
+                },
+                {
+                  tag: "2",
+                  content: "[redacted]",
+                },
+                {
+                  tag: "0",
+                  content: "[redacted]",
+                },
+              ],
             },
-            {
-              content: "Serbia.",
-              source: {
-                fieldTag: "d",
-                marcTag: "651",
-                ind1: " ",
-                ind2: "7",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "Serbia.",
-                  },
-                  {
-                    tag: "2",
-                    content: "[redacted]",
-                  },
-                  {
-                    tag: "0",
-                    content: "[redacted]",
-                  },
-                ],
-              },
+          },
+          {
+            content: "Serbia.",
+            source: {
+              fieldTag: "d",
+              marcTag: "651",
+              ind1: " ",
+              ind2: "7",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Serbia.",
+                },
+                {
+                  tag: "2",
+                  content: "[redacted]",
+                },
+                {
+                  tag: "0",
+                  content: "[redacted]",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Genre/Form",
-          values: [
-            {
-              content: "Periodicals.",
-              source: {
-                fieldTag: "d",
-                marcTag: "655",
-                ind1: " ",
-                ind2: "7",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "Periodicals.",
-                  },
-                  {
-                    tag: "2",
-                    content: "[redacted]",
-                  },
-                  {
-                    tag: "0",
-                    content: "[redacted]",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Genre/Form",
+        values: [
+          {
+            content: "Periodicals.",
+            source: {
+              fieldTag: "d",
+              marcTag: "655",
+              ind1: " ",
+              ind2: "7",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Periodicals.",
+                },
+                {
+                  tag: "2",
+                  content: "[redacted]",
+                },
+                {
+                  tag: "0",
+                  content: "[redacted]",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Added Author",
-          values: [
-            {
-              content: 'Narodna biblioteka "Stefan Prvovenčani"',
-              source: {
-                fieldTag: "b",
-                marcTag: "710",
-                ind1: "2",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: 'Narodna biblioteka "Stefan Prvovenčani"',
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Added Author",
+        values: [
+          {
+            content: 'Narodna biblioteka "Stefan Prvovenčani"',
+            source: {
+              fieldTag: "b",
+              marcTag: "710",
+              ind1: "2",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: 'Narodna biblioteka "Stefan Prvovenčani"',
+                },
+              ],
             },
-            {
-              content: "Narodna biblioteka Kraljevo.",
-              source: {
-                fieldTag: "b",
-                marcTag: "710",
-                ind1: "2",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "6",
-                    content: "[redacted]",
-                  },
-                  {
-                    tag: "a",
-                    content: "Narodna biblioteka Kraljevo.",
-                  },
-                ],
-              },
+          },
+          {
+            content: "Narodna biblioteka Kraljevo.",
+            source: {
+              fieldTag: "b",
+              marcTag: "710",
+              ind1: "2",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "6",
+                  content: "[redacted]",
+                },
+                {
+                  tag: "a",
+                  content: "Narodna biblioteka Kraljevo.",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Alternate Script for Added Author",
-          values: [
-            {
-              content: "Народна библиотека Краљево.",
-              source: {
-                fieldTag: "y",
-                marcTag: "880",
-                ind1: "2",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "6",
-                    content: "[redacted]",
-                  },
-                  {
-                    tag: "a",
-                    content: "Народна библиотека Краљево.",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Alternate Script for Added Author",
+        values: [
+          {
+            content: "Народна библиотека Краљево.",
+            source: {
+              fieldTag: "y",
+              marcTag: "880",
+              ind1: "2",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "6",
+                  content: "[redacted]",
+                },
+                {
+                  tag: "a",
+                  content: "Народна библиотека Краљево.",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Added Author",
-          values: [
-            {
-              content: 'Narodna biblioteka "Stefan Prvovenčani."',
-              source: {
-                fieldTag: "b",
-                marcTag: "710",
-                ind1: "2",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: 'Narodna biblioteka "Stefan Prvovenčani."',
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Added Author",
+        values: [
+          {
+            content: 'Narodna biblioteka "Stefan Prvovenčani."',
+            source: {
+              fieldTag: "b",
+              marcTag: "710",
+              ind1: "2",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: 'Narodna biblioteka "Stefan Prvovenčani."',
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Added Title",
-          values: [
-            {
-              content: "Pojedinačno.",
-              source: {
-                fieldTag: "u",
-                marcTag: "740",
-                ind1: "0",
-                ind2: "2",
-                content: null,
-                subfields: [
-                  {
-                    tag: "6",
-                    content: "[redacted]",
-                  },
-                  {
-                    tag: "a",
-                    content: "Pojedinačno.",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Added Title",
+        values: [
+          {
+            content: "Pojedinačno.",
+            source: {
+              fieldTag: "u",
+              marcTag: "740",
+              ind1: "0",
+              ind2: "2",
+              content: null,
+              subfields: [
+                {
+                  tag: "6",
+                  content: "[redacted]",
+                },
+                {
+                  tag: "a",
+                  content: "Pojedinačno.",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Alternate Script for Added Title",
-          values: [
-            {
-              content: "Појединачно.",
-              source: {
-                fieldTag: "y",
-                marcTag: "880",
-                ind1: "0",
-                ind2: "2",
-                content: null,
-                subfields: [
-                  {
-                    tag: "6",
-                    content: "[redacted]",
-                  },
-                  {
-                    tag: "a",
-                    content: "Појединачно.",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Alternate Script for Added Title",
+        values: [
+          {
+            content: "Појединачно.",
+            source: {
+              fieldTag: "y",
+              marcTag: "880",
+              ind1: "0",
+              ind2: "2",
+              content: null,
+              subfields: [
+                {
+                  tag: "6",
+                  content: "[redacted]",
+                },
+                {
+                  tag: "a",
+                  content: "Појединачно.",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Continues",
-          values: [
-            {
-              content: "Povelja oktobra",
-              source: {
-                fieldTag: "x",
-                marcTag: "780",
-                ind1: "0",
-                ind2: "0",
-                content: null,
-                subfields: [
-                  {
-                    tag: "6",
-                    content: "[redacted]",
-                  },
-                  {
-                    tag: "t",
-                    content: "Povelja oktobra",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Continues",
+        values: [
+          {
+            content: "Povelja oktobra",
+            source: {
+              fieldTag: "x",
+              marcTag: "780",
+              ind1: "0",
+              ind2: "0",
+              content: null,
+              subfields: [
+                {
+                  tag: "6",
+                  content: "[redacted]",
+                },
+                {
+                  tag: "t",
+                  content: "Povelja oktobra",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Alternate Script for Continues",
-          values: [
-            {
-              content: "Повеља октобра",
-              source: {
-                fieldTag: "y",
-                marcTag: "880",
-                ind1: "0",
-                ind2: "0",
-                content: null,
-                subfields: [
-                  {
-                    tag: "6",
-                    content: "[redacted]",
-                  },
-                  {
-                    tag: "t",
-                    content: "Повеља октобра",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Alternate Script for Continues",
+        values: [
+          {
+            content: "Повеља октобра",
+            source: {
+              fieldTag: "y",
+              marcTag: "880",
+              ind1: "0",
+              ind2: "0",
+              content: null,
+              subfields: [
+                {
+                  tag: "6",
+                  content: "[redacted]",
+                },
+                {
+                  tag: "t",
+                  content: "Повеља октобра",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Other Form:",
-          values: [
-            {
-              content: "Online version: Povelja (OCoLC)760047199",
-              source: {
-                fieldTag: "w",
-                marcTag: "776",
-                ind1: "0",
-                ind2: "8",
-                content: null,
-                subfields: [
-                  {
-                    tag: "i",
-                    content: "Online version:",
-                  },
-                  {
-                    tag: "t",
-                    content: "Povelja",
-                  },
-                  {
-                    tag: "w",
-                    content: "(OCoLC)760047199",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Other Form:",
+        values: [
+          {
+            content: "Online version: Povelja (OCoLC)760047199",
+            source: {
+              fieldTag: "w",
+              marcTag: "776",
+              ind1: "0",
+              ind2: "8",
+              content: null,
+              subfields: [
+                {
+                  tag: "i",
+                  content: "Online version:",
+                },
+                {
+                  tag: "t",
+                  content: "Povelja",
+                },
+                {
+                  tag: "w",
+                  content: "(OCoLC)760047199",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "LCCN",
-          values: [
-            {
-              content: "sn 95033418",
-              source: {
-                fieldTag: "l",
-                marcTag: "010",
-                ind1: " ",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "sn 95033418",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "LCCN",
+        values: [
+          {
+            content: "sn 95033418",
+            source: {
+              fieldTag: "l",
+              marcTag: "010",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "sn 95033418",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "ISSN",
-          values: [
-            {
-              content: "0352-7751 0352-7751",
-              source: {
-                fieldTag: "i",
-                marcTag: "022",
-                ind1: " ",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "0352-7751",
-                  },
-                  {
-                    tag: "l",
-                    content: "0352-7751",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "ISSN",
+        values: [
+          {
+            content: "0352-7751 0352-7751",
+            source: {
+              fieldTag: "i",
+              marcTag: "022",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "0352-7751",
+                },
+                {
+                  tag: "l",
+                  content: "0352-7751",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Research Call Number",
-          values: [
-            {
-              content: "*QKKA 08-490",
-              source: {
-                fieldTag: "q",
-                marcTag: "852",
-                ind1: "8",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "h",
-                    content: "*QKKA 08-490",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Research Call Number",
+        values: [
+          {
+            content: "*QKKA 08-490",
+            source: {
+              fieldTag: "q",
+              marcTag: "852",
+              ind1: "8",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "h",
+                  content: "*QKKA 08-490",
+                },
+              ],
             },
-          ],
-        },
-      ],
-    },
+          },
+        ],
+      },
+    ],
   },
 }
 
@@ -4675,286 +4670,284 @@ export const noParallels = {
     hasItemDates: false,
   },
   annotatedMarc: {
-    bib: {
-      id: "16145054",
-      nyplSource: "sierra-nypl",
-      fields: [
-        {
-          label: "Author",
-          values: [
-            {
-              content: "Cortanze, Gérard de.",
-              source: {
-                fieldTag: "a",
-                marcTag: "100",
-                ind1: "1",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "Cortanze, Gérard de.",
-                  },
-                ],
-              },
+    id: "16145054",
+    nyplSource: "sierra-nypl",
+    fields: [
+      {
+        label: "Author",
+        values: [
+          {
+            content: "Cortanze, Gérard de.",
+            source: {
+              fieldTag: "a",
+              marcTag: "100",
+              ind1: "1",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Cortanze, Gérard de.",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Title",
-          values: [
-            {
-              content: "Spaghetti! / Gérard de Cortanze.",
-              source: {
-                fieldTag: "t",
-                marcTag: "245",
-                ind1: "1",
-                ind2: "0",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "Spaghetti! /",
-                  },
-                  {
-                    tag: "c",
-                    content: "Gérard de Cortanze.",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Title",
+        values: [
+          {
+            content: "Spaghetti! / Gérard de Cortanze.",
+            source: {
+              fieldTag: "t",
+              marcTag: "245",
+              ind1: "1",
+              ind2: "0",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Spaghetti! /",
+                },
+                {
+                  tag: "c",
+                  content: "Gérard de Cortanze.",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Imprint",
-          values: [
-            {
-              content: "[Paris, France] : Gallimard, c2005.",
-              source: {
-                fieldTag: "p",
-                marcTag: "260",
-                ind1: " ",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "[Paris, France] :",
-                  },
-                  {
-                    tag: "b",
-                    content: "Gallimard,",
-                  },
-                  {
-                    tag: "c",
-                    content: "c2005.",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Imprint",
+        values: [
+          {
+            content: "[Paris, France] : Gallimard, c2005.",
+            source: {
+              fieldTag: "p",
+              marcTag: "260",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "[Paris, France] :",
+                },
+                {
+                  tag: "b",
+                  content: "Gallimard,",
+                },
+                {
+                  tag: "c",
+                  content: "c2005.",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Description",
-          values: [
-            {
-              content: "193 p. : ill. ; 19 cm.",
-              source: {
-                fieldTag: "r",
-                marcTag: "300",
-                ind1: " ",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "193 p. :",
-                  },
-                  {
-                    tag: "b",
-                    content: "ill. ;",
-                  },
-                  {
-                    tag: "c",
-                    content: "19 cm.",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Description",
+        values: [
+          {
+            content: "193 p. : ill. ; 19 cm.",
+            source: {
+              fieldTag: "r",
+              marcTag: "300",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "193 p. :",
+                },
+                {
+                  tag: "b",
+                  content: "ill. ;",
+                },
+                {
+                  tag: "c",
+                  content: "19 cm.",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Series",
-          values: [
-            {
-              content: "Haute enfance",
-              source: {
-                fieldTag: "s",
-                marcTag: "490",
-                ind1: "1",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "Haute enfance",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Series",
+        values: [
+          {
+            content: "Haute enfance",
+            source: {
+              fieldTag: "s",
+              marcTag: "490",
+              ind1: "1",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Haute enfance",
+                },
+              ],
             },
-            {
-              content: "Haute enfance (Gallimard (Firm))",
-              source: {
-                fieldTag: "s",
-                marcTag: "830",
-                ind1: " ",
-                ind2: "0",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "Haute enfance (Gallimard (Firm))",
-                  },
-                ],
-              },
+          },
+          {
+            content: "Haute enfance (Gallimard (Firm))",
+            source: {
+              fieldTag: "s",
+              marcTag: "830",
+              ind1: " ",
+              ind2: "0",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Haute enfance (Gallimard (Firm))",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Indexed Term",
-          values: [
-            {
-              content: "Autobiographical Narrative",
-              source: {
-                fieldTag: "d",
-                marcTag: "653",
-                ind1: " ",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "Autobiographical Narrative",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Indexed Term",
+        values: [
+          {
+            content: "Autobiographical Narrative",
+            source: {
+              fieldTag: "d",
+              marcTag: "653",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Autobiographical Narrative",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Subject",
-          values: [
-            {
-              content: "Cortanze, Gérard de -- Childhood and youth.",
-              source: {
-                fieldTag: "d",
-                marcTag: "600",
-                ind1: "1",
-                ind2: "0",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "Cortanze, Gérard de",
-                  },
-                  {
-                    tag: "x",
-                    content: "Childhood and youth.",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Subject",
+        values: [
+          {
+            content: "Cortanze, Gérard de -- Childhood and youth.",
+            source: {
+              fieldTag: "d",
+              marcTag: "600",
+              ind1: "1",
+              ind2: "0",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Cortanze, Gérard de",
+                },
+                {
+                  tag: "x",
+                  content: "Childhood and youth.",
+                },
+              ],
             },
-            {
-              content: "Authors, French -- 20th century -- Biography.",
-              source: {
-                fieldTag: "d",
-                marcTag: "650",
-                ind1: " ",
-                ind2: "0",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "Authors, French",
-                  },
-                  {
-                    tag: "y",
-                    content: "20th century",
-                  },
-                  {
-                    tag: "v",
-                    content: "Biography.",
-                  },
-                ],
-              },
+          },
+          {
+            content: "Authors, French -- 20th century -- Biography.",
+            source: {
+              fieldTag: "d",
+              marcTag: "650",
+              ind1: " ",
+              ind2: "0",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Authors, French",
+                },
+                {
+                  tag: "y",
+                  content: "20th century",
+                },
+                {
+                  tag: "v",
+                  content: "Biography.",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "LCCN",
-          values: [
-            {
-              content: "2005483039",
-              source: {
-                fieldTag: "l",
-                marcTag: "010",
-                ind1: " ",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "2005483039",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "LCCN",
+        values: [
+          {
+            content: "2005483039",
+            source: {
+              fieldTag: "l",
+              marcTag: "010",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "2005483039",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "ISBN",
-          values: [
-            {
-              content: "2070775178",
-              source: {
-                fieldTag: "i",
-                marcTag: "020",
-                ind1: " ",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "2070775178",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "ISBN",
+        values: [
+          {
+            content: "2070775178",
+            source: {
+              fieldTag: "i",
+              marcTag: "020",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "2070775178",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Research Call Number",
-          values: [
-            {
-              content: "JFC 06-438",
-              source: {
-                fieldTag: "q",
-                marcTag: "852",
-                ind1: "8",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "h",
-                    content: "JFC 06-438",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Research Call Number",
+        values: [
+          {
+            content: "JFC 06-438",
+            source: {
+              fieldTag: "q",
+              marcTag: "852",
+              ind1: "8",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "h",
+                  content: "JFC 06-438",
+                },
+              ],
             },
-          ],
-        },
-      ],
-    },
+          },
+        ],
+      },
+    ],
   },
 }
 
@@ -5258,485 +5251,482 @@ export const yiddishBib = {
     hasItemDates: false,
   },
   annotatedMarc: {
-    bib: {
-      id: "13966759",
-      nyplSource: "sierra-nypl",
-      fields: [
-        {
-          label: "Title",
-          values: [
-            {
-              content:
-                "Sefer Ḥorosṭḳov = Chorostkow book / ha-ʻorekh, Daṿid Shṭoḳfish.",
-              source: {
-                fieldTag: "t",
-                marcTag: "245",
-                ind1: "0",
-                ind2: "0",
-                content: null,
-                subfields: [
-                  {
-                    tag: "6",
-                    content: "[redacted]",
-                  },
-                  {
-                    tag: "a",
-                    content: "Sefer Ḥorosṭḳov =",
-                  },
-                  {
-                    tag: "b",
-                    content: "Chorostkow book /",
-                  },
-                  {
-                    tag: "c",
-                    content: "ha-ʻorekh, Daṿid Shṭoḳfish.",
-                  },
-                ],
-              },
+    id: "13966759",
+    nyplSource: "sierra-nypl",
+    fields: [
+      {
+        label: "Title",
+        values: [
+          {
+            content:
+              "Sefer Ḥorosṭḳov = Chorostkow book / ha-ʻorekh, Daṿid Shṭoḳfish.",
+            source: {
+              fieldTag: "t",
+              marcTag: "245",
+              ind1: "0",
+              ind2: "0",
+              content: null,
+              subfields: [
+                {
+                  tag: "6",
+                  content: "[redacted]",
+                },
+                {
+                  tag: "a",
+                  content: "Sefer Ḥorosṭḳov =",
+                },
+                {
+                  tag: "b",
+                  content: "Chorostkow book /",
+                },
+                {
+                  tag: "c",
+                  content: "ha-ʻorekh, Daṿid Shṭoḳfish.",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Alternate Script for Title",
-          values: [
-            {
-              content: "ספר חורוסטוב = Chrostkow book / העורך, דוד שטאקפיש.",
-              source: {
-                fieldTag: "y",
-                marcTag: "880",
-                ind1: "0",
-                ind2: "0",
-                content: null,
-                subfields: [
-                  {
-                    tag: "6",
-                    content: "[redacted]",
-                  },
-                  {
-                    tag: "a",
-                    content: "ספר חורוסטוב =",
-                  },
-                  {
-                    tag: "b",
-                    content: "Chrostkow book /",
-                  },
-                  {
-                    tag: "c",
-                    content: "העורך, דוד שטאקפיש.",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Alternate Script for Title",
+        values: [
+          {
+            content: "ספר חורוסטוב = Chrostkow book / העורך, דוד שטאקפיש.",
+            source: {
+              fieldTag: "y",
+              marcTag: "880",
+              ind1: "0",
+              ind2: "0",
+              content: null,
+              subfields: [
+                {
+                  tag: "6",
+                  content: "[redacted]",
+                },
+                {
+                  tag: "a",
+                  content: "ספר חורוסטוב =",
+                },
+                {
+                  tag: "b",
+                  content: "Chrostkow book /",
+                },
+                {
+                  tag: "c",
+                  content: "העורך, דוד שטאקפיש.",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Imprint",
-          values: [
-            {
-              content:
-                "Tel Aviv : Ṿaʻad irgun yotsʼe Ḥorosṭḳov be-Yiśraʼel, 1968.",
-              source: {
-                fieldTag: "p",
-                marcTag: "260",
-                ind1: " ",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "6",
-                    content: "[redacted]",
-                  },
-                  {
-                    tag: "a",
-                    content: "Tel Aviv :",
-                  },
-                  {
-                    tag: "b",
-                    content: "Ṿaʻad irgun yotsʼe Ḥorosṭḳov be-Yiśraʼel,",
-                  },
-                  {
-                    tag: "c",
-                    content: "1968.",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Imprint",
+        values: [
+          {
+            content:
+              "Tel Aviv : Ṿaʻad irgun yotsʼe Ḥorosṭḳov be-Yiśraʼel, 1968.",
+            source: {
+              fieldTag: "p",
+              marcTag: "260",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "6",
+                  content: "[redacted]",
+                },
+                {
+                  tag: "a",
+                  content: "Tel Aviv :",
+                },
+                {
+                  tag: "b",
+                  content: "Ṿaʻad irgun yotsʼe Ḥorosṭḳov be-Yiśraʼel,",
+                },
+                {
+                  tag: "c",
+                  content: "1968.",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Alternate Script for Imprint",
-          values: [
-            {
-              content: "תל אביב : ועד ארגון יוצאי חורוסטוב בישראל, 8691.",
-              source: {
-                fieldTag: "y",
-                marcTag: "880",
-                ind1: " ",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "6",
-                    content: "[redacted]",
-                  },
-                  {
-                    tag: "a",
-                    content: "תל אביב :",
-                  },
-                  {
-                    tag: "b",
-                    content: "ועד ארגון יוצאי חורוסטוב בישראל,",
-                  },
-                  {
-                    tag: "c",
-                    content: "8691.",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Alternate Script for Imprint",
+        values: [
+          {
+            content: "תל אביב : ועד ארגון יוצאי חורוסטוב בישראל, 8691.",
+            source: {
+              fieldTag: "y",
+              marcTag: "880",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "6",
+                  content: "[redacted]",
+                },
+                {
+                  tag: "a",
+                  content: "תל אביב :",
+                },
+                {
+                  tag: "b",
+                  content: "ועד ארגון יוצאי חורוסטוב בישראל,",
+                },
+                {
+                  tag: "c",
+                  content: "8691.",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Description",
-          values: [
-            {
-              content: "418 p. : ill., facsims., ports. ; 25 cm.",
-              source: {
-                fieldTag: "r",
-                marcTag: "300",
-                ind1: " ",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "418 p. :",
-                  },
-                  {
-                    tag: "b",
-                    content: "ill., facsims., ports. ;",
-                  },
-                  {
-                    tag: "c",
-                    content: "25 cm.",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Description",
+        values: [
+          {
+            content: "418 p. : ill., facsims., ports. ; 25 cm.",
+            source: {
+              fieldTag: "r",
+              marcTag: "300",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "418 p. :",
+                },
+                {
+                  tag: "b",
+                  content: "ill., facsims., ports. ;",
+                },
+                {
+                  tag: "c",
+                  content: "25 cm.",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Language",
-          values: [
-            {
-              content: "Hebrew orYiddish.",
-              source: {
-                fieldTag: "n",
-                marcTag: "546",
-                ind1: " ",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "Hebrew orYiddish.",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Language",
+        values: [
+          {
+            content: "Hebrew orYiddish.",
+            source: {
+              fieldTag: "n",
+              marcTag: "546",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Hebrew orYiddish.",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Connect to:",
-          values: [
-            {
-              label: "NYPL Digital Collections",
-              content: "http://link.nypl.org/QDOW-HthTv2--JmvYIVzeg3",
-              source: {
-                fieldTag: "y",
-                marcTag: "856",
-                ind1: "4",
-                ind2: "0",
-                content: null,
-                subfields: [
-                  {
-                    tag: "z",
-                    content: "[redacted]",
-                  },
-                  {
-                    tag: "u",
-                    content: "http://link.nypl.org/QDOW-HthTv2--JmvYIVzeg3",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Connect to:",
+        values: [
+          {
+            label: "NYPL Digital Collections",
+            content: "http://link.nypl.org/QDOW-HthTv2--JmvYIVzeg3",
+            source: {
+              fieldTag: "y",
+              marcTag: "856",
+              ind1: "4",
+              ind2: "0",
+              content: null,
+              subfields: [
+                {
+                  tag: "z",
+                  content: "[redacted]",
+                },
+                {
+                  tag: "u",
+                  content: "http://link.nypl.org/QDOW-HthTv2--JmvYIVzeg3",
+                },
+              ],
             },
-            {
-              label: "Yiddish Book Center",
-              content:
-                "https://www.yiddishbookcenter.org/collections/yizkor-books/yzk-nybc313724",
-              source: {
-                fieldTag: "y",
-                marcTag: "856",
-                ind1: "4",
-                ind2: "0",
-                content: null,
-                subfields: [
-                  {
-                    tag: "z",
-                    content: "[redacted]",
-                  },
-                  {
-                    tag: "u",
-                    content:
-                      "https://www.yiddishbookcenter.org/collections/yizkor-books/yzk-nybc313724",
-                  },
-                ],
-              },
+          },
+          {
+            label: "Yiddish Book Center",
+            content:
+              "https://www.yiddishbookcenter.org/collections/yizkor-books/yzk-nybc313724",
+            source: {
+              fieldTag: "y",
+              marcTag: "856",
+              ind1: "4",
+              ind2: "0",
+              content: null,
+              subfields: [
+                {
+                  tag: "z",
+                  content: "[redacted]",
+                },
+                {
+                  tag: "u",
+                  content:
+                    "https://www.yiddishbookcenter.org/collections/yizkor-books/yzk-nybc313724",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Subject",
-          values: [
-            {
-              content: "Jews -- Ukraine -- Khorostkov -- History.",
-              source: {
-                fieldTag: "d",
-                marcTag: "650",
-                ind1: " ",
-                ind2: "0",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "Jews",
-                  },
-                  {
-                    tag: "z",
-                    content: "Ukraine",
-                  },
-                  {
-                    tag: "z",
-                    content: "Khorostkov",
-                  },
-                  {
-                    tag: "x",
-                    content: "History.",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Subject",
+        values: [
+          {
+            content: "Jews -- Ukraine -- Khorostkov -- History.",
+            source: {
+              fieldTag: "d",
+              marcTag: "650",
+              ind1: " ",
+              ind2: "0",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Jews",
+                },
+                {
+                  tag: "z",
+                  content: "Ukraine",
+                },
+                {
+                  tag: "z",
+                  content: "Khorostkov",
+                },
+                {
+                  tag: "x",
+                  content: "History.",
+                },
+              ],
             },
-            {
-              content:
-                "Holocaust, Jewish (1939-1945) -- Ukraine -- Khorostkov.",
-              source: {
-                fieldTag: "d",
-                marcTag: "650",
-                ind1: " ",
-                ind2: "0",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "Holocaust, Jewish (1939-1945)",
-                  },
-                  {
-                    tag: "z",
-                    content: "Ukraine",
-                  },
-                  {
-                    tag: "z",
-                    content: "Khorostkov.",
-                  },
-                ],
-              },
+          },
+          {
+            content: "Holocaust, Jewish (1939-1945) -- Ukraine -- Khorostkov.",
+            source: {
+              fieldTag: "d",
+              marcTag: "650",
+              ind1: " ",
+              ind2: "0",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Holocaust, Jewish (1939-1945)",
+                },
+                {
+                  tag: "z",
+                  content: "Ukraine",
+                },
+                {
+                  tag: "z",
+                  content: "Khorostkov.",
+                },
+              ],
             },
-            {
-              content: "Khorostkov (Ukraine) -- Ethnic relations.",
-              source: {
-                fieldTag: "d",
-                marcTag: "651",
-                ind1: " ",
-                ind2: "0",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "Khorostkov (Ukraine)",
-                  },
-                  {
-                    tag: "x",
-                    content: "Ethnic relations.",
-                  },
-                ],
-              },
+          },
+          {
+            content: "Khorostkov (Ukraine) -- Ethnic relations.",
+            source: {
+              fieldTag: "d",
+              marcTag: "651",
+              ind1: " ",
+              ind2: "0",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Khorostkov (Ukraine)",
+                },
+                {
+                  tag: "x",
+                  content: "Ethnic relations.",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Genre/Form",
-          values: [
-            {
-              content: "Memorial books (Holocaust)",
-              source: {
-                fieldTag: "d",
-                marcTag: "655",
-                ind1: " ",
-                ind2: "0",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "Memorial books (Holocaust)",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Genre/Form",
+        values: [
+          {
+            content: "Memorial books (Holocaust)",
+            source: {
+              fieldTag: "d",
+              marcTag: "655",
+              ind1: " ",
+              ind2: "0",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Memorial books (Holocaust)",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Added Author",
-          values: [
-            {
-              content: "Sztokfisz, David.",
-              source: {
-                fieldTag: "b",
-                marcTag: "700",
-                ind1: "1",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "6",
-                    content: "[redacted]",
-                  },
-                  {
-                    tag: "a",
-                    content: "Sztokfisz, David.",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Added Author",
+        values: [
+          {
+            content: "Sztokfisz, David.",
+            source: {
+              fieldTag: "b",
+              marcTag: "700",
+              ind1: "1",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "6",
+                  content: "[redacted]",
+                },
+                {
+                  tag: "a",
+                  content: "Sztokfisz, David.",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Alternate Script for Added Author",
-          values: [
-            {
-              content: "שטאקפיש, דוד.",
-              source: {
-                fieldTag: "y",
-                marcTag: "880",
-                ind1: "1",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "6",
-                    content: "[redacted]",
-                  },
-                  {
-                    tag: "a",
-                    content: "שטאקפיש, דוד.",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Alternate Script for Added Author",
+        values: [
+          {
+            content: "שטאקפיש, דוד.",
+            source: {
+              fieldTag: "y",
+              marcTag: "880",
+              ind1: "1",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "6",
+                  content: "[redacted]",
+                },
+                {
+                  tag: "a",
+                  content: "שטאקפיש, דוד.",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Spine Title",
-          values: [
-            {
-              content: "Horosṭḳov; sefer zikaron",
-              source: {
-                fieldTag: "u",
-                marcTag: "246",
-                ind1: "1",
-                ind2: "8",
-                content: null,
-                subfields: [
-                  {
-                    tag: "6",
-                    content: "[redacted]",
-                  },
-                  {
-                    tag: "a",
-                    content: "Horosṭḳov; sefer zikaron",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Spine Title",
+        values: [
+          {
+            content: "Horosṭḳov; sefer zikaron",
+            source: {
+              fieldTag: "u",
+              marcTag: "246",
+              ind1: "1",
+              ind2: "8",
+              content: null,
+              subfields: [
+                {
+                  tag: "6",
+                  content: "[redacted]",
+                },
+                {
+                  tag: "a",
+                  content: "Horosṭḳov; sefer zikaron",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Alternate Script for Spine Title",
-          values: [
-            {
-              content: "חורוסטקוב; ספר-זכרון",
-              source: {
-                fieldTag: "y",
-                marcTag: "880",
-                ind1: "1",
-                ind2: "8",
-                content: null,
-                subfields: [
-                  {
-                    tag: "6",
-                    content: "[redacted]",
-                  },
-                  {
-                    tag: "a",
-                    content: "חורוסטקוב; ספר-זכרון",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Alternate Script for Spine Title",
+        values: [
+          {
+            content: "חורוסטקוב; ספר-זכרון",
+            source: {
+              fieldTag: "y",
+              marcTag: "880",
+              ind1: "1",
+              ind2: "8",
+              content: null,
+              subfields: [
+                {
+                  tag: "6",
+                  content: "[redacted]",
+                },
+                {
+                  tag: "a",
+                  content: "חורוסטקוב; ספר-זכרון",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "LCCN",
-          values: [
-            {
-              content: "he 68003086",
-              source: {
-                fieldTag: "l",
-                marcTag: "010",
-                ind1: " ",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "a",
-                    content: "he 68003086",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "LCCN",
+        values: [
+          {
+            content: "he 68003086",
+            source: {
+              fieldTag: "l",
+              marcTag: "010",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "he 68003086",
+                },
+              ],
             },
-          ],
-        },
-        {
-          label: "Research Call Number",
-          values: [
-            {
-              content: "*PXW (Khorostkov) (Sefer Ḥorosṭḳov. 1968)",
-              source: {
-                fieldTag: "q",
-                marcTag: "852",
-                ind1: "8",
-                ind2: " ",
-                content: null,
-                subfields: [
-                  {
-                    tag: "h",
-                    content: "*PXW (Khorostkov) (Sefer Ḥorosṭḳov. 1968)",
-                  },
-                ],
-              },
+          },
+        ],
+      },
+      {
+        label: "Research Call Number",
+        values: [
+          {
+            content: "*PXW (Khorostkov) (Sefer Ḥorosṭḳov. 1968)",
+            source: {
+              fieldTag: "q",
+              marcTag: "852",
+              ind1: "8",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "h",
+                  content: "*PXW (Khorostkov) (Sefer Ḥorosṭḳov. 1968)",
+                },
+              ],
             },
-          ],
-        },
-      ],
-    },
+          },
+        ],
+      },
+    ],
   },
 }

@@ -4,6 +4,7 @@ import {
   parallelsBib,
   yiddishBib,
 } from "../../../__test__/fixtures/bibFixtures"
+import type { LinkedBibDetail } from "../../types/bibDetailsTypes"
 import BibDetailsModel from "../BibDetails"
 
 describe("Bib model", () => {
@@ -27,19 +28,26 @@ describe("Bib model", () => {
   describe("note", () => {
     it("groups notes", () => {
       const model = bibWithParallelsModel
-      expect(model.groupedNotes).toStrictEqual({
-        "Linking Entry (note)": [
-          "Has supplement, <2005-> : Preporučeno, ISSN 1452-3531",
-
-          "Has supplement, <2006-> : Види чуда, ISSN 1452-7316",
-
-          "Has supplement, <2006-> : Vidi čuda, ISSN 1452-7316",
-        ],
-        "Issued By (note)": ["Issued by: Narodna biblioteka Kraljevo."],
-        "Language (note)": ["Serbian;"],
-        "Source of Description (note)": ["G. 46, 3 (2016)."],
-        "Supplement (note)": ["Has supplement, <2012-2016>: Pojedinačno."],
-      })
+      expect(model.groupedNotes).toStrictEqual([
+        {
+          label: "Supplement (note)",
+          value: ["Has supplement, <2012-2016>: Pojedinačno."],
+        },
+        { label: "Language (note)", value: ["Serbian;"] },
+        {
+          label: "Issued By (note)",
+          value: ["Issued by: Narodna biblioteka Kraljevo."],
+        },
+        {
+          label: "Linking Entry (note)",
+          value: [
+            "Has supplement, <2005-> : Preporučeno, ISSN 1452-3531",
+            "Has supplement, <2006-> : Види чуда, ISSN 1452-7316",
+            "Has supplement, <2006-> : Vidi čuda, ISSN 1452-7316",
+          ],
+        },
+        { label: "Source of Description (note)", value: ["G. 46, 3 (2016)."] },
+      ])
     })
   })
   describe("subjectHeadings", () => {
@@ -162,6 +170,18 @@ describe("Bib model", () => {
       ).toStrictEqual({ label: "Genre/Form", value: ["Humorous fiction."] })
     })
   })
+  describe("combined bottom details", () => {
+    it("removes fields with matching labels from bottom details", () => {
+      const subject = bibWithSupContentModel.bottomDetails.filter(
+        (detail) => detail.label === "Subject"
+      )
+      expect(subject).toHaveLength(1)
+      const genreForm = bibWithSupContentModel.bottomDetails.filter(
+        (detail) => detail.label === "Genre/Form"
+      )
+      expect(genreForm).toHaveLength(1)
+    })
+  })
   describe("external linking fields", () => {
     it("can handle missing fields", () => {
       expect(bibWithParallelsModel.supplementaryContent).toBeNull()
@@ -236,6 +256,20 @@ describe("Bib model", () => {
     it("can handle no parallels, and no notes", () => {
       const model = bibWithNoParallelsModel
       expect(model.groupedNotes).toBeUndefined
+    })
+  })
+  describe("annotated marc fields", () => {
+    const details = bibWithSupContentModel.annotatedMarcDetails
+    it("generates external link detail for Connect To urls", () => {
+      const connectTo = details.filter(
+        (field) => field.label === "Connect to:"
+      )[0] as LinkedBibDetail
+      expect(connectTo.link).toBe("external")
+    })
+    it("builds details for all of the annotated marc fields", () => {
+      expect(details).toHaveLength(
+        bibWithSupplementaryContent.annotatedMarc.fields.length
+      )
     })
   })
 })

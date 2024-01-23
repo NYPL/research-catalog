@@ -30,7 +30,9 @@ export interface FieldMapping {
 }
 
 export interface AnnotatedMarc {
-  bib: { id: string; nyplSource: string; fields: AnnotatedMarcField[] }
+  id: string
+  nyplSource: string
+  fields: AnnotatedMarcField[]
 }
 
 export interface AnnotatedMarcField {
