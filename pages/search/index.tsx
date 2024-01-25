@@ -197,7 +197,7 @@ export async function getServerSideProps({ resolvedUrl }) {
   return {
     props: {
       results,
-      ebscoResults
+      ebscoResults,
     },
   }
 }
