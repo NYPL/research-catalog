@@ -147,6 +147,7 @@ export const getPickupTimeEstimate = async (
 
   let arrivalAtHoldshelf = destinationServiceTime
 
+  // Unless deliverying to a scholar room before opening hours, on-site apply travel time:
   if (!skipOnsiteTravelTime) {
     arrivalAtHoldshelf = await addOnsiteTravelDuration(
       destinationServiceTime,
