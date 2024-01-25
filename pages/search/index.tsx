@@ -14,6 +14,7 @@ import DRBContainer from "../../src/components/DRB/DRBContainer"
 import SearchResult from "../../src/components/SearchResult/SearchResult"
 
 import { fetchResults } from "../api/search"
+import { fetchEbscoResults } from "../api/ebsco"
 import {
   getSearchResultsHeading,
   mapQueryToSearchParams,
@@ -26,11 +27,13 @@ import { mapWorksToDRBResults } from "../../src/utils/drbUtils"
 import { SITE_NAME, RESULTS_PER_PAGE } from "../../src/config/constants"
 import type SearchResultsBib from "../../src/models/SearchResultsBib"
 
+import EbscoSidebar from "../../src/components/ebsco/EbscoSidebar"
+
 /**
  * The Search page is responsible for fetching and displaying the Search results,
  * as well as displaying and controlling pagination and search filters.
  */
-export default function Search({ results }) {
+export default function Search({ results, ebscoResults }) {
   const { push, query } = useRouter()
   const { itemListElement: searchResultsElements, totalResults } =
     results.results
@@ -63,6 +66,7 @@ export default function Search({ results }) {
       getQueryString({ ...searchParams, sortBy, order, page: undefined })
     )
   }
+  console.log("Ebsco: ", ebscoResults)
 
   return (
     <>
@@ -100,6 +104,7 @@ export default function Search({ results }) {
                 searchParams={searchParams}
               />
             )}
+            {ebscoResults && <EbscoSidebar results={ebscoResults} />}
           </>
         }
       >
@@ -151,9 +156,34 @@ export async function getServerSideProps({ resolvedUrl }) {
   const queryString = resolvedUrl.slice(resolvedUrl.indexOf("?") + 1)
   const results = await fetchResults(mapQueryToSearchParams(parse(queryString)))
 
+  const query = parse(queryString)
+  let ebscoResults = await fetchEbscoResults(query.q)
+  // console.log("EBSCO response: ", ebscoResults.SearchResult.Statistics)
+  ebscoResults = {
+    records:
+      ebscoResults.SearchResult?.Data?.Records?.map((record) => {
+        return {
+          id: record.ResultId,
+          db: record.Header.DbLabel,
+          type: record.Header.PubType,
+          // RecordInfo.BibRecord.BibEntity.Titles[0].TitleFull
+          title: record.RecordInfo.BibRecord.BibEntity?.Titles[0]?.TitleFull,
+          url: record.PLink,
+          authors:
+            record.RecordInfo.BibRecord.BibRelationships?.HasContributorRelationships?.map(
+              (rel) => rel.PersonEntity?.Name?.NameFull
+            ),
+        }
+      }) || [],
+    queryString: ebscoResults.SearchRequestGet.QueryString,
+    total: ebscoResults.SearchResult.Statistics.TotalHits,
+  }
+  console.log("Ebsco results: ", ebscoResults)
+
   return {
     props: {
       results: JSON.parse(JSON.stringify(results)),
+      ebscoResults: JSON.parse(JSON.stringify(ebscoResults)),
     },
   }
 }

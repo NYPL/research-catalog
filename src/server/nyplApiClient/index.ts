@@ -1,7 +1,8 @@
 import NyplApiClient from "@nypl/nypl-data-api-client"
-import aws from "aws-sdk"
 
 import { appConfig } from "../../config/config"
+
+import { decryptKMS } from "../../utils/kms"
 
 interface KMSCache {
   clients: string[]
@@ -15,30 +16,6 @@ const clientSecret = process.env.PLATFORM_API_CLIENT_SECRET
 
 const keys = [clientId, clientSecret]
 const CACHE: KMSCache = { clients: [], clientSecret, clientId }
-
-const kms: aws.KMS = new aws.KMS({
-  region: "us-east-1",
-})
-
-const decryptKMS = async (key: string) => {
-  console.log("Decrypt func INPUT: " + key)
-  const params = {
-    CiphertextBlob: Buffer.from(key, "base64"),
-  }
-  const { Plaintext } = await kms.decrypt(params).promise()
-
-  return await new Promise((resolve, reject) => {
-    kms.decrypt(params, (err: Error) => {
-      if (err) {
-        console.log({ err })
-        reject(err)
-      } else {
-        // eslint-disable-next-line @typescript-eslint/no-base-to-string
-        resolve(Plaintext.toString())
-      }
-    })
-  })
-}
 
 const nyplApiClient = async (options = { apiName: "platform" }) => {
   const { apiName } = options
