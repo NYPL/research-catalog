@@ -12,6 +12,24 @@ describe("Bib model", () => {
   )
   const bibWithParallelsModel = new BibDetailsModel(parallelsBib)
   const bibWithNoParallelsModel = new BibDetailsModel(noParallels)
+  describe("note", () => {
+    it("groups notes", () => {
+      const model = new BibDetailsModel(parallelsBib)
+      expect(model.groupedNotes).toStrictEqual({
+        "Linking Entry (note)": [
+          "Has supplement, <2005-> : Preporučeno, ISSN 1452-3531",
+
+          "Has supplement, <2006-> : Види чуда, ISSN 1452-7316",
+
+          "Has supplement, <2006-> : Vidi čuda, ISSN 1452-7316",
+        ],
+        "Issued By (note)": ["Issued by: Narodna biblioteka Kraljevo."],
+        "Language (note)": ["Serbian;"],
+        "Source of Description (note)": ["G. 46, 3 (2016)."],
+        "Supplement (note)": ["Has supplement, <2012-2016>: Pojedinačno."],
+      })
+    })
+  })
   describe("subjectHeadings", () => {
     it("maps single subjects to compound heading url", () => {
       const filterQueryForSubjectHeading = "/search?filters[subjectLiteral]="
@@ -20,37 +38,43 @@ describe("Bib model", () => {
         value: [
           [
             {
-              url: filterQueryForSubjectHeading + "Authors, French",
+              url: `${filterQueryForSubjectHeading}${encodeURI(
+                "Authors, French"
+              )}`,
               urlLabel: "Authors, French",
             },
             {
-              url:
-                filterQueryForSubjectHeading +
-                "Authors, French -- 20th century",
+              url: `${filterQueryForSubjectHeading}${encodeURI(
+                "Authors, French -- 20th century"
+              )}`,
               urlLabel: "20th century",
             },
             {
-              url:
-                filterQueryForSubjectHeading +
-                "Authors, French -- 20th century -- Biography",
+              url: `${filterQueryForSubjectHeading}${encodeURI(
+                "Authors, French -- 20th century -- Biography"
+              )}`,
               urlLabel: "Biography",
             },
           ],
           [
             {
-              url: filterQueryForSubjectHeading + "Autobiographical Narrative",
+              url: `${filterQueryForSubjectHeading}${encodeURI(
+                "Autobiographical Narrative"
+              )}`,
               urlLabel: "Autobiographical Narrative",
             },
           ],
           [
             {
-              url: filterQueryForSubjectHeading + "Cortanze, Gérard de",
+              url: `${filterQueryForSubjectHeading}${encodeURI(
+                "Cortanze, Gérard de"
+              )}`,
               urlLabel: "Cortanze, Gérard de",
             },
             {
-              url:
-                filterQueryForSubjectHeading +
-                "Cortanze, Gérard de -- Childhood and youth",
+              url: `${filterQueryForSubjectHeading}${encodeURI(
+                "Cortanze, Gérard de -- Childhood and youth"
+              )}`,
               urlLabel: "Childhood and youth",
             },
           ],
@@ -166,14 +190,14 @@ describe("Bib model", () => {
         value: [
           {
             urlLabel: "Watson, Tom, 1965-",
-            url: "/search?filters[creatorLiteral][0]=Watson, Tom, 1965-",
+            url: "/search?filters[creatorLiteral][0]=Watson,%20Tom,%201965-",
           },
         ],
       })
     })
   })
 
-  describe("preprocessing", () => {
+  describe("parallels", () => {
     it("combines parallels and primaries with null values", () => {
       const model = new BibDetailsModel(parallelsBib)
       expect(model.bib.contributorLiteral).toStrictEqual([
@@ -197,25 +221,9 @@ describe("Bib model", () => {
         "Sefer Ḥorosṭḳov = Chorostkow book",
       ])
     })
-    it("groups notes", () => {
-      const model = new BibDetailsModel(parallelsBib)
-      expect(model.bib.groupedNotes).toStrictEqual({
-        "Linking Entry (note)": [
-          "Has supplement, <2005-> : Preporučeno, ISSN 1452-3531",
-
-          "Has supplement, <2006-> : Види чуда, ISSN 1452-7316",
-
-          "Has supplement, <2006-> : Vidi čuda, ISSN 1452-7316",
-        ],
-        "Issued By (note)": ["Issued by: Narodna biblioteka Kraljevo."],
-        "Language (note)": ["Serbian;"],
-        "Source of Description (note)": ["G. 46, 3 (2016)."],
-        "Supplement (note)": ["Has supplement, <2012-2016>: Pojedinačno."],
-      })
-    })
     it("can handle no parallels, and no notes", () => {
       const model = new BibDetailsModel(noParallels)
-      expect(model.bib.groupedNotes).toStrictEqual({})
+      expect(model.groupedNotes).toBeUndefined
     })
   })
 })

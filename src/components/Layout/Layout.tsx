@@ -1,4 +1,4 @@
-import type { ReactElement, PropsWithChildren } from "react"
+import { type ReactElement, type PropsWithChildren } from "react"
 import {
   Box,
   TemplateAppContainer,
@@ -67,13 +67,7 @@ const Layout = ({
         }
         sidebar={sidebar ? sidebarPosition : "none"}
         contentPrimary={<Box pb="l">{children}</Box>}
-        contentSidebar={
-          sidebar && (
-            <Box pb="l">
-              <div>{sidebar}</div>
-            </Box>
-          )
-        }
+        contentSidebar={sidebar && <Box pb="l">{sidebar}</Box>}
       />
     </DSProvider>
   )

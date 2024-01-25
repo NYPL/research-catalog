@@ -19,21 +19,13 @@ export default function Document() {
         <meta name="description" content="Research Catalog | NYPL" />
       </Head>
       <body>
-        {/* NYPL Header script and container */}
+        {/* NYPL Header container */}
         <div id="Header-Placeholder">
           <div id="nypl-header"></div>
-          <script
-            src={`${process.env.NYPL_HEADER_URL}/header.min.js?containerId=nypl-header`}
-            async
-          />
         </div>
         <Main />
         <NextScript />
-        {/* NYPL Footer script and container */}
-        <script
-          src={`${process.env.NYPL_HEADER_URL}/footer.min.js?containerId=nypl-footer`}
-          async
-        />
+        {/* NYPL Footer container */}
         <div id="nypl-footer"></div>
       </body>
     </Html>

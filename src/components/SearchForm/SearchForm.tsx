@@ -5,9 +5,10 @@ import { useState } from "react"
 
 import styles from "../../../styles/components/Search.module.scss"
 import RCLink from "../RCLink/RCLink"
-import { getQueryString } from "../../utils/searchUtils"
+import { getSearchQuery } from "../../utils/searchUtils"
 import { BASE_URL, PATHS } from "../../config/constants"
 import EDSLink from "../EDSLink"
+import useLoading from "../../hooks/useLoading"
 
 /**
  * The SearchForm component renders and controls the Search form and
@@ -20,13 +21,15 @@ const SearchForm = () => {
   )
   const [searchScope, setSearchScope] = useState("all")
 
+  const isLoading = useLoading()
+
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
     const searchParams = {
       q: searchTerm,
       field: searchScope,
     }
-    const queryString = getQueryString(searchParams)
+    const queryString = getSearchQuery(searchParams)
 
     await router.push(`${PATHS.SEARCH}${queryString}`)
   }
@@ -49,6 +52,7 @@ const SearchForm = () => {
             method="get"
             onSubmit={handleSubmit}
             labelText="Search Bar Label"
+            isDisabled={isLoading}
             selectProps={{
               value: searchScope,
               onChange: (e) => handleChange(e, setSearchScope),

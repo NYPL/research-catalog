@@ -1,17 +1,11 @@
-import type { ElectronicResource } from "./bibTypes"
+import type { Bib } from "./bibTypes"
 import type { DRBResults } from "./drbTypes"
-import type { SearchResultsItem, JSONLDValue } from "./itemTypes"
 
 type Language = string
 type SubjectLiteral = string
 type ContributorLiteral = string
 type Issuance = string
 type MaterialTypeFilter = string
-
-type MaterialType = {
-  value?: string
-  prefLabel?: string
-}
 
 export interface SearchFilters {
   materialType?: MaterialTypeFilter | MaterialTypeFilter[]
@@ -61,7 +55,7 @@ export interface SearchResults {
 }
 
 export interface SearchResultsElement {
-  result?: SearchResult
+  result?: Bib
   field?: string
 }
 
@@ -109,44 +103,6 @@ export interface SearchFormEvent {
   materialType?: SearchFormField
 }
 
-interface Note {
-  "@type": string
-  noteType: string
-  prefLabel: string
-}
-
-export interface SearchResult {
-  extent?: string[]
-  dimensions?: string[]
-  note?: Note[]
-  identifier: object[]
-  subjectLiteral?: string[]
-  "@id"?: string
-  uri?: string
-  titleDisplay?: string[]
-  creatorLiteral?: string[]
-  title?: string[]
-  materialType?: MaterialType[]
-  publicationStatement?: string[]
-  dateStartYear?: number
-  dateEndYear?: number
-  electronicResources?: ElectronicResource[]
-  issuance?: JSONLDValue[]
-  numItemsTotal?: number
-  items?: SearchResultsItem[]
-  parallelTitleDisplay?: string[]
-  supplementaryContent?: SupplementaryContent[]
-  contributorLiteral?: string[]
-}
-
-export interface ProcessedSearchResult extends SearchResult {
-  compressedSubjectLiteral: string[]
-  groupedNotes: object
-  extent?: string[]
-  dimensions?: string[]
-  holdings?: object
-}
-
 export interface AnnotatedMarc {
   id: string
   nyplSource: string
@@ -156,12 +112,6 @@ export interface AnnotatedMarc {
 export interface AnnotatedMarcField {
   label: string
   values: AnnotatedMarcFieldValue[]
-}
-
-interface SupplementaryContent {
-  "@type": string
-  label: string
-  url: string
 }
 
 export interface AnnotatedMarcFieldValue {
