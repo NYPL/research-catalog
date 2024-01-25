@@ -47,7 +47,7 @@ const nyplApiClient = async (options = { apiName: "platform" }) => {
   }
 
   const baseUrl = appConfig.apiUrls[apiName][appEnvironment]
-
+  console.log(baseUrl)
   return await new Promise((resolve, reject) => {
     Promise.all(keys.map(decryptKMS))
       .then(([decryptedClientId, decryptedClientSecret]) => {

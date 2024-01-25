@@ -46,13 +46,15 @@ const RefineSearchCheckBoxField = ({
         }}
         value={appliedFilters}
         onChange={updateCheckboxGroupValue}
-      >
-        {options.map(({ value, label }) => {
-          return (
-            <Checkbox id={value} key={value} value={value} labelText={label} />
-          )
+        checkboxData={options.map(({ value, label }, i) => {
+          return {
+            id: value,
+            key: `${value}-${i}`,
+            value: value,
+            labelText: label,
+          }
         })}
-      </CheckboxGroup>
+      />
     </FormField>
   )
 }
