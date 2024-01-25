@@ -4,6 +4,7 @@ import {
   SimpleGrid,
   Pagination,
   Select,
+  SkeletonLoader,
 } from "@nypl/design-system-react-components"
 import type { ChangeEvent } from "react"
 import { useRouter } from "next/router"
@@ -19,7 +20,7 @@ import {
   getSearchResultsHeading,
   mapQueryToSearchParams,
   mapElementsToSearchResultsBibs,
-  getQueryString,
+  getSearchQuery,
   sortOptions,
 } from "../../src/utils/searchUtils"
 import type { SortKey, SortOrder } from "../../src/types/searchTypes"
@@ -28,6 +29,7 @@ import { SITE_NAME, RESULTS_PER_PAGE } from "../../src/config/constants"
 import type SearchResultsBib from "../../src/models/SearchResultsBib"
 
 import EbscoSidebar from "../../src/components/ebsco/EbscoSidebar"
+import useLoading from "../../src/hooks/useLoading"
 
 /**
  * The Search page is responsible for fetching and displaying the Search results,
@@ -49,8 +51,10 @@ export default function Search({ results, ebscoResults }) {
   // Map DRB Works from response to DRBResult objects
   const drbResults = mapWorksToDRBResults(drbWorks)
 
+  const isLoading = useLoading()
+
   const handlePageChange = async (page: number) => {
-    const newQuery = getQueryString({ ...searchParams, page })
+    const newQuery = getSearchQuery({ ...searchParams, page })
     await push(newQuery)
   }
 
@@ -63,7 +67,7 @@ export default function Search({ results, ebscoResults }) {
     ]
     // Push the new query values, removing the page number if set.
     await push(
-      getQueryString({ ...searchParams, sortBy, order, page: undefined })
+      getSearchQuery({ ...searchParams, sortBy, order, page: undefined })
     )
   }
   console.log("Ebsco: ", ebscoResults)
@@ -97,12 +101,16 @@ export default function Search({ results, ebscoResults }) {
                 ))}
               </Select>
             )}
-            {drbResponse?.totalWorks && (
-              <DRBContainer
-                drbResults={drbResults}
-                totalWorks={drbResponse.totalWorks}
-                searchParams={searchParams}
-              />
+            {isLoading ? (
+              <SkeletonLoader showImage={false} />
+            ) : (
+              drbResponse?.totalWorks && (
+                <DRBContainer
+                  drbResults={drbResults}
+                  totalWorks={drbResponse.totalWorks}
+                  searchParams={searchParams}
+                />
+              )
             )}
             {ebscoResults && <EbscoSidebar results={ebscoResults} />}
           </>
@@ -110,18 +118,24 @@ export default function Search({ results, ebscoResults }) {
       >
         {totalResults ? (
           <>
-            <Heading level="h2" mb="xl" size="heading4">
-              {getSearchResultsHeading(
-                searchParams.page,
-                totalResults,
-                searchParams.q
-              )}
-            </Heading>
-            <SimpleGrid columns={1} gap="grid.xl">
-              {searchResultBibs.map((bib: SearchResultsBib) => {
-                return <SearchResult key={bib.id} bib={bib} />
-              })}
-            </SimpleGrid>
+            {isLoading ? (
+              <SkeletonLoader showImage={false} />
+            ) : (
+              <>
+                <Heading level="h2" mb="xl" size="heading4">
+                  {getSearchResultsHeading(
+                    searchParams.page,
+                    totalResults,
+                    searchParams.q
+                  )}
+                </Heading>
+                <SimpleGrid columns={1} gap="grid.xl">
+                  {searchResultBibs.map((bib: SearchResultsBib) => {
+                    return <SearchResult key={bib.id} bib={bib} />
+                  })}
+                </SimpleGrid>
+              </>
+            )}
             <Pagination
               id="results-pagination"
               mt="xl"
@@ -182,8 +196,8 @@ export async function getServerSideProps({ resolvedUrl }) {
 
   return {
     props: {
-      results: JSON.parse(JSON.stringify(results)),
-      ebscoResults: JSON.parse(JSON.stringify(ebscoResults)),
+      results,
+      ebscoResults
     },
   }
 }
