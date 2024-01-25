@@ -1,4 +1,4 @@
-import type { ReactElement, PropsWithChildren } from "react"
+import { type ReactElement, type PropsWithChildren } from "react"
 import {
   Box,
   TemplateAppContainer,
@@ -49,6 +49,13 @@ const Layout = ({
                     text: "Research Catalog",
                   },
                 ]}
+                __css={{
+                  a: {
+                    _focus: {
+                      outlineColor: "ui.white",
+                    },
+                  },
+                }}
               />
               <div className={styles.researchHeadingContainer}>
                 <Heading id="heading-h1" level="h1" text="Research Catalog" />
@@ -60,13 +67,7 @@ const Layout = ({
         }
         sidebar={sidebar ? sidebarPosition : "none"}
         contentPrimary={<Box pb="l">{children}</Box>}
-        contentSidebar={
-          sidebar && (
-            <Box pb="l">
-              <div>{sidebar}</div>
-            </Box>
-          )
-        }
+        contentSidebar={sidebar && <Box pb="l">{sidebar}</Box>}
       />
     </DSProvider>
   )

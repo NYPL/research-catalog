@@ -14,9 +14,9 @@
   display: flex;
   justify-content: space-between;
   margin: var(--nypl-space-xs) 0;
+
   @media (max-width: 400px) {
     flex-direction: column-reverse;
-    bottom-padding: var(--nypl-space-s);
     align-items: flex-end;
   }
 }

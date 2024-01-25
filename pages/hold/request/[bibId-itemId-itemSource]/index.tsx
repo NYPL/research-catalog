@@ -2,7 +2,7 @@ import Head from "next/head"
 
 import { extractFeatures } from "../../../../src/utils/appUtils"
 import { Heading } from "@nypl/design-system-react-components"
-import { fetchBib } from "../../../../src/utils/bibUtils"
+import { fetchBib } from "../../../api/bib/index"
 import { LibraryItem } from "../../../api/hold/confirmation/[bibId-itemId]"
 import isAeonUrl from "../../../../src/utils/aeonLinkUtils"
 import User from "../../../../src/utils/userUtils"
@@ -43,12 +43,12 @@ async function newHoldRequest(req, res) {
   // Retrieve item
   try {
     const bibResponseData = await fetchBib(
-      { bibId: bibAndItemId },
-      {},
-      {
-        fetchSubjectHeadingData: false,
-        features: urlEnabledFeatures,
-      }
+      bibAndItemId,
+      {}
+      // {
+      //   fetchSubjectHeadingData: false,
+      //   features: urlEnabledFeatures,
+      // }
     )
     const { bib } = bibResponseData
     barcode = LibraryItem.getItem(bib, itemId).barcode

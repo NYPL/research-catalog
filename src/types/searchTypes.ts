@@ -1,17 +1,11 @@
-import type { ElectronicResource } from "./bibTypes"
+import type { Bib } from "./bibTypes"
 import type { DRBResults } from "./drbTypes"
-import type { SearchResultsItem } from "./itemTypes"
 
 type Language = string
 type SubjectLiteral = string
 type ContributorLiteral = string
 type Issuance = string
 type MaterialTypeFilter = string
-
-type MaterialType = {
-  value?: string
-  prefLabel?: string
-}
 
 export interface SearchFilters {
   materialType?: MaterialTypeFilter | MaterialTypeFilter[]
@@ -61,7 +55,7 @@ export interface SearchResults {
 }
 
 export interface SearchResultsElement {
-  result?: SearchResult
+  result?: Bib
   field?: string
 }
 
@@ -109,17 +103,30 @@ export interface SearchFormEvent {
   materialType?: SearchFormField
 }
 
-export interface SearchResult {
-  "@id"?: string
-  uri?: string
-  titleDisplay?: string[]
-  creatorLiteral?: string[]
-  title?: string[]
-  materialType?: MaterialType[]
-  publicationStatement?: string[]
-  dateStartYear?: number
-  dateEndYear?: number
-  electronicResources?: ElectronicResource[]
-  numItemsTotal?: number
-  items?: SearchResultsItem[]
+export interface AnnotatedMarc {
+  id: string
+  nyplSource: string
+  fields: AnnotatedMarcField[]
+}
+
+export interface AnnotatedMarcField {
+  label: string
+  values: AnnotatedMarcFieldValue[]
+}
+
+export interface AnnotatedMarcFieldValue {
+  content: string
+  source: {
+    fieldTag: string
+    marcTag: string
+    ind1?: string
+    ind2?: string
+    content: string | null
+    subfields: MarcSubfield[]
+  }
+}
+
+export interface MarcSubfield {
+  tag: string
+  content: string
 }

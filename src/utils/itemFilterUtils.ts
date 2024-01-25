@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import type { ItemFilterData } from "../models/itemFilterData"
+import type { ItemFilterData } from "../models/ItemFilterData"
 import type { AppliedFilters } from "../types/filterTypes"
 
 export const isRecapLocation = (loc: string) => {
@@ -32,7 +32,7 @@ export const parseItemFilterQueryParams = ({
   }
 }
 
-export const buildItemFilterQueryParams = (
+export const buildItemFilterQueryString = (
   { location, format, status }: AppliedFilters,
   recapLocations: string
 ) => {
@@ -51,27 +51,32 @@ export const buildItemFilterQueryParams = (
   else return ""
 }
 
-export const buildAppliedFiltersString = (
-  query: BibPageQueryParams,
-  numItems = 20,
-  itemAggs: ItemFilterData[]
-) => {
+// numItems default is for development purposes only. Once data is being
+// passed in to the Item Filters components, this default should be removed.
+export const buildItemsMatchedStringString = (query, numItems = 20) => {
   const items = `Item${numItems === 1 ? "" : "s"}`
   if (Object.keys(query).length === 0) return `${numItems} ${items}`
   const num = numItems === 0 ? "No" : numItems
-  const numMatchingItems = `${num} ${items} Matching `
-  const filters = Object.keys(query)
+  return `${num} Matching ${items} `
+}
+
+export const buildAppliedFiltersString = (
+  appliedFilters: AppliedFilters,
+  itemAggs: ItemFilterData[]
+) => {
+  const filters = Object.keys(appliedFilters)
     .map((field: string) => {
-      const queryPerField = query[field]
-      if (queryPerField) {
+      const appliedFilterPerField = appliedFilters[field]
+      if (appliedFilterPerField.length) {
         const fieldAggregations = itemAggs.find(
-          (agg: ItemFilterData) => agg.field === field.substring(5)
+          (agg: ItemFilterData) => agg.field === field
         )
-        const labels =
-          fieldAggregations.labelsForConcatenatedValues(queryPerField)
-        return field.substring(5) + ": " + labels
+        const labels = fieldAggregations.labelsForConcatenatedValues(
+          appliedFilterPerField
+        )
+        return field + ": " + labels
       }
     })
     .filter((filter) => filter)
-  return numMatchingItems + "Filtered by " + filters.join(", ")
+  if (filters.length) return "Filtered by " + filters.join(", ")
 }

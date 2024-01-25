@@ -6,6 +6,8 @@ import {
   itemUnavailable,
   itemPartnerReCAP,
   itemNYPLReCAP,
+  itemNoShelfMark,
+  itemNoShelfMarkNoURI,
 } from "../../../__test__/fixtures/itemFixtures"
 import { searchResultPhysicalItems } from "../../../__test__/fixtures/searchResultPhysicalItems"
 
@@ -52,6 +54,10 @@ describe("Item model", () => {
 
     it("initializes the Item's barcode", () => {
       expect(item.barcode).toBe("33433090622188")
+    })
+
+    it("initializes the Item's due date", () => {
+      expect(item.dueDate).toBe("2023-09-03")
     })
 
     it("initializes the Item's location", () => {
@@ -107,6 +113,24 @@ describe("Item model", () => {
 
       expect(nyplRecap.isNYPLReCAP()).toBe(true)
       expect(nyplRecap.isPartnerReCAP()).toBe(false)
+    })
+  })
+
+  describe("Sortable shelfMark field creation", () => {
+    it("sets the sortableShelfMark with an 'a' prefix when shelfMark field is present", () => {
+      const itemWithShelfMark = new Item(itemPhysicallyRequestable, parentBib)
+      expect(itemWithShelfMark.sortableShelfMark).toBe("aD-11 002906")
+    })
+    it("correctly sets the sortableShelfMark as the call number with a 'b' prefix when shelfMark is absent", () => {
+      const itemMissingShelfMark = new Item(itemNoShelfMark, parentBib)
+      expect(itemMissingShelfMark.sortableShelfMark).toBe("bi10572546")
+    })
+    it("correctly sets the sortableShelfMark to 'c' when shelfMark and URI are absent", () => {
+      const itemMissingShelfMarkAndURI = new Item(
+        itemNoShelfMarkNoURI,
+        parentBib
+      )
+      expect(itemMissingShelfMarkAndURI.sortableShelfMark).toBe("c")
     })
   })
 })

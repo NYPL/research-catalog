@@ -2,6 +2,7 @@ import type {
   SearchResultsItem,
   JSONLDValue,
   ItemLocation,
+  ItemLocationEndpoint,
 } from "../types/itemTypes"
 import { locationLabelToKey } from "../utils/itemUtils"
 import type SearchResultsBib from "./SearchResultsBib"
@@ -10,7 +11,9 @@ import {
   defaultNYPLLocation,
   partnerDefaultLocation,
   locationEndpointsMap,
+  formatShelfMarkForSort,
 } from "../utils/itemUtils"
+import { appConfig } from "../config/config"
 
 /**
  * The Item class contains the data and getter functions
@@ -29,8 +32,10 @@ export default class Item {
   barcode?: string
   location?: ItemLocation
   aeonUrl?: string
+  dueDate?: string
   isPhysicallyRequestable: boolean
   isEDDRequestable: boolean
+  sortableShelfMark?: string
 
   constructor(item: SearchResultsItem, bib: SearchResultsBib) {
     this.id = item.uri || ""
@@ -50,8 +55,10 @@ export default class Item {
     this.barcode = item.idBarcode?.length ? item.idBarcode[0] : null
     this.location = this.getLocationFromItem(item)
     this.aeonUrl = item.aeonUrl?.length ? item.aeonUrl[0] : null
+    this.dueDate = item.dueDate?.length ? item.dueDate[0] : null
     this.isPhysicallyRequestable = item.physRequestable
     this.isEDDRequestable = item.eddRequestable
+    this.sortableShelfMark = this.getSortableShelfMark(item)
   }
 
   // Item availability is determined by the existence of status id in the availability ids list
@@ -61,6 +68,15 @@ export default class Item {
 
   get isReCAP(): boolean {
     return this.isPartnerReCAP() || this.isNYPLReCAP()
+  }
+
+  get allLocationsClosed(): boolean {
+    const { closedLocations, recapClosedLocations, nonRecapClosedLocations } =
+      appConfig
+
+    return closedLocations
+      .concat(this.isReCAP ? recapClosedLocations : nonRecapClosedLocations)
+      .includes("all")
   }
 
   // Pre-processing logic for setting Item holding location
@@ -79,10 +95,26 @@ export default class Item {
 
       // Set branch endpoint based on API location label
       const locationKey = locationLabelToKey(location.prefLabel)
-      location.endpoint = locationEndpointsMap[locationKey]
+      location.endpoint = locationEndpointsMap[
+        locationKey
+      ] as ItemLocationEndpoint
     }
-
     return location
+  }
+
+  // Pre-processing logic for setting Item sortableShelfMark
+  // TODO: review later to figure out if this is better served in the backend API rather than here
+  getSortableShelfMark(item: SearchResultsItem): string {
+    let shelfMarkSort: string
+    // Order by id if we have no call numbers, but make sure these items
+    // go after items with call numbers
+    if (!item.shelfMark?.length) {
+      shelfMarkSort = item.uri ? `b${item.uri}` : "c"
+    } else {
+      // order by call number, put these items first
+      shelfMarkSort = `a${formatShelfMarkForSort(item.shelfMark[0])}`
+    }
+    return shelfMarkSort
   }
 
   // Determine if item is Non-NYPL ReCAP by existence of "Recap" string in item source attribute

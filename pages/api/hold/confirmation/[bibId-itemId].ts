@@ -4,7 +4,7 @@ import User from "../../../../src/utils/userUtils"
 import { nyplApiClientGet } from "../../../../src/server/nyplApiClient"
 import { appConfig } from "../../../../src/config/config"
 import { extractFeatures } from "../../../../src/utils/appUtils"
-import { fetchBib } from "../../../../src/utils/bibUtils"
+import { fetchBib } from "../../bib/index"
 import { findWhere } from "underscore"
 import Item from "../../../../src/models/Item"
 import {
@@ -12,6 +12,7 @@ import {
   mapLocationDetails,
   modelDeliveryLocationName,
 } from "../../../../src/utils/holdUtils"
+import type { BibResponse } from "../../../../src/types/bibTypes"
 
 // TODO - implement LibraryItem which, in this conversion would live in
 // the Item class. Taking a closer look, `LibraryItem.getItem` doesn't
@@ -93,13 +94,14 @@ async function confirmRequest(req, res) {
     }
     // Retrieve item
     try {
-      const bibResponseData = fetchBib(
-        { bibId },
-        {},
-        {
-          fetchSubjectHeadingData: false,
-          features: urlEnabledFeatures,
-        }
+      const bibResponseData: BibResponse = await fetchBib(
+        bibId,
+        {}
+        // TODO: review later
+        // {
+        //   fetchSubjectHeadingData: false,
+        //   features: urlEnabledFeatures,
+        // }
       )
       const { bib } = bibResponseData
 
