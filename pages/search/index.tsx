@@ -35,7 +35,7 @@ import useLoading from "../../src/hooks/useLoading"
  * The Search page is responsible for fetching and displaying the Search results,
  * as well as displaying and controlling pagination and search filters.
  */
-export default function Search({ results, ebscoResults }) {
+export default function Search({ results, ebscoResults = null }) {
   const { push, query } = useRouter()
   const { itemListElement: searchResultsElements, totalResults } =
     results.results
@@ -70,7 +70,6 @@ export default function Search({ results, ebscoResults }) {
       getSearchQuery({ ...searchParams, sortBy, order, page: undefined })
     )
   }
-  console.log("Ebsco: ", ebscoResults)
 
   return (
     <>
@@ -112,7 +111,11 @@ export default function Search({ results, ebscoResults }) {
                 />
               )
             )}
-            {ebscoResults && <EbscoSidebar results={ebscoResults} />}
+            {isLoading ? (
+              <SkeletonLoader showImage={false} />
+            ) : (
+              ebscoResults && <EbscoSidebar results={ebscoResults} />
+            )}
           </>
         }
       >
@@ -186,7 +189,7 @@ export async function getServerSideProps({ resolvedUrl }) {
           authors:
             record.RecordInfo.BibRecord.BibRelationships?.HasContributorRelationships?.map(
               (rel) => rel.PersonEntity?.Name?.NameFull
-            ),
+            ) || null,
         }
       }) || [],
     queryString: ebscoResults.SearchRequestGet.QueryString,
