@@ -28,16 +28,12 @@ export async function fetchBib(
   const client = await nyplApiClient({ apiName: DISCOVERY_API_NAME })
   const [bibResponse, annotatedMarcResponse] = await Promise.allSettled([
     await client.get(
-      `${DISCOVERY_API_SEARCH_ROUTE}/${getBibQuery(standardizedId, bibParams)}`
+      `${DISCOVERY_API_SEARCH_ROUTE}/${getBibQuery(id, bibParams)}`
     ),
     // Don't fetch annotated-marc for partner records:
-    isNyplBibID(standardizedId) &&
+    isNyplBibID(id) &&
       (await client.get(
-        `${DISCOVERY_API_SEARCH_ROUTE}/${getBibQuery(
-          standardizedId,
-          bibParams,
-          true
-        )}`
+        `${DISCOVERY_API_SEARCH_ROUTE}/${getBibQuery(id, bibParams, true)}`
       )),
   ])
 
@@ -45,17 +41,25 @@ export async function fetchBib(
   const bib = bibResponse.status === "fulfilled" && bibResponse.value
   const annotatedMarc =
     annotatedMarcResponse.status === "fulfilled" && annotatedMarcResponse.value
+
+  // Get subject headings from SHEP API
+  // TODO: Revisit this after Enhanced Browse work to determine if it's still necessary
+  if (bib.subjectLiteral?.length) {
+    const subjectHeadingData = await fetchBibSubjectHeadings(id)
+    bib.subjectHeadingData = subjectHeadingData || null
+  }
+
   try {
     // If there's a problem with a bib, try to fetch from the Sierra API and redirect to circulating catalog
-    if (!bib || !bib.uri || !standardizedId.includes(bib.uri)) {
+    if (!bib || !bib.uri || !id.includes(bib.uri)) {
       // TODO: Check if this ID slicing is correct and if this redirect logic is still accurate
       const sierraBibResponse = await client.get(
-        `/bibs/sierra-nypl/${standardizedId.slice(1)}`
+        `/bibs/sierra-nypl/${id.slice(1)}`
       )
       if (sierraBibResponse.statusCode === 200) {
         return {
           status: 307,
-          redirectUrl: `${appConfig.externalUrls.circulatingCatalog}/iii/encore/record/C__R${standardizedId}`,
+          redirectUrl: `${appConfig.externalUrls.circulatingCatalog}/iii/encore/record/C__R${id}`,
         }
       } else {
         console.error("There was a problem fetching the bib from Sierra")
@@ -84,5 +88,19 @@ export async function fetchBib(
     return {
       status: 404,
     }
+  }
+}
+
+async function fetchBibSubjectHeadings(bibId: string) {
+  try {
+    const response = await fetch(
+      `${appConfig.apiUrls.shep}/bibs/${bibId}/subject_headings`
+    )
+    return await response.json()
+  } catch (error) {
+    console.error(
+      "Error fetching SHEP API data (note: VPN should be used for local testing)",
+      error
+    )
   }
 }
