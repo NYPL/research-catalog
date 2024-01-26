@@ -1,5 +1,8 @@
-import { Link as DSLink } from "@nypl/design-system-react-components"
-import Link from "next/link"
+import {
+  Link as DSLink,
+  type LinkTypes,
+} from "@nypl/design-system-react-components"
+// import Link from "next/link"
 import { type ReactNode } from "react"
 
 interface RCLinkProps {
@@ -8,6 +11,8 @@ interface RCLinkProps {
   children: ReactNode
   className?: string
   color?: string
+  type?: LinkTypes
+  size?: string
   hasWhiteFocusRing?: boolean
 }
 
@@ -25,22 +30,23 @@ const RCLink = ({
   ...rest
 }: RCLinkProps) => {
   return (
-    <Link href={href} passHref>
-      <DSLink
-        className={className}
-        fontWeight={active && "bold"}
-        {...rest}
-        __css={
-          hasWhiteFocusRing && {
-            _focus: {
-              outlineColor: "ui.white",
-            },
-          }
+    // <Link href={href} passHref>
+    <DSLink
+      href={href}
+      className={className}
+      fontWeight={active && "bold"}
+      {...rest}
+      __css={
+        hasWhiteFocusRing && {
+          _focus: {
+            outlineColor: "ui.white",
+          },
         }
-      >
-        {children}
-      </DSLink>
-    </Link>
+      }
+    >
+      {children}
+    </DSLink>
+    // </Link>
   )
 }
 
