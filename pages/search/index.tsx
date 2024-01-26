@@ -6,7 +6,7 @@ import {
   Select,
   SkeletonLoader,
 } from "@nypl/design-system-react-components"
-import { useContext, type ChangeEvent } from "react"
+import { type ChangeEvent } from "react"
 import { useRouter } from "next/router"
 import { parse } from "qs"
 
@@ -26,9 +26,9 @@ import type { SortKey, SortOrder } from "../../src/types/searchTypes"
 import { mapWorksToDRBResults } from "../../src/utils/drbUtils"
 import { SITE_NAME, RESULTS_PER_PAGE } from "../../src/config/constants"
 import type SearchResultsBib from "../../src/models/SearchResultsBib"
+import { SearchResultsAggregationsContext } from "./SearchResultsAggregationsContext"
 
 import useLoading from "../../src/hooks/useLoading"
-import { SearchResultsAggregationsProvider } from "./SearchResultsAggregationsContext"
 
 /**
  * The Search page is responsible for fetching and displaying the Search results,
@@ -68,9 +68,10 @@ export default function Search({ results }) {
       getSearchQuery({ ...searchParams, sortBy, order, page: undefined })
     )
   }
-
   return (
-    <SearchResultsAggregationsProvider value={results.aggregations}>
+    <SearchResultsAggregationsContext.Provider
+      value={results?.aggregations?.itemListElement}
+    >
       <Head>
         <title>Search Results | {SITE_NAME}</title>
       </Head>
@@ -149,7 +150,7 @@ export default function Search({ results }) {
           <Heading level="h3">No results. Try a different search.</Heading>
         )}
       </Layout>
-    </SearchResultsAggregationsProvider>
+    </SearchResultsAggregationsContext.Provider>
   )
 }
 
@@ -162,7 +163,6 @@ export default function Search({ results }) {
  *
  */
 export async function getServerSideProps({ resolvedUrl }) {
-  console.log("spaghetti")
   // Remove everything before the query string delineator '?', necessary for correctly parsing the 'q' param.
   const queryString = resolvedUrl.slice(resolvedUrl.indexOf("?") + 1)
   const results = await fetchResults(mapQueryToSearchParams(parse(queryString)))

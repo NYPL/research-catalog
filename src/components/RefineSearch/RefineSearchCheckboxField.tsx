@@ -5,12 +5,12 @@ import {
 } from "@nypl/design-system-react-components"
 import type { Dispatch } from "react"
 
-import type { ItemAggregationOption } from "../../types/filterTypes"
+import type { AggregationOption } from "../../types/filterTypes"
 
 interface CheckboxGroupProps {
   field: { value: string; label: string }
   appliedFilters: string[]
-  options: ItemAggregationOption[]
+  options: AggregationOption[]
   setAppliedFilters: Dispatch<React.SetStateAction<string[]>>
 }
 
@@ -46,13 +46,10 @@ const RefineSearchCheckBoxField = ({
         }}
         value={appliedFilters}
         onChange={updateCheckboxGroupValue}
-      >
-        {options.map(({ value, label }) => {
-          return (
-            <Checkbox id={value} key={value} value={value} labelText={label} />
-          )
+        checkboxData={options.map(({ value, label }) => {
+          return { id: value, key: value, value: value, labelText: label }
         })}
-      </CheckboxGroup>
+      />
     </FormField>
   )
 }

@@ -22,7 +22,7 @@ const SearchForm = () => {
     (router?.query?.q as string) || ""
   )
   const [searchScope, setSearchScope] = useState("all")
-  const { aggregations } = useContext(SearchResultsAggregationsContext)
+  const aggregations = useContext(SearchResultsAggregationsContext)
   const isLoading = useLoading()
 
   const handleSubmit = async (e: SyntheticEvent) => {
@@ -88,7 +88,7 @@ const SearchForm = () => {
         <div className={styles.auxSearchContainer}>
           {/* Temporary color update. The Header overrides the new
             DS 2.X CSS color variable values. */}
-          <RefineSearch aggregations={aggregations} />
+          {aggregations && <RefineSearch aggregations={aggregations} />}
           <EDSLink />
           <RCLink
             className={styles.advancedSearch}

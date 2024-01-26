@@ -1,12 +1,16 @@
-import type { ItemAggregationOption } from "../types/filterTypes"
+import type {
+  AggregationOption,
+  Aggregation,
+  Option,
+} from "../types/filterTypes"
 
 class SearchResultsFilters {
-  options: ItemAggregationOption[]
+  options: AggregationOption[]
   activeFilters: string[]
   field: string
-  constructor(aggregationsResults, field) {
-    const filterOptions = aggregationsResults.itemListElement
-    this.options = filterOptions.find((f) => f.id === field.value)?.values
+  constructor(aggregationsResults: Aggregation[], field: Option) {
+    console.log({ aggregationsResults })
+    this.options = aggregationsResults.find((f) => f.id === field.value)?.values
     this.field = field.value
   }
 }

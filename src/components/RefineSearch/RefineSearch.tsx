@@ -17,10 +17,10 @@ import {
   buildFilters,
   removeFiltersFromQuery,
 } from "../../utils/refineSearchUtils"
-import type { SearchResults } from "../../types/searchTypes"
+import type { Aggregation } from "../../types/filterTypes"
 
 interface RefineSearchProps {
-  aggregations: SearchResults
+  aggregations: Aggregation[]
 }
 
 const RefineSearch = ({ aggregations }: RefineSearchProps) => {
