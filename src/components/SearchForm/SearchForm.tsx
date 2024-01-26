@@ -1,7 +1,7 @@
 import { SearchBar } from "@nypl/design-system-react-components"
 import { useRouter } from "next/router"
 import type { SyntheticEvent, Dispatch, SetStateAction } from "react"
-import { useState } from "react"
+import { useContext, useState } from "react"
 
 import styles from "../../../styles/components/Search.module.scss"
 import RCLink from "../RCLink/RCLink"
@@ -9,6 +9,8 @@ import { getSearchQuery } from "../../utils/searchUtils"
 import { BASE_URL, PATHS } from "../../config/constants"
 import EDSLink from "../EDSLink"
 import useLoading from "../../hooks/useLoading"
+import RefineSearch from "../RefineSearch/RefineSearch"
+import { SearchResultsAggregationsContext } from "../../../pages/search/SearchResultsAggregationsContext"
 
 /**
  * The SearchForm component renders and controls the Search form and
@@ -20,7 +22,7 @@ const SearchForm = () => {
     (router?.query?.q as string) || ""
   )
   const [searchScope, setSearchScope] = useState("all")
-
+  const { aggregations } = useContext(SearchResultsAggregationsContext)
   const isLoading = useLoading()
 
   const handleSubmit = async (e: SyntheticEvent) => {
@@ -86,6 +88,7 @@ const SearchForm = () => {
         <div className={styles.auxSearchContainer}>
           {/* Temporary color update. The Header overrides the new
             DS 2.X CSS color variable values. */}
+          <RefineSearch aggregations={aggregations} />
           <EDSLink />
           <RCLink
             className={styles.advancedSearch}

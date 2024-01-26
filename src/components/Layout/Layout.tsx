@@ -12,6 +12,7 @@ import styles from "../../../styles/components/Layout.module.scss"
 import SubNav from "../SubNav/SubNav"
 import SearchForm from "../SearchForm/SearchForm"
 import { BASE_URL } from "../../config/constants"
+import { SearchResultsAggregationsProvider } from "../../../pages/search/SearchResultsAggregationsContext"
 
 interface LayoutProps {
   sidebar?: ReactElement
@@ -63,7 +64,6 @@ const Layout = ({
                 <Heading id="heading-h1" level="h1" text="Research Catalog" />
                 <SubNav activePage={activePage} />
                 {showSearch && <SearchForm />}
-                {refineSearch}
               </div>
             </>
           )

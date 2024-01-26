@@ -6,14 +6,13 @@ import {
   Select,
   SkeletonLoader,
 } from "@nypl/design-system-react-components"
-import type { ChangeEvent } from "react"
+import { useContext, type ChangeEvent } from "react"
 import { useRouter } from "next/router"
 import { parse } from "qs"
 
 import Layout from "../../src/components/Layout/Layout"
 import DRBContainer from "../../src/components/DRB/DRBContainer"
 import SearchResult from "../../src/components/SearchResult/SearchResult"
-import RefineSearch from "../../src/components/RefineSearch/RefineSearch"
 
 import { fetchResults } from "../api/search"
 import {
@@ -29,6 +28,7 @@ import { SITE_NAME, RESULTS_PER_PAGE } from "../../src/config/constants"
 import type SearchResultsBib from "../../src/models/SearchResultsBib"
 
 import useLoading from "../../src/hooks/useLoading"
+import { SearchResultsAggregationsProvider } from "./SearchResultsAggregationsContext"
 
 /**
  * The Search page is responsible for fetching and displaying the Search results,
@@ -38,7 +38,6 @@ export default function Search({ results }) {
   const { push, query } = useRouter()
   const { itemListElement: searchResultsElements, totalResults } =
     results.results
-
   const drbResponse = results.drbResults?.data
   const drbWorks = drbResponse?.works
 
@@ -71,13 +70,12 @@ export default function Search({ results }) {
   }
 
   return (
-    <>
+    <SearchResultsAggregationsProvider value={results.aggregations}>
       <Head>
         <title>Search Results | {SITE_NAME}</title>
       </Head>
       <Layout
         activePage="search"
-        // refineSearch={<RefineSearch aggregations={aggregationsResults} />}
         sidebar={
           <>
             {totalResults && (
@@ -151,7 +149,7 @@ export default function Search({ results }) {
           <Heading level="h3">No results. Try a different search.</Heading>
         )}
       </Layout>
-    </>
+    </SearchResultsAggregationsProvider>
   )
 }
 
