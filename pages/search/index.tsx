@@ -78,7 +78,7 @@ export default function Search({ results }) {
         activePage="search"
         sidebar={
           <>
-            {totalResults && (
+            {totalResults > 0 ? (
               <Select
                 name="sort_direction"
                 id="search-results-sort"
@@ -97,18 +97,16 @@ export default function Search({ results }) {
                   </option>
                 ))}
               </Select>
-            )}
+            ) : null}
             {isLoading ? (
               <SkeletonLoader showImage={false} />
-            ) : (
-              drbResponse?.totalWorks && (
-                <DRBContainer
-                  drbResults={drbResults}
-                  totalWorks={drbResponse.totalWorks}
-                  searchParams={searchParams}
-                />
-              )
-            )}
+            ) : drbResponse?.totalWorks > 0 ? (
+              <DRBContainer
+                drbResults={drbResults}
+                totalWorks={drbResponse.totalWorks}
+                searchParams={searchParams}
+              />
+            ) : null}
           </>
         }
       >
