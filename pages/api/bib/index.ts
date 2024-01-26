@@ -8,6 +8,7 @@ import nyplApiClient from "../../../src/server/nyplApiClient"
 import {
   DISCOVERY_API_NAME,
   DISCOVERY_API_SEARCH_ROUTE,
+  SHEP_HTTP_TIMEOUT,
 } from "../../../src/config/constants"
 import { appConfig } from "../../../src/config/config"
 
@@ -92,9 +93,14 @@ export async function fetchBib(
 }
 
 async function fetchBibSubjectHeadings(bibId: string) {
+  const controller = new AbortController()
+  const timeoutId = setTimeout(() => controller.abort(), SHEP_HTTP_TIMEOUT)
   try {
     const response = await fetch(
-      `${appConfig.apiUrls.shep}/bibs/${bibId}/subject_headings`
+      `${appConfig.apiUrls.shep}/bibs/${bibId}/subject_headings`,
+      {
+        signal: controller.signal,
+      }
     )
     return await response.json()
   } catch (error) {
@@ -102,5 +108,7 @@ async function fetchBibSubjectHeadings(bibId: string) {
       "Error fetching SHEP API data (note: VPN should be used for local testing)",
       error
     )
+  } finally {
+    clearTimeout(timeoutId)
   }
 }
