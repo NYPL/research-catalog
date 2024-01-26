@@ -10,33 +10,51 @@ import type {
   AnyBibDetail,
 } from "../types/bibDetailsTypes"
 
-export default class BibDetailsModel {
+export default class BibDetails {
   bib: Bib
-  annotatedMarcFields: AnnotatedMarcField[]
+  annotatedMarcDetails: AnyBibDetail[]
+  holdingsDetails: AnyBibDetail[]
+  topDetails: AnyBibDetail[]
+  bottomDetails: AnyBibDetail[]
+  groupedNotes: AnyBibDetail[]
+  supplementaryContent: LinkedBibDetail
+  extent: BibDetail
+  subjectHeadings: SubjectHeadingDetail
   constructor(bib: Bib, annotatedMarc?: AnnotatedMarc) {
     this.bib = this.matchParallelToPrimaryValues(bib)
-    this.annotatedMarcFields = annotatedMarc?.fields
-  }
-
-  get annotatedMarcDetails(): AnyBibDetail[] {
-    return this.annotatedMarcFields?.map(
-      ({ label, values }: AnnotatedMarcField) => {
-        if (label === "Connect to:") {
-          const urlValues = values.map(({ label, content }) => ({
-            url: content,
-            urlLabel: label,
-          }))
-          return this.buildExternalLinkedDetail("Connect to:", urlValues)
-        } else {
-          const fieldValues = values.map((val) => val.content)
-          return this.buildDetail(label, fieldValues)
-        }
-      }
+    // these properties are not string[] so they require separate processing
+    this.supplementaryContent = this.buildSupplementaryContent()
+    this.groupedNotes = this.buildGroupedNotes()
+    this.extent = this.buildExtent()
+    this.subjectHeadings = this.buildSubjectHeadings()
+    // these are the actual arrays of details that will be displayed
+    this.annotatedMarcDetails = this.buildAnnotatedMarcDetails(
+      annotatedMarc?.fields
     )
+    this.holdingsDetails = this.buildHoldingsDetails(this.bib.holdings)
+    this.topDetails = this.buildTopDetails()
+    this.bottomDetails = this.buildBottomDetails()
   }
 
-  get holdingsDetails(): BibDetail[] {
-    const holdings = this.bib.holdings
+  buildAnnotatedMarcDetails(
+    annotatedMarc: AnnotatedMarcField[]
+  ): AnyBibDetail[] {
+    if (!annotatedMarc) return []
+    return annotatedMarc.map(({ label, values }: AnnotatedMarcField) => {
+      if (label === "Connect to:") {
+        const urlValues = values.map(({ label, content }) => ({
+          url: content,
+          urlLabel: label,
+        }))
+        return this.buildExternalLinkedDetail("Connect to:", urlValues)
+      } else {
+        const fieldValues = values.map((val) => val.content)
+        return this.buildDetail(label, fieldValues)
+      }
+    })
+  }
+
+  buildHoldingsDetails(holdings): BibDetail[] {
     if (!holdings) return []
     return [
       { label: "Location", field: "location" },
@@ -48,7 +66,8 @@ export default class BibDetailsModel {
       .map((fieldMapping) => this.buildHoldingDetail(fieldMapping))
       .filter((f) => f)
   }
-  get topDetails(): AnyBibDetail[] {
+
+  buildTopDetails(): AnyBibDetail[] {
     return [
       { field: "titleDisplay", label: "Title" },
       { field: "publicationStatement", label: "Published By" },
@@ -66,7 +85,7 @@ export default class BibDetailsModel {
       })
       .filter((f) => f)
   }
-  get bottomDetails(): AnyBibDetail[] {
+  buildBottomDetails(): AnyBibDetail[] {
     const resourceFields = [
       { field: "contributorLiteral", label: "Additional Authors" },
       { field: "partOf", label: "Found In" },
@@ -171,7 +190,7 @@ export default class BibDetailsModel {
     else return [...details, ...this.groupedNotes]
   }
 
-  get groupedNotes(): BibDetail[] {
+  buildGroupedNotes(): BibDetail[] {
     const note = this.bib?.note?.length ? this.bib.note : null
 
     // Make sure we have at least one note
@@ -269,7 +288,7 @@ export default class BibDetailsModel {
     return Object.assign({}, bib, ...parallelFieldMatches)
   }
 
-  get extent(): BibDetail {
+  buildExtent(): BibDetail {
     let modifiedExtent: string[]
     const { extent, dimensions } = this.bib
     const removeSemiColon = (extent) => [extent[0].replace(/\s*;\s*$/, "")]
@@ -291,7 +310,7 @@ export default class BibDetailsModel {
     }
   }
 
-  get supplementaryContent(): LinkedBibDetail {
+  buildSupplementaryContent(): LinkedBibDetail {
     if (
       !this.bib.supplementaryContent?.length ||
       // This is not for a known edge case, just here as a safeguard to avoid
@@ -310,7 +329,7 @@ export default class BibDetailsModel {
     return this.buildExternalLinkedDetail(label, values)
   }
 
-  get subjectHeadings(): SubjectHeadingDetail {
+  buildSubjectHeadings(): SubjectHeadingDetail {
     if (!this.bib.subjectLiteral) return
     const subjectLiteralUrls = this.bib.subjectLiteral.map(
       (subject: string) => {

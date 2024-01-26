@@ -27,6 +27,24 @@ export interface Bib {
   owner?: { "@id": string; prefLabel: string }
 }
 
+// export interface Holding {
+//   checkInBoxes: {
+//     coverage: string
+//     position: number
+//     type: string
+//     shelfMark: string[]
+//     status: string
+//   }[]
+//   holdingStatment: string[]
+//   identifier: { type: string; value: string }[]
+//   notes: string[]
+//   physicalLocation: string[]
+//   format: string[]
+//   location: { code: string; label: string }[]
+//   shelfmark: string[]
+//   uri: string
+// }
+
 type MaterialType = {
   value?: string
   prefLabel?: string
