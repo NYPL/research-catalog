@@ -47,7 +47,8 @@ export async function fetchBib(
   // TODO: Revisit this after Enhanced Browse work to determine if it's still necessary
   if (bib.subjectLiteral?.length) {
     const subjectHeadingData = await fetchBibSubjectHeadings(id)
-    bib.subjectHeadingData = subjectHeadingData || null
+    bib.subjectHeadings =
+      (subjectHeadingData && subjectHeadingData["subject_headings"]) || null
   }
 
   try {
