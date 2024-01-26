@@ -1,4 +1,3 @@
-import { StringValue } from "aws-sdk/clients/elbv2"
 import type { Bib } from "./bibTypes"
 import type { DRBResults } from "./drbTypes"
 

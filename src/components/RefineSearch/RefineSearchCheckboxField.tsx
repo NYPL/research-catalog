@@ -1,8 +1,4 @@
-import {
-  FormField,
-  CheckboxGroup,
-  Checkbox,
-} from "@nypl/design-system-react-components"
+import { FormField, CheckboxGroup } from "@nypl/design-system-react-components"
 import type { Dispatch } from "react"
 
 import type { AggregationOption } from "../../types/filterTypes"

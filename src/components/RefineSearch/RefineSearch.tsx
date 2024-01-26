@@ -6,7 +6,7 @@ import {
   Form,
 } from "@nypl/design-system-react-components"
 import type { SyntheticEvent } from "react"
-import { useState, useRef, useCallback, useMemo } from "react"
+import { useState, useRef } from "react"
 import { useRouter } from "next/router"
 
 import styles from "../../../styles/components/Search.module.scss"

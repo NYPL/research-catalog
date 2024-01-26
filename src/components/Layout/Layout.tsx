@@ -17,7 +17,6 @@ interface LayoutProps {
   sidebar?: ReactElement
   activePage?: RCPage
   sidebarPosition?: "right" | "left"
-  refineSearch?: ReactElement
 }
 
 /**
@@ -28,7 +27,6 @@ const Layout = ({
   children,
   sidebar,
   activePage,
-  refineSearch,
   sidebarPosition = "right",
 }: PropsWithChildren<LayoutProps>) => {
   const showSearch = activePage === "search"
