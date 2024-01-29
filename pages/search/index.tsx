@@ -112,11 +112,11 @@ export default function Search({ results }) {
           </>
         }
       >
-        {totalResults ? (
+        {isLoading ? (
+          <SkeletonLoader showImage={false} />
+        ) : (
           <>
-            {isLoading ? (
-              <SkeletonLoader showImage={false} />
-            ) : (
+            {totalResults ? (
               <>
                 <Heading level="h2" mb="xl" size="heading4">
                   {getSearchResultsHeading(
@@ -131,22 +131,14 @@ export default function Search({ results }) {
                   })}
                 </SimpleGrid>
               </>
+            ) : (
+              /**
+               * TODO: The logic and copy for different scenarios will need to be added when
+               * filters are implemented
+               */
+              <Heading level="h3">No results. Try a different search.</Heading>
             )}
-            <Pagination
-              id="results-pagination"
-              mt="xl"
-              initialPage={searchParams.page}
-              currentPage={searchParams.page}
-              pageCount={Math.ceil(totalResults / RESULTS_PER_PAGE)}
-              onPageChange={handlePageChange}
-            />
           </>
-        ) : (
-          /**
-           * TODO: The logic and copy for different scenarios will need to be added when
-           * filters are implemented
-           */
-          <Heading level="h3">No results. Try a different search.</Heading>
         )}
       </Layout>
     </>
