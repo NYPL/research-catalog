@@ -4,5 +4,10 @@
       "source": "/",
       "destination": "/research/research-catalog"
     }
-  ]
+  ],
+  "functions": {
+    "pages/api/*.js": {
+      "maxDuration": 60
+    }
+  }
 }

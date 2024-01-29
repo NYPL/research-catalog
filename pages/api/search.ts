@@ -21,11 +21,6 @@ import {
 import { standardizeBibId } from "../../src/utils/bibUtils"
 import { getDRBQueryStringFromSearchParams } from "../../src/utils/drbUtils"
 
-// Config required by Vercel to allow the search fetcher function to run for a maximum of 60 seconds
-export const config = {
-  maxDuration: 60,
-}
-
 export async function fetchResults(
   searchParams: SearchParams
 ): Promise<SearchResultsResponse | Error> {
