@@ -86,7 +86,7 @@ export default function AdvancedSearch() {
     e.preventDefault()
     const queryString = getSearchQuery(searchFormState as SearchParams)
 
-    if (!queryString.length) {
+    if (queryString === "?") {
       setErrorMessage(defaultEmptySearchErrorMessage)
       setAlert(true)
       // Very basic validation for the date range.
