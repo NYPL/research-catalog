@@ -25,7 +25,6 @@ export async function fetchResults(
   searchParams: SearchParams
 ): Promise<SearchResultsResponse | Error> {
   const { q, field, filters } = searchParams
-
   // If user is making a search for bib number (i.e. field set to "standard_number"),
   // standardize the bib ID and pass it as the search keywords
   const keywordsOrBibId = field === "standard_number" ? standardizeBibId(q) : q

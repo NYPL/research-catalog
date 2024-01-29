@@ -149,7 +149,7 @@ export function getSearchQuery({
 
   const completeQuery = `${searchKeywordsQuery}${advancedQuery}${filterQuery}${sortQuery}${fieldQuery}${pageQuery}${identifierQuery}`
 
-  return completeQuery?.length ? `?q=${completeQuery}` : ""
+  return completeQuery?.length ? `?q=${completeQuery}` : "?"
 }
 
 /**
@@ -192,13 +192,15 @@ export function mapRequestBodyToSearchParams(
 export function mapElementsToSearchResultsBibs(
   elements: SearchResultsElement[]
 ): SearchResultsBib[] | null {
-  return elements
-    .filter((result) => {
-      return !(isEmpty(result) || (result.result && isEmpty(result.result)))
-    })
-    .map((result) => {
-      return new SearchResultsBib(result.result)
-    })
+  return (
+    elements
+      ?.filter((result) => {
+        return !(isEmpty(result) || (result.result && isEmpty(result.result)))
+      })
+      .map((result) => {
+        return new SearchResultsBib(result.result)
+      }) || null
+  )
 }
 
 /* eslint-disable @typescript-eslint/naming-convention */
@@ -221,7 +223,7 @@ export const sortOptions: Record<string, string> = {
  * It also parses the results page number from a string, defaulting to 1 if absent
  */
 export function mapQueryToSearchParams({
-  q,
+  q = "",
   search_scope,
   sort_direction,
   page,
