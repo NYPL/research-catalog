@@ -149,7 +149,7 @@ export function getSearchQuery({
 
   const completeQuery = `${searchKeywordsQuery}${advancedQuery}${filterQuery}${sortQuery}${fieldQuery}${pageQuery}${identifierQuery}`
 
-  return completeQuery?.length ? `?q=${completeQuery}` : "?"
+  return completeQuery?.length ? `?q=${completeQuery}` : ""
 }
 
 /**
