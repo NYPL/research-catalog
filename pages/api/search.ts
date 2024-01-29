@@ -52,12 +52,15 @@ export async function fetchResults(
     q: keywordsOrBibId,
   }
 
-  const queryString = getSearchQuery(modifiedSearchParams)
+  let queryString = getSearchQuery(modifiedSearchParams)
 
+  // Fall back to a single "?" in the case of an empty query
+  if (!queryString.length) {
+    queryString = "?"
+  }
   const aggregationQuery = `/aggregations${queryString}`
-  const resultsQuery = `${
-    !queryString.length && "?"
-  }${queryString}&per_page=${RESULTS_PER_PAGE.toString()}`
+  const resultsQuery = `${queryString}&per_page=${RESULTS_PER_PAGE.toString()}`
+  console.log("resultsQuery", resultsQuery)
   const drbQuery = getDRBQueryStringFromSearchParams(modifiedSearchParams)
 
   // Get the following in parallel:
