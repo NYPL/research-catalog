@@ -31,6 +31,7 @@ export const appConfig = {
         process.env.DRB_API_BASE_URL ||
         "https://digital-research-books-api.nypl.org/search",
     },
+    shep: process.env.SHEP_API,
   },
   externalUrls: {
     drbFrontEnd: {

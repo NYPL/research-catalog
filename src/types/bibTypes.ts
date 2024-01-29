@@ -25,6 +25,7 @@ export interface Bib {
   contributorLiteral?: string[]
   holdings?: object
   owner?: { "@id": string; prefLabel: string }
+  subjectHeadings?: SubjectHeading[]
 }
 
 type MaterialType = {
@@ -71,4 +72,11 @@ export interface BibQueryParams {
   features?: string
   item_page?: number
   items_from?: number
+}
+
+type SubjectHeading = {
+  label?: string
+  uuid?: string
+  bib_count?: 10
+  desc_count?: 0
 }
