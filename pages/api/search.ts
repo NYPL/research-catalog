@@ -55,7 +55,6 @@ export async function fetchResults(
   }
   const aggregationQuery = `/aggregations${queryString}`
   const resultsQuery = `${queryString}&per_page=${RESULTS_PER_PAGE.toString()}`
-  console.log("resultsQuery", resultsQuery)
   const drbQuery = getDRBQueryStringFromSearchParams(modifiedSearchParams)
 
   // Get the following in parallel:
