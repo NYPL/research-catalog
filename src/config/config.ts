@@ -31,6 +31,7 @@ export const appConfig = {
         process.env.DRB_API_BASE_URL ||
         "https://digital-research-books-api.nypl.org/search",
     },
+    shep: process.env.SHEP_API,
   },
   externalUrls: {
     drbFrontEnd: {
@@ -58,6 +59,18 @@ export const appConfig = {
   nonRecapClosedLocations: parseLocations(
     process.env.NEXT_PUBLIC_NON_RECAP_CLOSED_LOCATIONS
   ),
+  nyplHeaderUrl: {
+    development: process.env.NYPL_HEADER_URL || "https://ds-header.nypl.org",
+    production: process.env.NYPL_HEADER_URL || "https://ds-header.nypl.org",
+  },
+  adobeEmbedUrl: {
+    development:
+      process.env.ADOBE_EMBED_URL ||
+      "https://assets.adobedtm.com/1a9376472d37/ddf1bedfe52e/launch-4eefcc91c90e.min.js",
+    production:
+      process.env.ADOBE_EMBED_URL ||
+      "https://assets.adobedtm.com/1a9376472d37/8519dfce636d/launch-672b7e7f98ee.min.js",
+  },
   jwtPublicKey: `-----BEGIN PUBLIC KEY-----
     MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA44ilHg/PxcJYsISHMRyo
     xsmez178qZpkJVXg7rOMVTLZuf05an7Pl+lX4nw/rqcvGQDXyrimciLgLkWu00xh
