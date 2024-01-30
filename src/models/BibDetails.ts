@@ -3,19 +3,58 @@ import type {
   LinkedBibDetail,
   BibDetail,
   FieldMapping,
+  AnnotatedMarcField,
+  Url,
+  SubjectHeadingDetail,
+  AnnotatedMarc,
+  AnyBibDetail,
 } from "../types/bibDetailsTypes"
 
-interface BibDetails extends Bib {
-  groupedNotes: object
-}
-export default class BibDetailsModel {
-  bib: BibDetails
-  constructor(bib: Bib) {
+export default class BibDetails {
+  bib: Bib
+  annotatedMarcDetails: AnyBibDetail[]
+  holdingsDetails: AnyBibDetail[]
+  topDetails: AnyBibDetail[]
+  bottomDetails: AnyBibDetail[]
+  groupedNotes: AnyBibDetail[]
+  supplementaryContent: LinkedBibDetail
+  extent: BibDetail
+  subjectHeadings: SubjectHeadingDetail
+  constructor(bib: Bib, annotatedMarc?: AnnotatedMarc) {
     this.bib = this.matchParallelToPrimaryValues(bib)
+    // these properties are not string[] so they require separate processing
+    this.supplementaryContent = this.buildSupplementaryContent()
+    this.groupedNotes = this.buildGroupedNotes()
+    this.extent = this.buildExtent()
+    this.subjectHeadings = this.buildSubjectHeadings()
+    // these are the actual arrays of details that will be displayed
+    this.annotatedMarcDetails = this.buildAnnotatedMarcDetails(
+      annotatedMarc?.fields
+    )
+    this.holdingsDetails = this.buildHoldingsDetails(this.bib.holdings)
+    this.topDetails = this.buildTopDetails()
+    this.bottomDetails = this.buildBottomDetails()
   }
 
-  get holdingsDetails() {
-    const holdings = this.bib.holdings
+  buildAnnotatedMarcDetails(
+    annotatedMarc: AnnotatedMarcField[]
+  ): AnyBibDetail[] {
+    if (!annotatedMarc) return []
+    return annotatedMarc.map(({ label, values }: AnnotatedMarcField) => {
+      if (label === "Connect to:") {
+        const urlValues = values.map(({ label, content }) => ({
+          url: content,
+          urlLabel: label,
+        }))
+        return this.buildExternalLinkedDetail("Connect to:", urlValues)
+      } else {
+        const fieldValues = values.map((val) => val.content)
+        return this.buildDetail(label, fieldValues)
+      }
+    })
+  }
+
+  buildHoldingsDetails(holdings): BibDetail[] {
     if (!holdings) return []
     return [
       { label: "Location", field: "location" },
@@ -27,7 +66,8 @@ export default class BibDetailsModel {
       .map((fieldMapping) => this.buildHoldingDetail(fieldMapping))
       .filter((f) => f)
   }
-  get topDetails() {
+
+  buildTopDetails(): AnyBibDetail[] {
     return [
       { field: "titleDisplay", label: "Title" },
       { field: "publicationStatement", label: "Published By" },
@@ -45,8 +85,8 @@ export default class BibDetailsModel {
       })
       .filter((f) => f)
   }
-  get bottomDetails() {
-    return [
+  buildBottomDetails(): AnyBibDetail[] {
+    const resourceFields = [
       { field: "contributorLiteral", label: "Additional Authors" },
       { field: "partOf", label: "Found In" },
       { field: "serialPublicationDates", label: "Publication Date" },
@@ -57,9 +97,8 @@ export default class BibDetailsModel {
       { field: "uniformTitle", label: "Uniform Title" },
       { field: "titleAlt", label: "Alternative Title" },
       { field: "formerTitle", label: "Former Title" },
-      { field: "subjectLiteral", label: "Subjects" },
+      { field: "subjectLiteral", label: "Subject" },
       { field: "genreForm", label: "Genre/Form" },
-      { field: "note", label: "Notes" },
       { field: "tableOfContents", label: "Contents" },
       { field: "shelfMark", label: "Call Number" },
       { field: "isbn", label: "ISBN" },
@@ -68,20 +107,44 @@ export default class BibDetailsModel {
       { field: "lccn", label: "LCCN" },
       { field: "owner", label: "Owning Institution" },
     ]
-      .map((fieldMapping) => {
-        let detail
+      .map((fieldMapping: FieldMapping): AnyBibDetail => {
+        let detail: AnyBibDetail
         if (fieldMapping.field === "contributorLiteral")
           detail = this.buildInternalLinkedDetail(fieldMapping)
-        else if (fieldMapping.field === "note") detail = this.groupedNotes
         else if (fieldMapping.field === "subjectLiteral")
           detail = this.subjectHeadings
         else if (fieldMapping.field === "extent") detail = this.extent
         else if (fieldMapping.field === "owner")
-          detail = this.bib.owner?.prefLabel
+          detail = this.bib.owner && {
+            label: fieldMapping.label,
+            value: [this.bib.owner?.prefLabel],
+          }
         else detail = this.buildStandardDetail(fieldMapping)
         return detail
       })
       .filter((f) => f)
+
+    const fieldsWithNotes = this.addNotes(resourceFields)
+    const combinedFields = this.combineBibDetailsData(
+      fieldsWithNotes,
+      this.annotatedMarcDetails
+    )
+    return combinedFields.filter((f) => f)
+  }
+
+  combineBibDetailsData = (
+    resourceEndpointDetails: AnyBibDetail[],
+    annotatedMarcDetails: AnyBibDetail[]
+  ) => {
+    const resourceEndpointDetailsLabels = new Set(
+      resourceEndpointDetails.map((detail: { label: string }) => {
+        return detail.label
+      })
+    )
+    const filteredAnnotatedMarcDetails = annotatedMarcDetails.filter(
+      (detail: AnyBibDetail) => !resourceEndpointDetailsLabels.has(detail.label)
+    )
+    return resourceEndpointDetails.concat(filteredAnnotatedMarcDetails)
   }
 
   buildHoldingDetail(fieldMapping: FieldMapping) {
@@ -94,7 +157,7 @@ export default class BibDetailsModel {
     return this.buildDetail(fieldMapping.label, bibFieldValue)
   }
 
-  buildDetail(label, value) {
+  buildDetail(label: string, value: string[]): BibDetail {
     if (!value?.length) return null
     return { label, value }
   }
@@ -117,25 +180,36 @@ export default class BibDetailsModel {
     }
   }
 
-  get groupedNotes() {
+  buildExternalLinkedDetail(label: string, values: Url[]): LinkedBibDetail {
+    if (!values.length) return null
+    return { link: "external", value: values, label }
+  }
+
+  addNotes(details: AnyBibDetail[]) {
+    if (!this.groupedNotes) return details
+    else return [...details, ...this.groupedNotes]
+  }
+
+  buildGroupedNotes(): BibDetail[] {
     const note = this.bib?.note?.length ? this.bib.note : null
 
     // Make sure we have at least one note
     if (note && Array.isArray(note)) {
-      // Group notes by noteType:
-      return (
-        note
-          // Make sure all notes are blanknodes:
-          .filter((note) => typeof note === "object")
-          .reduce((groups, note) => {
-            const noteType = this.getNoteType(note)
-            if (!groups[noteType]) {
-              groups[noteType] = []
-            }
-            groups[noteType].push(note.prefLabel)
-            return groups
-          }, {})
-      )
+      const notesGroupedByNoteType = note
+        .filter((note) => typeof note === "object")
+        .reduce((noteGroups, note) => {
+          const noteType = this.getNoteType(note)
+          if (!noteGroups[noteType]) {
+            noteGroups[noteType] = []
+          }
+          noteGroups[noteType].push(note.prefLabel)
+          return noteGroups
+        }, {})
+      const notesAsDetails = []
+      Object.keys(notesGroupedByNoteType).forEach((key: string) => {
+        notesAsDetails.push({ label: key, value: notesGroupedByNoteType[key] })
+      })
+      return notesAsDetails
     }
   }
 
@@ -214,7 +288,7 @@ export default class BibDetailsModel {
     return Object.assign({}, bib, ...parallelFieldMatches)
   }
 
-  get extent(): BibDetail {
+  buildExtent(): BibDetail {
     let modifiedExtent: string[]
     const { extent, dimensions } = this.bib
     const removeSemiColon = (extent) => [extent[0].replace(/\s*;\s*$/, "")]
@@ -236,7 +310,7 @@ export default class BibDetailsModel {
     }
   }
 
-  get supplementaryContent(): LinkedBibDetail {
+  buildSupplementaryContent(): LinkedBibDetail {
     if (
       !this.bib.supplementaryContent?.length ||
       // This is not for a known edge case, just here as a safeguard to avoid
@@ -252,14 +326,11 @@ export default class BibDetailsModel {
         urlLabel: sc.label,
       }
     })
-    return {
-      link: "external",
-      label,
-      value: values,
-    }
+    return this.buildExternalLinkedDetail(label, values)
   }
 
-  get subjectHeadings() {
+  buildSubjectHeadings(): SubjectHeadingDetail {
+    if (!this.bib.subjectLiteral) return
     const subjectLiteralUrls = this.bib.subjectLiteral.map(
       (subject: string) => {
         subject = subject.replace(/\.$/, "")
@@ -281,7 +352,7 @@ export default class BibDetailsModel {
       }
     )
     return {
-      label: "Subjects",
+      label: "Subject",
       value: subjectLiteralUrls,
     }
   }

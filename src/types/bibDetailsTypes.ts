@@ -1,3 +1,5 @@
+export type AnyBibDetail = BibDetail | LinkedBibDetail | SubjectHeadingDetail
+
 export interface SubjectHeadingDetail {
   value: Url[][]
   label: string
@@ -27,4 +29,33 @@ export interface Url {
 export interface FieldMapping {
   label: string
   field: string
+}
+
+export interface AnnotatedMarc {
+  id: string
+  nyplSource: string
+  fields: AnnotatedMarcField[]
+}
+
+export interface AnnotatedMarcField {
+  label: string
+  values: AnnotatedMarcFieldValue[]
+}
+
+export interface AnnotatedMarcFieldValue {
+  label?: string
+  content: string
+  source: {
+    fieldTag: string
+    marcTag: string
+    ind1?: string
+    ind2?: string
+    content: string | null
+    subfields: MarcSubfield[]
+  }
+}
+
+export interface MarcSubfield {
+  tag: string
+  content: string
 }
