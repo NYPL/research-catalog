@@ -37,6 +37,8 @@ As previously mentioned in the [README](README.md), we are using environment var
 | ---------------------------- | ----------------------------------------------------- |
 | `PLATFORM_API_CLIENT_ID`     | Platform client id. This value must be encrypted.     |
 | `PLATFORM_API_CLIENT_SECRET` | Platform client secret. This value must be encrypted. |
+| `SIERRA_KEY`                 | Sierra key. This value must be encrypted.             |
+| `SIERRA_SECRET`              | Sierra secret. This value must be encrypted.          |
 
 ### Encrypting
 
