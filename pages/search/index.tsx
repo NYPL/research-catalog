@@ -192,8 +192,8 @@ export async function getServerSideProps({ resolvedUrl }) {
             ) || null,
         }
       }) || [],
-    queryString: ebscoResults.SearchRequestGet.QueryString,
-    total: ebscoResults.SearchResult.Statistics.TotalHits,
+    queryString: ebscoResults.SearchRequestGet?.QueryString || null,
+    total: ebscoResults.SearchResult?.Statistics?.TotalHits || null,
   }
   console.log("Ebsco results: ", ebscoResults)
 

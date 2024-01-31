@@ -10,6 +10,8 @@ import EbscoCard from "./EbscoCard"
 
 const EbscoSidebar = ({ results }) => {
   // https://research-ebsco-com.i.ezproxy.nypl.org/c/2styhb/search/results?query-1=AND,q%3dtoast&sort=relevance&includefacets=y&searchmode=all&autosuggest=n&autocorrect=n&view=brief&resultsperpage=20&pagenumber=1&highlight=y&includeimagequickview=n
+  if (!results?.queryString) return null
+
   const queryString = results.queryString.replace("query-1=AND,", "q=")
 
   return (
