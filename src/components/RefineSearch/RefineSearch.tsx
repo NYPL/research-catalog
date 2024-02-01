@@ -50,9 +50,10 @@ const RefineSearch = ({ aggregations }: RefineSearchProps) => {
     toggleRefine()
   }
 
-  const [refineSearchOpen, setRefineSearchOpen] = useState(false)
+  const [displayRefineSearchButton, setDisplayRefineSearchButton] =
+    useState(true)
   const toggleRefine = useRef(() => {
-    setRefineSearchOpen((prevState) => !prevState)
+    setDisplayRefineSearchButton((prevState) => !prevState)
   }).current
 
   const handleClear = () => {
@@ -66,9 +67,10 @@ const RefineSearch = ({ aggregations }: RefineSearchProps) => {
 
   return (
     <Box className={styles.refineSearchContainer}>
-      {refineSearchOpen ? (
+      {displayRefineSearchButton ? (
         <Box className={styles.refineSearchInner}>
           <Button
+            data-testId="refine-search-button"
             onClick={toggleRefine}
             id="refine-search"
             buttonType="secondary"
@@ -97,10 +99,16 @@ const RefineSearch = ({ aggregations }: RefineSearchProps) => {
                 id="reset-refine"
                 type="reset"
                 buttonType="secondary"
+                data-testId="clear-filters-button"
               >
                 Clear Filters
               </Button>
-              <Button id="submit-refine" type="submit" buttonType="secondary">
+              <Button
+                data-testId="apply-filters-button"
+                id="submit-refine"
+                type="submit"
+                buttonType="secondary"
+              >
                 Apply Filters
               </Button>
             </ButtonGroup>

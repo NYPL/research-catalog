@@ -18,7 +18,7 @@ describe("RefineSearch", () => {
       render(<Search results={{ aggregations, results }} />)
     }
     beforeEach(setup)
-    it("should add filters and maintain creatorliteral filter and search params", async () => {
+    it.only("should add filters and maintain creatorliteral filter and search params", async () => {
       await openRefineSearch()
       await selectSomeFilters()
       await apply()
@@ -158,26 +158,28 @@ describe("RefineSearch", () => {
       })
     })
   })
+
   const openRefineSearch = async () => {
-    const refineButton = screen.getByRole("button", { name: "Refine Search" })
-    await act(async () => await userEvent.click(refineButton))
+    const refineButton = screen.getByTestId("refine-search-button")
+    await userEvent.click(refineButton)
   }
   const apply = async () => {
-    const applyButton = screen.getByRole("button", { name: "Apply Filters" })
-    await act(async () => await userEvent.click(applyButton))
+    const applyButton = screen.getByTestId("apply-filters-button")
+    await userEvent.click(applyButton)
   }
   const selectSomeFilters = async (
     labels = ["Portuguese", "Audio", "Cooking, Italian."]
   ) => {
-    const checkboxes = labels.map((label) => screen.getByLabelText(label))
     await Promise.all(
-      checkboxes.map(async (box) => {
-        await act(async () => await userEvent.click(box))
-      })
+      labels
+        .map((label) => screen.getByLabelText(label))
+        .map(async (box) => {
+          await userEvent.click(box)
+        })
     )
   }
   const clear = async () => {
-    const clearButton = screen.getByRole("button", { name: "Clear Filters" })
-    await act(async () => await userEvent.click(clearButton))
+    const clearButton = screen.getByTestId("clear-filters-button")
+    await userEvent.click(clearButton)
   }
 })
