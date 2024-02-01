@@ -3,7 +3,7 @@ import { Heading } from "@nypl/design-system-react-components"
 
 import Layout from "../../src/components/Layout/Layout"
 import { PATHS, SITE_NAME } from "../../src/config/constants"
-import { fetchBib } from "../api/bib"
+import { fetchBib } from "../../src/server/api/bib"
 import { mapQueryToBibParams } from "../../src/utils/bibUtils"
 import BibDetailsModel from "../../src/models/BibDetails"
 import BibDetails from "../../src/components/BibPage/BibDetail"
