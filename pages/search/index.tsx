@@ -14,7 +14,7 @@ import Layout from "../../src/components/Layout/Layout"
 import DRBContainer from "../../src/components/DRB/DRBContainer"
 import SearchResult from "../../src/components/SearchResult/SearchResult"
 
-import { fetchResults } from "../api/search"
+import { fetchResults } from "../../src/server/api/search"
 import {
   getSearchResultsHeading,
   mapQueryToSearchParams,
