@@ -1,6 +1,7 @@
 import { parse as parseDuration, toSeconds } from "iso8601-duration"
 import { fetchLocations } from "../../pages/api/locations"
 import { nyplCore } from "./nyplCore"
+import { DAYS } from "../config/constants"
 
 const cache = {}
 
@@ -280,14 +281,14 @@ export const adjustToSpecialSchedule = (
     hasSpecialDeliverySchedule = true
     getFirstHour = (time) => {
       const day = time.getDay()
-      return day === 0 ? 14 : 10
+      return day === DAYS.SUNDAY ? 14 : 10
     }
     getLastHour = (time) => {
       const day = time.getDay()
       // Tues-Sat last delivery 6pm (8pm close), Sun-Mon last delivery 4pm (6pm close)
       // FIXME: This is incorrect; Thurs-Sat we close at 6pm. These ranges
       // should be data driven.
-      return day > 1 ? 18 : 16
+      return day > DAYS.MONDAY ? 18 : 16
     }
     getNextHour = (hour) => 2 * Math.floor(hour / 2 + 1)
   }
@@ -296,12 +297,12 @@ export const adjustToSpecialSchedule = (
     hasSpecialDeliverySchedule = true
     getFirstHour = (time) => {
       const day = time.getDay()
-      return day === 0 ? 13 : 11
+      return day === DAYS.SUNDAY ? 13 : 11
     }
     getLastHour = (time) => {
       const day = time.getDay()
       // Tues/Wed last delivery 5pm (8pm close), other days 3pm last delivery
-      return day === 2 || day === 3 ? 17 : 15
+      return day === DAYS.TUESDAY || day === DAYS.WEDNESDAY ? 17 : 15
     }
     getNextHour = (hour) => 2 * Math.floor(hour / 2 + 0.5) + 1
   }

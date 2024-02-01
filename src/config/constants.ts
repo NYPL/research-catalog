@@ -49,3 +49,14 @@ export const ADOBE_ANALYTICS_PAGE_NAMES = {
   REDIRECT: "error|redirect",
   NOT_FOUND_404: "error|404",
 }
+
+// Build a lookup relating weekday names to their Date.prototype.getDay() number:
+export const DAYS = {
+  SUNDAY: 0,
+  MONDAY: 1,
+  TUESDAY: 2,
+  WEDNESDAY: 3,
+  THURSDAY: 4,
+  FRIDAY: 5,
+  SATURDAY: 6
+}
