@@ -22,7 +22,7 @@ import {
 } from "@nypl/design-system-react-components"
 
 import Layout from "../../src/components/Layout/Layout"
-import { BASE_URL, SITE_NAME } from "../../src/config/constants"
+import { BASE_URL, PATHS, SITE_NAME } from "../../src/config/constants"
 import { searchFormReducer } from "../../src/reducers/searchFormReducer"
 import {
   initialSearchFormState,
@@ -98,7 +98,13 @@ export default function AdvancedSearch() {
       setErrorMessage(badDateErrorMessage)
       setAlert(true)
     } else {
-      await router.push(`/search/${queryString}`)
+      // If the reverse_proxy_enabled feature flag is present, use window.location.replace
+      // instead of router.push to forward search results to DFE.
+      if (process.env.NEXT_PUBLIC_FEATURES.includes("reverse_proxy_enabled")) {
+        window.location.replace(`${BASE_URL}${PATHS.SEARCH}${queryString}`)
+      } else {
+        await router.push(`${PATHS.SEARCH}${queryString}`)
+      }
     }
   }
 
