@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 
+- Make the reverse proxy feature flag a boolean to avoid issues with stringified array values in Docker
+
 ## [0.1.0] 2024-02-02
 
 ### Added
