@@ -58,5 +58,5 @@ export const DAYS = {
   WEDNESDAY: 3,
   THURSDAY: 4,
   FRIDAY: 5,
-  SATURDAY: 6
+  SATURDAY: 6,
 }
