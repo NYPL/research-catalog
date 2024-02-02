@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
-### Update
+### Updated
 
-- Fixed accessibility issues on the Homepage (SCC-3829)
+## [0.1.0] 2024-02-02
+
+### Added
+
+- This includes the initial addition of several key features of the Research Catalog refactor (https://jira.nypl.org/browse/SCC-3510), including the following:
+- Homepage (https://jira.nypl.org/browse/SCC-3594)
+- Search Results Page (https://jira.nypl.org/browse/SCC-3600)
+- DRB Sidebar (https://jira.nypl.org/browse/SCC-3606)
+- Advanced Search (https://jira.nypl.org/browse/SCC-3890)
+- Initial Bib Details work (https://jira.nypl.org/browse/SCC-3938)
