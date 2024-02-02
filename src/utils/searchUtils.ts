@@ -1,16 +1,51 @@
-import {
-  isArray as _isArray,
-  isEmpty as _isEmpty,
-  mapObject as _mapObject,
-  forEach as _forEach,
-} from "underscore"
+import { isArray, isEmpty, mapObject, forEach } from "underscore"
 
 import type {
   SearchParams,
   SearchQueryParams,
   SearchFilters,
   Identifiers,
+  SearchResultsElement,
 } from "../types/searchTypes"
+import SearchResultsBib from "../models/SearchResultsBib"
+import { RESULTS_PER_PAGE } from "../config/constants"
+
+/**
+ * getPaginationOffsetStrings
+ * Used to generate search results start and end counts on Search Results page
+ */
+export function getPaginationOffsetStrings(
+  page = 1,
+  total: number
+): [string, string] {
+  const offset = RESULTS_PER_PAGE * page - RESULTS_PER_PAGE
+  const start = offset + 1
+  let end = offset + RESULTS_PER_PAGE
+  end = end >= total ? total : end
+
+  return [start.toLocaleString(), end.toLocaleString()]
+}
+
+/**
+ * getSearchResultsHeading
+ * Used to generate the search results heading text (Displaying 100 results for keyword "cats")
+ * TODO: Make search query type (i.e. "Keyword") dynamic
+ */
+export function getSearchResultsHeading(
+  page: number,
+  totalResults: number,
+  query: string
+): string {
+  const [resultsStart, resultsEnd] = getPaginationOffsetStrings(
+    page,
+    totalResults
+  )
+  return `Displaying ${
+    totalResults > RESULTS_PER_PAGE
+      ? `${resultsStart}-${resultsEnd}`
+      : totalResults.toLocaleString()
+  } of ${totalResults.toLocaleString()} results for keyword "${query}"`
+}
 
 /**
  * getSortQuery
@@ -19,9 +54,10 @@ import type {
 function getSortQuery(sortBy = "", order = ""): string {
   const reset = sortBy === "relevance"
   let sortQuery = ""
+  const sortDirectionQuery = order === "" ? "" : `&sort_direction=${order}`
 
   if (sortBy?.length && !reset) {
-    sortQuery = `&sort=${sortBy}&sort_direction=${order}`
+    sortQuery = `&sort=${sortBy}${sortDirectionQuery}`
   }
 
   return sortQuery
@@ -55,11 +91,11 @@ function getIdentifierQuery(identifiers: Identifiers): string {
 function getFilterQuery(filters: SearchFilters) {
   let filterQuery = ""
 
-  if (!_isEmpty(filters)) {
-    _mapObject(filters, (val, key) => {
+  if (!isEmpty(filters)) {
+    mapObject(filters, (val, key) => {
       // Property contains an array of its selected filter values:
-      if (val?.length && _isArray(val)) {
-        _forEach(val, (filter, index) => {
+      if (val?.length && isArray(val)) {
+        forEach(val, (filter, index) => {
           if (filter.value && filter.value !== "") {
             filterQuery += `&filters[${key}][${index}]=${encodeURIComponent(
               filter.value
@@ -82,25 +118,25 @@ function getFilterQuery(filters: SearchFilters) {
 }
 
 /**
- * getQueryString
- * Builds a query string from a SearchParams object, setting defaults on some undefined params.
+ * getSearchQuery
+ * Builds a query string from a SearchParams object
  */
-export function getQueryString({
+export function getSearchQuery({
   sortBy = "relevance",
   field = "all",
   order,
-  selectedFilters = {},
+  filters = {},
   identifiers = {},
-  searchKeywords,
+  q,
   contributor,
   title,
   subject,
   page = 1,
 }: SearchParams): string {
-  const searchKeywordsQuery = encodeURIComponent(searchKeywords)
+  const searchKeywordsQuery = encodeURIComponent(q)
   const sortQuery = getSortQuery(sortBy, order)
 
-  const filterQuery = getFilterQuery(selectedFilters)
+  const filterQuery = getFilterQuery(filters)
   const fieldQuery = getFieldQuery(field)
   const identifierQuery = getIdentifierQuery(identifiers)
   const pageQuery = page !== 1 ? `&page=${page}` : ""
@@ -113,18 +149,82 @@ export function getQueryString({
 
   const completeQuery = `${searchKeywordsQuery}${advancedQuery}${filterQuery}${sortQuery}${fieldQuery}${pageQuery}${identifierQuery}`
 
-  return completeQuery?.length ? `q=${completeQuery}` : ""
+  return completeQuery?.length ? `?q=${completeQuery}` : ""
+}
+
+/**
+ * mapRequestBodyToSearchParams
+ * Maps the POST request body from an JS disabled advanced search to a SearchParams object
+ */
+export function mapRequestBodyToSearchParams(
+  reqBody: SearchParams & SearchFilters
+): SearchParams {
+  const {
+    q,
+    page = 1,
+    contributor,
+    title,
+    subject,
+    language,
+    materialType,
+    dateAfter,
+    dateBefore,
+  } = reqBody
+  return {
+    q,
+    page,
+    contributor,
+    title,
+    subject,
+    filters: {
+      materialType,
+      language,
+      dateAfter,
+      dateBefore,
+    },
+  }
+}
+
+/**
+ * mapElementsToSearchResultsBibs
+ * Maps the SearchResultsElement structure from the search results response to an array of SearchResultsBib objects
+ */
+export function mapElementsToSearchResultsBibs(
+  elements: SearchResultsElement[]
+): SearchResultsBib[] | null {
+  return (
+    elements
+      ?.filter((result) => {
+        return !(isEmpty(result) || (result.result && isEmpty(result.result)))
+      })
+      .map((result) => {
+        return new SearchResultsBib(result.result)
+      }) || null
+  )
+}
+
+/* eslint-disable @typescript-eslint/naming-convention */
+
+/**
+ * sortOptions
+ * The allowed keys for the sort field and their respective labels
+ */
+export const sortOptions: Record<string, string> = {
+  relevance: "Relevance",
+  title_asc: "Title (A - Z)",
+  title_desc: "Title (Z - A)",
+  date_asc: "Date (Old to New)",
+  date_desc: "Date (New to Old)",
 }
 
 /**
  * mapQueryToSearchParams
  * Maps the SearchQueryParams structure from the request to a SearchParams object, which is expected by fetchResults
+ * It also parses the results page number from a string, defaulting to 1 if absent
  */
 export function mapQueryToSearchParams({
-  q,
-  // eslint-disable-next-line @typescript-eslint/naming-convention
+  q = "",
   search_scope,
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   sort_direction,
   page,
   contributor,
@@ -137,17 +237,18 @@ export function mapQueryToSearchParams({
   lccn,
   filters,
 }: SearchQueryParams): SearchParams {
+  const hasIdentifiers = issn || isbn || oclc || lccn
   return {
-    searchKeywords: q,
+    q,
     field: search_scope,
-    page,
+    page: page ? parseInt(page) : 1,
     contributor,
     title,
     subject,
     sortBy: sort,
     order: sort_direction,
-    selectedFilters: filters,
-    identifiers: {
+    filters,
+    identifiers: hasIdentifiers && {
       issn,
       isbn,
       oclc,

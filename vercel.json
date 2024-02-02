@@ -1,0 +1,16 @@
+{
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/research/research-catalog"
+    }
+  ],
+  "functions": {
+    "pages/search/index.tsx": {
+      "maxDuration": 60
+    },
+    "pages/api/*.js": {
+      "maxDuration": 60
+    }
+  }
+}

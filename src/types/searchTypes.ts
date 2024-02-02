@@ -1,15 +1,14 @@
-import type { ElectronicResource } from "./bibTypes"
+import type { Bib } from "./bibTypes"
+import type { DRBResults } from "./drbTypes"
 
 type Language = string
 type SubjectLiteral = string
 type ContributorLiteral = string
 type Issuance = string
-type MaterialType = {
-  prefLabel?: string
-}
+type MaterialTypeFilter = string
 
 export interface SearchFilters {
-  materialType?: MaterialType | MaterialType[]
+  materialType?: MaterialTypeFilter | MaterialTypeFilter[]
   language?: Language | Language[]
   subjectLiteral?: SubjectLiteral | SubjectLiteral[]
   contributorLiteral?: ContributorLiteral | ContributorLiteral[]
@@ -26,11 +25,11 @@ export interface Identifiers {
 }
 
 export interface SearchParams {
-  searchKeywords?: string
+  q?: string
   field?: string
-  sortBy?: string
-  order?: string
-  selectedFilters?: SearchFilters
+  sortBy?: SortKey
+  order?: SortOrder
+  filters?: SearchFilters
   contributor?: string
   title?: string
   subject?: string
@@ -38,28 +37,15 @@ export interface SearchParams {
   identifiers?: Identifiers
 }
 
-export interface SearchQueryParams extends Identifiers {
-  q?: string
-  contributor?: string
-  title?: string
-  subject?: string
-  filters?: SearchFilters
-  sort?: string
-  sort_direction?: string
-  sort_scope?: string
-  search_scope?: string
-  page?: number
-  per_page?: number
-}
+export type SortKey = "relevance" | "title" | "date"
+export type SortOrder = "asc" | "desc"
 
-export interface SearchFormEvent {
-  q?: { value: string }
-  search_scope?: { value: string }
-}
+type SearchFormField = { value: string }
 
 export interface SearchResultsResponse {
   results?: SearchResults
   aggregations?: SearchResults
+  drbResults?: DRBResults
   page: number
 }
 
@@ -69,20 +55,50 @@ export interface SearchResults {
 }
 
 export interface SearchResultsElement {
-  result?: SearchResult
+  result?: Bib
   field?: string
 }
 
-export interface SearchResult {
-  "@id"?: string
-  uri?: string
-  titleDisplay?: string[]
-  creatorLiteral?: string[]
-  title?: string[]
-  materialType?: MaterialType[]
-  publicationStatement?: string[]
-  dateStartYear?: number
-  dateEndYear?: number
-  electronicResources?: ElectronicResource[]
-  numItemsTotal?: number
+export interface SearchFormInputField {
+  name: string
+  label: string
+}
+
+export type SearchFormActionType =
+  | "input_change"
+  | "filter_change"
+  | "form_reset"
+
+export interface SearchFormAction {
+  type: SearchFormActionType
+  field?: string
+  payload: SearchParams | SearchFilters | string | string[]
+}
+
+/* eslint-disable @typescript-eslint/naming-convention */
+
+export interface SearchQueryParams extends Identifiers {
+  q?: string
+  contributor?: string
+  title?: string
+  subject?: string
+  filters?: SearchFilters
+  sort?: SortKey
+  sort_direction?: SortOrder
+  sort_scope?: string
+  search_scope?: string
+  page?: string
+  per_page?: string
+}
+
+export interface SearchFormEvent {
+  q?: SearchFormField
+  search_scope?: SearchFormField
+  title?: SearchFormField
+  contributor?: SearchFormField
+  subject?: SearchFormField
+  language?: SearchFormField
+  dateBefore?: SearchFormField
+  dateAfter?: SearchFormField
+  materialType?: SearchFormField
 }

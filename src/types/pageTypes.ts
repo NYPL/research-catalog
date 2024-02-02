@@ -1,1 +1,8 @@
-export type RCPage = "search" | "shep" | "account" | "404" | ""
+export type RCPage =
+  | "search"
+  | "advanced"
+  | "shep"
+  | "account"
+  | "bib"
+  | "404"
+  | ""

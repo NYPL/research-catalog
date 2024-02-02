@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 
 import type { SearchParams } from "../../src/types/searchTypes"
-import type { DRBResultsResponse } from "../../src/types/drbTypes"
+import type { DRBResults } from "../../src/types/drbTypes"
 import nyplApiClient from "../../src/server/nyplApiClient/index"
 import { DRB_API_NAME } from "../../src/config/constants"
 import { getDRBQueryStringFromSearchParams } from "../../src/utils/drbUtils"
@@ -12,7 +12,7 @@ import { mapQueryToSearchParams } from "../../src/utils/searchUtils"
  */
 export async function fetchDRBResults(
   searchParams: SearchParams
-): Promise<DRBResultsResponse | Error> {
+): Promise<DRBResults | Error> {
   const drbQueryString = getDRBQueryStringFromSearchParams(searchParams)
 
   try {
@@ -24,7 +24,8 @@ export async function fetchDRBResults(
       totalWorks: data.totalWorks,
     }
   } catch (error) {
-    return Error(error)
+    console.log(`Error fetching DRB results ${error.message}`)
+    throw new Error(error)
   }
 }
 
@@ -35,8 +36,18 @@ export async function fetchDRBResults(
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "GET") {
     const searchParams = mapQueryToSearchParams(req.query)
-    const response = await fetchDRBResults(searchParams)
-    res.status(200).json(response)
+
+    try {
+      const response = await fetchDRBResults(searchParams)
+
+      return res.status(200).json(response)
+    } catch (error) {
+      return res.status(500).json({
+        title: "Error fetching DRB results",
+        status: 500,
+        detail: error.message,
+      })
+    }
   }
 }
 
