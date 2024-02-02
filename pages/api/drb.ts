@@ -24,7 +24,8 @@ export async function fetchDRBResults(
       totalWorks: data.totalWorks,
     }
   } catch (error) {
-    return Error(error)
+    console.log(`Error fetching DRB results ${error.message}`)
+    throw new Error(error)
   }
 }
 
@@ -35,8 +36,18 @@ export async function fetchDRBResults(
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "GET") {
     const searchParams = mapQueryToSearchParams(req.query)
-    const response = await fetchDRBResults(searchParams)
-    res.status(200).json(response)
+
+    try {
+      const response = await fetchDRBResults(searchParams)
+
+      return res.status(200).json(response)
+    } catch (error) {
+      return res.status(500).json({
+        title: "Error fetching DRB results",
+        status: 500,
+        detail: error.message,
+      })
+    }
   }
 }
 

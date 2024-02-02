@@ -5,9 +5,10 @@ import { useState } from "react"
 
 import styles from "../../../styles/components/Search.module.scss"
 import RCLink from "../RCLink/RCLink"
-import { getQueryString } from "../../utils/searchUtils"
+import { getSearchQuery } from "../../utils/searchUtils"
 import { BASE_URL, PATHS } from "../../config/constants"
 import EDSLink from "../EDSLink"
+import useLoading from "../../hooks/useLoading"
 
 /**
  * The SearchForm component renders and controls the Search form and
@@ -20,15 +21,23 @@ const SearchForm = () => {
   )
   const [searchScope, setSearchScope] = useState("all")
 
+  const isLoading = useLoading()
+
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
     const searchParams = {
       q: searchTerm,
       field: searchScope,
     }
-    const queryString = getQueryString(searchParams)
+    const queryString = getSearchQuery(searchParams)
 
-    await router.push(`${PATHS.SEARCH}${queryString}`)
+    // If the reverse_proxy_enabled feature flag is present, use window.location.replace
+    // instead of router.push to forward search results to DFE.
+    if (process.env.NEXT_PUBLIC_FEATURES?.includes("reverse_proxy_enabled")) {
+      window.location.replace(`${BASE_URL}${PATHS.SEARCH}${queryString}`)
+    } else {
+      await router.push(`${PATHS.SEARCH}${queryString}`)
+    }
   }
 
   const handleChange = (
@@ -49,6 +58,7 @@ const SearchForm = () => {
             method="get"
             onSubmit={handleSubmit}
             labelText="Search Bar Label"
+            isDisabled={isLoading}
             selectProps={{
               value: searchScope,
               onChange: (e) => handleChange(e, setSearchScope),
@@ -85,7 +95,7 @@ const SearchForm = () => {
             DS 2.X CSS color variable values. */}
           <RCLink
             className={styles.advancedSearch}
-            href={"/search/advanced"}
+            href={`${BASE_URL}/search/advanced`}
             color="#0069BF"
           >
             Advanced Search

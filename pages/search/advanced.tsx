@@ -22,7 +22,7 @@ import {
 } from "@nypl/design-system-react-components"
 
 import Layout from "../../src/components/Layout/Layout"
-import { BASE_URL, SITE_NAME } from "../../src/config/constants"
+import { BASE_URL, PATHS, SITE_NAME } from "../../src/config/constants"
 import { searchFormReducer } from "../../src/reducers/searchFormReducer"
 import {
   initialSearchFormState,
@@ -34,7 +34,7 @@ import type {
   SearchParams,
   SearchFormActionType,
 } from "../../src/types/searchTypes"
-import { getQueryString } from "../../src/utils/searchUtils"
+import { getSearchQuery } from "../../src/utils/searchUtils"
 // import FieldsetDate from "../../src/components/SearchFilters/FieldsetDate"
 
 export const defaultEmptySearchErrorMessage =
@@ -84,7 +84,7 @@ export default function AdvancedSearch() {
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
-    const queryString = getQueryString(searchFormState as SearchParams)
+    const queryString = getSearchQuery(searchFormState as SearchParams)
 
     if (!queryString.length) {
       setErrorMessage(defaultEmptySearchErrorMessage)
@@ -98,7 +98,13 @@ export default function AdvancedSearch() {
       setErrorMessage(badDateErrorMessage)
       setAlert(true)
     } else {
-      await router.push(`/search/${queryString}`)
+      // If the reverse_proxy_enabled feature flag is present, use window.location.replace
+      // instead of router.push to forward search results to DFE.
+      if (process.env.NEXT_PUBLIC_FEATURES?.includes("reverse_proxy_enabled")) {
+        window.location.replace(`${BASE_URL}${PATHS.SEARCH}${queryString}`)
+      } else {
+        await router.push(`${PATHS.SEARCH}${queryString}`)
+      }
     }
   }
 

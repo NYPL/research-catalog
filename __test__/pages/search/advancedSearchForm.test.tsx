@@ -93,7 +93,7 @@ describe("Advanced Search Form", () => {
       screen.getByLabelText("Language"),
       "Azerbaijani"
     )
-    const keywordInput = screen.getByLabelText("Keywords")
+    const keywordInput = screen.getByLabelText("Keyword")
     const titleInput = screen.getByLabelText("Title")
     const contributorInput = screen.getByLabelText("Author")
     const subjectInput = screen.getByLabelText("Subject")

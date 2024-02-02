@@ -12,9 +12,9 @@ import {
   DRB_API_NAME,
   RESULTS_PER_PAGE,
 } from "../../src/config/constants"
-import nyplApiClient from "../../src/server/nyplApiClient/index"
+import nyplApiClient from "../../src/server/nyplApiClient"
 import {
-  getQueryString,
+  getSearchQuery,
   mapQueryToSearchParams,
   mapRequestBodyToSearchParams,
 } from "../../src/utils/searchUtils"
@@ -47,8 +47,12 @@ export async function fetchResults(
     q: keywordsOrBibId,
   }
 
-  const queryString = getQueryString(modifiedSearchParams)
+  let queryString = getSearchQuery(modifiedSearchParams)
 
+  // Fall back to a single "?" in the case of an empty query
+  if (!queryString.length) {
+    queryString = "?"
+  }
   const aggregationQuery = `/aggregations${queryString}`
   const resultsQuery = `${queryString}&per_page=${RESULTS_PER_PAGE.toString()}`
   const drbQuery = getDRBQueryStringFromSearchParams(modifiedSearchParams)
@@ -106,7 +110,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {
     const body = await req.body
     const searchParams = mapRequestBodyToSearchParams(body)
-    const queryString = getQueryString(searchParams)
+    const queryString = getSearchQuery(searchParams)
     res.redirect(BASE_URL + PATHS.SEARCH + queryString)
   }
 }
