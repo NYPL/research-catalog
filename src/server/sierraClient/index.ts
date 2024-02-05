@@ -14,7 +14,7 @@ const base = process.env.SIERRA_BASE
 if (!key || !base || !secret) {
   console.error("Missing Sierra credentials")
 }
-const creds = [key, base]
+const creds = [key, secret]
 const CACHE: KMSCache = { client: "", key, secret }
 
 const kms: aws.KMS = new aws.KMS({
@@ -48,9 +48,9 @@ const sierraClient = async () => {
   try {
     console.log("before wrapper config")
     await wrapper.config({
-      base: base,
       key: decryptedKey,
       secret: decryptedSecret,
+      base: base,
     })
     CACHE.key = decryptedKey
     CACHE.secret = decryptedSecret
@@ -58,7 +58,7 @@ const sierraClient = async () => {
     console.log("after wrapper config")
     return wrapper
   } catch (error) {
-    console.error(error)
+    console.error(error.message)
   }
 }
 
