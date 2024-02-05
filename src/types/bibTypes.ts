@@ -36,7 +36,26 @@ export interface Bib {
   contributorLiteral?: string[]
   holdings?: object
   owner?: { "@id": string; prefLabel: string }
+  subjectHeadings?: SubjectHeading[]
 }
+
+// export interface Holding {
+//   checkInBoxes: {
+//     coverage: string
+//     position: number
+//     type: string
+//     shelfMark: string[]
+//     status: string
+//   }[]
+//   holdingStatment: string[]
+//   identifier: { type: string; value: string }[]
+//   notes: string[]
+//   physicalLocation: string[]
+//   format: string[]
+//   location: { code: string; label: string }[]
+//   shelfmark: string[]
+//   uri: string
+// }
 
 type MaterialType = {
   value?: string
@@ -82,4 +101,11 @@ export interface BibQueryParams {
   features?: string
   item_page?: number
   items_from?: number
+}
+
+type SubjectHeading = {
+  label?: string
+  uuid?: string
+  bib_count?: 10
+  desc_count?: 0
 }

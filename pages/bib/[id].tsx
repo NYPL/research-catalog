@@ -5,20 +5,42 @@ import Layout from "../../src/components/Layout/Layout"
 import { PATHS, SITE_NAME } from "../../src/config/constants"
 import { fetchBib } from "../api/bib"
 import { mapQueryToBibParams } from "../../src/utils/bibUtils"
+import BibDetailsModel from "../../src/models/BibDetails"
+import BibDetails from "../../src/components/BibPage/BibDetail"
+import type { Bib } from "../../src/types/bibTypes"
+import type { AnnotatedMarc } from "../../src/types/bibDetailsTypes"
+
+interface BibPropsType {
+  bib: Bib
+  annotatedMarc: AnnotatedMarc
+}
 
 /**
  * The Bib page is responsible for fetching and displaying a single Bib's details.
  */
-export default function Bib({ bib, annotatedMarc }) {
-  console.log(bib)
-  console.log(annotatedMarc)
+export default function Bib({ bib, annotatedMarc }: BibPropsType) {
+  const { topDetails, bottomDetails, holdingsDetails } = new BibDetailsModel(
+    bib,
+    annotatedMarc
+  )
   return (
     <>
       <Head>
         <title>Item Details | {SITE_NAME}</title>
       </Head>
       <Layout activePage="bib">
+        <BibDetails key="top-details" details={topDetails} />
         <Heading level="h1">{bib.title[0]}</Heading>
+        <BibDetails
+          heading="Details"
+          key="bottom-details"
+          details={bottomDetails}
+        />
+        <BibDetails
+          heading="Holdings"
+          key="holdings-details"
+          details={holdingsDetails}
+        />
       </Layout>
     </>
   )

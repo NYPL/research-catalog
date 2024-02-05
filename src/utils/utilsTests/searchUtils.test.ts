@@ -40,6 +40,7 @@ describe("searchUtils", () => {
           isbn: "456",
         },
         page: 1,
+        q: "",
         field: "contributor",
         order: "asc",
         sortBy: "relevance",
@@ -52,6 +53,7 @@ describe("searchUtils", () => {
         })
       ).toEqual({
         page: 2,
+        q: "",
       })
     })
   })

@@ -80,7 +80,7 @@ export default function Search({ results, ebscoResults = null }) {
         activePage="search"
         sidebar={
           <>
-            {totalResults && (
+            {totalResults > 0 ? (
               <Select
                 name="sort_direction"
                 id="search-results-sort"
@@ -99,7 +99,7 @@ export default function Search({ results, ebscoResults = null }) {
                   </option>
                 ))}
               </Select>
-            )}
+            ) : null}
             {isLoading ? (
               <SkeletonLoader showImage={false} />
             ) : (

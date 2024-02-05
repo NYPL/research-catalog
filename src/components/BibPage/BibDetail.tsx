@@ -10,12 +10,13 @@ import type {
   Url,
   LinkedBibDetail,
   SubjectHeadingDetail,
+  AnyBibDetail,
 } from "../../types/bibDetailsTypes"
 import { rtlOrLtr, isItTheLastElement } from "../../utils/bibUtils"
 import type { ReactNode } from "react"
 
 interface BibDetailsProps {
-  details: BibDetail[] | LinkedBibDetail[]
+  details: AnyBibDetail[]
   heading?: string
 }
 
@@ -32,7 +33,7 @@ const BibDetails = ({ details, heading }: BibDetailsProps) => {
         {details.map(
           (detail: BibDetail | LinkedBibDetail | SubjectHeadingDetail) => {
             if (!detail) return
-            if (detail.label === "Subjects") {
+            if (detail.label === "Subject") {
               return CompoundSubjectHeadingElement(
                 detail as SubjectHeadingDetail
               )
