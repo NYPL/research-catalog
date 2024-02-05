@@ -40,9 +40,9 @@ const EbscoLinks = ({ ebscoResults }: EbscoLinksProps) => {
     // Group by coverage:
     .reduce((h, link) => {
       const coverageString = link.coverage
-        ? link.coverage.map((coverage) =>
-            coverage.map(formatCoverageDate).join("—")
-          ).join("; ")
+        ? link.coverage
+            .map((coverage) => coverage.map(formatCoverageDate).join("—"))
+            .join("; ")
         : "Various dates"
 
       if (!h[coverageString]) h[coverageString] = []
