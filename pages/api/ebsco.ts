@@ -9,3 +9,11 @@ export async function fetchEbscoResults(query) {
 
   return ebscoClient.search(query)
 }
+
+export async function fetchEbscoPublications(query) {
+  if (!ebscoClient) {
+    ebscoClient = await makeClient()
+  }
+
+  return ebscoClient.publications(query)
+}

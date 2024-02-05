@@ -15,7 +15,7 @@ import DRBContainer from "../../src/components/DRB/DRBContainer"
 import SearchResult from "../../src/components/SearchResult/SearchResult"
 
 import { fetchResults } from "../api/search"
-import { fetchEbscoResults } from "../api/ebsco"
+import { fetchEbscoResults, fetchEbscoPublications } from "../api/ebsco"
 import {
   getSearchResultsHeading,
   mapQueryToSearchParams,
@@ -103,6 +103,11 @@ export default function Search({ results, ebscoResults = null }) {
             {isLoading ? (
               <SkeletonLoader showImage={false} />
             ) : (
+              ebscoResults && <EbscoSidebar results={ebscoResults} />
+            )}
+            {isLoading ? (
+              <SkeletonLoader showImage={false} />
+            ) : (
               drbResponse?.totalWorks && (
                 <DRBContainer
                   drbResults={drbResults}
@@ -110,11 +115,6 @@ export default function Search({ results, ebscoResults = null }) {
                   searchParams={searchParams}
                 />
               )
-            )}
-            {isLoading ? (
-              <SkeletonLoader showImage={false} />
-            ) : (
-              ebscoResults && <EbscoSidebar results={ebscoResults} />
             )}
           </>
         }
@@ -171,19 +171,79 @@ export default function Search({ results, ebscoResults = null }) {
 export async function getServerSideProps({ resolvedUrl }) {
   // Remove everything before the query string delineator '?', necessary for correctly parsing the 'q' param.
   const queryString = resolvedUrl.slice(resolvedUrl.indexOf("?") + 1)
-  const results = await fetchResults(mapQueryToSearchParams(parse(queryString)))
 
   const query = parse(queryString)
-  let ebscoResults = await fetchEbscoResults(query.q)
-  // console.log("EBSCO response: ", ebscoResults.SearchResult.Statistics)
-  ebscoResults = {
+  const [discoveryApiResults, rawEbscoResults] = await Promise.all([
+    fetchResults(mapQueryToSearchParams(parse(queryString))),
+    fetchEbscoResults(query.q),
+  ])
+
+  const parseCoverageDates = (coverages) => {
+    if (!coverages) return null
+    const ret = coverages
+      .map((coverage) => [coverage.StartDate, coverage.EndDate])
+      .map((pair) =>
+        pair.map(
+          (s) =>
+            `${s.substring(0, 4)}-${s.substring(4, 6)}-${s.substring(6, 8)}`
+        )
+      )
+    return ret
+  }
+
+  if ("results" in discoveryApiResults) {
+    const issnResults = await Promise.all(
+      (discoveryApiResults.results.itemListElement || [])
+        .filter((result) => result.result.idIssn)
+        .map((result) => {
+          return result.result.idIssn.map((issn) => ({
+            uri: result.result.uri,
+            issn,
+          }))
+        })
+        .flat()
+        .map(async (result) => {
+          const results = await fetchEbscoPublications(`IS:${result.issn}`)
+          if (!results.SearchResult?.Data?.Records) return null
+
+          return {
+            uri: result.uri,
+            results: results.SearchResult?.Data?.Records?.map((record) => {
+              return record.FullTextHoldings.filter(
+                (holding) => holding.URL
+              ).map((holding) => {
+                return {
+                  url: holding.URL,
+                  name: holding.Name,
+                  coverage: parseCoverageDates(holding.CoverageDates),
+                }
+              })
+            }).flat(),
+          }
+        })
+    )
+    discoveryApiResults.results.itemListElement.forEach((result) => {
+      const ebscoResults = issnResults
+        .filter(
+          (ebscoResult) => ebscoResult && result.result.uri === ebscoResult.uri
+        )
+        .map((ebscoResult) => ebscoResult.results)
+        .flat()
+      if (ebscoResults.length) {
+        result.result.ebscoResults = ebscoResults
+      }
+    })
+  }
+
+  const ebscoResults = {
     records:
-      ebscoResults.SearchResult?.Data?.Records?.map((record) => {
+      rawEbscoResults.SearchResult?.Data?.Records.filter(
+        (record) => record.PLink
+      ).map((record) => {
         return {
           id: record.ResultId,
           db: record.Header.DbLabel,
           type: record.Header.PubType,
-          // RecordInfo.BibRecord.BibEntity.Titles[0].TitleFull
           title: record.RecordInfo.BibRecord.BibEntity?.Titles[0]?.TitleFull,
           url: record.PLink,
           authors:
@@ -192,14 +252,14 @@ export async function getServerSideProps({ resolvedUrl }) {
             ) || null,
         }
       }) || [],
-    queryString: ebscoResults.SearchRequestGet?.QueryString || null,
-    total: ebscoResults.SearchResult?.Statistics?.TotalHits || null,
+    queryString: rawEbscoResults.SearchRequestGet?.QueryString || null,
+    total: rawEbscoResults.SearchResult?.Statistics?.TotalHits || null,
   }
   console.log("Ebsco results: ", ebscoResults)
 
   return {
     props: {
-      results,
+      results: discoveryApiResults,
       ebscoResults,
     },
   }

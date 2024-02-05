@@ -10,6 +10,7 @@ import {
 
 import RCLink from "../RCLink/RCLink"
 import ElectronicResourcesLink from "./ElectronicResourcesLink"
+import EbscoLinks from "./EbscoLinks"
 import ItemTable from "../ItemTable/ItemTable"
 import ItemTableData from "../../models/ItemTableData"
 import type SearchResultsBib from "../../models/SearchResultsBib"
@@ -63,6 +64,7 @@ const SearchResult = ({ bib }: SearchResultProps) => {
             electronicResources={bib.electronicResources}
           />
         )}
+        {bib.ebscoResults && <EbscoLinks ebscoResults={bib.ebscoResults} />}
         {searchResultItems && (
           <>
             {searchResultItems.map((itemTableData) => (

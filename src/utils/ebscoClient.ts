@@ -24,10 +24,24 @@ export class EbscoClient {
     this.options = options
   }
 
+  // https://connect.ebsco.com/s/article/Publication-Finder-API-Reference-Guide-Search
+  async publications(query) {
+    const response = await this.ebscoQuery(
+      `edsapi/publication/search?query=${query}&includefacets=n`
+    )
+
+    if (response.ok) {
+      return response.json()
+    } else {
+      logger.error("Error getting publication results: ", response)
+      throw new Error("Error getting publication results")
+    }
+  }
+
   // https://connect.ebsco.com/s/article/EBSCO-Discovery-Service-API-Search-and-Retrieve-Search
   async search(query, limit = 5) {
     const response = await this.ebscoQuery(
-      `edsapi/rest/Search?query=${query}&resultsperpage=${limit}`
+      `edsapi/rest/Search?query=${query}&resultsperpage=${limit}&includefacets=n`
     )
 
     console.log(`Got ${response.status} response: ${response.ok}`)
@@ -52,6 +66,7 @@ export class EbscoClient {
         Accept: "application/json",
       },
     }
+
     logger.debug(`ebscoQuery: Fetching ${url} with ${JSON.stringify(options)}`)
     const response = await fetch(url, options)
 

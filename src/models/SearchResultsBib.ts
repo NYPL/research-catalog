@@ -1,4 +1,4 @@
-import type { Bib } from "../types/bibTypes"
+import type { Bib, EbscoResult } from "../types/bibTypes"
 import type { ElectronicResource } from "../types/bibTypes"
 import type { JSONLDValue } from "../types/itemTypes"
 import Item from "../models/Item"
@@ -25,6 +25,7 @@ export default class SearchResultsBib {
   issuance?: JSONLDValue[]
   numPhysicalItems: number
   items: Item[]
+  ebscoResults: EbscoResult[]
 
   constructor(result: Bib) {
     this.id = result["@id"] ? result["@id"].substring(4) : ""
@@ -39,6 +40,7 @@ export default class SearchResultsBib {
     this.issuance = (result.issuance?.length && result.issuance) || null
     this.numPhysicalItems = result.numItemsTotal || 0
     this.items = this.getItemsFromResult(result)
+    this.ebscoResults = result.ebscoResults
   }
 
   get url() {

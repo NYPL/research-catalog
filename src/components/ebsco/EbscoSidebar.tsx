@@ -16,7 +16,7 @@ const EbscoSidebar = ({ results }) => {
 
   return (
     <Card isBordered>
-      <CardHeading level="h3">Article Search</CardHeading>
+      <CardHeading level="h3">Results from Article Search</CardHeading>
       <CardContent>
         <Text size="body2">
           Results include journals &amp; books available from home with your
