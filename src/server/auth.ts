@@ -4,6 +4,7 @@ import { importSPKI, jwtVerify, type JWTPayload } from "jose"
 import type { NextRequest } from "next/server"
 
 import { appConfig } from "../config/config"
+import { BASE_URL } from "../config/constants"
 
 interface UserJwtPayload extends JWTPayload {
   iss: string
@@ -52,4 +53,26 @@ export default async function initializePatronTokenAuth(req: NextRequest) {
   }
 
   return patronTokenResponse
+}
+
+/**
+ * Used to create redirect from initializePatronTokenAuth() response, returns the redirect url.
+ */
+export function getLoginRedirect(req) {
+  if (
+    !req.patronTokenResponse ||
+    !req.patronTokenResponse.isTokenValid ||
+    !req.patronTokenResponse.decodedPatron ||
+    !req.patronTokenResponse.decodedPatron.sub
+  ) {
+    const protocol = "http"
+    const hostname = req.headers["host"]
+    const originalUrl = BASE_URL + req.url
+    const fullUrl = encodeURIComponent(
+      `${protocol}://${hostname}${originalUrl}`
+    )
+    const redirect = `${appConfig.externalUrls.login}?redirect_uri=${fullUrl}`
+    console.log(redirect)
+    return redirect
+  }
 }
