@@ -3,8 +3,13 @@ import { Heading } from "@nypl/design-system-react-components"
 import Layout from "../../src/components/Layout/Layout"
 import initializePatronTokenAuth from "../../src/server/auth"
 import sierraClient from "../../src/server/sierraClient"
+import { getRecordId } from "../../src/utils/accountUtils"
 
-export default function MyAccount({ props }) {
+export default function MyAccount({ isAuthenticated }) {
+  if (!isAuthenticated) {
+    console.log("client knows user is not authenticated")
+    return null
+  }
   return (
     <>
       <Head>
@@ -18,29 +23,47 @@ export default function MyAccount({ props }) {
 }
 
 export async function getServerSideProps({ req }) {
-  // Every page that needs patron data must call initializePatronTokenAuth
-  // to find if the token is valid and what the patron id is.
   const patronTokenResponse = await initializePatronTokenAuth(req)
-  // // Now it can be used to get patron data from Sierra or Platform API
-  // // or use `isTokenValid` to redirect to login page if it's not valid.
   console.log("patronTokenResponse is", patronTokenResponse)
-  //if (patronTokenResponse.isTokenValid) {
-  // const wrapper = await sierraClient()
-  // const id = patronTokenResponse.decodedPatron.sub
-  // console.log(id)
-  // // const checkoutData = await wrapper.get(
-  // //   `/patrons/${id}/checkouts?fields=barcode,dueDate,callNumber`
-  // // )
-  // const holdsData = await wrapper.get(`/patrons/${id}`)
-  // //?fields=barcode,pickUpByDate,callNumber,canFreeze,pickUpLocation,status
-  // // pickupLocations: [cached pickup locations],
-  // // const patronData: await wrapper.get(
-  // //   `/patrons/${id}/checkouts?fields={name, barcode, expiration date, emails, phoneNumbers, notificationPreference, homeLibrary, patronId},
-  // // fines: {total, itemized: []}
-  //console.log(holdsData)
-  // return props object
-  //}
+  const isAuthenticated = true
+  // if (!isAuthenticated) {
+  //   console.log("no", patronTokenResponse)
+  //   // return {
+  //   //   redirect: {
+  //   //     destination: "https://ilsstaff.nypl.org/iii/cas/login",
+  //   //     permanent: false,
+  //   //   },
+  //   // }
+  // }
+
+  // if (patronTokenResponse.isTokenValid) {
+  const wrapper = await sierraClient()
+  const id = "2772226"
+  //"9130737"
+  //patronTokenResponse.decodedPatron.sub
+  console.log(id)
+  const checkoutData = await wrapper.get(
+    `/patrons/${id}/checkouts?fields=barcode,dueDate,callNumber`
+  )
+  checkoutData.entries.forEach((checkout) => {
+    checkout.id = getRecordId(checkout.id)
+  })
+
+  const holdsData = await wrapper.get(`/patrons/${id}/holds`)
+  //?fields=barcode,pickUpByDate,callNumber,canFreeze,pickUpLocation,status
+
+  const patronData = await wrapper.get(
+    `/patrons/${id}?fields=names,barcodes,expirationDate,homeLibrary,emails,phones`
+  )
+
+  // fines: {total, itemized: []}
+
+  //const finesData = await wrapper.get(`/patrons/${id}/fines?fields=total`)
+  //console.log(checkoutData, holdsData, patronData)
+  // }
+  // const accountData = {}
+
   return {
-    props: {},
+    props: { isAuthenticated },
   }
 }
