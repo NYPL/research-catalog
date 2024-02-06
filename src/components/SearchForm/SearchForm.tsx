@@ -24,8 +24,6 @@ const SearchForm = () => {
 
   const isLoading = useLoading()
 
-  console.log("DISPLAY_TITLE", appConfig.displayTitle)
-
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
     const searchParams = {
@@ -38,8 +36,9 @@ const SearchForm = () => {
     // instead of router.push to forward search results to DFE.
     console.log(
       "NEXT_PUBLIC_REVERSE_PROXY_ENABLED",
-      appConfig.reverseProxyEnabled
+      process.env.NEXT_PUBLIC_REVERSE_PROXY_ENABLED
     )
+    console.log("appConfig.reverseProxyEnabled", appConfig.reverseProxyEnabled)
     if (appConfig.reverseProxyEnabled) {
       window.location.replace(`${BASE_URL}${PATHS.SEARCH}${queryString}`)
     } else {
