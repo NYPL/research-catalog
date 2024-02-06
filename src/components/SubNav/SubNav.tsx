@@ -41,7 +41,7 @@ const SubNav = ({ activePage }: SubNavProps) => {
         </li>
         <li>
           <RCLink
-            href="/account"
+            href={BASE_URL + "/account"}
             active={activePage === "account"}
             aria-current={activePage === "account" ? "page" : undefined}
             hasWhiteFocusRing

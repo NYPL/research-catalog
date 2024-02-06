@@ -164,9 +164,6 @@ export default function Search({ results }) {
  */
 export async function getServerSideProps({ resolvedUrl }) {
   // Remove everything before the query string delineator '?', necessary for correctly parsing the 'q' param.
-  const experiment = await sierraClient()
-  const { res } = experiment.get("/patrons/2772226/checkouts")
-  //console.log(res)
   const queryString = resolvedUrl.slice(resolvedUrl.indexOf("?") + 1)
   const results = await fetchResults(mapQueryToSearchParams(parse(queryString)))
   return {

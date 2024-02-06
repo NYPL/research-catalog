@@ -35,27 +35,22 @@ const decryptKMS = async (key: string) => {
 }
 
 const sierraClient = async () => {
-  console.log("sierraClient")
   let decryptedKey: string
   let decryptedSecret: string
   try {
-    console.log("before KMS")
     ;[decryptedKey, decryptedSecret] = await Promise.all(creds.map(decryptKMS))
-    console.log("after KMS")
   } catch (exception) {
     console.error("Error decrypting Sierra credentials")
   }
   try {
-    console.log("before wrapper config")
     await wrapper.config({
       key: decryptedKey,
       secret: decryptedSecret,
       base: base,
     })
-    CACHE.key = decryptedKey
-    CACHE.secret = decryptedSecret
-    CACHE.client = wrapper
-    console.log("after wrapper config")
+    // CACHE.key = decryptedKey
+    // CACHE.secret = decryptedSecret
+    // CACHE.client = wrapper
     return wrapper
   } catch (error) {
     console.error(error.message)
