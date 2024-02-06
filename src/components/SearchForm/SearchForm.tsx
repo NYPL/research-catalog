@@ -11,6 +11,7 @@ import EDSLink from "../EDSLink"
 import useLoading from "../../hooks/useLoading"
 import RefineSearch from "../RefineSearch/RefineSearch"
 import { SearchResultsAggregationsContext } from "../../../pages/search/SearchResultsAggregationsContext"
+import type { Aggregation } from "../../types/filterTypes"
 
 /**
  * The SearchForm component renders and controls the Search form and
@@ -43,6 +44,10 @@ const SearchForm = () => {
     const target = e.target as HTMLInputElement
     setValue(target.value)
   }
+
+  const displayRefineResults = aggregations?.filter(
+    (agg: Aggregation) => agg.values.length
+  ).length
 
   return (
     <div className={styles.searchContainer}>
@@ -88,7 +93,7 @@ const SearchForm = () => {
         <div className={styles.auxSearchContainer}>
           {/* Temporary color update. The Header overrides the new
             DS 2.X CSS color variable values. */}
-          {aggregations && <RefineSearch aggregations={aggregations} />}
+          {displayRefineResults && <RefineSearch aggregations={aggregations} />}
           <EDSLink />
           <RCLink
             className={styles.advancedSearch}

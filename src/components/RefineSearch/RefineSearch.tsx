@@ -24,6 +24,10 @@ interface RefineSearchProps {
 }
 
 const RefineSearch = ({ aggregations }: RefineSearchProps) => {
+  const router = useRouter()
+  const [appliedFilters, setAppliedFilters] = useState(
+    parseFilters(router.query)
+  )
   const fields = useRef([
     { value: "materialType", label: "Format" },
     { value: "language", label: "Language" },
@@ -32,10 +36,20 @@ const RefineSearch = ({ aggregations }: RefineSearchProps) => {
     { value: "subjectLiteral", label: "Subject" },
   ]).current
 
-  const router = useRouter()
-  const [appliedFilters, setAppliedFilters] = useState(
-    parseFilters(router.query)
-  )
+  const filters = fields.map((field) => {
+    const filterData = new SearchResultsFilters(aggregations, field)
+    if (filterData.options) {
+      return (
+        <RefineSearchCheckBoxField
+          setAppliedFilters={setAppliedFilters}
+          key={field.label}
+          field={field}
+          appliedFilters={appliedFilters[field.value]}
+          options={filterData.options}
+        />
+      )
+    } else return null
+  })
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault()
@@ -114,20 +128,7 @@ const RefineSearch = ({ aggregations }: RefineSearchProps) => {
             </ButtonGroup>
           </Box>
           <HorizontalRule />
-          {fields.map((field) => {
-            const filterData = new SearchResultsFilters(aggregations, field)
-            if (filterData.options) {
-              return (
-                <RefineSearchCheckBoxField
-                  setAppliedFilters={setAppliedFilters}
-                  key={field.label}
-                  field={field}
-                  appliedFilters={appliedFilters[field.value]}
-                  options={filterData.options}
-                />
-              )
-            } else return null
-          })}
+          {filters}
         </Form>
       )}
     </Box>
