@@ -24,6 +24,8 @@ const SearchForm = () => {
 
   const isLoading = useLoading()
 
+  console.log("DISPLAY_TITLE", appConfig.displayTitle)
+
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
     const searchParams = {

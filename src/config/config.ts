@@ -81,4 +81,5 @@ export const appConfig = {
     EQIDAQAB
     -----END PUBLIC KEY-----`,
   reverseProxyEnabled: process.env.NEXT_PUBLIC_REVERSE_PROXY_ENABLED || true,
+  displayTitle: process.env.DISPLAY_TITLE,
 }
