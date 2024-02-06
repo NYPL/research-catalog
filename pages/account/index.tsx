@@ -22,8 +22,7 @@ export default function MyAccount() {
 export async function getServerSideProps({ req }) {
   const patronTokenResponse = await initializePatronTokenAuth(req)
   console.log("patronTokenResponse is", patronTokenResponse)
-  const isAuthenticated = patronTokenResponse.isTokenValid
-  if (!isAuthenticated) {
+  if (!patronTokenResponse.isTokenValid) {
     const redirect = getLoginRedirect(req)
     return {
       redirect: {
