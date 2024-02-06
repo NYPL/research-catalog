@@ -5,11 +5,11 @@ import initializePatronTokenAuth from "../../src/server/auth"
 import sierraClient from "../../src/server/sierraClient"
 import { getRecordId } from "../../src/utils/accountUtils"
 
-export default function MyAccount({ isAuthenticated }) {
-  if (!isAuthenticated) {
-    console.log("client knows user is not authenticated")
-    return null
-  }
+export default function MyAccount() {
+  // if (!isAuthenticated) {
+  //   console.log("client knows user is not authenticated")
+  //   return null
+  // }
   return (
     <>
       <Head>
@@ -23,9 +23,9 @@ export default function MyAccount({ isAuthenticated }) {
 }
 
 export async function getServerSideProps({ req }) {
-  const patronTokenResponse = await initializePatronTokenAuth(req)
-  console.log("patronTokenResponse is", patronTokenResponse)
-  const isAuthenticated = true
+  // const patronTokenResponse = await initializePatronTokenAuth(req)
+  // console.log("patronTokenResponse is", patronTokenResponse)
+  // const isAuthenticated = true
   // if (!isAuthenticated) {
   //   console.log("no", patronTokenResponse)
   //   // return {
@@ -36,7 +36,7 @@ export async function getServerSideProps({ req }) {
   //   // }
   // }
 
-  // if (patronTokenResponse.isTokenValid) {
+  // // if (patronTokenResponse.isTokenValid) {
   const wrapper = await sierraClient()
   const id = "2772226"
   //"9130737"
@@ -56,14 +56,14 @@ export async function getServerSideProps({ req }) {
     `/patrons/${id}?fields=names,barcodes,expirationDate,homeLibrary,emails,phones`
   )
 
-  // fines: {total, itemized: []}
+  //fines: {total, itemized: []}
 
-  //const finesData = await wrapper.get(`/patrons/${id}/fines?fields=total`)
-  //console.log(checkoutData, holdsData, patronData)
-  // }
-  // const accountData = {}
+  const finesData = await wrapper.get(`/patrons/${id}/fines`)
+  console.log(checkoutData, holdsData, patronData, finesData)
+
+  //const accountData = {}
 
   return {
-    props: { isAuthenticated },
+    props: {},
   }
 }
