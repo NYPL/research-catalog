@@ -4,9 +4,14 @@ import Layout from "../../src/components/Layout/Layout"
 import initializePatronTokenAuth, {
   getLoginRedirect,
 } from "../../src/server/auth"
-import sierraClient from "../../src/server/sierraClient"
+import { fetchAccount } from "../api/account"
+import AccountDataModel from "../../src/models/AccountData"
 
-export default function MyAccount() {
+export default function MyAccount({ sierraAccountData }) {
+  const { checkouts, holds, patron, fines } = new AccountDataModel(
+    sierraAccountData
+  )
+  console.log(checkouts, holds, patron, fines)
   return (
     <>
       <Head>
@@ -31,29 +36,11 @@ export async function getServerSideProps({ req }) {
       },
     }
   }
-  // // if (patronTokenResponse.isTokenValid) {
-  const wrapper = await sierraClient()
-  const id = "2772226"
-  //"9130737"
-  //patronTokenResponse.decodedPatron.sub
-  console.log(id)
-  const checkoutData = await wrapper.get(
-    `/patrons/${id}/checkouts?fields=barcode,dueDate,callNumber`
-  )
-
-  const holdsData = await wrapper.get(`/patrons/${id}/holds`)
-  //?fields=barcode,pickUpByDate,callNumber,canFreeze,pickUpLocation,status
-
-  const patronData = await wrapper.get(
-    `/patrons/${id}?fields=names,barcodes,expirationDate,homeLibrary,emails,phones`
-  )
-  const finesData = await wrapper.get(`/patrons/${id}/fines`)
-
-  console.log(checkoutData, holdsData, patronData, finesData)
-
-  //const accountData = {}
+  const id = patronTokenResponse.decodedPatron.sub
+  const sierraAccountData = await fetchAccount(id)
+  console.log("sierra Account Data", sierraAccountData)
 
   return {
-    props: {},
+    props: { sierraAccountData },
   }
 }
