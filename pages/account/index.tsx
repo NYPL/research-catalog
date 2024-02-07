@@ -3,7 +3,6 @@ import { Heading } from "@nypl/design-system-react-components"
 import Layout from "../../src/components/Layout/Layout"
 import initializePatronTokenAuth from "../../src/server/auth"
 import sierraClient from "../../src/server/sierraClient"
-import { getRecordId } from "../../src/utils/accountUtils"
 
 export default function MyAccount() {
   // if (!isAuthenticated) {
@@ -45,9 +44,6 @@ export async function getServerSideProps({ req }) {
   const checkoutData = await wrapper.get(
     `/patrons/${id}/checkouts?fields=barcode,dueDate,callNumber`
   )
-  checkoutData.entries.forEach((checkout) => {
-    checkout.id = getRecordId(checkout.id)
-  })
 
   const holdsData = await wrapper.get(`/patrons/${id}/holds`)
   //?fields=barcode,pickUpByDate,callNumber,canFreeze,pickUpLocation,status
