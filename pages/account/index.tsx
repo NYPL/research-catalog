@@ -1,14 +1,12 @@
 import Head from "next/head"
 import { Heading } from "@nypl/design-system-react-components"
 import Layout from "../../src/components/Layout/Layout"
-import initializePatronTokenAuth from "../../src/server/auth"
+import initializePatronTokenAuth, {
+  getLoginRedirect,
+} from "../../src/server/auth"
 import sierraClient from "../../src/server/sierraClient"
 
 export default function MyAccount() {
-  // if (!isAuthenticated) {
-  //   console.log("client knows user is not authenticated")
-  //   return null
-  // }
   return (
     <>
       <Head>
@@ -58,6 +56,17 @@ export async function getServerSideProps({ req }) {
   console.log(checkoutData, holdsData, patronData, finesData)
 
   //const accountData = {}
+  const patronTokenResponse = await initializePatronTokenAuth(req)
+  console.log("patronTokenResponse is", patronTokenResponse)
+  if (!patronTokenResponse.isTokenValid) {
+    const redirect = getLoginRedirect(req)
+    return {
+      redirect: {
+        destination: redirect,
+        permanent: false,
+      },
+    }
+  }
 
   return {
     props: {},
