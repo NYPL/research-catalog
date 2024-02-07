@@ -5,10 +5,10 @@ import initializePatronTokenAuth, {
   getLoginRedirect,
 } from "../../src/server/auth"
 import { fetchAccount } from "../api/account"
-import AccountDataModel from "../../src/models/AccountData"
+import MyAccountModel from "../../src/models/MyAccount"
 
 export default function MyAccount({ sierraAccountData }) {
-  const { checkouts, holds, patron, fines } = new AccountDataModel(
+  const { checkouts, holds, patron, fines } = new MyAccountModel(
     sierraAccountData
   )
   console.log(checkouts, holds, patron, fines)

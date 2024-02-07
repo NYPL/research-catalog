@@ -1,4 +1,4 @@
-export interface SierraAccountData {
+export interface SierraMyAccount {
   checkouts: SierraCheckout[]
   holds: SierraHold[]
   patron: SierraPatron
