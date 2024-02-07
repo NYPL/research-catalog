@@ -2,7 +2,7 @@ export interface SierraAccountData {
   checkouts: SierraCheckout[]
   holds: SierraHold[]
   patron: SierraPatron
-  fines: SierraFines
+  fines: SierraFine
 }
 
 export interface SierraCheckout {
@@ -19,13 +19,15 @@ export interface SierraCheckout {
 export interface SierraHold {
   id: string
   record: string
-  frozen: string
+  frozen: boolean
+  canFreeze: boolean
   placed: string
   notWantedBeforeDate: string
-  pickupLocation: SierraLocation
-  status: SierraLocation
+  pickupLocation: SierraCodeName
+  status: SierraCodeName
   recordType: string
   priority: number
+  pickupByDate: string
 }
 
 export interface SierraPatron {
@@ -34,13 +36,8 @@ export interface SierraPatron {
   barcodes: string[]
   expirationDate: string
   emails: string[]
-  homeLibrary: SierraLocation
+  homeLibrary: SierraCodeName
   phones: { number: string; type: string }[]
-}
-
-export interface SierraFines {
-  total: number
-  entries: []
 }
 
 export interface Checkout {
@@ -51,32 +48,50 @@ export interface Checkout {
   isResearch?: boolean
 }
 
-export interface SierraLocation {
+export interface SierraCodeName {
   code: string
   name: string
 }
 
 export interface Hold {
-  barcode: string
-  pickUpByDate: string
+  pickupByDate: string
   id: string
   canFreeze: boolean
-  pickUpLocation: string
+  pickupLocation: string
   isResearch?: boolean
   status: string
+  frozen: boolean
 }
 
 export interface Patron {
   name: string
   barcode: string
   expirationDate: string
+  primaryEmail: string
   emails: string[]
   homeLibrary: string
-  phones: string[]
-  patronId: string
+  primaryPhone: string
+  phones: { number: string; type: string }[]
+  id: number
+}
+
+export interface SierraFine {
+  total: number
+  entries: SierraFineEntry[]
+}
+
+export interface SierraFineEntry {
+  chargeType: { display: string }
+  itemCharge: string
+  assessedDate: string
+  datePaid: string
 }
 
 export interface Fine {
-  total: string
-  entries: string[]
+  total: number
+  entries: {
+    detail: string
+    amount: string
+    date: string
+  }[]
 }

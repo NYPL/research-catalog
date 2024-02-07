@@ -20,19 +20,17 @@ export default function MyAccount() {
 }
 
 export async function getServerSideProps({ req }) {
-  // const patronTokenResponse = await initializePatronTokenAuth(req)
-  // console.log("patronTokenResponse is", patronTokenResponse)
-  // const isAuthenticated = true
-  // if (!isAuthenticated) {
-  //   console.log("no", patronTokenResponse)
-  //   // return {
-  //   //   redirect: {
-  //   //     destination: "https://ilsstaff.nypl.org/iii/cas/login",
-  //   //     permanent: false,
-  //   //   },
-  //   // }
-  // }
-
+  const patronTokenResponse = await initializePatronTokenAuth(req)
+  console.log("patronTokenResponse is", patronTokenResponse)
+  if (!patronTokenResponse.isTokenValid) {
+    const redirect = getLoginRedirect(req)
+    return {
+      redirect: {
+        destination: redirect,
+        permanent: false,
+      },
+    }
+  }
   // // if (patronTokenResponse.isTokenValid) {
   const wrapper = await sierraClient()
   const id = "2772226"
@@ -49,24 +47,11 @@ export async function getServerSideProps({ req }) {
   const patronData = await wrapper.get(
     `/patrons/${id}?fields=names,barcodes,expirationDate,homeLibrary,emails,phones`
   )
-
-  //fines: {total, itemized: []}
-
   const finesData = await wrapper.get(`/patrons/${id}/fines`)
+
   console.log(checkoutData, holdsData, patronData, finesData)
 
   //const accountData = {}
-  const patronTokenResponse = await initializePatronTokenAuth(req)
-  console.log("patronTokenResponse is", patronTokenResponse)
-  if (!patronTokenResponse.isTokenValid) {
-    const redirect = getLoginRedirect(req)
-    return {
-      redirect: {
-        destination: redirect,
-        permanent: false,
-      },
-    }
-  }
 
   return {
     props: {},
