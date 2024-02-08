@@ -71,7 +71,9 @@ export function getLoginRedirect(req) {
     const fullUrl = encodeURIComponent(
       `${protocol}://${hostname}${originalUrl}`
     )
-    const redirect = `${appConfig.externalUrls.login}?redirect_uri=${fullUrl}`
+    const redirect =
+      //`${appConfig.externalUrls.login}?redirect_uri=${fullUrl}`
+      `https://dev-login.nypl.org/auth/login?redirect_uri=${fullUrl}`
     console.log(redirect)
     return redirect
   }
