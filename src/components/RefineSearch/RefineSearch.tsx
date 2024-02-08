@@ -6,7 +6,7 @@ import {
   Form,
 } from "@nypl/design-system-react-components"
 import type { SyntheticEvent } from "react"
-import { useState, useRef } from "react"
+import { useState, useRef, useCallback } from "react"
 import { useRouter } from "next/router"
 
 import styles from "../../../styles/components/Search.module.scss"
@@ -28,7 +28,7 @@ const RefineSearch = ({ aggregations }: RefineSearchProps) => {
   const [appliedFilters, setAppliedFilters] = useState(
     parseFilters(router.query)
   )
-  console.log(aggregations)
+
   const fields = useRef([
     { value: "materialType", label: "Format" },
     { value: "language", label: "Language" },
@@ -65,11 +65,14 @@ const RefineSearch = ({ aggregations }: RefineSearchProps) => {
     toggleRefine()
   }
 
-  const [displayRefineSearchButton, setDisplayRefineSearchButton] =
-    useState(true)
-  const toggleRefine = useRef(() => {
-    setDisplayRefineSearchButton((prevState) => !prevState)
-  }).current
+  const [refineSearchClosed, setRefineSearchClosed] = useState(true)
+
+  const toggleRefine = useCallback(() => {
+    setRefineSearchClosed((prevState) => {
+      if (!prevState) setAppliedFilters(parseFilters(router.query))
+      return !prevState
+    })
+  }, [router.query, setAppliedFilters, setRefineSearchClosed])
 
   const handleClear = () => {
     setAppliedFilters(removeFiltersFromQuery(router.query))
@@ -79,10 +82,9 @@ const RefineSearch = ({ aggregations }: RefineSearchProps) => {
     })
     toggleRefine()
   }
-
   return (
     <Box className={styles.refineSearchContainer}>
-      {displayRefineSearchButton ? (
+      {refineSearchClosed ? (
         <Box className={styles.refineSearchInner}>
           <Button
             data-testId="refine-search-button"

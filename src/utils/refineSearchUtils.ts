@@ -11,9 +11,10 @@ export const parseFilters = (queryParams: object) => {
 
 export const buildFilters = (filters: object) => {
   return Object.keys(filters).reduce((acc, field) => {
-    filters[field].forEach(
-      (option, i) => (acc[`filters[${field}][${i}]`] = option)
-    )
+    filters[field] &&
+      filters[field].forEach(
+        (option, i) => (acc[`filters[${field}][${i}]`] = option)
+      )
     return acc
   }, {})
 }

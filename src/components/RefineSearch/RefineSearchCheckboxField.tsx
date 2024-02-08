@@ -21,12 +21,13 @@ const RefineSearchCheckBoxField = ({
   setAppliedFilters,
 }: CheckboxGroupProps) => {
   const updateCheckboxGroupValue = (data: string[]) => {
-    setAppliedFilters((prevFilters) => ({
-      ...prevFilters,
-      [field.value]: data,
-    }))
+    setAppliedFilters((prevFilters) => {
+      return {
+        ...prevFilters,
+        [field.value]: data,
+      }
+    })
   }
-
   const checkboxes = options.map(({ value, label }) => {
     return <Checkbox id={value} key={value} value={value} labelText={label} />
   })

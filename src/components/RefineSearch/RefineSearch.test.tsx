@@ -109,11 +109,10 @@ describe("RefineSearch", () => {
     })
     it("cancelling with selected but unapplied filters should close refine search, clear selected filters, and return to search results", async () => {
       await openRefineSearch()
-      const applyButton = screen.getByRole("button", { name: "Apply Filters" })
+      const applyButton = screen.getByTestId("apply-filters-button")
       await selectSomeFilters()
-      await act(async () => {
-        await userEvent.click(screen.getByRole("button", { name: "Cancel" }))
-      })
+      await userEvent.click(screen.getByRole("button", { name: "Cancel" }))
+
       expect(applyButton).not.toBeInTheDocument()
       expect(mockRouter.asPath).toBe("/search")
       await openRefineSearch()

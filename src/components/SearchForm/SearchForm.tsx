@@ -45,7 +45,7 @@ const SearchForm = () => {
     setValue(target.value)
   }
 
-  const displayRefineResults = aggregations?.filter(
+  const displayRefineResults = !!aggregations?.filter(
     (agg: Aggregation) => agg.values.length
   ).length
 
