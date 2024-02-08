@@ -67,6 +67,9 @@ describe("Electronic Resources Link with multiple resources", () => {
     const link = screen.getByRole("link", {
       name: "See All Available Online Resources",
     })
-    expect(link).toHaveAttribute("href", "/bib/b22133121#electronic-resources")
+    expect(link).toHaveAttribute(
+      "href",
+      "/research/research-catalog/bib/b22133121#electronic-resources"
+    )
   })
 })

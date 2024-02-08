@@ -5,6 +5,7 @@ import {
 } from "@nypl/design-system-react-components"
 
 import RCLink from "../RCLink/RCLink"
+import { BASE_URL } from "../../config/constants"
 import type { ElectronicResource } from "../../types/bibTypes"
 
 interface ElectronicResourcesLinkProps {
@@ -33,7 +34,10 @@ const ElectronicResourcesLink = ({
           {electronicResources[0].prefLabel || electronicResources[0].url}
         </DSLink>
       ) : (
-        <RCLink href={`${bibUrl}#electronic-resources`} type="standalone">
+        <RCLink
+          href={`${BASE_URL}${bibUrl}#electronic-resources`}
+          type="standalone"
+        >
           See All Available Online Resources
         </RCLink>
       )}
