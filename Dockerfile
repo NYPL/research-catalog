@@ -4,7 +4,6 @@ FROM node:16-alpine AS production
 #RUN apt-get upgrade -y
 
 ARG NYPL_HEADER_URL
-ARG NEXT_PUBLIC_REVERSE_PROXY_ENABLED
 
 WORKDIR /app
 
@@ -23,7 +22,6 @@ RUN npm install
 COPY . .
 
 ENV NYPL_HEADER_URL=${NYPL_HEADER_URL}
-ENV NEXT_PUBLIC_REVERSE_PROXY_ENABLED=${NEXT_PUBLIC_REVERSE_PROXY_ENABLED}
 RUN npm run build
 
 # Explicitly set port 3000 as open to requests.
