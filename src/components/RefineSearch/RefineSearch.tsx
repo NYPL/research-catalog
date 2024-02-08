@@ -28,6 +28,7 @@ const RefineSearch = ({ aggregations }: RefineSearchProps) => {
   const [appliedFilters, setAppliedFilters] = useState(
     parseFilters(router.query)
   )
+  console.log(aggregations)
   const fields = useRef([
     { value: "materialType", label: "Format" },
     { value: "language", label: "Language" },

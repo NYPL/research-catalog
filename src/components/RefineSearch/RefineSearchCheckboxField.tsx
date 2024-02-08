@@ -1,4 +1,8 @@
-import { FormField, CheckboxGroup } from "@nypl/design-system-react-components"
+import {
+  FormField,
+  CheckboxGroup,
+  Checkbox,
+} from "@nypl/design-system-react-components"
 import type { Dispatch } from "react"
 
 import type { AggregationOption } from "../../types/filterTypes"
@@ -23,8 +27,8 @@ const RefineSearchCheckBoxField = ({
     }))
   }
 
-  const checkboxData = options.map(({ value, label }) => {
-    return { id: value, key: value, value: value, labelText: label }
+  const checkboxes = options.map(({ value, label }) => {
+    return <Checkbox id={value} key={value} value={value} labelText={label} />
   })
 
   return (
@@ -46,8 +50,9 @@ const RefineSearchCheckBoxField = ({
         }}
         value={appliedFilters}
         onChange={updateCheckboxGroupValue}
-        checkboxData={checkboxData}
-      />
+      >
+        {checkboxes}
+      </CheckboxGroup>
     </FormField>
   )
 }

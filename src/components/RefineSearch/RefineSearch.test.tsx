@@ -18,7 +18,7 @@ describe("RefineSearch", () => {
       render(<Search results={{ aggregations, results }} />)
     }
     beforeEach(setup)
-    it.only("should add filters and maintain creatorliteral filter and search params", async () => {
+    it("should add filters and maintain creatorliteral filter and search params", async () => {
       await openRefineSearch()
       await selectSomeFilters()
       await apply()
