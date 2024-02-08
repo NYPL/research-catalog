@@ -12,7 +12,7 @@ import type {
   SierraFineEntry,
 } from "../types/accountTypes"
 
-export default class AccountData {
+export default class MyAccount {
   checkouts: Checkout[]
   holds: Hold[]
   patron: Patron
@@ -24,31 +24,33 @@ export default class AccountData {
     this.fines = this.buildFines(fines)
   }
 
-  buildCheckouts(checkouts: SierraCheckout[]) {
+  buildCheckouts(checkouts: SierraCheckout[]): Checkout[] {
     return checkouts.map((checkout: SierraCheckout) => {
       return {
-        id: AccountData.getRecordId(checkout.id),
+        id: MyAccount.getRecordId(checkout.id),
         callNumber: checkout.callNumber,
         barcode: checkout.barcode,
         dueDate: checkout.dueDate,
+        patron: MyAccount.getRecordId(checkout.patron),
       }
     })
   }
 
-  buildHolds(holds: SierraHold[]) {
+  buildHolds(holds: SierraHold[]): Hold[] {
     return holds.map((hold: SierraHold) => {
       return {
-        id: AccountData.getRecordId(hold.id),
+        patron: MyAccount.getRecordId(hold.patron),
+        id: MyAccount.getRecordId(hold.id),
         pickupByDate: hold.pickupByDate,
         canFreeze: hold.canFreeze,
         frozen: hold.frozen,
-        status: AccountData.getStatus(hold.status),
+        status: MyAccount.getStatus(hold.status),
         pickupLocation: hold.pickupLocation.name,
       }
     })
   }
 
-  buildPatron(patron: SierraPatron) {
+  buildPatron(patron: SierraPatron): Patron {
     return {
       name: patron.names[0],
       barcode: patron.barcodes[0],
@@ -62,7 +64,7 @@ export default class AccountData {
     }
   }
 
-  buildFines(fines: SierraFine) {
+  buildFines(fines: SierraFine): Fine {
     return {
       total: fines.total,
       entries: fines.entries.map((entry: SierraFineEntry) => {
@@ -77,11 +79,15 @@ export default class AccountData {
     }
   }
 
+  patronCookieMatchesCheckoutOrHold(cookieId: string) {
+    return cookieId
+  }
+
   static getStatus(status: SierraCodeName) {
     if (status.code === "status:a") {
       return "REQUEST PLACED"
     } else if (status.name === "READY SOON") {
-      return "READY FOR PICK UP"
+      return "READY FOR PICKUP"
     } else {
       return status.name
     }
