@@ -35,6 +35,7 @@ import type {
   SearchFormActionType,
 } from "../../src/types/searchTypes"
 import { getSearchQuery } from "../../src/utils/searchUtils"
+import initializePatronTokenAuth from "../../src/server/auth"
 // import FieldsetDate from "../../src/components/SearchFilters/FieldsetDate"
 
 export const defaultEmptySearchErrorMessage =
@@ -46,7 +47,7 @@ export const badDateErrorMessage =
  * The Advanced Search page is responsible for displaying the Advanced Search form fields and
  * buttons that clear the fields and submit a search request.
  */
-export default function AdvancedSearch() {
+export default function AdvancedSearch({ isAuthenticated }) {
   const router = useRouter()
   const inputRef = useRef<TextInputRefType>()
   const notificationRef = useRef<HTMLDivElement>()
@@ -120,7 +121,7 @@ export default function AdvancedSearch() {
       <Head>
         <title>Advanced Search | {SITE_NAME}</title>
       </Head>
-      <Layout activePage="advanced">
+      <Layout isAuthenticated={isAuthenticated} activePage="advanced">
         {/* Always render the wrapper element that will display the
           dynamically rendered notification */}
         <Box tabIndex={-1} ref={notificationRef}>
@@ -285,4 +286,12 @@ export default function AdvancedSearch() {
       </Layout>
     </>
   )
+}
+
+export async function getServerSideProps({ req }) {
+  const patronTokenResponse = await initializePatronTokenAuth(req)
+  const isAuthenticated = patronTokenResponse.isTokenValid
+  return {
+    props: { isAuthenticated },
+  }
 }

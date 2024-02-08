@@ -17,14 +17,14 @@ import { appConfig } from "../src/config/config"
 import initializePatronTokenAuth from "../src/server/auth"
 import useLoading from "../src/hooks/useLoading"
 
-export default function Home() {
+export default function Home({ isAuthenticated }) {
   const isLoading = useLoading()
   return (
     <>
       <Head>
         <title>{SITE_NAME}</title>
       </Head>
-      <Layout activePage="search">
+      <Layout isAuthenticated={isAuthenticated} activePage="search">
         {isLoading ? (
           <SkeletonLoader showImage={false} />
         ) : (
@@ -178,8 +178,9 @@ export async function getServerSideProps({ req }) {
   // or use `isTokenValid` to redirect to login page if it's not valid.
   console.log("patronTokenResponse is", patronTokenResponse)
 
+  const isAuthenticated = patronTokenResponse.isTokenValid
   // return props object
   return {
-    props: {},
+    props: { isAuthenticated },
   }
 }

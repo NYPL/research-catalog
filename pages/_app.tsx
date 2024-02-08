@@ -83,4 +83,8 @@ function App({ Component, pageProps }) {
   )
 }
 
+export async function getServerSideProps({ req }) {
+  const patronTokenResponse = await initializePatronTokenAuth(req)
+}
+
 export default App

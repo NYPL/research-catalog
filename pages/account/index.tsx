@@ -7,7 +7,7 @@ import initializePatronTokenAuth, {
 import { fetchAccount } from "../api/account"
 import MyAccountModel from "../../src/models/MyAccount"
 
-export default function MyAccount({ sierraAccountData }) {
+export default function MyAccount({ sierraAccountData, isAuthenticated }) {
   const { checkouts, holds, patron, fines } = new MyAccountModel(
     sierraAccountData
   )
@@ -17,7 +17,7 @@ export default function MyAccount({ sierraAccountData }) {
       <Head>
         <title>My Account</title>
       </Head>
-      <Layout activePage="account">
+      <Layout isAuthenticated={isAuthenticated} activePage="account">
         <Heading level="h1">my account</Heading>
       </Layout>
     </>
@@ -27,7 +27,8 @@ export default function MyAccount({ sierraAccountData }) {
 export async function getServerSideProps({ req }) {
   const patronTokenResponse = await initializePatronTokenAuth(req)
   console.log("patronTokenResponse is", patronTokenResponse)
-  if (!patronTokenResponse.isTokenValid) {
+  const isAuthenticated = patronTokenResponse.isTokenValid
+  if (!isAuthenticated) {
     const redirect = getLoginRedirect(req)
     return {
       redirect: {
@@ -41,6 +42,6 @@ export async function getServerSideProps({ req }) {
   console.log("sierra Account Data", sierraAccountData)
 
   return {
-    props: { sierraAccountData },
+    props: { sierraAccountData, isAuthenticated },
   }
 }

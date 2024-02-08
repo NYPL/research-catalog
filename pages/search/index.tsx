@@ -29,12 +29,13 @@ import type SearchResultsBib from "../../src/models/SearchResultsBib"
 
 import useLoading from "../../src/hooks/useLoading"
 import sierraClient from "../../src/server/sierraClient"
+import initializePatronTokenAuth from "../../src/server/auth"
 
 /**
  * The Search page is responsible for fetching and displaying the Search results,
  * as well as displaying and controlling pagination and search filters.
  */
-export default function Search({ results }) {
+export default function Search({ results, isAuthenticated }) {
   const { push, query } = useRouter()
   const { itemListElement: searchResultsElements, totalResults } =
     results.results
@@ -76,6 +77,7 @@ export default function Search({ results }) {
         <title>Search Results | {SITE_NAME}</title>
       </Head>
       <Layout
+        isAuthenticated={isAuthenticated}
         activePage="search"
         sidebar={
           <>
@@ -162,13 +164,18 @@ export default function Search({ results }) {
  * relevant search results on the server side (via fetchResults).
  *
  */
-export async function getServerSideProps({ resolvedUrl }) {
+export async function getServerSideProps({ resolvedUrl, req }) {
   // Remove everything before the query string delineator '?', necessary for correctly parsing the 'q' param.
   const queryString = resolvedUrl.slice(resolvedUrl.indexOf("?") + 1)
   const results = await fetchResults(mapQueryToSearchParams(parse(queryString)))
+
+  const patronTokenResponse = await initializePatronTokenAuth(req)
+  const isAuthenticated = patronTokenResponse.isTokenValid
+
   return {
     props: {
       results,
+      isAuthenticated,
     },
   }
 }
