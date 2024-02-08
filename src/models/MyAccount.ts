@@ -3,7 +3,7 @@ import type {
   Hold,
   Patron,
   Fine,
-  SierraMyAccount,
+  SierraAccountData,
   SierraCheckout,
   SierraHold,
   SierraCodeName,
@@ -17,7 +17,7 @@ export default class MyAccount {
   holds: Hold[]
   patron: Patron
   fines: Fine
-  constructor({ checkouts, holds, patron, fines }: SierraMyAccount) {
+  constructor({ checkouts, holds, patron, fines }: SierraAccountData) {
     this.checkouts = this.buildCheckouts(checkouts)
     this.holds = this.buildHolds(holds)
     this.patron = this.buildPatron(patron)
@@ -31,6 +31,7 @@ export default class MyAccount {
         callNumber: checkout.callNumber,
         barcode: checkout.barcode,
         dueDate: checkout.dueDate,
+        patron: MyAccount.getRecordId(checkout.patron),
       }
     })
   }
@@ -38,6 +39,7 @@ export default class MyAccount {
   buildHolds(holds: SierraHold[]): Hold[] {
     return holds.map((hold: SierraHold) => {
       return {
+        patron: MyAccount.getRecordId(hold.patron),
         id: MyAccount.getRecordId(hold.id),
         pickupByDate: hold.pickupByDate,
         canFreeze: hold.canFreeze,
@@ -75,6 +77,10 @@ export default class MyAccount {
         }
       }),
     }
+  }
+
+  patronCookieMatchesCheckoutOrHold(cookieId: string) {
+    return cookieId
   }
 
   static getStatus(status: SierraCodeName) {

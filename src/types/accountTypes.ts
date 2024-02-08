@@ -1,4 +1,4 @@
-export interface SierraMyAccount {
+export interface SierraAccountData {
   checkouts: SierraCheckout[]
   holds: SierraHold[]
   patron: SierraPatron
@@ -10,8 +10,6 @@ export interface SierraCheckout {
   patron: string
   item: string
   dueDate: string
-  numberOfRenewals: number
-  outDate: string
   callNumber: string
   barcode: string
 }
@@ -28,6 +26,7 @@ export interface SierraHold {
   recordType: string
   priority: number
   pickupByDate: string
+  patron: string
 }
 
 export interface SierraPatron {
@@ -46,6 +45,7 @@ export interface Checkout {
   dueDate: string
   id: string
   isResearch?: boolean
+  patron: string
 }
 
 export interface SierraCodeName {
@@ -61,6 +61,7 @@ export interface Hold {
   isResearch?: boolean
   status: string
   frozen: boolean
+  patron: string
 }
 
 export interface Patron {
