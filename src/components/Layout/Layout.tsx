@@ -17,6 +17,7 @@ interface LayoutProps {
   sidebar?: ReactElement
   activePage?: RCPage
   sidebarPosition?: "right" | "left"
+  isAuthenticated?: boolean
 }
 
 /**
@@ -25,6 +26,7 @@ interface LayoutProps {
  */
 const Layout = ({
   children,
+  isAuthenticated,
   sidebar,
   activePage,
   sidebarPosition = "right",
@@ -59,7 +61,10 @@ const Layout = ({
               />
               <div className={styles.researchHeadingContainer}>
                 <Heading id="heading-h1" level="h1" text="Research Catalog" />
-                <SubNav activePage={activePage} />
+                <SubNav
+                  isAuthenticated={isAuthenticated}
+                  activePage={activePage}
+                />
                 {showSearch && <SearchForm />}
               </div>
             </>

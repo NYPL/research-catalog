@@ -47,6 +47,8 @@ export const appConfig = {
       "https://digital-research-books-beta.nypl.org/about?source=catalog",
     circulatingCatalog: "https://nypl.na2.iiivega.com/",
     legacyCatalog: "https://legacycatalog.nypl.org/",
+    login: "https://dev-login.nypl.org/auth/login",
+    logout: "https://dev-login.nypl.org/auth/logout",
     locations: "https://www.nypl.org/locations/",
     researchMaterialsHelp:
       "https://www.nypl.org/help/request-research-materials",
