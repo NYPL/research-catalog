@@ -122,10 +122,10 @@ export default class SearchResultsBib {
 
   // Map Bib items to Item class instances and sort them by their sortableShelfMark field
   getItemsFromResult(result: Bib): Item[] {
-    return result.items
-      .map((item) => {
-        return new Item(item, this)
-      })
-      .sort((a, b) => (a.sortableShelfMark > b.sortableShelfMark ? 1 : -1))
+    return result.items.map((item) => {
+      return new Item(item, this)
+    })
+    // FIXME: This sort isn't well defined:
+    // .sort((a, b) => (a.sortableShelfMark > b.sortableShelfMark ? 1 : -1))
   }
 }

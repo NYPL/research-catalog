@@ -3,62 +3,52 @@ import {
   Heading,
   Link as DSLink,
 } from "@nypl/design-system-react-components"
-
-import type { EbscoResult } from "../../types/bibTypes"
+import RCLink from "../RCLink/RCLink"
+import { PATHS, BASE_URL } from "../../config/constants"
+import type SearchResultsBib from "../../models/SearchResultsBib"
+import {
+  formatCoverageRange,
+  groupLinksByCoverage,
+  overallCoverageRange,
+} from "../../utils/ebscoUtils"
 
 interface EbscoLinksProps {
-  ebscoResults: EbscoResult[]
+  bib: SearchResultsBib
 }
 
 /**
  * The SearchResult component displays a single search result element.
  */
-const EbscoLinks = ({ ebscoResults }: EbscoLinksProps) => {
-  const MAX_TO_SHOW = 3
+const EbscoLinks = ({ bib }: EbscoLinksProps) => {
+  const MAX_TO_SHOW = 30
 
-  const formatCoverageDate = (dateString) => {
-    const date = new Date(dateString)
-    if (date.getFullYear() === 9999) return "present"
+  const ebscoResultsGrouped = groupLinksByCoverage(
+    bib.ebscoResults,
+    MAX_TO_SHOW
+  )
 
-    const formatOptions: Intl.DateTimeFormatOptions = {
-      day: "numeric",
-      year: "numeric",
-      month: "numeric",
-      timeZone: "America/New_York",
-    }
-    return Intl.DateTimeFormat("en", formatOptions).format(date)
-  }
+  const coverageRange = overallCoverageRange(bib.ebscoResults)
 
-  const ebscoResultsGrouped = ebscoResults
-    // Sort by start date ascending:
-    .sort((l1, l2) => {
-      const [d1, d2] = [l1, l2].map((link) => link.coverage && link.coverage[0]) // ? link.coverage.split(" - ").shift() : "")
-      return d1 > d2 ? 1 : -1
-    })
-    // Only show first N links, however they're grouped:
-    .slice(0, MAX_TO_SHOW)
-    // Group by coverage:
-    .reduce((h, link) => {
-      const coverageString = link.coverage
-        ? link.coverage
-            .map((coverage) => coverage.map(formatCoverageDate).join("—"))
-            .join("; ")
-        : "Various dates"
-
-      if (!h[coverageString]) h[coverageString] = []
-      h[coverageString].push(link)
-      return h
-    }, {})
-
-  const viewMoreLabel =
-    ebscoResults.length > MAX_TO_SHOW
-      ? `View all ${ebscoResults.length} resources available online`
-      : null
+  // More links than shown?
+  const viewMoreUrl =
+    bib.ebscoResults.length > MAX_TO_SHOW ? (
+      <RCLink href={`${BASE_URL}${PATHS.BIB}/${bib.id}`}>
+        View all {bib.ebscoResults.length} resources available online
+      </RCLink>
+    ) : null
 
   return (
     <Box border="2px" borderColor="red.200">
       <>
-        [EBSCO]
+        <Heading level="four" size="callout" mb="xxs">
+          <>
+            <div style={{ width: "auto", float: "right" }}>
+              {formatCoverageRange(coverageRange)} • {bib.ebscoResults.length}{" "}
+              items
+            </div>
+            Available Online (EBSCO)
+          </>
+        </Heading>
         {Object.keys(ebscoResultsGrouped).map((coverage) => (
           <p key={coverage}>
             {coverage}:
@@ -78,11 +68,7 @@ const EbscoLinks = ({ ebscoResults }: EbscoLinksProps) => {
           </p>
         ))}
       </>
-      {viewMoreLabel && (
-        <Heading level="four" size="callout" mb="xxs">
-          {viewMoreLabel}
-        </Heading>
-      )}
+      {viewMoreUrl}
     </Box>
   )
 }

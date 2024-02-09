@@ -25,9 +25,16 @@ export class EbscoClient {
   }
 
   // https://connect.ebsco.com/s/article/Publication-Finder-API-Reference-Guide-Search
-  async publications(query) {
+  async publications(queries) {
+    queries = queries
+      .map((q, index) => {
+        return `query-${index + 1}=${index > 0 ? "OR," : ""}${q}`
+      })
+      .join(" ")
+    // queries = "query-1=Rob Hall query-2=OR,AU:Jon Krakauer query-3=OR,SU:Mountaineering"
+    // query-1=Rob Hall query-2=OR,AU:Jon Krakauer query-3=OR,SU:Mountaineering
     const response = await this.ebscoQuery(
-      `edsapi/publication/search?query=${query}&includefacets=n`
+      `edsapi/publication/search?${queries}&includefacets=n&highlight=n`
     )
 
     if (response.ok) {
@@ -41,10 +48,9 @@ export class EbscoClient {
   // https://connect.ebsco.com/s/article/EBSCO-Discovery-Service-API-Search-and-Retrieve-Search
   async search(query, limit = 5) {
     const response = await this.ebscoQuery(
-      `edsapi/rest/Search?query=${query}&resultsperpage=${limit}&includefacets=n`
+      `edsapi/rest/Search?query=${query}&resultsperpage=${limit}&includefacets=n&highlight=n`
     )
 
-    console.log(`Got ${response.status} response: ${response.ok}`)
     if (response.ok) {
       return response.json()
     } else {

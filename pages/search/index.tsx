@@ -15,7 +15,7 @@ import DRBContainer from "../../src/components/DRB/DRBContainer"
 import SearchResult from "../../src/components/SearchResult/SearchResult"
 
 import { fetchResults } from "../api/search"
-import { fetchEbscoResults, fetchEbscoPublications } from "../api/ebsco"
+import { fetchEbscoResults, publicationsForIssns } from "../api/ebsco"
 import {
   getSearchResultsHeading,
   mapQueryToSearchParams,
@@ -31,6 +31,7 @@ import type SearchResultsBib from "../../src/models/SearchResultsBib"
 import EbscoSidebar from "../../src/components/ebsco/EbscoSidebar"
 import useLoading from "../../src/hooks/useLoading"
 
+import { issnsForSearchResults } from "../../src/utils/ebscoUtils"
 /**
  * The Search page is responsible for fetching and displaying the Search results,
  * as well as displaying and controlling pagination and search filters.
@@ -178,59 +179,14 @@ export async function getServerSideProps({ resolvedUrl }) {
     fetchEbscoResults(query.q),
   ])
 
-  const parseCoverageDates = (coverages) => {
-    if (!coverages) return null
-    const ret = coverages
-      .map((coverage) => [coverage.StartDate, coverage.EndDate])
-      .map((pair) =>
-        pair.map(
-          (s) =>
-            `${s.substring(0, 4)}-${s.substring(4, 6)}-${s.substring(6, 8)}`
-        )
-      )
-    return ret
-  }
-
   if ("results" in discoveryApiResults) {
-    const issnResults = await Promise.all(
-      (discoveryApiResults.results.itemListElement || [])
-        .filter((result) => result.result.idIssn)
-        .map((result) => {
-          return result.result.idIssn.map((issn) => ({
-            uri: result.result.uri,
-            issn,
-          }))
-        })
-        .flat()
-        .map(async (result) => {
-          const results = await fetchEbscoPublications(`IS:${result.issn}`)
-          if (!results.SearchResult?.Data?.Records) return null
+    const issns = issnsForSearchResults(discoveryApiResults)
+    const publications = await publicationsForIssns(issns)
 
-          return {
-            uri: result.uri,
-            results: results.SearchResult?.Data?.Records?.map((record) => {
-              return record.FullTextHoldings.filter(
-                (holding) => holding.URL
-              ).map((holding) => {
-                return {
-                  url: holding.URL,
-                  name: holding.Name,
-                  coverage: parseCoverageDates(holding.CoverageDates),
-                }
-              })
-            }).flat(),
-          }
-        })
-    )
     discoveryApiResults.results.itemListElement.forEach((result) => {
-      const ebscoResults = issnResults
-        .filter(
-          (ebscoResult) => ebscoResult && result.result.uri === ebscoResult.uri
-        )
-        .map((ebscoResult) => ebscoResult.results)
-        .flat()
-      if (ebscoResults.length) {
-        result.result.ebscoResults = ebscoResults
+      if (result.result.idIssn && result.result.idIssn[0]) {
+        const ebscoMatches = publications[result.result.idIssn[0]]
+        result.result.ebscoResults = ebscoMatches
       }
     })
   }
@@ -255,7 +211,6 @@ export async function getServerSideProps({ resolvedUrl }) {
     queryString: rawEbscoResults.SearchRequestGet?.QueryString || null,
     total: rawEbscoResults.SearchResult?.Statistics?.TotalHits || null,
   }
-  console.log("Ebsco results: ", ebscoResults)
 
   return {
     props: {
