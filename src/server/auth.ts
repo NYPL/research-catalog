@@ -5,6 +5,7 @@ import type { NextRequest } from "next/server"
 
 import { appConfig } from "../config/config"
 import { BASE_URL } from "../config/constants"
+import { useRouter } from "next/router"
 
 interface UserJwtPayload extends JWTPayload {
   iss: string
@@ -56,7 +57,7 @@ export default async function initializePatronTokenAuth(req: NextRequest) {
 }
 
 /**
- * Used to create redirect from initializePatronTokenAuth() response, returns the redirect url.
+ * Creates and returns redirect url from initializePatronTokenAuth() response
  */
 export function getLoginRedirect(req) {
   if (
@@ -73,8 +74,24 @@ export function getLoginRedirect(req) {
     )
     const redirect =
       //`${appConfig.externalUrls.login}?redirect_uri=${fullUrl}`
-      `https://dev-login.nypl.org/auth/login?redirect_uri=${fullUrl}`
+      `${process.env.LOGIN_BASE_URL}/login?redirect_uri=${fullUrl}`
     console.log(redirect)
     return redirect
   }
+}
+
+/**
+ * Creates redirect to log out user, then return user to their current page. Requires an instance of useRouter.
+ */
+
+export function getLogoutRedirect(router) {
+  const current = router.pathname
+  let backPath = current
+  // If the patron is on any hold or account page, then
+  // redirect them to the home page after logging out.
+  if (current.includes("hold") || current.includes("account")) {
+    backPath = "/"
+  }
+  return `${appConfig.externalUrls.logoutUrl}?redirect_uri=http://local.nypl.org:8080/research/research-catalog${backPath}`
+  // TODO: The home url needs to be an env variable fs
 }
