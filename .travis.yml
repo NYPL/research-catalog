@@ -32,7 +32,7 @@ jobs:
         - export LOCAL_TAG_NAME="${ENV}-latest"
       script:
         - eval $(aws ecr get-login --no-include-email --region us-east-1)
-        - docker build -t "$LOCAL_TAG_NAME" --build-arg NYPL_HEADER_URL="${NYPL_HEADER_URL}" .
+        - docker build -t "$LOCAL_TAG_NAME" --build-arg NYPL_HEADER_URL="${NYPL_HEADER_URL}" --build-arg ="${NEXT_PUBLIC_REVERSE_PROXY_ENABLED}" .
         - docker tag "$LOCAL_TAG_NAME" "$ECR_URL:$LOCAL_TAG_NAME"
         # Re-tag last latest image just in case
         - |
