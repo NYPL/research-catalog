@@ -4,13 +4,9 @@ import Layout from "../../src/components/Layout/Layout"
 import initializePatronTokenAuth, {
   getLoginRedirect,
 } from "../../src/server/auth"
-import { fetchAccount } from "../api/account"
 import MyAccountModel from "../../src/models/MyAccount"
 
-export default function MyAccount({ sierraAccountData }) {
-  const { checkouts, holds, patron, fines } = new MyAccountModel(
-    sierraAccountData
-  )
+export default function MyAccount({ checkouts, holds, patron, fines }) {
   console.log(checkouts, holds, patron, fines)
   return (
     <>
@@ -37,10 +33,10 @@ export async function getServerSideProps({ req }) {
     }
   }
   const id = patronTokenResponse.decodedPatron.sub
-  const sierraAccountData = await fetchAccount(id)
-  console.log("sierra Account Data", sierraAccountData)
+  const { checkouts, holds, patron, fines } = await MyAccountModel.fetchAll(id)
+  console.log("sierra Account Data", { checkouts, holds, patron, fines })
 
   return {
-    props: { sierraAccountData },
+    props: { checkouts, holds, patron, fines },
   }
 }

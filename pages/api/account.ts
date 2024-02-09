@@ -5,10 +5,9 @@ export async function fetchAccount(id: string) {
     "/holds?fields=pickupLocation,frozen,record,canFreeze,placed,notWantedBeforeDate,status,recordType,priority,pickupByDate,patron"
   const patronQuery =
     "?fields=names,barcodes,expirationDate,homeLibrary,emails,phones"
-  const checkoutQuery =
-    "/checkouts?fields=barcode,dueDate,callNumber,patron,item"
+  const checkoutQuery = "/checkouts?expand=item"
   const finesQuery = "/fines"
-  const baseQuery = `patrons/${id}`
+  const baseQuery = "patrons/2772226"
 
   const client = await sierraClient()
 

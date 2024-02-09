@@ -3,30 +3,53 @@ export interface SierraAccountData {
   holds: SierraHold[]
   patron: SierraPatron
   fines: SierraFine
+  checkoutTitleMap: Record<string, string>
+  holdTitleMap: Record<string, string>
 }
 
 export interface SierraCheckout {
   id: string
   patron: string
-  item: string
+  item: SierraItem
   dueDate: string
-  callNumber: string
+}
+
+export interface SierraItem {
+  id: string
+  updatedDate: string
+  createdDate: string
+  deleted: boolean
+  bibIds: string[]
+  location: SierraCodeName
+  status: {
+    code: string
+    display: string
+    duedate: string
+  }
+  volumes: string[]
   barcode: string
+  callNumber: string
 }
 
 export interface SierraHold {
   id: string
-  record: string
+  record: SierraRecord
   frozen: boolean
   canFreeze: boolean
+  status: SierraCodeName
   placed: string
   notWantedBeforeDate: string
   pickupLocation: SierraCodeName
-  status: SierraCodeName
   recordType: string
   priority: number
   pickupByDate: string
   patron: string
+}
+
+export interface SierraRecord {
+  bibIds: string[]
+  barcode: string
+  callNumber: string
 }
 
 export interface SierraPatron {
@@ -46,6 +69,7 @@ export interface Checkout {
   id: string
   isResearch?: boolean
   patron: string
+  title: string
 }
 
 export interface SierraCodeName {
@@ -62,6 +86,7 @@ export interface Hold {
   status: string
   frozen: boolean
   patron: string
+  title: string
 }
 
 export interface Patron {

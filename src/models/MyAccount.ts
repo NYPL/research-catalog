@@ -1,3 +1,4 @@
+import sierraClient from "../server/sierraClient"
 import type {
   Checkout,
   Hold,
@@ -12,31 +13,106 @@ import type {
   SierraFineEntry,
 } from "../types/accountTypes"
 
+let client
+
 export default class MyAccount {
   checkouts: Checkout[]
   holds: Hold[]
   patron: Patron
   fines: Fine
-  constructor({ checkouts, holds, patron, fines }: SierraAccountData) {
-    this.checkouts = this.buildCheckouts(checkouts)
-    this.holds = this.buildHolds(holds)
+  checkoutTitleMap: Record<string, string>
+  holdTitleMap: Record<string, string>
+  constructor({
+    checkouts,
+    holds,
+    patron,
+    fines,
+    checkoutTitleMap,
+    holdTitleMap,
+  }: SierraAccountData) {
+    this.checkouts = this.buildCheckouts(checkouts, checkoutTitleMap)
+    this.holds = this.buildHolds(holds, holdTitleMap)
     this.patron = this.buildPatron(patron)
     this.fines = this.buildFines(fines)
   }
 
-  buildCheckouts(checkouts: SierraCheckout[]): Checkout[] {
+  static async fetchAll(id) {
+    client = await sierraClient()
+    const baseQuery = `patrons/${id}`
+    const checkouts = await this.fetchCheckouts(baseQuery)
+    const holds = await this.fetchHolds(baseQuery)
+    const patron = await this.fetchPatron(baseQuery)
+    const fines = await this.fetchFines(baseQuery)
+    const checkoutTitleMap = await this.fetchTitles(checkouts.entries, "item")
+    const holdTitleMap = await this.fetchTitles(holds.entries, "record")
+    return new this({
+      checkouts,
+      holds,
+      patron,
+      fines,
+      checkoutTitleMap,
+      holdTitleMap,
+    })
+  }
+
+  buildCheckouts(checkouts: SierraCheckout[], titleMap): Checkout[] {
     return checkouts.map((checkout: SierraCheckout) => {
       return {
         id: MyAccount.getRecordId(checkout.id),
-        callNumber: checkout.callNumber,
-        barcode: checkout.barcode,
+        callNumber: checkout.item.callNumber,
+        barcode: checkout.item.barcode,
         dueDate: checkout.dueDate,
         patron: MyAccount.getRecordId(checkout.patron),
+        title: titleMap[checkout.item.bibIds[0]],
       }
     })
   }
 
-  buildHolds(holds: SierraHold[]): Hold[] {
+  static async fetchCheckouts(baseQuery) {
+    const checkoutQuery = "/checkouts?expand=item"
+    return await client.get(`${baseQuery}${checkoutQuery}`)
+  }
+
+  static async fetchHolds(baseQuery) {
+    const holdsQuery = "/holds?expand=record"
+    return await client.get(`${baseQuery}${holdsQuery}`)
+  }
+
+  static async fetchPatron(baseQuery) {
+    const patronQuery =
+      "?fields=names,barcodes,expirationDate,homeLibrary,emails,phones"
+    return await client.get(`${baseQuery}${patronQuery}`)
+  }
+
+  static async fetchFines(baseQuery) {
+    const finesQuery = "/fines"
+    return await client.get(`${baseQuery}${finesQuery}`)
+  }
+
+  static async fetchTitles(holdOrCheckouts, itemOrRecord) {
+    console.log(holdOrCheckouts)
+    const checkoutBibIds = holdOrCheckouts.map((holdOrCheckout) => {
+      console.log(holdOrCheckout)
+      console.log(holdOrCheckout[itemOrRecord])
+      return holdOrCheckout[itemOrRecord].bibIds[0]
+    })
+    console.log(checkoutBibIds)
+    let defaultFields
+    try {
+      defaultFields = await client.get(
+        `bibs?id=${checkoutBibIds}?fields=default`
+      )
+    } catch (e) {
+      console.log("bib error")
+    }
+
+    return defaultFields.entries.reduce((bibIdTitleMap, defaultField) => {
+      bibIdTitleMap[defaultField.id] = defaultField.title
+      return bibIdTitleMap
+    }, {})
+  }
+
+  buildHolds(holds: SierraHold[], titleMap): Hold[] {
     return holds.map((hold: SierraHold) => {
       return {
         patron: MyAccount.getRecordId(hold.patron),
@@ -46,6 +122,7 @@ export default class MyAccount {
         frozen: hold.frozen,
         status: MyAccount.getStatus(hold.status),
         pickupLocation: hold.pickupLocation.name,
+        title: titleMap[hold.record.bibIds[0]],
       }
     })
   }
