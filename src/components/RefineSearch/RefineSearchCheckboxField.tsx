@@ -11,7 +11,7 @@ interface CheckboxGroupProps {
   field: { value: string; label: string }
   appliedFilters: string[]
   options: AggregationOption[]
-  setAppliedFilters: Dispatch<React.SetStateAction<string[]>>
+  setAppliedFilters: Dispatch<React.SetStateAction<Record<string, string[]>>>
 }
 
 const RefineSearchCheckBoxField = ({

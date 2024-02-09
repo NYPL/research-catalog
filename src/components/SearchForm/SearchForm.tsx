@@ -1,4 +1,4 @@
-import { SearchBar } from "@nypl/design-system-react-components"
+import { Box, SearchBar } from "@nypl/design-system-react-components"
 import { useRouter } from "next/router"
 import type { SyntheticEvent, Dispatch, SetStateAction } from "react"
 import { useContext, useState } from "react"
@@ -12,6 +12,7 @@ import useLoading from "../../hooks/useLoading"
 import RefineSearch from "../RefineSearch/RefineSearch"
 import { SearchResultsAggregationsContext } from "../../../pages/search/SearchResultsAggregationsContext"
 import type { Aggregation } from "../../types/filterTypes"
+import AppliedFilters from "../SearchFilters/AppliedFilters"
 
 /**
  * The SearchForm component renders and controls the Search form and
@@ -24,6 +25,7 @@ const SearchForm = () => {
   )
   const [searchScope, setSearchScope] = useState("all")
   const aggregations = useContext(SearchResultsAggregationsContext)
+
   const isLoading = useLoading()
 
   const handleSubmit = async (e: SyntheticEvent) => {
@@ -103,6 +105,7 @@ const SearchForm = () => {
             Advanced Search
           </RCLink>
         </div>
+        <AppliedFilters aggregations={aggregations} />
       </div>
     </div>
   )
