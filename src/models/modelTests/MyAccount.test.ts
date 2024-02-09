@@ -1,5 +1,14 @@
 import MyAccount from "../MyAccount"
-import { holds, checkouts, patron } from "./data/MyAccount"
+import {
+  holds,
+  checkouts,
+  patron,
+  holdBibs,
+  checkoutBibs,
+} from "./data/MyAccount"
+import * as sierraClient from "../../server/sierraClient"
+
+import sinon from "sinon"
 
 describe("MyAccountModel", () => {
   describe("getRecordId", () => {
@@ -25,12 +34,30 @@ describe("MyAccountModel", () => {
     })
   })
   it.todo("can handle all empty data")
-  // it("builds Account data model", () => {
-  //   const account = new MyAccount({
-  //     holds: holds.entries,
-  //     patron,
-  //     checkouts: checkouts.entries,
-  //     fines: { total: 0, entries: [] },
-  //   })
-  // })
+  it.only("builds Account data model", () => {
+    const getStub = sinon
+      .stub()
+      .onCall(0)
+      .resolves(checkouts)
+      .onCall(1)
+      .resolves(holds)
+      .onCall(2)
+      .resolves(patron)
+      .onCall(3)
+      .resolves({ total: 0, entries: [] })
+      .onCall(4)
+      .resolves(checkoutBibs)
+      .onCall(5)
+      .resolves(holdBibs)
+
+    const mockSierraClient = sinon.stub(sierraClient, "sierraClient").resolves({
+      get: getStub,
+    })
+    const account = MyAccount.MyAccountFactory({
+      holds: holds.entries,
+      patron,
+      checkouts: checkouts.entries,
+      fines: { total: 0, entries: [] },
+    })
+  })
 })

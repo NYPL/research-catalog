@@ -1,4 +1,4 @@
-import sierraClient from "../server/sierraClient"
+import { sierraClient } from "../server/sierraClient"
 import type {
   Checkout,
   Hold,
@@ -20,38 +20,38 @@ export default class MyAccount {
   holds: Hold[]
   patron: Patron
   fines: Fine
-  checkoutTitleMap: Record<string, string>
-  holdTitleMap: Record<string, string>
+  checkoutBibData: Record<string, string>
+  holdBibData: Record<string, string>
   constructor({
     checkouts,
     holds,
     patron,
     fines,
-    checkoutTitleMap,
-    holdTitleMap,
+    checkoutBibData,
+    holdBibData,
   }: SierraAccountData) {
-    this.checkouts = this.buildCheckouts(checkouts, checkoutTitleMap)
-    this.holds = this.buildHolds(holds, holdTitleMap)
+    this.checkouts = this.buildCheckouts(checkouts, checkoutBibData)
+    this.holds = this.buildHolds(holds, holdBibData)
     this.patron = this.buildPatron(patron)
     this.fines = this.buildFines(fines)
   }
 
-  static async fetchAll(id) {
+  static async MyAccountFactory(id) {
     client = await sierraClient()
     const baseQuery = `patrons/${id}`
     const checkouts = await this.fetchCheckouts(baseQuery)
     const holds = await this.fetchHolds(baseQuery)
     const patron = await this.fetchPatron(baseQuery)
     const fines = await this.fetchFines(baseQuery)
-    const checkoutTitleMap = await this.fetchBibData(checkouts.entries, "item")
-    const holdTitleMap = await this.fetchBibData(holds.entries, "record")
+    const checkoutBibData = await this.fetchBibData(checkouts.entries, "item")
+    const holdBibData = await this.fetchBibData(holds.entries, "record")
     return new this({
       checkouts: checkouts.entries,
       holds: holds.entries,
       patron,
       fines,
-      checkoutTitleMap,
-      holdTitleMap,
+      checkoutBibData,
+      holdBibData,
     })
   }
 
@@ -77,7 +77,8 @@ export default class MyAccount {
   }
 
   static async fetchHolds(baseQuery: string) {
-    const holdsQuery = "/holds?expand=record"
+    const holdsQuery =
+      "/holds?expand=record&fields=canFreeze,record,status,pickupLocation,frozen,patron,pickupByDate"
     return await client.get(`${baseQuery}${holdsQuery}`)
   }
 
@@ -100,6 +101,7 @@ export default class MyAccount {
     const checkoutBibIds = holdsOrCheckouts.map((holdOrCheckout) => {
       return holdOrCheckout[itemOrRecord].bibIds[0]
     })
+
     const defaultFields = await client.get(
       `bibs?id=${checkoutBibIds}&fields=default,varFields`
     )
