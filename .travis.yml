@@ -17,6 +17,7 @@ jobs:
           then
           export ENV="qa";
           export NYPL_HEADER_URL="https://qa-ds-header.nypl.org";
+          export NYPL_HEADER_URL="https://qa-ds-header.nypl.org";
           fi
         - if [[ "$TRAVIS_BRANCH" == "production" ]];
           then
