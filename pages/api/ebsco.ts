@@ -6,7 +6,11 @@ let ebscoClient
 
 export async function fetchEbscoResults(query) {
   if (!ebscoClient) {
-    ebscoClient = await makeClient()
+    try {
+      ebscoClient = await makeClient()
+    } catch {
+      return null
+    }
   }
 
   return ebscoClient.search(query)
@@ -17,9 +21,9 @@ export async function publicationsForIssns(issns) {
     issns.slice(0, 1).map((issn) => `IS:${issn}`)
   )
 
-  if (!results.SearchResult?.Data?.Records) return null
+  if (!results?.SearchResult?.Data?.Records) return null
 
-  return results.SearchResult?.Data?.Records?.map((record) => {
+  return results.SearchResult.Data.Records.map((record) => {
     const issnItem = record.Items?.find((item) => item.Name === "ISSN")
     if (!issnItem) return null
 
@@ -47,7 +51,11 @@ export async function publicationsForIssns(issns) {
 
 export async function fetchEbscoPublications(query) {
   if (!ebscoClient) {
-    ebscoClient = await makeClient()
+    try {
+      ebscoClient = await makeClient()
+    } catch {
+      return null
+    }
   }
 
   return ebscoClient.publications(query)

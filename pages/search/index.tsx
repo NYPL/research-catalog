@@ -183,17 +183,19 @@ export async function getServerSideProps({ resolvedUrl }) {
     const issns = issnsForSearchResults(discoveryApiResults)
     const publications = await publicationsForIssns(issns)
 
-    discoveryApiResults.results.itemListElement.forEach((result) => {
-      if (result.result.idIssn && result.result.idIssn[0]) {
-        const ebscoMatches = publications[result.result.idIssn[0]]
-        result.result.ebscoResults = ebscoMatches
-      }
-    })
+    if (publications !== null) {
+      discoveryApiResults.results.itemListElement.forEach((result) => {
+        if (result.result.idIssn && result.result.idIssn[0]) {
+          const ebscoMatches = publications[result.result.idIssn[0]]
+          result.result.ebscoResults = ebscoMatches
+        }
+      })
+    }
   }
 
   const ebscoResults = {
     records:
-      rawEbscoResults.SearchResult?.Data?.Records.filter(
+      rawEbscoResults?.SearchResult?.Data?.Records.filter(
         (record) => record.PLink
       ).map((record) => {
         return {
@@ -208,8 +210,8 @@ export async function getServerSideProps({ resolvedUrl }) {
             ) || null,
         }
       }) || [],
-    queryString: rawEbscoResults.SearchRequestGet?.QueryString || null,
-    total: rawEbscoResults.SearchResult?.Statistics?.TotalHits || null,
+    queryString: rawEbscoResults?.SearchRequestGet?.QueryString || null,
+    total: rawEbscoResults?.SearchResult?.Statistics?.TotalHits || null,
   }
 
   return {
