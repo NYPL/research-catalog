@@ -2,7 +2,7 @@ import wrapper from "@nypl/sierra-wrapper"
 import aws from "aws-sdk"
 
 interface KMSCache {
-  client: string
+  client: any
   key: string
   secret: string
 }
@@ -15,7 +15,7 @@ if (!key || !base || !secret) {
   console.error("Missing Sierra credentials")
 }
 const creds = [key, secret]
-const CACHE: KMSCache = { client: "", key, secret }
+const CACHE: KMSCache = { client: {}, key, secret }
 
 const kms: aws.KMS = new aws.KMS({
   region: "us-east-1",
@@ -35,6 +35,7 @@ const decryptKMS = async (key: string) => {
 }
 
 const sierraClient = async () => {
+  if (CACHE.client) return await Promise.resolve(CACHE.client)
   let decryptedKey: string
   let decryptedSecret: string
   try {
@@ -48,9 +49,8 @@ const sierraClient = async () => {
       secret: decryptedSecret,
       base: base,
     })
-    // CACHE.key = decryptedKey
-    // CACHE.secret = decryptedSecret
-    // CACHE.client = wrapper
+
+    CACHE.client = wrapper
     return wrapper
   } catch (error) {
     console.error(error.message)

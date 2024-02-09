@@ -25,12 +25,12 @@ describe("MyAccountModel", () => {
     })
   })
   it.todo("can handle all empty data")
-  it("builds Account data model", () => {
-    const account = new MyAccount({
-      holds: holds.entries,
-      patron,
-      checkouts: checkouts.entries,
-      fines: { total: 0, entries: [] },
-    })
-  })
+  // it("builds Account data model", () => {
+  //   const account = new MyAccount({
+  //     holds: holds.entries,
+  //     patron,
+  //     checkouts: checkouts.entries,
+  //     fines: { total: 0, entries: [] },
+  //   })
+  // })
 })

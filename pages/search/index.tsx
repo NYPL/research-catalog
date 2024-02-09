@@ -28,7 +28,6 @@ import { SITE_NAME, RESULTS_PER_PAGE } from "../../src/config/constants"
 import type SearchResultsBib from "../../src/models/SearchResultsBib"
 
 import useLoading from "../../src/hooks/useLoading"
-import sierraClient from "../../src/server/sierraClient"
 
 /**
  * The Search page is responsible for fetching and displaying the Search results,

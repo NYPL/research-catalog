@@ -67,9 +67,11 @@ export interface Checkout {
   barcode: string
   dueDate: string
   id: string
-  isResearch?: boolean
+  isResearch: boolean
   patron: string
   title: string
+  bibId?: string
+  isNyplOwned: boolean
 }
 
 export interface SierraCodeName {
@@ -82,11 +84,13 @@ export interface Hold {
   id: string
   canFreeze: boolean
   pickupLocation: string
-  isResearch?: boolean
+  isResearch: boolean
   status: string
   frozen: boolean
   patron: string
   title: string
+  bibId: string
+  isNyplOwned: boolean
 }
 
 export interface Patron {

@@ -1,13 +1,13 @@
 import sierraClient from "../../src/server/sierraClient"
 
-export async function fetchAccount(id: string) {
+export async function fetchAccount(id = "2772226") {
   const holdsQuery =
     "/holds?fields=pickupLocation,frozen,record,canFreeze,placed,notWantedBeforeDate,status,recordType,priority,pickupByDate,patron"
   const patronQuery =
     "?fields=names,barcodes,expirationDate,homeLibrary,emails,phones"
   const checkoutQuery = "/checkouts?expand=item"
   const finesQuery = "/fines"
-  const baseQuery = "patrons/2772226"
+  const baseQuery = "patrons/" + id
 
   const client = await sierraClient()
 
