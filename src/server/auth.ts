@@ -4,7 +4,7 @@ import { importSPKI, jwtVerify, type JWTPayload } from "jose"
 import type { NextRequest } from "next/server"
 import { appConfig } from "../config/config"
 import { BASE_URL } from "../config/constants"
-import type { NextRouter } from "next/router"
+import { useEffect, useState } from "react"
 
 interface UserJwtPayload extends JWTPayload {
   iss: string
@@ -67,21 +67,30 @@ export function getLoginRedirect(req) {
   const redirect = `${
     appConfig.externalUrls.loginUrl[appConfig.environment]
   }?redirect_uri=${fullUrl}`
-  console.log(redirect)
   return redirect
 }
 
 /**
- * Creates redirect to log out user, then return user to their current page. Requires an instance of useRouter.
+ * Creates redirect to log out user, then return user to their current page.
  */
-
-export function getLogoutRedirect(router: NextRouter) {
-  const current = router.pathname
-  let backPath = current
-  // If the patron is on any hold or account page, then
-  // redirect them to the home page after logging out.
-  if (current.includes("hold") || current.includes("account")) {
-    backPath = "/"
-  }
-  return `${appConfig.externalUrls.logoutUrl}?redirect_uri={window.location.href}${backPath}`
+export const useLogoutRedirect = () => {
+  const baseUrl = "/research/research-catalog"
+  // Will send user back to prod if below doesn't work
+  const [redirect, setRedirect] = useState(`https://www.nypl.org${baseUrl}`)
+  useEffect(() => {
+    const current = window.location.pathname
+    let backPath = window.location.href
+    // If the patron is on any hold or account page, then
+    // redirect them to the home page after logging out. Otherwise,
+    // send them back to the page they were on.
+    if (current.includes("hold") || current.includes("account")) {
+      backPath = window.location.origin + baseUrl
+    }
+    setRedirect(
+      `${
+        appConfig.externalUrls.logoutUrl[appConfig.environment]
+      }?redirect_uri=${backPath}`
+    )
+  }, [])
+  return redirect
 }

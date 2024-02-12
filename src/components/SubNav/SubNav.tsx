@@ -2,8 +2,7 @@ import RCLink from "../RCLink/RCLink"
 import styles from "../../../styles/components/SubNav.module.scss"
 import { type RCPage } from "../../types/pageTypes"
 import { BASE_URL } from "../../config/constants"
-import { useRouter } from "next/router"
-import { getLogoutRedirect } from "../../server/auth"
+import { useLogoutRedirect } from "../../server/auth"
 interface SubNavProps {
   activePage: RCPage
   isAuthenticated?: boolean
@@ -14,9 +13,7 @@ interface SubNavProps {
  * and passes the active prop to the correct link based on the route.
  */
 const SubNav = ({ activePage, isAuthenticated }: SubNavProps) => {
-  const router = useRouter()
-  const logOutRedirect = getLogoutRedirect(router)
-
+  const logoutLink = useLogoutRedirect()
   return (
     <nav className={styles.subNav} aria-label="Research Catalog main menu">
       <ul>
@@ -56,7 +53,7 @@ const SubNav = ({ activePage, isAuthenticated }: SubNavProps) => {
         </li>
         {isAuthenticated && (
           <li>
-            <RCLink href={logOutRedirect}>Log out</RCLink>
+            <RCLink href={logoutLink}>Log out</RCLink>
           </li>
         )}
       </ul>
