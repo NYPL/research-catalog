@@ -36,8 +36,6 @@ export default class MyAccount {
 
   static async MyAccountFactory(id) {
     client = await sierraClient()
-    console.log("hello")
-    console.log(client)
     const baseQuery = `patrons/${id}`
     const checkouts = await this.fetchCheckouts(baseQuery)
     const holds = await this.fetchHolds(baseQuery)
@@ -173,9 +171,11 @@ export default class MyAccount {
   }
 
   buildFines(fines: SierraFine): Fine {
-    //total TODO
     return {
-      total: fines.total,
+      total: fines.entries.reduce((acc, entry) => {
+        acc += entry.itemCharge
+        return acc
+      }, 0),
       entries: fines.entries.map((entry: SierraFineEntry) => {
         if (!entry.datePaid) {
           return {

@@ -34,7 +34,7 @@ export async function getServerSideProps({ req }) {
   }
   const id = patronTokenResponse.decodedPatron.sub
   const { checkouts, holds, patron, fines } =
-    await MyAccountModel.MyAccountFactory(2772226)
+    await MyAccountModel.MyAccountFactory(id)
   console.log("sierra Account Data", { checkouts, holds, patron, fines })
 
   return {

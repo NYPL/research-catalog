@@ -108,7 +108,7 @@ export interface SierraFine {
 
 export interface SierraFineEntry {
   chargeType: { display: string }
-  itemCharge: string
+  itemCharge: number
   assessedDate: string
   datePaid: string
 }
@@ -117,7 +117,7 @@ export interface Fine {
   total: number
   entries: {
     detail: string
-    amount: string
+    amount: number
     date: string
   }[]
 }
