@@ -20,8 +20,6 @@ export default class MyAccount {
   holds: Hold[]
   patron: Patron
   fines: Fine
-  checkoutBibData: Record<string, string>
-  holdBibData: Record<string, string>
   constructor({
     checkouts,
     holds,
@@ -38,6 +36,8 @@ export default class MyAccount {
 
   static async MyAccountFactory(id) {
     client = await sierraClient()
+    console.log("hello")
+    console.log(client)
     const baseQuery = `patrons/${id}`
     const checkouts = await this.fetchCheckouts(baseQuery)
     const holds = await this.fetchHolds(baseQuery)
@@ -173,6 +173,7 @@ export default class MyAccount {
   }
 
   buildFines(fines: SierraFine): Fine {
+    //total TODO
     return {
       total: fines.total,
       entries: fines.entries.map((entry: SierraFineEntry) => {

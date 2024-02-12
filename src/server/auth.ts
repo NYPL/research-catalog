@@ -59,22 +59,13 @@ export default async function initializePatronTokenAuth(req: NextRequest) {
  * Used to create redirect from initializePatronTokenAuth() response, returns the redirect url.
  */
 export function getLoginRedirect(req) {
-  if (
-    !req.patronTokenResponse ||
-    !req.patronTokenResponse.isTokenValid ||
-    !req.patronTokenResponse.decodedPatron ||
-    !req.patronTokenResponse.decodedPatron.sub
-  ) {
-    const protocol = "http"
-    const hostname = req.headers["host"]
-    const originalUrl = BASE_URL + req.url
-    const fullUrl = encodeURIComponent(
-      `${protocol}://${hostname}${originalUrl}`
-    )
-    const redirect =
-      //`${appConfig.externalUrls.login}?redirect_uri=${fullUrl}`
-      `https://dev-login.nypl.org/auth/login?redirect_uri=${fullUrl}`
-    console.log(redirect)
-    return redirect
-  }
+  const protocol = "http"
+  const hostname = req.headers["host"]
+  const originalUrl = BASE_URL + req.url
+  const fullUrl = encodeURIComponent(`${protocol}://${hostname}${originalUrl}`)
+  const redirect =
+    //`${appConfig.externalUrls.login}?redirect_uri=${fullUrl}`
+    `https://dev-login.nypl.org/auth/login?redirect_uri=${fullUrl}`
+  console.log(redirect)
+  return redirect
 }

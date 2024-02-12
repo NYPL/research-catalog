@@ -2102,3 +2102,32 @@ export const holds = {
     },
   ],
 }
+
+export const empty = { total: 0, entries: [] }
+
+export const fines = {
+  total: 1,
+  start: 0,
+  entries: [
+    {
+      id: "https://nypl-sierra-test.nypl.org/iii/sierra-api/v6/patrons/fines/13479583",
+      patron:
+        "https://nypl-sierra-test.nypl.org/iii/sierra-api/v6/patrons/7804774",
+      item: "https://nypl-sierra-test.nypl.org/iii/sierra-api/v6/items/36762288",
+      assessedDate: "2023-06-15T17:34:46Z",
+      invoiceNumber: 777911,
+      chargeType: {
+        code: "3",
+        display: "Replacement",
+      },
+      itemCharge: 14.99,
+      processingFee: 0.0,
+      billingFee: 0.0,
+      paidAmount: 0.0,
+      location: {
+        code: "baj0v",
+        name: "Baychester Children's Non-Print Media",
+      },
+    },
+  ],
+}

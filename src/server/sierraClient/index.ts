@@ -35,7 +35,7 @@ const decryptKMS = async (key: string) => {
 }
 
 export const sierraClient = async () => {
-  if (CACHE.client) return await Promise.resolve(CACHE.client)
+  if (CACHE.client?.get) return await Promise.resolve(CACHE.client)
   let decryptedKey: string
   let decryptedSecret: string
   try {
