@@ -3,13 +3,6 @@ import { render, screen } from "@testing-library/react"
 
 import Home from "../../pages/index"
 
-// Mock the auth module on the Page component level.
-jest.mock("jose", () => ({
-  importSPKI: async () => Promise.resolve("testPublicKey"),
-  jwtVerify: async () => ({
-    payload: {},
-  }),
-}))
 // Mock next router
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
