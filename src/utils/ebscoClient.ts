@@ -7,6 +7,7 @@ type ClientOptions = {
   password: string
   profile: string
   baseUrl: string
+  cacheSession: boolean
 }
 
 const logger = {
@@ -103,13 +104,15 @@ export class EbscoClient {
     if (force) {
       this.authToken = null
       this.sessionToken = null
-      fs.rmSync(sessionFile)
+      if (this.options.cacheSession) {
+        fs.rmSync(sessionFile)
+      }
       logger.debug("authenticate: Reauthenticating...")
     }
 
     if (this.authToken && this.sessionToken) return
 
-    if (fs.existsSync(sessionFile)) {
+    if (this.options.cacheSession && fs.existsSync(sessionFile)) {
       const { authToken, sessionToken } = JSON.parse(
         fs.readFileSync(sessionFile, "utf8")
       )
@@ -124,18 +127,20 @@ export class EbscoClient {
     await this.uidauth()
     await this.createSession()
 
-    fs.writeFileSync(
-      sessionFile,
-      JSON.stringify(
-        {
-          authToken: this.authToken,
-          sessionToken: this.sessionToken,
-        },
-        null,
-        2
+    if (this.options.cacheSession) {
+      fs.writeFileSync(
+        sessionFile,
+        JSON.stringify(
+          {
+            authToken: this.authToken,
+            sessionToken: this.sessionToken,
+          },
+          null,
+          2
+        )
       )
-    )
-    logger.debug("authenticate: Updated session file")
+      logger.debug("authenticate: Updated session file")
+    }
   }
 
   // https://connect.ebsco.com/s/article/EBSCO-Discovery-Service-API-Sessions-CreateSession
@@ -204,5 +209,6 @@ export async function makeClient() {
     password: decrypted["EBSCO_PASSWORD"],
     profile: decrypted["EBSCO_PROFILE"],
     baseUrl: process.env.EBSCO_BASE_URL,
+    cacheSession: process.env.EBSCO_CACHE_SESSION === "true",
   })
 }
