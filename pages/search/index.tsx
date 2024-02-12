@@ -187,7 +187,7 @@ export async function getServerSideProps({ resolvedUrl }) {
       discoveryApiResults.results.itemListElement.forEach((result) => {
         if (result.result.idIssn && result.result.idIssn[0]) {
           const ebscoMatches = publications[result.result.idIssn[0]]
-          result.result.ebscoResults = ebscoMatches
+          result.result.ebscoResults = ebscoMatches || null
         }
       })
     }
