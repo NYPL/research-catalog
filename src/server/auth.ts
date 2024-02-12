@@ -5,7 +5,7 @@ import type { NextRequest } from "next/server"
 
 import { appConfig } from "../config/config"
 import { BASE_URL } from "../config/constants"
-import { useRouter } from "next/router"
+import type { NextRouter } from "next/router"
 
 interface UserJwtPayload extends JWTPayload {
   iss: string
@@ -57,34 +57,26 @@ export default async function initializePatronTokenAuth(req: NextRequest) {
 }
 
 /**
- * Creates and returns redirect url from initializePatronTokenAuth() response
+ * Creates and returns redirect url from initializePatronTokenAuth() response. Call this function only with an un-authenticated patron,
+ * i.e., patronTokenResponse.isTokenValid must be false.
  */
 export function getLoginRedirect(req) {
-  if (
-    !req.patronTokenResponse ||
-    !req.patronTokenResponse.isTokenValid ||
-    !req.patronTokenResponse.decodedPatron ||
-    !req.patronTokenResponse.decodedPatron.sub
-  ) {
-    const protocol = "http"
-    const hostname = req.headers["host"]
-    const originalUrl = BASE_URL + req.url
-    const fullUrl = encodeURIComponent(
-      `${protocol}://${hostname}${originalUrl}`
-    )
-    const redirect =
-      //`${appConfig.externalUrls.login}?redirect_uri=${fullUrl}`
-      `${process.env.LOGIN_BASE_URL}/login?redirect_uri=${fullUrl}`
-    console.log(redirect)
-    return redirect
-  }
+  const protocol = "http"
+  const hostname = req.headers["host"]
+  const originalUrl = BASE_URL + req.url
+  const fullUrl = encodeURIComponent(`${protocol}://${hostname}${originalUrl}`)
+  const redirect =
+    //`${appConfig.externalUrls.login}?redirect_uri=${fullUrl}`
+    `${process.env.LOGIN_BASE_URL}/login?redirect_uri=${fullUrl}`
+  console.log(redirect)
+  return redirect
 }
 
 /**
  * Creates redirect to log out user, then return user to their current page. Requires an instance of useRouter.
  */
 
-export function getLogoutRedirect(router) {
+export function getLogoutRedirect(router: NextRouter) {
   const current = router.pathname
   let backPath = current
   // If the patron is on any hold or account page, then

@@ -3,7 +3,6 @@ import styles from "../../../styles/components/SubNav.module.scss"
 import { type RCPage } from "../../types/pageTypes"
 import { BASE_URL } from "../../config/constants"
 import { useRouter } from "next/router"
-import { Link } from "@nypl/design-system-react-components"
 import { getLogoutRedirect } from "../../server/auth"
 interface SubNavProps {
   activePage: RCPage
@@ -57,7 +56,7 @@ const SubNav = ({ activePage, isAuthenticated }: SubNavProps) => {
         </li>
         {isAuthenticated && (
           <li>
-            <Link href={logOutRedirect}>Log out</Link>
+            <RCLink href={logOutRedirect}>Log out</RCLink>
           </li>
         )}
       </ul>
