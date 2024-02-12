@@ -219,10 +219,12 @@ export async function getServerSideProps({ resolvedUrl }) {
       results: discoveryApiResults,
       ebscoResults,
       debug: {
-        env: ["EBSCO_USER_ID", "EBSCO_PASSWORD", "EBSCO_PROFILE"]
-          .reduce((h, name) => {
+        env: ["EBSCO_USER_ID", "EBSCO_PASSWORD", "EBSCO_PROFILE"].reduce(
+          (h, name) => {
             return Object.assign(h, { [name]: process.env[name] })
-          }, {})
+          },
+          {}
+        ),
       },
     },
   }
