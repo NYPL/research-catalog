@@ -2,7 +2,6 @@
 // import type { JWTPayload } from "jose"
 import { importSPKI, jwtVerify, type JWTPayload } from "jose"
 import type { NextRequest } from "next/server"
-
 import { appConfig } from "../config/config"
 import { BASE_URL } from "../config/constants"
 import type { NextRouter } from "next/router"
@@ -65,9 +64,9 @@ export function getLoginRedirect(req) {
   const hostname = req.headers["host"]
   const originalUrl = BASE_URL + req.url
   const fullUrl = encodeURIComponent(`${protocol}://${hostname}${originalUrl}`)
-  const redirect =
-    //`${appConfig.externalUrls.login}?redirect_uri=${fullUrl}`
-    `${process.env.LOGIN_BASE_URL}/login?redirect_uri=${fullUrl}`
+  const redirect = `${
+    appConfig.externalUrls.loginUrl[appConfig.environment]
+  }?redirect_uri=${fullUrl}`
   console.log(redirect)
   return redirect
 }
@@ -84,6 +83,5 @@ export function getLogoutRedirect(router: NextRouter) {
   if (current.includes("hold") || current.includes("account")) {
     backPath = "/"
   }
-  return `${appConfig.externalUrls.logoutUrl}?redirect_uri=http://local.nypl.org:8080/research/research-catalog${backPath}`
-  // TODO: The home url needs to be an env variable fs
+  return `${appConfig.externalUrls.logoutUrl}?redirect_uri={window.location.href}${backPath}`
 }
