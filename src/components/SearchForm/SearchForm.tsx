@@ -56,7 +56,10 @@ const SearchForm = () => {
     (agg: Aggregation) => agg.values.length
   ).length
 
-  useEffect(() => setAppliedFilters(parseFilters(router.query)), [router.query])
+  useEffect(() => {
+    setAppliedFilters(parseFilters(router.query))
+  }, [router.query])
+
   return (
     <div className={styles.searchContainer}>
       <div className={styles.searchContainerInner}>
@@ -118,7 +121,6 @@ const SearchForm = () => {
           </RCLink>
         </div>
         <AppliedFilters
-          setAppliedFilters={setAppliedFilters}
           appliedFilters={appliedFilters}
           aggregations={aggregations}
         />
