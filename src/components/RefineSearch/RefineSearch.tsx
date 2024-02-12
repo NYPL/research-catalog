@@ -5,7 +5,7 @@ import {
   ButtonGroup,
   Form,
 } from "@nypl/design-system-react-components"
-import type { SyntheticEvent } from "react"
+import type { Dispatch, SyntheticEvent } from "react"
 import { useState, useRef, useCallback } from "react"
 import { useRouter } from "next/router"
 
@@ -15,20 +15,22 @@ import RefineSearchCheckBoxField from "./RefineSearchCheckboxField"
 import {
   parseFilters,
   buildFilters,
-  removeFiltersFromQuery,
+  getQueryWithoutFilters,
 } from "../../utils/refineSearchUtils"
 import type { Aggregation } from "../../types/filterTypes"
 
 interface RefineSearchProps {
   aggregations: Aggregation[]
+  setAppliedFilters: Dispatch<React.SetStateAction<Record<string, string[]>>>
+  appliedFilters: Record<string, string[]>
 }
 
-const RefineSearch = ({ aggregations }: RefineSearchProps) => {
+const RefineSearch = ({
+  aggregations,
+  appliedFilters,
+  setAppliedFilters,
+}: RefineSearchProps) => {
   const router = useRouter()
-  const [appliedFilters, setAppliedFilters] = useState(
-    parseFilters(router.query)
-  )
-
   const fields = useRef([
     { value: "materialType", label: "Format" },
     { value: "language", label: "Language" },
@@ -55,9 +57,10 @@ const RefineSearch = ({ aggregations }: RefineSearchProps) => {
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault()
     const updatedQuery = {
-      ...removeFiltersFromQuery(router.query),
+      ...getQueryWithoutFilters(router.query),
       ...buildFilters(appliedFilters),
     }
+    console.log({ refineSearch: updatedQuery })
     router.push({
       pathname: "/search",
       query: updatedQuery,
@@ -75,10 +78,10 @@ const RefineSearch = ({ aggregations }: RefineSearchProps) => {
   }, [router.query, setAppliedFilters, setRefineSearchClosed])
 
   const handleClear = () => {
-    setAppliedFilters(removeFiltersFromQuery(router.query))
+    setAppliedFilters(getQueryWithoutFilters(router.query))
     router.push({
       pathname: "/search",
-      query: removeFiltersFromQuery(router.query),
+      query: getQueryWithoutFilters(router.query),
     })
     toggleRefine()
   }
