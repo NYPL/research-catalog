@@ -51,9 +51,9 @@ const AppliedFilters = ({
       console.log({ relevantField })
       const doesNotMatchLabelFromTag = (filter) => filter.label !== tagLabel
       console.log({ doesNotMatchLabelFromTag })
-      const updatedField = appliedFiltersWithLabels[relevantField].filter(
-        doesNotMatchLabelFromTag
-      )
+      const updatedField = appliedFiltersWithLabels[relevantField]
+        .filter(doesNotMatchLabelFromTag)
+        .map((updatedOption: Option) => updatedOption.value)
       updatedFilters = {
         ...appliedFiltersWithLabels,
         [relevantField]: updatedField,

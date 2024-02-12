@@ -1,5 +1,4 @@
 import type { Aggregation, Option } from "../types/filterTypes"
-import type { SearchParams } from "../types/searchTypes"
 
 export const parseFilters = (queryParams: object): Record<string, string[]> => {
   return Object.keys(queryParams)

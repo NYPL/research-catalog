@@ -60,7 +60,7 @@ const RefineSearch = ({
       ...getQueryWithoutFilters(router.query),
       ...buildFilters(appliedFilters),
     }
-    console.log({ refineSearch: updatedQuery })
+    // console.log({refineSearch: updatedQuery})
     router.push({
       pathname: "/search",
       query: updatedQuery,
