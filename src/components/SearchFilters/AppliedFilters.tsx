@@ -16,7 +16,6 @@ interface AppliedFiltersPropsType {
 
 const AppliedFilters = ({
   appliedFilters,
-  // setAppliedFilters,
   aggregations,
 }: AppliedFiltersPropsType) => {
   const router = useRouter()

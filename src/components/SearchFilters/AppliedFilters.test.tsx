@@ -57,4 +57,5 @@ describe("Applied Filters", () => {
       )
     })
   })
+  it.todo("can handle a combination of filters with no results")
 })
