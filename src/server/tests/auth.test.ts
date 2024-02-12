@@ -51,3 +51,7 @@ describe("initializePatronTokenAuth", () => {
     })
   })
 })
+
+describe("log in and log out ", () => {
+  //TODO
+})
