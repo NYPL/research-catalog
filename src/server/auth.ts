@@ -56,11 +56,10 @@ export default async function initializePatronTokenAuth(req: NextRequest) {
 }
 
 /**
- * Creates and returns redirect url from initializePatronTokenAuth() response. Call this function only with an un-authenticated patron,
+ * Creates and returns redirect urk. Call this function only with an un-authenticated patron,
  * i.e., patronTokenResponse.isTokenValid must be false.
  */
 export function getLoginRedirect(req) {
-  console.log(req.headers["referer"])
   const protocol = req.protocol || "http"
   const hostname = req.headers["host"]
   const originalUrl = BASE_URL + req.url
