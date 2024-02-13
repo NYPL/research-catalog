@@ -27,6 +27,12 @@ export async function checkoutRenewal(
       `patrons/checkouts/${checkoutId}/renewal`
     )
     console.log(response)
+
+    if (response.status === 403) {
+      throw new Error(
+        "RENEWAL NOT ALLOWED. This is a research material. Please contact gethelp@nypl.org for assistance."
+      )
+    }
   } catch (error) {
     console.error(error)
     res.status(500).json({ error: "internal server error" })
