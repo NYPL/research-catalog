@@ -1,7 +1,7 @@
 import { parseLocations } from "../utils/itemUtils"
 
 export const appConfig = {
-  environment: process.env.ENV || "production",
+  environment: process.env.APP_ENV || "production",
   apiUrls: {
     platform: {
       qa: "https://qa-platform.nypl.org/api/v0.1",
