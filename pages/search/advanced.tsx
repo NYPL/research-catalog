@@ -35,6 +35,7 @@ import type {
   SearchFormActionType,
 } from "../../src/types/searchTypes"
 import { getSearchQuery } from "../../src/utils/searchUtils"
+import { appConfig } from "../../src/config/config"
 // import FieldsetDate from "../../src/components/SearchFilters/FieldsetDate"
 
 export const defaultEmptySearchErrorMessage =
@@ -100,7 +101,7 @@ export default function AdvancedSearch() {
     } else {
       // If the NEXT_PUBLIC_REVERSE_PROXY_ENABLED feature flag is present, use window.location.replace
       // instead of router.push to forward search results to DFE.
-      if (process.env.NEXT_PUBLIC_REVERSE_PROXY_ENABLED) {
+      if (appConfig.reverseProxyEnabled[appConfig.environment]) {
         window.location.replace(`${BASE_URL}${PATHS.SEARCH}${queryString}`)
       } else {
         await router.push(`${PATHS.SEARCH}${queryString}`)
