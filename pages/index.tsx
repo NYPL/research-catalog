@@ -18,14 +18,18 @@ import { appConfig } from "../src/config/config"
 import initializePatronTokenAuth from "../src/server/auth"
 import useLoading from "../src/hooks/useLoading"
 
-export default function Home() {
+interface HomeProps {
+  bannerNotification?: string
+}
+
+export default function Home({ bannerNotification }: HomeProps) {
   const isLoading = useLoading()
   return (
     <>
       <Head>
         <title>{SITE_NAME}</title>
       </Head>
-      <Layout activePage="search">
+      <Layout activePage="search" bannerNotification={bannerNotification}>
         {isLoading ? (
           <SkeletonLoader showImage={false} />
         ) : (
@@ -172,6 +176,8 @@ export default function Home() {
 }
 
 export async function getServerSideProps({ req }) {
+  const bannerNotification = process.env.SEARCH_RESULTS_NOTIFICATION || ""
+
   // Every page that needs patron data must call initializePatronTokenAuth
   // to find if the token is valid and what the patron id is.
   const patronTokenResponse = await initializePatronTokenAuth(req)
@@ -181,6 +187,8 @@ export async function getServerSideProps({ req }) {
 
   // return props object
   return {
-    props: {},
+    props: {
+      bannerNotification,
+    },
   }
 }

@@ -80,6 +80,4 @@ export const appConfig = {
     Q9RrzMLTqxKnVVn2+hVpk4F/8tMsGCdd4s/AJqEQBy5lsq7ji1B63XYqi5fc1SnJ
     EQIDAQAB
     -----END PUBLIC KEY-----`,
-  searchResultsNotification:
-    process.env.NEXT_PUBLIC_SEARCH_RESULTS_NOTIFICATION || "",
 }

@@ -28,11 +28,16 @@ import { SITE_NAME, RESULTS_PER_PAGE } from "../../src/config/constants"
 import type SearchResultsBib from "../../src/models/SearchResultsBib"
 import useLoading from "../../src/hooks/useLoading"
 
+interface SearchProps {
+  bannerNotification?: string
+  results: any
+}
+
 /**
  * The Search page is responsible for fetching and displaying the Search results,
  * as well as displaying and controlling pagination and search filters.
  */
-export default function Search({ results }) {
+export default function Search({ bannerNotification, results }: SearchProps) {
   const { push, query } = useRouter()
   const { itemListElement: searchResultsElements, totalResults } =
     results.results
@@ -75,6 +80,7 @@ export default function Search({ results }) {
       </Head>
       <Layout
         activePage="search"
+        bannerNotification={bannerNotification}
         sidebar={
           <>
             {totalResults > 0 ? (
@@ -159,11 +165,14 @@ export default function Search({ results }) {
  *
  */
 export async function getServerSideProps({ resolvedUrl }) {
+  const bannerNotification = process.env.SEARCH_RESULTS_NOTIFICATION || ""
+
   // Remove everything before the query string delineator '?', necessary for correctly parsing the 'q' param.
   const queryString = resolvedUrl.slice(resolvedUrl.indexOf("?") + 1)
   const results = await fetchResults(mapQueryToSearchParams(parse(queryString)))
   return {
     props: {
+      bannerNotification,
       results,
     },
   }

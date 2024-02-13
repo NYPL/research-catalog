@@ -19,6 +19,7 @@ interface LayoutProps {
   sidebar?: ReactElement
   activePage?: RCPage
   sidebarPosition?: "right" | "left"
+  bannerNotification?: string
 }
 
 /**
@@ -30,6 +31,7 @@ const Layout = ({
   sidebar,
   activePage,
   sidebarPosition = "right",
+  bannerNotification,
 }: PropsWithChildren<LayoutProps>) => {
   const showSearch = activePage === "search"
   const showHeader = activePage !== "404"
@@ -65,10 +67,8 @@ const Layout = ({
                 <SubNav activePage={activePage} />
                 {showSearch && <SearchForm />}
               </div>
-              {showNotification && (
-                <Notification
-                  notification={appConfig.searchResultsNotification}
-                />
+              {showNotification && bannerNotification && (
+                <Notification notification={bannerNotification} />
               )}
             </>
           )
