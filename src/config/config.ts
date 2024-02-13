@@ -31,10 +31,7 @@ export const appConfig = {
     },
     drbAbout:
       "https://digital-research-books-beta.nypl.org/about?source=catalog",
-    circulatingCatalog: {
-      qa: "https://nypl-encore-test.nypl.org",
-      production: "https://nypl.na2.iiivega.com/",
-    },
+    circulatingCatalog: "https://nypl.na2.iiivega.com/",
     legacyCatalog: "https://legacycatalog.nypl.org/",
     locations: "https://www.nypl.org/locations/",
     researchMaterialsHelp:

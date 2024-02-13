@@ -61,9 +61,7 @@ export async function fetchBib(
       if (sierraBibResponse.statusCode === 200) {
         return {
           status: 307,
-          redirectUrl: `${
-            appConfig.externalUrls.circulatingCatalog[appConfig.environment]
-          }/iii/encore/record/C__R${id}`,
+          redirectUrl: `${appConfig.externalUrls.circulatingCatalog}/iii/encore/record/C__R${id}`,
         }
       } else {
         console.error("There was a problem fetching the bib from Sierra")
