@@ -47,6 +47,11 @@ function App({ Component, pageProps }) {
   // Track page view events to Adobe Analytics
   useEffect(() => {
     trackVirtualPageView(router.asPath)
+    console.log(
+      "process.env.NEXT_PUBLIC_REVERSE_PROXY_ENABLED",
+      process.env.NEXT_PUBLIC_REVERSE_PROXY_ENABLED
+    )
+    console.log("appConfig.reverseProxyEnabled", appConfig.reverseProxyEnabled)
   })
 
   return (
