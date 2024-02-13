@@ -1,5 +1,5 @@
 import type { NextRequest } from "next/server"
-import initializePatronTokenAuth from "../auth"
+import initializePatronTokenAuth, { getLoginRedirect } from "../auth"
 
 const mockPatronJwtDecodedObj = {
   iss: "",
@@ -52,6 +52,66 @@ describe("initializePatronTokenAuth", () => {
   })
 })
 
-describe("log in and log out ", () => {
-  //TODO
+describe("getLoginRedirect", () => {
+  it("should return a redirect link based on passed initializePatronTokenAuth request", async () => {
+    const patronTokenResponse = await initializePatronTokenAuth(
+      reqCookiesWithToken
+    )
+    console.log(patronTokenResponse)
+    // const login = getLoginRedirect(patronTokenResponse)
+    // console.log(login)
+  })
 })
+
+// describe("useLogoutRedirect", () => {
+//   let sandbox
+
+//   beforeEach(() => {
+//     sandbox = sinon.createSandbox()
+//   })
+
+//   afterEach(() => {
+//     sandbox.restore()
+//   })
+
+//   it("links to the logout url with the current location as the redirect param", () => {
+//     // Try a search results page.
+//     let currentLocation =
+//       "http://localhost:3001/research/research-catalog/search?q=national%20geographic"
+//     sandbox.stub(window.location, "href").value(currentLocation)
+
+//     let component = mountLogoutLink({ loggedIn: true })
+
+//     expect(component.find("a").prop("href")).to.equal(
+//       `${logoutLink}${currentLocation}`
+//     )
+//   })
+
+//   it("links to the logout url with the homepage as the redirect param on hold and account pages", () => {
+//     const originUrl = "http://localhost:3001"
+//     const homepageUrl = `${originUrl}/research/research-catalog/`
+//     // Mock the origin property as localhost.
+//     sandbox.stub(window.location, "origin").value(originUrl)
+
+//     // Try a hold page.
+//     let currentLocation =
+//       "http://localhost:3001/research/research-catalog/hold/request/cb7891544-ci7911509"
+//     sandbox.stub(window.location, "href").value(currentLocation)
+
+//     let component = mountLogoutLink({ loggedIn: true })
+
+//     expect(component.find("a").prop("href")).to.equal(
+//       `${logoutLink}${homepageUrl}`
+//     )
+
+//     // Try an account page.
+//     currentLocation = "http://localhost:3001/research/research-catalog/account"
+//     sandbox.stub(window.location, "href").value(currentLocation)
+
+//     component = mountLogoutLink({ loggedIn: true })
+
+//     expect(component.find("a").prop("href")).to.equal(
+//       `${logoutLink}${homepageUrl}`
+//     )
+//   })
+//})

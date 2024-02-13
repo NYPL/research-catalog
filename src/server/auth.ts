@@ -60,7 +60,8 @@ export default async function initializePatronTokenAuth(req: NextRequest) {
  * i.e., patronTokenResponse.isTokenValid must be false.
  */
 export function getLoginRedirect(req) {
-  const protocol = "http"
+  console.log(req.headers["referer"])
+  const protocol = req.protocol || "http"
   const hostname = req.headers["host"]
   const originalUrl = BASE_URL + req.url
   const fullUrl = encodeURIComponent(`${protocol}://${hostname}${originalUrl}`)
@@ -74,9 +75,8 @@ export function getLoginRedirect(req) {
  * Creates redirect to log out user, then return user to their current page.
  */
 export const useLogoutRedirect = () => {
-  const baseUrl = "/research/research-catalog"
   // Will send user back to prod if below doesn't work
-  const [redirect, setRedirect] = useState(`https://www.nypl.org${baseUrl}`)
+  const [redirect, setRedirect] = useState(`https://www.nypl.org${BASE_URL}`)
   useEffect(() => {
     const current = window.location.pathname
     let backPath = window.location.href
@@ -84,7 +84,7 @@ export const useLogoutRedirect = () => {
     // redirect them to the home page after logging out. Otherwise,
     // send them back to the page they were on.
     if (current.includes("hold") || current.includes("account")) {
-      backPath = window.location.origin + baseUrl
+      backPath = window.location.origin + BASE_URL
     }
     setRedirect(
       `${
