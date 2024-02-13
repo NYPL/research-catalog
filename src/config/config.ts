@@ -4,43 +4,29 @@ export const appConfig = {
   environment: process.env.APP_ENV || "production",
   apiUrls: {
     platform: {
-      development:
-        process.env.PLATFORM_API_BASE_URL ||
-        "https://qa-platform.nypl.org/api/v0.1",
-      production:
-        process.env.PLATFORM_API_BASE_URL ||
-        "https://platform.nypl.org/api/v0.1",
+      qa: "https://qa-platform.nypl.org/api/v0.1",
+      production: "https://platform.nypl.org/api/v0.1",
     },
     // The 'discovery' base URL should use DISCOVERY_API_BASE_URL if set,
     // falling back on PLATFORM_API_BASE_URL if set,
     // and finally falling back on a sensible default.
     discovery: {
-      development:
-        process.env.DISCOVERY_API_BASE_URL ||
-        process.env.PLATFORM_API_BASE_URL ||
-        "https://qa-platform.nypl.org/api/v0.1",
-      production:
-        process.env.DISCOVERY_API_BASE_URL ||
-        process.env.PLATFORM_API_BASE_URL ||
-        "https://platform.nypl.org/api/v0.1",
+      qa: "https://qa-platform.nypl.org/api/v0.1",
+      production: "https://platform.nypl.org/api/v0.1",
     },
     drb: {
-      development:
-        process.env.DRB_API_BASE_URL || "http://drb-api-qa.nypl.org/search/",
-      production:
-        process.env.DRB_API_BASE_URL ||
-        "https://digital-research-books-api.nypl.org/search",
+      qa: "http://drb-api-qa.nypl.org/search/",
+      production: "https://digital-research-books-api.nypl.org/search",
     },
     shep: process.env.SHEP_API,
   },
   externalUrls: {
     drbFrontEnd: {
-      development:
-        "http://sfr-front-end-development.us-east-1.elasticbeanstalk.com",
+      qa: "http://sfr-front-end-development.us-east-1.elasticbeanstalk.com",
       production: "https://digital-research-books-beta.nypl.org",
     },
     drbEreader: {
-      development: "https://researchnow-reader.nypl.org",
+      qa: "https://researchnow-reader.nypl.org",
       production: "https://digital-research-books-reader.nypl.org",
     },
     drbAbout:
@@ -52,23 +38,18 @@ export const appConfig = {
       "https://www.nypl.org/help/request-research-materials",
   },
   tokenUrl: "https://isso.nypl.org/",
-  closedLocations: parseLocations(process.env.NEXT_PUBLIC_CLOSED_LOCATIONS),
-  recapClosedLocations: parseLocations(
-    process.env.NEXT_PUBLIC_RECAP_CLOSED_LOCATIONS
-  ),
+  closedLocations: parseLocations(process.env.CLOSED_LOCATIONS),
+  recapClosedLocations: parseLocations(process.env.RECAP_CLOSED_LOCATIONS),
   nonRecapClosedLocations: parseLocations(
-    process.env.NEXT_PUBLIC_NON_RECAP_CLOSED_LOCATIONS
+    process.env.NON_RECAP_CLOSED_LOCATIONS
   ),
   nyplHeaderUrl: {
-    development: process.env.NYPL_HEADER_URL || "https://ds-header.nypl.org",
-    production: process.env.NYPL_HEADER_URL || "https://ds-header.nypl.org",
+    qa: "https://qa-ds-header.nypl.org",
+    production: "https://ds-header.nypl.org",
   },
   adobeEmbedUrl: {
-    development:
-      process.env.ADOBE_EMBED_URL ||
-      "https://assets.adobedtm.com/1a9376472d37/ddf1bedfe52e/launch-4eefcc91c90e.min.js",
+    qa: "https://assets.adobedtm.com/1a9376472d37/ddf1bedfe52e/launch-4eefcc91c90e.min.js",
     production:
-      process.env.ADOBE_EMBED_URL ||
       "https://assets.adobedtm.com/1a9376472d37/8519dfce636d/launch-672b7e7f98ee.min.js",
   },
   jwtPublicKey: `-----BEGIN PUBLIC KEY-----
