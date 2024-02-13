@@ -8998,6 +8998,74 @@ export const results = {
   totalResults: 423,
 }
 
+export const emptyAggregationsResults = {
+  itemListElement: [
+    {
+      "@type": "nypl:Aggregation",
+      "@id": "res:owner",
+      id: "owner",
+      field: "owner",
+      values: [],
+    },
+    {
+      "@type": "nypl:Aggregation",
+      "@id": "res:contributorLiteral",
+      id: "contributorLiteral",
+      field: "contributorLiteral",
+      values: [],
+    },
+    {
+      "@type": "nypl:Aggregation",
+      "@id": "res:materialType",
+      id: "materialType",
+      field: "materialType",
+      values: [],
+    },
+    {
+      "@type": "nypl:Aggregation",
+      "@id": "res:issuance",
+      id: "issuance",
+      field: "issuance",
+      values: [],
+    },
+    {
+      "@type": "nypl:Aggregation",
+      "@id": "res:publisher",
+      id: "publisher",
+      field: "publisher",
+      values: [],
+    },
+    {
+      "@type": "nypl:Aggregation",
+      "@id": "res:language",
+      id: "language",
+      field: "language",
+      values: [],
+    },
+    {
+      "@type": "nypl:Aggregation",
+      "@id": "res:mediaType",
+      id: "mediaType",
+      field: "mediaType",
+      values: [],
+    },
+    {
+      "@type": "nypl:Aggregation",
+      "@id": "res:subjectLiteral",
+      id: "subjectLiteral",
+      field: "subjectLiteral",
+      values: [],
+    },
+    {
+      "@type": "nypl:Aggregation",
+      "@id": "res:creatorLiteral",
+      id: "creatorLiteral",
+      field: "creatorLiteral",
+      values: [],
+    },
+  ],
+}
+
 export const aggregationsResults = {
   "@context":
     "http://discovery-api-production.us-east-1.elasticbeanstalk.com/api/v0.1/discovery/context_all.jsonld",

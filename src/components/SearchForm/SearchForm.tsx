@@ -26,7 +26,6 @@ const SearchForm = () => {
   )
   const [searchScope, setSearchScope] = useState("all")
   const aggregations = useContext(SearchResultsAggregationsContext)
-
   const [appliedFilters, setAppliedFilters] = useState(
     parseFilters(router.query)
   )
@@ -120,10 +119,12 @@ const SearchForm = () => {
             Advanced Search
           </RCLink>
         </div>
-        <AppliedFilters
-          appliedFilters={appliedFilters}
-          aggregations={aggregations}
-        />
+        {displayRefineResults && (
+          <AppliedFilters
+            appliedFilters={appliedFilters}
+            aggregations={aggregations}
+          />
+        )}
       </div>
     </div>
   )

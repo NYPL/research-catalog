@@ -10,7 +10,6 @@ import type { Aggregation, Option } from "../../types/filterTypes"
 
 interface AppliedFiltersPropsType {
   aggregations: Aggregation[]
-  // setAppliedFilters: Dispatch<React.SetStateAction<Record<string, string[]>>>
   appliedFilters: Record<string, string[]>
 }
 
@@ -23,7 +22,6 @@ const AppliedFilters = ({
     aggregations,
     appliedFilters
   )
-
   const appliedFilterFields = Object.keys(appliedFiltersWithLabels)
   const tagSetData = appliedFilterFields
     .map((field: string) => {

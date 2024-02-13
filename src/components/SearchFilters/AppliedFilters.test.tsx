@@ -1,5 +1,8 @@
 import { render, screen } from "@testing-library/react"
-import { aggregationsResults } from "../../../__test__/fixtures/searchResultsManyBibs"
+import {
+  aggregationsResults,
+  emptyAggregationsResults,
+} from "../../../__test__/fixtures/searchResultsManyBibs"
 import mockRouter from "next-router-mock"
 import userEvent from "@testing-library/user-event"
 import { SearchResultsAggregationsContext } from "../../../pages/search/SearchResultsAggregationsContext"
@@ -57,5 +60,16 @@ describe("Applied Filters", () => {
       )
     })
   })
-  it.todo("can handle a combination of filters with no results")
+  it("can handle a combination of filters with no results", () => {
+    mockRouter.push(
+      "/search?q=spaghetti&filters[materialType][0]=resourcetypes%3Amix&filters[language][0]=lang%3Apol&filters[subjectLiteral][0]=Community life."
+    )
+    render(
+      <SearchResultsAggregationsContext.Provider
+        value={emptyAggregationsResults.itemListElement}
+      >
+        <SearchForm />
+      </SearchResultsAggregationsContext.Provider>
+    )
+  })
 })

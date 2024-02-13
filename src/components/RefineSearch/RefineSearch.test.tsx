@@ -14,7 +14,7 @@ jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 describe("RefineSearch", () => {
   describe("with initial creatorLiteral filter", () => {
     const setup = () => {
-      mockRouter.push("/search?filters[creatorLiteral]=strega nonna")
+      mockRouter.push("/search?filters[creatorLiteral]=Gaberscek, Carlo.")
       render(<Search results={{ aggregations, results }} />)
     }
     beforeEach(setup)
@@ -23,7 +23,7 @@ describe("RefineSearch", () => {
       await selectSomeFilters()
       await apply()
       expect(mockRouter.asPath).toBe(
-        "/search?filters%5BcreatorLiteral%5D%5B0%5D=strega+nonna&filters%5Blanguage%5D%5B0%5D=lang%3Apor&filters%5BmaterialType%5D%5B0%5D=resourcetypes%3Aaud&filters%5BsubjectLiteral%5D%5B0%5D=Cooking%2C+Italian."
+        "/search?filters%5BcreatorLiteral%5D%5B0%5D=Gaberscek%2C+Carlo.&filters%5Blanguage%5D%5B0%5D=lang%3Apor&filters%5BmaterialType%5D%5B0%5D=resourcetypes%3Aaud&filters%5BsubjectLiteral%5D%5B0%5D=Cooking%2C+Italian."
       )
     })
     it("should clear refinment filters and creatorliteral filter", async () => {
@@ -38,7 +38,7 @@ describe("RefineSearch", () => {
       await openRefineSearch()
       await apply()
       expect(mockRouter.query).toStrictEqual({
-        "filters[creatorLiteral][0]": "strega nonna",
+        "filters[creatorLiteral][0]": "Gaberscek, Carlo.",
       })
     })
   })
