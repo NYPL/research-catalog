@@ -17,7 +17,7 @@ describe("404", () => {
     render(<Custom404 />)
 
     const homeLink = screen.getByText("Research Catalog")
-    expect(homeLink).toHaveAttribute("href", "/")
+    expect(homeLink).toHaveAttribute("href", "/research/research-catalog")
     const legacyLink = screen.getByText("Legacy Catalog")
     expect(legacyLink).toHaveAttribute(
       "href",

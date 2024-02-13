@@ -2,6 +2,7 @@ import Head from "next/head"
 import { Heading } from "@nypl/design-system-react-components"
 
 import { appConfig } from "../../src/config/config"
+import { BASE_URL } from "../../src/config/constants"
 import Layout from "../../src/components/Layout/Layout"
 import RCLink from "../../src/components/RCLink/RCLink"
 
@@ -16,7 +17,7 @@ export default function Redirect404() {
         <p>You&apos;ve followed an out-of-date link to our research catalog.</p>
         <p>
           You may be able to find what you&apos;re looking for in the{" "}
-          <RCLink href="/">Research Catalog</RCLink> or the{" "}
+          <RCLink href={BASE_URL}>Research Catalog</RCLink> or the{" "}
           <RCLink href={appConfig.externalUrls.circulatingCatalog}>
             Circulating Catalog
           </RCLink>
