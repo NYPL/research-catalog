@@ -23,18 +23,17 @@ export async function checkoutRenewal(
 ) {
   try {
     const client = await sierraClient()
-    const response = await client.post(
-      `patrons/checkouts/${checkoutId}/renewal`
-    )
-    console.log(response)
-
-    if (response.status === 403) {
-      throw new Error(
-        "RENEWAL NOT ALLOWED. This is a research material. Please contact gethelp@nypl.org for assistance."
-      )
-    }
+    await client.post(`patrons/checkouts/${checkoutId}/renewal`)
+    res.status(200).json({ message: "Renewed!" })
   } catch (error) {
-    console.error(error)
-    res.status(500).json({ error: "internal server error" })
+    if (error.response.status === 403) {
+      res.status(403).json({
+        message:
+          "RENEWAL NOT ALLOWED. Please contact gethelp@nypl.org for assistance.",
+      })
+    } else
+      res.status(500).json({
+        message: "server error",
+      })
   }
 }
