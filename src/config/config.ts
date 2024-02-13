@@ -1,7 +1,7 @@
 import { parseLocations } from "../utils/itemUtils"
 
 export const appConfig = {
-  environment: process.env.APP_ENV || "production",
+  environment: process.env.ENV || "production",
   apiUrls: {
     platform: {
       qa: "https://qa-platform.nypl.org/api/v0.1",
@@ -31,7 +31,10 @@ export const appConfig = {
     },
     drbAbout:
       "https://digital-research-books-beta.nypl.org/about?source=catalog",
-    circulatingCatalog: "https://nypl.na2.iiivega.com/",
+    circulatingCatalog: {
+      qa: "https://nypl-encore-test.nypl.org",
+      production: "https://nypl.na2.iiivega.com/",
+    },
     legacyCatalog: "https://legacycatalog.nypl.org/",
     locations: "https://www.nypl.org/locations/",
     researchMaterialsHelp:

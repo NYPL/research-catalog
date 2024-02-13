@@ -51,7 +51,13 @@ export default function Home() {
                 Please note that the Research Catalog does not include
                 circulating materials. For books and more that you can check out
                 to take home please visit our{" "}
-                <RCLink href={appConfig.externalUrls.circulatingCatalog}>
+                <RCLink
+                  href={
+                    appConfig.externalUrls.circulatingCatalog[
+                      appConfig.environment
+                    ]
+                  }
+                >
                   circulating branch catalog.
                 </RCLink>{" "}
                 The{" "}
