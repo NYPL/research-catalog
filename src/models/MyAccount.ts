@@ -188,10 +188,6 @@ export default class MyAccount {
     }
   }
 
-  patronCookieMatchesCheckoutOrHold(cookieId: string) {
-    return cookieId
-  }
-
   static getStatus(status: SierraCodeName) {
     if (status.code === "status:a") {
       return "REQUEST PLACED"
