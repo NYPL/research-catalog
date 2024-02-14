@@ -56,7 +56,7 @@ export default async function initializePatronTokenAuth(req: NextRequest) {
 }
 
 /**
- * Creates and returns redirect urk. Call this function only with an un-authenticated patron,
+ * Creates and returns redirect url. Call this function only with an un-authenticated patron,
  * i.e., patronTokenResponse.isTokenValid must be false.
  */
 export function getLoginRedirect(req) {
@@ -74,7 +74,8 @@ export function getLoginRedirect(req) {
  * Creates redirect to log out user, then return user to their current page.
  */
 export const useLogoutRedirect = () => {
-  // Will send user back to prod if below doesn't work
+  // Will send user back to prod if user has noscript or javascript disabled
+  // (useEffect won't work).
   const [redirect, setRedirect] = useState(`https://www.nypl.org${BASE_URL}`)
   useEffect(() => {
     const current = window.location.pathname
