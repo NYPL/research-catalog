@@ -12,11 +12,14 @@ import styles from "../../../styles/components/Layout.module.scss"
 import SubNav from "../SubNav/SubNav"
 import SearchForm from "../SearchForm/SearchForm"
 import { BASE_URL } from "../../config/constants"
+import Notification from "../Notification/Notification"
+import { appConfig } from "../../config/config"
 
 interface LayoutProps {
   sidebar?: ReactElement
   activePage?: RCPage
   sidebarPosition?: "right" | "left"
+  bannerNotification?: string
 }
 
 /**
@@ -28,9 +31,11 @@ const Layout = ({
   sidebar,
   activePage,
   sidebarPosition = "right",
+  bannerNotification,
 }: PropsWithChildren<LayoutProps>) => {
   const showSearch = activePage === "search"
   const showHeader = activePage !== "404"
+  const showNotification = activePage === "" || activePage === "search"
 
   return (
     <DSProvider>
@@ -62,6 +67,9 @@ const Layout = ({
                 <SubNav activePage={activePage} />
                 {showSearch && <SearchForm />}
               </div>
+              {showNotification && bannerNotification && (
+                <Notification notification={bannerNotification} />
+              )}
             </>
           )
         }
