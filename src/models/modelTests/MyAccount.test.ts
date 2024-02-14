@@ -21,6 +21,14 @@ describe("MyAccountModel", () => {
     })
   })
   describe("getStatus", () => {
+    it("returns the status as given when it's user-friendly", () => {
+      expect(
+        MyAccount.getStatus({
+          code: "i",
+          name: "Requested item ready for pickup.",
+        })
+      ).toBe("Requested item ready for pickup.")
+    })
     it("returns REQUEST PLACED instead of AVAILABLE", () => {
       expect(MyAccount.getStatus({ code: "status:a", name: "AVAILABLE" })).toBe(
         "REQUEST PLACED"
