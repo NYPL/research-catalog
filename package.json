@@ -23,6 +23,7 @@
     "@types/react-dom": "18.2.6",
     "aws-sdk": "2.99.0",
     "eslint-config-next": "13.4.7",
+    "iso8601-duration": "^2.1.1",
     "jose": "5.2.0",
     "next": "13.4.19",
     "qs": "^6.11.2",

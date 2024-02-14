@@ -31,7 +31,13 @@ const SearchForm = () => {
     }
     const queryString = getSearchQuery(searchParams)
 
-    await router.push(`${PATHS.SEARCH}${queryString}`)
+    // If the NEXT_PUBLIC_REVERSE_PROXY_ENABLED feature flag is present, use window.location.replace
+    // instead of router.push to forward search results to DFE.
+    if (process.env.NEXT_PUBLIC_REVERSE_PROXY_ENABLED) {
+      window.location.replace(`${BASE_URL}${PATHS.SEARCH}${queryString}`)
+    } else {
+      await router.push(`${PATHS.SEARCH}${queryString}`)
+    }
   }
 
   const handleChange = (

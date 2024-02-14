@@ -23,7 +23,7 @@ export default class DRBResult {
   constructor(work: DRBWork) {
     this.id = work.uuid
     this.title = work.title
-    this.editions = work.editions
+    this.editions = work.editions || []
     this.authors = this.getAuthorsFromWork(work)
   }
 
@@ -40,12 +40,12 @@ export default class DRBResult {
   }
 
   get readOnlineUrl(): string | null {
-    if (!this.selectedEdition.items) return null
+    if (!this.selectedEdition?.items) return null
 
     // Populate selected link with first item on the selected edition that includes
     // a link with a media type included in the readOnlineMediaTypes array.
     let selectedLink: EditionLink
-    this.selectedEdition.items.find(
+    this.selectedEdition?.items?.find(
       (item) =>
         (selectedLink = item.links.find(
           (link) => readOnlineMediaTypes.indexOf(link.mediaType) > -1
@@ -59,14 +59,14 @@ export default class DRBResult {
   }
 
   get downloadLink(): EditionLink | null {
-    if (!this.selectedEdition.items) return null
+    if (!this.selectedEdition?.items) return null
 
     // Populate download link with first item on the selected edition that includes
     // a link with a media type included in the downloadMediaTypes array.
     let downloadLink: EditionLink
-    this.selectedEdition.items.find(
+    this.selectedEdition?.items?.find(
       (item) =>
-        (downloadLink = item.links.find(
+        (downloadLink = item?.links?.find(
           (link) => downloadMediaTypes.indexOf(link.mediaType) > -1
         ))
     )
@@ -99,6 +99,6 @@ export default class DRBResult {
   getAuthorsFromWork(work: DRBWork): Author[] | Agent[] {
     return work.authors
       ? work.authors
-      : work.agents.filter((agent) => agent.roles.includes("author"))
+      : work.agents?.filter((agent) => agent.roles.includes("author"))
   }
 }

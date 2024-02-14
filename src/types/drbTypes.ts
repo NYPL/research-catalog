@@ -43,7 +43,7 @@ export interface Agent {
 /* eslint-disable @typescript-eslint/naming-convention */
 
 export interface EditionLink {
-  link_id: string
+  link_id: string | number
   mediaType: string
   url?: string
   download?: string

@@ -73,7 +73,10 @@ const SearchResult = ({ bib }: SearchResultProps) => {
             ))}
             {bib.showViewAllItemsLink && (
               <CardActions>
-                <RCLink href={`${bib.url}#items-table`} type="standalone">
+                <RCLink
+                  href={`${BASE_URL}${bib.url}#items-table`}
+                  type="standalone"
+                >
                   {`View All ${bib.itemMessage} `}
                 </RCLink>
               </CardActions>

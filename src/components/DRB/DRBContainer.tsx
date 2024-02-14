@@ -55,12 +55,13 @@ const DRBContainer = ({
           <DSLink
             href={`${DRB_BASE_URL}/search${drbQuery}`}
             target="_blank"
-            isUnderlined={false}
+            fontSize="desktop.body.body2"
+            fontWeight="bold"
           >
-            <Text size="body2" noSpace isBold>
+            <>
               See {totalWorks.toLocaleString()} result
               {totalWorks === 1 ? "" : "s"} from Digital Research Books Beta
-            </Text>
+            </>
           </DSLink>
         )}
       </CardContent>
