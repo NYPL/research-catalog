@@ -47,6 +47,7 @@ export const badDateErrorMessage =
  * buttons that clear the fields and submit a search request.
  */
 export default function AdvancedSearch() {
+  const metadataTitle = `Advanced Search | ${SITE_NAME}`
   const router = useRouter()
   const inputRef = useRef<TextInputRefType>()
   const notificationRef = useRef<HTMLDivElement>()
@@ -124,7 +125,14 @@ export default function AdvancedSearch() {
   return (
     <>
       <Head>
-        <title>Advanced Search | {SITE_NAME}</title>
+        <meta property="og:title" content={metadataTitle} key="og-title" />
+        <meta
+          property="og:site_name"
+          content={metadataTitle}
+          key="og-site-name"
+        />
+        <meta name="twitter:title" content={metadataTitle} key="tw-title" />
+        <title key="main-title">{metadataTitle}</title>
       </Head>
       <Layout activePage="advanced">
         {/* Always render the wrapper element that will display the

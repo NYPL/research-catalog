@@ -22,7 +22,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>{SITE_NAME}</title>
+        <title key="main-title">{SITE_NAME}</title>
       </Head>
       <Layout activePage="search">
         {isLoading ? (

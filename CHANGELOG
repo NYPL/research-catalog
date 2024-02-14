@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Added
+
+- OG and Twitter meta tags (SCC-4002)
+
 ### Updated
 
 - Make the reverse proxy feature flag a boolean to avoid issues with stringified array values in Docker
