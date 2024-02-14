@@ -11,6 +11,7 @@ import type {
   SierraPatron,
   SierraFine,
   SierraFineEntry,
+  SierraBib,
 } from "../types/accountTypes"
 
 let client
@@ -106,7 +107,8 @@ export default class MyAccount {
     )
   }
 
-  static buildBibData(bibs) {
+  static buildBibData(bibs: SierraBib) {
+    console.log("bibs", bibs)
     return bibs.entries.reduce(
       (
         bibDataMap: Record<
