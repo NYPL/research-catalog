@@ -108,7 +108,6 @@ export default class MyAccount {
   }
 
   static buildBibData(bibs: SierraBib) {
-    console.log("bibs", bibs)
     return bibs.entries.reduce(
       (
         bibDataMap: Record<
