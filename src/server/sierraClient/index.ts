@@ -34,7 +34,7 @@ const decryptKMS = async (key: string) => {
   }
 }
 
-export const sierraClient = async () => {
+const sierraClient = async () => {
   if (CACHE.client?.get) return await Promise.resolve(CACHE.client)
   let decryptedKey: string
   let decryptedSecret: string
@@ -56,3 +56,5 @@ export const sierraClient = async () => {
     console.error(error.message)
   }
 }
+
+export default sierraClient

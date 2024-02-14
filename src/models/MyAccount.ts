@@ -1,4 +1,4 @@
-import { sierraClient } from "../server/sierraClient"
+import sierraClient from "../server/sierraClient"
 import type {
   Checkout,
   Hold,
@@ -34,7 +34,7 @@ export default class MyAccount {
     this.fines = this.buildFines(fines)
   }
 
-  static async MyAccountFactory(id) {
+  static async MyAccountFactory(id: string) {
     client = await sierraClient()
     const baseQuery = `patrons/${id}`
     const checkouts = await this.fetchCheckouts(baseQuery)
@@ -53,7 +53,8 @@ export default class MyAccount {
     })
   }
 
-  buildCheckouts(checkouts: SierraCheckout[], bibDataMap): Checkout[] {
+  buildCheckouts(checkouts: SierraCheckout[], bibData): Checkout[] {
+    const bibDataMap = MyAccount.buildBibData(bibData)
     return checkouts.map((checkout: SierraCheckout) => {
       return {
         id: MyAccount.getRecordId(checkout.id),
@@ -100,11 +101,13 @@ export default class MyAccount {
       return holdOrCheckout[itemOrRecord].bibIds[0]
     })
 
-    const defaultFields = await client.get(
+    return await client.get(
       `bibs?id=${checkoutBibIds}&fields=default,varFields`
     )
+  }
 
-    return defaultFields.entries.reduce(
+  static buildBibData(bibs) {
+    return bibs.entries.reduce(
       (
         bibDataMap: Record<
           string,
@@ -138,7 +141,8 @@ export default class MyAccount {
     )
   }
 
-  buildHolds(holds: SierraHold[], bibDataMap): Hold[] {
+  buildHolds(holds: SierraHold[], bibData): Hold[] {
+    const bibDataMap = MyAccount.buildBibData(bibData)
     return holds.map((hold: SierraHold) => {
       return {
         patron: MyAccount.getRecordId(hold.patron),
