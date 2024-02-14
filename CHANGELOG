@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
-### Update
+### Updated
 
-- Fixed accessibility issues on the Homepage (SCC-3829)
+- Make the reverse proxy feature flag a boolean to avoid issues with stringified array values in Docker
+
+## [0.1.0] 2024-02-02
+
+### Added
+
+- This version adds several major features of the Research Catalog refactor (https://jira.nypl.org/browse/SCC-3510), including the following:
+- Homepage (SCC-3594)
+- Search Results Page (SCC-3600)
+- DRB Sidebar (SCC-3606)
+- Advanced Search (SCC-3890)
+- Initial Bib Page work (SCC-3659, SCC-3962, SCC-3938)
