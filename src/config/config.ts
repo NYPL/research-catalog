@@ -49,11 +49,11 @@ export const appConfig = {
     legacyCatalog: "https://legacycatalog.nypl.org/",
     loginUrl: {
       development: "https://dev-login.nypl.org/auth/login",
-      production: "https://dev-login.nypl.org/auth/login",
+      production: "https://login.nypl.org/auth/login",
     },
     logoutUrl: {
       development: "https://dev-login.nypl.org/auth/logout",
-      production: "https://dev-login.nypl.org/auth/logout",
+      production: "https://login.nypl.org/auth/logout",
     },
     locations: "https://www.nypl.org/locations/",
     researchMaterialsHelp:
