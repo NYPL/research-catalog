@@ -179,20 +179,6 @@ export async function getServerSideProps({ resolvedUrl }) {
     fetchEbscoResults(query.q),
   ])
 
-  if ("results" in discoveryApiResults) {
-    const issns = issnsForSearchResults(discoveryApiResults)
-    const publications = await publicationsForIssns(issns)
-
-    if (publications !== null) {
-      discoveryApiResults.results.itemListElement.forEach((result) => {
-        if (result.result.idIssn && result.result.idIssn[0]) {
-          const ebscoMatches = publications[result.result.idIssn[0]]
-          result.result.ebscoResults = ebscoMatches || null
-        }
-      })
-    }
-  }
-
   const ebscoResults = {
     records:
       rawEbscoResults?.SearchResult?.Data?.Records.filter(
@@ -212,6 +198,23 @@ export async function getServerSideProps({ resolvedUrl }) {
       }) || [],
     queryString: rawEbscoResults?.SearchRequestGet?.QueryString || null,
     total: rawEbscoResults?.SearchResult?.Statistics?.TotalHits || null,
+  }
+
+  // Do issn lookups for discovery-api results:
+  if ("results" in discoveryApiResults) {
+    const issns = issnsForSearchResults(discoveryApiResults)
+    if (issns?.length) {
+      const publications = await publicationsForIssns(issns)
+
+      if (publications !== null) {
+        discoveryApiResults.results.itemListElement.forEach((result) => {
+          if (result.result.idIssn && result.result.idIssn[0]) {
+            const ebscoMatches = publications[result.result.idIssn[0]]
+            result.result.ebscoResults = ebscoMatches || null
+          }
+        })
+      }
+    }
   }
 
   return {

@@ -16,6 +16,18 @@ const logger = {
   debug: console.log,
 }
 
+const timeIt = async (task) => {
+  const start = Date.now()
+
+  const result = await task
+
+  const time = Date.now() - start
+  return {
+    result,
+    time,
+  }
+}
+
 export class EbscoClient {
   authToken: string
   sessionToken: string
@@ -75,7 +87,8 @@ export class EbscoClient {
     }
 
     logger.debug(`ebscoQuery: Fetching ${url} with ${JSON.stringify(options)}`)
-    const response = await fetch(url, options)
+    const { result: response, time } = await timeIt(fetch(url, options))
+    logger.info(`ebscoQuery: ${time / 1000}s to fetch ${path}`)
 
     if (!response.ok) {
       const content = await response.json()
