@@ -22,6 +22,27 @@ export const issnsForSearchResults = (discoveryApiResults) => {
     .map((result) => result.issn)
 }
 
+export const ebscoSearchResultsToIssnResults = (results) => {
+  if (!results?.SearchResult?.Data?.Records) return null
+
+  return results.SearchResult.Data.Records
+    .map((record) => {
+      const issnItem = record.Items?.find((item) => item.Name === "ISSN")
+      if (!issnItem) return null
+
+      return record.FullTextHoldings.filter((holding) => holding.URL).map(
+        (holding) => {
+          return {
+            issn: issnItem.Data.split(" ").shift(),
+            url: holding.URL,
+            name: holding.Name,
+            coverage: parseCoverageDates(holding.CoverageDates),
+          }
+        }
+      )
+    })
+}
+
 export const formatCoverageDate = (dateString) => {
   const date = new Date(dateString)
   if (date.getFullYear() === 9999) return "present"
@@ -32,7 +53,11 @@ export const formatCoverageDate = (dateString) => {
     month: "numeric",
     timeZone: "America/New_York",
   }
-  return Intl.DateTimeFormat("en", formatOptions).format(date)
+  try {
+    return Intl.DateTimeFormat("en", formatOptions).format(date)
+  } catch {
+    return `[${dateString}]`
+  }
 }
 
 export const formatCoverageRange = (range) => {
@@ -71,9 +96,9 @@ const compoundSorter = function (...comparators) {
     // Throw error if comparators failed to find a defined sort for any two elements:
     const el1Values = comparators.map((comp) => comp(el1))
     const el2Values = comparators.map((comp) => comp(el2))
-    throw new Error(
+    /* throw new Error(
       `Could not sort elements because comparators returned identical values: ${el1Values}; ${el2Values}`
-    )
+    ) */
   }
 }
 
@@ -95,7 +120,7 @@ export const groupLinksByCoverage = (ebscoLinks, maxToShow = 3) => {
       .slice(0, maxToShow)
       // Group by coverage:
       .reduce((h, link) => {
-        const coverageString = link.coverage
+        const coverageString = link.coverage?.length
           ? link.coverage.map(formatCoverageRange).join("; ")
           : "Various dates"
 
@@ -122,5 +147,5 @@ export const overallCoverageRange = (ebscoLinks) => {
     .sort()
     .pop()
 
-  return [minCoverage, maxCoverage]
+  return minCoverage && maxCoverage && [minCoverage, maxCoverage]
 }

@@ -38,16 +38,18 @@ export class EbscoClient {
   }
 
   // https://connect.ebsco.com/s/article/Publication-Finder-API-Reference-Guide-Search
-  async publications(queries) {
-    queries = queries
+  async publications(query) {
+    // Can't work out how to query on mult. ISSNs at once:
+    /* queries = queries
       .map((q, index) => {
         return `query-${index + 1}=${index > 0 ? "OR," : ""}${q}`
       })
       .join(" ")
+      */
     // queries = "query-1=Rob Hall query-2=OR,AU:Jon Krakauer query-3=OR,SU:Mountaineering"
     // query-1=Rob Hall query-2=OR,AU:Jon Krakauer query-3=OR,SU:Mountaineering
     const response = await this.ebscoQuery(
-      `edsapi/publication/search?${queries}&includefacets=n&highlight=n`
+      `edsapi/publication/search?query=${query}&includefacets=n&highlight=n`
     )
 
     if (response.ok) {

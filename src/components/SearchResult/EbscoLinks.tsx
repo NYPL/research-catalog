@@ -20,7 +20,7 @@ interface EbscoLinksProps {
  * The SearchResult component displays a single search result element.
  */
 const EbscoLinks = ({ bib }: EbscoLinksProps) => {
-  const MAX_TO_SHOW = 30
+  const MAX_TO_SHOW = 10
 
   const ebscoResultsGrouped = groupLinksByCoverage(
     bib.ebscoResults,
@@ -43,7 +43,7 @@ const EbscoLinks = ({ bib }: EbscoLinksProps) => {
         <Heading level="four" size="callout" mb="xxs">
           <>
             <div style={{ width: "auto", float: "right" }}>
-              {formatCoverageRange(coverageRange)} • {bib.ebscoResults.length}{" "}
+              {coverageRange && formatCoverageRange(coverageRange) + " • "}{bib.ebscoResults.length}{" "}
               items
             </div>
             Available Online (EBSCO)

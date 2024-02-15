@@ -1,6 +1,9 @@
 import { makeClient } from "../../src/utils/ebscoClient"
 
-import { parseCoverageDates } from "../../src/utils/ebscoUtils"
+import {
+  parseCoverageDates,
+  ebscoSearchResultsToIssnResults,
+} from "../../src/utils/ebscoUtils"
 
 let ebscoClient
 
@@ -17,28 +20,20 @@ export async function fetchEbscoResults(query) {
 }
 
 export async function publicationsForIssns(issns) {
-  const results = await fetchEbscoPublications(
-    issns.slice(0, 1).map((issn) => `IS:${issn}`)
+  const results = await Promise.all(
+    issns
+      .map(async (issn) => {
+        const results = await fetchEbscoPublications(`IS:${issn}`)
+
+        const issnResults = ebscoSearchResultsToIssnResults(results)
+        return issnResults
+      })
   )
 
-  if (!results?.SearchResult?.Data?.Records) return null
+  const filteredResults = results
+    .flat(4)
 
-  return results.SearchResult.Data.Records.map((record) => {
-    const issnItem = record.Items?.find((item) => item.Name === "ISSN")
-    if (!issnItem) return null
-
-    return record.FullTextHoldings.filter((holding) => holding.URL).map(
-      (holding) => {
-        return {
-          issn: issnItem.Data.split(" ").shift(),
-          url: holding.URL,
-          name: holding.Name,
-          coverage: parseCoverageDates(holding.CoverageDates),
-        }
-      }
-    )
-  })
-    .flat()
+  return filteredResults
     .filter((result) => result)
     .reduce((h, result) => {
       if (!h[result.issn]) {
