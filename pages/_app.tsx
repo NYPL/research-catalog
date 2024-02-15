@@ -51,7 +51,10 @@ function App({ Component, pageProps }) {
 
   return (
     <>
-      <Script async src={appConfig.adobeEmbedUrl[appConfig.environment]} />
+      <Script
+        async
+        src={appConfig.apiEndpoints.adobeEmbedUrl[appConfig.environment]}
+      />
       <Script id="adobeDataLayerDefinition">
         {`
               // First define the global variable for the entire data layer array
@@ -65,13 +68,13 @@ function App({ Component, pageProps }) {
       {/* NYPL Header script */}
       <Script
         src={`${
-          appConfig.nyplHeaderUrl[appConfig.environment]
+          appConfig.apiEndpoints.nyplHeaderUrl[appConfig.environment]
         }/header.min.js?containerId=nypl-header`}
       />
       {/* NYPL Footer script */}
       <Script
         src={`${
-          appConfig.nyplHeaderUrl[appConfig.environment]
+          appConfig.apiEndpoints.nyplHeaderUrl[appConfig.environment]
         }/footer.min.js?containerId=nypl-footer`}
       />
 

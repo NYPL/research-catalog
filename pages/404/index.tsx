@@ -18,9 +18,7 @@ export default function Custom404() {
         <p>The page you were looking for doesn&apos;t exist.</p>
         <p>
           Search the <RCLink href={BASE_URL}>Research Catalog</RCLink> or our{" "}
-          <RCLink href={appConfig.externalUrls.legacyCatalog}>
-            Legacy Catalog
-          </RCLink>{" "}
+          <RCLink href={appConfig.urls.legacyCatalog}>Legacy Catalog</RCLink>{" "}
           for research materials.
         </p>
       </Layout>

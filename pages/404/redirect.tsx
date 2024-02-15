@@ -18,16 +18,14 @@ export default function Redirect404() {
         <p>
           You may be able to find what you&apos;re looking for in the{" "}
           <RCLink href={BASE_URL}>Research Catalog</RCLink> or the{" "}
-          <RCLink href={appConfig.externalUrls.circulatingCatalog}>
+          <RCLink href={appConfig.urls.circulatingCatalog}>
             Circulating Catalog
           </RCLink>
           . for research materials.
         </p>
         <p>
           You can also try the{" "}
-          <RCLink href={appConfig.externalUrls.legacyCatalog}>
-            Legacy Catalog
-          </RCLink>
+          <RCLink href={appConfig.urls.legacyCatalog}>Legacy Catalog</RCLink>
         </p>
       </Layout>
     </>
