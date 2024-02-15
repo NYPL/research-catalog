@@ -53,11 +53,11 @@ describe("MyAccountModel", () => {
       }
       const account = await MyAccount.MyAccountFactory("12345")
       expect(account.patron).toStrictEqual({
-        name: "KAHN, VERA RUTH",
+        name: "NONNA, STREGA",
         barcode: "23333121538324",
         expirationDate: "2025-03-28",
-        primaryEmail: "veraruthkahn@gmail.com",
-        emails: ["veraruthkahn@gmail.com", "veggievera@gmail.com"],
+        primaryEmail: "streganonna@gmail.com",
+        emails: ["streganonna@gmail.com", "spaghettigrandma@gmail.com"],
         primaryPhone: "646-660-0432",
         phones: [
           {
@@ -128,11 +128,11 @@ describe("MyAccountModel", () => {
 
       const emptyAccount = await MyAccount.MyAccountFactory("12345")
       expect(emptyAccount.patron).toStrictEqual({
-        name: "KAHN, VERA RUTH",
+        name: "NONNA, STREGA",
         barcode: "23333121538324",
         expirationDate: "2025-03-28",
-        primaryEmail: "veraruthkahn@gmail.com",
-        emails: ["veraruthkahn@gmail.com", "veggievera@gmail.com"],
+        primaryEmail: "streganonna@gmail.com",
+        emails: ["streganonna@gmail.com", "spaghettigrandma@gmail.com"],
         primaryPhone: "646-660-0432",
         phones: [
           {
