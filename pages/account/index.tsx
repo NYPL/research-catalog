@@ -5,8 +5,21 @@ import initializePatronTokenAuth, {
   getLoginRedirect,
 } from "../../src/server/auth"
 import MyAccountModel from "../../src/models/MyAccount"
+import type { Checkout, Hold, Patron, Fine } from "../../src/types/accountTypes"
 
-export default function MyAccount({ checkouts, holds, patron, fines }) {
+interface MyAccountProps {
+  checkouts: Checkout[]
+  holds: Hold[]
+  patron: Patron
+  fines: Fine
+}
+
+export default function MyAccount({
+  checkouts,
+  holds,
+  patron,
+  fines,
+}: MyAccountProps) {
   console.log(checkouts, holds, patron, fines)
   return (
     <>

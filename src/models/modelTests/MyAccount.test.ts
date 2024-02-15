@@ -1,16 +1,13 @@
 import MyAccount from "../MyAccount"
 import {
-  holds,
-  checkouts,
-  patron,
-  fines,
-  holdBibs,
-  checkoutBibs,
-  empty,
+  holds as mockHolds,
+  checkouts as mockCheckouts,
+  patron as mockPatron,
+  fines as mockFines,
+  holdBibs as mockHoldBibs,
+  checkoutBibs as mockCheckoutBibs,
+  empty as mockEmpty,
 } from "./data/MyAccount"
-import * as sierraClient from "../../server/sierraClient"
-
-import sinon from "sinon"
 
 describe("MyAccountModel", () => {
   describe("getRecordId", () => {
@@ -24,6 +21,14 @@ describe("MyAccountModel", () => {
     })
   })
   describe("getStatus", () => {
+    it("returns the status as given when it's user-friendly", () => {
+      expect(
+        MyAccount.getStatus({
+          code: "i",
+          name: "Requested item ready for pickup.",
+        })
+      ).toBe("Requested item ready for pickup.")
+    })
     it("returns REQUEST PLACED instead of AVAILABLE", () => {
       expect(MyAccount.getStatus({ code: "status:a", name: "AVAILABLE" })).toBe(
         "REQUEST PLACED"
@@ -36,35 +41,17 @@ describe("MyAccountModel", () => {
     })
   })
   describe("building model", () => {
-    let mockSierraClient
-    afterEach(() => {
-      mockSierraClient.restore()
-    })
     it("builds Account data model", async () => {
-      const getStub = sinon
-        .stub()
-        .onCall(0)
-        .resolves(checkouts)
-        .onCall(1)
-        .resolves(holds)
-        .onCall(2)
-        .resolves(patron)
-        .onCall(3)
-        .resolves(fines)
-        .onCall(4)
-        .resolves(checkoutBibs)
-        .onCall(5)
-        .resolves(holdBibs)
-
-      mockSierraClient = sinon.stub(sierraClient, "sierraClient").resolves({
-        get: getStub,
-      })
-      const account = await MyAccount.MyAccountFactory({
-        holds: holds.entries,
-        patron,
-        checkouts: checkouts.entries,
-        fines: { total: 0, entries: [] },
-      })
+      MyAccount.fetchCheckouts = async () => mockCheckouts
+      MyAccount.fetchHolds = async () => mockHolds
+      MyAccount.fetchPatron = async () => mockPatron
+      MyAccount.fetchFines = async () => mockFines
+      MyAccount.fetchBibData = async (entries, recordType) => {
+        if (recordType === "item") {
+          return mockCheckoutBibs.entries
+        } else return mockHoldBibs.entries
+      }
+      const account = await MyAccount.MyAccountFactory("12345")
       expect(account.patron).toStrictEqual({
         name: "KAHN, VERA RUTH",
         barcode: "23333121538324",
@@ -132,33 +119,14 @@ describe("MyAccountModel", () => {
         ],
       })
     })
-    it("builds empty Account model", async () => {
-      const getStub = sinon
-        .stub()
-        .onCall(0)
-        .resolves(empty)
-        .onCall(1)
-        .resolves(empty)
-        .onCall(2)
-        .resolves(patron)
-        .onCall(3)
-        .resolves({ total: 0, entries: [] })
-        .onCall(4)
-        .resolves(empty)
-        .onCall(5)
-        .resolves(empty)
+    it("builds empty Account data model", async () => {
+      MyAccount.fetchCheckouts = async () => mockEmpty
+      MyAccount.fetchHolds = async () => mockEmpty
+      MyAccount.fetchPatron = async () => mockPatron
+      MyAccount.fetchFines = async () => ({ total: 0, entries: [] })
+      MyAccount.fetchBibData = async () => []
 
-      const mockSierraClient = sinon
-        .stub(sierraClient, "sierraClient")
-        .resolves({
-          get: getStub,
-        })
-      const emptyAccount = await MyAccount.MyAccountFactory({
-        holds: holds.entries,
-        patron,
-        checkouts: checkouts.entries,
-        fines: { total: 0, entries: [] },
-      })
+      const emptyAccount = await MyAccount.MyAccountFactory("12345")
       expect(emptyAccount.patron).toStrictEqual({
         name: "KAHN, VERA RUTH",
         barcode: "23333121538324",
