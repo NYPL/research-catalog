@@ -1,9 +1,11 @@
 import { parseLocations } from "../utils/itemUtils"
+import type { AppConfig, Environment } from "../types/appTypes"
 
-export const appConfig = {
-  environment: process.env.APP_ENV || "production",
-  apiUrls: {
+export const appConfig: AppConfig = {
+  environment: (process.env.APP_ENV as Environment) || "development",
+  apiEndpoints: {
     platform: {
+      development: "https://platform.nypl.org/api/v0.1",
       qa: "https://qa-platform.nypl.org/api/v0.1",
       production: "https://platform.nypl.org/api/v0.1",
     },
@@ -11,24 +13,44 @@ export const appConfig = {
     // falling back on PLATFORM_API_BASE_URL if set,
     // and finally falling back on a sensible default.
     discovery: {
+      development: "https://platform.nypl.org/api/v0.1",
       qa: "https://qa-platform.nypl.org/api/v0.1",
       production: "https://platform.nypl.org/api/v0.1",
     },
     drb: {
+      development: "https://digital-research-books-api.nypl.org/search",
       qa: "http://drb-api-qa.nypl.org/search/",
       production: "https://digital-research-books-api.nypl.org/search",
     },
-    shep: process.env.SHEP_API,
-  },
-  externalUrls: {
+    shep: {
+      development: process.env.SHEP_API,
+      qa: process.env.SHEP_API,
+      production: process.env.SHEP_API,
+    },
+    nyplHeaderUrl: {
+      development: "https://ds-header.nypl.org",
+      qa: "https://qa-ds-header.nypl.org",
+      production: "https://ds-header.nypl.org",
+    },
+    adobeEmbedUrl: {
+      development:
+        "https://assets.adobedtm.com/1a9376472d37/ddf1bedfe52e/launch-4eefcc91c90e.min.js",
+      qa: "https://assets.adobedtm.com/1a9376472d37/ddf1bedfe52e/launch-4eefcc91c90e.min.js",
+      production:
+        "https://assets.adobedtm.com/1a9376472d37/8519dfce636d/launch-672b7e7f98ee.min.js",
+    },
     drbFrontEnd: {
+      development: "https://digital-research-books-beta.nypl.org",
       qa: "http://sfr-front-end-development.us-east-1.elasticbeanstalk.com",
       production: "https://digital-research-books-beta.nypl.org",
     },
     drbEreader: {
+      development: "https://digital-research-books-reader.nypl.org",
       qa: "https://researchnow-reader.nypl.org",
       production: "https://digital-research-books-reader.nypl.org",
     },
+  },
+  urls: {
     drbAbout:
       "https://digital-research-books-beta.nypl.org/about?source=catalog",
     circulatingCatalog: "https://nypl.na2.iiivega.com/",
@@ -36,22 +58,13 @@ export const appConfig = {
     locations: "https://www.nypl.org/locations/",
     researchMaterialsHelp:
       "https://www.nypl.org/help/request-research-materials",
+    tokenUrl: "https://isso.nypl.org/",
   },
-  tokenUrl: "https://isso.nypl.org/",
   closedLocations: parseLocations(process.env.CLOSED_LOCATIONS),
   recapClosedLocations: parseLocations(process.env.RECAP_CLOSED_LOCATIONS),
   nonRecapClosedLocations: parseLocations(
     process.env.NON_RECAP_CLOSED_LOCATIONS
   ),
-  nyplHeaderUrl: {
-    qa: "https://qa-ds-header.nypl.org",
-    production: "https://ds-header.nypl.org",
-  },
-  adobeEmbedUrl: {
-    qa: "https://assets.adobedtm.com/1a9376472d37/ddf1bedfe52e/launch-4eefcc91c90e.min.js",
-    production:
-      "https://assets.adobedtm.com/1a9376472d37/8519dfce636d/launch-672b7e7f98ee.min.js",
-  },
   jwtPublicKey: `-----BEGIN PUBLIC KEY-----
     MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA44ilHg/PxcJYsISHMRyo
     xsmez178qZpkJVXg7rOMVTLZuf05an7Pl+lX4nw/rqcvGQDXyrimciLgLkWu00xh
@@ -61,8 +74,11 @@ export const appConfig = {
     Q9RrzMLTqxKnVVn2+hVpk4F/8tMsGCdd4s/AJqEQBy5lsq7ji1B63XYqi5fc1SnJ
     EQIDAQAB
     -----END PUBLIC KEY-----`,
-  reverseProxyEnabled: {
-    qa: true,
-    production: false,
+  features: {
+    reverseProxyEnabled: {
+      development: false,
+      qa: true,
+      production: false,
+    },
   },
 }

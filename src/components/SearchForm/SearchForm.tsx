@@ -34,7 +34,7 @@ const SearchForm = () => {
 
     // If the reverseProxyEnabled feature flag is true, use window.location.replace
     // instead of router.push to forward search results to DFE.
-    if (appConfig.reverseProxyEnabled[appConfig.environment]) {
+    if (appConfig.features.reverseProxyEnabled[appConfig.environment]) {
       window.location.replace(`${BASE_URL}${PATHS.SEARCH}${queryString}`)
     } else {
       await router.push(`${PATHS.SEARCH}${queryString}`)
