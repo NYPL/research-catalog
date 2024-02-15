@@ -1,5 +1,4 @@
 import NyplApiClient from "@nypl/nypl-data-api-client"
-import aws from "aws-sdk"
 
 import { appConfig } from "../../config/config"
 import { kmsDecryptCreds } from "../kms"
