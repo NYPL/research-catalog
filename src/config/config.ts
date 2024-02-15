@@ -5,7 +5,7 @@ export const appConfig: AppConfig = {
   environment: (process.env.APP_ENV as Environment) || "development",
   apiEndpoints: {
     platform: {
-      development: "https://platform.nypl.org/api/v0.1",
+      development: "https://qa-platform.nypl.org/api/v0.1",
       qa: "https://qa-platform.nypl.org/api/v0.1",
       production: "https://platform.nypl.org/api/v0.1",
     },
@@ -13,12 +13,12 @@ export const appConfig: AppConfig = {
     // falling back on PLATFORM_API_BASE_URL if set,
     // and finally falling back on a sensible default.
     discovery: {
-      development: "https://platform.nypl.org/api/v0.1",
+      development: "https://qa-platform.nypl.org/api/v0.1",
       qa: "https://qa-platform.nypl.org/api/v0.1",
       production: "https://platform.nypl.org/api/v0.1",
     },
     drb: {
-      development: "https://digital-research-books-api.nypl.org/search",
+      development: "http://drb-api-qa.nypl.org/search/",
       qa: "http://drb-api-qa.nypl.org/search/",
       production: "https://digital-research-books-api.nypl.org/search",
     },
@@ -28,7 +28,7 @@ export const appConfig: AppConfig = {
       production: process.env.SHEP_API,
     },
     nyplHeaderUrl: {
-      development: "https://ds-header.nypl.org",
+      development: "https://qa-ds-header.nypl.org",
       qa: "https://qa-ds-header.nypl.org",
       production: "https://ds-header.nypl.org",
     },
@@ -40,12 +40,13 @@ export const appConfig: AppConfig = {
         "https://assets.adobedtm.com/1a9376472d37/8519dfce636d/launch-672b7e7f98ee.min.js",
     },
     drbFrontEnd: {
-      development: "https://digital-research-books-beta.nypl.org",
+      development:
+        "http://sfr-front-end-development.us-east-1.elasticbeanstalk.com",
       qa: "http://sfr-front-end-development.us-east-1.elasticbeanstalk.com",
       production: "https://digital-research-books-beta.nypl.org",
     },
     drbEreader: {
-      development: "https://digital-research-books-reader.nypl.org",
+      development: "https://researchnow-reader.nypl.org",
       qa: "https://researchnow-reader.nypl.org",
       production: "https://digital-research-books-reader.nypl.org",
     },
