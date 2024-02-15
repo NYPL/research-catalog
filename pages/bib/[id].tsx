@@ -19,6 +19,7 @@ interface BibPropsType {
  * The Bib page is responsible for fetching and displaying a single Bib's details.
  */
 export default function Bib({ bib, annotatedMarc }: BibPropsType) {
+  const metadataTitle = `Item Details | ${SITE_NAME}`
   const { topDetails, bottomDetails, holdingsDetails } = new BibDetailsModel(
     bib,
     annotatedMarc
@@ -26,7 +27,14 @@ export default function Bib({ bib, annotatedMarc }: BibPropsType) {
   return (
     <>
       <Head>
-        <title>Item Details | {SITE_NAME}</title>
+        <meta property="og:title" content={metadataTitle} key="og-title" />
+        <meta
+          property="og:site_name"
+          content={metadataTitle}
+          key="og-site-name"
+        />
+        <meta name="twitter:title" content={metadataTitle} key="tw-title" />
+        <title key="main-title">{metadataTitle}</title>
       </Head>
       <Layout activePage="bib">
         <BibDetails key="top-details" details={topDetails} />

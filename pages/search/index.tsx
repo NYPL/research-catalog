@@ -38,6 +38,7 @@ interface SearchProps {
  * as well as displaying and controlling pagination and search filters.
  */
 export default function Search({ bannerNotification, results }: SearchProps) {
+  const metadataTitle = `Search Results | ${SITE_NAME}`
   const { push, query } = useRouter()
   const { itemListElement: searchResultsElements, totalResults } =
     results.results
@@ -76,7 +77,14 @@ export default function Search({ bannerNotification, results }: SearchProps) {
   return (
     <>
       <Head>
-        <title>Search Results | {SITE_NAME}</title>
+        <meta property="og:title" content={metadataTitle} key="og-title" />
+        <meta
+          property="og:site_name"
+          content={metadataTitle}
+          key="og-site-name"
+        />
+        <meta name="twitter:title" content={metadataTitle} key="tw-title" />
+        <title key="main-title">{metadataTitle}</title>
       </Head>
       <Layout
         activePage="search"

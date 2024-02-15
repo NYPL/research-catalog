@@ -27,7 +27,7 @@ export default function Home({ bannerNotification }: HomeProps) {
   return (
     <>
       <Head>
-        <title>{SITE_NAME}</title>
+        <title key="main-title">{SITE_NAME}</title>
       </Head>
       <Layout activePage="search" bannerNotification={bannerNotification}>
         {isLoading ? (
