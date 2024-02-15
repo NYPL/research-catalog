@@ -22,7 +22,6 @@ const kms: aws.KMS = new aws.KMS({
 })
 
 const decryptKMS = async (key: string) => {
-  console.log("Sierra client, decrypt func INPUT: " + key)
   const params = {
     CiphertextBlob: Buffer.from(key, "base64"),
   }
@@ -38,10 +37,17 @@ const sierraClient = async () => {
   if (CACHE.client?.get) return await Promise.resolve(CACHE.client)
   let decryptedKey: string
   let decryptedSecret: string
-  try {
-    ;[decryptedKey, decryptedSecret] = await Promise.all(creds.map(decryptKMS))
-  } catch (exception) {
-    console.error("Error decrypting Sierra credentials")
+  if (CACHE.key && CACHE.secret) {
+    decryptedKey = CACHE.key
+    decryptedSecret = CACHE.secret
+  } else {
+    try {
+      ;[decryptedKey, decryptedSecret] = await Promise.all(
+        creds.map(decryptKMS)
+      )
+    } catch (exception) {
+      console.error("Error decrypting Sierra credentials")
+    }
   }
   try {
     await wrapper.config({
