@@ -8,6 +8,15 @@ export interface AppConfig {
   jwtPublicKey: string
   features: Record<string, Features>
 }
-export type APIEndpoints = Record<Environment, string>
-export type Features = Record<Environment, boolean>
+export interface APIEndpoints {
+  development: string
+  qa: string
+  production: string
+}
+export interface Features {
+  development: boolean
+  qa: boolean
+  production: boolean
+}
+
 export type Environment = "development" | "qa" | "production"
