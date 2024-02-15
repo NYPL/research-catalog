@@ -18,8 +18,8 @@ export const appConfig: AppConfig = {
       production: "https://platform.nypl.org/api/v0.1",
     },
     drb: {
-      development: "http://drb-api-qa.nypl.org/search/",
-      qa: "http://drb-api-qa.nypl.org/search/",
+      development: "https://digital-research-books-api.nypl.org/search",
+      qa: "https://digital-research-books-api.nypl.org/search",
       production: "https://digital-research-books-api.nypl.org/search",
     },
     shep: {
