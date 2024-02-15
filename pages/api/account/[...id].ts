@@ -3,7 +3,6 @@ import type { NextRequest } from "next/server"
 import { sierraClient } from "../../../src/server/sierraClient"
 import initializePatronTokenAuth from "../../../src/server/auth"
 
-// Testing with http://local.nypl.org:8080/research/research-catalog/api/account/checkouts/53036284/renewal
 /**
  * API route handler
  */
@@ -22,24 +21,8 @@ export default async function handler(req: NextRequest, res: NextApiResponse) {
   const checkoutRenewalMatch = req.url.match(/\/checkouts\/(\d+)\/renewal$/)
   if (checkoutRenewalMatch) {
     const checkoutId = checkoutRenewalMatch[1]
-    if (await patronCookieMatchesCheckout(patronId, checkoutId)) {
-      await checkoutRenewal(res, checkoutId)
-    } else {
-      res.status(403).json({
-        message: "Checkout does not belong to patron, renewal failed.",
-      })
-    }
+    await checkoutRenewal(res, checkoutId)
   }
-}
-
-async function patronCookieMatchesCheckout(
-  patronId: string,
-  checkoutId: string
-): Promise<boolean> {
-  const client = await sierraClient()
-  const checkout = await client.get(`patrons/checkouts/${checkoutId}`)
-  const checkoutPatronId = checkout?.patron.match(/\/(\d+)$/)[1]
-  return patronId === checkoutPatronId
 }
 
 export async function checkoutRenewal(
@@ -48,7 +31,10 @@ export async function checkoutRenewal(
 ) {
   try {
     const client = await sierraClient()
-    await client.post(`patrons/checkouts/${checkoutId}/renewal`)
+    const response = await client.post(
+      `patrons/checkouts/${checkoutId}/renewal`
+    )
+    console.log(response)
     res.status(200).json({ message: "Renewed!" })
   } catch (error) {
     if (error.response.status === 403) {
