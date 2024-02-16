@@ -64,7 +64,9 @@ export function getLoginRedirect(req) {
   const hostname = req.headers["host"]
   const originalUrl = BASE_URL + req.url
   const fullUrl = encodeURIComponent(`${protocol}://${hostname}${originalUrl}`)
-  const redirect = `${appConfig.urls.loginUrl}?redirect_uri=${fullUrl}`
+  const redirect = `${
+    appConfig.apiEndpoints.loginUrl[appConfig.environment]
+  }?redirect_uri=${fullUrl}`
   return redirect
 }
 
@@ -84,7 +86,11 @@ export const useLogoutRedirect = () => {
     if (current.includes("hold") || current.includes("account")) {
       backPath = window.location.origin + BASE_URL
     }
-    setRedirect(`${appConfig.urls.logoutUrl}?redirect_uri=${backPath}`)
+    setRedirect(
+      `${
+        appConfig.apiEndpoints.logoutUrl[appConfig.environment]
+      }?redirect_uri=${backPath}`
+    )
   }, [])
   return redirect
 }

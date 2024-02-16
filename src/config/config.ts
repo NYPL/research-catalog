@@ -50,14 +50,22 @@ export const appConfig: AppConfig = {
       qa: "https://researchnow-reader.nypl.org",
       production: "https://digital-research-books-reader.nypl.org",
     },
+    loginUrl: {
+      development: "https://dev-login.nypl.org/auth/login",
+      qa: "https://dev-login.nypl.org/auth/login",
+      production: "https://login.nypl.org/auth/login",
+    },
+    logoutUrl: {
+      development: "https://dev-login.nypl.org/auth/logout",
+      qa: "https://dev-login.nypl.org/auth/logout",
+      production: "https://login.nypl.org/auth/logout",
+    },
   },
   urls: {
     drbAbout:
       "https://digital-research-books-beta.nypl.org/about?source=catalog",
     circulatingCatalog: "https://nypl.na2.iiivega.com/",
     legacyCatalog: "https://legacycatalog.nypl.org/",
-    loginUrl: "https://dev-login.nypl.org/auth/login",
-    logoutUrl: "https://dev-login.nypl.org/auth/logout",
     locations: "https://www.nypl.org/locations/",
     researchMaterialsHelp:
       "https://www.nypl.org/help/request-research-materials",
