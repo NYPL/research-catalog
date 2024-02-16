@@ -9,16 +9,22 @@ import BibDetailsModel from "../../src/models/BibDetails"
 import BibDetails from "../../src/components/BibPage/BibDetail"
 import type { Bib } from "../../src/types/bibTypes"
 import type { AnnotatedMarc } from "../../src/types/bibDetailsTypes"
+import initializePatronTokenAuth from "../../src/server/auth"
 
 interface BibPropsType {
   bib: Bib
   annotatedMarc: AnnotatedMarc
+  isAuthenticated?: boolean
 }
 
 /**
  * The Bib page is responsible for fetching and displaying a single Bib's details.
  */
-export default function Bib({ bib, annotatedMarc }: BibPropsType) {
+export default function Bib({
+  bib,
+  annotatedMarc,
+  isAuthenticated,
+}: BibPropsType) {
   const metadataTitle = `Item Details | ${SITE_NAME}`
   const { topDetails, bottomDetails, holdingsDetails } = new BibDetailsModel(
     bib,
@@ -36,7 +42,7 @@ export default function Bib({ bib, annotatedMarc }: BibPropsType) {
         <meta name="twitter:title" content={metadataTitle} key="tw-title" />
         <title key="main-title">{metadataTitle}</title>
       </Head>
-      <Layout activePage="bib">
+      <Layout isAuthenticated={isAuthenticated} activePage="bib">
         <BibDetails key="top-details" details={topDetails} />
         <Heading level="h1">{bib.title[0]}</Heading>
         <BibDetails
@@ -54,7 +60,7 @@ export default function Bib({ bib, annotatedMarc }: BibPropsType) {
   )
 }
 
-export async function getServerSideProps({ params, resolvedUrl }) {
+export async function getServerSideProps({ params, resolvedUrl, req }) {
   const { id } = params
   const queryString = resolvedUrl.slice(resolvedUrl.indexOf("?") + 1)
   const bibParams = mapQueryToBibParams(queryString)
@@ -62,6 +68,8 @@ export async function getServerSideProps({ params, resolvedUrl }) {
     id,
     bibParams
   )
+  const patronTokenResponse = await initializePatronTokenAuth(req)
+  const isAuthenticated = patronTokenResponse.isTokenValid
 
   switch (status) {
     case 307:
@@ -83,6 +91,7 @@ export async function getServerSideProps({ params, resolvedUrl }) {
         props: {
           bib,
           annotatedMarc,
+          isAuthenticated,
         },
       }
   }

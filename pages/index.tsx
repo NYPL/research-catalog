@@ -20,16 +20,26 @@ import useLoading from "../src/hooks/useLoading"
 
 interface HomeProps {
   bannerNotification?: string
+  isAuthenticated: boolean
 }
 
-export default function Home({ bannerNotification }: HomeProps) {
+export default function Home({
+  bannerNotification,
+  isAuthenticated,
+}: HomeProps) {
   const isLoading = useLoading()
   return (
     <>
       <Head>
         <title key="main-title">{SITE_NAME}</title>
       </Head>
-      <Layout activePage="search" bannerNotification={bannerNotification}>
+      <Layout
+        isAuthenticated={isAuthenticated}
+        activePage="search"
+        bannerNotification={bannerNotification}
+      >
+        {" "}
+        main
         {isLoading ? (
           <SkeletonLoader showImage={false} />
         ) : (
@@ -185,10 +195,9 @@ export async function getServerSideProps({ req }) {
   // or use `isTokenValid` to redirect to login page if it's not valid.
   console.log("patronTokenResponse is", patronTokenResponse)
 
+  const isAuthenticated = patronTokenResponse.isTokenValid
   // return props object
   return {
-    props: {
-      bannerNotification,
-    },
+    props: { isAuthenticated, bannerNotification },
   }
 }
