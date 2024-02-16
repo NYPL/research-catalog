@@ -190,6 +190,6 @@ export const downloadMediaTypes = ["application/epub+zip", "application/pdf"]
 export function getAuthorURL(author: Author | Agent = { name: "" }) {
   if (!author.name) return ""
   return `${
-    appConfig.externalUrls.drbFrontEnd[appConfig.environment]
+    appConfig.apiEndpoints.drbFrontEnd[appConfig.environment]
   }/search${SOURCE_PARAM}&query=author:${author.name}`
 }

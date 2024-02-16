@@ -36,6 +36,7 @@ import type {
 } from "../../src/types/searchTypes"
 import { getSearchQuery } from "../../src/utils/searchUtils"
 import initializePatronTokenAuth from "../../src/server/auth"
+import { appConfig } from "../../src/config/config"
 // import FieldsetDate from "../../src/components/SearchFilters/FieldsetDate"
 
 export const defaultEmptySearchErrorMessage =
@@ -48,6 +49,7 @@ export const badDateErrorMessage =
  * buttons that clear the fields and submit a search request.
  */
 export default function AdvancedSearch({ isAuthenticated }) {
+  const metadataTitle = `Advanced Search | ${SITE_NAME}`
   const router = useRouter()
   const inputRef = useRef<TextInputRefType>()
   const notificationRef = useRef<HTMLDivElement>()
@@ -101,7 +103,7 @@ export default function AdvancedSearch({ isAuthenticated }) {
     } else {
       // If the NEXT_PUBLIC_REVERSE_PROXY_ENABLED feature flag is present, use window.location.replace
       // instead of router.push to forward search results to DFE.
-      if (process.env.NEXT_PUBLIC_REVERSE_PROXY_ENABLED) {
+      if (appConfig.features.reverseProxyEnabled[appConfig.environment]) {
         window.location.replace(`${BASE_URL}${PATHS.SEARCH}${queryString}`)
       } else {
         await router.push(`${PATHS.SEARCH}${queryString}`)
@@ -125,7 +127,14 @@ export default function AdvancedSearch({ isAuthenticated }) {
   return (
     <>
       <Head>
-        <title>Advanced Search | {SITE_NAME}</title>
+        <meta property="og:title" content={metadataTitle} key="og-title" />
+        <meta
+          property="og:site_name"
+          content={metadataTitle}
+          key="og-site-name"
+        />
+        <meta name="twitter:title" content={metadataTitle} key="tw-title" />
+        <title key="main-title">{metadataTitle}</title>
       </Head>
       <Layout isAuthenticated={isAuthenticated} activePage="advanced">
         {/* Always render the wrapper element that will display the

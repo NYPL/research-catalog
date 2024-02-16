@@ -25,6 +25,7 @@ export default function Bib({
   annotatedMarc,
   isAuthenticated,
 }: BibPropsType) {
+  const metadataTitle = `Item Details | ${SITE_NAME}`
   const { topDetails, bottomDetails, holdingsDetails } = new BibDetailsModel(
     bib,
     annotatedMarc
@@ -32,7 +33,14 @@ export default function Bib({
   return (
     <>
       <Head>
-        <title>Item Details | {SITE_NAME}</title>
+        <meta property="og:title" content={metadataTitle} key="og-title" />
+        <meta
+          property="og:site_name"
+          content={metadataTitle}
+          key="og-site-name"
+        />
+        <meta name="twitter:title" content={metadataTitle} key="tw-title" />
+        <title key="main-title">{metadataTitle}</title>
       </Head>
       <Layout isAuthenticated={isAuthenticated} activePage="bib">
         <BibDetails key="top-details" details={topDetails} />

@@ -19,10 +19,7 @@ describe("404", () => {
     const homeLink = screen.getByText("Research Catalog")
     expect(homeLink).toHaveAttribute("href", "/research/research-catalog")
     const legacyLink = screen.getByText("Legacy Catalog")
-    expect(legacyLink).toHaveAttribute(
-      "href",
-      appConfig.externalUrls.legacyCatalog
-    )
+    expect(legacyLink).toHaveAttribute("href", appConfig.urls.legacyCatalog)
   })
 })
 
