@@ -6,6 +6,10 @@ import initializePatronTokenAuth from "../../../src/server/auth"
 /**
  * API route handler
  */
+
+// TODO: api/account/settings/{patronId}
+// TODO: api/account/update-pin/{patronId}
+
 export default async function handler(req: NextRequest, res: NextApiResponse) {
   const patronTokenResponse = await initializePatronTokenAuth(req)
   const patronId = patronTokenResponse.decodedPatron?.sub
@@ -14,10 +18,6 @@ export default async function handler(req: NextRequest, res: NextApiResponse) {
       message: "No authenticated patron",
     })
   }
-
-  // api/account/settings/{patronId}
-  // api/account/update-pin/{patronId}
-
   const checkoutRenewalMatch = req.url.match(/\/checkouts\/(\d+)\/renewal$/)
   if (checkoutRenewalMatch) {
     const checkoutId = checkoutRenewalMatch[1]
@@ -31,10 +31,7 @@ export async function checkoutRenewal(
 ) {
   try {
     const client = await sierraClient()
-    const response = await client.post(
-      `patrons/checkouts/${checkoutId}/renewal`
-    )
-    console.log(response)
+    await client.post(`patrons/checkouts/${checkoutId}/renewal`)
     res.status(200).json({ message: "Renewed!" })
   } catch (error) {
     if (error.response.status === 403) {
@@ -44,7 +41,7 @@ export async function checkoutRenewal(
       })
     } else
       res.status(500).json({
-        message: "server error",
+        message: "Server error",
       })
   }
 }
