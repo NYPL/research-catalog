@@ -38,8 +38,6 @@ export default function Home({
         activePage="search"
         bannerNotification={bannerNotification}
       >
-        {" "}
-        main
         {isLoading ? (
           <SkeletonLoader showImage={false} />
         ) : (
