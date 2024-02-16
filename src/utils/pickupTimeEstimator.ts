@@ -1,6 +1,7 @@
 import { parse as parseDuration, toSeconds } from "iso8601-duration"
 import { fetchLocations } from "../../pages/api/locations"
 import { nyplCore } from "./nyplCore"
+import { DAYS } from "../config/constants"
 
 const cache = {}
 
@@ -16,6 +17,11 @@ type DateFormatType = {
   month?: string
   minute?: string
   weekday?: string
+}
+
+type RationaleEntry = {
+  time: string
+  activity: string
 }
 
 /**
@@ -55,7 +61,7 @@ export const getPickupTimeEstimate = async (
   // fulfillment or just 'ma' (which is a fine default for offsite requests)
   deliveryLocationId = deliveryLocationId || fulfillment.location || "ma"
 
-  const rationale = [{ time: fromTimestamp, activity: "request time" }]
+  let rationale = [{ time: fromTimestamp, activity: "Request time" }]
 
   const fulfillmentTimeMinutes = parseOffsiteTravelDuration(
     fulfillment.estimatedTime
@@ -117,30 +123,58 @@ export const getPickupTimeEstimate = async (
   )
   rationale.push({
     time: destinationServiceTime,
-    activity: `destination (${deliveryLocationId}) service time`,
+    activity: `Destination (${deliveryLocationId}) service time given ${
+      formatDateAndTime(new Date(arrivalAtDestination)).time
+    } arrival`,
   })
 
-  // Account for travel to reading room:
-  let arrivalAtHoldshelf = await addOnsiteTravelDuration(
-    destinationServiceTime,
-    deliveryLocationId
-  )
-  rationale.push({ time: arrivalAtHoldshelf, activity: "onsite travel time" })
-
   // Adjust to special delivery schedules for special rooms:
-  const hasSpecialDelivery = hasSpecialDeliverySchedule(deliveryLocationId)
-  if (hasSpecialDelivery) {
-    arrivalAtHoldshelf = adjustToSpecialSchedule(
-      deliveryLocationId,
-      arrivalAtHoldshelf
+  const { hasSpecialDeliverySchedule } = adjustToSpecialSchedule(
+    deliveryLocationId,
+    destinationServiceTime
+  )
+
+  // If delivered to a scholar room and requested at least 30mins before opening, skip travel time:
+  const openingHours = await getNextServiceHours(
+    deliveryLocationId,
+    destinationServiceTime
+  )
+  const skipOnsiteTravelTime =
+    hasSpecialDeliverySchedule &&
+    timestampIsLTE(
+      arrivalAtDestination,
+      addMinutes(openingHours.startTime, -30)
     )
+
+  let arrivalAtHoldshelf = destinationServiceTime
+
+  // Unless deliverying to a scholar room before opening hours, on-site apply travel time:
+  if (!skipOnsiteTravelTime) {
+    arrivalAtHoldshelf = await addOnsiteTravelDuration(
+      destinationServiceTime,
+      deliveryLocationId
+    )
+    rationale.push({ time: arrivalAtHoldshelf, activity: "Onsite travel time" })
+  }
+
+  if (hasSpecialDeliverySchedule) {
+    let specialDeliveryRationale
+    ;({ arrivalAtHoldshelf, rationale: specialDeliveryRationale } =
+      adjustToSpecialSchedule(deliveryLocationId, arrivalAtHoldshelf))
+    rationale = rationale.concat(specialDeliveryRationale)
+    rationale.push({
+      time: arrivalAtHoldshelf,
+      activity:
+        "Adjusted to special delivery schedule" +
+        (skipOnsiteTravelTime ? " (Skipped on-site travel time.)" : ""),
+    })
   }
 
   // Return the specific `time` and a human readable `estimate` string
   return {
     time: arrivalAtHoldshelf,
     estimate: makeFriendly(arrivalAtHoldshelf, {
-      useTodayAtTime: hasSpecialDelivery,
+      useTodayAtTime: hasSpecialDeliverySchedule,
       useTodayByTime: await isAtOrBeforeServiceHours(
         deliveryLocationId,
         destinationServiceTime
@@ -200,27 +234,128 @@ export const addOnsiteTravelDuration = async (serviceTime, locationId) => {
   return addDuration(serviceTime, onsiteTravelDuration)
 }
 
-/**
- *  Returns true if the named location has a special delivery schedule (e.g. is
- *  a scholar room)
- *
- *  TODO: Implement
- */
-export const hasSpecialDeliverySchedule = (locationId: string) => {
-  // Return true if locationId matches room known to have a specific delivery schedule
-  return false
+type AdjustToSpecialSchedule = {
+  hasSpecialDeliverySchedule: boolean
+  arrivalAtHoldshelf: string
+  rationale: RationaleEntry[]
 }
 
 /**
  *  Given a location id and a timestamp string, returns a new timestamp string
  *  representing the future delivery time for the location given the known
  *  delivery schedule.
- *
- *  TODO: Implement
  */
-export const adjustToSpecialSchedule = (locationId, time): string => {
-  // Update time to next delivery schedule after given time
-  return time
+export const adjustToSpecialSchedule = (
+  locationId,
+  time
+): AdjustToSpecialSchedule => {
+  let hasSpecialDeliverySchedule = false
+  const adjustedSpecialScheduleTime = new Date(time)
+  const secondFloorScholarRooms = ["mal17", "mala", "malc", "maln", "malw"]
+  const mapRooms = ["mapp8", "mapp9", "map08"]
+  let getFirstHour
+  let getNextHour
+  let getLastHour
+  // Subtract 1ms to coerce T10:00.000 to be evaluated as T09:59.999
+  // so that the evaluated next delivery for something avail at 10am sharp is 10am
+  const specialFudgeMs = -1
+  const offsetMs =
+    1000 *
+      60 *
+      (adjustedSpecialScheduleTime.getTimezoneOffset() - 60 * nyOffset()) -
+    adjustedSpecialScheduleTime.getMilliseconds() +
+    specialFudgeMs
+
+  // adjust time to simulate being in New York
+  adjustedSpecialScheduleTime.setTime(
+    adjustedSpecialScheduleTime.getTime() + offsetMs
+  )
+
+  const loggableTimestamp = (date) => {
+    return new Date(date.getTime() - offsetMs + specialFudgeMs).toISOString()
+  }
+
+  const rationale = []
+
+  if (secondFloorScholarRooms.includes(locationId)) {
+    hasSpecialDeliverySchedule = true
+    getFirstHour = (time) => {
+      const day = time.getDay()
+      return day === DAYS.SUNDAY ? 14 : 10
+    }
+    getLastHour = (time) => {
+      const day = time.getDay()
+      // Tues-Sat last delivery 6pm (8pm close), Sun-Mon last delivery 4pm (6pm close)
+      // FIXME: This is incorrect; Thurs-Sat we close at 6pm. These ranges
+      // should be data driven.
+      return day > DAYS.MONDAY ? 18 : 16
+    }
+    getNextHour = (hour) => 2 * Math.floor(hour / 2 + 1)
+  }
+
+  if (mapRooms.includes(locationId)) {
+    hasSpecialDeliverySchedule = true
+    getFirstHour = (time) => {
+      const day = time.getDay()
+      return day === DAYS.SUNDAY ? 13 : 11
+    }
+    getLastHour = (time) => {
+      const day = time.getDay()
+      // Tues/Wed last delivery 5pm (8pm close), other days 3pm last delivery
+      return day === DAYS.TUESDAY || day === DAYS.WEDNESDAY ? 17 : 15
+    }
+    getNextHour = (hour) => 2 * Math.floor(hour / 2 + 0.5) + 1
+  }
+
+  if (hasSpecialDeliverySchedule) {
+    const nextHour = getNextHour(adjustedSpecialScheduleTime.getHours())
+    // set to next hour
+    adjustedSpecialScheduleTime.setHours(nextHour, 0, 0, 0)
+    rationale.push({
+      time: loggableTimestamp(adjustedSpecialScheduleTime),
+      activity: `Next available delivery: ${nextHour}`,
+    })
+
+    // set to day to next day if after last hour
+    if (
+      adjustedSpecialScheduleTime.getHours() >
+      getLastHour(adjustedSpecialScheduleTime)
+    ) {
+      adjustedSpecialScheduleTime.setDate(
+        adjustedSpecialScheduleTime.getDate() + 1
+      )
+
+      const firstHour = getFirstHour(adjustedSpecialScheduleTime)
+      adjustedSpecialScheduleTime.setHours(firstHour, 0, 0, 0)
+      rationale.push({
+        time: loggableTimestamp(adjustedSpecialScheduleTime),
+        activity: "Rolled forward to next scheduled delivery day",
+      })
+    }
+
+    // set to first hour if before first hour
+    const firstHour = getFirstHour(adjustedSpecialScheduleTime)
+    if (firstHour > adjustedSpecialScheduleTime.getHours()) {
+      adjustedSpecialScheduleTime.setHours(firstHour, 0, 0, 0)
+      rationale.push({
+        time: loggableTimestamp(adjustedSpecialScheduleTime),
+        activity: "Rolled forward to next first scheduled delivery of the day",
+      })
+    }
+  }
+
+  // set time back to local time
+  adjustedSpecialScheduleTime.setTime(
+    adjustedSpecialScheduleTime.getTime() - offsetMs + specialFudgeMs
+  )
+
+  const arrivalAtHoldshelf = adjustedSpecialScheduleTime.toISOString()
+
+  return {
+    hasSpecialDeliverySchedule,
+    arrivalAtHoldshelf,
+    rationale,
+  }
 }
 
 type MakeFriendlyOptions = {

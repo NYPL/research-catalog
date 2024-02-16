@@ -369,7 +369,7 @@ describe("drbUtils", () => {
           roles: ["some role"],
         })
       ).toBe(
-        "https://digital-research-books-beta.nypl.org/search?source=catalog&query=author:Poe"
+        "http://sfr-front-end-development.us-east-1.elasticbeanstalk.com/search?source=catalog&query=author:Poe"
       )
     })
   })
