@@ -89,7 +89,7 @@ export const appConfig: AppConfig = {
     reverseProxyEnabled: {
       development: false,
       qa: true,
-      production: false,
+      production: true,
     },
   },
 }
