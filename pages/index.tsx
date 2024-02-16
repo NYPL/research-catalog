@@ -194,7 +194,6 @@ export async function getServerSideProps({ req }) {
   // Now it can be used to get patron data from Sierra or Platform API
   // or use `isTokenValid` to redirect to login page if it's not valid.
   console.log("patronTokenResponse is", patronTokenResponse)
-  console.log("appConfig", appConfig)
 
   const isAuthenticated = patronTokenResponse.isTokenValid
   // return props object

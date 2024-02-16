@@ -52,7 +52,6 @@ function App({ Component, pageProps }) {
       "process.env.NEXT_PUBLIC_REVERSE_PROXY_ENABLED",
       process.env.NEXT_PUBLIC_REVERSE_PROXY_ENABLED
     )
-    console.log("appConfig.reverseProxyEnabled", appConfig.reverseProxyEnabled)
   })
 
   return (
