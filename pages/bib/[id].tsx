@@ -64,10 +64,15 @@ export async function getServerSideProps({ params, resolvedUrl, req }) {
   const { id } = params
   const queryString = resolvedUrl.slice(resolvedUrl.indexOf("?") + 1)
   const bibParams = mapQueryToBibParams(queryString)
+  console.log("bibParams", bibParams)
   const { bib, annotatedMarc, status, redirectUrl } = await fetchBib(
     id,
     bibParams
   )
+  console.log("id", id)
+  console.log("annotatedMarc", annotatedMarc)
+  console.log("status", status)
+  console.log("redirectUrl", redirectUrl)
   const patronTokenResponse = await initializePatronTokenAuth(req)
   const isAuthenticated = patronTokenResponse.isTokenValid
 

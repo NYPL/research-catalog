@@ -42,7 +42,7 @@ jest.mock("../../nyplApiClient", () => {
 })
 
 describe("fetchResults", () => {
-  it("should search results return data from Discovery API", async () => {
+  it("should fetch search results data from Discovery API", async () => {
     const searchResults = (await fetchResults({
       q: "cat",
     })) as SearchResultsResponse
