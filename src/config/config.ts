@@ -2,7 +2,7 @@ import { parseLocations } from "../utils/itemUtils"
 import type { AppConfig, Environment } from "../types/appTypes"
 
 export const appConfig: AppConfig = {
-  environment: (process.env.APP_ENV as Environment) || "development",
+  environment: (process.env.APP_ENV as Environment) || "production",
   apiEndpoints: {
     platform: {
       development: "https://qa-platform.nypl.org/api/v0.1",
