@@ -4,16 +4,13 @@ import sierraClient from "../../../src/server/sierraClient"
 import initializePatronTokenAuth from "../../../src/server/auth"
 
 /**
- * API route handler
+ * API route handler for /api/account/checkouts
  */
-
-// TODO: api/account/settings/{patronId}
-// TODO: api/account/update-pin/{patronId}
 
 export default async function handler(req: NextRequest, res: NextApiResponse) {
   const patronTokenResponse = await initializePatronTokenAuth(req)
-  const patronId = patronTokenResponse.decodedPatron?.sub
-  if (!patronId) {
+  const cookiePatronId = patronTokenResponse.decodedPatron?.sub
+  if (!cookiePatronId) {
     res.status(403).json({
       message: "No authenticated patron",
     })
@@ -21,23 +18,28 @@ export default async function handler(req: NextRequest, res: NextApiResponse) {
   const checkoutRenewalMatch = req.url.match(
     /\/checkouts\/(\d+)\/renewal\/(\d+)$/
   )
-  const checkoutId = checkoutRenewalMatch[1]
-  const checkoutPatronId = checkoutRenewalMatch[2]
-  console.log(checkoutRenewalMatch)
-  if (checkoutRenewalMatch && checkoutPatronId == patronId) {
-    const response = await checkoutRenewal(checkoutId)
-    res.status(response.status)
-    res.json(response.message)
+  /** The url contains the checkout's id and the patron id from the checkout.
+   * We check that the patron cookie matches this id, i.e., the logged in user is the owner
+   * of the checkout. */
+  if (checkoutRenewalMatch) {
+    const checkoutId = checkoutRenewalMatch[1]
+    const checkoutPatronId = checkoutRenewalMatch[2]
+    if (checkoutPatronId == cookiePatronId) {
+      const response = await checkoutRenewal(checkoutId)
+      res.status(response.status)
+      res.json(response.message)
+    } else {
+      res.status(403)
+      res.json("Authenticated patron does not own this checkout")
+    }
   }
-  console.log(res)
-  return res
 }
 
 export async function checkoutRenewal(checkoutId: string) {
   try {
     const client = await sierraClient()
     await client.post(`patrons/checkouts/${checkoutId}/renewal`)
-    return { status: 200, message: "Renewed!" }
+    return { status: 200, message: "Renewed" }
   } catch (error) {
     if (error.response.status === 403) {
       return {

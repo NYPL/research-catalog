@@ -48,8 +48,8 @@ describe("MyAccountModel", () => {
       MyAccount.fetchFines = async () => mockFines
       MyAccount.fetchBibData = async (entries, recordType) => {
         if (recordType === "item") {
-          return mockCheckoutBibs.entries
-        } else return mockHoldBibs.entries
+          return mockCheckoutBibs
+        } else return mockHoldBibs
       }
       const account = await MyAccount.MyAccountFactory("12345")
       expect(account.patron).toStrictEqual({
@@ -124,7 +124,7 @@ describe("MyAccountModel", () => {
       MyAccount.fetchHolds = async () => mockEmpty
       MyAccount.fetchPatron = async () => mockPatron
       MyAccount.fetchFines = async () => ({ total: 0, entries: [] })
-      MyAccount.fetchBibData = async () => []
+      MyAccount.fetchBibData = async () => ({ total: 0, entries: [] })
 
       const emptyAccount = await MyAccount.MyAccountFactory("12345")
       expect(emptyAccount.patron).toStrictEqual({

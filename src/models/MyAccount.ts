@@ -29,8 +29,8 @@ export default class MyAccount {
     checkoutBibData,
     holdBibData,
   }: SierraAccountData) {
-    this.checkouts = this.buildCheckouts(checkouts, checkoutBibData)
-    this.holds = this.buildHolds(holds, holdBibData)
+    this.holds = this.buildHolds(holds, holdBibData.entries)
+    this.checkouts = this.buildCheckouts(checkouts, checkoutBibData.entries)
     this.patron = this.buildPatron(patron)
     this.fines = this.buildFines(fines)
   }
@@ -98,7 +98,6 @@ export default class MyAccount {
     itemOrRecord: string
   ) {
     if (!holdsOrCheckouts.length) return []
-    console.log(holdsOrCheckouts)
     const checkoutBibIds = holdsOrCheckouts.map((holdOrCheckout) => {
       if (holdOrCheckout[itemOrRecord].bibIds) {
         return holdOrCheckout[itemOrRecord].bibIds[0]
@@ -174,8 +173,12 @@ export default class MyAccount {
       expirationDate: patron.expirationDate,
       primaryEmail: patron.emails.length > 0 ? patron.emails[0] : "",
       emails: patron.emails,
-      primaryPhone: patron.phones.length > 0 ? patron.phones[0].number : "",
-      phones: patron.phones,
+      primaryPhone: patron.phones
+        ? patron.phones.length > 0
+          ? patron.phones[0].number
+          : ""
+        : "",
+      phones: patron.phones ? patron.phones : [],
       homeLibrary: patron.homeLibrary.name,
       id: patron.id,
     }
