@@ -185,7 +185,6 @@ export async function getServerSideProps({ resolvedUrl, req }) {
   // Remove everything before the query string delineator '?', necessary for correctly parsing the 'q' param.
   const queryString = resolvedUrl.slice(resolvedUrl.indexOf("?") + 1)
   const results = await fetchResults(mapQueryToSearchParams(parse(queryString)))
-
   const patronTokenResponse = await initializePatronTokenAuth(req)
   const isAuthenticated = patronTokenResponse.isTokenValid
 

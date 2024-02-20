@@ -92,7 +92,7 @@ describe("fetchDRBResults", () => {
 
   // Intentionally throw an error from the NYPLApiClient
   it("should throw an error if there was one", async () => {
-    expect(
+    await expect(
       async () => (await fetchDRBResults({ q: "cat" })) as DRBResults
     ).rejects.toThrow("Error: Bad API URL")
   })
