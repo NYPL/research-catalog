@@ -18,14 +18,23 @@ interface DRBCardProps {
  * The DRBContainer fetches and displays DRBContainer search results
  */
 const DRBCard = ({ drbResult }: DRBCardProps) => {
+  if (!drbResult) return null
+
   return (
-    <Card backgroundColor="var(--nypl-colors-ui-bg-default)" p="xs">
+    <Card backgroundColor="ui.bg.default" p="xs">
       <CardContent>
-        <DSLink href={drbResult.url} target="_blank" isUnderlined={false}>
-          <Text size="body2">{drbResult.title}</Text>
+        <DSLink
+          href={drbResult.url}
+          target="_blank"
+          isUnderlined={false}
+          fontSize="desktop.body.body2"
+          display="inline-block"
+          mb="s"
+        >
+          {drbResult.title}
         </DSLink>
 
-        {drbResult?.authors && (
+        {drbResult?.authors.length > 0 ? (
           <Text size="body2">
             By{" "}
             {drbResult.authors.map((author: Author | Agent, index: number) => (
@@ -41,14 +50,14 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
               </>
             ))}
           </Text>
-        )}
+        ) : null}
 
         {drbResult.readOnlineUrl && (
           <DSLink
             href={drbResult.readOnlineUrl}
             target="_blank"
             type="buttonPrimary"
-            mb={drbResult.downloadLink ? "s" : ""}
+            mb={drbResult.readOnlineUrl ? "s" : ""}
             isUnderlined={false}
           >
             Read Online
@@ -57,18 +66,16 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
 
         {drbResult.downloadLink && (
           <DSLink
-            href={drbResult.downloadLink.url}
+            href={drbResult.downloadLink?.url}
             target="_blank"
+            type="buttonPrimary"
             isUnderlined={false}
+            fontSize="desktop.body.body2"
           >
-            <Text
-              size="body2"
-              sx={{ display: "flex", alignItems: "center" }}
-              noSpace
-            >
+            <>
               <Icon name="download" align="left" size="small" />
-              Download {drbResult.downloadLink.mediaType || ""}
-            </Text>
+              Download {drbResult.downloadLink?.mediaType || ""}
+            </>
           </DSLink>
         )}
       </CardContent>

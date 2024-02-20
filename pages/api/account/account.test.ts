@@ -1,6 +1,6 @@
 import { checkoutRenewal } from "./[...id]"
 import type { NextApiResponse } from "next"
-import { sierraClient } from "../../../src/server/sierraClient"
+import sierraClient from "../../../src/server/sierraClient"
 
 jest.mock("../../../src/server/sierraClient")
 

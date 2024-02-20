@@ -59,10 +59,10 @@ export const checkouts = {
 
 export const patron = {
   id: 2772226,
-  names: ["KAHN, VERA RUTH"],
+  names: ["NONNA, STREGA"],
   barcodes: ["23333121538324"],
   expirationDate: "2025-03-28",
-  emails: ["veraruthkahn@gmail.com", "veggievera@gmail.com"],
+  emails: ["streganonna@gmail.com", "spaghettigrandma@gmail.com"],
   homeLibrary: {
     code: "sn",
     name: "Stavros Niarchos Foundation Library (SNFL)",

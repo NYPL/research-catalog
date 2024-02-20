@@ -18,30 +18,33 @@ export default async function handler(req: NextRequest, res: NextApiResponse) {
       message: "No authenticated patron",
     })
   }
-  const checkoutRenewalMatch = req.url.match(/\/checkouts\/(\d+)\/renewal$/)
-  if (checkoutRenewalMatch) {
-    const checkoutId = checkoutRenewalMatch[1]
-    await checkoutRenewal(res, checkoutId)
+  const checkoutRenewalMatch = req.url.match(
+    /\/checkouts\/(\d+)\/renewal\/(\d+)$/
+  )
+  const checkoutId = checkoutRenewalMatch[1]
+  const checkoutPatronId = checkoutRenewalMatch[2]
+  console.log(checkoutRenewalMatch)
+  if (checkoutRenewalMatch && checkoutPatronId == patronId) {
+    const response = await checkoutRenewal(checkoutId)
+    res.status(response.status)
+    res.json(response.message)
   }
+  console.log(res)
+  return res
 }
 
-export async function checkoutRenewal(
-  res: NextApiResponse,
-  checkoutId: string
-) {
+export async function checkoutRenewal(checkoutId: string) {
   try {
     const client = await sierraClient()
     await client.post(`patrons/checkouts/${checkoutId}/renewal`)
-    res.status(200).json({ message: "Renewed!" })
+    return { status: 200, message: "Renewed!" }
   } catch (error) {
     if (error.response.status === 403) {
-      res.status(403).json({
+      return {
+        status: 403,
         message:
           "RENEWAL NOT ALLOWED. Please contact gethelp@nypl.org for assistance.",
-      })
-    } else
-      res.status(500).json({
-        message: "Server error",
-      })
+      }
+    } else return { status: 500, message: "Server error" }
   }
 }

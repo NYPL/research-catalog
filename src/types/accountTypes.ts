@@ -103,6 +103,47 @@ export interface Patron {
   id: number
 }
 
+export interface SierraBib {
+  total: number
+  start: number
+  entries: SierraBibEntry[]
+}
+
+export interface SierraBibEntry {
+  id: string
+  updatedDate: string
+  createdDate: string
+  deleted: boolean
+  suppressed: boolean
+  isbn: string
+  lang: SierraCodeName
+  title: string
+  author: string
+  materialType: {
+    code: string
+    value: string
+  }
+  bibLevel: {
+    code: string
+    value: string
+  }
+  publishYear: number
+  catalogDate: string
+  country: SierraCodeName
+  callNumber: string
+  varFields: {
+    fieldTag: string
+    marcTag?: string
+    ind1?: string
+    ind2?: string
+    subfields: {
+      tag: string
+      content?: string
+      subfield?: string
+    }[]
+  }[]
+}
+
 export interface SierraFine {
   total: number
   entries: SierraFineEntry[]
