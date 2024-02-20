@@ -80,7 +80,6 @@ export async function fetchBib(
         status: 404,
       }
     }
-    console.log("annotatedMarc", annotatedMarc)
     return {
       bib,
       annotatedMarc: annotatedMarc?.bib || null,
