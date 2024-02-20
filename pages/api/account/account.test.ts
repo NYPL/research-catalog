@@ -11,7 +11,8 @@ describe("checkoutRenewal", () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
-    ;(mockStatus = jest.fn().mockReturnThis()), (mockJson = jest.fn())
+    mockStatus = jest.fn().mockReturnThis()
+    mockJson = jest.fn()
     mockRes = {
       status: mockStatus,
       json: mockJson,
