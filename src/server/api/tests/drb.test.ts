@@ -7,67 +7,63 @@ jest.mock("../../nyplApiClient", () => {
     .mockImplementationOnce(async () => {
       return await new Promise((resolve) => {
         resolve({
-          get: () => {
-            return new Promise((resolve) => {
-              resolve({
-                data: {
-                  works: [
+          get: jest.fn().mockReturnValueOnce({
+            data: {
+              works: [
+                {
+                  authors: [
                     {
-                      authors: [
-                        {
-                          lcnaf: "",
-                          name: "Reighard, Jacob (1861-)",
-                          primary: "true",
-                          viaf: "",
-                        },
-                      ],
-                      editions: [],
-                      languages: [
-                        {
-                          iso_2: null,
-                          iso_3: "und",
-                          language: "Undetermined",
-                        },
-                        {
-                          iso_2: "en",
-                          iso_3: "eng",
-                          language: "English",
-                        },
-                      ],
-                      title: "Anatomy of the cat",
-                      uuid: "84306f57-3285-403a-bff4-3d8286d98183",
-                    },
-                    {
-                      authors: [
-                        {
-                          lcnaf: "",
-                          name: "Reighard, Jacob, (1861-1942.)",
-                          primary: "true",
-                          viaf: "",
-                        },
-                      ],
-                      editions: [],
-                      languages: [
-                        {
-                          iso_2: "en",
-                          iso_3: "eng",
-                          language: "English",
-                        },
-                        {
-                          iso_2: null,
-                          iso_3: "und",
-                          language: "Undetermined",
-                        },
-                      ],
-                      title: "Anatomy of the cat",
-                      uuid: "a724ea94-bc62-4460-85b7-312cb4b51fb9",
+                      lcnaf: "",
+                      name: "Reighard, Jacob (1861-)",
+                      primary: "true",
+                      viaf: "",
                     },
                   ],
-                  totalWorks: 520,
+                  editions: [],
+                  languages: [
+                    {
+                      iso_2: null,
+                      iso_3: "und",
+                      language: "Undetermined",
+                    },
+                    {
+                      iso_2: "en",
+                      iso_3: "eng",
+                      language: "English",
+                    },
+                  ],
+                  title: "Anatomy of the cat",
+                  uuid: "84306f57-3285-403a-bff4-3d8286d98183",
                 },
-              })
-            })
-          },
+                {
+                  authors: [
+                    {
+                      lcnaf: "",
+                      name: "Reighard, Jacob, (1861-1942.)",
+                      primary: "true",
+                      viaf: "",
+                    },
+                  ],
+                  editions: [],
+                  languages: [
+                    {
+                      iso_2: "en",
+                      iso_3: "eng",
+                      language: "English",
+                    },
+                    {
+                      iso_2: null,
+                      iso_3: "und",
+                      language: "Undetermined",
+                    },
+                  ],
+                  title: "Anatomy of the cat",
+                  uuid: "a724ea94-bc62-4460-85b7-312cb4b51fb9",
+                },
+              ],
+              totalWorks: 520,
+            },
+          }),
         })
       })
     })
