@@ -20,7 +20,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
       // Available ReCAP item
       return (
         <Link
-          href={appConfig.externalUrls.researchMaterialsHelp}
+          href={appConfig.urls.researchMaterialsHelp}
           target="_blank"
           fontSize="sm"
         >
@@ -37,7 +37,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
             <>
               {" at "}
               <Link
-                href={`${appConfig.externalUrls.locations}${item.location.endpoint}`}
+                href={`${appConfig.urls.locations}${item.location.endpoint}`}
                 target="_blank"
               >
                 {item.location.prefLabel}
@@ -56,7 +56,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
           </Box>
           {" - Can be used on site. Please visit "}
           <Link
-            href={`${appConfig.externalUrls.locations}${item.location.endpoint}`}
+            href={`${appConfig.urls.locations}${item.location.endpoint}`}
             target="_blank"
           >
             {`New York Public Library - ${locationShort}`}

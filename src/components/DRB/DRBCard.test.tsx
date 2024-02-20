@@ -42,7 +42,7 @@ describe("DRBCard", () => {
     expect(authorLink).toBeInTheDocument()
     expect(authorLink).toHaveAttribute(
       "href",
-      "https://digital-research-books-beta.nypl.org/search?source=catalog&query=author:Mark Twain"
+      "http://sfr-front-end-development.us-east-1.elasticbeanstalk.com/search?source=catalog&query=author:Mark Twain"
     )
 
     expect(readOnlineLink).toBeInTheDocument()

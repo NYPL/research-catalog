@@ -35,6 +35,8 @@ import type {
   SearchFormActionType,
 } from "../../src/types/searchTypes"
 import { getSearchQuery } from "../../src/utils/searchUtils"
+import initializePatronTokenAuth from "../../src/server/auth"
+import { appConfig } from "../../src/config/config"
 // import FieldsetDate from "../../src/components/SearchFilters/FieldsetDate"
 
 export const defaultEmptySearchErrorMessage =
@@ -46,7 +48,8 @@ export const badDateErrorMessage =
  * The Advanced Search page is responsible for displaying the Advanced Search form fields and
  * buttons that clear the fields and submit a search request.
  */
-export default function AdvancedSearch() {
+export default function AdvancedSearch({ isAuthenticated }) {
+  const metadataTitle = `Advanced Search | ${SITE_NAME}`
   const router = useRouter()
   const inputRef = useRef<TextInputRefType>()
   const notificationRef = useRef<HTMLDivElement>()
@@ -98,9 +101,9 @@ export default function AdvancedSearch() {
       setErrorMessage(badDateErrorMessage)
       setAlert(true)
     } else {
-      // If the reverse_proxy_enabled feature flag is present, use window.location.replace
+      // If the NEXT_PUBLIC_REVERSE_PROXY_ENABLED feature flag is present, use window.location.replace
       // instead of router.push to forward search results to DFE.
-      if (process.env.NEXT_PUBLIC_FEATURES?.includes("reverse_proxy_enabled")) {
+      if (appConfig.features.reverseProxyEnabled[appConfig.environment]) {
         window.location.replace(`${BASE_URL}${PATHS.SEARCH}${queryString}`)
       } else {
         await router.push(`${PATHS.SEARCH}${queryString}`)
@@ -124,9 +127,16 @@ export default function AdvancedSearch() {
   return (
     <>
       <Head>
-        <title>Advanced Search | {SITE_NAME}</title>
+        <meta property="og:title" content={metadataTitle} key="og-title" />
+        <meta
+          property="og:site_name"
+          content={metadataTitle}
+          key="og-site-name"
+        />
+        <meta name="twitter:title" content={metadataTitle} key="tw-title" />
+        <title key="main-title">{metadataTitle}</title>
       </Head>
-      <Layout activePage="advanced">
+      <Layout isAuthenticated={isAuthenticated} activePage="advanced">
         {/* Always render the wrapper element that will display the
           dynamically rendered notification */}
         <Box tabIndex={-1} ref={notificationRef}>
@@ -291,4 +301,12 @@ export default function AdvancedSearch() {
       </Layout>
     </>
   )
+}
+
+export async function getServerSideProps({ req }) {
+  const patronTokenResponse = await initializePatronTokenAuth(req)
+  const isAuthenticated = patronTokenResponse.isTokenValid
+  return {
+    props: { isAuthenticated },
+  }
 }
