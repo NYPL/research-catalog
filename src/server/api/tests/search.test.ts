@@ -7,26 +7,26 @@ jest.mock("../../nyplApiClient", () => {
     .mockImplementationOnce(async () => {
       return await new Promise((resolve) => {
         resolve({
-          get: () => {
-            return new Promise((resolve) => {
-              resolve({
-                data: {},
-              })
+          get: jest
+            .fn()
+            .mockResolvedValueOnce({
+              itemListElement: [{}, {}, {}, {}],
+              totalResults: 4,
             })
-          },
+            .mockResolvedValueOnce({
+              itemListElement: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
+              totalResults: 4,
+            }),
         })
       })
     })
     .mockImplementationOnce(async () => {
       return await new Promise((resolve) => {
         resolve({
-          get: () => {
-            return new Promise((resolve) => {
-              resolve({
-                data: {},
-              })
-            })
-          },
+          get: jest.fn().mockResolvedValueOnce({
+            totalWorks: 1,
+            works: [{}],
+          }),
         })
       })
     })
@@ -47,9 +47,14 @@ describe("fetchResults", () => {
       q: "cat",
     })) as SearchResultsResponse
 
-    console.log(searchResults)
-    // expect(drbResults.works.length).toEqual(2)
-    // expect(drbResults.totalWorks).toEqual(520)
+    expect(searchResults.results.totalResults).toEqual(4)
+    expect(searchResults.results.itemListElement.length).toEqual(4)
+
+    expect(searchResults.aggregations.totalResults).toEqual(4)
+    expect(searchResults.aggregations.itemListElement.length).toEqual(10)
+
+    expect(searchResults.drbResults.totalWorks).toEqual(1)
+    expect(searchResults.drbResults.works.length).toEqual(1)
   })
 
   // Intentionally throw an error from the NYPLApiClient
