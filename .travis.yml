@@ -15,11 +15,11 @@ jobs:
       before_install:
         - if [[ $TRAVIS_BRANCH == "qa" ]];
           then
-          export APP_ENV="qa";
+          export NEXT_PUBLIC_APP_ENV="qa";
           fi
         - if [[ "$TRAVIS_BRANCH" == "production" ]];
           then
-          export APP_ENV="production";
+          export NEXT_PUBLIC_APP_ENV="production";
           fi
       env:
         - ECR_URL=946183545209.dkr.ecr.us-east-1.amazonaws.com/research-catalog
@@ -27,10 +27,10 @@ jobs:
         - AWS_REGION=us-east-1
       install:
         - pip install --user awscli
-        - export LOCAL_TAG_NAME="${APP_ENV}-latest"
+        - export LOCAL_TAG_NAME="${NEXT_PUBLIC_APP_ENV}-latest"
       script:
         - eval $(aws ecr get-login --no-include-email --region us-east-1)
-        - docker build -t "$LOCAL_TAG_NAME" --build-arg APP_ENV="${APP_ENV}" .
+        - docker build -t "$LOCAL_TAG_NAME" --build-arg NEXT_PUBLIC_APP_ENV="${NEXT_PUBLIC_APP_ENV}" .
         - docker tag "$LOCAL_TAG_NAME" "$ECR_URL:$LOCAL_TAG_NAME"
         # Re-tag last latest image just in case
         - |
