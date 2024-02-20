@@ -112,6 +112,12 @@ describe("fetchBib", () => {
     expect(bibResponse.status).toEqual(404)
   })
 
+  it("should redirect to standardized ID page when id is non-standard", async () => {
+    const bibResponse = (await fetchBib("B17418167")) as BibResponse
+    console.log(bibResponse)
+    expect(bibResponse.status).toEqual(307)
+  })
+
   // Intentionally throw an error from the NYPLApiClient
   it("should throw an error if there was one", async () => {
     await expect(
