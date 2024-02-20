@@ -1,7 +1,7 @@
-import { fetchDRBResults } from "../../../src/server/api/drb"
-import type { DRBResults } from "../../../src/types/drbTypes"
+import { fetchDRBResults } from "../drb"
+import type { DRBResults } from "../../../types/drbTypes"
 
-jest.mock("../../../src/server/nyplApiClient", () => {
+jest.mock("../../nyplApiClient", () => {
   return jest
     .fn()
     .mockImplementationOnce(async () => {
