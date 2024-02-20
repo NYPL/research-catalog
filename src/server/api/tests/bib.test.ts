@@ -5,8 +5,9 @@ jest.mock("../../nyplApiClient", () => {
   return jest.fn().mockImplementationOnce(async () => {
     return await new Promise((resolve) => {
       resolve({
-        get: jest.fn().mockResolvedValueOnce({
-          bib: {
+        get: jest
+          .fn()
+          .mockResolvedValueOnce({
             "@context":
               "http://discovery-api-qa.us-east-1.elasticbeanstalk.com/api/v0.1/discovery/context_all.jsonld",
             "@type": ["nypl:Item", "nypl:Resource"],
@@ -99,11 +100,22 @@ jest.mock("../../nyplApiClient", () => {
             suppressed: false,
             hasItemVolumes: false,
             hasItemDates: false,
-          },
-        }),
-        annotatedMarc: {},
-        status: 200,
-        redirectUrl: "",
+          })
+          .mockResolvedValueOnce({
+            bib: {
+              id: "17418167",
+              nyplSource: "sierra-nypl",
+              fields: [
+                { label: "Author", values: [Array] },
+                { label: "Title", values: [Array] },
+                { label: "Imprint", values: [Array] },
+                { label: "Edition", values: [Array] },
+                { label: "Description", values: [Array] },
+                { label: "LCCN", values: [Array] },
+                { label: "Branch Call Number", values: [Array] },
+              ],
+            },
+          }),
       })
     })
   })
