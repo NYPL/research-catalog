@@ -12,19 +12,32 @@ import Head from "next/head"
 
 import Layout from "../src/components/Layout/Layout"
 import RCLink from "../src/components/RCLink/RCLink"
+
 import { SITE_NAME } from "../src/config/constants"
 import { appConfig } from "../src/config/config"
 import initializePatronTokenAuth from "../src/server/auth"
 import useLoading from "../src/hooks/useLoading"
 
-export default function Home() {
+interface HomeProps {
+  bannerNotification?: string
+  isAuthenticated: boolean
+}
+
+export default function Home({
+  bannerNotification,
+  isAuthenticated,
+}: HomeProps) {
   const isLoading = useLoading()
   return (
     <>
       <Head>
-        <title>{SITE_NAME}</title>
+        <title key="main-title">{SITE_NAME}</title>
       </Head>
-      <Layout activePage="search">
+      <Layout
+        isAuthenticated={isAuthenticated}
+        activePage="search"
+        bannerNotification={bannerNotification}
+      >
         {isLoading ? (
           <SkeletonLoader showImage={false} />
         ) : (
@@ -51,11 +64,11 @@ export default function Home() {
                 Please note that the Research Catalog does not include
                 circulating materials. For books and more that you can check out
                 to take home please visit our{" "}
-                <RCLink href={appConfig.externalUrls.circulatingCatalog}>
+                <RCLink href={appConfig.urls.circulatingCatalog}>
                   circulating branch catalog.
                 </RCLink>{" "}
                 The{" "}
-                <RCLink href={appConfig.externalUrls.legacyCatalog}>
+                <RCLink href={appConfig.urls.legacyCatalog}>
                   legacy research catalog
                 </RCLink>{" "}
                 is still available, but does not include all of our Scan &
@@ -171,6 +184,8 @@ export default function Home() {
 }
 
 export async function getServerSideProps({ req }) {
+  const bannerNotification = process.env.SEARCH_RESULTS_NOTIFICATION || ""
+
   // Every page that needs patron data must call initializePatronTokenAuth
   // to find if the token is valid and what the patron id is.
   const patronTokenResponse = await initializePatronTokenAuth(req)
@@ -178,8 +193,9 @@ export async function getServerSideProps({ req }) {
   // or use `isTokenValid` to redirect to login page if it's not valid.
   console.log("patronTokenResponse is", patronTokenResponse)
 
+  const isAuthenticated = patronTokenResponse.isTokenValid
   // return props object
   return {
-    props: {},
+    props: { isAuthenticated, bannerNotification },
   }
 }

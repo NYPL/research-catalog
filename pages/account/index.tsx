@@ -12,6 +12,7 @@ interface MyAccountProps {
   holds: Hold[]
   patron: Patron
   fines: Fine
+  isAuthenticated: boolean
 }
 
 export default function MyAccount({
@@ -19,6 +20,7 @@ export default function MyAccount({
   holds,
   patron,
   fines,
+  isAuthenticated,
 }: MyAccountProps) {
   console.log(checkouts, holds, patron, fines)
   return (
@@ -26,7 +28,7 @@ export default function MyAccount({
       <Head>
         <title>My Account</title>
       </Head>
-      <Layout activePage="account">
+      <Layout isAuthenticated={isAuthenticated} activePage="account">
         <Heading level="h1">my account</Heading>
       </Layout>
     </>
@@ -36,7 +38,8 @@ export default function MyAccount({
 export async function getServerSideProps({ req }) {
   const patronTokenResponse = await initializePatronTokenAuth(req)
   console.log("patronTokenResponse is", patronTokenResponse)
-  if (!patronTokenResponse.isTokenValid) {
+  const isAuthenticated = patronTokenResponse.isTokenValid
+  if (!isAuthenticated) {
     const redirect = getLoginRedirect(req)
     return {
       redirect: {
@@ -50,6 +53,6 @@ export async function getServerSideProps({ req }) {
   console.log("sierra Account Data", { checkouts, holds, patron, fines })
 
   return {
-    props: { checkouts, holds, patron, fines },
+    props: { checkouts, holds, patron, fines, isAuthenticated },
   }
 }

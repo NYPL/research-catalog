@@ -21,7 +21,7 @@ const nyplApiClient = async (options = { apiName: "platform" }) => {
     return await Promise.resolve(CACHE.clients[apiName])
   }
 
-  const baseUrl = appConfig.apiUrls[apiName][appEnvironment]
+  const baseUrl = appConfig.apiEndpoints[apiName][appEnvironment]
 
   let decryptedId: string
   let decryptedSecret: string
@@ -42,7 +42,7 @@ const nyplApiClient = async (options = { apiName: "platform" }) => {
       base_url: baseUrl,
       oauth_key: decryptedId,
       oauth_secret: decryptedSecret,
-      oauth_url: appConfig.tokenUrl,
+      oauth_url: appConfig.urls.tokenUrl,
     })
     CACHE.clients[apiName] = nyplApiClient
     return nyplApiClient

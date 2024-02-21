@@ -2,9 +2,9 @@
 // import type { JWTPayload } from "jose"
 import { importSPKI, jwtVerify, type JWTPayload } from "jose"
 import type { NextRequest } from "next/server"
-
 import { appConfig } from "../config/config"
 import { BASE_URL } from "../config/constants"
+import { useEffect, useState } from "react"
 
 interface UserJwtPayload extends JWTPayload {
   iss: string
@@ -56,16 +56,41 @@ export default async function initializePatronTokenAuth(req: NextRequest) {
 }
 
 /**
- * Used to create redirect from initializePatronTokenAuth() response, returns the redirect url.
+ * Creates and returns redirect url. Call this function only with an un-authenticated patron,
+ * i.e., patronTokenResponse.isTokenValid must be false.
  */
 export function getLoginRedirect(req) {
-  const protocol = "http"
+  const protocol = req.protocol || "http"
   const hostname = req.headers["host"]
   const originalUrl = BASE_URL + req.url
   const fullUrl = encodeURIComponent(`${protocol}://${hostname}${originalUrl}`)
-  const redirect =
-    //`${appConfig.externalUrls.login}?redirect_uri=${fullUrl}`
-    `https://dev-login.nypl.org/auth/login?redirect_uri=${fullUrl}`
-  console.log(redirect)
+  const redirect = `${
+    appConfig.apiEndpoints.loginUrl[appConfig.environment]
+  }?redirect_uri=${fullUrl}`
+  return redirect
+}
+
+/**
+ * Creates redirect to log out user, then return user to their current page.
+ */
+export const useLogoutRedirect = () => {
+  // Will send user back to prod if user has noscript or javascript disabled
+  // (useEffect won't work).
+  const [redirect, setRedirect] = useState(`https://www.nypl.org${BASE_URL}`)
+  useEffect(() => {
+    const current = window.location.pathname
+    let backPath = window.location.href
+    // If the patron is on any hold or account page, then
+    // redirect them to the home page after logging out. Otherwise,
+    // send them back to the page they were on.
+    if (current.includes("hold") || current.includes("account")) {
+      backPath = window.location.origin + BASE_URL
+    }
+    setRedirect(
+      `${
+        appConfig.apiEndpoints.logoutUrl[appConfig.environment]
+      }?redirect_uri=${backPath}`
+    )
+  }, [])
   return redirect
 }
