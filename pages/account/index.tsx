@@ -20,6 +20,7 @@ export default function MyAccount({
   patron,
   fines,
 }: MyAccountProps) {
+  console.log("patron's checkouts", checkouts)
   /** Testing renew checkout api route, displaying alerts of whatever the handler returns. */
   async function checkoutRenew(checkoutId, patronId) {
     try {
@@ -54,7 +55,7 @@ export default function MyAccount({
         {/** Testing renew checkout api route, with test checkout id. */}
         <Button
           id="checkout-test"
-          onClick={() => checkoutRenew(58536268, patron.id)}
+          onClick={() => checkoutRenew(58536266, patron.id)}
         >
           Renew checkout
         </Button>

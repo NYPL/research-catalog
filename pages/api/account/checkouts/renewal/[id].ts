@@ -26,8 +26,6 @@ export default async function handler(
      * i.e.,the logged in user is the owner of the checkout. */
     if (checkoutPatronId == cookiePatronId) {
       const response = await checkoutRenewal(checkoutId)
-      responseStatus = response.status
-      responseMessage = response.message
     } else {
       responseStatus = 403
       responseMessage = "Authenticated patron does not own this checkout"
@@ -39,15 +37,17 @@ export default async function handler(
 export async function checkoutRenewal(checkoutId: string) {
   try {
     const client = await sierraClient()
-    await client.post(`patrons/checkouts/${checkoutId}/renewal`)
-    return { status: 200, message: "Renewed" }
+    const response = await client.post(
+      `patrons/checkouts/${checkoutId}/renewal`
+    )
+    console.log(response)
+    //New due date
+    return { status: response.status, message: "Renewed" }
   } catch (error) {
-    if (error.response.status === 403) {
-      return {
-        status: 403,
-        message:
-          "RENEWAL NOT ALLOWED. Please contact gethelp@nypl.org for assistance.",
-      }
-    } else return { status: 500, message: "Server error" }
+    console.log(error)
+    return {
+      status: error.response.status,
+      message: error.response.data.description,
+    }
   }
 }
