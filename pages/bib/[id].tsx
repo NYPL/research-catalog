@@ -69,10 +69,6 @@ export async function getServerSideProps({ params, resolvedUrl, req }) {
     id,
     bibParams
   )
-  console.log("id", id)
-  console.log("annotatedMarc", annotatedMarc)
-  console.log("status", status)
-  console.log("redirectUrl", redirectUrl)
   const patronTokenResponse = await initializePatronTokenAuth(req)
   const isAuthenticated = patronTokenResponse.isTokenValid
 
