@@ -6,7 +6,6 @@ import initializePatronTokenAuth, {
 } from "../../src/server/auth"
 import { MyAccountFactory } from "../../src/models/MyAccount"
 import type { Checkout, Hold, Patron, Fine } from "../../src/types/accountTypes"
-import { SierraClientError } from "../../src/server/sierraClient"
 
 interface MyAccountProps {
   checkouts: Checkout[]
