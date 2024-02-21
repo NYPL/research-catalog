@@ -58,10 +58,10 @@ describe("MyAccountModel", () => {
         expirationDate: "2025-03-28",
         primaryEmail: "streganonna@gmail.com",
         emails: ["streganonna@gmail.com", "spaghettigrandma@gmail.com"],
-        primaryPhone: "646-660-0432",
+        primaryPhone: "123-456-7890",
         phones: [
           {
-            number: "646-660-0432",
+            number: "123-456-7890",
             type: "t",
           },
         ],
@@ -119,10 +119,14 @@ describe("MyAccountModel", () => {
         ],
       })
     })
-    it("builds empty Account data model", async () => {
+    it("builds empty Account data model with empty phones and email", async () => {
       MyAccount.fetchCheckouts = async () => mockEmpty
       MyAccount.fetchHolds = async () => mockEmpty
-      MyAccount.fetchPatron = async () => mockPatron
+      MyAccount.fetchPatron = async () => ({
+        ...mockPatron,
+        phones: [],
+        emails: [],
+      })
       MyAccount.fetchFines = async () => ({ total: 0, entries: [] })
       MyAccount.fetchBibData = async () => []
 
@@ -131,21 +135,41 @@ describe("MyAccountModel", () => {
         name: "NONNA, STREGA",
         barcode: "23333121538324",
         expirationDate: "2025-03-28",
-        primaryEmail: "streganonna@gmail.com",
-        emails: ["streganonna@gmail.com", "spaghettigrandma@gmail.com"],
-        primaryPhone: "646-660-0432",
-        phones: [
-          {
-            number: "646-660-0432",
-            type: "t",
-          },
-        ],
+        primaryEmail: "",
+        emails: [],
+        primaryPhone: "",
+        phones: [],
         homeLibrary: "Stavros Niarchos Foundation Library (SNFL)",
         id: 2772226,
       })
       expect(emptyAccount.checkouts).toStrictEqual([])
       expect(emptyAccount.holds).toStrictEqual([])
       expect(emptyAccount.fines).toStrictEqual({ total: 0, entries: [] })
+    })
+    it("builds empty Account data model with empty phones and email", async () => {
+      MyAccount.fetchCheckouts = async () => mockEmpty
+      MyAccount.fetchHolds = async () => mockEmpty
+      MyAccount.fetchPatron = async () => ({
+        ...mockPatron,
+        phones: undefined,
+        emails: undefined,
+        homeLibrary: undefined,
+      })
+      MyAccount.fetchFines = async () => ({ total: 0, entries: [] })
+      MyAccount.fetchBibData = async () => []
+
+      const emptyAccount = await MyAccountFactory("12345")
+      expect(emptyAccount.patron).toStrictEqual({
+        name: "NONNA, STREGA",
+        barcode: "23333121538324",
+        expirationDate: "2025-03-28",
+        primaryEmail: "",
+        emails: [],
+        primaryPhone: "",
+        phones: [],
+        homeLibrary: "",
+        id: 2772226,
+      })
     })
   })
 })
