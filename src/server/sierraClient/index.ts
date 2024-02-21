@@ -17,6 +17,13 @@ if (!encryptedKey || !base || !encryptedSecret) {
 const creds = [encryptedKey, encryptedSecret]
 const CACHE: Cache = { client: null, key: null, secret: null }
 
+export class SierraClientError extends Error {
+  constructor(message: string) {
+    super()
+    this.message = "Error building Sierra Client: " + message
+  }
+}
+
 const sierraClient = async () => {
   if (CACHE.client) return await Promise.resolve(CACHE.client)
   let decryptedKey: string
@@ -29,8 +36,8 @@ const sierraClient = async () => {
       ;[decryptedKey, decryptedSecret] = await kmsDecryptCreds(creds)
       CACHE.key = decryptedKey
       CACHE.secret = decryptedSecret
-    } catch (exception) {
-      console.error("Error decrypting Sierra credentials")
+    } catch (error) {
+      throw new SierraClientError("Error decrypting creds")
     }
   }
   try {
@@ -43,7 +50,7 @@ const sierraClient = async () => {
     CACHE.client = wrapper
     return wrapper
   } catch (error) {
-    console.error(error.message)
+    throw new SierraClientError(error.message)
   }
 }
 

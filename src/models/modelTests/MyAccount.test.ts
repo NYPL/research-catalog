@@ -9,6 +9,8 @@ import {
   empty as mockEmpty,
 } from "./data/MyAccount"
 
+jest.mock("../../server/sierraClient")
+
 describe("MyAccountModel", () => {
   describe("getRecordId", () => {
     it("can parse an id", () => {

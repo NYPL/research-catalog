@@ -1,11 +1,12 @@
 import Head from "next/head"
-import { Heading } from "@nypl/design-system-react-components"
+import { Heading, Text } from "@nypl/design-system-react-components"
 import Layout from "../../src/components/Layout/Layout"
 import initializePatronTokenAuth, {
   getLoginRedirect,
 } from "../../src/server/auth"
 import { MyAccountFactory } from "../../src/models/MyAccount"
 import type { Checkout, Hold, Patron, Fine } from "../../src/types/accountTypes"
+import { SierraClientError } from "../../src/server/sierraClient"
 
 interface MyAccountProps {
   checkouts: Checkout[]
@@ -22,6 +23,7 @@ export default function MyAccount({
   fines,
   isAuthenticated,
 }: MyAccountProps) {
+  const sierraClientErrorThrown = !patron.name
   console.log(checkouts, holds, patron, fines)
   return (
     <>
@@ -30,6 +32,12 @@ export default function MyAccount({
       </Head>
       <Layout isAuthenticated={isAuthenticated} activePage="account">
         <Heading level="h1">my account</Heading>
+        {sierraClientErrorThrown && (
+          <Text>
+            We are unable to display your account information at this time.
+            Please contact gethelp@nypl.org for assistance.
+          </Text>
+        )}
       </Layout>
     </>
   )
@@ -48,11 +56,17 @@ export async function getServerSideProps({ req }) {
       },
     }
   }
-  const id = patronTokenResponse.decodedPatron.sub
-  const { checkouts, holds, patron, fines } = await MyAccountFactory(id)
-  console.log("sierra Account Data", { checkouts, holds, patron, fines })
 
-  return {
-    props: { checkouts, holds, patron, fines, isAuthenticated },
+  const id = patronTokenResponse.decodedPatron.sub
+  let props
+  try {
+    const { checkouts, holds, patron, fines } = await MyAccountFactory(id)
+    props = { checkouts, holds, patron, fines, isAuthenticated }
+  } catch (e) {
+    props = {
+      patron: {},
+      isAuthenticated,
+    }
   }
+  return { props }
 }
