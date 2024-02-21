@@ -35,25 +35,6 @@ export default class MyAccount {
     this.fines = this.buildFines(fines)
   }
 
-  static async MyAccountFactory(id: string) {
-    client = await sierraClient()
-    const baseQuery = `patrons/${id}`
-    const checkouts = await this.fetchCheckouts(baseQuery)
-    const holds = await this.fetchHolds(baseQuery)
-    const patron = await this.fetchPatron(baseQuery)
-    const fines = await this.fetchFines(baseQuery)
-    const checkoutBibData = await this.fetchBibData(checkouts.entries, "item")
-    const holdBibData = await this.fetchBibData(holds.entries, "record")
-    return new this({
-      checkouts: checkouts.entries,
-      holds: holds.entries,
-      patron,
-      fines,
-      checkoutBibData,
-      holdBibData,
-    })
-  }
-
   buildCheckouts(checkouts: SierraCheckout[], bibData): Checkout[] {
     const bibDataMap = MyAccount.buildBibData(bibData)
     return checkouts.map((checkout: SierraCheckout) => {
@@ -215,4 +196,26 @@ export default class MyAccount {
     const match = recordLink.match(/\/(\d+)$/)
     return match ? match[1] : null
   }
+}
+
+export const MyAccountFactory = async (id: string) => {
+  client = await sierraClient()
+  const baseQuery = `patrons/${id}`
+  const checkouts = await MyAccount.fetchCheckouts(baseQuery)
+  const holds = await MyAccount.fetchHolds(baseQuery)
+  const patron = await MyAccount.fetchPatron(baseQuery)
+  const fines = await MyAccount.fetchFines(baseQuery)
+  const checkoutBibData = await MyAccount.fetchBibData(
+    checkouts.entries,
+    "item"
+  )
+  const holdBibData = await MyAccount.fetchBibData(holds.entries, "record")
+  return new MyAccount({
+    checkouts: checkouts.entries,
+    holds: holds.entries,
+    patron,
+    fines,
+    checkoutBibData,
+    holdBibData,
+  })
 }

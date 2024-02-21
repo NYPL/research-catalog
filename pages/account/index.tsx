@@ -4,7 +4,7 @@ import Layout from "../../src/components/Layout/Layout"
 import initializePatronTokenAuth, {
   getLoginRedirect,
 } from "../../src/server/auth"
-import MyAccountModel from "../../src/models/MyAccount"
+import { MyAccountFactory } from "../../src/models/MyAccount"
 import type { Checkout, Hold, Patron, Fine } from "../../src/types/accountTypes"
 
 interface MyAccountProps {
@@ -46,8 +46,7 @@ export async function getServerSideProps({ req }) {
     }
   }
   const id = patronTokenResponse.decodedPatron.sub
-  const { checkouts, holds, patron, fines } =
-    await MyAccountModel.MyAccountFactory(id)
+  const { checkouts, holds, patron, fines } = await MyAccountFactory(id)
   console.log("sierra Account Data", { checkouts, holds, patron, fines })
 
   return {

@@ -1,4 +1,4 @@
-import MyAccount from "../MyAccount"
+import MyAccount, { MyAccountFactory } from "../MyAccount"
 import {
   holds as mockHolds,
   checkouts as mockCheckouts,
@@ -51,7 +51,7 @@ describe("MyAccountModel", () => {
           return mockCheckoutBibs.entries
         } else return mockHoldBibs.entries
       }
-      const account = await MyAccount.MyAccountFactory("12345")
+      const account = await MyAccountFactory("12345")
       expect(account.patron).toStrictEqual({
         name: "NONNA, STREGA",
         barcode: "23333121538324",
@@ -126,7 +126,7 @@ describe("MyAccountModel", () => {
       MyAccount.fetchFines = async () => ({ total: 0, entries: [] })
       MyAccount.fetchBibData = async () => []
 
-      const emptyAccount = await MyAccount.MyAccountFactory("12345")
+      const emptyAccount = await MyAccountFactory("12345")
       expect(emptyAccount.patron).toStrictEqual({
         name: "NONNA, STREGA",
         barcode: "23333121538324",
