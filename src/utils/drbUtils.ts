@@ -21,16 +21,20 @@ const mapSearchFieldToDRBField = {
 }
 
 /**
- *  Given a keyword and a search field, format and return a keyword query string expected by the DRB API
+ * Given a keyword and a search field, format and return a keyword query
+ * string expected by the DRB API
  */
-function getDRBKeywordQuery(keywords = "*", field = "keyword"): string {
+export function getDRBKeywordQuery(keywords = "*", field = "keyword"): string {
   return `${field}:${keywords}`
 }
 
 /**
- *  Given a hash of SearchQueryParams, format and return an advanced field query string expected by the DRB API
+ * Given a hash of SearchQueryParams, format and return an advanced field
+ * query string expected by the DRB API
  */
-function getDRBAdvancedQuery(params: SearchParams): string {
+export function getDRBAdvancedQuery(params: SearchParams = {}): string {
+  if (isEmpty(params)) return ""
+
   return ["contributor", "title", "subject"]
     .map((fieldType) => {
       const fieldValue = params[fieldType]
@@ -43,9 +47,12 @@ function getDRBAdvancedQuery(params: SearchParams): string {
 }
 
 /**
- *  Given a hash of SearchFilters, returns an array of DRBFilters as expected by the DRB API
+ * Given a hash of SearchFilters, returns an array of DRBFilters
+ * as expected by the DRB API
  */
-function mapSearchFiltersToDRBFilters(filters: SearchFilters = {}): DRBFilters {
+export function mapSearchFiltersToDRBFilters(
+  filters: SearchFilters = {}
+): DRBFilters {
   let drbFilters: DRBFilters = []
 
   if (filters.dateAfter) drbFilters.push(`startYear:${filters.dateAfter}`)
@@ -63,9 +70,12 @@ function mapSearchFiltersToDRBFilters(filters: SearchFilters = {}): DRBFilters {
 }
 
 /**
- *  Given a hash of SearchParams, returns a hash representing an equivalent query against DRB API
+ * Given a hash of SearchParams, returns a hash representing
+ * an equivalent query against DRB API
  */
-function mapSearchParamsToDRBQueryParams(params: SearchParams): DRBQueryParams {
+export function mapSearchParamsToDRBQueryParams(
+  params: SearchParams = {}
+): DRBQueryParams {
   const { q, field, sortBy, order, filters } = params
 
   const keywordQuery = getDRBKeywordQuery(q, field)
@@ -159,11 +169,11 @@ export function getDRBQueryStringFromSearchParams(
   return getQueryStringFromDRBQueryParams(drbQueryParams)
 }
 
-export function mapWorksToDRBResults(works: DRBWork[]): DRBResult[] | null {
+export function mapWorksToDRBResults(works?: DRBWork[]): DRBResult[] | null {
   if (!works) return null
   return works
     .filter((work: DRBWork) => {
-      return !isEmpty(work) || !work.uuid || !work.title
+      return !!(!isEmpty(work) || work.uuid || work.title)
     })
     .map((work: DRBWork) => {
       return new DRBResult(work)
@@ -177,8 +187,9 @@ export const readOnlineMediaTypes = [
 ]
 export const downloadMediaTypes = ["application/epub+zip", "application/pdf"]
 
-export function getAuthorURL(author: Author | Agent) {
+export function getAuthorURL(author: Author | Agent = { name: "" }) {
+  if (!author.name) return ""
   return `${
-    appConfig.externalUrls.drbFrontEnd[appConfig.environment]
-  }/search?query=${`author:${author.name}${SOURCE_PARAM}`}`
+    appConfig.apiEndpoints.drbFrontEnd[appConfig.environment]
+  }/search${SOURCE_PARAM}&query=author:${author.name}`
 }

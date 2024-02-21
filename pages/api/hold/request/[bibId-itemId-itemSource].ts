@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 
 import User from "../../../../src/utils/userUtils"
-import { appConfig } from "../../../../src/config/config"
 import { postHoldAPI } from "../../../../src/utils/holdUtils"
+import { BASE_URL } from "../../../../src/config/constants"
 
 /**
  * createHoldRequest(req, res)
@@ -13,7 +13,7 @@ import { postHoldAPI } from "../../../../src/utils/holdUtils"
 async function createHoldRequest(req, res) {
   // Ensure user is logged in
   const { redirect } = User.requireUser(req, res)
-  if (redirect) return res.redirect(`${appConfig.baseUrl}/404`)
+  if (redirect) return res.redirect(`${BASE_URL}/404`)
 
   const paramString = req.query["bibId-itemId-itemSource"] || ""
   const [bibId, itemId, itemSource] = paramString.split("-")
@@ -28,7 +28,7 @@ async function createHoldRequest(req, res) {
 
   if (!bibId || !itemId) {
     // Dummy redirect for now
-    return res.redirect(`${appConfig.baseUrl}/404`)
+    return res.redirect(`${BASE_URL}/404`)
   }
 
   try {
@@ -42,7 +42,7 @@ async function createHoldRequest(req, res) {
 
     if (holdData.statusCode === 200) {
       res.redirect(
-        `${appConfig.baseUrl}/hold/confirmation/${bibId}-${itemId}?pickupLocation=` +
+        `${BASE_URL}/hold/confirmation/${bibId}-${itemId}?pickupLocation=` +
           `${pickupLocation}&requestId=${holdData.data.id}${searchKeywordsQuery}`
       )
     } else if (holdData.statusCode === 400) {
@@ -62,7 +62,7 @@ async function createHoldRequest(req, res) {
         : ""
     // Perhaps don't redirect if there is an API error call...
     res.redirect(
-      `${appConfig.baseUrl}/hold/confirmation/${bibId}-${itemId}?pickupLocation=` +
+      `${BASE_URL}/hold/confirmation/${bibId}-${itemId}?pickupLocation=` +
         `${pickupLocation}${errorStatus}${errorMessage}`
     )
   }

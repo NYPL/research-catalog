@@ -9,7 +9,7 @@ services:
         - NODE_ENV=local
       dockerfile: Dockerfile.development
     ports:
-      - 3000:3000
+      - 8080:8080
     volumes:
       - ./pages:/app/pages
       - ./styles:/app/styles

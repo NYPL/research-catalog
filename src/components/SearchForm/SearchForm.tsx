@@ -9,6 +9,7 @@ import { getSearchQuery } from "../../utils/searchUtils"
 import { BASE_URL, PATHS } from "../../config/constants"
 import EDSLink from "../EDSLink"
 import useLoading from "../../hooks/useLoading"
+import { appConfig } from "../../config/config"
 
 /**
  * The SearchForm component renders and controls the Search form and
@@ -31,7 +32,13 @@ const SearchForm = () => {
     }
     const queryString = getSearchQuery(searchParams)
 
-    await router.push(`${PATHS.SEARCH}${queryString}`)
+    // If the reverseProxyEnabled feature flag is true, use window.location.replace
+    // instead of router.push to forward search results to DFE.
+    if (appConfig.features.reverseProxyEnabled[appConfig.environment]) {
+      window.location.replace(`${BASE_URL}${PATHS.SEARCH}${queryString}`)
+    } else {
+      await router.push(`${PATHS.SEARCH}${queryString}`)
+    }
   }
 
   const handleChange = (

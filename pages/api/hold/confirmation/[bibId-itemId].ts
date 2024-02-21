@@ -13,6 +13,7 @@ import {
   modelDeliveryLocationName,
 } from "../../../../src/utils/holdUtils"
 import type { BibResponse } from "../../../../src/types/bibTypes"
+import { BASE_URL } from "../../../../src/config/constants"
 
 // TODO - implement LibraryItem which, in this conversion would live in
 // the Item class. Taking a closer look, `LibraryItem.getItem` doesn't
@@ -89,7 +90,7 @@ async function confirmRequest(req, res) {
 
     // The patron who is seeing the confirmation did not make the Hold Request
     if (patronIdFromHoldRequest !== patronId) {
-      res.status(404).redirect(`${appConfig.baseUrl}/404`)
+      res.status(404).redirect(`${BASE_URL}/404`)
       return false
     }
     // Retrieve item

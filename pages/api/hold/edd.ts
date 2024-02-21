@@ -1,9 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 import { isEmpty, omit } from "underscore"
 
-import { appConfig } from "../../../src/config/config"
 import { postHoldAPI, validate } from "../../../src/utils/holdUtils"
 import User from "../../../src/utils/userUtils"
+import { BASE_URL } from "../../../src/config/constants"
 
 /**
  * eddRequest(req, res)
@@ -40,7 +40,7 @@ async function eddRequest(req, res) {
     // param. For now, this works, but make sure that the data is being
     // passed and picked up by the `ElectronicDelivery` component.
     return res.redirect(
-      `${appConfig.baseUrl}/hold/request/${bibId}-${itemId}/edd?` +
+      `${BASE_URL}/hold/request/${bibId}-${itemId}/edd?` +
         `error=${JSON.stringify(serverErrors)}` +
         `&form=${JSON.stringify(req.body)}${fromUrlQueryParam}`
     )
@@ -57,7 +57,7 @@ async function eddRequest(req, res) {
 
     if (holdData.statusCode === 200) {
       res.redirect(
-        `${appConfig.baseUrl}/hold/confirmation/${bibId}-${itemId}` +
+        `${BASE_URL}/hold/confirmation/${bibId}-${itemId}` +
           `?pickupLocation=${pickupLocation}&requestId=${holdData.data.id}` +
           `${searchKeywordsQuery}${fromUrl}`
       )
@@ -77,7 +77,7 @@ async function eddRequest(req, res) {
         ? `&errorMessage=${error.statusText}${searchKeywordsQuery}${fromUrlQueryParam}`
         : ""
     res.redirect(
-      `${appConfig.baseUrl}/hold/confirmation/${bibId}-${itemId}` +
+      `${BASE_URL}/hold/confirmation/${bibId}-${itemId}` +
         `?pickupLocation=edd${errorStatus}${errorMessage}`
     )
   }
