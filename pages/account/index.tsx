@@ -20,7 +20,7 @@ export default function MyAccount({
   patron,
   fines,
 }: MyAccountProps) {
-  console.log("patron's checkouts", checkouts)
+  console.log(patron)
   /** Testing renew checkout api route, displaying alerts of whatever the handler returns. */
   async function checkoutRenew(checkoutId, patronId) {
     try {
@@ -32,6 +32,30 @@ export default function MyAccount({
             "Content-Type": "application/json",
           },
           body: JSON.stringify(patronId),
+        }
+      )
+      const responseData = await response.json()
+      if (response.ok) {
+        alert(responseData)
+      } else {
+        alert(`error: ${responseData}`)
+      }
+    } catch (error) {
+      alert("fetching error")
+    }
+  }
+
+  /** Testing settings api route */
+  async function settingsUpdate(patronId) {
+    try {
+      const response = await fetch(
+        `/research/research-catalog/api/account/settings/${patronId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ emails: ["goodbye"] }),
         }
       )
       const responseData = await response.json()
@@ -58,6 +82,10 @@ export default function MyAccount({
           onClick={() => checkoutRenew(58536266, patron.id)}
         >
           Renew checkout
+        </Button>
+        {/** Testing settings api route */}
+        <Button id="settings-test" onClick={() => settingsUpdate(patron.id)}>
+          Update settings
         </Button>
       </Layout>
     </>
