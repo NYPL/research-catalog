@@ -1,5 +1,5 @@
 import Head from "next/head"
-import { Heading } from "@nypl/design-system-react-components"
+import { Button, Heading } from "@nypl/design-system-react-components"
 import Layout from "../../src/components/Layout/Layout"
 import initializePatronTokenAuth, {
   getLoginRedirect,
@@ -20,7 +20,31 @@ export default function MyAccount({
   patron,
   fines,
 }: MyAccountProps) {
-  console.log(checkouts, holds, patron, fines)
+  console.log("patron's checkouts", checkouts)
+  /** Testing renew checkout api route, displaying alerts of whatever the handler returns. */
+  async function checkoutRenew(checkoutId, patronId) {
+    try {
+      const response = await fetch(
+        `/research/research-catalog/api/account/checkouts/renewal/${checkoutId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(patronId),
+        }
+      )
+      const responseData = await response.json()
+      if (response.ok) {
+        alert(responseData)
+      } else {
+        alert(`error: ${responseData}`)
+      }
+    } catch (error) {
+      alert("fetching error")
+    }
+  }
+
   return (
     <>
       <Head>
@@ -28,13 +52,20 @@ export default function MyAccount({
       </Head>
       <Layout activePage="account">
         <Heading level="h1">my account</Heading>
+        {/** Testing renew checkout api route, with test checkout id. */}
+        <Button
+          id="checkout-test"
+          onClick={() => checkoutRenew(58536266, patron.id)}
+        >
+          Renew checkout
+        </Button>
       </Layout>
     </>
   )
 }
 
 export async function getServerSideProps({ req }) {
-  const patronTokenResponse = await initializePatronTokenAuth(req)
+  const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   console.log("patronTokenResponse is", patronTokenResponse)
   if (!patronTokenResponse.isTokenValid) {
     const redirect = getLoginRedirect(req)
@@ -48,7 +79,6 @@ export async function getServerSideProps({ req }) {
   const id = patronTokenResponse.decodedPatron.sub
   const { checkouts, holds, patron, fines } =
     await MyAccountModel.MyAccountFactory(id)
-  console.log("sierra Account Data", { checkouts, holds, patron, fines })
 
   return {
     props: { checkouts, holds, patron, fines },
