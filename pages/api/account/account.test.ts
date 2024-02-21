@@ -1,7 +1,60 @@
-import { checkoutRenewal } from "./[...checkouts]"
+import handler, { checkoutRenewal } from "./checkouts/renewal/[id]"
 import sierraClient from "../../../src/server/sierraClient"
+import initializePatronTokenAuth from "../../../src/server/auth"
+import type { NextApiRequest, NextApiResponse } from "next"
 
 jest.mock("../../../src/server/sierraClient")
+jest.mock("../../../src/server/auth")
+
+describe("handler", () => {
+  let req: Partial<NextApiRequest>
+  let res: Partial<NextApiResponse>
+
+  beforeEach(() => {
+    req = {
+      cookies: {},
+      method: "POST",
+      query: { id: "123456" },
+      body: {},
+    }
+    res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    }
+  })
+
+  it("should return 403 if no authenticated patron", async () => {
+    ;(initializePatronTokenAuth as jest.Mock).mockResolvedValueOnce({
+      decodedPatron: null,
+    })
+    await handler(req as NextApiRequest, res as NextApiResponse)
+    expect(checkoutRenewal).not.toHaveBeenCalled
+    expect(res.status).toHaveBeenCalledWith(403)
+    expect(res.json).toHaveBeenCalledWith("No authenticated patron")
+  })
+
+  it("should return 403 if logged in patron does not own the checkout", async () => {
+    const checkoutPatronId = "678910"
+    req.body = checkoutPatronId
+    ;(initializePatronTokenAuth as jest.Mock).mockResolvedValueOnce({
+      decodedPatron: { sub: "123456" },
+    })
+    await handler(req as NextApiRequest, res as NextApiResponse)
+    expect(checkoutRenewal).not.toHaveBeenCalled
+    expect(res.status).toHaveBeenCalledWith(403)
+    expect(res.json).toHaveBeenCalledWith(
+      "Authenticated patron does not own this checkout"
+    )
+  })
+
+  it("should call checkoutRenewal if authentication succeeds", async () => {
+    ;(initializePatronTokenAuth as jest.Mock).mockResolvedValueOnce({
+      decodedPatron: { sub: "123456" },
+    })
+    await handler(req as NextApiRequest, res as NextApiResponse)
+    expect(checkoutRenewal).toHaveBeenCalled
+  })
+})
 
 describe("checkoutRenewal", () => {
   it("should return a success message if renewal is successful", async () => {

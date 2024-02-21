@@ -30,7 +30,9 @@ const reqCookiesWithToken = {
 
 describe("initializePatronTokenAuth", () => {
   it("should return the default empty patron object when the nyplIdentityPatron cookie is not set", async () => {
-    const patronTokenResponse = await initializePatronTokenAuth(reqNoCookies)
+    const patronTokenResponse = await initializePatronTokenAuth(
+      reqNoCookies.cookies
+    )
 
     expect(patronTokenResponse).toEqual({
       isTokenValid: false,
@@ -41,7 +43,7 @@ describe("initializePatronTokenAuth", () => {
 
   it("should return the decoded patron object when the nyplIdentityPatron cookie is set", async () => {
     const patronTokenResponse = await initializePatronTokenAuth(
-      reqCookiesWithToken
+      reqCookiesWithToken.cookies
     )
 
     expect(patronTokenResponse).toEqual({
