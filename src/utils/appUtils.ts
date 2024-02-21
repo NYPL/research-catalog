@@ -7,6 +7,14 @@ import {
 
 import { standardizeBibId } from "./bibUtils"
 
+export const extractFeatures = (featuresString) => {
+  if (typeof featuresString !== "string") return []
+  return featuresString.split(",").reduce((features, feature) => {
+    if (feature.length) features.push(feature.trim())
+    return features
+  }, [])
+}
+
 /**
  * adobeAnalyticsParam
  * Utility function that builds a param string as expected by the Adobe Analytics dashboard
