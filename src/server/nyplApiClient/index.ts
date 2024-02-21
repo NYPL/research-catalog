@@ -25,7 +25,7 @@ const nyplApiClient = async (options = { apiName: "platform" }) => {
 
   let decryptedId: string
   let decryptedSecret: string
-  if (CACHE.secret && CACHE.secret) {
+  if (CACHE.secret && CACHE.id) {
     decryptedId = CACHE.id
     decryptedSecret = CACHE.secret
   } else {
