@@ -132,7 +132,7 @@ export default class MyAccount {
         pickupByDate: hold.pickupByDate,
         canFreeze: hold.canFreeze,
         frozen: hold.frozen,
-        status: MyAccount.getStatus(hold.status),
+        status: MyAccount.getHoldStatus(hold.status),
         pickupLocation: hold.pickupLocation.name,
         title: bibDataMap[hold.record.bibIds[0]].title,
         isResearch: bibDataMap[hold.record.bibIds[0]].isResearch,
@@ -175,10 +175,10 @@ export default class MyAccount {
   }
 
   /**
-   * getStatus
+   * getHoldStatus
    * Returns user-friendly status message
    */
-  static getStatus(status: SierraCodeName) {
+  static getHoldStatus(status: SierraCodeName) {
     if (status.code === "status:a") {
       return "REQUEST PLACED"
     } else if (status.name === "READY SOON") {

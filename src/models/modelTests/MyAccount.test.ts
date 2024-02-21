@@ -20,23 +20,23 @@ describe("MyAccountModel", () => {
       expect(MyAccount.getRecordId("")).toBe(null)
     })
   })
-  describe("getStatus", () => {
+  describe("getHoldStatus", () => {
     it("returns the status as given when it's user-friendly", () => {
       expect(
-        MyAccount.getStatus({
+        MyAccount.getHoldStatus({
           code: "i",
           name: "Requested item ready for pickup.",
         })
       ).toBe("Requested item ready for pickup.")
     })
     it("returns REQUEST PLACED instead of AVAILABLE", () => {
-      expect(MyAccount.getStatus({ code: "status:a", name: "AVAILABLE" })).toBe(
-        "REQUEST PLACED"
-      )
+      expect(
+        MyAccount.getHoldStatus({ code: "status:a", name: "AVAILABLE" })
+      ).toBe("REQUEST PLACED")
     })
     it("returns READY FOR PICKUP instead of READY SOON", () => {
       expect(
-        MyAccount.getStatus({ code: "spaghetti", name: "READY SOON" })
+        MyAccount.getHoldStatus({ code: "spaghetti", name: "READY SOON" })
       ).toBe("READY FOR PICKUP")
     })
   })
