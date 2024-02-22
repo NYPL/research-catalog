@@ -11,12 +11,16 @@ export default async function handler(
 ) {
   let responseMessage
   let responseStatus
+  let responseBody = {}
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const cookiePatronId = patronTokenResponse.decodedPatron?.sub
   if (!cookiePatronId) {
     responseStatus = 403
     responseMessage = "No authenticated patron"
-    return res.status(responseStatus).json(responseMessage)
+    res.status(responseStatus).json({
+      message: responseMessage,
+      body: responseBody,
+    })
   }
   if (req.method == "POST") {
     /**  We get the checkout id and patron id from the request: */
@@ -26,12 +30,21 @@ export default async function handler(
      * i.e.,the logged in user is the owner of the checkout. */
     if (checkoutPatronId == cookiePatronId) {
       const response = await checkoutRenewal(checkoutId)
+      responseStatus = response.status
+      responseMessage = response.message
+      // If successful, returns the renewed checkout object in the body.
+      if (response.body) {
+        responseBody = response.body.dueDate
+      }
     } else {
       responseStatus = 403
       responseMessage = "Authenticated patron does not own this checkout"
     }
   }
-  res.status(responseStatus).json(responseMessage)
+  return res.status(responseStatus).json({
+    message: responseMessage,
+    body: responseBody,
+  })
 }
 
 export async function checkoutRenewal(checkoutId: string) {
@@ -40,11 +53,8 @@ export async function checkoutRenewal(checkoutId: string) {
     const response = await client.post(
       `patrons/checkouts/${checkoutId}/renewal`
     )
-    console.log(response)
-    //New due date
-    return { status: response.status, message: "Renewed" }
+    return { status: 200, message: "Renewed", body: response }
   } catch (error) {
-    console.log(error)
     return {
       status: error.response.status,
       message: error.response.data.description,

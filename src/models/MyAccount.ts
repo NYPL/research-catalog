@@ -173,12 +173,8 @@ export default class MyAccount {
       expirationDate: patron.expirationDate,
       primaryEmail: patron.emails.length > 0 ? patron.emails[0] : "",
       emails: patron.emails,
-      primaryPhone: patron.phones
-        ? patron.phones.length > 0
-          ? patron.phones[0].number
-          : ""
-        : "",
-      phones: patron.phones ? patron.phones : [],
+      primaryPhone: patron?.phones?.length ? patron.phones[0].number : "",
+      phones: patron.phones || [],
       homeLibrary: patron.homeLibrary.name,
       id: patron.id,
     }
