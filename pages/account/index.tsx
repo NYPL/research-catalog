@@ -71,6 +71,30 @@ export default function MyAccount({
     }
   }
 
+  /** Testing pin update api route */
+  async function pinUpdate(patronId) {
+    try {
+      const response = await fetch(
+        `/research/research-catalog/api/account/update-pin/${patronId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ old: "1234", new: "5678" }),
+        }
+      )
+      const responseData = await response.json()
+      if (response.ok) {
+        alert(responseData)
+      } else {
+        alert(`error: ${responseData}`)
+      }
+    } catch (error) {
+      alert("fetching error")
+    }
+  }
+
   return (
     <>
       <Head>
@@ -88,6 +112,10 @@ export default function MyAccount({
         {/** Testing settings api route */}
         <Button id="settings-test" onClick={() => settingsUpdate(patron.id)}>
           Update settings
+        </Button>
+        {/** Testing pin update api route */}
+        <Button id="pin-update" onClick={() => pinUpdate(patron.id)}>
+          Update pin
         </Button>
       </Layout>
     </>
