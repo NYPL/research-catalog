@@ -20,7 +20,6 @@ export default function MyAccount({
   patron,
   fines,
 }: MyAccountProps) {
-  console.log(patron)
   /** Testing renew checkout api route, displaying alerts of whatever the handler returns. */
   async function checkoutRenew(checkoutId, patronId) {
     try {
@@ -35,13 +34,16 @@ export default function MyAccount({
         }
       )
       const responseData = await response.json()
-      if (response.ok) {
-        alert(responseData)
+      if (responseData.status == 200) {
+        // New due date.
+        alert(responseData.body)
       } else {
-        alert(`error: ${responseData}`)
+        // Renewal failed.
+        alert(responseData.message)
       }
     } catch (error) {
-      alert("fetching error")
+      // Request failed.
+      alert("Fetching error")
     }
   }
 
