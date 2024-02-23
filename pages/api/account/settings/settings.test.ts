@@ -87,13 +87,10 @@ describe("settingsUpdate", () => {
     })
     ;(sierraClient as jest.Mock).mockResolvedValueOnce({ put: clientMock })
 
-    try {
-      await settingsUpdate(patronId, patronData)
-    } catch (error) {
-      expect(sierraClient).toHaveBeenCalled()
-      expect(clientMock).toHaveBeenCalledWith(`patrons/${patronId}`, patronData)
-      expect(error.response.status).toBe(500)
-      expect(error.response.data.message).toBe("Server error")
-    }
+    const response = await settingsUpdate(patronId, patronData)
+    expect(sierraClient).toHaveBeenCalled()
+    expect(clientMock).toHaveBeenCalledWith(`patrons/${patronId}`, patronData)
+    expect(response.status).toBe(500)
+    expect(response.message).toBe("Server error")
   })
 })
