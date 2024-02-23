@@ -42,10 +42,7 @@ describe("handler", () => {
     await handler(req as NextApiRequest, res as NextApiResponse)
     expect(checkoutRenewal).not.toHaveBeenCalled
     expect(res.status).toHaveBeenCalledWith(403)
-    expect(res.json).toHaveBeenCalledWith({
-      body: {},
-      message: "No authenticated patron",
-    })
+    expect(res.json).toHaveBeenCalledWith("No authenticated patron")
   })
 
   it("should return 403 if logged in patron does not own the checkout", async () => {
@@ -57,10 +54,9 @@ describe("handler", () => {
     await handler(req as NextApiRequest, res as NextApiResponse)
     expect(checkoutRenewal).not.toHaveBeenCalled
     expect(res.status).toHaveBeenCalledWith(403)
-    expect(res.json).toHaveBeenCalledWith({
-      body: {},
-      message: "Authenticated patron does not own this checkout",
-    })
+    expect(res.json).toHaveBeenCalledWith(
+      "Authenticated patron does not own this checkout"
+    )
   })
 
   it("should call checkoutRenewal if authentication succeeds", async () => {

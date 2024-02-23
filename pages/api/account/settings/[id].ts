@@ -9,14 +9,18 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  let responseMessage
-  let responseStatus
+  let responseMessage = "Request error"
+  let responseStatus = 400
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const cookiePatronId = patronTokenResponse.decodedPatron?.sub
   if (!cookiePatronId) {
     responseStatus = 403
     responseMessage = "No authenticated patron"
     return res.status(responseStatus).json(responseMessage)
+  }
+
+  if (req.method == "GET") {
+    responseMessage = "Please make a PUT request to this endpoint."
   }
   if (req.method == "PUT") {
     /**  We get the patron id from the request: */

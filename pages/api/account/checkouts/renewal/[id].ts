@@ -9,18 +9,18 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  let responseMessage
-  let responseStatus
+  let responseMessage = "Request error"
+  let responseStatus = 400
   let responseBody = {}
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const cookiePatronId = patronTokenResponse.decodedPatron?.sub
   if (!cookiePatronId) {
     responseStatus = 403
     responseMessage = "No authenticated patron"
-    res.status(responseStatus).json({
-      message: responseMessage,
-      body: responseBody,
-    })
+    res.status(responseStatus).json(responseMessage)
+  }
+  if (req.method == "GET") {
+    responseMessage = "Please make a POST request to this endpoint."
   }
   if (req.method == "POST") {
     /**  We get the checkout id and patron id from the request: */
@@ -41,10 +41,12 @@ export default async function handler(
       responseMessage = "Authenticated patron does not own this checkout"
     }
   }
-  return res.status(responseStatus).json({
-    message: responseMessage,
-    body: responseBody,
-  })
+  if (JSON.stringify(responseBody) !== "{}") {
+    return res.status(responseStatus).json({
+      message: responseMessage,
+      body: responseBody,
+    })
+  } else return res.status(responseStatus).json(responseMessage)
 }
 
 export async function checkoutRenewal(checkoutId: string) {

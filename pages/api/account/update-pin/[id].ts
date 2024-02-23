@@ -9,8 +9,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  let responseMessage
-  let responseStatus
+  let responseMessage = "Request error"
+  let responseStatus = 400
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const cookiePatronId = patronTokenResponse.decodedPatron?.sub
   if (!cookiePatronId) {
@@ -18,12 +18,13 @@ export default async function handler(
     responseMessage = "No authenticated patron"
     return res.status(responseStatus).json(responseMessage)
   }
+  if (req.method == "GET") {
+    responseMessage = "Please make a PUT request to this endpoint."
+  }
   if (req.method == "PUT") {
     /**  We get the patron id from the request: */
     const patronId = req.query.id as string
-    const oldPin = req.body.old
-    const newPin = req.body.new
-    const barcode = req.body.barcode
+    const { oldPin, newPin, barcode } = req.body
     /**  We check that the patron cookie matches the patron id in the request,
      * i.e.,the logged in user is updating their own PIN. */
     if (patronId == cookiePatronId) {
