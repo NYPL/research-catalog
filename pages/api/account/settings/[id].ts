@@ -42,10 +42,9 @@ export async function settingsUpdate(patronId: string, patronData: any) {
     await client.put(`patrons/${patronId}`, patronData)
     return { status: 200, message: "Updated" }
   } catch (error) {
-    console.log(error)
     return {
       status: error.response.status,
-      message: error.response.data.description,
+      message: error.response.data.message || error.response.data.description,
     }
   }
 }

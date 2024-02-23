@@ -23,10 +23,11 @@ export default async function handler(
     const patronId = req.query.id as string
     const oldPin = req.body.old
     const newPin = req.body.new
+    const barcode = req.body.barcode
     /**  We check that the patron cookie matches the patron id in the request,
-     * i.e.,the logged in user is updating their own settings. */
+     * i.e.,the logged in user is updating their own PIN. */
     if (patronId == cookiePatronId) {
-      const response = await pinUpdate(oldPin)
+      const response = await pinUpdate(patronId, barcode, oldPin, newPin)
       responseStatus = response.status
       responseMessage = response.message
     } else {
@@ -37,21 +38,24 @@ export default async function handler(
   res.status(responseStatus).json(responseMessage)
 }
 
-export async function pinUpdate(oldPin: string) {
+export async function pinUpdate(
+  patronId: string,
+  barcode: string,
+  oldPin: string,
+  newPin: string
+) {
   try {
-    console.log("old pin", oldPin)
     const client = await sierraClient()
-    const response1 = await client.post("patrons/validate", {
-      barcode: "23333094983077",
+    await client.post("patrons/validate", {
+      barcode: barcode,
       pin: oldPin,
     })
-    console.log(response1)
-    return { status: response1.status, message: "Updated" }
+    await client.put(`patrons/${patronId}`, { pin: newPin })
+    return { status: 200, message: `Pin updated to ${newPin}` }
   } catch (error) {
-    console.log(error)
     return {
       status: error.response.status,
-      message: error.response.data.description,
+      message: error.response.data.message || error.response.data.description,
     }
   }
 }

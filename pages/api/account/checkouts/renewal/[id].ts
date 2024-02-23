@@ -57,7 +57,7 @@ export async function checkoutRenewal(checkoutId: string) {
   } catch (error) {
     return {
       status: error.response.status,
-      message: error.response.data.description,
+      message: error.response.data.message || error.response.data.description,
     }
   }
 }

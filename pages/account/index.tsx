@@ -20,6 +20,7 @@ export default function MyAccount({
   patron,
   fines,
 }: MyAccountProps) {
+  console.log(patron)
   /** Testing renew checkout api route, displaying alerts of whatever the handler returns. */
   async function checkoutRenew(checkoutId, patronId) {
     try {
@@ -72,7 +73,7 @@ export default function MyAccount({
   }
 
   /** Testing pin update api route */
-  async function pinUpdate(patronId) {
+  async function pinUpdate(patronId, patronBarcode, oldPin, newPin) {
     try {
       const response = await fetch(
         `/research/research-catalog/api/account/update-pin/${patronId}`,
@@ -81,13 +82,18 @@ export default function MyAccount({
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ old: "1234", new: "5678" }),
+          body: JSON.stringify({
+            old: oldPin,
+            new: newPin,
+            barcode: patronBarcode,
+          }),
         }
       )
       const responseData = await response.json()
       if (response.ok) {
         alert(responseData)
       } else {
+        console.log("problem")
         alert(`error: ${responseData}`)
       }
     } catch (error) {
@@ -114,7 +120,10 @@ export default function MyAccount({
           Update settings
         </Button>
         {/** Testing pin update api route */}
-        <Button id="pin-update" onClick={() => pinUpdate(patron.id)}>
+        <Button
+          id="pin-update"
+          onClick={() => pinUpdate(patron.id, "23333094983077", "7890", "7890")}
+        >
           Update pin
         </Button>
       </Layout>

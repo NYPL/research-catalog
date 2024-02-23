@@ -1,10 +1,10 @@
-import handler, { checkoutRenewal } from "./checkouts/renewal/[id]"
-import sierraClient from "../../../src/server/sierraClient"
-import initializePatronTokenAuth from "../../../src/server/auth"
+import handler, { checkoutRenewal } from "./[id]"
+import sierraClient from "../../../../../src/server/sierraClient"
+import initializePatronTokenAuth from "../../../../../src/server/auth"
 import type { NextApiRequest, NextApiResponse } from "next"
 
-jest.mock("../../../src/server/sierraClient")
-jest.mock("../../../src/server/auth")
+jest.mock("../../../../../src/server/sierraClient")
+jest.mock("../../../../../src/server/auth")
 
 const mockCheckoutResponse = {
   id: "1234567",
@@ -105,16 +105,13 @@ describe("checkoutRenewal", () => {
     })
     ;(sierraClient as jest.Mock).mockResolvedValueOnce({ post: clientMock })
 
-    try {
-      await checkoutRenewal(checkoutId)
-    } catch (error) {
-      expect(sierraClient).toHaveBeenCalled()
-      expect(clientMock).toHaveBeenCalledWith(
-        `patrons/checkouts/${checkoutId}/renewal`
-      )
-      expect(error.response.status).toBe(500)
-      expect(error.response.data.message).toBe("Server error")
-    }
+    const response = await checkoutRenewal(checkoutId)
+    expect(sierraClient).toHaveBeenCalled()
+    expect(clientMock).toHaveBeenCalledWith(
+      `patrons/checkouts/${checkoutId}/renewal`
+    )
+    expect(response.status).toBe(500)
+    expect(response.message).toBe("Server error")
   })
 
   it("should return a 403 error if renewal fails", async () => {
@@ -123,24 +120,21 @@ describe("checkoutRenewal", () => {
       response: {
         status: 403,
         data: {
-          message:
+          description:
             "RENEWAL NOT ALLOWED. Please contact gethelp@nypl.org for assistance",
         },
       },
     })
     ;(sierraClient as jest.Mock).mockResolvedValueOnce({ post: clientMock })
 
-    try {
-      await checkoutRenewal(checkoutId)
-    } catch (error) {
-      expect(sierraClient).toHaveBeenCalled()
-      expect(clientMock).toHaveBeenCalledWith(
-        `patrons/checkouts/${checkoutId}/renewal`
-      )
-      expect(error.response.status).toBe(403)
-      expect(error.response.data.message).toBe(
-        "RENEWAL NOT ALLOWED. Please contact gethelp@nypl.org for assistance"
-      )
-    }
+    const response = await checkoutRenewal(checkoutId)
+    expect(sierraClient).toHaveBeenCalled()
+    expect(clientMock).toHaveBeenCalledWith(
+      `patrons/checkouts/${checkoutId}/renewal`
+    )
+    expect(response.status).toBe(403)
+    expect(response.message).toBe(
+      "RENEWAL NOT ALLOWED. Please contact gethelp@nypl.org for assistance"
+    )
   })
 })
