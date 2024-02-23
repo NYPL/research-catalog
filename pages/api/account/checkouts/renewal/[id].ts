@@ -11,7 +11,7 @@ export default async function handler(
 ) {
   let responseMessage
   let responseStatus
-  let responseBody = {}
+  let responseDueDate = {}
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const cookiePatronId = patronTokenResponse.decodedPatron?.sub
   if (!cookiePatronId) {
@@ -19,7 +19,7 @@ export default async function handler(
     responseMessage = "No authenticated patron"
     res.status(responseStatus).json({
       message: responseMessage,
-      body: responseBody,
+      dueDate: responseDueDate,
     })
   }
   if (req.method == "POST") {
@@ -34,7 +34,7 @@ export default async function handler(
       responseMessage = response.message
       // If successful, returns the renewed checkout object in the body.
       if (response.body) {
-        responseBody = response.body.dueDate
+        responseDueDate = response.body.dueDate
       }
     } else {
       responseStatus = 403
@@ -43,7 +43,7 @@ export default async function handler(
   }
   return res.status(responseStatus).json({
     message: responseMessage,
-    body: responseBody,
+    dueDate: responseDueDate,
   })
 }
 

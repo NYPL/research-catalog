@@ -34,9 +34,9 @@ export default function MyAccount({
         }
       )
       const responseData = await response.json()
-      if (responseData.status == 200) {
+      if (response.status == 200) {
         // New due date.
-        alert(responseData.body)
+        alert(responseData.dueDate)
       } else {
         // Renewal failed.
         alert(responseData.message)
@@ -57,7 +57,7 @@ export default function MyAccount({
         {/** Testing renew checkout api route, with test checkout id. */}
         <Button
           id="checkout-test"
-          onClick={() => checkoutRenew(58536266, patron.id)}
+          onClick={() => checkoutRenew(58536261, patron.id)}
         >
           Renew checkout
         </Button>
