@@ -43,7 +43,7 @@ describe("handler", () => {
     expect(checkoutRenewal).not.toHaveBeenCalled
     expect(res.status).toHaveBeenCalledWith(403)
     expect(res.json).toHaveBeenCalledWith({
-      body: {},
+      dueDate: {},
       message: "No authenticated patron",
     })
   })
@@ -58,7 +58,7 @@ describe("handler", () => {
     expect(checkoutRenewal).not.toHaveBeenCalled
     expect(res.status).toHaveBeenCalledWith(403)
     expect(res.json).toHaveBeenCalledWith({
-      body: {},
+      dueDate: {},
       message: "Authenticated patron does not own this checkout",
     })
   })
