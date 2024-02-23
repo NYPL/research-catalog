@@ -20,7 +20,6 @@ export default function MyAccount({
   patron,
   fines,
 }: MyAccountProps) {
-  console.log(patron)
   /** Testing renew checkout api route, displaying alerts of whatever the handler returns. */
   async function checkoutRenew(checkoutId, patronId) {
     try {
@@ -93,7 +92,6 @@ export default function MyAccount({
       if (response.ok) {
         alert(responseData)
       } else {
-        console.log("problem")
         alert(`error: ${responseData}`)
       }
     } catch (error) {
