@@ -14,7 +14,7 @@ export const appConfig: AppConfig = {
     // falling back on PLATFORM_API_BASE_URL if set,
     // and finally falling back on a sensible default.
     discovery: {
-      development: "https://platform.nypl.org/api/v0.1",
+      development: "https://qa-platform.nypl.org/api/v0.1",
       qa: "https://qa-platform.nypl.org/api/v0.1",
       production: "https://platform.nypl.org/api/v0.1",
     },
