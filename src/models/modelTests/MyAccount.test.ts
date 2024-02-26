@@ -1,12 +1,12 @@
 import MyAccount, { MyAccountFactory } from "../MyAccount"
 import {
-  holds as mockHolds,
-  checkouts as mockCheckouts,
-  patron as mockPatron,
-  fines as mockFines,
-  holdBibs as mockHoldBibs,
-  checkoutBibs as mockCheckoutBibs,
-  empty as mockEmpty,
+  holds,
+  checkouts,
+  patron,
+  fines,
+  holdBibs,
+  checkoutBibs,
+  empty,
 } from "./data/MyAccount"
 
 jest.mock("../../server/sierraClient")
@@ -44,14 +44,14 @@ describe("MyAccountModel", () => {
   })
   describe("building model", () => {
     it("builds Account data model", async () => {
-      MyAccount.fetchCheckouts = async () => mockCheckouts
-      MyAccount.fetchHolds = async () => mockHolds
-      MyAccount.fetchPatron = async () => mockPatron
-      MyAccount.fetchFines = async () => mockFines
+      MyAccount.fetchCheckouts = async () => checkouts
+      MyAccount.fetchHolds = async () => holds
+      MyAccount.fetchPatron = async () => patron
+      MyAccount.fetchFines = async () => fines
       MyAccount.fetchBibData = async (entries, recordType) => {
         if (recordType === "item") {
-          return mockCheckoutBibs.entries
-        } else return mockHoldBibs.entries
+          return checkoutBibs
+        } else return holdBibs
       }
       const account = await MyAccountFactory("12345")
       expect(account.patron).toStrictEqual({
@@ -122,15 +122,15 @@ describe("MyAccountModel", () => {
       })
     })
     it("builds empty Account data model with empty phones and email", async () => {
-      MyAccount.fetchCheckouts = async () => mockEmpty
-      MyAccount.fetchHolds = async () => mockEmpty
+      MyAccount.fetchCheckouts = async () => empty
+      MyAccount.fetchHolds = async () => empty
       MyAccount.fetchPatron = async () => ({
-        ...mockPatron,
+        ...patron,
         phones: [],
         emails: [],
       })
       MyAccount.fetchFines = async () => ({ total: 0, entries: [] })
-      MyAccount.fetchBibData = async () => []
+      MyAccount.fetchBibData = async () => ({ total: 0, entries: [] })
 
       const emptyAccount = await MyAccountFactory("12345")
       expect(emptyAccount.patron).toStrictEqual({
@@ -149,16 +149,16 @@ describe("MyAccountModel", () => {
       expect(emptyAccount.fines).toStrictEqual({ total: 0, entries: [] })
     })
     it("builds empty Account data model with empty phones and email", async () => {
-      MyAccount.fetchCheckouts = async () => mockEmpty
-      MyAccount.fetchHolds = async () => mockEmpty
+      MyAccount.fetchCheckouts = async () => empty
+      MyAccount.fetchHolds = async () => empty
       MyAccount.fetchPatron = async () => ({
-        ...mockPatron,
+        ...patron,
         phones: undefined,
         emails: undefined,
         homeLibrary: undefined,
       })
       MyAccount.fetchFines = async () => ({ total: 0, entries: [] })
-      MyAccount.fetchBibData = async () => []
+      MyAccount.fetchBibData = async () => ({ total: 0, entries: [] })
 
       const emptyAccount = await MyAccountFactory("12345")
       expect(emptyAccount.patron).toStrictEqual({

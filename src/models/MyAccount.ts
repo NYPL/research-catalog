@@ -99,8 +99,8 @@ export default class MyAccount {
         >,
         bibFields
       ) => {
-        let isResearch
-        let isNyplOwned
+        let isResearch: boolean
+        let isNyplOwned: boolean
         const title = bibFields.title
         const nineTen = bibFields.varFields.find(
           (field) => field.marcTag === "910"
