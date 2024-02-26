@@ -60,16 +60,16 @@ describe("settingsUpdate", () => {
   it("should return a success message if settings are updated", async () => {
     const patronId = "12345"
     const patronData = { emails: ["fake"] }
-    const clientMock = jest.fn().mockResolvedValueOnce({
+    const methodMock = jest.fn().mockResolvedValueOnce({
       status: 200,
       message: "Updated",
     })
-    ;(sierraClient as jest.Mock).mockResolvedValueOnce({ put: clientMock })
+    ;(sierraClient as jest.Mock).mockResolvedValueOnce({ put: methodMock })
 
     const response = await settingsUpdate(patronId, patronData)
 
     expect(sierraClient).toHaveBeenCalled()
-    expect(clientMock).toHaveBeenCalledWith(`patrons/${patronId}`, patronData)
+    expect(methodMock).toHaveBeenCalledWith(`patrons/${patronId}`, patronData)
     expect(response.status).toBe(200)
     expect(response.message).toBe("Updated")
   })
@@ -77,7 +77,7 @@ describe("settingsUpdate", () => {
   it("should return a 500 error if server errors", async () => {
     const patronId = "12345"
     const patronData = { emails: ["fake"] }
-    const clientMock = jest.fn().mockRejectedValueOnce({
+    const methodMock = jest.fn().mockRejectedValueOnce({
       response: {
         status: 500,
         data: {
@@ -85,11 +85,11 @@ describe("settingsUpdate", () => {
         },
       },
     })
-    ;(sierraClient as jest.Mock).mockResolvedValueOnce({ put: clientMock })
+    ;(sierraClient as jest.Mock).mockResolvedValueOnce({ put: methodMock })
 
     const response = await settingsUpdate(patronId, patronData)
     expect(sierraClient).toHaveBeenCalled()
-    expect(clientMock).toHaveBeenCalledWith(`patrons/${patronId}`, patronData)
+    expect(methodMock).toHaveBeenCalledWith(`patrons/${patronId}`, patronData)
     expect(response.status).toBe(500)
     expect(response.message).toBe("Server error")
   })

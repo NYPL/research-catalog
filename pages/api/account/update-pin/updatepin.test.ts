@@ -63,7 +63,7 @@ describe("pinUpdate", () => {
     const oldPin = "1234"
     const newPin = "6789"
 
-    const clientMock = jest
+    const methodMock = jest
       .fn()
       .mockResolvedValueOnce({
         status: 200,
@@ -73,18 +73,18 @@ describe("pinUpdate", () => {
         message: `Pin updated to ${newPin}`,
       })
     ;(sierraClient as jest.Mock).mockResolvedValueOnce({
-      post: clientMock,
-      put: clientMock,
+      post: methodMock,
+      put: methodMock,
     })
 
     const response = await pinUpdate(patronId, patronBarcode, oldPin, newPin)
 
     expect(sierraClient).toHaveBeenCalled
-    expect(clientMock).toHaveBeenNthCalledWith(1, "patrons/validate", {
+    expect(methodMock).toHaveBeenNthCalledWith(1, "patrons/validate", {
       barcode: patronBarcode,
       pin: oldPin,
     })
-    expect(clientMock).toHaveBeenNthCalledWith(2, `patrons/${patronId}`, {
+    expect(methodMock).toHaveBeenNthCalledWith(2, `patrons/${patronId}`, {
       pin: newPin,
     })
     expect(response.status).toBe(200)
@@ -97,20 +97,20 @@ describe("pinUpdate", () => {
     const oldPin = "1234"
     const newPin = "6789"
 
-    const clientMock = jest.fn().mockRejectedValueOnce({
+    const methodMock = jest.fn().mockRejectedValueOnce({
       response: {
         status: 400,
         data: { description: "Invalid parameter : Invalid barcode or PIN" },
       },
     })
     ;(sierraClient as jest.Mock).mockResolvedValueOnce({
-      post: clientMock,
+      post: methodMock,
     })
 
     const response = await pinUpdate(patronId, patronBarcode, oldPin, newPin)
 
     expect(sierraClient).toHaveBeenCalled
-    expect(clientMock).toHaveBeenCalledWith("patrons/validate", {
+    expect(methodMock).toHaveBeenCalledWith("patrons/validate", {
       barcode: patronBarcode,
       pin: oldPin,
     })
@@ -124,20 +124,20 @@ describe("pinUpdate", () => {
     const oldPin = "1234"
     const newPin = "6789"
 
-    const clientMock = jest.fn().mockRejectedValueOnce({
+    const methodMock = jest.fn().mockRejectedValueOnce({
       response: {
         status: 500,
         data: { message: "Server error" },
       },
     })
     ;(sierraClient as jest.Mock).mockResolvedValueOnce({
-      post: clientMock,
+      post: methodMock,
     })
 
     const response = await pinUpdate(patronId, patronBarcode, oldPin, newPin)
 
     expect(sierraClient).toHaveBeenCalled
-    expect(clientMock).toHaveBeenCalledWith("patrons/validate", {
+    expect(methodMock).toHaveBeenCalledWith("patrons/validate", {
       barcode: patronBarcode,
       pin: oldPin,
     })

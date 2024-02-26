@@ -71,17 +71,17 @@ describe("handler", () => {
 describe("checkoutRenewal", () => {
   it("should return a success message, and the checkout, if renewal is successful", async () => {
     const checkoutId = "123"
-    const clientMock = jest.fn().mockResolvedValueOnce({
+    const methodMock = jest.fn().mockResolvedValueOnce({
       status: 200,
       message: "Renewed",
       body: mockCheckoutResponse,
     })
-    ;(sierraClient as jest.Mock).mockResolvedValueOnce({ post: clientMock })
+    ;(sierraClient as jest.Mock).mockResolvedValueOnce({ post: methodMock })
 
     const response = await checkoutRenewal(checkoutId)
 
     expect(sierraClient).toHaveBeenCalled()
-    expect(clientMock).toHaveBeenCalledWith(
+    expect(methodMock).toHaveBeenCalledWith(
       `patrons/checkouts/${checkoutId}/renewal`
     )
     expect(response.body.status).toBe(200)
@@ -91,7 +91,7 @@ describe("checkoutRenewal", () => {
 
   it("should return a 500 error if server errors", async () => {
     const checkoutId = "789"
-    const clientMock = jest.fn().mockRejectedValueOnce({
+    const methodMock = jest.fn().mockRejectedValueOnce({
       response: {
         status: 500,
         data: {
@@ -99,11 +99,11 @@ describe("checkoutRenewal", () => {
         },
       },
     })
-    ;(sierraClient as jest.Mock).mockResolvedValueOnce({ post: clientMock })
+    ;(sierraClient as jest.Mock).mockResolvedValueOnce({ post: methodMock })
 
     const response = await checkoutRenewal(checkoutId)
     expect(sierraClient).toHaveBeenCalled()
-    expect(clientMock).toHaveBeenCalledWith(
+    expect(methodMock).toHaveBeenCalledWith(
       `patrons/checkouts/${checkoutId}/renewal`
     )
     expect(response.status).toBe(500)
@@ -112,7 +112,7 @@ describe("checkoutRenewal", () => {
 
   it("should return a 403 error if renewal fails", async () => {
     const checkoutId = "456"
-    const clientMock = jest.fn().mockRejectedValueOnce({
+    const methodMock = jest.fn().mockRejectedValueOnce({
       response: {
         status: 403,
         data: {
@@ -121,11 +121,11 @@ describe("checkoutRenewal", () => {
         },
       },
     })
-    ;(sierraClient as jest.Mock).mockResolvedValueOnce({ post: clientMock })
+    ;(sierraClient as jest.Mock).mockResolvedValueOnce({ post: methodMock })
 
     const response = await checkoutRenewal(checkoutId)
     expect(sierraClient).toHaveBeenCalled()
-    expect(clientMock).toHaveBeenCalledWith(
+    expect(methodMock).toHaveBeenCalledWith(
       `patrons/checkouts/${checkoutId}/renewal`
     )
     expect(response.status).toBe(403)
