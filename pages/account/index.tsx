@@ -1,11 +1,13 @@
 import Head from "next/head"
 import { Heading, Text } from "@nypl/design-system-react-components"
+
 import Layout from "../../src/components/Layout/Layout"
 import initializePatronTokenAuth, {
   getLoginRedirect,
 } from "../../src/server/auth"
 import { MyAccountFactory } from "../../src/models/MyAccount"
 import type { Checkout, Hold, Patron, Fine } from "../../src/types/accountTypes"
+import ProfileHeader from "../../src/components/MyAccount/ProfileHeader"
 
 interface MyAccountPropsType {
   checkouts?: Checkout[]
@@ -23,20 +25,20 @@ export default function MyAccount({
   isAuthenticated,
 }: MyAccountPropsType) {
   const errorRetrievingPatronData = !patron
-  console.log(checkouts, holds, patron, fines)
+  console.log("spaghetti", patron)
   return (
     <>
       <Head>
         <title>My Account</title>
       </Head>
       <Layout isAuthenticated={isAuthenticated} activePage="account">
-        <Heading level="h1">my account</Heading>
         {errorRetrievingPatronData && (
           <Text>
             We are unable to display your account information at this time.
             Please contact gethelp@nypl.org for assistance.
           </Text>
         )}
+        <ProfileHeader patron={patron} />
       </Layout>
     </>
   )
