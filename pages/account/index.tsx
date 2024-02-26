@@ -61,6 +61,7 @@ export async function getServerSideProps({ req }) {
     const { checkouts, holds, patron, fines } = await MyAccountFactory(id)
     return { props: { checkouts, holds, patron, fines, isAuthenticated } }
   } catch (e) {
+    console.log(e.message)
     return {
       props: {
         patron: {},

@@ -40,7 +40,9 @@ export default class MyAccount {
     return checkouts.map((checkout: SierraCheckout) => {
       return {
         id: MyAccount.getRecordId(checkout.id),
-        callNumber: checkout.item.callNumber,
+        // Partner items do not have call numbers. Null has to be explicitly
+        // returned for JSON serialization in getServerSideProps
+        callNumber: checkout.item.callNumber || null,
         barcode: checkout.item.barcode,
         dueDate: checkout.dueDate,
         patron: MyAccount.getRecordId(checkout.patron),
@@ -129,7 +131,7 @@ export default class MyAccount {
       return {
         patron: MyAccount.getRecordId(hold.patron),
         id: MyAccount.getRecordId(hold.id),
-        pickupByDate: hold.pickupByDate,
+        pickupByDate: hold.pickupByDate || null,
         canFreeze: hold.canFreeze,
         frozen: hold.frozen,
         status: MyAccount.getHoldStatus(hold.status),
@@ -215,7 +217,7 @@ export const MyAccountFactory = async (id: string) => {
     holds: holds.entries,
     patron,
     fines,
-    checkoutBibData,
-    holdBibData,
+    checkoutBibData: checkoutBibData.entries,
+    holdBibData: holdBibData.entries,
   })
 }
