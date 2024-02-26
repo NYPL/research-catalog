@@ -15,6 +15,7 @@ import DRBContainer from "../../src/components/DRB/DRBContainer"
 import SearchResult from "../../src/components/SearchResult/SearchResult"
 
 import { fetchResults } from "../api/search"
+import { fetchEbscoResults, publicationsForIssns } from "../api/ebsco"
 import {
   getSearchResultsHeading,
   mapQueryToSearchParams,
@@ -26,6 +27,8 @@ import type { SortKey, SortOrder } from "../../src/types/searchTypes"
 import { mapWorksToDRBResults } from "../../src/utils/drbUtils"
 import { SITE_NAME, RESULTS_PER_PAGE } from "../../src/config/constants"
 import type SearchResultsBib from "../../src/models/SearchResultsBib"
+
+import EbscoSidebar from "../../src/components/ebsco/EbscoSidebar"
 import useLoading from "../../src/hooks/useLoading"
 import initializePatronTokenAuth from "../../src/server/auth"
 
@@ -33,8 +36,10 @@ interface SearchProps {
   bannerNotification?: string
   results: any
   isAuthenticated: boolean
+  ebscoResults?: any
 }
 
+import { issnsForSearchResults } from "../../src/utils/ebscoUtils"
 /**
  * The Search page is responsible for fetching and displaying the Search results,
  * as well as displaying and controlling pagination and search filters.
@@ -43,6 +48,7 @@ export default function Search({
   bannerNotification,
   results,
   isAuthenticated,
+  ebscoResults = null,
 }: SearchProps) {
   const metadataTitle = `Search Results | ${SITE_NAME}`
   const { push, query } = useRouter()
@@ -120,13 +126,20 @@ export default function Search({
             ) : null}
             {isLoading ? (
               <SkeletonLoader showImage={false} />
-            ) : drbResponse?.totalWorks > 0 ? (
-              <DRBContainer
-                drbResults={drbResults}
-                totalWorks={drbResponse.totalWorks}
-                searchParams={searchParams}
-              />
-            ) : null}
+            ) : (
+              ebscoResults && <EbscoSidebar results={ebscoResults} />
+            )}
+            {isLoading ? (
+              <SkeletonLoader showImage={false} />
+            ) : (
+              drbResponse?.totalWorks && (
+                <DRBContainer
+                  drbResults={drbResults}
+                  totalWorks={drbResponse.totalWorks}
+                  searchParams={searchParams}
+                />
+              )
+            )}
           </>
         }
       >
@@ -184,7 +197,52 @@ export async function getServerSideProps({ resolvedUrl, req }) {
 
   // Remove everything before the query string delineator '?', necessary for correctly parsing the 'q' param.
   const queryString = resolvedUrl.slice(resolvedUrl.indexOf("?") + 1)
-  const results = await fetchResults(mapQueryToSearchParams(parse(queryString)))
+
+  const query = parse(queryString)
+  const [results, rawEbscoResults] = await Promise.all([
+    fetchResults(mapQueryToSearchParams(parse(queryString))),
+    fetchEbscoResults(query.q),
+  ])
+
+  const ebscoResults = {
+    records:
+      rawEbscoResults?.SearchResult?.Data?.Records.filter(
+        (record) => record.PLink
+      ).map((record) => {
+        return {
+          id: record.ResultId,
+          db: record.Header.DbLabel,
+          type: record.Header.PubType,
+          title: record.RecordInfo.BibRecord.BibEntity?.Titles[0]?.TitleFull,
+          url: record.PLink,
+          fullTextUrl:
+            record.FullText?.CustomLinks?.find((link) => link.Url)?.Url || null,
+          authors:
+            record.RecordInfo.BibRecord.BibRelationships?.HasContributorRelationships?.map(
+              (rel) => rel.PersonEntity?.Name?.NameFull
+            ) || null,
+        }
+      }) || [],
+    queryString: rawEbscoResults?.SearchRequestGet?.QueryString || null,
+    total: rawEbscoResults?.SearchResult?.Statistics?.TotalHits || null,
+  }
+
+  // Do issn lookups for discovery-api results:
+  if ("results" in results) {
+    const issns = issnsForSearchResults(results)
+    if (issns?.length) {
+      const publications = await publicationsForIssns(issns)
+
+      if (publications !== null) {
+        results.results.itemListElement.forEach((result) => {
+          if (result.result.idIssn && result.result.idIssn[0]) {
+            const ebscoMatches = publications[result.result.idIssn[0]]
+            result.result.ebscoResults = ebscoMatches || null
+          }
+        })
+      }
+    }
+  }
 
   const patronTokenResponse = await initializePatronTokenAuth(req)
   const isAuthenticated = patronTokenResponse.isTokenValid
@@ -194,6 +252,7 @@ export async function getServerSideProps({ resolvedUrl, req }) {
       bannerNotification,
       results,
       isAuthenticated,
+      ebscoResults,
     },
   }
 }

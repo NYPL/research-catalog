@@ -1,16 +1,27 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import type { SearchResultsItem, JSONLDValue } from "./itemTypes"
 
+export type EbscoResult = {
+  id: string
+  url: string
+  db: string
+  type: string
+  coverage: string[][]
+  title: string
+}
+
 export interface Bib {
   extent?: string[]
   dimensions?: string[]
   note?: Note[]
   identifier: object[]
+  idIssn?: string[]
   subjectLiteral?: string[]
   "@id"?: string
   uri?: string
   titleDisplay?: string[]
   creatorLiteral?: string[]
+  ebscoResults?: EbscoResult[]
   title?: string[]
   materialType?: MaterialType[]
   publicationStatement?: string[]
