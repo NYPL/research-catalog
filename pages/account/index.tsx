@@ -95,6 +95,59 @@ export default function MyAccount({
         alert(`error: ${responseData}`)
       }
     } catch (error) {
+      console.log(error)
+      alert("fetching error")
+    }
+  }
+
+  /** Testing hold update api route */
+  async function holdUpdate(patronId, holdId, freeze, pickupLocation) {
+    try {
+      const response = await fetch(
+        `/research/research-catalog/api/account/update-request/${holdId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            patronId: patronId,
+            freeze: freeze,
+            pickupLocation: pickupLocation,
+          }),
+        }
+      )
+      const responseData = await response.json()
+      if (response.ok) {
+        alert(responseData)
+      } else {
+        alert(`error: ${responseData}`)
+      }
+    } catch (error) {
+      alert("fetching error")
+    }
+  }
+
+  /** Testing hold cancel api route */
+  async function holdCancel(patronId, holdId) {
+    try {
+      const response = await fetch(
+        `/research/research-catalog/api/account/cancel-request/${holdId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(patronId),
+        }
+      )
+      const responseData = await response.json()
+      if (response.ok) {
+        alert(responseData)
+      } else {
+        alert(`error: ${responseData}`)
+      }
+    } catch (error) {
       alert("fetching error")
     }
   }
@@ -124,6 +177,20 @@ export default function MyAccount({
         >
           Update pin
         </Button>
+        {/** Testing hold update api route */}
+        <Button
+          id="hold-update"
+          onClick={() => holdUpdate(patron.id, "42273325", false, "mp")}
+        >
+          Update hold request
+        </Button>
+        {/** Testing hold cancelapi route */}
+        <Button
+          id="hold-cancel"
+          onClick={() => holdCancel(patron.id, "42273300")}
+        >
+          Cancel hold request
+        </Button>
       </Layout>
     </>
   )
@@ -144,7 +211,7 @@ export async function getServerSideProps({ req }) {
   const id = patronTokenResponse.decodedPatron.sub
   const { checkouts, holds, patron, fines } =
     await MyAccountModel.MyAccountFactory(id)
-
+  console.log(holds)
   return {
     props: { checkouts, holds, patron, fines },
   }
