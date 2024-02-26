@@ -1,9 +1,9 @@
 import type { NextApiResponse, NextApiRequest } from "next"
-import sierraClient from "../../../../src/server/sierraClient"
-import initializePatronTokenAuth from "../../../../src/server/auth"
+import sierraClient from "../../../../../src/server/sierraClient"
+import initializePatronTokenAuth from "../../../../../src/server/auth"
 
 /**
- * API route handler for /api/account/update-request/{holdId}
+ * API route handler for /api/account/holds/update/{holdId}
  */
 export default async function handler(
   req: NextApiRequest,
@@ -19,8 +19,8 @@ export default async function handler(
     return res.status(responseStatus).json(responseMessage)
   }
 
-  if (req.method == "GET") {
-    responseMessage = "Please make a PUT request to this endpoint."
+  if (req.method !== "POST") {
+    responseMessage = "Please make a POST request to this endpoint."
   }
   if (req.method == "POST") {
     /**  We get the hold id from the request: */
@@ -33,18 +33,18 @@ export default async function handler(
     /**  We check that the patron cookie matches the patron id in the request,
      * i.e.,the logged in user is updating their own hold. */
     if (holdPatronId == cookiePatronId) {
-      const response = await requestUpdate(holdId, holdData)
+      const response = await holdUpdate(holdId, holdData)
       responseStatus = response.status
       responseMessage = response.message
     } else {
       responseStatus = 403
-      responseMessage = "Authenticated patron does not match request"
+      responseMessage = "Authenticated patron does not own this hold"
     }
   }
   res.status(responseStatus).json(responseMessage)
 }
 
-export async function requestUpdate(holdId: string, holdData: any) {
+export async function holdUpdate(holdId: string, holdData: any) {
   try {
     const client = await sierraClient()
     await client.put(`patrons/holds/${holdId}`, holdData)

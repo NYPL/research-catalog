@@ -1,9 +1,9 @@
 import type { NextApiResponse, NextApiRequest } from "next"
-import sierraClient from "../../../../src/server/sierraClient"
-import initializePatronTokenAuth from "../../../../src/server/auth"
+import sierraClient from "../../../../../src/server/sierraClient"
+import initializePatronTokenAuth from "../../../../../src/server/auth"
 
 /**
- * API route handler for /api/account/cancel-request/{holdId}
+ * API route handler for /api/account/holds/cancel/{holdId}
  */
 export default async function handler(
   req: NextApiRequest,
@@ -29,7 +29,7 @@ export default async function handler(
     /**  We check that the patron cookie matches the patron id in the request body,
      * i.e.,the logged in user is the owner of the hold. */
     if (holdPatronId == cookiePatronId) {
-      const response = await requestCancel(holdId)
+      const response = await holdCancel(holdId)
       responseStatus = response.status
       responseMessage = response.message
     } else {
@@ -40,16 +40,15 @@ export default async function handler(
   return res.status(responseStatus).json(responseMessage)
 }
 
-export async function requestCancel(holdId: string) {
+export async function holdCancel(holdId: string) {
   try {
     const client = await sierraClient()
-    await client.delete(`patrons/holds/${holdId}`)
+    await client.deleteRequest(`patrons/holds/${holdId}`)
     return { status: 200, message: "Deleted" }
   } catch (error) {
-    console.log(error)
     return {
-      status: 500,
-      message: "No response",
+      status: error.response.status,
+      message: error.response.data.name || error.response.data.description,
     }
   }
 }

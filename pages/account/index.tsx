@@ -104,7 +104,7 @@ export default function MyAccount({
   async function holdUpdate(patronId, holdId, freeze, pickupLocation) {
     try {
       const response = await fetch(
-        `/research/research-catalog/api/account/update-request/${holdId}`,
+        `/research/research-catalog/api/account/holds/update/${holdId}`,
         {
           method: "POST",
           headers: {
@@ -132,7 +132,7 @@ export default function MyAccount({
   async function holdCancel(patronId, holdId) {
     try {
       const response = await fetch(
-        `/research/research-catalog/api/account/cancel-request/${holdId}`,
+        `/research/research-catalog/api/account/holds/cancel/${holdId}`,
         {
           method: "POST",
           headers: {
@@ -180,14 +180,14 @@ export default function MyAccount({
         {/** Testing hold update api route */}
         <Button
           id="hold-update"
-          onClick={() => holdUpdate(patron.id, "42273325", false, "mp")}
+          onClick={() => holdUpdate(patron.id, "42273325", false, "")}
         >
           Update hold request
         </Button>
         {/** Testing hold cancelapi route */}
         <Button
           id="hold-cancel"
-          onClick={() => holdCancel(patron.id, "42273300")}
+          onClick={() => holdCancel(patron.id, "42273326")}
         >
           Cancel hold request
         </Button>
@@ -211,7 +211,6 @@ export async function getServerSideProps({ req }) {
   const id = patronTokenResponse.decodedPatron.sub
   const { checkouts, holds, patron, fines } =
     await MyAccountModel.MyAccountFactory(id)
-  console.log(holds)
   return {
     props: { checkouts, holds, patron, fines },
   }
