@@ -1,5 +1,4 @@
 import React, { useContext, useState } from "react"
-import axios from "axios"
 
 import { FeedbackContext } from "../../context/FeedbackContext"
 import { BASE_URL } from "../../config/constants"
@@ -25,16 +24,18 @@ const FeedbackForm = () => {
   }
   const submitFeedback = async (metadataAndComment) => {
     try {
-      const res = await axios.post(`${BASE_URL}/api/feedback`, {
-        fields: metadataAndComment,
+      const response = await fetch(`${BASE_URL}/api/feedback`, {
+        method: "POST",
+        body: JSON.stringify(metadataAndComment),
       })
-      if (res.data.error) {
-        console.error(res.data.error)
+      const responseJson = await response.json()
+      if (responseJson.data.error) {
+        console.error(responseJson.data.error)
         return
       }
       setScreen("confirmation")
-    } catch (e) {
-      console.error("Error posting feedback", e)
+    } catch (error) {
+      console.error("Error posting feedback", error)
       setScreen("error")
     }
   }
