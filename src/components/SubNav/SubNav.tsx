@@ -2,16 +2,18 @@ import RCLink from "../RCLink/RCLink"
 import styles from "../../../styles/components/SubNav.module.scss"
 import { type RCPage } from "../../types/pageTypes"
 import { BASE_URL } from "../../config/constants"
-
+import { useLogoutRedirect } from "../../server/auth"
 interface SubNavProps {
   activePage: RCPage
+  isAuthenticated?: boolean
 }
 
 /**
  * The SubNav component renders the primary Research Catalog menu
  * and passes the active prop to the correct link based on the route.
  */
-const SubNav = ({ activePage }: SubNavProps) => {
+const SubNav = ({ activePage, isAuthenticated }: SubNavProps) => {
+  const logoutLink = useLogoutRedirect()
   return (
     <nav className={styles.subNav} aria-label="Research Catalog main menu">
       <ul>
@@ -31,7 +33,7 @@ const SubNav = ({ activePage }: SubNavProps) => {
         </li>
         <li>
           <RCLink
-            href="/subject_headings"
+            href={`${BASE_URL}/subject_headings`}
             active={activePage === "shep"}
             aria-current={activePage === "shep" ? "page" : undefined}
             hasWhiteFocusRing
@@ -41,7 +43,7 @@ const SubNav = ({ activePage }: SubNavProps) => {
         </li>
         <li>
           <RCLink
-            href="/account"
+            href={`${BASE_URL}/account`}
             active={activePage === "account"}
             aria-current={activePage === "account" ? "page" : undefined}
             hasWhiteFocusRing
@@ -49,6 +51,11 @@ const SubNav = ({ activePage }: SubNavProps) => {
             My Account
           </RCLink>
         </li>
+        {isAuthenticated && (
+          <li>
+            <RCLink href={logoutLink}>Log out</RCLink>
+          </li>
+        )}
       </ul>
     </nav>
   )

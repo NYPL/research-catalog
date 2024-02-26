@@ -15,7 +15,9 @@ describe("RefineSearch", () => {
   describe("with initial creatorLiteral filter", () => {
     const setup = () => {
       mockRouter.push("/search?filters[creatorLiteral]=Gaberscek, Carlo.")
-      render(<Search results={{ aggregations, results }} />)
+      render(
+        <Search isAuthenticated={true} results={{ aggregations, results }} />
+      )
     }
     beforeEach(setup)
     it("should add filters and maintain creatorliteral filter and search params", async () => {
@@ -45,7 +47,9 @@ describe("RefineSearch", () => {
   describe("with search params", () => {
     const setup = () => {
       mockRouter.push("/search?q=spaghetti")
-      render(<Search results={{ aggregations, results }} />)
+      render(
+        <Search isAuthenticated={true} results={{ aggregations, results }} />
+      )
     }
     beforeEach(setup)
     it("adding filters should maintain search params", async () => {
@@ -72,7 +76,9 @@ describe("RefineSearch", () => {
   describe("basic filter functionality", () => {
     const setup = () => {
       mockRouter.push("/search")
-      render(<Search results={{ aggregations, results }} />)
+      render(
+        <Search isAuthenticated={true} results={{ aggregations, results }} />
+      )
     }
     beforeEach(setup)
     it("applying no filters should return to search results", async () => {

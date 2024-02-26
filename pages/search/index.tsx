@@ -29,12 +29,24 @@ import type SearchResultsBib from "../../src/models/SearchResultsBib"
 import { SearchResultsAggregationsContext } from "./SearchResultsAggregationsContext"
 
 import useLoading from "../../src/hooks/useLoading"
+import initializePatronTokenAuth from "../../src/server/auth"
+
+interface SearchProps {
+  bannerNotification?: string
+  results: any
+  isAuthenticated: boolean
+}
 
 /**
  * The Search page is responsible for fetching and displaying the Search results,
  * as well as displaying and controlling pagination and search filters.
  */
-export default function Search({ results }) {
+export default function Search({
+  bannerNotification,
+  results,
+  isAuthenticated,
+}: SearchProps) {
+  const metadataTitle = `Search Results | ${SITE_NAME}`
   const { push, query } = useRouter()
   const { itemListElement: searchResultsElements, totalResults } =
     results.results
@@ -73,13 +85,22 @@ export default function Search({ results }) {
       value={results?.aggregations?.itemListElement}
     >
       <Head>
-        <title>Search Results | {SITE_NAME}</title>
+        <meta property="og:title" content={metadataTitle} key="og-title" />
+        <meta
+          property="og:site_name"
+          content={metadataTitle}
+          key="og-site-name"
+        />
+        <meta name="twitter:title" content={metadataTitle} key="tw-title" />
+        <title key="main-title">{metadataTitle}</title>
       </Head>
       <Layout
+        isAuthenticated={isAuthenticated}
         activePage="search"
+        bannerNotification={bannerNotification}
         sidebar={
           <>
-            {totalResults && (
+            {totalResults > 0 ? (
               <Select
                 name="sort_direction"
                 id="search-results-sort"
@@ -98,18 +119,16 @@ export default function Search({ results }) {
                   </option>
                 ))}
               </Select>
-            )}
+            ) : null}
             {isLoading ? (
               <SkeletonLoader showImage={false} />
-            ) : (
-              drbResponse?.totalWorks && (
-                <DRBContainer
-                  drbResults={drbResults}
-                  totalWorks={drbResponse.totalWorks}
-                  searchParams={searchParams}
-                />
-              )
-            )}
+            ) : drbResponse?.totalWorks > 0 ? (
+              <DRBContainer
+                drbResults={drbResults}
+                totalWorks={drbResponse.totalWorks}
+                searchParams={searchParams}
+              />
+            ) : null}
           </>
         }
       >
@@ -162,14 +181,21 @@ export default function Search({ results }) {
  * relevant search results on the server side (via fetchResults).
  *
  */
-export async function getServerSideProps({ resolvedUrl }) {
+export async function getServerSideProps({ resolvedUrl, req }) {
+  const bannerNotification = process.env.SEARCH_RESULTS_NOTIFICATION || ""
+
   // Remove everything before the query string delineator '?', necessary for correctly parsing the 'q' param.
   const queryString = resolvedUrl.slice(resolvedUrl.indexOf("?") + 1)
   const results = await fetchResults(mapQueryToSearchParams(parse(queryString)))
 
+  const patronTokenResponse = await initializePatronTokenAuth(req)
+  const isAuthenticated = patronTokenResponse.isTokenValid
+
   return {
     props: {
+      bannerNotification,
       results,
+      isAuthenticated,
     },
   }
 }
