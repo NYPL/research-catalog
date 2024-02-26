@@ -36,7 +36,7 @@ interface SearchProps {
   bannerNotification?: string
   results: any
   isAuthenticated: boolean
-  ebscoResults: any
+  ebscoResults?: any
 }
 
 import { issnsForSearchResults } from "../../src/utils/ebscoUtils"

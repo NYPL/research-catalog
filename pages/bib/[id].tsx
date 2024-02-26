@@ -7,7 +7,7 @@ import { fetchBib } from "../api/bib"
 import { mapQueryToBibParams } from "../../src/utils/bibUtils"
 import BibDetailsModel from "../../src/models/BibDetails"
 import BibDetails from "../../src/components/BibPage/BibDetail"
-import type { Bib } from "../../src/types/bibTypes"
+import type { Bib, EbscoResult } from "../../src/types/bibTypes"
 import type { AnnotatedMarc } from "../../src/types/bibDetailsTypes"
 import initializePatronTokenAuth from "../../src/server/auth"
 import { publicationsForIssns } from "../api/ebsco"
@@ -47,7 +47,7 @@ export default function Bib({
       <Layout isAuthenticated={isAuthenticated} activePage="bib">
         <Heading level="h1">{bib.title[0]}</Heading>
         <BibDetails key="top-details" details={topDetails} />
-        {bib.ebscoResults && <EbscoLinks bib={bib} showSearchInside={true} />}
+        {bib.ebscoResults && <EbscoLinks bibId={bib.uri} ebscoResults={bib.ebscoResults} showSearchInside={true} />}
         <BibDetails
           heading="Details"
           key="bottom-details"
@@ -79,7 +79,7 @@ export async function getServerSideProps({ params, resolvedUrl, req }) {
     const publications = await publicationsForIssns(issns)
 
     if (publications !== null) {
-      bib.ebscoResults = Object.values(publications).flat()
+      bib.ebscoResults = (Object.values(publications) as EbscoResult[]).flat()
     }
   }
 

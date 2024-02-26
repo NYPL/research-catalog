@@ -30,9 +30,9 @@ export const ebscoSearchResultsToIssnResults = (results) => {
     if (!issnItem) return null
 
     const publicationId = record.Header.PublicationId.replace(/^[^\d]*/, "")
-    const publicationTitle = record.Items.find((item) => item.Name === "Title")?.Data
-
-    console.log(`Publication baseURL : ${publicationId}&publicationTitle=${publicationTitle}`)
+    const publicationTitle = record.Items.find(
+      (item) => item.Name === "Title"
+    )?.Data
 
     return record.FullTextHoldings.filter((holding) => holding.URL).map(
       (holding) => {
