@@ -15,10 +15,17 @@ const encryptedClientSecret = process.env.PLATFORM_API_CLIENT_SECRET
 const creds = [encryptedClientId, encryptedClientSecret]
 const CACHE: KMSCache = { clients: [], secret: null, id: null }
 
+export class NyplApiClientError extends Error {
+  constructor(message: string) {
+    super()
+    this.message = "Error building NYPL data api client: " + message
+  }
+}
+
 const nyplApiClient = async (options = { apiName: "platform" }) => {
   const { apiName } = options
   if (CACHE.clients[apiName]) {
-    return await Promise.resolve(CACHE.clients[apiName])
+    return CACHE.clients[apiName]
   }
 
   const baseUrl = appConfig.apiEndpoints[apiName][appEnvironment]
@@ -34,7 +41,7 @@ const nyplApiClient = async (options = { apiName: "platform" }) => {
       CACHE.id = decryptedId
       CACHE.secret = decryptedSecret
     } catch (exception) {
-      console.error("Error decrypting Sierra credentials")
+      throw new NyplApiClientError("Error decrypting creds")
     }
   }
   try {
@@ -47,7 +54,7 @@ const nyplApiClient = async (options = { apiName: "platform" }) => {
     CACHE.clients[apiName] = nyplApiClient
     return nyplApiClient
   } catch (error) {
-    console.error(error.message)
+    throw new NyplApiClientError(error.message)
   }
 }
 

@@ -25,7 +25,7 @@ export class SierraClientError extends Error {
 }
 
 const sierraClient = async () => {
-  if (CACHE.client) return await Promise.resolve(CACHE.client)
+  if (CACHE.client) return CACHE.client
   let decryptedKey: string
   let decryptedSecret: string
   if (CACHE.key && CACHE.secret) {
