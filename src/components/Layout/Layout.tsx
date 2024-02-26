@@ -13,7 +13,6 @@ import SubNav from "../SubNav/SubNav"
 import SearchForm from "../SearchForm/SearchForm"
 import { BASE_URL } from "../../config/constants"
 import Notification from "../Notification/Notification"
-import { appConfig } from "../../config/config"
 
 interface LayoutProps {
   sidebar?: ReactElement
