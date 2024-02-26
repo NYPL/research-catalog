@@ -64,7 +64,6 @@ export async function getServerSideProps({ params, resolvedUrl, req }) {
   const { id } = params
   const queryString = resolvedUrl.slice(resolvedUrl.indexOf("?") + 1)
   const bibParams = mapQueryToBibParams(queryString)
-  console.log("bibParams", bibParams)
   const { bib, annotatedMarc, status, redirectUrl } = await fetchBib(
     id,
     bibParams
