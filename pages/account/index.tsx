@@ -6,6 +6,7 @@ import initializePatronTokenAuth, {
 } from "../../src/server/auth"
 import MyAccountModel from "../../src/models/MyAccount"
 import type { Checkout, Hold, Patron, Fine } from "../../src/types/accountTypes"
+import { BASE_URL } from "../../src/config/constants"
 
 interface MyAccountProps {
   checkouts: Checkout[]
@@ -24,7 +25,7 @@ export default function MyAccount({
   async function checkoutRenew(checkoutId, patronId) {
     try {
       const response = await fetch(
-        `/research/research-catalog/api/account/checkouts/renewal/${checkoutId}`,
+        `${BASE_URL}/api/account/checkouts/renewal/${checkoutId}`,
         {
           method: "POST",
           headers: {
@@ -51,7 +52,7 @@ export default function MyAccount({
   async function settingsUpdate(patronId) {
     try {
       const response = await fetch(
-        `/research/research-catalog/api/account/settings/${patronId}`,
+        `${BASE_URL}/api/account/settings/${patronId}`,
         {
           method: "PUT",
           headers: {
@@ -75,7 +76,7 @@ export default function MyAccount({
   async function pinUpdate(patronId, patronBarcode, oldPin, newPin) {
     try {
       const response = await fetch(
-        `/research/research-catalog/api/account/update-pin/${patronId}`,
+        `${BASE_URL}/api/account/update-pin/${patronId}`,
         {
           method: "PUT",
           headers: {
