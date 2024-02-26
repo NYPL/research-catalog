@@ -43,12 +43,13 @@ export default async function initializePatronTokenAuth(req: NextRequest) {
         publicKey
       )
       patronTokenResponse.isTokenValid = true
-      patronTokenResponse.errorCode = null
       patronTokenResponse.decodedPatron = verified.payload as UserJwtPayload
+      patronTokenResponse.errorCode = null
     } catch (error) {
       // Most likely the token is expired and it needs to be refreshed
       console.log("error", error)
       patronTokenResponse.errorCode = error.message
+      patronTokenResponse.isTokenValid = false
     }
   }
 

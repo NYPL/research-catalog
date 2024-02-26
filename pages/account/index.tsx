@@ -7,7 +7,7 @@ import initializePatronTokenAuth, {
 import { MyAccountFactory } from "../../src/models/MyAccount"
 import type { Checkout, Hold, Patron, Fine } from "../../src/types/accountTypes"
 
-interface MyAccountProps {
+interface MyAccountPropsType {
   checkouts: Checkout[]
   holds: Hold[]
   patron: Patron
@@ -21,7 +21,7 @@ export default function MyAccount({
   patron,
   fines,
   isAuthenticated,
-}: MyAccountProps) {
+}: MyAccountPropsType) {
   const sierraClientErrorThrown = !patron.name
   console.log(checkouts, holds, patron, fines)
   return (
@@ -57,15 +57,15 @@ export async function getServerSideProps({ req }) {
   }
 
   const id = patronTokenResponse.decodedPatron.sub
-  let props
   try {
     const { checkouts, holds, patron, fines } = await MyAccountFactory(id)
-    props = { checkouts, holds, patron, fines, isAuthenticated }
+    return { props: { checkouts, holds, patron, fines, isAuthenticated } }
   } catch (e) {
-    props = {
-      patron: {},
-      isAuthenticated,
+    return {
+      props: {
+        patron: {},
+        isAuthenticated,
+      },
     }
   }
-  return { props }
 }
