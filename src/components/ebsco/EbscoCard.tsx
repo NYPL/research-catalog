@@ -4,6 +4,7 @@ import {
   Text,
   Link as DSLink,
 } from "@nypl/design-system-react-components"
+import RCLink from "../RCLink/RCLink"
 
 /**
  */
@@ -36,6 +37,14 @@ const EbscoCard = ({ ebscoResult }) => {
         )}
 
         {description && <Text size="body2">{description}</Text>}
+
+        {ebscoResult.fullTextUrl && (
+          <>
+            <RCLink href={ebscoResult.fullTextUrl} type="buttonSecondary">
+              Read online
+            </RCLink>
+          </>
+        )}
       </CardContent>
     </Card>
   )

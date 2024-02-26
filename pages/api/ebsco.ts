@@ -1,9 +1,6 @@
 import { makeClient } from "../../src/utils/ebscoClient"
 
-import {
-  parseCoverageDates,
-  ebscoSearchResultsToIssnResults,
-} from "../../src/utils/ebscoUtils"
+import { ebscoSearchResultsToIssnResults } from "../../src/utils/ebscoUtils"
 
 let ebscoClient
 
@@ -21,17 +18,15 @@ export async function fetchEbscoResults(query) {
 
 export async function publicationsForIssns(issns) {
   const results = await Promise.all(
-    issns
-      .map(async (issn) => {
-        const results = await fetchEbscoPublications(`IS:${issn}`)
+    issns.map(async (issn) => {
+      const results = await fetchEbscoPublications(`IS:${issn}`)
 
-        const issnResults = ebscoSearchResultsToIssnResults(results)
-        return issnResults
-      })
+      const issnResults = ebscoSearchResultsToIssnResults(results)
+      return issnResults
+    })
   )
 
-  const filteredResults = results
-    .flat(4)
+  const filteredResults = results.flat(4)
 
   return filteredResults
     .filter((result) => result)

@@ -190,6 +190,8 @@ export async function getServerSideProps({ resolvedUrl }) {
           type: record.Header.PubType,
           title: record.RecordInfo.BibRecord.BibEntity?.Titles[0]?.TitleFull,
           url: record.PLink,
+          fullTextUrl:
+            record.FullText?.CustomLinks?.find((link) => link.Url)?.Url || null,
           authors:
             record.RecordInfo.BibRecord.BibRelationships?.HasContributorRelationships?.map(
               (rel) => rel.PersonEntity?.Name?.NameFull
@@ -221,14 +223,6 @@ export async function getServerSideProps({ resolvedUrl }) {
     props: {
       results: discoveryApiResults,
       ebscoResults,
-      debug: {
-        env: ["EBSCO_USER_ID", "EBSCO_PASSWORD", "EBSCO_PROFILE"].reduce(
-          (h, name) => {
-            return Object.assign(h, { [name]: process.env[name] })
-          },
-          {}
-        ),
-      },
     },
   }
 }

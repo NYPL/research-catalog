@@ -25,22 +25,21 @@ export const issnsForSearchResults = (discoveryApiResults) => {
 export const ebscoSearchResultsToIssnResults = (results) => {
   if (!results?.SearchResult?.Data?.Records) return null
 
-  return results.SearchResult.Data.Records
-    .map((record) => {
-      const issnItem = record.Items?.find((item) => item.Name === "ISSN")
-      if (!issnItem) return null
+  return results.SearchResult.Data.Records.map((record) => {
+    const issnItem = record.Items?.find((item) => item.Name === "ISSN")
+    if (!issnItem) return null
 
-      return record.FullTextHoldings.filter((holding) => holding.URL).map(
-        (holding) => {
-          return {
-            issn: issnItem.Data.split(" ").shift(),
-            url: holding.URL,
-            name: holding.Name,
-            coverage: parseCoverageDates(holding.CoverageDates),
-          }
+    return record.FullTextHoldings.filter((holding) => holding.URL).map(
+      (holding) => {
+        return {
+          issn: issnItem.Data.split(" ").shift(),
+          url: holding.URL,
+          name: holding.Name,
+          coverage: parseCoverageDates(holding.CoverageDates),
         }
-      )
-    })
+      }
+    )
+  })
 }
 
 export const formatCoverageDate = (dateString) => {
@@ -93,12 +92,14 @@ const compoundSorter = function (...comparators) {
       if (v1 > v2) return 1
       else if (v1 < v2) return -1
     }
+    /*
     // Throw error if comparators failed to find a defined sort for any two elements:
     const el1Values = comparators.map((comp) => comp(el1))
     const el2Values = comparators.map((comp) => comp(el2))
-    /* throw new Error(
+    throw new Error(
       `Could not sort elements because comparators returned identical values: ${el1Values}; ${el2Values}`
-    ) */
+    )
+    */
   }
 }
 

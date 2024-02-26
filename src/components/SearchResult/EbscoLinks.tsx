@@ -38,13 +38,13 @@ const EbscoLinks = ({ bib }: EbscoLinksProps) => {
     ) : null
 
   return (
-    <Box border="2px" borderColor="red.200">
+    <Box border="dashed gray 2px">
       <>
-        <Heading level="four" size="callout" mb="xxs">
+        <Heading background="gray.200" level="four" size="callout" mb="xxs">
           <>
             <div style={{ width: "auto", float: "right" }}>
-              {coverageRange && formatCoverageRange(coverageRange) + " • "}{bib.ebscoResults.length}{" "}
-              items
+              {coverageRange && formatCoverageRange(coverageRange) + " • "}
+              {bib.ebscoResults.length} items
             </div>
             Available Online (EBSCO)
           </>
