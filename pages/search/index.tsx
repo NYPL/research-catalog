@@ -30,13 +30,27 @@ import type SearchResultsBib from "../../src/models/SearchResultsBib"
 
 import EbscoSidebar from "../../src/components/ebsco/EbscoSidebar"
 import useLoading from "../../src/hooks/useLoading"
+import initializePatronTokenAuth from "../../src/server/auth"
+
+interface SearchProps {
+  bannerNotification?: string
+  results: any
+  isAuthenticated: boolean
+  ebscoResults: any
+}
 
 import { issnsForSearchResults } from "../../src/utils/ebscoUtils"
 /**
  * The Search page is responsible for fetching and displaying the Search results,
  * as well as displaying and controlling pagination and search filters.
  */
-export default function Search({ results, ebscoResults = null }) {
+export default function Search({
+  bannerNotification,
+  results,
+  isAuthenticated,
+  ebscoResults = null,
+}: SearchProps) {
+  const metadataTitle = `Search Results | ${SITE_NAME}`
   const { push, query } = useRouter()
   const { itemListElement: searchResultsElements, totalResults } =
     results.results
@@ -75,10 +89,19 @@ export default function Search({ results, ebscoResults = null }) {
   return (
     <>
       <Head>
-        <title>Search Results | {SITE_NAME}</title>
+        <meta property="og:title" content={metadataTitle} key="og-title" />
+        <meta
+          property="og:site_name"
+          content={metadataTitle}
+          key="og-site-name"
+        />
+        <meta name="twitter:title" content={metadataTitle} key="tw-title" />
+        <title key="main-title">{metadataTitle}</title>
       </Head>
       <Layout
+        isAuthenticated={isAuthenticated}
         activePage="search"
+        bannerNotification={bannerNotification}
         sidebar={
           <>
             {totalResults > 0 ? (
@@ -169,12 +192,14 @@ export default function Search({ results, ebscoResults = null }) {
  * relevant search results on the server side (via fetchResults).
  *
  */
-export async function getServerSideProps({ resolvedUrl }) {
+export async function getServerSideProps({ resolvedUrl, req }) {
+  const bannerNotification = process.env.SEARCH_RESULTS_NOTIFICATION || ""
+
   // Remove everything before the query string delineator '?', necessary for correctly parsing the 'q' param.
   const queryString = resolvedUrl.slice(resolvedUrl.indexOf("?") + 1)
 
   const query = parse(queryString)
-  const [discoveryApiResults, rawEbscoResults] = await Promise.all([
+  const [results, rawEbscoResults] = await Promise.all([
     fetchResults(mapQueryToSearchParams(parse(queryString))),
     fetchEbscoResults(query.q),
   ])
@@ -203,13 +228,13 @@ export async function getServerSideProps({ resolvedUrl }) {
   }
 
   // Do issn lookups for discovery-api results:
-  if ("results" in discoveryApiResults) {
-    const issns = issnsForSearchResults(discoveryApiResults)
+  if ("results" in results) {
+    const issns = issnsForSearchResults(results)
     if (issns?.length) {
       const publications = await publicationsForIssns(issns)
 
       if (publications !== null) {
-        discoveryApiResults.results.itemListElement.forEach((result) => {
+        results.results.itemListElement.forEach((result) => {
           if (result.result.idIssn && result.result.idIssn[0]) {
             const ebscoMatches = publications[result.result.idIssn[0]]
             result.result.ebscoResults = ebscoMatches || null
@@ -219,9 +244,14 @@ export async function getServerSideProps({ resolvedUrl }) {
     }
   }
 
+  const patronTokenResponse = await initializePatronTokenAuth(req)
+  const isAuthenticated = patronTokenResponse.isTokenValid
+
   return {
     props: {
-      results: discoveryApiResults,
+      bannerNotification,
+      results,
+      isAuthenticated,
       ebscoResults,
     },
   }

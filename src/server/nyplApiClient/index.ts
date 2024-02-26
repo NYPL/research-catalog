@@ -9,7 +9,7 @@ interface KMSCache {
   clientId: string
   clientSecret: string
 }
-const appEnvironment = process.env.APP_ENV || "production"
+const appEnvironment = appConfig.environment
 const clientId = process.env.PLATFORM_API_CLIENT_ID
 const clientSecret = process.env.PLATFORM_API_CLIENT_SECRET
 
@@ -22,7 +22,7 @@ const nyplApiClient = async (options = { apiName: "platform" }) => {
     return await Promise.resolve(CACHE.clients[apiName])
   }
 
-  const baseUrl = appConfig.apiUrls[apiName][appEnvironment]
+  const baseUrl = appConfig.apiEndpoints[apiName][appEnvironment]
   return await new Promise((resolve, reject) => {
     Promise.all(keys.map(decryptKMS))
       .then(([decryptedClientId, decryptedClientSecret]) => {
@@ -30,7 +30,7 @@ const nyplApiClient = async (options = { apiName: "platform" }) => {
           base_url: baseUrl,
           oauth_key: decryptedClientId,
           oauth_secret: decryptedClientSecret,
-          oauth_url: appConfig.tokenUrl,
+          oauth_url: appConfig.urls.tokenUrl,
         })
 
         CACHE.clientId = clientId

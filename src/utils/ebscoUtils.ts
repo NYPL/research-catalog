@@ -29,11 +29,19 @@ export const ebscoSearchResultsToIssnResults = (results) => {
     const issnItem = record.Items?.find((item) => item.Name === "ISSN")
     if (!issnItem) return null
 
+    const publicationId = record.Header.PublicationId.replace(/^[^\d]*/, "")
+    const publicationTitle = record.Items.find((item) => item.Name === "Title")?.Data
+
+    console.log(`Publication baseURL : ${publicationId}&publicationTitle=${publicationTitle}`)
+
     return record.FullTextHoldings.filter((holding) => holding.URL).map(
       (holding) => {
         return {
           issn: issnItem.Data.split(" ").shift(),
           url: holding.URL,
+          publicationId,
+          publicationTitle,
+          // fulltextSearchBase: `https://research-ebsco-com.i.ezproxy.nypl.org/c/2styhb/search/results?autocorrect=y&publicationId=${publicationId}&publicationTitle=${publicationTitle}`, // &q=clinical
           name: holding.Name,
           coverage: parseCoverageDates(holding.CoverageDates),
         }
@@ -103,7 +111,32 @@ const compoundSorter = function (...comparators) {
   }
 }
 
-export const groupLinksByCoverage = (ebscoLinks, maxToShow = 3) => {
+export const groupLinksByPublication = (ebscoLinks) => {
+  return (
+    ebscoLinks
+      .sort(
+        compoundSorter(
+          // Sort by start date ascending:
+          (link) =>
+            link.coverage && link.coverage[0] && link.coverage[0].join("🎸"),
+          // .. followed by name (if dates match)
+          (link) => link.name,
+          // .. followed by URL (if dates and name match)
+          (link) => link.url
+        )
+      )
+      // Group by coverage:
+      .reduce((h, link) => {
+        const publicationKey = `${link.publicationId}||${link.publicationTitle}`
+
+        if (!h[publicationKey]) h[publicationKey] = []
+        h[publicationKey].push(link)
+        return h
+      }, {})
+  )
+}
+
+export const groupLinksByCoverage = (ebscoLinks, maxToShow = Infinity) => {
   return (
     ebscoLinks
       .sort(
