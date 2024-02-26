@@ -8,10 +8,10 @@ import { MyAccountFactory } from "../../src/models/MyAccount"
 import type { Checkout, Hold, Patron, Fine } from "../../src/types/accountTypes"
 
 interface MyAccountPropsType {
-  checkouts: Checkout[]
-  holds: Hold[]
-  patron: Patron
-  fines: Fine
+  checkouts?: Checkout[]
+  holds?: Hold[]
+  patron?: Patron
+  fines?: Fine
   isAuthenticated: boolean
 }
 
@@ -22,7 +22,7 @@ export default function MyAccount({
   fines,
   isAuthenticated,
 }: MyAccountPropsType) {
-  const sierraClientErrorThrown = !patron.name
+  const errorRetrievingPatronData = !patron
   console.log(checkouts, holds, patron, fines)
   return (
     <>
@@ -31,7 +31,7 @@ export default function MyAccount({
       </Head>
       <Layout isAuthenticated={isAuthenticated} activePage="account">
         <Heading level="h1">my account</Heading>
-        {sierraClientErrorThrown && (
+        {errorRetrievingPatronData && (
           <Text>
             We are unable to display your account information at this time.
             Please contact gethelp@nypl.org for assistance.
@@ -64,7 +64,6 @@ export async function getServerSideProps({ req }) {
     console.log(e.message)
     return {
       props: {
-        patron: {},
         isAuthenticated,
       },
     }
