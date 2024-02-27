@@ -6,6 +6,15 @@ import type { NextApiRequest, NextApiResponse } from "next"
 jest.mock("../../../../../src/server/sierraClient")
 jest.mock("../../../../../src/server/auth")
 
+const mockHoldUpdate = (holdUpdateReturnValue) => {
+  const mockedHoldUpdate = jest.fn(async () => holdUpdateReturnValue)
+  jest.mock("./[id]", () => {
+    const handler = jest.requireActual("./[id]")
+    return { default: handler, holdUpdate: mockedHoldUpdate }
+  })
+  return mockedHoldUpdate
+}
+
 describe("handler", () => {
   let req: Partial<NextApiRequest>
   let res: Partial<NextApiResponse>
@@ -28,8 +37,9 @@ describe("handler", () => {
     ;(initializePatronTokenAuth as jest.Mock).mockResolvedValueOnce({
       decodedPatron: null,
     })
+    const mockedHoldUpdate = mockHoldUpdate("")
     await handler(req as NextApiRequest, res as NextApiResponse)
-    expect(holdUpdate).not.toHaveBeenCalled
+    expect(mockedHoldUpdate).not.toHaveBeenCalled()
     expect(res.status).toHaveBeenCalledWith(403)
     expect(res.json).toHaveBeenCalledWith("No authenticated patron")
   })
@@ -39,8 +49,9 @@ describe("handler", () => {
     ;(initializePatronTokenAuth as jest.Mock).mockResolvedValueOnce({
       decodedPatron: { sub: "123456" },
     })
+
     await handler(req as NextApiRequest, res as NextApiResponse)
-    expect(holdUpdate).not.toHaveBeenCalled
+    expect(holdUpdate).not.toHaveBeenCalled()
     expect(res.status).toHaveBeenCalledWith(403)
     expect(res.json).toHaveBeenCalledWith(
       "Authenticated patron does not own this hold"
