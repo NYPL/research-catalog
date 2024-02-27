@@ -18,7 +18,7 @@ describe("Advanced Search Form", () => {
     await userEvent.click(screen.getByText("Clear"))
   })
   it("displays alert when no fields are submitted", () => {
-    render(<AdvancedSearch />)
+    render(<AdvancedSearch isAuthenticated={true} />)
 
     submit()
     screen.getByText(defaultEmptySearchErrorMessage)
@@ -29,7 +29,7 @@ describe("Advanced Search Form", () => {
   // commented out below.
   it.todo("can set keyword, contributor, title, subject")
   // async () => {
-  //   render(<AdvancedSearch />)
+  //   render(<AdvancedSearch isAuthenticated={true}/>)
 
   //   const [keywordInput, contributorInput, titleInput, subjectInput] = [
   //     "Keywords",
@@ -52,7 +52,7 @@ describe("Advanced Search Form", () => {
   //   })
   // })
   it("can select languages", async () => {
-    render(<AdvancedSearch />)
+    render(<AdvancedSearch isAuthenticated={true} />)
 
     const languageSelect = screen.getByLabelText("Language")
     await userEvent.selectOptions(languageSelect, "Azerbaijani")
@@ -63,7 +63,7 @@ describe("Advanced Search Form", () => {
     )
   })
   it("can check material checkboxes", async () => {
-    render(<AdvancedSearch />)
+    render(<AdvancedSearch isAuthenticated={true} />)
     await userEvent.click(screen.getByLabelText("Notated music"))
     await userEvent.click(screen.getByLabelText("Cartographic"))
     submit()
@@ -74,7 +74,7 @@ describe("Advanced Search Form", () => {
     )
   })
   it("should throw an error when the date from is bigger than the date to", async () => {
-    render(<AdvancedSearch />)
+    render(<AdvancedSearch isAuthenticated={true} />)
     const dateFromInput = screen.getByLabelText("From")
     const dateToInput = screen.getByLabelText("To")
     await userEvent.type(dateFromInput, "1999")
@@ -84,7 +84,7 @@ describe("Advanced Search Form", () => {
     expect(screen.getByText(badDateErrorMessage)).toBeInTheDocument()
   })
   it("can clear the form", async () => {
-    render(<AdvancedSearch />)
+    render(<AdvancedSearch isAuthenticated={true} />)
     const notatedMusic = screen.getByLabelText("Notated music")
     await userEvent.click(notatedMusic)
     const cartographic = screen.getByLabelText("Cartographic")

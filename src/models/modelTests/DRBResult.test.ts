@@ -26,7 +26,7 @@ describe("DRBResult model", () => {
 
   it("has a read online link but no download link", () => {
     expect(model.readOnlineUrl).toEqual(
-      "https://digital-research-books-beta.nypl.org/read/3979504"
+      "http://sfr-front-end-development.us-east-1.elasticbeanstalk.com/read/3979504"
     )
     expect(model.downloadLink).toEqual(null)
   })

@@ -7,9 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Added
+
+- Added the Notification banner on the home and search result pages (SCC-3996)
+- OG and Twitter meta tags (SCC-4002)
+
 ### Updated
 
-- Make the reverse proxy feature flag a boolean to avoid issues with stringified array values in Docker
+- Remove all build time env variables from appConfig except for ENV
 
 ## [0.1.0] 2024-02-02
 

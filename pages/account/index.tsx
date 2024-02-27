@@ -1,17 +1,18 @@
 import Head from "next/head"
-import { Button, Heading } from "@nypl/design-system-react-components"
+import { Button, Heading, Text } from "@nypl/design-system-react-components"
 import Layout from "../../src/components/Layout/Layout"
 import initializePatronTokenAuth, {
   getLoginRedirect,
 } from "../../src/server/auth"
-import MyAccountModel from "../../src/models/MyAccount"
+import { MyAccountFactory } from "../../src/models/MyAccount"
 import type { Checkout, Hold, Patron, Fine } from "../../src/types/accountTypes"
 
-interface MyAccountProps {
-  checkouts: Checkout[]
-  holds: Hold[]
-  patron: Patron
-  fines: Fine
+interface MyAccountPropsType {
+  checkouts?: Checkout[]
+  holds?: Hold[]
+  patron?: Patron
+  fines?: Fine
+  isAuthenticated: boolean
 }
 
 export default function MyAccount({
@@ -19,7 +20,10 @@ export default function MyAccount({
   holds,
   patron,
   fines,
-}: MyAccountProps) {
+  isAuthenticated,
+}: MyAccountPropsType) {
+  const errorRetrievingPatronData = !patron
+  console.log(checkouts, holds, patron, fines)
   /** Testing renew checkout api route, displaying alerts of whatever the handler returns. */
   async function checkoutRenew(checkoutId, patronId) {
     try {
@@ -52,8 +56,14 @@ export default function MyAccount({
       <Head>
         <title>My Account</title>
       </Head>
-      <Layout activePage="account">
+      <Layout isAuthenticated={isAuthenticated} activePage="account">
         <Heading level="h1">my account</Heading>
+        {errorRetrievingPatronData && (
+          <Text>
+            We are unable to display your account information at this time.
+            Please contact gethelp@nypl.org for assistance.
+          </Text>
+        )}
         {/** Testing renew checkout api route, with test checkout id. */}
         <Button
           id="checkout-test"
@@ -69,7 +79,8 @@ export default function MyAccount({
 export async function getServerSideProps({ req }) {
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   console.log("patronTokenResponse is", patronTokenResponse)
-  if (!patronTokenResponse.isTokenValid) {
+  const isAuthenticated = patronTokenResponse.isTokenValid
+  if (!isAuthenticated) {
     const redirect = getLoginRedirect(req)
     return {
       redirect: {
@@ -79,10 +90,15 @@ export async function getServerSideProps({ req }) {
     }
   }
   const id = patronTokenResponse.decodedPatron.sub
-  const { checkouts, holds, patron, fines } =
-    await MyAccountModel.MyAccountFactory(id)
-
-  return {
-    props: { checkouts, holds, patron, fines },
+  try {
+    const { checkouts, holds, patron, fines } = await MyAccountFactory(id)
+    return { props: { checkouts, holds, patron, fines, isAuthenticated } }
+  } catch (e) {
+    console.log(e.message)
+    return {
+      props: {
+        isAuthenticated,
+      },
+    }
   }
 }
