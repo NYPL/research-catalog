@@ -95,7 +95,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
             onContact({
               id: item.id,
               barcode: item.barcode,
-              callnumber: item.callNumber,
+              callNumber: item.callNumber,
               bibId: item.bibId,
             })
           }

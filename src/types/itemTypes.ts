@@ -36,7 +36,7 @@ export interface ItemTableParams {
 export interface ItemMetadata {
   id?: string
   barcode?: string
-  callnumber?: string
+  callNumber?: string
   bibId?: string
 }
 

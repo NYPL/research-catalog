@@ -32,8 +32,7 @@ const FeedbackForm = () => {
         body: JSON.stringify(metadataAndComment),
       })
       const responseJson = await response.json()
-      console.log(responseJson)
-      if (responseJson?.data?.error) {
+      if (responseJson.error) {
         console.error(responseJson.data.error)
         return
       }
@@ -55,8 +54,8 @@ const FeedbackForm = () => {
       showEmailField
       hiddenFields={itemMetadata}
       notificationText={
-        itemMetadata?.callnumber
-          ? `You are asking for help or information about ${itemMetadata.callnumber} in this record.`
+        itemMetadata?.callNumber
+          ? `You are asking for help or information about ${itemMetadata.callNumber} in this record.`
           : null
       }
       view={screen}
