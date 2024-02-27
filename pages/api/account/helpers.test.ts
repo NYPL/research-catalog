@@ -34,7 +34,7 @@ describe("cancelHold", () => {
     expect(sierraClient).toHaveBeenCalled()
     expect(clientMock).toHaveBeenCalledWith(`patrons/holds/${holdId}`)
     expect(response.status).toBe(200)
-    expect(response.message).toBe("Deleted")
+    expect(response.message).toBe("Cancelled")
   })
 
   it("should return a 404 error if hold DNE", async () => {

@@ -39,7 +39,7 @@ export default function MyAccount({
         alert(responseData.body)
       } else {
         // Renewal failed.
-        alert(responseData.message)
+        alert(responseData)
       }
     } catch (error) {
       // Request failed.
