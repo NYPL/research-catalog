@@ -108,7 +108,7 @@ export const trackVirtualPageView = (pathname = "") => {
 }
 
 /**
- * encodeHTML(str, maxLength)
+ * encodeHTML
  * Return a version of the string sanitized to protect against XSS.
  */
 export const encodeHTML = (str: string) =>
