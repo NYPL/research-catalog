@@ -3,8 +3,8 @@ import type { ChakraComponent } from "@chakra-ui/react"
 
 export interface FeedbackMetadataAndComment {
   category?: string
-  comment?: string
-  email?: string
+  comment: string
+  email: string
   id?: string
   barcode?: string
 }
