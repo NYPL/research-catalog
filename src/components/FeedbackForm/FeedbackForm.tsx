@@ -33,7 +33,7 @@ const FeedbackForm = () => {
       })
       const responseJson = await response.json()
       if (responseJson.error) {
-        console.error(responseJson.data.error)
+        console.error(responseJson.error)
         return
       }
       setScreen("confirmation")
