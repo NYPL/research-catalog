@@ -1,5 +1,5 @@
 import handler from "./[id]"
-import holdCancel from "./cancelHold"
+import cancelHold from "./cancelHold"
 import initializePatronTokenAuth from "../../../../../src/server/auth"
 import type { NextApiRequest, NextApiResponse } from "next"
 
@@ -30,7 +30,7 @@ describe("handler", () => {
       decodedPatron: null,
     })
     await handler(req as NextApiRequest, res as NextApiResponse)
-    expect(holdCancel).not.toHaveBeenCalled()
+    expect(cancelHold).not.toHaveBeenCalled()
     expect(res.status).toHaveBeenCalledWith(403)
     expect(res.json).toHaveBeenCalledWith("No authenticated patron")
   })
@@ -41,23 +41,23 @@ describe("handler", () => {
       decodedPatron: { sub: "123456" },
     })
     await handler(req as NextApiRequest, res as NextApiResponse)
-    expect(holdCancel).not.toHaveBeenCalled()
+    expect(cancelHold).not.toHaveBeenCalled()
     expect(res.status).toHaveBeenCalledWith(403)
     expect(res.json).toHaveBeenCalledWith(
       "Authenticated patron does not own this hold"
     )
   })
 
-  it("should call holdCancel if authentication succeeds", async () => {
+  it("should call cancelHold if authentication succeeds", async () => {
     req.body.patronId = "123456"
     ;(initializePatronTokenAuth as jest.Mock).mockResolvedValueOnce({
       decodedPatron: { sub: "123456" },
     })
-    ;(holdCancel as jest.Mock).mockResolvedValueOnce({
+    ;(cancelHold as jest.Mock).mockResolvedValueOnce({
       status: "200",
       message: "test",
     })
     await handler(req as NextApiRequest, res as NextApiResponse)
-    expect(holdCancel).toHaveBeenCalled()
+    expect(cancelHold).toHaveBeenCalled()
   })
 })
