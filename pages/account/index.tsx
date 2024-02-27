@@ -1,5 +1,5 @@
 import Head from "next/head"
-import { Heading, Text } from "@nypl/design-system-react-components"
+import { Text } from "@nypl/design-system-react-components"
 
 import Layout from "../../src/components/Layout/Layout"
 import initializePatronTokenAuth, {

@@ -35,25 +35,6 @@ export default class MyAccount {
     this.fines = this.buildFines(fines)
   }
 
-  buildCheckouts(checkouts: SierraCheckout[], bibData): Checkout[] {
-    const bibDataMap = MyAccount.buildBibData(bibData)
-    return checkouts.map((checkout: SierraCheckout) => {
-      return {
-        id: MyAccount.getRecordId(checkout.id),
-        // Partner items do not have call numbers. Null has to be explicitly
-        // returned for JSON serialization in getServerSideProps
-        callNumber: checkout.item.callNumber || null,
-        barcode: checkout.item.barcode,
-        dueDate: checkout.dueDate,
-        patron: MyAccount.getRecordId(checkout.patron),
-        title: bibDataMap[checkout.item.bibIds[0]].title,
-        isResearch: bibDataMap[checkout.item.bibIds[0]].isResearch,
-        bibId: checkout.item.bibIds[0],
-        isNyplOwned: bibDataMap[checkout.item.bibIds[0]].isNyplOwned,
-      }
-    })
-  }
-
   static async fetchCheckouts(baseQuery: string) {
     const checkoutQuery = "/checkouts?expand=item"
     return await client.get(`${baseQuery}${checkoutQuery}`)
@@ -80,14 +61,16 @@ export default class MyAccount {
     holdsOrCheckouts: (SierraHold | SierraCheckout)[],
     itemOrRecord: string
   ) {
-    if (!holdsOrCheckouts.length) return []
+    if (!holdsOrCheckouts.length) return { entries: [] }
     const checkoutBibIds = holdsOrCheckouts.map((holdOrCheckout) => {
       return holdOrCheckout[itemOrRecord].bibIds[0]
     })
 
-    return await client.get(
+    const bibData = await client.get(
       `bibs?id=${checkoutBibIds}&fields=default,varFields`
     )
+
+    return bibData
   }
 
   static buildBibData(bibs: SierraBibEntry[]) {
@@ -140,6 +123,25 @@ export default class MyAccount {
         isResearch: bibDataMap[hold.record.bibIds[0]].isResearch,
         bibId: hold.record.bibIds[0],
         isNyplOwned: bibDataMap[hold.record.bibIds[0]].isResearch,
+      }
+    })
+  }
+
+  buildCheckouts(checkouts: SierraCheckout[], bibData): Checkout[] {
+    const bibDataMap = MyAccount.buildBibData(bibData)
+    return checkouts.map((checkout: SierraCheckout) => {
+      return {
+        id: MyAccount.getRecordId(checkout.id),
+        // Partner items do not have call numbers. Null has to be explicitly
+        // returned for JSON serialization in getServerSideProps
+        callNumber: checkout.item.callNumber || null,
+        barcode: checkout.item.barcode,
+        dueDate: checkout.dueDate,
+        patron: MyAccount.getRecordId(checkout.patron),
+        title: bibDataMap[checkout.item.bibIds[0]].title,
+        isResearch: bibDataMap[checkout.item.bibIds[0]].isResearch,
+        bibId: checkout.item.bibIds[0],
+        isNyplOwned: bibDataMap[checkout.item.bibIds[0]].isNyplOwned,
       }
     })
   }

@@ -12,6 +12,8 @@ import {
 jest.mock("../../server/sierraClient")
 
 describe("MyAccountModel", () => {
+  const fetchBibs = MyAccount.fetchBibData
+  afterAll(() => (MyAccount.fetchBibData = fetchBibs))
   describe("getRecordId", () => {
     it("can parse an id", () => {
       const idUrl =
