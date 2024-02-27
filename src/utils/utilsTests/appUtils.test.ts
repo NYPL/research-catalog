@@ -1,4 +1,4 @@
-import { adobeAnalyticsRouteToPageName } from "../appUtils"
+import { adobeAnalyticsRouteToPageName, encodeHTML } from "../appUtils"
 import {
   ADOBE_ANALYTICS_RC_PREFIX,
   ADOBE_ANALYTICS_PAGE_NAMES,
@@ -61,6 +61,13 @@ describe("appUtils", () => {
       )
       expect(adobeAnalyticsRouteToPageName("/404")).toBe(
         `${ADOBE_ANALYTICS_RC_PREFIX}${ADOBE_ANALYTICS_PAGE_NAMES.NOT_FOUND_404}`
+      )
+    })
+  })
+  describe("encodeHTML", () => {
+    it("should correctly encode a string to html", () => {
+      expect(encodeHTML('"Test" & string to < encode')).toBe(
+        "&quot;Test&quot; &amp; string to &lt; encode"
       )
     })
   })
