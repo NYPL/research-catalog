@@ -24,13 +24,13 @@ export default function MyAccount({
   async function checkoutRenew(checkoutId, patronId) {
     try {
       const response = await fetch(
-        `/research/research-catalog/api/account/checkouts/renewal/${checkoutId}`,
+        `/research/research-catalog/api/account/checkouts/renew/${checkoutId}`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(patronId),
+          body: JSON.stringify({ patronId: patronId }),
         }
       )
       const responseData = await response.json()
@@ -138,7 +138,7 @@ export default function MyAccount({
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(patronId),
+          body: JSON.stringify({ patronId: patronId }),
         }
       )
       const responseData = await response.json()

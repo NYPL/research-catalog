@@ -1,5 +1,5 @@
 import type { NextApiResponse, NextApiRequest } from "next"
-import sierraClient from "../../../../../src/server/sierraClient"
+import cancelHold from "./cancelHold"
 import initializePatronTokenAuth from "../../../../../src/server/auth"
 
 /**
@@ -25,11 +25,11 @@ export default async function handler(
   if (req.method == "POST") {
     /**  We get the hold id and patron id from the request: */
     const holdId = req.query.id as string
-    const holdPatronId = JSON.parse(JSON.stringify(req.body))
+    const holdPatronId = JSON.parse(JSON.stringify(req.body)).patronId
     /**  We check that the patron cookie matches the patron id in the request body,
      * i.e.,the logged in user is the owner of the hold. */
     if (holdPatronId == cookiePatronId) {
-      const response = await holdCancel(holdId)
+      const response = await cancelHold(holdId)
       responseStatus = response.status
       responseMessage = response.message
     } else {
@@ -38,17 +38,4 @@ export default async function handler(
     }
   }
   return res.status(responseStatus).json(responseMessage)
-}
-
-export async function holdCancel(holdId: string) {
-  try {
-    const client = await sierraClient()
-    await client.deleteRequest(`patrons/holds/${holdId}`)
-    return { status: 200, message: "Deleted" }
-  } catch (error) {
-    return {
-      status: error.response.status,
-      message: error.response.data.name || error.response.data.description,
-    }
-  }
 }

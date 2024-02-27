@@ -1,6 +1,6 @@
 import type { NextApiResponse, NextApiRequest } from "next"
-import sierraClient from "../../../../src/server/sierraClient"
 import initializePatronTokenAuth from "../../../../src/server/auth"
+import updatePin from "./updatePin"
 
 /**
  * API route handler for /api/account/update-pin/{patronId}
@@ -28,7 +28,7 @@ export default async function handler(
     /**  We check that the patron cookie matches the patron id in the request,
      * i.e.,the logged in user is updating their own PIN. */
     if (patronId == cookiePatronId) {
-      const response = await pinUpdate(patronId, barcode, oldPin, newPin)
+      const response = await updatePin(patronId, barcode, oldPin, newPin)
       responseStatus = response.status
       responseMessage = response.message
     } else {
@@ -37,26 +37,4 @@ export default async function handler(
     }
   }
   res.status(responseStatus).json(responseMessage)
-}
-
-export async function pinUpdate(
-  patronId: string,
-  barcode: string,
-  oldPin: string,
-  newPin: string
-) {
-  try {
-    const client = await sierraClient()
-    await client.post("patrons/validate", {
-      barcode: barcode,
-      pin: oldPin,
-    })
-    await client.put(`patrons/${patronId}`, { pin: newPin })
-    return { status: 200, message: `Pin updated to ${newPin}` }
-  } catch (error) {
-    return {
-      status: error.response.status,
-      message: error.response.data.message || error.response.data.description,
-    }
-  }
 }

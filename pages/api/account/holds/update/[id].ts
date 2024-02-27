@@ -1,5 +1,5 @@
 import type { NextApiResponse, NextApiRequest } from "next"
-import sierraClient from "../../../../../src/server/sierraClient"
+import updateHold from "./updateHold"
 import initializePatronTokenAuth from "../../../../../src/server/auth"
 
 /**
@@ -33,7 +33,7 @@ export default async function handler(
     /**  We check that the patron cookie matches the patron id in the request,
      * i.e.,the logged in user is updating their own hold. */
     if (holdPatronId == cookiePatronId) {
-      const response = await holdUpdate(holdId, holdData)
+      const response = await updateHold(holdId, holdData)
       responseStatus = response.status
       responseMessage = response.message
     } else {
@@ -42,17 +42,4 @@ export default async function handler(
     }
   }
   res.status(responseStatus).json(responseMessage)
-}
-
-export async function holdUpdate(holdId: string, holdData: any) {
-  try {
-    const client = await sierraClient()
-    await client.put(`patrons/holds/${holdId}`, holdData)
-    return { status: 200, message: "Updated" }
-  } catch (error) {
-    return {
-      status: error.response.status,
-      message: error.response.data.message || error.response.data.description,
-    }
-  }
 }
