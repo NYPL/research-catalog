@@ -29,8 +29,8 @@ export default class MyAccount {
     checkoutBibData,
     holdBibData,
   }: SierraAccountData) {
-    this.holds = this.buildHolds(holds, holdBibData.entries)
-    this.checkouts = this.buildCheckouts(checkouts, checkoutBibData.entries)
+    this.checkouts = this.buildCheckouts(checkouts, checkoutBibData)
+    this.holds = this.buildHolds(holds, holdBibData)
     this.patron = this.buildPatron(patron)
     this.fines = this.buildFines(fines)
   }
@@ -82,11 +82,7 @@ export default class MyAccount {
   ) {
     if (!holdsOrCheckouts.length) return []
     const checkoutBibIds = holdsOrCheckouts.map((holdOrCheckout) => {
-      if (holdOrCheckout[itemOrRecord].bibIds) {
-        return holdOrCheckout[itemOrRecord].bibIds[0]
-      } else {
-        return holdOrCheckout[itemOrRecord].id
-      }
+      return holdOrCheckout[itemOrRecord].bibIds[0]
     })
 
     return await client.get(
@@ -132,7 +128,6 @@ export default class MyAccount {
   buildHolds(holds: SierraHold[], bibData): Hold[] {
     const bibDataMap = MyAccount.buildBibData(bibData)
     return holds.map((hold: SierraHold) => {
-      const bibId = hold.record.bibIds ? hold.record.bibIds[0] : hold.record.id
       return {
         patron: MyAccount.getRecordId(hold.patron),
         id: MyAccount.getRecordId(hold.id),
@@ -141,10 +136,10 @@ export default class MyAccount {
         frozen: hold.frozen,
         status: MyAccount.getHoldStatus(hold.status),
         pickupLocation: hold.pickupLocation.name,
-        title: bibDataMap[bibId].title,
-        isResearch: bibDataMap[bibId].isResearch,
-        bibId: bibId,
-        isNyplOwned: bibDataMap[bibId].isResearch,
+        title: bibDataMap[hold.record.bibIds[0]].title,
+        isResearch: bibDataMap[hold.record.bibIds[0]].isResearch,
+        bibId: hold.record.bibIds[0],
+        isNyplOwned: bibDataMap[hold.record.bibIds[0]].isResearch,
       }
     })
   }

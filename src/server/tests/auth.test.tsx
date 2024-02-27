@@ -23,14 +23,6 @@ const mockReq = {
   },
 }
 
-// Mock the "jose" library that does the JWT verification.
-jest.mock("jose", () => ({
-  importSPKI: async () => Promise.resolve("testPublicKey"),
-  jwtVerify: async () => ({
-    payload: mockPatronJwtDecodedObj,
-  }),
-}))
-
 const reqNoCookies = {
   cookies: {},
 } as NextRequest
@@ -42,7 +34,9 @@ const reqCookiesWithToken = {
 
 describe("initializePatronTokenAuth", () => {
   it("should return the default empty patron object when the nyplIdentityPatron cookie is not set", async () => {
-    const patronTokenResponse = await initializePatronTokenAuth(reqNoCookies)
+    const patronTokenResponse = await initializePatronTokenAuth(
+      reqNoCookies.cookies
+    )
 
     expect(patronTokenResponse).toEqual({
       isTokenValid: false,
@@ -53,7 +47,7 @@ describe("initializePatronTokenAuth", () => {
 
   it("should return the decoded patron object when the nyplIdentityPatron cookie is set", async () => {
     const patronTokenResponse = await initializePatronTokenAuth(
-      reqCookiesWithToken
+      reqCookiesWithToken.cookies
     )
 
     expect(patronTokenResponse).toEqual({

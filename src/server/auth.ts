@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 // import type { JWTPayload } from "jose"
 import { importSPKI, jwtVerify, type JWTPayload } from "jose"
-
+import type { NextRequest } from "next/server"
 import { appConfig } from "../config/config"
 import { BASE_URL } from "../config/constants"
 import { useEffect, useState } from "react"
@@ -20,10 +20,10 @@ interface UserJwtPayload extends JWTPayload {
  * Used in Nextjs middleware to check and parse the nyplIdentiyPatron cookie
  * and then verify it through JWT. The decoded patron information is returned.
  */
-export default async function initializePatronTokenAuth(reqCookie: unknown) {
-  type cookie = typeof reqCookie & { nyplIdentityPatron?: string }
+export default async function initializePatronTokenAuth(reqCookies: unknown) {
+  type cookie = typeof reqCookies & { nyplIdentityPatron?: string }
 
-  const nyplIdentityPatron = (reqCookie as cookie)?.nyplIdentityPatron
+  const nyplIdentityPatron = (reqCookies as cookie)?.nyplIdentityPatron
   const nyplIdentityCookieObject = nyplIdentityPatron
     ? JSON.parse(nyplIdentityPatron)
     : {}
