@@ -64,7 +64,13 @@ const SearchResult = ({ bib }: SearchResultProps) => {
             electronicResources={bib.electronicResources}
           />
         )}
-        {bib.ebscoResults && <EbscoLinks bibId={bib.id} ebscoResults={bib.ebscoResults} linksCount={3} />}
+        {bib.ebscoResults && (
+          <EbscoLinks
+            bibId={bib.id}
+            ebscoResults={bib.ebscoResults}
+            linksCount={3}
+          />
+        )}
         {searchResultItems && (
           <>
             {searchResultItems.map((itemTableData) => (

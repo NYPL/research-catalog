@@ -44,20 +44,24 @@ const EbscoLinks = ({
 
   const searchInside = (event) => {
     event.preventDefault()
+    // TODO: Need a way to place a single publication key in the SearchBar form
+    // so that we can disable the publication-select for ISSNs with a single publication
+    const publicationKey = event.target?.selectName?.value || event.target?.defaultPublication?.value
+    const [publicationId, publicationTitle] = publicationKey.split("||")
 
-    const [publicationId, publicationTitle] =
-      event.target.selectName.value.split("||")
     const baseUrl = `https://research-ebsco-com.i.ezproxy.nypl.org/c/2styhb/search/results?autocorrect=y&publicationId=${publicationId}&publicationTitle=${publicationTitle}`
     const query = event.target.textInputName.value
 
     const url = `${baseUrl}&q=${query}`
-    window.location.href = url
+    window.open(url, "_blank")
   }
 
   const searchInsideOptions = Object.entries(
     groupLinksByPublication(ebscoResults)
   ).map(([publicationKey, holdings]) => {
-    let db = Array.isArray(holdings) ? holdings.map((h) => h.name).join(", ") : ""
+    let db = Array.isArray(holdings)
+      ? holdings.map((h) => h.name).join(", ")
+      : ""
     db = db.length > 40 ? db.substring(0, 37) + "..." : db
 
     return {

@@ -47,7 +47,13 @@ export default function Bib({
       <Layout isAuthenticated={isAuthenticated} activePage="bib">
         <Heading level="h1">{bib.title[0]}</Heading>
         <BibDetails key="top-details" details={topDetails} />
-        {bib.ebscoResults && <EbscoLinks bibId={bib.uri} ebscoResults={bib.ebscoResults} showSearchInside={true} />}
+        {bib.ebscoResults && (
+          <EbscoLinks
+            bibId={bib.uri}
+            ebscoResults={bib.ebscoResults}
+            showSearchInside={true}
+          />
+        )}
         <BibDetails
           heading="Details"
           key="bottom-details"
