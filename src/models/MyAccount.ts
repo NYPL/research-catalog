@@ -12,6 +12,7 @@ import type {
   SierraFine,
   SierraFineEntry,
   SierraBibEntry,
+  BibDataMapType,
 } from "../types/accountTypes"
 
 let client
@@ -58,9 +59,13 @@ export default class MyAccount {
   }
 
   static async fetchBibData(
-    holdsOrCheckouts: (SierraHold | SierraCheckout)[],
+    holdsOrCheckouts,
     itemOrRecord: string
-  ) {
+  ): Promise<{
+    total?: number
+    start?: number
+    entries: SierraBibEntry[]
+  }> {
     if (!holdsOrCheckouts.length) return { entries: [] }
     const checkoutBibIds = holdsOrCheckouts.map((holdOrCheckout) => {
       return holdOrCheckout[itemOrRecord].bibIds[0]
@@ -73,42 +78,32 @@ export default class MyAccount {
     return bibData
   }
 
-  static buildBibData(bibs: SierraBibEntry[]) {
-    return bibs.reduce(
-      (
-        bibDataMap: Record<
-          string,
-          { title: string; isResearch: boolean; isNyplOwned: boolean }
-        >,
-        bibFields
-      ) => {
-        let isResearch: boolean
-        let isNyplOwned: boolean
-        const title = bibFields.title
-        const nineTen = bibFields.varFields.find(
-          (field) => field.marcTag === "910"
-        )
-        // if we are unsure of the research ness of a bib, default to true so
-        // we don't let them renew or freeze the record
-        if (!nineTen) {
-          isResearch = true
-          isNyplOwned = false
-        } else {
-          const nineTenContent = nineTen.subfields.find(
-            (subfield: { tag: string; subfield: string }) =>
-              subfield.tag === "a"
-          ).content
-          isResearch = nineTenContent.startsWith("RL")
-          isNyplOwned = nineTenContent !== "RLOTF"
-        }
-        bibDataMap[bibFields.id] = { title, isResearch, isNyplOwned }
-        return bibDataMap
-      },
-      {}
-    )
+  static buildBibData(bibs: SierraBibEntry[]): BibDataMapType {
+    return bibs.reduce((bibDataMap: BibDataMapType, bibFields) => {
+      let isResearch: boolean
+      let isNyplOwned: boolean
+      const title = bibFields.title
+      const nineTen = bibFields.varFields.find(
+        (field) => field.marcTag === "910"
+      )
+      // if we are unsure of the research ness of a bib, default to true so
+      // we don't let them renew or freeze the record
+      if (!nineTen) {
+        isResearch = true
+        isNyplOwned = false
+      } else {
+        const nineTenContent = nineTen.subfields.find(
+          (subfield: { tag: string; subfield: string }) => subfield.tag === "a"
+        ).content
+        isResearch = nineTenContent.startsWith("RL")
+        isNyplOwned = nineTenContent !== "RLOTF"
+      }
+      bibDataMap[bibFields.id] = { title, isResearch, isNyplOwned }
+      return bibDataMap
+    }, {})
   }
 
-  buildHolds(holds: SierraHold[], bibData): Hold[] {
+  buildHolds(holds: SierraHold[], bibData: SierraBibEntry[]): Hold[] {
     const bibDataMap = MyAccount.buildBibData(bibData)
     return holds.map((hold: SierraHold) => {
       return {
@@ -127,7 +122,10 @@ export default class MyAccount {
     })
   }
 
-  buildCheckouts(checkouts: SierraCheckout[], bibData): Checkout[] {
+  buildCheckouts(
+    checkouts: SierraCheckout[],
+    bibData: SierraBibEntry[]
+  ): Checkout[] {
     const bibDataMap = MyAccount.buildBibData(bibData)
     return checkouts.map((checkout: SierraCheckout) => {
       return {

@@ -25,20 +25,20 @@ export default function MyAccount({
   isAuthenticated,
 }: MyAccountPropsType) {
   const errorRetrievingPatronData = !patron
-  console.log("spaghetti", patron)
   return (
     <>
       <Head>
         <title>My Account</title>
       </Head>
       <Layout isAuthenticated={isAuthenticated} activePage="account">
-        {errorRetrievingPatronData && (
+        {errorRetrievingPatronData ? (
           <Text>
             We are unable to display your account information at this time.
             Please contact gethelp@nypl.org for assistance.
           </Text>
+        ) : (
+          <ProfileHeader patron={patron} />
         )}
-        <ProfileHeader patron={patron} />
       </Layout>
     </>
   )
