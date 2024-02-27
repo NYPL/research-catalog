@@ -18,12 +18,12 @@ interface ItemAvailabilityProps {
 const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
   const feedback = useContext(FeedbackContext)
 
-  const openFeedbackBox = feedback.onOpen
-  const setItemMetadata = feedback.setItemMetadata
+  const openFeedbackBox = feedback?.onOpen
+  const setItemMetadata = feedback?.setItemMetadata
 
   const onContact = (metadata: ItemMetadata) => {
-    setItemMetadata(metadata)
-    openFeedbackBox()
+    setItemMetadata && setItemMetadata(metadata)
+    openFeedbackBox && openFeedbackBox()
   }
 
   // TODO: Move this logic into a getter function in the Item class that returns an availability status key

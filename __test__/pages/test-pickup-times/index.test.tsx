@@ -1,5 +1,5 @@
 import React from "react"
-import { screen, render } from "@testing-library/react"
+import { screen, render } from "../../../__test__/test-utils"
 
 import TestPickupTimes from "../../../pages/test-pickup-times/index"
 

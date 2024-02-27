@@ -1,5 +1,5 @@
 import MyAccount from "../../../pages/account"
-import { render, screen } from "@testing-library/react"
+import { render, screen } from "../../../__test__/test-utils"
 
 describe("My Account page", () => {
   it("displays an error message when patron is empty", () => {
