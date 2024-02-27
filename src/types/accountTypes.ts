@@ -43,6 +43,8 @@ export interface SierraHold {
 }
 
 export interface SierraRecord {
+  id?: string
+  title?: string
   bibIds: string[]
   barcode: string
   callNumber: string
