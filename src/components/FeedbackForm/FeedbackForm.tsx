@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react"
 
 import { FeedbackContext } from "../../context/FeedbackContext"
+import type { FeedbackMetadataAndComment } from "../../types/feedbackTypes"
 import { BASE_URL } from "../../config/constants"
 
 /**
@@ -22,14 +23,17 @@ const FeedbackForm = () => {
     onClose()
     setScreen("form")
   }
-  const submitFeedback = async (metadataAndComment) => {
+  const submitFeedback = async (
+    metadataAndComment: FeedbackMetadataAndComment
+  ) => {
     try {
       const response = await fetch(`${BASE_URL}/api/feedback`, {
         method: "POST",
         body: JSON.stringify(metadataAndComment),
       })
       const responseJson = await response.json()
-      if (responseJson.data.error) {
+      console.log(responseJson)
+      if (responseJson?.data?.error) {
         console.error(responseJson.data.error)
         return
       }
@@ -51,8 +55,8 @@ const FeedbackForm = () => {
       showEmailField
       hiddenFields={itemMetadata}
       notificationText={
-        itemMetadata && itemMetadata.callNumber
-          ? `You are asking for help or information about ${itemMetadata.callNumber} in this record.`
+        itemMetadata?.callnumber
+          ? `You are asking for help or information about ${itemMetadata.callnumber} in this record.`
           : null
       }
       view={screen}

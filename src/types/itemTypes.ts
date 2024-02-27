@@ -33,6 +33,13 @@ export interface ItemTableParams {
   isArchiveCollection?: boolean
 }
 
+export interface ItemMetadata {
+  id?: string
+  barcode?: string
+  callnumber?: string
+  bibId?: string
+}
+
 /* eslint-disable @typescript-eslint/naming-convention */
 
 export interface JSONLDValue {
