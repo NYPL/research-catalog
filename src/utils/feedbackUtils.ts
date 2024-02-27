@@ -16,7 +16,7 @@ export const getFeedbackEmailText = (
 }
 
 /**
- * getFeedbackEmailText
+ * getFeedbackEmailHTML
  * Build the Feedback submission email HTML based with the submitted fields and the full referer url.
  */
 export const getFeedbackEmailHTML = (
