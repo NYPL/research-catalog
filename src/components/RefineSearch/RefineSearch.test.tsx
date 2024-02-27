@@ -105,7 +105,7 @@ describe("RefineSearch", () => {
     })
     it("clearing filters should return to search results", async () => {
       await openRefineSearch()
-      const applyButton = screen.getByRole("button", { name: "Apply Filters" })
+      const applyButton = screen.getByText("Apply Filters")
       await selectSomeFilters()
       await apply()
       await openRefineSearch()
@@ -115,7 +115,7 @@ describe("RefineSearch", () => {
     })
     it("cancelling with selected but unapplied filters should close refine search, clear selected filters, and return to search results", async () => {
       await openRefineSearch()
-      const applyButton = screen.getByTestId("apply-filters-button")
+      const applyButton = screen.getByText("Apply Filters")
       await selectSomeFilters()
       await userEvent.click(screen.getByRole("button", { name: "Cancel" }))
 
@@ -165,11 +165,11 @@ describe("RefineSearch", () => {
   })
 
   const openRefineSearch = async () => {
-    const refineButton = screen.getByTestId("refine-search-button")
+    const refineButton = screen.getByText("Refine Search")
     await userEvent.click(refineButton)
   }
   const apply = async () => {
-    const applyButton = screen.getByTestId("apply-filters-button")
+    const applyButton = screen.getByText("Apply Filters")
     await userEvent.click(applyButton)
   }
   const selectSomeFilters = async (
