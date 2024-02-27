@@ -31,7 +31,7 @@ export const SOURCE_PARAM = "?source=catalog"
 
 // External URLs
 export const DRB_BASE_URL =
-  appConfig.externalUrls.drbFrontEnd[appConfig.environment]
+  appConfig.apiEndpoints.drbFrontEnd[appConfig.environment]
 
 // String used to namespace Research Catalog events in Adobe Analytics
 export const ADOBE_ANALYTICS_SITE_SECTION = "Research Catalog"
