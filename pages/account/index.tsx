@@ -109,6 +109,12 @@ export default function MyAccount({
       <Head>
         <title>My Account</title>
       </Head>
+      {errorRetrievingPatronData && (
+        <Text>
+          We are unable to display your account information at this time. Please
+          contact gethelp@nypl.org for assistance.
+        </Text>
+      )}
       <Layout isAuthenticated={isAuthenticated} activePage="account">
         <Heading level="h1">my account</Heading>
         {/** Testing renew checkout api route, with test checkout id. */}
