@@ -17,11 +17,21 @@ jest.spyOn(global.console, "warn").mockImplementation(() => jest.fn())
 // Increase timeout on tests
 jest.setTimeout(35000)
 
-//Set up jose to mock auth for every page test
+const mockPatronJwtDecodedObj = {
+  iss: "",
+  sub: "123",
+  aud: "",
+  iat: 123,
+  exp: 123,
+  auth_time: 123,
+  scope: "openid",
+}
+
+// Mock the "jose" library that does the JWT verification.
 jest.mock("jose", () => ({
   importSPKI: async () => Promise.resolve("testPublicKey"),
   jwtVerify: async () => ({
-    payload: {},
+    payload: mockPatronJwtDecodedObj,
   }),
 }))
 
