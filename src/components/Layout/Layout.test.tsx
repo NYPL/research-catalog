@@ -47,4 +47,8 @@ describe("Layout", () => {
     const logout = screen.queryByText("Log out")
     expect(logout).toBeInTheDocument()
   })
+  it("renders a feedback form component", () => {
+    render(<Layout></Layout>)
+    expect(screen.getByText("Help and Feedback")).toBeInTheDocument()
+  })
 })
