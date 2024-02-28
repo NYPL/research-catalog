@@ -1,6 +1,5 @@
 import Head from "next/head"
-import { Text } from "@nypl/design-system-react-components"
-
+import { Button, Heading, Text } from "@nypl/design-system-react-components"
 import Layout from "../../src/components/Layout/Layout"
 import initializePatronTokenAuth, {
   getLoginRedirect,
@@ -25,6 +24,34 @@ export default function MyAccount({
   isAuthenticated,
 }: MyAccountPropsType) {
   const errorRetrievingPatronData = !patron
+  console.log(checkouts, holds, patron, fines)
+  /** Testing renew checkout api route, displaying alerts of whatever the handler returns. */
+  async function checkoutRenew(checkoutId, patronId) {
+    try {
+      const response = await fetch(
+        `/research/research-catalog/api/account/checkouts/renewal/${checkoutId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(patronId),
+        }
+      )
+      const responseData = await response.json()
+      if (response.status == 200) {
+        // New due date.
+        alert(responseData.dueDate)
+      } else {
+        // Renewal failed.
+        alert(responseData.message)
+      }
+    } catch (error) {
+      // Request failed.
+      alert("Fetching error")
+    }
+  }
+
   return (
     <>
       <Head>
@@ -39,13 +66,20 @@ export default function MyAccount({
         ) : (
           <ProfileHeader patron={patron} />
         )}
+        {/** Testing renew checkout api route, with test checkout id. */}
+        <Button
+          id="checkout-test"
+          onClick={() => checkoutRenew(58536261, patron.id)}
+        >
+          Renew checkout
+        </Button>
       </Layout>
     </>
   )
 }
 
 export async function getServerSideProps({ req }) {
-  const patronTokenResponse = await initializePatronTokenAuth(req)
+  const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   console.log("patronTokenResponse is", patronTokenResponse)
   const isAuthenticated = patronTokenResponse.isTokenValid
   if (!isAuthenticated) {
@@ -57,7 +91,6 @@ export async function getServerSideProps({ req }) {
       },
     }
   }
-
   const id = patronTokenResponse.decodedPatron.sub
   try {
     const { checkouts, holds, patron, fines } = await MyAccountFactory(id)
