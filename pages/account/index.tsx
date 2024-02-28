@@ -6,6 +6,7 @@ import initializePatronTokenAuth, {
 } from "../../src/server/auth"
 import { MyAccountFactory } from "../../src/models/MyAccount"
 import type { Checkout, Hold, Patron, Fine } from "../../src/types/accountTypes"
+import ProfileHeader from "../../src/components/MyAccount/ProfileHeader"
 import { BASE_URL } from "../../src/config/constants"
 
 interface MyAccountPropsType {
@@ -109,32 +110,41 @@ export default function MyAccount({
       <Head>
         <title>My Account</title>
       </Head>
-      {errorRetrievingPatronData && (
-        <Text>
-          We are unable to display your account information at this time. Please
-          contact gethelp@nypl.org for assistance.
-        </Text>
-      )}
       <Layout isAuthenticated={isAuthenticated} activePage="account">
-        <Heading level="h1">my account</Heading>
-        {/** Testing renew checkout api route, with test checkout id. */}
-        <Button
-          id="checkout-test"
-          onClick={() => checkoutRenew(58536266, patron.id)}
-        >
-          Renew checkout
-        </Button>
-        {/** Testing settings api route */}
-        <Button id="settings-test" onClick={() => settingsUpdate(patron.id)}>
-          Update settings
-        </Button>
-        {/** Testing pin update api route */}
-        <Button
-          id="pin-update"
-          onClick={() => pinUpdate(patron.id, patron.barcode, "7890", "7890")}
-        >
-          Update pin
-        </Button>
+        {errorRetrievingPatronData ? (
+          <Text>
+            We are unable to display your account information at this time.
+            Please contact gethelp@nypl.org for assistance.
+          </Text>
+        ) : (
+          <>
+            <ProfileHeader patron={patron} />
+
+            {/** Testing renew checkout api route, with test checkout id. */}
+            <Button
+              id="checkout-test"
+              onClick={() => checkoutRenew(58536266, patron.id)}
+            >
+              Renew checkout
+            </Button>
+            {/** Testing settings api route */}
+            <Button
+              id="settings-test"
+              onClick={() => settingsUpdate(patron.id)}
+            >
+              Update settings
+            </Button>
+            {/** Testing pin update api route */}
+            <Button
+              id="pin-update"
+              onClick={() =>
+                pinUpdate(patron.id, patron.barcode, "7890", "7890")
+              }
+            >
+              Update pin
+            </Button>
+          </>
+        )}
       </Layout>
     </>
   )
