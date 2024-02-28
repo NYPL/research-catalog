@@ -89,12 +89,11 @@ const RefineSearch = ({
       {refineSearchClosed ? (
         <Box className={styles.refineSearchInner}>
           <Button
-            data-testId="refine-search-button"
             onClick={toggleRefine}
             id="refine-search"
             buttonType="secondary"
           >
-            {"Refine Search"}
+            Refine Search
           </Button>
         </Box>
       ) : (
@@ -118,12 +117,11 @@ const RefineSearch = ({
                 id="reset-refine"
                 type="reset"
                 buttonType="secondary"
-                data-testId="clear-filters-button"
               >
                 Clear Filters
               </Button>
               <Button
-                data-testId="apply-filters-button"
+                data-testid="apply-filters-button"
                 id="submit-refine"
                 type="submit"
                 buttonType="secondary"

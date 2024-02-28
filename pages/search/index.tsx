@@ -26,7 +26,7 @@ import type { SortKey, SortOrder } from "../../src/types/searchTypes"
 import { mapWorksToDRBResults } from "../../src/utils/drbUtils"
 import { SITE_NAME, RESULTS_PER_PAGE } from "../../src/config/constants"
 import type SearchResultsBib from "../../src/models/SearchResultsBib"
-import { SearchResultsAggregationsContext } from "./SearchResultsAggregationsContext"
+import { SearchResultsAggregationsProvider } from "./SearchResultsAggregationsContext"
 
 import useLoading from "../../src/hooks/useLoading"
 import initializePatronTokenAuth from "../../src/server/auth"
@@ -81,7 +81,7 @@ export default function Search({
     )
   }
   return (
-    <SearchResultsAggregationsContext.Provider
+    <SearchResultsAggregationsProvider
       value={results?.aggregations?.itemListElement}
     >
       <Head>
@@ -169,7 +169,7 @@ export default function Search({
           <Heading level="h3">No results. Try a different search.</Heading>
         )}
       </Layout>
-    </SearchResultsAggregationsContext.Provider>
+    </SearchResultsAggregationsProvider>
   )
 }
 

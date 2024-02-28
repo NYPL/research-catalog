@@ -11,6 +11,30 @@ import {
 
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
+const openRefineSearch = async () => {
+  const refineButton = screen.getByText("Refine Search")
+  await userEvent.click(refineButton)
+}
+const apply = async () => {
+  const applyButton = screen.getByText("Apply Filters")
+  await userEvent.click(applyButton)
+}
+const selectSomeFilters = async (
+  labels = ["Portuguese", "Audio", "Cooking, Italian."]
+) => {
+  await Promise.all(
+    labels
+      .map((label) => screen.getByLabelText(label))
+      .map(async (box) => {
+        await userEvent.click(box)
+      })
+  )
+}
+const clear = async () => {
+  const clearButton = screen.getByTestId("clear-filters-button")
+  await userEvent.click(clearButton)
+}
+
 describe("RefineSearch", () => {
   describe("with initial creatorLiteral filter", () => {
     const setup = () => {
@@ -28,7 +52,7 @@ describe("RefineSearch", () => {
         "/search?filters%5BcreatorLiteral%5D%5B0%5D=Gaberscek%2C+Carlo.&filters%5Blanguage%5D%5B0%5D=lang%3Apor&filters%5BmaterialType%5D%5B0%5D=resourcetypes%3Aaud&filters%5BsubjectLiteral%5D%5B0%5D=Cooking%2C+Italian."
       )
     })
-    it("should clear refinment filters and creatorliteral filter", async () => {
+    it("should clear refinement filters and creatorliteral filter", async () => {
       await openRefineSearch()
       await selectSomeFilters()
       await apply()
@@ -93,7 +117,7 @@ describe("RefineSearch", () => {
       await apply()
       expect(applyButton).not.toBeInTheDocument()
     })
-    it("applying multiple filters should update url and search results", async () => {
+    it("applying multiple filters should router query and search results", async () => {
       await openRefineSearch()
       await selectSomeFilters()
       await apply()
@@ -109,6 +133,7 @@ describe("RefineSearch", () => {
       await selectSomeFilters()
       await apply()
       await openRefineSearch()
+      expect(mockRouter.asPath).not.toBe("/search")
       await clear()
       expect(applyButton).not.toBeInTheDocument()
       expect(mockRouter.asPath).toBe("/search")
@@ -122,8 +147,14 @@ describe("RefineSearch", () => {
       expect(applyButton).not.toBeInTheDocument()
       expect(mockRouter.asPath).toBe("/search")
       await openRefineSearch()
-      const checkboxes = screen.getAllByRole("checkbox")
-      checkboxes.forEach((box) => expect(box).not.toBeChecked())
+      const previouslySelectedCheckboxes = [
+        "Portuguese",
+        "Audio",
+        "Cooking, Italian.",
+      ].map((label) => screen.getByLabelText(label))
+      previouslySelectedCheckboxes.forEach((box) =>
+        expect(box).not.toBeChecked()
+      )
     })
     it("multiple selections for multiple filters", async () => {
       await openRefineSearch()
@@ -163,28 +194,4 @@ describe("RefineSearch", () => {
       })
     })
   })
-
-  const openRefineSearch = async () => {
-    const refineButton = screen.getByText("Refine Search")
-    await userEvent.click(refineButton)
-  }
-  const apply = async () => {
-    const applyButton = screen.getByText("Apply Filters")
-    await userEvent.click(applyButton)
-  }
-  const selectSomeFilters = async (
-    labels = ["Portuguese", "Audio", "Cooking, Italian."]
-  ) => {
-    await Promise.all(
-      labels
-        .map((label) => screen.getByLabelText(label))
-        .map(async (box) => {
-          await userEvent.click(box)
-        })
-    )
-  }
-  const clear = async () => {
-    const clearButton = screen.getByTestId("clear-filters-button")
-    await userEvent.click(clearButton)
-  }
 })

@@ -5,7 +5,7 @@ import {
 } from "../../../__test__/fixtures/searchResultsManyBibs"
 import mockRouter from "next-router-mock"
 import userEvent from "@testing-library/user-event"
-import { SearchResultsAggregationsContext } from "../../../pages/search/SearchResultsAggregationsContext"
+import { SearchResultsAggregationsProvider } from "../../../pages/search/SearchResultsAggregationsContext"
 import SearchForm from "../SearchForm/SearchForm"
 
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
@@ -17,11 +17,11 @@ describe("Applied Filters", () => {
         "/search?q=spaghetti&filters[materialType][0]=resourcetypes%3Atxt&filters[language][0]=lang%3Afre"
       )
       render(
-        <SearchResultsAggregationsContext.Provider
+        <SearchResultsAggregationsProvider
           value={aggregationsResults.itemListElement}
         >
           <SearchForm />
-        </SearchResultsAggregationsContext.Provider>
+        </SearchResultsAggregationsProvider>
       )
 
       await userEvent.click(screen.getByText("Text"))
@@ -34,11 +34,11 @@ describe("Applied Filters", () => {
         "/search?q=spaghetti&filters[materialType][0]=resourcetypes%3Atxt&filters[language][0]=lang%3Afre"
       )
       render(
-        <SearchResultsAggregationsContext.Provider
+        <SearchResultsAggregationsProvider
           value={aggregationsResults.itemListElement}
         >
           <SearchForm />
-        </SearchResultsAggregationsContext.Provider>
+        </SearchResultsAggregationsProvider>
       )
       await userEvent.click(screen.getByText("Clear Filters"))
       expect(mockRouter.asPath).toBe("/search?q=spaghetti")
@@ -48,11 +48,11 @@ describe("Applied Filters", () => {
         "/search?q=spaghetti&filters[materialType][0]=resourcetypes%3Atxt&filters[materialType][1]=resourcetypes%3Aaud&filters[materialType][2]=resourcetypes%3Amov&filters[language][0]=lang%3Afre"
       )
       render(
-        <SearchResultsAggregationsContext.Provider
+        <SearchResultsAggregationsProvider
           value={aggregationsResults.itemListElement}
         >
           <SearchForm />
-        </SearchResultsAggregationsContext.Provider>
+        </SearchResultsAggregationsProvider>
       )
       await userEvent.click(screen.getByText("Text"))
       expect(decodeURI(mockRouter.asPath)).toBe(
@@ -65,11 +65,11 @@ describe("Applied Filters", () => {
       "/search?q=spaghetti&filters[materialType][0]=resourcetypes%3Amix&filters[language][0]=lang%3Apol&filters[subjectLiteral][0]=Community life."
     )
     render(
-      <SearchResultsAggregationsContext.Provider
+      <SearchResultsAggregationsProvider
         value={emptyAggregationsResults.itemListElement}
       >
         <SearchForm />
-      </SearchResultsAggregationsContext.Provider>
+      </SearchResultsAggregationsProvider>
     )
   })
 })
