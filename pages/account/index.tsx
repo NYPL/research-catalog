@@ -30,7 +30,7 @@ export default function MyAccount({
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ patronId: patronId }),
+          body: JSON.stringify({ patronId }),
         }
       )
       const responseData = await response.json()
@@ -82,8 +82,8 @@ export default function MyAccount({
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            oldPin: oldPin,
-            newPin: newPin,
+            oldPin,
+            newPin,
             barcode: patronBarcode,
           }),
         }
@@ -111,9 +111,9 @@ export default function MyAccount({
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            patronId: patronId,
-            freeze: freeze,
-            pickupLocation: pickupLocation,
+            patronId,
+            freeze,
+            pickupLocation,
           }),
         }
       )
@@ -138,7 +138,7 @@ export default function MyAccount({
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ patronId: patronId }),
+          body: JSON.stringify({ patronId }),
         }
       )
       const responseData = await response.json()

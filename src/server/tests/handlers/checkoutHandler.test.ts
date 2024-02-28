@@ -1,16 +1,17 @@
-import handler from "./[id]"
-import { updateHold } from "../../helpers"
-import initializePatronTokenAuth from "../../../../../src/server/auth"
+import handler from "../../../../pages/api/account/checkouts/renew/[id]"
+import { renewCheckout } from "../../../../pages/api/account/helpers"
+import initializePatronTokenAuth from "../../auth"
 import type { NextApiRequest, NextApiResponse } from "next"
 
-jest.mock("../../../../../src/server/sierraClient")
-jest.mock("../../../../../src/server/auth")
-jest.mock("../../helpers", () => {
-  const originalModule = jest.requireActual("../../helpers")
+jest.mock("../../auth")
+jest.mock("../../../../pages/api/account/helpers", () => {
+  const originalModule = jest.requireActual(
+    "../../../../pages/api/account/helpers"
+  )
   return {
     __esModule: true,
     ...originalModule,
-    updateHold: jest.fn().mockResolvedValueOnce({
+    renewCheckout: jest.fn().mockResolvedValueOnce({
       status: "200",
       message: "test",
     }),
@@ -20,6 +21,7 @@ jest.mock("../../helpers", () => {
 describe("handler", () => {
   let req: Partial<NextApiRequest>
   let res: Partial<NextApiResponse>
+
   beforeEach(() => {
     req = {
       cookies: {},
@@ -39,31 +41,30 @@ describe("handler", () => {
       decodedPatron: null,
     })
     await handler(req as NextApiRequest, res as NextApiResponse)
-    expect(updateHold).not.toHaveBeenCalled()
+    expect(renewCheckout).not.toHaveBeenCalled()
     expect(res.status).toHaveBeenCalledWith(403)
     expect(res.json).toHaveBeenCalledWith("No authenticated patron")
   })
 
-  it("should return 403 if logged in patron does not match the hold they are updating", async () => {
+  it("should return 403 if logged in patron does not own the checkout", async () => {
     req.body.patronId = "678910"
     ;(initializePatronTokenAuth as jest.Mock).mockResolvedValueOnce({
       decodedPatron: { sub: "123456" },
     })
-
     await handler(req as NextApiRequest, res as NextApiResponse)
-    expect(updateHold).not.toHaveBeenCalled()
+    expect(renewCheckout).not.toHaveBeenCalled()
     expect(res.status).toHaveBeenCalledWith(403)
     expect(res.json).toHaveBeenCalledWith(
-      "Authenticated patron does not own this hold"
+      "Authenticated patron does not own this checkout"
     )
   })
 
-  it("should call updateHold if authentication succeeds", async () => {
+  it("should call renewCheckout if authentication succeeds", async () => {
     req.body.patronId = "123456"
     ;(initializePatronTokenAuth as jest.Mock).mockResolvedValueOnce({
       decodedPatron: { sub: "123456" },
     })
     await handler(req as NextApiRequest, res as NextApiResponse)
-    expect(updateHold).toHaveBeenCalled()
+    expect(renewCheckout).toHaveBeenCalled()
   })
 })

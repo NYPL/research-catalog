@@ -1,11 +1,11 @@
 import sierraClient from "../../../src/server/sierraClient"
 import {
   updatePin,
-  updateSettings,
+  updatePatronSettings,
   updateHold,
   renewCheckout,
   cancelHold,
-} from "./helpers"
+} from "../../../pages/api/account/helpers"
 
 jest.mock("../../../src/server/sierraClient")
 const mockCheckoutResponse = {
@@ -21,7 +21,7 @@ const mockCheckoutResponse = {
 }
 
 describe("cancelHold", () => {
-  it("should return a success message if hold is deleted", async () => {
+  it("should return a success message if hold is cancelled", async () => {
     const holdId = "12345"
     const methodMock = jest.fn().mockResolvedValueOnce({
       status: 200,
@@ -143,7 +143,7 @@ describe("updateHold", () => {
   })
 })
 
-describe("updateSettings", () => {
+describe("updatePatronSettings", () => {
   it("should return a success message if settings are updated", async () => {
     const patronId = "12345"
     const patronData = { emails: ["fake"] }
@@ -153,7 +153,7 @@ describe("updateSettings", () => {
     })
     ;(sierraClient as jest.Mock).mockResolvedValueOnce({ put: methodMock })
 
-    const response = await updateSettings(patronId, patronData)
+    const response = await updatePatronSettings(patronId, patronData)
 
     expect(sierraClient).toHaveBeenCalled()
     expect(methodMock).toHaveBeenCalledWith(`patrons/${patronId}`, patronData)
@@ -174,7 +174,7 @@ describe("updateSettings", () => {
     })
     ;(sierraClient as jest.Mock).mockResolvedValueOnce({ put: methodMock })
 
-    const response = await updateSettings(patronId, patronData)
+    const response = await updatePatronSettings(patronId, patronData)
     expect(sierraClient).toHaveBeenCalled()
     expect(methodMock).toHaveBeenCalledWith(`patrons/${patronId}`, patronData)
     expect(response.status).toBe(500)

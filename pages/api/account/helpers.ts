@@ -22,7 +22,7 @@ export async function updatePin(
   }
 }
 
-export async function updateSettings(patronId: string, patronData: any) {
+export async function updatePatronSettings(patronId: string, patronData: any) {
   try {
     const client = await sierraClient()
     await client.put(`patrons/${patronId}`, patronData)

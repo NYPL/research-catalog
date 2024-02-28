@@ -1,6 +1,6 @@
 import type { NextApiResponse, NextApiRequest } from "next"
 import initializePatronTokenAuth from "../../../../src/server/auth"
-import { updateSettings } from "../helpers"
+import { updatePatronSettings } from "../helpers"
 
 /**
  * API route handler for /api/account/settings/{patronId}
@@ -29,7 +29,7 @@ export default async function handler(
     /**  We check that the patron cookie matches the patron id in the request,
      * i.e.,the logged in user is updating their own settings. */
     if (patronId == cookiePatronId) {
-      const response = await updateSettings(patronId, patronData)
+      const response = await updatePatronSettings(patronId, patronData)
       responseStatus = response.status
       responseMessage = response.message
     } else {
