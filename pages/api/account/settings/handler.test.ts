@@ -1,11 +1,21 @@
 import handler from "./[id]"
-import updateSettings from "./updateSettings"
+import { updateSettings } from "../helpers"
 import initializePatronTokenAuth from "../../../../src/server/auth"
 import type { NextApiRequest, NextApiResponse } from "next"
 
 jest.mock("../../../../src/server/sierraClient")
 jest.mock("../../../../src/server/auth")
-jest.mock("./updateSettings")
+jest.mock("../helpers", () => {
+  const originalModule = jest.requireActual("../helpers")
+  return {
+    __esModule: true,
+    ...originalModule,
+    updateSettings: jest.fn().mockResolvedValueOnce({
+      status: "200",
+      message: "Updated",
+    }),
+  }
+})
 
 describe("handler", () => {
   let req: Partial<NextApiRequest>
@@ -52,10 +62,6 @@ describe("handler", () => {
     req.query.id = "123456"
     ;(initializePatronTokenAuth as jest.Mock).mockResolvedValueOnce({
       decodedPatron: { sub: "123456" },
-    })
-    ;(updateSettings as jest.Mock).mockResolvedValueOnce({
-      status: "200",
-      message: "test",
     })
     await handler(req as NextApiRequest, res as NextApiResponse)
     expect(updateSettings).toHaveBeenCalled

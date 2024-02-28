@@ -1,6 +1,6 @@
 import type { NextApiResponse, NextApiRequest } from "next"
 import initializePatronTokenAuth from "../../../../src/server/auth"
-import updatePin from "./updatePin"
+import { updatePin } from "../helpers"
 
 /**
  * API route handler for /api/account/update-pin/{patronId}

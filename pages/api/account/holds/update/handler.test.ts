@@ -1,11 +1,21 @@
 import handler from "./[id]"
-import holdUpdate from "./updateHold"
+import { updateHold } from "../../helpers"
 import initializePatronTokenAuth from "../../../../../src/server/auth"
 import type { NextApiRequest, NextApiResponse } from "next"
 
 jest.mock("../../../../../src/server/sierraClient")
 jest.mock("../../../../../src/server/auth")
-jest.mock("./updateHold")
+jest.mock("../../helpers", () => {
+  const originalModule = jest.requireActual("../../helpers")
+  return {
+    __esModule: true,
+    ...originalModule,
+    updateHold: jest.fn().mockResolvedValueOnce({
+      status: "200",
+      message: "test",
+    }),
+  }
+})
 
 describe("handler", () => {
   let req: Partial<NextApiRequest>
@@ -29,7 +39,7 @@ describe("handler", () => {
       decodedPatron: null,
     })
     await handler(req as NextApiRequest, res as NextApiResponse)
-    expect(holdUpdate).not.toHaveBeenCalled()
+    expect(updateHold).not.toHaveBeenCalled()
     expect(res.status).toHaveBeenCalledWith(403)
     expect(res.json).toHaveBeenCalledWith("No authenticated patron")
   })
@@ -41,23 +51,19 @@ describe("handler", () => {
     })
 
     await handler(req as NextApiRequest, res as NextApiResponse)
-    expect(holdUpdate).not.toHaveBeenCalled()
+    expect(updateHold).not.toHaveBeenCalled()
     expect(res.status).toHaveBeenCalledWith(403)
     expect(res.json).toHaveBeenCalledWith(
       "Authenticated patron does not own this hold"
     )
   })
 
-  it("should call holdUpdate if authentication succeeds", async () => {
+  it("should call updateHold if authentication succeeds", async () => {
     req.body.patronId = "123456"
     ;(initializePatronTokenAuth as jest.Mock).mockResolvedValueOnce({
       decodedPatron: { sub: "123456" },
     })
-    ;(holdUpdate as jest.Mock).mockResolvedValueOnce({
-      status: "200",
-      message: "test",
-    })
     await handler(req as NextApiRequest, res as NextApiResponse)
-    expect(holdUpdate).toHaveBeenCalled()
+    expect(updateHold).toHaveBeenCalled()
   })
 })

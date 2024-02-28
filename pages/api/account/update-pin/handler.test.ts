@@ -1,11 +1,21 @@
 import handler from "./[id]"
-import updatePin from "./updatePin"
+import { updatePin } from "../helpers"
 import initializePatronTokenAuth from "../../../../src/server/auth"
 import type { NextApiRequest, NextApiResponse } from "next"
 
 jest.mock("../../../../src/server/sierraClient")
 jest.mock("../../../../src/server/auth")
-jest.mock("./updatePin")
+jest.mock("../helpers", () => {
+  const originalModule = jest.requireActual("../helpers")
+  return {
+    __esModule: true,
+    ...originalModule,
+    updatePin: jest.fn().mockResolvedValueOnce({
+      status: "200",
+      message: "test",
+    }),
+  }
+})
 
 describe("handler", () => {
   let req: Partial<NextApiRequest>
@@ -30,7 +40,7 @@ describe("handler", () => {
       decodedPatron: null,
     })
     await handler(req as NextApiRequest, res as NextApiResponse)
-    expect(updatePin).not.toHaveBeenCalled
+    expect(updatePin).not.toHaveBeenCalled()
     expect(res.status).toHaveBeenCalledWith(403)
     expect(res.json).toHaveBeenCalledWith("No authenticated patron")
   })
@@ -41,7 +51,7 @@ describe("handler", () => {
       decodedPatron: { sub: "123456" },
     })
     await handler(req as NextApiRequest, res as NextApiResponse)
-    expect(updatePin).not.toHaveBeenCalled
+    expect(updatePin).not.toHaveBeenCalled()
     expect(res.status).toHaveBeenCalledWith(403)
     expect(res.json).toHaveBeenCalledWith(
       "Authenticated patron does not match request"
@@ -53,11 +63,7 @@ describe("handler", () => {
     ;(initializePatronTokenAuth as jest.Mock).mockResolvedValueOnce({
       decodedPatron: { sub: "123456" },
     })
-    ;(updatePin as jest.Mock).mockResolvedValueOnce({
-      status: "200",
-      message: "test",
-    })
     await handler(req as NextApiRequest, res as NextApiResponse)
-    expect(updatePin).toHaveBeenCalled
+    expect(updatePin).toHaveBeenCalled()
   })
 })

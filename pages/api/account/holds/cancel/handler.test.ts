@@ -1,11 +1,21 @@
 import handler from "./[id]"
-import cancelHold from "./cancelHold"
+import { cancelHold } from "../../helpers"
 import initializePatronTokenAuth from "../../../../../src/server/auth"
 import type { NextApiRequest, NextApiResponse } from "next"
 
 jest.mock("../../../../../src/server/sierraClient")
 jest.mock("../../../../../src/server/auth")
-jest.mock("./cancelHold")
+jest.mock("../../helpers", () => {
+  const originalModule = jest.requireActual("../../helpers")
+  return {
+    __esModule: true,
+    ...originalModule,
+    cancelHold: jest.fn().mockResolvedValueOnce({
+      status: "200",
+      message: "test",
+    }),
+  }
+})
 
 describe("handler", () => {
   let req: Partial<NextApiRequest>
@@ -52,10 +62,6 @@ describe("handler", () => {
     req.body.patronId = "123456"
     ;(initializePatronTokenAuth as jest.Mock).mockResolvedValueOnce({
       decodedPatron: { sub: "123456" },
-    })
-    ;(cancelHold as jest.Mock).mockResolvedValueOnce({
-      status: "200",
-      message: "test",
     })
     await handler(req as NextApiRequest, res as NextApiResponse)
     expect(cancelHold).toHaveBeenCalled()

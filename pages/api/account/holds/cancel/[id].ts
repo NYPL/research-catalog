@@ -1,5 +1,5 @@
 import type { NextApiResponse, NextApiRequest } from "next"
-import cancelHold from "./cancelHold"
+import { cancelHold } from "../../helpers"
 import initializePatronTokenAuth from "../../../../../src/server/auth"
 
 /**

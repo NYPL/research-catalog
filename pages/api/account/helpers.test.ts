@@ -1,9 +1,11 @@
 import sierraClient from "../../../src/server/sierraClient"
-import renewCheckout from "./checkouts/renew/renewCheckout"
-import cancelHold from "./holds/cancel/cancelHold"
-import updateHold from "./holds/update/updateHold"
-import updateSettings from "./settings/updateSettings"
-import updatePin from "./update-pin/updatePin"
+import {
+  updatePin,
+  updateSettings,
+  updateHold,
+  renewCheckout,
+  cancelHold,
+} from "./helpers"
 
 jest.mock("../../../src/server/sierraClient")
 const mockCheckoutResponse = {

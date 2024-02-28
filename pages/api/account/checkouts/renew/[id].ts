@@ -1,6 +1,6 @@
 import type { NextApiResponse, NextApiRequest } from "next"
 import initializePatronTokenAuth from "../../../../../src/server/auth"
-import renewCheckout from "./renewCheckout"
+import { renewCheckout } from "../../helpers"
 
 /**
  * API route handler for /api/account/checkouts/renew/{checkoutId}

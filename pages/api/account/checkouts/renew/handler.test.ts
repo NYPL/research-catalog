@@ -1,10 +1,20 @@
 import handler from "./[id]"
-import renewCheckout from "./renewCheckout"
+import { renewCheckout } from "../../helpers"
 import initializePatronTokenAuth from "../../../../../src/server/auth"
 import type { NextApiRequest, NextApiResponse } from "next"
 
 jest.mock("../../../../../src/server/auth")
-jest.mock("./renewCheckout")
+jest.mock("../../helpers", () => {
+  const originalModule = jest.requireActual("../../helpers")
+  return {
+    __esModule: true,
+    ...originalModule,
+    renewCheckout: jest.fn().mockResolvedValueOnce({
+      status: "200",
+      message: "test",
+    }),
+  }
+})
 
 describe("handler", () => {
   let req: Partial<NextApiRequest>
@@ -51,10 +61,6 @@ describe("handler", () => {
     req.body.patronId = "123456"
     ;(initializePatronTokenAuth as jest.Mock).mockResolvedValueOnce({
       decodedPatron: { sub: "123456" },
-    })
-    ;(renewCheckout as jest.Mock).mockResolvedValueOnce({
-      status: "200",
-      message: "test",
     })
     await handler(req as NextApiRequest, res as NextApiResponse)
     expect(renewCheckout).toHaveBeenCalled()
