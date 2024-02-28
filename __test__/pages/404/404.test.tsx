@@ -1,5 +1,5 @@
 import React from "react"
-import { render, screen } from "../../../__test__/test-utils"
+import { render, screen } from "../../../src/utils/testUtils"
 
 import Custom404 from "../../../pages/404/index"
 import Redirect404 from "../../../pages/404/redirect"

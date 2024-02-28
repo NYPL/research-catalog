@@ -1,5 +1,5 @@
 import MyAccount from "../../../pages/account"
-import { render, screen } from "../../../__test__/test-utils"
+import { render, screen } from "../../../src/utils/testUtils"
 
 describe("My Account page", () => {
   it("displays an error message when patron is empty", () => {

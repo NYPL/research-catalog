@@ -1,5 +1,5 @@
 import React from "react"
-import { fireEvent, render, screen } from "../../../__test__/test-utils"
+import { fireEvent, render, screen } from "../../../src/utils/testUtils"
 import mockRouter from "next-router-mock"
 import userEvent from "@testing-library/user-event"
 

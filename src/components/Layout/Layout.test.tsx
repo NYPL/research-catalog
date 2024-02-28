@@ -1,5 +1,5 @@
 import React from "react"
-import { render, screen, within } from "../../../__test__/test-utils"
+import { render, screen, within } from "../../utils/testUtils"
 
 import Layout from "./Layout"
 
