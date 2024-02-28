@@ -1,7 +1,8 @@
 import React from "react"
+import userEvent from "@testing-library/user-event"
+
 import { render, screen } from "../../utils/testUtils"
 import FeedbackForm from "./FeedbackForm"
-import userEvent from "@testing-library/user-event"
 
 describe("FeedbackForm", () => {
   it("renders a feedback button, expands the form on click, and closes it on cancel button click", async () => {
@@ -27,18 +28,14 @@ describe("FeedbackForm", () => {
     render(<FeedbackForm></FeedbackForm>)
 
     await userEvent.click(screen.getByText("Help and Feedback"))
-
     const commentField = screen.getByPlaceholderText(
       "Enter your question or feedback here"
     )
     await userEvent.type(commentField, "Comment")
-
     const emailField = screen.getByPlaceholderText(
       "Enter your email address here"
     )
-
     await userEvent.type(emailField, "test@test.com")
-
     await userEvent.click(screen.getByText("Submit"))
     expect(
       screen.getByText(

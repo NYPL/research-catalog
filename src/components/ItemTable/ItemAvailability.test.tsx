@@ -1,8 +1,11 @@
 import React from "react"
-import { render, screen } from "@testing-library/react"
+import { render, screen } from "../../utils/testUtils"
+import userEvent from "@testing-library/user-event"
+
 import ItemAvailability from "./ItemAvailability"
 import Item from "../../models/Item"
 import SearchResultsBib from "../../models/SearchResultsBib"
+import FeedbackForm from "../FeedbackForm/FeedbackForm"
 import {
   itemNYPLReCAP,
   itemPhysicallyRequestable,
@@ -18,9 +21,7 @@ describe("ItemAvailability", () => {
     const item = new Item(itemNYPLReCAP, parentBib)
     render(<ItemAvailability item={item} />)
     expect(
-      screen.getByRole("link", {
-        name: "How do I pick up this item and when will it be ready?",
-      })
+      screen.getByText("How do I pick up this item and when will it be ready?")
     ).toHaveAttribute(
       "href",
       "https://www.nypl.org/help/request-research-materials"
@@ -31,9 +32,7 @@ describe("ItemAvailability", () => {
     render(<ItemAvailability item={item} />)
     expect(screen.getByText("Available by appointment")).toBeInTheDocument()
     expect(
-      screen.getByRole("link", {
-        name: "Schwarzman Building - Main Reading Room 315",
-      })
+      screen.getByText("Schwarzman Building - Main Reading Room 315")
     ).toHaveAttribute("href", "https://www.nypl.org/locations/schwarzman")
   })
   it("renders the correct text for an available onsite item", async () => {
@@ -44,9 +43,7 @@ describe("ItemAvailability", () => {
       screen.getByText("- Can be used on site. Please visit", { exact: false })
     ).toBeInTheDocument()
     expect(
-      screen.getByRole("link", {
-        name: "New York Public Library - Schwarzman Building M2",
-      })
+      screen.getByText("New York Public Library - Schwarzman Building M2")
     ).toHaveAttribute("href", "https://www.nypl.org/locations/schwarzman")
     expect(
       screen.getByText("to submit a request in person.", { exact: false })
@@ -57,11 +54,26 @@ describe("ItemAvailability", () => {
     render(<ItemAvailability item={item} />)
     expect(screen.getByText("Not available")).toBeInTheDocument()
     expect(screen.getByText("- Please", { exact: false })).toBeInTheDocument()
-    screen.getByRole("button", {
-      name: "contact a librarian",
-    })
+    expect(screen.getByText("contact a librarian")).toBeInTheDocument()
     expect(
       screen.getByText("for assistance.", { exact: false })
+    ).toBeInTheDocument()
+  })
+  it("pre-populates the metadata in the feedback form for unavailable items", async () => {
+    const item = new Item(itemUnavailable, parentBib)
+    render(
+      <>
+        <ItemAvailability item={item} />
+        <FeedbackForm />
+      </>
+    )
+    const feedbackButton = screen.getByText("contact a librarian")
+    await userEvent.click(feedbackButton)
+
+    expect(
+      screen.getByText(
+        "You are asking for help or information about NCOV 2803 in this record."
+      )
     ).toBeInTheDocument()
   })
 })
