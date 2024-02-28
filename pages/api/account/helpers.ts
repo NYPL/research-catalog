@@ -1,5 +1,9 @@
 import sierraClient from "../../../src/server/sierraClient"
 
+/**
+ * PUT request to Sierra to update patron PIN, first validating with previous PIN.
+ * Returns status and message about request.
+ */
 export async function updatePin(
   patronId: string,
   barcode: string,
@@ -22,6 +26,9 @@ export async function updatePin(
   }
 }
 
+/**
+ * PUT request to Sierra to update patron settings. Returns status and message about request.
+ */
 export async function updatePatronSettings(patronId: string, patronData: any) {
   try {
     const client = await sierraClient()
@@ -34,7 +41,9 @@ export async function updatePatronSettings(patronId: string, patronData: any) {
     }
   }
 }
-
+/**
+ * PUT request to Sierra to update a patron's hold. Returns status and message about request.
+ */
 export async function updateHold(holdId: string, holdData: any) {
   try {
     const client = await sierraClient()
@@ -48,6 +57,9 @@ export async function updateHold(holdId: string, holdData: any) {
   }
 }
 
+/**
+ * DELETE request to Sierra to cancel a patron's hold. Returns status and message about request.
+ */
 export async function cancelHold(holdId: string) {
   try {
     const client = await sierraClient()
@@ -61,6 +73,10 @@ export async function cancelHold(holdId: string) {
   }
 }
 
+/**
+ * POST request to Sierra to renew a patron's checkout. Returns status, message about request, and
+ * (if successful) the checkout object.
+ */
 export async function renewCheckout(checkoutId: string) {
   try {
     const client = await sierraClient()
