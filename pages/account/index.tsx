@@ -6,6 +6,7 @@ import initializePatronTokenAuth, {
 } from "../../src/server/auth"
 import { MyAccountFactory } from "../../src/models/MyAccount"
 import type { Checkout, Hold, Patron, Fine } from "../../src/types/accountTypes"
+import ProfileTabs from "../../src/components/MyAccount/ProfileTabs"
 
 interface MyAccountPropsType {
   checkouts?: Checkout[]
@@ -64,6 +65,12 @@ export default function MyAccount({
             Please contact gethelp@nypl.org for assistance.
           </Text>
         )}
+        <ProfileTabs
+          patron={patron}
+          fines={fines}
+          checkouts={checkouts}
+          holds={holds}
+        />
         {/** Testing renew checkout api route, with test checkout id. */}
         <Button
           id="checkout-test"
