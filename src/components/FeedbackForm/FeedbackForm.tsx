@@ -24,7 +24,7 @@ const FeedbackForm = () => {
     setScreen("form")
 
     // Focus on the feedback button when the form is closed
-    // TODO: Debug why this default DS behavior isn't working
+    // TODO: Figure out why this default DS behavior isn't working out of the box
     setTimeout(() => {
       const openButton = document.querySelector("#open")
       if (openButton instanceof HTMLElement) {
