@@ -8,14 +8,18 @@ import {
 } from "@nypl/design-system-react-components"
 import EbscoCard from "./EbscoCard"
 
-const EbscoSidebar = ({ results }) => {
+const EbscoSidebar = ({
+  results,
+  showCount = 10,
+  ebscoLookingForNotification,
+}) => {
   // https://research-ebsco-com.i.ezproxy.nypl.org/c/2styhb/search/results?query-1=AND,q%3dtoast&sort=relevance&includefacets=y&searchmode=all&autosuggest=n&autocorrect=n&view=brief&resultsperpage=20&pagenumber=1&highlight=y&includeimagequickview=n
   if (!results?.queryString) return null
 
   const queryString = results.queryString.replace("query-1=AND,", "q=")
 
   return (
-    <Card isBordered>
+    <Card isBordered background="ui.gray.x-light-cool" marginBottom="1em">
       <CardHeading level="h3">Results from Article Search</CardHeading>
       <CardContent>
         <Text size="body2">
@@ -23,7 +27,8 @@ const EbscoSidebar = ({ results }) => {
           library card.
         </Text>
         <SimpleGrid columns={1} gap="s" pb="s">
-          {results.records.map((result) => (
+          <p>{ebscoLookingForNotification}</p>
+          {results.records.slice(0, showCount).map((result) => (
             <EbscoCard key={result.id} ebscoResult={result} />
           ))}
         </SimpleGrid>

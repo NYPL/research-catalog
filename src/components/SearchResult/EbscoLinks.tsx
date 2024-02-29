@@ -42,11 +42,12 @@ const EbscoLinks = ({
       </RCLink>
     ) : null
 
-  const searchInside = (event) => {
+  const searchInside = (event, defaultPublicationKey) => {
     event.preventDefault()
     // TODO: Need a way to place a single publication key in the SearchBar form
     // so that we can disable the publication-select for ISSNs with a single publication
-    const publicationKey = event.target?.selectName?.value || event.target?.defaultPublication?.value
+    const publicationKey =
+      event.target?.selectName?.value || defaultPublicationKey
     const [publicationId, publicationTitle] = publicationKey.split("||")
 
     const baseUrl = `https://research-ebsco-com.i.ezproxy.nypl.org/c/2styhb/search/results?autocorrect=y&publicationId=${publicationId}&publicationTitle=${publicationTitle}`
@@ -59,13 +60,14 @@ const EbscoLinks = ({
   const searchInsideOptions = Object.entries(
     groupLinksByPublication(ebscoResults)
   ).map(([publicationKey, holdings]) => {
+    const maxLength = 50
     let db = Array.isArray(holdings)
       ? holdings.map((h) => h.name).join(", ")
       : ""
-    db = db.length > 40 ? db.substring(0, 37) + "..." : db
+    db = db.length > maxLength ? db.substring(0, maxLength - 3) + "..." : db
 
     return {
-      text: formatCoverageRange(overallCoverageRange(holdings)) + ` (${db})`,
+      text: formatCoverageRange(overallCoverageRange(holdings)) + `: ${db}`,
       value: publicationKey,
     }
   })
@@ -94,12 +96,16 @@ const EbscoLinks = ({
             <SearchBar
               id="searchBar-id"
               labelText="SearchBar Label"
-              onSubmit={searchInside}
-              selectProps={{
-                labelText: "Select a coverage",
-                name: "selectName",
-                optionsData: searchInsideOptions,
-              }}
+              onSubmit={(e) => searchInside(e, searchInsideOptions[0].value)}
+              selectProps={
+                searchInsideOptions.length > 1
+                  ? {
+                      labelText: "Select a coverage",
+                      name: "selectName",
+                      optionsData: searchInsideOptions,
+                    }
+                  : null
+              }
               textInputProps={{
                 labelText: "Item Search",
                 name: "textInputName",

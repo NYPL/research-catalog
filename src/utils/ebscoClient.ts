@@ -49,7 +49,7 @@ export class EbscoClient {
     // queries = "query-1=Rob Hall query-2=OR,AU:Jon Krakauer query-3=OR,SU:Mountaineering"
     // query-1=Rob Hall query-2=OR,AU:Jon Krakauer query-3=OR,SU:Mountaineering
     const response = await this.ebscoQuery(
-      `edsapi/publication/search?query=${query}&includefacets=n&highlight=n`
+      `edsapi/publication/search?query=${query}&includefacets=y&highlight=n`
     )
 
     if (response.ok) {

@@ -1,6 +1,6 @@
 import { makeClient } from "../../src/utils/ebscoClient"
 
-import { ebscoSearchResultsToIssnResults } from "../../src/utils/ebscoUtils"
+import { serializeEbscoPublicationResults } from "../../src/utils/ebscoUtils"
 
 let ebscoClient
 
@@ -16,17 +16,35 @@ export async function fetchEbscoResults(query) {
   return ebscoClient.search(query)
 }
 
+export async function publicationsForKeyword(q) {
+  const results = await fetchEbscoPublications(q)
+  if (!results?.SearchResult?.Data?.Records) return null
+
+  // For keyword publication searches, remove anything with low relevance to
+  // approximate EBSCO's behavior:
+  const records = results.SearchResult.Data.Records.filter((record) => {
+    return parseInt(record.Header.PreciseRelevancyScore) > 2800
+  })
+
+  const serialized = serializeEbscoPublicationResults(records)
+
+  return serialized
+}
+
 export async function publicationsForIssns(issns) {
   const results = await Promise.all(
     issns.map(async (issn) => {
       const results = await fetchEbscoPublications(`IS:${issn}`)
+      if (!results?.SearchResult?.Data?.Records) return null
 
-      const issnResults = ebscoSearchResultsToIssnResults(results)
+      const issnResults = serializeEbscoPublicationResults(
+        results.SearchResult.Data.Records
+      )
       return issnResults
     })
   )
 
-  const filteredResults = results.flat(4)
+  const filteredResults = results.flat()
 
   return filteredResults
     .filter((result) => result)

@@ -1,6 +1,10 @@
 import Head from "next/head"
 import {
+  Box,
+  Link as DSLink,
   Heading,
+  Icon,
+  Notification,
   SimpleGrid,
   Pagination,
   Select,
@@ -15,7 +19,11 @@ import DRBContainer from "../../src/components/DRB/DRBContainer"
 import SearchResult from "../../src/components/SearchResult/SearchResult"
 
 import { fetchResults } from "../api/search"
-import { fetchEbscoResults, publicationsForIssns } from "../api/ebsco"
+import {
+  fetchEbscoResults,
+  publicationsForIssns,
+  publicationsForKeyword,
+} from "../api/ebsco"
 import {
   getSearchResultsHeading,
   mapQueryToSearchParams,
@@ -37,6 +45,7 @@ interface SearchProps {
   results: any
   isAuthenticated: boolean
   ebscoResults?: any
+  ebscoPublicationResults?: any
 }
 
 import { issnsForSearchResults } from "../../src/utils/ebscoUtils"
@@ -49,6 +58,7 @@ export default function Search({
   results,
   isAuthenticated,
   ebscoResults = null,
+  ebscoPublicationResults = null,
 }: SearchProps) {
   const metadataTitle = `Search Results | ${SITE_NAME}`
   const { push, query } = useRouter()
@@ -84,6 +94,43 @@ export default function Search({
     await push(
       getSearchQuery({ ...searchParams, sortBy, order, page: undefined })
     )
+  }
+  const ebscoLookingForTitle =
+    ebscoPublicationResults?.length &&
+    ebscoPublicationResults[0].publicationTitle
+  const ebscoMatchingPublicationCount =
+    ebscoPublicationResults &&
+    Array.from(new Set(ebscoPublicationResults.map((pub) => pub.publicationId)))
+      .length
+  const ebscoAllPublicationsLink = `https://research-ebsco-com.i.ezproxy.nypl.org/c/2styhb/search/publication-results?id=&limiters=None&q=${query.q}`
+
+  const ebscoLookingForNotification = ebscoMatchingPublicationCount ? (
+    <>
+      Looking for <em>{ebscoLookingForTitle}</em>? &nbsp;
+      <DSLink
+        href={ebscoAllPublicationsLink}
+        target="_blank"
+        rel="noreferrer"
+        key="looking-for-link-all"
+      >
+        See {ebscoMatchingPublicationCount} matching publication
+        {ebscoMatchingPublicationCount > 1 ? "s" : ""} in Article Search
+      </DSLink>
+    </>
+  ) : null
+
+  const injectEbscoResults = (searchResults, ebscoResults, index, count) => {
+    return searchResults
+      .slice(0, index)
+      .concat([
+        <EbscoSidebar
+          key="injected-ebsco-results-sidebar"
+          results={ebscoResults}
+          showCount={3}
+          ebscoLookingForNotification={ebscoLookingForNotification}
+        />,
+      ])
+      .concat(searchResults.slice(index))
   }
 
   return (
@@ -127,7 +174,12 @@ export default function Search({
             {isLoading ? (
               <SkeletonLoader showImage={false} />
             ) : (
-              ebscoResults && <EbscoSidebar results={ebscoResults} />
+              ebscoResults && (
+                <EbscoSidebar
+                  results={ebscoResults}
+                  ebscoLookingForNotification={ebscoLookingForNotification}
+                />
+              )
             )}
             {isLoading ? (
               <SkeletonLoader showImage={false} />
@@ -149,6 +201,19 @@ export default function Search({
               <SkeletonLoader showImage={false} />
             ) : (
               <>
+                {ebscoLookingForNotification && (
+                  <Notification
+                    notificationType="announcement"
+                    notificationHeading="Looking for a publication?"
+                    icon={
+                      <Icon
+                        name="actionLaunch"
+                        color="section.research.secondary"
+                      />
+                    }
+                    notificationContent={ebscoLookingForNotification}
+                  />
+                )}
                 <Heading level="h2" mb="xl" size="heading4">
                   {getSearchResultsHeading(
                     searchParams.page,
@@ -157,9 +222,14 @@ export default function Search({
                   )}
                 </Heading>
                 <SimpleGrid columns={1} gap="grid.xl">
-                  {searchResultBibs.map((bib: SearchResultsBib) => {
-                    return <SearchResult key={bib.id} bib={bib} />
-                  })}
+                  {injectEbscoResults(
+                    searchResultBibs.map((bib: SearchResultsBib) => {
+                      return <SearchResult key={bib.id} bib={bib} />
+                    }),
+                    ebscoResults,
+                    3,
+                    3
+                  )}
                 </SimpleGrid>
               </>
             )}
@@ -199,10 +269,13 @@ export async function getServerSideProps({ resolvedUrl, req }) {
   const queryString = resolvedUrl.slice(resolvedUrl.indexOf("?") + 1)
 
   const query = parse(queryString)
-  const [results, rawEbscoResults] = await Promise.all([
-    fetchResults(mapQueryToSearchParams(parse(queryString))),
-    fetchEbscoResults(query.q),
-  ])
+  const [results, rawEbscoResults, ebscoPublicationResults] = await Promise.all(
+    [
+      fetchResults(mapQueryToSearchParams(parse(queryString))),
+      fetchEbscoResults(query.q),
+      publicationsForKeyword(query.q),
+    ]
+  )
 
   const ebscoResults = {
     records:
@@ -253,6 +326,7 @@ export async function getServerSideProps({ resolvedUrl, req }) {
       results,
       isAuthenticated,
       ebscoResults,
+      ebscoPublicationResults,
     },
   }
 }

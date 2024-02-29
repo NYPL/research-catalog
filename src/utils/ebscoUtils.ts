@@ -22,32 +22,32 @@ export const issnsForSearchResults = (discoveryApiResults) => {
     .map((result) => result.issn)
 }
 
-export const ebscoSearchResultsToIssnResults = (results) => {
-  if (!results?.SearchResult?.Data?.Records) return null
+export const serializeEbscoPublicationResults = (records) => {
+  return records
+    .map((record) => {
+      const issnItem = record.Items?.find((item) => item.Name === "ISSN")
+      if (!issnItem) return null
 
-  return results.SearchResult.Data.Records.map((record) => {
-    const issnItem = record.Items?.find((item) => item.Name === "ISSN")
-    if (!issnItem) return null
+      const publicationId = record.Header.PublicationId.replace(/^[^\d]*/, "")
+      const publicationTitle = record.Items.find(
+        (item) => item.Name === "Title"
+      )?.Data
 
-    const publicationId = record.Header.PublicationId.replace(/^[^\d]*/, "")
-    const publicationTitle = record.Items.find(
-      (item) => item.Name === "Title"
-    )?.Data
-
-    return record.FullTextHoldings.filter((holding) => holding.URL).map(
-      (holding) => {
-        return {
-          issn: issnItem.Data.split(" ").shift(),
-          url: holding.URL,
-          publicationId,
-          publicationTitle,
-          // fulltextSearchBase: `https://research-ebsco-com.i.ezproxy.nypl.org/c/2styhb/search/results?autocorrect=y&publicationId=${publicationId}&publicationTitle=${publicationTitle}`, // &q=clinical
-          name: holding.Name,
-          coverage: parseCoverageDates(holding.CoverageDates),
+      return record.FullTextHoldings.filter((holding) => holding.URL).map(
+        (holding) => {
+          return {
+            issn: issnItem.Data.split(" ").shift(),
+            url: holding.URL,
+            publicationId,
+            publicationTitle,
+            name: holding.Name,
+            coverage: parseCoverageDates(holding.CoverageDates),
+          }
         }
-      }
-    )
-  })
+      )
+    })
+    .flat(4)
+    .filter((entry) => entry)
 }
 
 export const formatCoverageDate = (dateString) => {

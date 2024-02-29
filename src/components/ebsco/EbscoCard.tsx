@@ -12,7 +12,7 @@ const EbscoCard = ({ ebscoResult }) => {
   const description = `${ebscoResult.type} from ${ebscoResult.db}`
 
   return (
-    <Card backgroundColor="var(--nypl-colors-ui-bg-default)" p="xs">
+    <Card backgroundColor="ui.white" p="xs">
       <CardContent>
         <DSLink href={ebscoResult.url} target="_blank" isUnderlined={false}>
           <Text size="body2">{ebscoResult.title}</Text>
