@@ -9,7 +9,7 @@ import { BASE_URL } from "../../config/constants"
  * or by clicking on 'Contact a librarian' (located in src/app/components/Item/InformationLinks.jsx)
  */
 const FeedbackForm = () => {
-  const [screen, setScreen] = useState("form")
+  const [feedbackFormScreen, setFeedbackFormScreen] = useState("form")
   const {
     FeedbackBox,
     isOpen,
@@ -21,7 +21,7 @@ const FeedbackForm = () => {
   const closeAndResetItemMetadata = () => {
     if (itemMetadata) setItemMetadata(null)
     onClose()
-    setScreen("form")
+    setFeedbackFormScreen("form")
 
     // Focus on the feedback button when the form is closed
     // TODO: Figure out why this default DS behavior isn't working out of the box
@@ -45,10 +45,10 @@ const FeedbackForm = () => {
         console.error(responseJson.error)
         return
       }
-      setScreen("confirmation")
+      setFeedbackFormScreen("confirmation")
     } catch (error) {
       console.error("Error posting feedback", error)
-      setScreen("error")
+      setFeedbackFormScreen("error")
     }
   }
   return (
@@ -66,7 +66,7 @@ const FeedbackForm = () => {
           ? `You are asking for help or information about ${itemMetadata.callNumber} in this record.`
           : null
       }
-      view={screen}
+      view={feedbackFormScreen}
     />
   )
 }
