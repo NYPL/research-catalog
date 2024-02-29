@@ -22,6 +22,15 @@ const FeedbackForm = () => {
     if (itemMetadata) setItemMetadata(null)
     onClose()
     setScreen("form")
+
+    // Focus on the feedback button when the form is closed
+    // TODO: Debug why this default DS behavior isn't working
+    setTimeout(() => {
+      const openButton = document.querySelector("#open")
+      if (openButton instanceof HTMLElement) {
+        openButton.focus()
+      }
+    }, 250)
   }
   const submitFeedback = async (
     metadataAndComment: FeedbackMetadataAndComment
@@ -42,7 +51,6 @@ const FeedbackForm = () => {
       setScreen("error")
     }
   }
-
   return (
     <FeedbackBox
       onSubmit={submitFeedback}
