@@ -1,4 +1,4 @@
-import { List, Icon, Text } from "@nypl/design-system-react-components"
+import { List, Icon, Text, Box } from "@nypl/design-system-react-components"
 import type { IconNames } from "@nypl/design-system-react-components"
 import styles from "../../../styles/components/MyAccount.module.scss"
 
@@ -44,7 +44,7 @@ const ProfileHeader = ({ patron }: { patron: Patron }) => {
     }) => {
       return (
         <>
-          <dt>
+          <dt key={term}>
             <Icon
               size="large"
               name={icon}
@@ -52,7 +52,7 @@ const ProfileHeader = ({ patron }: { patron: Patron }) => {
             />
             {term}
           </dt>
-          <dd>{description}</dd>
+          <dd key={term}>{description}</dd>
         </>
       )
     }
