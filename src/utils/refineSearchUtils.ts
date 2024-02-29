@@ -13,7 +13,7 @@ export const collapseMultiValueQueryParams = (
     }, {})
 }
 
-export const buildQuery = (filters: Record<string, string[]>) => {
+export const buildFilterQuery = (filters: Record<string, string[]>) => {
   return Object.keys(filters).reduce((acc, field) => {
     filters[field] && filters[field].length
     filters[field].forEach(

@@ -14,7 +14,7 @@ import SearchResultsFilters from "../../models/SearchResultsFilters"
 import RefineSearchCheckBoxField from "./RefineSearchCheckboxField"
 import {
   collapseMultiValueQueryParams,
-  buildQuery,
+  buildFilterQuery,
   getQueryWithoutFilters,
 } from "../../utils/refineSearchUtils"
 import type { Aggregation } from "../../types/filterTypes"
@@ -57,34 +57,45 @@ const RefineSearch = ({
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault()
     const updatedQuery = {
+      // maintain any non-filter query params, eg q=spaghetti
       ...getQueryWithoutFilters(router.query),
-      ...buildQuery(appliedFilters),
+      // build out multi-value query params for selected filters
+      ...buildFilterQuery(appliedFilters),
     }
     router.push({
       pathname: "/search",
       query: updatedQuery,
     })
+    // refine search dialog closes after url is pushed
     toggleRefine()
   }
 
   const [refineSearchClosed, setRefineSearchClosed] = useState(true)
 
+  // runs when refine search button is clicked to open and close the dialog
   const toggleRefine = useCallback(() => {
-    setRefineSearchClosed((prevState) => {
-      if (!prevState)
+    setRefineSearchClosed((prevRefineSearchClosed) => {
+      // if refine search is open (and this toggle is going to close it)
+      if (!prevRefineSearchClosed) {
+        // reset filters to the values from the url
         setAppliedFilters(collapseMultiValueQueryParams(router.query))
-      return !prevState
+      }
+      return !prevRefineSearchClosed
     })
   }, [router.query, setAppliedFilters, setRefineSearchClosed])
 
   const handleClear = () => {
-    setAppliedFilters(getQueryWithoutFilters(router.query))
+    // remove applied filters from state
+    // console.log(getQueryWithoutFilters(router.query))
+    setAppliedFilters({})
     router.push({
       pathname: "/search",
       query: getQueryWithoutFilters(router.query),
     })
     toggleRefine()
   }
+  console.log(appliedFilters)
+
   return (
     <Box className={styles.refineSearchContainer}>
       {refineSearchClosed ? (

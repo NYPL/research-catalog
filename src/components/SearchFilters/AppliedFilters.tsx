@@ -3,7 +3,7 @@ import { TagSet } from "@nypl/design-system-react-components"
 
 import {
   getQueryWithoutFilters,
-  buildQuery,
+  buildFilterQuery,
   addLabelPropAndParseFilters,
 } from "../../utils/refineSearchUtils"
 import type { Aggregation, Option } from "../../types/filterTypes"
@@ -64,7 +64,7 @@ const AppliedFilters = ({
 
     const updatedQuery = {
       ...getQueryWithoutFilters(router.query),
-      ...buildQuery(updatedFilters),
+      ...buildFilterQuery(updatedFilters),
     }
     router.push({
       pathname: "/search",
