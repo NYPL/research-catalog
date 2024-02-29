@@ -1,5 +1,9 @@
 import type { Aggregation, Option } from "../types/filterTypes"
 
+// Filters are always multivalue query params in the form
+// filters[field][index]=value eg filters[materialType][0]=resourcetypes:aud.
+// This method returns an object that maps a field to an array of the values
+// provided in the query string with that field called out.
 export const collapseMultiValueQueryParams = (
   queryParams: object
 ): Record<string, string[]> => {
@@ -13,6 +17,8 @@ export const collapseMultiValueQueryParams = (
     }, {})
 }
 
+// This method does the inverse of the one above. Turn an object into a
+// multivalue query param string
 export const buildFilterQuery = (filters: Record<string, string[]>) => {
   return Object.keys(filters).reduce((acc, field) => {
     filters[field] && filters[field].length
@@ -30,11 +36,12 @@ export const getQueryWithoutFilters = (filters: object) => {
   }, {})
 }
 
+// The aggregations from the api response have the label we want to display
+// in the filter dialog. The applied filter values only have values. Using
+// the filter values, find the label from the aggregations array.
 export const addLabelPropAndParseFilters = (
-  // from the api response
-  aggregations: Aggregation[],
-  // parsed from url query params
-  appliedFilterValues: Record<string, string[]>
+  aggregations: Aggregation[], // from the api response
+  appliedFilterValues: Record<string, string[]> // parsed from url query params
 ): Record<string, Option[]> => {
   const appliedFilterValuesWithLabels = {}
   for (const appliedFilterField in appliedFilterValues) {

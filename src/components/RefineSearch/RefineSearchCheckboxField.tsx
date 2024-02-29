@@ -20,7 +20,10 @@ const RefineSearchCheckBoxField = ({
   options,
   setAppliedFilters,
 }: CheckboxGroupProps) => {
+  // Data is an array of strings corresponding to the selected options for this
+  // field
   const updateCheckboxGroupValue = (data: string[]) => {
+    // update the parent state to know about the updated selected values
     setAppliedFilters((prevFilters) => {
       return {
         ...prevFilters,
@@ -28,6 +31,7 @@ const RefineSearchCheckBoxField = ({
       }
     })
   }
+
   const checkboxes = options.map(({ value, label }) => {
     return <Checkbox id={value} key={value} value={value} labelText={label} />
   })
