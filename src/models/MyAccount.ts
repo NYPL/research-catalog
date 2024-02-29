@@ -12,6 +12,7 @@ import type {
   SierraFine,
   SierraFineEntry,
   SierraBibEntry,
+  BibDataMapType,
 } from "../types/accountTypes"
 
 let client
@@ -35,25 +36,6 @@ export default class MyAccount {
     this.fines = this.buildFines(fines)
   }
 
-  buildCheckouts(checkouts: SierraCheckout[], bibData): Checkout[] {
-    const bibDataMap = MyAccount.buildBibData(bibData)
-    return checkouts.map((checkout: SierraCheckout) => {
-      return {
-        id: MyAccount.getRecordId(checkout.id),
-        // Partner items do not have call numbers. Null has to be explicitly
-        // returned for JSON serialization in getServerSideProps
-        callNumber: checkout.item.callNumber || null,
-        barcode: checkout.item.barcode,
-        dueDate: checkout.dueDate,
-        patron: MyAccount.getRecordId(checkout.patron),
-        title: bibDataMap[checkout.item.bibIds[0]].title,
-        isResearch: bibDataMap[checkout.item.bibIds[0]].isResearch,
-        bibId: checkout.item.bibIds[0],
-        isNyplOwned: bibDataMap[checkout.item.bibIds[0]].isNyplOwned,
-      }
-    })
-  }
-
   static async fetchCheckouts(baseQuery: string) {
     const checkoutQuery = "/checkouts?expand=item"
     return await client.get(`${baseQuery}${checkoutQuery}`)
@@ -67,7 +49,7 @@ export default class MyAccount {
 
   static async fetchPatron(baseQuery: string) {
     const patronQuery =
-      "?fields=names,barcodes,expirationDate,homeLibrary,emails,phones"
+      "?fields=names,barcodes,expirationDate,homeLibrary,emails,phones,fixedFields"
     return await client.get(`${baseQuery}${patronQuery}`)
   }
 
@@ -77,55 +59,51 @@ export default class MyAccount {
   }
 
   static async fetchBibData(
-    holdsOrCheckouts: (SierraHold | SierraCheckout)[],
+    holdsOrCheckouts,
     itemOrRecord: string
-  ) {
-    if (!holdsOrCheckouts.length) return []
+  ): Promise<{
+    total?: number
+    start?: number
+    entries: SierraBibEntry[]
+  }> {
+    if (!holdsOrCheckouts.length) return { entries: [] }
     const checkoutBibIds = holdsOrCheckouts.map((holdOrCheckout) => {
       return holdOrCheckout[itemOrRecord].bibIds[0]
     })
 
-    return await client.get(
+    const bibData = await client.get(
       `bibs?id=${checkoutBibIds}&fields=default,varFields`
     )
+
+    return bibData
   }
 
-  static buildBibData(bibs: SierraBibEntry[]) {
-    return bibs.reduce(
-      (
-        bibDataMap: Record<
-          string,
-          { title: string; isResearch: boolean; isNyplOwned: boolean }
-        >,
-        bibFields
-      ) => {
-        let isResearch: boolean
-        let isNyplOwned: boolean
-        const title = bibFields.title
-        const nineTen = bibFields.varFields.find(
-          (field) => field.marcTag === "910"
-        )
-        // if we are unsure of the research ness of a bib, default to true so
-        // we don't let them renew or freeze the record
-        if (!nineTen) {
-          isResearch = true
-          isNyplOwned = false
-        } else {
-          const nineTenContent = nineTen.subfields.find(
-            (subfield: { tag: string; subfield: string }) =>
-              subfield.tag === "a"
-          ).content
-          isResearch = nineTenContent.startsWith("RL")
-          isNyplOwned = nineTenContent !== "RLOTF"
-        }
-        bibDataMap[bibFields.id] = { title, isResearch, isNyplOwned }
-        return bibDataMap
-      },
-      {}
-    )
+  static buildBibData(bibs: SierraBibEntry[]): BibDataMapType {
+    return bibs.reduce((bibDataMap: BibDataMapType, bibFields) => {
+      let isResearch: boolean
+      let isNyplOwned: boolean
+      const title = bibFields.title
+      const nineTen = bibFields.varFields.find(
+        (field) => field.marcTag === "910"
+      )
+      // if we are unsure of the research ness of a bib, default to true so
+      // we don't let them renew or freeze the record
+      if (!nineTen) {
+        isResearch = true
+        isNyplOwned = false
+      } else {
+        const nineTenContent = nineTen.subfields.find(
+          (subfield: { tag: string; subfield: string }) => subfield.tag === "a"
+        ).content
+        isResearch = nineTenContent.startsWith("RL")
+        isNyplOwned = nineTenContent !== "RLOTF"
+      }
+      bibDataMap[bibFields.id] = { title, isResearch, isNyplOwned }
+      return bibDataMap
+    }, {})
   }
 
-  buildHolds(holds: SierraHold[], bibData): Hold[] {
+  buildHolds(holds: SierraHold[], bibData: SierraBibEntry[]): Hold[] {
     const bibDataMap = MyAccount.buildBibData(bibData)
     return holds.map((hold: SierraHold) => {
       return {
@@ -144,8 +122,36 @@ export default class MyAccount {
     })
   }
 
+  buildCheckouts(
+    checkouts: SierraCheckout[],
+    bibData: SierraBibEntry[]
+  ): Checkout[] {
+    const bibDataMap = MyAccount.buildBibData(bibData)
+    return checkouts.map((checkout: SierraCheckout) => {
+      return {
+        id: MyAccount.getRecordId(checkout.id),
+        // Partner items do not have call numbers. Null has to be explicitly
+        // returned for JSON serialization in getServerSideProps
+        callNumber: checkout.item.callNumber || null,
+        barcode: checkout.item.barcode,
+        dueDate: checkout.dueDate,
+        patron: MyAccount.getRecordId(checkout.patron),
+        title: bibDataMap[checkout.item.bibIds[0]].title,
+        isResearch: bibDataMap[checkout.item.bibIds[0]].isResearch,
+        bibId: checkout.item.bibIds[0],
+        isNyplOwned: bibDataMap[checkout.item.bibIds[0]].isNyplOwned,
+      }
+    })
+  }
+
+  filterNotificationPreference(patron: SierraPatron) {
+    patron.fixedFields["268"].value
+  }
+
   buildPatron(patron: SierraPatron): Patron {
+    const notificationPreference = patron.field
     return {
+      notificationPreference,
       name: patron.names[0],
       barcode: patron.barcodes[0],
       expirationDate: patron.expirationDate,

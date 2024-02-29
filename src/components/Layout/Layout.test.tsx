@@ -1,5 +1,5 @@
 import React from "react"
-import { render, screen, within } from "@testing-library/react"
+import { render, screen, within } from "../../utils/testUtils"
 
 import Layout from "./Layout"
 
@@ -46,5 +46,9 @@ describe("Layout", () => {
     render(<Layout isAuthenticated={true}></Layout>)
     const logout = screen.queryByText("Log out")
     expect(logout).toBeInTheDocument()
+  })
+  it("renders a feedback form component", () => {
+    render(<Layout></Layout>)
+    expect(screen.getByText("Help and Feedback")).toBeInTheDocument()
   })
 })

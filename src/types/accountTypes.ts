@@ -3,8 +3,8 @@ export interface SierraAccountData {
   holds: SierraHold[]
   patron: SierraPatron
   fines: SierraFine
-  checkoutBibData: Record<string, string>
-  holdBibData: Record<string, string>
+  checkoutBibData: SierraBibEntry[]
+  holdBibData: SierraBibEntry[]
 }
 
 export interface SierraCheckout {
@@ -51,6 +51,7 @@ export interface SierraRecord {
 }
 
 export interface SierraPatron {
+  fixedFields: Record<string, Record<string, { label: string; value: string }>>
   id: number
   names: string[]
   barcodes: string[]
@@ -92,6 +93,7 @@ export interface Hold {
 }
 
 export interface Patron {
+  notificationPreference: string
   name: string
   barcode: string
   expirationDate: string
@@ -136,7 +138,7 @@ export interface SierraBibEntry {
     marcTag?: string
     ind1?: string
     ind2?: string
-    subfields: {
+    subfields?: {
       tag: string
       content?: string
       subfield?: string
@@ -164,3 +166,8 @@ export interface Fine {
     date: string
   }[]
 }
+
+export type BibDataMapType = Record<
+  string,
+  { title: string; isResearch: boolean; isNyplOwned: boolean }
+>

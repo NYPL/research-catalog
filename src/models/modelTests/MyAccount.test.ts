@@ -12,6 +12,8 @@ import {
 jest.mock("../../server/sierraClient")
 
 describe("MyAccountModel", () => {
+  const fetchBibs = MyAccount.fetchBibData
+  afterAll(() => (MyAccount.fetchBibData = fetchBibs))
   describe("getRecordId", () => {
     it("can parse an id", () => {
       const idUrl =
@@ -157,8 +159,8 @@ describe("MyAccountModel", () => {
         emails: undefined,
         homeLibrary: undefined,
       })
-      MyAccount.fetchFines = async () => ({ total: 0, entries: [] })
-      MyAccount.fetchBibData = async () => ({ total: 0, entries: [] })
+      MyAccount.fetchFines = async () => empty
+      MyAccount.fetchBibData = async () => empty
 
       const emptyAccount = await MyAccountFactory("12345")
       expect(emptyAccount.patron).toStrictEqual({
