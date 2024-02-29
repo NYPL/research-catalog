@@ -1,4 +1,4 @@
-import MyAccount from "../../../pages/account"
+import MyAccount from "../../../pages/account/[[...index]]"
 import { render, screen } from "@testing-library/react"
 
 describe("My Account page", () => {

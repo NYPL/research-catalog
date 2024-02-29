@@ -1,42 +1,26 @@
 import { Tabs } from "@nypl/design-system-react-components"
 import type { Patron, Checkout, Fine, Hold } from "../../types/accountTypes"
-import { useRouter } from "next/router"
 import { BASE_URL } from "../../config/constants"
-import { useEffect } from "react"
+import { useRouter } from "next/router"
+import { useState, useEffect } from "react"
 
 const ProfileTabs = ({
   checkouts,
   holds,
   patron,
   fines,
+  active,
 }: {
   patron: Patron
   checkouts: Checkout[]
   holds: Hold[]
   fines: Fine
+  active: string
 }) => {
-  //   const router = useRouter()
-  const onChange = (value) => {
-    console.log(
-      `local.nypl.org:8080${BASE_URL}/account/${tabsData[value].label}`
-    )
-  }
-  //   console.log(
-  //     `local.nypl.org:8080${BASE_URL}/account/${tabsData[value].label}`
-  //   )
-  //   router.push(
-  //     `local.nypl.org:8080${BASE_URL}/account/${tabsData[value].label}`,
-  //     undefined,
-  //     {
-  //       shallow: true,
-  //     }
-  //   )
-  //   const query = { ...router.query, (tabsData[value].label) }
-
-  //   router.push({ query, pathname: router.pathname }, undefined, {
-  //     shallow: true,
-  //   })
-  //   }
+  const router = useRouter()
+  const tabsFineDict = { settings: 3, requests: 1, checkouts: 0, fines: 2 }
+  const tabsDict = { settings: 2, requests: 1, checkouts: 0 }
+  const [activeTab, setActiveTab] = useState(active ? tabsDict[active] : 0)
 
   const tabsData = [
     {
@@ -47,8 +31,8 @@ const ProfileTabs = ({
       label: "Requests",
       content: "",
     },
-    fines.total > 0 && {
-      label: `Fines ($${fines.total.toFixed(2)})`,
+    {
+      label: `Fines ($${fines?.total.toFixed(2)})`,
       content: "",
     },
     {
@@ -57,13 +41,47 @@ const ProfileTabs = ({
     },
   ]
 
+  const updateRoute = (index) => {
+    const tabData = tabsData[index]
+    const label = tabData.label.toLowerCase()
+    let newPath = `/account/${label}`
+
+    if (label.startsWith("account")) {
+      newPath = "/account/settings"
+    } else if (label.startsWith("fines")) {
+      // If no fines, force redirect to /checkouts.
+      if (fines.total === 0) {
+        newPath = "/account/checkouts"
+      } else {
+        newPath = "/account/fines"
+      }
+      router.push(newPath, undefined, { shallow: true })
+      return index
+    }
+  }
+
+  useEffect(() => {
+    setActiveTab(updateRoute(activeTab))
+  }, [])
+
   return (
+    /* TO-DO: Check that mobile view tab updates from 
+    https://github.com/NYPL/nypl-design-system/pull/1539 are as expected. */
     <Tabs
-      defaultIndex={0}
+      defaultIndex={activeTab}
       id="tabs-id"
-      useHash={false}
-      onChange={onChange}
-      tabsData={tabsData}
+      onChange={(index) => {
+        setActiveTab(updateRoute(index))
+      }}
+      // If no fines, don't display the fines tab.
+      tabsData={
+        fines.total === 0
+          ? tabsData.filter(
+              (tab) =>
+                !tab.label.startsWith(`Fines ($${fines?.total.toFixed(2)})`)
+            )
+          : tabsData
+      }
     />
   )
 }

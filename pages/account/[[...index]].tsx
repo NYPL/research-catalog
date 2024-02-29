@@ -7,6 +7,7 @@ import initializePatronTokenAuth, {
 import { MyAccountFactory } from "../../src/models/MyAccount"
 import type { Checkout, Hold, Patron, Fine } from "../../src/types/accountTypes"
 import ProfileTabs from "../../src/components/MyAccount/ProfileTabs"
+import { useRouter } from "next/router"
 
 interface MyAccountPropsType {
   checkouts?: Checkout[]
@@ -14,6 +15,7 @@ interface MyAccountPropsType {
   patron?: Patron
   fines?: Fine
   isAuthenticated: boolean
+  tabsPath?: string
 }
 
 export default function MyAccount({
@@ -22,9 +24,10 @@ export default function MyAccount({
   patron,
   fines,
   isAuthenticated,
+  tabsPath,
 }: MyAccountPropsType) {
   const errorRetrievingPatronData = !patron
-  console.log(checkouts, holds, patron, fines)
+  console.log(checkouts, holds, patron, fines, tabsPath)
   /** Testing renew checkout api route, displaying alerts of whatever the handler returns. */
   async function checkoutRenew(checkoutId, patronId) {
     try {
@@ -70,6 +73,7 @@ export default function MyAccount({
           fines={fines}
           checkouts={checkouts}
           holds={holds}
+          active={tabsPath}
         />
         {/** Testing renew checkout api route, with test checkout id. */}
         <Button
@@ -96,14 +100,22 @@ export async function getServerSideProps({ req }) {
       },
     }
   }
+  /* Parsing path from url to pass to ProfileTabs. */
+  let tabsPath = req.url.split("/", -1)[2] || null
   const id = patronTokenResponse.decodedPatron.sub
   try {
     const { checkouts, holds, patron, fines } = await MyAccountFactory(id)
-    return { props: { checkouts, holds, patron, fines, isAuthenticated } }
+    if (tabsPath == "fines" && fines.total === 0) {
+      tabsPath = "checkouts"
+    }
+    return {
+      props: { checkouts, holds, patron, fines, tabsPath, isAuthenticated },
+    }
   } catch (e) {
     console.log(e.message)
     return {
       props: {
+        tabsPath,
         isAuthenticated,
       },
     }
