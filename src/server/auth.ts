@@ -20,10 +20,10 @@ interface UserJwtPayload extends JWTPayload {
  * Used in Nextjs middleware to check and parse the nyplIdentiyPatron cookie
  * and then verify it through JWT. The decoded patron information is returned.
  */
-export default async function initializePatronTokenAuth(req: NextRequest) {
-  type cookie = typeof req.cookies & { nyplIdentityPatron?: string }
+export default async function initializePatronTokenAuth(reqCookies: unknown) {
+  type cookie = typeof reqCookies & { nyplIdentityPatron?: string }
 
-  const nyplIdentityPatron = (req.cookies as cookie)?.nyplIdentityPatron
+  const nyplIdentityPatron = (reqCookies as cookie)?.nyplIdentityPatron
   const nyplIdentityCookieObject = nyplIdentityPatron
     ? JSON.parse(nyplIdentityPatron)
     : {}
@@ -43,12 +43,13 @@ export default async function initializePatronTokenAuth(req: NextRequest) {
         publicKey
       )
       patronTokenResponse.isTokenValid = true
-      patronTokenResponse.errorCode = null
       patronTokenResponse.decodedPatron = verified.payload as UserJwtPayload
+      patronTokenResponse.errorCode = null
     } catch (error) {
       // Most likely the token is expired and it needs to be refreshed
       console.log("error", error)
       patronTokenResponse.errorCode = error.message
+      patronTokenResponse.isTokenValid = false
     }
   }
 
