@@ -77,7 +77,8 @@ const RefineSearch = ({
     setRefineSearchClosed((prevRefineSearchClosed) => {
       // if refine search is open (and this toggle is going to close it)
       if (!prevRefineSearchClosed) {
-        // reset filters to the values from the url
+        // reset filters to the values from the url (removing those that were
+        // clicked on but left unapplied)
         setAppliedFilters(collapseMultiValueQueryParams(router.query))
       }
       return !prevRefineSearchClosed
@@ -88,13 +89,14 @@ const RefineSearch = ({
     // remove applied filters from state
     // console.log(getQueryWithoutFilters(router.query))
     setAppliedFilters({})
+    // pushing to router with just the original query will refetch the bibs
     router.push({
       pathname: "/search",
       query: getQueryWithoutFilters(router.query),
     })
+    // close the dialog
     toggleRefine()
   }
-  console.log(appliedFilters)
 
   return (
     <Box className={styles.refineSearchContainer}>
