@@ -13,7 +13,7 @@ import RefineSearch from "../RefineSearch/RefineSearch"
 import { SearchResultsAggregationsContext } from "../../../pages/search/SearchResultsAggregationsContext"
 import type { Aggregation } from "../../types/filterTypes"
 import AppliedFilters from "../SearchFilters/AppliedFilters"
-import { parseFilters } from "../../utils/refineSearchUtils"
+import { collapseMultiValueQueryParams } from "../../utils/refineSearchUtils"
 import { appConfig } from "../../config/config"
 
 /**
@@ -28,7 +28,7 @@ const SearchForm = () => {
   const [searchScope, setSearchScope] = useState("all")
   const aggregations = useContext(SearchResultsAggregationsContext)
   const [appliedFilters, setAppliedFilters] = useState(
-    parseFilters(router.query)
+    collapseMultiValueQueryParams(router.query)
   )
 
   const isLoading = useLoading()
@@ -63,7 +63,7 @@ const SearchForm = () => {
   ).length
 
   useEffect(() => {
-    setAppliedFilters(parseFilters(router.query))
+    setAppliedFilters(collapseMultiValueQueryParams(router.query))
   }, [router.query])
 
   return (

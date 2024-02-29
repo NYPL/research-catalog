@@ -142,7 +142,7 @@ describe("RefineSearch", () => {
       await openRefineSearch()
       const applyButton = screen.getByText("Apply Filters")
       await selectSomeFilters()
-      await userEvent.click(screen.getByRole("button", { name: "Cancel" }))
+      await userEvent.click(screen.getByText("Cancel"))
 
       expect(applyButton).not.toBeInTheDocument()
       expect(mockRouter.asPath).toBe("/search")

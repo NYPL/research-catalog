@@ -1,10 +1,10 @@
-import { parseFilters, buildFilters } from "../refineSearchUtils"
+import { collapseMultiValueQueryParams, buildQuery } from "../refineSearchUtils"
 
 describe("refineSearchUtils", () => {
-  describe("parseFilters", () => {
+  describe("collapseMultiValueQueryParams", () => {
     it("can parse a single filter", () => {
       const query = { "filters[language][0]": "lang:fre" }
-      expect(parseFilters(query)).toStrictEqual({
+      expect(collapseMultiValueQueryParams(query)).toStrictEqual({
         language: ["lang:fre"],
       })
     })
@@ -17,7 +17,7 @@ describe("refineSearchUtils", () => {
         "filters[subjectLiteral][4]":
           "Motion pictures -- Social aspects -- Lorraine.",
       }
-      expect(parseFilters(query)).toStrictEqual({
+      expect(collapseMultiValueQueryParams(query)).toStrictEqual({
         subjectLiteral: [
           "Italians in motion pictures",
           "Immigrants -- Lorraine.",
@@ -32,7 +32,7 @@ describe("refineSearchUtils", () => {
         "filters[subjectLiteral][0]": "Italians in motion pictures",
         "filters[language][0]": "lang:fre",
       }
-      expect(parseFilters(query)).toStrictEqual({
+      expect(collapseMultiValueQueryParams(query)).toStrictEqual({
         language: ["lang:fre"],
         subjectLiteral: ["Italians in motion pictures"],
       })
@@ -41,10 +41,10 @@ describe("refineSearchUtils", () => {
     it.todo("can parse with other params")
   })
 
-  describe("buildFilters", () => {
+  describe("buildQuery", () => {
     it("single filter single value", () => {
       const filters = { subjectLiteral: ["spaghetti"] }
-      expect(buildFilters(filters)).toStrictEqual({
+      expect(buildQuery(filters)).toStrictEqual({
         "filters[subjectLiteral][0]": "spaghetti",
       })
     })
@@ -52,7 +52,7 @@ describe("refineSearchUtils", () => {
       const filters = {
         subjectLiteral: ["spaghetti", "meatballs", "parmesean"],
       }
-      expect(buildFilters(filters)).toStrictEqual({
+      expect(buildQuery(filters)).toStrictEqual({
         "filters[subjectLiteral][0]": "spaghetti",
         "filters[subjectLiteral][1]": "meatballs",
         "filters[subjectLiteral][2]": "parmesean",
@@ -63,7 +63,7 @@ describe("refineSearchUtils", () => {
         subjectLiteral: ["spaghetti", "meatballs", "parmesean"],
         author: ["strega nonna", "chef boyardee"],
       }
-      expect(buildFilters(filters)).toStrictEqual({
+      expect(buildQuery(filters)).toStrictEqual({
         "filters[subjectLiteral][0]": "spaghetti",
         "filters[subjectLiteral][1]": "meatballs",
         "filters[subjectLiteral][2]": "parmesean",

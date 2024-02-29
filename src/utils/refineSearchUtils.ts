@@ -1,6 +1,8 @@
 import type { Aggregation, Option } from "../types/filterTypes"
 
-export const parseFilters = (queryParams: object): Record<string, string[]> => {
+export const collapseMultiValueQueryParams = (
+  queryParams: object
+): Record<string, string[]> => {
   return Object.keys(queryParams)
     .filter((param) => param.includes("filters["))
     .reduce((acc, currentFilter) => {
@@ -11,7 +13,7 @@ export const parseFilters = (queryParams: object): Record<string, string[]> => {
     }, {})
 }
 
-export const buildFilters = (filters: Record<string, string[]>) => {
+export const buildQuery = (filters: Record<string, string[]>) => {
   return Object.keys(filters).reduce((acc, field) => {
     filters[field] && filters[field].length
     filters[field].forEach(
@@ -29,7 +31,9 @@ export const getQueryWithoutFilters = (filters: object) => {
 }
 
 export const addLabelPropAndParseFilters = (
+  // from the api response
   aggregations: Aggregation[],
+  // parsed from url query params
   appliedFilterValues: Record<string, string[]>
 ): Record<string, Option[]> => {
   const appliedFilterValuesWithLabels = {}

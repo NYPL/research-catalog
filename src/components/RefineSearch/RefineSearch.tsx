@@ -13,8 +13,8 @@ import styles from "../../../styles/components/Search.module.scss"
 import SearchResultsFilters from "../../models/SearchResultsFilters"
 import RefineSearchCheckBoxField from "./RefineSearchCheckboxField"
 import {
-  parseFilters,
-  buildFilters,
+  collapseMultiValueQueryParams,
+  buildQuery,
   getQueryWithoutFilters,
 } from "../../utils/refineSearchUtils"
 import type { Aggregation } from "../../types/filterTypes"
@@ -58,7 +58,7 @@ const RefineSearch = ({
     e.preventDefault()
     const updatedQuery = {
       ...getQueryWithoutFilters(router.query),
-      ...buildFilters(appliedFilters),
+      ...buildQuery(appliedFilters),
     }
     router.push({
       pathname: "/search",
@@ -71,7 +71,8 @@ const RefineSearch = ({
 
   const toggleRefine = useCallback(() => {
     setRefineSearchClosed((prevState) => {
-      if (!prevState) setAppliedFilters(parseFilters(router.query))
+      if (!prevState)
+        setAppliedFilters(collapseMultiValueQueryParams(router.query))
       return !prevState
     })
   }, [router.query, setAppliedFilters, setRefineSearchClosed])
@@ -113,6 +114,7 @@ const RefineSearch = ({
             </Button>
             <ButtonGroup className={styles.re}>
               <Button
+                data-testid="clear-filters-button"
                 onClick={handleClear}
                 id="reset-refine"
                 type="reset"
@@ -120,12 +122,7 @@ const RefineSearch = ({
               >
                 Clear Filters
               </Button>
-              <Button
-                data-testid="apply-filters-button"
-                id="submit-refine"
-                type="submit"
-                buttonType="secondary"
-              >
+              <Button id="submit-refine" type="submit" buttonType="secondary">
                 Apply Filters
               </Button>
             </ButtonGroup>
