@@ -1,5 +1,5 @@
 import React from "react"
-import { render, screen } from "@testing-library/react"
+import { render, screen } from "../../utils/testUtils"
 import SearchResult from "./SearchResult"
 import SearchResultsBib from "../../models/SearchResultsBib"
 import { searchResultPhysicalItems } from "../../../__test__/fixtures/searchResultPhysicalItems"

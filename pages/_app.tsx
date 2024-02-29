@@ -8,6 +8,8 @@ import { trackVirtualPageView } from "../src/utils/appUtils"
 import { appConfig } from "../src/config/config"
 import { BASE_URL, SITE_NAME } from "../src/config/constants"
 
+import { FeedbackProvider } from "../src/context/FeedbackContext"
+
 // eslint-disable-next-line @typescript-eslint/naming-convention
 function App({ Component, pageProps }) {
   const router = useRouter()
@@ -82,7 +84,7 @@ function App({ Component, pageProps }) {
       <Head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta http-equiv="x-ua-compatible" content="ie=edge" />
+        <meta httpEquiv="x-ua-compatible" content="ie=edge" />
         <link
           rel="icon"
           type="image/png"
@@ -104,7 +106,9 @@ function App({ Component, pageProps }) {
 
         <title key="main-title">{SITE_NAME}</title>
       </Head>
-      <Component {...pageProps} />
+      <FeedbackProvider value={null}>
+        <Component {...pageProps} />
+      </FeedbackProvider>
     </>
   )
 }
