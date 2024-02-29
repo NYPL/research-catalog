@@ -36,6 +36,7 @@ const FeedbackForm = () => {
     metadataAndComment: FeedbackMetadataAndComment
   ) => {
     try {
+      // Changed this route to /feedback-rc to avoid conflicts with DFE with 2AD reverse proxy config
       // TODO: Change this route name back to /feedback when all routes point to research catalog
       const response = await fetch(`${BASE_URL}/api/feedback-rc`, {
         method: "POST",
