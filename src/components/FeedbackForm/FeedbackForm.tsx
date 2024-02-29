@@ -42,7 +42,6 @@ const FeedbackForm = () => {
         body: JSON.stringify(metadataAndComment),
       })
       const responseJson = await response.json()
-      console.log(responseJson)
       if (responseJson.error) {
         console.error(responseJson.error)
         return

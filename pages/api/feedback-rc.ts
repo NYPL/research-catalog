@@ -21,10 +21,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     const emailText = getFeedbackEmailText(fullUrl, fields)
     const emailHTML = getFeedbackEmailHTML(fullUrl, fields)
 
-    console.log("appConfig.libAnswersEmail", appConfig.libAnswersEmail)
-    console.log("appConfig.sourceEmail", appConfig.sourceEmail)
-    console.log("fields.email", fields.email)
-
     const emailParams: SendEmailRequest = {
       Destination: {
         ToAddresses: [appConfig.libAnswersEmail],
