@@ -30,13 +30,13 @@ export default function MyAccount({
   async function checkoutRenew(checkoutId, patronId) {
     try {
       const response = await fetch(
-        `${BASE_URL}/api/account/checkouts/renewal/${checkoutId}`,
+        `${BASE_URL}/api/account/checkouts/renew/${checkoutId}`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(patronId),
+          body: JSON.stringify({ patronId }),
         }
       )
       const responseData = await response.json()
@@ -45,7 +45,7 @@ export default function MyAccount({
         alert(responseData.body)
       } else {
         // Renewal failed.
-        alert(responseData.message)
+        alert(responseData)
       }
     } catch (error) {
       // Request failed.
@@ -88,10 +88,63 @@ export default function MyAccount({
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            oldPin: oldPin,
-            newPin: newPin,
+            oldPin,
+            newPin,
             barcode: patronBarcode,
           }),
+        }
+      )
+      const responseData = await response.json()
+      if (response.ok) {
+        alert(responseData)
+      } else {
+        alert(`error: ${responseData}`)
+      }
+    } catch (error) {
+      console.log(error)
+      alert("fetching error")
+    }
+  }
+
+  /** Testing hold update api route */
+  async function holdUpdate(patronId, holdId, freeze, pickupLocation) {
+    try {
+      const response = await fetch(
+        `/research/research-catalog/api/account/holds/update/${holdId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            patronId,
+            freeze,
+            pickupLocation,
+          }),
+        }
+      )
+      const responseData = await response.json()
+      if (response.ok) {
+        alert(responseData)
+      } else {
+        alert(`error: ${responseData}`)
+      }
+    } catch (error) {
+      alert("fetching error")
+    }
+  }
+
+  /** Testing hold cancel api route */
+  async function holdCancel(patronId, holdId) {
+    try {
+      const response = await fetch(
+        `/research/research-catalog/api/account/holds/cancel/${holdId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ patronId }),
         }
       )
       const responseData = await response.json()
@@ -110,6 +163,7 @@ export default function MyAccount({
       <Head>
         <title>My Account</title>
       </Head>
+
       <Layout isAuthenticated={isAuthenticated} activePage="account">
         {errorRetrievingPatronData ? (
           <Text>
@@ -142,6 +196,20 @@ export default function MyAccount({
               }
             >
               Update pin
+            </Button>
+            {/** Testing hold update api route */}
+            <Button
+              id="hold-update"
+              onClick={() => holdUpdate(patron.id, "42273325", false, "")}
+            >
+              Update hold request
+            </Button>
+            {/** Testing hold cancelapi route */}
+            <Button
+              id="hold-cancel"
+              onClick={() => holdCancel(patron.id, "42273326")}
+            >
+              Cancel hold request
             </Button>
           </>
         )}

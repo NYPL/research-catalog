@@ -1,9 +1,9 @@
 import type { NextApiResponse, NextApiRequest } from "next"
-import sierraClient from "../../../../../src/server/sierraClient"
 import initializePatronTokenAuth from "../../../../../src/server/auth"
+import { renewCheckout } from "../../helpers"
 
 /**
- * API route handler for /api/account/checkouts/renewal/{checkoutId}
+ * API route handler for /api/account/checkouts/renew/{checkoutId}
  */
 export default async function handler(
   req: NextApiRequest,
@@ -25,11 +25,11 @@ export default async function handler(
   if (req.method == "POST") {
     /**  We get the checkout id and patron id from the request: */
     const checkoutId = req.query.id as string
-    const checkoutPatronId = JSON.parse(JSON.stringify(req.body))
+    const checkoutPatronId = JSON.parse(JSON.stringify(req.body)).patronId
     /**  We check that the patron cookie matches the patron id in the request body,
      * i.e.,the logged in user is the owner of the checkout. */
     if (checkoutPatronId == cookiePatronId) {
-      const response = await checkoutRenewal(checkoutId)
+      const response = await renewCheckout(checkoutId)
       responseStatus = response.status
       responseMessage = response.message
       // If successful, returns the renewed checkout object in the body.
@@ -48,19 +48,4 @@ export default async function handler(
       body: responseBody,
     })
   } else return res.status(responseStatus).json(responseMessage)
-}
-
-export async function checkoutRenewal(checkoutId: string) {
-  try {
-    const client = await sierraClient()
-    const response = await client.post(
-      `patrons/checkouts/${checkoutId}/renewal`
-    )
-    return { status: 200, message: "Renewed", body: response }
-  } catch (error) {
-    return {
-      status: error.response.status,
-      message: error.response.data.message || error.response.data.description,
-    }
-  }
 }

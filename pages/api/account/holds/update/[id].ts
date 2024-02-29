@@ -1,9 +1,9 @@
 import type { NextApiResponse, NextApiRequest } from "next"
-import initializePatronTokenAuth from "../../../../src/server/auth"
-import { updatePin } from "../helpers"
+import { updateHold } from "../../helpers"
+import initializePatronTokenAuth from "../../../../../src/server/auth"
 
 /**
- * API route handler for /api/account/update-pin/{patronId}
+ * API route handler for /api/account/holds/update/{holdId}
  */
 export default async function handler(
   req: NextApiRequest,
@@ -18,22 +18,27 @@ export default async function handler(
     responseMessage = "No authenticated patron"
     return res.status(responseStatus).json(responseMessage)
   }
-  if (req.method == "GET") {
-    responseMessage = "Please make a PUT request to this endpoint."
+
+  if (req.method !== "POST") {
+    responseMessage = "Please make a POST request to this endpoint."
   }
-  if (req.method == "PUT") {
-    /**  We get the patron id from the request: */
-    const patronId = req.query.id as string
-    const { oldPin, newPin, barcode } = req.body
+  if (req.method == "POST") {
+    /**  We get the hold id from the request: */
+    const holdId = req.query.id as string
+    const holdPatronId = req.body.patronId
+    const holdData = {
+      freeze: req.body.freeze,
+      pickupLocation: req.body.pickupLocation,
+    }
     /**  We check that the patron cookie matches the patron id in the request,
-     * i.e.,the logged in user is updating their own PIN. */
-    if (patronId == cookiePatronId) {
-      const response = await updatePin(patronId, barcode, oldPin, newPin)
+     * i.e.,the logged in user is updating their own hold. */
+    if (holdPatronId == cookiePatronId) {
+      const response = await updateHold(holdId, holdData)
       responseStatus = response.status
       responseMessage = response.message
     } else {
       responseStatus = 403
-      responseMessage = "Authenticated patron does not match request"
+      responseMessage = "Authenticated patron does not own this hold"
     }
   }
   res.status(responseStatus).json(responseMessage)
