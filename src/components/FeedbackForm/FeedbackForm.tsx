@@ -36,7 +36,8 @@ const FeedbackForm = () => {
     metadataAndComment: FeedbackMetadataAndComment
   ) => {
     try {
-      const response = await fetch(`${BASE_URL}/api/feedback`, {
+      // TODO: Change this route name back to /feedback when all routes point to research catalog
+      const response = await fetch(`${BASE_URL}/api/feedback-rc`, {
         method: "POST",
         body: JSON.stringify(metadataAndComment),
       })
