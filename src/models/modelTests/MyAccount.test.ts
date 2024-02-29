@@ -1,15 +1,19 @@
-import MyAccount from "../MyAccount"
+import MyAccount, { MyAccountFactory } from "../MyAccount"
 import {
-  holds as mockHolds,
-  checkouts as mockCheckouts,
-  patron as mockPatron,
-  fines as mockFines,
-  holdBibs as mockHoldBibs,
-  checkoutBibs as mockCheckoutBibs,
-  empty as mockEmpty,
+  holds,
+  checkouts,
+  patron,
+  fines,
+  holdBibs,
+  checkoutBibs,
+  empty,
 } from "./data/MyAccount"
 
+jest.mock("../../server/sierraClient")
+
 describe("MyAccountModel", () => {
+  const fetchBibs = MyAccount.fetchBibData
+  afterAll(() => (MyAccount.fetchBibData = fetchBibs))
   describe("getRecordId", () => {
     it("can parse an id", () => {
       const idUrl =
@@ -20,48 +24,48 @@ describe("MyAccountModel", () => {
       expect(MyAccount.getRecordId("")).toBe(null)
     })
   })
-  describe("getStatus", () => {
+  describe("getHoldStatus", () => {
     it("returns the status as given when it's user-friendly", () => {
       expect(
-        MyAccount.getStatus({
+        MyAccount.getHoldStatus({
           code: "i",
           name: "Requested item ready for pickup.",
         })
       ).toBe("Requested item ready for pickup.")
     })
     it("returns REQUEST PLACED instead of AVAILABLE", () => {
-      expect(MyAccount.getStatus({ code: "status:a", name: "AVAILABLE" })).toBe(
-        "REQUEST PLACED"
-      )
+      expect(
+        MyAccount.getHoldStatus({ code: "status:a", name: "AVAILABLE" })
+      ).toBe("REQUEST PLACED")
     })
     it("returns READY FOR PICKUP instead of READY SOON", () => {
       expect(
-        MyAccount.getStatus({ code: "spaghetti", name: "READY SOON" })
+        MyAccount.getHoldStatus({ code: "spaghetti", name: "READY SOON" })
       ).toBe("READY FOR PICKUP")
     })
   })
   describe("building model", () => {
     it("builds Account data model", async () => {
-      MyAccount.fetchCheckouts = async () => mockCheckouts
-      MyAccount.fetchHolds = async () => mockHolds
-      MyAccount.fetchPatron = async () => mockPatron
-      MyAccount.fetchFines = async () => mockFines
+      MyAccount.fetchCheckouts = async () => checkouts
+      MyAccount.fetchHolds = async () => holds
+      MyAccount.fetchPatron = async () => patron
+      MyAccount.fetchFines = async () => fines
       MyAccount.fetchBibData = async (entries, recordType) => {
         if (recordType === "item") {
-          return mockCheckoutBibs
-        } else return mockHoldBibs
+          return checkoutBibs
+        } else return holdBibs
       }
-      const account = await MyAccount.MyAccountFactory("12345")
+      const account = await MyAccountFactory("12345")
       expect(account.patron).toStrictEqual({
         name: "NONNA, STREGA",
         barcode: "23333121538324",
         expirationDate: "2025-03-28",
         primaryEmail: "streganonna@gmail.com",
         emails: ["streganonna@gmail.com", "spaghettigrandma@gmail.com"],
-        primaryPhone: "646-660-0432",
+        primaryPhone: "123-456-7890",
         phones: [
           {
-            number: "646-660-0432",
+            number: "123-456-7890",
             type: "t",
           },
         ],
@@ -119,33 +123,57 @@ describe("MyAccountModel", () => {
         ],
       })
     })
-    it("builds empty Account data model", async () => {
-      MyAccount.fetchCheckouts = async () => mockEmpty
-      MyAccount.fetchHolds = async () => mockEmpty
-      MyAccount.fetchPatron = async () => mockPatron
+    it("builds empty Account data model with empty phones and email", async () => {
+      MyAccount.fetchCheckouts = async () => empty
+      MyAccount.fetchHolds = async () => empty
+      MyAccount.fetchPatron = async () => ({
+        ...patron,
+        phones: [],
+        emails: [],
+      })
       MyAccount.fetchFines = async () => ({ total: 0, entries: [] })
       MyAccount.fetchBibData = async () => ({ total: 0, entries: [] })
 
-      const emptyAccount = await MyAccount.MyAccountFactory("12345")
+      const emptyAccount = await MyAccountFactory("12345")
       expect(emptyAccount.patron).toStrictEqual({
         name: "NONNA, STREGA",
         barcode: "23333121538324",
         expirationDate: "2025-03-28",
-        primaryEmail: "streganonna@gmail.com",
-        emails: ["streganonna@gmail.com", "spaghettigrandma@gmail.com"],
-        primaryPhone: "646-660-0432",
-        phones: [
-          {
-            number: "646-660-0432",
-            type: "t",
-          },
-        ],
+        primaryEmail: "",
+        emails: [],
+        primaryPhone: "",
+        phones: [],
         homeLibrary: "Stavros Niarchos Foundation Library (SNFL)",
         id: 2772226,
       })
       expect(emptyAccount.checkouts).toStrictEqual([])
       expect(emptyAccount.holds).toStrictEqual([])
       expect(emptyAccount.fines).toStrictEqual({ total: 0, entries: [] })
+    })
+    it("builds empty Account data model with empty phones and email", async () => {
+      MyAccount.fetchCheckouts = async () => empty
+      MyAccount.fetchHolds = async () => empty
+      MyAccount.fetchPatron = async () => ({
+        ...patron,
+        phones: undefined,
+        emails: undefined,
+        homeLibrary: undefined,
+      })
+      MyAccount.fetchFines = async () => empty
+      MyAccount.fetchBibData = async () => empty
+
+      const emptyAccount = await MyAccountFactory("12345")
+      expect(emptyAccount.patron).toStrictEqual({
+        name: "NONNA, STREGA",
+        barcode: "23333121538324",
+        expirationDate: "2025-03-28",
+        primaryEmail: "",
+        emails: [],
+        primaryPhone: "",
+        phones: [],
+        homeLibrary: "",
+        id: 2772226,
+      })
     })
   })
 })

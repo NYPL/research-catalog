@@ -41,6 +41,7 @@ export default async function handler(
       responseMessage = "Authenticated patron does not own this checkout"
     }
   }
+  // If renewal fails, response body will be empty
   if (JSON.stringify(responseBody) !== "{}") {
     return res.status(responseStatus).json({
       message: responseMessage,

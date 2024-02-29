@@ -1,17 +1,20 @@
 import Head from "next/head"
-import { Button, Heading } from "@nypl/design-system-react-components"
+import { Button, Heading, Text } from "@nypl/design-system-react-components"
 import Layout from "../../src/components/Layout/Layout"
 import initializePatronTokenAuth, {
   getLoginRedirect,
 } from "../../src/server/auth"
-import MyAccountModel from "../../src/models/MyAccount"
+import { MyAccountFactory } from "../../src/models/MyAccount"
 import type { Checkout, Hold, Patron, Fine } from "../../src/types/accountTypes"
+import ProfileHeader from "../../src/components/MyAccount/ProfileHeader"
+import { BASE_URL } from "../../src/config/constants"
 
-interface MyAccountProps {
-  checkouts: Checkout[]
-  holds: Hold[]
-  patron: Patron
-  fines: Fine
+interface MyAccountPropsType {
+  checkouts?: Checkout[]
+  holds?: Hold[]
+  patron?: Patron
+  fines?: Fine
+  isAuthenticated: boolean
 }
 
 export default function MyAccount({
@@ -19,12 +22,15 @@ export default function MyAccount({
   holds,
   patron,
   fines,
-}: MyAccountProps) {
+  isAuthenticated,
+}: MyAccountPropsType) {
+  const errorRetrievingPatronData = !patron
+  console.log(checkouts, holds, patron, fines)
   /** Testing renew checkout api route, displaying alerts of whatever the handler returns. */
   async function checkoutRenew(checkoutId, patronId) {
     try {
       const response = await fetch(
-        `/research/research-catalog/api/account/checkouts/renew/${checkoutId}`,
+        `${BASE_URL}/api/account/checkouts/renew/${checkoutId}`,
         {
           method: "POST",
           headers: {
@@ -51,7 +57,7 @@ export default function MyAccount({
   async function settingsUpdate(patronId) {
     try {
       const response = await fetch(
-        `/research/research-catalog/api/account/settings/${patronId}`,
+        `${BASE_URL}/api/account/settings/${patronId}`,
         {
           method: "PUT",
           headers: {
@@ -75,7 +81,7 @@ export default function MyAccount({
   async function pinUpdate(patronId, patronBarcode, oldPin, newPin) {
     try {
       const response = await fetch(
-        `/research/research-catalog/api/account/update-pin/${patronId}`,
+        `${BASE_URL}/api/account/update-pin/${patronId}`,
         {
           method: "PUT",
           headers: {
@@ -157,40 +163,56 @@ export default function MyAccount({
       <Head>
         <title>My Account</title>
       </Head>
-      <Layout activePage="account">
-        <Heading level="h1">my account</Heading>
-        {/** Testing renew checkout api route, with test checkout id. */}
-        <Button
-          id="checkout-test"
-          onClick={() => checkoutRenew(58536266, patron.id)}
-        >
-          Renew checkout
-        </Button>
-        {/** Testing settings api route */}
-        <Button id="settings-test" onClick={() => settingsUpdate(patron.id)}>
-          Update settings
-        </Button>
-        {/** Testing pin update api route */}
-        <Button
-          id="pin-update"
-          onClick={() => pinUpdate(patron.id, patron.barcode, "7890", "7890")}
-        >
-          Update pin
-        </Button>
-        {/** Testing hold update api route */}
-        <Button
-          id="hold-update"
-          onClick={() => holdUpdate(patron.id, "42273325", false, "")}
-        >
-          Update hold request
-        </Button>
-        {/** Testing hold cancelapi route */}
-        <Button
-          id="hold-cancel"
-          onClick={() => holdCancel(patron.id, "42273326")}
-        >
-          Cancel hold request
-        </Button>
+
+      <Layout isAuthenticated={isAuthenticated} activePage="account">
+        {errorRetrievingPatronData ? (
+          <Text>
+            We are unable to display your account information at this time.
+            Please contact gethelp@nypl.org for assistance.
+          </Text>
+        ) : (
+          <>
+            <ProfileHeader patron={patron} />
+
+            {/** Testing renew checkout api route, with test checkout id. */}
+            <Button
+              id="checkout-test"
+              onClick={() => checkoutRenew(58536266, patron.id)}
+            >
+              Renew checkout
+            </Button>
+            {/** Testing settings api route */}
+            <Button
+              id="settings-test"
+              onClick={() => settingsUpdate(patron.id)}
+            >
+              Update settings
+            </Button>
+            {/** Testing pin update api route */}
+            <Button
+              id="pin-update"
+              onClick={() =>
+                pinUpdate(patron.id, patron.barcode, "7890", "7890")
+              }
+            >
+              Update pin
+            </Button>
+            {/** Testing hold update api route */}
+            <Button
+              id="hold-update"
+              onClick={() => holdUpdate(patron.id, "42273325", false, "")}
+            >
+              Update hold request
+            </Button>
+            {/** Testing hold cancelapi route */}
+            <Button
+              id="hold-cancel"
+              onClick={() => holdCancel(patron.id, "42273326")}
+            >
+              Cancel hold request
+            </Button>
+          </>
+        )}
       </Layout>
     </>
   )
@@ -199,7 +221,8 @@ export default function MyAccount({
 export async function getServerSideProps({ req }) {
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   console.log("patronTokenResponse is", patronTokenResponse)
-  if (!patronTokenResponse.isTokenValid) {
+  const isAuthenticated = patronTokenResponse.isTokenValid
+  if (!isAuthenticated) {
     const redirect = getLoginRedirect(req)
     return {
       redirect: {
@@ -209,9 +232,15 @@ export async function getServerSideProps({ req }) {
     }
   }
   const id = patronTokenResponse.decodedPatron.sub
-  const { checkouts, holds, patron, fines } =
-    await MyAccountModel.MyAccountFactory(id)
-  return {
-    props: { checkouts, holds, patron, fines },
+  try {
+    const { checkouts, holds, patron, fines } = await MyAccountFactory(id)
+    return { props: { checkouts, holds, patron, fines, isAuthenticated } }
+  } catch (e) {
+    console.log(e.message)
+    return {
+      props: {
+        isAuthenticated,
+      },
+    }
   }
 }
