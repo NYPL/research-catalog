@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 import aws from "aws-sdk"
+import { type SendEmailRequest } from "aws-sdk/clients/ses"
 
 import { appConfig } from "../../src/config/config"
 import {
@@ -20,14 +21,12 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     const emailText = getFeedbackEmailText(fullUrl, fields)
     const emailHTML = getFeedbackEmailHTML(fullUrl, fields)
 
-    const emailParams = {
+    const emailParams: SendEmailRequest = {
       Destination: {
-        /* required */ ToAddresses: [appConfig.libAnswersEmail],
+        ToAddresses: [appConfig.libAnswersEmail],
       },
       Message: {
-        /* required */
         Body: {
-          /* required */
           Html: {
             Charset: "UTF-8",
             Data: emailHTML,
@@ -42,7 +41,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           Data: "SCC Feedback",
         },
       },
-      Source: appConfig.sourceEmail /* required */,
+      Source: appConfig.sourceEmail,
       ReplyToAddresses: [fields.email || appConfig.sourceEmail],
     }
 
