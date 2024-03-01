@@ -33,7 +33,7 @@ const ProfileTabs = ({
           {
             label: `Fees ($${fines.total.toFixed(2)})`,
             content: "",
-            urlPath: "fees",
+            urlPath: "overdues",
           },
         ]
       : []),
@@ -43,11 +43,10 @@ const ProfileTabs = ({
       urlPath: "settings",
     },
   ]
-  // If page passes a path, set that tab. Otherwise, set to checkouts tab.
-  const [activeTab, setActiveTab] = useState(
-    activePath ? tabsData.findIndex((tab) => tab.urlPath === activePath) : 0
-  )
-
+  const tabsDict =
+    fines?.total > 0
+      ? { checkouts: 0, requests: 1, fines: 2, settings: 3 }
+      : { checkouts: 0, requests: 1, settings: 2 }
   const router = useRouter()
 
   const updatePath = (newPath) => {
@@ -55,25 +54,10 @@ const ProfileTabs = ({
       shallow: true,
     })
   }
-  const updateTabs = (newPath) => {
-    setActiveTab(tabsData.findIndex((tab) => tab.urlPath === newPath))
-  }
-
-  // On path change, update tabs.
-  useEffect(() => {
-    const handleRouteChange = (url) => {
-      const path = url.split("/")[4]
-      updateTabs(path)
-    }
-    router.events.on("routeChangeComplete", handleRouteChange)
-    return () => {
-      router.events.off("routeChangeComplete", handleRouteChange)
-    }
-  }, [])
 
   return (
     <Tabs
-      defaultIndex={activeTab}
+      defaultIndex={tabsDict[activePath] || 0}
       id="tabs-id"
       onChange={(index) => {
         // Update path when tab changes.
