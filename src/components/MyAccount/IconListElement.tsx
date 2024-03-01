@@ -23,4 +23,21 @@ const IconListElement = ({
   )
 }
 
+export const buildIconListElements = ({
+  icon,
+  term,
+  description,
+}: {
+  icon: IconNames
+  term: string
+  description: string
+}) => (
+  <IconListElement
+    key={term}
+    term={term}
+    icon={icon}
+    description={description}
+  />
+)
+
 export default IconListElement

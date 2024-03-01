@@ -1,11 +1,16 @@
 import Head from "next/head"
-import { Button, Heading, Text } from "@nypl/design-system-react-components"
+import { Button, Text } from "@nypl/design-system-react-components"
 import Layout from "../../src/components/Layout/Layout"
 import initializePatronTokenAuth, {
   getLoginRedirect,
 } from "../../src/server/auth"
 import { MyAccountFactory } from "../../src/models/MyAccount"
-import type { Checkout, Hold, Patron, Fine } from "../../src/types/accountTypes"
+import type {
+  Checkout,
+  Hold,
+  Patron,
+  Fine,
+} from "../../src/types/myAccountTypes"
 import ProfileTabs from "../../src/components/MyAccount/ProfileTabs"
 import ProfileHeader from "../../src/components/MyAccount/ProfileHeader"
 import { BASE_URL } from "../../src/config/constants"
@@ -212,21 +217,21 @@ export default function MyAccount({
             >
               Cancel hold request
             </Button>
+            <ProfileTabs
+              patron={patron}
+              fines={fines}
+              checkouts={checkouts}
+              holds={holds}
+            />
+            {/** Testing renew checkout api route, with test checkout id. */}
+            <Button
+              id="checkout-test"
+              onClick={() => checkoutRenew(58536261, patron.id)}
+            >
+              Renew checkout
+            </Button>
           </>
         )}
-        <ProfileTabs
-          patron={patron}
-          fines={fines}
-          checkouts={checkouts}
-          holds={holds}
-        />
-        {/** Testing renew checkout api route, with test checkout id. */}
-        <Button
-          id="checkout-test"
-          onClick={() => checkoutRenew(58536261, patron.id)}
-        >
-          Renew checkout
-        </Button>
       </Layout>
     </>
   )

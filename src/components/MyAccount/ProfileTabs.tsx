@@ -1,5 +1,5 @@
 import { Tabs } from "@nypl/design-system-react-components"
-import type { Patron, Checkout, Fine, Hold } from "../../types/accountTypes"
+import type { Patron, Checkout, Fine, Hold } from "../../types/myAccountTypes"
 import { useRouter } from "next/router"
 import { BASE_URL } from "../../config/constants"
 import { useEffect } from "react"

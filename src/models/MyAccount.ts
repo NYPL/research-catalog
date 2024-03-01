@@ -13,9 +13,17 @@ import type {
   SierraFineEntry,
   SierraBibEntry,
   BibDataMapType,
-} from "../types/accountTypes"
+} from "../types/myAccountTypes"
 
 let client
+
+export const notificationPreferenceMap = {
+  z: "Email",
+  a: "Print",
+  p: "Phone",
+  m: "Mobile",
+  "-": null,
+}
 
 export default class MyAccount {
   checkouts: Checkout[]
@@ -144,12 +152,9 @@ export default class MyAccount {
     })
   }
 
-  filterNotificationPreference(patron: SierraPatron) {
-    patron.fixedFields["268"].value
-  }
-
   buildPatron(patron: SierraPatron): Patron {
-    const notificationPreference = patron.field
+    const notificationPreference =
+      notificationPreferenceMap[patron.fixedFields["268"].value]
     return {
       notificationPreference,
       name: patron.names[0],

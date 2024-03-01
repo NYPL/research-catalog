@@ -4,8 +4,8 @@ import styles from "../../../styles/components/MyAccount.module.scss"
 
 import Barcode from "react-barcode"
 
-import type { Patron } from "../../types/accountTypes"
-import IconListElement from "./IconListElement"
+import type { Patron } from "../../types/myAccountTypes"
+import { buildIconListElements } from "./IconListElement"
 
 const ProfileHeader = ({ patron }: { patron: Patron }) => {
   const profileData = [
@@ -32,26 +32,7 @@ const ProfileHeader = ({ patron }: { patron: Patron }) => {
       term: "Expiration date:",
       description: patron.expirationDate,
     },
-  ].map(
-    ({
-      icon,
-      term,
-      description,
-    }: {
-      icon: IconNames
-      term: string
-      description: string
-    }) => {
-      return (
-        <IconListElement
-          key={term}
-          term={term}
-          icon={icon}
-          description={description}
-        />
-      )
-    }
-  )
+  ].map(buildIconListElements)
 
   return (
     <List

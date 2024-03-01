@@ -51,7 +51,7 @@ export interface SierraRecord {
 }
 
 export interface SierraPatron {
-  fixedFields: Record<string, Record<string, { label: string; value: string }>>
+  fixedFields: Record<string, { label: string; value: string }>
   id: number
   names: string[]
   barcodes: string[]
