@@ -32,6 +32,7 @@ export const serializeEbscoPublicationResults = (records) => {
       const publicationTitle = record.Items.find(
         (item) => item.Name === "Title"
       )?.Data
+      const publicationType = record.Header.ResourceType
 
       return record.FullTextHoldings.filter((holding) => holding.URL).map(
         (holding) => {
@@ -40,6 +41,7 @@ export const serializeEbscoPublicationResults = (records) => {
             url: holding.URL,
             publicationId,
             publicationTitle,
+            publicationType,
             name: holding.Name,
             coverage: parseCoverageDates(holding.CoverageDates),
           }

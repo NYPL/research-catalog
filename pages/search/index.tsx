@@ -1,6 +1,5 @@
 import Head from "next/head"
 import {
-  Box,
   Link as DSLink,
   Heading,
   Icon,
@@ -95,9 +94,10 @@ export default function Search({
       getSearchQuery({ ...searchParams, sortBy, order, page: undefined })
     )
   }
-  const ebscoLookingForTitle =
-    ebscoPublicationResults?.length &&
-    ebscoPublicationResults[0].publicationTitle
+
+  const publicationSuggestion =
+    ebscoPublicationResults?.length && ebscoPublicationResults[0]
+  const ebscoLookingForTitle = publicationSuggestion?.publicationTitle
   const ebscoMatchingPublicationCount =
     ebscoPublicationResults &&
     Array.from(new Set(ebscoPublicationResults.map((pub) => pub.publicationId)))
@@ -119,15 +119,15 @@ export default function Search({
     </>
   ) : null
 
-  const injectEbscoResults = (searchResults, ebscoResults, index, count) => {
+  const injectEbscoResults = (searchResults, ebscoResults, index) => {
     return searchResults
       .slice(0, index)
       .concat([
         <EbscoSidebar
           key="injected-ebsco-results-sidebar"
+          publicationSuggestion={publicationSuggestion}
           results={ebscoResults}
           showCount={3}
-          ebscoLookingForNotification={ebscoLookingForNotification}
         />,
       ])
       .concat(searchResults.slice(index))
@@ -177,7 +177,7 @@ export default function Search({
               ebscoResults && (
                 <EbscoSidebar
                   results={ebscoResults}
-                  ebscoLookingForNotification={ebscoLookingForNotification}
+                  publicationSuggestion={publicationSuggestion}
                 />
               )
             )}
@@ -228,7 +228,6 @@ export default function Search({
                     }),
                     ebscoResults,
                     3,
-                    3
                   )}
                 </SimpleGrid>
               </>

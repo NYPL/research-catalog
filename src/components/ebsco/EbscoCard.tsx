@@ -1,19 +1,23 @@
 import {
   Card,
   CardContent,
+  StatusBadge,
   Text,
   Link as DSLink,
 } from "@nypl/design-system-react-components"
-import RCLink from "../RCLink/RCLink"
 
 /**
  */
 const EbscoCard = ({ ebscoResult }) => {
-  const description = `${ebscoResult.type} from ${ebscoResult.db}`
-
   return (
     <Card backgroundColor="ui.white" p="xs">
       <CardContent>
+        {ebscoResult.isFeatured && (
+          <StatusBadge level="high">Featured result</StatusBadge>
+        )}
+
+        {ebscoResult.type && <Text size="body2">{ebscoResult.type}</Text>}
+
         <DSLink href={ebscoResult.url} target="_blank" isUnderlined={false}>
           <Text size="body2">{ebscoResult.title}</Text>
         </DSLink>
@@ -36,13 +40,15 @@ const EbscoCard = ({ ebscoResult }) => {
           </Text>
         )}
 
-        {description && <Text size="body2">{description}</Text>}
-
         {ebscoResult.fullTextUrl && (
           <>
-            <RCLink href={ebscoResult.fullTextUrl} type="buttonSecondary">
+            <DSLink
+              href={ebscoResult.fullTextUrl}
+              type="buttonSecondary"
+              target="_blank"
+            >
               Read online
-            </RCLink>
+            </DSLink>
           </>
         )}
       </CardContent>
