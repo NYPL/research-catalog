@@ -73,7 +73,7 @@ export default function MyAccount({
           fines={fines}
           checkouts={checkouts}
           holds={holds}
-          active={tabsPath}
+          activePath={tabsPath}
         />
         {/** Testing renew checkout api route, with test checkout id. */}
         <Button
@@ -101,13 +101,10 @@ export async function getServerSideProps({ req }) {
     }
   }
   /* Parsing path from url to pass to ProfileTabs. */
-  let tabsPath = req.url.split("/", -1)[2] || null
+  const tabsPath = req.url.split("/", -1)[2] || null
   const id = patronTokenResponse.decodedPatron.sub
   try {
     const { checkouts, holds, patron, fines } = await MyAccountFactory(id)
-    if (tabsPath == "fines" && fines.total === 0) {
-      tabsPath = "checkouts"
-    }
     return {
       props: { checkouts, holds, patron, fines, tabsPath, isAuthenticated },
     }
