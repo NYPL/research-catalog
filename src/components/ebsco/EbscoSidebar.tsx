@@ -37,7 +37,7 @@ const EbscoSidebar = ({ results, showCount = 10, publicationSuggestion }) => {
               key={publicationSuggestion.publicationId}
               ebscoResult={publicationAsResult}
             />
-          )}
+          ) || null}
           {results.records.slice(0, adjustedShowCount).map((result) => (
             <EbscoCard key={result.id} ebscoResult={result} />
           ))}

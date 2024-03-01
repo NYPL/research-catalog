@@ -227,7 +227,7 @@ export default function Search({
                       return <SearchResult key={bib.id} bib={bib} />
                     }),
                     ebscoResults,
-                    3,
+                    3
                   )}
                 </SimpleGrid>
               </>

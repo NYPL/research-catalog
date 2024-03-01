@@ -20,9 +20,12 @@ export async function publicationsForKeyword(q) {
   const results = await fetchEbscoPublications(q)
   if (!results?.SearchResult?.Data?.Records) return null
 
+  // console.log("Publications for keyword: ", JSON.stringify(results, null, 2))
+
   // For keyword publication searches, remove anything with low relevance to
   // approximate EBSCO's behavior:
   const records = results.SearchResult.Data.Records.filter((record) => {
+    // console.log("Discarding pub match with score " + record.Header.PreciseRelevancyScore)
     return parseInt(record.Header.PreciseRelevancyScore) > 2800
   })
 
