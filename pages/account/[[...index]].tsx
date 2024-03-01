@@ -105,7 +105,7 @@ export async function getServerSideProps({ req }) {
   try {
     const { checkouts, holds, patron, fines } = await MyAccountFactory(id)
     // Redirecting /fines if user has none.
-    if (tabsPath === "fines" && fines.total === 0) {
+    if (tabsPath === "fees" && fines.total === 0) {
       return {
         redirect: {
           destination: "/account",

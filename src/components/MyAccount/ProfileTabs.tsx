@@ -31,9 +31,9 @@ const ProfileTabs = ({
     ...(fines?.total > 0
       ? [
           {
-            label: `Fines ($${fines.total.toFixed(2)})`,
+            label: `Fees ($${fines.total.toFixed(2)})`,
             content: "",
-            urlPath: "fines",
+            urlPath: "fees",
           },
         ]
       : []),
