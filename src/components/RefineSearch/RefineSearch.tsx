@@ -87,7 +87,6 @@ const RefineSearch = ({
 
   const handleClear = () => {
     // remove applied filters from state
-    // console.log(getQueryWithoutFilters(router.query))
     setAppliedFilters({})
     // pushing to router with just the original query will refetch the bibs
     router.push({
