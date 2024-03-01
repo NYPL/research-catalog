@@ -7,7 +7,6 @@ import initializePatronTokenAuth, {
 import { MyAccountFactory } from "../../src/models/MyAccount"
 import type { Checkout, Hold, Patron, Fine } from "../../src/types/accountTypes"
 import ProfileTabs from "../../src/components/MyAccount/ProfileTabs"
-import { useRouter } from "next/router"
 
 interface MyAccountPropsType {
   checkouts?: Checkout[]
@@ -100,11 +99,20 @@ export async function getServerSideProps({ req }) {
       },
     }
   }
-  /* Parsing path from url to pass to ProfileTabs. */
+  // Parsing path from url to pass to ProfileTabs.
   const tabsPath = req.url.split("/", -1)[2] || null
   const id = patronTokenResponse.decodedPatron.sub
   try {
     const { checkouts, holds, patron, fines } = await MyAccountFactory(id)
+    // Redirecting /fines if user has none.
+    if (tabsPath === "fines" && fines.total === 0) {
+      return {
+        redirect: {
+          destination: "/account",
+          permanent: false,
+        },
+      }
+    }
     return {
       props: { checkouts, holds, patron, fines, tabsPath, isAuthenticated },
     }

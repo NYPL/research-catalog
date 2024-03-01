@@ -16,51 +16,50 @@ const ProfileTabs = ({
   fines: Fine
   activePath: string
 }) => {
-  // tabsData and tabsDict conditionally include fines– only when user has a total more than $0.
+  // tabsData conditionally includes fines– only when user has total fines more than $0.
   const tabsData = [
     {
       label: "Checkouts",
       content: "",
+      urlPath: "checkouts",
     },
     {
       label: "Requests",
       content: "",
+      urlPath: "requests",
     },
-    ...(fines.total > 0
+    ...(fines?.total > 0
       ? [
           {
             label: `Fines ($${fines.total.toFixed(2)})`,
             content: "",
+            urlPath: "fines",
           },
         ]
       : []),
     {
       label: "Account settings",
       content: "",
+      urlPath: "settings",
     },
   ]
-  const tabsDict =
-    fines.total > 0
-      ? { checkouts: 0, requests: 1, fines: 2, settings: 3 }
-      : { checkouts: 0, requests: 1, settings: 2 }
-
   // If page passes a path, set that tab. Otherwise, set to checkouts tab.
   const [activeTab, setActiveTab] = useState(
-    activePath ? tabsDict[activePath] : 0
+    activePath ? tabsData.findIndex((tab) => tab.urlPath === activePath) : 0
   )
 
   const router = useRouter()
 
   const updatePath = (newPath) => {
-    router.push(`/account/${newPath.toLowerCase()}`, undefined, {
+    router.push(`/account/${newPath}`, undefined, {
       shallow: true,
     })
   }
   const updateTabs = (newPath) => {
-    setActiveTab(tabsDict[newPath])
+    setActiveTab(tabsData.findIndex((tab) => tab.urlPath === newPath))
   }
 
-  // On url change, update tabs.
+  // On path change, update tabs.
   useEffect(() => {
     const handleRouteChange = (url) => {
       const path = url.split("/")[4]
@@ -77,18 +76,8 @@ const ProfileTabs = ({
       defaultIndex={activeTab}
       id="tabs-id"
       onChange={(index) => {
-        let label = tabsData[index].label.toLowerCase()
-        // Parse label into url path.
-        if (label.startsWith("account")) {
-          label = "settings"
-        }
-        if (label.startsWith("fines") && !(fines.total > 0)) {
-          label = "checkouts"
-        } else if (label.startsWith("fines")) {
-          label = "fines"
-        }
-        //Update path when tab changes.
-        updatePath(label)
+        // Update path when tab changes.
+        updatePath(tabsData[index].urlPath)
       }}
       tabsData={tabsData}
     />
