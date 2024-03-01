@@ -1,7 +1,6 @@
 import { Tabs } from "@nypl/design-system-react-components"
 import type { Patron, Checkout, Fine, Hold } from "../../types/accountTypes"
 import { useRouter } from "next/router"
-import { useState, useEffect } from "react"
 
 const ProfileTabs = ({
   checkouts,

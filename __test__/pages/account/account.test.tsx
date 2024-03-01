@@ -10,10 +10,6 @@ describe("My Account page", () => {
   const routerMock = useRouter as jest.Mock
   routerMock.mockReturnValue({
     push: jest.fn(),
-    events: {
-      on: jest.fn(),
-      off: jest.fn(),
-    },
   })
   it("displays an error message when patron is empty", () => {
     render(<MyAccount isAuthenticated={true} />)
