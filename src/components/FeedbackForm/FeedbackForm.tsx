@@ -45,10 +45,11 @@ const FeedbackForm = () => {
       const responseJson = await response.json()
       console.log(responseJson)
       if (responseJson.error) {
-        console.error(responseJson.error)
-        return
+        console.error("Error in feedback api response", responseJson.error)
+        setFeedbackFormScreen("error")
+      } else {
+        setFeedbackFormScreen("confirmation")
       }
-      setFeedbackFormScreen("confirmation")
     } catch (error) {
       console.error("Error posting feedback", error)
       setFeedbackFormScreen("error")
