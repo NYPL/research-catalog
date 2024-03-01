@@ -1,68 +1,71 @@
+import AccountSettingsTab from "./AccountSettingsTab"
+import type MyAccount from "../../models/MyAccount"
+
 import { Tabs } from "@nypl/design-system-react-components"
-import type { Patron, Checkout, Fine, Hold } from "../../types/myAccountTypes"
 import { useRouter } from "next/router"
-import { BASE_URL } from "../../config/constants"
-import { useEffect } from "react"
+
+interface ProfileTabsPropsType {
+  patron: MyAccount["patron"]
+  checkouts: MyAccount["checkouts"]
+  holds: MyAccount["holds"]
+  fines: MyAccount["fines"]
+  activePath: string
+}
 
 const ProfileTabs = ({
   checkouts,
   holds,
   patron,
   fines,
-}: {
-  patron: Patron
-  checkouts: Checkout[]
-  holds: Hold[]
-  fines: Fine
-}) => {
-  //   const router = useRouter()
-  const onChange = (value) => {
-    console.log(
-      `local.nypl.org:8080${BASE_URL}/account/${tabsData[value].label}`
-    )
-  }
-  //   console.log(
-  //     `local.nypl.org:8080${BASE_URL}/account/${tabsData[value].label}`
-  //   )
-  //   router.push(
-  //     `local.nypl.org:8080${BASE_URL}/account/${tabsData[value].label}`,
-  //     undefined,
-  //     {
-  //       shallow: true,
-  //     }
-  //   )
-  //   const query = { ...router.query, (tabsData[value].label) }
-
-  //   router.push({ query, pathname: router.pathname }, undefined, {
-  //     shallow: true,
-  //   })
-  //   }
-
+  activePath,
+}: ProfileTabsPropsType) => {
+  // tabsData conditionally includes fines– only when user has total fines more than $0.
   const tabsData = [
     {
       label: "Checkouts",
       content: "",
+      urlPath: "checkouts",
     },
     {
       label: "Requests",
       content: "",
+      urlPath: "requests",
     },
-    fines.total > 0 && {
-      label: `Fines ($${fines.total.toFixed(2)})`,
-      content: "",
-    },
+    ...(fines?.total > 0
+      ? [
+          {
+            label: `Fees ($${fines.total.toFixed(2)})`,
+            content: "",
+            urlPath: "overdues",
+          },
+        ]
+      : []),
     {
       label: "Account settings",
-      content: "",
+      content: <AccountSettingsTab settingsData={patron} />,
+      urlPath: "settings",
     },
   ]
+  const tabsDict =
+    fines?.total > 0
+      ? { checkouts: 0, requests: 1, fines: 2, settings: 3 }
+      : { checkouts: 0, requests: 1, settings: 2 }
+  const router = useRouter()
+
+  const updatePath = (newPath) => {
+    router.push(`/account/${newPath}`, undefined, {
+      shallow: true,
+    })
+  }
 
   return (
     <Tabs
-      defaultIndex={0}
+      defaultIndex={tabsDict[activePath] || 0}
       id="tabs-id"
-      useHash={false}
-      onChange={onChange}
+      onChange={(index) => {
+        // Update path when tab changes.
+        updatePath(tabsData[index].urlPath)
+      }}
       tabsData={tabsData}
     />
   )
