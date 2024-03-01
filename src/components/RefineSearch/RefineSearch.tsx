@@ -6,7 +6,7 @@ import {
   Form,
 } from "@nypl/design-system-react-components"
 import type { Dispatch, SyntheticEvent } from "react"
-import { useState, useRef, useCallback } from "react"
+import { useState, useCallback } from "react"
 import { useRouter } from "next/router"
 
 import styles from "../../../styles/components/Search.module.scss"
@@ -31,13 +31,14 @@ const RefineSearch = ({
   setAppliedFilters,
 }: RefineSearchProps) => {
   const router = useRouter()
-  const fields = useRef([
+
+  const fields = [
     { value: "materialType", label: "Format" },
     { value: "language", label: "Language" },
     { value: "dateAfter", label: "Start Year" },
     { value: "dateBefore", label: "End Year" },
     { value: "subjectLiteral", label: "Subject" },
-  ]).current
+  ]
 
   const filters = fields.map((field) => {
     const filterData = new SearchResultsFilters(aggregations, field)
