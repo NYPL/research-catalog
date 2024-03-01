@@ -1,11 +1,10 @@
 import { List } from "@nypl/design-system-react-components"
-import type { IconNames } from "@nypl/design-system-react-components"
 import styles from "../../../styles/components/MyAccount.module.scss"
 
 import Barcode from "react-barcode"
 
 import type { Patron } from "../../types/myAccountTypes"
-import { buildIconListElements } from "./IconListElement"
+import { buildListElementsWithIcons } from "./IconListElement"
 
 const ProfileHeader = ({ patron }: { patron: Patron }) => {
   const profileData = [
@@ -32,12 +31,12 @@ const ProfileHeader = ({ patron }: { patron: Patron }) => {
       term: "Expiration date:",
       description: patron.expirationDate,
     },
-  ].map(buildIconListElements)
+  ].map(buildListElementsWithIcons)
 
   return (
     <List
       sx={{ border: "none", h2: { border: "none" } }}
-      className={styles.myAccountProfileHeader}
+      className={styles.myAccountList}
       id="my-account-profile-header"
       title="My account"
       type="dl"

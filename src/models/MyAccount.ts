@@ -224,8 +224,10 @@ export const MyAccountFactory = async (id: string) => {
   )
   const holdBibData = await MyAccount.fetchBibData(holds.entries, "record")
   return new MyAccount({
-    checkouts: checkouts.entries,
-    holds: holds.entries,
+    //  default to empty array to avoid hard to replicate error
+    // where entries end up undefined in buildBibData.
+    checkouts: checkouts.entries || [],
+    holds: holds.entries || [],
     patron,
     fines,
     checkoutBibData: checkoutBibData.entries,

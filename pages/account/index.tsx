@@ -14,6 +14,7 @@ import type {
 import ProfileTabs from "../../src/components/MyAccount/ProfileTabs"
 import ProfileHeader from "../../src/components/MyAccount/ProfileHeader"
 import { BASE_URL } from "../../src/config/constants"
+import AccountSettingsTab from "../../src/components/MyAccount/AccountSettingsTab"
 
 interface MyAccountPropsType {
   checkouts?: Checkout[]
@@ -31,7 +32,6 @@ export default function MyAccount({
   isAuthenticated,
 }: MyAccountPropsType) {
   const errorRetrievingPatronData = !patron
-  console.log(checkouts, holds, patron, fines)
   /** Testing renew checkout api route, displaying alerts of whatever the handler returns. */
   async function checkoutRenew(checkoutId, patronId) {
     try {
@@ -223,7 +223,8 @@ export default function MyAccount({
               checkouts={checkouts}
               holds={holds}
             />
-            {/** Testing renew checkout api route, with test checkout id. */}
+            <AccountSettingsTab settingsData={patron} />
+            {/** Testing renew checkout api route, with test checkout id*/}
             <Button
               id="checkout-test"
               onClick={() => checkoutRenew(58536261, patron.id)}

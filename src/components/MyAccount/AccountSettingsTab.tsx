@@ -1,6 +1,7 @@
 import { List } from "@nypl/design-system-react-components"
 import type { Patron } from "../../types/myAccountTypes"
-import { buildIconListElements } from "./IconListElement"
+import { buildListElementsWithIcons } from "./IconListElement"
+import styles from "../../../styles/components/MyAccount.module.scss"
 
 const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
   const listData = [
@@ -17,10 +18,24 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
     {
       icon: "communicationChatBubble",
       term: "Notification preference:",
-      description: settingsData.primaryPhone,
+      description: settingsData.notificationPreference,
     },
-  ]
-  return <List type="dl">{listData.map(buildIconListElements)}</List>
+    {
+      icon: "actionHome",
+      term: "Home library:",
+      description: settingsData.homeLibrary,
+    },
+    {
+      icon: "actionLockClosed",
+      term: "Pin/Password:",
+      description: "****",
+    },
+  ].filter((listData) => listData.description)
+  return (
+    <List className={styles.myAccountList} type="dl">
+      {listData.map(buildListElementsWithIcons)}
+    </List>
+  )
 }
 
 export default AccountSettingsTab

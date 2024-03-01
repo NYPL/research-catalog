@@ -1,6 +1,8 @@
 import { Icon } from "@nypl/design-system-react-components"
 import type { IconNames } from "@nypl/design-system-react-components"
 
+import styles from "../../../styles/components/MyAccount.module.scss"
+
 interface IconListElementPropType {
   icon: IconNames
   term: string
@@ -14,7 +16,7 @@ const IconListElement = ({
 }: IconListElementPropType) => {
   return (
     <>
-      <dt>
+      <dt className={styles.iconDt}>
         <Icon size="large" name={icon} title={`account profile ${term} icon`} />
         {term}
       </dt>
@@ -23,7 +25,7 @@ const IconListElement = ({
   )
 }
 
-export const buildIconListElements = ({
+export const buildListElementsWithIcons = ({
   icon,
   term,
   description,
