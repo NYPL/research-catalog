@@ -14,17 +14,10 @@ const IconListElement = ({
   term,
   description,
 }: IconListElementPropType) => {
-  const removeTrailingColon = (term: string) => {
-    return term.replace(/:$/, "")
-  }
   return (
     <>
       <dt className={styles.iconDt}>
-        <Icon
-          size="large"
-          name={icon}
-          title={`account profile ${removeTrailingColon(term)} icon`}
-        />
+        <Icon size="large" name={icon} />
         {term}
       </dt>
       <dd>{description}</dd>
