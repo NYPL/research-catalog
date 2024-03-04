@@ -32,8 +32,16 @@ const RefineSearchCheckBoxField = ({
     })
   }
 
-  const checkboxes = options.map(({ value, label }) => {
-    return <Checkbox id={value} key={value} value={value} labelText={label} />
+  const checkboxes = options.map(({ value, label, count }) => {
+    console.log(`${label} (${count})`)
+    return (
+      <Checkbox
+        id={value}
+        key={value}
+        value={value}
+        labelText={`${label} (${count})`}
+      />
+    )
   })
 
   return (
