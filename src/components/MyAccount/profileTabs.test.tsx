@@ -7,17 +7,10 @@ import {
   mockHolds,
   mockPatron,
 } from "../../../__test__/fixtures/accountFixtures"
-import { useRouter } from "next/router"
-
-jest.mock("next/router", () => ({
-  useRouter: jest.fn(),
-}))
+import mockRouter from "next-router-mock"
+jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
 describe("ProfileTabs", () => {
-  const routerMock = useRouter as jest.Mock
-  routerMock.mockReturnValue({
-    push: jest.fn(),
-  })
   it("renders", () => {
     render(
       <ProfileTabs
@@ -69,10 +62,6 @@ describe("ProfileTabs", () => {
       />
     )
     fireEvent.click(getByText("Requests"))
-    expect(useRouter().push).toHaveBeenCalledWith(
-      "/account/requests",
-      undefined,
-      { shallow: true }
-    )
+    expect(mockRouter.asPath).toBe("/account/requests")
   })
 })
