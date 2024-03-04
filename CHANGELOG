@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - My Account Header (SCC-3924)
 - Holds API routes (SCC-3953)
 - Settings API routes (SCC-3954)
+- Checkout renewal API route (SCC-3951)
 - Tests for existing API routes (SCC-3967)
 
 ### Removals
