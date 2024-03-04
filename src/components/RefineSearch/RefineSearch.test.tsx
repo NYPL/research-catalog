@@ -105,6 +105,15 @@ describe("RefineSearch", () => {
       )
     }
     beforeEach(setup)
+    it("should transform labels based on mapping", async () => {
+      await openRefineSearch()
+      expect(
+        screen.queryByLabelText("Greek, Modern (1453- ) (4)")
+      ).not.toBeInTheDocument()
+      expect(
+        screen.queryByLabelText("Greek, Modern (1453-present) (4)")
+      ).toBeInTheDocument()
+    })
     it("applying no filters should return to search results", async () => {
       await openRefineSearch()
       await apply()

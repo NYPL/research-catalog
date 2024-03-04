@@ -9134,6 +9134,11 @@ export const aggregationsResults = {
       field: "language",
       values: [
         {
+          value: "lang:mod",
+          count: 4,
+          label: "Greek, Modern (1453- )",
+        },
+        {
           value: "lang:ita",
           count: 59,
           label: "Italian",
