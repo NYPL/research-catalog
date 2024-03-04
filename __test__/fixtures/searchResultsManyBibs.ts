@@ -9133,7 +9133,11 @@ export const aggregationsResults = {
       id: "language",
       field: "language",
       values: [
-        { value: "lang:por", label: "Portugese", count: 3 },
+        {
+          value: "lang:mod",
+          count: 4,
+          label: "Greek, Modern (1453- )",
+        },
         {
           value: "lang:ita",
           count: 59,
@@ -9153,34 +9157,6 @@ export const aggregationsResults = {
           value: "lang:por",
           count: 1,
           label: "Portuguese",
-        },
-      ],
-    },
-    {
-      "@type": "nypl:Aggregation",
-      "@id": "res:mediaType",
-      id: "mediaType",
-      field: "mediaType",
-      values: [
-        {
-          value: "mediatypes:n",
-          count: 412,
-          label: "unmediated",
-        },
-        {
-          value: "mediatypes:s",
-          count: 6,
-          label: "audio",
-        },
-        {
-          value: "mediatypes:undefined",
-          count: 4,
-          label: "unmediated",
-        },
-        {
-          value: "mediatypes:v",
-          count: 2,
-          label: "video",
         },
       ],
     },

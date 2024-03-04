@@ -20,7 +20,7 @@ const apply = async () => {
   await userEvent.click(applyButton)
 }
 const selectSomeFilters = async (
-  labels = ["Portuguese", "Audio", "Cooking, Italian."]
+  labels = ["Portuguese (1)", "Audio (37)", "Cooking, Italian. (19)"]
 ) => {
   await Promise.all(
     labels
@@ -105,6 +105,15 @@ describe("RefineSearch", () => {
       )
     }
     beforeEach(setup)
+    it("should transform labels based on mapping", async () => {
+      await openRefineSearch()
+      expect(
+        screen.queryByLabelText("Greek, Modern (1453- ) (4)")
+      ).not.toBeInTheDocument()
+      expect(
+        screen.queryByLabelText("Greek, Modern (1453-present) (4)")
+      ).toBeInTheDocument()
+    })
     it("applying no filters should return to search results", async () => {
       await openRefineSearch()
       await apply()
@@ -148,9 +157,9 @@ describe("RefineSearch", () => {
       expect(mockRouter.asPath).toBe("/search")
       await openRefineSearch()
       const previouslySelectedCheckboxes = [
-        "Portuguese",
-        "Audio",
-        "Cooking, Italian.",
+        "Portuguese (1)",
+        "Audio (37)",
+        "Cooking, Italian. (19)",
       ].map((label) => screen.getByLabelText(label))
       previouslySelectedCheckboxes.forEach((box) =>
         expect(box).not.toBeChecked()
@@ -159,11 +168,11 @@ describe("RefineSearch", () => {
     it("multiple selections for multiple filters", async () => {
       await openRefineSearch()
       await selectSomeFilters([
-        "Audio",
-        "Moving image",
-        "French",
-        "Dutch",
-        "Italian",
+        "Audio (37)",
+        "Moving image (8)",
+        "French (34)",
+        "Dutch (4)",
+        "Italian (59)",
       ])
       await apply()
       expect(mockRouter.query).toStrictEqual({
@@ -186,7 +195,7 @@ describe("RefineSearch", () => {
       })
       await openRefineSearch()
       // this should actually deselect the filters as it is just clicking on filters
-      await selectSomeFilters(["Italian", "Audio"])
+      await selectSomeFilters(["Italian (59)", "Audio (37)"])
       await apply()
       expect(mockRouter.query).toStrictEqual({
         "filters[language][0]": "lang:por",
