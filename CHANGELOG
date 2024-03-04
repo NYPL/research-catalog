@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Release Notes
 
-- This version represents the first public release of the research catalog refactor.
+- This version represents the first public release of the Research Catalog refactor.
 - This first public release will include the new Homepage and Advanced Search page, the Header and Footer, as well as the Feedback form (SCC-3614).
 - Other pages will fall back to their currently live DFE versions.
 
