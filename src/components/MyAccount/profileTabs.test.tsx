@@ -10,7 +10,6 @@ import {
 import mockRouter from "next-router-mock"
 import userEvent from "@testing-library/user-event"
 
-window.HTMLElement.prototype.scrollIntoView = jest.fn()
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
 describe("ProfileTabs", () => {
