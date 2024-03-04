@@ -1,5 +1,5 @@
-import { render, screen } from "../../../src/utils/testUtils"
 import MyAccount from "../../../pages/account/[[...index]]"
+import { render, screen } from "../../../src/utils/testUtils"
 import { useRouter } from "next/router"
 
 jest.mock("next/router", () => ({

@@ -5,17 +5,10 @@ import initializePatronTokenAuth, {
   getLoginRedirect,
 } from "../../src/server/auth"
 import { MyAccountFactory } from "../../src/models/MyAccount"
-import type {
-  Checkout,
-  Hold,
-  Patron,
-  Fine,
-} from "../../src/types/myAccountTypes"
+import type MyAccountModel from "../../src/models/MyAccount"
 import ProfileTabs from "../../src/components/MyAccount/ProfileTabs"
 import ProfileHeader from "../../src/components/MyAccount/ProfileHeader"
 import { BASE_URL } from "../../src/config/constants"
-import AccountSettingsTab from "../../src/components/MyAccount/AccountSettingsTab"
-import type MyAccountModel from "../../src/models/MyAccount"
 
 interface MyAccountPropsType {
   patron?: MyAccountModel["patron"]
