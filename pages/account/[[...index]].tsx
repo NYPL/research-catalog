@@ -1,5 +1,5 @@
 import Head from "next/head"
-import { Button, Heading, Text } from "@nypl/design-system-react-components"
+import { Button, Text } from "@nypl/design-system-react-components"
 import Layout from "../../src/components/Layout/Layout"
 import initializePatronTokenAuth, {
   getLoginRedirect,
@@ -176,7 +176,13 @@ export default function MyAccount({
         ) : (
           <>
             <ProfileHeader patron={patron} />
-
+            <ProfileTabs
+              patron={patron}
+              checkouts={checkouts}
+              holds={holds}
+              fines={fines}
+              activePath={tabsPath}
+            />
             {/** Testing renew checkout api route, with test checkout id. */}
             <Button
               id="checkout-test"
