@@ -68,7 +68,7 @@ describe("ProfileTabs", () => {
         activePath="checkouts"
       />
     )
-    fireEvent.click(getByText("Requests"))
+    fireEvent(getByText("Requests"), new MouseEvent("click"))
     expect(useRouter().push).toHaveBeenCalledWith(
       "/account/requests",
       undefined,
