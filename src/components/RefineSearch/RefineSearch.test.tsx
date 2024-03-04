@@ -1,7 +1,7 @@
 import React from "react"
-import { render, screen, act } from "@testing-library/react"
 import mockRouter from "next-router-mock"
 import userEvent from "@testing-library/user-event"
+import { screen, render } from "../../utils/testUtils"
 
 import Search from "../../../pages/search/index"
 import {
