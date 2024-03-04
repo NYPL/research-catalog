@@ -7,6 +7,8 @@ export interface AppConfig {
   nonRecapClosedLocations: string[]
   jwtPublicKey: string
   features: Record<string, Features>
+  sourceEmail: string
+  libAnswersEmail: string
 }
 export interface APIEndpoints {
   development: string

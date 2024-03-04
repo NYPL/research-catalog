@@ -13,7 +13,7 @@ import SubNav from "../SubNav/SubNav"
 import SearchForm from "../SearchForm/SearchForm"
 import { BASE_URL } from "../../config/constants"
 import Notification from "../Notification/Notification"
-import { appConfig } from "../../config/config"
+import FeedbackForm from "../FeedbackForm/FeedbackForm"
 
 interface LayoutProps {
   sidebar?: ReactElement
@@ -79,7 +79,12 @@ const Layout = ({
           )
         }
         sidebar={sidebar ? sidebarPosition : "none"}
-        contentPrimary={<Box pb="l">{children}</Box>}
+        contentPrimary={
+          <Box pb="l">
+            {children}
+            <FeedbackForm />
+          </Box>
+        }
         contentSidebar={sidebar && <Box pb="l">{sidebar}</Box>}
       />
     </DSProvider>
