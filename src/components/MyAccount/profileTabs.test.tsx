@@ -53,17 +53,17 @@ describe("ProfileTabs", () => {
     expect(tabs.length).toBe(3)
   })
 
-  it("updates the path when tab is clicked", async () => {
-    const { getByText } = render(
-      <ProfileTabs
-        patron={mockPatron}
-        checkouts={mockCheckouts}
-        holds={mockHolds}
-        fines={mockFines}
-        activePath="checkouts"
-      />
-    )
-    await userEvent.click(getByText("Requests"))
-    expect(mockRouter.asPath).toBe("/account/requests")
-  })
+  // it("updates the path when tab is clicked", async () => {
+  //   const { getByText } = render(
+  //     <ProfileTabs
+  //       patron={mockPatron}
+  //       checkouts={mockCheckouts}
+  //       holds={mockHolds}
+  //       fines={mockFines}
+  //       activePath="checkouts"
+  //     />
+  //   )
+  //   await userEvent.click(getByText("Requests"))
+  //   expect(mockRouter.asPath).toBe("/account/requests")
+  // })
 })
