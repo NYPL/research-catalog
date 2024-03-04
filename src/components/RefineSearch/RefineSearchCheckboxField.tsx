@@ -33,7 +33,9 @@ const RefineSearchCheckBoxField = ({
   }
 
   const checkboxes = options.map(({ value, label, count }) => {
-    console.log(`${label} (${count})`)
+    if (label === "Greek, Modern (1453- )") {
+      label = "Greek, Modern (1453-present)"
+    }
     return (
       <Checkbox
         id={value}
