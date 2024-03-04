@@ -26,7 +26,7 @@ import type { SortKey, SortOrder } from "../../src/types/searchTypes"
 import { mapWorksToDRBResults } from "../../src/utils/drbUtils"
 import { SITE_NAME, RESULTS_PER_PAGE } from "../../src/config/constants"
 import type SearchResultsBib from "../../src/models/SearchResultsBib"
-import { SearchResultsAggregationsProvider } from "./SearchResultsAggregationsContext"
+import { SearchResultsAggregationsProvider } from "../../src/context/SearchResultsAggregationsContext"
 
 import useLoading from "../../src/hooks/useLoading"
 import initializePatronTokenAuth from "../../src/server/auth"

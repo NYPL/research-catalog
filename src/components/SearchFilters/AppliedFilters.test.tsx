@@ -5,7 +5,7 @@ import {
 } from "../../../__test__/fixtures/searchResultsManyBibs"
 import mockRouter from "next-router-mock"
 import userEvent from "@testing-library/user-event"
-import { SearchResultsAggregationsProvider } from "../../../pages/search/SearchResultsAggregationsContext"
+import { SearchResultsAggregationsProvider } from "../../context/SearchResultsAggregationsContext"
 import SearchForm from "../SearchForm/SearchForm"
 
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
