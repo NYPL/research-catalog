@@ -4,7 +4,11 @@ This README details the Sierra API endpoints that now support [Research Catalog'
 
 ## Account API Endpoints
 
-| Description            | Request method | Internal route                              | Example request body (\* is required)                            |
+Each of these endpoints responds with a status code and accompanying message. If it errors, the message will be from Sierra (ex. "Too soon to renew"), and if it succeeds, message is generated (ex. "Updated"). Only `/api/account/checkouts/renew/{checkoutId}` returns a response body– the updated checkout object.
+
+See `src/pages/api/account` for handlers and helpers in more detail.
+
+| Description            | Request method | Internal route                              | Example request body (\* is required field)                      |
 | ---------------------- | -------------- | ------------------------------------------- | ---------------------------------------------------------------- |
 | Update hold request    | POST           | `/api/account/holds/update/{holdId}`        | `{"patronId"*: 123456}`                                          |
 | Cancel hold request    | POST           | `/api/account/holds/cancel/{holdId}`        | `{"patronId"*: 123456, "freeze": false, "pickupLocation": "sn"}` |
