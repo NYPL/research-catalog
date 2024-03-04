@@ -183,7 +183,7 @@ export default function MyAccount({
               fines={fines}
               activePath={tabsPath}
             />
-            {/** Testing renew checkout api route, with test checkout id. */}
+            {/* * Testing renew checkout api route, with test checkout id.
             <Button
               id="checkout-test"
               onClick={() => checkoutRenew(58536266, patron.id)}
@@ -191,35 +191,35 @@ export default function MyAccount({
               Renew checkout
             </Button>
             {/** Testing settings api route */}
-            <Button
+            {/* <Button
               id="settings-test"
               onClick={() => settingsUpdate(patron.id)}
             >
               Update settings
-            </Button>
+            </Button> */}
             {/** Testing pin update api route */}
-            <Button
+            {/* <Button
               id="pin-update"
               onClick={() =>
                 pinUpdate(patron.id, patron.barcode, "7890", "7890")
               }
             >
               Update pin
-            </Button>
+            </Button> */}
             {/** Testing hold update api route */}
-            <Button
+            {/* <Button
               id="hold-update"
               onClick={() => holdUpdate(patron.id, "42273325", false, "")}
             >
               Update hold request
-            </Button>
+            </Button> */}
             {/** Testing hold cancelapi route */}
-            <Button
+            {/* <Button
               id="hold-cancel"
               onClick={() => holdCancel(patron.id, "42273326")}
             >
               Cancel hold request
-            </Button>
+            </Button> */}
           </>
         )}
       </Layout>

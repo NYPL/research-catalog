@@ -1,6 +1,7 @@
 import { Tabs } from "@nypl/design-system-react-components"
 import type { Patron, Checkout, Fine, Hold } from "../../types/accountTypes"
 import { useRouter } from "next/router"
+import CheckoutsTab from "./CheckoutsTab"
 
 const ProfileTabs = ({
   checkouts,
@@ -19,7 +20,7 @@ const ProfileTabs = ({
   const tabsData = [
     {
       label: "Checkouts",
-      content: "",
+      content: <CheckoutsTab checkouts={checkouts} />,
       urlPath: "checkouts",
     },
     {
@@ -56,6 +57,7 @@ const ProfileTabs = ({
 
   return (
     <Tabs
+      sx={{ "div[role=tabpanel]": { padding: "0px" } }}
       defaultIndex={tabsDict[activePath] || 0}
       id="tabs-id"
       onChange={(index) => {
