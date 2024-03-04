@@ -13,19 +13,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - This first public release will include the new Homepage and Advanced Search page, the Header and Footer, as well as the Feedback form (SCC-3614).
 - Other pages will fall back to their currently live DFE versions.
 
-### Added
-
-- Feedback Box (SCC-3614)
-- Tests for existing API routes (SCC-3967)
-
-## Unreleased
-
 ### My Account
 
 - My Account Header (SCC-3924)
 - Holds API routes (SCC-3953)
 - Settings API routes (SCC-3954)
 - Checkout renewal API route (SCC-3951)
+
+### Added
+
+- Feedback Box (SCC-3614)
+- Tests for existing API routes (SCC-3967)
 
 ### Removals
 
