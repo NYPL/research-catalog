@@ -176,7 +176,13 @@ export default function MyAccount({
         ) : (
           <>
             <ProfileHeader patron={patron} />
-
+            <ProfileTabs
+              patron={patron}
+              checkouts={checkouts}
+              holds={holds}
+              fines={fines}
+              activePath={tabsPath}
+            />
             {/** Testing renew checkout api route, with test checkout id. */}
             <Button
               id="checkout-test"

@@ -1,5 +1,5 @@
 import React from "react"
-import { render } from "@testing-library/react"
+import { render, fireEvent } from "@testing-library/react"
 import ProfileTabs from "./ProfileTabs"
 import {
   mockCheckouts,
@@ -8,8 +8,6 @@ import {
   mockPatron,
 } from "../../../__test__/fixtures/accountFixtures"
 import mockRouter from "next-router-mock"
-import userEvent from "@testing-library/user-event"
-
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
 describe("ProfileTabs", () => {
@@ -53,7 +51,7 @@ describe("ProfileTabs", () => {
     expect(tabs.length).toBe(3)
   })
 
-  it("updates the path when tab is clicked", async () => {
+  it("calls updatePath when tab is clicked", () => {
     const { getByText } = render(
       <ProfileTabs
         patron={mockPatron}
@@ -63,7 +61,7 @@ describe("ProfileTabs", () => {
         activePath="checkouts"
       />
     )
-    await userEvent.click(getByText("Requests"))
+    fireEvent.click(getByText("Requests"))
     expect(mockRouter.asPath).toBe("/account/requests")
   })
 })
