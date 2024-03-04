@@ -11,7 +11,6 @@ import {
   defaultNYPLLocation,
   partnerDefaultLocation,
   locationEndpointsMap,
-  formatShelfMarkForSort,
 } from "../utils/itemUtils"
 import { appConfig } from "../config/config"
 
@@ -35,7 +34,6 @@ export default class Item {
   dueDate?: string
   isPhysicallyRequestable: boolean
   isEDDRequestable: boolean
-  sortableShelfMark?: string
 
   constructor(item: SearchResultsItem, bib: SearchResultsBib) {
     this.id = item.uri || ""
@@ -58,7 +56,6 @@ export default class Item {
     this.dueDate = item.dueDate?.length ? item.dueDate[0] : null
     this.isPhysicallyRequestable = item.physRequestable
     this.isEDDRequestable = item.eddRequestable
-    this.sortableShelfMark = this.getSortableShelfMark(item)
   }
 
   // Item availability is determined by the existence of status id in the availability ids list
@@ -100,21 +97,6 @@ export default class Item {
       ] as ItemLocationEndpoint
     }
     return location
-  }
-
-  // Pre-processing logic for setting Item sortableShelfMark
-  // TODO: review later to figure out if this is better served in the backend API rather than here
-  getSortableShelfMark(item: SearchResultsItem): string {
-    let shelfMarkSort: string
-    // Order by id if we have no call numbers, but make sure these items
-    // go after items with call numbers
-    if (!item.shelfMark?.length) {
-      shelfMarkSort = item.uri ? `b${item.uri}` : "c"
-    } else {
-      // order by call number, put these items first
-      shelfMarkSort = `a${formatShelfMarkForSort(item.shelfMark[0])}`
-    }
-    return shelfMarkSort
   }
 
   // Determine if item is Non-NYPL ReCAP by existence of "Recap" string in item source attribute

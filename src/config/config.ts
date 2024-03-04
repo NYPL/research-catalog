@@ -94,4 +94,6 @@ export const appConfig: AppConfig = {
       production: true,
     },
   },
+  sourceEmail: process.env.SOURCE_EMAIL,
+  libAnswersEmail: process.env.LIB_ANSWERS_EMAIL,
 }
