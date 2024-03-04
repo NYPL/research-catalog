@@ -1,5 +1,5 @@
 import React from "react"
-import { render, fireEvent } from "@testing-library/react"
+import { render } from "@testing-library/react"
 import ProfileTabs from "./ProfileTabs"
 import {
   mockCheckouts,
@@ -7,17 +7,12 @@ import {
   mockHolds,
   mockPatron,
 } from "../../../__test__/fixtures/accountFixtures"
-import { useRouter } from "next/router"
+import mockRouter from "next-router-mock"
+import userEvent from "@testing-library/user-event"
 
-jest.mock("next/router", () => ({
-  useRouter: jest.fn(),
-}))
+jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
 describe("ProfileTabs", () => {
-  const routerMock = useRouter as jest.Mock
-  routerMock.mockReturnValue({
-    push: jest.fn(),
-  })
   it("renders", () => {
     render(
       <ProfileTabs
@@ -58,7 +53,7 @@ describe("ProfileTabs", () => {
     expect(tabs.length).toBe(3)
   })
 
-  it("calls updatePath when tab is clicked", () => {
+  it("updates the path when tab is clicked", async () => {
     const { getByText } = render(
       <ProfileTabs
         patron={mockPatron}
@@ -68,11 +63,7 @@ describe("ProfileTabs", () => {
         activePath="checkouts"
       />
     )
-    fireEvent(getByText("Requests"), new MouseEvent("click"))
-    expect(useRouter().push).toHaveBeenCalledWith(
-      "/account/requests",
-      undefined,
-      { shallow: true }
-    )
+    await userEvent.click(getByText("Requests"))
+    expect(mockRouter.asPath).toBe("/account/requests")
   })
 })
