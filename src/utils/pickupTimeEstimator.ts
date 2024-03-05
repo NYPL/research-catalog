@@ -1,5 +1,5 @@
 import { parse as parseDuration, toSeconds } from "iso8601-duration"
-import { fetchLocations } from "../../pages/api/locations"
+import { fetchLocations } from "../server/api/locations"
 import { nyplCore } from "./nyplCore"
 import { DAYS } from "../config/constants"
 

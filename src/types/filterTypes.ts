@@ -5,26 +5,26 @@ export type AppliedFilters = {
   format: string[]
   status: string[]
 }
-export interface ItemAggregationOption {
+export interface AggregationOption {
   value: string
   count: number
   label: string
 }
 
-export interface ItemAggregation {
+export interface Aggregation {
   // eslint-disable-next-line @typescript-eslint/naming-convention
   "@type": string
   // eslint-disable-next-line @typescript-eslint/naming-convention
   "@id": string
   id: string
   field: string
-  values: ItemAggregationOption[]
+  values: AggregationOption[]
 }
 
 export type Option = { value: string; label: string }
 
-export type ReducedItemAggregation = {
+export type ReducedAggregation = {
   field: string
-  options: ItemAggregationOption[]
+  options: AggregationOption[]
   count: number
 }

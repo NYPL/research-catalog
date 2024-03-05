@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next"
-import { fetchBib } from "./index"
+import { fetchBib } from "../../../src/server/api/bib"
 import { PATHS, BASE_URL } from "../../../src/config/constants"
 import { mapQueryToBibParams } from "../../../src/utils/bibUtils"
 

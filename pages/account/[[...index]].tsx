@@ -1,20 +1,22 @@
 import Head from "next/head"
-import { Button, Heading, Text } from "@nypl/design-system-react-components"
+import { Button, Text } from "@nypl/design-system-react-components"
 import Layout from "../../src/components/Layout/Layout"
 import initializePatronTokenAuth, {
   getLoginRedirect,
 } from "../../src/server/auth"
 import { MyAccountFactory } from "../../src/models/MyAccount"
-import type { Checkout, Hold, Patron, Fine } from "../../src/types/accountTypes"
+import type MyAccountModel from "../../src/models/MyAccount"
+import ProfileTabs from "../../src/components/MyAccount/ProfileTabs"
 import ProfileHeader from "../../src/components/MyAccount/ProfileHeader"
 import { BASE_URL } from "../../src/config/constants"
 
 interface MyAccountPropsType {
-  checkouts?: Checkout[]
-  holds?: Hold[]
-  patron?: Patron
-  fines?: Fine
+  patron?: MyAccountModel["patron"]
+  checkouts?: MyAccountModel["checkouts"]
+  holds?: MyAccountModel["holds"]
+  fines?: MyAccountModel["fines"]
   isAuthenticated: boolean
+  tabsPath?: string
 }
 
 export default function MyAccount({
@@ -23,9 +25,10 @@ export default function MyAccount({
   patron,
   fines,
   isAuthenticated,
+  tabsPath,
 }: MyAccountPropsType) {
   const errorRetrievingPatronData = !patron
-  console.log(checkouts, holds, patron, fines)
+  console.log(checkouts, holds, patron, fines, tabsPath)
   /** Testing renew checkout api route, displaying alerts of whatever the handler returns. */
   async function checkoutRenew(checkoutId, patronId) {
     try {
@@ -173,7 +176,13 @@ export default function MyAccount({
         ) : (
           <>
             <ProfileHeader patron={patron} />
-
+            <ProfileTabs
+              patron={patron}
+              checkouts={checkouts}
+              holds={holds}
+              fines={fines}
+              activePath={tabsPath}
+            />
             {/** Testing renew checkout api route, with test checkout id. */}
             <Button
               id="checkout-test"
@@ -211,6 +220,27 @@ export default function MyAccount({
             >
               Cancel hold request
             </Button>
+            {/** Testing renew checkout api route, with test checkout id*/}
+            <Button
+              id="checkout-test"
+              onClick={() => checkoutRenew(58536261, patron.id)}
+            >
+              Renew checkout
+            </Button>
+            <ProfileTabs
+              patron={patron}
+              fines={fines}
+              checkouts={checkouts}
+              holds={holds}
+              activePath={tabsPath}
+            />
+            {/** Testing renew checkout api route, with test checkout id. */}
+            <Button
+              id="checkout-test"
+              onClick={() => checkoutRenew(58536261, patron.id)}
+            >
+              Renew checkout
+            </Button>
           </>
         )}
       </Layout>
@@ -231,14 +261,28 @@ export async function getServerSideProps({ req }) {
       },
     }
   }
+  // Parsing path from url to pass to ProfileTabs.
+  const tabsPath = req.url.split("/", -1)[2] || null
   const id = patronTokenResponse.decodedPatron.sub
   try {
     const { checkouts, holds, patron, fines } = await MyAccountFactory(id)
-    return { props: { checkouts, holds, patron, fines, isAuthenticated } }
+    // Redirecting /fines if user has none.
+    if (tabsPath === "overdues" && fines.total === 0) {
+      return {
+        redirect: {
+          destination: "/account",
+          permanent: false,
+        },
+      }
+    }
+    return {
+      props: { checkouts, holds, patron, fines, tabsPath, isAuthenticated },
+    }
   } catch (e) {
     console.log(e.message)
     return {
       props: {
+        tabsPath,
         isAuthenticated,
       },
     }

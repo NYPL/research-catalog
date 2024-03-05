@@ -1,0 +1,1250 @@
+{
+  "selectedFilters": {
+    "materialType": [],
+    "language": [],
+    "dateAfter": "",
+    "dateBefore": "",
+    "subjectLiteral": []
+  },
+  "searchKeywords": "spaghetti",
+  "sortBy": "relevance",
+  "filters": {
+    "@context": "http://discovery-api-production.us-east-1.elasticbeanstalk.com/api/v0.1/discovery/context_all.jsonld",
+    "@type": "itemList",
+    "itemListElement": [
+      {
+        "@type": "nypl:Aggregation",
+        "@id": "res:owner",
+        "id": "owner",
+        "field": "owner",
+        "values": [
+          {
+            "value": "orgs:0002",
+            "count": 56,
+            "label": "Columbia University Libraries"
+          },
+          {
+            "value": "orgs:1000",
+            "count": 55,
+            "label": "Stephen A. Schwarzman Building"
+          },
+          {
+            "value": "orgs:0004",
+            "count": 53,
+            "label": "Harvard Library"
+          },
+          {
+            "value": "orgs:1101",
+            "count": 34,
+            "label": "General Research Division"
+          },
+          {
+            "value": "orgs:0003",
+            "count": 28,
+            "label": "Princeton University Library"
+          },
+          {
+            "value": "orgs:1002",
+            "count": 26,
+            "label": "New York Public Library for the Performing Arts, Dorothy and Lewis B. Cullman Center"
+          },
+          {
+            "value": "orgs:1114",
+            "count": 6,
+            "label": "Schomburg Center for Research in Black Culture, Jean Blackwell Hutson Research and Reference Division"
+          },
+          {
+            "value": "orgs:1110",
+            "count": 3,
+            "label": "The Miriam and Ira D. Wallach Division of Art, Prints and Photographs: Art & Architecture Collection"
+          }
+        ]
+      },
+      {
+        "@type": "nypl:Aggregation",
+        "@id": "res:contributorLiteral",
+        "id": "contributorLiteral",
+        "field": "contributorLiteral",
+        "values": [
+          {
+            "value": "OverDrive, Inc.",
+            "count": 53,
+            "label": "OverDrive, Inc."
+          },
+          {
+            "value": "OverDrive, Inc., distributor",
+            "count": 9,
+            "label": "OverDrive, Inc., distributor"
+          },
+          {
+            "value": "Mistretta, Gaetano.",
+            "count": 6,
+            "label": "Mistretta, Gaetano."
+          },
+          {
+            "value": "Bibliotheca (Firm)",
+            "count": 3,
+            "label": "Bibliotheca (Firm)"
+          },
+          {
+            "value": "Bibliotheca (Firm), distributor.",
+            "count": 3,
+            "label": "Bibliotheca (Firm), distributor."
+          },
+          {
+            "value": "Festi, Roberto.",
+            "count": 3,
+            "label": "Festi, Roberto."
+          },
+          {
+            "value": "Brown, Morgan",
+            "count": 2,
+            "label": "Brown, Morgan"
+          },
+          {
+            "value": "Bruschini, Antonio.",
+            "count": 2,
+            "label": "Bruschini, Antonio."
+          },
+          {
+            "value": "Crnkovich, Tony, 1962-",
+            "count": 2,
+            "label": "Crnkovich, Tony, 1962-"
+          },
+          {
+            "value": "Cullen, Adam, 1986-",
+            "count": 2,
+            "label": "Cullen, Adam, 1986-"
+          },
+          {
+            "value": "Curti, Roberto, 1971-",
+            "count": 2,
+            "label": "Curti, Roberto, 1971-"
+          },
+          {
+            "value": "Edwards, Matthew, 1978-",
+            "count": 2,
+            "label": "Edwards, Matthew, 1978-"
+          },
+          {
+            "value": "Farrel, Pam, 1959-",
+            "count": 2,
+            "label": "Farrel, Pam, 1959-"
+          },
+          {
+            "value": "Gastaldi, Ernesto, 1934-",
+            "count": 2,
+            "label": "Gastaldi, Ernesto, 1934-"
+          },
+          {
+            "value": "Getty Publications.",
+            "count": 2,
+            "label": "Getty Publications."
+          },
+          {
+            "value": "Goode, Diane.",
+            "count": 2,
+            "label": "Goode, Diane."
+          },
+          {
+            "value": "Graziosi, Maurizio Cesare.",
+            "count": 2,
+            "label": "Graziosi, Maurizio Cesare."
+          },
+          {
+            "value": "Klein, Thomas.",
+            "count": 2,
+            "label": "Klein, Thomas."
+          },
+          {
+            "value": "Krug, Neil.",
+            "count": 2,
+            "label": "Krug, Neil."
+          },
+          {
+            "value": "Martin, Dawn Lundy",
+            "count": 2,
+            "label": "Martin, Dawn Lundy"
+          },
+          {
+            "value": "Morrocchi, Riccardo.",
+            "count": 2,
+            "label": "Morrocchi, Riccardo."
+          },
+          {
+            "value": "New Museum of Contemporary Art (New York, N.Y.)",
+            "count": 2,
+            "label": "New Museum of Contemporary Art (New York, N.Y.)"
+          },
+          {
+            "value": "Norton, Margot,",
+            "count": 2,
+            "label": "Norton, Margot,"
+          },
+          {
+            "value": "Piselli, Stefano.",
+            "count": 2,
+            "label": "Piselli, Stefano."
+          },
+          {
+            "value": "Tentori, Antonio, 1960-",
+            "count": 2,
+            "label": "Tentori, Antonio, 1960-"
+          },
+          {
+            "value": "Viganò, Aldo.",
+            "count": 2,
+            "label": "Viganò, Aldo."
+          },
+          {
+            "value": "3 Hole Press, publisher.",
+            "count": 1,
+            "label": "3 Hole Press, publisher."
+          },
+          {
+            "value": "3 Hole Press, publisher. http://id.loc.gov/vocabulary/relators/pbl",
+            "count": 1,
+            "label": "3 Hole Press, publisher. http://id.loc.gov/vocabulary/relators/pbl"
+          },
+          {
+            "value": "Ackerley, Sarah, 1981-",
+            "count": 1,
+            "label": "Ackerley, Sarah, 1981-"
+          },
+          {
+            "value": "Acosta, María",
+            "count": 1,
+            "label": "Acosta, María"
+          },
+          {
+            "value": "Adams Media.",
+            "count": 1,
+            "label": "Adams Media."
+          },
+          {
+            "value": "America's Test Kitchen (Firm)",
+            "count": 1,
+            "label": "America's Test Kitchen (Firm)"
+          },
+          {
+            "value": "America's Test Kitchen (Firm), author.",
+            "count": 1,
+            "label": "America's Test Kitchen (Firm), author."
+          },
+          {
+            "value": "Anatrone, Sole, 1981-",
+            "count": 1,
+            "label": "Anatrone, Sole, 1981-"
+          },
+          {
+            "value": "Aperture Foundation.",
+            "count": 1,
+            "label": "Aperture Foundation."
+          },
+          {
+            "value": "Arezzo (Italy : Province)",
+            "count": 1,
+            "label": "Arezzo (Italy : Province)"
+          },
+          {
+            "value": "Ashwander, Donald",
+            "count": 1,
+            "label": "Ashwander, Donald"
+          },
+          {
+            "value": "Ayres, Mitchell, 1910-1969",
+            "count": 1,
+            "label": "Ayres, Mitchell, 1910-1969"
+          },
+          {
+            "value": "B Real, 1970-",
+            "count": 1,
+            "label": "B Real, 1970-"
+          },
+          {
+            "value": "Bacciarelli, Antonella.",
+            "count": 1,
+            "label": "Bacciarelli, Antonella."
+          },
+          {
+            "value": "Backbone (Musician)",
+            "count": 1,
+            "label": "Backbone (Musician)"
+          },
+          {
+            "value": "Badu, Erykah.",
+            "count": 1,
+            "label": "Badu, Erykah."
+          },
+          {
+            "value": "Bales, Allen.",
+            "count": 1,
+            "label": "Bales, Allen."
+          },
+          {
+            "value": "Balthasar-Neumann-Chor, singer. http://id.loc.gov/vocabulary/relators/sng",
+            "count": 1,
+            "label": "Balthasar-Neumann-Chor, singer. http://id.loc.gov/vocabulary/relators/sng"
+          },
+          {
+            "value": "Balthasar-Neumann-Ensemble, instrumentalist. http://id.loc.gov/vocabulary/relators/itr",
+            "count": 1,
+            "label": "Balthasar-Neumann-Ensemble, instrumentalist. http://id.loc.gov/vocabulary/relators/itr"
+          },
+          {
+            "value": "Barnard, William Steven.",
+            "count": 1,
+            "label": "Barnard, William Steven."
+          },
+          {
+            "value": "Barruel, Laurence",
+            "count": 1,
+            "label": "Barruel, Laurence"
+          },
+          {
+            "value": "Barry, Katharina,",
+            "count": 1,
+            "label": "Barry, Katharina,"
+          },
+          {
+            "value": "Bart, Lionel.",
+            "count": 1,
+            "label": "Bart, Lionel."
+          },
+          {
+            "value": "Bassett, Leslie, 1923-2016.",
+            "count": 1,
+            "label": "Bassett, Leslie, 1923-2016."
+          }
+        ]
+      },
+      {
+        "@type": "nypl:Aggregation",
+        "@id": "res:materialType",
+        "id": "materialType",
+        "field": "materialType",
+        "values": [
+          {
+            "value": "resourcetypes:txt",
+            "count": 376,
+            "label": "Text"
+          },
+          {
+            "value": "resourcetypes:aud",
+            "count": 37,
+            "label": "Audio"
+          },
+          {
+            "value": "resourcetypes:mov",
+            "count": 7,
+            "label": "Moving image"
+          },
+          {
+            "value": "resourcetypes:not",
+            "count": 7,
+            "label": "Notated music"
+          },
+          {
+            "value": "resourcetypes:mix",
+            "count": 1,
+            "label": "Mixed material"
+          }
+        ]
+      },
+      {
+        "@type": "nypl:Aggregation",
+        "@id": "res:issuance",
+        "id": "issuance",
+        "field": "issuance",
+        "values": [
+          {
+            "value": "urn:biblevel:m",
+            "count": 421,
+            "label": "monograph/item"
+          },
+          {
+            "value": "urn:biblevel:b",
+            "count": 2,
+            "label": "serial component part"
+          },
+          {
+            "value": "urn:biblevel:a",
+            "count": 1,
+            "label": "monograph component part"
+          },
+          {
+            "value": "urn:biblevel:c",
+            "count": 1,
+            "label": "collection"
+          },
+          {
+            "value": "urn:biblevel:s",
+            "count": 1,
+            "label": "serial"
+          }
+        ]
+      },
+      {
+        "@type": "nypl:Aggregation",
+        "@id": "res:publisher",
+        "id": "publisher",
+        "field": "publisher",
+        "values": [
+          {
+            "value": "Clarkson Potter",
+            "count": 5,
+            "label": "Clarkson Potter"
+          },
+          {
+            "value": "McFarland & Company, Inc., Publishers",
+            "count": 5,
+            "label": "McFarland & Company, Inc., Publishers"
+          },
+          {
+            "value": "Hendon Music : Boosey & Hawkes",
+            "count": 4,
+            "label": "Hendon Music : Boosey & Hawkes"
+          },
+          {
+            "value": "Chronicle Books",
+            "count": 3,
+            "label": "Chronicle Books"
+          },
+          {
+            "value": "Dutton Children's Books",
+            "count": 3,
+            "label": "Dutton Children's Books"
+          },
+          {
+            "value": "Houghton Mifflin Harcourt",
+            "count": 3,
+            "label": "Houghton Mifflin Harcourt"
+          },
+          {
+            "value": "L'Harmattan",
+            "count": 3,
+            "label": "L'Harmattan"
+          },
+          {
+            "value": "M&P",
+            "count": 3,
+            "label": "M&P"
+          },
+          {
+            "value": "McFarland & Co.",
+            "count": 3,
+            "label": "McFarland & Co."
+          },
+          {
+            "value": "Random House Audio",
+            "count": 3,
+            "label": "Random House Audio"
+          },
+          {
+            "value": "Schwarzkopf & Schwarzkopf,",
+            "count": 3,
+            "label": "Schwarzkopf & Schwarzkopf,"
+          },
+          {
+            "value": "3 Hole Press",
+            "count": 2,
+            "label": "3 Hole Press"
+          },
+          {
+            "value": "Alfred A. Knopf",
+            "count": 2,
+            "label": "Alfred A. Knopf"
+          },
+          {
+            "value": "Alfred A. Knopf,",
+            "count": 2,
+            "label": "Alfred A. Knopf,"
+          },
+          {
+            "value": "America's Test Kitchen",
+            "count": 2,
+            "label": "America's Test Kitchen"
+          },
+          {
+            "value": "Atria Books",
+            "count": 2,
+            "label": "Atria Books"
+          },
+          {
+            "value": "Carl Hanser Verlag",
+            "count": 2,
+            "label": "Carl Hanser Verlag"
+          },
+          {
+            "value": "Distributed by Hal Leonard Corporation",
+            "count": 2,
+            "label": "Distributed by Hal Leonard Corporation"
+          },
+          {
+            "value": "Distributed by Hal Leonard Corporation.",
+            "count": 2,
+            "label": "Distributed by Hal Leonard Corporation."
+          },
+          {
+            "value": "Edinburgh University Press",
+            "count": 2,
+            "label": "Edinburgh University Press"
+          },
+          {
+            "value": "Editori GLF Laterza",
+            "count": 2,
+            "label": "Editori GLF Laterza"
+          },
+          {
+            "value": "Editorial Círculo Rojo",
+            "count": 2,
+            "label": "Editorial Círculo Rojo"
+          },
+          {
+            "value": "Editorial Unicornio,",
+            "count": 2,
+            "label": "Editorial Unicornio,"
+          },
+          {
+            "value": "Edizioni Il Foglio",
+            "count": 2,
+            "label": "Edizioni Il Foglio"
+          },
+          {
+            "value": "F. Motta",
+            "count": 2,
+            "label": "F. Motta"
+          },
+          {
+            "value": "Falsopiano",
+            "count": 2,
+            "label": "Falsopiano"
+          },
+          {
+            "value": "Fremantle Arts Centre Press",
+            "count": 2,
+            "label": "Fremantle Arts Centre Press"
+          },
+          {
+            "value": "Glittering images",
+            "count": 2,
+            "label": "Glittering images"
+          },
+          {
+            "value": "Glénat",
+            "count": 2,
+            "label": "Glénat"
+          },
+          {
+            "value": "Harper & Row",
+            "count": 2,
+            "label": "Harper & Row"
+          },
+          {
+            "value": "HarperCollins",
+            "count": 2,
+            "label": "HarperCollins"
+          },
+          {
+            "value": "Houghton Mifflin Harcourt,",
+            "count": 2,
+            "label": "Houghton Mifflin Harcourt,"
+          },
+          {
+            "value": "John Wiley & Sons",
+            "count": 2,
+            "label": "John Wiley & Sons"
+          },
+          {
+            "value": "LifeWay Press",
+            "count": 2,
+            "label": "LifeWay Press"
+          },
+          {
+            "value": "Longo",
+            "count": 2,
+            "label": "Longo"
+          },
+          {
+            "value": "MACK",
+            "count": 2,
+            "label": "MACK"
+          },
+          {
+            "value": "Maro,",
+            "count": 2,
+            "label": "Maro,"
+          },
+          {
+            "value": "Mercury",
+            "count": 2,
+            "label": "Mercury"
+          },
+          {
+            "value": "New Museum,",
+            "count": 2,
+            "label": "New Museum,"
+          },
+          {
+            "value": "Residenz Verlag",
+            "count": 2,
+            "label": "Residenz Verlag"
+          },
+          {
+            "value": "Universtiy of Chicago Press",
+            "count": 2,
+            "label": "Universtiy of Chicago Press"
+          },
+          {
+            "value": "W.W. Norton",
+            "count": 2,
+            "label": "W.W. Norton"
+          },
+          {
+            "value": "Yale Universtiy Press",
+            "count": 2,
+            "label": "Yale Universtiy Press"
+          },
+          {
+            "value": "A. Sacco,",
+            "count": 1,
+            "label": "A. Sacco,"
+          },
+          {
+            "value": "Abelard-Schuman",
+            "count": 1,
+            "label": "Abelard-Schuman"
+          },
+          {
+            "value": "Abrams Books for Young Readers",
+            "count": 1,
+            "label": "Abrams Books for Young Readers"
+          },
+          {
+            "value": "Actes sud,",
+            "count": 1,
+            "label": "Actes sud,"
+          },
+          {
+            "value": "Adams Media",
+            "count": 1,
+            "label": "Adams Media"
+          },
+          {
+            "value": "Alternative Comics",
+            "count": 1,
+            "label": "Alternative Comics"
+          },
+          {
+            "value": "American Palate",
+            "count": 1,
+            "label": "American Palate"
+          }
+        ]
+      },
+      {
+        "@type": "nypl:Aggregation",
+        "@id": "res:language",
+        "id": "language",
+        "field": "language",
+        "values": [
+          {
+            "value": "lang:eng",
+            "count": 265,
+            "label": "English"
+          },
+          {
+            "value": "lang:ita",
+            "count": 58,
+            "label": "Italian"
+          },
+          {
+            "value": "lang:fre",
+            "count": 35,
+            "label": "French"
+          },
+          {
+            "value": "lang:ger",
+            "count": 30,
+            "label": "German"
+          },
+          {
+            "value": "lang:spa",
+            "count": 13,
+            "label": "Spanish"
+          },
+          {
+            "value": "lang:zxx",
+            "count": 11,
+            "label": "No linguistic content"
+          },
+          {
+            "value": "lang:dut",
+            "count": 4,
+            "label": "Dutch"
+          },
+          {
+            "value": "lang:heb",
+            "count": 2,
+            "label": "Hebrew"
+          },
+          {
+            "value": "lang:pol",
+            "count": 1,
+            "label": "Polish"
+          },
+          {
+            "value": "lang:por",
+            "count": 1,
+            "label": "Portuguese"
+          }
+        ]
+      },
+      {
+        "@type": "nypl:Aggregation",
+        "@id": "res:mediaType",
+        "id": "mediaType",
+        "field": "mediaType",
+        "values": [
+          {
+            "value": "mediatypes:n",
+            "count": 416,
+            "label": "unmediated"
+          },
+          {
+            "value": "mediatypes:s",
+            "count": 6,
+            "label": "audio"
+          },
+          {
+            "value": "mediatypes:undefined",
+            "count": 4,
+            "label": "unmediated"
+          },
+          {
+            "value": "mediatypes:v",
+            "count": 2,
+            "label": "video"
+          }
+        ]
+      },
+      {
+        "@type": "nypl:Aggregation",
+        "@id": "res:subjectLiteral",
+        "id": "subjectLiteral",
+        "field": "subjectLiteral",
+        "values": [
+          {
+            "value": "Spaghetti Westerns -- History and criticism.",
+            "count": 42,
+            "label": "Spaghetti Westerns -- History and criticism."
+          },
+          {
+            "value": "Cooking, Italian.",
+            "count": 19,
+            "label": "Cooking, Italian."
+          },
+          {
+            "value": "Cooking (Pasta)",
+            "count": 16,
+            "label": "Cooking (Pasta)"
+          },
+          {
+            "value": "Cooking.",
+            "count": 14,
+            "label": "Cooking."
+          },
+          {
+            "value": "Spaghetti Westerns.",
+            "count": 10,
+            "label": "Spaghetti Westerns."
+          },
+          {
+            "value": "Horror films -- Italy -- History and criticism.",
+            "count": 5,
+            "label": "Horror films -- Italy -- History and criticism."
+          },
+          {
+            "value": "Italy.",
+            "count": 5,
+            "label": "Italy."
+          },
+          {
+            "value": "Motion pictures -- Italy -- Interviews.",
+            "count": 4,
+            "label": "Motion pictures -- Italy -- Interviews."
+          },
+          {
+            "value": "Ragtime music.",
+            "count": 4,
+            "label": "Ragtime music."
+          },
+          {
+            "value": "United States.",
+            "count": 4,
+            "label": "United States."
+          },
+          {
+            "value": "Western films.",
+            "count": 4,
+            "label": "Western films."
+          },
+          {
+            "value": "1900-1999",
+            "count": 3,
+            "label": "1900-1999"
+          },
+          {
+            "value": "Food habits.",
+            "count": 3,
+            "label": "Food habits."
+          },
+          {
+            "value": "Motion pictures -- Italy",
+            "count": 3,
+            "label": "Motion pictures -- Italy"
+          },
+          {
+            "value": "Motion pictures.",
+            "count": 3,
+            "label": "Motion pictures."
+          },
+          {
+            "value": "Western films -- History and criticism.",
+            "count": 3,
+            "label": "Western films -- History and criticism."
+          },
+          {
+            "value": "2000-2099",
+            "count": 2,
+            "label": "2000-2099"
+          },
+          {
+            "value": "African Americans -- Drama.",
+            "count": 2,
+            "label": "African Americans -- Drama."
+          },
+          {
+            "value": "Appetizers.",
+            "count": 2,
+            "label": "Appetizers."
+          },
+          {
+            "value": "Appropriation (Art)",
+            "count": 2,
+            "label": "Appropriation (Art)"
+          },
+          {
+            "value": "Appropriation (Art) -- Pictorial works.",
+            "count": 2,
+            "label": "Appropriation (Art) -- Pictorial works."
+          },
+          {
+            "value": "Art -- Reproduction.",
+            "count": 2,
+            "label": "Art -- Reproduction."
+          },
+          {
+            "value": "Buildings.",
+            "count": 2,
+            "label": "Buildings."
+          },
+          {
+            "value": "COOKING / Regional & Ethnic / Japanese.",
+            "count": 2,
+            "label": "COOKING / Regional & Ethnic / Japanese."
+          },
+          {
+            "value": "California -- Los Angeles.",
+            "count": 2,
+            "label": "California -- Los Angeles."
+          },
+          {
+            "value": "Casserole cooking.",
+            "count": 2,
+            "label": "Casserole cooking."
+          },
+          {
+            "value": "Children's songs -- Texts.",
+            "count": 2,
+            "label": "Children's songs -- Texts."
+          },
+          {
+            "value": "Children's songs.",
+            "count": 2,
+            "label": "Children's songs."
+          },
+          {
+            "value": "Cincinnati (Ohio) -- History.",
+            "count": 2,
+            "label": "Cincinnati (Ohio) -- History."
+          },
+          {
+            "value": "City planning -- 21st century.",
+            "count": 2,
+            "label": "City planning -- 21st century."
+          },
+          {
+            "value": "Civilization -- Influence.",
+            "count": 2,
+            "label": "Civilization -- Influence."
+          },
+          {
+            "value": "Comic strip characters in motion pictures.",
+            "count": 2,
+            "label": "Comic strip characters in motion pictures."
+          },
+          {
+            "value": "Community life.",
+            "count": 2,
+            "label": "Community life."
+          },
+          {
+            "value": "Cooking (Natural foods)",
+            "count": 2,
+            "label": "Cooking (Natural foods)"
+          },
+          {
+            "value": "Cooking (Pasta) -- History.",
+            "count": 2,
+            "label": "Cooking (Pasta) -- History."
+          },
+          {
+            "value": "Cooking -- United States.",
+            "count": 2,
+            "label": "Cooking -- United States."
+          },
+          {
+            "value": "Cooking, American.",
+            "count": 2,
+            "label": "Cooking, American."
+          },
+          {
+            "value": "Cooking, French.",
+            "count": 2,
+            "label": "Cooking, French."
+          },
+          {
+            "value": "Creative ability -- Pictorial works.",
+            "count": 2,
+            "label": "Creative ability -- Pictorial works."
+          },
+          {
+            "value": "Dance orchestra music.",
+            "count": 2,
+            "label": "Dance orchestra music."
+          },
+          {
+            "value": "Diet therapy -- Popular works.",
+            "count": 2,
+            "label": "Diet therapy -- Popular works."
+          },
+          {
+            "value": "Economic development -- Social aspects.",
+            "count": 2,
+            "label": "Economic development -- Social aspects."
+          },
+          {
+            "value": "Film posters, Italian -- Catalogs.",
+            "count": 2,
+            "label": "Film posters, Italian -- Catalogs."
+          },
+          {
+            "value": "Film posters, Italian.",
+            "count": 2,
+            "label": "Film posters, Italian."
+          },
+          {
+            "value": "Food.",
+            "count": 2,
+            "label": "Food."
+          },
+          {
+            "value": "HISTORY / Europe / Italy.",
+            "count": 2,
+            "label": "HISTORY / Europe / Italy."
+          },
+          {
+            "value": "Health.",
+            "count": 2,
+            "label": "Health."
+          },
+          {
+            "value": "Historic buildings.",
+            "count": 2,
+            "label": "Historic buildings."
+          },
+          {
+            "value": "Historic sites.",
+            "count": 2,
+            "label": "Historic sites."
+          },
+          {
+            "value": "Humorous songs.",
+            "count": 2,
+            "label": "Humorous songs."
+          }
+        ]
+      },
+      {
+        "@type": "nypl:Aggregation",
+        "@id": "res:creatorLiteral",
+        "id": "creatorLiteral",
+        "field": "creatorLiteral",
+        "values": [
+          {
+            "value": "Palmerini, Luca M.",
+            "count": 5,
+            "label": "Palmerini, Luca M."
+          },
+          {
+            "value": "Daugherty, Michael, 1954-",
+            "count": 4,
+            "label": "Daugherty, Michael, 1954-"
+          },
+          {
+            "value": "Alberini, Massimo.",
+            "count": 3,
+            "label": "Alberini, Massimo."
+          },
+          {
+            "value": "Bruckner, Ulrich P., 1962-",
+            "count": 3,
+            "label": "Bruckner, Ulrich P., 1962-"
+          },
+          {
+            "value": "Frayling, Christopher.",
+            "count": 3,
+            "label": "Frayling, Christopher."
+          },
+          {
+            "value": "Harris, Aleshea",
+            "count": 3,
+            "label": "Harris, Aleshea"
+          },
+          {
+            "value": "Abugattas, Luis.",
+            "count": 2,
+            "label": "Abugattas, Luis."
+          },
+          {
+            "value": "August, Jan, 1912-",
+            "count": 2,
+            "label": "August, Jan, 1912-"
+          },
+          {
+            "value": "Beatrice, Luca, 1961-",
+            "count": 2,
+            "label": "Beatrice, Luca, 1961-"
+          },
+          {
+            "value": "Bunbury, Bill.",
+            "count": 2,
+            "label": "Bunbury, Bill."
+          },
+          {
+            "value": "Buonassisi, Vincenzo.",
+            "count": 2,
+            "label": "Buonassisi, Vincenzo."
+          },
+          {
+            "value": "Callahan, Peter, 1959-",
+            "count": 2,
+            "label": "Callahan, Peter, 1959-"
+          },
+          {
+            "value": "Casadio, Gianfranco.",
+            "count": 2,
+            "label": "Casadio, Gianfranco."
+          },
+          {
+            "value": "Casale, Jana",
+            "count": 2,
+            "label": "Casale, Jana"
+          },
+          {
+            "value": "Curti, Roberto, 1971-",
+            "count": 2,
+            "label": "Curti, Roberto, 1971-"
+          },
+          {
+            "value": "D'Amicone, Giulio.",
+            "count": 2,
+            "label": "D'Amicone, Giulio."
+          },
+          {
+            "value": "Dahl, Roald",
+            "count": 2,
+            "label": "Dahl, Roald"
+          },
+          {
+            "value": "DiCamillo, Kate",
+            "count": 2,
+            "label": "DiCamillo, Kate"
+          },
+          {
+            "value": "España, Rafael de.",
+            "count": 2,
+            "label": "España, Rafael de."
+          },
+          {
+            "value": "Ettlinger, Karl, 1882-1939.",
+            "count": 2,
+            "label": "Ettlinger, Karl, 1882-1939."
+          },
+          {
+            "value": "Farrel, Bill, 1959-",
+            "count": 2,
+            "label": "Farrel, Bill, 1959-"
+          },
+          {
+            "value": "Fox, John Esmond.",
+            "count": 2,
+            "label": "Fox, John Esmond."
+          },
+          {
+            "value": "Fridlund, Bert., 1947-",
+            "count": 2,
+            "label": "Fridlund, Bert., 1947-"
+          },
+          {
+            "value": "Gaberscek, Carlo.",
+            "count": 2,
+            "label": "Gaberscek, Carlo."
+          },
+          {
+            "value": "Gayte, Francis Cisco",
+            "count": 2,
+            "label": "Gayte, Francis Cisco"
+          },
+          {
+            "value": "Giré, Jean-François.",
+            "count": 2,
+            "label": "Giré, Jean-François."
+          },
+          {
+            "value": "Glazer, Tom.",
+            "count": 2,
+            "label": "Glazer, Tom."
+          },
+          {
+            "value": "Halpern, Greg",
+            "count": 2,
+            "label": "Halpern, Greg"
+          },
+          {
+            "value": "Harbeck, Joni.",
+            "count": 2,
+            "label": "Harbeck, Joni."
+          },
+          {
+            "value": "Hennig, Tessa, 1963-",
+            "count": 2,
+            "label": "Hennig, Tessa, 1963-"
+          },
+          {
+            "value": "Hohler, Franz.",
+            "count": 2,
+            "label": "Hohler, Franz."
+          },
+          {
+            "value": "Hughes, Howard, 1971-",
+            "count": 2,
+            "label": "Hughes, Howard, 1971-"
+          },
+          {
+            "value": "Kinnard, Roy, 1952-",
+            "count": 2,
+            "label": "Kinnard, Roy, 1952-"
+          },
+          {
+            "value": "Lawson, Nigella, 1960-",
+            "count": 2,
+            "label": "Lawson, Nigella, 1960-"
+          },
+          {
+            "value": "Mancini, Matteo, 1981-",
+            "count": 2,
+            "label": "Mancini, Matteo, 1981-"
+          },
+          {
+            "value": "Mariotti, Maximiliano.",
+            "count": 2,
+            "label": "Mariotti, Maximiliano."
+          },
+          {
+            "value": "Montanari, Massimo, 1949-",
+            "count": 2,
+            "label": "Montanari, Massimo, 1949-"
+          },
+          {
+            "value": "Morton, Drew, 1983-",
+            "count": 2,
+            "label": "Morton, Drew, 1983-"
+          },
+          {
+            "value": "Palm, Kurt",
+            "count": 2,
+            "label": "Palm, Kurt"
+          },
+          {
+            "value": "Rottenberg, Mika, 1976-",
+            "count": 2,
+            "label": "Rottenberg, Mika, 1976-"
+          },
+          {
+            "value": "Acajou.",
+            "count": 1,
+            "label": "Acajou."
+          },
+          {
+            "value": "Afeltra, Gaetano, 1937-",
+            "count": 1,
+            "label": "Afeltra, Gaetano, 1937-"
+          },
+          {
+            "value": "Afeltra, Gaetano.",
+            "count": 1,
+            "label": "Afeltra, Gaetano."
+          },
+          {
+            "value": "America's Test Kitchen (COR)",
+            "count": 1,
+            "label": "America's Test Kitchen (COR)"
+          },
+          {
+            "value": "Arrazola, Amaia, 1984-",
+            "count": 1,
+            "label": "Arrazola, Amaia, 1984-"
+          },
+          {
+            "value": "Aziza, Claude",
+            "count": 1,
+            "label": "Aziza, Claude"
+          },
+          {
+            "value": "Bagshaw, Mel.",
+            "count": 1,
+            "label": "Bagshaw, Mel."
+          },
+          {
+            "value": "Baker, Barbara, 1947-",
+            "count": 1,
+            "label": "Baker, Barbara, 1947-"
+          },
+          {
+            "value": "Battini, Pierre.",
+            "count": 1,
+            "label": "Battini, Pierre."
+          },
+          {
+            "value": "Beanland, Christopher",
+            "count": 1,
+            "label": "Beanland, Christopher"
+          }
+        ]
+      }
+    ],
+    "totalResults": 428
+  }
+}
