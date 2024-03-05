@@ -32,12 +32,13 @@ const EbscoSidebar = ({ results, showCount = 10, publicationSuggestion }) => {
           library card.
         </Text>
         <SimpleGrid columns={1} gap="s" pb="s">
-          {publicationSuggestion && (
+          {(publicationSuggestion && (
             <EbscoCard
               key={publicationSuggestion.publicationId}
               ebscoResult={publicationAsResult}
             />
-          ) || null}
+          )) ||
+            null}
           {results.records.slice(0, adjustedShowCount).map((result) => (
             <EbscoCard key={result.id} ebscoResult={result} />
           ))}
