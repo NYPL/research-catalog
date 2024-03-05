@@ -227,20 +227,6 @@ export default function MyAccount({
             >
               Renew checkout
             </Button>
-            <ProfileTabs
-              patron={patron}
-              fines={fines}
-              checkouts={checkouts}
-              holds={holds}
-              activePath={tabsPath}
-            />
-            {/** Testing renew checkout api route, with test checkout id. */}
-            <Button
-              id="checkout-test"
-              onClick={() => checkoutRenew(58536261, patron.id)}
-            >
-              Renew checkout
-            </Button>
           </>
         )}
       </Layout>

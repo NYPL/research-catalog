@@ -3,8 +3,8 @@ import type { Patron } from "../../types/myAccountTypes"
 import { buildListElementsWithIcons } from "./IconListElement"
 import styles from "../../../styles/components/MyAccount.module.scss"
 
-const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
-  const listData = [
+const buildAccountSettings = (settingsData: Patron) => {
+  return [
     {
       icon: "communicationCall",
       term: "Phone:",
@@ -30,10 +30,16 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
       term: "Pin/Password:",
       description: "****",
     },
-  ].filter((listData) => listData.description)
+  ]
+    .filter((listData) => listData.description)
+    .map(buildListElementsWithIcons)
+}
+
+const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
+  const accountSettingsData = buildAccountSettings(settingsData)
   return (
     <List className={styles.myAccountList} type="dl">
-      {listData.map(buildListElementsWithIcons)}
+      {accountSettingsData}
     </List>
   )
 }

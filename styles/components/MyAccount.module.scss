@@ -7,10 +7,16 @@
   h2 {
     border: none;
   }
+  .iconDd {
+    @media (max-width: 600px) {
+      margin-left: 2rem;
+    }
+  }
 }
 
 .iconDt {
   display: flex;
+  margin-bottom: var(--nypl-space-xs);
   svg {
     margin-right: var(--nypl-space-xs);
   }

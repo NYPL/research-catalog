@@ -9,6 +9,8 @@ interface IconListElementPropType {
   description: string
 }
 
+// This component is designed to centralize common styling patterns for a
+// description type List with icons
 const IconListElement = ({
   icon,
   term,
@@ -20,7 +22,7 @@ const IconListElement = ({
         <Icon size="large" name={icon} />
         {term}
       </dt>
-      <dd>{description}</dd>
+      <dd className={styles.iconDd}>{description}</dd>
     </>
   )
 }
