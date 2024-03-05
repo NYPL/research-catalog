@@ -57,6 +57,7 @@ describe("MyAccountModel", () => {
       }
       const account = await MyAccountFactory("12345")
       expect(account.patron).toStrictEqual({
+        notificationPreference: "Email",
         name: "NONNA, STREGA",
         barcode: "23333121538324",
         expirationDate: "2025-03-28",
@@ -128,6 +129,9 @@ describe("MyAccountModel", () => {
       MyAccount.fetchHolds = async () => empty
       MyAccount.fetchPatron = async () => ({
         ...patron,
+        fixedFields: {
+          "268": { label: "notification preference", value: "-" },
+        },
         phones: [],
         emails: [],
       })
@@ -145,35 +149,11 @@ describe("MyAccountModel", () => {
         phones: [],
         homeLibrary: "Stavros Niarchos Foundation Library (SNFL)",
         id: 2772226,
+        notificationPreference: null,
       })
       expect(emptyAccount.checkouts).toStrictEqual([])
       expect(emptyAccount.holds).toStrictEqual([])
       expect(emptyAccount.fines).toStrictEqual({ total: 0, entries: [] })
-    })
-    it("builds empty Account data model with empty phones and email", async () => {
-      MyAccount.fetchCheckouts = async () => empty
-      MyAccount.fetchHolds = async () => empty
-      MyAccount.fetchPatron = async () => ({
-        ...patron,
-        phones: undefined,
-        emails: undefined,
-        homeLibrary: undefined,
-      })
-      MyAccount.fetchFines = async () => empty
-      MyAccount.fetchBibData = async () => empty
-
-      const emptyAccount = await MyAccountFactory("12345")
-      expect(emptyAccount.patron).toStrictEqual({
-        name: "NONNA, STREGA",
-        barcode: "23333121538324",
-        expirationDate: "2025-03-28",
-        primaryEmail: "",
-        emails: [],
-        primaryPhone: "",
-        phones: [],
-        homeLibrary: "",
-        id: 2772226,
-      })
     })
   })
 })

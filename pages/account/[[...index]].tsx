@@ -5,16 +5,16 @@ import initializePatronTokenAuth, {
   getLoginRedirect,
 } from "../../src/server/auth"
 import { MyAccountFactory } from "../../src/models/MyAccount"
-import type { Checkout, Hold, Patron, Fine } from "../../src/types/accountTypes"
+import type MyAccountModel from "../../src/models/MyAccount"
 import ProfileTabs from "../../src/components/MyAccount/ProfileTabs"
 import ProfileHeader from "../../src/components/MyAccount/ProfileHeader"
 import { BASE_URL } from "../../src/config/constants"
 
 interface MyAccountPropsType {
-  checkouts?: Checkout[]
-  holds?: Hold[]
-  patron?: Patron
-  fines?: Fine
+  patron?: MyAccountModel["patron"]
+  checkouts?: MyAccountModel["checkouts"]
+  holds?: MyAccountModel["holds"]
+  fines?: MyAccountModel["fines"]
   isAuthenticated: boolean
   tabsPath?: string
 }
@@ -219,6 +219,27 @@ export default function MyAccount({
               onClick={() => holdCancel(patron.id, "42273326")}
             >
               Cancel hold request
+            </Button>
+            {/** Testing renew checkout api route, with test checkout id*/}
+            <Button
+              id="checkout-test"
+              onClick={() => checkoutRenew(58536261, patron.id)}
+            >
+              Renew checkout
+            </Button>
+            <ProfileTabs
+              patron={patron}
+              fines={fines}
+              checkouts={checkouts}
+              holds={holds}
+              activePath={tabsPath}
+            />
+            {/** Testing renew checkout api route, with test checkout id. */}
+            <Button
+              id="checkout-test"
+              onClick={() => checkoutRenew(58536261, patron.id)}
+            >
+              Renew checkout
             </Button>
           </>
         )}

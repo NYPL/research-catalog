@@ -142,7 +142,7 @@ const HOURS = {
   ],
 }
 
-jest.mock("../../../pages/api/locations", () => {
+jest.mock("../../../src/server/api/locations", () => {
   return {
     fetchLocations: ({ location_codes: code }) =>
       Promise.resolve({

@@ -1,6 +1,16 @@
+import AccountSettingsTab from "./AccountSettingsTab"
+import type MyAccount from "../../models/MyAccount"
+
 import { Tabs } from "@nypl/design-system-react-components"
-import type { Patron, Checkout, Fine, Hold } from "../../types/accountTypes"
 import { useRouter } from "next/router"
+
+interface ProfileTabsPropsType {
+  patron: MyAccount["patron"]
+  checkouts: MyAccount["checkouts"]
+  holds: MyAccount["holds"]
+  fines: MyAccount["fines"]
+  activePath: string
+}
 
 const ProfileTabs = ({
   checkouts,
@@ -8,13 +18,7 @@ const ProfileTabs = ({
   patron,
   fines,
   activePath,
-}: {
-  patron: Patron
-  checkouts: Checkout[]
-  holds: Hold[]
-  fines: Fine
-  activePath: string
-}) => {
+}: ProfileTabsPropsType) => {
   // tabsData conditionally includes fines– only when user has total fines more than $0.
   const tabsData = [
     {
@@ -38,7 +42,7 @@ const ProfileTabs = ({
       : []),
     {
       label: "Account settings",
-      content: "",
+      content: <AccountSettingsTab settingsData={patron} />,
       urlPath: "settings",
     },
   ]
