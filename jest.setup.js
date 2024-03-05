@@ -1,6 +1,9 @@
 /* eslint-disable no-undef */
 import "@testing-library/jest-dom"
 
+// The scrollIntoView function is necessary for the Tabs component.
+window.HTMLElement.prototype.scrollIntoView = jest.fn()
+
 //Set up jose to mock auth for every page test
 jest.mock("jose", () => ({
   importSPKI: async () => Promise.resolve("testPublicKey"),

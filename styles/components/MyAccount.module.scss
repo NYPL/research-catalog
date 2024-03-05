@@ -1,4 +1,4 @@
-.myAccountProfileHeader {
+.myAccountList {
   border: none;
   dl > dt,
   dl > dd {
@@ -7,10 +7,11 @@
   h2 {
     border: none;
   }
-  dt {
-    display: flex;
-    svg {
-      margin-right: var(--nypl-space-xs);
-    }
+}
+
+.iconDt {
+  display: flex;
+  svg {
+    margin-right: var(--nypl-space-xs);
   }
 }
