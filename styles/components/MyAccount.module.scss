@@ -1,0 +1,17 @@
+.myAccountList {
+  border: none;
+  dl > dt,
+  dl > dd {
+    border: none;
+  }
+  h2 {
+    border: none;
+  }
+}
+
+.iconDt {
+  display: flex;
+  svg {
+    margin-right: var(--nypl-space-xs);
+  }
+}

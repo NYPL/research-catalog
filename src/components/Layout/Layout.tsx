@@ -12,11 +12,15 @@ import styles from "../../../styles/components/Layout.module.scss"
 import SubNav from "../SubNav/SubNav"
 import SearchForm from "../SearchForm/SearchForm"
 import { BASE_URL } from "../../config/constants"
+import Notification from "../Notification/Notification"
+import FeedbackForm from "../FeedbackForm/FeedbackForm"
 
 interface LayoutProps {
   sidebar?: ReactElement
   activePage?: RCPage
   sidebarPosition?: "right" | "left"
+  bannerNotification?: string
+  isAuthenticated?: boolean
 }
 
 /**
@@ -25,12 +29,15 @@ interface LayoutProps {
  */
 const Layout = ({
   children,
+  isAuthenticated,
   sidebar,
   activePage,
   sidebarPosition = "right",
+  bannerNotification,
 }: PropsWithChildren<LayoutProps>) => {
   const showSearch = activePage === "search"
   const showHeader = activePage !== "404"
+  const showNotification = activePage === "" || activePage === "search"
 
   return (
     <DSProvider>
@@ -59,14 +66,25 @@ const Layout = ({
               />
               <div className={styles.researchHeadingContainer}>
                 <Heading id="heading-h1" level="h1" text="Research Catalog" />
-                <SubNav activePage={activePage} />
+                <SubNav
+                  isAuthenticated={isAuthenticated}
+                  activePage={activePage}
+                />
                 {showSearch && <SearchForm />}
               </div>
+              {showNotification && bannerNotification && (
+                <Notification notification={bannerNotification} />
+              )}
             </>
           )
         }
         sidebar={sidebar ? sidebarPosition : "none"}
-        contentPrimary={<Box pb="l">{children}</Box>}
+        contentPrimary={
+          <Box pb="l">
+            {children}
+            <FeedbackForm />
+          </Box>
+        }
         contentSidebar={sidebar && <Box pb="l">{sidebar}</Box>}
       />
     </DSProvider>

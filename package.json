@@ -11,12 +11,13 @@
     "prettier": "prettier --write .",
     "prepare": "husky install",
     "test": "jest",
-    "test-watch": "jest --watch --verbose",
+    "test-watch": "jest --watch --verbose --silent=false",
     "coverage": "jest --coverage"
   },
   "dependencies": {
-    "@nypl/design-system-react-components": "2.1.4",
+    "@nypl/design-system-react-components": "2.1.6",
     "@nypl/nypl-data-api-client": "1.0.5",
+    "@nypl/sierra-wrapper": "1.1.0",
     "@types/node": "20.3.1",
     "@types/react": "18.2.13",
     "@types/react-dom": "18.2.6",
@@ -27,6 +28,7 @@
     "next": "13.4.19",
     "qs": "^6.11.2",
     "react": "18.2.0",
+    "react-barcode": "^1.4.6",
     "react-dom": "18.2.0",
     "swr": "2.2.1",
     "ts-jest": "^29.1.1",

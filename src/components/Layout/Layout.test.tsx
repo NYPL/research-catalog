@@ -1,5 +1,5 @@
 import React from "react"
-import { render, screen, within } from "@testing-library/react"
+import { render, screen, within } from "../../utils/testUtils"
 
 import Layout from "./Layout"
 
@@ -36,5 +36,19 @@ describe("Layout", () => {
     render(<Layout activePage="404"></Layout>)
     const header = screen.queryByRole("heading", { level: 1 })
     expect(header).not.toBeInTheDocument()
+  })
+  it("should hide Log Out if user is not logged in", () => {
+    render(<Layout isAuthenticated={false}></Layout>)
+    const logout = screen.queryByText("Log out")
+    expect(logout).not.toBeInTheDocument()
+  })
+  it("should show Log Out if user is logged in", () => {
+    render(<Layout isAuthenticated={true}></Layout>)
+    const logout = screen.queryByText("Log out")
+    expect(logout).toBeInTheDocument()
+  })
+  it("renders a feedback form component", () => {
+    render(<Layout></Layout>)
+    expect(screen.getByText("Help and Feedback")).toBeInTheDocument()
   })
 })

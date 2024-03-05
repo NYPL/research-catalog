@@ -6,6 +6,9 @@ import "@nypl/design-system-react-components/dist/styles.css"
 
 import { trackVirtualPageView } from "../src/utils/appUtils"
 import { appConfig } from "../src/config/config"
+import { BASE_URL, SITE_NAME } from "../src/config/constants"
+
+import { FeedbackProvider } from "../src/context/FeedbackContext"
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 function App({ Component, pageProps }) {
@@ -51,7 +54,10 @@ function App({ Component, pageProps }) {
 
   return (
     <>
-      <Script async src={appConfig.adobeEmbedUrl[appConfig.environment]} />
+      <Script
+        async
+        src={appConfig.apiEndpoints.adobeEmbedUrl[appConfig.environment]}
+      />
       <Script id="adobeDataLayerDefinition">
         {`
               // First define the global variable for the entire data layer array
@@ -65,22 +71,45 @@ function App({ Component, pageProps }) {
       {/* NYPL Header script */}
       <Script
         src={`${
-          appConfig.nyplHeaderUrl[appConfig.environment]
+          appConfig.apiEndpoints.nyplHeaderUrl[appConfig.environment]
         }/header.min.js?containerId=nypl-header`}
       />
       {/* NYPL Footer script */}
       <Script
         src={`${
-          appConfig.nyplHeaderUrl[appConfig.environment]
+          appConfig.apiEndpoints.nyplHeaderUrl[appConfig.environment]
         }/footer.min.js?containerId=nypl-footer`}
       />
 
       <Head>
+        <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta httpEquiv="x-ua-compatible" content="ie=edge" />
+        <link
+          rel="icon"
+          type="image/png"
+          href="https://ux-static.nypl.org/images/favicon.ico"
+        />
+
+        <meta property="og:title" content={SITE_NAME} key="og-title" />
+        <meta property="og:site_name" content={SITE_NAME} key="og-site-name" />
+        <meta property="og:url" content={`https://www.nypl.org${BASE_URL}`} />
+        <meta property="og:description" content="" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="" />
+        <meta name="twitter:title" content={SITE_NAME} key="tw-title" />
+        <meta name="twitter:description" content="" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@nypl" />
+        <meta name="twitter:creator" content="@nypl" />
+        <meta name="twitter:image" content="" />
+
+        <title key="main-title">{SITE_NAME}</title>
       </Head>
-      <Component {...pageProps} />
+      <FeedbackProvider value={null}>
+        <Component {...pageProps} />
+      </FeedbackProvider>
     </>
   )
 }
-
 export default App

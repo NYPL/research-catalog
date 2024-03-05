@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import type { SearchResultsItem, JSONLDValue } from "./itemTypes"
+import type { AnnotatedMarc } from "./bibDetailsTypes"
 
 export interface Bib {
   extent?: string[]
@@ -71,7 +72,7 @@ export interface ElectronicResource {
 
 export interface BibResponse {
   bib?: Bib
-  annotatedMarc?: []
+  annotatedMarc?: AnnotatedMarc
   status: 200 | 307 | 404
   redirectUrl?: string
 }

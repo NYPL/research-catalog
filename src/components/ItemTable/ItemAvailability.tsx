@@ -1,7 +1,10 @@
+import { useContext } from "react"
 import { Text, Link, Button, Box } from "@nypl/design-system-react-components"
 
 import { appConfig } from "../../config/config"
 import type Item from "../../models/Item"
+import { FeedbackContext } from "../../context/FeedbackContext"
+import type { ItemMetadata } from "../../types/itemTypes"
 
 interface ItemAvailabilityProps {
   item: Item
@@ -13,6 +16,13 @@ interface ItemAvailabilityProps {
  * TODO: Add Feedback box, Due date, Available font styles
  */
 const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
+  const { onOpen, setItemMetadata } = useContext(FeedbackContext)
+
+  const onContact = (metadata: ItemMetadata) => {
+    setItemMetadata(metadata)
+    onOpen()
+  }
+
   // TODO: Move this logic into a getter function in the Item class that returns an availability status key
   // and replace this nested If with a simple switch statement
   if (item.isAvailable) {
@@ -20,7 +30,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
       // Available ReCAP item
       return (
         <Link
-          href={appConfig.externalUrls.researchMaterialsHelp}
+          href={appConfig.urls.researchMaterialsHelp}
           target="_blank"
           fontSize="sm"
         >
@@ -37,7 +47,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
             <>
               {" at "}
               <Link
-                href={`${appConfig.externalUrls.locations}${item.location.endpoint}`}
+                href={`${appConfig.urls.locations}${item.location.endpoint}`}
                 target="_blank"
               >
                 {item.location.prefLabel}
@@ -56,7 +66,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
           </Box>
           {" - Can be used on site. Please visit "}
           <Link
-            href={`${appConfig.externalUrls.locations}${item.location.endpoint}`}
+            href={`${appConfig.urls.locations}${item.location.endpoint}`}
             target="_blank"
           >
             {`New York Public Library - ${locationShort}`}
@@ -78,9 +88,14 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
           id="contact-librarian"
           buttonType="link"
           sx={{ display: "inline", fontWeight: "inherit", fontSize: "inherit" }}
-          onClick={() => {
-            console.log("TODO: Trigger Feedback box")
-          }}
+          onClick={() =>
+            onContact({
+              id: item.id,
+              barcode: item.barcode,
+              callNumber: item.callNumber,
+              bibId: item.bibId,
+            })
+          }
         >
           contact a librarian
         </Button>

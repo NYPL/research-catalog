@@ -1,5 +1,5 @@
 import React from "react"
-import { render, screen } from "@testing-library/react"
+import { render, screen } from "../../utils/testUtils"
 import SearchResult from "./SearchResult"
 import SearchResultsBib from "../../models/SearchResultsBib"
 import { searchResultPhysicalItems } from "../../../__test__/fixtures/searchResultPhysicalItems"
@@ -43,7 +43,7 @@ describe("SearchResult with Many Physical Items", () => {
     })
     expect(resultTitleLink).toHaveAttribute(
       "href",
-      "/bib/b14753192#items-table"
+      "/research/research-catalog/bib/b14753192#items-table"
     )
   })
 })

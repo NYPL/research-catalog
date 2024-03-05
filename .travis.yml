@@ -1,4 +1,5 @@
-language: minimal
+dist: xenial
+language: ruby
 
 services:
   - docker
@@ -15,13 +16,11 @@ jobs:
       before_install:
         - if [[ $TRAVIS_BRANCH == "qa" ]];
           then
-          export ENV="qa";
-          export NYPL_HEADER_URL="https://qa-ds-header.nypl.org";
+          export NEXT_PUBLIC_APP_ENV="qa";
           fi
         - if [[ "$TRAVIS_BRANCH" == "production" ]];
           then
-          export ENV="production";
-          export NYPL_HEADER_URL="https://ds-header.nypl.org";
+          export NEXT_PUBLIC_APP_ENV="production";
           fi
       env:
         - ECR_URL=946183545209.dkr.ecr.us-east-1.amazonaws.com/research-catalog
@@ -29,10 +28,10 @@ jobs:
         - AWS_REGION=us-east-1
       install:
         - pip install --user awscli
-        - export LOCAL_TAG_NAME="${ENV}-latest"
+        - export LOCAL_TAG_NAME="${NEXT_PUBLIC_APP_ENV}-latest"
       script:
         - eval $(aws ecr get-login --no-include-email --region us-east-1)
-        - docker build -t "$LOCAL_TAG_NAME" --build-arg NYPL_HEADER_URL="${NYPL_HEADER_URL}" .
+        - docker build -t "$LOCAL_TAG_NAME" --build-arg NEXT_PUBLIC_APP_ENV="${NEXT_PUBLIC_APP_ENV}" .
         - docker tag "$LOCAL_TAG_NAME" "$ECR_URL:$LOCAL_TAG_NAME"
         # Re-tag last latest image just in case
         - |

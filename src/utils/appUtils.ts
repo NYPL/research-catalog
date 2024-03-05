@@ -106,3 +106,10 @@ export const trackVirtualPageView = (pathname = "") => {
     site_section: ADOBE_ANALYTICS_SITE_SECTION,
   })
 }
+
+/**
+ * encodeHTML
+ * Return a version of the string sanitized to protect against XSS.
+ */
+export const encodeHTML = (str: string) =>
+  str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;")

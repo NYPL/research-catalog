@@ -41,7 +41,7 @@ const DRBContainer = ({
         <Text size="body2">
           Digital books for research from multiple sources world wide- all free
           to read, download, and keep. No Library Card is Required.{" "}
-          <RCLink href={appConfig.externalUrls.drbAbout}>
+          <RCLink href={appConfig.urls.drbAbout}>
             Read more about the project
           </RCLink>
           .
