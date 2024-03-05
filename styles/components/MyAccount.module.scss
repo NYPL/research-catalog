@@ -21,3 +21,10 @@
     margin-right: var(--nypl-space-xs);
   }
 }
+
+.accountSettingsTab {
+  display: flex;
+  button + button {
+    margin-left: var(--nypl-space-xs);
+  }
+}
