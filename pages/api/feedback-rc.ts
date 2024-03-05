@@ -44,10 +44,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       Source: appConfig.sourceEmail,
       ReplyToAddresses: [fields.email || appConfig.sourceEmail],
     }
-    console.log("appConfig.sourceEmail", appConfig.sourceEmail)
-    console.log("process.env.SOURCE_EMAIL", process.env.SOURCE_EMAIL)
-    console.log("appConfig.libAnswersEmail", appConfig.libAnswersEmail)
-    console.log("process.env.LIB_ANSWERS_EMAIL", process.env.LIB_ANSWERS_EMAIL)
 
     // Create the promise and SES service object
     const sendPromise = new aws.SES({ apiVersion: "2010-12-01" })
