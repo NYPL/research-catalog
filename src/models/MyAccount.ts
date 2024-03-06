@@ -79,28 +79,34 @@ export default class MyAccount {
   }
 
   static buildBibData(bibs: SierraBibEntry[]): BibDataMapType {
-    return bibs.reduce((bibDataMap: BibDataMapType, bibFields) => {
-      let isResearch: boolean
-      let isNyplOwned: boolean
-      const title = bibFields.title
-      const nineTen = bibFields.varFields.find(
-        (field) => field.marcTag === "910"
-      )
-      // if we are unsure of the research ness of a bib, default to true so
-      // we don't let them renew or freeze the record
-      if (!nineTen) {
-        isResearch = true
-        isNyplOwned = false
-      } else {
-        const nineTenContent = nineTen.subfields.find(
-          (subfield: { tag: string; subfield: string }) => subfield.tag === "a"
-        ).content
-        isResearch = nineTenContent.startsWith("RL")
-        isNyplOwned = nineTenContent !== "RLOTF"
-      }
-      bibDataMap[bibFields.id] = { title, isResearch, isNyplOwned }
-      return bibDataMap
-    }, {})
+    return bibs.reduce(
+      (bibDataMap: BibDataMapType, bibFields: SierraBibEntry) => {
+        let isResearch: boolean
+        let isNyplOwned: boolean
+        const title = bibFields.title
+        const nineTen = bibFields.varFields.find(
+          (field) => field.marcTag === "910"
+        )
+        // if we are unsure of the research ness of a bib, default to true so
+        // we don't let them renew or freeze the record
+        if (!nineTen || !nineTen.subfields) {
+          isResearch = true
+          isNyplOwned = false
+        } else {
+          const nineTenContent =
+            nineTen.subfields.find(
+              (subfield: { tag: string; subfield: string }) =>
+                subfield.tag === "a"
+              // this default is to make a typescript error go away
+            )?.content || ""
+          isResearch = nineTenContent.startsWith("RL")
+          isNyplOwned = nineTenContent !== "RLOTF"
+        }
+        bibDataMap[bibFields.id] = { title, isResearch, isNyplOwned }
+        return bibDataMap
+      },
+      {}
+    )
   }
 
   buildHolds(holds: SierraHold[], bibData: SierraBibEntry[]): Hold[] {
@@ -167,15 +173,15 @@ export default class MyAccount {
         acc += entry.itemCharge
         return acc
       }, 0),
-      entries: fines.entries.map((entry: SierraFineEntry) => {
-        if (!entry.datePaid) {
+      entries: fines.entries
+        .filter((entry) => !entry.datePaid)
+        .map((entry: SierraFineEntry) => {
           return {
             detail: entry.chargeType.display,
             amount: entry.itemCharge,
             date: entry.assessedDate,
           }
-        }
-      }),
+        }),
     }
   }
 

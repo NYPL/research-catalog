@@ -62,12 +62,12 @@ export interface SierraPatron {
 }
 
 export interface Checkout {
-  callNumber: string
+  callNumber: string | null
   barcode: string
   dueDate: string
-  id: string
+  id: string | null
   isResearch: boolean
-  patron: string
+  patron: string | null
   title: string
   bibId?: string
   isNyplOwned: boolean
@@ -79,14 +79,14 @@ export interface SierraCodeName {
 }
 
 export interface Hold {
-  pickupByDate: string
-  id: string
+  pickupByDate: string | null
+  id: string | null
   canFreeze: boolean
-  pickupLocation: string
+  pickupLocation: string | null
   isResearch: boolean
   status: string
   frozen: boolean
-  patron: string
+  patron: string | null
   title: string
   bibId: string
   isNyplOwned: boolean
@@ -138,10 +138,10 @@ export interface SierraBibEntry {
     marcTag?: string
     ind1?: string
     ind2?: string
-    subfields?: {
+    subfields: {
       tag: string
-      content?: string
-      subfield?: string
+      content: string
+      subfield: string
     }[]
   }[]
 }
