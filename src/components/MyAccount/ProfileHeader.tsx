@@ -8,10 +8,10 @@ import { buildListElementsWithIcons } from "./IconListElement"
 
 const ProfileHeader = ({ patron }: { patron: Patron }) => {
   const profileData = [
-    { icon: "actionIdentityFilled", term: "Name:", description: patron.name },
+    { icon: "actionIdentityFilled", term: "Name", description: patron.name },
     {
       icon: "actionPayment",
-      term: "Card number:",
+      term: "Card number",
       description: patron.barcode,
     },
     {
@@ -28,7 +28,7 @@ const ProfileHeader = ({ patron }: { patron: Patron }) => {
     },
     {
       icon: "clock",
-      term: "Expiration date:",
+      term: "Expiration date",
       description: patron.expirationDate,
     },
   ].map(buildListElementsWithIcons)

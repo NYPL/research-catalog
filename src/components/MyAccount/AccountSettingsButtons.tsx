@@ -1,11 +1,21 @@
 import { Icon, Button } from "@nypl/design-system-react-components"
-import { useState } from "react"
+import type { Dispatch } from "react"
 
-const AccountSettingsButtons = () => {
-  const [currentlyEditing, setCurrentlyEditing] = useState(false)
+interface AccountSettingsButtonsPropsType {
+  currentlyEditing: boolean
+  setCurrentlyEditing: Dispatch<React.SetStateAction<boolean>>
+}
 
+const AccountSettingsButtons = ({
+  currentlyEditing,
+  setCurrentlyEditing,
+}: AccountSettingsButtonsPropsType) => {
   const toggleCurrentlyEditing = () => setCurrentlyEditing(!currentlyEditing)
 
+  const clearUpdate = () => {
+    //clear state
+    toggleCurrentlyEditing()
+  }
   const editButton = (
     <Button
       id="edit-account-settings-button"
@@ -21,6 +31,7 @@ const AccountSettingsButtons = () => {
   const cancelAndSaveButtons = (
     <>
       <Button
+        onClick={clearUpdate}
         id="account-settings-cancel-update-button"
         screenreaderOnlyText="cancel account settings update"
         buttonType="secondary"

@@ -20,7 +20,7 @@ const IconListElement = ({
     <>
       <dt className={styles.iconDt}>
         <Icon size="large" name={icon} />
-        {term}
+        {term + ":"}
       </dt>
       <dd className={styles.iconDd}>{description}</dd>
     </>
