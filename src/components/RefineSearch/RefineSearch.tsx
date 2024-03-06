@@ -4,6 +4,7 @@ import {
   HorizontalRule,
   ButtonGroup,
   Form,
+  Icon,
 } from "@nypl/design-system-react-components"
 import type { Dispatch, SyntheticEvent } from "react"
 import { useState, useCallback } from "react"
@@ -101,28 +102,28 @@ const RefineSearch = ({
   return (
     <Box className={styles.refineSearchContainer}>
       {refineSearchClosed ? (
-        <Box className={styles.refineSearchInner}>
-          <Button
-            onClick={toggleRefine}
-            id="refine-search"
-            buttonType="secondary"
-          >
-            Refine Search
-          </Button>
-        </Box>
+        <Button
+          className={styles.refineSearchButton}
+          onClick={toggleRefine}
+          id="refine-search"
+          buttonType="secondary"
+        >
+          Refine Search
+        </Button>
       ) : (
         <Form
           className={styles.refineSearchInner}
           id="refine-search"
           onSubmit={handleSubmit}
         >
-          <HorizontalRule />
+          <HorizontalRule sx={{ marginBottom: 0 }} />
           <Box className={styles.refineButtons}>
             <Button
               onClick={toggleRefine}
               id="cancel-refine"
               buttonType="secondary"
             >
+              <Icon name="close" size="large" align="left" />
               Cancel
             </Button>
             <ButtonGroup className={styles.re}>
@@ -133,14 +134,16 @@ const RefineSearch = ({
                 type="reset"
                 buttonType="secondary"
               >
+                <Icon name="actionDelete" align="left" size="large" />
                 Clear Filters
               </Button>
-              <Button id="submit-refine" type="submit" buttonType="secondary">
+              <Button id="submit-refine" type="submit" buttonType="primary">
+                <Icon name="check" align="left" size="large" />
                 Apply Filters
               </Button>
             </ButtonGroup>
           </Box>
-          <HorizontalRule />
+          <HorizontalRule sx={{ marginTop: 0 }} />
           {filters}
         </Form>
       )}

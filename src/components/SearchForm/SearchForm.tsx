@@ -110,6 +110,13 @@ const SearchForm = () => {
         <div className={styles.auxSearchContainer}>
           {/* Temporary color update. The Header overrides the new
             DS 2.X CSS color variable values. */}
+          <RCLink
+            className={styles.advancedSearch}
+            href={`${BASE_URL}/search/advanced`}
+            color="#0069BF"
+          >
+            Advanced Search
+          </RCLink>
           {displayRefineResults && (
             <RefineSearch
               setAppliedFilters={setAppliedFilters}
@@ -118,20 +125,7 @@ const SearchForm = () => {
             />
           )}
           <EDSLink />
-          <RCLink
-            className={styles.advancedSearch}
-            href={`${BASE_URL}/search/advanced`}
-            color="#0069BF"
-          >
-            Advanced Search
-          </RCLink>
         </div>
-        {displayRefineResults && (
-          <AppliedFilters
-            appliedFilters={appliedFilters}
-            aggregations={aggregations}
-          />
-        )}
       </div>
     </div>
   )
