@@ -6,7 +6,6 @@
     "build": "next build",
     "start": "next start",
     "local-prod": "next build && next start -p 8080",
-    "check-types": "tsc --noemit",
     "lint": "eslint . --fix && npm run check-types",
     "prettier": "prettier --write .",
     "prepare": "husky install",
@@ -18,7 +17,6 @@
     "@nypl/design-system-react-components": "2.1.6",
     "@nypl/nypl-data-api-client": "1.0.5",
     "@nypl/sierra-wrapper": "1.1.0",
-    "@types/node": "20.3.1",
     "@types/react": "18.2.13",
     "@types/react-dom": "18.2.6",
     "aws-sdk": "2.99.0",
@@ -41,6 +39,7 @@
     "@testing-library/user-event": "^14.5.1",
     "@types/jest": "^29.5.5",
     "@types/jest-axe": "^3.5.6",
+    "@types/node": "^20.11.25",
     "@types/qs": "^6.9.8",
     "@types/underscore": "^1.11.6",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
@@ -61,6 +60,7 @@
     "prettier": "^2.8.8",
     "react-element-to-jsx-string": "^15.0.0",
     "sass": "^1.63.6",
+    "tsc-files": "^1.1.4",
     "typescript": "5.0.4",
     "user-event": "^4.0.0"
   },
@@ -69,6 +69,6 @@
       "eslint . --fix",
       "prettier --write ."
     ],
-    "**/*.ts": "tsc-files --noEmit"
+    "**/*.{ts,tsx}": "tsc-files --noEmit"
   }
 }
