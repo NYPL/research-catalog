@@ -20,7 +20,7 @@ const ProfileTabs = ({
   const tabsData = [
     {
       label: "Checkouts",
-      content: <CheckoutsTab checkouts={checkouts} />,
+      content: <CheckoutsTab checkouts={checkouts} patron={patron} />,
       urlPath: "checkouts",
     },
     {
