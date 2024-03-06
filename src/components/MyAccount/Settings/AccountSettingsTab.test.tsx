@@ -1,7 +1,7 @@
-import { patron } from "../../models/modelTests/data/MyAccount"
+import { patron } from "../../../models/modelTests/data/MyAccount"
 import AccountSettingsTab from "./AccountSettingsTab"
-import MyAccount from "../../models/MyAccount"
-import { render, screen } from "../../../src/utils/testUtils"
+import MyAccount from "../../../models/MyAccount"
+import { render, screen } from "../../../utils/testUtils"
 
 describe("AccountSettingsTab", () => {
   it("can render a complete patron", () => {

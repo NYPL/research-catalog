@@ -1,4 +1,4 @@
-import AccountSettingsTab from "./AccountSettingsTab"
+import AccountSettingsTab from "./Settings/AccountSettingsTab"
 import type MyAccount from "../../models/MyAccount"
 import styles from "../../../styles/components/MyAccount.module.scss"
 

@@ -95,8 +95,7 @@ export default class MyAccount {
         } else {
           const nineTenContent =
             nineTen.subfields.find(
-              (subfield: { tag: string; subfield: string }) =>
-                subfield.tag === "a"
+              (subfield: { tag: string }) => subfield.tag === "a"
               // this default is to make a typescript error go away
             )?.content || ""
           isResearch = nineTenContent.startsWith("RL")

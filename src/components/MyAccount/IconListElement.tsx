@@ -3,10 +3,10 @@ import type { IconNames } from "@nypl/design-system-react-components"
 
 import styles from "../../../styles/components/MyAccount.module.scss"
 
-interface IconListElementPropType {
+export interface IconListElementPropType {
   icon: IconNames
   term: string
-  description: string
+  description: string | JSX.Element
 }
 
 // This component is designed to centralize common styling patterns for a
@@ -31,11 +31,7 @@ export const buildListElementsWithIcons = ({
   icon,
   term,
   description,
-}: {
-  icon: IconNames
-  term: string
-  description: string
-}) => (
+}: IconListElementPropType) => (
   <IconListElement
     key={term}
     term={term}

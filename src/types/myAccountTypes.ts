@@ -138,10 +138,9 @@ export interface SierraBibEntry {
     marcTag?: string
     ind1?: string
     ind2?: string
-    subfields: {
+    subfields?: {
       tag: string
       content: string
-      subfield: string
     }[]
   }[]
 }
