@@ -14,17 +14,9 @@ import type {
   SierraBibEntry,
   BibDataMapType,
 } from "../types/myAccountTypes"
+import { notificationPreferenceMap } from "../utils/myAccountData"
 
 let client
-
-export const notificationPreferenceMap = {
-  z: "Email",
-  a: "Print",
-  p: "Phone",
-  m: "Mobile",
-  "-": null,
-}
-
 export default class MyAccount {
   checkouts: Checkout[]
   holds: Hold[]
