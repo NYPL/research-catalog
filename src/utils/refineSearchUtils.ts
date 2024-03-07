@@ -52,10 +52,11 @@ export const addLabelPropAndParseFilters = (
       // aggregations results. Pass the year along with out
       // transforming fieldname or finding the label
       if (appliedFilterField.includes("date")) {
+        const labelPrefix = appliedFilterField.split("date")[1]
         return {
           count: null,
-          value: appliedFilterValues[appliedFilterField][0],
-          label: appliedFilterValues[appliedFilterField][0],
+          value: appliedFilterField,
+          label: labelPrefix + " " + filterValue,
         }
       }
       // Find the aggregation that corresponds to the filter field we are working on

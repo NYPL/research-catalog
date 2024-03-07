@@ -24,7 +24,6 @@ const AppliedFilters = ({
     appliedFilters
   )
   const appliedFilterFields = Object.keys(appliedFiltersWithLabels)
-  console.log({ appliedFilterFields })
   const tagSetData = appliedFilterFields
     .map((field: string) => {
       const appliedFiltersWithLabelsPerField = appliedFiltersWithLabels[field]
