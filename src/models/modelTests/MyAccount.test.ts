@@ -59,7 +59,7 @@ describe("MyAccountModel", () => {
       expect(account.patron).toStrictEqual({
         name: "NONNA, STREGA",
         barcode: "23333121538324",
-        expirationDate: "2025-03-28",
+        expirationDate: "March 27, 2025",
         primaryEmail: "streganonna@gmail.com",
         emails: ["streganonna@gmail.com", "spaghettigrandma@gmail.com"],
         primaryPhone: "123-456-7890",
@@ -138,7 +138,7 @@ describe("MyAccountModel", () => {
       expect(emptyAccount.patron).toStrictEqual({
         name: "NONNA, STREGA",
         barcode: "23333121538324",
-        expirationDate: "2025-03-28",
+        expirationDate: "March 27, 2025",
         primaryEmail: "",
         emails: [],
         primaryPhone: "",
@@ -166,7 +166,7 @@ describe("MyAccountModel", () => {
       expect(emptyAccount.patron).toStrictEqual({
         name: "NONNA, STREGA",
         barcode: "23333121538324",
-        expirationDate: "2025-03-28",
+        expirationDate: "March 27, 2025",
         primaryEmail: "",
         emails: [],
         primaryPhone: "",
