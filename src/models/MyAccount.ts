@@ -109,7 +109,7 @@ export default class MyAccount {
       return {
         patron: MyAccount.getRecordId(hold.patron),
         id: MyAccount.getRecordId(hold.id),
-        pickupByDate: hold.pickupByDate || null,
+        pickupByDate: MyAccount.formatDate(hold.pickupByDate) || null,
         canFreeze: hold.canFreeze,
         frozen: hold.frozen,
         status: MyAccount.getHoldStatus(hold.status),
@@ -134,7 +134,7 @@ export default class MyAccount {
         // returned for JSON serialization in getServerSideProps
         callNumber: checkout.item.callNumber || null,
         barcode: checkout.item.barcode,
-        dueDate: checkout.dueDate,
+        dueDate: MyAccount.formatDate(checkout.dueDate),
         patron: MyAccount.getRecordId(checkout.patron),
         title: bibDataMap[checkout.item.bibIds[0]].title,
         isResearch: bibDataMap[checkout.item.bibIds[0]].isResearch,
@@ -174,6 +174,17 @@ export default class MyAccount {
         }
       }),
     }
+  }
+  /**
+   * getDueDate
+   * Returns date in readable string ("Month day, year")
+   */
+  static formatDate(date) {
+    const d = new Date(date)
+    const year = d.getFullYear()
+    const day = d.getDate()
+    const month = d.toLocaleString("default", { month: "long" })
+    return month + " " + day + ", " + year
   }
 
   /**

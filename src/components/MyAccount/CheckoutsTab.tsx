@@ -10,6 +10,8 @@ import {
 import type { Checkout, Patron } from "../../types/accountTypes"
 import { useEffect, useState } from "react"
 import { BASE_URL } from "../../config/constants"
+import { getTitle } from "../../utils/myAccountUtils"
+import styles from "../../../styles/components/MyAccount.module.scss"
 
 const CheckoutsTab = ({
   checkouts,
@@ -32,35 +34,19 @@ const CheckoutsTab = ({
     const [modalProps, setModalProps] = useState(null)
     const successModalProps = {
       bodyContent: (
-        <Box
-          sx={{
-            fontSize: "desktop.body.body1.light",
-            display: "flex",
-            marginTop: "-xs",
-          }}
-        >
+        <Box className={styles.modalbody}>
           <Text sx={{ marginLeft: "l" }}>
-            Your item was renewed. It is now due back on{" "}
-            {getDueDate(checkout.date)}.
+            Your item was renewed. It is now due back on {checkout.date}.
           </Text>
         </Box>
       ),
       closeButtonLabel: "OK",
       headingText: (
-        <Box
-          sx={{
-            fontSize: "desktop.heading.heading5",
-            marginTop: "l",
-            display: "flex",
-            justifyContent: "flex-start",
-            gap: "10px",
-          }}
-        >
+        <Box className={styles.modalheading}>
           <Icon
             size="large"
             name="actionCheckCircleFilled"
             color="ui.success.primary"
-            sx={{ marginTop: "4px" }}
           />
           <Text sx={{ marginBottom: "0px" }}> Renewal successful </Text>
         </Box>
@@ -68,13 +54,7 @@ const CheckoutsTab = ({
     }
     const failureModalProps = {
       bodyContent: (
-        <Box
-          sx={{
-            fontSize: "desktop.body.body1.light",
-            display: "flex",
-            marginTop: "-xs",
-          }}
-        >
+        <Box className={styles.modalbody}>
           <Text sx={{ marginLeft: "l", marginRight: "m" }}>
             We were unable to renew your item. Please try again or{" "}
             <Link href="https://www.nypl.org/get-help/contact-us">
@@ -86,21 +66,8 @@ const CheckoutsTab = ({
       ),
       closeButtonLabel: "OK",
       headingText: (
-        <Box
-          sx={{
-            fontSize: "desktop.heading.heading5",
-            paddingTop: "m",
-            display: "flex",
-            justifyContent: "flex-start",
-            gap: "10px",
-          }}
-        >
-          <Icon
-            size="large"
-            name="errorFilled"
-            color="ui.error.primary"
-            sx={{ marginTop: "4px" }}
-          />
+        <Box className={styles.modalheading}>
+          <Icon size="large" name="errorFilled" color="ui.error.primary" />
           <Text sx={{ marginBottom: "0px" }}> Renewal failed </Text>
         </Box>
       ),
@@ -163,57 +130,21 @@ const CheckoutsTab = ({
     )
   }
 
-  function getDueDate(date) {
-    const d = new Date(date)
-    const year = d.getFullYear()
-    const day = d.getDate()
-    const month = d.toLocaleString("default", { month: "long" })
-    return month + " " + day + ", " + year
-  }
-
-  function getTitle(checkout) {
-    const href = checkout.isResearch
-      ? `https://nypl.org/research/research-catalog/bib/b${checkout.bibId}`
-      : `https://nypl.na2.iiivega.com/search/card?recordId=${checkout.bibId}`
-    return checkout.isNyplOwned ? (
-      <Link href={href}>{checkout.title}</Link>
-    ) : (
-      <Text>{checkout.title}</Text>
-    )
-  }
-
   const checkoutsData = checkouts.map((checkout) => [
     getTitle(checkout),
     checkout.barcode,
     checkout.callNumber,
-    getDueDate(checkout.dueDate),
+    checkout.dueDate,
     checkout.isResearch ? null : RenewButton(checkout, patron),
   ])
   return (
     <>
       {checkouts.length === 0 && (
-        <Box
-          sx={{
-            fontSize: "desktop.body.body1",
-            marginTop: "m",
-            marginBottom: "m",
-            display: "flex",
-            justifyContent: "flex-start",
-          }}
-        >
+        <Box className={styles.notification}>
           <span>You currently do not have any research items checked out.</span>
         </Box>
       )}
-      <Box
-        sx={{
-          fontSize: "desktop.body.body2",
-          marginTop: "m",
-          marginBottom: "m",
-          display: "flex",
-          justifyContent: "flex-start",
-          gap: "4px",
-        }}
-      >
+      <Box className={styles.notificationwithicon}>
         <Icon size="medium" name="errorOutline" iconRotation="rotate180" />{" "}
         <span>
           See <Link href="https://nypl.na2.iiivega.com/">this page</Link> for
@@ -221,16 +152,7 @@ const CheckoutsTab = ({
         </span>
       </Box>
       <Table
-        sx={{
-          "thead > tr > th, thead > tr > th:last-of-type": {
-            textTransform: "unset",
-            fontWeight: "700",
-            borderColor: "ui.gray.light-cool",
-          },
-          "tbody > tr > td, tbody > tr > td:last-of-type": {
-            borderColor: "ui.gray.light-cool",
-          },
-        }}
+        className={styles.itemstable}
         showRowDividers={true}
         columnHeadersBackgroundColor={"ui.gray.x-light-cool"}
         columnHeaders={checkoutsHeaders}

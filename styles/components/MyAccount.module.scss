@@ -1,3 +1,6 @@
+@import "../utils/mixins";
+@import "../utils/breakpoints";
+
 .myAccountProfileHeader {
   border: none;
   dl > dt,
@@ -12,5 +15,54 @@
     svg {
       margin-right: var(--nypl-space-xs);
     }
+  }
+}
+
+.modalheading {
+  font-size: var(--nypl-fontSizes-desktop-heading-heading5);
+  margin-top: var(--nypl-space-l);
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+  svg {
+    margin-top: 4px;
+  }
+}
+.modalbody {
+  font-size: var(--nypl-fontSizes-desktop-body-body2);
+  display: flex;
+  margin-top: -(var(--nypl-space-xs));
+}
+
+.notification {
+  font-size: var(--nypl-fontSizes-desktop-body-body1);
+  margin-top: var(--nypl-space-m);
+  margin-bottom: var(--nypl-space-m);
+  display: flex;
+  justify-content: flex-start;
+}
+
+.notificationwithicon {
+  font-size: var(--nypl-fontSizes-desktop-body-body1);
+  margin-top: var(--nypl-space-m);
+  margin-bottom: var(--nypl-space-m);
+  display: flex;
+  justify-content: flex-start;
+  gap: 4px;
+  svg {
+    margin-top: 4px;
+  }
+}
+
+.itemstable {
+  thead > tr > th,
+  thead > tr > th:last-of-type {
+    text-transform: unset;
+    font-weight: 700;
+    border-color: var(--nypl-colors-ui-gray-light-cool);
+  }
+  tbody > tr > td,
+  tbody > tr > td:last-of-type {
+    border-color: var(--nypl-colors-ui-gray-light-cool);
   }
 }

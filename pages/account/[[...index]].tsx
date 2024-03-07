@@ -29,32 +29,6 @@ export default function MyAccount({
 }: MyAccountPropsType) {
   const errorRetrievingPatronData = !patron
   console.log(checkouts, holds, patron, fines, tabsPath)
-  /** Testing renew checkout api route, displaying alerts of whatever the handler returns. */
-  async function checkoutRenew(checkoutId, patronId) {
-    try {
-      const response = await fetch(
-        `${BASE_URL}/api/account/checkouts/renew/${checkoutId}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ patronId }),
-        }
-      )
-      const responseData = await response.json()
-      if (responseData.status == 200) {
-        // New due date.
-        alert(responseData.body)
-      } else {
-        // Renewal failed.
-        alert(responseData)
-      }
-    } catch (error) {
-      // Request failed.
-      alert("Fetching error")
-    }
-  }
 
   /** Testing settings api route */
   async function settingsUpdate(patronId) {
@@ -183,13 +157,6 @@ export default function MyAccount({
               fines={fines}
               activePath={tabsPath}
             />
-            {/* * Testing renew checkout api route, with test checkout id.
-            <Button
-              id="checkout-test"
-              onClick={() => checkoutRenew(58536266, patron.id)}
-            >
-              Renew checkout
-            </Button>
             {/** Testing settings api route */}
             {/* <Button
               id="settings-test"
