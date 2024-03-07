@@ -2,31 +2,17 @@ import { Box, Form, List, Spacer } from "@nypl/design-system-react-components"
 import { useState } from "react"
 import type { Patron } from "../../../types/myAccountTypes"
 import styles from "../../../../styles/components/MyAccount.module.scss"
-import { accountSettings } from "./AccountSettingsUtils"
 import AccountSettingsButtons from "./AccountSettingsButtons"
-import { buildAccountSettingsForm } from "./AccountSettingsForm"
-import { buildListElementsWithIcons } from "../IconListElement"
+import {
+  buildAccountSettingsForm,
+  buildAccountSettingsDisplay,
+} from "./AccountSettingsDisplayOptions"
 
 const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
   const [currentlyEditing, setCurrentlyEditing] = useState(false)
-
-  const buildAccountSettingsData = (settingsData: Patron) => {
-    return accountSettings
-      .map((setting) => {
-        return {
-          icon: setting.icon,
-          term: setting.term,
-          // pin is masked so description is a default "****"
-          description: settingsData[setting.field] || setting.description,
-        }
-      })
-      .filter((listData) => listData.description)
-      .map(buildListElementsWithIcons)
-  }
-
   const listElements = currentlyEditing
     ? buildAccountSettingsForm(settingsData)
-    : buildAccountSettingsData(settingsData)
+    : buildAccountSettingsDisplay(settingsData)
 
   return (
     <Box className={styles.accountSettingsTab}>

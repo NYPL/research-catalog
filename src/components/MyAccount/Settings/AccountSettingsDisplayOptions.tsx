@@ -10,7 +10,21 @@ import { accountSettings } from "./AccountSettingsUtils"
 import { buildListElementsWithIcons } from "../IconListElement"
 import type { JSX, ReactNode } from "react"
 
-export const buildAccountSettingsForm = (settingsData: Patron) => {
+export const buildAccountSettingsDisplay = (patron: Patron) => {
+  return accountSettings
+    .map((setting) => {
+      return {
+        icon: setting.icon,
+        term: setting.term,
+        // pin is masked so description is a default "****"
+        description: patron[setting.field] || setting.description,
+      }
+    })
+    .filter((listData) => listData.description)
+    .map(buildListElementsWithIcons)
+}
+
+export const buildAccountSettingsForm = (patron: Patron) => {
   return accountSettings
     .map((setting) => {
       let inputField:
@@ -48,8 +62,35 @@ export const buildAccountSettingsForm = (settingsData: Patron) => {
             </Select>
           )
           break
-        default:
-          inputField = <TextInput id="spaghetti" labelText="defaultInput" />
+        case "Phone":
+          inputField = (
+            <TextInput
+              defaultValue={patron.primaryPhone}
+              id="phone-text-input"
+              labelText="Update phone number"
+              showLabel={false}
+            />
+          )
+          break
+        case "Email":
+          inputField = (
+            <TextInput
+              defaultValue={patron.primaryEmail}
+              id="email-text-input"
+              labelText="Update email"
+              showLabel={false}
+            />
+          )
+          break
+        case "Pin/Password":
+          inputField = (
+            <TextInput
+              defaultValue="****"
+              id="pin-input"
+              labelText="Update pin or password"
+              showLabel={false}
+            />
+          )
       }
       return {
         term: setting.term,
