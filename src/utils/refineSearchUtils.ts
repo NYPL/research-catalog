@@ -45,13 +45,23 @@ export const addLabelPropAndParseFilters = (
 ): Record<string, Option[]> => {
   const appliedFilterValuesWithLabels = {}
   for (const appliedFilterField in appliedFilterValues) {
-    // Find the aggregation that corresponds to the filter field we are working on
-    const matchingFieldAggregation = aggregations.find(
-      ({ field: aggregationField }) => aggregationField === appliedFilterField
-    )
     appliedFilterValuesWithLabels[appliedFilterField] = appliedFilterValues[
       appliedFilterField
     ].map((filterValue: string): Option => {
+      // dateBefore and dateAfter fields are not based on
+      // aggregations results. Pass the year along with out
+      // transforming fieldname or finding the label
+      if (appliedFilterField.includes("date")) {
+        return {
+          count: null,
+          value: appliedFilterValues[appliedFilterField][0],
+          label: appliedFilterValues[appliedFilterField][0],
+        }
+      }
+      // Find the aggregation that corresponds to the filter field we are working on
+      const matchingFieldAggregation = aggregations.find(
+        ({ field: aggregationField }) => aggregationField === appliedFilterField
+      )
       // Find the option with the same value, so we can eventually display the label
       const matchingOption = matchingFieldAggregation.values.find(
         (option: Option) => option.value === filterValue
