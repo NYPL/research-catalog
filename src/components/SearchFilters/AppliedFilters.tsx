@@ -1,6 +1,7 @@
 import { useRouter } from "next/router"
 import { TagSet } from "@nypl/design-system-react-components"
 
+import styles from "../../../styles/components/Search.module.scss"
 import {
   getQueryWithoutFilters,
   buildFilterQuery,
@@ -76,6 +77,7 @@ const AppliedFilters = ({
   if (!tagSetData.length) return null
   return (
     <TagSet
+      className={styles.filterTags}
       onClick={handleRemove}
       tagSetData={tagSetData}
       isDismissible={true}

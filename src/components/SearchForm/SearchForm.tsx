@@ -12,7 +12,6 @@ import useLoading from "../../hooks/useLoading"
 import RefineSearch from "../RefineSearch/RefineSearch"
 import { SearchResultsAggregationsContext } from "../../context/SearchResultsAggregationsContext"
 import type { Aggregation } from "../../types/filterTypes"
-import AppliedFilters from "../SearchFilters/AppliedFilters"
 import { collapseMultiValueQueryParams } from "../../utils/refineSearchUtils"
 import { appConfig } from "../../config/config"
 
