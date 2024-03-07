@@ -129,12 +129,11 @@ const CheckoutsTab = ({
           body: JSON.stringify({ patronId: patron.id }),
         }
       )
-      console.log(response)
       const responseData = await response.json()
       if (responseData.message == "Renewed") {
+        setButtonDisabled(true)
         setModalProps(successModalProps)
         onOpen()
-        setButtonDisabled(true)
         localStorage.setItem(
           `lastDisabledTime-${checkout.id}`,
           new Date().getTime().toString()
@@ -149,7 +148,9 @@ const CheckoutsTab = ({
     return (
       <>
         <Button
-          sx={{ width: "-webkit-fill-available" }}
+          sx={{
+            width: "-webkit-fill-available",
+          }}
           buttonType="secondary"
           id={`renew-${checkout.id}`}
           onClick={handleClick}
