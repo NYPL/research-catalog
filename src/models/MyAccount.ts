@@ -148,7 +148,7 @@ export default class MyAccount {
     return {
       name: patron.names[0],
       barcode: patron.barcodes[0],
-      expirationDate: patron.expirationDate,
+      expirationDate: MyAccount.formatDate(patron.expirationDate),
       primaryEmail: patron.emails?.length > 0 ? patron.emails[0] : "",
       emails: patron.emails || [],
       primaryPhone: patron.phones?.length > 0 ? patron.phones[0].number : "",
