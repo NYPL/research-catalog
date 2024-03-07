@@ -125,12 +125,6 @@ const SearchForm = () => {
             Advanced Search
           </RCLink>
         </div>
-        {displayRefineResults && (
-          <AppliedFilters
-            appliedFilters={appliedFilters}
-            aggregations={aggregations}
-          />
-        )}
       </div>
     </div>
   )

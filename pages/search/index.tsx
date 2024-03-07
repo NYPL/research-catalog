@@ -84,6 +84,7 @@ export default function Search({
       getSearchQuery({ ...searchParams, sortBy, order, page: undefined })
     )
   }
+  const router = useRouter()
 
   const appliedFilters = collapseMultiValueQueryParams(router.query)
 
