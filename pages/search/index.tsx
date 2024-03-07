@@ -7,7 +7,7 @@ import {
   SkeletonLoader,
 } from "@nypl/design-system-react-components"
 import { type ChangeEvent } from "react"
-import router, { useRouter } from "next/router"
+import { useRouter } from "next/router"
 import { parse } from "qs"
 
 import Layout from "../../src/components/Layout/Layout"

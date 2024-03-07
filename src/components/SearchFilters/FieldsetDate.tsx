@@ -4,7 +4,6 @@ import {
 } from "@nypl/design-system-react-components"
 import { debounce } from "underscore"
 const debounceInterval = 500
-import type { Dispatch, SetStateAction } from "react"
 
 export type DateFormName = "dateAfter" | "dateBefore"
 interface FieldsetDateProps {
