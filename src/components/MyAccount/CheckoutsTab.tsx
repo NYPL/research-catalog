@@ -34,7 +34,7 @@ const CheckoutsTab = ({
     const [modalProps, setModalProps] = useState(null)
     const successModalProps = {
       bodyContent: (
-        <Box className={styles.modalbody}>
+        <Box className={styles.modalBody}>
           <Text sx={{ marginLeft: "l" }}>
             Your item was renewed. It is now due back on {checkout.date}.
           </Text>
@@ -42,7 +42,7 @@ const CheckoutsTab = ({
       ),
       closeButtonLabel: "OK",
       headingText: (
-        <Box className={styles.modalheading}>
+        <Box className={styles.modalHeading}>
           <Icon
             size="large"
             name="actionCheckCircleFilled"
@@ -54,7 +54,7 @@ const CheckoutsTab = ({
     }
     const failureModalProps = {
       bodyContent: (
-        <Box className={styles.modalbody}>
+        <Box className={styles.modalBody}>
           <Text sx={{ marginLeft: "l", marginRight: "m" }}>
             We were unable to renew your item. Please try again or{" "}
             <Link href="https://www.nypl.org/get-help/contact-us">
@@ -66,7 +66,7 @@ const CheckoutsTab = ({
       ),
       closeButtonLabel: "OK",
       headingText: (
-        <Box className={styles.modalheading}>
+        <Box className={styles.modalHeading}>
           <Icon size="large" name="errorFilled" color="ui.error.primary" />
           <Text sx={{ marginBottom: "0px" }}> Renewal failed </Text>
         </Box>
@@ -144,7 +144,7 @@ const CheckoutsTab = ({
           <span>You currently do not have any research items checked out.</span>
         </Box>
       )}
-      <Box className={styles.notificationwithicon}>
+      <Box className={styles.notificationWithIcon}>
         <Icon size="medium" name="errorOutline" iconRotation="rotate180" />{" "}
         <span>
           See <Link href="https://nypl.na2.iiivega.com/">this page</Link> for
@@ -152,7 +152,7 @@ const CheckoutsTab = ({
         </span>
       </Box>
       <Table
-        className={styles.itemstable}
+        className={styles.itemsTable}
         showRowDividers={true}
         columnHeadersBackgroundColor={"ui.gray.x-light-cool"}
         columnHeaders={checkoutsHeaders}
