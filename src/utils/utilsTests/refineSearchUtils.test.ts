@@ -1,9 +1,27 @@
 import {
   collapseMultiValueQueryParams,
   buildFilterQuery,
+  addLabelPropAndParseFilters,
 } from "../refineSearchUtils"
+import { aggregationsResults } from "../../../__test__/fixtures/searchResultsManyBibs"
 
 describe("refineSearchUtils", () => {
+  describe("addLabelPropAndParseFilters", () => {
+    it("takes applied filter values and adds the appropriate label", () => {
+      const appliedFilterValues = {
+        materialType: ["resourcetypes:txt"],
+        language: ["lang:ita"],
+        subjectLiteral: [
+          "Horror comic books, strips, etc. -- Italy -- History and criticism.",
+        ],
+      }
+      addLabelPropAndParseFilters(
+        aggregationsResults.itemListElement,
+        appliedFilterValues
+      )
+    })
+  })
+
   describe("collapseMultiValueQueryParams", () => {
     it("can parse a single filter", () => {
       const query = { "filters[language][0]": "lang:fre" }
