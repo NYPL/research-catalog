@@ -1,6 +1,9 @@
 @import "../utils/mixins";
 @import "../utils/breakpoints";
 
+.filterTags {
+  margin-bottom: var(--nypl-space-xs);
+}
 .searchContainer {
   background-color: var(--nypl-colors-ui-bg-default);
   padding: var(--nypl-space-l) 0 var(--nypl-space-xs);

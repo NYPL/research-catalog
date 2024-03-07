@@ -7,7 +7,7 @@ import {
   SkeletonLoader,
 } from "@nypl/design-system-react-components"
 import { type ChangeEvent } from "react"
-import { useRouter } from "next/router"
+import router, { useRouter } from "next/router"
 import { parse } from "qs"
 
 import Layout from "../../src/components/Layout/Layout"
@@ -30,6 +30,8 @@ import { SearchResultsAggregationsProvider } from "../../src/context/SearchResul
 
 import useLoading from "../../src/hooks/useLoading"
 import initializePatronTokenAuth from "../../src/server/auth"
+import AppliedFilters from "../../src/components/SearchFilters/AppliedFilters"
+import { collapseMultiValueQueryParams } from "../../src/utils/refineSearchUtils"
 
 interface SearchProps {
   bannerNotification?: string
@@ -68,6 +70,8 @@ export default function Search({
     await push(newQuery)
   }
 
+  const aggs = results?.aggregations?.itemListElement
+
   const handleSortChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const selectedSortOption = e.target.value
     // Extract sort key and order from selected sort option using "_" delineator
@@ -80,10 +84,11 @@ export default function Search({
       getSearchQuery({ ...searchParams, sortBy, order, page: undefined })
     )
   }
+
+  const appliedFilters = collapseMultiValueQueryParams(router.query)
+
   return (
-    <SearchResultsAggregationsProvider
-      value={results?.aggregations?.itemListElement}
-    >
+    <SearchResultsAggregationsProvider value={aggs}>
       <Head>
         <meta property="og:title" content={metadataTitle} key="og-title" />
         <meta
@@ -138,6 +143,10 @@ export default function Search({
               <SkeletonLoader showImage={false} />
             ) : (
               <>
+                <AppliedFilters
+                  appliedFilters={appliedFilters}
+                  aggregations={aggs}
+                />
                 <Heading level="h2" mb="xl" size="heading4">
                   {getSearchResultsHeading(
                     searchParams.page,
