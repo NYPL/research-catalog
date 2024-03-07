@@ -11,14 +11,39 @@ describe("refineSearchUtils", () => {
       const appliedFilterValues = {
         materialType: ["resourcetypes:txt"],
         language: ["lang:ita"],
-        subjectLiteral: [
-          "Horror comic books, strips, etc. -- Italy -- History and criticism.",
-        ],
+        subjectLiteral: ["Spaghetti Westerns -- History and criticism."],
       }
-      addLabelPropAndParseFilters(
+      const parsed = addLabelPropAndParseFilters(
         aggregationsResults.itemListElement,
         appliedFilterValues
       )
+      expect(parsed).toStrictEqual({
+        materialType: [
+          { value: "resourcetypes:txt", count: 371, label: "Text" },
+        ],
+        language: [{ value: "lang:ita", count: 59, label: "Italian" }],
+        subjectLiteral: [
+          {
+            value: "Spaghetti Westerns -- History and criticism.",
+            count: 42,
+            label: "Spaghetti Westerns -- History and criticism.",
+          },
+        ],
+      })
+    })
+    it("takes applied date filter values and adds the appropriate label", () => {
+      const appliedFilterValues = {
+        dateBefore: ["2009"],
+        dateAfter: ["2010"],
+      }
+      const parsed = addLabelPropAndParseFilters(
+        aggregationsResults.itemListElement,
+        appliedFilterValues
+      )
+      expect(parsed).toStrictEqual({
+        dateBefore: [{ value: "2009", count: null, label: "2009" }],
+        dateAfter: [{ value: "2010", count: null, label: "2010" }],
+      })
     })
   })
 
