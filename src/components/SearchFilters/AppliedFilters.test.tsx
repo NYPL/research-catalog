@@ -83,6 +83,8 @@ describe("Applied Filters", () => {
         }}
       />
     )
+    expect(screen.getByText("Before 2000")).toBeInTheDocument()
+    expect(screen.getByText("After 1990")).toBeInTheDocument()
   })
   it("can handle a combination of filters with no results", () => {
     mockRouter.push(
