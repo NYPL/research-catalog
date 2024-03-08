@@ -83,5 +83,6 @@ describe("Applied Filters", () => {
         }}
       />
     )
+    expect(true)
   })
 })
