@@ -1,17 +1,17 @@
+import { getTitle } from "../../../utils/myAccountUtils"
 import {
   Box,
   Button,
   Icon,
   Link,
-  Table,
   Text,
   useModal,
 } from "@nypl/design-system-react-components"
-import type { Checkout, Patron } from "../../types/accountTypes"
+import type { Checkout, Patron } from "../../../types/accountTypes"
 import { useEffect, useState } from "react"
-import { BASE_URL } from "../../config/constants"
-import { getTitle } from "../../utils/myAccountUtils"
+import { BASE_URL } from "../../../config/constants"
 import styles from "../../../styles/components/MyAccount.module.scss"
+import ItemsTab from "../ItemsTab"
 
 const CheckoutsTab = ({
   checkouts,
@@ -27,6 +27,13 @@ const CheckoutsTab = ({
     "Due back by",
     "Manage checkout",
   ]
+  const checkoutsData = checkouts.map((checkout) => [
+    getTitle(checkout),
+    checkout.barcode,
+    checkout.callNumber,
+    checkout.dueDate,
+    checkout.isResearch ? null : RenewButton(checkout, patron),
+  ])
 
   function RenewButton(checkout, patron) {
     const [isButtonDisabled, setButtonDisabled] = useState(false)
@@ -130,35 +137,12 @@ const CheckoutsTab = ({
     )
   }
 
-  const checkoutsData = checkouts.map((checkout) => [
-    getTitle(checkout),
-    checkout.barcode,
-    checkout.callNumber,
-    checkout.dueDate,
-    checkout.isResearch ? null : RenewButton(checkout, patron),
-  ])
   return (
-    <>
-      {checkouts.length === 0 && (
-        <Box className={styles.notification}>
-          <span>You currently do not have any research items checked out.</span>
-        </Box>
-      )}
-      <Box className={styles.notificationWithIcon}>
-        <Icon size="medium" name="errorOutline" iconRotation="rotate180" />{" "}
-        <span>
-          See <Link href="https://nypl.na2.iiivega.com/">this page</Link> for
-          eBooks and eAudiobooks checked out by you
-        </span>
-      </Box>
-      <Table
-        className={styles.itemsTable}
-        showRowDividers={true}
-        columnHeadersBackgroundColor={"ui.gray.x-light-cool"}
-        columnHeaders={checkoutsHeaders}
-        tableData={checkoutsData}
-      />
-    </>
+    <ItemsTab
+      headers={checkoutsHeaders}
+      data={checkoutsData}
+      verb={"checked out"}
+    />
   )
 }
 

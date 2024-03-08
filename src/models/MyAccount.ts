@@ -104,6 +104,7 @@ export default class MyAccount {
   }
 
   buildHolds(holds: SierraHold[], bibData: SierraBibEntry[]): Hold[] {
+    console.log(holds)
     const bibDataMap = MyAccount.buildBibData(bibData)
     return holds.map((hold: SierraHold) => {
       return {
@@ -180,6 +181,7 @@ export default class MyAccount {
    * Returns date in readable string ("Month day, year")
    */
   static formatDate(date) {
+    if (!date) return null
     const d = new Date(date)
     const year = d.getFullYear()
     const day = d.getDate()

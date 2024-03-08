@@ -1,7 +1,8 @@
 import { Tabs } from "@nypl/design-system-react-components"
 import type { Patron, Checkout, Fine, Hold } from "../../types/accountTypes"
 import { useRouter } from "next/router"
-import CheckoutsTab from "./CheckoutsTab"
+import CheckoutsTab from "./CheckoutsTab/CheckoutsTab"
+import RequestsTab from "./RequestsTab/RequestsTab"
 
 const ProfileTabs = ({
   checkouts,
@@ -25,7 +26,7 @@ const ProfileTabs = ({
     },
     {
       label: "Requests",
-      content: "",
+      content: <RequestsTab holds={holds} patron={patron} />,
       urlPath: "requests",
     },
     ...(fines?.total > 0
