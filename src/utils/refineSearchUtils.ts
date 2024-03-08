@@ -55,7 +55,7 @@ export const addLabelPropAndParseFilters = (
         const labelPrefix = appliedFilterField.split("date")[1]
         return {
           count: null,
-          value: appliedFilterField,
+          value: filterValue,
           label: labelPrefix + " " + filterValue,
         }
       }

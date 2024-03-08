@@ -1,5 +1,6 @@
 import type { Bib } from "./bibTypes"
 import type { DRBResults } from "./drbTypes"
+import type { Aggregation } from "./filterTypes"
 
 type Language = string
 type SubjectLiteral = string
@@ -44,11 +45,15 @@ type SearchFormField = { value: string }
 
 export interface SearchResultsResponse {
   results?: SearchResults
-  aggregations?: SearchResults
+  aggregations?: AggregationResults
   drbResults?: DRBResults
   page: number
 }
 
+export interface AggregationResults {
+  totalResults: number
+  itemListElement: Aggregation[]
+}
 export interface SearchResults {
   totalResults: number
   itemListElement: SearchResultsElement[]

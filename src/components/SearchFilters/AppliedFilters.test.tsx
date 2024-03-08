@@ -1,12 +1,12 @@
-import { render, screen } from "@testing-library/react"
+import { render, screen } from "../../utils/testUtils"
 import {
-  aggregationsResults,
+  results,
+  aggregationsResults as aggregations,
   emptyAggregationsResults,
 } from "../../../__test__/fixtures/searchResultsManyBibs"
 import mockRouter from "next-router-mock"
 import userEvent from "@testing-library/user-event"
-import { SearchResultsAggregationsProvider } from "../../context/SearchResultsAggregationsContext"
-import SearchForm from "../SearchForm/SearchForm"
+import Search from "../../../pages/search"
 
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
@@ -14,17 +14,20 @@ describe("Applied Filters", () => {
   describe("tagset click handler", () => {
     it("can remove one filter", async () => {
       mockRouter.push(
-        "/search?q=spaghetti&filters[materialType][0]=resourcetypes%3Atxt&filters[language][0]=lang%3Afre"
+        "/search?q=spaghetti&filters[materialType][0]=resourcetypes%3Amov&filters[language][0]=lang%3Afre"
       )
       render(
-        <SearchResultsAggregationsProvider
-          value={aggregationsResults.itemListElement}
-        >
-          <SearchForm />
-        </SearchResultsAggregationsProvider>
+        <Search
+          isAuthenticated={true}
+          results={{
+            page: 1,
+            results,
+            aggregations,
+          }}
+        />
       )
 
-      await userEvent.click(screen.getByText("Text"))
+      await userEvent.click(screen.getAllByTestId("filter-tags")[0])
       expect(decodeURI(mockRouter.asPath)).toBe(
         "/search?q=spaghetti&filters[language][0]=lang%3Afre"
       )
@@ -34,13 +37,16 @@ describe("Applied Filters", () => {
         "/search?q=spaghetti&filters[materialType][0]=resourcetypes%3Atxt&filters[language][0]=lang%3Afre"
       )
       render(
-        <SearchResultsAggregationsProvider
-          value={aggregationsResults.itemListElement}
-        >
-          <SearchForm />
-        </SearchResultsAggregationsProvider>
+        <Search
+          isAuthenticated={true}
+          results={{
+            page: 1,
+            aggregations,
+            results,
+          }}
+        />
       )
-      await userEvent.click(screen.getByText("Clear Filters"))
+      await userEvent.click(screen.getByTestId("filter-clear-all"))
       expect(mockRouter.asPath).toBe("/search?q=spaghetti")
     })
     it("can remove one of many field filters", async () => {
@@ -48,13 +54,16 @@ describe("Applied Filters", () => {
         "/search?q=spaghetti&filters[materialType][0]=resourcetypes%3Atxt&filters[materialType][1]=resourcetypes%3Aaud&filters[materialType][2]=resourcetypes%3Amov&filters[language][0]=lang%3Afre"
       )
       render(
-        <SearchResultsAggregationsProvider
-          value={aggregationsResults.itemListElement}
-        >
-          <SearchForm />
-        </SearchResultsAggregationsProvider>
+        <Search
+          isAuthenticated={true}
+          results={{
+            page: 1,
+            aggregations,
+            results,
+          }}
+        />
       )
-      await userEvent.click(screen.getByText("Text"))
+      await userEvent.click(screen.getAllByTestId("filter-tags")[0])
       expect(decodeURI(mockRouter.asPath)).toBe(
         "/search?q=spaghetti&filters[materialType][0]=resourcetypes%3Aaud&filters[materialType][1]=resourcetypes%3Amov&filters[language][0]=lang%3Afre"
       )
@@ -65,11 +74,14 @@ describe("Applied Filters", () => {
       "/search?q=spaghetti&filters[materialType][0]=resourcetypes%3Amix&filters[language][0]=lang%3Apol&filters[subjectLiteral][0]=Community life."
     )
     render(
-      <SearchResultsAggregationsProvider
-        value={emptyAggregationsResults.itemListElement}
-      >
-        <SearchForm />
-      </SearchResultsAggregationsProvider>
+      <Search
+        isAuthenticated={true}
+        results={{
+          page: 1,
+          aggregations: emptyAggregationsResults,
+          results: { ...results, totalResults: 0 },
+        }}
+      />
     )
   })
 })

@@ -41,8 +41,8 @@ describe("refineSearchUtils", () => {
         appliedFilterValues
       )
       expect(parsed).toStrictEqual({
-        dateBefore: [{ value: "2009", count: null, label: "2009" }],
-        dateAfter: [{ value: "2010", count: null, label: "2010" }],
+        dateBefore: [{ value: "2009", count: null, label: "Before 2009" }],
+        dateAfter: [{ value: "2010", count: null, label: "After 2010" }],
       })
     })
   })

@@ -6,19 +6,16 @@ import {
   getQueryWithoutFilters,
   buildFilterQuery,
   addLabelPropAndParseFilters,
+  collapseMultiValueQueryParams,
 } from "../../utils/refineSearchUtils"
-import type { Aggregation, Option } from "../../types/filterTypes"
+import type { Option } from "../../types/filterTypes"
+import { useContext } from "react"
+import { SearchResultsAggregationsContext } from "../../context/SearchResultsAggregationsContext"
 
-interface AppliedFiltersPropsType {
-  aggregations: Aggregation[]
-  appliedFilters: Record<string, string[]>
-}
-
-const AppliedFilters = ({
-  appliedFilters,
-  aggregations,
-}: AppliedFiltersPropsType) => {
+const AppliedFilters = () => {
+  const aggregations = useContext(SearchResultsAggregationsContext)
   const router = useRouter()
+  const appliedFilters = collapseMultiValueQueryParams(router.query)
   const appliedFiltersWithLabels = addLabelPropAndParseFilters(
     aggregations,
     appliedFilters
