@@ -150,7 +150,7 @@ export default function Search({
               <SkeletonLoader showImage={false} />
             ) : (
               <>
-                (displayAppliedFilters && <AppliedFilters />)
+                {displayAppliedFilters && <AppliedFilters />}
                 <Heading level="h2" mb="xl" size="heading4">
                   {getSearchResultsHeading(
                     searchParams.page,

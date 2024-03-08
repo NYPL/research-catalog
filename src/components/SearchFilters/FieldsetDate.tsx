@@ -39,7 +39,6 @@ const FieldsetDate = ({
   const invalidText =
     "Enter a valid range in the Start Year and End Year fields or remove what " +
     "you've entered from those fields."
-  console.log(dateAfter, dateBefore)
   return (
     <DatePicker
       dateType="year"
