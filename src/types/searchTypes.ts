@@ -47,7 +47,7 @@ export interface SearchResultsResponse {
   results?: SearchResults
   aggregations?: AggregationResults
   drbResults?: DRBResults
-  page: number
+  page?: number
 }
 
 export interface AggregationResults {

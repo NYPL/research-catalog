@@ -10,7 +10,7 @@ export interface DRBQueryParams {
 export type DRBFilters = string[]
 
 export interface DRBResults {
-  data: any
+  data?: any
   works?: DRBWork[]
   totalWorks?: number
 }

@@ -40,7 +40,10 @@ describe("RefineSearch", () => {
     const setup = () => {
       mockRouter.push("/search?filters[creatorLiteral]=Gaberscek, Carlo.")
       render(
-        <Search isAuthenticated={true} results={{ aggregations, results }} />
+        <Search
+          isAuthenticated={true}
+          results={{ page: 1, aggregations, results }}
+        />
       )
     }
     beforeEach(setup)
@@ -72,7 +75,10 @@ describe("RefineSearch", () => {
     const setup = () => {
       mockRouter.push("/search?q=spaghetti")
       render(
-        <Search isAuthenticated={true} results={{ aggregations, results }} />
+        <Search
+          isAuthenticated={true}
+          results={{ page: 1, aggregations, results }}
+        />
       )
     }
     beforeEach(setup)

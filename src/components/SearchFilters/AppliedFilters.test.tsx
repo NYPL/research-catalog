@@ -69,6 +69,21 @@ describe("Applied Filters", () => {
       )
     })
   })
+  it("can handle dates", () => {
+    mockRouter.push(
+      "/search?q=spaghetti&filters[dateBefore][0]=2000&filters[dateAfter][0]=1990"
+    )
+    render(
+      <Search
+        isAuthenticated={true}
+        results={{
+          page: 1,
+          aggregations,
+          results,
+        }}
+      />
+    )
+  })
   it("can handle a combination of filters with no results", () => {
     mockRouter.push(
       "/search?q=spaghetti&filters[materialType][0]=resourcetypes%3Amix&filters[language][0]=lang%3Apol&filters[subjectLiteral][0]=Community life."
@@ -83,6 +98,6 @@ describe("Applied Filters", () => {
         }}
       />
     )
-    // expect(true)
+    expect(screen.queryByTestId("filter-clear-all")).not.toBeInTheDocument()
   })
 })
