@@ -99,6 +99,7 @@ describe("MyAccountModel", () => {
           isResearch: false,
           bibId: "21678146",
           isNyplOwned: true,
+          href: "https://nypl.na2.iiivega.com/search/card?recordId=21678146",
         },
         {
           id: "65060570",
@@ -110,6 +111,7 @@ describe("MyAccountModel", () => {
           isResearch: false,
           bibId: "17699134",
           isNyplOwned: true,
+          href: "https://nypl.na2.iiivega.com/search/card?recordId=17699134",
         },
       ])
       expect(account.fines).toStrictEqual({

@@ -140,6 +140,11 @@ export default class MyAccount {
         isResearch: bibDataMap[checkout.item.bibIds[0]].isResearch,
         bibId: checkout.item.bibIds[0],
         isNyplOwned: bibDataMap[checkout.item.bibIds[0]].isNyplOwned,
+        href: bibDataMap[checkout.item.bibIds[0]].isNyplOwned
+          ? bibDataMap[checkout.item.bibIds[0]].isResearch
+            ? `https://nypl.org/research/research-catalog/bib/b${checkout.item.bibIds[0]}`
+            : `https://nypl.na2.iiivega.com/search/card?recordId=${checkout.item.bibIds[0]}`
+          : null,
       }
     })
   }

@@ -1,7 +1,11 @@
-import { Box, Icon, Link, Table } from "@nypl/design-system-react-components"
+import {
+  Box,
+  Icon,
+  Link,
+  Table,
+  Text,
+} from "@nypl/design-system-react-components"
 import type { Checkout, Patron } from "../../types/accountTypes"
-
-import { getTitle } from "../../utils/myAccountUtils"
 import styles from "../../../styles/components/MyAccount.module.scss"
 import RenewButton from "./RenewButton"
 
@@ -20,8 +24,16 @@ const CheckoutsTab = ({
     "Manage checkout",
   ]
 
+  function formatTitle(checkout: Checkout) {
+    if (checkout.href) {
+      return <Link href={checkout.href}>{checkout.title}</Link>
+    } else {
+      return <Text>{checkout.title}</Text>
+    }
+  }
+
   const checkoutsData = checkouts.map((checkout) => [
-    getTitle(checkout),
+    formatTitle(checkout),
     checkout.barcode,
     checkout.callNumber,
     checkout.dueDate,
