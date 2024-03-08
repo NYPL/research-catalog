@@ -1,4 +1,3 @@
-import { getTitle } from "../../../utils/myAccountUtils"
 import {
   Box,
   Button,
@@ -25,7 +24,7 @@ const RequestsTab = ({ holds, patron }: { holds: Hold[]; patron: Patron }) => {
   ]
 
   const holdsData = holds.map((hold) => [
-    getTitle(hold),
+    hold.title,
     getStatusBadge(hold.status),
     hold.pickupLocation,
     hold.pickupByDate,

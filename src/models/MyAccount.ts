@@ -141,6 +141,11 @@ export default class MyAccount {
         isResearch: bibDataMap[checkout.item.bibIds[0]].isResearch,
         bibId: checkout.item.bibIds[0],
         isNyplOwned: bibDataMap[checkout.item.bibIds[0]].isNyplOwned,
+        href: bibDataMap[checkout.item.bibIds[0]].isNyplOwned
+          ? bibDataMap[checkout.item.bibIds[0]].isResearch
+            ? `https://nypl.org/research/research-catalog/bib/b${checkout.item.bibIds[0]}`
+            : `https://nypl.na2.iiivega.com/search/card?recordId=${checkout.item.bibIds[0]}`
+          : null,
       }
     })
   }
@@ -149,7 +154,7 @@ export default class MyAccount {
     return {
       name: patron.names[0],
       barcode: patron.barcodes[0],
-      expirationDate: MyAccount.formatDate(patron.expirationDate),
+      expirationDate: patron.expirationDate,
       primaryEmail: patron.emails?.length > 0 ? patron.emails[0] : "",
       emails: patron.emails || [],
       primaryPhone: patron.phones?.length > 0 ? patron.phones[0].number : "",
@@ -186,7 +191,7 @@ export default class MyAccount {
     const year = d.getFullYear()
     const day = d.getDate()
     const month = d.toLocaleString("default", { month: "long" })
-    return month + " " + day + ", " + year
+    return `${month} ${day}, ${year}`
   }
 
   /**

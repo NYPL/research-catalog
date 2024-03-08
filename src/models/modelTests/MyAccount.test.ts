@@ -59,7 +59,7 @@ describe("MyAccountModel", () => {
       expect(account.patron).toStrictEqual({
         name: "NONNA, STREGA",
         barcode: "23333121538324",
-        expirationDate: "March 27, 2025",
+        expirationDate: "2025-03-28",
         primaryEmail: "streganonna@gmail.com",
         emails: ["streganonna@gmail.com", "spaghettigrandma@gmail.com"],
         primaryPhone: "123-456-7890",
@@ -99,6 +99,7 @@ describe("MyAccountModel", () => {
           isResearch: false,
           bibId: "21678146",
           isNyplOwned: true,
+          href: "https://nypl.na2.iiivega.com/search/card?recordId=21678146",
         },
         {
           id: "65060570",
@@ -110,6 +111,7 @@ describe("MyAccountModel", () => {
           isResearch: false,
           bibId: "17699134",
           isNyplOwned: true,
+          href: "https://nypl.na2.iiivega.com/search/card?recordId=17699134",
         },
       ])
       expect(account.fines).toStrictEqual({
@@ -138,7 +140,7 @@ describe("MyAccountModel", () => {
       expect(emptyAccount.patron).toStrictEqual({
         name: "NONNA, STREGA",
         barcode: "23333121538324",
-        expirationDate: "March 27, 2025",
+        expirationDate: "2025-03-28",
         primaryEmail: "",
         emails: [],
         primaryPhone: "",
@@ -166,7 +168,7 @@ describe("MyAccountModel", () => {
       expect(emptyAccount.patron).toStrictEqual({
         name: "NONNA, STREGA",
         barcode: "23333121538324",
-        expirationDate: "March 27, 2025",
+        expirationDate: "2025-03-28",
         primaryEmail: "",
         emails: [],
         primaryPhone: "",
