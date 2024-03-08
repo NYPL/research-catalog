@@ -184,7 +184,7 @@ export default class MyAccount {
     const year = d.getFullYear()
     const day = d.getDate()
     const month = d.toLocaleString("default", { month: "long" })
-    return month + " " + day + ", " + year
+    return `${month} ${day}, ${year}`
   }
 
   /**

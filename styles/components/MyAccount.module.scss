@@ -19,19 +19,25 @@
 }
 
 .modalHeading {
-  font-size: var(--nypl-fontSizes-desktop-heading-heading5);
-  margin-top: var(--nypl-space-l);
   display: flex;
   justify-content: flex-start;
   gap: 10px;
+  margin-bottom: 0px !important;
+  p {
+    margin-top: var(--nypl-space-s);
+    margin-bottom: 0px;
+    font-size: var(--nypl-fontSizes-desktop-heading-heading5);
+    font-weight: 510;
+    letter-spacing: normal;
+  }
   svg {
-    margin-top: 4px;
+    margin-top: var(--nypl-space-s);
   }
 }
 .modalBody {
-  font-size: var(--nypl-fontSizes-desktop-body-body2);
+  font-size: var(--nypl-fontSizes-desktop-body-body1);
   display: flex;
-  margin-top: -(var(--nypl-space-xs));
+  padding-top: 0px;
 }
 
 .notification {
@@ -64,5 +70,8 @@
   tbody > tr > td,
   tbody > tr > td:last-of-type {
     border-color: var(--nypl-colors-ui-gray-light-cool);
+  }
+  th:first-of-type {
+    width: 413px;
   }
 }
