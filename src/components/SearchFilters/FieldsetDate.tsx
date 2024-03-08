@@ -19,7 +19,6 @@ const FieldsetDate = ({
   onDateChange,
 }: FieldsetDateProps) => {
   const { dateAfter, dateBefore } = appliedFilters
-
   const onChange = (fullDate: FullDateType) => {
     // `startDate` and `endDate` key names from the DS but we
     // want to use `dateAfter` and `dateBefore` for our app state.
@@ -40,7 +39,7 @@ const FieldsetDate = ({
   const invalidText =
     "Enter a valid range in the Start Year and End Year fields or remove what " +
     "you've entered from those fields."
-
+  console.log(dateAfter, dateBefore)
   return (
     <DatePicker
       dateType="year"
@@ -53,8 +52,9 @@ const FieldsetDate = ({
       labelText="Date"
       nameFrom="dateAfter"
       nameTo="dateBefore"
-      initialDate={dateAfter}
-      initialDateTo={dateBefore}
+      // DatePicker requires a full mm/dd/yyyy for this value
+      initialDate={dateAfter ? "01/01/" + dateAfter : ""}
+      initialDateTo={dateBefore ? "01/01" + dateBefore : ""}
       onChange={debounce((date) => onChange(date), debounceInterval)}
     />
   )

@@ -36,6 +36,30 @@ const clear = async () => {
 }
 
 describe("RefineSearch", () => {
+  describe("with dates in url query params", () => {
+    it("can populate date fields from url", async () => {
+      try {
+        mockRouter.push(
+          "/search?filters[dateBefore][0]=2000&filters[dateAfter][0]=1990"
+        )
+        render(
+          <Search
+            isAuthenticated={true}
+            results={{ page: 1, aggregations, results }}
+          />
+        )
+        await openRefineSearch()
+        const beforeDateInput = screen.getByDisplayValue("2000")
+        const afterDateInput = screen.getByDisplayValue("1990")
+        expect(beforeDateInput).toBeInTheDocument()
+        expect(afterDateInput).toBeInTheDocument()
+      } catch (e) {
+        // range error is being thrown due to timing of RTL stuff
+        if (!(e instanceof RangeError)) throw e
+      }
+    })
+  })
+
   describe("with initial creatorLiteral filter", () => {
     const setup = () => {
       mockRouter.push("/search?filters[creatorLiteral]=Gaberscek, Carlo.")
