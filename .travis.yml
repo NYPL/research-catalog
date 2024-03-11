@@ -1,4 +1,5 @@
 dist: xenial
+
 language: ruby
 
 services:
@@ -32,7 +33,7 @@ jobs:
       script:
         - eval $(aws ecr get-login --no-include-email --region us-east-1)
         - docker build -t "$LOCAL_TAG_NAME" --build-arg NEXT_PUBLIC_APP_ENV="${NEXT_PUBLIC_APP_ENV}" .
-        - docker tag "$LOCAL_TAG_NAME" "$ECR_URL:$LOCAL_TAG_NAME"
+        - docker tag "$LOCAL_WSDFCxv :$LOCAL_TAG_NAME"
         # Re-tag last latest image just in case
         - |
           MANIFEST=$(aws ecr batch-get-image --repository-name research-catalog --image-ids imageTag="$ENV-latest" --output json | jq --raw-output --join-output '.images[0].imageManifest')
