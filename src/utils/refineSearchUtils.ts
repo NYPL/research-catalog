@@ -56,7 +56,7 @@ export const addLabelPropAndParseFilters = (
         return {
           count: null,
           value: filterValue,
-          label: labelPrefix + " " + filterValue,
+          label: `${labelPrefix} ${filterValue}`,
         }
       }
       // Find the aggregation that corresponds to the filter field we are working on
