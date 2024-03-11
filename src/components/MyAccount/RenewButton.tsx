@@ -12,7 +12,13 @@ import Link from "next/link"
 import { BASE_URL } from "../../config/constants"
 import styles from "../../../styles/components/MyAccount.module.scss"
 
-const RenewButton = (checkout: Checkout, patron: Patron) => {
+const RenewButton = ({
+  checkout,
+  patron,
+}: {
+  checkout: Checkout
+  patron: Patron
+}) => {
   const [isButtonDisabled, setButtonDisabled] = useState(false)
   const { onOpen, Modal } = useModal()
   const [modalProps, setModalProps] = useState(null)

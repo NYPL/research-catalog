@@ -70,7 +70,7 @@ export interface Checkout {
   title: string
   bibId?: string
   isNyplOwned: boolean
-  href: string
+  catalogHref: string
 }
 
 export interface SierraCodeName {

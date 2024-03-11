@@ -25,8 +25,8 @@ const CheckoutsTab = ({
   ]
 
   function formatTitle(checkout: Checkout) {
-    if (checkout.href) {
-      return <Link href={checkout.href}>{checkout.title}</Link>
+    if (checkout.catalogHref) {
+      return <Link href={checkout.catalogHref}>{checkout.title}</Link>
     } else {
       return <Text>{checkout.title}</Text>
     }
@@ -37,7 +37,9 @@ const CheckoutsTab = ({
     checkout.barcode,
     checkout.callNumber,
     checkout.dueDate,
-    checkout.isResearch ? null : RenewButton(checkout, patron),
+    checkout.isResearch ? null : (
+      <RenewButton checkout={checkout} patron={patron} />
+    ),
   ])
   return (
     <>
