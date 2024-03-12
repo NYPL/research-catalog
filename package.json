@@ -7,8 +7,6 @@
     "start": "next start",
     "local-prod": "next build && next start -p 8080",
     "check-types": "tsc --noemit",
-    "lint": "eslint . --fix && npm run check-types",
-    "prettier": "prettier --write .",
     "prepare": "husky install",
     "test": "jest",
     "test-watch": "jest --watch --verbose --silent=false",
