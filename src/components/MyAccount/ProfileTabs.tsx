@@ -3,6 +3,7 @@ import type MyAccount from "../../models/MyAccount"
 
 import { Tabs } from "@nypl/design-system-react-components"
 import { useRouter } from "next/router"
+import CheckoutsTab from "./CheckoutsTab"
 
 interface ProfileTabsPropsType {
   patron: MyAccount["patron"]
@@ -23,7 +24,7 @@ const ProfileTabs = ({
   const tabsData = [
     {
       label: "Checkouts",
-      content: "",
+      content: <CheckoutsTab checkouts={checkouts} patron={patron} />,
       urlPath: "checkouts",
     },
     {
@@ -60,6 +61,7 @@ const ProfileTabs = ({
 
   return (
     <Tabs
+      sx={{ "div[role=tabpanel]": { padding: "0px" } }}
       defaultIndex={tabsDict[activePath] || 0}
       id="tabs-id"
       onChange={(index) => {

@@ -29,32 +29,6 @@ export default function MyAccount({
 }: MyAccountPropsType) {
   const errorRetrievingPatronData = !patron
   console.log(checkouts, holds, patron, fines, tabsPath)
-  /** Testing renew checkout api route, displaying alerts of whatever the handler returns. */
-  async function checkoutRenew(checkoutId, patronId) {
-    try {
-      const response = await fetch(
-        `${BASE_URL}/api/account/checkouts/renew/${checkoutId}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ patronId }),
-        }
-      )
-      const responseData = await response.json()
-      if (responseData.status == 200) {
-        // New due date.
-        alert(responseData.body)
-      } else {
-        // Renewal failed.
-        alert(responseData)
-      }
-    } catch (error) {
-      // Request failed.
-      alert("Fetching error")
-    }
-  }
 
   /** Testing settings api route */
   async function settingsUpdate(patronId) {
@@ -183,64 +157,36 @@ export default function MyAccount({
               fines={fines}
               activePath={tabsPath}
             />
-            {/** Testing renew checkout api route, with test checkout id. */}
-            <Button
-              id="checkout-test"
-              onClick={() => checkoutRenew(58536266, patron.id)}
-            >
-              Renew checkout
-            </Button>
             {/** Testing settings api route */}
-            <Button
+            {/* <Button
               id="settings-test"
               onClick={() => settingsUpdate(patron.id)}
             >
               Update settings
-            </Button>
+            </Button> */}
             {/** Testing pin update api route */}
-            <Button
+            {/* <Button
               id="pin-update"
               onClick={() =>
                 pinUpdate(patron.id, patron.barcode, "7890", "7890")
               }
             >
               Update pin
-            </Button>
+            </Button> */}
             {/** Testing hold update api route */}
-            <Button
+            {/* <Button
               id="hold-update"
               onClick={() => holdUpdate(patron.id, "42273325", false, "")}
             >
               Update hold request
-            </Button>
+            </Button> */}
             {/** Testing hold cancelapi route */}
-            <Button
+            {/* <Button
               id="hold-cancel"
               onClick={() => holdCancel(patron.id, "42273326")}
             >
               Cancel hold request
-            </Button>
-            {/** Testing renew checkout api route, with test checkout id*/}
-            <Button
-              id="checkout-test"
-              onClick={() => checkoutRenew(58536261, patron.id)}
-            >
-              Renew checkout
-            </Button>
-            <ProfileTabs
-              patron={patron}
-              fines={fines}
-              checkouts={checkouts}
-              holds={holds}
-              activePath={tabsPath}
-            />
-            {/** Testing renew checkout api route, with test checkout id. */}
-            <Button
-              id="checkout-test"
-              onClick={() => checkoutRenew(58536261, patron.id)}
-            >
-              Renew checkout
-            </Button>
+            </Button> */}
           </>
         )}
       </Layout>
