@@ -21,7 +21,7 @@ export interface Aggregation {
   values: AggregationOption[]
 }
 
-export type Option = { value: string; label: string }
+export type Option = { value: string; label: string; count?: number }
 
 export type ReducedAggregation = {
   field: string

@@ -8999,6 +8999,7 @@ export const results = {
 }
 
 export const emptyAggregationsResults = {
+  totalResults: 0,
   itemListElement: [
     {
       "@type": "nypl:Aggregation",

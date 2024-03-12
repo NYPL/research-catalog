@@ -11,6 +11,7 @@ import { useState, useCallback } from "react"
 import { useRouter } from "next/router"
 
 import styles from "../../../styles/components/Search.module.scss"
+import FieldsetDate, { type DateFormName }from "../SearchFilters/FieldsetDate"
 import SearchResultsFilters from "../../models/SearchResultsFilters"
 import RefineSearchCheckBoxField from "./RefineSearchCheckboxField"
 import {
@@ -26,6 +27,9 @@ interface RefineSearchProps {
   appliedFilters: Record<string, string[]>
 }
 
+/**
+ * Renders a button that when clicked opens the Refine Search dialog.
+ */
 const RefineSearch = ({
   aggregations,
   appliedFilters,
@@ -41,25 +45,45 @@ const RefineSearch = ({
     { value: "subjectLiteral", label: "Subject" },
   ]
 
-  const filters = fields.map((field) => {
-    const filterData = new SearchResultsFilters(aggregations, field)
-    if (filterData.options) {
-      return (
-        <RefineSearchCheckBoxField
-          setAppliedFilters={setAppliedFilters}
-          key={field.label}
-          field={field}
-          appliedFilters={appliedFilters[field.value]}
-          options={filterData.options}
-        />
-      )
-    } else return null
-  })
+  const dateFieldset = (
+    <FieldsetDate
+      onDateChange={(dateField: DateFormName, data: string) => {
+        // update the parent state to know about the updated dateValues
+        setAppliedFilters((prevFilters) => {
+          return {
+            ...prevFilters,
+            [dateField]: [data],
+          }
+        })
+      }}
+      appliedFilters={{
+        dateBefore: appliedFilters.dateBefore && appliedFilters.dateBefore[0],
+        dateAfter: appliedFilters.dateAfter && appliedFilters.dateAfter[0],
+      }}
+    />
+  )
+
+  const filters = fields
+    .map((field) => {
+      const filterData = new SearchResultsFilters(aggregations, field)
+      if (filterData.options) {
+        return (
+          <RefineSearchCheckBoxField
+            setAppliedFilters={setAppliedFilters}
+            key={field.label}
+            field={field}
+            appliedFilters={appliedFilters[field.value]}
+            options={filterData.options}
+          />
+        )
+      } else return null
+    })
+    .concat(dateFieldset)
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault()
     const updatedQuery = {
-      // maintain any non-filter query params, eg q=spaghetti
+      // maintain any non-filter query params, eg q=spaghetti, journalTitle=pasta%20fancy
       ...getQueryWithoutFilters(router.query),
       // build out multi-value query params for selected filters
       ...buildFilterQuery(appliedFilters),
