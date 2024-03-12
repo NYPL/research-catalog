@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import type { Checkout, Patron } from "../../types/accountTypes"
+import type { Checkout, Patron } from "../../../types/accountTypes"
 import {
   useModal,
   Box,
@@ -9,8 +9,8 @@ import {
   Heading,
 } from "@nypl/design-system-react-components"
 import Link from "next/link"
-import { BASE_URL } from "../../config/constants"
-import styles from "../../../styles/components/MyAccount.module.scss"
+import { BASE_URL } from "../../../config/constants"
+import styles from "../../../../styles/components/MyAccount.module.scss"
 
 const RenewButton = (checkout: Checkout, patron: Patron) => {
   const [isButtonDisabled, setButtonDisabled] = useState(false)

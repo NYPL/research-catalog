@@ -1,12 +1,25 @@
-import { Link, StatusBadge, Text } from "@nypl/design-system-react-components"
+import {
+  Box,
+  Link,
+  StatusBadge,
+  Text,
+} from "@nypl/design-system-react-components"
 import type { Hold, Patron } from "../../../types/accountTypes"
 import styles from "../../../../styles/components/MyAccount.module.scss"
 import ItemsTab from "../ItemsTab"
-import CancelFreezeButton from "../CancelFreezeButton"
+import CancelButton from "./CancelButton"
 import { useState } from "react"
+import FreezeButton from "./FreezeButton"
 
-const RequestsTab = ({ holds, patron }: { holds: Hold[]; patron: Patron }) => {
-  const [currentHolds, setCurrentHolds] = useState(holds)
+const RequestsTab = ({
+  handleHoldsState,
+  holds,
+  patron,
+}: {
+  handleHoldsState
+  holds: Hold[]
+  patron: Patron
+}) => {
   const holdsHeaders = [
     "Title",
     "Status",
@@ -15,28 +28,22 @@ const RequestsTab = ({ holds, patron }: { holds: Hold[]; patron: Patron }) => {
     "Manage request",
   ]
 
-  function handleState(hold) {
-    setCurrentHolds(
-      currentHolds.reduce((acc, item) => {
-        if (item.id !== hold.id) {
-          acc.push(item)
-        }
-        return acc
-      }, [])
-    )
-  }
-
-  const holdsData = currentHolds.map((hold) => [
+  const holdsData = holds.map((hold) => [
     formatTitle(hold),
     getStatusBadge(hold.status),
     hold.pickupLocation.name,
     hold.pickupByDate,
+    /* Passing handleState() down to the Cancel button so it can remove the hold from
+     * currentHolds */
     hold ? (
-      <CancelFreezeButton
-        handleState={handleState}
-        hold={hold}
-        patron={patron}
-      />
+      <Box sx={{ display: "flex", gap: "4px" }}>
+        <CancelButton
+          handleHoldsState={handleHoldsState}
+          hold={hold}
+          patron={patron}
+        />
+        {hold.canFreeze && <FreezeButton hold={hold} patron={patron} />}
+      </Box>
     ) : null,
   ])
 

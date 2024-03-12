@@ -2,98 +2,168 @@ import React from "react"
 import { render } from "../../../utils/testUtils"
 import {
   mockCheckouts,
+  mockFines,
   mockHolds,
   mockPatron,
 } from "../../../../__test__/fixtures/accountFixtures"
-import RequestsTab from "./RequestsTab"
 import { userEvent } from "@testing-library/user-event"
+import ProfileTabs from "../ProfileTabs"
+
+jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
 describe("RequestsTab", () => {
   global.fetch = jest.fn().mockResolvedValue({
-    json: async () => ({ message: "Renewed", status: 200, body: {} }),
+    json: async () => "Cancelled",
   } as Response)
 
   beforeEach(() => {
     window.localStorage.clear()
   })
 
-  //   it("renders", () => {
-  //     render(<RequestsTab patron={mockPatron} holds={mockHolds} />)
-  //   })
+  // Mocking from ProfileTabs level so that handleHoldsState can be tested
+  it("renders", () => {
+    render(
+      <ProfileTabs
+        patron={mockPatron}
+        checkouts={mockCheckouts}
+        holds={mockHolds}
+        fines={mockFines}
+        activePath="requests"
+      />
+    )
+  })
 
-  //   it("renders each checkout as a row", () => {
-  //     const { getAllByRole } = render(
-  //       <CheckoutsTab patron={mockPatron} checkouts={mockCheckouts} />
-  //     )
-  //     const rows = getAllByRole("row")
-  //     expect(rows.length).toBe(3)
-  //   })
-  //   it("calls renew checkout endpoint when Renew button is clicked", async () => {
-  //     const component = render(
-  //       <CheckoutsTab patron={mockPatron} checkouts={mockCheckouts} />
-  //     )
+  it("renders each hold request as a row", () => {
+    const { getAllByRole } = render(
+      <ProfileTabs
+        patron={mockPatron}
+        checkouts={mockCheckouts}
+        holds={mockHolds}
+        fines={mockFines}
+        activePath="requests"
+      />
+    )
+    const rows = getAllByRole("row")
+    expect(rows.length).toBe(3)
+  })
 
-  //     await userEvent.click(component.getAllByText("Renew")[0])
+  it("calls hold cancel endpoint when Cancel button is clicked", async () => {
+    const component = render(
+      <ProfileTabs
+        patron={mockPatron}
+        checkouts={mockCheckouts}
+        holds={mockHolds}
+        fines={mockFines}
+        activePath="requests"
+      />
+    )
 
-  //     expect(fetch).toHaveBeenCalledWith(
-  //       `/research/research-catalog/api/account/checkouts/renew/${mockCheckouts[0].id}`,
-  //       {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify({ patronId: mockPatron.id }),
-  //       }
-  //     )
-  //   })
+    await userEvent.click(component.getAllByText("Cancel")[0])
+    await userEvent.click(component.getAllByText("Yes, cancel")[0])
 
-  //   it("disables button on successful renewal", async () => {
-  //     const component = render(
-  //       <CheckoutsTab patron={mockPatron} checkouts={mockCheckouts} />
-  //     )
-  //     const renewButton = component.getAllByText("Renew")[0]
-  //     expect(renewButton).not.toBeDisabled()
+    expect(fetch).toHaveBeenCalledWith(
+      `/research/research-catalog/api/account/holds/cancel/${mockHolds[0].id}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ patronId: mockPatron.id }),
+      }
+    )
+  })
 
-  //     await userEvent.click(renewButton)
+  it("removes hold from list when cancel is successful", async () => {
+    const component = render(
+      <ProfileTabs
+        patron={mockPatron}
+        checkouts={mockCheckouts}
+        holds={mockHolds}
+        fines={mockFines}
+        activePath="requests"
+      />
+    )
 
-  //     expect(fetch).toHaveBeenCalledWith(
-  //       `/research/research-catalog/api/account/checkouts/renew/${mockCheckouts[0].id}`,
-  //       {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify({ patronId: mockPatron.id }),
-  //       }
-  //     )
-  //     expect(renewButton).toBeDisabled()
-  //   })
+    await userEvent.click(component.getAllByText("Cancel")[0])
+    await userEvent.click(component.getAllByText("Yes, cancel")[0])
 
-  //   it("does not disable button on failed renewal", async () => {
-  //     // Resetting fetch to return a failed response
-  //     global.fetch = jest.fn().mockResolvedValue({
-  //       json: async () => ({ message: "Failed", status: 403, body: {} }),
-  //     } as Response)
-  //     const component = render(
-  //       <CheckoutsTab patron={mockPatron} checkouts={mockCheckouts} />
-  //     )
-  //     const renewButton = component.getAllByText("Renew")[0]
+    expect(fetch).toHaveBeenCalledWith(
+      `/research/research-catalog/api/account/holds/cancel/${mockHolds[0].id}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ patronId: mockPatron.id }),
+      }
+    )
+    await userEvent.click(component.getAllByText("OK")[0])
 
-  //     expect(renewButton).not.toBeDisabled()
+    const rows = component.getAllByRole("row")
+    expect(rows.length).toBe(2)
+  })
 
-  //     await userEvent.click(renewButton)
+  it("displays freeze buttons only for holds that can be frozen", async () => {
+    const component = render(
+      <ProfileTabs
+        patron={mockPatron}
+        checkouts={mockCheckouts}
+        holds={mockHolds}
+        fines={mockFines}
+        activePath="requests"
+      />
+    )
+    const freezeButtons = component.getAllByText("Freeze")
+    expect(freezeButtons.length).toBe(1)
+  })
 
-  //     expect(fetch).toHaveBeenCalledWith(
-  //       `/research/research-catalog/api/account/checkouts/renew/${mockCheckouts[0].id}`,
-  //       {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify({ patronId: mockPatron.id }),
-  //       }
-  //     )
+  it("freezes and unfreezes, with button reflecting current state", async () => {
+    const component = render(
+      <ProfileTabs
+        patron={mockPatron}
+        checkouts={mockCheckouts}
+        holds={mockHolds}
+        fines={mockFines}
+        activePath="requests"
+      />
+    )
+    const freezeButton = component.getAllByText("Freeze")[0]
+    await userEvent.click(freezeButton)
+    expect(fetch).toHaveBeenCalledWith(
+      `/research/research-catalog/api/account/holds/update/${mockHolds[0].id}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          patronId: mockPatron.id,
+          freeze: true,
+          pickupLocation: "mal",
+        }),
+      }
+    )
 
-  //     expect(renewButton).not.toBeDisabled()
-  //   })
+    const unfreezeButton = component.getAllByText("Unfreeze")[0]
+
+    await userEvent.click(unfreezeButton)
+
+    expect(fetch).toHaveBeenCalledWith(
+      `/research/research-catalog/api/account/holds/update/${mockHolds[0].id}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          patronId: mockPatron.id,
+          freeze: false,
+          pickupLocation: "mal",
+        }),
+      }
+    )
+
+    const freezeButtons = component.getAllByText("Freeze")
+    expect(freezeButtons.length).toBe(1)
+  })
 })

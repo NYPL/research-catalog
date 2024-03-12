@@ -1,6 +1,6 @@
 import { Link, Text } from "@nypl/design-system-react-components"
 import type { Checkout, Patron } from "../../../types/accountTypes"
-import RenewButton from "../RenewButton"
+import RenewButton from "./RenewButton"
 import ItemsTab from "../ItemsTab"
 
 const CheckoutsTab = ({
