@@ -96,7 +96,7 @@ export default class MyAccount {
           (subfield: { tag: string; subfield: string }) => subfield.tag === "a"
         ).content
         isResearch = nineTenContent.startsWith("RL")
-        isNyplOwned = nineTenContent !== "RLOTF"
+        isNyplOwned = !isResearch || nineTenContent !== "RLOTF"
       }
       bibDataMap[bibFields.id] = { title, isResearch, isNyplOwned }
       return bibDataMap
@@ -114,11 +114,16 @@ export default class MyAccount {
         canFreeze: hold.canFreeze,
         frozen: hold.frozen,
         status: MyAccount.getHoldStatus(hold.status),
-        pickupLocation: hold.pickupLocation.name,
+        pickupLocation: hold.pickupLocation,
         title: bibDataMap[hold.record.bibIds[0]].title,
         isResearch: bibDataMap[hold.record.bibIds[0]].isResearch,
         bibId: hold.record.bibIds[0],
-        isNyplOwned: bibDataMap[hold.record.bibIds[0]].isResearch,
+        isNyplOwned: bibDataMap[hold.record.bibIds[0]].isNyplOwned,
+        catalogHref: bibDataMap[hold.record.bibIds[0]].isNyplOwned
+          ? bibDataMap[hold.record.bibIds[0]].isResearch
+            ? `https://nypl.org/research/research-catalog/bib/b${hold.record.bibIds[0]}`
+            : `https://nypl.na2.iiivega.com/search/card?recordId=${hold.record.bibIds[0]}`
+          : null,
       }
     })
   }

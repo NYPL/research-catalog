@@ -49,12 +49,13 @@ export const mockHolds = [
     canFreeze: false,
     frozen: false,
     status: "Requested item ready for pickup.",
-    pickupLocation: "SNFL (formerly Mid-Manhattan)",
+    pickupLocation: { code: "mal", name: "SNFL (formerly Mid-Manhattan)" },
     title:
       "Quit like a woman : the radical choice to not drink in a culture obsessed with alcohol",
     isResearch: false,
     bibId: "22002760",
-    isNyplOwned: false,
+    isNyplOwned: true,
+    catalogHref: "https://nypl.na2.iiivega.com/search/card?recordId=22002760",
   },
 ]
 export const mockFines = {

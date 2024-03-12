@@ -84,7 +84,7 @@ export default function MyAccount({
   }
 
   /** Testing hold update api route */
-  async function holdUpdate(patronId, holdId, freeze, pickupLocation) {
+  async function holdUpdate(patronId, holdId, frozen, pickupLocation) {
     try {
       const response = await fetch(
         `/research/research-catalog/api/account/holds/update/${holdId}`,
@@ -95,7 +95,7 @@ export default function MyAccount({
           },
           body: JSON.stringify({
             patronId,
-            freeze,
+            frozen,
             pickupLocation,
           }),
         }
@@ -172,20 +172,6 @@ export default function MyAccount({
               }
             >
               Update pin
-            </Button> */}
-            {/** Testing hold update api route */}
-            {/* <Button
-              id="hold-update"
-              onClick={() => holdUpdate(patron.id, "42273325", false, "")}
-            >
-              Update hold request
-            </Button> */}
-            {/** Testing hold cancelapi route */}
-            {/* <Button
-              id="hold-cancel"
-              onClick={() => holdCancel(patron.id, "42273326")}
-            >
-              Cancel hold request
             </Button> */}
           </>
         )}

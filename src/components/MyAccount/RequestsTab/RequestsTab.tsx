@@ -1,20 +1,12 @@
-import {
-  Box,
-  Button,
-  Icon,
-  Link,
-  StatusBadge,
-  Text,
-  useModal,
-} from "@nypl/design-system-react-components"
+import { Link, StatusBadge, Text } from "@nypl/design-system-react-components"
 import type { Hold, Patron } from "../../../types/accountTypes"
-import { useEffect, useState } from "react"
-import { BASE_URL } from "../../../config/constants"
-import styles from "../../../styles/components/MyAccount.module.scss"
+import styles from "../../../../styles/components/MyAccount.module.scss"
 import ItemsTab from "../ItemsTab"
+import CancelFreezeButton from "../CancelFreezeButton"
+import { useState } from "react"
 
 const RequestsTab = ({ holds, patron }: { holds: Hold[]; patron: Patron }) => {
-  console.log(holds)
+  const [currentHolds, setCurrentHolds] = useState(holds)
   const holdsHeaders = [
     "Title",
     "Status",
@@ -23,13 +15,40 @@ const RequestsTab = ({ holds, patron }: { holds: Hold[]; patron: Patron }) => {
     "Manage request",
   ]
 
-  const holdsData = holds.map((hold) => [
-    hold.title,
+  function handleState(hold) {
+    setCurrentHolds(
+      currentHolds.reduce((acc, item) => {
+        if (item.id !== hold.id) {
+          acc.push(item)
+        }
+        return acc
+      }, [])
+    )
+  }
+
+  const holdsData = currentHolds.map((hold) => [
+    formatTitle(hold),
     getStatusBadge(hold.status),
-    hold.pickupLocation,
+    hold.pickupLocation.name,
     hold.pickupByDate,
-    CancelFreezeButton(hold, patron),
+    hold ? (
+      <CancelFreezeButton
+        handleState={handleState}
+        hold={hold}
+        patron={patron}
+      />
+    ) : null,
   ])
+
+  function formatTitle(hold: Hold) {
+    // If item is research/circ
+    if (hold.catalogHref) {
+      return <Link href={hold.catalogHref}>{hold.title}</Link>
+    } else {
+      // Item is a partner record
+      return <Text>{hold.title}</Text>
+    }
+  }
 
   function getStatusBadge(status) {
     if (status == "READY FOR PICKUP") {
@@ -42,10 +61,6 @@ const RequestsTab = ({ holds, patron }: { holds: Hold[]; patron: Patron }) => {
         {status.toUpperCase()}
       </StatusBadge>
     )
-  }
-
-  function CancelFreezeButton(hold, patron) {
-    const { onOpen, Modal } = useModal()
   }
 
   return <ItemsTab headers={holdsHeaders} data={holdsData} verb={"requested"} />

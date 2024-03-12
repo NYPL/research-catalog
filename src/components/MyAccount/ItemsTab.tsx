@@ -24,13 +24,15 @@ const ItemsTab = ({
           eBooks and eAudiobooks {verb} by you
         </span>
       </Box>
-      <Table
-        className={styles.itemsTable}
-        showRowDividers={true}
-        columnHeadersBackgroundColor={"ui.gray.x-light-cool"}
-        columnHeaders={headers}
-        tableData={data}
-      />
+      {data.length > 0 && (
+        <Table
+          className={styles.itemsTable}
+          showRowDividers={true}
+          columnHeadersBackgroundColor={"ui.gray.x-light-cool"}
+          columnHeaders={headers}
+          tableData={data}
+        />
+      )}
     </>
   )
 }
