@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 // import type { JWTPayload } from "jose"
 import { importSPKI, jwtVerify, type JWTPayload } from "jose"
-import type { NextRequest } from "next/server"
 import { appConfig } from "../config/config"
 import { BASE_URL } from "../config/constants"
 import { useEffect, useState } from "react"

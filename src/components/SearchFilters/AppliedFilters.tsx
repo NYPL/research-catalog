@@ -1,23 +1,21 @@
 import { useRouter } from "next/router"
 import { TagSet } from "@nypl/design-system-react-components"
 
+import styles from "../../../styles/components/Search.module.scss"
 import {
   getQueryWithoutFilters,
   buildFilterQuery,
   addLabelPropAndParseFilters,
+  collapseMultiValueQueryParams,
 } from "../../utils/refineSearchUtils"
-import type { Aggregation, Option } from "../../types/filterTypes"
+import type { Option } from "../../types/filterTypes"
+import { useContext } from "react"
+import { SearchResultsAggregationsContext } from "../../context/SearchResultsAggregationsContext"
 
-interface AppliedFiltersPropsType {
-  aggregations: Aggregation[]
-  appliedFilters: Record<string, string[]>
-}
-
-const AppliedFilters = ({
-  appliedFilters,
-  aggregations,
-}: AppliedFiltersPropsType) => {
+const AppliedFilters = () => {
+  const aggregations = useContext(SearchResultsAggregationsContext)
   const router = useRouter()
+  const appliedFilters = collapseMultiValueQueryParams(router.query)
   const appliedFiltersWithLabels = addLabelPropAndParseFilters(
     aggregations,
     appliedFilters
@@ -75,6 +73,7 @@ const AppliedFilters = ({
   if (!tagSetData.length) return null
   return (
     <TagSet
+      className={styles.filterTags}
       onClick={handleRemove}
       tagSetData={tagSetData}
       isDismissible={true}
