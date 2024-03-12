@@ -1,7 +1,7 @@
 import { SearchBar } from "@nypl/design-system-react-components"
 import { useRouter } from "next/router"
 import type { SyntheticEvent, Dispatch, SetStateAction } from "react"
-import { useState } from "react"
+import { useContext, useState, useEffect } from "react"
 
 import styles from "../../../styles/components/Search.module.scss"
 import RCLink from "../RCLink/RCLink"
@@ -9,6 +9,11 @@ import { getSearchQuery } from "../../utils/searchUtils"
 import { BASE_URL, PATHS } from "../../config/constants"
 import EDSLink from "../EDSLink"
 import useLoading from "../../hooks/useLoading"
+import RefineSearch from "../RefineSearch/RefineSearch"
+import { SearchResultsAggregationsContext } from "../../context/SearchResultsAggregationsContext"
+import type { Aggregation } from "../../types/filterTypes"
+import AppliedFilters from "../SearchFilters/AppliedFilters"
+import { collapseMultiValueQueryParams } from "../../utils/refineSearchUtils"
 import { appConfig } from "../../config/config"
 
 /**
@@ -21,6 +26,10 @@ const SearchForm = () => {
     (router?.query?.q as string) || ""
   )
   const [searchScope, setSearchScope] = useState("all")
+  const aggregations = useContext(SearchResultsAggregationsContext)
+  const [appliedFilters, setAppliedFilters] = useState(
+    collapseMultiValueQueryParams(router.query)
+  )
 
   const isLoading = useLoading()
 
@@ -48,6 +57,14 @@ const SearchForm = () => {
     const target = e.target as HTMLInputElement
     setValue(target.value)
   }
+
+  const displayRefineResults = !!aggregations?.filter(
+    (agg: Aggregation) => agg.values.length
+  ).length
+
+  useEffect(() => {
+    setAppliedFilters(collapseMultiValueQueryParams(router.query))
+  }, [router.query])
 
   return (
     <div className={styles.searchContainer}>
@@ -91,9 +108,16 @@ const SearchForm = () => {
           />
         </div>
         <div className={styles.auxSearchContainer}>
-          <EDSLink />
           {/* Temporary color update. The Header overrides the new
             DS 2.X CSS color variable values. */}
+          {displayRefineResults && (
+            <RefineSearch
+              setAppliedFilters={setAppliedFilters}
+              appliedFilters={appliedFilters}
+              aggregations={aggregations}
+            />
+          )}
+          <EDSLink />
           <RCLink
             className={styles.advancedSearch}
             href={`${BASE_URL}/search/advanced`}
@@ -102,6 +126,12 @@ const SearchForm = () => {
             Advanced Search
           </RCLink>
         </div>
+        {displayRefineResults && (
+          <AppliedFilters
+            appliedFilters={appliedFilters}
+            aggregations={aggregations}
+          />
+        )}
       </div>
     </div>
   )

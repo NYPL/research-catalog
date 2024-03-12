@@ -6,7 +6,7 @@ import {
   Select,
   SkeletonLoader,
 } from "@nypl/design-system-react-components"
-import type { ChangeEvent } from "react"
+import { type ChangeEvent } from "react"
 import { useRouter } from "next/router"
 import { parse } from "qs"
 
@@ -14,7 +14,7 @@ import Layout from "../../src/components/Layout/Layout"
 import DRBContainer from "../../src/components/DRB/DRBContainer"
 import SearchResult from "../../src/components/SearchResult/SearchResult"
 
-import { fetchResults } from "../api/search"
+import { fetchResults } from "../../src/server/api/search"
 import {
   getSearchResultsHeading,
   mapQueryToSearchParams,
@@ -26,6 +26,8 @@ import type { SortKey, SortOrder } from "../../src/types/searchTypes"
 import { mapWorksToDRBResults } from "../../src/utils/drbUtils"
 import { SITE_NAME, RESULTS_PER_PAGE } from "../../src/config/constants"
 import type SearchResultsBib from "../../src/models/SearchResultsBib"
+import { SearchResultsAggregationsProvider } from "../../src/context/SearchResultsAggregationsContext"
+
 import useLoading from "../../src/hooks/useLoading"
 import initializePatronTokenAuth from "../../src/server/auth"
 
@@ -48,7 +50,6 @@ export default function Search({
   const { push, query } = useRouter()
   const { itemListElement: searchResultsElements, totalResults } =
     results.results
-
   const drbResponse = results.drbResults?.data
   const drbWorks = drbResponse?.works
 
@@ -79,9 +80,10 @@ export default function Search({
       getSearchQuery({ ...searchParams, sortBy, order, page: undefined })
     )
   }
-
   return (
-    <>
+    <SearchResultsAggregationsProvider
+      value={results?.aggregations?.itemListElement}
+    >
       <Head>
         <meta property="og:title" content={metadataTitle} key="og-title" />
         <meta
@@ -167,7 +169,7 @@ export default function Search({
           <Heading level="h3">No results. Try a different search.</Heading>
         )}
       </Layout>
-    </>
+    </SearchResultsAggregationsProvider>
   )
 }
 
@@ -185,7 +187,6 @@ export async function getServerSideProps({ resolvedUrl, req }) {
   // Remove everything before the query string delineator '?', necessary for correctly parsing the 'q' param.
   const queryString = resolvedUrl.slice(resolvedUrl.indexOf("?") + 1)
   const results = await fetchResults(mapQueryToSearchParams(parse(queryString)))
-
   const patronTokenResponse = await initializePatronTokenAuth(req)
   const isAuthenticated = patronTokenResponse.isTokenValid
 

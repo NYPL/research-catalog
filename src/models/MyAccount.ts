@@ -13,9 +13,17 @@ import type {
   SierraFineEntry,
   SierraBibEntry,
   BibDataMapType,
-} from "../types/accountTypes"
+} from "../types/myAccountTypes"
 
 let client
+
+export const notificationPreferenceMap = {
+  z: "Email",
+  a: "Print",
+  p: "Phone",
+  m: "Mobile",
+  "-": null,
+}
 
 export default class MyAccount {
   checkouts: Checkout[]
@@ -49,7 +57,7 @@ export default class MyAccount {
 
   static async fetchPatron(baseQuery: string) {
     const patronQuery =
-      "?fields=names,barcodes,expirationDate,homeLibrary,emails,phones"
+      "?fields=names,barcodes,expirationDate,homeLibrary,emails,phones,fixedFields"
     return await client.get(`${baseQuery}${patronQuery}`)
   }
 
@@ -150,7 +158,10 @@ export default class MyAccount {
   }
 
   buildPatron(patron: SierraPatron): Patron {
+    const notificationPreference =
+      notificationPreferenceMap[patron.fixedFields["268"].value]
     return {
+      notificationPreference,
       name: patron.names[0],
       barcode: patron.barcodes[0],
       expirationDate: patron.expirationDate,
@@ -229,8 +240,10 @@ export const MyAccountFactory = async (id: string) => {
   )
   const holdBibData = await MyAccount.fetchBibData(holds.entries, "record")
   return new MyAccount({
-    checkouts: checkouts.entries,
-    holds: holds.entries,
+    //  default to empty array to avoid hard to replicate error
+    // where entries end up undefined in buildBibData.
+    checkouts: checkouts.entries || [],
+    holds: holds.entries || [],
     patron,
     fines,
     checkoutBibData: checkoutBibData.entries,

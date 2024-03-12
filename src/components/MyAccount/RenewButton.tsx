@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import type { Checkout, Patron } from "../../types/accountTypes"
+import type { Checkout, Patron } from "../../types/myAccountTypes"
 import {
   useModal,
   Box,

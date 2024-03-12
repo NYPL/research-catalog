@@ -1,4 +1,5 @@
 export const mockPatron = {
+  notificationPreference: "Email",
   name: "NONNA, STREGA",
   barcode: "23333121538324",
   expirationDate: "2025-03-28",

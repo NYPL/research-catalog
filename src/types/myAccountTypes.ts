@@ -51,6 +51,7 @@ export interface SierraRecord {
 }
 
 export interface SierraPatron {
+  fixedFields: Record<string, { label: string; value: string }>
   id: number
   names: string[]
   barcodes: string[]
@@ -93,6 +94,7 @@ export interface Hold {
 }
 
 export interface Patron {
+  notificationPreference: string
   name: string
   barcode: string
   expirationDate: string

@@ -73,6 +73,9 @@ export const patron = {
       type: "t",
     },
   ],
+  fixedFields: {
+    268: { label: "notification preference", value: "z" },
+  },
 }
 
 export const holdBibs = {

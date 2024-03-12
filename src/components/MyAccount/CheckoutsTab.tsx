@@ -5,7 +5,7 @@ import {
   Table,
   Text,
 } from "@nypl/design-system-react-components"
-import type { Checkout, Patron } from "../../types/accountTypes"
+import type { Checkout, Patron } from "../../types/myAccountTypes"
 import styles from "../../../styles/components/MyAccount.module.scss"
 import RenewButton from "./RenewButton"
 
