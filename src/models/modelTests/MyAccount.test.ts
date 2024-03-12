@@ -80,7 +80,10 @@ describe("MyAccountModel", () => {
           canFreeze: false,
           frozen: false,
           status: "Requested item ready for pickup.",
-          pickupLocation: "SNFL (formerly Mid-Manhattan)",
+          pickupLocation: {
+            code: "sn",
+            name: "SNFL (formerly Mid-Manhattan)",
+          },
           title:
             "Quit like a woman : the radical choice to not drink in a culture obsessed with alcohol",
           isResearch: false,

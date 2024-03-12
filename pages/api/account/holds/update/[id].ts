@@ -30,7 +30,6 @@ export default async function handler(
       freeze: req.body.freeze,
       pickupLocation: req.body.pickupLocation,
     }
-    console.log(holdData)
     /**  We check that the patron cookie matches the patron id in the request,
      * i.e.,the logged in user is updating their own hold. */
     if (holdPatronId == cookiePatronId) {

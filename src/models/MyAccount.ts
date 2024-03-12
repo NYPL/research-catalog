@@ -104,7 +104,6 @@ export default class MyAccount {
   }
 
   buildHolds(holds: SierraHold[], bibData: SierraBibEntry[]): Hold[] {
-    console.log(holds)
     const bibDataMap = MyAccount.buildBibData(bibData)
     return holds.map((hold: SierraHold) => {
       return {
