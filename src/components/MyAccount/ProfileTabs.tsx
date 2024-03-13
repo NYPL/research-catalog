@@ -20,17 +20,10 @@ const ProfileTabs = ({
 }) => {
   // currentHolds is a copy of the holds local to this component.
   const [currentHolds, setCurrentHolds] = useState(holds)
-  /* handleState removes the passed hold from currentHolds, so page doesn't need to
+  /* removeHold removes the passed hold from currentHolds, so page doesn't need to
    * reload for the request to disappear. */
-  function handleHoldsState(hold) {
-    setCurrentHolds(
-      currentHolds.reduce((acc, item) => {
-        if (item.id !== hold.id) {
-          acc.push(item)
-        }
-        return acc
-      }, [])
-    )
+  function removeHold(hold) {
+    setCurrentHolds(currentHolds.filter((item) => item.id !== hold.id))
   }
 
   // tabsData conditionally includes fines– only when user has total fines more than $0.
@@ -44,7 +37,7 @@ const ProfileTabs = ({
       label: `Requests (${currentHolds.length})`,
       content: (
         <RequestsTab
-          handleHoldsState={handleHoldsState}
+          removeHold={removeHold}
           holds={currentHolds}
           patron={patron}
         />

@@ -61,7 +61,7 @@ describe("ProfileTabs", () => {
         activePath="checkouts"
       />
     )
-    fireEvent.click(getByText("Requests (2)"))
+    fireEvent.click(getByText("Requests", { exact: false }))
     expect(mockRouter.asPath).toBe("/account/requests")
   })
 })

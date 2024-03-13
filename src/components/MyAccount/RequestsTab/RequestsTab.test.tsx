@@ -8,39 +8,39 @@ import {
 } from "../../../../__test__/fixtures/accountFixtures"
 import { userEvent } from "@testing-library/user-event"
 import ProfileTabs from "../ProfileTabs"
+import RequestsTab from "./RequestsTab"
 
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
+const mockRemoveHold = jest.fn()
 
 describe("RequestsTab", () => {
   global.fetch = jest.fn().mockResolvedValue({
-    json: async () => "Cancelled",
+    json: async () => "Canceled",
   } as Response)
 
   beforeEach(() => {
     window.localStorage.clear()
   })
 
-  // Mocking from ProfileTabs level so that handleHoldsState can be tested
   it("renders", () => {
-    render(
-      <ProfileTabs
+    const component = render(
+      <RequestsTab
         patron={mockPatron}
-        checkouts={mockCheckouts}
         holds={mockHolds}
-        fines={mockFines}
-        activePath="requests"
+        removeHold={mockRemoveHold}
       />
     )
+    expect(
+      component.getByText("Pickup location", { exact: false })
+    ).toBeInTheDocument()
   })
 
   it("renders each hold request as a row", () => {
     const { getAllByRole } = render(
-      <ProfileTabs
+      <RequestsTab
         patron={mockPatron}
-        checkouts={mockCheckouts}
         holds={mockHolds}
-        fines={mockFines}
-        activePath="requests"
+        removeHold={mockRemoveHold}
       />
     )
     const rows = getAllByRole("row")
@@ -49,12 +49,10 @@ describe("RequestsTab", () => {
 
   it("calls hold cancel endpoint when Cancel button is clicked", async () => {
     const component = render(
-      <ProfileTabs
+      <RequestsTab
         patron={mockPatron}
-        checkouts={mockCheckouts}
         holds={mockHolds}
-        fines={mockFines}
-        activePath="requests"
+        removeHold={mockRemoveHold}
       />
     )
 
@@ -105,12 +103,10 @@ describe("RequestsTab", () => {
 
   it("displays freeze buttons only for holds that can be frozen", async () => {
     const component = render(
-      <ProfileTabs
+      <RequestsTab
         patron={mockPatron}
-        checkouts={mockCheckouts}
         holds={mockHolds}
-        fines={mockFines}
-        activePath="requests"
+        removeHold={mockRemoveHold}
       />
     )
     const freezeButtons = component.getAllByText("Freeze")
@@ -119,12 +115,10 @@ describe("RequestsTab", () => {
 
   it("freezes and unfreezes, with button reflecting current state", async () => {
     const component = render(
-      <ProfileTabs
+      <RequestsTab
         patron={mockPatron}
-        checkouts={mockCheckouts}
         holds={mockHolds}
-        fines={mockFines}
-        activePath="requests"
+        removeHold={mockRemoveHold}
       />
     )
     const freezeButton = component.getAllByText("Freeze")[0]
@@ -144,8 +138,8 @@ describe("RequestsTab", () => {
       }
     )
 
+    expect(component.queryByText("Freeze")).not.toBeInTheDocument()
     const unfreezeButton = component.getAllByText("Unfreeze")[0]
-
     await userEvent.click(unfreezeButton)
 
     expect(fetch).toHaveBeenCalledWith(
@@ -163,6 +157,7 @@ describe("RequestsTab", () => {
       }
     )
 
+    expect(component.queryByText("Unfreeze")).not.toBeInTheDocument()
     const freezeButtons = component.getAllByText("Freeze")
     expect(freezeButtons.length).toBe(1)
   })

@@ -9,39 +9,21 @@ const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
   const handleFreezeClick = async () => {
     // Disabling button while request happens.
     setIsDisabled(true)
-    if (frozen) {
-      await fetch(
-        `/research/research-catalog/api/account/holds/update/${hold.id}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            patronId: patron.id,
-            freeze: false,
-            pickupLocation: hold.pickupLocation.code,
-          }),
-        }
-      )
-      setFrozen(false)
-    } else {
-      await fetch(
-        `/research/research-catalog/api/account/holds/update/${hold.id}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            patronId: patron.id,
-            freeze: true,
-            pickupLocation: hold.pickupLocation.code,
-          }),
-        }
-      )
-      setFrozen(true)
-    }
+    await fetch(
+      `/research/research-catalog/api/account/holds/update/${hold.id}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          patronId: patron.id,
+          freeze: !frozen,
+          pickupLocation: hold.pickupLocation.code,
+        }),
+      }
+    )
+    setFrozen(!frozen)
     setIsDisabled(false)
   }
 

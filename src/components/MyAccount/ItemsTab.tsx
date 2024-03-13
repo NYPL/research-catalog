@@ -4,27 +4,29 @@ import styles from "../../../styles/components/MyAccount.module.scss"
 const ItemsTab = ({
   headers,
   data,
-  verb,
+  userAction,
 }: {
   headers: string[]
   data: any[]
-  verb: string
+  userAction: "requested" | "checked out"
 }) => {
   return (
     <>
-      {data.length === 0 && (
+      {data?.length === 0 && (
         <Box className={styles.notification}>
-          <span>You currently do not have any research items {verb}.</span>
+          <span>
+            You currently do not have any research items {userAction}.
+          </span>
         </Box>
       )}
       <Box className={styles.notificationWithIcon}>
         <Icon size="medium" name="errorOutline" iconRotation="rotate180" />{" "}
         <span>
           See <Link href="https://nypl.na2.iiivega.com/">this page</Link> for
-          eBooks and eAudiobooks {verb} by you
+          eBooks and eAudiobooks {userAction} by you
         </span>
       </Box>
-      {data.length > 0 && (
+      {data?.length > 0 && (
         <Table
           className={styles.itemsTable}
           showRowDividers={true}

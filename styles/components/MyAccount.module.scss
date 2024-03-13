@@ -27,7 +27,7 @@
     margin-top: var(--nypl-space-s);
     margin-bottom: 0px;
     font-size: var(--nypl-fontSizes-desktop-heading-heading5);
-    font-weight: 510;
+    font-weight: var(--nypl-fontWeights-medium);
     letter-spacing: normal;
   }
   svg {
@@ -37,6 +37,7 @@
 .modalBody {
   font-size: var(--nypl-fontSizes-desktop-body-body1);
   display: flex;
+  flex-direction: column;
   padding-top: 0px;
 }
 
@@ -64,7 +65,7 @@
   thead > tr > th,
   thead > tr > th:last-of-type {
     text-transform: unset;
-    font-weight: 700;
+    font-weight: var(--nypl-fontWeights-bold);
     border-color: var(--nypl-colors-ui-gray-light-cool);
   }
   tbody > tr > td,
@@ -84,7 +85,7 @@
   border-color: var(--nypl-colors-ui-gray-semi-dark) !important;
   border-left: 4px solid;
   font-size: var(--nypl-fontSizes-desktop-caption);
-  font-weight: 510;
+  font-weight: var(--nypl-fontWeights-medium);
   font-style: normal !important;
 }
 
@@ -93,6 +94,6 @@
   border-color: var(--nypl-colors-ui-success-primary) !important;
   border-left: 4px solid;
   font-size: var(--nypl-fontSizes-desktop-caption);
-  font-weight: 510;
+  font-weight: var(--nypl-fontWeights-medium);
   font-style: normal !important;
 }
