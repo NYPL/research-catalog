@@ -16,7 +16,7 @@ jest.mock("next/router", () => ({
 describe("FeesTab", () => {
   it("renders", () => {
     const component = render(<FeesTab fines={mockFines} />)
-    expect(component.getByText("Amount", { exact: false })).toBeInTheDocument()
+    expect(component.getByText("Amount")).toBeInTheDocument()
   })
 
   it("renders each fine as a row", () => {
