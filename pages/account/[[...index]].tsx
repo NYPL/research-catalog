@@ -1,5 +1,9 @@
 import Head from "next/head"
-import { Button, Text } from "@nypl/design-system-react-components"
+import {
+  Button,
+  Notification,
+  Text,
+} from "@nypl/design-system-react-components"
 import Layout from "../../src/components/Layout/Layout"
 import initializePatronTokenAuth, {
   getLoginRedirect,
@@ -149,6 +153,16 @@ export default function MyAccount({
           </Text>
         ) : (
           <>
+            <Notification
+              className="feesNotification"
+              notificationType="warning"
+              showIcon
+              ariaLabel="Fees warning"
+              id="notification-id"
+              notificationContent="You have outstanding fees. Borrowing privileges will be suspended for cardholders with replacement fees totaling $100 or more.
+Fees can be paid at any New York Public Library branch in cash, U.S. Postal money order, personal check, or online through the Library website."
+            />
+
             <ProfileHeader patron={patron} />
             <ProfileTabs
               patron={patron}
