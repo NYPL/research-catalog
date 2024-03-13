@@ -12,8 +12,7 @@ const EDSLink = () => {
       <Text size="body2" className="eds-link">
         <span style={{ color: "var(--nypl-colors-ui-success-primary)" }}>
           New!
-        </span>
-        {" spaghetti"}
+        </span>{" "}
         Try our{" "}
         <DSLink href="https://research.ebsco.com/c/2styhb" target="_blank">
           <strong>Article Search</strong>
