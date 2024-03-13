@@ -15,7 +15,8 @@ jest.mock("next/router", () => ({
 
 describe("FeesTab", () => {
   it("renders", () => {
-    render(<FeesTab fines={mockFines} />)
+    const component = render(<FeesTab fines={mockFines} />)
+    expect(component.getByText("Amount", { exact: false })).toBeInTheDocument()
   })
 
   it("renders each fine as a row", () => {
@@ -41,7 +42,9 @@ describe("FeesTab", () => {
         fines={mockFines}
       />
     )
-    expect(screen.getByText("You have outstanding fees.", { exact: false }))
+    expect(
+      screen.getByText("You have outstanding fees.", { exact: false })
+    ).toBeInTheDocument()
   })
 
   it("does not render notification banner if user does not have fines", () => {
