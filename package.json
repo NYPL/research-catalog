@@ -66,7 +66,6 @@
     "**/*.{ts,tsx,json,sass}": [
       "eslint . --fix",
       "prettier --write ."
-    ],
-    "**/*.ts": "tsc-files --noEmit"
+    ]
   }
 }
