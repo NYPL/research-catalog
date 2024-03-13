@@ -1,6 +1,8 @@
 import Head from "next/head"
 import {
   Button,
+  Icon,
+  Link,
   Notification,
   Text,
 } from "@nypl/design-system-react-components"
@@ -13,6 +15,7 @@ import type { Checkout, Hold, Patron, Fine } from "../../src/types/accountTypes"
 import ProfileTabs from "../../src/components/MyAccount/ProfileTabs"
 import ProfileHeader from "../../src/components/MyAccount/ProfileHeader"
 import { BASE_URL } from "../../src/config/constants"
+import styles from "../../styles/components/MyAccount.module.scss"
 
 interface MyAccountPropsType {
   checkouts?: Checkout[]
@@ -153,15 +156,34 @@ export default function MyAccount({
           </Text>
         ) : (
           <>
-            <Notification
-              className="feesNotification"
-              notificationType="warning"
-              showIcon
-              ariaLabel="Fees warning"
-              id="notification-id"
-              notificationContent="You have outstanding fees. Borrowing privileges will be suspended for cardholders with replacement fees totaling $100 or more.
-Fees can be paid at any New York Public Library branch in cash, U.S. Postal money order, personal check, or online through the Library website."
-            />
+            {fines.total > 0 && (
+              <Notification
+                notificationType="warning"
+                showIcon={false}
+                className={styles.feesNotification}
+                notificationContent={
+                  <>
+                    <Icon
+                      size="medium"
+                      name="errorOutline"
+                      iconRotation="rotate180"
+                    />{" "}
+                    <Text>
+                      You have outstanding fees. Borrowing privileges will be
+                      suspended for cardholders with replacement fees totaling
+                      $100 or more. <br /> Fees can be paid at any New York
+                      Public Library branch in cash, U.S. Postal money order,
+                      personal check, or{" "}
+                      <Link href="https://nypl.na2.iiivega.com//?openAccount=fines-and-fees">
+                        {" "}
+                        online through the Library website
+                      </Link>
+                      .
+                    </Text>
+                  </>
+                }
+              />
+            )}
 
             <ProfileHeader patron={patron} />
             <ProfileTabs

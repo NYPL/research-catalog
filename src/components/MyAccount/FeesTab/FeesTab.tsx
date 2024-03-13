@@ -9,7 +9,6 @@ const FeesTab = ({ fines }: { fines: Fine }) => {
     fine.date,
     `$${fine.amount.toFixed(2)}`,
   ])
-  console.log(feesData)
   const finalRow = [["Total fees due", null, `$${fines.total.toFixed(2)}`]]
   return (
     <Table
