@@ -1,6 +1,5 @@
 import Head from "next/head"
 import {
-  Button,
   Icon,
   Link,
   Notification,

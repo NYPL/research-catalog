@@ -125,7 +125,7 @@ describe("MyAccountModel", () => {
           {
             detail: "Replacement",
             amount: 14.99,
-            date: "2023-06-15T17:34:46Z",
+            date: "June 15, 2023",
           },
         ],
       })
