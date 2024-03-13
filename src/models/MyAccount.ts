@@ -250,3 +250,32 @@ export const MyAccountFactory = async (id: string) => {
     holdBibData: holdBibData.entries,
   })
 }
+
+export const getPickupLocations = async () => {
+  const locations = await fetchPickupLocations()
+  return filterPickupLocations(locations)
+}
+
+const fetchPickupLocations = async () => {
+  const client = await sierraClient()
+  return await client.get("/branches/pickupLocations")
+}
+
+export const filterPickupLocations = (locations) => {
+  const pickupLocationDisqualification = [
+    "closed",
+    "onsite",
+    "staff only",
+    "edd",
+    "performing arts",
+    "reopening",
+  ]
+  const disqualified = (locationName, testString) =>
+    locationName.toLowerCase().includes(testString)
+  const isOpenBranchLocation = ({ name }: SierraCodeName, i) =>
+    !pickupLocationDisqualification.find((testString: string, j) =>
+      disqualified(name, testString)
+    )
+
+  return locations.filter(isOpenBranchLocation)
+}
