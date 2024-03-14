@@ -18,7 +18,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "GET") {
     const searchParams = mapQueryToSearchParams(req.query)
     const response = await fetchResults(searchParams)
-    res.status(200).json(response)
+
+    res.status(response.status).json(response)
   }
   // If we emit a POST request to the route handler, we are likely submitting an advanced search
   // with JS disabled. In this case, parse the request body and redirect to the results page.

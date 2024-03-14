@@ -47,6 +47,7 @@ export interface SearchResultsResponse {
   results?: SearchResults
   aggregations?: AggregationResults
   drbResults?: DRBResults
+  status?: 200 | 500
   page?: number
 }
 

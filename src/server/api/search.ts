@@ -15,7 +15,7 @@ import nyplApiClient from "../nyplApiClient"
 
 export async function fetchResults(
   searchParams: SearchParams
-): Promise<SearchResultsResponse | Error> {
+): Promise<SearchResultsResponse> {
   const { q, field, filters } = searchParams
 
   // If user is making a search for bib number (i.e. field set to "standard_number"),
@@ -49,38 +49,41 @@ export async function fetchResults(
   const resultsQuery = `${queryString}&per_page=${RESULTS_PER_PAGE.toString()}`
   const drbQuery = getDRBQueryStringFromSearchParams(modifiedSearchParams)
 
-  // Get the following in parallel:
-  //  - search results
-  //  - aggregations
-  //  - drb results
-  const client = await nyplApiClient({ apiName: DISCOVERY_API_NAME })
-  const drbClient = await nyplApiClient({ apiName: DRB_API_NAME })
-
-  const [resultsResponse, aggregationsResponse, drbResultsResponse] =
-    await Promise.allSettled([
-      await client.get(`${DISCOVERY_API_SEARCH_ROUTE}${resultsQuery}`),
-      await client.get(`${DISCOVERY_API_SEARCH_ROUTE}${aggregationQuery}`),
-      await drbClient.get(drbQuery),
-    ])
-
-  // Assign results values for each response when status is fulfilled
-  const results =
-    resultsResponse.status === "fulfilled" && resultsResponse.value
-
-  const aggregations =
-    aggregationsResponse.status === "fulfilled" && aggregationsResponse.value
-
-  const drbResults =
-    drbResultsResponse.status === "fulfilled" && drbResultsResponse.value
-
   try {
+    // Get the following in parallel:
+    //  - search results
+    //  - aggregations
+    //  - drb results
+    const client = await nyplApiClient({ apiName: DISCOVERY_API_NAME })
+    const drbClient = await nyplApiClient({ apiName: DRB_API_NAME })
+
+    const [resultsResponse, aggregationsResponse, drbResultsResponse] =
+      await Promise.allSettled([
+        await client.get(`${DISCOVERY_API_SEARCH_ROUTE}${resultsQuery}`),
+        await client.get(`${DISCOVERY_API_SEARCH_ROUTE}${aggregationQuery}`),
+        await drbClient.get(drbQuery),
+      ])
+
+    // Assign results values for each response when status is fulfilled
+    const results =
+      resultsResponse.status === "fulfilled" && resultsResponse.value
+
+    const aggregations =
+      aggregationsResponse.status === "fulfilled" && aggregationsResponse.value
+
+    const drbResults =
+      drbResultsResponse.status === "fulfilled" && drbResultsResponse.value
+
     return {
       results,
       aggregations,
       drbResults,
+      status: 200,
       page: searchParams.page,
     }
   } catch (error) {
-    return new Error("Error fetching Search Results")
+    return {
+      status: 500,
+    }
   }
 }

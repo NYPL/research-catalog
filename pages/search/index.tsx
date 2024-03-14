@@ -35,8 +35,6 @@ import { SearchResultsAggregationsProvider } from "../../src/context/SearchResul
 import useLoading from "../../src/hooks/useLoading"
 import initializePatronTokenAuth from "../../src/server/auth"
 import AppliedFilters from "../../src/components/SearchFilters/AppliedFilters"
-import { collapseMultiValueQueryParams } from "../../src/utils/refineSearchUtils"
-import { Aggregation } from "../../src/types/filterTypes"
 
 interface SearchProps {
   bannerNotification?: string
