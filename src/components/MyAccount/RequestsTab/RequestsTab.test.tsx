@@ -16,6 +16,7 @@ const mockRemoveHold = jest.fn()
 describe("RequestsTab", () => {
   global.fetch = jest.fn().mockResolvedValue({
     json: async () => "Canceled",
+    status: 200,
   } as Response)
 
   beforeEach(() => {
