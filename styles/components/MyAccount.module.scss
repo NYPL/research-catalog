@@ -121,16 +121,16 @@
 }
 
 .feesNotification {
-  margin-left: 0px !important;
+  margin-left: 0 !important;
   background: rgba(250, 244, 244, 1) !important;
   border-left: 2px solid var(--nypl-colors-ui-error-primary);
-  border-radius: 0px !important;
+  border-radius: 0 !important;
   > div > div > div {
     display: flex;
     gap: 4px;
     flex-direction: row;
     > p {
-      margin-bottom: 0px;
+      margin-bottom: 0;
       color: var(--nypl-colors-ui-error-primary);
       font-size: var(--nypl-fontSizes-desktop-body-body1);
     }
@@ -143,6 +143,6 @@
     }
   }
   > div {
-    padding-left: 0px;
+    padding-left: 0;
   }
 }
