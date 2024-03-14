@@ -73,7 +73,7 @@ const ProfileTabs = ({
 
   return (
     <Tabs
-      sx={{ "div[role=tabpanel]": { padding: "0px" } }}
+      sx={{ "div[role=tabpanel]": { padding: 0 } }}
       defaultIndex={tabsDict[activePath] || 0}
       id="tabs-id"
       onChange={(index) => {

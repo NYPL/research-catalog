@@ -30,8 +30,10 @@ const CancelButton = ({
         <Box className={styles.modalBody}>
           <Text sx={{ marginLeft: "l", marginRight: "m" }}>
             Your request for{" "}
-            <span style={{ fontWeight: 510 }}>{hold.title}</span> has been
-            canceled.
+            <span style={{ fontWeight: "var(--nypl-fontWeights-medium)" }}>
+              {hold.title}
+            </span>{" "}
+            has been canceled.
           </Text>
         </Box>
       ),
@@ -40,7 +42,7 @@ const CancelButton = ({
         <Heading className={styles.modalHeading}>
           <>
             <Icon size="large" name="errorFilled" color="ui.error.primary" />
-            <Text sx={{ marginBottom: "0px" }}>Request canceled </Text>
+            <Text sx={{ marginBottom: 0 }}>Request canceled </Text>
           </>
         </Heading>
       ),
@@ -58,7 +60,10 @@ const CancelButton = ({
         <Box className={styles.modalBody}>
           <Text>
             Are you sure that you want to cancel your request for{" "}
-            <span style={{ fontWeight: 510 }}>{hold.title}</span>?
+            <span style={{ fontWeight: "var(--nypl-fontWeights-medium)" }}>
+              {hold.title}
+            </span>
+            ?
           </Text>
           <Text>
             This item will no longer be available for pickup once you cancel
@@ -69,7 +74,7 @@ const CancelButton = ({
       closeButtonLabel: "Yes, cancel",
       headingText: (
         <Box className={styles.modalHeading}>
-          <Text sx={{ marginBottom: "0px" }}>Cancel request?</Text>
+          <Text sx={{ marginBottom: 0 }}>Cancel request?</Text>
         </Box>
       ),
       onClose: async (e) => {
@@ -84,8 +89,7 @@ const CancelButton = ({
               body: JSON.stringify({ patronId: patron.id }),
             }
           )
-          const responseData = await response.json()
-          if (responseData == "Canceled") {
+          if (response.status == 200) {
             // Open next modal to confirm request has been canceled.
             setModalProps(confirmModalProps(hold))
           }
