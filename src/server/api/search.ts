@@ -74,12 +74,18 @@ export async function fetchResults(
     const drbResults =
       drbResultsResponse.status === "fulfilled" && drbResultsResponse.value
 
-    return {
-      results,
-      aggregations,
-      drbResults,
-      status: 200,
-      page: searchParams.page,
+    if (results.totalResults !== undefined) {
+      return {
+        results,
+        aggregations,
+        drbResults,
+        status: 200,
+        page: searchParams.page,
+      }
+    } else {
+      return {
+        status: 500,
+      }
     }
   } catch (error) {
     return {

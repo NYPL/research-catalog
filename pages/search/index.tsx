@@ -53,6 +53,37 @@ export default function Search({
 }: SearchProps) {
   const metadataTitle = `Search Results | ${SITE_NAME}`
   const { push, query } = useRouter()
+
+  const isLoading = useLoading()
+
+  if (results.status === 500) {
+    return !isLoading ? (
+      <>
+        <Head>
+          <meta property="og:title" content={metadataTitle} key="og-title" />
+          <meta
+            property="og:site_name"
+            content={metadataTitle}
+            key="og-site-name"
+          />
+          <meta name="twitter:title" content={metadataTitle} key="tw-title" />
+          <title key="main-title">{metadataTitle}</title>
+        </Head>
+        <Layout
+          isAuthenticated={isAuthenticated}
+          activePage="search"
+          bannerNotification={bannerNotification}
+        >
+          <Heading level="h3">
+            There was an error getting the search results. Please try again.
+          </Heading>
+        </Layout>
+      </>
+    ) : (
+      <SkeletonLoader showImage={false} />
+    )
+  }
+
   const { itemListElement: searchResultsElements, totalResults } =
     results.results
   const drbResponse = results.drbResults?.data
@@ -65,8 +96,6 @@ export default function Search({
   const searchResultBibs = mapElementsToSearchResultsBibs(searchResultsElements)
   // Map DRB Works from response to DRBResult objects
   const drbResults = mapWorksToDRBResults(drbWorks)
-
-  const isLoading = useLoading()
 
   const handlePageChange = async (page: number) => {
     const newQuery = getSearchQuery({ ...searchParams, page })
