@@ -40,3 +40,17 @@ jest.mock("jose", () => ({
 
 // Set NEXT_PUBLIC_APP_ENV to "development" for jest tests
 process.env.NEXT_PUBLIC_APP_ENV = "development"
+
+Object.defineProperty(window, "matchMedia", {
+  writable: true,
+  value: jest.fn().mockImplementation(query => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: jest.fn(), // Deprecated
+    removeListener: jest.fn(), // Deprecated
+    addEventListener: jest.fn(),
+    removeEventListener: jest.fn(),
+    dispatchEvent: jest.fn(),
+  })),
+});
