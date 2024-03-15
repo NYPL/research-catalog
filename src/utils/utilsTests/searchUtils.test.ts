@@ -96,16 +96,24 @@ describe("searchUtils", () => {
     })
   })
   describe("getSearchResultsHeading", () => {
+    it("doesn't display empty keyword if other params are present", () => {
+      const heading = getSearchResultsHeading(
+        { page: 1, q: "", title: "Strega Nonna" },
+        1200
+      )
+      expect(heading.includes('keyword ""')).toBe(false)
+    })
+    it.todo("doesn't display filter params")
     it("returns the correct heading string for first page", () => {
-      const heading = getSearchResultsHeading(1, 1200, "cats")
+      const heading = getSearchResultsHeading({ page: 1, q: "cats" }, 1200)
       expect(heading).toEqual(
-        'Displaying 1-50 of 1,200 results for keyword "cats"'
+        'Displaying 1-50 of 1,200 results for Keyword: "cats"'
       )
     })
     it("returns the correct heading string for other pages", () => {
-      const heading = getSearchResultsHeading(5, 1200, "cats")
+      const heading = getSearchResultsHeading({ page: 5, q: "cats" }, 1200)
       expect(heading).toEqual(
-        'Displaying 201-250 of 1,200 results for keyword "cats"'
+        'Displaying 201-250 of 1,200 results for Keyword: "cats"'
       )
     })
   })
