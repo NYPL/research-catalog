@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import type { Checkout, Patron } from "../../types/myAccountTypes"
+import type { Checkout, Patron } from "../../../types/myAccountTypes"
 import {
   useModal,
   Box,
@@ -9,8 +9,8 @@ import {
   Heading,
 } from "@nypl/design-system-react-components"
 import Link from "next/link"
-import { BASE_URL } from "../../config/constants"
-import styles from "../../../styles/components/MyAccount.module.scss"
+import { BASE_URL } from "../../../config/constants"
+import styles from "../../../../styles/components/MyAccount.module.scss"
 
 const RenewButton = ({
   checkout,
@@ -39,7 +39,7 @@ const RenewButton = ({
           name="actionCheckCircleFilled"
           color="ui.success.primary"
         />
-        <Text sx={{ marginBottom: "0px" }}> Renewal successful </Text>
+        <Text sx={{ marginBottom: 0 }}> Renewal successful </Text>
       </Box>
     ),
   }
@@ -60,7 +60,7 @@ const RenewButton = ({
       <Heading className={styles.modalHeading}>
         <>
           <Icon size="large" name="errorFilled" color="ui.error.primary" />
-          <Text sx={{ marginBottom: "0px" }}> Renewal failed </Text>
+          <Text sx={{ marginBottom: 0 }}> Renewal failed </Text>
         </>
       </Heading>
     ),

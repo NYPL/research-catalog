@@ -109,7 +109,9 @@ export default class MyAccount {
           (subfield: { tag: string; subfield: string }) => subfield.tag === "a"
         ).content
         isResearch = nineTenContent.startsWith("RL")
-        isNyplOwned = nineTenContent !== "RLOTF"
+        // RLOTF: "Research Library On The Fly", a code we add to OTF (aka "virtual") records,
+        // to tag them as being Research OTF records
+        isNyplOwned = !isResearch || nineTenContent !== "RLOTF"
       }
       bibDataMap[bibFields.id] = { title, isResearch, isNyplOwned }
       return bibDataMap
@@ -127,11 +129,16 @@ export default class MyAccount {
         canFreeze: hold.canFreeze,
         frozen: hold.frozen,
         status: MyAccount.getHoldStatus(hold.status),
-        pickupLocation: hold.pickupLocation.name,
+        pickupLocation: hold.pickupLocation,
         title: bibDataMap[bibId].title,
         isResearch: bibDataMap[bibId].isResearch,
         bibId: bibId,
-        isNyplOwned: bibDataMap[bibId].isResearch,
+        isNyplOwned: bibDataMap[bibId].isNyplOwned,
+        catalogHref: bibDataMap[bibId].isNyplOwned
+          ? bibDataMap[bibId].isResearch
+            ? `https://nypl.org/research/research-catalog/bib/b${bibId}`
+            : `https://nypl.na2.iiivega.com/search/card?recordId=${bibId}`
+          : null,
       }
     })
   }
@@ -202,6 +209,7 @@ export default class MyAccount {
    * Returns date in readable string ("Month day, year")
    */
   static formatDate(date) {
+    if (!date) return null
     const d = new Date(date)
     const year = d.getFullYear()
     const day = d.getDate()

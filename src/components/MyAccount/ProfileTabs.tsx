@@ -3,7 +3,9 @@ import type MyAccount from "../../models/MyAccount"
 
 import { Tabs } from "@nypl/design-system-react-components"
 import { useRouter } from "next/router"
-import CheckoutsTab from "./CheckoutsTab"
+import CheckoutsTab from "./CheckoutsTab/CheckoutsTab"
+import RequestsTab from "./RequestsTab/RequestsTab"
+import { useState } from "react"
 
 interface ProfileTabsPropsType {
   patron: MyAccount["patron"]
@@ -20,16 +22,30 @@ const ProfileTabs = ({
   fines,
   activePath,
 }: ProfileTabsPropsType) => {
+  // currentHolds is a copy of the holds local to this component.
+  const [currentHolds, setCurrentHolds] = useState(holds)
+  /* removeHold removes the passed hold from currentHolds, so page doesn't need to
+   * reload for the request to disappear. */
+  function removeHold(hold) {
+    setCurrentHolds(currentHolds.filter((item) => item.id !== hold.id))
+  }
+
   // tabsData conditionally includes fines– only when user has total fines more than $0.
   const tabsData = [
     {
-      label: "Checkouts",
+      label: `Checkouts (${checkouts.length})`,
       content: <CheckoutsTab checkouts={checkouts} patron={patron} />,
       urlPath: "checkouts",
     },
     {
-      label: "Requests",
-      content: "",
+      label: `Requests (${currentHolds.length})`,
+      content: (
+        <RequestsTab
+          removeHold={removeHold}
+          holds={currentHolds}
+          patron={patron}
+        />
+      ),
       urlPath: "requests",
     },
     ...(fines?.total > 0
@@ -61,7 +77,7 @@ const ProfileTabs = ({
 
   return (
     <Tabs
-      sx={{ "div[role=tabpanel]": { padding: "0px" } }}
+      sx={{ "div[role=tabpanel]": { padding: 0 } }}
       defaultIndex={tabsDict[activePath] || 0}
       id="tabs-id"
       onChange={(index) => {
