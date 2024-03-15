@@ -96,6 +96,8 @@ export default class MyAccount {
           (subfield: { tag: string; subfield: string }) => subfield.tag === "a"
         ).content
         isResearch = nineTenContent.startsWith("RL")
+        // RLOTF: "Research Library On The Fly", a code we add to OTF (aka "virtual") records,
+        // to tag them as being Research OTF records
         isNyplOwned = !isResearch || nineTenContent !== "RLOTF"
       }
       bibDataMap[bibFields.id] = { title, isResearch, isNyplOwned }

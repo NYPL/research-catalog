@@ -79,21 +79,3 @@
     width: 213px;
   }
 }
-
-.statusBadge {
-  background: var(--nypl-colors-ui-bg-default);
-  border-color: var(--nypl-colors-ui-gray-semi-dark) !important;
-  border-left: 4px solid;
-  font-size: var(--nypl-fontSizes-desktop-caption);
-  font-weight: var(--nypl-fontWeights-medium);
-  font-style: normal !important;
-}
-
-.statusBadgeReady {
-  background: rgba(238, 247, 240, 1) !important;
-  border-color: var(--nypl-colors-ui-success-primary) !important;
-  border-left: 4px solid;
-  font-size: var(--nypl-fontSizes-desktop-caption);
-  font-weight: var(--nypl-fontWeights-medium);
-  font-style: normal !important;
-}
