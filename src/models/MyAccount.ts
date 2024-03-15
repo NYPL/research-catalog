@@ -76,13 +76,18 @@ export default class MyAccount {
   }> {
     if (!holdsOrCheckouts.length) return { entries: [] }
     const checkoutBibIds = holdsOrCheckouts.map((holdOrCheckout) => {
-      return holdOrCheckout[itemOrRecord].bibIds[0]
+      if (holdOrCheckout[itemOrRecord].bibIds) {
+        return holdOrCheckout[itemOrRecord].bibIds[0]
+      } else {
+        return holdOrCheckout[itemOrRecord].id
+      }
     })
 
     const bibData = await client.get(
       `bibs?id=${checkoutBibIds}&fields=default,varFields`
     )
-
+    console.log("bibData")
+    console.log(bibData)
     return bibData
   }
 
@@ -114,6 +119,7 @@ export default class MyAccount {
   buildHolds(holds: SierraHold[], bibData: SierraBibEntry[]): Hold[] {
     const bibDataMap = MyAccount.buildBibData(bibData)
     return holds.map((hold: SierraHold) => {
+      const bibId = hold.record.bibIds ? hold.record.bibIds[0] : hold.record.id
       return {
         patron: MyAccount.getRecordId(hold.patron),
         id: MyAccount.getRecordId(hold.id),
@@ -122,10 +128,10 @@ export default class MyAccount {
         frozen: hold.frozen,
         status: MyAccount.getHoldStatus(hold.status),
         pickupLocation: hold.pickupLocation.name,
-        title: bibDataMap[hold.record.bibIds[0]].title,
-        isResearch: bibDataMap[hold.record.bibIds[0]].isResearch,
-        bibId: hold.record.bibIds[0],
-        isNyplOwned: bibDataMap[hold.record.bibIds[0]].isResearch,
+        title: bibDataMap[bibId].title,
+        isResearch: bibDataMap[bibId].isResearch,
+        bibId: bibId,
+        isNyplOwned: bibDataMap[bibId].isResearch,
       }
     })
   }
@@ -238,6 +244,7 @@ export const MyAccountFactory = async (id: string) => {
     checkouts.entries,
     "item"
   )
+  console.log("holds entering fetchBibData", holds.entries)
   const holdBibData = await MyAccount.fetchBibData(holds.entries, "record")
   return new MyAccount({
     //  default to empty array to avoid hard to replicate error
