@@ -41,9 +41,10 @@ jest.mock("jose", () => ({
 // Set NEXT_PUBLIC_APP_ENV to "development" for jest tests
 process.env.NEXT_PUBLIC_APP_ENV = "development"
 
+// Fixes error introduced with DS v3
 Object.defineProperty(window, "matchMedia", {
   writable: true,
-  value: jest.fn().mockImplementation(query => ({
+  value: jest.fn().mockImplementation((query) => ({
     matches: false,
     media: query,
     onchange: null,
@@ -53,4 +54,4 @@ Object.defineProperty(window, "matchMedia", {
     removeEventListener: jest.fn(),
     dispatchEvent: jest.fn(),
   })),
-});
+})
