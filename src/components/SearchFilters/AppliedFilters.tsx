@@ -8,10 +8,12 @@ import {
   addLabelPropAndParseFilters,
   collapseMultiValueQueryParams,
 } from "../../utils/refineSearchUtils"
-import type { Option } from "../../types/filterTypes"
 import { useContext } from "react"
 import { SearchResultsAggregationsContext } from "../../context/SearchResultsAggregationsContext"
-import { removeSelectedTag } from "./appliedFilterUtils"
+import {
+  buildTagsetData,
+  buildAppliedFiltersValueArrayWithTagRemoved,
+} from "./appliedFilterUtils"
 
 const AppliedFilters = () => {
   const aggregations = useContext(SearchResultsAggregationsContext)
@@ -21,18 +23,9 @@ const AppliedFilters = () => {
     aggregations,
     appliedFilters
   )
-  const appliedFilterFields = Object.keys(appliedFiltersWithLabels)
-  const tagSetData = appliedFilterFields
-    .map((field: string) => {
-      const appliedFiltersWithLabelsPerField = appliedFiltersWithLabels[field]
-      return appliedFiltersWithLabelsPerField.map((filter: Option) => {
-        return { id: field + "-" + filter.label, label: filter.label, field }
-      })
-    })
-    .flat()
 
+  const tagSetData = buildTagsetData(appliedFiltersWithLabels)
   const handleRemove = (tag: { label: string; field: string }) => {
-    console.log(tag)
     if (tag.label === "Clear Filters") {
       router.push({
         pathname: "/search",
@@ -40,10 +33,9 @@ const AppliedFilters = () => {
       })
       return
     }
-    const updatedFilters = removeSelectedTag(
+    const updatedFilters = buildAppliedFiltersValueArrayWithTagRemoved(
       tag,
-      appliedFiltersWithLabels,
-      appliedFilters
+      appliedFiltersWithLabels
     )
     const updatedQuery = {
       ...getQueryWithoutFilters(router.query),

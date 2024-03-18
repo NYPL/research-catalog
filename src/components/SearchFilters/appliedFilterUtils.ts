@@ -1,27 +1,45 @@
-import type { Option } from "../../types/filterTypes"
+import type {
+  CollapsedMultiValueAppliedFilters,
+  Option,
+} from "../../types/filterTypes"
 
-export const removeSelectedTag = (
+export const buildAppliedFiltersValueArrayWithTagRemoved = (
   tag: { label: string; field: string },
-  appliedFiltersWithLabels: Record<string, Option[]>,
-  appliedFilters
-) => {
-  const relevantField = tag.field
+  appliedFiltersWithLabels: Record<string, Option[]>
+): Record<string, string[]> => {
+  const fieldToUpdate = tag.field
   const doesNotMatchLabelToRemove = (option: Option) =>
     option.label !== tag.label
-  // regenerate the selected options for the relevant field by removing only
-  // the tag that was selected.
-  const updatedField = appliedFiltersWithLabels[relevantField]
-    .filter(doesNotMatchLabelToRemove)
-    // only return the value so we can generate the query again
-    .map((selectedOption: Option) => selectedOption.value)
 
-  const updatedFilters = appliedFilters
-  // if there are elements left in the relevant field, we want those in the \
-  // query
-  if (updatedField.length) {
-    updatedFilters[relevantField] = updatedField
-    // otherwise, remove the field from the query so we don't have an
-    // undefined query param
-  } else delete updatedFilters[relevantField]
+  const updatedFilters = {} as CollapsedMultiValueAppliedFilters
+  for (const field in appliedFiltersWithLabels) {
+    if (field !== fieldToUpdate) {
+      updatedFilters[field] = appliedFiltersWithLabels[field].map(
+        (option: Option) => option.value
+      )
+    } else {
+      // regenerate the selected options for the relevant field by removing only
+      // the tag that was selected.
+      updatedFilters[field] = appliedFiltersWithLabels[field]
+        .filter(doesNotMatchLabelToRemove)
+        // only return the value so we can generate the query again
+        .map((option: Option) => option.value)
+    }
+  }
+
   return updatedFilters
+}
+
+export const buildTagsetData = (
+  appliedFiltersWithLabels: Record<string, Option[]>
+) => {
+  const appliedFilterFields = Object.keys(appliedFiltersWithLabels)
+  return appliedFilterFields
+    .map((field: string) => {
+      const appliedFiltersWithLabelsPerField = appliedFiltersWithLabels[field]
+      return appliedFiltersWithLabelsPerField.map((filter: Option) => {
+        return { id: field + "-" + filter.label, label: filter.label, field }
+      })
+    })
+    .flat()
 }

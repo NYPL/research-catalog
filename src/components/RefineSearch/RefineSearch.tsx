@@ -23,8 +23,10 @@ import type { Aggregation } from "../../types/filterTypes"
 
 interface RefineSearchProps {
   aggregations: Aggregation[]
-  setAppliedFilters: Dispatch<React.SetStateAction<Record<string, string[]>>>
-  appliedFilters: Record<string, string[]>
+  setAppliedFilters: Dispatch<
+    React.SetStateAction<CollapsedMultiValueAppliedFilters>
+  >
+  appliedFilters: CollapsedMultiValueAppliedFilters
 }
 
 /**
