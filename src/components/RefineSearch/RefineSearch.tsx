@@ -11,7 +11,7 @@ import { useState, useCallback } from "react"
 import { useRouter } from "next/router"
 
 import styles from "../../../styles/components/Search.module.scss"
-import FieldsetDate, { type DateFormName }from "../SearchFilters/FieldsetDate"
+import FieldsetDate, { type DateFormName } from "../SearchFilters/FieldsetDate"
 import SearchResultsFilters from "../../models/SearchResultsFilters"
 import RefineSearchCheckBoxField from "./RefineSearchCheckboxField"
 import {
@@ -20,7 +20,9 @@ import {
   getQueryWithoutFilters,
 } from "../../utils/refineSearchUtils"
 import type { Aggregation } from "../../types/filterTypes"
+import DateForm from "../DateForm"
 
+const debounceInterval = 60
 interface RefineSearchProps {
   aggregations: Aggregation[]
   setAppliedFilters: Dispatch<React.SetStateAction<Record<string, string[]>>>
@@ -46,20 +48,20 @@ const RefineSearch = ({
   ]
 
   const dateFieldset = (
-    <FieldsetDate
-      onDateChange={(dateField: DateFormName, data: string) => {
+    <DateForm
+      changeHandler={(e: SyntheticEvent) => {
+        const target = e.target as HTMLInputElement
         // update the parent state to know about the updated dateValues
         setAppliedFilters((prevFilters) => {
           return {
             ...prevFilters,
-            [dateField]: [data],
+            [target.name]: [target.value],
           }
         })
       }}
-      appliedFilters={{
-        dateBefore: appliedFilters.dateBefore && appliedFilters.dateBefore[0],
-        dateAfter: appliedFilters.dateAfter && appliedFilters.dateAfter[0],
-      }}
+      debounceInterval={debounceInterval}
+      dateAfter={appliedFilters.dateAfter?.[0]}
+      dateBefore={appliedFilters.dateBefore?.[0]}
     />
   )
 

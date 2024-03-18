@@ -37,6 +37,8 @@ import type {
 import { getSearchQuery } from "../../src/utils/searchUtils"
 import initializePatronTokenAuth from "../../src/server/auth"
 import { appConfig } from "../../src/config/config"
+import DatePicker from "../../src/components/DateForm"
+import DateForm from "../../src/components/DateForm"
 // import FieldsetDate from "../../src/components/SearchFilters/FieldsetDate"
 
 export const defaultEmptySearchErrorMessage =
@@ -202,40 +204,15 @@ export default function AdvancedSearch({ isAuthenticated }) {
                 </Select>
                 <FormRow>
                   <FormField>
-                    <Fieldset
-                      id="date-fieldset"
-                      gridTemplateColumns="repeat(2, minmax(0, 1fr))"
-                      legendText="Date"
-                      display="grid"
-                      gap="s"
-                    >
-                      <TextInput
-                        id="date-from"
-                        labelText="From"
-                        type="text"
-                        name="dateAfter"
-                        helperText="e.g. 1901"
-                        value={searchFormState["filters"].dateAfter}
-                        onChange={debounce(
-                          (e) => handleInputChange(e, "filter_change"),
-                          debounceInterval
-                        )}
-                        ref={inputRef}
-                      />
-                      <TextInput
-                        id="date-to"
-                        labelText="To"
-                        type="text"
-                        name="dateBefore"
-                        helperText="e.g. 2000"
-                        value={searchFormState["filters"].dateBefore}
-                        onChange={debounce(
-                          (e) => handleInputChange(e, "filter_change"),
-                          debounceInterval
-                        )}
-                        ref={inputRef}
-                      />
-                    </Fieldset>
+                    <DateForm
+                      debounceInterval={debounceInterval}
+                      inputRef={inputRef}
+                      dateBefore={searchFormState["filters"].dateBefore}
+                      dateAfter={searchFormState["filters"].dateAfter}
+                      changeHandler={(e) =>
+                        handleInputChange(e, "filter_change")
+                      }
+                    />
                   </FormField>
                 </FormRow>
               </FormField>

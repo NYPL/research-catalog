@@ -166,6 +166,7 @@ describe("RefineSearch", () => {
         "filters[subjectLiteral][0]": "Cooking, Italian.",
       })
     })
+    it.todo("clearing filters should clear year filters")
     it("clearing filters should return to search results", async () => {
       await openRefineSearch()
       const applyButton = screen.getByText("Apply Filters")
