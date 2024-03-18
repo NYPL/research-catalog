@@ -1,10 +1,5 @@
 import Head from "next/head"
-import {
-  Icon,
-  Link,
-  Notification,
-  Text,
-} from "@nypl/design-system-react-components"
+import { Text } from "@nypl/design-system-react-components"
 import Layout from "../../src/components/Layout/Layout"
 import initializePatronTokenAuth, {
   getLoginRedirect,
@@ -14,7 +9,7 @@ import type { Checkout, Hold, Patron, Fine } from "../../src/types/accountTypes"
 import ProfileTabs from "../../src/components/MyAccount/ProfileTabs"
 import ProfileHeader from "../../src/components/MyAccount/ProfileHeader"
 import { BASE_URL } from "../../src/config/constants"
-import styles from "../../styles/components/MyAccount.module.scss"
+import FeesBanner from "../../src/components/MyAccount/FeesBanner"
 
 interface MyAccountPropsType {
   checkouts?: Checkout[]
@@ -155,35 +150,7 @@ export default function MyAccount({
           </Text>
         ) : (
           <>
-            {fines.total > 0 && (
-              <Notification
-                notificationType="warning"
-                showIcon={false}
-                className={styles.feesNotification}
-                notificationContent={
-                  <>
-                    <Icon
-                      size="medium"
-                      name="errorOutline"
-                      iconRotation="rotate180"
-                    />{" "}
-                    <Text>
-                      You have outstanding fees. Borrowing privileges will be
-                      suspended for cardholders with replacement fees totaling
-                      $100 or more. <br /> Fees can be paid at any New York
-                      Public Library branch in cash, U.S. Postal money order,
-                      personal check, or{" "}
-                      <Link href="https://nypl.na2.iiivega.com//?openAccount=fines-and-fees">
-                        {" "}
-                        online through the Library website
-                      </Link>
-                      .
-                    </Text>
-                  </>
-                }
-              />
-            )}
-
+            {fines.total > 0 && <FeesBanner />}
             <ProfileHeader patron={patron} />
             <ProfileTabs
               patron={patron}
