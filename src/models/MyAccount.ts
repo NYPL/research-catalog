@@ -263,7 +263,6 @@ export const MyAccountFactory = async (id: string) => {
     checkouts.entries,
     "item"
   )
-  console.log("holds entering fetchBibData", holds.entries)
   const holdBibData = await MyAccount.fetchBibData(holds.entries, "record")
   return new MyAccount({
     //  default to empty array to avoid hard to replicate error

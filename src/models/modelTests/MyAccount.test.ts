@@ -93,6 +93,21 @@ describe("MyAccountModel", () => {
           catalogHref:
             "https://nypl.na2.iiivega.com/search/card?recordId=22002760",
         },
+        {
+          patron: "2772226",
+          id: "42273371",
+          pickupByDate: null,
+          canFreeze: false,
+          frozen: false,
+          status: "on hold.",
+          pickupLocation: { code: "mp", name: "Morris Park" },
+          title: "2017 Tony Award Season.",
+          isResearch: false,
+          bibId: "21317166",
+          isNyplOwned: true,
+          catalogHref:
+            "https://nypl.na2.iiivega.com/search/card?recordId=21317166",
+        },
       ])
       expect(account.checkouts).toStrictEqual([
         {

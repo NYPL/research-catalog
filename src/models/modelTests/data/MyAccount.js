@@ -79,9 +79,10 @@ export const patron = {
 }
 
 export const holdBibs = {
-  total: 1,
+  total: 2,
   start: 0,
   entries: [
+    //Item level hold bib data
     {
       id: "22002760",
       updatedDate: "2024-02-06T12:15:43Z",
@@ -607,6 +608,24 @@ export const holdBibs = {
           content: "00000pam a2200457 i 4500",
         },
       ],
+    },
+    //Bib level hold bib data
+    {
+      id: "21317166",
+      updatedDate: "2024-03-13T15:35:21Z",
+      createdDate: "2017-08-15T17:03:37Z",
+      deleted: false,
+      suppressed: false,
+      upc: "888295581936",
+      lang: { code: "eng", name: "English" },
+      title: "2017 Tony Award Season.",
+      author: "",
+      materialType: { code: "y  ", value: "MUSIC CD" },
+      bibLevel: { code: "m", value: "MONOGRAPH" },
+      publishYear: 2017,
+      catalogDate: "2017-08-27",
+      country: { code: "xx ", name: "Unknown or undetermined" },
+      callNumber: "CD MUSICAL 2017 TON-5143",
     },
   ],
 }
@@ -2067,9 +2086,10 @@ export const checkoutBibs = {
 }
 
 export const holds = {
-  total: 1,
+  total: 2,
   start: 0,
   entries: [
+    //Item level hold
     {
       id: "https://ilsstaff.nypl.org/iii/sierra-api/v6/patrons/holds/48636910",
       record: {
@@ -2101,6 +2121,33 @@ export const holds = {
         code: "i",
         name: "Requested item ready for pickup.",
       },
+      canFreeze: false,
+    },
+    //Bib level hold
+    {
+      id: "https://nypl-sierra-test.nypl.org/iii/sierra-api/v6/patrons/holds/42273371",
+      record: {
+        id: "21317166",
+        updatedDate: "2024-03-13T15:35:21Z",
+        createdDate: "2017-08-15T17:03:37Z",
+        deleted: false,
+        suppressed: false,
+        upc: "888295581936",
+        lang: [Object],
+        title: "2017 Tony Award Season.",
+        author: "",
+        materialType: [Object],
+        bibLevel: [Object],
+        publishYear: 2017,
+        catalogDate: "2017-08-27",
+        country: [Object],
+        callNumber: "CD MUSICAL 2017 TON-5143",
+      },
+      patron:
+        "https://nypl-sierra-test.nypl.org/iii/sierra-api/v6/patrons/2772226",
+      frozen: false,
+      pickupLocation: { code: "mp", name: "Morris Park" },
+      status: { code: "0", name: "on hold." },
       canFreeze: false,
     },
   ],
