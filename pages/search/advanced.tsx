@@ -37,14 +37,11 @@ import type {
 import { getSearchQuery } from "../../src/utils/searchUtils"
 import initializePatronTokenAuth from "../../src/server/auth"
 import { appConfig } from "../../src/config/config"
-import DatePicker from "../../src/components/DateForm"
 import DateForm from "../../src/components/DateForm"
 // import FieldsetDate from "../../src/components/SearchFilters/FieldsetDate"
 
 export const defaultEmptySearchErrorMessage =
   "Error: please enter at least one field to submit an advanced search."
-export const badDateErrorMessage =
-  "Error: the date range is invalid. Please try again."
 
 /**
  * The Advanced Search page is responsible for displaying the Advanced Search form fields and
@@ -56,6 +53,10 @@ export default function AdvancedSearch({ isAuthenticated }) {
   const inputRef = useRef<TextInputRefType>()
   const notificationRef = useRef<HTMLDivElement>()
   const debounceInterval = 20
+
+  const [dateRangeError, setDateRangeError] = useState(false)
+  const [displayDateRangeError, setDisplayDateRangeError] = useState(false)
+  const dateInputRef = useRef<TextInputRefType>()
 
   const [alert, setAlert] = useState(false)
   const [errorMessage, setErrorMessage] = useState(
@@ -89,19 +90,17 @@ export default function AdvancedSearch({ isAuthenticated }) {
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
+    if (dateRangeError) {
+      setDisplayDateRangeError(true)
+      dateInputRef.current.focus()
+      return
+    }
     const queryString = getSearchQuery(searchFormState as SearchParams)
 
     if (!queryString.length) {
       setErrorMessage(defaultEmptySearchErrorMessage)
       setAlert(true)
       // Very basic validation for the date range.
-    } else if (
-      searchFormState["filters"].dateAfter >
-      searchFormState["filters"].dateBefore
-    ) {
-      // The error message can be better, but this is a start.
-      setErrorMessage(badDateErrorMessage)
-      setAlert(true)
     } else {
       // If the NEXT_PUBLIC_REVERSE_PROXY_ENABLED feature flag is present, use window.location.replace
       // instead of router.push to forward search results to DFE.
@@ -116,6 +115,7 @@ export default function AdvancedSearch({ isAuthenticated }) {
   const handleClear = (e: SyntheticEvent) => {
     e.preventDefault()
     alert && setAlert(false)
+    dateInputRef.current.value = ""
     inputRef.current.value = ""
     dispatch({ type: "form_reset", payload: initialSearchFormState })
   }
@@ -205,8 +205,10 @@ export default function AdvancedSearch({ isAuthenticated }) {
                 <FormRow>
                   <FormField>
                     <DateForm
+                      displayDateRangeErrorNotification={displayDateRangeError}
+                      setDateRangeError={setDateRangeError}
                       debounceInterval={debounceInterval}
-                      inputRef={inputRef}
+                      inputRef={dateInputRef}
                       dateBefore={searchFormState["filters"].dateBefore}
                       dateAfter={searchFormState["filters"].dateAfter}
                       changeHandler={(e) =>

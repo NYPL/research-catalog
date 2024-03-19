@@ -1,3 +1,4 @@
+import type { TextInputRefType } from "@nypl/design-system-react-components"
 import {
   Box,
   Button,
@@ -7,7 +8,7 @@ import {
   Icon,
 } from "@nypl/design-system-react-components"
 import type { Dispatch, SyntheticEvent } from "react"
-import { useState, useCallback } from "react"
+import { useState, useCallback, useRef } from "react"
 import { useRouter } from "next/router"
 
 import styles from "../../../styles/components/Search.module.scss"
@@ -23,6 +24,14 @@ import type { Aggregation } from "../../types/filterTypes"
 import DateForm from "../DateForm"
 
 const debounceInterval = 60
+
+const fields = [
+  { value: "materialType", label: "Format" },
+  { value: "language", label: "Language" },
+  { value: "dateAfter", label: "Start Year" },
+  { value: "dateBefore", label: "End Year" },
+  { value: "subjectLiteral", label: "Subject" },
+]
 interface RefineSearchProps {
   aggregations: Aggregation[]
   setAppliedFilters: Dispatch<React.SetStateAction<Record<string, string[]>>>
@@ -39,13 +48,14 @@ const RefineSearch = ({
 }: RefineSearchProps) => {
   const router = useRouter()
 
-  const fields = [
-    { value: "materialType", label: "Format" },
-    { value: "language", label: "Language" },
-    { value: "dateAfter", label: "Start Year" },
-    { value: "dateBefore", label: "End Year" },
-    { value: "subjectLiteral", label: "Subject" },
-  ]
+  // we need two separate states for date range errors. dateRangeError is a
+  // boolean which tells us if the date range passes input validation
+  // displayDateRangeError is a boolean that is set on submitting the filters.
+  // We don't want to display the date form error until a user has attempted to
+  // submit the incorrect date range.
+  const [dateRangeError, setDateRangeError] = useState(false)
+  const [displayDateRangeError, setDisplayDateRangeError] = useState(false)
+  const dateInputRef = useRef<TextInputRefType>()
 
   const dateFieldset = (
     <DateForm
@@ -59,6 +69,9 @@ const RefineSearch = ({
           }
         })
       }}
+      inputRef={dateInputRef}
+      displayDateRangeErrorNotification={displayDateRangeError}
+      setDateRangeError={setDateRangeError}
       debounceInterval={debounceInterval}
       dateAfter={appliedFilters.dateAfter?.[0]}
       dateBefore={appliedFilters.dateBefore?.[0]}
@@ -84,6 +97,11 @@ const RefineSearch = ({
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault()
+    if (dateRangeError) {
+      setDisplayDateRangeError(true)
+      dateInputRef.current.focus()
+      return
+    }
     const updatedQuery = {
       // maintain any non-filter query params, eg q=spaghetti, journalTitle=pasta%20fancy
       ...getQueryWithoutFilters(router.query),
