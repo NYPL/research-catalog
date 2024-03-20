@@ -10,6 +10,14 @@ const CheckoutsTab = ({
   checkouts: Checkout[]
   patron: Patron
 }) => {
+  function formatTitleElement(checkout: Checkout) {
+    if (checkout.href) {
+      return <Link href={checkout.href}>{checkout.title}</Link>
+    } else {
+      return <Text>{checkout.title}</Text>
+    }
+  }
+
   const checkoutsHeaders = [
     "Title",
     "Barcode",
@@ -18,16 +26,8 @@ const CheckoutsTab = ({
     "Manage checkout",
   ]
 
-  function formatTitle(checkout: Checkout) {
-    if (checkout.href) {
-      return <Link href={checkout.href}>{checkout.title}</Link>
-    } else {
-      return <Text>{checkout.title}</Text>
-    }
-  }
-
   const checkoutsData = checkouts.map((checkout) => [
-    formatTitle(checkout),
+    formatTitleElement(checkout),
     checkout.barcode,
     checkout.callNumber,
     checkout.dueDate,
@@ -37,7 +37,7 @@ const CheckoutsTab = ({
     <ItemsTab
       headers={checkoutsHeaders}
       data={checkoutsData}
-      verb={"checked out"}
+      userAction={"checked out"}
     />
   )
 }

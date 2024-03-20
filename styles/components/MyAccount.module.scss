@@ -22,12 +22,12 @@
   display: flex;
   justify-content: flex-start;
   gap: 10px;
-  margin-bottom: 0px !important;
+  margin-bottom: 0 !important;
   p {
     margin-top: var(--nypl-space-s);
-    margin-bottom: 0px;
+    margin-bottom: 0;
     font-size: var(--nypl-fontSizes-desktop-heading-heading5);
-    font-weight: 510;
+    font-weight: var(--nypl-fontWeights-medium);
     letter-spacing: normal;
   }
   svg {
@@ -37,7 +37,8 @@
 .modalBody {
   font-size: var(--nypl-fontSizes-desktop-body-body1);
   display: flex;
-  padding-top: 0px;
+  flex-direction: column;
+  padding-top: 0;
 }
 
 .notification {
@@ -64,18 +65,26 @@
   thead > tr > th,
   thead > tr > th:last-of-type {
     text-transform: unset;
-    font-weight: 700;
+    font-weight: var(--nypl-fontWeights-bold);
     border-color: var(--nypl-colors-ui-gray-light-cool);
   }
   tbody > tr > td,
   tbody > tr > td:last-of-type {
     border-color: var(--nypl-colors-ui-gray-light-cool);
+    width: var(--nypl-space-52);
   }
-  th:first-of-type {
-    width: 427px;
+  tbody > tr > td:first-of-type {
+    width: var(--nypl-space-96);
   }
-  th {
-    width: 213px;
+  tbody > tr > td:last-of-type {
+    width: var(--nypl-sizes-40);
+  }
+  @media only screen and (max-width: 600px) {
+    tbody > tr > td:first-of-type,
+    tbody > tr > td,
+    tbody > tr > td:last-of-type {
+      width: auto;
+    }
   }
 }
 

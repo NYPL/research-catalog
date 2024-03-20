@@ -33,7 +33,7 @@ const RenewButton = (checkout: Checkout, patron: Patron) => {
           name="actionCheckCircleFilled"
           color="ui.success.primary"
         />
-        <Text sx={{ marginBottom: "0px" }}> Renewal successful </Text>
+        <Text sx={{ marginBottom: 0 }}> Renewal successful </Text>
       </Box>
     ),
   }
@@ -54,7 +54,7 @@ const RenewButton = (checkout: Checkout, patron: Patron) => {
       <Heading className={styles.modalHeading}>
         <>
           <Icon size="large" name="errorFilled" color="ui.error.primary" />
-          <Text sx={{ marginBottom: "0px" }}> Renewal failed </Text>
+          <Text sx={{ marginBottom: 0 }}> Renewal failed </Text>
         </>
       </Heading>
     ),
