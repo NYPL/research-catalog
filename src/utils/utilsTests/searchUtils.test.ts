@@ -1,3 +1,4 @@
+import { textInputFields } from "../advancedSearchUtils"
 import {
   getPaginationOffsetStrings,
   getSearchQuery,
@@ -103,7 +104,22 @@ describe("searchUtils", () => {
       )
       expect(heading.includes('keyword ""')).toBe(false)
     })
-    it.todo("doesn't display filter params")
+    it("displays all of the values from advanced search and nothing else", () => {
+      const heading = getSearchResultsHeading(
+        {
+          page: 1,
+          q: "spaghetti",
+          title: "ricotta",
+          contributor: "pasta mama",
+          subject: "italian",
+          filters: { language: "italian" },
+        },
+        100
+      )
+      expect(heading).toEqual(
+        'Displaying 1-50 of 100 results for Keyword: "spaghetti" and Title: "ricotta" and Author: "pasta mama" and Subject: "italian"'
+      )
+    })
     it("returns the correct heading string for first page", () => {
       const heading = getSearchResultsHeading({ page: 1, q: "cats" }, 1200)
       expect(heading).toEqual(
