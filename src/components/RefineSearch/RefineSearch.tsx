@@ -22,6 +22,7 @@ import {
 } from "../../utils/refineSearchUtils"
 import type { Aggregation } from "../../types/filterTypes"
 import DateForm from "../DateForm"
+import { useDateForm } from "../SearchFilters/DateForm"
 
 const debounceInterval = 60
 
@@ -47,36 +48,23 @@ const RefineSearch = ({
   setAppliedFilters,
 }: RefineSearchProps) => {
   const router = useRouter()
-
-  // we need two separate states for date range errors. dateRangeError is a
-  // boolean which tells us if the date range passes input validation
-  // displayDateRangeError is a boolean that is set on submitting the filters.
-  // We don't want to display the date form error until a user has attempted to
-  // submit the incorrect date range.
-  const [dateRangeError, setDateRangeError] = useState(false)
-  const [displayDateRangeError, setDisplayDateRangeError] = useState(false)
   const dateInputRef = useRef<TextInputRefType>()
-
-  const dateFieldset = (
-    <DateForm
-      changeHandler={(e: SyntheticEvent) => {
-        const target = e.target as HTMLInputElement
-        // update the parent state to know about the updated dateValues
-        setAppliedFilters((prevFilters) => {
-          return {
-            ...prevFilters,
-            [target.name]: [target.value],
-          }
-        })
-      }}
-      inputRef={dateInputRef}
-      displayDateRangeErrorNotification={displayDateRangeError}
-      setDateRangeError={setDateRangeError}
-      debounceInterval={debounceInterval}
-      dateAfter={appliedFilters.dateAfter?.[0]}
-      dateBefore={appliedFilters.dateBefore?.[0]}
-    />
-  )
+  const { DateFormWithProps, validateDateRange } = useDateForm({
+    changeHandler: (e: SyntheticEvent) => {
+      const target = e.target as HTMLInputElement
+      // update the parent state to know about the updated dateValues
+      setAppliedFilters((prevFilters) => {
+        return {
+          ...prevFilters,
+          [target.name]: [target.value],
+        }
+      })
+    },
+    inputRef: dateInputRef,
+    debounceInterval: debounceInterval,
+    dateAfter: appliedFilters.dateAfter?.[0],
+    dateBefore: appliedFilters.dateBefore?.[0],
+  })
 
   const filters = fields
     .map((field) => {
@@ -93,15 +81,11 @@ const RefineSearch = ({
         )
       } else return null
     })
-    .concat(dateFieldset)
+    .concat(DateFormWithProps)
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault()
-    if (dateRangeError) {
-      setDisplayDateRangeError(true)
-      dateInputRef.current.focus()
-      return
-    }
+    if (validateDateRange() === false) return
     const updatedQuery = {
       // maintain any non-filter query params, eg q=spaghetti, journalTitle=pasta%20fancy
       ...getQueryWithoutFilters(router.query),

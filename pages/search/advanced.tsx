@@ -18,7 +18,6 @@ import {
   ButtonGroup,
   Button,
   Box,
-  Fieldset,
 } from "@nypl/design-system-react-components"
 
 import Layout from "../../src/components/Layout/Layout"
@@ -38,6 +37,7 @@ import { getSearchQuery } from "../../src/utils/searchUtils"
 import initializePatronTokenAuth from "../../src/server/auth"
 import { appConfig } from "../../src/config/config"
 import DateForm from "../../src/components/DateForm"
+import { useDateForm } from "../../src/components/SearchFilters/DateForm"
 // import FieldsetDate from "../../src/components/SearchFilters/FieldsetDate"
 
 export const defaultEmptySearchErrorMessage =
@@ -53,9 +53,6 @@ export default function AdvancedSearch({ isAuthenticated }) {
   const inputRef = useRef<TextInputRefType>()
   const notificationRef = useRef<HTMLDivElement>()
   const debounceInterval = 20
-
-  const [dateRangeError, setDateRangeError] = useState(false)
-  const [displayDateRangeError, setDisplayDateRangeError] = useState(false)
   const dateInputRef = useRef<TextInputRefType>()
 
   const [alert, setAlert] = useState(false)
@@ -66,6 +63,14 @@ export default function AdvancedSearch({ isAuthenticated }) {
     searchFormReducer,
     initialSearchFormState
   )
+
+  const { DateFormWithProps, validateDateRange } = useDateForm({
+    inputRef: dateInputRef,
+    debounceInterval: debounceInterval,
+    dateBefore: searchFormState["filters"].dateBefore,
+    dateAfter: searchFormState["filters"].dateAfter,
+    changeHandler: (e) => handleInputChange(e, "filter_change"),
+  })
 
   const handleInputChange = (e: SyntheticEvent, type: SearchFormActionType) => {
     e.preventDefault()
@@ -90,11 +95,7 @@ export default function AdvancedSearch({ isAuthenticated }) {
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
-    if (dateRangeError) {
-      setDisplayDateRangeError(true)
-      dateInputRef.current.focus()
-      return
-    }
+    if (!validateDateRange()) return
     const queryString = getSearchQuery(searchFormState as SearchParams)
 
     if (!queryString.length) {
@@ -203,19 +204,7 @@ export default function AdvancedSearch({ isAuthenticated }) {
                   })}
                 </Select>
                 <FormRow>
-                  <FormField>
-                    <DateForm
-                      displayDateRangeErrorNotification={displayDateRangeError}
-                      setDateRangeError={setDateRangeError}
-                      debounceInterval={debounceInterval}
-                      inputRef={dateInputRef}
-                      dateBefore={searchFormState["filters"].dateBefore}
-                      dateAfter={searchFormState["filters"].dateAfter}
-                      changeHandler={(e) =>
-                        handleInputChange(e, "filter_change")
-                      }
-                    />
-                  </FormField>
+                  <FormField>{DateFormWithProps}</FormField>
                 </FormRow>
               </FormField>
             </FormRow>
