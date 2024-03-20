@@ -102,7 +102,7 @@ describe("searchUtils", () => {
         { page: 1, q: "", title: "Strega Nonna" },
         1200
       )
-      expect(heading.includes('keyword ""')).toBe(false)
+      expect(heading.toLocaleLowerCase().includes("keyword")).toBe(false)
     })
     it("displays all of the values from advanced search and nothing else", () => {
       const heading = getSearchResultsHeading(
