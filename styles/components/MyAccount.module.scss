@@ -92,10 +92,14 @@
     border-color: var(--nypl-colors-ui-gray-light-cool);
   }
   th:first-of-type {
-    width: 60%;
+    width: auto;
+  }
+  th,
+  th:last-of-type {
+    width: var(--nypl-space-52);
   }
   tbody > tr:last-of-type {
-    font-weight: 700;
+    font-weight: var(--nypl-fontWeights-bold);
   }
 }
 
