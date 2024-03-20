@@ -53,7 +53,7 @@ export default function AdvancedSearch({ isAuthenticated }) {
   const inputRef = useRef<TextInputRefType>()
   const notificationRef = useRef<HTMLDivElement>()
   const debounceInterval = 20
-  const dateInputRef = useRef<TextInputRefType>()
+  const dateInputRefs = [useRef<TextInputRefType>(), useRef<TextInputRefType>()]
 
   const [alert, setAlert] = useState(false)
   const [errorMessage, setErrorMessage] = useState(
@@ -65,7 +65,7 @@ export default function AdvancedSearch({ isAuthenticated }) {
   )
 
   const { DateFormWithProps, validateDateRange } = useDateForm({
-    inputRef: dateInputRef,
+    inputRefs: dateInputRefs,
     debounceInterval: debounceInterval,
     dateBefore: searchFormState["filters"].dateBefore,
     dateAfter: searchFormState["filters"].dateAfter,
@@ -116,7 +116,7 @@ export default function AdvancedSearch({ isAuthenticated }) {
   const handleClear = (e: SyntheticEvent) => {
     e.preventDefault()
     alert && setAlert(false)
-    dateInputRef.current.value = ""
+    dateInputRefs.map((ref) => (ref.current.value = ""))
     inputRef.current.value = ""
     dispatch({ type: "form_reset", payload: initialSearchFormState })
   }

@@ -13,7 +13,7 @@ import {
 import { debounce } from "underscore"
 
 interface DateFormHookPropsType {
-  inputRef?: MutableRefObject<TextInputRefType> // to focus on error
+  inputRefs?: MutableRefObject<TextInputRefType>[] // to focus on error and clear
   dateAfter: string
   dateBefore: string
   debounceInterval: number
@@ -35,7 +35,7 @@ export const useDateForm = (dateFormProps: DateFormHookPropsType) => {
   const validateDateRange = () => {
     if (dateRangeError) {
       setDisplayDateRangeError(true)
-      dateFormProps.inputRef.current.focus()
+      dateFormProps.inputRefs[0].current.focus()
       return false
     }
     setDisplayDateRangeError(false)
@@ -57,7 +57,7 @@ interface DateFormPropsType extends DateFormHookPropsType {
 const DateForm = ({
   setDateRangeError,
   displayDateRangeError,
-  inputRef,
+  inputRefs,
   dateAfter,
   dateBefore,
   debounceInterval,
@@ -108,7 +108,7 @@ const DateForm = ({
           helperText="e.g. 1901"
           value={dateAfter}
           onChange={debounce((e) => changeHandler(e), debounceInterval)}
-          ref={inputRef}
+          ref={inputRefs[0]}
         />
         <TextInput
           id="date-to"
@@ -118,7 +118,7 @@ const DateForm = ({
           helperText="e.g. 2000"
           value={dateBefore}
           onChange={debounce((e) => changeHandler(e), debounceInterval)}
-          ref={inputRef}
+          ref={inputRefs[1]}
         />
       </Fieldset>
     </>

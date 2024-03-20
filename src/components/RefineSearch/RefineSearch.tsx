@@ -60,7 +60,7 @@ const RefineSearch = ({
         }
       })
     },
-    inputRef: dateInputRef,
+    inputRefs: [dateInputRef],
     debounceInterval: debounceInterval,
     dateAfter: appliedFilters.dateAfter?.[0],
     dateBefore: appliedFilters.dateBefore?.[0],
