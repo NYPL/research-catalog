@@ -4,6 +4,7 @@ import { useRouter } from "next/router"
 import CheckoutsTab from "./CheckoutsTab/CheckoutsTab"
 import RequestsTab from "./RequestsTab/RequestsTab"
 import { useState } from "react"
+import FeesTab from "./FeesTab/FeesTab"
 
 const ProfileTabs = ({
   checkouts,
@@ -48,7 +49,7 @@ const ProfileTabs = ({
       ? [
           {
             label: `Fees ($${fines.total.toFixed(2)})`,
-            content: "",
+            content: <FeesTab fines={fines} />,
             urlPath: "overdues",
           },
         ]

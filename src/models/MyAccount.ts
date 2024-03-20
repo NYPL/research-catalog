@@ -181,7 +181,7 @@ export default class MyAccount {
           return {
             detail: entry.chargeType.display,
             amount: entry.itemCharge,
-            date: entry.assessedDate,
+            date: MyAccount.formatDate(entry.assessedDate),
           }
         }
       }),
