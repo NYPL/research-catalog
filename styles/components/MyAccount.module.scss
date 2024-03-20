@@ -71,5 +71,12 @@
   tbody > tr > td,
   tbody > tr > td:last-of-type {
     border-color: var(--nypl-colors-ui-gray-light-cool);
+    width: var(--nypl-space-52);
+  }
+  tbody > tr > td:first-of-type {
+    width: var(--nypl-space-96);
+  }
+  tbody > tr > td:last-of-type {
+    width: var(--nypl-sizes-40);
   }
 }
