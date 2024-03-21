@@ -41,17 +41,10 @@ jest.mock("jose", () => ({
 // Set NEXT_PUBLIC_APP_ENV to "development" for jest tests
 process.env.NEXT_PUBLIC_APP_ENV = "development"
 
-// Fixes error introduced with DS v3
-Object.defineProperty(window, "matchMedia", {
-  writable: true,
-  value: jest.fn().mockImplementation((query) => ({
-    matches: false,
-    media: query,
-    onchange: null,
-    addListener: jest.fn(), // Deprecated
-    removeListener: jest.fn(), // Deprecated
-    addEventListener: jest.fn(),
-    removeEventListener: jest.fn(),
-    dispatchEvent: jest.fn(),
-  })),
-})
+// Related to the useNYPLBreakpoints hook which is used in: ButtonGroup,
+// FeedbackBox, Modal, MultiSelectGroup, and NewsletterSignup.
+import { MatchMedia } from "@nypl/design-system-react-components";
+
+new MatchMedia();
+
+window.HTMLElement.prototype.scrollIntoView = jest.fn()
