@@ -14,7 +14,9 @@ export interface DateFormHookPropsType {
  * Given DateForm props, the useDateForm hook returns:
  * 1. a validation method for the parent component to run on submit. The
  * validation method checks for an error state, displays the error notification,
- * and focuses on the first date input.
+ * and focuses on the first date input. It returns a boolean
+ * indicating whether the validation passed. If false, the onSubmit should return
+ * immediately.
  * 2. props to pass into the DateForm component. Including original props, plus
  * methods and values used within the DateForm component to manage error state
  * and display an error message
@@ -22,28 +24,61 @@ export interface DateFormHookPropsType {
  */
 
 export const useDateForm = (dateFormProps: DateFormHookPropsType) => {
-  const [dateRangeError, setDateRangeError] = useState("")
-  const [displayDateRangeError, setDisplayDateRangeError] = useState(false)
+  const { dateBefore, dateAfter } = dateFormProps
+  // const [dateRangeError, setDateRangeError] = useState("")
+  const [displayDateRangeError, setDisplayDateRangeError] = useState("")
+
+  const invalidYearFormat = rangeContainsInvalidYearFormat(
+    dateAfter,
+    dateBefore
+  )
+  const invalidRange = endDateInvalid(dateAfter, dateBefore)
+
+  const invalid = invalidRange || invalidYearFormat
+  const invalidReason = invalidRange
+    ? "Error: Start date must be earlier than end date."
+    : "Error: Years must be 4 digits"
+  const dateRangeError = invalid ? invalidReason : ""
 
   const dateFormWithHookProps = {
     ...dateFormProps,
-    setDisplayDateRangeError,
-    setDateRangeError,
     displayDateRangeError,
   }
 
   const validateDateRange = () => {
+    // dateRangeError is either an empty string or an error message. If error message is present, we want to
+    // focus on the first dateForm input...
     if (dateRangeError) {
-      setDisplayDateRangeError(true)
       dateFormProps.inputRefs[0].current.focus()
-      return false
     }
-    setDisplayDateRangeError(false)
-    return true
+    // ...update the display value to include updated date ranger error
+    setDisplayDateRangeError(dateRangeError)
+    // boolean indicating whether dateRange passed validation, for use in parent onSubmit.
+    return !dateRangeError
   }
 
   return {
     dateFormProps: dateFormWithHookProps,
     validateDateRange,
   }
+}
+
+const endDateInvalid = (dateAfter, dateBefore) => {
+  const bothDatesPresent = !!dateBefore && !!dateAfter
+  const beforeLessThanAfter =
+    bothDatesPresent && parseInt(dateBefore, 10) < parseInt(dateAfter, 10)
+  return bothDatesPresent && beforeLessThanAfter
+}
+
+const rangeContainsInvalidYearFormat = (dateAfter, dateBefore) => {
+  // if there is no input for date, it's valid. if there is, it must
+  // be at least 4 digits.
+  const isDateFourDigits = (date: string) => {
+    const dividedBy1000 = Math.floor(parseInt(date, 10) / 1000)
+    return dividedBy1000 > 0 && dividedBy1000 <= 1
+  }
+  const dateAfterValid = !dateAfter || isDateFourDigits(dateAfter)
+  const dateBeforeValid = !dateBefore || isDateFourDigits
+  // ^^
+  return !dateAfterValid || !dateBeforeValid
 }

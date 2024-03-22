@@ -3,21 +3,16 @@ import {
   TextInput,
   Notification,
 } from "@nypl/design-system-react-components"
-import { type Dispatch } from "react"
 import { debounce } from "underscore"
 import type { DateFormHookPropsType } from "../../hooks/useDateForm"
 
 interface DateFormPropsType extends DateFormHookPropsType {
-  setDateRangeError: Dispatch<React.SetStateAction<string>>
-  setDisplayDateRangeError: Dispatch<React.SetStateAction<boolean>>
-  displayDateRangeError: boolean
+  displayDateRangeError: string
 }
 
-const debounceInterval = 250
+const debounceInterval = 60
 
 const DateForm = ({
-  // This prop is meant to be used for input validation in parent onSubmit
-  setDateRangeError,
   // This prop is used to display an error notification. This is NOT the companion
   // to setDateRangeError. dateRangeError is used in hook validation to
   // determine what value is passed into setDisplayDateRangeError, because we
@@ -29,33 +24,13 @@ const DateForm = ({
   dateBefore,
   changeHandler,
 }: DateFormPropsType) => {
-  const bothDatesPresent = !!dateBefore && !!dateAfter
-  // if there is no input for date, it's valid. if there is, it must
-  // be at least 4 digits.
-  const isDateFourDigits = (date: string) => {
-    const dividedBy1000 = Math.floor(parseInt(date, 10) / 1000)
-    return dividedBy1000 > 0 && dividedBy1000 < 1
-  }
-  const dateAfterValid = !dateAfter || isDateFourDigits(dateAfter)
-  const dateBeforeValid = !dateBefore || isDateFourDigits
-  // ^^
-  const invalidYearFormat = !dateAfterValid || !dateBeforeValid
-  const beforeLessThanAfter =
-    bothDatesPresent && parseInt(dateBefore, 10) < parseInt(dateAfter, 10)
-  const invalidRange = bothDatesPresent && beforeLessThanAfter
-  const invalid = invalidRange || invalidYearFormat
-  const invalidReason = invalidRange
-    ? "Error: Start date must be earlier than end date."
-    : "Error: Years must be 4 digits"
-
-  setDateRangeError(invalid ? invalidReason : "")
   return (
     <>
       <div aria-live="polite">
         {displayDateRangeError && (
           <Notification
             notificationType="warning"
-            notificationContent={invalidReason}
+            notificationContent={displayDateRangeError}
             noMargin
             mb="s"
           />
