@@ -52,7 +52,7 @@ export default function AdvancedSearch({ isAuthenticated }) {
   const inputRef = useRef<TextInputRefType>()
   const notificationRef = useRef<HTMLDivElement>()
   const debounceInterval = 20
-  const dateInputRefs = [useRef<TextInputRefType>(), useRef<TextInputRefType>()]
+  const dateInputRefs = [useRef<TextInputRefType>()]
 
   const [alert, setAlert] = useState(false)
   const [errorMessage, setErrorMessage] = useState(

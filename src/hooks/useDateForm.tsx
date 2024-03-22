@@ -25,7 +25,6 @@ export interface DateFormHookPropsType {
 
 export const useDateForm = (dateFormProps: DateFormHookPropsType) => {
   const { dateBefore, dateAfter } = dateFormProps
-  // const [dateRangeError, setDateRangeError] = useState("")
   const [displayDateRangeError, setDisplayDateRangeError] = useState("")
 
   const invalidYearFormat = rangeContainsInvalidYearFormat(
@@ -79,6 +78,5 @@ const rangeContainsInvalidYearFormat = (dateAfter, dateBefore) => {
   }
   const dateAfterValid = !dateAfter || isDateFourDigits(dateAfter)
   const dateBeforeValid = !dateBefore || isDateFourDigits
-  // ^^
   return !dateAfterValid || !dateBeforeValid
 }
