@@ -205,12 +205,12 @@ export default class MyAccount {
    * Returns user-friendly status message
    */
   static getHoldStatus(status: SierraCodeName) {
-    if (status.code === "status:a") {
-      return "REQUEST PLACED"
-    } else if (status.name === "READY SOON") {
+    if (status.code === "i") {
       return "READY FOR PICKUP"
+    } else if (status.code === "t") {
+      return "REQUEST CONFIRMED"
     } else {
-      return status.name
+      return "REQUEST PENDING"
     }
   }
 

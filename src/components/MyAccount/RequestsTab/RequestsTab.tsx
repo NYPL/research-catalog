@@ -55,7 +55,7 @@ const RequestsTab = ({
     if (status == "READY FOR PICKUP") {
       return <StatusBadge type="positive">{status}</StatusBadge>
     }
-    return <StatusBadge type="neutral">{status.toUpperCase()}</StatusBadge>
+    return <StatusBadge type="neutral">{status}</StatusBadge>
   }
 
   return (
