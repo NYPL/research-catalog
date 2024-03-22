@@ -1,5 +1,8 @@
 import { useRouter } from "next/router"
-import { TagSet } from "@nypl/design-system-react-components"
+import {
+  TagSet,
+  type TagSetFilterDataProps,
+} from "@nypl/design-system-react-components"
 
 import styles from "../../../styles/components/Search.module.scss"
 import {
@@ -25,7 +28,7 @@ const AppliedFilters = () => {
   )
 
   const tagSetData = buildTagsetData(appliedFiltersWithLabels)
-  const handleRemove = (tag: { label: string; field: string }) => {
+  const handleRemove = (tag: TagSetFilterDataProps) => {
     if (tag.label === "Clear Filters") {
       router.push({
         pathname: "/search",

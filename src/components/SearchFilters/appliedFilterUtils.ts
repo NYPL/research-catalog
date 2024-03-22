@@ -1,10 +1,11 @@
+import type { TagSetFilterDataProps } from "@nypl/design-system-react-components"
 import type {
   CollapsedMultiValueAppliedFilters,
   Option,
 } from "../../types/filterTypes"
 
 export const buildAppliedFiltersValueArrayWithTagRemoved = (
-  tag: { label: string; field: string },
+  tag: TagSetFilterDataProps,
   appliedFiltersWithLabels: Record<string, Option[]>
 ): Record<string, string[]> => {
   const fieldToUpdate = tag.field

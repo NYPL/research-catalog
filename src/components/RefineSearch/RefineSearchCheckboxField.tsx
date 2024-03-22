@@ -5,7 +5,10 @@ import {
 } from "@nypl/design-system-react-components"
 import type { Dispatch } from "react"
 
-import type { AggregationOption } from "../../types/filterTypes"
+import type {
+  AggregationOption,
+  CollapsedMultiValueAppliedFilters,
+} from "../../types/filterTypes"
 
 interface CheckboxGroupProps {
   field: { value: string; label: string }

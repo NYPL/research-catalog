@@ -19,7 +19,10 @@ import {
   buildFilterQuery,
   getQueryWithoutFilters,
 } from "../../utils/refineSearchUtils"
-import type { Aggregation } from "../../types/filterTypes"
+import type {
+  Aggregation,
+  CollapsedMultiValueAppliedFilters,
+} from "../../types/filterTypes"
 
 interface RefineSearchProps {
   aggregations: Aggregation[]
