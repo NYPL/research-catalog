@@ -62,21 +62,21 @@ export const useDateForm = (dateFormProps: DateFormHookPropsType) => {
   }
 }
 
-const endDateInvalid = (dateAfter, dateBefore) => {
+export const endDateInvalid = (dateAfter, dateBefore) => {
   const bothDatesPresent = !!dateBefore && !!dateAfter
   const beforeLessThanAfter =
     bothDatesPresent && parseInt(dateBefore, 10) < parseInt(dateAfter, 10)
   return bothDatesPresent && beforeLessThanAfter
 }
 
-const rangeContainsInvalidYearFormat = (dateAfter, dateBefore) => {
+export const rangeContainsInvalidYearFormat = (dateAfter, dateBefore) => {
   // if there is no input for date, it's valid. if there is, it must
   // be at least 4 digits.
   const isDateFourDigits = (date: string) => {
     const dividedBy1000 = Math.floor(parseInt(date, 10) / 1000)
-    return dividedBy1000 > 0 && dividedBy1000 <= 1
+    return dividedBy1000 > 0 && dividedBy1000 <= 2
   }
   const dateAfterValid = !dateAfter || isDateFourDigits(dateAfter)
-  const dateBeforeValid = !dateBefore || isDateFourDigits
+  const dateBeforeValid = !dateBefore || isDateFourDigits(dateBefore)
   return !dateAfterValid || !dateBeforeValid
 }
