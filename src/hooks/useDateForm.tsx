@@ -5,7 +5,6 @@ export interface DateFormHookPropsType {
   inputRefs?: MutableRefObject<TextInputRefType>[] // to focus on error and clear
   dateAfter: string
   dateBefore: string
-  debounceInterval: number
   changeHandler: (e: SyntheticEvent) => void
 }
 

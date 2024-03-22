@@ -13,6 +13,8 @@ interface DateFormPropsType extends DateFormHookPropsType {
   displayDateRangeError: boolean
 }
 
+const debounceInterval = 250
+
 const DateForm = ({
   // This prop is meant to be used for input validation in parent onSubmit
   setDateRangeError,
@@ -25,10 +27,8 @@ const DateForm = ({
   inputRefs,
   dateAfter,
   dateBefore,
-  debounceInterval,
   changeHandler,
 }: DateFormPropsType) => {
-  console.log("render")
   const bothDatesPresent = !!dateBefore && !!dateAfter
   // if there is no input for date, it's valid. if there is, it must
   // be at least 4 digits.
