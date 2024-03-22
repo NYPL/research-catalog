@@ -12,7 +12,6 @@ import { useState, useCallback, useRef } from "react"
 import { useRouter } from "next/router"
 
 import styles from "../../../styles/components/Search.module.scss"
-import FieldsetDate, { type DateFormName } from "../SearchFilters/FieldsetDate"
 import SearchResultsFilters from "../../models/SearchResultsFilters"
 import RefineSearchCheckBoxField from "./RefineSearchCheckboxField"
 import {
@@ -21,8 +20,8 @@ import {
   getQueryWithoutFilters,
 } from "../../utils/refineSearchUtils"
 import type { Aggregation } from "../../types/filterTypes"
-import DateForm from "../DateForm"
-import { useDateForm } from "../SearchFilters/DateForm"
+import { useDateForm } from "../../hooks/useDateForm"
+import DateForm from "../SearchFilters/DateForm"
 
 const debounceInterval = 60
 
@@ -49,7 +48,7 @@ const RefineSearch = ({
 }: RefineSearchProps) => {
   const router = useRouter()
   const dateInputRef = useRef<TextInputRefType>()
-  const { DateFormWithProps, validateDateRange } = useDateForm({
+  const { dateFormProps, validateDateRange } = useDateForm({
     changeHandler: (e: SyntheticEvent) => {
       const target = e.target as HTMLInputElement
       // update the parent state to know about the updated dateValues
@@ -81,7 +80,7 @@ const RefineSearch = ({
         )
       } else return null
     })
-    .concat(DateFormWithProps)
+    .concat(<DateForm {...dateFormProps} />)
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault()

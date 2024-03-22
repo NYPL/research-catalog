@@ -1,52 +1,11 @@
 import {
-  type TextInputRefType,
   Fieldset,
   TextInput,
   Notification,
 } from "@nypl/design-system-react-components"
-import {
-  type SyntheticEvent,
-  type MutableRefObject,
-  type Dispatch,
-  useState,
-} from "react"
+import { type Dispatch } from "react"
 import { debounce } from "underscore"
-
-interface DateFormHookPropsType {
-  inputRefs?: MutableRefObject<TextInputRefType>[] // to focus on error and clear
-  dateAfter: string
-  dateBefore: string
-  debounceInterval: number
-  changeHandler: (e: SyntheticEvent) => void
-}
-
-export const useDateForm = (dateFormProps: DateFormHookPropsType) => {
-  const [dateRangeError, setDateRangeError] = useState("")
-  const [displayDateRangeError, setDisplayDateRangeError] = useState(false)
-  const DateFormWithProps = (
-    <DateForm
-      {...dateFormProps}
-      setDisplayDateRangeError={setDisplayDateRangeError}
-      setDateRangeError={setDateRangeError}
-      displayDateRangeError={displayDateRangeError}
-    />
-  )
-
-  const validateDateRange = () => {
-    if (dateRangeError) {
-      setDisplayDateRangeError(true)
-      dateFormProps.inputRefs[0].current.focus()
-      return false
-    }
-    setDisplayDateRangeError(false)
-    return true
-  }
-
-  return {
-    DateFormWithProps,
-    validateDateRange,
-  }
-}
+import type { DateFormHookPropsType } from "../../hooks/useDateForm"
 
 interface DateFormPropsType extends DateFormHookPropsType {
   setDateRangeError: Dispatch<React.SetStateAction<string>>
@@ -63,13 +22,16 @@ const DateForm = ({
   debounceInterval,
   changeHandler,
 }: DateFormPropsType) => {
+  console.log("render")
   const bothDatesPresent = !!dateBefore && !!dateAfter
   // if there is no input for date, it's valid. if there is, it must
   // be at least 4 digits.
-  const dateAfterValid =
-    !dateAfter || Math.floor(parseInt(dateAfter, 10) / 1000)
-  const dateBeforeValid =
-    !dateBefore || Math.floor(parseInt(dateBefore, 10) / 1000)
+  const isDateFourDigits = (date: string) => {
+    const dividedBy1000 = Math.floor(parseInt(date, 10) / 1000)
+    return dividedBy1000 > 0 && dividedBy1000 < 1
+  }
+  const dateAfterValid = !dateAfter || isDateFourDigits(dateAfter)
+  const dateBeforeValid = !dateBefore || isDateFourDigits
   // ^^
   const invalidYearFormat = !dateAfterValid || !dateBeforeValid
   const beforeLessThanAfter =
