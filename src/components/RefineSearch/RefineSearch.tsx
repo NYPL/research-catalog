@@ -19,12 +19,17 @@ import {
   buildFilterQuery,
   getQueryWithoutFilters,
 } from "../../utils/refineSearchUtils"
-import type { Aggregation } from "../../types/filterTypes"
+import type {
+  Aggregation,
+  CollapsedMultiValueAppliedFilters,
+} from "../../types/filterTypes"
 
 interface RefineSearchProps {
   aggregations: Aggregation[]
-  setAppliedFilters: Dispatch<React.SetStateAction<Record<string, string[]>>>
-  appliedFilters: Record<string, string[]>
+  setAppliedFilters: Dispatch<
+    React.SetStateAction<CollapsedMultiValueAppliedFilters>
+  >
+  appliedFilters: CollapsedMultiValueAppliedFilters
 }
 
 /**

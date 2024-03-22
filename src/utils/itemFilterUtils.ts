@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import type { ItemFilterData } from "../models/ItemFilterData"
-import type { AppliedFilters } from "../types/filterTypes"
+import type {
+  AppliedItemFilters,
+  CollapsedMultiValueAppliedFilters,
+} from "../types/filterTypes"
 
 export const isRecapLocation = (loc: string) => {
   return loc.split(":")[1].startsWith("rc")
@@ -33,7 +36,7 @@ export const parseItemFilterQueryParams = ({
 }
 
 export const buildItemFilterQueryString = (
-  { location, format, status }: AppliedFilters,
+  { location, format, status }: AppliedItemFilters,
   recapLocations: string
 ) => {
   const locs = location.map((loc) => {
@@ -61,7 +64,7 @@ export const buildItemsMatchedStringString = (query, numItems = 20) => {
 }
 
 export const buildAppliedFiltersString = (
-  appliedFilters: AppliedFilters,
+  appliedFilters: CollapsedMultiValueAppliedFilters,
   itemAggs: ItemFilterData[]
 ) => {
   const filters = Object.keys(appliedFilters)
