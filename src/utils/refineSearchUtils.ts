@@ -18,13 +18,14 @@ export const collapseMultiValueQueryParams = (
 }
 
 // This method does the inverse of the one above. Turn an object into a
-// multivalue query param string
+// multivalue query param object
 export const buildFilterQuery = (filters: Record<string, string[]>) => {
   return Object.keys(filters).reduce((acc, field) => {
-    filters[field] && filters[field].length
-    filters[field].forEach(
-      (option, i) => (acc[`filters[${field}][${i}]`] = option)
-    )
+    if (filters[field]?.filter((x) => x).length) {
+      filters[field].forEach(
+        (option, i) => (acc[`filters[${field}][${i}]`] = option)
+      )
+    }
     return acc
   }, {})
 }
@@ -37,8 +38,8 @@ export const getQueryWithoutFilters = (filters: object) => {
 }
 
 // The aggregations from the api response have the label we want to display
-// in the filter dialog. The applied filter values only have values. Using
-// the filter values, find the label from the aggregations array.
+// in the filter dialog. The applied filter values parsed from the url only have
+// values. Using the filter values, find the label from the aggregations array.
 export const addLabelPropAndParseFilters = (
   aggregations: Aggregation[], // from the api response
   appliedFilterValues: Record<string, string[]> // parsed from url query params
