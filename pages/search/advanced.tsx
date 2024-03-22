@@ -36,9 +36,8 @@ import type {
 import { getSearchQuery } from "../../src/utils/searchUtils"
 import initializePatronTokenAuth from "../../src/server/auth"
 import { appConfig } from "../../src/config/config"
-import DateForm from "../../src/components/DateForm"
-import { useDateForm } from "../../src/components/SearchFilters/DateForm"
-// import FieldsetDate from "../../src/components/SearchFilters/FieldsetDate"
+import { useDateForm } from "../../src/hooks/useDateForm"
+import DateForm from "../../src/components/SearchFilters/DateForm"
 
 export const defaultEmptySearchErrorMessage =
   "Error: please enter at least one field to submit an advanced search."
@@ -64,9 +63,8 @@ export default function AdvancedSearch({ isAuthenticated }) {
     initialSearchFormState
   )
 
-  const { DateFormWithProps, validateDateRange } = useDateForm({
+  const { dateFormProps, validateDateRange } = useDateForm({
     inputRefs: dateInputRefs,
-    debounceInterval: debounceInterval,
     dateBefore: searchFormState["filters"].dateBefore,
     dateAfter: searchFormState["filters"].dateAfter,
     changeHandler: (e) => handleInputChange(e, "filter_change"),
@@ -204,7 +202,7 @@ export default function AdvancedSearch({ isAuthenticated }) {
                   })}
                 </Select>
                 <FormRow>
-                  <FormField>{DateFormWithProps}</FormField>
+                  <FormField>{<DateForm {...dateFormProps} />}</FormField>
                 </FormRow>
               </FormField>
             </FormRow>

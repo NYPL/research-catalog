@@ -23,8 +23,6 @@ import type { Aggregation } from "../../types/filterTypes"
 import { useDateForm } from "../../hooks/useDateForm"
 import DateForm from "../SearchFilters/DateForm"
 
-const debounceInterval = 60
-
 const fields = [
   { value: "materialType", label: "Format" },
   { value: "language", label: "Language" },
