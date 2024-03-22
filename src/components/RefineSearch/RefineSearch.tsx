@@ -11,7 +11,7 @@ import { useState, useCallback } from "react"
 import { useRouter } from "next/router"
 
 import styles from "../../../styles/components/Search.module.scss"
-import FieldsetDate, { type DateFormName }from "../SearchFilters/FieldsetDate"
+import FieldsetDate, { type DateFormName } from "../SearchFilters/FieldsetDate"
 import SearchResultsFilters from "../../models/SearchResultsFilters"
 import RefineSearchCheckBoxField from "./RefineSearchCheckboxField"
 import {
@@ -44,7 +44,6 @@ const RefineSearch = ({
     { value: "dateBefore", label: "End Year" },
     { value: "subjectLiteral", label: "Subject" },
   ]
-
   const dateFieldset = (
     <FieldsetDate
       onDateChange={(dateField: DateFormName, data: string) => {
