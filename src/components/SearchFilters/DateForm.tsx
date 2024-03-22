@@ -14,7 +14,13 @@ interface DateFormPropsType extends DateFormHookPropsType {
 }
 
 const DateForm = ({
+  // This prop is meant to be used for input validation in parent onSubmit
   setDateRangeError,
+  // This prop is used to display an error notification. This is NOT the companion
+  // to setDateRangeError. dateRangeError is used in hook validation to
+  // determine what value is passed into setDisplayDateRangeError, because we
+  // don't want to display the error until the user has attempted to submit
+  // an invalid range.
   displayDateRangeError,
   inputRefs,
   dateAfter,
