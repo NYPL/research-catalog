@@ -110,7 +110,7 @@ describe("MyAccountModel", () => {
           pickupByDate: null,
           canFreeze: false,
           frozen: false,
-          status: "on hold.",
+          status: "REQUEST PENDING",
           pickupLocation: { code: "mp", name: "Morris Park" },
           title: "2017 Tony Award Season.",
           isResearch: false,
