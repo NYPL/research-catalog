@@ -1,5 +1,5 @@
 import Head from "next/head"
-import { Button, Text } from "@nypl/design-system-react-components"
+import { Text } from "@nypl/design-system-react-components"
 import Layout from "../../src/components/Layout/Layout"
 import initializePatronTokenAuth, {
   getLoginRedirect,
@@ -9,6 +9,7 @@ import type MyAccountModel from "../../src/models/MyAccount"
 import ProfileTabs from "../../src/components/MyAccount/ProfileTabs"
 import ProfileHeader from "../../src/components/MyAccount/ProfileHeader"
 import { BASE_URL } from "../../src/config/constants"
+import FeesBanner from "../../src/components/MyAccount/FeesBanner"
 
 interface MyAccountPropsType {
   patron?: MyAccountModel["patron"]
@@ -149,6 +150,7 @@ export default function MyAccount({
           </Text>
         ) : (
           <>
+            {fines.total > 0 && <FeesBanner />}
             <ProfileHeader patron={patron} />
             <ProfileTabs
               patron={patron}

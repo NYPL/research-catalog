@@ -1,6 +1,8 @@
 export type Locations = string[]
 
-export type AppliedFilters = {
+export type CollapsedMultiValueAppliedFilters = Record<string, string[]>
+
+export type AppliedItemFilters = {
   location: string[]
   format: string[]
   status: string[]
@@ -21,7 +23,12 @@ export interface Aggregation {
   values: AggregationOption[]
 }
 
-export type Option = { value: string; label: string; count?: number }
+export type Option = {
+  value: string
+  label: string
+  count?: number
+  field?: string
+}
 
 export type ReducedAggregation = {
   field: string

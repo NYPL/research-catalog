@@ -27,7 +27,7 @@ const RenewButton = ({
     bodyContent: (
       <Box className={styles.modalBody}>
         <Text sx={{ marginLeft: "l" }}>
-          Your item was renewed. It is now due back on {checkout.dueDate}.
+          Your item was renewed. It is now due back on {checkout?.dueDate}.
         </Text>
       </Box>
     ),
