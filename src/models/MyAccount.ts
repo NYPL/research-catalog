@@ -99,40 +99,23 @@ export default class MyAccount {
    * Reads varFields of a item-level hold's bib data to return if it is a research item,
    * and if it is owned by NYPL.
    */
-
   static getBibVarFields(bibFields) {
-    let isResearch = false
-    let isNyplOwned = false
-    if (bibFields.varFields) {
-      const nineTen = bibFields.varFields.find(
-        (field) => field.marcTag === "910"
-      )
-      // if we are unsure of the research ness of a bib, default to true so
-      // we don't let them renew or freeze the record
-      if (!nineTen) {
-        isResearch = true
-      } else {
-        const nineTenContent = nineTen.subfields.find(
-          (subfield) => subfield.tag === "a"
-        ).content
-        isResearch = nineTenContent.startsWith("RL")
-        // RLOTF: "Research Library On The Fly", a code we add to OTF (aka "virtual") records,
-        // to tag them as being Research OTF records
-        isNyplOwned = !isResearch || nineTenContent !== "RLOTF"
-      }
-    }
+    // Bib level hold won't have varFields, and we know it will be circ and NYPL owned.
+    if (!bibFields.varFields) return { isNypl: true, isResearch: false }
+    const nineTen = bibFields.varFields.find((field) => field.marcTag === "910")
+    if (!nineTen) return { isResearch: true, isNypl: false }
+    const nineTenContent = nineTen.subfields.find(
+      (subfield) => subfield.tag === "a"
+    ).content
+    const isResearch = nineTenContent.startsWith("RL")
+    const isNyplOwned = !isResearch || nineTenContent !== "RLOTF"
     return { isResearch, isNyplOwned }
   }
 
   static buildBibData(bibs: SierraBibEntry[]): BibDataMapType {
     return bibs.reduce((bibDataMap: BibDataMapType, bibFields) => {
-      let { isResearch, isNyplOwned } = this.getBibVarFields(bibFields)
+      const { isResearch, isNyplOwned } = this.getBibVarFields(bibFields)
       const title = bibFields.title
-      // Bib level hold won't have varFields, and we know it will be circ and NYPL owned.
-      if (!bibFields.varFields) {
-        isResearch = false
-        isNyplOwned = true
-      }
       bibDataMap[bibFields.id] = { title, isResearch, isNyplOwned }
       return bibDataMap
     }, {})
