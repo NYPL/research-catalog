@@ -45,7 +45,7 @@ const RefineSearch = ({
   setAppliedFilters,
 }: RefineSearchProps) => {
   const router = useRouter()
-  const dateInputRef = useRef<TextInputRefType>()
+  const dateInputRefs = [useRef<TextInputRefType>(), useRef<TextInputRefType>()]
   const { dateFormProps, validateDateRange } = useDateForm({
     changeHandler: (e: SyntheticEvent) => {
       const target = e.target as HTMLInputElement
@@ -57,7 +57,7 @@ const RefineSearch = ({
         }
       })
     },
-    inputRefs: [dateInputRef],
+    inputRefs: dateInputRefs,
     dateAfter: appliedFilters.dateAfter?.[0],
     dateBefore: appliedFilters.dateBefore?.[0],
   })
