@@ -3,7 +3,7 @@ import {
   rangeContainsInvalidYearFormat,
   useDateForm,
 } from "./useDateForm"
-import { renderHook, screen, render, waitFor } from "../utils/testUtils"
+import { renderHook, screen, render } from "../utils/testUtils"
 import type { MutableRefObject } from "react"
 import { useRef } from "react"
 import type { TextInputRefType } from "@nypl/design-system-react-components"
@@ -43,6 +43,8 @@ describe("useDateForm", () => {
       render(<DateForm {...dateFormProps} />)
       validateDateRange()
       const input1 = screen.getByDisplayValue("2000")
+      const input2 = screen.getByDisplayValue("1999")
+      expect(input2).not.toHaveFocus()
       expect(input1).toHaveFocus()
     })
     it("validateDateRange returns false when end date is earlier than start date", async () => {
@@ -53,7 +55,7 @@ describe("useDateForm", () => {
       render(<DateForm {...dateFormProps} />)
       expect(validateDateRange()).toBe(false)
     })
-    it(
+    it.todo(
       "validateDateRange displays range error message when end date is earlier than start date"
       // , () => {
       //   const { validateDateRange, dateFormProps } = setUpDateFormWithRefs(
