@@ -3,14 +3,11 @@ import {
   TextInput,
   Notification,
 } from "@nypl/design-system-react-components"
-import { debounce } from "underscore"
 import type { DateFormHookPropsType } from "../../hooks/useDateForm"
 
 interface DateFormPropsType extends DateFormHookPropsType {
   displayDateRangeError: string
 }
-
-const debounceInterval = 60
 
 const DateForm = ({
   // This prop is used to display an error notification. This is NOT the companion
@@ -29,6 +26,7 @@ const DateForm = ({
       <div aria-live="polite">
         {displayDateRangeError && (
           <Notification
+            data-testid="dateRangeErrorMessage"
             notificationType="warning"
             notificationContent={displayDateRangeError}
             noMargin
@@ -50,7 +48,7 @@ const DateForm = ({
           name="dateAfter"
           helperText="e.g. 1901"
           value={dateAfter}
-          onChange={debounce((e) => changeHandler(e), debounceInterval)}
+          onChange={(e) => changeHandler(e)}
           ref={inputRefs[0]}
         />
         <TextInput
@@ -60,7 +58,7 @@ const DateForm = ({
           name="dateBefore"
           helperText="e.g. 2000"
           value={dateBefore}
-          onChange={debounce((e) => changeHandler(e), debounceInterval)}
+          onChange={(e) => changeHandler(e)}
           ref={inputRefs[1]}
         />
       </Fieldset>
