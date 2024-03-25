@@ -6,7 +6,7 @@ import {
   Select,
   SkeletonLoader,
 } from "@nypl/design-system-react-components"
-import type { ChangeEvent } from "react"
+import { type ChangeEvent } from "react"
 import { useRouter } from "next/router"
 import { parse } from "qs"
 
@@ -14,7 +14,7 @@ import Layout from "../../src/components/Layout/Layout"
 import DRBContainer from "../../src/components/DRB/DRBContainer"
 import SearchResult from "../../src/components/SearchResult/SearchResult"
 
-import { fetchResults } from "../api/search"
+import { fetchResults } from "../../src/server/api/search"
 import {
   getSearchResultsHeading,
   mapQueryToSearchParams,
@@ -22,16 +22,23 @@ import {
   getSearchQuery,
   sortOptions,
 } from "../../src/utils/searchUtils"
-import type { SortKey, SortOrder } from "../../src/types/searchTypes"
+import type {
+  SearchResultsResponse,
+  SortKey,
+  SortOrder,
+} from "../../src/types/searchTypes"
 import { mapWorksToDRBResults } from "../../src/utils/drbUtils"
 import { SITE_NAME, RESULTS_PER_PAGE } from "../../src/config/constants"
 import type SearchResultsBib from "../../src/models/SearchResultsBib"
+import { SearchResultsAggregationsProvider } from "../../src/context/SearchResultsAggregationsContext"
+
 import useLoading from "../../src/hooks/useLoading"
 import initializePatronTokenAuth from "../../src/server/auth"
+import AppliedFilters from "../../src/components/SearchFilters/AppliedFilters"
 
 interface SearchProps {
   bannerNotification?: string
-  results: any
+  results: SearchResultsResponse
   isAuthenticated: boolean
 }
 
@@ -48,7 +55,6 @@ export default function Search({
   const { push, query } = useRouter()
   const { itemListElement: searchResultsElements, totalResults } =
     results.results
-
   const drbResponse = results.drbResults?.data
   const drbWorks = drbResponse?.works
 
@@ -67,6 +73,12 @@ export default function Search({
     await push(newQuery)
   }
 
+  const aggs = results?.aggregations?.itemListElement
+  // if there are no results, then applied filters correspond to aggregations
+  // with no values, which will break our code down the line. Do not render
+  // the Applied Filters tagset.
+  const displayAppliedFilters = totalResults > 0
+
   const handleSortChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const selectedSortOption = e.target.value
     // Extract sort key and order from selected sort option using "_" delineator
@@ -81,7 +93,7 @@ export default function Search({
   }
 
   return (
-    <>
+    <SearchResultsAggregationsProvider value={aggs}>
       <Head>
         <meta property="og:title" content={metadataTitle} key="og-title" />
         <meta
@@ -136,12 +148,9 @@ export default function Search({
               <SkeletonLoader showImage={false} />
             ) : (
               <>
+                {displayAppliedFilters && <AppliedFilters />}
                 <Heading level="h2" mb="xl" size="heading4">
-                  {getSearchResultsHeading(
-                    searchParams.page,
-                    totalResults,
-                    searchParams.q
-                  )}
+                  {getSearchResultsHeading(searchParams, totalResults)}
                 </Heading>
                 <SimpleGrid columns={1} gap="grid.xl">
                   {searchResultBibs.map((bib: SearchResultsBib) => {
@@ -167,7 +176,7 @@ export default function Search({
           <Heading level="h3">No results. Try a different search.</Heading>
         )}
       </Layout>
-    </>
+    </SearchResultsAggregationsProvider>
   )
 }
 
@@ -185,7 +194,6 @@ export async function getServerSideProps({ resolvedUrl, req }) {
   // Remove everything before the query string delineator '?', necessary for correctly parsing the 'q' param.
   const queryString = resolvedUrl.slice(resolvedUrl.indexOf("?") + 1)
   const results = await fetchResults(mapQueryToSearchParams(parse(queryString)))
-
   const patronTokenResponse = await initializePatronTokenAuth(req)
   const isAuthenticated = patronTokenResponse.isTokenValid
 

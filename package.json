@@ -7,11 +7,9 @@
     "start": "next start",
     "local-prod": "next build && next start -p 8080",
     "check-types": "tsc --noemit",
-    "lint": "eslint . --fix && npm run check-types",
-    "prettier": "prettier --write .",
     "prepare": "husky install",
     "test": "jest",
-    "test-watch": "jest --watch --verbose",
+    "test-watch": "jest --watch --verbose --silent=false",
     "coverage": "jest --coverage"
   },
   "dependencies": {
@@ -68,7 +66,6 @@
     "**/*.{ts,tsx,json,sass}": [
       "eslint . --fix",
       "prettier --write ."
-    ],
-    "**/*.ts": "tsc-files --noEmit"
+    ]
   }
 }

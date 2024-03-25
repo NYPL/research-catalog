@@ -304,7 +304,7 @@ export default function AdvancedSearch({ isAuthenticated }) {
 }
 
 export async function getServerSideProps({ req }) {
-  const patronTokenResponse = await initializePatronTokenAuth(req)
+  const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const isAuthenticated = patronTokenResponse.isTokenValid
   return {
     props: { isAuthenticated },

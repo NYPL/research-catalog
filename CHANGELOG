@@ -5,7 +5,37 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## [1.0.1] 2024-03-06
+
+### Fixes
+
+- Fixed logout button not appearing on Advanced Search page (SCC-4028)
+
+## [1.0.0] 2024-03-04
+
+## Release Notes
+
+- This version represents the first public release of the Research Catalog refactor.
+- This first public release will include the new Homepage and Advanced Search page, the Header and Footer, as well as the Feedback form (SCC-3614).
+- Other pages will fall back to their currently live DFE versions.
+
+### My Account
+
+- My Account Header (SCC-3924)
+- Holds API routes (SCC-3953)
+- Settings API routes (SCC-3954)
+- Checkout renewal API route (SCC-3951)
+
+### Added
+
+- Feedback Box (SCC-3614)
+- Tests for existing API routes (SCC-3967)
+
+### Removals
+
+- Removal of client-side item sorting (SCC-3984)
+
+## [0.1.1] 2024-02-14
 
 ### Added
 
