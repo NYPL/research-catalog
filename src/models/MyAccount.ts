@@ -100,39 +100,34 @@ export default class MyAccount {
    * and if it is owned by NYPL.
    */
 
-  static getBibVarFields(bibFields) {
-    let isResearch = false
-    let isNyplOwned = false
-    if (bibFields.varFields) {
-      const nineTen = bibFields.varFields.find(
-        (field) => field.marcTag === "910"
-      )
-      // if we are unsure of the research ness of a bib, default to true so
-      // we don't let them renew or freeze the record
-      if (!nineTen) {
-        isResearch = true
-      } else {
-        const nineTenContent = nineTen.subfields.find(
-          (subfield) => subfield.tag === "a"
-        ).content
-        isResearch = nineTenContent.startsWith("RL")
-        // RLOTF: "Research Library On The Fly", a code we add to OTF (aka "virtual") records,
-        // to tag them as being Research OTF records
-        isNyplOwned = !isResearch || nineTenContent !== "RLOTF"
-      }
+  static getResearchAndOwnership(bibFields) {
+    // We don't fetch varfields for bib level holds. Bib level holds only happen
+    // on circ, and therefore NYPL records.
+    if (!bibFields.varFields) {
+      return { isResearch: false, isNyplOwned: true }
     }
-    return { isResearch, isNyplOwned }
+    const nineTen = bibFields.varFields.find((field) => field.marcTag === "910")
+    if (nineTen) {
+      const nineTenContent = nineTen.subfields.find(
+        (subfield) => subfield.tag === "a"
+      ).content
+      const isResearch = nineTenContent.startsWith("RL")
+      // RLOTF: "Research Library On The Fly", a code we add to OTF (aka
+      // "virtual") records, to tag them as being Research OTF records
+      const isPartnerRecord = nineTenContent === "RLOTF"
+      // non-research means circ, circ records are nypl owned
+      const isNyplOwned = !isResearch || !isPartnerRecord
+      return { isResearch, isNyplOwned }
+    }
+    // default to most restrictive values
+    return { isResearch: true, isNyplOwned: false }
   }
 
   static buildBibData(bibs: SierraBibEntry[]): BibDataMapType {
     return bibs.reduce((bibDataMap: BibDataMapType, bibFields) => {
-      let { isResearch, isNyplOwned } = this.getBibVarFields(bibFields)
+      const { isResearch, isNyplOwned } =
+        this.getResearchAndOwnership(bibFields)
       const title = bibFields.title
-      // Bib level hold won't have varFields, and we know it will be circ and NYPL owned.
-      if (!bibFields.varFields) {
-        isResearch = false
-        isNyplOwned = true
-      }
       bibDataMap[bibFields.id] = { title, isResearch, isNyplOwned }
       return bibDataMap
     }, {})

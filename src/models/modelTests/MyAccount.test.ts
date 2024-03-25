@@ -180,4 +180,46 @@ describe("MyAccountModel", () => {
       expect(emptyAccount.fines).toStrictEqual({ total: 0, entries: [] })
     })
   })
+  describe("getResearchAndOwnership", () => {
+    it("can handle no varfields", () => {
+      expect(MyAccount.getResearchAndOwnership({})).toStrictEqual({
+        isResearch: false,
+        isNyplOwned: true,
+      })
+    })
+    it("can handle missing 910 field", () => {
+      expect(
+        MyAccount.getResearchAndOwnership({
+          varFields: [{ marcTag: "666" }],
+        })
+      ).toStrictEqual({
+        isResearch: true,
+        isNyplOwned: false,
+      })
+    })
+    it("can handle a otf record", () => {
+      expect(
+        MyAccount.getResearchAndOwnership({
+          varFields: [
+            { marcTag: "910", subfields: [{ tag: "a", content: "RLOTF" }] },
+          ],
+        })
+      ).toStrictEqual({
+        isResearch: true,
+        isNyplOwned: false,
+      })
+    })
+    it("can handle an nypl research record", () => {
+      expect(
+        MyAccount.getResearchAndOwnership({
+          varFields: [
+            { marcTag: "910", subfields: [{ tag: "a", content: "RL" }] },
+          ],
+        })
+      ).toStrictEqual({
+        isResearch: true,
+        isNyplOwned: true,
+      })
+    })
+  })
 })
