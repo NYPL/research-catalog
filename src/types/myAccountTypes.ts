@@ -83,7 +83,7 @@ export interface Hold {
   pickupByDate: string
   id: string
   canFreeze: boolean
-  pickupLocation: string
+  pickupLocation: SierraCodeName
   isResearch: boolean
   status: string
   frozen: boolean
@@ -91,6 +91,7 @@ export interface Hold {
   title: string
   bibId: string
   isNyplOwned: boolean
+  catalogHref: string
 }
 
 export interface Patron {
