@@ -18,9 +18,9 @@ import type {
 let client
 
 class MyAccountModelError extends Error {
-  constructor(errorDetail, error) {
+  constructor(errorDetail: string, error: Error) {
     super()
-    this.message = `Error ${errorDetail} in ${error.filename}, line ${error.lineNumber}: ${error.message}`
+    this.message = `Error ${errorDetail}: ${error.message}`
   }
 }
 
