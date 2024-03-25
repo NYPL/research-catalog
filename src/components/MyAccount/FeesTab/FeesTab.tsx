@@ -1,6 +1,6 @@
 import { Table } from "@nypl/design-system-react-components"
 import styles from "../../../../styles/components/MyAccount.module.scss"
-import type { Fine } from "../../../types/accountTypes"
+import type { Fine } from "../../../types/myAccountTypes"
 
 const FeesTab = ({ fines }: { fines: Fine }) => {
   const feesHeaders = ["Details", "Date", "Amount"]

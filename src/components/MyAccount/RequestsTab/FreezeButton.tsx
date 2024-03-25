@@ -1,5 +1,5 @@
 import { useState } from "react"
-import type { Hold, Patron } from "../../../types/accountTypes"
+import type { Hold, Patron } from "../../../types/myAccountTypes"
 import { Button } from "@nypl/design-system-react-components"
 
 const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
