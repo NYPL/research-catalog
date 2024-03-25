@@ -2122,6 +2122,7 @@ export const holds = {
         name: "Requested item ready for pickup.",
       },
       canFreeze: false,
+      recordType: "i",
     },
     //Bib level hold
     {
@@ -2149,6 +2150,7 @@ export const holds = {
       pickupLocation: { code: "mp", name: "Morris Park" },
       status: { code: "0", name: "on hold." },
       canFreeze: false,
+      recordType: "b",
     },
   ],
 }

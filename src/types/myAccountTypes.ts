@@ -40,6 +40,7 @@ export interface SierraHold {
   pickupLocation: SierraCodeName
   pickupByDate: string
   patron: string
+  recordType: string
 }
 
 export interface SierraRecord {
