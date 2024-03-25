@@ -14,9 +14,7 @@ const ItemsTab = ({
     <>
       {data?.length === 0 && (
         <Box className={styles.notification}>
-          <span>
-            You currently do not have any research items {userAction}.
-          </span>
+          <span>You currently do not have any items {userAction}.</span>
         </Box>
       )}
       <Box className={styles.notificationWithIcon}>

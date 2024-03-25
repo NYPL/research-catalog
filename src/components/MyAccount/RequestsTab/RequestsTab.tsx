@@ -5,7 +5,6 @@ import {
   Text,
 } from "@nypl/design-system-react-components"
 import type { Hold, Patron } from "../../../types/accountTypes"
-import styles from "../../../../styles/components/MyAccount.module.scss"
 import ItemsTab from "../ItemsTab"
 import CancelButton from "./CancelButton"
 import FreezeButton from "./FreezeButton"
