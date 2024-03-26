@@ -13,7 +13,7 @@
     "coverage": "jest --coverage"
   },
   "dependencies": {
-    "@nypl/design-system-react-components": "2.1.6",
+    "@nypl/design-system-react-components": "3.0.0",
     "@nypl/nypl-data-api-client": "1.0.5",
     "@nypl/sierra-wrapper": "1.1.0",
     "@types/node": "20.3.1",
@@ -21,16 +21,16 @@
     "@types/react-dom": "18.2.6",
     "aws-sdk": "2.99.0",
     "eslint-config-next": "13.4.7",
-    "iso8601-duration": "^2.1.1",
+    "iso8601-duration": "2.1.1",
     "jose": "5.2.0",
     "next": "13.4.19",
-    "qs": "^6.11.2",
+    "qs": "6.11.2",
     "react": "18.2.0",
-    "react-barcode": "^1.4.6",
+    "react-barcode": "1.4.6",
     "react-dom": "18.2.0",
     "swr": "2.2.1",
-    "ts-jest": "^29.1.1",
-    "underscore": "^1.13.6"
+    "ts-jest": "29.1.1",
+    "underscore": "1.13.6"
   },
   "devDependencies": {
     "@testing-library/dom": "^9.3.3",

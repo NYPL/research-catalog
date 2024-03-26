@@ -64,7 +64,7 @@ export async function cancelHold(holdId: string) {
   try {
     const client = await sierraClient()
     await client.deleteRequest(`patrons/holds/${holdId}`)
-    return { status: 200, message: "Cancelled" }
+    return { status: 200, message: "Canceled" }
   } catch (error) {
     return {
       status: error.response.status,

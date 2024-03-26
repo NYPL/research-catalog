@@ -1,9 +1,9 @@
 import React from "react"
-import { render } from "../../utils/testUtils"
+import { render } from "../../../utils/testUtils"
 import {
   mockCheckouts,
   mockPatron,
-} from "../../../__test__/fixtures/accountFixtures"
+} from "../../../../__test__/fixtures/accountFixtures"
 import CheckoutsTab from "./CheckoutsTab"
 import { userEvent } from "@testing-library/user-event"
 

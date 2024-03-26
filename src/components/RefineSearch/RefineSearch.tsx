@@ -10,6 +10,8 @@ import {
 import type { Dispatch, SyntheticEvent } from "react"
 import { useState, useCallback, useRef } from "react"
 import { useRouter } from "next/router"
+import DateForm from "../SearchFilters/DateForm"
+import { useDateForm } from "../../hooks/useDateForm"
 
 import styles from "../../../styles/components/Search.module.scss"
 import SearchResultsFilters from "../../models/SearchResultsFilters"
@@ -19,9 +21,10 @@ import {
   buildFilterQuery,
   getQueryWithoutFilters,
 } from "../../utils/refineSearchUtils"
-import type { Aggregation } from "../../types/filterTypes"
-import { useDateForm } from "../../hooks/useDateForm"
-import DateForm from "../SearchFilters/DateForm"
+import type {
+  Aggregation,
+  CollapsedMultiValueAppliedFilters,
+} from "../../types/filterTypes"
 
 const fields = [
   { value: "materialType", label: "Format" },
@@ -32,8 +35,10 @@ const fields = [
 ]
 interface RefineSearchProps {
   aggregations: Aggregation[]
-  setAppliedFilters: Dispatch<React.SetStateAction<Record<string, string[]>>>
-  appliedFilters: Record<string, string[]>
+  setAppliedFilters: Dispatch<
+    React.SetStateAction<CollapsedMultiValueAppliedFilters>
+  >
+  appliedFilters: CollapsedMultiValueAppliedFilters
 }
 
 /**

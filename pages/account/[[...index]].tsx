@@ -1,5 +1,5 @@
 import Head from "next/head"
-import { Button, Text } from "@nypl/design-system-react-components"
+import { Text } from "@nypl/design-system-react-components"
 import Layout from "../../src/components/Layout/Layout"
 import initializePatronTokenAuth, {
   getLoginRedirect,
@@ -9,6 +9,7 @@ import type MyAccountModel from "../../src/models/MyAccount"
 import ProfileTabs from "../../src/components/MyAccount/ProfileTabs"
 import ProfileHeader from "../../src/components/MyAccount/ProfileHeader"
 import { BASE_URL } from "../../src/config/constants"
+import FeesBanner from "../../src/components/MyAccount/FeesBanner"
 
 interface MyAccountPropsType {
   patron?: MyAccountModel["patron"]
@@ -84,7 +85,7 @@ export default function MyAccount({
   }
 
   /** Testing hold update api route */
-  async function holdUpdate(patronId, holdId, freeze, pickupLocation) {
+  async function holdUpdate(patronId, holdId, frozen, pickupLocation) {
     try {
       const response = await fetch(
         `/research/research-catalog/api/account/holds/update/${holdId}`,
@@ -95,7 +96,7 @@ export default function MyAccount({
           },
           body: JSON.stringify({
             patronId,
-            freeze,
+            frozen,
             pickupLocation,
           }),
         }
@@ -149,6 +150,7 @@ export default function MyAccount({
           </Text>
         ) : (
           <>
+            {fines.total > 0 && <FeesBanner />}
             <ProfileHeader patron={patron} />
             <ProfileTabs
               patron={patron}
@@ -172,20 +174,6 @@ export default function MyAccount({
               }
             >
               Update pin
-            </Button> */}
-            {/** Testing hold update api route */}
-            {/* <Button
-              id="hold-update"
-              onClick={() => holdUpdate(patron.id, "42273325", false, "")}
-            >
-              Update hold request
-            </Button> */}
-            {/** Testing hold cancelapi route */}
-            {/* <Button
-              id="hold-cancel"
-              onClick={() => holdCancel(patron.id, "42273326")}
-            >
-              Cancel hold request
             </Button> */}
           </>
         )}

@@ -104,7 +104,9 @@ export default class MyAccount {
           (subfield: { tag: string; subfield: string }) => subfield.tag === "a"
         ).content
         isResearch = nineTenContent.startsWith("RL")
-        isNyplOwned = nineTenContent !== "RLOTF"
+        // RLOTF: "Research Library On The Fly", a code we add to OTF (aka "virtual") records,
+        // to tag them as being Research OTF records
+        isNyplOwned = !isResearch || nineTenContent !== "RLOTF"
       }
       bibDataMap[bibFields.id] = { title, isResearch, isNyplOwned }
       return bibDataMap
@@ -121,11 +123,16 @@ export default class MyAccount {
         canFreeze: hold.canFreeze,
         frozen: hold.frozen,
         status: MyAccount.getHoldStatus(hold.status),
-        pickupLocation: hold.pickupLocation.name,
+        pickupLocation: hold.pickupLocation,
         title: bibDataMap[hold.record.bibIds[0]].title,
         isResearch: bibDataMap[hold.record.bibIds[0]].isResearch,
         bibId: hold.record.bibIds[0],
-        isNyplOwned: bibDataMap[hold.record.bibIds[0]].isResearch,
+        isNyplOwned: bibDataMap[hold.record.bibIds[0]].isNyplOwned,
+        catalogHref: bibDataMap[hold.record.bibIds[0]].isNyplOwned
+          ? bibDataMap[hold.record.bibIds[0]].isResearch
+            ? `https://nypl.org/research/research-catalog/bib/b${hold.record.bibIds[0]}`
+            : `https://nypl.na2.iiivega.com/search/card?recordId=${hold.record.bibIds[0]}`
+          : null,
       }
     })
   }
@@ -185,7 +192,7 @@ export default class MyAccount {
           return {
             detail: entry.chargeType.display,
             amount: entry.itemCharge,
-            date: entry.assessedDate,
+            date: MyAccount.formatDate(entry.assessedDate),
           }
         }
       }),
@@ -196,6 +203,7 @@ export default class MyAccount {
    * Returns date in readable string ("Month day, year")
    */
   static formatDate(date) {
+    if (!date) return null
     const d = new Date(date)
     const year = d.getFullYear()
     const day = d.getDate()
@@ -208,12 +216,12 @@ export default class MyAccount {
    * Returns user-friendly status message
    */
   static getHoldStatus(status: SierraCodeName) {
-    if (status.code === "status:a") {
-      return "REQUEST PLACED"
-    } else if (status.name === "READY SOON") {
+    if (status.code === "i") {
       return "READY FOR PICKUP"
+    } else if (status.code === "t") {
+      return "REQUEST CONFIRMED"
     } else {
-      return status.name
+      return "REQUEST PENDING"
     }
   }
 
