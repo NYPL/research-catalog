@@ -4,15 +4,17 @@ import type { Patron } from "../../../types/myAccountTypes"
 import styles from "../../../../styles/components/MyAccount.module.scss"
 import AccountSettingsButtons from "./AccountSettingsButtons"
 import {
-  buildAccountSettingsForm,
-  buildAccountSettingsDisplay,
+  AccountSettingsForm,
+  AccountSettingsDisplay,
 } from "./AccountSettingsDisplayOptions"
 
 const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
   const [currentlyEditing, setCurrentlyEditing] = useState(false)
-  const listElements = currentlyEditing
-    ? buildAccountSettingsForm(settingsData)
-    : buildAccountSettingsDisplay(settingsData)
+  const listElements = currentlyEditing ? (
+    <AccountSettingsForm patron={settingsData} />
+  ) : (
+    <AccountSettingsDisplay patron={settingsData} />
+  )
 
   return (
     <Box className={styles.accountSettingsTab}>

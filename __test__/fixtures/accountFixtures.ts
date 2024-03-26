@@ -15,6 +15,19 @@ export const mockPatron = {
   homeLibrary: "Stavros Niarchos Foundation Library (SNFL)",
   id: 2772226,
 }
+
+export const emptyPatron = {
+  name: "NONNA, STREGA",
+  barcode: "23333121538324",
+  expirationDate: "2025-03-28",
+  primaryEmail: "",
+  emails: [],
+  primaryPhone: "",
+  phones: [],
+  homeLibrary: "Stavros Niarchos Foundation Library (SNFL)",
+  id: 2772226,
+  notificationPreference: null,
+}
 export const mockCheckouts = [
   {
     id: "65060571",

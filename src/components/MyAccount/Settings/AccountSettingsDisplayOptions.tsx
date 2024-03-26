@@ -10,7 +10,7 @@ import { accountSettings } from "./AccountSettingsUtils"
 import { buildListElementsWithIcons } from "../IconListElement"
 import type { JSX, ReactNode } from "react"
 
-export const buildAccountSettingsDisplay = (patron: Patron) => {
+export const AccountSettingsDisplay = ({ patron }: { patron: Patron }) => {
   return accountSettings
     .map((setting) => {
       return {
@@ -20,11 +20,11 @@ export const buildAccountSettingsDisplay = (patron: Patron) => {
         description: patron[setting.field] || setting.description,
       }
     })
-    .filter((listData) => listData.description)
+    .filter((listData) => !!listData.description)
     .map(buildListElementsWithIcons)
 }
 
-export const buildAccountSettingsForm = (patron: Patron) => {
+export const AccountSettingsForm = ({ patron }: { patron: Patron }) => {
   return accountSettings
     .map((setting) => {
       let inputField:
@@ -42,7 +42,7 @@ export const buildAccountSettingsForm = (patron: Patron) => {
               labelText="Update home library"
               showLabel={false}
             >
-              <option>another library</option>
+              <option>{patron.homeLibrary}</option>
             </Select>
           )
           break
