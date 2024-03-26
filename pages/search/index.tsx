@@ -22,7 +22,11 @@ import {
   getSearchQuery,
   sortOptions,
 } from "../../src/utils/searchUtils"
-import type { SortKey, SortOrder } from "../../src/types/searchTypes"
+import type {
+  SearchResultsResponse,
+  SortKey,
+  SortOrder,
+} from "../../src/types/searchTypes"
 import { mapWorksToDRBResults } from "../../src/utils/drbUtils"
 import { SITE_NAME, RESULTS_PER_PAGE } from "../../src/config/constants"
 import type SearchResultsBib from "../../src/models/SearchResultsBib"
@@ -30,10 +34,11 @@ import { SearchResultsAggregationsProvider } from "../../src/context/SearchResul
 
 import useLoading from "../../src/hooks/useLoading"
 import initializePatronTokenAuth from "../../src/server/auth"
+import AppliedFilters from "../../src/components/SearchFilters/AppliedFilters"
 
 interface SearchProps {
   bannerNotification?: string
-  results: any
+  results: SearchResultsResponse
   isAuthenticated: boolean
 }
 
@@ -68,6 +73,12 @@ export default function Search({
     await push(newQuery)
   }
 
+  const aggs = results?.aggregations?.itemListElement
+  // if there are no results, then applied filters correspond to aggregations
+  // with no values, which will break our code down the line. Do not render
+  // the Applied Filters tagset.
+  const displayAppliedFilters = totalResults > 0
+
   const handleSortChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const selectedSortOption = e.target.value
     // Extract sort key and order from selected sort option using "_" delineator
@@ -80,10 +91,9 @@ export default function Search({
       getSearchQuery({ ...searchParams, sortBy, order, page: undefined })
     )
   }
+
   return (
-    <SearchResultsAggregationsProvider
-      value={results?.aggregations?.itemListElement}
-    >
+    <SearchResultsAggregationsProvider value={aggs}>
       <Head>
         <meta property="og:title" content={metadataTitle} key="og-title" />
         <meta
@@ -138,12 +148,9 @@ export default function Search({
               <SkeletonLoader showImage={false} />
             ) : (
               <>
+                {displayAppliedFilters && <AppliedFilters />}
                 <Heading level="h2" mb="xl" size="heading4">
-                  {getSearchResultsHeading(
-                    searchParams.page,
-                    totalResults,
-                    searchParams.q
-                  )}
+                  {getSearchResultsHeading(searchParams, totalResults)}
                 </Heading>
                 <SimpleGrid columns={1} gap="grid.xl">
                   {searchResultBibs.map((bib: SearchResultsBib) => {
