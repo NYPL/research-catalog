@@ -143,7 +143,6 @@ const TestPickupTimes = (params) => {
               <TextInput
                 id="holdingLocation"
                 labelText="Item Location"
-                type="text"
                 name="holdingLocation"
                 value={holdingLocation}
                 onChange={(e) => setHoldingLocation(e.target.value)}
@@ -169,7 +168,6 @@ const TestPickupTimes = (params) => {
               <TextInput
                 id="deliveryLocation"
                 labelText="Delivery Location (opt)"
-                type="text"
                 name="deliveryLocation"
                 value={deliveryLocation}
                 onChange={(e) => setDeliveryLocation(e.target.value)}
@@ -178,7 +176,6 @@ const TestPickupTimes = (params) => {
               <TextInput
                 id="requestTime"
                 labelText="Requested at (opt)"
-                type="text"
                 name="requestTime"
                 value={requestTime}
                 onChange={(e) => setRequestTime(e.target.value)}
@@ -187,7 +184,6 @@ const TestPickupTimes = (params) => {
               <TextInput
                 id="currentTime"
                 labelText="Current time (opt)"
-                type="text"
                 name="currentTime"
                 value={currentTime}
                 onChange={(e) => setCurrentTime(e.target.value)}
