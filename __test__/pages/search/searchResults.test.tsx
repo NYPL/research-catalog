@@ -17,10 +17,11 @@ describe("Search Results page", () => {
       mockRouter.push(`/search?q=${query}`)
       render(<SearchResults isAuthenticated={true} results={{ results }} />)
 
-      const displayingText = screen.getByRole("heading", { level: 2 })
-      expect(displayingText).toHaveTextContent(
-        `Displaying 1-50 of ${results.totalResults} results for keyword "${query}"`
+      const displayingText = screen.getByText(
+        `Displaying 1-50 of ${results.totalResults} results for Keyword: "${query}"`
       )
+      expect(displayingText).toBeInTheDocument()
+
       const cards = screen.getAllByRole("heading", { level: 3 })
       expect(cards).toHaveLength(50)
     })

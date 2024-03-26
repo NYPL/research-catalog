@@ -25,25 +25,36 @@ describe("MyAccountModel", () => {
     })
   })
   describe("getHoldStatus", () => {
-    it("returns the status as given when it's user-friendly", () => {
+    it("returns the correct status", () => {
       expect(
         MyAccount.getHoldStatus({
           code: "i",
           name: "Requested item ready for pickup.",
         })
-      ).toBe("Requested item ready for pickup.")
-    })
-    it("returns REQUEST PLACED instead of AVAILABLE", () => {
-      expect(
-        MyAccount.getHoldStatus({ code: "status:a", name: "AVAILABLE" })
-      ).toBe("REQUEST PLACED")
-    })
-    it("returns READY FOR PICKUP instead of READY SOON", () => {
-      expect(
-        MyAccount.getHoldStatus({ code: "spaghetti", name: "READY SOON" })
       ).toBe("READY FOR PICKUP")
+      expect(
+        MyAccount.getHoldStatus({
+          code: "t",
+          name: "Requested item is in transit.",
+        })
+      ).toBe("REQUEST CONFIRMED")
+      expect(
+        MyAccount.getHoldStatus({
+          code: "0",
+          name: "on hold.",
+        })
+      ).toBe("REQUEST PENDING")
+    })
+    it("returns anything beyond the mapped 3 as REQUEST PENDING", () => {
+      expect(
+        MyAccount.getHoldStatus({
+          code: "spaghetti",
+          name: "spagehe tti Hello",
+        })
+      ).toBe("REQUEST PENDING")
     })
   })
+
   describe("building model", () => {
     it("builds Account data model", async () => {
       MyAccount.fetchCheckouts = async () => checkouts
@@ -80,7 +91,7 @@ describe("MyAccountModel", () => {
           pickupByDate: "February 15, 2024",
           canFreeze: false,
           frozen: false,
-          status: "Requested item ready for pickup.",
+          status: "READY FOR PICKUP",
           pickupLocation: {
             code: "sn",
             name: "SNFL (formerly Mid-Manhattan)",
@@ -99,7 +110,7 @@ describe("MyAccountModel", () => {
           pickupByDate: null,
           canFreeze: false,
           frozen: false,
-          status: "on hold.",
+          status: "REQUEST PENDING",
           pickupLocation: { code: "mp", name: "Morris Park" },
           title: "2017 Tony Award Season.",
           isResearch: false,
@@ -143,7 +154,7 @@ describe("MyAccountModel", () => {
           {
             detail: "Replacement",
             amount: 14.99,
-            date: "2023-06-15T17:34:46Z",
+            date: "June 15, 2023",
           },
         ],
       })

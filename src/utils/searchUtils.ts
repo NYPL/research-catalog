@@ -1,5 +1,6 @@
 import { isArray, isEmpty, mapObject, forEach } from "underscore"
 
+import { textInputFields } from "./advancedSearchUtils"
 import type {
   SearchParams,
   SearchQueryParams,
@@ -32,19 +33,37 @@ export function getPaginationOffsetStrings(
  * TODO: Make search query type (i.e. "Keyword") dynamic
  */
 export function getSearchResultsHeading(
-  page: number,
-  totalResults: number,
-  query: string
+  searchParams: SearchParams,
+  totalResults: number
 ): string {
   const [resultsStart, resultsEnd] = getPaginationOffsetStrings(
-    page,
+    searchParams.page,
     totalResults
   )
+  const queryDisplayString = buildQueryDisplayString(searchParams)
+
   return `Displaying ${
     totalResults > RESULTS_PER_PAGE
       ? `${resultsStart}-${resultsEnd}`
       : totalResults.toLocaleString()
-  } of ${totalResults.toLocaleString()} results for keyword "${query}"`
+  } of ${totalResults.toLocaleString()} results ${queryDisplayString}`
+}
+
+function buildQueryDisplayString(searchParams: SearchParams): string {
+  const params = Object.keys(searchParams)
+  return params
+    .reduce((displayString, param, i) => {
+      const displayParam = textInputFields.find((field) => field.name === param)
+      // if it's a param we want to display and it is a populated value
+      if (displayParam && searchParams[param]) {
+        const label = displayParam.label
+        const value = searchParams[param]
+        displayString += displayString.length ? "and " : "for "
+        displayString += `${label}: "${value}" `
+      }
+      return displayString
+    }, "")
+    .trim()
 }
 
 /**

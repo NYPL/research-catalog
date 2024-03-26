@@ -35,8 +35,6 @@ import { SearchResultsAggregationsProvider } from "../../src/context/SearchResul
 import useLoading from "../../src/hooks/useLoading"
 import initializePatronTokenAuth from "../../src/server/auth"
 import AppliedFilters from "../../src/components/SearchFilters/AppliedFilters"
-import { collapseMultiValueQueryParams } from "../../src/utils/refineSearchUtils"
-import { Aggregation } from "../../src/types/filterTypes"
 
 interface SearchProps {
   bannerNotification?: string
@@ -152,11 +150,7 @@ export default function Search({
               <>
                 {displayAppliedFilters && <AppliedFilters />}
                 <Heading level="h2" mb="xl" size="heading4">
-                  {getSearchResultsHeading(
-                    searchParams.page,
-                    totalResults,
-                    searchParams.q
-                  )}
+                  {getSearchResultsHeading(searchParams, totalResults)}
                 </Heading>
                 <SimpleGrid columns={1} gap="grid.xl">
                   {searchResultBibs.map((bib: SearchResultsBib) => {

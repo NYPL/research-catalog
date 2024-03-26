@@ -7,7 +7,7 @@ import type { Dispatch } from "react"
 import { useCallback, useEffect, useState } from "react"
 
 import type { ItemFilterData } from "../../models/ItemFilterData"
-import type { Option, AppliedFilters } from "../../types/filterTypes"
+import type { Option, AppliedItemFilters } from "../../types/filterTypes"
 import styles from "../../../styles/components/ItemFilters.module.scss"
 
 import ItemFilterButtons from "./ItemFilterButtons"
@@ -15,7 +15,7 @@ import ItemFilterLabel from "./ItemFilterLabel"
 
 interface ItemFilterProps {
   itemFilterData: ItemFilterData
-  appliedFilters: AppliedFilters
+  appliedFilters: AppliedItemFilters
   // this type is temporary for dev use only. could end up being different.
   submitFilters: (selection: string[], field: string) => void
   isOpen: boolean

@@ -6,6 +6,7 @@ import { useRouter } from "next/router"
 import CheckoutsTab from "./CheckoutsTab/CheckoutsTab"
 import RequestsTab from "./RequestsTab/RequestsTab"
 import { useState } from "react"
+import FeesTab from "./FeesTab/FeesTab"
 
 interface ProfileTabsPropsType {
   patron: MyAccount["patron"]
@@ -29,7 +30,6 @@ const ProfileTabs = ({
   function removeHold(hold) {
     setCurrentHolds(currentHolds.filter((item) => item.id !== hold.id))
   }
-
   // tabsData conditionally includes fines– only when user has total fines more than $0.
   const tabsData = [
     {
@@ -52,7 +52,7 @@ const ProfileTabs = ({
       ? [
           {
             label: `Fees ($${fines.total.toFixed(2)})`,
-            content: "",
+            content: <FeesTab fines={fines} />,
             urlPath: "overdues",
           },
         ]
