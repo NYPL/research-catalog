@@ -51,7 +51,7 @@ export default class MyAccount {
 
   static async fetchHolds(baseQuery: string) {
     const holdsQuery =
-      "/holds?expand=record&fields=canFreeze,record,status,pickupLocation,frozen,patron,pickupByDate"
+      "/holds?expand=record&fields=canFreeze,record,status,pickupLocation,frozen,patron,pickupByDate,recordType"
     return await client.get(`${baseQuery}${holdsQuery}`)
   }
 
@@ -137,7 +137,8 @@ export default class MyAccount {
     const bibDataMap = MyAccount.buildBibData(bibData)
     return holds.map((hold: SierraHold) => {
       // Hold without bibIds is a bib level id.
-      const bibId = hold.record.bibIds ? hold.record.bibIds[0] : hold.record.id
+      const bibId =
+        hold.recordType === "i" ? hold.record.bibIds[0] : hold.record.id
       const bibForHold = bibDataMap[bibId]
       return {
         patron: MyAccount.getRecordId(hold.patron),
