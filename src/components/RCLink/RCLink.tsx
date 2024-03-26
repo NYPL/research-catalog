@@ -16,6 +16,9 @@ interface RCLinkProps {
   hasWhiteFocusRing?: boolean
 }
 
+// TODO: once 2ad is phased out, replace with DS v3 Link which can wrap a
+// next link.
+
 /**
  * The RCLink component is a utility that wraps the design system Link component with
  * Next's Link component to allow for correct navigation in Next per the design system's
