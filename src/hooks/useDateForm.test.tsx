@@ -55,23 +55,6 @@ describe("useDateForm", () => {
       render(<DateForm {...dateFormProps} />)
       expect(validateDateRange()).toBe(false)
     })
-    it.todo(
-      "validateDateRange displays range error message when end date is earlier than start date"
-      // , () => {
-      //   const { validateDateRange, dateFormProps } = setUpDateFormWithRefs(
-      //     "2000",
-      //     "1999"
-      //   )
-      //   // dateRangeError is populated, but displayDateRangeError is ''
-      //   render(<DateForm {...dateFormProps} />)
-      //   // invocation should update display to have content
-      //   validateDateRange()
-      //   const error = screen.findByText(
-      //     "Error: Start date must be earlier than end date."
-      //   )
-      //   expect(error).toBeInTheDocument()
-      // }
-    )
     it("returns true when dates are valid", () => {
       const { validateDateRange, dateFormProps } = setUpDateFormWithRefs(
         "1999",

@@ -63,7 +63,11 @@ export default function AdvancedSearch({ isAuthenticated }) {
     initialSearchFormState
   )
 
-  const { dateFormProps, validateDateRange } = useDateForm({
+  const {
+    dateFormProps,
+    validateDateRange,
+    clearInputs: clearDateInputs,
+  } = useDateForm({
     inputRefs: dateInputRefs,
     dateBefore: searchFormState["filters"].dateBefore,
     dateAfter: searchFormState["filters"].dateAfter,
@@ -114,7 +118,7 @@ export default function AdvancedSearch({ isAuthenticated }) {
   const handleClear = (e: SyntheticEvent) => {
     e.preventDefault()
     alert && setAlert(false)
-    dateInputRefs.map((ref) => (ref.current.value = ""))
+    clearDateInputs()
     inputRef.current.value = ""
     dispatch({ type: "form_reset", payload: initialSearchFormState })
   }

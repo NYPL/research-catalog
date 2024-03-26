@@ -56,9 +56,14 @@ export const useDateForm = (dateFormProps: DateFormHookPropsType) => {
     return !dateRangeError
   }
 
+  const clearInputs = () => {
+    dateFormProps.inputRefs.forEach((ref) => (ref.current.value = ""))
+  }
+
   return {
     dateFormProps: dateFormWithHookProps,
     validateDateRange,
+    clearInputs,
   }
 }
 
