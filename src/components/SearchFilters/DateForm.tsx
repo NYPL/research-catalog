@@ -45,7 +45,6 @@ const DateForm = ({
         <TextInput
           id="date-from"
           labelText="Start"
-          type="text"
           name="dateAfter"
           helperText="e.g. 1901"
           value={dateAfter}
@@ -55,7 +54,6 @@ const DateForm = ({
         <TextInput
           id="date-to"
           labelText="End"
-          type="text"
           name="dateBefore"
           helperText="e.g. 2000"
           value={dateBefore}

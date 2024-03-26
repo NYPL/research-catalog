@@ -178,7 +178,6 @@ export default function AdvancedSearch({ isAuthenticated }) {
                     <TextInput
                       id={name}
                       labelText={label}
-                      type="text"
                       name={name}
                       value={searchFormState[name]}
                       key={name}
