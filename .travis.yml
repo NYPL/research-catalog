@@ -1,4 +1,6 @@
-language: minimal
+dist: xenial
+
+language: ruby
 
 services:
   - docker

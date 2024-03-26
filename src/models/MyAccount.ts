@@ -1,4 +1,5 @@
 import sierraClient from "../server/sierraClient"
+import type { MarcSubfield } from "../types/bibDetailsTypes"
 import type {
   Checkout,
   Hold,
@@ -79,33 +80,30 @@ export default class MyAccount {
   }
 
   static buildBibData(bibs: SierraBibEntry[]): BibDataMapType {
-    return bibs.reduce(
-      (bibDataMap: BibDataMapType, bibFields: SierraBibEntry) => {
-        let isResearch: boolean
-        let isNyplOwned: boolean
-        const title = bibFields.title
-        const nineTen = bibFields.varFields.find(
-          (field) => field.marcTag === "910"
-        )
-        // if we are unsure of the research ness of a bib, default to true so
-        // we don't let them renew or freeze the record
-        if (!nineTen || !nineTen.subfields) {
-          isResearch = true
-          isNyplOwned = false
-        } else {
-          const nineTenContent =
-            nineTen.subfields.find(
-              (subfield: { tag: string }) => subfield.tag === "a"
-              // this default is to make a typescript error go away
-            )?.content || ""
-          isResearch = nineTenContent.startsWith("RL")
-          isNyplOwned = nineTenContent !== "RLOTF"
-        }
-        bibDataMap[bibFields.id] = { title, isResearch, isNyplOwned }
-        return bibDataMap
-      },
-      {}
-    )
+    return bibs.reduce((bibDataMap: BibDataMapType, bibFields) => {
+      let isResearch: boolean
+      let isNyplOwned: boolean
+      const title = bibFields.title
+      const nineTen = bibFields.varFields.find(
+        (field) => field.marcTag === "910"
+      )
+      // if we are unsure of the research ness of a bib, default to true so
+      // we don't let them renew or freeze the record
+      if (!nineTen) {
+        isResearch = true
+        isNyplOwned = false
+      } else {
+        const nineTenContent = nineTen.subfields.find(
+          (subfield: MarcSubfield) => subfield.tag === "a"
+        ).content
+        isResearch = nineTenContent.startsWith("RL")
+        // RLOTF: "Research Library On The Fly", a code we add to OTF (aka "virtual") records,
+        // to tag them as being Research OTF records
+        isNyplOwned = !isResearch || nineTenContent !== "RLOTF"
+      }
+      bibDataMap[bibFields.id] = { title, isResearch, isNyplOwned }
+      return bibDataMap
+    }, {})
   }
 
   buildHolds(holds: SierraHold[], bibData: SierraBibEntry[]): Hold[] {
@@ -114,15 +112,20 @@ export default class MyAccount {
       return {
         patron: MyAccount.getRecordId(hold.patron),
         id: MyAccount.getRecordId(hold.id),
-        pickupByDate: hold.pickupByDate || null,
+        pickupByDate: MyAccount.formatDate(hold.pickupByDate) || null,
         canFreeze: hold.canFreeze,
         frozen: hold.frozen,
         status: MyAccount.getHoldStatus(hold.status),
-        pickupLocation: hold.pickupLocation.name,
+        pickupLocation: hold.pickupLocation,
         title: bibDataMap[hold.record.bibIds[0]].title,
         isResearch: bibDataMap[hold.record.bibIds[0]].isResearch,
         bibId: hold.record.bibIds[0],
-        isNyplOwned: bibDataMap[hold.record.bibIds[0]].isResearch,
+        isNyplOwned: bibDataMap[hold.record.bibIds[0]].isNyplOwned,
+        catalogHref: bibDataMap[hold.record.bibIds[0]].isNyplOwned
+          ? bibDataMap[hold.record.bibIds[0]].isResearch
+            ? `https://nypl.org/research/research-catalog/bib/b${hold.record.bibIds[0]}`
+            : `https://nypl.na2.iiivega.com/search/card?recordId=${hold.record.bibIds[0]}`
+          : null,
       }
     })
   }
@@ -139,12 +142,17 @@ export default class MyAccount {
         // returned for JSON serialization in getServerSideProps
         callNumber: checkout.item.callNumber || null,
         barcode: checkout.item.barcode,
-        dueDate: checkout.dueDate,
+        dueDate: MyAccount.formatDate(checkout.dueDate),
         patron: MyAccount.getRecordId(checkout.patron),
         title: bibDataMap[checkout.item.bibIds[0]].title,
         isResearch: bibDataMap[checkout.item.bibIds[0]].isResearch,
         bibId: checkout.item.bibIds[0],
         isNyplOwned: bibDataMap[checkout.item.bibIds[0]].isNyplOwned,
+        catalogHref: bibDataMap[checkout.item.bibIds[0]].isNyplOwned
+          ? bibDataMap[checkout.item.bibIds[0]].isResearch
+            ? `https://nypl.org/research/research-catalog/bib/b${checkout.item.bibIds[0]}`
+            : `https://nypl.na2.iiivega.com/search/card?recordId=${checkout.item.bibIds[0]}`
+          : null,
       }
     })
   }
@@ -178,10 +186,22 @@ export default class MyAccount {
           return {
             detail: entry.chargeType.display,
             amount: entry.itemCharge,
-            date: entry.assessedDate,
+            date: MyAccount.formatDate(entry.assessedDate),
           }
         }),
     }
+  }
+  /**
+   * getDueDate
+   * Returns date in readable string ("Month day, year")
+   */
+  static formatDate(date) {
+    if (!date) return null
+    const d = new Date(date)
+    const year = d.getFullYear()
+    const day = d.getDate()
+    const month = d.toLocaleString("default", { month: "long" })
+    return `${month} ${day}, ${year}`
   }
 
   /**
@@ -189,12 +209,12 @@ export default class MyAccount {
    * Returns user-friendly status message
    */
   static getHoldStatus(status: SierraCodeName) {
-    if (status.code === "status:a") {
-      return "REQUEST PLACED"
-    } else if (status.name === "READY SOON") {
+    if (status.code === "i") {
       return "READY FOR PICKUP"
+    } else if (status.code === "t") {
+      return "REQUEST CONFIRMED"
     } else {
-      return status.name
+      return "REQUEST PENDING"
     }
   }
 

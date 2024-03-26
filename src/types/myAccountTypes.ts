@@ -71,6 +71,7 @@ export interface Checkout {
   title: string
   bibId?: string
   isNyplOwned: boolean
+  catalogHref: string
 }
 
 export interface SierraCodeName {
@@ -82,7 +83,7 @@ export interface Hold {
   pickupByDate: string | null
   id: string | null
   canFreeze: boolean
-  pickupLocation: string | null
+  pickupLocation: SierraCodeName
   isResearch: boolean
   status: string
   frozen: boolean
@@ -90,6 +91,7 @@ export interface Hold {
   title: string
   bibId: string
   isNyplOwned: boolean
+  catalogHref: string
 }
 
 export interface Patron {
