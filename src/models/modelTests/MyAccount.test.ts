@@ -7,7 +7,7 @@ import {
   holdBibs,
   checkoutBibs,
   empty,
-} from "./data/MyAccount"
+} from "../../../__test__/fixtures/myAccountFixtures"
 
 jest.mock("../../server/sierraClient")
 

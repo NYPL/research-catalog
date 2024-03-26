@@ -144,7 +144,7 @@ export default class MyAccount {
         pickupLocation: hold.pickupLocation,
         title: bibForHold.title,
         isResearch: bibForHold.isResearch,
-        bibId: bibId,
+        bibId,
         isNyplOwned: bibForHold.isNyplOwned,
         catalogHref: bibForHold.isNyplOwned
           ? bibForHold.isResearch
