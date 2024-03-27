@@ -24,6 +24,11 @@ export interface DateFormHookPropsType {
  */
 
 export const useDateForm = (dateFormProps: DateFormHookPropsType) => {
+  if (dateFormProps.inputRefs.length !== 2) {
+    console.warn(
+      "useDateForm hook requires inputRefs to contain two refs. Unexpected behavior may ensue."
+    )
+  }
   const { dateBefore, dateAfter } = dateFormProps
   const [displayDateRangeError, setDisplayDateRangeError] = useState("")
 

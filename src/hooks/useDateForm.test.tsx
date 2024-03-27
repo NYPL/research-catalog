@@ -45,7 +45,7 @@ const useTestDateFormHookComponent = (start: string, end: string) => {
       inputRefs: refs,
       dateAfter: start,
       dateBefore: end,
-      changeHandler: (e) => true,
+      changeHandler: () => true,
     })
 
     return (
