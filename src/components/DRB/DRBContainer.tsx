@@ -46,7 +46,7 @@ const DRBContainer = ({
           </RCLink>
           .
         </Text>
-        <SimpleGrid columns={1} gap="s" pb="s">
+        <SimpleGrid columns={1} gap="grid.s" pb="s">
           {drbResults.map((result: DRBResult) => (
             <DRBCard key={result.id} drbResult={result} />
           ))}

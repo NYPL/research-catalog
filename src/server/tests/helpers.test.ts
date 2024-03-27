@@ -21,7 +21,7 @@ const mockCheckoutResponse = {
 }
 
 describe("cancelHold", () => {
-  it("should return a success message if hold is cancelled", async () => {
+  it("should return a success message if hold is canceled", async () => {
     const holdId = "12345"
     const methodMock = jest.fn().mockResolvedValueOnce({
       status: 200,
@@ -36,7 +36,7 @@ describe("cancelHold", () => {
     expect(sierraClient).toHaveBeenCalled()
     expect(methodMock).toHaveBeenCalledWith(`patrons/holds/${holdId}`)
     expect(response.status).toBe(200)
-    expect(response.message).toBe("Cancelled")
+    expect(response.message).toBe("Canceled")
   })
 
   it("should return a 404 error if hold DNE", async () => {

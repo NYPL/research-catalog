@@ -18,7 +18,6 @@ import {
   ButtonGroup,
   Button,
   Box,
-  Fieldset,
 } from "@nypl/design-system-react-components"
 
 import Layout from "../../src/components/Layout/Layout"
@@ -37,12 +36,11 @@ import type {
 import { getSearchQuery } from "../../src/utils/searchUtils"
 import initializePatronTokenAuth from "../../src/server/auth"
 import { appConfig } from "../../src/config/config"
-// import FieldsetDate from "../../src/components/SearchFilters/FieldsetDate"
+import { useDateForm } from "../../src/hooks/useDateForm"
+import DateForm from "../../src/components/SearchFilters/DateForm"
 
 export const defaultEmptySearchErrorMessage =
   "Error: please enter at least one field to submit an advanced search."
-export const badDateErrorMessage =
-  "Error: the date range is invalid. Please try again."
 
 /**
  * The Advanced Search page is responsible for displaying the Advanced Search form fields and
@@ -54,6 +52,7 @@ export default function AdvancedSearch({ isAuthenticated }) {
   const inputRef = useRef<TextInputRefType>()
   const notificationRef = useRef<HTMLDivElement>()
   const debounceInterval = 20
+  const dateInputRefs = [useRef<TextInputRefType>(), useRef<TextInputRefType>()]
 
   const [alert, setAlert] = useState(false)
   const [errorMessage, setErrorMessage] = useState(
@@ -63,6 +62,17 @@ export default function AdvancedSearch({ isAuthenticated }) {
     searchFormReducer,
     initialSearchFormState
   )
+
+  const {
+    dateFormProps,
+    validateDateRange,
+    clearInputs: clearDateInputs,
+  } = useDateForm({
+    inputRefs: dateInputRefs,
+    dateBefore: searchFormState["filters"].dateBefore,
+    dateAfter: searchFormState["filters"].dateAfter,
+    changeHandler: (e) => handleInputChange(e, "filter_change"),
+  })
 
   const handleInputChange = (e: SyntheticEvent, type: SearchFormActionType) => {
     e.preventDefault()
@@ -87,19 +97,13 @@ export default function AdvancedSearch({ isAuthenticated }) {
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
+    if (!validateDateRange()) return
     const queryString = getSearchQuery(searchFormState as SearchParams)
 
     if (!queryString.length) {
       setErrorMessage(defaultEmptySearchErrorMessage)
       setAlert(true)
       // Very basic validation for the date range.
-    } else if (
-      searchFormState["filters"].dateAfter >
-      searchFormState["filters"].dateBefore
-    ) {
-      // The error message can be better, but this is a start.
-      setErrorMessage(badDateErrorMessage)
-      setAlert(true)
     } else {
       // If the NEXT_PUBLIC_REVERSE_PROXY_ENABLED feature flag is present, use window.location.replace
       // instead of router.push to forward search results to DFE.
@@ -114,6 +118,7 @@ export default function AdvancedSearch({ isAuthenticated }) {
   const handleClear = (e: SyntheticEvent) => {
     e.preventDefault()
     alert && setAlert(false)
+    clearDateInputs()
     inputRef.current.value = ""
     dispatch({ type: "form_reset", payload: initialSearchFormState })
   }
@@ -173,7 +178,6 @@ export default function AdvancedSearch({ isAuthenticated }) {
                     <TextInput
                       id={name}
                       labelText={label}
-                      type="text"
                       name={name}
                       value={searchFormState[name]}
                       key={name}
@@ -201,42 +205,7 @@ export default function AdvancedSearch({ isAuthenticated }) {
                   })}
                 </Select>
                 <FormRow>
-                  <FormField>
-                    <Fieldset
-                      id="date-fieldset"
-                      gridTemplateColumns="repeat(2, minmax(0, 1fr))"
-                      legendText="Date"
-                      display="grid"
-                      gap="s"
-                    >
-                      <TextInput
-                        id="date-from"
-                        labelText="From"
-                        type="text"
-                        name="dateAfter"
-                        helperText="e.g. 1901"
-                        value={searchFormState["filters"].dateAfter}
-                        onChange={debounce(
-                          (e) => handleInputChange(e, "filter_change"),
-                          debounceInterval
-                        )}
-                        ref={inputRef}
-                      />
-                      <TextInput
-                        id="date-to"
-                        labelText="To"
-                        type="text"
-                        name="dateBefore"
-                        helperText="e.g. 2000"
-                        value={searchFormState["filters"].dateBefore}
-                        onChange={debounce(
-                          (e) => handleInputChange(e, "filter_change"),
-                          debounceInterval
-                        )}
-                        ref={inputRef}
-                      />
-                    </Fieldset>
-                  </FormField>
+                  <FormField>{<DateForm {...dateFormProps} />}</FormField>
                 </FormRow>
               </FormField>
             </FormRow>
@@ -304,7 +273,7 @@ export default function AdvancedSearch({ isAuthenticated }) {
 }
 
 export async function getServerSideProps({ req }) {
-  const patronTokenResponse = await initializePatronTokenAuth(req)
+  const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const isAuthenticated = patronTokenResponse.isTokenValid
   return {
     props: { isAuthenticated },

@@ -53,7 +53,7 @@ const SubNav = ({ activePage, isAuthenticated }: SubNavProps) => {
         </li>
         {isAuthenticated && (
           <li>
-            <RCLink href={logoutLink}>Log out</RCLink>
+            <RCLink href={logoutLink}>Log Out</RCLink>
           </li>
         )}
       </ul>

@@ -5,13 +5,18 @@ import {
 } from "@nypl/design-system-react-components"
 import type { Dispatch } from "react"
 
-import type { AggregationOption } from "../../types/filterTypes"
+import type {
+  AggregationOption,
+  CollapsedMultiValueAppliedFilters,
+} from "../../types/filterTypes"
 
 interface CheckboxGroupProps {
   field: { value: string; label: string }
   appliedFilters: string[]
   options: AggregationOption[]
-  setAppliedFilters: Dispatch<React.SetStateAction<Record<string, string[]>>>
+  setAppliedFilters: Dispatch<
+    React.SetStateAction<CollapsedMultiValueAppliedFilters>
+  >
 }
 
 const RefineSearchCheckBoxField = ({
@@ -32,8 +37,15 @@ const RefineSearchCheckBoxField = ({
     })
   }
 
-  const checkboxes = options.map(({ value, label }) => {
-    return <Checkbox id={value} key={value} value={value} labelText={label} />
+  const checkboxes = options.map(({ value, label, count }) => {
+    return (
+      <Checkbox
+        id={value}
+        key={value}
+        value={value}
+        labelText={`${label} (${count})`}
+      />
+    )
   })
 
   return (

@@ -1,9 +1,52 @@
 import {
   collapseMultiValueQueryParams,
   buildFilterQuery,
+  addLabelPropAndParseFilters,
 } from "../refineSearchUtils"
+import { aggregationsResults } from "../../../__test__/fixtures/searchResultsManyBibs"
 
 describe("refineSearchUtils", () => {
+  describe("addLabelPropAndParseFilters", () => {
+    it("takes applied filter values and adds the appropriate label", () => {
+      const appliedFilterValues = {
+        materialType: ["resourcetypes:txt"],
+        language: ["lang:ita"],
+        subjectLiteral: ["Spaghetti Westerns -- History and criticism."],
+      }
+      const parsed = addLabelPropAndParseFilters(
+        aggregationsResults.itemListElement,
+        appliedFilterValues
+      )
+      expect(parsed).toStrictEqual({
+        materialType: [
+          { value: "resourcetypes:txt", count: 371, label: "Text" },
+        ],
+        language: [{ value: "lang:ita", count: 59, label: "Italian" }],
+        subjectLiteral: [
+          {
+            value: "Spaghetti Westerns -- History and criticism.",
+            count: 42,
+            label: "Spaghetti Westerns -- History and criticism.",
+          },
+        ],
+      })
+    })
+    it("takes applied date filter values and adds the appropriate label", () => {
+      const appliedFilterValues = {
+        dateBefore: ["2009"],
+        dateAfter: ["2010"],
+      }
+      const parsed = addLabelPropAndParseFilters(
+        aggregationsResults.itemListElement,
+        appliedFilterValues
+      )
+      expect(parsed).toStrictEqual({
+        dateBefore: [{ value: "2009", count: null, label: "Before 2009" }],
+        dateAfter: [{ value: "2010", count: null, label: "After 2010" }],
+      })
+    })
+  })
+
   describe("collapseMultiValueQueryParams", () => {
     it("can parse a single filter", () => {
       const query = { "filters[language][0]": "lang:fre" }
@@ -45,6 +88,12 @@ describe("refineSearchUtils", () => {
   })
 
   describe("buildFilterQuery", () => {
+    it("ignores empty filter value", () => {
+      const filters = { dateBefore: [""], dateAfter: ["1990"] }
+      expect(buildFilterQuery(filters)).toStrictEqual({
+        "filters[dateAfter][0]": "1990",
+      })
+    })
     it("single filter single value", () => {
       const filters = { subjectLiteral: ["spaghetti"] }
       expect(buildFilterQuery(filters)).toStrictEqual({
