@@ -78,20 +78,7 @@ describe("Advanced Search Form", () => {
       "/search?q=&filters%5BmaterialType%5D%5B0%5D=resourcetypes%3Anot&filters%5BmaterialType%5D%5B1%5D=resourcetypes%3Acar"
     )
   })
-  // this test is also failing due to timing issues. the second text
-  // input is not populated until after the test has run.
-  // it("should throw an error when the date from is bigger than the date to", async () => {
-  //   render(<AdvancedSearch isAuthenticated={true} />)
-  //   const dateAfterInput = screen.getByLabelText("Start")
-  //   const dateBeforeInput = screen.getByLabelText("End")
-  //   await userEvent.type(dateBeforeInput, "1900")
-  //   await userEvent.type(dateAfterInput, "1999")
-  //   fireEvent(screen.getByText("Submit"), new MouseEvent("click"))
-  //   const errorMessage = screen.getByText(
-  //       "Start date must be earlier than end date."
-  //   )
-  //   expect(errorMessage).toBeInTheDocument()
-  // })
+
   it("can clear the form", async () => {
     render(<AdvancedSearch isAuthenticated={true} />)
     const notatedMusic = screen.getByLabelText("Notated music")

@@ -3,13 +3,18 @@ import {
   rangeContainsInvalidYearFormat,
   useDateForm,
 } from "./useDateForm"
-import { renderHook, screen, render } from "../utils/testUtils"
-import type { MutableRefObject } from "react"
-import { useRef } from "react"
-import type { TextInputRefType } from "@nypl/design-system-react-components"
+import { screen, render, renderHook } from "../utils/testUtils"
+import { type MutableRefObject, useRef } from "react"
+import {
+  Button,
+  type TextInputRefType,
+} from "@nypl/design-system-react-components"
 import DateForm from "../components/SearchFilters/DateForm"
+import userEvent from "@testing-library/user-event"
 
-const setUpDateFormWithRefs = (start, end) => {
+// A hook which renders a date form and exposes the validate date range
+// method for testing
+const setUpDateFormHook = (start: string, end: string) => {
   let refs: MutableRefObject<TextInputRefType>[]
   // this component exists only to populate the ref values
   const TestComponent = () => {
@@ -18,7 +23,6 @@ const setUpDateFormWithRefs = (start, end) => {
   }
   render(<TestComponent />)
   const {
-    rerender,
     result: {
       current: { validateDateRange, dateFormProps },
     },
@@ -30,17 +34,49 @@ const setUpDateFormWithRefs = (start, end) => {
       changeHandler: () => true,
     })
   )
-  return { validateDateRange, dateFormProps, rerender }
+  render(<DateForm {...dateFormProps} />)
+  return validateDateRange
+}
+const useTestDateFormHookComponent = (start: string, end: string) => {
+  let refs: MutableRefObject<TextInputRefType>[]
+  const TestComponent = () => {
+    refs = [useRef<TextInputRefType>(), useRef<TextInputRefType>()]
+    const { validateDateRange, dateFormProps, clearInputs } = useDateForm({
+      inputRefs: refs,
+      dateAfter: start,
+      dateBefore: end,
+      changeHandler: (e) => true,
+    })
+
+    return (
+      <>
+        <Button id="test-clear" onClick={clearInputs}>
+          Clear
+        </Button>
+        <Button id="test-submit" onClick={validateDateRange}>
+          Submit
+        </Button>
+        <DateForm {...dateFormProps} />
+      </>
+    )
+  }
+  render(<TestComponent />)
+}
+
+const clickSubmitButton = async () => {
+  const button = screen.getByText("Submit")
+  await userEvent.click(button)
+}
+
+const clearInputs = async () => {
+  const button = screen.getByText("Clear")
+  await userEvent.click(button)
 }
 
 describe("useDateForm", () => {
   describe("validateDateRange", () => {
     it("validateDateRange focuses the input when end date is earlier than start date", () => {
-      const { validateDateRange, dateFormProps } = setUpDateFormWithRefs(
-        "2000",
-        "1999"
-      )
-      render(<DateForm {...dateFormProps} />)
+      const validateDateRange = setUpDateFormHook("2000", "1999")
       validateDateRange()
       const input1 = screen.getByDisplayValue("2000")
       const input2 = screen.getByDisplayValue("1999")
@@ -48,20 +84,49 @@ describe("useDateForm", () => {
       expect(input1).toHaveFocus()
     })
     it("validateDateRange returns false when end date is earlier than start date", async () => {
-      const { validateDateRange, dateFormProps } = setUpDateFormWithRefs(
-        "2000",
-        "1999"
-      )
-      render(<DateForm {...dateFormProps} />)
+      const validateDateRange = setUpDateFormHook("2000", "1999")
       expect(validateDateRange()).toBe(false)
     })
     it("returns true when dates are valid", () => {
-      const { validateDateRange, dateFormProps } = setUpDateFormWithRefs(
-        "1999",
-        "2000"
-      )
-      render(<DateForm {...dateFormProps} />)
+      const validateDateRange = setUpDateFormHook("1999", "2000")
       expect(validateDateRange()).toBe(true)
+    })
+  })
+  describe("hook with DateForm component", () => {
+    it("should not display an error when there is only one valid date", async () => {
+      useTestDateFormHookComponent("", "2000")
+      await clickSubmitButton()
+      const errorMessage = screen.queryByText("Error: ", { exact: false })
+      expect(errorMessage).not.toBeInTheDocument()
+    })
+    it("should not display an error when the dates are valid", async () => {
+      useTestDateFormHookComponent("1999", "2000")
+      await clickSubmitButton()
+      const errorMessage = screen.queryByText("Error: ", { exact: false })
+      expect(errorMessage).not.toBeInTheDocument()
+    })
+    it("should display an error when the before date is bigger than the after date and validation fails", async () => {
+      useTestDateFormHookComponent("1999", "1998")
+      await clickSubmitButton()
+      const errorMessage = screen.getByText(
+        "Error: Start date must be earlier than end date.",
+        { exact: false }
+      )
+      expect(errorMessage).toBeInTheDocument()
+    })
+    it("should display an error when dates are clearly wrong to and validation fails", async () => {
+      useTestDateFormHookComponent("1900000", "200000000")
+      await clickSubmitButton()
+      const errorMessage = screen.getByText("Error: Years must be 4 digits", {
+        exact: false,
+      })
+      expect(errorMessage).toBeInTheDocument()
+    })
+    it("should be able to clear inputs", async () => {
+      useTestDateFormHookComponent("1900", "2000")
+      await clearInputs()
+      const inputs = screen.getAllByRole("textbox")
+      inputs.forEach((input: TextInputRefType) => expect(input.value).toBe(""))
     })
   })
   describe("endDateInvalid", () => {
