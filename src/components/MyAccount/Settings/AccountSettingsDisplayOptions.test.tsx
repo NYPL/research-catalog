@@ -3,9 +3,9 @@ import {
   AccountSettingsDisplay,
 } from "./AccountSettingsDisplayOptions"
 import {
-  mockPatron,
   emptyPatron,
-} from "../../../../__test__/fixtures/myAccountFixtures"
+  mockPatron,
+} from "../../../../__test__/fixtures/processedMyAccountData"
 import { render, screen } from "../../../utils/testUtils"
 
 describe("AccountSettingsDisplayOptions", () => {

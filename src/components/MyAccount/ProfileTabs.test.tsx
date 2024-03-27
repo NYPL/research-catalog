@@ -6,7 +6,7 @@ import {
   mockFines,
   mockHolds,
   mockPatron,
-} from "../../../__test__/fixtures/myAccountFixtures"
+} from "../../../__test__/fixtures/processedMyAccountData"
 import mockRouter from "next-router-mock"
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 

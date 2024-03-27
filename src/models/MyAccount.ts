@@ -102,7 +102,7 @@ export default class MyAccount {
     const nineTen = bibFields.varFields.find((field) => field.marcTag === "910")
     if (nineTen) {
       const nineTenContent = nineTen.subfields.find(
-        (subfield) => subfield.tag === "a"
+        (subfield: MarcSubfield) => subfield.tag === "a"
       ).content
       const isResearch = nineTenContent.startsWith("RL")
       // RLOTF: "Research Library On The Fly", a code we add to OTF (aka
