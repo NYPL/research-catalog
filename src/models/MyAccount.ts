@@ -18,6 +18,14 @@ import type {
 import { notificationPreferenceMap } from "../utils/myAccountData"
 
 let client
+
+class MyAccountModelError extends Error {
+  constructor(errorDetail: string, error: Error) {
+    super()
+    this.message = `Error ${errorDetail}: ${error.message}`
+  }
+}
+
 export default class MyAccount {
   checkouts: Checkout[]
   holds: Hold[]
@@ -67,6 +75,7 @@ export default class MyAccount {
     start?: number
     entries: SierraBibEntry[]
   }> {
+    console.log(holdsOrCheckouts)
     if (!holdsOrCheckouts?.length) return { entries: [] }
     const itemLevelHoldsorCheckouts = []
     const bibLevelHolds = []
@@ -79,7 +88,7 @@ export default class MyAccount {
         bibLevelHolds.push(holdOrCheckout.record)
       }
     })
-
+    console.log(`bibs?id=${itemLevelHoldsorCheckouts}&fields=default,varFields`)
     const bibData = await client.get(
       `bibs?id=${itemLevelHoldsorCheckouts}&fields=default,varFields`
     )
@@ -127,92 +136,114 @@ export default class MyAccount {
   }
 
   buildHolds(holds: SierraHold[], bibData: SierraBibEntry[]): Hold[] {
-    const bibDataMap = MyAccount.buildBibData(bibData)
-    return holds.map((hold: SierraHold) => {
-      // Hold without bibIds is a bib level id.
-      const bibId =
-        hold.recordType === "i" ? hold.record.bibIds[0] : hold.record.id
-      const bibForHold = bibDataMap[bibId]
-      return {
-        patron: MyAccount.getRecordId(hold.patron),
-        id: MyAccount.getRecordId(hold.id),
-        pickupByDate: MyAccount.formatDate(hold.pickupByDate) || null,
-        canFreeze: hold.canFreeze,
-        frozen: hold.frozen,
-        status: MyAccount.getHoldStatus(hold.status),
-        pickupLocation: hold.pickupLocation,
-        title: bibForHold.title,
-        isResearch: bibForHold.isResearch,
-        bibId,
-        isNyplOwned: bibForHold.isNyplOwned,
-        catalogHref: bibForHold.isNyplOwned
-          ? bibForHold.isResearch
-            ? `https://nypl.org/research/research-catalog/bib/b${bibId}`
-            : `https://nypl.na2.iiivega.com/search/card?recordId=${bibId}`
-          : null,
-      }
-    })
+    let bibDataMap
+    try {
+      bibDataMap = MyAccount.buildBibData(bibData)
+    } catch (e) {
+      throw new MyAccountModelError("building bibData for holds", e)
+    }
+    try {
+      return holds.map((hold: SierraHold) => {
+        return {
+          patron: MyAccount.getRecordId(hold.patron),
+          id: MyAccount.getRecordId(hold.id),
+          pickupByDate: MyAccount.formatDate(hold.pickupByDate) || null,
+          canFreeze: hold.canFreeze,
+          frozen: hold.frozen,
+          status: MyAccount.getHoldStatus(hold.status),
+          pickupLocation: hold.pickupLocation,
+          title: bibDataMap[hold.record.bibIds[0]].title,
+          isResearch: bibDataMap[hold.record.bibIds[0]].isResearch,
+          bibId: hold.record.bibIds[0],
+          isNyplOwned: bibDataMap[hold.record.bibIds[0]].isNyplOwned,
+          catalogHref: bibDataMap[hold.record.bibIds[0]].isNyplOwned
+            ? bibDataMap[hold.record.bibIds[0]].isResearch
+              ? `https://nypl.org/research/research-catalog/bib/b${hold.record.bibIds[0]}`
+              : `https://nypl.na2.iiivega.com/search/card?recordId=${hold.record.bibIds[0]}`
+            : null,
+        }
+      })
+    } catch (e) {
+      throw new MyAccountModelError("building holds", e)
+    }
   }
 
   buildCheckouts(
     checkouts: SierraCheckout[],
     bibData: SierraBibEntry[]
   ): Checkout[] {
-    const bibDataMap = MyAccount.buildBibData(bibData)
-    return checkouts.map((checkout: SierraCheckout) => {
-      return {
-        id: MyAccount.getRecordId(checkout.id),
-        // Partner items do not have call numbers. Null has to be explicitly
-        // returned for JSON serialization in getServerSideProps
-        callNumber: checkout.item.callNumber || null,
-        barcode: checkout.item.barcode,
-        dueDate: MyAccount.formatDate(checkout.dueDate),
-        patron: MyAccount.getRecordId(checkout.patron),
-        title: bibDataMap[checkout.item.bibIds[0]].title,
-        isResearch: bibDataMap[checkout.item.bibIds[0]].isResearch,
-        bibId: checkout.item.bibIds[0],
-        isNyplOwned: bibDataMap[checkout.item.bibIds[0]].isNyplOwned,
-        catalogHref: bibDataMap[checkout.item.bibIds[0]].isNyplOwned
-          ? bibDataMap[checkout.item.bibIds[0]].isResearch
-            ? `https://nypl.org/research/research-catalog/bib/b${checkout.item.bibIds[0]}`
-            : `https://nypl.na2.iiivega.com/search/card?recordId=${checkout.item.bibIds[0]}`
-          : null,
-      }
-    })
+    let bibDataMap
+    try {
+      bibDataMap = MyAccount.buildBibData(bibData)
+    } catch (e) {
+      throw new MyAccountModelError("building bibData for checkouts", e)
+    }
+    try {
+      return checkouts.map((checkout: SierraCheckout) => {
+        return {
+          id: MyAccount.getRecordId(checkout.id),
+          // Partner items do not have call numbers. Null has to be explicitly
+          // returned for JSON serialization in getServerSideProps
+          callNumber: checkout.item.callNumber || null,
+          barcode: checkout.item.barcode,
+          dueDate: MyAccount.formatDate(checkout.dueDate),
+          patron: MyAccount.getRecordId(checkout.patron),
+          title: bibDataMap[checkout.item.bibIds[0]].title,
+          isResearch: bibDataMap[checkout.item.bibIds[0]].isResearch,
+          bibId: checkout.item.bibIds[0],
+          isNyplOwned: bibDataMap[checkout.item.bibIds[0]].isNyplOwned,
+          catalogHref: bibDataMap[checkout.item.bibIds[0]].isNyplOwned
+            ? bibDataMap[checkout.item.bibIds[0]].isResearch
+              ? `https://nypl.org/research/research-catalog/bib/b${checkout.item.bibIds[0]}`
+              : `https://nypl.na2.iiivega.com/search/card?recordId=${checkout.item.bibIds[0]}`
+            : null,
+        }
+      })
+    } catch (e) {
+      throw new MyAccountModelError("building checkouts", e)
+    }
   }
 
   buildPatron(patron: SierraPatron): Patron {
     const notificationPreference =
       notificationPreferenceMap[patron.fixedFields["268"].value]
-    return {
-      notificationPreference,
-      name: patron.names[0],
-      barcode: patron.barcodes[0],
-      expirationDate: patron.expirationDate,
-      primaryEmail: patron.emails?.length > 0 ? patron.emails[0] : "",
-      emails: patron.emails || [],
-      primaryPhone: patron.phones?.length > 0 ? patron.phones[0].number : "",
-      phones: patron.phones || [],
-      homeLibrary: patron.homeLibrary?.name ? patron.homeLibrary.name : "",
-      id: patron.id,
+    try {
+      return {
+        notificationPreference,
+        name: patron.names[0],
+        barcode: patron.barcodes[0],
+        expirationDate: patron.expirationDate,
+        primaryEmail: patron.emails?.length > 0 ? patron.emails[0] : "",
+        emails: patron.emails || [],
+        primaryPhone: patron.phones?.length > 0 ? patron.phones[0].number : "",
+        phones: patron.phones || [],
+        homeLibrary: patron.homeLibrary?.name ? patron.homeLibrary.name : "",
+        id: patron.id,
+      }
+    } catch (e) {
+      throw new MyAccountModelError("building patron", e)
     }
   }
 
   buildFines(fines: SierraFine): Fine {
-    return {
-      total: fines.entries.reduce((acc, entry) => {
-        acc += entry.itemCharge
-        return acc
-      }, 0),
-      entries: fines.entries
-        .filter((entry) => !entry.datePaid)
-        .map((entry: SierraFineEntry) => {
-          return {
-            detail: entry.chargeType.display,
-            amount: entry.itemCharge,
-            date: MyAccount.formatDate(entry.assessedDate),
+    try {
+      return {
+        total: fines.entries.reduce((acc, entry) => {
+          acc += entry.itemCharge
+          return acc
+        }, 0),
+        entries: fines.entries.map((entry: SierraFineEntry) => {
+          if (!entry.datePaid) {
+            return {
+              detail: entry.chargeType.display,
+              amount: entry.itemCharge,
+              date: MyAccount.formatDate(entry.assessedDate),
+            }
           }
         }),
+      }
+    } catch (e) {
+      throw new MyAccountModelError("building fines", e)
     }
   }
   /**
@@ -255,15 +286,25 @@ export default class MyAccount {
 export const MyAccountFactory = async (id: string) => {
   client = await sierraClient()
   const baseQuery = `patrons/${id}`
-  const checkouts = await MyAccount.fetchCheckouts(baseQuery)
-  const holds = await MyAccount.fetchHolds(baseQuery)
-  const patron = await MyAccount.fetchPatron(baseQuery)
-  const fines = await MyAccount.fetchFines(baseQuery)
-  const checkoutBibData = await MyAccount.fetchBibData(
-    checkouts.entries,
-    "item"
-  )
-  const holdBibData = await MyAccount.fetchBibData(holds.entries, "record")
+  let holds, patron, fines, checkoutBibData, checkouts, holdBibData
+  try {
+    checkouts = await MyAccount.fetchCheckouts(baseQuery)
+    holds = await MyAccount.fetchHolds(baseQuery)
+    patron = await MyAccount.fetchPatron(baseQuery)
+    fines = await MyAccount.fetchFines(baseQuery)
+  } catch (e) {
+    throw new MyAccountModelError("fetching patron data", e)
+  }
+  try {
+    checkoutBibData = await MyAccount.fetchBibData(checkouts.entries, "item")
+  } catch (e) {
+    throw new MyAccountModelError("fetching bibs for checkouts", e)
+  }
+  try {
+    holdBibData = await MyAccount.fetchBibData(holds.entries, "record")
+  } catch (e) {
+    throw new MyAccountModelError("fetching bibs for holds", e)
+  }
   return new MyAccount({
     //  default to empty array to avoid hard to replicate error
     // where entries end up undefined in buildBibData.
