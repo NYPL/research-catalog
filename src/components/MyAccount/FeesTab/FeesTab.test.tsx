@@ -5,7 +5,7 @@ import {
   mockFines,
   mockHolds,
   mockPatron,
-} from "../../../../__test__/fixtures/accountFixtures"
+} from "../../../../__test__/fixtures/myAccountFixtures"
 import FeesTab from "./FeesTab"
 import MyAccount from "../../../../pages/account/[[...index]]"
 

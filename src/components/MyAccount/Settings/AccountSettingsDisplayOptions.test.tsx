@@ -5,7 +5,7 @@ import {
 import {
   mockPatron,
   emptyPatron,
-} from "../../../../__test__/fixtures/accountFixtures"
+} from "../../../../__test__/fixtures/myAccountFixtures"
 import { render, screen } from "../../../utils/testUtils"
 
 describe("AccountSettingsDisplayOptions", () => {
