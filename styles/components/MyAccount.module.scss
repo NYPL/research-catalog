@@ -20,12 +20,12 @@
   display: flex;
   justify-content: flex-start;
   gap: 10px;
-  margin-bottom: 0px !important;
+  margin-bottom: 0 !important;
   p {
     margin-top: var(--nypl-space-s);
-    margin-bottom: 0px;
+    margin-bottom: 0;
     font-size: var(--nypl-fontSizes-desktop-heading-heading5);
-    font-weight: 510;
+    font-weight: var(--nypl-fontWeights-medium);
     letter-spacing: normal;
   }
   svg {
@@ -35,7 +35,8 @@
 .modalBody {
   font-size: var(--nypl-fontSizes-desktop-body-body1);
   display: flex;
-  padding-top: 0px;
+  flex-direction: column;
+  padding-top: 0;
 }
 
 .notification {
@@ -62,6 +63,34 @@
   thead > tr > th,
   thead > tr > th:last-of-type {
     text-transform: unset;
+    font-weight: var(--nypl-fontWeights-bold);
+    border-color: var(--nypl-colors-ui-gray-light-cool);
+  }
+  tbody > tr > td,
+  tbody > tr > td:last-of-type {
+    border-color: var(--nypl-colors-ui-gray-light-cool);
+    width: var(--nypl-space-52);
+  }
+  tbody > tr > td:first-of-type {
+    width: var(--nypl-space-96);
+  }
+  tbody > tr > td:last-of-type {
+    width: var(--nypl-sizes-40);
+  }
+  @media only screen and (max-width: 600px) {
+    tbody > tr > td:first-of-type,
+    tbody > tr > td,
+    tbody > tr > td:last-of-type {
+      width: auto;
+    }
+  }
+}
+
+.feesTable {
+  margin-top: var(--nypl-space-m);
+  thead > tr > th,
+  thead > tr > th:last-of-type {
+    text-transform: unset;
     font-weight: 700;
     border-color: var(--nypl-colors-ui-gray-light-cool);
   }
@@ -70,6 +99,58 @@
     border-color: var(--nypl-colors-ui-gray-light-cool);
   }
   th:first-of-type {
-    width: 413px;
+    width: auto;
+  }
+  th,
+  th:last-of-type {
+    width: var(--nypl-space-52);
+  }
+  tbody > tr:last-of-type {
+    font-weight: var(--nypl-fontWeights-bold);
+  }
+}
+
+.statusBadge {
+  background: var(--nypl-colors-ui-bg-default);
+  border-color: var(--nypl-colors-ui-gray-semi-dark) !important;
+  border-left: 4px solid;
+  font-size: var(--nypl-fontSizes-desktop-caption);
+  font-weight: 510;
+  font-style: normal !important;
+}
+
+.statusBadgeReady {
+  background: rgba(238, 247, 240, 1) !important;
+  border-color: var(--nypl-colors-ui-success-primary) !important;
+  border-left: 4px solid;
+  font-size: var(--nypl-fontSizes-desktop-caption);
+  font-weight: 510;
+  font-style: normal !important;
+}
+
+.feesNotification {
+  margin-left: 0 !important;
+  background: rgba(250, 244, 244, 1) !important;
+  border-left: 2px solid var(--nypl-colors-ui-error-primary);
+  border-radius: 0 !important;
+  > div > div > div {
+    display: flex;
+    gap: 4px;
+    flex-direction: row;
+    > p {
+      margin-bottom: 0;
+      color: var(--nypl-colors-ui-error-primary);
+      font-size: var(--nypl-fontSizes-desktop-body-body1);
+    }
+    > svg {
+      fill: var(--nypl-colors-ui-error-primary);
+      margin-top: 3px;
+    }
+    a {
+      color: var(--nypl-colors-ui-link-primary) !important;
+    }
+  }
+  > div {
+    padding-left: 0;
   }
 }

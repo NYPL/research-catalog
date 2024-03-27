@@ -11,7 +11,7 @@ import { useState, useCallback } from "react"
 import { useRouter } from "next/router"
 
 import styles from "../../../styles/components/Search.module.scss"
-import FieldsetDate, { type DateFormName }from "../SearchFilters/FieldsetDate"
+import FieldsetDate, { type DateFormName } from "../SearchFilters/FieldsetDate"
 import SearchResultsFilters from "../../models/SearchResultsFilters"
 import RefineSearchCheckBoxField from "./RefineSearchCheckboxField"
 import {
@@ -19,12 +19,17 @@ import {
   buildFilterQuery,
   getQueryWithoutFilters,
 } from "../../utils/refineSearchUtils"
-import type { Aggregation } from "../../types/filterTypes"
+import type {
+  Aggregation,
+  CollapsedMultiValueAppliedFilters,
+} from "../../types/filterTypes"
 
 interface RefineSearchProps {
   aggregations: Aggregation[]
-  setAppliedFilters: Dispatch<React.SetStateAction<Record<string, string[]>>>
-  appliedFilters: Record<string, string[]>
+  setAppliedFilters: Dispatch<
+    React.SetStateAction<CollapsedMultiValueAppliedFilters>
+  >
+  appliedFilters: CollapsedMultiValueAppliedFilters
 }
 
 /**
@@ -44,7 +49,6 @@ const RefineSearch = ({
     { value: "dateBefore", label: "End Year" },
     { value: "subjectLiteral", label: "Subject" },
   ]
-
   const dateFieldset = (
     <FieldsetDate
       onDateChange={(dateField: DateFormName, data: string) => {

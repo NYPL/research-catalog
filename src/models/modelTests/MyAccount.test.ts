@@ -15,7 +15,7 @@ import {
   holdBibs,
   checkoutBibs,
   empty,
-} from "./data/MyAccount"
+} from "../../../__test__/fixtures/myAccountFixtures"
 
 jest.mock("../../server/sierraClient")
 
@@ -40,25 +40,36 @@ describe("MyAccountModel", () => {
     })
   })
   describe("getHoldStatus", () => {
-    it("returns the status as given when it's user-friendly", () => {
+    it("returns the correct status", () => {
       expect(
         MyAccount.getHoldStatus({
           code: "i",
           name: "Requested item ready for pickup.",
         })
-      ).toBe("Requested item ready for pickup.")
-    })
-    it("returns REQUEST PLACED instead of AVAILABLE", () => {
-      expect(
-        MyAccount.getHoldStatus({ code: "status:a", name: "AVAILABLE" })
-      ).toBe("REQUEST PLACED")
-    })
-    it("returns READY FOR PICKUP instead of READY SOON", () => {
-      expect(
-        MyAccount.getHoldStatus({ code: "spaghetti", name: "READY SOON" })
       ).toBe("READY FOR PICKUP")
+      expect(
+        MyAccount.getHoldStatus({
+          code: "t",
+          name: "Requested item is in transit.",
+        })
+      ).toBe("REQUEST CONFIRMED")
+      expect(
+        MyAccount.getHoldStatus({
+          code: "0",
+          name: "on hold.",
+        })
+      ).toBe("REQUEST PENDING")
+    })
+    it("returns anything beyond the mapped 3 as REQUEST PENDING", () => {
+      expect(
+        MyAccount.getHoldStatus({
+          code: "spaghetti",
+          name: "spagehe tti Hello",
+        })
+      ).toBe("REQUEST PENDING")
     })
   })
+
   describe("building model", () => {
     it("builds Account data model", async () => {
       MyAccount.fetchCheckouts = async () => checkouts
@@ -95,13 +106,33 @@ describe("MyAccountModel", () => {
           pickupByDate: "February 15, 2024",
           canFreeze: false,
           frozen: false,
-          status: "Requested item ready for pickup.",
-          pickupLocation: "SNFL (formerly Mid-Manhattan)",
+          status: "READY FOR PICKUP",
+          pickupLocation: {
+            code: "sn",
+            name: "SNFL (formerly Mid-Manhattan)",
+          },
           title:
             "Quit like a woman : the radical choice to not drink in a culture obsessed with alcohol",
           isResearch: false,
           bibId: "22002760",
-          isNyplOwned: false,
+          isNyplOwned: true,
+          catalogHref:
+            "https://nypl.na2.iiivega.com/search/card?recordId=22002760",
+        },
+        {
+          patron: "2772226",
+          id: "42273371",
+          pickupByDate: null,
+          canFreeze: false,
+          frozen: false,
+          status: "REQUEST PENDING",
+          pickupLocation: { code: "mp", name: "Morris Park" },
+          title: "2017 Tony Award Season.",
+          isResearch: false,
+          bibId: "21317166",
+          isNyplOwned: true,
+          catalogHref:
+            "https://nypl.na2.iiivega.com/search/card?recordId=21317166",
         },
       ])
       expect(account.checkouts).toStrictEqual([
@@ -138,7 +169,7 @@ describe("MyAccountModel", () => {
           {
             detail: "Replacement",
             amount: 14.99,
-            date: "2023-06-15T17:34:46Z",
+            date: "June 15, 2023",
           },
         ],
       })
@@ -173,6 +204,48 @@ describe("MyAccountModel", () => {
       expect(emptyAccount.checkouts).toStrictEqual([])
       expect(emptyAccount.holds).toStrictEqual([])
       expect(emptyAccount.fines).toStrictEqual({ total: 0, entries: [] })
+    })
+  })
+  describe("getResearchAndOwnership", () => {
+    it("can handle no varfields", () => {
+      expect(MyAccount.getResearchAndOwnership({})).toStrictEqual({
+        isResearch: false,
+        isNyplOwned: true,
+      })
+    })
+    it("can handle missing 910 field", () => {
+      expect(
+        MyAccount.getResearchAndOwnership({
+          varFields: [{ marcTag: "666" }],
+        })
+      ).toStrictEqual({
+        isResearch: true,
+        isNyplOwned: false,
+      })
+    })
+    it("can handle a otf record", () => {
+      expect(
+        MyAccount.getResearchAndOwnership({
+          varFields: [
+            { marcTag: "910", subfields: [{ tag: "a", content: "RLOTF" }] },
+          ],
+        })
+      ).toStrictEqual({
+        isResearch: true,
+        isNyplOwned: false,
+      })
+    })
+    it("can handle an nypl research record", () => {
+      expect(
+        MyAccount.getResearchAndOwnership({
+          varFields: [
+            { marcTag: "910", subfields: [{ tag: "a", content: "RL" }] },
+          ],
+        })
+      ).toStrictEqual({
+        isResearch: true,
+        isNyplOwned: true,
+      })
     })
   })
 })

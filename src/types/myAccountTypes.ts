@@ -40,6 +40,7 @@ export interface SierraHold {
   pickupLocation: SierraCodeName
   pickupByDate: string
   patron: string
+  recordType: string
 }
 
 export interface SierraRecord {
@@ -83,7 +84,7 @@ export interface Hold {
   pickupByDate: string
   id: string
   canFreeze: boolean
-  pickupLocation: string
+  pickupLocation: SierraCodeName
   isResearch: boolean
   status: string
   frozen: boolean
@@ -91,6 +92,7 @@ export interface Hold {
   title: string
   bibId: string
   isNyplOwned: boolean
+  catalogHref: string
 }
 
 export interface Patron {
@@ -118,7 +120,7 @@ export interface SierraBibEntry {
   createdDate: string
   deleted: boolean
   suppressed: boolean
-  isbn: string
+  isbn?: string
   lang: SierraCodeName
   title: string
   author: string
@@ -134,7 +136,7 @@ export interface SierraBibEntry {
   catalogDate: string
   country: SierraCodeName
   callNumber: string
-  varFields: {
+  varFields?: {
     fieldTag: string
     marcTag?: string
     ind1?: string

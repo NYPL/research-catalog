@@ -51,7 +51,7 @@ export default class MyAccount {
 
   static async fetchHolds(baseQuery: string) {
     const holdsQuery =
-      "/holds?expand=record&fields=canFreeze,record,status,pickupLocation,frozen,patron,pickupByDate"
+      "/holds?expand=record&fields=canFreeze,record,status,pickupLocation,frozen,patron,pickupByDate,recordType"
     return await client.get(`${baseQuery}${holdsQuery}`)
   }
 
@@ -74,38 +74,60 @@ export default class MyAccount {
     start?: number
     entries: SierraBibEntry[]
   }> {
-    if (!holdsOrCheckouts.length) return { entries: [] }
-    const checkoutBibIds = holdsOrCheckouts.map((holdOrCheckout) => {
-      return holdOrCheckout[itemOrRecord].bibIds[0]
+    if (!holdsOrCheckouts?.length) return { entries: [] }
+    const itemLevelHoldsorCheckouts = []
+    const bibLevelHolds = []
+
+    // Separating bib level and item level records so we only fetch bib data for item level holds/checkouts.
+    holdsOrCheckouts.forEach((holdOrCheckout) => {
+      if (holdOrCheckout[itemOrRecord].bibIds) {
+        itemLevelHoldsorCheckouts.push(holdOrCheckout[itemOrRecord].bibIds[0])
+      } else {
+        bibLevelHolds.push(holdOrCheckout.record)
+      }
     })
 
     const bibData = await client.get(
-      `bibs?id=${checkoutBibIds}&fields=default,varFields`
+      `bibs?id=${itemLevelHoldsorCheckouts}&fields=default,varFields`
     )
-
+    bibData.entries = bibData.entries.concat(bibLevelHolds)
     return bibData
+  }
+
+  /**
+   * getBibVarFields
+   * Reads varFields of a item-level hold's bib data to return if it is a research item,
+   * and if it is owned by NYPL.
+   */
+
+  static getResearchAndOwnership(bibFields) {
+    // We don't fetch varfields for bib level holds. Bib level holds only happen
+    // on circ, and therefore NYPL records.
+    if (!bibFields.varFields) {
+      return { isResearch: false, isNyplOwned: true }
+    }
+    const nineTen = bibFields.varFields.find((field) => field.marcTag === "910")
+    if (nineTen) {
+      const nineTenContent = nineTen.subfields.find(
+        (subfield) => subfield.tag === "a"
+      ).content
+      const isResearch = nineTenContent.startsWith("RL")
+      // RLOTF: "Research Library On The Fly", a code we add to OTF (aka
+      // "virtual") records, to tag them as being Research OTF records
+      const isPartnerRecord = nineTenContent === "RLOTF"
+      // Non-research means circ, circ records are NYPL owned
+      const isNyplOwned = !isResearch || !isPartnerRecord
+      return { isResearch, isNyplOwned }
+    }
+    // Default to most restrictive values
+    return { isResearch: true, isNyplOwned: false }
   }
 
   static buildBibData(bibs: SierraBibEntry[]): BibDataMapType {
     return bibs.reduce((bibDataMap: BibDataMapType, bibFields) => {
-      let isResearch: boolean
-      let isNyplOwned: boolean
+      const { isResearch, isNyplOwned } =
+        this.getResearchAndOwnership(bibFields)
       const title = bibFields.title
-      const nineTen = bibFields.varFields.find(
-        (field) => field.marcTag === "910"
-      )
-      // if we are unsure of the research ness of a bib, default to true so
-      // we don't let them renew or freeze the record
-      if (!nineTen) {
-        isResearch = true
-        isNyplOwned = false
-      } else {
-        const nineTenContent = nineTen.subfields.find(
-          (subfield: { tag: string; subfield: string }) => subfield.tag === "a"
-        ).content
-        isResearch = nineTenContent.startsWith("RL")
-        isNyplOwned = nineTenContent !== "RLOTF"
-      }
       bibDataMap[bibFields.id] = { title, isResearch, isNyplOwned }
       return bibDataMap
     }, {})
@@ -114,6 +136,10 @@ export default class MyAccount {
   buildHolds(holds: SierraHold[], bibData: SierraBibEntry[]): Hold[] {
     const bibDataMap = MyAccount.buildBibData(bibData)
     return holds.map((hold: SierraHold) => {
+      // Hold without bibIds is a bib level id.
+      const bibId =
+        hold.recordType === "i" ? hold.record.bibIds[0] : hold.record.id
+      const bibForHold = bibDataMap[bibId]
       return {
         patron: MyAccount.getRecordId(hold.patron),
         id: MyAccount.getRecordId(hold.id),
@@ -121,11 +147,16 @@ export default class MyAccount {
         canFreeze: hold.canFreeze,
         frozen: hold.frozen,
         status: MyAccount.getHoldStatus(hold.status),
-        pickupLocation: hold.pickupLocation.name,
-        title: bibDataMap[hold.record.bibIds[0]].title,
-        isResearch: bibDataMap[hold.record.bibIds[0]].isResearch,
-        bibId: hold.record.bibIds[0],
-        isNyplOwned: bibDataMap[hold.record.bibIds[0]].isResearch,
+        pickupLocation: hold.pickupLocation,
+        title: bibForHold.title,
+        isResearch: bibForHold.isResearch,
+        bibId,
+        isNyplOwned: bibForHold.isNyplOwned,
+        catalogHref: bibForHold.isNyplOwned
+          ? bibForHold.isResearch
+            ? `https://nypl.org/research/research-catalog/bib/b${bibId}`
+            : `https://nypl.na2.iiivega.com/search/card?recordId=${bibId}`
+          : null,
       }
     })
   }
@@ -185,7 +216,7 @@ export default class MyAccount {
           return {
             detail: entry.chargeType.display,
             amount: entry.itemCharge,
-            date: entry.assessedDate,
+            date: MyAccount.formatDate(entry.assessedDate),
           }
         }
       }),
@@ -196,6 +227,7 @@ export default class MyAccount {
    * Returns date in readable string ("Month day, year")
    */
   static formatDate(date) {
+    if (!date) return null
     const d = new Date(date)
     const year = d.getFullYear()
     const day = d.getDate()
@@ -208,12 +240,12 @@ export default class MyAccount {
    * Returns user-friendly status message
    */
   static getHoldStatus(status: SierraCodeName) {
-    if (status.code === "status:a") {
-      return "REQUEST PLACED"
-    } else if (status.name === "READY SOON") {
+    if (status.code === "i") {
       return "READY FOR PICKUP"
+    } else if (status.code === "t") {
+      return "REQUEST CONFIRMED"
     } else {
-      return status.name
+      return "REQUEST PENDING"
     }
   }
 
