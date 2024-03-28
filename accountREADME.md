@@ -63,7 +63,7 @@ Route parameter is the patron ID. Request body can include any fields on the pat
 ```
 
 exampleBody: {
-    emails: ['new@email.com],
+    emails: ['new@email.com'],
     phones: [6466600432]
 },
 
@@ -150,7 +150,7 @@ exampleSuccessResponse: {
 }
 exampleFailureResponse: {
     status: 403,
-    message: "TOO MANY RENEWALS. Please contact gethelp@nypl.org for assistance."
+    message: 'TOO MANY RENEWALS. Please contact gethelp@nypl.org for assistance.'
 }
 
 ```
