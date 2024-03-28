@@ -63,8 +63,8 @@ Route parameter is the patron ID. Request body can include any fields on the pat
 ```
 
 exampleBody: {
-    "emails": ['new@email.com],
-    "phones": [6466600432]
+    emails: ['new@email.com],
+    phones: [6466600432]
 },
 
 ```
@@ -89,9 +89,9 @@ Route parameter is the patron ID. Request body requires the patron's **current P
 ```
 
 exampleBody: {
-    "oldPin": 1234,
-    "newPin": 7890,
-    "barcode": 123456789
+    oldPin: 1234,
+    newPin: 7890,
+    barcode: 123456789
 },
 
 ```
@@ -116,7 +116,7 @@ Route parameter is the checkout ID. Request body requires the **patron ID**.
 ```
 
 exampleBody: {
-    "patronId": 123456
+    patronId: 123456
 },
 
 ```
