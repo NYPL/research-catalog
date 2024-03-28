@@ -45,6 +45,9 @@ const UpdateLocation = ({
               (loc) => e.target.value === loc.code
             )
             setSelectedLocation(newLocation)
+            // modalProps have to be explicitly updated here because
+            // of how useModal works.
+            setModalProps(defaultModalProps(newLocation))
           }}
           id={`update-location-selector-${key}`}
           labelText="Pickup location"
@@ -90,7 +93,9 @@ const UpdateLocation = ({
     ),
   })
 
-  const [modalProps, setModalProps] = useState(null)
+  const [modalProps, setModalProps] = useState(
+    defaultModalProps(selectedLocation)
+  )
   const successModalProps = {
     bodyContent: (
       <Box className={styles.modalBody}>
@@ -131,9 +136,6 @@ const UpdateLocation = ({
       </Heading>
     ),
   }
-  useEffect(() => {
-    setModalProps(defaultModalProps(selectedLocation))
-  }, [selectedLocation])
   return (
     <>
       <Button
