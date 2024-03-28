@@ -1,13 +1,10 @@
-import {
-  filteredPickupLocations,
-  pickupLocations,
-} from "../../../__test__/fixtures/accountFixtures"
 import MyAccount, {
   MyAccountFactory,
-  fetchPickupLocations,
   filterPickupLocations,
 } from "../MyAccount"
 import {
+  filteredPickupLocations,
+  pickupLocations,
   holds,
   checkouts,
   patron,

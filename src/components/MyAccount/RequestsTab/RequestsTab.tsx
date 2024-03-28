@@ -8,6 +8,7 @@ import type { Hold, Patron } from "../../../types/myAccountTypes"
 import ItemsTab from "../ItemsTab"
 import CancelButton from "./CancelButton"
 import FreezeButton from "./FreezeButton"
+import UpdateLocation from "./UpdateLocation"
 
 const RequestsTab = ({
   removeHold,
@@ -35,10 +36,15 @@ const RequestsTab = ({
     "Manage request",
   ]
 
-  const holdsData = holds.map((hold) => [
+  const holdsData = holds.map((hold, i) => [
     formatTitleElement(hold),
     getStatusBadge(hold.status),
-    hold.pickupLocation.name,
+    <>
+      <Text>{hold.pickupLocation.name}</Text>
+      {!hold.isResearch && (
+        <UpdateLocation selectedLocation={hold.pickupLocation.name} key={i} />
+      )}
+    </>,
     hold.pickupByDate,
     /* Passing removeHold() down to the Cancel button so it can remove the hold from
      * currentHolds */
