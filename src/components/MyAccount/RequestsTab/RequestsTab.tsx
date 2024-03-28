@@ -43,6 +43,7 @@ const RequestsTab = ({
       <Text>{hold.pickupLocation.name}</Text>
       {!hold.isResearch && (
         <UpdateLocation
+          patronId={patron.id}
           holdId={hold.id}
           pickupLocation={hold.pickupLocation}
           key={i}

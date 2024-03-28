@@ -11,9 +11,9 @@ import {
 } from "@nypl/design-system-react-components"
 import type { SierraCodeName } from "../../../types/myAccountTypes"
 import styles from "../../../../styles/components/MyAccount.module.scss"
-import { useState, useEffect, useRef } from "react"
+import { useState, useRef } from "react"
 
-import { pickupLocations } from "../../../../__test__/fixtures/myAccountFixtures"
+import { filteredPickupLocations as pickupLocations } from "../../../../__test__/fixtures/myAccountFixtures"
 import { BASE_URL } from "../../../config/constants"
 
 interface UpdateLocationPropsType {
@@ -21,15 +21,17 @@ interface UpdateLocationPropsType {
   pickupLocation: SierraCodeName
   // locations: SierraCodeName[]
   key: number
+  patronId: number
 }
 
 const UpdateLocation = ({
+  patronId,
   holdId,
   pickupLocation,
   key,
 }: UpdateLocationPropsType) => {
   const [displayModal, setDisplayModal] = useState(false)
-  const { Modal, onOpen: openModal } = useModal()
+  const { Modal, onOpen: openModal, onClose: closeModal } = useModal()
   const [selectedLocation, setSelectedLocation] = useState(pickupLocation)
   const locationsWithSelectedFirst = useRef([
     selectedLocation,
@@ -68,21 +70,22 @@ const UpdateLocation = ({
       </Box>
     ),
     closeButtonLabel: "Confirm location",
-    // onClose: async (e) => {
-    //   console.log(e)
-    //   if (!e) {
-    //     console.log("no e")
-    //     closeModal()
-    //   }
-    //   const response = await fetch(`${BASE_URL}/api/account/${holdId}/holds/`, {
-    //     method: "PUT",
-    //     body: JSON.stringify({ pickupLocation: selectedLocation }),
-    //   })
-    //   if (response.status == 200) {
-    //     // Open next modal to confirm request has been canceled.
-    //     setModalProps(successModalProps)
-    //   } else setModalProps(failureModalProps)
-    // },
+    onClose: async (e) => {
+      if (!e) {
+        closeModal()
+      }
+      const response = await fetch(
+        `${BASE_URL}/api/account/holds/update/${holdId}`,
+        {
+          method: "PUT",
+          body: JSON.stringify({ pickupLocation: selectedLocation, patronId }),
+        }
+      )
+      if (response.status == 200) {
+        // Open next modal to confirm request has been canceled.
+        setModalProps(successModalProps)
+      } else setModalProps(failureModalProps)
+    },
     headingText: (
       <Heading className={styles.modalHeading}>
         <Text sx={{ marginBottom: 0 }}>
