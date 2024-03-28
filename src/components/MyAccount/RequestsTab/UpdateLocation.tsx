@@ -1,3 +1,5 @@
+// @ts-nocheck
+// Modal onClose
 import {
   Box,
   Icon,
@@ -9,29 +11,47 @@ import {
 } from "@nypl/design-system-react-components"
 import type { SierraCodeName } from "../../../types/myAccountTypes"
 import styles from "../../../../styles/components/MyAccount.module.scss"
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 
 import { pickupLocations } from "../../../../__test__/fixtures/myAccountFixtures"
+import { BASE_URL } from "../../../config/constants"
 
 interface UpdateLocationPropsType {
-  selectedLocation: string
+  holdId: string
+  pickupLocation: SierraCodeName
   // locations: SierraCodeName[]
   key: number
 }
 
-const UpdateLocation = ({ selectedLocation, key }: UpdateLocationPropsType) => {
-  const { onOpen: openModal, onClose: closeModal, Modal } = useModal()
-  const [updatedLocation, setUpdatedLocation] = useState(selectedLocation)
-  const defaultModalProps = {
+const UpdateLocation = ({
+  holdId,
+  pickupLocation,
+  key,
+}: UpdateLocationPropsType) => {
+  const [displayModal, setDisplayModal] = useState(false)
+  const { Modal, onOpen: openModal } = useModal()
+  const [selectedLocation, setSelectedLocation] = useState(pickupLocation)
+  const locationsWithSelectedFirst = useRef([
+    selectedLocation,
+    ...pickupLocations.filter((loc) => loc.code !== pickupLocation.code),
+  ]).current
+  const defaultModalProps = (selected) => ({
     bodyContent: (
       <Box className={styles.modalBody}>
         <Select
+          value={selected.code}
+          onChange={(e: { target: HTMLInputElement }) => {
+            const newLocation = locationsWithSelectedFirst.find(
+              (loc) => e.target.value === loc.code
+            )
+            setSelectedLocation(newLocation)
+          }}
           id={`update-location-selector-${key}`}
           labelText="Pickup location"
           showLabel
           name={"pickup-location"}
         >
-          {pickupLocations.map((location, locationKey) => {
+          {locationsWithSelectedFirst.map((location, locationKey) => {
             return (
               <option
                 key={`pickupLocation-option-${key}${locationKey}`}
@@ -44,7 +64,22 @@ const UpdateLocation = ({ selectedLocation, key }: UpdateLocationPropsType) => {
         </Select>
       </Box>
     ),
-    closeButtonLabel: "OK",
+    closeButtonLabel: "Confirm location",
+    // onClose: async (e) => {
+    //   console.log(e)
+    //   if (!e) {
+    //     console.log("no e")
+    //     closeModal()
+    //   }
+    //   const response = await fetch(`${BASE_URL}/api/account/${holdId}/holds/`, {
+    //     method: "PUT",
+    //     body: JSON.stringify({ pickupLocation: selectedLocation }),
+    //   })
+    //   if (response.status == 200) {
+    //     // Open next modal to confirm request has been canceled.
+    //     setModalProps(successModalProps)
+    //   } else setModalProps(failureModalProps)
+    // },
     headingText: (
       <Heading className={styles.modalHeading}>
         <Text sx={{ marginBottom: 0 }}>
@@ -53,8 +88,9 @@ const UpdateLocation = ({ selectedLocation, key }: UpdateLocationPropsType) => {
         </Text>
       </Heading>
     ),
-  }
-  const [modalProps, setModalProps] = useState(defaultModalProps)
+  })
+
+  const [modalProps, setModalProps] = useState(null)
   const successModalProps = {
     bodyContent: (
       <Box className={styles.modalBody}>
@@ -95,20 +131,25 @@ const UpdateLocation = ({ selectedLocation, key }: UpdateLocationPropsType) => {
       </Heading>
     ),
   }
-
+  useEffect(() => {
+    setModalProps(defaultModalProps(selectedLocation))
+  }, [selectedLocation])
   return (
     <>
       <Button
         sx={{ paddingLeft: 0 }}
         size="small"
-        onClick={openModal}
+        onClick={() => {
+          openModal()
+          setDisplayModal(true)
+        }}
         id={`update-pickup-location-${key}`}
         buttonType="text"
       >
         <Icon name="socialTwitter" align="left" size="small"></Icon>
         <Text className={styles.changeLocation}>Change location</Text>
       </Button>
-      <Modal {...modalProps} />
+      {displayModal && <Modal {...modalProps} />}
     </>
   )
 }

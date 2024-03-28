@@ -42,7 +42,11 @@ const RequestsTab = ({
     <>
       <Text>{hold.pickupLocation.name}</Text>
       {!hold.isResearch && (
-        <UpdateLocation selectedLocation={hold.pickupLocation.name} key={i} />
+        <UpdateLocation
+          holdId={hold.id}
+          pickupLocation={hold.pickupLocation}
+          key={i}
+        />
       )}
     </>,
     hold.pickupByDate,
