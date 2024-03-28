@@ -99,17 +99,14 @@ const UpdateLocation = ({ selectedLocation, key }: UpdateLocationPropsType) => {
   return (
     <>
       <Button
+        sx={{ paddingLeft: 0 }}
+        size="small"
         onClick={openModal}
         id={`update-pickup-location-${key}`}
         buttonType="text"
       >
-        <Icon
-          sx={{ marginLeft: "xs" }}
-          name="socialTwitter"
-          align="left"
-          size="small"
-        ></Icon>
-        Update location
+        <Icon name="socialTwitter" align="left" size="small"></Icon>
+        <Text className={styles.changeLocation}>Change location</Text>
       </Button>
       <Modal {...modalProps} />
     </>

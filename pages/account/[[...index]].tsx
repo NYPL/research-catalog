@@ -10,6 +10,7 @@ import ProfileTabs from "../../src/components/MyAccount/ProfileTabs"
 import ProfileHeader from "../../src/components/MyAccount/ProfileHeader"
 import { BASE_URL } from "../../src/config/constants"
 import FeesBanner from "../../src/components/MyAccount/FeesBanner"
+import { myAccountPageData } from "../../__test__/fixtures/myAccountFixtures"
 
 interface MyAccountPropsType {
   patron?: MyAccountModel["patron"]

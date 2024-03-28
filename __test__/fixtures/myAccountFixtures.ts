@@ -1,3 +1,4 @@
+import type MyAccount from "../../src/models/MyAccount"
 
 export const pickupLocations = [
   { code: "ft   ", name: "53rd Street" },
@@ -2469,4 +2470,11 @@ export const mockFines = {
       date: "2023-06-15T17:34:46Z",
     },
   ],
+}
+
+export const myAccountPageData = {
+  checkouts: mockCheckouts,
+  fines: mockFines,
+  holds: mockHolds,
+  patron: mockPatron,
 }
