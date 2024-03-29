@@ -155,7 +155,7 @@ const UpdateLocation = ({
         id={`update-pickup-location-${key}`}
         buttonType="text"
       >
-        <Icon name="socialTwitter" align="left" size="small"></Icon>
+        <Icon name="editorMode" align="left" size="small"></Icon>
         <Text className={styles.changeLocation}>Change location</Text>
       </Button>
       <Modal {...modalProps} />
