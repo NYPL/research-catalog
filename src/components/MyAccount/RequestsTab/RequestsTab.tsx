@@ -10,6 +10,8 @@ import CancelButton from "./CancelButton"
 import FreezeButton from "./FreezeButton"
 import UpdateLocation from "./UpdateLocation"
 
+import { filteredPickupLocations as pickupLocations } from "../../../../__test__/fixtures/myAccountFixtures"
+
 const RequestsTab = ({
   removeHold,
   holds,
@@ -43,6 +45,7 @@ const RequestsTab = ({
       <Text>{hold.pickupLocation.name}</Text>
       {!hold.isResearch && (
         <UpdateLocation
+          pickupLocationOptions={pickupLocations}
           patronId={patron.id}
           holdId={hold.id}
           pickupLocation={hold.pickupLocation}

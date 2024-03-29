@@ -19,12 +19,13 @@ import { BASE_URL } from "../../../config/constants"
 interface UpdateLocationPropsType {
   holdId: string
   pickupLocation: SierraCodeName
-  // locations: SierraCodeName[]
+  pickupLocationOptions: SierraCodeName[]
   key: number
   patronId: number
 }
 
 const UpdateLocation = ({
+  pickupLocationOptions,
   patronId,
   holdId,
   pickupLocation,
@@ -35,7 +36,7 @@ const UpdateLocation = ({
   const [selectedLocation, setSelectedLocation] = useState(pickupLocation)
   const locationsWithSelectedFirst = useRef([
     selectedLocation,
-    ...pickupLocations.filter((loc) => loc.code !== pickupLocation.code),
+    ...pickupLocationOptions.filter((loc) => loc.code !== pickupLocation.code),
   ]).current
   const defaultModalProps = (selected) => ({
     bodyContent: (
@@ -46,10 +47,12 @@ const UpdateLocation = ({
             const newLocation = locationsWithSelectedFirst.find(
               (loc) => e.target.value === loc.code
             )
-            setSelectedLocation(newLocation)
-            // modalProps have to be explicitly updated here because
-            // of how useModal works.
-            setModalProps(defaultModalProps(newLocation))
+            setSelectedLocation(() => {
+              // modalProps have to be explicitly updated here because
+              // of how useModal works.
+              setModalProps(defaultModalProps(newLocation))
+              return newLocation
+            })
           }}
           id={`update-location-selector-${key}`}
           labelText="Pickup location"
@@ -99,6 +102,7 @@ const UpdateLocation = ({
   const [modalProps, setModalProps] = useState(
     defaultModalProps(selectedLocation)
   )
+
   const successModalProps = {
     bodyContent: (
       <Box className={styles.modalBody}>
