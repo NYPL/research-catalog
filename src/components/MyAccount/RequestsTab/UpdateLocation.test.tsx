@@ -4,10 +4,20 @@ import userEvent from "@testing-library/user-event"
 import { filteredPickupLocations as pickupLocations } from "../../../../__test__/fixtures/myAccountFixtures"
 import { BASE_URL } from "../../../config/constants"
 
-global.fetch = jest.fn().mockResolvedValueOnce({
-  json: async () => "updated",
-  status: 200,
-} as Response)
+global.fetch = jest
+  .fn()
+  .mockResolvedValueOnce({
+    json: async () => "updated",
+    status: 200,
+  } as Response)
+  .mockResolvedValueOnce({
+    json: async () => "updated",
+    status: 200,
+  } as Response)
+  .mockResolvedValueOnce({
+    json: async () => "error",
+    status: 500,
+  } as Response)
 
 describe("UpdateLocation modal trigger", () => {
   const openModal = async () => {
@@ -35,21 +45,41 @@ describe("UpdateLocation modal trigger", () => {
     })
     expect(selectedOption).toBeInTheDocument()
   })
-  it.only("submits a hold update request with patron id and new location as body", async () => {
-    const fetchSpy = jest.spyOn(global, "fetch")
-    await openModal()
-    const select = screen.getByLabelText("Pickup location")
-    await userEvent.selectOptions(select, "mp   ")
-    const submitButton = screen.getByText("Confirm location")
-    await userEvent.click(submitButton)
-    expect(fetchSpy).toHaveBeenCalledWith(
-      `${BASE_URL}/api/account/holds/update/987654`,
-      {
-        method: "PUT",
-        body: JSON.stringify({ pickupLocation: "mp   ", patronId: 1234567 }),
-      }
-    )
+  describe("submission", () => {
+    it("submits a hold update request with patron id and new location as body", async () => {
+      const fetchSpy = jest.spyOn(global, "fetch")
+      await openModal()
+      const select = screen.getByLabelText("Pickup location")
+      await userEvent.selectOptions(select, "mp   ")
+      const submitButton = screen.getByText("Confirm location")
+      await userEvent.click(submitButton)
+      expect(fetchSpy).toHaveBeenCalledWith(
+        `${BASE_URL}/api/account/holds/update/987654`,
+        {
+          method: "PUT",
+          body: JSON.stringify({ pickupLocation: "mp   ", patronId: 1234567 }),
+        }
+      )
+    })
+    it("displays success modal on successful update", async () => {
+      await openModal()
+      const select = screen.getByLabelText("Pickup location")
+      await userEvent.selectOptions(select, "mp   ")
+      const submitButton = screen.getByText("Confirm location")
+      await userEvent.click(submitButton)
+      const errorMessage = screen.getByText("Location change successful", {
+        exact: false,
+      })
+      expect(errorMessage).toBeInTheDocument()
+    })
+    it("displays failure modal on failed update", async () => {
+      await openModal()
+      const select = screen.getByLabelText("Pickup location")
+      await userEvent.selectOptions(select, "mp   ")
+      const submitButton = screen.getByText("Confirm location")
+      await userEvent.click(submitButton)
+      const errorMessage = screen.getByText("Location change failed")
+      expect(errorMessage).toBeInTheDocument()
+    })
   })
-  it.todo("displays success modal on successful update")
-  it.todo("displays failure modal on failed update")
 })
