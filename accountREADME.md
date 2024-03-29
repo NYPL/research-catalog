@@ -1,6 +1,6 @@
 # My Account: Phase 1
 
-This README details the Sierra API endpoints that now support [Research Catalog's My Account page](https://www.nypl.org/research/research-catalog/account) (instead of the webscraping previously used). See [Sierra API documentation](https://sandbox.iii.com/iii/sierra-api/swagger/index.html#!/patrons) for more information.
+This README details the internal Next.js API endpoints that hit Sierra API, which now support [Research Catalog's My Account page](https://www.nypl.org/research/research-catalog/account) (instead of the webscraping previously used). See [Sierra API documentation](https://sandbox.iii.com/iii/sierra-api/swagger/index.html#!/patrons) for more information.
 
 ## Account API Endpoints
 
