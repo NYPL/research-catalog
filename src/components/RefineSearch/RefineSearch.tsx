@@ -1,3 +1,4 @@
+import type { TextInputRefType } from "@nypl/design-system-react-components"
 import {
   Box,
   Button,
@@ -7,11 +8,12 @@ import {
   Icon,
 } from "@nypl/design-system-react-components"
 import type { Dispatch, SyntheticEvent } from "react"
-import { useState, useCallback } from "react"
+import { useState, useCallback, useRef } from "react"
 import { useRouter } from "next/router"
+import DateForm from "../SearchFilters/DateForm"
+import { useDateForm } from "../../hooks/useDateForm"
 
 import styles from "../../../styles/components/Search.module.scss"
-import FieldsetDate, { type DateFormName } from "../SearchFilters/FieldsetDate"
 import SearchResultsFilters from "../../models/SearchResultsFilters"
 import RefineSearchCheckBoxField from "./RefineSearchCheckboxField"
 import {
@@ -24,6 +26,13 @@ import type {
   CollapsedMultiValueAppliedFilters,
 } from "../../types/filterTypes"
 
+const fields = [
+  { value: "materialType", label: "Format" },
+  { value: "language", label: "Language" },
+  { value: "dateAfter", label: "Start Year" },
+  { value: "dateBefore", label: "End Year" },
+  { value: "subjectLiteral", label: "Subject" },
+]
 interface RefineSearchProps {
   aggregations: Aggregation[]
   setAppliedFilters: Dispatch<
@@ -41,31 +50,22 @@ const RefineSearch = ({
   setAppliedFilters,
 }: RefineSearchProps) => {
   const router = useRouter()
-
-  const fields = [
-    { value: "materialType", label: "Format" },
-    { value: "language", label: "Language" },
-    { value: "dateAfter", label: "Start Year" },
-    { value: "dateBefore", label: "End Year" },
-    { value: "subjectLiteral", label: "Subject" },
-  ]
-  const dateFieldset = (
-    <FieldsetDate
-      onDateChange={(dateField: DateFormName, data: string) => {
-        // update the parent state to know about the updated dateValues
-        setAppliedFilters((prevFilters) => {
-          return {
-            ...prevFilters,
-            [dateField]: [data],
-          }
-        })
-      }}
-      appliedFilters={{
-        dateBefore: appliedFilters.dateBefore && appliedFilters.dateBefore[0],
-        dateAfter: appliedFilters.dateAfter && appliedFilters.dateAfter[0],
-      }}
-    />
-  )
+  const dateInputRefs = [useRef<TextInputRefType>(), useRef<TextInputRefType>()]
+  const { dateFormProps, validateDateRange } = useDateForm({
+    changeHandler: (e: SyntheticEvent) => {
+      const target = e.target as HTMLInputElement
+      // update the parent state to know about the updated dateValues
+      setAppliedFilters((prevFilters) => {
+        return {
+          ...prevFilters,
+          [target.name]: [target.value],
+        }
+      })
+    },
+    inputRefs: dateInputRefs,
+    dateAfter: appliedFilters.dateAfter?.[0],
+    dateBefore: appliedFilters.dateBefore?.[0],
+  })
 
   const filters = fields
     .map((field) => {
@@ -82,10 +82,11 @@ const RefineSearch = ({
         )
       } else return null
     })
-    .concat(dateFieldset)
+    .concat(<DateForm {...dateFormProps} />)
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault()
+    if (validateDateRange() === false) return
     const updatedQuery = {
       // maintain any non-filter query params, eg q=spaghetti, journalTitle=pasta%20fancy
       ...getQueryWithoutFilters(router.query),
