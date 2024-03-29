@@ -31,19 +31,19 @@ const UpdateLocation = ({
   pickupLocation,
   key,
 }: UpdateLocationPropsType) => {
-  const [displayModal, setDisplayModal] = useState(false)
   const { Modal, onOpen: openModal, onClose: closeModal } = useModal()
   const [selectedLocation, setSelectedLocation] = useState(pickupLocation)
   const locationsWithSelectedFirst = useRef([
     selectedLocation,
     ...pickupLocationOptions.filter((loc) => loc.code !== pickupLocation.code),
   ]).current
-  const defaultModalProps = (selected) => ({
+  const defaultModalProps = (selected: SierraCodeName) => ({
     bodyContent: (
       <Box className={styles.modalBody}>
         <Select
           value={selected.code}
           onChange={(e: { target: HTMLInputElement }) => {
+            console.log("change")
             const newLocation = locationsWithSelectedFirst.find(
               (loc) => e.target.value === loc.code
             )
@@ -51,6 +51,7 @@ const UpdateLocation = ({
               // modalProps have to be explicitly updated here because
               // of how useModal works.
               setModalProps(defaultModalProps(newLocation))
+              console.log(newLocation)
               return newLocation
             })
           }}
@@ -81,7 +82,7 @@ const UpdateLocation = ({
         `${BASE_URL}/api/account/holds/update/${holdId}`,
         {
           method: "PUT",
-          body: JSON.stringify({ pickupLocation: selectedLocation, patronId }),
+          body: JSON.stringify({ pickupLocation: selected.code, patronId }),
         }
       )
       if (response.status == 200) {
@@ -107,21 +108,21 @@ const UpdateLocation = ({
     bodyContent: (
       <Box className={styles.modalBody}>
         <Text sx={{ marginLeft: "l" }}>
-          Your item will be available for pickup at the {selectedLocation}{" "}
+          Your item will be available for pickup at the {selectedLocation.name}{" "}
           Library.
         </Text>
       </Box>
     ),
     closeButtonLabel: "OK",
     headingText: (
-      <Heading className={styles.modalHeading}>
+      <Box className={styles.modalHeading}>
         <Icon
           size="large"
           name="actionCheckCircleFilled"
           color="ui.success.primary"
         />
         <Text sx={{ marginBottom: 0 }}> Location change successful </Text>
-      </Heading>
+      </Box>
     ),
   }
   const failureModalProps = {
@@ -148,19 +149,15 @@ const UpdateLocation = ({
       <Button
         sx={{ paddingLeft: 0 }}
         size="small"
-        onClick={() => {
-          openModal()
-          setDisplayModal(true)
-        }}
+        onClick={openModal}
         id={`update-pickup-location-${key}`}
         buttonType="text"
       >
         <Icon name="socialTwitter" align="left" size="small"></Icon>
         <Text className={styles.changeLocation}>Change location</Text>
       </Button>
-      {displayModal && <Modal {...modalProps} />}
+      <Modal {...modalProps} />
     </>
   )
 }
-
 export default UpdateLocation
