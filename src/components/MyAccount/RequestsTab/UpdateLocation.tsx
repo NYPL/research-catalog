@@ -8,6 +8,7 @@ import {
   Heading,
   Button,
   Select,
+  Link as DSLink,
 } from "@nypl/design-system-react-components"
 import type { SierraCodeName } from "../../../types/myAccountTypes"
 import styles from "../../../../styles/components/MyAccount.module.scss"
@@ -131,8 +132,11 @@ const UpdateLocation = ({
     bodyContent: (
       <Box className={styles.modalBody}>
         <Text sx={{ marginLeft: "l", marginRight: "m" }}>
-          We were unable to change the pickup location because this item is
-          already in transit to the original location.
+          We were unable to change the pickup location. Please contact{" "}
+          <DSLink href="https://www.nypl.org/get-help/contact-us">
+            AskNYPL
+          </DSLink>{" "}
+          for further assistance.
         </Text>
       </Box>
     ),
