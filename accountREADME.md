@@ -4,6 +4,31 @@ This README details the internal Next.js API endpoints that hit Sierra API, whic
 
 ## Account API Endpoints
 
+In general, successful requests will return a `200` status. Requests will fail with a `403` status if the patron is not authenticated, or if the patron does not own the item they are updating. These failure responses will look like this:
+
+```
+exampleFailureResponse: {
+    status: 403,
+    message: 'No authenticated patron'
+}
+exampleFailureResponse: {
+    status: 403,
+    message: 'Authenticated patron does not own this hold'
+}
+
+```
+
+If the request fails because it's rejected by Sierra (a common example is a checkout being renewed too many times), it will return a `4XX` status, with a message from Sierra.
+
+```
+exampleFailureResponse: {
+    status: 403,
+    message: 'TOO MANY RENEWALS. Please contact gethelp@nypl.org for assistance.'
+}
+```
+
+Since we don't have a definitive list of possible Sierra error messages, the logged response should be referenced for more information.
+
 | Description | Request method | Internal route |
 | ----------- | -------------- | -------------- |
 
@@ -14,9 +39,9 @@ Route parameter is the hold ID. Request body requires the **patron ID**, and can
 
 ```
 exampleBody: {
-    patronId: "123456",
+    patronId: '123456',
     freeze: true,
-    pickupLocation: "sn",
+    pickupLocation: 'sn',
 },
 ```
 
@@ -39,7 +64,7 @@ Route parameter is the hold ID. Request body requires the **patron ID**.
 
 ```
 exampleBody: {
-    patronId: "123456",
+    patronId: '123456',
 },
 ```
 
@@ -124,7 +149,7 @@ exampleBody: {
 ```
 exampleSuccessResponse: {
     status: 200,
-    message: "Renewed",
+    message: 'Renewed',
     body: {
     // A checkout object with new due date
     {
