@@ -32,11 +32,12 @@
     margin-top: var(--nypl-space-s);
   }
 }
+
 .modalBody {
   font-size: var(--nypl-fontSizes-desktop-body-body1);
   display: flex;
   flex-direction: column;
-  padding-top: 0;
+  padding-top: 0 !important;
 }
 
 .notification {
@@ -110,24 +111,6 @@
   }
 }
 
-.statusBadge {
-  background: var(--nypl-colors-ui-bg-default);
-  border-color: var(--nypl-colors-ui-gray-semi-dark) !important;
-  border-left: 4px solid;
-  font-size: var(--nypl-fontSizes-desktop-caption);
-  font-weight: 510;
-  font-style: normal !important;
-}
-
-.statusBadgeReady {
-  background: rgba(238, 247, 240, 1) !important;
-  border-color: var(--nypl-colors-ui-success-primary) !important;
-  border-left: 4px solid;
-  font-size: var(--nypl-fontSizes-desktop-caption);
-  font-weight: 510;
-  font-style: normal !important;
-}
-
 .feesNotification {
   margin-left: 0 !important;
   background: rgba(250, 244, 244, 1) !important;
@@ -153,4 +136,25 @@
   > div {
     padding-left: 0;
   }
+}
+
+.formTextInput {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--nypl-space-xs);
+  > label {
+    font-size: var(--nypl-fontSizes-desktop-body-body1);
+    font-weight: var(--nypl-fontWeights-light);
+  }
+  > div {
+    width: 100%;
+  }
+}
+
+.formButton {
+  width: 200px;
+  display: flex;
+  flex-direction: row;
+  justify-self: end;
 }
