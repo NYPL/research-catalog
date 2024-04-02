@@ -102,7 +102,7 @@ describe("fetchBib", () => {
 
     expect(bibResponse.status).toEqual(307)
     expect(bibResponse.redirectUrl).toEqual(
-      "https://nypl.na2.iiivega.com//iii/encore/record/C__Rb17418167"
+      "https://nypl.na2.iiivega.com/iii/encore/record/C__Rb17418167"
     )
   })
 
