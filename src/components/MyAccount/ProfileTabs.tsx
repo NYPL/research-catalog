@@ -1,4 +1,4 @@
-import AccountSettingsTab from "./AccountSettingsTab"
+import AccountSettingsTab from "./SettingsTab/AccountSettingsTab"
 import type MyAccount from "../../models/MyAccount"
 
 import { Tabs } from "@nypl/design-system-react-components"

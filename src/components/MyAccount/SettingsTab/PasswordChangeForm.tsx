@@ -5,10 +5,17 @@ import {
   TextInput,
   Button,
 } from "@nypl/design-system-react-components"
-import styles from "../../../styles/components/MyAccount.module.scss"
-import { BASE_URL } from "../../config/constants"
+import styles from "../../../../styles/components/MyAccount.module.scss"
+import { BASE_URL } from "../../../config/constants"
+import type { Patron } from "../../../types/myAccountTypes"
 
-const PasswordChangeForm = ({ patron, setModal }) => {
+const PasswordChangeForm = ({
+  patron,
+  updateModal,
+}: {
+  patron: Patron
+  updateModal: (errorMessage?: string) => void
+}) => {
   const [formData, setFormData] = useState({
     oldPassword: "",
     newPassword: "",
@@ -16,58 +23,41 @@ const PasswordChangeForm = ({ patron, setModal }) => {
     passwordsMatch: true,
   })
 
-  const matchPasswords = (firstPassword, secondPassword) => {
-    return firstPassword === secondPassword
-  }
-
   const validateForm = () => {
-    return formData.oldPassword === "" ||
-      formData.newPassword === "" ||
-      formData.confirmPassword === "" ||
-      !formData.passwordsMatch
-      ? false
-      : true
+    return (
+      formData.oldPassword !== "" &&
+      formData.newPassword !== "" &&
+      formData.confirmPassword !== "" &&
+      formData.passwordsMatch
+    )
   }
 
   const handleInputChange = (e) => {
     const { id, value } = e.target
-
     if (id === "confirmPassword") {
-      formData.passwordsMatch = matchPasswords(formData.newPassword, value)
+      formData.passwordsMatch = formData.newPassword === value
     }
     setFormData({ ...formData, [id]: value })
   }
 
   const handleSubmit = async () => {
-    console.log(formData.oldPassword, formData.newPassword, patron.barcode)
-    const response = await fetch(
-      `${BASE_URL}/api/account/update-pin/${patron.id}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          oldPin: formData.oldPassword,
-          newPin: formData.newPassword,
-          barcode: patron.barcode,
-        }),
-      }
-    )
-    if (response.status === 200) {
-      setModal("success")
-    } else {
-      setModal("failure")
-    }
+    const res = await fetch(`${BASE_URL}/api/account/update-pin/${patron.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        oldPin: formData.oldPassword,
+        newPin: formData.newPassword,
+        barcode: patron.barcode,
+      }),
+    })
+    const errorMessage = await res.json()
+    res.status === 200 ? updateModal() : updateModal(errorMessage)
   }
 
   return (
-    <Form
-      id="pw-form"
-      gap="grid.s"
-      width="50%"
-      sx={{ paddingTop: "s", paddingBottom: "m" }}
-    >
+    <Form id="pw-form" gap="grid.s">
       <FormField className={styles.formField}>
         <TextInput
           id="oldPassword"

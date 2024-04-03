@@ -1,8 +1,8 @@
 import { List } from "@nypl/design-system-react-components"
-import type { Patron } from "../../types/myAccountTypes"
-import { buildListElementsWithIcons } from "./IconListElement"
-import styles from "../../../styles/components/MyAccount.module.scss"
-import PinUpdateModal from "./PinUpdateModal"
+import type { Patron } from "../../../types/myAccountTypes"
+import { buildListElementsWithIcons } from "../IconListElement"
+import styles from "../../../../styles/components/MyAccount.module.scss"
+import PasswordModal from "./PasswordModal"
 
 const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
   const listData = [
@@ -37,7 +37,7 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
       <List className={styles.myAccountList} type="dl">
         {listData.map(buildListElementsWithIcons)}
       </List>
-      <PinUpdateModal patron={settingsData} />
+      <PasswordModal patron={settingsData} />
     </>
   )
 }

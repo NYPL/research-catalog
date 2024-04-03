@@ -156,18 +156,3 @@
   flex-direction: row;
   justify-self: end;
 }
-
-.passwordModal {
-  max-width: none !important;
-  width: 900px !important;
-  div[role="dialog"] {
-    outline: 2px green solid !important;
-  }
-}
-
-.passwordModalBody {
-  font-size: var(--nypl-fontSizes-desktop-body-body1);
-  display: flex;
-  flex-direction: row;
-  padding-top: 0 !important;
-}
