@@ -23,7 +23,7 @@ const AccountSettingsButtons = ({
       onClick={toggleCurrentlyEditing}
     >
       {/* {placeholder icon before pencil is included in DS} */}
-      <Icon name="socialTwitter" align="left" size="medium" />
+      <Icon name="editorMode" align="left" size="medium" />
       Edit account Settings
     </Button>
   )
