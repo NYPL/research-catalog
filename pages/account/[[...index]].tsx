@@ -10,7 +10,8 @@ import ProfileTabs from "../../src/components/MyAccount/ProfileTabs"
 import ProfileHeader from "../../src/components/MyAccount/ProfileHeader"
 import { BASE_URL } from "../../src/config/constants"
 import FeesBanner from "../../src/components/MyAccount/FeesBanner"
-import { myAccountPageData } from "../../__test__/fixtures/myAccountFixtures"
+import { getPickupLocations } from "../../src/models/MyAccount"
+import type { SierraCodeName } from "../../src/types/myAccountTypes"
 
 interface MyAccountPropsType {
   patron?: MyAccountModel["patron"]
@@ -19,6 +20,7 @@ interface MyAccountPropsType {
   fines?: MyAccountModel["fines"]
   isAuthenticated: boolean
   tabsPath?: string
+  pickupLocations: SierraCodeName[]
 }
 
 export default function MyAccount({
@@ -28,6 +30,7 @@ export default function MyAccount({
   fines,
   isAuthenticated,
   tabsPath,
+  pickupLocations,
 }: MyAccountPropsType) {
   const errorRetrievingPatronData = !patron
   // console.log(checkouts, holds, patron, fines, tabsPath)
@@ -154,6 +157,7 @@ export default function MyAccount({
             {fines.total > 0 && <FeesBanner />}
             <ProfileHeader patron={patron} />
             <ProfileTabs
+              pickupLocations={pickupLocations}
               patron={patron}
               checkouts={checkouts}
               holds={holds}
@@ -199,27 +203,36 @@ export async function getServerSideProps({ req }) {
   // Parsing path from url to pass to ProfileTabs.
   const tabsPath = req.url.split("/", -1)[2] || null
   const id = patronTokenResponse.decodedPatron.sub
-  // try {
-  const { checkouts, holds, patron, fines } = await MyAccountFactory(id)
-  // Redirecting /fines if user has none.
-  if (tabsPath === "overdues" && fines.total === 0) {
+  try {
+    const { checkouts, holds, patron, fines } = await MyAccountFactory(id)
+    const pickupLocations = await getPickupLocations()
+    // Redirecting /fines if user has none.
+    if (tabsPath === "overdues" && fines.total === 0) {
+      return {
+        redirect: {
+          destination: "/account",
+          permanent: false,
+        },
+      }
+    }
     return {
-      redirect: {
-        destination: "/account",
-        permanent: false,
+      props: {
+        checkouts,
+        holds,
+        patron,
+        fines,
+        tabsPath,
+        isAuthenticated,
+        pickupLocations,
+      },
+    }
+  } catch (e) {
+    console.log(e.message)
+    return {
+      props: {
+        tabsPath,
+        isAuthenticated,
       },
     }
   }
-  return {
-    props: { checkouts, holds, patron, fines, tabsPath, isAuthenticated },
-  }
-  // } catch (e) {
-  //   console.log(e.message)
-  //   return {
-  //     props: {
-  //       tabsPath,
-  //       isAuthenticated,
-  //     },
-  //   }
-  // }
 }

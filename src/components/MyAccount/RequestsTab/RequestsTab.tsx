@@ -10,16 +10,16 @@ import CancelButton from "./CancelButton"
 import FreezeButton from "./FreezeButton"
 import UpdateLocation from "./UpdateLocation"
 
-import { filteredPickupLocations as pickupLocations } from "../../../../__test__/fixtures/myAccountFixtures"
-
 const RequestsTab = ({
   removeHold,
   holds,
   patron,
+  pickupLocations,
 }: {
   removeHold
   holds: Hold[]
   patron: Patron
+  pickupLocations: SieraCodeName[]
 }) => {
   function formatTitleElement(hold: Hold) {
     // If item is research/circ

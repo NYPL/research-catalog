@@ -7,6 +7,7 @@ import CheckoutsTab from "./CheckoutsTab/CheckoutsTab"
 import RequestsTab from "./RequestsTab/RequestsTab"
 import { useState } from "react"
 import FeesTab from "./FeesTab/FeesTab"
+import type { SierraCodeName } from "../../types/myAccountTypes"
 
 interface ProfileTabsPropsType {
   patron: MyAccount["patron"]
@@ -14,9 +15,11 @@ interface ProfileTabsPropsType {
   holds: MyAccount["holds"]
   fines: MyAccount["fines"]
   activePath: string
+  pickupLocations: SierraCodeName[]
 }
 
 const ProfileTabs = ({
+  pickupLocations,
   checkouts,
   holds,
   patron,
@@ -41,6 +44,7 @@ const ProfileTabs = ({
       label: `Requests (${currentHolds.length})`,
       content: (
         <RequestsTab
+          pickupLocations={pickupLocations}
           removeHold={removeHold}
           holds={currentHolds}
           patron={patron}

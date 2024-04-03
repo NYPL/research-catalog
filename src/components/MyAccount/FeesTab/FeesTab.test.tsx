@@ -5,6 +5,7 @@ import {
   mockFines,
   mockHolds,
   mockPatron,
+  filteredPickupLocations as pickupLocations,
 } from "../../../../__test__/fixtures/myAccountFixtures"
 import FeesTab from "./FeesTab"
 import MyAccount from "../../../../pages/account/[[...index]]"
@@ -35,6 +36,7 @@ describe("FeesTab", () => {
   it("renders notification banner if user has fines", () => {
     render(
       <MyAccount
+        pickupLocations={pickupLocations}
         isAuthenticated={true}
         patron={mockPatron}
         checkouts={mockCheckouts}
@@ -50,6 +52,7 @@ describe("FeesTab", () => {
   it("does not render notification banner if user does not have fines", () => {
     render(
       <MyAccount
+        pickupLocations={pickupLocations}
         isAuthenticated={true}
         patron={mockPatron}
         checkouts={mockCheckouts}

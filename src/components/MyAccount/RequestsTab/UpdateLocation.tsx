@@ -52,7 +52,6 @@ const UpdateLocation = ({
               // modalProps have to be explicitly updated here because
               // of how useModal works.
               setModalProps(defaultModalProps(newLocation))
-              console.log(newLocation)
               return newLocation
             })
           }}

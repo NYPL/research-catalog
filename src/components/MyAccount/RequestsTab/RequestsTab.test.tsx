@@ -5,7 +5,9 @@ import {
   mockFines,
   mockHolds,
   mockPatron,
+  filteredPickupLocations as pickupLocations,
 } from "../../../../__test__/fixtures/myAccountFixtures"
+
 import { userEvent } from "@testing-library/user-event"
 import ProfileTabs from "../ProfileTabs"
 import RequestsTab from "./RequestsTab"
@@ -26,6 +28,7 @@ describe("RequestsTab", () => {
   it("renders", () => {
     const component = render(
       <RequestsTab
+        pickupLocations={pickupLocations}
         patron={mockPatron}
         holds={mockHolds}
         removeHold={mockRemoveHold}
@@ -39,6 +42,7 @@ describe("RequestsTab", () => {
   it("renders each hold request as a row", () => {
     const { getAllByRole } = render(
       <RequestsTab
+        pickupLocations={pickupLocations}
         patron={mockPatron}
         holds={mockHolds}
         removeHold={mockRemoveHold}
@@ -51,6 +55,7 @@ describe("RequestsTab", () => {
   it("calls hold cancel endpoint when Cancel button is clicked", async () => {
     const component = render(
       <RequestsTab
+        pickupLocations={pickupLocations}
         patron={mockPatron}
         holds={mockHolds}
         removeHold={mockRemoveHold}
@@ -75,6 +80,7 @@ describe("RequestsTab", () => {
   it("removes hold from list when cancel is successful", async () => {
     const component = render(
       <ProfileTabs
+        pickupLocations={pickupLocations}
         patron={mockPatron}
         checkouts={mockCheckouts}
         holds={mockHolds}
@@ -105,6 +111,7 @@ describe("RequestsTab", () => {
   it("displays freeze buttons only for holds that can be frozen", async () => {
     const component = render(
       <RequestsTab
+        pickupLocations={pickupLocations}
         patron={mockPatron}
         holds={mockHolds}
         removeHold={mockRemoveHold}
@@ -117,6 +124,7 @@ describe("RequestsTab", () => {
   it("freezes and unfreezes, with button reflecting current state", async () => {
     const component = render(
       <RequestsTab
+        pickupLocations={pickupLocations}
         patron={mockPatron}
         holds={mockHolds}
         removeHold={mockRemoveHold}
