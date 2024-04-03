@@ -2212,7 +2212,7 @@ export const mockCheckouts = [
     isResearch: false,
     bibId: "21678146",
     isNyplOwned: true,
-    catalogHref: "https://nypl.na2.iiivega.com/search/card?recordId=21678146",
+    catalogHref: "https://borrow.nypl.org/search/card?recordId=21678146",
   },
   {
     id: "65060570",
@@ -2224,7 +2224,7 @@ export const mockCheckouts = [
     isResearch: false,
     bibId: "17699134",
     isNyplOwned: true,
-    catalogHref: "https://nypl.na2.iiivega.com/search/card?recordId=17699134",
+    catalogHref: "https://borrow.nypl.org/search/card?recordId=17699134",
   },
 ]
 
@@ -2242,7 +2242,7 @@ export const mockHolds = [
     isResearch: false,
     bibId: "22002760",
     isNyplOwned: true,
-    catalogHref: "https://nypl.na2.iiivega.com/search/card?recordId=22002760",
+    catalogHref: "https://borrow.nypl.org/search/card?recordId=22002760",
   },
   {
     patron: "2772226",
@@ -2257,7 +2257,7 @@ export const mockHolds = [
     isResearch: false,
     bibId: "22002761",
     isNyplOwned: true,
-    catalogHref: "https://nypl.na2.iiivega.com/search/card?recordId=22002760",
+    catalogHref: "https://borrow.nypl.org/search/card?recordId=22002760",
   },
 ]
 export const mockFines = {
