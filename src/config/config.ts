@@ -65,7 +65,7 @@ export const appConfig: AppConfig = {
   urls: {
     drbAbout:
       "https://digital-research-books-beta.nypl.org/about?source=catalog",
-    circulatingCatalog: "https://nypl.na2.iiivega.com/",
+    circulatingCatalog: "https://borrow.nypl.org",
     legacyCatalog: "https://legacycatalog.nypl.org/",
     login: "https://login.nypl.org/auth/login",
     locations: "https://www.nypl.org/locations/",

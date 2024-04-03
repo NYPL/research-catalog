@@ -14,6 +14,7 @@ import type {
   SierraBibEntry,
   BibDataMapType,
 } from "../types/myAccountTypes"
+import { appConfig } from "../config/config"
 
 let client
 
@@ -155,7 +156,7 @@ export default class MyAccount {
         catalogHref: bibForHold.isNyplOwned
           ? bibForHold.isResearch
             ? `https://nypl.org/research/research-catalog/bib/b${bibId}`
-            : `https://nypl.na2.iiivega.com/search/card?recordId=${bibId}`
+            : `${appConfig.urls.circulatingCatalog}/search/card?recordId=${bibId}`
           : null,
       }
     })
@@ -182,7 +183,7 @@ export default class MyAccount {
         catalogHref: bibDataMap[checkout.item.bibIds[0]].isNyplOwned
           ? bibDataMap[checkout.item.bibIds[0]].isResearch
             ? `https://nypl.org/research/research-catalog/bib/b${checkout.item.bibIds[0]}`
-            : `https://nypl.na2.iiivega.com/search/card?recordId=${checkout.item.bibIds[0]}`
+            : `${appConfig.urls.circulatingCatalog}/search/card?recordId=${checkout.item.bibIds[0]}`
           : null,
       }
     })
