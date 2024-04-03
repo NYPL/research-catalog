@@ -101,8 +101,7 @@ describe("MyAccountModel", () => {
           isResearch: false,
           bibId: "22002760",
           isNyplOwned: true,
-          catalogHref:
-            "https://nypl.na2.iiivega.com/search/card?recordId=22002760",
+          catalogHref: "https://borrow.nypl.org/search/card?recordId=22002760",
         },
         {
           patron: "2772226",
@@ -116,8 +115,7 @@ describe("MyAccountModel", () => {
           isResearch: false,
           bibId: "21317166",
           isNyplOwned: true,
-          catalogHref:
-            "https://nypl.na2.iiivega.com/search/card?recordId=21317166",
+          catalogHref: "https://borrow.nypl.org/search/card?recordId=21317166",
         },
       ])
       expect(account.checkouts).toStrictEqual([
@@ -131,8 +129,7 @@ describe("MyAccountModel", () => {
           isResearch: false,
           bibId: "21678146",
           isNyplOwned: true,
-          catalogHref:
-            "https://nypl.na2.iiivega.com/search/card?recordId=21678146",
+          catalogHref: "https://borrow.nypl.org/search/card?recordId=21678146",
         },
         {
           id: "65060570",
@@ -144,8 +141,7 @@ describe("MyAccountModel", () => {
           isResearch: false,
           bibId: "17699134",
           isNyplOwned: true,
-          catalogHref:
-            "https://nypl.na2.iiivega.com/search/card?recordId=17699134",
+          catalogHref: "https://borrow.nypl.org/search/card?recordId=17699134",
         },
       ])
       expect(account.fines).toStrictEqual({
