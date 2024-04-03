@@ -132,10 +132,10 @@ const RefineSearch = ({
     <Box className={styles.refineSearchContainer}>
       {refineSearchClosed ? (
         <Button
-          className={styles.refineSearchButton}
           onClick={toggleRefine}
           id="refine-search"
           buttonType="secondary"
+          backgroundColor="ui.white"
         >
           Refine Search
         </Button>

@@ -14,6 +14,7 @@ interface RCLinkProps {
   type?: LinkTypes
   size?: string
   hasWhiteFocusRing?: boolean
+  [key: string]: any
 }
 
 // TODO: once 2ad is phased out, replace with DS v3 Link which can wrap a

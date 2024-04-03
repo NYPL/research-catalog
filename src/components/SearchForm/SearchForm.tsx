@@ -1,4 +1,4 @@
-import { SearchBar } from "@nypl/design-system-react-components"
+import { Box, SearchBar } from "@nypl/design-system-react-components"
 import { useRouter } from "next/router"
 import type { SyntheticEvent, Dispatch, SetStateAction } from "react"
 import { useContext, useState, useEffect } from "react"
@@ -68,54 +68,42 @@ const SearchForm = () => {
   return (
     <div className={styles.searchContainer}>
       <div className={styles.searchContainerInner}>
-        <div className={styles.searchBarContainer}>
-          <SearchBar
-            id="mainContent"
-            action={`${BASE_URL}/search`}
-            method="get"
-            onSubmit={handleSubmit}
-            labelText="Search Bar Label"
-            isDisabled={isLoading}
-            selectProps={{
-              value: searchScope,
-              onChange: (e) => handleChange(e, setSearchScope),
-              labelText: "Select a category",
-              name: "search_scope",
-              optionsData: [
-                { text: "All fields", value: "all" },
-                { text: "Title", value: "title" },
-                { text: "Journal Title", value: "journal_title" },
-                { text: "Author/Contributor", value: "contributor" },
-                { text: "Standard Numbers", value: "standard_number" },
-                { text: "Subject", value: "subject" },
-              ],
-            }}
-            textInputProps={{
-              isClearable: true,
-              onChange: (e) => handleChange(e, setSearchTerm),
-              isClearableCallback: () => setSearchTerm(""),
-              value: searchTerm,
-              labelText:
-                "Search by keyword, title, journal title, or author/contributor",
-              name: "q",
-              placeholder:
-                "Keyword, title, journal title, or author/contributor",
-            }}
-            sx={{
-              ".chakra-select__icon-wrapper": { "z-index": "999 !important" },
-            }}
-          />
-        </div>
-        <div className={styles.auxSearchContainer}>
-          {/* Temporary color update. The Header overrides the new
-            DS 2.X CSS color variable values. */}
-          <RCLink
-            className={styles.advancedSearch}
-            href={`${BASE_URL}/search/advanced`}
-            color="#0069BF"
-          >
-            Advanced Search
-          </RCLink>
+        <SearchBar
+          id="mainContent"
+          action={`${BASE_URL}/search`}
+          method="get"
+          onSubmit={handleSubmit}
+          labelText="Search Bar Label"
+          isDisabled={isLoading}
+          selectProps={{
+            value: searchScope,
+            onChange: (e) => handleChange(e, setSearchScope),
+            labelText: "Select a category",
+            name: "search_scope",
+            optionsData: [
+              { text: "All fields", value: "all" },
+              { text: "Title", value: "title" },
+              { text: "Journal Title", value: "journal_title" },
+              { text: "Author/Contributor", value: "contributor" },
+              { text: "Standard Numbers", value: "standard_number" },
+              { text: "Subject", value: "subject" },
+            ],
+          }}
+          textInputProps={{
+            isClearable: true,
+            onChange: (e) => handleChange(e, setSearchTerm),
+            isClearableCallback: () => setSearchTerm(""),
+            value: searchTerm,
+            labelText:
+              "Search by keyword, title, journal title, or author/contributor",
+            name: "q",
+            placeholder: "Keyword, title, journal title, or author/contributor",
+          }}
+          sx={{
+            ".chakra-select__icon-wrapper": { "z-index": "999 !important" },
+          }}
+        />
+        <Box className={styles.auxSearchContainer}>
           {displayRefineResults && (
             <RefineSearch
               setAppliedFilters={setAppliedFilters}
@@ -123,8 +111,15 @@ const SearchForm = () => {
               aggregations={aggregations}
             />
           )}
-          <EDSLink />
-        </div>
+          <RCLink
+            className={styles.advancedSearch}
+            href={`${BASE_URL}/search/advanced`}
+            isUnderlined={false}
+          >
+            Advanced Search
+          </RCLink>
+        </Box>
+        <EDSLink />
       </div>
     </div>
   )
