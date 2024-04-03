@@ -102,7 +102,7 @@ describe("fetchBib", () => {
 
     expect(bibResponse.status).toEqual(307)
     expect(bibResponse.redirectUrl).toEqual(
-      "https://borrow.nypl.org/iii/encore/record/C__Rb17418167"
+      "https://borrow.nypl.org/search/card?recordId=17418167"
     )
   })
 
