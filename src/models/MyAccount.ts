@@ -144,6 +144,9 @@ export default class MyAccount {
     }
     try {
       return holds.map((hold: SierraHold) => {
+        const bibId =
+          hold.recordType === "i" ? hold.record.bibIds[0] : hold.record.id
+        const bibForHold = bibDataMap[bibId]
         return {
           patron: MyAccount.getRecordId(hold.patron),
           id: MyAccount.getRecordId(hold.id),
@@ -152,14 +155,14 @@ export default class MyAccount {
           frozen: hold.frozen,
           status: MyAccount.getHoldStatus(hold.status),
           pickupLocation: hold.pickupLocation,
-          title: bibDataMap[hold.record.bibIds[0]].title,
-          isResearch: bibDataMap[hold.record.bibIds[0]].isResearch,
-          bibId: hold.record.bibIds[0],
-          isNyplOwned: bibDataMap[hold.record.bibIds[0]].isNyplOwned,
-          catalogHref: bibDataMap[hold.record.bibIds[0]].isNyplOwned
-            ? bibDataMap[hold.record.bibIds[0]].isResearch
-              ? `https://nypl.org/research/research-catalog/bib/b${hold.record.bibIds[0]}`
-              : `https://nypl.na2.iiivega.com/search/card?recordId=${hold.record.bibIds[0]}`
+          title: bibForHold.title,
+          isResearch: bibForHold.isResearch,
+          bibId,
+          isNyplOwned: bibForHold.isNyplOwned,
+          catalogHref: bibForHold.isNyplOwned
+            ? bibForHold.isResearch
+              ? `https://nypl.org/research/research-catalog/bib/b${bibId}`
+              : `https://nypl.na2.iiivega.com/search/card?recordId=${bibId}`
             : null,
         }
       })
@@ -180,6 +183,8 @@ export default class MyAccount {
     }
     try {
       return checkouts.map((checkout: SierraCheckout) => {
+        const bibId = checkout.item.bibIds[0]
+        const bibForCheckout = bibDataMap[bibId]
         return {
           id: MyAccount.getRecordId(checkout.id),
           // Partner items do not have call numbers. Null has to be explicitly
@@ -188,14 +193,14 @@ export default class MyAccount {
           barcode: checkout.item.barcode,
           dueDate: MyAccount.formatDate(checkout.dueDate),
           patron: MyAccount.getRecordId(checkout.patron),
-          title: bibDataMap[checkout.item.bibIds[0]].title,
-          isResearch: bibDataMap[checkout.item.bibIds[0]].isResearch,
-          bibId: checkout.item.bibIds[0],
-          isNyplOwned: bibDataMap[checkout.item.bibIds[0]].isNyplOwned,
-          catalogHref: bibDataMap[checkout.item.bibIds[0]].isNyplOwned
-            ? bibDataMap[checkout.item.bibIds[0]].isResearch
-              ? `https://nypl.org/research/research-catalog/bib/b${checkout.item.bibIds[0]}`
-              : `https://nypl.na2.iiivega.com/search/card?recordId=${checkout.item.bibIds[0]}`
+          title: bibForCheckout.title,
+          isResearch: bibForCheckout.isResearch,
+          bibId: bibId,
+          isNyplOwned: bibForCheckout.isNyplOwned,
+          catalogHref: bibForCheckout.isNyplOwned
+            ? bibForCheckout.isResearch
+              ? `https://nypl.org/research/research-catalog/bib/b${bibId}`
+              : `https://nypl.na2.iiivega.com/search/card?recordId=${bibId}`
             : null,
         }
       })

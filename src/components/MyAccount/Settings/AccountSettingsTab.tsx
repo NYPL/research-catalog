@@ -7,6 +7,7 @@ import {
   AccountSettingsForm,
   AccountSettingsDisplay,
 } from "./AccountSettingsDisplayOptions"
+import { accountSettings } from "./AccountSettingsUtils"
 
 const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
   const [currentlyEditing, setCurrentlyEditing] = useState(false)
@@ -15,10 +16,24 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
   ) : (
     <AccountSettingsDisplay patron={settingsData} />
   )
-
+  const submitAccountSettings = (e) => {
+    e.preventDefault()
+    const payload = accountSettings.reduce((putRequestPayload, setting) => {
+      putRequestPayload[setting.field] = e.target[setting.field]?.value
+      return putRequestPayload
+    }, {})
+    console.log(payload)
+  }
   return (
     <Box className={styles.accountSettingsTab}>
-      <Form id="account-settings-container">
+      <Form
+        id="account-settings-container"
+        onSubmit={(e) => submitAccountSettings(e)}
+      >
+        <AccountSettingsButtons
+          currentlyEditing={currentlyEditing}
+          setCurrentlyEditing={setCurrentlyEditing}
+        />
         <List
           sx={{ border: "none", h2: { border: "none" } }}
           className={styles.myAccountList}
@@ -29,10 +44,6 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
 
         <Spacer />
       </Form>
-      <AccountSettingsButtons
-        currentlyEditing={currentlyEditing}
-        setCurrentlyEditing={setCurrentlyEditing}
-      />
     </Box>
   )
 }

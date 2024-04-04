@@ -38,7 +38,11 @@ const AccountSettingsButtons = ({
       >
         Cancel
       </Button>
-      <Button id="account-settings-update-button" buttonType="primary">
+      <Button
+        id="account-settings-update-button"
+        type="submit"
+        buttonType="primary"
+      >
         Save Changes
       </Button>
     </>

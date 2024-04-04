@@ -1,8 +1,10 @@
 import {
-  Form,
+  Text,
   FormField,
   Select,
   TextInput,
+  Form,
+  FormRow,
 } from "@nypl/design-system-react-components"
 import { notificationPreferenceMap } from "../../../utils/myAccountData"
 import type { Patron } from "../../../types/myAccountTypes"
@@ -25,7 +27,7 @@ export const AccountSettingsDisplay = ({ patron }: { patron: Patron }) => {
 }
 
 export const AccountSettingsForm = ({ patron }: { patron: Patron }) => {
-  return accountSettings
+  const formInputs = accountSettings
     .map((setting) => {
       let inputField:
         | string
@@ -65,6 +67,7 @@ export const AccountSettingsForm = ({ patron }: { patron: Patron }) => {
         case "Phone":
           inputField = (
             <TextInput
+              name={setting.field}
               defaultValue={patron.primaryPhone}
               id="phone-text-input"
               labelText="Update phone number"
@@ -75,6 +78,7 @@ export const AccountSettingsForm = ({ patron }: { patron: Patron }) => {
         case "Email":
           inputField = (
             <TextInput
+              name={setting.field}
               defaultValue={patron.primaryEmail}
               id="email-text-input"
               labelText="Update email"
@@ -83,14 +87,7 @@ export const AccountSettingsForm = ({ patron }: { patron: Patron }) => {
           )
           break
         case "Pin/Password":
-          inputField = (
-            <TextInput
-              defaultValue="****"
-              id="pin-input"
-              labelText="Update pin or password"
-              showLabel={false}
-            />
-          )
+          inputField = <Text>****</Text>
       }
       return {
         term: setting.term,
@@ -101,4 +98,5 @@ export const AccountSettingsForm = ({ patron }: { patron: Patron }) => {
       }
     })
     .map(buildListElementsWithIcons)
+  return formInputs
 }
