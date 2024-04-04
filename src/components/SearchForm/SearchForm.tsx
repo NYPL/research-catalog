@@ -104,13 +104,15 @@ const SearchForm = () => {
           }}
         />
         <Box className={styles.auxSearchContainer}>
-          {displayRefineResults && (
-            <RefineSearch
-              setAppliedFilters={setAppliedFilters}
-              appliedFilters={appliedFilters}
-              aggregations={aggregations}
-            />
-          )}
+          <Box>
+            {displayRefineResults && (
+              <RefineSearch
+                setAppliedFilters={setAppliedFilters}
+                appliedFilters={appliedFilters}
+                aggregations={aggregations}
+              />
+            )}
+          </Box>
           <RCLink
             className={styles.advancedSearch}
             href={`${BASE_URL}/search/advanced`}

@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Fixed VQA issues on the top half of the Search Results page (SCC-4065)
+- Fixed VQA issues for the searchbar, results heading, sort dropdown, and individual search result card in the Search Results page (SCC-4065)
 
 ## [1.0.3] 2024-04-03
 
