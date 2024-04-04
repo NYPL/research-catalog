@@ -4,7 +4,11 @@ import {
   StatusBadge,
   Text,
 } from "@nypl/design-system-react-components"
-import type { Hold, Patron } from "../../../types/myAccountTypes"
+import type {
+  Hold,
+  Patron,
+  SierraCodeName,
+} from "../../../types/myAccountTypes"
 import ItemsTab from "../ItemsTab"
 import CancelButton from "./CancelButton"
 import FreezeButton from "./FreezeButton"
@@ -19,7 +23,7 @@ const RequestsTab = ({
   removeHold
   holds: Hold[]
   patron: Patron
-  pickupLocations: SieraCodeName[]
+  pickupLocations: SierraCodeName[]
 }) => {
   function formatTitleElement(hold: Hold) {
     // If item is research/circ

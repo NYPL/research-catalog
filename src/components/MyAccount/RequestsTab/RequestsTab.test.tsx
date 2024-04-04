@@ -170,4 +170,6 @@ describe("RequestsTab", () => {
     const freezeButtons = component.getAllByText("Freeze")
     expect(freezeButtons.length).toBe(1)
   })
+  // need new creds
+  it.todo("displays pickup location button for circ records that are eligible")
 })
