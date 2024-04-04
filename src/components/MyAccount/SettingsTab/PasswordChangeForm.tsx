@@ -30,16 +30,16 @@ const PasswordChangeForm = ({
     formData.passwordsMatch
 
   const handleInputChange = (e) => {
-    const { id, value } = e.target
+    const { name, value } = e.target
     let updatedFormData = { ...formData }
 
-    if (id === "confirmPassword") {
+    if (name === "confirmPassword") {
       updatedFormData = {
         ...updatedFormData,
         confirmPassword: value,
         passwordsMatch: updatedFormData.newPassword === value,
       }
-    } else if (id === "newPassword") {
+    } else if (name === "newPassword") {
       updatedFormData = {
         ...updatedFormData,
         newPassword: value,
@@ -48,7 +48,7 @@ const PasswordChangeForm = ({
     } else {
       updatedFormData = {
         ...updatedFormData,
-        [id]: value,
+        [name]: value,
       }
     }
 
