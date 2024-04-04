@@ -61,8 +61,12 @@ export default async function initializePatronTokenAuth(reqCookies: unknown) {
  */
 export function getLoginRedirect(req) {
   const protocol = req.protocol || "http"
-  const hostname = req.headers["host"]
+  const hostname =
+    appConfig.environment === "development"
+      ? "local.nypl.org:8080"
+      : req.headers["host"]
   const originalUrl = BASE_URL + req.url
+  console.log("hostname", hostname)
   const fullUrl = encodeURIComponent(`${protocol}://${hostname}${originalUrl}`)
   const redirect = `${
     appConfig.apiEndpoints.loginUrl[appConfig.environment]

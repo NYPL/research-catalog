@@ -193,7 +193,7 @@ export default class MyAccount {
     const notificationPreference =
       notificationPreferenceMap[patron.fixedFields["268"].value]
     return {
-      notificationPreference,
+      notificationPreference: notificationPreference || null,
       name: patron.names[0],
       barcode: patron.barcodes[0],
       expirationDate: patron.expirationDate,

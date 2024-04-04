@@ -209,6 +209,14 @@ export async function getServerSideProps({ req }) {
         },
       }
     }
+    //   if (tabsPath === 1) {
+    //     return {
+    //       redirect: {
+    //         destination: PATHS["404"],
+    //         permanent: false,
+    //       }
+    // }
+
     return {
       props: { checkouts, holds, patron, fines, tabsPath, isAuthenticated },
     }
