@@ -121,9 +121,7 @@ const PasswordModal = ({ patron }: { patron: Patron }) => {
       <Button
         id="button"
         buttonType="text"
-        onClick={() => {
-          openModal()
-        }}
+        onClick={openModal}
         sx={{ textDecoration: "underline", margin: "xs" }}
       >
         Change pin/password

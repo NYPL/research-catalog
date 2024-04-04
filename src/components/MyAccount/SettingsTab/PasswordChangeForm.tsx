@@ -23,21 +23,36 @@ const PasswordChangeForm = ({
     passwordsMatch: true,
   })
 
-  const validateForm = () => {
-    return (
-      formData.oldPassword !== "" &&
-      formData.newPassword !== "" &&
-      formData.confirmPassword !== "" &&
-      formData.passwordsMatch
-    )
-  }
+  const validateForm =
+    formData.oldPassword !== "" &&
+    formData.newPassword !== "" &&
+    formData.confirmPassword !== "" &&
+    formData.passwordsMatch
 
   const handleInputChange = (e) => {
     const { id, value } = e.target
+    let updatedFormData = { ...formData }
+
     if (id === "confirmPassword") {
-      formData.passwordsMatch = formData.newPassword === value
+      updatedFormData = {
+        ...updatedFormData,
+        confirmPassword: value,
+        passwordsMatch: updatedFormData.newPassword === value,
+      }
+    } else if (id === "newPassword") {
+      updatedFormData = {
+        ...updatedFormData,
+        newPassword: value,
+        passwordsMatch: updatedFormData.confirmPassword === value,
+      }
+    } else {
+      updatedFormData = {
+        ...updatedFormData,
+        [id]: value,
+      }
     }
-    setFormData({ ...formData, [id]: value })
+
+    setFormData(updatedFormData)
   }
 
   const handleSubmit = async () => {
@@ -58,9 +73,10 @@ const PasswordChangeForm = ({
 
   return (
     <Form id="pw-form" gap="grid.s">
-      <FormField className={styles.formField}>
+      <FormField>
         <TextInput
           id="oldPassword"
+          name="oldPassword"
           type="password"
           className={styles.formTextInput}
           isRequired
@@ -69,9 +85,10 @@ const PasswordChangeForm = ({
           onChange={handleInputChange}
         />
       </FormField>
-      <FormField className={styles.formField}>
+      <FormField>
         <TextInput
           id="newPassword"
+          name="newPassword"
           type="password"
           className={styles.formTextInput}
           isRequired
@@ -80,9 +97,10 @@ const PasswordChangeForm = ({
           onChange={handleInputChange}
         />
       </FormField>
-      <FormField className={styles.formField}>
+      <FormField>
         <TextInput
           id="confirmPassword"
+          name="confirmPassword"
           type="password"
           isInvalid={!formData.passwordsMatch}
           invalidText="PIN/PASSWORDS do not match"
@@ -98,7 +116,7 @@ const PasswordChangeForm = ({
           className={styles.formButton}
           onClick={handleSubmit}
           id="submit"
-          isDisabled={!validateForm()}
+          isDisabled={!validateForm}
         >
           Change PIN/PASSWORD
         </Button>
