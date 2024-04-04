@@ -115,6 +115,7 @@ export default function Search({
                 name="sort_direction"
                 id="search-results-sort"
                 labelText="Sort by"
+                labelPosition="inline"
                 mb="l"
                 onChange={handleSortChange}
                 value={
@@ -149,10 +150,10 @@ export default function Search({
             ) : (
               <>
                 {displayAppliedFilters && <AppliedFilters />}
-                <Heading level="h2" mb="xl" size="heading4">
+                <Heading level="h2" mb="l" size="heading5" minH="40px">
                   {getSearchResultsHeading(searchParams, totalResults)}
                 </Heading>
-                <SimpleGrid columns={1} gap="grid.xl">
+                <SimpleGrid columns={1} gap="grid.l">
                   {searchResultBibs.map((bib: SearchResultsBib) => {
                     return <SearchResult key={bib.id} bib={bib} />
                   })}

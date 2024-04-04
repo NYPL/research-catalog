@@ -56,10 +56,12 @@ function buildQueryDisplayString(searchParams: SearchParams): string {
       const displayParam = textInputFields.find((field) => field.name === param)
       // if it's a param we want to display and it is a populated value
       if (displayParam && searchParams[param]) {
-        const label = displayParam.label
+        const label = displayParam.label.toLowerCase()
         const value = searchParams[param]
+        const plural = label === "keyword" && value.indexOf(" ") > -1 ? "s" : ""
+
         displayString += displayString.length ? "and " : "for "
-        displayString += `${label}: "${value}" `
+        displayString += `${label}${plural} "${value}" `
       }
       return displayString
     }, "")

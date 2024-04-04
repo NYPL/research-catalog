@@ -21,7 +21,7 @@ const ElectronicResourcesLink = ({
   electronicResources,
 }: ElectronicResourcesLinkProps) => {
   return (
-    <Box>
+    <Box mt="s" mb="s">
       <Heading level="four" size="callout" mb="xxs">
         Available Online
       </Heading>

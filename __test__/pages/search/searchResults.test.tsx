@@ -18,7 +18,7 @@ describe("Search Results page", () => {
       render(<SearchResults isAuthenticated={true} results={{ results }} />)
 
       const displayingText = screen.getByText(
-        `Displaying 1-50 of ${results.totalResults} results for Keyword: "${query}"`
+        `Displaying 1-50 of ${results.totalResults} results for keyword "${query}"`
       )
       expect(displayingText).toBeInTheDocument()
 
