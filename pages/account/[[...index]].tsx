@@ -29,7 +29,6 @@ export default function MyAccount({
   tabsPath,
 }: MyAccountPropsType) {
   const errorRetrievingPatronData = !patron
-  console.log(checkouts, holds, patron, fines, tabsPath)
 
   /** Testing settings api route */
   async function settingsUpdate(patronId) {
@@ -184,7 +183,6 @@ export default function MyAccount({
 
 export async function getServerSideProps({ req }) {
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
-  console.log("patronTokenResponse is", patronTokenResponse)
   const isAuthenticated = patronTokenResponse.isTokenValid
   if (!isAuthenticated) {
     const redirect = getLoginRedirect(req)
