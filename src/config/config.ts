@@ -18,6 +18,11 @@ export const appConfig: AppConfig = {
       qa: "https://qa-platform.nypl.org/api/v0.1",
       production: "https://platform.nypl.org/api/v0.1",
     },
+    domain: {
+      development: "local.nypl.org:8080",
+      qa: "qa-www.nypl.org",
+      production: "nypl.org",
+    },
     drb: {
       development: "https://digital-research-books-api.nypl.org/search",
       qa: "https://digital-research-books-api.nypl.org/search",

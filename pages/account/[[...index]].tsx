@@ -8,7 +8,7 @@ import { MyAccountFactory } from "../../src/models/MyAccount"
 import type MyAccountModel from "../../src/models/MyAccount"
 import ProfileTabs from "../../src/components/MyAccount/ProfileTabs"
 import ProfileHeader from "../../src/components/MyAccount/ProfileHeader"
-import { BASE_URL } from "../../src/config/constants"
+import { BASE_URL, PATHS } from "../../src/config/constants"
 import FeesBanner from "../../src/components/MyAccount/FeesBanner"
 
 interface MyAccountPropsType {
@@ -200,8 +200,13 @@ export async function getServerSideProps({ req }) {
   const id = patronTokenResponse.decodedPatron.sub
   try {
     const { checkouts, holds, patron, fines } = await MyAccountFactory(id)
-    // Redirecting /fines if user has none.
-    if (tabsPath === "overdues" && fines.total === 0) {
+    // Redirecting /fines if user has none, or any other paths.
+    if (
+      (tabsPath === "overdues" && fines.total === 0) ||
+      ["checkouts", "requests", "overdues", "settings", null].indexOf(
+        tabsPath
+      ) <= 0
+    ) {
       return {
         redirect: {
           destination: "/account",
@@ -209,14 +214,6 @@ export async function getServerSideProps({ req }) {
         },
       }
     }
-    //   if (tabsPath === 1) {
-    //     return {
-    //       redirect: {
-    //         destination: PATHS["404"],
-    //         permanent: false,
-    //       }
-    // }
-
     return {
       props: { checkouts, holds, patron, fines, tabsPath, isAuthenticated },
     }

@@ -16,7 +16,7 @@ interface UserJwtPayload extends JWTPayload {
 }
 
 /**
- * Used in Nextjs middleware to check and parse the nyplIdentiyPatron cookie
+ * Used in Nextjs middleware to check and parse the nyplIdentityPatron cookie
  * and then verify it through JWT. The decoded patron information is returned.
  */
 export default async function initializePatronTokenAuth(reqCookies: unknown) {
@@ -61,10 +61,7 @@ export default async function initializePatronTokenAuth(reqCookies: unknown) {
  */
 export function getLoginRedirect(req) {
   const protocol = req.protocol || "http"
-  const hostname =
-    appConfig.environment === "development"
-      ? "local.nypl.org:8080"
-      : req.headers["host"]
+  const hostname = appConfig.apiEndpoints.domain[appConfig.environment]
   const originalUrl = BASE_URL + req.url
   console.log("hostname", hostname)
   const fullUrl = encodeURIComponent(`${protocol}://${hostname}${originalUrl}`)
