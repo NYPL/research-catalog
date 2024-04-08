@@ -30,12 +30,19 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
       console.log({ field, fieldValue })
       switch (field) {
         case "pin":
-          return putRequestPayload
+          // pin is handled in a separate dialog
+          break
         case "email":
           putRequestPayload[field] = updateArrayValue(
             fieldValue,
             settingsData.emails
           )
+          break
+        // TODO: need input from product about phone type
+        //case "phone"
+        case "notificationPreference":
+        case "homeLibrary":
+          putRequestPayload[field] = fieldValue
       }
       return putRequestPayload
     }, {})
