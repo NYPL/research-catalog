@@ -6,7 +6,7 @@ import {
   Select,
   SkeletonLoader,
 } from "@nypl/design-system-react-components"
-import { type ChangeEvent } from "react"
+import { useEffect, useRef, type ChangeEvent } from "react"
 import { useRouter } from "next/router"
 import { parse } from "qs"
 
@@ -91,6 +91,10 @@ export default function Search({
       getSearchQuery({ ...searchParams, sortBy, order, page: undefined })
     )
   }
+  // const searchResultsHeadingRef = useRef(null).current
+  // useEffect(() => {
+  //   if (!isLoading) searchResultsHeadingRef.focus()
+  // }, [isLoading])
 
   return (
     <SearchResultsAggregationsProvider value={aggs}>
@@ -149,7 +153,12 @@ export default function Search({
             ) : (
               <>
                 {displayAppliedFilters && <AppliedFilters />}
-                <Heading level="h2" mb="xl" size="heading4">
+                <Heading
+                  level="h2"
+                  mb="xl"
+                  size="heading4"
+                  // ref={searchResultsHeadingRef}
+                >
                   {getSearchResultsHeading(searchParams, totalResults)}
                 </Heading>
                 <SimpleGrid columns={1} gap="grid.xl">

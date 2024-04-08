@@ -101,6 +101,9 @@ const RefineSearch = ({
     toggleRefine()
   }
 
+  // const cancelButtonRef = useRef(null)
+  // const refineButtonRef = useRef(null)
+
   const [refineSearchClosed, setRefineSearchClosed] = useState(true)
 
   // runs when refine search button is clicked to open and close the dialog
@@ -108,10 +111,14 @@ const RefineSearch = ({
     setRefineSearchClosed((prevRefineSearchClosed) => {
       // if refine search is open (and this toggle is going to close it)
       if (!prevRefineSearchClosed) {
+        // cancelButtonRef.current.focus()
         // reset filters to the values from the url (removing those that were
         // clicked on but left unapplied)
         setAppliedFilters(collapseMultiValueQueryParams(router.query))
       }
+      // } else {
+      //   refineButtonRef.current.focus()
+      // }
       return !prevRefineSearchClosed
     })
   }, [router.query, setAppliedFilters, setRefineSearchClosed])
@@ -132,6 +139,7 @@ const RefineSearch = ({
     <Box className={styles.refineSearchContainer}>
       {refineSearchClosed ? (
         <Button
+          // ref={refineButtonRef.current}
           className={styles.refineSearchButton}
           onClick={toggleRefine}
           id="refine-search"
@@ -151,6 +159,7 @@ const RefineSearch = ({
               onClick={toggleRefine}
               id="cancel-refine"
               buttonType="secondary"
+              // ref={cancelButtonRef.current}
             >
               <Icon name="close" size="large" align="left" />
               Cancel
