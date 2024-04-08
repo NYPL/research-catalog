@@ -40,9 +40,6 @@ const RCLink = ({
       href={href}
       className={className}
       fontWeight={active && "bold"}
-      role="link"
-      aria-disabled={disabled}
-      tabIndex={disabled ? -1 : 0}
       {...rest}
       __css={
         hasWhiteFocusRing && {
@@ -51,6 +48,10 @@ const RCLink = ({
           },
         }
       }
+      // TODO: These were added in accessibility QA. Investigate adding these to the DS Link component.
+      role="link"
+      aria-disabled={disabled}
+      tabIndex={disabled ? -1 : 0}
     >
       {children}
     </DSLink>
