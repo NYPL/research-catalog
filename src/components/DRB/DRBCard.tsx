@@ -30,6 +30,7 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
           fontSize="desktop.body.body2"
           display="inline-block"
           mb="s"
+          lang={drbResult.language}
         >
           {drbResult.title}
         </DSLink>
