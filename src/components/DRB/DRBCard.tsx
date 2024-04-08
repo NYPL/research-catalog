@@ -55,6 +55,7 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
         {drbResult.readOnlineUrl && (
           <DSLink
             href={drbResult.readOnlineUrl}
+            aria-label={`Read Online, ${drbResult.title}`}
             target="_blank"
             type="buttonPrimary"
             mb={drbResult.readOnlineUrl ? "s" : ""}
