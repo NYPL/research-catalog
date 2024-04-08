@@ -20,7 +20,7 @@ const RequestButtons = ({ item }: RequestButtonsProps) => {
           href={item.aeonUrl}
           type={!item.isAvailable ? "buttonDisabled" : "buttonSecondary"}
           aria-label={`Request Appointment, ${item.bibTitle}`}
-          aria-disabled={!item.isAvailable}
+          disabled={!item.isAvailable}
         >
           Request Appointment
         </RCLink>
@@ -31,9 +31,9 @@ const RequestButtons = ({ item }: RequestButtonsProps) => {
               href={`/hold/request/${item.bibId}-${
                 item.id
               }?searchKeywords=${"TODO"}`}
-              aria-label={`Request for On-site Use, ${item.bibTitle}`}
-              aria-disabled={!item.isAvailable}
               type={!item.isAvailable ? "buttonDisabled" : "buttonSecondary"}
+              aria-label={`Request for On-site Use, ${item.bibTitle}`}
+              disabled={!item.isAvailable}
             >
               Request for On-site Use
             </RCLink>
@@ -43,9 +43,9 @@ const RequestButtons = ({ item }: RequestButtonsProps) => {
               href={`/hold/request/${item.bibId}-${
                 item.id
               }/edd?searchKeywords=${"TODO"}`}
-              aria-label={`Request Scan, ${item.bibTitle}`}
-              aria-disabled={!item.isAvailable}
               type={!item.isAvailable ? "buttonDisabled" : "buttonSecondary"}
+              aria-label={`Request Scan, ${item.bibTitle}`}
+              disabled={!item.isAvailable}
             >
               Request Scan
             </RCLink>

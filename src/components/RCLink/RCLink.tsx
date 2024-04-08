@@ -14,6 +14,7 @@ interface RCLinkProps {
   type?: LinkTypes
   size?: string
   hasWhiteFocusRing?: boolean
+  disabled?: boolean
 }
 
 // TODO: once 2ad is phased out, replace with DS v3 Link which can wrap a
@@ -30,6 +31,7 @@ const RCLink = ({
   children,
   active = false,
   hasWhiteFocusRing = false,
+  disabled,
   ...rest
 }: RCLinkProps) => {
   return (
@@ -38,6 +40,9 @@ const RCLink = ({
       href={href}
       className={className}
       fontWeight={active && "bold"}
+      role="link"
+      aria-disabled={disabled}
+      tabIndex={disabled ? -1 : 0}
       {...rest}
       __css={
         hasWhiteFocusRing && {
