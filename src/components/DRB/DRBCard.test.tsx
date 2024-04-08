@@ -24,6 +24,11 @@ const drbWorkMarkTwain = {
   ],
   authors: [{ name: "Mark Twain" }],
   agents: [],
+  languages: [
+    {
+      iso_2: "en",
+    },
+  ],
 }
 
 describe("DRBCard", () => {
@@ -31,13 +36,13 @@ describe("DRBCard", () => {
     const drbResultTwain = new DRBResult(drbWorkMarkTwain)
     render(<DRBCard drbResult={drbResultTwain} />)
 
+    const titleLink = screen.getByText(/The Adventures of Tom Sawyer/i)
     const authorLink = screen.getByText(/Mark Twain/i)
     const readOnlineLink = screen.getByText(/Read Online/i)
     const downloadLink = screen.queryByText(/Download PDF/i)
 
-    expect(
-      screen.getByText(/The Adventures of Tom Sawyer/i)
-    ).toBeInTheDocument()
+    expect(titleLink).toBeInTheDocument()
+    expect(titleLink).toHaveAttribute("lang", "en")
 
     expect(authorLink).toBeInTheDocument()
     expect(authorLink).toHaveAttribute(
