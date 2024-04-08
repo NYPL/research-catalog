@@ -211,6 +211,7 @@ export function mapRequestBodyToSearchParams(
 export function mapElementsToSearchResultsBibs(
   elements: SearchResultsElement[]
 ): SearchResultsBib[] | null {
+  console.log(elements)
   return (
     elements
       ?.filter((result) => {

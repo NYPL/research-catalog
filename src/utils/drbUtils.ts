@@ -170,7 +170,6 @@ export function getDRBQueryStringFromSearchParams(
 }
 
 export function mapWorksToDRBResults(works?: DRBWork[]): DRBResult[] | null {
-  console.log(works)
   if (!works) return null
   return works
     .filter((work: DRBWork) => {
