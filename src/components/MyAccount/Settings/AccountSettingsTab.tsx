@@ -14,7 +14,7 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
   const listElements = currentlyEditing ? (
     <AccountSettingsForm patron={settingsData} />
   ) : (
-    <AccountSettingsDisplay patron={settingsData} />
+    <AccountSettingsDisplay patron={{ emails: [], ...settingsData }} />
   )
   const updateArrayValue = (newPrimary: string, currentValues: string[]) => {
     const removedNewPrimaryIfPresent = currentValues.filter(
@@ -65,7 +65,6 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
         >
           {listElements}
         </List>
-
         <Spacer />
       </Form>
     </Box>

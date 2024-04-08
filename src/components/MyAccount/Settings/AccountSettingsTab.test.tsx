@@ -8,11 +8,11 @@ describe("AccountSettingsTab", () => {
     const myAccountPatron = MyAccount.prototype.buildPatron(patron)
     render(<AccountSettingsTab settingsData={myAccountPatron} />)
     ;[
-      "Email:",
-      "Phone:",
-      "Notification preference:",
-      "Home library:",
-      "Pin/Password:",
+      "streganonna@gmail.com",
+      "Phone",
+      "Notification preference",
+      "Home library",
+      "Pin/Password",
     ].forEach((patronInfo) => {
       const element = screen.getByText(patronInfo)
       expect(element).toBeInTheDocument()
@@ -26,14 +26,14 @@ describe("AccountSettingsTab", () => {
     })
     render(<AccountSettingsTab settingsData={myAccountPatron} />)
     ;[
-      "Email:",
-      "Phone:",
-      "Notification preference:",
-      "Home library:",
-      "Pin/Password:",
+      "Email",
+      "Phone",
+      "Notification preference",
+      "Home library",
+      "Pin/Password",
     ].forEach((patronInfo) => {
       const element = screen.queryByText(patronInfo)
-      if (patronInfo === "Email:" || patronInfo === "Phone:") {
+      if (patronInfo === "Email" || patronInfo === "Phone") {
         expect(element).not.toBeInTheDocument()
       } else expect(element).toBeInTheDocument()
     })
