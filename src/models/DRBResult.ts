@@ -26,7 +26,7 @@ export default class DRBResult {
     this.title = work.title
     this.editions = work.editions || []
     this.authors = this.getAuthorsFromWork(work)
-    this.language = work.languages[0]?.iso_2
+    this.language = work.languages?.[0]?.iso_2
   }
 
   get url(): string {

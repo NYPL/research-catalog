@@ -18,7 +18,7 @@ describe("RequestButtons", () => {
     render(<RequestButtons item={item} />)
     expect(
       screen.getByRole("link", {
-        name: "Request Appointment",
+        name: "Request Appointment, A history of spaghetti eating and cooking for: spaghetti dinner.",
       })
     ).toHaveAttribute(
       "href",
@@ -30,7 +30,7 @@ describe("RequestButtons", () => {
     render(<RequestButtons item={item} />)
     expect(
       screen.getByRole("link", {
-        name: "Request for On-site Use",
+        name: "Request for On-site Use, A history of spaghetti eating and cooking for: spaghetti dinner.",
       })
     ).toHaveAttribute(
       "href",
@@ -42,7 +42,7 @@ describe("RequestButtons", () => {
     render(<RequestButtons item={item} />)
     expect(
       screen.getByRole("link", {
-        name: "Request Scan",
+        name: "Request Scan, A history of spaghetti eating and cooking for: spaghetti dinner.",
       })
     ).toHaveAttribute(
       "href",
