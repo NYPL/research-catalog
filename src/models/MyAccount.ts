@@ -88,7 +88,6 @@ export default class MyAccount {
         bibLevelHolds.push(holdOrCheckout.record)
       }
     })
-    console.log(`bibs?id=${itemLevelHoldsorCheckouts}&fields=default,varFields`)
     const bibData = await client.get(
       `bibs?id=${itemLevelHoldsorCheckouts}&fields=default,varFields`
     )

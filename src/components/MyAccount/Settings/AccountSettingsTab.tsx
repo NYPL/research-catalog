@@ -16,10 +16,27 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
   ) : (
     <AccountSettingsDisplay patron={settingsData} />
   )
+  const updateArrayValue = (newPrimary: string, currentValues: string[]) => {
+    const removedNewPrimaryIfPresent = currentValues.filter(
+      (val) => val !== newPrimary
+    )
+    return [newPrimary, ...removedNewPrimaryIfPresent]
+  }
   const submitAccountSettings = (e) => {
     e.preventDefault()
     const payload = accountSettings.reduce((putRequestPayload, setting) => {
-      putRequestPayload[setting.field] = e.target[setting.field]?.value
+      const fieldValue = e.target[setting.field]?.value
+      const field = setting.field
+      console.log({ field, fieldValue })
+      switch (field) {
+        case "pin":
+          return putRequestPayload
+        case "email":
+          putRequestPayload[field] = updateArrayValue(
+            fieldValue,
+            settingsData.emails
+          )
+      }
       return putRequestPayload
     }, {})
     console.log(payload)
