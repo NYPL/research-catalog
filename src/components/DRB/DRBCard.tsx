@@ -23,21 +23,20 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
 
   return (
     <Card backgroundColor="ui.bg.default" p="xs">
+      <CardHeading level="h3" size="heading6" mb="0">
+        <DSLink
+          href={drbResult.url}
+          target="_blank"
+          isUnderlined={false}
+          fontSize="desktop.body.body2"
+          display="inline-block"
+          mb="s"
+          lang={drbResult.language}
+        >
+          {drbResult.title}
+        </DSLink>
+      </CardHeading>
       <CardContent>
-        <CardHeading level="h3" size="heading6" mb="0">
-          <DSLink
-            href={drbResult.url}
-            target="_blank"
-            isUnderlined={false}
-            fontSize="desktop.body.body2"
-            display="inline-block"
-            mb="s"
-            lang={drbResult.language}
-          >
-            {drbResult.title}
-          </DSLink>
-        </CardHeading>
-
         {drbResult?.authors.length > 0 ? (
           <Text size="body2">
             By{" "}
