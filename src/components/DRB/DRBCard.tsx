@@ -31,13 +31,13 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
           fontSize="desktop.body.body2"
           display="inline-block"
           mb="s"
-          lang={drbResult.language}
+          lang={drbResult.language !== "en" ? drbResult.language : null}
         >
           {drbResult.title}
         </DSLink>
       </CardHeading>
       <CardContent>
-        {drbResult?.authors.length > 0 ? (
+        {drbResult?.authors?.length > 0 ? (
           <Text size="body2">
             By{" "}
             {drbResult.authors.map((author: Author | Agent, index: number) => (
