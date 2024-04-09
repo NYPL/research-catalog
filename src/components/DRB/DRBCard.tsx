@@ -3,6 +3,7 @@ import {
   CardContent,
   Text,
   Icon,
+  Box,
   Link as DSLink,
 } from "@nypl/design-system-react-components"
 
@@ -21,29 +22,33 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
   if (!drbResult) return null
 
   return (
-    <Card backgroundColor="ui.bg.default" p="xs">
+    <Card backgroundColor="white" p="s" borderRadius="5px">
       <CardContent>
         <DSLink
           href={drbResult.url}
           target="_blank"
           isUnderlined={false}
-          fontSize="desktop.body.body2"
+          fontSize="desktop.subtitle.subtitle2"
+          fontWeight="medium"
           display="inline-block"
-          mb="s"
+          mb="xs"
         >
           {drbResult.title}
         </DSLink>
 
         {drbResult?.authors.length > 0 ? (
-          <Text size="body2">
-            By{" "}
+          <Text size="body2" mb="m">
+            <Box as="span" fontSize="desktop.body.body2" fontWeight="medium">
+              By
+            </Box>{" "}
             {drbResult.authors.map((author: Author | Agent, index: number) => (
               <>
                 {index > 0 && ","}
                 <DSLink
                   href={getAuthorURL(author)}
                   target="_blank"
-                  isUnderlined={false}
+                  fontSize="desktop.body.body2"
+                  fontWeight="light"
                 >
                   {author.name}
                 </DSLink>
@@ -56,8 +61,8 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
           <DSLink
             href={drbResult.readOnlineUrl}
             target="_blank"
-            type="buttonPrimary"
-            mb={drbResult.readOnlineUrl ? "s" : ""}
+            type="buttonSecondary"
+            mb={drbResult.downloadLink ? "s" : ""}
             isUnderlined={false}
           >
             Read Online
@@ -68,7 +73,7 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
           <DSLink
             href={drbResult.downloadLink?.url}
             target="_blank"
-            type="buttonPrimary"
+            type="buttonSecondary"
             isUnderlined={false}
             fontSize="desktop.body.body2"
           >

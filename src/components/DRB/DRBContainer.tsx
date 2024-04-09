@@ -33,8 +33,8 @@ const DRBContainer = ({
   const drbQuery = getDRBQueryStringFromSearchParams(searchParams)
 
   return (
-    <Card isBordered>
-      <CardHeading level="h3">
+    <Card backgroundColor="ui.bg.default" p="s" borderRadius="5px">
+      <CardHeading level="h6">
         Results from Digital Research Books Beta
       </CardHeading>
       <CardContent>
@@ -56,11 +56,12 @@ const DRBContainer = ({
             href={`${DRB_BASE_URL}/search${drbQuery}`}
             target="_blank"
             fontSize="desktop.body.body2"
+            type="standalone"
             fontWeight="bold"
           >
             <>
-              See {totalWorks.toLocaleString()} result
-              {totalWorks === 1 ? "" : "s"} from Digital Research Books Beta
+              View all {totalWorks.toLocaleString()} results in Digital Research
+              Books Beta
             </>
           </DSLink>
         )}

@@ -18,7 +18,7 @@ const ElectronicResourcesLink = ({
 }: ElectronicResourcesLinkProps) => {
   return (
     <Box>
-      <Text mb="xxs" size="body1" isBold>
+      <Text mb="xxs" fontSize="desktop.body.body1" fontWeight="bold">
         Available Online
       </Text>
       {electronicResources.length === 1 ? (
