@@ -161,18 +161,21 @@ export default function Search({
             )}
             <Pagination
               id="results-pagination"
-              mt="xl"
+              mt="xxl"
+              mb="l"
               initialPage={searchParams.page}
               currentPage={searchParams.page}
               pageCount={Math.ceil(totalResults / RESULTS_PER_PAGE)}
               onPageChange={handlePageChange}
             />
           </>
+        ) : /**
+         * TODO: The logic and copy for different scenarios will need to be added when
+         * filters are implemented
+         */
+        isLoading ? (
+          <SkeletonLoader showImage={false} />
         ) : (
-          /**
-           * TODO: The logic and copy for different scenarios will need to be added when
-           * filters are implemented
-           */
           <Heading level="h3">No results. Try a different search.</Heading>
         )}
       </Layout>
