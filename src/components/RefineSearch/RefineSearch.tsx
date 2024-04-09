@@ -100,16 +100,16 @@ const RefineSearch = ({
     toggleRefine()
   }
 
-  const cancelButtonRef = useRef(null)
-  const refineButtonRef = useRef(null)
+  // the two buttons can share a ref because they are never rendered at the same
+  // time.
+  const refineCancelRef = useRef(null)
 
   const [refineSearchClosed, setRefineSearchClosed] = useState(true)
+
+  // focus has to happen after refineSearchClosed updates in order for the
+  // element we want to focus on to be present in the dom.
   useEffect(() => {
-    if (refineSearchClosed) {
-      refineButtonRef?.current?.focus()
-    } else {
-      cancelButtonRef?.current?.focus()
-    }
+    refineCancelRef.current.focus()
   }, [refineSearchClosed])
 
   // runs when refine search button is clicked to open and close the dialog
@@ -134,7 +134,7 @@ const RefineSearch = ({
     <Box className={styles.refineSearchContainer}>
       {refineSearchClosed ? (
         <Button
-          ref={refineButtonRef}
+          ref={refineCancelRef}
           className={styles.refineSearchButton}
           onClick={toggleRefine}
           id="refine-search"
@@ -154,7 +154,7 @@ const RefineSearch = ({
               onClick={toggleRefine}
               id="cancel-refine"
               buttonType="secondary"
-              ref={cancelButtonRef}
+              ref={refineCancelRef}
             >
               <Icon name="close" size="large" align="left" />
               Cancel
