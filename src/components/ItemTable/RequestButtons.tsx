@@ -17,10 +17,9 @@ const RequestButtons = ({ item }: RequestButtonsProps) => {
     <Box sx={{ a: { marginRight: "xs", marginBottom: "xs" } }} mb="s">
       {item.aeonUrl ? (
         <RCLink
-          href={item.aeonUrl}
-          type={!item.isAvailable ? "buttonDisabled" : "buttonSecondary"}
+          href={item.isAvailable ? item.aeonUrl : null}
+          type={item.isAvailable ? "buttonSecondary" : "buttonDisabled"}
           aria-label={`Request Appointment, ${item.bibTitle}`}
-          disabled={!item.isAvailable}
         >
           Request Appointment
         </RCLink>
@@ -28,24 +27,30 @@ const RequestButtons = ({ item }: RequestButtonsProps) => {
         <>
           {item.isPhysicallyRequestable && (
             <RCLink
-              href={`/hold/request/${item.bibId}-${
-                item.id
-              }?searchKeywords=${"TODO"}`}
-              type={!item.isAvailable ? "buttonDisabled" : "buttonSecondary"}
+              href={
+                item.isAvailable
+                  ? `/hold/request/${item.bibId}-${
+                      item.id
+                    }?searchKeywords=${"TODO"}`
+                  : null
+              }
+              type={item.isAvailable ? "buttonSecondary" : "buttonDisabled"}
               aria-label={`Request for On-site Use, ${item.bibTitle}`}
-              disabled={!item.isAvailable}
             >
               Request for On-site Use
             </RCLink>
           )}
           {item.isEDDRequestable && (
             <RCLink
-              href={`/hold/request/${item.bibId}-${
-                item.id
-              }/edd?searchKeywords=${"TODO"}`}
-              type={!item.isAvailable ? "buttonDisabled" : "buttonSecondary"}
+              href={
+                item.isAvailable
+                  ? `/hold/request/${item.bibId}-${
+                      item.id
+                    }/edd?searchKeywords=${"TODO"}`
+                  : null
+              }
+              type={item.isAvailable ? "buttonSecondary" : "buttonDisabled"}
               aria-label={`Request Scan, ${item.bibTitle}`}
-              disabled={!item.isAvailable}
             >
               Request Scan
             </RCLink>

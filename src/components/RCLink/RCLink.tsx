@@ -14,7 +14,6 @@ interface RCLinkProps {
   type?: LinkTypes
   size?: string
   hasWhiteFocusRing?: boolean
-  disabled?: boolean
 }
 
 // TODO: once 2ad is phased out, replace with DS v3 Link which can wrap a
@@ -31,7 +30,6 @@ const RCLink = ({
   children,
   active = false,
   hasWhiteFocusRing = false,
-  disabled,
   ...rest
 }: RCLinkProps) => {
   return (
@@ -48,10 +46,6 @@ const RCLink = ({
           },
         }
       }
-      // TODO: These were added in accessibility QA. Investigate adding these to the DS Link component.
-      role="link"
-      aria-disabled={disabled}
-      tabIndex={disabled ? -1 : 0}
     >
       {children}
     </DSLink>

@@ -15,18 +15,4 @@ describe("RCLink", () => {
       expect(link).toHaveAttribute("href", "/spaghetti")
     })
   })
-  it("should add appropriate accessibility attributes when link is disabled", async () => {
-    render(
-      <RCLink href="/spaghetti" disabled>
-        Spaghetti
-      </RCLink>,
-      {
-        wrapper: MemoryRouterProvider,
-      }
-    )
-    const link = screen.getByText("Spaghetti")
-    expect(link).toHaveAttribute("aria-disabled", "true")
-    expect(link).toHaveAttribute("role", "link")
-    expect(link).toHaveAttribute("tabindex", "-1")
-  })
 })
