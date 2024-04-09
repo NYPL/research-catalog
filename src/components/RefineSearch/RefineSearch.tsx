@@ -8,7 +8,7 @@ import {
   Icon,
 } from "@nypl/design-system-react-components"
 import type { Dispatch, SyntheticEvent } from "react"
-import { useState, useCallback, useRef } from "react"
+import { useState, useCallback, useRef, useEffect } from "react"
 import { useRouter } from "next/router"
 import DateForm from "../SearchFilters/DateForm"
 import { useDateForm } from "../../hooks/useDateForm"
@@ -104,22 +104,19 @@ const RefineSearch = ({
   const refineButtonRef = useRef(null)
 
   const [refineSearchClosed, setRefineSearchClosed] = useState(true)
-
-  if (refineSearchClosed) {
-    setTimeout(() => {
-      cancelButtonRef?.current?.focus()
-    }, 100)
-  } else {
-    setTimeout(() => {
+  useEffect(() => {
+    if (refineSearchClosed) {
       refineButtonRef?.current?.focus()
-    }, 100)
-  }
+    } else {
+      cancelButtonRef?.current?.focus()
+    }
+  }, [refineSearchClosed])
 
   // runs when refine search button is clicked to open and close the dialog
   const toggleRefine = useCallback(() => {
     setRefineSearchClosed((closed) => !closed)
     setAppliedFilters(collapseMultiValueQueryParams(router.query))
-  }, [setRefineSearchClosed, setAppliedFilters])
+  }, [setRefineSearchClosed, setAppliedFilters, router.query])
 
   const handleClear = () => {
     // remove applied filters from state
