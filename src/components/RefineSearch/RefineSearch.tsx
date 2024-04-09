@@ -97,31 +97,29 @@ const RefineSearch = ({
       pathname: "/search",
       query: updatedQuery,
     })
-    // refine search dialog closes after url is pushed
     toggleRefine()
   }
 
-  // const cancelButtonRef = useRef(null)
-  // const refineButtonRef = useRef(null)
+  const cancelButtonRef = useRef(null)
+  const refineButtonRef = useRef(null)
 
   const [refineSearchClosed, setRefineSearchClosed] = useState(true)
 
+  if (refineSearchClosed) {
+    setTimeout(() => {
+      cancelButtonRef?.current?.focus()
+    }, 100)
+  } else {
+    setTimeout(() => {
+      refineButtonRef?.current?.focus()
+    }, 100)
+  }
+
   // runs when refine search button is clicked to open and close the dialog
   const toggleRefine = useCallback(() => {
-    setRefineSearchClosed((prevRefineSearchClosed) => {
-      // if refine search is open (and this toggle is going to close it)
-      if (!prevRefineSearchClosed) {
-        // cancelButtonRef.current.focus()
-        // reset filters to the values from the url (removing those that were
-        // clicked on but left unapplied)
-        setAppliedFilters(collapseMultiValueQueryParams(router.query))
-      }
-      // } else {
-      //   refineButtonRef.current.focus()
-      // }
-      return !prevRefineSearchClosed
-    })
-  }, [router.query, setAppliedFilters, setRefineSearchClosed])
+    setRefineSearchClosed((closed) => !closed)
+    setAppliedFilters(collapseMultiValueQueryParams(router.query))
+  }, [setRefineSearchClosed, setAppliedFilters])
 
   const handleClear = () => {
     // remove applied filters from state
@@ -139,7 +137,7 @@ const RefineSearch = ({
     <Box className={styles.refineSearchContainer}>
       {refineSearchClosed ? (
         <Button
-          // ref={refineButtonRef.current}
+          ref={refineButtonRef}
           className={styles.refineSearchButton}
           onClick={toggleRefine}
           id="refine-search"
@@ -159,7 +157,7 @@ const RefineSearch = ({
               onClick={toggleRefine}
               id="cancel-refine"
               buttonType="secondary"
-              // ref={cancelButtonRef.current}
+              ref={cancelButtonRef}
             >
               <Icon name="close" size="large" align="left" />
               Cancel
