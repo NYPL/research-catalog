@@ -39,6 +39,7 @@ const RCLink = ({
       href={href}
       className={className}
       fontWeight={active && "bold"}
+      hasVisitedState={false}
       {...rest}
       __css={
         hasWhiteFocusRing && {
