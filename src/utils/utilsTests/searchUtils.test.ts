@@ -5,12 +5,39 @@ import {
   mapQueryToSearchParams,
   mapRequestBodyToSearchParams,
   getSearchResultsHeading,
+  getFreshSortByQuery,
 } from "../searchUtils"
 import { queryParamsEquality } from "../../../__test__/helpers/searchHelpers"
 
 const checkQueryParamsEquality = queryParamsEquality(getSearchQuery)
 
 describe("searchUtils", () => {
+  describe("getFreshSortByQuery", () => {
+    it("returns false if there is no prevUrl", () => {
+      expect(getFreshSortByQuery(undefined, "thebomb.com")).toBe(false)
+    })
+    it("returns false if the prevUrl and currentUrl have same sort by params", () => {
+      const prev =
+        "http://local.nypl.org:8080/research/research-catalog/search?q=spaghetti&sort=title&sort_direction=asc"
+      const curr =
+        "http://local.nypl.org:8080/research/research-catalog/search?q=spaghetti&sort=title&sort_direction=asc&shape=pasta"
+      expect(getFreshSortByQuery(prev, curr)).toBe(false)
+    })
+    it("returns true if sort is same but direction is different", () => {
+      const prev =
+        "http://local.nypl.org:8080/research/research-catalog/search?q=spaghetti&sort=title&sort_direction=asc"
+      const curr =
+        "http://local.nypl.org:8080/research/research-catalog/search?q=spaghetti&sort=title&sort_direction=desc"
+      expect(getFreshSortByQuery(prev, curr)).toBe(true)
+    })
+    it("returns true if sort is different and direction is same", () => {
+      const prev =
+        "http://local.nypl.org:8080/research/research-catalog/search?q=spaghetti&sort=title&sort_direction=asc"
+      const curr =
+        "http://local.nypl.org:8080/research/research-catalog/search?q=spaghetti&sort=date&sort_direction=asc"
+      expect(getFreshSortByQuery(prev, curr)).toBe(true)
+    })
+  })
   describe("getSearchQuery", () => {
     it("constructs a basic query", () => {
       const testQuery =

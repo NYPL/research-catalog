@@ -12,6 +12,27 @@ import SearchResultsBib from "../models/SearchResultsBib"
 import { RESULTS_PER_PAGE } from "../config/constants"
 
 /**
+ * determineFreshSortByQuery
+ * Returns true only if the last update to the query was a sort by change.
+ * Used to determine whether to focus on the search results header
+ */
+export const getFreshSortByQuery = (prevUrl: string, currentUrl: string) => {
+  if (!prevUrl) return false
+  const sortByAndDirection = (query) => {
+    const match = query.match(/sort=(.*?)&sort_direction=(.*?)(&|$)/)
+    if (match) return [match[1], match[2]]
+  }
+  const previousSortValues = sortByAndDirection(prevUrl)
+  const currentSortValues = sortByAndDirection(currentUrl)
+  console.log({ previousSortValues, currentSortValues })
+  if (!currentSortValues) return false
+  const sortTypeHasChanged = previousSortValues[0] !== currentSortValues[0]
+  const sortDirectionHasChanged = previousSortValues[1] !== currentSortValues[1]
+  const sortValuesHaveUpdated = sortTypeHasChanged || sortDirectionHasChanged
+  return sortValuesHaveUpdated
+}
+
+/**
  * getPaginationOffsetStrings
  * Used to generate search results start and end counts on Search Results page
  */

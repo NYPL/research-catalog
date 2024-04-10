@@ -22,6 +22,7 @@ import {
   mapElementsToSearchResultsBibs,
   getSearchQuery,
   sortOptions,
+  getFreshSortByQuery,
 } from "../../src/utils/searchUtils"
 import type {
   SearchResultsResponse,
@@ -31,7 +32,6 @@ import type {
 import { mapWorksToDRBResults } from "../../src/utils/drbUtils"
 import { SITE_NAME, RESULTS_PER_PAGE } from "../../src/config/constants"
 import type SearchResultsBib from "../../src/models/SearchResultsBib"
-import { SearchResultsAggregationsProvider } from "../../src/context/SearchResultsAggregationsContext"
 
 import useLoading from "../../src/hooks/useLoading"
 import initializePatronTokenAuth from "../../src/server/auth"
@@ -41,6 +41,7 @@ interface SearchProps {
   bannerNotification?: string
   results: SearchResultsResponse
   isAuthenticated: boolean
+  isFreshSortByQuery: boolean
 }
 
 /**
@@ -51,6 +52,7 @@ export default function Search({
   bannerNotification,
   results,
   isAuthenticated,
+  isFreshSortByQuery,
 }: SearchProps) {
   const metadataTitle = `Search Results | ${SITE_NAME}`
   const { push, query } = useRouter()
@@ -95,12 +97,15 @@ export default function Search({
 
   const searchResultsHeadingRef = useRef(null)
   useEffect(() => {
-    console.log("spaghetti")
-    if (!isLoading) {
-      console.log("not loading")
-      searchResultsHeadingRef.current.focus()
+    // don't focus on "Displaying n results..." if the page is not done loading
+    if (isLoading) return
+    // keep focus on sort by selector if the last update to the query was a sort
+    if (isFreshSortByQuery) {
+      return
     }
-  }, [isLoading])
+    // otherwise, focus on "Displaying n results..."
+    searchResultsHeadingRef?.current?.focus()
+  }, [isLoading, isFreshSortByQuery])
 
   const searchForm = (
     <SearchForm
@@ -198,7 +203,9 @@ export default function Search({
            * TODO: The logic and copy for different scenarios will need to be added when
            * filters are implemented
            */
-          <Heading level="h3">No results. Try a different search.</Heading>
+          <Heading ref={searchResultsHeadingRef} tabIndex="0" level="h3">
+            No results. Try a different search.
+          </Heading>
         )}
       </Layout>
     </>
@@ -221,9 +228,13 @@ export async function getServerSideProps({ resolvedUrl, req }) {
   const results = await fetchResults(mapQueryToSearchParams(parse(queryString)))
   const patronTokenResponse = await initializePatronTokenAuth(req)
   const isAuthenticated = patronTokenResponse.isTokenValid
-
+  const isFreshSortByQuery = getFreshSortByQuery(
+    req.headers.referer,
+    resolvedUrl
+  )
   return {
     props: {
+      isFreshSortByQuery,
       bannerNotification,
       results,
       isAuthenticated,
