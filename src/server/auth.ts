@@ -63,7 +63,6 @@ export function getLoginRedirect(req) {
   const protocol = req.protocol || "http"
   const hostname = appConfig.apiEndpoints.domain[appConfig.environment]
   const originalUrl = BASE_URL + req.url
-  console.log("hostname", hostname)
   const fullUrl = encodeURIComponent(`${protocol}://${hostname}${originalUrl}`)
   const redirect = `${
     appConfig.apiEndpoints.loginUrl[appConfig.environment]
