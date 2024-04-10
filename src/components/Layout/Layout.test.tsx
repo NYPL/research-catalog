@@ -2,11 +2,14 @@ import React from "react"
 import { render, screen, within } from "../../utils/testUtils"
 
 import Layout from "./Layout"
+import { normalAggs } from "../../../__test__/fixtures/testAggregations"
+import SearchForm from "../SearchForm/SearchForm"
 
 // Mock next router
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
 describe("Layout", () => {
+  const searchForm = <SearchForm aggregations={normalAggs} />
   const searchLabel =
     "Search by keyword, title, journal title, or author/contributor"
 
@@ -25,11 +28,11 @@ describe("Layout", () => {
     expect(breadcrumbsUrls).toHaveLength(3)
   })
   it("should show search", () => {
-    render(<Layout activePage="search"></Layout>)
+    render(<Layout searchForm={searchForm} activePage="search"></Layout>)
     screen.getByLabelText(searchLabel)
   })
   it("should show search bar on search page", () => {
-    render(<Layout activePage="search"></Layout>)
+    render(<Layout searchForm={searchForm} activePage="search"></Layout>)
     screen.getByLabelText(searchLabel)
   })
   it("should hide header on 404", () => {

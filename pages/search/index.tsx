@@ -107,12 +107,7 @@ export default function Search({
     searchResultsHeadingRef?.current?.focus()
   }, [isLoading, isFreshSortByQuery])
 
-  const searchForm = (
-    <SearchForm
-      aggregations={aggs}
-      searchResultsHeadingRef={searchResultsHeadingRef}
-    />
-  )
+  const searchForm = <SearchForm aggregations={aggs} />
   return (
     <>
       <Head>
@@ -175,6 +170,7 @@ export default function Search({
                 )}
                 <Heading
                   level="h2"
+                  // @ts-expect-error
                   tabIndex="0"
                   mb="xl"
                   size="heading4"
@@ -203,6 +199,7 @@ export default function Search({
            * TODO: The logic and copy for different scenarios will need to be added when
            * filters are implemented
            */
+          // @ts-expect-error
           <Heading ref={searchResultsHeadingRef} tabIndex="0" level="h3">
             No results. Try a different search.
           </Heading>

@@ -1,4 +1,3 @@
-import { textInputFields } from "../advancedSearchUtils"
 import {
   getPaginationOffsetStrings,
   getSearchQuery,

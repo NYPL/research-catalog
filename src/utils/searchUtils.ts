@@ -24,7 +24,6 @@ export const getFreshSortByQuery = (prevUrl: string, currentUrl: string) => {
   }
   const previousSortValues = sortByAndDirection(prevUrl)
   const currentSortValues = sortByAndDirection(currentUrl)
-  console.log({ previousSortValues, currentSortValues })
   if (!currentSortValues) return false
   const sortTypeHasChanged = previousSortValues[0] !== currentSortValues[0]
   const sortDirectionHasChanged = previousSortValues[1] !== currentSortValues[1]

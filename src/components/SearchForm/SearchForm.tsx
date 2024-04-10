@@ -18,13 +18,7 @@ import { appConfig } from "../../config/config"
  * The SearchForm component renders and controls the Search form and
  * advanced search link.
  */
-const SearchForm = ({
-  aggregations,
-  searchResultsHeadingRef,
-}: {
-  searchResultsHeadingRef: RefObject<null>
-  aggregations: Aggregation[]
-}) => {
+const SearchForm = ({ aggregations }: { aggregations: Aggregation[] }) => {
   const router = useRouter()
   const [searchTerm, setSearchTerm] = useState(
     (router?.query?.q as string) || ""
@@ -122,7 +116,6 @@ const SearchForm = ({
           </RCLink>
           {displayRefineResults && (
             <RefineSearch
-              searchResultsHeadingRef={searchResultsHeadingRef}
               setAppliedFilters={setAppliedFilters}
               appliedFilters={appliedFilters}
               aggregations={aggregations}
