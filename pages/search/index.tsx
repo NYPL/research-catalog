@@ -10,6 +10,7 @@ import { useEffect, useRef, type ChangeEvent } from "react"
 import { useRouter } from "next/router"
 import { parse } from "qs"
 
+import SearchForm from "../../src/components/SearchForm/SearchForm"
 import Layout from "../../src/components/Layout/Layout"
 import DRBContainer from "../../src/components/DRB/DRBContainer"
 import SearchResult from "../../src/components/SearchResult/SearchResult"
@@ -91,13 +92,24 @@ export default function Search({
       getSearchQuery({ ...searchParams, sortBy, order, page: undefined })
     )
   }
-  // const searchResultsHeadingRef = useRef(null).current
-  // useEffect(() => {
-  //   if (!isLoading) searchResultsHeadingRef.focus()
-  // }, [isLoading])
 
+  const searchResultsHeadingRef = useRef(null)
+  useEffect(() => {
+    console.log("spaghetti")
+    if (!isLoading) {
+      console.log("not loading")
+      searchResultsHeadingRef.current.focus()
+    }
+  }, [isLoading])
+
+  const searchForm = (
+    <SearchForm
+      aggregations={aggs}
+      searchResultsHeadingRef={searchResultsHeadingRef}
+    />
+  )
   return (
-    <SearchResultsAggregationsProvider value={aggs}>
+    <>
       <Head>
         <meta property="og:title" content={metadataTitle} key="og-title" />
         <meta
@@ -109,6 +121,7 @@ export default function Search({
         <title key="main-title">{metadataTitle}</title>
       </Head>
       <Layout
+        searchForm={searchForm}
         isAuthenticated={isAuthenticated}
         activePage="search"
         bannerNotification={bannerNotification}
@@ -152,12 +165,15 @@ export default function Search({
               <SkeletonLoader showImage={false} />
             ) : (
               <>
-                {displayAppliedFilters && <AppliedFilters />}
+                {displayAppliedFilters && (
+                  <AppliedFilters aggregations={aggs} />
+                )}
                 <Heading
                   level="h2"
+                  tabIndex="0"
                   mb="xl"
                   size="heading4"
-                  // ref={searchResultsHeadingRef}
+                  ref={searchResultsHeadingRef}
                 >
                   {getSearchResultsHeading(searchParams, totalResults)}
                 </Heading>
@@ -185,7 +201,7 @@ export default function Search({
           <Heading level="h3">No results. Try a different search.</Heading>
         )}
       </Layout>
-    </SearchResultsAggregationsProvider>
+    </>
   )
 }
 

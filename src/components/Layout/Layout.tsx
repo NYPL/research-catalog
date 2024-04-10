@@ -21,6 +21,7 @@ interface LayoutProps {
   sidebarPosition?: "right" | "left"
   bannerNotification?: string
   isAuthenticated?: boolean
+  searchForm?: ReactElement
 }
 
 /**
@@ -28,6 +29,7 @@ interface LayoutProps {
  * controls the rendering of Research Catalog header components per-page.
  */
 const Layout = ({
+  searchForm,
   children,
   isAuthenticated,
   sidebar,
@@ -70,7 +72,7 @@ const Layout = ({
                   isAuthenticated={isAuthenticated}
                   activePage={activePage}
                 />
-                {showSearch && <SearchForm />}
+                {showSearch && searchForm}
               </div>
               {showNotification && bannerNotification && (
                 <Notification notification={bannerNotification} />

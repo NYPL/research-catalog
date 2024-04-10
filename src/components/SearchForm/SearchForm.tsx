@@ -1,7 +1,7 @@
 import { SearchBar } from "@nypl/design-system-react-components"
 import { useRouter } from "next/router"
-import type { SyntheticEvent, Dispatch, SetStateAction } from "react"
-import { useContext, useState, useEffect } from "react"
+import type { SyntheticEvent, Dispatch, SetStateAction, RefObject } from "react"
+import { useState, useEffect } from "react"
 
 import styles from "../../../styles/components/Search.module.scss"
 import RCLink from "../RCLink/RCLink"
@@ -10,7 +10,6 @@ import { BASE_URL, PATHS } from "../../config/constants"
 import EDSLink from "../EDSLink"
 import useLoading from "../../hooks/useLoading"
 import RefineSearch from "../RefineSearch/RefineSearch"
-import { SearchResultsAggregationsContext } from "../../context/SearchResultsAggregationsContext"
 import type { Aggregation } from "../../types/filterTypes"
 import { collapseMultiValueQueryParams } from "../../utils/refineSearchUtils"
 import { appConfig } from "../../config/config"
@@ -19,13 +18,18 @@ import { appConfig } from "../../config/config"
  * The SearchForm component renders and controls the Search form and
  * advanced search link.
  */
-const SearchForm = () => {
+const SearchForm = ({
+  aggregations,
+  searchResultsHeadingRef,
+}: {
+  searchResultsHeadingRef: RefObject<null>
+  aggregations: Aggregation[]
+}) => {
   const router = useRouter()
   const [searchTerm, setSearchTerm] = useState(
     (router?.query?.q as string) || ""
   )
   const [searchScope, setSearchScope] = useState("all")
-  const aggregations = useContext(SearchResultsAggregationsContext)
   const [appliedFilters, setAppliedFilters] = useState(
     collapseMultiValueQueryParams(router.query)
   )
@@ -118,6 +122,7 @@ const SearchForm = () => {
           </RCLink>
           {displayRefineResults && (
             <RefineSearch
+              searchResultsHeadingRef={searchResultsHeadingRef}
               setAppliedFilters={setAppliedFilters}
               appliedFilters={appliedFilters}
               aggregations={aggregations}

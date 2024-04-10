@@ -7,7 +7,13 @@ import {
   Form,
   Icon,
 } from "@nypl/design-system-react-components"
-import type { Dispatch, SyntheticEvent } from "react"
+import type {
+  Dispatch,
+  MutableRefObject,
+  ReactElement,
+  RefObject,
+  SyntheticEvent,
+} from "react"
 import { useState, useCallback, useRef, useEffect } from "react"
 import { useRouter } from "next/router"
 import DateForm from "../SearchFilters/DateForm"
@@ -25,6 +31,7 @@ import type {
   Aggregation,
   CollapsedMultiValueAppliedFilters,
 } from "../../types/filterTypes"
+import useLoading from "../../hooks/useLoading"
 
 const fields = [
   { value: "materialType", label: "Format" },
@@ -39,6 +46,7 @@ interface RefineSearchProps {
     React.SetStateAction<CollapsedMultiValueAppliedFilters>
   >
   appliedFilters: CollapsedMultiValueAppliedFilters
+  searchResultsHeadingRef: MutableRefObject<null>
 }
 
 /**
@@ -48,6 +56,7 @@ const RefineSearch = ({
   aggregations,
   appliedFilters,
   setAppliedFilters,
+  searchResultsHeadingRef,
 }: RefineSearchProps) => {
   const router = useRouter()
   const dateInputRefs = [useRef<TextInputRefType>(), useRef<TextInputRefType>()]
