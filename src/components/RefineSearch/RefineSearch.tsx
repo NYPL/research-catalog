@@ -129,7 +129,7 @@ const RefineSearch = ({
   }
 
   return (
-    <Box className={styles.refineSearchContainer}>
+    <Box className={styles.refineSearchContainer} mb="l">
       {refineSearchClosed ? (
         <Button
           className={styles.refineSearchButton}
@@ -144,13 +144,15 @@ const RefineSearch = ({
           className={styles.refineSearchInner}
           id="refine-search"
           onSubmit={handleSubmit}
+          p={0}
         >
-          <HorizontalRule sx={{ marginBottom: 0 }} />
+          <HorizontalRule mb={0} />
           <Box className={styles.refineButtons}>
             <Button
               onClick={toggleRefine}
               id="cancel-refine"
               buttonType="secondary"
+              backgroundColor="white"
             >
               <Icon name="close" size="large" align="left" />
               Cancel
@@ -162,6 +164,7 @@ const RefineSearch = ({
                 id="reset-refine"
                 type="reset"
                 buttonType="secondary"
+                backgroundColor="white"
               >
                 <Icon name="actionDelete" align="left" size="large" />
                 Clear Filters
@@ -172,7 +175,7 @@ const RefineSearch = ({
               </Button>
             </ButtonGroup>
           </Box>
-          <HorizontalRule sx={{ marginTop: 0 }} />
+          <HorizontalRule m={0} />
           {filters}
         </Form>
       )}
