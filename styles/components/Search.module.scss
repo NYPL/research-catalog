@@ -3,6 +3,11 @@
 
 .filterTags {
   margin-bottom: var(--nypl-space-xs);
+
+  button[id^=ts-filter-clear-all] {
+    color: var(--nypl-colors-ui-link-primary);
+    text-decoration: underline;
+  }
 }
 .searchContainer {
   background-color: var(--nypl-colors-ui-bg-default);
