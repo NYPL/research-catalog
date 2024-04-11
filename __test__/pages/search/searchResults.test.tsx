@@ -4,7 +4,10 @@ import { render, screen } from "../../../src/utils/testUtils"
 
 import mockRouter from "next-router-mock"
 
-import { results } from "../../fixtures/searchResultsManyBibs"
+import {
+  results,
+  aggregationsResults,
+} from "../../fixtures/searchResultsManyBibs"
 import { noBibs } from "../../fixtures/searchResultsNoBibs"
 import SearchResults from "../../../pages/search/index"
 
@@ -12,9 +15,103 @@ jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 const query = "spaghetti"
 
 describe("Search Results page", () => {
-  describe("More than 50 bibs", () => {
-    it("displays many bibs", () => {
+  describe("focus", () => {
+    it("focuses on search results heading after filters are applied", async () => {
       mockRouter.push(`/search?q=${query}`)
+      render(
+        <SearchResults
+          isFreshSortByQuery={false}
+          isAuthenticated={true}
+          results={{ results, aggregations: aggregationsResults }}
+        />
+      )
+      const refine = screen.getByText("Refine Search")
+      await userEvent.click(refine)
+      const field = screen.getByLabelText("Greek, Modern (1453-present)", {
+        exact: false,
+      })
+      await userEvent.click(field)
+      await userEvent.click(screen.getByText("Apply Filters"))
+      setTimeout(() => {
+        const resultsHeading = screen.getByTestId("search-results-heading")
+        expect(resultsHeading).toHaveFocus()
+      }, 2000)
+    })
+    it("focuses on search results heading after loading a keyword search", () => {
+      mockRouter.push(`/search?q=${query}`)
+      render(
+        <SearchResults
+          isFreshSortByQuery={false}
+          isAuthenticated={true}
+          results={{ results, aggregations: aggregationsResults }}
+        />
+      )
+      const resultsHeading = screen.getByText("Displaying 1-50", {
+        exact: false,
+      })
+      expect(resultsHeading).toHaveFocus()
+    })
+    it("keeps focus on the sort by selector after a sort is applied", async () => {
+      mockRouter.push(`/search?q=${query}`)
+
+      render(
+        <SearchResults
+          isFreshSortByQuery={false}
+          isAuthenticated={true}
+          results={{ results, aggregations: aggregationsResults }}
+        />
+      )
+      const selector = screen.getByLabelText("Sort by")
+      await userEvent.selectOptions(selector, "Title (A - Z)")
+      expect(selector).toHaveFocus()
+    })
+    it("focuses on cancel after clicking refine search", async () => {
+      mockRouter.push(`/search?q=${query}`)
+      render(
+        <SearchResults
+          isFreshSortByQuery={false}
+          isAuthenticated={true}
+          results={{ results, aggregations: aggregationsResults }}
+        />
+      )
+      const refine = screen.getByText("Refine Search")
+      await userEvent.click(refine)
+      const cancel = screen.getByText("Cancel")
+      expect(cancel).toHaveFocus
+    })
+    it("focuses on refine search after clicking cancel", async () => {
+      mockRouter.push(`/search?q=${query}`)
+      render(
+        <SearchResults
+          isFreshSortByQuery={false}
+          isAuthenticated={true}
+          results={{ results, aggregations: aggregationsResults }}
+        />
+      )
+      const refine = screen.getByText("Refine Search")
+      await userEvent.click(refine)
+      const cancel = screen.getByText("Cancel")
+      await userEvent.click(cancel)
+      expect(refine).toHaveFocus
+    })
+    it("keeps focus on the sort by selector after a sort is changed", async () => {
+      mockRouter.push("")
+      render(
+        <SearchResults
+          isFreshSortByQuery={false}
+          isAuthenticated={true}
+          results={{ results, aggregations: aggregationsResults }}
+        />
+      )
+      const selector = screen.getByLabelText("Sort by")
+      await userEvent.selectOptions(selector, "Title (A - Z)")
+      await userEvent.selectOptions(selector, "Title (Z - A)")
+      expect(selector).toHaveFocus
+    })
+  })
+  describe("More than 50 bibs", () => {
+    it("displays many bibs", async () => {
+      await mockRouter.push(`/search?q=${query}`)
       render(
         <SearchResults
           isFreshSortByQuery={false}

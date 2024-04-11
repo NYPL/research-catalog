@@ -169,6 +169,7 @@ export default function Search({
                   <AppliedFilters aggregations={aggs} />
                 )}
                 <Heading
+                  data-testid="search-results-heading"
                   level="h2"
                   // @ts-expect-error
                   tabIndex="0"
