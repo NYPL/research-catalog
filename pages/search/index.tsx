@@ -6,7 +6,7 @@ import {
   Select,
   SkeletonLoader,
 } from "@nypl/design-system-react-components"
-import { useEffect, useRef, type ChangeEvent } from "react"
+import { useEffect, useRef, useState, type ChangeEvent } from "react"
 import { useRouter } from "next/router"
 import { parse } from "qs"
 
@@ -14,6 +14,7 @@ import SearchForm from "../../src/components/SearchForm/SearchForm"
 import Layout from "../../src/components/Layout/Layout"
 import DRBContainer from "../../src/components/DRB/DRBContainer"
 import SearchResult from "../../src/components/SearchResult/SearchResult"
+import AppliedFilters from "../../src/components/SearchFilters/AppliedFilters"
 
 import { fetchResults } from "../../src/server/api/search"
 import {
@@ -35,7 +36,7 @@ import type SearchResultsBib from "../../src/models/SearchResultsBib"
 
 import useLoading from "../../src/hooks/useLoading"
 import initializePatronTokenAuth from "../../src/server/auth"
-import AppliedFilters from "../../src/components/SearchFilters/AppliedFilters"
+import a11yStyles from "../../styles/utils/a11y.module.scss"
 
 interface SearchProps {
   bannerNotification?: string
@@ -107,6 +108,13 @@ export default function Search({
     searchResultsHeadingRef?.current?.focus()
   }, [isLoading, isFreshSortByQuery])
 
+  const [headerText, setHeaderText] = useState(
+    getSearchResultsHeading(searchParams, totalResults)
+  )
+  useEffect(() => {
+    setHeaderText(getSearchResultsHeading(searchParams, totalResults))
+  }, [totalResults, searchParams])
+
   const searchForm = <SearchForm aggregations={aggs} />
   return (
     <>
@@ -120,6 +128,14 @@ export default function Search({
         <meta name="twitter:title" content={metadataTitle} key="tw-title" />
         <title key="main-title">{metadataTitle}</title>
       </Head>
+      {/* this span is here to ensure that screen readers are updated
+      when the page has finished loading. in particular, after applying a sort
+      to the results, focus remains on the selector for accessibility reasons.
+      this span ensures that a screen reader will also alert the user that
+      new search results have been delivered. */}
+      <span className={a11yStyles.screenreaderOnly} aria-live="polite">
+        {headerText}
+      </span>
       <Layout
         searchForm={searchForm}
         isAuthenticated={isAuthenticated}
@@ -177,7 +193,7 @@ export default function Search({
                   size="heading4"
                   ref={searchResultsHeadingRef}
                 >
-                  {getSearchResultsHeading(searchParams, totalResults)}
+                  {headerText}
                 </Heading>
                 <SimpleGrid columns={1} gap="grid.xl">
                   {searchResultBibs.map((bib: SearchResultsBib) => {
