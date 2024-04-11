@@ -1,13 +1,10 @@
-import {
-  filteredPickupLocations,
-  pickupLocations,
-} from "../../../__test__/fixtures/accountFixtures"
+import { filteredPickupLocations } from "../../../__test__/fixtures/processedMyAccountData"
 import MyAccount, {
   MyAccountFactory,
-  fetchPickupLocations,
   filterPickupLocations,
 } from "../MyAccount"
 import {
+  pickupLocations,
   holds,
   checkouts,
   patron,
@@ -15,7 +12,7 @@ import {
   holdBibs,
   checkoutBibs,
   empty,
-} from "../../../__test__/fixtures/processedMyAccountData"
+} from "../../../__test__/fixtures/rawSierraAccountData"
 
 jest.mock("../../server/sierraClient")
 
