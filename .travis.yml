@@ -8,14 +8,13 @@ branches:
   only:
     - qa
     - production
-    - fix-travis-previous-image
 
 jobs:
   include:
     - stage: docker build
-      #if: (branch = qa or branch = production)
+      if: (branch = qa or branch = production)
       before_install:
-        - if [[ $TRAVIS_BRANCH == "fix-travis-previous-image" ]];
+        - if [[ $TRAVIS_BRANCH == "qa" ]];
           then
           export NEXT_PUBLIC_APP_ENV="qa";
           fi
