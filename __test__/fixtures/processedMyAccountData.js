@@ -325,10 +325,6 @@ export const filteredPickupLocations = [
     name: "Saint Agnes",
   },
   {
-    code: "sg   ",
-    name: "Saint George (Reopening 7/11)",
-  },
-  {
     code: "sd   ",
     name: "Sedgwick",
   },
@@ -415,61 +411,5 @@ export const filteredPickupLocations = [
   {
     code: "yv   ",
     name: "Yorkville",
-  },
-  {
-    code: "hd   ",
-    name: "125th Street (CLOSED)",
-  },
-  {
-    code: "bl   ",
-    name: "Bloomingdale (CLOSED)",
-  },
-  {
-    code: "b1   ",
-    name: "Bookmobile 1 (CLOSED)",
-  },
-  {
-    code: "ct   ",
-    name: "Castle Hill (CLOSED)",
-  },
-  {
-    code: "fw   ",
-    name: "Fort Washington (CLOSED)",
-  },
-  {
-    code: "br   ",
-    name: "George Bruce (CLOSED)",
-  },
-  {
-    code: "hf   ",
-    name: "Hamilton Fish Park (CLOSED)",
-  },
-  {
-    code: "hs   ",
-    name: "Hunt's Point (CLOSED)",
-  },
-  {
-    code: "jm   ",
-    name: "Jefferson Market (CLOSED)",
-  },
-  {
-    code: "me   ",
-    name: "Melrose (CLOSED)",
-  },
-  {
-    code: "mu   ",
-    name: "Muhlenberg (CLOSED)",
-  },
-  {
-    code: "pr   ",
-    name: "Port Richmond (CLOSED)",
-  },
-  {
-    code: "myr  ",
-    name: "Performing Arts PDD - 3rd Fl",
-  },
-  {
-    code: "myrs ",
-    name: "Performing Arts - Spec Col Desk",
-  },
+  }
 ]

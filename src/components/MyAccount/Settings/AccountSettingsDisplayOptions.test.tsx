@@ -85,7 +85,7 @@ describe("AccountSettingsDisplayOptions", () => {
       expect(phone).toBeInTheDocument()
     })
     it("displays password mask", () => {
-      const pin = screen.getByDisplayValue("****")
+      const pin = screen.getByText("****")
       expect(pin).toBeInTheDocument()
     })
   })
