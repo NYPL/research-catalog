@@ -108,13 +108,6 @@ export default function Search({
     searchResultsHeadingRef?.current?.focus()
   }, [isLoading, isFreshSortByQuery])
 
-  const [headerText, setHeaderText] = useState(
-    getSearchResultsHeading(searchParams, totalResults)
-  )
-  useEffect(() => {
-    setHeaderText(getSearchResultsHeading(searchParams, totalResults))
-  }, [totalResults, searchParams])
-
   const searchForm = <SearchForm aggregations={aggs} />
   return (
     <>
@@ -128,14 +121,6 @@ export default function Search({
         <meta name="twitter:title" content={metadataTitle} key="tw-title" />
         <title key="main-title">{metadataTitle}</title>
       </Head>
-      {/* this span is here to ensure that screen readers are updated
-      when the page has finished loading. in particular, after applying a sort
-      to the results, focus remains on the selector for accessibility reasons.
-      this span ensures that a screen reader will also alert the user that
-      new search results have been delivered. */}
-      <span className={a11yStyles.screenreaderOnly} aria-live="polite">
-        {headerText}
-      </span>
       <Layout
         searchForm={searchForm}
         isAuthenticated={isAuthenticated}
@@ -193,7 +178,7 @@ export default function Search({
                   size="heading4"
                   ref={searchResultsHeadingRef}
                 >
-                  {headerText}
+                  {getSearchResultsHeading(searchParams, totalResults)}
                 </Heading>
                 <SimpleGrid columns={1} gap="grid.xl">
                   {searchResultBibs.map((bib: SearchResultsBib) => {
