@@ -3,6 +3,11 @@
 
 .filterTags {
   margin-bottom: var(--nypl-space-xs);
+
+  button[id^="ts-filter-clear-all"] {
+    color: var(--nypl-colors-ui-link-primary);
+    text-decoration: underline;
+  }
 }
 .searchContainer {
   background-color: var(--nypl-colors-ui-bg-default);
@@ -21,7 +26,7 @@
 .advancedSearch {
   align-self: flex-end;
   min-width: 127px;
-  margin-top: var(--nypl-space-xs);
+  margin-top: var(--nypl-space-xxs);
 }
 
 .edsLink {
@@ -40,10 +45,11 @@
 
 .refineSearchContainer {
   background-color: var(--nypl-colors-ui-bg-default);
+  margin-bottom: var(--nypl-space-l);
 }
 .refineSearchInner {
   @include maxWidth;
-  padding-bottom: var(--nypl-space-xs);
+  padding-bottom: var(--nypl-space-l);
 }
 
 .refineSearchButton {

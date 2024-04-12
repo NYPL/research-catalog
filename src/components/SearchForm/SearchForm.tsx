@@ -110,7 +110,6 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
           <RCLink
             className={styles.advancedSearch}
             href={`${BASE_URL}/search/advanced`}
-            color="#0069BF"
           >
             Advanced Search
           </RCLink>

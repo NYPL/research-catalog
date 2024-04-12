@@ -148,13 +148,14 @@ const RefineSearch = ({
           id="refine-search"
           onSubmit={handleSubmit}
         >
-          <HorizontalRule sx={{ marginBottom: 0 }} />
+          <HorizontalRule mb={0} />
           <Box className={styles.refineButtons}>
             <Button
               onClick={toggleRefine}
               id="cancel-refine"
               buttonType="secondary"
               ref={refineOrCancelRef}
+              backgroundColor="ui.white"
             >
               <Icon name="close" size="large" align="left" />
               Cancel
@@ -166,6 +167,7 @@ const RefineSearch = ({
                 id="reset-refine"
                 type="reset"
                 buttonType="secondary"
+                backgroundColor="ui.white"
               >
                 <Icon name="actionDelete" align="left" size="large" />
                 Clear Filters
@@ -176,7 +178,7 @@ const RefineSearch = ({
               </Button>
             </ButtonGroup>
           </Box>
-          <HorizontalRule sx={{ marginTop: 0 }} />
+          <HorizontalRule m={0} />
           {filters}
         </Form>
       )}

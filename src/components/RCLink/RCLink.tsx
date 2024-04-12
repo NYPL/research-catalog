@@ -12,7 +12,9 @@ interface RCLinkProps {
   className?: string
   color?: string
   type?: LinkTypes
-  size?: string
+  fontSize?: string
+  fontWeight?: string
+  isUnderlined?: boolean
   hasWhiteFocusRing?: boolean
   disabled?: boolean
 }
