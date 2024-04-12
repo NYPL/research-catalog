@@ -172,6 +172,8 @@ export default function Search({
                 <Heading
                   data-testid="search-results-heading"
                   level="h2"
+                  // Heading component does not expect tabIndex prop, so we
+                  // are ignoring the typescript error that pops up.
                   // @ts-expect-error
                   tabIndex="0"
                   mb="xl"
@@ -201,6 +203,8 @@ export default function Search({
            * TODO: The logic and copy for different scenarios will need to be added when
            * filters are implemented
            */
+          // Heading component does not expect tabIndex prop, so we are ignoring
+          // the typescript error that pops up.
           // @ts-expect-error
           <Heading ref={searchResultsHeadingRef} tabIndex="0" level="h3">
             No results. Try a different search.

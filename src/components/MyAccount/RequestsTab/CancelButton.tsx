@@ -75,6 +75,8 @@ const CancelButton = ({
           <Text sx={{ marginBottom: 0 }}>Cancel request?</Text>
         </Box>
       ),
+      // Override onClose function type. The callback expects a method with
+      // arity 0, but we are leveraging the event that is in fact passed along.
       //@ts-ignore
       onClose: async (e) => {
         if (e) {
