@@ -2,6 +2,11 @@
 
 .filterTags {
   margin-bottom: var(--nypl-space-xs);
+
+  button[id^="ts-filter-clear-all"] {
+    color: var(--nypl-colors-ui-link-primary);
+    text-decoration: underline;
+  }
 }
 .searchContainer {
   background-color: var(--nypl-colors-ui-bg-default);
@@ -16,7 +21,7 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  margin-top: var(--nypl-space-xs);
+  margin-top: var(--nypl-space-s);
   margin-bottom: var(--nypl-space-s);
 }
 
@@ -40,5 +45,5 @@
 }
 .refineSearchInner {
   @include maxWidth;
-  padding-bottom: var(--nypl-space-xs);
+  padding-bottom: var(--nypl-space-l);
 }

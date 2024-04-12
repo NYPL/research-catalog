@@ -55,7 +55,9 @@ const SearchResult = ({ bib }: SearchResultProps) => {
         {bib.title}
       </CardHeading>
       <CardContent>
-        <Box sx={{ p: { display: "inline", marginRight: "s" } }}>
+        <Box
+          sx={{ p: { display: "inline", marginRight: "s", marginBottom: "s" } }}
+        >
           {bib.materialType && <Text>{bib.materialType}</Text>}
           {bib.publicationStatement && <Text>{bib.publicationStatement}</Text>}
           {bib.yearPublished && <Text>{bib.yearPublished}</Text>}

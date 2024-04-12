@@ -1,7 +1,7 @@
 import { Box, SearchBar } from "@nypl/design-system-react-components"
 import { useRouter } from "next/router"
 import type { SyntheticEvent, Dispatch, SetStateAction } from "react"
-import { useContext, useState, useEffect } from "react"
+import { useState, useEffect } from "react"
 
 import styles from "../../../styles/components/Search.module.scss"
 import RCLink from "../RCLink/RCLink"
@@ -10,7 +10,6 @@ import { BASE_URL, PATHS } from "../../config/constants"
 import EDSLink from "../EDSLink"
 import useLoading from "../../hooks/useLoading"
 import RefineSearch from "../RefineSearch/RefineSearch"
-import { SearchResultsAggregationsContext } from "../../context/SearchResultsAggregationsContext"
 import type { Aggregation } from "../../types/filterTypes"
 import { collapseMultiValueQueryParams } from "../../utils/refineSearchUtils"
 import { appConfig } from "../../config/config"
@@ -19,13 +18,12 @@ import { appConfig } from "../../config/config"
  * The SearchForm component renders and controls the Search form and
  * advanced search link.
  */
-const SearchForm = () => {
+const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
   const router = useRouter()
   const [searchTerm, setSearchTerm] = useState(
     (router?.query?.q as string) || ""
   )
   const [searchScope, setSearchScope] = useState("all")
-  const aggregations = useContext(SearchResultsAggregationsContext)
   const [appliedFilters, setAppliedFilters] = useState(
     collapseMultiValueQueryParams(router.query)
   )
@@ -60,7 +58,7 @@ const SearchForm = () => {
   const displayRefineResults = !!aggregations?.filter(
     (agg: Aggregation) => agg.values.length
   ).length
-
+  console.log(displayRefineResults)
   useEffect(() => {
     setAppliedFilters(collapseMultiValueQueryParams(router.query))
   }, [router.query])
@@ -104,15 +102,13 @@ const SearchForm = () => {
           }}
         />
         <Box className={styles.auxSearchContainer}>
-          <Box>
-            {displayRefineResults && (
-              <RefineSearch
-                setAppliedFilters={setAppliedFilters}
-                appliedFilters={appliedFilters}
-                aggregations={aggregations}
-              />
-            )}
-          </Box>
+          {displayRefineResults && (
+            <RefineSearch
+              setAppliedFilters={setAppliedFilters}
+              appliedFilters={appliedFilters}
+              aggregations={aggregations}
+            />
+          )}
           <RCLink
             className={styles.advancedSearch}
             href={`${BASE_URL}/search/advanced`}

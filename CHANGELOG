@@ -9,7 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+<<<<<<< HEAD
 - Fixed VQA issues for the searchbar, results heading, sort dropdown, and individual search result card in the Search Results page (SCC-4065)
+=======
+- Fixed second half of Accessibility QA issues for Search Results (SCC-4064)
+>>>>>>> main
 
 ## [1.0.3] 2024-04-03
 
