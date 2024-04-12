@@ -129,7 +129,7 @@ const RefineSearch = ({
   }
 
   return (
-    <Box className={styles.refineSearchContainer} mb="l">
+    <Box className={styles.refineSearchContainer}>
       {refineSearchClosed ? (
         <Button
           className={styles.refineSearchButton}
@@ -144,7 +144,6 @@ const RefineSearch = ({
           className={styles.refineSearchInner}
           id="refine-search"
           onSubmit={handleSubmit}
-          p={0}
         >
           <HorizontalRule mb={0} />
           <Box className={styles.refineButtons}>

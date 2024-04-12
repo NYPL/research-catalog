@@ -4,7 +4,7 @@
 .filterTags {
   margin-bottom: var(--nypl-space-xs);
 
-  button[id^=ts-filter-clear-all] {
+  button[id^="ts-filter-clear-all"] {
     color: var(--nypl-colors-ui-link-primary);
     text-decoration: underline;
   }
@@ -45,10 +45,11 @@
 
 .refineSearchContainer {
   background-color: var(--nypl-colors-ui-bg-default);
+  margin-bottom: var(--nypl-space-l);
 }
 .refineSearchInner {
   @include maxWidth;
-  padding-bottom: var(--nypl-space-xs);
+  padding-bottom: var(--nypl-space-l);
 }
 
 .refineSearchButton {
