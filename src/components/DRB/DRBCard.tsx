@@ -5,6 +5,7 @@ import {
   Icon,
   Box,
   Link as DSLink,
+  CardHeading,
 } from "@nypl/design-system-react-components"
 
 import type DRBResult from "../../models/DRBResult"
@@ -20,11 +21,10 @@ interface DRBCardProps {
  */
 const DRBCard = ({ drbResult }: DRBCardProps) => {
   if (!drbResult) return null
-  console.log(drbResult.readOnlineUrl)
 
   return (
     <Card backgroundColor="ui.white" p="s" borderRadius="5px">
-      <CardContent>
+      <CardHeading level="h3" size="heading6" mb="0">
         <DSLink
           href={drbResult.url}
           target="_blank"
@@ -33,11 +33,13 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
           fontWeight="medium"
           display="inline-block"
           mb="xs"
+          lang={drbResult.language !== "en" ? drbResult.language : null}
         >
           {drbResult.title}
         </DSLink>
-
-        {drbResult?.authors.length > 0 ? (
+      </CardHeading>
+      <CardContent>
+        {drbResult?.authors?.length > 0 ? (
           <Text size="body2" mb="s">
             <Box as="span" fontSize="desktop.body.body2" fontWeight="medium">
               By
@@ -61,6 +63,7 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
         {drbResult.readOnlineUrl && (
           <DSLink
             href={drbResult.readOnlineUrl}
+            aria-label={`Read Online, ${drbResult.title}`}
             target="_blank"
             type="buttonSecondary"
             mt="xs"
