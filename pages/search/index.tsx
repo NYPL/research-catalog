@@ -128,6 +128,7 @@ export default function Search({
                 name="sort_direction"
                 id="search-results-sort"
                 labelText="Sort by"
+                labelPosition="inline"
                 mb="l"
                 onChange={handleSortChange}
                 value={
@@ -167,17 +168,18 @@ export default function Search({
                 <Heading
                   data-testid="search-results-heading"
                   level="h2"
+                  size="heading5"
                   // Heading component does not expect tabIndex prop, so we
                   // are ignoring the typescript error that pops up.
                   // @ts-expect-error
                   tabIndex={-1}
-                  mb="xl"
-                  size="heading4"
+                  mb="l"
+                  minH="40px"
                   ref={searchResultsHeadingRef}
                 >
                   {getSearchResultsHeading(searchParams, totalResults)}
                 </Heading>
-                <SimpleGrid columns={1} gap="grid.xl">
+                <SimpleGrid columns={1} gap="grid.l">
                   {searchResultBibs.map((bib: SearchResultsBib) => {
                     return <SearchResult key={bib.id} bib={bib} />
                   })}

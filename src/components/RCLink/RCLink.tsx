@@ -17,6 +17,7 @@ interface RCLinkProps {
   isUnderlined?: boolean
   hasWhiteFocusRing?: boolean
   disabled?: boolean
+  [key: string]: any
 }
 
 // TODO: once 2ad is phased out, replace with DS v3 Link which can wrap a
@@ -42,6 +43,7 @@ const RCLink = ({
       href={href}
       className={className}
       fontWeight={active && "bold"}
+      hasVisitedState={false}
       {...rest}
       __css={
         hasWhiteFocusRing && {

@@ -122,7 +122,7 @@ describe("Search Results page", () => {
       )
 
       const displayingText = screen.getByText(
-        `Displaying 1-50 of ${results.totalResults} results for Keyword: "${query}"`
+        `Displaying 1-50 of ${results.totalResults} results for keyword "${query}"`
       )
       expect(displayingText).toBeInTheDocument()
 

@@ -135,10 +135,10 @@ const RefineSearch = ({
       {refineSearchClosed ? (
         <Button
           ref={refineOrCancelRef}
-          className={styles.refineSearchButton}
           onClick={toggleRefine}
           id="refine-search"
           buttonType="secondary"
+          backgroundColor="ui.white"
         >
           Refine Search
         </Button>
