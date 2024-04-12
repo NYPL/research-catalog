@@ -1,10 +1,39 @@
 import { parsePayload, updateArrayValue } from "./AccountSettingsUtils"
+import { mockPatron } from "../../../../__test__/fixtures/processedMyAccountData"
 
 describe("Account settings utils", () => {
   describe("parsePayload", () => {
     it.todo("does not submit empty form inputs")
-    it.todo("submits inputs with values")
-    it.todo("sends an array of phones and emails")
+    it("submits inputs with values", () => {
+      const eventTarget = {
+        primaryEmail: { value: "fusili@gmail.com" },
+        primaryPhone: { value: "666" },
+        homeLibrary: { value: "xx   " },
+        notificationPreference: { value: "z" },
+      }
+      expect(parsePayload(eventTarget, mockPatron).emails).toStrictEqual([
+        "fusili@gmail.com",
+        "streganonna@gmail.com",
+        "spaghettigrandma@gmail.com",
+      ])
+      expect(parsePayload(eventTarget, mockPatron).phones).toStrictEqual([
+        {
+          number: "666",
+          type: "t",
+        },
+        {
+          number: "123-456-7890",
+          type: "t",
+        },
+      ])
+      expect(parsePayload(eventTarget, mockPatron).homeLibrary).toBe("xx   ")
+      expect(parsePayload(eventTarget, mockPatron).fixedFields).toStrictEqual({
+        268: {
+          label: "Notice Preference",
+          value: "z",
+        },
+      })
+    })
   })
   describe("updateArrayValue", () => {
     it("appends new primary to the front of the array", () => {

@@ -35,7 +35,8 @@ export const accountSettings = [
   description: string | JSX.Element
 }[]
 
-type PhoneOrEmail = string | { number: string; type: string }
+type Phone = { number: string; type: string }
+type PhoneOrEmail = string | Phone
 export const updateArrayValue = (
   newPrimary: PhoneOrEmail,
   currentValues: PhoneOrEmail[]
@@ -46,10 +47,21 @@ export const updateArrayValue = (
   })
   return [newPrimary, ...removedNewPrimaryIfPresent]
 }
+type PutRequestPayloadType = {
+  emails?: string[]
+  phones?: Phone[]
+  fixedFields?: {
+    /* eslint-disable @typescript-eslint/naming-convention */
+    268: {
+      label: "Notice Preference"
+      value: string
+    }
+  }
+  homeLibrary?: string
+}
 /** Parses the account settings form submission event target and turns it into
  * the payload for the patron settings update request.
  */
-
 export const parsePayload = (formSubmissionBody, settingsData: Patron) => {
   return accountSettings.reduce((putRequestPayload, setting) => {
     const fieldValue = formSubmissionBody[setting.field]?.value
@@ -63,7 +75,7 @@ export const parsePayload = (formSubmissionBody, settingsData: Patron) => {
         putRequestPayload["emails"] = updateArrayValue(
           fieldValue,
           settingsData.emails
-        )
+        ) as string[]
         break
       // TODO: right now we are assuming that all phones are mobile phones.
       // follow on ticket outlines two different inputs
@@ -71,7 +83,7 @@ export const parsePayload = (formSubmissionBody, settingsData: Patron) => {
         putRequestPayload["phones"] = updateArrayValue(
           { number: fieldValue, type: "t" },
           settingsData.phones
-        )
+        ) as Phone[]
         break
       case "notificationPreference":
         putRequestPayload["fixedFields"] = {
@@ -85,5 +97,5 @@ export const parsePayload = (formSubmissionBody, settingsData: Patron) => {
         putRequestPayload[field] = fieldValue
     }
     return putRequestPayload
-  }, {})
+  }, {} as PutRequestPayloadType)
 }
