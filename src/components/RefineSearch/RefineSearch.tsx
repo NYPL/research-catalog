@@ -151,7 +151,7 @@ const RefineSearch = ({
               onClick={toggleRefine}
               id="cancel-refine"
               buttonType="secondary"
-              backgroundColor="white"
+              backgroundColor="ui.white"
             >
               <Icon name="close" size="large" align="left" />
               Cancel
@@ -163,7 +163,7 @@ const RefineSearch = ({
                 id="reset-refine"
                 type="reset"
                 buttonType="secondary"
-                backgroundColor="white"
+                backgroundColor="ui.white"
               >
                 <Icon name="actionDelete" align="left" size="large" />
                 Clear Filters
