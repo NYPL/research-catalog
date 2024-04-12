@@ -101,9 +101,7 @@ export default function Search({
     // don't focus on "Displaying n results..." if the page is not done loading
     if (isLoading) return
     // keep focus on sort by selector if the last update to the query was a sort
-    if (isFreshSortByQuery) {
-      return
-    }
+    if (isFreshSortByQuery) return
     // otherwise, focus on "Displaying n results..."
     searchResultsHeadingRef?.current?.focus()
   }, [isLoading, isFreshSortByQuery])

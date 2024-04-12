@@ -32,10 +32,11 @@ describe("Search Results page", () => {
       })
       await userEvent.click(field)
       await userEvent.click(screen.getByText("Apply Filters"))
+      // This was the only way to get this test to pass. waitFor was not in fact waiting, even with same timeout.
       setTimeout(() => {
         const resultsHeading = screen.getByTestId("search-results-heading")
         expect(resultsHeading).toHaveFocus()
-      }, 2000)
+      }, 500)
     })
     it("focuses on search results heading after loading a keyword search", () => {
       mockRouter.push(`/search?q=${query}`)
