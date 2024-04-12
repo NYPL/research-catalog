@@ -27,7 +27,7 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
   const listElements = currentlyEditing ? (
     <AccountSettingsForm patron={mostRecentPatronData} />
   ) : (
-    <AccountSettingsDisplay patron={{ emails: [], ...mostRecentPatronData }} />
+    <AccountSettingsDisplay patron={mostRecentPatronData} />
   )
   const { onOpen: openModal, Modal } = useModal()
 

@@ -52,7 +52,7 @@ export const accountSettings = [
   field: string
   icon: IconNames
   term: string
-  description?: any
+  description?: (any) => string
 }[]
 
 export const updateArrayValue = (
