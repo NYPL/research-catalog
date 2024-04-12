@@ -1,6 +1,6 @@
 import { SearchBar } from "@nypl/design-system-react-components"
 import { useRouter } from "next/router"
-import type { SyntheticEvent, Dispatch, SetStateAction, RefObject } from "react"
+import type { SyntheticEvent, Dispatch, SetStateAction } from "react"
 import { useState, useEffect } from "react"
 
 import styles from "../../../styles/components/Search.module.scss"
