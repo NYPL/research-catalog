@@ -60,8 +60,9 @@ const DRBContainer = ({
             fontWeight="bold"
           >
             <>
-              View all {totalWorks.toLocaleString()} results in Digital Research
-              Books Beta
+              View {totalWorks === 1 ? "" : "all"} {totalWorks.toLocaleString()}{" "}
+              result
+              {totalWorks === 1 ? "" : "s"} in Digital Research Books Beta
             </>
           </DSLink>
         )}
