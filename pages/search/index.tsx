@@ -10,7 +10,6 @@ import { useEffect, useRef, type ChangeEvent } from "react"
 import { useRouter } from "next/router"
 import { parse } from "qs"
 
-import SearchForm from "../../src/components/SearchForm/SearchForm"
 import Layout from "../../src/components/Layout/Layout"
 import DRBContainer from "../../src/components/DRB/DRBContainer"
 import SearchResult from "../../src/components/SearchResult/SearchResult"
@@ -36,7 +35,6 @@ import type SearchResultsBib from "../../src/models/SearchResultsBib"
 
 import useLoading from "../../src/hooks/useLoading"
 import initializePatronTokenAuth from "../../src/server/auth"
-import a11yStyles from "../../styles/utils/a11y.module.scss"
 
 interface SearchProps {
   bannerNotification?: string
