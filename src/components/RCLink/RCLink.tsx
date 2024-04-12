@@ -51,7 +51,7 @@ const RCLink = ({
       // TODO: These were added in accessibility QA. Investigate adding these to the DS Link component.
       role="link"
       aria-disabled={disabled}
-      tabIndex={disabled ? -1 : 0}
+      tabIndex={disabled ? -1 : null}
     >
       {children}
     </DSLink>
