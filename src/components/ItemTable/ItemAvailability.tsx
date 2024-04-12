@@ -39,7 +39,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
       )
     } else if (item.aeonUrl && item.location?.endpoint) {
       return (
-        <Text>
+        <Text mb="0">
           <Box as="span" color="ui.success.primary">
             Available by appointment
           </Box>
@@ -60,7 +60,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
       // Available Onsite item
       const locationShort = item.location.prefLabel.split("-")[0]
       return (
-        <Text>
+        <Text mb="0">
           <Box as="span" color="ui.success.primary">
             Available
           </Box>
@@ -78,7 +78,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
   } else {
     // Not available
     return (
-      <Text>
+      <Text mb="0">
         <Box as="span" color="ui.warning.primary">
           Not available
         </Box>

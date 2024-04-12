@@ -6,13 +6,14 @@ import {
   Select,
   SkeletonLoader,
 } from "@nypl/design-system-react-components"
-import { type ChangeEvent } from "react"
+import { useEffect, useRef, type ChangeEvent } from "react"
 import { useRouter } from "next/router"
 import { parse } from "qs"
 
 import Layout from "../../src/components/Layout/Layout"
 import DRBContainer from "../../src/components/DRB/DRBContainer"
 import SearchResult from "../../src/components/SearchResult/SearchResult"
+import AppliedFilters from "../../src/components/SearchFilters/AppliedFilters"
 
 import { fetchResults } from "../../src/server/api/search"
 import {
@@ -21,6 +22,7 @@ import {
   mapElementsToSearchResultsBibs,
   getSearchQuery,
   sortOptions,
+  getFreshSortByQuery,
 } from "../../src/utils/searchUtils"
 import type {
   SearchResultsResponse,
@@ -30,16 +32,15 @@ import type {
 import { mapWorksToDRBResults } from "../../src/utils/drbUtils"
 import { SITE_NAME, RESULTS_PER_PAGE } from "../../src/config/constants"
 import type SearchResultsBib from "../../src/models/SearchResultsBib"
-import { SearchResultsAggregationsProvider } from "../../src/context/SearchResultsAggregationsContext"
 
 import useLoading from "../../src/hooks/useLoading"
 import initializePatronTokenAuth from "../../src/server/auth"
-import AppliedFilters from "../../src/components/SearchFilters/AppliedFilters"
 
 interface SearchProps {
   bannerNotification?: string
   results: SearchResultsResponse
   isAuthenticated: boolean
+  isFreshSortByQuery: boolean
 }
 
 /**
@@ -50,6 +51,7 @@ export default function Search({
   bannerNotification,
   results,
   isAuthenticated,
+  isFreshSortByQuery,
 }: SearchProps) {
   const metadataTitle = `Search Results | ${SITE_NAME}`
   const { push, query } = useRouter()
@@ -92,8 +94,18 @@ export default function Search({
     )
   }
 
+  const searchResultsHeadingRef = useRef(null)
+  useEffect(() => {
+    // don't focus on "Displaying n results..." if the page is not done loading
+    if (isLoading) return
+    // keep focus on sort by selector if the last update to the query was a sort
+    if (isFreshSortByQuery) return
+    // otherwise, focus on "Displaying n results..."
+    searchResultsHeadingRef?.current?.focus()
+  }, [isLoading, isFreshSortByQuery])
+
   return (
-    <SearchResultsAggregationsProvider value={aggs}>
+    <>
       <Head>
         <meta property="og:title" content={metadataTitle} key="og-title" />
         <meta
@@ -105,6 +117,7 @@ export default function Search({
         <title key="main-title">{metadataTitle}</title>
       </Head>
       <Layout
+        searchAggregations={aggs}
         isAuthenticated={isAuthenticated}
         activePage="search"
         bannerNotification={bannerNotification}
@@ -115,6 +128,7 @@ export default function Search({
                 name="sort_direction"
                 id="search-results-sort"
                 labelText="Sort by"
+                labelPosition="inline"
                 mb="l"
                 onChange={handleSortChange}
                 value={
@@ -148,11 +162,24 @@ export default function Search({
               <SkeletonLoader showImage={false} />
             ) : (
               <>
-                {displayAppliedFilters && <AppliedFilters />}
-                <Heading level="h2" mb="xl" size="heading4">
+                {displayAppliedFilters && (
+                  <AppliedFilters aggregations={aggs} />
+                )}
+                <Heading
+                  data-testid="search-results-heading"
+                  level="h2"
+                  size="heading5"
+                  // Heading component does not expect tabIndex prop, so we
+                  // are ignoring the typescript error that pops up.
+                  // @ts-expect-error
+                  tabIndex={-1}
+                  mb="l"
+                  minH="40px"
+                  ref={searchResultsHeadingRef}
+                >
                   {getSearchResultsHeading(searchParams, totalResults)}
                 </Heading>
-                <SimpleGrid columns={1} gap="grid.xl">
+                <SimpleGrid columns={1} gap="grid.l">
                   {searchResultBibs.map((bib: SearchResultsBib) => {
                     return <SearchResult key={bib.id} bib={bib} />
                   })}
@@ -161,22 +188,30 @@ export default function Search({
             )}
             <Pagination
               id="results-pagination"
-              mt="xl"
+              mt="xxl"
+              mb="l"
               initialPage={searchParams.page}
               currentPage={searchParams.page}
               pageCount={Math.ceil(totalResults / RESULTS_PER_PAGE)}
               onPageChange={handlePageChange}
             />
           </>
+        ) : /**
+         * TODO: The logic and copy for different scenarios will need to be added when
+         * filters are implemented
+         */
+        isLoading ? (
+          <SkeletonLoader showImage={false} />
         ) : (
-          /**
-           * TODO: The logic and copy for different scenarios will need to be added when
-           * filters are implemented
-           */
-          <Heading level="h3">No results. Try a different search.</Heading>
+          // Heading component does not expect tabIndex prop, so we are ignoring
+          // the typescript error that pops up.
+          // @ts-expect-error
+          <Heading ref={searchResultsHeadingRef} tabIndex="0" level="h3">
+            No results. Try a different search.
+          </Heading>
         )}
       </Layout>
-    </SearchResultsAggregationsProvider>
+    </>
   )
 }
 
@@ -196,9 +231,13 @@ export async function getServerSideProps({ resolvedUrl, req }) {
   const results = await fetchResults(mapQueryToSearchParams(parse(queryString)))
   const patronTokenResponse = await initializePatronTokenAuth(req)
   const isAuthenticated = patronTokenResponse.isTokenValid
-
+  const isFreshSortByQuery = getFreshSortByQuery(
+    req.headers.referer,
+    resolvedUrl
+  )
   return {
     props: {
+      isFreshSortByQuery,
       bannerNotification,
       results,
       isAuthenticated,

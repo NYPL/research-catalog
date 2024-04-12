@@ -3,7 +3,9 @@ import {
   CardContent,
   Text,
   Icon,
+  Box,
   Link as DSLink,
+  CardHeading,
 } from "@nypl/design-system-react-components"
 
 import type DRBResult from "../../models/DRBResult"
@@ -21,29 +23,35 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
   if (!drbResult) return null
 
   return (
-    <Card backgroundColor="ui.bg.default" p="xs">
-      <CardContent>
+    <Card backgroundColor="ui.white" p="s" borderRadius="5px">
+      <CardHeading level="h3" size="heading6" mb="0">
         <DSLink
           href={drbResult.url}
           target="_blank"
           isUnderlined={false}
-          fontSize="desktop.body.body2"
+          fontSize="desktop.subtitle.subtitle2"
+          fontWeight="medium"
           display="inline-block"
-          mb="s"
+          mb="xs"
+          lang={drbResult.language !== "en" ? drbResult.language : null}
         >
           {drbResult.title}
         </DSLink>
-
-        {drbResult?.authors.length > 0 ? (
-          <Text size="body2">
-            By{" "}
+      </CardHeading>
+      <CardContent>
+        {drbResult?.authors?.length > 0 ? (
+          <Text size="body2" mb="s">
+            <Box as="span" fontSize="desktop.body.body2" fontWeight="medium">
+              By
+            </Box>{" "}
             {drbResult.authors.map((author: Author | Agent, index: number) => (
               <>
                 {index > 0 && ","}
                 <DSLink
                   href={getAuthorURL(author)}
                   target="_blank"
-                  isUnderlined={false}
+                  fontSize="desktop.body.body2"
+                  fontWeight="light"
                 >
                   {author.name}
                 </DSLink>
@@ -55,9 +63,10 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
         {drbResult.readOnlineUrl && (
           <DSLink
             href={drbResult.readOnlineUrl}
+            aria-label={`Read Online, ${drbResult.title}`}
             target="_blank"
-            type="buttonPrimary"
-            mb={drbResult.readOnlineUrl ? "s" : ""}
+            type="buttonSecondary"
+            mt="xs"
             isUnderlined={false}
           >
             Read Online
@@ -68,9 +77,10 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
           <DSLink
             href={drbResult.downloadLink?.url}
             target="_blank"
-            type="buttonPrimary"
+            type="buttonSecondary"
             isUnderlined={false}
             fontSize="desktop.body.body2"
+            mt="xs"
           >
             <>
               <Icon name="download" align="left" size="small" />

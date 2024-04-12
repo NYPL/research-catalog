@@ -3,6 +3,7 @@ import { Box, Table } from "@nypl/design-system-react-components"
 import type ItemTableData from "../../models/ItemTableData"
 import RequestButtons from "./RequestButtons"
 import ItemAvailability from "./ItemAvailability"
+import styles from "../../../styles/components/ItemTable.module.scss"
 
 interface ItemTableProps {
   itemTableData: ItemTableData
@@ -15,23 +16,12 @@ const ItemTable = ({ itemTableData }: ItemTableProps) => {
   return (
     <>
       <Table
+        className={styles.itemTable}
         columnHeaders={itemTableData.tableHeadings}
         tableData={itemTableData.tableData}
-        mb="s"
-        // TODO: These styles approximate those of the old app.
-        // Design will VQA the component with the DS defaults, but leaving this for reference.
-        // sx={{
-        //   tableLayout: "fixed",
-        //   width: "full",
-        //   tr: { border: "0 !important", padding: 0 },
-        //   "th, td, th > span, td > span": {
-        //     paddingTop: "xs",
-        //     paddingBottom: "xs",
-        //   },
-        // }}
       />
       {!itemTableData.isBibPage && (
-        <Box mb="s">
+        <Box>
           <RequestButtons item={itemTableData.items[0]} />
           <ItemAvailability item={itemTableData.items[0]} />
         </Box>

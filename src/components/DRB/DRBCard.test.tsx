@@ -24,6 +24,21 @@ const drbWorkMarkTwain = {
   ],
   authors: [{ name: "Mark Twain" }],
   agents: [],
+  languages: [
+    {
+      iso_2: "en",
+    },
+  ],
+}
+
+const drbWorkSpanish = {
+  title: "Spanish Title",
+  uuid: "123",
+  languages: [
+    {
+      iso_2: "es",
+    },
+  ],
 }
 
 describe("DRBCard", () => {
@@ -31,13 +46,13 @@ describe("DRBCard", () => {
     const drbResultTwain = new DRBResult(drbWorkMarkTwain)
     render(<DRBCard drbResult={drbResultTwain} />)
 
+    const titleLink = screen.getByText(/The Adventures of Tom Sawyer/i)
     const authorLink = screen.getByText(/Mark Twain/i)
     const readOnlineLink = screen.getByText(/Read Online/i)
     const downloadLink = screen.queryByText(/Download PDF/i)
 
-    expect(
-      screen.getByText(/The Adventures of Tom Sawyer/i)
-    ).toBeInTheDocument()
+    expect(titleLink).toBeInTheDocument()
+    expect(titleLink).not.toHaveAttribute("lang", "en")
 
     expect(authorLink).toBeInTheDocument()
     expect(authorLink).toHaveAttribute(
@@ -49,5 +64,15 @@ describe("DRBCard", () => {
     expect(readOnlineLink).toHaveAttribute("href", drbResultTwain.readOnlineUrl)
 
     expect(downloadLink).not.toBeInTheDocument()
+  })
+
+  it("includes the lang prop in the title when the language is not english", () => {
+    const spanishWork = new DRBResult(drbWorkSpanish)
+    render(<DRBCard drbResult={spanishWork} />)
+
+    const titleLink = screen.getByText(/Spanish Title/i)
+
+    expect(titleLink).toBeInTheDocument()
+    expect(titleLink).toHaveAttribute("lang", "es")
   })
 })
