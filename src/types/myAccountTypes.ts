@@ -14,6 +14,11 @@ export interface SierraCheckout {
   dueDate: string
 }
 
+export interface Phone {
+  number: string
+  type: string
+}
+
 export interface SierraItem {
   id: string
   updatedDate: string
@@ -100,11 +105,9 @@ export interface Patron {
   name: string
   barcode: string
   expirationDate: string
-  primaryEmail: string
   emails: string[]
-  homeLibrary: string
-  primaryPhone: string
-  phones: { number: string; type: string }[]
+  homeLibrary: SierraCodeName
+  phones: Phone[]
   id: number
 }
 

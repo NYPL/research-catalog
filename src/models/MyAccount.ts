@@ -217,11 +217,9 @@ export default class MyAccount {
         name: patron.names[0],
         barcode: patron.barcodes[0],
         expirationDate: patron.expirationDate,
-        primaryEmail: patron.emails?.length > 0 ? patron.emails[0] : "",
         emails: patron.emails || [],
-        primaryPhone: patron.phones?.length > 0 ? patron.phones[0].number : "",
         phones: patron.phones || [],
-        homeLibrary: patron.homeLibrary?.name ? patron.homeLibrary.name : "",
+        homeLibrary: patron.homeLibrary || [],
         id: patron.id,
       }
     } catch (e) {

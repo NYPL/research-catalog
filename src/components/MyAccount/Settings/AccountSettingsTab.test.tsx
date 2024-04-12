@@ -33,6 +33,7 @@ describe("AccountSettingsTab", () => {
       "Pin/Password",
     ].forEach((patronInfo) => {
       const element = screen.queryByText(patronInfo)
+      console.log(myAccountPatron)
       if (patronInfo === "Email" || patronInfo === "Phone") {
         expect(element).not.toBeInTheDocument()
       } else expect(element).toBeInTheDocument()

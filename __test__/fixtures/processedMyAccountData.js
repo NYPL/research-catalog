@@ -3,16 +3,14 @@ export const mockPatron = {
   name: "NONNA, STREGA",
   barcode: "23333121538324",
   expirationDate: "2025-03-28",
-  primaryEmail: "streganonna@gmail.com",
   emails: ["streganonna@gmail.com", "spaghettigrandma@gmail.com"],
-  primaryPhone: "123-456-7890",
   phones: [
     {
       number: "123-456-7890",
       type: "t",
     },
   ],
-  homeLibrary: "Stavros Niarchos Foundation Library (SNFL)",
+  homeLibrary: { name: "Stavros Niarchos Foundation Library (SNFL)", code: "sn   " },
   id: 2772226,
 }
 
@@ -20,11 +18,9 @@ export const emptyPatron = {
   name: "NONNA, STREGA",
   barcode: "23333121538324",
   expirationDate: "2025-03-28",
-  primaryEmail: "",
   emails: [],
-  primaryPhone: "",
   phones: [],
-  homeLibrary: "Stavros Niarchos Foundation Library (SNFL)",
+  homeLibrary: { name: "Stavros Niarchos Foundation Library (SNFL)", code: "sn   " },
   id: 2772226,
   notificationPreference: null,
 }

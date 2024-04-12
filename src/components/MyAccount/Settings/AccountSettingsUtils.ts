@@ -1,8 +1,7 @@
 import type { IconNames } from "@nypl/design-system-react-components"
-import type { Patron } from "../../../types/myAccountTypes"
+import type { Patron, SierraCodeName } from "../../../types/myAccountTypes"
 import { notificationPreferenceMap } from "../../../utils/myAccountData"
 import { filteredPickupLocations } from "../../../../__test__/fixtures/processedMyAccountData"
-import MyAccount from "../../../models/MyAccount"
 
 type PutRequestPayloadType = {
   emails?: string[]
@@ -21,14 +20,16 @@ type PhoneOrEmail = string | Phone
 
 export const accountSettings = [
   {
-    field: "primaryPhone",
+    field: "phones",
     icon: "communicationCall",
     term: "Phone",
+    description: (value: Phone[]) => value[0]?.number,
   },
   {
-    field: "primaryEmail",
+    field: "emails",
     icon: "communicationEmail",
     term: "Email",
+    description: (value: string[]) => value[0],
   },
   {
     field: "notificationPreference",
@@ -39,18 +40,19 @@ export const accountSettings = [
     field: "homeLibrary",
     icon: "actionHome",
     term: "Home library",
+    description: (value: SierraCodeName) => value?.name,
   },
   {
     field: "pin",
     icon: "actionLockClosed",
     term: "Pin/Password",
-    description: "****",
+    description: (_) => "****",
   },
 ] as {
   field: string
   icon: IconNames
   term: string
-  description: string | JSX.Element
+  description?: any
 }[]
 
 export const updateArrayValue = (
@@ -69,14 +71,14 @@ export const updateArrayValue = (
  */
 export const parsePayload = (formSubmissionBody, settingsData: Patron) => {
   return accountSettings.reduce((putRequestPayload, setting) => {
-    const fieldValue = formSubmissionBody[setting.field]?.value
     const field = setting.field
+    const fieldValue = formSubmissionBody[field]?.value
     if (fieldValue?.length < 1) return putRequestPayload
     switch (field) {
       case "pin":
         // pin is handled in a separate dialog
         break
-      case "primaryEmail":
+      case "emails":
         putRequestPayload["emails"] = updateArrayValue(
           fieldValue,
           settingsData.emails
@@ -84,7 +86,7 @@ export const parsePayload = (formSubmissionBody, settingsData: Patron) => {
         break
       // TODO: right now we are assuming that all phones are mobile phones.
       // follow on ticket outlines two different inputs
-      case "primaryPhone":
+      case "phones":
         putRequestPayload["phones"] = updateArrayValue(
           { number: fieldValue, type: "t" },
           settingsData.phones
@@ -113,9 +115,7 @@ export const updatePatronData = (
   newData.notificationPreference =
     notificationPreferenceMap[patronUpdateBody.fixedFields[268].value]
   newData.emails = patronUpdateBody.emails
-  newData.primaryEmail = patronUpdateBody.emails[0]
   newData.phones = patronUpdateBody.phones
-  newData.primaryPhone = patronUpdateBody.phones[0].number
   newData.homeLibrary = filteredPickupLocations[patronUpdateBody.homeLibrary]
   return newData
 }

@@ -15,11 +15,14 @@ export const AccountSettingsDisplay = ({ patron }: { patron: Patron }) => {
     <>
       {accountSettings
         .map((setting) => {
+          const description = setting.description
+            ? setting.description(patron[setting.field])
+            : patron[setting.field]
           return {
             icon: setting.icon,
             term: setting.term,
             // pin is masked so description is a default "****"
-            description: patron[setting.field] || setting.description,
+            description,
           }
         })
         .filter((listData) => !!listData.description)
@@ -46,7 +49,9 @@ export const AccountSettingsForm = ({ patron }: { patron: Patron }) => {
               labelText="Update home library"
               showLabel={false}
             >
-              <option>{patron.homeLibrary}</option>
+              <option value={patron.homeLibrary.code}>
+                {patron.homeLibrary.name}
+              </option>
             </Select>
           )
           break
@@ -70,7 +75,7 @@ export const AccountSettingsForm = ({ patron }: { patron: Patron }) => {
           inputField = (
             <TextInput
               name={setting.field}
-              defaultValue={patron.primaryPhone}
+              defaultValue={patron.phones[0]?.number}
               id="phone-text-input"
               labelText="Update phone number"
               showLabel={false}
@@ -81,7 +86,7 @@ export const AccountSettingsForm = ({ patron }: { patron: Patron }) => {
           inputField = (
             <TextInput
               name={setting.field}
-              defaultValue={patron.primaryEmail}
+              defaultValue={patron.emails[0]}
               id="email-text-input"
               labelText="Update email"
               showLabel={false}

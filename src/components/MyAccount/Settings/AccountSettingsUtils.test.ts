@@ -6,8 +6,8 @@ describe("Account settings utils", () => {
     it.todo("does not submit empty form inputs")
     it("submits inputs with values", () => {
       const eventTarget = {
-        primaryEmail: { value: "fusili@gmail.com" },
-        primaryPhone: { value: "666" },
+        emails: { value: "fusili@gmail.com" },
+        phones: { value: "666" },
         homeLibrary: { value: "xx   " },
         notificationPreference: { value: "z" },
       }
