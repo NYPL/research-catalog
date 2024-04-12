@@ -36,13 +36,14 @@ export const accountSettings = [
 }[]
 
 type PhoneOrEmail = string | { number: string; type: string }
-const updateArrayValue = (
+export const updateArrayValue = (
   newPrimary: PhoneOrEmail,
   currentValues: PhoneOrEmail[]
 ) => {
-  const removedNewPrimaryIfPresent = currentValues.filter(
-    (val) => val !== newPrimary
-  )
+  const removedNewPrimaryIfPresent = currentValues.filter((val) => {
+    if (val["type"]) return val["number"] !== newPrimary["number"]
+    return val !== newPrimary
+  })
   return [newPrimary, ...removedNewPrimaryIfPresent]
 }
 /** Parses the account settings form submission event target and turns it into
