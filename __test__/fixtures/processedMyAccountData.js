@@ -411,5 +411,5 @@ export const filteredPickupLocations = [
   {
     code: "yv   ",
     name: "Yorkville",
-  }
+  },
 ]

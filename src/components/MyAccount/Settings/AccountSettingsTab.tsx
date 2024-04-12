@@ -7,7 +7,7 @@ import {
   AccountSettingsForm,
   AccountSettingsDisplay,
 } from "./AccountSettingsDisplayOptions"
-import { accountSettings } from "./AccountSettingsUtils"
+import { parsePayload } from "./AccountSettingsUtils"
 
 const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
   const [currentlyEditing, setCurrentlyEditing] = useState(false)
@@ -16,38 +16,12 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
   ) : (
     <AccountSettingsDisplay patron={{ emails: [], ...settingsData }} />
   )
-  const updateArrayValue = (newPrimary: string, currentValues: string[]) => {
-    const removedNewPrimaryIfPresent = currentValues.filter(
-      (val) => val !== newPrimary
-    )
-    return [newPrimary, ...removedNewPrimaryIfPresent]
-  }
+
   const submitAccountSettings = (e) => {
     e.preventDefault()
-    const payload = accountSettings.reduce((putRequestPayload, setting) => {
-      const fieldValue = e.target[setting.field]?.value
-      const field = setting.field
-      console.log({ field, fieldValue })
-      switch (field) {
-        case "pin":
-          // pin is handled in a separate dialog
-          break
-        case "email":
-          putRequestPayload[field] = updateArrayValue(
-            fieldValue,
-            settingsData.emails
-          )
-          break
-        // TODO: need input from product about phone type
-        //case "phone"
-        case "notificationPreference":
-        case "homeLibrary":
-          putRequestPayload[field] = fieldValue
-      }
-      return putRequestPayload
-    }, {})
-    console.log(payload)
+    parsePayload(e.target, settingsData)
   }
+
   return (
     <Box className={styles.accountSettingsTab}>
       <Form

@@ -40,6 +40,7 @@ const AccountSettingsButtons = ({
       </Button>
       <Button
         id="account-settings-update-button"
+        // the click handler for this button is the onSubmit in AccountSettingsTab
         type="submit"
         buttonType="primary"
       >
