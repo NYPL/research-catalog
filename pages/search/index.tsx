@@ -172,7 +172,7 @@ export default function Search({
                   // Heading component does not expect tabIndex prop, so we
                   // are ignoring the typescript error that pops up.
                   // @ts-expect-error
-                  tabIndex="0"
+                  tabIndex={-1}
                   mb="xl"
                   size="heading4"
                   ref={searchResultsHeadingRef}
