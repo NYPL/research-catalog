@@ -21,7 +21,7 @@ interface LayoutProps {
   sidebarPosition?: "right" | "left"
   bannerNotification?: string
   isAuthenticated?: boolean
-  searchForm?: ReactElement
+  searchFormWithRefineResults?: ReactElement
 }
 
 /**
@@ -29,7 +29,7 @@ interface LayoutProps {
  * controls the rendering of Research Catalog header components per-page.
  */
 const Layout = ({
-  searchForm,
+  searchFormWithRefineResults,
   children,
   isAuthenticated,
   sidebar,
@@ -40,6 +40,9 @@ const Layout = ({
   const showSearch = activePage === "search"
   const showHeader = activePage !== "404"
   const showNotification = activePage === "" || activePage === "search"
+  // if the search page is rendering the layout, it will pass a search form
+  // with a refine search button. otherwise, a plain search form is fine
+  const searchForm = searchFormWithRefineResults || <SearchForm />
 
   return (
     <DSProvider>
