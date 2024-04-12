@@ -8,7 +8,7 @@ import {
   Icon,
 } from "@nypl/design-system-react-components"
 import type { Dispatch, SyntheticEvent } from "react"
-import { useState, useCallback, useRef } from "react"
+import { useState, useCallback, useRef, useEffect } from "react"
 import { useRouter } from "next/router"
 import DateForm from "../SearchFilters/DateForm"
 import { useDateForm } from "../../hooks/useDateForm"
@@ -97,24 +97,26 @@ const RefineSearch = ({
       pathname: "/search",
       query: updatedQuery,
     })
-    // refine search dialog closes after url is pushed
     toggleRefine()
   }
 
+  // the two buttons can share a ref because they are never rendered at the same
+  // time.
+  const refineOrCancelRef = useRef(null)
+
   const [refineSearchClosed, setRefineSearchClosed] = useState(true)
+
+  // focus has to happen after refineSearchClosed updates in order for the
+  // element we want to focus on to be present in the dom.
+  useEffect(() => {
+    refineOrCancelRef.current.focus()
+  }, [refineSearchClosed])
 
   // runs when refine search button is clicked to open and close the dialog
   const toggleRefine = useCallback(() => {
-    setRefineSearchClosed((prevRefineSearchClosed) => {
-      // if refine search is open (and this toggle is going to close it)
-      if (!prevRefineSearchClosed) {
-        // reset filters to the values from the url (removing those that were
-        // clicked on but left unapplied)
-        setAppliedFilters(collapseMultiValueQueryParams(router.query))
-      }
-      return !prevRefineSearchClosed
-    })
-  }, [router.query, setAppliedFilters, setRefineSearchClosed])
+    setRefineSearchClosed((closed) => !closed)
+    setAppliedFilters(collapseMultiValueQueryParams(router.query))
+  }, [setRefineSearchClosed, setAppliedFilters, router.query])
 
   const handleClear = () => {
     // remove applied filters from state
@@ -132,6 +134,7 @@ const RefineSearch = ({
     <Box className={styles.refineSearchContainer}>
       {refineSearchClosed ? (
         <Button
+          ref={refineOrCancelRef}
           className={styles.refineSearchButton}
           onClick={toggleRefine}
           id="refine-search"
@@ -151,6 +154,7 @@ const RefineSearch = ({
               onClick={toggleRefine}
               id="cancel-refine"
               buttonType="secondary"
+              ref={refineOrCancelRef}
             >
               <Icon name="close" size="large" align="left" />
               Cancel
