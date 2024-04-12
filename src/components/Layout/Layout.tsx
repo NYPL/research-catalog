@@ -41,7 +41,8 @@ const Layout = ({
   const showHeader = activePage !== "404"
   const showNotification = activePage === "" || activePage === "search"
   // if the search page is rendering the layout, it will pass a search form
-  // with a refine search button. otherwise, a plain search form is fine
+  // with a refine search button. otherwise, a plain search form will do.
+  console.log({ searchFormWithRefineResults })
   const searchForm = searchFormWithRefineResults || <SearchForm />
 
   return (

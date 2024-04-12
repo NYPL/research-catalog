@@ -6,7 +6,7 @@ import {
   Select,
   SkeletonLoader,
 } from "@nypl/design-system-react-components"
-import { useEffect, useRef, useState, type ChangeEvent } from "react"
+import { useEffect, useRef, type ChangeEvent } from "react"
 import { useRouter } from "next/router"
 import { parse } from "qs"
 
@@ -120,7 +120,7 @@ export default function Search({
         <title key="main-title">{metadataTitle}</title>
       </Head>
       <Layout
-        searchForm={searchForm}
+        searchFormWithRefineResults={searchForm}
         isAuthenticated={isAuthenticated}
         activePage="search"
         bannerNotification={bannerNotification}
