@@ -106,7 +106,6 @@ export default function Search({
     searchResultsHeadingRef?.current?.focus()
   }, [isLoading, isFreshSortByQuery])
 
-  const searchForm = <SearchForm aggregations={aggs} />
   return (
     <>
       <Head>
@@ -120,7 +119,7 @@ export default function Search({
         <title key="main-title">{metadataTitle}</title>
       </Head>
       <Layout
-        searchFormWithRefineResults={searchForm}
+        searchAggregations={aggs}
         isAuthenticated={isAuthenticated}
         activePage="search"
         bannerNotification={bannerNotification}

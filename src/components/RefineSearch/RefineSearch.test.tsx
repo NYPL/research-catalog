@@ -36,10 +36,6 @@ const clear = async () => {
 }
 
 describe("RefineSearch", () => {
-  describe("focus", () => {
-    it.todo("clicking on Refine Results focuses on Cancel button")
-    it.todo("clicking on Cancel focuses on Refine Results button")
-  })
   describe("with dates in url query params", () => {
     it("can populate date fields from url", async () => {
       try {

@@ -14,6 +14,7 @@ import SearchForm from "../SearchForm/SearchForm"
 import { BASE_URL } from "../../config/constants"
 import Notification from "../Notification/Notification"
 import FeedbackForm from "../FeedbackForm/FeedbackForm"
+import type { Aggregation } from "../../types/filterTypes"
 
 interface LayoutProps {
   sidebar?: ReactElement
@@ -21,7 +22,7 @@ interface LayoutProps {
   sidebarPosition?: "right" | "left"
   bannerNotification?: string
   isAuthenticated?: boolean
-  searchFormWithRefineResults?: ReactElement
+  searchAggregations?: Aggregation[]
 }
 
 /**
@@ -29,7 +30,7 @@ interface LayoutProps {
  * controls the rendering of Research Catalog header components per-page.
  */
 const Layout = ({
-  searchFormWithRefineResults,
+  searchAggregations,
   children,
   isAuthenticated,
   sidebar,
@@ -40,10 +41,6 @@ const Layout = ({
   const showSearch = activePage === "search"
   const showHeader = activePage !== "404"
   const showNotification = activePage === "" || activePage === "search"
-  // if the search page is rendering the layout, it will pass a search form
-  // with a refine search button. otherwise, a plain search form will do.
-  console.log({ searchFormWithRefineResults })
-  const searchForm = searchFormWithRefineResults || <SearchForm />
 
   return (
     <DSProvider>
@@ -76,7 +73,7 @@ const Layout = ({
                   isAuthenticated={isAuthenticated}
                   activePage={activePage}
                 />
-                {showSearch && searchForm}
+                {showSearch && <SearchForm aggregations={searchAggregations} />}
               </div>
               {showNotification && bannerNotification && (
                 <Notification notification={bannerNotification} />

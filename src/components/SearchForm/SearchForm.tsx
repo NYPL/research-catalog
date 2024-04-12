@@ -58,7 +58,7 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
   const displayRefineResults = !!aggregations?.filter(
     (agg: Aggregation) => agg.values.length
   ).length
-
+  console.log(displayRefineResults)
   useEffect(() => {
     setAppliedFilters(collapseMultiValueQueryParams(router.query))
   }, [router.query])
