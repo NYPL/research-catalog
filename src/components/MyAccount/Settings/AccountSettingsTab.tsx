@@ -1,4 +1,10 @@
-import { Box, Form, List, Spacer } from "@nypl/design-system-react-components"
+import {
+  Box,
+  Form,
+  List,
+  Spacer,
+  useModal,
+} from "@nypl/design-system-react-components"
 import { useState } from "react"
 import type { Patron } from "../../../types/myAccountTypes"
 import styles from "../../../../styles/components/MyAccount.module.scss"
@@ -7,23 +13,57 @@ import {
   AccountSettingsForm,
   AccountSettingsDisplay,
 } from "./AccountSettingsDisplayOptions"
-import { parsePayload } from "./AccountSettingsUtils"
+import {
+  successModalProps,
+  failureModalProps,
+} from "./AccountSettingsFeedbackModalProps"
+import { parsePayload, updatePatronData } from "./AccountSettingsUtils"
+import { BASE_URL } from "../../../config/constants"
 
 const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
   const [currentlyEditing, setCurrentlyEditing] = useState(false)
+  const [mostRecentPatronData, setMostRecentPatronData] = useState(settingsData)
+  const [modalProps, setModalProps] = useState(null)
   const listElements = currentlyEditing ? (
-    <AccountSettingsForm patron={settingsData} />
+    <AccountSettingsForm patron={mostRecentPatronData} />
   ) : (
-    <AccountSettingsDisplay patron={{ emails: [], ...settingsData }} />
+    <AccountSettingsDisplay patron={{ emails: [], ...mostRecentPatronData }} />
   )
+  const { onOpen: openModal, Modal } = useModal()
 
-  const submitAccountSettings = (e) => {
+  const submitAccountSettings = async (e) => {
     e.preventDefault()
-    parsePayload(e.target, settingsData)
+    const payload = parsePayload(e.target, mostRecentPatronData)
+    try {
+      const response = await fetch(
+        `${BASE_URL}/api/account/settings/${mostRecentPatronData.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        }
+      )
+      const responseData = await response.json()
+      if (response.ok) {
+        setMostRecentPatronData(updatePatronData(mostRecentPatronData, payload))
+        setCurrentlyEditing(false)
+        setModalProps(successModalProps)
+        openModal()
+      } else {
+        alert(`error: ${responseData}`)
+        setModalProps(failureModalProps)
+        openModal()
+      }
+    } catch (error) {
+      alert("fetching error")
+    }
   }
 
   return (
     <Box className={styles.accountSettingsTab}>
+      {modalProps && <Modal {...modalProps} />}
       <Form
         id="account-settings-container"
         onSubmit={(e) => submitAccountSettings(e)}
