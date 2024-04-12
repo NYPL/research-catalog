@@ -38,7 +38,7 @@ const ElectronicResourcesLink = ({
           href={`${BASE_URL}${bibUrl}#electronic-resources`}
           type="standalone"
           fontSize="desktop.body.body2"
-          fontWeight="bold"
+          fontWeight="medium"
           isUnderlined={false}
         >
           View all available online resources

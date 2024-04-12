@@ -20,9 +20,10 @@ interface DRBCardProps {
  */
 const DRBCard = ({ drbResult }: DRBCardProps) => {
   if (!drbResult) return null
+  console.log(drbResult.readOnlineUrl)
 
   return (
-    <Card backgroundColor="white" p="s" borderRadius="5px">
+    <Card backgroundColor="ui.white" p="s" borderRadius="5px">
       <CardContent>
         <DSLink
           href={drbResult.url}
@@ -37,7 +38,7 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
         </DSLink>
 
         {drbResult?.authors.length > 0 ? (
-          <Text size="body2" mb="m">
+          <Text size="body2" mb="s">
             <Box as="span" fontSize="desktop.body.body2" fontWeight="medium">
               By
             </Box>{" "}
@@ -62,7 +63,7 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
             href={drbResult.readOnlineUrl}
             target="_blank"
             type="buttonSecondary"
-            mb={drbResult.downloadLink ? "s" : ""}
+            mt="xs"
             isUnderlined={false}
           >
             Read Online
@@ -76,6 +77,7 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
             type="buttonSecondary"
             isUnderlined={false}
             fontSize="desktop.body.body2"
+            mt="xs"
           >
             <>
               <Icon name="download" align="left" size="small" />

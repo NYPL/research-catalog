@@ -34,7 +34,7 @@ const DRBContainer = ({
 
   return (
     <Card backgroundColor="ui.bg.default" p="s" borderRadius="5px">
-      <CardHeading level="h6">
+      <CardHeading size="h6">
         Results from Digital Research Books Beta
       </CardHeading>
       <CardContent>
