@@ -11,15 +11,13 @@ import {
   addLabelPropAndParseFilters,
   collapseMultiValueQueryParams,
 } from "../../utils/refineSearchUtils"
-import { useContext } from "react"
-import { SearchResultsAggregationsContext } from "../../context/SearchResultsAggregationsContext"
 import {
   buildTagsetData,
   buildAppliedFiltersValueArrayWithTagRemoved,
 } from "./appliedFilterUtils"
+import type { Aggregation } from "../../types/filterTypes"
 
-const AppliedFilters = () => {
-  const aggregations = useContext(SearchResultsAggregationsContext)
+const AppliedFilters = ({ aggregations }: { aggregations: Aggregation[] }) => {
   const router = useRouter()
   const appliedFilters = collapseMultiValueQueryParams(router.query)
   const appliedFiltersWithLabels = addLabelPropAndParseFilters(

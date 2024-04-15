@@ -44,14 +44,20 @@ const SearchResult = ({ bib }: SearchResultProps) => {
     <Card
       sx={{
         borderBottom: "1px solid var(--nypl-colors-ui-border-default)",
-        paddingBottom: "m",
+        paddingBottom: "l",
       }}
     >
-      <CardHeading level="h3" size="heading4">
-        <RCLink href={`${BASE_URL}${PATHS.BIB}/${bib.id}`}>{bib.title}</RCLink>
+      <CardHeading
+        level="h3"
+        size="heading5"
+        url={`${BASE_URL}${PATHS.BIB}/${bib.id}`}
+      >
+        {bib.title}
       </CardHeading>
       <CardContent>
-        <Box sx={{ p: { display: "inline", marginRight: "s" } }}>
+        <Box
+          sx={{ p: { display: "inline", marginRight: "s", marginBottom: "s" } }}
+        >
           {bib.materialType && <Text>{bib.materialType}</Text>}
           {bib.publicationStatement && <Text>{bib.publicationStatement}</Text>}
           {bib.yearPublished && <Text>{bib.yearPublished}</Text>}

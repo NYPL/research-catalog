@@ -114,6 +114,7 @@ const RenewButton = ({
         id={`renew-${checkout.id}`}
         onClick={handleClick}
         isDisabled={isButtonDisabled}
+        aria-disabled={isButtonDisabled}
       >
         Renew
       </Button>

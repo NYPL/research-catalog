@@ -2,6 +2,7 @@ import {
   FormField,
   CheckboxGroup,
   Checkbox,
+  useNYPLBreakpoints,
 } from "@nypl/design-system-react-components"
 import type { Dispatch } from "react"
 
@@ -48,6 +49,10 @@ const RefineSearchCheckBoxField = ({
     )
   })
 
+  const { isLargerThanMobile } = useNYPLBreakpoints()
+
+  const gridWidth = isLargerThanMobile ? 4 : 2
+
   return (
     <FormField>
       <CheckboxGroup
@@ -58,7 +63,7 @@ const RefineSearchCheckBoxField = ({
           "> div": {
             display: "grid",
             //TODO: make the number here dynamic to breakpoint
-            gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
+            gridTemplateColumns: `repeat(${gridWidth}, minmax(0, 1fr))`,
             gridGap: "var(--nypl-space-s)",
             div: {
               marginTop: "0 !important",

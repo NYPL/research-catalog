@@ -1,8 +1,4 @@
-import {
-  Box,
-  Heading,
-  Link as DSLink,
-} from "@nypl/design-system-react-components"
+import { Box, Text, Link as DSLink } from "@nypl/design-system-react-components"
 
 import RCLink from "../RCLink/RCLink"
 import { BASE_URL } from "../../config/constants"
@@ -21,15 +17,19 @@ const ElectronicResourcesLink = ({
   electronicResources,
 }: ElectronicResourcesLinkProps) => {
   return (
-    <Box>
-      <Heading level="four" size="callout" mb="xxs">
+    <Box mt="s" mb="s">
+      <Text mb="xxs" fontSize="desktop.body.body1" fontWeight="bold">
         Available Online
-      </Heading>
+      </Text>
       {electronicResources.length === 1 ? (
         <DSLink
           href={electronicResources[0].url}
           target="_blank"
           rel="noreferrer"
+          type="standalone"
+          fontSize="desktop.body.body2"
+          fontWeight="bold"
+          isUnderlined={false}
         >
           {electronicResources[0].prefLabel || electronicResources[0].url}
         </DSLink>
@@ -37,8 +37,11 @@ const ElectronicResourcesLink = ({
         <RCLink
           href={`${BASE_URL}${bibUrl}#electronic-resources`}
           type="standalone"
+          fontSize="desktop.body.body2"
+          fontWeight="medium"
+          isUnderlined={false}
         >
-          See All Available Online Resources
+          View all available online resources
         </RCLink>
       )}
     </Box>
