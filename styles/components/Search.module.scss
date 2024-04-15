@@ -28,6 +28,11 @@
 .advancedSearch {
   align-self: flex-start;
   min-width: 127px;
+  line-height: 1;
+
+  @media screen and (min-width: 600px) {
+    margin-top: -8px;
+  }
 }
 
 .refineButtons {
