@@ -15,11 +15,6 @@ const FeesBanner = () => {
             Postal money order, personal check, or{" "}
             <Link
               href={`${appConfig.urls.circulatingCatalog}?openAccount=fines-and-fees`}
-              sx={{
-                color: "ui.link.primary !important",
-                textDecoration: "underline",
-                _hover: { color: "ui.link.secondary !important" },
-              }}
             >
               {" "}
               online through the Library website
