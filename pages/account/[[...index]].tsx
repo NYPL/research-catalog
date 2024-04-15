@@ -208,7 +208,7 @@ export async function getServerSideProps({ req }) {
 
     /*  Redirecting invalid paths (including /overdues if user has none) and
     // cleaning extra parts off valid paths. */
-    const allowedPaths = ["checkouts", "requests", "overdues", "settings"]
+    const allowedPaths = ["items", "requests", "overdues", "settings"]
     if (
       !allowedPaths.some((path) => tabsPath.startsWith(path)) ||
       (tabsPath === "overdues" && fines.total === 0)
