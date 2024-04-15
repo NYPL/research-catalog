@@ -139,6 +139,7 @@ const RefineSearch = ({
           id="refine-search"
           buttonType="secondary"
           backgroundColor="ui.white"
+          className={styles.refineSearchButton}
         >
           Refine Search
         </Button>

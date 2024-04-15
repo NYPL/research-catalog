@@ -23,11 +23,23 @@
   justify-content: space-between;
   margin-top: var(--nypl-space-s);
   margin-bottom: var(--nypl-space-s);
+
+  @media screen and (min-width: 600px) {
+    margin-top: var(--nypl-space-xs);
+  }
 }
 
 .advancedSearch {
   align-self: flex-start;
   min-width: 127px;
+  line-height: 1;
+  margin-left: auto;
+}
+
+.refineSearchButton {
+  @media screen and (min-width: 600px) {
+    margin-top: var(--nypl-space-xs);
+  }
 }
 
 .refineButtons {
