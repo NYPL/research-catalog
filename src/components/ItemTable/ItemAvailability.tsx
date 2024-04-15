@@ -87,7 +87,12 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
         <Button
           id="contact-librarian"
           buttonType="link"
-          sx={{ display: "inline", fontWeight: "inherit", fontSize: "inherit" }}
+          sx={{
+            display: "inline",
+            fontWeight: "inherit",
+            fontSize: "inherit",
+            p: 0,
+          }}
           onClick={() =>
             onContact({
               id: item.id,
