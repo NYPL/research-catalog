@@ -25,12 +25,7 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
 
   return (
     <Card backgroundColor="ui.white" p="s" borderRadius="5px">
-      <CardHeading
-        level="h3"
-        size="heading6"
-        mb="0"
-        sx={{ a: { textDecoration: "none" } }}
-      >
+      <CardHeading level="h3" size="heading6" mb="0">
         <DSLink
           href={drbResult.url}
           target="_blank"
