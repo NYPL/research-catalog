@@ -92,6 +92,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
             fontWeight: "inherit",
             fontSize: "inherit",
             p: 0,
+            height: "auto",
           }}
           onClick={() =>
             onContact({
