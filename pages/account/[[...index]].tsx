@@ -194,16 +194,24 @@ export async function getServerSideProps({ req }) {
     }
   }
   // Parsing path from url to pass to ProfileTabs.
-  const tabsPath = req.url.split("/", -1)[2] || null
+  const tabsPath = req.url.split("/").slice(2).join("/") || null
   const id = patronTokenResponse.decodedPatron.sub
   try {
     const { checkouts, holds, patron, fines } = await MyAccountFactory(id)
-    // Redirecting /fines if user has none, or any other paths.
+
+    // Immediately returning base path.
+    if (!tabsPath) {
+      return {
+        props: { checkouts, holds, patron, fines, tabsPath, isAuthenticated },
+      }
+    }
+
+    /*  Redirecting invalid paths (including /overdues if user has none) and
+    // cleaning extra parts off valid paths. */
+    const allowedPaths = ["checkouts", "requests", "overdues", "settings"]
     if (
-      (tabsPath === "overdues" && fines.total === 0) ||
-      ["checkouts", "requests", "overdues", "settings", null].indexOf(
-        tabsPath
-      ) <= 0
+      !allowedPaths.some((path) => tabsPath.startsWith(path)) ||
+      (tabsPath === "overdues" && fines.total === 0)
     ) {
       return {
         redirect: {
@@ -211,7 +219,17 @@ export async function getServerSideProps({ req }) {
           permanent: false,
         },
       }
+    } else {
+      const matchedPath = allowedPaths.find((path) => tabsPath.startsWith(path))
+      if (tabsPath != matchedPath)
+        return {
+          redirect: {
+            destination: "/account/" + matchedPath,
+            permanent: false,
+          },
+        }
     }
+
     return {
       props: { checkouts, holds, patron, fines, tabsPath, isAuthenticated },
     }

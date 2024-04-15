@@ -76,6 +76,30 @@ describe("MyAccount page", () => {
     })
   })
 
+  it("corrects invalid path to correct path, ex. /account/settings", async () => {
+    ;(MyAccountFactory as jest.Mock).mockResolvedValueOnce({
+      checkouts: mockCheckouts,
+      patron: mockPatron,
+      fines: mockFines,
+      holds: mockHolds,
+    })
+
+    const mockReq = {
+      headers: {
+        host: "local.nypl.org:8080",
+      },
+      url: "/account/settings/spaghetti",
+      cookies: {
+        nyplIdentityPatron: '{"access_token":123}',
+      },
+    }
+
+    const result = await getServerSideProps({ req: mockReq })
+    expect(result).toStrictEqual({
+      redirect: { destination: "/account/settings", permanent: false },
+    })
+  })
+
   it("allows valid path to /account/settings", async () => {
     ;(MyAccountFactory as jest.Mock).mockResolvedValueOnce({
       checkouts: mockCheckouts,
@@ -96,5 +120,27 @@ describe("MyAccount page", () => {
 
     const result = await getServerSideProps({ req: mockReq })
     expect(result.props.tabsPath).toBe("settings")
+  })
+
+  it("allows valid path to /account/overdues", async () => {
+    ;(MyAccountFactory as jest.Mock).mockResolvedValueOnce({
+      checkouts: mockCheckouts,
+      patron: mockPatron,
+      fines: mockFines,
+      holds: mockHolds,
+    })
+
+    const mockReq = {
+      headers: {
+        host: "local.nypl.org:8080",
+      },
+      url: "/account/overdues",
+      cookies: {
+        nyplIdentityPatron: '{"access_token":123}',
+      },
+    }
+
+    const result = await getServerSideProps({ req: mockReq })
+    expect(result.props.tabsPath).toBe("overdues")
   })
 })

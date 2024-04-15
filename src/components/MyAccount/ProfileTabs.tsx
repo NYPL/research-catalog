@@ -65,8 +65,9 @@ const ProfileTabs = ({
   ]
   const tabsDict =
     fines?.total > 0
-      ? { checkouts: 0, requests: 1, fines: 2, settings: 3 }
+      ? { checkouts: 0, requests: 1, overdues: 2, settings: 3 }
       : { checkouts: 0, requests: 1, settings: 2 }
+
   const router = useRouter()
 
   const updatePath = (newPath) => {
