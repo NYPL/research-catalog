@@ -11,6 +11,7 @@ import {
 import type DRBResult from "../../models/DRBResult"
 import { getAuthorURL } from "../../utils/drbUtils"
 import type { Author, Agent } from "../../types/drbTypes"
+import { textDecoration } from "@chakra-ui/styled-system"
 
 interface DRBCardProps {
   drbResult: DRBResult
@@ -24,7 +25,12 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
 
   return (
     <Card backgroundColor="ui.white" p="s" borderRadius="5px">
-      <CardHeading level="h3" size="heading6" mb="0">
+      <CardHeading
+        level="h3"
+        size="heading6"
+        mb="0"
+        sx={{ a: { textDecoration: "none" } }}
+      >
         <DSLink
           href={drbResult.url}
           target="_blank"
