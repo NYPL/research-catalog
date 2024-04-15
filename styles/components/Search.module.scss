@@ -23,6 +23,10 @@
   justify-content: space-between;
   margin-top: var(--nypl-space-s);
   margin-bottom: var(--nypl-space-s);
+
+  @media screen and (min-width: 600px) {
+    margin-top: var(--nypl-space-xs);
+  }
 }
 
 .advancedSearch {
@@ -30,9 +34,11 @@
   min-width: 127px;
   line-height: 1;
   margin-left: auto;
+}
 
+.refineSearchButton {
   @media screen and (min-width: 600px) {
-    margin-top: -8px;
+    margin-top: var(--nypl-space-xs);
   }
 }
 
