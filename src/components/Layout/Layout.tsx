@@ -75,7 +75,9 @@ const Layout = ({
                 />
                 {showSearch && <SearchForm aggregations={searchAggregations} />}
               </div>
-              {true && <Notification notification={"Sdg"} />}
+              {showNotification && bannerNotification && (
+                <Notification notification={bannerNotification} />
+              )}
             </>
           )
         }
