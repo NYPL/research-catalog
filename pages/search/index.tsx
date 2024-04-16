@@ -173,7 +173,7 @@ export default function Search({
                   // are ignoring the typescript error that pops up.
                   // @ts-expect-error
                   tabIndex={-1}
-                  mb="l"
+                  mb={{ base: "m", md: "l" }}
                   minH="40px"
                   ref={searchResultsHeadingRef}
                 >
