@@ -19,7 +19,8 @@ const ItemTable = ({ itemTableData }: ItemTableProps) => {
         className={styles.itemTable}
         columnHeaders={itemTableData.tableHeadings}
         tableData={itemTableData.tableData}
-        my={{ base: 0, md: "s" }}
+        mt={{ base: 0, md: "s" }}
+        mb={0}
       />
       {!itemTableData.isBibPage && (
         <Box>

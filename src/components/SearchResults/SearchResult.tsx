@@ -66,44 +66,41 @@ const SearchResult = ({ bib }: SearchResultProps) => {
           {bib.yearPublished && <Text>{bib.yearPublished}</Text>}
           <Text>{bib.itemMessage}</Text>
         </Box>
-        {bib.hasElectronicResources && (
-          <ElectronicResourcesLink
-            bibUrl={bib.url}
-            electronicResources={bib.electronicResources}
-          />
-        )}
-        {searchResultItems && (
-          <>
-            <SimpleGrid
-              columns={1}
-              gap="grid.s"
-              mt={bib.hasElectronicResources && "s"}
-            >
+
+        <SimpleGrid columns={1} gap="grid.l">
+          {bib.hasElectronicResources && (
+            <ElectronicResourcesLink
+              bibUrl={bib.url}
+              electronicResources={bib.electronicResources}
+            />
+          )}
+          {searchResultItems && (
+            <>
               {searchResultItems.map((itemTableData) => (
                 <ItemTable
                   itemTableData={itemTableData}
                   key={`search-results-item-${itemTableData.items[0].id}`}
                 />
               ))}
-            </SimpleGrid>
-            {bib.showViewAllItemsLink && (
-              <CardActions>
-                <RCLink
-                  href={`${BASE_URL}${bib.url}#items-table`}
-                  fontSize={{
-                    base: "mobile.body.body2",
-                    md: "desktop.body.body2",
-                  }}
-                  fontWeight="medium"
-                  type="standalone"
-                  mt="m"
-                >
-                  {`View All ${bib.itemMessage} `}
-                </RCLink>
-              </CardActions>
-            )}
-          </>
-        )}
+              {bib.showViewAllItemsLink && (
+                <CardActions>
+                  <RCLink
+                    href={`${BASE_URL}${bib.url}#items-table`}
+                    fontSize={{
+                      base: "mobile.body.body2",
+                      md: "desktop.body.body2",
+                    }}
+                    fontWeight="medium"
+                    type="standalone"
+                    mt="m"
+                  >
+                    {`View All ${bib.itemMessage} `}
+                  </RCLink>
+                </CardActions>
+              )}
+            </>
+          )}
+        </SimpleGrid>
       </CardContent>
     </Card>
   )
