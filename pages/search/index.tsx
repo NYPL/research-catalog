@@ -69,7 +69,7 @@ export default function Search({
   const drbResults = mapWorksToDRBResults(drbWorks)
 
   const isLoading = useLoading()
-  const { isLargerThanLarge: isDesktop } = useNYPLBreakpoints()
+  const { isLargerThanMedium: isDesktop } = useNYPLBreakpoints()
 
   const handlePageChange = async (page: number) => {
     const newQuery = getSearchQuery({ ...searchParams, page })
@@ -160,7 +160,7 @@ export default function Search({
                   // are ignoring the typescript error that pops up.
                   // @ts-expect-error
                   tabIndex={-1}
-                  mb={{ base: "m", md: "l" }}
+                  mb={{ base: "s", md: "l" }}
                   minH="40px"
                   ref={searchResultsHeadingRef}
                 >
