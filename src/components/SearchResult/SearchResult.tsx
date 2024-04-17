@@ -81,7 +81,10 @@ const SearchResult = ({ bib }: SearchResultProps) => {
               <CardActions>
                 <RCLink
                   href={`${BASE_URL}${bib.url}#items-table`}
-                  fontSize="desktop.body.body2"
+                  fontSize={{
+                    base: "mobile.body.body2",
+                    md: "desktop.body.body2",
+                  }}
                   fontWeight="medium"
                   type="standalone"
                   mt="m"
