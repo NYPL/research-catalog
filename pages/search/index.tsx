@@ -12,8 +12,8 @@ import { parse } from "qs"
 
 import Layout from "../../src/components/Layout/Layout"
 import DRBContainer from "../../src/components/DRB/DRBContainer"
-import SearchResult from "../../src/components/SearchResult/SearchResult"
-import SearchResultsSort from "../../src/components/SearchResult/SearchResultsSort"
+import SearchResult from "../../src/components/SearchResults/SearchResult"
+import SearchResultsSort from "../../src/components/SearchResults/SearchResultsSort"
 import AppliedFilters from "../../src/components/SearchFilters/AppliedFilters"
 
 import { fetchResults } from "../../src/server/api/search"
