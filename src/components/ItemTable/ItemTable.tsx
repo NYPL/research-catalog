@@ -14,7 +14,7 @@ interface ItemTableProps {
  */
 const ItemTable = ({ itemTableData }: ItemTableProps) => {
   return (
-    <>
+    <Box>
       <Table
         className={styles.itemTable}
         columnHeaders={itemTableData.tableHeadings}
@@ -28,7 +28,7 @@ const ItemTable = ({ itemTableData }: ItemTableProps) => {
           <ItemAvailability item={itemTableData.items[0]} />
         </Box>
       )}
-    </>
+    </Box>
   )
 }
 
