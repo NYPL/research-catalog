@@ -6,6 +6,7 @@ import {
   Text,
   CardActions,
   useNYPLBreakpoints,
+  SimpleGrid,
 } from "@nypl/design-system-react-components"
 
 import RCLink from "../RCLink/RCLink"
@@ -18,6 +19,8 @@ import {
   ITEMS_PER_SEARCH_RESULT,
   BASE_URL,
 } from "../../config/constants"
+import DRBResult from "../../models/DRBResult"
+import DRBCard from "../DRB/DRBCard"
 
 interface SearchResultProps {
   bib: SearchResultsBib
@@ -71,12 +74,18 @@ const SearchResult = ({ bib }: SearchResultProps) => {
         )}
         {searchResultItems && (
           <>
-            {searchResultItems.map((itemTableData) => (
-              <ItemTable
-                itemTableData={itemTableData}
-                key={`search-results-item-${itemTableData.items[0].id}`}
-              />
-            ))}
+            <SimpleGrid
+              columns={1}
+              gap="grid.s"
+              mt={bib.hasElectronicResources && "s"}
+            >
+              {searchResultItems.map((itemTableData) => (
+                <ItemTable
+                  itemTableData={itemTableData}
+                  key={`search-results-item-${itemTableData.items[0].id}`}
+                />
+              ))}
+            </SimpleGrid>
             {bib.showViewAllItemsLink && (
               <CardActions>
                 <RCLink
