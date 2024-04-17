@@ -12,6 +12,7 @@ import type DRBResult from "../../models/DRBResult"
 import { getAuthorURL } from "../../utils/drbUtils"
 import type { Author, Agent } from "../../types/drbTypes"
 import { textDecoration } from "@chakra-ui/styled-system"
+import { BASE_URL, PATHS } from "../../config/constants"
 
 interface DRBCardProps {
   drbResult: DRBResult
@@ -25,19 +26,19 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
 
   return (
     <Card backgroundColor="ui.white" p="s" borderRadius="5px">
-      <CardHeading level="h3" size="heading6" mb="0">
-        <DSLink
-          href={drbResult.url}
-          target="_blank"
-          isUnderlined={false}
-          fontSize="desktop.subtitle.subtitle2"
-          fontWeight="medium"
-          display="inline-block"
-          mb="xs"
-          lang={drbResult.language !== "en" ? drbResult.language : null}
-        >
-          {drbResult.title}
-        </DSLink>
+      <CardHeading
+        level="h3"
+        size="heading6"
+        mb="xs"
+        url={drbResult.url}
+        fontSize={{
+          base: "mobile.subtitle.subtitle2",
+          md: "desktop.subtitle.subtitle2",
+        }}
+        fontWeight="medium"
+        lang={drbResult.language !== "en" ? drbResult.language : null}
+      >
+        {drbResult.title}
       </CardHeading>
       <CardContent>
         {drbResult?.authors?.length > 0 ? (
