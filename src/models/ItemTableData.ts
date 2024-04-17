@@ -38,7 +38,7 @@ export default class ItemTableData {
       "Format",
       "Call Number",
       ...(this.showAccessColumn() ? ["Access"] : []),
-      "Item Location",
+      ...(this.showLocationColumn() ? ["Item Location"] : []),
     ]
   }
 
@@ -50,7 +50,7 @@ export default class ItemTableData {
         item.format,
         item.callNumber,
         ...(this.showAccessColumn() ? [item.accessMessage] : []),
-        item.location.prefLabel,
+        ...(this.showLocationColumn() ? [item.location.prefLabel] : []),
       ]
     })
   }
@@ -65,6 +65,10 @@ export default class ItemTableData {
 
   showAccessColumn(): boolean {
     return this.isBibPage && this.isDesktop
+  }
+
+  showLocationColumn(): boolean {
+    return this.isDesktop
   }
 
   volumeColumnHeading(): string {
