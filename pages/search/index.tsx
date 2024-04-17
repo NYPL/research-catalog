@@ -4,7 +4,6 @@ import {
   SimpleGrid,
   Pagination,
   SkeletonLoader,
-  useNYPLBreakpoints,
 } from "@nypl/design-system-react-components"
 import { useEffect, useRef, type ChangeEvent } from "react"
 import { useRouter } from "next/router"
@@ -69,7 +68,6 @@ export default function Search({
   const drbResults = mapWorksToDRBResults(drbWorks)
 
   const isLoading = useLoading()
-  const { isLargerThanMedium: isDesktop } = useNYPLBreakpoints()
 
   const handlePageChange = async (page: number) => {
     const newQuery = getSearchQuery({ ...searchParams, page })
@@ -124,13 +122,13 @@ export default function Search({
         bannerNotification={bannerNotification}
         sidebar={
           <>
-            {isDesktop && (
-              <SearchResultsSort
-                pageHasResults={totalResults > 0}
-                searchParams={searchParams}
-                handleSortChange={handleSortChange}
-              />
-            )}
+            <SearchResultsSort
+              id="search-results-sort"
+              pageHasResults={totalResults > 0}
+              searchParams={searchParams}
+              handleSortChange={handleSortChange}
+              mobileOnly={false}
+            />
             {isLoading ? (
               <SkeletonLoader showImage={false} />
             ) : drbResponse?.totalWorks > 0 ? (
@@ -166,13 +164,13 @@ export default function Search({
                 >
                   {getSearchResultsHeading(searchParams, totalResults)}
                 </Heading>
-                {!isDesktop && (
-                  <SearchResultsSort
-                    pageHasResults={totalResults > 0}
-                    searchParams={searchParams}
-                    handleSortChange={handleSortChange}
-                  />
-                )}
+                <SearchResultsSort
+                  id="search-results-sort-mobile"
+                  pageHasResults={totalResults > 0}
+                  searchParams={searchParams}
+                  handleSortChange={handleSortChange}
+                  mobileOnly={true}
+                />
                 <SimpleGrid columns={1} gap="grid.l">
                   {searchResultBibs.map((bib: SearchResultsBib) => {
                     return <SearchResult key={bib.id} bib={bib} />
