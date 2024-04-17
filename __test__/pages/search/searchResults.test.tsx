@@ -62,7 +62,7 @@ describe("Search Results page", () => {
           results={{ results, aggregations: aggregationsResults }}
         />
       )
-      const selector = screen.getByLabelText("Sort by")
+      const selector = screen.getAllByLabelText("Sort by")[0]
       await userEvent.selectOptions(selector, "Title (A - Z)")
       expect(selector).toHaveFocus()
     })
@@ -104,7 +104,7 @@ describe("Search Results page", () => {
           results={{ results, aggregations: aggregationsResults }}
         />
       )
-      const selector = screen.getByLabelText("Sort by")
+      const selector = screen.getAllByLabelText("Sort by")[0]
       await userEvent.selectOptions(selector, "Title (A - Z)")
       await userEvent.selectOptions(selector, "Title (Z - A)")
       expect(selector).toHaveFocus
@@ -153,7 +153,7 @@ describe("Search Results page", () => {
           results={{ results }}
         />
       )
-      const sortSelect = screen.getByLabelText("Sort by")
+      const sortSelect = screen.getAllByLabelText("Sort by")[0]
       expect(sortSelect).toHaveValue("relevance")
       await userEvent.selectOptions(sortSelect, "Title (A - Z)")
       expect(sortSelect).toHaveValue("title_asc")
@@ -171,7 +171,7 @@ describe("Search Results page", () => {
           results={{ results }}
         />
       )
-      const sortSelect = screen.getByLabelText("Sort by")
+      const sortSelect = screen.getAllByLabelText("Sort by")[0]
       await userEvent.selectOptions(sortSelect, "Title (Z - A)")
 
       expect(mockRouter.asPath).toBe(
