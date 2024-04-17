@@ -3,7 +3,6 @@ import {
   Heading,
   SimpleGrid,
   Pagination,
-  Select,
   SkeletonLoader,
 } from "@nypl/design-system-react-components"
 import { useEffect, useRef, type ChangeEvent } from "react"
@@ -13,6 +12,7 @@ import { parse } from "qs"
 import Layout from "../../src/components/Layout/Layout"
 import DRBContainer from "../../src/components/DRB/DRBContainer"
 import SearchResult from "../../src/components/SearchResult/SearchResult"
+import SearchResultsSort from "../../src/components/SearchResult/SearchResultsSort"
 import AppliedFilters from "../../src/components/SearchFilters/AppliedFilters"
 
 import { fetchResults } from "../../src/server/api/search"
@@ -21,7 +21,6 @@ import {
   mapQueryToSearchParams,
   mapElementsToSearchResultsBibs,
   getSearchQuery,
-  sortOptions,
   getFreshSortByQuery,
 } from "../../src/utils/searchUtils"
 import type {
@@ -123,27 +122,11 @@ export default function Search({
         bannerNotification={bannerNotification}
         sidebar={
           <>
-            {totalResults > 0 ? (
-              <Select
-                name="sort_direction"
-                id="search-results-sort"
-                labelText="Sort by"
-                labelPosition="inline"
-                mb="l"
-                onChange={handleSortChange}
-                value={
-                  searchParams.order
-                    ? `${searchParams.sortBy}_${searchParams.order}`
-                    : searchParams.sortBy
-                }
-              >
-                {Object.keys(sortOptions).map((key) => (
-                  <option value={key} key={`sort-by-${key}`}>
-                    {sortOptions[key]}
-                  </option>
-                ))}
-              </Select>
-            ) : null}
+            <SearchResultsSort
+              pageHasResults={totalResults > 0}
+              searchParams={searchParams}
+              handleSortChange={handleSortChange}
+            />
             {isLoading ? (
               <SkeletonLoader showImage={false} />
             ) : drbResponse?.totalWorks > 0 ? (
