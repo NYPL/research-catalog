@@ -43,7 +43,14 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
       <CardContent>
         {drbResult?.authors?.length > 0 ? (
           <Text size="body2" mb="s">
-            <Box as="span" fontSize="desktop.body.body2" fontWeight="medium">
+            <Box
+              as="span"
+              fontSize={{
+                base: "mobile.body.body2",
+                md: "desktop.body.body2",
+              }}
+              fontWeight="medium"
+            >
               By
             </Box>{" "}
             {drbResult.authors.map((author: Author | Agent, index: number) => (
@@ -52,7 +59,10 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
                 <DSLink
                   href={getAuthorURL(author)}
                   target="_blank"
-                  fontSize="desktop.body.body2"
+                  fontSize={{
+                    base: "mobile.body.body2",
+                    md: "desktop.body.body2",
+                  }}
                   fontWeight="light"
                 >
                   {author.name}
@@ -81,7 +91,10 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
             target="_blank"
             type="buttonSecondary"
             isUnderlined={false}
-            fontSize="desktop.body.body2"
+            fontSize={{
+              base: "mobile.body.body2",
+              md: "desktop.body.body2",
+            }}
             mt="xs"
           >
             <>
