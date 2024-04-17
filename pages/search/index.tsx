@@ -123,7 +123,6 @@ export default function Search({
         sidebar={
           <>
             <SearchResultsSort
-              id="search-results-sort"
               pageHasResults={totalResults > 0}
               searchParams={searchParams}
               handleSortChange={handleSortChange}
@@ -165,6 +164,8 @@ export default function Search({
                   {getSearchResultsHeading(searchParams, totalResults)}
                 </Heading>
                 <SearchResultsSort
+                  // Mobile only Search Results Sort Select
+                  // Necessary due to the placement of the Select in the main content on mobile only.
                   id="search-results-sort-mobile"
                   pageHasResults={totalResults > 0}
                   searchParams={searchParams}
