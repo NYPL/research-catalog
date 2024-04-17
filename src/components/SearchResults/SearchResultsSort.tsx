@@ -5,7 +5,6 @@ import type { SearchParams } from "../../types/searchTypes"
 import type { ChangeEvent } from "react"
 
 interface SearchResultsSortProps {
-  id?: string
   pageHasResults: boolean
   searchParams: SearchParams
   handleSortChange: (e: ChangeEvent) => Promise<void>
@@ -16,7 +15,6 @@ interface SearchResultsSortProps {
  * The SearchResultsSort component renders a Select element used for sorting Search Results.
  */
 const SearchResultsSort = ({
-  id = "search-results-sort",
   pageHasResults,
   searchParams,
   handleSortChange,
@@ -26,7 +24,7 @@ const SearchResultsSort = ({
   return (
     <Select
       name="sort_direction"
-      id={id}
+      id={`search-results-sort${mobileOnly && "-mobile"}`}
       labelText="Sort by"
       labelPosition="inline"
       mb="l"

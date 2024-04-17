@@ -166,7 +166,6 @@ export default function Search({
                 <SearchResultsSort
                   // Mobile only Search Results Sort Select
                   // Necessary due to the placement of the Select in the main content on mobile only.
-                  id="search-results-sort-mobile"
                   pageHasResults={totalResults > 0}
                   searchParams={searchParams}
                   handleSortChange={handleSortChange}
