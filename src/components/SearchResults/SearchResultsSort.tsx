@@ -5,26 +5,25 @@ import type { SearchParams } from "../../types/searchTypes"
 import type { ChangeEvent } from "react"
 
 interface SearchResultsSortProps {
-  pageHasResults: boolean
+  id?: string
   searchParams: SearchParams
   handleSortChange: (e: ChangeEvent) => Promise<void>
-  mobileOnly?: boolean
+  display?: Record<string, string>
 }
 
 /**
  * The SearchResultsSort component renders a Select element used for sorting Search Results.
  */
 const SearchResultsSort = ({
-  pageHasResults,
+  id = "search-results-sort",
   searchParams,
   handleSortChange,
-  mobileOnly = false,
+  display,
 }: SearchResultsSortProps) => {
-  if (!pageHasResults) return
   return (
     <Select
       name="sort_direction"
-      id={`search-results-sort${mobileOnly ? "-mobile" : ""}`}
+      id={id}
       labelText="Sort by"
       labelPosition="inline"
       mb="l"
@@ -34,10 +33,7 @@ const SearchResultsSort = ({
           ? `${searchParams.sortBy}_${searchParams.order}`
           : searchParams.sortBy
       }
-      display={{
-        base: mobileOnly ? "block" : "none",
-        md: mobileOnly ? "none" : "block",
-      }}
+      display={display}
     >
       {Object.keys(sortOptions).map((key) => (
         <option value={key} key={`sort-by-${key}`}>

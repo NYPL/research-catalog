@@ -122,12 +122,16 @@ export default function Search({
         bannerNotification={bannerNotification}
         sidebar={
           <>
-            <SearchResultsSort
-              pageHasResults={totalResults > 0}
-              searchParams={searchParams}
-              handleSortChange={handleSortChange}
-              mobileOnly={false}
-            />
+            {totalResults > 0 ? (
+              <SearchResultsSort
+                searchParams={searchParams}
+                handleSortChange={handleSortChange}
+                display={{
+                  base: "none",
+                  md: "block",
+                }}
+              />
+            ) : null}
             {isLoading ? (
               <SkeletonLoader showImage={false} />
             ) : drbResponse?.totalWorks > 0 ? (
@@ -163,14 +167,20 @@ export default function Search({
                 >
                   {getSearchResultsHeading(searchParams, totalResults)}
                 </Heading>
-                <SearchResultsSort
-                  // Mobile only Search Results Sort Select
-                  // Necessary due to the placement of the Select in the main content on mobile only.
-                  pageHasResults={totalResults > 0}
-                  searchParams={searchParams}
-                  handleSortChange={handleSortChange}
-                  mobileOnly={true}
-                />
+
+                {totalResults > 0 ? (
+                  <SearchResultsSort
+                    // Mobile only Search Results Sort Select
+                    // Necessary due to the placement of the Select in the main content on mobile only.
+                    id="search-results-sort-mobile"
+                    searchParams={searchParams}
+                    handleSortChange={handleSortChange}
+                    display={{
+                      base: "block",
+                      md: "none",
+                    }}
+                  />
+                ) : null}
                 <SimpleGrid columns={1} gap="grid.l">
                   {searchResultBibs.map((bib: SearchResultsBib) => {
                     return <SearchResult key={bib.id} bib={bib} />
