@@ -1,3 +1,5 @@
+import sierraClient from "../server/sierraClient"
+import type { MarcSubfield } from "../types/bibDetailsTypes"
 import type {
   Checkout,
   Hold,
@@ -12,6 +14,7 @@ import type {
   SierraBibEntry,
   BibDataMapType,
 } from "../types/myAccountTypes"
+import { notificationPreferenceMap } from "../utils/myAccountData"
 
 let client: any
 
@@ -20,14 +23,6 @@ class MyAccountModelError extends Error {
     super()
     this.message = `Error ${errorDetail}: ${error.message}`
   }
-}
-
-export const notificationPreferenceMap = {
-  z: "Email",
-  a: "Print",
-  p: "Phone",
-  m: "Mobile",
-  "-": null,
 }
 
 export default class MyAccount {
@@ -79,6 +74,7 @@ export default class MyAccount {
     start?: number
     entries: SierraBibEntry[]
   }> {
+    console.log(holdsOrCheckouts)
     if (!holdsOrCheckouts?.length) return { entries: [] }
     const itemLevelHoldsorCheckouts = []
     const bibLevelHolds = []
@@ -114,7 +110,7 @@ export default class MyAccount {
     const nineTen = bibFields.varFields.find((field) => field.marcTag === "910")
     if (nineTen) {
       const nineTenContent = nineTen.subfields.find(
-        (subfield) => subfield.tag === "a"
+        (subfield: MarcSubfield) => subfield.tag === "a"
       ).content
       const isResearch = nineTenContent.startsWith("RL")
       // RLOTF: "Research Library On The Fly", a code we add to OTF (aka
@@ -147,6 +143,9 @@ export default class MyAccount {
     }
     try {
       return holds.map((hold: SierraHold) => {
+        const bibId =
+          hold.recordType === "i" ? hold.record.bibIds[0] : hold.record.id
+        const bibForHold = bibDataMap[bibId]
         return {
           patron: MyAccount.getRecordId(hold.patron),
           id: MyAccount.getRecordId(hold.id),
@@ -155,14 +154,14 @@ export default class MyAccount {
           frozen: hold.frozen,
           status: MyAccount.getHoldStatus(hold.status),
           pickupLocation: hold.pickupLocation,
-          title: bibDataMap[hold.record.bibIds[0]].title,
-          isResearch: bibDataMap[hold.record.bibIds[0]].isResearch,
-          bibId: hold.record.bibIds[0],
-          isNyplOwned: bibDataMap[hold.record.bibIds[0]].isNyplOwned,
-          catalogHref: bibDataMap[hold.record.bibIds[0]].isNyplOwned
-            ? bibDataMap[hold.record.bibIds[0]].isResearch
-              ? `https://nypl.org/research/research-catalog/bib/b${hold.record.bibIds[0]}`
-              : `https://nypl.na2.iiivega.com/search/card?recordId=${hold.record.bibIds[0]}`
+          title: bibForHold.title,
+          isResearch: bibForHold.isResearch,
+          bibId,
+          isNyplOwned: bibForHold.isNyplOwned,
+          catalogHref: bibForHold.isNyplOwned
+            ? bibForHold.isResearch
+              ? `https://nypl.org/research/research-catalog/bib/b${bibId}`
+              : `https://nypl.na2.iiivega.com/search/card?recordId=${bibId}`
             : null,
         }
       })
@@ -183,6 +182,8 @@ export default class MyAccount {
     }
     try {
       return checkouts.map((checkout: SierraCheckout) => {
+        const bibId = checkout.item.bibIds[0]
+        const bibForCheckout = bibDataMap[bibId]
         return {
           id: MyAccount.getRecordId(checkout.id),
           // Partner items do not have call numbers. Null has to be explicitly
@@ -191,14 +192,14 @@ export default class MyAccount {
           barcode: checkout.item.barcode,
           dueDate: MyAccount.formatDate(checkout.dueDate),
           patron: MyAccount.getRecordId(checkout.patron),
-          title: bibDataMap[checkout.item.bibIds[0]].title,
-          isResearch: bibDataMap[checkout.item.bibIds[0]].isResearch,
-          bibId: checkout.item.bibIds[0],
-          isNyplOwned: bibDataMap[checkout.item.bibIds[0]].isNyplOwned,
-          catalogHref: bibDataMap[checkout.item.bibIds[0]].isNyplOwned
-            ? bibDataMap[checkout.item.bibIds[0]].isResearch
-              ? `https://nypl.org/research/research-catalog/bib/b${checkout.item.bibIds[0]}`
-              : `https://borrow.nypl.org/search/card?recordId=${checkout.item.bibIds[0]}`
+          title: bibForCheckout.title,
+          isResearch: bibForCheckout.isResearch,
+          bibId: bibId,
+          isNyplOwned: bibForCheckout.isNyplOwned,
+          catalogHref: bibForCheckout.isNyplOwned
+            ? bibForCheckout.isResearch
+              ? `https://nypl.org/research/research-catalog/bib/b${bibId}`
+              : `https://nypl.na2.iiivega.com/search/card?recordId=${bibId}`
             : null,
         }
       })
@@ -208,6 +209,8 @@ export default class MyAccount {
   }
 
   buildPatron(patron: SierraPatron): Patron {
+    const notificationPreference =
+      notificationPreferenceMap[patron.fixedFields["268"].value]
     try {
       const notificationPreference =
         notificationPreferenceMap[patron.fixedFields["268"].value]
@@ -216,11 +219,9 @@ export default class MyAccount {
         name: patron.names[0],
         barcode: patron.barcodes[0],
         expirationDate: patron.expirationDate,
-        primaryEmail: patron.emails?.length > 0 ? patron.emails[0] : "",
         emails: patron.emails || [],
-        primaryPhone: patron.phones?.length > 0 ? patron.phones[0].number : "",
         phones: patron.phones || [],
-        homeLibrary: patron.homeLibrary?.name ? patron.homeLibrary.name : "",
+        homeLibrary: patron.homeLibrary || null,
         id: patron.id,
       }
     } catch (e) {
@@ -299,4 +300,33 @@ export const MyAccountFactory = async (id: string, client) => {
     return data.status === "fulfilled" ? data.value : []
   })
   return { checkouts, holds, patron, fines }
+}
+
+export const getPickupLocations = async () => {
+  const locations = await fetchPickupLocations()
+  return filterPickupLocations(locations)
+}
+
+const fetchPickupLocations = async () => {
+  const client = await sierraClient()
+  return await client.get("/branches/pickupLocations")
+}
+
+export const filterPickupLocations = (locations) => {
+  const pickupLocationDisqualification = [
+    "closed",
+    "onsite",
+    "staff only",
+    "edd",
+    "performing arts",
+    "reopening",
+  ]
+  const disqualified = (locationName, testString) =>
+    locationName.toLowerCase().includes(testString)
+  const isOpenBranchLocation = ({ name }: SierraCodeName, i) =>
+    !pickupLocationDisqualification.find((testString: string, j) =>
+      disqualified(name, testString)
+    )
+
+  return locations.filter(isOpenBranchLocation)
 }

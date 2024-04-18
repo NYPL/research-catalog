@@ -1,5 +1,10 @@
-import MyAccount, { MyAccountFactory } from "../MyAccount"
+import { filteredPickupLocations } from "../../../__test__/fixtures/processedMyAccountData"
+import MyAccount, {
+  MyAccountFactory,
+  filterPickupLocations,
+} from "../MyAccount"
 import {
+  pickupLocations,
   holds,
   checkouts,
   patron,
@@ -7,13 +12,20 @@ import {
   holdBibs,
   checkoutBibs,
   empty,
-} from "../../../__test__/fixtures/myAccountFixtures"
+} from "../../../__test__/fixtures/rawSierraAccountData"
 
 jest.mock("../../server/sierraClient")
 
 describe("MyAccountModel", () => {
   const fetchBibs = MyAccount.prototype.fetchBibData
   afterAll(() => (MyAccount.prototype.fetchBibData = fetchBibs))
+  describe("fetchPickupLocations", () => {
+    it("filters out closed and research branches", () => {
+      expect(filterPickupLocations(pickupLocations)).toStrictEqual(
+        filteredPickupLocations
+      )
+    })
+  })
   describe("getRecordId", () => {
     it("can parse an id", () => {
       const idUrl =

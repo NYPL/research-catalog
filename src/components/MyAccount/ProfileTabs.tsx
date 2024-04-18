@@ -1,5 +1,6 @@
-import AccountSettingsTab from "./AccountSettingsTab"
+import AccountSettingsTab from "./Settings/AccountSettingsTab"
 import type MyAccount from "../../models/MyAccount"
+import styles from "../../../styles/components/MyAccount.module.scss"
 
 import { Tabs } from "@nypl/design-system-react-components"
 import { useRouter } from "next/router"
