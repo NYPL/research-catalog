@@ -1,5 +1,6 @@
 import { Box, Icon, Link, Table } from "@nypl/design-system-react-components"
 import styles from "../../../styles/components/MyAccount.module.scss"
+import { appConfig } from "../../config/config"
 
 const ItemsTab = ({
   headers,
@@ -14,16 +15,14 @@ const ItemsTab = ({
     <>
       {data?.length === 0 && (
         <Box className={styles.notification}>
-          <span>
-            You currently do not have any research items {userAction}.
-          </span>
+          <span>You currently do not have any items {userAction}.</span>
         </Box>
       )}
       <Box className={styles.notificationWithIcon}>
         <Icon size="medium" name="errorOutline" iconRotation="rotate180" />{" "}
         <span>
-          See <Link href="https://nypl.na2.iiivega.com/">this page</Link> for
-          eBooks and eAudiobooks {userAction} by you
+          See <Link href={appConfig.urls.circulatingCatalog}>this page</Link>{" "}
+          for eBooks and eAudiobooks {userAction} by you
         </span>
       </Box>
       {data?.length > 0 && (

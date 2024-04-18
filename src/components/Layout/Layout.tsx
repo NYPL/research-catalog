@@ -14,6 +14,7 @@ import SearchForm from "../SearchForm/SearchForm"
 import { BASE_URL } from "../../config/constants"
 import Notification from "../Notification/Notification"
 import FeedbackForm from "../FeedbackForm/FeedbackForm"
+import type { Aggregation } from "../../types/filterTypes"
 
 interface LayoutProps {
   sidebar?: ReactElement
@@ -21,6 +22,7 @@ interface LayoutProps {
   sidebarPosition?: "right" | "left"
   bannerNotification?: string
   isAuthenticated?: boolean
+  searchAggregations?: Aggregation[]
 }
 
 /**
@@ -28,6 +30,7 @@ interface LayoutProps {
  * controls the rendering of Research Catalog header components per-page.
  */
 const Layout = ({
+  searchAggregations,
   children,
   isAuthenticated,
   sidebar,
@@ -70,7 +73,7 @@ const Layout = ({
                   isAuthenticated={isAuthenticated}
                   activePage={activePage}
                 />
-                {showSearch && <SearchForm />}
+                {showSearch && <SearchForm aggregations={searchAggregations} />}
               </div>
               {showNotification && bannerNotification && (
                 <Notification notification={bannerNotification} />

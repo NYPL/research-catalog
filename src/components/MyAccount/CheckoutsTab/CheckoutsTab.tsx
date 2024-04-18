@@ -1,5 +1,5 @@
 import { Link, Text } from "@nypl/design-system-react-components"
-import type { Checkout, Patron } from "../../../types/accountTypes"
+import type { Checkout, Patron } from "../../../types/myAccountTypes"
 import RenewButton from "./RenewButton"
 import ItemsTab from "../ItemsTab"
 
@@ -11,8 +11,8 @@ const CheckoutsTab = ({
   patron: Patron
 }) => {
   function formatTitleElement(checkout: Checkout) {
-    if (checkout.href) {
-      return <Link href={checkout.href}>{checkout.title}</Link>
+    if (checkout.catalogHref) {
+      return <Link href={checkout.catalogHref}>{checkout.title}</Link>
     } else {
       return <Text>{checkout.title}</Text>
     }
@@ -31,7 +31,9 @@ const CheckoutsTab = ({
     checkout.barcode,
     checkout.callNumber,
     checkout.dueDate,
-    checkout.isResearch ? null : RenewButton(checkout, patron),
+    checkout.isResearch ? null : (
+      <RenewButton checkout={checkout} patron={patron} />
+    ),
   ])
   return (
     <ItemsTab

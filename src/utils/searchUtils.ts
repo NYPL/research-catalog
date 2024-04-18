@@ -1,5 +1,6 @@
 import { isArray, isEmpty, mapObject, forEach } from "underscore"
 
+import { textInputFields } from "./advancedSearchUtils"
 import type {
   SearchParams,
   SearchQueryParams,
@@ -9,6 +10,27 @@ import type {
 } from "../types/searchTypes"
 import SearchResultsBib from "../models/SearchResultsBib"
 import { RESULTS_PER_PAGE } from "../config/constants"
+
+/**
+ * determineFreshSortByQuery
+ * Returns true only if the last update to the query was a sort by change.
+ * Used to determine whether to focus on the search results header
+ */
+export const getFreshSortByQuery = (prevUrl: string, currentUrl: string) => {
+  if (!prevUrl) return false
+  const sortByAndDirection = (query) => {
+    const match = query.match(/sort=(.*?)&sort_direction=(.*?)(&|$)/)
+    if (match) return [match[1], match[2]]
+  }
+  const previousSortValues = sortByAndDirection(prevUrl)
+  const currentSortValues = sortByAndDirection(currentUrl)
+  if (!currentSortValues) return false
+  const sortTypeHasChanged = previousSortValues?.[0] !== currentSortValues[0]
+  const sortDirectionHasChanged =
+    previousSortValues?.[1] !== currentSortValues[1]
+  const sortValuesHaveUpdated = sortTypeHasChanged || sortDirectionHasChanged
+  return sortValuesHaveUpdated
+}
 
 /**
  * getPaginationOffsetStrings
@@ -32,19 +54,39 @@ export function getPaginationOffsetStrings(
  * TODO: Make search query type (i.e. "Keyword") dynamic
  */
 export function getSearchResultsHeading(
-  page: number,
-  totalResults: number,
-  query: string
+  searchParams: SearchParams,
+  totalResults: number
 ): string {
   const [resultsStart, resultsEnd] = getPaginationOffsetStrings(
-    page,
+    searchParams.page,
     totalResults
   )
+  const queryDisplayString = buildQueryDisplayString(searchParams)
+
   return `Displaying ${
     totalResults > RESULTS_PER_PAGE
       ? `${resultsStart}-${resultsEnd}`
       : totalResults.toLocaleString()
-  } of ${totalResults.toLocaleString()} results for keyword "${query}"`
+  } of ${totalResults.toLocaleString()} results ${queryDisplayString}`
+}
+
+function buildQueryDisplayString(searchParams: SearchParams): string {
+  const params = Object.keys(searchParams)
+  return params
+    .reduce((displayString, param, i) => {
+      const displayParam = textInputFields.find((field) => field.name === param)
+      // if it's a param we want to display and it is a populated value
+      if (displayParam && searchParams[param]) {
+        const label = displayParam.label.toLowerCase()
+        const value = searchParams[param]
+        const plural = label === "keyword" && value.indexOf(" ") > -1 ? "s" : ""
+
+        displayString += displayString.length ? "and " : "for "
+        displayString += `${label}${plural} "${value}" `
+      }
+      return displayString
+    }, "")
+    .trim()
 }
 
 /**

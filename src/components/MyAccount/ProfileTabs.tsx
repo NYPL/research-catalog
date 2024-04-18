@@ -1,10 +1,20 @@
+import AccountSettingsTab from "./AccountSettingsTab"
+import type MyAccount from "../../models/MyAccount"
+
 import { Tabs } from "@nypl/design-system-react-components"
-import type { Patron, Checkout, Fine, Hold } from "../../types/accountTypes"
 import { useRouter } from "next/router"
 import CheckoutsTab from "./CheckoutsTab/CheckoutsTab"
 import RequestsTab from "./RequestsTab/RequestsTab"
 import { useState } from "react"
 import FeesTab from "./FeesTab/FeesTab"
+
+interface ProfileTabsPropsType {
+  patron: MyAccount["patron"]
+  checkouts: MyAccount["checkouts"]
+  holds: MyAccount["holds"]
+  fines: MyAccount["fines"]
+  activePath: string
+}
 
 const ProfileTabs = ({
   checkouts,
@@ -12,13 +22,7 @@ const ProfileTabs = ({
   patron,
   fines,
   activePath,
-}: {
-  patron: Patron
-  checkouts: Checkout[]
-  holds: Hold[]
-  fines: Fine
-  activePath: string
-}) => {
+}: ProfileTabsPropsType) => {
   // currentHolds is a copy of the holds local to this component.
   const [currentHolds, setCurrentHolds] = useState(holds)
   /* removeHold removes the passed hold from currentHolds, so page doesn't need to
@@ -26,7 +30,6 @@ const ProfileTabs = ({
   function removeHold(hold) {
     setCurrentHolds(currentHolds.filter((item) => item.id !== hold.id))
   }
-
   // tabsData conditionally includes fines– only when user has total fines more than $0.
   const tabsData = [
     {
@@ -56,7 +59,7 @@ const ProfileTabs = ({
       : []),
     {
       label: "Account settings",
-      content: "",
+      content: <AccountSettingsTab settingsData={patron} />,
       urlPath: "settings",
     },
   ]

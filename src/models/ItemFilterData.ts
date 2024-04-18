@@ -1,16 +1,16 @@
 import type {
-  ItemAggregation,
-  ItemAggregationOption,
+  Aggregation,
+  AggregationOption,
   Option,
 } from "../types/filterTypes"
 
 import { isRecapLocation } from "../utils/itemFilterUtils"
 
 export class ItemFilterData {
-  options: ItemAggregationOption[]
-  agg: ItemAggregation
+  options: AggregationOption[]
+  agg: Aggregation
   field: string
-  constructor(agg: ItemAggregation) {
+  constructor(agg: Aggregation) {
     this.agg = agg
     this.options = agg.values
     this.field = agg.field
@@ -34,11 +34,11 @@ export class ItemFilterData {
 }
 
 export class LocationFilterData extends ItemFilterData {
-  constructor(aggs: ItemAggregation) {
+  constructor(aggs: Aggregation) {
     super(aggs)
   }
 
-  displayOptions(): ItemAggregationOption[] {
+  displayOptions(): AggregationOption[] {
     let offsiteCount = 0
     const optionsWithoutRecap = this.options.filter(({ value, count }) => {
       if (isRecapLocation(value)) {

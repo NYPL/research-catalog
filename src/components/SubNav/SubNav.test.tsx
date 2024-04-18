@@ -37,18 +37,18 @@ describe("SubNav", () => {
     expect(subNavLinks[2]).toHaveAttribute("aria-current", "page")
   })
 
-  it("does not render Log out link if user is not logged in", () => {
+  it("does not render Log Out link if user is not logged in", () => {
     render(<SubNav isAuthenticated={false} activePage="search" />)
     const subNavLinks = screen.getAllByRole("link")
     expect(subNavLinks).toHaveLength(3)
-    const logoutLink = screen.queryByText("Log out")
+    const logoutLink = screen.queryByText("Log Out")
     expect(logoutLink).toBeNull()
   })
-  it("does render Log out link if user is logged in", () => {
+  it("does render Log Out link if user is logged in", () => {
     render(<SubNav isAuthenticated={true} activePage="search" />)
     const subNavLinks = screen.getAllByRole("link")
     expect(subNavLinks).toHaveLength(4)
-    const logoutLink = screen.getByText("Log out")
+    const logoutLink = screen.getByText("Log Out")
     expect(logoutLink).toBeInTheDocument()
   })
 })

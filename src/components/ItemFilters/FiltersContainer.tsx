@@ -14,7 +14,7 @@ import {
 } from "@nypl/design-system-react-components"
 
 import styles from "../../../styles/components/ItemFilters.module.scss"
-import type { ItemAggregation } from "../../types/filterTypes"
+import type { Aggregation } from "../../types/filterTypes"
 import { ItemFilterData, LocationFilterData } from "../../models/ItemFilterData"
 import ItemFilter from "./ItemFilter"
 import {
@@ -25,7 +25,7 @@ import {
 } from "../../utils/itemFilterUtils"
 
 interface ItemFilterContainerProps {
-  itemAggs: ItemAggregation[]
+  itemAggs: Aggregation[]
 }
 
 const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
@@ -36,7 +36,7 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
     : styles.filterGroupMobile
 
   const filterData = useRef<ItemFilterData[]>(
-    itemAggs.map((agg: ItemAggregation) => {
+    itemAggs.map((agg: Aggregation) => {
       if (agg.field === "location") return new LocationFilterData(agg)
       else return new ItemFilterData(agg)
     })

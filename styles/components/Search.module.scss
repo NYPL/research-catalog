@@ -1,9 +1,16 @@
 @import "../utils/mixins";
-@import "../utils/breakpoints";
 
+.filterTags {
+  margin-bottom: var(--nypl-space-xs);
+
+  button[id^="ts-filter-clear-all"] {
+    color: var(--nypl-colors-ui-link-primary);
+    text-decoration: underline;
+  }
+}
 .searchContainer {
   background-color: var(--nypl-colors-ui-bg-default);
-  padding: var(--nypl-space-l) 0 var(--nypl-space-xs);
+  padding: var(--nypl-space-l) 0;
 }
 
 .searchContainerInner {
@@ -12,20 +19,43 @@
 
 .auxSearchContainer {
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
-  margin: var(--nypl-space-xs) 0;
+  margin-top: var(--nypl-space-s);
+  margin-bottom: var(--nypl-space-s);
 
-  @media (max-width: 400px) {
-    flex-direction: column-reverse;
-    align-items: flex-end;
+  @media screen and (min-width: 600px) {
+    margin-top: var(--nypl-space-xs);
   }
 }
 
 .advancedSearch {
+  align-self: flex-start;
   min-width: 127px;
-  margin-bottom: var(--nypl-space-s);
+  line-height: 1;
+  margin-left: auto;
 }
 
-.edsLink {
-  padding-right: var(--nypl-space-xl);
+.refineSearchButton {
+  @media screen and (min-width: 600px) {
+    margin-top: var(--nypl-space-xs);
+  }
+}
+
+.refineButtons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.refineCheckboxGroup {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.refineSearchContainer {
+  background-color: var(--nypl-colors-ui-bg-default);
+}
+.refineSearchInner {
+  @include maxWidth;
+  padding-bottom: var(--nypl-space-l);
 }

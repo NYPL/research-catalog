@@ -1,12 +1,12 @@
 import React from "react"
-import { render, fireEvent, act } from "@testing-library/react"
+import { render, fireEvent } from "@testing-library/react"
 import ProfileTabs from "./ProfileTabs"
 import {
   mockCheckouts,
   mockFines,
   mockHolds,
   mockPatron,
-} from "../../../__test__/fixtures/accountFixtures"
+} from "../../../__test__/fixtures/myAccountFixtures"
 import mockRouter from "next-router-mock"
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 

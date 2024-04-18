@@ -40,6 +40,7 @@ export interface SierraHold {
   pickupLocation: SierraCodeName
   pickupByDate: string
   patron: string
+  recordType: string
 }
 
 export interface SierraRecord {
@@ -51,6 +52,7 @@ export interface SierraRecord {
 }
 
 export interface SierraPatron {
+  fixedFields: Record<string, { label: string; value: string }>
   id: number
   names: string[]
   barcodes: string[]
@@ -70,7 +72,7 @@ export interface Checkout {
   title: string
   bibId?: string
   isNyplOwned: boolean
-  href: string
+  catalogHref: string
 }
 
 export interface SierraCodeName {
@@ -94,6 +96,7 @@ export interface Hold {
 }
 
 export interface Patron {
+  notificationPreference: string
   name: string
   barcode: string
   expirationDate: string
@@ -117,7 +120,7 @@ export interface SierraBibEntry {
   createdDate: string
   deleted: boolean
   suppressed: boolean
-  isbn: string
+  isbn?: string
   lang: SierraCodeName
   title: string
   author: string
@@ -133,7 +136,7 @@ export interface SierraBibEntry {
   catalogDate: string
   country: SierraCodeName
   callNumber: string
-  varFields: {
+  varFields?: {
     fieldTag: string
     marcTag?: string
     ind1?: string

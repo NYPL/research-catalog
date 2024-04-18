@@ -4,8 +4,7 @@ import {
   StatusBadge,
   Text,
 } from "@nypl/design-system-react-components"
-import type { Hold, Patron } from "../../../types/accountTypes"
-import styles from "../../../../styles/components/MyAccount.module.scss"
+import type { Hold, Patron } from "../../../types/myAccountTypes"
 import ItemsTab from "../ItemsTab"
 import CancelButton from "./CancelButton"
 import FreezeButton from "./FreezeButton"

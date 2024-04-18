@@ -7,7 +7,7 @@ import {
   holdBibs,
   checkoutBibs,
   empty,
-} from "./data/MyAccount"
+} from "../../../__test__/fixtures/myAccountFixtures"
 
 jest.mock("../../server/sierraClient")
 
@@ -79,7 +79,7 @@ describe("MyAccountModel", () => {
           isResearch: false,
           bibId: "21678146",
           isNyplOwned: true,
-          href: "https://nypl.na2.iiivega.com/search/card?recordId=21678146",
+          catalogHref: "https://borrow.nypl.org/search/card?recordId=21678146",
         },
         {
           id: "65060570",
@@ -91,7 +91,7 @@ describe("MyAccountModel", () => {
           isResearch: false,
           bibId: "17699134",
           isNyplOwned: true,
-          href: "https://nypl.na2.iiivega.com/search/card?recordId=17699134",
+          catalogHref: "https://borrow.nypl.org/search/card?recordId=17699134",
         },
       ])
     })
@@ -164,6 +164,52 @@ describe("MyAccountModel", () => {
         ],
         homeLibrary: "Stavros Niarchos Foundation Library (SNFL)",
         id: 2772226,
+        notificationPreference: null,
+      })
+      expect(emptyAccount.checkouts).toStrictEqual([])
+      expect(emptyAccount.holds).toStrictEqual([])
+      expect(emptyAccount.fines).toStrictEqual({ total: 0, entries: [] })
+    })
+  })
+  describe("getResearchAndOwnership", () => {
+    it("can handle no varfields", () => {
+      expect(MyAccount.getResearchAndOwnership({})).toStrictEqual({
+        isResearch: false,
+        isNyplOwned: true,
+      })
+    })
+    it("can handle missing 910 field", () => {
+      expect(
+        MyAccount.getResearchAndOwnership({
+          varFields: [{ marcTag: "666" }],
+        })
+      ).toStrictEqual({
+        isResearch: true,
+        isNyplOwned: false,
+      })
+    })
+    it("can handle a otf record", () => {
+      expect(
+        MyAccount.getResearchAndOwnership({
+          varFields: [
+            { marcTag: "910", subfields: [{ tag: "a", content: "RLOTF" }] },
+          ],
+        })
+      ).toStrictEqual({
+        isResearch: true,
+        isNyplOwned: false,
+      })
+    })
+    it("can handle an nypl research record", () => {
+      expect(
+        MyAccount.getResearchAndOwnership({
+          varFields: [
+            { marcTag: "910", subfields: [{ tag: "a", content: "RL" }] },
+          ],
+        })
+      ).toStrictEqual({
+        isResearch: true,
+        isNyplOwned: true,
       })
     })
   })

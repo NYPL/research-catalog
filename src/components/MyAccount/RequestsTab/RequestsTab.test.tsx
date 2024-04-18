@@ -5,7 +5,7 @@ import {
   mockFines,
   mockHolds,
   mockPatron,
-} from "../../../../__test__/fixtures/accountFixtures"
+} from "../../../../__test__/fixtures/myAccountFixtures"
 import { userEvent } from "@testing-library/user-event"
 import ProfileTabs from "../ProfileTabs"
 import RequestsTab from "./RequestsTab"

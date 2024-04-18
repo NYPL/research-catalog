@@ -13,7 +13,8 @@ import type {
   SierraFineEntry,
   SierraBibEntry,
   BibDataMapType,
-} from "../types/accountTypes"
+} from "../types/myAccountTypes"
+import { appConfig } from "../config/config"
 
 let client: any
 
@@ -22,6 +23,14 @@ class MyAccountModelError extends Error {
     super()
     this.message = `Error ${errorDetail}: ${error.message}`
   }
+}
+
+export const notificationPreferenceMap = {
+  z: "Email",
+  a: "Print",
+  p: "Phone",
+  m: "Mobile",
+  "-": null,
 }
 
 export default class MyAccount {
@@ -46,7 +55,7 @@ export default class MyAccount {
 
   async getHolds() {
     const holds = await this.client.get(
-      `${this.baseQuery}"/holds?expand=record"`
+      `${this.baseQuery}"/holds?expand=canFreeze,record,status,pickupLocation,frozen,patron,pickupByDate,recordType"`
     )
     const holdBibData = await this.fetchBibData(holds.entries, "record")
     const holdsWithBibData = this.buildHolds(holds.entries, holdBibData.entries)
@@ -55,7 +64,7 @@ export default class MyAccount {
 
   async getPatron() {
     const patron = this.client.get(
-      `${this.baseQuery}"?fields=names,barcodes,expirationDate,homeLibrary,emails,phones"`
+      `${this.baseQuery}?fields=names,barcodes,expirationDate,homeLibrary,emails,phones,fixedFields`
     )
     return this.buildPatron(patron)
   }
@@ -74,41 +83,59 @@ export default class MyAccount {
     entries: SierraBibEntry[]
   }> {
     if (!holdsOrCheckouts?.length) return { entries: [] }
-    const checkoutBibIds = holdsOrCheckouts.map(
-      (holdOrCheckout: { [x: string]: { bibIds: any[] } }) => {
-        return holdOrCheckout[itemOrRecord].bibIds[0]
+    const itemLevelHoldsorCheckouts = []
+    const bibLevelHolds = []
+
+    // Separating bib level and item level records so we only fetch bib data for item level holds/checkouts.
+    holdsOrCheckouts.forEach((holdOrCheckout) => {
+      if (holdOrCheckout[itemOrRecord].bibIds) {
+        itemLevelHoldsorCheckouts.push(holdOrCheckout[itemOrRecord].bibIds[0])
+      } else {
+        bibLevelHolds.push(holdOrCheckout.record)
       }
-    )
+    })
 
-    const bibData = await this.client.get(
-      `bibs?id=${checkoutBibIds}&fields=default,varFields`
+    const bibData = await client.get(
+      `bibs?id=${itemLevelHoldsorCheckouts}&fields=default,varFields`
     )
-
+    bibData.entries = bibData.entries.concat(bibLevelHolds)
     return bibData
+  }
+
+  /**
+   * getBibVarFields
+   * Reads varFields of a item-level hold's bib data to return if it is a research item,
+   * and if it is owned by NYPL.
+   */
+
+  static getResearchAndOwnership(bibFields) {
+    // We don't fetch varfields for bib level holds. Bib level holds only happen
+    // on circ, and therefore NYPL records.
+    if (!bibFields.varFields) {
+      return { isResearch: false, isNyplOwned: true }
+    }
+    const nineTen = bibFields.varFields.find((field) => field.marcTag === "910")
+    if (nineTen) {
+      const nineTenContent = nineTen.subfields.find(
+        (subfield) => subfield.tag === "a"
+      ).content
+      const isResearch = nineTenContent.startsWith("RL")
+      // RLOTF: "Research Library On The Fly", a code we add to OTF (aka
+      // "virtual") records, to tag them as being Research OTF records
+      const isPartnerRecord = nineTenContent === "RLOTF"
+      // Non-research means circ, circ records are NYPL owned
+      const isNyplOwned = !isResearch || !isPartnerRecord
+      return { isResearch, isNyplOwned }
+    }
+    // Default to most restrictive values
+    return { isResearch: true, isNyplOwned: false }
   }
 
   static buildBibData(bibs: SierraBibEntry[]): BibDataMapType {
     return bibs.reduce((bibDataMap: BibDataMapType, bibFields) => {
-      let isResearch: boolean
-      let isNyplOwned: boolean
+      const { isResearch, isNyplOwned } =
+        this.getResearchAndOwnership(bibFields)
       const title = bibFields.title
-      const nineTen = bibFields.varFields.find(
-        (field) => field.marcTag === "910"
-      )
-      // if we are unsure of the research ness of a bib, default to true so
-      // we don't let them renew or freeze the record
-      if (!nineTen) {
-        isResearch = true
-        isNyplOwned = false
-      } else {
-        const nineTenContent = nineTen.subfields.find(
-          (subfield: { tag: string; subfield: string }) => subfield.tag === "a"
-        ).content
-        isResearch = nineTenContent.startsWith("RL")
-        // RLOTF: "Research Library On The Fly", a code we add to OTF (aka "virtual") records,
-        // to tag them as being Research OTF records
-        isNyplOwned = !isResearch || nineTenContent !== "RLOTF"
-      }
       bibDataMap[bibFields.id] = { title, isResearch, isNyplOwned }
       return bibDataMap
     }, {})
@@ -171,7 +198,7 @@ export default class MyAccount {
           isResearch: bibDataMap[checkout.item.bibIds[0]].isResearch,
           bibId: checkout.item.bibIds[0],
           isNyplOwned: bibDataMap[checkout.item.bibIds[0]].isNyplOwned,
-          href: bibDataMap[checkout.item.bibIds[0]].isNyplOwned
+          catalogHref: bibDataMap[checkout.item.bibIds[0]].isNyplOwned
             ? bibDataMap[checkout.item.bibIds[0]].isResearch
               ? `https://nypl.org/research/research-catalog/bib/b${checkout.item.bibIds[0]}`
               : `https://nypl.na2.iiivega.com/search/card?recordId=${checkout.item.bibIds[0]}`
@@ -185,7 +212,10 @@ export default class MyAccount {
 
   buildPatron(patron: SierraPatron): Patron {
     try {
+      const notificationPreference =
+        notificationPreferenceMap[patron.fixedFields["268"].value]
       return {
+        notificationPreference,
         name: patron.names[0],
         barcode: patron.barcodes[0],
         expirationDate: patron.expirationDate,

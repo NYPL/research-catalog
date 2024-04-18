@@ -6,33 +6,41 @@ import {
   Select,
   SkeletonLoader,
 } from "@nypl/design-system-react-components"
-import type { ChangeEvent } from "react"
+import { useEffect, useRef, type ChangeEvent } from "react"
 import { useRouter } from "next/router"
 import { parse } from "qs"
 
 import Layout from "../../src/components/Layout/Layout"
 import DRBContainer from "../../src/components/DRB/DRBContainer"
 import SearchResult from "../../src/components/SearchResult/SearchResult"
+import AppliedFilters from "../../src/components/SearchFilters/AppliedFilters"
 
-import { fetchResults } from "../api/search"
+import { fetchResults } from "../../src/server/api/search"
 import {
   getSearchResultsHeading,
   mapQueryToSearchParams,
   mapElementsToSearchResultsBibs,
   getSearchQuery,
   sortOptions,
+  getFreshSortByQuery,
 } from "../../src/utils/searchUtils"
-import type { SortKey, SortOrder } from "../../src/types/searchTypes"
+import type {
+  SearchResultsResponse,
+  SortKey,
+  SortOrder,
+} from "../../src/types/searchTypes"
 import { mapWorksToDRBResults } from "../../src/utils/drbUtils"
 import { SITE_NAME, RESULTS_PER_PAGE } from "../../src/config/constants"
 import type SearchResultsBib from "../../src/models/SearchResultsBib"
+
 import useLoading from "../../src/hooks/useLoading"
 import initializePatronTokenAuth from "../../src/server/auth"
 
 interface SearchProps {
   bannerNotification?: string
-  results: any
+  results: SearchResultsResponse
   isAuthenticated: boolean
+  isFreshSortByQuery: boolean
 }
 
 /**
@@ -43,12 +51,12 @@ export default function Search({
   bannerNotification,
   results,
   isAuthenticated,
+  isFreshSortByQuery,
 }: SearchProps) {
   const metadataTitle = `Search Results | ${SITE_NAME}`
   const { push, query } = useRouter()
   const { itemListElement: searchResultsElements, totalResults } =
     results.results
-
   const drbResponse = results.drbResults?.data
   const drbWorks = drbResponse?.works
 
@@ -67,6 +75,12 @@ export default function Search({
     await push(newQuery)
   }
 
+  const aggs = results?.aggregations?.itemListElement
+  // if there are no results, then applied filters correspond to aggregations
+  // with no values, which will break our code down the line. Do not render
+  // the Applied Filters tagset.
+  const displayAppliedFilters = totalResults > 0
+
   const handleSortChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const selectedSortOption = e.target.value
     // Extract sort key and order from selected sort option using "_" delineator
@@ -79,6 +93,16 @@ export default function Search({
       getSearchQuery({ ...searchParams, sortBy, order, page: undefined })
     )
   }
+
+  const searchResultsHeadingRef = useRef(null)
+  useEffect(() => {
+    // don't focus on "Displaying n results..." if the page is not done loading
+    if (isLoading) return
+    // keep focus on sort by selector if the last update to the query was a sort
+    if (isFreshSortByQuery) return
+    // otherwise, focus on "Displaying n results..."
+    searchResultsHeadingRef?.current?.focus()
+  }, [isLoading, isFreshSortByQuery])
 
   return (
     <>
@@ -93,6 +117,7 @@ export default function Search({
         <title key="main-title">{metadataTitle}</title>
       </Head>
       <Layout
+        searchAggregations={aggs}
         isAuthenticated={isAuthenticated}
         activePage="search"
         bannerNotification={bannerNotification}
@@ -103,6 +128,7 @@ export default function Search({
                 name="sort_direction"
                 id="search-results-sort"
                 labelText="Sort by"
+                labelPosition="inline"
                 mb="l"
                 onChange={handleSortChange}
                 value={
@@ -136,14 +162,24 @@ export default function Search({
               <SkeletonLoader showImage={false} />
             ) : (
               <>
-                <Heading level="h2" mb="xl" size="heading4">
-                  {getSearchResultsHeading(
-                    searchParams.page,
-                    totalResults,
-                    searchParams.q
-                  )}
+                {displayAppliedFilters && (
+                  <AppliedFilters aggregations={aggs} />
+                )}
+                <Heading
+                  data-testid="search-results-heading"
+                  level="h2"
+                  size="heading5"
+                  // Heading component does not expect tabIndex prop, so we
+                  // are ignoring the typescript error that pops up.
+                  // @ts-expect-error
+                  tabIndex={-1}
+                  mb="l"
+                  minH="40px"
+                  ref={searchResultsHeadingRef}
+                >
+                  {getSearchResultsHeading(searchParams, totalResults)}
                 </Heading>
-                <SimpleGrid columns={1} gap="grid.xl">
+                <SimpleGrid columns={1} gap="grid.l">
                   {searchResultBibs.map((bib: SearchResultsBib) => {
                     return <SearchResult key={bib.id} bib={bib} />
                   })}
@@ -152,19 +188,27 @@ export default function Search({
             )}
             <Pagination
               id="results-pagination"
-              mt="xl"
+              mt="xxl"
+              mb="l"
               initialPage={searchParams.page}
               currentPage={searchParams.page}
               pageCount={Math.ceil(totalResults / RESULTS_PER_PAGE)}
               onPageChange={handlePageChange}
             />
           </>
+        ) : /**
+         * TODO: The logic and copy for different scenarios will need to be added when
+         * filters are implemented
+         */
+        isLoading ? (
+          <SkeletonLoader showImage={false} />
         ) : (
-          /**
-           * TODO: The logic and copy for different scenarios will need to be added when
-           * filters are implemented
-           */
-          <Heading level="h3">No results. Try a different search.</Heading>
+          // Heading component does not expect tabIndex prop, so we are ignoring
+          // the typescript error that pops up.
+          // @ts-expect-error
+          <Heading ref={searchResultsHeadingRef} tabIndex="0" level="h3">
+            No results. Try a different search.
+          </Heading>
         )}
       </Layout>
     </>
@@ -185,12 +229,15 @@ export async function getServerSideProps({ resolvedUrl, req }) {
   // Remove everything before the query string delineator '?', necessary for correctly parsing the 'q' param.
   const queryString = resolvedUrl.slice(resolvedUrl.indexOf("?") + 1)
   const results = await fetchResults(mapQueryToSearchParams(parse(queryString)))
-
   const patronTokenResponse = await initializePatronTokenAuth(req)
   const isAuthenticated = patronTokenResponse.isTokenValid
-
+  const isFreshSortByQuery = getFreshSortByQuery(
+    req.headers.referer,
+    resolvedUrl
+  )
   return {
     props: {
+      isFreshSortByQuery,
       bannerNotification,
       results,
       isAuthenticated,

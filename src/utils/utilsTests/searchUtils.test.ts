@@ -4,12 +4,39 @@ import {
   mapQueryToSearchParams,
   mapRequestBodyToSearchParams,
   getSearchResultsHeading,
+  getFreshSortByQuery,
 } from "../searchUtils"
 import { queryParamsEquality } from "../../../__test__/helpers/searchHelpers"
 
 const checkQueryParamsEquality = queryParamsEquality(getSearchQuery)
 
 describe("searchUtils", () => {
+  describe("getFreshSortByQuery", () => {
+    it("returns false if there is no prevUrl", () => {
+      expect(getFreshSortByQuery(undefined, "thebomb.com")).toBe(false)
+    })
+    it("returns false if the prevUrl and currentUrl have same sort by params", () => {
+      const prev =
+        "http://local.nypl.org:8080/research/research-catalog/search?q=spaghetti&sort=title&sort_direction=asc"
+      const curr =
+        "http://local.nypl.org:8080/research/research-catalog/search?q=spaghetti&sort=title&sort_direction=asc&shape=pasta"
+      expect(getFreshSortByQuery(prev, curr)).toBe(false)
+    })
+    it("returns true if sort is same but direction is different", () => {
+      const prev =
+        "http://local.nypl.org:8080/research/research-catalog/search?q=spaghetti&sort=title&sort_direction=asc"
+      const curr =
+        "http://local.nypl.org:8080/research/research-catalog/search?q=spaghetti&sort=title&sort_direction=desc"
+      expect(getFreshSortByQuery(prev, curr)).toBe(true)
+    })
+    it("returns true if sort is different and direction is same", () => {
+      const prev =
+        "http://local.nypl.org:8080/research/research-catalog/search?q=spaghetti&sort=title&sort_direction=asc"
+      const curr =
+        "http://local.nypl.org:8080/research/research-catalog/search?q=spaghetti&sort=date&sort_direction=asc"
+      expect(getFreshSortByQuery(prev, curr)).toBe(true)
+    })
+  })
   describe("getSearchQuery", () => {
     it("constructs a basic query", () => {
       const testQuery =
@@ -96,14 +123,37 @@ describe("searchUtils", () => {
     })
   })
   describe("getSearchResultsHeading", () => {
+    it("doesn't display empty keyword if other params are present", () => {
+      const heading = getSearchResultsHeading(
+        { page: 1, q: "", title: "Strega Nonna" },
+        1200
+      )
+      expect(heading.toLocaleLowerCase().includes("keyword")).toBe(false)
+    })
+    it("displays all of the values from advanced search and nothing else", () => {
+      const heading = getSearchResultsHeading(
+        {
+          page: 1,
+          q: "spaghetti",
+          title: "ricotta",
+          contributor: "pasta mama",
+          subject: "italian",
+          filters: { language: "italian" },
+        },
+        100
+      )
+      expect(heading).toEqual(
+        'Displaying 1-50 of 100 results for keyword "spaghetti" and title "ricotta" and author "pasta mama" and subject "italian"'
+      )
+    })
     it("returns the correct heading string for first page", () => {
-      const heading = getSearchResultsHeading(1, 1200, "cats")
+      const heading = getSearchResultsHeading({ page: 1, q: "cats" }, 1200)
       expect(heading).toEqual(
         'Displaying 1-50 of 1,200 results for keyword "cats"'
       )
     })
     it("returns the correct heading string for other pages", () => {
-      const heading = getSearchResultsHeading(5, 1200, "cats")
+      const heading = getSearchResultsHeading({ page: 5, q: "cats" }, 1200)
       expect(heading).toEqual(
         'Displaying 201-250 of 1,200 results for keyword "cats"'
       )

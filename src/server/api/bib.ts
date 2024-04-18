@@ -1,16 +1,16 @@
-import type { BibParams, BibResponse } from "../../../src/types/bibTypes"
+import type { BibParams, BibResponse } from "../../types/bibTypes"
 import {
   getBibQuery,
   isNyplBibID,
   standardizeBibId,
-} from "../../../src/utils/bibUtils"
-import nyplApiClient from "../../../src/server/nyplApiClient"
+} from "../../utils/bibUtils"
+import nyplApiClient from "../nyplApiClient"
 import {
   DISCOVERY_API_NAME,
   DISCOVERY_API_SEARCH_ROUTE,
   SHEP_HTTP_TIMEOUT,
-} from "../../../src/config/constants"
-import { appConfig } from "../../../src/config/config"
+} from "../../config/constants"
+import { appConfig } from "../../config/config"
 
 export async function fetchBib(
   id: string,
@@ -61,7 +61,9 @@ export async function fetchBib(
       if (sierraBibResponse.statusCode === 200) {
         return {
           status: 307,
-          redirectUrl: `${appConfig.urls.circulatingCatalog}/iii/encore/record/C__R${id}`,
+          redirectUrl: `${
+            appConfig.urls.circulatingCatalog
+          }/search/card?recordId=${id.replace(/^b/, "")}`,
         }
       } else {
         console.error("There was a problem fetching the bib from Sierra")
