@@ -73,6 +73,6 @@ describe("DRBCard", () => {
     const titleLink = screen.getByText(/Spanish Title/i)
 
     expect(titleLink).toBeInTheDocument()
-    expect(titleLink.parentElement).toHaveAttribute("lang", "es")
+    expect(titleLink).toHaveAttribute("lang", "es")
   })
 })

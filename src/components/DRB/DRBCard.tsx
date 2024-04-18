@@ -29,16 +29,23 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
       <CardHeading
         level="h3"
         size="heading6"
-        mb="xs"
-        url={drbResult.url}
-        fontSize={{
-          base: "mobile.subtitle.subtitle2",
-          md: "desktop.subtitle.subtitle2",
-        }}
-        fontWeight="medium"
-        lang={drbResult.language !== "en" ? drbResult.language : null}
+        mb="0"
+        sx={{ a: { textDecoration: "none" } }}
       >
-        {drbResult.title}
+        <DSLink
+          href={drbResult.url}
+          target="_blank"
+          fontSize={{
+            base: "mobile.subtitle.subtitle2",
+            md: "desktop.subtitle.subtitle2",
+          }}
+          fontWeight="medium"
+          display="inline-block"
+          mb="xs"
+          lang={drbResult.language !== "en" ? drbResult.language : null}
+        >
+          {drbResult.title}
+        </DSLink>
       </CardHeading>
       <CardContent>
         {drbResult?.authors?.length > 0 ? (
