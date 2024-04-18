@@ -24,7 +24,7 @@ const SearchResultsSort = ({
   return (
     <Select
       name="sort_direction"
-      id={`search-results-sort${mobileOnly && "-mobile"}`}
+      id={`search-results-sort${mobileOnly ? "-mobile" : ""}`}
       labelText="Sort by"
       labelPosition="inline"
       mb="l"
