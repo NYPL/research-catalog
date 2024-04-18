@@ -219,7 +219,7 @@ export default class MyAccount {
         expirationDate: patron.expirationDate,
         emails: patron.emails || [],
         phones: patron.phones || [],
-        homeLibrary: patron.homeLibrary || [],
+        homeLibrary: patron.homeLibrary || null,
         id: patron.id,
       }
     } catch (e) {
