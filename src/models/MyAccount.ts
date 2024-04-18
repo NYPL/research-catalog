@@ -74,7 +74,6 @@ export default class MyAccount {
     start?: number
     entries: SierraBibEntry[]
   }> {
-    console.log(holdsOrCheckouts)
     if (!holdsOrCheckouts?.length) return { entries: [] }
     const itemLevelHoldsorCheckouts = []
     const bibLevelHolds = []
@@ -161,7 +160,7 @@ export default class MyAccount {
           catalogHref: bibForHold.isNyplOwned
             ? bibForHold.isResearch
               ? `https://nypl.org/research/research-catalog/bib/b${bibId}`
-              : `https://nypl.na2.iiivega.com/search/card?recordId=${bibId}`
+              : `https://borrow.nypl.org/search/card?recordId=${bibId}`
             : null,
         }
       })
@@ -199,7 +198,7 @@ export default class MyAccount {
           catalogHref: bibForCheckout.isNyplOwned
             ? bibForCheckout.isResearch
               ? `https://nypl.org/research/research-catalog/bib/b${bibId}`
-              : `https://nypl.na2.iiivega.com/search/card?recordId=${bibId}`
+              : `https://borrow.nypl.org/search/card?recordId=${bibId}`
             : null,
         }
       })
@@ -209,8 +208,6 @@ export default class MyAccount {
   }
 
   buildPatron(patron: SierraPatron): Patron {
-    const notificationPreference =
-      notificationPreferenceMap[patron.fixedFields["268"].value]
     try {
       const notificationPreference =
         notificationPreferenceMap[patron.fixedFields["268"].value]

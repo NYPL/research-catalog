@@ -70,7 +70,6 @@ describe("MyAccountModel", () => {
     it("can return checkouts", async () => {
       const mockSierraClient = {
         get: async (path) => {
-          console.log(path.includes("checkouts"))
           if (path.includes("checkouts")) {
             return Promise.resolve(checkouts)
           } else if (path.includes("bibs")) {
@@ -133,8 +132,24 @@ describe("MyAccountModel", () => {
           isResearch: false,
           bibId: "22002760",
           isNyplOwned: true,
-          catalogHref:
-            "https://nypl.na2.iiivega.com/search/card?recordId=22002760",
+          catalogHref: "https://borrow.nypl.org/search/card?recordId=22002760",
+        },
+        {
+          bibId: "21317166",
+          canFreeze: false,
+          catalogHref: "https://borrow.nypl.org/search/card?recordId=21317166",
+          frozen: false,
+          id: "42273371",
+          isNyplOwned: true,
+          isResearch: false,
+          patron: "2772226",
+          pickupByDate: null,
+          pickupLocation: {
+            code: "mp",
+            name: "Morris Park",
+          },
+          status: "REQUEST PENDING",
+          title: "2017 Tony Award Season.",
         },
       ])
     })

@@ -8,7 +8,6 @@ import { MyAccountFactory } from "../../src/models/MyAccount"
 import type MyAccountModel from "../../src/models/MyAccount"
 import ProfileTabs from "../../src/components/MyAccount/ProfileTabs"
 import ProfileHeader from "../../src/components/MyAccount/ProfileHeader"
-import { BASE_URL } from "../../src/config/constants"
 import FeesBanner from "../../src/components/MyAccount/FeesBanner"
 
 interface MyAccountPropsType {
