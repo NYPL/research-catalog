@@ -147,7 +147,7 @@ export default function Search({
         {totalResults ? (
           <>
             {isLoading ? (
-              <SkeletonLoader showImage={false} />
+              <SkeletonLoader showImage={false} mb="m" />
             ) : (
               <>
                 {displayAppliedFilters && (
