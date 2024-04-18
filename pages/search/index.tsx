@@ -167,27 +167,26 @@ export default function Search({
                 >
                   {getSearchResultsHeading(searchParams, totalResults)}
                 </Heading>
-
-                {totalResults > 0 ? (
-                  <SearchResultsSort
-                    // Mobile only Search Results Sort Select
-                    // Necessary due to the placement of the Select in the main content on mobile only.
-                    id="search-results-sort-mobile"
-                    searchParams={searchParams}
-                    handleSortChange={handleSortChange}
-                    display={{
-                      base: "block",
-                      md: "none",
-                    }}
-                  />
-                ) : null}
-                <SimpleGrid columns={1} gap="grid.l">
-                  {searchResultBibs.map((bib: SearchResultsBib) => {
-                    return <SearchResult key={bib.id} bib={bib} />
-                  })}
-                </SimpleGrid>
               </>
             )}
+            <SearchResultsSort
+              // Mobile only Search Results Sort Select
+              // Necessary due to the placement of the Select in the main content on mobile only.
+              id="search-results-sort-mobile"
+              searchParams={searchParams}
+              handleSortChange={handleSortChange}
+              display={{
+                base: "block",
+                md: "none",
+              }}
+            />
+            {!isLoading ? (
+              <SimpleGrid columns={1} gap="grid.l">
+                {searchResultBibs.map((bib: SearchResultsBib) => {
+                  return <SearchResult key={bib.id} bib={bib} />
+                })}
+              </SimpleGrid>
+            ) : null}
             <Pagination
               id="results-pagination"
               mt="xxl"
