@@ -34,6 +34,7 @@ const ElectronicResourcesLink = ({
           fontSize={{ base: "mobile.body.body2", md: "desktop.body.body2" }}
           fontWeight="bold"
           isUnderlined={false}
+          hasVisitedState={false}
         >
           {electronicResources[0].prefLabel || electronicResources[0].url}
         </DSLink>
@@ -44,6 +45,7 @@ const ElectronicResourcesLink = ({
           fontSize={{ base: "mobile.body.body2", md: "desktop.body.body2" }}
           fontWeight="medium"
           isUnderlined={false}
+          hasVisitedState={false}
         >
           View all available online resources
         </RCLink>

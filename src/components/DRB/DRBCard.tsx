@@ -43,6 +43,7 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
           display="inline-block"
           mb="xs"
           lang={drbResult.language !== "en" ? drbResult.language : null}
+          hasVisitedState={false}
         >
           {drbResult.title}
         </DSLink>
@@ -71,6 +72,7 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
                     md: "desktop.body.body2",
                   }}
                   fontWeight="light"
+                  hasVisitedState={false}
                 >
                   {author.name}
                 </DSLink>
@@ -87,6 +89,7 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
             type="buttonSecondary"
             mt="xs"
             isUnderlined={false}
+            hasVisitedState={false}
           >
             Read Online
           </DSLink>
@@ -103,6 +106,7 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
               md: "desktop.body.body2",
             }}
             mt="xs"
+            hasVisitedState={false}
           >
             <>
               <Icon name="download" align="left" size="small" />

@@ -61,6 +61,7 @@ const DRBContainer = ({
             }}
             type="standalone"
             fontWeight="bold"
+            hasVisitedState={false}
           >
             <>
               View {totalWorks === 1 ? "" : "all"} {totalWorks.toLocaleString()}{" "}
