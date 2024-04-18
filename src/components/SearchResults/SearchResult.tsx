@@ -7,6 +7,7 @@ import {
   CardActions,
   useNYPLBreakpoints,
   SimpleGrid,
+  Link as DSLink,
 } from "@nypl/design-system-react-components"
 
 import RCLink from "../RCLink/RCLink"
@@ -53,9 +54,14 @@ const SearchResult = ({ bib }: SearchResultProps) => {
       <CardHeading
         level="h3"
         size="heading5"
-        url={`${BASE_URL}${PATHS.BIB}/${bib.id}`}
+        sx={{ a: { textDecoration: "none" } }}
       >
-        {bib.title}
+        <DSLink
+          href={`${BASE_URL}${PATHS.BIB}/${bib.id}`}
+          hasVisitedState={false}
+        >
+          {bib.title}
+        </DSLink>
       </CardHeading>
       <CardContent>
         <Box
