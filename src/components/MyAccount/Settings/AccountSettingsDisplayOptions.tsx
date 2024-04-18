@@ -11,25 +11,21 @@ import { buildListElementsWithIcons } from "../IconListElement"
 import type { JSX, ReactNode } from "react"
 
 export const AccountSettingsDisplay = ({ patron }: { patron: Patron }) => {
-  return (
-    <>
-      {accountSettings
-        .map((setting) => {
-          const description = setting.description
-            ? setting.description(patron[setting.field])
-            : patron[setting.field]
-          console.log(setting.field, description)
-          return {
-            icon: setting.icon,
-            term: setting.term,
-            // pin is masked so description is a default "****"
-            description,
-          }
-        })
-        .filter((listData) => !!listData.description)
-        .map(buildListElementsWithIcons)}
-    </>
-  )
+  const terms = accountSettings
+    .map((setting) => {
+      const description = setting.description
+        ? setting.description(patron[setting.field])
+        : patron[setting.field]
+
+      return {
+        icon: setting.icon,
+        term: setting.term,
+        // pin is masked so description is a default "****"
+        description,
+      }
+    })
+    .filter((listData) => !!listData.description)
+  return <>{terms.map(buildListElementsWithIcons)}</>
 }
 
 export const AccountSettingsForm = ({ patron }: { patron: Patron }) => {
