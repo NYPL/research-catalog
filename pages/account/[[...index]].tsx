@@ -29,7 +29,6 @@ export default function MyAccount({
   tabsPath,
 }: MyAccountPropsType) {
   const errorRetrievingPatronData = !patron
-  console.log(checkouts, holds, patron, fines, tabsPath)
 
   /** Testing settings api route */
   async function settingsUpdate(patronId) {
