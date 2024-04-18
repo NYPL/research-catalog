@@ -1,10 +1,8 @@
-import sierraClient from "../server/sierraClient"
 import type {
   Checkout,
   Hold,
   Patron,
   Fine,
-  SierraAccountData,
   SierraCheckout,
   SierraHold,
   SierraCodeName,
@@ -14,7 +12,6 @@ import type {
   SierraBibEntry,
   BibDataMapType,
 } from "../types/myAccountTypes"
-import { appConfig } from "../config/config"
 
 let client: any
 
@@ -95,7 +92,7 @@ export default class MyAccount {
       }
     })
 
-    const bibData = await client.get(
+    const bibData = await this.client.get(
       `bibs?id=${itemLevelHoldsorCheckouts}&fields=default,varFields`
     )
     bibData.entries = bibData.entries.concat(bibLevelHolds)
@@ -201,7 +198,7 @@ export default class MyAccount {
           catalogHref: bibDataMap[checkout.item.bibIds[0]].isNyplOwned
             ? bibDataMap[checkout.item.bibIds[0]].isResearch
               ? `https://nypl.org/research/research-catalog/bib/b${checkout.item.bibIds[0]}`
-              : `https://nypl.na2.iiivega.com/search/card?recordId=${checkout.item.bibIds[0]}`
+              : `https://borrow.nypl.org/search/card?recordId=${checkout.item.bibIds[0]}`
             : null,
         }
       })

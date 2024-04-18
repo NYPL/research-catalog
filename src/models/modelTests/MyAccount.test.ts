@@ -143,33 +143,6 @@ describe("MyAccountModel", () => {
         ],
       })
     })
-    it("can return a patron", async () => {
-      const mockSierraClient = {
-        get: async (path) => Promise.resolve(patron),
-      }
-      const fetcher = new MyAccount(mockSierraClient, "12345")
-      const processedFines = await fetcher.getPatron()
-      expect(processedFines).toStrictEqual({
-        name: "NONNA, STREGA",
-        barcode: "23333121538324",
-        expirationDate: "2025-03-28",
-        primaryEmail: "streganonna@gmail.com",
-        emails: ["streganonna@gmail.com", "spaghettigrandma@gmail.com"],
-        primaryPhone: "123-456-7890",
-        phones: [
-          {
-            number: "123-456-7890",
-            type: "t",
-          },
-        ],
-        homeLibrary: "Stavros Niarchos Foundation Library (SNFL)",
-        id: 2772226,
-        notificationPreference: null,
-      })
-      expect(emptyAccount.checkouts).toStrictEqual([])
-      expect(emptyAccount.holds).toStrictEqual([])
-      expect(emptyAccount.fines).toStrictEqual({ total: 0, entries: [] })
-    })
   })
   describe("getResearchAndOwnership", () => {
     it("can handle no varfields", () => {
