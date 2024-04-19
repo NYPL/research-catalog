@@ -14,13 +14,14 @@ interface RequestButtonsProps {
 const RequestButtons = ({ item }: RequestButtonsProps) => {
   if (item.allLocationsClosed) return null
   return (
-    <Box sx={{ a: { marginRight: "xs" } }} mb="s">
+    <Box sx={{ a: { marginRight: "xs" } }}>
       {item.aeonUrl ? (
         <RCLink
           href={item.aeonUrl}
           type={!item.isAvailable ? "buttonDisabled" : "buttonSecondary"}
           aria-label={`Request Appointment, ${item.bibTitle}`}
           disabled={!item.isAvailable}
+          mb="s"
         >
           Request Appointment
         </RCLink>
@@ -34,6 +35,7 @@ const RequestButtons = ({ item }: RequestButtonsProps) => {
               type={!item.isAvailable ? "buttonDisabled" : "buttonSecondary"}
               aria-label={`Request for On-site Use, ${item.bibTitle}`}
               disabled={!item.isAvailable}
+              mb="s"
             >
               Request for On-site Use
             </RCLink>
@@ -46,6 +48,7 @@ const RequestButtons = ({ item }: RequestButtonsProps) => {
               type={!item.isAvailable ? "buttonDisabled" : "buttonSecondary"}
               aria-label={`Request Scan, ${item.bibTitle}`}
               disabled={!item.isAvailable}
+              mb="s"
             >
               Request Scan
             </RCLink>
