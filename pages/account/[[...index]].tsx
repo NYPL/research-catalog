@@ -9,12 +9,19 @@ import type MyAccountModel from "../../src/models/MyAccount"
 import ProfileTabs from "../../src/components/MyAccount/ProfileTabs"
 import ProfileHeader from "../../src/components/MyAccount/ProfileHeader"
 import FeesBanner from "../../src/components/MyAccount/FeesBanner"
+import sierraClient from "../../src/server/sierraClient"
+import type {
+  Patron,
+  Hold,
+  Checkout,
+  Fine,
+} from "../../src/types/myAccountTypes"
 
 interface MyAccountPropsType {
-  patron?: MyAccountModel["patron"]
-  checkouts?: MyAccountModel["checkouts"]
-  holds?: MyAccountModel["holds"]
-  fines?: MyAccountModel["fines"]
+  patron?: Patron
+  checkouts?: Checkout[]
+  holds?: Hold[]
+  fines?: Fine
   isAuthenticated: boolean
   tabsPath?: string
 }
@@ -92,7 +99,11 @@ export async function getServerSideProps({ req }) {
   const tabsPath = req.url.split("/", -1)[2] || null
   const id = patronTokenResponse.decodedPatron.sub
   try {
-    const { checkouts, holds, patron, fines } = await MyAccountFactory(id)
+    const client = sierraClient()
+    const { checkouts, holds, patron, fines } = await MyAccountFactory(
+      id,
+      client
+    )
     // Redirecting /fines if user has none.
     if (tabsPath === "overdues" && fines.total === 0) {
       return {
