@@ -27,9 +27,10 @@ interface SearchResultProps {
  * The SearchResult component displays a single search result element.
  */
 const SearchResult = ({ bib }: SearchResultProps) => {
-  const { isLargerThanLarge: isDesktop } = useNYPLBreakpoints()
+  const { isLargerThanMobile: isDesktop } = useNYPLBreakpoints()
 
-  // On Search Results, a separate ItemTable is constructed for each item up to the limit set in ITEMS_PER_SEARCH_RESULT.
+  // On Search Results, a separate ItemTable is constructed for each item up to
+  // the limit set in ITEMS_PER_SEARCH_RESULT.
   // TODO: Move this preprocessing to SearchResultsBib model
   const searchResultItems: ItemTableData[] =
     bib.hasItems &&
