@@ -9,6 +9,7 @@ import {
   SkeletonLoader,
 } from "@nypl/design-system-react-components"
 import Head from "next/head"
+import logger from "../logger"
 
 import Layout from "../src/components/Layout/Layout"
 import RCLink from "../src/components/RCLink/RCLink"
@@ -184,6 +185,7 @@ export default function Home({
 }
 
 export async function getServerSideProps({ req }) {
+  logger.info("Testing logger")
   const bannerNotification = process.env.SEARCH_RESULTS_NOTIFICATION || ""
 
   // Every page that needs patron data must call initializePatronTokenAuth
