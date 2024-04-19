@@ -185,15 +185,12 @@ export default function Home({
 }
 
 export async function getServerSideProps({ req }) {
-  logger.info("Testing logger")
   const bannerNotification = process.env.SEARCH_RESULTS_NOTIFICATION || ""
-
   // Every page that needs patron data must call initializePatronTokenAuth
   // to find if the token is valid and what the patron id is.
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   // Now it can be used to get patron data from Sierra or Platform API
   // or use `isTokenValid` to redirect to login page if it's not valid.
-  console.log("patronTokenResponse is", patronTokenResponse)
 
   const isAuthenticated = patronTokenResponse.isTokenValid
   // return props object
