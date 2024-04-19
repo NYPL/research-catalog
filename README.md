@@ -59,6 +59,13 @@ When getServerSideProps is used to fetch the initial data, Next automatically ha
 
 For instances where manual client-side data fetching is preferable (e.g. when we don't want data fetching to block the initial page load), we employ the [`SWR`](https://www.npmjs.com/package/swr) module. SWR provides hooks that handles the typical boilerplate for fetching data and setting loading and error states, as well as optimizations such as caching.
 
+## Logging
+
+This project uses [Winston](https://www.npmjs.com/package/winston) for serverside logging. See `logger.js` for the formatting and storage of logs. We structure our logs according to these [NYPL standards](https://github.com/NYPL/engineering-general/blob/main/standards/logging.md).
+
+Logs for this project's `qa` and `production` branches can be found in AWS Cloudwatch under the `nypl-digital-dev` account by searching "research-catalog". For the old DFE logs, search "discoveryui". 
+
+
 ## My Account API Endpoints
 
 See the [My Account README](accountREADME.md).
