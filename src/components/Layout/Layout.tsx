@@ -22,6 +22,7 @@ interface LayoutProps {
   sidebarPosition?: "right" | "left"
   isAuthenticated?: boolean
   searchAggregations?: Aggregation[]
+  bannerNotification?: string
 }
 
 /**
@@ -39,6 +40,7 @@ const Layout = ({
 }: PropsWithChildren<LayoutProps>) => {
   const showSearch = activePage === "search"
   const showHeader = activePage !== "404"
+  const showNotification = activePage === "" || activePage === "search"
 
   return (
     <DSProvider>
@@ -79,6 +81,13 @@ const Layout = ({
         sidebar={sidebar ? sidebarPosition : "none"}
         contentPrimary={
           <Box pb="l">
+            {showNotification && bannerNotification && (
+              <Banner
+                mb="s"
+                heading="New Service Announcement"
+                content={bannerNotification}
+              />
+            )}
             {children}
             <FeedbackForm />
           </Box>

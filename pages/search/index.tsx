@@ -117,6 +117,7 @@ export default function Search({
         <title key="main-title">{metadataTitle}</title>
       </Head>
       <Layout
+        bannerNotification={bannerNotification}
         searchAggregations={aggs}
         isAuthenticated={isAuthenticated}
         activePage="search"
@@ -156,13 +157,6 @@ export default function Search({
               <SkeletonLoader showImage={false} mb="m" />
             ) : (
               <>
-                {bannerNotification && (
-                  <Banner
-                    mb="s"
-                    heading="New Service Announcement"
-                    content={bannerNotification}
-                  />
-                )}
                 {displayAppliedFilters && (
                   <AppliedFilters aggregations={aggs} />
                 )}
