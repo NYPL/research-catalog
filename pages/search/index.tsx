@@ -126,6 +126,12 @@ export default function Search({
               <SearchResultsSort
                 searchParams={searchParams}
                 handleSortChange={handleSortChange}
+                // We have to render the sort select twice and toggle which is shown at the desktop breakpoint, since
+                // the design has it appearing in the sidebar on desktop and in the main content on mobile.
+                // Using inline styles to do this for now since using useNYPLBreakpoints had a visible lag.
+                // TODO: Extend the Layout component to receive a prop that contains content to be shown below the
+                //  main header, which will include the search results heading and the sort select, which would allow us
+                //  to only render the sort select once.
                 display={{
                   base: "none",
                   md: "block",
@@ -175,6 +181,12 @@ export default function Search({
               id="search-results-sort-mobile"
               searchParams={searchParams}
               handleSortChange={handleSortChange}
+              // We have to render the sort select twice and toggle which is shown at the desktop breakpoint, since
+              // the design has it appearing in the sidebar on desktop and in the main content on mobile.
+              // Using inline styles to do this for now since using useNYPLBreakpoints had a visible lag.
+              // TODO: Extend the Layout component to receive a prop that contains content to be shown below the
+              //  main header, which will include the search results heading and the sort select, which would allow us
+              //  to only render the sort select once.
               display={{
                 base: "block",
                 md: "none",
