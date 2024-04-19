@@ -350,7 +350,7 @@ describe("MyAccountModel", () => {
       expect(emptyAccount.holds).toStrictEqual([])
       expect(emptyAccount.fines).toStrictEqual({ total: 0, entries: [] })
     })
-    it("can handle one fetch fails", async () => {
+    it("will return other processed data if one fetch fails", async () => {
       MyAccount.prototype.fetchCheckouts = async () =>
         Promise.resolve(checkouts)
       MyAccount.prototype.fetchHolds = jest.fn().mockRejectedValue({})
@@ -363,6 +363,24 @@ describe("MyAccountModel", () => {
       const patronWithFails = await MyAccountFactory("123", {})
       expect(patronWithFails.holds).toStrictEqual([])
       expect(patronWithFails.checkouts).not.toHaveLength(0)
+      expect(patronWithFails.fines.total).toEqual(0)
+      expect(patronWithFails.patron.name).toEqual("NONNA, STREGA")
+    })
+    it("will return other processed data if an error is thrown", async () => {
+      MyAccount.prototype.fetchCheckouts = async () =>
+        Promise.resolve(checkouts)
+      MyAccount.prototype.fetchHolds = async () => Promise.resolve(holds)
+      MyAccount.prototype.fetchPatron = async () => Promise.resolve(patron)
+      MyAccount.prototype.fetchFines = async () => ({ total: 0, entries: [] })
+      MyAccount.prototype.fetchBibData = jest
+        .fn()
+        .mockImplementationOnce(() => {
+          throw new Error("spahget")
+        })
+        .mockResolvedValueOnce(holdBibs)
+      const patronWithFails = await MyAccountFactory("123", {})
+      expect(patronWithFails.checkouts).toStrictEqual([])
+      expect(patronWithFails.holds).not.toHaveLength(0)
       expect(patronWithFails.fines.total).toEqual(0)
       expect(patronWithFails.patron.name).toEqual("NONNA, STREGA")
     })
