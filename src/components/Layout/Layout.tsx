@@ -5,6 +5,7 @@ import {
   Breadcrumbs,
   DSProvider,
   Heading,
+  Banner,
 } from "@nypl/design-system-react-components"
 
 import { type RCPage } from "../../types/pageTypes"
@@ -12,7 +13,6 @@ import styles from "../../../styles/components/Layout.module.scss"
 import SubNav from "../SubNav/SubNav"
 import SearchForm from "../SearchForm/SearchForm"
 import { BASE_URL } from "../../config/constants"
-import Notification from "../Notification/Notification"
 import FeedbackForm from "../FeedbackForm/FeedbackForm"
 import type { Aggregation } from "../../types/filterTypes"
 
@@ -75,15 +75,18 @@ const Layout = ({
                 />
                 {showSearch && <SearchForm aggregations={searchAggregations} />}
               </div>
-              {showNotification && bannerNotification && (
-                <Notification notification={bannerNotification} />
-              )}
             </>
           )
         }
         sidebar={sidebar ? sidebarPosition : "none"}
         contentPrimary={
           <Box pb="l">
+            {showNotification && bannerNotification && (
+              <Banner
+                heading="New Service Announcement"
+                content={bannerNotification}
+              />
+            )}
             {children}
             <FeedbackForm />
           </Box>
