@@ -4,6 +4,7 @@ import {
   SimpleGrid,
   Pagination,
   SkeletonLoader,
+  Banner,
 } from "@nypl/design-system-react-components"
 import { useEffect, useRef, type ChangeEvent } from "react"
 import { useRouter } from "next/router"
@@ -119,7 +120,6 @@ export default function Search({
         searchAggregations={aggs}
         isAuthenticated={isAuthenticated}
         activePage="search"
-        bannerNotification={bannerNotification}
         sidebar={
           <>
             {totalResults > 0 ? (
@@ -156,6 +156,13 @@ export default function Search({
               <SkeletonLoader showImage={false} mb="m" />
             ) : (
               <>
+                {bannerNotification && (
+                  <Banner
+                    mb="s"
+                    heading="New Service Announcement"
+                    content={bannerNotification}
+                  />
+                )}
                 {displayAppliedFilters && (
                   <AppliedFilters aggregations={aggs} />
                 )}
