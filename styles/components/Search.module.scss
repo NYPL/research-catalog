@@ -10,7 +10,11 @@
 }
 .searchContainer {
   background-color: var(--nypl-colors-ui-bg-default);
-  padding: var(--nypl-space-l) 0;
+  padding: var(--nypl-space-s) 0;
+
+  @media screen and (min-width: 600px) {
+    padding: var(--nypl-space-l) 0;
+  }
 }
 
 .searchContainerInner {
@@ -19,25 +23,31 @@
 
 .auxSearchContainer {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
-  margin-top: var(--nypl-space-s);
+  margin-top: var(--nypl-space-xs);
   margin-bottom: var(--nypl-space-s);
 
   @media screen and (min-width: 600px) {
-    margin-top: var(--nypl-space-xs);
+    flex-direction: row-reverse;
   }
 }
 
 .advancedSearch {
   align-self: flex-start;
   min-width: 127px;
-  line-height: 1;
   margin-left: auto;
+
+  @media screen and (min-width: 600px) {
+    line-height: 1;
+  }
 }
 
 .refineSearchButton {
+  width: 100%;
+
   @media screen and (min-width: 600px) {
+    width: auto;
     margin-top: var(--nypl-space-xs);
   }
 }

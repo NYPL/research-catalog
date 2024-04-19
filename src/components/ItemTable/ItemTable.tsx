@@ -14,11 +14,12 @@ interface ItemTableProps {
  */
 const ItemTable = ({ itemTableData }: ItemTableProps) => {
   return (
-    <>
+    <Box>
       <Table
         className={styles.itemTable}
         columnHeaders={itemTableData.tableHeadings}
         tableData={itemTableData.tableData}
+        my={{ base: 0, md: "s" }}
       />
       {!itemTableData.isBibPage && (
         <Box>
@@ -26,7 +27,7 @@ const ItemTable = ({ itemTableData }: ItemTableProps) => {
           <ItemAvailability item={itemTableData.items[0]} />
         </Box>
       )}
-    </>
+    </Box>
   )
 }
 
