@@ -65,6 +65,8 @@ This project uses [Winston](https://www.npmjs.com/package/winston) for serversid
 
 Logs for this project's `qa` and `production` branches can be found in AWS Cloudwatch under the `nypl-digital-dev` account by searching "research-catalog". For the old DFE logs, search "discoveryui". 
 
+For Vercel deployments, logging will appear in the console. 
+
 
 ## My Account API Endpoints
 
