@@ -12,7 +12,11 @@ const CheckoutsTab = ({
 }) => {
   function formatTitleElement(checkout: Checkout) {
     if (checkout.catalogHref) {
-      return <Link href={checkout.catalogHref}>{checkout.title}</Link>
+      return (
+        <Link href={checkout.catalogHref} hasVisitedState={false}>
+          {checkout.title}
+        </Link>
+      )
     } else {
       return <Text>{checkout.title}</Text>
     }

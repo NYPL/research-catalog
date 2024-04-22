@@ -56,6 +56,7 @@ export default function Home({
                 <Link
                   href="/research/collections/about/shared-collection-catalog"
                   aria-label="Learn more about the Research Catalog."
+                  hasVisitedState={false}
                 >
                   Learn more.
                 </Link>

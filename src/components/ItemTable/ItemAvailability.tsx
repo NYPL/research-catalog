@@ -33,6 +33,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
           href={appConfig.urls.researchMaterialsHelp}
           target="_blank"
           fontSize="sm"
+          hasVisitedState={false}
         >
           How do I pick up this item and when will it be ready?
         </Link>
@@ -49,6 +50,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
               <Link
                 href={`${appConfig.urls.locations}${item.location.endpoint}`}
                 target="_blank"
+                hasVisitedState={false}
               >
                 {item.location.prefLabel}
               </Link>
@@ -68,6 +70,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
           <Link
             href={`${appConfig.urls.locations}${item.location.endpoint}`}
             target="_blank"
+            hasVisitedState={false}
           >
             {`New York Public Library - ${locationShort}`}
           </Link>
