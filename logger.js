@@ -6,36 +6,21 @@ const initializeLogger = () => {
     //
   }
 
-  // Set default NYPL agreed upon log levels
+  // NYPL levels allowed by console
   const nyplLogLevels = {
-    emergency: 0,
-    alert: 1,
-    critical: 2,
-    error: 3,
-    warning: 4,
-    notice: 5,
-    info: 6,
-    debug: 7,
+    warn: 1,
+    info: 2,
+    debug: 3,
   }
 
   const getLogLevelCode = (levelString) => {
     switch (levelString) {
-      case "emergency":
-        return 0
-      case "alert":
+      case "warn":
         return 1
-      case "critical":
-        return 2
-      case "error":
-        return 3
-      case "warning":
-        return 4
-      case "notice":
-        return 5
       case "info":
-        return 6
+        return 2
       case "debug":
-        return 7
+        return 3
       default:
         return "n/a"
     }
@@ -56,7 +41,7 @@ const initializeLogger = () => {
   })
 
   const transports = [
-    new winston.transports.Console(),
+    new winston.transports.Console({ level: "debug" }),
     new winston.transports.File({
       filename: path.resolve(process.cwd(), "log", "rc.log"),
       // Log format space limited
