@@ -8,19 +8,22 @@ const initializeLogger = () => {
 
   // NYPL levels allowed by console
   const nyplLogLevels = {
-    warn: 1,
-    info: 2,
-    debug: 3,
+    error: 1,
+    warn: 2,
+    info: 3,
+    debug: 4,
   }
 
   const getLogLevelCode = (levelString) => {
     switch (levelString) {
-      case "warn":
+      case "error":
         return 1
-      case "info":
+      case "warn":
         return 2
-      case "debug":
+      case "info":
         return 3
+      case "debug":
+        return 4
       default:
         return "n/a"
     }
