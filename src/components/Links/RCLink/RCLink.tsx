@@ -4,10 +4,11 @@ import {
 } from "@nypl/design-system-react-components"
 // import Link from "next/link"
 import { type ReactNode } from "react"
+import { BASE_URL } from "../../../config/constants"
 
 interface RCLinkProps {
   active?: boolean
-  href: string
+  href?: string
   children: ReactNode
   className?: string
   color?: string
@@ -18,6 +19,7 @@ interface RCLinkProps {
   hasWhiteFocusRing?: boolean
   disabled?: boolean
   [key: string]: any
+  includeBaseUrl?: boolean
 }
 
 // TODO: once 2ad is phased out, replace with DS v3 Link which can wrap a
@@ -30,17 +32,18 @@ interface RCLinkProps {
  */
 const RCLink = ({
   className,
-  href,
+  href = "",
   children,
   active = false,
   hasWhiteFocusRing = false,
   disabled,
+  includeBaseUrl = true,
   ...rest
 }: RCLinkProps) => {
   return (
     // <Link href={href} passHref>
     <DSLink
-      href={href}
+      href={`${includeBaseUrl ? BASE_URL : ""}${href}`}
       className={className}
       fontWeight={active && "bold"}
       hasVisitedState={false}

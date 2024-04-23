@@ -2,7 +2,6 @@ import { Box, Text } from "@nypl/design-system-react-components"
 
 import RCLink from "../Links/RCLink/RCLink"
 import ExternalLink from "../Links/ExternalLink/ExternalLink"
-import { BASE_URL } from "../../config/constants"
 import type { ElectronicResource } from "../../types/bibTypes"
 
 interface ElectronicResourcesLinkProps {
@@ -39,7 +38,7 @@ const ElectronicResourcesLink = ({
         </ExternalLink>
       ) : (
         <RCLink
-          href={`${BASE_URL}${bibUrl}#electronic-resources`}
+          href={`${bibUrl}#electronic-resources`}
           type="standalone"
           fontSize={{ base: "mobile.body.body2", md: "desktop.body.body2" }}
           fontWeight="medium"

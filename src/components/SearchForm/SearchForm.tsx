@@ -103,7 +103,7 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
         <Box className={styles.auxSearchContainer}>
           <RCLink
             className={styles.advancedSearch}
-            href={`${BASE_URL}/search/advanced`}
+            href="/search/advanced"
             isUnderlined={false}
             mb="xs"
           >

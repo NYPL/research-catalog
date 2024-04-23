@@ -18,6 +18,7 @@ interface ExternalLinkProps {
   mt?: string
   lang?: string
   isUnderlined?: boolean
+  disabled?: boolean
 }
 
 // TODO: once 2ad is phased out, replace with DS v3 Link which can wrap a
@@ -32,6 +33,7 @@ const ExternalLink = ({
   href,
   children,
   target = "_blank",
+  disabled = false,
   ...rest
 }: ExternalLinkProps) => {
   return (
@@ -41,6 +43,10 @@ const ExternalLink = ({
       hasVisitedState={false}
       target={target}
       {...rest}
+      // TODO: These were added in accessibility QA. Investigate adding these to the DS Link component.
+      role="link"
+      aria-disabled={disabled}
+      tabIndex={disabled ? -1 : 0}
     >
       {children}
     </DSLink>

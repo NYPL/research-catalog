@@ -120,7 +120,12 @@ const LinkElement = (url: Url, linkType: string) => {
   else if (linkType === "external") Link = ExternalLink
   const stringDirection = rtlOrLtr(url.urlLabel)
   return (
-    <Link dir={stringDirection} href={url.url} key={url.url}>
+    <Link
+      dir={stringDirection}
+      href={url.url}
+      key={url.url}
+      includeBaseUrl={false}
+    >
       {url.urlLabel}
     </Link>
   )

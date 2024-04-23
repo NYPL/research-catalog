@@ -10,7 +10,6 @@ import {
 import Head from "next/head"
 
 import Layout from "../src/components/Layout/Layout"
-import RCLink from "../src/components/Links/RCLink/RCLink"
 import ExternalLink from "../src/components/Links/ExternalLink/ExternalLink"
 
 import { SITE_NAME } from "../src/config/constants"
@@ -64,13 +63,13 @@ export default function Home({
                 Please note that the Research Catalog does not include
                 circulating materials. For books and more that you can check out
                 to take home please visit our{" "}
-                <RCLink href={appConfig.urls.circulatingCatalog}>
+                <ExternalLink href={appConfig.urls.circulatingCatalog}>
                   circulating branch catalog.
-                </RCLink>{" "}
+                </ExternalLink>{" "}
                 The{" "}
-                <RCLink href={appConfig.urls.legacyCatalog}>
+                <ExternalLink href={appConfig.urls.legacyCatalog}>
                   legacy research catalog
-                </RCLink>{" "}
+                </ExternalLink>{" "}
                 is still available, but does not include all of our Scan &
                 Deliver options or the Columbia University, Harvard University,
                 and Princeton University material from the Shared Collection.

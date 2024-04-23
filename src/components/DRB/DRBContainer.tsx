@@ -7,7 +7,6 @@ import {
 } from "@nypl/design-system-react-components"
 
 import { appConfig } from "../../config/config"
-import RCLink from "../Links/RCLink/RCLink"
 import ExternalLink from "../Links/ExternalLink/ExternalLink"
 import DRBCard from "./DRBCard"
 import type DRBResult from "../../models/DRBResult"
@@ -41,9 +40,9 @@ const DRBContainer = ({
         <Text size="body2">
           Digital books for research from multiple sources world wide- all free
           to read, download, and keep. No Library Card is Required.{" "}
-          <RCLink href={appConfig.urls.drbAbout}>
+          <ExternalLink href={appConfig.urls.drbAbout}>
             Read more about the project
-          </RCLink>
+          </ExternalLink>
           .
         </Text>
         <SimpleGrid columns={1} gap="grid.s" pb="s">

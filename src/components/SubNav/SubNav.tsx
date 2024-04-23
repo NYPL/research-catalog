@@ -1,7 +1,6 @@
 import RCLink from "../Links/RCLink/RCLink"
 import styles from "../../../styles/components/SubNav.module.scss"
 import { type RCPage } from "../../types/pageTypes"
-import { BASE_URL } from "../../config/constants"
 import { useLogoutRedirect } from "../../server/auth"
 interface SubNavProps {
   activePage: RCPage
@@ -19,7 +18,6 @@ const SubNav = ({ activePage, isAuthenticated }: SubNavProps) => {
       <ul>
         <li>
           <RCLink
-            href={BASE_URL}
             aria-current={
               activePage === "search" || activePage === "advanced"
                 ? "page"
@@ -33,7 +31,7 @@ const SubNav = ({ activePage, isAuthenticated }: SubNavProps) => {
         </li>
         <li>
           <RCLink
-            href={`${BASE_URL}/subject_headings`}
+            href="/subject_headings"
             active={activePage === "shep"}
             aria-current={activePage === "shep" ? "page" : undefined}
             hasWhiteFocusRing
@@ -43,7 +41,7 @@ const SubNav = ({ activePage, isAuthenticated }: SubNavProps) => {
         </li>
         <li>
           <RCLink
-            href={`${BASE_URL}/account`}
+            href="/account"
             active={activePage === "account"}
             aria-current={activePage === "account" ? "page" : undefined}
             hasWhiteFocusRing
@@ -53,7 +51,9 @@ const SubNav = ({ activePage, isAuthenticated }: SubNavProps) => {
         </li>
         {isAuthenticated && (
           <li>
-            <RCLink href={logoutLink}>Log Out</RCLink>
+            <RCLink href={logoutLink} includeBaseUrl={false}>
+              Log Out
+            </RCLink>
           </li>
         )}
       </ul>
