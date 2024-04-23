@@ -80,12 +80,6 @@ export interface SearchFormAction {
   payload: SearchParams | SearchFilters | string | string[]
 }
 
-export interface SearchFormAction {
-  type: SearchFormActionType
-  field?: string
-  payload: SearchParams | SearchFilters | string | string[]
-}
-
 export type SearchQueryFilters = [string, string][]
 
 /* eslint-disable @typescript-eslint/naming-convention */
