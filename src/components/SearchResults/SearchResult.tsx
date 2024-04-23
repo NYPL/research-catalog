@@ -7,10 +7,10 @@ import {
   CardActions,
   useNYPLBreakpoints,
   SimpleGrid,
-  Link as DSLink,
 } from "@nypl/design-system-react-components"
 
 import RCLink from "../Links/RCLink/RCLink"
+import ExternalLink from "../Links/ExternalLink/ExternalLink"
 import ElectronicResourcesLink from "./ElectronicResourcesLink"
 import ItemTable from "../ItemTable/ItemTable"
 import ItemTableData from "../../models/ItemTableData"
@@ -56,12 +56,9 @@ const SearchResult = ({ bib }: SearchResultProps) => {
         size="heading5"
         sx={{ a: { textDecoration: "none" } }}
       >
-        <DSLink
-          href={`${BASE_URL}${PATHS.BIB}/${bib.id}`}
-          hasVisitedState={false}
-        >
+        <ExternalLink href={`${BASE_URL}${PATHS.BIB}/${bib.id}`}>
           {bib.title}
-        </DSLink>
+        </ExternalLink>
       </CardHeading>
       <CardContent>
         <Box
@@ -98,7 +95,6 @@ const SearchResult = ({ bib }: SearchResultProps) => {
                     }}
                     fontWeight="medium"
                     type="standalone"
-                    mt="m"
                   >
                     {`View All ${bib.itemMessage} `}
                   </RCLink>

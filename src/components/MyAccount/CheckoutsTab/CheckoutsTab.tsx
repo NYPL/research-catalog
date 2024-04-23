@@ -1,4 +1,6 @@
-import { Link, Text } from "@nypl/design-system-react-components"
+import { Text } from "@nypl/design-system-react-components"
+
+import ExternalLink from "../../Links/ExternalLink/ExternalLink"
 import type { Checkout, Patron } from "../../../types/myAccountTypes"
 import RenewButton from "./RenewButton"
 import ItemsTab from "../ItemsTab"
@@ -13,9 +15,9 @@ const CheckoutsTab = ({
   function formatTitleElement(checkout: Checkout) {
     if (checkout.catalogHref) {
       return (
-        <Link href={checkout.catalogHref} hasVisitedState={false}>
+        <ExternalLink href={checkout.catalogHref}>
           {checkout.title}
-        </Link>
+        </ExternalLink>
       )
     } else {
       return <Text>{checkout.title}</Text>

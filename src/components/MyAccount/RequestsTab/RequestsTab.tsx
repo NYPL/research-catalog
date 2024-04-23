@@ -1,9 +1,6 @@
-import {
-  Box,
-  Link,
-  StatusBadge,
-  Text,
-} from "@nypl/design-system-react-components"
+import { Box, StatusBadge, Text } from "@nypl/design-system-react-components"
+
+import ExternalLink from "../../Links/ExternalLink/ExternalLink"
 import type { Hold, Patron } from "../../../types/myAccountTypes"
 import ItemsTab from "../ItemsTab"
 import CancelButton from "./CancelButton"
@@ -21,11 +18,7 @@ const RequestsTab = ({
   function formatTitleElement(hold: Hold) {
     // If item is research/circ
     if (hold.catalogHref) {
-      return (
-        <Link href={hold.catalogHref} hasVisitedState={false}>
-          {hold.title}
-        </Link>
-      )
+      return <ExternalLink href={hold.catalogHref}>{hold.title}</ExternalLink>
     } else {
       // Item is a partner record
       return <Text>{hold.title}</Text>

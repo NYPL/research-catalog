@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react"
-import type { Checkout, Patron } from "../../../types/myAccountTypes"
 import {
   useModal,
   Box,
   Icon,
   Button,
   Text,
-  Link,
   Heading,
 } from "@nypl/design-system-react-components"
+
+import ExternalLink from "../../Links/ExternalLink/ExternalLink"
+import type { Checkout, Patron } from "../../../types/myAccountTypes"
 import { BASE_URL } from "../../../config/constants"
 import styles from "../../../../styles/components/MyAccount.module.scss"
 
@@ -48,12 +49,9 @@ const RenewButton = ({
       <Box className={styles.modalBody}>
         <Text sx={{ marginLeft: "l", marginRight: "m" }}>
           We were unable to renew your item. Please try again or{" "}
-          <Link
-            href="https://www.nypl.org/get-help/contact-us"
-            hasVisitedState={false}
-          >
+          <ExternalLink href="https://www.nypl.org/get-help/contact-us">
             contact us
-          </Link>{" "}
+          </ExternalLink>{" "}
           for assistance.
         </Text>
       </Box>

@@ -4,11 +4,11 @@ import {
   CardContent,
   Text,
   SimpleGrid,
-  Link as DSLink,
 } from "@nypl/design-system-react-components"
 
 import { appConfig } from "../../config/config"
 import RCLink from "../Links/RCLink/RCLink"
+import ExternalLink from "../Links/ExternalLink/ExternalLink"
 import DRBCard from "./DRBCard"
 import type DRBResult from "../../models/DRBResult"
 import type { SearchParams } from "../../types/searchTypes"
@@ -52,23 +52,21 @@ const DRBContainer = ({
           ))}
         </SimpleGrid>
         {totalWorks && (
-          <DSLink
+          <ExternalLink
             href={`${DRB_BASE_URL}/search${drbQuery}`}
-            target="_blank"
             fontSize={{
               base: "mobile.body.body2",
               md: "desktop.body.body2",
             }}
             type="standalone"
             fontWeight="bold"
-            hasVisitedState={false}
           >
             <>
               View {totalWorks === 1 ? "" : "all"} {totalWorks.toLocaleString()}{" "}
               result
               {totalWorks === 1 ? "" : "s"} in Digital Research Books Beta
             </>
-          </DSLink>
+          </ExternalLink>
         )}
       </CardContent>
     </Card>

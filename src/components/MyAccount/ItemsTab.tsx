@@ -1,4 +1,6 @@
-import { Box, Icon, Link, Table } from "@nypl/design-system-react-components"
+import { Box, Icon, Table } from "@nypl/design-system-react-components"
+
+import ExternalLink from "../Links/ExternalLink/ExternalLink"
 import styles from "../../../styles/components/MyAccount.module.scss"
 import { appConfig } from "../../config/config"
 
@@ -21,7 +23,10 @@ const ItemsTab = ({
       <Box className={styles.notificationWithIcon}>
         <Icon size="medium" name="errorOutline" iconRotation="rotate180" />{" "}
         <span>
-          See <Link href={appConfig.urls.circulatingCatalog}>this page</Link>{" "}
+          See{" "}
+          <ExternalLink href={appConfig.urls.circulatingCatalog}>
+            this page
+          </ExternalLink>{" "}
           for eBooks and eAudiobooks {userAction} by you
         </span>
       </Box>

@@ -4,7 +4,6 @@ import {
   Card,
   CardHeading,
   CardContent,
-  Link,
   Box,
   SkeletonLoader,
 } from "@nypl/design-system-react-components"
@@ -12,6 +11,7 @@ import Head from "next/head"
 
 import Layout from "../src/components/Layout/Layout"
 import RCLink from "../src/components/Links/RCLink/RCLink"
+import ExternalLink from "../src/components/Links/ExternalLink/ExternalLink"
 
 import { SITE_NAME } from "../src/config/constants"
 import { appConfig } from "../src/config/config"
@@ -53,13 +53,12 @@ export default function Home({
                 for the Performing Arts. Plus, access materials from library
                 collections at Columbia University, Harvard University, and
                 Princeton University.{" "}
-                <Link
+                <ExternalLink
                   href="/research/collections/about/shared-collection-catalog"
                   aria-label="Learn more about the Research Catalog."
-                  hasVisitedState={false}
                 >
                   Learn more.
-                </Link>
+                </ExternalLink>
               </p>
               <p>
                 Please note that the Research Catalog does not include
