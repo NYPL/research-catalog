@@ -78,7 +78,7 @@ describe("searchUtils", () => {
         sortBy: "relevance",
       })
     })
-    it("parses the filters correctly", () => {
+    it("maps the filters correctly", () => {
       expect(
         mapQueryToSearchParams({
           "filters[language][0]": "lang:rus",
@@ -106,7 +106,7 @@ describe("searchUtils", () => {
     })
   })
   describe("mapQueryFiltersToSearchFilters", () => {
-    it("parses filter query keys to a SearchFilters object", () => {
+    it("maps filter query keys to a SearchFilters object", () => {
       const filters = mapQueryFiltersToSearchFilters([
         ["filters[language][0]", "lang:rus"],
         ["filters[subjectLiteral][0]", "Spaghetti"],
