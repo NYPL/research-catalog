@@ -150,7 +150,7 @@ export default function MyAccount({
           </Text>
         ) : (
           <>
-            {fines.total === 0 && <FeesBanner />}
+            {fines.total > 0 && <FeesBanner />}
             <ProfileHeader patron={patron} />
             <ProfileTabs
               patron={patron}
