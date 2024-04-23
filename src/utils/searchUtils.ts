@@ -280,7 +280,6 @@ export function mapQueryFiltersToSearchFilters(
       searchFilters[filterKey] = [filterValue]
     }
   })
-  console.log(searchFilters)
   return searchFilters
 }
 
