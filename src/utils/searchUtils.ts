@@ -7,6 +7,7 @@ import type {
   SearchFilters,
   Identifiers,
   SearchResultsElement,
+  SearchQueryFilters,
 } from "../types/searchTypes"
 import SearchResultsBib from "../models/SearchResultsBib"
 import { RESULTS_PER_PAGE } from "../config/constants"
@@ -260,6 +261,30 @@ export const sortOptions: Record<string, string> = {
 }
 
 /**
+ * mapQueryFiltersToSearchFilters
+ * Maps the filter query params to a SearchFilters object
+ */
+function mapQueryFiltersToSearchFilters(
+  filters: SearchQueryFilters
+): SearchFilters {
+  const searchFilters: SearchFilters = {}
+
+  console.log(filters)
+  filters.forEach((filter) => {
+    const [key, filterValue] = filter
+    // get values in between brackets in filter keys
+    const filterKey = key.match(/\[(.*?)]/i)?.[1]
+
+    if (searchFilters[filterKey]) {
+      searchFilters[filterKey].push(filterValue)
+    } else {
+      searchFilters[filterKey] = [filterValue]
+    }
+  })
+  return searchFilters
+}
+
+/**
  * mapQueryToSearchParams
  * Maps the SearchQueryParams structure from the request to a SearchParams object, which is expected by fetchResults
  * It also parses the results page number from a string, defaulting to 1 if absent
@@ -277,9 +302,10 @@ export function mapQueryToSearchParams({
   isbn,
   oclc,
   lccn,
-  filters,
+  ...queryFilters
 }: SearchQueryParams): SearchParams {
   const hasIdentifiers = issn || isbn || oclc || lccn
+  const filters = mapQueryFiltersToSearchFilters(Object.entries(queryFilters))
   return {
     q,
     field: search_scope,

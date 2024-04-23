@@ -38,13 +38,7 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
     }
     const queryString = getSearchQuery(searchParams)
 
-    // If the reverseProxyEnabled feature flag is true, use window.location.replace
-    // instead of router.push to forward search results to DFE.
-    if (appConfig.features.reverseProxyEnabled[appConfig.environment]) {
-      window.location.replace(`${BASE_URL}${PATHS.SEARCH}${queryString}`)
-    } else {
-      await router.push(`${PATHS.SEARCH}${queryString}`)
-    }
+    await router.push(`${PATHS.SEARCH}${queryString}`)
   }
 
   const handleChange = (
