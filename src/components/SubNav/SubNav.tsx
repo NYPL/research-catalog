@@ -1,4 +1,4 @@
-import RCLink from "../RCLink/RCLink"
+import RCLink from "../Links/RCLink/RCLink"
 import styles from "../../../styles/components/SubNav.module.scss"
 import { type RCPage } from "../../types/pageTypes"
 import { BASE_URL } from "../../config/constants"

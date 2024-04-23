@@ -11,7 +11,7 @@ import {
 import Head from "next/head"
 
 import Layout from "../src/components/Layout/Layout"
-import RCLink from "../src/components/RCLink/RCLink"
+import RCLink from "../src/components/Links/RCLink/RCLink"
 
 import { SITE_NAME } from "../src/config/constants"
 import { appConfig } from "../src/config/config"

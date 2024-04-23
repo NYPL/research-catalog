@@ -3,7 +3,7 @@ import { Heading } from "@nypl/design-system-react-components"
 
 import { appConfig } from "../../src/config/config"
 import Layout from "../../src/components/Layout/Layout"
-import RCLink from "../../src/components/RCLink/RCLink"
+import RCLink from "../../src/components/Links/RCLink/RCLink"
 import { BASE_URL, SITE_NAME } from "../../src/config/constants"
 
 export default function Custom404() {

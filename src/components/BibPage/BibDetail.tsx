@@ -4,7 +4,7 @@ import {
   List,
 } from "@nypl/design-system-react-components"
 import styles from "../../../styles/components/BibDetails.module.scss"
-import RCLink from "../RCLink/RCLink"
+import RCLink from "../Links/RCLink/RCLink"
 import type {
   BibDetail,
   Url,

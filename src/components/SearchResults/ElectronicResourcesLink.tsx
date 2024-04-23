@@ -1,6 +1,6 @@
 import { Box, Text, Link as DSLink } from "@nypl/design-system-react-components"
 
-import RCLink from "../RCLink/RCLink"
+import RCLink from "../Links/RCLink/RCLink"
 import { BASE_URL } from "../../config/constants"
 import type { ElectronicResource } from "../../types/bibTypes"
 

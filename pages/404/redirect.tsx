@@ -4,7 +4,7 @@ import { Heading } from "@nypl/design-system-react-components"
 import { appConfig } from "../../src/config/config"
 import { BASE_URL, SITE_NAME } from "../../src/config/constants"
 import Layout from "../../src/components/Layout/Layout"
-import RCLink from "../../src/components/RCLink/RCLink"
+import RCLink from "../../src/components/Links/RCLink/RCLink"
 
 export default function Redirect404() {
   const metadataTitle = `404 Redirect | ${SITE_NAME}`

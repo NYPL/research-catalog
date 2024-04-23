@@ -10,7 +10,7 @@ import {
   Link as DSLink,
 } from "@nypl/design-system-react-components"
 
-import RCLink from "../RCLink/RCLink"
+import RCLink from "../Links/RCLink/RCLink"
 import ElectronicResourcesLink from "./ElectronicResourcesLink"
 import ItemTable from "../ItemTable/ItemTable"
 import ItemTableData from "../../models/ItemTableData"

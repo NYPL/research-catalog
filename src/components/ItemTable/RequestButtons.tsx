@@ -1,5 +1,5 @@
 import { Box } from "@nypl/design-system-react-components"
-import RCLink from "../RCLink/RCLink"
+import RCLink from "../Links/RCLink/RCLink"
 
 import type Item from "../../models/Item"
 import { BASE_URL } from "../../config/constants"

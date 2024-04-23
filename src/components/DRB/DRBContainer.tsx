@@ -8,7 +8,7 @@ import {
 } from "@nypl/design-system-react-components"
 
 import { appConfig } from "../../config/config"
-import RCLink from "../RCLink/RCLink"
+import RCLink from "../Links/RCLink/RCLink"
 import DRBCard from "./DRBCard"
 import type DRBResult from "../../models/DRBResult"
 import type { SearchParams } from "../../types/searchTypes"
