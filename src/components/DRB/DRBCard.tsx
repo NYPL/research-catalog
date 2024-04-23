@@ -62,7 +62,6 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
                 {index > 0 && ","}
                 <ExternalLink
                   href={getAuthorURL(author)}
-                  target="_blank"
                   fontSize={{
                     base: "mobile.body.body2",
                     md: "desktop.body.body2",
@@ -80,7 +79,6 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
           <ExternalLink
             href={drbResult.readOnlineUrl}
             aria-label={`Read Online, ${drbResult.title}`}
-            target="_blank"
             type="buttonSecondary"
             mt="xs"
             isUnderlined={false}
@@ -92,7 +90,6 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
         {drbResult.downloadLink && (
           <ExternalLink
             href={drbResult.downloadLink?.url}
-            target="_blank"
             type="buttonSecondary"
             isUnderlined={false}
             fontSize={{
