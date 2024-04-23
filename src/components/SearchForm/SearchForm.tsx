@@ -12,7 +12,6 @@ import useLoading from "../../hooks/useLoading"
 import RefineSearch from "../RefineSearch/RefineSearch"
 import type { Aggregation } from "../../types/filterTypes"
 import { collapseMultiValueQueryParams } from "../../utils/refineSearchUtils"
-import { appConfig } from "../../config/config"
 
 /**
  * The SearchForm component renders and controls the Search form and
@@ -23,7 +22,9 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
   const [searchTerm, setSearchTerm] = useState(
     (router?.query?.q as string) || ""
   )
-  const [searchScope, setSearchScope] = useState("all")
+  const [searchScope, setSearchScope] = useState(
+    (router?.query?.search_scope as string) || "all"
+  )
   const [appliedFilters, setAppliedFilters] = useState(
     collapseMultiValueQueryParams(router.query)
   )
