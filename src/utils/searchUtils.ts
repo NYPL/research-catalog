@@ -264,12 +264,11 @@ export const sortOptions: Record<string, string> = {
  * mapQueryFiltersToSearchFilters
  * Maps the filter query params to a SearchFilters object
  */
-function mapQueryFiltersToSearchFilters(
+export function mapQueryFiltersToSearchFilters(
   filters: SearchQueryFilters
 ): SearchFilters {
   const searchFilters: SearchFilters = {}
 
-  console.log(filters)
   filters.forEach((filter) => {
     const [key, filterValue] = filter
     // get values in between brackets in filter keys
@@ -281,6 +280,7 @@ function mapQueryFiltersToSearchFilters(
       searchFilters[filterKey] = [filterValue]
     }
   })
+  console.log(searchFilters)
   return searchFilters
 }
 
@@ -305,7 +305,9 @@ export function mapQueryToSearchParams({
   ...queryFilters
 }: SearchQueryParams): SearchParams {
   const hasIdentifiers = issn || isbn || oclc || lccn
-  const filters = mapQueryFiltersToSearchFilters(Object.entries(queryFilters))
+  const filters = Object.keys(queryFilters).length
+    ? mapQueryFiltersToSearchFilters(Object.entries(queryFilters))
+    : undefined
   return {
     q,
     field: search_scope,

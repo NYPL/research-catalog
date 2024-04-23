@@ -5,8 +5,13 @@ import {
   mapRequestBodyToSearchParams,
   getSearchResultsHeading,
   getFreshSortByQuery,
+  mapQueryFiltersToSearchFilters,
 } from "../searchUtils"
 import { queryParamsEquality } from "../../../__test__/helpers/searchHelpers"
+import type {
+  SearchQueryFilters,
+  SearchQueryParams,
+} from "../../types/searchTypes"
 
 const checkQueryParamsEquality = queryParamsEquality(getSearchQuery)
 
@@ -73,6 +78,22 @@ describe("searchUtils", () => {
         sortBy: "relevance",
       })
     })
+    it("parses the filters correctly", () => {
+      expect(
+        mapQueryToSearchParams({
+          "filters[language][0]": "lang:rus",
+          "filters[subjectLiteral][0]": "Spaghetti",
+          "filters[subjectLiteral][1]": "Linguini",
+        } as SearchQueryParams)
+      ).toEqual({
+        page: 1,
+        q: "",
+        filters: {
+          language: ["lang:rus"],
+          subjectLiteral: ["Spaghetti", "Linguini"],
+        },
+      })
+    })
     it("parses the page number query string value into a number", () => {
       expect(
         mapQueryToSearchParams({
@@ -82,6 +103,27 @@ describe("searchUtils", () => {
         page: 2,
         q: "",
       })
+    })
+  })
+  describe("mapQueryFiltersToSearchFilters", () => {
+    it("parses filter query keys to a SearchFilters object", () => {
+      const filters = mapQueryFiltersToSearchFilters([
+        ["filters[language][0]", "lang:rus"],
+        ["filters[subjectLiteral][0]", "Spaghetti"],
+        ["filters[subjectLiteral][1]", "Linguini"],
+        ["filters[dateAfter][0]", "1999"],
+      ])
+
+      expect(filters).toEqual({
+        language: ["lang:rus"],
+        subjectLiteral: ["Spaghetti", "Linguini"],
+        dateAfter: ["1999"],
+      })
+    })
+    it("returns an empty object when an empty value is passed in", () => {
+      const filters = mapQueryFiltersToSearchFilters([])
+
+      expect(filters).toEqual({})
     })
   })
   describe("mapRequestBodyToSearchParams", () => {
