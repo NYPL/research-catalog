@@ -11,10 +11,8 @@ interface RCLinkProps {
   href?: string
   children: ReactNode
   className?: string
-  color?: string
   type?: LinkTypes
   fontSize?: string | Record<string, string>
-  fontWeight?: string
   isUnderlined?: boolean
   hasWhiteFocusRing?: boolean
   disabled?: boolean

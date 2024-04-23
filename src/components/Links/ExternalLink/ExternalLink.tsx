@@ -2,6 +2,7 @@ import {
   Link as DSLink,
   type LinkTypes,
 } from "@nypl/design-system-react-components"
+import { chakra } from "@chakra-ui/react"
 import { type ReactNode } from "react"
 
 interface ExternalLinkProps {
@@ -10,15 +11,9 @@ interface ExternalLinkProps {
   className?: string
   target?: "_blank" | "_parent" | "_self" | "_top"
   type?: LinkTypes
-  fontSize?: string | Record<string, string>
-  fontWeight?: string
-  display?: string
-  rel?: string
-  mb?: string
-  mt?: string
-  lang?: string
   isUnderlined?: boolean
   disabled?: boolean
+  [key: string]: any
 }
 
 // TODO: once 2ad is phased out, replace with DS v3 Link which can wrap a

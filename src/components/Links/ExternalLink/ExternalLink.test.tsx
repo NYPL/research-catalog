@@ -20,4 +20,15 @@ describe("ExternalLink", () => {
     const link = screen.getByText("Spaghetti")
     expect(link).toHaveAttribute("target", "_blank")
   })
+  it("should add appropriate accessibility attributes when link is disabled", async () => {
+    render(
+      <ExternalLink href="/spaghetti" disabled>
+        Spaghetti
+      </ExternalLink>
+    )
+    const link = screen.getByText("Spaghetti")
+    expect(link).toHaveAttribute("aria-disabled", "true")
+    expect(link).toHaveAttribute("role", "link")
+    expect(link).toHaveAttribute("tabindex", "-1")
+  })
 })
