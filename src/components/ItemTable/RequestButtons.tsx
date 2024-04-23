@@ -36,6 +36,7 @@ const RequestButtons = ({ item }: RequestButtonsProps) => {
               aria-label={`Request for On-site Use, ${item.bibTitle}`}
               disabled={!item.isAvailable}
               mb="s"
+              target="_self"
             >
               Request for On-site Use
             </RCLink>
@@ -47,6 +48,7 @@ const RequestButtons = ({ item }: RequestButtonsProps) => {
               aria-label={`Request Scan, ${item.bibTitle}`}
               disabled={!item.isAvailable}
               mb="s"
+              target="_self"
             >
               Request Scan
             </RCLink>
