@@ -61,10 +61,7 @@ export default function Search({
   const drbWorks = drbResponse?.works
 
   // TODO: Move this to global context
-  console.log("query", query)
   const searchParams = mapQueryToSearchParams(query)
-  console.log("searchParams", searchParams)
-
   // Map Search Results Elements from response to SearchResultBib objects
   const searchResultBibs = mapElementsToSearchResultsBibs(searchResultsElements)
   // Map DRB Works from response to DRBResult objects
