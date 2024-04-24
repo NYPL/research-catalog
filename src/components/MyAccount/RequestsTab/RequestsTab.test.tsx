@@ -134,7 +134,7 @@ describe("RequestsTab", () => {
         body: JSON.stringify({
           patronId: mockPatron.id,
           freeze: true,
-          pickupLocation: "mal",
+          pickupLocation: "sn",
         }),
       }
     )
@@ -153,7 +153,7 @@ describe("RequestsTab", () => {
         body: JSON.stringify({
           patronId: mockPatron.id,
           freeze: false,
-          pickupLocation: "mal",
+          pickupLocation: "sn",
         }),
       }
     )

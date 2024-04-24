@@ -5,7 +5,6 @@ import type {
   Hold,
   Patron,
   Fine,
-  SierraAccountData,
   SierraCheckout,
   SierraHold,
   SierraCodeName,
@@ -17,8 +16,6 @@ import type {
 } from "../types/myAccountTypes"
 import { notificationPreferenceMap } from "../utils/myAccountData"
 
-let client
-
 class MyAccountModelError extends Error {
   constructor(errorDetail: string, error: Error) {
     super()
@@ -27,55 +24,68 @@ class MyAccountModelError extends Error {
 }
 
 export default class MyAccount {
-  checkouts: Checkout[]
-  holds: Hold[]
-  patron: Patron
-  fines: Fine
-  constructor({
-    checkouts,
-    holds,
-    patron,
-    fines,
-    checkoutBibData,
-    holdBibData,
-  }: SierraAccountData) {
-    this.checkouts = this.buildCheckouts(checkouts, checkoutBibData)
-    this.holds = this.buildHolds(holds, holdBibData)
-    this.patron = this.buildPatron(patron)
-    this.fines = this.buildFines(fines)
+  client
+  baseQuery: string
+  constructor(client, patronId: string) {
+    this.client = client
+    this.baseQuery = `patrons/${patronId}`
   }
 
-  static async fetchCheckouts(baseQuery: string) {
-    const checkoutQuery = "/checkouts?expand=item"
-    return await client.get(`${baseQuery}${checkoutQuery}`)
+  async fetchCheckouts() {
+    return await this.client.get(`${this.baseQuery}"/checkouts?expand=item"`)
   }
 
-  static async fetchHolds(baseQuery: string) {
-    const holdsQuery =
-      "/holds?expand=record&fields=canFreeze,record,status,pickupLocation,frozen,patron,pickupByDate,recordType"
-    return await client.get(`${baseQuery}${holdsQuery}`)
+  async getCheckouts() {
+    const checkouts = await this.fetchCheckouts()
+    const checkoutBibData = await this.fetchBibData(checkouts.entries, "item")
+    const checkoutsWithBibData = this.buildCheckouts(
+      checkouts.entries,
+      checkoutBibData.entries
+    )
+    return checkoutsWithBibData
   }
 
-  static async fetchPatron(baseQuery: string) {
-    const patronQuery =
-      "?fields=names,barcodes,expirationDate,homeLibrary,emails,phones,fixedFields"
-    return await client.get(`${baseQuery}${patronQuery}`)
+  async fetchHolds() {
+    return await this.client.get(
+      `${this.baseQuery}"/holds?expand=canFreeze,record,status,pickupLocation,frozen,patron,pickupByDate,recordType"`
+    )
   }
 
-  static async fetchFines(baseQuery: string) {
-    const finesQuery = "/fines"
-    return await client.get(`${baseQuery}${finesQuery}`)
+  async getHolds() {
+    const holds = await this.fetchHolds()
+    const holdBibData = await this.fetchBibData(holds.entries, "record")
+    const holdsWithBibData = this.buildHolds(holds.entries, holdBibData.entries)
+    return holdsWithBibData
   }
 
-  static async fetchBibData(
-    holdsOrCheckouts,
+  async fetchPatron() {
+    return await this.client.get(
+      `${this.baseQuery}?fields=names,barcodes,expirationDate,homeLibrary,emails,phones,fixedFields`
+    )
+  }
+
+  async getPatron() {
+    const patron = await this.fetchPatron()
+    return this.buildPatron(patron)
+  }
+
+  async fetchFines() {
+    return await this.client.get(`${this.baseQuery}/fines`)
+  }
+
+  async getFines() {
+    const fines = await this.fetchFines()
+    return this.buildFines(fines)
+  }
+
+  async fetchBibData(
+    holdsOrCheckouts: any[],
     itemOrRecord: string
   ): Promise<{
     total?: number
     start?: number
     entries: SierraBibEntry[]
   }> {
-    console.log(holdsOrCheckouts)
     if (!holdsOrCheckouts?.length) return { entries: [] }
     const itemLevelHoldsorCheckouts = []
     const bibLevelHolds = []
@@ -88,7 +98,8 @@ export default class MyAccount {
         bibLevelHolds.push(holdOrCheckout.record)
       }
     })
-    const bibData = await client.get(
+
+    const bibData = await this.client.get(
       `bibs?id=${itemLevelHoldsorCheckouts}&fields=default,varFields`
     )
     bibData.entries = bibData.entries.concat(bibLevelHolds)
@@ -135,7 +146,7 @@ export default class MyAccount {
   }
 
   buildHolds(holds: SierraHold[], bibData: SierraBibEntry[]): Hold[] {
-    let bibDataMap
+    let bibDataMap: BibDataMapType
     try {
       bibDataMap = MyAccount.buildBibData(bibData)
     } catch (e) {
@@ -174,7 +185,7 @@ export default class MyAccount {
     checkouts: SierraCheckout[],
     bibData: SierraBibEntry[]
   ): Checkout[] {
-    let bibDataMap
+    let bibDataMap: BibDataMapType
     try {
       bibDataMap = MyAccount.buildBibData(bibData)
     } catch (e) {
@@ -209,9 +220,9 @@ export default class MyAccount {
   }
 
   buildPatron(patron: SierraPatron): Patron {
-    const notificationPreference =
-      notificationPreferenceMap[patron.fixedFields["268"].value]
     try {
+      const notificationPreference =
+        notificationPreferenceMap[patron.fixedFields["268"].value]
       return {
         notificationPreference,
         name: patron.names[0],
@@ -252,7 +263,7 @@ export default class MyAccount {
    * getDueDate
    * Returns date in readable string ("Month day, year")
    */
-  static formatDate(date) {
+  static formatDate(date: string | number | Date) {
     if (!date) return null
     const d = new Date(date)
     const year = d.getFullYear()
@@ -285,38 +296,18 @@ export default class MyAccount {
   }
 }
 
-export const MyAccountFactory = async (id: string) => {
-  client = await sierraClient()
-  const baseQuery = `patrons/${id}`
-  let holds, patron, fines, checkoutBibData, checkouts, holdBibData
-  try {
-    checkouts = await MyAccount.fetchCheckouts(baseQuery)
-    holds = await MyAccount.fetchHolds(baseQuery)
-    patron = await MyAccount.fetchPatron(baseQuery)
-    fines = await MyAccount.fetchFines(baseQuery)
-  } catch (e) {
-    throw new MyAccountModelError("fetching patron data", e)
-  }
-  try {
-    checkoutBibData = await MyAccount.fetchBibData(checkouts.entries, "item")
-  } catch (e) {
-    throw new MyAccountModelError("fetching bibs for checkouts", e)
-  }
-  try {
-    holdBibData = await MyAccount.fetchBibData(holds.entries, "record")
-  } catch (e) {
-    throw new MyAccountModelError("fetching bibs for holds", e)
-  }
-  return new MyAccount({
-    //  default to empty array to avoid hard to replicate error
-    // where entries end up undefined in buildBibData.
-    checkouts: checkouts.entries || [],
-    holds: holds.entries || [],
-    patron,
-    fines,
-    checkoutBibData: checkoutBibData.entries,
-    holdBibData: holdBibData.entries,
-  })
+export const MyAccountFactory = async (id: string, client) => {
+  const patronFetcher = new MyAccount(client, id)
+  const sierraData = await Promise.allSettled([
+    patronFetcher.getCheckouts(),
+    patronFetcher.getHolds(),
+    patronFetcher.getPatron(),
+    patronFetcher.getFines(),
+  ])
+  const [checkouts, holds, patron, fines] = sierraData.map((data) => {
+    return data.status === "fulfilled" ? data.value : []
+  }) as [Checkout[], Hold[], Patron, Fine]
+  return { checkouts, holds, patron, fines }
 }
 
 export const getPickupLocations = async () => {
