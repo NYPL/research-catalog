@@ -43,7 +43,7 @@ export default function Home({
         ) : (
           <>
             <Heading level="h2">
-              Explore the Library&apos;s Vast Research Collections & More
+              Explore the Library&apos;s Vast Research Collections &amp; More
             </Heading>
             <Box>
               <p>
