@@ -13,9 +13,6 @@ import {
   checkoutBibs,
   empty,
 } from "../../../__test__/fixtures/rawSierraAccountData"
-import { notificationPreferenceMap } from "../../utils/myAccountData"
-
-jest.mock("../../server/sierraClient")
 
 describe("MyAccountModel", () => {
   const fetchBibs = MyAccount.prototype.fetchBibData
