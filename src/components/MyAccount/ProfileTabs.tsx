@@ -31,20 +31,27 @@ const ProfileTabs = ({
     setCurrentHolds(currentHolds.filter((item) => item.id !== hold.id))
   }
   // tabsData conditionally includes fines– only when user has total fines more than $0.
+  const errorTabMessage = (tab) => `There was an error accessing your ${tab}.`
   const tabsData = [
     {
-      label: `Checkouts (${checkouts.length})`,
-      content: <CheckoutsTab checkouts={checkouts} patron={patron} />,
+      label: "Checkouts" + (checkouts ? `(${checkouts.length})` : ""),
+      content: checkouts ? (
+        <CheckoutsTab checkouts={checkouts} patron={patron} />
+      ) : (
+        errorTabMessage("checkouts")
+      ),
       urlPath: "checkouts",
     },
     {
-      label: `Requests (${currentHolds.length})`,
-      content: (
+      label: "Requests" + (holds ? `(${holds.length})` : ""),
+      content: holds ? (
         <RequestsTab
           removeHold={removeHold}
           holds={currentHolds}
           patron={patron}
         />
+      ) : (
+        errorTabMessage("requests")
       ),
       urlPath: "requests",
     },

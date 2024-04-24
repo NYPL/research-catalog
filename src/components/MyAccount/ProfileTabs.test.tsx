@@ -64,4 +64,19 @@ describe("ProfileTabs", () => {
     fireEvent.click(getByText("Requests", { exact: false }))
     expect(mockRouter.asPath).toBe("/account/requests")
   })
+  it("displays error message when checkouts or holds are null", () => {
+    const { getAllByText } = render(
+      <ProfileTabs
+        patron={mockPatron}
+        checkouts={null}
+        holds={null}
+        fines={mockFines}
+        activePath="checkouts"
+      />
+    )
+    const errorMessages = getAllByText("There was an error accessing your", {
+      exact: false,
+    })
+    expect(errorMessages).toHaveLength(2)
+  })
 })

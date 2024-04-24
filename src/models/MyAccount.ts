@@ -54,6 +54,7 @@ export default class MyAccount {
   async getHolds() {
     const holds = await this.fetchHolds()
     const holdBibData = await this.fetchBibData(holds.entries, "record")
+
     const holdsWithBibData = this.buildHolds(holds.entries, holdBibData.entries)
     return holdsWithBibData
   }
@@ -305,7 +306,8 @@ export const MyAccountFactory = async (id: string, client) => {
     patronFetcher.getFines(),
   ])
   const [checkouts, holds, patron, fines] = sierraData.map((data) => {
-    return data.status === "fulfilled" ? data.value : []
+    if (data.status === "fulfilled") return data.value
+    else return null
   }) as [Checkout[], Hold[], Patron, Fine]
   return { checkouts, holds, patron, fines }
 }
