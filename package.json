@@ -30,7 +30,8 @@
     "react-dom": "18.2.0",
     "swr": "2.2.1",
     "ts-jest": "29.1.1",
-    "underscore": "1.13.6"
+    "underscore": "1.13.6",
+    "winston": "3.9.0"
   },
   "devDependencies": {
     "@testing-library/dom": "^9.3.3",

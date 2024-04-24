@@ -17,8 +17,12 @@ const ElectronicResourcesLink = ({
   electronicResources,
 }: ElectronicResourcesLinkProps) => {
   return (
-    <Box mt="s" mb="s">
-      <Text mb="xxs" fontSize="desktop.body.body1" fontWeight="bold">
+    <Box mt="s">
+      <Text
+        mb="xxs"
+        fontSize={{ base: "mobile.body.body1", md: "desktop.body.body1" }}
+        fontWeight="bold"
+      >
         Available Online
       </Text>
       {electronicResources.length === 1 ? (
@@ -27,9 +31,10 @@ const ElectronicResourcesLink = ({
           target="_blank"
           rel="noreferrer"
           type="standalone"
-          fontSize="desktop.body.body2"
+          fontSize={{ base: "mobile.body.body2", md: "desktop.body.body2" }}
           fontWeight="bold"
           isUnderlined={false}
+          hasVisitedState={false}
         >
           {electronicResources[0].prefLabel || electronicResources[0].url}
         </DSLink>
@@ -37,9 +42,10 @@ const ElectronicResourcesLink = ({
         <RCLink
           href={`${BASE_URL}${bibUrl}#electronic-resources`}
           type="standalone"
-          fontSize="desktop.body.body2"
+          fontSize={{ base: "mobile.body.body2", md: "desktop.body.body2" }}
           fontWeight="medium"
           isUnderlined={false}
+          hasVisitedState={false}
         >
           View all available online resources
         </RCLink>

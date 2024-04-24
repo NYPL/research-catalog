@@ -101,6 +101,14 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
           }}
         />
         <Box className={styles.auxSearchContainer}>
+          <RCLink
+            className={styles.advancedSearch}
+            href={`${BASE_URL}/search/advanced`}
+            isUnderlined={false}
+            mb="xs"
+          >
+            Advanced Search
+          </RCLink>
           {displayRefineResults && (
             <RefineSearch
               setAppliedFilters={setAppliedFilters}
@@ -108,13 +116,6 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
               aggregations={aggregations}
             />
           )}
-          <RCLink
-            className={styles.advancedSearch}
-            href={`${BASE_URL}/search/advanced`}
-            isUnderlined={false}
-          >
-            Advanced Search
-          </RCLink>
         </Box>
         <EDSLink />
       </div>
