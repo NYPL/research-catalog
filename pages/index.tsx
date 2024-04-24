@@ -43,7 +43,7 @@ export default function Home({
         ) : (
           <>
             <Heading level="h2">
-              Explore the Library&apos;s Vast Research Collections & More
+              Explore the Library&apos;s Vast Research Collections &amp; More
             </Heading>
             <Box>
               <p>
@@ -71,7 +71,7 @@ export default function Home({
                 <RCLink href={appConfig.urls.legacyCatalog}>
                   legacy research catalog
                 </RCLink>{" "}
-                is still available, but does not include all of our Scan &
+                is still available, but does not include all of our Scan &amp;
                 Deliver options or the Columbia University, Harvard University,
                 and Princeton University material from the Shared Collection.
               </p>
@@ -185,14 +185,11 @@ export default function Home({
 
 export async function getServerSideProps({ req }) {
   const bannerNotification = process.env.SEARCH_RESULTS_NOTIFICATION || ""
-
   // Every page that needs patron data must call initializePatronTokenAuth
   // to find if the token is valid and what the patron id is.
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   // Now it can be used to get patron data from Sierra or Platform API
   // or use `isTokenValid` to redirect to login page if it's not valid.
-  console.log("patronTokenResponse is", patronTokenResponse)
-
   const isAuthenticated = patronTokenResponse.isTokenValid
   // return props object
   return {
