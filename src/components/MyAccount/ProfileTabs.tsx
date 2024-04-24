@@ -1,6 +1,6 @@
 import AccountSettingsTab from "./Settings/AccountSettingsTab"
 
-import { Tabs } from "@nypl/design-system-react-components"
+import { Tabs, Text } from "@nypl/design-system-react-components"
 import { useRouter } from "next/router"
 import CheckoutsTab from "./CheckoutsTab/CheckoutsTab"
 import RequestsTab from "./RequestsTab/RequestsTab"
@@ -31,14 +31,13 @@ const ProfileTabs = ({
     setCurrentHolds(currentHolds.filter((item) => item.id !== hold.id))
   }
   // tabsData conditionally includes fines– only when user has total fines more than $0.
-  const errorTabMessage = (tab) => `There was an error accessing your ${tab}.`
   const tabsData = [
     {
       label: "Checkouts" + (checkouts ? `(${checkouts.length})` : ""),
       content: checkouts ? (
         <CheckoutsTab checkouts={checkouts} patron={patron} />
       ) : (
-        errorTabMessage("checkouts")
+        <Text>There was an error accessing your checkouts.</Text>
       ),
       urlPath: "checkouts",
     },
@@ -51,7 +50,7 @@ const ProfileTabs = ({
           patron={patron}
         />
       ) : (
-        errorTabMessage("requests")
+        <Text>There was an error accessing your requests</Text>
       ),
       urlPath: "requests",
     },

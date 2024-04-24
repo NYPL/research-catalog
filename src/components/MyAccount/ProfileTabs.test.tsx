@@ -1,5 +1,5 @@
 import React from "react"
-import { render, fireEvent } from "@testing-library/react"
+import { render, fireEvent, screen } from "../../utils/testUtils"
 import ProfileTabs from "./ProfileTabs"
 import {
   mockCheckouts,
@@ -65,7 +65,7 @@ describe("ProfileTabs", () => {
     expect(mockRouter.asPath).toBe("/account/requests")
   })
   it("displays error message when checkouts or holds are null", () => {
-    const { getAllByText } = render(
+    render(
       <ProfileTabs
         patron={mockPatron}
         checkouts={null}
@@ -74,9 +74,9 @@ describe("ProfileTabs", () => {
         activePath="checkouts"
       />
     )
-    const errorMessages = getAllByText("There was an error accessing your", {
-      exact: false,
-    })
-    expect(errorMessages).toHaveLength(2)
+    const errorMessage = screen.getByText(
+      "There was an error accessing your checkouts."
+    )
+    expect(errorMessage).toBeInTheDocument()
   })
 })
