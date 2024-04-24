@@ -1,5 +1,4 @@
-import AccountSettingsTab from "./AccountSettingsTab"
-import type MyAccount from "../../models/MyAccount"
+import AccountSettingsTab from "./Settings/AccountSettingsTab"
 
 import { Tabs } from "@nypl/design-system-react-components"
 import { useRouter } from "next/router"
@@ -7,12 +6,13 @@ import CheckoutsTab from "./CheckoutsTab/CheckoutsTab"
 import RequestsTab from "./RequestsTab/RequestsTab"
 import { useState } from "react"
 import FeesTab from "./FeesTab/FeesTab"
+import type { Checkout, Patron, Hold, Fine } from "../../types/myAccountTypes"
 
 interface ProfileTabsPropsType {
-  patron: MyAccount["patron"]
-  checkouts: MyAccount["checkouts"]
-  holds: MyAccount["holds"]
-  fines: MyAccount["fines"]
+  patron: Patron
+  checkouts: Checkout[]
+  holds: Hold[]
+  fines: Fine
   activePath: string
 }
 

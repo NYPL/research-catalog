@@ -3,7 +3,7 @@ import { render } from "../../../utils/testUtils"
 import {
   mockCheckouts,
   mockPatron,
-} from "../../../../__test__/fixtures/myAccountFixtures"
+} from "../../../../__test__/fixtures/processedMyAccountData"
 import CheckoutsTab from "./CheckoutsTab"
 import { userEvent } from "@testing-library/user-event"
 
