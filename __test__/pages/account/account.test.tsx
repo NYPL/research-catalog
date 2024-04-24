@@ -6,7 +6,7 @@ import {
   mockCheckouts,
   mockHolds,
   mockFines,
-} from "../../fixtures/myAccountFixtures"
+} from "../../fixtures/processedMyAccountData"
 
 jest.mock("next/router", () => ({
   useRouter: jest.fn(),
