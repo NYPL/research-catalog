@@ -71,7 +71,7 @@ export default function Home({
                 <RCLink href={appConfig.urls.legacyCatalog}>
                   legacy research catalog
                 </RCLink>{" "}
-                is still available, but does not include all of our Scan &
+                is still available, but does not include all of our Scan &amp;
                 Deliver options or the Columbia University, Harvard University,
                 and Princeton University material from the Shared Collection.
               </p>
@@ -190,7 +190,6 @@ export async function getServerSideProps({ req }) {
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   // Now it can be used to get patron data from Sierra or Platform API
   // or use `isTokenValid` to redirect to login page if it's not valid.
-
   const isAuthenticated = patronTokenResponse.isTokenValid
   // return props object
   return {
