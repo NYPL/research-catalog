@@ -194,7 +194,9 @@ export async function getServerSideProps({ req }) {
     }
   }
   // Parsing path from url to pass to ProfileTabs.
-  const tabsPath = req.url.split("/").slice(2).join("/") || null
+  const tabsPathRegex = /\/account\/(.+)/
+  const match = req.url.match(tabsPathRegex)
+  const tabsPath = match ? match[1] : null
   const id = patronTokenResponse.decodedPatron.sub
   try {
     const { checkouts, holds, patron, fines } = await MyAccountFactory(id)
