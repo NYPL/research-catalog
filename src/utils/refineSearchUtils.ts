@@ -50,7 +50,6 @@ export const addLabelPropAndParseFilters = (
   aggregations: Aggregation[], // from the api response
   appliedFilterValues: CollapsedMultiValueAppliedFilters // parsed from url query params
 ): Record<string, Option[]> => {
-  console.log({ aggregations, appliedFilterValues })
   const appliedFilterValuesWithLabels = {}
   for (const appliedFilterField in appliedFilterValues) {
     // Find the aggregation that corresponds to the filter field we are working on
