@@ -1,5 +1,10 @@
-import MyAccount, { MyAccountFactory } from "../MyAccount"
+import { filteredPickupLocations } from "../../../__test__/fixtures/processedMyAccountData"
+import MyAccount, {
+  MyAccountFactory,
+  filterPickupLocations,
+} from "../MyAccount"
 import {
+  pickupLocations,
   holds,
   checkouts,
   patron,
@@ -7,13 +12,20 @@ import {
   holdBibs,
   checkoutBibs,
   empty,
-} from "../../../__test__/fixtures/myAccountFixtures"
+} from "../../../__test__/fixtures/rawSierraAccountData"
 
 jest.mock("../../server/sierraClient")
 
 describe("MyAccountModel", () => {
   const fetchBibs = MyAccount.fetchBibData
   afterAll(() => (MyAccount.fetchBibData = fetchBibs))
+  describe("fetchPickupLocations", () => {
+    it("filters out closed and research branches", () => {
+      expect(filterPickupLocations(pickupLocations)).toStrictEqual(
+        filteredPickupLocations
+      )
+    })
+  })
   describe("getRecordId", () => {
     it("can parse an id", () => {
       const idUrl =
@@ -72,16 +84,17 @@ describe("MyAccountModel", () => {
         name: "NONNA, STREGA",
         barcode: "23333121538324",
         expirationDate: "2025-03-28",
-        primaryEmail: "streganonna@gmail.com",
         emails: ["streganonna@gmail.com", "spaghettigrandma@gmail.com"],
-        primaryPhone: "123-456-7890",
         phones: [
           {
             number: "123-456-7890",
             type: "t",
           },
         ],
-        homeLibrary: "Stavros Niarchos Foundation Library (SNFL)",
+        homeLibrary: {
+          code: "sn",
+          name: "Stavros Niarchos Foundation Library (SNFL)",
+        },
         id: 2772226,
       })
       expect(account.holds).toStrictEqual([
@@ -174,11 +187,12 @@ describe("MyAccountModel", () => {
         name: "NONNA, STREGA",
         barcode: "23333121538324",
         expirationDate: "2025-03-28",
-        primaryEmail: "",
         emails: [],
-        primaryPhone: "",
         phones: [],
-        homeLibrary: "Stavros Niarchos Foundation Library (SNFL)",
+        homeLibrary: {
+          code: "sn",
+          name: "Stavros Niarchos Foundation Library (SNFL)",
+        },
         id: 2772226,
         notificationPreference: null,
       })
