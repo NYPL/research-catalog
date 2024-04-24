@@ -9,7 +9,7 @@ import {
   mockFines,
   mockHolds,
   mockPatron,
-} from "../../fixtures/myAccountFixtures"
+} from "../../fixtures/processedMyAccountData"
 
 jest.mock("../../../src/server/auth")
 jest.mock("../../../src/models/MyAccount")
