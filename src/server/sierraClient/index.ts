@@ -1,5 +1,6 @@
 import wrapper from "@nypl/sierra-wrapper"
 import { kmsDecryptCreds } from "../kms"
+import logger from "../../../logger"
 
 interface Cache {
   client: any
@@ -12,7 +13,7 @@ const encryptedSecret = process.env.SIERRA_SECRET
 const base = process.env.SIERRA_BASE
 
 if (!encryptedKey || !base || !encryptedSecret) {
-  console.error("Missing Sierra credentials")
+  logger.error("Missing Sierra credentials")
 }
 const creds = [encryptedKey, encryptedSecret]
 const CACHE: Cache = { client: null, key: null, secret: null }
