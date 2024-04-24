@@ -5,6 +5,7 @@ import {
   Breadcrumbs,
   DSProvider,
   Heading,
+  Banner,
 } from "@nypl/design-system-react-components"
 
 import { type RCPage } from "../../types/pageTypes"
@@ -12,15 +13,16 @@ import styles from "../../../styles/components/Layout.module.scss"
 import SubNav from "../SubNav/SubNav"
 import SearchForm from "../SearchForm/SearchForm"
 import { BASE_URL } from "../../config/constants"
-import Notification from "../Notification/Notification"
 import FeedbackForm from "../FeedbackForm/FeedbackForm"
+import type { Aggregation } from "../../types/filterTypes"
 
 interface LayoutProps {
   sidebar?: ReactElement
   activePage?: RCPage
   sidebarPosition?: "right" | "left"
-  bannerNotification?: string
   isAuthenticated?: boolean
+  searchAggregations?: Aggregation[]
+  bannerNotification?: string
 }
 
 /**
@@ -28,6 +30,7 @@ interface LayoutProps {
  * controls the rendering of Research Catalog header components per-page.
  */
 const Layout = ({
+  searchAggregations,
   children,
   isAuthenticated,
   sidebar,
@@ -70,17 +73,21 @@ const Layout = ({
                   isAuthenticated={isAuthenticated}
                   activePage={activePage}
                 />
-                {showSearch && <SearchForm />}
+                {showSearch && <SearchForm aggregations={searchAggregations} />}
               </div>
-              {showNotification && bannerNotification && (
-                <Notification notification={bannerNotification} />
-              )}
             </>
           )
         }
         sidebar={sidebar ? sidebarPosition : "none"}
         contentPrimary={
           <Box pb="l">
+            {showNotification && bannerNotification && (
+              <Banner
+                mb="s"
+                heading="New Service Announcement"
+                content={bannerNotification}
+              />
+            )}
             {children}
             <FeedbackForm />
           </Box>

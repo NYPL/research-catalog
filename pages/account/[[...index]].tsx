@@ -10,6 +10,7 @@ import ProfileTabs from "../../src/components/MyAccount/ProfileTabs"
 import ProfileHeader from "../../src/components/MyAccount/ProfileHeader"
 import { BASE_URL, PATHS } from "../../src/config/constants"
 import FeesBanner from "../../src/components/MyAccount/FeesBanner"
+import logger from "../../logger"
 
 interface MyAccountPropsType {
   patron?: MyAccountModel["patron"]
@@ -183,6 +184,7 @@ export default function MyAccount({
 
 export async function getServerSideProps({ req }) {
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
+  logger.debug(patronTokenResponse)
   const isAuthenticated = patronTokenResponse.isTokenValid
   if (!isAuthenticated) {
     const redirect = getLoginRedirect(req)
@@ -236,7 +238,7 @@ export async function getServerSideProps({ req }) {
       props: { checkouts, holds, patron, fines, tabsPath, isAuthenticated },
     }
   } catch (e) {
-    console.log(e.message)
+    logger.error(e.message)
     return {
       props: {
         tabsPath,

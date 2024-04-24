@@ -34,6 +34,7 @@ export default class Item {
   dueDate?: string
   isPhysicallyRequestable: boolean
   isEDDRequestable: boolean
+  bibTitle: string
 
   constructor(item: SearchResultsItem, bib: SearchResultsBib) {
     this.id = item.uri || ""
@@ -56,6 +57,7 @@ export default class Item {
     this.dueDate = item.dueDate?.length ? item.dueDate[0] : null
     this.isPhysicallyRequestable = item.physRequestable
     this.isEDDRequestable = item.eddRequestable
+    this.bibTitle = bib.title
   }
 
   // Item availability is determined by the existence of status id in the availability ids list

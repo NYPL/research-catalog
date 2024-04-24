@@ -6,6 +6,8 @@ import {
   Text,
   CardActions,
   useNYPLBreakpoints,
+  SimpleGrid,
+  Link as DSLink,
 } from "@nypl/design-system-react-components"
 
 import RCLink from "../RCLink/RCLink"
@@ -18,6 +20,8 @@ import {
   ITEMS_PER_SEARCH_RESULT,
   BASE_URL,
 } from "../../config/constants"
+import DRBResult from "../../models/DRBResult"
+import DRBCard from "../DRB/DRBCard"
 
 interface SearchResultProps {
   bib: SearchResultsBib
@@ -44,45 +48,65 @@ const SearchResult = ({ bib }: SearchResultProps) => {
     <Card
       sx={{
         borderBottom: "1px solid var(--nypl-colors-ui-border-default)",
-        paddingBottom: "m",
+        paddingBottom: "l",
       }}
     >
-      <CardHeading level="h3" size="heading4">
-        <RCLink href={`${BASE_URL}${PATHS.BIB}/${bib.id}`}>{bib.title}</RCLink>
+      <CardHeading
+        level="h3"
+        size="heading5"
+        sx={{ a: { textDecoration: "none" } }}
+      >
+        <DSLink
+          href={`${BASE_URL}${PATHS.BIB}/${bib.id}`}
+          hasVisitedState={false}
+        >
+          {bib.title}
+        </DSLink>
       </CardHeading>
       <CardContent>
-        <Box sx={{ p: { display: "inline", marginRight: "s" } }}>
+        <Box
+          sx={{ p: { display: "inline", marginRight: "s", marginBottom: "s" } }}
+        >
           {bib.materialType && <Text>{bib.materialType}</Text>}
           {bib.publicationStatement && <Text>{bib.publicationStatement}</Text>}
           {bib.yearPublished && <Text>{bib.yearPublished}</Text>}
           <Text>{bib.itemMessage}</Text>
         </Box>
-        {bib.hasElectronicResources && (
-          <ElectronicResourcesLink
-            bibUrl={bib.url}
-            electronicResources={bib.electronicResources}
-          />
-        )}
-        {searchResultItems && (
-          <>
-            {searchResultItems.map((itemTableData) => (
-              <ItemTable
-                itemTableData={itemTableData}
-                key={`search-results-item-${itemTableData.items[0].id}`}
-              />
-            ))}
-            {bib.showViewAllItemsLink && (
-              <CardActions>
-                <RCLink
-                  href={`${BASE_URL}${bib.url}#items-table`}
-                  type="standalone"
-                >
-                  {`View All ${bib.itemMessage} `}
-                </RCLink>
-              </CardActions>
-            )}
-          </>
-        )}
+
+        <SimpleGrid columns={1} gap="grid.l">
+          {bib.hasElectronicResources && (
+            <ElectronicResourcesLink
+              bibUrl={bib.url}
+              electronicResources={bib.electronicResources}
+            />
+          )}
+          {searchResultItems && (
+            <>
+              {searchResultItems.map((itemTableData) => (
+                <ItemTable
+                  itemTableData={itemTableData}
+                  key={`search-results-item-${itemTableData.items[0].id}`}
+                />
+              ))}
+              {bib.showViewAllItemsLink && (
+                <CardActions>
+                  <RCLink
+                    href={`${BASE_URL}${bib.url}#items-table`}
+                    fontSize={{
+                      base: "mobile.body.body2",
+                      md: "desktop.body.body2",
+                    }}
+                    fontWeight="medium"
+                    type="standalone"
+                    mt="m"
+                  >
+                    {`View All ${bib.itemMessage} `}
+                  </RCLink>
+                </CardActions>
+              )}
+            </>
+          )}
+        </SimpleGrid>
       </CardContent>
     </Card>
   )
