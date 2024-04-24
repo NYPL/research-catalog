@@ -10,6 +10,7 @@ import ProfileTabs from "../../src/components/MyAccount/ProfileTabs"
 import ProfileHeader from "../../src/components/MyAccount/ProfileHeader"
 import { BASE_URL } from "../../src/config/constants"
 import FeesBanner from "../../src/components/MyAccount/FeesBanner"
+import logger from "../../logger"
 
 interface MyAccountPropsType {
   patron?: MyAccountModel["patron"]
@@ -184,7 +185,7 @@ export default function MyAccount({
 
 export async function getServerSideProps({ req }) {
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
-  console.log("patronTokenResponse is", patronTokenResponse)
+  logger.debug(patronTokenResponse)
   const isAuthenticated = patronTokenResponse.isTokenValid
   if (!isAuthenticated) {
     const redirect = getLoginRedirect(req)
@@ -198,27 +199,27 @@ export async function getServerSideProps({ req }) {
   // Parsing path from url to pass to ProfileTabs.
   const tabsPath = req.url.split("/", -1)[2] || null
   const id = patronTokenResponse.decodedPatron.sub
-  // try {
-  const { checkouts, holds, patron, fines } = await MyAccountFactory(id)
-  // Redirecting /fines if user has none.
-  if (tabsPath === "overdues" && fines.total === 0) {
+  try {
+    const { checkouts, holds, patron, fines } = await MyAccountFactory(id)
+    // Redirecting /fines if user has none.
+    if (tabsPath === "overdues" && fines.total === 0) {
+      return {
+        redirect: {
+          destination: "/account",
+          permanent: false,
+        },
+      }
+    }
     return {
-      redirect: {
-        destination: "/account",
-        permanent: false,
+      props: { checkouts, holds, patron, fines, tabsPath, isAuthenticated },
+    }
+  } catch (e) {
+    logger.error(e.message)
+    return {
+      props: {
+        tabsPath,
+        isAuthenticated,
       },
     }
   }
-  return {
-    props: { checkouts, holds, patron, fines, tabsPath, isAuthenticated },
-  }
-  // } catch (e) {
-  //   console.log(e.message)
-  //   return {
-  //     props: {
-  //       tabsPath,
-  //       isAuthenticated,
-  //     },
-  //   }
-  // }
 }
