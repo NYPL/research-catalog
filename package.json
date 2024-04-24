@@ -15,7 +15,7 @@
     "coverage": "jest --coverage"
   },
   "dependencies": {
-    "@nypl/design-system-react-components": "3.0.1",
+    "@nypl/design-system-react-components": "3.1.0",
     "@nypl/nypl-data-api-client": "1.0.5",
     "@nypl/sierra-wrapper": "1.1.0",
     "@types/node": "20.3.1",
@@ -32,7 +32,8 @@
     "react-dom": "18.2.0",
     "swr": "2.2.1",
     "ts-jest": "29.1.1",
-    "underscore": "1.13.6"
+    "underscore": "1.13.6",
+    "winston": "3.9.0"
   },
   "devDependencies": {
     "@testing-library/dom": "^9.3.3",

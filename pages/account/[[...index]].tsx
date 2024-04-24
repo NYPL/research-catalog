@@ -16,6 +16,7 @@ import type {
   Checkout,
   Fine,
 } from "../../src/types/myAccountTypes"
+import logger from "../../logger"
 
 interface MyAccountPropsType {
   patron?: Patron
@@ -84,7 +85,7 @@ export default function MyAccount({
 
 export async function getServerSideProps({ req }) {
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
-  console.log("patronTokenResponse is", patronTokenResponse)
+  logger.debug(patronTokenResponse)
   const isAuthenticated = patronTokenResponse.isTokenValid
   if (!isAuthenticated) {
     const redirect = getLoginRedirect(req)
@@ -117,7 +118,7 @@ export async function getServerSideProps({ req }) {
       props: { checkouts, holds, patron, fines, tabsPath, isAuthenticated },
     }
   } catch (e) {
-    console.log(`Error serving My Account data: ${e.message}`)
+    logger.error(e.message)
     return {
       props: {
         tabsPath,

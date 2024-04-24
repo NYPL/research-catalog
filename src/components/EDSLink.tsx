@@ -11,7 +11,11 @@ const EDSLink = () => {
         New!
       </span>{" "}
       Try our{" "}
-      <DSLink href="https://research.ebsco.com/c/2styhb" target="_blank">
+      <DSLink
+        href="https://research.ebsco.com/c/2styhb"
+        target="_blank"
+        hasVisitedState={false}
+      >
         <strong>Article Search</strong>
       </DSLink>{" "}
       to discover online journals, books, and more from home with your library

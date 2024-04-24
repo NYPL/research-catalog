@@ -3,8 +3,8 @@ import {
   Heading,
   SimpleGrid,
   Pagination,
-  Select,
   SkeletonLoader,
+  Banner,
 } from "@nypl/design-system-react-components"
 import { useEffect, useRef, type ChangeEvent } from "react"
 import { useRouter } from "next/router"
@@ -12,7 +12,8 @@ import { parse } from "qs"
 
 import Layout from "../../src/components/Layout/Layout"
 import DRBContainer from "../../src/components/DRB/DRBContainer"
-import SearchResult from "../../src/components/SearchResult/SearchResult"
+import SearchResult from "../../src/components/SearchResults/SearchResult"
+import SearchResultsSort from "../../src/components/SearchResults/SearchResultsSort"
 import AppliedFilters from "../../src/components/SearchFilters/AppliedFilters"
 
 import { fetchResults } from "../../src/server/api/search"
@@ -21,7 +22,6 @@ import {
   mapQueryToSearchParams,
   mapElementsToSearchResultsBibs,
   getSearchQuery,
-  sortOptions,
   getFreshSortByQuery,
 } from "../../src/utils/searchUtils"
 import type {
@@ -117,32 +117,27 @@ export default function Search({
         <title key="main-title">{metadataTitle}</title>
       </Head>
       <Layout
+        bannerNotification={bannerNotification}
         searchAggregations={aggs}
         isAuthenticated={isAuthenticated}
         activePage="search"
-        bannerNotification={bannerNotification}
         sidebar={
           <>
             {totalResults > 0 ? (
-              <Select
-                name="sort_direction"
-                id="search-results-sort"
-                labelText="Sort by"
-                labelPosition="inline"
-                mb="l"
-                onChange={handleSortChange}
-                value={
-                  searchParams.order
-                    ? `${searchParams.sortBy}_${searchParams.order}`
-                    : searchParams.sortBy
-                }
-              >
-                {Object.keys(sortOptions).map((key) => (
-                  <option value={key} key={`sort-by-${key}`}>
-                    {sortOptions[key]}
-                  </option>
-                ))}
-              </Select>
+              <SearchResultsSort
+                searchParams={searchParams}
+                handleSortChange={handleSortChange}
+                // We have to render the sort select twice and toggle which is shown at the desktop breakpoint, since
+                // the design has it appearing in the sidebar on desktop and in the main content on mobile.
+                // Using inline styles to do this for now since using useNYPLBreakpoints had a visible lag.
+                // TODO: Extend the Layout component to receive a prop that contains content to be shown below the
+                //  main header, which will include the search results heading and the sort select, which would allow us
+                //  to only render the sort select once.
+                display={{
+                  base: "none",
+                  md: "block",
+                }}
+              />
             ) : null}
             {isLoading ? (
               <SkeletonLoader showImage={false} />
@@ -159,7 +154,7 @@ export default function Search({
         {totalResults ? (
           <>
             {isLoading ? (
-              <SkeletonLoader showImage={false} />
+              <SkeletonLoader showImage={false} mb="m" />
             ) : (
               <>
                 {displayAppliedFilters && (
@@ -173,19 +168,38 @@ export default function Search({
                   // are ignoring the typescript error that pops up.
                   // @ts-expect-error
                   tabIndex={-1}
-                  mb="l"
+                  mb={{ base: "s", md: "l" }}
                   minH="40px"
                   ref={searchResultsHeadingRef}
                 >
                   {getSearchResultsHeading(searchParams, totalResults)}
                 </Heading>
-                <SimpleGrid columns={1} gap="grid.l">
-                  {searchResultBibs.map((bib: SearchResultsBib) => {
-                    return <SearchResult key={bib.id} bib={bib} />
-                  })}
-                </SimpleGrid>
               </>
             )}
+            <SearchResultsSort
+              // Mobile only Search Results Sort Select
+              // Necessary due to the placement of the Select in the main content on mobile only.
+              id="search-results-sort-mobile"
+              searchParams={searchParams}
+              handleSortChange={handleSortChange}
+              // We have to render the sort select twice and toggle which is shown at the desktop breakpoint, since
+              // the design has it appearing in the sidebar on desktop and in the main content on mobile.
+              // Using inline styles to do this for now since using useNYPLBreakpoints had a visible lag.
+              // TODO: Extend the Layout component to receive a prop that contains content to be shown below the
+              //  main header, which will include the search results heading and the sort select, which would allow us
+              //  to only render the sort select once.
+              display={{
+                base: "block",
+                md: "none",
+              }}
+            />
+            {!isLoading ? (
+              <SimpleGrid columns={1} gap="grid.l">
+                {searchResultBibs.map((bib: SearchResultsBib) => {
+                  return <SearchResult key={bib.id} bib={bib} />
+                })}
+              </SimpleGrid>
+            ) : null}
             <Pagination
               id="results-pagination"
               mt="xxl"

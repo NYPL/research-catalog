@@ -55,9 +55,13 @@ const DRBContainer = ({
           <DSLink
             href={`${DRB_BASE_URL}/search${drbQuery}`}
             target="_blank"
-            fontSize="desktop.body.body2"
+            fontSize={{
+              base: "mobile.body.body2",
+              md: "desktop.body.body2",
+            }}
             type="standalone"
             fontWeight="bold"
+            hasVisitedState={false}
           >
             <>
               View {totalWorks === 1 ? "" : "all"} {totalWorks.toLocaleString()}{" "}

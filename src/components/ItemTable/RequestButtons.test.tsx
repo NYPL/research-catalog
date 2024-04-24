@@ -34,7 +34,7 @@ describe("RequestButtons", () => {
       })
     ).toHaveAttribute(
       "href",
-      "/hold/request/b12810991-i14119377?searchKeywords=TODO"
+      "/research/research-catalog/hold/request/b12810991-i14119377"
     )
   })
   it("renders an an request scan link if item is EDD requestable", async () => {
@@ -46,7 +46,7 @@ describe("RequestButtons", () => {
       })
     ).toHaveAttribute(
       "href",
-      "/hold/request/b12810991-i15550040/edd?searchKeywords=TODO"
+      "/research/research-catalog/hold/request/b12810991-i15550040/edd"
     )
   })
 })
