@@ -226,7 +226,8 @@ describe("MyAccountModel", () => {
         .fn()
         .mockResolvedValueOnce(checkoutBibs)
         .mockResolvedValueOnce(holdBibs)
-
+      // passing in an empty object for a mock sierra client triggers a type error. ignore because we are
+      // mocking the fetch calls.
       // @ts-ignore
       const account = await MyAccountFactory("12345", {})
       expect(account.patron).toStrictEqual({
