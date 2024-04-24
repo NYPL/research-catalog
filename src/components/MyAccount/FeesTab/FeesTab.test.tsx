@@ -1,6 +1,12 @@
 import React from "react"
-import { render } from "../../../utils/testUtils"
-import { mockFines } from "../../../../__test__/fixtures/myAccountFixtures"
+import { render, screen } from "../../../utils/testUtils"
+import {
+  mockCheckouts,
+  mockFines,
+  mockHolds,
+  mockPatron,
+} from "../../../../__test__/fixtures/processedMyAccountData"
+
 import FeesTab from "./FeesTab"
 
 jest.mock("next/router", () => ({

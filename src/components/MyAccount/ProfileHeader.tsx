@@ -4,34 +4,37 @@ import styles from "../../../styles/components/MyAccount.module.scss"
 import Barcode from "react-barcode"
 
 import type { Patron } from "../../types/myAccountTypes"
+import type { IconListElementPropType } from "./IconListElement"
 import { buildListElementsWithIcons } from "./IconListElement"
 
 const ProfileHeader = ({ patron }: { patron: Patron }) => {
-  const profileData = [
-    { icon: "actionIdentityFilled", term: "Name:", description: patron.name },
-    {
-      icon: "actionPayment",
-      term: "Card number:",
-      description: patron.barcode,
-    },
-    {
-      icon: "",
-      term: "",
-      description: (
-        <Barcode
-          margin={0}
-          value={patron.barcode}
-          format="codabar"
-          displayValue={false}
-        />
-      ),
-    },
-    {
-      icon: "clock",
-      term: "Expiration date:",
-      description: patron.expirationDate,
-    },
-  ].map(buildListElementsWithIcons)
+  const profileData = (
+    [
+      { icon: "actionIdentityFilled", term: "Name", description: patron.name },
+      {
+        icon: "actionPayment",
+        term: "Card number",
+        description: patron.barcode,
+      },
+      {
+        icon: "",
+        term: "",
+        description: (
+          <Barcode
+            margin={0}
+            value={patron.barcode}
+            format="codabar"
+            displayValue={false}
+          />
+        ),
+      },
+      {
+        icon: "clock",
+        term: "Expiration date",
+        description: patron.expirationDate,
+      },
+    ] as IconListElementPropType[]
+  ).map(buildListElementsWithIcons)
 
   return (
     <List
