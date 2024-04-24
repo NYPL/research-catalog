@@ -99,7 +99,7 @@ export async function getServerSideProps({ req }) {
   const tabsPath = req.url.split("/", -1)[2] || null
   const id = patronTokenResponse.decodedPatron.sub
   try {
-    const client = sierraClient()
+    const client = await sierraClient()
     const { checkouts, holds, patron, fines } = await MyAccountFactory(
       id,
       client
@@ -117,7 +117,7 @@ export async function getServerSideProps({ req }) {
       props: { checkouts, holds, patron, fines, tabsPath, isAuthenticated },
     }
   } catch (e) {
-    console.log(e.message)
+    console.log(`Error serving My Account data: ${e.message}`)
     return {
       props: {
         tabsPath,
