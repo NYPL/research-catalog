@@ -13,7 +13,7 @@ const encryptedSecret = process.env.SIERRA_SECRET
 const base = process.env.SIERRA_BASE
 
 if (!encryptedKey || !base || !encryptedSecret) {
-  logger.error("Missing Sierra credentials")
+  console.error("Missing Sierra credentials")
 }
 const creds = [encryptedKey, encryptedSecret]
 const CACHE: Cache = { client: null, key: null, secret: null }

@@ -22,7 +22,7 @@ export async function fetchDRBResults(
       totalWorks: data.totalWorks,
     }
   } catch (error) {
-    logger.error(`Error fetching DRB results ${error.message}`)
+    console.error(`Error fetching DRB results ${error.message}`)
     throw new Error(error)
   }
 }
