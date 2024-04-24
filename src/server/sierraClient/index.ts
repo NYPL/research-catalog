@@ -1,6 +1,5 @@
 import wrapper from "@nypl/sierra-wrapper"
 import { kmsDecryptCreds } from "../kms"
-import logger from "../../../logger"
 
 interface Cache {
   client: any
