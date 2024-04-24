@@ -10,7 +10,7 @@ const AccountSettingsButtons = ({
   currentlyEditing,
   setCurrentlyEditing,
 }: AccountSettingsButtonsPropsType) => {
-  const toggleCurrentlyEditing = (doWeWantToEdit) =>
+  const toggleCurrentlyEditing = (doWeWantToEdit: boolean) =>
     setCurrentlyEditing(doWeWantToEdit)
 
   const editButton = (
@@ -19,7 +19,6 @@ const AccountSettingsButtons = ({
       buttonType="secondary"
       onClick={() => toggleCurrentlyEditing(true)}
     >
-      {/* {placeholder icon before pencil is included in DS} */}
       <Icon name="editorMode" align="left" size="medium" />
       Edit account Settings
     </Button>
