@@ -1,3 +1,4 @@
+import type { TextInputRefType } from "@nypl/design-system-react-components"
 import {
   Box,
   Button,
@@ -7,11 +8,12 @@ import {
   Icon,
 } from "@nypl/design-system-react-components"
 import type { Dispatch, SyntheticEvent } from "react"
-import { useState, useCallback } from "react"
+import { useState, useCallback, useRef, useEffect } from "react"
 import { useRouter } from "next/router"
+import DateForm from "../SearchFilters/DateForm"
+import { useDateForm } from "../../hooks/useDateForm"
 
 import styles from "../../../styles/components/Search.module.scss"
-import FieldsetDate, { type DateFormName } from "../SearchFilters/FieldsetDate"
 import SearchResultsFilters from "../../models/SearchResultsFilters"
 import RefineSearchCheckBoxField from "./RefineSearchCheckboxField"
 import {
@@ -24,6 +26,13 @@ import type {
   CollapsedMultiValueAppliedFilters,
 } from "../../types/filterTypes"
 
+const fields = [
+  { value: "materialType", label: "Format" },
+  { value: "language", label: "Language" },
+  { value: "dateAfter", label: "Start Year" },
+  { value: "dateBefore", label: "End Year" },
+  { value: "subjectLiteral", label: "Subject" },
+]
 interface RefineSearchProps {
   aggregations: Aggregation[]
   setAppliedFilters: Dispatch<
@@ -41,31 +50,22 @@ const RefineSearch = ({
   setAppliedFilters,
 }: RefineSearchProps) => {
   const router = useRouter()
-
-  const fields = [
-    { value: "materialType", label: "Format" },
-    { value: "language", label: "Language" },
-    { value: "dateAfter", label: "Start Year" },
-    { value: "dateBefore", label: "End Year" },
-    { value: "subjectLiteral", label: "Subject" },
-  ]
-  const dateFieldset = (
-    <FieldsetDate
-      onDateChange={(dateField: DateFormName, data: string) => {
-        // update the parent state to know about the updated dateValues
-        setAppliedFilters((prevFilters) => {
-          return {
-            ...prevFilters,
-            [dateField]: [data],
-          }
-        })
-      }}
-      appliedFilters={{
-        dateBefore: appliedFilters.dateBefore && appliedFilters.dateBefore[0],
-        dateAfter: appliedFilters.dateAfter && appliedFilters.dateAfter[0],
-      }}
-    />
-  )
+  const dateInputRefs = [useRef<TextInputRefType>(), useRef<TextInputRefType>()]
+  const { dateFormProps, validateDateRange } = useDateForm({
+    changeHandler: (e: SyntheticEvent) => {
+      const target = e.target as HTMLInputElement
+      // update the parent state to know about the updated dateValues
+      setAppliedFilters((prevFilters) => {
+        return {
+          ...prevFilters,
+          [target.name]: [target.value],
+        }
+      })
+    },
+    inputRefs: dateInputRefs,
+    dateAfter: appliedFilters.dateAfter?.[0],
+    dateBefore: appliedFilters.dateBefore?.[0],
+  })
 
   const filters = fields
     .map((field) => {
@@ -82,10 +82,11 @@ const RefineSearch = ({
         )
       } else return null
     })
-    .concat(dateFieldset)
+    .concat(<DateForm {...dateFormProps} />)
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault()
+    if (validateDateRange() === false) return
     const updatedQuery = {
       // maintain any non-filter query params, eg q=spaghetti, journalTitle=pasta%20fancy
       ...getQueryWithoutFilters(router.query),
@@ -96,24 +97,26 @@ const RefineSearch = ({
       pathname: "/search",
       query: updatedQuery,
     })
-    // refine search dialog closes after url is pushed
     toggleRefine()
   }
 
+  // the two buttons can share a ref because they are never rendered at the same
+  // time.
+  const refineOrCancelRef = useRef(null)
+
   const [refineSearchClosed, setRefineSearchClosed] = useState(true)
+
+  // focus has to happen after refineSearchClosed updates in order for the
+  // element we want to focus on to be present in the dom.
+  useEffect(() => {
+    refineOrCancelRef.current.focus()
+  }, [refineSearchClosed])
 
   // runs when refine search button is clicked to open and close the dialog
   const toggleRefine = useCallback(() => {
-    setRefineSearchClosed((prevRefineSearchClosed) => {
-      // if refine search is open (and this toggle is going to close it)
-      if (!prevRefineSearchClosed) {
-        // reset filters to the values from the url (removing those that were
-        // clicked on but left unapplied)
-        setAppliedFilters(collapseMultiValueQueryParams(router.query))
-      }
-      return !prevRefineSearchClosed
-    })
-  }, [router.query, setAppliedFilters, setRefineSearchClosed])
+    setRefineSearchClosed((closed) => !closed)
+    setAppliedFilters(collapseMultiValueQueryParams(router.query))
+  }, [setRefineSearchClosed, setAppliedFilters, router.query])
 
   const handleClear = () => {
     // remove applied filters from state
@@ -131,10 +134,12 @@ const RefineSearch = ({
     <Box className={styles.refineSearchContainer}>
       {refineSearchClosed ? (
         <Button
-          className={styles.refineSearchButton}
+          ref={refineOrCancelRef}
           onClick={toggleRefine}
           id="refine-search"
           buttonType="secondary"
+          backgroundColor="ui.white"
+          className={styles.refineSearchButton}
         >
           Refine Search
         </Button>
@@ -144,12 +149,14 @@ const RefineSearch = ({
           id="refine-search"
           onSubmit={handleSubmit}
         >
-          <HorizontalRule sx={{ marginBottom: 0 }} />
+          <HorizontalRule mb={0} />
           <Box className={styles.refineButtons}>
             <Button
               onClick={toggleRefine}
               id="cancel-refine"
               buttonType="secondary"
+              ref={refineOrCancelRef}
+              backgroundColor="ui.white"
             >
               <Icon name="close" size="large" align="left" />
               Cancel
@@ -161,6 +168,7 @@ const RefineSearch = ({
                 id="reset-refine"
                 type="reset"
                 buttonType="secondary"
+                backgroundColor="ui.white"
               >
                 <Icon name="actionDelete" align="left" size="large" />
                 Clear Filters
@@ -171,7 +179,7 @@ const RefineSearch = ({
               </Button>
             </ButtonGroup>
           </Box>
-          <HorizontalRule sx={{ marginTop: 0 }} />
+          <HorizontalRule m={0} />
           {filters}
         </Form>
       )}

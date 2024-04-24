@@ -24,7 +24,8 @@ const Notification = ({ notification = "" }) => {
       notificationType="announcement"
       noMargin
       maxWidth="1248px"
-      mx="auto"
+      marginTop={{ base: "s", md: "l" }}
+      mx={{ base: "s", md: "auto" }}
     />
   )
 }

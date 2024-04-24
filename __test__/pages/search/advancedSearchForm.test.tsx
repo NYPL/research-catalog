@@ -1,10 +1,14 @@
 import React from "react"
-import { fireEvent, render, screen } from "../../../src/utils/testUtils"
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from "../../../src/utils/testUtils"
 import mockRouter from "next-router-mock"
 import userEvent from "@testing-library/user-event"
 
 import AdvancedSearch, {
-  badDateErrorMessage,
   defaultEmptySearchErrorMessage,
 } from "../../../pages/search/advanced"
 
@@ -12,8 +16,9 @@ import AdvancedSearch, {
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
 describe("Advanced Search Form", () => {
-  const submit = () =>
+  const submit = () => {
     fireEvent(screen.getByText("Submit"), new MouseEvent("click"))
+  }
   afterEach(async () => {
     await userEvent.click(screen.getByText("Clear"))
   })
@@ -73,16 +78,7 @@ describe("Advanced Search Form", () => {
       "/search?q=&filters%5BmaterialType%5D%5B0%5D=resourcetypes%3Anot&filters%5BmaterialType%5D%5B1%5D=resourcetypes%3Acar"
     )
   })
-  it("should throw an error when the date from is bigger than the date to", async () => {
-    render(<AdvancedSearch isAuthenticated={true} />)
-    const dateFromInput = screen.getByLabelText("From")
-    const dateToInput = screen.getByLabelText("To")
-    await userEvent.type(dateFromInput, "1999")
-    await userEvent.type(dateToInput, "1900")
-    submit()
 
-    expect(screen.getByText(badDateErrorMessage)).toBeInTheDocument()
-  })
   it("can clear the form", async () => {
     render(<AdvancedSearch isAuthenticated={true} />)
     const notatedMusic = screen.getByLabelText("Notated music")

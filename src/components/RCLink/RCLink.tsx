@@ -12,8 +12,12 @@ interface RCLinkProps {
   className?: string
   color?: string
   type?: LinkTypes
-  size?: string
+  fontSize?: string | Record<string, string>
+  fontWeight?: string
+  isUnderlined?: boolean
   hasWhiteFocusRing?: boolean
+  disabled?: boolean
+  [key: string]: any
 }
 
 // TODO: once 2ad is phased out, replace with DS v3 Link which can wrap a
@@ -30,6 +34,7 @@ const RCLink = ({
   children,
   active = false,
   hasWhiteFocusRing = false,
+  disabled,
   ...rest
 }: RCLinkProps) => {
   return (
@@ -38,6 +43,7 @@ const RCLink = ({
       href={href}
       className={className}
       fontWeight={active && "bold"}
+      hasVisitedState={false}
       {...rest}
       __css={
         hasWhiteFocusRing && {
@@ -46,6 +52,10 @@ const RCLink = ({
           },
         }
       }
+      // TODO: These were added in accessibility QA. Investigate adding these to the DS Link component.
+      role="link"
+      aria-disabled={disabled}
+      tabIndex={disabled ? -1 : 0}
     >
       {children}
     </DSLink>

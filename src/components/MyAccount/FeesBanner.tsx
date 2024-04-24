@@ -5,6 +5,7 @@ import {
   Text,
 } from "@nypl/design-system-react-components"
 import styles from "../../../styles/components/MyAccount.module.scss"
+import { appConfig } from "../../config/config"
 
 const FeesBanner = () => {
   return (
@@ -20,7 +21,9 @@ const FeesBanner = () => {
             for cardholders with replacement fees totaling $100 or more. <br />{" "}
             Fees can be paid at any New York Public Library branch in cash, U.S.
             Postal money order, personal check, or{" "}
-            <Link href="https://nypl.na2.iiivega.com//?openAccount=fines-and-fees">
+            <Link
+              href={`${appConfig.urls.circulatingCatalog}?openAccount=fines-and-fees`}
+            >
               {" "}
               online through the Library website
             </Link>

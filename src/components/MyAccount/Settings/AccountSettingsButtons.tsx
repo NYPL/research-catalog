@@ -10,17 +10,14 @@ const AccountSettingsButtons = ({
   currentlyEditing,
   setCurrentlyEditing,
 }: AccountSettingsButtonsPropsType) => {
-  const toggleCurrentlyEditing = () => setCurrentlyEditing(!currentlyEditing)
+  const toggleCurrentlyEditing = (doWeWantToEdit) =>
+    setCurrentlyEditing(doWeWantToEdit)
 
-  const clearUpdate = () => {
-    //clear state
-    toggleCurrentlyEditing()
-  }
   const editButton = (
     <Button
       id="edit-account-settings-button"
       buttonType="secondary"
-      onClick={toggleCurrentlyEditing}
+      onClick={() => toggleCurrentlyEditing(true)}
     >
       {/* {placeholder icon before pencil is included in DS} */}
       <Icon name="editorMode" align="left" size="medium" />
@@ -31,7 +28,7 @@ const AccountSettingsButtons = ({
   const cancelAndSaveButtons = (
     <>
       <Button
-        onClick={clearUpdate}
+        onClick={() => toggleCurrentlyEditing(false)}
         id="account-settings-cancel-update-button"
         screenreaderOnlyText="cancel account settings update"
         buttonType="secondary"
