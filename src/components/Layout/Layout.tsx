@@ -76,11 +76,13 @@ const Layout = ({
                 {showSearch && <SearchForm aggregations={searchAggregations} />}
               </div>
               {showNotification && bannerNotification && (
-                <Banner
-                  sx={{ width: "auto", margin: "2em 2em .5em 2em" }}
-                  heading="New Service Announcement"
-                  content={bannerNotification}
-                />
+                <Box sx={{ display: "flex", "justify-content": "center" }}>
+                  <Banner
+                    sx={{ maxWidth: "1248px", margin: "2em 2em .5em 2em" }}
+                    heading="New Service Announcement"
+                    content={bannerNotification}
+                  />
+                </Box>
               )}
             </>
           )
