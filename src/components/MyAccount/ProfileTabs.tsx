@@ -33,7 +33,7 @@ const ProfileTabs = ({
   // tabsData conditionally includes fines– only when user has total fines more than $0.
   const tabsData = [
     {
-      label: "Checkouts" + (checkouts ? `(${checkouts.length})` : ""),
+      label: "Checkouts" + (checkouts ? ` (${checkouts.length})` : ""),
       content: checkouts ? (
         <CheckoutsTab checkouts={checkouts} patron={patron} />
       ) : (
@@ -42,7 +42,7 @@ const ProfileTabs = ({
       urlPath: "items",
     },
     {
-      label: "Requests" + (holds ? `(${holds.length})` : ""),
+      label: "Requests" + (holds ? ` (${holds.length})` : ""),
       content: holds ? (
         <RequestsTab
           removeHold={removeHold}
