@@ -1,7 +1,50 @@
-import { parsePayload, updateArrayValue } from "./AccountSettingsUtils"
+import {
+  parsePayload,
+  updateArrayValue,
+  updatePatronData,
+} from "./AccountSettingsUtils"
 import { mockPatron } from "../../../../__test__/fixtures/processedMyAccountData"
+import { notificationPreferenceMap } from "../../../utils/myAccountData"
 
 describe("Account settings utils", () => {
+  describe("updatePatronData", () => {
+    it("can combine patron data and update body with all fields provided", () => {
+      const originalPatronData = {
+        barcode: "23333121538324",
+        emails: ["veggievera@gmail.com"],
+        expirationDate: "2025-03-28",
+        homeLibrary: {
+          code: "sn",
+          name: "Stavros Niarchos Foundation Library (SNFL)",
+        },
+        id: 2772226,
+        name: "KAHN, VERA RUTH",
+        notificationPreference: "Email",
+        phones: [{ number: "6466600432", type: "t" }],
+      }
+      const patronUpdateBody = {
+        emails: ["veraruthkahn@gmail.com", "veggievera@gmail.com"],
+        fixedFields: { 268: { label: "Notice Preference", value: "p" } },
+        homeLibraryCode: "mp   ",
+        phones: [
+          { number: "6466600432", type: "t" },
+          { number: "1234567890", type: "t" },
+        ],
+      }
+      const { emails, phones, homeLibrary, notificationPreference } =
+        updatePatronData(originalPatronData, patronUpdateBody)
+      expect(emails).toStrictEqual([
+        "veraruthkahn@gmail.com",
+        "veggievera@gmail.com",
+      ])
+      expect(phones).toStrictEqual([
+        { number: "6466600432", type: "t" },
+        { number: "1234567890", type: "t" },
+      ])
+      expect(notificationPreference).toStrictEqual("Phone")
+      expect(homeLibrary).toStrictEqual({ code: "mp   ", name: "Morris Park" })
+    })
+  })
   describe("parsePayload", () => {
     it.todo("does not submit empty form inputs")
     it("submits inputs with values", () => {
@@ -26,7 +69,9 @@ describe("Account settings utils", () => {
           type: "t",
         },
       ])
-      expect(parsePayload(eventTarget, mockPatron).homeLibrary).toBe("xx   ")
+      expect(parsePayload(eventTarget, mockPatron).homeLibraryCode).toBe(
+        "xx   "
+      )
       expect(parsePayload(eventTarget, mockPatron).fixedFields).toStrictEqual({
         268: {
           label: "Notice Preference",

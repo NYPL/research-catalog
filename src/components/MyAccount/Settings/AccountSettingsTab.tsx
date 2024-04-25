@@ -47,7 +47,9 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
       )
       const responseData = await response.json()
       if (response.ok) {
-        setMostRecentPatronData(updatePatronData(mostRecentPatronData, payload))
+        setMostRecentPatronData((prevData) =>
+          updatePatronData(prevData, payload)
+        )
         setCurrentlyEditing(false)
         setModalProps(successModalProps)
         openModal()
