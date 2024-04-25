@@ -4,11 +4,12 @@ import MyAccount, {
 import { MyAccountFactory } from "../../../src/models/MyAccount"
 import { render, screen } from "../../../src/utils/testUtils"
 import initializePatronTokenAuth from "../../../src/server/auth"
+import { useRouter } from "next/router"
 import {
-  mockCheckouts,
-  mockFines,
-  mockHolds,
   mockPatron,
+  mockCheckouts,
+  mockHolds,
+  mockFines,
 } from "../../fixtures/processedMyAccountData"
 
 jest.mock("../../../src/server/auth")
@@ -142,5 +143,36 @@ describe("MyAccount page", () => {
 
     const result = await getServerSideProps({ req: mockReq })
     expect(result.props.tabsPath).toBe("overdues")
+  })
+  it("renders notification banner if user has fines", () => {
+    render(
+      <MyAccount
+        isAuthenticated={true}
+        patron={mockPatron}
+        checkouts={mockCheckouts}
+        holds={mockHolds}
+        fines={mockFines}
+      />
+    )
+    const notification = screen.queryByText("You have outstanding fees", {
+      exact: false,
+    })
+    expect(notification).toBeInTheDocument()
+  })
+
+  it("does not render notification banner if user does not have fines", () => {
+    render(
+      <MyAccount
+        isAuthenticated={true}
+        patron={mockPatron}
+        checkouts={mockCheckouts}
+        holds={mockHolds}
+        fines={{ total: 0, entries: [] }}
+      />
+    )
+    const notification = screen.queryByText("You have outstanding fees", {
+      exact: false,
+    })
+    expect(notification).not.toBeInTheDocument()
   })
 })

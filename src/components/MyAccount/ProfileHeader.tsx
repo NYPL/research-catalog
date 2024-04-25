@@ -38,7 +38,7 @@ const ProfileHeader = ({ patron }: { patron: Patron }) => {
 
   return (
     <List
-      sx={{ border: "none", h2: { border: "none" } }}
+      sx={{ border: "none", h2: { border: "none", paddingTop: 0 } }}
       className={styles.myAccountList}
       id="my-account-profile-header"
       title="My account"

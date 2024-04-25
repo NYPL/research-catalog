@@ -6,8 +6,8 @@ import {
   mockHolds,
   mockPatron,
 } from "../../../../__test__/fixtures/processedMyAccountData"
+
 import FeesTab from "./FeesTab"
-import MyAccount from "../../../../pages/account/[[...index]]"
 
 jest.mock("next/router", () => ({
   useRouter: jest.fn(),
@@ -30,34 +30,5 @@ describe("FeesTab", () => {
     const component = render(<FeesTab fines={mockFines} />)
     const expectedTotal = component.getAllByText("$14.99")
     expect(expectedTotal.length).toBe(2)
-  })
-
-  it("renders notification banner if user has fines", () => {
-    render(
-      <MyAccount
-        isAuthenticated={true}
-        patron={mockPatron}
-        checkouts={mockCheckouts}
-        holds={mockHolds}
-        fines={mockFines}
-      />
-    )
-    expect(
-      screen.getByText("You have outstanding fees.", { exact: false })
-    ).toBeInTheDocument()
-  })
-
-  it("does not render notification banner if user does not have fines", () => {
-    render(
-      <MyAccount
-        isAuthenticated={true}
-        patron={mockPatron}
-        checkouts={mockCheckouts}
-        holds={mockHolds}
-        fines={{ total: 0, entries: [] }}
-      />
-    )
-    const notification = screen.queryByText("You have outstanding fees.")
-    expect(notification).not.toBeInTheDocument()
   })
 })
