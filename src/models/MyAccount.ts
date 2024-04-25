@@ -1,3 +1,4 @@
+import logger from "../../logger"
 import sierraClient from "../server/sierraClient"
 import type { MarcSubfield } from "../types/bibDetailsTypes"
 import type {
@@ -32,7 +33,15 @@ export default class MyAccount {
   }
 
   async fetchCheckouts() {
-    return await this.client.get(`${this.baseQuery}"/checkouts?expand=item"`)
+    try {
+      return await this.client.get(`${this.baseQuery}/checkouts?expand=item`)
+    } catch (e) {
+      console.error("fetch checkouts error: ", e.message)
+      throw new MyAccountModelError(
+        "MyAccount#fetchCheckouts error: ",
+        e.message
+      )
+    }
   }
 
   async getCheckouts() {
@@ -47,15 +56,21 @@ export default class MyAccount {
 
   async fetchHolds() {
     return await this.client.get(
-      `${this.baseQuery}"/holds?expand=canFreeze,record,status,pickupLocation,frozen,patron,pickupByDate,recordType"`
+      `${this.baseQuery}/holds?expand=record&fields=canFreeze,status,pickupLocation,frozen,patron,pickupByDate,recordType,record`
     )
   }
 
   async getHolds() {
     const holds = await this.fetchHolds()
-    const holdBibData = await this.fetchBibData(holds.entries, "record")
+    let holdBibData
+    try {
+      holdBibData = await this.fetchBibData(holds.entries, "record")
+    } catch (e) {
+      logger.error("MyAccount#fetchBibData error: " + e.message)
+    }
 
     const holdsWithBibData = this.buildHolds(holds.entries, holdBibData.entries)
+
     return holdsWithBibData
   }
 
@@ -151,6 +166,9 @@ export default class MyAccount {
     try {
       bibDataMap = MyAccount.buildBibData(bibData)
     } catch (e) {
+      logger.error(
+        "Error building bibData in MyAccount#buildHolds: " + e.message
+      )
       throw new MyAccountModelError("building bibData for holds", e)
     }
     try {
@@ -178,6 +196,7 @@ export default class MyAccount {
         }
       })
     } catch (e) {
+      logger.error("Error building holds in MyAccount#buildHolds: " + e.message)
       throw new MyAccountModelError("building holds", e)
     }
   }
@@ -190,6 +209,10 @@ export default class MyAccount {
     try {
       bibDataMap = MyAccount.buildBibData(bibData)
     } catch (e) {
+      logger.error(
+        "MyAccount#buildCheckouts: Error building bib data for checkouts: ",
+        e.message
+      )
       throw new MyAccountModelError("building bibData for checkouts", e)
     }
     try {
