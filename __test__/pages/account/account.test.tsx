@@ -4,7 +4,6 @@ import MyAccount, {
 import { MyAccountFactory } from "../../../src/models/MyAccount"
 import { render, screen } from "../../../src/utils/testUtils"
 import initializePatronTokenAuth from "../../../src/server/auth"
-import { useRouter } from "next/router"
 import {
   mockPatron,
   mockCheckouts,
@@ -14,6 +13,11 @@ import {
 
 jest.mock("../../../src/server/auth")
 jest.mock("../../../src/models/MyAccount")
+jest.mock("../../../src/server/sierraClient")
+
+jest.mock("next/router", () => ({
+  useRouter: jest.fn(),
+}))
 
 describe("MyAccount page", () => {
   it("displays an error message when patron is empty", () => {
