@@ -8,6 +8,8 @@ import { MyAccountFactory } from "../../src/models/MyAccount"
 import type MyAccountModel from "../../src/models/MyAccount"
 import ProfileTabs from "../../src/components/MyAccount/ProfileTabs"
 import ProfileHeader from "../../src/components/MyAccount/ProfileHeader"
+import { BASE_URL, PATHS } from "../../src/config/constants"
+
 import FeesBanner from "../../src/components/MyAccount/FeesBanner"
 import sierraClient from "../../src/server/sierraClient"
 import type {
@@ -85,7 +87,6 @@ export default function MyAccount({
 
 export async function getServerSideProps({ req }) {
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
-  logger.debug(patronTokenResponse)
   const isAuthenticated = patronTokenResponse.isTokenValid
   if (!isAuthenticated) {
     const redirect = getLoginRedirect(req)
@@ -97,7 +98,9 @@ export async function getServerSideProps({ req }) {
     }
   }
   // Parsing path from url to pass to ProfileTabs.
-  const tabsPath = req.url.split("/", -1)[2] || null
+  const tabsPathRegex = /\/account\/(.+)/
+  const match = req.url.match(tabsPathRegex)
+  const tabsPath = match ? match[1] : null
   const id = patronTokenResponse.decodedPatron.sub
   try {
     const client = await sierraClient()
@@ -105,15 +108,38 @@ export async function getServerSideProps({ req }) {
       id,
       client
     )
-    // Redirecting /fines if user has none.
-    if (tabsPath === "overdues" && fines.total === 0) {
+
+    // Immediately returning base path.
+    if (!tabsPath) {
+      return {
+        props: { checkouts, holds, patron, fines, tabsPath, isAuthenticated },
+      }
+    }
+
+    /*  Redirecting invalid paths (including /overdues if user has none) and
+    // cleaning extra parts off valid paths. */
+    const allowedPaths = ["items", "requests", "overdues", "settings"]
+    if (
+      !allowedPaths.some((path) => tabsPath.startsWith(path)) ||
+      (tabsPath === "overdues" && fines.total === 0)
+    ) {
       return {
         redirect: {
           destination: "/account",
           permanent: false,
         },
       }
+    } else {
+      const matchedPath = allowedPaths.find((path) => tabsPath.startsWith(path))
+      if (tabsPath != matchedPath)
+        return {
+          redirect: {
+            destination: "/account/" + matchedPath,
+            permanent: false,
+          },
+        }
     }
+
     return {
       props: { checkouts, holds, patron, fines, tabsPath, isAuthenticated },
     }

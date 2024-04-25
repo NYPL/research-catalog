@@ -33,16 +33,16 @@ const ProfileTabs = ({
   // tabsData conditionally includes fines– only when user has total fines more than $0.
   const tabsData = [
     {
-      label: "Checkouts" + (checkouts ? `(${checkouts.length})` : ""),
+      label: "Checkouts" + (checkouts ? ` (${checkouts.length})` : ""),
       content: checkouts ? (
         <CheckoutsTab checkouts={checkouts} patron={patron} />
       ) : (
         <Text>There was an error accessing your checkouts.</Text>
       ),
-      urlPath: "checkouts",
+      urlPath: "items",
     },
     {
-      label: "Requests" + (holds ? `(${holds.length})` : ""),
+      label: "Requests" + (holds ? ` (${holds.length})` : ""),
       content: holds ? (
         <RequestsTab
           removeHold={removeHold}
@@ -71,8 +71,9 @@ const ProfileTabs = ({
   ]
   const tabsDict =
     fines?.total > 0
-      ? { checkouts: 0, requests: 1, fines: 2, settings: 3 }
-      : { checkouts: 0, requests: 1, settings: 2 }
+      ? { items: 0, requests: 1, overdues: 2, settings: 3 }
+      : { items: 0, requests: 1, settings: 2 }
+
   const router = useRouter()
 
   const updatePath = (newPath) => {
