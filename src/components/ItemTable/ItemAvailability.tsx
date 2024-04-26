@@ -74,7 +74,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
     // Not available
     return (
       <Text mb="0">
-        <Box as="span" color="ui.warning.primary">
+        <Box as="span" color="ui.warning.tertiary">
           Not available
         </Box>
         {item.dueDate && ` - In use until ${item.dueDate}`}

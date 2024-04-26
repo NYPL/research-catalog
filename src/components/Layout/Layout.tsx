@@ -75,19 +75,21 @@ const Layout = ({
                 />
                 {showSearch && <SearchForm aggregations={searchAggregations} />}
               </div>
+              {showNotification && bannerNotification && (
+                <Box sx={{ display: "flex", "justify-content": "center" }}>
+                  <Banner
+                    sx={{ maxWidth: "1248px", margin: "2em 2em .5em 2em" }}
+                    heading="New Service Announcement"
+                    content={bannerNotification}
+                  />
+                </Box>
+              )}
             </>
           )
         }
         sidebar={sidebar ? sidebarPosition : "none"}
         contentPrimary={
           <Box pb="l">
-            {showNotification && bannerNotification && (
-              <Banner
-                mb="s"
-                heading="New Service Announcement"
-                content={bannerNotification}
-              />
-            )}
             {children}
             <FeedbackForm />
           </Box>

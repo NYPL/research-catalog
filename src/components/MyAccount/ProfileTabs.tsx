@@ -1,18 +1,18 @@
-import AccountSettingsTab from "./AccountSettingsTab"
-import type MyAccount from "../../models/MyAccount"
+import AccountSettingsTab from "./Settings/AccountSettingsTab"
 
-import { Tabs } from "@nypl/design-system-react-components"
+import { Tabs, Text } from "@nypl/design-system-react-components"
 import { useRouter } from "next/router"
 import CheckoutsTab from "./CheckoutsTab/CheckoutsTab"
 import RequestsTab from "./RequestsTab/RequestsTab"
 import { useState } from "react"
 import FeesTab from "./FeesTab/FeesTab"
+import type { Checkout, Patron, Hold, Fine } from "../../types/myAccountTypes"
 
 interface ProfileTabsPropsType {
-  patron: MyAccount["patron"]
-  checkouts: MyAccount["checkouts"]
-  holds: MyAccount["holds"]
-  fines: MyAccount["fines"]
+  patron: Patron
+  checkouts: Checkout[]
+  holds: Hold[]
+  fines: Fine
   activePath: string
 }
 
@@ -33,18 +33,24 @@ const ProfileTabs = ({
   // tabsData conditionally includes fines– only when user has total fines more than $0.
   const tabsData = [
     {
-      label: `Checkouts (${checkouts.length})`,
-      content: <CheckoutsTab checkouts={checkouts} patron={patron} />,
-      urlPath: "checkouts",
+      label: "Checkouts" + (checkouts ? ` (${checkouts.length})` : ""),
+      content: checkouts ? (
+        <CheckoutsTab checkouts={checkouts} patron={patron} />
+      ) : (
+        <Text>There was an error accessing your checkouts.</Text>
+      ),
+      urlPath: "items",
     },
     {
-      label: `Requests (${currentHolds.length})`,
-      content: (
+      label: "Requests" + (holds ? ` (${holds.length})` : ""),
+      content: holds ? (
         <RequestsTab
           removeHold={removeHold}
           holds={currentHolds}
           patron={patron}
         />
+      ) : (
+        <Text>There was an error accessing your requests</Text>
       ),
       urlPath: "requests",
     },
@@ -65,8 +71,9 @@ const ProfileTabs = ({
   ]
   const tabsDict =
     fines?.total > 0
-      ? { checkouts: 0, requests: 1, fines: 2, settings: 3 }
-      : { checkouts: 0, requests: 1, settings: 2 }
+      ? { items: 0, requests: 1, overdues: 2, settings: 3 }
+      : { items: 0, requests: 1, settings: 2 }
+
   const router = useRouter()
 
   const updatePath = (newPath) => {

@@ -58,7 +58,7 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
               By
             </Box>{" "}
             {drbResult.authors.map((author: Author | Agent, index: number) => (
-              <>
+              <span key={`author-${drbResult.id}`}>
                 {index > 0 && ","}
                 <ExternalLink
                   href={getAuthorURL(author)}
@@ -70,7 +70,7 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
                 >
                   {author.name}
                 </ExternalLink>
-              </>
+              </span>
             ))}
           </Text>
         ) : null}
