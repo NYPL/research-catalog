@@ -1,4 +1,5 @@
 import {
+  Box,
   Fieldset,
   TextInput,
   Notification,
@@ -35,31 +36,31 @@ const DateForm = ({
           />
         )}
       </div>
-      <Fieldset
-        id="date-fieldset"
-        gridTemplateColumns="repeat(2, minmax(0, 1fr))"
-        legendText="Date"
-        display="grid"
-        gap="s"
-      >
-        <TextInput
-          id="date-from"
-          labelText="Start"
-          name="dateAfter"
-          helperText="e.g. 1901"
-          value={dateAfter}
-          onChange={(e) => changeHandler(e)}
-          ref={inputRefs[0]}
-        />
-        <TextInput
-          id="date-to"
-          labelText="End"
-          name="dateBefore"
-          helperText="e.g. 2000"
-          value={dateBefore}
-          onChange={(e) => changeHandler(e)}
-          ref={inputRefs[1]}
-        />
+      <Fieldset id="date-fieldset" legendText="Date">
+        <Box
+          gridTemplateColumns="repeat(2, minmax(0, 1fr))"
+          display="grid"
+          gap="s"
+        >
+          <TextInput
+            id="date-from"
+            labelText="Start"
+            name="dateAfter"
+            helperText="e.g. 1901"
+            value={dateAfter}
+            onChange={(e) => changeHandler(e)}
+            ref={inputRefs[0]}
+          />
+          <TextInput
+            id="date-to"
+            labelText="End"
+            name="dateBefore"
+            helperText="e.g. 2000"
+            value={dateBefore}
+            onChange={(e) => changeHandler(e)}
+            ref={inputRefs[1]}
+          />
+        </Box>
       </Fieldset>
     </>
   )

@@ -70,6 +70,18 @@ export function mapSearchFiltersToDRBFilters(
 }
 
 /**
+ * DRBFieldMap
+ * A mapping of Search field keys to DRB field keys
+ */
+export const DRBFieldMap = {
+  all: "keyword",
+  contributor: "author",
+  standard_number: "standardNumber",
+  title: "title",
+  date: "date",
+}
+
+/**
  * Given a hash of SearchParams, returns a hash representing
  * an equivalent query against DRB API
  */
@@ -78,7 +90,7 @@ export function mapSearchParamsToDRBQueryParams(
 ): DRBQueryParams {
   const { q, field, sortBy, order, filters } = params
 
-  const keywordQuery = getDRBKeywordQuery(q, field)
+  const keywordQuery = getDRBKeywordQuery(q || "*", DRBFieldMap[field])
   const advancedQuery = getDRBAdvancedQuery(params)
 
   const mainQuery = keywordQuery + (advancedQuery ? "," : "") + advancedQuery

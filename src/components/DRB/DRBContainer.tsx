@@ -33,11 +33,16 @@ const DRBContainer = ({
   const drbQuery = getDRBQueryStringFromSearchParams(searchParams)
 
   return (
-    <Card backgroundColor="ui.bg.default" p="s" borderRadius="5px">
-      <CardHeading size="h6">
+    <Card
+      id="drb-sidebar-container"
+      backgroundColor="ui.bg.default"
+      p="s"
+      borderRadius="5px"
+    >
+      <CardHeading size="h6" id="drb-sidebar-container-heading">
         Results from Digital Research Books Beta
       </CardHeading>
-      <CardContent>
+      <CardContent id="drb-sidebar-container-content">
         <Text size="body2">
           Digital books for research from multiple sources world wide- all free
           to read, download, and keep. No Library Card is Required.{" "}
