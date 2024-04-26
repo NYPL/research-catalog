@@ -120,7 +120,7 @@ const CancelButton = ({
             // Open next modal to confirm request has been canceled.
             setModalProps(confirmModalProps(hold))
           } else {
-            setModalProps(failureModalProps)
+            setModalProps(failureModalProps(hold))
           }
         } else {
           closeModal()
