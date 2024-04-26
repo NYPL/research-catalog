@@ -4,7 +4,6 @@ import {
   updatePatronData,
 } from "./AccountSettingsUtils"
 import { mockPatron } from "../../../../__test__/fixtures/processedMyAccountData"
-import { notificationPreferenceMap } from "../../../utils/myAccountData"
 
 describe("Account settings utils", () => {
   describe("updatePatronData", () => {
@@ -13,10 +12,7 @@ describe("Account settings utils", () => {
         barcode: "23333121538324",
         emails: ["veggievera@gmail.com"],
         expirationDate: "2025-03-28",
-        homeLibrary: {
-          code: "sn",
-          name: "Stavros Niarchos Foundation Library (SNFL)",
-        },
+        homeLibraryCode: "sn",
         id: 2772226,
         name: "KAHN, VERA RUTH",
         notificationPreference: "Email",
@@ -31,7 +27,7 @@ describe("Account settings utils", () => {
           { number: "1234567890", type: "t" },
         ],
       }
-      const { emails, phones, homeLibrary, notificationPreference } =
+      const { emails, phones, homeLibraryCode, notificationPreference } =
         updatePatronData(originalPatronData, patronUpdateBody)
       expect(emails).toStrictEqual([
         "veraruthkahn@gmail.com",
@@ -41,17 +37,46 @@ describe("Account settings utils", () => {
         { number: "6466600432", type: "t" },
         { number: "1234567890", type: "t" },
       ])
-      expect(notificationPreference).toStrictEqual("Phone")
-      expect(homeLibrary).toStrictEqual({ code: "mp   ", name: "Morris Park" })
+      expect(notificationPreference).toEqual("Phone")
+      expect(homeLibraryCode).toStrictEqual("mp   ")
+    })
+    it("updates original data when updated data is missing fields", () => {
+      const originalPatronData = {
+        barcode: "23333121538324",
+        emails: ["veggievera@gmail.com"],
+        expirationDate: "2025-03-28",
+        homeLibraryCode: "sn",
+        id: 2772226,
+        name: "KAHN, VERA RUTH",
+        notificationPreference: "Email",
+        phones: [{ number: "6466600432", type: "t" }],
+      }
+      const patronUpdateBody = {
+        fixedFields: { 268: { label: "Notice Preference", value: "p" } },
+        homeLibraryCode: "mp   ",
+      }
+      const { emails, phones, homeLibraryCode, notificationPreference } =
+        updatePatronData(originalPatronData, patronUpdateBody)
+      expect(emails).toStrictEqual(originalPatronData.emails)
+      expect(phones).toStrictEqual(originalPatronData.phones)
+      expect(homeLibraryCode).toEqual("mp   ")
+      expect(notificationPreference).toEqual("Phone")
     })
   })
   describe("parsePayload", () => {
-    it.todo("does not submit empty form inputs")
+    it("does not submit empty form inputs", () => {
+      const eventTarget = {
+        emails: { value: "" },
+        phones: { value: "" },
+      }
+      // The payload won't actual
+      expect(parsePayload(eventTarget, mockPatron)).toStrictEqual({})
+    })
     it("submits inputs with values", () => {
       const eventTarget = {
         emails: { value: "fusili@gmail.com" },
         phones: { value: "666" },
-        homeLibrary: { value: "xx   " },
+        homeLibraryCode: { value: "xx   " },
         notificationPreference: { value: "z" },
       }
       expect(parsePayload(eventTarget, mockPatron).emails).toStrictEqual([

@@ -16,7 +16,6 @@ export const AccountSettingsDisplay = ({ patron }: { patron: Patron }) => {
       const description = setting.description
         ? setting.description(patron[setting.field])
         : patron[setting.field]
-
       return {
         icon: setting.icon,
         term: setting.term,
@@ -46,8 +45,8 @@ export const AccountSettingsForm = ({ patron }: { patron: Patron }) => {
               labelText="Update home library"
               showLabel={false}
             >
-              <option value={patron.homeLibrary.code}>
-                {patron.homeLibrary.name}
+              <option value={patron.homeLibraryCode}>
+                {"SNFL (formerly Mid-Manhattan)"}
               </option>
             </Select>
           )

@@ -76,7 +76,7 @@ export default class MyAccount {
 
   async fetchPatron() {
     return await this.client.get(
-      `${this.baseQuery}?fields=names,barcodes,expirationDate,homeLibrary,emails,phones,fixedFields`
+      `${this.baseQuery}?fields=names,barcodes,expirationDate,homeLibraryCode,emails,phones,fixedFields`
     )
   }
 
@@ -249,12 +249,12 @@ export default class MyAccount {
         notificationPreferenceMap[patron.fixedFields["268"].value]
       return {
         notificationPreference,
-        name: patron.names[0],
-        barcode: patron.barcodes[0],
+        name: patron.names?.[0],
+        barcode: patron.barcodes?.[0],
         expirationDate: patron.expirationDate,
         emails: patron.emails || [],
         phones: patron.phones || [],
-        homeLibrary: patron.homeLibrary || null,
+        homeLibraryCode: patron.homeLibraryCode || null,
         id: patron.id,
       }
     } catch (e) {

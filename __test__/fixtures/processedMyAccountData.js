@@ -10,10 +10,7 @@ export const mockPatron = {
       type: "t",
     },
   ],
-  homeLibrary: {
-    name: "Stavros Niarchos Foundation Library (SNFL)",
-    code: "sn   ",
-  },
+  homeLibraryCode: "sn   ",
   id: 2772226,
 }
 

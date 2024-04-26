@@ -239,10 +239,7 @@ describe("MyAccountModel", () => {
             type: "t",
           },
         ],
-        homeLibrary: {
-          code: "sn",
-          name: "Stavros Niarchos Foundation Library (SNFL)",
-        },
+        homeLibraryCode: "sn",
         id: 2772226,
       })
       expect(account.holds).toStrictEqual([
@@ -338,10 +335,7 @@ describe("MyAccountModel", () => {
         expirationDate: "2025-03-28",
         emails: [],
         phones: [],
-        homeLibrary: {
-          code: "sn",
-          name: "Stavros Niarchos Foundation Library (SNFL)",
-        },
+        homeLibraryCode: "sn",
         id: 2772226,
       })
       expect(emptyAccount.checkouts).toStrictEqual([])
