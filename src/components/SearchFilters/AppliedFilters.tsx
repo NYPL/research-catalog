@@ -27,7 +27,7 @@ const AppliedFilters = ({ aggregations }: { aggregations: Aggregation[] }) => {
 
   const tagSetData = buildTagsetData(appliedFiltersWithLabels)
   const handleRemove = (tag: TagSetFilterDataProps) => {
-    if (tag.label === "Clear Filters") {
+    if (tag.label === "Clear filters") {
       router.push({
         pathname: "/search",
         query: getQueryWithoutFilters(router.query),
