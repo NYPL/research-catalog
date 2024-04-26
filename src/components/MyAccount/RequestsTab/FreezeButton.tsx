@@ -1,15 +1,47 @@
 import { useState } from "react"
 import type { Hold, Patron } from "../../../types/myAccountTypes"
-import { Button } from "@nypl/design-system-react-components"
+import {
+  Box,
+  Button,
+  Heading,
+  Icon,
+  useModal,
+  Text,
+} from "@nypl/design-system-react-components"
+import styles from "../../../../styles/components/MyAccount.module.scss"
 
 const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
   const [frozen, setFrozen] = useState(hold.frozen)
   const [isDisabled, setIsDisabled] = useState(false)
+  const { onOpen: openModal, onClose: closeModal, Modal } = useModal()
+  const modalProps = {
+    bodyContent: (
+      <Box className={styles.modalBody}>
+        <Text sx={{ marginLeft: "l", marginRight: "m" }}>
+          Please try again.
+        </Text>
+      </Box>
+    ),
+    closeButtonLabel: "OK",
+    headingText: (
+      <Heading className={styles.modalHeading}>
+        <>
+          <Icon size="large" name="errorFilled" color="ui.error.primary" />
+          <Text sx={{ marginBottom: 0 }}> Freezing this hold failed </Text>
+        </>
+      </Heading>
+    ),
+    onClose: () => {
+      closeModal()
+      setFrozen(!frozen)
+      setIsDisabled(false)
+    },
+  }
 
   const handleFreezeClick = async () => {
     // Disabling button while request happens.
     setIsDisabled(true)
-    await fetch(
+    const response = await fetch(
       `/research/research-catalog/api/account/holds/update/${hold.id}`,
       {
         method: "POST",
@@ -23,20 +55,27 @@ const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
         }),
       }
     )
-    setFrozen(!frozen)
-    setIsDisabled(false)
+    if (response.status !== 200) {
+      openModal()
+    } else {
+      setFrozen(!frozen)
+      setIsDisabled(false)
+    }
   }
 
   return (
-    <Button
-      width="100%"
-      buttonType="secondary"
-      id={`freeze-${hold.id}`}
-      onClick={handleFreezeClick}
-      isDisabled={isDisabled}
-    >
-      {frozen ? "Unfreeze" : "Freeze"}
-    </Button>
+    <>
+      <Button
+        width="100%"
+        buttonType="secondary"
+        id={`freeze-${hold.id}`}
+        onClick={handleFreezeClick}
+        isDisabled={isDisabled}
+      >
+        {frozen ? "Unfreeze" : "Freeze"}
+      </Button>
+      <Modal {...modalProps} />
+    </>
   )
 }
 

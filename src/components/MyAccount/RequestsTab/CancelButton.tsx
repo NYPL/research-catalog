@@ -52,6 +52,32 @@ const CancelButton = ({
     }
   }
 
+  function failureModalProps(hold) {
+    return {
+      bodyContent: (
+        <Box className={styles.modalBody}>
+          <Text sx={{ marginLeft: "l", marginRight: "m" }}>
+            Your request for{" "}
+            <span style={{ fontWeight: "var(--nypl-fontWeights-medium)" }}>
+              {hold.title}
+            </span>{" "}
+            has not been canceled. Please try again.
+          </Text>
+        </Box>
+      ),
+      closeButtonLabel: "OK",
+      headingText: (
+        <Heading className={styles.modalHeading}>
+          <>
+            <Icon size="large" name="errorFilled" color="ui.error.primary" />
+            <Text sx={{ marginBottom: 0 }}>Failed to cancel request </Text>
+          </>
+        </Heading>
+      ),
+      onClose: closeModal(),
+    }
+  }
+
   function checkModalProps(hold) {
     return {
       bodyContent: (
@@ -93,6 +119,8 @@ const CancelButton = ({
           if (response.status == 200) {
             // Open next modal to confirm request has been canceled.
             setModalProps(confirmModalProps(hold))
+          } else {
+            setModalProps(failureModalProps)
           }
         } else {
           closeModal()
