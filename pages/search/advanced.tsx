@@ -18,6 +18,7 @@ import {
   ButtonGroup,
   Button,
   Box,
+  Banner,
 } from "@nypl/design-system-react-components"
 
 import Layout from "../../src/components/Layout/Layout"
@@ -145,14 +146,7 @@ export default function AdvancedSearch({ isAuthenticated }) {
         {/* Always render the wrapper element that will display the
           dynamically rendered notification */}
         <Box tabIndex={-1} ref={notificationRef}>
-          {alert && (
-            <Notification
-              notificationType="warning"
-              notificationContent={errorMessage}
-              noMargin
-              mb="s"
-            />
-          )}
+          {alert && <Banner type="negative" content={errorMessage} mb="s" />}
         </Box>
         <Heading level="h2">Advanced Search</Heading>
         <Form
