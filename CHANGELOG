@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+### Added
+
+- Added `SearchParamsContext` to keep track of search keywords globally. For now, it only keeps track of the `q` query param (SCC-4061)
+
 ### Fixed
 
 - Fixed VQA issues for the searchbar, results heading, sort dropdown, and individual search result card in the Search Results page (SCC-4065)

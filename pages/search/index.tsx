@@ -4,7 +4,6 @@ import {
   SimpleGrid,
   Pagination,
   SkeletonLoader,
-  Banner,
 } from "@nypl/design-system-react-components"
 import { useEffect, useRef, type ChangeEvent } from "react"
 import { useRouter } from "next/router"
@@ -35,6 +34,7 @@ import type SearchResultsBib from "../../src/models/SearchResultsBib"
 
 import useLoading from "../../src/hooks/useLoading"
 import initializePatronTokenAuth from "../../src/server/auth"
+import { useSearchParamsContext } from "../../src/context/SearchParamsContext"
 
 interface SearchProps {
   bannerNotification?: string
@@ -59,8 +59,7 @@ export default function Search({
     results.results
   const drbResponse = results.drbResults?.data
   const drbWorks = drbResponse?.works
-
-  // TODO: Move this to global context
+  const { setSearchParams } = useSearchParamsContext()
   const searchParams = mapQueryToSearchParams(query)
 
   // Map Search Results Elements from response to SearchResultBib objects
@@ -95,6 +94,7 @@ export default function Search({
   }
 
   const searchResultsHeadingRef = useRef(null)
+
   useEffect(() => {
     // don't focus on "Displaying n results..." if the page is not done loading
     if (isLoading) return
@@ -103,6 +103,9 @@ export default function Search({
     // otherwise, focus on "Displaying n results..."
     searchResultsHeadingRef?.current?.focus()
   }, [isLoading, isFreshSortByQuery])
+
+  // Update the global context for the search params, specifically the 'q' param
+  setSearchParams(searchParams.q)
 
   return (
     <>

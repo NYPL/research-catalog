@@ -15,8 +15,6 @@ import ItemTable from "../ItemTable/ItemTable"
 import ItemTableData from "../../models/ItemTableData"
 import type SearchResultsBib from "../../models/SearchResultsBib"
 import { PATHS, ITEMS_PER_SEARCH_RESULT } from "../../config/constants"
-import DRBResult from "../../models/DRBResult"
-import DRBCard from "../DRB/DRBCard"
 
 interface SearchResultProps {
   bib: SearchResultsBib
@@ -28,7 +26,8 @@ interface SearchResultProps {
 const SearchResult = ({ bib }: SearchResultProps) => {
   const { isLargerThanLarge: isDesktop } = useNYPLBreakpoints()
 
-  // On Search Results, a separate ItemTable is constructed for each item up to the limit set in ITEMS_PER_SEARCH_RESULT.
+  // On Search Results, a separate ItemTable is constructed for each item up to
+  // the limit set in ITEMS_PER_SEARCH_RESULT.
   // TODO: Move this preprocessing to SearchResultsBib model
   const searchResultItems: ItemTableData[] =
     bib.hasItems &&

@@ -1,5 +1,6 @@
 import React from "react"
-import { render, screen } from "@testing-library/react"
+import { render, screen } from "../../utils/testUtils"
+
 import RequestButtons from "./RequestButtons"
 import Item from "../../models/Item"
 import SearchResultsBib from "../../models/SearchResultsBib"
@@ -9,6 +10,7 @@ import {
   itemEddRequestable,
 } from "../../../__test__/fixtures/itemFixtures"
 import { searchResultPhysicalItems } from "../../../__test__/fixtures/searchResultPhysicalItems"
+import { useSearchParamsContext } from "../../context/SearchParamsContext"
 
 const parentBib = new SearchResultsBib(searchResultPhysicalItems)
 
@@ -37,16 +39,41 @@ describe("RequestButtons", () => {
       "/research/research-catalog/hold/request/b12810991-i14119377"
     )
   })
+  it("renders an on-site use request link when aeon url is not present and item is available", async () => {
+    const RequestButtonWithContext = () => {
+      const item = new Item(itemAvailableOnsite, parentBib)
+      const { setSearchParams } = useSearchParamsContext()
+      setSearchParams("spaghetti")
+
+      return <RequestButtons item={item} />
+    }
+
+    render(<RequestButtonWithContext />)
+    expect(
+      screen.getByRole("link", {
+        name: "Request for On-site Use, A history of spaghetti eating and cooking for: spaghetti dinner.",
+      })
+    ).toHaveAttribute(
+      "href",
+      "/research/research-catalog/hold/request/b12810991-i14119377?searchKeywords=spaghetti"
+    )
+  })
   it("renders an an request scan link if item is EDD requestable", async () => {
-    const item = new Item(itemEddRequestable, parentBib)
-    render(<RequestButtons item={item} />)
+    const RequestButtonWithContext = () => {
+      const item = new Item(itemEddRequestable, parentBib)
+      const { setSearchParams } = useSearchParamsContext()
+      setSearchParams("spaghetti")
+
+      return <RequestButtons item={item} />
+    }
+    render(<RequestButtonWithContext />)
     expect(
       screen.getByRole("link", {
         name: "Request Scan, A history of spaghetti eating and cooking for: spaghetti dinner.",
       })
     ).toHaveAttribute(
       "href",
-      "/research/research-catalog/hold/request/b12810991-i15550040/edd"
+      "/research/research-catalog/hold/request/b12810991-i15550040/edd?searchKeywords=spaghetti"
     )
   })
 })
