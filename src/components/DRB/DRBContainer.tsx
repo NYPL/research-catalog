@@ -4,11 +4,10 @@ import {
   CardContent,
   Text,
   SimpleGrid,
-  Link as DSLink,
 } from "@nypl/design-system-react-components"
 
 import { appConfig } from "../../config/config"
-import RCLink from "../RCLink/RCLink"
+import ExternalLink from "../Links/ExternalLink/ExternalLink"
 import DRBCard from "./DRBCard"
 import type DRBResult from "../../models/DRBResult"
 import type { SearchParams } from "../../types/searchTypes"
@@ -46,9 +45,9 @@ const DRBContainer = ({
         <Text size="body2">
           Digital books for research from multiple sources world wide- all free
           to read, download, and keep. No Library Card is Required.{" "}
-          <RCLink href={appConfig.urls.drbAbout}>
+          <ExternalLink href={appConfig.urls.drbAbout}>
             Read more about the project
-          </RCLink>
+          </ExternalLink>
           .
         </Text>
         <SimpleGrid columns={1} gap="grid.s" pb="s">
@@ -57,23 +56,21 @@ const DRBContainer = ({
           ))}
         </SimpleGrid>
         {totalWorks && (
-          <DSLink
+          <ExternalLink
             href={`${DRB_BASE_URL}/search${drbQuery}`}
-            target="_blank"
             fontSize={{
               base: "mobile.body.body2",
               md: "desktop.body.body2",
             }}
             type="standalone"
             fontWeight="bold"
-            hasVisitedState={false}
           >
             <>
               View {totalWorks === 1 ? "" : "all"} {totalWorks.toLocaleString()}{" "}
               result
               {totalWorks === 1 ? "" : "s"} in Digital Research Books Beta
             </>
-          </DSLink>
+          </ExternalLink>
         )}
       </CardContent>
     </Card>

@@ -1,4 +1,5 @@
-import { Text, Link as DSLink } from "@nypl/design-system-react-components"
+import { Text } from "@nypl/design-system-react-components"
+import ExternalLink from "./Links/ExternalLink/ExternalLink"
 import React from "react"
 
 /**
@@ -11,13 +12,9 @@ const EDSLink = () => {
         New!
       </span>{" "}
       Try our{" "}
-      <DSLink
-        href="https://research.ebsco.com/c/2styhb"
-        target="_blank"
-        hasVisitedState={false}
-      >
+      <ExternalLink href="https://research.ebsco.com/c/2styhb">
         <strong>Article Search</strong>
-      </DSLink>{" "}
+      </ExternalLink>{" "}
       to discover online journals, books, and more from home with your library
       card.
     </Text>
