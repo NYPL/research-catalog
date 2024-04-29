@@ -39,7 +39,7 @@ describe("RequestButtons", () => {
       "/research/research-catalog/hold/request/b12810991-i14119377"
     )
   })
-  it("renders an on-site use request link when aeon url is not present and item is available", async () => {
+  it("renders the searchKeywords param in the URL when there's a search param", async () => {
     const RequestButtonWithContext = () => {
       const item = new Item(itemAvailableOnsite, parentBib)
       const { setSearchParams } = useSearchParamsContext()
@@ -59,6 +59,18 @@ describe("RequestButtons", () => {
     )
   })
   it("renders an an request scan link if item is EDD requestable", async () => {
+    const item = new Item(itemEddRequestable, parentBib)
+    render(<RequestButtons item={item} />)
+    expect(
+      screen.getByRole("link", {
+        name: "Request Scan, A history of spaghetti eating and cooking for: spaghetti dinner.",
+      })
+    ).toHaveAttribute(
+      "href",
+      "/research/research-catalog/hold/request/b12810991-i15550040/edd"
+    )
+  })
+  it("renders the searchKeywords param in the EDD URL when there's a search param", async () => {
     const RequestButtonWithContext = () => {
       const item = new Item(itemEddRequestable, parentBib)
       const { setSearchParams } = useSearchParamsContext()
