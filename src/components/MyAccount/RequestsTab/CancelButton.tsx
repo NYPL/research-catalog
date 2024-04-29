@@ -39,7 +39,11 @@ const CancelButton = ({
       headingText: (
         <Heading className={styles.modalHeading}>
           <>
-            <Icon size="large" name="errorFilled" color="ui.error.primary" />
+            <Icon
+              size="large"
+              name="actionCheckCircleFilled"
+              color="ui.success.primary"
+            />
             <Text sx={{ marginBottom: 0 }}>Request canceled </Text>
           </>
         </Heading>
