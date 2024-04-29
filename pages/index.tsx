@@ -4,14 +4,13 @@ import {
   Card,
   CardHeading,
   CardContent,
-  Link,
   Box,
   SkeletonLoader,
 } from "@nypl/design-system-react-components"
 import Head from "next/head"
 
 import Layout from "../src/components/Layout/Layout"
-import RCLink from "../src/components/RCLink/RCLink"
+import ExternalLink from "../src/components/Links/ExternalLink/ExternalLink"
 
 import { SITE_NAME } from "../src/config/constants"
 import { appConfig } from "../src/config/config"
@@ -43,7 +42,7 @@ export default function Home({
         ) : (
           <>
             <Heading level="h2">
-              Explore the Library&apos;s Vast Research Collections & More
+              Explore the Library&apos;s Vast Research Collections &amp; More
             </Heading>
             <Box>
               <p>
@@ -53,25 +52,25 @@ export default function Home({
                 for the Performing Arts. Plus, access materials from library
                 collections at Columbia University, Harvard University, and
                 Princeton University.{" "}
-                <Link
+                <ExternalLink
                   href="/research/collections/about/shared-collection-catalog"
                   aria-label="Learn more about the Research Catalog."
                 >
                   Learn more.
-                </Link>
+                </ExternalLink>
               </p>
               <p>
                 Please note that the Research Catalog does not include
                 circulating materials. For books and more that you can check out
                 to take home please visit our{" "}
-                <RCLink href={appConfig.urls.circulatingCatalog}>
+                <ExternalLink href={appConfig.urls.circulatingCatalog}>
                   circulating branch catalog.
-                </RCLink>{" "}
+                </ExternalLink>{" "}
                 The{" "}
-                <RCLink href={appConfig.urls.legacyCatalog}>
+                <ExternalLink href={appConfig.urls.legacyCatalog}>
                   legacy research catalog
-                </RCLink>{" "}
-                is still available, but does not include all of our Scan &
+                </ExternalLink>{" "}
+                is still available, but does not include all of our Scan &amp;
                 Deliver options or the Columbia University, Harvard University,
                 and Princeton University material from the Shared Collection.
               </p>
@@ -185,14 +184,11 @@ export default function Home({
 
 export async function getServerSideProps({ req }) {
   const bannerNotification = process.env.SEARCH_RESULTS_NOTIFICATION || ""
-
   // Every page that needs patron data must call initializePatronTokenAuth
   // to find if the token is valid and what the patron id is.
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   // Now it can be used to get patron data from Sierra or Platform API
   // or use `isTokenValid` to redirect to login page if it's not valid.
-  console.log("patronTokenResponse is", patronTokenResponse)
-
   const isAuthenticated = patronTokenResponse.isTokenValid
   // return props object
   return {

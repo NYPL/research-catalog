@@ -74,7 +74,7 @@ export function getSearchResultsHeading(
 function buildQueryDisplayString(searchParams: SearchParams): string {
   const params = Object.keys(searchParams)
   return params
-    .reduce((displayString, param, i) => {
+    .reduce((displayString, param) => {
       const displayParam = textInputFields.find((field) => field.name === param)
       // if it's a param we want to display and it is a populated value
       if (displayParam && searchParams[param]) {

@@ -1,12 +1,12 @@
 import React from "react"
 import { render, screen, act } from "@testing-library/react"
-import RCLink from "./RCLink"
+import ExternalLink from "./ExternalLink"
 import userEvent from "@testing-library/user-event"
 import { MemoryRouterProvider } from "next-router-mock/MemoryRouterProvider"
 
-describe("RCLink", () => {
+describe("ExternalLink", () => {
   it("can take an href", async () => {
-    render(<RCLink href="/spaghetti">Spaghetti</RCLink>, {
+    render(<ExternalLink href="/spaghetti">Spaghetti</ExternalLink>, {
       wrapper: MemoryRouterProvider,
     })
     const link = screen.getByText("Spaghetti")
@@ -15,14 +15,16 @@ describe("RCLink", () => {
       expect(link).toHaveAttribute("href", "/spaghetti")
     })
   })
+  it("opens in a new tab by default", async () => {
+    render(<ExternalLink href="/spaghetti">Spaghetti</ExternalLink>)
+    const link = screen.getByText("Spaghetti")
+    expect(link).toHaveAttribute("target", "_blank")
+  })
   it("should add appropriate accessibility attributes when link is disabled", async () => {
     render(
-      <RCLink href="/spaghetti" disabled>
+      <ExternalLink href="/spaghetti" disabled>
         Spaghetti
-      </RCLink>,
-      {
-        wrapper: MemoryRouterProvider,
-      }
+      </ExternalLink>
     )
     const link = screen.getByText("Spaghetti")
     expect(link).toHaveAttribute("aria-disabled", "true")

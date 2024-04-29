@@ -1,4 +1,5 @@
 import aws from "aws-sdk"
+import logger from "../../logger"
 
 const kms: aws.KMS = new aws.KMS({
   region: "us-east-1",
@@ -9,7 +10,7 @@ export const kmsDecryptCreds = async (creds: string[]) => {
 }
 
 const decryptKMS = async (key: string) => {
-  console.log("Decrypt func INPUT: " + key)
+  logger.info("Decrypt func INPUT: " + key)
   const params = {
     CiphertextBlob: Buffer.from(key, "base64"),
   }
@@ -17,6 +18,6 @@ const decryptKMS = async (key: string) => {
     const decrypted = await kms.decrypt(params).promise()
     return decrypted.Plaintext.toString()
   } catch (exception) {
-    console.error(exception)
+    logger.error(exception)
   }
 }

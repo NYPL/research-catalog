@@ -8,14 +8,23 @@ import { MyAccountFactory } from "../../src/models/MyAccount"
 import type MyAccountModel from "../../src/models/MyAccount"
 import ProfileTabs from "../../src/components/MyAccount/ProfileTabs"
 import ProfileHeader from "../../src/components/MyAccount/ProfileHeader"
-import { BASE_URL } from "../../src/config/constants"
+import { BASE_URL, PATHS } from "../../src/config/constants"
+
 import FeesBanner from "../../src/components/MyAccount/FeesBanner"
+import sierraClient from "../../src/server/sierraClient"
+import type {
+  Patron,
+  Hold,
+  Checkout,
+  Fine,
+} from "../../src/types/myAccountTypes"
+import logger from "../../logger"
 
 interface MyAccountPropsType {
-  patron?: MyAccountModel["patron"]
-  checkouts?: MyAccountModel["checkouts"]
-  holds?: MyAccountModel["holds"]
-  fines?: MyAccountModel["fines"]
+  patron?: Patron
+  checkouts?: Checkout[]
+  holds?: Hold[]
+  fines?: Fine
   isAuthenticated: boolean
   tabsPath?: string
 }
@@ -29,112 +38,6 @@ export default function MyAccount({
   tabsPath,
 }: MyAccountPropsType) {
   const errorRetrievingPatronData = !patron
-  console.log(checkouts, holds, patron, fines, tabsPath)
-
-  /** Testing settings api route */
-  async function settingsUpdate(patronId) {
-    try {
-      const response = await fetch(
-        `${BASE_URL}/api/account/settings/${patronId}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ emails: ["goodbye"] }),
-        }
-      )
-      const responseData = await response.json()
-      if (response.ok) {
-        alert(responseData)
-      } else {
-        alert(`error: ${responseData}`)
-      }
-    } catch (error) {
-      alert("fetching error")
-    }
-  }
-
-  /** Testing pin update api route */
-  async function pinUpdate(patronId, patronBarcode, oldPin, newPin) {
-    try {
-      const response = await fetch(
-        `${BASE_URL}/api/account/update-pin/${patronId}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            oldPin,
-            newPin,
-            barcode: patronBarcode,
-          }),
-        }
-      )
-      const responseData = await response.json()
-      if (response.ok) {
-        alert(responseData)
-      } else {
-        alert(`error: ${responseData}`)
-      }
-    } catch (error) {
-      console.log(error)
-      alert("fetching error")
-    }
-  }
-
-  /** Testing hold update api route */
-  async function holdUpdate(patronId, holdId, frozen, pickupLocation) {
-    try {
-      const response = await fetch(
-        `/research/research-catalog/api/account/holds/update/${holdId}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            patronId,
-            frozen,
-            pickupLocation,
-          }),
-        }
-      )
-      const responseData = await response.json()
-      if (response.ok) {
-        alert(responseData)
-      } else {
-        alert(`error: ${responseData}`)
-      }
-    } catch (error) {
-      alert("fetching error")
-    }
-  }
-
-  /** Testing hold cancel api route */
-  async function holdCancel(patronId, holdId) {
-    try {
-      const response = await fetch(
-        `/research/research-catalog/api/account/holds/cancel/${holdId}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ patronId }),
-        }
-      )
-      const responseData = await response.json()
-      if (response.ok) {
-        alert(responseData)
-      } else {
-        alert(`error: ${responseData}`)
-      }
-    } catch (error) {
-      alert("fetching error")
-    }
-  }
 
   return (
     <>
@@ -184,7 +87,6 @@ export default function MyAccount({
 
 export async function getServerSideProps({ req }) {
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
-  console.log("patronTokenResponse is", patronTokenResponse)
   const isAuthenticated = patronTokenResponse.isTokenValid
   if (!isAuthenticated) {
     const redirect = getLoginRedirect(req)
@@ -196,29 +98,58 @@ export async function getServerSideProps({ req }) {
     }
   }
   // Parsing path from url to pass to ProfileTabs.
-  const tabsPath = req.url.split("/", -1)[2] || null
+  const tabsPathRegex = /\/account\/(.+)/
+  const match = req.url.match(tabsPathRegex)
+  const tabsPath = match ? match[1] : null
   const id = patronTokenResponse.decodedPatron.sub
-  // try {
-  const { checkouts, holds, patron, fines } = await MyAccountFactory(id)
-  // Redirecting /fines if user has none.
-  if (tabsPath === "overdues" && fines.total === 0) {
+  try {
+    const client = await sierraClient()
+    const { checkouts, holds, patron, fines } = await MyAccountFactory(
+      id,
+      client
+    )
+
+    // Immediately returning base path.
+    if (!tabsPath) {
+      return {
+        props: { checkouts, holds, patron, fines, tabsPath, isAuthenticated },
+      }
+    }
+
+    /*  Redirecting invalid paths (including /overdues if user has none) and
+    // cleaning extra parts off valid paths. */
+    const allowedPaths = ["items", "requests", "overdues", "settings"]
+    if (
+      !allowedPaths.some((path) => tabsPath.startsWith(path)) ||
+      (tabsPath === "overdues" && fines.total === 0)
+    ) {
+      return {
+        redirect: {
+          destination: "/account",
+          permanent: false,
+        },
+      }
+    } else {
+      const matchedPath = allowedPaths.find((path) => tabsPath.startsWith(path))
+      if (tabsPath != matchedPath)
+        return {
+          redirect: {
+            destination: "/account/" + matchedPath,
+            permanent: false,
+          },
+        }
+    }
+
     return {
-      redirect: {
-        destination: "/account",
-        permanent: false,
+      props: { checkouts, holds, patron, fines, tabsPath, isAuthenticated },
+    }
+  } catch (e) {
+    logger.error(e.message)
+    return {
+      props: {
+        tabsPath,
+        isAuthenticated,
       },
     }
   }
-  return {
-    props: { checkouts, holds, patron, fines, tabsPath, isAuthenticated },
-  }
-  // } catch (e) {
-  //   console.log(e.message)
-  //   return {
-  //     props: {
-  //       tabsPath,
-  //       isAuthenticated,
-  //     },
-  //   }
-  // }
 }

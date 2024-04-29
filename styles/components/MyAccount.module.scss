@@ -7,15 +7,27 @@
   h2 {
     border: none;
   }
+  .iconDd {
+    @media (max-width: 600px) {
+      margin-left: 2rem;
+    }
+  }
 }
 
 .iconDt {
   display: flex;
+  margin-bottom: var(--nypl-space-xs);
   svg {
     margin-right: var(--nypl-space-xs);
   }
 }
 
+.accountSettingsTab {
+  display: flex;
+  button + button {
+    margin-left: var(--nypl-space-xs);
+  }
+}
 .modalHeading {
   display: flex;
   justify-content: flex-start;
@@ -32,11 +44,12 @@
     margin-top: var(--nypl-space-s);
   }
 }
+
 .modalBody {
   font-size: var(--nypl-fontSizes-desktop-body-body1);
   display: flex;
   flex-direction: column;
-  padding-top: 0;
+  padding-top: 0 !important;
 }
 
 .notification {
@@ -110,47 +123,22 @@
   }
 }
 
-.statusBadge {
-  background: var(--nypl-colors-ui-bg-default);
-  border-color: var(--nypl-colors-ui-gray-semi-dark) !important;
-  border-left: 4px solid;
-  font-size: var(--nypl-fontSizes-desktop-caption);
-  font-weight: 510;
-  font-style: normal !important;
-}
-
-.statusBadgeReady {
-  background: rgba(238, 247, 240, 1) !important;
-  border-color: var(--nypl-colors-ui-success-primary) !important;
-  border-left: 4px solid;
-  font-size: var(--nypl-fontSizes-desktop-caption);
-  font-weight: 510;
-  font-style: normal !important;
-}
-
-.feesNotification {
-  margin-left: 0 !important;
-  background: rgba(250, 244, 244, 1) !important;
-  border-left: 2px solid var(--nypl-colors-ui-error-primary);
-  border-radius: 0 !important;
-  > div > div > div {
-    display: flex;
-    gap: 4px;
-    flex-direction: row;
-    > p {
-      margin-bottom: 0;
-      color: var(--nypl-colors-ui-error-primary);
-      font-size: var(--nypl-fontSizes-desktop-body-body1);
-    }
-    > svg {
-      fill: var(--nypl-colors-ui-error-primary);
-      margin-top: 3px;
-    }
-    a {
-      color: var(--nypl-colors-ui-link-primary) !important;
-    }
+// TO-DO: Remove or correct these styles once Modal component is updated.
+.formTextInput {
+  align-items: center;
+  gap: var(--nypl-space-xs);
+  > label {
+    font-size: var(--nypl-fontSizes-desktop-body-body1);
+    font-weight: var(--nypl-fontWeights-light);
   }
   > div {
-    padding-left: 0;
+    width: 100%;
   }
+}
+
+.formButton {
+  width: 200px;
+  display: flex;
+  flex-direction: row;
+  justify-self: end;
 }
