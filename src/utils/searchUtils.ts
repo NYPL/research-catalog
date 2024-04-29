@@ -299,14 +299,14 @@ export function mapQueryToSearchParams({
     q,
     field: search_scope,
     page: page ? parseInt(page) : 1,
-    // TODO: this is a "catch-all" for journal title and standard number
-    // fields but will also update other fields such as title, subject, and
-    // contributor. Setting this higher up so that it can be overridden by the
-    // other fields if a value is present. Is this the best way to handle this?
-    ...(search_scope && q ? { [search_scope]: q } : {}),
     contributor,
     title,
     subject,
+    // TODO: this is a "catch-all" for journal title and standard number
+    // fields but will also update other fields such as title, subject, and
+    // contributor. This will override other fields if a value is present.
+    // Is this the best way to handle this?
+    ...(search_scope && q ? { [search_scope]: q } : {}),
     sortBy: sort,
     order: sort_direction,
     filters,
