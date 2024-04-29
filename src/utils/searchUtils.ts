@@ -7,10 +7,10 @@ import type {
   SearchFilters,
   Identifiers,
   SearchResultsElement,
-  SearchQueryFilters,
 } from "../types/searchTypes"
 import SearchResultsBib from "../models/SearchResultsBib"
 import { RESULTS_PER_PAGE } from "../config/constants"
+import { collapseMultiValueQueryParams } from "./refineSearchUtils"
 
 /**
  * determineFreshSortByQuery
@@ -261,29 +261,6 @@ export const sortOptions: Record<string, string> = {
 }
 
 /**
- * mapQueryFiltersToSearchFilters
- * Maps the filter query params to a SearchFilters object
- */
-export function mapQueryFiltersToSearchFilters(
-  filters: SearchQueryFilters
-): SearchFilters {
-  const searchFilters: SearchFilters = {}
-
-  filters.forEach((filter) => {
-    const [key, filterValue] = filter
-    // get values in between brackets in filter keys
-    const filterKey = key.match(/\[(.*?)]/i)?.[1]
-
-    if (searchFilters[filterKey]) {
-      searchFilters[filterKey].push(filterValue)
-    } else {
-      searchFilters[filterKey] = [filterValue]
-    }
-  })
-  return searchFilters
-}
-
-/**
  * mapQueryToSearchParams
  * Maps the SearchQueryParams structure from the request to a SearchParams object, which is expected by fetchResults
  * It also parses the results page number from a string, defaulting to 1 if absent
@@ -304,9 +281,7 @@ export function mapQueryToSearchParams({
   ...queryFilters
 }: SearchQueryParams): SearchParams {
   const hasIdentifiers = issn || isbn || oclc || lccn
-  const filters = Object.keys(queryFilters).length
-    ? mapQueryFiltersToSearchFilters(Object.entries(queryFilters))
-    : undefined
+  const filters = collapseMultiValueQueryParams(queryFilters)
   return {
     q,
     field: search_scope,
@@ -316,7 +291,7 @@ export function mapQueryToSearchParams({
     subject,
     sortBy: sort,
     order: sort_direction,
-    filters,
+    filters: Object.keys(filters).length ? filters : undefined,
     identifiers: hasIdentifiers && {
       issn,
       isbn,
