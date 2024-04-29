@@ -1,5 +1,4 @@
 import AccountSettingsTab from "./Settings/AccountSettingsTab"
-
 import { Tabs, Text } from "@nypl/design-system-react-components"
 import { useRouter } from "next/router"
 import CheckoutsTab from "./CheckoutsTab/CheckoutsTab"
