@@ -82,6 +82,8 @@ describe("RequestsTab", () => {
         activePath="requests"
       />
     )
+    let rows = component.getAllByRole("row")
+    expect(rows.length).toBe(3)
 
     await userEvent.click(component.getAllByText("Cancel")[0])
     await userEvent.click(component.getAllByText("Yes, cancel")[0])
@@ -96,10 +98,8 @@ describe("RequestsTab", () => {
         body: JSON.stringify({ patronId: mockPatron.id }),
       }
     )
-    expect
     await userEvent.click(component.getAllByText("OK")[0])
-
-    const rows = component.getAllByRole("row")
+    rows = component.getAllByRole("row")
     expect(rows.length).toBe(2)
   })
 
@@ -118,6 +118,8 @@ describe("RequestsTab", () => {
       />
     )
 
+    let rows = component.getAllByRole("row")
+    expect(rows.length).toBe(3)
     await userEvent.click(component.getAllByText("Cancel")[0])
     await userEvent.click(component.getAllByText("Yes, cancel")[0])
 
@@ -134,7 +136,7 @@ describe("RequestsTab", () => {
 
     await userEvent.click(screen.getAllByText("OK", { exact: false })[0])
 
-    const rows = component.getAllByRole("row")
+    rows = component.getAllByRole("row")
     expect(rows.length).toBe(3)
   })
 

@@ -33,7 +33,7 @@ const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
     ),
     onClose: () => {
       closeModal()
-      setFrozen(!frozen)
+      setFrozen((frozen) => !frozen)
       setIsDisabled(false)
     },
   }
@@ -58,7 +58,7 @@ const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
     if (response.status !== 200) {
       openModal()
     } else {
-      setFrozen(!frozen)
+      setFrozen((frozen) => !frozen)
       setIsDisabled(false)
     }
   }
