@@ -5,7 +5,7 @@ import {
   mockFines,
   mockHolds,
   mockPatron,
-} from "../../../../__test__/fixtures/myAccountFixtures"
+} from "../../../../__test__/fixtures/processedMyAccountData"
 import { userEvent } from "@testing-library/user-event"
 import ProfileTabs from "../ProfileTabs"
 import RequestsTab from "./RequestsTab"
@@ -134,7 +134,7 @@ describe("RequestsTab", () => {
         body: JSON.stringify({
           patronId: mockPatron.id,
           freeze: true,
-          pickupLocation: "mal",
+          pickupLocation: "sn",
         }),
       }
     )
@@ -153,7 +153,7 @@ describe("RequestsTab", () => {
         body: JSON.stringify({
           patronId: mockPatron.id,
           freeze: false,
-          pickupLocation: "mal",
+          pickupLocation: "sn",
         }),
       }
     )

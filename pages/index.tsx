@@ -4,14 +4,13 @@ import {
   Card,
   CardHeading,
   CardContent,
-  Link,
   Box,
   SkeletonLoader,
 } from "@nypl/design-system-react-components"
 import Head from "next/head"
 
 import Layout from "../src/components/Layout/Layout"
-import RCLink from "../src/components/RCLink/RCLink"
+import ExternalLink from "../src/components/Links/ExternalLink/ExternalLink"
 
 import { SITE_NAME } from "../src/config/constants"
 import { appConfig } from "../src/config/config"
@@ -53,24 +52,24 @@ export default function Home({
                 for the Performing Arts. Plus, access materials from library
                 collections at Columbia University, Harvard University, and
                 Princeton University.{" "}
-                <Link
+                <ExternalLink
                   href="/research/collections/about/shared-collection-catalog"
                   aria-label="Learn more about the Research Catalog."
                 >
                   Learn more.
-                </Link>
+                </ExternalLink>
               </p>
               <p>
                 Please note that the Research Catalog does not include
                 circulating materials. For books and more that you can check out
                 to take home please visit our{" "}
-                <RCLink href={appConfig.urls.circulatingCatalog}>
+                <ExternalLink href={appConfig.urls.circulatingCatalog}>
                   circulating branch catalog.
-                </RCLink>{" "}
+                </ExternalLink>{" "}
                 The{" "}
-                <RCLink href={appConfig.urls.legacyCatalog}>
+                <ExternalLink href={appConfig.urls.legacyCatalog}>
                   legacy research catalog
-                </RCLink>{" "}
+                </ExternalLink>{" "}
                 is still available, but does not include all of our Scan &amp;
                 Deliver options or the Columbia University, Harvard University,
                 and Princeton University material from the Shared Collection.

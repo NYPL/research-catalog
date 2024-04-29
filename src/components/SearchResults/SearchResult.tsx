@@ -7,19 +7,14 @@ import {
   CardActions,
   useNYPLBreakpoints,
   SimpleGrid,
-  Link as DSLink,
 } from "@nypl/design-system-react-components"
 
-import RCLink from "../RCLink/RCLink"
+import RCLink from "../Links/RCLink/RCLink"
 import ElectronicResourcesLink from "./ElectronicResourcesLink"
 import ItemTable from "../ItemTable/ItemTable"
 import ItemTableData from "../../models/ItemTableData"
 import type SearchResultsBib from "../../models/SearchResultsBib"
-import {
-  PATHS,
-  ITEMS_PER_SEARCH_RESULT,
-  BASE_URL,
-} from "../../config/constants"
+import { PATHS, ITEMS_PER_SEARCH_RESULT } from "../../config/constants"
 import DRBResult from "../../models/DRBResult"
 import DRBCard from "../DRB/DRBCard"
 
@@ -56,12 +51,7 @@ const SearchResult = ({ bib }: SearchResultProps) => {
         size="heading5"
         sx={{ a: { textDecoration: "none" } }}
       >
-        <DSLink
-          href={`${BASE_URL}${PATHS.BIB}/${bib.id}`}
-          hasVisitedState={false}
-        >
-          {bib.title}
-        </DSLink>
+        <RCLink href={`${PATHS.BIB}/${bib.id}`}>{bib.title}</RCLink>
       </CardHeading>
       <CardContent>
         <Box
@@ -91,14 +81,13 @@ const SearchResult = ({ bib }: SearchResultProps) => {
               {bib.showViewAllItemsLink && (
                 <CardActions>
                   <RCLink
-                    href={`${BASE_URL}${bib.url}#items-table`}
+                    href={`${bib.url}#items-table`}
                     fontSize={{
                       base: "mobile.body.body2",
                       md: "desktop.body.body2",
                     }}
                     fontWeight="medium"
                     type="standalone"
-                    mt="m"
                   >
                     {`View All ${bib.itemMessage} `}
                   </RCLink>

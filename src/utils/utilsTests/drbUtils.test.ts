@@ -120,6 +120,38 @@ describe("drbUtils", () => {
       })
     })
 
+    it("should correctly map search fields to DRB fields", () => {
+      expect(
+        mapSearchParamsToDRBQueryParams({ q: "toast", field: "contributor" })
+      ).toEqual({
+        query: ["author:toast"],
+        page: 1,
+        source: "catalog",
+        size: DRB_RESULTS_PER_PAGE,
+      })
+
+      expect(
+        mapSearchParamsToDRBQueryParams({ q: "toast", field: "all" })
+      ).toEqual({
+        query: ["keyword:toast"],
+        page: 1,
+        source: "catalog",
+        size: DRB_RESULTS_PER_PAGE,
+      })
+
+      expect(
+        mapSearchParamsToDRBQueryParams({
+          q: "123",
+          field: "standard_number",
+        })
+      ).toEqual({
+        query: ["standardNumber:123"],
+        page: 1,
+        source: "catalog",
+        size: DRB_RESULTS_PER_PAGE,
+      })
+    })
+
     it("should handle keyword & subject query", () => {
       expect(
         mapSearchParamsToDRBQueryParams({

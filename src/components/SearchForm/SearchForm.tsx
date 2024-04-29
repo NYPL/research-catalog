@@ -4,7 +4,7 @@ import type { SyntheticEvent, Dispatch, SetStateAction } from "react"
 import { useState, useEffect } from "react"
 
 import styles from "../../../styles/components/Search.module.scss"
-import RCLink from "../RCLink/RCLink"
+import RCLink from "../Links/RCLink/RCLink"
 import { getSearchQuery } from "../../utils/searchUtils"
 import { BASE_URL, PATHS } from "../../config/constants"
 import EDSLink from "../EDSLink"
@@ -103,7 +103,7 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
         <Box className={styles.auxSearchContainer}>
           <RCLink
             className={styles.advancedSearch}
-            href={`${BASE_URL}/search/advanced`}
+            href="/search/advanced"
             isUnderlined={false}
             mb="xs"
           >
