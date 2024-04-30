@@ -206,7 +206,7 @@ describe("RequestsTab", () => {
     expect(freezeButtons.length).toBe(1)
   })
 
-  it("shows failure modal when freeze doesn't work", async () => {
+  it("shows failure modal when freeze doesn't work and does not change frozen state", async () => {
     global.fetch = jest.fn().mockResolvedValue({
       json: async () => "Nooo",
       status: 400,
@@ -218,13 +218,15 @@ describe("RequestsTab", () => {
         removeHold={mockRemoveHold}
       />
     )
-    const freezeButton = component.getAllByText("Freeze")[0]
+    let freezeButtons = component.getAllByText("Freeze")
+    expect(freezeButtons.length).toBe(1)
+    const freezeButton = component.getByText("Freeze")
     await userEvent.click(freezeButton)
     expect(
       component.getByText("Freezing this hold failed", { exact: false })
     ).toBeInTheDocument()
     await userEvent.click(screen.getAllByText("OK", { exact: false })[0])
-    const freezeButtons = component.getAllByText("Freeze")
+    freezeButtons = component.getAllByText("Freeze")
     expect(freezeButtons.length).toBe(1)
   })
 })
