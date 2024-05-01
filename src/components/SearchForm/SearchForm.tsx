@@ -12,7 +12,6 @@ import useLoading from "../../hooks/useLoading"
 import RefineSearch from "../RefineSearch/RefineSearch"
 import type { Aggregation } from "../../types/filterTypes"
 import { collapseMultiValueQueryParams } from "../../utils/refineSearchUtils"
-import { appConfig } from "../../config/config"
 
 /**
  * The SearchForm component renders and controls the Search form and
@@ -23,7 +22,9 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
   const [searchTerm, setSearchTerm] = useState(
     (router?.query?.q as string) || ""
   )
-  const [searchScope, setSearchScope] = useState("all")
+  const [searchScope, setSearchScope] = useState(
+    (router?.query?.search_scope as string) || "all"
+  )
   const [appliedFilters, setAppliedFilters] = useState(
     collapseMultiValueQueryParams(router.query)
   )
@@ -38,13 +39,7 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
     }
     const queryString = getSearchQuery(searchParams)
 
-    // If the reverseProxyEnabled feature flag is true, use window.location.replace
-    // instead of router.push to forward search results to DFE.
-    if (appConfig.features.reverseProxyEnabled[appConfig.environment]) {
-      window.location.replace(`${BASE_URL}${PATHS.SEARCH}${queryString}`)
-    } else {
-      await router.push(`${PATHS.SEARCH}${queryString}`)
-    }
+    await router.push(`${PATHS.SEARCH}${queryString}`)
   }
 
   const handleChange = (

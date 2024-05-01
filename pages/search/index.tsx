@@ -61,7 +61,6 @@ export default function Search({
 
   // TODO: Move this to global context
   const searchParams = mapQueryToSearchParams(query)
-
   // Map Search Results Elements from response to SearchResultBib objects
   const searchResultBibs = mapElementsToSearchResultsBibs(searchResultsElements)
   // Map DRB Works from response to DRBResult objects

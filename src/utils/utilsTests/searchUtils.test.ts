@@ -7,7 +7,7 @@ import {
   getFreshSortByQuery,
 } from "../searchUtils"
 import { queryParamsEquality } from "../../../__test__/helpers/searchHelpers"
-import { type SearchParams } from "../../types/searchTypes"
+import type { SearchQueryParams, SearchParams } from "../../types/searchTypes"
 
 const checkQueryParamsEquality = queryParamsEquality(getSearchQuery)
 
@@ -61,24 +61,33 @@ describe("searchUtils", () => {
           search_scope: "contributor",
           sort_direction: "asc",
           sort: "relevance",
-          contributor: "",
         })
       ).toEqual({
         identifiers: {
           issn: "123",
           isbn: "456",
-          lccn: undefined,
-          oclc: undefined,
         },
         page: 1,
         q: "",
         field: "contributor",
         order: "asc",
         sortBy: "relevance",
-        subject: undefined,
-        title: undefined,
-        contributor: "",
-        filters: undefined,
+      })
+    })
+    it("maps the filters correctly", () => {
+      expect(
+        mapQueryToSearchParams({
+          "filters[language][0]": "lang:rus",
+          "filters[subjectLiteral][0]": "Spaghetti",
+          "filters[subjectLiteral][1]": "Linguini",
+        } as SearchQueryParams)
+      ).toEqual({
+        page: 1,
+        q: "",
+        filters: {
+          language: ["lang:rus"],
+          subjectLiteral: ["Spaghetti", "Linguini"],
+        },
       })
     })
     it("parses the page number query string value into a number", () => {
@@ -89,14 +98,6 @@ describe("searchUtils", () => {
       ).toEqual({
         page: 2,
         q: "",
-        field: undefined,
-        order: undefined,
-        sortBy: undefined,
-        subject: undefined,
-        title: undefined,
-        contributor: undefined,
-        filters: undefined,
-        identifiers: undefined,
       })
     })
   })

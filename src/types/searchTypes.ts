@@ -89,13 +89,10 @@ export interface SearchQueryParams extends Identifiers {
   contributor?: string
   title?: string
   subject?: string
-  filters?: SearchFilters
   sort?: SortKey
   sort_direction?: SortOrder
-  sort_scope?: string
   search_scope?: string
   page?: string
-  per_page?: string
 }
 
 export interface SearchFormEvent {

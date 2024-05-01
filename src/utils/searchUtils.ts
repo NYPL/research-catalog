@@ -10,6 +10,7 @@ import type {
 } from "../types/searchTypes"
 import SearchResultsBib from "../models/SearchResultsBib"
 import { RESULTS_PER_PAGE } from "../config/constants"
+import { collapseMultiValueQueryParams } from "./refineSearchUtils"
 
 /**
  * determineFreshSortByQuery
@@ -292,9 +293,10 @@ export function mapQueryToSearchParams({
   isbn,
   oclc,
   lccn,
-  filters,
+  ...queryFilters
 }: SearchQueryParams): SearchParams {
   const hasIdentifiers = issn || isbn || oclc || lccn
+  const filters = collapseMultiValueQueryParams(queryFilters)
   return {
     q,
     field: search_scope,
@@ -309,7 +311,7 @@ export function mapQueryToSearchParams({
     ...(search_scope && q ? { [search_scope]: q } : {}),
     sortBy: sort,
     order: sort_direction,
-    filters,
+    filters: Object.keys(filters).length ? filters : undefined,
     identifiers: hasIdentifiers && {
       issn,
       isbn,
