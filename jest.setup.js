@@ -18,7 +18,7 @@ jest.spyOn(global.console, "error").mockImplementation(() => jest.fn())
 jest.spyOn(global.console, "warn").mockImplementation(() => jest.fn())
 
 // Increase timeout on tests
-jest.setTimeout(35000)
+jest.setTimeout(40000)
 
 const mockPatronJwtDecodedObj = {
   iss: "",

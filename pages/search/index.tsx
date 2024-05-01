@@ -4,7 +4,6 @@ import {
   SimpleGrid,
   Pagination,
   SkeletonLoader,
-  Banner,
 } from "@nypl/design-system-react-components"
 import { useEffect, useRef, type ChangeEvent } from "react"
 import { useRouter } from "next/router"
@@ -62,7 +61,6 @@ export default function Search({
 
   // TODO: Move this to global context
   const searchParams = mapQueryToSearchParams(query)
-
   // Map Search Results Elements from response to SearchResultBib objects
   const searchResultBibs = mapElementsToSearchResultsBibs(searchResultsElements)
   // Map DRB Works from response to DRBResult objects
