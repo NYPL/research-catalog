@@ -33,6 +33,8 @@ export interface SearchParams {
   filters?: SearchFilters
   contributor?: string
   title?: string
+  journalTitle?: string
+  standardNumber?: string
   subject?: string
   page?: number
   identifiers?: Identifiers

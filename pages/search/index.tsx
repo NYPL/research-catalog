@@ -4,7 +4,6 @@ import {
   SimpleGrid,
   Pagination,
   SkeletonLoader,
-  Banner,
 } from "@nypl/design-system-react-components"
 import { useEffect, useRef, type ChangeEvent } from "react"
 import { useRouter } from "next/router"

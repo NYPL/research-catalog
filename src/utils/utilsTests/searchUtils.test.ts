@@ -7,7 +7,7 @@ import {
   getFreshSortByQuery,
 } from "../searchUtils"
 import { queryParamsEquality } from "../../../__test__/helpers/searchHelpers"
-import type { SearchQueryParams } from "../../types/searchTypes"
+import type { SearchQueryParams, SearchParams } from "../../types/searchTypes"
 
 const checkQueryParamsEquality = queryParamsEquality(getSearchQuery)
 
@@ -147,6 +147,12 @@ describe("searchUtils", () => {
       )
       expect(heading.toLocaleLowerCase().includes("keyword")).toBe(false)
     })
+    it("displays the default keyword display string", () => {
+      const heading = getSearchResultsHeading({ q: "spaghetti" }, 100)
+      expect(heading).toEqual(
+        'Displaying 1-50 of 100 results for keyword "spaghetti"'
+      )
+    })
     it("displays all of the values from advanced search and nothing else", () => {
       const heading = getSearchResultsHeading(
         {
@@ -161,6 +167,20 @@ describe("searchUtils", () => {
       )
       expect(heading).toEqual(
         'Displaying 1-50 of 100 results for keyword "spaghetti" and title "ricotta" and author "pasta mama" and subject "italian"'
+      )
+    })
+    it("displays the appropriate string for certain values", () => {
+      const heading = getSearchResultsHeading(
+        {
+          page: 1,
+          q: "spaghetti",
+          field: "journal_title",
+          journal_title: "spaghetti",
+        } as SearchParams,
+        100
+      )
+      expect(heading).toEqual(
+        'Displaying 1-50 of 100 results for journal title "spaghetti"'
       )
     })
     it("returns the correct heading string for first page", () => {
