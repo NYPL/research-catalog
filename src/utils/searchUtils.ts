@@ -81,9 +81,13 @@ function buildQueryDisplayString(searchParams: SearchParams): string {
   Object.keys(searchParams).forEach((param) => {
     const displayParam = searchFields.find((field) => field.name === param)
     if (displayParam && searchParams[param]) {
-      const label = displayParam.label.toLowerCase()
+      let label = displayParam.label.toLowerCase()
       const value = searchParams[param]
       const plural = label === "keyword" && value.indexOf(" ") > -1 ? "s" : ""
+      // Special case for the author display string.
+      if (label === "author") {
+        label = "author/contributor"
+      }
 
       paramsStringCollection[param] = `${label}${plural} "${value}"`
     }
