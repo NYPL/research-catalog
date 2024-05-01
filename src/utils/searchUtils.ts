@@ -71,22 +71,37 @@ export function getSearchResultsHeading(
 }
 
 function buildQueryDisplayString(searchParams: SearchParams): string {
-  const params = Object.keys(searchParams)
-  return params
-    .reduce((displayString, param) => {
-      const displayParam = textInputFields.find((field) => field.name === param)
-      // if it's a param we want to display and it is a populated value
-      if (displayParam && searchParams[param]) {
-        const label = displayParam.label.toLowerCase()
-        const value = searchParams[param]
-        const plural = label === "keyword" && value.indexOf(" ") > -1 ? "s" : ""
+  const searchFields = textInputFields.concat([
+    { name: "journal_title", label: "Journal Title" },
+    { name: "standard_number", label: "Standard Number" },
+  ])
+  const paramsStringCollection = {}
 
-        displayString += displayString.length ? "and " : "for "
-        displayString += `${label}${plural} "${value}" `
-      }
-      return displayString
-    }, "")
-    .trim()
+  Object.keys(searchParams).forEach((param) => {
+    const displayParam = searchFields.find((field) => field.name === param)
+    if (displayParam && searchParams[param]) {
+      const label = displayParam.label.toLowerCase()
+      const value = searchParams[param]
+      const plural = label === "keyword" && value.indexOf(" ") > -1 ? "s" : ""
+
+      paramsStringCollection[param] = `${label}${plural} "${value}"`
+    }
+  })
+
+  // If the field is set, i.e. through the search_scope query param,
+  // then use that and remove the keyword from the display string.
+  // Note: mapQueryToSearchParams sets the search_scope value in the field property.
+  if (searchParams.field) {
+    delete paramsStringCollection["q"]
+  }
+
+  const displayStringArray = Object.values(paramsStringCollection)
+
+  return `for ${
+    displayStringArray.length > 1
+      ? displayStringArray.join(" and ")
+      : displayStringArray[0]
+  }`
 }
 
 /**
@@ -287,6 +302,11 @@ export function mapQueryToSearchParams({
     contributor,
     title,
     subject,
+    // TODO: this is a "catch-all" for journal title and standard number
+    // fields but will also update other fields such as title, subject, and
+    // contributor. This will override other fields if a value is present.
+    // Is this the best way to handle this?
+    ...(search_scope && q ? { [search_scope]: q } : {}),
     sortBy: sort,
     order: sort_direction,
     filters,
