@@ -37,6 +37,16 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
       q: searchTerm,
       field: searchScope,
     }
+
+    // Keeping the feature where if the search scope from the select
+    // dropdown is "subject", it will redirect to SHEP.
+    if (searchScope === "subject") {
+      window.location.href = `${BASE_URL}/subject_headings?filter=${
+        searchTerm.charAt(0).toUpperCase() + searchTerm.slice(1)
+      }`
+      return
+    }
+
     const queryString = getSearchQuery(searchParams)
 
     await router.push(`${PATHS.SEARCH}${queryString}`)
