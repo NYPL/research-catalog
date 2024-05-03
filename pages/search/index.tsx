@@ -192,7 +192,7 @@ export default function Search({
               }}
             />
             {!isLoading ? (
-              <SimpleGrid columns={1} gap="grid.l">
+              <SimpleGrid columns={1} id="search-results-list" gap="grid.l">
                 {searchResultBibs.map((bib: SearchResultsBib) => {
                   return <SearchResult key={bib.id} bib={bib} />
                 })}
@@ -241,7 +241,7 @@ export async function getServerSideProps({ resolvedUrl, req }) {
   // Remove everything before the query string delineator '?', necessary for correctly parsing the 'q' param.
   const queryString = resolvedUrl.slice(resolvedUrl.indexOf("?") + 1)
   const results = await fetchResults(mapQueryToSearchParams(parse(queryString)))
-  const patronTokenResponse = await initializePatronTokenAuth(req)
+  const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const isAuthenticated = patronTokenResponse.isTokenValid
   const isFreshSortByQuery = getFreshSortByQuery(
     req.headers.referer,
