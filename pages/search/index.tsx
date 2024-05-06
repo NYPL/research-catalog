@@ -191,7 +191,7 @@ export default function Search({
               }}
             />
             {!isLoading ? (
-              <SimpleGrid columns={1} gap="grid.l">
+              <SimpleGrid columns={1} id="search-results-list" gap="grid.l">
                 {searchResultBibs.map((bib: SearchResultsBib) => {
                   return <SearchResult key={bib.id} bib={bib} />
                 })}
@@ -236,9 +236,8 @@ export default function Search({
  */
 export async function getServerSideProps({ resolvedUrl, req, query }) {
   const bannerNotification = process.env.SEARCH_RESULTS_NOTIFICATION || ""
-
+  const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const results = await fetchResults(mapQueryToSearchParams(query))
-  const patronTokenResponse = await initializePatronTokenAuth(req)
   const isAuthenticated = patronTokenResponse.isTokenValid
   const isFreshSortByQuery = getFreshSortByQuery(
     req.headers.referer,
