@@ -159,6 +159,15 @@ describe("searchUtils", () => {
         'Displaying 1-50 of 100 results for author/contributor "spaghetti"'
       )
     })
+    it("handles the special case for the creatorLiteral field", () => {
+      const heading = getSearchResultsHeading(
+        { filters: { creatorLiteral: ["spaghetti"] } },
+        100
+      )
+      expect(heading).toEqual(
+        'Displaying 1-50 of 100 results for author "spaghetti"'
+      )
+    })
     it("displays all of the values from advanced search and nothing else", () => {
       const heading = getSearchResultsHeading(
         {

@@ -75,17 +75,20 @@ function buildQueryDisplayString(searchParams: SearchParams): string {
   const searchFields = textInputFields.concat([
     { name: "journal_title", label: "Journal Title" },
     { name: "standard_number", label: "Standard Number" },
+    { name: "creatorLiteral", label: "author" },
   ])
   const paramsStringCollection = {}
+  const searchParamsObject = { ...searchParams, ...searchParams.filters }
 
-  Object.keys(searchParams).forEach((param) => {
+  Object.keys(searchParamsObject).forEach((param) => {
     const displayParam = searchFields.find((field) => field.name === param)
-    if (displayParam && searchParams[param]) {
+    if (displayParam && searchParamsObject[param]) {
       let label = displayParam.label.toLowerCase()
-      const value = searchParams[param]
+      const value = searchParamsObject[param]
       const plural = label === "keyword" && value.indexOf(" ") > -1 ? "s" : ""
-      // Special case for the author display string.
-      if (label === "author") {
+      // Special case for the author display string for both
+      // the "contributor" field and the "creatorLiteral" filter.
+      if (label === "author" && displayParam.name !== "creatorLiteral") {
         label = "author/contributor"
       }
 
@@ -96,7 +99,7 @@ function buildQueryDisplayString(searchParams: SearchParams): string {
   // If the field is set, i.e. through the search_scope query param,
   // then use that and remove the keyword from the display string.
   // Note: mapQueryToSearchParams sets the search_scope value in the field property.
-  if (searchParams.field) {
+  if (searchParamsObject.field) {
     delete paramsStringCollection["q"]
   }
 
@@ -301,6 +304,7 @@ export function mapQueryToSearchParams({
 }: SearchQueryParams): SearchParams {
   const hasIdentifiers = issn || isbn || oclc || lccn
   const filters = collapseMultiValueQueryParams(queryFilters)
+
   return {
     q,
     field: search_scope,
