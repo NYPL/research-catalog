@@ -68,7 +68,7 @@ export async function getServerSideProps({ params, resolvedUrl, req }) {
     id,
     bibParams
   )
-  const patronTokenResponse = await initializePatronTokenAuth(req)
+  const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const isAuthenticated = patronTokenResponse.isTokenValid
 
   switch (status) {
