@@ -7,7 +7,6 @@ import {
 } from "@nypl/design-system-react-components"
 import { useEffect, useRef, type ChangeEvent } from "react"
 import { useRouter } from "next/router"
-import { parse } from "qs"
 
 import Layout from "../../src/components/Layout/Layout"
 import DRBContainer from "../../src/components/DRB/DRBContainer"
@@ -235,13 +234,10 @@ export default function Search({
  * relevant search results on the server side (via fetchResults).
  *
  */
-export async function getServerSideProps({ resolvedUrl, req }) {
+export async function getServerSideProps({ resolvedUrl, req, query }) {
   const bannerNotification = process.env.SEARCH_RESULTS_NOTIFICATION || ""
-
-  // Remove everything before the query string delineator '?', necessary for correctly parsing the 'q' param.
-  const queryString = resolvedUrl.slice(resolvedUrl.indexOf("?") + 1)
-  const results = await fetchResults(mapQueryToSearchParams(parse(queryString)))
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
+  const results = await fetchResults(mapQueryToSearchParams(query))
   const isAuthenticated = patronTokenResponse.isTokenValid
   const isFreshSortByQuery = getFreshSortByQuery(
     req.headers.referer,

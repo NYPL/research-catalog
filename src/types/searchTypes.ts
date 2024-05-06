@@ -5,6 +5,7 @@ import type { Aggregation } from "./filterTypes"
 type Language = string
 type SubjectLiteral = string
 type ContributorLiteral = string
+type CreatorLiteral = string
 type Issuance = string
 type MaterialTypeFilter = string
 
@@ -13,6 +14,7 @@ export interface SearchFilters {
   language?: Language | Language[]
   subjectLiteral?: SubjectLiteral | SubjectLiteral[]
   contributorLiteral?: ContributorLiteral | ContributorLiteral[]
+  creatorLiteral?: CreatorLiteral | CreatorLiteral[]
   issuance?: Issuance | Issuance[]
   dateAfter?: string
   dateBefore?: string
