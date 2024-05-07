@@ -2,10 +2,8 @@ import type { Patron, SierraPatron } from "../types/myAccountTypes"
 
 export const notificationPreferenceMap = {
   z: "Email",
-  a: "Print",
   p: "Phone",
   m: "Mobile",
-  "-": null,
 }
 
 export const buildPatron = (patron: SierraPatron): Patron => {
