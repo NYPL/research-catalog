@@ -15,7 +15,8 @@ import type {
   SierraBibEntry,
   BibDataMapType,
 } from "../types/myAccountTypes"
-import { notificationPreferenceMap } from "../utils/myAccountData"
+
+import { buildPatron } from "../utils/myAccountUtils"
 
 class MyAccountModelError extends Error {
   constructor(errorDetail: string, error: Error) {
@@ -245,18 +246,7 @@ export default class MyAccount {
 
   buildPatron(patron: SierraPatron): Patron {
     try {
-      const notificationPreference =
-        notificationPreferenceMap[patron.fixedFields["268"].value]
-      return {
-        notificationPreference,
-        name: patron.names?.[0],
-        barcode: patron.barcodes?.[0],
-        expirationDate: patron.expirationDate,
-        emails: patron.emails || [],
-        phones: patron.phones || [],
-        homeLibraryCode: patron.homeLibraryCode || null,
-        id: patron.id,
-      }
+      return buildPatron(patron)
     } catch (e) {
       throw new MyAccountModelError("building patron", e)
     }

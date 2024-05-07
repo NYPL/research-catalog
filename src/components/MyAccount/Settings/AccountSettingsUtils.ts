@@ -1,7 +1,7 @@
 import type { IconNames } from "@nypl/design-system-react-components"
 import type { Patron, SierraPatron } from "../../../types/myAccountTypes"
 
-import MyAccount from "../../../models/MyAccount"
+import { buildPatron } from "../../../utils/myAccountUtils"
 import { filteredPickupLocations } from "../../../../__test__/fixtures/processedMyAccountData"
 
 type Phone = { number: string; type: string }
@@ -105,6 +105,6 @@ export const updatePatronData = (
   originalPatronData: Patron,
   patronUpdateBody: SierraPatron
 ) => {
-  const newData = MyAccount.prototype.buildPatron(patronUpdateBody)
+  const newData = buildPatron(patronUpdateBody)
   return Object.assign(originalPatronData, newData)
 }

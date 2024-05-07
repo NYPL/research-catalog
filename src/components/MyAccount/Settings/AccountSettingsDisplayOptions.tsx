@@ -4,7 +4,7 @@ import {
   Select,
   TextInput,
 } from "@nypl/design-system-react-components"
-import { notificationPreferenceMap } from "../../../utils/myAccountData"
+import { notificationPreferenceMap } from "../../../utils/myAccountUtils"
 import type { Patron } from "../../../types/myAccountTypes"
 import { accountSettings } from "./AccountSettingsUtils"
 import { buildListElementsWithIcons } from "../IconListElement"
