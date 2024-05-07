@@ -1,4 +1,4 @@
-import { Icon, Button } from "@nypl/design-system-react-components"
+import { Icon, Button, ButtonGroup } from "@nypl/design-system-react-components"
 import type { Dispatch } from "react"
 
 interface AccountSettingsButtonsPropsType {
@@ -25,7 +25,7 @@ const AccountSettingsButtons = ({
   )
 
   const cancelAndSaveButtons = (
-    <>
+    <ButtonGroup>
       <Button
         onClick={() => toggleCurrentlyEditing(false)}
         id="account-settings-cancel-update-button"
@@ -42,7 +42,7 @@ const AccountSettingsButtons = ({
       >
         Save Changes
       </Button>
-    </>
+    </ButtonGroup>
   )
 
   return currentlyEditing ? cancelAndSaveButtons : editButton

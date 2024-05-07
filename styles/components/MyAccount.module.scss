@@ -23,11 +23,9 @@
 }
 
 .accountSettingsTab {
-  div {
+  > div {
+    margin-top: var(--nypl-space-l);
     display: flex;
-    button + button {
-      margin-left: var(--nypl-space-xxs);
-    }
   }
 }
 .modalHeading {
