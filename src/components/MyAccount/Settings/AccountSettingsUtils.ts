@@ -106,5 +106,9 @@ export const updatePatronData = (
   patronUpdateBody: SierraPatron
 ) => {
   const newData = buildPatron(patronUpdateBody)
-  return Object.assign(originalPatronData, newData)
+  Object.keys(originalPatronData).forEach((setting) => {
+    if (!newData[setting] || !newData[setting].length)
+      newData[setting] = originalPatronData[setting]
+  })
+  return newData
 }

@@ -27,7 +27,7 @@ describe("Account settings utils", () => {
           { number: "1234567890", type: "t" },
         ],
       }
-      const { emails, phones, homeLibraryCode, notificationPreference } =
+      const { id, emails, phones, homeLibraryCode, notificationPreference } =
         updatePatronData(originalPatronData, patronUpdateBody)
       expect(emails).toStrictEqual([
         "veraruthkahn@gmail.com",
@@ -39,6 +39,7 @@ describe("Account settings utils", () => {
       ])
       expect(notificationPreference).toEqual("Phone")
       expect(homeLibraryCode).toStrictEqual("mp   ")
+      expect(id).toEqual(originalPatronData.id)
     })
     it("updates original data when updated data is missing fields", () => {
       const originalPatronData = {
@@ -55,12 +56,13 @@ describe("Account settings utils", () => {
         fixedFields: { 268: { label: "Notice Preference", value: "p" } },
         homeLibraryCode: "mp   ",
       }
-      const { emails, phones, homeLibraryCode, notificationPreference } =
+      const { id, emails, phones, homeLibraryCode, notificationPreference } =
         updatePatronData(originalPatronData, patronUpdateBody)
       expect(emails).toStrictEqual(originalPatronData.emails)
       expect(phones).toStrictEqual(originalPatronData.phones)
       expect(homeLibraryCode).toEqual("mp   ")
       expect(notificationPreference).toEqual("Phone")
+      expect(id).toEqual(originalPatronData.id)
     })
   })
   describe("parsePayload", () => {
