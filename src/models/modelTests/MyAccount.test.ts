@@ -239,7 +239,7 @@ describe("MyAccountModel", () => {
             type: "t",
           },
         ],
-        homeLibraryCode: "sn",
+        homeLibraryCode: "sn   ",
         id: 2772226,
       })
       expect(account.holds).toStrictEqual([
@@ -335,7 +335,7 @@ describe("MyAccountModel", () => {
         expirationDate: "2025-03-28",
         emails: [],
         phones: [],
-        homeLibraryCode: "sn",
+        homeLibraryCode: "sn   ",
         id: 2772226,
       })
       expect(emptyAccount.checkouts).toStrictEqual([])

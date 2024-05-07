@@ -6,6 +6,8 @@ export const notificationPreferenceMap = {
   m: "Mobile",
 }
 
+// this method has to live here so it can be imported into the front end without
+// importing the MyAccount files.
 export const buildPatron = (patron: SierraPatron): Patron => {
   const notificationPreference =
     notificationPreferenceMap[patron.fixedFields["268"].value]

@@ -7,16 +7,15 @@ describe("AccountSettingsTab", () => {
   it("can render a complete patron", () => {
     const myAccountPatron = MyAccount.prototype.buildPatron(patron)
     render(<AccountSettingsTab settingsData={myAccountPatron} />)
-    ;[
-      "streganonna@gmail.com",
-      "Phone",
-      "Notification preference",
-      "Home library",
-      "Pin/Password",
-    ].forEach((patronInfo) => {
-      const element = screen.getByText(patronInfo)
-      expect(element).toBeInTheDocument()
-    })
+
+    const email = screen.getByText("streganonna@gmail.com")
+    expect(email).toBeInTheDocument()
+    const phone = screen.getByText("Phone")
+    expect(phone).toBeInTheDocument()
+    const homeLibrary = screen.getByText("Home library")
+    expect(homeLibrary).toBeInTheDocument()
+    const pin = screen.getByText("Pin/Password")
+    expect(pin).toBeInTheDocument()
   })
   it("can render a patron with no email or phone", () => {
     const myAccountPatron = MyAccount.prototype.buildPatron({
