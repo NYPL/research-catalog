@@ -71,6 +71,11 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
         id="account-settings-container"
         onSubmit={(e) => submitAccountSettings(e)}
       >
+        <AccountSettingsButtons
+          currentlyEditing={currentlyEditing}
+          setCurrentlyEditing={setCurrentlyEditing}
+        />
+        <Spacer />
         <List
           sx={{ border: "none", h2: { border: "none" } }}
           className={styles.myAccountList}
@@ -78,11 +83,6 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
         >
           {listElements}
         </List>
-        <Spacer />
-        <AccountSettingsButtons
-          currentlyEditing={currentlyEditing}
-          setCurrentlyEditing={setCurrentlyEditing}
-        />
       </Form>
     </>
   )
