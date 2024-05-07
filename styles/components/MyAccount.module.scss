@@ -26,9 +26,7 @@
   > div {
     margin-top: var(--nypl-space-l);
     display: flex;
-    @media (min-width: 600px) {
-      flex-direction: row-reverse;
-    }
+    flex-direction: row;
     @media (max-width: 600px) {
       flex-direction: column;
     }
