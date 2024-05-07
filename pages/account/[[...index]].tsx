@@ -39,6 +39,7 @@ export default function MyAccount({
 }: MyAccountPropsType) {
   const errorRetrievingPatronData = !patron
 
+  //console.log(checkouts, holds, patron, fines, tabsPath, isAuthenticated)
   return (
     <>
       <Head>

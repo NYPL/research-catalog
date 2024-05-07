@@ -25,7 +25,7 @@ describe("CheckoutsTab", () => {
       <CheckoutsTab patron={mockPatron} checkouts={mockCheckouts} />
     )
     const rows = getAllByRole("row")
-    expect(rows.length).toBe(3)
+    expect(rows.length).toBe(5)
   })
   it("calls renew checkout endpoint when Renew button is clicked", async () => {
     const component = render(
@@ -94,5 +94,22 @@ describe("CheckoutsTab", () => {
     )
 
     expect(renewButton).not.toBeDisabled()
+  })
+  it("does not render partner items with a link to the record or renew buttons", () => {
+    const component = render(
+      <CheckoutsTab patron={mockPatron} checkouts={mockCheckouts} />
+    )
+    // Borrow.nypl.org and two NYPL titles
+    const expectedLinks = component.getAllByRole("link")
+    expect(expectedLinks.length).toBe(3)
+  })
+
+  it("does not render partner/research items with renew buttons", () => {
+    const component = render(
+      <CheckoutsTab patron={mockPatron} checkouts={mockCheckouts} />
+    )
+    // 1 circ checkout
+    const expectedRenewButtons = component.getAllByText("Renew")
+    expect(expectedRenewButtons.length).toBe(1)
   })
 })
