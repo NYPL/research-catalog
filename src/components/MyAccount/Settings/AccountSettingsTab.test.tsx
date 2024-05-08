@@ -7,17 +7,18 @@ import userEvent from "@testing-library/user-event"
 
 jest.spyOn(helpers, "updatePatronSettings")
 
-jest.mock("../../../server/sierraClient", () => {
-  return {
-    put: jest.fn().mockImplementation(async () => {
-      console.log("i am mocked")
-      return { status: 200, message: "mock mock mock" }
-    }),
-    // .mockRejectedValueOnce({ status: 500, message: "because i said so" }),
-  }
-})
-
 describe("AccountSettingsTab", () => {
+  global.fetch = jest
+    .fn()
+    .mockResolvedValueOnce({
+      json: async () => console.log("updated"),
+      status: 200,
+    } as Response)
+    .mockResolvedValueOnce({
+      json: async () => console.log("not updated"),
+      status: 500,
+    } as Response)
+
   it("can render a complete patron", () => {
     const myAccountPatron = MyAccount.prototype.buildPatron(patron)
     render(<AccountSettingsTab settingsData={myAccountPatron} />)
@@ -62,9 +63,8 @@ describe("AccountSettingsTab", () => {
       expect(dropdowns).toHaveLength(2)
       // save changes
       await userEvent.click(screen.getByText("Save Changes"))
-      expect(helpers.updatePatronSettings).toHaveBeenCalled()
       expect(
-        screen.queryByText("We were unable to update your account settings. ", {
+        screen.queryByText("Your account settings were successfully updated.", {
           exact: false,
         })
       ).toBeInTheDocument()
@@ -72,7 +72,7 @@ describe("AccountSettingsTab", () => {
       textInputs.forEach((input) => expect(input).not.toBeInTheDocument())
     })
 
-    xit("clicking the edit button opens the form, \nclicking submit submits data", () => {
+    it("clicking the edit button opens the form, \nclicking submit triggers error message on error response", () => {
       const myAccountPatron = MyAccount.prototype.buildPatron({
         ...patron,
       })
@@ -84,10 +84,10 @@ describe("AccountSettingsTab", () => {
       expect(dropdowns).toHaveLength(2)
       fireEvent.click(screen.getByText("Save Changes"))
       expect(
-        screen.queryByText("Your account settings were successsfully updated", {
+        screen.queryByText("We were unable to update your account settings.", {
           exact: false,
         })
-      )
+      ).toBeInTheDocument()
     })
   })
 })

@@ -10,7 +10,7 @@ export const notificationPreferenceMap = {
 // importing the MyAccount files.
 export const buildPatron = (patron: SierraPatron): Patron => {
   const notificationPreference =
-    notificationPreferenceMap[patron.fixedFields["268"].value]
+    notificationPreferenceMap[patron.fixedFields?.["268"].value]
   return {
     notificationPreference,
     name: patron.names?.[0],

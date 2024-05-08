@@ -35,32 +35,26 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
   const submitAccountSettings = async (e) => {
     e.preventDefault()
     const payload = parsePayload(e.target, mostRecentPatronData)
-    try {
-      const response = await fetch(
-        `${BASE_URL}/api/account/settings/${mostRecentPatronData.id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
-        }
-      )
-      const responseData = await response.json()
-      if (response.ok) {
-        setMostRecentPatronData((prevData) =>
-          updatePatronData(prevData, payload)
-        )
-        setCurrentlyEditing(false)
-        setModalProps(successModalProps)
-        openModal()
-      } else {
-        alert(`error: ${responseData}`)
-        setModalProps(failureModalProps)
-        openModal()
+    const response = await fetch(
+      `/research/research-catalog/api/account/settings/${mostRecentPatronData.id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
       }
-    } catch (error) {
-      alert("fetching error")
+    )
+    // const response = { status: 500 }
+    if (response.status === 200) {
+      setMostRecentPatronData((prevData) => updatePatronData(prevData, payload))
+      setCurrentlyEditing(false)
+      setModalProps(successModalProps)
+      openModal()
+    } else {
+      console.log("spaghetti", response.status)
+      setModalProps(failureModalProps)
+      openModal()
     }
   }
 
