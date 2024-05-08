@@ -32,7 +32,9 @@ export async function updatePin(
 export async function updatePatronSettings(patronId: string, patronData: any) {
   try {
     const client = await sierraClient()
-    await client.put(`patrons/${patronId}`, patronData)
+    console.log(client)
+    const resp = await client.put(`patrons/${patronId}`, patronData)
+    console.log(resp)
     return { status: 200, message: "Updated" }
   } catch (error) {
     return {

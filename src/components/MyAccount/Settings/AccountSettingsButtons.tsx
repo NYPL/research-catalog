@@ -20,7 +20,7 @@ const AccountSettingsButtons = ({
       onClick={() => toggleCurrentlyEditing(true)}
     >
       <Icon name="editorMode" align="left" size="medium" />
-      Edit account Settings
+      Edit account settings
     </Button>
   )
 
