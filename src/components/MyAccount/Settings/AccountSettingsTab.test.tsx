@@ -72,17 +72,17 @@ describe("AccountSettingsTab", () => {
       textInputs.forEach((input) => expect(input).not.toBeInTheDocument())
     })
 
-    it("clicking the edit button opens the form, \nclicking submit triggers error message on error response", () => {
+    it("clicking the edit button opens the form, \nclicking submit triggers error message on error response", async () => {
       const myAccountPatron = MyAccount.prototype.buildPatron({
         ...patron,
       })
       render(<AccountSettingsTab settingsData={myAccountPatron} />)
-      fireEvent.click(screen.getByText("Edit account settings"))
+      await userEvent.click(screen.getByText("Edit account settings"))
       const textInputs = screen.getAllByRole("textbox")
       expect(textInputs).toHaveLength(2)
       const dropdowns = screen.getAllByRole("combobox")
       expect(dropdowns).toHaveLength(2)
-      fireEvent.click(screen.getByText("Save Changes"))
+      await userEvent.click(screen.getByText("Save Changes"))
       expect(
         screen.queryByText("We were unable to update your account settings.", {
           exact: false,

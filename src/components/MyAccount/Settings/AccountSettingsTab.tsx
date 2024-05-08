@@ -45,14 +45,12 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
         body: JSON.stringify(payload),
       }
     )
-    // const response = { status: 500 }
     if (response.status === 200) {
       setMostRecentPatronData((prevData) => updatePatronData(prevData, payload))
       setCurrentlyEditing(false)
       setModalProps(successModalProps)
       openModal()
     } else {
-      console.log("spaghetti", response.status)
       setModalProps(failureModalProps)
       openModal()
     }
