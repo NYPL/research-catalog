@@ -4,7 +4,7 @@ import type { SyntheticEvent, Dispatch, SetStateAction } from "react"
 import { useState, useEffect } from "react"
 
 import styles from "../../../styles/components/Search.module.scss"
-import RCLink from "../RCLink/RCLink"
+import RCLink from "../Links/RCLink/RCLink"
 import { getSearchQuery } from "../../utils/searchUtils"
 import { BASE_URL, PATHS } from "../../config/constants"
 import EDSLink from "../EDSLink"
@@ -12,7 +12,6 @@ import useLoading from "../../hooks/useLoading"
 import RefineSearch from "../RefineSearch/RefineSearch"
 import type { Aggregation } from "../../types/filterTypes"
 import { collapseMultiValueQueryParams } from "../../utils/refineSearchUtils"
-import { appConfig } from "../../config/config"
 
 /**
  * The SearchForm component renders and controls the Search form and
@@ -23,7 +22,9 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
   const [searchTerm, setSearchTerm] = useState(
     (router?.query?.q as string) || ""
   )
-  const [searchScope, setSearchScope] = useState("all")
+  const [searchScope, setSearchScope] = useState(
+    (router?.query?.search_scope as string) || "all"
+  )
   const [appliedFilters, setAppliedFilters] = useState(
     collapseMultiValueQueryParams(router.query)
   )
@@ -36,15 +37,19 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
       q: searchTerm,
       field: searchScope,
     }
+
+    // Keeping the feature where if the search scope from the select
+    // dropdown is "subject", it will redirect to SHEP.
+    if (searchScope === "subject") {
+      window.location.href = `${BASE_URL}/subject_headings?filter=${
+        searchTerm.charAt(0).toUpperCase() + searchTerm.slice(1)
+      }`
+      return
+    }
+
     const queryString = getSearchQuery(searchParams)
 
-    // If the reverseProxyEnabled feature flag is true, use window.location.replace
-    // instead of router.push to forward search results to DFE.
-    if (appConfig.features.reverseProxyEnabled[appConfig.environment]) {
-      window.location.replace(`${BASE_URL}${PATHS.SEARCH}${queryString}`)
-    } else {
-      await router.push(`${PATHS.SEARCH}${queryString}`)
-    }
+    await router.push(`${PATHS.SEARCH}${queryString}`)
   }
 
   const handleChange = (
@@ -58,6 +63,7 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
   const displayRefineResults = !!aggregations?.filter(
     (agg: Aggregation) => agg.values.length
   ).length
+
   useEffect(() => {
     setAppliedFilters(collapseMultiValueQueryParams(router.query))
   }, [router.query])
@@ -103,7 +109,7 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
         <Box className={styles.auxSearchContainer}>
           <RCLink
             className={styles.advancedSearch}
-            href={`${BASE_URL}/search/advanced`}
+            href="/search/advanced"
             isUnderlined={false}
             mb="xs"
           >

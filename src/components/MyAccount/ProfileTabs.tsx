@@ -1,5 +1,4 @@
 import AccountSettingsTab from "./Settings/AccountSettingsTab"
-
 import { Tabs, Text } from "@nypl/design-system-react-components"
 import { useRouter } from "next/router"
 import CheckoutsTab from "./CheckoutsTab/CheckoutsTab"
@@ -39,7 +38,7 @@ const ProfileTabs = ({
       ) : (
         <Text>There was an error accessing your checkouts.</Text>
       ),
-      urlPath: "checkouts",
+      urlPath: "items",
     },
     {
       label: "Requests" + (holds ? ` (${holds.length})` : ""),
@@ -71,8 +70,9 @@ const ProfileTabs = ({
   ]
   const tabsDict =
     fines?.total > 0
-      ? { checkouts: 0, requests: 1, fines: 2, settings: 3 }
-      : { checkouts: 0, requests: 1, settings: 2 }
+      ? { items: 0, requests: 1, overdues: 2, settings: 3 }
+      : { items: 0, requests: 1, settings: 2 }
+
   const router = useRouter()
 
   const updatePath = (newPath) => {

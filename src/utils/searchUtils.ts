@@ -10,6 +10,7 @@ import type {
 } from "../types/searchTypes"
 import SearchResultsBib from "../models/SearchResultsBib"
 import { RESULTS_PER_PAGE } from "../config/constants"
+import { collapseMultiValueQueryParams } from "./refineSearchUtils"
 
 /**
  * determineFreshSortByQuery
@@ -71,22 +72,44 @@ export function getSearchResultsHeading(
 }
 
 function buildQueryDisplayString(searchParams: SearchParams): string {
-  const params = Object.keys(searchParams)
-  return params
-    .reduce((displayString, param) => {
-      const displayParam = textInputFields.find((field) => field.name === param)
-      // if it's a param we want to display and it is a populated value
-      if (displayParam && searchParams[param]) {
-        const label = displayParam.label.toLowerCase()
-        const value = searchParams[param]
-        const plural = label === "keyword" && value.indexOf(" ") > -1 ? "s" : ""
+  const searchFields = textInputFields.concat([
+    { name: "journal_title", label: "Journal Title" },
+    { name: "standard_number", label: "Standard Number" },
+    { name: "creatorLiteral", label: "author" },
+  ])
+  const paramsStringCollection = {}
+  const searchParamsObject = { ...searchParams, ...searchParams.filters }
 
-        displayString += displayString.length ? "and " : "for "
-        displayString += `${label}${plural} "${value}" `
+  Object.keys(searchParamsObject).forEach((param) => {
+    const displayParam = searchFields.find((field) => field.name === param)
+    if (displayParam && searchParamsObject[param]) {
+      let label = displayParam.label.toLowerCase()
+      const value = searchParamsObject[param]
+      const plural = label === "keyword" && value.indexOf(" ") > -1 ? "s" : ""
+      // Special case for the author display string for both
+      // the "contributor" field and the "creatorLiteral" filter.
+      if (label === "author" && displayParam.name !== "creatorLiteral") {
+        label = "author/contributor"
       }
-      return displayString
-    }, "")
-    .trim()
+
+      paramsStringCollection[param] = `${label}${plural} "${value}"`
+    }
+  })
+
+  // If the field is set, i.e. through the search_scope query param,
+  // then use that and remove the keyword from the display string.
+  // Note: mapQueryToSearchParams sets the search_scope value in the field property.
+  if (searchParamsObject.field) {
+    delete paramsStringCollection["q"]
+  }
+
+  const displayStringArray = Object.values(paramsStringCollection)
+
+  return `for ${
+    displayStringArray.length > 1
+      ? displayStringArray.join(" and ")
+      : displayStringArray[0]
+  }`
 }
 
 /**
@@ -277,9 +300,11 @@ export function mapQueryToSearchParams({
   isbn,
   oclc,
   lccn,
-  filters,
+  ...queryFilters
 }: SearchQueryParams): SearchParams {
   const hasIdentifiers = issn || isbn || oclc || lccn
+  const filters = collapseMultiValueQueryParams(queryFilters)
+
   return {
     q,
     field: search_scope,
@@ -287,9 +312,14 @@ export function mapQueryToSearchParams({
     contributor,
     title,
     subject,
+    // TODO: this is a "catch-all" for journal title and standard number
+    // fields but will also update other fields such as title, subject, and
+    // contributor. This will override other fields if a value is present.
+    // Is this the best way to handle this?
+    ...(search_scope && q ? { [search_scope]: q } : {}),
     sortBy: sort,
     order: sort_direction,
-    filters,
+    filters: Object.keys(filters).length ? filters : undefined,
     identifiers: hasIdentifiers && {
       issn,
       isbn,

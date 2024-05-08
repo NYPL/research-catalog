@@ -19,6 +19,7 @@ import {
 } from "./AccountSettingsFeedbackModalProps"
 import { parsePayload, updatePatronData } from "./AccountSettingsUtils"
 import { BASE_URL } from "../../../config/constants"
+import PasswordModal from "./PasswordModal"
 
 const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
   const [currentlyEditing, setCurrentlyEditing] = useState(false)
@@ -84,6 +85,7 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
           setCurrentlyEditing={setCurrentlyEditing}
         />
       </Form>
+      <PasswordModal patron={settingsData} />
     </>
   )
 }
