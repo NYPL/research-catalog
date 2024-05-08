@@ -218,6 +218,9 @@ describe("RequestsTab", () => {
         removeHold={mockRemoveHold}
       />
     )
+    expect(
+      component.queryByText("Freezing this hold failed", { exact: false })
+    ).not.toBeInTheDocument()
     let freezeButtons = component.getAllByText("Freeze")
     expect(freezeButtons.length).toBe(1)
     const freezeButton = component.getByText("Freeze")
@@ -242,7 +245,18 @@ describe("RequestsTab", () => {
     expect(readyCircRequestRow).toHaveTextContent("May 15, 2024")
     expect(readyCircRequestRow).toHaveTextContent("READY FOR PICKUP")
   })
-  it.todo(
-    "does not show freeze button on freezable request when it is in transit"
-  )
+  it("does not show freeze button on freezable request when it is anything other than pending", () => {
+    const component = render(
+      <RequestsTab
+        patron={mockPatron}
+        holds={mockHolds}
+        removeHold={mockRemoveHold}
+      />
+    )
+    const readyCircRequestRow = component.getAllByRole("row")[5]
+    expect(readyCircRequestRow).not.toHaveTextContent("Freeze")
+
+    const confirmedCircRequestRow = component.getAllByRole("row")[3]
+    expect(confirmedCircRequestRow).not.toHaveTextContent("Freeze")
+  })
 })
