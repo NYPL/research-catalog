@@ -10,6 +10,28 @@ import type {
 } from "../types/searchTypes"
 import SearchResultsBib from "../models/SearchResultsBib"
 import { RESULTS_PER_PAGE } from "../config/constants"
+import { collapseMultiValueQueryParams } from "./refineSearchUtils"
+
+/**
+ * determineFreshSortByQuery
+ * Returns true only if the last update to the query was a sort by change.
+ * Used to determine whether to focus on the search results header
+ */
+export const getFreshSortByQuery = (prevUrl: string, currentUrl: string) => {
+  if (!prevUrl) return false
+  const sortByAndDirection = (query) => {
+    const match = query.match(/sort=(.*?)&sort_direction=(.*?)(&|$)/)
+    if (match) return [match[1], match[2]]
+  }
+  const previousSortValues = sortByAndDirection(prevUrl)
+  const currentSortValues = sortByAndDirection(currentUrl)
+  if (!currentSortValues) return false
+  const sortTypeHasChanged = previousSortValues?.[0] !== currentSortValues[0]
+  const sortDirectionHasChanged =
+    previousSortValues?.[1] !== currentSortValues[1]
+  const sortValuesHaveUpdated = sortTypeHasChanged || sortDirectionHasChanged
+  return sortValuesHaveUpdated
+}
 
 /**
  * getPaginationOffsetStrings
@@ -50,20 +72,44 @@ export function getSearchResultsHeading(
 }
 
 function buildQueryDisplayString(searchParams: SearchParams): string {
-  const params = Object.keys(searchParams)
-  return params
-    .reduce((displayString, param, i) => {
-      const displayParam = textInputFields.find((field) => field.name === param)
-      // if it's a param we want to display and it is a populated value
-      if (displayParam && searchParams[param]) {
-        const label = displayParam.label
-        const value = searchParams[param]
-        displayString += displayString.length ? "and " : "for "
-        displayString += `${label}: "${value}" `
+  const searchFields = textInputFields.concat([
+    { name: "journal_title", label: "Journal Title" },
+    { name: "standard_number", label: "Standard Number" },
+    { name: "creatorLiteral", label: "author" },
+  ])
+  const paramsStringCollection = {}
+  const searchParamsObject = { ...searchParams, ...searchParams.filters }
+
+  Object.keys(searchParamsObject).forEach((param) => {
+    const displayParam = searchFields.find((field) => field.name === param)
+    if (displayParam && searchParamsObject[param]) {
+      let label = displayParam.label.toLowerCase()
+      const value = searchParamsObject[param]
+      const plural = label === "keyword" && value.indexOf(" ") > -1 ? "s" : ""
+      // Special case for the author display string for both
+      // the "contributor" field and the "creatorLiteral" filter.
+      if (label === "author" && displayParam.name !== "creatorLiteral") {
+        label = "author/contributor"
       }
-      return displayString
-    }, "")
-    .trim()
+
+      paramsStringCollection[param] = `${label}${plural} "${value}"`
+    }
+  })
+
+  // If the field is set, i.e. through the search_scope query param,
+  // then use that and remove the keyword from the display string.
+  // Note: mapQueryToSearchParams sets the search_scope value in the field property.
+  if (searchParamsObject.field) {
+    delete paramsStringCollection["q"]
+  }
+
+  const displayStringArray = Object.values(paramsStringCollection)
+
+  return `for ${
+    displayStringArray.length > 1
+      ? displayStringArray.join(" and ")
+      : displayStringArray[0]
+  }`
 }
 
 /**
@@ -254,9 +300,11 @@ export function mapQueryToSearchParams({
   isbn,
   oclc,
   lccn,
-  filters,
+  ...queryFilters
 }: SearchQueryParams): SearchParams {
   const hasIdentifiers = issn || isbn || oclc || lccn
+  const filters = collapseMultiValueQueryParams(queryFilters)
+
   return {
     q,
     field: search_scope,
@@ -264,9 +312,14 @@ export function mapQueryToSearchParams({
     contributor,
     title,
     subject,
+    // TODO: this is a "catch-all" for journal title and standard number
+    // fields but will also update other fields such as title, subject, and
+    // contributor. This will override other fields if a value is present.
+    // Is this the best way to handle this?
+    ...(search_scope && q ? { [search_scope]: q } : {}),
     sortBy: sort,
     order: sort_direction,
-    filters,
+    filters: Object.keys(filters).length ? filters : undefined,
     identifiers: hasIdentifiers && {
       issn,
       isbn,

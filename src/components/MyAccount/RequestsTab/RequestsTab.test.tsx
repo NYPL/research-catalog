@@ -1,11 +1,11 @@
 import React from "react"
-import { render } from "../../../utils/testUtils"
+import { render, screen } from "../../../utils/testUtils"
 import {
   mockCheckouts,
   mockFines,
   mockHolds,
   mockPatron,
-} from "../../../../__test__/fixtures/myAccountFixtures"
+} from "../../../../__test__/fixtures/processedMyAccountData"
 import { userEvent } from "@testing-library/user-event"
 import ProfileTabs from "../ProfileTabs"
 import RequestsTab from "./RequestsTab"
@@ -82,6 +82,8 @@ describe("RequestsTab", () => {
         activePath="requests"
       />
     )
+    let rows = component.getAllByRole("row")
+    expect(rows.length).toBe(3)
 
     await userEvent.click(component.getAllByText("Cancel")[0])
     await userEvent.click(component.getAllByText("Yes, cancel")[0])
@@ -97,9 +99,45 @@ describe("RequestsTab", () => {
       }
     )
     await userEvent.click(component.getAllByText("OK")[0])
-
-    const rows = component.getAllByRole("row")
+    rows = component.getAllByRole("row")
     expect(rows.length).toBe(2)
+  })
+
+  it("does not remove hold from list when cancel fails", async () => {
+    global.fetch = jest.fn().mockResolvedValue({
+      json: async () => "Nooo",
+      status: 400,
+    } as Response)
+    const component = render(
+      <ProfileTabs
+        patron={mockPatron}
+        checkouts={mockCheckouts}
+        holds={mockHolds}
+        fines={mockFines}
+        activePath="requests"
+      />
+    )
+
+    let rows = component.getAllByRole("row")
+    expect(rows.length).toBe(3)
+    await userEvent.click(component.getAllByText("Cancel")[0])
+    await userEvent.click(component.getAllByText("Yes, cancel")[0])
+
+    expect(fetch).toHaveBeenCalledWith(
+      `/research/research-catalog/api/account/holds/cancel/${mockHolds[0].id}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ patronId: mockPatron.id }),
+      }
+    )
+
+    await userEvent.click(screen.getAllByText("OK", { exact: false })[0])
+
+    rows = component.getAllByRole("row")
+    expect(rows.length).toBe(3)
   })
 
   it("displays freeze buttons only for holds that can be frozen", async () => {
@@ -115,6 +153,10 @@ describe("RequestsTab", () => {
   })
 
   it("freezes and unfreezes, with button reflecting current state", async () => {
+    global.fetch = jest.fn().mockResolvedValue({
+      json: async () => "Updated",
+      status: 200,
+    } as Response)
     const component = render(
       <RequestsTab
         patron={mockPatron}
@@ -134,11 +176,12 @@ describe("RequestsTab", () => {
         body: JSON.stringify({
           patronId: mockPatron.id,
           freeze: true,
-          pickupLocation: "mal",
+          pickupLocation: "sn",
         }),
       }
     )
 
+    await userEvent.click(screen.getAllByText("OK", { exact: false })[0])
     expect(component.queryByText("Freeze")).not.toBeInTheDocument()
     const unfreezeButton = component.getAllByText("Unfreeze")[0]
     await userEvent.click(unfreezeButton)
@@ -153,13 +196,37 @@ describe("RequestsTab", () => {
         body: JSON.stringify({
           patronId: mockPatron.id,
           freeze: false,
-          pickupLocation: "mal",
+          pickupLocation: "sn",
         }),
       }
     )
 
     expect(component.queryByText("Unfreeze")).not.toBeInTheDocument()
     const freezeButtons = component.getAllByText("Freeze")
+    expect(freezeButtons.length).toBe(1)
+  })
+
+  it("shows failure modal when freeze doesn't work and does not change frozen state", async () => {
+    global.fetch = jest.fn().mockResolvedValue({
+      json: async () => "Nooo",
+      status: 400,
+    } as Response)
+    const component = render(
+      <RequestsTab
+        patron={mockPatron}
+        holds={mockHolds}
+        removeHold={mockRemoveHold}
+      />
+    )
+    let freezeButtons = component.getAllByText("Freeze")
+    expect(freezeButtons.length).toBe(1)
+    const freezeButton = component.getByText("Freeze")
+    await userEvent.click(freezeButton)
+    expect(
+      component.getByText("Freezing this hold failed", { exact: false })
+    ).toBeInTheDocument()
+    await userEvent.click(screen.getAllByText("OK", { exact: false })[0])
+    freezeButtons = component.getAllByText("Freeze")
     expect(freezeButtons.length).toBe(1)
   })
 })

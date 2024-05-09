@@ -18,6 +18,7 @@ describe("Applied Filters", () => {
       )
       render(
         <Search
+          isFreshSortByQuery={false}
           isAuthenticated={true}
           results={{
             page: 1,
@@ -38,6 +39,7 @@ describe("Applied Filters", () => {
       )
       render(
         <Search
+          isFreshSortByQuery={false}
           isAuthenticated={true}
           results={{
             page: 1,
@@ -55,6 +57,7 @@ describe("Applied Filters", () => {
       )
       render(
         <Search
+          isFreshSortByQuery={false}
           isAuthenticated={true}
           results={{
             page: 1,
@@ -75,6 +78,7 @@ describe("Applied Filters", () => {
     )
     render(
       <Search
+        isFreshSortByQuery={false}
         isAuthenticated={true}
         results={{
           page: 1,
@@ -92,6 +96,7 @@ describe("Applied Filters", () => {
     )
     render(
       <Search
+        isFreshSortByQuery={false}
         isAuthenticated={true}
         results={{
           page: 1,
