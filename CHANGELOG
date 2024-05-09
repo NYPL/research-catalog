@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Extracted SearchResultsSort into its own component to render it in a different location on mobile.
 - No longer hiding the Item Location in the ItemTable on mobile.
 - Updated to DS v3.1.1 (as part of SCC-4090)
+- Special handling for subjectLiteral applied filter in `addLabelPropAndParseFilters`
 
 ### Fixed
 
