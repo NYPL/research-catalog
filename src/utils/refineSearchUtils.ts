@@ -76,6 +76,11 @@ export const addLabelPropAndParseFilters = (
           label: `${labelPrefix} ${filterValue}`,
         }
       }
+      if (appliedFilterField === "subjectLiteral")
+        return {
+          value: filterValue,
+          label: filterValue,
+        }
       // Find the option with the same value, so we can eventually display the label
       const matchingOption = matchingFieldAggregation.values.find(
         (option: Option) => option.value === filterValue
