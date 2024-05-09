@@ -4,7 +4,7 @@ import {
   Select,
   TextInput,
 } from "@nypl/design-system-react-components"
-import { notificationPreferenceMap } from "../../../utils/myAccountUtils"
+import { notificationPreferenceTuples } from "../../../utils/myAccountUtils"
 import type { Patron } from "../../../types/myAccountTypes"
 import { accountSettings, getLibraryByCode } from "./AccountSettingsUtils"
 import { buildListElementsWithIcons } from "../IconListElement"
@@ -63,7 +63,16 @@ export const AccountSettingsForm = ({ patron }: { patron: Patron }) => {
             )
           }
           break
-        case "Notification preference":
+        case "Notification preference": {
+          const patronNotPref = notificationPreferenceTuples.find(
+            (pref) => pref[1] === patron.notificationPreference
+          )
+          const sortedNotPrefs = [
+            patronNotPref,
+            ...notificationPreferenceTuples.filter(
+              (pref) => pref[1] !== patronNotPref[1]
+            ),
+          ]
           inputField = (
             <Select
               name={setting.field}
@@ -71,14 +80,15 @@ export const AccountSettingsForm = ({ patron }: { patron: Patron }) => {
               labelText="Update notification preference"
               showLabel={false}
             >
-              {Object.keys(notificationPreferenceMap).map((pref) => (
-                <option key={pref + "-option"} value={pref}>
-                  {notificationPreferenceMap[pref]}
+              {sortedNotPrefs.map((pref) => (
+                <option key={pref + "-option"} value={pref[0]}>
+                  {pref[1]}
                 </option>
               ))}
             </Select>
           )
           break
+        }
         case "Phone":
           inputField = (
             <TextInput

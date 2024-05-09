@@ -32,9 +32,7 @@ export const accountSettings = [
     field: "homeLibraryCode",
     icon: "actionHome",
     term: "Home library",
-    description: (code) =>
-      filteredPickupLocations.find((loc) => loc.code.trim() === code.trim())
-        ?.name,
+    description: (code) => getLibraryByCode(code)?.name,
   },
   {
     field: "pin",
