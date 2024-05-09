@@ -35,12 +35,26 @@ export const buildTagsetData = (
   appliedFiltersWithLabels: Record<string, Option[]>
 ) => {
   const appliedFilterFields = Object.keys(appliedFiltersWithLabels)
-  return appliedFilterFields
-    .map((field: string) => {
-      const appliedFiltersWithLabelsPerField = appliedFiltersWithLabels[field]
-      return appliedFiltersWithLabelsPerField.map((filter: Option) => {
-        return { id: field + "-" + filter.label, label: filter.label, field }
+  return (
+    appliedFilterFields
+      .map((field: string) => {
+        const appliedFiltersWithLabelsPerField = appliedFiltersWithLabels[field]
+        // HOTFIX 5/9/24 - this is a temporary fix to resolve a 500 error on production caused by certain combinations of filters
+        // e.g. http://local.nypl.org:8080/research/research-catalog/search?q=shakespeare&filters%5BsubjectLiteral%5D%5B0%5D=Shakespeare%2C+William%2C+1564-1616+--+Characters.&filters%5BmaterialType%5D%5B0%5D=resourcetypes%3Anot
+        // TODO: Find the root cause of this issue and remove this override
+        if (appliedFiltersWithLabelsPerField.some((filter) => !filter))
+          return null
+        return appliedFiltersWithLabelsPerField.map((filter: Option) => {
+          return {
+            id: field + "-" + filter?.label,
+            label: filter?.label,
+            field,
+          }
+        })
       })
-    })
-    .flat()
+      // HOTFIX 5/9/24
+      // See comment above
+      .filter((filterArr) => !!filterArr)
+      .flat()
+  )
 }
