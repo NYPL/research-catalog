@@ -27,7 +27,7 @@
     margin-top: var(--nypl-space-l);
     display: flex;
     flex-direction: row;
-    @media (max-width: 600px) {
+    @media (max-width: var(--nypl-breakpoint-medium)) {
       flex-direction: column;
     }
     @media (max-width: 800px) and (min-width: 601) {

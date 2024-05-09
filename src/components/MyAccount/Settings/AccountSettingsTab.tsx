@@ -72,7 +72,7 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
         >
           {listElements}
         </List>
-        {isLargerThanLarge && <Spacer />}
+        <Spacer display={{ base: "none", md: "inline-block" }} />
         <AccountSettingsButtons
           currentlyEditing={currentlyEditing}
           setCurrentlyEditing={setCurrentlyEditing}
