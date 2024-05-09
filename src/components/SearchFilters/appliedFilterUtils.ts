@@ -1,5 +1,6 @@
 import type { TagSetFilterDataProps } from "@nypl/design-system-react-components"
 import type {
+  Aggregation,
   CollapsedMultiValueAppliedFilters,
   Option,
 } from "../../types/filterTypes"
@@ -29,6 +30,59 @@ export const buildAppliedFiltersValueArrayWithTagRemoved = (
   }
 
   return updatedFilters
+}
+
+// The aggregations from the api response have the label we want to display
+// in the filter dialog. The applied filter values parsed from the url only have
+// values. Using the filter values, find the label from the aggregations array.
+export const addLabelPropAndParseFilters = (
+  aggregations: Aggregation[], // from the api response
+  appliedFilterValues: CollapsedMultiValueAppliedFilters // parsed from url query params
+): Record<string, Option[]> => {
+  const appliedFilterValuesWithLabels = {}
+  for (const appliedFilterField in appliedFilterValues) {
+    // Find the aggregation that corresponds to the filter field we are working on
+    const matchingFieldAggregation = aggregations.find(
+      ({ field: aggregationField }) => aggregationField === appliedFilterField
+    )
+    // There are some filters which don't return aggregations and are not used
+    // for applied filter fields (yet). This is mainly the unsupported holding
+    // location filter (eg filters[holdingLocation][0]=loc:scff2), which is
+    // used by devs to assist QA. See line 69 for explanation of date exclusion.
+    if (!matchingFieldAggregation && !appliedFilterField.includes("date"))
+      continue
+    appliedFilterValuesWithLabels[appliedFilterField] = appliedFilterValues[
+      appliedFilterField
+    ].map((filterValue: string): Option => {
+      // dateBefore and dateAfter fields are not based on
+      // aggregations results. Pass the year along with out
+      // transforming fieldname or finding the label
+      if (appliedFilterField.includes("date")) {
+        const labelPrefix = appliedFilterField.split("date")[1]
+        return {
+          count: null,
+          value: filterValue,
+          label: `${labelPrefix} ${filterValue}`,
+        }
+      }
+      // Subject literals can be combinations of multiple subjects, ie a -- b -- c.
+      // We need special handling for when a query is made for a -- b, but
+      // aggregations only returns a -- b -- c.
+      if (appliedFilterField === "subjectLiteral")
+        return {
+          count: null,
+          value: filterValue,
+          label: filterValue,
+        }
+      // Find the option with the same value, so we can eventually display the label
+      const matchingOption = matchingFieldAggregation.values.find(
+        (option: Option) => option.value === filterValue
+      )
+      return matchingOption
+    })
+  }
+  delete appliedFilterValuesWithLabels["q"]
+  return appliedFilterValuesWithLabels
 }
 
 export const buildTagsetData = (
