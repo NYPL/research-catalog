@@ -3,6 +3,7 @@ import {
   FormField,
   Select,
   TextInput,
+  Box,
 } from "@nypl/design-system-react-components"
 import { notificationPreferenceTuples } from "../../../utils/myAccountUtils"
 import type { Patron } from "../../../types/myAccountTypes"
@@ -64,9 +65,10 @@ export const AccountSettingsForm = ({ patron }: { patron: Patron }) => {
           }
           break
         case "Notification preference": {
-          const patronNotPref = notificationPreferenceTuples.find(
-            (pref) => pref[1] === patron.notificationPreference
-          )
+          const patronNotPref =
+            notificationPreferenceTuples.find(
+              (pref) => pref[1] === patron.notificationPreference
+            ) || notificationPreferenceTuples[0]
           const sortedNotPrefs = [
             patronNotPref,
             ...notificationPreferenceTuples.filter(
@@ -113,10 +115,10 @@ export const AccountSettingsForm = ({ patron }: { patron: Patron }) => {
           break
         case "Pin/Password":
           inputField = (
-            <>
+            <Box sx={{}}>
               <Text>****</Text>
               <PasswordModal patron={patron} />
-            </>
+            </Box>
           )
       }
       return {
