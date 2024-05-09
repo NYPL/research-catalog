@@ -6,9 +6,10 @@ import {
 } from "@nypl/design-system-react-components"
 import { notificationPreferenceMap } from "../../../utils/myAccountUtils"
 import type { Patron } from "../../../types/myAccountTypes"
-import { accountSettings } from "./AccountSettingsUtils"
+import { accountSettings, getLibraryByCode } from "./AccountSettingsUtils"
 import { buildListElementsWithIcons } from "../IconListElement"
 import type { JSX, ReactNode } from "react"
+import { filteredPickupLocations } from "../../../../__test__/fixtures/processedMyAccountData"
 
 export const AccountSettingsDisplay = ({ patron }: { patron: Patron }) => {
   const terms = accountSettings
@@ -38,18 +39,29 @@ export const AccountSettingsForm = ({ patron }: { patron: Patron }) => {
         | Iterable<ReactNode>
       switch (setting.term) {
         case "Home library":
-          inputField = (
-            <Select
-              name={setting.field}
-              id="update-home-library-selector"
-              labelText="Update home library"
-              showLabel={false}
-            >
-              <option value={patron.homeLibraryCode}>
-                {"SNFL (formerly Mid-Manhattan)"}
-              </option>
-            </Select>
-          )
+          {
+            const patronHomeLibrary = getLibraryByCode(patron.homeLibraryCode)
+            const sortedPickupLocations = [
+              patronHomeLibrary,
+              ...filteredPickupLocations.filter(
+                (loc) => loc.code.trim() !== patron.homeLibraryCode.trim()
+              ),
+            ]
+            inputField = (
+              <Select
+                name={setting.field}
+                id="update-home-library-selector"
+                labelText="Update home library"
+                showLabel={false}
+              >
+                {sortedPickupLocations.map((loc, i) => (
+                  <option key={`location-option-${i}`} value={loc.code}>
+                    {loc.name}
+                  </option>
+                ))}
+              </Select>
+            )
+          }
           break
         case "Notification preference":
           inputField = (

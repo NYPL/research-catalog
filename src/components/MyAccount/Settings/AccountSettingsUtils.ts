@@ -7,6 +7,9 @@ import { filteredPickupLocations } from "../../../../__test__/fixtures/processed
 type Phone = { number: string; type: string }
 type PhoneOrEmail = string | Phone
 
+export const getLibraryByCode = (code) =>
+  filteredPickupLocations.find((loc) => loc.code.trim() === code.trim())
+
 export const accountSettings = [
   {
     field: "phones",
@@ -30,7 +33,8 @@ export const accountSettings = [
     icon: "actionHome",
     term: "Home library",
     description: (code) =>
-      filteredPickupLocations.find((loc) => loc.code === code)?.name,
+      filteredPickupLocations.find((loc) => loc.code.trim() === code.trim())
+        ?.name,
   },
   {
     field: "pin",
