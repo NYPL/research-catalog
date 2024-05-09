@@ -65,6 +65,9 @@ export const addLabelPropAndParseFilters = (
           label: `${labelPrefix} ${filterValue}`,
         }
       }
+      // Subject literals can be combinations of multiple subjects, ie a -- b -- c.
+      // We need special handling for when a query is made for a -- b, but
+      // aggregations only returns a -- b -- c.
       if (appliedFilterField === "subjectLiteral")
         return {
           count: null,
