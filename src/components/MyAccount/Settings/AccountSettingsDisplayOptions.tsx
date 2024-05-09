@@ -10,6 +10,7 @@ import { accountSettings, getLibraryByCode } from "./AccountSettingsUtils"
 import { buildListElementsWithIcons } from "../IconListElement"
 import type { JSX, ReactNode } from "react"
 import { filteredPickupLocations } from "../../../../__test__/fixtures/processedMyAccountData"
+import PasswordModal from "./PasswordModal"
 
 export const AccountSettingsDisplay = ({ patron }: { patron: Patron }) => {
   const terms = accountSettings
@@ -20,7 +21,6 @@ export const AccountSettingsDisplay = ({ patron }: { patron: Patron }) => {
       return {
         icon: setting.icon,
         term: setting.term,
-        // pin is masked so description is a default "****"
         description,
       }
     })
@@ -112,7 +112,12 @@ export const AccountSettingsForm = ({ patron }: { patron: Patron }) => {
           )
           break
         case "Pin/Password":
-          inputField = <Text>****</Text>
+          inputField = (
+            <>
+              <Text>****</Text>
+              <PasswordModal patron={patron} />
+            </>
+          )
       }
       return {
         term: setting.term,

@@ -81,7 +81,6 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
           setCurrentlyEditing={setCurrentlyEditing}
         />
       </Form>
-      <PasswordModal patron={settingsData} />
     </>
   )
 }

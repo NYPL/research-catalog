@@ -118,12 +118,8 @@ const PasswordModal = ({ patron }: { patron: Patron }) => {
 
   return (
     <>
-      <Button
-        id="button"
-        buttonType="text"
-        onClick={openModal}
-        sx={{ textDecoration: "underline", margin: "xs" }}
-      >
+      <Button size="large" id="button" buttonType="text" onClick={openModal}>
+        <Icon name="editorMode" align="left" size="small" />
         Change pin/password
       </Button>
       <Modal {...modalProps} />
