@@ -93,8 +93,9 @@ export const buildTagsetData = (
     appliedFilterFields
       .map((field: string) => {
         const appliedFiltersWithLabelsPerField = appliedFiltersWithLabels[field]
-        // HOTFIX 5/9/24 - this is a temporary fix to resolve a 500 error on production caused by certain combinations of filters
-        // e.g. http://local.nypl.org:8080/research/research-catalog/search?q=shakespeare&filters%5BsubjectLiteral%5D%5B0%5D=Shakespeare%2C+William%2C+1564-1616+--+Characters.&filters%5BmaterialType%5D%5B0%5D=resourcetypes%3Anot
+        // HOTFIX 5/9/24 - this is a temporary fix to resolve a 500 error on production caused by certain combinations of filters. Discovery API is bumping off certain resourcetypes from the aggregations.
+        // Specifically on this query: local.nypl.org:8080/research/research-catalog/search?q=pop&filters[materialType][0]=resourcetypes%3Acar&filters[materialType][1]=resourcetypes%3Amul&filters[materialType][2]=resourcetypes%3Acar&filters[materialType][3]=resourcetypes%3Aaud&filters[materialType][4]=resourcetypes%3Anot&filters[materialType][5]=resourcetypes%3Amix&filters[materialType][6]=resourcetypes%3Amul&filters[materialType][7]=resourcetypes%3Amov&filters[language][0]=lang%3Aeng&filters[language][1]=lang%3Ager&filters[language][2]=lang%3Akor&filters[language][3]=lang%3Afre&filters[subjectLiteral][0]=Pop+music&filters[subjectLiteral][1]=Popular+music&filters[subjectLiteral][2]=Music+--+Social+aspects.&filters[subjectLiteral][3]=Pop+art+--+United+States.&filters[subjectLiteral][4]=Art%2C+Modern+--+20th+century+--+Exhibitions.&filters[subjectLiteral][5]=Popular+music+--+United+States+--+History+and+criticism.&filters[subjectLiteral][6]=Manners+and+customs
+        // resourcetype:car and resourcetype:mul are not returned in the aggregations.
         // TODO: Find the root cause of this issue and remove this override
         if (appliedFiltersWithLabelsPerField.some((filter) => !filter))
           return null
