@@ -1,10 +1,9 @@
 import {
-  Box,
   Form,
   List,
   Spacer,
   useModal,
-  useNYPLBreakpoints,
+  SkeletonLoader,
 } from "@nypl/design-system-react-components"
 import { useState } from "react"
 import type { Patron } from "../../../types/myAccountTypes"
@@ -25,7 +24,7 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
   const [currentlyEditing, setCurrentlyEditing] = useState(false)
   const [mostRecentPatronData, setMostRecentPatronData] = useState(settingsData)
   const [modalProps, setModalProps] = useState(null)
-  const { isLargerThanLarge } = useNYPLBreakpoints()
+  const [isLoading, setIsLoading] = useState(false)
   const listElements = currentlyEditing ? (
     <AccountSettingsForm patron={mostRecentPatronData} />
   ) : (
@@ -35,6 +34,7 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
 
   const submitAccountSettings = async (e) => {
     e.preventDefault()
+    setIsLoading(true)
     const payload = parsePayload(e.target, mostRecentPatronData)
     const response = await fetch(
       `/research/research-catalog/api/account/settings/${mostRecentPatronData.id}`,
@@ -55,9 +55,12 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
       setModalProps(failureModalProps)
       openModal()
     }
+    setIsLoading(false)
   }
 
-  return (
+  return isLoading ? (
+    <SkeletonLoader showImage={false} />
+  ) : (
     <>
       {modalProps && <Modal {...modalProps} />}
       <Form
