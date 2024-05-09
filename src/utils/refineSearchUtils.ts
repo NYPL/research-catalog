@@ -78,6 +78,7 @@ export const addLabelPropAndParseFilters = (
       }
       if (appliedFilterField === "subjectLiteral")
         return {
+          count: null,
           value: filterValue,
           label: filterValue,
         }
