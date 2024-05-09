@@ -1,7 +1,7 @@
 import { patron } from "../../../../__test__/fixtures/rawSierraAccountData"
 import AccountSettingsTab from "./AccountSettingsTab"
 import MyAccount from "../../../models/MyAccount"
-import { fireEvent, render, screen } from "../../../utils/testUtils"
+import { render, screen } from "../../../utils/testUtils"
 import * as helpers from "../../../../pages/api/account/helpers"
 import userEvent from "@testing-library/user-event"
 
@@ -72,22 +72,20 @@ describe("AccountSettingsTab", () => {
       textInputs.forEach((input) => expect(input).not.toBeInTheDocument())
     })
 
-    it("clicking the edit button opens the form, \nclicking submit triggers error message on error response", async () => {
+    it("clicking the edit button opens the form, \nclicking submit triggers error message on error response,\n closing modal toggles display", async () => {
       const myAccountPatron = MyAccount.prototype.buildPatron({
         ...patron,
       })
       render(<AccountSettingsTab settingsData={myAccountPatron} />)
       await userEvent.click(screen.getByText("Edit account settings"))
-      const textInputs = screen.getAllByRole("textbox")
-      expect(textInputs).toHaveLength(2)
-      const dropdowns = screen.getAllByRole("combobox")
-      expect(dropdowns).toHaveLength(2)
       await userEvent.click(screen.getByText("Save Changes"))
       expect(
         screen.queryByText("We were unable to update your account settings.", {
           exact: false,
         })
       ).toBeInTheDocument()
+      await userEvent.click(screen.getAllByText("OK")[0])
+      expect(screen.queryByText("Save changes")).not.toBeInTheDocument()
     })
   })
 })

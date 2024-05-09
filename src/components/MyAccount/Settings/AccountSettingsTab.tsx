@@ -4,6 +4,7 @@ import {
   List,
   Spacer,
   useModal,
+  useNYPLBreakpoints,
 } from "@nypl/design-system-react-components"
 import { useState } from "react"
 import type { Patron } from "../../../types/myAccountTypes"
@@ -18,13 +19,13 @@ import {
   failureModalProps,
 } from "./AccountSettingsFeedbackModalProps"
 import { parsePayload, updatePatronData } from "./AccountSettingsUtils"
-import { BASE_URL } from "../../../config/constants"
 import PasswordModal from "./PasswordModal"
 
 const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
   const [currentlyEditing, setCurrentlyEditing] = useState(false)
   const [mostRecentPatronData, setMostRecentPatronData] = useState(settingsData)
   const [modalProps, setModalProps] = useState(null)
+  const { isLargerThanLarge } = useNYPLBreakpoints()
   const listElements = currentlyEditing ? (
     <AccountSettingsForm patron={mostRecentPatronData} />
   ) : (
@@ -71,7 +72,7 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
         >
           {listElements}
         </List>
-        <Spacer />
+        {isLargerThanLarge && <Spacer />}
         <AccountSettingsButtons
           currentlyEditing={currentlyEditing}
           setCurrentlyEditing={setCurrentlyEditing}

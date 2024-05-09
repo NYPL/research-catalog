@@ -7,6 +7,22 @@ import { mockPatron } from "../../../../__test__/fixtures/processedMyAccountData
 
 describe("Account settings utils", () => {
   describe("updatePatronData", () => {
+    it("can handle an empty patron", () => {
+      const originalPatronData = {
+        barcode: "23333121538324",
+        emails: ["veggievera@gmail.com"],
+        expirationDate: "2025-03-28",
+        homeLibraryCode: "sn",
+        id: 2772226,
+        name: "KAHN, VERA RUTH",
+        notificationPreference: "Email",
+        phones: [{ number: "6466600432", type: "t" }],
+      }
+      const patronUpdateBody = {}
+      expect(
+        updatePatronData(originalPatronData, patronUpdateBody)
+      ).toStrictEqual(originalPatronData)
+    })
     it("can combine patron data and update body with all fields provided", () => {
       const originalPatronData = {
         barcode: "23333121538324",
