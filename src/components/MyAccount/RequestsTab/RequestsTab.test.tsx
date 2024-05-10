@@ -254,9 +254,11 @@ describe("RequestsTab", () => {
       />
     )
     const readyCircRequestRow = component.getAllByRole("row")[5]
+    expect(readyCircRequestRow).toHaveTextContent("READY FOR PICKUP")
     expect(readyCircRequestRow).not.toHaveTextContent("Freeze")
 
     const confirmedCircRequestRow = component.getAllByRole("row")[3]
+    expect(confirmedCircRequestRow).toHaveTextContent("REQUEST CONFIRMED")
     expect(confirmedCircRequestRow).not.toHaveTextContent("Freeze")
   })
 })
