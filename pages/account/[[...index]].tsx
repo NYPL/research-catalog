@@ -147,7 +147,7 @@ export async function getServerSideProps({ req }) {
       props: { checkouts, holds, patron, fines, tabsPath, isAuthenticated },
     }
   } catch (e) {
-    logger.error(e.message)
+    console.log(e.message)
     return {
       props: {
         tabsPath,
