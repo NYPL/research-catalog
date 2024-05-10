@@ -11,6 +11,7 @@ import {
   SHEP_HTTP_TIMEOUT,
 } from "../../config/constants"
 import { appConfig } from "../../config/config"
+import logger from "../../../logger"
 
 export async function fetchBib(
   id: string,
@@ -61,10 +62,12 @@ export async function fetchBib(
       if (sierraBibResponse.statusCode === 200) {
         return {
           status: 307,
-          redirectUrl: `${appConfig.urls.circulatingCatalog}/iii/encore/record/C__R${id}`,
+          redirectUrl: `${
+            appConfig.urls.circulatingCatalog
+          }/search/card?recordId=${id.replace(/^b/, "")}`,
         }
       } else {
-        console.error("There was a problem fetching the bib from Sierra")
+        logger.error("There was a problem fetching the bib from Sierra")
         return {
           status: 404,
         }
@@ -73,9 +76,7 @@ export async function fetchBib(
     // The Discovery API currently returns HTML in the bib attribute when it can't find a bib.
     // TODO: Modify the error response in Discovery API to return a 404 status instead of an HTML string in the bib attribute
     else if (typeof bib === "string") {
-      console.error(
-        "There was an error fetching the Bib from the Discovery API"
-      )
+      logger.error("There was an error fetching the Bib from the Discovery API")
       return {
         status: 404,
       }
@@ -86,7 +87,7 @@ export async function fetchBib(
       status: 200,
     }
   } catch (error) {
-    console.error(error.message)
+    logger.error(error.message)
     return {
       status: 404,
     }
@@ -107,7 +108,7 @@ async function fetchBibSubjectHeadings(bibId: string) {
     )
     return await response.json()
   } catch (error) {
-    console.error(
+    logger.error(
       "Error fetching SHEP API data (note: VPN should be used for local testing)",
       error
     )

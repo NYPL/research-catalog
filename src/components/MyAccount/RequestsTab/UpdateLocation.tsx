@@ -13,8 +13,6 @@ import {
 import type { SierraCodeName } from "../../../types/myAccountTypes"
 import styles from "../../../../styles/components/MyAccount.module.scss"
 import { useState, useRef } from "react"
-
-import { filteredPickupLocations as pickupLocations } from "../../../../__test__/fixtures/myAccountFixtures"
 import { BASE_URL } from "../../../config/constants"
 
 interface UpdateLocationPropsType {

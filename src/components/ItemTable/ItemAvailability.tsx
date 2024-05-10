@@ -1,6 +1,7 @@
 import { useContext } from "react"
-import { Text, Link, Button, Box } from "@nypl/design-system-react-components"
+import { Text, Button, Box } from "@nypl/design-system-react-components"
 
+import ExternalLink from "../Links/ExternalLink/ExternalLink"
 import { appConfig } from "../../config/config"
 import type Item from "../../models/Item"
 import { FeedbackContext } from "../../context/FeedbackContext"
@@ -29,29 +30,24 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
     if (item.isReCAP && !item.aeonUrl) {
       // Available ReCAP item
       return (
-        <Link
-          href={appConfig.urls.researchMaterialsHelp}
-          target="_blank"
-          fontSize="sm"
-        >
+        <ExternalLink href={appConfig.urls.researchMaterialsHelp} fontSize="sm">
           How do I pick up this item and when will it be ready?
-        </Link>
+        </ExternalLink>
       )
     } else if (item.aeonUrl && item.location?.endpoint) {
       return (
-        <Text>
+        <Text mb="0">
           <Box as="span" color="ui.success.primary">
             Available by appointment
           </Box>
           {!item.isReCAP ? (
             <>
               {" at "}
-              <Link
+              <ExternalLink
                 href={`${appConfig.urls.locations}${item.location.endpoint}`}
-                target="_blank"
               >
                 {item.location.prefLabel}
-              </Link>
+              </ExternalLink>
             </>
           ) : null}
         </Text>
@@ -60,17 +56,16 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
       // Available Onsite item
       const locationShort = item.location.prefLabel.split("-")[0]
       return (
-        <Text>
+        <Text mb="0">
           <Box as="span" color="ui.success.primary">
             Available
           </Box>
           {" - Can be used on site. Please visit "}
-          <Link
+          <ExternalLink
             href={`${appConfig.urls.locations}${item.location.endpoint}`}
-            target="_blank"
           >
             {`New York Public Library - ${locationShort}`}
-          </Link>
+          </ExternalLink>
           {" to submit a request in person."}
         </Text>
       )
@@ -78,8 +73,8 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
   } else {
     // Not available
     return (
-      <Text>
-        <Box as="span" color="ui.warning.primary">
+      <Text mb="0">
+        <Box as="span" color="ui.warning.tertiary">
           Not available
         </Box>
         {item.dueDate && ` - In use until ${item.dueDate}`}
@@ -87,7 +82,13 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
         <Button
           id="contact-librarian"
           buttonType="link"
-          sx={{ display: "inline", fontWeight: "inherit", fontSize: "inherit" }}
+          sx={{
+            display: "inline",
+            fontWeight: "inherit",
+            fontSize: "inherit",
+            p: 0,
+            height: "auto",
+          }}
           onClick={() =>
             onContact({
               id: item.id,

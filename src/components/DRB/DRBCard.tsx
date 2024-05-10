@@ -3,9 +3,11 @@ import {
   CardContent,
   Text,
   Icon,
-  Link as DSLink,
+  Box,
+  CardHeading,
 } from "@nypl/design-system-react-components"
 
+import ExternalLink from "../Links/ExternalLink/ExternalLink"
 import type DRBResult from "../../models/DRBResult"
 import { getAuthorURL } from "../../utils/drbUtils"
 import type { Author, Agent } from "../../types/drbTypes"
@@ -21,62 +23,86 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
   if (!drbResult) return null
 
   return (
-    <Card backgroundColor="ui.bg.default" p="xs">
-      <CardContent>
-        <DSLink
+    <Card backgroundColor="ui.white" p="s" borderRadius="5px">
+      <CardHeading
+        level="h3"
+        size="heading6"
+        mb="0"
+        sx={{ a: { textDecoration: "none" } }}
+      >
+        <ExternalLink
           href={drbResult.url}
-          target="_blank"
-          isUnderlined={false}
-          fontSize="desktop.body.body2"
+          fontSize={{
+            base: "mobile.subtitle.subtitle2",
+            md: "desktop.subtitle.subtitle2",
+          }}
+          fontWeight="medium"
           display="inline-block"
-          mb="s"
+          mb="xs"
+          lang={drbResult.language !== "en" ? drbResult.language : null}
         >
           {drbResult.title}
-        </DSLink>
-
-        {drbResult?.authors.length > 0 ? (
-          <Text size="body2">
-            By{" "}
+        </ExternalLink>
+      </CardHeading>
+      <CardContent>
+        {drbResult?.authors?.length > 0 ? (
+          <Text size="body2" mb="s">
+            <Box
+              as="span"
+              fontSize={{
+                base: "mobile.body.body2",
+                md: "desktop.body.body2",
+              }}
+              fontWeight="medium"
+            >
+              By
+            </Box>{" "}
             {drbResult.authors.map((author: Author | Agent, index: number) => (
-              <>
+              <span key={`author-${drbResult.id}`}>
                 {index > 0 && ","}
-                <DSLink
+                <ExternalLink
                   href={getAuthorURL(author)}
-                  target="_blank"
-                  isUnderlined={false}
+                  fontSize={{
+                    base: "mobile.body.body2",
+                    md: "desktop.body.body2",
+                  }}
+                  fontWeight="light"
                 >
                   {author.name}
-                </DSLink>
-              </>
+                </ExternalLink>
+              </span>
             ))}
           </Text>
         ) : null}
 
         {drbResult.readOnlineUrl && (
-          <DSLink
+          <ExternalLink
             href={drbResult.readOnlineUrl}
-            target="_blank"
-            type="buttonPrimary"
-            mb={drbResult.readOnlineUrl ? "s" : ""}
+            aria-label={`Read Online, ${drbResult.title}`}
+            type="buttonSecondary"
+            mt="xs"
             isUnderlined={false}
           >
             Read Online
-          </DSLink>
+          </ExternalLink>
         )}
 
         {drbResult.downloadLink && (
-          <DSLink
+          <ExternalLink
             href={drbResult.downloadLink?.url}
-            target="_blank"
-            type="buttonPrimary"
+            type="buttonSecondary"
             isUnderlined={false}
-            fontSize="desktop.body.body2"
+            fontSize={{
+              base: "mobile.body.body2",
+              md: "desktop.body.body2",
+            }}
+            mt="xs"
           >
             <>
               <Icon name="download" align="left" size="small" />
               Download {drbResult.downloadLink?.mediaType || ""}
             </>
-          </DSLink>
+          </ExternalLink>
         )}
       </CardContent>
     </Card>

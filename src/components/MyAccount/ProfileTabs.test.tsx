@@ -1,5 +1,5 @@
 import React from "react"
-import { render, fireEvent } from "@testing-library/react"
+import { render, fireEvent, screen } from "../../utils/testUtils"
 import ProfileTabs from "./ProfileTabs"
 import {
   mockCheckouts,
@@ -7,7 +7,7 @@ import {
   mockHolds,
   mockPatron,
   filteredPickupLocations as pickupLocations,
-} from "../../../__test__/fixtures/myAccountFixtures"
+} from "../../../__test__/fixtures/processedMyAccountData"
 import mockRouter from "next-router-mock"
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
@@ -68,5 +68,20 @@ describe("ProfileTabs", () => {
     )
     fireEvent.click(getByText("Requests", { exact: false }))
     expect(mockRouter.asPath).toBe("/account/requests")
+  })
+  it("displays error message when checkouts or holds are null", () => {
+    render(
+      <ProfileTabs
+        patron={mockPatron}
+        checkouts={null}
+        holds={null}
+        fines={mockFines}
+        activePath="checkouts"
+      />
+    )
+    const errorMessage = screen.getByText(
+      "There was an error accessing your checkouts."
+    )
+    expect(errorMessage).toBeInTheDocument()
   })
 })

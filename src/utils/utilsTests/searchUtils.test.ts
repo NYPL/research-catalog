@@ -1,16 +1,43 @@
-import { textInputFields } from "../advancedSearchUtils"
 import {
   getPaginationOffsetStrings,
   getSearchQuery,
   mapQueryToSearchParams,
   mapRequestBodyToSearchParams,
   getSearchResultsHeading,
+  getFreshSortByQuery,
 } from "../searchUtils"
 import { queryParamsEquality } from "../../../__test__/helpers/searchHelpers"
+import type { SearchQueryParams, SearchParams } from "../../types/searchTypes"
 
 const checkQueryParamsEquality = queryParamsEquality(getSearchQuery)
 
 describe("searchUtils", () => {
+  describe("getFreshSortByQuery", () => {
+    it("returns false if there is no prevUrl", () => {
+      expect(getFreshSortByQuery(undefined, "thebomb.com")).toBe(false)
+    })
+    it("returns false if the prevUrl and currentUrl have same sort by params", () => {
+      const prev =
+        "http://local.nypl.org:8080/research/research-catalog/search?q=spaghetti&sort=title&sort_direction=asc"
+      const curr =
+        "http://local.nypl.org:8080/research/research-catalog/search?q=spaghetti&sort=title&sort_direction=asc&shape=pasta"
+      expect(getFreshSortByQuery(prev, curr)).toBe(false)
+    })
+    it("returns true if sort is same but direction is different", () => {
+      const prev =
+        "http://local.nypl.org:8080/research/research-catalog/search?q=spaghetti&sort=title&sort_direction=asc"
+      const curr =
+        "http://local.nypl.org:8080/research/research-catalog/search?q=spaghetti&sort=title&sort_direction=desc"
+      expect(getFreshSortByQuery(prev, curr)).toBe(true)
+    })
+    it("returns true if sort is different and direction is same", () => {
+      const prev =
+        "http://local.nypl.org:8080/research/research-catalog/search?q=spaghetti&sort=title&sort_direction=asc"
+      const curr =
+        "http://local.nypl.org:8080/research/research-catalog/search?q=spaghetti&sort=date&sort_direction=asc"
+      expect(getFreshSortByQuery(prev, curr)).toBe(true)
+    })
+  })
   describe("getSearchQuery", () => {
     it("constructs a basic query", () => {
       const testQuery =
@@ -45,6 +72,22 @@ describe("searchUtils", () => {
         field: "contributor",
         order: "asc",
         sortBy: "relevance",
+      })
+    })
+    it("maps the filters correctly", () => {
+      expect(
+        mapQueryToSearchParams({
+          "filters[language][0]": "lang:rus",
+          "filters[subjectLiteral][0]": "Spaghetti",
+          "filters[subjectLiteral][1]": "Linguini",
+        } as SearchQueryParams)
+      ).toEqual({
+        page: 1,
+        q: "",
+        filters: {
+          language: ["lang:rus"],
+          subjectLiteral: ["Spaghetti", "Linguini"],
+        },
       })
     })
     it("parses the page number query string value into a number", () => {
@@ -104,6 +147,27 @@ describe("searchUtils", () => {
       )
       expect(heading.toLocaleLowerCase().includes("keyword")).toBe(false)
     })
+    it("displays the default keyword display string", () => {
+      const heading = getSearchResultsHeading({ q: "spaghetti" }, 100)
+      expect(heading).toEqual(
+        'Displaying 1-50 of 100 results for keyword "spaghetti"'
+      )
+    })
+    it("handles the special case for the author field", () => {
+      const heading = getSearchResultsHeading({ contributor: "spaghetti" }, 100)
+      expect(heading).toEqual(
+        'Displaying 1-50 of 100 results for author/contributor "spaghetti"'
+      )
+    })
+    it("handles the special case for the creatorLiteral field", () => {
+      const heading = getSearchResultsHeading(
+        { filters: { creatorLiteral: ["spaghetti"] } },
+        100
+      )
+      expect(heading).toEqual(
+        'Displaying 1-50 of 100 results for author "spaghetti"'
+      )
+    })
     it("displays all of the values from advanced search and nothing else", () => {
       const heading = getSearchResultsHeading(
         {
@@ -117,19 +181,33 @@ describe("searchUtils", () => {
         100
       )
       expect(heading).toEqual(
-        'Displaying 1-50 of 100 results for Keyword: "spaghetti" and Title: "ricotta" and Author: "pasta mama" and Subject: "italian"'
+        'Displaying 1-50 of 100 results for keyword "spaghetti" and title "ricotta" and author/contributor "pasta mama" and subject "italian"'
+      )
+    })
+    it("displays the appropriate string for certain values", () => {
+      const heading = getSearchResultsHeading(
+        {
+          page: 1,
+          q: "spaghetti",
+          field: "journal_title",
+          journal_title: "spaghetti",
+        } as SearchParams,
+        100
+      )
+      expect(heading).toEqual(
+        'Displaying 1-50 of 100 results for journal title "spaghetti"'
       )
     })
     it("returns the correct heading string for first page", () => {
       const heading = getSearchResultsHeading({ page: 1, q: "cats" }, 1200)
       expect(heading).toEqual(
-        'Displaying 1-50 of 1,200 results for Keyword: "cats"'
+        'Displaying 1-50 of 1,200 results for keyword "cats"'
       )
     })
     it("returns the correct heading string for other pages", () => {
       const heading = getSearchResultsHeading({ page: 5, q: "cats" }, 1200)
       expect(heading).toEqual(
-        'Displaying 201-250 of 1,200 results for Keyword: "cats"'
+        'Displaying 201-250 of 1,200 results for keyword "cats"'
       )
     })
   })

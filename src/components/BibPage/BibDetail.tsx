@@ -1,10 +1,7 @@
-import {
-  Link as DSLink,
-  Heading,
-  List,
-} from "@nypl/design-system-react-components"
+import { Heading, List } from "@nypl/design-system-react-components"
 import styles from "../../../styles/components/BibDetails.module.scss"
-import RCLink from "../RCLink/RCLink"
+import RCLink from "../Links/RCLink/RCLink"
+import ExternalLink from "../Links/ExternalLink/ExternalLink"
 import type {
   BibDetail,
   Url,
@@ -120,10 +117,15 @@ const LinkedDetailElement = (field: LinkedBibDetail) => {
 const LinkElement = (url: Url, linkType: string) => {
   let Link
   if (linkType === "internal") Link = RCLink
-  else if (linkType === "external") Link = DSLink
+  else if (linkType === "external") Link = ExternalLink
   const stringDirection = rtlOrLtr(url.urlLabel)
   return (
-    <Link dir={stringDirection} href={url.url} key={url.url}>
+    <Link
+      dir={stringDirection}
+      href={url.url}
+      key={url.url}
+      includeBaseUrl={false}
+    >
       {url.urlLabel}
     </Link>
   )

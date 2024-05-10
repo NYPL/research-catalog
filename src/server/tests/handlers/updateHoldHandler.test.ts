@@ -24,7 +24,7 @@ describe("handler", () => {
   beforeEach(() => {
     req = {
       cookies: {},
-      method: "POST",
+      method: "PUT",
       query: {},
       body: {},
     }

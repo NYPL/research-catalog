@@ -4,16 +4,20 @@ import {
 } from "@nypl/design-system-react-components"
 // import Link from "next/link"
 import { type ReactNode } from "react"
+import { BASE_URL } from "../../../config/constants"
 
 interface RCLinkProps {
   active?: boolean
-  href: string
+  href?: string
   children: ReactNode
   className?: string
-  color?: string
   type?: LinkTypes
-  size?: string
+  fontSize?: string | Record<string, string>
+  isUnderlined?: boolean
   hasWhiteFocusRing?: boolean
+  disabled?: boolean
+  [key: string]: any
+  includeBaseUrl?: boolean
 }
 
 // TODO: once 2ad is phased out, replace with DS v3 Link which can wrap a
@@ -26,18 +30,21 @@ interface RCLinkProps {
  */
 const RCLink = ({
   className,
-  href,
+  href = "",
   children,
   active = false,
   hasWhiteFocusRing = false,
+  disabled,
+  includeBaseUrl = true,
   ...rest
 }: RCLinkProps) => {
   return (
     // <Link href={href} passHref>
     <DSLink
-      href={href}
+      href={`${includeBaseUrl ? BASE_URL : ""}${href}`}
       className={className}
       fontWeight={active && "bold"}
+      hasVisitedState={false}
       {...rest}
       __css={
         hasWhiteFocusRing && {
@@ -46,6 +53,10 @@ const RCLink = ({
           },
         }
       }
+      // TODO: These were added in accessibility QA. Investigate adding these to the DS Link component.
+      role="link"
+      aria-disabled={disabled}
+      tabIndex={disabled ? -1 : 0}
     >
       {children}
     </DSLink>

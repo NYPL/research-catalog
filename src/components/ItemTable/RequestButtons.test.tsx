@@ -18,7 +18,7 @@ describe("RequestButtons", () => {
     render(<RequestButtons item={item} />)
     expect(
       screen.getByRole("link", {
-        name: "Request Appointment",
+        name: "Request Appointment, A history of spaghetti eating and cooking for: spaghetti dinner.",
       })
     ).toHaveAttribute(
       "href",
@@ -30,11 +30,11 @@ describe("RequestButtons", () => {
     render(<RequestButtons item={item} />)
     expect(
       screen.getByRole("link", {
-        name: "Request for On-site Use",
+        name: "Request for On-site Use, A history of spaghetti eating and cooking for: spaghetti dinner.",
       })
     ).toHaveAttribute(
       "href",
-      "/hold/request/b12810991-i14119377?searchKeywords=TODO"
+      "/research/research-catalog/hold/request/b12810991-i14119377"
     )
   })
   it("renders an an request scan link if item is EDD requestable", async () => {
@@ -42,11 +42,11 @@ describe("RequestButtons", () => {
     render(<RequestButtons item={item} />)
     expect(
       screen.getByRole("link", {
-        name: "Request Scan",
+        name: "Request Scan, A history of spaghetti eating and cooking for: spaghetti dinner.",
       })
     ).toHaveAttribute(
       "href",
-      "/hold/request/b12810991-i15550040/edd?searchKeywords=TODO"
+      "/research/research-catalog/hold/request/b12810991-i15550040/edd"
     )
   })
 })

@@ -1,34 +1,26 @@
-import {
-  Box,
-  Link,
-  StatusBadge,
-  Text,
-} from "@nypl/design-system-react-components"
-import type {
-  Hold,
-  Patron,
-  SierraCodeName,
-} from "../../../types/myAccountTypes"
+import { Box, StatusBadge, Text } from "@nypl/design-system-react-components"
+
+import ExternalLink from "../../Links/ExternalLink/ExternalLink"
+import type { Hold, Patron } from "../../../types/myAccountTypes"
 import ItemsTab from "../ItemsTab"
 import CancelButton from "./CancelButton"
 import FreezeButton from "./FreezeButton"
 import UpdateLocation from "./UpdateLocation"
+import { filteredPickupLocations as pickupLocations } from "../../../../__test__/fixtures/processedMyAccountData"
 
 const RequestsTab = ({
   removeHold,
   holds,
   patron,
-  pickupLocations,
 }: {
   removeHold
   holds: Hold[]
   patron: Patron
-  pickupLocations: SierraCodeName[]
 }) => {
   function formatTitleElement(hold: Hold) {
     // If item is research/circ
     if (hold.catalogHref) {
-      return <Link href={hold.catalogHref}>{hold.title}</Link>
+      return <ExternalLink href={hold.catalogHref}>{hold.title}</ExternalLink>
     } else {
       // Item is a partner record
       return <Text>{hold.title}</Text>

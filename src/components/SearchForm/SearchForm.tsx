@@ -1,31 +1,30 @@
-import { SearchBar } from "@nypl/design-system-react-components"
+import { Box, SearchBar } from "@nypl/design-system-react-components"
 import { useRouter } from "next/router"
 import type { SyntheticEvent, Dispatch, SetStateAction } from "react"
-import { useContext, useState, useEffect } from "react"
+import { useState, useEffect } from "react"
 
 import styles from "../../../styles/components/Search.module.scss"
-import RCLink from "../RCLink/RCLink"
+import RCLink from "../Links/RCLink/RCLink"
 import { getSearchQuery } from "../../utils/searchUtils"
 import { BASE_URL, PATHS } from "../../config/constants"
 import EDSLink from "../EDSLink"
 import useLoading from "../../hooks/useLoading"
 import RefineSearch from "../RefineSearch/RefineSearch"
-import { SearchResultsAggregationsContext } from "../../context/SearchResultsAggregationsContext"
 import type { Aggregation } from "../../types/filterTypes"
 import { collapseMultiValueQueryParams } from "../../utils/refineSearchUtils"
-import { appConfig } from "../../config/config"
 
 /**
  * The SearchForm component renders and controls the Search form and
  * advanced search link.
  */
-const SearchForm = () => {
+const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
   const router = useRouter()
   const [searchTerm, setSearchTerm] = useState(
     (router?.query?.q as string) || ""
   )
-  const [searchScope, setSearchScope] = useState("all")
-  const aggregations = useContext(SearchResultsAggregationsContext)
+  const [searchScope, setSearchScope] = useState(
+    (router?.query?.search_scope as string) || "all"
+  )
   const [appliedFilters, setAppliedFilters] = useState(
     collapseMultiValueQueryParams(router.query)
   )
@@ -38,15 +37,19 @@ const SearchForm = () => {
       q: searchTerm,
       field: searchScope,
     }
+
+    // Keeping the feature where if the search scope from the select
+    // dropdown is "subject", it will redirect to SHEP.
+    if (searchScope === "subject") {
+      window.location.href = `${BASE_URL}/subject_headings?filter=${
+        searchTerm.charAt(0).toUpperCase() + searchTerm.slice(1)
+      }`
+      return
+    }
+
     const queryString = getSearchQuery(searchParams)
 
-    // If the reverseProxyEnabled feature flag is true, use window.location.replace
-    // instead of router.push to forward search results to DFE.
-    if (appConfig.features.reverseProxyEnabled[appConfig.environment]) {
-      window.location.replace(`${BASE_URL}${PATHS.SEARCH}${queryString}`)
-    } else {
-      await router.push(`${PATHS.SEARCH}${queryString}`)
-    }
+    await router.push(`${PATHS.SEARCH}${queryString}`)
   }
 
   const handleChange = (
@@ -68,51 +71,47 @@ const SearchForm = () => {
   return (
     <div className={styles.searchContainer}>
       <div className={styles.searchContainerInner}>
-        <div className={styles.searchBarContainer}>
-          <SearchBar
-            id="mainContent"
-            action={`${BASE_URL}/search`}
-            method="get"
-            onSubmit={handleSubmit}
-            labelText="Search Bar Label"
-            isDisabled={isLoading}
-            selectProps={{
-              value: searchScope,
-              onChange: (e) => handleChange(e, setSearchScope),
-              labelText: "Select a category",
-              name: "search_scope",
-              optionsData: [
-                { text: "All fields", value: "all" },
-                { text: "Title", value: "title" },
-                { text: "Journal Title", value: "journal_title" },
-                { text: "Author/Contributor", value: "contributor" },
-                { text: "Standard Numbers", value: "standard_number" },
-                { text: "Subject", value: "subject" },
-              ],
-            }}
-            textInputProps={{
-              isClearable: true,
-              onChange: (e) => handleChange(e, setSearchTerm),
-              isClearableCallback: () => setSearchTerm(""),
-              value: searchTerm,
-              labelText:
-                "Search by keyword, title, journal title, or author/contributor",
-              name: "q",
-              placeholder:
-                "Keyword, title, journal title, or author/contributor",
-            }}
-            sx={{
-              ".chakra-select__icon-wrapper": { "z-index": "999 !important" },
-            }}
-          />
-        </div>
-        <div className={styles.auxSearchContainer}>
-          {/* Temporary color update. The Header overrides the new
-            DS 2.X CSS color variable values. */}
+        <SearchBar
+          id="mainContent"
+          action={`${BASE_URL}/search`}
+          method="get"
+          onSubmit={handleSubmit}
+          labelText="Search Bar Label"
+          isDisabled={isLoading}
+          selectProps={{
+            value: searchScope,
+            onChange: (e) => handleChange(e, setSearchScope),
+            labelText: "Select a category",
+            name: "search_scope",
+            optionsData: [
+              { text: "All fields", value: "all" },
+              { text: "Title", value: "title" },
+              { text: "Journal Title", value: "journal_title" },
+              { text: "Author/Contributor", value: "contributor" },
+              { text: "Standard Numbers", value: "standard_number" },
+              { text: "Subject", value: "subject" },
+            ],
+          }}
+          textInputProps={{
+            isClearable: true,
+            onChange: (e) => handleChange(e, setSearchTerm),
+            isClearableCallback: () => setSearchTerm(""),
+            value: searchTerm,
+            labelText:
+              "Search by keyword, title, journal title, or author/contributor",
+            name: "q",
+            placeholder: "Keyword, title, journal title, or author/contributor",
+          }}
+          sx={{
+            ".chakra-select__icon-wrapper": { "z-index": "999 !important" },
+          }}
+        />
+        <Box className={styles.auxSearchContainer}>
           <RCLink
             className={styles.advancedSearch}
-            href={`${BASE_URL}/search/advanced`}
-            color="#0069BF"
+            href="/search/advanced"
+            isUnderlined={false}
+            mb="xs"
           >
             Advanced Search
           </RCLink>
@@ -123,8 +122,8 @@ const SearchForm = () => {
               aggregations={aggregations}
             />
           )}
-          <EDSLink />
-        </div>
+        </Box>
+        <EDSLink />
       </div>
     </div>
   )

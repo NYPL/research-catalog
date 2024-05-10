@@ -5,6 +5,37 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Prerelease
+
+### Updated
+
+### Fixed
+
+## [1.1.0] 2024-05-09
+
+- This version represents the first public release of the Search Results page, including various fixes for visual and accessibility issues found in VQA.
+
+### Updated
+
+- Extracted SearchResultsSort into its own component to render it in a different location on mobile.
+- No longer hiding the Item Location in the ItemTable on mobile.
+- Updated to DS v3.1.1 (as part of SCC-4090)
+
+### Fixed
+
+- Fixed VQA issues for the searchbar, results heading, sort dropdown, and individual search result card in the Search Results page (SCC-4065)
+- Fixed second half of Accessibility QA issues for Search Results (SCC-4064)
+- Fixed second half of the VQA issues, as well as the "Second Pass" requests mostly related to mobile styles (SCC-4066)
+- Fixed color contrast issue on item availability text (SCC-4090)
+- Fixed "subject" searches going to SHEP.
+- Fixed the special case for the author/contributor display string for the "Author" select dropdown value.
+
+## [1.0.3] 2024-04-03
+
+### Updated
+
+- Replaced hardcoded Vega links with appConfig value and set default to borrow.nypl.org (SCC-4062)
+
 ## [1.0.2] 2024-03-26
 
 ### Fixed

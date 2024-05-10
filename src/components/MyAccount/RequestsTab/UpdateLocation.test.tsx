@@ -1,7 +1,7 @@
 import UpdateLocation from "./UpdateLocation"
 import { render, screen } from "../../../utils/testUtils"
 import userEvent from "@testing-library/user-event"
-import { filteredPickupLocations as pickupLocations } from "../../../../__test__/fixtures/myAccountFixtures"
+import { filteredPickupLocations as pickupLocations } from "../../../../__test__/fixtures/processedMyAccountData"
 import { BASE_URL } from "../../../config/constants"
 
 global.fetch = jest

@@ -18,6 +18,11 @@ export const appConfig: AppConfig = {
       qa: "https://qa-platform.nypl.org/api/v0.1",
       production: "https://platform.nypl.org/api/v0.1",
     },
+    domain: {
+      development: "local.nypl.org:8080",
+      qa: "qa-www.nypl.org",
+      production: "nypl.org",
+    },
     drb: {
       development: "https://digital-research-books-api.nypl.org/search",
       qa: "https://digital-research-books-api.nypl.org/search",
@@ -65,7 +70,7 @@ export const appConfig: AppConfig = {
   urls: {
     drbAbout:
       "https://digital-research-books-beta.nypl.org/about?source=catalog",
-    circulatingCatalog: "https://nypl.na2.iiivega.com/",
+    circulatingCatalog: "https://borrow.nypl.org",
     legacyCatalog: "https://legacycatalog.nypl.org/",
     login: "https://login.nypl.org/auth/login",
     locations: "https://www.nypl.org/locations/",

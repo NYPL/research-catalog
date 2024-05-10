@@ -27,10 +27,11 @@ export const buildFilterQuery = (
   filters: CollapsedMultiValueAppliedFilters
 ) => {
   return Object.keys(filters).reduce((acc, field) => {
-    filters[field] && filters[field].length
-    filters[field].forEach(
-      (option, i) => (acc[`filters[${field}][${i}]`] = option)
-    )
+    if (filters[field]?.filter((x) => x).length) {
+      filters[field].forEach(
+        (option, i) => (acc[`filters[${field}][${i}]`] = option)
+      )
+    }
     return acc
   }, {})
 }
@@ -43,14 +44,24 @@ export const getQueryWithoutFilters = (filters: object) => {
 }
 
 // The aggregations from the api response have the label we want to display
-// in the filter dialog. The applied filter values only have values. Using
-// the filter values, find the label from the aggregations array.
+// in the filter dialog. The applied filter values parsed from the url only have
+// values. Using the filter values, find the label from the aggregations array.
 export const addLabelPropAndParseFilters = (
   aggregations: Aggregation[], // from the api response
   appliedFilterValues: CollapsedMultiValueAppliedFilters // parsed from url query params
 ): Record<string, Option[]> => {
   const appliedFilterValuesWithLabels = {}
   for (const appliedFilterField in appliedFilterValues) {
+    // Find the aggregation that corresponds to the filter field we are working on
+    const matchingFieldAggregation = aggregations.find(
+      ({ field: aggregationField }) => aggregationField === appliedFilterField
+    )
+    // There are some filters which don't return aggregations and are not used
+    // for applied filter fields (yet). This is mainly the unsupported holding
+    // location filter (eg filters[holdingLocation][0]=loc:scff2), which is
+    // used by devs to assist QA. See line 69 for explanation of date exclusion.
+    if (!matchingFieldAggregation && !appliedFilterField.includes("date"))
+      continue
     appliedFilterValuesWithLabels[appliedFilterField] = appliedFilterValues[
       appliedFilterField
     ].map((filterValue: string): Option => {
@@ -65,10 +76,6 @@ export const addLabelPropAndParseFilters = (
           label: `${labelPrefix} ${filterValue}`,
         }
       }
-      // Find the aggregation that corresponds to the filter field we are working on
-      const matchingFieldAggregation = aggregations.find(
-        ({ field: aggregationField }) => aggregationField === appliedFilterField
-      )
       // Find the option with the same value, so we can eventually display the label
       const matchingOption = matchingFieldAggregation.values.find(
         (option: Option) => option.value === filterValue

@@ -1,7 +1,5 @@
-// @ts-nocheck
-// Modal onClose
 import { useState } from "react"
-import type { Hold, Patron } from "../../../types/accountTypes"
+import type { Hold, Patron } from "../../../types/myAccountTypes"
 import {
   useModal,
   Box,
@@ -41,7 +39,11 @@ const CancelButton = ({
       headingText: (
         <Heading className={styles.modalHeading}>
           <>
-            <Icon size="large" name="errorFilled" color="ui.error.primary" />
+            <Icon
+              size="large"
+              name="actionCheckCircleFilled"
+              color="ui.success.primary"
+            />
             <Text sx={{ marginBottom: 0 }}>Request canceled </Text>
           </>
         </Heading>
@@ -51,6 +53,32 @@ const CancelButton = ({
         closeModal()
         removeHold(hold)
       },
+    }
+  }
+
+  function failureModalProps(hold) {
+    return {
+      bodyContent: (
+        <Box className={styles.modalBody}>
+          <Text sx={{ marginLeft: "l", marginRight: "m" }}>
+            Your request for{" "}
+            <span style={{ fontWeight: "var(--nypl-fontWeights-medium)" }}>
+              {hold.title}
+            </span>{" "}
+            has not been canceled. Please try again.
+          </Text>
+        </Box>
+      ),
+      closeButtonLabel: "OK",
+      headingText: (
+        <Heading className={styles.modalHeading}>
+          <>
+            <Icon size="large" name="errorFilled" color="ui.error.primary" />
+            <Text sx={{ marginBottom: 0 }}>Failed to cancel request </Text>
+          </>
+        </Heading>
+      ),
+      onClose: closeModal(),
     }
   }
 
@@ -77,6 +105,9 @@ const CancelButton = ({
           <Text sx={{ marginBottom: 0 }}>Cancel request?</Text>
         </Box>
       ),
+      // Override onClose function type. The callback expects a method with
+      // arity 0, but we are leveraging the event that is in fact passed along.
+      //@ts-ignore
       onClose: async (e) => {
         if (e) {
           const response = await fetch(
@@ -92,6 +123,8 @@ const CancelButton = ({
           if (response.status == 200) {
             // Open next modal to confirm request has been canceled.
             setModalProps(confirmModalProps(hold))
+          } else {
+            setModalProps(failureModalProps(hold))
           }
         } else {
           closeModal()

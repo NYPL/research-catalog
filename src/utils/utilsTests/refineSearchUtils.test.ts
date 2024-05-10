@@ -7,6 +7,48 @@ import { aggregationsResults } from "../../../__test__/fixtures/searchResultsMan
 
 describe("refineSearchUtils", () => {
   describe("addLabelPropAndParseFilters", () => {
+    it("does not return filter value for invalid filter", () => {
+      const aggregations = [
+        {
+          "@type": "nypl:Aggregation",
+          "@id": "res:owner",
+          id: "owner",
+          field: "owner",
+          values: [
+            {
+              value: "orgs:1121",
+              count: 1,
+              label: "Jerome Robbins Dance Division",
+            },
+          ],
+        },
+        {
+          "@type": "nypl:Aggregation",
+          "@id": "res:contributorLiteral",
+          id: "contributorLiteral",
+          field: "contributorLiteral",
+          values: [
+            {
+              value: "Schomburg Children's Collection.",
+              count: 54,
+              label: "Schomburg Children's Collection.",
+            },
+            {
+              value: "Schomburg Children's Collection. ",
+              count: 11,
+              label: "Schomburg Children's Collection. ",
+            },
+          ],
+        },
+      ]
+      const appliedFilterValues = {
+        holdingLocation: ["loc:scff2"],
+      }
+      expect(
+        addLabelPropAndParseFilters(aggregations, appliedFilterValues)
+      ).toStrictEqual({})
+    })
+
     it("takes applied filter values and adds the appropriate label", () => {
       const appliedFilterValues = {
         materialType: ["resourcetypes:txt"],
@@ -88,6 +130,12 @@ describe("refineSearchUtils", () => {
   })
 
   describe("buildFilterQuery", () => {
+    it("ignores empty filter value", () => {
+      const filters = { dateBefore: [""], dateAfter: ["1990"] }
+      expect(buildFilterQuery(filters)).toStrictEqual({
+        "filters[dateAfter][0]": "1990",
+      })
+    })
     it("single filter single value", () => {
       const filters = { subjectLiteral: ["spaghetti"] }
       expect(buildFilterQuery(filters)).toStrictEqual({

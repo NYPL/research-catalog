@@ -20,9 +20,7 @@ describe("Electronic Resources Link with a single resource", () => {
   })
 
   it("renders the correct heading", async () => {
-    expect(screen.getByRole("heading", { level: 4 })).toHaveTextContent(
-      "Available Online"
-    )
+    expect(screen.getByText("Available Online")).toBeInTheDocument()
   })
   it("renders the correct link with the label as the text when only one electronic resource is available", async () => {
     const link = screen.getByRole("link", {
@@ -65,7 +63,7 @@ describe("Electronic Resources Link with multiple resources", () => {
     )
 
     const link = screen.getByRole("link", {
-      name: "See All Available Online Resources",
+      name: "View all available online resources",
     })
     expect(link).toHaveAttribute(
       "href",
