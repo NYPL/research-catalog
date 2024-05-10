@@ -9,10 +9,12 @@ import UpdateLocation from "./UpdateLocation"
 import { filteredPickupLocations as pickupLocations } from "../../../../__test__/fixtures/processedMyAccountData"
 
 const RequestsTab = ({
+  updateHoldLocation,
   removeHold,
   holds,
   patron,
 }: {
+  updateHoldLocation
   removeHold
   holds: Hold[]
   patron: Patron
@@ -41,6 +43,7 @@ const RequestsTab = ({
       <Text>{hold.pickupLocation.name}</Text>
       {!hold.isResearch && (
         <UpdateLocation
+          updateHoldLocation={updateHoldLocation}
           pickupLocationOptions={pickupLocations}
           patronId={patron.id}
           holdId={hold.id}

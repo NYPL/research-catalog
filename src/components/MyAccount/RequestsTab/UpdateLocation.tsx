@@ -21,9 +21,11 @@ interface UpdateLocationPropsType {
   pickupLocationOptions: SierraCodeName[]
   key: number
   patronId: number
+  updateHoldLocation: (holdId: string, location: SierraCodeName) => void
 }
 
 const UpdateLocation = ({
+  updateHoldLocation,
   pickupLocationOptions,
   patronId,
   holdId,
@@ -45,7 +47,6 @@ const UpdateLocation = ({
             const newLocation = locationsWithSelectedFirst.find(
               (loc) => e.target.value === loc.code
             )
-            console.log(e.target.value)
             setSelectedLocation(() => {
               // modalProps have to be explicitly updated here because
               // of how useModal works.
@@ -129,7 +130,7 @@ const UpdateLocation = ({
       </Heading>
     ),
     onClose: () => {
-      setModalProps(defaultModalProps(newLocation))
+      updateHoldLocation(holdId, newLocation)
       closeModal()
     },
   })
