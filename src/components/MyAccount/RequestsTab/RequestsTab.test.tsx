@@ -1,5 +1,5 @@
 import React from "react"
-import { render, screen } from "../../../utils/testUtils"
+import { render, screen, within } from "../../../utils/testUtils"
 import {
   mockCheckouts,
   mockFines,
@@ -37,15 +37,15 @@ describe("RequestsTab", () => {
   })
 
   it("renders each hold request as a row", () => {
-    const { getAllByRole } = render(
+    const component = render(
       <RequestsTab
         patron={mockPatron}
         holds={mockHolds}
         removeHold={mockRemoveHold}
       />
     )
-    const rows = getAllByRole("row")
-    expect(rows.length).toBe(7)
+    const bodyRows = component.getAllByRole("rowgroup")[1]
+    expect(within(bodyRows).getAllByRole("row").length).toBe(6)
   })
 
   it("calls hold cancel endpoint when Cancel button is clicked", async () => {
@@ -82,8 +82,8 @@ describe("RequestsTab", () => {
         activePath="requests"
       />
     )
-    let rows = component.getAllByRole("row")
-    expect(rows.length).toBe(7)
+    let bodyRows = component.getAllByRole("rowgroup")[1]
+    expect(within(bodyRows).getAllByRole("row").length).toBe(6)
 
     await userEvent.click(component.getAllByText("Cancel request")[0])
     await userEvent.click(component.getAllByText("Yes, cancel")[0])
@@ -99,8 +99,8 @@ describe("RequestsTab", () => {
       }
     )
     await userEvent.click(component.getAllByText("OK")[0])
-    rows = component.getAllByRole("row")
-    expect(rows.length).toBe(6)
+    bodyRows = component.getAllByRole("rowgroup")[1]
+    expect(within(bodyRows).getAllByRole("row").length).toBe(5)
   })
 
   it("does not remove hold from list when cancel fails", async () => {
@@ -118,8 +118,8 @@ describe("RequestsTab", () => {
       />
     )
 
-    let rows = component.getAllByRole("row")
-    expect(rows.length).toBe(7)
+    let bodyRows = component.getAllByRole("rowgroup")[1]
+    expect(within(bodyRows).getAllByRole("row").length).toBe(6)
     await userEvent.click(component.getAllByText("Cancel request")[0])
     await userEvent.click(component.getAllByText("Yes, cancel")[0])
 
@@ -136,8 +136,8 @@ describe("RequestsTab", () => {
 
     await userEvent.click(screen.getAllByText("OK", { exact: false })[0])
 
-    rows = component.getAllByRole("row")
-    expect(rows.length).toBe(7)
+    bodyRows = component.getAllByRole("rowgroup")[1]
+    expect(within(bodyRows).getAllByRole("row").length).toBe(6)
   })
 
   it("displays freeze buttons only for holds that can be frozen", async () => {

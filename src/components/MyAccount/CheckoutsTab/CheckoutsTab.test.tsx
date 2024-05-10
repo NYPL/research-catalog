@@ -1,5 +1,5 @@
 import React from "react"
-import { render } from "../../../utils/testUtils"
+import { render, within } from "../../../utils/testUtils"
 import {
   mockCheckouts,
   mockPatron,
@@ -21,11 +21,11 @@ describe("CheckoutsTab", () => {
   })
 
   it("renders each checkout as a row", () => {
-    const { getAllByRole } = render(
+    const component = render(
       <CheckoutsTab patron={mockPatron} checkouts={mockCheckouts} />
     )
-    const rows = getAllByRole("row")
-    expect(rows.length).toBe(5)
+    const bodyRows = component.getAllByRole("rowgroup")[1]
+    expect(within(bodyRows).getAllByRole("row").length).toBe(4)
   })
   it("calls renew checkout endpoint when Renew button is clicked", async () => {
     const component = render(
