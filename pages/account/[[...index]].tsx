@@ -27,7 +27,6 @@ interface MyAccountPropsType {
   fines?: Fine
   isAuthenticated: boolean
   tabsPath?: string
-  pickupLocations: SierraCodeName[]
 }
 
 export default function MyAccount({
@@ -37,7 +36,6 @@ export default function MyAccount({
   fines,
   isAuthenticated,
   tabsPath,
-  pickupLocations,
 }: MyAccountPropsType) {
   const errorRetrievingPatronData = !patron
 
@@ -58,29 +56,12 @@ export default function MyAccount({
             {fines.total > 0 && <FeesBanner />}
             <ProfileHeader patron={patron} />
             <ProfileTabs
-              pickupLocations={pickupLocations}
               patron={patron}
               checkouts={checkouts}
               holds={holds}
               fines={fines}
               activePath={tabsPath}
             />
-            {/** Testing settings api route */}
-            {/* <Button
-              id="settings-test"
-              onClick={() => settingsUpdate(patron.id)}
-            >
-              Update settings
-            </Button> */}
-            {/** Testing pin update api route */}
-            {/* <Button
-              id="pin-update"
-              onClick={() =>
-                pinUpdate(patron.id, patron.barcode, "7890", "7890")
-              }
-            >
-              Update pin
-            </Button> */}
           </>
         )}
       </Layout>
