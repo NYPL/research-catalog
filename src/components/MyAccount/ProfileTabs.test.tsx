@@ -6,7 +6,6 @@ import {
   mockFines,
   mockHolds,
   mockPatron,
-  filteredPickupLocations as pickupLocations,
 } from "../../../__test__/fixtures/processedMyAccountData"
 import mockRouter from "next-router-mock"
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
@@ -15,7 +14,6 @@ describe("ProfileTabs", () => {
   it("renders", () => {
     render(
       <ProfileTabs
-        pickupLocations={pickupLocations}
         patron={mockPatron}
         checkouts={mockCheckouts}
         holds={mockHolds}
@@ -28,7 +26,6 @@ describe("ProfileTabs", () => {
   it("renders correct number of tabs when fines are greater than $0", () => {
     const { getAllByRole } = render(
       <ProfileTabs
-        pickupLocations={pickupLocations}
         patron={mockPatron}
         checkouts={mockCheckouts}
         holds={mockHolds}
@@ -43,7 +40,6 @@ describe("ProfileTabs", () => {
   it("renders correct number of tabs when fines are $0", () => {
     const { getAllByRole } = render(
       <ProfileTabs
-        pickupLocations={pickupLocations}
         patron={mockPatron}
         checkouts={mockCheckouts}
         holds={mockHolds}
@@ -58,7 +54,6 @@ describe("ProfileTabs", () => {
   it("calls updatePath when tab is clicked", () => {
     const { getByText } = render(
       <ProfileTabs
-        pickupLocations={pickupLocations}
         patron={mockPatron}
         checkouts={mockCheckouts}
         holds={mockHolds}

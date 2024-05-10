@@ -46,7 +46,6 @@ export async function updatePatronSettings(patronId: string, patronData: any) {
  */
 export async function updateHold(holdId: string, holdData: any) {
   try {
-    console.log(`patrons/holds/${holdId}`, holdData)
     const client = await sierraClient()
     await client.put(`patrons/holds/${holdId}`, holdData)
     return { status: 200, message: "Updated" }

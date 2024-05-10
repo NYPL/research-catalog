@@ -19,6 +19,8 @@ global.fetch = jest
     status: 500,
   } as Response)
 
+const mockUpdateHoldLocation = jest.fn()
+
 describe("UpdateLocation modal trigger", () => {
   const openModal = async () => {
     const modalTrigger = screen.getByText("Change location")
@@ -28,6 +30,7 @@ describe("UpdateLocation modal trigger", () => {
     render(
       <>
         <UpdateLocation
+          updateHoldLocation={mockUpdateHoldLocation}
           pickupLocationOptions={pickupLocations}
           data-testId="click me"
           holdId="987654"
@@ -64,18 +67,21 @@ describe("UpdateLocation modal trigger", () => {
         }
       )
     })
-    it("displays success modal on successful update", async () => {
+    it("displays success modal on successful update and updates hold location", async () => {
       await openModal()
       const select = screen.getByLabelText("Pickup location")
       await userEvent.selectOptions(select, "mp   ")
       const submitButton = screen.getByText("Confirm location")
       await userEvent.click(submitButton)
-      const errorMessage = screen.getByText("Location change successful", {
+      const successMessage = screen.getByText("Location change successful", {
         exact: false,
       })
-      expect(errorMessage).toBeInTheDocument()
+      expect(successMessage).toBeInTheDocument()
+      await userEvent.click(screen.getByText("OK"))
+      expect(mockUpdateHoldLocation).toHaveBeenCalled()
+      mockUpdateHoldLocation.mockReset()
     })
-    it("displays failure modal on failed update", async () => {
+    it("displays failure modal on failed update and does not update hold location", async () => {
       await openModal()
       const select = screen.getByLabelText("Pickup location")
       await userEvent.selectOptions(select, "mp   ")
@@ -83,6 +89,8 @@ describe("UpdateLocation modal trigger", () => {
       await userEvent.click(submitButton)
       const errorMessage = screen.getByText("Location change failed")
       expect(errorMessage).toBeInTheDocument()
+      await userEvent.click(screen.getByText("OK"))
+      expect(mockUpdateHoldLocation).not.toHaveBeenCalled()
     })
   })
 })

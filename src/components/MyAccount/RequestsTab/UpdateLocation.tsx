@@ -77,7 +77,6 @@ const UpdateLocation = ({
       if (!e) {
         closeModal()
       }
-      console.log(selected.code)
       const response = await fetch(
         `${BASE_URL}/api/account/holds/update/${holdId}`,
         {
@@ -131,6 +130,7 @@ const UpdateLocation = ({
     ),
     onClose: () => {
       updateHoldLocation(holdId, newLocation)
+      setModalProps(defaultModalProps(newLocation))
       closeModal()
     },
   })

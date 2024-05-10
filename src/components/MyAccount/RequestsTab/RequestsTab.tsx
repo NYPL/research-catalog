@@ -35,13 +35,12 @@ const RequestsTab = ({
     "Pickup by",
     "Manage request",
   ]
-
   const holdsData = holds.map((hold, i) => [
     formatTitleElement(hold),
     getStatusBadge(hold.status),
     <>
       <Text>{hold.pickupLocation.name}</Text>
-      {!hold.isResearch && (
+      {!hold.isResearch && hold.status === "REQUEST PENDING" && (
         <UpdateLocation
           updateHoldLocation={updateHoldLocation}
           pickupLocationOptions={pickupLocations}

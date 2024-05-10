@@ -5,7 +5,7 @@ import {
   mockFines,
   mockHolds,
   mockPatron,
-  filteredPickupLocations as pickupLocations,
+  mockHoldsToBeDeletedWhen4105IsMerged,
 } from "../../../../__test__/fixtures/processedMyAccountData"
 import { userEvent } from "@testing-library/user-event"
 import ProfileTabs from "../ProfileTabs"
@@ -13,6 +13,7 @@ import RequestsTab from "./RequestsTab"
 
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 const mockRemoveHold = jest.fn()
+const mockUpdateHoldLocation = jest.fn()
 
 describe("RequestsTab", () => {
   global.fetch = jest.fn().mockResolvedValue({
@@ -27,6 +28,7 @@ describe("RequestsTab", () => {
   it("renders", () => {
     const component = render(
       <RequestsTab
+        updateHoldLocation={mockUpdateHoldLocation}
         patron={mockPatron}
         holds={mockHolds}
         removeHold={mockRemoveHold}
@@ -40,6 +42,7 @@ describe("RequestsTab", () => {
   it("renders each hold request as a row", () => {
     const { getAllByRole } = render(
       <RequestsTab
+        updateHoldLocation={mockUpdateHoldLocation}
         patron={mockPatron}
         holds={mockHolds}
         removeHold={mockRemoveHold}
@@ -52,6 +55,7 @@ describe("RequestsTab", () => {
   it("calls hold cancel endpoint when Cancel button is clicked", async () => {
     const component = render(
       <RequestsTab
+        updateHoldLocation={mockUpdateHoldLocation}
         patron={mockPatron}
         holds={mockHolds}
         removeHold={mockRemoveHold}
@@ -140,10 +144,26 @@ describe("RequestsTab", () => {
     rows = component.getAllByRole("row")
     expect(rows.length).toBe(3)
   })
+  describe("updateHoldLocation", () => {
+    it("only displays update pickup location button for request pending circ items", () => {
+      render(
+        <RequestsTab
+          updateHoldLocation={mockUpdateHoldLocation}
+          patron={mockPatron}
+          holds={mockHoldsToBeDeletedWhen4105IsMerged}
+          removeHold={mockRemoveHold}
+        />
+      )
+      const changeLocationButtons = screen.getAllByText("Change location")
+      // there are two circ request pending holds in the provided holds array
+      expect(changeLocationButtons).toHaveLength(2)
+    })
+  })
 
   it("displays freeze buttons only for holds that can be frozen", async () => {
     const component = render(
       <RequestsTab
+        updateHoldLocation={mockUpdateHoldLocation}
         patron={mockPatron}
         holds={mockHolds}
         removeHold={mockRemoveHold}
@@ -160,6 +180,7 @@ describe("RequestsTab", () => {
     } as Response)
     const component = render(
       <RequestsTab
+        updateHoldLocation={mockUpdateHoldLocation}
         patron={mockPatron}
         holds={mockHolds}
         removeHold={mockRemoveHold}
@@ -206,8 +227,6 @@ describe("RequestsTab", () => {
     const freezeButtons = component.getAllByText("Freeze")
     expect(freezeButtons.length).toBe(1)
   })
-  // need new creds
-  it.todo("displays pickup location button for circ records that are eligible")
 
   it("shows failure modal when freeze doesn't work and does not change frozen state", async () => {
     global.fetch = jest.fn().mockResolvedValue({
@@ -216,6 +235,7 @@ describe("RequestsTab", () => {
     } as Response)
     const component = render(
       <RequestsTab
+        updateHoldLocation={mockUpdateHoldLocation}
         patron={mockPatron}
         holds={mockHolds}
         removeHold={mockRemoveHold}
