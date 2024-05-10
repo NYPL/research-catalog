@@ -42,7 +42,6 @@ const UpdateLocation = ({
         <Select
           value={selected.code}
           onChange={(e: { target: HTMLInputElement }) => {
-            console.log("change")
             const newLocation = locationsWithSelectedFirst.find(
               (loc) => e.target.value === loc.code
             )
@@ -80,7 +79,10 @@ const UpdateLocation = ({
         `${BASE_URL}/api/account/holds/update/${holdId}`,
         {
           method: "PUT",
-          body: JSON.stringify({ pickupLocation: selected.code, patronId }),
+          body: JSON.stringify({
+            pickupLocation: selected.code,
+            patronId: `${patronId}`,
+          }),
         }
       )
       if (response.status == 200) {

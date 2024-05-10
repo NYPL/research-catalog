@@ -35,7 +35,7 @@ describe("handler", () => {
   })
 
   it("should return 403 if no authenticated patron", async () => {
-    req.body.patronId = "123456"
+    req.body = JSON.stringify({ patronId: "123456" })
     ;(initializePatronTokenAuth as jest.Mock).mockResolvedValueOnce({
       decodedPatron: null,
     })
@@ -46,9 +46,9 @@ describe("handler", () => {
   })
 
   it("should return 403 if logged in patron does not match the hold they are updating", async () => {
-    req.body.patronId = "678910"
+    req.body = JSON.stringify({ patronId: "123456" })
     ;(initializePatronTokenAuth as jest.Mock).mockResolvedValueOnce({
-      decodedPatron: { sub: "123456" },
+      decodedPatron: { sub: "987654" },
     })
 
     await handler(req as NextApiRequest, res as NextApiResponse)
@@ -60,7 +60,7 @@ describe("handler", () => {
   })
 
   it("should call updateHold if authentication succeeds", async () => {
-    req.body.patronId = "123456"
+    req.body = JSON.stringify({ patronId: "123456" })
     ;(initializePatronTokenAuth as jest.Mock).mockResolvedValueOnce({
       decodedPatron: { sub: "123456" },
     })

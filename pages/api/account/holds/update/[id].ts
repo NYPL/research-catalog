@@ -25,7 +25,7 @@ export default async function handler(
   if (req.method == "PUT") {
     /**  We get the hold id from the request: */
     const holdId = req.query.id as string
-    const holdPatronId = req.body.patronId
+    const holdPatronId = JSON.parse(req.body).patronId
     const holdData = {
       freeze: req.body.freeze,
       pickupLocation: req.body.pickupLocation,

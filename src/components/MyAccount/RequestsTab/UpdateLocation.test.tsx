@@ -57,7 +57,10 @@ describe("UpdateLocation modal trigger", () => {
         `${BASE_URL}/api/account/holds/update/987654`,
         {
           method: "PUT",
-          body: JSON.stringify({ pickupLocation: "mp   ", patronId: 1234567 }),
+          body: JSON.stringify({
+            pickupLocation: "mp   ",
+            patronId: "1234567",
+          }),
         }
       )
     })
