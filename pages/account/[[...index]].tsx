@@ -104,17 +104,19 @@ export async function getServerSideProps({ req }) {
   const id = patronTokenResponse.decodedPatron.sub
   try {
     const client = await sierraClient()
-    const { checkouts, holds, patron, fines } = await MyAccountFactory(
-      id,
-      client
-    )
 
     // Immediately returning base path.
     if (!tabsPath) {
+      const { checkouts, holds, patron, fines } = await MyAccountFactory(
+        id,
+        client
+      )
       return {
         props: { checkouts, holds, patron, fines, tabsPath, isAuthenticated },
       }
     }
+
+    const { fines } = await MyAccountFactory(id, client)
 
     /*  Redirecting invalid paths (including /overdues if user has none) and
     // cleaning extra parts off valid paths. */
@@ -140,6 +142,7 @@ export async function getServerSideProps({ req }) {
         }
     }
 
+    const { checkouts, holds, patron } = await MyAccountFactory(id, client)
     return {
       props: { checkouts, holds, patron, fines, tabsPath, isAuthenticated },
     }
