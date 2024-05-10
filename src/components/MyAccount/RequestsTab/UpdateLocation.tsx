@@ -137,6 +137,10 @@ const UpdateLocation = ({
         </Text>
       </Box>
     ),
+    onClose: () => {
+      setModalProps(defaultModalProps(pickupLocation))
+      closeModal()
+    },
     closeButtonLabel: "OK",
     headingText: (
       <Heading className={styles.modalHeading}>
