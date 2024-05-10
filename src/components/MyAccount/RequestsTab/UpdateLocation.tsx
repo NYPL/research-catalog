@@ -45,6 +45,7 @@ const UpdateLocation = ({
             const newLocation = locationsWithSelectedFirst.find(
               (loc) => e.target.value === loc.code
             )
+            console.log(e.target.value)
             setSelectedLocation(() => {
               // modalProps have to be explicitly updated here because
               // of how useModal works.
@@ -75,6 +76,7 @@ const UpdateLocation = ({
       if (!e) {
         closeModal()
       }
+      console.log(selected.code)
       const response = await fetch(
         `${BASE_URL}/api/account/holds/update/${holdId}`,
         {
@@ -87,7 +89,7 @@ const UpdateLocation = ({
       )
       if (response.status == 200) {
         // Open next modal to confirm request has been canceled.
-        setModalProps(successModalProps)
+        setModalProps(successModalProps(selected))
       } else setModalProps(failureModalProps)
     },
     headingText: (
@@ -104,11 +106,11 @@ const UpdateLocation = ({
     defaultModalProps(selectedLocation)
   )
 
-  const successModalProps = {
+  const successModalProps = (newLocation) => ({
     bodyContent: (
       <Box className={styles.modalBody}>
         <Text sx={{ marginLeft: "l" }}>
-          Your item will be available for pickup at the {selectedLocation.name}{" "}
+          Your item will be available for pickup at the {newLocation.name}{" "}
           Library.
         </Text>
       </Box>
@@ -126,7 +128,11 @@ const UpdateLocation = ({
         </>
       </Heading>
     ),
-  }
+    onClose: () => {
+      setModalProps(defaultModalProps(newLocation))
+      closeModal()
+    },
+  })
   const failureModalProps = {
     bodyContent: (
       <Box className={styles.modalBody}>
@@ -140,7 +146,7 @@ const UpdateLocation = ({
       </Box>
     ),
     onClose: () => {
-      setModalProps(defaultModalProps(pickupLocation))
+      setModalProps(defaultModalProps(selectedLocation))
       closeModal()
     },
     closeButtonLabel: "OK",

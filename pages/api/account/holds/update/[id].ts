@@ -25,10 +25,11 @@ export default async function handler(
   if (req.method == "PUT") {
     /**  We get the hold id from the request: */
     const holdId = req.query.id as string
-    const holdPatronId = JSON.parse(req.body).patronId
+    const reqBody = JSON.parse(req.body)
+    const holdPatronId = reqBody.patronId
     const holdData = {
-      freeze: req.body.freeze,
-      pickupLocation: req.body.pickupLocation,
+      freeze: reqBody.freeze,
+      pickupLocation: reqBody.pickupLocation,
     }
     /**  We check that the patron cookie matches the patron id in the request,
      * i.e.,the logged in user is updating their own hold. */
