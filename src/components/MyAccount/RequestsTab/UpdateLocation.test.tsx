@@ -43,7 +43,7 @@ describe("UpdateLocation modal trigger", () => {
   })
   it("opens a modal with selected location as first option", async () => {
     await openModal()
-    const selectedOption = screen.getByText("SNFL (formerly Mid-Manhattan)", {
+    const selectedOption = screen.getByText("SNFL", {
       exact: false,
     })
     expect(selectedOption).toBeInTheDocument()

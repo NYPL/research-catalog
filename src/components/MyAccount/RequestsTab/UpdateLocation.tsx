@@ -12,7 +12,7 @@ import {
 } from "@nypl/design-system-react-components"
 import type { SierraCodeName } from "../../../types/myAccountTypes"
 import styles from "../../../../styles/components/MyAccount.module.scss"
-import { useState, useRef } from "react"
+import { useState } from "react"
 import { BASE_URL } from "../../../config/constants"
 
 interface UpdateLocationPropsType {
@@ -33,11 +33,12 @@ const UpdateLocation = ({
   key,
 }: UpdateLocationPropsType) => {
   const { Modal, onOpen: openModal, onClose: closeModal } = useModal()
-  const [selectedLocation, setSelectedLocation] = useState(pickupLocation)
-  const locationsWithSelectedFirst = useRef([
-    selectedLocation,
-    ...pickupLocationOptions.filter((loc) => loc.code !== pickupLocation.code),
-  ]).current
+  const locationsWithSelectedFirst = [
+    pickupLocation,
+    ...pickupLocationOptions.filter(
+      (loc) => loc.code.trim() !== pickupLocation.code.trim()
+    ),
+  ]
   const defaultModalProps = (selected: SierraCodeName) => ({
     bodyContent: (
       <Box className={styles.modalBody}>
@@ -47,12 +48,7 @@ const UpdateLocation = ({
             const newLocation = locationsWithSelectedFirst.find(
               (loc) => e.target.value === loc.code
             )
-            setSelectedLocation(() => {
-              // modalProps have to be explicitly updated here because
-              // of how useModal works.
-              setModalProps(defaultModalProps(newLocation))
-              return newLocation
-            })
+            setModalProps(defaultModalProps(newLocation))
           }}
           id={`update-location-selector-${key}`}
           labelText="Pickup location"
@@ -103,7 +99,7 @@ const UpdateLocation = ({
   })
 
   const [modalProps, setModalProps] = useState(
-    defaultModalProps(selectedLocation)
+    defaultModalProps(pickupLocation)
   )
 
   const successModalProps = (newLocation) => ({
@@ -147,7 +143,7 @@ const UpdateLocation = ({
       </Box>
     ),
     onClose: () => {
-      setModalProps(defaultModalProps(selectedLocation))
+      setModalProps(defaultModalProps(pickupLocation))
       closeModal()
     },
     closeButtonLabel: "OK",
