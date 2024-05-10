@@ -109,8 +109,8 @@ const CancelButton = ({
           </Text>
         </Box>
       ),
-      closeButtonLabel: "No, go back",
-      confirmButtonLabel: "Cancel",
+      closeButtonLabel: "No, keep request",
+      confirmButtonLabel: "Yes, cancel request",
       headingText: (
         <Box className={styles.modalHeading}>
           <Text sx={{ marginBottom: 0 }}>Cancel request?</Text>
