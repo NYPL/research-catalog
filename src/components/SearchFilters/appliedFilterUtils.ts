@@ -82,7 +82,8 @@ export const addLabelPropAndParseFilters = (
         return matchingOption
       })
       // don't pass on falsy options. this happens when no aggregations are
-      // returned for a given param, and possibly in other scenarios.
+      // returned for a given param, which is not uncommon when many filters
+      // are applied at once (and possibly in other scenarios).
       .filter((option) => option)
   }
   delete appliedFilterValuesWithLabels["q"]
