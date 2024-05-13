@@ -38,8 +38,6 @@ export default function MyAccount({
   tabsPath,
 }: MyAccountPropsType) {
   const errorRetrievingPatronData = !patron
-  console.timeEnd("total")
-  console.log("DONE")
 
   return (
     <>
