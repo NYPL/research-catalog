@@ -38,6 +38,8 @@ export default function MyAccount({
   tabsPath,
 }: MyAccountPropsType) {
   const errorRetrievingPatronData = !patron
+  console.timeEnd("total")
+  console.log("DONE")
 
   return (
     <>
@@ -86,10 +88,12 @@ export default function MyAccount({
 }
 
 export async function getServerSideProps({ req }) {
+  console.time("total")
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const isAuthenticated = patronTokenResponse.isTokenValid
   if (!isAuthenticated) {
     const redirect = getLoginRedirect(req)
+    console.timeEnd("Redirection time")
     return {
       redirect: {
         destination: redirect,
@@ -111,6 +115,7 @@ export async function getServerSideProps({ req }) {
         id,
         client
       )
+      console.timeLog("total", "it was account")
       return {
         props: { checkouts, holds, patron, fines, tabsPath, isAuthenticated },
       }
@@ -125,6 +130,7 @@ export async function getServerSideProps({ req }) {
       !allowedPaths.some((path) => tabsPath.startsWith(path)) ||
       (tabsPath === "overdues" && fines.total === 0)
     ) {
+      console.timeLog("total", "invalid path back to /account")
       return {
         redirect: {
           destination: "/account",
@@ -133,13 +139,15 @@ export async function getServerSideProps({ req }) {
       }
     } else {
       const matchedPath = allowedPaths.find((path) => tabsPath.startsWith(path))
-      if (tabsPath != matchedPath)
+      if (tabsPath != matchedPath) {
+        console.timeLog("total", "invalid path back to /account/something")
         return {
           redirect: {
             destination: "/account/" + matchedPath,
             permanent: false,
           },
         }
+      }
     }
 
     const { checkouts, holds, patron } = await MyAccountFactory(id, client)
@@ -148,6 +156,7 @@ export async function getServerSideProps({ req }) {
     }
   } catch (e) {
     console.log(e.message)
+    console.timeEnd("Redirection time")
     return {
       props: {
         tabsPath,
