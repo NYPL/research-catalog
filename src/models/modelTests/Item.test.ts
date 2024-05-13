@@ -6,8 +6,7 @@ import {
   itemUnavailable,
   itemPartnerReCAP,
   itemNYPLReCAP,
-  itemNoShelfMark,
-  itemNoShelfMarkNoURI,
+  itemUseInLibrary,
 } from "../../../__test__/fixtures/itemFixtures"
 import { searchResultPhysicalItems } from "../../../__test__/fixtures/searchResultPhysicalItems"
 
@@ -88,6 +87,9 @@ describe("Item model", () => {
   describe("isAvailable", () => {
     it("determines if an item is available based on the status label", () => {
       expect(item.isAvailable).toBe(true)
+
+      const useInLibraryItem = new Item(itemUseInLibrary, parentBib)
+      expect(useInLibraryItem.isAvailable).toBe(true)
 
       const unavailableItem = new Item(itemUnavailable, parentBib)
       expect(unavailableItem.isAvailable).toBe(false)
