@@ -95,7 +95,7 @@ describe("CheckoutsTab", () => {
 
     expect(renewButton).not.toBeDisabled()
   })
-  it("does not render partner items with a link to the record or renew buttons", () => {
+  it("does not render partner items with a link to the record", () => {
     const component = render(
       <CheckoutsTab patron={mockPatron} checkouts={mockCheckouts} />
     )
