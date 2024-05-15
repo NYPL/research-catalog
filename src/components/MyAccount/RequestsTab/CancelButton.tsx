@@ -12,11 +12,9 @@ import { BASE_URL } from "../../../config/constants"
 import styles from "../../../../styles/components/MyAccount.module.scss"
 import type {
   BaseModalProps,
-  BaseProps,
   ConfirmationModalProps,
   DefaultModalProps,
-} from "@nypl/design-system-react-components/dist/src/components/Modal/Modal"
-//import type { BaseModalProps } from "@nypl/design-system-react-components/dist/src/components/Modal/Modal"
+} from "@nypl/design-system-react-components"
 
 const CancelButton = ({
   removeHold,

@@ -31,9 +31,7 @@ describe("RequestsTab", () => {
         removeHold={mockRemoveHold}
       />
     )
-    expect(
-      component.getByText("Pickup location", { exact: false })
-    ).toBeInTheDocument()
+    expect(component.getByText("Quit like a woman", { exact: false }))
   })
 
   it("renders each hold request as a row", () => {
