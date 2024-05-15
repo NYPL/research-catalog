@@ -29,7 +29,7 @@ jobs:
         - AWS_REGION=us-east-1
       install:
         - pip install --user awscli
-        - export LOCAL_TAG_NAME="${NEXT_PUBLIC_APP_ENV}-latest"
+        - export LOCAL_TAG_NAME="myAccount-qa-feature-latest"
       script:
         - eval $(aws ecr get-login --no-include-email --region us-east-1)
         - docker build -t "$LOCAL_TAG_NAME" --build-arg NEXT_PUBLIC_APP_ENV="${NEXT_PUBLIC_APP_ENV}" .
