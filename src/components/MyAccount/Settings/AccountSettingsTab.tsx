@@ -1,9 +1,9 @@
 import {
-  Box,
   Form,
   List,
   Spacer,
   useModal,
+  SkeletonLoader,
 } from "@nypl/design-system-react-components"
 import { useState } from "react"
 import type { Patron } from "../../../types/myAccountTypes"
@@ -18,13 +18,13 @@ import {
   failureModalProps,
 } from "./AccountSettingsFeedbackModalProps"
 import { parsePayload, updatePatronData } from "./AccountSettingsUtils"
-import { BASE_URL } from "../../../config/constants"
 import PasswordModal from "./PasswordModal"
 
 const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
   const [currentlyEditing, setCurrentlyEditing] = useState(false)
   const [mostRecentPatronData, setMostRecentPatronData] = useState(settingsData)
   const [modalProps, setModalProps] = useState(null)
+  const [isLoading, setIsLoading] = useState(false)
   const listElements = currentlyEditing ? (
     <AccountSettingsForm patron={mostRecentPatronData} />
   ) : (
@@ -34,45 +34,40 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
 
   const submitAccountSettings = async (e) => {
     e.preventDefault()
+    setIsLoading(true)
     const payload = parsePayload(e.target, mostRecentPatronData)
-    try {
-      const response = await fetch(
-        `${BASE_URL}/api/account/settings/${mostRecentPatronData.id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
-        }
-      )
-      const responseData = await response.json()
-      if (response.ok) {
-        setMostRecentPatronData(updatePatronData(mostRecentPatronData, payload))
-        setCurrentlyEditing(false)
-        setModalProps(successModalProps)
-        openModal()
-      } else {
-        alert(`error: ${responseData}`)
-        setModalProps(failureModalProps)
-        openModal()
+    const response = await fetch(
+      `/research/research-catalog/api/account/settings/${mostRecentPatronData.id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
       }
-    } catch (error) {
-      alert("fetching error")
+    )
+    if (response.status === 200) {
+      setMostRecentPatronData((prevData) => updatePatronData(prevData, payload))
+      setCurrentlyEditing(false)
+      setModalProps(successModalProps)
+      openModal()
+    } else {
+      setModalProps(failureModalProps)
+      openModal()
     }
+    setIsLoading(false)
   }
 
-  return (
-    <Box className={styles.accountSettingsTab}>
+  return isLoading ? (
+    <SkeletonLoader showImage={false} />
+  ) : (
+    <>
       {modalProps && <Modal {...modalProps} />}
       <Form
+        className={styles.accountSettingsTab}
         id="account-settings-container"
         onSubmit={(e) => submitAccountSettings(e)}
       >
-        <AccountSettingsButtons
-          currentlyEditing={currentlyEditing}
-          setCurrentlyEditing={setCurrentlyEditing}
-        />
         <List
           sx={{ border: "none", h2: { border: "none" } }}
           className={styles.myAccountList}
@@ -80,10 +75,13 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
         >
           {listElements}
         </List>
-        <Spacer />
+        <Spacer display={{ base: "none", md: "inline-block" }} />
+        <AccountSettingsButtons
+          currentlyEditing={currentlyEditing}
+          setCurrentlyEditing={setCurrentlyEditing}
+        />
       </Form>
-      <PasswordModal patron={settingsData} />
-    </Box>
+    </>
   )
 }
 

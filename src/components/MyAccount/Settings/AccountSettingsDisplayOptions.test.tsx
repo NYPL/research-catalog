@@ -13,18 +13,16 @@ describe("AccountSettingsDisplayOptions", () => {
     beforeEach(() => {
       render(
         <AccountSettingsDisplay
-          patron={{ ...mockPatron, notificationPreference: "Print" }}
+          patron={{ ...mockPatron, notificationPreference: "Mobile" }}
         />
       )
     })
     it("displays a selector with patron's home library selected", () => {
-      const homeLibrary = screen.getByText(
-        "Stavros Niarchos Foundation Library (SNFL)"
-      )
+      const homeLibrary = screen.getByText("SNFL (formerly Mid-Manhattan)")
       expect(homeLibrary).toBeInTheDocument()
     })
     it("displays a selector with patron's notification selected", () => {
-      const notificationPreference = screen.getByText("Print")
+      const notificationPreference = screen.getByText("Mobile")
       expect(notificationPreference).toBeInTheDocument()
     })
     it("displays a text input with patron's primary email displayed", () => {
@@ -67,10 +65,10 @@ describe("AccountSettingsDisplayOptions", () => {
       render(<AccountSettingsForm patron={mockPatron} />)
     })
     it("displays a selector with patron's home library selected", () => {
-      const homeLibrary = screen.getByDisplayValue(
-        "Stavros Niarchos Foundation Library (SNFL)"
+      const homeLibraryCode = screen.getByDisplayValue(
+        "SNFL (formerly Mid-Manhattan)"
       )
-      expect(homeLibrary).toBeInTheDocument()
+      expect(homeLibraryCode).toBeInTheDocument()
     })
     it("displays a selector with patron's notification selected", () => {
       const notificationPreference = screen.getByLabelText("Update email")
