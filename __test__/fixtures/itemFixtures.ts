@@ -339,13 +339,13 @@ export const itemAvailableOnsite = {
   },
 }
 
-export const itemNoShelfMark = {
-  "@id": "res:i10572546",
+export const itemUseInLibrary = {
+  "@id": "res:i14119377",
   "@type": ["bf:Item"],
   accessMessage: [
     {
-      "@id": "accessMessage:2",
-      prefLabel: "Request in advance",
+      "@id": "accessMessage:1",
+      prefLabel: "Use in library",
     },
   ],
   catalogItemType: [
@@ -358,82 +358,37 @@ export const itemNoShelfMark = {
   formatLiteral: ["Text"],
   holdingLocation: [
     {
-      "@id": "loc:rc2ma",
-      prefLabel: "Offsite",
+      "@id": "loc:mal92",
+      prefLabel: "Schwarzman Building M2 - General Research Room 315",
+      endpoint: "schwarzman" as ItemLocationEndpoint,
     },
   ],
-  idBarcode: ["33433077546822"],
-  owner: [
+  idBarcode: ["33433048828085"],
+  identifier: [
     {
-      "@id": "orgs:1000",
-      prefLabel: "Stephen A. Schwarzman Building",
+      "@type": "bf:ShelfMark",
+      "@value": "JFE 93-253",
+    },
+    {
+      "@type": "bf:Barcode",
+      "@value": "33433048828085",
     },
   ],
+  m2CustomerCode: ["XF"],
   physRequestable: true,
-  physicalLocation: [
-    "VTI (Prezzolini, G. History of spaghetti eating and cooking for: spaghetti dinner)",
-  ],
-  recapCustomerCode: ["NA"],
+  physicalLocation: ["JFE 93-253"],
   requestable: [true],
+  shelfMark: ["JFE 93-253"],
   specRequestable: false,
   status: [
     {
-      "@id": "status:a",
-      prefLabel: "Available",
+      "@id": "status:o",
+      prefLabel: "Use in Library",
     },
   ],
-  uri: "i10572546",
+  uri: "i14119377",
   idNyplSourceId: {
     "@type": "SierraNypl",
-    "@value": "10572546",
-  },
-}
-
-export const itemNoShelfMarkNoURI = {
-  "@id": "res:i10572546",
-  "@type": ["bf:Item"],
-  accessMessage: [
-    {
-      "@id": "accessMessage:2",
-      prefLabel: "Request in advance",
-    },
-  ],
-  catalogItemType: [
-    {
-      "@id": "catalogItemType:55",
-      prefLabel: "book, limited circ, MaRLI",
-    },
-  ],
-  eddRequestable: true,
-  formatLiteral: ["Text"],
-  holdingLocation: [
-    {
-      "@id": "loc:rc2ma",
-      prefLabel: "Offsite",
-    },
-  ],
-  idBarcode: ["33433077546822"],
-  owner: [
-    {
-      "@id": "orgs:1000",
-      prefLabel: "Stephen A. Schwarzman Building",
-    },
-  ],
-  physRequestable: true,
-  physicalLocation: [
-    "VTI (Prezzolini, G. History of spaghetti eating and cooking for: spaghetti dinner)",
-  ],
-  recapCustomerCode: ["NA"],
-  requestable: [true],
-  specRequestable: false,
-  status: [
-    {
-      "@id": "status:a",
-      prefLabel: "Available",
-    },
-  ],
-  idNyplSourceId: {
-    "@type": "SierraNypl",
-    "@value": "10572546",
+    "@value": "14119377",
   },
 }

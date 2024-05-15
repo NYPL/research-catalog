@@ -9,7 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 
+## [1.1.1] 2024-05-15
+
+### Updated
+
+- Upgraded Next.js to 13.5.6 to address security vulnerability - SCC-4120
+
 ### Fixed
+
+- Added status:o (Use in Library) to availability IDs list
 
 ## [1.1.0] 2024-05-09
 
