@@ -1,11 +1,6 @@
 import React from "react"
-import { render, screen } from "../../../utils/testUtils"
-import {
-  mockCheckouts,
-  mockFines,
-  mockHolds,
-  mockPatron,
-} from "../../../../__test__/fixtures/processedMyAccountData"
+import { render } from "../../../utils/testUtils"
+import { mockFines } from "../../../../__test__/fixtures/processedMyAccountData"
 
 import FeesTab from "./FeesTab"
 
@@ -16,7 +11,7 @@ jest.mock("next/router", () => ({
 describe("FeesTab", () => {
   it("renders", () => {
     const component = render(<FeesTab fines={mockFines} />)
-    expect(component.getByText("Amount")).toBeInTheDocument()
+    expect(component.queryAllByText("Amount")[0]).toBeInTheDocument()
   })
 
   it("renders each fine as a row", () => {

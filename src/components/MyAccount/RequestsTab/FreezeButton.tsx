@@ -15,6 +15,7 @@ const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
   const [isDisabled, setIsDisabled] = useState(false)
   const { onOpen: openModal, onClose: closeModal, Modal } = useModal()
   const modalProps = {
+    type: "default",
     bodyContent: (
       <Box className={styles.modalBody}>
         <Text sx={{ marginLeft: "l", marginRight: "m" }}>
