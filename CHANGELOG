@@ -11,9 +11,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 
+## [1.1.1] 2024-05-15
+
+### Updated
+
+- Upgraded Next.js to 13.5.6 to address security vulnerability - SCC-4120
+
+### Fixed
+
+- Added status:o (Use in Library) to availability IDs list
+
+## [1.1.0] 2024-05-09
+
+- This version represents the first public release of the Search Results page, including various fixes for visual and accessibility issues found in VQA.
+
+### Updated
+
 - Extracted SearchResultsSort into its own component to render it in a different location on mobile.
 - No longer hiding the Item Location in the ItemTable on mobile.
 - Updated to DS v3.1.1 (as part of SCC-4090)
+- Special handling for subjectLiteral applied filter in `addLabelPropAndParseFilters`
 
 ### Fixed
 
