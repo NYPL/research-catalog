@@ -62,22 +62,6 @@ export default function MyAccount({
               fines={fines}
               activePath={tabsPath}
             />
-            {/** Testing settings api route */}
-            {/* <Button
-              id="settings-test"
-              onClick={() => settingsUpdate(patron.id)}
-            >
-              Update settings
-            </Button> */}
-            {/** Testing pin update api route */}
-            {/* <Button
-              id="pin-update"
-              onClick={() =>
-                pinUpdate(patron.id, patron.barcode, "7890", "7890")
-              }
-            >
-              Update pin
-            </Button> */}
           </>
         )}
       </Layout>
@@ -108,6 +92,8 @@ export async function getServerSideProps({ req }) {
       id,
       client
     )
+    /*  Redirecting invalid paths (including /overdues if user has none) and
+    // cleaning extra parts off valid paths. */
     if (tabsPath) {
       const allowedPaths = ["items", "requests", "overdues", "settings"]
       if (
