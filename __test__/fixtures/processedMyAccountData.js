@@ -10,10 +10,7 @@ export const mockPatron = {
       type: "t",
     },
   ],
-  homeLibrary: {
-    name: "Stavros Niarchos Foundation Library (SNFL)",
-    code: "sn   ",
-  },
+  homeLibraryCode: "sn   ",
   id: 2772226,
 }
 
@@ -23,10 +20,7 @@ export const emptyPatron = {
   expirationDate: "2025-03-28",
   emails: [],
   phones: [],
-  homeLibrary: {
-    name: "Stavros Niarchos Foundation Library (SNFL)",
-    code: "sn   ",
-  },
+  homeLibraryCode: "sn   ",
   id: 2772226,
   notificationPreference: null,
 }

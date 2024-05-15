@@ -23,9 +23,16 @@
 }
 
 .accountSettingsTab {
-  display: flex;
-  button + button {
-    margin-left: var(--nypl-space-xs);
+  > div {
+    margin-top: var(--nypl-space-l);
+    display: flex;
+    flex-direction: row;
+    @media (max-width: 600) {
+      flex-direction: column;
+    }
+    @media (max-width: 800px) and (min-width: 601) {
+      flex-direction: column-reverse;
+    }
   }
 }
 .modalHeading {
