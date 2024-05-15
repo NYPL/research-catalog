@@ -47,6 +47,7 @@ export default class MyAccount {
   async getCheckouts() {
     const checkouts = await this.fetchCheckouts()
     const checkoutBibData = await this.fetchBibData(checkouts.entries, "item")
+    console.log(checkoutBibData)
     const checkoutsWithBibData = this.buildCheckouts(
       checkouts.entries,
       checkoutBibData.entries
@@ -66,7 +67,7 @@ export default class MyAccount {
     try {
       holdBibData = await this.fetchBibData(holds.entries, "record")
     } catch (e) {
-      logger.error("MyAccount#fetchBibData error: " + e.message)
+      console.error("MyAccount#fetchBibData error: " + e.message)
     }
 
     const holdsWithBibData = this.buildHolds(holds.entries, holdBibData.entries)
@@ -114,11 +115,11 @@ export default class MyAccount {
         bibLevelHolds.push(holdOrCheckout.record)
       }
     })
-
     const bibData = await this.client.get(
       `bibs?id=${itemLevelHoldsorCheckouts}&fields=default,varFields`
     )
     bibData.entries = bibData.entries.concat(bibLevelHolds)
+    console.log("bib level", bibLevelHolds)
     return bibData
   }
 
@@ -166,7 +167,7 @@ export default class MyAccount {
     try {
       bibDataMap = MyAccount.buildBibData(bibData)
     } catch (e) {
-      logger.error(
+      console.error(
         "Error building bibData in MyAccount#buildHolds: " + e.message
       )
       throw new MyAccountModelError("building bibData for holds", e)
@@ -196,7 +197,9 @@ export default class MyAccount {
         }
       })
     } catch (e) {
-      logger.error("Error building holds in MyAccount#buildHolds: " + e.message)
+      console.error(
+        "Error building holds in MyAccount#buildHolds: " + e.message
+      )
       throw new MyAccountModelError("building holds", e)
     }
   }
@@ -209,7 +212,7 @@ export default class MyAccount {
     try {
       bibDataMap = MyAccount.buildBibData(bibData)
     } catch (e) {
-      logger.error(
+      console.error(
         "MyAccount#buildCheckouts: Error building bib data for checkouts: ",
         e.message
       )

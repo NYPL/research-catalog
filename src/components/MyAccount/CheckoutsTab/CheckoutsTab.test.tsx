@@ -1,5 +1,5 @@
 import React from "react"
-import { render } from "../../../utils/testUtils"
+import { render, within } from "../../../utils/testUtils"
 import {
   mockCheckouts,
   mockPatron,
@@ -21,11 +21,11 @@ describe("CheckoutsTab", () => {
   })
 
   it("renders each checkout as a row", () => {
-    const { getAllByRole } = render(
+    const component = render(
       <CheckoutsTab patron={mockPatron} checkouts={mockCheckouts} />
     )
-    const rows = getAllByRole("row")
-    expect(rows.length).toBe(3)
+    const bodyRows = component.getAllByRole("rowgroup")[1]
+    expect(within(bodyRows).getAllByRole("row").length).toBe(4)
   })
   it("calls renew checkout endpoint when Renew button is clicked", async () => {
     const component = render(
@@ -94,5 +94,22 @@ describe("CheckoutsTab", () => {
     )
 
     expect(renewButton).not.toBeDisabled()
+  })
+  it("does not render partner items with a link to the record", () => {
+    const component = render(
+      <CheckoutsTab patron={mockPatron} checkouts={mockCheckouts} />
+    )
+    // Borrow.nypl.org and two NYPL titles
+    const expectedLinks = component.getAllByRole("link")
+    expect(expectedLinks.length).toBe(3)
+  })
+
+  it("does not render partner/research items with renew buttons", () => {
+    const component = render(
+      <CheckoutsTab patron={mockPatron} checkouts={mockCheckouts} />
+    )
+    // 1 circ checkout
+    const expectedRenewButtons = component.getAllByText("Renew")
+    expect(expectedRenewButtons.length).toBe(1)
   })
 })
