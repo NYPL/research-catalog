@@ -100,7 +100,6 @@ const RenewButton = ({
         body: JSON.stringify({ patronId: patron.id }),
       }
     )
-    console.log("trying to renew")
     const responseData = await response.json()
     if (responseData.message == "Renewed") {
       setButtonDisabled(true)
