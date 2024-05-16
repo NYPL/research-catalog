@@ -21,7 +21,7 @@ const RenewButton = ({
   patron: Patron
 }) => {
   const [isButtonDisabled, setButtonDisabled] = useState(false)
-  const { onOpen, Modal } = useModal()
+  const { onOpen, onClose, Modal } = useModal()
   const [modalProps, setModalProps] = useState(null)
 
   const successModalProps = {
@@ -35,15 +35,20 @@ const RenewButton = ({
     ),
     closeButtonLabel: "OK",
     headingText: (
-      <Box className={styles.modalHeading}>
-        <Icon
-          size="large"
-          name="actionCheckCircleFilled"
-          color="ui.success.primary"
-        />
-        <Text sx={{ marginBottom: 0 }}> Renewal successful </Text>
-      </Box>
+      <Heading className={styles.modalHeading}>
+        <>
+          <Icon
+            size="large"
+            name="actionCheckCircleFilled"
+            color="ui.success.primary"
+          />
+          <Text sx={{ marginBottom: 0 }}> Renewal successful </Text>
+        </>
+      </Heading>
     ),
+    onClose: () => {
+      onClose()
+    },
   }
   const failureModalProps = {
     type: "default",
@@ -67,6 +72,9 @@ const RenewButton = ({
         </>
       </Heading>
     ),
+    onClose: () => {
+      onClose()
+    },
   }
 
   useEffect(() => {
@@ -92,6 +100,7 @@ const RenewButton = ({
         body: JSON.stringify({ patronId: patron.id }),
       }
     )
+    console.log("trying to renew")
     const responseData = await response.json()
     if (responseData.message == "Renewed") {
       setButtonDisabled(true)
