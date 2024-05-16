@@ -119,7 +119,7 @@ describe("RequestsTab", () => {
     let bodyRows = component.getAllByRole("rowgroup")[1]
     expect(within(bodyRows).getAllByRole("row").length).toBe(6)
     await userEvent.click(component.getAllByText("Cancel request")[0])
-    await userEvent.click(component.getAllByText("Yes, cancel")[0])
+    await userEvent.click(component.getAllByText("Yes, cancel request")[0])
 
     expect(fetch).toHaveBeenCalledWith(
       `/research/research-catalog/api/account/holds/cancel/${mockHolds[0].id}`,
