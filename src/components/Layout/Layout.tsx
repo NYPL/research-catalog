@@ -82,9 +82,10 @@ const Layout = ({
                   heading="New Service Announcement"
                   content={
                     <>
-                      We are currently experiencing problems viewing Research
-                      Catalog accounts. Until the issue is resolved, you can
-                      view and manage your holds and checkouts in the{" "}
+                      We are currently experiencing problems with Research
+                      Catalog accounts and search results. Until the issue is
+                      resolved, you can view and manage your holds and checkouts
+                      in the{" "}
                       <ExternalLink href="https://legacycatalog.nypl.org/patroninfo">
                         Legacy Catalog
                       </ExternalLink>
