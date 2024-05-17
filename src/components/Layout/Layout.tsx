@@ -14,6 +14,7 @@ import SubNav from "../SubNav/SubNav"
 import SearchForm from "../SearchForm/SearchForm"
 import { BASE_URL } from "../../config/constants"
 import FeedbackForm from "../FeedbackForm/FeedbackForm"
+import ExternalLink from "../Links/ExternalLink/ExternalLink"
 import type { Aggregation } from "../../types/filterTypes"
 
 interface LayoutProps {
@@ -75,15 +76,22 @@ const Layout = ({
                 />
                 {showSearch && <SearchForm aggregations={searchAggregations} />}
               </div>
-              {showNotification && bannerNotification && (
-                <Box sx={{ display: "flex", "justify-content": "center" }}>
-                  <Banner
-                    sx={{ maxWidth: "1248px", margin: "2em 2em .5em 2em" }}
-                    heading="New Service Announcement"
-                    content={bannerNotification}
-                  />
-                </Box>
-              )}
+              <Box sx={{ display: "flex", "justify-content": "center" }}>
+                <Banner
+                  sx={{ maxWidth: "1248px", margin: "2em 2em .5em 2em" }}
+                  heading="New Service Announcement"
+                  content={
+                    <>
+                      We are currently experiencing problems viewing Research
+                      Catalog accounts. Until the issue is resolved, you can
+                      view and manage your holds and checkouts in the{" "}
+                      <ExternalLink href="https://legacycatalog.nypl.org/patroninfo">
+                        Legacy Catalog
+                      </ExternalLink>
+                    </>
+                  }
+                />
+              </Box>
             </>
           )
         }
