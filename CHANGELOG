@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+### Hotfixes 2024-05-17
+
+- Hardcode notification banner content.
+- Temporarily remove log in/out links for My Account.
+- Catching Platform API errors when it's down.
+
 ### Updated
 
 ## [1.1.1] 2024-05-15
