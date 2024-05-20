@@ -39,23 +39,23 @@ const SubNav = ({ activePage, isAuthenticated }: SubNavProps) => {
             Subject Heading Explorer
           </RCLink>
         </li>
-        {/*<li>*/}
-        {/*  <RCLink*/}
-        {/*    href="/account"*/}
-        {/*    active={activePage === "account"}*/}
-        {/*    aria-current={activePage === "account" ? "page" : undefined}*/}
-        {/*    hasWhiteFocusRing*/}
-        {/*  >*/}
-        {/*    My Account*/}
-        {/*  </RCLink>*/}
-        {/*</li>*/}
-        {/*{isAuthenticated && (*/}
-        {/*  <li>*/}
-        {/*    <RCLink href={logoutLink} includeBaseUrl={false}>*/}
-        {/*      Log Out*/}
-        {/*    </RCLink>*/}
-        {/*  </li>*/}
-        {/*)}*/}
+        <li>
+          <RCLink
+            href="/account"
+            active={activePage === "account"}
+            aria-current={activePage === "account" ? "page" : undefined}
+            hasWhiteFocusRing
+          >
+            My Account
+          </RCLink>
+        </li>
+        {isAuthenticated && (
+          <li>
+            <RCLink href={logoutLink} includeBaseUrl={false}>
+              Log Out
+            </RCLink>
+          </li>
+        )}
       </ul>
     </nav>
   )
