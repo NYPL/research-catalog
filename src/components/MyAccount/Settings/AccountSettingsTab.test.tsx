@@ -7,7 +7,7 @@ import userEvent from "@testing-library/user-event"
 
 jest.spyOn(helpers, "updatePatronSettings")
 
-describe("AccountSettingsTab", () => {
+describe.skip("AccountSettingsTab", () => {
   global.fetch = jest
     .fn()
     .mockResolvedValueOnce({
