@@ -10,7 +10,7 @@ import type { Patron } from "../../../types/myAccountTypes"
 import { accountSettings, getLibraryByCode } from "./AccountSettingsUtils"
 import { buildListElementsWithIcons } from "../IconListElement"
 import type { JSX, ReactNode } from "react"
-import { useState, useEffect, useCallback, createRef } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { filteredPickupLocations } from "../../../../__test__/fixtures/processedMyAccountData"
 import PasswordModal from "./PasswordModal"
 
@@ -40,8 +40,6 @@ export const AccountSettingsForm = ({
   const [formData, setFormData] = useState({
     primaryPhone: patron.phones[0]?.number,
     secondaryPhone: patron.phones[1]?.number,
-    notificationPreference:
-      patron.notificationPreference === "Phone" ? "p" : "z",
   })
 
   const validateForm = useCallback(() => {
@@ -72,11 +70,6 @@ export const AccountSettingsForm = ({
       updatedFormData = {
         ...updatedFormData,
         secondaryPhone: value,
-      }
-    } else if (id === "notification-preference-selector") {
-      updatedFormData = {
-        ...updatedFormData,
-        notificationPreference: value,
       }
     }
     setFormData(updatedFormData)
@@ -133,7 +126,6 @@ export const AccountSettingsForm = ({
               id="notification-preference-selector"
               labelText="Update notification preference"
               showLabel={false}
-              onChange={handleInputChange}
             >
               {sortedNotPrefs.map((pref) => (
                 <option key={pref + "-option"} value={pref[0]}>
@@ -151,17 +143,15 @@ export const AccountSettingsForm = ({
                 name={setting.field}
                 defaultValue={patron.phones[0]?.number}
                 id="phone-text-input"
-                labelText="Mobile phone"
+                labelText="Primary phone"
                 showLabel={true}
                 onChange={handleInputChange}
-                isRequired
-                showRequiredLabel={false}
               />
               <TextInput
                 name={setting.field}
                 defaultValue={patron.phones[1]?.number}
                 id="secondary-phone-text-input"
-                labelText="Home phone"
+                labelText="Secondary phone"
                 onChange={handleInputChange}
                 showLabel={true}
               />
