@@ -12,7 +12,7 @@ import styles from "../../../../styles/components/MyAccount.module.scss"
 
 const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
   const [frozen, setFrozen] = useState(hold.frozen)
-  const [isDisabled, setIsDisabled] = useState(null)
+  const [isDisabled, setIsDisabled] = useState<boolean | null>(null)
   const buttonRef = createRef<HTMLButtonElement>()
   const { onOpen: openModal, onClose: closeModal, Modal } = useModal()
   const modalProps = {
