@@ -140,10 +140,12 @@ const CancelButton = ({
   const [modalProps, setModalProps] = useState<BaseModalProps>(
     checkModalProps(hold) as ConfirmationModalProps
   )
+  const buttonLabel = `Cancel${!hold.canFreeze ? " request" : ""}`
 
   return (
     <>
       <Button
+        aria-label={`${buttonLabel} ${hold.title}`}
         width="100%"
         buttonType="secondary"
         id={`cancel-${hold.id}`}
@@ -152,7 +154,7 @@ const CancelButton = ({
           openModal()
         }}
       >
-        Cancel {!hold.canFreeze && "request"}
+        {buttonLabel}
       </Button>
       <Modal {...modalProps} />
     </>

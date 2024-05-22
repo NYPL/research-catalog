@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { createRef, useEffect, useState } from "react"
 import type { Hold, Patron } from "../../../types/myAccountTypes"
 import {
   Box,
@@ -12,7 +12,8 @@ import styles from "../../../../styles/components/MyAccount.module.scss"
 
 const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
   const [frozen, setFrozen] = useState(hold.frozen)
-  const [isDisabled, setIsDisabled] = useState(false)
+  const [isDisabled, setIsDisabled] = useState(null)
+  const buttonRef = createRef<HTMLButtonElement>()
   const { onOpen: openModal, onClose: closeModal, Modal } = useModal()
   const modalProps = {
     type: "default",
@@ -38,6 +39,12 @@ const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
     },
   }
 
+  useEffect(() => {
+    if (isDisabled === false) {
+      buttonRef.current?.focus()
+    }
+  }, [isDisabled, buttonRef])
+
   const handleFreezeClick = async () => {
     // Disabling button while request happens.
     setIsDisabled(true)
@@ -62,17 +69,20 @@ const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
       setIsDisabled(false)
     }
   }
+  const buttonLabel = frozen ? "Unfreeze" : "Freeze"
 
   return (
     <>
       <Button
-        width="100%"
+        aria-label={`${buttonLabel} ${hold.title}`}
         buttonType="secondary"
         id={`freeze-${hold.id}`}
         onClick={handleFreezeClick}
         isDisabled={isDisabled}
+        width="100%"
+        ref={buttonRef}
       >
-        {frozen ? "Unfreeze" : "Freeze"}
+        {buttonLabel}
       </Button>
       <Modal {...modalProps} />
     </>
