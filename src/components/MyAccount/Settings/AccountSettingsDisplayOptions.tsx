@@ -93,13 +93,24 @@ export const AccountSettingsForm = ({ patron }: { patron: Patron }) => {
         }
         case "Phone":
           inputField = (
-            <TextInput
-              name={setting.field}
-              defaultValue={patron.phones[0]?.number}
-              id="phone-text-input"
-              labelText="Update phone number"
-              showLabel={false}
-            />
+            <>
+              <TextInput
+                name={setting.field}
+                defaultValue={patron.phones[0]?.number}
+                id="phone-text-input"
+                labelText="Primary phone number"
+                showLabel={true}
+                isRequired
+                showRequiredLabel={false}
+              />
+              <TextInput
+                name={setting.field}
+                defaultValue={patron.phones[1]?.number}
+                id="home-phone-text-input"
+                labelText="Home phone number"
+                showLabel={true}
+              />
+            </>
           )
           break
         case "Email":

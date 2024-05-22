@@ -13,12 +13,9 @@ import {
   AccountSettingsForm,
   AccountSettingsDisplay,
 } from "./AccountSettingsDisplayOptions"
-import {
-  successModalProps,
-  failureModalProps,
-} from "./AccountSettingsFeedbackModalProps"
 import { parsePayload, updatePatronData } from "./AccountSettingsUtils"
-import PasswordModal from "./PasswordModal"
+import { Box, Icon, Heading, Text } from "@nypl/design-system-react-components"
+import Link from "next/link"
 
 const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
   const [currentlyEditing, setCurrentlyEditing] = useState(false)
@@ -30,11 +27,59 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
   ) : (
     <AccountSettingsDisplay patron={mostRecentPatronData} />
   )
-  const { onOpen: openModal, Modal } = useModal()
+  const { onOpen: openModal, onClose: closeModal, Modal } = useModal()
+
+  const successModalProps = {
+    type: "default",
+    bodyContent: (
+      <Box className={styles.modalBody}>
+        <Text sx={{ marginLeft: "l" }}>
+          Your account settings were successfully updated.
+        </Text>
+      </Box>
+    ),
+    closeButtonLabel: "OK",
+    headingText: (
+      <Box className={styles.modalHeading}>
+        <Icon
+          size="large"
+          name="actionCheckCircleFilled"
+          color="ui.success.primary"
+        />
+        <Text sx={{ marginBottom: 0 }}> Update successful </Text>
+      </Box>
+    ),
+    onClose: closeModal,
+  }
+  const failureModalProps = {
+    type: "default",
+    bodyContent: (
+      <Box className={styles.modalBody}>
+        <Text sx={{ marginLeft: "l", marginRight: "m" }}>
+          We were unable to update your account settings. Please try again or{" "}
+          <Link href="https://www.nypl.org/get-help/contact-us">
+            contact us
+          </Link>{" "}
+          for assistance.
+        </Text>
+      </Box>
+    ),
+    closeButtonLabel: "OK",
+    headingText: (
+      <Heading className={styles.modalHeading}>
+        <>
+          <Icon size="large" name="errorFilled" color="ui.error.primary" />
+          <Text sx={{ marginBottom: 0 }}> Update failed </Text>
+        </>
+      </Heading>
+    ),
+    onClose: closeModal,
+  }
 
   const submitAccountSettings = async (e) => {
     e.preventDefault()
     setIsLoading(true)
+    console.log(e.target)
     const payload = parsePayload(e.target, mostRecentPatronData)
     const response = await fetch(
       `/research/research-catalog/api/account/settings/${mostRecentPatronData.id}`,
@@ -79,6 +124,7 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
         <AccountSettingsButtons
           currentlyEditing={currentlyEditing}
           setCurrentlyEditing={setCurrentlyEditing}
+          formValid={false}
         />
       </Form>
     </>

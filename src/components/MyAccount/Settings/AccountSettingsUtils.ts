@@ -58,13 +58,39 @@ export const updateArrayValue = (
   return [newPrimary, ...removedNewPrimaryIfPresent]
 }
 
+export const updatePhonesArray = (newValues, currentValues: Phone[]) => {
+  newValues = [
+    { number: newValues[0], type: "t" },
+    { number: newValues[1], type: "t" },
+  ]
+  let newPrimary = currentValues[0]
+  let newSecondary = currentValues[1]
+
+  if (newValues[0]?.number !== currentValues[0]?.number) {
+    newPrimary = newValues[0]
+  }
+  if (newValues[1]?.number !== currentValues[1]?.number) {
+    newSecondary = newValues[1]
+  }
+
+  return [newPrimary, newSecondary, ...currentValues]
+}
+
 /** Parses the account settings form submission event target and turns it into
  * the payload for the patron settings update request.
  */
+
 export const parsePayload = (formSubmissionBody, settingsData: Patron) => {
+  console.log(formSubmissionBody)
   return accountSettings.reduce((putRequestPayload, setting) => {
     const field = setting.field
-    const fieldValue = formSubmissionBody[field]?.value
+    const fieldValue =
+      field === "phones"
+        ? [
+            formSubmissionBody[field][0]?.value,
+            formSubmissionBody[field][1]?.value,
+          ]
+        : formSubmissionBody[field]?.value
     if (!fieldValue) {
       return putRequestPayload
     }
@@ -78,11 +104,9 @@ export const parsePayload = (formSubmissionBody, settingsData: Patron) => {
           settingsData.emails
         ) as string[]
         break
-      // TODO: right now we are assuming that all phones are mobile phones.
-      // follow on ticket outlines two different inputs
       case "phones":
-        putRequestPayload["phones"] = updateArrayValue(
-          { number: fieldValue, type: "t" },
+        putRequestPayload["phones"] = updatePhonesArray(
+          fieldValue,
           settingsData.phones
         ) as Phone[]
         break
@@ -97,6 +121,7 @@ export const parsePayload = (formSubmissionBody, settingsData: Patron) => {
       case "homeLibraryCode":
         putRequestPayload.homeLibraryCode = fieldValue
     }
+    console.log(putRequestPayload)
     return putRequestPayload
   }, {} as SierraPatron)
 }
