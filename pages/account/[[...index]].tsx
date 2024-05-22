@@ -62,22 +62,6 @@ export default function MyAccount({
               fines={fines}
               activePath={tabsPath}
             />
-            {/** Testing settings api route */}
-            {/* <Button
-              id="settings-test"
-              onClick={() => settingsUpdate(patron.id)}
-            >
-              Update settings
-            </Button> */}
-            {/** Testing pin update api route */}
-            {/* <Button
-              id="pin-update"
-              onClick={() =>
-                pinUpdate(patron.id, patron.barcode, "7890", "7890")
-              }
-            >
-              Update pin
-            </Button> */}
           </>
         )}
       </Layout>
@@ -108,43 +92,39 @@ export async function getServerSideProps({ req }) {
       id,
       client
     )
-
-    // Immediately returning base path.
-    if (!tabsPath) {
-      return {
-        props: { checkouts, holds, patron, fines, tabsPath, isAuthenticated },
-      }
-    }
-
     /*  Redirecting invalid paths (including /overdues if user has none) and
     // cleaning extra parts off valid paths. */
-    const allowedPaths = ["items", "requests", "overdues", "settings"]
-    if (
-      !allowedPaths.some((path) => tabsPath.startsWith(path)) ||
-      (tabsPath === "overdues" && fines.total === 0)
-    ) {
-      return {
-        redirect: {
-          destination: "/account",
-          permanent: false,
-        },
-      }
-    } else {
-      const matchedPath = allowedPaths.find((path) => tabsPath.startsWith(path))
-      if (tabsPath != matchedPath)
+    if (tabsPath) {
+      const allowedPaths = ["items", "requests", "overdues", "settings"]
+      if (
+        !allowedPaths.some((path) => tabsPath.startsWith(path)) ||
+        (tabsPath === "overdues" && fines.total === 0)
+      ) {
         return {
           redirect: {
-            destination: "/account/" + matchedPath,
+            destination: "/account",
             permanent: false,
           },
         }
+      } else {
+        const matchedPath = allowedPaths.find((path) =>
+          tabsPath.startsWith(path)
+        )
+        if (tabsPath != matchedPath) {
+          return {
+            redirect: {
+              destination: "/account/" + matchedPath,
+              permanent: false,
+            },
+          }
+        }
+      }
     }
-
     return {
       props: { checkouts, holds, patron, fines, tabsPath, isAuthenticated },
     }
   } catch (e) {
-    logger.error(e.message)
+    console.log(e.message)
     return {
       props: {
         tabsPath,
