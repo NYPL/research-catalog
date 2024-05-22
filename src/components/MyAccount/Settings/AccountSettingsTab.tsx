@@ -22,11 +22,7 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
   const [mostRecentPatronData, setMostRecentPatronData] = useState(settingsData)
   const [modalProps, setModalProps] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
-  const listElements = currentlyEditing ? (
-    <AccountSettingsForm patron={mostRecentPatronData} />
-  ) : (
-    <AccountSettingsDisplay patron={mostRecentPatronData} />
-  )
+
   const { onOpen: openModal, onClose: closeModal, Modal } = useModal()
 
   const successModalProps = {
@@ -76,6 +72,21 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
     onClose: closeModal,
   }
 
+  const [isFormValid, setIsFormValid] = useState(false)
+
+  const handleValidateForm = (isValid) => {
+    setIsFormValid(isValid)
+  }
+
+  const listElements = currentlyEditing ? (
+    <AccountSettingsForm
+      patron={mostRecentPatronData}
+      onValidateForm={handleValidateForm}
+    />
+  ) : (
+    <AccountSettingsDisplay patron={mostRecentPatronData} />
+  )
+
   const submitAccountSettings = async (e) => {
     e.preventDefault()
     setIsLoading(true)
@@ -124,7 +135,7 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
         <AccountSettingsButtons
           currentlyEditing={currentlyEditing}
           setCurrentlyEditing={setCurrentlyEditing}
-          formValid={false}
+          formValid={isFormValid}
         />
       </Form>
     </>

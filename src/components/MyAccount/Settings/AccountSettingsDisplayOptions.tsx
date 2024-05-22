@@ -10,6 +10,7 @@ import type { Patron } from "../../../types/myAccountTypes"
 import { accountSettings, getLibraryByCode } from "./AccountSettingsUtils"
 import { buildListElementsWithIcons } from "../IconListElement"
 import type { JSX, ReactNode } from "react"
+import { useState, useEffect, useCallback, createRef } from "react"
 import { filteredPickupLocations } from "../../../../__test__/fixtures/processedMyAccountData"
 import PasswordModal from "./PasswordModal"
 
@@ -29,7 +30,58 @@ export const AccountSettingsDisplay = ({ patron }: { patron: Patron }) => {
   return <>{terms.map(buildListElementsWithIcons)}</>
 }
 
-export const AccountSettingsForm = ({ patron }: { patron: Patron }) => {
+export const AccountSettingsForm = ({
+  patron,
+  onValidateForm,
+}: {
+  patron: Patron
+  onValidateForm: (any) => void
+}) => {
+  const [formData, setFormData] = useState({
+    primaryPhone: patron.phones[0]?.number,
+    secondaryPhone: patron.phones[1]?.number,
+    notificationPreference:
+      patron.notificationPreference === "Phone" ? "p" : "z",
+  })
+
+  const validateForm = useCallback(() => {
+    const regex = /^\d+$/
+    if (patron.notificationPreference == "Mobile") {
+      return formData.primaryPhone !== "" && regex.test(formData.primaryPhone)
+    } else if (patron.notificationPreference == "Phone") {
+      return (
+        (formData.primaryPhone !== "" && regex.test(formData.primaryPhone)) ||
+        (formData.secondaryPhone !== "" && regex.test(formData.secondaryPhone))
+      )
+    } else return true
+  }, [formData])
+
+  useEffect(() => {
+    onValidateForm(validateForm())
+  }, [formData, validateForm, onValidateForm])
+
+  const handleInputChange = (e) => {
+    const { id, value } = e.target
+    let updatedFormData = { ...formData }
+    if (id === "phone-text-input") {
+      updatedFormData = {
+        ...updatedFormData,
+        primaryPhone: value,
+      }
+    } else if (id === "secondary-phone-text-input") {
+      updatedFormData = {
+        ...updatedFormData,
+        secondaryPhone: value,
+      }
+    } else if (id === "notification-preference-selector") {
+      updatedFormData = {
+        ...updatedFormData,
+        notificationPreference: value,
+      }
+    }
+    setFormData(updatedFormData)
+  }
+
   const formInputs = accountSettings
     .map((setting) => {
       let inputField:
@@ -81,6 +133,7 @@ export const AccountSettingsForm = ({ patron }: { patron: Patron }) => {
               id="notification-preference-selector"
               labelText="Update notification preference"
               showLabel={false}
+              onChange={handleInputChange}
             >
               {sortedNotPrefs.map((pref) => (
                 <option key={pref + "-option"} value={pref[0]}>
@@ -98,16 +151,18 @@ export const AccountSettingsForm = ({ patron }: { patron: Patron }) => {
                 name={setting.field}
                 defaultValue={patron.phones[0]?.number}
                 id="phone-text-input"
-                labelText="Primary phone number"
+                labelText="Mobile phone"
                 showLabel={true}
+                onChange={handleInputChange}
                 isRequired
                 showRequiredLabel={false}
               />
               <TextInput
                 name={setting.field}
                 defaultValue={patron.phones[1]?.number}
-                id="home-phone-text-input"
-                labelText="Home phone number"
+                id="secondary-phone-text-input"
+                labelText="Home phone"
+                onChange={handleInputChange}
                 showLabel={true}
               />
             </>
