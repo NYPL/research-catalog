@@ -229,7 +229,7 @@ describe("MyAccountModel", () => {
       const account = await MyAccountFactory("12345", {})
       expect(account.patron).toStrictEqual({
         notificationPreference: "Email",
-        name: "NONNA, STREGA",
+        name: "Strega Nonna",
         barcode: "23333121538324",
         formattedBarcode: "2 3333 12153 8324",
         expirationDate: "March 27, 2025",
@@ -334,7 +334,7 @@ describe("MyAccountModel", () => {
       const emptyAccount = await MyAccountFactory("12345", {})
       expect(emptyAccount.patron).toStrictEqual({
         notificationPreference: "Email",
-        name: "NONNA, STREGA",
+        name: "Strega Nonna",
         barcode: "23333121538324",
         formattedBarcode: "2 3333 12153 8324",
         expirationDate: "March 27, 2025",
@@ -364,7 +364,7 @@ describe("MyAccountModel", () => {
       expect(patronWithFails.holds).toBeNull()
       expect(patronWithFails.checkouts).not.toHaveLength(0)
       expect(patronWithFails.fines.total).toEqual(0)
-      expect(patronWithFails.patron.name).toEqual("NONNA, STREGA")
+      expect(patronWithFails.patron.name).toEqual("Strega Nonna")
     })
     it("will return other processed data if an error is thrown", async () => {
       MyAccount.prototype.fetchCheckouts = async () =>
@@ -382,7 +382,7 @@ describe("MyAccountModel", () => {
       expect(patronWithFails.checkouts).toBe(null)
       expect(patronWithFails.holds).not.toHaveLength(0)
       expect(patronWithFails.fines.total).toEqual(0)
-      expect(patronWithFails.patron.name).toEqual("NONNA, STREGA")
+      expect(patronWithFails.patron.name).toEqual("Strega Nonna")
     })
   })
 })
