@@ -1,4 +1,3 @@
-import { useState } from "react"
 import {
   useModal,
   Box,
@@ -8,6 +7,8 @@ import {
   List,
   Button,
 } from "@nypl/design-system-react-components"
+import { useState } from "react"
+
 import styles from "../../../../styles/components/MyAccount.module.scss"
 import PasswordChangeForm from "./PasswordChangeForm"
 import type { Patron } from "../../../types/myAccountTypes"
@@ -72,7 +73,9 @@ const PasswordModal = ({ patron }: { patron: Patron }) => {
     type: "default",
     bodyContent: (
       <Box className={styles.modalBody}>
-        <Text sx={{ marginLeft: "l" }}>Your PIN/PASSWORD was changed.</Text>
+        <Text sx={{ marginLeft: "l" }}>
+          Your PIN/PASSWORD has been changed.
+        </Text>
       </Box>
     ),
     closeButtonLabel: "OK",

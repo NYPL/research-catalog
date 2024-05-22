@@ -231,7 +231,8 @@ describe("MyAccountModel", () => {
         notificationPreference: "Email",
         name: "NONNA, STREGA",
         barcode: "23333121538324",
-        expirationDate: "2025-03-28",
+        formattedBarcode: "2 3333 12153 8324",
+        expirationDate: "March 27, 2025",
         emails: ["streganonna@gmail.com", "spaghettigrandma@gmail.com"],
         phones: [
           {
@@ -335,7 +336,8 @@ describe("MyAccountModel", () => {
         notificationPreference: "Email",
         name: "NONNA, STREGA",
         barcode: "23333121538324",
-        expirationDate: "2025-03-28",
+        formattedBarcode: "2 3333 12153 8324",
+        expirationDate: "March 27, 2025",
         emails: [],
         phones: [],
         homeLibrary: {

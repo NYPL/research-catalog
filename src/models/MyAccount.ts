@@ -249,9 +249,13 @@ export default class MyAccount {
         notificationPreferenceMap[patron.fixedFields["268"].value]
       return {
         notificationPreference,
-        name: patron.names[0],
+        name: MyAccount.formatPatronName(patron.names[0]),
         barcode: patron.barcodes[0],
-        expirationDate: patron.expirationDate,
+        formattedBarcode: patron.barcodes[0].replace(
+          /(\d{1})(\d{4})(\d{5})(\d{4})/,
+          "$1 $2 $3 $4"
+        ),
+        expirationDate: MyAccount.formatDate(patron.expirationDate),
         emails: patron.emails || [],
         phones: patron.phones || [],
         homeLibrary: patron.homeLibrary || null,
@@ -283,6 +287,20 @@ export default class MyAccount {
       throw new MyAccountModelError("building fines", e)
     }
   }
+
+  /**
+   * Formats the patron's name per NYPL guidelines.
+   */
+  static formatPatronName(name: string) {
+    const [lastName, firstName] = name.split(",")
+    // The name from Sierra is in all caps, so we need to lowercase
+    // all but the first letter.
+    function capitalize(name: string) {
+      return `${name.charAt(0)}${name.slice(1).toLowerCase()}`
+    }
+    return `${capitalize(firstName.trim())} ${capitalize(lastName.trim())}`
+  }
+
   /**
    * getDueDate
    * Returns date in readable string ("Month day, year")

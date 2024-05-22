@@ -1,15 +1,13 @@
-import Head from "next/head"
 import { Text } from "@nypl/design-system-react-components"
+import Head from "next/head"
+
 import Layout from "../../src/components/Layout/Layout"
 import initializePatronTokenAuth, {
   getLoginRedirect,
 } from "../../src/server/auth"
 import { MyAccountFactory } from "../../src/models/MyAccount"
-import type MyAccountModel from "../../src/models/MyAccount"
 import ProfileTabs from "../../src/components/MyAccount/ProfileTabs"
 import ProfileHeader from "../../src/components/MyAccount/ProfileHeader"
-import { BASE_URL, PATHS } from "../../src/config/constants"
-
 import FeesBanner from "../../src/components/MyAccount/FeesBanner"
 import sierraClient from "../../src/server/sierraClient"
 import type {
@@ -18,7 +16,6 @@ import type {
   Checkout,
   Fine,
 } from "../../src/types/myAccountTypes"
-import logger from "../../logger"
 
 interface MyAccountPropsType {
   patron?: Patron
