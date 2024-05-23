@@ -64,33 +64,34 @@ export const AccountSettingsForm = ({ patron }: { patron: Patron }) => {
             )
           }
           break
-        case "Notification preference": {
-          const patronNotPref =
-            notificationPreferenceTuples.find(
-              (pref) => pref[1] === patron.notificationPreference
-            ) || notificationPreferenceTuples[0]
-          const sortedNotPrefs = [
-            patronNotPref,
-            ...notificationPreferenceTuples.filter(
-              (pref) => pref[1] !== patronNotPref[1]
-            ),
-          ]
-          inputField = (
-            <Select
-              name={setting.field}
-              id="notification-preference-selector"
-              labelText="Update notification preference"
-              showLabel={false}
-            >
-              {sortedNotPrefs.map((pref) => (
-                <option key={pref + "-option"} value={pref[0]}>
-                  {pref[1]}
-                </option>
-              ))}
-            </Select>
-          )
+        case "Notification preference":
+          {
+            const patronNotPref =
+              notificationPreferenceTuples.find(
+                (pref) => pref[1] === patron.notificationPreference
+              ) || notificationPreferenceTuples[0]
+            const sortedNotPrefs = [
+              patronNotPref,
+              ...notificationPreferenceTuples.filter(
+                (pref) => pref[1] !== patronNotPref[1]
+              ),
+            ]
+            inputField = (
+              <Select
+                name={setting.field}
+                id="notification-preference-selector"
+                labelText="Update notification preference"
+                showLabel={false}
+              >
+                {sortedNotPrefs.map((pref) => (
+                  <option key={pref + "-option"} value={pref[0]}>
+                    {pref[1]}
+                  </option>
+                ))}
+              </Select>
+            )
+          }
           break
-        }
         case "Phone":
           inputField = (
             <TextInput
