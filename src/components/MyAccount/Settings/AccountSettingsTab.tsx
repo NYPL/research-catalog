@@ -18,7 +18,7 @@ import {
   failureModalProps,
 } from "./AccountSettingsFeedbackModalProps"
 import {
-  parsePayload,
+  parseAccountSettingsPayload,
   buildUpdatedPatronDisplayData,
 } from "./AccountSettingsUtils"
 
@@ -37,7 +37,7 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
   const submitAccountSettings = async (e) => {
     e.preventDefault()
     setIsLoading(true)
-    const payload = parsePayload(e.target, mostRecentPatronData)
+    const payload = parseAccountSettingsPayload(e.target, mostRecentPatronData)
     const response = await fetch(
       `/research/research-catalog/api/account/settings/${mostRecentPatronData.id}`,
       {
