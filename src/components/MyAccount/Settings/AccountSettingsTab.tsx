@@ -18,7 +18,6 @@ import {
   failureModalProps,
 } from "./AccountSettingsFeedbackModalProps"
 import { parsePayload, updatePatronData } from "./AccountSettingsUtils"
-import PasswordModal from "./PasswordModal"
 
 const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
   const [currentlyEditing, setCurrentlyEditing] = useState(false)
