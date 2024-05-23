@@ -39,18 +39,17 @@ export const AccountSettingsForm = ({
 }) => {
   const [formData, setFormData] = useState({
     primaryPhone: patron.phones[0]?.number,
-    secondaryPhone: patron.phones[1]?.number,
+    email: patron.emails[0],
   })
 
   const validateForm = useCallback(() => {
-    const regex = /^\d+$/
-    if (patron.notificationPreference == "Mobile") {
-      return formData.primaryPhone !== "" && regex.test(formData.primaryPhone)
-    } else if (patron.notificationPreference == "Phone") {
+    const phoneRegex = /^\d+$/
+    if (patron.notificationPreference == "Phone") {
       return (
-        (formData.primaryPhone !== "" && regex.test(formData.primaryPhone)) ||
-        (formData.secondaryPhone !== "" && regex.test(formData.secondaryPhone))
+        formData.primaryPhone !== "" && phoneRegex.test(formData.primaryPhone)
       )
+    } else if (patron.notificationPreference == "Email") {
+      return formData.email !== ""
     } else return true
   }, [formData])
 
@@ -66,10 +65,10 @@ export const AccountSettingsForm = ({
         ...updatedFormData,
         primaryPhone: value,
       }
-    } else if (id === "secondary-phone-text-input") {
+    } else if (id === "email-text-input") {
       updatedFormData = {
         ...updatedFormData,
-        secondaryPhone: value,
+        email: value,
       }
     }
     setFormData(updatedFormData)
@@ -138,24 +137,14 @@ export const AccountSettingsForm = ({
         }
         case "Phone":
           inputField = (
-            <>
-              <TextInput
-                name={setting.field}
-                defaultValue={patron.phones[0]?.number}
-                id="phone-text-input"
-                labelText="Primary phone"
-                showLabel={true}
-                onChange={handleInputChange}
-              />
-              <TextInput
-                name={setting.field}
-                defaultValue={patron.phones[1]?.number}
-                id="secondary-phone-text-input"
-                labelText="Secondary phone"
-                onChange={handleInputChange}
-                showLabel={true}
-              />
-            </>
+            <TextInput
+              name={setting.field}
+              defaultValue={patron.phones[0]?.number}
+              id="phone-text-input"
+              labelText="Update phone number"
+              showLabel={false}
+              onChange={handleInputChange}
+            />
           )
           break
         case "Email":
@@ -166,6 +155,7 @@ export const AccountSettingsForm = ({
               id="email-text-input"
               labelText="Update email"
               showLabel={false}
+              onChange={handleInputChange}
             />
           )
           break

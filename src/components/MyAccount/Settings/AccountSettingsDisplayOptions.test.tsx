@@ -8,7 +8,7 @@ import {
 } from "../../../../__test__/fixtures/processedMyAccountData"
 import { render, screen } from "../../../utils/testUtils"
 
-describe.skip("AccountSettingsDisplayOptions", () => {
+describe("AccountSettingsDisplayOptions", () => {
   describe("Display normal patron", () => {
     beforeEach(() => {
       render(
@@ -48,7 +48,7 @@ describe.skip("AccountSettingsDisplayOptions", () => {
       )
       missingFields.forEach((field) => expect(field).not.toBeInTheDocument())
     })
-    it("displays empty email, phone, or notification preference if not specified", () => {
+    it("displays empty email, phone, or notification preference in edit mode if not specified", () => {
       render(
         <AccountSettingsForm
           patron={emptyPatron}

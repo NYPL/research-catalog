@@ -71,6 +71,8 @@ describe("PasswordModal", () => {
     const button = getByText("Change pin/password")
     fireEvent.click(button)
 
+    const submitButton = getAllByText("Change PIN/PASSWORD")[1]
+
     const newPasswordField = getByLabelText("Enter new PIN/PASSWORD")
     const confirmPasswordField = getByLabelText("Re-enter new PIN/PASSWORD")
 
@@ -79,7 +81,6 @@ describe("PasswordModal", () => {
       target: { value: "wrongPassword" },
     })
 
-    const submitButton = getAllByText("Change PIN/PASSWORD")[1]
     expect(submitButton).toBeDisabled()
   })
 
