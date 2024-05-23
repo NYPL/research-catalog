@@ -321,12 +321,12 @@ export const notificationPreferenceMap = {
   m: "Mobile",
 }
 
-export const notificationPreferenceTuples = [
-  ["z", "Email"],
-  ["p", "Phone"],
-  ["m", "Mobile"],
-]
-
+export const notificationPreferenceTuples = Object.keys(
+  notificationPreferenceMap
+).reduce((tuples, key) => {
+  tuples.push([key, notificationPreferenceMap[key]])
+  return tuples
+}, [])
 // this method has to live here so it can be imported into the front end without
 // importing the MyAccount files.
 export const buildPatron = (patron: SierraPatron): Patron => {
