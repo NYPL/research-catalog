@@ -1,12 +1,12 @@
 import {
   parsePayload,
   updateArrayValue,
-  updatePatronData,
+  buildUpdatedPatronDisplayData,
 } from "./AccountSettingsUtils"
 import { mockPatron } from "../../../../__test__/fixtures/processedMyAccountData"
 
 describe("Account settings utils", () => {
-  describe("updatePatronData", () => {
+  describe("buildUpdatedPatronDisplayData", () => {
     it("can handle an empty patron", () => {
       const originalPatronData = {
         barcode: "23333121538324",
@@ -20,7 +20,7 @@ describe("Account settings utils", () => {
       }
       const patronUpdateBody = {}
       expect(
-        updatePatronData(originalPatronData, patronUpdateBody)
+        buildUpdatedPatronDisplayData(originalPatronData, patronUpdateBody)
       ).toStrictEqual(originalPatronData)
     })
     it("can combine patron data and update body with all fields provided", () => {
@@ -44,7 +44,7 @@ describe("Account settings utils", () => {
         ],
       }
       const { id, emails, phones, homeLibraryCode, notificationPreference } =
-        updatePatronData(originalPatronData, patronUpdateBody)
+        buildUpdatedPatronDisplayData(originalPatronData, patronUpdateBody)
       expect(emails).toStrictEqual([
         "veraruthkahn@gmail.com",
         "veggievera@gmail.com",
@@ -73,7 +73,7 @@ describe("Account settings utils", () => {
         homeLibraryCode: "mp   ",
       }
       const { id, emails, phones, homeLibraryCode, notificationPreference } =
-        updatePatronData(originalPatronData, patronUpdateBody)
+        buildUpdatedPatronDisplayData(originalPatronData, patronUpdateBody)
       expect(emails).toStrictEqual(originalPatronData.emails)
       expect(phones).toStrictEqual(originalPatronData.phones)
       expect(homeLibraryCode).toEqual("mp   ")
@@ -87,7 +87,6 @@ describe("Account settings utils", () => {
         emails: { value: "" },
         phones: { value: "" },
       }
-      // The payload won't actual
       expect(parsePayload(eventTarget, mockPatron)).toStrictEqual({})
     })
     it("submits inputs with values", () => {

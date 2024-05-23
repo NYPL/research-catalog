@@ -17,7 +17,10 @@ import {
   successModalProps,
   failureModalProps,
 } from "./AccountSettingsFeedbackModalProps"
-import { parsePayload, updatePatronData } from "./AccountSettingsUtils"
+import {
+  parsePayload,
+  buildUpdatedPatronDisplayData,
+} from "./AccountSettingsUtils"
 
 const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
   const [currentlyEditing, setCurrentlyEditing] = useState(false)
@@ -46,7 +49,9 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
       }
     )
     if (response.status === 200) {
-      setMostRecentPatronData((prevData) => updatePatronData(prevData, payload))
+      setMostRecentPatronData((prevData) =>
+        buildUpdatedPatronDisplayData(prevData, payload)
+      )
       setCurrentlyEditing(false)
       setModalProps(successModalProps)
       openModal()
