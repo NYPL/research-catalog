@@ -116,7 +116,7 @@ export const AccountSettingsForm = ({ patron }: { patron: Patron }) => {
           break
         case "Pin/Password":
           inputField = (
-            <Box sx={{}}>
+            <Box>
               <Text>****</Text>
               <PasswordModal patron={patron} />
             </Box>
