@@ -10,7 +10,7 @@ import type { Patron } from "../../../types/myAccountTypes"
 import { accountSettings, getLibraryByCode } from "./AccountSettingsUtils"
 import { buildListElementsWithIcons } from "../IconListElement"
 import type { JSX, ReactNode } from "react"
-import { filteredPickupLocations } from "../../../../__test__/fixtures/processedMyAccountData"
+import { filteredPickupLocations } from "../../../utils/myAccountUtils"
 import PasswordModal from "./PasswordModal"
 
 export const AccountSettingsDisplay = ({ patron }: { patron: Patron }) => {

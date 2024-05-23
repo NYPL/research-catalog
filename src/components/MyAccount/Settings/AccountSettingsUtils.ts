@@ -2,7 +2,7 @@ import type { IconNames } from "@nypl/design-system-react-components"
 import type { Patron, SierraPatron } from "../../../types/myAccountTypes"
 
 import { buildPatron } from "../../../utils/myAccountUtils"
-import { filteredPickupLocations } from "../../../../__test__/fixtures/processedMyAccountData"
+import { filteredPickupLocations } from "../../../utils/myAccountUtils"
 
 type Phone = { number: string; type: string }
 type PhoneOrEmail = string | Phone
