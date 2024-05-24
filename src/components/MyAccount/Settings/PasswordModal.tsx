@@ -126,11 +126,12 @@ const PasswordModal = ({ patron }: { patron: Patron }) => {
   return (
     <>
       <Button
-        id="button"
+        size="large"
+        id="pin-modal-button"
         buttonType="text"
         onClick={openModal}
-        sx={{ textDecoration: "underline", margin: "xs" }}
       >
+        <Icon name="editorMode" align="left" size="small" />
         Change pin/password
       </Button>
       <Modal {...modalProps} />
