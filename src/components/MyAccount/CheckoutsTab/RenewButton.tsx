@@ -25,6 +25,7 @@ const RenewButton = ({
   const [modalProps, setModalProps] = useState(null)
 
   const successModalProps = {
+    type: "default",
     bodyContent: (
       <Box className={styles.modalBody}>
         <Text sx={{ marginLeft: "l" }}>
@@ -45,6 +46,7 @@ const RenewButton = ({
     ),
   }
   const failureModalProps = {
+    type: "default",
     bodyContent: (
       <Box className={styles.modalBody}>
         <Text sx={{ marginLeft: "l", marginRight: "m" }}>

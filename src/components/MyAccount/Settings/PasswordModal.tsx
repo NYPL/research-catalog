@@ -16,6 +16,7 @@ const PasswordModal = ({ patron }: { patron: Patron }) => {
   const { onOpen: openModal, onClose: closeModal, Modal } = useModal()
 
   const entryModalProps = {
+    type: "default",
     bodyContent: (
       <Box className={styles.modalBody}>
         <Text sx={{ fontWeight: "medium", paddingBottom: 0 }}>
@@ -68,6 +69,7 @@ const PasswordModal = ({ patron }: { patron: Patron }) => {
   }
 
   const successModalProps = {
+    type: "default",
     bodyContent: (
       <Box className={styles.modalBody}>
         <Text sx={{ marginLeft: "l" }}>Your PIN/PASSWORD was changed.</Text>
@@ -95,6 +97,7 @@ const PasswordModal = ({ patron }: { patron: Patron }) => {
   }
 
   const failureModalProps = (errorMessage) => ({
+    type: "default",
     bodyContent: (
       <Box className={styles.modalBody}>
         <Text sx={{ marginLeft: "l", marginRight: "m" }}>
