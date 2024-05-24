@@ -82,14 +82,10 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
 
   const [isFormValid, setIsFormValid] = useState(false)
 
-  const handleValidateForm = (isValid) => {
-    setIsFormValid(isValid)
-  }
-
   const listElements = currentlyEditing ? (
     <AccountSettingsForm
       patron={mostRecentPatronData}
-      onValidateForm={handleValidateForm}
+      setIsFormValid={setIsFormValid}
     />
   ) : (
     <AccountSettingsDisplay patron={mostRecentPatronData} />

@@ -9,7 +9,7 @@ import { notificationPreferenceTuples } from "../../../utils/myAccountUtils"
 import type { Patron } from "../../../types/myAccountTypes"
 import { accountSettings, getLibraryByCode } from "./AccountSettingsUtils"
 import { buildListElementsWithIcons } from "../IconListElement"
-import type { JSX, ReactNode } from "react"
+import type { Dispatch, JSX, ReactNode } from "react"
 import { useState, useEffect, useCallback } from "react"
 import { filteredPickupLocations } from "../../../utils/myAccountUtils"
 import PasswordModal from "./PasswordModal"
@@ -32,17 +32,17 @@ export const AccountSettingsDisplay = ({ patron }: { patron: Patron }) => {
 
 export const AccountSettingsForm = ({
   patron,
-  onValidateForm,
+  setIsFormValid,
 }: {
   patron: Patron
-  onValidateForm: (any) => void
+  setIsFormValid: Dispatch<React.SetStateAction<boolean>>
 }) => {
   const [formData, setFormData] = useState({
     primaryPhone: patron.phones[0]?.number,
     email: patron.emails[0],
   })
 
-  const validateForm = useCallback(() => {
+  const isFormValid = useCallback(() => {
     const phoneRegex = /^\d+$/
     if (patron.notificationPreference == "Phone") {
       return (
@@ -54,8 +54,8 @@ export const AccountSettingsForm = ({
   }, [formData])
 
   useEffect(() => {
-    onValidateForm(validateForm())
-  }, [formData, validateForm, onValidateForm])
+    setIsFormValid(isFormValid())
+  }, [formData, isFormValid, setIsFormValid])
 
   const handleInputChange = (e) => {
     const { id, value } = e.target
