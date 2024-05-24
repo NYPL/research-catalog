@@ -31,7 +31,7 @@ describe("RequestsTab", () => {
         removeHold={mockRemoveHold}
       />
     )
-    expect(component.getByText("Quit like a woman", { exact: false }))
+    expect(component.getByText("I want to be spaghetti!", { exact: false }))
   })
 
   it("renders each hold request as a row", () => {
@@ -56,7 +56,7 @@ describe("RequestsTab", () => {
     )
 
     await userEvent.click(component.getAllByText("Cancel request")[0])
-    await userEvent.click(component.getAllByText("Yes, cancel")[0])
+    await userEvent.click(component.getAllByText("Yes, cancel request")[0])
 
     expect(fetch).toHaveBeenCalledWith(
       `/research/research-catalog/api/account/holds/cancel/${mockHolds[0].id}`,
@@ -84,7 +84,7 @@ describe("RequestsTab", () => {
     expect(within(bodyRows).getAllByRole("row").length).toBe(5)
 
     await userEvent.click(component.getAllByText("Cancel request")[0])
-    await userEvent.click(component.getAllByText("Yes, cancel")[0])
+    await userEvent.click(component.getAllByText("Yes, cancel request")[0])
 
     expect(fetch).toHaveBeenCalledWith(
       `/research/research-catalog/api/account/holds/cancel/${mockHolds[0].id}`,
@@ -119,7 +119,7 @@ describe("RequestsTab", () => {
     let bodyRows = component.getAllByRole("rowgroup")[1]
     expect(within(bodyRows).getAllByRole("row").length).toBe(5)
     await userEvent.click(component.getAllByText("Cancel request")[0])
-    await userEvent.click(component.getAllByText("Yes, cancel")[0])
+    await userEvent.click(component.getAllByText("Yes, cancel request")[0])
 
     expect(fetch).toHaveBeenCalledWith(
       `/research/research-catalog/api/account/holds/cancel/${mockHolds[0].id}`,
