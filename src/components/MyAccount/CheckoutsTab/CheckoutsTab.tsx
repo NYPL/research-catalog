@@ -1,5 +1,4 @@
 import { Text } from "@nypl/design-system-react-components"
-
 import ExternalLink from "../../Links/ExternalLink/ExternalLink"
 import type { Checkout, Patron } from "../../../types/myAccountTypes"
 import RenewButton from "./RenewButton"

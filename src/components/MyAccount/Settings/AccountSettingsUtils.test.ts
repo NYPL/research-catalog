@@ -3,7 +3,7 @@ import {
   updatePhoneOrEmailArrayWithNewPrimary,
   buildUpdatedPatronDisplayData,
 } from "./AccountSettingsUtils"
-import { mockPatron } from "../../../../__test__/fixtures/processedMyAccountData"
+import { processedPatron } from "../../../../__test__/fixtures/processedMyAccountData"
 
 describe("Account settings utils", () => {
   describe("buildUpdatedPatronDisplayData", () => {
@@ -88,7 +88,7 @@ describe("Account settings utils", () => {
         phones: { value: "" },
       }
       expect(
-        parseAccountSettingsPayload(eventTarget, mockPatron)
+        parseAccountSettingsPayload(eventTarget, processedPatron)
       ).toStrictEqual({})
     })
     it("submits inputs with values", () => {
@@ -99,14 +99,14 @@ describe("Account settings utils", () => {
         notificationPreference: { value: "z" },
       }
       expect(
-        parseAccountSettingsPayload(eventTarget, mockPatron).emails
+        parseAccountSettingsPayload(eventTarget, processedPatron).emails
       ).toStrictEqual([
         "fusili@gmail.com",
         "streganonna@gmail.com",
         "spaghettigrandma@gmail.com",
       ])
       expect(
-        parseAccountSettingsPayload(eventTarget, mockPatron).phones
+        parseAccountSettingsPayload(eventTarget, processedPatron).phones
       ).toStrictEqual([
         {
           number: "666",
@@ -118,10 +118,11 @@ describe("Account settings utils", () => {
         },
       ])
       expect(
-        parseAccountSettingsPayload(eventTarget, mockPatron).homeLibraryCode
+        parseAccountSettingsPayload(eventTarget, processedPatron)
+          .homeLibraryCode
       ).toBe("xx   ")
       expect(
-        parseAccountSettingsPayload(eventTarget, mockPatron).fixedFields
+        parseAccountSettingsPayload(eventTarget, processedPatron).fixedFields
       ).toStrictEqual({
         268: {
           label: "Notice Preference",

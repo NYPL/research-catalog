@@ -48,7 +48,6 @@ export default class MyAccount {
   async getCheckouts() {
     const checkouts = await this.fetchCheckouts()
     const checkoutBibData = await this.fetchBibData(checkouts.entries, "item")
-    console.log(checkoutBibData)
     const checkoutsWithBibData = this.buildCheckouts(
       checkouts.entries,
       checkoutBibData.entries
@@ -120,7 +119,6 @@ export default class MyAccount {
       `bibs?id=${itemLevelHoldsorCheckouts}&fields=default,varFields`
     )
     bibData.entries = bibData.entries.concat(bibLevelHolds)
-    console.log("bib level", bibLevelHolds)
     return bibData
   }
 
