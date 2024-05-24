@@ -7,6 +7,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+- Replaced all modals with new 'confirmation'/'default' variant (SCC-4110)
+
+### Updated
+
+## Hotfixes 2024-05-22
+
+- Fix bug caused by advanced search query parameters not clearing when search scope is set to anything other than "all"
+
+## [1.1.2] 2024-05-20
+
+### Fixed
+
+- Catching Platform API errors when it's down.
+
+### Hotfixes 2024-05-17
+
+- Hardcode notification banner content.
+- Temporarily remove log in/out links for My Account.
+
+## [1.1.1] 2024-05-15
+
+### Updated
+
+- Upgraded Next.js to 13.5.6 to address security vulnerability - SCC-4120
+
+### Fixed
+
+- Added status:o (Use in Library) to availability IDs list
+
+## [1.1.0] 2024-05-09
+
+- This version represents the first public release of the Search Results page, including various fixes for visual and accessibility issues found in VQA.
+
 ### Updated
 
 - Created update patron settings functionality via the Settings tab in My Account. Currently only supports phone, email, and notification preference updates. (SCC-3928)
@@ -14,6 +47,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Extracted SearchResultsSort into its own component to render it in a different location on mobile.
 - No longer hiding the Item Location in the ItemTable on mobile.
 - Updated to DS v3.1.1 (as part of SCC-4090)
+- Special handling for subjectLiteral applied filter in `addLabelPropAndParseFilters`
 
 ### Fixed
 

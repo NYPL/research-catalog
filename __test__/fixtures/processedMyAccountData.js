@@ -77,7 +77,7 @@ export const mockHolds = [
     status: "Requested item ready for pickup.",
     pickupLocation: { code: "sn", name: "SNFL (formerly Mid-Manhattan)" },
     title:
-      "Quit like a woman : the radical choice to not drink in a culture obsessed with alcohol",
+      "Changing this so tests pass : the radical choice to not drink in a culture obsessed with alcohol",
     isResearch: false,
     bibId: "22002761",
     isNyplOwned: true,
