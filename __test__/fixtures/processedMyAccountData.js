@@ -2,6 +2,7 @@ export const processedPatron = {
   notificationPreference: "Email",
   name: "Strega Nonna",
   barcode: "23333121538324",
+  formattedBarcode: "2 3333 12153 8324",
   expirationDate: "March 28, 2025",
   emails: ["streganonna@gmail.com", "spaghettigrandma@gmail.com"],
   phones: [
@@ -18,6 +19,7 @@ export const emptyPatron = {
   notificationPreference: "Email",
   name: "Strega Nonna",
   barcode: "23333121538324",
+  formattedBarcode: "2 3333 12153 8324",
   expirationDate: "March 28, 2025",
   emails: [],
   phones: [],

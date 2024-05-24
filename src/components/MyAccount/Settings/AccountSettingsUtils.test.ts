@@ -10,6 +10,7 @@ describe("Account settings utils", () => {
     it("can handle an empty patron", () => {
       const originalPatronData = {
         barcode: "23333121538324",
+        formattedBarcode: undefined,
         emails: ["veggievera@gmail.com"],
         expirationDate: "2025-03-28",
         homeLibraryCode: "sn",
