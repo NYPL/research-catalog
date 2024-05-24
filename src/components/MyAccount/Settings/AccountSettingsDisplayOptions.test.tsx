@@ -52,7 +52,7 @@ describe("AccountSettingsDisplayOptions", () => {
       render(
         <AccountSettingsForm
           patron={emptyPatron}
-          onValidateForm={() => {
+          setIsFormValid={() => {
             return true
           }}
         />
@@ -72,7 +72,7 @@ describe("AccountSettingsDisplayOptions", () => {
       render(
         <AccountSettingsForm
           patron={mockPatron}
-          onValidateForm={() => {
+          setIsFormValid={() => {
             return true
           }}
         />
