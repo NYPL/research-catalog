@@ -15,7 +15,8 @@ import type {
   SierraBibEntry,
   BibDataMapType,
 } from "../types/myAccountTypes"
-import { notificationPreferenceMap } from "../utils/myAccountData"
+
+import { buildPatron } from "../utils/myAccountUtils"
 
 class MyAccountModelError extends Error {
   constructor(errorDetail: string, error: Error) {
@@ -66,7 +67,7 @@ export default class MyAccount {
     try {
       holdBibData = await this.fetchBibData(holds.entries, "record")
     } catch (e) {
-      logger.error("MyAccount#fetchBibData error: " + e.message)
+      console.error("MyAccount#fetchBibData error: " + e.message)
     }
 
     const holdsWithBibData = this.buildHolds(holds.entries, holdBibData.entries)
@@ -76,7 +77,7 @@ export default class MyAccount {
 
   async fetchPatron() {
     return await this.client.get(
-      `${this.baseQuery}?fields=names,barcodes,expirationDate,homeLibrary,emails,phones,fixedFields`
+      `${this.baseQuery}?fields=names,barcodes,expirationDate,homeLibraryCode,emails,phones,fixedFields`
     )
   }
 
@@ -114,7 +115,6 @@ export default class MyAccount {
         bibLevelHolds.push(holdOrCheckout.record)
       }
     })
-
     const bibData = await this.client.get(
       `bibs?id=${itemLevelHoldsorCheckouts}&fields=default,varFields`
     )
@@ -166,7 +166,7 @@ export default class MyAccount {
     try {
       bibDataMap = MyAccount.buildBibData(bibData)
     } catch (e) {
-      logger.error(
+      console.error(
         "Error building bibData in MyAccount#buildHolds: " + e.message
       )
       throw new MyAccountModelError("building bibData for holds", e)
@@ -196,7 +196,9 @@ export default class MyAccount {
         }
       })
     } catch (e) {
-      logger.error("Error building holds in MyAccount#buildHolds: " + e.message)
+      console.error(
+        "Error building holds in MyAccount#buildHolds: " + e.message
+      )
       throw new MyAccountModelError("building holds", e)
     }
   }
@@ -209,7 +211,7 @@ export default class MyAccount {
     try {
       bibDataMap = MyAccount.buildBibData(bibData)
     } catch (e) {
-      logger.error(
+      console.error(
         "MyAccount#buildCheckouts: Error building bib data for checkouts: ",
         e.message
       )
@@ -245,18 +247,7 @@ export default class MyAccount {
 
   buildPatron(patron: SierraPatron): Patron {
     try {
-      const notificationPreference =
-        notificationPreferenceMap[patron.fixedFields["268"].value]
-      return {
-        notificationPreference,
-        name: patron.names[0],
-        barcode: patron.barcodes[0],
-        expirationDate: patron.expirationDate,
-        emails: patron.emails || [],
-        phones: patron.phones || [],
-        homeLibrary: patron.homeLibrary || null,
-        id: patron.id,
-      }
+      return buildPatron(patron)
     } catch (e) {
       throw new MyAccountModelError("building patron", e)
     }
