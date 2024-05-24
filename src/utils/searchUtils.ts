@@ -210,7 +210,14 @@ export function getSearchQuery({
   const contributorQuery = contributor ? `&contributor=${contributor}` : ""
   const titleQuery = title ? `&title=${title}` : ""
   const subjectQuery = subject ? `&subject=${subject}` : ""
-  const advancedQuery = `${contributorQuery}${titleQuery}${subjectQuery}`
+
+  // if a search_scope is "all", we want to clear the advanced search query params
+  // and default to the q param
+  const isAdvancedSearchOrAllFields = field.length && field === "all"
+
+  const advancedQuery = isAdvancedSearchOrAllFields
+    ? `${contributorQuery}${titleQuery}${subjectQuery}`
+    : ""
 
   const completeQuery = `${searchKeywordsQuery}${advancedQuery}${filterQuery}${sortQuery}${fieldQuery}${pageQuery}${identifierQuery}`
 

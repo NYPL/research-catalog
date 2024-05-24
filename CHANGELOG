@@ -11,6 +11,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 
+## Hotfixes 2024-05-22
+
+- Fix bug caused by advanced search query parameters not clearing when search scope is set to anything other than "all"
+
+## [1.1.2] 2024-05-20
+
+### Fixed
+
+- Catching Platform API errors when it's down.
+
+### Hotfixes 2024-05-17
+
+- Hardcode notification banner content.
+- Temporarily remove log in/out links for My Account.
+
 ## [1.1.1] 2024-05-15
 
 ### Updated

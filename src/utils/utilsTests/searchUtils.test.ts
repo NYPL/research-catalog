@@ -51,6 +51,53 @@ describe("searchUtils", () => {
         })
       ).toBe(true)
     })
+    it("includes advanced search query params when field is set to 'all'", () => {
+      const testQuery =
+        "?q=shel%20silverstein&contributor=shel silverstein&title=the giving tree&subject=books"
+      expect(
+        checkQueryParamsEquality(testQuery, {
+          q: "shel silverstein",
+          title: "the giving tree",
+          contributor: "shel silverstein",
+          subject: "books",
+          field: "all",
+        })
+      ).toBe(true)
+    })
+    it("clears advanced search query params when field param is anything other than 'all'", () => {
+      const titleQuery = "?q=shel%20silverstein&search_scope=title"
+      expect(
+        checkQueryParamsEquality(titleQuery, {
+          q: "shel silverstein",
+          title: "the giving tree",
+          contributor: "shel silverstein",
+          subject: "books",
+          field: "title",
+        })
+      ).toBe(true)
+
+      const subjectQuery = "?q=shel%20silverstein&search_scope=subject"
+      expect(
+        checkQueryParamsEquality(subjectQuery, {
+          q: "shel silverstein",
+          title: "the giving tree",
+          contributor: "shel silverstein",
+          subject: "books",
+          field: "subject",
+        })
+      ).toBe(true)
+
+      const contributorQuery = "?q=shel%20silverstein&search_scope=contributor"
+      expect(
+        checkQueryParamsEquality(contributorQuery, {
+          q: "shel silverstein",
+          title: "the giving tree",
+          contributor: "shel silverstein",
+          subject: "books",
+          field: "contributor",
+        })
+      ).toBe(true)
+    })
   })
   describe("mapQueryToSearchParams", () => {
     it("should consolidate identifiers, change some keys, and initializes the page number to 1", () => {
