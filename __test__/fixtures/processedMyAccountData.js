@@ -10,10 +10,7 @@ export const processedPatron = {
       type: "t",
     },
   ],
-  homeLibrary: {
-    code: "sn",
-    name: "Stavros Niarchos Foundation Library (SNFL)",
-  },
+  homeLibraryCode: "sn   ",
   id: 6742743,
 }
 
@@ -24,10 +21,7 @@ export const emptyPatron = {
   expirationDate: "2025-03-28",
   emails: [],
   phones: [],
-  homeLibrary: {
-    code: "sn",
-    name: "Stavros Niarchos Foundation Library (SNFL)",
-  },
+  homeLibraryCode: "sn   ",
   id: 6742743,
 }
 
