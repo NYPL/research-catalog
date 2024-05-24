@@ -57,14 +57,14 @@ export interface SierraRecord {
 }
 
 export interface SierraPatron {
-  fixedFields: Record<string, { label: string; value: string }>
-  id: number
-  names: string[]
-  barcodes: string[]
-  expirationDate: string
-  emails: string[]
-  homeLibrary: SierraCodeName
-  phones: { number: string; type: string }[]
+  fixedFields?: Record<string, { label: string; value: string }>
+  id?: number
+  names?: string[]
+  barcodes?: string[]
+  expirationDate?: string
+  emails?: string[]
+  homeLibraryCode?: string
+  phones?: { number: string; type: string }[]
 }
 
 export interface Checkout {
@@ -107,7 +107,7 @@ export interface Patron {
   formattedBarcode?: string
   expirationDate: string
   emails: string[]
-  homeLibrary: SierraCodeName
+  homeLibraryCode: string
   phones: Phone[]
   id: number
 }

@@ -1,171 +1,4 @@
-export const processedPatron = {
-  notificationPreference: "Email",
-  name: "Strega Nonna",
-  barcode: "23333121538324",
-  expirationDate: "March 28, 2025",
-  emails: ["streganonna@gmail.com", "spaghettigrandma@gmail.com"],
-  phones: [
-    {
-      number: "123-456-7890",
-      type: "t",
-    },
-  ],
-  homeLibraryCode: "sn   ",
-  id: 6742743,
-}
-
-export const emptyPatron = {
-  notificationPreference: "Email",
-  name: "Strega Nonna",
-  barcode: "23333121538324",
-  expirationDate: "March 28, 2025",
-  emails: [],
-  phones: [],
-  homeLibraryCode: "sn   ",
-  id: 6742743,
-}
-
-export const processedCheckouts = [
-  {
-    id: "66527401",
-    callNumber: "J PIC COUSINS",
-    barcode: "33333455951331",
-    dueDate: "May 30, 2024",
-    patron: "6742743",
-    title: "Good night, Little Fish",
-    isResearch: false,
-    bibId: "23129476",
-    isNyplOwned: true,
-    catalogHref: "https://borrow.nypl.org/search/card?recordId=23129476",
-  },
-  {
-    id: "66527400",
-    callNumber: "J PIC A",
-    barcode: "33333072760735",
-    dueDate: "May 7, 2024",
-    patron: "6742743",
-    title: "Fish, fish, fish",
-    isResearch: true,
-    bibId: "17226308",
-    isNyplOwned: true,
-    catalogHref: "https://nypl.org/research/research-catalog/bib/b17226308",
-  },
-  {
-    id: "66527399",
-    callNumber: "test 5/6 01 xx",
-    barcode: "1715021087264",
-    dueDate: "May 7, 2024",
-    patron: "6742743",
-    title: "test 5/6 01",
-    isResearch: true,
-    bibId: "23296884",
-    isNyplOwned: false,
-    catalogHref: null,
-  },
-  {
-    id: "66527379",
-    callNumber: "PJ5055.37.O4222 H64 2016g",
-    barcode: "CU25631586",
-    dueDate: "April 24, 2024",
-    patron: "6742743",
-    title:
-      "[Standard NYPL restrictions apply] HOF HA-KELAVIM HA-MESHUHRARIM = THE BEACH OF FREE DOGS / AVRON POLAKOW. [RECAP]",
-    isResearch: true,
-    bibId: "23296866",
-    isNyplOwned: false,
-    catalogHref: null,
-  },
-]
-
-export const processedHolds = [
-  {
-    patron: "6742743",
-    id: "49438189",
-    pickupByDate: null,
-    canFreeze: false,
-    frozen: false,
-    status: "REQUEST PENDING",
-    pickupLocation: {
-      code: "mal82",
-      name: "Schwarzman Room 315 ONSITE USE",
-    },
-    title: "Spaghetti!",
-    isResearch: true,
-    bibId: "16145054",
-    isNyplOwned: true,
-    catalogHref: "https://nypl.org/research/research-catalog/bib/b16145054",
-  },
-  {
-    patron: "6742743",
-    id: "49438190",
-    pickupByDate: null,
-    canFreeze: true,
-    frozen: false,
-    status: "REQUEST PENDING",
-    pickupLocation: { code: "sn", name: "SNFL (formerly Mid-Manhattan)" },
-    title: "Pasta every day : make it, shape it, sauce it, eat it",
-    isResearch: false,
-    bibId: "23167148",
-    isNyplOwned: true,
-    catalogHref: "https://borrow.nypl.org/search/card?recordId=23167148",
-  },
-  {
-    patron: "6742743",
-    id: "49438191",
-    pickupByDate: null,
-    canFreeze: false,
-    frozen: false,
-    status: "REQUEST CONFIRMED",
-    pickupLocation: { code: "sn", name: "SNFL (formerly Mid-Manhattan)" },
-    title: "The house of mirth : large print",
-    isResearch: false,
-    bibId: "22046460",
-    isNyplOwned: true,
-    catalogHref: "https://borrow.nypl.org/search/card?recordId=22046460",
-  },
-  {
-    patron: "6742743",
-    id: "49438192",
-    pickupByDate: "May 17, 2024",
-    canFreeze: false,
-    frozen: false,
-    status: "READY FOR PICKUP",
-    pickupLocation: { code: "sn", name: "SNFL (formerly Mid-Manhattan)" },
-    title: "I want to be spaghetti!",
-    isResearch: false,
-    bibId: "23099273",
-    isNyplOwned: true,
-    catalogHref: "https://borrow.nypl.org/search/card?recordId=23099273",
-  },
-  {
-    patron: "6742743",
-    id: "49438193",
-    pickupByDate: null,
-    canFreeze: false,
-    frozen: false,
-    status: "REQUEST PENDING",
-    pickupLocation: {
-      code: "mal",
-      name: "Schwarzman Room 315 ONSITE USE",
-    },
-    title: "Partner record",
-    isResearch: true,
-    bibId: "23296875",
-    isNyplOwned: false,
-    catalogHref: null,
-  },
-]
-
-export const processedFines = {
-  total: 14.99,
-  entries: [
-    {
-      detail: "Replacement",
-      amount: 14.99,
-      date: "June 15, 2023",
-    },
-  ],
-}
+import type { Patron, SierraPatron } from "../types/myAccountTypes"
 
 export const filteredPickupLocations = [
   {
@@ -481,3 +314,63 @@ export const filteredPickupLocations = [
     name: "Yorkville",
   },
 ]
+
+export const notificationPreferenceMap = {
+  z: "Email",
+  p: "Phone",
+  m: "Mobile",
+}
+
+export const notificationPreferenceTuples = Object.keys(
+  notificationPreferenceMap
+).reduce((tuples, key) => {
+  tuples.push([key, notificationPreferenceMap[key]])
+  return tuples
+}, [])
+
+/**
+ * Formats the patron's name per NYPL guidelines.
+ */
+function formatPatronName(name = "") {
+  const [lastName, firstName] = name.split(",")
+  // The name from Sierra is in all caps, so we need to lowercase
+  // all but the first letter.
+  function capitalize(name: string) {
+    return `${name.charAt(0)}${name.slice(1).toLowerCase()}`
+  }
+  return `${capitalize(firstName.trim())} ${capitalize(lastName.trim())}`
+}
+
+/**
+ * getDueDate
+ * Returns date in readable string ("Month day, year")
+ */
+export function formatDate(date: string | number | Date) {
+  if (!date) return null
+  const d = new Date(date)
+  const year = d.getFullYear()
+  const day = d.getDate()
+  const month = d.toLocaleString("default", { month: "long" })
+  return `${month} ${day}, ${year}`
+}
+
+// this method has to live here so it can be imported into the front end without
+// importing the MyAccount files.
+export const buildPatron = (patron: SierraPatron): Patron => {
+  const notificationPreference =
+    notificationPreferenceMap[patron.fixedFields?.["268"].value]
+  return {
+    notificationPreference,
+    name: formatPatronName(patron.names?.[0]),
+    barcode: patron.barcodes?.[0],
+    formattedBarcode: patron.barcodes?.[0].replace(
+      /(\d{1})(\d{4})(\d{5})(\d{4})/,
+      "$1 $2 $3 $4"
+    ),
+    expirationDate: formatDate(patron.expirationDate),
+    emails: patron.emails || [],
+    phones: patron.phones || [],
+    homeLibraryCode: patron.homeLibraryCode || null,
+    id: patron.id,
+  }
+}
