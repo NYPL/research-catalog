@@ -1,5 +1,6 @@
 import { Icon, Button, ButtonGroup } from "@nypl/design-system-react-components"
 import type { Dispatch } from "react"
+import styles from "../../../../styles/components/MyAccount.module.scss"
 
 interface AccountSettingsButtonsPropsType {
   currentlyEditing: boolean
@@ -17,6 +18,7 @@ const AccountSettingsButtons = ({
 
   const editButton = (
     <Button
+      className={styles.settingsEditButton}
       id="edit-account-settings-button"
       buttonType="secondary"
       onClick={() => toggleCurrentlyEditing(true)}
@@ -27,7 +29,7 @@ const AccountSettingsButtons = ({
   )
 
   const cancelAndSaveButtons = (
-    <ButtonGroup>
+    <ButtonGroup className={styles.settingsEditButton}>
       <Button
         onClick={() => toggleCurrentlyEditing(false)}
         id="account-settings-cancel-update-button"

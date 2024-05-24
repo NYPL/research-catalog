@@ -1,4 +1,4 @@
-import { filteredPickupLocations } from "../../../__test__/fixtures/processedMyAccountData"
+import { filteredPickupLocations } from "../../utils/myAccountUtils"
 import MyAccount, {
   MyAccountFactory,
   filterPickupLocations,
