@@ -1951,10 +1951,7 @@ export const patron = {
   barcodes: ["23333121538324"],
   expirationDate: "2025-03-28",
   emails: ["streganonna@gmail.com", "spaghettigrandma@gmail.com"],
-  homeLibrary: {
-    code: "sn",
-    name: "Stavros Niarchos Foundation Library (SNFL)",
-  },
+  homeLibraryCode: "sn   ",
   phones: [
     {
       number: "123-456-7890",
@@ -4154,7 +4151,7 @@ export const mockPatron = {
       type: "t",
     },
   ],
-  homeLibrary: "Stavros Niarchos Foundation Library (SNFL)",
+  homeLibraryCode: "sn",
   id: 2772226,
 }
 export const mockCheckouts = [
