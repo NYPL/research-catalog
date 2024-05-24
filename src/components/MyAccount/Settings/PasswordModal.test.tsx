@@ -1,17 +1,17 @@
 import React from "react"
 import { render, fireEvent, waitFor } from "../../../utils/testUtils"
 import PasswordModal from "./PasswordModal"
-import { mockPatron } from "../../../../__test__/fixtures/processedMyAccountData"
+import { processedPatron } from "../../../../__test__/fixtures/processedMyAccountData"
 
 describe("PasswordModal", () => {
   test("renders", () => {
-    const { getByText } = render(<PasswordModal patron={mockPatron} />)
+    const { getByText } = render(<PasswordModal patron={processedPatron} />)
     expect(getByText("Change pin/password")).toBeInTheDocument()
   })
 
   test("opens modal on button click", () => {
     const { getByText, getByRole } = render(
-      <PasswordModal patron={mockPatron} />
+      <PasswordModal patron={processedPatron} />
     )
     const button = getByText("Change pin/password")
     fireEvent.click(button)
@@ -21,7 +21,7 @@ describe("PasswordModal", () => {
 
   test("closes modal when clicking cancel button", () => {
     const { getByText, queryByRole } = render(
-      <PasswordModal patron={mockPatron} />
+      <PasswordModal patron={processedPatron} />
     )
     const button = getByText("Change pin/password")
     fireEvent.click(button)
@@ -38,7 +38,7 @@ describe("PasswordModal", () => {
     } as Response)
 
     const { getByText, getAllByText, getByLabelText, queryByText } = render(
-      <PasswordModal patron={mockPatron} />
+      <PasswordModal patron={processedPatron} />
     )
     const button = getByText("Change pin/password")
     fireEvent.click(button)
@@ -68,7 +68,7 @@ describe("PasswordModal", () => {
 
   test("disables submit button if any form field is empty", async () => {
     const { getByText, getAllByText, getByLabelText } = render(
-      <PasswordModal patron={mockPatron} />
+      <PasswordModal patron={processedPatron} />
     )
     const button = getByText("Change pin/password")
     fireEvent.click(button)
@@ -87,7 +87,7 @@ describe("PasswordModal", () => {
 
   test("disables submit button if passwords don't match", async () => {
     const { getByText, getAllByText, getByLabelText } = render(
-      <PasswordModal patron={mockPatron} />
+      <PasswordModal patron={processedPatron} />
     )
     const button = getByText("Change pin/password")
     fireEvent.click(button)
@@ -114,7 +114,7 @@ describe("PasswordModal", () => {
     } as Response)
 
     const { getByText, getAllByText, getByLabelText, queryByText } = render(
-      <PasswordModal patron={mockPatron} />
+      <PasswordModal patron={processedPatron} />
     )
     const button = getByText("Change pin/password")
     fireEvent.click(button)
@@ -149,7 +149,7 @@ describe("PasswordModal", () => {
     } as Response)
 
     const { getByText, getAllByText, getByLabelText, queryByText } = render(
-      <PasswordModal patron={mockPatron} />
+      <PasswordModal patron={processedPatron} />
     )
     const button = getByText("Change pin/password")
     fireEvent.click(button)

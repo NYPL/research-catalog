@@ -1,4 +1,4 @@
-export const mockPatron = {
+export const processedPatron = {
   notificationPreference: "Email",
   name: "NONNA, STREGA",
   barcode: "23333121538324",
@@ -31,7 +31,7 @@ export const emptyPatron = {
   id: 6742743,
 }
 
-export const mockCheckouts = [
+export const processedCheckouts = [
   {
     id: "66527401",
     callNumber: "J PIC COUSINS",
@@ -83,7 +83,7 @@ export const mockCheckouts = [
   },
 ]
 
-export const mockHolds = [
+export const processedHolds = [
   {
     patron: "6742743",
     id: "49438189",
@@ -162,7 +162,7 @@ export const mockHolds = [
   },
 ]
 
-export const mockFines = {
+export const processedFines = {
   total: 14.99,
   entries: [
     {

@@ -1,5 +1,5 @@
 import { parsePayload, updateArrayValue } from "./AccountSettingsUtils"
-import { mockPatron } from "../../../../__test__/fixtures/processedMyAccountData"
+import { processedPatron } from "../../../../__test__/fixtures/processedMyAccountData"
 
 describe("Account settings utils", () => {
   describe("parsePayload", () => {
@@ -11,12 +11,12 @@ describe("Account settings utils", () => {
         homeLibrary: { value: "xx   " },
         notificationPreference: { value: "z" },
       }
-      expect(parsePayload(eventTarget, mockPatron).emails).toStrictEqual([
+      expect(parsePayload(eventTarget, processedPatron).emails).toStrictEqual([
         "fusili@gmail.com",
         "streganonna@gmail.com",
         "spaghettigrandma@gmail.com",
       ])
-      expect(parsePayload(eventTarget, mockPatron).phones).toStrictEqual([
+      expect(parsePayload(eventTarget, processedPatron).phones).toStrictEqual([
         {
           number: "666",
           type: "t",
@@ -26,8 +26,12 @@ describe("Account settings utils", () => {
           type: "t",
         },
       ])
-      expect(parsePayload(eventTarget, mockPatron).homeLibrary).toBe("xx   ")
-      expect(parsePayload(eventTarget, mockPatron).fixedFields).toStrictEqual({
+      expect(parsePayload(eventTarget, processedPatron).homeLibrary).toBe(
+        "xx   "
+      )
+      expect(
+        parsePayload(eventTarget, processedPatron).fixedFields
+      ).toStrictEqual({
         268: {
           label: "Notice Preference",
           value: "z",

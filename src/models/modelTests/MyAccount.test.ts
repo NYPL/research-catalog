@@ -1,10 +1,10 @@
 import {
   emptyPatron,
   filteredPickupLocations,
-  mockCheckouts,
-  mockFines,
-  mockHolds,
-  mockPatron,
+  processedCheckouts,
+  processedFines,
+  processedHolds,
+  processedPatron,
 } from "../../../__test__/fixtures/processedMyAccountData"
 import MyAccount, {
   MyAccountFactory,
@@ -90,7 +90,7 @@ describe("MyAccountModel", () => {
       }
       const fetcher = new MyAccount(mockSierraClient, "12345")
       const processedCheckouts = await fetcher.getCheckouts()
-      expect(processedCheckouts).toStrictEqual(mockCheckouts)
+      expect(processedCheckouts).toStrictEqual(processedCheckouts)
     })
     it("can return holds", async () => {
       const mockSierraClient = {
@@ -104,7 +104,7 @@ describe("MyAccountModel", () => {
       }
       const fetcher = new MyAccount(mockSierraClient, "12345")
       const processedHolds = await fetcher.getHolds()
-      expect(processedHolds).toStrictEqual(mockHolds)
+      expect(processedHolds).toStrictEqual(processedHolds)
     })
     it("can return fines", async () => {
       const mockSierraClient = {
@@ -112,7 +112,7 @@ describe("MyAccountModel", () => {
       }
       const fetcher = new MyAccount(mockSierraClient, "12345")
       const processedFines = await fetcher.getFines()
-      expect(processedFines).toStrictEqual(mockFines)
+      expect(processedFines).toStrictEqual(processedFines)
     })
   })
 
@@ -174,10 +174,10 @@ describe("MyAccountModel", () => {
       // mocking the fetch calls.
       // @ts-ignore
       const account = await MyAccountFactory("12345", {})
-      expect(account.patron).toStrictEqual(mockPatron)
-      expect(account.holds).toStrictEqual(mockHolds)
-      expect(account.checkouts).toStrictEqual(mockCheckouts)
-      expect(account.fines).toStrictEqual(mockFines)
+      expect(account.patron).toStrictEqual(processedPatron)
+      expect(account.holds).toStrictEqual(processedHolds)
+      expect(account.checkouts).toStrictEqual(processedCheckouts)
+      expect(account.fines).toStrictEqual(processedFines)
     })
     it("builds empty Account data model with empty phones and email", async () => {
       MyAccount.prototype.fetchCheckouts = async () => empty
