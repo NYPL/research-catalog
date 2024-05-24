@@ -13,21 +13,6 @@ import userEvent from "@testing-library/user-event"
 jest.spyOn(helpers, "updatePatronSettings")
 
 describe("AccountSettingsTab", () => {
-  global.fetch = jest
-    .fn()
-    .mockResolvedValueOnce({
-      json: async () => console.log("updated"),
-      status: 200,
-    } as Response)
-    .mockResolvedValueOnce({
-      json: async () => console.log("not updated"),
-      status: 500,
-    } as Response)
-    .mockResolvedValueOnce({
-      json: async () => console.log("updated"),
-      status: 200,
-    } as Response)
-
   it("can render a complete patron", () => {
     const myAccountPatron = MyAccount.prototype.buildPatron(patron)
     render(<AccountSettingsTab settingsData={myAccountPatron} />)
@@ -78,6 +63,10 @@ describe("AccountSettingsTab", () => {
       .mockResolvedValueOnce({
         json: async () => console.log("not updated"),
         status: 500,
+      } as Response)
+      .mockResolvedValueOnce({
+        json: async () => console.log("updated"),
+        status: 200,
       } as Response)
     it("clicking the edit button opens the form, \nclicking submit opens modal on success,\n closing modal toggles display", async () => {
       const myAccountPatron = MyAccount.prototype.buildPatron({
