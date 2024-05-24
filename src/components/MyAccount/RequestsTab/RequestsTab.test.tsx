@@ -45,7 +45,7 @@ describe("RequestsTab", () => {
       />
     )
     const bodyRows = component.getAllByRole("rowgroup")[1]
-    expect(within(bodyRows).getAllByRole("row").length).toBe(6)
+    expect(within(bodyRows).getAllByRole("row").length).toBe(5)
   })
 
   it("calls hold cancel endpoint when Cancel button is clicked", async () => {
@@ -83,7 +83,7 @@ describe("RequestsTab", () => {
       />
     )
     let bodyRows = component.getAllByRole("rowgroup")[1]
-    expect(within(bodyRows).getAllByRole("row").length).toBe(6)
+    expect(within(bodyRows).getAllByRole("row").length).toBe(5)
 
     await userEvent.click(component.getAllByText("Cancel request")[0])
     await userEvent.click(component.getAllByText("Yes, cancel")[0])
@@ -100,7 +100,7 @@ describe("RequestsTab", () => {
     )
     await userEvent.click(component.getAllByText("OK")[0])
     bodyRows = component.getAllByRole("rowgroup")[1]
-    expect(within(bodyRows).getAllByRole("row").length).toBe(5)
+    expect(within(bodyRows).getAllByRole("row").length).toBe(4)
   })
 
   it("does not remove hold from list when cancel fails", async () => {
@@ -119,7 +119,7 @@ describe("RequestsTab", () => {
     )
 
     let bodyRows = component.getAllByRole("rowgroup")[1]
-    expect(within(bodyRows).getAllByRole("row").length).toBe(6)
+    expect(within(bodyRows).getAllByRole("row").length).toBe(5)
     await userEvent.click(component.getAllByText("Cancel request")[0])
     await userEvent.click(component.getAllByText("Yes, cancel")[0])
 
@@ -137,7 +137,7 @@ describe("RequestsTab", () => {
     await userEvent.click(screen.getAllByText("OK", { exact: false })[0])
 
     bodyRows = component.getAllByRole("rowgroup")[1]
-    expect(within(bodyRows).getAllByRole("row").length).toBe(6)
+    expect(within(bodyRows).getAllByRole("row").length).toBe(5)
   })
 
   it("displays freeze buttons only for holds that can be frozen", async () => {
@@ -241,8 +241,8 @@ describe("RequestsTab", () => {
         removeHold={mockRemoveHold}
       />
     )
-    const readyCircRequestRow = component.getAllByRole("row")[5]
-    expect(readyCircRequestRow).toHaveTextContent("May 15, 2024")
+    const readyCircRequestRow = component.getAllByRole("row")[4]
+    expect(readyCircRequestRow).toHaveTextContent("May 17, 2024")
     expect(readyCircRequestRow).toHaveTextContent("READY FOR PICKUP")
   })
   it("does not show freeze button on freezable request when it is anything other than pending", () => {
@@ -253,7 +253,7 @@ describe("RequestsTab", () => {
         removeHold={mockRemoveHold}
       />
     )
-    const readyCircRequestRow = component.getAllByRole("row")[5]
+    const readyCircRequestRow = component.getAllByRole("row")[4]
     expect(readyCircRequestRow).toHaveTextContent("READY FOR PICKUP")
     expect(readyCircRequestRow).not.toHaveTextContent("Freeze")
 

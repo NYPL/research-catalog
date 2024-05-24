@@ -61,7 +61,9 @@ describe("PasswordModal", () => {
     })
 
     fireEvent.click(getByText("OK"))
-    expect(queryByText("Your PIN/PASSWORD was changed.")).toBeNull()
+    await waitFor(() => {
+      expect(queryByText("Your PIN/PASSWORD was changed.")).toBeNull()
+    })
   })
 
   test("disables submit button if any form field is empty", async () => {

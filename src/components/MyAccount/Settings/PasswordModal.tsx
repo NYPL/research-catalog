@@ -49,14 +49,12 @@ const PasswordModal = ({ patron }: { patron: Patron }) => {
         <Text sx={{ marginBottom: 0 }}> Change PIN/PASSWORD </Text>
       </Heading>
     ),
+    onClose: () => {
+      closeModal()
+    },
   }
 
   const [modalProps, setModalProps] = useState(entryModalProps)
-
-  const resetModal = async () => {
-    closeModal()
-    setModalProps(entryModalProps)
-  }
 
   function updateModal(errorMessage?: string) {
     if (errorMessage) {
@@ -90,7 +88,10 @@ const PasswordModal = ({ patron }: { patron: Patron }) => {
         </>
       </Heading>
     ),
-    onClose: resetModal,
+    onClose: async () => {
+      closeModal()
+      setModalProps(entryModalProps)
+    },
   }
 
   const failureModalProps = (errorMessage) => ({
@@ -113,7 +114,10 @@ const PasswordModal = ({ patron }: { patron: Patron }) => {
         </>
       </Heading>
     ),
-    onClose: resetModal,
+    onClose: async () => {
+      closeModal()
+      setModalProps(entryModalProps)
+    },
   })
 
   return (

@@ -1,4 +1,11 @@
-import { filteredPickupLocations } from "../../../__test__/fixtures/processedMyAccountData"
+import {
+  emptyPatron,
+  filteredPickupLocations,
+  mockCheckouts,
+  mockFines,
+  mockHolds,
+  mockPatron,
+} from "../../../__test__/fixtures/processedMyAccountData"
 import MyAccount, {
   MyAccountFactory,
   filterPickupLocations,
@@ -16,7 +23,10 @@ import {
 
 describe("MyAccountModel", () => {
   const fetchBibs = MyAccount.prototype.fetchBibData
-  afterAll(() => (MyAccount.prototype.fetchBibData = fetchBibs))
+  afterAll(() => {
+    MyAccount.prototype.fetchBibData = fetchBibs
+  })
+
   describe("fetchPickupLocations", () => {
     it("filters out closed and research branches", () => {
       expect(filterPickupLocations(pickupLocations)).toStrictEqual(
@@ -24,6 +34,7 @@ describe("MyAccountModel", () => {
       )
     })
   })
+
   describe("getRecordId", () => {
     it("can parse an id", () => {
       const idUrl =
@@ -34,6 +45,7 @@ describe("MyAccountModel", () => {
       expect(MyAccount.getRecordId("")).toBe(null)
     })
   })
+
   describe("getHoldStatus", () => {
     it("returns the correct status", () => {
       expect(
@@ -64,6 +76,7 @@ describe("MyAccountModel", () => {
       ).toBe("REQUEST PENDING")
     })
   })
+
   describe("fetcher", () => {
     it("can return checkouts", async () => {
       const mockSierraClient = {
@@ -77,58 +90,7 @@ describe("MyAccountModel", () => {
       }
       const fetcher = new MyAccount(mockSierraClient, "12345")
       const processedCheckouts = await fetcher.getCheckouts()
-      expect(processedCheckouts).toStrictEqual([
-        {
-          id: "66527401",
-          callNumber: "J PIC COUSINS",
-          barcode: "33333455951331",
-          dueDate: "May 30, 2024",
-          patron: "6742743",
-          title: "Good night, Little Fish",
-          isResearch: false,
-          bibId: "23129476",
-          isNyplOwned: true,
-          catalogHref: "https://borrow.nypl.org/search/card?recordId=23129476",
-        },
-        {
-          id: "66527400",
-          callNumber: "J PIC A",
-          barcode: "33333072760735",
-          dueDate: "May 7, 2024",
-          patron: "6742743",
-          title: "Fish, fish, fish",
-          isResearch: true,
-          bibId: "17226308",
-          isNyplOwned: true,
-          catalogHref:
-            "https://nypl.org/research/research-catalog/bib/b17226308",
-        },
-        {
-          id: "66527399",
-          callNumber: "test 5/6 01 xx",
-          barcode: "1715021087264",
-          dueDate: "May 7, 2024",
-          patron: "6742743",
-          title: "test 5/6 01",
-          isResearch: true,
-          bibId: "23296884",
-          isNyplOwned: false,
-          catalogHref: null,
-        },
-        {
-          id: "66527379",
-          callNumber: "PJ5055.37.O4222 H64 2016g",
-          barcode: "CU25631586",
-          dueDate: "April 24, 2024",
-          patron: "6742743",
-          title:
-            "[Standard NYPL restrictions apply] HOF HA-KELAVIM HA-MESHUHRARIM = THE BEACH OF FREE DOGS / AVRON POLAKOW. [RECAP]",
-          isResearch: true,
-          bibId: "23296866",
-          isNyplOwned: false,
-          catalogHref: null,
-        },
-      ])
+      expect(processedCheckouts).toStrictEqual(mockCheckouts)
     })
     it("can return holds", async () => {
       const mockSierraClient = {
@@ -142,85 +104,7 @@ describe("MyAccountModel", () => {
       }
       const fetcher = new MyAccount(mockSierraClient, "12345")
       const processedHolds = await fetcher.getHolds()
-      expect(processedHolds).toStrictEqual([
-        {
-          patron: "6742743",
-          id: "49438189",
-          pickupByDate: null,
-          canFreeze: false,
-          frozen: false,
-          status: "REQUEST PENDING",
-          pickupLocation: {
-            code: "mal82",
-            name: "Schwarzman Room 315 ONSITE USE",
-          },
-          title: "Spaghetti!",
-          isResearch: true,
-          bibId: "16145054",
-          isNyplOwned: true,
-          catalogHref:
-            "https://nypl.org/research/research-catalog/bib/b16145054",
-        },
-        {
-          patron: "6742743",
-          id: "49438190",
-          pickupByDate: null,
-          canFreeze: false,
-          frozen: false,
-          status: "REQUEST PENDING",
-          pickupLocation: { code: "fe", name: "58th Street" },
-          title: "Pasta every day : make it, shape it, sauce it, eat it",
-          isResearch: false,
-          bibId: "23167148",
-          isNyplOwned: true,
-          catalogHref: "https://borrow.nypl.org/search/card?recordId=23167148",
-        },
-        {
-          patron: "6742743",
-          id: "49438191",
-          pickupByDate: null,
-          canFreeze: false,
-          frozen: false,
-          status: "REQUEST PENDING",
-          pickupLocation: { code: "sn", name: "SNFL (formerly Mid-Manhattan)" },
-          title: "The house of mirth : large print",
-          isResearch: false,
-          bibId: "22046460",
-          isNyplOwned: true,
-          catalogHref: "https://borrow.nypl.org/search/card?recordId=22046460",
-        },
-        {
-          patron: "6742743",
-          id: "49438192",
-          pickupByDate: "May 17, 2024",
-          canFreeze: false,
-          frozen: false,
-          status: "READY FOR PICKUP",
-          pickupLocation: { code: "sn", name: "SNFL (formerly Mid-Manhattan)" },
-          title: "I want to be spaghetti!",
-          isResearch: false,
-          bibId: "23099273",
-          isNyplOwned: true,
-          catalogHref: "https://borrow.nypl.org/search/card?recordId=23099273",
-        },
-        {
-          patron: "6742743",
-          id: "49438193",
-          pickupByDate: null,
-          canFreeze: false,
-          frozen: false,
-          status: "REQUEST PENDING",
-          pickupLocation: {
-            code: "mal",
-            name: "Schwarzman Room 315 ONSITE USE",
-          },
-          title: "Partner record",
-          isResearch: true,
-          bibId: "23296875",
-          isNyplOwned: false,
-          catalogHref: null,
-        },
-      ])
+      expect(processedHolds).toStrictEqual(mockHolds)
     })
     it("can return fines", async () => {
       const mockSierraClient = {
@@ -228,18 +112,10 @@ describe("MyAccountModel", () => {
       }
       const fetcher = new MyAccount(mockSierraClient, "12345")
       const processedFines = await fetcher.getFines()
-      expect(processedFines).toStrictEqual({
-        total: 14.99,
-        entries: [
-          {
-            detail: "Replacement",
-            amount: 14.99,
-            date: "June 15, 2023",
-          },
-        ],
-      })
+      expect(processedFines).toStrictEqual(mockFines)
     })
   })
+
   describe("getResearchAndOwnership", () => {
     it("can handle no varfields", () => {
       expect(MyAccount.getResearchAndOwnership({})).toStrictEqual({
@@ -298,165 +174,10 @@ describe("MyAccountModel", () => {
       // mocking the fetch calls.
       // @ts-ignore
       const account = await MyAccountFactory("12345", {})
-      expect(account.patron).toStrictEqual({
-        notificationPreference: "Email",
-        name: "NONNA, STREGA",
-        barcode: "23333121538324",
-        expirationDate: "2025-03-28",
-        emails: ["streganonna@gmail.com", "spaghettigrandma@gmail.com"],
-        phones: [
-          {
-            number: "123-456-7890",
-            type: "t",
-          },
-        ],
-        homeLibrary: {
-          code: "sn",
-          name: "Stavros Niarchos Foundation Library (SNFL)",
-        },
-        id: 6742743,
-      })
-      expect(account.holds).toStrictEqual([
-        {
-          patron: "6742743",
-          id: "49438189",
-          pickupByDate: null,
-          canFreeze: false,
-          frozen: false,
-          status: "REQUEST PENDING",
-          pickupLocation: {
-            code: "mal82",
-            name: "Schwarzman Room 315 ONSITE USE",
-          },
-          title: "Spaghetti!",
-          isResearch: true,
-          bibId: "16145054",
-          isNyplOwned: true,
-          catalogHref:
-            "https://nypl.org/research/research-catalog/bib/b16145054",
-        },
-        {
-          patron: "6742743",
-          id: "49438190",
-          pickupByDate: null,
-          canFreeze: false,
-          frozen: false,
-          status: "REQUEST PENDING",
-          pickupLocation: { code: "fe", name: "58th Street" },
-          title: "Pasta every day : make it, shape it, sauce it, eat it",
-          isResearch: false,
-          bibId: "23167148",
-          isNyplOwned: true,
-          catalogHref: "https://borrow.nypl.org/search/card?recordId=23167148",
-        },
-        {
-          patron: "6742743",
-          id: "49438191",
-          pickupByDate: null,
-          canFreeze: false,
-          frozen: false,
-          status: "REQUEST PENDING",
-          pickupLocation: { code: "sn", name: "SNFL (formerly Mid-Manhattan)" },
-          title: "The house of mirth : large print",
-          isResearch: false,
-          bibId: "22046460",
-          isNyplOwned: true,
-          catalogHref: "https://borrow.nypl.org/search/card?recordId=22046460",
-        },
-        {
-          patron: "6742743",
-          id: "49438192",
-          pickupByDate: "May 17, 2024",
-          canFreeze: false,
-          frozen: false,
-          status: "READY FOR PICKUP",
-          pickupLocation: { code: "sn", name: "SNFL (formerly Mid-Manhattan)" },
-          title: "I want to be spaghetti!",
-          isResearch: false,
-          bibId: "23099273",
-          isNyplOwned: true,
-          catalogHref: "https://borrow.nypl.org/search/card?recordId=23099273",
-        },
-        {
-          patron: "6742743",
-          id: "49438193",
-          pickupByDate: null,
-          canFreeze: false,
-          frozen: false,
-          status: "REQUEST PENDING",
-          pickupLocation: {
-            code: "mal",
-            name: "Schwarzman Room 315 ONSITE USE",
-          },
-          title: "Partner record",
-          isResearch: true,
-          bibId: "23296875",
-          isNyplOwned: false,
-          catalogHref: null,
-        },
-      ])
-      expect(account.checkouts).toStrictEqual([
-        {
-          id: "66527401",
-          callNumber: "J PIC COUSINS",
-          barcode: "33333455951331",
-          dueDate: "May 30, 2024",
-          patron: "6742743",
-          title: "Good night, Little Fish",
-          isResearch: false,
-          bibId: "23129476",
-          isNyplOwned: true,
-          catalogHref: "https://borrow.nypl.org/search/card?recordId=23129476",
-        },
-        {
-          id: "66527400",
-          callNumber: "J PIC A",
-          barcode: "33333072760735",
-          dueDate: "May 7, 2024",
-          patron: "6742743",
-          title: "Fish, fish, fish",
-          isResearch: true,
-          bibId: "17226308",
-          isNyplOwned: true,
-          catalogHref:
-            "https://nypl.org/research/research-catalog/bib/b17226308",
-        },
-        {
-          id: "66527399",
-          callNumber: "test 5/6 01 xx",
-          barcode: "1715021087264",
-          dueDate: "May 7, 2024",
-          patron: "6742743",
-          title: "test 5/6 01",
-          isResearch: true,
-          bibId: "23296884",
-          isNyplOwned: false,
-          catalogHref: null,
-        },
-        {
-          id: "66527379",
-          callNumber: "PJ5055.37.O4222 H64 2016g",
-          barcode: "CU25631586",
-          dueDate: "April 24, 2024",
-          patron: "6742743",
-          title:
-            "[Standard NYPL restrictions apply] HOF HA-KELAVIM HA-MESHUHRARIM = THE BEACH OF FREE DOGS / AVRON POLAKOW. [RECAP]",
-          isResearch: true,
-          bibId: "23296866",
-          isNyplOwned: false,
-          catalogHref: null,
-        },
-      ])
-      expect(account.fines).toStrictEqual({
-        total: 14.99,
-        entries: [
-          {
-            detail: "Replacement",
-            amount: 14.99,
-            date: "June 15, 2023",
-          },
-        ],
-      })
+      expect(account.patron).toStrictEqual(mockPatron)
+      expect(account.holds).toStrictEqual(mockHolds)
+      expect(account.checkouts).toStrictEqual(mockCheckouts)
+      expect(account.fines).toStrictEqual(mockFines)
     })
     it("builds empty Account data model with empty phones and email", async () => {
       MyAccount.prototype.fetchCheckouts = async () => empty
@@ -470,19 +191,7 @@ describe("MyAccountModel", () => {
       MyAccount.prototype.fetchBibData = async () => ({ total: 0, entries: [] })
 
       const emptyAccount = await MyAccountFactory("12345", {})
-      expect(emptyAccount.patron).toStrictEqual({
-        notificationPreference: "Email",
-        name: "NONNA, STREGA",
-        barcode: "23333121538324",
-        expirationDate: "2025-03-28",
-        emails: [],
-        phones: [],
-        homeLibrary: {
-          code: "sn",
-          name: "Stavros Niarchos Foundation Library (SNFL)",
-        },
-        id: 6742743,
-      })
+      expect(emptyAccount.patron).toStrictEqual(emptyPatron)
       expect(emptyAccount.checkouts).toStrictEqual([])
       expect(emptyAccount.holds).toStrictEqual([])
       expect(emptyAccount.fines).toStrictEqual({ total: 0, entries: [] })
