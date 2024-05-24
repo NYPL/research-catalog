@@ -21,10 +21,11 @@ const RenewButton = ({
   patron: Patron
 }) => {
   const [isButtonDisabled, setButtonDisabled] = useState(false)
-  const { onOpen, Modal } = useModal()
+  const { onOpen, onClose, Modal } = useModal()
   const [modalProps, setModalProps] = useState(null)
 
   const successModalProps = {
+    type: "default",
     bodyContent: (
       <Box className={styles.modalBody}>
         <Text sx={{ marginLeft: "l" }}>
@@ -34,17 +35,23 @@ const RenewButton = ({
     ),
     closeButtonLabel: "OK",
     headingText: (
-      <Box className={styles.modalHeading}>
-        <Icon
-          size="large"
-          name="actionCheckCircleFilled"
-          color="ui.success.primary"
-        />
-        <Text sx={{ marginBottom: 0 }}> Renewal successful </Text>
-      </Box>
+      <Heading className={styles.modalHeading}>
+        <>
+          <Icon
+            size="large"
+            name="actionCheckCircleFilled"
+            color="ui.success.primary"
+          />
+          <Text sx={{ marginBottom: 0 }}> Renewal successful </Text>
+        </>
+      </Heading>
     ),
+    onClose: () => {
+      onClose()
+    },
   }
   const failureModalProps = {
+    type: "default",
     bodyContent: (
       <Box className={styles.modalBody}>
         <Text sx={{ marginLeft: "l", marginRight: "m" }}>
@@ -65,6 +72,9 @@ const RenewButton = ({
         </>
       </Heading>
     ),
+    onClose: () => {
+      onClose()
+    },
   }
 
   useEffect(() => {

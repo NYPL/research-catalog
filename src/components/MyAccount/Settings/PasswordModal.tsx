@@ -16,6 +16,7 @@ const PasswordModal = ({ patron }: { patron: Patron }) => {
   const { onOpen: openModal, onClose: closeModal, Modal } = useModal()
 
   const entryModalProps = {
+    type: "default",
     bodyContent: (
       <Box className={styles.modalBody}>
         <Text sx={{ fontWeight: "medium", paddingBottom: 0 }}>
@@ -49,14 +50,12 @@ const PasswordModal = ({ patron }: { patron: Patron }) => {
         <Text sx={{ marginBottom: 0 }}> Change PIN/PASSWORD </Text>
       </Heading>
     ),
+    onClose: () => {
+      closeModal()
+    },
   }
 
   const [modalProps, setModalProps] = useState(entryModalProps)
-
-  const resetModal = async () => {
-    closeModal()
-    setModalProps(entryModalProps)
-  }
 
   function updateModal(errorMessage?: string) {
     if (errorMessage) {
@@ -70,6 +69,7 @@ const PasswordModal = ({ patron }: { patron: Patron }) => {
   }
 
   const successModalProps = {
+    type: "default",
     bodyContent: (
       <Box className={styles.modalBody}>
         <Text sx={{ marginLeft: "l" }}>Your PIN/PASSWORD was changed.</Text>
@@ -90,10 +90,14 @@ const PasswordModal = ({ patron }: { patron: Patron }) => {
         </>
       </Heading>
     ),
-    onClose: resetModal,
+    onClose: async () => {
+      closeModal()
+      setModalProps(entryModalProps)
+    },
   }
 
   const failureModalProps = (errorMessage) => ({
+    type: "default",
     bodyContent: (
       <Box className={styles.modalBody}>
         <Text sx={{ marginLeft: "l", marginRight: "m" }}>
@@ -113,7 +117,10 @@ const PasswordModal = ({ patron }: { patron: Patron }) => {
         </>
       </Heading>
     ),
-    onClose: resetModal,
+    onClose: async () => {
+      closeModal()
+      setModalProps(entryModalProps)
+    },
   })
 
   return (

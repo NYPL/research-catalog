@@ -1,5 +1,5 @@
 import React from "react"
-import { render, screen } from "../../../utils/testUtils"
+import { render, screen, within } from "../../../utils/testUtils"
 import {
   mockCheckouts,
   mockFines,
@@ -31,21 +31,19 @@ describe("RequestsTab", () => {
         removeHold={mockRemoveHold}
       />
     )
-    expect(
-      component.getByText("Pickup location", { exact: false })
-    ).toBeInTheDocument()
+    expect(component.getByText("Quit like a woman", { exact: false }))
   })
 
   it("renders each hold request as a row", () => {
-    const { getAllByRole } = render(
+    const component = render(
       <RequestsTab
         patron={mockPatron}
         holds={mockHolds}
         removeHold={mockRemoveHold}
       />
     )
-    const rows = getAllByRole("row")
-    expect(rows.length).toBe(3)
+    const bodyRows = component.getAllByRole("rowgroup")[1]
+    expect(within(bodyRows).getAllByRole("row").length).toBe(6)
   })
 
   it("calls hold cancel endpoint when Cancel button is clicked", async () => {
@@ -57,8 +55,8 @@ describe("RequestsTab", () => {
       />
     )
 
-    await userEvent.click(component.getAllByText("Cancel")[0])
-    await userEvent.click(component.getAllByText("Yes, cancel")[0])
+    await userEvent.click(component.getAllByText("Cancel request")[0])
+    await userEvent.click(component.getAllByText("Yes, cancel request")[0])
 
     expect(fetch).toHaveBeenCalledWith(
       `/research/research-catalog/api/account/holds/cancel/${mockHolds[0].id}`,
@@ -82,11 +80,11 @@ describe("RequestsTab", () => {
         activePath="requests"
       />
     )
-    let rows = component.getAllByRole("row")
-    expect(rows.length).toBe(3)
+    let bodyRows = component.getAllByRole("rowgroup")[1]
+    expect(within(bodyRows).getAllByRole("row").length).toBe(6)
 
-    await userEvent.click(component.getAllByText("Cancel")[0])
-    await userEvent.click(component.getAllByText("Yes, cancel")[0])
+    await userEvent.click(component.getAllByText("Cancel request")[0])
+    await userEvent.click(component.getAllByText("Yes, cancel request")[0])
 
     expect(fetch).toHaveBeenCalledWith(
       `/research/research-catalog/api/account/holds/cancel/${mockHolds[0].id}`,
@@ -99,8 +97,8 @@ describe("RequestsTab", () => {
       }
     )
     await userEvent.click(component.getAllByText("OK")[0])
-    rows = component.getAllByRole("row")
-    expect(rows.length).toBe(2)
+    bodyRows = component.getAllByRole("rowgroup")[1]
+    expect(within(bodyRows).getAllByRole("row").length).toBe(5)
   })
 
   it("does not remove hold from list when cancel fails", async () => {
@@ -118,10 +116,10 @@ describe("RequestsTab", () => {
       />
     )
 
-    let rows = component.getAllByRole("row")
-    expect(rows.length).toBe(3)
-    await userEvent.click(component.getAllByText("Cancel")[0])
-    await userEvent.click(component.getAllByText("Yes, cancel")[0])
+    let bodyRows = component.getAllByRole("rowgroup")[1]
+    expect(within(bodyRows).getAllByRole("row").length).toBe(6)
+    await userEvent.click(component.getAllByText("Cancel request")[0])
+    await userEvent.click(component.getAllByText("Yes, cancel request")[0])
 
     expect(fetch).toHaveBeenCalledWith(
       `/research/research-catalog/api/account/holds/cancel/${mockHolds[0].id}`,
@@ -136,8 +134,8 @@ describe("RequestsTab", () => {
 
     await userEvent.click(screen.getAllByText("OK", { exact: false })[0])
 
-    rows = component.getAllByRole("row")
-    expect(rows.length).toBe(3)
+    bodyRows = component.getAllByRole("rowgroup")[1]
+    expect(within(bodyRows).getAllByRole("row").length).toBe(6)
   })
 
   it("displays freeze buttons only for holds that can be frozen", async () => {
@@ -164,10 +162,10 @@ describe("RequestsTab", () => {
         removeHold={mockRemoveHold}
       />
     )
-    const freezeButton = component.getAllByText("Freeze")[0]
+    const freezeButton = component.getByText("Freeze")
     await userEvent.click(freezeButton)
     expect(fetch).toHaveBeenCalledWith(
-      `/research/research-catalog/api/account/holds/update/${mockHolds[0].id}`,
+      `/research/research-catalog/api/account/holds/update/${mockHolds[1].id}`,
       {
         method: "POST",
         headers: {
@@ -187,7 +185,7 @@ describe("RequestsTab", () => {
     await userEvent.click(unfreezeButton)
 
     expect(fetch).toHaveBeenCalledWith(
-      `/research/research-catalog/api/account/holds/update/${mockHolds[0].id}`,
+      `/research/research-catalog/api/account/holds/update/${mockHolds[1].id}`,
       {
         method: "POST",
         headers: {
@@ -218,6 +216,9 @@ describe("RequestsTab", () => {
         removeHold={mockRemoveHold}
       />
     )
+    expect(
+      component.queryByText("Freezing this hold failed", { exact: false })
+    ).not.toBeInTheDocument()
     let freezeButtons = component.getAllByText("Freeze")
     expect(freezeButtons.length).toBe(1)
     const freezeButton = component.getByText("Freeze")
@@ -228,5 +229,34 @@ describe("RequestsTab", () => {
     await userEvent.click(screen.getAllByText("OK", { exact: false })[0])
     freezeButtons = component.getAllByText("Freeze")
     expect(freezeButtons.length).toBe(1)
+  })
+
+  it("shows pick up by date and status when circ request is ready", () => {
+    const component = render(
+      <RequestsTab
+        patron={mockPatron}
+        holds={mockHolds}
+        removeHold={mockRemoveHold}
+      />
+    )
+    const readyCircRequestRow = component.getAllByRole("row")[5]
+    expect(readyCircRequestRow).toHaveTextContent("May 15, 2024")
+    expect(readyCircRequestRow).toHaveTextContent("READY FOR PICKUP")
+  })
+  it("does not show freeze button on freezable request when it is anything other than pending", () => {
+    const component = render(
+      <RequestsTab
+        patron={mockPatron}
+        holds={mockHolds}
+        removeHold={mockRemoveHold}
+      />
+    )
+    const readyCircRequestRow = component.getAllByRole("row")[5]
+    expect(readyCircRequestRow).toHaveTextContent("READY FOR PICKUP")
+    expect(readyCircRequestRow).not.toHaveTextContent("Freeze")
+
+    const confirmedCircRequestRow = component.getAllByRole("row")[3]
+    expect(confirmedCircRequestRow).toHaveTextContent("REQUEST CONFIRMED")
+    expect(confirmedCircRequestRow).not.toHaveTextContent("Freeze")
   })
 })
