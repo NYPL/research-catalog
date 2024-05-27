@@ -16,13 +16,11 @@ import RequestButtons from "../components/ItemTable/RequestButtons"
  */
 export default class ItemTableData {
   items: Item[]
-  isDesktop: boolean
   isBibPage: boolean
   isArchiveCollection: boolean
 
   constructor(items: Item[], itemTableParams: ItemTableParams) {
     this.items = items
-    this.isDesktop = itemTableParams.isDesktop
     this.isBibPage = itemTableParams.isBibPage
     this.isArchiveCollection = itemTableParams.isArchiveCollection
   }
@@ -64,7 +62,7 @@ export default class ItemTableData {
   }
 
   showAccessColumn(): boolean {
-    return this.isBibPage && this.isDesktop
+    return this.isBibPage
   }
 
   volumeColumnHeading(): string {

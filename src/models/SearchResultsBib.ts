@@ -1,7 +1,7 @@
-import type { BibResult } from "../types/bibTypes"
-import type { ElectronicResource } from "../types/bibTypes"
-import type { JSONLDValue } from "../types/itemTypes"
+import type { BibResult, ElectronicResource } from "../types/bibTypes"
+import type { JSONLDValue, SearchResultsItem } from "../types/itemTypes"
 import Item from "../models/Item"
+import ItemTableData from "./ItemTableData"
 import { ITEMS_PER_SEARCH_RESULT } from "../config/constants"
 
 /**
@@ -24,7 +24,7 @@ export default class SearchResultsBib {
   electronicResources?: ElectronicResource[]
   issuance?: JSONLDValue[]
   numPhysicalItems: number
-  items: Item[]
+  itemTables?: ItemTableData[]
 
   constructor(result: BibResult) {
     this.id = result["@id"] ? result["@id"].substring(4) : ""
@@ -38,7 +38,7 @@ export default class SearchResultsBib {
     this.electronicResources = result.electronicResources || null
     this.issuance = (result.issuance?.length && result.issuance) || null
     this.numPhysicalItems = result.numItemsTotal || 0
-    this.items = this.getItemsFromResult(result)
+    this.itemTables = this.mapBibItemsToItemTables(result.items)
   }
 
   get url() {
@@ -55,10 +55,6 @@ export default class SearchResultsBib {
       Array.isArray(this.issuance) &&
       this.issuance.some((issuance) => issuance["@id"] === "urn:biblevel:c")
     )
-  }
-
-  get hasItems() {
-    return this.items.length > 0
   }
 
   get hasPhysicalItems() {
@@ -118,10 +114,16 @@ export default class SearchResultsBib {
     return null
   }
 
-  // Map Bib items to Item class instances
-  getItemsFromResult(result: BibResult): Item[] {
-    return result.items.map((item) => {
-      return new Item(item, this)
-    })
+  // Map Bib items to ItemTableData class instances
+  // Unlike the Bib Page, a Search Result renders an item table per item
+  mapBibItemsToItemTables(items: SearchResultsItem[]): ItemTableData[] {
+    return items.length
+      ? items.slice(0, ITEMS_PER_SEARCH_RESULT).map((item) => {
+          return new ItemTableData([new Item(item, this)], {
+            isBibPage: false,
+            isArchiveCollection: this.isArchiveCollection,
+          })
+        })
+      : null
   }
 }
