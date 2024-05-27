@@ -7,12 +7,12 @@ import { fetchBib } from "../../src/server/api/bib"
 import { mapQueryToBibParams } from "../../src/utils/bibUtils"
 import BibDetailsModel from "../../src/models/BibDetails"
 import BibDetails from "../../src/components/BibPage/BibDetail"
-import type { Bib } from "../../src/types/bibTypes"
+import type { BibResult } from "../../src/types/bibTypes"
 import type { AnnotatedMarc } from "../../src/types/bibDetailsTypes"
 import initializePatronTokenAuth from "../../src/server/auth"
 
 interface BibPropsType {
-  bib: Bib
+  bib: BibResult
   annotatedMarc: AnnotatedMarc
   isAuthenticated?: boolean
 }
@@ -43,8 +43,8 @@ export default function Bib({
         <title key="main-title">{metadataTitle}</title>
       </Head>
       <Layout isAuthenticated={isAuthenticated} activePage="bib">
-        <BibDetails key="top-details" details={topDetails} />
         <Heading level="h1">{bib.title[0]}</Heading>
+        <BibDetails key="top-details" details={topDetails} />
         <BibDetails
           heading="Details"
           key="bottom-details"

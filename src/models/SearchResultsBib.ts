@@ -1,4 +1,4 @@
-import type { Bib } from "../types/bibTypes"
+import type { BibResult } from "../types/bibTypes"
 import type { ElectronicResource } from "../types/bibTypes"
 import type { JSONLDValue } from "../types/itemTypes"
 import Item from "../models/Item"
@@ -26,7 +26,7 @@ export default class SearchResultsBib {
   numPhysicalItems: number
   items: Item[]
 
-  constructor(result: Bib) {
+  constructor(result: BibResult) {
     this.id = result["@id"] ? result["@id"].substring(4) : ""
     this.title = this.getTitleFromResult(result)
     this.yearPublished = this.getYearFromResult(result)
@@ -89,7 +89,7 @@ export default class SearchResultsBib {
     }`
   }
 
-  getTitleFromResult(result: Bib) {
+  getTitleFromResult(result: BibResult) {
     if (!result.titleDisplay || !result.titleDisplay.length) {
       const author =
         result.creatorLiteral && result.creatorLiteral.length
@@ -102,7 +102,7 @@ export default class SearchResultsBib {
     return result.titleDisplay[0]
   }
 
-  getYearFromResult(result: Bib) {
+  getYearFromResult(result: BibResult) {
     const { dateStartYear, dateEndYear } = result
 
     const displayStartYear: string =
@@ -119,7 +119,7 @@ export default class SearchResultsBib {
   }
 
   // Map Bib items to Item class instances
-  getItemsFromResult(result: Bib): Item[] {
+  getItemsFromResult(result: BibResult): Item[] {
     return result.items.map((item) => {
       return new Item(item, this)
     })

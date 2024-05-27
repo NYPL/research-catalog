@@ -5,7 +5,7 @@ import SearchResultsBib from "../../models/SearchResultsBib"
 import { searchResultPhysicalItems } from "../../../__test__/fixtures/searchResultPhysicalItems"
 import { searchResultManyPhysicalItems } from "../../../__test__/fixtures/searchResultManyPhysicalItems"
 import { searchResultElectronicResources } from "../../../__test__/fixtures/searchResultElectronicResources"
-import type { Bib } from "../../types/bibTypes"
+import type { BibResult } from "../../types/bibTypes"
 
 describe("SearchResult with Physical Items", () => {
   beforeEach(() => {
@@ -33,7 +33,7 @@ describe("SearchResult with Physical Items", () => {
 
 describe("SearchResult with Many Physical Items", () => {
   beforeEach(() => {
-    const bib = new SearchResultsBib(searchResultManyPhysicalItems as Bib)
+    const bib = new SearchResultsBib(searchResultManyPhysicalItems as BibResult)
     render(<SearchResult bib={bib} />)
   })
 
