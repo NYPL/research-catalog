@@ -1,4 +1,3 @@
-// @ts-nocheck
 // Modal onClose
 import {
   Box,
@@ -9,6 +8,9 @@ import {
   Button,
   Select,
   Link as DSLink,
+  type DefaultModalProps,
+  type ConfirmationModalProps,
+  type BaseModalProps,
 } from "@nypl/design-system-react-components"
 import type { SierraCodeName } from "../../../types/myAccountTypes"
 import styles from "../../../../styles/components/MyAccount.module.scss"
@@ -39,16 +41,21 @@ const UpdateLocation = ({
       (loc) => loc.code.trim() !== pickupLocation.code.trim()
     ),
   ]
-  const defaultModalProps = (selected: SierraCodeName) => ({
+  const confirmLocationChangeModalProps = (selected: SierraCodeName) => ({
+    type: "confirmation",
     bodyContent: (
       <Box className={styles.modalBody}>
         <Select
           value={selected.code}
-          onChange={(e: { target: HTMLInputElement }) => {
+          onChange={(e: React.FormEvent<HTMLInputElement>) => {
             const newLocation = locationsWithSelectedFirst.find(
-              (loc) => e.target.value === loc.code
+              (loc) => e.currentTarget.value === loc.code
             )
-            setModalProps(defaultModalProps(newLocation))
+            setModalProps(
+              confirmLocationChangeModalProps(
+                newLocation
+              ) as ConfirmationModalProps
+            )
           }}
           id={`update-location-selector-${key}`}
           labelText="Pickup location"
@@ -68,11 +75,12 @@ const UpdateLocation = ({
         </Select>
       </Box>
     ),
-    closeButtonLabel: "Confirm location",
-    onClose: async (e) => {
-      if (!e) {
-        closeModal()
-      }
+    closeButtonLabel: "Cancel location change",
+    confirmButtonLabel: "Confirm location",
+    onCancel: () => {
+      closeModal()
+    },
+    onConfirm: async () => {
       const response = await fetch(
         `${BASE_URL}/api/account/holds/update/${holdId}`,
         {
@@ -85,8 +93,8 @@ const UpdateLocation = ({
       )
       if (response.status == 200) {
         // Open next modal to confirm request has been canceled.
-        setModalProps(successModalProps(selected))
-      } else setModalProps(failureModalProps)
+        setModalProps(successModalProps(selected) as DefaultModalProps)
+      } else setModalProps(failureModalProps as DefaultModalProps)
     },
     headingText: (
       <Heading className={styles.modalHeading}>
@@ -98,11 +106,12 @@ const UpdateLocation = ({
     ),
   })
 
-  const [modalProps, setModalProps] = useState(
-    defaultModalProps(pickupLocation)
+  const [modalProps, setModalProps] = useState<BaseModalProps>(
+    confirmLocationChangeModalProps(pickupLocation) as ConfirmationModalProps
   )
 
-  const successModalProps = (newLocation) => ({
+  const successModalProps = (newLocation: SierraCodeName) => ({
+    type: "default",
     bodyContent: (
       <Box className={styles.modalBody}>
         <Text sx={{ marginLeft: "l" }}>
@@ -126,11 +135,14 @@ const UpdateLocation = ({
     ),
     onClose: () => {
       updateHoldLocation(holdId, newLocation)
-      setModalProps(defaultModalProps(newLocation))
+      setModalProps(
+        confirmLocationChangeModalProps(newLocation) as ConfirmationModalProps
+      )
       closeModal()
     },
   })
   const failureModalProps = {
+    type: "default",
     bodyContent: (
       <Box className={styles.modalBody}>
         <Text sx={{ marginLeft: "l", marginRight: "m" }}>
@@ -143,7 +155,9 @@ const UpdateLocation = ({
       </Box>
     ),
     onClose: () => {
-      setModalProps(defaultModalProps(pickupLocation))
+      setModalProps(
+        confirmLocationChangeModalProps(pickupLocation) as DefaultModalProps
+      )
       closeModal()
     },
     closeButtonLabel: "OK",
