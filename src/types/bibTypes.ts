@@ -71,7 +71,7 @@ export interface ElectronicResource {
 }
 
 export interface BibResponse {
-  bib?: BibResult
+  bibResult?: BibResult
   annotatedMarc?: AnnotatedMarc
   status: 200 | 307 | 404
   redirectUrl?: string

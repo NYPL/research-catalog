@@ -10,13 +10,14 @@ import BibDetails from "../../src/components/BibPage/BibDetail"
 import ItemTable from "../../src/components/ItemTable/ItemTable"
 import type { BibResult } from "../../src/types/bibTypes"
 import type { AnnotatedMarc } from "../../src/types/bibDetailsTypes"
+import Bib from "../../src/models/Bib"
 import Item from "../../src/models/Item"
 import ItemTableData from "../../src/models/ItemTableData"
 import SearchResultsBib from "../../src/models/SearchResultsBib"
 import initializePatronTokenAuth from "../../src/server/auth"
 
 interface BibPropsType {
-  bib: BibResult
+  bibResult: BibResult
   annotatedMarc: AnnotatedMarc
   isAuthenticated?: boolean
 }
@@ -24,16 +25,25 @@ interface BibPropsType {
 /**
  * The Bib page is responsible for fetching and displaying a single Bib's details.
  */
-export default function Bib({
-  bib,
+export default function BibPage({
+  bibResult,
   annotatedMarc,
   isAuthenticated,
 }: BibPropsType) {
   const metadataTitle = `Item Details | ${SITE_NAME}`
+  const bib = new Bib(bibResult)
   const { topDetails, bottomDetails, holdingsDetails } = new BibDetailsModel(
-    bib,
+    bibResult,
     annotatedMarc
   )
+
+  const itemTableData = bib.items
+    ? new ItemTableData(bib.items, {
+        isBibPage: true,
+        isArchiveCollection: bib.isArchiveCollection,
+      })
+    : null
+
   return (
     <>
       <Head>
@@ -47,9 +57,9 @@ export default function Bib({
         <title key="main-title">{metadataTitle}</title>
       </Head>
       <Layout isAuthenticated={isAuthenticated} activePage="bib">
-        <Heading level="h1">{bib.title[0]}</Heading>
+        <Heading level="h1">{bib.title}</Heading>
         <BibDetails key="top-details" details={topDetails} />
-        {/*{itemTableData && <ItemTable itemTableData={itemTableData} />}*/}
+        {itemTableData && <ItemTable itemTableData={itemTableData} />}
         <BibDetails
           heading="Details"
           key="bottom-details"
@@ -69,7 +79,7 @@ export async function getServerSideProps({ params, resolvedUrl, req }) {
   const { id } = params
   const queryString = resolvedUrl.slice(resolvedUrl.indexOf("?") + 1)
   const bibParams = mapQueryToBibParams(queryString)
-  const { bib, annotatedMarc, status, redirectUrl } = await fetchBib(
+  const { bibResult, annotatedMarc, status, redirectUrl } = await fetchBib(
     id,
     bibParams
   )
@@ -94,7 +104,7 @@ export async function getServerSideProps({ params, resolvedUrl, req }) {
     default:
       return {
         props: {
-          bib,
+          bibResult,
           annotatedMarc,
           isAuthenticated,
         },

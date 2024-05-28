@@ -82,7 +82,7 @@ export async function fetchBib(
       }
     }
     return {
-      bib,
+      bibResult: bib,
       annotatedMarc: annotatedMarc?.bib || null,
       status: 200,
     }
