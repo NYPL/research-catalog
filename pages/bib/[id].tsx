@@ -34,13 +34,6 @@ export default function Bib({
     bib,
     annotatedMarc
   )
-  const itemTableData = bib.items.length
-    ? new ItemTableData(
-        bib.items.map((item) => new Item(item, new SearchResultsBib(bib))),
-        { isBibPage: true }
-      )
-    : null
-  console.log(itemTableData.tableData)
   return (
     <>
       <Head>
@@ -56,7 +49,7 @@ export default function Bib({
       <Layout isAuthenticated={isAuthenticated} activePage="bib">
         <Heading level="h1">{bib.title[0]}</Heading>
         <BibDetails key="top-details" details={topDetails} />
-        {itemTableData && <ItemTable itemTableData={itemTableData} />}
+        {/*{itemTableData && <ItemTable itemTableData={itemTableData} />}*/}
         <BibDetails
           heading="Details"
           key="bottom-details"

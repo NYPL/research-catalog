@@ -5,7 +5,7 @@ import type {
   ItemLocationEndpoint,
 } from "../types/itemTypes"
 import { locationLabelToKey } from "../utils/itemUtils"
-import type SearchResultsBib from "./SearchResultsBib"
+import type Bib from "./Bib"
 import {
   itemAvailableIds,
   defaultNYPLLocation,
@@ -36,7 +36,7 @@ export default class Item {
   isEDDRequestable: boolean
   bibTitle: string
 
-  constructor(item: SearchResultsItem, bib: SearchResultsBib) {
+  constructor(item: SearchResultsItem, bib: Bib) {
     this.id = item.uri || ""
     this.bibId = bib.id
     this.status = item.status?.length ? item.status[0] : null

@@ -1,5 +1,5 @@
 import type { BibResult, ElectronicResource } from "../types/bibTypes"
-import type { JSONLDValue, SearchResultsItem } from "../types/itemTypes"
+import Bib from "../models/Bib"
 import Item from "../models/Item"
 import ItemTableData from "./ItemTableData"
 import { ITEMS_PER_SEARCH_RESULT } from "../config/constants"
@@ -15,30 +15,20 @@ import { ITEMS_PER_SEARCH_RESULT } from "../config/constants"
  * formatted as a single item in an array. These fields are extracted and parsed
  * into simple string attributes via the object's constructor.
  */
-export default class SearchResultsBib {
-  id: string
-  title: string
+export default class SearchResultsBib extends Bib {
   yearPublished?: string
-  materialType?: string
   publicationStatement?: string
   electronicResources?: ElectronicResource[]
-  issuance?: JSONLDValue[]
   numPhysicalItems: number
-  itemTables?: ItemTableData[]
 
   constructor(result: BibResult) {
-    this.id = result["@id"] ? result["@id"].substring(4) : ""
-    this.title = this.getTitleFromResult(result)
+    super(result)
     this.yearPublished = this.getYearFromResult(result)
-    this.materialType =
-      (result.materialType?.length && result.materialType[0]?.prefLabel) || null
     this.publicationStatement = result.publicationStatement?.length
       ? result.publicationStatement[0]
       : null
     this.electronicResources = result.electronicResources || null
-    this.issuance = (result.issuance?.length && result.issuance) || null
     this.numPhysicalItems = result.numItemsTotal || 0
-    this.itemTables = this.mapBibItemsToItemTables(result.items)
   }
 
   get url() {
@@ -47,14 +37,6 @@ export default class SearchResultsBib {
 
   get numElectronicResources() {
     return this.electronicResources?.length || 0
-  }
-
-  // Used to determine the Volume column text in the ItemTable
-  get isArchiveCollection() {
-    return (
-      Array.isArray(this.issuance) &&
-      this.issuance.some((issuance) => issuance["@id"] === "urn:biblevel:c")
-    )
   }
 
   get hasPhysicalItems() {
@@ -85,17 +67,17 @@ export default class SearchResultsBib {
     }`
   }
 
-  getTitleFromResult(result: BibResult) {
-    if (!result.titleDisplay || !result.titleDisplay.length) {
-      const author =
-        result.creatorLiteral && result.creatorLiteral.length
-          ? ` / ${result.creatorLiteral[0]}`
-          : ""
-      return result.title && result.title.length
-        ? `${result.title[0]}${author}`
-        : ""
-    }
-    return result.titleDisplay[0]
+  // Map Bib items to ItemTableData class instances
+  // Unlike the Bib Page, a Search Result renders an item table per item
+  get itemTables(): ItemTableData[] {
+    return this.items
+      ? this.items.slice(0, ITEMS_PER_SEARCH_RESULT).map((item) => {
+          return new ItemTableData([item], {
+            isBibPage: false,
+            isArchiveCollection: this.isArchiveCollection,
+          })
+        })
+      : null
   }
 
   getYearFromResult(result: BibResult) {
@@ -112,18 +94,5 @@ export default class SearchResultsBib {
       return displayStartYear
     }
     return null
-  }
-
-  // Map Bib items to ItemTableData class instances
-  // Unlike the Bib Page, a Search Result renders an item table per item
-  mapBibItemsToItemTables(items: SearchResultsItem[]): ItemTableData[] {
-    return items.length
-      ? items.slice(0, ITEMS_PER_SEARCH_RESULT).map((item) => {
-          return new ItemTableData([new Item(item, this)], {
-            isBibPage: false,
-            isArchiveCollection: this.isArchiveCollection,
-          })
-        })
-      : null
   }
 }
