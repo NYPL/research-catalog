@@ -11,9 +11,7 @@ import ItemTable from "../../src/components/ItemTable/ItemTable"
 import type { BibResult } from "../../src/types/bibTypes"
 import type { AnnotatedMarc } from "../../src/types/bibDetailsTypes"
 import Bib from "../../src/models/Bib"
-import Item from "../../src/models/Item"
 import ItemTableData from "../../src/models/ItemTableData"
-import SearchResultsBib from "../../src/models/SearchResultsBib"
 import initializePatronTokenAuth from "../../src/server/auth"
 
 interface BibPropsType {
