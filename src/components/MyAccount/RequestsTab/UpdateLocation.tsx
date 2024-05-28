@@ -11,11 +11,13 @@ import {
   type DefaultModalProps,
   type ConfirmationModalProps,
   type BaseModalProps,
+  SkeletonLoader,
 } from "@nypl/design-system-react-components"
 import type { SierraCodeName } from "../../../types/myAccountTypes"
 import styles from "../../../../styles/components/MyAccount.module.scss"
 import { useState } from "react"
 import { BASE_URL } from "../../../config/constants"
+import useLoading from "../../../../src/hooks/useLoading"
 
 interface UpdateLocationPropsType {
   holdId: string
@@ -81,6 +83,10 @@ const UpdateLocation = ({
       closeModal()
     },
     onConfirm: async () => {
+      setModalProps({
+        ...confirmLocationChangeModalProps(selected),
+        bodyContent: <SkeletonLoader showImage={false} />,
+      } as ConfirmationModalProps)
       const response = await fetch(
         `${BASE_URL}/api/account/holds/update/${holdId}`,
         {
