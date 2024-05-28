@@ -17,7 +17,6 @@ import type { SierraCodeName } from "../../../types/myAccountTypes"
 import styles from "../../../../styles/components/MyAccount.module.scss"
 import { useState } from "react"
 import { BASE_URL } from "../../../config/constants"
-import useLoading from "../../../../src/hooks/useLoading"
 
 interface UpdateLocationPropsType {
   holdId: string
