@@ -144,7 +144,7 @@ const CancelButton = ({
   return (
     <>
       <Button
-        width="max"
+        width="100%"
         buttonType="secondary"
         id={`cancel-${hold.id}`}
         onClick={() => {
