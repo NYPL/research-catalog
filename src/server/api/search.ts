@@ -58,9 +58,9 @@ export async function fetchResults(
 
   const [resultsResponse, aggregationsResponse, drbResultsResponse] =
     await Promise.allSettled([
-      await client.get(`${DISCOVERY_API_SEARCH_ROUTE}${resultsQuery}`),
-      await client.get(`${DISCOVERY_API_SEARCH_ROUTE}${aggregationQuery}`),
-      await drbClient.get(drbQuery),
+      client.get(`${DISCOVERY_API_SEARCH_ROUTE}${resultsQuery}`),
+      client.get(`${DISCOVERY_API_SEARCH_ROUTE}${aggregationQuery}`),
+      drbClient.get(drbQuery),
     ])
 
   // Assign results values for each response when status is fulfilled

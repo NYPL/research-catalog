@@ -57,7 +57,9 @@ const RequestsTab = ({
     hold ? (
       <Box sx={{ display: "flex", gap: "4px" }}>
         <CancelButton removeHold={removeHold} hold={hold} patron={patron} />
-        {hold.canFreeze && <FreezeButton hold={hold} patron={patron} />}
+        {hold.canFreeze && hold.status === "REQUEST PENDING" && (
+          <FreezeButton hold={hold} patron={patron} />
+        )}
       </Box>
     ) : null,
   ])
