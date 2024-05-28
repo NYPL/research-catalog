@@ -210,7 +210,7 @@ describe("MyAccountModel", () => {
       expect(patronWithFails.holds).toBeNull()
       expect(patronWithFails.checkouts).not.toHaveLength(0)
       expect(patronWithFails.fines.total).toEqual(0)
-      expect(patronWithFails.patron.name).toEqual("NONNA, STREGA")
+      expect(patronWithFails.patron.name).toEqual("Strega Nonna")
     })
     it("will return other processed data if an error is thrown", async () => {
       MyAccount.prototype.fetchCheckouts = async () =>
@@ -228,7 +228,7 @@ describe("MyAccountModel", () => {
       expect(patronWithFails.checkouts).toBe(null)
       expect(patronWithFails.holds).not.toHaveLength(0)
       expect(patronWithFails.fines.total).toEqual(0)
-      expect(patronWithFails.patron.name).toEqual("NONNA, STREGA")
+      expect(patronWithFails.patron.name).toEqual("Strega Nonna")
     })
   })
 })

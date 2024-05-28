@@ -1,7 +1,7 @@
 import { List } from "@nypl/design-system-react-components"
-import styles from "../../../styles/components/MyAccount.module.scss"
-
 import Barcode from "react-barcode"
+
+import styles from "../../../styles/components/MyAccount.module.scss"
 
 import type { Patron } from "../../types/myAccountTypes"
 import type { IconListElementPropType } from "./IconListElement"
@@ -14,7 +14,7 @@ const ProfileHeader = ({ patron }: { patron: Patron }) => {
       {
         icon: "actionPayment",
         term: "Card number",
-        description: patron.barcode,
+        description: patron.formattedBarcode,
       },
       {
         icon: "",
@@ -38,11 +38,15 @@ const ProfileHeader = ({ patron }: { patron: Patron }) => {
 
   return (
     <List
-      sx={{ border: "none", h2: { border: "none", paddingTop: 0 } }}
       className={styles.myAccountList}
       id="my-account-profile-header"
       title="My account"
       type="dl"
+      sx={{
+        border: "none",
+        h2: { border: "none", paddingTop: 0 },
+        marginBottom: "xxl",
+      }}
     >
       {profileData}
     </List>

@@ -1,4 +1,5 @@
 import React from "react"
+
 import { render, fireEvent, waitFor } from "../../../utils/testUtils"
 import PasswordModal from "./PasswordModal"
 import { processedPatron } from "../../../../__test__/fixtures/processedMyAccountData"
@@ -57,12 +58,15 @@ describe("PasswordModal", () => {
     fireEvent.click(submitButton)
 
     await waitFor(() => {
-      expect(queryByText("Your PIN/PASSWORD was changed.")).toBeInTheDocument()
+      expect(
+        queryByText("Your PIN/PASSWORD has been changed.")
+      ).toBeInTheDocument()
     })
 
     fireEvent.click(getByText("OK"))
+
     await waitFor(() => {
-      expect(queryByText("Your PIN/PASSWORD was changed.")).toBeNull()
+      expect(queryByText("Your PIN/PASSWORD has been changed.")).toBeNull()
     })
   })
 

@@ -104,6 +104,7 @@ export interface Patron {
   notificationPreference: string
   name: string
   barcode: string
+  formattedBarcode?: string
   expirationDate: string
   emails: string[]
   homeLibraryCode: string
