@@ -16,7 +16,8 @@ interface ItemTableProps {
  * The ItemTable displays item details, the RequestButtons
  */
 const ItemTable = ({ itemTableData }: ItemTableProps) => {
-  const isSearchResult = !itemTableData.isBibPage
+  const { tableHeadings, tableData, items, isBibPage } = itemTableData
+  const isSearchResult = !isBibPage
 
   return (
     <Box>
@@ -25,15 +26,15 @@ const ItemTable = ({ itemTableData }: ItemTableProps) => {
           itemTable: true,
           isSearchResult,
         })}
-        columnHeaders={itemTableData.tableHeadings}
-        tableData={itemTableData.tableData}
+        columnHeaders={tableHeadings}
+        tableData={tableData}
         showRowDividers={!isSearchResult}
         my={{ base: 0, md: "s" }}
       />
       {isSearchResult && (
         <Box>
-          <RequestButtons item={itemTableData.items[0]} />
-          <ItemAvailability item={itemTableData.items[0]} />
+          <RequestButtons item={items[0]} />
+          <ItemAvailability item={items[0]} />
         </Box>
       )}
     </Box>
