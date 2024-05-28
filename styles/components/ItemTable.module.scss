@@ -7,14 +7,16 @@
     margin-bottom: var(--nypl-space-xs);
   }
 
-  tr {
-    border: 0 !important;
+  &.isSearchResult {
+    tr {
+      border: 0 !important;
 
-    th,
-    td {
-      // Meant to be 240 col width + 32 (gap) = 272px
-      width: 272px;
-      padding: 0;
+      th,
+      td {
+        // Meant to be 240 col width + 32 (gap) = 272px
+        width: 272px;
+        padding: 0;
+      }
     }
   }
 }

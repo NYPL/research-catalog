@@ -1,9 +1,12 @@
 import { Box, Table } from "@nypl/design-system-react-components"
+import classNames from "classnames/bind"
 
 import type ItemTableData from "../../models/ItemTableData"
 import RequestButtons from "./RequestButtons"
 import ItemAvailability from "./ItemAvailability"
 import styles from "../../../styles/components/ItemTable.module.scss"
+
+const cx = classNames.bind(styles)
 
 interface ItemTableProps {
   itemTableData: ItemTableData
@@ -13,16 +16,21 @@ interface ItemTableProps {
  * The ItemTable displays item details, the RequestButtons
  */
 const ItemTable = ({ itemTableData }: ItemTableProps) => {
+  const isSearchResult = !itemTableData.isBibPage
+
   return (
     <Box>
       <Table
-        className={styles.itemTable}
+        className={cx({
+          itemTable: true,
+          isSearchResult,
+        })}
         columnHeaders={itemTableData.tableHeadings}
         tableData={itemTableData.tableData}
-        showRowDividers={itemTableData.isBibPage}
+        showRowDividers={!isSearchResult}
         my={{ base: 0, md: "s" }}
       />
-      {!itemTableData.isBibPage && (
+      {isSearchResult && (
         <Box>
           <RequestButtons item={itemTableData.items[0]} />
           <ItemAvailability item={itemTableData.items[0]} />
