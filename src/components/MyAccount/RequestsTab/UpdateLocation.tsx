@@ -156,7 +156,9 @@ const UpdateLocation = ({
     ),
     onClose: () => {
       setModalProps(
-        confirmLocationChangeModalProps(pickupLocation) as DefaultModalProps
+        confirmLocationChangeModalProps(
+          pickupLocation
+        ) as ConfirmationModalProps
       )
       closeModal()
     },
