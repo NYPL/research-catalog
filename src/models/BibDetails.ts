@@ -20,6 +20,7 @@ export default class BibDetails {
   supplementaryContent: LinkedBibDetail
   extent: BibDetail
   subjectHeadings: SubjectHeadingDetail
+
   constructor(bib: BibResult, annotatedMarc?: AnnotatedMarc) {
     this.bib = this.matchParallelToPrimaryValues(bib)
     // these properties are not string[] so they require separate processing

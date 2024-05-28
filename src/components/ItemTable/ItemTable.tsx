@@ -19,6 +19,7 @@ const ItemTable = ({ itemTableData }: ItemTableProps) => {
         className={styles.itemTable}
         columnHeaders={itemTableData.tableHeadings}
         tableData={itemTableData.tableData}
+        showRowDividers={itemTableData.isBibPage}
         my={{ base: 0, md: "s" }}
       />
       {!itemTableData.isBibPage && (

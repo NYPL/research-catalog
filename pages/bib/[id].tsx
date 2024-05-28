@@ -7,8 +7,12 @@ import { fetchBib } from "../../src/server/api/bib"
 import { mapQueryToBibParams } from "../../src/utils/bibUtils"
 import BibDetailsModel from "../../src/models/BibDetails"
 import BibDetails from "../../src/components/BibPage/BibDetail"
+import ItemTable from "../../src/components/ItemTable/ItemTable"
 import type { BibResult } from "../../src/types/bibTypes"
 import type { AnnotatedMarc } from "../../src/types/bibDetailsTypes"
+import Item from "../../src/models/Item"
+import ItemTableData from "../../src/models/ItemTableData"
+import SearchResultsBib from "../../src/models/SearchResultsBib"
 import initializePatronTokenAuth from "../../src/server/auth"
 
 interface BibPropsType {
@@ -30,6 +34,13 @@ export default function Bib({
     bib,
     annotatedMarc
   )
+  const itemTableData = bib.items.length
+    ? new ItemTableData(
+        bib.items.map((item) => new Item(item, new SearchResultsBib(bib))),
+        { isBibPage: true }
+      )
+    : null
+  console.log(itemTableData.tableData)
   return (
     <>
       <Head>
@@ -45,6 +56,7 @@ export default function Bib({
       <Layout isAuthenticated={isAuthenticated} activePage="bib">
         <Heading level="h1">{bib.title[0]}</Heading>
         <BibDetails key="top-details" details={topDetails} />
+        {itemTableData && <ItemTable itemTableData={itemTableData} />}
         <BibDetails
           heading="Details"
           key="bottom-details"
