@@ -2,7 +2,6 @@ import {
   Link as DSLink,
   type LinkTypes,
 } from "@nypl/design-system-react-components"
-import { chakra } from "@chakra-ui/react"
 import { type ReactNode } from "react"
 
 interface ExternalLinkProps {

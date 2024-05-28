@@ -9,6 +9,7 @@ describe("Account settings utils", () => {
   describe("buildUpdatedPatronDisplayData", () => {
     it("can handle an empty patron", () => {
       const originalPatronData = {
+        formattedBarcode: undefined,
         barcode: "1234567890",
         emails: ["email@mail.com"],
         expirationDate: "2025-03-28",
