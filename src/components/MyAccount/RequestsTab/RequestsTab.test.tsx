@@ -217,14 +217,14 @@ describe("RequestsTab", () => {
       />
     )
     expect(
-      component.queryByText("Freezing this hold failed", { exact: false })
+      component.queryByText("Hold freeze failed", { exact: false })
     ).not.toBeInTheDocument()
     let freezeButtons = component.getAllByText("Freeze")
     expect(freezeButtons.length).toBe(1)
     const freezeButton = component.getByText("Freeze")
     await userEvent.click(freezeButton)
     expect(
-      component.getByText("Freezing this hold failed", { exact: false })
+      component.getByText("Hold freeze failed", { exact: false })
     ).toBeInTheDocument()
     await userEvent.click(screen.getAllByText("OK", { exact: false })[0])
     freezeButtons = component.getAllByText("Freeze")
