@@ -69,16 +69,14 @@ describe("AccountSettingsDisplayOptions", () => {
   })
   describe("Update", () => {
     beforeEach(() => {
-
       render(
         <AccountSettingsForm
-          patron={mockPatron}
+          patron={processedPatron}
           setIsFormValid={() => {
             return true
           }}
         />
       )
-
     })
     it("displays a selector with patron's home library selected", () => {
       const homeLibraryCode = screen.getByDisplayValue(
