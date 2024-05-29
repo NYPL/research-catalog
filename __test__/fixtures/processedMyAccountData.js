@@ -1,8 +1,9 @@
-export const mockPatron = {
+export const processedPatron = {
   notificationPreference: "Email",
-  name: "NONNA, STREGA",
+  name: "Strega Nonna",
   barcode: "23333121538324",
-  expirationDate: "2025-03-28",
+  formattedBarcode: "2 3333 12153 8324",
+  expirationDate: "March 28, 2025",
   emails: ["streganonna@gmail.com", "spaghettigrandma@gmail.com"],
   phones: [
     {
@@ -11,55 +12,53 @@ export const mockPatron = {
     },
   ],
   homeLibraryCode: "sn   ",
-  id: 2772226,
+  id: 6742743,
 }
 
 export const emptyPatron = {
-  name: "NONNA, STREGA",
+  notificationPreference: "Email",
+  name: "Strega Nonna",
   barcode: "23333121538324",
-  expirationDate: "2025-03-28",
+  formattedBarcode: "2 3333 12153 8324",
+  expirationDate: "March 28, 2025",
   emails: [],
   phones: [],
   homeLibraryCode: "sn   ",
-  id: 2772226,
-  notificationPreference: null,
+  id: 6742743,
 }
 
-export const mockCheckouts = [
-  // Circ item
+export const processedCheckouts = [
   {
     id: "66527401",
     callNumber: "J PIC COUSINS",
     barcode: "33333455951331",
-    dueDate: "May 28, 2024",
-    patron: "2772226",
+    dueDate: "May 30, 2024",
+    patron: "6742743",
     title: "Good night, Little Fish",
     isResearch: false,
     bibId: "23129476",
     isNyplOwned: true,
     catalogHref: "https://borrow.nypl.org/search/card?recordId=23129476",
   },
-  // Research item
   {
     id: "66527400",
     callNumber: "J PIC A",
     barcode: "33333072760735",
     dueDate: "May 7, 2024",
-    patron: "2772226",
+    patron: "6742743",
     title: "Fish, fish, fish",
     isResearch: true,
     bibId: "17226308",
     isNyplOwned: true,
     catalogHref: "https://nypl.org/research/research-catalog/bib/b17226308",
   },
-  // Partner items
   {
     id: "66527399",
     callNumber: "test 5/6 01 xx",
     barcode: "1715021087264",
     dueDate: "May 7, 2024",
-    patron: "2772226",
-    title: "Partner item",
+    patron: "6742743",
+    title: "test 5/6 01",
     isResearch: true,
     bibId: "23296884",
     isNyplOwned: false,
@@ -70,7 +69,7 @@ export const mockCheckouts = [
     callNumber: "PJ5055.37.O4222 H64 2016g",
     barcode: "CU25631586",
     dueDate: "April 24, 2024",
-    patron: "2772226",
+    patron: "6742743",
     title:
       "[Standard NYPL restrictions apply] HOF HA-KELAVIM HA-MESHUHRARIM = THE BEACH OF FREE DOGS / AVRON POLAKOW. [RECAP]",
     isResearch: true,
@@ -80,45 +79,31 @@ export const mockCheckouts = [
   },
 ]
 
-export const mockHolds = [
-  // Research hold
+export const processedHolds = [
   {
-    patron: "2772226",
-    id: "49438134",
+    patron: "6742743",
+    id: "49438189",
     pickupByDate: null,
     canFreeze: false,
     frozen: false,
     status: "REQUEST PENDING",
-    pickupLocation: { code: "mal82", name: "Schwarzman Room 315 ONSITE USE" },
+    pickupLocation: {
+      code: "mal82",
+      name: "Schwarzman Room 315 ONSITE USE",
+    },
     title: "Spaghetti!",
     isResearch: true,
     bibId: "16145054",
     isNyplOwned: true,
     catalogHref: "https://nypl.org/research/research-catalog/bib/b16145054",
   },
-  // Circ holds
   {
-    patron: "2772226",
-    id: "48636910",
-    pickupByDate: "2024-02-15T09:00:00Z",
-    canFreeze: true,
-    frozen: false,
-    status: "REQUEST PENDING",
-    pickupLocation: { code: "sn", name: "SNFL (formerly Mid-Manhattan)" },
-    title:
-      "Quit like a woman : the radical choice to not drink in a culture obsessed with alcohol",
-    isResearch: false,
-    bibId: "22002760",
-    isNyplOwned: true,
-    catalogHref: "https://nypl.na2.iiivega.com/search/card?recordId=22002760",
-  },
-  {
-    patron: "2772226",
-    id: "49438135",
+    patron: "6742743",
+    id: "49438190",
     pickupByDate: null,
     canFreeze: true,
     frozen: false,
-    status: "REQUEST CONFIRMED",
+    status: "REQUEST PENDING",
     pickupLocation: { code: "sn", name: "SNFL (formerly Mid-Manhattan)" },
     title: "Pasta every day : make it, shape it, sauce it, eat it",
     isResearch: false,
@@ -127,13 +112,13 @@ export const mockHolds = [
     catalogHref: "https://borrow.nypl.org/search/card?recordId=23167148",
   },
   {
-    patron: "2772226",
-    id: "49438136",
+    patron: "6742743",
+    id: "49438191",
     pickupByDate: null,
     canFreeze: false,
     frozen: false,
-    status: "REQUEST PENDING",
-    pickupLocation: { code: "bca0f", name: "Bronx Library Center Fiction" },
+    status: "REQUEST CONFIRMED",
+    pickupLocation: { code: "sn", name: "SNFL (formerly Mid-Manhattan)" },
     title: "The house of mirth : large print",
     isResearch: false,
     bibId: "22046460",
@@ -141,31 +126,30 @@ export const mockHolds = [
     catalogHref: "https://borrow.nypl.org/search/card?recordId=22046460",
   },
   {
-    patron: "2772226",
-    id: "49438137",
-    pickupByDate: "May 15, 2024",
+    patron: "6742743",
+    id: "49438192",
+    pickupByDate: "May 17, 2024",
     canFreeze: false,
     frozen: false,
     status: "READY FOR PICKUP",
-    pickupLocation: {
-      code: "mbj0i",
-      name: "Macomb's Bridge Children's Picture Book",
-    },
+    pickupLocation: { code: "sn", name: "SNFL (formerly Mid-Manhattan)" },
     title: "I want to be spaghetti!",
     isResearch: false,
     bibId: "23099273",
     isNyplOwned: true,
     catalogHref: "https://borrow.nypl.org/search/card?recordId=23099273",
   },
-  // Partner hold
   {
-    patron: "2772226",
-    id: "49438138",
+    patron: "6742743",
+    id: "49438193",
     pickupByDate: null,
     canFreeze: false,
     frozen: false,
     status: "REQUEST PENDING",
-    pickupLocation: { code: "mal", name: "Schwarzman Room 315 ONSITE USE" },
+    pickupLocation: {
+      code: "mal",
+      name: "Schwarzman Room 315 ONSITE USE",
+    },
     title: "Partner record",
     isResearch: true,
     bibId: "23296875",
@@ -173,13 +157,14 @@ export const mockHolds = [
     catalogHref: null,
   },
 ]
-export const mockFines = {
+
+export const processedFines = {
   total: 14.99,
   entries: [
     {
       detail: "Replacement",
       amount: 14.99,
-      date: "2023-06-15T17:34:46Z",
+      date: "June 15, 2023",
     },
   ],
 }

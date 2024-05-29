@@ -4,7 +4,7 @@ import {
 } from "./AccountSettingsDisplayOptions"
 import {
   emptyPatron,
-  mockPatron,
+  processedPatron,
 } from "../../../../__test__/fixtures/processedMyAccountData"
 import { render, screen } from "../../../utils/testUtils"
 
@@ -13,7 +13,7 @@ describe("AccountSettingsDisplayOptions", () => {
     beforeEach(() => {
       render(
         <AccountSettingsDisplay
-          patron={{ ...mockPatron, notificationPreference: "Mobile" }}
+          patron={{ ...processedPatron, notificationPreference: "Mobile" }}
         />
       )
     })
@@ -69,6 +69,7 @@ describe("AccountSettingsDisplayOptions", () => {
   })
   describe("Update", () => {
     beforeEach(() => {
+
       render(
         <AccountSettingsForm
           patron={mockPatron}
@@ -77,6 +78,7 @@ describe("AccountSettingsDisplayOptions", () => {
           }}
         />
       )
+
     })
     it("displays a selector with patron's home library selected", () => {
       const homeLibraryCode = screen.getByDisplayValue(

@@ -1,9 +1,10 @@
-import AccountSettingsTab from "./Settings/AccountSettingsTab"
 import { Tabs, Text } from "@nypl/design-system-react-components"
 import { useRouter } from "next/router"
+import { useState } from "react"
+
+import AccountSettingsTab from "./Settings/AccountSettingsTab"
 import CheckoutsTab from "./CheckoutsTab/CheckoutsTab"
 import RequestsTab from "./RequestsTab/RequestsTab"
-import { useState } from "react"
 import FeesTab from "./FeesTab/FeesTab"
 import type { Checkout, Patron, Hold, Fine } from "../../types/myAccountTypes"
 
@@ -87,7 +88,6 @@ const ProfileTabs = ({
 
   return (
     <Tabs
-      sx={{ "div[role=tabpanel]": { padding: 0 } }}
       defaultIndex={tabsDict[activePath] || 0}
       id="tabs-id"
       onChange={(index) => {
@@ -95,6 +95,7 @@ const ProfileTabs = ({
         updatePath(tabsData[index].urlPath)
       }}
       tabsData={tabsData}
+      sx={{ "div[role=tabpanel]": { padding: 0 }, marginBottom: "xxl" }}
     />
   )
 }

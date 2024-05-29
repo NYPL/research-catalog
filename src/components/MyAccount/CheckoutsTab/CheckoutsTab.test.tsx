@@ -1,8 +1,8 @@
 import React from "react"
 import { render, within } from "../../../utils/testUtils"
 import {
-  mockCheckouts,
-  mockPatron,
+  processedCheckouts,
+  processedPatron,
 } from "../../../../__test__/fixtures/processedMyAccountData"
 import CheckoutsTab from "./CheckoutsTab"
 import { userEvent } from "@testing-library/user-event"
@@ -17,38 +17,40 @@ describe("CheckoutsTab", () => {
   })
 
   it("renders", () => {
-    render(<CheckoutsTab patron={mockPatron} checkouts={mockCheckouts} />)
+    render(
+      <CheckoutsTab patron={processedPatron} checkouts={processedCheckouts} />
+    )
   })
 
   it("renders each checkout as a row", () => {
     const component = render(
-      <CheckoutsTab patron={mockPatron} checkouts={mockCheckouts} />
+      <CheckoutsTab patron={processedPatron} checkouts={processedCheckouts} />
     )
     const bodyRows = component.getAllByRole("rowgroup")[1]
     expect(within(bodyRows).getAllByRole("row").length).toBe(4)
   })
   it("calls renew checkout endpoint when Renew button is clicked", async () => {
     const component = render(
-      <CheckoutsTab patron={mockPatron} checkouts={mockCheckouts} />
+      <CheckoutsTab patron={processedPatron} checkouts={processedCheckouts} />
     )
 
     await userEvent.click(component.getAllByText("Renew")[0])
 
     expect(fetch).toHaveBeenCalledWith(
-      `/research/research-catalog/api/account/checkouts/renew/${mockCheckouts[0].id}`,
+      `/research/research-catalog/api/account/checkouts/renew/${processedCheckouts[0].id}`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ patronId: mockPatron.id }),
+        body: JSON.stringify({ patronId: processedPatron.id }),
       }
     )
   })
 
   it("disables button on successful renewal", async () => {
     const component = render(
-      <CheckoutsTab patron={mockPatron} checkouts={mockCheckouts} />
+      <CheckoutsTab patron={processedPatron} checkouts={processedCheckouts} />
     )
     const renewButton = component.getAllByText("Renew")[0]
     expect(renewButton).not.toBeDisabled()
@@ -56,13 +58,13 @@ describe("CheckoutsTab", () => {
     await userEvent.click(renewButton)
 
     expect(fetch).toHaveBeenCalledWith(
-      `/research/research-catalog/api/account/checkouts/renew/${mockCheckouts[0].id}`,
+      `/research/research-catalog/api/account/checkouts/renew/${processedCheckouts[0].id}`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ patronId: mockPatron.id }),
+        body: JSON.stringify({ patronId: processedPatron.id }),
       }
     )
     expect(renewButton).toBeDisabled()
@@ -74,7 +76,7 @@ describe("CheckoutsTab", () => {
       json: async () => ({ message: "Failed", status: 403, body: {} }),
     } as Response)
     const component = render(
-      <CheckoutsTab patron={mockPatron} checkouts={mockCheckouts} />
+      <CheckoutsTab patron={processedPatron} checkouts={processedCheckouts} />
     )
     const renewButton = component.getAllByText("Renew")[0]
 
@@ -83,13 +85,13 @@ describe("CheckoutsTab", () => {
     await userEvent.click(renewButton)
 
     expect(fetch).toHaveBeenCalledWith(
-      `/research/research-catalog/api/account/checkouts/renew/${mockCheckouts[0].id}`,
+      `/research/research-catalog/api/account/checkouts/renew/${processedCheckouts[0].id}`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ patronId: mockPatron.id }),
+        body: JSON.stringify({ patronId: processedPatron.id }),
       }
     )
 
@@ -97,7 +99,7 @@ describe("CheckoutsTab", () => {
   })
   it("does not render partner items with a link to the record", () => {
     const component = render(
-      <CheckoutsTab patron={mockPatron} checkouts={mockCheckouts} />
+      <CheckoutsTab patron={processedPatron} checkouts={processedCheckouts} />
     )
     // Borrow.nypl.org and two NYPL titles
     const expectedLinks = component.getAllByRole("link")
@@ -106,7 +108,7 @@ describe("CheckoutsTab", () => {
 
   it("does not render partner/research items with renew buttons", () => {
     const component = render(
-      <CheckoutsTab patron={mockPatron} checkouts={mockCheckouts} />
+      <CheckoutsTab patron={processedPatron} checkouts={processedCheckouts} />
     )
     // 1 circ checkout
     const expectedRenewButtons = component.getAllByText("Renew")

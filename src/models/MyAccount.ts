@@ -1,4 +1,3 @@
-import logger from "../../logger"
 import sierraClient from "../server/sierraClient"
 import type { MarcSubfield } from "../types/bibDetailsTypes"
 import type {
@@ -16,7 +15,7 @@ import type {
   BibDataMapType,
 } from "../types/myAccountTypes"
 
-import { buildPatron } from "../utils/myAccountUtils"
+import { buildPatron, formatDate } from "../utils/myAccountUtils"
 
 class MyAccountModelError extends Error {
   constructor(errorDetail: string, error: Error) {
@@ -48,7 +47,6 @@ export default class MyAccount {
   async getCheckouts() {
     const checkouts = await this.fetchCheckouts()
     const checkoutBibData = await this.fetchBibData(checkouts.entries, "item")
-    console.log(checkoutBibData)
     const checkoutsWithBibData = this.buildCheckouts(
       checkouts.entries,
       checkoutBibData.entries
@@ -120,7 +118,6 @@ export default class MyAccount {
       `bibs?id=${itemLevelHoldsorCheckouts}&fields=default,varFields`
     )
     bibData.entries = bibData.entries.concat(bibLevelHolds)
-    console.log("bib level", bibLevelHolds)
     return bibData
   }
 
@@ -276,17 +273,13 @@ export default class MyAccount {
       throw new MyAccountModelError("building fines", e)
     }
   }
+
   /**
    * getDueDate
    * Returns date in readable string ("Month day, year")
    */
   static formatDate(date: string | number | Date) {
-    if (!date) return null
-    const d = new Date(date)
-    const year = d.getFullYear()
-    const day = d.getDate()
-    const month = d.toLocaleString("default", { month: "long" })
-    return `${month} ${day}, ${year}`
+    return formatDate(date)
   }
 
   /**

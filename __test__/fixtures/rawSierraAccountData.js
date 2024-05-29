@@ -3992,15 +3992,15 @@ export const holds = {
         "https://nypl-sierra-test.nypl.org/iii/sierra-api/v6/patrons/6742743",
       frozen: false,
       pickupLocation: {
-        code: "fe",
-        name: "58th Street",
+        code: "sn",
+        name: "SNFL (formerly Mid-Manhattan)",
       },
       status: {
         code: "0",
         name: "on hold.",
       },
       recordType: "b",
-      canFreeze: false,
+      canFreeze: true,
     },
     {
       id: "https://nypl-sierra-test.nypl.org/iii/sierra-api/v6/patrons/holds/49438191",
@@ -4015,8 +4015,8 @@ export const holds = {
           name: "Bronx Library Center Fiction",
         },
         status: {
-          code: "!",
-          display: "ON HOLDSHELF",
+          code: "t",
+          name: "Requested item is in transit.",
         },
         volumes: [],
         barcode: "33333437951979",
@@ -4030,8 +4030,8 @@ export const holds = {
         name: "SNFL (formerly Mid-Manhattan)",
       },
       status: {
-        code: "0",
-        name: "on hold.",
+        code: "t",
+        name: "Requested item is in transit.",
       },
       recordType: "i",
       canFreeze: false,
