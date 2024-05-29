@@ -1,6 +1,5 @@
-import type { BibResult, ElectronicResource } from "../types/bibTypes"
+import type { BibResult } from "../types/bibTypes"
 import Bib from "../models/Bib"
-import Item from "../models/Item"
 import ItemTableData from "./ItemTableData"
 import { ITEMS_PER_SEARCH_RESULT } from "../config/constants"
 
@@ -18,8 +17,6 @@ import { ITEMS_PER_SEARCH_RESULT } from "../config/constants"
 export default class SearchResultsBib extends Bib {
   yearPublished?: string
   publicationStatement?: string
-  electronicResources?: ElectronicResource[]
-  numPhysicalItems: number
 
   constructor(result: BibResult) {
     super(result)
@@ -27,34 +24,10 @@ export default class SearchResultsBib extends Bib {
     this.publicationStatement = result.publicationStatement?.length
       ? result.publicationStatement[0]
       : null
-    this.electronicResources = result.electronicResources || null
-    this.numPhysicalItems = result.numItemsTotal || 0
-  }
-
-  get url() {
-    return `/bib/${this.id}`
-  }
-
-  get numElectronicResources() {
-    return this.electronicResources?.length || 0
-  }
-
-  get hasPhysicalItems() {
-    return this.numPhysicalItems > 0
-  }
-
-  get hasElectronicResources() {
-    return this.numElectronicResources > 0
   }
 
   get showViewAllItemsLink() {
     return this.numPhysicalItems > ITEMS_PER_SEARCH_RESULT
-  }
-
-  get numItems() {
-    return this.hasPhysicalItems
-      ? this.numPhysicalItems
-      : this.numElectronicResources
   }
 
   get resourceType() {

@@ -57,7 +57,9 @@ export default function BibPage({
       <Layout isAuthenticated={isAuthenticated} activePage="bib">
         <Heading level="h1">{bib.title}</Heading>
         <BibDetails key="top-details" details={topDetails} />
-        {itemTableData && <ItemTable itemTableData={itemTableData} />}
+        {bib.showItemTable && itemTableData ? (
+          <ItemTable itemTableData={itemTableData} />
+        ) : null}
         <BibDetails
           heading="Details"
           key="bottom-details"

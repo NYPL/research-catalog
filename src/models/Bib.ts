@@ -1,4 +1,4 @@
-import type { BibResult } from "../types/bibTypes"
+import type { BibResult, ElectronicResource } from "../types/bibTypes"
 import type { JSONLDValue } from "../types/itemTypes"
 import Item from "../models/Item"
 
@@ -16,6 +16,8 @@ import Item from "../models/Item"
 export default class Bib {
   id: string
   title: string
+  electronicResources?: ElectronicResource[]
+  numPhysicalItems: number
   issuance?: JSONLDValue[]
   materialType?: string
   items?: Item[]
@@ -23,10 +25,42 @@ export default class Bib {
   constructor(result: BibResult) {
     this.id = result["@id"] ? result["@id"].substring(4) : ""
     this.title = this.getTitleFromResult(result)
+    this.electronicResources = result.electronicResources || null
+    this.numPhysicalItems = result.numItemsTotal || 0
     this.issuance = (result.issuance?.length && result.issuance) || null
     this.items = this.getItemsFromResult(result)
     this.materialType =
       (result.materialType?.length && result.materialType[0]?.prefLabel) || null
+  }
+
+  get url() {
+    return `/bib/${this.id}`
+  }
+
+  get numElectronicResources() {
+    return this.electronicResources?.length || 0
+  }
+
+  get numItems() {
+    return this.hasPhysicalItems
+      ? this.numPhysicalItems
+      : this.numElectronicResources
+  }
+
+  get hasPhysicalItems() {
+    return this.numPhysicalItems > 0
+  }
+
+  get hasElectronicResources() {
+    return this.numElectronicResources > 0
+  }
+
+  get isOnlyElectronicResources() {
+    return this.hasElectronicResources && !this.hasPhysicalItems
+  }
+
+  get showItemTable() {
+    return !this.isOnlyElectronicResources && this.hasPhysicalItems
   }
 
   // Used to determine the Volume column text in the ItemTable
