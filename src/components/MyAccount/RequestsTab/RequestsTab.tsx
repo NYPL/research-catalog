@@ -6,7 +6,7 @@ import ItemsTab from "../ItemsTab"
 import CancelButton from "./CancelButton"
 import FreezeButton from "./FreezeButton"
 import UpdateLocation from "./UpdateLocation"
-import { filteredPickupLocations as pickupLocations } from "../../../../__test__/fixtures/processedMyAccountData"
+import { filteredPickupLocations as pickupLocations } from "../../../utils/myAccountUtils"
 
 const RequestsTab = ({
   updateHoldLocation,

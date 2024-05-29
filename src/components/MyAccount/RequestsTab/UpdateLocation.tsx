@@ -169,7 +169,7 @@ const UpdateLocation = ({
       <Heading className={styles.modalHeading}>
         <>
           <Icon size="large" name="errorFilled" color="ui.error.primary" />
-          <Text mb={0}> Location change failed </Text>
+          <Text mb={0}>Location change failed</Text>
         </>
       </Heading>
     ),
