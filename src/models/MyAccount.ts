@@ -306,24 +306,30 @@ export default class MyAccount {
   }
 }
 
+export const getPickupLocations = async () => {
+  const locations = await fetchPickupLocations()
+  return filterPickupLocations(locations)
+}
+
 export const MyAccountFactory = async (id: string, client) => {
   const patronFetcher = new MyAccount(client, id)
+  const before = Date.now()
   const sierraData = await Promise.allSettled([
+    getPickupLocations(),
     patronFetcher.getCheckouts(),
     patronFetcher.getHolds(),
     patronFetcher.getPatron(),
     patronFetcher.getFines(),
   ])
-  const [checkouts, holds, patron, fines] = sierraData.map((data) => {
-    if (data.status === "fulfilled") return data.value
-    else return null
-  }) as [Checkout[], Hold[], Patron, Fine]
-  return { checkouts, holds, patron, fines }
-}
-
-export const getPickupLocations = async () => {
-  const locations = await fetchPickupLocations()
-  return filterPickupLocations(locations)
+  const [pickupLocations, checkouts, holds, patron, fines] = sierraData.map(
+    (data) => {
+      if (data.status === "fulfilled") return data.value
+      else return null
+    }
+  ) as [SierraCodeName[], Checkout[], Hold[], Patron, Fine]
+  const after = Date.now()
+  console.log("time", after - before)
+  return { pickupLocations, checkouts, holds, patron, fines }
 }
 
 const fetchPickupLocations = async () => {
