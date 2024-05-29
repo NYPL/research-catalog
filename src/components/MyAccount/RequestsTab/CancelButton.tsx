@@ -27,7 +27,7 @@ const CancelButton = ({
 }) => {
   const { onOpen: openModal, onClose: closeModal, Modal } = useModal()
 
-  function confirmModalProps(hold) {
+  function successModalProps(hold) {
     return {
       type: "default",
       bodyContent: (
@@ -110,9 +110,9 @@ const CancelButton = ({
       closeButtonLabel: "No, keep request",
       confirmButtonLabel: "Yes, cancel request",
       headingText: (
-        <Box className={styles.modalHeading}>
+        <Heading className={styles.modalHeading}>
           <Text sx={{ marginBottom: 0 }}>Cancel request?</Text>
-        </Box>
+        </Heading>
       ),
       onConfirm: async () => {
         const response = await fetch(
@@ -127,7 +127,7 @@ const CancelButton = ({
         )
         if (response.status == 200) {
           // Open next modal to confirm request has been canceled.
-          setModalProps(confirmModalProps(hold) as DefaultModalProps)
+          setModalProps(successModalProps(hold) as DefaultModalProps)
         } else {
           setModalProps(failureModalProps(hold) as DefaultModalProps)
         }
