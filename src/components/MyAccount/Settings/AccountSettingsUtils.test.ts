@@ -9,14 +9,15 @@ describe("Account settings utils", () => {
   describe("buildUpdatedPatronDisplayData", () => {
     it("can handle an empty patron", () => {
       const originalPatronData = {
-        barcode: "23333121538324",
-        emails: ["veggievera@gmail.com"],
+        formattedBarcode: undefined,
+        barcode: "1234567890",
+        emails: ["email@mail.com"],
         expirationDate: "2025-03-28",
         homeLibraryCode: "sn",
         id: 2772226,
-        name: "KAHN, VERA RUTH",
+        name: "NONNA, STREGA",
         notificationPreference: "Email",
-        phones: [{ number: "6466600432", type: "t" }],
+        phones: [{ number: "2129876543", type: "t" }],
       }
       const patronUpdateBody = {}
       expect(
@@ -25,32 +26,29 @@ describe("Account settings utils", () => {
     })
     it("can combine patron data and update body with all fields provided", () => {
       const originalPatronData = {
-        barcode: "23333121538324",
-        emails: ["veggievera@gmail.com"],
+        barcode: "1234567890",
+        emails: ["email@mail.com"],
         expirationDate: "2025-03-28",
         homeLibraryCode: "sn",
         id: 2772226,
-        name: "KAHN, VERA RUTH",
+        name: "NONNA, STREGA",
         notificationPreference: "Email",
-        phones: [{ number: "6466600432", type: "t" }],
+        phones: [{ number: "2129876543", type: "t" }],
       }
       const patronUpdateBody = {
-        emails: ["veraruthkahn@gmail.com", "veggievera@gmail.com"],
+        emails: ["hey@you.com", "email@mail.com"],
         fixedFields: { 268: { label: "Notice Preference", value: "p" } },
         homeLibraryCode: "mp   ",
         phones: [
-          { number: "6466600432", type: "t" },
+          { number: "2129876543", type: "t" },
           { number: "1234567890", type: "t" },
         ],
       }
       const { id, emails, phones, homeLibraryCode, notificationPreference } =
         buildUpdatedPatronDisplayData(originalPatronData, patronUpdateBody)
-      expect(emails).toStrictEqual([
-        "veraruthkahn@gmail.com",
-        "veggievera@gmail.com",
-      ])
+      expect(emails).toStrictEqual(["hey@you.com", "email@mail.com"])
       expect(phones).toStrictEqual([
-        { number: "6466600432", type: "t" },
+        { number: "2129876543", type: "t" },
         { number: "1234567890", type: "t" },
       ])
       expect(notificationPreference).toEqual("Phone")
@@ -59,14 +57,14 @@ describe("Account settings utils", () => {
     })
     it("updates original data when updated data is missing fields", () => {
       const originalPatronData = {
-        barcode: "23333121538324",
-        emails: ["veggievera@gmail.com"],
+        barcode: "1234567890",
+        emails: ["email@mail.com"],
         expirationDate: "2025-03-28",
         homeLibraryCode: "sn",
         id: 2772226,
-        name: "KAHN, VERA RUTH",
+        name: "NONNA, STREGA",
         notificationPreference: "Email",
-        phones: [{ number: "6466600432", type: "t" }],
+        phones: [{ number: "2129876543", type: "t" }],
       }
       const patronUpdateBody = {
         fixedFields: { 268: { label: "Notice Preference", value: "p" } },

@@ -14,7 +14,10 @@ const CheckoutsTab = ({
   function formatTitleElement(checkout: Checkout) {
     if (checkout.catalogHref) {
       return (
-        <ExternalLink href={checkout.catalogHref}>
+        <ExternalLink
+          href={checkout.catalogHref}
+          __css={{ textDecoration: "none" }}
+        >
           {checkout.title}
         </ExternalLink>
       )
