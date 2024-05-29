@@ -7,6 +7,7 @@ import {
   Button,
   Text,
   Heading,
+  SkeletonLoader,
 } from "@nypl/design-system-react-components"
 import { BASE_URL } from "../../../config/constants"
 import styles from "../../../../styles/components/MyAccount.module.scss"
@@ -115,6 +116,10 @@ const CancelButton = ({
         </Heading>
       ),
       onConfirm: async () => {
+        setModalProps({
+          ...checkModalProps(hold),
+          bodyContent: <SkeletonLoader showImage={false} />,
+        } as ConfirmationModalProps)
         const response = await fetch(
           `${BASE_URL}/api/account/holds/cancel/${hold.id}`,
           {
