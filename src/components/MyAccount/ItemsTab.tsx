@@ -25,9 +25,9 @@ const ItemsTab = ({
         <span>
           See{" "}
           <ExternalLink href={appConfig.urls.circulatingCatalog}>
-            this page
+            eBooks and eAudiobooks
           </ExternalLink>{" "}
-          for eBooks and eAudiobooks {userAction} by you
+          {userAction} by you
         </span>
       </Box>
       {data?.length > 0 && (

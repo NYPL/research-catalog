@@ -126,6 +126,7 @@ const RenewButton = ({
         onClick={handleClick}
         isDisabled={isButtonDisabled}
         aria-disabled={isButtonDisabled}
+        aria-label={`Renew ${checkout.title}`}
       >
         Renew
       </Button>
