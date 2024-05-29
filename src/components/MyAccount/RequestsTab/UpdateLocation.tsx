@@ -177,14 +177,16 @@ const UpdateLocation = ({
   return (
     <>
       <Button
-        pl={0}
         size="small"
+        pl={0}
         onClick={openModal}
         id={`update-pickup-location-${key}`}
         buttonType="text"
       >
-        <Icon name="editorMode" align="left" size="small"></Icon>
-        <Text className={styles.changeLocation}>Change location</Text>
+        <Icon name="editorMode" align="left" size="medium"></Icon>
+        <Text fontSize={0} className={styles.changeLocation}>
+          Change location
+        </Text>
       </Button>
       <Modal {...modalProps} />
     </>
