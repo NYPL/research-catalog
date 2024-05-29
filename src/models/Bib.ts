@@ -4,15 +4,12 @@ import Item from "../models/Item"
 import ItemTableData from "./ItemTableData"
 
 /**
- * The Bib class contains the data and getter functions
- * for a single Search Results Bib entity.
+ * The Bib class represents a single Bib entity and contains the data
+ * and getter functions used in both the Bib Details page and a single
+ * Search Result.
  *
- * Search Results returned from the API are mapped and initialized into
- * SearchResultsBib objects in the SearchResults component.
- *
- * Certain string fields (e.g. publicationStatement) returned from the API are
- * formatted as a single item in an array. These fields are extracted and parsed
- * into simple string attributes via the object's constructor.
+ * It is the parent class of SearchResultsBib, which adds functionality specific
+ * to Search Results.
  */
 export default class Bib {
   id: string
@@ -20,7 +17,6 @@ export default class Bib {
   electronicResources?: ElectronicResource[]
   numPhysicalItems: number
   issuance?: JSONLDValue[]
-  materialType?: string
   items?: Item[]
 
   constructor(result: BibResult) {
@@ -30,8 +26,6 @@ export default class Bib {
     this.numPhysicalItems = result.numItemsTotal || 0
     this.issuance = (result.issuance?.length && result.issuance) || null
     this.items = this.getItemsFromResult(result)
-    this.materialType =
-      (result.materialType?.length && result.materialType[0]?.prefLabel) || null
   }
 
   get url() {
