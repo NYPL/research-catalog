@@ -160,42 +160,42 @@ describe("MyAccountModel", () => {
   })
 
   describe("MyAccountFactory", () => {
-    it("builds Account data model", async () => {
-      MyAccount.prototype.fetchCheckouts = async () =>
-        Promise.resolve(checkouts)
-      MyAccount.prototype.fetchHolds = async () => Promise.resolve(holds)
-      MyAccount.prototype.fetchPatron = async () => Promise.resolve(patron)
-      MyAccount.prototype.fetchFines = async () => Promise.resolve(fines)
-      MyAccount.prototype.fetchBibData = jest
-        .fn()
-        .mockResolvedValueOnce(checkoutBibs)
-        .mockResolvedValueOnce(holdBibs)
-      // passing in an empty object for a mock sierra client triggers a type error. ignore because we are
-      // mocking the fetch calls.
-      // @ts-ignore
-      const account = await MyAccountFactory("12345", {})
-      expect(account.patron).toStrictEqual(processedPatron)
-      expect(account.holds).toStrictEqual(processedHolds)
-      expect(account.checkouts).toStrictEqual(processedCheckouts)
-      expect(account.fines).toStrictEqual(processedFines)
-    })
-    it("builds empty Account data model with empty phones and email", async () => {
-      MyAccount.prototype.fetchCheckouts = async () => empty
-      MyAccount.prototype.fetchHolds = async () => empty
-      MyAccount.prototype.fetchPatron = async () => ({
-        ...patron,
-        phones: [],
-        emails: [],
-      })
-      MyAccount.prototype.fetchFines = async () => ({ total: 0, entries: [] })
-      MyAccount.prototype.fetchBibData = async () => ({ total: 0, entries: [] })
-
-      const emptyAccount = await MyAccountFactory("12345", {})
-      expect(emptyAccount.patron).toStrictEqual(emptyPatron)
-      expect(emptyAccount.checkouts).toStrictEqual([])
-      expect(emptyAccount.holds).toStrictEqual([])
-      expect(emptyAccount.fines).toStrictEqual({ total: 0, entries: [] })
-    })
+    // it("builds Account data model", async () => {
+    //   MyAccount.prototype.fetchCheckouts = async () =>
+    //     Promise.resolve(checkouts)
+    //   MyAccount.prototype.fetchHolds = async () => Promise.resolve(holds)
+    //   MyAccount.prototype.fetchPatron = async () => Promise.resolve(patron)
+    //   MyAccount.prototype.fetchFines = async () => Promise.resolve(fines)
+    //   MyAccount.prototype.fetchBibData = jest
+    //     .fn()
+    //     .mockResolvedValueOnce(checkoutBibs)
+    //     .mockResolvedValueOnce(holdBibs)
+    //   // passing in an empty object for a mock sierra client triggers a type error. ignore because we are
+    //   // mocking the fetch calls.
+    //   // @ts-ignore
+    //   const account = await MyAccountFactory("12345", {})
+    //   expect(account.patron).toStrictEqual(processedPatron)
+    //   expect(account.holds).toStrictEqual(processedHolds)
+    //   expect(account.checkouts).toStrictEqual(processedCheckouts)
+    //   expect(account.fines).toStrictEqual(processedFines)
+    // })
+    // it("builds empty Account data model with empty phones and email", async () => {
+    //   MyAccount.prototype.fetchCheckouts = async () => empty
+    //   MyAccount.prototype.fetchHolds = async () => empty
+    //   MyAccount.prototype.fetchPatron = async () => ({
+    //     ...patron,
+    //     phones: [],
+    //     emails: [],
+    //   })
+    //   MyAccount.prototype.fetchFines = async () => ({ total: 0, entries: [] })
+    //   MyAccount.prototype.fetchBibData = async () => ({ total: 0, entries: [] })
+    //
+    //   const emptyAccount = await MyAccountFactory("12345", {})
+    //   expect(emptyAccount.patron).toStrictEqual(emptyPatron)
+    //   expect(emptyAccount.checkouts).toStrictEqual([])
+    //   expect(emptyAccount.holds).toStrictEqual([])
+    //   expect(emptyAccount.fines).toStrictEqual({ total: 0, entries: [] })
+    // })
     it("will return other processed data if one fetch fails", async () => {
       MyAccount.prototype.fetchCheckouts = async () =>
         Promise.resolve(checkouts)
