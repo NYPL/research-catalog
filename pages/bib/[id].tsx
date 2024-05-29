@@ -11,7 +11,6 @@ import ItemTable from "../../src/components/ItemTable/ItemTable"
 import type { BibResult } from "../../src/types/bibTypes"
 import type { AnnotatedMarc } from "../../src/types/bibDetailsTypes"
 import Bib from "../../src/models/Bib"
-import ItemTableData from "../../src/models/ItemTableData"
 import initializePatronTokenAuth from "../../src/server/auth"
 
 interface BibPropsType {
@@ -35,13 +34,6 @@ export default function BibPage({
     annotatedMarc
   )
 
-  const itemTableData = bib.items
-    ? new ItemTableData(bib.items, {
-        isBibPage: true,
-        isArchiveCollection: bib.isArchiveCollection,
-      })
-    : null
-
   return (
     <>
       <Head>
@@ -57,8 +49,8 @@ export default function BibPage({
       <Layout isAuthenticated={isAuthenticated} activePage="bib">
         <Heading level="h1">{bib.title}</Heading>
         <BibDetails key="top-details" details={topDetails} />
-        {bib.showItemTable && itemTableData ? (
-          <ItemTable itemTableData={itemTableData} />
+        {bib.itemTableData ? (
+          <ItemTable itemTableData={bib.itemTableData} />
         ) : null}
         <BibDetails
           heading="Details"

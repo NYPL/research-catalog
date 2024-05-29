@@ -41,7 +41,7 @@ export default class SearchResultsBib extends Bib {
   }
 
   // Map Bib items to ItemTableData class instances
-  // Unlike the Bib Page, a Search Result renders an item table per item
+  // Unlike the Bib Page, a Search Result renders an ItemTable component per Item
   get itemTables(): ItemTableData[] {
     return this.items
       ? this.items.slice(0, ITEMS_PER_SEARCH_RESULT).map((item) => {
