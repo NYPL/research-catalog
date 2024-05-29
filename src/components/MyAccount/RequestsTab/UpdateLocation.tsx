@@ -103,7 +103,7 @@ const UpdateLocation = ({
     },
     headingText: (
       <Heading className={styles.modalHeading}>
-        <Text sx={{ mb: 0 }}> Where would you like to pick up this item? </Text>
+        <Text mb={0}> Where would you like to pick up this item? </Text>
       </Heading>
     ),
   })
@@ -116,7 +116,7 @@ const UpdateLocation = ({
     type: "default",
     bodyContent: (
       <Box className={styles.modalBody}>
-        <Text sx={{ ml: "l" }}>
+        <Text ml="l">
           Your item will be available for pickup at the {newLocation.name}{" "}
           Library.
         </Text>
@@ -131,7 +131,7 @@ const UpdateLocation = ({
             name="actionCheckCircleFilled"
             color="ui.success.primary"
           />
-          <Text sx={{ mb: 0 }}> Location change successful </Text>
+          <Text mb={0}> Location change successful </Text>
         </>
       </Heading>
     ),
@@ -147,7 +147,7 @@ const UpdateLocation = ({
     type: "default",
     bodyContent: (
       <Box className={styles.modalBody}>
-        <Text sx={{ ml: "l", mr: "m" }}>
+        <Text ml="l" mr="m">
           We were unable to change the pickup location. Please contact{" "}
           <DSLink href="https://www.nypl.org/get-help/contact-us">
             AskNYPL
@@ -169,7 +169,7 @@ const UpdateLocation = ({
       <Heading className={styles.modalHeading}>
         <>
           <Icon size="large" name="errorFilled" color="ui.error.primary" />
-          <Text sx={{ mb: 0 }}> Location change failed </Text>
+          <Text mb={0}> Location change failed </Text>
         </>
       </Heading>
     ),
@@ -177,7 +177,7 @@ const UpdateLocation = ({
   return (
     <>
       <Button
-        sx={{ paddingLeft: 0 }}
+        pl={0}
         size="small"
         onClick={openModal}
         id={`update-pickup-location-${key}`}
