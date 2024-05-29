@@ -15,7 +15,7 @@ import { mapQueryToBibParams } from "../../../src/utils/bibUtils"
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const id = req.query.id as string
   const bibParams = mapQueryToBibParams(req.query)
-  const { bib, annotatedMarc, status, redirectUrl } = await fetchBib(
+  const { bibResult, annotatedMarc, status, redirectUrl } = await fetchBib(
     id,
     bibParams
   )
@@ -30,7 +30,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         break
       default:
         res.status(200).json({
-          bib,
+          bibResult,
           annotatedMarc,
         })
         break
