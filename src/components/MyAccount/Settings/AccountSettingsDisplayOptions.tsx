@@ -43,7 +43,7 @@ export const AccountSettingsForm = ({
   })
 
   const isFormValid = useCallback(() => {
-    const phoneRegex = /^\d+$/
+    const phoneRegex = /^[0-9-]+$/
     if (patron.notificationPreference == "Phone") {
       return (
         formData.primaryPhone !== "" && phoneRegex.test(formData.primaryPhone)

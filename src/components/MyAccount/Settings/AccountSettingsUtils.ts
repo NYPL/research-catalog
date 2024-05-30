@@ -85,7 +85,7 @@ export const parseAccountSettingsPayload = (
       // and home phones.
       case "phones":
         putRequestPayload["phones"] = updatePhoneOrEmailArrayWithNewPrimary(
-          { number: fieldValue, type: "t" },
+          { number: fieldValue.replace(/-/g, ""), type: "t" },
           settingsData.phones
         ) as Phone[]
         break
