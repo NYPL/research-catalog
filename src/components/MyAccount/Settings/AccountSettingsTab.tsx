@@ -53,7 +53,7 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
         return buildUpdatedPatronDisplayData(
           prevData,
           payload,
-          e.target.homeLibrary
+          e.target.homeLibrary.value
         )
       })
       setCurrentlyEditing(false)

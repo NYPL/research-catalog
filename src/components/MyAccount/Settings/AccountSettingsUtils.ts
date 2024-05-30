@@ -36,7 +36,10 @@ export const accountSettings = [
     field: "homeLibrary",
     icon: "actionHome",
     term: "Home library",
-    description: (location) => location?.name,
+    description: (location) => {
+      console.log(location)
+      return location?.name
+    },
   },
   {
     field: "pin",
@@ -102,7 +105,7 @@ export const parseAccountSettingsPayload = (
         }
         break
       case "homeLibrary":
-        putRequestPayload.homeLibraryCode = fieldValue[0]
+        putRequestPayload.homeLibraryCode = fieldValue.split("@")[0]
     }
     return putRequestPayload
   }, {} as PatronUpdateBody)
@@ -121,7 +124,7 @@ export const addHomeLibraryObjectToPayload = (homeLibraryTuple, payload) => {
 export const buildUpdatedPatronDisplayData = (
   originalPatronData: Patron,
   patronUpdateBody: SierraPatron,
-  homeLibrary?: string[]
+  homeLibrary?: string
 ) => {
   const newData = buildPatron(patronUpdateBody)
   Object.keys(originalPatronData).forEach((setting) => {
@@ -130,7 +133,10 @@ export const buildUpdatedPatronDisplayData = (
     }
   })
   if (homeLibrary) {
-    newData.homeLibrary = { code: homeLibrary[0], name: homeLibrary[1] }
+    newData.homeLibrary = {
+      code: homeLibrary.split("@")[0],
+      name: homeLibrary.split("@")[1],
+    }
   }
   return newData
 }

@@ -7,7 +7,7 @@ import {
 } from "@nypl/design-system-react-components"
 import { notificationPreferenceTuples } from "../../../utils/myAccountUtils"
 import type { Patron } from "../../../types/myAccountTypes"
-import { accountSettings, getLibraryByCode } from "./AccountSettingsUtils"
+import { accountSettings } from "./AccountSettingsUtils"
 import { buildListElementsWithIcons } from "../IconListElement"
 import type { JSX, ReactNode } from "react"
 import { filteredPickupLocations } from "../../../utils/myAccountUtils"
@@ -57,7 +57,7 @@ export const AccountSettingsForm = ({ patron }: { patron: Patron }) => {
                 {sortedPickupLocations.map((loc, i) => (
                   <option
                     key={`location-option-${i}`}
-                    value={[loc.code, loc.name]}
+                    value={`${loc.code}@${loc.name}`}
                   >
                     {loc.name}
                   </option>
