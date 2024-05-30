@@ -12,6 +12,7 @@ import RequestsTab from "./RequestsTab"
 
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 const mockRemoveHold = jest.fn()
+const mockUpdateHoldLocation = jest.fn()
 
 describe("RequestsTab", () => {
   global.fetch = jest.fn().mockResolvedValue({
@@ -26,6 +27,7 @@ describe("RequestsTab", () => {
   it("renders", () => {
     const component = render(
       <RequestsTab
+        updateHoldLocation={mockUpdateHoldLocation}
         patron={processedPatron}
         holds={processedHolds}
         removeHold={mockRemoveHold}
@@ -37,6 +39,7 @@ describe("RequestsTab", () => {
   it("renders each hold request as a row", () => {
     const component = render(
       <RequestsTab
+        updateHoldLocation={mockUpdateHoldLocation}
         patron={processedPatron}
         holds={processedHolds}
         removeHold={mockRemoveHold}
@@ -49,6 +52,7 @@ describe("RequestsTab", () => {
   it("calls hold cancel endpoint when Cancel button is clicked", async () => {
     const component = render(
       <RequestsTab
+        updateHoldLocation={mockUpdateHoldLocation}
         patron={processedPatron}
         holds={processedHolds}
         removeHold={mockRemoveHold}
@@ -137,10 +141,26 @@ describe("RequestsTab", () => {
     bodyRows = component.getAllByRole("rowgroup")[1]
     expect(within(bodyRows).getAllByRole("row").length).toBe(5)
   })
+  describe("updateHoldLocation", () => {
+    it("only displays update pickup location button for request pending circ items", () => {
+      render(
+        <RequestsTab
+          updateHoldLocation={mockUpdateHoldLocation}
+          patron={processedPatron}
+          holds={processedHolds}
+          removeHold={mockRemoveHold}
+        />
+      )
+      const changeLocationButtons = screen.getAllByText("Change location")
+      // there is one circ hold with status Request Pending in the provided holds array
+      expect(changeLocationButtons).toHaveLength(1)
+    })
+  })
 
   it("displays freeze buttons only for holds that can be frozen", async () => {
     const component = render(
       <RequestsTab
+        updateHoldLocation={mockUpdateHoldLocation}
         patron={processedPatron}
         holds={processedHolds}
         removeHold={mockRemoveHold}
@@ -157,6 +177,7 @@ describe("RequestsTab", () => {
     } as Response)
     const component = render(
       <RequestsTab
+        updateHoldLocation={mockUpdateHoldLocation}
         patron={processedPatron}
         holds={processedHolds}
         removeHold={mockRemoveHold}
@@ -211,6 +232,7 @@ describe("RequestsTab", () => {
     } as Response)
     const component = render(
       <RequestsTab
+        updateHoldLocation={mockUpdateHoldLocation}
         patron={processedPatron}
         holds={processedHolds}
         removeHold={mockRemoveHold}
@@ -234,6 +256,7 @@ describe("RequestsTab", () => {
   it("shows pick up by date and status when circ request is ready", () => {
     const component = render(
       <RequestsTab
+        updateHoldLocation={mockUpdateHoldLocation}
         patron={processedPatron}
         holds={processedHolds}
         removeHold={mockRemoveHold}
@@ -246,6 +269,7 @@ describe("RequestsTab", () => {
   it("does not show freeze button on freezable request when it is anything other than pending", () => {
     const component = render(
       <RequestsTab
+        updateHoldLocation={mockUpdateHoldLocation}
         patron={processedPatron}
         holds={processedHolds}
         removeHold={mockRemoveHold}

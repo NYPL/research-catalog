@@ -349,6 +349,10 @@ function formatPatronName(name = "") {
  */
 export function formatDate(date: string | number | Date) {
   if (!date) return null
+  // pickup location returns an iso string, but expiration date is YYYY-MM-DD.
+  // we need to specify timezone to avoid off by one error.
+  // perhaps this method needs to be two methods for the specific cases.
+  if (typeof date === "string" && !date.includes("Z")) date += " GMT-0400"
   const d = new Date(date)
   const year = d.getFullYear()
   const day = d.getDate()

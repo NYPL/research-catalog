@@ -332,7 +332,7 @@ const fetchPickupLocations = async () => {
 }
 
 export const filterPickupLocations = (locations) => {
-  const pickupLocationDisqualification = [
+  const branchLocationDisqualification = [
     "closed",
     "onsite",
     "staff only",
@@ -343,7 +343,7 @@ export const filterPickupLocations = (locations) => {
   const disqualified = (locationName, testString) =>
     locationName.toLowerCase().includes(testString)
   const isOpenBranchLocation = ({ name }: SierraCodeName, i) =>
-    !pickupLocationDisqualification.find((testString: string, j) =>
+    !branchLocationDisqualification.find((testString: string, j) =>
       disqualified(name, testString)
     )
 
