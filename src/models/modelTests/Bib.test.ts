@@ -12,5 +12,33 @@ describe("Bib model", () => {
     it("initializes the Bib ID with the with the Bib's @id field", () => {
       expect(bib.id).toBe("b15080796")
     })
+
+    it("initializes the title as titleDisplay field when present", () => {
+      expect(bib.title).toBe("Urban spaghetti.")
+    })
+
+    it("initializes the electronicResources as empty array when missing from bib result", () => {
+      expect(bib.electronicResources).toStrictEqual([])
+    })
+
+    it("initializes numPhysicalItems based on the number of physical items", () => {
+      expect(bib.numPhysicalItems).toBe(4)
+    })
+
+    it("initializes materialType with the Bib's materialType field", () => {
+      expect(bib.materialType).toBe("Text")
+    })
+
+    it("initializes issuance with the Bib's issuance field", () => {
+      expect(bib.issuance).toStrictEqual([
+        { "@id": "urn:biblevel:s", prefLabel: "serial" },
+      ])
+    })
+
+    it("initializes the items field with the Bib's items mapped as Item objects", () => {
+      expect(bib.items.length).toBe(4)
+      expect(typeof bib.items[0]).toBe("object")
+      expect(bib.items[0].bibId).toBe("b15080796")
+    })
   })
 })
