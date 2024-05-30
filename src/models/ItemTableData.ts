@@ -66,6 +66,6 @@ export default class ItemTableData {
   }
 
   volumeColumnHeading(): string {
-    return this.isArchiveCollection ? "Vol/Date" : "Container"
+    return this.isArchiveCollection ? "Container" : "Vol/Date"
   }
 }

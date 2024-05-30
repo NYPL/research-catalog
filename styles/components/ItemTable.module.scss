@@ -7,6 +7,16 @@
     margin-bottom: var(--nypl-space-xs);
   }
 
+  tr {
+    th,
+    td,
+    td:first-of-type,
+    th:first-of-type {
+      padding: var(--nypl-space-s) 0;
+    }
+  }
+
+
   &.isSearchResult {
     tr {
       border: 0 !important;
@@ -15,7 +25,6 @@
       td {
         // Meant to be 240 col width + 32 (gap) = 272px
         width: 272px;
-        padding: 0;
       }
     }
   }

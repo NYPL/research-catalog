@@ -20,12 +20,10 @@ export interface SearchResultsItem {
 export interface ItemLocation extends JSONLDValue {
   customerCode?: string
   prefLabel?: string
-  endpoint?: ItemLocationEndpoint
+  endpoint?: string
 }
 
 export type ItemLocationKey = "Schwarzman" | "Performing" | "Schomburg"
-
-export type ItemLocationEndpoint = "schwarzman" | "lpa" | "schomburg"
 
 export interface ItemTableParams {
   isDesktop?: boolean

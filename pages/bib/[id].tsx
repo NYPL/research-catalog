@@ -30,7 +30,7 @@ export default function BibPage({
   const metadataTitle = `Item Details | ${SITE_NAME}`
   console.log(bibResult)
   const bib = new Bib(bibResult)
-  console.log(bib.itemTableData)
+  console.log(bib.isArchiveCollection)
   const { topDetails, bottomDetails, holdingsDetails } = new BibDetailsModel(
     bibResult,
     annotatedMarc

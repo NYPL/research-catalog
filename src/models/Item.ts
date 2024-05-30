@@ -2,7 +2,6 @@ import type {
   SearchResultsItem,
   JSONLDValue,
   ItemLocation,
-  ItemLocationEndpoint,
 } from "../types/itemTypes"
 import { locationLabelToKey } from "../utils/itemUtils"
 import type Bib from "./Bib"
@@ -94,9 +93,7 @@ export default class Item {
 
       // Set branch endpoint based on API location label
       const locationKey = locationLabelToKey(location.prefLabel)
-      location.endpoint = locationEndpointsMap[
-        locationKey
-      ] as ItemLocationEndpoint
+      location.endpoint = locationEndpointsMap[locationKey]
     }
     return location
   }

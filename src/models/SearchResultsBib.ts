@@ -16,14 +16,11 @@ import { ITEMS_PER_SEARCH_RESULT } from "../config/constants"
  */
 export default class SearchResultsBib extends Bib {
   yearPublished?: string
-  materialType?: string
   publicationStatement?: string
 
   constructor(result: BibResult) {
     super(result)
     this.yearPublished = this.getYearFromResult(result)
-    this.materialType =
-      (result.materialType?.length && result.materialType[0]?.prefLabel) || null
     this.publicationStatement = result.publicationStatement?.length
       ? result.publicationStatement[0]
       : null

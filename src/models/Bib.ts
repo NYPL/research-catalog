@@ -16,6 +16,7 @@ export default class Bib {
   title: string
   electronicResources?: ElectronicResource[]
   numPhysicalItems: number
+  materialType?: string
   issuance?: JSONLDValue[]
   items?: Item[]
 
@@ -24,6 +25,8 @@ export default class Bib {
     this.title = this.getTitleFromResult(result)
     this.electronicResources = result.electronicResources || null
     this.numPhysicalItems = result.numItemsTotal || 0
+    this.materialType =
+      (result.materialType?.length && result.materialType[0]?.prefLabel) || null
     this.issuance = (result.issuance?.length && result.issuance) || null
     this.items = this.getItemsFromResult(result)
   }
