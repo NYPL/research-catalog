@@ -2,7 +2,7 @@ import type { ReactElement } from "react"
 
 import type Item from "./Item"
 import type { ItemTableParams } from "../types/itemTypes"
-import RequestButtons from "../components/ItemTable/RequestButtons"
+import StatusLinks from "../components/ItemTable/StatusLinks"
 
 /**
  * The ItemTable class converts a Bib's item data to the format
@@ -43,7 +43,7 @@ export default class ItemTableData {
   get tableData(): (string | ReactElement)[][] {
     return this.items.map((item) => {
       return [
-        ...(this.showStatusColumn() ? [RequestButtons({ item })] : []),
+        ...(this.showStatusColumn() ? [StatusLinks({ item })] : []),
         ...(this.showVolumeColumn() ? [item.volume] : []),
         item.format,
         item.callNumber,

@@ -13,6 +13,7 @@ interface RequestButtonsProps {
  * TODO: Pass search keywords to links as ?searchKeywords=${"TODO"}
  */
 const RequestButtons = ({ item }: RequestButtonsProps) => {
+  console.log(item)
   if (item.allLocationsClosed) return null
   return (
     <Box sx={{ a: { marginRight: "xs" } }}>

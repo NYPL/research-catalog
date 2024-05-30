@@ -2,8 +2,7 @@ import { Box, Table } from "@nypl/design-system-react-components"
 import classNames from "classnames/bind"
 
 import type ItemTableData from "../../models/ItemTableData"
-import RequestButtons from "./RequestButtons"
-import ItemAvailability from "./ItemAvailability"
+import StatusLinks from "./StatusLinks"
 import styles from "../../../styles/components/ItemTable.module.scss"
 
 const cx = classNames.bind(styles)
@@ -31,12 +30,7 @@ const ItemTable = ({ itemTableData }: ItemTableProps) => {
         showRowDividers={!isSearchResult}
         my={{ base: 0, md: "s" }}
       />
-      {isSearchResult && (
-        <Box>
-          <RequestButtons item={items[0]} />
-          <ItemAvailability item={items[0]} />
-        </Box>
-      )}
+      {isSearchResult && <StatusLinks item={items[0]} />}
     </Box>
   )
 }
