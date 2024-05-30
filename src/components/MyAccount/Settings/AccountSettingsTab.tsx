@@ -20,7 +20,6 @@ import {
 import {
   parseAccountSettingsPayload,
   buildUpdatedPatronDisplayData,
-  addHomeLibraryObjectToPayload,
 } from "./AccountSettingsUtils"
 
 const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {

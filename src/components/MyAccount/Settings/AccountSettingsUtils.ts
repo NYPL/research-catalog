@@ -121,13 +121,12 @@ export const addHomeLibraryObjectToPayload = (homeLibraryTuple, payload) => {
 export const buildUpdatedPatronDisplayData = (
   originalPatronData: Patron,
   patronUpdateBody: SierraPatron,
-  homeLibrary: string[]
+  homeLibrary?: string[]
 ) => {
   const newData = buildPatron(patronUpdateBody)
   Object.keys(originalPatronData).forEach((setting) => {
     if (!newData[setting] || !newData[setting].length) {
       newData[setting] = originalPatronData[setting]
-      console.log("setting doesnt exist", setting)
     }
   })
   if (homeLibrary) {

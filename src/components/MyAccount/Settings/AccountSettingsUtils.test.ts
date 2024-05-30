@@ -5,7 +5,7 @@ import {
 } from "./AccountSettingsUtils"
 import { processedPatron } from "../../../../__test__/fixtures/processedMyAccountData"
 import { formatDate } from "../../../utils/myAccountUtils"
-import { Patron } from "../../../types/myAccountTypes"
+import type { Patron } from "../../../types/myAccountTypes"
 
 describe("Account settings utils", () => {
   describe("formatDate", () => {
@@ -54,7 +54,7 @@ describe("Account settings utils", () => {
       }
       const { id, emails, phones, homeLibrary, notificationPreference } =
         buildUpdatedPatronDisplayData(originalPatronData, patronUpdateBody, [
-          "mp",
+          "mp   ",
           "Morris Park",
         ])
       expect(emails).toStrictEqual(["hey@you.com", "email@mail.com"])
@@ -66,7 +66,7 @@ describe("Account settings utils", () => {
       expect(homeLibrary).toStrictEqual({ code: "mp   ", name: "Morris Park" })
       expect(id).toEqual(originalPatronData.id)
     })
-    it.only("populates with original data when updated data is missing fields", () => {
+    it("populates with original data when updated data is missing fields", () => {
       const originalPatronData = {
         barcode: "1234567890",
         emails: ["email@mail.com"],
@@ -83,7 +83,7 @@ describe("Account settings utils", () => {
       }
       const { id, emails, phones, homeLibrary, notificationPreference } =
         buildUpdatedPatronDisplayData(originalPatronData, patronUpdateBody, [
-          "mp",
+          "mp   ",
           "Morris Park",
         ])
       expect(emails).toStrictEqual(originalPatronData.emails)
