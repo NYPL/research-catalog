@@ -5,13 +5,8 @@ import {
   processedHolds,
   processedPatron,
 } from "../../../__test__/fixtures/processedMyAccountData"
-import { filteredPickupLocations } from "../../utils/myAccountUtils"
-import MyAccount, {
-  MyAccountFactory,
-  filterPickupLocations,
-} from "../MyAccount"
+import MyAccount, { MyAccountFactory } from "../MyAccount"
 import {
-  pickupLocations,
   holds,
   checkouts,
   patron,
@@ -25,14 +20,6 @@ describe("MyAccountModel", () => {
   const fetchBibs = MyAccount.prototype.fetchBibData
   afterAll(() => {
     MyAccount.prototype.fetchBibData = fetchBibs
-  })
-
-  describe("fetchPickupLocations", () => {
-    it("filters out closed and research branches", () => {
-      expect(filterPickupLocations(pickupLocations)).toStrictEqual(
-        filteredPickupLocations
-      )
-    })
   })
 
   describe("getRecordId", () => {

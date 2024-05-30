@@ -1,4 +1,3 @@
-import sierraClient from "../server/sierraClient"
 import type { MarcSubfield } from "../types/bibDetailsTypes"
 import type {
   Checkout,
@@ -16,6 +15,7 @@ import type {
 } from "../types/myAccountTypes"
 
 import { buildPatron, formatDate } from "../utils/myAccountUtils"
+import { getPickupLocations } from "../utils/pickupLocationsUtils"
 
 class MyAccountModelError extends Error {
   constructor(errorDetail: string, error: Error) {
@@ -306,15 +306,10 @@ export default class MyAccount {
   }
 }
 
-export const getPickupLocations = async () => {
-  const locations = await fetchPickupLocations()
-  return filterPickupLocations(locations)
-}
-
 export const MyAccountFactory = async (id: string, client) => {
   const patronFetcher = new MyAccount(client, id)
   const sierraData = await Promise.allSettled([
-    getPickupLocations(),
+    getPickupLocations(client),
     patronFetcher.getCheckouts(),
     patronFetcher.getHolds(),
     patronFetcher.getPatron(),
@@ -327,28 +322,4 @@ export const MyAccountFactory = async (id: string, client) => {
     }
   ) as [SierraCodeName[], Checkout[], Hold[], Patron, Fine]
   return { pickupLocations, checkouts, holds, patron, fines }
-}
-
-const fetchPickupLocations = async () => {
-  const client = await sierraClient()
-  return await client.get("/branches/pickupLocations")
-}
-
-export const filterPickupLocations = (locations) => {
-  const branchLocationDisqualification = [
-    "closed",
-    "onsite",
-    "staff only",
-    "edd",
-    "performing arts",
-    "reopening",
-  ]
-  const disqualified = (locationName, testString) =>
-    locationName.toLowerCase().includes(testString)
-  const isOpenBranchLocation = ({ name }: SierraCodeName, i) =>
-    !branchLocationDisqualification.find((testString: string, j) =>
-      disqualified(name, testString)
-    )
-
-  return locations.filter(isOpenBranchLocation)
 }
