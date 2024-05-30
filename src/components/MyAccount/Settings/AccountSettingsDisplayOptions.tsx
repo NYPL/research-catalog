@@ -41,11 +41,10 @@ export const AccountSettingsForm = ({ patron }: { patron: Patron }) => {
       switch (setting.term) {
         case "Home library":
           {
-            const patronHomeLibrary = getLibraryByCode(patron.homeLibraryCode)
             const sortedPickupLocations = [
-              patronHomeLibrary,
+              patron.homeLibrary,
               ...filteredPickupLocations.filter(
-                (loc) => loc.code.trim() !== patron.homeLibraryCode.trim()
+                (loc) => loc.code.trim() !== patron.homeLibrary.code.trim()
               ),
             ]
             inputField = (
@@ -56,7 +55,10 @@ export const AccountSettingsForm = ({ patron }: { patron: Patron }) => {
                 showLabel={false}
               >
                 {sortedPickupLocations.map((loc, i) => (
-                  <option key={`location-option-${i}`} value={loc.code}>
+                  <option
+                    key={`location-option-${i}`}
+                    value={[loc.code, loc.name]}
+                  >
                     {loc.name}
                   </option>
                 ))}

@@ -76,7 +76,7 @@ export default class MyAccount {
 
   async fetchPatron() {
     return await this.client.get(
-      `${this.baseQuery}?fields=names,barcodes,expirationDate,homeLibraryCode,emails,phones,fixedFields`
+      `${this.baseQuery}?fields=names,barcodes,expirationDate,homeLibrary,emails,phones,fixedFields`
     )
   }
 
@@ -313,7 +313,6 @@ export const getPickupLocations = async () => {
 
 export const MyAccountFactory = async (id: string, client) => {
   const patronFetcher = new MyAccount(client, id)
-  const before = Date.now()
   const sierraData = await Promise.allSettled([
     getPickupLocations(),
     patronFetcher.getCheckouts(),
@@ -327,8 +326,6 @@ export const MyAccountFactory = async (id: string, client) => {
       else return null
     }
   ) as [SierraCodeName[], Checkout[], Hold[], Patron, Fine]
-  const after = Date.now()
-  console.log("time", after - before)
   return { pickupLocations, checkouts, holds, patron, fines }
 }
 
