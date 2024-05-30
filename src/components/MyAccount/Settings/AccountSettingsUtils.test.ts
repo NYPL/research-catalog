@@ -53,10 +53,11 @@ describe("Account settings utils", () => {
         ],
       }
       const { id, emails, phones, homeLibrary, notificationPreference } =
-        buildUpdatedPatronDisplayData(originalPatronData, patronUpdateBody, [
-          "mp   ",
-          "Morris Park",
-        ])
+        buildUpdatedPatronDisplayData(
+          originalPatronData,
+          patronUpdateBody,
+          "mp   @Morris Park"
+        )
       expect(emails).toStrictEqual(["hey@you.com", "email@mail.com"])
       expect(phones).toStrictEqual([
         { number: "2129876543", type: "t" },
@@ -82,10 +83,11 @@ describe("Account settings utils", () => {
         homeLibraryCode: "mp   ",
       }
       const { id, emails, phones, homeLibrary, notificationPreference } =
-        buildUpdatedPatronDisplayData(originalPatronData, patronUpdateBody, [
-          "mp   ",
-          "Morris Park",
-        ])
+        buildUpdatedPatronDisplayData(
+          originalPatronData,
+          patronUpdateBody,
+          "mp   @Morris Park"
+        )
       expect(emails).toStrictEqual(originalPatronData.emails)
       expect(phones).toStrictEqual(originalPatronData.phones)
       expect(homeLibrary).toEqual({ code: "mp   ", name: "Morris Park" })
@@ -107,7 +109,7 @@ describe("Account settings utils", () => {
       const eventTarget = {
         emails: { value: "fusili@gmail.com" },
         phones: { value: "666" },
-        homeLibrary: { value: ["xx   ", "spaghetti"] },
+        homeLibrary: { value: "xx   @spaghetti" },
         notificationPreference: { value: "z" },
       }
       expect(

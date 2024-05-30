@@ -37,7 +37,6 @@ export const accountSettings = [
     icon: "actionHome",
     term: "Home library",
     description: (location) => {
-      console.log(location)
       return location?.name
     },
   },
