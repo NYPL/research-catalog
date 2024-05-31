@@ -43,7 +43,7 @@ export const AccountSettingsForm = ({
   })
 
   const isFormValid = useCallback(() => {
-    const phoneRegex = /^[0-9-]+$/
+    const phoneRegex = /^(?:\D*\d){10}\D*$/
     if (patron.notificationPreference == "Phone") {
       return (
         formData.primaryPhone !== "" && phoneRegex.test(formData.primaryPhone)
@@ -145,6 +145,7 @@ export const AccountSettingsForm = ({
               labelText="Update phone number"
               showLabel={false}
               onChange={handleInputChange}
+              placeholder="000-000-0000"
             />
           )
           break
