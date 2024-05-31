@@ -6,7 +6,7 @@ describe("SearchResultsBib model", () => {
   let searchResultsBib: SearchResultsBib
 
   beforeEach(() => {
-    searchResultsBib = new SearchResultsBib(bibWithItems)
+    searchResultsBib = new SearchResultsBib(bibWithItems.resource)
   })
 
   describe("constructor", () => {

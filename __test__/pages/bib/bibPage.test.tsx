@@ -2,23 +2,87 @@ import React from "react"
 import { render, screen } from "../../../src/utils/testUtils"
 
 import BibPage from "../../../pages/bib/[id]"
-import { bibWithSupplementaryContent } from "../../fixtures/bibFixtures"
+import {
+  bibWithSupplementaryContent as bibNoItems,
+  bibWithItems,
+} from "../../fixtures/bibFixtures"
 
-describe("Bib Page", () => {
+describe("Bib Page with items", () => {
   beforeEach(() => {
     render(
       <BibPage
-        bibResult={bibWithSupplementaryContent.resource}
-        annotatedMarc={bibWithSupplementaryContent.annotatedMarc}
+        bibResult={bibWithItems.resource}
+        annotatedMarc={bibWithItems.annotatedMarc}
         isAuthenticated={false}
       />
     )
   })
 
-  it("should render the bib title as an H2", () => {
-    const header = screen.getByRole("heading", { level: 2 })
-    const headerText =
-      "Stick Dog slurps spaghetti / by Tom Watson ; [illustrations by Ethan Long based on original sketches by Tom Watson]."
-    expect(header).toHaveTextContent(headerText)
+  it("renders the bib title as an H2", () => {
+    const headerText = "Urban spaghetti."
+    expect(screen.getByRole("heading", { level: 2 })).toHaveTextContent(
+      headerText
+    )
+  })
+
+  it("renders the top bib details", () => {
+    expect(screen.getAllByTestId("Title")[0]).toHaveTextContent(
+      "Urban spaghetti."
+    )
+    expect(screen.getByTestId("Published By")).toHaveTextContent(
+      "Mansfield, Ohio : Urban Spaghetti, [1999?-"
+    )
+  })
+
+  it("renders the bib page item table when there are physical items in the bib", () => {
+    expect(screen.getByTestId("bib-details-item-table")).toBeInTheDocument()
+  })
+
+  it("renders the bottom bib details", () => {
+    expect(screen.getByTestId("Publication Date")).toHaveTextContent(
+      "Vol. 1, issue 1-"
+    )
+    expect(screen.getByTestId("Description")).toHaveTextContent(
+      "v. : ill.; 22 cm."
+    )
+    expect(screen.getByTestId("Donor/Sponsor")).toHaveTextContent(
+      "Gift of the DeWitt Wallace Endowment Fund, named in honor of the founder of Reader's Digest"
+    )
+    expect(screen.getByTestId("Alternative Title")).toHaveTextContent(
+      "Urban spaghetti literary arts journal"
+    )
+    expect(screen.getByTestId("Subject")).toHaveTextContent("Arts, Modern")
+    expect(screen.getByTestId("Call Number")).toHaveTextContent("JFK 01-374")
+    expect(screen.getAllByTestId("Title")[1]).toHaveTextContent(
+      "Urban spaghetti."
+    )
+    expect(screen.getByTestId("Imprint")).toHaveTextContent(
+      "Mansfield, Ohio : Urban Spaghetti, [1999?-"
+    )
+  })
+})
+
+describe("Bib Page not items", () => {
+  beforeEach(() => {
+    render(
+      <BibPage
+        bibResult={bibNoItems.resource}
+        annotatedMarc={bibNoItems.annotatedMarc}
+        isAuthenticated={false}
+      />
+    )
+  })
+
+  it("does not render an item table when there are no physical items in the bib", () => {
+    render(
+      <BibPage
+        bibResult={bibNoItems.resource}
+        annotatedMarc={bibNoItems.annotatedMarc}
+        isAuthenticated={false}
+      />
+    )
+    expect(
+      screen.queryByTestId("bib-details-item-table")
+    ).not.toBeInTheDocument()
   })
 })

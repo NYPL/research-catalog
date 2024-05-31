@@ -6,7 +6,7 @@ describe("Bib model", () => {
   let bib: Bib
 
   beforeEach(() => {
-    bib = new Bib(bibWithItems)
+    bib = new Bib(bibWithItems.resource)
   })
 
   describe("constructor", () => {

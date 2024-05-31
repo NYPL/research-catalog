@@ -16,21 +16,23 @@ interface ItemTableProps {
  */
 const ItemTable = ({ itemTableData }: ItemTableProps) => {
   const { tableHeadings, tableData, items, isBibPage } = itemTableData
-  const isSearchResult = !isBibPage
 
   return (
     <Box>
       <Table
         className={cx({
           itemTable: true,
-          isSearchResult,
+          isSearchResult: !isBibPage,
         })}
         columnHeaders={tableHeadings}
         tableData={tableData}
-        showRowDividers={!isSearchResult}
+        showRowDividers={isBibPage}
         my={{ base: 0, md: "s" }}
+        data-testid={
+          isBibPage ? "bib-details-item-table" : "search-results-item-table"
+        }
       />
-      {isSearchResult && <StatusLinks item={items[0]} />}
+      {!isBibPage && <StatusLinks item={items[0]} />}
     </Box>
   )
 }

@@ -28,9 +28,7 @@ export default function BibPage({
   isAuthenticated,
 }: BibPropsType) {
   const metadataTitle = `Item Details | ${SITE_NAME}`
-  console.log(bibResult)
   const bib = new Bib(bibResult)
-  console.log(bib.isArchiveCollection)
   const { topDetails, bottomDetails, holdingsDetails } = new BibDetailsModel(
     bibResult,
     annotatedMarc
