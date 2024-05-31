@@ -19,10 +19,11 @@ export const testUtils = {
 
 export const getPickupLocations = async (sierraClient) => {
   if (!cache.pickupLocations && !cache.isStillValid()) {
+    console.log("fetching")
     const locations = await fetchPickupLocations(sierraClient)
     cache.pickupLocations = filterPickupLocations(locations)
     cache.lastUpdated = Date.now()
-  }
+  } else console.log("using cache", cache.lastUpdated)
   return cache.pickupLocations
 }
 
