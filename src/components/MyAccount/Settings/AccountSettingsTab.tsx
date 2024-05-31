@@ -32,7 +32,7 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
   ) : (
     <AccountSettingsDisplay patron={mostRecentPatronData} />
   )
-  const { onOpen: openModal, Modal } = useModal()
+  const { onOpen: openModal, Modal, onClose } = useModal()
 
   const submitAccountSettings = async (e) => {
     e.preventDefault()
@@ -70,7 +70,7 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
     <SkeletonLoader showImage={false} />
   ) : (
     <>
-      {modalProps && <Modal {...modalProps} />}
+      {modalProps && <Modal {...{ ...modalProps, onClose }} />}
       <Form
         className={styles.accountSettingsTab}
         id="account-settings-container"
