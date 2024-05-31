@@ -4,8 +4,15 @@ import {
   buildUpdatedPatronDisplayData,
 } from "./AccountSettingsUtils"
 import { processedPatron } from "../../../../__test__/fixtures/processedMyAccountData"
+import { formatDate } from "../../../utils/myAccountUtils"
 
 describe("Account settings utils", () => {
+  describe("formatDate", () => {
+    it("can parse a date", () => {
+      const date = "2025-03-28"
+      expect(formatDate(date)).toEqual("March 28, 2025")
+    })
+  })
   describe("buildUpdatedPatronDisplayData", () => {
     it("can handle an empty patron", () => {
       const originalPatronData = {

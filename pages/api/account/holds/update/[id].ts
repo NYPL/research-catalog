@@ -19,16 +19,17 @@ export default async function handler(
     return res.status(responseStatus).json(responseMessage)
   }
 
-  if (req.method !== "POST") {
-    responseMessage = "Please make a POST request to this endpoint."
+  if (req.method !== "PUT") {
+    responseMessage = "Please make a PUT request to this endpoint."
   }
-  if (req.method == "POST") {
+  if (req.method == "PUT") {
     /**  We get the hold id from the request: */
     const holdId = req.query.id as string
-    const holdPatronId = req.body.patronId
+    const reqBody = JSON.parse(req.body)
+    const holdPatronId = reqBody.patronId
     const holdData = {
-      freeze: req.body.freeze,
-      pickupLocation: req.body.pickupLocation,
+      freeze: reqBody.freeze,
+      pickupLocation: reqBody.pickupLocation,
     }
     /**  We check that the patron cookie matches the patron id in the request,
      * i.e.,the logged in user is updating their own hold. */
