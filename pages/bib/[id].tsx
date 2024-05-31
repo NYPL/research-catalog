@@ -49,7 +49,7 @@ export default function BibPage({
         <title key="main-title">{metadataTitle}</title>
       </Head>
       <Layout isAuthenticated={isAuthenticated} activePage="bib">
-        <Heading level="h1">{bib.title}</Heading>
+        <Heading level="h2">{bib.title}</Heading>
         <BibDetails key="top-details" details={topDetails} />
         {bib.itemTableData ? (
           <ItemTable itemTableData={bib.itemTableData} />
