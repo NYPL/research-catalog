@@ -1,5 +1,6 @@
 import { bibWithItems } from "../../../__test__/fixtures/bibFixtures"
 import Bib from "../Bib"
+import Item from "../Item"
 
 describe("Bib model", () => {
   let bib: Bib
@@ -38,7 +39,7 @@ describe("Bib model", () => {
     it("initializes the items field with the Bib's items mapped as Item objects", () => {
       expect(bib.items.length).toBe(4)
       expect(typeof bib.items[0]).toBe("object")
-      expect(bib.items[0].bibId).toBe("b15080796")
+      expect(bib.items[0] instanceof Item).toBe(true)
     })
   })
 })
