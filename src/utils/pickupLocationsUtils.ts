@@ -9,21 +9,12 @@ const cache = {
   },
 }
 
-export const testUtils = {
-  getCache: () => cache,
-  resetCache: () => {
-    cache.pickupLocations = null
-    cache.lastUpdated = null
-  },
-}
-
 export const getPickupLocations = async (sierraClient) => {
   if (!cache.pickupLocations && !cache.isStillValid()) {
-    console.log("fetching")
     const locations = await fetchPickupLocations(sierraClient)
     cache.pickupLocations = filterPickupLocations(locations)
     cache.lastUpdated = Date.now()
-  } else console.log("using cache", cache.lastUpdated)
+  }
   return cache.pickupLocations
 }
 
@@ -31,6 +22,8 @@ const fetchPickupLocations = async (client) => {
   return await client.get("/branches/pickupLocations")
 }
 
+// Sierra returns all pickup locations, including ones that totally invalid
+// options for circulating materials. Filter those out.
 export const filterPickupLocations = (locations) => {
   const branchLocationDisqualification = [
     "closed",
@@ -47,4 +40,13 @@ export const filterPickupLocations = (locations) => {
       disqualified(name, testString)
     )
   return locations.filter(isOpenBranchLocation)
+}
+
+// These are only used for verifying and resetting the cache for testing purposes
+export const testUtils = {
+  getCache: () => cache,
+  resetCache: () => {
+    cache.pickupLocations = null
+    cache.lastUpdated = null
+  },
 }

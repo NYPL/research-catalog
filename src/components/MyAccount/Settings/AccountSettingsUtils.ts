@@ -36,9 +36,7 @@ export const accountSettings = [
     field: "homeLibrary",
     icon: "actionHome",
     term: "Home library",
-    description: (location) => {
-      return location?.name
-    },
+    description: (location) => location?.name,
   },
   {
     field: "pin",
