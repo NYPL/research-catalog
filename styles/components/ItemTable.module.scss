@@ -16,12 +16,13 @@
     }
   }
 
-  &.isSearchResult {
+  &.inSearchResult {
     tr {
       border: 0 !important;
 
       th,
       td {
+        padding: 0;
         // Meant to be 240 col width + 32 (gap) = 272px
         width: 272px;
       }

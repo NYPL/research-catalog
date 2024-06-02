@@ -27,7 +27,7 @@ export type ItemLocationKey = "Schwarzman" | "Performing" | "Schomburg"
 
 export interface ItemTableParams {
   isDesktop?: boolean
-  isBibPage?: boolean
+  inSearchResult?: boolean
   isArchiveCollection?: boolean
 }
 

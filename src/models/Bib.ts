@@ -72,7 +72,6 @@ export default class Bib {
   get itemTableData(): ItemTableData {
     return this.showItemTable && this.items.length
       ? new ItemTableData(this.items, {
-          isBibPage: true,
           isArchiveCollection: this.isArchiveCollection,
         })
       : null

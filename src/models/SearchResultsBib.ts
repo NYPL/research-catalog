@@ -46,7 +46,7 @@ export default class SearchResultsBib extends Bib {
     return this.items
       ? this.items.slice(0, ITEMS_PER_SEARCH_RESULT).map((item) => {
           return new ItemTableData([item], {
-            isBibPage: false,
+            inSearchResult: true,
             isArchiveCollection: this.isArchiveCollection,
           })
         })
