@@ -59,6 +59,20 @@ describe("Bib Page with items", () => {
     expect(screen.getByTestId("Imprint")).toHaveTextContent(
       "Mansfield, Ohio : Urban Spaghetti, [1999?-"
     )
+    expect(screen.getByTestId("Current Frequency")).toHaveTextContent(
+      "Semiannual"
+    )
+    expect(screen.getByTestId("Abbreviated Title")).toHaveTextContent(
+      "Urban spaghetti"
+    )
+    expect(screen.getByTestId("Cover Title")).toHaveTextContent(
+      "Urban spaghetti literary arts journal"
+    )
+    expect(screen.getByTestId("LCCN")).toHaveTextContent("sn 98001765")
+    expect(screen.getByTestId("ISSN")).toHaveTextContent("1521-1371")
+    expect(screen.getByTestId("Research Call Number")).toHaveTextContent(
+      "JFK 01-374"
+    )
   })
 })
 
