@@ -12,14 +12,15 @@ export const successModalProps = {
   closeButtonLabel: "OK",
   headingText: (
     <Heading className={styles.modalHeading}>
-      <>
+      <Text>
+        {" "}
         <Icon
           size="large"
           name="actionCheckCircleFilled"
           color="ui.success.primary"
         />
-        <Text> Update successful </Text>
-      </>
+        Update successful{" "}
+      </Text>
     </Heading>
   ),
 }
@@ -37,8 +38,10 @@ export const failureModalProps = {
   closeButtonLabel: "OK",
   headingText: (
     <Heading className={styles.modalHeading}>
-      <Icon size="large" name="errorFilled" color="ui.error.primary" />
-      <Text>Update failed</Text>
+      <Text>
+        <Icon size="large" name="errorFilled" color="ui.error.primary" />
+        Update failed
+      </Text>
     </Heading>
   ),
 }
