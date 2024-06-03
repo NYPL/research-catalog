@@ -53,7 +53,7 @@ describe("DRBContainer", () => {
     ).toBeInTheDocument()
     expect(
       screen.getByText(
-        /Digital books for research from multiple sources world wide- all free to read, download, and keep. No Library Card is Required./i
+        /Digital books for research from multiple sources worldwide - all free to read, download, and keep. No library card required./i
       )
     ).toBeInTheDocument()
     expect(screen.getByText("Read more about the project")).toHaveAttribute(
