@@ -36,14 +36,14 @@ const RenewButton = ({
     closeButtonLabel: "OK",
     headingText: (
       <Heading className={styles.modalHeading}>
-        <>
+        <Text>
           <Icon
             size="large"
             name="actionCheckCircleFilled"
             color="ui.success.primary"
           />
-          <Text> Renewal successful </Text>
-        </>
+          Renewal successful
+        </Text>
       </Heading>
     ),
     onClose: () => {

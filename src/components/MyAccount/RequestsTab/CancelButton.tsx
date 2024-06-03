@@ -80,10 +80,10 @@ const CancelButton = ({
       closeButtonLabel: "OK",
       headingText: (
         <Heading className={styles.modalHeading}>
-          <>
+          <Text>
             <Icon size="large" name="errorFilled" color="ui.error.primary" />
-            <Text>Failed to cancel request </Text>
-          </>
+            Failed to cancel request
+          </Text>
         </Heading>
       ),
       onClose: closeModal(),

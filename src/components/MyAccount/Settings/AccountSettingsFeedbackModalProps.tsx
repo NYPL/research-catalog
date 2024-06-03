@@ -37,10 +37,8 @@ export const failureModalProps = {
   closeButtonLabel: "OK",
   headingText: (
     <Heading className={styles.modalHeading}>
-      <>
-        <Icon size="large" name="errorFilled" color="ui.error.primary" />
-        <Text> Update failed </Text>
-      </>
+      <Icon size="large" name="errorFilled" color="ui.error.primary" />
+      <Text>Update failed</Text>
     </Heading>
   ),
 }
