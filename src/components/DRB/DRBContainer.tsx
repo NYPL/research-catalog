@@ -53,7 +53,7 @@ const DRBContainer = ({
             free to read, download, and keep. No library card required.
           </Text>
           <Text size="body2">
-            <ExternalLink href={appConfig.urls.drbAbout} size="body2">
+            <ExternalLink href={appConfig.urls.drbAbout}>
               Read more about the project
             </ExternalLink>
           </Text>
