@@ -28,7 +28,7 @@ const RenewButton = ({
     type: "default",
     bodyContent: (
       <Box className={styles.modalBody}>
-        <Text sx={{ marginLeft: "l" }}>
+        <Text>
           This item has been renewed. It is now due back on {checkout?.dueDate}.
         </Text>
       </Box>
@@ -42,7 +42,7 @@ const RenewButton = ({
             name="actionCheckCircleFilled"
             color="ui.success.primary"
           />
-          <Text sx={{ marginBottom: 0 }}> Renewal successful </Text>
+          <Text> Renewal successful </Text>
         </>
       </Heading>
     ),
@@ -54,7 +54,7 @@ const RenewButton = ({
     type: "default",
     bodyContent: (
       <Box className={styles.modalBody}>
-        <Text sx={{ marginLeft: "l", marginRight: "m" }}>
+        <Text>
           We were unable to renew this item. Please try again or{" "}
           <ExternalLink href="https://www.nypl.org/get-help/contact-us">
             contact us
@@ -68,7 +68,7 @@ const RenewButton = ({
       <Heading className={styles.modalHeading}>
         <>
           <Icon size="large" name="errorFilled" color="ui.error.primary" />
-          <Text sx={{ marginBottom: 0 }}> Renewal failed </Text>
+          <Text> Renewal failed </Text>
         </>
       </Heading>
     ),

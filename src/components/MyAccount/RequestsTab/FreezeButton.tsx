@@ -20,9 +20,7 @@ const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
     type: "default",
     bodyContent: (
       <Box className={styles.modalBody}>
-        <Text sx={{ marginLeft: "l", marginRight: "m" }}>
-          Please try again.
-        </Text>
+        <Text>Please try again.</Text>
       </Box>
     ),
     closeButtonLabel: "OK",
@@ -30,9 +28,7 @@ const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
       <Heading className={styles.modalHeading}>
         <>
           <Icon size="large" name="errorFilled" color="ui.error.primary" />
-          <Text sx={{ marginBottom: 0 }}>
-            Hold {frozen ? "unfreeze" : "freeze"} failed
-          </Text>
+          <Text>Hold {frozen ? "unfreeze" : "freeze"} failed</Text>
         </>
       </Heading>
     ),
@@ -52,9 +48,7 @@ const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
             name="actionCheckCircleFilled"
             color="ui.success.primary"
           />
-          <Text sx={{ marginBottom: 0 }}>
-            Hold {frozen ? "unfreeze" : "freeze"} successful
-          </Text>
+          <Text>Hold {frozen ? "unfreeze" : "freeze"} successful</Text>
         </>
       </Heading>
     ),

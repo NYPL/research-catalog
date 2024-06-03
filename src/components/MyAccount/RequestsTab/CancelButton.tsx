@@ -33,7 +33,7 @@ const CancelButton = ({
       type: "default",
       bodyContent: (
         <Box className={styles.modalBody}>
-          <Text sx={{ marginLeft: "l", marginRight: "m" }}>
+          <Text>
             Your request for{" "}
             <span style={{ fontWeight: "var(--nypl-fontWeights-medium)" }}>
               {hold.title}
@@ -51,7 +51,7 @@ const CancelButton = ({
               name="actionCheckCircleFilled"
               color="ui.success.primary"
             />
-            <Text sx={{ marginBottom: 0 }}>Request canceled </Text>
+            <Text>Request canceled </Text>
           </>
         </Heading>
       ),
@@ -68,7 +68,7 @@ const CancelButton = ({
       type: "default",
       bodyContent: (
         <Box className={styles.modalBody}>
-          <Text sx={{ marginLeft: "l", marginRight: "m" }}>
+          <Text>
             Your request for{" "}
             <span style={{ fontWeight: "var(--nypl-fontWeights-medium)" }}>
               {hold.title}
@@ -82,7 +82,7 @@ const CancelButton = ({
         <Heading className={styles.modalHeading}>
           <>
             <Icon size="large" name="errorFilled" color="ui.error.primary" />
-            <Text sx={{ marginBottom: 0 }}>Failed to cancel request </Text>
+            <Text>Failed to cancel request </Text>
           </>
         </Heading>
       ),
@@ -112,7 +112,7 @@ const CancelButton = ({
       confirmButtonLabel: "Yes, cancel request",
       headingText: (
         <Heading className={styles.modalHeading}>
-          <Text sx={{ marginBottom: 0 }}>Cancel request?</Text>
+          <Text>Cancel request?</Text>
         </Heading>
       ),
       onConfirm: async () => {

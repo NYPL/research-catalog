@@ -48,7 +48,7 @@ const PasswordModal = ({ patron }: { patron: Patron }) => {
     closeButtonLabel: "Cancel",
     headingText: (
       <Heading className={styles.modalHeading}>
-        <Text sx={{ marginBottom: 0 }}> Change PIN/PASSWORD </Text>
+        <Text> Change PIN/PASSWORD </Text>
       </Heading>
     ),
     onClose: () => {
@@ -73,9 +73,7 @@ const PasswordModal = ({ patron }: { patron: Patron }) => {
     type: "default",
     bodyContent: (
       <Box className={styles.modalBody}>
-        <Text sx={{ marginLeft: "l" }}>
-          Your PIN/PASSWORD has been changed.
-        </Text>
+        <Text>Your PIN/PASSWORD has been changed.</Text>
       </Box>
     ),
     closeButtonLabel: "OK",
@@ -87,9 +85,7 @@ const PasswordModal = ({ patron }: { patron: Patron }) => {
             name="actionCheckCircleFilled"
             color="ui.success.primary"
           />
-          <Text sx={{ marginBottom: 0 }}>
-            PIN/PASSWORD change was successful
-          </Text>
+          <Text>PIN/PASSWORD change was successful</Text>
         </>
       </Heading>
     ),
@@ -103,12 +99,8 @@ const PasswordModal = ({ patron }: { patron: Patron }) => {
     type: "default",
     bodyContent: (
       <Box className={styles.modalBody}>
-        <Text sx={{ marginLeft: "l", marginRight: "m" }}>
-          We were unable to change your PIN/PASSWORD: {errorMessage}
-        </Text>
-        <Text sx={{ marginLeft: "l", marginRight: "m" }}>
-          Please try again.
-        </Text>
+        <Text>We were unable to change your PIN/PASSWORD: {errorMessage}</Text>
+        <Text>Please try again.</Text>
       </Box>
     ),
     closeButtonLabel: "OK",
@@ -116,7 +108,7 @@ const PasswordModal = ({ patron }: { patron: Patron }) => {
       <Heading className={styles.modalHeading}>
         <>
           <Icon size="large" name="errorFilled" color="ui.error.primary" />
-          <Text sx={{ marginBottom: 0 }}> PIN/PASSWORD change failed </Text>
+          <Text> PIN/PASSWORD change failed </Text>
         </>
       </Heading>
     ),

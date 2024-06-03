@@ -61,6 +61,10 @@
   display: flex;
   flex-direction: column;
   padding-top: 0 !important;
+  p {
+    margin-left: var(--nypl-space-l);
+    margin-right: var(--nypl-space-m);
+  }
 }
 
 .notification {
