@@ -42,7 +42,11 @@ export const getFeedbackEmailHTML = (
       </div>
     `
 
-export function getEmailParams(body: string, url: string): SendEmailRequest {
+export function getEmailParams(
+  body: string,
+  url: string,
+  sourceEmail: string
+): SendEmailRequest {
   const fields = JSON.parse(body)
 
   const fullUrl = encodeHTML(url)
@@ -71,6 +75,6 @@ export function getEmailParams(body: string, url: string): SendEmailRequest {
       },
     },
     Source: appConfig.sourceEmail,
-    ReplyToAddresses: [fields.email || appConfig.sourceEmail],
+    ReplyToAddresses: [fields.email || sourceEmail],
   }
 }
