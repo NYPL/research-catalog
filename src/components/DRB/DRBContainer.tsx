@@ -80,21 +80,30 @@ const DRBContainer = ({
             </ExternalLink>
           </>
         ) : (
-          <ExternalLink
-            href={appConfig.urls.drbAbout}
-            fontSize={{
-              base: "mobile.body.body2",
-              md: "desktop.body.body2",
-            }}
-          >
-            <Box mb="xs" bg="ui.white" p="s" borderRadius="5px">
-              <Image
-                src={drbPromoImage}
-                alt="Image of three Digital Research Books"
-              />
-            </Box>
-            Explore Digital Research Books Beta
-          </ExternalLink>
+          <>
+            <ExternalLink
+              href={appConfig.urls.drbAbout}
+              aria-label="Explore Digital Research Books Beta"
+            >
+              <Box mb="xs" bg="ui.white" p="s" borderRadius="5px">
+                <Image
+                  src={drbPromoImage}
+                  alt="Image of three Digital Research Books"
+                />
+              </Box>
+            </ExternalLink>
+            <ExternalLink
+              href={appConfig.urls.drbAbout}
+              fontSize={{
+                base: "mobile.body.body2",
+                md: "desktop.body.body2",
+              }}
+              type="standalone"
+              fontWeight="bold"
+            >
+              Explore Digital Research Books Beta
+            </ExternalLink>
+          </>
         )}
       </CardContent>
     </Card>

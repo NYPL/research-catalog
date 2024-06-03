@@ -61,6 +61,9 @@ describe("DRBContainer", () => {
       appConfig.urls.drbAbout
     )
     expect(
+      screen.getByLabelText("Explore Digital Research Books Beta")
+    ).toHaveAttribute("href", appConfig.urls.drbAbout)
+    expect(
       screen.getByText("Explore Digital Research Books Beta")
     ).toHaveAttribute("href", appConfig.urls.drbAbout)
   })
