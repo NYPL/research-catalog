@@ -112,7 +112,7 @@ const CancelButton = ({
       confirmButtonLabel: "Yes, cancel request",
       headingText: (
         <Heading className={styles.modalHeading}>
-          <Text>Cancel request?</Text>
+          <Text ml="l">Cancel request?</Text>
         </Heading>
       ),
       onConfirm: async () => {
