@@ -103,7 +103,7 @@ const UpdateLocation = ({
     },
     headingText: (
       <Heading className={styles.modalHeading}>
-        <Text mb={0}> Where would you like to pick up this item? </Text>
+        <Text>Where would you like to pick up this item?</Text>
       </Heading>
     ),
   })
@@ -116,7 +116,7 @@ const UpdateLocation = ({
     type: "default",
     bodyContent: (
       <Box className={styles.modalBody}>
-        <Text ml="l">
+        <Text>
           Your item will be available for pickup at the {newLocation.name}{" "}
           Library.
         </Text>
@@ -125,14 +125,14 @@ const UpdateLocation = ({
     closeButtonLabel: "OK",
     headingText: (
       <Heading className={styles.modalHeading}>
-        <>
+        <Text>
           <Icon
             size="large"
             name="actionCheckCircleFilled"
             color="ui.success.primary"
           />
-          <Text mb={0}> Location change successful </Text>
-        </>
+          Location change successful
+        </Text>
       </Heading>
     ),
     onClose: () => {
@@ -147,7 +147,7 @@ const UpdateLocation = ({
     type: "default",
     bodyContent: (
       <Box className={styles.modalBody}>
-        <Text ml="l" mr="m">
+        <Text>
           We were unable to change the pickup location. Please contact{" "}
           <DSLink href="https://www.nypl.org/get-help/contact-us">
             AskNYPL
@@ -167,10 +167,10 @@ const UpdateLocation = ({
     closeButtonLabel: "OK",
     headingText: (
       <Heading className={styles.modalHeading}>
-        <>
+        <Text>
           <Icon size="large" name="errorFilled" color="ui.error.primary" />
-          <Text mb={0}>Location change failed</Text>
-        </>
+          Location change failed
+        </Text>
       </Heading>
     ),
   }
