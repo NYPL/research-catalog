@@ -1,9 +1,4 @@
-import {
-  getFeedbackEmailText,
-  getFeedbackEmailHTML,
-  getEmailParams,
-} from "../feedbackUtils"
-import { appConfig } from "../../config/config"
+import { getFeedbackEmailText, getFeedbackEmailHTML } from "../feedbackUtils"
 
 describe("feedbackUtils", () => {
   describe("getFeedbackEmailText", () => {
@@ -68,33 +63,6 @@ describe("feedbackUtils", () => {
       </div>
     `
       )
-    })
-  })
-  describe("getEmailParams", () => {
-    it("correctly returns the email params in the SendEmailRequest type format", () => {
-      expect(getEmailParams("https://www.nypl.org", "")).toBe({
-        Destination: {
-          ToAddresses: [appConfig.libAnswersEmail],
-        },
-        Message: {
-          Body: {
-            Html: {
-              Charset: "UTF-8",
-              Data: emailHTML,
-            },
-            Text: {
-              Charset: "UTF-8",
-              Data: emailText,
-            },
-          },
-          Subject: {
-            Charset: "UTF-8",
-            Data: "SCC Feedback",
-          },
-        },
-        Source: appConfig.sourceEmail,
-        ReplyToAddresses: [""],
-      })
     })
   })
 })

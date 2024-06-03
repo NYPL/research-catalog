@@ -34,7 +34,6 @@ const DRBContainer = ({
 }: DRBContainerProps) => {
   const drbQuery = getDRBQueryStringFromSearchParams(searchParams)
   const hasResults = totalWorks > 0
-
   return (
     <Card
       id="drb-sidebar-container"
@@ -82,18 +81,19 @@ const DRBContainer = ({
           </>
         ) : (
           <ExternalLink
-            href={appConfig.urls.drbABout}
+            href={appConfig.urls.drbAbout}
             fontSize={{
               base: "mobile.body.body2",
               md: "desktop.body.body2",
             }}
           >
-            <>
-              <Box mb="xs" bg="ui.white" p="s" borderRadius="5px">
-                <Image src={drbPromoImage} alt="Digital Research Books" />
-              </Box>
-              Explore Digital Research Books Beta
-            </>
+            <Box mb="xs" bg="ui.white" p="s" borderRadius="5px">
+              <Image
+                src={drbPromoImage}
+                alt="Image of three Digital Research Books"
+              />
+            </Box>
+            Explore Digital Research Books Beta
           </ExternalLink>
         )}
       </CardContent>
