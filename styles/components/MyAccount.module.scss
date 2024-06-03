@@ -119,7 +119,6 @@
   margin-top: var(--nypl-space-m);
   thead > tr > th,
   thead > tr > th:last-of-type {
-    text-transform: unset;
     font-weight: 700;
     border-color: var(--nypl-colors-ui-gray-light-cool);
   }
@@ -127,8 +126,20 @@
   tbody > tr > td:last-of-type {
     border-color: var(--nypl-colors-ui-gray-light-cool);
   }
+  @media only screen and (min-width: 600px) {
+    tr > th:last-of-type {
+      padding-right: var(--nypl-space-l);
+      text-align: right;
+    }
+  }
+  @media only screen and (min-width: 600px) {
+    tr > td:last-of-type {
+      text-align: right;
+      padding-right: var(--nypl-space-s);
+    }
+  }
   th:first-of-type {
-    width: auto;
+    width: 60%;
   }
   th,
   th:last-of-type {
