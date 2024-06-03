@@ -1,7 +1,12 @@
 import { patron } from "../../../../__test__/fixtures/rawSierraAccountData"
 import AccountSettingsTab from "./AccountSettingsTab"
 import MyAccount from "../../../models/MyAccount"
-import { render, screen } from "../../../utils/testUtils"
+import {
+  fireEvent,
+  getByLabelText,
+  render,
+  screen,
+} from "../../../utils/testUtils"
 import * as helpers from "../../../../pages/api/account/helpers"
 import userEvent from "@testing-library/user-event"
 
@@ -59,6 +64,10 @@ describe("AccountSettingsTab", () => {
         json: async () => console.log("not updated"),
         status: 500,
       } as Response)
+      .mockResolvedValueOnce({
+        json: async () => console.log("updated"),
+        status: 200,
+      } as Response)
     it("clicking the edit button opens the form, \nclicking submit opens modal on success,\n closing modal toggles display", async () => {
       const myAccountPatron = MyAccount.prototype.buildPatron({
         ...patron,
@@ -96,6 +105,27 @@ describe("AccountSettingsTab", () => {
       ).toBeInTheDocument()
       await userEvent.click(screen.getAllByText("OK")[0])
       expect(screen.queryByText("Save changes")).not.toBeInTheDocument()
+    })
+
+    it("prevents users from submitting empty fields according to notification preference", async () => {
+      const myAccountPatron = MyAccount.prototype.buildPatron({
+        ...patron,
+      })
+      render(<AccountSettingsTab settingsData={myAccountPatron} />)
+      await userEvent.click(screen.getByText("Edit account settings"))
+      const saveButton = screen
+        .getByText("Save Changes", { exact: false })
+        .closest("button")
+      expect(saveButton).not.toBeDisabled()
+
+      const emailField = screen.getByLabelText("Update email")
+      fireEvent.change(emailField, { target: { value: "" } })
+
+      expect(saveButton).toBeDisabled()
+      fireEvent.change(emailField, { target: { value: "email@email" } })
+      expect(saveButton).not.toBeDisabled()
+      await userEvent.click(screen.getByText("Save Changes"))
+      await userEvent.click(screen.getAllByText("OK")[0])
     })
   })
 })
