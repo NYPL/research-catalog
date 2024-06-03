@@ -87,7 +87,6 @@ const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
         }),
       }
     )
-    console.log(response)
     if (response.status !== 200) {
       setModalProps(failureModalProps)
       openModal()
