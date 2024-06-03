@@ -47,14 +47,17 @@ const DRBContainer = ({
           : "No results found from Digital Research Books Beta"}
       </CardHeading>
       <CardContent id="drb-sidebar-container-content">
-        <Text size="body2">
-          Digital books for research from multiple sources world wide- all free
-          to read, download, and keep. No Library Card is Required.{" "}
-          <ExternalLink href={appConfig.urls.drbAbout}>
-            Read more about the project
-          </ExternalLink>
-          .
-        </Text>
+        <Box mb="s">
+          <Text size="body2" isBold mb="xxs">
+            Digital books for research from multiple sources worldwide - all
+            free to read, download, and keep. No library card required.
+          </Text>
+          <Text size="body2">
+            <ExternalLink href={appConfig.urls.drbAbout}>
+              Read more about the project
+            </ExternalLink>
+          </Text>
+        </Box>
 
         {hasResults ? (
           <>
