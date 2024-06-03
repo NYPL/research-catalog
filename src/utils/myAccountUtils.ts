@@ -318,7 +318,6 @@ export const filteredPickupLocations = [
 export const notificationPreferenceMap = {
   z: "Email",
   p: "Phone",
-  m: "Mobile",
 }
 
 export const notificationPreferenceTuples = Object.keys(

@@ -85,11 +85,11 @@ export const parseAccountSettingsPayload = (
           settingsData.emails
         ) as string[]
         break
-      // TODO: right now we are assuming that all phones are mobile phones.
-      // follow on ticket outlines two different inputs
+      // Accepting one phone number as primary, since NYPL currently doesn't differentiate between mobile
+      // and home phones.
       case "phones":
         putRequestPayload["phones"] = updatePhoneOrEmailArrayWithNewPrimary(
-          { number: fieldValue, type: "t" },
+          { number: fieldValue.match(/\d+/g).join(""), type: "t" },
           settingsData.phones
         ) as Phone[]
         break
