@@ -48,12 +48,12 @@ const DRBContainer = ({
       </CardHeading>
       <CardContent id="drb-sidebar-container-content">
         <Box mb="s">
-          <Text size="body2" isBold mb="xxs">
+          <Text size="body2" mb="xxs">
             Digital books for research from multiple sources worldwide - all
             free to read, download, and keep. No library card required.
           </Text>
           <Text size="body2">
-            <ExternalLink href={appConfig.urls.drbAbout}>
+            <ExternalLink href={appConfig.urls.drbAbout} size="body2">
               Read more about the project
             </ExternalLink>
           </Text>
