@@ -1,4 +1,5 @@
 import type { FeedbackMetadataAndComment } from "../types/feedbackTypes"
+import { type SendEmailRequest } from "aws-sdk/clients/ses"
 import { encodeHTML } from "./appUtils"
 
 /**
@@ -39,3 +40,44 @@ export const getFeedbackEmailHTML = (
         </dl>
       </div>
     `
+/**
+ * getEmailParams
+ * Get the params for Feedback email submission as expected by SES
+ */
+export const getEmailParams = (
+  body: string,
+  referer: string,
+  toAddress: string,
+  sourceAddress: string
+): SendEmailRequest => {
+  const fields = JSON.parse(body)
+
+  const fullUrl = encodeHTML(referer)
+
+  const emailText = getFeedbackEmailText(fullUrl, fields)
+  const emailHTML = getFeedbackEmailHTML(fullUrl, fields)
+
+  return {
+    Destination: {
+      ToAddresses: [toAddress],
+    },
+    Message: {
+      Body: {
+        Html: {
+          Charset: "UTF-8",
+          Data: emailHTML,
+        },
+        Text: {
+          Charset: "UTF-8",
+          Data: emailText,
+        },
+      },
+      Subject: {
+        Charset: "UTF-8",
+        Data: "SCC Feedback",
+      },
+    },
+    Source: sourceAddress,
+    ReplyToAddresses: [fields.email || sourceAddress],
+  }
+}
