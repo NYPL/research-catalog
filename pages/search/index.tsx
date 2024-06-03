@@ -138,13 +138,13 @@ export default function Search({
             ) : null}
             {isLoading ? (
               <SkeletonLoader showImage={false} />
-            ) : drbResponse?.totalWorks > 0 ? (
+            ) : (
               <DRBContainer
                 drbResults={drbResults}
                 totalWorks={drbResponse.totalWorks}
                 searchParams={searchParams}
               />
-            ) : null}
+            )}
           </>
         }
       >

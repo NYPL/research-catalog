@@ -4,7 +4,9 @@ import {
   CardContent,
   Text,
   SimpleGrid,
+  Box,
 } from "@nypl/design-system-react-components"
+import Image from "next/image"
 
 import { appConfig } from "../../config/config"
 import ExternalLink from "../Links/ExternalLink/ExternalLink"
@@ -13,6 +15,7 @@ import type DRBResult from "../../models/DRBResult"
 import type { SearchParams } from "../../types/searchTypes"
 import { getDRBQueryStringFromSearchParams } from "../../utils/drbUtils"
 import { DRB_BASE_URL } from "../../config/constants"
+import drbPromoImage from "../../client/assets/drb_promo.png"
 
 interface DRBContainerProps {
   drbResults: DRBResult[]
@@ -30,6 +33,7 @@ const DRBContainer = ({
   searchParams,
 }: DRBContainerProps) => {
   const drbQuery = getDRBQueryStringFromSearchParams(searchParams)
+  const hasResults = totalWorks > 0
 
   return (
     <Card
@@ -39,7 +43,9 @@ const DRBContainer = ({
       borderRadius="5px"
     >
       <CardHeading size="h6" id="drb-sidebar-container-heading">
-        Results from Digital Research Books Beta
+        {hasResults
+          ? "Results from Digital Research Books Beta"
+          : "No results found from Digital Research Books Beta"}
       </CardHeading>
       <CardContent id="drb-sidebar-container-content">
         <Text size="body2">
@@ -50,25 +56,43 @@ const DRBContainer = ({
           </ExternalLink>
           .
         </Text>
-        <SimpleGrid columns={1} gap="grid.s" pb="s">
-          {drbResults.map((result: DRBResult) => (
-            <DRBCard key={result.id} drbResult={result} />
-          ))}
-        </SimpleGrid>
-        {totalWorks && (
+
+        {hasResults ? (
+          <>
+            <SimpleGrid columns={1} gap="grid.s" pb="s">
+              {drbResults.map((result: DRBResult) => (
+                <DRBCard key={result.id} drbResult={result} />
+              ))}
+            </SimpleGrid>
+            <ExternalLink
+              href={`${DRB_BASE_URL}/search${drbQuery}`}
+              fontSize={{
+                base: "mobile.body.body2",
+                md: "desktop.body.body2",
+              }}
+              type="standalone"
+              fontWeight="bold"
+            >
+              <>
+                View {totalWorks === 1 ? "" : "all"}{" "}
+                {totalWorks.toLocaleString()} result
+                {totalWorks === 1 ? "" : "s"} in Digital Research Books Beta
+              </>
+            </ExternalLink>
+          </>
+        ) : (
           <ExternalLink
-            href={`${DRB_BASE_URL}/search${drbQuery}`}
+            href={appConfig.urls.drbABout}
             fontSize={{
               base: "mobile.body.body2",
               md: "desktop.body.body2",
             }}
-            type="standalone"
-            fontWeight="bold"
           >
             <>
-              View {totalWorks === 1 ? "" : "all"} {totalWorks.toLocaleString()}{" "}
-              result
-              {totalWorks === 1 ? "" : "s"} in Digital Research Books Beta
+              <Box mb="xs" bg="ui.white" p="s" borderRadius="5px">
+                <Image src={drbPromoImage} alt="Digital Research Books" />
+              </Box>
+              Explore Digital Research Books Beta
             </>
           </ExternalLink>
         )}
