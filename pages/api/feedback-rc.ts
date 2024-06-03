@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 import aws from "aws-sdk"
 
-import { appConfig } from "../../src/config/config"
 import { getEmailParams } from "../../src/utils/feedbackUtils"
+import { appConfig } from "../../src/config/config"
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {
