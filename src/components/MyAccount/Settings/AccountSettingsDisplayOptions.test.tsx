@@ -48,8 +48,15 @@ describe("AccountSettingsDisplayOptions", () => {
       )
       missingFields.forEach((field) => expect(field).not.toBeInTheDocument())
     })
-    it("displays empty email, phone, or notification preference if not specified", () => {
-      render(<AccountSettingsForm patron={emptyPatron} />)
+    it("displays empty email, phone, or notification preference in edit mode if not specified", () => {
+      render(
+        <AccountSettingsForm
+          patron={emptyPatron}
+          setIsFormValid={() => {
+            return true
+          }}
+        />
+      )
       const missingFields = [
         "Update email",
         "Update phone number",
@@ -62,7 +69,14 @@ describe("AccountSettingsDisplayOptions", () => {
   })
   describe("Update", () => {
     beforeEach(() => {
-      render(<AccountSettingsForm patron={processedPatron} />)
+      render(
+        <AccountSettingsForm
+          patron={processedPatron}
+          setIsFormValid={() => {
+            return true
+          }}
+        />
+      )
     })
     it("displays a selector with patron's home library selected", () => {
       const homeLibraryCode = screen.getByDisplayValue(
