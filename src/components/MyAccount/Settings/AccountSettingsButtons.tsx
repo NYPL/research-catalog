@@ -4,11 +4,13 @@ import styles from "../../../../styles/components/MyAccount.module.scss"
 
 interface AccountSettingsButtonsPropsType {
   currentlyEditing: boolean
+  formValid: boolean
   setCurrentlyEditing: Dispatch<React.SetStateAction<boolean>>
 }
 
 const AccountSettingsButtons = ({
   currentlyEditing,
+  formValid,
   setCurrentlyEditing,
 }: AccountSettingsButtonsPropsType) => {
   const toggleCurrentlyEditing = (doWeWantToEdit: boolean) =>
@@ -41,6 +43,7 @@ const AccountSettingsButtons = ({
         // the click handler for this button is the onSubmit in AccountSettingsTab
         type="submit"
         buttonType="primary"
+        isDisabled={!formValid}
       >
         Save Changes
       </Button>

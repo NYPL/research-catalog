@@ -22,7 +22,11 @@ const RequestsTab = ({
   function formatTitleElement(hold: Hold) {
     // If item is research/circ
     if (hold.catalogHref) {
-      return <ExternalLink href={hold.catalogHref}>{hold.title}</ExternalLink>
+      return (
+        <ExternalLink isUnderlined={false} href={hold.catalogHref}>
+          {hold.title}
+        </ExternalLink>
+      )
     } else {
       // Item is a partner record
       return <Text>{hold.title}</Text>
