@@ -76,7 +76,7 @@ describe("Bib Page with items", () => {
   })
 })
 
-describe("Bib Page not items", () => {
+describe("Bib Page no items", () => {
   beforeEach(() => {
     render(
       <BibPage
