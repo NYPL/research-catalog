@@ -37,7 +37,7 @@ const ProfileTabs = ({
       content: checkouts ? (
         <CheckoutsTab checkouts={checkouts} patron={patron} />
       ) : (
-        <Text sx={{ marginTop: "s" }}>
+        <Text sx={{ mt: "s" }}>
           There was an error accessing your checkouts.
         </Text>
       ),
@@ -52,9 +52,7 @@ const ProfileTabs = ({
           patron={patron}
         />
       ) : (
-        <Text sx={{ marginTop: "s" }}>
-          There was an error accessing your requests
-        </Text>
+        <Text sx={{ mt: "s" }}>There was an error accessing your requests</Text>
       ),
       urlPath: "requests",
     },
