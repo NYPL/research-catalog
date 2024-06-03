@@ -5,7 +5,7 @@ const cache = {
   lastUpdated: null,
   isStillValid: function () {
     const now = Date.now()
-    return this.lastUpdated && now - this.lastUpdated < 360000
+    return this.lastUpdated && now - this.lastUpdated < 1000 * 60 * 60
   },
 }
 
