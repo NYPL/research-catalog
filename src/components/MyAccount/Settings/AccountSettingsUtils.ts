@@ -102,6 +102,9 @@ export const parseAccountSettingsPayload = (
         }
         break
       case "homeLibrary":
+        // Sierra API holds PUT endpoint only takes homeLibraryCode, which is a
+        // different type than the homeLibrary object used everywhere else in
+        // the app.
         putRequestPayload.homeLibraryCode = fieldValue.split("@")[0]
     }
     return putRequestPayload

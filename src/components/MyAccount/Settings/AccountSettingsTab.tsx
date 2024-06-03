@@ -127,7 +127,7 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
     <SkeletonLoader showImage={false} />
   ) : (
     <>
-      {modalProps && <Modal {...{ ...modalProps, onClose }} />}
+      {modalProps && <Modal {...{ ...modalProps, onClose: closeModal }} />}
       <Form
         className={styles.accountSettingsTab}
         id="account-settings-container"
