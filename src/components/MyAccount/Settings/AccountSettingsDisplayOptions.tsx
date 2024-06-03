@@ -9,7 +9,8 @@ import { notificationPreferenceTuples } from "../../../utils/myAccountUtils"
 import type { Patron } from "../../../types/myAccountTypes"
 import { accountSettings, getLibraryByCode } from "./AccountSettingsUtils"
 import { buildListElementsWithIcons } from "../IconListElement"
-import type { JSX, ReactNode } from "react"
+import type { Dispatch, JSX, ReactNode } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { filteredPickupLocations } from "../../../utils/myAccountUtils"
 import PasswordModal from "./PasswordModal"
 
@@ -29,7 +30,51 @@ export const AccountSettingsDisplay = ({ patron }: { patron: Patron }) => {
   return <>{terms.map(buildListElementsWithIcons)}</>
 }
 
-export const AccountSettingsForm = ({ patron }: { patron: Patron }) => {
+export const AccountSettingsForm = ({
+  patron,
+  setIsFormValid,
+}: {
+  patron: Patron
+  setIsFormValid: Dispatch<React.SetStateAction<boolean>>
+}) => {
+  const [formData, setFormData] = useState({
+    primaryPhone: patron.phones[0]?.number,
+    email: patron.emails[0],
+  })
+
+  const isFormValid = useCallback(() => {
+    const phoneRegex = /^(?:\D*\d){10}\D*$/
+    if (patron.notificationPreference == "Phone") {
+      return (
+        formData.primaryPhone !== "" && phoneRegex.test(formData.primaryPhone)
+      )
+    } else if (patron.notificationPreference == "Email") {
+      console.log(formData)
+      return formData.email !== ""
+    } else return true
+  }, [formData])
+
+  useEffect(() => {
+    setIsFormValid(isFormValid())
+  }, [formData, isFormValid, setIsFormValid])
+
+  const handleInputChange = (e) => {
+    const { id, value } = e.target
+    let updatedFormData = { ...formData }
+    if (id === "phone-text-input") {
+      updatedFormData = {
+        ...updatedFormData,
+        primaryPhone: value,
+      }
+    } else if (id === "email-text-input") {
+      updatedFormData = {
+        ...updatedFormData,
+        email: value,
+      }
+    }
+    setFormData(updatedFormData)
+  }
+
   const formInputs = accountSettings
     .map((setting) => {
       let inputField:
@@ -100,6 +145,8 @@ export const AccountSettingsForm = ({ patron }: { patron: Patron }) => {
               id="phone-text-input"
               labelText="Update phone number"
               showLabel={false}
+              onChange={handleInputChange}
+              placeholder="000-000-0000"
             />
           )
           break
@@ -111,6 +158,7 @@ export const AccountSettingsForm = ({ patron }: { patron: Patron }) => {
               id="email-text-input"
               labelText="Update email"
               showLabel={false}
+              onChange={handleInputChange}
             />
           )
           break

@@ -14,25 +14,32 @@ import {
   AccountSettingsDisplay,
 } from "./AccountSettingsDisplayOptions"
 import {
-  successModalProps,
-  failureModalProps,
-} from "./AccountSettingsFeedbackModalProps"
-import {
   parseAccountSettingsPayload,
   buildUpdatedPatronDisplayData,
 } from "./AccountSettingsUtils"
+import {
+  failureModalProps,
+  successModalProps,
+} from "./AccountSettingsFeedbackModalProps"
 
 const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
   const [currentlyEditing, setCurrentlyEditing] = useState(false)
   const [mostRecentPatronData, setMostRecentPatronData] = useState(settingsData)
   const [modalProps, setModalProps] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
+
+  const { onOpen: openModal, onClose: closeModal, Modal } = useModal()
+
+  const [isFormValid, setIsFormValid] = useState(false)
+
   const listElements = currentlyEditing ? (
-    <AccountSettingsForm patron={mostRecentPatronData} />
+    <AccountSettingsForm
+      patron={mostRecentPatronData}
+      setIsFormValid={setIsFormValid}
+    />
   ) : (
     <AccountSettingsDisplay patron={mostRecentPatronData} />
   )
-  const { onOpen: openModal, Modal, onClose: closeModal } = useModal()
 
   const submitAccountSettings = async (e) => {
     e.preventDefault()
@@ -66,7 +73,7 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
     <SkeletonLoader showImage={false} />
   ) : (
     <>
-      {modalProps && <Modal {...{ ...modalProps, closeModal }} />}
+      {modalProps && <Modal {...{ ...modalProps, onClose: closeModal }} />}
       <Form
         className={styles.accountSettingsTab}
         id="account-settings-container"
@@ -83,6 +90,7 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
         <AccountSettingsButtons
           currentlyEditing={currentlyEditing}
           setCurrentlyEditing={setCurrentlyEditing}
+          formValid={isFormValid}
         />
       </Form>
     </>
