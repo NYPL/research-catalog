@@ -49,7 +49,6 @@ export const AccountSettingsForm = ({
         formData.primaryPhone !== "" && phoneRegex.test(formData.primaryPhone)
       )
     } else if (patron.notificationPreference == "Email") {
-      console.log(formData)
       return formData.email !== ""
     } else return true
   }, [formData])
