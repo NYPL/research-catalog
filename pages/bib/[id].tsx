@@ -1,8 +1,8 @@
 import Head from "next/head"
-import { Heading } from "@nypl/design-system-react-components"
+import { Heading, Pagination } from "@nypl/design-system-react-components"
 
 import Layout from "../../src/components/Layout/Layout"
-import { PATHS, SITE_NAME } from "../../src/config/constants"
+import { PATHS, ITEM_BATCH_SIZE, SITE_NAME } from "../../src/config/constants"
 import { fetchBib } from "../../src/server/api/bib"
 import { mapQueryToBibParams } from "../../src/utils/bibUtils"
 import BibDetailsModel from "../../src/models/BibDetails"
@@ -34,6 +34,10 @@ export default function BibPage({
     annotatedMarc
   )
 
+  const handlePageChange = (page) => {
+    console.log(page)
+  }
+
   return (
     <>
       <Head>
@@ -50,7 +54,16 @@ export default function BibPage({
         <Heading level="h2">{bib.title}</Heading>
         <BibDetails key="top-details" details={topDetails} />
         {bib.itemTableData ? (
-          <ItemTable itemTableData={bib.itemTableData} />
+          <>
+            <ItemTable itemTableData={bib.itemTableData} />
+            <Pagination
+              id="bib-items-pagination"
+              initialPage={1}
+              currentPage={1}
+              pageCount={Math.ceil(bib.numPhysicalItems / ITEM_BATCH_SIZE)}
+              onPageChange={handlePageChange}
+            />
+          </>
         ) : null}
         <BibDetails
           heading="Details"
