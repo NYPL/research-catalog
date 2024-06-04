@@ -71,6 +71,9 @@ export default function BibPage({
     const { items } = await response.json()
     setBibItems(items.map((item) => new Item(item, bib)))
     setItemsLoading(false)
+    document.getElementById("item-table")?.scrollIntoView({
+      behavior: "smooth",
+    })
   }
 
   const handlePageChange = async (page) => {
@@ -95,13 +98,11 @@ export default function BibPage({
         <Heading level="h2">{bib.title}</Heading>
         <BibDetails key="top-details" details={topDetails} />
         {bib.showItemTable ? (
-          <>
+          <Box id="item-table">
             {itemsLoading ? (
               <SkeletonLoader showImage={false} />
             ) : (
-              <Box id="item-table">
-                <ItemTable itemTableData={itemTableData} />
-              </Box>
+              <ItemTable itemTableData={itemTableData} />
             )}
             <Pagination
               id="bib-items-pagination"
@@ -111,7 +112,7 @@ export default function BibPage({
               onPageChange={handlePageChange}
               my="xl"
             />
-          </>
+          </Box>
         ) : null}
         <BibDetails
           heading="Details"
