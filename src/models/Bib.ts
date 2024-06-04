@@ -1,7 +1,6 @@
 import type { BibResult, ElectronicResource } from "../types/bibTypes"
 import type { JSONLDValue } from "../types/itemTypes"
 import Item from "../models/Item"
-import ItemTableData from "./ItemTableData"
 
 /**
  * The Bib class represents a single Bib entity and contains the data
@@ -67,14 +66,6 @@ export default class Bib {
       Array.isArray(this.issuance) &&
       this.issuance.some((issuance) => issuance["@id"] === "urn:biblevel:c")
     )
-  }
-
-  get itemTableData(): ItemTableData {
-    return this.showItemTable && this.items.length
-      ? new ItemTableData(this.items, {
-          isArchiveCollection: this.isArchiveCollection,
-        })
-      : null
   }
 
   getTitleFromResult(result: BibResult) {

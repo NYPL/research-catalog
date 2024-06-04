@@ -6,6 +6,7 @@ import { PATHS, ITEM_BATCH_SIZE, SITE_NAME } from "../../src/config/constants"
 import { fetchBib } from "../../src/server/api/bib"
 import { mapQueryToBibParams } from "../../src/utils/bibUtils"
 import BibDetailsModel from "../../src/models/BibDetails"
+import ItemTableData from "../../src/models/ItemTableData"
 import BibDetails from "../../src/components/BibPage/BibDetail"
 import ItemTable from "../../src/components/ItemTable/ItemTable"
 import type { BibResult } from "../../src/types/bibTypes"
@@ -28,11 +29,20 @@ export default function BibPage({
   isAuthenticated,
 }: BibPropsType) {
   const metadataTitle = `Item Details | ${SITE_NAME}`
+
   const bib = new Bib(bibResult)
+
   const { topDetails, bottomDetails, holdingsDetails } = new BibDetailsModel(
     bibResult,
     annotatedMarc
   )
+
+  const itemTableData =
+    bib.showItemTable && bib.hasPhysicalItems
+      ? new ItemTableData(bib.items, {
+          isArchiveCollection: bib.isArchiveCollection,
+        })
+      : null
 
   const handlePageChange = (page) => {
     console.log(page)
@@ -53,9 +63,9 @@ export default function BibPage({
       <Layout isAuthenticated={isAuthenticated} activePage="bib">
         <Heading level="h2">{bib.title}</Heading>
         <BibDetails key="top-details" details={topDetails} />
-        {bib.itemTableData ? (
+        {itemTableData ? (
           <>
-            <ItemTable itemTableData={bib.itemTableData} />
+            <ItemTable itemTableData={itemTableData} />
             <Pagination
               id="bib-items-pagination"
               initialPage={1}
