@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next"
-import { fetchBib } from "../../../src/server/api/bib"
-import { PATHS, BASE_URL } from "../../../src/config/constants"
-import { mapQueryToBibParams } from "../../../src/utils/bibUtils"
+import { fetchBib } from "../../../../src/server/api/bib"
+import { PATHS, BASE_URL } from "../../../../src/config/constants"
+import { mapQueryToBibParams } from "../../../../src/utils/bibUtils"
 
 /**
  * Default API route handler for Bib page
