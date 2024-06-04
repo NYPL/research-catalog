@@ -89,7 +89,14 @@ const DRBContainer = ({
               href={appConfig.urls.drbAbout}
               aria-label="Explore Digital Research Books Beta"
             >
-              <Box mb="xs" bg="ui.white" p="s" borderRadius="5px">
+              <Box
+                as="span"
+                display="inline-block"
+                mb="xs"
+                bg="ui.white"
+                p="s"
+                borderRadius="5px"
+              >
                 <Image src={drbPromoImage} alt="" />
               </Box>
             </ExternalLink>
