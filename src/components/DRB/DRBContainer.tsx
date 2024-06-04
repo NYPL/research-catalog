@@ -19,7 +19,7 @@ import drbPromoImage from "../../client/assets/drb_promo.png"
 
 interface DRBContainerProps {
   drbResults: DRBResult[]
-  totalWorks: number
+  totalWorks?: number
   // TODO: Get these from context when SearchParamsContext is added
   searchParams: SearchParams
 }
@@ -29,11 +29,12 @@ interface DRBContainerProps {
  */
 const DRBContainer = ({
   drbResults,
-  totalWorks,
+  totalWorks = 0,
   searchParams,
 }: DRBContainerProps) => {
   const drbQuery = getDRBQueryStringFromSearchParams(searchParams)
   const hasResults = totalWorks > 0
+
   return (
     <Card
       id="drb-sidebar-container"
