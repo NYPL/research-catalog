@@ -3,6 +3,7 @@ import type { ReactElement } from "react"
 import type Item from "./Item"
 import type { ItemTableParams } from "../types/itemTypes"
 import StatusLinks from "../components/ItemTable/StatusLinks"
+import { ITEM_BATCH_SIZE } from "../config/constants"
 
 /**
  * The ItemTable class converts a Bib's item data to the format

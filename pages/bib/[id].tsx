@@ -100,13 +100,15 @@ export default function BibPage({
             ) : (
               <ItemTable itemTableData={itemTableData} />
             )}
-            <Pagination
-              id="bib-items-pagination"
-              initialPage={1}
-              currentPage={1}
-              pageCount={Math.ceil(bib.numPhysicalItems / ITEM_BATCH_SIZE)}
-              onPageChange={handlePageChange}
-            />
+            {bib.showItemPagination ? (
+              <Pagination
+                id="bib-items-pagination"
+                initialPage={1}
+                currentPage={1}
+                pageCount={Math.ceil(bib.numPhysicalItems / ITEM_BATCH_SIZE)}
+                onPageChange={handlePageChange}
+              />
+            ) : null}
           </>
         ) : null}
         <BibDetails

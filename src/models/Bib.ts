@@ -1,6 +1,7 @@
 import type { BibResult, ElectronicResource } from "../types/bibTypes"
 import type { JSONLDValue } from "../types/itemTypes"
 import Item from "../models/Item"
+import { ITEM_BATCH_SIZE } from "../config/constants"
 
 /**
  * The Bib class represents a single Bib entity and contains the data
@@ -58,6 +59,10 @@ export default class Bib {
 
   get showItemTable() {
     return !this.isOnlyElectronicResources && this.hasPhysicalItems
+  }
+
+  get showItemPagination() {
+    return this.numPhysicalItems > ITEM_BATCH_SIZE
   }
 
   // Used to determine the Volume column text in the ItemTable
