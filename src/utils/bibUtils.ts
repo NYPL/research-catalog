@@ -81,6 +81,7 @@ const extractFeatures = (featuresString: string): string[] => {
 /* eslint-disable @typescript-eslint/naming-convention */
 
 export function mapQueryToBibParams(bibQuery: BibQueryParams): BibParams {
+  console.log(bibQuery)
   const { features, item_page = 1, items_from } = bibQuery
   const urlEnabledFeatures = extractFeatures(features)
 

@@ -5,6 +5,7 @@ import {
   Heading,
   Pagination,
   SkeletonLoader,
+  Box,
 } from "@nypl/design-system-react-components"
 
 import Layout from "../../src/components/Layout/Layout"
@@ -98,7 +99,9 @@ export default function BibPage({
             {itemsLoading ? (
               <SkeletonLoader showImage={false} />
             ) : (
-              <ItemTable itemTableData={itemTableData} />
+              <Box id="item-table">
+                <ItemTable itemTableData={itemTableData} />
+              </Box>
             )}
             <Pagination
               id="bib-items-pagination"
@@ -106,6 +109,7 @@ export default function BibPage({
               currentPage={1}
               pageCount={Math.ceil(bib.numPhysicalItems / ITEM_BATCH_SIZE)}
               onPageChange={handlePageChange}
+              my="xl"
             />
           </>
         ) : null}

@@ -43,7 +43,7 @@ describe("SearchResult with Many Physical Items", () => {
     })
     expect(resultTitleLink).toHaveAttribute(
       "href",
-      "/research/research-catalog/bib/b14753192#items-table"
+      "/research/research-catalog/bib/b14753192#item-table"
     )
   })
 })
