@@ -2031,7 +2031,7 @@ export const patron = {
   barcodes: ["23333121538324"],
   expirationDate: "2025-03-28",
   emails: ["streganonna@gmail.com", "spaghettigrandma@gmail.com"],
-  homeLibraryCode: "sn   ",
+  homeLibrary: { code: "sn   ", name: "SNFL (formerly Mid-Manhattan)" },
   phones: [
     {
       number: "123-456-7890",

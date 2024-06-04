@@ -5,6 +5,7 @@ import {
 } from "./AccountSettingsUtils"
 import { processedPatron } from "../../../../__test__/fixtures/processedMyAccountData"
 import { formatDate } from "../../../utils/myAccountUtils"
+import type { Patron } from "../../../types/myAccountTypes"
 
 describe("Account settings utils", () => {
   describe("formatDate", () => {
@@ -20,13 +21,13 @@ describe("Account settings utils", () => {
         barcode: "1234567890",
         emails: ["email@mail.com"],
         expirationDate: "2025-03-28",
-        homeLibraryCode: "sn",
+        homeLibrary: { code: "sn   ", name: "SNFL (formerly Mid-Manhattan)" },
         id: 2772226,
         name: "NONNA, STREGA",
         notificationPreference: "Email",
         phones: [{ number: "2129876543", type: "t" }],
       }
-      const patronUpdateBody = {}
+      const patronUpdateBody = {} as Patron
       expect(
         buildUpdatedPatronDisplayData(originalPatronData, patronUpdateBody)
       ).toStrictEqual(originalPatronData)
@@ -36,7 +37,7 @@ describe("Account settings utils", () => {
         barcode: "1234567890",
         emails: ["email@mail.com"],
         expirationDate: "2025-03-28",
-        homeLibraryCode: "sn",
+        homeLibrary: { code: "mp   ", name: "SNFL (formerly Mid-Manhattan)" },
         id: 2772226,
         name: "NONNA, STREGA",
         notificationPreference: "Email",
@@ -51,23 +52,27 @@ describe("Account settings utils", () => {
           { number: "1234567890", type: "t" },
         ],
       }
-      const { id, emails, phones, homeLibraryCode, notificationPreference } =
-        buildUpdatedPatronDisplayData(originalPatronData, patronUpdateBody)
+      const { id, emails, phones, homeLibrary, notificationPreference } =
+        buildUpdatedPatronDisplayData(
+          originalPatronData,
+          patronUpdateBody,
+          "mp   @Morris Park"
+        )
       expect(emails).toStrictEqual(["hey@you.com", "email@mail.com"])
       expect(phones).toStrictEqual([
         { number: "2129876543", type: "t" },
         { number: "1234567890", type: "t" },
       ])
       expect(notificationPreference).toEqual("Phone")
-      expect(homeLibraryCode).toStrictEqual("mp   ")
+      expect(homeLibrary).toStrictEqual({ code: "mp   ", name: "Morris Park" })
       expect(id).toEqual(originalPatronData.id)
     })
-    it("updates original data when updated data is missing fields", () => {
+    it("populates with original data when updated data is missing fields", () => {
       const originalPatronData = {
         barcode: "1234567890",
         emails: ["email@mail.com"],
         expirationDate: "2025-03-28",
-        homeLibraryCode: "sn",
+        homeLibrary: { code: "sn   ", name: "SNFL (formerly Mid-Manhattan)" },
         id: 2772226,
         name: "NONNA, STREGA",
         notificationPreference: "Email",
@@ -77,11 +82,15 @@ describe("Account settings utils", () => {
         fixedFields: { 268: { label: "Notice Preference", value: "p" } },
         homeLibraryCode: "mp   ",
       }
-      const { id, emails, phones, homeLibraryCode, notificationPreference } =
-        buildUpdatedPatronDisplayData(originalPatronData, patronUpdateBody)
+      const { id, emails, phones, homeLibrary, notificationPreference } =
+        buildUpdatedPatronDisplayData(
+          originalPatronData,
+          patronUpdateBody,
+          "mp   @Morris Park"
+        )
       expect(emails).toStrictEqual(originalPatronData.emails)
       expect(phones).toStrictEqual(originalPatronData.phones)
-      expect(homeLibraryCode).toEqual("mp   ")
+      expect(homeLibrary).toEqual({ code: "mp   ", name: "Morris Park" })
       expect(notificationPreference).toEqual("Phone")
       expect(id).toEqual(originalPatronData.id)
     })
@@ -100,7 +109,7 @@ describe("Account settings utils", () => {
       const eventTarget = {
         emails: { value: "fusili@gmail.com" },
         phones: { value: "666" },
-        homeLibraryCode: { value: "xx   " },
+        homeLibrary: { value: "xx   @spaghetti" },
         notificationPreference: { value: "z" },
       }
       expect(
