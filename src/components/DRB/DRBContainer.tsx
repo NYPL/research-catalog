@@ -89,10 +89,7 @@ const DRBContainer = ({
               aria-label="Explore Digital Research Books Beta"
             >
               <Box mb="xs" bg="ui.white" p="s" borderRadius="5px">
-                <Image
-                  src={drbPromoImage}
-                  alt="Image of three Digital Research Books"
-                />
+                <Image src={drbPromoImage} alt="" />
               </Box>
             </ExternalLink>
             <ExternalLink
