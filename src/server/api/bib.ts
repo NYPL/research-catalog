@@ -26,6 +26,7 @@ export async function fetchBib(
       redirectUrl: `/bib/${standardizedId}`,
     }
   }
+  console.log(getBibQuery(id, bibParams))
 
   const client = await nyplApiClient({ apiName: DISCOVERY_API_NAME })
   const [bibResponse, annotatedMarcResponse] = await Promise.allSettled([

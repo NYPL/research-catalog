@@ -1,10 +1,21 @@
 import Head from "next/head"
-import { Heading, Pagination } from "@nypl/design-system-react-components"
+import { useState } from "react"
+import { useRouter } from "next/router"
+import {
+  Heading,
+  Pagination,
+  SkeletonLoader,
+} from "@nypl/design-system-react-components"
 
 import Layout from "../../src/components/Layout/Layout"
-import { PATHS, ITEM_BATCH_SIZE, SITE_NAME } from "../../src/config/constants"
+import {
+  PATHS,
+  ITEM_BATCH_SIZE,
+  SITE_NAME,
+  BASE_URL,
+} from "../../src/config/constants"
 import { fetchBib } from "../../src/server/api/bib"
-import { mapQueryToBibParams } from "../../src/utils/bibUtils"
+import { getBibQuery, mapQueryToBibParams } from "../../src/utils/bibUtils"
 import BibDetailsModel from "../../src/models/BibDetails"
 import ItemTableData from "../../src/models/ItemTableData"
 import BibDetails from "../../src/components/BibPage/BibDetail"
@@ -13,6 +24,8 @@ import type { BibResult } from "../../src/types/bibTypes"
 import type { AnnotatedMarc } from "../../src/types/bibDetailsTypes"
 import Bib from "../../src/models/Bib"
 import initializePatronTokenAuth from "../../src/server/auth"
+import type { ParsedUrlQueryInput } from "querystring"
+import Item from "../../src/models/Item"
 
 interface BibPropsType {
   bibResult: BibResult
@@ -28,24 +41,41 @@ export default function BibPage({
   annotatedMarc,
   isAuthenticated,
 }: BibPropsType) {
+  const { pathname, push, query } = useRouter()
   const metadataTitle = `Item Details | ${SITE_NAME}`
 
   const bib = new Bib(bibResult)
+
+  const [itemsLoading, setItemsLoading] = useState(false)
+  const [bibItems, setBibItems] = useState(bib.items)
 
   const { topDetails, bottomDetails, holdingsDetails } = new BibDetailsModel(
     bibResult,
     annotatedMarc
   )
 
-  const itemTableData =
-    bib.showItemTable && bib.hasPhysicalItems
-      ? new ItemTableData(bib.items, {
-          isArchiveCollection: bib.isArchiveCollection,
-        })
-      : null
+  const itemTableData = new ItemTableData(bibItems, {
+    isArchiveCollection: bib.isArchiveCollection,
+  })
 
-  const handlePageChange = (page) => {
-    console.log(page)
+  const refreshItemTable = async (newQuery: ParsedUrlQueryInput) => {
+    setItemsLoading(true)
+    await push({ pathname, query: { ...newQuery } }, undefined, {
+      shallow: true,
+    })
+    const queryString = getBibQuery(bib.id, mapQueryToBibParams(newQuery))
+    const response = await fetch(
+      `${BASE_URL}/api/bib/${bib.id}/items?${queryString}`
+    )
+    const { items } = await response.json()
+    setBibItems(items.map((item) => new Item(item, bib)))
+    setItemsLoading(false)
+  }
+
+  const handlePageChange = async (page) => {
+    const newQuery = { ...query, item_page: page }
+    if (page === 1) delete newQuery.item_page
+    await refreshItemTable(newQuery)
   }
 
   return (
@@ -63,9 +93,13 @@ export default function BibPage({
       <Layout isAuthenticated={isAuthenticated} activePage="bib">
         <Heading level="h2">{bib.title}</Heading>
         <BibDetails key="top-details" details={topDetails} />
-        {itemTableData ? (
+        {bib.showItemTable ? (
           <>
-            <ItemTable itemTableData={itemTableData} />
+            {itemsLoading ? (
+              <SkeletonLoader showImage={false} />
+            ) : (
+              <ItemTable itemTableData={itemTableData} />
+            )}
             <Pagination
               id="bib-items-pagination"
               initialPage={1}
