@@ -63,7 +63,7 @@ export interface SierraPatron {
   barcodes?: string[]
   expirationDate?: string
   emails?: string[]
-  homeLibraryCode?: string
+  homeLibrary?: SierraCodeName
   phones?: { number: string; type: string }[]
 }
 
@@ -107,9 +107,24 @@ export interface Patron {
   formattedBarcode?: string
   expirationDate: string
   emails: string[]
-  homeLibraryCode: string
+  homeLibrary: SierraCodeName
   phones: Phone[]
   id: number
+}
+
+export interface SierraPatron {
+  fixedFields?: Record<string, { label: string; value: string }>
+  id?: number
+  names?: string[]
+  barcodes?: string[]
+  expirationDate?: string
+  emails?: string[]
+  homeLibrary?: SierraCodeName
+  phones?: { number: string; type: string }[]
+}
+
+export interface PatronUpdateBody extends Omit<SierraPatron, "homeLibrary"> {
+  homeLibraryCode?: string
 }
 
 export interface SierraBib {

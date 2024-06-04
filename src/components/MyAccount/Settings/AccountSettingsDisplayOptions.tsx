@@ -7,7 +7,7 @@ import {
 } from "@nypl/design-system-react-components"
 import { notificationPreferenceTuples } from "../../../utils/myAccountUtils"
 import type { Patron } from "../../../types/myAccountTypes"
-import { accountSettings, getLibraryByCode } from "./AccountSettingsUtils"
+import { accountSettings } from "./AccountSettingsUtils"
 import { buildListElementsWithIcons } from "../IconListElement"
 import type { Dispatch, JSX, ReactNode } from "react"
 import { useState, useEffect, useCallback } from "react"
@@ -85,11 +85,10 @@ export const AccountSettingsForm = ({
       switch (setting.term) {
         case "Home library":
           {
-            const patronHomeLibrary = getLibraryByCode(patron.homeLibraryCode)
             const sortedPickupLocations = [
-              patronHomeLibrary,
+              patron.homeLibrary,
               ...filteredPickupLocations.filter(
-                (loc) => loc.code.trim() !== patron.homeLibraryCode.trim()
+                (loc) => loc.code.trim() !== patron.homeLibrary.code.trim()
               ),
             ]
             inputField = (
@@ -100,7 +99,10 @@ export const AccountSettingsForm = ({
                 showLabel={false}
               >
                 {sortedPickupLocations.map((loc, i) => (
-                  <option key={`location-option-${i}`} value={loc.code}>
+                  <option
+                    key={`location-option-${i}`}
+                    value={`${loc.code}@${loc.name}`}
+                  >
                     {loc.name}
                   </option>
                 ))}
