@@ -61,10 +61,6 @@ export default class Bib {
     return !this.isOnlyElectronicResources && this.hasPhysicalItems
   }
 
-  get showItemPagination() {
-    return this.numPhysicalItems > ITEM_BATCH_SIZE
-  }
-
   // Used to determine the Volume column text in the ItemTable
   get isArchiveCollection() {
     return (
