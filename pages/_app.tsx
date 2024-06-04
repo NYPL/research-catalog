@@ -9,6 +9,7 @@ import { appConfig } from "../src/config/config"
 import { BASE_URL, SITE_NAME } from "../src/config/constants"
 
 import { FeedbackProvider } from "../src/context/FeedbackContext"
+import { SearchParamsProvider } from "../src/context/SearchParamsContext"
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 function App({ Component, pageProps }) {
@@ -107,7 +108,9 @@ function App({ Component, pageProps }) {
         <title key="main-title">{SITE_NAME}</title>
       </Head>
       <FeedbackProvider value={null}>
-        <Component {...pageProps} />
+        <SearchParamsProvider>
+          <Component {...pageProps} />
+        </SearchParamsProvider>
       </FeedbackProvider>
     </>
   )
