@@ -4,7 +4,7 @@ import {
 } from "./AccountSettingsDisplayOptions"
 import {
   emptyPatron,
-  mockPatron,
+  processedPatron,
 } from "../../../../__test__/fixtures/processedMyAccountData"
 import { render, screen } from "../../../utils/testUtils"
 
@@ -13,18 +13,16 @@ describe("AccountSettingsDisplayOptions", () => {
     beforeEach(() => {
       render(
         <AccountSettingsDisplay
-          patron={{ ...mockPatron, notificationPreference: "Print" }}
+          patron={{ ...processedPatron, notificationPreference: "Mobile" }}
         />
       )
     })
     it("displays a selector with patron's home library selected", () => {
-      const homeLibrary = screen.getByText(
-        "Stavros Niarchos Foundation Library (SNFL)"
-      )
+      const homeLibrary = screen.getByText("SNFL (formerly Mid-Manhattan)")
       expect(homeLibrary).toBeInTheDocument()
     })
     it("displays a selector with patron's notification selected", () => {
-      const notificationPreference = screen.getByText("Print")
+      const notificationPreference = screen.getByText("Mobile")
       expect(notificationPreference).toBeInTheDocument()
     })
     it("displays a text input with patron's primary email displayed", () => {
@@ -50,8 +48,15 @@ describe("AccountSettingsDisplayOptions", () => {
       )
       missingFields.forEach((field) => expect(field).not.toBeInTheDocument())
     })
-    it("displays empty email, phone, or notification preference if not specified", () => {
-      render(<AccountSettingsForm patron={emptyPatron} />)
+    it("displays empty email, phone, or notification preference in edit mode if not specified", () => {
+      render(
+        <AccountSettingsForm
+          patron={emptyPatron}
+          setIsFormValid={() => {
+            return true
+          }}
+        />
+      )
       const missingFields = [
         "Update email",
         "Update phone number",
@@ -64,13 +69,20 @@ describe("AccountSettingsDisplayOptions", () => {
   })
   describe("Update", () => {
     beforeEach(() => {
-      render(<AccountSettingsForm patron={mockPatron} />)
+      render(
+        <AccountSettingsForm
+          patron={processedPatron}
+          setIsFormValid={() => {
+            return true
+          }}
+        />
+      )
     })
     it("displays a selector with patron's home library selected", () => {
-      const homeLibrary = screen.getByDisplayValue(
-        "Stavros Niarchos Foundation Library (SNFL)"
+      const homeLibraryCode = screen.getByDisplayValue(
+        "SNFL (formerly Mid-Manhattan)"
       )
-      expect(homeLibrary).toBeInTheDocument()
+      expect(homeLibraryCode).toBeInTheDocument()
     })
     it("displays a selector with patron's notification selected", () => {
       const notificationPreference = screen.getByLabelText("Update email")

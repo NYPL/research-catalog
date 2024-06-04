@@ -1,3 +1,7 @@
+.settingsEditButton {
+  margin-top: var(--nypl-space-m);
+}
+
 .myAccountList {
   border: none;
   dl > dt,
@@ -23,9 +27,16 @@
 }
 
 .accountSettingsTab {
-  display: flex;
-  button + button {
-    margin-left: var(--nypl-space-xs);
+  > div {
+    margin-top: var(--nypl-space-l);
+    display: flex;
+    flex-direction: row;
+    @media (max-width: 600) {
+      flex-direction: column;
+    }
+    @media (max-width: 800px) and (min-width: 601) {
+      flex-direction: column-reverse;
+    }
   }
 }
 .modalHeading {
@@ -99,11 +110,15 @@
   }
 }
 
+.changeLocation {
+  margin-bottom: 0;
+  width: max-content;
+}
+
 .feesTable {
   margin-top: var(--nypl-space-m);
   thead > tr > th,
   thead > tr > th:last-of-type {
-    text-transform: unset;
     font-weight: 700;
     border-color: var(--nypl-colors-ui-gray-light-cool);
   }
@@ -111,8 +126,20 @@
   tbody > tr > td:last-of-type {
     border-color: var(--nypl-colors-ui-gray-light-cool);
   }
+  @media only screen and (min-width: 600px) {
+    tr > th:last-of-type {
+      padding-right: var(--nypl-space-l);
+      text-align: right;
+    }
+  }
+  @media only screen and (min-width: 600px) {
+    tr > td:last-of-type {
+      text-align: right;
+      padding-right: var(--nypl-space-s);
+    }
+  }
   th:first-of-type {
-    width: auto;
+    width: 60%;
   }
   th,
   th:last-of-type {

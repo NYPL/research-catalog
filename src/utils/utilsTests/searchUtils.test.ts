@@ -7,6 +7,7 @@ import {
   getFreshSortByQuery,
 } from "../searchUtils"
 import { queryParamsEquality } from "../../../__test__/helpers/searchHelpers"
+import type { SearchQueryParams, SearchParams } from "../../types/searchTypes"
 
 const checkQueryParamsEquality = queryParamsEquality(getSearchQuery)
 
@@ -50,6 +51,53 @@ describe("searchUtils", () => {
         })
       ).toBe(true)
     })
+    it("includes advanced search query params when field is set to 'all'", () => {
+      const testQuery =
+        "?q=shel%20silverstein&contributor=shel silverstein&title=the giving tree&subject=books"
+      expect(
+        checkQueryParamsEquality(testQuery, {
+          q: "shel silverstein",
+          title: "the giving tree",
+          contributor: "shel silverstein",
+          subject: "books",
+          field: "all",
+        })
+      ).toBe(true)
+    })
+    it("clears advanced search query params when field param is anything other than 'all'", () => {
+      const titleQuery = "?q=shel%20silverstein&search_scope=title"
+      expect(
+        checkQueryParamsEquality(titleQuery, {
+          q: "shel silverstein",
+          title: "the giving tree",
+          contributor: "shel silverstein",
+          subject: "books",
+          field: "title",
+        })
+      ).toBe(true)
+
+      const subjectQuery = "?q=shel%20silverstein&search_scope=subject"
+      expect(
+        checkQueryParamsEquality(subjectQuery, {
+          q: "shel silverstein",
+          title: "the giving tree",
+          contributor: "shel silverstein",
+          subject: "books",
+          field: "subject",
+        })
+      ).toBe(true)
+
+      const contributorQuery = "?q=shel%20silverstein&search_scope=contributor"
+      expect(
+        checkQueryParamsEquality(contributorQuery, {
+          q: "shel silverstein",
+          title: "the giving tree",
+          contributor: "shel silverstein",
+          subject: "books",
+          field: "contributor",
+        })
+      ).toBe(true)
+    })
   })
   describe("mapQueryToSearchParams", () => {
     it("should consolidate identifiers, change some keys, and initializes the page number to 1", () => {
@@ -71,6 +119,22 @@ describe("searchUtils", () => {
         field: "contributor",
         order: "asc",
         sortBy: "relevance",
+      })
+    })
+    it("maps the filters correctly", () => {
+      expect(
+        mapQueryToSearchParams({
+          "filters[language][0]": "lang:rus",
+          "filters[subjectLiteral][0]": "Spaghetti",
+          "filters[subjectLiteral][1]": "Linguini",
+        } as SearchQueryParams)
+      ).toEqual({
+        page: 1,
+        q: "",
+        filters: {
+          language: ["lang:rus"],
+          subjectLiteral: ["Spaghetti", "Linguini"],
+        },
       })
     })
     it("parses the page number query string value into a number", () => {
@@ -130,6 +194,27 @@ describe("searchUtils", () => {
       )
       expect(heading.toLocaleLowerCase().includes("keyword")).toBe(false)
     })
+    it("displays the default keyword display string", () => {
+      const heading = getSearchResultsHeading({ q: "spaghetti" }, 100)
+      expect(heading).toEqual(
+        'Displaying 1-50 of 100 results for keyword "spaghetti"'
+      )
+    })
+    it("handles the special case for the author field", () => {
+      const heading = getSearchResultsHeading({ contributor: "spaghetti" }, 100)
+      expect(heading).toEqual(
+        'Displaying 1-50 of 100 results for author/contributor "spaghetti"'
+      )
+    })
+    it("handles the special case for the creatorLiteral field", () => {
+      const heading = getSearchResultsHeading(
+        { filters: { creatorLiteral: ["spaghetti"] } },
+        100
+      )
+      expect(heading).toEqual(
+        'Displaying 1-50 of 100 results for author "spaghetti"'
+      )
+    })
     it("displays all of the values from advanced search and nothing else", () => {
       const heading = getSearchResultsHeading(
         {
@@ -143,7 +228,21 @@ describe("searchUtils", () => {
         100
       )
       expect(heading).toEqual(
-        'Displaying 1-50 of 100 results for keyword "spaghetti" and title "ricotta" and author "pasta mama" and subject "italian"'
+        'Displaying 1-50 of 100 results for keyword "spaghetti" and title "ricotta" and author/contributor "pasta mama" and subject "italian"'
+      )
+    })
+    it("displays the appropriate string for certain values", () => {
+      const heading = getSearchResultsHeading(
+        {
+          page: 1,
+          q: "spaghetti",
+          field: "journal_title",
+          journal_title: "spaghetti",
+        } as SearchParams,
+        100
+      )
+      expect(heading).toEqual(
+        'Displaying 1-50 of 100 results for journal title "spaghetti"'
       )
     })
     it("returns the correct heading string for first page", () => {

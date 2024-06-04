@@ -3,12 +3,16 @@ import {
   FormField,
   Select,
   TextInput,
+  Box,
 } from "@nypl/design-system-react-components"
-import { notificationPreferenceMap } from "../../../utils/myAccountData"
+import { notificationPreferenceTuples } from "../../../utils/myAccountUtils"
 import type { Patron } from "../../../types/myAccountTypes"
-import { accountSettings } from "./AccountSettingsUtils"
+import { accountSettings, getLibraryByCode } from "./AccountSettingsUtils"
 import { buildListElementsWithIcons } from "../IconListElement"
-import type { JSX, ReactNode } from "react"
+import type { Dispatch, JSX, ReactNode } from "react"
+import { useState, useEffect, useCallback } from "react"
+import { filteredPickupLocations } from "../../../utils/myAccountUtils"
+import PasswordModal from "./PasswordModal"
 
 export const AccountSettingsDisplay = ({ patron }: { patron: Patron }) => {
   const terms = accountSettings
@@ -16,11 +20,9 @@ export const AccountSettingsDisplay = ({ patron }: { patron: Patron }) => {
       const description = setting.description
         ? setting.description(patron[setting.field])
         : patron[setting.field]
-
       return {
         icon: setting.icon,
         term: setting.term,
-        // pin is masked so description is a default "****"
         description,
       }
     })
@@ -28,7 +30,50 @@ export const AccountSettingsDisplay = ({ patron }: { patron: Patron }) => {
   return <>{terms.map(buildListElementsWithIcons)}</>
 }
 
-export const AccountSettingsForm = ({ patron }: { patron: Patron }) => {
+export const AccountSettingsForm = ({
+  patron,
+  setIsFormValid,
+}: {
+  patron: Patron
+  setIsFormValid: Dispatch<React.SetStateAction<boolean>>
+}) => {
+  const [formData, setFormData] = useState({
+    primaryPhone: patron.phones[0]?.number,
+    email: patron.emails[0],
+  })
+
+  const isFormValid = useCallback(() => {
+    const phoneRegex = /^(?:\D*\d){10}\D*$/
+    if (patron.notificationPreference == "Phone") {
+      return (
+        formData.primaryPhone !== "" && phoneRegex.test(formData.primaryPhone)
+      )
+    } else if (patron.notificationPreference == "Email") {
+      return formData.email !== ""
+    } else return true
+  }, [formData])
+
+  useEffect(() => {
+    setIsFormValid(isFormValid())
+  }, [formData, isFormValid, setIsFormValid])
+
+  const handleInputChange = (e) => {
+    const { id, value } = e.target
+    let updatedFormData = { ...formData }
+    if (id === "phone-text-input") {
+      updatedFormData = {
+        ...updatedFormData,
+        primaryPhone: value,
+      }
+    } else if (id === "email-text-input") {
+      updatedFormData = {
+        ...updatedFormData,
+        email: value,
+      }
+    }
+    setFormData(updatedFormData)
+  }
+
   const formInputs = accountSettings
     .map((setting) => {
       let inputField:
@@ -39,34 +84,57 @@ export const AccountSettingsForm = ({ patron }: { patron: Patron }) => {
         | Iterable<ReactNode>
       switch (setting.term) {
         case "Home library":
-          inputField = (
-            <Select
-              name={setting.field}
-              id="update-home-library-selector"
-              labelText="Update home library"
-              showLabel={false}
-            >
-              <option value={patron.homeLibrary.code}>
-                {patron.homeLibrary.name}
-              </option>
-            </Select>
-          )
+          {
+            const patronHomeLibrary = getLibraryByCode(patron.homeLibraryCode)
+            const sortedPickupLocations = [
+              patronHomeLibrary,
+              ...filteredPickupLocations.filter(
+                (loc) => loc.code.trim() !== patron.homeLibraryCode.trim()
+              ),
+            ]
+            inputField = (
+              <Select
+                name={setting.field}
+                id="update-home-library-selector"
+                labelText="Update home library"
+                showLabel={false}
+              >
+                {sortedPickupLocations.map((loc, i) => (
+                  <option key={`location-option-${i}`} value={loc.code}>
+                    {loc.name}
+                  </option>
+                ))}
+              </Select>
+            )
+          }
           break
         case "Notification preference":
-          inputField = (
-            <Select
-              name={setting.field}
-              id="notification-preference-selector"
-              labelText="Update notification preference"
-              showLabel={false}
-            >
-              {Object.keys(notificationPreferenceMap).map((pref) => (
-                <option key={pref + "-option"} value={pref}>
-                  {notificationPreferenceMap[pref]}
-                </option>
-              ))}
-            </Select>
-          )
+          {
+            const patronNotPref =
+              notificationPreferenceTuples.find(
+                (pref) => pref[1] === patron.notificationPreference
+              ) || notificationPreferenceTuples[0]
+            const sortedNotPrefs = [
+              patronNotPref,
+              ...notificationPreferenceTuples.filter(
+                (pref) => pref[1] !== patronNotPref[1]
+              ),
+            ]
+            inputField = (
+              <Select
+                name={setting.field}
+                id="notification-preference-selector"
+                labelText="Update notification preference"
+                showLabel={false}
+              >
+                {sortedNotPrefs.map((pref) => (
+                  <option key={pref + "-option"} value={pref[0]}>
+                    {pref[1]}
+                  </option>
+                ))}
+              </Select>
+            )
+          }
           break
         case "Phone":
           inputField = (
@@ -76,6 +144,8 @@ export const AccountSettingsForm = ({ patron }: { patron: Patron }) => {
               id="phone-text-input"
               labelText="Update phone number"
               showLabel={false}
+              onChange={handleInputChange}
+              placeholder="000-000-0000"
             />
           )
           break
@@ -87,11 +157,17 @@ export const AccountSettingsForm = ({ patron }: { patron: Patron }) => {
               id="email-text-input"
               labelText="Update email"
               showLabel={false}
+              onChange={handleInputChange}
             />
           )
           break
         case "Pin/Password":
-          inputField = <Text>****</Text>
+          inputField = (
+            <Box>
+              <Text>****</Text>
+              <PasswordModal patron={patron} />
+            </Box>
+          )
       }
       return {
         term: setting.term,

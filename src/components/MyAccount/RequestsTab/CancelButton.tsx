@@ -7,9 +7,15 @@ import {
   Button,
   Text,
   Heading,
+  SkeletonLoader,
 } from "@nypl/design-system-react-components"
 import { BASE_URL } from "../../../config/constants"
 import styles from "../../../../styles/components/MyAccount.module.scss"
+import type {
+  BaseModalProps,
+  ConfirmationModalProps,
+  DefaultModalProps,
+} from "@nypl/design-system-react-components"
 
 const CancelButton = ({
   removeHold,
@@ -22,8 +28,9 @@ const CancelButton = ({
 }) => {
   const { onOpen: openModal, onClose: closeModal, Modal } = useModal()
 
-  function confirmModalProps(hold) {
+  function successModalProps(hold) {
     return {
+      type: "default",
       bodyContent: (
         <Box className={styles.modalBody}>
           <Text sx={{ marginLeft: "l", marginRight: "m" }}>
@@ -39,7 +46,11 @@ const CancelButton = ({
       headingText: (
         <Heading className={styles.modalHeading}>
           <>
-            <Icon size="large" name="errorFilled" color="ui.error.primary" />
+            <Icon
+              size="large"
+              name="actionCheckCircleFilled"
+              color="ui.success.primary"
+            />
             <Text sx={{ marginBottom: 0 }}>Request canceled </Text>
           </>
         </Heading>
@@ -52,8 +63,36 @@ const CancelButton = ({
     }
   }
 
+  function failureModalProps(hold) {
+    return {
+      type: "default",
+      bodyContent: (
+        <Box className={styles.modalBody}>
+          <Text sx={{ marginLeft: "l", marginRight: "m" }}>
+            Your request for{" "}
+            <span style={{ fontWeight: "var(--nypl-fontWeights-medium)" }}>
+              {hold.title}
+            </span>{" "}
+            has not been canceled. Please try again.
+          </Text>
+        </Box>
+      ),
+      closeButtonLabel: "OK",
+      headingText: (
+        <Heading className={styles.modalHeading}>
+          <>
+            <Icon size="large" name="errorFilled" color="ui.error.primary" />
+            <Text sx={{ marginBottom: 0 }}>Failed to cancel request </Text>
+          </>
+        </Heading>
+      ),
+      onClose: closeModal(),
+    }
+  }
+
   function checkModalProps(hold) {
     return {
+      type: "confirmation",
       bodyContent: (
         <Box className={styles.modalBody}>
           <Text>
@@ -69,51 +108,58 @@ const CancelButton = ({
           </Text>
         </Box>
       ),
-      closeButtonLabel: "Yes, cancel",
+      closeButtonLabel: "No, keep request",
+      confirmButtonLabel: "Yes, cancel request",
       headingText: (
-        <Box className={styles.modalHeading}>
+        <Heading className={styles.modalHeading}>
           <Text sx={{ marginBottom: 0 }}>Cancel request?</Text>
-        </Box>
+        </Heading>
       ),
-      // Override onClose function type. The callback expects a method with
-      // arity 0, but we are leveraging the event that is in fact passed along.
-      //@ts-ignore
-      onClose: async (e) => {
-        if (e) {
-          const response = await fetch(
-            `${BASE_URL}/api/account/holds/cancel/${hold.id}`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ patronId: patron.id }),
-            }
-          )
-          if (response.status == 200) {
-            // Open next modal to confirm request has been canceled.
-            setModalProps(confirmModalProps(hold))
+      onConfirm: async () => {
+        setModalProps({
+          ...checkModalProps(hold),
+          bodyContent: <SkeletonLoader showImage={false} />,
+        } as ConfirmationModalProps)
+        const response = await fetch(
+          `${BASE_URL}/api/account/holds/cancel/${hold.id}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ patronId: patron.id }),
           }
+        )
+        if (response.status == 200) {
+          // Open next modal to confirm request has been canceled.
+          setModalProps(successModalProps(hold) as DefaultModalProps)
         } else {
-          closeModal()
+          setModalProps(failureModalProps(hold) as DefaultModalProps)
         }
+      },
+      onCancel: () => {
+        closeModal()
       },
     }
   }
-  const [modalProps, setModalProps] = useState(checkModalProps(hold))
+  const [modalProps, setModalProps] = useState<BaseModalProps>(
+    checkModalProps(hold) as ConfirmationModalProps
+  )
+  const buttonLabel = `Cancel${!hold.canFreeze ? " request" : ""}`
 
   return (
     <>
       <Button
+        aria-label={`${buttonLabel} ${hold.title}`}
         width="100%"
         buttonType="secondary"
         id={`cancel-${hold.id}`}
         onClick={() => {
-          setModalProps(checkModalProps(hold))
+          setModalProps(checkModalProps(hold) as ConfirmationModalProps)
           openModal()
         }}
       >
-        Cancel {!hold.canFreeze && "request"}
+        {buttonLabel}
       </Button>
       <Modal {...modalProps} />
     </>

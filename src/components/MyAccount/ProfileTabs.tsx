@@ -1,11 +1,18 @@
-import AccountSettingsTab from "./Settings/AccountSettingsTab"
 import { Tabs, Text } from "@nypl/design-system-react-components"
 import { useRouter } from "next/router"
+import { useState } from "react"
+
+import AccountSettingsTab from "./Settings/AccountSettingsTab"
 import CheckoutsTab from "./CheckoutsTab/CheckoutsTab"
 import RequestsTab from "./RequestsTab/RequestsTab"
-import { useState } from "react"
 import FeesTab from "./FeesTab/FeesTab"
-import type { Checkout, Patron, Hold, Fine } from "../../types/myAccountTypes"
+import type {
+  Checkout,
+  Patron,
+  Hold,
+  Fine,
+  SierraCodeName,
+} from "../../types/myAccountTypes"
 
 interface ProfileTabsPropsType {
   patron: Patron
@@ -26,8 +33,21 @@ const ProfileTabs = ({
   const [currentHolds, setCurrentHolds] = useState(holds)
   /* removeHold removes the passed hold from currentHolds, so page doesn't need to
    * reload for the request to disappear. */
-  function removeHold(hold) {
+  function removeHold(hold: Hold) {
     setCurrentHolds(currentHolds.filter((item) => item.id !== hold.id))
+  }
+  function updateHoldLocation(
+    holdIdToUpdate: string,
+    location: SierraCodeName
+  ) {
+    setCurrentHolds(
+      currentHolds.map((hold) => {
+        if (hold.id === holdIdToUpdate) {
+          hold.pickupLocation = location
+        }
+        return hold
+      })
+    )
   }
   // tabsData conditionally includes fines– only when user has total fines more than $0.
   const tabsData = [
@@ -36,7 +56,9 @@ const ProfileTabs = ({
       content: checkouts ? (
         <CheckoutsTab checkouts={checkouts} patron={patron} />
       ) : (
-        <Text>There was an error accessing your checkouts.</Text>
+        <Text sx={{ mt: "s" }}>
+          There was an error accessing your checkouts.
+        </Text>
       ),
       urlPath: "items",
     },
@@ -44,12 +66,13 @@ const ProfileTabs = ({
       label: "Requests" + (holds ? ` (${holds.length})` : ""),
       content: holds ? (
         <RequestsTab
+          updateHoldLocation={updateHoldLocation}
           removeHold={removeHold}
           holds={currentHolds}
           patron={patron}
         />
       ) : (
-        <Text>There was an error accessing your requests</Text>
+        <Text sx={{ mt: "s" }}>There was an error accessing your requests</Text>
       ),
       urlPath: "requests",
     },
@@ -83,7 +106,6 @@ const ProfileTabs = ({
 
   return (
     <Tabs
-      sx={{ "div[role=tabpanel]": { padding: 0 } }}
       defaultIndex={tabsDict[activePath] || 0}
       id="tabs-id"
       onChange={(index) => {
@@ -91,6 +113,7 @@ const ProfileTabs = ({
         updatePath(tabsData[index].urlPath)
       }}
       tabsData={tabsData}
+      sx={{ "div[role=tabpanel]": { padding: 0 }, marginBottom: "xxl" }}
     />
   )
 }

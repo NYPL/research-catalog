@@ -5,10 +5,10 @@ import { MyAccountFactory } from "../../../src/models/MyAccount"
 import { render, screen } from "../../../src/utils/testUtils"
 import initializePatronTokenAuth from "../../../src/server/auth"
 import {
-  mockPatron,
-  mockCheckouts,
-  mockHolds,
-  mockFines,
+  processedPatron,
+  processedCheckouts,
+  processedHolds,
+  processedFines,
 } from "../../fixtures/processedMyAccountData"
 
 jest.mock("../../../src/server/auth")
@@ -35,10 +35,10 @@ describe("MyAccount page", () => {
 
   it("redirects /overdues to /account if user has no fees", async () => {
     ;(MyAccountFactory as jest.Mock).mockResolvedValueOnce({
-      checkouts: mockCheckouts,
-      patron: mockPatron,
+      checkouts: processedCheckouts,
+      patron: processedPatron,
       fines: { total: 0, entries: [] },
-      holds: mockHolds,
+      holds: processedHolds,
     })
 
     const mockReq = {
@@ -59,10 +59,10 @@ describe("MyAccount page", () => {
 
   it("redirects invalid paths to /account", async () => {
     ;(MyAccountFactory as jest.Mock).mockResolvedValueOnce({
-      checkouts: mockCheckouts,
-      patron: mockPatron,
-      fines: mockFines,
-      holds: mockHolds,
+      checkouts: processedCheckouts,
+      patron: processedPatron,
+      fines: processedFines,
+      holds: processedHolds,
     })
 
     const mockReq = {
@@ -83,10 +83,10 @@ describe("MyAccount page", () => {
 
   it("corrects invalid path to correct path, ex. /account/settings", async () => {
     ;(MyAccountFactory as jest.Mock).mockResolvedValueOnce({
-      checkouts: mockCheckouts,
-      patron: mockPatron,
-      fines: mockFines,
-      holds: mockHolds,
+      checkouts: processedCheckouts,
+      patron: processedPatron,
+      fines: processedFines,
+      holds: processedHolds,
     })
 
     const mockReq = {
@@ -107,10 +107,10 @@ describe("MyAccount page", () => {
 
   it("allows valid path to /account/settings", async () => {
     ;(MyAccountFactory as jest.Mock).mockResolvedValueOnce({
-      checkouts: mockCheckouts,
-      patron: mockPatron,
-      fines: mockFines,
-      holds: mockHolds,
+      checkouts: processedCheckouts,
+      patron: processedPatron,
+      fines: processedFines,
+      holds: processedHolds,
     })
 
     const mockReq = {
@@ -129,10 +129,10 @@ describe("MyAccount page", () => {
 
   it("allows valid path to /account/overdues", async () => {
     ;(MyAccountFactory as jest.Mock).mockResolvedValueOnce({
-      checkouts: mockCheckouts,
-      patron: mockPatron,
-      fines: mockFines,
-      holds: mockHolds,
+      checkouts: processedCheckouts,
+      patron: processedPatron,
+      fines: processedFines,
+      holds: processedHolds,
     })
 
     const mockReq = {
@@ -152,10 +152,10 @@ describe("MyAccount page", () => {
     render(
       <MyAccount
         isAuthenticated={true}
-        patron={mockPatron}
-        checkouts={mockCheckouts}
-        holds={mockHolds}
-        fines={mockFines}
+        patron={processedPatron}
+        checkouts={processedCheckouts}
+        holds={processedHolds}
+        fines={processedFines}
       />
     )
     const notification = screen.queryByText("You have outstanding fees", {
@@ -168,9 +168,9 @@ describe("MyAccount page", () => {
     render(
       <MyAccount
         isAuthenticated={true}
-        patron={mockPatron}
-        checkouts={mockCheckouts}
-        holds={mockHolds}
+        patron={processedPatron}
+        checkouts={processedCheckouts}
+        holds={processedHolds}
         fines={{ total: 0, entries: [] }}
       />
     )

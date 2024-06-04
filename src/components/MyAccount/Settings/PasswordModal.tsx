@@ -1,4 +1,3 @@
-import { useState } from "react"
 import {
   useModal,
   Box,
@@ -8,6 +7,8 @@ import {
   List,
   Button,
 } from "@nypl/design-system-react-components"
+import { useState } from "react"
+
 import styles from "../../../../styles/components/MyAccount.module.scss"
 import PasswordChangeForm from "./PasswordChangeForm"
 import type { Patron } from "../../../types/myAccountTypes"
@@ -16,6 +17,7 @@ const PasswordModal = ({ patron }: { patron: Patron }) => {
   const { onOpen: openModal, onClose: closeModal, Modal } = useModal()
 
   const entryModalProps = {
+    type: "default",
     bodyContent: (
       <Box className={styles.modalBody}>
         <Text sx={{ fontWeight: "medium", paddingBottom: 0 }}>
@@ -49,14 +51,12 @@ const PasswordModal = ({ patron }: { patron: Patron }) => {
         <Text sx={{ marginBottom: 0 }}> Change PIN/PASSWORD </Text>
       </Heading>
     ),
+    onClose: () => {
+      closeModal()
+    },
   }
 
   const [modalProps, setModalProps] = useState(entryModalProps)
-
-  const resetModal = async () => {
-    closeModal()
-    setModalProps(entryModalProps)
-  }
 
   function updateModal(errorMessage?: string) {
     if (errorMessage) {
@@ -70,9 +70,12 @@ const PasswordModal = ({ patron }: { patron: Patron }) => {
   }
 
   const successModalProps = {
+    type: "default",
     bodyContent: (
       <Box className={styles.modalBody}>
-        <Text sx={{ marginLeft: "l" }}>Your PIN/PASSWORD was changed.</Text>
+        <Text sx={{ marginLeft: "l" }}>
+          Your PIN/PASSWORD has been changed.
+        </Text>
       </Box>
     ),
     closeButtonLabel: "OK",
@@ -90,10 +93,14 @@ const PasswordModal = ({ patron }: { patron: Patron }) => {
         </>
       </Heading>
     ),
-    onClose: resetModal,
+    onClose: async () => {
+      closeModal()
+      setModalProps(entryModalProps)
+    },
   }
 
   const failureModalProps = (errorMessage) => ({
+    type: "default",
     bodyContent: (
       <Box className={styles.modalBody}>
         <Text sx={{ marginLeft: "l", marginRight: "m" }}>
@@ -113,17 +120,21 @@ const PasswordModal = ({ patron }: { patron: Patron }) => {
         </>
       </Heading>
     ),
-    onClose: resetModal,
+    onClose: async () => {
+      closeModal()
+      setModalProps(entryModalProps)
+    },
   })
 
   return (
     <>
       <Button
-        id="button"
+        size="large"
+        id="pin-modal-button"
         buttonType="text"
         onClick={openModal}
-        sx={{ textDecoration: "underline", margin: "xs" }}
       >
+        <Icon name="editorMode" align="left" size="small" />
         Change pin/password
       </Button>
       <Modal {...modalProps} />

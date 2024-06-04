@@ -8,12 +8,12 @@ import styles from "../../../styles/components/Search.module.scss"
 import {
   getQueryWithoutFilters,
   buildFilterQuery,
-  addLabelPropAndParseFilters,
   collapseMultiValueQueryParams,
 } from "../../utils/refineSearchUtils"
 import {
   buildTagsetData,
   buildAppliedFiltersValueArrayWithTagRemoved,
+  addLabelPropAndParseFilters,
 } from "./appliedFilterUtils"
 import type { Aggregation } from "../../types/filterTypes"
 

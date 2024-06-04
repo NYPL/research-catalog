@@ -5,6 +5,7 @@ import type { Aggregation } from "./filterTypes"
 type Language = string
 type SubjectLiteral = string
 type ContributorLiteral = string
+type CreatorLiteral = string
 type Issuance = string
 type MaterialTypeFilter = string
 
@@ -13,6 +14,7 @@ export interface SearchFilters {
   language?: Language | Language[]
   subjectLiteral?: SubjectLiteral | SubjectLiteral[]
   contributorLiteral?: ContributorLiteral | ContributorLiteral[]
+  creatorLiteral?: CreatorLiteral | CreatorLiteral[]
   issuance?: Issuance | Issuance[]
   dateAfter?: string
   dateBefore?: string
@@ -33,6 +35,8 @@ export interface SearchParams {
   filters?: SearchFilters
   contributor?: string
   title?: string
+  journalTitle?: string
+  standardNumber?: string
   subject?: string
   page?: number
   identifiers?: Identifiers
@@ -87,13 +91,10 @@ export interface SearchQueryParams extends Identifiers {
   contributor?: string
   title?: string
   subject?: string
-  filters?: SearchFilters
   sort?: SortKey
   sort_direction?: SortOrder
-  sort_scope?: string
   search_scope?: string
   page?: string
-  per_page?: string
 }
 
 export interface SearchFormEvent {
