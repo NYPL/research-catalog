@@ -1,19 +1,21 @@
 import React from "react"
 import { render, screen } from "../../../src/utils/testUtils"
+import mockRouter from "next-router-mock"
+import userEvent from "@testing-library/user-event"
 
 import BibPage from "../../../pages/bib/[id]"
 import {
   bibWithSupplementaryContent as bibNoItems,
   bibWithItems,
+  bibWithManyItems,
 } from "../../fixtures/bibFixtures"
 
-jest.mock("next/router", () => ({
-  useRouter() {
-    return {
-      pathname: "",
-    }
-  },
-}))
+jest.mock("next/router", () => jest.requireActual("next-router-mock"))
+
+global.fetch = jest.fn().mockResolvedValue({
+  json: async () => "Items fetched",
+  status: 200,
+} as Response)
 
 describe("Bib Page with items", () => {
   beforeEach(() => {
@@ -44,6 +46,22 @@ describe("Bib Page with items", () => {
 
   it("renders the bib page item table when there are physical items in the bib", () => {
     expect(screen.getByTestId("bib-details-item-table")).toBeInTheDocument()
+  })
+
+  it("renders pagination when there are more than 20 items and updates the router on page button clicks", async () => {
+    render(
+      <BibPage
+        discoveryBibResult={bibWithManyItems.resource}
+        annotatedMarc={bibWithManyItems.annotatedMarc}
+        isAuthenticated={false}
+      />
+    )
+
+    expect(screen.getByLabelText("Pagination")).toBeInTheDocument()
+
+    const pageButton = screen.getByLabelText("Page 2")
+    await userEvent.click(pageButton)
+    expect(mockRouter.asPath).toBe("/?item_page=2")
   })
 
   it("renders the bottom bib details", () => {

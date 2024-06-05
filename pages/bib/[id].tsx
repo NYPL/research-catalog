@@ -47,6 +47,7 @@ export default function BibPage({
   isAuthenticated,
   itemPage = 1,
 }: BibPropsType) {
+  console.log(discoveryBibResult)
   const { pathname, push, query } = useRouter()
   const metadataTitle = `Item Details | ${SITE_NAME}`
   const bib = new Bib(discoveryBibResult)
