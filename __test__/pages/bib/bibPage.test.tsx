@@ -7,6 +7,14 @@ import {
   bibWithItems,
 } from "../../fixtures/bibFixtures"
 
+jest.mock("next/router", () => ({
+  useRouter() {
+    return {
+      pathname: "",
+    }
+  },
+}))
+
 describe("Bib Page with items", () => {
   beforeEach(() => {
     render(

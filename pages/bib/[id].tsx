@@ -45,7 +45,7 @@ export default function BibPage({
   discoveryBibResult,
   annotatedMarc,
   isAuthenticated,
-  itemPage,
+  itemPage = 1,
 }: BibPropsType) {
   const { pathname, push, query } = useRouter()
   const metadataTitle = `Item Details | ${SITE_NAME}`
@@ -173,7 +173,7 @@ export async function getServerSideProps({ params, query, req }) {
           discoveryBibResult,
           annotatedMarc,
           isAuthenticated,
-          itemPage: query.item_page,
+          itemPage: query.item_page || null,
         },
       }
   }

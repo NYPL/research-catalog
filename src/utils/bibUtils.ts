@@ -41,10 +41,10 @@ export function isNyplBibID(id: string) {
 }
 
 /**
- * Given a BibParams object and an includeAnnotatedMarc boolean, return a query string for the Bib fetch API call.
+ * Given a BibQueryParams object and an includeAnnotatedMarc boolean, return a query string for the Bib fetch API call.
  */
 export function getBibQueryString(
-  bibQuery?: BibQueryParams,
+  bibQuery: BibQueryParams,
   includeAnnotatedMarc = false
 ): string {
   let itemsFrom = bibQuery?.items_from || 0
