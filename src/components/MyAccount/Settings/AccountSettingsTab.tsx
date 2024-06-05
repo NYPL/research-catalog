@@ -106,9 +106,13 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
       }
     )
     if (response.status === 200) {
-      setMostRecentPatronData((prevData) =>
-        buildUpdatedPatronDisplayData(prevData, payload)
-      )
+      setMostRecentPatronData((prevData) => {
+        return buildUpdatedPatronDisplayData(
+          prevData,
+          payload,
+          e.target.homeLibrary?.value
+        )
+      })
       setCurrentlyEditing(false)
       setModalProps(successModalProps)
       openModal()
@@ -123,7 +127,7 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
     <SkeletonLoader showImage={false} />
   ) : (
     <>
-      {modalProps && <Modal {...modalProps} />}
+      {modalProps && <Modal {...{ ...modalProps, onClose: closeModal }} />}
       <Form
         className={styles.accountSettingsTab}
         id="account-settings-container"
