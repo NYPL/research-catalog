@@ -44,13 +44,11 @@
   justify-content: flex-start;
   gap: 10px;
   margin-bottom: 0 !important;
-  p {
-    margin-top: var(--nypl-space-s);
-    margin-bottom: 0;
-    font-size: var(--nypl-fontSizes-desktop-heading-heading5);
-    font-weight: var(--nypl-fontWeights-medium);
-    letter-spacing: normal;
-  }
+  margin-top: var(--nypl-space-s);
+  margin-bottom: 0;
+  font-size: var(--nypl-fontSizes-desktop-heading-heading5);
+  font-weight: var(--nypl-fontWeights-medium);
+  letter-spacing: normal;
   svg {
     margin-top: var(--nypl-space-s);
     margin-right: var(--nypl-space-xs);
