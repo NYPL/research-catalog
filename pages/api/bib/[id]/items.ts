@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 import { fetchBib } from "../../../../src/server/api/bib"
-import { PATHS, BASE_URL } from "../../../../src/config/constants"
 import { mapQueryToBibParams } from "../../../../src/utils/bibUtils"
 
 /**
@@ -16,15 +15,14 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   const items = discoveryBibResult?.items
 
   if (req.method === "GET") {
-    switch (status) {
-      case 404:
-        res.redirect(BASE_URL + PATHS["404"])
-        break
-      default:
-        res.status(200).json({
-          items,
-        })
-        break
+    if (status !== 200 || !items?.length) {
+      res.status(500).json({
+        error: "Error fetching Bib items for this query",
+      })
+    } else {
+      res.status(200).json({
+        items,
+      })
     }
   }
   if (req.method === "POST") {

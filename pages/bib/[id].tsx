@@ -6,6 +6,7 @@ import {
   Pagination,
   SkeletonLoader,
   Box,
+  Notification,
 } from "@nypl/design-system-react-components"
 
 import Layout from "../../src/components/Layout/Layout"
@@ -47,6 +48,7 @@ export default function BibPage({
   const bib = new Bib(discoveryBibResult)
 
   const [itemsLoading, setItemsLoading] = useState(false)
+  const [itemFetchError, setItemFetchError] = useState(false)
   const [bibItems, setBibItems] = useState(bib.items)
 
   const { topDetails, bottomDetails, holdingsDetails } = new BibDetailsModel(
@@ -60,6 +62,7 @@ export default function BibPage({
 
   const refreshItemTable = async (newQuery: ParsedUrlQueryInput) => {
     setItemsLoading(true)
+    setItemFetchError(false)
     await push({ pathname, query: { ...newQuery } }, undefined, {
       shallow: true,
     })
@@ -67,13 +70,16 @@ export default function BibPage({
     const response = await fetch(
       `${BASE_URL}/api/bib/${bib.id}/items?${queryString}`
     )
-    const { items } = await response.json()
-    console.log(items)
-    setBibItems(items.map((item) => new Item(item, bib)))
-    setItemsLoading(false)
-    document.getElementById("item-table")?.scrollIntoView({
-      behavior: "smooth",
-    })
+    if (response.ok) {
+      const { items } = await response.json()
+      setBibItems(items.map((item) => new Item(item, bib)))
+      setItemsLoading(false)
+      document.getElementById("item-table")?.scrollIntoView({
+        behavior: "smooth",
+      })
+    } else {
+      setItemFetchError(true)
+    }
   }
 
   const handlePageChange = async (page) => {
@@ -101,6 +107,13 @@ export default function BibPage({
           <Box id="item-table">
             {itemsLoading ? (
               <SkeletonLoader showImage={false} />
+            ) : itemFetchError ? (
+              <Notification
+                data-testid="itemFetchErrorNotification"
+                notificationType="warning"
+                notificationContent="There was an error fetching items. Please try again with another query."
+                noMargin
+              />
             ) : (
               <ItemTable itemTableData={itemTableData} />
             )}
