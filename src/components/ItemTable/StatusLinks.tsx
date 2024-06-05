@@ -11,7 +11,7 @@ interface StatusLinksProps {
 /**
  * The StatusLinks component renders the RequestButtons and ItemAvailability for a given Item
  */
-const ItemTable = ({ item }: StatusLinksProps) => {
+const StatusLinks = ({ item }: StatusLinksProps) => {
   return (
     <Box>
       <RequestButtons item={item} />
@@ -20,4 +20,4 @@ const ItemTable = ({ item }: StatusLinksProps) => {
   )
 }
 
-export default ItemTable
+export default StatusLinks
