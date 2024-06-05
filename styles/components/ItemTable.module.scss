@@ -13,6 +13,7 @@
     td:first-of-type,
     th:first-of-type {
       padding: var(--nypl-space-s) 0;
+      min-width: 100px;
 
       // Fix for extra whitespace added by non-table cell styling on span coming from DS
       // TODO: Bring this issue up with DS team and potentially fix there
