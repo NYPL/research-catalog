@@ -46,8 +46,8 @@ export default class ItemTableData {
         ...(this.showStatusColumn() ? [StatusLinks({ item })] : []),
         ...(this.showVolumeColumn() ? [item.volume] : []),
         item.format,
-        item.callNumber,
         ...(this.showAccessColumn() ? [item.accessMessage] : []),
+        item.callNumber,
         item.location.prefLabel,
       ]
     })
