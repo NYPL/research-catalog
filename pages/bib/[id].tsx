@@ -8,13 +8,13 @@ import { mapQueryToBibParams } from "../../src/utils/bibUtils"
 import BibDetailsModel from "../../src/models/BibDetails"
 import BibDetails from "../../src/components/BibPage/BibDetail"
 import ItemTable from "../../src/components/ItemTable/ItemTable"
-import type { BibResult } from "../../src/types/bibTypes"
+import type { DiscoveryBibResult } from "../../src/types/bibTypes"
 import type { AnnotatedMarc } from "../../src/types/bibDetailsTypes"
 import Bib from "../../src/models/Bib"
 import initializePatronTokenAuth from "../../src/server/auth"
 
 interface BibPropsType {
-  bibResult: BibResult
+  discoveryBibResult: DiscoveryBibResult
   annotatedMarc: AnnotatedMarc
   isAuthenticated?: boolean
 }
@@ -23,14 +23,14 @@ interface BibPropsType {
  * The Bib page is responsible for fetching and displaying a single Bib's details.
  */
 export default function BibPage({
-  bibResult,
+  discoveryBibResult,
   annotatedMarc,
   isAuthenticated,
 }: BibPropsType) {
   const metadataTitle = `Item Details | ${SITE_NAME}`
-  const bib = new Bib(bibResult)
+  const bib = new Bib(discoveryBibResult)
   const { topDetails, bottomDetails, holdingsDetails } = new BibDetailsModel(
-    bibResult,
+    discoveryBibResult,
     annotatedMarc
   )
 
@@ -71,10 +71,8 @@ export async function getServerSideProps({ params, resolvedUrl, req }) {
   const { id } = params
   const queryString = resolvedUrl.slice(resolvedUrl.indexOf("?") + 1)
   const bibParams = mapQueryToBibParams(queryString)
-  const { bibResult, annotatedMarc, status, redirectUrl } = await fetchBib(
-    id,
-    bibParams
-  )
+  const { discoveryBibResult, annotatedMarc, status, redirectUrl } =
+    await fetchBib(id, bibParams)
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const isAuthenticated = patronTokenResponse.isTokenValid
 
@@ -96,7 +94,7 @@ export async function getServerSideProps({ params, resolvedUrl, req }) {
     default:
       return {
         props: {
-          bibResult,
+          discoveryBibResult,
           annotatedMarc,
           isAuthenticated,
         },

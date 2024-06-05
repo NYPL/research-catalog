@@ -1,5 +1,6 @@
 import { fetchBib } from "../bib"
 import type { BibResponse } from "../../../types/bibTypes"
+import { DiscoveryBibResult } from "../../../types/bibTypes"
 
 jest.mock("../../nyplApiClient", () => {
   return jest
@@ -88,8 +89,10 @@ jest.mock("../../nyplApiClient", () => {
 describe("fetchBib", () => {
   it("should return bib and annotated data with 200 status code when uri is present", async () => {
     const bibResponse = (await fetchBib("b17418167")) as BibResponse
-    expect(bibResponse.bibResult.numItemsTotal).toEqual(1)
-    expect(bibResponse.bibResult.title).toEqual(["Cats cats cats cats cats."])
+    expect(bibResponse.discoveryBibResult.numItemsTotal).toEqual(1)
+    expect(bibResponse.discoveryBibResult.title).toEqual([
+      "Cats cats cats cats cats.",
+    ])
 
     expect(bibResponse.annotatedMarc.id).toEqual("17418167")
     expect(bibResponse.annotatedMarc.fields.length).toEqual(7)

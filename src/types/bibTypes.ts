@@ -2,7 +2,7 @@
 import type { SearchResultsItem, JSONLDValue } from "./itemTypes"
 import type { AnnotatedMarc } from "./bibDetailsTypes"
 
-export interface BibResult {
+export interface DiscoveryBibResult {
   extent?: string[]
   dimensions?: string[]
   note?: Note[]
@@ -71,7 +71,7 @@ export interface ElectronicResource {
 }
 
 export interface BibResponse {
-  bibResult?: BibResult
+  discoveryBibResult?: DiscoveryBibResult
   annotatedMarc?: AnnotatedMarc
   status: 200 | 307 | 404
   redirectUrl?: string

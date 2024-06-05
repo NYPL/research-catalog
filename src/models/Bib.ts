@@ -1,4 +1,4 @@
-import type { BibResult, ElectronicResource } from "../types/bibTypes"
+import type { DiscoveryBibResult, ElectronicResource } from "../types/bibTypes"
 import type { JSONLDValue } from "../types/itemTypes"
 import Item from "../models/Item"
 import ItemTableData from "./ItemTableData"
@@ -20,7 +20,7 @@ export default class Bib {
   issuance?: JSONLDValue[]
   items?: Item[]
 
-  constructor(result: BibResult) {
+  constructor(result: DiscoveryBibResult) {
     this.id = result["@id"] ? result["@id"].substring(4) : ""
     this.title = this.getTitleFromResult(result)
     this.electronicResources = result.electronicResources || null
@@ -77,7 +77,7 @@ export default class Bib {
       : null
   }
 
-  getTitleFromResult(result: BibResult) {
+  getTitleFromResult(result: DiscoveryBibResult) {
     if (!result.titleDisplay || !result.titleDisplay.length) {
       const author =
         result.creatorLiteral && result.creatorLiteral.length
@@ -90,7 +90,7 @@ export default class Bib {
     return result.titleDisplay[0]
   }
 
-  getItemsFromResult(result: BibResult): Item[] | null {
+  getItemsFromResult(result: DiscoveryBibResult): Item[] | null {
     return result.items.length
       ? result.items.map((item) => new Item(item, this))
       : null

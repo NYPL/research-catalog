@@ -1,4 +1,4 @@
-import type { BibResult } from "../types/bibTypes"
+import type { DiscoveryBibResult } from "../types/bibTypes"
 import Bib from "../models/Bib"
 import ItemTableData from "./ItemTableData"
 import { ITEMS_PER_SEARCH_RESULT } from "../config/constants"
@@ -18,7 +18,7 @@ export default class SearchResultsBib extends Bib {
   yearPublished?: string
   publicationStatement?: string
 
-  constructor(result: BibResult) {
+  constructor(result: DiscoveryBibResult) {
     super(result)
     this.yearPublished = this.getYearFromResult(result)
     this.publicationStatement = result.publicationStatement?.length
@@ -53,7 +53,7 @@ export default class SearchResultsBib extends Bib {
       : null
   }
 
-  getYearFromResult(result: BibResult) {
+  getYearFromResult(result: DiscoveryBibResult) {
     const { dateStartYear, dateEndYear } = result
 
     const displayStartYear: string =
