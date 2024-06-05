@@ -23,13 +23,10 @@
 
       @media screen and (min-width: 900px) {
         min-width: 130px;
-      }
 
-      @media screen and (min-width: 900px) {
         &:first-child {
           min-width: 370px;
         }
-
       }
 
       // Fix for extra whitespace added by non-table cell styling on span coming from DS
