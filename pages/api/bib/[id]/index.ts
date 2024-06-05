@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 import { fetchBib } from "../../../../src/server/api/bib"
 import { PATHS, BASE_URL } from "../../../../src/config/constants"
-import { mapQueryToBibParams } from "../../../../src/utils/bibUtils"
 
 /**
  * Default API route handler for Bib page
@@ -14,9 +13,8 @@ import { mapQueryToBibParams } from "../../../../src/utils/bibUtils"
  */
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const id = req.query.id as string
-  const bibParams = mapQueryToBibParams(req.query)
   const { discoveryBibResult, annotatedMarc, status, redirectUrl } =
-    await fetchBib(id, bibParams)
+    await fetchBib(id, req.query)
 
   if (req.method === "GET") {
     switch (status) {

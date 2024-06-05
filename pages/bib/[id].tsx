@@ -17,22 +17,25 @@ import {
   BASE_URL,
 } from "../../src/config/constants"
 import { fetchBib } from "../../src/server/api/bib"
-import { getBibQuery, mapQueryToBibParams } from "../../src/utils/bibUtils"
+import { getBibQueryString } from "../../src/utils/bibUtils"
 import BibDetailsModel from "../../src/models/BibDetails"
 import ItemTableData from "../../src/models/ItemTableData"
 import BibDetails from "../../src/components/BibPage/BibDetail"
 import ItemTable from "../../src/components/ItemTable/ItemTable"
-import type { DiscoveryBibResult } from "../../src/types/bibTypes"
+import type {
+  DiscoveryBibResult,
+  BibQueryParams,
+} from "../../src/types/bibTypes"
 import type { AnnotatedMarc } from "../../src/types/bibDetailsTypes"
 import Bib from "../../src/models/Bib"
 import initializePatronTokenAuth from "../../src/server/auth"
-import type { ParsedUrlQueryInput } from "querystring"
 import Item from "../../src/models/Item"
 
 interface BibPropsType {
   discoveryBibResult: DiscoveryBibResult
   annotatedMarc: AnnotatedMarc
   isAuthenticated?: boolean
+  itemPage?: number
 }
 
 /**
@@ -42,6 +45,7 @@ export default function BibPage({
   discoveryBibResult,
   annotatedMarc,
   isAuthenticated,
+  itemPage,
 }: BibPropsType) {
   const { pathname, push, query } = useRouter()
   const metadataTitle = `Item Details | ${SITE_NAME}`
@@ -60,15 +64,15 @@ export default function BibPage({
     isArchiveCollection: bib.isArchiveCollection,
   })
 
-  const refreshItemTable = async (newQuery: ParsedUrlQueryInput) => {
+  const refreshItemTable = async (newQuery: BibQueryParams) => {
     setItemsLoading(true)
     setItemFetchError(false)
     await push({ pathname, query: { ...newQuery } }, undefined, {
       shallow: true,
     })
-    const queryString = getBibQuery(bib.id, mapQueryToBibParams(newQuery))
+    const bibQueryString = getBibQueryString(newQuery)
     const response = await fetch(
-      `${BASE_URL}/api/bib/${bib.id}/items?${queryString}`
+      `${BASE_URL}/api/bib/${bib.id}/items?${bibQueryString}`
     )
     if (response.ok) {
       const { items } = await response.json()
@@ -119,8 +123,7 @@ export default function BibPage({
             )}
             <Pagination
               id="bib-items-pagination"
-              initialPage={1}
-              currentPage={1}
+              initialPage={itemPage}
               pageCount={Math.ceil(bib.numPhysicalItems / ITEM_BATCH_SIZE)}
               onPageChange={handlePageChange}
               my="xl"
@@ -142,12 +145,10 @@ export default function BibPage({
   )
 }
 
-export async function getServerSideProps({ params, resolvedUrl, req }) {
+export async function getServerSideProps({ params, query, req }) {
   const { id } = params
-  const queryString = resolvedUrl.slice(resolvedUrl.indexOf("?") + 1)
-  const bibParams = mapQueryToBibParams(queryString)
   const { discoveryBibResult, annotatedMarc, status, redirectUrl } =
-    await fetchBib(id, bibParams)
+    await fetchBib(id, query)
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const isAuthenticated = patronTokenResponse.isTokenValid
 
@@ -172,6 +173,7 @@ export async function getServerSideProps({ params, resolvedUrl, req }) {
           discoveryBibResult,
           annotatedMarc,
           isAuthenticated,
+          itemPage: query.item_page,
         },
       }
   }

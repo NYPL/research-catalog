@@ -1,4 +1,5 @@
 import type { ReactElement } from "react"
+import type { ParsedUrlQueryInput } from "querystring"
 
 import type Item from "./Item"
 import type { ItemTableParams } from "../types/itemTypes"

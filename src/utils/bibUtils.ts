@@ -1,5 +1,5 @@
-import type { BibParams, BibQueryParams } from "../types/bibTypes"
 import { ITEM_BATCH_SIZE } from "../config/constants"
+import type { BibQueryParams } from "../types/bibTypes"
 
 /**
  * standardizeBibId
@@ -43,15 +43,23 @@ export function isNyplBibID(id: string) {
 /**
  * Given a BibParams object and an includeAnnotatedMarc boolean, return a query string for the Bib fetch API call.
  */
-export function getBibQuery(
-  id: string,
-  bibQuery?: BibParams,
+export function getBibQueryString(
+  bibQuery?: BibQueryParams,
   includeAnnotatedMarc = false
-) {
-  const itemsFrom = bibQuery?.itemsFrom
-  const itemFilterQuery = bibQuery?.itemFilterQuery
+): string {
+  let itemsFrom = bibQuery?.items_from || 0
+  const itemPage = bibQuery?.item_page || 1
+  itemsFrom = itemsFrom || (itemPage - 1) * ITEM_BATCH_SIZE
+
+  const itemFilterQuery = Object.keys(bibQuery)
+    .filter((key) => key !== "items_from")
+    .map((key) => `${key}=${bibQuery[key]}`)
+    .join("&")
+
   const itemQueries = []
-  const queryBase = includeAnnotatedMarc ? `${id}.annotated-marc` : id
+  const queryBase = includeAnnotatedMarc
+    ? `${bibQuery.id}.annotated-marc`
+    : bibQuery.id
 
   // Add items_size and items_from params when itemsFrom is defined, even when 0.
   if (typeof itemsFrom !== "undefined")
@@ -65,36 +73,4 @@ export function getBibQuery(
   return itemQueries.length
     ? queryBase + `?${itemQueries.join("&")}`
     : queryBase
-}
-
-/**
- * Given a comma-separated features string, return an array of individual feature keys.
- */
-const extractFeatures = (featuresString: string): string[] => {
-  if (typeof featuresString !== "string") return []
-  return featuresString.split(",").reduce((features, feature) => {
-    if (feature.length) features.push(feature.trim())
-    return features
-  }, [])
-}
-
-/* eslint-disable @typescript-eslint/naming-convention */
-
-export function mapQueryToBibParams(bibQuery: BibQueryParams): BibParams {
-  console.log(bibQuery)
-  const { features, item_page = 1, items_from } = bibQuery
-  const urlEnabledFeatures = extractFeatures(features)
-
-  const itemFilterQuery = Object.keys(bibQuery)
-    .filter((key) => key !== "items_from")
-    .map((key) => `${key}=${bibQuery[key]}`)
-    .join("&")
-
-  return {
-    features: urlEnabledFeatures,
-    // If items_from is set, use that value, otherwise calculate it
-    // based on the current page and the batch size.
-    itemsFrom: items_from ? items_from : (item_page - 1) * ITEM_BATCH_SIZE,
-    itemFilterQuery,
-  }
 }

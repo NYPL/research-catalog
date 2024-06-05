@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 import { fetchBib } from "../../../../src/server/api/bib"
-import { mapQueryToBibParams } from "../../../../src/utils/bibUtils"
 
 /**
  * Item fetching route handler for Bib page
@@ -10,8 +9,7 @@ import { mapQueryToBibParams } from "../../../../src/utils/bibUtils"
  */
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const id = req.query.id as string
-  const bibParams = mapQueryToBibParams(req.query)
-  const { discoveryBibResult, status } = await fetchBib(id, bibParams)
+  const { discoveryBibResult, status } = await fetchBib(id, req.query)
   const items = discoveryBibResult?.items
 
   if (req.method === "GET") {
