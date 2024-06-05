@@ -13,7 +13,6 @@
     td:first-of-type,
     th:first-of-type {
       padding: var(--nypl-space-s) 0;
-      min-width: 100px;
 
       // These min-widths are here temporarily to fix an issue with the table that causes the Format and Call Number columns to appear to narrow
       // TODO: These can be removed if the issue is addressed in the DS or during VQA.
