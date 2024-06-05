@@ -40,21 +40,26 @@ export async function fetchBib(
   ])
 
   // Assign results values for each response when status is fulfilled
-  const bib = bibResponse.status === "fulfilled" && bibResponse.value
+  const discoveryBibResult =
+    bibResponse.status === "fulfilled" && bibResponse.value
   const annotatedMarc =
     annotatedMarcResponse.status === "fulfilled" && annotatedMarcResponse.value
 
   // Get subject headings from SHEP API
   // TODO: Revisit this after Enhanced Browse work to determine if it's still necessary
-  if (bib.subjectLiteral?.length) {
+  if (discoveryBibResult.subjectLiteral?.length) {
     const subjectHeadingData = await fetchBibSubjectHeadings(id)
-    bib.subjectHeadings =
+    discoveryBibResult.subjectHeadings =
       (subjectHeadingData && subjectHeadingData["subject_headings"]) || null
   }
 
   try {
     // If there's a problem with a bib, try to fetch from the Sierra API and redirect to circulating catalog
-    if (!bib || !bib.uri || !id.includes(bib.uri)) {
+    if (
+      !discoveryBibResult ||
+      !discoveryBibResult.uri ||
+      !id.includes(discoveryBibResult.uri)
+    ) {
       // TODO: Check if this ID slicing is correct and if this redirect logic is still accurate
       const sierraBibResponse = await client.get(
         `/bibs/sierra-nypl/${id.slice(1)}`
@@ -75,14 +80,14 @@ export async function fetchBib(
     }
     // The Discovery API currently returns HTML in the bib attribute when it can't find a bib.
     // TODO: Modify the error response in Discovery API to return a 404 status instead of an HTML string in the bib attribute
-    else if (typeof bib === "string") {
+    else if (typeof discoveryBibResult === "string") {
       logger.error("There was an error fetching the Bib from the Discovery API")
       return {
         status: 404,
       }
     }
     return {
-      bibResult: bib,
+      discoveryBibResult,
       annotatedMarc: annotatedMarc?.bib || null,
       status: 200,
     }

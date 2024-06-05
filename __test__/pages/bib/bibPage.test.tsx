@@ -11,7 +11,7 @@ describe("Bib Page with items", () => {
   beforeEach(() => {
     render(
       <BibPage
-        bibResult={bibWithItems.resource}
+        discoveryBibResult={bibWithItems.resource}
         annotatedMarc={bibWithItems.annotatedMarc}
         isAuthenticated={false}
       />
@@ -80,7 +80,7 @@ describe("Bib Page no items", () => {
   beforeEach(() => {
     render(
       <BibPage
-        bibResult={bibNoItems.resource}
+        discoveryBibResult={bibNoItems.resource}
         annotatedMarc={bibNoItems.annotatedMarc}
         isAuthenticated={false}
       />
@@ -90,7 +90,7 @@ describe("Bib Page no items", () => {
   it("does not render an item table when there are no physical items in the bib", () => {
     render(
       <BibPage
-        bibResult={bibNoItems.resource}
+        discoveryBibResult={bibNoItems.resource}
         annotatedMarc={bibNoItems.annotatedMarc}
         isAuthenticated={false}
       />

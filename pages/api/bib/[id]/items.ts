@@ -12,8 +12,8 @@ import { mapQueryToBibParams } from "../../../../src/utils/bibUtils"
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const id = req.query.id as string
   const bibParams = mapQueryToBibParams(req.query)
-  const { bibResult, status } = await fetchBib(id, bibParams)
-  const items = bibResult?.items
+  const { discoveryBibResult, status } = await fetchBib(id, bibParams)
+  const items = discoveryBibResult?.items
 
   if (req.method === "GET") {
     switch (status) {

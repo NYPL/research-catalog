@@ -21,7 +21,7 @@ import BibDetailsModel from "../../src/models/BibDetails"
 import ItemTableData from "../../src/models/ItemTableData"
 import BibDetails from "../../src/components/BibPage/BibDetail"
 import ItemTable from "../../src/components/ItemTable/ItemTable"
-import type { BibResult } from "../../src/types/bibTypes"
+import type { DiscoveryBibResult } from "../../src/types/bibTypes"
 import type { AnnotatedMarc } from "../../src/types/bibDetailsTypes"
 import Bib from "../../src/models/Bib"
 import initializePatronTokenAuth from "../../src/server/auth"
@@ -29,7 +29,7 @@ import type { ParsedUrlQueryInput } from "querystring"
 import Item from "../../src/models/Item"
 
 interface BibPropsType {
-  bibResult: BibResult
+  discoveryBibResult: DiscoveryBibResult
   annotatedMarc: AnnotatedMarc
   isAuthenticated?: boolean
 }
@@ -38,20 +38,19 @@ interface BibPropsType {
  * The Bib page is responsible for fetching and displaying a single Bib's details.
  */
 export default function BibPage({
-  bibResult,
+  discoveryBibResult,
   annotatedMarc,
   isAuthenticated,
 }: BibPropsType) {
   const { pathname, push, query } = useRouter()
   const metadataTitle = `Item Details | ${SITE_NAME}`
-
-  const bib = new Bib(bibResult)
+  const bib = new Bib(discoveryBibResult)
 
   const [itemsLoading, setItemsLoading] = useState(false)
   const [bibItems, setBibItems] = useState(bib.items)
 
   const { topDetails, bottomDetails, holdingsDetails } = new BibDetailsModel(
-    bibResult,
+    discoveryBibResult,
     annotatedMarc
   )
 
@@ -69,6 +68,7 @@ export default function BibPage({
       `${BASE_URL}/api/bib/${bib.id}/items?${queryString}`
     )
     const { items } = await response.json()
+    console.log(items)
     setBibItems(items.map((item) => new Item(item, bib)))
     setItemsLoading(false)
     document.getElementById("item-table")?.scrollIntoView({
@@ -133,10 +133,8 @@ export async function getServerSideProps({ params, resolvedUrl, req }) {
   const { id } = params
   const queryString = resolvedUrl.slice(resolvedUrl.indexOf("?") + 1)
   const bibParams = mapQueryToBibParams(queryString)
-  const { bibResult, annotatedMarc, status, redirectUrl } = await fetchBib(
-    id,
-    bibParams
-  )
+  const { discoveryBibResult, annotatedMarc, status, redirectUrl } =
+    await fetchBib(id, bibParams)
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const isAuthenticated = patronTokenResponse.isTokenValid
 
@@ -158,7 +156,7 @@ export async function getServerSideProps({ params, resolvedUrl, req }) {
     default:
       return {
         props: {
-          bibResult,
+          discoveryBibResult,
           annotatedMarc,
           isAuthenticated,
         },

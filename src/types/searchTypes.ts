@@ -1,4 +1,4 @@
-import type { BibResult } from "./bibTypes"
+import type { DiscoveryBibResult } from "./bibTypes"
 import type { DRBResults } from "./drbTypes"
 import type { Aggregation } from "./filterTypes"
 
@@ -64,7 +64,7 @@ export interface SearchResults {
 }
 
 export interface SearchResultsElement {
-  result?: BibResult
+  result?: DiscoveryBibResult
   field?: string
 }
 
