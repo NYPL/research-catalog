@@ -79,14 +79,14 @@ const PasswordModal = ({ patron }: { patron: Patron }) => {
     closeButtonLabel: "OK",
     headingText: (
       <Heading className={styles.modalHeading}>
-        <Text>
+        <>
           <Icon
             size="large"
             name="actionCheckCircleFilled"
             color="ui.success.primary"
           />
           PIN/PASSWORD change was successful
-        </Text>
+        </>
       </Heading>
     ),
     onClose: async () => {
@@ -106,10 +106,10 @@ const PasswordModal = ({ patron }: { patron: Patron }) => {
     closeButtonLabel: "OK",
     headingText: (
       <Heading className={styles.modalHeading}>
-        <Text>
+        <>
           <Icon size="large" name="errorFilled" color="ui.error.primary" />
           PIN/PASSWORD change failed
-        </Text>
+        </>
       </Heading>
     ),
     onClose: async () => {

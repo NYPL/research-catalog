@@ -26,10 +26,10 @@ const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
     closeButtonLabel: "OK",
     headingText: (
       <Heading className={styles.modalHeading}>
-        <Text>
+        <>
           <Icon size="large" name="errorFilled" color="ui.error.primary" />
           Hold {frozen ? "unfreeze" : "freeze"} failed
-        </Text>
+        </>
       </Heading>
     ),
     onClose: () => {
@@ -42,14 +42,14 @@ const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
     closeButtonLabel: "OK",
     headingText: (
       <Heading className={styles.modalHeading}>
-        <Text>
+        <>
           <Icon
             size="large"
             name="actionCheckCircleFilled"
             color="ui.success.primary"
           />
           Hold {frozen ? "unfreeze" : "freeze"} successful
-        </Text>
+        </>
       </Heading>
     ),
     onClose: () => {

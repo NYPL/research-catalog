@@ -103,7 +103,7 @@ const UpdateLocation = ({
     },
     headingText: (
       <Heading className={styles.modalHeading}>
-        <Text>Where would you like to pick up this item?</Text>
+        Where would you like to pick up this item?
       </Heading>
     ),
   })
@@ -125,14 +125,14 @@ const UpdateLocation = ({
     closeButtonLabel: "OK",
     headingText: (
       <Heading className={styles.modalHeading}>
-        <Text>
+        <>
           <Icon
             size="large"
             name="actionCheckCircleFilled"
             color="ui.success.primary"
           />
           Location change successful
-        </Text>
+        </>
       </Heading>
     ),
     onClose: () => {
@@ -167,10 +167,10 @@ const UpdateLocation = ({
     closeButtonLabel: "OK",
     headingText: (
       <Heading className={styles.modalHeading}>
-        <Text>
+        <>
           <Icon size="large" name="errorFilled" color="ui.error.primary" />
           Location change failed
-        </Text>
+        </>
       </Heading>
     ),
   }

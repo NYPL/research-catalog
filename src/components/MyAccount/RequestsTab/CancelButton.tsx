@@ -51,7 +51,7 @@ const CancelButton = ({
               name="actionCheckCircleFilled"
               color="ui.success.primary"
             />
-            <Text>Request canceled </Text>
+            Request canceled
           </>
         </Heading>
       ),
@@ -80,10 +80,10 @@ const CancelButton = ({
       closeButtonLabel: "OK",
       headingText: (
         <Heading className={styles.modalHeading}>
-          <Text>
+          <>
             <Icon size="large" name="errorFilled" color="ui.error.primary" />
             Failed to cancel request
-          </Text>
+          </>
         </Heading>
       ),
       onClose: closeModal(),
@@ -111,9 +111,7 @@ const CancelButton = ({
       closeButtonLabel: "No, keep request",
       confirmButtonLabel: "Yes, cancel request",
       headingText: (
-        <Heading className={styles.modalHeading}>
-          <Text ml="l">Cancel request?</Text>
-        </Heading>
+        <Heading className={styles.modalHeading}>Cancel request?</Heading>
       ),
       onConfirm: async () => {
         setModalProps({
