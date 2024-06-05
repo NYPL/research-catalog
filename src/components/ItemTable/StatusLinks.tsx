@@ -9,7 +9,7 @@ interface StatusLinksProps {
 }
 
 /**
- * The StatusLinks component renders the RequestButtons and AvailabilityLinks for a given Item
+ * The StatusLinks component renders the RequestButtons and ItemAvailability for a given Item
  */
 const ItemTable = ({ item }: StatusLinksProps) => {
   return (
