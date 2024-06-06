@@ -1,8 +1,4 @@
-import type {
-  ItemLocationKey,
-  ItemLocation,
-  ItemLocationEndpoint,
-} from "../types/itemTypes"
+import type { ItemLocationKey, ItemLocation } from "../types/itemTypes"
 
 export const itemAvailableIds = ["status:a", "status:o"]
 
@@ -20,10 +16,7 @@ export const partnerDefaultLocation: ItemLocation = {
   customerCode: "",
 }
 
-export const locationEndpointsMap: Record<
-  ItemLocationKey,
-  ItemLocationEndpoint
-> = {
+export const locationEndpointsMap: Record<ItemLocationKey, string> = {
   Schwarzman: "schwarzman",
   Performing: "lpa",
   Schomburg: "schomburg",
