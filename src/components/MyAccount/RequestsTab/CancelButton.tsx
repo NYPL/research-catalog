@@ -6,7 +6,6 @@ import {
   Icon,
   Button,
   Text,
-  Heading,
   SkeletonLoader,
 } from "@nypl/design-system-react-components"
 import { BASE_URL } from "../../../config/constants"
