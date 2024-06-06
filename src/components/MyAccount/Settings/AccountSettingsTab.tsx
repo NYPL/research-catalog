@@ -33,7 +33,9 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
 
   const [isFormValid, setIsFormValid] = useState(false)
 
+  const editButtonRef = useRef<HTMLButtonElement>()
   const firstInputRef = useRef<TextInputRefType>()
+
   const listElements = currentlyEditing ? (
     <AccountSettingsForm
       firstInputRef={firstInputRef}
@@ -46,7 +48,7 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
   useEffect(() => {
     if (currentlyEditing === true) {
       firstInputRef.current?.focus()
-    }
+    } else editButtonRef.current?.focus()
   }, [currentlyEditing, firstInputRef])
 
   const submitAccountSettings = async (e) => {
@@ -100,6 +102,7 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
         </List>
         <Spacer display={{ base: "none", md: "inline-block" }} />
         <AccountSettingsButtons
+          editButtonRef={editButtonRef}
           currentlyEditing={currentlyEditing}
           setCurrentlyEditing={setCurrentlyEditing}
           formValid={isFormValid}

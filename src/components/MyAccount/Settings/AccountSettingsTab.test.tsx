@@ -63,7 +63,7 @@ describe("AccountSettingsTab", () => {
         json: async () => console.log("updated"),
         status: 200,
       } as Response)
-    it("clicking edit focuses on first input", async () => {
+    it("clicking edit focuses on first input and cancel focuses on edit", async () => {
       const myAccountPatron = MyAccount.prototype.buildPatron({
         ...patron,
       })
@@ -71,6 +71,8 @@ describe("AccountSettingsTab", () => {
       await userEvent.click(screen.getByText("Edit account settings"))
       const inputs = screen.getAllByRole("textbox")
       expect(inputs[0]).toHaveFocus()
+      await userEvent.click(screen.getByText("Cancel"))
+      expect(screen.getByText("Edit account settings")).toHaveFocus()
     })
     it("clicking the edit button opens the form, \nclicking submit opens modal on success,\n closing modal toggles display", async () => {
       const myAccountPatron = MyAccount.prototype.buildPatron({

@@ -11,17 +11,20 @@ interface AccountSettingsButtonsPropsType {
   currentlyEditing: boolean
   formValid: boolean
   setCurrentlyEditing: Dispatch<React.SetStateAction<boolean>>
+  editButtonRef: MutableRefObject<HTMLButtonElement>
 }
 
 const AccountSettingsButtons = ({
   currentlyEditing,
   formValid,
   setCurrentlyEditing,
+  editButtonRef,
 }: AccountSettingsButtonsPropsType) => {
   const toggleCurrentlyEditing = (doWeWantToEdit: boolean) =>
     setCurrentlyEditing(doWeWantToEdit)
   const editButton = (
     <Button
+      ref={editButtonRef}
       className={styles.settingsEditButton}
       id="edit-account-settings-button"
       buttonType="secondary"
