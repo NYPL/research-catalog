@@ -19,7 +19,7 @@ import drbPromoImage from "../../client/assets/drb_promo.png"
 
 interface DRBContainerProps {
   drbResults: DRBResult[]
-  totalWorks: number
+  totalWorks?: number
   // TODO: Get these from context when SearchParamsContext is added
   searchParams: SearchParams
 }
@@ -29,11 +29,12 @@ interface DRBContainerProps {
  */
 const DRBContainer = ({
   drbResults,
-  totalWorks,
+  totalWorks = 0,
   searchParams,
 }: DRBContainerProps) => {
   const drbQuery = getDRBQueryStringFromSearchParams(searchParams)
   const hasResults = totalWorks > 0
+
   return (
     <Card
       id="drb-sidebar-container"
@@ -88,11 +89,15 @@ const DRBContainer = ({
               href={appConfig.urls.drbAbout}
               aria-label="Explore Digital Research Books Beta"
             >
-              <Box mb="xs" bg="ui.white" p="s" borderRadius="5px">
-                <Image
-                  src={drbPromoImage}
-                  alt="Image of three Digital Research Books"
-                />
+              <Box
+                as="span"
+                display="inline-block"
+                mb="xs"
+                bg="ui.white"
+                p="s"
+                borderRadius="5px"
+              >
+                <Image src={drbPromoImage} alt="" />
               </Box>
             </ExternalLink>
             <ExternalLink

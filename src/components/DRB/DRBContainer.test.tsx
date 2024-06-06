@@ -46,7 +46,7 @@ describe("DRBContainer", () => {
     expect(screen.getByText(/Read Online/i)).toBeInTheDocument()
   })
   it("renders the DRBContainer component but with no results", () => {
-    render(<DRBContainer drbResults={[]} totalWorks={0} searchParams={{}} />)
+    render(<DRBContainer drbResults={[]} searchParams={{}} />)
 
     expect(
       screen.getByText(/No results found from Digital Research Books Beta/i)

@@ -141,7 +141,7 @@ export default function Search({
             ) : (
               <DRBContainer
                 drbResults={drbResults}
-                totalWorks={drbResponse?.totalWorks || 0}
+                totalWorks={drbResponse?.totalWorks}
                 searchParams={searchParams}
               />
             )}
