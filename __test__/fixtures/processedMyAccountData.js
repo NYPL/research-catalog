@@ -11,7 +11,7 @@ export const processedPatron = {
       type: "t",
     },
   ],
-  homeLibraryCode: "sn   ",
+  homeLibrary: { code: "sn   ", name: "SNFL (formerly Mid-Manhattan)" },
   id: 6742743,
 }
 
@@ -23,7 +23,7 @@ export const emptyPatron = {
   expirationDate: "March 28, 2025",
   emails: [],
   phones: [],
-  homeLibraryCode: "sn   ",
+  homeLibrary: { code: "sn   ", name: "SNFL (formerly Mid-Manhattan)" },
   id: 6742743,
 }
 

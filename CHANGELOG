@@ -7,13 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
-### Updated
+### Added
 
 - Add No DRB Results copy and image to DRBContainer (SCC-4116)
-- Replaced all modals with new 'confirmation'/'default' variant (SCC-4110)
+- Added Bib model parent class and rendered ItemTable in Bib Details (SCC-3964)
 - Add update pickup location functionality to Requests tab in account page (SCC-3930)
+- Add caching of pickup location. Update Patron type to have a SierraCodeName for homeLibrary instead of a string for homeLibraryCode (SCC-4060)
 
 ### Updated
+
+- Replaced all modals with new 'confirmation'/'default' variant (SCC-4110)
 
 ## Hotfixes 2024-05-22
 
