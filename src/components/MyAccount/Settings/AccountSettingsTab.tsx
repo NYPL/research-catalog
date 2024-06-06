@@ -46,10 +46,10 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
     <AccountSettingsDisplay patron={mostRecentPatronData} />
   )
   useEffect(() => {
-    if (currentlyEditing === true) {
+    if (currentlyEditing) {
       firstInputRef.current?.focus()
     } else editButtonRef.current?.focus()
-  }, [currentlyEditing, firstInputRef])
+  }, [currentlyEditing])
 
   const submitAccountSettings = async (e) => {
     e.preventDefault()
