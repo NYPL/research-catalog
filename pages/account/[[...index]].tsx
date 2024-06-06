@@ -16,6 +16,9 @@ import type {
   Checkout,
   Fine,
 } from "../../src/types/myAccountTypes"
+import { BASE_URL } from "../../src/config/constants"
+import { useEffect, useState } from "react"
+import { incrementTime } from "../../src/utils/myAccountUtils"
 
 interface MyAccountPropsType {
   patron?: Patron
@@ -35,6 +38,38 @@ export default function MyAccount({
   tabsPath,
 }: MyAccountPropsType) {
   const errorRetrievingPatronData = !patron
+  const [stuckInAuthRedirectLoop, setStuckInAuthRedirectLoop] = useState(false)
+  // Detect a redirect loop and display error if we can't solve it any other way
+  const trackRedirects = () => {
+    const nyplAccountRedirectTracker = document.cookie
+      .split(";")
+      .find((cookie) => cookie.includes("nyplAccountRedirectTracker"))
+    if (nyplAccountRedirectTracker) {
+      const currentValue = nyplAccountRedirectTracker.split("=")[1].split("exp")
+      const currentCount = parseInt(currentValue[0], 10)
+      if (currentCount > 3) {
+        fetch(
+          `${BASE_URL}/api/accountError?type=redirect_loop&page=${encodeURI(
+            window.location.href
+          )}`
+        )
+        return true
+      }
+      const currentExp = currentValue[1]
+      document.cookie = `nyplAccountRedirectTracker=${
+        currentCount + 1
+      }exp${currentExp}; expires=${currentExp}`
+    } else {
+      const expirationTime = incrementTime(0, 10)
+      document.cookie = `nyplAccountRedirectTracker=1exp${expirationTime}; expires=${expirationTime}`
+    }
+    return false
+  }
+
+  useEffect(() => {
+    const isInRedirectLoop = trackRedirects()
+    setStuckInAuthRedirectLoop(isInRedirectLoop)
+  }, [])
 
   return (
     <>
@@ -43,7 +78,13 @@ export default function MyAccount({
       </Head>
 
       <Layout isAuthenticated={isAuthenticated} activePage="account">
-        {errorRetrievingPatronData ? (
+        {stuckInAuthRedirectLoop ? (
+          <Text>
+            We are unable to display your account information at this time due
+            an error with our authentication server. Please contact
+            gethelp@nypl.org for assistance.
+          </Text>
+        ) : errorRetrievingPatronData ? (
           <Text>
             We are unable to display your account information at this time.
             Please contact gethelp@nypl.org for assistance.

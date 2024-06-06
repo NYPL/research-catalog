@@ -1,5 +1,11 @@
 import type { Patron, SierraPatron } from "../types/myAccountTypes"
 
+export const incrementTime = (minutes, seconds = 0) => {
+  const now = new Date()
+  now.setTime(now.getTime() + minutes * 60 * 1000 + seconds * 1000)
+  return now.toUTCString()
+}
+
 export const filteredPickupLocations = [
   {
     code: "ft   ",
