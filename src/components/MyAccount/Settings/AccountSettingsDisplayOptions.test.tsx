@@ -7,6 +7,7 @@ import {
   processedPatron,
 } from "../../../../__test__/fixtures/processedMyAccountData"
 import { render, screen } from "../../../utils/testUtils"
+import { useRef } from "react"
 
 describe("AccountSettingsDisplayOptions", () => {
   describe("Display normal patron", () => {
@@ -39,6 +40,7 @@ describe("AccountSettingsDisplayOptions", () => {
     })
   })
   describe("empty patron", () => {
+    const ref = useRef()
     it("doesn't display email, phone, or notification preference if not specified", () => {
       render(<AccountSettingsDisplay patron={emptyPatron} />)
       const missingFields = ["Email", "Phone", "Notification preference"].map(
@@ -51,6 +53,7 @@ describe("AccountSettingsDisplayOptions", () => {
     it("displays empty email, phone, or notification preference in edit mode if not specified", () => {
       render(
         <AccountSettingsForm
+          firstInputRef={ref}
           patron={emptyPatron}
           setIsFormValid={() => {
             return true
@@ -69,8 +72,10 @@ describe("AccountSettingsDisplayOptions", () => {
   })
   describe("Update", () => {
     beforeEach(() => {
+      const ref = useRef()
       render(
         <AccountSettingsForm
+          firstInputRef={ref}
           patron={processedPatron}
           setIsFormValid={() => {
             return true
