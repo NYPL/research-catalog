@@ -1,4 +1,4 @@
-import type { Bib, Note } from "../types/bibTypes"
+import type { DiscoveryBibResult, Note } from "../types/bibTypes"
 import type {
   LinkedBibDetail,
   BibDetail,
@@ -11,7 +11,7 @@ import type {
 } from "../types/bibDetailsTypes"
 
 export default class BibDetails {
-  bib: Bib
+  bib: DiscoveryBibResult
   annotatedMarcDetails: AnyBibDetail[]
   holdingsDetails: AnyBibDetail[]
   topDetails: AnyBibDetail[]
@@ -20,8 +20,12 @@ export default class BibDetails {
   supplementaryContent: LinkedBibDetail
   extent: BibDetail
   subjectHeadings: SubjectHeadingDetail
-  constructor(bib: Bib, annotatedMarc?: AnnotatedMarc) {
-    this.bib = this.matchParallelToPrimaryValues(bib)
+
+  constructor(
+    discoveryBibResult: DiscoveryBibResult,
+    annotatedMarc?: AnnotatedMarc
+  ) {
+    this.bib = this.matchParallelToPrimaryValues(discoveryBibResult)
     // these properties are not string[] so they require separate processing
     this.supplementaryContent = this.buildSupplementaryContent()
     this.groupedNotes = this.buildGroupedNotes()
@@ -267,7 +271,7 @@ export default class BibDetails {
    * The new rewritten field interleaves the parallel field and the paralleled (i.e. original) field together.
    * Skips over subject fields since these require changes to SHEP.
    */
-  matchParallelToPrimaryValues(bib: Bib) {
+  matchParallelToPrimaryValues(bib: DiscoveryBibResult) {
     const parallelFieldMatches = Object.keys(bib).map((key) => {
       if (key.match(/subject/i)) {
         return null

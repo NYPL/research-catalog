@@ -375,7 +375,7 @@ export const buildPatron = (patron: SierraPatron): Patron => {
     expirationDate: formatDate(patron.expirationDate),
     emails: patron.emails || [],
     phones: patron.phones || [],
-    homeLibraryCode: patron.homeLibraryCode || null,
+    homeLibrary: patron.homeLibrary || null,
     id: patron.id,
   }
 }
