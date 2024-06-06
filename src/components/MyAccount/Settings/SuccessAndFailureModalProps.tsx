@@ -1,11 +1,6 @@
-import {
-  Box,
-  Heading,
-  Icon,
-  Link,
-  Text,
-} from "@nypl/design-system-react-components"
+import { Box, Icon, Link, Text } from "@nypl/design-system-react-components"
 import styles from "../../../../styles/components/MyAccount.module.scss"
+import modalHeading from "../ModalHeading"
 
 export const successModalProps = {
   type: "default",
@@ -17,17 +12,15 @@ export const successModalProps = {
     </Box>
   ),
   closeButtonLabel: "OK",
-  headingText: (
-    <Heading className={styles.modalHeading}>
-      <>
-        <Icon
-          size="large"
-          name="actionCheckCircleFilled"
-          color="ui.success.primary"
-        />
-        <Text sx={{ marginBottom: 0 }}> Update successful </Text>
-      </>
-    </Heading>
+  headingText: modalHeading(
+    <>
+      <Icon
+        size="large"
+        name="actionCheckCircleFilled"
+        color="ui.success.primary"
+      />
+      <Text sx={{ marginBottom: 0 }}> Update successful </Text>
+    </>
   ),
 }
 export const failureModalProps = {
@@ -42,12 +35,10 @@ export const failureModalProps = {
     </Box>
   ),
   closeButtonLabel: "OK",
-  headingText: (
-    <Heading className={styles.modalHeading}>
-      <>
-        <Icon size="large" name="errorFilled" color="ui.error.primary" />
-        <Text sx={{ marginBottom: 0 }}> Update failed </Text>
-      </>
-    </Heading>
+  headingText: modalHeading(
+    <>
+      <Icon size="large" name="errorFilled" color="ui.error.primary" />
+      <Text sx={{ marginBottom: 0 }}> Update failed </Text>
+    </>
   ),
 }

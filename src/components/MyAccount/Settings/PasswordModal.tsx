@@ -12,6 +12,7 @@ import { useState } from "react"
 import styles from "../../../../styles/components/MyAccount.module.scss"
 import PasswordChangeForm from "./PasswordChangeForm"
 import type { Patron } from "../../../types/myAccountTypes"
+import modalHeading from "../ModalHeading"
 
 const PasswordModal = ({ patron }: { patron: Patron }) => {
   const { onOpen: openModal, onClose: closeModal, Modal } = useModal()
@@ -46,11 +47,7 @@ const PasswordModal = ({ patron }: { patron: Patron }) => {
       </Box>
     ),
     closeButtonLabel: "Cancel",
-    headingText: (
-      <Heading className={styles.modalHeading}>
-        <Text> Change PIN/PASSWORD </Text>
-      </Heading>
-    ),
+    headingText: modalHeading(<Text> Change PIN/PASSWORD </Text>),
     onClose: () => {
       closeModal()
     },
@@ -77,17 +74,15 @@ const PasswordModal = ({ patron }: { patron: Patron }) => {
       </Box>
     ),
     closeButtonLabel: "OK",
-    headingText: (
-      <Heading className={styles.modalHeading}>
-        <>
-          <Icon
-            size="large"
-            name="actionCheckCircleFilled"
-            color="ui.success.primary"
-          />
-          PIN/PASSWORD change was successful
-        </>
-      </Heading>
+    headingText: modalHeading(
+      <>
+        <Icon
+          size="large"
+          name="actionCheckCircleFilled"
+          color="ui.success.primary"
+        />
+        PIN/PASSWORD change was successful
+      </>
     ),
     onClose: async () => {
       closeModal()
@@ -104,13 +99,11 @@ const PasswordModal = ({ patron }: { patron: Patron }) => {
       </Box>
     ),
     closeButtonLabel: "OK",
-    headingText: (
-      <Heading className={styles.modalHeading}>
-        <>
-          <Icon size="large" name="errorFilled" color="ui.error.primary" />
-          PIN/PASSWORD change failed
-        </>
-      </Heading>
+    headingText: modalHeading(
+      <>
+        <Icon size="large" name="errorFilled" color="ui.error.primary" />
+        PIN/PASSWORD change failed
+      </>
     ),
     onClose: async () => {
       closeModal()

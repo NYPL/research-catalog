@@ -9,6 +9,7 @@ import {
   Text,
 } from "@nypl/design-system-react-components"
 import styles from "../../../../styles/components/MyAccount.module.scss"
+import modalHeading from "../ModalHeading"
 
 const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
   const [frozen, setFrozen] = useState(hold.frozen)
@@ -24,13 +25,11 @@ const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
       </Box>
     ),
     closeButtonLabel: "OK",
-    headingText: (
-      <Heading className={styles.modalHeading}>
-        <>
-          <Icon size="large" name="errorFilled" color="ui.error.primary" />
-          Hold {frozen ? "unfreeze" : "freeze"} failed
-        </>
-      </Heading>
+    headingText: modalHeading(
+      <>
+        <Icon size="large" name="errorFilled" color="ui.error.primary" />
+        Hold {frozen ? "unfreeze" : "freeze"} failed
+      </>
     ),
     onClose: () => {
       closeModal()
@@ -40,17 +39,15 @@ const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
   const successModalProps = {
     type: "default",
     closeButtonLabel: "OK",
-    headingText: (
-      <Heading className={styles.modalHeading}>
-        <>
-          <Icon
-            size="large"
-            name="actionCheckCircleFilled"
-            color="ui.success.primary"
-          />
-          Hold {frozen ? "unfreeze" : "freeze"} successful
-        </>
-      </Heading>
+    headingText: modalHeading(
+      <>
+        <Icon
+          size="large"
+          name="actionCheckCircleFilled"
+          color="ui.success.primary"
+        />
+        Hold {frozen ? "unfreeze" : "freeze"} successful
+      </>
     ),
     onClose: () => {
       closeModal()

@@ -11,6 +11,7 @@ import {
 } from "@nypl/design-system-react-components"
 import { BASE_URL } from "../../../config/constants"
 import styles from "../../../../styles/components/MyAccount.module.scss"
+import modalHeading from "../ModalHeading"
 import type {
   BaseModalProps,
   ConfirmationModalProps,
@@ -43,17 +44,15 @@ const CancelButton = ({
         </Box>
       ),
       closeButtonLabel: "OK",
-      headingText: (
-        <Heading className={styles.modalHeading}>
-          <>
-            <Icon
-              size="large"
-              name="actionCheckCircleFilled"
-              color="ui.success.primary"
-            />
-            Request canceled
-          </>
-        </Heading>
+      headingText: modalHeading(
+        <>
+          <Icon
+            size="large"
+            name="actionCheckCircleFilled"
+            color="ui.success.primary"
+          />
+          Request canceled
+        </>
       ),
       // Close modal, remove hold from currentHolds so it disappears immediately.
       onClose: async () => {
@@ -78,13 +77,11 @@ const CancelButton = ({
         </Box>
       ),
       closeButtonLabel: "OK",
-      headingText: (
-        <Heading className={styles.modalHeading}>
-          <>
-            <Icon size="large" name="errorFilled" color="ui.error.primary" />
-            Failed to cancel request
-          </>
-        </Heading>
+      headingText: modalHeading(
+        <>
+          <Icon size="large" name="errorFilled" color="ui.error.primary" />
+          Failed to cancel request
+        </>
       ),
       onClose: closeModal(),
     }
@@ -110,9 +107,7 @@ const CancelButton = ({
       ),
       closeButtonLabel: "No, keep request",
       confirmButtonLabel: "Yes, cancel request",
-      headingText: (
-        <Heading className={styles.modalHeading}>Cancel request?</Heading>
-      ),
+      headingText: modalHeading("Cancel request?"),
       onConfirm: async () => {
         setModalProps({
           ...checkModalProps(hold),
