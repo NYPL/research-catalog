@@ -9,6 +9,19 @@ import {
 import { render, screen } from "../../../utils/testUtils"
 import { useRef } from "react"
 
+const FormWithRef = ({ patron }) => {
+  const ref = useRef()
+  return (
+    <AccountSettingsForm
+      firstInputRef={ref}
+      patron={patron}
+      setIsFormValid={() => {
+        return true
+      }}
+    />
+  )
+}
+
 describe("AccountSettingsDisplayOptions", () => {
   describe("Display normal patron", () => {
     beforeEach(() => {
@@ -40,7 +53,6 @@ describe("AccountSettingsDisplayOptions", () => {
     })
   })
   describe("empty patron", () => {
-    const ref = useRef()
     it("doesn't display email, phone, or notification preference if not specified", () => {
       render(<AccountSettingsDisplay patron={emptyPatron} />)
       const missingFields = ["Email", "Phone", "Notification preference"].map(
@@ -51,15 +63,7 @@ describe("AccountSettingsDisplayOptions", () => {
       missingFields.forEach((field) => expect(field).not.toBeInTheDocument())
     })
     it("displays empty email, phone, or notification preference in edit mode if not specified", () => {
-      render(
-        <AccountSettingsForm
-          firstInputRef={ref}
-          patron={emptyPatron}
-          setIsFormValid={() => {
-            return true
-          }}
-        />
-      )
+      render(<FormWithRef patron={emptyPatron} />)
       const missingFields = [
         "Update email",
         "Update phone number",
@@ -72,16 +76,7 @@ describe("AccountSettingsDisplayOptions", () => {
   })
   describe("Update", () => {
     beforeEach(() => {
-      const ref = useRef()
-      render(
-        <AccountSettingsForm
-          firstInputRef={ref}
-          patron={processedPatron}
-          setIsFormValid={() => {
-            return true
-          }}
-        />
-      )
+      render(<FormWithRef patron={processedPatron} />)
     })
     it("displays a selector with patron's home library selected", () => {
       const homeLibraryCode = screen.getByDisplayValue(
