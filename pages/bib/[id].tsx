@@ -87,7 +87,7 @@ export default function BibPage({
     }
   }
 
-  const handlePageChange = async (page) => {
+  const handlePageChange = async (page: number) => {
     const newQuery = { ...query, item_page: page }
     if (page === 1) delete newQuery.item_page
     await refreshItemTable(newQuery)
@@ -125,6 +125,7 @@ export default function BibPage({
             <Pagination
               id="bib-items-pagination"
               initialPage={itemPage}
+              currentPage={itemPage}
               pageCount={Math.ceil(bib.numPhysicalItems / ITEM_BATCH_SIZE)}
               onPageChange={handlePageChange}
               my="xl"
