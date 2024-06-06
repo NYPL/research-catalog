@@ -4,12 +4,13 @@ import {
   Select,
   TextInput,
   Box,
+  type TextInputRefType,
 } from "@nypl/design-system-react-components"
 import { notificationPreferenceTuples } from "../../../utils/myAccountUtils"
 import type { Patron } from "../../../types/myAccountTypes"
 import { accountSettings } from "./AccountSettingsUtils"
 import { buildListElementsWithIcons } from "../IconListElement"
-import type { Dispatch, JSX, ReactNode } from "react"
+import type { Dispatch, JSX, MutableRefObject, ReactNode } from "react"
 import { useState, useEffect, useCallback } from "react"
 import { filteredPickupLocations } from "../../../utils/myAccountUtils"
 import PasswordModal from "./PasswordModal"
@@ -33,7 +34,9 @@ export const AccountSettingsDisplay = ({ patron }: { patron: Patron }) => {
 export const AccountSettingsForm = ({
   patron,
   setIsFormValid,
+  firstInputRef,
 }: {
+  firstInputRef: MutableRefObject<TextInputRefType>
   patron: Patron
   setIsFormValid: Dispatch<React.SetStateAction<boolean>>
 }) => {
@@ -141,6 +144,7 @@ export const AccountSettingsForm = ({
         case "Phone":
           inputField = (
             <TextInput
+              ref={firstInputRef}
               name={setting.field}
               defaultValue={patron.phones[0]?.number}
               id="phone-text-input"

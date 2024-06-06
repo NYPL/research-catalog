@@ -1,5 +1,10 @@
-import { Icon, Button, ButtonGroup } from "@nypl/design-system-react-components"
-import type { Dispatch } from "react"
+import {
+  Icon,
+  Button,
+  ButtonGroup,
+  type TextInputRefType,
+} from "@nypl/design-system-react-components"
+import type { Dispatch, MutableRefObject } from "react"
 import styles from "../../../../styles/components/MyAccount.module.scss"
 
 interface AccountSettingsButtonsPropsType {
@@ -15,7 +20,6 @@ const AccountSettingsButtons = ({
 }: AccountSettingsButtonsPropsType) => {
   const toggleCurrentlyEditing = (doWeWantToEdit: boolean) =>
     setCurrentlyEditing(doWeWantToEdit)
-
   const editButton = (
     <Button
       className={styles.settingsEditButton}

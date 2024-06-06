@@ -4,8 +4,9 @@ import {
   Spacer,
   useModal,
   SkeletonLoader,
+  type TextInputRefType,
 } from "@nypl/design-system-react-components"
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import type { Patron } from "../../../types/myAccountTypes"
 import styles from "../../../../styles/components/MyAccount.module.scss"
 import AccountSettingsButtons from "./AccountSettingsButtons"
@@ -32,14 +33,21 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
 
   const [isFormValid, setIsFormValid] = useState(false)
 
+  const firstInputRef = useRef<TextInputRefType>()
   const listElements = currentlyEditing ? (
     <AccountSettingsForm
+      firstInputRef={firstInputRef}
       patron={mostRecentPatronData}
       setIsFormValid={setIsFormValid}
     />
   ) : (
     <AccountSettingsDisplay patron={mostRecentPatronData} />
   )
+  useEffect(() => {
+    if (currentlyEditing === true) {
+      firstInputRef.current?.focus()
+    }
+  }, [currentlyEditing, firstInputRef])
 
   const submitAccountSettings = async (e) => {
     e.preventDefault()
