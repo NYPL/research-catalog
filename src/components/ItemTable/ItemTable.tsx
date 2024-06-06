@@ -1,11 +1,8 @@
 import { Box, Table } from "@nypl/design-system-react-components"
-import classNames from "classnames/bind"
 
 import type ItemTableData from "../../models/ItemTableData"
 import StatusLinks from "./StatusLinks"
 import styles from "../../../styles/components/ItemTable.module.scss"
-
-const cx = classNames.bind(styles)
 
 interface ItemTableProps {
   itemTableData: ItemTableData
@@ -20,10 +17,9 @@ const ItemTable = ({ itemTableData }: ItemTableProps) => {
   return (
     <Box>
       <Table
-        className={cx({
-          itemTable: true,
-          inSearchResult: inSearchResult,
-        })}
+        className={`${styles.itemTable}${
+          inSearchResult ? " " + styles.inSearchResult : ""
+        }`}
         columnHeaders={tableHeadings}
         tableData={tableData}
         showRowDividers={!inSearchResult}
