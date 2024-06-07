@@ -46,11 +46,7 @@ const PasswordModal = ({ patron }: { patron: Patron }) => {
       </Box>
     ),
     closeButtonLabel: "Cancel",
-    headingText: (
-      <h5 className={styles.modalHeading}>
-        <Text> Change PIN/PASSWORD </Text>
-      </h5>
-    ),
+    headingText: <h5 className={styles.modalHeading}>Change PIN/PASSWORD</h5>,
     onClose: () => {
       closeModal()
     },
