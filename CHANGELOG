@@ -9,12 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add Item Table pagination and Bib items API route (SCC-4136)
 - Add No DRB Results copy and image to DRBContainer (SCC-4116)
 - Add Bib model parent class and rendered ItemTable in Bib Details (SCC-3964)
 - Add update pickup location functionality to Requests tab in account page (SCC-3930)
 - Add caching of pickup location. Update Patron type to have a SierraCodeName for homeLibrary instead of a string for homeLibraryCode (SCC-4060)
 
 ### Updated
+- Refactored bibUtils and removed BibParams type (SCC-4136)
 - Extracted getEmailParams from Feedback API route and added test (SCC-4032)
 - Replaced all modals with new 'confirmation'/'default' variant (SCC-4110)
 
