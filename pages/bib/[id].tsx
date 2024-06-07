@@ -125,7 +125,6 @@ export default function BibPage({
               <Banner
                 type="negative"
                 content="There was an error fetching items. Please try again with a different query."
-                mb="s"
               />
             ) : (
               <>
