@@ -43,15 +43,17 @@ const CancelButton = ({
         </Box>
       ),
       closeButtonLabel: "OK",
-      headingText: modalHeading(
-        <>
-          <Icon
-            size="large"
-            name="actionCheckCircleFilled"
-            color="ui.success.primary"
-          />
-          Request canceled
-        </>
+      headingText: (
+        <h5 className={styles.modalHeading}>
+          <>
+            <Icon
+              size="large"
+              name="actionCheckCircleFilled"
+              color="ui.success.primary"
+            />
+            Request canceled
+          </>
+        </h5>
       ),
       // Close modal, remove hold from currentHolds so it disappears immediately.
       onClose: async () => {
@@ -76,11 +78,13 @@ const CancelButton = ({
         </Box>
       ),
       closeButtonLabel: "OK",
-      headingText: modalHeading(
-        <>
-          <Icon size="large" name="errorFilled" color="ui.error.primary" />
-          Failed to cancel request
-        </>
+      headingText: (
+        <h5 className={styles.modalHeading}>
+          <>
+            <Icon size="large" name="errorFilled" color="ui.error.primary" />
+            Failed to cancel request
+          </>
+        </h5>
       ),
       onClose: closeModal(),
     }
@@ -106,7 +110,7 @@ const CancelButton = ({
       ),
       closeButtonLabel: "No, keep request",
       confirmButtonLabel: "Yes, cancel request",
-      headingText: modalHeading("Cancel request?"),
+      headingText: <h5 className={styles.modalHeading}>Cancel request?</h5>,
       onConfirm: async () => {
         setModalProps({
           ...checkModalProps(hold),

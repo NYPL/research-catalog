@@ -4,7 +4,6 @@ import {
   Icon,
   useModal,
   Text,
-  Heading,
   Button,
   Select,
   Link as DSLink,
@@ -17,7 +16,6 @@ import type { SierraCodeName } from "../../../types/myAccountTypes"
 import styles from "../../../../styles/components/MyAccount.module.scss"
 import { useState } from "react"
 import { BASE_URL } from "../../../config/constants"
-import modalHeading from "../ModalHeading"
 
 interface UpdateLocationPropsType {
   holdId: string
@@ -102,7 +100,11 @@ const UpdateLocation = ({
         setModalProps(successModalProps(selected) as DefaultModalProps)
       } else setModalProps(failureModalProps as DefaultModalProps)
     },
-    headingText: modalHeading("Where would you like to pick up this item?"),
+    headingText: (
+      <h5 className={styles.modalHeading}>
+        Where would you like to pick up this item?
+      </h5>
+    ),
   })
 
   const [modalProps, setModalProps] = useState<BaseModalProps>(
@@ -120,15 +122,17 @@ const UpdateLocation = ({
       </Box>
     ),
     closeButtonLabel: "OK",
-    headingText: modalHeading(
-      <>
-        <Icon
-          size="large"
-          name="actionCheckCircleFilled"
-          color="ui.success.primary"
-        />
-        Location change successful
-      </>
+    headingText: (
+      <h5 className={styles.modalHeading}>
+        <>
+          <Icon
+            size="large"
+            name="actionCheckCircleFilled"
+            color="ui.success.primary"
+          />
+          Location change successful
+        </>
+      </h5>
     ),
     onClose: () => {
       updateHoldLocation(holdId, newLocation)
@@ -160,11 +164,13 @@ const UpdateLocation = ({
       closeModal()
     },
     closeButtonLabel: "OK",
-    headingText: modalHeading(
-      <>
-        <Icon size="large" name="errorFilled" color="ui.error.primary" />
-        Location change failed
-      </>
+    headingText: (
+      <h5 className={styles.modalHeading}>
+        <>
+          <Icon size="large" name="errorFilled" color="ui.error.primary" />
+          Location change failed
+        </>
+      </h5>
     ),
   }
   return (
