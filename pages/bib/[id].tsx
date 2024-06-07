@@ -18,6 +18,7 @@ import {
 } from "../../src/config/constants"
 import { fetchBib } from "../../src/server/api/bib"
 import { getBibQueryString } from "../../src/utils/bibUtils"
+import { buildItemTableDisplayingString } from "../../src/utils/bibUtils"
 import BibDetailsModel from "../../src/models/BibDetails"
 import ItemTableData from "../../src/models/ItemTableData"
 import BibDetails from "../../src/components/BibPage/BibDetail"
@@ -30,6 +31,7 @@ import type { AnnotatedMarc } from "../../src/types/bibDetailsTypes"
 import Bib from "../../src/models/Bib"
 import initializePatronTokenAuth from "../../src/server/auth"
 import Item from "../../src/models/Item"
+import type { SearchResultsItem } from "../../src/types/itemTypes"
 
 interface BibPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -76,7 +78,7 @@ export default function BibPage({
     )
     if (response.ok) {
       const { items } = await response.json()
-      setBibItems(items.map((item) => new Item(item, bib)))
+      setBibItems(items.map((item: SearchResultsItem) => new Item(item, bib)))
       setItemsLoading(false)
       document.getElementById("item-table")?.scrollIntoView({
         behavior: "smooth",
@@ -109,6 +111,14 @@ export default function BibPage({
         <BibDetails key="top-details" details={topDetails} />
         {bib.showItemTable ? (
           <Box id="item-table">
+            <Heading
+              data-testid="item-table-heading"
+              level="h3"
+              size="heading4"
+              mb={{ base: "s", md: "m" }}
+            >
+              Items in the library and off-site
+            </Heading>
             {itemsLoading ? (
               <SkeletonLoader showImage={false} />
             ) : itemFetchError ? (
@@ -119,7 +129,20 @@ export default function BibPage({
                 noMargin
               />
             ) : (
-              <ItemTable itemTableData={itemTableData} />
+              <>
+                <Heading
+                  data-testid="item-table-displaying-text"
+                  level="h4"
+                  size="heading5"
+                  mb={{ base: "s", md: "m" }}
+                >
+                  {buildItemTableDisplayingString(
+                    itemPage,
+                    bib.numPhysicalItems
+                  )}
+                </Heading>
+                <ItemTable itemTableData={itemTableData} />
+              </>
             )}
             <Pagination
               id="bib-items-pagination"

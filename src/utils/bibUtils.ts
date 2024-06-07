@@ -1,5 +1,6 @@
-import { ITEM_BATCH_SIZE } from "../config/constants"
+import { ITEM_BATCH_SIZE, RESULTS_PER_PAGE } from "../config/constants"
 import type { BibQueryParams } from "../types/bibTypes"
+import { getPaginationOffsetStrings } from "./appUtils"
 
 /**
  * standardizeBibId
@@ -31,6 +32,23 @@ export const rtlOrLtr = (value: string) => {
 const isRtl = (value: string) => value.substring(0, 1) === "\u200F"
 
 export const isItTheLastElement = (i, array) => !(i < array.length - 1)
+
+export const buildItemTableDisplayingString = (
+  page: number,
+  totalResults: number
+) => {
+  const [resultsStart, resultsEnd] = getPaginationOffsetStrings(
+    page,
+    totalResults,
+    ITEM_BATCH_SIZE
+  )
+
+  return `Displaying ${
+    totalResults > ITEM_BATCH_SIZE
+      ? `${resultsStart}-${resultsEnd}`
+      : totalResults.toLocaleString()
+  } of ${totalResults.toLocaleString()} item${totalResults > 1 ? "s" : ""}`
+}
 
 /**
  * Given a bib ID (e.g. b12082323, pb123456, hb10000202040400) returns true
