@@ -11,6 +11,22 @@ import { filteredPickupLocations } from "../../../utils/myAccountUtils"
 type Phone = { number: string; type: string }
 type PhoneOrEmail = string | Phone
 
+export const isFormValid = (updatedForm) => {
+  const phoneRegex = /^(?:\D*\d){10}\D*$/
+  if (updatedForm.notificationPreference === "p") {
+    console.log(
+      "phone not emtpy",
+      updatedForm.phones !== "",
+      "regex pass",
+      phoneRegex.test(updatedForm.phones)
+    )
+    return updatedForm.phones !== "" && phoneRegex.test(updatedForm.phones)
+  } else if (updatedForm.notificationPreference === "z") {
+    console.log("email not empty", updatedForm.emails !== "")
+    return updatedForm.emails !== ""
+  } else return true
+}
+
 export const getLibraryByCode = (code) =>
   filteredPickupLocations.find((loc) => loc.code.trim() === code.trim())
 

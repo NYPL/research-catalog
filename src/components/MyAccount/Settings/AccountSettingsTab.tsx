@@ -31,7 +31,7 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
 
   const { onOpen: openModal, onClose: closeModal, Modal } = useModal()
 
-  const [isFormValid, setIsFormValid] = useState(false)
+  const [isFormValid, setIsFormValid] = useState(true)
 
   const editButtonRef = useRef<HTMLButtonElement>()
   const firstInputRef = useRef<TextInputRefType>()

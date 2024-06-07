@@ -123,13 +123,46 @@ describe("AccountSettingsTab", () => {
         .getByText("Save Changes", { exact: false })
         .closest("button")
       expect(saveButton).not.toBeDisabled()
-
+      expect(
+        screen.getByLabelText("Update notification preference")
+      ).toHaveValue("z")
       const emailField = screen.getByLabelText("Update email")
       fireEvent.change(emailField, { target: { value: "" } })
 
       expect(saveButton).toBeDisabled()
       fireEvent.change(emailField, { target: { value: "email@email" } })
       expect(saveButton).not.toBeDisabled()
+      await userEvent.click(screen.getByText("Save Changes"))
+      await userEvent.click(screen.getAllByText("OK")[0])
+    })
+    it("prevents users from submitting empty fields after changing notification preference", async () => {
+      const myAccountPatron = MyAccount.prototype.buildPatron({
+        ...patron,
+      })
+      render(<AccountSettingsTab settingsData={myAccountPatron} />)
+      // open account settings
+      await userEvent.click(screen.getByText("Edit account settings"))
+      const saveButton = screen
+        .getByText("Save Changes", { exact: false })
+        .closest("button")
+      expect(saveButton).not.toBeDisabled()
+      const notificationPreferenceSelector = screen.getByLabelText(
+        "Update notification preference"
+      )
+      expect(
+        screen.getByLabelText("Update notification preference")
+      ).toHaveValue("z")
+      // update phone number to empty
+      const phoneField = screen.getByLabelText("Update phone number")
+      fireEvent.change(phoneField, { target: { value: "" } })
+      // save button should be enabled because email is still selected as
+      // notification preference
+      expect(saveButton).not.toBeDisabled()
+      // make phone the prefered notifier
+      fireEvent.change(notificationPreferenceSelector, {
+        target: { value: "p" },
+      })
+      expect(saveButton).toBeDisabled()
       await userEvent.click(screen.getByText("Save Changes"))
       await userEvent.click(screen.getAllByText("OK")[0])
     })
