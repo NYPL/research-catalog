@@ -58,6 +58,7 @@ describe("Bib Page with items", () => {
         isAuthenticated={false}
       />
     )
+    expect(screen.queryByText("Displaying 4 of 4 items")).toBeInTheDocument()
 
     expect(screen.getByLabelText("Pagination")).toBeInTheDocument()
 

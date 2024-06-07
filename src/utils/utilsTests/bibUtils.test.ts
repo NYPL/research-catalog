@@ -1,4 +1,9 @@
-import { standardizeBibId, isNyplBibID, getBibQueryString } from "../bibUtils"
+import {
+  standardizeBibId,
+  isNyplBibID,
+  getBibQueryString,
+  buildItemTableDisplayingString,
+} from "../bibUtils"
 
 describe("bibUtils", () => {
   describe("standardizeBibId", () => {
@@ -59,6 +64,23 @@ describe("bibUtils", () => {
       )
       expect(getBibQueryString({ id: "b12082323", items_from: 5 }, true)).toBe(
         "b12082323.annotated-marc?items_size=20&items_from=5"
+      )
+    })
+  })
+  describe("buildItemTableDisplayingString", () => {
+    it("returns the correct item table heading when there is one item", () => {
+      expect(buildItemTableDisplayingString(1, 1)).toBe(
+        "Displaying 1 of 1 item"
+      )
+    })
+    it("returns the correct item table heading for first page when there are many items", () => {
+      expect(buildItemTableDisplayingString(1, 300)).toBe(
+        "Displaying 1-20 of 300 items"
+      )
+    })
+    it("returns the correct item table heading for pages greater than 1 when there are many items", () => {
+      expect(buildItemTableDisplayingString(5, 300)).toBe(
+        "Displaying 81-100 of 300 items"
       )
     })
   })

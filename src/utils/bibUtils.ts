@@ -33,6 +33,8 @@ const isRtl = (value: string) => value.substring(0, 1) === "\u200F"
 
 export const isItTheLastElement = (i, array) => !(i < array.length - 1)
 
+// Build the heading above the Item Table in the Bib Page
+// based on pagination values
 export const buildItemTableDisplayingString = (
   page: number,
   totalResults: number
