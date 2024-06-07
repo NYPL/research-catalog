@@ -28,23 +28,23 @@ const RenewButton = ({
     type: "default",
     bodyContent: (
       <Box className={styles.modalBody}>
-        <Text sx={{ marginLeft: "l" }}>
+        <Text>
           This item has been renewed. It is now due back on {checkout?.dueDate}.
         </Text>
       </Box>
     ),
     closeButtonLabel: "OK",
     headingText: (
-      <Heading className={styles.modalHeading}>
+      <h5 className={styles.modalHeading}>
         <>
           <Icon
             size="large"
             name="actionCheckCircleFilled"
             color="ui.success.primary"
           />
-          <Text sx={{ marginBottom: 0 }}> Renewal successful </Text>
+          Renewal successful
         </>
-      </Heading>
+      </h5>
     ),
     onClose: () => {
       onClose()
@@ -54,7 +54,7 @@ const RenewButton = ({
     type: "default",
     bodyContent: (
       <Box className={styles.modalBody}>
-        <Text sx={{ marginLeft: "l", marginRight: "m" }}>
+        <Text>
           We were unable to renew this item. Please try again or{" "}
           <ExternalLink href="https://www.nypl.org/get-help/contact-us">
             contact us
@@ -65,12 +65,12 @@ const RenewButton = ({
     ),
     closeButtonLabel: "OK",
     headingText: (
-      <Heading className={styles.modalHeading}>
+      <h5 className={styles.modalHeading}>
         <>
           <Icon size="large" name="errorFilled" color="ui.error.primary" />
-          <Text sx={{ marginBottom: 0 }}> Renewal failed </Text>
+          Renewal failed
         </>
-      </Heading>
+      </h5>
     ),
     onClose: () => {
       onClose()

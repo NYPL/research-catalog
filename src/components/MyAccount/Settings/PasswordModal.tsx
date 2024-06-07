@@ -46,11 +46,7 @@ const PasswordModal = ({ patron }: { patron: Patron }) => {
       </Box>
     ),
     closeButtonLabel: "Cancel",
-    headingText: (
-      <Heading className={styles.modalHeading}>
-        <Text sx={{ marginBottom: 0 }}> Change PIN/PASSWORD </Text>
-      </Heading>
-    ),
+    headingText: <h5 className={styles.modalHeading}>Change PIN/PASSWORD</h5>,
     onClose: () => {
       closeModal()
     },
@@ -73,25 +69,21 @@ const PasswordModal = ({ patron }: { patron: Patron }) => {
     type: "default",
     bodyContent: (
       <Box className={styles.modalBody}>
-        <Text sx={{ marginLeft: "l" }}>
-          Your PIN/PASSWORD has been changed.
-        </Text>
+        <Text>Your PIN/PASSWORD has been changed.</Text>
       </Box>
     ),
     closeButtonLabel: "OK",
     headingText: (
-      <Heading className={styles.modalHeading}>
+      <h5 className={styles.modalHeading}>
         <>
           <Icon
             size="large"
             name="actionCheckCircleFilled"
             color="ui.success.primary"
           />
-          <Text sx={{ marginBottom: 0 }}>
-            PIN/PASSWORD change was successful
-          </Text>
+          PIN/PASSWORD change was successful
         </>
-      </Heading>
+      </h5>
     ),
     onClose: async () => {
       closeModal()
@@ -103,22 +95,18 @@ const PasswordModal = ({ patron }: { patron: Patron }) => {
     type: "default",
     bodyContent: (
       <Box className={styles.modalBody}>
-        <Text sx={{ marginLeft: "l", marginRight: "m" }}>
-          We were unable to change your PIN/PASSWORD: {errorMessage}
-        </Text>
-        <Text sx={{ marginLeft: "l", marginRight: "m" }}>
-          Please try again.
-        </Text>
+        <Text>We were unable to change your PIN/PASSWORD: {errorMessage}</Text>
+        <Text>Please try again.</Text>
       </Box>
     ),
     closeButtonLabel: "OK",
     headingText: (
-      <Heading className={styles.modalHeading}>
+      <h5 className={styles.modalHeading}>
         <>
           <Icon size="large" name="errorFilled" color="ui.error.primary" />
-          <Text sx={{ marginBottom: 0 }}> PIN/PASSWORD change failed </Text>
+          PIN/PASSWORD change failed
         </>
-      </Heading>
+      </h5>
     ),
     onClose: async () => {
       closeModal()
