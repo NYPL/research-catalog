@@ -10,7 +10,7 @@ import {
 } from "@nypl/design-system-react-components"
 import { BASE_URL } from "../../../config/constants"
 import styles from "../../../../styles/components/MyAccount.module.scss"
-import modalHeading from "../ModalHeading"
+
 import type {
   BaseModalProps,
   ConfirmationModalProps,

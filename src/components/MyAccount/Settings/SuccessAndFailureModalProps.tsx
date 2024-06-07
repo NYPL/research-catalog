@@ -1,6 +1,5 @@
 import { Box, Icon, Link, Text } from "@nypl/design-system-react-components"
 import styles from "../../../../styles/components/MyAccount.module.scss"
-import modalHeading from "../ModalHeading"
 
 export const successModalProps = {
   type: "default",

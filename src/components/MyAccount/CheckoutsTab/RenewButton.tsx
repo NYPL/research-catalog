@@ -12,7 +12,6 @@ import ExternalLink from "../../Links/ExternalLink/ExternalLink"
 import type { Checkout, Patron } from "../../../types/myAccountTypes"
 import { BASE_URL } from "../../../config/constants"
 import styles from "../../../../styles/components/MyAccount.module.scss"
-import modalHeading from "../ModalHeading"
 
 const RenewButton = ({
   checkout,

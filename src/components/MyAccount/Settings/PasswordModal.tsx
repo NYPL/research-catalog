@@ -12,7 +12,6 @@ import { useState } from "react"
 import styles from "../../../../styles/components/MyAccount.module.scss"
 import PasswordChangeForm from "./PasswordChangeForm"
 import type { Patron } from "../../../types/myAccountTypes"
-import modalHeading from "../ModalHeading"
 
 const PasswordModal = ({ patron }: { patron: Patron }) => {
   const { onOpen: openModal, onClose: closeModal, Modal } = useModal()

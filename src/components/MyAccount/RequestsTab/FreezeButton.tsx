@@ -9,7 +9,6 @@ import {
   Text,
 } from "@nypl/design-system-react-components"
 import styles from "../../../../styles/components/MyAccount.module.scss"
-import modalHeading from "../ModalHeading"
 
 const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
   const [frozen, setFrozen] = useState(hold.frozen)
