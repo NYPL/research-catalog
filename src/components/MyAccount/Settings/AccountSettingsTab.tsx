@@ -4,8 +4,9 @@ import {
   Spacer,
   useModal,
   SkeletonLoader,
+  type TextInputRefType,
 } from "@nypl/design-system-react-components"
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import type { Patron } from "../../../types/myAccountTypes"
 import styles from "../../../../styles/components/MyAccount.module.scss"
 import AccountSettingsButtons from "./AccountSettingsButtons"
@@ -32,14 +33,23 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
 
   const [isFormValid, setIsFormValid] = useState(false)
 
+  const editButtonRef = useRef<HTMLButtonElement>()
+  const firstInputRef = useRef<TextInputRefType>()
+
   const listElements = currentlyEditing ? (
     <AccountSettingsForm
+      firstInputRef={firstInputRef}
       patron={mostRecentPatronData}
       setIsFormValid={setIsFormValid}
     />
   ) : (
     <AccountSettingsDisplay patron={mostRecentPatronData} />
   )
+  useEffect(() => {
+    if (currentlyEditing) {
+      firstInputRef.current?.focus()
+    } else editButtonRef.current?.focus()
+  }, [currentlyEditing])
 
   const submitAccountSettings = async (e) => {
     e.preventDefault()
@@ -92,6 +102,7 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
         </List>
         <Spacer display={{ base: "none", md: "inline-block" }} />
         <AccountSettingsButtons
+          editButtonRef={editButtonRef}
           currentlyEditing={currentlyEditing}
           setCurrentlyEditing={setCurrentlyEditing}
           formValid={isFormValid}

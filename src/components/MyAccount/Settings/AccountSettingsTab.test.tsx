@@ -1,12 +1,7 @@
 import { patron } from "../../../../__test__/fixtures/rawSierraAccountData"
 import AccountSettingsTab from "./AccountSettingsTab"
 import MyAccount from "../../../models/MyAccount"
-import {
-  fireEvent,
-  getByLabelText,
-  render,
-  screen,
-} from "../../../utils/testUtils"
+import { fireEvent, render, screen } from "../../../utils/testUtils"
 import * as helpers from "../../../../pages/api/account/helpers"
 import userEvent from "@testing-library/user-event"
 
@@ -68,6 +63,17 @@ describe("AccountSettingsTab", () => {
         json: async () => console.log("updated"),
         status: 200,
       } as Response)
+    it("clicking edit focuses on first input and cancel focuses on edit", async () => {
+      const myAccountPatron = MyAccount.prototype.buildPatron({
+        ...patron,
+      })
+      render(<AccountSettingsTab settingsData={myAccountPatron} />)
+      await userEvent.click(screen.getByText("Edit account settings"))
+      const inputs = screen.getAllByRole("textbox")
+      expect(inputs[0]).toHaveFocus()
+      await userEvent.click(screen.getByText("Cancel"))
+      expect(screen.getByText("Edit account settings")).toHaveFocus()
+    })
     it("clicking the edit button opens the form, \nclicking submit opens modal on success,\n closing modal toggles display", async () => {
       const myAccountPatron = MyAccount.prototype.buildPatron({
         ...patron,
