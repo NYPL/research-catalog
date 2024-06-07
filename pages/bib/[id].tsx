@@ -1,5 +1,5 @@
 import Head from "next/head"
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { useRouter } from "next/router"
 import {
   Heading,
@@ -56,6 +56,7 @@ export default function BibPage({
   const [itemsLoading, setItemsLoading] = useState(false)
   const [itemFetchError, setItemFetchError] = useState(bib.showItemTableError)
   const [bibItems, setBibItems] = useState(bib.items)
+  const itemTableScrollRef = useRef<HTMLElement | null>(null)
 
   const { topDetails, bottomDetails, holdingsDetails } = new BibDetailsModel(
     discoveryBibResult,
@@ -80,7 +81,7 @@ export default function BibPage({
       const { items } = await response.json()
       setBibItems(items.map((item: SearchResultsItem) => new Item(item, bib)))
       setItemsLoading(false)
-      document.getElementById("item-table")?.scrollIntoView({
+      itemTableScrollRef.current?.scrollIntoView({
         behavior: "smooth",
       })
     } else {
@@ -110,7 +111,7 @@ export default function BibPage({
         <Heading level="h2">{bib.title}</Heading>
         <BibDetails key="top-details" details={topDetails} />
         {bib.showItemTable ? (
-          <Box id="item-table">
+          <Box id="item-table" ref={itemTableScrollRef}>
             <Heading
               data-testid="item-table-heading"
               level="h3"
