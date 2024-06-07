@@ -60,6 +60,12 @@ export default class Bib {
     return !this.isOnlyElectronicResources && this.hasPhysicalItems
   }
 
+  // Items should be shown but there are none set in the items attribute
+  // Likely a problem with the pagination offset query in the initial Bib fetch
+  get showItemTableError() {
+    return this.showItemTable && !this.items
+  }
+
   // Used to determine the Volume column text in the ItemTable
   get isArchiveCollection() {
     return (

@@ -1,10 +1,8 @@
 import type { ReactElement } from "react"
-import type { ParsedUrlQueryInput } from "querystring"
 
 import type Item from "./Item"
 import type { ItemTableParams } from "../types/itemTypes"
 import StatusLinks from "../components/ItemTable/StatusLinks"
-import { ITEM_BATCH_SIZE } from "../config/constants"
 
 /**
  * The ItemTable class converts a Bib's item data to the format
@@ -17,12 +15,12 @@ import { ITEM_BATCH_SIZE } from "../config/constants"
  * TODO: Remove this class and move functionality to Bib class
  */
 export default class ItemTableData {
-  items: Item[]
+  items?: Item[]
   inSearchResult: boolean
   isArchiveCollection: boolean
 
   constructor(items: Item[], itemTableParams: ItemTableParams) {
-    this.items = items
+    this.items = items || null
     this.inSearchResult = itemTableParams.inSearchResult || false
     this.isArchiveCollection = itemTableParams.isArchiveCollection
   }
@@ -56,7 +54,7 @@ export default class ItemTableData {
   }
 
   showVolumeColumn(): boolean {
-    return this.items.some((item) => item.volume) && !this.inSearchResult
+    return this.items?.some((item) => item.volume) && !this.inSearchResult
   }
 
   showStatusColumn(): boolean {

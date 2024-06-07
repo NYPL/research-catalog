@@ -52,7 +52,7 @@ export default function BibPage({
   const bib = new Bib(discoveryBibResult)
 
   const [itemsLoading, setItemsLoading] = useState(false)
-  const [itemFetchError, setItemFetchError] = useState(false)
+  const [itemFetchError, setItemFetchError] = useState(bib.showItemTableError)
   const [bibItems, setBibItems] = useState(bib.items)
 
   const { topDetails, bottomDetails, holdingsDetails } = new BibDetailsModel(
@@ -115,7 +115,7 @@ export default function BibPage({
               <Notification
                 data-testid="itemFetchErrorNotification"
                 notificationType="warning"
-                notificationContent="There was an error fetching items. Please try again with another query."
+                notificationContent="There was an error fetching items. Please try again with a different query."
                 noMargin
               />
             ) : (

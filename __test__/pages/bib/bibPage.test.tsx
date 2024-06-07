@@ -12,11 +12,6 @@ import {
 
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
-global.fetch = jest.fn().mockResolvedValue({
-  json: async () => "Items fetched",
-  status: 200,
-} as Response)
-
 describe("Bib Page with items", () => {
   beforeEach(() => {
     render(
@@ -49,6 +44,13 @@ describe("Bib Page with items", () => {
   })
 
   it("renders pagination when there are more than 20 items and updates the router on page button clicks", async () => {
+    global.fetch = jest.fn().mockImplementationOnce(() =>
+      Promise.resolve({
+        status: 200,
+        json: () => Promise.resolve({ success: true }),
+      })
+    )
+
     render(
       <BibPage
         discoveryBibResult={bibWithManyItems.resource}
