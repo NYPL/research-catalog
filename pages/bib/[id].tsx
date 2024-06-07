@@ -6,7 +6,7 @@ import {
   Pagination,
   SkeletonLoader,
   Box,
-  Notification,
+  Banner,
 } from "@nypl/design-system-react-components"
 
 import Layout from "../../src/components/Layout/Layout"
@@ -122,11 +122,10 @@ export default function BibPage({
             {itemsLoading ? (
               <SkeletonLoader showImage={false} />
             ) : itemFetchError ? (
-              <Notification
-                data-testid="itemFetchErrorNotification"
-                notificationType="warning"
-                notificationContent="There was an error fetching items. Please try again with a different query."
-                noMargin
+              <Banner
+                type="negative"
+                content="There was an error fetching items. Please try again with a different query."
+                mb="s"
               />
             ) : (
               <>
