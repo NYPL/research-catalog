@@ -56,7 +56,7 @@ export default function BibPage({
   const [itemsLoading, setItemsLoading] = useState(false)
   const [itemFetchError, setItemFetchError] = useState(bib.showItemTableError)
   const [bibItems, setBibItems] = useState(bib.items)
-  const itemTableScrollRef = useRef<HTMLElement | null>(null)
+  const itemTableScrollRef = useRef<HTMLDivElement>(null)
 
   const { topDetails, bottomDetails, holdingsDetails } = new BibDetailsModel(
     discoveryBibResult,
@@ -111,7 +111,7 @@ export default function BibPage({
         <Heading level="h2">{bib.title}</Heading>
         <BibDetails key="top-details" details={topDetails} />
         {bib.showItemTable ? (
-          <Box id="item-table" ref={itemTableScrollRef}>
+          <>
             <Heading
               data-testid="item-table-heading"
               level="h3"
@@ -120,38 +120,40 @@ export default function BibPage({
             >
               Items in the library and off-site
             </Heading>
-            {itemsLoading ? (
-              <SkeletonLoader showImage={false} />
-            ) : itemFetchError ? (
-              <Banner
-                type="negative"
-                content="There was an error fetching items. Please try again with a different query."
+            <Box id="item-table" ref={itemTableScrollRef}>
+              {itemsLoading ? (
+                <SkeletonLoader showImage={false} />
+              ) : itemFetchError ? (
+                <Banner
+                  type="negative"
+                  content="There was an error fetching items. Please try again with a different query."
+                />
+              ) : (
+                <>
+                  <Heading
+                    data-testid="item-table-displaying-text"
+                    level="h4"
+                    size="heading5"
+                    mb={{ base: "s", md: "m" }}
+                  >
+                    {buildItemTableDisplayingString(
+                      itemPage,
+                      bib.numPhysicalItems
+                    )}
+                  </Heading>
+                  <ItemTable itemTableData={itemTableData} />
+                </>
+              )}
+              <Pagination
+                id="bib-items-pagination"
+                initialPage={itemPage}
+                currentPage={itemPage}
+                pageCount={Math.ceil(bib.numPhysicalItems / ITEM_BATCH_SIZE)}
+                onPageChange={handlePageChange}
+                my="xl"
               />
-            ) : (
-              <>
-                <Heading
-                  data-testid="item-table-displaying-text"
-                  level="h4"
-                  size="heading5"
-                  mb={{ base: "s", md: "m" }}
-                >
-                  {buildItemTableDisplayingString(
-                    itemPage,
-                    bib.numPhysicalItems
-                  )}
-                </Heading>
-                <ItemTable itemTableData={itemTableData} />
-              </>
-            )}
-            <Pagination
-              id="bib-items-pagination"
-              initialPage={itemPage}
-              currentPage={itemPage}
-              pageCount={Math.ceil(bib.numPhysicalItems / ITEM_BATCH_SIZE)}
-              onPageChange={handlePageChange}
-              my="xl"
-            />
-          </Box>
+            </Box>
+          </>
         ) : null}
         <BibDetails
           heading="Details"
