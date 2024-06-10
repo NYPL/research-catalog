@@ -165,6 +165,8 @@ describe("AccountSettingsTab", () => {
       fireEvent.change(notificationPreferenceSelector, {
         target: { value: "p" },
       })
+      // now that phone is notification preference, but phone input is empty,
+      // user should not be able to save preferences.
       expect(saveButton).toBeDisabled()
     })
   })
