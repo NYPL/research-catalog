@@ -5,7 +5,7 @@ import {
 } from "./AccountSettingsUtils"
 import { processedPatron } from "../../../../__test__/fixtures/processedMyAccountData"
 import { formatDate } from "../../../utils/myAccountUtils"
-import type { Patron } from "../../../types/myAccountTypes"
+import type { FixedField, Patron } from "../../../types/myAccountTypes"
 
 describe("Account settings utils", () => {
   describe("formatDate", () => {
@@ -26,7 +26,7 @@ describe("Account settings utils", () => {
         name: "NONNA, STREGA",
         notificationPreference: "z",
         phones: [],
-      }
+      } as Patron
       const patronUpdateBody = {} as Patron
       expect(
         buildUpdatedPatronDisplayData(originalPatronData, patronUpdateBody)
@@ -42,10 +42,12 @@ describe("Account settings utils", () => {
         name: "NONNA, STREGA",
         notificationPreference: "z",
         phones: [{ number: "2129876543", type: "t" }],
-      }
+      } as Patron
       const patronUpdateBody = {
         emails: ["hey@you.com", "email@mail.com"],
-        fixedFields: { 268: { label: "Notice Preference", value: "p" } },
+        fixedFields: {
+          268: { label: "Notice Preference", value: "p" } as FixedField,
+        },
         homeLibraryCode: "mp   ",
         phones: [
           { number: "2129876543", type: "t" },
@@ -77,9 +79,11 @@ describe("Account settings utils", () => {
         name: "NONNA, STREGA",
         notificationPreference: "z",
         phones: [{ number: "2129876543", type: "t" }],
-      }
+      } as Patron
       const patronUpdateBody = {
-        fixedFields: { 268: { label: "Notice Preference", value: "p" } },
+        fixedFields: {
+          "268": { label: "Notice Preference", value: "p" } as FixedField,
+        },
         homeLibraryCode: "mp   ",
       }
       const { id, emails, phones, homeLibrary, notificationPreference } =

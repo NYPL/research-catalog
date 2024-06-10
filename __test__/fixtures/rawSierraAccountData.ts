@@ -1,3 +1,5 @@
+import { FixedField } from "../../src/types/myAccountTypes"
+
 export const filteredPickupLocations = [
   { code: "ft   ", name: "53rd Street" },
   { code: "fe   ", name: "58th Street" },
@@ -2039,7 +2041,7 @@ export const patron = {
     },
   ],
   fixedFields: {
-    268: { label: "notification preference", value: "z" },
+    "268": { label: "notification preference", value: "z" } as FixedField,
   },
 }
 

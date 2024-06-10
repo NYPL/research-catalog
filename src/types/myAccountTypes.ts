@@ -56,8 +56,10 @@ export interface SierraRecord {
   callNumber: string
 }
 
+export type FixedField = { label: string; value: "z" | "p" }
+
 export interface SierraPatron {
-  fixedFields?: Record<string, { label: string; value: string }>
+  fixedFields?: Record<"268", FixedField>
   id?: number
   names?: string[]
   barcodes?: string[]
@@ -110,17 +112,6 @@ export interface Patron {
   homeLibrary: SierraCodeName
   phones: Phone[]
   id: number
-}
-
-export interface SierraPatron {
-  fixedFields?: Record<string, { label: string; value: string }>
-  id?: number
-  names?: string[]
-  barcodes?: string[]
-  expirationDate?: string
-  emails?: string[]
-  homeLibrary?: SierraCodeName
-  phones?: { number: string; type: string }[]
 }
 
 export interface PatronUpdateBody extends Omit<SierraPatron, "homeLibrary"> {

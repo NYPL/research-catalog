@@ -1,3 +1,5 @@
+import type { Patron } from "../../src/types/myAccountTypes"
+
 export const processedPatron = {
   notificationPreference: "z",
   name: "Strega Nonna",
@@ -13,7 +15,7 @@ export const processedPatron = {
   ],
   homeLibrary: { code: "sn   ", name: "SNFL (formerly Mid-Manhattan)" },
   id: 6742743,
-}
+} as Patron
 
 export const emptyPatron = {
   notificationPreference: "z",
@@ -25,7 +27,7 @@ export const emptyPatron = {
   phones: [],
   homeLibrary: { code: "sn   ", name: "SNFL (formerly Mid-Manhattan)" },
   id: 6742743,
-}
+} as Patron
 
 export const processedCheckouts = [
   {
