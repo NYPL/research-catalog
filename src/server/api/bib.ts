@@ -138,7 +138,7 @@ export async function fetchBibItems(
   )
 
   if (viewAllItems) {
-    console.log("bibQueryString", qbibQueryString)
+    console.log("bibQueryString", bibQueryString)
   } else {
     items = bib?.items
   }
