@@ -1,4 +1,4 @@
-import { FixedField } from "../../src/types/myAccountTypes"
+import type { FixedField } from "../../src/types/myAccountTypes"
 
 export const filteredPickupLocations = [
   { code: "ft   ", name: "53rd Street" },
