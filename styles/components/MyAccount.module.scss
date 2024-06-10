@@ -42,18 +42,15 @@
 .modalHeading {
   display: flex;
   justify-content: flex-start;
+  align-items: center;
   gap: 10px;
   margin-bottom: 0 !important;
-  p {
-    margin-top: var(--nypl-space-s);
-    margin-bottom: 0;
-    font-size: var(--nypl-fontSizes-desktop-heading-heading5);
-    font-weight: var(--nypl-fontWeights-medium);
-    letter-spacing: normal;
-  }
-  svg {
-    margin-top: var(--nypl-space-s);
-  }
+  padding-top: var(--nypl-space-s);
+  font-weight: var(--nypl-fontWeights-medium);
+  letter-spacing: normal;
+}
+.string-only-heading {
+  padding-left: var(--nypl-space-l);
 }
 
 .modalBody {
@@ -61,6 +58,10 @@
   display: flex;
   flex-direction: column;
   padding-top: 0 !important;
+  p {
+    margin-left: var(--nypl-space-l);
+    margin-right: var(--nypl-space-m);
+  }
 }
 
 .notification {

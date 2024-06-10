@@ -4,13 +4,9 @@ import {
   Spacer,
   useModal,
   SkeletonLoader,
-  Box,
-  Heading,
-  Icon,
-  Link,
-  Text,
+  type TextInputRefType,
 } from "@nypl/design-system-react-components"
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import type { Patron } from "../../../types/myAccountTypes"
 import styles from "../../../../styles/components/MyAccount.module.scss"
 import AccountSettingsButtons from "./AccountSettingsButtons"
@@ -22,6 +18,10 @@ import {
   parseAccountSettingsPayload,
   buildUpdatedPatronDisplayData,
 } from "./AccountSettingsUtils"
+import {
+  successModalProps,
+  failureModalProps,
+} from "./SuccessAndFailureModalProps"
 
 const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
   const [currentlyEditing, setCurrentlyEditing] = useState(false)
@@ -31,65 +31,25 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
 
   const { onOpen: openModal, onClose: closeModal, Modal } = useModal()
 
-  const successModalProps = {
-    type: "default",
-    bodyContent: (
-      <Box className={styles.modalBody}>
-        <Text sx={{ marginLeft: "l" }}>
-          Your account settings were successfully updated.
-        </Text>
-      </Box>
-    ),
-    closeButtonLabel: "OK",
-    headingText: (
-      <Heading className={styles.modalHeading}>
-        <>
-          <Icon
-            size="large"
-            name="actionCheckCircleFilled"
-            color="ui.success.primary"
-          />
-          <Text sx={{ marginBottom: 0 }}> Update successful </Text>
-        </>
-      </Heading>
-    ),
-    onClose: closeModal,
-  }
-  const failureModalProps = {
-    type: "default",
-    bodyContent: (
-      <Box className={styles.modalBody}>
-        <Text sx={{ marginLeft: "l", marginRight: "m" }}>
-          We were unable to update your account settings. Please try again or{" "}
-          <Link href="https://www.nypl.org/get-help/contact-us">
-            contact us
-          </Link>{" "}
-          for assistance.
-        </Text>
-      </Box>
-    ),
-    closeButtonLabel: "OK",
-    headingText: (
-      <Heading className={styles.modalHeading}>
-        <>
-          <Icon size="large" name="errorFilled" color="ui.error.primary" />
-          <Text sx={{ marginBottom: 0 }}> Update failed </Text>
-        </>
-      </Heading>
-    ),
-    onClose: closeModal,
-  }
-
   const [isFormValid, setIsFormValid] = useState(false)
+
+  const editButtonRef = useRef<HTMLButtonElement>()
+  const firstInputRef = useRef<TextInputRefType>()
 
   const listElements = currentlyEditing ? (
     <AccountSettingsForm
+      firstInputRef={firstInputRef}
       patron={mostRecentPatronData}
       setIsFormValid={setIsFormValid}
     />
   ) : (
     <AccountSettingsDisplay patron={mostRecentPatronData} />
   )
+  useEffect(() => {
+    if (currentlyEditing) {
+      firstInputRef.current?.focus()
+    } else editButtonRef.current?.focus()
+  }, [currentlyEditing])
 
   const submitAccountSettings = async (e) => {
     e.preventDefault()
@@ -142,6 +102,7 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
         </List>
         <Spacer display={{ base: "none", md: "inline-block" }} />
         <AccountSettingsButtons
+          editButtonRef={editButtonRef}
           currentlyEditing={currentlyEditing}
           setCurrentlyEditing={setCurrentlyEditing}
           formValid={isFormValid}

@@ -4,7 +4,6 @@ import {
   Icon,
   useModal,
   Text,
-  Heading,
   Button,
   Select,
   Link as DSLink,
@@ -102,9 +101,9 @@ const UpdateLocation = ({
       } else setModalProps(failureModalProps as DefaultModalProps)
     },
     headingText: (
-      <Heading className={styles.modalHeading}>
-        <Text mb={0}> Where would you like to pick up this item? </Text>
-      </Heading>
+      <h5 className={styles.modalHeading}>
+        Where would you like to pick up this item?
+      </h5>
     ),
   })
 
@@ -116,7 +115,7 @@ const UpdateLocation = ({
     type: "default",
     bodyContent: (
       <Box className={styles.modalBody}>
-        <Text ml="l">
+        <Text>
           Your item will be available for pickup at the {newLocation.name}{" "}
           Library.
         </Text>
@@ -124,16 +123,16 @@ const UpdateLocation = ({
     ),
     closeButtonLabel: "OK",
     headingText: (
-      <Heading className={styles.modalHeading}>
+      <h5 className={styles.modalHeading}>
         <>
           <Icon
             size="large"
             name="actionCheckCircleFilled"
             color="ui.success.primary"
           />
-          <Text mb={0}> Location change successful </Text>
+          Location change successful
         </>
-      </Heading>
+      </h5>
     ),
     onClose: () => {
       updateHoldLocation(holdId, newLocation)
@@ -147,7 +146,7 @@ const UpdateLocation = ({
     type: "default",
     bodyContent: (
       <Box className={styles.modalBody}>
-        <Text ml="l" mr="m">
+        <Text>
           We were unable to change the pickup location. Please contact{" "}
           <DSLink href="https://www.nypl.org/get-help/contact-us">
             AskNYPL
@@ -166,12 +165,12 @@ const UpdateLocation = ({
     },
     closeButtonLabel: "OK",
     headingText: (
-      <Heading className={styles.modalHeading}>
+      <h5 className={styles.modalHeading}>
         <>
           <Icon size="large" name="errorFilled" color="ui.error.primary" />
-          <Text mb={0}>Location change failed</Text>
+          Location change failed
         </>
-      </Heading>
+      </h5>
     ),
   }
   return (

@@ -6,11 +6,11 @@ import {
   Icon,
   Button,
   Text,
-  Heading,
   SkeletonLoader,
 } from "@nypl/design-system-react-components"
 import { BASE_URL } from "../../../config/constants"
 import styles from "../../../../styles/components/MyAccount.module.scss"
+
 import type {
   BaseModalProps,
   ConfirmationModalProps,
@@ -33,7 +33,7 @@ const CancelButton = ({
       type: "default",
       bodyContent: (
         <Box className={styles.modalBody}>
-          <Text sx={{ marginLeft: "l", marginRight: "m" }}>
+          <Text>
             Your request for{" "}
             <span style={{ fontWeight: "var(--nypl-fontWeights-medium)" }}>
               {hold.title}
@@ -44,16 +44,16 @@ const CancelButton = ({
       ),
       closeButtonLabel: "OK",
       headingText: (
-        <Heading className={styles.modalHeading}>
+        <h5 className={styles.modalHeading}>
           <>
             <Icon
               size="large"
               name="actionCheckCircleFilled"
               color="ui.success.primary"
             />
-            <Text sx={{ marginBottom: 0 }}>Request canceled </Text>
+            Request canceled
           </>
-        </Heading>
+        </h5>
       ),
       // Close modal, remove hold from currentHolds so it disappears immediately.
       onClose: async () => {
@@ -68,7 +68,7 @@ const CancelButton = ({
       type: "default",
       bodyContent: (
         <Box className={styles.modalBody}>
-          <Text sx={{ marginLeft: "l", marginRight: "m" }}>
+          <Text>
             Your request for{" "}
             <span style={{ fontWeight: "var(--nypl-fontWeights-medium)" }}>
               {hold.title}
@@ -79,12 +79,12 @@ const CancelButton = ({
       ),
       closeButtonLabel: "OK",
       headingText: (
-        <Heading className={styles.modalHeading}>
+        <h5 className={styles.modalHeading}>
           <>
             <Icon size="large" name="errorFilled" color="ui.error.primary" />
-            <Text sx={{ marginBottom: 0 }}>Failed to cancel request </Text>
+            Failed to cancel request
           </>
-        </Heading>
+        </h5>
       ),
       onClose: closeModal(),
     }
@@ -110,11 +110,7 @@ const CancelButton = ({
       ),
       closeButtonLabel: "No, keep request",
       confirmButtonLabel: "Yes, cancel request",
-      headingText: (
-        <Heading className={styles.modalHeading}>
-          <Text sx={{ marginBottom: 0 }}>Cancel request?</Text>
-        </Heading>
-      ),
+      headingText: <h5 className={styles.modalHeading}>Cancel request?</h5>,
       onConfirm: async () => {
         setModalProps({
           ...checkModalProps(hold),

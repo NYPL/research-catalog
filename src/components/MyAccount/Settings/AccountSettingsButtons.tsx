@@ -1,23 +1,30 @@
-import { Icon, Button, ButtonGroup } from "@nypl/design-system-react-components"
-import type { Dispatch } from "react"
+import {
+  Icon,
+  Button,
+  ButtonGroup,
+  type TextInputRefType,
+} from "@nypl/design-system-react-components"
+import type { Dispatch, MutableRefObject } from "react"
 import styles from "../../../../styles/components/MyAccount.module.scss"
 
 interface AccountSettingsButtonsPropsType {
   currentlyEditing: boolean
   formValid: boolean
   setCurrentlyEditing: Dispatch<React.SetStateAction<boolean>>
+  editButtonRef: MutableRefObject<HTMLButtonElement>
 }
 
 const AccountSettingsButtons = ({
   currentlyEditing,
   formValid,
   setCurrentlyEditing,
+  editButtonRef,
 }: AccountSettingsButtonsPropsType) => {
   const toggleCurrentlyEditing = (doWeWantToEdit: boolean) =>
     setCurrentlyEditing(doWeWantToEdit)
-
   const editButton = (
     <Button
+      ref={editButtonRef}
       className={styles.settingsEditButton}
       id="edit-account-settings-button"
       buttonType="secondary"
