@@ -1,5 +1,6 @@
 import Head from "next/head"
-import { useState, useRef, SyntheticEvent } from "react"
+import type { SyntheticEvent } from "react";
+import { useState, useRef } from "react"
 import { useRouter } from "next/router"
 import {
   Heading,

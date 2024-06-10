@@ -2,12 +2,14 @@ import BibPage from "./index"
 import { fetchBib } from "../../../src/server/api/bib"
 import initializePatronTokenAuth from "../../../src/server/auth"
 import { PATHS } from "../../../src/config/constants"
+
 export default BibPage
 
 export async function getServerSideProps({ params, query, req }) {
   const { id } = params
+  const newQuery = { ...query, view_all_items: true }
   const { discoveryBibResult, annotatedMarc, status, redirectUrl } =
-    await fetchBib(id, query)
+    await fetchBib(id, newQuery)
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const isAuthenticated = patronTokenResponse.isTokenValid
 
