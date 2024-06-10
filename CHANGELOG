@@ -21,6 +21,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Extracted getEmailParams from Feedback API route and added test (SCC-4032)
 - Replaced all modals with new 'confirmation'/'default' variant (SCC-4110)
 
+### Fixed
+
+- Fixed mobile tabs width on My Account page so text is readable when a user zooms in.
+
 ## Hotfixes 2024-05-22
 
 - Fix bug caused by advanced search query parameters not clearing when search scope is set to anything other than "all"

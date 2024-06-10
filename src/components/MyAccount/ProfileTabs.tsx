@@ -113,7 +113,11 @@ const ProfileTabs = ({
         updatePath(tabsData[index].urlPath)
       }}
       tabsData={tabsData}
-      sx={{ "div[role=tabpanel]": { padding: 0 }, marginBottom: "xxl" }}
+      sx={{
+        "div[role=tabpanel]": { padding: 0 },
+        marginBottom: "xxl",
+        width: { base: "80%", md: "100%" },
+      }}
     />
   )
 }
