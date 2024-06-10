@@ -43,10 +43,7 @@ export const AccountSettingsForm = ({
   const [formData, setFormData] = useState({
     phones: patron.phones[0]?.number,
     emails: patron.emails[0],
-    notificationPreference:
-      notificationPreferenceTuples.find(
-        (pref) => pref[1] === patron.notificationPreference
-      ) || notificationPreferenceTuples[0],
+    notificationPreference: patron.notificationPreference[0],
   })
 
   const handleInputChange = (e) => {

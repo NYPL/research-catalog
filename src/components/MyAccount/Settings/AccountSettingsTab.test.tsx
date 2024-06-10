@@ -118,15 +118,18 @@ describe("AccountSettingsTab", () => {
         ...patron,
       })
       render(<AccountSettingsTab settingsData={myAccountPatron} />)
+      // open account settings
       await userEvent.click(screen.getByText("Edit account settings"))
       const saveButton = screen
         .getByText("Save Changes", { exact: false })
         .closest("button")
       expect(saveButton).not.toBeDisabled()
+      // confirm patron has email ("z") selected
       expect(
         screen.getByLabelText("Update notification preference")
       ).toHaveValue("z")
       const emailField = screen.getByLabelText("Update email")
+      // update email to empty string
       fireEvent.change(emailField, { target: { value: "" } })
 
       expect(saveButton).toBeDisabled()
@@ -163,8 +166,6 @@ describe("AccountSettingsTab", () => {
         target: { value: "p" },
       })
       expect(saveButton).toBeDisabled()
-      await userEvent.click(screen.getByText("Save Changes"))
-      await userEvent.click(screen.getAllByText("OK")[0])
     })
   })
 })

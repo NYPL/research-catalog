@@ -1,5 +1,5 @@
 export const processedPatron = {
-  notificationPreference: "Email",
+  notificationPreference: "z",
   name: "Strega Nonna",
   barcode: "23333121538324",
   formattedBarcode: "2 3333 12153 8324",
@@ -16,7 +16,7 @@ export const processedPatron = {
 }
 
 export const emptyPatron = {
-  notificationPreference: "Email",
+  notificationPreference: "z",
   name: "Strega Nonna",
   barcode: "23333121538324",
   formattedBarcode: "2 3333 12153 8324",

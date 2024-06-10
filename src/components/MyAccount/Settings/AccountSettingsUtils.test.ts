@@ -19,13 +19,13 @@ describe("Account settings utils", () => {
       const originalPatronData = {
         formattedBarcode: undefined,
         barcode: "1234567890",
-        emails: ["email@mail.com"],
+        emails: [],
         expirationDate: "2025-03-28",
         homeLibrary: { code: "sn   ", name: "SNFL (formerly Mid-Manhattan)" },
         id: 2772226,
         name: "NONNA, STREGA",
-        notificationPreference: "Email",
-        phones: [{ number: "2129876543", type: "t" }],
+        notificationPreference: "z",
+        phones: [],
       }
       const patronUpdateBody = {} as Patron
       expect(
@@ -40,7 +40,7 @@ describe("Account settings utils", () => {
         homeLibrary: { code: "mp   ", name: "SNFL (formerly Mid-Manhattan)" },
         id: 2772226,
         name: "NONNA, STREGA",
-        notificationPreference: "Email",
+        notificationPreference: "z",
         phones: [{ number: "2129876543", type: "t" }],
       }
       const patronUpdateBody = {
@@ -63,7 +63,7 @@ describe("Account settings utils", () => {
         { number: "2129876543", type: "t" },
         { number: "1234567890", type: "t" },
       ])
-      expect(notificationPreference).toEqual("Phone")
+      expect(notificationPreference).toEqual("p")
       expect(homeLibrary).toStrictEqual({ code: "mp   ", name: "Morris Park" })
       expect(id).toEqual(originalPatronData.id)
     })
@@ -75,7 +75,7 @@ describe("Account settings utils", () => {
         homeLibrary: { code: "sn   ", name: "SNFL (formerly Mid-Manhattan)" },
         id: 2772226,
         name: "NONNA, STREGA",
-        notificationPreference: "Email",
+        notificationPreference: "z",
         phones: [{ number: "2129876543", type: "t" }],
       }
       const patronUpdateBody = {
@@ -91,7 +91,7 @@ describe("Account settings utils", () => {
       expect(emails).toStrictEqual(originalPatronData.emails)
       expect(phones).toStrictEqual(originalPatronData.phones)
       expect(homeLibrary).toEqual({ code: "mp   ", name: "Morris Park" })
-      expect(notificationPreference).toEqual("Phone")
+      expect(notificationPreference).toEqual("p")
       expect(id).toEqual(originalPatronData.id)
     })
   })

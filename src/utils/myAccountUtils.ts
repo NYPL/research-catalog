@@ -362,8 +362,7 @@ export function formatDate(date: string | number | Date) {
 // this method has to live here so it can be imported into the front end without
 // importing the MyAccount files.
 export const buildPatron = (patron: SierraPatron): Patron => {
-  const notificationPreference =
-    notificationPreferenceMap[patron.fixedFields?.["268"].value]
+  const notificationPreference = patron.fixedFields?.["268"].value
   return {
     notificationPreference,
     name: formatPatronName(patron.names?.[0]),

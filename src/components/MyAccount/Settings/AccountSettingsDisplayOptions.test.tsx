@@ -27,7 +27,7 @@ describe("AccountSettingsDisplayOptions", () => {
     beforeEach(() => {
       render(
         <AccountSettingsDisplay
-          patron={{ ...processedPatron, notificationPreference: "Mobile" }}
+          patron={{ ...processedPatron, notificationPreference: "p" }}
         />
       )
     })
@@ -36,7 +36,7 @@ describe("AccountSettingsDisplayOptions", () => {
       expect(homeLibrary).toBeInTheDocument()
     })
     it("displays a selector with patron's notification selected", () => {
-      const notificationPreference = screen.getByText("Mobile")
+      const notificationPreference = screen.getByText("Phone")
       expect(notificationPreference).toBeInTheDocument()
     })
     it("displays a text input with patron's primary email displayed", () => {
