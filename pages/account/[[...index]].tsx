@@ -35,7 +35,6 @@ export default function MyAccount({
   tabsPath,
 }: MyAccountPropsType) {
   const errorRetrievingPatronData = !patron
-
   return (
     <>
       <Head>
@@ -50,7 +49,7 @@ export default function MyAccount({
           </Text>
         ) : (
           <>
-            {fines.total > 0 && <FeesBanner />}
+            {fines?.total > 0 && <FeesBanner />}
             <ProfileHeader patron={patron} />
             <ProfileTabs
               patron={patron}
@@ -95,7 +94,7 @@ export async function getServerSideProps({ req }) {
       const allowedPaths = ["items", "requests", "overdues", "settings"]
       if (
         !allowedPaths.some((path) => tabsPath.startsWith(path)) ||
-        (tabsPath === "overdues" && fines.total === 0)
+        (tabsPath === "overdues" && fines?.total === 0)
       ) {
         return {
           redirect: {

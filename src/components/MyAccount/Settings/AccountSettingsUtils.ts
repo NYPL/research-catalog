@@ -48,7 +48,7 @@ export const accountSettings = [
     icon: "communicationChatBubble",
     term: "Notification preference",
     description: (pref): [code: string, label: string] =>
-      notificationPreferenceTuples.find(([code]) => pref === code),
+      notificationPreferenceTuples.find(([code]) => pref === code)[1],
   },
   {
     field: "homeLibrary",
