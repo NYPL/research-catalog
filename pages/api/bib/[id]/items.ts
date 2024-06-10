@@ -9,6 +9,7 @@ import { fetchBib } from "../../../../src/server/api/bib"
  */
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const id = req.query.id as string
+  console.log(req.query)
   const { discoveryBibResult, status } = await fetchBib(id, req.query)
   const items = discoveryBibResult?.items
 

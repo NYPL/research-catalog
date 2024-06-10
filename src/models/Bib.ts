@@ -1,6 +1,7 @@
 import type { DiscoveryBibResult, ElectronicResource } from "../types/bibTypes"
 import type { JSONLDValue } from "../types/itemTypes"
 import Item from "../models/Item"
+import { ITEM_BATCH_SIZE, ITEMS_PER_SEARCH_RESULT } from "../config/constants"
 
 /**
  * The Bib class represents a single Bib entity and contains the data
@@ -64,6 +65,20 @@ export default class Bib {
   // Likely a problem with the pagination offset query in the initial Bib fetch
   get showItemTableError() {
     return this.showItemTable && !this.items
+  }
+
+  get showViewAllItemsLink() {
+    return this.numPhysicalItems > ITEM_BATCH_SIZE
+  }
+
+  get resourceType() {
+    return this.hasPhysicalItems ? "Item" : "Resource"
+  }
+
+  get itemMessage() {
+    return `${this.numItems} ${this.resourceType}${
+      this.numItems !== 1 ? "s" : ""
+    }`
   }
 
   // Used to determine the Volume column text in the ItemTable

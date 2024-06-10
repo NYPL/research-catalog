@@ -1,5 +1,5 @@
 import Head from "next/head"
-import { useState, useRef } from "react"
+import { useState, useRef, SyntheticEvent } from "react"
 import { useRouter } from "next/router"
 import {
   Heading,
@@ -9,35 +9,38 @@ import {
   Banner,
 } from "@nypl/design-system-react-components"
 
-import Layout from "../../src/components/Layout/Layout"
+import Layout from "../../../src/components/Layout/Layout"
 import {
   PATHS,
   ITEM_BATCH_SIZE,
   SITE_NAME,
   BASE_URL,
-} from "../../src/config/constants"
-import { fetchBib } from "../../src/server/api/bib"
-import { getBibQueryString } from "../../src/utils/bibUtils"
-import { buildItemTableDisplayingString } from "../../src/utils/bibUtils"
-import BibDetailsModel from "../../src/models/BibDetails"
-import ItemTableData from "../../src/models/ItemTableData"
-import BibDetails from "../../src/components/BibPage/BibDetail"
-import ItemTable from "../../src/components/ItemTable/ItemTable"
+} from "../../../src/config/constants"
+import { fetchBib } from "../../../src/server/api/bib"
+import { getBibQueryString } from "../../../src/utils/bibUtils"
+import { buildItemTableDisplayingString } from "../../../src/utils/bibUtils"
+import BibDetailsModel from "../../../src/models/BibDetails"
+import ItemTableData from "../../../src/models/ItemTableData"
+import BibDetails from "../../../src/components/BibPage/BibDetail"
+import ItemTable from "../../../src/components/ItemTable/ItemTable"
 import type {
   DiscoveryBibResult,
   BibQueryParams,
-} from "../../src/types/bibTypes"
-import type { AnnotatedMarc } from "../../src/types/bibDetailsTypes"
-import Bib from "../../src/models/Bib"
-import initializePatronTokenAuth from "../../src/server/auth"
-import Item from "../../src/models/Item"
-import type { SearchResultsItem } from "../../src/types/itemTypes"
+} from "../../../src/types/bibTypes"
+import type { AnnotatedMarc } from "../../../src/types/bibDetailsTypes"
+import Bib from "../../../src/models/Bib"
+import initializePatronTokenAuth from "../../../src/server/auth"
+import Item from "../../../src/models/Item"
+import type { SearchResultsItem } from "../../../src/types/itemTypes"
+import RCLink from "../../../src/components/Links/RCLink/RCLink"
+import { ParsedUrlQueryInput } from "querystring"
 
 interface BibPropsType {
   discoveryBibResult: DiscoveryBibResult
   annotatedMarc: AnnotatedMarc
   isAuthenticated?: boolean
   itemPage?: number
+  viewAllItems?: boolean
 }
 
 /**
@@ -48,6 +51,7 @@ export default function BibPage({
   annotatedMarc,
   isAuthenticated,
   itemPage = 1,
+  viewAllItems = false,
 }: BibPropsType) {
   const { pathname, push, query } = useRouter()
   const metadataTitle = `Item Details | ${SITE_NAME}`
@@ -55,6 +59,7 @@ export default function BibPage({
 
   const [itemsLoading, setItemsLoading] = useState(false)
   const [itemFetchError, setItemFetchError] = useState(bib.showItemTableError)
+  const [viewAllEnabled, setViewAllEnabled] = useState(viewAllItems)
   const [bibItems, setBibItems] = useState(bib.items)
   const itemTableScrollRef = useRef<HTMLDivElement>(null)
 
@@ -67,13 +72,23 @@ export default function BibPage({
     isArchiveCollection: bib.isArchiveCollection,
   })
 
-  const refreshItemTable = async (newQuery: BibQueryParams) => {
+  const refreshItemTable = async (
+    newQuery: BibQueryParams,
+    viewAllItems = false
+  ) => {
     setItemsLoading(true)
     setItemFetchError(false)
-    await push({ pathname, query: { ...newQuery } }, undefined, {
-      shallow: true,
-    })
-    const bibQueryString = getBibQueryString(newQuery)
+    await push(
+      {
+        pathname: `${pathname}${viewAllItems ? "/all" : ""}`,
+        query: { ...newQuery },
+      },
+      undefined,
+      {
+        shallow: true,
+      }
+    )
+    const bibQueryString = getBibQueryString(newQuery, false, viewAllItems)
     const response = await fetch(
       `${BASE_URL}/api/bib/${bib.id}/items?${bibQueryString}`
     )
@@ -93,6 +108,20 @@ export default function BibPage({
     const newQuery = { ...query, item_page: page }
     if (page === 1) delete newQuery.item_page
     await refreshItemTable(newQuery)
+  }
+
+  const handleViewAll = async (e: SyntheticEvent) => {
+    e.preventDefault()
+    let newQuery: BibQueryParams
+    setViewAllEnabled((viewAllEnabled) => !viewAllEnabled)
+    if (viewAllEnabled) {
+      newQuery = query
+      await refreshItemTable(newQuery)
+    } else {
+      newQuery = query
+      delete newQuery.item_page
+      await refreshItemTable(newQuery, true)
+    }
   }
 
   return (
@@ -144,14 +173,36 @@ export default function BibPage({
                   <ItemTable itemTableData={itemTableData} />
                 </>
               )}
-              <Pagination
-                id="bib-items-pagination"
-                initialPage={itemPage}
-                currentPage={itemPage}
-                pageCount={Math.ceil(bib.numPhysicalItems / ITEM_BATCH_SIZE)}
-                onPageChange={handlePageChange}
-                my="xl"
-              />
+              <Box>
+                {!viewAllEnabled ? (
+                  <Pagination
+                    id="bib-items-pagination"
+                    initialPage={itemPage}
+                    currentPage={itemPage}
+                    pageCount={Math.ceil(
+                      bib.numPhysicalItems / ITEM_BATCH_SIZE
+                    )}
+                    onPageChange={handlePageChange}
+                    my="xl"
+                  />
+                ) : null}
+                {bib.showViewAllItemsLink && (
+                  <RCLink
+                    href={`${bib.url}${!viewAllEnabled ? "/all" : ""}`}
+                    onClick={handleViewAll}
+                    fontSize={{
+                      base: "mobile.body.body2",
+                      md: "desktop.body.body2",
+                    }}
+                    fontWeight="medium"
+                    type="standalone"
+                  >
+                    {viewAllEnabled
+                      ? "View Less"
+                      : `View All ${bib.itemMessage} `}
+                  </RCLink>
+                )}
+              </Box>
             </Box>
           </>
         ) : null}

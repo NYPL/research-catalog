@@ -65,7 +65,8 @@ export function isNyplBibID(id: string) {
  */
 export function getBibQueryString(
   bibQuery: BibQueryParams,
-  includeAnnotatedMarc = false
+  includeAnnotatedMarc = false,
+  viewAllItems = false
 ): string {
   let itemsFrom = bibQuery?.items_from || 0
   const itemPage = bibQuery?.item_page || 1
@@ -90,7 +91,7 @@ export function getBibQueryString(
     itemQueries.push("merge_checkin_card_items=true")
   }
 
-  return itemQueries.length
-    ? queryBase + `?${itemQueries.join("&")}`
-    : queryBase
+  return `${queryBase}?${itemQueries.length ? itemQueries.join("&") : ""}${
+    viewAllItems ? "&view_all_items=true" : ""
+  }`
 }

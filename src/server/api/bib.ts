@@ -18,8 +18,9 @@ export async function fetchBib(
   bibQuery?: BibQueryParams
 ): Promise<BibResponse> {
   const standardizedId = standardizeBibId(id)
-  const bibQueryString = getBibQueryString({ ...bibQuery, id: standardizedId })
 
+  const bibQueryString = getBibQueryString({ ...bibQuery, id: standardizedId })
+  console.log(bibQueryString)
   // Redirect to Bib page with standardized version of the Bib ID
   if (id !== standardizedId) {
     return {
