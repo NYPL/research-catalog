@@ -9,9 +9,12 @@ import {
   DISCOVERY_API_NAME,
   DISCOVERY_API_SEARCH_ROUTE,
   SHEP_HTTP_TIMEOUT,
+  ITEM_VIEW_ALL_BATCH_SIZE,
+  ITEM_BATCH_SIZE,
 } from "../../config/constants"
 import { appConfig } from "../../config/config"
 import logger from "../../../logger"
+import type { SearchResultsItem } from "../../types/itemTypes"
 
 export async function fetchBib(
   id: string,
@@ -20,7 +23,6 @@ export async function fetchBib(
   const standardizedId = standardizeBibId(id)
 
   const bibQueryString = getBibQueryString({ ...bibQuery, id: standardizedId })
-  console.log(bibQueryString)
   // Redirect to Bib page with standardized version of the Bib ID
   if (id !== standardizedId) {
     return {
@@ -118,4 +120,27 @@ async function fetchBibSubjectHeadings(bibId: string) {
   } finally {
     clearTimeout(timeoutId)
   }
+}
+
+export async function fetchBibItems(
+  id: string,
+  bibQuery?: BibQueryParams,
+  viewAllItems = false
+): Promise<SearchResultsItem[]> {
+  let items: SearchResultsItem[] = []
+  const client = await nyplApiClient({ apiName: DISCOVERY_API_NAME })
+  const batchSize = viewAllItems ? ITEM_VIEW_ALL_BATCH_SIZE : ITEM_BATCH_SIZE
+  const standardizedId = standardizeBibId(id)
+  const bibQueryString = getBibQueryString({ ...bibQuery, id: standardizedId })
+
+  const bib = await client.get(
+    `${DISCOVERY_API_SEARCH_ROUTE}/${bibQueryString}`
+  )
+
+  if (viewAllItems) {
+    console.log("bibQueryString", qbibQueryString)
+  } else {
+    items = bib?.items
+  }
+  return items
 }
