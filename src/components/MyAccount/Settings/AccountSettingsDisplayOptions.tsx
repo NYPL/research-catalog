@@ -101,7 +101,11 @@ export const AccountSettingsForm = ({
                 value={formData.notificationPreference}
               >
                 {notificationPreferenceTuples.map((pref) => (
-                  <option key={pref + "-option"} value={pref[0]}>
+                  <option
+                    data-testid="notification-preference-option"
+                    key={pref + "-option"}
+                    value={pref[0]}
+                  >
                     {pref[1]}
                   </option>
                 ))}
