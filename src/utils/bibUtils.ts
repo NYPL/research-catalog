@@ -77,9 +77,6 @@ export function getBibQueryString(
     .join("&")
 
   const itemQueries = []
-  const queryBase = includeAnnotatedMarc
-    ? `${bibQuery.id}.annotated-marc`
-    : bibQuery.id
 
   // Add items_size and items_from params when itemsFrom is defined, even when 0.
   if (typeof itemsFrom !== "undefined")
@@ -90,7 +87,5 @@ export function getBibQueryString(
     itemQueries.push("merge_checkin_card_items=true")
   }
 
-  return itemQueries.length
-    ? queryBase + `?${itemQueries.join("&")}`
-    : queryBase
+  return itemQueries.length ? `?${itemQueries.join("&")}` : ""
 }

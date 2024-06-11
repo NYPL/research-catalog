@@ -74,6 +74,10 @@ export default function BibPage({
       shallow: true,
     })
     const bibQueryString = getBibQueryString(newQuery)
+    console.log(
+      "query",
+      `${BASE_URL}/api/bib/${bib.id}/items?${bibQueryString}`
+    )
     const response = await fetch(
       `${BASE_URL}/api/bib/${bib.id}/items?${bibQueryString}`
     )
