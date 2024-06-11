@@ -9,7 +9,6 @@ import {
   buildPatron,
   notificationPreferenceTuples,
 } from "../../../utils/myAccountUtils"
-import { filteredPickupLocations } from "../../../utils/myAccountUtils"
 
 type Phone = { number: string; type: string }
 type PhoneOrEmail = string | Phone
@@ -26,9 +25,6 @@ export const isFormValid = (updatedForm: {
     return updatedForm.emails !== ""
   } else return true
 }
-
-export const getLibraryByCode = (code) =>
-  filteredPickupLocations.find((loc) => loc.code.trim() === code.trim())
 
 export const accountSettings = [
   {
