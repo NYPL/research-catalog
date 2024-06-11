@@ -5,14 +5,26 @@ import type {
   SierraPatron,
 } from "../../../types/myAccountTypes"
 
-import { buildPatron } from "../../../utils/myAccountUtils"
-import { filteredPickupLocations } from "../../../utils/myAccountUtils"
+import {
+  buildPatron,
+  notificationPreferenceTuples,
+} from "../../../utils/myAccountUtils"
 
 type Phone = { number: string; type: string }
 type PhoneOrEmail = string | Phone
 
-export const getLibraryByCode = (code) =>
-  filteredPickupLocations.find((loc) => loc.code.trim() === code.trim())
+export const isFormValid = (updatedForm: {
+  emails: string
+  phones: string
+  notificationPreference: string
+}) => {
+  const phoneRegex = /^(?:\D*\d){10}\D*$/
+  if (updatedForm.notificationPreference === "p") {
+    return updatedForm.phones !== "" && phoneRegex.test(updatedForm.phones)
+  } else if (updatedForm.notificationPreference === "z") {
+    return updatedForm.emails !== ""
+  } else return true
+}
 
 export const accountSettings = [
   {
@@ -31,6 +43,8 @@ export const accountSettings = [
     field: "notificationPreference",
     icon: "communicationChatBubble",
     term: "Notification preference",
+    description: (pref): [code: string, label: string] =>
+      notificationPreferenceTuples.find(([code]) => pref === code)[1],
   },
   {
     field: "homeLibrary",

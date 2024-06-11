@@ -4,13 +4,19 @@ import MyAccount from "../../../models/MyAccount"
 import { fireEvent, render, screen } from "../../../utils/testUtils"
 import * as helpers from "../../../../pages/api/account/helpers"
 import userEvent from "@testing-library/user-event"
+import { filteredPickupLocations } from "../../../../__test__/fixtures/processedMyAccountData"
 
 jest.spyOn(helpers, "updatePatronSettings")
 
 describe("AccountSettingsTab", () => {
   it("can render a complete patron", () => {
     const myAccountPatron = MyAccount.prototype.buildPatron(patron)
-    render(<AccountSettingsTab settingsData={myAccountPatron} />)
+    render(
+      <AccountSettingsTab
+        pickupLocations={filteredPickupLocations}
+        settingsData={myAccountPatron}
+      />
+    )
 
     const emailLabel = screen.getAllByText("Email")[0]
     const email = screen.getByText("streganonna@gmail.com")
@@ -38,7 +44,12 @@ describe("AccountSettingsTab", () => {
       emails: [],
       phones: [],
     })
-    render(<AccountSettingsTab settingsData={myAccountPatron} />)
+    render(
+      <AccountSettingsTab
+        pickupLocations={filteredPickupLocations}
+        settingsData={myAccountPatron}
+      />
+    )
     ;["Notification preference", "Home library", "Pin/Password"].forEach(
       (patronInfo) => {
         const element = screen.queryByText(patronInfo)
@@ -67,7 +78,12 @@ describe("AccountSettingsTab", () => {
       const myAccountPatron = MyAccount.prototype.buildPatron({
         ...patron,
       })
-      render(<AccountSettingsTab settingsData={myAccountPatron} />)
+      render(
+        <AccountSettingsTab
+          pickupLocations={filteredPickupLocations}
+          settingsData={myAccountPatron}
+        />
+      )
       await userEvent.click(screen.getByText("Edit account settings"))
       const inputs = screen.getAllByRole("textbox")
       expect(inputs[0]).toHaveFocus()
@@ -78,7 +94,12 @@ describe("AccountSettingsTab", () => {
       const myAccountPatron = MyAccount.prototype.buildPatron({
         ...patron,
       })
-      render(<AccountSettingsTab settingsData={myAccountPatron} />)
+      render(
+        <AccountSettingsTab
+          pickupLocations={filteredPickupLocations}
+          settingsData={myAccountPatron}
+        />
+      )
       // open account settings
       await userEvent.click(screen.getByText("Edit account settings"))
       // verify inputs are present
@@ -101,7 +122,12 @@ describe("AccountSettingsTab", () => {
       const myAccountPatron = MyAccount.prototype.buildPatron({
         ...patron,
       })
-      render(<AccountSettingsTab settingsData={myAccountPatron} />)
+      render(
+        <AccountSettingsTab
+          pickupLocations={filteredPickupLocations}
+          settingsData={myAccountPatron}
+        />
+      )
       await userEvent.click(screen.getByText("Edit account settings"))
       await userEvent.click(screen.getByText("Save Changes"))
       expect(
@@ -117,14 +143,24 @@ describe("AccountSettingsTab", () => {
       const myAccountPatron = MyAccount.prototype.buildPatron({
         ...patron,
       })
-      render(<AccountSettingsTab settingsData={myAccountPatron} />)
+      render(
+        <AccountSettingsTab
+          pickupLocations={filteredPickupLocations}
+          settingsData={myAccountPatron}
+        />
+      )
+      // open account settings
       await userEvent.click(screen.getByText("Edit account settings"))
       const saveButton = screen
         .getByText("Save Changes", { exact: false })
         .closest("button")
       expect(saveButton).not.toBeDisabled()
-
+      // confirm patron has email ("z") selected
+      expect(
+        screen.getByLabelText("Update notification preference")
+      ).toHaveValue("z")
       const emailField = screen.getByLabelText("Update email")
+      // update email to empty string
       fireEvent.change(emailField, { target: { value: "" } })
 
       expect(saveButton).toBeDisabled()
@@ -132,6 +168,42 @@ describe("AccountSettingsTab", () => {
       expect(saveButton).not.toBeDisabled()
       await userEvent.click(screen.getByText("Save Changes"))
       await userEvent.click(screen.getAllByText("OK")[0])
+    })
+    it("prevents users from submitting empty fields after changing notification preference", async () => {
+      const myAccountPatron = MyAccount.prototype.buildPatron({
+        ...patron,
+      })
+      render(
+        <AccountSettingsTab
+          pickupLocations={filteredPickupLocations}
+          settingsData={myAccountPatron}
+        />
+      )
+      // open account settings
+      await userEvent.click(screen.getByText("Edit account settings"))
+      const saveButton = screen
+        .getByText("Save Changes", { exact: false })
+        .closest("button")
+      expect(saveButton).not.toBeDisabled()
+      const notificationPreferenceSelector = screen.getByLabelText(
+        "Update notification preference"
+      )
+      expect(
+        screen.getByLabelText("Update notification preference")
+      ).toHaveValue("z")
+      // update phone number to empty
+      const phoneField = screen.getByLabelText("Update phone number")
+      fireEvent.change(phoneField, { target: { value: "" } })
+      // save button should be enabled because email is still selected as
+      // notification preference
+      expect(saveButton).not.toBeDisabled()
+      // make phone the prefered notifier
+      fireEvent.change(notificationPreferenceSelector, {
+        target: { value: "p" },
+      })
+      // now that phone is notification preference, but phone input is empty,
+      // user should not be able to save preferences.
+      expect(saveButton).toBeDisabled()
     })
   })
 })
