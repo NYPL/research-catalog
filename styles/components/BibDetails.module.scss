@@ -1,10 +1,8 @@
-@import "../utils/mixins";
-
 .bibDetails {
-  border-bottom: none;
-  dl > dt,
-  dl > dd {
-    border: none;
+  dl dt,
+  dl dd {
+    padding-top: 0;
+    padding-bottom: 0;
   }
   h3 {
     border: none;

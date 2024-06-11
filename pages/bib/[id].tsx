@@ -32,6 +32,9 @@ import Bib from "../../src/models/Bib"
 import initializePatronTokenAuth from "../../src/server/auth"
 import Item from "../../src/models/Item"
 import type { SearchResultsItem } from "../../src/types/itemTypes"
+import ElectronicResourcesLink from "../../src/components/SearchResults/ElectronicResourcesLink"
+import ExternalLink from "../../src/components/Links/ExternalLink/ExternalLink"
+import { appConfig } from "../../src/config/config"
 
 interface BibPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -52,6 +55,7 @@ export default function BibPage({
   const { pathname, push, query } = useRouter()
   const metadataTitle = `Item Details | ${SITE_NAME}`
   const bib = new Bib(discoveryBibResult)
+  const displayCatalogLink = !!bib.id.startsWith("b")
 
   const [itemsLoading, setItemsLoading] = useState(false)
   const [itemFetchError, setItemFetchError] = useState(bib.showItemTableError)
@@ -108,18 +112,31 @@ export default function BibPage({
         <title key="main-title">{metadataTitle}</title>
       </Head>
       <Layout isAuthenticated={isAuthenticated} activePage="bib">
-        <Heading level="h2">{bib.title}</Heading>
+        <Heading level="h2" size="heading3">
+          {bib.title}
+        </Heading>
         <BibDetails key="top-details" details={topDetails} />
+        <ElectronicResourcesLink
+          bibUrl={bib.url}
+          electronicResources={bib.electronicResources}
+          inSearchResults={false}
+        />
         {bib.showItemTable ? (
           <>
             <Heading
               data-testid="item-table-heading"
               level="h3"
               size="heading4"
-              mb={{ base: "s", md: "m" }}
+              mt="l"
+              mb="s"
             >
               Items in the library and off-site
             </Heading>
+            <Banner
+              content="How do I request and pick up research materials for on-site use?"
+              isDismissible
+              mb="s"
+            />
             <Box id="item-table" ref={itemTableScrollRef}>
               {itemsLoading ? (
                 <SkeletonLoader showImage={false} />
@@ -133,8 +150,8 @@ export default function BibPage({
                   <Heading
                     data-testid="item-table-displaying-text"
                     level="h4"
-                    size="heading5"
-                    mb={{ base: "s", md: "m" }}
+                    size="heading6"
+                    mb="s"
                   >
                     {buildItemTableDisplayingString(
                       itemPage,
@@ -156,15 +173,24 @@ export default function BibPage({
           </>
         ) : null}
         <BibDetails
-          heading="Details"
-          key="bottom-details"
-          details={bottomDetails}
-        />
-        <BibDetails
           heading="Holdings"
           key="holdings-details"
           details={holdingsDetails}
         />
+        <BibDetails
+          heading="Details"
+          key="bottom-details"
+          details={bottomDetails}
+        />
+        {displayCatalogLink ? (
+          <ExternalLink
+            id="legacy-catalog-link"
+            href={`${appConfig.urls.legacyCatalog}/record=${bib.id}`}
+            type="standalone"
+          >
+            View in legacy catalog
+          </ExternalLink>
+        ) : null}
       </Layout>
     </>
   )
