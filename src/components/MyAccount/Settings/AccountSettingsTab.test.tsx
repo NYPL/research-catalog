@@ -4,13 +4,19 @@ import MyAccount from "../../../models/MyAccount"
 import { fireEvent, render, screen } from "../../../utils/testUtils"
 import * as helpers from "../../../../pages/api/account/helpers"
 import userEvent from "@testing-library/user-event"
+import { filteredPickupLocations } from "../../../../__test__/fixtures/processedMyAccountData"
 
 jest.spyOn(helpers, "updatePatronSettings")
 
 describe("AccountSettingsTab", () => {
   it("can render a complete patron", () => {
     const myAccountPatron = MyAccount.prototype.buildPatron(patron)
-    render(<AccountSettingsTab settingsData={myAccountPatron} />)
+    render(
+      <AccountSettingsTab
+        pickupLocations={filteredPickupLocations}
+        settingsData={myAccountPatron}
+      />
+    )
 
     const emailLabel = screen.getAllByText("Email")[0]
     const email = screen.getByText("streganonna@gmail.com")
@@ -38,7 +44,12 @@ describe("AccountSettingsTab", () => {
       emails: [],
       phones: [],
     })
-    render(<AccountSettingsTab settingsData={myAccountPatron} />)
+    render(
+      <AccountSettingsTab
+        pickupLocations={filteredPickupLocations}
+        settingsData={myAccountPatron}
+      />
+    )
     ;["Notification preference", "Home library", "Pin/Password"].forEach(
       (patronInfo) => {
         const element = screen.queryByText(patronInfo)
@@ -67,7 +78,12 @@ describe("AccountSettingsTab", () => {
       const myAccountPatron = MyAccount.prototype.buildPatron({
         ...patron,
       })
-      render(<AccountSettingsTab settingsData={myAccountPatron} />)
+      render(
+        <AccountSettingsTab
+          pickupLocations={filteredPickupLocations}
+          settingsData={myAccountPatron}
+        />
+      )
       await userEvent.click(screen.getByText("Edit account settings"))
       const inputs = screen.getAllByRole("textbox")
       expect(inputs[0]).toHaveFocus()
@@ -78,7 +94,12 @@ describe("AccountSettingsTab", () => {
       const myAccountPatron = MyAccount.prototype.buildPatron({
         ...patron,
       })
-      render(<AccountSettingsTab settingsData={myAccountPatron} />)
+      render(
+        <AccountSettingsTab
+          pickupLocations={filteredPickupLocations}
+          settingsData={myAccountPatron}
+        />
+      )
       // open account settings
       await userEvent.click(screen.getByText("Edit account settings"))
       // verify inputs are present
@@ -101,7 +122,12 @@ describe("AccountSettingsTab", () => {
       const myAccountPatron = MyAccount.prototype.buildPatron({
         ...patron,
       })
-      render(<AccountSettingsTab settingsData={myAccountPatron} />)
+      render(
+        <AccountSettingsTab
+          pickupLocations={filteredPickupLocations}
+          settingsData={myAccountPatron}
+        />
+      )
       await userEvent.click(screen.getByText("Edit account settings"))
       await userEvent.click(screen.getByText("Save Changes"))
       expect(
@@ -117,7 +143,12 @@ describe("AccountSettingsTab", () => {
       const myAccountPatron = MyAccount.prototype.buildPatron({
         ...patron,
       })
-      render(<AccountSettingsTab settingsData={myAccountPatron} />)
+      render(
+        <AccountSettingsTab
+          pickupLocations={filteredPickupLocations}
+          settingsData={myAccountPatron}
+        />
+      )
       // open account settings
       await userEvent.click(screen.getByText("Edit account settings"))
       const saveButton = screen
@@ -142,7 +173,12 @@ describe("AccountSettingsTab", () => {
       const myAccountPatron = MyAccount.prototype.buildPatron({
         ...patron,
       })
-      render(<AccountSettingsTab settingsData={myAccountPatron} />)
+      render(
+        <AccountSettingsTab
+          pickupLocations={filteredPickupLocations}
+          settingsData={myAccountPatron}
+        />
+      )
       // open account settings
       await userEvent.click(screen.getByText("Edit account settings"))
       const saveButton = screen

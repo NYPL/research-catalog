@@ -4,6 +4,7 @@ import {
 } from "./AccountSettingsDisplayOptions"
 import {
   emptyPatron,
+  filteredPickupLocations,
   processedPatron,
 } from "../../../../__test__/fixtures/processedMyAccountData"
 import { render, screen, within } from "../../../utils/testUtils"
@@ -13,6 +14,7 @@ const FormWithRef = ({ patron }) => {
   const ref = useRef()
   return (
     <AccountSettingsForm
+      pickupLocations={filteredPickupLocations}
       firstInputRef={ref}
       patron={patron}
       setIsFormValid={() => {
