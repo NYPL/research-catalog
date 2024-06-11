@@ -2,6 +2,7 @@ import React from "react"
 import { render, fireEvent, screen } from "../../utils/testUtils"
 import ProfileTabs from "./ProfileTabs"
 import {
+  filteredPickupLocations,
   processedCheckouts,
   processedFines,
   processedHolds,
@@ -14,6 +15,7 @@ describe("ProfileTabs", () => {
   it("renders", () => {
     render(
       <ProfileTabs
+        pickupLocations={filteredPickupLocations}
         patron={processedPatron}
         checkouts={processedCheckouts}
         holds={processedHolds}
@@ -26,6 +28,7 @@ describe("ProfileTabs", () => {
   it("renders correct number of tabs when fines are greater than $0", () => {
     const { getAllByRole } = render(
       <ProfileTabs
+        pickupLocations={filteredPickupLocations}
         patron={processedPatron}
         checkouts={processedCheckouts}
         holds={processedHolds}
@@ -40,6 +43,7 @@ describe("ProfileTabs", () => {
   it("renders correct number of tabs when fines are $0", () => {
     const { getAllByRole } = render(
       <ProfileTabs
+        pickupLocations={filteredPickupLocations}
         patron={processedPatron}
         checkouts={processedCheckouts}
         holds={processedHolds}
@@ -54,6 +58,7 @@ describe("ProfileTabs", () => {
   it("calls updatePath when tab is clicked", () => {
     const { getByText } = render(
       <ProfileTabs
+        pickupLocations={filteredPickupLocations}
         patron={processedPatron}
         checkouts={processedCheckouts}
         holds={processedHolds}
@@ -67,6 +72,7 @@ describe("ProfileTabs", () => {
   it("displays error message when checkouts or holds are null", () => {
     render(
       <ProfileTabs
+        pickupLocations={filteredPickupLocations}
         patron={processedPatron}
         checkouts={null}
         holds={null}

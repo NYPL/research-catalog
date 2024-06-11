@@ -7,7 +7,7 @@ import {
   type TextInputRefType,
 } from "@nypl/design-system-react-components"
 import { useEffect, useRef, useState } from "react"
-import type { Patron } from "../../../types/myAccountTypes"
+import type { Patron, SierraCodeName } from "../../../types/myAccountTypes"
 import styles from "../../../../styles/components/MyAccount.module.scss"
 import AccountSettingsButtons from "./AccountSettingsButtons"
 import {
@@ -23,7 +23,13 @@ import {
   failureModalProps,
 } from "./SuccessAndFailureModalProps"
 
-const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
+const AccountSettingsTab = ({
+  settingsData,
+  pickupLocations,
+}: {
+  settingsData: Patron
+  pickupLocations: SierraCodeName[]
+}) => {
   const [currentlyEditing, setCurrentlyEditing] = useState(false)
   const [mostRecentPatronData, setMostRecentPatronData] = useState(settingsData)
   const [modalProps, setModalProps] = useState(null)
@@ -31,7 +37,7 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
 
   const { onOpen: openModal, onClose: closeModal, Modal } = useModal()
 
-  const [isFormValid, setIsFormValid] = useState(false)
+  const [isFormValid, setIsFormValid] = useState(true)
 
   const editButtonRef = useRef<HTMLButtonElement>()
   const firstInputRef = useRef<TextInputRefType>()
@@ -41,6 +47,7 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
       firstInputRef={firstInputRef}
       patron={mostRecentPatronData}
       setIsFormValid={setIsFormValid}
+      pickupLocations={pickupLocations}
     />
   ) : (
     <AccountSettingsDisplay patron={mostRecentPatronData} />

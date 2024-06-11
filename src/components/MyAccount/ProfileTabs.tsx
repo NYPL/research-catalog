@@ -20,9 +20,11 @@ interface ProfileTabsPropsType {
   holds: Hold[]
   fines: Fine
   activePath: string
+  pickupLocations: SierraCodeName[]
 }
 
 const ProfileTabs = ({
+  pickupLocations,
   checkouts,
   holds,
   patron,
@@ -66,6 +68,7 @@ const ProfileTabs = ({
       label: "Requests" + (holds ? ` (${holds.length})` : ""),
       content: holds ? (
         <RequestsTab
+          pickupLocations={pickupLocations}
           updateHoldLocation={updateHoldLocation}
           removeHold={removeHold}
           holds={currentHolds}
@@ -87,7 +90,12 @@ const ProfileTabs = ({
       : []),
     {
       label: "Account settings",
-      content: <AccountSettingsTab settingsData={patron} />,
+      content: (
+        <AccountSettingsTab
+          pickupLocations={pickupLocations}
+          settingsData={patron}
+        />
+      ),
       urlPath: "settings",
     },
   ]

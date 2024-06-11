@@ -7,12 +7,11 @@ import {
   type TextInputRefType,
 } from "@nypl/design-system-react-components"
 import { notificationPreferenceTuples } from "../../../utils/myAccountUtils"
-import type { Patron } from "../../../types/myAccountTypes"
-import { accountSettings } from "./AccountSettingsUtils"
+import type { Patron, SierraCodeName } from "../../../types/myAccountTypes"
+import { accountSettings, isFormValid } from "./AccountSettingsUtils"
 import { buildListElementsWithIcons } from "../IconListElement"
 import type { Dispatch, JSX, MutableRefObject, ReactNode } from "react"
-import { useState, useEffect, useCallback } from "react"
-import { filteredPickupLocations } from "../../../utils/myAccountUtils"
+import { useState } from "react"
 import PasswordModal from "./PasswordModal"
 
 export const AccountSettingsDisplay = ({ patron }: { patron: Patron }) => {
@@ -32,48 +31,26 @@ export const AccountSettingsDisplay = ({ patron }: { patron: Patron }) => {
 }
 
 export const AccountSettingsForm = ({
+  pickupLocations,
   patron,
   setIsFormValid,
   firstInputRef,
 }: {
+  pickupLocations: SierraCodeName[]
   firstInputRef: MutableRefObject<TextInputRefType>
   patron: Patron
   setIsFormValid: Dispatch<React.SetStateAction<boolean>>
 }) => {
   const [formData, setFormData] = useState({
-    primaryPhone: patron.phones[0]?.number,
-    email: patron.emails[0],
+    phones: patron.phones[0]?.number,
+    emails: patron.emails[0],
+    notificationPreference: patron.notificationPreference[0],
   })
 
-  const isFormValid = useCallback(() => {
-    const phoneRegex = /^(?:\D*\d){10}\D*$/
-    if (patron.notificationPreference == "Phone") {
-      return (
-        formData.primaryPhone !== "" && phoneRegex.test(formData.primaryPhone)
-      )
-    } else if (patron.notificationPreference == "Email") {
-      return formData.email !== ""
-    } else return true
-  }, [formData])
-
-  useEffect(() => {
-    setIsFormValid(isFormValid())
-  }, [formData, isFormValid, setIsFormValid])
-
   const handleInputChange = (e) => {
-    const { id, value } = e.target
-    let updatedFormData = { ...formData }
-    if (id === "phone-text-input") {
-      updatedFormData = {
-        ...updatedFormData,
-        primaryPhone: value,
-      }
-    } else if (id === "email-text-input") {
-      updatedFormData = {
-        ...updatedFormData,
-        email: value,
-      }
-    }
+    const { value, name } = e.target
+    const updatedFormData = { ...formData, [name]: value }
+    setIsFormValid(isFormValid(updatedFormData))
     setFormData(updatedFormData)
   }
 
@@ -88,51 +65,45 @@ export const AccountSettingsForm = ({
       switch (setting.term) {
         case "Home library":
           {
-            const sortedPickupLocations = [
-              patron.homeLibrary,
-              ...filteredPickupLocations.filter(
-                (loc) => loc.code.trim() !== patron.homeLibrary.code.trim()
-              ),
-            ]
-            inputField = (
-              <Select
-                name={setting.field}
-                id="update-home-library-selector"
-                labelText="Update home library"
-                showLabel={false}
-              >
-                {sortedPickupLocations.map((loc, i) => (
-                  <option
-                    key={`location-option-${i}`}
-                    value={`${loc.code}@${loc.name}`}
-                  >
-                    {loc.name}
-                  </option>
-                ))}
-              </Select>
-            )
+            if (pickupLocations) {
+              const sortedPickupLocations = [
+                patron.homeLibrary,
+                ...pickupLocations.filter(
+                  (loc) => loc.code.trim() !== patron.homeLibrary.code.trim()
+                ),
+              ]
+              inputField = (
+                <Select
+                  name={setting.field}
+                  id="update-home-library-selector"
+                  labelText="Update home library"
+                  showLabel={false}
+                >
+                  {sortedPickupLocations.map((loc, i) => (
+                    <option
+                      key={`location-option-${i}`}
+                      value={`${loc.code}@${loc.name}`}
+                    >
+                      {loc.name}
+                    </option>
+                  ))}
+                </Select>
+              )
+            }
           }
           break
         case "Notification preference":
           {
-            const patronNotPref =
-              notificationPreferenceTuples.find(
-                (pref) => pref[1] === patron.notificationPreference
-              ) || notificationPreferenceTuples[0]
-            const sortedNotPrefs = [
-              patronNotPref,
-              ...notificationPreferenceTuples.filter(
-                (pref) => pref[1] !== patronNotPref[1]
-              ),
-            ]
             inputField = (
               <Select
+                onChange={handleInputChange}
                 name={setting.field}
                 id="notification-preference-selector"
                 labelText="Update notification preference"
                 showLabel={false}
+                value={formData.notificationPreference}
               >
-                {sortedNotPrefs.map((pref) => (
+                {notificationPreferenceTuples.map((pref) => (
                   <option key={pref + "-option"} value={pref[0]}>
                     {pref[1]}
                   </option>
@@ -146,7 +117,7 @@ export const AccountSettingsForm = ({
             <TextInput
               ref={firstInputRef}
               name={setting.field}
-              defaultValue={patron.phones[0]?.number}
+              value={formData.phones}
               id="phone-text-input"
               labelText="Update phone number"
               showLabel={false}
@@ -159,7 +130,7 @@ export const AccountSettingsForm = ({
           inputField = (
             <TextInput
               name={setting.field}
-              defaultValue={patron.emails[0]}
+              value={formData.emails}
               id="email-text-input"
               labelText="Update email"
               showLabel={false}
