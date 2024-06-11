@@ -21,6 +21,17 @@ jest.mock("next/router", () => ({
 }))
 
 describe("MyAccount page", () => {
+  it("can handle null values for checkouts, holds, fines", () => {
+    expect(() =>
+      render(
+        <MyAccount
+          pickupLocations={null}
+          patron={processedPatron}
+          isAuthenticated={true}
+        />
+      )
+    ).not.toThrow()
+  })
   it("displays an error message when patron is empty", () => {
     render(
       <MyAccount

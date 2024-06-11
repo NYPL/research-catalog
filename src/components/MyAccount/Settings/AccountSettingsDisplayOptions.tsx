@@ -65,29 +65,31 @@ export const AccountSettingsForm = ({
       switch (setting.term) {
         case "Home library":
           {
-            const sortedPickupLocations = [
-              patron.homeLibrary,
-              ...pickupLocations.filter(
-                (loc) => loc.code.trim() !== patron.homeLibrary.code.trim()
-              ),
-            ]
-            inputField = (
-              <Select
-                name={setting.field}
-                id="update-home-library-selector"
-                labelText="Update home library"
-                showLabel={false}
-              >
-                {sortedPickupLocations.map((loc, i) => (
-                  <option
-                    key={`location-option-${i}`}
-                    value={`${loc.code}@${loc.name}`}
-                  >
-                    {loc.name}
-                  </option>
-                ))}
-              </Select>
-            )
+            if (pickupLocations) {
+              const sortedPickupLocations = [
+                patron.homeLibrary,
+                ...pickupLocations.filter(
+                  (loc) => loc.code.trim() !== patron.homeLibrary.code.trim()
+                ),
+              ]
+              inputField = (
+                <Select
+                  name={setting.field}
+                  id="update-home-library-selector"
+                  labelText="Update home library"
+                  showLabel={false}
+                >
+                  {sortedPickupLocations.map((loc, i) => (
+                    <option
+                      key={`location-option-${i}`}
+                      value={`${loc.code}@${loc.name}`}
+                    >
+                      {loc.name}
+                    </option>
+                  ))}
+                </Select>
+              )
+            }
           }
           break
         case "Notification preference":
