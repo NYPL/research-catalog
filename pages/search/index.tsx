@@ -138,13 +138,13 @@ export default function Search({
             ) : null}
             {isLoading ? (
               <SkeletonLoader showImage={false} />
-            ) : drbResponse?.totalWorks > 0 ? (
+            ) : (
               <DRBContainer
                 drbResults={drbResults}
-                totalWorks={drbResponse.totalWorks}
+                totalWorks={drbResponse?.totalWorks}
                 searchParams={searchParams}
               />
-            ) : null}
+            )}
           </>
         }
       >
@@ -163,7 +163,6 @@ export default function Search({
                   size="heading5"
                   // Heading component does not expect tabIndex prop, so we
                   // are ignoring the typescript error that pops up.
-                  // @ts-expect-error
                   tabIndex={-1}
                   mb={{ base: "s", md: "l" }}
                   minH="40px"

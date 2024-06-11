@@ -21,34 +21,41 @@ const RenewButton = ({
   patron: Patron
 }) => {
   const [isButtonDisabled, setButtonDisabled] = useState(false)
-  const { onOpen, Modal } = useModal()
+  const { onOpen, onClose, Modal } = useModal()
   const [modalProps, setModalProps] = useState(null)
 
   const successModalProps = {
+    type: "default",
     bodyContent: (
       <Box className={styles.modalBody}>
-        <Text sx={{ marginLeft: "l" }}>
-          Your item was renewed. It is now due back on {checkout?.dueDate}.
+        <Text>
+          This item has been renewed. It is now due back on {checkout?.dueDate}.
         </Text>
       </Box>
     ),
     closeButtonLabel: "OK",
     headingText: (
-      <Box className={styles.modalHeading}>
-        <Icon
-          size="large"
-          name="actionCheckCircleFilled"
-          color="ui.success.primary"
-        />
-        <Text sx={{ marginBottom: 0 }}> Renewal successful </Text>
-      </Box>
+      <h5 className={styles.modalHeading}>
+        <>
+          <Icon
+            size="large"
+            name="actionCheckCircleFilled"
+            color="ui.success.primary"
+          />
+          Renewal successful
+        </>
+      </h5>
     ),
+    onClose: () => {
+      onClose()
+    },
   }
   const failureModalProps = {
+    type: "default",
     bodyContent: (
       <Box className={styles.modalBody}>
-        <Text sx={{ marginLeft: "l", marginRight: "m" }}>
-          We were unable to renew your item. Please try again or{" "}
+        <Text>
+          We were unable to renew this item. Please try again or{" "}
           <ExternalLink href="https://www.nypl.org/get-help/contact-us">
             contact us
           </ExternalLink>{" "}
@@ -58,13 +65,16 @@ const RenewButton = ({
     ),
     closeButtonLabel: "OK",
     headingText: (
-      <Heading className={styles.modalHeading}>
+      <h5 className={styles.modalHeading}>
         <>
           <Icon size="large" name="errorFilled" color="ui.error.primary" />
-          <Text sx={{ marginBottom: 0 }}> Renewal failed </Text>
+          Renewal failed
         </>
-      </Heading>
+      </h5>
     ),
+    onClose: () => {
+      onClose()
+    },
   }
 
   useEffect(() => {
@@ -116,6 +126,7 @@ const RenewButton = ({
         onClick={handleClick}
         isDisabled={isButtonDisabled}
         aria-disabled={isButtonDisabled}
+        aria-label={`Renew ${checkout.title}`}
       >
         Renew
       </Button>

@@ -2,10 +2,11 @@ import React from "react"
 import { render, fireEvent, screen } from "../../utils/testUtils"
 import ProfileTabs from "./ProfileTabs"
 import {
-  mockCheckouts,
-  mockFines,
-  mockHolds,
-  mockPatron,
+  filteredPickupLocations,
+  processedCheckouts,
+  processedFines,
+  processedHolds,
+  processedPatron,
 } from "../../../__test__/fixtures/processedMyAccountData"
 import mockRouter from "next-router-mock"
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
@@ -14,10 +15,11 @@ describe("ProfileTabs", () => {
   it("renders", () => {
     render(
       <ProfileTabs
-        patron={mockPatron}
-        checkouts={mockCheckouts}
-        holds={mockHolds}
-        fines={mockFines}
+        pickupLocations={filteredPickupLocations}
+        patron={processedPatron}
+        checkouts={processedCheckouts}
+        holds={processedHolds}
+        fines={processedFines}
         activePath="checkouts"
       />
     )
@@ -26,10 +28,11 @@ describe("ProfileTabs", () => {
   it("renders correct number of tabs when fines are greater than $0", () => {
     const { getAllByRole } = render(
       <ProfileTabs
-        patron={mockPatron}
-        checkouts={mockCheckouts}
-        holds={mockHolds}
-        fines={mockFines}
+        pickupLocations={filteredPickupLocations}
+        patron={processedPatron}
+        checkouts={processedCheckouts}
+        holds={processedHolds}
+        fines={processedFines}
         activePath="checkouts"
       />
     )
@@ -40,9 +43,10 @@ describe("ProfileTabs", () => {
   it("renders correct number of tabs when fines are $0", () => {
     const { getAllByRole } = render(
       <ProfileTabs
-        patron={mockPatron}
-        checkouts={mockCheckouts}
-        holds={mockHolds}
+        pickupLocations={filteredPickupLocations}
+        patron={processedPatron}
+        checkouts={processedCheckouts}
+        holds={processedHolds}
         fines={{ total: 0, entries: [] }}
         activePath="checkouts"
       />
@@ -54,10 +58,11 @@ describe("ProfileTabs", () => {
   it("calls updatePath when tab is clicked", () => {
     const { getByText } = render(
       <ProfileTabs
-        patron={mockPatron}
-        checkouts={mockCheckouts}
-        holds={mockHolds}
-        fines={mockFines}
+        pickupLocations={filteredPickupLocations}
+        patron={processedPatron}
+        checkouts={processedCheckouts}
+        holds={processedHolds}
+        fines={processedFines}
         activePath="checkouts"
       />
     )
@@ -67,10 +72,11 @@ describe("ProfileTabs", () => {
   it("displays error message when checkouts or holds are null", () => {
     render(
       <ProfileTabs
-        patron={mockPatron}
+        pickupLocations={filteredPickupLocations}
+        patron={processedPatron}
         checkouts={null}
         holds={null}
-        fines={mockFines}
+        fines={processedFines}
         activePath="checkouts"
       />
     )

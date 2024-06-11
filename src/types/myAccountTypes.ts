@@ -56,15 +56,17 @@ export interface SierraRecord {
   callNumber: string
 }
 
+export type FixedField = { label: string; value: "z" | "p" }
+
 export interface SierraPatron {
-  fixedFields: Record<string, { label: string; value: string }>
-  id: number
-  names: string[]
-  barcodes: string[]
-  expirationDate: string
-  emails: string[]
-  homeLibrary: SierraCodeName
-  phones: { number: string; type: string }[]
+  fixedFields?: Record<"268", FixedField>
+  id?: number
+  names?: string[]
+  barcodes?: string[]
+  expirationDate?: string
+  emails?: string[]
+  homeLibrary?: SierraCodeName
+  phones?: { number: string; type: string }[]
 }
 
 export interface Checkout {
@@ -101,14 +103,19 @@ export interface Hold {
 }
 
 export interface Patron {
-  notificationPreference: string
+  notificationPreference: "z" | "p"
   name: string
   barcode: string
+  formattedBarcode?: string
   expirationDate: string
   emails: string[]
   homeLibrary: SierraCodeName
   phones: Phone[]
   id: number
+}
+
+export interface PatronUpdateBody extends Omit<SierraPatron, "homeLibrary"> {
+  homeLibraryCode?: string
 }
 
 export interface SierraBib {

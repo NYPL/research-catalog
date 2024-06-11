@@ -1,15 +1,13 @@
-import Head from "next/head"
 import { Text } from "@nypl/design-system-react-components"
+import Head from "next/head"
+
 import Layout from "../../src/components/Layout/Layout"
 import initializePatronTokenAuth, {
   getLoginRedirect,
 } from "../../src/server/auth"
 import { MyAccountFactory } from "../../src/models/MyAccount"
-import type MyAccountModel from "../../src/models/MyAccount"
 import ProfileTabs from "../../src/components/MyAccount/ProfileTabs"
 import ProfileHeader from "../../src/components/MyAccount/ProfileHeader"
-import { BASE_URL, PATHS } from "../../src/config/constants"
-
 import FeesBanner from "../../src/components/MyAccount/FeesBanner"
 import sierraClient from "../../src/server/sierraClient"
 import type {
@@ -17,8 +15,8 @@ import type {
   Hold,
   Checkout,
   Fine,
+  SierraCodeName,
 } from "../../src/types/myAccountTypes"
-import logger from "../../logger"
 
 interface MyAccountPropsType {
   patron?: Patron
@@ -27,9 +25,11 @@ interface MyAccountPropsType {
   fines?: Fine
   isAuthenticated: boolean
   tabsPath?: string
+  pickupLocations: SierraCodeName[]
 }
 
 export default function MyAccount({
+  pickupLocations,
   checkouts,
   holds,
   patron,
@@ -38,7 +38,6 @@ export default function MyAccount({
   tabsPath,
 }: MyAccountPropsType) {
   const errorRetrievingPatronData = !patron
-
   return (
     <>
       <Head>
@@ -53,31 +52,16 @@ export default function MyAccount({
           </Text>
         ) : (
           <>
-            {fines.total > 0 && <FeesBanner />}
+            {fines?.total > 0 && <FeesBanner />}
             <ProfileHeader patron={patron} />
             <ProfileTabs
+              pickupLocations={pickupLocations}
               patron={patron}
               checkouts={checkouts}
               holds={holds}
               fines={fines}
               activePath={tabsPath}
             />
-            {/** Testing settings api route */}
-            {/* <Button
-              id="settings-test"
-              onClick={() => settingsUpdate(patron.id)}
-            >
-              Update settings
-            </Button> */}
-            {/** Testing pin update api route */}
-            {/* <Button
-              id="pin-update"
-              onClick={() =>
-                pinUpdate(patron.id, patron.barcode, "7890", "7890")
-              }
-            >
-              Update pin
-            </Button> */}
           </>
         )}
       </Layout>
@@ -104,47 +88,49 @@ export async function getServerSideProps({ req }) {
   const id = patronTokenResponse.decodedPatron.sub
   try {
     const client = await sierraClient()
-    const { checkouts, holds, patron, fines } = await MyAccountFactory(
-      id,
-      client
-    )
-
-    // Immediately returning base path.
-    if (!tabsPath) {
-      return {
-        props: { checkouts, holds, patron, fines, tabsPath, isAuthenticated },
-      }
-    }
-
+    const { checkouts, holds, patron, fines, pickupLocations } =
+      await MyAccountFactory(id, client)
     /*  Redirecting invalid paths (including /overdues if user has none) and
     // cleaning extra parts off valid paths. */
-    const allowedPaths = ["items", "requests", "overdues", "settings"]
-    if (
-      !allowedPaths.some((path) => tabsPath.startsWith(path)) ||
-      (tabsPath === "overdues" && fines.total === 0)
-    ) {
-      return {
-        redirect: {
-          destination: "/account",
-          permanent: false,
-        },
-      }
-    } else {
-      const matchedPath = allowedPaths.find((path) => tabsPath.startsWith(path))
-      if (tabsPath != matchedPath)
+    if (tabsPath) {
+      const allowedPaths = ["items", "requests", "overdues", "settings"]
+      if (
+        !allowedPaths.some((path) => tabsPath.startsWith(path)) ||
+        (tabsPath === "overdues" && fines?.total === 0)
+      ) {
         return {
           redirect: {
-            destination: "/account/" + matchedPath,
+            destination: "/account",
             permanent: false,
           },
         }
+      } else {
+        const matchedPath = allowedPaths.find((path) =>
+          tabsPath.startsWith(path)
+        )
+        if (tabsPath != matchedPath) {
+          return {
+            redirect: {
+              destination: "/account/" + matchedPath,
+              permanent: false,
+            },
+          }
+        }
+      }
     }
-
     return {
-      props: { checkouts, holds, patron, fines, tabsPath, isAuthenticated },
+      props: {
+        checkouts,
+        holds,
+        patron,
+        fines,
+        tabsPath,
+        isAuthenticated,
+        pickupLocations,
+      },
     }
   } catch (e) {
-    logger.error(e.message)
+    console.log(e.message)
     return {
       props: {
         tabsPath,

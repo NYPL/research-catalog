@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { createRef, useEffect, useState } from "react"
 import type { Hold, Patron } from "../../../types/myAccountTypes"
 import {
   Box,
@@ -12,30 +12,57 @@ import styles from "../../../../styles/components/MyAccount.module.scss"
 
 const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
   const [frozen, setFrozen] = useState(hold.frozen)
-  const [isDisabled, setIsDisabled] = useState(false)
+  const [isDisabled, setIsDisabled] = useState<boolean | null>(null)
+  const [modalProps, setModalProps] = useState(null)
+  const buttonRef = createRef<HTMLButtonElement>()
   const { onOpen: openModal, onClose: closeModal, Modal } = useModal()
-  const modalProps = {
+  const failureModalProps = {
+    type: "default",
     bodyContent: (
       <Box className={styles.modalBody}>
-        <Text sx={{ marginLeft: "l", marginRight: "m" }}>
-          Please try again.
-        </Text>
+        <Text>Please try again.</Text>
       </Box>
     ),
     closeButtonLabel: "OK",
     headingText: (
-      <Heading className={styles.modalHeading}>
+      <h5 className={styles.modalHeading}>
         <>
           <Icon size="large" name="errorFilled" color="ui.error.primary" />
-          <Text sx={{ marginBottom: 0 }}> Freezing this hold failed </Text>
+          Hold {frozen ? "unfreeze" : "freeze"} failed
         </>
-      </Heading>
+      </h5>
     ),
     onClose: () => {
       closeModal()
       setIsDisabled(false)
     },
   }
+  const successModalProps = {
+    type: "default",
+    closeButtonLabel: "OK",
+    headingText: (
+      <h5 className={styles.modalHeading}>
+        <>
+          <Icon
+            size="large"
+            name="actionCheckCircleFilled"
+            color="ui.success.primary"
+          />
+          Hold {frozen ? "unfreeze" : "freeze"} successful
+        </>
+      </h5>
+    ),
+    onClose: () => {
+      closeModal()
+      setIsDisabled(false)
+    },
+  }
+
+  useEffect(() => {
+    if (isDisabled === false) {
+      buttonRef.current?.focus()
+    }
+  }, [isDisabled, buttonRef])
 
   const handleFreezeClick = async () => {
     // Disabling button while request happens.
@@ -55,23 +82,29 @@ const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
       }
     )
     if (response.status !== 200) {
+      setModalProps(failureModalProps)
       openModal()
     } else {
+      setModalProps(successModalProps)
+      openModal()
       setFrozen((frozen) => !frozen)
       setIsDisabled(false)
     }
   }
+  const buttonLabel = frozen ? "Unfreeze" : "Freeze"
 
   return (
     <>
       <Button
-        width="100%"
+        aria-label={`${buttonLabel} ${hold.title}`}
         buttonType="secondary"
         id={`freeze-${hold.id}`}
         onClick={handleFreezeClick}
         isDisabled={isDisabled}
+        width="100%"
+        ref={buttonRef}
       >
-        {frozen ? "Unfreeze" : "Freeze"}
+        {buttonLabel}
       </Button>
       <Modal {...modalProps} />
     </>
