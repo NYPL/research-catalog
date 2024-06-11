@@ -7,12 +7,11 @@ import {
   type TextInputRefType,
 } from "@nypl/design-system-react-components"
 import { notificationPreferenceTuples } from "../../../utils/myAccountUtils"
-import type { Patron } from "../../../types/myAccountTypes"
+import type { Patron, SierraCodeName } from "../../../types/myAccountTypes"
 import { accountSettings, isFormValid } from "./AccountSettingsUtils"
 import { buildListElementsWithIcons } from "../IconListElement"
 import type { Dispatch, JSX, MutableRefObject, ReactNode } from "react"
 import { useState } from "react"
-import { filteredPickupLocations } from "../../../utils/myAccountUtils"
 import PasswordModal from "./PasswordModal"
 
 export const AccountSettingsDisplay = ({ patron }: { patron: Patron }) => {
@@ -32,10 +31,12 @@ export const AccountSettingsDisplay = ({ patron }: { patron: Patron }) => {
 }
 
 export const AccountSettingsForm = ({
+  pickupLocations,
   patron,
   setIsFormValid,
   firstInputRef,
 }: {
+  pickupLocations: SierraCodeName[]
   firstInputRef: MutableRefObject<TextInputRefType>
   patron: Patron
   setIsFormValid: Dispatch<React.SetStateAction<boolean>>
@@ -66,7 +67,7 @@ export const AccountSettingsForm = ({
           {
             const sortedPickupLocations = [
               patron.homeLibrary,
-              ...filteredPickupLocations.filter(
+              ...pickupLocations.filter(
                 (loc) => loc.code.trim() !== patron.homeLibrary.code.trim()
               ),
             ]
