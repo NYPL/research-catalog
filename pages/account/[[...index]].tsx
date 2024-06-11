@@ -48,11 +48,6 @@ export default function MyAccount({
       const currentValue = nyplAccountRedirectTracker.split("=")[1].split("exp")
       const currentCount = parseInt(currentValue[0], 10)
       if (currentCount > 3) {
-        fetch(
-          `${BASE_URL}/api/accountError?type=redirect_loop&page=${encodeURI(
-            window.location.href
-          )}`
-        )
         return true
       }
       const currentExp = currentValue[1]
@@ -67,9 +62,12 @@ export default function MyAccount({
   }
 
   useEffect(() => {
-    const isInRedirectLoop = trackRedirects()
-    setStuckInAuthRedirectLoop(isInRedirectLoop)
-  }, [])
+    // Missing patron is a red flag that we may be in redirect loop.
+    if (!patron) {
+      const isInRedirectLoop = trackRedirects()
+      setStuckInAuthRedirectLoop(isInRedirectLoop)
+    }
+  }, [patron])
 
   return (
     <>
@@ -111,9 +109,13 @@ export async function getServerSideProps({ req }) {
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const isAuthenticated = patronTokenResponse.isTokenValid
   if (!isAuthenticated) {
+    // figure if we're in the loop
+    // if we're in the loop, return some flag
+    // else return redirect response with redirectcookie updated with new :
     const redirect = getLoginRedirect(req)
     return {
       redirect: {
+        // redirect cookie
         destination: redirect,
         permanent: false,
       },
