@@ -5,7 +5,7 @@ import {
 } from "./AccountSettingsUtils"
 import { processedPatron } from "../../../../__test__/fixtures/processedMyAccountData"
 import { formatDate } from "../../../utils/myAccountUtils"
-import type { Patron } from "../../../types/myAccountTypes"
+import type { FixedField, Patron } from "../../../types/myAccountTypes"
 
 describe("Account settings utils", () => {
   describe("formatDate", () => {
@@ -19,14 +19,14 @@ describe("Account settings utils", () => {
       const originalPatronData = {
         formattedBarcode: undefined,
         barcode: "1234567890",
-        emails: ["email@mail.com"],
+        emails: [],
         expirationDate: "2025-03-28",
         homeLibrary: { code: "sn   ", name: "SNFL (formerly Mid-Manhattan)" },
         id: 2772226,
         name: "NONNA, STREGA",
-        notificationPreference: "Email",
-        phones: [{ number: "2129876543", type: "t" }],
-      }
+        notificationPreference: "z",
+        phones: [],
+      } as Patron
       const patronUpdateBody = {} as Patron
       expect(
         buildUpdatedPatronDisplayData(originalPatronData, patronUpdateBody)
@@ -40,12 +40,14 @@ describe("Account settings utils", () => {
         homeLibrary: { code: "mp   ", name: "SNFL (formerly Mid-Manhattan)" },
         id: 2772226,
         name: "NONNA, STREGA",
-        notificationPreference: "Email",
+        notificationPreference: "z",
         phones: [{ number: "2129876543", type: "t" }],
-      }
+      } as Patron
       const patronUpdateBody = {
         emails: ["hey@you.com", "email@mail.com"],
-        fixedFields: { 268: { label: "Notice Preference", value: "p" } },
+        fixedFields: {
+          268: { label: "Notice Preference", value: "p" } as FixedField,
+        },
         homeLibraryCode: "mp   ",
         phones: [
           { number: "2129876543", type: "t" },
@@ -63,7 +65,7 @@ describe("Account settings utils", () => {
         { number: "2129876543", type: "t" },
         { number: "1234567890", type: "t" },
       ])
-      expect(notificationPreference).toEqual("Phone")
+      expect(notificationPreference).toEqual("p")
       expect(homeLibrary).toStrictEqual({ code: "mp   ", name: "Morris Park" })
       expect(id).toEqual(originalPatronData.id)
     })
@@ -75,11 +77,13 @@ describe("Account settings utils", () => {
         homeLibrary: { code: "sn   ", name: "SNFL (formerly Mid-Manhattan)" },
         id: 2772226,
         name: "NONNA, STREGA",
-        notificationPreference: "Email",
+        notificationPreference: "z",
         phones: [{ number: "2129876543", type: "t" }],
-      }
+      } as Patron
       const patronUpdateBody = {
-        fixedFields: { 268: { label: "Notice Preference", value: "p" } },
+        fixedFields: {
+          "268": { label: "Notice Preference", value: "p" } as FixedField,
+        },
         homeLibraryCode: "mp   ",
       }
       const { id, emails, phones, homeLibrary, notificationPreference } =
@@ -91,7 +95,7 @@ describe("Account settings utils", () => {
       expect(emails).toStrictEqual(originalPatronData.emails)
       expect(phones).toStrictEqual(originalPatronData.phones)
       expect(homeLibrary).toEqual({ code: "mp   ", name: "Morris Park" })
-      expect(notificationPreference).toEqual("Phone")
+      expect(notificationPreference).toEqual("p")
       expect(id).toEqual(originalPatronData.id)
     })
   })
