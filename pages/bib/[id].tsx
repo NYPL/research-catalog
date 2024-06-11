@@ -112,7 +112,7 @@ export default function BibPage({
         <title key="main-title">{metadataTitle}</title>
       </Head>
       <Layout isAuthenticated={isAuthenticated} activePage="bib">
-        <Heading level="h2" size="heading3">
+        <Heading level="h2" size="heading3" mb="l">
           {bib.title}
         </Heading>
         <BibDetails key="top-details" details={topDetails} />
@@ -172,25 +172,28 @@ export default function BibPage({
             </Box>
           </>
         ) : null}
-        <BibDetails
-          heading="Holdings"
-          key="holdings-details"
-          details={holdingsDetails}
-        />
-        <BibDetails
-          heading="Details"
-          key="bottom-details"
-          details={bottomDetails}
-        />
-        {displayCatalogLink ? (
-          <ExternalLink
-            id="legacy-catalog-link"
-            href={`${appConfig.urls.legacyCatalog}/record=${bib.id}`}
-            type="standalone"
-          >
-            View in legacy catalog
-          </ExternalLink>
-        ) : null}
+        <Box mb="xl">
+          <BibDetails
+            heading="Holdings"
+            key="holdings-details"
+            details={holdingsDetails}
+          />
+          <BibDetails
+            heading="Details"
+            key="bottom-details"
+            details={bottomDetails}
+          />
+          {displayCatalogLink ? (
+            <ExternalLink
+              id="legacy-catalog-link"
+              href={`${appConfig.urls.legacyCatalog}/record=${bib.id}`}
+              type="standalone"
+              mt="s"
+            >
+              View in legacy catalog
+            </ExternalLink>
+          ) : null}
+        </Box>
       </Layout>
     </>
   )
