@@ -1,8 +1,12 @@
-import { getFeedbackEmailText, getFeedbackEmailHTML } from "../feedbackUtils"
+import {
+  getFeedbackEmailText,
+  getFeedbackEmailHTML,
+  getEmailParams,
+} from "../feedbackUtils"
 
 describe("feedbackUtils", () => {
   describe("getFeedbackEmailText", () => {
-    it("correctly format the feedback email text given a full url and a fields object", () => {
+    it("correctly formats the feedback email text given a full url and a fields object", () => {
       expect(
         getFeedbackEmailText("https://www.nypl.org", {
           category: "category",
@@ -27,7 +31,7 @@ describe("feedbackUtils", () => {
     })
   })
   describe("getFeedbackEmailHTML", () => {
-    it("correctly format the feedback email HTML given a full url and a fields object", () => {
+    it("correctly formats the feedback email HTML given a full url and a fields object", () => {
       expect(
         getFeedbackEmailHTML("https://www.nypl.org", {
           category: "category",
@@ -63,6 +67,36 @@ describe("feedbackUtils", () => {
       </div>
     `
       )
+    })
+  })
+  describe("getEmailParams", () => {
+    it("correctly formats the email params based on the required arguments", () => {
+      const body = {
+        category: "comment",
+        comment: "Body text",
+        email: "replyTo@email.com",
+      }
+      const referer = "http://localhost:8080"
+      expect(
+        getEmailParams(body, referer, "to@email.com", "source@email.com")
+      ).toStrictEqual({
+        Destination: { ToAddresses: ["to@email.com"] },
+        Message: {
+          Body: {
+            Html: {
+              Charset: "UTF-8",
+              Data: getFeedbackEmailHTML(referer, body),
+            },
+            Text: {
+              Charset: "UTF-8",
+              Data: getFeedbackEmailText(referer, body),
+            },
+          },
+          Subject: { Charset: "UTF-8", Data: "SCC Feedback" },
+        },
+        Source: "source@email.com",
+        ReplyToAddresses: ["replyTo@email.com"],
+      })
     })
   })
 })

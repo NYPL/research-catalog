@@ -4,15 +4,17 @@ import {
 } from "./AccountSettingsDisplayOptions"
 import {
   emptyPatron,
+  filteredPickupLocations,
   processedPatron,
 } from "../../../../__test__/fixtures/processedMyAccountData"
-import { render, screen } from "../../../utils/testUtils"
+import { render, screen, within } from "../../../utils/testUtils"
 import { useRef } from "react"
 
 const FormWithRef = ({ patron }) => {
   const ref = useRef()
   return (
     <AccountSettingsForm
+      pickupLocations={filteredPickupLocations}
       firstInputRef={ref}
       patron={patron}
       setIsFormValid={() => {
@@ -27,16 +29,17 @@ describe("AccountSettingsDisplayOptions", () => {
     beforeEach(() => {
       render(
         <AccountSettingsDisplay
-          patron={{ ...processedPatron, notificationPreference: "Mobile" }}
+          patron={{ ...processedPatron, notificationPreference: "p" }}
         />
       )
     })
-    it("displays a selector with patron's home library selected", () => {
+    it("displays patron's home library", () => {
       const homeLibrary = screen.getByText("SNFL (formerly Mid-Manhattan)")
       expect(homeLibrary).toBeInTheDocument()
     })
     it("displays a selector with patron's notification selected", () => {
-      const notificationPreference = screen.getByText("Mobile")
+      const pref = screen.getByTestId("Notification preference")
+      const notificationPreference = within(pref).getByText("Phone")
       expect(notificationPreference).toBeInTheDocument()
     })
     it("displays a text input with patron's primary email displayed", () => {

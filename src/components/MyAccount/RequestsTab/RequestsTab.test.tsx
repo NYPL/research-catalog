@@ -1,6 +1,7 @@
 import React from "react"
 import { render, screen, within } from "../../../utils/testUtils"
 import {
+  filteredPickupLocations,
   processedCheckouts,
   processedFines,
   processedHolds,
@@ -27,6 +28,7 @@ describe("RequestsTab", () => {
   it("renders", () => {
     const component = render(
       <RequestsTab
+        pickupLocations={filteredPickupLocations}
         updateHoldLocation={mockUpdateHoldLocation}
         patron={processedPatron}
         holds={processedHolds}
@@ -39,6 +41,7 @@ describe("RequestsTab", () => {
   it("renders each hold request as a row", () => {
     const component = render(
       <RequestsTab
+        pickupLocations={filteredPickupLocations}
         updateHoldLocation={mockUpdateHoldLocation}
         patron={processedPatron}
         holds={processedHolds}
@@ -52,6 +55,7 @@ describe("RequestsTab", () => {
   it("calls hold cancel endpoint when Cancel button is clicked", async () => {
     const component = render(
       <RequestsTab
+        pickupLocations={filteredPickupLocations}
         updateHoldLocation={mockUpdateHoldLocation}
         patron={processedPatron}
         holds={processedHolds}
@@ -77,6 +81,7 @@ describe("RequestsTab", () => {
   it("removes hold from list when cancel is successful", async () => {
     const component = render(
       <ProfileTabs
+        pickupLocations={filteredPickupLocations}
         patron={processedPatron}
         checkouts={processedCheckouts}
         holds={processedHolds}
@@ -112,6 +117,7 @@ describe("RequestsTab", () => {
     } as Response)
     const component = render(
       <ProfileTabs
+        pickupLocations={filteredPickupLocations}
         patron={processedPatron}
         checkouts={processedCheckouts}
         holds={processedHolds}
@@ -145,6 +151,7 @@ describe("RequestsTab", () => {
     it("only displays update pickup location button for request pending circ items", () => {
       render(
         <RequestsTab
+          pickupLocations={filteredPickupLocations}
           updateHoldLocation={mockUpdateHoldLocation}
           patron={processedPatron}
           holds={processedHolds}
@@ -160,6 +167,7 @@ describe("RequestsTab", () => {
   it("displays freeze buttons only for holds that can be frozen", async () => {
     const component = render(
       <RequestsTab
+        pickupLocations={filteredPickupLocations}
         updateHoldLocation={mockUpdateHoldLocation}
         patron={processedPatron}
         holds={processedHolds}
@@ -177,6 +185,7 @@ describe("RequestsTab", () => {
     } as Response)
     const component = render(
       <RequestsTab
+        pickupLocations={filteredPickupLocations}
         updateHoldLocation={mockUpdateHoldLocation}
         patron={processedPatron}
         holds={processedHolds}
@@ -232,6 +241,7 @@ describe("RequestsTab", () => {
     } as Response)
     const component = render(
       <RequestsTab
+        pickupLocations={filteredPickupLocations}
         updateHoldLocation={mockUpdateHoldLocation}
         patron={processedPatron}
         holds={processedHolds}
@@ -256,6 +266,7 @@ describe("RequestsTab", () => {
   it("shows pick up by date and status when circ request is ready", () => {
     const component = render(
       <RequestsTab
+        pickupLocations={filteredPickupLocations}
         updateHoldLocation={mockUpdateHoldLocation}
         patron={processedPatron}
         holds={processedHolds}
@@ -269,6 +280,7 @@ describe("RequestsTab", () => {
   it("does not show freeze button on freezable request when it is anything other than pending", () => {
     const component = render(
       <RequestsTab
+        pickupLocations={filteredPickupLocations}
         updateHoldLocation={mockUpdateHoldLocation}
         patron={processedPatron}
         holds={processedHolds}

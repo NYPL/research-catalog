@@ -12,7 +12,6 @@ import { useState } from "react"
 import styles from "../../../../styles/components/MyAccount.module.scss"
 import PasswordChangeForm from "./PasswordChangeForm"
 import type { Patron } from "../../../types/myAccountTypes"
-import modalHeading from "../ModalHeading"
 
 const PasswordModal = ({ patron }: { patron: Patron }) => {
   const { onOpen: openModal, onClose: closeModal, Modal } = useModal()
@@ -47,7 +46,7 @@ const PasswordModal = ({ patron }: { patron: Patron }) => {
       </Box>
     ),
     closeButtonLabel: "Cancel",
-    headingText: modalHeading(<Text> Change PIN/PASSWORD </Text>),
+    headingText: <h5 className={styles.modalHeading}>Change PIN/PASSWORD</h5>,
     onClose: () => {
       closeModal()
     },
@@ -74,15 +73,17 @@ const PasswordModal = ({ patron }: { patron: Patron }) => {
       </Box>
     ),
     closeButtonLabel: "OK",
-    headingText: modalHeading(
-      <>
-        <Icon
-          size="large"
-          name="actionCheckCircleFilled"
-          color="ui.success.primary"
-        />
-        PIN/PASSWORD change was successful
-      </>
+    headingText: (
+      <h5 className={styles.modalHeading}>
+        <>
+          <Icon
+            size="large"
+            name="actionCheckCircleFilled"
+            color="ui.success.primary"
+          />
+          PIN/PASSWORD change was successful
+        </>
+      </h5>
     ),
     onClose: async () => {
       closeModal()
@@ -99,11 +100,13 @@ const PasswordModal = ({ patron }: { patron: Patron }) => {
       </Box>
     ),
     closeButtonLabel: "OK",
-    headingText: modalHeading(
-      <>
-        <Icon size="large" name="errorFilled" color="ui.error.primary" />
-        PIN/PASSWORD change failed
-      </>
+    headingText: (
+      <h5 className={styles.modalHeading}>
+        <>
+          <Icon size="large" name="errorFilled" color="ui.error.primary" />
+          PIN/PASSWORD change failed
+        </>
+      </h5>
     ),
     onClose: async () => {
       closeModal()

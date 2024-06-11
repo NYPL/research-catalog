@@ -7,11 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
-- Replaced all modals with new 'confirmation'/'default' variant (SCC-4110)
+### Added
+
+- Add No DRB Results copy and image to DRBContainer (SCC-4116)
+- Add Bib model parent class and rendered ItemTable in Bib Details (SCC-3964)
 - Add update pickup location functionality to Requests tab in account page (SCC-3930)
 - Add caching of pickup location. Update Patron type to have a SierraCodeName for homeLibrary instead of a string for homeLibraryCode (SCC-4060)
 
 ### Updated
+
+- Created npm run test-watch-quiet to run tests for changed files without printing the HTML from RTL errors.
+- Update Account Settings notification preference selector to be a controlled component in order to validate based on the selected preference. This includes changing the Patron type that is returned from the My Account model
+- Extracted getEmailParams from Feedback API route and added test (SCC-4032)
+- Replaced all modals with new 'confirmation'/'default' variant (SCC-4110)
+
+### Fixed
+
+- Fixed mobile tabs width on My Account page so text is readable when a user zooms in.
 
 ## Hotfixes 2024-05-22
 

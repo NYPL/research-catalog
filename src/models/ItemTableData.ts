@@ -2,7 +2,7 @@ import type { ReactElement } from "react"
 
 import type Item from "./Item"
 import type { ItemTableParams } from "../types/itemTypes"
-import RequestButtons from "../components/ItemTable/RequestButtons"
+import StatusLinks from "../components/ItemTable/StatusLinks"
 
 /**
  * The ItemTable class converts a Bib's item data to the format
@@ -16,14 +16,12 @@ import RequestButtons from "../components/ItemTable/RequestButtons"
  */
 export default class ItemTableData {
   items: Item[]
-  isDesktop: boolean
-  isBibPage: boolean
+  inSearchResult: boolean
   isArchiveCollection: boolean
 
   constructor(items: Item[], itemTableParams: ItemTableParams) {
     this.items = items
-    this.isDesktop = itemTableParams.isDesktop
-    this.isBibPage = itemTableParams.isBibPage
+    this.inSearchResult = itemTableParams.inSearchResult || false
     this.isArchiveCollection = itemTableParams.isArchiveCollection
   }
   /**
@@ -45,29 +43,29 @@ export default class ItemTableData {
   get tableData(): (string | ReactElement)[][] {
     return this.items.map((item) => {
       return [
-        ...(this.showStatusColumn() ? [RequestButtons({ item })] : []),
+        ...(this.showStatusColumn() ? [StatusLinks({ item })] : []),
         ...(this.showVolumeColumn() ? [item.volume] : []),
         item.format,
-        item.callNumber,
         ...(this.showAccessColumn() ? [item.accessMessage] : []),
+        item.callNumber,
         item.location.prefLabel,
       ]
     })
   }
 
   showVolumeColumn(): boolean {
-    return this.items.some((item) => item.volume) && this.isBibPage
+    return this.items.some((item) => item.volume) && !this.inSearchResult
   }
 
   showStatusColumn(): boolean {
-    return this.isBibPage
+    return !this.inSearchResult
   }
 
   showAccessColumn(): boolean {
-    return this.isBibPage && this.isDesktop
+    return !this.inSearchResult
   }
 
   volumeColumnHeading(): string {
-    return this.isArchiveCollection ? "Vol/Date" : "Container"
+    return this.isArchiveCollection ? "Container" : "Vol/Date"
   }
 }

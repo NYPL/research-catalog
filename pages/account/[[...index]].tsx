@@ -15,6 +15,7 @@ import type {
   Hold,
   Checkout,
   Fine,
+  SierraCodeName,
 } from "../../src/types/myAccountTypes"
 import { BASE_URL } from "../../src/config/constants"
 import { useEffect, useState } from "react"
@@ -27,9 +28,11 @@ interface MyAccountPropsType {
   fines?: Fine
   isAuthenticated: boolean
   tabsPath?: string
+  pickupLocations: SierraCodeName[]
 }
 
 export default function MyAccount({
+  pickupLocations,
   checkouts,
   holds,
   patron,
@@ -89,9 +92,10 @@ export default function MyAccount({
           </Text>
         ) : (
           <>
-            {fines.total > 0 && <FeesBanner />}
+            {fines?.total > 0 && <FeesBanner />}
             <ProfileHeader patron={patron} />
             <ProfileTabs
+              pickupLocations={pickupLocations}
               patron={patron}
               checkouts={checkouts}
               holds={holds}
@@ -128,17 +132,15 @@ export async function getServerSideProps({ req }) {
   const id = patronTokenResponse.decodedPatron.sub
   try {
     const client = await sierraClient()
-    const { checkouts, holds, patron, fines } = await MyAccountFactory(
-      id,
-      client
-    )
+    const { checkouts, holds, patron, fines, pickupLocations } =
+      await MyAccountFactory(id, client)
     /*  Redirecting invalid paths (including /overdues if user has none) and
     // cleaning extra parts off valid paths. */
     if (tabsPath) {
       const allowedPaths = ["items", "requests", "overdues", "settings"]
       if (
         !allowedPaths.some((path) => tabsPath.startsWith(path)) ||
-        (tabsPath === "overdues" && fines.total === 0)
+        (tabsPath === "overdues" && fines?.total === 0)
       ) {
         return {
           redirect: {
@@ -161,7 +163,15 @@ export async function getServerSideProps({ req }) {
       }
     }
     return {
-      props: { checkouts, holds, patron, fines, tabsPath, isAuthenticated },
+      props: {
+        checkouts,
+        holds,
+        patron,
+        fines,
+        tabsPath,
+        isAuthenticated,
+        pickupLocations,
+      },
     }
   } catch (e) {
     console.log(e.message)

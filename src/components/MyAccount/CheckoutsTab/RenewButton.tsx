@@ -12,7 +12,6 @@ import ExternalLink from "../../Links/ExternalLink/ExternalLink"
 import type { Checkout, Patron } from "../../../types/myAccountTypes"
 import { BASE_URL } from "../../../config/constants"
 import styles from "../../../../styles/components/MyAccount.module.scss"
-import modalHeading from "../ModalHeading"
 
 const RenewButton = ({
   checkout,
@@ -35,15 +34,17 @@ const RenewButton = ({
       </Box>
     ),
     closeButtonLabel: "OK",
-    headingText: modalHeading(
-      <>
-        <Icon
-          size="large"
-          name="actionCheckCircleFilled"
-          color="ui.success.primary"
-        />
-        Renewal successful
-      </>
+    headingText: (
+      <h5 className={styles.modalHeading}>
+        <>
+          <Icon
+            size="large"
+            name="actionCheckCircleFilled"
+            color="ui.success.primary"
+          />
+          Renewal successful
+        </>
+      </h5>
     ),
     onClose: () => {
       onClose()
@@ -63,11 +64,13 @@ const RenewButton = ({
       </Box>
     ),
     closeButtonLabel: "OK",
-    headingText: modalHeading(
-      <>
-        <Icon size="large" name="errorFilled" color="ui.error.primary" />
-        Renewal failed
-      </>
+    headingText: (
+      <h5 className={styles.modalHeading}>
+        <>
+          <Icon size="large" name="errorFilled" color="ui.error.primary" />
+          Renewal failed
+        </>
+      </h5>
     ),
     onClose: () => {
       onClose()

@@ -1,23 +1,28 @@
 import { Box, StatusBadge, Text } from "@nypl/design-system-react-components"
 
 import ExternalLink from "../../Links/ExternalLink/ExternalLink"
-import type { Hold, Patron } from "../../../types/myAccountTypes"
+import type {
+  Hold,
+  Patron,
+  SierraCodeName,
+} from "../../../types/myAccountTypes"
 import ItemsTab from "../ItemsTab"
 import CancelButton from "./CancelButton"
 import FreezeButton from "./FreezeButton"
 import UpdateLocation from "./UpdateLocation"
-import { filteredPickupLocations as pickupLocations } from "../../../utils/myAccountUtils"
 
 const RequestsTab = ({
   updateHoldLocation,
   removeHold,
   holds,
   patron,
+  pickupLocations,
 }: {
   updateHoldLocation
   removeHold
   holds: Hold[]
   patron: Patron
+  pickupLocations: SierraCodeName[]
 }) => {
   function formatTitleElement(hold: Hold) {
     // If item is research/circ
