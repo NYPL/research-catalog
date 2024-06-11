@@ -9,6 +9,7 @@ import {
   processedCheckouts,
   processedHolds,
   processedFines,
+  filteredPickupLocations,
 } from "../../fixtures/processedMyAccountData"
 
 jest.mock("../../../src/server/auth")
@@ -21,7 +22,12 @@ jest.mock("next/router", () => ({
 
 describe("MyAccount page", () => {
   it("displays an error message when patron is empty", () => {
-    render(<MyAccount isAuthenticated={true} />)
+    render(
+      <MyAccount
+        pickupLocations={filteredPickupLocations}
+        isAuthenticated={true}
+      />
+    )
     expect(screen.getByText("We are unable to display", { exact: false }))
   })
 
@@ -35,6 +41,7 @@ describe("MyAccount page", () => {
 
   it("redirects /overdues to /account if user has no fees", async () => {
     ;(MyAccountFactory as jest.Mock).mockResolvedValueOnce({
+      pickupLocations: filteredPickupLocations,
       checkouts: processedCheckouts,
       patron: processedPatron,
       fines: { total: 0, entries: [] },
@@ -59,6 +66,7 @@ describe("MyAccount page", () => {
 
   it("redirects invalid paths to /account", async () => {
     ;(MyAccountFactory as jest.Mock).mockResolvedValueOnce({
+      pickupLocations: filteredPickupLocations,
       checkouts: processedCheckouts,
       patron: processedPatron,
       fines: processedFines,
@@ -151,6 +159,7 @@ describe("MyAccount page", () => {
   it("renders notification banner if user has fines", () => {
     render(
       <MyAccount
+        pickupLocations={filteredPickupLocations}
         isAuthenticated={true}
         patron={processedPatron}
         checkouts={processedCheckouts}
@@ -167,6 +176,7 @@ describe("MyAccount page", () => {
   it("does not render notification banner if user does not have fines", () => {
     render(
       <MyAccount
+        pickupLocations={filteredPickupLocations}
         isAuthenticated={true}
         patron={processedPatron}
         checkouts={processedCheckouts}
