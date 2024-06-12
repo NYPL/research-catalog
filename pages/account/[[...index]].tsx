@@ -37,6 +37,7 @@ export default function MyAccount({
   isAuthenticated,
   tabsPath,
 }: MyAccountPropsType) {
+  console.log("spaghettiiiiiiiiii and meatballs")
   const errorRetrievingPatronData = !patron
   return (
     <>
