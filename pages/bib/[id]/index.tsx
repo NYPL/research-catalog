@@ -13,7 +13,7 @@ import {
 import Layout from "../../../src/components/Layout/Layout"
 import {
   PATHS,
-  ITEM_BATCH_SIZE,
+  ITEM_PAGINATION_BATCH_SIZE,
   SITE_NAME,
   BASE_URL,
 } from "../../../src/config/constants"
@@ -181,7 +181,7 @@ export default function BibPage({
                     initialPage={itemPage}
                     currentPage={itemPage}
                     pageCount={Math.ceil(
-                      bib.numPhysicalItems / ITEM_BATCH_SIZE
+                      bib.numPhysicalItems / ITEM_PAGINATION_BATCH_SIZE
                     )}
                     onPageChange={handlePageChange}
                     my="xl"

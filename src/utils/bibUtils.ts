@@ -1,4 +1,4 @@
-import { ITEM_BATCH_SIZE } from "../config/constants"
+import { ITEM_PAGINATION_BATCH_SIZE } from "../config/constants"
 import type { BibQueryParams } from "../types/bibTypes"
 import { getPaginationOffsetStrings } from "./appUtils"
 
@@ -42,11 +42,11 @@ export const buildItemTableDisplayingString = (
   const [resultsStart, resultsEnd] = getPaginationOffsetStrings(
     page,
     totalResults,
-    ITEM_BATCH_SIZE
+    ITEM_PAGINATION_BATCH_SIZE
   )
 
   return `Displaying ${
-    totalResults > ITEM_BATCH_SIZE
+    totalResults > ITEM_PAGINATION_BATCH_SIZE
       ? `${resultsStart}-${resultsEnd}`
       : totalResults.toLocaleString()
   } of ${totalResults.toLocaleString()} item${totalResults > 1 ? "s" : ""}`
@@ -70,7 +70,7 @@ export function getBibQueryString(
 ): string {
   let itemsFrom = bibQuery?.items_from || 0
   const itemPage = bibQuery?.item_page || 1
-  itemsFrom = itemsFrom || (itemPage - 1) * ITEM_BATCH_SIZE
+  itemsFrom = itemsFrom || (itemPage - 1) * ITEM_PAGINATION_BATCH_SIZE
 
   const itemFilterQuery = Object.keys(bibQuery)
     .filter((key) => key !== "items_from")
@@ -81,7 +81,9 @@ export function getBibQueryString(
 
   // Add items_size and items_from params when itemsFrom is defined, even when 0.
   if (typeof itemsFrom !== "undefined")
-    itemQueries.push(`items_size=${ITEM_BATCH_SIZE}&items_from=${itemsFrom}`)
+    itemQueries.push(
+      `items_size=${ITEM_PAGINATION_BATCH_SIZE}&items_from=${itemsFrom}`
+    )
 
   if (!includeAnnotatedMarc) {
     if (itemFilterQuery?.length) itemQueries.push(`${itemFilterQuery}`)

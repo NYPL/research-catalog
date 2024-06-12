@@ -1,7 +1,6 @@
 import type { DiscoveryBibResult, ElectronicResource } from "../types/bibTypes"
 import type { JSONLDValue } from "../types/itemTypes"
 import Item from "../models/Item"
-import { ITEM_BATCH_SIZE, ITEMS_PER_SEARCH_RESULT } from "../config/constants"
 
 /**
  * The Bib class represents a single Bib entity and contains the data
@@ -68,7 +67,7 @@ export default class Bib {
   }
 
   get showViewAllItemsLink() {
-    return this.numPhysicalItems > ITEM_BATCH_SIZE
+    return this.numPhysicalItems > ITEM_PAGINATION_BATCH_SIZE
   }
 
   get resourceType() {

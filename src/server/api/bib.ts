@@ -10,7 +10,7 @@ import {
   DISCOVERY_API_SEARCH_ROUTE,
   SHEP_HTTP_TIMEOUT,
   ITEM_VIEW_ALL_BATCH_SIZE,
-  ITEM_BATCH_SIZE,
+  ITEM_PAGINATION_BATCH_SIZE,
 } from "../../config/constants"
 import { appConfig } from "../../config/config"
 import logger from "../../../logger"
@@ -22,7 +22,6 @@ export async function fetchBib(
 ): Promise<BibResponse> {
   const standardizedId = standardizeBibId(id)
 
-  const bibQueryString = getBibQueryString({ ...bibQuery, id: standardizedId })
   // Redirect to Bib page with standardized version of the Bib ID
   if (id !== standardizedId) {
     return {
@@ -139,7 +138,9 @@ export async function fetchBibItems(
 ): Promise<SearchResultsItem[]> {
   let items: SearchResultsItem[] = []
   const client = await nyplApiClient({ apiName: DISCOVERY_API_NAME })
-  const batchSize = viewAllItems ? ITEM_VIEW_ALL_BATCH_SIZE : ITEM_BATCH_SIZE
+  const batchSize = viewAllItems
+    ? ITEM_VIEW_ALL_BATCH_SIZE
+    : ITEM_PAGINATION_BATCH_SIZE
   const standardizedId = standardizeBibId(id)
   const bibQueryString = getBibQueryString({ ...bibQuery, id: standardizedId })
 
