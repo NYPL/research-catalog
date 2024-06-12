@@ -90,6 +90,7 @@ export default function BibPage({
       }
     )
     const bibQueryString = getBibQueryString(newQuery, false, viewAllItems)
+
     const response = await fetch(
       `${BASE_URL}/api/bib/${bib.id}/items${bibQueryString}`
     )
@@ -113,15 +114,12 @@ export default function BibPage({
 
   const handleViewAll = async (e: SyntheticEvent) => {
     e.preventDefault()
-    let newQuery: BibQueryParams
     setViewAllEnabled((viewAllEnabled) => !viewAllEnabled)
     if (viewAllEnabled) {
-      newQuery = query
-      await refreshItemTable(newQuery)
+      await refreshItemTable(query)
     } else {
-      newQuery = query
-      delete newQuery.item_page
-      await refreshItemTable(newQuery, true)
+      delete query.item_page
+      await refreshItemTable(query, true)
     }
   }
 

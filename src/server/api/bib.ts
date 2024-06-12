@@ -10,7 +10,6 @@ import {
   DISCOVERY_API_SEARCH_ROUTE,
   SHEP_HTTP_TIMEOUT,
   ITEM_VIEW_ALL_BATCH_SIZE,
-  ITEM_PAGINATION_BATCH_SIZE,
 } from "../../config/constants"
 import { appConfig } from "../../config/config"
 import logger from "../../../logger"
@@ -33,16 +32,15 @@ export async function fetchBib(
   const client = await nyplApiClient({ apiName: DISCOVERY_API_NAME })
   const [bibResponse, annotatedMarcResponse] = await Promise.allSettled([
     await client.get(
-      `${DISCOVERY_API_SEARCH_ROUTE}/${standardizedId}${getBibQueryString({
-        ...bibQuery,
-        id: standardizedId,
-      })}`
+      `${DISCOVERY_API_SEARCH_ROUTE}/${standardizedId}${getBibQueryString(
+        bibQuery
+      )}`
     ),
     // Don't fetch annotated-marc for partner records:
     isNyplBibID(id) &&
       (await client.get(
         `${DISCOVERY_API_SEARCH_ROUTE}/${standardizedId}.annotated-marc${getBibQueryString(
-          { ...bibQuery, id: standardizedId },
+          bibQuery,
           true
         )}`
       )),
@@ -144,20 +142,17 @@ export async function fetchBibItems(
   const bib = await client.get(
     `${DISCOVERY_API_SEARCH_ROUTE}/${standardizedId}${bibQueryString}`
   )
-
   // Return the items in the case that View All isn't enabled
   if (!viewAllItems && bib?.items?.length) {
-    console.log("WRONG")
     return bib?.items
   }
 
   // If View All is enabled, fetch the items in large batches
   for (
     let chunk = 1;
-    chunk <= bib.numItemsTotal / ITEM_VIEW_ALL_BATCH_SIZE;
+    chunk <= Math.ceil(bib.numItemsTotal / ITEM_VIEW_ALL_BATCH_SIZE);
     chunk++
   ) {
-    console.log(chunk)
     const pageQueryString = getBibQueryString(
       {
         ...bibQuery,

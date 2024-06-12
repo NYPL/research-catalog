@@ -71,31 +71,26 @@ export function getBibQueryString(
   includeAnnotatedMarc = false,
   viewAllItems = false
 ): string {
-  let itemsFrom = bibQuery?.items_from || 0
-  const itemPage = bibQuery?.item_page || 1
   const batchSize = viewAllItems
     ? ITEM_VIEW_ALL_BATCH_SIZE
     : ITEM_PAGINATION_BATCH_SIZE
-  itemsFrom = itemsFrom || (itemPage - 1) * batchSize
+
+  const itemPage = bibQuery?.item_page || 1
+  const itemsFrom = (itemPage - 1) * batchSize || 0
+
+  const nonFilterQueries = ["items_from", "item_page", "items_size"]
 
   const itemFilterQuery = Object.keys(bibQuery)
-    .filter((key) => key !== "items_from")
-    .map((key) => `${key}=${bibQuery[key]}`)
-    .join("&")
-  console.log(itemFilterQuery)
+    .filter((key) => !nonFilterQueries.includes(key))
+    .map((key) => `&${key}=${bibQuery[key]}`)
 
-  const itemQueries = []
+  const paginationQuery = `items_size=${batchSize}&items_from=${itemsFrom}&item_page=${itemPage}`
 
-  itemQueries.push(`items_size=${batchSize}&items_from=${itemsFrom}`)
-
-  if (!includeAnnotatedMarc) {
-    itemQueries.push("merge_checkin_card_items=true")
-  }
-
-  const itemQueryString = itemQueries.length ? itemQueries.join("&") : ""
-  const viewAllQueryString = viewAllItems ? "&view_all_items=true" : ""
-
-  return itemQueries.length || viewAllItems
-    ? `?${itemQueryString}${viewAllQueryString}`
+  const mergeCheckinQuery = !includeAnnotatedMarc
+    ? "&merge_checkin_card_items=true"
     : ""
+
+  const viewAllQuery = viewAllItems ? "&view_all_items=true" : ""
+
+  return `?${paginationQuery}${itemFilterQuery}${itemFilterQuery}${viewAllQuery}${mergeCheckinQuery}`
 }

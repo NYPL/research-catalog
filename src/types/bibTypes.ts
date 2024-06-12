@@ -82,7 +82,6 @@ export interface BibQueryParams {
   features?: string
   item_page?: number
   items_size?: number
-  items_from?: number
   view_all_items?: boolean
 }
 
