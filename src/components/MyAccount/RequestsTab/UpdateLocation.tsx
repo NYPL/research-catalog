@@ -187,7 +187,7 @@ const UpdateLocation = ({
           Change location
         </Text>
       </Button>
-      <Modal {...modalProps} />
+      <Modal {...{ ...modalProps, onClose: closeModal }} />
     </>
   )
 }
