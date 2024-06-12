@@ -3,7 +3,10 @@ import Head from "next/head"
 
 import Layout from "../../src/components/Layout/Layout"
 import initializePatronTokenAuth, {
+  stuckInRedirectLoop,
   getLoginRedirect,
+  buildNewAuthRedirectCookie,
+  stuckInRedirectLoop,
 } from "../../src/server/auth"
 import { MyAccountFactory } from "../../src/models/MyAccount"
 import ProfileTabs from "../../src/components/MyAccount/ProfileTabs"
@@ -17,10 +20,6 @@ import type {
   Fine,
   SierraCodeName,
 } from "../../src/types/myAccountTypes"
-import { BASE_URL } from "../../src/config/constants"
-import { useEffect, useState } from "react"
-import { incrementTime } from "../../src/utils/myAccountUtils"
-
 interface MyAccountPropsType {
   patron?: Patron
   checkouts?: Checkout[]
@@ -29,9 +28,11 @@ interface MyAccountPropsType {
   isAuthenticated: boolean
   tabsPath?: string
   pickupLocations: SierraCodeName[]
+  redirectLoop: boolean
 }
 
 export default function MyAccount({
+  redirectLoop,
   pickupLocations,
   checkouts,
   holds,
@@ -41,36 +42,6 @@ export default function MyAccount({
   tabsPath,
 }: MyAccountPropsType) {
   const errorRetrievingPatronData = !patron
-  const [stuckInAuthRedirectLoop, setStuckInAuthRedirectLoop] = useState(false)
-  // Detect a redirect loop and display error if we can't solve it any other way
-  const trackRedirects = () => {
-    const nyplAccountRedirectTracker = document.cookie
-      .split(";")
-      .find((cookie) => cookie.includes("nyplAccountRedirectTracker"))
-    if (nyplAccountRedirectTracker) {
-      const currentValue = nyplAccountRedirectTracker.split("=")[1].split("exp")
-      const currentCount = parseInt(currentValue[0], 10)
-      if (currentCount > 3) {
-        return true
-      }
-      const currentExp = currentValue[1]
-      document.cookie = `nyplAccountRedirectTracker=${
-        currentCount + 1
-      }exp${currentExp}; expires=${currentExp}`
-    } else {
-      const expirationTime = incrementTime(0, 10)
-      document.cookie = `nyplAccountRedirectTracker=1exp${expirationTime}; expires=${expirationTime}`
-    }
-    return false
-  }
-
-  useEffect(() => {
-    // Missing patron is a red flag that we may be in redirect loop.
-    if (!patron) {
-      const isInRedirectLoop = trackRedirects()
-      setStuckInAuthRedirectLoop(isInRedirectLoop)
-    }
-  }, [patron])
 
   return (
     <>
@@ -79,7 +50,7 @@ export default function MyAccount({
       </Head>
 
       <Layout isAuthenticated={isAuthenticated} activePage="account">
-        {stuckInAuthRedirectLoop ? (
+        {redirectLoop ? (
           <Text>
             We are unable to display your account information at this time due
             an error with our authentication server. Please contact
@@ -112,17 +83,24 @@ export default function MyAccount({
 export async function getServerSideProps({ req }) {
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const isAuthenticated = patronTokenResponse.isTokenValid
+  let stuck = false
   if (!isAuthenticated) {
     // figure if we're in the loop
+    let redirectTrackerCookie = req.cookies["nyplAccountRedirectTracker"]
+    stuck = stuckInRedirectLoop(redirectTrackerCookie)
+    const shouldWeRedirect = !stuck
+    redirectTrackerCookie = buildNewAuthRedirectCookie(redirectTrackerCookie)
     // if we're in the loop, return some flag
     // else return redirect response with redirectcookie updated with new :
     const redirect = getLoginRedirect(req)
-    return {
-      redirect: {
-        // redirect cookie
-        destination: redirect,
-        permanent: false,
-      },
+    if (shouldWeRedirect) {
+      return {
+        redirect: {
+          cookie: redirectTrackerCookie,
+          destination: redirect,
+          permanent: false,
+        },
+      }
     }
   }
   // Parsing path from url to pass to ProfileTabs.
@@ -171,6 +149,7 @@ export async function getServerSideProps({ req }) {
         tabsPath,
         isAuthenticated,
         pickupLocations,
+        redirectLoop: stuck,
       },
     }
   } catch (e) {

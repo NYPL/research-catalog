@@ -4,6 +4,8 @@ import { importSPKI, jwtVerify, type JWTPayload } from "jose"
 import { appConfig } from "../config/config"
 import { BASE_URL } from "../config/constants"
 import { useEffect, useState } from "react"
+import { incrementTime } from "../../src/utils/myAccountUtils"
+import { NextRequest } from "next/server"
 
 interface UserJwtPayload extends JWTPayload {
   iss: string
@@ -53,6 +55,41 @@ export default async function initializePatronTokenAuth(reqCookies: unknown) {
   }
 
   return patronTokenResponse
+}
+
+const parseNyplAccountRedirectTracker = (
+  nyplAccountRedirectTracker: string
+) => {
+  const currentValue = nyplAccountRedirectTracker.split("exp")
+  const currentCount = parseInt(currentValue[0], 10)
+  return { currentCount, currentValue }
+}
+
+// Detect a redirect loop and display error if we can't solve it any other way
+export const stuckInRedirectLoop = (nyplAccountRedirectTracker: string) => {
+  if (!nyplAccountRedirectTracker) return false
+  const { currentCount } = parseNyplAccountRedirectTracker(
+    nyplAccountRedirectTracker
+  )
+  if (currentCount < 3) return false
+  if (currentCount > 3) return true
+}
+
+export const buildNewAuthRedirectCookie = (
+  nyplAccountRedirectTracker: string
+) => {
+  if (!nyplAccountRedirectTracker) {
+    const expirationTime = incrementTime(0, 10)
+    return `nyplAccountRedirectTracker=1exp${expirationTime}; expires=${expirationTime}`
+  } else {
+    const { currentCount, currentValue } = parseNyplAccountRedirectTracker(
+      nyplAccountRedirectTracker
+    )
+    const currentExp = currentValue[1]
+    return `nyplAccountRedirectTracker=${
+      currentCount + 1
+    }exp${currentExp}; expires=${currentExp}`
+  }
 }
 
 /**
