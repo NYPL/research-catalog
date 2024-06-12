@@ -1,6 +1,7 @@
 import type { DiscoveryBibResult, ElectronicResource } from "../types/bibTypes"
 import type { JSONLDValue } from "../types/itemTypes"
 import Item from "../models/Item"
+import { ITEM_PAGINATION_BATCH_SIZE } from "../config/constants"
 
 /**
  * The Bib class represents a single Bib entity and contains the data

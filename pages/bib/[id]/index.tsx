@@ -91,7 +91,7 @@ export default function BibPage({
     )
     const bibQueryString = getBibQueryString(newQuery, false, viewAllItems)
     const response = await fetch(
-      `${BASE_URL}/api/bib/${bib.id}/items?${bibQueryString}`
+      `${BASE_URL}/api/bib/${bib.id}/items${bibQueryString}`
     )
     if (response.ok) {
       const { items } = await response.json()

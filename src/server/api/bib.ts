@@ -136,22 +136,45 @@ export async function fetchBibItems(
   bibQuery?: BibQueryParams,
   viewAllItems = false
 ): Promise<SearchResultsItem[]> {
-  let items: SearchResultsItem[] = []
+  const items: SearchResultsItem[] = []
   const client = await nyplApiClient({ apiName: DISCOVERY_API_NAME })
-  const batchSize = viewAllItems
-    ? ITEM_VIEW_ALL_BATCH_SIZE
-    : ITEM_PAGINATION_BATCH_SIZE
   const standardizedId = standardizeBibId(id)
   const bibQueryString = getBibQueryString({ ...bibQuery, id: standardizedId })
-
+  // Fetch the bib with pagination and filters applied to determine total physical item count
   const bib = await client.get(
-    `${DISCOVERY_API_SEARCH_ROUTE}/${bibQueryString}`
+    `${DISCOVERY_API_SEARCH_ROUTE}/${standardizedId}${bibQueryString}`
   )
 
-  if (viewAllItems) {
-    console.log("bibQueryString", bibQueryString)
-  } else {
-    items = bib?.items
+  // Return the items in the case that View All isn't enabled
+  if (!viewAllItems && bib?.items?.length) {
+    console.log("WRONG")
+    return bib?.items
+  }
+
+  // If View All is enabled, fetch the items in large batches
+  for (
+    let chunk = 1;
+    chunk <= bib.numItemsTotal / ITEM_VIEW_ALL_BATCH_SIZE;
+    chunk++
+  ) {
+    console.log(chunk)
+    const pageQueryString = getBibQueryString(
+      {
+        ...bibQuery,
+        id: standardizedId,
+        item_page: chunk,
+      },
+      false,
+      true
+    )
+    const bibPage = await client.get(
+      `${DISCOVERY_API_SEARCH_ROUTE}/${standardizedId}${pageQueryString}`
+    )
+    if (bibPage?.items?.length) {
+      items.push(...bibPage.items)
+    } else {
+      console.log("Unable to fetch items")
+    }
   }
   return items
 }

@@ -1,4 +1,7 @@
-import { ITEM_PAGINATION_BATCH_SIZE } from "../config/constants"
+import {
+  ITEM_PAGINATION_BATCH_SIZE,
+  ITEM_VIEW_ALL_BATCH_SIZE,
+} from "../config/constants"
 import type { BibQueryParams } from "../types/bibTypes"
 import { getPaginationOffsetStrings } from "./appUtils"
 
@@ -70,23 +73,22 @@ export function getBibQueryString(
 ): string {
   let itemsFrom = bibQuery?.items_from || 0
   const itemPage = bibQuery?.item_page || 1
-  itemsFrom = itemsFrom || (itemPage - 1) * ITEM_PAGINATION_BATCH_SIZE
+  const batchSize = viewAllItems
+    ? ITEM_VIEW_ALL_BATCH_SIZE
+    : ITEM_PAGINATION_BATCH_SIZE
+  itemsFrom = itemsFrom || (itemPage - 1) * batchSize
 
   const itemFilterQuery = Object.keys(bibQuery)
     .filter((key) => key !== "items_from")
     .map((key) => `${key}=${bibQuery[key]}`)
     .join("&")
+  console.log(itemFilterQuery)
 
   const itemQueries = []
 
-  // Add items_size and items_from params when itemsFrom is defined, even when 0.
-  if (typeof itemsFrom !== "undefined")
-    itemQueries.push(
-      `items_size=${ITEM_PAGINATION_BATCH_SIZE}&items_from=${itemsFrom}`
-    )
+  itemQueries.push(`items_size=${batchSize}&items_from=${itemsFrom}`)
 
   if (!includeAnnotatedMarc) {
-    if (itemFilterQuery?.length) itemQueries.push(`${itemFilterQuery}`)
     itemQueries.push("merge_checkin_card_items=true")
   }
 
