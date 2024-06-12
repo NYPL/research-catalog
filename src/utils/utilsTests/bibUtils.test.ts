@@ -44,26 +44,23 @@ describe("bibUtils", () => {
   describe("getBibQueryString", () => {
     it("returns the correct query string with a bib ID and no bib params", () => {
       expect(getBibQueryString({ id: "b12082323" })).toBe(
-        "b12082323?items_size=20&items_from=0&id=b12082323&merge_checkin_card_items=true"
+        "?items_size=20&items_from=0&id=b12082323&merge_checkin_card_items=true"
       )
     })
-    it("returns the correct query string with a bib ID and various combinations of bib params", () => {
+    it("returns the correct query string with a bib ID and query params", () => {
       expect(getBibQueryString({ id: "b12082323", items_from: 5 })).toBe(
-        "b12082323?items_size=20&items_from=5&id=b12082323&merge_checkin_card_items=true"
+        "?items_size=20&items_from=5&id=b12082323&merge_checkin_card_items=true"
       )
       expect(getBibQueryString({ id: "b12082323", item_page: 5 })).toBe(
-        "b12082323?items_size=20&items_from=80&id=b12082323&item_page=5&merge_checkin_card_items=true"
+        "?items_size=20&items_from=80&id=b12082323&item_page=5&merge_checkin_card_items=true"
       )
     })
     it("returns the correct query string with various combinations of bib params and annotated marc setting enabled", () => {
       expect(getBibQueryString({ id: "b12082323", items_from: 5 }, true)).toBe(
-        "b12082323.annotated-marc?items_size=20&items_from=5"
+        "?items_size=20&items_from=5"
       )
       expect(getBibQueryString({ id: "b12082323", item_page: 5 }, true)).toBe(
-        "b12082323.annotated-marc?items_size=20&items_from=80"
-      )
-      expect(getBibQueryString({ id: "b12082323", items_from: 5 }, true)).toBe(
-        "b12082323.annotated-marc?items_size=20&items_from=5"
+        "?items_size=20&items_from=80"
       )
     })
   })

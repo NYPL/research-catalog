@@ -78,9 +78,6 @@ export function getBibQueryString(
     .join("&")
 
   const itemQueries = []
-  const queryBase = includeAnnotatedMarc
-    ? `${bibQuery.id}.annotated-marc`
-    : bibQuery.id
 
   // Add items_size and items_from params when itemsFrom is defined, even when 0.
   if (typeof itemsFrom !== "undefined")
@@ -91,7 +88,10 @@ export function getBibQueryString(
     itemQueries.push("merge_checkin_card_items=true")
   }
 
-  return `${queryBase}?${itemQueries.length ? itemQueries.join("&") : ""}${
-    viewAllItems ? "&view_all_items=true" : ""
-  }`
+  const itemQueryString = itemQueries.length ? itemQueries.join("&") : ""
+  const viewAllQueryString = viewAllItems ? "&view_all_items=true" : ""
+
+  return itemQueries.length || viewAllItems
+    ? `?${itemQueryString}${viewAllQueryString}`
+    : ""
 }
