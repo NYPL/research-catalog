@@ -198,7 +198,7 @@ export async function getServerSideProps({ params, query, req }) {
           discoveryBibResult,
           annotatedMarc,
           isAuthenticated,
-          itemPage: parseInt(query.item_page) || 1,
+          itemPage: query.item_page ? parseInt(query.item_page) : 1,
         },
       }
   }
