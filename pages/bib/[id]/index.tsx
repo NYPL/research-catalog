@@ -37,7 +37,6 @@ import Item from "../../../src/models/Item"
 import type { SearchResultsItem } from "../../../src/types/itemTypes"
 import RCLink from "../../../src/components/Links/RCLink/RCLink"
 import type { ParsedUrlQueryInput } from "querystring"
-import styles from "../../../styles/components/MyAccount.module.scss"
 
 interface BibPropsType {
   discoveryBibResult: DiscoveryBibResult
