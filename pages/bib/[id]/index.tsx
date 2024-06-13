@@ -135,7 +135,7 @@ export default function BibPage({
     e.preventDefault()
     setViewAllEnabled((viewAllEnabled) => !viewAllEnabled)
     if (viewAllEnabled) {
-      await refreshItemTable(query)
+      await refreshItemTable(query, false)
     } else {
       delete query.item_page
       await refreshItemTable(query, true)
