@@ -1,6 +1,6 @@
 import Head from "next/head"
 import type { SyntheticEvent } from "react"
-import { useState, useRef } from "react"
+import { useState, useRef, useCallback } from "react"
 import { useRouter } from "next/router"
 import {
   Heading,
@@ -77,55 +77,55 @@ export default function BibPage({
     isArchiveCollection: bib.isArchiveCollection,
   })
 
-  const refreshItemTable = async (
-    newQuery: BibQueryParams,
-    viewAllItems = false
-  ) => {
-    setItemsLoading(true)
-    setItemFetchError(false)
+  const refreshItemTable = useCallback(
+    async (newQuery: BibQueryParams, viewAllItems = false) => {
+      setItemsLoading(true)
+      setItemFetchError(false)
 
-    // By default the Next router query includes the bib id
-    // This prevents it from being added redundantly to the query string
-    delete newQuery.id
+      // By default the Next router query includes the bib id
+      // This prevents it from being added redundantly to the query string
+      delete newQuery.id
 
-    await push(
-      {
-        pathname: `${PATHS.BIB}/${bib.id}${viewAllItems ? "/all" : ""}`,
-        query: newQuery as ParsedUrlQueryInput,
-      },
-      undefined,
-      {
-        shallow: true,
-        scroll: false,
+      await push(
+        {
+          pathname: `${PATHS.BIB}/${bib.id}${viewAllItems ? "/all" : ""}`,
+          query: newQuery as ParsedUrlQueryInput,
+        },
+        undefined,
+        {
+          shallow: true,
+          scroll: false,
+        }
+      )
+      const bibQueryString = getBibQueryString(newQuery, false, viewAllItems)
+
+      // Cancel any active fetches on new ItemTable refreshes
+      if (controllerRef.current) {
+        controllerRef.current.abort()
       }
-    )
-    const bibQueryString = getBibQueryString(newQuery, false, viewAllItems)
+      controllerRef.current = new AbortController()
+      const signal = controllerRef.current.signal
 
-    // Cancel any active fetches on new ItemTable refreshes
-    if (controllerRef.current) {
-      controllerRef.current.abort()
-    }
-    controllerRef.current = new AbortController()
-    const signal = controllerRef.current.signal
-
-    const response = await fetch(
-      `${BASE_URL}/api/bib/${bib.id}/items${bibQueryString}`,
-      {
-        method: "get",
-        signal,
+      const response = await fetch(
+        `${BASE_URL}/api/bib/${bib.id}/items${bibQueryString}`,
+        {
+          method: "get",
+          signal,
+        }
+      )
+      if (response.ok) {
+        const { items } = await response.json()
+        setBibItems(items.map((item: SearchResultsItem) => new Item(item, bib)))
+        setItemsLoading(false)
+        itemTableScrollRef.current?.scrollIntoView({
+          behavior: "smooth",
+        })
+      } else {
+        setItemFetchError(true)
       }
-    )
-    if (response.ok) {
-      const { items } = await response.json()
-      setBibItems(items.map((item: SearchResultsItem) => new Item(item, bib)))
-      setItemsLoading(false)
-      itemTableScrollRef.current?.scrollIntoView({
-        behavior: "smooth",
-      })
-    } else {
-      setItemFetchError(true)
-    }
-  }
+    },
+    [bib, query]
+  )
 
   const handlePageChange = async (page: number) => {
     const newQuery = { ...query, item_page: page }
