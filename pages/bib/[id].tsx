@@ -85,6 +85,7 @@ export default function BibPage({
         behavior: "smooth",
       })
     } else {
+      setItemsLoading(false)
       setItemFetchError(true)
     }
   }
