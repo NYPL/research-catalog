@@ -8,6 +8,8 @@ import {
   SkeletonLoader,
   Box,
   Banner,
+  Icon,
+  Text,
 } from "@nypl/design-system-react-components"
 
 import Layout from "../../../src/components/Layout/Layout"
@@ -34,7 +36,8 @@ import initializePatronTokenAuth from "../../../src/server/auth"
 import Item from "../../../src/models/Item"
 import type { SearchResultsItem } from "../../../src/types/itemTypes"
 import RCLink from "../../../src/components/Links/RCLink/RCLink"
-import { ParsedUrlQueryInput } from "querystring"
+import type { ParsedUrlQueryInput } from "querystring"
+import styles from "../../../styles/components/MyAccount.module.scss"
 
 interface BibPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -54,7 +57,7 @@ export default function BibPage({
   itemPage = 1,
   viewAllItems = false,
 }: BibPropsType) {
-  const { pathname, push, query } = useRouter()
+  const { push, query } = useRouter()
   const metadataTitle = `Item Details | ${SITE_NAME}`
   const bib = new Bib(discoveryBibResult)
 
@@ -63,6 +66,8 @@ export default function BibPage({
   const [viewAllEnabled, setViewAllEnabled] = useState(viewAllItems)
   const [bibItems, setBibItems] = useState(bib.items)
   const itemTableScrollRef = useRef<HTMLDivElement>(null)
+
+  const controllerRef = useRef<AbortController>()
 
   const { topDetails, bottomDetails, holdingsDetails } = new BibDetailsModel(
     discoveryBibResult,
@@ -79,20 +84,33 @@ export default function BibPage({
   ) => {
     setItemsLoading(true)
     setItemFetchError(false)
+    delete newQuery.id
+
     await push(
       {
-        pathname: `${pathname}${viewAllItems ? "/all" : ""}`,
-        query: { ...newQuery },
+        pathname: `${PATHS.BIB}/${bib.id}${viewAllItems ? "/all" : ""}`,
+        query: newQuery as ParsedUrlQueryInput,
       },
       undefined,
       {
         shallow: true,
+        scroll: false,
       }
     )
     const bibQueryString = getBibQueryString(newQuery, false, viewAllItems)
 
+    if (controllerRef.current) {
+      controllerRef.current.abort()
+    }
+    controllerRef.current = new AbortController()
+    const signal = controllerRef.current.signal
+
     const response = await fetch(
-      `${BASE_URL}/api/bib/${bib.id}/items${bibQueryString}`
+      `${BASE_URL}/api/bib/${bib.id}/items${bibQueryString}`,
+      {
+        method: "get",
+        signal,
+      }
     )
     if (response.ok) {
       const { items } = await response.json()
@@ -172,7 +190,7 @@ export default function BibPage({
                   <ItemTable itemTableData={itemTableData} />
                 </>
               )}
-              <Box>
+              <Box display="flex" my="xl" justifyContent="space-between">
                 {!viewAllEnabled ? (
                   <Pagination
                     id="bib-items-pagination"
@@ -182,25 +200,48 @@ export default function BibPage({
                       bib.numPhysicalItems / ITEM_PAGINATION_BATCH_SIZE
                     )}
                     onPageChange={handlePageChange}
-                    my="xl"
+                    width="auto"
                   />
                 ) : null}
-                {bib.showViewAllItemsLink && (
-                  <RCLink
-                    href={`${bib.url}${!viewAllEnabled ? "/all" : ""}`}
-                    onClick={handleViewAll}
-                    fontSize={{
-                      base: "mobile.body.body2",
-                      md: "desktop.body.body2",
-                    }}
-                    fontWeight="medium"
-                    type="standalone"
-                  >
-                    {viewAllEnabled
-                      ? "View Less"
-                      : `View All ${bib.itemMessage} `}
-                  </RCLink>
-                )}
+                {bib.showViewAllItemsLink &&
+                  (itemsLoading ? (
+                    <Text
+                      fontSize={{
+                        base: "mobile.body.body1",
+                        md: "desktop.body.body1",
+                      }}
+                      fontWeight="medium"
+                    >
+                      {`Loading all ${bib.numPhysicalItems} items...`}
+                    </Text>
+                  ) : (
+                    <RCLink
+                      href={`${bib.url}${!viewAllEnabled ? "/all" : ""}`}
+                      onClick={handleViewAll}
+                      fontSize={{
+                        base: "mobile.body.body1",
+                        md: "desktop.body.body1",
+                      }}
+                      fontWeight="medium"
+                      display="flex"
+                      alignItems="center"
+                      ml="auto"
+                      isUnderlined={false}
+                    >
+                      <Box as="span" mr="xxs">
+                        {viewAllEnabled
+                          ? "View fewer items"
+                          : `View All ${bib.itemMessage}`}
+                      </Box>
+                      <Icon
+                        iconRotation={viewAllEnabled ? "rotate180" : "rotate0"}
+                        name="arrow"
+                        size="small"
+                        align="right"
+                        color="ui.link.primary"
+                      />
+                    </RCLink>
+                  ))}
               </Box>
             </Box>
           </>
