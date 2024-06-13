@@ -99,6 +99,7 @@ export default function BibPage({
     )
     const bibQueryString = getBibQueryString(newQuery, false, viewAllItems)
 
+    // Cancel any active fetches on new ItemTable refreshes
     if (controllerRef.current) {
       controllerRef.current.abort()
     }
