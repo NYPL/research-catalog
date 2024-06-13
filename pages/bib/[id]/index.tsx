@@ -177,17 +177,19 @@ export default function BibPage({
                 />
               ) : (
                 <>
-                  <Heading
-                    data-testid="item-table-displaying-text"
-                    level="h4"
-                    size="heading5"
-                    mb={{ base: "s", md: "m" }}
-                  >
-                    {buildItemTableDisplayingString(
-                      itemPage,
-                      bib.numPhysicalItems
-                    )}
-                  </Heading>
+                  {!viewAllEnabled ? (
+                    <Heading
+                      data-testid="item-table-displaying-text"
+                      level="h4"
+                      size="heading5"
+                      mb={{ base: "s", md: "m" }}
+                    >
+                      {buildItemTableDisplayingString(
+                        itemPage,
+                        bib.numPhysicalItems
+                      )}
+                    </Heading>
+                  ) : null}
                   <ItemTable itemTableData={itemTableData} />
                 </>
               )}
@@ -205,17 +207,18 @@ export default function BibPage({
                   />
                 ) : null}
                 {bib.showViewAllItemsLink &&
-                  (itemsLoading ? (
+                  (itemsLoading && viewAllEnabled ? (
                     <Text
                       fontSize={{
                         base: "mobile.body.body1",
                         md: "desktop.body.body1",
                       }}
                       fontWeight="medium"
+                      ml="auto"
                     >
                       {`Loading all ${bib.numPhysicalItems} items...`}
                     </Text>
-                  ) : (
+                  ) : !itemsLoading ? (
                     <RCLink
                       href={`${bib.url}${!viewAllEnabled ? "/all" : ""}`}
                       onClick={handleViewAll}
@@ -242,7 +245,7 @@ export default function BibPage({
                         color="ui.link.primary"
                       />
                     </RCLink>
-                  ))}
+                  ) : null)}
               </Box>
             </Box>
           </>
