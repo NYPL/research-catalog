@@ -83,6 +83,9 @@ export default function BibPage({
   ) => {
     setItemsLoading(true)
     setItemFetchError(false)
+
+    // By default the Next router query includes the bib id
+    // This prevents it from being added redundantly to the query string
     delete newQuery.id
 
     await push(
