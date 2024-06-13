@@ -93,6 +93,7 @@ export async function fetchBib(
         status: 404,
       }
     }
+
     return {
       discoveryBibResult,
       annotatedMarc: annotatedMarc?.bib || null,
@@ -139,18 +140,19 @@ export async function fetchBibItems(
   const standardizedId = standardizeBibId(id)
   const bibQueryString = getBibQueryString({ ...bibQuery, id: standardizedId })
   // Fetch the bib with pagination and filters applied to determine total physical item count
-  const bib = await client.get(
+  const discoveryBibResult = await client.get(
     `${DISCOVERY_API_SEARCH_ROUTE}/${standardizedId}${bibQueryString}`
   )
   // Return the items in the case that View All isn't enabled
-  if (!viewAllItems && bib?.items?.length) {
-    return bib?.items
+  if (!viewAllItems && discoveryBibResult?.items?.length) {
+    return discoveryBibResult?.items
   }
 
   // If View All is enabled, fetch the items in large batches
   for (
     let chunk = 1;
-    chunk <= Math.ceil(bib.numItemsTotal / ITEM_VIEW_ALL_BATCH_SIZE);
+    chunk <=
+    Math.ceil(discoveryBibResult.numItemsTotal / ITEM_VIEW_ALL_BATCH_SIZE);
     chunk++
   ) {
     const pageQueryString = getBibQueryString(
