@@ -1,6 +1,6 @@
 import Head from "next/head"
 import type { SyntheticEvent } from "react"
-import { useState, useRef, useCallback } from "react"
+import { useState, useRef, useCallback, useEffect, useMemo } from "react"
 import { useRouter } from "next/router"
 import {
   Heading,
@@ -77,55 +77,61 @@ export default function BibPage({
     isArchiveCollection: bib.isArchiveCollection,
   })
 
-  const refreshItemTable = useCallback(
-    async (newQuery: BibQueryParams, viewAllItems = false) => {
-      setItemsLoading(true)
-      setItemFetchError(false)
+  // Load all items via client-side fetch if page is first loaded with viewAllItems prop passed in
+  // Namely, when the page is accessed with the /all route
+  useEffect(() => {
+    if (viewAllItems) refreshItemTable(query, true)
+  }, [])
 
-      // By default the Next router query includes the bib id
-      // This prevents it from being added redundantly to the query string
-      delete newQuery.id
+  const refreshItemTable = async (
+    newQuery: BibQueryParams,
+    viewAllItems = false
+  ) => {
+    setItemsLoading(true)
+    setItemFetchError(false)
 
-      await push(
-        {
-          pathname: `${PATHS.BIB}/${bib.id}${viewAllItems ? "/all" : ""}`,
-          query: newQuery as ParsedUrlQueryInput,
-        },
-        undefined,
-        {
-          shallow: true,
-          scroll: false,
-        }
-      )
-      const bibQueryString = getBibQueryString(newQuery, false, viewAllItems)
+    // By default the Next router query includes the bib id
+    // This prevents it from being added redundantly to the query string
+    delete newQuery.id
 
-      // Cancel any active fetches on new ItemTable refreshes
-      if (controllerRef.current) {
-        controllerRef.current.abort()
+    await push(
+      {
+        pathname: `${PATHS.BIB}/${bib.id}${viewAllItems ? "/all" : ""}`,
+        query: newQuery as ParsedUrlQueryInput,
+      },
+      undefined,
+      {
+        shallow: true,
+        scroll: false,
       }
-      controllerRef.current = new AbortController()
-      const signal = controllerRef.current.signal
+    )
+    const bibQueryString = getBibQueryString(newQuery, false, viewAllItems)
 
-      const response = await fetch(
-        `${BASE_URL}/api/bib/${bib.id}/items${bibQueryString}`,
-        {
-          method: "get",
-          signal,
-        }
-      )
-      if (response.ok) {
-        const { items } = await response.json()
-        setBibItems(items.map((item: SearchResultsItem) => new Item(item, bib)))
-        setItemsLoading(false)
-        itemTableScrollRef.current?.scrollIntoView({
-          behavior: "smooth",
-        })
-      } else {
-        setItemFetchError(true)
+    // Cancel any active fetches on new ItemTable refreshes
+    if (controllerRef.current) {
+      controllerRef.current.abort()
+    }
+    controllerRef.current = new AbortController()
+    const signal = controllerRef.current.signal
+
+    const response = await fetch(
+      `${BASE_URL}/api/bib/${bib.id}/items${bibQueryString}`,
+      {
+        method: "get",
+        signal,
       }
-    },
-    [bib, query]
-  )
+    )
+    if (response.ok) {
+      const { items } = await response.json()
+      setBibItems(items.map((item: SearchResultsItem) => new Item(item, bib)))
+      setItemsLoading(false)
+      itemTableScrollRef.current?.scrollIntoView({
+        behavior: "smooth",
+      })
+    } else {
+      setItemFetchError(true)
+    }
+  }
 
   const handlePageChange = async (page: number) => {
     const newQuery = { ...query, item_page: page }
@@ -133,7 +139,7 @@ export default function BibPage({
     await refreshItemTable(newQuery)
   }
 
-  const handleViewAll = async (e: SyntheticEvent) => {
+  const handleViewAllClick = async (e: SyntheticEvent) => {
     e.preventDefault()
     setViewAllEnabled((viewAllEnabled) => !viewAllEnabled)
     if (viewAllEnabled) {
@@ -223,7 +229,7 @@ export default function BibPage({
                   ) : !itemsLoading ? (
                     <RCLink
                       href={`${bib.url}${!viewAllEnabled ? "/all" : ""}`}
-                      onClick={handleViewAll}
+                      onClick={handleViewAllClick}
                       fontSize={{
                         base: "mobile.body.body1",
                         md: "desktop.body.body1",
