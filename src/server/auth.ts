@@ -5,7 +5,6 @@ import { appConfig } from "../config/config"
 import { BASE_URL } from "../config/constants"
 import { useEffect, useState } from "react"
 import { incrementTime } from "../../src/utils/myAccountUtils"
-import { NextRequest } from "next/server"
 
 interface UserJwtPayload extends JWTPayload {
   iss: string
@@ -57,38 +56,28 @@ export default async function initializePatronTokenAuth(reqCookies: unknown) {
   return patronTokenResponse
 }
 
-const parseNyplAccountRedirectTracker = (
-  nyplAccountRedirectTracker: string
-) => {
-  const currentValue = nyplAccountRedirectTracker.split("exp")
-  const currentCount = parseInt(currentValue[0], 10)
-  return { currentCount, currentValue }
+const parseNyplAccountRedirects = (nyplAccountRedirects: string) => {
+  const currentValue = nyplAccountRedirects.split("exp")
+  const count = parseInt(currentValue[0], 10)
+  const expiration = currentValue[1]
+  return { count, expiration }
 }
 
-// Detect a redirect loop and display error if we can't solve it any other way
-export const stuckInRedirectLoop = (nyplAccountRedirectTracker: string) => {
-  if (!nyplAccountRedirectTracker) return false
-  const { currentCount } = parseNyplAccountRedirectTracker(
-    nyplAccountRedirectTracker
-  )
-  if (currentCount < 3) return false
-  if (currentCount > 3) return true
+export const stuckInRedirectLoop = (nyplAccountRedirects: string) => {
+  if (!nyplAccountRedirects) return false
+  const { count } = parseNyplAccountRedirects(nyplAccountRedirects)
+  if (count < 3) return false
+  if (count >= 3) return true
 }
 
-export const buildNewAuthRedirectCookie = (
-  nyplAccountRedirectTracker: string
-) => {
-  if (!nyplAccountRedirectTracker) {
-    const expirationTime = incrementTime(0, 10)
-    return `nyplAccountRedirectTracker=1exp${expirationTime}; expires=${expirationTime}`
+export const buildNewAuthRedirectCookie = (nyplAccountRedirects: string) => {
+  if (!nyplAccountRedirects) {
+    const expiration = incrementTime(0, 10)
+    return `1; expires=${expiration}`
   } else {
-    const { currentCount, currentValue } = parseNyplAccountRedirectTracker(
-      nyplAccountRedirectTracker
-    )
-    const currentExp = currentValue[1]
-    return `nyplAccountRedirectTracker=${
-      currentCount + 1
-    }exp${currentExp}; expires=${currentExp}`
+    const { count, expiration } =
+      parseNyplAccountRedirects(nyplAccountRedirects)
+    return `${count + 1}; expires=${expiration}`
   }
 }
 

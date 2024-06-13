@@ -3,7 +3,6 @@ import Head from "next/head"
 
 import Layout from "../../src/components/Layout/Layout"
 import initializePatronTokenAuth, {
-  stuckInRedirectLoop,
   getLoginRedirect,
   buildNewAuthRedirectCookie,
   stuckInRedirectLoop,
@@ -42,65 +41,60 @@ export default function MyAccount({
   tabsPath,
 }: MyAccountPropsType) {
   const errorRetrievingPatronData = !patron
+  if (redirectLoop)
+    return (
+      <>
+        <Head>
+          <title>My Account</title>
+        </Head>
 
-  return (
-    <>
-      <Head>
-        <title>My Account</title>
-      </Head>
-
-      <Layout isAuthenticated={isAuthenticated} activePage="account">
-        {redirectLoop ? (
-          <Text>
-            We are unable to display your account information at this time due
-            an error with our authentication server. Please contact
-            gethelp@nypl.org for assistance.
-          </Text>
-        ) : errorRetrievingPatronData ? (
-          <Text>
-            We are unable to display your account information at this time.
-            Please contact gethelp@nypl.org for assistance.
-          </Text>
-        ) : (
-          <>
-            {fines?.total > 0 && <FeesBanner />}
-            <ProfileHeader patron={patron} />
-            <ProfileTabs
-              pickupLocations={pickupLocations}
-              patron={patron}
-              checkouts={checkouts}
-              holds={holds}
-              fines={fines}
-              activePath={tabsPath}
-            />
-          </>
-        )}
-      </Layout>
-    </>
-  )
+        <Layout isAuthenticated={isAuthenticated} activePage="account">
+          {redirectLoop ? (
+            <Text>
+              We are unable to display your account information at this time due
+              an error with our authentication server. Please contact
+              gethelp@nypl.org for assistance.
+            </Text>
+          ) : errorRetrievingPatronData ? (
+            <Text>
+              We are unable to display your account information at this time.
+              Please contact gethelp@nypl.org for assistance.
+            </Text>
+          ) : (
+            <>
+              {fines?.total > 0 && <FeesBanner />}
+              <ProfileHeader patron={patron} />
+              <ProfileTabs
+                pickupLocations={pickupLocations}
+                patron={patron}
+                checkouts={checkouts}
+                holds={holds}
+                fines={fines}
+                activePath={tabsPath}
+              />
+            </>
+          )}
+        </Layout>
+      </>
+    )
 }
 
-export async function getServerSideProps({ req }) {
+export async function getServerSideProps({ req, res }) {
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const isAuthenticated = patronTokenResponse.isTokenValid
-  let stuck = false
-  if (!isAuthenticated) {
-    // figure if we're in the loop
-    let redirectTrackerCookie = req.cookies["nyplAccountRedirectTracker"]
-    stuck = stuckInRedirectLoop(redirectTrackerCookie)
-    const shouldWeRedirect = !stuck
-    redirectTrackerCookie = buildNewAuthRedirectCookie(redirectTrackerCookie)
+  const redirectTrackerCookie = req.cookies["nyplAccountRedirectTracker"]
+  const threeRedirectsHaveHappened = stuckInRedirectLoop(redirectTrackerCookie)
+  const newCookie = buildNewAuthRedirectCookie(redirectTrackerCookie)
+  res.setHeader("Set-Cookie", "username=lee; Path=/; HttpOnly")
+  if (!isAuthenticated && !threeRedirectsHaveHappened) {
     // if we're in the loop, return some flag
     // else return redirect response with redirectcookie updated with new :
     const redirect = getLoginRedirect(req)
-    if (shouldWeRedirect) {
-      return {
-        redirect: {
-          cookie: redirectTrackerCookie,
-          destination: redirect,
-          permanent: false,
-        },
-      }
+    return {
+      redirect: {
+        destination: redirect,
+        permanent: false,
+      },
     }
   }
   // Parsing path from url to pass to ProfileTabs.
@@ -149,7 +143,7 @@ export async function getServerSideProps({ req }) {
         tabsPath,
         isAuthenticated,
         pickupLocations,
-        redirectLoop: stuck,
+        redirectLoop: threeRedirectsHaveHappened,
       },
     }
   } catch (e) {
