@@ -36,7 +36,7 @@ export async function fetchBib(
       })}`
     ),
     // Don't fetch annotated-marc for partner records:
-    isNyplBibID(id) &&
+    isNyplBibID(standardizedId) &&
       (await client.get(
         `${DISCOVERY_API_SEARCH_ROUTE}/${standardizedId}.annotated-marc${getBibQueryString(
           { ...bibQuery, id: standardizedId },
