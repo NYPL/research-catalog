@@ -14,6 +14,7 @@ export default async function handler(
   let responseBody = {}
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const cookiePatronId = patronTokenResponse.decodedPatron?.sub
+  console.log({ cookiePatronId })
   if (!cookiePatronId) {
     responseStatus = 403
     responseMessage = "No authenticated patron"
@@ -25,7 +26,8 @@ export default async function handler(
   if (req.method == "POST") {
     /**  We get the checkout id and patron id from the request: */
     const checkoutId = req.query.id as string
-    const checkoutPatronId = JSON.parse(JSON.stringify(req.body)).patronId
+    const reqBody = JSON.parse(req.body)
+    const checkoutPatronId = reqBody.patronId
     /**  We check that the patron cookie matches the patron id in the request body,
      * i.e.,the logged in user is the owner of the checkout. */
     if (checkoutPatronId == cookiePatronId) {

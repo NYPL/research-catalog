@@ -72,7 +72,6 @@ const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
       freeze: !frozen,
       pickupLocation: hold.pickupLocation.code,
     })
-    console.log("body type", typeof body)
     const response = await fetch(
       `/research/research-catalog/api/account/holds/update/${hold.id}`,
       {
