@@ -4,8 +4,7 @@ import Head from "next/head"
 import Layout from "../../src/components/Layout/Layout"
 import initializePatronTokenAuth, {
   getLoginRedirect,
-  buildNewAuthRedirectCookie,
-  stuckInRedirectLoop,
+  getUpdatedRedirectCount,
 } from "../../src/server/auth"
 import { MyAccountFactory } from "../../src/models/MyAccount"
 import ProfileTabs from "../../src/components/MyAccount/ProfileTabs"
@@ -41,54 +40,56 @@ export default function MyAccount({
   tabsPath,
 }: MyAccountPropsType) {
   const errorRetrievingPatronData = !patron
-  if (redirectLoop)
-    return (
-      <>
-        <Head>
-          <title>My Account</title>
-        </Head>
+  console.log(redirectLoop)
+  return (
+    <>
+      <Head>
+        <title>My Account</title>
+      </Head>
 
-        <Layout isAuthenticated={isAuthenticated} activePage="account">
-          {redirectLoop ? (
-            <Text>
-              We are unable to display your account information at this time due
-              an error with our authentication server. Please contact
-              gethelp@nypl.org for assistance.
-            </Text>
-          ) : errorRetrievingPatronData ? (
-            <Text>
-              We are unable to display your account information at this time.
-              Please contact gethelp@nypl.org for assistance.
-            </Text>
-          ) : (
-            <>
-              {fines?.total > 0 && <FeesBanner />}
-              <ProfileHeader patron={patron} />
-              <ProfileTabs
-                pickupLocations={pickupLocations}
-                patron={patron}
-                checkouts={checkouts}
-                holds={holds}
-                fines={fines}
-                activePath={tabsPath}
-              />
-            </>
-          )}
-        </Layout>
-      </>
-    )
+      <Layout isAuthenticated={isAuthenticated} activePage="account">
+        {redirectLoop ? (
+          <Text>
+            We are unable to display your account information at this time due
+            an error with our authentication server. Please contact
+            gethelp@nypl.org for assistance.
+          </Text>
+        ) : errorRetrievingPatronData ? (
+          <Text>
+            We are unable to display your account information at this time.
+            Please contact gethelp@nypl.org for assistance.
+          </Text>
+        ) : (
+          <>
+            {fines?.total > 0 && <FeesBanner />}
+            <ProfileHeader patron={patron} />
+            <ProfileTabs
+              pickupLocations={pickupLocations}
+              patron={patron}
+              checkouts={checkouts}
+              holds={holds}
+              fines={fines}
+              activePath={tabsPath}
+            />
+          </>
+        )}
+      </Layout>
+    </>
+  )
 }
 
 export async function getServerSideProps({ req, res }) {
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const isAuthenticated = patronTokenResponse.isTokenValid
-  const redirectTrackerCookie = req.cookies["nyplAccountRedirectTracker"]
-  const threeRedirectsHaveHappened = stuckInRedirectLoop(redirectTrackerCookie)
-  const newCookie = buildNewAuthRedirectCookie(redirectTrackerCookie)
-  res.setHeader("Set-Cookie", "username=lee; Path=/; HttpOnly")
-  if (!isAuthenticated && !threeRedirectsHaveHappened) {
-    // if we're in the loop, return some flag
-    // else return redirect response with redirectcookie updated with new :
+  const redirectTrackerCookie = req.cookies["nyplAccountRedirects"]
+  const redirectCount = getUpdatedRedirectCount(redirectTrackerCookie)
+  res.setHeader(
+    "Set-Cookie",
+    `nyplAccountRedirects=${redirectCount}; Max-Age=10`
+  )
+  const stuckInRedirectLoop = redirectCount >= 3
+  // If we end up not authenticated 3 times after redirecting to the login url, don't redirect.
+  if (!stuckInRedirectLoop && !isAuthenticated) {
     const redirect = getLoginRedirect(req)
     return {
       redirect: {
@@ -143,7 +144,7 @@ export async function getServerSideProps({ req, res }) {
         tabsPath,
         isAuthenticated,
         pickupLocations,
-        redirectLoop: threeRedirectsHaveHappened,
+        redirectLoop: stuckInRedirectLoop,
       },
     }
   } catch (e) {

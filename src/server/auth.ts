@@ -56,29 +56,10 @@ export default async function initializePatronTokenAuth(reqCookies: unknown) {
   return patronTokenResponse
 }
 
-const parseNyplAccountRedirects = (nyplAccountRedirects: string) => {
-  const currentValue = nyplAccountRedirects.split("exp")
-  const count = parseInt(currentValue[0], 10)
-  const expiration = currentValue[1]
-  return { count, expiration }
-}
-
-export const stuckInRedirectLoop = (nyplAccountRedirects: string) => {
-  if (!nyplAccountRedirects) return false
-  const { count } = parseNyplAccountRedirects(nyplAccountRedirects)
-  if (count < 3) return false
-  if (count >= 3) return true
-}
-
-export const buildNewAuthRedirectCookie = (nyplAccountRedirects: string) => {
-  if (!nyplAccountRedirects) {
-    const expiration = incrementTime(0, 10)
-    return `1; expires=${expiration}`
-  } else {
-    const { count, expiration } =
-      parseNyplAccountRedirects(nyplAccountRedirects)
-    return `${count + 1}; expires=${expiration}`
-  }
+export const getUpdatedRedirectCount = (nyplAccountRedirects: string) => {
+  if (!nyplAccountRedirects) return 1
+  const count = parseInt(nyplAccountRedirects, 10)
+  return count + 1
 }
 
 /**
@@ -88,6 +69,7 @@ export const buildNewAuthRedirectCookie = (nyplAccountRedirects: string) => {
 export function getLoginRedirect(req) {
   const protocol = req.protocol || "http"
   const hostname = appConfig.apiEndpoints.domain[appConfig.environment]
+  console.log(req.url)
   const originalUrl = BASE_URL + req.url
   const fullUrl = encodeURIComponent(`${protocol}://${hostname}${originalUrl}`)
   const redirect = `${
