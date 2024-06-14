@@ -14,7 +14,6 @@ export default async function handler(
   let responseBody = {}
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const cookiePatronId = patronTokenResponse.decodedPatron?.sub
-  console.log({ cookiePatronId })
   if (!cookiePatronId) {
     responseStatus = 403
     responseMessage = "No authenticated patron"
