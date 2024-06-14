@@ -36,7 +36,7 @@ describe("handler", () => {
   })
 
   it("should return 403 if no authenticated patron", async () => {
-    req.body.patronId = "123456"
+    req.body = JSON.stringify({ patronId: "123456" })
     ;(initializePatronTokenAuth as jest.Mock).mockResolvedValueOnce({
       decodedPatron: null,
     })
@@ -47,7 +47,7 @@ describe("handler", () => {
   })
 
   it("should return 403 if logged in patron does not own the checkout", async () => {
-    req.body.patronId = "678910"
+    req.body = JSON.stringify({ patronId: "678910" })
     ;(initializePatronTokenAuth as jest.Mock).mockResolvedValueOnce({
       decodedPatron: { sub: "123456" },
     })
@@ -60,7 +60,7 @@ describe("handler", () => {
   })
 
   it("should call renewCheckout if authentication succeeds", async () => {
-    req.body.patronId = "123456"
+    req.body = JSON.stringify({ patronId: "123456" })
     ;(initializePatronTokenAuth as jest.Mock).mockResolvedValueOnce({
       decodedPatron: { sub: "123456" },
     })

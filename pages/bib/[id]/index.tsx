@@ -1,6 +1,6 @@
 import Head from "next/head"
 import type { SyntheticEvent } from "react"
-import { useState, useRef, useCallback, useEffect, useMemo } from "react"
+import { useState, useRef, useEffect } from "react"
 import { useRouter } from "next/router"
 import {
   Heading,
@@ -90,7 +90,7 @@ export default function BibPage({
     setItemsLoading(true)
     setItemFetchError(false)
 
-    // By default the Next router query includes the bib id
+    // By default, the Next router query includes the bib id
     // This prevents it from being added redundantly to the query string
     delete newQuery.id
 
