@@ -64,7 +64,7 @@ const SearchResult = ({ bib }: SearchResultProps) => {
               {bib.showViewAllItemsLink && (
                 <CardActions>
                   <RCLink
-                    href={`${bib.url}#items-table`}
+                    href={`${bib.url}#item-table`}
                     fontSize={{
                       base: "mobile.body.body2",
                       md: "desktop.body.body2",

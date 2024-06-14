@@ -11,6 +11,7 @@ import type {
 import SearchResultsBib from "../models/SearchResultsBib"
 import { RESULTS_PER_PAGE } from "../config/constants"
 import { collapseMultiValueQueryParams } from "./refineSearchUtils"
+import { getPaginationOffsetStrings } from "./appUtils"
 
 /**
  * determineFreshSortByQuery
@@ -34,22 +35,6 @@ export const getFreshSortByQuery = (prevUrl: string, currentUrl: string) => {
 }
 
 /**
- * getPaginationOffsetStrings
- * Used to generate search results start and end counts on Search Results page
- */
-export function getPaginationOffsetStrings(
-  page = 1,
-  total: number
-): [string, string] {
-  const offset = RESULTS_PER_PAGE * page - RESULTS_PER_PAGE
-  const start = offset + 1
-  let end = offset + RESULTS_PER_PAGE
-  end = end >= total ? total : end
-
-  return [start.toLocaleString(), end.toLocaleString()]
-}
-
-/**
  * getSearchResultsHeading
  * Used to generate the search results heading text (Displaying 100 results for keyword "cats")
  * TODO: Make search query type (i.e. "Keyword") dynamic
@@ -60,7 +45,8 @@ export function getSearchResultsHeading(
 ): string {
   const [resultsStart, resultsEnd] = getPaginationOffsetStrings(
     searchParams.page,
-    totalResults
+    totalResults,
+    RESULTS_PER_PAGE
   )
   const queryDisplayString = buildQueryDisplayString(searchParams)
 

@@ -77,13 +77,8 @@ export interface BibResponse {
   redirectUrl?: string
 }
 
-export interface BibParams {
-  itemsFrom?: number
-  itemFilterQuery?: string
-  features?: string[]
-}
-
 export interface BibQueryParams {
+  id?: string
   features?: string
   item_page?: number
   items_from?: number

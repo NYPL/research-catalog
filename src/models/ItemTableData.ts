@@ -15,12 +15,12 @@ import StatusLinks from "../components/ItemTable/StatusLinks"
  * TODO: Remove this class and move functionality to Bib class
  */
 export default class ItemTableData {
-  items: Item[]
+  items?: Item[]
   inSearchResult: boolean
   isArchiveCollection: boolean
 
   constructor(items: Item[], itemTableParams: ItemTableParams) {
-    this.items = items
+    this.items = items || null
     this.inSearchResult = itemTableParams.inSearchResult || false
     this.isArchiveCollection = itemTableParams.isArchiveCollection
   }
@@ -54,7 +54,7 @@ export default class ItemTableData {
   }
 
   showVolumeColumn(): boolean {
-    return this.items.some((item) => item.volume) && !this.inSearchResult
+    return this.items?.some((item) => item.volume) && !this.inSearchResult
   }
 
   showStatusColumn(): boolean {
