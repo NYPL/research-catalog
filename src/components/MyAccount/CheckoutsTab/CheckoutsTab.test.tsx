@@ -40,9 +40,6 @@ describe("CheckoutsTab", () => {
       `/research/research-catalog/api/account/checkouts/renew/${processedCheckouts[0].id}`,
       {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({ patronId: processedPatron.id }),
       }
     )
@@ -61,9 +58,6 @@ describe("CheckoutsTab", () => {
       `/research/research-catalog/api/account/checkouts/renew/${processedCheckouts[0].id}`,
       {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({ patronId: processedPatron.id }),
       }
     )
@@ -88,9 +82,6 @@ describe("CheckoutsTab", () => {
       `/research/research-catalog/api/account/checkouts/renew/${processedCheckouts[0].id}`,
       {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({ patronId: processedPatron.id }),
       }
     )

@@ -197,10 +197,7 @@ describe("RequestsTab", () => {
     expect(fetch).toHaveBeenCalledWith(
       `/research/research-catalog/api/account/holds/update/${processedHolds[1].id}`,
       {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        method: "PUT",
         body: JSON.stringify({
           patronId: processedPatron.id,
           freeze: true,
@@ -217,10 +214,7 @@ describe("RequestsTab", () => {
     expect(fetch).toHaveBeenCalledWith(
       `/research/research-catalog/api/account/holds/update/${processedHolds[1].id}`,
       {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        method: "PUT",
         body: JSON.stringify({
           patronId: processedPatron.id,
           freeze: false,
