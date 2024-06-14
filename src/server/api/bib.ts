@@ -18,7 +18,6 @@ export async function fetchBib(
   bibQuery?: BibQueryParams
 ): Promise<BibResponse> {
   const standardizedId = standardizeBibId(id)
-  const bibQueryString = getBibQueryString({ ...bibQuery, id: standardizedId })
 
   // Redirect to Bib page with standardized version of the Bib ID
   if (id !== standardizedId) {
@@ -30,10 +29,20 @@ export async function fetchBib(
 
   const client = await nyplApiClient({ apiName: DISCOVERY_API_NAME })
   const [bibResponse, annotatedMarcResponse] = await Promise.allSettled([
-    await client.get(`${DISCOVERY_API_SEARCH_ROUTE}/${bibQueryString}`),
+    await client.get(
+      `${DISCOVERY_API_SEARCH_ROUTE}/${standardizedId}${getBibQueryString({
+        ...bibQuery,
+        id: standardizedId,
+      })}`
+    ),
     // Don't fetch annotated-marc for partner records:
-    isNyplBibID(id) &&
-      (await client.get(`${DISCOVERY_API_SEARCH_ROUTE}/${bibQueryString}`)),
+    isNyplBibID(standardizedId) &&
+      (await client.get(
+        `${DISCOVERY_API_SEARCH_ROUTE}/${standardizedId}.annotated-marc${getBibQueryString(
+          { ...bibQuery, id: standardizedId },
+          true
+        )}`
+      )),
   ])
 
   // Assign results values for each response when status is fulfilled

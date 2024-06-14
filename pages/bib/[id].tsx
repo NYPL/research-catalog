@@ -35,6 +35,7 @@ import type { SearchResultsItem } from "../../src/types/itemTypes"
 import ElectronicResourcesLink from "../../src/components/SearchResults/ElectronicResourcesLink"
 import ExternalLink from "../../src/components/Links/ExternalLink/ExternalLink"
 import { appConfig } from "../../src/config/config"
+import type { ParsedUrlQueryInput } from "querystring"
 
 interface BibPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -60,6 +61,7 @@ export default function BibPage({
   const [itemsLoading, setItemsLoading] = useState(false)
   const [itemFetchError, setItemFetchError] = useState(bib.showItemTableError)
   const [bibItems, setBibItems] = useState(bib.items)
+  const [itemTablePage, setItemTablePage] = useState(itemPage)
   const itemTableScrollRef = useRef<HTMLDivElement>(null)
 
   const { topDetails, bottomDetails, holdingsDetails } = new BibDetailsModel(
@@ -74,10 +76,14 @@ export default function BibPage({
   const refreshItemTable = async (newQuery: BibQueryParams) => {
     setItemsLoading(true)
     setItemFetchError(false)
-    await push({ pathname, query: { ...newQuery } }, undefined, {
-      shallow: true,
-    })
-    const bibQueryString = getBibQueryString(newQuery)
+    await push(
+      { pathname, query: newQuery as ParsedUrlQueryInput },
+      undefined,
+      {
+        shallow: true,
+      }
+    )
+    const bibQueryString = getBibQueryString(query)
     const response = await fetch(
       `${BASE_URL}/api/bib/${bib.id}/items?${bibQueryString}`
     )
@@ -89,11 +95,13 @@ export default function BibPage({
         behavior: "smooth",
       })
     } else {
+      setItemsLoading(false)
       setItemFetchError(true)
     }
   }
 
   const handlePageChange = async (page: number) => {
+    setItemTablePage(page)
     const newQuery = { ...query, item_page: page }
     if (page === 1) delete newQuery.item_page
     await refreshItemTable(newQuery)
@@ -154,7 +162,7 @@ export default function BibPage({
                     mb="s"
                   >
                     {buildItemTableDisplayingString(
-                      itemPage,
+                      itemTablePage,
                       bib.numPhysicalItems
                     )}
                   </Heading>
@@ -163,8 +171,8 @@ export default function BibPage({
               )}
               <Pagination
                 id="bib-items-pagination"
-                initialPage={itemPage}
-                currentPage={itemPage}
+                initialPage={itemTablePage}
+                currentPage={itemTablePage}
                 pageCount={Math.ceil(bib.numPhysicalItems / ITEM_BATCH_SIZE)}
                 onPageChange={handlePageChange}
                 my="xl"
@@ -227,7 +235,7 @@ export async function getServerSideProps({ params, query, req }) {
           discoveryBibResult,
           annotatedMarc,
           isAuthenticated,
-          itemPage: query.item_page || 1,
+          itemPage: query.item_page ? parseInt(query.item_page) : 1,
         },
       }
   }

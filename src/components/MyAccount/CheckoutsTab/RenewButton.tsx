@@ -94,9 +94,6 @@ const RenewButton = ({
       `${BASE_URL}/api/account/checkouts/renew/${checkout.id}`,
       {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({ patronId: patron.id }),
       }
     )

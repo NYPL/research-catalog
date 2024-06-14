@@ -22,7 +22,9 @@ const IconListElement = ({
         <Icon size="large" name={icon} />
         {term}
       </dt>
-      <dd className={styles.iconDd}>{description}</dd>
+      <dd data-testid={term} className={styles.iconDd}>
+        {description}
+      </dd>
     </>
   )
 }

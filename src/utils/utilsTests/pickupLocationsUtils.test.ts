@@ -3,7 +3,7 @@ import {
   getPickupLocations,
   testUtils,
 } from "../pickupLocationsUtils"
-import { filteredPickupLocations } from "../../utils/myAccountUtils"
+import { filteredPickupLocations } from "../../../__test__/fixtures/processedMyAccountData"
 import { pickupLocations } from "../../../__test__/fixtures/rawSierraAccountData"
 
 describe("fetchPickupLocations", () => {

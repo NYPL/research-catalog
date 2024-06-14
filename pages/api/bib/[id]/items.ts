@@ -14,7 +14,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   if (req.method === "GET") {
     if (status !== 200 || !items?.length) {
-      res.status(500).json({
+      res.status(400).json({
         error: "Error fetching Bib items for this query",
       })
     } else {
@@ -22,9 +22,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         items,
       })
     }
-  }
-  if (req.method === "POST") {
-    res.status(500).json({
+  } else {
+    res.status(400).json({
       error: "Please use a GET request for the Bib Items API endpoint",
     })
   }

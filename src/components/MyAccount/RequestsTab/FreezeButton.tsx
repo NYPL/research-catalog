@@ -67,18 +67,16 @@ const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
   const handleFreezeClick = async () => {
     // Disabling button while request happens.
     setIsDisabled(true)
+    const body = JSON.stringify({
+      patronId: patron.id,
+      freeze: !frozen,
+      pickupLocation: hold.pickupLocation.code,
+    })
     const response = await fetch(
       `/research/research-catalog/api/account/holds/update/${hold.id}`,
       {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          patronId: patron.id,
-          freeze: !frozen,
-          pickupLocation: hold.pickupLocation.code,
-        }),
+        method: "PUT",
+        body,
       }
     )
     if (response.status !== 200) {
