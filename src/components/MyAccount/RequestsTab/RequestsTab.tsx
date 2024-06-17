@@ -54,7 +54,7 @@ const RequestsTab = ({
           updateHoldLocation={updateHoldLocation}
           pickupLocationOptions={pickupLocations}
           patronId={patron.id}
-          holdId={hold.id}
+          hold={hold}
           pickupLocation={hold.pickupLocation}
           key={i}
         />
