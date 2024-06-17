@@ -122,6 +122,7 @@ export default function BibPage({
         signal,
       }
     )
+    console.log(response)
     if (response.ok) {
       const { items } = await response.json()
       setBibItems(items.map((item: DiscoveryItemResult) => new Item(item, bib)))
@@ -131,6 +132,7 @@ export default function BibPage({
       })
     } else {
       setItemFetchError(true)
+      setItemsLoading(false)
     }
   }
 

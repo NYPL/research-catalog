@@ -148,7 +148,10 @@ export async function fetchBibItems(
   )
   // Return the items in the case that View All isn't enabled
   if (!viewAllItems && discoveryBibResult?.items?.length) {
-    return discoveryBibResult?.items
+    return {
+      items: discoveryBibResult?.items,
+      status: 200,
+    }
   }
 
   // If View All is enabled, fetch the items in large batches
@@ -173,7 +176,10 @@ export async function fetchBibItems(
     if (bibPage?.items?.length) {
       items.push(...bibPage.items)
     } else {
-      console.log("Unable to fetch items")
+      return {
+        items: [],
+        status: 500,
+      }
     }
   }
   return {
