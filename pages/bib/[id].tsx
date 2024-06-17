@@ -17,8 +17,11 @@ import {
   BASE_URL,
 } from "../../src/config/constants"
 import { fetchBib } from "../../src/server/api/bib"
-import { getBibQueryString } from "../../src/utils/bibUtils"
-import { buildItemTableDisplayingString } from "../../src/utils/bibUtils"
+import {
+  buildItemTableDisplayingString,
+  getBibQueryString,
+  isNyplBibID,
+} from "../../src/utils/bibUtils"
 import BibDetailsModel from "../../src/models/BibDetails"
 import ItemTableData from "../../src/models/ItemTableData"
 import BibDetails from "../../src/components/BibPage/BibDetail"
@@ -56,7 +59,7 @@ export default function BibPage({
   const { pathname, push, query } = useRouter()
   const metadataTitle = `Item Details | ${SITE_NAME}`
   const bib = new Bib(discoveryBibResult)
-  const displayCatalogLink = !!bib.id.startsWith("b")
+  const displayLegacyCatalogLink = isNyplBibID(bib.id)
 
   const [itemsLoading, setItemsLoading] = useState(false)
   const [itemFetchError, setItemFetchError] = useState(bib.showItemTableError)
@@ -141,7 +144,12 @@ export default function BibPage({
               Items in the library and off-site
             </Heading>
             <Banner
-              content="How do I request and pick up research materials for on-site use?"
+              content={
+                <ExternalLink href="https://www.nypl.org/help/request-research-materials">
+                  How do I request and pick up research materials for on-site
+                  use?
+                </ExternalLink>
+              }
               isDismissible
               mb="s"
             />
@@ -191,7 +199,7 @@ export default function BibPage({
             key="bottom-details"
             details={bottomDetails}
           />
-          {displayCatalogLink ? (
+          {displayLegacyCatalogLink ? (
             <ExternalLink
               id="legacy-catalog-link"
               href={`${appConfig.urls.legacyCatalog}/record=${bib.id}`}
