@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
 // Item structure coming from the Search Results API response
-export interface SearchResultsItem {
+export interface DiscoveryItemResult {
   uri?: string
   idNyplSourceId?: ItemSourceID
   accessMessage?: JSONLDValue[]

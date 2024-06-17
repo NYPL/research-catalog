@@ -13,7 +13,7 @@ import {
 } from "../../config/constants"
 import { appConfig } from "../../config/config"
 import logger from "../../../logger"
-import type { SearchResultsItem } from "../../types/itemTypes"
+import type { DiscoveryItemResult } from "../../types/itemTypes"
 
 export async function fetchBib(
   id: string,
@@ -134,8 +134,8 @@ export async function fetchBibItems(
   id: string,
   bibQuery?: BibQueryParams,
   viewAllItems = false
-): Promise<SearchResultsItem[]> {
-  const items: SearchResultsItem[] = []
+): Promise<DiscoveryItemResult[]> {
+  const items: DiscoveryItemResult[] = []
   const client = await nyplApiClient({ apiName: DISCOVERY_API_NAME })
   const standardizedId = standardizeBibId(id)
   const bibQueryString = getBibQueryString({ ...bibQuery, id: standardizedId })

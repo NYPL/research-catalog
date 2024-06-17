@@ -34,7 +34,7 @@ import type { AnnotatedMarc } from "../../../src/types/bibDetailsTypes"
 import Bib from "../../../src/models/Bib"
 import initializePatronTokenAuth from "../../../src/server/auth"
 import Item from "../../../src/models/Item"
-import type { SearchResultsItem } from "../../../src/types/itemTypes"
+import type { DiscoveryItemResult } from "../../../src/types/itemTypes"
 import RCLink from "../../../src/components/Links/RCLink/RCLink"
 import type { ParsedUrlQueryInput } from "querystring"
 
@@ -123,7 +123,7 @@ export default function BibPage({
     )
     if (response.ok) {
       const { items } = await response.json()
-      setBibItems(items.map((item: SearchResultsItem) => new Item(item, bib)))
+      setBibItems(items.map((item: DiscoveryItemResult) => new Item(item, bib)))
       setItemsLoading(false)
       itemTableScrollRef.current?.scrollIntoView({
         behavior: "smooth",
