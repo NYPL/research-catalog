@@ -64,6 +64,7 @@ export default function BibPage({
   const [itemFetchError, setItemFetchError] = useState(bib.showItemTableError)
   const [viewAllEnabled, setViewAllEnabled] = useState(viewAllItems)
   const [bibItems, setBibItems] = useState(bib.items)
+  const [itemTablePage, setItemTablePage] = useState(itemPage)
   const itemTableScrollRef = useRef<HTMLDivElement>(null)
 
   const controllerRef = useRef<AbortController>()
@@ -134,6 +135,7 @@ export default function BibPage({
   }
 
   const handlePageChange = async (page: number) => {
+    setItemTablePage(page)
     const newQuery = { ...query, item_page: page }
     if (page === 1) delete newQuery.item_page
     await refreshItemTable(newQuery)
@@ -193,7 +195,7 @@ export default function BibPage({
                       mb={{ base: "s", md: "m" }}
                     >
                       {buildItemTableDisplayingString(
-                        itemPage,
+                        itemTablePage,
                         bib.numPhysicalItems
                       )}
                     </Heading>
@@ -205,8 +207,8 @@ export default function BibPage({
                 {!viewAllEnabled ? (
                   <Pagination
                     id="bib-items-pagination"
-                    initialPage={itemPage}
-                    currentPage={itemPage}
+                    initialPage={itemTablePage}
+                    currentPage={itemTablePage}
                     pageCount={Math.ceil(
                       bib.numPhysicalItems / ITEM_PAGINATION_BATCH_SIZE
                     )}
