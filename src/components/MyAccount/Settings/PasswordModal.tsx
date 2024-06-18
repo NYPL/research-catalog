@@ -3,7 +3,6 @@ import {
   Box,
   Icon,
   Text,
-  Heading,
   List,
   Button,
 } from "@nypl/design-system-react-components"
@@ -19,7 +18,7 @@ const PasswordModal = ({ patron }: { patron: Patron }) => {
   const entryModalProps = {
     type: "default",
     bodyContent: (
-      <Box className={styles.modalBody}>
+      <Box className={styles.noIconBody}>
         <Text sx={{ fontWeight: "medium", paddingBottom: 0 }}>
           Use a strong PIN/PASSWORD to protect your security and identity.
         </Text>
@@ -46,7 +45,7 @@ const PasswordModal = ({ patron }: { patron: Patron }) => {
       </Box>
     ),
     closeButtonLabel: "Cancel",
-    headingText: <h5 className={styles.modalHeading}>Change PIN/PASSWORD</h5>,
+    headingText: <h5 className={styles.noIconHeading}>Change PIN/PASSWORD</h5>,
     onClose: () => {
       closeModal()
     },
