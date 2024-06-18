@@ -18,7 +18,7 @@ export const isFormValid = (updatedForm: {
   phones: string
   notificationPreference: string
 }) => {
-  const phoneRegex = /^(?:\D*\d){10}\D*$/
+  const phoneRegex = /^(?:\D*\d){10,11}\D*$/
   if (updatedForm.notificationPreference === "p") {
     return updatedForm.phones !== "" && phoneRegex.test(updatedForm.phones)
   } else if (updatedForm.notificationPreference === "z") {
