@@ -20,7 +20,10 @@ const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
     type: "default",
     bodyContent: (
       <Box className={styles.modalBody}>
-        <Text>Please try again.</Text>
+        <Text>
+          We were unable to freeze your hold on this item. Please try again or
+          contact us for assistance.
+        </Text>
       </Box>
     ),
     closeButtonLabel: "OK",
@@ -40,6 +43,15 @@ const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
   const successModalProps = {
     type: "default",
     closeButtonLabel: "OK",
+    bodyContent: (
+      <Box className={styles.modalBody}>
+        <Text>
+          Your hold on this item has been frozen. You will continue to advance
+          in the queue but your request will not be filled until you unfreeze
+          your hold.
+        </Text>
+      </Box>
+    ),
     headingText: (
       <h5 className={styles.modalHeading}>
         <>
