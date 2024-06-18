@@ -43,7 +43,6 @@ export function formatDate(date: string | number | Date) {
   // we need to specify timezone to avoid off by one error.
   // perhaps this method needs to be two methods for the specific cases.
   const d = new Date(date)
-  console.log(d)
   const year = d.getFullYear()
   const day = d.getUTCDate()
   const month = d.toLocaleString("default", { month: "long" })
