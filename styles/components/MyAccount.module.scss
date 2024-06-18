@@ -99,6 +99,7 @@
 .itemsTable {
   thead > tr > th,
   thead > tr > th:last-of-type {
+    vertical-align: top;
     text-transform: unset;
     font-weight: var(--nypl-fontWeights-bold);
     border-color: var(--nypl-colors-ui-gray-light-cool);
