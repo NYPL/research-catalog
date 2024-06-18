@@ -116,7 +116,9 @@ const PasswordModal = ({ patron }: { patron: Patron }) => {
   return (
     <>
       <Button
-        size="large"
+        size="medium"
+        pl="0"
+        pt="0"
         id="pin-modal-button"
         buttonType="text"
         onClick={openModal}
