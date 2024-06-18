@@ -4,7 +4,6 @@ import { importSPKI, jwtVerify, type JWTPayload } from "jose"
 import { appConfig } from "../config/config"
 import { BASE_URL } from "../config/constants"
 import { useEffect, useState } from "react"
-import { incrementTime } from "../../src/utils/myAccountUtils"
 
 interface UserJwtPayload extends JWTPayload {
   iss: string
@@ -57,6 +56,7 @@ export default async function initializePatronTokenAuth(reqCookies: unknown) {
 }
 
 export const getUpdatedRedirectCount = (nyplAccountRedirects: string) => {
+  console.log(nyplAccountRedirects)
   if (!nyplAccountRedirects) return 1
   const count = parseInt(nyplAccountRedirects, 10)
   return count + 1

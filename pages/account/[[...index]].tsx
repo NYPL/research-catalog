@@ -26,7 +26,7 @@ interface MyAccountPropsType {
   isAuthenticated: boolean
   tabsPath?: string
   pickupLocations: SierraCodeName[]
-  redirectLoop: boolean
+  redirectLoop?: boolean
 }
 
 export default function MyAccount({
@@ -40,7 +40,6 @@ export default function MyAccount({
   tabsPath,
 }: MyAccountPropsType) {
   const errorRetrievingPatronData = !patron
-  console.log(redirectLoop)
   return (
     <>
       <Head>
@@ -88,9 +87,12 @@ export async function getServerSideProps({ req, res }) {
     `nyplAccountRedirects=${redirectCount}; Max-Age=10`
   )
   const stuckInRedirectLoop = redirectCount >= 3
+  console.log({ stuckInRedirectLoop, isAuthenticated })
   // If we end up not authenticated 3 times after redirecting to the login url, don't redirect.
   if (!stuckInRedirectLoop && !isAuthenticated) {
+    console.log("spaghetti")
     const redirect = getLoginRedirect(req)
+    console.log({ redirect })
     return {
       redirect: {
         destination: redirect,

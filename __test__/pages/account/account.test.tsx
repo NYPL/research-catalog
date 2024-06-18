@@ -20,7 +20,60 @@ jest.mock("next/router", () => ({
   useRouter: jest.fn(),
 }))
 
+// methods on this mock starting with __ are not on original, used here to test
+// call counts
+const mockRes = {
+  __cookieUpdateCount: 0,
+  cookies: {},
+  setHeader: function (_, cookie) {
+    const key = cookie.split("=")[0]
+    const value = cookie.split("=")[1]
+    this.cookieUpdateCount++
+    this.cookies[key] = this.cookies[value]
+  },
+  __reset: function () {
+    this.cookieUpdateCount = 0
+    this.cookies = {}
+  },
+}
+
 describe("MyAccount page", () => {
+  beforeEach(() => {
+    mockRes.__reset()
+    ;(initializePatronTokenAuth as jest.Mock).mockResolvedValueOnce({
+      isTokenValid: true,
+      errorCode: null,
+      decodedPatron: { sub: "123" },
+    })
+  })
+  describe("logout redirect handling", () => {
+    it("redirects up to three times if patron is not authenticated", async () => {
+      ;(MyAccountFactory as jest.Mock).mockResolvedValue({
+        pickupLocations: filteredPickupLocations,
+        checkouts: processedCheckouts,
+        patron: processedPatron,
+        fines: { total: 0, entries: [] },
+        holds: processedHolds,
+      })
+      ;(initializePatronTokenAuth as jest.Mock).mockResolvedValueOnce({
+        isTokenValid: false,
+      })
+      const mockReq = {
+        headers: {
+          host: "local.nypl.org:8080",
+        },
+        url: "/account",
+        cookies: {
+          nyplIdentityPatron: '{"access_token":123}',
+        },
+      }
+
+      await getServerSideProps({ req: mockReq, res: mockRes })
+      expect(mockRes.__cookieUpdateCount).toBe(3)
+    })
+    it.todo("does not redirect if patron is authenticated")
+    it.todo("updates the nyplAccountRedirectsCookie upon redirecting")
+  })
   it("can handle null values for checkouts, holds, fines", () => {
     expect(() =>
       render(
@@ -42,14 +95,6 @@ describe("MyAccount page", () => {
     expect(screen.getByText("We are unable to display", { exact: false }))
   })
 
-  beforeEach(() => {
-    ;(initializePatronTokenAuth as jest.Mock).mockResolvedValueOnce({
-      isTokenValid: true,
-      errorCode: null,
-      decodedPatron: { sub: "123" },
-    })
-  })
-
   it("redirects /overdues to /account if user has no fees", async () => {
     ;(MyAccountFactory as jest.Mock).mockResolvedValueOnce({
       pickupLocations: filteredPickupLocations,
@@ -69,7 +114,7 @@ describe("MyAccount page", () => {
       },
     }
 
-    const result = await getServerSideProps({ req: mockReq })
+    const result = await getServerSideProps({ req: mockReq, res: mockRes })
     expect(result).toStrictEqual({
       redirect: { destination: "/account", permanent: false },
     })
@@ -94,7 +139,7 @@ describe("MyAccount page", () => {
       },
     }
 
-    const result = await getServerSideProps({ req: mockReq })
+    const result = await getServerSideProps({ req: mockReq, res: mockRes })
     expect(result).toStrictEqual({
       redirect: { destination: "/account", permanent: false },
     })
@@ -118,7 +163,7 @@ describe("MyAccount page", () => {
       },
     }
 
-    const result = await getServerSideProps({ req: mockReq })
+    const result = await getServerSideProps({ req: mockReq, res: mockRes })
     expect(result).toStrictEqual({
       redirect: { destination: "/account/settings", permanent: false },
     })
@@ -142,7 +187,7 @@ describe("MyAccount page", () => {
       },
     }
 
-    const result = await getServerSideProps({ req: mockReq })
+    const result = await getServerSideProps({ req: mockReq, res: mockRes })
     expect(result.props.tabsPath).toBe("settings")
   })
 
@@ -164,7 +209,7 @@ describe("MyAccount page", () => {
       },
     }
 
-    const result = await getServerSideProps({ req: mockReq })
+    const result = await getServerSideProps({ req: mockReq, res: mockRes })
     expect(result.props.tabsPath).toBe("overdues")
   })
   it("renders notification banner if user has fines", () => {
