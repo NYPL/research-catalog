@@ -43,7 +43,7 @@ export interface ItemMetadata {
 
 export interface BibItemsResponse {
   items: DiscoveryItemResult[]
-  status: 200 | 500
+  status: 200 | 400
 }
 
 /* eslint-disable @typescript-eslint/naming-convention */

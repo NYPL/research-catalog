@@ -146,7 +146,7 @@ export async function fetchBibItems(
   const discoveryBibResult = await client.get(
     `${DISCOVERY_API_SEARCH_ROUTE}/${standardizedId}${bibQueryString}`
   )
-  // Return the items in the case that View All isn't enabled
+  // Return the bib's paginated items in the case that View All isn't enabled
   if (!viewAllItems && discoveryBibResult?.items?.length) {
     return {
       items: discoveryBibResult?.items,
@@ -178,7 +178,7 @@ export async function fetchBibItems(
     } else {
       return {
         items: [],
-        status: 500,
+        status: 400,
       }
     }
   }

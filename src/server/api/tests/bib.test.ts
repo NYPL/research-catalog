@@ -1,6 +1,6 @@
-import { fetchBib } from "../bib"
+import { fetchBib, fetchBibItems } from "../bib"
 import type { BibResponse } from "../../../types/bibTypes"
-import { DiscoveryBibResult } from "../../../types/bibTypes"
+import type { BibItemsResponse } from "../../../types/itemTypes"
 
 jest.mock("../../nyplApiClient", () => {
   return jest
@@ -84,6 +84,16 @@ jest.mock("../../nyplApiClient", () => {
         })
       })
     })
+    .mockImplementationOnce(async () => {
+      return await new Promise((resolve) => {
+        resolve({
+          get: jest.fn().mockResolvedValueOnce({
+            items: [{}, {}, {}, {}],
+            status: 200,
+          }),
+        })
+      })
+    })
 })
 
 describe("fetchBib", () => {
@@ -125,5 +135,19 @@ describe("fetchBib", () => {
     await expect(
       async () => (await fetchBib("b17418167")) as BibResponse
     ).rejects.toThrow("Bad API URL")
+  })
+})
+
+describe("fetchBibItems", () => {
+  it("should return bib's paginated and filtered items for a given query when viewAllItems is false", async () => {
+    const bibItemsResponse = (await fetchBibItems(
+      "b17418167",
+      {
+        items_from: 0,
+      },
+      false
+    )) as BibItemsResponse
+    expect(bibItemsResponse.items.length).toEqual(4)
+    expect(bibItemsResponse.status).toEqual(200)
   })
 })

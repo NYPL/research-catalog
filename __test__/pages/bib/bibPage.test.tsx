@@ -64,7 +64,7 @@ describe("Bib Page with items", () => {
 
     const pageButton = screen.getByLabelText("Page 2")
     await userEvent.click(pageButton)
-    expect(mockRouter.asPath).toBe("/?item_page=2")
+    expect(mockRouter.asPath).toBe("/bib/pb5579193?item_page=2")
   })
 
   it("renders the bottom bib details", () => {

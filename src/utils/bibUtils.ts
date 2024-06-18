@@ -74,15 +74,16 @@ export function getBibQueryString(
   const batchSize = viewAllItems
     ? ITEM_VIEW_ALL_BATCH_SIZE
     : ITEM_PAGINATION_BATCH_SIZE
-
   const itemPage = bibQuery?.item_page || 1
   const itemsFrom = (itemPage - 1) * batchSize || 0
 
-  const nonFilterQueries = ["items_from", "item_page", "items_size"]
+  const NON_FILTER_QUERIES = ["items_from", "item_page", "items_size"]
 
-  const itemFilterQuery = Object.keys(bibQuery)
-    .filter((key) => !nonFilterQueries.includes(key))
-    .map((key) => `&${key}=${bibQuery[key]}`)
+  const itemFilterQuery = bibQuery
+    ? Object.keys(bibQuery)
+        .filter((key) => !NON_FILTER_QUERIES.includes(key))
+        .map((key) => `&${key}=${bibQuery[key]}`)
+    : ""
 
   const paginationQuery = `items_size=${batchSize}&items_from=${itemsFrom}&item_page=${itemPage}`
 
@@ -92,5 +93,5 @@ export function getBibQueryString(
 
   const viewAllQuery = viewAllItems ? "&view_all_items=true" : ""
 
-  return `?${paginationQuery}${itemFilterQuery}${itemFilterQuery}${viewAllQuery}${mergeCheckinQuery}`
+  return `?${paginationQuery}${itemFilterQuery}${viewAllQuery}${mergeCheckinQuery}`
 }
