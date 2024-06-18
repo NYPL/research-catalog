@@ -94,6 +94,26 @@ jest.mock("../../nyplApiClient", () => {
         })
       })
     })
+    .mockImplementationOnce(async () => {
+      return await new Promise((resolve) => {
+        resolve({
+          get: jest
+            .fn()
+            .mockResolvedValueOnce({
+              numItemsTotal: 4,
+              status: 200,
+            })
+            .mockResolvedValueOnce({
+              items: [{}, {}],
+              status: 200,
+            })
+            .mockResolvedValueOnce({
+              items: [{}, {}],
+              status: 200,
+            }),
+        })
+      })
+    })
 })
 
 describe("fetchBib", () => {
@@ -146,6 +166,16 @@ describe("fetchBibItems", () => {
         items_from: 0,
       },
       false
+    )) as BibItemsResponse
+    expect(bibItemsResponse.items.length).toEqual(4)
+    expect(bibItemsResponse.status).toEqual(200)
+  })
+  it("should fetch items in batches when viewAllItems is true", async () => {
+    const bibItemsResponse = (await fetchBibItems(
+      "b17418167",
+      {},
+      true,
+      2
     )) as BibItemsResponse
     expect(bibItemsResponse.items.length).toEqual(4)
     expect(bibItemsResponse.status).toEqual(200)

@@ -136,7 +136,8 @@ async function fetchBibSubjectHeadings(bibId: string) {
 export async function fetchBibItems(
   id: string,
   bibQuery?: BibQueryParams,
-  viewAllItems = false
+  viewAllItems = false,
+  batchSize = ITEM_VIEW_ALL_BATCH_SIZE
 ): Promise<BibItemsResponse> {
   const items: DiscoveryItemResult[] = []
   const client = await nyplApiClient({ apiName: DISCOVERY_API_NAME })
@@ -156,16 +157,15 @@ export async function fetchBibItems(
 
   // If View All is enabled, fetch the items in large batches
   for (
-    let chunk = 1;
-    chunk <=
-    Math.ceil(discoveryBibResult.numItemsTotal / ITEM_VIEW_ALL_BATCH_SIZE);
-    chunk++
+    let batchNum = 1;
+    batchNum <= Math.ceil(discoveryBibResult.numItemsTotal / batchSize);
+    batchNum++
   ) {
     const pageQueryString = getBibQueryString(
       {
         ...bibQuery,
         id: standardizedId,
-        item_page: chunk,
+        item_page: batchNum,
       },
       false,
       true
