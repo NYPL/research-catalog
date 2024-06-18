@@ -1,6 +1,5 @@
-import { fetchBib, fetchBibItems } from "../bib"
+import { fetchBib } from "../bib"
 import type { BibResponse } from "../../../types/bibTypes"
-import type { BibItemsResponse } from "../../../types/itemTypes"
 
 jest.mock("../../nyplApiClient", () => {
   return jest
@@ -100,6 +99,22 @@ jest.mock("../../nyplApiClient", () => {
           get: jest
             .fn()
             .mockResolvedValueOnce({
+              numItemsTotal: 0,
+              status: 400,
+            })
+            .mockResolvedValueOnce({
+              items: [],
+              status: 400,
+            }),
+        })
+      })
+    })
+    .mockImplementationOnce(async () => {
+      return await new Promise((resolve) => {
+        resolve({
+          get: jest
+            .fn()
+            .mockResolvedValueOnce({
               numItemsTotal: 4,
               status: 200,
             })
@@ -110,6 +125,26 @@ jest.mock("../../nyplApiClient", () => {
             .mockResolvedValueOnce({
               items: [{}, {}],
               status: 200,
+            }),
+        })
+      })
+    })
+    .mockImplementationOnce(async () => {
+      return await new Promise((resolve) => {
+        resolve({
+          get: jest
+            .fn()
+            .mockResolvedValueOnce({
+              numItemsTotal: 4,
+              status: 200,
+            })
+            .mockResolvedValueOnce({
+              items: [{}, {}],
+              status: 200,
+            })
+            .mockResolvedValueOnce({
+              items: [],
+              status: 400,
             }),
         })
       })
@@ -155,29 +190,5 @@ describe("fetchBib", () => {
     await expect(
       async () => (await fetchBib("b17418167")) as BibResponse
     ).rejects.toThrow("Bad API URL")
-  })
-})
-
-describe("fetchBibItems", () => {
-  it("should return bib's paginated and filtered items for a given query when viewAllItems is false", async () => {
-    const bibItemsResponse = (await fetchBibItems(
-      "b17418167",
-      {
-        items_from: 0,
-      },
-      false
-    )) as BibItemsResponse
-    expect(bibItemsResponse.items.length).toEqual(4)
-    expect(bibItemsResponse.status).toEqual(200)
-  })
-  it("should fetch items in batches when viewAllItems is true", async () => {
-    const bibItemsResponse = (await fetchBibItems(
-      "b17418167",
-      {},
-      true,
-      2
-    )) as BibItemsResponse
-    expect(bibItemsResponse.items.length).toEqual(4)
-    expect(bibItemsResponse.status).toEqual(200)
   })
 })

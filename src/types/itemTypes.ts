@@ -41,7 +41,7 @@ export interface ItemMetadata {
   bibId?: string
 }
 
-export interface BibItemsResponse {
+export interface ItemsResponse {
   items: DiscoveryItemResult[]
   status: 200 | 400
 }

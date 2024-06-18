@@ -9,14 +9,9 @@ import {
   DISCOVERY_API_NAME,
   DISCOVERY_API_SEARCH_ROUTE,
   SHEP_HTTP_TIMEOUT,
-  ITEM_VIEW_ALL_BATCH_SIZE,
 } from "../../config/constants"
 import { appConfig } from "../../config/config"
 import logger from "../../../logger"
-import type {
-  DiscoveryItemResult,
-  BibItemsResponse,
-} from "../../types/itemTypes"
 
 export async function fetchBib(
   id: string,
@@ -130,60 +125,5 @@ async function fetchBibSubjectHeadings(bibId: string) {
     )
   } finally {
     clearTimeout(timeoutId)
-  }
-}
-
-export async function fetchBibItems(
-  id: string,
-  bibQuery?: BibQueryParams,
-  viewAllItems = false,
-  batchSize = ITEM_VIEW_ALL_BATCH_SIZE
-): Promise<BibItemsResponse> {
-  const items: DiscoveryItemResult[] = []
-  const client = await nyplApiClient({ apiName: DISCOVERY_API_NAME })
-  const standardizedId = standardizeBibId(id)
-  const bibQueryString = getBibQueryString({ ...bibQuery, id: standardizedId })
-  // Fetch the bib with pagination and filters applied to determine total physical item count
-  const discoveryBibResult = await client.get(
-    `${DISCOVERY_API_SEARCH_ROUTE}/${standardizedId}${bibQueryString}`
-  )
-  // Return the bib's paginated items in the case that View All isn't enabled
-  if (!viewAllItems && discoveryBibResult?.items?.length) {
-    return {
-      items: discoveryBibResult?.items,
-      status: 200,
-    }
-  }
-
-  // If View All is enabled, fetch the items in large batches
-  for (
-    let batchNum = 1;
-    batchNum <= Math.ceil(discoveryBibResult.numItemsTotal / batchSize);
-    batchNum++
-  ) {
-    const pageQueryString = getBibQueryString(
-      {
-        ...bibQuery,
-        id: standardizedId,
-        item_page: batchNum,
-      },
-      false,
-      true
-    )
-    const bibPage = await client.get(
-      `${DISCOVERY_API_SEARCH_ROUTE}/${standardizedId}${pageQueryString}`
-    )
-    if (bibPage?.items?.length) {
-      items.push(...bibPage.items)
-    } else {
-      return {
-        items: [],
-        status: 400,
-      }
-    }
-  }
-  return {
-    items,
-    status: 200,
   }
 }
