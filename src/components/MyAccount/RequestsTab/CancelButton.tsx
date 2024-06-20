@@ -94,7 +94,7 @@ const CancelButton = ({
     return {
       type: "confirmation",
       bodyContent: (
-        <Box className={styles.modalBody}>
+        <Box className={styles.noIconBody}>
           <Text>
             Are you sure that you want to cancel your request for{" "}
             <span style={{ fontWeight: "var(--nypl-fontWeights-medium)" }}>
@@ -110,7 +110,7 @@ const CancelButton = ({
       ),
       closeButtonLabel: "No, keep request",
       confirmButtonLabel: "Yes, cancel request",
-      headingText: <h5 className={styles.modalHeading}>Cancel request?</h5>,
+      headingText: <h5 className={styles["noIconHeading"]}>Cancel request?</h5>,
       onConfirm: async () => {
         setModalProps({
           ...checkModalProps(hold),
