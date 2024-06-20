@@ -61,7 +61,7 @@ export default class Item {
 
   // Item availability is determined by the existence of status id in the availability ids list
   get isAvailable(): boolean {
-    return itemAvailableIds.includes(this.status["@id"])
+    return itemAvailableIds.includes(this?.status?.["@id"]) || false
   }
 
   get isReCAP(): boolean {
@@ -100,7 +100,7 @@ export default class Item {
 
   // Determine if item is Non-NYPL ReCAP by existence of "Recap" string in item source attribute
   isPartnerReCAP(): boolean {
-    return this.source.indexOf("Recap") !== -1
+    return this.source?.indexOf("Recap") !== -1 || false
   }
 
   // It's an NYPL-owned ReCAP item if item source is Sierra and location is ReCAP

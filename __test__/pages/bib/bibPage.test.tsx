@@ -89,40 +89,12 @@ describe("Bib Page with items", () => {
     global.fetch = jest.fn().mockImplementationOnce(() =>
       Promise.resolve({
         status: 200,
+        ok: true,
         json: () =>
           Promise.resolve({
             success: true,
-            data: {
-              status: 200,
-              items: [
-                {},
-                {},
-                {},
-                {},
-                {},
-                {},
-                {},
-                {},
-                {},
-                {},
-                {},
-                {},
-                {},
-                {},
-                {},
-                {},
-                {},
-                {},
-                {},
-                {},
-                {},
-                {},
-                {},
-                {},
-                {},
-                {},
-              ],
-            },
+            status: 200,
+            items: Array(26).fill({}),
           }),
       })
     )
@@ -134,8 +106,7 @@ describe("Bib Page with items", () => {
       />
     )
     await userEvent.click(screen.getByText("View All 26 Items").closest("a"))
-    screen.debug(undefined, 100000)
-    expect(mockRouter.asPath).toBe("/bib/pb5579193/all")
+    expect(screen.getByText("View fewer items")).toBeInTheDocument()
   })
 
   it("renders the bottom bib details", () => {
