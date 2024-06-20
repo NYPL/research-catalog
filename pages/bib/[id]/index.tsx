@@ -188,19 +188,18 @@ export default function BibPage({
                 />
               ) : (
                 <>
-                  {!viewAllEnabled ? (
-                    <Heading
-                      data-testid="item-table-displaying-text"
-                      level="h4"
-                      size="heading5"
-                      mb={{ base: "s", md: "m" }}
-                    >
-                      {buildItemTableDisplayingString(
-                        itemTablePage,
-                        bib.numPhysicalItems
-                      )}
-                    </Heading>
-                  ) : null}
+                  <Heading
+                    data-testid="item-table-displaying-text"
+                    level="h4"
+                    size="heading5"
+                    mb={{ base: "s", md: "m" }}
+                  >
+                    {buildItemTableDisplayingString(
+                      itemTablePage,
+                      bib.numPhysicalItems,
+                      viewAllEnabled
+                    )}
+                  </Heading>
                   <ItemTable itemTableData={itemTableData} />
                 </>
               )}

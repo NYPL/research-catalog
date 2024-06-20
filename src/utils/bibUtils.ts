@@ -40,8 +40,15 @@ export const isItTheLastElement = (i, array) => !(i < array.length - 1)
 // based on pagination values
 export const buildItemTableDisplayingString = (
   page: number,
-  totalResults: number
+  totalResults: number,
+  viewAllItems = false
 ) => {
+  // Return 'Displaying all' copy when view all is enabled
+  if (viewAllItems) {
+    return `Displaying all ${totalResults} items`
+  }
+
+  // Otherwise, show Displaying string with pagination values
   const [resultsStart, resultsEnd] = getPaginationOffsetStrings(
     page,
     totalResults,

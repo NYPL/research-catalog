@@ -69,5 +69,10 @@ describe("bibUtils", () => {
         "Displaying 81-100 of 300 items"
       )
     })
+    it("returns the correct item table heading for when view all items is enabled", () => {
+      expect(buildItemTableDisplayingString(1, 300, true)).toBe(
+        "Displaying all 300 items"
+      )
+    })
   })
 })
