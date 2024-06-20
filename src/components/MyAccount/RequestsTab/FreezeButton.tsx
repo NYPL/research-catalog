@@ -49,10 +49,8 @@ const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
           {`Your hold on this item has been ${
             frozen
               ? "unfrozen."
-              : `
-          frozen. You will continue to advance
-          in the queue but your request will not be filled until you unfreeze
-          your hold.`
+              : "frozen. You will continue to advance in the queue but your \
+              request will not be filled until you unfreezeyour hold."
           }`}
         </Text>
       </Box>
