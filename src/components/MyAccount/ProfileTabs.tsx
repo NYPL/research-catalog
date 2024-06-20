@@ -124,7 +124,6 @@ const ProfileTabs = ({
       sx={{
         "div[role=tabpanel]": { padding: 0 },
         marginBottom: "xxl",
-        width: { base: "80%", md: "100%" },
       }}
     />
   )
