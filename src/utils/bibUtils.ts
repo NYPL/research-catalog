@@ -43,23 +43,23 @@ export const buildItemTableDisplayingString = (
   totalResults: number,
   viewAllItems = false
 ) => {
-  // Return 'Displaying all' copy when view all is enabled
-  if (viewAllItems) {
-    return `Displaying all ${totalResults} items`
+  const isPlural = totalResults > 1
+
+  if (viewAllItems || totalResults <= ITEM_PAGINATION_BATCH_SIZE) {
+    return `Displaying all ${totalResults.toLocaleString()} item${
+      isPlural ? "s" : ""
+    }`
+  } else {
+    const [resultsStart, resultsEnd] = getPaginationOffsetStrings(
+      page,
+      totalResults,
+      ITEM_PAGINATION_BATCH_SIZE
+    )
+
+    return `Displaying ${resultsStart}-${resultsEnd} of ${totalResults.toLocaleString()} item${
+      isPlural ? "s" : ""
+    }`
   }
-
-  // Otherwise, show Displaying string with pagination values
-  const [resultsStart, resultsEnd] = getPaginationOffsetStrings(
-    page,
-    totalResults,
-    ITEM_PAGINATION_BATCH_SIZE
-  )
-
-  return `Displaying ${
-    totalResults > ITEM_PAGINATION_BATCH_SIZE
-      ? `${resultsStart}-${resultsEnd}`
-      : totalResults.toLocaleString()
-  } of ${totalResults.toLocaleString()} item${totalResults > 1 ? "s" : ""}`
 }
 
 /**
