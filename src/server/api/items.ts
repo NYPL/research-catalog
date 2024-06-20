@@ -24,7 +24,7 @@ export async function fetchItems(
   )
   // Return the bib's paginated items in the case that View All isn't enabled
   if (!viewAllItems) {
-    if (discoveryBibResult?.items?.length && discoveryBibResult.status === 200)
+    if (discoveryBibResult?.items?.length)
       return {
         items: discoveryBibResult?.items,
         status: 200,

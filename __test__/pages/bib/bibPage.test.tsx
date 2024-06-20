@@ -9,6 +9,7 @@ import {
   bibWithItems,
   bibWithManyItems,
 } from "../../fixtures/bibFixtures"
+import { appConfig } from "../../../src/config/config"
 
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
@@ -65,6 +66,76 @@ describe("Bib Page with items", () => {
     const pageButton = screen.getByLabelText("Page 2")
     await userEvent.click(pageButton)
     expect(mockRouter.asPath).toBe("/bib/pb5579193?item_page=2")
+  })
+
+  it("renders a view all button when there are more than 20 items and updates the url to /all when clicked", async () => {
+    render(
+      <BibPage
+        discoveryBibResult={bibWithManyItems.resource}
+        annotatedMarc={bibWithManyItems.annotatedMarc}
+        isAuthenticated={false}
+      />
+    )
+    const viewAllLink = screen.getByText("View All 26 Items").closest("a")
+    expect(viewAllLink).toHaveAttribute(
+      "href",
+      "/research/research-catalog/bib/pb5579193/all"
+    )
+    await userEvent.click(viewAllLink)
+    expect(mockRouter.asPath).toBe("/bib/pb5579193/all")
+  })
+
+  it("shows all the items when the view all button is clicked", async () => {
+    global.fetch = jest.fn().mockImplementationOnce(() =>
+      Promise.resolve({
+        status: 200,
+        json: () =>
+          Promise.resolve({
+            success: true,
+            data: {
+              status: 200,
+              items: [
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+              ],
+            },
+          }),
+      })
+    )
+    render(
+      <BibPage
+        discoveryBibResult={bibWithManyItems.resource}
+        annotatedMarc={bibWithManyItems.annotatedMarc}
+        isAuthenticated={false}
+      />
+    )
+    await userEvent.click(screen.getByText("View All 26 Items").closest("a"))
+    screen.debug(undefined, 100000)
+    expect(mockRouter.asPath).toBe("/bib/pb5579193/all")
   })
 
   it("renders the bottom bib details", () => {

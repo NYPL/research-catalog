@@ -122,7 +122,7 @@ export default function BibPage({
         signal,
       }
     )
-    if (response.ok) {
+    if (response?.ok) {
       const { items } = await response.json()
       setBibItems(items.map((item: DiscoveryItemResult) => new Item(item, bib)))
       setItemsLoading(false)
