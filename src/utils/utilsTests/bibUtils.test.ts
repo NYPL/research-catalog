@@ -55,8 +55,11 @@ describe("bibUtils", () => {
   })
   describe("buildItemTableDisplayingString", () => {
     it("returns the correct item table heading when there is one item", () => {
-      expect(buildItemTableDisplayingString(1, 1)).toBe(
-        "Displaying 1 of 1 item"
+      expect(buildItemTableDisplayingString(1, 1)).toBe("Displaying 1 item")
+    })
+    it("returns the correct item table heading when the total number is greater than 1 but less than the pagination limit", () => {
+      expect(buildItemTableDisplayingString(1, 2)).toBe(
+        "Displaying all 2 items"
       )
     })
     it("returns the correct item table heading for first page when there are many items", () => {

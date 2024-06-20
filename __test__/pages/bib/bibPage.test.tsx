@@ -166,7 +166,6 @@ describe("Bib Page Item Table", () => {
     )
     await userEvent.click(screen.getByText("View All 26 Items").closest("a"))
     expect(screen.getByText("View fewer items")).toBeInTheDocument()
-    console.log("DIEGO", screen.getAllByTestId("bib-details-item-table").length)
     expect(screen.getByTestId("bib-details-item-table")).toBeInTheDocument()
   })
 })

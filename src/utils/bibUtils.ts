@@ -44,11 +44,12 @@ export const buildItemTableDisplayingString = (
   viewAllItems = false
 ) => {
   const isPlural = totalResults > 1
+  const totalString = totalResults.toLocaleString()
 
   if (viewAllItems || totalResults <= ITEM_PAGINATION_BATCH_SIZE) {
-    return `Displaying all ${totalResults.toLocaleString()} item${
-      isPlural ? "s" : ""
-    }`
+    return isPlural
+      ? `Displaying all ${totalString} items`
+      : "Displaying 1 item"
   } else {
     const [resultsStart, resultsEnd] = getPaginationOffsetStrings(
       page,
