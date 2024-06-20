@@ -81,7 +81,9 @@ describe("Bib Page with items", () => {
       "Urban spaghetti literary arts journal"
     )
     expect(screen.getByTestId("Subject")).toHaveTextContent("Arts, Modern")
-    expect(screen.getByTestId("Call Number")).toHaveTextContent("JFK 01-374")
+    expect(screen.getAllByTestId("Call Number")[0]).toHaveTextContent(
+      "JFK 01-374"
+    )
     expect(screen.getAllByTestId("Title")[1]).toHaveTextContent(
       "Urban spaghetti."
     )
