@@ -10,6 +10,7 @@ import {
   Banner,
   Icon,
   Text,
+  ProgressIndicator,
 } from "@nypl/design-system-react-components"
 
 import Layout from "../../../src/components/Layout/Layout"
@@ -218,16 +219,31 @@ export default function BibPage({
                 ) : null}
                 {bib.showViewAllItemsLink &&
                   (itemsLoading && viewAllEnabled ? (
-                    <Text
-                      fontSize={{
-                        base: "mobile.body.body1",
-                        md: "desktop.body.body1",
-                      }}
-                      fontWeight="medium"
+                    <Box
                       ml="auto"
+                      display="flex"
+                      justifyContent="flex-start"
+                      alignItems="center"
                     >
-                      {`Loading all ${bib.numPhysicalItems} items...`}
-                    </Text>
+                      <ProgressIndicator
+                        id="bib-all-items-loading"
+                        labelText={bib.itemsViewAllLoadingMessage}
+                        size="small"
+                        indicatorType="circular"
+                        mr="xs"
+                        isIndeterminate
+                      />
+                      <Text
+                        fontSize={{
+                          base: "mobile.body.body1",
+                          md: "desktop.body.body1",
+                        }}
+                        fontWeight="medium"
+                        mb={0}
+                      >
+                        {bib.itemsViewAllLoadingMessage}
+                      </Text>
+                    </Box>
                   ) : !itemsLoading ? (
                     <RCLink
                       href={`${bib.url}${!viewAllEnabled ? "/all" : ""}`}
