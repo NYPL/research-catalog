@@ -82,7 +82,7 @@ export default class Bib {
   }
 
   get itemsViewAllLoadingMessage() {
-    return `Loading all ${this.numPhysicalItems} items...this may take a few moments`
+    return `Loading all ${this.numPhysicalItems} items...this may take a few moments.`
   }
 
   // Used to determine the Volume column text in the ItemTable
