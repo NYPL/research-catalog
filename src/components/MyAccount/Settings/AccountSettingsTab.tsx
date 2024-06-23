@@ -107,7 +107,7 @@ const AccountSettingsTab = ({
         >
           {listElements}
         </List>
-        <Spacer display={{ base: "none", md: "inline-block" }} />
+        <Spacer display={{ sm: "none", base: "none", md: "inline-block" }} />
         <AccountSettingsButtons
           editButtonRef={editButtonRef}
           currentlyEditing={currentlyEditing}

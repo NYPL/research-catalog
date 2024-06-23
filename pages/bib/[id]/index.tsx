@@ -20,13 +20,19 @@ import {
   SITE_NAME,
   BASE_URL,
 } from "../../../src/config/constants"
+import { appConfig } from "../../../src/config/config"
 import { fetchBib } from "../../../src/server/api/bib"
-import { getBibQueryString } from "../../../src/utils/bibUtils"
-import { buildItemTableDisplayingString } from "../../../src/utils/bibUtils"
+import {
+  getBibQueryString,
+  buildItemTableDisplayingString,
+  isNyplBibID,
+} from "../../../src/utils/bibUtils"
 import BibDetailsModel from "../../../src/models/BibDetails"
 import ItemTableData from "../../../src/models/ItemTableData"
 import BibDetails from "../../../src/components/BibPage/BibDetail"
 import ItemTable from "../../../src/components/ItemTable/ItemTable"
+import ElectronicResourcesLink from "../../../src/components/SearchResults/ElectronicResourcesLink"
+import ExternalLink from "../../../src/components/Links/ExternalLink/ExternalLink"
 import type {
   DiscoveryBibResult,
   BibQueryParams,
@@ -60,6 +66,7 @@ export default function BibPage({
   const { push, query } = useRouter()
   const metadataTitle = `Item Details | ${SITE_NAME}`
   const bib = new Bib(discoveryBibResult)
+  const displayLegacyCatalogLink = isNyplBibID(bib.id)
 
   const [itemsLoading, setItemsLoading] = useState(false)
   const [itemFetchError, setItemFetchError] = useState(bib.showItemTableError)
@@ -167,18 +174,36 @@ export default function BibPage({
         <title key="main-title">{metadataTitle}</title>
       </Head>
       <Layout isAuthenticated={isAuthenticated} activePage="bib">
-        <Heading level="h2">{bib.title}</Heading>
+        <Heading level="h2" size="heading3" mb="l">
+          {bib.title}
+        </Heading>
         <BibDetails key="top-details" details={topDetails} />
+        <ElectronicResourcesLink
+          bibUrl={bib.url}
+          electronicResources={bib.electronicResources}
+          inSearchResults={false}
+        />
         {bib.showItemTable ? (
           <>
             <Heading
               data-testid="item-table-heading"
               level="h3"
               size="heading4"
-              mb={{ base: "s", md: "m" }}
+              mt="l"
+              mb="s"
             >
               Items in the library and off-site
             </Heading>
+            <Banner
+              content={
+                <ExternalLink href="https://www.nypl.org/help/request-research-materials">
+                  How do I request and pick up research materials for on-site
+                  use?
+                </ExternalLink>
+              }
+              isDismissible
+              mb="s"
+            />
             <Box id="item-table" ref={itemTableScrollRef}>
               {itemsLoading ? (
                 <SkeletonLoader showImage={false} />
@@ -192,8 +217,8 @@ export default function BibPage({
                   <Heading
                     data-testid="item-table-displaying-text"
                     level="h4"
-                    size="heading5"
-                    mb={{ base: "s", md: "m" }}
+                    size="heading6"
+                    mb="s"
                   >
                     {buildItemTableDisplayingString(
                       itemTablePage,
@@ -276,16 +301,28 @@ export default function BibPage({
             </Box>
           </>
         ) : null}
-        <BibDetails
-          heading="Details"
-          key="bottom-details"
-          details={bottomDetails}
-        />
-        <BibDetails
-          heading="Holdings"
-          key="holdings-details"
-          details={holdingsDetails}
-        />
+        <Box mb="xl">
+          <BibDetails
+            heading="Holdings"
+            key="holdings-details"
+            details={holdingsDetails}
+          />
+          <BibDetails
+            heading="Details"
+            key="bottom-details"
+            details={bottomDetails}
+          />
+          {displayLegacyCatalogLink ? (
+            <ExternalLink
+              id="legacy-catalog-link"
+              href={`${appConfig.urls.legacyCatalog}/record=${bib.id}`}
+              type="standalone"
+              mt="s"
+            >
+              View in legacy catalog
+            </ExternalLink>
+          ) : null}
+        </Box>
       </Layout>
     </>
   )
