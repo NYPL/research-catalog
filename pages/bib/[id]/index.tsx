@@ -160,16 +160,13 @@ export default function BibPage({
 
   const handleViewAllClick = async (e: SyntheticEvent) => {
     e.preventDefault()
-    setViewAllEnabled((viewAllEnabled) => !viewAllEnabled)
+    setViewAllEnabled((viewAllEnabled) => {
+      refreshItemTable(query, !viewAllEnabled)
+      return !viewAllEnabled
+    })
     setTimeout(() => {
       viewAllLoadingTextRef.current?.focus()
     }, FOCUS_TIMEOUT)
-    if (viewAllEnabled) {
-      await refreshItemTable(query, false)
-    } else {
-      delete query.item_page
-      await refreshItemTable(query, true)
-    }
   }
 
   return (
