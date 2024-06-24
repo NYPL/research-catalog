@@ -18,7 +18,7 @@ export const isFormValid = (updatedForm: {
   phones: string
   notificationPreference: string
 }) => {
-  const phoneRegex = /^(?:\D*\d){10}\D*$/
+  const phoneRegex = /^(?:\D*\d){10,11}\D*$/
   if (updatedForm.notificationPreference === "p") {
     return updatedForm.phones !== "" && phoneRegex.test(updatedForm.phones)
   } else if (updatedForm.notificationPreference === "z") {
@@ -26,12 +26,28 @@ export const isFormValid = (updatedForm: {
   } else return true
 }
 
+export const formatPhoneNumber = (value: Phone[]) => {
+  const number = value[0]?.number
+  if (!number) return
+  if (number.length === 11) {
+    return `${number[0]}-${number.substring(1, 4)}-${number.substring(
+      4,
+      7
+    )}-${number.substring(7)}`
+  } else if (number.length === 10) {
+    return `${number.substring(0, 3)}-${number.substring(
+      3,
+      6
+    )}-${number.substring(6)}`
+  } else return number
+}
+
 export const accountSettings = [
   {
     field: "phones",
     icon: "communicationCall",
     term: "Phone",
-    description: (value: Phone[]) => value[0]?.number,
+    description: formatPhoneNumber,
   },
   {
     field: "emails",

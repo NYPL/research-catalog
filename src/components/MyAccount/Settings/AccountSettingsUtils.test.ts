@@ -2,6 +2,7 @@ import {
   parseAccountSettingsPayload,
   updatePhoneOrEmailArrayWithNewPrimary,
   buildUpdatedPatronDisplayData,
+  formatPhoneNumber,
 } from "./AccountSettingsUtils"
 import { processedPatron } from "../../../../__test__/fixtures/processedMyAccountData"
 import { formatDate } from "../../../utils/myAccountUtils"
@@ -12,6 +13,20 @@ describe("Account settings utils", () => {
     it("can parse a date", () => {
       const date = "2025-03-28"
       expect(formatDate(date)).toEqual("March 28, 2025")
+    })
+  })
+  describe("formatPhoneNumber", () => {
+    it("formats a 10 digit number", () => {
+      const phones = [{ number: "1234567890", type: "t" }]
+      expect(formatPhoneNumber(phones)).toEqual("123-456-7890")
+    })
+    it("formats an 11 digit number", () => {
+      const phones = [{ number: "01234567890", type: "t" }]
+      expect(formatPhoneNumber(phones)).toEqual("0-123-456-7890")
+    })
+    it("returns any other number", () => {
+      const phones = [{ number: "1234567", type: "t" }]
+      expect(formatPhoneNumber(phones)).toEqual("1234567")
     })
   })
   describe("buildUpdatedPatronDisplayData", () => {

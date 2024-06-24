@@ -141,7 +141,7 @@ export const AccountSettingsForm = ({
         case "Pin/Password":
           inputField = (
             <Box>
-              <Text>****</Text>
+              <Text mb="0">****</Text>
               <PasswordModal patron={patron} />
             </Box>
           )
