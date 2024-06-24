@@ -4,19 +4,14 @@ import { useState, useRef, useEffect } from "react"
 import { useRouter } from "next/router"
 import {
   Heading,
-  Pagination,
   SkeletonLoader,
   Box,
   Banner,
-  Icon,
-  Label,
-  ProgressIndicator,
 } from "@nypl/design-system-react-components"
 
 import Layout from "../../../src/components/Layout/Layout"
 import {
   PATHS,
-  ITEM_PAGINATION_BATCH_SIZE,
   SITE_NAME,
   BASE_URL,
   FOCUS_TIMEOUT,
@@ -32,6 +27,7 @@ import BibDetailsModel from "../../../src/models/BibDetails"
 import ItemTableData from "../../../src/models/ItemTableData"
 import BibDetails from "../../../src/components/BibPage/BibDetail"
 import ItemTable from "../../../src/components/ItemTable/ItemTable"
+import ItemTableControls from "../../../src/components/ItemTable/ItemTableControls"
 import ElectronicResourcesLink from "../../../src/components/SearchResults/ElectronicResourcesLink"
 import ExternalLink from "../../../src/components/Links/ExternalLink/ExternalLink"
 import type {
@@ -43,7 +39,6 @@ import Bib from "../../../src/models/Bib"
 import initializePatronTokenAuth from "../../../src/server/auth"
 import Item from "../../../src/models/Item"
 import type { DiscoveryItemResult } from "../../../src/types/itemTypes"
-import RCLink from "../../../src/components/Links/RCLink/RCLink"
 import type { ParsedUrlQueryInput } from "querystring"
 
 interface BibPropsType {
@@ -246,82 +241,15 @@ export default function BibPage({
                   <ItemTable itemTableData={itemTableData} />
                 </>
               )}
-              <Box display="flex" my="xl" justifyContent="space-between">
-                {!viewAllEnabled ? (
-                  <Pagination
-                    id="bib-items-pagination"
-                    initialPage={itemTablePage}
-                    currentPage={itemTablePage}
-                    pageCount={Math.ceil(
-                      bib.numPhysicalItems / ITEM_PAGINATION_BATCH_SIZE
-                    )}
-                    onPageChange={handlePageChange}
-                    width="auto"
-                  />
-                ) : null}
-                {bib.showViewAllItemsLink &&
-                  (itemsLoading && viewAllEnabled ? (
-                    <Box
-                      ml="auto"
-                      display="flex"
-                      justifyContent="flex-start"
-                      alignItems="center"
-                    >
-                      <ProgressIndicator
-                        id="bib-all-items-loading"
-                        labelText={bib.itemsViewAllLoadingMessage}
-                        size="small"
-                        indicatorType="circular"
-                        mr="xs"
-                        isIndeterminate
-                      />
-                      <Label
-                        id="bib-all-items-loading-label"
-                        htmlFor="bib-all-items-loading"
-                        ref={viewAllLoadingTextRef}
-                        fontSize={{
-                          base: "mobile.body.body1",
-                          md: "desktop.body.body1",
-                        }}
-                        fontWeight="medium"
-                        mb={0}
-                        // Label component does not expect tabIndex prop, so we are ignoring the typescript error that pops up.
-                        // Add any additional props above this for typescript validation.
-                        // @ts-expect-error
-                        tabIndex={-1}
-                      >
-                        {bib.itemsViewAllLoadingMessage}
-                      </Label>
-                    </Box>
-                  ) : !itemsLoading ? (
-                    <RCLink
-                      href={`${bib.url}${!viewAllEnabled ? "/all" : ""}`}
-                      onClick={handleViewAllClick}
-                      fontSize={{
-                        base: "mobile.body.body1",
-                        md: "desktop.body.body1",
-                      }}
-                      fontWeight="medium"
-                      display="flex"
-                      alignItems="center"
-                      ml="auto"
-                      isUnderlined={false}
-                    >
-                      <Box as="span" mr="xxs">
-                        {viewAllEnabled
-                          ? "View fewer items"
-                          : `View All ${bib.numItemsMessage}`}
-                      </Box>
-                      <Icon
-                        iconRotation={viewAllEnabled ? "rotate180" : "rotate0"}
-                        name="arrow"
-                        size="small"
-                        align="right"
-                        color="ui.link.primary"
-                      />
-                    </RCLink>
-                  ) : null)}
-              </Box>
+              <ItemTableControls
+                bib={bib}
+                viewAllEnabled={viewAllEnabled}
+                itemsLoading={itemsLoading}
+                itemTablePage={itemTablePage}
+                handlePageChange={handlePageChange}
+                handleViewAllClick={handleViewAllClick}
+                viewAllLoadingTextRef={viewAllLoadingTextRef}
+              />
             </Box>
           </>
         ) : null}
