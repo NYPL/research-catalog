@@ -186,7 +186,7 @@ const UpdateLocation = ({
         buttonType="text"
       >
         <Icon name="editorMode" align="left" size="medium"></Icon>
-        <Text fontSize={0} className={styles.changeLocation}>
+        <Text fontSize={-1} className={styles.changeLocation}>
           {buttonLabel}
         </Text>
       </Button>
