@@ -30,7 +30,10 @@
 }
 
 .statusBadge {
-  white-space: normal !important;
+  @media screen and (max-width: 600px) {
+    background-color: violet;
+    white-space: normal !important;
+  }
 }
 
 .accountSettingsTab {

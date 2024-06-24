@@ -65,7 +65,13 @@ const RequestsTab = ({
     /* Passing removeHold() down to the Cancel button so it can remove the hold from
      * currentHolds */
     hold ? (
-      <Box sx={{ display: "flex", gap: "4px" }}>
+      <Box
+        sx={{
+          display: "flex",
+          gap: "4px",
+          flexDirection: { base: "column", md: "row" },
+        }}
+      >
         <CancelButton removeHold={removeHold} hold={hold} patron={patron} />
         {hold.canFreeze && hold.status === "REQUEST PENDING" && (
           <FreezeButton hold={hold} patron={patron} />
