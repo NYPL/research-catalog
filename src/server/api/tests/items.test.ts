@@ -1,4 +1,5 @@
 import { fetchItems } from "../items"
+import nyplApiClient from "../../nyplApiClient"
 import type { ItemsResponse } from "../../../types/itemTypes"
 
 jest.mock("../../nyplApiClient", () => {
@@ -104,6 +105,8 @@ describe("fetchItems", () => {
     )) as ItemsResponse
     expect(itemsResponse.items.length).toEqual(4)
     expect(itemsResponse.status).toEqual(200)
+    // we should expect 1 initial fetch plus the 2 batched fetches
+    expect(nyplApiClient).toHaveBeenCalledTimes(3)
   })
   it("should return a 400 status code when any of the batched fetches fails", async () => {
     const itemsResponse = (await fetchItems(
