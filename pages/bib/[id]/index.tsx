@@ -9,35 +9,35 @@ import {
   Banner,
 } from "@nypl/design-system-react-components"
 
-import Layout from "../../src/components/Layout/Layout"
+import Layout from "../../../src/components/Layout/Layout"
 import {
   PATHS,
   ITEM_BATCH_SIZE,
   SITE_NAME,
   BASE_URL,
-} from "../../src/config/constants"
-import { fetchBib } from "../../src/server/api/bib"
+} from "../../../src/config/constants"
+import { fetchBib } from "../../../src/server/api/bib"
 import {
   buildItemTableDisplayingString,
   getBibQueryString,
   isNyplBibID,
-} from "../../src/utils/bibUtils"
-import BibDetailsModel from "../../src/models/BibDetails"
-import ItemTableData from "../../src/models/ItemTableData"
-import BibDetails from "../../src/components/BibPage/BibDetail"
-import ItemTable from "../../src/components/ItemTable/ItemTable"
+} from "../../../src/utils/bibUtils"
+import BibDetailsModel from "../../../src/models/BibDetails"
+import ItemTableData from "../../../src/models/ItemTableData"
+import BibDetails from "../../../src/components/BibPage/BibDetail"
+import ItemTable from "../../../src/components/ItemTable/ItemTable"
 import type {
   DiscoveryBibResult,
   BibQueryParams,
-} from "../../src/types/bibTypes"
-import type { AnnotatedMarc } from "../../src/types/bibDetailsTypes"
-import Bib from "../../src/models/Bib"
-import initializePatronTokenAuth from "../../src/server/auth"
-import Item from "../../src/models/Item"
-import type { SearchResultsItem } from "../../src/types/itemTypes"
-import ElectronicResourcesLink from "../../src/components/SearchResults/ElectronicResourcesLink"
-import ExternalLink from "../../src/components/Links/ExternalLink/ExternalLink"
-import { appConfig } from "../../src/config/config"
+} from "../../../src/types/bibTypes"
+import type { AnnotatedMarc } from "../../../src/types/bibDetailsTypes"
+import Bib from "../../../src/models/Bib"
+import initializePatronTokenAuth from "../../../src/server/auth"
+import Item from "../../../src/models/Item"
+import type { SearchResultsItem } from "../../../src/types/itemTypes"
+import ElectronicResourcesLink from "../../../src/components/SearchResults/ElectronicResourcesLink"
+import ExternalLink from "../../../src/components/Links/ExternalLink/ExternalLink"
+import { appConfig } from "../../../src/config/config"
 import type { ParsedUrlQueryInput } from "querystring"
 
 interface BibPropsType {
