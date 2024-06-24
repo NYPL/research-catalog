@@ -15,7 +15,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { status, items } = await fetchItems(id, req.query, viewAllItems)
 
   if (req.method === "GET") {
-    if (!items?.length || status !== 200) {
+    if (status !== 200 || !items?.length) {
       res.status(400).json({
         error: "Error fetching Bib items for this query",
       })
