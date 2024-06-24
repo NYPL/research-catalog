@@ -1,6 +1,6 @@
 import Head from "next/head"
 import type { SyntheticEvent } from "react"
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect, useCallback } from "react"
 import { useRouter } from "next/router"
 import {
   Heading,
@@ -9,7 +9,7 @@ import {
   Box,
   Banner,
   Icon,
-  Text,
+  Label,
   ProgressIndicator,
 } from "@nypl/design-system-react-components"
 
@@ -19,6 +19,7 @@ import {
   ITEM_PAGINATION_BATCH_SIZE,
   SITE_NAME,
   BASE_URL,
+  FOCUS_TIMEOUT,
 } from "../../../src/config/constants"
 import { appConfig } from "../../../src/config/config"
 import { fetchBib } from "../../../src/server/api/bib"
@@ -73,8 +74,10 @@ export default function BibPage({
   const [viewAllEnabled, setViewAllEnabled] = useState(viewAllItems)
   const [bibItems, setBibItems] = useState(bib.items)
   const [itemTablePage, setItemTablePage] = useState(itemPage)
-  const itemTableScrollRef = useRef<HTMLDivElement>(null)
 
+  const itemTableScrollRef = useRef<HTMLDivElement>(null)
+  const itemTableHeadingRef = useRef<HTMLDivElement>(null)
+  const viewAllLoadingTextRef = useRef<HTMLDivElement & HTMLLabelElement>(null)
   const controllerRef = useRef<AbortController>()
 
   const { topDetails, bottomDetails, holdingsDetails } = new BibDetailsModel(
@@ -137,6 +140,9 @@ export default function BibPage({
       itemTableScrollRef.current?.scrollIntoView({
         behavior: "smooth",
       })
+      setTimeout(() => {
+        itemTableHeadingRef.current?.focus()
+      }, FOCUS_TIMEOUT)
     } else {
       setItemFetchError(true)
       setItemsLoading(false)
@@ -153,6 +159,9 @@ export default function BibPage({
   const handleViewAllClick = async (e: SyntheticEvent) => {
     e.preventDefault()
     setViewAllEnabled((viewAllEnabled) => !viewAllEnabled)
+    setTimeout(() => {
+      viewAllLoadingTextRef.current?.focus()
+    }, FOCUS_TIMEOUT)
     if (viewAllEnabled) {
       await refreshItemTable(query, false)
     } else {
@@ -216,9 +225,11 @@ export default function BibPage({
                 <>
                   <Heading
                     data-testid="item-table-displaying-text"
+                    ref={itemTableHeadingRef}
                     level="h4"
                     size="heading6"
                     mb="s"
+                    tabIndex={-1}
                   >
                     {buildItemTableDisplayingString(
                       itemTablePage,
@@ -258,16 +269,22 @@ export default function BibPage({
                         mr="xs"
                         isIndeterminate
                       />
-                      <Text
+                      <Label
+                        htmlFor="bib-all-items-loading"
+                        ref={viewAllLoadingTextRef}
                         fontSize={{
                           base: "mobile.body.body1",
                           md: "desktop.body.body1",
                         }}
                         fontWeight="medium"
                         mb={0}
+                        // Label component does not expect tabIndex prop, so we are ignoring the typescript error that pops up.
+                        // Add any additional props above this for typescript validation.
+                        // @ts-expect-error
+                        tabIndex={-1}
                       >
                         {bib.itemsViewAllLoadingMessage}
-                      </Text>
+                      </Label>
                     </Box>
                   ) : !itemsLoading ? (
                     <RCLink
