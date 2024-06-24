@@ -3,7 +3,7 @@ import ExternalLink from "./Links/ExternalLink/ExternalLink"
 import React from "react"
 
 /**
- * Renders a simple link to log out the user out from the Catalog.
+ * Renders an EDS link.
  */
 const EDSLink = () => {
   return (

@@ -60,15 +60,19 @@ export default class BibDetails {
 
   buildHoldingsDetails(holdings): BibDetail[] {
     if (!holdings) return []
-    return [
-      { label: "Location", field: "location" },
-      { label: "Format", field: "format" },
-      { label: "Call Number", field: "shelfMark" },
-      { label: "Library Has", field: "holdingStatement" },
-      { label: "Notes", field: "notes" },
-    ]
-      .map((fieldMapping) => this.buildHoldingDetail(fieldMapping))
-      .filter((f) => f)
+    return holdings
+      ?.map((holding) => {
+        return [
+          { label: "Location", field: "location" },
+          { label: "Format", field: "format" },
+          { label: "Call Number", field: "shelfMark" },
+          { label: "Library Has", field: "holdingStatement" },
+          { label: "Notes", field: "notes" },
+        ]
+          .map((fieldMapping) => this.buildHoldingDetail(holding, fieldMapping))
+          .filter((f) => f)
+      })
+      .flat()
   }
 
   buildTopDetails(): AnyBibDetail[] {
@@ -151,8 +155,14 @@ export default class BibDetails {
     return resourceEndpointDetails.concat(filteredAnnotatedMarcDetails)
   }
 
-  buildHoldingDetail(fieldMapping: FieldMapping) {
-    const bibFieldValue = this.bib.holdings[fieldMapping.field]
+  buildHoldingDetail(holding, fieldMapping: FieldMapping) {
+    const bibFieldValue =
+      fieldMapping.field === "location"
+        ? // "location" is the only holding field that is an array of
+          // objects shaped like { code: "loc:...", label: "..." }
+          // Getting the first object in the array.
+          [holding[fieldMapping.field][0].label]
+        : holding[fieldMapping.field]
     return this.buildDetail(fieldMapping.label, bibFieldValue)
   }
 
