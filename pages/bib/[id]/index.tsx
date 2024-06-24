@@ -108,6 +108,13 @@ export default function BibPage({
     // This prevents it from being added redundantly to the query string
     delete newQuery.id
 
+    // If viewAllItems is enabled, remove pagination queries
+    if (viewAllItems) {
+      delete newQuery.items_from
+      delete newQuery.item_page
+      delete newQuery.items_size
+    }
+
     await push(
       {
         pathname: `${PATHS.BIB}/${bib.id}${viewAllItems ? "/all" : ""}`,
