@@ -146,8 +146,8 @@ export default function BibPage({
         itemTableHeadingRef.current?.focus()
       }, FOCUS_TIMEOUT)
     } else {
-      setItemFetchError(true)
       setItemsLoading(false)
+      setItemFetchError(true)
     }
   }
 
