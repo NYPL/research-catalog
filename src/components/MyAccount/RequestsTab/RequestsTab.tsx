@@ -10,6 +10,7 @@ import ItemsTab from "../ItemsTab"
 import CancelButton from "./CancelButton"
 import FreezeButton from "./FreezeButton"
 import UpdateLocation from "./UpdateLocation"
+import styles from "../../../../styles/components/MyAccount.module.scss"
 
 const RequestsTab = ({
   updateHoldLocation,
@@ -75,9 +76,17 @@ const RequestsTab = ({
 
   function getStatusBadge(status) {
     if (status == "READY FOR PICKUP") {
-      return <StatusBadge type="positive">{status}</StatusBadge>
+      return (
+        <StatusBadge className={styles.statusBadge} type="positive">
+          {status}
+        </StatusBadge>
+      )
     }
-    return <StatusBadge type="neutral">{status}</StatusBadge>
+    return (
+      <StatusBadge className={styles.statusBadge} type="neutral">
+        {status}
+      </StatusBadge>
+    )
   }
 
   return (

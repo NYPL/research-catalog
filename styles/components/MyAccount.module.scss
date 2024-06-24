@@ -29,6 +29,10 @@
   }
 }
 
+.statusBadge {
+  white-space: normal !important;
+}
+
 .accountSettingsTab {
   > div {
     margin-top: var(--nypl-space-l);
