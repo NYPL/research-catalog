@@ -100,7 +100,7 @@ export default class Item {
 
   // Determine if item is Non-NYPL ReCAP by existence of "Recap" string in item source attribute
   isPartnerReCAP(): boolean {
-    return this.source?.indexOf("Recap") !== -1 || false
+    return this.source?.indexOf("Recap") !== -1
   }
 
   // It's an NYPL-owned ReCAP item if item source is Sierra and location is ReCAP
