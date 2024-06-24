@@ -147,6 +147,7 @@ describe("Bib Page Item Table", () => {
     expect(screen.getByText("View fewer items")).toBeInTheDocument()
     expect(screen.getByTestId("bib-details-item-table")).toBeInTheDocument()
   })
+
   it("shows the correct loading copy when the user is waiting after view all is clicked", async () => {
     global.fetch = jest.fn().mockImplementationOnce(
       () =>
@@ -157,6 +158,21 @@ describe("Bib Page Item Table", () => {
     await userEvent.click(screen.getByText("View All 26 Items").closest("a"))
     expect(
       screen.getByText("Loading all 26 items...this may take a few moments.")
+    ).toBeInTheDocument()
+  })
+
+  it("shows an error when the ", async () => {
+    global.fetch = jest.fn().mockImplementationOnce(() =>
+      Promise.resolve({
+        status: 400,
+        ok: false,
+      })
+    )
+    await userEvent.click(screen.getByText("View All 26 Items").closest("a"))
+    expect(
+      screen.getByText(
+        "There was an error fetching items. Please try again with a different query."
+      )
     ).toBeInTheDocument()
   })
 })
