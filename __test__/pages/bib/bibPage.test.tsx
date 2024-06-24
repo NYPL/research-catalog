@@ -84,16 +84,6 @@ describe("Bib Page with items", () => {
 })
 
 describe("Bib Page no items", () => {
-  beforeEach(() => {
-    render(
-      <BibPage
-        discoveryBibResult={bibNoItems.resource}
-        annotatedMarc={bibNoItems.annotatedMarc}
-        isAuthenticated={false}
-      />
-    )
-  })
-
   it("does not render an item table when there are no physical items in the bib", () => {
     expect(
       screen.queryByTestId("bib-details-item-table")
@@ -102,14 +92,7 @@ describe("Bib Page no items", () => {
 })
 
 describe("Bib Page Item Table", () => {
-  it("renders pagination when there are more than 20 items and updates the router on page button clicks", async () => {
-    global.fetch = jest.fn().mockImplementationOnce(() =>
-      Promise.resolve({
-        status: 200,
-        json: () => Promise.resolve({ success: true }),
-      })
-    )
-
+  beforeEach(() => {
     render(
       <BibPage
         discoveryBibResult={bibWithManyItems.resource}
@@ -117,7 +100,15 @@ describe("Bib Page Item Table", () => {
         isAuthenticated={false}
       />
     )
-    screen.debug(undefined, 10000)
+  })
+
+  it("renders pagination when there are more than 20 items and updates the router on page button clicks", async () => {
+    global.fetch = jest.fn().mockImplementationOnce(() =>
+      Promise.resolve({
+        status: 200,
+        json: () => Promise.resolve({ success: true }),
+      })
+    )
     expect(
       screen.queryByText("Displaying 1-20 of 26 items")
     ).toBeInTheDocument()
@@ -130,13 +121,6 @@ describe("Bib Page Item Table", () => {
   })
 
   it("renders a view all button when there are more than 20 items and updates the url to /all when clicked", async () => {
-    render(
-      <BibPage
-        discoveryBibResult={bibWithManyItems.resource}
-        annotatedMarc={bibWithManyItems.annotatedMarc}
-        isAuthenticated={false}
-      />
-    )
     const viewAllLink = screen.getByText("View All 26 Items").closest("a")
     expect(viewAllLink).toHaveAttribute(
       "href",
@@ -159,15 +143,20 @@ describe("Bib Page Item Table", () => {
           }),
       })
     )
-    render(
-      <BibPage
-        discoveryBibResult={bibWithManyItems.resource}
-        annotatedMarc={bibWithManyItems.annotatedMarc}
-        isAuthenticated={false}
-      />
-    )
     await userEvent.click(screen.getByText("View All 26 Items").closest("a"))
     expect(screen.getByText("View fewer items")).toBeInTheDocument()
     expect(screen.getByTestId("bib-details-item-table")).toBeInTheDocument()
+  })
+  it("shows the correct loading copy when the user is waiting after view all is clicked", async () => {
+    global.fetch = jest.fn().mockImplementationOnce(
+      () =>
+        new Promise((resolve) => {
+          setTimeout(resolve, 50)
+        })
+    )
+    await userEvent.click(screen.getByText("View All 26 Items").closest("a"))
+    expect(
+      screen.getByText("Loading all 26 items...this may take a few moments.")
+    ).toBeInTheDocument()
   })
 })
