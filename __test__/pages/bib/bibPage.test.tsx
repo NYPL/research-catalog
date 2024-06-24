@@ -171,7 +171,7 @@ describe("Bib Page Item Table", () => {
     ).toBeInTheDocument()
   })
 
-  it("shows an error when the ", async () => {
+  it("shows an error when the item fetch fails", async () => {
     global.fetch = jest.fn().mockImplementationOnce(() =>
       Promise.resolve({
         status: 400,
