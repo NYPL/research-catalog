@@ -276,6 +276,7 @@ export default function BibPage({
                         isIndeterminate
                       />
                       <Label
+                        id="bib-all-items-loading-label"
                         htmlFor="bib-all-items-loading"
                         ref={viewAllLoadingTextRef}
                         fontSize={{
