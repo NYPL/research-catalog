@@ -1,5 +1,8 @@
 .settingsEditButton {
   margin-top: var(--nypl-space-m);
+  @media screen and (max-width: 800px) and (min-width: 601px) {
+    width: 250px;
+  }
 }
 
 .myAccountList {
@@ -30,15 +33,12 @@
   > div {
     margin-top: var(--nypl-space-l);
     display: flex;
-    flex-direction: row;
-    @media screen and (max-width: 600px) {
-      flex-direction: column;
+    flex-direction: column;
+    @media screen and (min-width: 600px) {
+      flex-direction: row;
     }
     @media screen and (max-width: 800px) and (min-width: 601px) {
       flex-direction: column-reverse;
-      button {
-        width: 50%;
-      }
     }
   }
 }
