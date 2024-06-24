@@ -75,7 +75,7 @@ export default class Bib {
     return this.hasPhysicalItems ? "Item" : "Resource"
   }
 
-  get itemMessage() {
+  get numItemsMessage() {
     return `${this.numItems} ${this.resourceType}${
       this.numItems !== 1 ? "s" : ""
     }`

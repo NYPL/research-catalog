@@ -303,7 +303,7 @@ export default function BibPage({
                       <Box as="span" mr="xxs">
                         {viewAllEnabled
                           ? "View fewer items"
-                          : `View All ${bib.itemMessage}`}
+                          : `View All ${bib.numItemsMessage}`}
                       </Box>
                       <Icon
                         iconRotation={viewAllEnabled ? "rotate180" : "rotate0"}
