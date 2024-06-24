@@ -5,7 +5,6 @@ import Layout from "../../src/components/Layout/Layout"
 import initializePatronTokenAuth, {
   doRedirectBasedOnNyplAccountRedirects,
   getLoginRedirect,
-  getUpdatedRedirectCount,
 } from "../../src/server/auth"
 import { MyAccountFactory } from "../../src/models/MyAccount"
 import ProfileTabs from "../../src/components/MyAccount/ProfileTabs"
