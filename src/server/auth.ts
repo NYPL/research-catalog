@@ -55,11 +55,10 @@ export default async function initializePatronTokenAuth(reqCookies: unknown) {
   return patronTokenResponse
 }
 
-export const getUpdatedRedirectCount = (nyplAccountRedirects: string) => {
-  console.log(nyplAccountRedirects)
-  if (!nyplAccountRedirects) return 1
-  const count = parseInt(nyplAccountRedirects, 10)
-  return count + 1
+export const doRedirectBasedOnNyplAccountRedirects = (count: number) => {
+  if (!count) return true
+  if (count >= 3) return false
+  else return true
 }
 
 /**

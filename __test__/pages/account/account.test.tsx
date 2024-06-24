@@ -3,7 +3,9 @@ import MyAccount, {
 } from "../../../pages/account/[[...index]]"
 import { MyAccountFactory } from "../../../src/models/MyAccount"
 import { render, screen } from "../../../src/utils/testUtils"
-import initializePatronTokenAuth from "../../../src/server/auth"
+import initializePatronTokenAuth, {
+  doRedirectBasedOnNyplAccountRedirects,
+} from "../../../src/server/auth"
 import {
   processedPatron,
   processedCheckouts,
@@ -20,59 +22,91 @@ jest.mock("next/router", () => ({
   useRouter: jest.fn(),
 }))
 
-// methods on this mock starting with __ are not on original, used here to test
-// call counts
 const mockRes = {
-  __cookieUpdateCount: 0,
-  cookies: {},
-  setHeader: function (_, cookie) {
-    const key = cookie.split("=")[0]
-    const value = cookie.split("=")[1]
-    this.cookieUpdateCount++
-    this.cookies[key] = this.cookies[value]
+  setHeader: jest.fn(),
+}
+const mockReq = {
+  headers: {
+    host: "local.nypl.org:8080",
   },
-  __reset: function () {
-    this.cookieUpdateCount = 0
-    this.cookies = {}
+  url: "/account",
+  cookies: {
+    nyplIdentityPatron: '{"access_token":123}',
   },
 }
 
 describe("MyAccount page", () => {
   beforeEach(() => {
-    mockRes.__reset()
-    ;(initializePatronTokenAuth as jest.Mock).mockResolvedValueOnce({
+    ;(initializePatronTokenAuth as jest.Mock).mockResolvedValue({
       isTokenValid: true,
       errorCode: null,
       decodedPatron: { sub: "123" },
     })
   })
   describe("logout redirect handling", () => {
-    it("redirects up to three times if patron is not authenticated", async () => {
+    beforeAll(() => {
       ;(MyAccountFactory as jest.Mock).mockResolvedValue({
         pickupLocations: filteredPickupLocations,
         checkouts: processedCheckouts,
         patron: processedPatron,
-        fines: { total: 0, entries: [] },
+        fines: processedFines,
         holds: processedHolds,
       })
-      ;(initializePatronTokenAuth as jest.Mock).mockResolvedValueOnce({
+    })
+
+    it("redirects if cookie count is less than 3", async () => {
+      ;(doRedirectBasedOnNyplAccountRedirects as jest.Mock).mockReturnValue(
+        true
+      )
+      ;(initializePatronTokenAuth as jest.Mock).mockResolvedValue({
         isTokenValid: false,
       })
-      const mockReq = {
-        headers: {
-          host: "local.nypl.org:8080",
-        },
-        url: "/account",
-        cookies: {
-          nyplIdentityPatron: '{"access_token":123}',
-        },
-      }
 
-      await getServerSideProps({ req: mockReq, res: mockRes })
-      expect(mockRes.__cookieUpdateCount).toBe(3)
+      const responseWithZeroRedirects = await getServerSideProps({
+        req: mockReq,
+        res: mockRes,
+      })
+      expect(responseWithZeroRedirects.redirect).toBeDefined()
+      const responseWithTwoRedirects = await getServerSideProps({
+        req: { ...mockReq, cookies: { nyplAccountRedirects: 2 } },
+        res: mockRes,
+      })
+      expect(responseWithTwoRedirects.redirect).toBeDefined()
     })
-    it.todo("does not redirect if patron is authenticated")
-    it.todo("updates the nyplAccountRedirectsCookie upon redirecting")
+    it("does not redirect if doRedirect method returns false", async () => {
+      ;(doRedirectBasedOnNyplAccountRedirects as jest.Mock).mockReturnValue(
+        false
+      )
+      ;(initializePatronTokenAuth as jest.Mock).mockResolvedValue({
+        decodedPatron: { sub: "123" },
+        isTokenValid: false,
+      })
+
+      const responseWithoutRedirect = await getServerSideProps({
+        req: mockReq,
+        res: mockRes,
+      })
+      expect(responseWithoutRedirect.props.redirectLoop).toBe(true)
+    })
+    it("does not redirect if patron is authenticated", async () => {
+      const response = await getServerSideProps({ req: mockReq, res: mockRes })
+      console.log(response)
+      expect(response.redirect).toBeUndefined()
+    })
+    it("updates the nyplAccountRedirectsCookie upon redirecting", async () => {
+      ;(doRedirectBasedOnNyplAccountRedirects as jest.Mock).mockReturnValue(
+        true
+      )
+      ;(initializePatronTokenAuth as jest.Mock).mockResolvedValue({
+        decodedPatron: { sub: "123" },
+        isTokenValid: false,
+      })
+      await getServerSideProps({ res: mockRes, req: mockReq })
+      expect(mockRes.setHeader.mock.calls[0]).toStrictEqual([
+        "Set-Cookie",
+        "nyplAccountRedirects=1; Max-Age=10",
+      ])
+    })
   })
   it("can handle null values for checkouts, holds, fines", () => {
     expect(() =>
@@ -104,17 +138,12 @@ describe("MyAccount page", () => {
       holds: processedHolds,
     })
 
-    const mockReq = {
-      headers: {
-        host: "local.nypl.org:8080",
-      },
+    const req = {
+      ...mockReq,
       url: "/account/overdues",
-      cookies: {
-        nyplIdentityPatron: '{"access_token":123}',
-      },
     }
 
-    const result = await getServerSideProps({ req: mockReq, res: mockRes })
+    const result = await getServerSideProps({ req, res: mockRes })
     expect(result).toStrictEqual({
       redirect: { destination: "/account", permanent: false },
     })
@@ -129,17 +158,12 @@ describe("MyAccount page", () => {
       holds: processedHolds,
     })
 
-    const mockReq = {
-      headers: {
-        host: "local.nypl.org:8080",
-      },
+    const req = {
+      ...mockReq,
       url: "/account/spaghetti",
-      cookies: {
-        nyplIdentityPatron: '{"access_token":123}',
-      },
     }
 
-    const result = await getServerSideProps({ req: mockReq, res: mockRes })
+    const result = await getServerSideProps({ req: req, res: mockRes })
     expect(result).toStrictEqual({
       redirect: { destination: "/account", permanent: false },
     })
@@ -153,17 +177,12 @@ describe("MyAccount page", () => {
       holds: processedHolds,
     })
 
-    const mockReq = {
-      headers: {
-        host: "local.nypl.org:8080",
-      },
+    const req = {
+      ...mockReq,
       url: "/account/settings/spaghetti",
-      cookies: {
-        nyplIdentityPatron: '{"access_token":123}',
-      },
     }
 
-    const result = await getServerSideProps({ req: mockReq, res: mockRes })
+    const result = await getServerSideProps({ req: req, res: mockRes })
     expect(result).toStrictEqual({
       redirect: { destination: "/account/settings", permanent: false },
     })
@@ -177,17 +196,12 @@ describe("MyAccount page", () => {
       holds: processedHolds,
     })
 
-    const mockReq = {
-      headers: {
-        host: "local.nypl.org:8080",
-      },
+    const req = {
+      ...mockReq,
       url: "/account/settings",
-      cookies: {
-        nyplIdentityPatron: '{"access_token":123}',
-      },
     }
 
-    const result = await getServerSideProps({ req: mockReq, res: mockRes })
+    const result = await getServerSideProps({ req: req, res: mockRes })
     expect(result.props.tabsPath).toBe("settings")
   })
 
@@ -199,17 +213,12 @@ describe("MyAccount page", () => {
       holds: processedHolds,
     })
 
-    const mockReq = {
-      headers: {
-        host: "local.nypl.org:8080",
-      },
+    const req = {
+      ...mockReq,
       url: "/account/overdues",
-      cookies: {
-        nyplIdentityPatron: '{"access_token":123}',
-      },
     }
 
-    const result = await getServerSideProps({ req: mockReq, res: mockRes })
+    const result = await getServerSideProps({ req: req, res: mockRes })
     expect(result.props.tabsPath).toBe("overdues")
   })
   it("renders notification banner if user has fines", () => {

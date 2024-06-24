@@ -3,6 +3,7 @@ import Head from "next/head"
 
 import Layout from "../../src/components/Layout/Layout"
 import initializePatronTokenAuth, {
+  doRedirectBasedOnNyplAccountRedirects,
   getLoginRedirect,
   getUpdatedRedirectCount,
 } from "../../src/server/auth"
@@ -81,18 +82,16 @@ export async function getServerSideProps({ req, res }) {
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const isAuthenticated = patronTokenResponse.isTokenValid
   const redirectTrackerCookie = req.cookies["nyplAccountRedirects"]
-  const redirectCount = getUpdatedRedirectCount(redirectTrackerCookie)
-  res.setHeader(
-    "Set-Cookie",
-    `nyplAccountRedirects=${redirectCount}; Max-Age=10`
-  )
-  const stuckInRedirectLoop = redirectCount >= 3
-  console.log({ stuckInRedirectLoop, isAuthenticated })
+  const redirectCount = parseInt(redirectTrackerCookie, 10) || 0
+  const redirectBasedOnNyplAccountRedirects =
+    doRedirectBasedOnNyplAccountRedirects(redirectCount)
   // If we end up not authenticated 3 times after redirecting to the login url, don't redirect.
-  if (!stuckInRedirectLoop && !isAuthenticated) {
-    console.log("spaghetti")
+  if (redirectBasedOnNyplAccountRedirects && !isAuthenticated) {
+    res.setHeader(
+      "Set-Cookie",
+      `nyplAccountRedirects=${redirectCount + 1}; Max-Age=10`
+    )
     const redirect = getLoginRedirect(req)
-    console.log({ redirect })
     return {
       redirect: {
         destination: redirect,
@@ -146,7 +145,7 @@ export async function getServerSideProps({ req, res }) {
         tabsPath,
         isAuthenticated,
         pickupLocations,
-        redirectLoop: stuckInRedirectLoop,
+        redirectLoop: !redirectBasedOnNyplAccountRedirects,
       },
     }
   } catch (e) {
