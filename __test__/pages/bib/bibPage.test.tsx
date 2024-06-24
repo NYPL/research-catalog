@@ -84,6 +84,16 @@ describe("Bib Page with items", () => {
 })
 
 describe("Bib Page no items", () => {
+  beforeEach(() => {
+    render(
+      <BibPage
+        discoveryBibResult={bibNoItems.resource}
+        annotatedMarc={bibNoItems.annotatedMarc}
+        isAuthenticated={false}
+      />
+    )
+  })
+
   it("does not render an item table when there are no physical items in the bib", () => {
     expect(
       screen.queryByTestId("bib-details-item-table")
