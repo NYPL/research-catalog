@@ -16,12 +16,12 @@ describe("Filters container", () => {
   })
 
   it("renders a single filter", () => {
-    render(<FiltersContainer itemAggs={[normalAggs[0]]} />)
+    render(<FiltersContainer itemAggregations={[normalAggs[0]]} />)
     const filters = screen.getAllByTestId(/item-filter/)
     expect(filters.length).toBe(1)
   })
   it("renders three filter boxes", () => {
-    render(<FiltersContainer itemAggs={normalAggs} />)
+    render(<FiltersContainer itemAggregations={normalAggs} />)
     const filters = screen.getAllByTestId(/item-filter/)
     expect(filters.length).toBe(3)
   })
@@ -32,7 +32,7 @@ describe("Filters container", () => {
       item_format: "Text",
       item_status: "status:a",
     }
-    render(<FiltersContainer itemAggs={normalAggs} />)
+    render(<FiltersContainer itemAggregations={normalAggs} />)
     const { locationFilterButton, statusFilterButton, formatFilterButton } =
       filterButtons()
     await filterHasSelected(locationFilterButton, ["Offsite"])
@@ -41,7 +41,7 @@ describe("Filters container", () => {
   })
 
   it("closes open filters when user clicks outside of the filter", async () => {
-    render(<FiltersContainer itemAggs={normalAggs} />)
+    render(<FiltersContainer itemAggregations={normalAggs} />)
     const { locationFilterButton } = filterButtons()
     const outsideOfTheFilter = screen.getByTestId("filter-text")
 
@@ -58,7 +58,7 @@ describe("Filters container", () => {
       item_format: "Text",
       item_status: "status:a,status:na",
     }
-    render(<FiltersContainer itemAggs={normalAggs} />)
+    render(<FiltersContainer itemAggregations={normalAggs} />)
     const { locationFilterButton, statusFilterButton, formatFilterButton } =
       filterButtons()
 
@@ -81,7 +81,7 @@ describe("Filters container", () => {
   })
 
   it("does not persist selection if filter closes without applying", async () => {
-    render(<FiltersContainer itemAggs={normalAggs} />)
+    render(<FiltersContainer itemAggregations={normalAggs} />)
     const { locationFilterButton, statusFilterButton } = filterButtons()
     await userEvent.click(locationFilterButton)
     const checkbox = screen.getAllByRole("checkbox")[0]
@@ -100,7 +100,7 @@ describe("Filters container", () => {
       item_format: "Text",
       item_status: "status:a,status:na",
     }
-    render(<FiltersContainer itemAggs={normalAggs} />)
+    render(<FiltersContainer itemAggregations={normalAggs} />)
     const { locationFilterButton, statusFilterButton } = filterButtons()
     await userEvent.click(locationFilterButton)
     const checkbox = screen.getByLabelText(/Main Reading Room/)

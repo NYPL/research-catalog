@@ -216,7 +216,7 @@ export default function BibPage({
               isDismissible
               mb="s"
             />
-            <FiltersContainer itemAggs={bib.itemAggregations} />
+            <FiltersContainer itemAggregations={bib.itemAggregations} />
             <Box id="item-table" ref={itemTableScrollRef}>
               {itemsLoading ? (
                 <SkeletonLoader showImage={false} />
