@@ -25,10 +25,12 @@ import {
 } from "../../utils/itemFilterUtils"
 
 interface ItemFilterContainerProps {
-  itemAggs: Aggregation[]
+  itemAggregations: Aggregation[]
 }
 
-const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
+const ItemFilterContainer = ({
+  itemAggregations,
+}: ItemFilterContainerProps) => {
   const router = useRouter()
   const { isLargerThanLarge, isLargerThanMedium } = useNYPLBreakpoints()
   const filterGroupClassName = isLargerThanLarge
@@ -36,9 +38,10 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
     : styles.filterGroupMobile
 
   const filterData = useRef<ItemFilterData[]>(
-    itemAggs.map((agg: Aggregation) => {
-      if (agg.field === "location") return new LocationFilterData(agg)
-      else return new ItemFilterData(agg)
+    itemAggregations.map((aggregation: Aggregation) => {
+      if (aggregation.field === "location")
+        return new LocationFilterData(aggregation)
+      else return new ItemFilterData(aggregation)
     })
   ).current
 
@@ -129,9 +132,9 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
           </CardContent>
         </Card>
       </Box>
-      {/*<Heading level="h3" size="heading6">*/}
-      {/*  {itemsMatched}*/}
-      {/*</Heading>*/}
+      <Heading level="h3" size="heading6">
+        {itemsMatched}
+      </Heading>
       <Text>{appliedFiltersDisplay}</Text>
     </>
   )
