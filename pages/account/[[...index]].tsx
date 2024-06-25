@@ -26,11 +26,11 @@ interface MyAccountPropsType {
   isAuthenticated: boolean
   tabsPath?: string
   pickupLocations: SierraCodeName[]
-  redirectLoop?: boolean
+  renderAuthServerError?: boolean
 }
 
 export default function MyAccount({
-  redirectLoop,
+  renderAuthServerError,
   pickupLocations,
   checkouts,
   holds,
@@ -47,7 +47,7 @@ export default function MyAccount({
       </Head>
 
       <Layout isAuthenticated={isAuthenticated} activePage="account">
-        {redirectLoop ? (
+        {renderAuthServerError ? (
           <Text>
             We are unable to display your account information at this time due
             an error with our authentication server. Please contact
@@ -144,7 +144,7 @@ export async function getServerSideProps({ req, res }) {
         tabsPath,
         isAuthenticated,
         pickupLocations,
-        redirectLoop: !redirectBasedOnNyplAccountRedirects,
+        renderAuthServerError: !redirectBasedOnNyplAccountRedirects,
       },
     }
   } catch (e) {
