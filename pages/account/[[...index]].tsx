@@ -18,6 +18,8 @@ import type {
   Fine,
   SierraCodeName,
 } from "../../src/types/myAccountTypes"
+import { useEffect, useState } from "react"
+import TML from "../../src/components/MyAccount/TML"
 interface MyAccountPropsType {
   patron?: Patron
   checkouts?: Checkout[]
@@ -40,6 +42,7 @@ export default function MyAccount({
   tabsPath,
 }: MyAccountPropsType) {
   const errorRetrievingPatronData = !patron
+
   return (
     <>
       <Head>
@@ -47,6 +50,7 @@ export default function MyAccount({
       </Head>
 
       <Layout isAuthenticated={isAuthenticated} activePage="account">
+        <TML />
         {redirectLoop ? (
           <Text>
             We are unable to display your account information at this time due
