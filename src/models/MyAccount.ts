@@ -154,7 +154,9 @@ export default class MyAccount {
     return bibs.reduce((bibDataMap: BibDataMapType, bibFields) => {
       const { isResearch, isNyplOwned } =
         this.getResearchAndOwnership(bibFields)
-      const title = bibFields.title
+      const title = `${bibFields.title}${
+        bibFields.author && isNyplOwned ? ` / ${bibFields.author}` : ""
+      }`
       bibDataMap[bibFields.id] = { title, isResearch, isNyplOwned }
       return bibDataMap
     }, {})
