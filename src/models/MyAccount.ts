@@ -173,29 +173,37 @@ export default class MyAccount {
       throw new MyAccountModelError("building bibData for holds", e)
     }
     try {
-      return holds.map((hold: SierraHold) => {
-        const bibId =
-          hold.recordType === "i" ? hold.record.bibIds[0] : hold.record.id
-        const bibForHold = bibDataMap[bibId]
-        return {
-          patron: MyAccount.getRecordId(hold.patron),
-          id: MyAccount.getRecordId(hold.id),
-          pickupByDate: MyAccount.formatDate(hold.pickupByDate) || null,
-          canFreeze: hold.canFreeze,
-          frozen: hold.frozen,
-          status: MyAccount.getHoldStatus(hold.status),
-          pickupLocation: hold.pickupLocation,
-          title: bibForHold.title,
-          isResearch: bibForHold.isResearch,
-          bibId,
-          isNyplOwned: bibForHold.isNyplOwned,
-          catalogHref: bibForHold.isNyplOwned
-            ? bibForHold.isResearch
-              ? `https://nypl.org/research/research-catalog/bib/b${bibId}`
-              : `https://borrow.nypl.org/search/card?recordId=${bibId}`
-            : null,
-        }
-      })
+      return holds
+        .map((hold: SierraHold) => {
+          const bibId =
+            hold.recordType === "i" ? hold.record.bibIds[0] : hold.record.id
+          const bibForHold = bibDataMap[bibId]
+          return {
+            patron: MyAccount.getRecordId(hold.patron),
+            id: MyAccount.getRecordId(hold.id),
+            pickupByDate: MyAccount.formatDate(hold.pickupByDate) || null,
+            canFreeze: hold.canFreeze,
+            frozen: hold.frozen,
+            status: MyAccount.getHoldStatus(hold.status),
+            pickupLocation: hold.pickupLocation,
+            title: bibForHold.title,
+            isResearch: bibForHold.isResearch,
+            bibId,
+            isNyplOwned: bibForHold.isNyplOwned,
+            catalogHref: bibForHold.isNyplOwned
+              ? bibForHold.isResearch
+                ? `https://nypl.org/research/research-catalog/bib/b${bibId}`
+                : `https://borrow.nypl.org/search/card?recordId=${bibId}`
+              : null,
+          }
+        })
+        .sort((a, b) => {
+          if (!a.pickupByDate) return 1
+          return (
+            new Date(a.pickupByDate).valueOf() -
+            new Date(b.pickupByDate).valueOf()
+          )
+        })
     } catch (e) {
       console.error(
         "Error building holds in MyAccount#buildHolds: " + e.message
@@ -219,28 +227,32 @@ export default class MyAccount {
       throw new MyAccountModelError("building bibData for checkouts", e)
     }
     try {
-      return checkouts.map((checkout: SierraCheckout) => {
-        const bibId = checkout.item.bibIds[0]
-        const bibForCheckout = bibDataMap[bibId]
-        return {
-          id: MyAccount.getRecordId(checkout.id),
-          // Partner items do not have call numbers. Null has to be explicitly
-          // returned for JSON serialization in getServerSideProps
-          callNumber: checkout.item.callNumber || null,
-          barcode: checkout.item.barcode,
-          dueDate: MyAccount.formatDate(checkout.dueDate),
-          patron: MyAccount.getRecordId(checkout.patron),
-          title: bibForCheckout.title,
-          isResearch: bibForCheckout.isResearch,
-          bibId: bibId,
-          isNyplOwned: bibForCheckout.isNyplOwned,
-          catalogHref: bibForCheckout.isNyplOwned
-            ? bibForCheckout.isResearch
-              ? `https://nypl.org/research/research-catalog/bib/b${bibId}`
-              : `https://borrow.nypl.org/search/card?recordId=${bibId}`
-            : null,
-        }
-      })
+      return checkouts
+        .map((checkout: SierraCheckout) => {
+          const bibId = checkout.item.bibIds[0]
+          const bibForCheckout = bibDataMap[bibId]
+          return {
+            id: MyAccount.getRecordId(checkout.id),
+            // Partner items do not have call numbers. Null has to be explicitly
+            // returned for JSON serialization in getServerSideProps
+            callNumber: checkout.item.callNumber || null,
+            barcode: checkout.item.barcode,
+            dueDate: MyAccount.formatDate(checkout.dueDate),
+            patron: MyAccount.getRecordId(checkout.patron),
+            title: bibForCheckout.title,
+            isResearch: bibForCheckout.isResearch,
+            bibId: bibId,
+            isNyplOwned: bibForCheckout.isNyplOwned,
+            catalogHref: bibForCheckout.isNyplOwned
+              ? bibForCheckout.isResearch
+                ? `https://nypl.org/research/research-catalog/bib/b${bibId}`
+                : `https://borrow.nypl.org/search/card?recordId=${bibId}`
+              : null,
+          }
+        })
+        .sort((a, b) => {
+          return new Date(a.dueDate).valueOf() - new Date(b.dueDate).valueOf()
+        })
     } catch (e) {
       throw new MyAccountModelError("building checkouts", e)
     }

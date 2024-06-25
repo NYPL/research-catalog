@@ -35,7 +35,7 @@ describe("RequestsTab", () => {
         removeHold={mockRemoveHold}
       />
     )
-    expect(component.getByText("I want to be spaghetti!", { exact: false }))
+    expect(component.getByText("I want to be spaghetti! / ", { exact: false }))
   })
 
   it("renders each hold request as a row", () => {
@@ -192,10 +192,12 @@ describe("RequestsTab", () => {
         removeHold={mockRemoveHold}
       />
     )
-    const freezeButton = component.getByText("Freeze")
+    const pendingRequest = processedHolds[2]
+    const row = component.getByText(pendingRequest.title).closest("tr")
+    const freezeButton = within(row).getByText("Freeze")
     await userEvent.click(freezeButton)
     expect(fetch).toHaveBeenCalledWith(
-      `/research/research-catalog/api/account/holds/update/${processedHolds[1].id}`,
+      `/research/research-catalog/api/account/holds/update/${pendingRequest.id}`,
       {
         method: "PUT",
         body: JSON.stringify({
@@ -208,11 +210,11 @@ describe("RequestsTab", () => {
 
     await userEvent.click(screen.getAllByText("OK", { exact: false })[0])
     expect(component.queryByText("Freeze")).not.toBeInTheDocument()
-    const unfreezeButton = component.getAllByText("Unfreeze")[0]
+    const unfreezeButton = within(row).getByText("Unfreeze")
     await userEvent.click(unfreezeButton)
 
     expect(fetch).toHaveBeenCalledWith(
-      `/research/research-catalog/api/account/holds/update/${processedHolds[1].id}`,
+      `/research/research-catalog/api/account/holds/update/${pendingRequest.id}`,
       {
         method: "PUT",
         body: JSON.stringify({
@@ -267,7 +269,7 @@ describe("RequestsTab", () => {
         removeHold={mockRemoveHold}
       />
     )
-    const readyCircRequestRow = component.getAllByRole("row")[4]
+    const readyCircRequestRow = component.getAllByRole("row")[1]
     expect(readyCircRequestRow).toHaveTextContent("May 17, 2024")
     expect(readyCircRequestRow).toHaveTextContent("READY FOR PICKUP")
   })
@@ -281,11 +283,11 @@ describe("RequestsTab", () => {
         removeHold={mockRemoveHold}
       />
     )
-    const readyCircRequestRow = component.getAllByRole("row")[4]
+    const readyCircRequestRow = component.getAllByRole("row")[1]
     expect(readyCircRequestRow).toHaveTextContent("READY FOR PICKUP")
     expect(readyCircRequestRow).not.toHaveTextContent("Freeze")
 
-    const confirmedCircRequestRow = component.getAllByRole("row")[3]
+    const confirmedCircRequestRow = component.getAllByRole("row")[4]
     expect(confirmedCircRequestRow).toHaveTextContent("REQUEST CONFIRMED")
     expect(confirmedCircRequestRow).not.toHaveTextContent("Freeze")
   })
