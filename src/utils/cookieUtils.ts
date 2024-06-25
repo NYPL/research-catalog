@@ -1,4 +1,9 @@
 const includeDomain = process.env.NODE_ENV !== "test"
+
+export const getTimeLeft = (expTime) => {
+  console.log(expTime)
+  return (new Date(expTime).getTime() - new Date().getTime()) / 1000
+}
 /**
  * setCookieWithMaxAge(sKey, expiration, value)
  * set a cookie
@@ -7,9 +12,10 @@ const includeDomain = process.env.NODE_ENV !== "test"
  * @param {string} value - The value of the cookie, defaults to an empty string
  */
 
-const setCookieWithMaxAge = (sKey, maxAge, value = "") => {
+const setCookieWithExpiration = (sKey, expiration, value = "") => {
+  console.log({ sKey, value })
   document.cookie =
-    `${sKey}=${value}; Max-Age=${maxAge || 0}; ` +
+    `${sKey}=${value}; expires=${expiration || Date.now()}; ` +
     (includeDomain ? "path=/; domain=.nypl.org;" : "")
 }
 
@@ -25,6 +31,6 @@ export const incrementTime = (minutes, seconds = 0) => {
  *
  * @param {string} sKey - The name of the cookie to be looked up.
  */
-const deleteCookie = (sKey) => setCookieWithMaxAge(sKey, null)
+const deleteCookie = (sKey) => setCookieWithExpiration(sKey, null)
 
-export { deleteCookie, setCookieWithMaxAge }
+export { deleteCookie, setCookieWithExpiration }

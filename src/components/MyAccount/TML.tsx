@@ -1,6 +1,11 @@
 /* global document */
 import { useModal } from "@nypl/design-system-react-components"
-import { deleteCookie, incrementTime } from "../../utils/cookieUtils"
+import {
+  deleteCookie,
+  incrementTime,
+  setCookieWithExpiration,
+  getTimeLeft,
+} from "../../utils/cookieUtils"
 import { useLogoutRedirect } from "../../server/auth"
 import { useRouter } from "next/router"
 import { useCallback, useEffect, useState } from "react"
@@ -8,8 +13,8 @@ import { useCallback, useEffect, useState } from "react"
 const TML = () => {
   const { onOpen: openModal, onClose: closeModal, Modal } = useModal()
   const warningWindow = 2 * 1000
-  const [timeTillCookieExpires, setTimeTillCookieExpires] = useState(10 * 1000)
-
+  const [timeTillCookieExpires, setTimeTillCookieExpires] = useState(null)
+  console.log({ timeTillCookieExpires })
   const logout = useCallback(() => {
     console.log("log me out")
     closeModal()
@@ -44,6 +49,13 @@ const TML = () => {
       clearTimeout(warningWindowTimeout)
     }
   }, [openModal, timeTillCookieExpires, warningWindow, logout])
+
+  useEffect(() => {
+    console.log("useEffect")
+    const expiration = incrementTime(1)
+    setCookieWithExpiration("accountPageExp", expiration, expiration)
+    setTimeTillCookieExpires(getTimeLeft(document.cookie["accountPageExp"]))
+  }, [])
 
   return <Modal {...modalProps} />
 }
