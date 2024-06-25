@@ -30,6 +30,7 @@ import ItemTable from "../../../src/components/ItemTable/ItemTable"
 import ItemTableControls from "../../../src/components/ItemTable/ItemTableControls"
 import ElectronicResourcesLink from "../../../src/components/SearchResults/ElectronicResourcesLink"
 import ExternalLink from "../../../src/components/Links/ExternalLink/ExternalLink"
+import FiltersContainer from "../../../src/components/ItemFilters/FiltersContainer"
 import type {
   DiscoveryBibResult,
   BibQueryParams,
@@ -61,6 +62,7 @@ export default function BibPage({
 }: BibPropsType) {
   const { push, query } = useRouter()
   const metadataTitle = `Item Details | ${SITE_NAME}`
+  console.log(discoveryBibResult)
   const bib = new Bib(discoveryBibResult)
   const displayLegacyCatalogLink = isNyplBibID(bib.id)
 
@@ -214,6 +216,7 @@ export default function BibPage({
               isDismissible
               mb="s"
             />
+            <FiltersContainer itemAggs={bib.itemAggregations} />
             <Box id="item-table" ref={itemTableScrollRef}>
               {itemsLoading ? (
                 <SkeletonLoader showImage={false} />

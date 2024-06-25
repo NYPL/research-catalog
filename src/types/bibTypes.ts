@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import type { DiscoveryItemResult, JSONLDValue } from "./itemTypes"
 import type { AnnotatedMarc } from "./bibDetailsTypes"
+import type { Aggregation } from "./filterTypes"
 
 export interface DiscoveryBibResult {
   extent?: string[]
@@ -21,6 +22,7 @@ export interface DiscoveryBibResult {
   issuance?: JSONLDValue[]
   numItemsTotal?: number
   items?: DiscoveryItemResult[]
+  itemAggregations?: Aggregation[]
   parallelTitleDisplay?: string[]
   supplementaryContent?: SupplementaryContent[]
   contributorLiteral?: string[]

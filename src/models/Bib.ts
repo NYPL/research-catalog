@@ -1,5 +1,6 @@
 import type { DiscoveryBibResult, ElectronicResource } from "../types/bibTypes"
 import type { JSONLDValue } from "../types/itemTypes"
+import type { Aggregation } from "../types/filterTypes"
 import Item from "../models/Item"
 import { ITEM_PAGINATION_BATCH_SIZE } from "../config/constants"
 
@@ -19,6 +20,7 @@ export default class Bib {
   materialType?: string
   issuance?: JSONLDValue[]
   items?: Item[]
+  itemAggregations?: Aggregation[]
 
   constructor(result: DiscoveryBibResult) {
     this.id = result["@id"] ? result["@id"].substring(4) : ""
@@ -29,6 +31,7 @@ export default class Bib {
       (result.materialType?.length && result.materialType[0]?.prefLabel) || null
     this.issuance = (result.issuance?.length && result.issuance) || null
     this.items = this.getItemsFromResult(result)
+    this.itemAggregations = result.itemAggregations || null
   }
 
   get url() {

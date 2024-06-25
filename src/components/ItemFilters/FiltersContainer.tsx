@@ -78,6 +78,7 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
           display: "flex",
           flexDirection: isLargerThanMedium ? "row" : "column",
         }}
+        mb="m"
       >
         <Card className={filterGroupClassName} ref={ref}>
           <CardHeading level="h3" size="body2">
@@ -128,9 +129,9 @@ const ItemFilterContainer = ({ itemAggs }: ItemFilterContainerProps) => {
           </CardContent>
         </Card>
       </Box>
-      <Heading level="h3" size="heading6">
-        {itemsMatched}
-      </Heading>
+      {/*<Heading level="h3" size="heading6">*/}
+      {/*  {itemsMatched}*/}
+      {/*</Heading>*/}
       <Text>{appliedFiltersDisplay}</Text>
     </>
   )
