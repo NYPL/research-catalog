@@ -28,9 +28,7 @@ interface ItemFilterContainerProps {
   itemAggregations: Aggregation[]
 }
 
-const ItemFilterContainer = ({
-  itemAggregations,
-}: ItemFilterContainerProps) => {
+const FiltersContainer = ({ itemAggregations }: ItemFilterContainerProps) => {
   const router = useRouter()
   const { isLargerThanLarge, isLargerThanMedium } = useNYPLBreakpoints()
   const filterGroupClassName = isLargerThanLarge
@@ -70,7 +68,7 @@ const ItemFilterContainer = ({
       locationFilterData.recapLocations()
     )
     setWhichFilterIsOpen("")
-    router.push("/search/advanced" + url)
+    // router.push("/search/advanced" + url)
   }
 
   return (
@@ -113,7 +111,7 @@ const ItemFilterContainer = ({
             level="h3"
             size="body2"
             data-testid="filter-text"
-            isBold={true}
+            fontWeight="bold"
           >
             Search by Year
           </CardHeading>
@@ -135,9 +133,11 @@ const ItemFilterContainer = ({
       <Heading level="h3" size="heading6">
         {itemsMatched}
       </Heading>
-      <Text>{appliedFiltersDisplay}</Text>
+      {appliedFiltersDisplay?.length ? (
+        <Text>{appliedFiltersDisplay}</Text>
+      ) : null}
     </>
   )
 }
 
-export default ItemFilterContainer
+export default FiltersContainer

@@ -62,7 +62,6 @@ export default function BibPage({
 }: BibPropsType) {
   const { push, query } = useRouter()
   const metadataTitle = `Item Details | ${SITE_NAME}`
-  console.log(discoveryBibResult)
   const bib = new Bib(discoveryBibResult)
   const displayLegacyCatalogLink = isNyplBibID(bib.id)
 

@@ -50,8 +50,8 @@ export const buildItemFilterQueryString = (
   const query = [location_query, format_query, status_query]
     .filter((q) => q)
     .join("&")
-  if (query.length) return encodeURI("?" + query)
-  else return ""
+
+  return query.length ? encodeURI(query) : ""
 }
 
 // numItems default is for development purposes only. Once data is being
