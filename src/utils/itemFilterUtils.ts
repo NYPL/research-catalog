@@ -100,6 +100,5 @@ export const getFiltersWithItemRemoved = (
       valuesAndField = [appliedFilters[field], field]
     }
   })
-  console.log(valuesAndField)
   return valuesAndField
 }
