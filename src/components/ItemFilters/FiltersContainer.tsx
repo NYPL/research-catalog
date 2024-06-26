@@ -2,13 +2,10 @@ import { useRef, useState } from "react"
 import { useRouter } from "next/router"
 import React from "react"
 import {
-  Card,
   SearchBar,
   Box,
   useCloseDropDown,
   useNYPLBreakpoints,
-  CardHeading,
-  CardContent,
   Text,
   Label,
   TagSet,
