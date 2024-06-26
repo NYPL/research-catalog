@@ -94,9 +94,10 @@ export default function BibPage({
 
   const displayLegacyCatalogLink = isNyplBibID(bib.id)
 
-  const numItems = filtersAreApplied(appliedFilters)
-    ? bib.numItemsMatched
-    : bib.numPhysicalItems
+  const filtersApplied = filtersAreApplied(appliedFilters)
+
+  // If filters are applied, show the matching number of items, otherwise show the total number of items
+  const numItems = filtersApplied ? bib.numItemsMatched : bib.numPhysicalItems
 
   // Load all items via client-side fetch if page is first loaded with viewAllItems prop passed in
   // Namely, when the page is accessed with the /all route
@@ -172,11 +173,10 @@ export default function BibPage({
   ) => {
     const newQuery = {
       ...newAppliedFilterQuery,
-      ...(query.view_all_items === "true" && { view_all_items: true }),
-    }
-    await handlePageChange(1)
+    } as BibQueryParams
+    if (newQuery.item_page) delete newQuery.item_page
     setAppliedFilters(parseItemFilterQueryParams(newAppliedFilterQuery))
-    await refreshItemTable(newQuery)
+    await refreshItemTable(newQuery, viewAllEnabled)
   }
 
   const handlePageChange = async (page: number) => {
@@ -283,7 +283,7 @@ export default function BibPage({
                 handleViewAllClick={handleViewAllClick}
                 viewAllLoadingTextRef={viewAllLoadingTextRef}
                 numItemsTotal={numItems}
-                filtersApplied={filtersAreApplied(appliedFilters)}
+                filtersApplied={filtersApplied}
               />
             </Box>
           </>

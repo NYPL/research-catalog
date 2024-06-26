@@ -62,6 +62,7 @@ const FiltersContainer = ({
     filterData
   )
   const ref = useRef<HTMLDivElement>(null)
+
   useCloseDropDown(() => setWhichFilterIsOpen(""), ref)
 
   const [whichFilterIsOpen, setWhichFilterIsOpen] = useState("")
@@ -70,6 +71,8 @@ const FiltersContainer = ({
     router.query,
     numItemsMatched
   )
+
+  const filtersApplied = filtersAreApplied(appliedFilters)
 
   const submitFilters = (selection: string[], field: string) => {
     const newFilters = { ...appliedFilters, [field]: selection }
@@ -143,7 +146,7 @@ const FiltersContainer = ({
           </CardContent>
         </Card>
       </Box>
-      {!itemsLoading && filtersAreApplied(appliedFilters) ? (
+      {!itemsLoading && filtersApplied ? (
         <>
           <Heading level="h3" size="heading6" mb="s">
             {itemsMatchedMessage}

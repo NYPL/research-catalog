@@ -95,9 +95,10 @@ export default class Bib {
   }
 
   getItemsViewAllLoadingMessage(filtersApplied = false) {
-    return `Loading all ${this.numItemsMatched} ${
-      filtersApplied ? "filtered " : ""
-    }items. This may take a few moments...`
+    // We don't want to show the number of filtered items since this may change during loading.
+    return `Loading all ${
+      filtersApplied ? "filtered" : this.numPhysicalItems
+    } items. This may take a few moments...`
   }
 
   getTitleFromResult(result: DiscoveryBibResult) {
