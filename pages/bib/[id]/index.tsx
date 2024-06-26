@@ -159,6 +159,7 @@ export default function BibPage({
   const handleFiltersChange = async (
     newAppliedFilterQuery: ItemFilterQueryParams
   ) => {
+    console.log(newAppliedFilterQuery)
     const newQuery = {
       ...newAppliedFilterQuery,
       ...(query.view_all_items === "true" && { view_all_items: true }),

@@ -60,14 +60,14 @@ export const buildItemsMatchedStringString = (
 
 export const buildAppliedFiltersString = (
   appliedFilters: CollapsedMultiValueAppliedFilters,
-  itemAggs: ItemFilterData[]
+  itemAggregations: ItemFilterData[]
 ) => {
   const filters = Object.keys(appliedFilters)
     .map((field: string) => {
       const appliedFilterPerField = appliedFilters[field]
       if (appliedFilterPerField.length) {
-        const fieldAggregations = itemAggs.find(
-          (agg: ItemFilterData) => agg.field === field
+        const fieldAggregations = itemAggregations.find(
+          (aggregation: ItemFilterData) => aggregation.field === field
         )
         const labels = fieldAggregations.labelsForConcatenatedValues(
           appliedFilterPerField
