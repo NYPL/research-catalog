@@ -136,36 +136,45 @@ export default function BibPage({
       }
     )
     const bibQueryString = getBibQueryString(newQuery, false, viewAllItems)
-
-    // Cancel any active fetches on new ItemTable refreshes
-    if (controllerRef.current) {
-      controllerRef.current.abort()
-    }
-    controllerRef.current = new AbortController()
-    const signal = controllerRef.current.signal
-
-    const response = await fetch(
-      `${BASE_URL}/api/bib/${bib.id}/items${bibQueryString}`,
-      {
-        method: "get",
-        signal,
+    try {
+      // Cancel any active fetches on new ItemTable refreshes
+      if (controllerRef.current) {
+        controllerRef.current.abort()
       }
-    )
-    if (response?.ok) {
-      const { items, discoveryBibResult } = await response.json()
-      setBib(new Bib(discoveryBibResult))
-      setBibItems(items.map((item: DiscoveryItemResult) => new Item(item, bib)))
-      setItemsLoading(false)
-      itemTableScrollRef.current?.scrollIntoView({
-        behavior: "smooth",
-      })
-      setTimeout(() => {
-        itemTableHeadingRef.current?.focus()
-      }, FOCUS_TIMEOUT)
-    } else {
-      setItemsLoading(false)
-      setItemFetchError(true)
+      controllerRef.current = new AbortController()
+      const signal = controllerRef.current.signal
+
+      const response = await fetch(
+        `${BASE_URL}/api/bib/${bib.id}/items${bibQueryString}`,
+        {
+          method: "get",
+          signal,
+        }
+      )
+      if (response?.ok) {
+        const { items, discoveryBibResult } = await response.json()
+        setBib(new Bib(discoveryBibResult))
+        setBibItems(
+          items.map((item: DiscoveryItemResult) => new Item(item, bib))
+        )
+        setItemsLoading(false)
+        itemTableScrollRef.current?.scrollIntoView({
+          behavior: "smooth",
+        })
+        setTimeout(() => {
+          itemTableHeadingRef.current?.focus()
+        }, FOCUS_TIMEOUT)
+      } else {
+        handleItemFetchError()
+      }
+    } catch (error) {
+      handleItemFetchError()
     }
+  }
+
+  const handleItemFetchError = () => {
+    setItemsLoading(false)
+    setItemFetchError(true)
   }
 
   const handleFiltersChange = async (
