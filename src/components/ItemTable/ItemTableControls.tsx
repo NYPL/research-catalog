@@ -60,7 +60,7 @@ const ItemTableControls = ({
           >
             <ProgressIndicator
               id="bib-all-items-loading"
-              labelText={bib.itemsViewAllLoadingMessage}
+              labelText={bib.getItemsViewAllLoadingMessage(filtersApplied)}
               size="small"
               indicatorType="circular"
               mr="xs"
@@ -81,7 +81,7 @@ const ItemTableControls = ({
               // @ts-expect-error
               tabIndex={-1}
             >
-              {bib.itemsViewAllLoadingMessage}
+              {bib.getItemsViewAllLoadingMessage(filtersApplied)}
             </Label>
           </Box>
         ) : !itemsLoading ? (

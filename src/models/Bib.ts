@@ -80,10 +80,6 @@ export default class Bib {
     return this.hasPhysicalItems ? "Item" : "Resource"
   }
 
-  get itemsViewAllLoadingMessage() {
-    return `Loading all ${this.numItemsMatched} items. This may take a few moments...`
-  }
-
   // Used to determine the Volume column text in the ItemTable
   get isArchiveCollection() {
     return (
@@ -96,6 +92,12 @@ export default class Bib {
     return `${this.numItemsMatched} ${filtersApplied ? "filtered " : ""}${
       this.resourceType
     }${this.numItems !== 1 ? "s" : ""}`
+  }
+
+  getItemsViewAllLoadingMessage(filtersApplied = false) {
+    return `Loading all ${this.numItemsMatched} ${
+      filtersApplied ? "filtered " : ""
+    }items. This may take a few moments...`
   }
 
   getTitleFromResult(result: DiscoveryBibResult) {
