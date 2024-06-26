@@ -27,11 +27,13 @@ export async function fetchItems(
     if (discoveryBibResult?.items?.length)
       return {
         items: discoveryBibResult?.items,
+        discoveryBibResult,
         status: 200,
       }
     // Return a failed response if the first fetch fails
     return {
       items: [],
+      discoveryBibResult,
       status: 400,
     }
   }
@@ -39,7 +41,7 @@ export async function fetchItems(
   // If View All is enabled, fetch the items in large batches
   for (
     let batchNum = 1;
-    batchNum <= Math.ceil(discoveryBibResult.numItemsTotal / batchSize);
+    batchNum <= Math.ceil(discoveryBibResult.numItemsMatched / batchSize);
     batchNum++
   ) {
     const pageQueryString = getBibQueryString(
@@ -59,12 +61,14 @@ export async function fetchItems(
     } else {
       return {
         items: [],
+        discoveryBibResult,
         status: 400,
       }
     }
   }
   return {
     items,
+    discoveryBibResult,
     status: 200,
   }
 }

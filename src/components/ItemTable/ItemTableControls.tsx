@@ -42,7 +42,7 @@ const ItemTableControls = ({
           initialPage={itemTablePage}
           currentPage={itemTablePage}
           pageCount={Math.ceil(
-            bib.numPhysicalItems / ITEM_PAGINATION_BATCH_SIZE
+            bib.numItemsMatched / ITEM_PAGINATION_BATCH_SIZE
           )}
           onPageChange={handlePageChange}
           width="auto"

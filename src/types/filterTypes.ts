@@ -7,16 +7,22 @@ export type AppliedItemFilters = {
   format: string[]
   status: string[]
 }
+
 export interface AggregationOption {
   value: string
   count: number
   label: string
 }
 
+/* eslint-disable @typescript-eslint/naming-convention */
+export type ItemFilterQueryParams = {
+  item_location?: string
+  item_format?: string
+  item_status?: string
+}
+
 export interface Aggregation {
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   "@type": string
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   "@id": string
   id: string
   field: string

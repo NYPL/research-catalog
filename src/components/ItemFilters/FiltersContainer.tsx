@@ -14,21 +14,32 @@ import {
 } from "@nypl/design-system-react-components"
 
 import styles from "../../../styles/components/ItemFilters.module.scss"
-import type { Aggregation } from "../../types/filterTypes"
+import type {
+  Aggregation,
+  ItemFilterQueryParams,
+} from "../../types/filterTypes"
 import { ItemFilterData, LocationFilterData } from "../../models/ItemFilterData"
 import ItemFilter from "./ItemFilter"
 import {
   buildAppliedFiltersString,
-  buildItemFilterQueryString,
+  buildItemFilterQuery,
   buildItemsMatchedStringString,
   parseItemFilterQueryParams,
 } from "../../utils/itemFilterUtils"
 
 interface ItemFilterContainerProps {
   itemAggregations: Aggregation[]
+  handleFiltersChange?: (newAppliedFilterQuery: ItemFilterQueryParams) => void
+  numItemsMatched?: number
+  itemsLoading?: boolean
 }
 
-const FiltersContainer = ({ itemAggregations }: ItemFilterContainerProps) => {
+const FiltersContainer = ({
+  itemAggregations,
+  handleFiltersChange,
+  numItemsMatched = 0,
+  itemsLoading = false,
+}: ItemFilterContainerProps) => {
   const router = useRouter()
   const { isLargerThanLarge, isLargerThanMedium } = useNYPLBreakpoints()
   const filterGroupClassName = isLargerThanLarge
@@ -56,19 +67,22 @@ const FiltersContainer = ({ itemAggregations }: ItemFilterContainerProps) => {
 
   const [whichFilterIsOpen, setWhichFilterIsOpen] = useState("")
 
-  const itemsMatched = buildItemsMatchedStringString(router.query)
+  const itemsMatchedMessage = buildItemsMatchedStringString(
+    router.query,
+    numItemsMatched
+  )
 
   const submitFilters = (selection: string[], field: string) => {
     const newFilters = { ...appliedFilters, [field]: selection }
     const locationFilterData = filterData.find(
       (filter) => filter.field === "location"
     ) as LocationFilterData
-    const url = buildItemFilterQueryString(
+    const itemFilterQuery = buildItemFilterQuery(
       newFilters,
       locationFilterData.recapLocations()
     )
+    handleFiltersChange(itemFilterQuery)
     setWhichFilterIsOpen("")
-    // router.push("/search/advanced" + url)
   }
 
   return (
@@ -130,11 +144,13 @@ const FiltersContainer = ({ itemAggregations }: ItemFilterContainerProps) => {
           </CardContent>
         </Card>
       </Box>
-      <Heading level="h3" size="heading6">
-        {itemsMatched}
-      </Heading>
+      {!itemsLoading ? (
+        <Heading level="h3" size="heading6" mb="s">
+          {itemsMatchedMessage}
+        </Heading>
+      ) : null}
       {appliedFiltersDisplay?.length ? (
-        <Text>{appliedFiltersDisplay}</Text>
+        <Text mb="m">{appliedFiltersDisplay}</Text>
       ) : null}
     </>
   )

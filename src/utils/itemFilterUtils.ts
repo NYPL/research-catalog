@@ -3,6 +3,7 @@ import type { ItemFilterData } from "../models/ItemFilterData"
 import type {
   AppliedItemFilters,
   CollapsedMultiValueAppliedFilters,
+  ItemFilterQueryParams,
 } from "../types/filterTypes"
 
 export const isRecapLocation = (loc: string) => {
@@ -15,17 +16,11 @@ export const combineRecapLocations = (locations: string[]) => {
   } else return locations
 }
 
-type BibPageQueryParams = {
-  item_location?: string
-  item_format?: string
-  item_status?: string
-}
-
 export const parseItemFilterQueryParams = ({
   item_status,
   item_format,
   item_location,
-}: BibPageQueryParams) => {
+}: ItemFilterQueryParams) => {
   return {
     location: item_location
       ? combineRecapLocations(item_location.split(","))
@@ -35,7 +30,7 @@ export const parseItemFilterQueryParams = ({
   }
 }
 
-export const buildItemFilterQueryString = (
+export const buildItemFilterQuery = (
   { location, format, status }: AppliedItemFilters,
   recapLocations: string
 ) => {
@@ -43,23 +38,23 @@ export const buildItemFilterQueryString = (
     if (loc === "Offsite") return recapLocations
     else return loc
   })
-  const location_query = locs.length ? "item_location=" + locs.join(",") : ""
-  const format_query = format.length ? "item_format=" + format.join(",") : ""
-  const status_query = status.length ? "item_status=" + status.join(",") : ""
 
-  const query = [location_query, format_query, status_query]
-    .filter((q) => q)
-    .join("&")
-
-  return query.length ? encodeURI(query) : ""
+  return {
+    ...(locs.length && { item_location: locs.join(",") }),
+    ...(format.length && { item_format: format.join(",") }),
+    ...(status.length && { item_status: status.join(",") }),
+  }
 }
 
 // numItems default is for development purposes only. Once data is being
 // passed in to the Item Filters components, this default should be removed.
-export const buildItemsMatchedStringString = (query, numItems = 20) => {
-  const items = `Item${numItems === 1 ? "" : "s"}`
-  if (Object.keys(query).length === 0) return `${numItems} ${items}`
-  const num = numItems === 0 ? "No" : numItems
+export const buildItemsMatchedStringString = (
+  query: ItemFilterQueryParams,
+  numItemsMatched = 0
+) => {
+  const items = `Item${numItemsMatched === 1 ? "" : "s"}`
+  if (Object.keys(query).length === 0) return `${numItemsMatched} ${items}`
+  const num = numItemsMatched === 0 ? "No" : numItemsMatched
   return `${num} Matching ${items} `
 }
 

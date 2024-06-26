@@ -12,7 +12,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   const id = req.query.id as string
   const viewAllItems = req.query?.view_all_items === "true"
 
-  const { status, items } = await fetchItems(id, req.query, viewAllItems)
+  const { status, discoveryBibResult, items } = await fetchItems(
+    id,
+    req.query,
+    viewAllItems
+  )
 
   if (req.method === "GET") {
     if (status !== 200 || !items?.length) {
@@ -21,6 +25,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       })
     } else {
       res.status(200).json({
+        discoveryBibResult,
         items,
       })
     }

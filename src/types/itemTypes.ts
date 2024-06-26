@@ -2,7 +2,7 @@
 
 // Item structure coming from the Search Results API response
 import { AnnotatedMarc } from "./bibDetailsTypes"
-import { DiscoveryBibResult } from "./bibTypes"
+import type { DiscoveryBibResult } from "./bibTypes"
 
 export interface DiscoveryItemResult {
   uri?: string
@@ -43,6 +43,7 @@ export interface ItemMetadata {
 
 export interface ItemsResponse {
   items: DiscoveryItemResult[]
+  discoveryBibResult: DiscoveryBibResult
   status: 200 | 400
 }
 

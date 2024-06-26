@@ -3,6 +3,7 @@ import {
   ITEM_VIEW_ALL_BATCH_SIZE,
 } from "../config/constants"
 import type { BibQueryParams } from "../types/bibTypes"
+import { ItemFilterQueryParams } from "../types/filterTypes"
 import { getPaginationOffsetStrings } from "./appUtils"
 
 /**
@@ -85,12 +86,13 @@ export function getBibQueryString(
   const itemPage = bibQuery?.item_page || 1
   const itemsFrom = (itemPage - 1) * batchSize || 0
 
-  const NON_FILTER_QUERIES = ["items_from", "item_page", "items_size"]
+  const FILTER_QUERIES = ["item_location", "item_format", "item_status"]
 
   const itemFilterQuery = bibQuery
     ? Object.keys(bibQuery)
-        .filter((key) => !NON_FILTER_QUERIES.includes(key))
+        .filter((key) => FILTER_QUERIES.includes(key))
         .map((key) => `&${key}=${bibQuery[key]}`)
+        .join("")
     : ""
 
   const paginationQuery = `items_size=${batchSize}&items_from=${itemsFrom}&item_page=${itemPage}`
@@ -100,6 +102,5 @@ export function getBibQueryString(
     : ""
 
   const viewAllQuery = viewAllItems ? "&view_all_items=true" : ""
-
   return `?${paginationQuery}${itemFilterQuery}${viewAllQuery}${mergeCheckinQuery}`
 }

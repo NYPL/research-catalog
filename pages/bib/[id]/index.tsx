@@ -40,6 +40,7 @@ import Bib from "../../../src/models/Bib"
 import initializePatronTokenAuth from "../../../src/server/auth"
 import Item from "../../../src/models/Item"
 import type { DiscoveryItemResult } from "../../../src/types/itemTypes"
+import type { ItemFilterQueryParams } from "../../../src/types/filterTypes"
 import type { ParsedUrlQueryInput } from "querystring"
 
 interface BibPropsType {
@@ -62,9 +63,8 @@ export default function BibPage({
 }: BibPropsType) {
   const { push, query } = useRouter()
   const metadataTitle = `Item Details | ${SITE_NAME}`
-  const bib = new Bib(discoveryBibResult)
-  const displayLegacyCatalogLink = isNyplBibID(bib.id)
 
+  const [bib, setBib] = useState(new Bib(discoveryBibResult))
   const [itemsLoading, setItemsLoading] = useState(false)
   const [itemFetchError, setItemFetchError] = useState(bib.showItemTableError)
   const [viewAllEnabled, setViewAllEnabled] = useState(viewAllItems)
@@ -84,6 +84,8 @@ export default function BibPage({
   const itemTableData = new ItemTableData(bibItems, {
     isArchiveCollection: bib.isArchiveCollection,
   })
+
+  const displayLegacyCatalogLink = isNyplBibID(bib.id)
 
   // Load all items via client-side fetch if page is first loaded with viewAllItems prop passed in
   // Namely, when the page is accessed with the /all route
@@ -110,7 +112,6 @@ export default function BibPage({
       delete newQuery.item_page
       delete newQuery.items_size
     }
-
     await push(
       {
         pathname: `${PATHS.BIB}/${bib.id}${viewAllItems ? "/all" : ""}`,
@@ -139,7 +140,8 @@ export default function BibPage({
       }
     )
     if (response?.ok) {
-      const { items } = await response.json()
+      const { items, discoveryBibResult } = await response.json()
+      setBib(new Bib(discoveryBibResult))
       setBibItems(items.map((item: DiscoveryItemResult) => new Item(item, bib)))
       setItemsLoading(false)
       itemTableScrollRef.current?.scrollIntoView({
@@ -152,6 +154,17 @@ export default function BibPage({
       setItemsLoading(false)
       setItemFetchError(true)
     }
+  }
+
+  const handleFiltersChange = async (
+    newAppliedFilterQuery: ItemFilterQueryParams
+  ) => {
+    const newQuery = {
+      ...newAppliedFilterQuery,
+      ...(query.view_all_items === "true" && { view_all_items: true }),
+    }
+    await handlePageChange(1)
+    await refreshItemTable(newQuery)
   }
 
   const handlePageChange = async (page: number) => {
@@ -215,7 +228,12 @@ export default function BibPage({
               isDismissible
               mb="s"
             />
-            <FiltersContainer itemAggregations={bib.itemAggregations} />
+            <FiltersContainer
+              itemAggregations={bib.itemAggregations}
+              handleFiltersChange={handleFiltersChange}
+              numItemsMatched={bib.numItemsMatched}
+              itemsLoading={itemsLoading}
+            />
             <Box id="item-table" ref={itemTableScrollRef}>
               {itemsLoading ? (
                 <SkeletonLoader showImage={false} />
@@ -236,7 +254,7 @@ export default function BibPage({
                   >
                     {buildItemTableDisplayingString(
                       itemTablePage,
-                      bib.numPhysicalItems,
+                      bib.numItemsMatched,
                       viewAllEnabled
                     )}
                   </Heading>

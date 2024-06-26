@@ -17,6 +17,7 @@ export default class Bib {
   title: string
   electronicResources?: ElectronicResource[]
   numPhysicalItems: number
+  numItemsMatched: number
   materialType?: string
   issuance?: JSONLDValue[]
   items?: Item[]
@@ -27,6 +28,7 @@ export default class Bib {
     this.title = this.getTitleFromResult(result)
     this.electronicResources = result.electronicResources || null
     this.numPhysicalItems = result.numItemsTotal || 0
+    this.numItemsMatched = result.numItemsMatched || 0
     this.materialType =
       (result.materialType?.length && result.materialType[0]?.prefLabel) || null
     this.issuance = (result.issuance?.length && result.issuance) || null
@@ -71,7 +73,7 @@ export default class Bib {
   }
 
   get showViewAllItemsLink() {
-    return this.numPhysicalItems > ITEM_PAGINATION_BATCH_SIZE
+    return this.numItemsMatched > ITEM_PAGINATION_BATCH_SIZE
   }
 
   get resourceType() {
@@ -79,13 +81,13 @@ export default class Bib {
   }
 
   get numItemsMessage() {
-    return `${this.numItems} ${this.resourceType}${
+    return `${this.numItemsMatched} ${this.resourceType}${
       this.numItems !== 1 ? "s" : ""
     }`
   }
 
   get itemsViewAllLoadingMessage() {
-    return `Loading all ${this.numPhysicalItems} items. This may take a few moments...`
+    return `Loading all ${this.numItemsMatched} items. This may take a few moments...`
   }
 
   // Used to determine the Volume column text in the ItemTable
