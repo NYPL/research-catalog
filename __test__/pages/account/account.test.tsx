@@ -86,11 +86,10 @@ describe("MyAccount page", () => {
         req: mockReq,
         res: mockRes,
       })
-      expect(responseWithoutRedirect.props.redirectLoop).toBe(true)
+      expect(responseWithoutRedirect.props.renderAuthServerError).toBe(true)
     })
     it("does not redirect if patron is authenticated", async () => {
       const response = await getServerSideProps({ req: mockReq, res: mockRes })
-      console.log(response)
       expect(response.redirect).toBeUndefined()
     })
     it("updates the nyplAccountRedirectsCookie upon redirecting", async () => {
@@ -104,7 +103,7 @@ describe("MyAccount page", () => {
       await getServerSideProps({ res: mockRes, req: mockReq })
       expect(mockRes.setHeader.mock.calls[0]).toStrictEqual([
         "Set-Cookie",
-        "nyplAccountRedirects=1; Max-Age=10",
+        "nyplAccountRedirects=1; Max-Age=10; path=/; domain=.nypl.org;",
       ])
     })
   })
