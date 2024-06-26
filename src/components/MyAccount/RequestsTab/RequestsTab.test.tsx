@@ -158,9 +158,12 @@ describe("RequestsTab", () => {
           removeHold={mockRemoveHold}
         />
       )
+      const numberOfPendingHolds = processedHolds.filter(
+        (hold) => hold.status === "REQUEST PENDING" && !hold.isResearch
+      ).length
       const changeLocationButtons = screen.getAllByText("Change location")
       // there is one circ hold with status Request Pending in the provided holds array
-      expect(changeLocationButtons).toHaveLength(1)
+      expect(changeLocationButtons).toHaveLength(numberOfPendingHolds)
     })
   })
 
@@ -174,8 +177,11 @@ describe("RequestsTab", () => {
         removeHold={mockRemoveHold}
       />
     )
+    const numberOfFreezableHolds = processedHolds.filter(
+      (hold) => hold.status === "REQUEST PENDING" && !hold.isResearch
+    ).length
     const freezeButtons = component.getAllByText("Freeze")
-    expect(freezeButtons.length).toBe(1)
+    expect(freezeButtons.length).toBe(numberOfFreezableHolds)
   })
 
   it("freezes and unfreezes, with button reflecting current state", async () => {
@@ -269,9 +275,11 @@ describe("RequestsTab", () => {
         removeHold={mockRemoveHold}
       />
     )
-    const readyCircRequestRow = component.getAllByRole("row")[1]
-    expect(readyCircRequestRow).toHaveTextContent("May 17, 2024")
-    expect(readyCircRequestRow).toHaveTextContent("READY FOR PICKUP")
+    const readyRequest = processedHolds[0]
+    const row = component.getByText(readyRequest.title).closest("tr")
+
+    expect(row).toHaveTextContent("May 17, 2024")
+    expect(row).toHaveTextContent("READY FOR PICKUP")
   })
   it("does not show freeze button on freezable request when it is anything other than pending", () => {
     const component = render(
@@ -283,12 +291,21 @@ describe("RequestsTab", () => {
         removeHold={mockRemoveHold}
       />
     )
-    const readyCircRequestRow = component.getAllByRole("row")[1]
+
+    const readyRequest = processedHolds[0]
+    const readyCircRequestRow = component
+      .getByText(readyRequest.title)
+      .closest("tr")
+
     expect(readyCircRequestRow).toHaveTextContent("READY FOR PICKUP")
     expect(readyCircRequestRow).not.toHaveTextContent("Freeze")
 
-    const confirmedCircRequestRow = component.getAllByRole("row")[4]
-    expect(confirmedCircRequestRow).toHaveTextContent("REQUEST CONFIRMED")
-    expect(confirmedCircRequestRow).not.toHaveTextContent("Freeze")
+    const confirmedRequest = processedHolds[3]
+    const confirmedRequestRow = component
+      .getByText(confirmedRequest.title)
+      .closest("tr")
+
+    expect(confirmedRequestRow).toHaveTextContent("REQUEST CONFIRMED")
+    expect(confirmedRequestRow).not.toHaveTextContent("Freeze")
   })
 })
