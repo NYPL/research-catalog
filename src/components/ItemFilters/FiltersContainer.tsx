@@ -25,6 +25,7 @@ import {
   buildItemFilterQuery,
   buildItemsMatchedStringString,
   filtersAreApplied,
+  getFiltersWithItemRemoved,
 } from "../../utils/itemFilterUtils"
 
 interface ItemFilterContainerProps {
@@ -65,11 +66,6 @@ const FiltersContainer = ({
 
   const [whichFilterIsOpen, setWhichFilterIsOpen] = useState("")
 
-  const itemsMatchedMessage = buildItemsMatchedStringString(
-    router.query,
-    numItemsMatched
-  )
-
   const filtersApplied = filtersAreApplied(appliedFilters)
 
   const submitFilters = (selection: string[], field: string) => {
@@ -85,8 +81,23 @@ const FiltersContainer = ({
     setWhichFilterIsOpen("")
   }
 
-  const handleAppliedFiltersClick = (tagSetData: TagSetFilterDataProps) => {
-    console.log(tagSetData)
+  const clearAllFilters = () => {
+    handleFiltersChange({})
+    setWhichFilterIsOpen("")
+  }
+
+  const handleRemoveAppliedFilterClick = ({ id }: TagSetFilterDataProps) => {
+    if (id === "clear-filters") {
+      clearAllFilters()
+    } else {
+      const [filtersWithValueCleared, field] = getFiltersWithItemRemoved(
+        id,
+        appliedFilters
+      )
+      console.log(filtersWithValueCleared)
+      if (filtersWithValueCleared && field)
+        submitFilters(filtersWithValueCleared, field)
+    }
   }
 
   return (
@@ -156,7 +167,7 @@ const FiltersContainer = ({
             id="bib-details-applied-filters"
             isDismissible
             type="filter"
-            onClick={handleAppliedFiltersClick}
+            onClick={handleRemoveAppliedFilterClick}
             tagSetData={appliedFiltersTagSetData}
           />
         </Box>

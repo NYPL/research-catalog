@@ -26,12 +26,6 @@ export class ItemFilterData {
       return opt.value === value || opt.label === value
     })?.label
   }
-
-  labelsForConcatenatedValues(values: string[]) {
-    return Array.from(
-      new Set(values.map((val: string) => `'${this.labelForValue(val)}'`))
-    ).join(", ")
-  }
 }
 
 export class LocationFilterData extends ItemFilterData {

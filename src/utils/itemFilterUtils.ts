@@ -87,3 +87,19 @@ export const buildAppliedFiltersTagSetData = (
   })
   return filters
 }
+
+export const getFiltersWithItemRemoved = (
+  id: string,
+  appliedFilters: AppliedItemFilters
+): [values?: string[], field?: string] => {
+  let valuesAndField: [values?: string[], field?: string] = [null, null]
+  Object.keys(appliedFilters).forEach((field) => {
+    const filterValueIndex = appliedFilters[field].indexOf(id)
+    if (filterValueIndex >= 0) {
+      appliedFilters[field].splice(filterValueIndex, 1)
+      valuesAndField = [appliedFilters[field], field]
+    }
+  })
+  console.log(valuesAndField)
+  return valuesAndField
+}
