@@ -158,6 +158,7 @@ export default function BibPage({
         handleItemFetchError()
       }
     } catch (error) {
+      console.log(error)
       handleItemFetchError()
     }
   }
