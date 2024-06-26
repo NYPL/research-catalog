@@ -174,6 +174,7 @@ export default function BibPage({
       ...newAppliedFilterQuery,
     } as BibQueryParams
     if (newQuery.item_page) delete newQuery.item_page
+    setItemTablePage(1)
     setAppliedFilters(parseItemFilterQueryParams(newAppliedFilterQuery))
     await refreshItemTable(newQuery, viewAllEnabled)
   }
