@@ -42,6 +42,10 @@ import Item from "../../../src/models/Item"
 import type { DiscoveryItemResult } from "../../../src/types/itemTypes"
 import type { ItemFilterQueryParams } from "../../../src/types/filterTypes"
 import type { ParsedUrlQueryInput } from "querystring"
+import {
+  parseItemFilterQueryParams,
+  filtersAreApplied,
+} from "../../../src/utils/itemFilterUtils"
 
 interface BibPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -68,6 +72,9 @@ export default function BibPage({
   const [itemsLoading, setItemsLoading] = useState(false)
   const [itemFetchError, setItemFetchError] = useState(bib.showItemTableError)
   const [viewAllEnabled, setViewAllEnabled] = useState(viewAllItems)
+  const [appliedFilters, setAppliedFilters] = useState(
+    parseItemFilterQueryParams(query)
+  )
   const [bibItems, setBibItems] = useState(bib.items)
   const [itemTablePage, setItemTablePage] = useState(itemPage)
 
@@ -86,6 +93,10 @@ export default function BibPage({
   })
 
   const displayLegacyCatalogLink = isNyplBibID(bib.id)
+
+  const numItems = filtersAreApplied(appliedFilters)
+    ? bib.numItemsMatched
+    : bib.numPhysicalItems
 
   // Load all items via client-side fetch if page is first loaded with viewAllItems prop passed in
   // Namely, when the page is accessed with the /all route
@@ -159,12 +170,12 @@ export default function BibPage({
   const handleFiltersChange = async (
     newAppliedFilterQuery: ItemFilterQueryParams
   ) => {
-    console.log(newAppliedFilterQuery)
     const newQuery = {
       ...newAppliedFilterQuery,
       ...(query.view_all_items === "true" && { view_all_items: true }),
     }
     await handlePageChange(1)
+    setAppliedFilters(parseItemFilterQueryParams(newAppliedFilterQuery))
     await refreshItemTable(newQuery)
   }
 
@@ -232,8 +243,9 @@ export default function BibPage({
             <FiltersContainer
               itemAggregations={bib.itemAggregations}
               handleFiltersChange={handleFiltersChange}
-              numItemsMatched={bib.numItemsMatched}
+              numItemsMatched={numItems}
               itemsLoading={itemsLoading}
+              appliedFilters={appliedFilters}
             />
             <Box id="item-table" ref={itemTableScrollRef}>
               {itemsLoading ? (
@@ -255,7 +267,7 @@ export default function BibPage({
                   >
                     {buildItemTableDisplayingString(
                       itemTablePage,
-                      bib.numItemsMatched,
+                      numItems,
                       viewAllEnabled
                     )}
                   </Heading>
@@ -270,6 +282,8 @@ export default function BibPage({
                 handlePageChange={handlePageChange}
                 handleViewAllClick={handleViewAllClick}
                 viewAllLoadingTextRef={viewAllLoadingTextRef}
+                numItemsTotal={numItems}
+                filtersApplied={filtersAreApplied(appliedFilters)}
               />
             </Box>
           </>

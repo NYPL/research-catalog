@@ -16,6 +16,9 @@ export const combineRecapLocations = (locations: string[]) => {
   } else return locations
 }
 
+export const filtersAreApplied = (appliedFilters: AppliedItemFilters) =>
+  Object.entries(appliedFilters).some(([, value]) => value.length > 0)
+
 export const parseItemFilterQueryParams = ({
   item_status,
   item_format,

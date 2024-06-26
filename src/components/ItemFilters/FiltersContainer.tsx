@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react"
+import { useRef, useState } from "react"
 import { useRouter } from "next/router"
 import React from "react"
 import {
@@ -17,6 +17,7 @@ import styles from "../../../styles/components/ItemFilters.module.scss"
 import type {
   Aggregation,
   ItemFilterQueryParams,
+  AppliedItemFilters,
 } from "../../types/filterTypes"
 import { ItemFilterData, LocationFilterData } from "../../models/ItemFilterData"
 import ItemFilter from "./ItemFilter"
@@ -24,7 +25,7 @@ import {
   buildAppliedFiltersString,
   buildItemFilterQuery,
   buildItemsMatchedStringString,
-  parseItemFilterQueryParams,
+  filtersAreApplied,
 } from "../../utils/itemFilterUtils"
 
 interface ItemFilterContainerProps {
@@ -32,6 +33,7 @@ interface ItemFilterContainerProps {
   handleFiltersChange?: (newAppliedFilterQuery: ItemFilterQueryParams) => void
   numItemsMatched?: number
   itemsLoading?: boolean
+  appliedFilters?: AppliedItemFilters
 }
 
 const FiltersContainer = ({
@@ -39,6 +41,7 @@ const FiltersContainer = ({
   handleFiltersChange,
   numItemsMatched = 0,
   itemsLoading = false,
+  appliedFilters = { location: [], format: [], status: [] },
 }: ItemFilterContainerProps) => {
   const router = useRouter()
   const { isLargerThanLarge, isLargerThanMedium } = useNYPLBreakpoints()
@@ -53,10 +56,6 @@ const FiltersContainer = ({
       else return new ItemFilterData(aggregation)
     })
   ).current
-
-  const appliedFilters = useMemo(() => {
-    return parseItemFilterQueryParams(router.query)
-  }, [router.query])
 
   const appliedFiltersDisplay = buildAppliedFiltersString(
     appliedFilters,
@@ -144,13 +143,15 @@ const FiltersContainer = ({
           </CardContent>
         </Card>
       </Box>
-      {!itemsLoading ? (
-        <Heading level="h3" size="heading6" mb="s">
-          {itemsMatchedMessage}
-        </Heading>
-      ) : null}
-      {appliedFiltersDisplay?.length ? (
-        <Text mb="m">{appliedFiltersDisplay}</Text>
+      {!itemsLoading && filtersAreApplied(appliedFilters) ? (
+        <>
+          <Heading level="h3" size="heading6" mb="s">
+            {itemsMatchedMessage}
+          </Heading>
+          {appliedFiltersDisplay?.length ? (
+            <Text mb="m">{appliedFiltersDisplay}</Text>
+          ) : null}
+        </>
       ) : null}
     </>
   )

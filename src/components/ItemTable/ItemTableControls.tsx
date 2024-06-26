@@ -19,6 +19,8 @@ interface ItemTableControlsProps {
   handlePageChange: (selected: number) => void
   handleViewAllClick: (e: SyntheticEvent) => Promise<void>
   viewAllLoadingTextRef: RefObject<HTMLDivElement & HTMLLabelElement>
+  numItemsTotal?: number
+  filtersApplied?: boolean
 }
 
 /**
@@ -33,6 +35,8 @@ const ItemTableControls = ({
   handlePageChange,
   handleViewAllClick,
   viewAllLoadingTextRef,
+  numItemsTotal = 0,
+  filtersApplied = false,
 }: ItemTableControlsProps) => {
   return (
     <Box display="flex" my="xl" justifyContent="space-between">
@@ -41,9 +45,7 @@ const ItemTableControls = ({
           id="bib-items-pagination"
           initialPage={itemTablePage}
           currentPage={itemTablePage}
-          pageCount={Math.ceil(
-            bib.numItemsMatched / ITEM_PAGINATION_BATCH_SIZE
-          )}
+          pageCount={Math.ceil(numItemsTotal / ITEM_PAGINATION_BATCH_SIZE)}
           onPageChange={handlePageChange}
           width="auto"
         />
@@ -99,7 +101,7 @@ const ItemTableControls = ({
             <Box as="span" mr="xxs">
               {viewAllEnabled
                 ? "View fewer items"
-                : `View All ${bib.numItemsMessage}`}
+                : `View All ${bib.getNumItemsMessage(filtersApplied)}`}
             </Box>
             <Icon
               iconRotation={viewAllEnabled ? "rotate180" : "rotate0"}

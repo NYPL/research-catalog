@@ -80,12 +80,6 @@ export default class Bib {
     return this.hasPhysicalItems ? "Item" : "Resource"
   }
 
-  get numItemsMessage() {
-    return `${this.numItemsMatched} ${this.resourceType}${
-      this.numItems !== 1 ? "s" : ""
-    }`
-  }
-
   get itemsViewAllLoadingMessage() {
     return `Loading all ${this.numItemsMatched} items. This may take a few moments...`
   }
@@ -96,6 +90,12 @@ export default class Bib {
       Array.isArray(this.issuance) &&
       this.issuance.some((issuance) => issuance["@id"] === "urn:biblevel:c")
     )
+  }
+
+  getNumItemsMessage(filtersApplied = false) {
+    return `${this.numItemsMatched} ${filtersApplied ? "filtered " : ""}${
+      this.resourceType
+    }${this.numItems !== 1 ? "s" : ""}`
   }
 
   getTitleFromResult(result: DiscoveryBibResult) {
