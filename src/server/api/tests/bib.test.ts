@@ -1,6 +1,5 @@
 import { fetchBib } from "../bib"
 import type { BibResponse } from "../../../types/bibTypes"
-import { DiscoveryBibResult } from "../../../types/bibTypes"
 
 jest.mock("../../nyplApiClient", () => {
   return jest

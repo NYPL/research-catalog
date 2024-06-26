@@ -95,7 +95,7 @@ describe("MyAccountModel", () => {
     })
     it("can return fines", async () => {
       const mockSierraClient = {
-        get: async (path) => Promise.resolve(fines),
+        get: async () => Promise.resolve(fines),
       }
       const fetcher = new MyAccount(mockSierraClient, "12345")
       const processedFines = await fetcher.getFines()
