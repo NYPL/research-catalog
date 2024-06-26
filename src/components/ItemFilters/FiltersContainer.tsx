@@ -106,45 +106,41 @@ const FiltersContainer = ({
           <Label htmlFor="item-filters" fontWeight="bold">
             Filter By
           </Label>
-          <Box>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: isLargerThanLarge ? "row" : "column",
-              }}
-              gap="nypl-s"
-              id="item-filters"
-            >
-              {filterData.map((field: ItemFilterData) => (
-                <ItemFilter
-                  isOpen={whichFilterIsOpen === field.field}
-                  setWhichFilterIsOpen={setWhichFilterIsOpen}
-                  key={field.field}
-                  itemFilterData={field}
-                  appliedFilters={appliedFilters}
-                  submitFilters={submitFilters}
-                />
-              ))}
-            </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: isLargerThanLarge ? "row" : "column",
+            }}
+            gap="nypl-s"
+            id="item-filters"
+          >
+            {filterData.map((field: ItemFilterData) => (
+              <ItemFilter
+                isOpen={whichFilterIsOpen === field.field}
+                setWhichFilterIsOpen={setWhichFilterIsOpen}
+                key={field.field}
+                itemFilterData={field}
+                appliedFilters={appliedFilters}
+                submitFilters={submitFilters}
+              />
+            ))}
           </Box>
         </Box>
         <Box className={filterGroupClassName}>
           <Label htmlFor="year-filter" fontWeight="bold">
             Search by Year
           </Label>
-          <Box>
-            <SearchBar
-              id="year-filter"
-              labelText="Apply"
-              textInputProps={{
-                defaultValue: "YYYY",
-                isClearable: true,
-                labelText: "Item Search",
-                name: "textInputName",
-              }}
-              onSubmit={() => console.log("spaghetti!")}
-            />
-          </Box>
+          <SearchBar
+            id="year-filter"
+            labelText="Apply"
+            textInputProps={{
+              defaultValue: "YYYY",
+              isClearable: true,
+              labelText: "Item Search",
+              name: "textInputName",
+            }}
+            onSubmit={() => console.log("spaghetti!")}
+          />
         </Box>
       </Box>
       {filtersApplied ? (
