@@ -2,15 +2,16 @@ import { useRef, useState } from "react"
 import { useRouter } from "next/router"
 import React from "react"
 import {
-  Text,
   Card,
   SearchBar,
   Box,
-  Heading,
   useCloseDropDown,
   useNYPLBreakpoints,
   CardHeading,
   CardContent,
+  Text,
+  TagSet,
+  type TagSetFilterDataProps,
 } from "@nypl/design-system-react-components"
 
 import styles from "../../../styles/components/ItemFilters.module.scss"
@@ -32,7 +33,6 @@ interface ItemFilterContainerProps {
   itemAggregations: Aggregation[]
   handleFiltersChange?: (newAppliedFilterQuery: ItemFilterQueryParams) => void
   numItemsMatched?: number
-  itemsLoading?: boolean
   appliedFilters?: AppliedItemFilters
 }
 
@@ -40,7 +40,6 @@ const FiltersContainer = ({
   itemAggregations,
   handleFiltersChange,
   numItemsMatched = 0,
-  itemsLoading = false,
   appliedFilters = { location: [], format: [], status: [] },
 }: ItemFilterContainerProps) => {
   const router = useRouter()
@@ -85,6 +84,10 @@ const FiltersContainer = ({
     )
     handleFiltersChange(itemFilterQuery)
     setWhichFilterIsOpen("")
+  }
+
+  const handleAppliedFiltersClick = (tagSetData: TagSetFilterDataProps) => {
+    console.log(tagSetData)
   }
 
   return (
@@ -146,15 +149,29 @@ const FiltersContainer = ({
           </CardContent>
         </Card>
       </Box>
-      {!itemsLoading && filtersApplied ? (
-        <>
-          <Heading level="h3" size="heading6" mb="s">
-            {itemsMatchedMessage}
-          </Heading>
-          {appliedFiltersDisplay?.length ? (
-            <Text mb="m">{appliedFiltersDisplay}</Text>
-          ) : null}
-        </>
+      {filtersApplied ? (
+        <Box display="flex" mr="s" mb="m">
+          <Text
+            fontSize="desktop.body.body2"
+            fontWeight="bold"
+            mr="s"
+            mb={0}
+            lineHeight={2}
+            display="table-cell"
+          >
+            Filters Applied
+          </Text>
+          <TagSet
+            id="bib-details-applied-filters"
+            isDismissible
+            type="filter"
+            onClick={handleAppliedFiltersClick}
+            tagSetData={[
+              { iconName: "close", id: "one", label: "one" },
+              { iconName: "close", id: "two", label: "two" },
+            ]}
+          />
+        </Box>
       ) : null}
     </>
   )

@@ -244,7 +244,6 @@ export default function BibPage({
               itemAggregations={bib.itemAggregations}
               handleFiltersChange={handleFiltersChange}
               numItemsMatched={numItems}
-              itemsLoading={itemsLoading}
               appliedFilters={appliedFilters}
             />
             <Box id="item-table" ref={itemTableScrollRef}>
