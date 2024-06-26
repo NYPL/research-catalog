@@ -70,8 +70,8 @@ export default class MyAccount {
     }
 
     const holdsWithBibData = this.buildHolds(holds.entries, holdBibData.entries)
-
-    return holdsWithBibData
+    const sortedHolds = MyAccount.sortHolds(holdsWithBibData)
+    return sortedHolds
   }
 
   async fetchPatron() {
@@ -162,6 +162,17 @@ export default class MyAccount {
     }, {})
   }
 
+  static sortHolds(holds: Hold[]) {
+    const holdsWithNoPickupByDates = holds.filter((hold) => !hold.pickupByDate)
+    const holdsWithPickupByDates = holds.filter((hold) => hold.pickupByDate)
+    const sortedHoldsWithDates = holdsWithPickupByDates.sort((a, b) => {
+      return (
+        new Date(b.pickupByDate).valueOf() - new Date(a.pickupByDate).valueOf()
+      )
+    })
+    return [...sortedHoldsWithDates, ...holdsWithNoPickupByDates]
+  }
+
   buildHolds(holds: SierraHold[], bibData: SierraBibEntry[]): Hold[] {
     let bibDataMap: BibDataMapType
     try {
@@ -173,37 +184,29 @@ export default class MyAccount {
       throw new MyAccountModelError("building bibData for holds", e)
     }
     try {
-      return holds
-        .map((hold: SierraHold) => {
-          const bibId =
-            hold.recordType === "i" ? hold.record.bibIds[0] : hold.record.id
-          const bibForHold = bibDataMap[bibId]
-          return {
-            patron: MyAccount.getRecordId(hold.patron),
-            id: MyAccount.getRecordId(hold.id),
-            pickupByDate: MyAccount.formatDate(hold.pickupByDate) || null,
-            canFreeze: hold.canFreeze,
-            frozen: hold.frozen,
-            status: MyAccount.getHoldStatus(hold.status),
-            pickupLocation: hold.pickupLocation,
-            title: bibForHold.title,
-            isResearch: bibForHold.isResearch,
-            bibId,
-            isNyplOwned: bibForHold.isNyplOwned,
-            catalogHref: bibForHold.isNyplOwned
-              ? bibForHold.isResearch
-                ? `https://nypl.org/research/research-catalog/bib/b${bibId}`
-                : `https://borrow.nypl.org/search/card?recordId=${bibId}`
-              : null,
-          }
-        })
-        .sort((a, b) => {
-          if (!a.pickupByDate) return 1
-          return (
-            new Date(a.pickupByDate).valueOf() -
-            new Date(b.pickupByDate).valueOf()
-          )
-        })
+      return holds.map((hold: SierraHold) => {
+        const bibId =
+          hold.recordType === "i" ? hold.record.bibIds[0] : hold.record.id
+        const bibForHold = bibDataMap[bibId]
+        return {
+          patron: MyAccount.getRecordId(hold.patron),
+          id: MyAccount.getRecordId(hold.id),
+          pickupByDate: MyAccount.formatDate(hold.pickupByDate) || null,
+          canFreeze: hold.canFreeze,
+          frozen: hold.frozen,
+          status: MyAccount.getHoldStatus(hold.status),
+          pickupLocation: hold.pickupLocation,
+          title: bibForHold.title,
+          isResearch: bibForHold.isResearch,
+          bibId,
+          isNyplOwned: bibForHold.isNyplOwned,
+          catalogHref: bibForHold.isNyplOwned
+            ? bibForHold.isResearch
+              ? `https://nypl.org/research/research-catalog/bib/b${bibId}`
+              : `https://borrow.nypl.org/search/card?recordId=${bibId}`
+            : null,
+        }
+      })
     } catch (e) {
       console.error(
         "Error building holds in MyAccount#buildHolds: " + e.message
@@ -251,7 +254,7 @@ export default class MyAccount {
           }
         })
         .sort((a, b) => {
-          return new Date(a.dueDate).valueOf() - new Date(b.dueDate).valueOf()
+          return new Date(b.dueDate).valueOf() - new Date(a.dueDate).valueOf()
         })
     } catch (e) {
       throw new MyAccountModelError("building checkouts", e)
