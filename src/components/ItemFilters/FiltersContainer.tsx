@@ -58,7 +58,7 @@ const FiltersContainer = ({
     appliedFilters,
     filterData
   )
-  console.log(appliedFiltersTagSetData)
+
   const ref = useRef<HTMLDivElement>(null)
 
   useCloseDropDown(() => setWhichFilterIsOpen(""), ref)
@@ -157,10 +157,7 @@ const FiltersContainer = ({
             isDismissible
             type="filter"
             onClick={handleAppliedFiltersClick}
-            tagSetData={[
-              { iconName: "close", id: "one", label: "one" },
-              { iconName: "close", id: "two", label: "two" },
-            ]}
+            tagSetData={appliedFiltersTagSetData}
           />
         </Box>
       ) : null}

@@ -1,4 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+import { capitalize } from "lodash"
+import type { TagSetFilterDataProps } from "@nypl/design-system-react-components"
+
 import type { ItemFilterData } from "../models/ItemFilterData"
 import type {
   AppliedItemFilters,
@@ -61,30 +64,26 @@ export const buildItemsMatchedStringString = (
   return `${num} Matching ${items} `
 }
 
-export const buildAppliedFiltersString = (
-  appliedFilters: CollapsedMultiValueAppliedFilters,
-  itemAggregations: ItemFilterData[]
-) => {
-  const filters = Object.keys(appliedFilters)
-    .map((field: string) => {
-      const appliedFilterPerField = appliedFilters[field]
-      if (appliedFilterPerField.length) {
-        const fieldAggregations = itemAggregations.find(
-          (aggregation: ItemFilterData) => aggregation.field === field
-        )
-        const labels = fieldAggregations.labelsForConcatenatedValues(
-          appliedFilterPerField
-        )
-        return field + ": " + labels
-      }
-    })
-    .filter((filter) => filter)
-  if (filters.length) return "Filtered by " + filters.join(", ")
-}
-
 export const buildAppliedFiltersTagSetData = (
   appliedFilters: CollapsedMultiValueAppliedFilters,
   itemAggregations: ItemFilterData[]
-) => {
-  return appliedFilters
+): TagSetFilterDataProps[] => {
+  const filters: TagSetFilterDataProps[] = []
+  Object.keys(appliedFilters).forEach((field: string) => {
+    const appliedFilterPerField = appliedFilters[field]
+    appliedFilterPerField.forEach((filterValue: string) => {
+      const fieldAggregations = itemAggregations.find(
+        (aggregation: ItemFilterData) => aggregation.field === field
+      )
+
+      filters.push({
+        label: `${capitalize(field)} > ${fieldAggregations.labelForValue(
+          filterValue
+        )}`,
+        id: filterValue,
+        iconName: "close",
+      })
+    })
+  })
+  return filters
 }
