@@ -59,14 +59,20 @@ describe("initializePatronTokenAuth", () => {
 })
 
 describe("getLoginRedirect", () => {
-  it("should return a redirect link defaulting to /account", async () => {
-    const login = getLoginRedirect(mockReq)
+  it("should return a redirect link containing defaultPath if req has a server url /account", async () => {
+    const login = getLoginRedirect(
+      {
+        ...mockReq,
+        url: "/_next/data/developement/account.json",
+      },
+      "/account"
+    )
     expect(login).toStrictEqual(
       "https://dev-login.nypl.org/auth/login?redirect_uri=http%3A%2F%2Flocal.nypl.org%3A8080%2Fresearch%2Fresearch-catalog%2Faccount"
     )
   })
-  it("should return a redirect link defaulting to /account", async () => {
-    const login = getLoginRedirect({ ...mockReq, url: "/shep" }, false)
+  it("should return a redirect link based on the request", async () => {
+    const login = getLoginRedirect({ ...mockReq, url: "/shep" })
     expect(login).toStrictEqual(
       "https://dev-login.nypl.org/auth/login?redirect_uri=http%3A%2F%2Flocal.nypl.org%3A8080%2Fresearch%2Fresearch-catalog%2Fshep"
     )

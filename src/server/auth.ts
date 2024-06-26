@@ -68,10 +68,11 @@ export const doRedirectBasedOnNyplAccountRedirects = (count: number) => {
  * /account. The req url coming from my account redirects sometimes is a
  * server url from the NextJS json API. We don't want NOTHING to do with that.
  */
-export function getLoginRedirect(req, redirectLoopHandling = true) {
+export function getLoginRedirect(req, defaultPath?: string) {
   const protocol = req.protocol || "http"
   const hostname = appConfig.apiEndpoints.domain[appConfig.environment]
-  const originalUrl = BASE_URL + (redirectLoopHandling ? "/account" : req.url)
+  const path = req.url?.includes("_next") ? defaultPath : req.url
+  const originalUrl = BASE_URL + path
   const fullUrl = encodeURIComponent(`${protocol}://${hostname}${originalUrl}`)
   const redirect = `${
     appConfig.apiEndpoints.loginUrl[appConfig.environment]

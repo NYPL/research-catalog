@@ -93,7 +93,7 @@ export async function getServerSideProps({ req, res }) {
         redirectCount + 1
       }; Max-Age=10; path=/; domain=.nypl.org;`
     )
-    const redirect = getLoginRedirect(req)
+    const redirect = getLoginRedirect(req, "/account")
     return {
       redirect: {
         destination: redirect,
