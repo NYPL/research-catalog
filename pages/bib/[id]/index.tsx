@@ -24,7 +24,6 @@ import {
   isNyplBibID,
 } from "../../../src/utils/bibUtils"
 import BibDetailsModel from "../../../src/models/BibDetails"
-import ItemTableData from "../../../src/models/ItemTableData"
 import BibDetails from "../../../src/components/BibPage/BibDetail"
 import ItemTable from "../../../src/components/ItemTable/ItemTable"
 import ItemTableControls from "../../../src/components/ItemTable/ItemTableControls"
@@ -38,8 +37,6 @@ import type {
 import type { AnnotatedMarc } from "../../../src/types/bibDetailsTypes"
 import Bib from "../../../src/models/Bib"
 import initializePatronTokenAuth from "../../../src/server/auth"
-import Item from "../../../src/models/Item"
-import type { DiscoveryItemResult } from "../../../src/types/itemTypes"
 import type { ItemFilterQueryParams } from "../../../src/types/filterTypes"
 import type { ParsedUrlQueryInput } from "querystring"
 import {
@@ -75,7 +72,6 @@ export default function BibPage({
   const [appliedFilters, setAppliedFilters] = useState(
     parseItemFilterQueryParams(query)
   )
-  const [bibItems, setBibItems] = useState(bib.items)
   const [itemTablePage, setItemTablePage] = useState(itemPage)
 
   const itemTableScrollRef = useRef<HTMLDivElement>(null)
@@ -87,10 +83,6 @@ export default function BibPage({
     discoveryBibResult,
     annotatedMarc
   )
-
-  const itemTableData = new ItemTableData(bibItems, {
-    isArchiveCollection: bib.isArchiveCollection,
-  })
 
   const displayLegacyCatalogLink = isNyplBibID(bib.id)
 
@@ -153,10 +145,8 @@ export default function BibPage({
       )
       if (response?.ok) {
         const { items, discoveryBibResult } = await response.json()
-        setBib(new Bib(discoveryBibResult))
-        setBibItems(
-          items.map((item: DiscoveryItemResult) => new Item(item, bib))
-        )
+        setBib(new Bib({ ...discoveryBibResult, items }))
+
         setItemsLoading(false)
         itemTableScrollRef.current?.scrollIntoView({
           behavior: "smooth",
@@ -280,7 +270,7 @@ export default function BibPage({
                       filtersApplied
                     )}
                   </Heading>
-                  <ItemTable itemTableData={itemTableData} />
+                  <ItemTable itemTableData={bib.itemTableData} />
                 </>
               )}
               <ItemTableControls

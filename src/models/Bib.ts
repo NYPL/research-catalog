@@ -3,6 +3,7 @@ import type { JSONLDValue } from "../types/itemTypes"
 import type { Aggregation } from "../types/filterTypes"
 import Item from "../models/Item"
 import { ITEM_PAGINATION_BATCH_SIZE } from "../config/constants"
+import ItemTableData from "./ItemTableData"
 
 /**
  * The Bib class represents a single Bib entity and contains the data
@@ -64,6 +65,12 @@ export default class Bib {
 
   get showItemTable() {
     return !this.isOnlyElectronicResources && this.hasPhysicalItems
+  }
+
+  get itemTableData() {
+    return new ItemTableData(this.items, {
+      isArchiveCollection: this.isArchiveCollection,
+    })
   }
 
   // Items should be shown but there are none set in the items attribute
