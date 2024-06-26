@@ -23,7 +23,6 @@ import ItemFilter from "./ItemFilter"
 import {
   buildAppliedFiltersTagSetData,
   buildItemFilterQuery,
-  buildItemsMatchedStringString,
   filtersAreApplied,
   getFiltersWithItemRemoved,
 } from "../../utils/itemFilterUtils"
@@ -38,10 +37,8 @@ interface ItemFilterContainerProps {
 const FiltersContainer = ({
   itemAggregations,
   handleFiltersChange,
-  numItemsMatched = 0,
   appliedFilters = { location: [], format: [], status: [] },
 }: ItemFilterContainerProps) => {
-  const router = useRouter()
   const { isLargerThanLarge, isLargerThanMedium } = useNYPLBreakpoints()
   const filterGroupClassName = isLargerThanLarge
     ? styles.filterGroup
@@ -94,7 +91,6 @@ const FiltersContainer = ({
         id,
         appliedFilters
       )
-      console.log(filtersWithValueCleared)
       if (filtersWithValueCleared && field)
         submitFilters(filtersWithValueCleared, field)
     }
@@ -134,7 +130,7 @@ const FiltersContainer = ({
             ))}
           </Box>
         </Box>
-        <Box className={filterGroupClassName}>
+        <Box className={filterGroupClassName} minWidth={440}>
           <Label htmlFor="year-filter" fontWeight="bold">
             Search by Year
           </Label>
@@ -142,7 +138,7 @@ const FiltersContainer = ({
             id="year-filter"
             labelText="Apply"
             textInputProps={{
-              defaultValue: "YYYY",
+              placeholder: "YYYY",
               isClearable: true,
               labelText: "Item Search",
               name: "textInputName",
