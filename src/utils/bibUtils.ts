@@ -3,7 +3,6 @@ import {
   ITEM_VIEW_ALL_BATCH_SIZE,
 } from "../config/constants"
 import type { BibQueryParams } from "../types/bibTypes"
-import { ItemFilterQueryParams } from "../types/filterTypes"
 import { getPaginationOffsetStrings } from "./appUtils"
 
 /**
@@ -42,14 +41,17 @@ export const isItTheLastElement = (i, array) => !(i < array.length - 1)
 export const buildItemTableDisplayingString = (
   page: number,
   totalResults: number,
-  viewAllItems = false
+  viewAllItems = false,
+  filtersApplied = false
 ) => {
   const isPlural = totalResults > 1
   const totalString = totalResults.toLocaleString()
-
+  console.log(filtersApplied)
   if (viewAllItems || totalResults <= ITEM_PAGINATION_BATCH_SIZE) {
     return isPlural
-      ? `Displaying all ${totalString} items`
+      ? `Displaying all ${totalString} ${
+          filtersApplied ? "matching " : ""
+        }items`
       : "Displaying 1 item"
   } else {
     const [resultsStart, resultsEnd] = getPaginationOffsetStrings(
@@ -58,9 +60,9 @@ export const buildItemTableDisplayingString = (
       ITEM_PAGINATION_BATCH_SIZE
     )
 
-    return `Displaying ${resultsStart}-${resultsEnd} of ${totalResults.toLocaleString()} item${
-      isPlural ? "s" : ""
-    }`
+    return `Displaying ${resultsStart}-${resultsEnd} of ${totalResults.toLocaleString()} ${
+      filtersApplied ? "matching " : ""
+    }item${isPlural ? "s" : ""}`
   }
 }
 
