@@ -1,4 +1,4 @@
-import { ITEM_BATCH_SIZE, RESULTS_PER_PAGE } from "../config/constants"
+import { ITEM_BATCH_SIZE } from "../config/constants"
 import type { BibQueryParams } from "../types/bibTypes"
 import { getPaginationOffsetStrings } from "./appUtils"
 

@@ -291,25 +291,25 @@ describe("pickupTimeEstimator", () => {
       })
     })
 
-    // Each of these times is afterhours
-    ;[
-      // 7pm closing:
-      "2023-06-01T19:00:09-04:00",
-      // 8pm:
-      "2023-06-01T20:00:00-04:00",
-      // 2am:
-      "2023-06-02T02:00:00-04:00",
-    ].forEach(async (timestamp) => {
-      it(`should return tomorrow when called after service hours (${timestamp})`, async () => {
-        mockNowTimestamp = timestamp
-        expect(await estimator.getNextServiceHours("sc")).toEqual({
-          day: "Friday",
-          startTime: "2023-06-02T14:00:00.000Z",
-          endTime: "2023-06-02T22:00:00.000Z",
-          nextDeliverableDay: true,
+      // Each of these times is afterhours
+      ;[
+        // 7pm closing:
+        "2023-06-01T19:00:09-04:00",
+        // 8pm:
+        "2023-06-01T20:00:00-04:00",
+        // 2am:
+        "2023-06-02T02:00:00-04:00",
+      ].forEach(async (timestamp) => {
+        it(`should return tomorrow when called after service hours (${timestamp})`, async () => {
+          mockNowTimestamp = timestamp
+          expect(await estimator.getNextServiceHours("sc")).toEqual({
+            day: "Friday",
+            startTime: "2023-06-02T14:00:00.000Z",
+            endTime: "2023-06-02T22:00:00.000Z",
+            nextDeliverableDay: true,
+          })
         })
       })
-    })
   })
 
   describe("getServiceTime", () => {
@@ -515,7 +515,7 @@ describe("pickupTimeEstimator", () => {
     it("should only make one get request for successive calls", async () => {
       await estimator.operatingHours("sc")
       await estimator.operatingHours("sc")
-      const hours = await estimator.operatingHours("sc")
+      // const hours = await estimator.operatingHours("sc")
       // expect(sinon.assert.calledOnce(clientStub))
       // expect(hours).toEqual(hoursArray.sc)
     })
