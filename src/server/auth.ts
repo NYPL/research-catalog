@@ -64,11 +64,14 @@ export const doRedirectBasedOnNyplAccountRedirects = (count: number) => {
 /**
  * Creates and returns redirect url. Call this function only with an un-authenticated patron,
  * i.e., patronTokenResponse.isTokenValid must be false.
+ * Due to redirect shenanigans, this method is somewhat hardcoded to return
+ * /account. The req url coming from my account redirects sometimes is a
+ * server url from the NextJS json API. We don't want NOTHING to do with that.
  */
-export function getLoginRedirect(req) {
+export function getLoginRedirect(req, redirectLoopHandling = true) {
   const protocol = req.protocol || "http"
   const hostname = appConfig.apiEndpoints.domain[appConfig.environment]
-  const originalUrl = BASE_URL + req.url
+  const originalUrl = BASE_URL + (redirectLoopHandling ? "/account" : req.url)
   const fullUrl = encodeURIComponent(`${protocol}://${hostname}${originalUrl}`)
   const redirect = `${
     appConfig.apiEndpoints.loginUrl[appConfig.environment]

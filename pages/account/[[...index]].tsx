@@ -84,6 +84,7 @@ export async function getServerSideProps({ req, res }) {
   const redirectCount = parseInt(redirectTrackerCookie, 10) || 0
   const redirectBasedOnNyplAccountRedirects =
     doRedirectBasedOnNyplAccountRedirects(redirectCount)
+
   // If we end up not authenticated 3 times after redirecting to the login url, don't redirect.
   if (redirectBasedOnNyplAccountRedirects && !isAuthenticated) {
     res.setHeader(
