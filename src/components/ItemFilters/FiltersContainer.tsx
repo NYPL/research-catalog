@@ -10,6 +10,7 @@ import {
   CardHeading,
   CardContent,
   Text,
+  Label,
   TagSet,
   type TagSetFilterDataProps,
 } from "@nypl/design-system-react-components"
@@ -23,7 +24,7 @@ import type {
 import { ItemFilterData, LocationFilterData } from "../../models/ItemFilterData"
 import ItemFilter from "./ItemFilter"
 import {
-  buildAppliedFiltersString,
+  buildAppliedFiltersTagSetData,
   buildItemFilterQuery,
   buildItemsMatchedStringString,
   filtersAreApplied,
@@ -56,10 +57,11 @@ const FiltersContainer = ({
     })
   ).current
 
-  const appliedFiltersDisplay = buildAppliedFiltersString(
+  const appliedFiltersTagSetData = buildAppliedFiltersTagSetData(
     appliedFilters,
     filterData
   )
+  console.log(appliedFiltersTagSetData)
   const ref = useRef<HTMLDivElement>(null)
 
   useCloseDropDown(() => setWhichFilterIsOpen(""), ref)
@@ -100,17 +102,18 @@ const FiltersContainer = ({
         }}
         mb="m"
       >
-        <Card className={filterGroupClassName} ref={ref}>
-          <CardHeading level="h3" size="body2">
-            Filter by
-          </CardHeading>
-          <CardContent>
+        <Box className={filterGroupClassName} ref={ref}>
+          <Label htmlFor="item-filters" fontWeight="bold">
+            Filter By
+          </Label>
+          <Box>
             <Box
               sx={{
                 display: "flex",
                 flexDirection: isLargerThanLarge ? "row" : "column",
               }}
               gap="nypl-s"
+              id="item-filters"
             >
               {filterData.map((field: ItemFilterData) => (
                 <ItemFilter
@@ -123,18 +126,13 @@ const FiltersContainer = ({
                 />
               ))}
             </Box>
-          </CardContent>
-        </Card>
-        <Card className={filterGroupClassName}>
-          <CardHeading
-            level="h3"
-            size="body2"
-            data-testid="filter-text"
-            fontWeight="bold"
-          >
+          </Box>
+        </Box>
+        <Box className={filterGroupClassName}>
+          <Label htmlFor="year-filter" fontWeight="bold">
             Search by Year
-          </CardHeading>
-          <CardContent>
+          </Label>
+          <Box>
             <SearchBar
               id="year-filter"
               labelText="Apply"
@@ -146,13 +144,13 @@ const FiltersContainer = ({
               }}
               onSubmit={() => console.log("spaghetti!")}
             />
-          </CardContent>
-        </Card>
+          </Box>
+        </Box>
       </Box>
       {filtersApplied ? (
         <Box display="flex" mr="s" mb="m">
           <Text
-            fontSize="desktop.body.body2"
+            fontSize="body2"
             fontWeight="bold"
             mr="s"
             mb={0}

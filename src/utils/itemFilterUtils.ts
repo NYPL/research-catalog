@@ -81,3 +81,10 @@ export const buildAppliedFiltersString = (
     .filter((filter) => filter)
   if (filters.length) return "Filtered by " + filters.join(", ")
 }
+
+export const buildAppliedFiltersTagSetData = (
+  appliedFilters: CollapsedMultiValueAppliedFilters,
+  itemAggregations: ItemFilterData[]
+) => {
+  return appliedFilters
+}
