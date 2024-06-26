@@ -88,7 +88,9 @@ export async function getServerSideProps({ req, res }) {
   if (redirectBasedOnNyplAccountRedirects && !isAuthenticated) {
     res.setHeader(
       "Set-Cookie",
-      `nyplAccountRedirects=${redirectCount + 1}; Max-Age=10`
+      `nyplAccountRedirects=${
+        redirectCount + 1
+      }; Max-Age=10; path=/; domain=.nypl.org;`
     )
     const redirect = getLoginRedirect(req)
     return {
