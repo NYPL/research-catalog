@@ -89,7 +89,7 @@ export default class Bib {
   }
 
   getNumItemsMessage(filtersApplied = false) {
-    return `${this.numItemsMatched} ${filtersApplied ? "filtered " : ""}${
+    return `${this.numItemsMatched} ${filtersApplied ? "matching " : ""}${
       this.resourceType
     }${this.numItems !== 1 ? "s" : ""}`
   }
@@ -97,7 +97,7 @@ export default class Bib {
   getItemsViewAllLoadingMessage(filtersApplied = false) {
     // We don't want to show the number of filtered items since this may change during loading.
     return `Loading all ${
-      filtersApplied ? "filtered" : this.numPhysicalItems
+      filtersApplied ? "matching" : this.numPhysicalItems
     } items. This may take a few moments...`
   }
 
