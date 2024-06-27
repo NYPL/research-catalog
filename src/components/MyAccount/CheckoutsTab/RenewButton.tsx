@@ -5,7 +5,6 @@ import {
   Icon,
   Button,
   Text,
-  Heading,
 } from "@nypl/design-system-react-components"
 
 import ExternalLink from "../../Links/ExternalLink/ExternalLink"

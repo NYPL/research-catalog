@@ -10,7 +10,7 @@ const logger = {
     Console: jest.fn(),
     File: jest.fn(),
   },
-  createLogger: jest.fn().mockImplementation(function (creationOpts) {
+  createLogger: jest.fn().mockImplementation(function () {
     return {
       info: jest.fn(),
       warn: jest.fn(),

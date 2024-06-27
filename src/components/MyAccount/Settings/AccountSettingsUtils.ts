@@ -72,7 +72,7 @@ export const accountSettings = [
     field: "pin",
     icon: "actionLockClosed",
     term: "Pin/Password",
-    description: (_) => "****",
+    description: () => "****",
   },
 ] as {
   field: string
