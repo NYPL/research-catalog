@@ -1,5 +1,4 @@
 import { useRef, useState } from "react"
-import { useRouter } from "next/router"
 import React from "react"
 import {
   SearchBar,
@@ -65,8 +64,8 @@ const FiltersContainer = ({
 
   const filtersApplied = filtersAreApplied(appliedFilters)
 
-  const submitFilters = (selection: string[], field: string) => {
-    const newFilters = { ...appliedFilters, [field]: selection }
+  const submitFilters = (selectedFilters: string[], field: string) => {
+    const newFilters = { ...appliedFilters, [field]: selectedFilters }
     const locationFilterData = filterData.find(
       (filter) => filter.field === "location"
     ) as LocationFilterData
@@ -83,7 +82,7 @@ const FiltersContainer = ({
     setWhichFilterIsOpen("")
   }
 
-  const handleRemoveAppliedFilterClick = ({ id }: TagSetFilterDataProps) => {
+  const handleRemoveFilterClick = ({ id }: TagSetFilterDataProps) => {
     if (id === "clear-filters") {
       clearAllFilters()
     } else {
@@ -163,7 +162,7 @@ const FiltersContainer = ({
             id="bib-details-applied-filters"
             isDismissible
             type="filter"
-            onClick={handleRemoveAppliedFilterClick}
+            onClick={handleRemoveFilterClick}
             tagSetData={appliedFiltersTagSetData}
           />
         </Box>
