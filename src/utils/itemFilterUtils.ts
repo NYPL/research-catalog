@@ -75,26 +75,27 @@ export const buildAppliedFiltersTagSetData = (
       const fieldAggregations = itemAggregations.find(
         (aggregation: ItemFilterData) => aggregation.field === field
       )
-
-      filters.push({
-        label: `${capitalize(field)} > ${fieldAggregations.labelForValue(
-          filterValue
-        )}`,
-        id: filterValue,
-        iconName: "close",
-      })
+      if (filterValue) {
+        filters.push({
+          label: `${capitalize(field)} > ${fieldAggregations.labelForValue(
+            filterValue
+          )}`,
+          id: filterValue,
+          iconName: "close",
+        })
+      }
     })
   })
   return filters
 }
 
-export const getFiltersWithItemRemoved = (
-  id: string,
+export const removeValueFromFilters = (
+  idToRemove: string,
   appliedFilters: AppliedItemFilters
 ): [values?: string[], field?: string] => {
   let valuesAndField: [values?: string[], field?: string] = [null, null]
   Object.keys(appliedFilters).forEach((field) => {
-    const filterValueIndex = appliedFilters[field].indexOf(id)
+    const filterValueIndex = appliedFilters[field].indexOf(idToRemove)
     if (filterValueIndex >= 0) {
       appliedFilters[field].splice(filterValueIndex, 1)
       valuesAndField = [appliedFilters[field], field]

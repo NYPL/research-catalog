@@ -24,7 +24,7 @@ import {
   buildAppliedFiltersTagSetData,
   buildItemFilterQuery,
   filtersAreApplied,
-  getFiltersWithItemRemoved,
+  removeValueFromFilters,
 } from "../../utils/itemFilterUtils"
 
 interface ItemFilterContainerProps {
@@ -87,12 +87,12 @@ const FiltersContainer = ({
     if (id === "clear-filters") {
       clearAllFilters()
     } else {
-      const [filtersWithValueCleared, field] = getFiltersWithItemRemoved(
+      const [filtersWithValueRemoved, field] = removeValueFromFilters(
         id,
         appliedFilters
       )
-      if (filtersWithValueCleared && field)
-        submitFilters(filtersWithValueCleared, field)
+      if (filtersWithValueRemoved && field)
+        submitFilters(filtersWithValueRemoved, field)
     }
   }
 
