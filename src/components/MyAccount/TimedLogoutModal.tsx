@@ -1,5 +1,5 @@
 /* global document */
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { Button } from "@nypl/design-system-react-components"
 
 import { deleteCookie } from "../../utils/cookieUtils"
@@ -12,7 +12,7 @@ import { useRouter } from "next/router"
  */
 const TimedLogoutModal = ({ stayLoggedIn }) => {
   const router = useRouter()
-
+  const [time, setTime] = useState({ minutes: 0, seconds: 0 })
   const [update, setUpdate] = React.useState(false)
   const redirectUri = useLogoutRedirect()
 
@@ -23,55 +23,52 @@ const TimedLogoutModal = ({ stayLoggedIn }) => {
     router.push(redirectUri)
   }
 
-  let minutes = 0
-  let seconds = 0
+  if (
+    typeof document !== "undefined" &&
+    !document.cookie.includes("accountPageExp")
+  ) {
+    logOutAndRedirect()
+  }
 
-  // if (
-  //   typeof document !== "undefined" &&
-  //   !document.cookie.includes("accountPageExp")
-  // ) {
-  //   logOutAndRedirect()
-  // } else if (typeof document !== "undefined") {
-  //   const expTime = document.cookie
-  //     .split(";")
-  //     .find((el) => el.includes("accountPageExp"))
-  //     .split("=")[1]
+  const expTime = document.cookie
+    .split(";")
+    .find((el) => el.includes("accountPageExp"))
+    .split("=")[1]
 
-  //   const timeLeft = (new Date(expTime).getTime() - new Date().getTime()) / 1000
+  const timeLeft = (new Date(expTime).getTime() - new Date().getTime()) / 1000
 
-  //   useEffect(() => {
-  //     const timeout = setTimeout(() => {
-  //       setUpdate(!update)
-  //     }, 1000)
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setTime({
+        minutes: Math.ceil(timeLeft / 60),
+        seconds: Math.ceil(timeLeft % 60),
+      })
+    }, 1000)
 
-  //     return () => {
-  //       clearTimeout(timeout)
-  //     }
-  //   })
+    return () => {
+      clearTimeout(timeout)
+    }
+  })
 
-  //   minutes = Math.max(timeLeft / 60)
-  //   seconds = Math.max(timeLeft % 60)
-
-  //   // Theoretically, accountPageExp should disappear after 5mins, causing
-  //   // logOutAndRedirect() to be fired above, but let's make sure a failure
-  //   // there never allows the timer to pass zero:
-  //   if (timeLeft <= 0) {
-  //     logOutAndRedirect()
-  //   }
-  // }
+  // Theoretically, accountPageExp should disappear after 5mins, causing
+  // logOutAndRedirect() to be fired above, but let's make sure a failure
+  // there never allows the timer to pass zero:
+  if (timeLeft <= 0) {
+    logOutAndRedirect()
+  }
 
   // Show warning when 2m remaining:
-  const open = minutes < 2
+  const open = time.minutes < 4
   if (!open) return null
 
   return (
     // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
-    <div tabIndex="0" className="research-modal timed-logout old-ds-modal">
+    <div tabIndex={0} className="research-modal timed-logout old-ds-modal">
       <div className="research-modal__content">
         <p>
           Your session is about to expire
           <span className="time-display">
-            {`${minutes}:${seconds < 10 ? "0" : ""}${seconds}`}
+            {`${time.minutes}:${time.seconds < 10 ? "0" : ""}${time.seconds}`}
           </span>
         </p>
         <hr />

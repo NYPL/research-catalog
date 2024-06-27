@@ -68,7 +68,6 @@ export const doRedirectBasedOnNyplAccountRedirects = (count: number) => {
 export function getLoginRedirect(req) {
   const protocol = req.protocol || "http"
   const hostname = appConfig.apiEndpoints.domain[appConfig.environment]
-  console.log(req.url)
   const originalUrl = BASE_URL + req.url
   const fullUrl = encodeURIComponent(`${protocol}://${hostname}${originalUrl}`)
   const redirect = `${
