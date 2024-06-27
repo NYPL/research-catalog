@@ -29,7 +29,6 @@ import {
 interface ItemFilterContainerProps {
   itemAggregations: Aggregation[]
   handleFiltersChange?: (newAppliedFilterQuery: ItemFilterQueryParams) => void
-  numItemsMatched?: number
   appliedFilters?: AppliedItemFilters
 }
 
@@ -106,7 +105,12 @@ const FiltersContainer = ({
         mb="m"
       >
         <Box className={filterGroupClassName} ref={ref}>
-          <Label htmlFor="item-filters" fontWeight="bold">
+          <Label
+            id="filters-label"
+            htmlFor="item-filters"
+            fontWeight="bold"
+            data-testid="filters-label"
+          >
             Filter By
           </Label>
           <Box
@@ -130,7 +134,12 @@ const FiltersContainer = ({
           </Box>
         </Box>
         <Box className={filterGroupClassName} minWidth={440}>
-          <Label htmlFor="year-filter" fontWeight="bold">
+          <Label
+            id="year-filter-label"
+            htmlFor="year-filter"
+            fontWeight="bold"
+            data-testid="year-filter-label"
+          >
             Search by Year
           </Label>
           <SearchBar
