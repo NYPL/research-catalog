@@ -3,7 +3,6 @@ import type { Hold, Patron } from "../../../types/myAccountTypes"
 import {
   Box,
   Button,
-  Heading,
   Icon,
   useModal,
   Text,

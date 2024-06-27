@@ -70,8 +70,8 @@ export default class MyAccount {
     }
 
     const holdsWithBibData = this.buildHolds(holds.entries, holdBibData.entries)
-
-    return holdsWithBibData
+    const sortedHolds = MyAccount.sortHolds(holdsWithBibData)
+    return sortedHolds
   }
 
   async fetchPatron() {
@@ -154,10 +154,23 @@ export default class MyAccount {
     return bibs.reduce((bibDataMap: BibDataMapType, bibFields) => {
       const { isResearch, isNyplOwned } =
         this.getResearchAndOwnership(bibFields)
-      const title = bibFields.title
+      const title = `${bibFields.title}${
+        bibFields.author && isNyplOwned ? ` / ${bibFields.author}` : ""
+      }`
       bibDataMap[bibFields.id] = { title, isResearch, isNyplOwned }
       return bibDataMap
     }, {})
+  }
+
+  static sortHolds(holds: Hold[]) {
+    const holdsWithNoPickupByDates = holds.filter((hold) => !hold.pickupByDate)
+    const holdsWithPickupByDates = holds.filter((hold) => hold.pickupByDate)
+    const sortedHoldsWithDates = holdsWithPickupByDates.sort((a, b) => {
+      return (
+        new Date(b.pickupByDate).valueOf() - new Date(a.pickupByDate).valueOf()
+      )
+    })
+    return [...sortedHoldsWithDates, ...holdsWithNoPickupByDates]
   }
 
   buildHolds(holds: SierraHold[], bibData: SierraBibEntry[]): Hold[] {
@@ -217,28 +230,32 @@ export default class MyAccount {
       throw new MyAccountModelError("building bibData for checkouts", e)
     }
     try {
-      return checkouts.map((checkout: SierraCheckout) => {
-        const bibId = checkout.item.bibIds[0]
-        const bibForCheckout = bibDataMap[bibId]
-        return {
-          id: MyAccount.getRecordId(checkout.id),
-          // Partner items do not have call numbers. Null has to be explicitly
-          // returned for JSON serialization in getServerSideProps
-          callNumber: checkout.item.callNumber || null,
-          barcode: checkout.item.barcode,
-          dueDate: MyAccount.formatDate(checkout.dueDate),
-          patron: MyAccount.getRecordId(checkout.patron),
-          title: bibForCheckout.title,
-          isResearch: bibForCheckout.isResearch,
-          bibId: bibId,
-          isNyplOwned: bibForCheckout.isNyplOwned,
-          catalogHref: bibForCheckout.isNyplOwned
-            ? bibForCheckout.isResearch
-              ? `https://nypl.org/research/research-catalog/bib/b${bibId}`
-              : `https://borrow.nypl.org/search/card?recordId=${bibId}`
-            : null,
-        }
-      })
+      return checkouts
+        .map((checkout: SierraCheckout) => {
+          const bibId = checkout.item.bibIds[0]
+          const bibForCheckout = bibDataMap[bibId]
+          return {
+            id: MyAccount.getRecordId(checkout.id),
+            // Partner items do not have call numbers. Null has to be explicitly
+            // returned for JSON serialization in getServerSideProps
+            callNumber: checkout.item.callNumber || null,
+            barcode: checkout.item.barcode,
+            dueDate: MyAccount.formatDate(checkout.dueDate),
+            patron: MyAccount.getRecordId(checkout.patron),
+            title: bibForCheckout.title,
+            isResearch: bibForCheckout.isResearch,
+            bibId: bibId,
+            isNyplOwned: bibForCheckout.isNyplOwned,
+            catalogHref: bibForCheckout.isNyplOwned
+              ? bibForCheckout.isResearch
+                ? `https://nypl.org/research/research-catalog/bib/b${bibId}`
+                : `https://borrow.nypl.org/search/card?recordId=${bibId}`
+              : null,
+          }
+        })
+        .sort((a, b) => {
+          return new Date(b.dueDate).valueOf() - new Date(a.dueDate).valueOf()
+        })
     } catch (e) {
       throw new MyAccountModelError("building checkouts", e)
     }
