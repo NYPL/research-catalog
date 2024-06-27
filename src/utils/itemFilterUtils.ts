@@ -75,11 +75,10 @@ export const buildAppliedFiltersTagSetData = (
       const fieldAggregations = itemAggregations.find(
         (aggregation: ItemFilterData) => aggregation.field === field
       )
-      if (filterValue) {
+      const valueLabel = fieldAggregations.labelForValue(filterValue)
+      if (valueLabel) {
         filters.push({
-          label: `${capitalize(field)} > ${fieldAggregations.labelForValue(
-            filterValue
-          )}`,
+          label: `${capitalize(field)} > ${valueLabel}`,
           id: filterValue,
           iconName: "close",
         })
