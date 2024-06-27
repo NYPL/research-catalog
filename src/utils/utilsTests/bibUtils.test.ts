@@ -44,12 +44,12 @@ describe("bibUtils", () => {
   describe("getBibQueryString", () => {
     it("returns the correct query string with a bib ID and no bib params", () => {
       expect(getBibQueryString({ id: "b12082323" })).toBe(
-        "?items_size=20&items_from=0&item_page=1&id=b12082323&merge_checkin_card_items=true"
+        "?items_size=20&items_from=0&item_page=1&merge_checkin_card_items=true"
       )
     })
     it("returns the correct query string with a bib ID and query params", () => {
       expect(getBibQueryString({ id: "b12082323", item_page: 5 })).toBe(
-        "?items_size=20&items_from=80&item_page=5&id=b12082323&merge_checkin_card_items=true"
+        "?items_size=20&items_from=80&item_page=5&merge_checkin_card_items=true"
       )
     })
   })

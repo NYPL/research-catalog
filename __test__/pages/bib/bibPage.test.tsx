@@ -31,10 +31,10 @@ describe("Bib Page with items", () => {
   })
 
   it("renders the top bib details", () => {
-    expect(screen.getAllByTestId("Title")[0]).toHaveTextContent(
+    expect(screen.getAllByTestId("title")[0]).toHaveTextContent(
       "Urban spaghetti."
     )
-    expect(screen.getByTestId("Published By")).toHaveTextContent(
+    expect(screen.getByTestId("published-by")).toHaveTextContent(
       "Mansfield, Ohio : Urban Spaghetti, [1999?-"
     )
   })
@@ -44,40 +44,40 @@ describe("Bib Page with items", () => {
   })
 
   it("renders the bottom bib details", () => {
-    expect(screen.getByTestId("Publication Date")).toHaveTextContent(
+    expect(screen.getByTestId("publication-date")).toHaveTextContent(
       "Vol. 1, issue 1-"
     )
-    expect(screen.getByTestId("Description")).toHaveTextContent(
+    expect(screen.getByTestId("description")).toHaveTextContent(
       "v. : ill.; 22 cm."
     )
-    expect(screen.getByTestId("Donor/Sponsor")).toHaveTextContent(
+    expect(screen.getByTestId("donor-sponsor")).toHaveTextContent(
       "Gift of the DeWitt Wallace Endowment Fund, named in honor of the founder of Reader's Digest"
     )
-    expect(screen.getByTestId("Alternative Title")).toHaveTextContent(
+    expect(screen.getByTestId("alternative-title")).toHaveTextContent(
       "Urban spaghetti literary arts journal"
     )
-    expect(screen.getByTestId("Subject")).toHaveTextContent("Arts, Modern")
-    expect(screen.getAllByTestId("Call Number")[0]).toHaveTextContent(
+    expect(screen.getByTestId("subject")).toHaveTextContent("Arts, Modern")
+    expect(screen.getAllByTestId("call-number")[0]).toHaveTextContent(
       "JFK 01-374"
     )
-    expect(screen.getAllByTestId("Title")[1]).toHaveTextContent(
+    expect(screen.getAllByTestId("title")[1]).toHaveTextContent(
       "Urban spaghetti."
     )
-    expect(screen.getByTestId("Imprint")).toHaveTextContent(
+    expect(screen.getByTestId("imprint")).toHaveTextContent(
       "Mansfield, Ohio : Urban Spaghetti, [1999?-"
     )
-    expect(screen.getByTestId("Current Frequency")).toHaveTextContent(
+    expect(screen.getByTestId("current-frequency")).toHaveTextContent(
       "Semiannual"
     )
-    expect(screen.getByTestId("Abbreviated Title")).toHaveTextContent(
+    expect(screen.getByTestId("abbreviated-title")).toHaveTextContent(
       "Urban spaghetti"
     )
-    expect(screen.getByTestId("Cover Title")).toHaveTextContent(
+    expect(screen.getByTestId("cover-title")).toHaveTextContent(
       "Urban spaghetti literary arts journal"
     )
-    expect(screen.getByTestId("LCCN")).toHaveTextContent("sn 98001765")
-    expect(screen.getByTestId("ISSN")).toHaveTextContent("1521-1371")
-    expect(screen.getByTestId("Research Call Number")).toHaveTextContent(
+    expect(screen.getByTestId("lccn")).toHaveTextContent("sn 98001765")
+    expect(screen.getByTestId("issn")).toHaveTextContent("1521-1371")
+    expect(screen.getByTestId("research-call-number")).toHaveTextContent(
       "JFK 01-374"
     )
   })
@@ -149,6 +149,7 @@ describe("Bib Page Item Table", () => {
           Promise.resolve({
             success: true,
             status: 200,
+            discoveryBibResult: bibWithManyItems.resource,
             items: Array(26).fill({}),
           }),
       })

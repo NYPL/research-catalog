@@ -46,7 +46,6 @@ export const buildItemTableDisplayingString = (
 ) => {
   const isPlural = totalResults > 1
   const totalString = totalResults.toLocaleString()
-  console.log(filtersApplied)
   if (viewAllItems || totalResults <= ITEM_PAGINATION_BATCH_SIZE) {
     return isPlural
       ? `Displaying all ${totalString} ${

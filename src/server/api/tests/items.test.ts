@@ -10,6 +10,7 @@ jest.mock("../../nyplApiClient", () => {
         resolve({
           get: jest.fn().mockResolvedValueOnce({
             items: [{}, {}, {}, {}],
+            discoveryBibResult: { items: [{}, {}, {}, {}] },
             status: 200,
           }),
         })
@@ -21,11 +22,12 @@ jest.mock("../../nyplApiClient", () => {
           get: jest
             .fn()
             .mockResolvedValueOnce({
-              numItemsTotal: 0,
+              numItemsMatched: 0,
               status: 400,
             })
             .mockResolvedValueOnce({
               items: [],
+              discoveryBibResult: undefined,
               status: 400,
             }),
         })
@@ -37,7 +39,7 @@ jest.mock("../../nyplApiClient", () => {
           get: jest
             .fn()
             .mockResolvedValueOnce({
-              numItemsTotal: 4,
+              numItemsMatched: 4,
               status: 200,
             })
             .mockResolvedValueOnce({
@@ -57,7 +59,7 @@ jest.mock("../../nyplApiClient", () => {
           get: jest
             .fn()
             .mockResolvedValueOnce({
-              numItemsTotal: 4,
+              numItemsMatched: 4,
               status: 200,
             })
             .mockResolvedValueOnce({
