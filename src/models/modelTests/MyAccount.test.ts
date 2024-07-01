@@ -15,6 +15,7 @@ import {
   checkoutBibs,
   empty,
 } from "../../../__test__/fixtures/rawSierraAccountData"
+import type { Hold } from "../../types/myAccountTypes"
 
 describe("MyAccountModel", () => {
   const fetchBibs = MyAccount.prototype.fetchBibData
@@ -95,7 +96,7 @@ describe("MyAccountModel", () => {
     })
     it("can return fines", async () => {
       const mockSierraClient = {
-        get: async (path) => Promise.resolve(fines),
+        get: async () => Promise.resolve(fines),
       }
       const fetcher = new MyAccount(mockSierraClient, "12345")
       const processedFines = await fetcher.getFines()
@@ -147,6 +148,26 @@ describe("MyAccountModel", () => {
   })
 
   describe("MyAccountFactory", () => {
+    it("sortHolds", () => {
+      const holds = [
+        { pickupByDate: null },
+        { pickupByDate: "May 17, 2024" },
+        { pickupByDate: null },
+        { pickupByDate: "January 17, 2024" },
+        { pickupByDate: null },
+        { pickupByDate: "April 17, 2024" },
+        { pickupByDate: null },
+      ] as Hold[]
+      expect(MyAccount.sortHolds(holds)).toStrictEqual([
+        { pickupByDate: "May 17, 2024" },
+        { pickupByDate: "April 17, 2024" },
+        { pickupByDate: "January 17, 2024" },
+        { pickupByDate: null },
+        { pickupByDate: null },
+        { pickupByDate: null },
+        { pickupByDate: null },
+      ])
+    })
     it("builds Account data model", async () => {
       MyAccount.prototype.fetchCheckouts = async () =>
         Promise.resolve(checkouts)

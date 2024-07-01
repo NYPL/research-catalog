@@ -3,6 +3,7 @@ import Head from "next/head"
 
 import Layout from "../../src/components/Layout/Layout"
 import initializePatronTokenAuth, {
+  doRedirectBasedOnNyplAccountRedirects,
   getLoginRedirect,
 } from "../../src/server/auth"
 import { MyAccountFactory } from "../../src/models/MyAccount"
@@ -17,7 +18,6 @@ import type {
   Fine,
   SierraCodeName,
 } from "../../src/types/myAccountTypes"
-
 interface MyAccountPropsType {
   patron?: Patron
   checkouts?: Checkout[]
@@ -26,9 +26,11 @@ interface MyAccountPropsType {
   isAuthenticated: boolean
   tabsPath?: string
   pickupLocations: SierraCodeName[]
+  renderAuthServerError?: boolean
 }
 
 export default function MyAccount({
+  renderAuthServerError,
   pickupLocations,
   checkouts,
   holds,
@@ -45,7 +47,13 @@ export default function MyAccount({
       </Head>
 
       <Layout isAuthenticated={isAuthenticated} activePage="account">
-        {errorRetrievingPatronData ? (
+        {renderAuthServerError ? (
+          <Text>
+            We are unable to display your account information at this time due
+            an error with our authentication server. Please contact
+            gethelp@nypl.org for assistance.
+          </Text>
+        ) : errorRetrievingPatronData ? (
           <Text>
             We are unable to display your account information at this time.
             Please contact gethelp@nypl.org for assistance.
@@ -69,11 +77,23 @@ export default function MyAccount({
   )
 }
 
-export async function getServerSideProps({ req }) {
+export async function getServerSideProps({ req, res }) {
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const isAuthenticated = patronTokenResponse.isTokenValid
-  if (!isAuthenticated) {
-    const redirect = getLoginRedirect(req)
+  const redirectTrackerCookie = req.cookies["nyplAccountRedirects"]
+  const redirectCount = parseInt(redirectTrackerCookie, 10) || 0
+  const redirectBasedOnNyplAccountRedirects =
+    doRedirectBasedOnNyplAccountRedirects(redirectCount)
+
+  // If we end up not authenticated 3 times after redirecting to the login url, don't redirect.
+  if (redirectBasedOnNyplAccountRedirects && !isAuthenticated) {
+    res.setHeader(
+      "Set-Cookie",
+      `nyplAccountRedirects=${
+        redirectCount + 1
+      }; Max-Age=10; path=/; domain=.nypl.org;`
+    )
+    const redirect = getLoginRedirect(req, "/account")
     return {
       redirect: {
         destination: redirect,
@@ -127,6 +147,7 @@ export async function getServerSideProps({ req }) {
         tabsPath,
         isAuthenticated,
         pickupLocations,
+        renderAuthServerError: !redirectBasedOnNyplAccountRedirects,
       },
     }
   } catch (e) {

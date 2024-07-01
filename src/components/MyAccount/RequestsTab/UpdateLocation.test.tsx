@@ -60,7 +60,7 @@ describe("UpdateLocation modal trigger", () => {
       const submitButton = screen.getByText("Confirm location")
       await userEvent.click(submitButton)
       expect(fetchSpy).toHaveBeenCalledWith(
-        `${BASE_URL}/api/account/holds/update/49438189`,
+        `${BASE_URL}/api/account/holds/update/${processedHolds[0].id}`,
         {
           method: "PUT",
           body: JSON.stringify({

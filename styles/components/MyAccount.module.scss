@@ -29,6 +29,13 @@
   }
 }
 
+.statusBadge {
+  white-space: normal !important;
+  @media screen and (min-width: 600px) {
+    white-space: nowrap !important;
+  }
+}
+
 .accountSettingsTab {
   > div {
     margin-top: var(--nypl-space-l);
