@@ -74,47 +74,39 @@ jest.mock("../../nyplApiClient", () => {
 })
 
 describe("fetchItems", () => {
-  it("should return bib's paginated and filtered items for a given query when viewAllItems is false", async () => {
-    const itemsResponse = (await fetchItems(
-      "b17418167",
-      {
-        items_from: 0,
-      },
-      false
-    )) as ItemsResponse
+  it("should return bib's paginated and filtered items for a given query when view_all_items is not true", async () => {
+    const itemsResponse = (await fetchItems({
+      id: "b17418167",
+      items_from: 0,
+    })) as ItemsResponse
     expect(itemsResponse.items.length).toEqual(4)
     expect(itemsResponse.status).toEqual(200)
   })
   it("should return a 400 status code when the initial bib fetch fails or returns no items", async () => {
-    const itemsResponse = (await fetchItems(
-      "b17418167",
-      {
-        items_from: 0,
-      },
-      false
-    )) as ItemsResponse
+    const itemsResponse = (await fetchItems({
+      id: "b17418167",
+      items_from: 0,
+    })) as ItemsResponse
     expect(itemsResponse.items.length).toEqual(0)
     expect(itemsResponse.status).toEqual(400)
   })
-  it("should fetch items in batches when viewAllItems is true", async () => {
-    const itemsResponse = (await fetchItems(
-      "b17418167",
-      {},
-      true,
-      2
-    )) as ItemsResponse
+  it("should fetch items in batches when view_all_items is 'true'", async () => {
+    const itemsResponse = (await fetchItems({
+      id: "b17418167",
+      view_all_items: "true",
+      batch_size: 2,
+    })) as ItemsResponse
     expect(itemsResponse.items.length).toEqual(4)
     expect(itemsResponse.status).toEqual(200)
     // we should expect 1 initial fetch plus the 2 batched fetches
     expect(nyplApiClient).toHaveBeenCalledTimes(3)
   })
   it("should return a 400 status code when any of the batched fetches fails", async () => {
-    const itemsResponse = (await fetchItems(
-      "b17418167",
-      {},
-      true,
-      2
-    )) as ItemsResponse
+    const itemsResponse = (await fetchItems({
+      id: "b17418167",
+      view_all_items: "true",
+      batch_size: 2,
+    })) as ItemsResponse
     expect(itemsResponse.items.length).toEqual(0)
     expect(itemsResponse.status).toEqual(400)
   })

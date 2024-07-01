@@ -9,21 +9,18 @@ import nyplApiClient from "../nyplApiClient"
 import { getBibQueryString, standardizeBibId } from "../../utils/bibUtils"
 
 export async function fetchItems(
-  id: string,
-  bibQuery?: BibQueryParams,
-  viewAllItems = false,
-  batchSize = ITEM_VIEW_ALL_BATCH_SIZE
+  bibQuery?: BibQueryParams
 ): Promise<ItemsResponse> {
   const items: DiscoveryItemResult[] = []
   const client = await nyplApiClient({ apiName: DISCOVERY_API_NAME })
-  const standardizedId = standardizeBibId(id)
+  const standardizedId = standardizeBibId(bibQuery?.id)
   const bibQueryString = getBibQueryString({ ...bibQuery, id: standardizedId })
   // Fetch the bib with pagination and filters applied to determine total physical item count
   const discoveryBibResult = await client.get(
     `${DISCOVERY_API_SEARCH_ROUTE}/${standardizedId}${bibQueryString}`
   )
   // Return the bib's paginated items in the case that View All isn't enabled
-  if (!viewAllItems) {
+  if (bibQuery?.view_all_items !== "true") {
     if (discoveryBibResult?.items?.length)
       return {
         items: discoveryBibResult?.items,
@@ -35,6 +32,9 @@ export async function fetchItems(
       status: 400,
     }
   }
+
+  // Allow batch size to be passed in as a query parameter for testing
+  const batchSize = bibQuery?.batch_size || ITEM_VIEW_ALL_BATCH_SIZE
 
   // If View All is enabled, fetch the items in large batches
   for (
