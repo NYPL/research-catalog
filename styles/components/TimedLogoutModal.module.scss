@@ -18,14 +18,10 @@
     height: 100vh;
     position: absolute;
   }
-  align-items: flex-start;
   background: var(--nypl-colors-ui-bg-default);
   border: 1px solid var(--nypl-colors-ui-border-default);
   border-radius: 5px;
   padding-left: var(--nypl-space-s);
   padding-right: var(--nypl-space-s);
   min-width: 472px;
-}
-
-.logoutModalTimer {
 }
