@@ -51,7 +51,7 @@ const SubNav = ({ activePage, isAuthenticated }: SubNavProps) => {
         </li>
         {isAuthenticated && (
           <li>
-            <RCLink href={logoutLink} includeBaseUrl={false}>
+            <RCLink href={logoutLink} includeBaseUrl={false} hasWhiteFocusRing>
               Log Out
             </RCLink>
           </li>

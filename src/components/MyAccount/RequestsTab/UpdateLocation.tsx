@@ -12,13 +12,13 @@ import {
   type BaseModalProps,
   SkeletonLoader,
 } from "@nypl/design-system-react-components"
-import type { SierraCodeName } from "../../../types/myAccountTypes"
+import type { Hold, SierraCodeName } from "../../../types/myAccountTypes"
 import styles from "../../../../styles/components/MyAccount.module.scss"
 import { useState } from "react"
 import { BASE_URL } from "../../../config/constants"
 
 interface UpdateLocationPropsType {
-  holdId: string
+  hold: Hold
   pickupLocation: SierraCodeName
   pickupLocationOptions: SierraCodeName[]
   key: number
@@ -30,7 +30,7 @@ const UpdateLocation = ({
   updateHoldLocation,
   pickupLocationOptions,
   patronId,
-  holdId,
+  hold,
   pickupLocation,
   key,
 }: UpdateLocationPropsType) => {
@@ -86,7 +86,7 @@ const UpdateLocation = ({
         bodyContent: <SkeletonLoader showImage={false} />,
       } as ConfirmationModalProps)
       const response = await fetch(
-        `${BASE_URL}/api/account/holds/update/${holdId}`,
+        `${BASE_URL}/api/account/holds/update/${hold.id}`,
         {
           method: "PUT",
           body: JSON.stringify({
@@ -135,7 +135,7 @@ const UpdateLocation = ({
       </h5>
     ),
     onClose: () => {
-      updateHoldLocation(holdId, newLocation)
+      updateHoldLocation(hold.id, newLocation)
       setModalProps(
         confirmLocationChangeModalProps(newLocation) as ConfirmationModalProps
       )
@@ -173,9 +173,12 @@ const UpdateLocation = ({
       </h5>
     ),
   }
+  const buttonLabel = "Change location"
+
   return (
     <>
       <Button
+        aria-label={`${buttonLabel} for ${hold.title}`}
         size="small"
         pl={0}
         onClick={openModal}
@@ -183,8 +186,8 @@ const UpdateLocation = ({
         buttonType="text"
       >
         <Icon name="editorMode" align="left" size="medium"></Icon>
-        <Text fontSize={0} className={styles.changeLocation}>
-          Change location
+        <Text fontSize={-1} className={styles.changeLocation}>
+          {buttonLabel}
         </Text>
       </Button>
       <Modal {...modalProps} />

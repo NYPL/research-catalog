@@ -24,8 +24,8 @@ const BibDetails = ({ details, heading }: BibDetailsProps) => {
         title={heading && <Heading level="three">{heading}</Heading>}
         noStyling
         type="dl"
+        showRowDividers={false}
         className={styles.bibDetails}
-        sx={{ borderBottom: "none" }}
       >
         {details.map(
           (detail: BibDetail | LinkedBibDetail | SubjectHeadingDetail) => {
@@ -60,7 +60,7 @@ const DetailElement = (label: string, listChildren: ReactNode[]) => {
 }
 
 const PlainTextElement = (field: BibDetail) => {
-  const values = field.value.map((val: string, i: number) => {
+  const values = field?.value?.map((val: string, i: number) => {
     const stringDirection = rtlOrLtr(val)
     return (
       <li dir={stringDirection} key={`${field}-${i}`}>
@@ -125,6 +125,7 @@ const LinkElement = (url: Url, linkType: string) => {
       href={url.url}
       key={url.url}
       includeBaseUrl={false}
+      textDecoration="none"
     >
       {url.urlLabel}
     </Link>

@@ -1,7 +1,6 @@
 import type { DiscoveryBibResult, ElectronicResource } from "../types/bibTypes"
 import type { JSONLDValue } from "../types/itemTypes"
 import Item from "../models/Item"
-import ItemTableData from "./ItemTableData"
 
 /**
  * The Bib class represents a single Bib entity and contains the data
@@ -61,20 +60,18 @@ export default class Bib {
     return !this.isOnlyElectronicResources && this.hasPhysicalItems
   }
 
+  // Items should be shown but there are none set in the items attribute
+  // Likely a problem with the pagination offset query in the initial Bib fetch
+  get showItemTableError() {
+    return this.showItemTable && !this.items
+  }
+
   // Used to determine the Volume column text in the ItemTable
   get isArchiveCollection() {
     return (
       Array.isArray(this.issuance) &&
       this.issuance.some((issuance) => issuance["@id"] === "urn:biblevel:c")
     )
-  }
-
-  get itemTableData(): ItemTableData {
-    return this.showItemTable && this.items.length
-      ? new ItemTableData(this.items, {
-          isArchiveCollection: this.isArchiveCollection,
-        })
-      : null
   }
 
   getTitleFromResult(result: DiscoveryBibResult) {

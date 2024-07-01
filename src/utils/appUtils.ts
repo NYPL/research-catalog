@@ -108,6 +108,24 @@ export const trackVirtualPageView = (pathname = "") => {
 }
 
 /**
+ * getPaginationOffsetStrings
+ * Used to generate start and end counts for pagination on Search Results and above the
+ * item table in the Bib page
+ */
+export function getPaginationOffsetStrings(
+  page = 1,
+  total: number,
+  pageLimit: number
+): [string, string] {
+  const offset = pageLimit * page - pageLimit
+  const start = offset + 1
+  let end = offset + pageLimit
+  end = end >= total ? total : end
+
+  return [start.toLocaleString(), end.toLocaleString()]
+}
+
+/**
  * encodeHTML
  * Return a version of the string sanitized to protect against XSS.
  */

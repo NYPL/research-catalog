@@ -1,7 +1,10 @@
 import UpdateLocation from "./UpdateLocation"
 import { render, screen } from "../../../utils/testUtils"
 import userEvent from "@testing-library/user-event"
-import { filteredPickupLocations as pickupLocations } from "../../../../__test__/fixtures/processedMyAccountData"
+import {
+  filteredPickupLocations as pickupLocations,
+  processedHolds,
+} from "../../../../__test__/fixtures/processedMyAccountData"
 import { BASE_URL } from "../../../config/constants"
 
 global.fetch = jest
@@ -33,7 +36,7 @@ describe("UpdateLocation modal trigger", () => {
           updateHoldLocation={mockUpdateHoldLocation}
           pickupLocationOptions={pickupLocations}
           data-testId="click me"
-          holdId="987654"
+          hold={processedHolds[0]}
           patronId={1234567}
           pickupLocation={{ name: "SNFL", code: "sn" }}
           key={1}
@@ -57,7 +60,7 @@ describe("UpdateLocation modal trigger", () => {
       const submitButton = screen.getByText("Confirm location")
       await userEvent.click(submitButton)
       expect(fetchSpy).toHaveBeenCalledWith(
-        `${BASE_URL}/api/account/holds/update/987654`,
+        `${BASE_URL}/api/account/holds/update/${processedHolds[0].id}`,
         {
           method: "PUT",
           body: JSON.stringify({

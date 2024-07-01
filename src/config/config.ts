@@ -71,7 +71,7 @@ export const appConfig: AppConfig = {
     drbAbout:
       "https://digital-research-books-beta.nypl.org/about?source=catalog",
     circulatingCatalog: "https://borrow.nypl.org",
-    legacyCatalog: "https://legacycatalog.nypl.org/",
+    legacyCatalog: "https://legacycatalog.nypl.org",
     login: "https://login.nypl.org/auth/login",
     locations: "https://www.nypl.org/locations/",
     researchMaterialsHelp:

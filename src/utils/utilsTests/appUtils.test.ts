@@ -1,4 +1,8 @@
-import { adobeAnalyticsRouteToPageName, encodeHTML } from "../appUtils"
+import {
+  adobeAnalyticsRouteToPageName,
+  encodeHTML,
+  getPaginationOffsetStrings,
+} from "../appUtils"
 import {
   ADOBE_ANALYTICS_RC_PREFIX,
   ADOBE_ANALYTICS_PAGE_NAMES,
@@ -69,6 +73,23 @@ describe("appUtils", () => {
       expect(encodeHTML('"Test" & string to < encode')).toBe(
         "&quot;Test&quot; &amp; string to &lt; encode"
       )
+    })
+  })
+  describe("getPaginationOffsetStrings", () => {
+    it("returns a tuple of strings with the correct start and end values for the first page", () => {
+      const [start, end] = getPaginationOffsetStrings(1, 1200, 50)
+      expect(start).toEqual("1")
+      expect(end).toEqual("50")
+    })
+    it("returns a tuple of strings with the correct start and end values for any given page", () => {
+      const [start, end] = getPaginationOffsetStrings(5, 1200, 50)
+      expect(start).toEqual("201")
+      expect(end).toEqual("250")
+    })
+    it("correctly sets the end value for the last page", () => {
+      const [start, end] = getPaginationOffsetStrings(24, 1195, 50)
+      expect(start).toEqual("1,151")
+      expect(end).toEqual("1,195")
     })
   })
 })
