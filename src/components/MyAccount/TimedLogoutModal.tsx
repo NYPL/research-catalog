@@ -1,10 +1,17 @@
 /* global document */
 import React, { useEffect, useState } from "react"
-import { Button } from "@nypl/design-system-react-components"
+import {
+  Box,
+  Button,
+  ButtonGroup,
+  Heading,
+  HorizontalRule,
+} from "@nypl/design-system-react-components"
 
 import { deleteCookie } from "../../utils/cookieUtils"
 import { useLogoutRedirect } from "../../server/auth"
 import { useRouter } from "next/router"
+import styles from "../../../styles/components/TimedLogoutModal.module.scss"
 
 /**
  * This renders a modal interface based on an early version from the
@@ -13,7 +20,6 @@ import { useRouter } from "next/router"
 const TimedLogoutModal = ({ stayLoggedIn }) => {
   const router = useRouter()
   const [time, setTime] = useState({ minutes: 0, seconds: 0 })
-  const [update, setUpdate] = React.useState(false)
   const redirectUri = useLogoutRedirect()
 
   const logOutAndRedirect = () => {
@@ -57,23 +63,28 @@ const TimedLogoutModal = ({ stayLoggedIn }) => {
     logOutAndRedirect()
   }
 
+  const headingText = `Your session is about to expire ${time.minutes}:${
+    time.seconds < 10 ? "0" : ""
+  }${time.seconds}`
+
   // Show warning when 2m remaining:
-  const open = time.minutes < 4.9
-  if (!open) return null
+  // const open = time.minutes <= 5
+  // if (!open) return null
 
   return (
     // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
-    <div tabIndex={0} className="research-modal timed-logout old-ds-modal">
-      <div className="research-modal__content">
-        <p>
-          Your session is about to expire
-          <span className="time-display">
-            {`${time.minutes}:${time.seconds < 10 ? "0" : ""}${time.seconds}`}
-          </span>
-        </p>
-        <hr />
+    <Box
+      tabIndex={0}
+      className={styles.logoutModalContainer}
+      role="dialog"
+      aria-labelledby="logout-modal-heading"
+      aria-describedby="logout-modal-content"
+    >
+      <Box className={styles.logoutModalBody}>
+        <Heading size="heading6">{headingText}</Heading>
+        <HorizontalRule />
         Do you want to stay logged in?
-        <div className="button-container">
+        <ButtonGroup className="button-container">
           <Button
             buttonType="secondary"
             onClick={logOutAndRedirect}
@@ -84,9 +95,9 @@ const TimedLogoutModal = ({ stayLoggedIn }) => {
           <Button onClick={stayLoggedIn} id="logged-in-button">
             Stay logged in
           </Button>
-        </div>
-      </div>
-    </div>
+        </ButtonGroup>
+      </Box>
+    </Box>
   )
 }
 
