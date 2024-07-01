@@ -90,7 +90,6 @@ describe("MyAccount page", () => {
     })
     it("does not redirect if patron is authenticated", async () => {
       const response = await getServerSideProps({ req: mockReq, res: mockRes })
-      console.log(response)
       expect(response.redirect).toBeUndefined()
     })
     it("updates the nyplAccountRedirectsCookie upon redirecting", async () => {

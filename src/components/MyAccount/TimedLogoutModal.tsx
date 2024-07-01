@@ -58,7 +58,7 @@ const TimedLogoutModal = ({ stayLoggedIn }) => {
   }
 
   // Show warning when 2m remaining:
-  const open = time.minutes < 4
+  const open = time.minutes < 4.9
   if (!open) return null
 
   return (
