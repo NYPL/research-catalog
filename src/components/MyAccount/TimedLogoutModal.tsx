@@ -86,8 +86,15 @@ const TimedLogoutModal = ({ stayLoggedIn }) => {
         backgroundColor="ui.bg.default"
         className={styles.logoutModalBody}
       >
-        <CardHeading subtitle="Do you want to stay logged in?" size="heading6">
-          {headingText}
+        <CardHeading
+          sx={{ display: "flex", justifyContent: "space-between" }}
+          subtitle="Do you want to stay logged in?"
+          size="heading6"
+        >
+          Your session is about to expire
+          <span>
+            {`${time.minutes}:${time.seconds < 10 ? "0" : ""}${time.seconds}`}
+          </span>
         </CardHeading>
         <CardContent>
           <CardActions className={styles.modalButtons}>
