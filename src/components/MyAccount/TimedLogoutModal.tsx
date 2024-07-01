@@ -1,11 +1,12 @@
 /* global document */
 import React, { useEffect, useState } from "react"
 import {
-  Box,
   Button,
-  ButtonGroup,
-  Heading,
-  HorizontalRule,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeading,
+  Spacer,
 } from "@nypl/design-system-react-components"
 
 import { deleteCookie } from "../../utils/cookieUtils"
@@ -72,32 +73,39 @@ const TimedLogoutModal = ({ stayLoggedIn }) => {
   // if (!open) return null
 
   return (
-    // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
-    <Box
+    <div
       tabIndex={0}
       className={styles.logoutModalContainer}
       role="dialog"
       aria-labelledby="logout-modal-heading"
       aria-describedby="logout-modal-content"
     >
-      <Box className={styles.logoutModalBody}>
-        <Heading size="heading6">{headingText}</Heading>
-        <HorizontalRule />
-        Do you want to stay logged in?
-        <ButtonGroup className="button-container">
-          <Button
-            buttonType="secondary"
-            onClick={logOutAndRedirect}
-            id="logoff-button"
-          >
-            Log off
-          </Button>
-          <Button onClick={stayLoggedIn} id="logged-in-button">
-            Stay logged in
-          </Button>
-        </ButtonGroup>
-      </Box>
-    </Box>
+      <Card
+        layout="row"
+        isBordered={true}
+        backgroundColor="ui.bg.default"
+        className={styles.logoutModalBody}
+      >
+        <CardHeading subtitle="Do you want to stay logged in?" size="heading6">
+          {headingText}
+        </CardHeading>
+        <CardContent>
+          <CardActions className={styles.modalButtons}>
+            <Spacer />
+            <Button
+              buttonType="secondary"
+              onClick={logOutAndRedirect}
+              id="logoff-button"
+            >
+              Log off
+            </Button>
+            <Button onClick={stayLoggedIn} id="logged-in-button">
+              Stay logged in
+            </Button>
+          </CardActions>
+        </CardContent>
+      </Card>
+    </div>
   )
 }
 

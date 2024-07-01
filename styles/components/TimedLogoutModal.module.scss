@@ -1,10 +1,28 @@
-// .logoutModalContainer {
-//   background: rgba(64, 64, 64, 0.9);
-//   padding-top: 25vh;
-// }
+.logoutModalContainer {
+  background: rgba(64, 64, 64, 0.9);
+  height: 100vh;
+  left: 0;
+  overflow-y: auto;
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-// .logoutModalBody {
-//   width: 472px;
-//   max-width: 100%;
-//   position: absolute;
-// }
+.logoutModalBody {
+  @media screen and (max-width: 600px) {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+  }
+  align-items: flex-start;
+  background: var(--nypl-colors-ui-bg-default);
+  border: 1px solid var(--nypl-colors-ui-border-default);
+  border-radius: 5px;
+  padding-left: var(--nypl-space-s);
+  padding-right: var(--nypl-space-s);
+  min-width: 472px;
+}
