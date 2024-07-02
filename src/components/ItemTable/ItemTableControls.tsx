@@ -19,6 +19,7 @@ interface ItemTableControlsProps {
   handlePageChange: (selected: number) => void
   handleViewAllClick: (e: SyntheticEvent) => Promise<void>
   viewAllLoadingTextRef: RefObject<HTMLDivElement & HTMLLabelElement>
+  javascriptEnabled: boolean
 }
 
 /**
@@ -33,6 +34,7 @@ const ItemTableControls = ({
   handlePageChange,
   handleViewAllClick,
   viewAllLoadingTextRef,
+  javascriptEnabled = true,
 }: ItemTableControlsProps) => {
   return (
     <Box display="flex" my="xl" justifyContent="space-between">
@@ -82,33 +84,35 @@ const ItemTableControls = ({
               {bib.itemsViewAllLoadingMessage}
             </Label>
           </Box>
-        ) : !itemsLoading ? (
-          <RCLink
-            href={`${bib.url}${!viewAllExpanded ? "/all" : ""}`}
-            onClick={handleViewAllClick}
-            fontSize={{
-              base: "mobile.body.body1",
-              md: "desktop.body.body1",
-            }}
-            fontWeight="medium"
-            display="flex"
-            alignItems="center"
-            ml="auto"
-            isUnderlined={false}
-          >
-            <Box as="span" mr="xxs">
-              {viewAllExpanded
-                ? "View fewer items"
-                : `View All ${bib.numItemsMessage}`}
-            </Box>
-            <Icon
-              iconRotation={viewAllExpanded ? "rotate180" : "rotate0"}
-              name="arrow"
-              size="small"
-              align="right"
-              color="ui.link.primary"
-            />
-          </RCLink>
+        ) : !itemsLoading && javascriptEnabled ? (
+          <>
+            <RCLink
+              href={`${bib.url}${!viewAllExpanded ? "/all" : ""}`}
+              onClick={handleViewAllClick}
+              fontSize={{
+                base: "mobile.body.body1",
+                md: "desktop.body.body1",
+              }}
+              fontWeight="medium"
+              display="flex"
+              alignItems="center"
+              ml="auto"
+              isUnderlined={false}
+            >
+              <Box as="span" mr="xxs">
+                {viewAllExpanded
+                  ? "View fewer items"
+                  : `View All ${bib.numItemsMessage}`}
+              </Box>
+              <Icon
+                iconRotation={viewAllExpanded ? "rotate180" : "rotate0"}
+                name="arrow"
+                size="small"
+                align="right"
+                color="ui.link.primary"
+              />
+            </RCLink>
+          </>
         ) : null)}
     </Box>
   )

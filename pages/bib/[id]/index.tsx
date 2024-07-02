@@ -70,6 +70,9 @@ export default function BibPage({
   const [bibItems, setBibItems] = useState(bib.items)
   const [itemTablePage, setItemTablePage] = useState(itemPage)
 
+  // TODO: move JS disabled check for this feature to the server side
+  const [javascriptEnabled, setJavascriptEnabled] = useState(false)
+
   const itemTableScrollRef = useRef<HTMLDivElement>(null)
   const itemTableHeadingRef = useRef<HTMLDivElement>(null)
   const viewAllLoadingTextRef = useRef<HTMLDivElement & HTMLLabelElement>(null)
@@ -88,6 +91,9 @@ export default function BibPage({
   // Namely, when the page is accessed with the /all route
   useEffect(() => {
     if (viewAllItems) void refreshItemTable(query, true)
+
+    // set javaScriptEnabled to true before the first render
+    setJavascriptEnabled(true)
     // Disable eslint exhaustive-deps rule because we only want this to run once on page load
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -222,7 +228,7 @@ export default function BibPage({
                   type="negative"
                   content="There was an error fetching items. Please try again with a different query."
                 />
-              ) : (
+              ) : javascriptEnabled ? (
                 <>
                   <Heading
                     data-testid="item-table-displaying-text"
@@ -240,7 +246,13 @@ export default function BibPage({
                   </Heading>
                   <ItemTable itemTableData={itemTableData} />
                 </>
+              ) : (
+                <Banner
+                  type="negative"
+                  content="Please enable Javascript to view all items."
+                />
               )}
+
               <ItemTableControls
                 bib={bib}
                 viewAllExpanded={viewAllExpanded}
@@ -249,6 +261,7 @@ export default function BibPage({
                 handlePageChange={handlePageChange}
                 handleViewAllClick={handleViewAllClick}
                 viewAllLoadingTextRef={viewAllLoadingTextRef}
+                javascriptEnabled={javascriptEnabled}
               />
             </Box>
           </>
