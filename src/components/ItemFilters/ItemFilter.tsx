@@ -3,7 +3,7 @@ import {
   Checkbox,
   Box,
 } from "@nypl/design-system-react-components"
-import type { Dispatch } from "react"
+import type { Dispatch, SetStateAction } from "react"
 import { useCallback, useEffect, useState } from "react"
 
 import type { ItemFilterData } from "../../models/ItemFilterData"
@@ -19,7 +19,7 @@ interface ItemFilterProps {
   // this type is temporary for dev use only. could end up being different.
   submitFilters: (selection: string[], field: string) => void
   isOpen: boolean
-  setWhichFilterIsOpen: Dispatch<React.SetStateAction<string>>
+  setWhichFilterIsOpen: Dispatch<SetStateAction<string>>
 }
 
 const ItemFilter = ({

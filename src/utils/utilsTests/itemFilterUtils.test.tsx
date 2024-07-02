@@ -2,8 +2,8 @@ import {
   isRecapLocation,
   combineRecapLocations,
   parseItemFilterQueryParams,
-  buildItemFilterQueryString,
-  buildAppliedFiltersString,
+  buildItemFilterQuery,
+  buildAppliedFiltersTagSetData,
 } from "../itemFilterUtils"
 import { normalAggs } from "../../../__test__/fixtures/testAggregations"
 import { ItemFilterData } from "../../models/ItemFilterData"
@@ -73,9 +73,11 @@ describe("Item Filter Utils", () => {
         status: ["status:a", "status:na"],
       }
       const recapLocations = "loc:rc2ma,loc:rc3ma,loc:rc4ma"
-      expect(buildItemFilterQueryString(query, recapLocations)).toBe(
-        "?item_location=loc:abc,loc:rc2ma,loc:rc3ma,loc:rc4ma&item_format=Text&item_status=status:a,status:na"
-      )
+      expect(buildItemFilterQuery(query, recapLocations)).toStrictEqual({
+        item_location: "loc:abc,loc:rc2ma,loc:rc3ma,loc:rc4ma",
+        item_format: "Text",
+        item_status: "status:a,status:na",
+      })
     })
     it("can handle only one param", () => {
       const query = {
@@ -84,40 +86,51 @@ describe("Item Filter Utils", () => {
         status: [],
       }
       const recapLocations = "loc:rc2ma,loc:rc3ma,loc:rc4ma"
-      expect(buildItemFilterQueryString(query, recapLocations)).toBe(
-        "?item_location=loc:abc,loc:rc2ma,loc:rc3ma,loc:rc4ma"
-      )
+      expect(buildItemFilterQuery(query, recapLocations)).toStrictEqual({
+        item_location: "loc:abc,loc:rc2ma,loc:rc3ma,loc:rc4ma",
+      })
     })
   })
 
-  describe("buildAppliedFiltersString", () => {
+  describe("buildAppliedFiltersTagSetData", () => {
     const query = parseItemFilterQueryParams({
       item_location: "loc:rc2ma,loc:rcma2",
       item_status: "status:a",
       item_format: "Text",
     })
     const emptyQuery = parseItemFilterQueryParams({})
-    const aggs = normalAggs.map((agg) => new ItemFilterData(agg))
+    const aggregations = normalAggs.map(
+      (aggregation) => new ItemFilterData(aggregation)
+    )
     it("no filters", () => {
-      expect(buildAppliedFiltersString(emptyQuery, aggs)).toBeUndefined()
+      expect(
+        buildAppliedFiltersTagSetData(emptyQuery, aggregations)
+      ).toStrictEqual([])
     })
     it("with all filters", () => {
-      expect(buildAppliedFiltersString(query, aggs)).toBe(
-        "Filtered by location: 'Offsite', format: 'Text', status: 'Available'"
-      )
+      expect(buildAppliedFiltersTagSetData(query, aggregations)).toStrictEqual([
+        { iconName: "close", id: "Offsite", label: "Location > Offsite" },
+        { iconName: "close", id: "Text", label: "Format > Text" },
+        { iconName: "close", id: "status:a", label: "Status > Available" },
+      ])
     })
     it("all filters filters", () => {
-      expect(buildAppliedFiltersString(query, aggs)).toBe(
-        "Filtered by location: 'Offsite', format: 'Text', status: 'Available'"
-      )
+      expect(buildAppliedFiltersTagSetData(query, aggregations)).toStrictEqual([
+        { iconName: "close", id: "Offsite", label: "Location > Offsite" },
+        { iconName: "close", id: "Text", label: "Format > Text" },
+        { iconName: "close", id: "status:a", label: "Status > Available" },
+      ])
     })
     it("one filter", () => {
       expect(
-        buildAppliedFiltersString(
+        buildAppliedFiltersTagSetData(
           parseItemFilterQueryParams({ item_status: "status:a,status:na" }),
-          aggs
+          aggregations
         )
-      ).toBe("Filtered by status: 'Available', 'Not available'")
+      ).toStrictEqual([
+        { iconName: "close", id: "status:a", label: "Status > Available" },
+        { iconName: "close", id: "status:na", label: "Status > Not available" },
+      ])
     })
   })
 })

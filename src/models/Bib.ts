@@ -1,6 +1,9 @@
 import type { DiscoveryBibResult, ElectronicResource } from "../types/bibTypes"
 import type { JSONLDValue } from "../types/itemTypes"
+import type { Aggregation } from "../types/filterTypes"
 import Item from "../models/Item"
+import { ITEM_PAGINATION_BATCH_SIZE } from "../config/constants"
+import ItemTableData from "./ItemTableData"
 
 /**
  * The Bib class represents a single Bib entity and contains the data
@@ -15,19 +18,23 @@ export default class Bib {
   title: string
   electronicResources?: ElectronicResource[]
   numPhysicalItems: number
+  numItemsMatched: number
   materialType?: string
   issuance?: JSONLDValue[]
   items?: Item[]
+  itemAggregations?: Aggregation[]
 
   constructor(result: DiscoveryBibResult) {
     this.id = result["@id"] ? result["@id"].substring(4) : ""
     this.title = this.getTitleFromResult(result)
     this.electronicResources = result.electronicResources || null
     this.numPhysicalItems = result.numItemsTotal || 0
+    this.numItemsMatched = result.numItemsMatched || 0
     this.materialType =
       (result.materialType?.length && result.materialType[0]?.prefLabel) || null
     this.issuance = (result.issuance?.length && result.issuance) || null
     this.items = this.getItemsFromResult(result)
+    this.itemAggregations = result.itemAggregations || null
   }
 
   get url() {
@@ -60,10 +67,24 @@ export default class Bib {
     return !this.isOnlyElectronicResources && this.hasPhysicalItems
   }
 
+  get itemTableData() {
+    return new ItemTableData(this.items, {
+      isArchiveCollection: this.isArchiveCollection,
+    })
+  }
+
   // Items should be shown but there are none set in the items attribute
   // Likely a problem with the pagination offset query in the initial Bib fetch
   get showItemTableError() {
     return this.showItemTable && !this.items
+  }
+
+  get showViewAllItemsLink() {
+    return this.numItemsMatched > ITEM_PAGINATION_BATCH_SIZE
+  }
+
+  get resourceType() {
+    return this.hasPhysicalItems ? "Item" : "Resource"
   }
 
   // Used to determine the Volume column text in the ItemTable
@@ -72,6 +93,20 @@ export default class Bib {
       Array.isArray(this.issuance) &&
       this.issuance.some((issuance) => issuance["@id"] === "urn:biblevel:c")
     )
+  }
+
+  getNumItemsMessage(filtersApplied = false) {
+    const totalItems = filtersApplied ? this.numItemsMatched : this.numItems
+    return `${totalItems} ${filtersApplied ? "matching " : ""}${
+      this.resourceType
+    }${totalItems !== 1 ? "s" : ""}`
+  }
+
+  getItemsViewAllLoadingMessage(filtersApplied = false) {
+    // We don't want to show the number of filtered items since this may change during loading.
+    return `Loading all ${
+      filtersApplied ? "matching" : this.numPhysicalItems
+    } items. This may take a few moments...`
   }
 
   getTitleFromResult(result: DiscoveryBibResult) {
