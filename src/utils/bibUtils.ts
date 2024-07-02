@@ -50,17 +50,17 @@ export const buildItemTableDisplayingString = (
     return isPlural
       ? `Displaying all ${totalString} items`
       : "Displaying 1 item"
-  } else {
-    const [resultsStart, resultsEnd] = getPaginationOffsetStrings(
-      page,
-      totalResults,
-      ITEM_PAGINATION_BATCH_SIZE
-    )
-
-    return `Displaying ${resultsStart}-${resultsEnd} of ${totalResults.toLocaleString()} item${
-      isPlural ? "s" : ""
-    }`
   }
+
+  const [resultsStart, resultsEnd] = getPaginationOffsetStrings(
+    page,
+    totalResults,
+    ITEM_PAGINATION_BATCH_SIZE
+  )
+
+  return `Displaying ${resultsStart}-${resultsEnd} of ${totalResults.toLocaleString()} item${
+    isPlural ? "s" : ""
+  }`
 }
 
 /**
