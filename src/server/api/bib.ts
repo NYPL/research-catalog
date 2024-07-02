@@ -30,16 +30,15 @@ export async function fetchBib(
   const client = await nyplApiClient({ apiName: DISCOVERY_API_NAME })
   const [bibResponse, annotatedMarcResponse] = await Promise.allSettled([
     await client.get(
-      `${DISCOVERY_API_SEARCH_ROUTE}/${standardizedId}${getBibQueryString({
-        ...bibQuery,
-        id: standardizedId,
-      })}`
+      `${DISCOVERY_API_SEARCH_ROUTE}/${standardizedId}${getBibQueryString(
+        bibQuery
+      )}`
     ),
     // Don't fetch annotated-marc for partner records:
     isNyplBibID(standardizedId) &&
       (await client.get(
         `${DISCOVERY_API_SEARCH_ROUTE}/${standardizedId}.annotated-marc${getBibQueryString(
-          { ...bibQuery, id: standardizedId },
+          bibQuery,
           true
         )}`
       )),
@@ -92,6 +91,7 @@ export async function fetchBib(
         status: 404,
       }
     }
+
     return {
       discoveryBibResult,
       annotatedMarc: annotatedMarc?.bib || null,

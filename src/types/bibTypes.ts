@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import type { SearchResultsItem, JSONLDValue } from "./itemTypes"
+import type { DiscoveryItemResult, JSONLDValue } from "./itemTypes"
 import type { AnnotatedMarc } from "./bibDetailsTypes"
 
 export interface DiscoveryBibResult {
@@ -20,7 +20,7 @@ export interface DiscoveryBibResult {
   electronicResources?: ElectronicResource[]
   issuance?: JSONLDValue[]
   numItemsTotal?: number
-  items?: SearchResultsItem[]
+  items?: DiscoveryItemResult[]
   parallelTitleDisplay?: string[]
   supplementaryContent?: SupplementaryContent[]
   contributorLiteral?: string[]
@@ -81,7 +81,10 @@ export interface BibQueryParams {
   id?: string
   features?: string
   item_page?: number
+  items_size?: number
   items_from?: number
+  view_all_items?: string
+  batch_size?: number
 }
 
 type SubjectHeading = {
