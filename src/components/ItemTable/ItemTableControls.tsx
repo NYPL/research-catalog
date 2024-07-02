@@ -13,7 +13,7 @@ import type Bib from "../../models/Bib"
 
 interface ItemTableControlsProps {
   bib: Bib
-  viewAllEnabled: boolean
+  viewAllExpanded: boolean
   itemsLoading: boolean
   itemTablePage: number
   handlePageChange: (selected: number) => void
@@ -27,7 +27,7 @@ interface ItemTableControlsProps {
  */
 const ItemTableControls = ({
   bib,
-  viewAllEnabled,
+  viewAllExpanded,
   itemsLoading,
   itemTablePage,
   handlePageChange,
@@ -36,7 +36,7 @@ const ItemTableControls = ({
 }: ItemTableControlsProps) => {
   return (
     <Box display="flex" my="xl" justifyContent="space-between">
-      {!viewAllEnabled ? (
+      {!viewAllExpanded ? (
         <Pagination
           id="bib-items-pagination"
           initialPage={itemTablePage}
@@ -49,7 +49,7 @@ const ItemTableControls = ({
         />
       ) : null}
       {bib.showViewAllItemsLink &&
-        (itemsLoading && viewAllEnabled ? (
+        (itemsLoading && viewAllExpanded ? (
           <Box
             ml="auto"
             display="flex"
@@ -84,7 +84,7 @@ const ItemTableControls = ({
           </Box>
         ) : !itemsLoading ? (
           <RCLink
-            href={`${bib.url}${!viewAllEnabled ? "/all" : ""}`}
+            href={`${bib.url}${!viewAllExpanded ? "/all" : ""}`}
             onClick={handleViewAllClick}
             fontSize={{
               base: "mobile.body.body1",
@@ -97,12 +97,12 @@ const ItemTableControls = ({
             isUnderlined={false}
           >
             <Box as="span" mr="xxs">
-              {viewAllEnabled
+              {viewAllExpanded
                 ? "View fewer items"
                 : `View All ${bib.numItemsMessage}`}
             </Box>
             <Icon
-              iconRotation={viewAllEnabled ? "rotate180" : "rotate0"}
+              iconRotation={viewAllExpanded ? "rotate180" : "rotate0"}
               name="arrow"
               size="small"
               align="right"

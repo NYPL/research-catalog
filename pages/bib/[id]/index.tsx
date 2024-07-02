@@ -66,7 +66,7 @@ export default function BibPage({
 
   const [itemsLoading, setItemsLoading] = useState(false)
   const [itemFetchError, setItemFetchError] = useState(bib.showItemTableError)
-  const [viewAllEnabled, setViewAllEnabled] = useState(viewAllItems)
+  const [viewAllExpanded, setViewAllExpanded] = useState(viewAllItems)
   const [bibItems, setBibItems] = useState(bib.items)
   const [itemTablePage, setItemTablePage] = useState(itemPage)
 
@@ -162,9 +162,9 @@ export default function BibPage({
 
   const handleViewAllClick = async (e: SyntheticEvent) => {
     e.preventDefault()
-    setViewAllEnabled((viewAllEnabled) => {
-      refreshItemTable(query, !viewAllEnabled)
-      return !viewAllEnabled
+    setViewAllExpanded((viewAllExpanded) => {
+      refreshItemTable(query, !viewAllExpanded)
+      return !viewAllExpanded
     })
     setTimeout(() => {
       viewAllLoadingTextRef.current?.focus()
@@ -235,7 +235,7 @@ export default function BibPage({
                     {buildItemTableDisplayingString(
                       itemTablePage,
                       bib.numPhysicalItems,
-                      viewAllEnabled
+                      viewAllExpanded
                     )}
                   </Heading>
                   <ItemTable itemTableData={itemTableData} />
@@ -243,7 +243,7 @@ export default function BibPage({
               )}
               <ItemTableControls
                 bib={bib}
-                viewAllEnabled={viewAllEnabled}
+                viewAllExpanded={viewAllExpanded}
                 itemsLoading={itemsLoading}
                 itemTablePage={itemTablePage}
                 handlePageChange={handlePageChange}
