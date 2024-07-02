@@ -9,14 +9,7 @@ import { fetchItems } from "../../../../src/server/api/items"
  *
  */
 async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const id = req.query.id as string
-  const viewAllItems = req.query?.view_all_items === "true"
-
-  const { status, discoveryBibResult, items } = await fetchItems(
-    id,
-    req.query,
-    viewAllItems
-  )
+  const { status, discoveryBibResult, items } = await fetchItems(req.query)
 
   if (req.method === "GET") {
     if (status !== 200 || !items?.length) {

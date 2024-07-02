@@ -86,7 +86,8 @@ export interface BibQueryParams extends ItemFilterQueryParams {
   item_page?: number
   items_size?: number
   items_from?: number
-  view_all_items?: boolean
+  view_all_items?: string
+  batch_size?: number
 }
 
 type SubjectHeading = {
