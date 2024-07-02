@@ -3,7 +3,6 @@ import {
   ITEM_VIEW_ALL_BATCH_SIZE,
 } from "../config/constants"
 import type { BibQueryParams } from "../types/bibTypes"
-import { getPaginationOffsetStrings } from "./appUtils"
 
 /**
  * standardizeBibId
@@ -35,33 +34,6 @@ export const rtlOrLtr = (value: string) => {
 const isRtl = (value: string) => value.substring(0, 1) === "\u200F"
 
 export const isItTheLastElement = (i, array) => !(i < array.length - 1)
-
-// Build the heading above the Item Table in the Bib Page
-// based on pagination values
-export const buildItemTableDisplayingString = (
-  page: number,
-  totalResults: number,
-  viewAllItems = false
-) => {
-  const isPlural = totalResults > 1
-  const totalString = totalResults.toLocaleString()
-
-  if (viewAllItems || totalResults <= ITEM_PAGINATION_BATCH_SIZE) {
-    return isPlural
-      ? `Displaying all ${totalString} items`
-      : "Displaying 1 item"
-  }
-
-  const [resultsStart, resultsEnd] = getPaginationOffsetStrings(
-    page,
-    totalResults,
-    ITEM_PAGINATION_BATCH_SIZE
-  )
-
-  return `Displaying ${resultsStart}-${resultsEnd} of ${totalResults.toLocaleString()} item${
-    isPlural ? "s" : ""
-  }`
-}
 
 /**
  * Given a bib ID (e.g. b12082323, pb123456, hb10000202040400) returns true

@@ -18,11 +18,8 @@ import {
 } from "../../../src/config/constants"
 import { appConfig } from "../../../src/config/config"
 import { fetchBib } from "../../../src/server/api/bib"
-import {
-  getBibQueryString,
-  buildItemTableDisplayingString,
-  isNyplBibID,
-} from "../../../src/utils/bibUtils"
+import { getBibQueryString, isNyplBibID } from "../../../src/utils/bibUtils"
+import { buildItemTableDisplayingString } from "../../../src/utils/itemUtils"
 import BibDetailsModel from "../../../src/models/BibDetails"
 import ItemTableData from "../../../src/models/ItemTableData"
 import BibDetails from "../../../src/components/BibPage/BibDetail"
