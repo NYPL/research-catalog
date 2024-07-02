@@ -38,9 +38,9 @@ describe("SearchResultsBib model", () => {
     })
   })
 
-  describe("itemMessage", () => {
+  describe("numItemsMessage", () => {
     it("returns a message populated with the correct resource type and pluralization", () => {
-      expect(searchResultsBib.itemMessage).toBe("4 Items")
+      expect(searchResultsBib.numItemsMessage).toBe("4 Items")
     })
   })
 
