@@ -18,7 +18,7 @@ export const notificationPreferenceTuples = Object.keys(
 function formatPatronName(name = "") {
   if (!name) return ""
 
-  const [lastName, firstName] = name.split(",")
+  const [lastName = "", firstName = ""] = name.split(",")
   // The name from Sierra is in all caps, so we need to lowercase
   // all but the first letter.
   function capitalize(name: string) {
