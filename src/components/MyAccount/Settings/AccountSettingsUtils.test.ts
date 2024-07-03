@@ -16,7 +16,7 @@ describe("Account settings utils", () => {
     })
   })
   describe("formatPatronName", () => {
-    it("correctly formats the patron name when in call caps and comma separated", () => {
+    it("correctly formats the patron name when in all caps and comma-separated", () => {
       expect(formatPatronName("LAST,FIRST")).toEqual("First Last")
     })
     it("falls back to the input name when not comma-separated", () => {
