@@ -15,16 +15,18 @@ export const notificationPreferenceTuples = Object.keys(
 /**
  * Formats the patron's name per NYPL guidelines.
  */
-function formatPatronName(name = "") {
+export function formatPatronName(name = "") {
   if (!name) return ""
-
-  const [lastName = "", firstName = ""] = name.split(",")
+  if (!name.includes(",")) return name
+  const [lastName, firstName] = name.split(",")
   // The name from Sierra is in all caps, so we need to lowercase
   // all but the first letter.
   function capitalize(name: string) {
     return `${name.charAt(0)}${name.slice(1).toLowerCase()}`
   }
-  return `${capitalize(firstName.trim())} ${capitalize(lastName.trim())}`
+  return `${firstName && capitalize(firstName.trim())} ${capitalize(
+    lastName.trim()
+  )}`
 }
 
 /**
