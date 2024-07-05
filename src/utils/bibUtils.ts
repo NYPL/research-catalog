@@ -46,23 +46,24 @@ export const buildItemTableDisplayingString = (
 ) => {
   const isPlural = totalResults > 1
   const totalString = totalResults.toLocaleString()
+
   if (viewAllItems || totalResults <= ITEM_PAGINATION_BATCH_SIZE) {
     return isPlural
       ? `Displaying all ${totalString} ${
           filtersApplied ? "matching " : ""
         }items`
       : "Displaying 1 item"
-  } else {
-    const [resultsStart, resultsEnd] = getPaginationOffsetStrings(
-      page,
-      totalResults,
-      ITEM_PAGINATION_BATCH_SIZE
-    )
-
-    return `Displaying ${resultsStart}-${resultsEnd} of ${totalResults.toLocaleString()} ${
-      filtersApplied ? "matching " : ""
-    }item${isPlural ? "s" : ""}`
   }
+
+  const [resultsStart, resultsEnd] = getPaginationOffsetStrings(
+    page,
+    totalResults,
+    ITEM_PAGINATION_BATCH_SIZE
+  )
+
+  return `Displaying ${resultsStart}-${resultsEnd} of ${totalResults.toLocaleString()} ${
+    filtersApplied ? "matching " : ""
+  }item${isPlural ? "s" : ""}`
 }
 
 /**

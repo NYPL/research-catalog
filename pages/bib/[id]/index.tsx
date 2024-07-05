@@ -68,11 +68,14 @@ export default function BibPage({
   const [bib, setBib] = useState(new Bib(discoveryBibResult))
   const [itemsLoading, setItemsLoading] = useState(false)
   const [itemFetchError, setItemFetchError] = useState(bib.showItemTableError)
-  const [viewAllEnabled, setViewAllEnabled] = useState(viewAllItems)
+  const [viewAllExpanded, setViewAllExpanded] = useState(viewAllItems)
   const [appliedFilters, setAppliedFilters] = useState(
     parseItemFilterQueryParams(query)
   )
   const [itemTablePage, setItemTablePage] = useState(itemPage)
+
+  // TODO: move JS disabled check for this feature to the server side
+  const [javascriptEnabled, setJavascriptEnabled] = useState(false)
 
   const itemTableScrollRef = useRef<HTMLDivElement>(null)
   const itemTableHeadingRef = useRef<HTMLDivElement>(null)
@@ -90,6 +93,9 @@ export default function BibPage({
 
   // If filters are applied, show the matching number of items, otherwise show the total number of items
   const numItems = filtersApplied ? bib.numItemsMatched : bib.numPhysicalItems
+
+  // set javaScriptEnabled to true before the first render
+  if (!javascriptEnabled) setJavascriptEnabled(true)
 
   // Load all items via client-side fetch if page is first loaded with viewAllItems prop passed in
   // Namely, when the page is accessed with the /all route
@@ -116,6 +122,7 @@ export default function BibPage({
       delete newQuery.item_page
       delete newQuery.items_size
     }
+
     await push(
       {
         pathname: `${PATHS.BIB}/${bib.id}${viewAllItems ? "/all" : ""}`,
@@ -178,7 +185,7 @@ export default function BibPage({
     if (newQuery.item_page) delete newQuery.item_page
     setItemTablePage(1)
     setAppliedFilters(parseItemFilterQueryParams(newAppliedFilterQuery))
-    await refreshItemTable(newQuery, viewAllEnabled)
+    await refreshItemTable(newQuery, viewAllExpanded)
   }
 
   const handlePageChange = async (page: number) => {
@@ -190,9 +197,9 @@ export default function BibPage({
 
   const handleViewAllClick = async (e: SyntheticEvent) => {
     e.preventDefault()
-    setViewAllEnabled((viewAllEnabled) => {
-      refreshItemTable(query, !viewAllEnabled)
-      return !viewAllEnabled
+    setViewAllExpanded((viewAllExpanded) => {
+      refreshItemTable(query, !viewAllExpanded)
+      return !viewAllExpanded
     })
     setTimeout(() => {
       viewAllLoadingTextRef.current?.focus()
@@ -255,7 +262,7 @@ export default function BibPage({
                   type="negative"
                   content="There was an error fetching items. Please try again with a different query."
                 />
-              ) : (
+              ) : javascriptEnabled ? (
                 <>
                   <Heading
                     data-testid="item-table-displaying-text"
@@ -268,16 +275,21 @@ export default function BibPage({
                     {buildItemTableDisplayingString(
                       itemTablePage,
                       numItems,
-                      viewAllEnabled,
+                      viewAllExpanded,
                       filtersApplied
                     )}
                   </Heading>
                   <ItemTable itemTableData={bib.itemTableData} />
                 </>
+              ) : (
+                <Banner
+                  type="negative"
+                  content="Please enable Javascript to view all items."
+                />
               )}
               <ItemTableControls
                 bib={bib}
-                viewAllEnabled={viewAllEnabled}
+                viewAllExpanded={viewAllExpanded}
                 itemsLoading={itemsLoading}
                 itemTablePage={itemTablePage}
                 handlePageChange={handlePageChange}
@@ -285,6 +297,7 @@ export default function BibPage({
                 viewAllLoadingTextRef={viewAllLoadingTextRef}
                 numItemsTotal={numItems}
                 filtersApplied={filtersApplied}
+                javascriptEnabled={javascriptEnabled}
               />
             </Box>
           </>

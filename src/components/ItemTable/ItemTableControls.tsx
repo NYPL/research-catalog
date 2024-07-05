@@ -13,7 +13,7 @@ import type Bib from "../../models/Bib"
 
 interface ItemTableControlsProps {
   bib: Bib
-  viewAllEnabled: boolean
+  viewAllExpanded: boolean
   itemsLoading: boolean
   itemTablePage: number
   handlePageChange: (selected: number) => void
@@ -21,6 +21,7 @@ interface ItemTableControlsProps {
   viewAllLoadingTextRef: RefObject<HTMLDivElement & HTMLLabelElement>
   numItemsTotal?: number
   filtersApplied?: boolean
+  javascriptEnabled: boolean
 }
 
 /**
@@ -29,7 +30,7 @@ interface ItemTableControlsProps {
  */
 const ItemTableControls = ({
   bib,
-  viewAllEnabled,
+  viewAllExpanded,
   itemsLoading,
   itemTablePage,
   handlePageChange,
@@ -37,10 +38,11 @@ const ItemTableControls = ({
   viewAllLoadingTextRef,
   numItemsTotal = 0,
   filtersApplied = false,
+  javascriptEnabled = true,
 }: ItemTableControlsProps) => {
   return (
     <Box display="flex" my="xl" justifyContent="space-between">
-      {!viewAllEnabled ? (
+      {!viewAllExpanded ? (
         <Pagination
           id="bib-items-pagination"
           initialPage={itemTablePage}
@@ -51,7 +53,7 @@ const ItemTableControls = ({
         />
       ) : null}
       {bib.showViewAllItemsLink &&
-        (itemsLoading && viewAllEnabled ? (
+        (itemsLoading && viewAllExpanded ? (
           <Box
             ml="auto"
             display="flex"
@@ -84,33 +86,35 @@ const ItemTableControls = ({
               {bib.getItemsViewAllLoadingMessage(filtersApplied)}
             </Label>
           </Box>
-        ) : !itemsLoading ? (
-          <RCLink
-            href={`${bib.url}${!viewAllEnabled ? "/all" : ""}`}
-            onClick={handleViewAllClick}
-            fontSize={{
-              base: "mobile.body.body1",
-              md: "desktop.body.body1",
-            }}
-            fontWeight="medium"
-            display="flex"
-            alignItems="center"
-            ml="auto"
-            isUnderlined={false}
-          >
-            <Box as="span" mr="xxs">
-              {viewAllEnabled
-                ? "View fewer items"
-                : `View All ${bib.getNumItemsMessage(filtersApplied)}`}
-            </Box>
-            <Icon
-              iconRotation={viewAllEnabled ? "rotate180" : "rotate0"}
-              name="arrow"
-              size="small"
-              align="right"
-              color="ui.link.primary"
-            />
-          </RCLink>
+        ) : !itemsLoading && javascriptEnabled ? (
+          <>
+            <RCLink
+              href={`${bib.url}${!viewAllExpanded ? "/all" : ""}`}
+              onClick={handleViewAllClick}
+              fontSize={{
+                base: "mobile.body.body1",
+                md: "desktop.body.body1",
+              }}
+              fontWeight="medium"
+              display="flex"
+              alignItems="center"
+              ml="auto"
+              isUnderlined={false}
+            >
+              <Box as="span" mr="xxs">
+                {viewAllExpanded
+                  ? "View fewer items"
+                  : `View All ${bib.getNumItemsMessage(filtersApplied)}`}
+              </Box>
+              <Icon
+                iconRotation={viewAllExpanded ? "rotate180" : "rotate0"}
+                name="arrow"
+                size="small"
+                align="right"
+                color="ui.link.primary"
+              />
+            </RCLink>
+          </>
         ) : null)}
     </Box>
   )
