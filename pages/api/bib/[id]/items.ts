@@ -9,6 +9,7 @@ import { fetchItems } from "../../../../src/server/api/items"
  *
  */
 async function handler(req: NextApiRequest, res: NextApiResponse) {
+  console.log(req.query)
   const { status, discoveryBibResult, items } = await fetchItems(req.query)
 
   if (req.method === "GET") {

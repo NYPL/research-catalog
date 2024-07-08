@@ -35,7 +35,7 @@ interface ItemFilterContainerProps {
 const FiltersContainer = ({
   itemAggregations,
   handleFiltersChange,
-  appliedFilters = { location: [], format: [], status: [], date: [] },
+  appliedFilters = { location: [], format: [], status: [], year: [] },
 }: ItemFilterContainerProps) => {
   const { isLargerThanLarge, isLargerThanMedium } = useNYPLBreakpoints()
   const filterGroupClassName = isLargerThanLarge
@@ -97,7 +97,7 @@ const FiltersContainer = ({
   const handleYearSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
     const year = e.target[0].value
-    submitFilters([year], "date")
+    submitFilters([year], "year")
   }
 
   return (

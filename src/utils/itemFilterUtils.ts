@@ -34,12 +34,12 @@ export const parseItemFilterQueryParams = ({
       : [],
     format: item_format?.split(",") || [],
     status: item_status?.split(",") || [],
-    date: item_date?.split(",") || [],
+    year: item_date?.split(",") || [],
   }
 }
 
 export const buildItemFilterQuery = (
-  { location, format, status, date }: AppliedItemFilters,
+  { location, format, status, year }: AppliedItemFilters,
   recapLocations: string
 ) => {
   const locs = location.map((loc) => {
@@ -51,7 +51,7 @@ export const buildItemFilterQuery = (
     ...(locs.length && { item_location: locs.join(",") }),
     ...(format.length && { item_format: format.join(",") }),
     ...(status.length && { item_status: status.join(",") }),
-    ...(date.length && { item_date: date.join(",") }),
+    ...(year.length && { item_date: year.join(",") }),
   }
 }
 
@@ -79,8 +79,8 @@ export const buildAppliedFiltersTagSetData = (
         (aggregation: ItemFilterData) => aggregation.field === field
       )
       const valueLabel =
-        field === "date"
-          ? "Year"
+        field === "year"
+          ? filterValue
           : fieldAggregations?.labelForValue(filterValue)
       if (valueLabel) {
         filters.push({

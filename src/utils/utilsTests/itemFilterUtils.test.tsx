@@ -50,6 +50,7 @@ describe("Item Filter Utils", () => {
         format: ["Text"],
         location: ["loc:mal", "Offsite"],
         status: ["status:a", "status:na"],
+        year: ["2000"],
       })
     })
     it("parses locations including multiple recap locations", () => {
@@ -62,6 +63,7 @@ describe("Item Filter Utils", () => {
         format: ["Text"],
         location: ["loc:abc", "Offsite"],
         status: ["status:a", "status:na"],
+        year: ["2000"],
       })
     })
   })
@@ -71,6 +73,7 @@ describe("Item Filter Utils", () => {
         format: ["Text"],
         location: ["loc:abc", "Offsite"],
         status: ["status:a", "status:na"],
+        year: ["2000"],
       }
       const recapLocations = "loc:rc2ma,loc:rc3ma,loc:rc4ma"
       expect(buildItemFilterQuery(query, recapLocations)).toStrictEqual({
@@ -84,6 +87,7 @@ describe("Item Filter Utils", () => {
         format: [],
         location: ["loc:abc", "Offsite"],
         status: [],
+        year: [],
       }
       const recapLocations = "loc:rc2ma,loc:rc3ma,loc:rc4ma"
       expect(buildItemFilterQuery(query, recapLocations)).toStrictEqual({
@@ -97,6 +101,7 @@ describe("Item Filter Utils", () => {
       item_location: "loc:rc2ma,loc:rcma2",
       item_status: "status:a",
       item_format: "Text",
+      item_date: "2005",
     })
     const emptyQuery = parseItemFilterQueryParams({})
     const aggregations = normalAggs.map(

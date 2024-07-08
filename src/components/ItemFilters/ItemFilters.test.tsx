@@ -26,6 +26,7 @@ describe("Filters container", () => {
           location: ["Offsite"],
           format: ["Text"],
           status: ["status:a"],
+          year: ["2005"],
         }}
       />
     )

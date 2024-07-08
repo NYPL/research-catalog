@@ -88,7 +88,12 @@ export function getBibQueryString(
   const itemPage = bibQuery?.item_page || 1
   const itemsFrom = (itemPage - 1) * batchSize || 0
 
-  const FILTER_QUERIES = ["item_location", "item_format", "item_status"]
+  const FILTER_QUERIES = [
+    "item_location",
+    "item_format",
+    "item_status",
+    "item_date",
+  ]
 
   const itemFilterQuery = bibQuery
     ? Object.keys(bibQuery)

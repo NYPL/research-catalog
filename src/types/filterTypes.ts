@@ -6,7 +6,7 @@ export type AppliedItemFilters = {
   location: string[]
   format: string[]
   status: string[]
-  date: string[]
+  year: string[]
 }
 
 export interface AggregationOption {
