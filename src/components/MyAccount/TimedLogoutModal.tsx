@@ -65,7 +65,6 @@ const TimedLogoutModal = ({
   if (timeUntilExpiration.minutes <= 0 && timeUntilExpiration.seconds <= 0) {
     logOutAndRedirect()
   }
-  // Show warning when 2m remaining:
 
   if (!open) return null
 
