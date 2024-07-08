@@ -268,8 +268,9 @@ export default function BibPage({
                   >
                     {buildItemTableDisplayingString(
                       itemTablePage,
-                      bib.numPhysicalItems,
-                      viewAllExpanded
+                      numItems,
+                      viewAllExpanded,
+                      filtersApplied
                     )}
                   </Heading>
                   <ItemTable itemTableData={bib.itemTableData} />
