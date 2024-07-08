@@ -33,4 +33,12 @@ export const incrementTime = (minutes, seconds = 0) => {
  */
 const deleteCookie = (sKey) => setCookieWithExpiration(sKey, null)
 
+export const buildTimeLeft = (expirationTime) => {
+  const left =
+    (new Date(expirationTime).getTime() - new Date().getTime()) / 1000
+  const minutes = Math.ceil(left / 60)
+  const seconds = Math.ceil(left) % 60
+  return { minutes, seconds }
+}
+
 export { deleteCookie, setCookieWithExpiration }

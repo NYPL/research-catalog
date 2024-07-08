@@ -9,7 +9,7 @@ import {
   Spacer,
 } from "@nypl/design-system-react-components"
 
-import { deleteCookie } from "../../utils/cookieUtils"
+import { buildTimeLeft, deleteCookie } from "../../utils/cookieUtils"
 import { useLogoutRedirect } from "../../server/auth"
 import { useRouter } from "next/router"
 import styles from "../../../styles/components/TimedLogoutModal.module.scss"
@@ -18,12 +18,21 @@ import styles from "../../../styles/components/TimedLogoutModal.module.scss"
  * This renders a modal interface based on an early version from the
  * Reservoir Design System through the `old-ds-modal` CSS class.
  */
-const TimedLogoutModal = ({ stayLoggedIn }) => {
+const TimedLogoutModal = ({
+  stayLoggedIn,
+  expirationTime,
+}: {
+  expirationTime: string
+  stayLoggedIn: () => void
+}) => {
   const router = useRouter()
-  const [expTime, setExpTime] = useState("")
-  const [timeLeft, setTimeLeft] = useState({ minutes: 50, seconds: 0 })
+  const [timeUntilExpiration, setTimeUntilExpiration] = useState(
+    buildTimeLeft(expirationTime)
+  )
+  console.log(timeUntilExpiration)
   const [open, setOpen] = useState(false)
   const redirectUri = useLogoutRedirect()
+
   const logOutAndRedirect = () => {
     // If patron clicked Log Out before natural expiration of cookie,
     // explicitly delete it:
@@ -31,33 +40,21 @@ const TimedLogoutModal = ({ stayLoggedIn }) => {
     router.push(redirectUri)
   }
 
-  if (
-    typeof document !== "undefined" &&
-    !document.cookie.includes("accountPageExp")
-  ) {
+  if (!expirationTime) {
     logOutAndRedirect()
   }
 
   useEffect(() => {
     const timeout = setInterval(() => {
-      const left = (new Date(expTime).getTime() - new Date().getTime()) / 1000
-      const minutes = Math.ceil(left / 60)
-
-      const seconds = Math.ceil(left) % 60
+      const { minutes, seconds } = buildTimeLeft(expirationTime)
       if (minutes < 5) setOpen(true)
-      setTimeLeft(() => {
+      setTimeUntilExpiration(() => {
         return {
           minutes,
           seconds,
         }
       })
     }, 1000)
-    setExpTime(
-      document.cookie
-        .split(";")
-        .find((el) => el.includes("accountPageExp"))
-        .split("=")[1]
-    )
     return () => {
       clearInterval(timeout)
     }
@@ -66,7 +63,7 @@ const TimedLogoutModal = ({ stayLoggedIn }) => {
   // Theoretically, accountPageExp should disappear after 5mins, causing
   // logOutAndRedirect() to be fired above, but let's make sure a failure
   // there never allows the timer to pass zero:
-  if (timeLeft.minutes <= 0 && timeLeft.seconds <= 0) {
+  if (timeUntilExpiration.minutes <= 0 && timeUntilExpiration.seconds <= 0) {
     logOutAndRedirect()
   }
   // Show warning when 2m remaining:
@@ -94,9 +91,9 @@ const TimedLogoutModal = ({ stayLoggedIn }) => {
         >
           Your session is about to expire
           <span>
-            {`${timeLeft.minutes}:${timeLeft.seconds < 10 ? "0" : ""}${
-              timeLeft.seconds
-            }`}
+            {`${timeUntilExpiration.minutes}:${
+              timeUntilExpiration.seconds < 10 ? "0" : ""
+            }${timeUntilExpiration.seconds}`}
           </span>
         </CardHeading>
         <CardContent>

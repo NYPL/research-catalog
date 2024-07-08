@@ -45,10 +45,13 @@ export default function MyAccount({
   const errorRetrievingPatronData = !patron
 
   const [displayTimedLogoutModal, setDisplayTimedLogoutModal] = useState(false)
+  const [expirationTime, setExpirationTime] = useState("")
 
   const resetCountdown = () => {
     const inFive = incrementTime(5)
-    document.cookie = `accountPageExp=${inFive}; expires=${inFive}`
+    const newExpirationTime = `accountPageExp=${inFive}; expires=${inFive}`
+    document.cookie = newExpirationTime
+    setExpirationTime(inFive)
     setDisplayTimedLogoutModal(true)
   }
 
@@ -64,7 +67,10 @@ export default function MyAccount({
 
       <Layout isAuthenticated={isAuthenticated} activePage="account">
         {displayTimedLogoutModal && (
-          <TimedLogoutModal stayLoggedIn={resetCountdown} />
+          <TimedLogoutModal
+            stayLoggedIn={resetCountdown}
+            expirationTime={expirationTime}
+          />
         )}
         {redirectLoop ? (
           <Text>
