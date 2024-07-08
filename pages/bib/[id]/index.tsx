@@ -272,7 +272,7 @@ export default function BibPage({
                       viewAllExpanded
                     )}
                   </Heading>
-                  <ItemTable itemTableData={itemTableData} />
+                  <ItemTable itemTableData={bib.itemTableData} />
                 </>
               )}
 
