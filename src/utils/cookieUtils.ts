@@ -13,7 +13,6 @@ export const getTimeLeft = (expTime) => {
  */
 
 const setCookieWithExpiration = (sKey, expiration, value = "") => {
-  console.log({ sKey, value })
   document.cookie =
     `${sKey}=${value}; expires=${expiration || Date.now()}; ` +
     (includeDomain ? "path=/; domain=.nypl.org;" : "")

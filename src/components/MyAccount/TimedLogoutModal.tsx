@@ -21,33 +21,32 @@ import styles from "../../../styles/components/TimedLogoutModal.module.scss"
 const TimedLogoutModal = ({
   stayLoggedIn,
   expirationTime,
+  timeoutWindow = 5,
 }: {
   expirationTime: string
   stayLoggedIn: () => void
+  timeoutWindow?: number
 }) => {
   const router = useRouter()
-  const [timeUntilExpiration, setTimeUntilExpiration] = useState(
-    buildTimeLeft(expirationTime)
-  )
-  console.log(timeUntilExpiration)
-  const [open, setOpen] = useState(false)
   const redirectUri = useLogoutRedirect()
-
   const logOutAndRedirect = () => {
     // If patron clicked Log Out before natural expiration of cookie,
     // explicitly delete it:
     deleteCookie("accountPageExp")
     router.push(redirectUri)
   }
-
   if (!expirationTime) {
     logOutAndRedirect()
   }
+  const [timeUntilExpiration, setTimeUntilExpiration] = useState(
+    buildTimeLeft(expirationTime)
+  )
+  const [open, setOpen] = useState(false)
 
   useEffect(() => {
     const timeout = setInterval(() => {
       const { minutes, seconds } = buildTimeLeft(expirationTime)
-      if (minutes < 5) setOpen(true)
+      if (minutes < timeoutWindow) setOpen(true)
       setTimeUntilExpiration(() => {
         return {
           minutes,

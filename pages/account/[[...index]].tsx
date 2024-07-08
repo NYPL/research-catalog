@@ -19,7 +19,7 @@ import type {
   SierraCodeName,
 } from "../../src/types/myAccountTypes"
 import TimedLogoutModal from "../../src/components/MyAccount/TimedLogoutModal"
-import { incrementTime } from "../../src/utils/cookieUtils"
+import { buildTimeLeft, incrementTime } from "../../src/utils/cookieUtils"
 import { useEffect, useState } from "react"
 interface MyAccountPropsType {
   patron?: Patron
