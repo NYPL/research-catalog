@@ -21,7 +21,6 @@ interface ItemTableControlsProps {
   viewAllLoadingTextRef: RefObject<HTMLDivElement & HTMLLabelElement>
   numItemsTotal?: number
   filtersApplied?: boolean
-  javascriptEnabled: boolean
 }
 
 /**
@@ -38,7 +37,6 @@ const ItemTableControls = ({
   viewAllLoadingTextRef,
   numItemsTotal = 0,
   filtersApplied = false,
-  javascriptEnabled = true,
 }: ItemTableControlsProps) => {
   return (
     <Box display="flex" my="xl" justifyContent="space-between">
@@ -86,7 +84,7 @@ const ItemTableControls = ({
               {bib.getItemsViewAllLoadingMessage(filtersApplied)}
             </Label>
           </Box>
-        ) : !itemsLoading && javascriptEnabled ? (
+        ) : !itemsLoading ? (
           <>
             <RCLink
               href={`${bib.url}${!viewAllExpanded ? "/all" : ""}`}
