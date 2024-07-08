@@ -20,9 +20,12 @@ import styles from "../../../styles/components/TimedLogoutModal.module.scss"
  */
 const TimedLogoutModal = ({ stayLoggedIn }) => {
   const router = useRouter()
-  const [time, setTime] = useState({ minutes: 0, seconds: 0 })
+  const [expTime, setExpTime] = useState("")
+  const [timeLeft, setTimeLeft] = useState({ minutes: 50, seconds: 0 })
   const redirectUri = useLogoutRedirect()
-
+  // const resetTime = () => {
+  //   setTime
+  // }
   const logOutAndRedirect = () => {
     // If patron clicked Log Out before natural expiration of cookie,
     // explicitly delete it:
@@ -37,40 +40,37 @@ const TimedLogoutModal = ({ stayLoggedIn }) => {
     logOutAndRedirect()
   }
 
-  const expTime = document.cookie
-    .split(";")
-    .find((el) => el.includes("accountPageExp"))
-    .split("=")[1]
-
-  const timeLeft = (new Date(expTime).getTime() - new Date().getTime()) / 1000
-
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      setTime({
-        minutes: Math.ceil(timeLeft / 60),
-        seconds: Math.ceil(timeLeft % 60),
+    console.log(expTime)
+    const timeout = setInterval(() => {
+      const left = (new Date(expTime).getTime() - new Date().getTime()) / 1000
+      console.log(left)
+      setTimeLeft({
+        minutes: Math.ceil(left / 60),
+        seconds: Math.ceil(left % 60),
       })
     }, 1000)
+    setExpTime(
+      document.cookie
+        .split(";")
+        .find((el) => el.includes("accountPageExp"))
+        .split("=")[1]
+    )
 
     return () => {
-      clearTimeout(timeout)
+      clearInterval(timeout)
     }
   })
 
   // Theoretically, accountPageExp should disappear after 5mins, causing
   // logOutAndRedirect() to be fired above, but let's make sure a failure
   // there never allows the timer to pass zero:
-  if (timeLeft <= 0) {
+  if (timeLeft.minutes <= 0 && timeLeft.seconds <= 0) {
     logOutAndRedirect()
   }
-
-  const headingText = `Your session is about to expire ${time.minutes}:${
-    time.seconds < 10 ? "0" : ""
-  }${time.seconds}`
-
   // Show warning when 2m remaining:
-  // const open = time.minutes <= 5
-  // if (!open) return null
+  const open = timeLeft.minutes <= 5
+  if (!open) return null
 
   return (
     <div
@@ -93,7 +93,9 @@ const TimedLogoutModal = ({ stayLoggedIn }) => {
         >
           Your session is about to expire
           <span>
-            {`${time.minutes}:${time.seconds < 10 ? "0" : ""}${time.seconds}`}
+            {`${timeLeft.minutes}:${timeLeft.seconds < 10 ? "0" : ""}${
+              timeLeft.seconds
+            }`}
           </span>
         </CardHeading>
         <CardContent>
