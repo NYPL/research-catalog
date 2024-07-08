@@ -50,7 +50,7 @@ describe("Item Filter Utils", () => {
         format: ["Text"],
         location: ["loc:mal", "Offsite"],
         status: ["status:a", "status:na"],
-        year: ["2000"],
+        year: [],
       })
     })
     it("parses locations including multiple recap locations", () => {
@@ -63,7 +63,7 @@ describe("Item Filter Utils", () => {
         format: ["Text"],
         location: ["loc:abc", "Offsite"],
         status: ["status:a", "status:na"],
-        year: ["2000"],
+        year: [],
       })
     })
   })
@@ -73,7 +73,7 @@ describe("Item Filter Utils", () => {
         format: ["Text"],
         location: ["loc:abc", "Offsite"],
         status: ["status:a", "status:na"],
-        year: ["2000"],
+        year: [],
       }
       const recapLocations = "loc:rc2ma,loc:rc3ma,loc:rc4ma"
       expect(buildItemFilterQuery(query, recapLocations)).toStrictEqual({
@@ -114,16 +114,18 @@ describe("Item Filter Utils", () => {
     })
     it("with all filters", () => {
       expect(buildAppliedFiltersTagSetData(query, aggregations)).toStrictEqual([
-        { iconName: "close", id: "Offsite", label: "Location > Offsite" },
-        { iconName: "close", id: "Text", label: "Format > Text" },
-        { iconName: "close", id: "status:a", label: "Status > Available" },
-      ])
-    })
-    it("all filters filters", () => {
-      expect(buildAppliedFiltersTagSetData(query, aggregations)).toStrictEqual([
-        { iconName: "close", id: "Offsite", label: "Location > Offsite" },
-        { iconName: "close", id: "Text", label: "Format > Text" },
-        { iconName: "close", id: "status:a", label: "Status > Available" },
+        {
+          iconName: "close",
+          id: "location-offsite",
+          label: "Location > Offsite",
+        },
+        { iconName: "close", id: "format-text", label: "Format > Text" },
+        {
+          iconName: "close",
+          id: "status-available",
+          label: "Status > Available",
+        },
+        { iconName: "close", id: "year-2005", label: "Year > 2005" },
       ])
     })
     it("one filter", () => {
@@ -133,8 +135,16 @@ describe("Item Filter Utils", () => {
           aggregations
         )
       ).toStrictEqual([
-        { iconName: "close", id: "status:a", label: "Status > Available" },
-        { iconName: "close", id: "status:na", label: "Status > Not available" },
+        {
+          iconName: "close",
+          id: "status-available",
+          label: "Status > Available",
+        },
+        {
+          iconName: "close",
+          id: "status-not-available",
+          label: "Status > Not available",
+        },
       ])
     })
   })

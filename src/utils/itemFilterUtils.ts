@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { capitalize } from "lodash"
+import { capitalize, kebabCase } from "lodash"
 import type { TagSetFilterDataProps } from "@nypl/design-system-react-components"
 
 import type { ItemFilterData } from "../models/ItemFilterData"
@@ -85,7 +85,7 @@ export const buildAppliedFiltersTagSetData = (
       if (valueLabel) {
         filters.push({
           label: `${capitalize(field)} > ${valueLabel}`,
-          id: filterValue,
+          id: kebabCase(`${field}-${valueLabel}`),
           iconName: "close",
         })
       }
