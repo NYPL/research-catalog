@@ -1,4 +1,4 @@
-import { useRef, useState } from "react"
+import { type SyntheticEvent, useRef, useState } from "react"
 import React from "react"
 import {
   SearchBar,
@@ -35,7 +35,7 @@ interface ItemFilterContainerProps {
 const FiltersContainer = ({
   itemAggregations,
   handleFiltersChange,
-  appliedFilters = { location: [], format: [], status: [] },
+  appliedFilters = { location: [], format: [], status: [], date: [] },
 }: ItemFilterContainerProps) => {
   const { isLargerThanLarge, isLargerThanMedium } = useNYPLBreakpoints()
   const filterGroupClassName = isLargerThanLarge
@@ -92,6 +92,12 @@ const FiltersContainer = ({
       if (filtersWithValueRemoved && field)
         submitFilters(filtersWithValueRemoved, field)
     }
+  }
+
+  const handleYearSubmit = async (e: SyntheticEvent) => {
+    e.preventDefault()
+    const year = e.target[0].value
+    submitFilters([year], "date")
   }
 
   return (
@@ -151,7 +157,7 @@ const FiltersContainer = ({
               labelText: "Item Search",
               name: "textInputName",
             }}
-            onSubmit={() => console.log("spaghetti!")}
+            onSubmit={handleYearSubmit}
           />
         </Box>
       </Box>

@@ -6,6 +6,7 @@ export type AppliedItemFilters = {
   location: string[]
   format: string[]
   status: string[]
+  date: string[]
 }
 
 export interface AggregationOption {
@@ -19,6 +20,7 @@ export type ItemFilterQueryParams = {
   item_location?: string
   item_format?: string
   item_status?: string
+  item_date?: string
 }
 
 export interface Aggregation {
