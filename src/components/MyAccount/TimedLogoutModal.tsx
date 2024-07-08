@@ -22,10 +22,8 @@ const TimedLogoutModal = ({ stayLoggedIn }) => {
   const router = useRouter()
   const [expTime, setExpTime] = useState("")
   const [timeLeft, setTimeLeft] = useState({ minutes: 50, seconds: 0 })
+  const [open, setOpen] = useState(false)
   const redirectUri = useLogoutRedirect()
-  // const resetTime = () => {
-  //   setTime
-  // }
   const logOutAndRedirect = () => {
     // If patron clicked Log Out before natural expiration of cookie,
     // explicitly delete it:
@@ -41,13 +39,17 @@ const TimedLogoutModal = ({ stayLoggedIn }) => {
   }
 
   useEffect(() => {
-    console.log(expTime)
     const timeout = setInterval(() => {
       const left = (new Date(expTime).getTime() - new Date().getTime()) / 1000
-      console.log(left)
-      setTimeLeft({
-        minutes: Math.ceil(left / 60),
-        seconds: Math.ceil(left % 60),
+      const minutes = Math.ceil(left / 60)
+
+      const seconds = Math.ceil(left) % 60
+      if (minutes < 5) setOpen(true)
+      setTimeLeft(() => {
+        return {
+          minutes,
+          seconds,
+        }
       })
     }, 1000)
     setExpTime(
@@ -56,7 +58,6 @@ const TimedLogoutModal = ({ stayLoggedIn }) => {
         .find((el) => el.includes("accountPageExp"))
         .split("=")[1]
     )
-
     return () => {
       clearInterval(timeout)
     }
@@ -69,7 +70,7 @@ const TimedLogoutModal = ({ stayLoggedIn }) => {
     logOutAndRedirect()
   }
   // Show warning when 2m remaining:
-  const open = timeLeft.minutes <= 5
+
   if (!open) return null
 
   return (
@@ -104,11 +105,17 @@ const TimedLogoutModal = ({ stayLoggedIn }) => {
             <Button
               buttonType="secondary"
               onClick={logOutAndRedirect}
-              id="logoff-button"
+              id="logout -button"
             >
-              Log off
+              Log out
             </Button>
-            <Button onClick={stayLoggedIn} id="logged-in-button">
+            <Button
+              onClick={() => {
+                stayLoggedIn()
+                setOpen(false)
+              }}
+              id="logged-in-button"
+            >
               Stay logged in
             </Button>
           </CardActions>
