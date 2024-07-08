@@ -70,9 +70,6 @@ export default function BibPage({
   const [bibItems, setBibItems] = useState(bib.items)
   const [itemTablePage, setItemTablePage] = useState(itemPage)
 
-  // TODO: move JS disabled check for this feature to the server side
-  const [javascriptEnabled, setJavascriptEnabled] = useState(false)
-
   const itemTableScrollRef = useRef<HTMLDivElement>(null)
   const itemTableHeadingRef = useRef<HTMLDivElement>(null)
   const viewAllLoadingTextRef = useRef<HTMLDivElement & HTMLLabelElement>(null)
@@ -86,9 +83,6 @@ export default function BibPage({
   const itemTableData = new ItemTableData(bibItems, {
     isArchiveCollection: bib.isArchiveCollection,
   })
-
-  // set javaScriptEnabled to true before the first render
-  if (!javascriptEnabled) setJavascriptEnabled(true)
 
   // Load all items via client-side fetch if page is first loaded with viewAllItems prop passed in
   // Namely, when the page is accessed with the /all route
@@ -228,7 +222,7 @@ export default function BibPage({
                   type="negative"
                   content="There was an error fetching items. Please try again with a different query."
                 />
-              ) : javascriptEnabled ? (
+              ) : (
                 <>
                   <Heading
                     data-testid="item-table-displaying-text"
@@ -246,11 +240,6 @@ export default function BibPage({
                   </Heading>
                   <ItemTable itemTableData={itemTableData} />
                 </>
-              ) : (
-                <Banner
-                  type="negative"
-                  content="Please enable Javascript to view all items."
-                />
               )}
 
               <ItemTableControls
@@ -261,7 +250,6 @@ export default function BibPage({
                 handlePageChange={handlePageChange}
                 handleViewAllClick={handleViewAllClick}
                 viewAllLoadingTextRef={viewAllLoadingTextRef}
-                javascriptEnabled={javascriptEnabled}
               />
             </Box>
           </>

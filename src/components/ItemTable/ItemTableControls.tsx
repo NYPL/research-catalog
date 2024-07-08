@@ -19,7 +19,6 @@ interface ItemTableControlsProps {
   handlePageChange: (selected: number) => void
   handleViewAllClick: (e: SyntheticEvent) => Promise<void>
   viewAllLoadingTextRef: RefObject<HTMLDivElement & HTMLLabelElement>
-  javascriptEnabled: boolean
 }
 
 /**
@@ -34,7 +33,6 @@ const ItemTableControls = ({
   handlePageChange,
   handleViewAllClick,
   viewAllLoadingTextRef,
-  javascriptEnabled = true,
 }: ItemTableControlsProps) => {
   return (
     <Box display="flex" my="xl" justifyContent="space-between">
@@ -84,7 +82,7 @@ const ItemTableControls = ({
               {bib.itemsViewAllLoadingMessage}
             </Label>
           </Box>
-        ) : !itemsLoading && javascriptEnabled ? (
+        ) : !itemsLoading ? (
           <>
             <RCLink
               href={`${bib.url}${!viewAllExpanded ? "/all" : ""}`}
