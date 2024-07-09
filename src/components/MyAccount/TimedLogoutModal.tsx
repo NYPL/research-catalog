@@ -21,7 +21,7 @@ import styles from "../../../styles/components/TimedLogoutModal.module.scss"
 const TimedLogoutModal = ({
   stayLoggedIn,
   expirationTime,
-  timeoutWindow = 5,
+  timeoutWindow = 2,
 }: {
   expirationTime: string
   stayLoggedIn: () => void
