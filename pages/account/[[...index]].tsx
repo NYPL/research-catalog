@@ -45,6 +45,7 @@ export default function MyAccount({
   const errorRetrievingPatronData = !patron
 
   const [expirationTime, setExpirationTime] = useState("")
+  const [displayLogoutModal, setDisplayLogoutModal] = useState(false)
 
   const resetCountdown = () => {
     const inFive = incrementTime(5)
@@ -55,6 +56,9 @@ export default function MyAccount({
 
   useEffect(() => {
     resetCountdown()
+    // to avoid a reference error on document in the modal, wait to render it
+    // until we are on the client side
+    setDisplayLogoutModal(true)
   })
 
   return (
@@ -64,12 +68,12 @@ export default function MyAccount({
       </Head>
 
       <Layout isAuthenticated={isAuthenticated} activePage="account">
-        {
+        {displayLogoutModal && (
           <TimedLogoutModal
             stayLoggedIn={resetCountdown}
             expirationTime={expirationTime}
           />
-        }
+        )}
         {redirectLoop ? (
           <Text>
             We are unable to display your account information at this time due

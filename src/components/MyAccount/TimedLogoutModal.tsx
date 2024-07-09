@@ -1,5 +1,5 @@
 /* global document */
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import {
   Button,
   Card,
@@ -27,6 +27,7 @@ const TimedLogoutModal = ({
   stayLoggedIn: () => void
   timeoutWindow?: number
 }) => {
+  const [open, setOpen] = useState(false)
   const router = useRouter()
   const redirectUri = useLogoutRedirect()
   const logOutAndRedirect = () => {
@@ -35,16 +36,16 @@ const TimedLogoutModal = ({
     deleteCookie("accountPageExp")
     router.push(redirectUri)
   }
+
   if (!expirationTime) {
     logOutAndRedirect()
   }
   const [timeUntilExpiration, setTimeUntilExpiration] = useState(
     buildTimeLeft(expirationTime)
   )
-  const [open, setOpen] = useState(false)
 
   useEffect(() => {
-    const timeout = setInterval(() => {
+    const timeout = setTimeout(() => {
       const { minutes, seconds } = buildTimeLeft(expirationTime)
       if (minutes < timeoutWindow) setOpen(true)
       setTimeUntilExpiration(() => {
@@ -55,7 +56,7 @@ const TimedLogoutModal = ({
       })
     }, 1000)
     return () => {
-      clearInterval(timeout)
+      clearTimeout(timeout)
     }
   })
 
@@ -65,7 +66,6 @@ const TimedLogoutModal = ({
   if (timeUntilExpiration.minutes <= 0 && timeUntilExpiration.seconds <= 0) {
     logOutAndRedirect()
   }
-
   if (!open) return null
 
   return (
