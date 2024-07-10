@@ -83,6 +83,72 @@ jest.mock("../../nyplApiClient", () => {
         })
       })
     })
+    .mockImplementationOnce(async () => {
+      return await new Promise((resolve) => {
+        resolve({
+          get: jest.fn().mockResolvedValueOnce({
+            items: [{}, {}, {}, {}],
+            status: 200,
+          }),
+        })
+      })
+    })
+    .mockImplementationOnce(async () => {
+      return await new Promise((resolve) => {
+        resolve({
+          get: jest
+            .fn()
+            .mockResolvedValueOnce({
+              numItemsTotal: 0,
+              status: 400,
+            })
+            .mockResolvedValueOnce({
+              items: [],
+              status: 400,
+            }),
+        })
+      })
+    })
+    .mockImplementationOnce(async () => {
+      return await new Promise((resolve) => {
+        resolve({
+          get: jest
+            .fn()
+            .mockResolvedValueOnce({
+              numItemsTotal: 4,
+              status: 200,
+            })
+            .mockResolvedValueOnce({
+              items: [{}, {}],
+              status: 200,
+            })
+            .mockResolvedValueOnce({
+              items: [{}, {}],
+              status: 200,
+            }),
+        })
+      })
+    })
+    .mockImplementationOnce(async () => {
+      return await new Promise((resolve) => {
+        resolve({
+          get: jest
+            .fn()
+            .mockResolvedValueOnce({
+              numItemsTotal: 4,
+              status: 200,
+            })
+            .mockResolvedValueOnce({
+              items: [{}, {}],
+              status: 200,
+            })
+            .mockResolvedValueOnce({
+              items: [],
+              status: 400,
+            }),
+        })
+      })
+    })
 })
 
 describe("fetchBib", () => {

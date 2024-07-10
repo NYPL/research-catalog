@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next"
-import { fetchBib } from "../../../../src/server/api/bib"
+
+import { fetchItems } from "../../../../src/server/api/items"
 
 /**
  * Item fetching route handler for Bib page
@@ -8,9 +9,7 @@ import { fetchBib } from "../../../../src/server/api/bib"
  *
  */
 async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const id = req.query.id as string
-  const { discoveryBibResult, status } = await fetchBib(id, req.query)
-  const items = discoveryBibResult?.items
+  const { status, items } = await fetchItems(req.query)
 
   if (req.method === "GET") {
     if (status !== 200 || !items?.length) {

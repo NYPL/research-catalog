@@ -1,9 +1,9 @@
 import Head from "next/head"
-import { useState, useRef } from "react"
+import type { SyntheticEvent } from "react"
+import { useState, useRef, useEffect } from "react"
 import { useRouter } from "next/router"
 import {
   Heading,
-  Pagination,
   SkeletonLoader,
   Box,
   Banner,
@@ -12,20 +12,24 @@ import {
 import Layout from "../../../src/components/Layout/Layout"
 import {
   PATHS,
-  ITEM_BATCH_SIZE,
   SITE_NAME,
   BASE_URL,
+  FOCUS_TIMEOUT,
 } from "../../../src/config/constants"
+import { appConfig } from "../../../src/config/config"
 import { fetchBib } from "../../../src/server/api/bib"
 import {
-  buildItemTableDisplayingString,
   getBibQueryString,
+  buildItemTableDisplayingString,
   isNyplBibID,
 } from "../../../src/utils/bibUtils"
 import BibDetailsModel from "../../../src/models/BibDetails"
 import ItemTableData from "../../../src/models/ItemTableData"
 import BibDetails from "../../../src/components/BibPage/BibDetail"
 import ItemTable from "../../../src/components/ItemTable/ItemTable"
+import ItemTableControls from "../../../src/components/ItemTable/ItemTableControls"
+import ElectronicResourcesLink from "../../../src/components/SearchResults/ElectronicResourcesLink"
+import ExternalLink from "../../../src/components/Links/ExternalLink/ExternalLink"
 import type {
   DiscoveryBibResult,
   BibQueryParams,
@@ -34,10 +38,7 @@ import type { AnnotatedMarc } from "../../../src/types/bibDetailsTypes"
 import Bib from "../../../src/models/Bib"
 import initializePatronTokenAuth from "../../../src/server/auth"
 import Item from "../../../src/models/Item"
-import type { SearchResultsItem } from "../../../src/types/itemTypes"
-import ElectronicResourcesLink from "../../../src/components/SearchResults/ElectronicResourcesLink"
-import ExternalLink from "../../../src/components/Links/ExternalLink/ExternalLink"
-import { appConfig } from "../../../src/config/config"
+import type { DiscoveryItemResult } from "../../../src/types/itemTypes"
 import type { ParsedUrlQueryInput } from "querystring"
 
 interface BibPropsType {
@@ -45,6 +46,7 @@ interface BibPropsType {
   annotatedMarc: AnnotatedMarc
   isAuthenticated?: boolean
   itemPage?: number
+  viewAllItems?: boolean
 }
 
 /**
@@ -55,17 +57,23 @@ export default function BibPage({
   annotatedMarc,
   isAuthenticated,
   itemPage = 1,
+  viewAllItems = false,
 }: BibPropsType) {
-  const { pathname, push, query } = useRouter()
+  const { push, query } = useRouter()
   const metadataTitle = `Item Details | ${SITE_NAME}`
   const bib = new Bib(discoveryBibResult)
   const displayLegacyCatalogLink = isNyplBibID(bib.id)
 
   const [itemsLoading, setItemsLoading] = useState(false)
   const [itemFetchError, setItemFetchError] = useState(bib.showItemTableError)
+  const [viewAllExpanded, setViewAllExpanded] = useState(viewAllItems)
   const [bibItems, setBibItems] = useState(bib.items)
   const [itemTablePage, setItemTablePage] = useState(itemPage)
+
   const itemTableScrollRef = useRef<HTMLDivElement>(null)
+  const itemTableHeadingRef = useRef<HTMLDivElement>(null)
+  const viewAllLoadingTextRef = useRef<HTMLDivElement & HTMLLabelElement>(null)
+  const controllerRef = useRef<AbortController>()
 
   const { topDetails, bottomDetails, holdingsDetails } = new BibDetailsModel(
     discoveryBibResult,
@@ -76,27 +84,69 @@ export default function BibPage({
     isArchiveCollection: bib.isArchiveCollection,
   })
 
-  const refreshItemTable = async (newQuery: BibQueryParams) => {
+  // Load all items via client-side fetch if page is first loaded with viewAllItems prop passed in
+  // Namely, when the page is accessed with the /all route
+  useEffect(() => {
+    if (viewAllItems) void refreshItemTable(query, true)
+    // Disable eslint exhaustive-deps rule because we only want this to run once on page load
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const refreshItemTable = async (
+    newQuery: BibQueryParams,
+    viewAllItems = false
+  ) => {
     setItemsLoading(true)
     setItemFetchError(false)
+
+    // By default, the Next router query includes the bib id
+    // This prevents it from being added redundantly to the query string
+    delete newQuery.id
+
+    // If viewAllItems is enabled, remove pagination queries
+    if (viewAllItems) {
+      delete newQuery.items_from
+      delete newQuery.item_page
+      delete newQuery.items_size
+    }
+
     await push(
-      { pathname, query: newQuery as ParsedUrlQueryInput },
+      {
+        pathname: `${PATHS.BIB}/${bib.id}${viewAllItems ? "/all" : ""}`,
+        query: newQuery as ParsedUrlQueryInput,
+      },
       undefined,
       {
         shallow: true,
+        scroll: false,
       }
     )
-    const bibQueryString = getBibQueryString(query)
+    const bibQueryString = getBibQueryString(newQuery, false, viewAllItems)
+
+    // Cancel any active fetches on new ItemTable refreshes
+    if (controllerRef.current) {
+      controllerRef.current.abort()
+    }
+    controllerRef.current = new AbortController()
+    const signal = controllerRef.current.signal
+
     const response = await fetch(
-      `${BASE_URL}/api/bib/${bib.id}/items?${bibQueryString}`
+      `${BASE_URL}/api/bib/${bib.id}/items${bibQueryString}`,
+      {
+        method: "get",
+        signal,
+      }
     )
-    if (response.ok) {
+    if (response?.ok) {
       const { items } = await response.json()
-      setBibItems(items.map((item: SearchResultsItem) => new Item(item, bib)))
+      setBibItems(items.map((item: DiscoveryItemResult) => new Item(item, bib)))
       setItemsLoading(false)
       itemTableScrollRef.current?.scrollIntoView({
         behavior: "smooth",
       })
+      setTimeout(() => {
+        itemTableHeadingRef.current?.focus()
+      }, FOCUS_TIMEOUT)
     } else {
       setItemsLoading(false)
       setItemFetchError(true)
@@ -108,6 +158,17 @@ export default function BibPage({
     const newQuery = { ...query, item_page: page }
     if (page === 1) delete newQuery.item_page
     await refreshItemTable(newQuery)
+  }
+
+  const handleViewAllClick = async (e: SyntheticEvent) => {
+    e.preventDefault()
+    setViewAllExpanded((viewAllExpanded) => {
+      refreshItemTable(query, !viewAllExpanded)
+      return !viewAllExpanded
+    })
+    setTimeout(() => {
+      viewAllLoadingTextRef.current?.focus()
+    }, FOCUS_TIMEOUT)
   }
 
   return (
@@ -165,25 +226,30 @@ export default function BibPage({
                 <>
                   <Heading
                     data-testid="item-table-displaying-text"
+                    ref={itemTableHeadingRef}
                     level="h4"
                     size="heading6"
                     mb="s"
+                    tabIndex={-1}
                   >
                     {buildItemTableDisplayingString(
                       itemTablePage,
-                      bib.numPhysicalItems
+                      bib.numPhysicalItems,
+                      viewAllExpanded
                     )}
                   </Heading>
                   <ItemTable itemTableData={itemTableData} />
                 </>
               )}
-              <Pagination
-                id="bib-items-pagination"
-                initialPage={itemTablePage}
-                currentPage={itemTablePage}
-                pageCount={Math.ceil(bib.numPhysicalItems / ITEM_BATCH_SIZE)}
-                onPageChange={handlePageChange}
-                my="xl"
+
+              <ItemTableControls
+                bib={bib}
+                viewAllExpanded={viewAllExpanded}
+                itemsLoading={itemsLoading}
+                itemTablePage={itemTablePage}
+                handlePageChange={handlePageChange}
+                handleViewAllClick={handleViewAllClick}
+                viewAllLoadingTextRef={viewAllLoadingTextRef}
               />
             </Box>
           </>

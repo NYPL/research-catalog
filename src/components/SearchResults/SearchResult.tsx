@@ -43,7 +43,7 @@ const SearchResult = ({ bib }: SearchResultProps) => {
           {bib.materialType && <Text>{bib.materialType}</Text>}
           {bib.publicationStatement && <Text>{bib.publicationStatement}</Text>}
           {bib.yearPublished && <Text>{bib.yearPublished}</Text>}
-          <Text>{bib.itemMessage}</Text>
+          <Text>{bib.numItemsMessage}</Text>
         </Box>
 
         <SimpleGrid columns={1} gap="grid.l">
@@ -72,7 +72,7 @@ const SearchResult = ({ bib }: SearchResultProps) => {
                     fontWeight="medium"
                     type="standalone"
                   >
-                    {`View All ${bib.itemMessage} `}
+                    {`View All ${bib.numItemsMessage} `}
                   </RCLink>
                 </CardActions>
               )}
