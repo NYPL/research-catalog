@@ -1,17 +1,15 @@
-import { kebabCase } from "lodash"
-
 import { Heading, List } from "@nypl/design-system-react-components"
 import styles from "../../../styles/components/BibDetails.module.scss"
 import RCLink from "../Links/RCLink/RCLink"
 import ExternalLink from "../Links/ExternalLink/ExternalLink"
 import type {
-  AnyBibDetail,
   BibDetail,
+  Url,
   LinkedBibDetail,
   SubjectHeadingDetail,
-  Url,
+  AnyBibDetail,
 } from "../../types/bibDetailsTypes"
-import { isItTheLastElement, rtlOrLtr } from "../../utils/bibUtils"
+import { rtlOrLtr, isItTheLastElement } from "../../utils/bibUtils"
 import type { ReactNode } from "react"
 
 interface BibDetailsProps {
@@ -53,7 +51,7 @@ const DetailElement = (label: string, listChildren: ReactNode[]) => {
     <>
       <dt>{label}</dt>
       <dd>
-        <List noStyling data-testid={kebabCase(label)} type="ol">
+        <List noStyling data-testId={label} type="ol">
           {listChildren}
         </List>
       </dd>
@@ -65,7 +63,7 @@ const PlainTextElement = (field: BibDetail) => {
   const values = field?.value?.map((val: string, i: number) => {
     const stringDirection = rtlOrLtr(val)
     return (
-      <li dir={stringDirection} key={`${kebabCase(field.label)}-${i}`}>
+      <li dir={stringDirection} key={`${field}-${i}`}>
         {val}
       </li>
     )
@@ -80,7 +78,7 @@ const CompoundSubjectHeadingElement = (field: SubjectHeadingDetail) => {
     }
   )
   const values = subjectHeadingLinksPerSubject.map((subject, i) => (
-    <li key={`subject-heading-${i}`} data-testid="subject-link-per">
+    <li key={`subject-heading-${i}`} data-testid="subjectLinksPer">
       {subject}
     </li>
   ))
@@ -88,7 +86,7 @@ const CompoundSubjectHeadingElement = (field: SubjectHeadingDetail) => {
 }
 
 const SingleSubjectHeadingElement = (subjectHeadingUrls: Url[]) => {
-  return subjectHeadingUrls.reduce((linksPerSubject, url: Url, index) => {
+  const urls = subjectHeadingUrls.reduce((linksPerSubject, url: Url, index) => {
     const divider = (
       // this span will render as > in between the divided subject heading links
       <span data-testid="divider" key={`divider-${index}`}>
@@ -103,15 +101,14 @@ const SingleSubjectHeadingElement = (subjectHeadingUrls: Url[]) => {
     }
     return linksPerSubject
   }, [] as React.JSX.Element[])
+  return urls
 }
 
 const LinkedDetailElement = (field: LinkedBibDetail) => {
   const internalOrExternal = field.link
   const values = field.value.map((urlInfo: Url, i) => {
     return (
-      <li key={`${kebabCase(field.label)}-${i}`}>
-        {LinkElement(urlInfo, internalOrExternal)}
-      </li>
+      <li key={`${field}-${i}`}>{LinkElement(urlInfo, internalOrExternal)}</li>
     )
   })
   return DetailElement(field.label, values)
