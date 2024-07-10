@@ -74,11 +74,3 @@ const filterButtons = () => {
     formatFilterButton,
   }
 }
-
-const filterHasNotSelected = async (checkboxGroupButton, values: string[]) => {
-  await userEvent.click(checkboxGroupButton)
-  const selectedValues = values.map((label) => screen.getByLabelText(label))
-  selectedValues.forEach((checkbox) => {
-    expect(checkbox).not.toBeChecked()
-  })
-}
