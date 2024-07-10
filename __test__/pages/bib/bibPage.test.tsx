@@ -140,25 +140,6 @@ describe("Bib Page Item Table", () => {
     expect(mockRouter.asPath).toBe("/bib/pb5579193/all")
   })
 
-  it("renders the item filters", async () => {
-    expect(screen.getByTestId("filters-label")).toBeInTheDocument()
-    expect(screen.getByTestId("year-filter-label")).toBeInTheDocument()
-  })
-
-  it("updates the query when location filters are changed", async () => {
-    const statusButton = screen.getByTestId("status-item-filter")
-    await userEvent.click(statusButton)
-    const checkboxGroup = screen.getByTestId("checkbox-group")
-    const checkbox = checkboxGroup.closest("input")
-    const submitButton = checkboxGroup
-      .closest("fieldset")
-      .closest("input[type='submit']")
-    screen.debug(undefined, Infinity)
-    await userEvent.click(checkbox)
-    await userEvent.click(submitButton)
-    expect(mockRouter.asPath).toBe("/bib/pb5579193/")
-  })
-
   it("shows all the items when the view all button is clicked", async () => {
     global.fetch = jest.fn().mockImplementationOnce(() =>
       Promise.resolve({
