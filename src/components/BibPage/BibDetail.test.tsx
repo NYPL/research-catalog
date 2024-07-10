@@ -41,7 +41,7 @@ describe("BibDetail component", () => {
     })
     it("renders multiple values, primaries and orphaned parallels", () => {
       render(<BibDetails details={parallelsBibModel.topDetails} />)
-      const publisherDetails = screen.getByTestId("published-by")
+      const publisherDetails = screen.getByTestId("Published By")
       expect(publisherDetails.children).toHaveLength(3)
     })
   })
@@ -79,7 +79,7 @@ describe("BibDetail component", () => {
       render(<BibDetails details={noParallelsBibModel.bottomDetails} />, {
         wrapper: MemoryRouterProvider,
       })
-      subjectHeadings = screen.getAllByTestId("subject-link-per")
+      subjectHeadings = screen.getAllByTestId("subjectLinksPer")
     })
     it("renders subject link groups per subject literal", () => {
       expect(subjectHeadings).toHaveLength(
