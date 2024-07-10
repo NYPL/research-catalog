@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Add Item Table Filter functionality (SCC-4139)
+- Add Item Filtering functionality (SCC-4139)
 - Add Item Table View All functionality (SCC-4140)
 - Add Item Table pagination and Bib items API route (SCC-4136)
 - Add No DRB Results copy and image to DRBContainer (SCC-4116)
