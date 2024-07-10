@@ -81,7 +81,7 @@ const CompoundSubjectHeadingElement = (field: SubjectHeadingDetail) => {
     }
   )
   const values = subjectHeadingLinksPerSubject.map((subject, i) => (
-    <li key={`subject-heading-${i}`} data-testid="subject-link-per">
+    <li key={`subject-heading-${i}`} data-testid="subject-links-per">
       {subject}
     </li>
   ))
