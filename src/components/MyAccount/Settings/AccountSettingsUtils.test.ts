@@ -5,7 +5,7 @@ import {
   formatPhoneNumber,
 } from "./AccountSettingsUtils"
 import { processedPatron } from "../../../../__test__/fixtures/processedMyAccountData"
-import { formatDate } from "../../../utils/myAccountUtils"
+import { formatDate, formatPatronName } from "../../../utils/myAccountUtils"
 import type { FixedField, Patron } from "../../../types/myAccountTypes"
 
 describe("Account settings utils", () => {
@@ -13,6 +13,14 @@ describe("Account settings utils", () => {
     it("can parse a date", () => {
       const date = "2025-03-28"
       expect(formatDate(date)).toEqual("March 28, 2025")
+    })
+  })
+  describe("formatPatronName", () => {
+    it("correctly formats the patron name when in all caps and comma-separated", () => {
+      expect(formatPatronName("LAST,FIRST")).toEqual("First Last")
+    })
+    it("falls back to the input name when not comma-separated", () => {
+      expect(formatPatronName("QA Tester ILS")).toEqual("QA Tester ILS")
     })
   })
   describe("formatPhoneNumber", () => {
