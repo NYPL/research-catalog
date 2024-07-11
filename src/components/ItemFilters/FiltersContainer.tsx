@@ -154,7 +154,7 @@ const FiltersContainer = ({
             textInputProps={{
               placeholder: "YYYY",
               isClearable: true,
-              labelText: "Item Search",
+              labelText: "Search by year",
               name: "textInputName",
               value: appliedFilters.year[0],
             }}
