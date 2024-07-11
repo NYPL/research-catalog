@@ -85,8 +85,7 @@ export const buildAppliedFiltersTagSetData = (
       if (valueLabel) {
         filters.push({
           label: `${capitalize(field)} > ${valueLabel}`,
-          id: kebabCase(`${field}-${valueLabel}`),
-          iconName: "close",
+          id: filterValue,
         })
       }
     })

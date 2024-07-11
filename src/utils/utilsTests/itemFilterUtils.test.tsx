@@ -115,17 +115,15 @@ describe("Item Filter Utils", () => {
     it("with all filters", () => {
       expect(buildAppliedFiltersTagSetData(query, aggregations)).toStrictEqual([
         {
-          iconName: "close",
           id: "location-offsite",
           label: "Location > Offsite",
         },
-        { iconName: "close", id: "format-text", label: "Format > Text" },
+        { id: "format-text", label: "Format > Text" },
         {
-          iconName: "close",
           id: "status-available",
           label: "Status > Available",
         },
-        { iconName: "close", id: "year-2005", label: "Year > 2005" },
+        { id: "year-2005", label: "Year > 2005" },
       ])
     })
     it("one filter", () => {
@@ -136,12 +134,10 @@ describe("Item Filter Utils", () => {
         )
       ).toStrictEqual([
         {
-          iconName: "close",
           id: "status-available",
           label: "Status > Available",
         },
         {
-          iconName: "close",
           id: "status-not-available",
           label: "Status > Not available",
         },
