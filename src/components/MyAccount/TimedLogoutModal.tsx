@@ -1,6 +1,6 @@
-/* global document */
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useState } from "react"
 import {
+  Box,
   Button,
   Card,
   CardActions,
@@ -69,7 +69,7 @@ const TimedLogoutModal = ({
   if (!open) return null
 
   return (
-    <div
+    <Box
       tabIndex={0}
       className={styles.logoutModalContainer}
       role="dialog"
@@ -88,11 +88,11 @@ const TimedLogoutModal = ({
           size="heading6"
         >
           Your session is about to expire
-          <span>
+          <Box as="span">
             {`${timeUntilExpiration.minutes}:${
               timeUntilExpiration.seconds < 10 ? "0" : ""
             }${timeUntilExpiration.seconds}`}
-          </span>
+          </Box>
         </CardHeading>
         <CardContent>
           <CardActions className={styles.modalButtons}>
@@ -100,7 +100,7 @@ const TimedLogoutModal = ({
             <Button
               buttonType="secondary"
               onClick={logOutAndRedirect}
-              id="logout -button"
+              id="logout-button"
             >
               Log out
             </Button>
@@ -116,7 +116,7 @@ const TimedLogoutModal = ({
           </CardActions>
         </CardContent>
       </Card>
-    </div>
+    </Box>
   )
 }
 

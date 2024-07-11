@@ -19,7 +19,7 @@ import type {
   SierraCodeName,
 } from "../../src/types/myAccountTypes"
 import TimedLogoutModal from "../../src/components/MyAccount/TimedLogoutModal"
-import { incrementTime } from "../../src/utils/cookieUtils"
+import { getIncrementedTime } from "../../src/utils/cookieUtils"
 import { useEffect, useState } from "react"
 interface MyAccountPropsType {
   patron?: Patron
@@ -48,7 +48,7 @@ export default function MyAccount({
   const [displayLogoutModal, setDisplayLogoutModal] = useState(false)
 
   const resetCountdown = () => {
-    const inFive = incrementTime(5)
+    const inFive = getIncrementedTime(5)
     const newExpirationTime = `accountPageExp=${inFive}; expires=${inFive}`
     document.cookie = newExpirationTime
     setExpirationTime(inFive)
