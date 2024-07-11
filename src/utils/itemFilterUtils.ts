@@ -85,6 +85,7 @@ export const buildAppliedFiltersTagSetData = (
       if (valueLabel) {
         filters.push({
           label: `${capitalize(field)} > ${valueLabel}`,
+          // This ID needs to be the filters value to allow for proper clearing of the individual filters
           id: filterValue,
         })
       }
