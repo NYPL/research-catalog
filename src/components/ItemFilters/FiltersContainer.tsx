@@ -22,7 +22,7 @@ import ItemFilter from "./ItemFilter"
 import {
   buildAppliedFiltersTagSetData,
   buildItemFilterQuery,
-  filtersAreApplied,
+  areFiltersApplied,
   removeValueFromFilters,
 } from "../../utils/itemFilterUtils"
 
@@ -61,7 +61,7 @@ const FiltersContainer = ({
 
   const [whichFilterIsOpen, setWhichFilterIsOpen] = useState("")
 
-  const filtersApplied = filtersAreApplied(appliedFilters)
+  const filtersAreApplied = areFiltersApplied(appliedFilters)
 
   const submitFilters = (selectedFilters: string[], field: string) => {
     const newFilters = { ...appliedFilters, [field]: selectedFilters }
@@ -162,7 +162,7 @@ const FiltersContainer = ({
           />
         </Box>
       </Box>
-      {filtersApplied ? (
+      {filtersAreApplied ? (
         <Box display="flex" mr="s" mb="m">
           <Text
             fontSize="body2"

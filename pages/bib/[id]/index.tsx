@@ -41,7 +41,7 @@ import type { ItemFilterQueryParams } from "../../../src/types/filterTypes"
 import type { ParsedUrlQueryInput } from "querystring"
 import {
   parseItemFilterQueryParams,
-  filtersAreApplied,
+  areFiltersApplied,
 } from "../../../src/utils/itemFilterUtils"
 
 interface BibPropsType {
@@ -86,10 +86,12 @@ export default function BibPage({
 
   const displayLegacyCatalogLink = isNyplBibID(bib.id)
 
-  const filtersApplied = filtersAreApplied(appliedFilters)
+  const filtersAreApplied = areFiltersApplied(appliedFilters)
 
   // If filters are applied, show the matching number of items, otherwise show the total number of items
-  const numItems = filtersApplied ? bib.numItemsMatched : bib.numPhysicalItems
+  const numItems = filtersAreApplied
+    ? bib.numItemsMatched
+    : bib.numPhysicalItems
 
   // Load all items via client-side fetch if page is first loaded with viewAllItems prop passed in
   // Namely, when the page is accessed with the /all route
@@ -270,7 +272,7 @@ export default function BibPage({
                       itemTablePage,
                       numItems,
                       viewAllExpanded,
-                      filtersApplied
+                      filtersAreApplied
                     )}
                   </Heading>
                   <ItemTable itemTableData={bib.itemTableData} />
@@ -286,7 +288,7 @@ export default function BibPage({
                 handleViewAllClick={handleViewAllClick}
                 viewAllLoadingTextRef={viewAllLoadingTextRef}
                 numItemsTotal={numItems}
-                filtersApplied={filtersApplied}
+                filtersAreApplied={filtersAreApplied}
               />
             </Box>
           </>

@@ -42,7 +42,7 @@ export const buildItemTableDisplayingString = (
   page: number,
   totalResults: number,
   viewAllItems = false,
-  filtersApplied = false
+  filtersAreApplied = false
 ) => {
   const isPlural = totalResults > 1
   const totalString = totalResults.toLocaleString()
@@ -50,7 +50,7 @@ export const buildItemTableDisplayingString = (
   if (viewAllItems || totalResults <= ITEM_PAGINATION_BATCH_SIZE) {
     return isPlural
       ? `Displaying all ${totalString} ${
-          filtersApplied ? "matching " : ""
+          filtersAreApplied ? "matching " : ""
         }items`
       : "Displaying 1 item"
   }
@@ -62,7 +62,7 @@ export const buildItemTableDisplayingString = (
   )
 
   return `Displaying ${resultsStart}-${resultsEnd} of ${totalResults.toLocaleString()} ${
-    filtersApplied ? "matching " : ""
+    filtersAreApplied ? "matching " : ""
   }item${isPlural ? "s" : ""}`
 }
 

@@ -20,7 +20,7 @@ interface ItemTableControlsProps {
   handleViewAllClick: (e: SyntheticEvent) => Promise<void>
   viewAllLoadingTextRef: RefObject<HTMLDivElement & HTMLLabelElement>
   numItemsTotal?: number
-  filtersApplied?: boolean
+  filtersAreApplied?: boolean
 }
 
 /**
@@ -36,7 +36,7 @@ const ItemTableControls = ({
   handleViewAllClick,
   viewAllLoadingTextRef,
   numItemsTotal = 0,
-  filtersApplied = false,
+  filtersAreApplied = false,
 }: ItemTableControlsProps) => {
   return (
     <Box display="flex" my="xl" justifyContent="space-between">
@@ -60,7 +60,7 @@ const ItemTableControls = ({
           >
             <ProgressIndicator
               id="bib-all-items-loading"
-              labelText={bib.getItemsViewAllLoadingMessage(filtersApplied)}
+              labelText={bib.getItemsViewAllLoadingMessage(filtersAreApplied)}
               size="small"
               indicatorType="circular"
               mr="xs"
@@ -81,7 +81,7 @@ const ItemTableControls = ({
               // @ts-expect-error
               tabIndex={-1}
             >
-              {bib.getItemsViewAllLoadingMessage(filtersApplied)}
+              {bib.getItemsViewAllLoadingMessage(filtersAreApplied)}
             </Label>
           </Box>
         ) : !itemsLoading ? (
@@ -102,7 +102,7 @@ const ItemTableControls = ({
               <Box as="span" mr="xxs">
                 {viewAllExpanded
                   ? "View fewer items"
-                  : `View All ${bib.getNumItemsMessage(filtersApplied)}`}
+                  : `View All ${bib.getNumItemsMessage(filtersAreApplied)}`}
               </Box>
               <Icon
                 iconRotation={viewAllExpanded ? "rotate180" : "rotate0"}

@@ -95,17 +95,17 @@ export default class Bib {
     )
   }
 
-  getNumItemsMessage(filtersApplied = false) {
-    const totalItems = filtersApplied ? this.numItemsMatched : this.numItems
-    return `${totalItems} ${filtersApplied ? "matching " : ""}${
+  getNumItemsMessage(filtersAreApplied = false) {
+    const totalItems = filtersAreApplied ? this.numItemsMatched : this.numItems
+    return `${totalItems} ${filtersAreApplied ? "matching " : ""}${
       this.resourceType
     }${totalItems !== 1 ? "s" : ""}`
   }
 
-  getItemsViewAllLoadingMessage(filtersApplied = false) {
+  getItemsViewAllLoadingMessage(filtersAreApplied = false) {
     // We don't want to show the number of filtered items since this may change during loading.
     return `Loading all ${
-      filtersApplied ? "matching" : this.numPhysicalItems
+      filtersAreApplied ? "matching" : this.numPhysicalItems
     } items. This may take a few moments...`
   }
 
