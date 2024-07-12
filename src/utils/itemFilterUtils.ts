@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-import { capitalize, kebabCase } from "lodash"
 import type { TagSetFilterDataProps } from "@nypl/design-system-react-components"
 
 import type { ItemFilterData } from "../models/ItemFilterData"
@@ -21,22 +19,6 @@ export const combineRecapLocations = (locations: string[]) => {
 
 export const areFiltersApplied = (appliedFilters: AppliedItemFilters) =>
   Object.entries(appliedFilters).some(([, value]) => value.length > 0)
-
-export const parseItemFilterQueryParams = ({
-  item_status,
-  item_format,
-  item_location,
-  item_date,
-}: ItemFilterQueryParams) => {
-  return {
-    location: item_location
-      ? combineRecapLocations(item_location.split(","))
-      : [],
-    format: item_format?.split(",") || [],
-    status: item_status?.split(",") || [],
-    year: item_date?.split(",") || [],
-  }
-}
 
 export const buildItemFilterQuery = (
   { location, format, status, year }: AppliedItemFilters,
@@ -107,4 +89,21 @@ export const removeValueFromFilters = (
     }
   })
   return valuesAndField
+}
+
+/* eslint-disable @typescript-eslint/naming-convention */
+export const parseItemFilterQueryParams = ({
+  item_status,
+  item_format,
+  item_location,
+  item_date,
+}: ItemFilterQueryParams) => {
+  return {
+    location: item_location
+      ? combineRecapLocations(item_location.split(","))
+      : [],
+    format: item_format?.split(",") || [],
+    status: item_status?.split(",") || [],
+    year: item_date?.split(",") || [],
+  }
 }
