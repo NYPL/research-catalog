@@ -1,3 +1,6 @@
+export interface PatronDataContextType extends Patron {
+  updatePatron: () => void
+}
 export interface SierraAccountData {
   checkouts: SierraCheckout[]
   holds: SierraHold[]
