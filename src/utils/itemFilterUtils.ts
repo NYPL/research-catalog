@@ -1,4 +1,5 @@
 import type { TagSetFilterDataProps } from "@nypl/design-system-react-components"
+import { capitalize } from "lodash"
 
 import type { ItemFilterData } from "../models/ItemFilterData"
 import type {
@@ -35,18 +36,6 @@ export const buildItemFilterQuery = (
     ...(status.length && { item_status: status.join(",") }),
     ...(year.length && { item_date: year.join(",") }),
   }
-}
-
-// numItems default is for development purposes only. Once data is being
-// passed in to the Item Filters components, this default should be removed.
-export const buildItemsMatchedStringString = (
-  query: ItemFilterQueryParams,
-  numItemsMatched = 0
-) => {
-  const items = `Item${numItemsMatched === 1 ? "" : "s"}`
-  if (Object.keys(query).length === 0) return `${numItemsMatched} ${items}`
-  const num = numItemsMatched === 0 ? "No" : numItemsMatched
-  return `${num} Matching ${items} `
 }
 
 export const buildAppliedFiltersTagSetData = (
