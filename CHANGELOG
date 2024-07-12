@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 
+- Pass bibDetail test ids as kebabCase (SCC-4150)
 - Refactored bibUtils and removed BibParams type (SCC-4136)
 - Created npm run test-watch-quiet to run tests for changed files without printing the HTML from RTL errors.
 - Update Account Settings notification preference selector to be a controlled component in order to validate based on the selected preference. This includes changing the Patron type that is returned from the My Account model
