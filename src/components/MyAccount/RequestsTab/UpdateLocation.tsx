@@ -14,8 +14,8 @@ import {
 } from "@nypl/design-system-react-components"
 import type { Hold, SierraCodeName } from "../../../types/myAccountTypes"
 import styles from "../../../../styles/components/MyAccount.module.scss"
-import { useState } from "react"
-import { BASE_URL } from "../../../config/constants"
+import { useEffect, useRef, useState } from "react"
+import { BASE_URL, FOCUS_TIMEOUT } from "../../../config/constants"
 
 interface UpdateLocationPropsType {
   hold: Hold
@@ -34,6 +34,9 @@ const UpdateLocation = ({
   pickupLocation,
   key,
 }: UpdateLocationPropsType) => {
+  const selectRef = useRef(null)
+  // this variable is used to help with focus management
+  const [locationUpdated, setLocationUpdated] = useState(false)
   const { Modal, onOpen: openModal, onClose: closeModal } = useModal()
   const locationsWithSelectedFirst = [
     pickupLocation,
@@ -46,6 +49,7 @@ const UpdateLocation = ({
     bodyContent: (
       <Box className={styles.modalBody}>
         <Select
+          ref={selectRef}
           value={selected.code}
           onChange={(e: React.FormEvent<HTMLInputElement>) => {
             const newLocation = locationsWithSelectedFirst.find(
@@ -56,6 +60,7 @@ const UpdateLocation = ({
                 newLocation
               ) as ConfirmationModalProps
             )
+            setLocationUpdated(true)
           }}
           id={`update-location-selector-${key}`}
           labelText="Pickup location"
@@ -174,6 +179,16 @@ const UpdateLocation = ({
     ),
   }
   const buttonLabel = "Change location"
+  useEffect(() => {
+    if (locationUpdated) {
+      setTimeout(() => {
+        console.log(selectRef)
+        selectRef.current.focus()
+        setLocationUpdated(false)
+        console.log(document.activeElement)
+      }, 2000)
+    }
+  }, [locationUpdated])
 
   return (
     <>
