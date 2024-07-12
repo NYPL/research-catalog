@@ -20,7 +20,6 @@ export async function fetchBib(
   bibQuery?: BibQueryParams
 ): Promise<BibResponse> {
   const standardizedId = standardizeBibId(id)
-
   // Redirect to Bib page with standardized version of the Bib ID
   if (id !== standardizedId) {
     return {
@@ -28,7 +27,6 @@ export async function fetchBib(
       redirectUrl: `/bib/${standardizedId}`,
     }
   }
-
   const client = await nyplApiClient({ apiName: DISCOVERY_API_NAME })
   const [bibResponse, annotatedMarcResponse] = await Promise.allSettled([
     await client.get(
@@ -97,7 +95,9 @@ export async function fetchBib(
     if (bibQuery?.view_all_items) {
       discoveryBibResult.items = await fetchAllBibItems(
         bibQuery,
-        discoveryBibResult.numItemsMatched
+        discoveryBibResult.numItemsMatched,
+        // allow control of batch size in query param for testing
+        bibQuery?.batch_size || ITEM_VIEW_ALL_BATCH_SIZE
       )
     }
 
@@ -140,11 +140,10 @@ async function fetchBibSubjectHeadings(bibId: string) {
 async function fetchAllBibItems(
   bibQuery: BibQueryParams,
   numItems: number,
-  batchSize = ITEM_VIEW_ALL_BATCH_SIZE
+  batchSize: number
 ): Promise<DiscoveryItemResult[]> {
   const items: DiscoveryItemResult[] = []
   const client = await nyplApiClient({ apiName: DISCOVERY_API_NAME })
-
   for (
     let batchNum = 1;
     batchNum <= Math.ceil(numItems / batchSize);

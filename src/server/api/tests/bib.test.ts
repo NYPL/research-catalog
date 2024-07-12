@@ -86,25 +86,19 @@ jest.mock("../../nyplApiClient", () => {
     .mockImplementationOnce(async () => {
       return await new Promise((resolve) => {
         resolve({
-          get: jest.fn().mockResolvedValueOnce({
-            items: [{}, {}, {}, {}],
-            status: 200,
-          }),
-        })
-      })
-    })
-    .mockImplementationOnce(async () => {
-      return await new Promise((resolve) => {
-        resolve({
           get: jest
             .fn()
             .mockResolvedValueOnce({
-              numItemsTotal: 0,
-              status: 400,
+              items: Array(20).fill({}),
+              numItemsTotal: 25,
+              numItemsMatched: 25,
+              uri: "b17418167",
             })
             .mockResolvedValueOnce({
-              items: [],
-              status: 400,
+              items: Array(20).fill({}),
+            })
+            .mockResolvedValueOnce({
+              items: Array(5).fill({}),
             }),
         })
       })
@@ -115,15 +109,11 @@ jest.mock("../../nyplApiClient", () => {
           get: jest
             .fn()
             .mockResolvedValueOnce({
-              numItemsTotal: 4,
+              items: Array(20).fill({}),
               status: 200,
             })
             .mockResolvedValueOnce({
-              items: [{}, {}],
-              status: 200,
-            })
-            .mockResolvedValueOnce({
-              items: [{}, {}],
+              items: Array(5).fill({}),
               status: 200,
             }),
         })
@@ -135,17 +125,28 @@ jest.mock("../../nyplApiClient", () => {
           get: jest
             .fn()
             .mockResolvedValueOnce({
-              numItemsTotal: 4,
-              status: 200,
+              items: Array(20).fill({}),
+              numItemsTotal: 25,
+              numItemsMatched: 25,
+              uri: "b17418167",
             })
             .mockResolvedValueOnce({
-              items: [{}, {}],
-              status: 200,
+              items: Array(20).fill({}),
             })
             .mockResolvedValueOnce({
-              items: [],
-              status: 400,
+              items: Array(5).fill({}),
             }),
+        })
+      })
+    })
+    .mockImplementationOnce(async () => {
+      return await new Promise((resolve) => {
+        resolve({
+          get: () => {
+            throw new Error(
+              "There was en error fetching items in one of the batches"
+            )
+          },
         })
       })
     })
@@ -190,5 +191,22 @@ describe("fetchBib", () => {
     await expect(
       async () => (await fetchBib("b17418167")) as BibResponse
     ).rejects.toThrow("Bad API URL")
+  })
+
+  it("should load all the items in batches if view_all_items query param is true", async () => {
+    const bibResponse = (await fetchBib("b17418167", {
+      view_all_items: true,
+      batch_size: 20,
+    })) as BibResponse
+    expect(bibResponse.status).toEqual(200)
+    expect(bibResponse.discoveryBibResult.items.length).toEqual(25)
+  })
+
+  it("should throw an error on view all if one of the batched fetches fails", async () => {
+    const bibResponse = (await fetchBib("b17418167", {
+      view_all_items: true,
+      batch_size: 20,
+    })) as BibResponse
+    expect(bibResponse.status).toEqual(404)
   })
 })

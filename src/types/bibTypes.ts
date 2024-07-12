@@ -86,7 +86,7 @@ export interface BibQueryParams extends ItemFilterQueryParams {
   item_page?: number
   items_size?: number
   items_from?: number
-  view_all_items?: string
+  view_all_items?: boolean
   batch_size?: number
 }
 
