@@ -138,17 +138,16 @@ export default function BibPage({
       }
       controllerRef.current = new AbortController()
       const signal = controllerRef.current.signal
-
       const response = await fetch(
-        `${BASE_URL}/api/bib/${bib.id}/items${bibQueryString}`,
+        `${BASE_URL}/api/bib/${bib.id}${bibQueryString}`,
         {
           method: "get",
           signal,
         }
       )
       if (response?.ok) {
-        const { items, discoveryBibResult } = await response.json()
-        setBib(new Bib({ ...discoveryBibResult, items }))
+        const { discoveryBibResult } = await response.json()
+        setBib(new Bib(discoveryBibResult))
 
         setItemsLoading(false)
         itemTableScrollRef.current?.scrollIntoView({
