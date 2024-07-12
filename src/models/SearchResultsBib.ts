@@ -30,16 +30,6 @@ export default class SearchResultsBib extends Bib {
     return this.numPhysicalItems > ITEMS_PER_SEARCH_RESULT
   }
 
-  get resourceType() {
-    return this.hasPhysicalItems ? "Item" : "Resource"
-  }
-
-  get itemMessage() {
-    return `${this.numItems} ${this.resourceType}${
-      this.numItems !== 1 ? "s" : ""
-    }`
-  }
-
   // Map Bib items to ItemTableData class instances
   // Unlike the Bib Page, a Search Result renders an ItemTable component per Item
   get itemTables(): ItemTableData[] {

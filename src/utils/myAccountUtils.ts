@@ -15,16 +15,20 @@ export const notificationPreferenceTuples = Object.keys(
 /**
  * Formats the patron's name per NYPL guidelines.
  */
-function formatPatronName(name = "") {
+export function formatPatronName(name = "") {
   if (!name) return ""
-
+  if (!name.includes(",")) return name
   const [lastName, firstName] = name.split(",")
   // The name from Sierra is in all caps, so we need to lowercase
   // all but the first letter.
   function capitalize(name: string) {
     return `${name.charAt(0)}${name.slice(1).toLowerCase()}`
   }
-  return `${capitalize(firstName.trim())} ${capitalize(lastName.trim())}`
+  const splitAndCapitalize = (nameSegment) =>
+    nameSegment.split(" ").map(capitalize).join(" ")
+  return `${
+    firstName && splitAndCapitalize(firstName.trim())
+  } ${splitAndCapitalize(lastName.trim())}`
 }
 
 /**
@@ -36,10 +40,9 @@ export function formatDate(date: string | number | Date) {
   // pickup location returns an iso string, but expiration date is YYYY-MM-DD.
   // we need to specify timezone to avoid off by one error.
   // perhaps this method needs to be two methods for the specific cases.
-  if (typeof date === "string" && !date.includes("Z")) date += " GMT-0400"
   const d = new Date(date)
   const year = d.getFullYear()
-  const day = d.getDate()
+  const day = d.getUTCDate()
   const month = d.toLocaleString("default", { month: "long" })
   return `${month} ${day}, ${year}`
 }

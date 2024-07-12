@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add Item Table View All functionality (SCC-4140)
+- Add Item Table pagination and Bib items API route (SCC-4136)
 - Add No DRB Results copy and image to DRBContainer (SCC-4116)
 - Add Bib model parent class and rendered ItemTable in Bib Details (SCC-3964)
 - Add update pickup location functionality to Requests tab in account page (SCC-3930)
@@ -16,6 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 
+- Pass bibDetail test ids as kebabCase (SCC-4150)
+- Refactored bibUtils and removed BibParams type (SCC-4136)
 - Created npm run test-watch-quiet to run tests for changed files without printing the HTML from RTL errors.
 - Update Account Settings notification preference selector to be a controlled component in order to validate based on the selected preference. This includes changing the Patron type that is returned from the My Account model
 - Extracted getEmailParams from Feedback API route and added test (SCC-4032)
@@ -23,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Fixed issue caused by formatPatronName when a non-comma separated value is passed in (SCC-4175)
 - Fixed mobile tabs width on My Account page so text is readable when a user zooms in.
 
 ## Hotfixes 2024-05-22

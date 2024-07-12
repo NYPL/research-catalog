@@ -1,4 +1,4 @@
-import { Table, Text } from "@nypl/design-system-react-components"
+import { Table } from "@nypl/design-system-react-components"
 import styles from "../../../../styles/components/MyAccount.module.scss"
 import type { Fine } from "../../../types/myAccountTypes"
 

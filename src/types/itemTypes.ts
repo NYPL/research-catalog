@@ -1,7 +1,10 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
 // Item structure coming from the Search Results API response
-export interface SearchResultsItem {
+import { AnnotatedMarc } from "./bibDetailsTypes"
+import { DiscoveryBibResult } from "./bibTypes"
+
+export interface DiscoveryItemResult {
   uri?: string
   idNyplSourceId?: ItemSourceID
   accessMessage?: JSONLDValue[]
@@ -36,6 +39,11 @@ export interface ItemMetadata {
   barcode?: string
   callNumber?: string
   bibId?: string
+}
+
+export interface ItemsResponse {
+  items: DiscoveryItemResult[]
+  status: 200 | 400
 }
 
 /* eslint-disable @typescript-eslint/naming-convention */

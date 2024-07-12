@@ -1,7 +1,7 @@
-import type { BibParams, BibResponse } from "../../types/bibTypes"
+import type { BibQueryParams, BibResponse } from "../../types/bibTypes"
 import {
-  getBibQuery,
   isNyplBibID,
+  getBibQueryString,
   standardizeBibId,
 } from "../../utils/bibUtils"
 import nyplApiClient from "../nyplApiClient"
@@ -15,7 +15,7 @@ import logger from "../../../logger"
 
 export async function fetchBib(
   id: string,
-  bibParams?: BibParams
+  bibQuery?: BibQueryParams
 ): Promise<BibResponse> {
   const standardizedId = standardizeBibId(id)
 
@@ -30,12 +30,17 @@ export async function fetchBib(
   const client = await nyplApiClient({ apiName: DISCOVERY_API_NAME })
   const [bibResponse, annotatedMarcResponse] = await Promise.allSettled([
     await client.get(
-      `${DISCOVERY_API_SEARCH_ROUTE}/${getBibQuery(id, bibParams)}`
+      `${DISCOVERY_API_SEARCH_ROUTE}/${standardizedId}${getBibQueryString(
+        bibQuery
+      )}`
     ),
     // Don't fetch annotated-marc for partner records:
-    isNyplBibID(id) &&
+    isNyplBibID(standardizedId) &&
       (await client.get(
-        `${DISCOVERY_API_SEARCH_ROUTE}/${getBibQuery(id, bibParams, true)}`
+        `${DISCOVERY_API_SEARCH_ROUTE}/${standardizedId}.annotated-marc${getBibQueryString(
+          bibQuery,
+          true
+        )}`
       )),
   ])
 
@@ -86,6 +91,7 @@ export async function fetchBib(
         status: 404,
       }
     }
+
     return {
       discoveryBibResult,
       annotatedMarc: annotatedMarc?.bib || null,

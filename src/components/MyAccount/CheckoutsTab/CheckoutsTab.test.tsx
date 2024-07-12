@@ -33,16 +33,16 @@ describe("CheckoutsTab", () => {
     const component = render(
       <CheckoutsTab patron={processedPatron} checkouts={processedCheckouts} />
     )
+    const renewableCheckout = processedCheckouts[0]
+    const row = component.getByText(renewableCheckout.title).closest("tr")
+    const renewButton = within(row).getByText("Renew")
 
-    await userEvent.click(component.getAllByText("Renew")[0])
+    await userEvent.click(renewButton)
 
     expect(fetch).toHaveBeenCalledWith(
-      `/research/research-catalog/api/account/checkouts/renew/${processedCheckouts[0].id}`,
+      `/research/research-catalog/api/account/checkouts/renew/${renewableCheckout.id}`,
       {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({ patronId: processedPatron.id }),
       }
     )
@@ -52,18 +52,16 @@ describe("CheckoutsTab", () => {
     const component = render(
       <CheckoutsTab patron={processedPatron} checkouts={processedCheckouts} />
     )
-    const renewButton = component.getAllByText("Renew")[0]
-    expect(renewButton).not.toBeDisabled()
+    const renewableCheckout = processedCheckouts[0]
+    const row = component.getByText(renewableCheckout.title).closest("tr")
+    const renewButton = within(row).getByText("Renew")
 
     await userEvent.click(renewButton)
 
     expect(fetch).toHaveBeenCalledWith(
-      `/research/research-catalog/api/account/checkouts/renew/${processedCheckouts[0].id}`,
+      `/research/research-catalog/api/account/checkouts/renew/${renewableCheckout.id}`,
       {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({ patronId: processedPatron.id }),
       }
     )
@@ -78,19 +76,16 @@ describe("CheckoutsTab", () => {
     const component = render(
       <CheckoutsTab patron={processedPatron} checkouts={processedCheckouts} />
     )
-    const renewButton = component.getAllByText("Renew")[0]
-
-    expect(renewButton).not.toBeDisabled()
+    const renewableCheckout = processedCheckouts[0]
+    const row = component.getByText(renewableCheckout.title).closest("tr")
+    const renewButton = within(row).getByText("Renew")
 
     await userEvent.click(renewButton)
 
     expect(fetch).toHaveBeenCalledWith(
-      `/research/research-catalog/api/account/checkouts/renew/${processedCheckouts[0].id}`,
+      `/research/research-catalog/api/account/checkouts/renew/${renewableCheckout.id}`,
       {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({ patronId: processedPatron.id }),
       }
     )

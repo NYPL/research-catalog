@@ -1,7 +1,7 @@
 import type { DiscoveryBibResult, ElectronicResource } from "../types/bibTypes"
 import type { JSONLDValue } from "../types/itemTypes"
 import Item from "../models/Item"
-import ItemTableData from "./ItemTableData"
+import { ITEM_PAGINATION_BATCH_SIZE } from "../config/constants"
 
 /**
  * The Bib class represents a single Bib entity and contains the data
@@ -61,20 +61,36 @@ export default class Bib {
     return !this.isOnlyElectronicResources && this.hasPhysicalItems
   }
 
+  // Items should be shown but there are none set in the items attribute
+  // Likely a problem with the pagination offset query in the initial Bib fetch
+  get showItemTableError() {
+    return this.showItemTable && !this.items
+  }
+
+  get showViewAllItemsLink() {
+    return this.numPhysicalItems > ITEM_PAGINATION_BATCH_SIZE
+  }
+
+  get resourceType() {
+    return this.hasPhysicalItems ? "Item" : "Resource"
+  }
+
+  get numItemsMessage() {
+    return `${this.numItems} ${this.resourceType}${
+      this.numItems !== 1 ? "s" : ""
+    }`
+  }
+
+  get itemsViewAllLoadingMessage() {
+    return `Loading all ${this.numPhysicalItems} items. This may take a few moments...`
+  }
+
   // Used to determine the Volume column text in the ItemTable
   get isArchiveCollection() {
     return (
       Array.isArray(this.issuance) &&
       this.issuance.some((issuance) => issuance["@id"] === "urn:biblevel:c")
     )
-  }
-
-  get itemTableData(): ItemTableData {
-    return this.showItemTable && this.items.length
-      ? new ItemTableData(this.items, {
-          isArchiveCollection: this.isArchiveCollection,
-        })
-      : null
   }
 
   getTitleFromResult(result: DiscoveryBibResult) {

@@ -5,7 +5,6 @@ import {
   Icon,
   Button,
   Text,
-  Heading,
 } from "@nypl/design-system-react-components"
 
 import ExternalLink from "../../Links/ExternalLink/ExternalLink"
@@ -94,9 +93,6 @@ const RenewButton = ({
       `${BASE_URL}/api/account/checkouts/renew/${checkout.id}`,
       {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({ patronId: patron.id }),
       }
     )

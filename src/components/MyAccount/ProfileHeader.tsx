@@ -1,4 +1,8 @@
-import { List } from "@nypl/design-system-react-components"
+import {
+  Box,
+  List,
+  useNYPLBreakpoints,
+} from "@nypl/design-system-react-components"
 import Barcode from "react-barcode"
 
 import styles from "../../../styles/components/MyAccount.module.scss"
@@ -8,6 +12,8 @@ import type { IconListElementPropType } from "./IconListElement"
 import { buildListElementsWithIcons } from "./IconListElement"
 
 const ProfileHeader = ({ patron }: { patron: Patron }) => {
+  const { isLargerThanMobile } = useNYPLBreakpoints()
+
   const profileData = (
     [
       { icon: "actionIdentityFilled", term: "Name", description: patron.name },
@@ -20,12 +26,15 @@ const ProfileHeader = ({ patron }: { patron: Patron }) => {
         icon: "",
         term: "",
         description: (
-          <Barcode
-            margin={0}
-            value={patron.barcode}
-            format="codabar"
-            displayValue={false}
-          />
+          <Box role="img" aria-label="barcode">
+            <Barcode
+              margin={0}
+              value={patron.barcode}
+              format="codabar"
+              displayValue={false}
+              width={isLargerThanMobile ? 2 : 1.5}
+            />
+          </Box>
         ),
       },
       {

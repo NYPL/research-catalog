@@ -1,9 +1,4 @@
-import {
-  Icon,
-  Button,
-  ButtonGroup,
-  type TextInputRefType,
-} from "@nypl/design-system-react-components"
+import { Icon, Button, ButtonGroup } from "@nypl/design-system-react-components"
 import type { Dispatch, MutableRefObject } from "react"
 import styles from "../../../../styles/components/MyAccount.module.scss"
 

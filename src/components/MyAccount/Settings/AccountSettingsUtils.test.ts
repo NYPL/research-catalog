@@ -2,9 +2,10 @@ import {
   parseAccountSettingsPayload,
   updatePhoneOrEmailArrayWithNewPrimary,
   buildUpdatedPatronDisplayData,
+  formatPhoneNumber,
 } from "./AccountSettingsUtils"
 import { processedPatron } from "../../../../__test__/fixtures/processedMyAccountData"
-import { formatDate } from "../../../utils/myAccountUtils"
+import { formatDate, formatPatronName } from "../../../utils/myAccountUtils"
 import type { FixedField, Patron } from "../../../types/myAccountTypes"
 
 describe("Account settings utils", () => {
@@ -12,6 +13,31 @@ describe("Account settings utils", () => {
     it("can parse a date", () => {
       const date = "2025-03-28"
       expect(formatDate(date)).toEqual("March 28, 2025")
+    })
+  })
+  describe("formatPatronName", () => {
+    it("correctly formats the patron name when in all caps and comma-separated", () => {
+      expect(formatPatronName("LAST,FIRST")).toEqual("First Last")
+    })
+    it("falls back to the input name when not comma-separated", () => {
+      expect(formatPatronName("QA Tester ILS")).toEqual("QA Tester ILS")
+    })
+    it("can handle an initial", () => {
+      expect(formatPatronName("JOHNSON, LYNDON B")).toEqual("Lyndon B Johnson")
+    })
+  })
+  describe("formatPhoneNumber", () => {
+    it("formats a 10 digit number", () => {
+      const phones = [{ number: "1234567890", type: "t" }]
+      expect(formatPhoneNumber(phones)).toEqual("123-456-7890")
+    })
+    it("formats an 11 digit number", () => {
+      const phones = [{ number: "01234567890", type: "t" }]
+      expect(formatPhoneNumber(phones)).toEqual("0-123-456-7890")
+    })
+    it("returns any other number", () => {
+      const phones = [{ number: "1234567", type: "t" }]
+      expect(formatPhoneNumber(phones)).toEqual("1234567")
     })
   })
   describe("buildUpdatedPatronDisplayData", () => {

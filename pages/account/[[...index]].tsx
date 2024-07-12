@@ -29,11 +29,11 @@ interface MyAccountPropsType {
   isAuthenticated: boolean
   tabsPath?: string
   pickupLocations: SierraCodeName[]
-  redirectLoop?: boolean
+  renderAuthServerError?: boolean
 }
 
 export default function MyAccount({
-  redirectLoop,
+  renderAuthServerError,
   pickupLocations,
   checkouts,
   holds,
@@ -74,7 +74,7 @@ export default function MyAccount({
             expirationTime={expirationTime}
           />
         )}
-        {redirectLoop ? (
+        {renderAuthServerError ? (
           <Text>
             We are unable to display your account information at this time due
             an error with our authentication server. Please contact
@@ -111,13 +111,16 @@ export async function getServerSideProps({ req, res }) {
   const redirectCount = parseInt(redirectTrackerCookie, 10) || 0
   const redirectBasedOnNyplAccountRedirects =
     doRedirectBasedOnNyplAccountRedirects(redirectCount)
+
   // If we end up not authenticated 3 times after redirecting to the login url, don't redirect.
   if (redirectBasedOnNyplAccountRedirects && !isAuthenticated) {
     res.setHeader(
       "Set-Cookie",
-      `nyplAccountRedirects=${redirectCount + 1}; Max-Age=10`
+      `nyplAccountRedirects=${
+        redirectCount + 1
+      }; Max-Age=10; path=/; domain=.nypl.org;`
     )
-    const redirect = getLoginRedirect(req)
+    const redirect = getLoginRedirect(req, "/account")
     return {
       redirect: {
         destination: redirect,
@@ -171,7 +174,7 @@ export async function getServerSideProps({ req, res }) {
         tabsPath,
         isAuthenticated,
         pickupLocations,
-        redirectLoop: !redirectBasedOnNyplAccountRedirects,
+        renderAuthServerError: !redirectBasedOnNyplAccountRedirects,
       },
     }
   } catch (e) {

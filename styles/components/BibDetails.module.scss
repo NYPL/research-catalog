@@ -1,12 +1,13 @@
-@import "../utils/mixins";
-
 .bibDetails {
-  border-bottom: none;
-  dl > dt,
-  dl > dd {
-    border: none;
-  }
+  margin-top: var(--nypl-space-xl) !important;
+
   h3 {
     border: none;
+    margin-bottom: var(--nypl-space-m);
+  }
+  dl dt,
+  dl dd {
+    padding-top: 0;
+    padding-bottom: 0;
   }
 }
