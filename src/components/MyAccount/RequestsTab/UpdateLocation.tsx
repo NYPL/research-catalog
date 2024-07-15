@@ -36,7 +36,7 @@ const UpdateLocation = ({
 }: UpdateLocationPropsType) => {
   const selectRef = useRef(null)
   // this variable is used to help with focus management
-  const [locationUpdated, setLocationUpdated] = useState(false)
+  const [confirmationIsOpen, setConfirmationIsOpen] = useState(false)
   const { Modal, onOpen: openModal, onClose: closeModal } = useModal()
   const locationsWithSelectedFirst = [
     pickupLocation,
@@ -60,7 +60,7 @@ const UpdateLocation = ({
                 newLocation
               ) as ConfirmationModalProps
             )
-            setLocationUpdated(true)
+            setConfirmationIsOpen(true)
           }}
           id={`update-location-selector-${key}`}
           labelText="Pickup location"
@@ -180,15 +180,10 @@ const UpdateLocation = ({
   }
   const buttonLabel = "Change location"
   useEffect(() => {
-    if (locationUpdated) {
-      setTimeout(() => {
-        console.log(selectRef)
-        selectRef.current.focus()
-        setLocationUpdated(false)
-        console.log(document.activeElement)
-      }, 2000)
-    }
-  }, [locationUpdated])
+    setTimeout(() => {
+      if (confirmationIsOpen && selectRef?.current) selectRef.current.focus()
+    }, FOCUS_TIMEOUT)
+  })
 
   return (
     <>
