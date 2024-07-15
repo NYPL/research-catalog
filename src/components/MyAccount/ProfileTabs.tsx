@@ -19,7 +19,7 @@ const ProfileTabs = ({ accountData, activePath }: ProfileTabsPropsType) => {
     {
       label: "Checkouts" + (checkouts ? ` (${checkouts.length})` : ""),
       content: checkouts ? (
-        <CheckoutsTab checkouts={checkouts} patron={patron} />
+        <CheckoutsTab />
       ) : (
         <Text sx={{ mt: "s" }}>
           There was an error accessing your checkouts.
@@ -30,11 +30,7 @@ const ProfileTabs = ({ accountData, activePath }: ProfileTabsPropsType) => {
     {
       label: "Requests" + (holds ? ` (${holds.length})` : ""),
       content: holds ? (
-        <RequestsTab
-          pickupLocations={pickupLocations}
-          holds={holds}
-          patron={patron}
-        />
+        <RequestsTab />
       ) : (
         <Text sx={{ mt: "s" }}>There was an error accessing your requests</Text>
       ),
@@ -51,12 +47,7 @@ const ProfileTabs = ({ accountData, activePath }: ProfileTabsPropsType) => {
       : []),
     {
       label: "Account settings",
-      content: (
-        <AccountSettingsTab
-          pickupLocations={pickupLocations}
-          settingsData={patron}
-        />
-      ),
+      content: <AccountSettingsTab />,
       urlPath: "settings",
     },
   ]

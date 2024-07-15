@@ -6,11 +6,7 @@ import {
 } from "@nypl/design-system-react-components"
 
 import ExternalLink from "../../Links/ExternalLink/ExternalLink"
-import type {
-  Hold,
-  Patron,
-  SierraCodeName,
-} from "../../../types/myAccountTypes"
+import type { Hold } from "../../../types/myAccountTypes"
 import ItemsTab from "../ItemsTab"
 import CancelButton from "./CancelButton"
 import FreezeButton from "./FreezeButton"
@@ -19,16 +15,11 @@ import styles from "../../../../styles/components/MyAccount.module.scss"
 import { useContext } from "react"
 import { PatronDataContext } from "../../../context/PatronDataContext"
 
-const RequestsTab = ({
-  holds,
-  patron,
-  pickupLocations,
-}: {
-  holds: Hold[]
-  patron: Patron
-  pickupLocations: SierraCodeName[]
-}) => {
-  const { patronDataLoading } = useContext(PatronDataContext)
+const RequestsTab = () => {
+  const {
+    patronDataLoading,
+    updatedAccountData: { holds, patron, pickupLocations },
+  } = useContext(PatronDataContext)
   function formatTitleElement(hold: Hold) {
     // If item is research/circ
     if (hold.catalogHref) {

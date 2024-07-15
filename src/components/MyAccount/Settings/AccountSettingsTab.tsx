@@ -7,7 +7,6 @@ import {
   type TextInputRefType,
 } from "@nypl/design-system-react-components"
 import { useContext, useEffect, useRef, useState } from "react"
-import type { Patron, SierraCodeName } from "../../../types/myAccountTypes"
 import styles from "../../../../styles/components/MyAccount.module.scss"
 import AccountSettingsButtons from "./AccountSettingsButtons"
 import {
@@ -21,14 +20,11 @@ import {
 } from "./SuccessAndFailureModalProps"
 import { PatronDataContext } from "../../../context/PatronDataContext"
 
-const AccountSettingsTab = ({
-  settingsData,
-  pickupLocations,
-}: {
-  settingsData: Patron
-  pickupLocations: SierraCodeName[]
-}) => {
-  const { getMostUpdatedSierraAccountData } = useContext(PatronDataContext)
+const AccountSettingsTab = () => {
+  const {
+    getMostUpdatedSierraAccountData,
+    updatedAccountData: { patron, pickupLocations },
+  } = useContext(PatronDataContext)
 
   const [currentlyEditing, setCurrentlyEditing] = useState(false)
   const [modalProps, setModalProps] = useState(null)
@@ -44,12 +40,12 @@ const AccountSettingsTab = ({
   const listElements = currentlyEditing ? (
     <AccountSettingsForm
       firstInputRef={firstInputRef}
-      patron={settingsData}
+      patron={patron}
       setIsFormValid={setIsFormValid}
       pickupLocations={pickupLocations}
     />
   ) : (
-    <AccountSettingsDisplay patron={settingsData} />
+    <AccountSettingsDisplay patron={patron} />
   )
   useEffect(() => {
     if (currentlyEditing) {
@@ -60,9 +56,9 @@ const AccountSettingsTab = ({
   const submitAccountSettings = async (e) => {
     e.preventDefault()
     setIsLoading(true)
-    const payload = parseAccountSettingsPayload(e.target, settingsData)
+    const payload = parseAccountSettingsPayload(e.target, patron)
     const response = await fetch(
-      `/research/research-catalog/api/account/settings/${settingsData.id}`,
+      `/research/research-catalog/api/account/settings/${patron.id}`,
       {
         method: "PUT",
         headers: {
@@ -81,7 +77,6 @@ const AccountSettingsTab = ({
     }
     setIsLoading(false)
   }
-
   return isLoading ? (
     <SkeletonLoader showImage={false} />
   ) : (
@@ -91,8 +86,11 @@ const AccountSettingsTab = ({
           {...{
             ...modalProps,
             onClose: () => {
+              if (modalProps.headingText.toString().includes("successful")) {
+                console.log("spahgeti")
+                getMostUpdatedSierraAccountData()
+              }
               closeModal()
-              getMostUpdatedSierraAccountData()
             },
           }}
         />
