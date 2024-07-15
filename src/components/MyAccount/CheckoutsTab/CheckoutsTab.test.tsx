@@ -74,6 +74,10 @@ describe("CheckoutsTab", () => {
       }
     )
     expect(renewButton).toBeDisabled()
+    // expect account data refresh to have happened
+    expect(fetch).toHaveBeenLastCalledWith(
+      `/research/research-catalog/api/account/${processedPatron.id}`
+    )
   })
 
   it("does not disable button on failed renewal", async () => {
@@ -110,5 +114,11 @@ describe("CheckoutsTab", () => {
     // 1 circ checkout
     const expectedRenewButtons = component.getAllByText("Renew")
     expect(expectedRenewButtons.length).toBe(1)
+  })
+  it("fetches account data after renewing data", () => {
+    const component = renderWithPatronDataContext()
+    const renewableCheckout = processedCheckouts[0]
+    const row = component.getByText(renewableCheckout.title).closest("tr")
+    const renewButton = within(row).getByText("Renew")
   })
 })
