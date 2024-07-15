@@ -223,12 +223,14 @@ describe("MyAccount page", () => {
   it("renders notification banner if user has fines", () => {
     render(
       <MyAccount
-        pickupLocations={filteredPickupLocations}
         isAuthenticated={true}
-        patron={processedPatron}
-        checkouts={processedCheckouts}
-        holds={processedHolds}
-        fines={processedFines}
+        accountData={{
+          checkouts: processedCheckouts,
+          holds: processedHolds,
+          patron: processedPatron,
+          fines: processedFines,
+          pickupLocations: filteredPickupLocations,
+        }}
       />
     )
     const notification = screen.queryByText("You have outstanding fees", {
@@ -240,12 +242,14 @@ describe("MyAccount page", () => {
   it("does not render notification banner if user does not have fines", () => {
     render(
       <MyAccount
-        pickupLocations={filteredPickupLocations}
         isAuthenticated={true}
-        patron={processedPatron}
-        checkouts={processedCheckouts}
-        holds={processedHolds}
-        fines={{ total: 0, entries: [] }}
+        accountData={{
+          pickupLocations: filteredPickupLocations,
+          patron: processedPatron,
+          checkouts: processedCheckouts,
+          holds: processedHolds,
+          fines: { total: 0, entries: [] },
+        }}
       />
     )
     const notification = screen.queryByText("You have outstanding fees", {

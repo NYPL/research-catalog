@@ -17,7 +17,6 @@ import { useContext } from "react"
 import { PatronDataProvider } from "../../src/context/PatronDataContext"
 interface MyAccountPropsType {
   accountData: MyAccountPatronData
-  pickupLocations: SierraCodeName[]
   isAuthenticated: boolean
   tabsPath?: string
   renderAuthServerError?: boolean
@@ -25,7 +24,6 @@ interface MyAccountPropsType {
 
 export default function MyAccount({
   renderAuthServerError,
-  pickupLocations,
   accountData,
   isAuthenticated,
   tabsPath,
@@ -50,7 +48,7 @@ export default function MyAccount({
             Please contact gethelp@nypl.org for assistance.
           </Text>
         ) : (
-          <PatronDataProvider value={{ ...accountData, pickupLocations }}>
+          <PatronDataProvider value={{ ...accountData }}>
             <ProfileContainer tabsPath={tabsPath} />
           </PatronDataProvider>
         )}
