@@ -5,15 +5,17 @@ import AccountSettingsTab from "./Settings/AccountSettingsTab"
 import CheckoutsTab from "./CheckoutsTab/CheckoutsTab"
 import RequestsTab from "./RequestsTab/RequestsTab"
 import FeesTab from "./FeesTab/FeesTab"
-import type { MyAccountPatronData } from "../../types/myAccountTypes"
+import { PatronDataContext } from "../../context/PatronDataContext"
+import { useContext } from "react"
 
 interface ProfileTabsPropsType {
   activePath: string
-  accountData: MyAccountPatronData
 }
 
-const ProfileTabs = ({ accountData, activePath }: ProfileTabsPropsType) => {
-  const { checkouts, holds, fines } = accountData
+const ProfileTabs = ({ activePath }: ProfileTabsPropsType) => {
+  const {
+    updatedAccountData: { checkouts, holds, fines },
+  } = useContext(PatronDataContext)
   // tabsData conditionally includes fines– only when user has total fines more than $0.
   const tabsData = [
     {

@@ -111,8 +111,13 @@ describe("MyAccount page", () => {
     expect(() =>
       render(
         <MyAccount
-          pickupLocations={null}
-          patron={processedPatron}
+          accountData={{
+            pickupLocations: filteredPickupLocations,
+            checkouts: null,
+            holds: null,
+            fines: null,
+            patron: processedPatron,
+          }}
           isAuthenticated={true}
         />
       )
@@ -121,7 +126,13 @@ describe("MyAccount page", () => {
   it("displays an error message when patron is empty", () => {
     render(
       <MyAccount
-        pickupLocations={filteredPickupLocations}
+        accountData={{
+          pickupLocations: filteredPickupLocations,
+          checkouts: null,
+          holds: null,
+          fines: null,
+          patron: null,
+        }}
         isAuthenticated={true}
       />
     )
