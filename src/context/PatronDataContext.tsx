@@ -19,7 +19,6 @@ export const PatronDataProvider = ({
   value: MyAccountPatronData
 }) => {
   const [patronDataLoading, setPatronDataLoading] = useState(false)
-  console.log(patronDataLoading)
   const [updatedAccountData, setUpdatedAccountData] = useState(value)
   const getMostUpdatedSierraAccountData = async () => {
     setPatronDataLoading(true)
@@ -34,6 +33,7 @@ export const PatronDataProvider = ({
   return (
     <PatronDataContext.Provider
       value={{
+        setPatronDataLoading,
         patronDataLoading,
         updatedAccountData,
         getMostUpdatedSierraAccountData,

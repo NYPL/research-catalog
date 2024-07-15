@@ -14,10 +14,7 @@ import {
   AccountSettingsForm,
   AccountSettingsDisplay,
 } from "./AccountSettingsDisplayOptions"
-import {
-  parseAccountSettingsPayload,
-  buildUpdatedPatronDisplayData,
-} from "./AccountSettingsUtils"
+import { parseAccountSettingsPayload } from "./AccountSettingsUtils"
 import {
   successModalProps,
   failureModalProps,

@@ -9,6 +9,7 @@ export interface MyAccountPatronData {
 }
 
 export interface PatronDataContextType {
+  setPatronDataLoading: Dispatch<SetStateAction<boolean>>
   patronDataLoading: boolean
   setUpdatedAccountData: Dispatch<SetStateAction<MyAccountPatronData>>
   updatedAccountData: MyAccountPatronData
