@@ -9,9 +9,11 @@ import { userEvent } from "@testing-library/user-event"
 import { PatronDataProvider } from "../../../context/PatronDataContext"
 import { pickupLocations } from "../../../../__test__/fixtures/rawSierraAccountData"
 
+const accountDataRefreshSpy = jest.fn()
 const renderWithPatronDataContext = () => {
   return render(
     <PatronDataProvider
+      testSpy={accountDataRefreshSpy}
       value={{
         pickupLocations,
         patron: processedPatron,
@@ -24,13 +26,27 @@ const renderWithPatronDataContext = () => {
 }
 
 describe("CheckoutsTab", () => {
-  global.fetch = jest.fn().mockResolvedValue({
-    json: async () => ({ message: "Renewed", status: 200, body: {} }),
-  } as Response)
+  global.fetch = jest.fn().mockImplementation(async (...args) => {
+    if (args.length > 1)
+      return {
+        json: async () => ({ message: "Renewed", status: 200, body: {} }),
+      } as Response
+    else
+      return {
+        json: async () =>
+          JSON.stringify({
+            checkouts: processedCheckouts,
+            patron: processedPatron,
+          }),
+        status: 200,
+      } as Response
+  })
 
   beforeEach(() => {
     window.localStorage.clear()
   })
+
+  afterEach(() => accountDataRefreshSpy.mockReset())
 
   it("renders", () => {
     renderWithPatronDataContext()
@@ -74,10 +90,9 @@ describe("CheckoutsTab", () => {
       }
     )
     expect(renewButton).toBeDisabled()
+    await userEvent.click(component.getByText("OK"))
     // expect account data refresh to have happened
-    expect(fetch).toHaveBeenCalledWith(
-      `/research/research-catalog/api/account/${processedPatron.id}`
-    )
+    expect(accountDataRefreshSpy).toHaveBeenCalled()
   })
 
   it("does not disable button on failed renewal", async () => {
@@ -114,11 +129,5 @@ describe("CheckoutsTab", () => {
     // 1 circ checkout
     const expectedRenewButtons = component.getAllByText("Renew")
     expect(expectedRenewButtons.length).toBe(1)
-  })
-  it("fetches account data after renewing data", () => {
-    const component = renderWithPatronDataContext()
-    const renewableCheckout = processedCheckouts[0]
-    const row = component.getByText(renewableCheckout.title).closest("tr")
-    const renewButton = within(row).getByText("Renew")
   })
 })
