@@ -9,6 +9,7 @@ export interface MyAccountPatronData {
 }
 
 export interface PatronDataContextType {
+  patronDataLoading: boolean
   setUpdatedAccountData: Dispatch<SetStateAction<MyAccountPatronData>>
   updatedAccountData: MyAccountPatronData
   getMostUpdatedSierraAccountData: () => void

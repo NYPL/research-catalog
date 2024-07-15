@@ -1,4 +1,9 @@
-import { Box, StatusBadge, Text } from "@nypl/design-system-react-components"
+import {
+  Box,
+  StatusBadge,
+  Text,
+  SkeletonLoader,
+} from "@nypl/design-system-react-components"
 
 import ExternalLink from "../../Links/ExternalLink/ExternalLink"
 import type {
@@ -11,6 +16,8 @@ import CancelButton from "./CancelButton"
 import FreezeButton from "./FreezeButton"
 import UpdateLocation from "./UpdateLocation"
 import styles from "../../../../styles/components/MyAccount.module.scss"
+import { useContext } from "react"
+import { PatronDataContext } from "../../../context/PatronDataContext"
 
 const RequestsTab = ({
   holds,
@@ -21,6 +28,7 @@ const RequestsTab = ({
   patron: Patron
   pickupLocations: SierraCodeName[]
 }) => {
+  const { patronDataLoading } = useContext(PatronDataContext)
   function formatTitleElement(hold: Hold) {
     // If item is research/circ
     if (hold.catalogHref) {
@@ -87,14 +95,16 @@ const RequestsTab = ({
       </StatusBadge>
     )
   }
-
-  return (
+  const tabDisplay = patronDataLoading ? (
+    <SkeletonLoader showImage={false} />
+  ) : (
     <ItemsTab
       headers={holdsHeaders}
       data={holdsData}
       userAction={"requested"}
     />
   )
+  return tabDisplay
 }
 
 export default RequestsTab

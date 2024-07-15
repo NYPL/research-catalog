@@ -18,20 +18,23 @@ export const PatronDataProvider = ({
   children: ReactNode
   value: MyAccountPatronData
 }) => {
+  const [patronDataLoading, setPatronDataLoading] = useState(false)
+  console.log(patronDataLoading)
   const [updatedAccountData, setUpdatedAccountData] = useState(value)
   const getMostUpdatedSierraAccountData = async () => {
+    setPatronDataLoading(true)
     const resp = await fetch(
       `${BASE_URL}/api/account/${updatedAccountData.patron.id}`
     )
     const data = await resp.json()
-    // setTimeout(() => {
     setUpdatedAccountData(JSON.parse(data))
-    // }, 2000)
+    setPatronDataLoading(false)
   }
 
   return (
     <PatronDataContext.Provider
       value={{
+        patronDataLoading,
         updatedAccountData,
         getMostUpdatedSierraAccountData,
         setUpdatedAccountData,

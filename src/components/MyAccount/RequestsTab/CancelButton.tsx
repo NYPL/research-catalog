@@ -52,6 +52,7 @@ const CancelButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
       onClose: () => {
         // This fetch for updated patron data removes the hold entirely,
         // thereby closing the modal.
+        closeModal()
         getMostUpdatedSierraAccountData()
       },
     }
