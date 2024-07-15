@@ -27,9 +27,9 @@ import {
 
 interface ItemFilterContainerProps {
   itemAggregations: Aggregation[]
-  handleFiltersChange: (newAppliedFilterQuery: ItemFilterQueryParams) => void
-  appliedFilters: AppliedItemFilters
-  filtersAreApplied: boolean
+  handleFiltersChange?: (newAppliedFilterQuery: ItemFilterQueryParams) => void
+  appliedFilters?: AppliedItemFilters
+  filtersAreApplied?: boolean
 }
 
 const FiltersContainer = ({
