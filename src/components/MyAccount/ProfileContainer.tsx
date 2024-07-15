@@ -10,7 +10,7 @@ const ProfileContainer = ({ tabsPath }) => {
     <>
       {updatedAccountData.fines?.total > 0 && <FeesBanner />}
       <ProfileHeader patron={updatedAccountData.patron} />
-      <ProfileTabs accountData={updatedAccountData} activePath={tabsPath} />
+      <ProfileTabs activePath={tabsPath} />
     </>
   )
 }
