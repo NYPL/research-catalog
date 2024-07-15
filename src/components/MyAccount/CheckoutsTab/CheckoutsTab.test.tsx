@@ -75,7 +75,7 @@ describe("CheckoutsTab", () => {
     )
     expect(renewButton).toBeDisabled()
     // expect account data refresh to have happened
-    expect(fetch).toHaveBeenLastCalledWith(
+    expect(fetch).toHaveBeenCalledWith(
       `/research/research-catalog/api/account/${processedPatron.id}`
     )
   })

@@ -14,13 +14,16 @@ export const PatronDataContext = createContext<PatronDataContextType | null>(
 export const PatronDataProvider = ({
   children,
   value,
+  testSpy,
 }: {
   children: ReactNode
   value: MyAccountPatronData
+  testSpy?: () => void
 }) => {
   const [patronDataLoading, setPatronDataLoading] = useState(false)
   const [updatedAccountData, setUpdatedAccountData] = useState(value)
   const getMostUpdatedSierraAccountData = async () => {
+    if (testSpy) testSpy()
     setPatronDataLoading(true)
     const resp = await fetch(
       `${BASE_URL}/api/account/${updatedAccountData.patron.id}`

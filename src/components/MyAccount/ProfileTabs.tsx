@@ -13,7 +13,7 @@ interface ProfileTabsPropsType {
 }
 
 const ProfileTabs = ({ accountData, activePath }: ProfileTabsPropsType) => {
-  const { checkouts, holds, patron, fines, pickupLocations } = accountData
+  const { checkouts, holds, fines } = accountData
   // tabsData conditionally includes fines– only when user has total fines more than $0.
   const tabsData = [
     {
