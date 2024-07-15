@@ -22,20 +22,21 @@ import ItemFilter from "./ItemFilter"
 import {
   buildAppliedFiltersTagSetData,
   buildItemFilterQuery,
-  areFiltersApplied,
   removeValueFromFilters,
 } from "../../utils/itemFilterUtils"
 
 interface ItemFilterContainerProps {
   itemAggregations: Aggregation[]
-  handleFiltersChange?: (newAppliedFilterQuery: ItemFilterQueryParams) => void
-  appliedFilters?: AppliedItemFilters
+  handleFiltersChange: (newAppliedFilterQuery: ItemFilterQueryParams) => void
+  appliedFilters: AppliedItemFilters
+  filtersAreApplied: boolean
 }
 
 const FiltersContainer = ({
   itemAggregations,
   handleFiltersChange,
   appliedFilters = { location: [], format: [], status: [], year: [] },
+  filtersAreApplied = false,
 }: ItemFilterContainerProps) => {
   const { isLargerThanLarge, isLargerThanMedium } = useNYPLBreakpoints()
   const filterGroupClassName = isLargerThanLarge
@@ -60,8 +61,6 @@ const FiltersContainer = ({
   useCloseDropDown(() => setWhichFilterIsOpen(""), ref)
 
   const [whichFilterIsOpen, setWhichFilterIsOpen] = useState("")
-
-  const filtersAreApplied = areFiltersApplied(appliedFilters)
 
   const submitFilters = (selectedFilters: string[], field: string) => {
     const newFilters = { ...appliedFilters, [field]: selectedFilters }
