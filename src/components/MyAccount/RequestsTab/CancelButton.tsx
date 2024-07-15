@@ -49,9 +49,10 @@ const CancelButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
           </>
         </h5>
       ),
-      // Close modal, remove hold from currentHolds so it disappears immediately.
-      onClose: async () => {
-        closeModal()
+      onClose: () => {
+        // This fetch for updated patron data removes the hold entirely,
+        // thereby closing the modal.
+        getMostUpdatedSierraAccountData()
       },
     }
   }
@@ -120,8 +121,6 @@ const CancelButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
           }
         )
         if (response.status == 200) {
-          getMostUpdatedSierraAccountData()
-
           // Open next modal to confirm request has been canceled.
           setModalProps(successModalProps(hold) as DefaultModalProps)
         } else {

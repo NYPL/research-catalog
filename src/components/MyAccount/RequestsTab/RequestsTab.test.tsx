@@ -32,7 +32,6 @@ describe("RequestsTab", () => {
         updateHoldLocation={mockUpdateHoldLocation}
         patron={processedPatron}
         holds={processedHolds}
-        removeHold={mockRemoveHold}
       />
     )
     expect(component.getByText("I want to be spaghetti! / ", { exact: false }))
@@ -45,7 +44,6 @@ describe("RequestsTab", () => {
         updateHoldLocation={mockUpdateHoldLocation}
         patron={processedPatron}
         holds={processedHolds}
-        removeHold={mockRemoveHold}
       />
     )
     const bodyRows = component.getAllByRole("rowgroup")[1]
@@ -59,7 +57,6 @@ describe("RequestsTab", () => {
         updateHoldLocation={mockUpdateHoldLocation}
         patron={processedPatron}
         holds={processedHolds}
-        removeHold={mockRemoveHold}
       />
     )
 
@@ -155,7 +152,6 @@ describe("RequestsTab", () => {
           updateHoldLocation={mockUpdateHoldLocation}
           patron={processedPatron}
           holds={processedHolds}
-          removeHold={mockRemoveHold}
         />
       )
       const numberOfPendingHolds = processedHolds.filter(
@@ -174,7 +170,6 @@ describe("RequestsTab", () => {
         updateHoldLocation={mockUpdateHoldLocation}
         patron={processedPatron}
         holds={processedHolds}
-        removeHold={mockRemoveHold}
       />
     )
     const numberOfFreezableHolds = processedHolds.filter(
@@ -195,7 +190,6 @@ describe("RequestsTab", () => {
         updateHoldLocation={mockUpdateHoldLocation}
         patron={processedPatron}
         holds={processedHolds}
-        removeHold={mockRemoveHold}
       />
     )
     const pendingRequest = processedHolds[2]
@@ -247,7 +241,6 @@ describe("RequestsTab", () => {
         updateHoldLocation={mockUpdateHoldLocation}
         patron={processedPatron}
         holds={processedHolds}
-        removeHold={mockRemoveHold}
       />
     )
     expect(
@@ -272,7 +265,6 @@ describe("RequestsTab", () => {
         updateHoldLocation={mockUpdateHoldLocation}
         patron={processedPatron}
         holds={processedHolds}
-        removeHold={mockRemoveHold}
       />
     )
     const readyRequest = processedHolds[0]
@@ -288,7 +280,6 @@ describe("RequestsTab", () => {
         updateHoldLocation={mockUpdateHoldLocation}
         patron={processedPatron}
         holds={processedHolds}
-        removeHold={mockRemoveHold}
       />
     )
 

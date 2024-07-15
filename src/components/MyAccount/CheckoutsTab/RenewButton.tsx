@@ -48,8 +48,8 @@ const RenewButton = ({
       </h5>
     ),
     onClose: async () => {
-      onClose()
       getMostUpdatedSierraAccountData()
+      onClose()
     },
   }
   const failureModalProps = {

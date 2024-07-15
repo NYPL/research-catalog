@@ -1,28 +1,19 @@
 import { Tabs, Text } from "@nypl/design-system-react-components"
 import { useRouter } from "next/router"
-import { useState } from "react"
 
 import AccountSettingsTab from "./Settings/AccountSettingsTab"
 import CheckoutsTab from "./CheckoutsTab/CheckoutsTab"
 import RequestsTab from "./RequestsTab/RequestsTab"
 import FeesTab from "./FeesTab/FeesTab"
-import type {
-  MyAccountPatronData,
-  SierraCodeName,
-} from "../../types/myAccountTypes"
+import type { MyAccountPatronData } from "../../types/myAccountTypes"
 
 interface ProfileTabsPropsType {
   activePath: string
-  pickupLocations: SierraCodeName[]
   accountData: MyAccountPatronData
 }
 
-const ProfileTabs = ({
-  pickupLocations,
-  accountData,
-  activePath,
-}: ProfileTabsPropsType) => {
-  const { checkouts, holds, patron, fines } = accountData
+const ProfileTabs = ({ accountData, activePath }: ProfileTabsPropsType) => {
+  const { checkouts, holds, patron, fines, pickupLocations } = accountData
   // tabsData conditionally includes fines– only when user has total fines more than $0.
   const tabsData = [
     {

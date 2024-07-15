@@ -6,7 +6,7 @@ import {
   SkeletonLoader,
   type TextInputRefType,
 } from "@nypl/design-system-react-components"
-import { useEffect, useRef, useState } from "react"
+import { useContext, useEffect, useRef, useState } from "react"
 import type { Patron, SierraCodeName } from "../../../types/myAccountTypes"
 import styles from "../../../../styles/components/MyAccount.module.scss"
 import AccountSettingsButtons from "./AccountSettingsButtons"
@@ -22,6 +22,7 @@ import {
   successModalProps,
   failureModalProps,
 } from "./SuccessAndFailureModalProps"
+import { PatronDataContext } from "../../../context/PatronDataContext"
 
 const AccountSettingsTab = ({
   settingsData,
@@ -30,8 +31,9 @@ const AccountSettingsTab = ({
   settingsData: Patron
   pickupLocations: SierraCodeName[]
 }) => {
+  const { getMostUpdatedSierraAccountData } = useContext(PatronDataContext)
+
   const [currentlyEditing, setCurrentlyEditing] = useState(false)
-  const [mostRecentPatronData, setMostRecentPatronData] = useState(settingsData)
   const [modalProps, setModalProps] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -45,12 +47,12 @@ const AccountSettingsTab = ({
   const listElements = currentlyEditing ? (
     <AccountSettingsForm
       firstInputRef={firstInputRef}
-      patron={mostRecentPatronData}
+      patron={settingsData}
       setIsFormValid={setIsFormValid}
       pickupLocations={pickupLocations}
     />
   ) : (
-    <AccountSettingsDisplay patron={mostRecentPatronData} />
+    <AccountSettingsDisplay patron={settingsData} />
   )
   useEffect(() => {
     if (currentlyEditing) {
@@ -61,9 +63,9 @@ const AccountSettingsTab = ({
   const submitAccountSettings = async (e) => {
     e.preventDefault()
     setIsLoading(true)
-    const payload = parseAccountSettingsPayload(e.target, mostRecentPatronData)
+    const payload = parseAccountSettingsPayload(e.target, settingsData)
     const response = await fetch(
-      `/research/research-catalog/api/account/settings/${mostRecentPatronData.id}`,
+      `/research/research-catalog/api/account/settings/${settingsData.id}`,
       {
         method: "PUT",
         headers: {
@@ -73,13 +75,6 @@ const AccountSettingsTab = ({
       }
     )
     if (response.status === 200) {
-      setMostRecentPatronData((prevData) => {
-        return buildUpdatedPatronDisplayData(
-          prevData,
-          payload,
-          e.target.homeLibrary?.value
-        )
-      })
       setCurrentlyEditing(false)
       setModalProps(successModalProps)
       openModal()
@@ -94,7 +89,17 @@ const AccountSettingsTab = ({
     <SkeletonLoader showImage={false} />
   ) : (
     <>
-      {modalProps && <Modal {...{ ...modalProps, onClose: closeModal }} />}
+      {modalProps && (
+        <Modal
+          {...{
+            ...modalProps,
+            onClose: () => {
+              closeModal()
+              getMostUpdatedSierraAccountData()
+            },
+          }}
+        />
+      )}
       <Form
         className={styles.accountSettingsTab}
         id="account-settings-container"
