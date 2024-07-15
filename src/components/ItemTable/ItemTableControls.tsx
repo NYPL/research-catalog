@@ -38,6 +38,9 @@ const ItemTableControls = ({
   numItemsTotal = 0,
   filtersAreApplied = false,
 }: ItemTableControlsProps) => {
+  const viewAllLoadingMessage =
+    bib.getItemsViewAllLoadingMessage(filtersAreApplied)
+
   return (
     <Box display="flex" my="xl" justifyContent="space-between">
       {!viewAllExpanded ? (
@@ -60,7 +63,7 @@ const ItemTableControls = ({
           >
             <ProgressIndicator
               id="bib-all-items-loading"
-              labelText={bib.getItemsViewAllLoadingMessage(filtersAreApplied)}
+              labelText={viewAllLoadingMessage}
               size="small"
               indicatorType="circular"
               mr="xs"
@@ -81,7 +84,7 @@ const ItemTableControls = ({
               // @ts-expect-error
               tabIndex={-1}
             >
-              {bib.getItemsViewAllLoadingMessage(filtersAreApplied)}
+              {viewAllLoadingMessage}
             </Label>
           </Box>
         ) : !itemsLoading ? (
