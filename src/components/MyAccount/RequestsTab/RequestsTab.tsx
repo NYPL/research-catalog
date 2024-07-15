@@ -13,14 +13,10 @@ import UpdateLocation from "./UpdateLocation"
 import styles from "../../../../styles/components/MyAccount.module.scss"
 
 const RequestsTab = ({
-  updateHoldLocation,
-  removeHold,
   holds,
   patron,
   pickupLocations,
 }: {
-  updateHoldLocation
-  removeHold
   holds: Hold[]
   patron: Patron
   pickupLocations: SierraCodeName[]
@@ -52,7 +48,6 @@ const RequestsTab = ({
       <Text>{hold.pickupLocation.name}</Text>
       {!hold.isResearch && hold.status === "REQUEST PENDING" && (
         <UpdateLocation
-          updateHoldLocation={updateHoldLocation}
           pickupLocationOptions={pickupLocations}
           patronId={patron.id}
           hold={hold}
@@ -62,8 +57,6 @@ const RequestsTab = ({
       )}
     </>,
     hold.pickupByDate,
-    /* Passing removeHold() down to the Cancel button so it can remove the hold from
-     * currentHolds */
     hold ? (
       <Box
         sx={{
@@ -72,7 +65,7 @@ const RequestsTab = ({
           flexDirection: { base: "column", md: "row" },
         }}
       >
-        <CancelButton removeHold={removeHold} hold={hold} patron={patron} />
+        <CancelButton hold={hold} patron={patron} />
         {hold.canFreeze && hold.status === "REQUEST PENDING" && (
           <FreezeButton hold={hold} patron={patron} />
         )}

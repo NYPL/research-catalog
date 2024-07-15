@@ -7,50 +7,22 @@ import CheckoutsTab from "./CheckoutsTab/CheckoutsTab"
 import RequestsTab from "./RequestsTab/RequestsTab"
 import FeesTab from "./FeesTab/FeesTab"
 import type {
-  Checkout,
-  Patron,
-  Hold,
-  Fine,
+  MyAccountPatronData,
   SierraCodeName,
 } from "../../types/myAccountTypes"
 
 interface ProfileTabsPropsType {
-  patron: Patron
-  checkouts: Checkout[]
-  holds: Hold[]
-  fines: Fine
   activePath: string
   pickupLocations: SierraCodeName[]
+  accountData: MyAccountPatronData
 }
 
 const ProfileTabs = ({
   pickupLocations,
-  checkouts,
-  holds,
-  patron,
-  fines,
+  accountData,
   activePath,
 }: ProfileTabsPropsType) => {
-  // currentHolds is a copy of the holds local to this component.
-  const [currentHolds, setCurrentHolds] = useState(holds)
-  /* removeHold removes the passed hold from currentHolds, so page doesn't need to
-   * reload for the request to disappear. */
-  function removeHold(hold: Hold) {
-    setCurrentHolds(currentHolds.filter((item) => item.id !== hold.id))
-  }
-  function updateHoldLocation(
-    holdIdToUpdate: string,
-    location: SierraCodeName
-  ) {
-    setCurrentHolds(
-      currentHolds.map((hold) => {
-        if (hold.id === holdIdToUpdate) {
-          hold.pickupLocation = location
-        }
-        return hold
-      })
-    )
-  }
+  const { checkouts, holds, patron, fines } = accountData
   // tabsData conditionally includes fines– only when user has total fines more than $0.
   const tabsData = [
     {
@@ -69,9 +41,7 @@ const ProfileTabs = ({
       content: holds ? (
         <RequestsTab
           pickupLocations={pickupLocations}
-          updateHoldLocation={updateHoldLocation}
-          removeHold={removeHold}
-          holds={currentHolds}
+          holds={holds}
           patron={patron}
         />
       ) : (

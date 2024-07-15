@@ -1,5 +1,17 @@
-export interface PatronDataContextType extends Patron {
-  updatePatron: () => void
+import type { Dispatch, SetStateAction } from "react"
+
+export interface MyAccountPatronData {
+  patron?: Patron
+  checkouts?: Checkout[]
+  holds?: Hold[]
+  fines?: Fine
+  pickupLocations: SierraCodeName[]
+}
+
+export interface PatronDataContextType {
+  setUpdatedAccountData: Dispatch<SetStateAction<MyAccountPatronData>>
+  updatedAccountData: MyAccountPatronData
+  getMostUpdatedSierraAccountData: () => void
 }
 export interface SierraAccountData {
   checkouts: SierraCheckout[]

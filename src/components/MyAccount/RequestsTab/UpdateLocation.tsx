@@ -14,8 +14,9 @@ import {
 } from "@nypl/design-system-react-components"
 import type { Hold, SierraCodeName } from "../../../types/myAccountTypes"
 import styles from "../../../../styles/components/MyAccount.module.scss"
-import { useState } from "react"
+import { useContext, useState } from "react"
 import { BASE_URL } from "../../../config/constants"
+import { PatronDataContext } from "../../../context/PatronDataContext"
 
 interface UpdateLocationPropsType {
   hold: Hold
@@ -23,17 +24,16 @@ interface UpdateLocationPropsType {
   pickupLocationOptions: SierraCodeName[]
   key: number
   patronId: number
-  updateHoldLocation: (holdId: string, location: SierraCodeName) => void
 }
 
 const UpdateLocation = ({
-  updateHoldLocation,
   pickupLocationOptions,
   patronId,
   hold,
   pickupLocation,
   key,
 }: UpdateLocationPropsType) => {
+  const { getMostUpdatedSierraAccountData } = useContext(PatronDataContext)
   const { Modal, onOpen: openModal, onClose: closeModal } = useModal()
   const locationsWithSelectedFirst = [
     pickupLocation,
@@ -135,11 +135,11 @@ const UpdateLocation = ({
       </h5>
     ),
     onClose: () => {
-      updateHoldLocation(hold.id, newLocation)
       setModalProps(
         confirmLocationChangeModalProps(newLocation) as ConfirmationModalProps
       )
       closeModal()
+      getMostUpdatedSierraAccountData()
     },
   })
   const failureModalProps = {

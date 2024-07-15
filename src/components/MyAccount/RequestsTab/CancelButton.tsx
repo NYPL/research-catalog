@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useContext, useState } from "react"
 import type { Hold, Patron } from "../../../types/myAccountTypes"
 import {
   useModal,
@@ -16,17 +16,11 @@ import type {
   ConfirmationModalProps,
   DefaultModalProps,
 } from "@nypl/design-system-react-components"
+import { PatronDataContext } from "../../../context/PatronDataContext"
 
-const CancelButton = ({
-  removeHold,
-  hold,
-  patron,
-}: {
-  removeHold: (hold: Hold) => void
-  hold: Hold
-  patron: Patron
-}) => {
+const CancelButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
   const { onOpen: openModal, onClose: closeModal, Modal } = useModal()
+  const { getMostUpdatedSierraAccountData } = useContext(PatronDataContext)
 
   function successModalProps(hold) {
     return {
@@ -58,7 +52,6 @@ const CancelButton = ({
       // Close modal, remove hold from currentHolds so it disappears immediately.
       onClose: async () => {
         closeModal()
-        removeHold(hold)
       },
     }
   }
@@ -127,6 +120,8 @@ const CancelButton = ({
           }
         )
         if (response.status == 200) {
+          getMostUpdatedSierraAccountData()
+
           // Open next modal to confirm request has been canceled.
           setModalProps(successModalProps(hold) as DefaultModalProps)
         } else {
