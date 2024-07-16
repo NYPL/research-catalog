@@ -155,7 +155,7 @@ const FiltersContainer = ({
               isClearable: true,
               labelText: "Search by year",
               name: "textInputName",
-              value: appliedFilters.year[0],
+              value: appliedFilters.year[0] || "",
             }}
             onSubmit={handleYearSubmit}
           />
