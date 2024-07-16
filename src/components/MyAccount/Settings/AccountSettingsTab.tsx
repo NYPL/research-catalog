@@ -68,6 +68,7 @@ const AccountSettingsTab = () => {
       }
     )
     if (response.status === 200) {
+      await getMostUpdatedSierraAccountData()
       setCurrentlyEditing(false)
       setModalProps(successModalProps)
       openModal()
@@ -85,13 +86,7 @@ const AccountSettingsTab = () => {
         <Modal
           {...{
             ...modalProps,
-            onClose: () => {
-              if (modalProps.headingText.toString().includes("successful")) {
-                console.log("spahgeti")
-                getMostUpdatedSierraAccountData()
-              }
-              closeModal()
-            },
+            onClose: closeModal,
           }}
         />
       )}
