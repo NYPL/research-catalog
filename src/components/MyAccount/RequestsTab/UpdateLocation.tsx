@@ -14,8 +14,9 @@ import {
 } from "@nypl/design-system-react-components"
 import type { Hold, SierraCodeName } from "../../../types/myAccountTypes"
 import styles from "../../../../styles/components/MyAccount.module.scss"
-import { useEffect, useRef, useState } from "react"
+import { useContext, useRef, useState, useEffect } from "react"
 import { BASE_URL, FOCUS_TIMEOUT } from "../../../config/constants"
+import { PatronDataContext } from "../../../context/PatronDataContext"
 
 interface UpdateLocationPropsType {
   hold: Hold
@@ -23,11 +24,9 @@ interface UpdateLocationPropsType {
   pickupLocationOptions: SierraCodeName[]
   key: number
   patronId: number
-  updateHoldLocation: (holdId: string, location: SierraCodeName) => void
 }
 
 const UpdateLocation = ({
-  updateHoldLocation,
   pickupLocationOptions,
   patronId,
   hold,
@@ -37,6 +36,7 @@ const UpdateLocation = ({
   const selectRef = useRef(null)
   // this variable is used to help with focus management
   const [confirmationIsOpen, setConfirmationIsOpen] = useState(false)
+  const { getMostUpdatedSierraAccountData } = useContext(PatronDataContext)
   const { Modal, onOpen: openModal, onClose: closeModal } = useModal()
   const locationsWithSelectedFirst = [
     pickupLocation,
@@ -140,11 +140,11 @@ const UpdateLocation = ({
       </h5>
     ),
     onClose: () => {
-      updateHoldLocation(hold.id, newLocation)
       setModalProps(
         confirmLocationChangeModalProps(newLocation) as ConfirmationModalProps
       )
       closeModal()
+      getMostUpdatedSierraAccountData()
     },
   })
   const failureModalProps = {

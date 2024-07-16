@@ -7,39 +7,24 @@ import initializePatronTokenAuth, {
   getLoginRedirect,
 } from "../../src/server/auth"
 import { MyAccountFactory } from "../../src/models/MyAccount"
-import ProfileTabs from "../../src/components/MyAccount/ProfileTabs"
-import ProfileHeader from "../../src/components/MyAccount/ProfileHeader"
-import FeesBanner from "../../src/components/MyAccount/FeesBanner"
+import ProfileContainer from "../../src/components/MyAccount/ProfileContainer"
 import sierraClient from "../../src/server/sierraClient"
-import type {
-  Patron,
-  Hold,
-  Checkout,
-  Fine,
-  SierraCodeName,
-} from "../../src/types/myAccountTypes"
+import type { MyAccountPatronData } from "../../src/types/myAccountTypes"
+import { PatronDataProvider } from "../../src/context/PatronDataContext"
 interface MyAccountPropsType {
-  patron?: Patron
-  checkouts?: Checkout[]
-  holds?: Hold[]
-  fines?: Fine
+  accountData: MyAccountPatronData
   isAuthenticated: boolean
   tabsPath?: string
-  pickupLocations: SierraCodeName[]
   renderAuthServerError?: boolean
 }
 
 export default function MyAccount({
   renderAuthServerError,
-  pickupLocations,
-  checkouts,
-  holds,
-  patron,
-  fines,
+  accountData,
   isAuthenticated,
   tabsPath,
 }: MyAccountPropsType) {
-  const errorRetrievingPatronData = !patron
+  const errorRetrievingPatronData = !accountData?.patron
   return (
     <>
       <Head>
@@ -59,18 +44,9 @@ export default function MyAccount({
             Please contact gethelp@nypl.org for assistance.
           </Text>
         ) : (
-          <>
-            {fines?.total > 0 && <FeesBanner />}
-            <ProfileHeader patron={patron} />
-            <ProfileTabs
-              pickupLocations={pickupLocations}
-              patron={patron}
-              checkouts={checkouts}
-              holds={holds}
-              fines={fines}
-              activePath={tabsPath}
-            />
-          </>
+          <PatronDataProvider value={{ ...accountData }}>
+            <ProfileContainer tabsPath={tabsPath} />
+          </PatronDataProvider>
         )}
       </Layout>
     </>
@@ -140,13 +116,9 @@ export async function getServerSideProps({ req, res }) {
     }
     return {
       props: {
-        checkouts,
-        holds,
-        patron,
-        fines,
+        accountData: { checkouts, holds, patron, fines, pickupLocations },
         tabsPath,
         isAuthenticated,
-        pickupLocations,
         renderAuthServerError: !redirectBasedOnNyplAccountRedirects,
       },
     }
