@@ -65,7 +65,9 @@ describe("CheckoutsTab", () => {
         body: JSON.stringify({ patronId: processedPatron.id }),
       }
     )
-    expect(renewButton).toBeDisabled()
+    await userEvent.click(component.getByText("OK"))
+    expect(renewButton).toHaveAttribute("aria-disabled", "true")
+    expect(renewButton).toHaveFocus()
   })
 
   it("does not disable button on failed renewal", async () => {
