@@ -12,7 +12,7 @@ import CancelButton from "./CancelButton"
 import FreezeButton from "./FreezeButton"
 import UpdateLocation from "./UpdateLocation"
 import styles from "../../../../styles/components/MyAccount.module.scss"
-import { useContext, useRef } from "react"
+import { useContext, useEffect, useRef } from "react"
 import { PatronDataContext } from "../../../context/PatronDataContext"
 
 const RequestsTab = () => {
@@ -73,6 +73,9 @@ const RequestsTab = () => {
       </Box>
     ) : null,
   ])
+  useEffect(() => {
+    if (tabRef?.current && !patronDataLoading) tabRef.current.focus()
+  }, [patronDataLoading])
 
   function getStatusBadge(status) {
     if (status == "READY FOR PICKUP") {
@@ -96,7 +99,7 @@ const RequestsTab = () => {
       // props.
       // @ts-ignore
       ref={tabRef}
-      data-testid="request-tab"
+      data-testid="requests-tab"
       headers={holdsHeaders}
       data={holdsData}
       userAction={"requested"}

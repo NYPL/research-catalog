@@ -62,10 +62,10 @@ const CancelButton = ({
         // thereby closing the modal.
         closeModal()
         getMostUpdatedSierraAccountData()
-        if (tabRef?.current) {
-          // console.log("current", tabRef.current)
-          tabRef.current.focus()
-        }
+        // if (tabRef?.current) {
+        //   // console.log("current", tabRef.current)
+        //   tabRef.current.focus()
+        // }
       },
     }
   }

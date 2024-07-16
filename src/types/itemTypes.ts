@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
 // Item structure coming from the Search Results API response
-import { AnnotatedMarc } from "./bibDetailsTypes"
-import { DiscoveryBibResult } from "./bibTypes"
 
 export interface DiscoveryItemResult {
   uri?: string
