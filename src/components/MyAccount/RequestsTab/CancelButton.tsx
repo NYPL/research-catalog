@@ -1,4 +1,4 @@
-import { useContext, useState } from "react"
+import { type RefObject, useContext, useState } from "react"
 import type { Hold, Patron } from "../../../types/myAccountTypes"
 import {
   useModal,
@@ -18,7 +18,15 @@ import type {
 } from "@nypl/design-system-react-components"
 import { PatronDataContext } from "../../../context/PatronDataContext"
 
-const CancelButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
+const CancelButton = ({
+  tabRef,
+  hold,
+  patron,
+}: {
+  tabRef: RefObject<HTMLButtonElement>
+  hold: Hold
+  patron: Patron
+}) => {
   const { onOpen: openModal, onClose: closeModal, Modal } = useModal()
   const { getMostUpdatedSierraAccountData } = useContext(PatronDataContext)
 
@@ -54,6 +62,10 @@ const CancelButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
         // thereby closing the modal.
         closeModal()
         getMostUpdatedSierraAccountData()
+        if (tabRef?.current) {
+          // console.log("current", tabRef.current)
+          tabRef.current.focus()
+        }
       },
     }
   }

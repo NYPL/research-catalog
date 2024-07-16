@@ -1,18 +1,13 @@
 import React from "react"
 import { render, screen, within } from "../../../utils/testUtils"
 import {
-  filteredPickupLocations,
-  processedCheckouts,
-  processedFines,
   processedHolds,
   processedPatron,
 } from "../../../../__test__/fixtures/processedMyAccountData"
 import { userEvent } from "@testing-library/user-event"
-import ProfileTabs from "../ProfileTabs"
 import RequestsTab from "./RequestsTab"
 import { PatronDataProvider } from "../../../context/PatronDataContext"
 import { pickupLocations } from "../../../../__test__/fixtures/rawSierraAccountData"
-import { BASE_URL } from "../../../config/constants"
 
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
@@ -242,5 +237,29 @@ describe("RequestsTab", () => {
 
     expect(confirmedRequestRow).toHaveTextContent("REQUEST CONFIRMED")
     expect(confirmedRequestRow).not.toHaveTextContent("Freeze")
+  })
+  it("should focus on the holds table after successfully canceling a request", async () => {
+    global.fetch = jest
+      .fn()
+      .mockResolvedValueOnce({
+        json: async () => "Canceled",
+        status: 200,
+      } as Response)
+      .mockResolvedValueOnce({
+        json: async () =>
+          JSON.stringify({
+            patron: { id: 123 },
+            holds: processedHolds,
+            pickupLocations,
+          }),
+        status: 200,
+      } as Response)
+    const component = renderWithPatronDataContext()
+
+    await userEvent.click(component.getAllByText("Cancel request")[0])
+    await userEvent.click(component.getAllByText("Yes, cancel request")[0])
+
+    await userEvent.click(component.getAllByText("OK")[0])
+    expect(component.baseElement).toHaveFocus()
   })
 })

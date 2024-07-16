@@ -3,12 +3,15 @@ import { Box, Icon, Table } from "@nypl/design-system-react-components"
 import ExternalLink from "../Links/ExternalLink/ExternalLink"
 import styles from "../../../styles/components/MyAccount.module.scss"
 import { appConfig } from "../../config/config"
+import type { LegacyRef, MutableRefObject, RefObject } from "react"
 
 const ItemsTab = ({
+  // ref,
   headers,
   data,
   userAction,
 }: {
+  // ref: LegacyRef<HTMLDivElement>
   headers: string[]
   data: any[]
   userAction: "requested" | "checked out"

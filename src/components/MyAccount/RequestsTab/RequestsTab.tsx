@@ -12,10 +12,12 @@ import CancelButton from "./CancelButton"
 import FreezeButton from "./FreezeButton"
 import UpdateLocation from "./UpdateLocation"
 import styles from "../../../../styles/components/MyAccount.module.scss"
-import { useContext, useEffect } from "react"
+import { useContext, useRef } from "react"
 import { PatronDataContext } from "../../../context/PatronDataContext"
 
 const RequestsTab = () => {
+  const tabRef = useRef(null)
+
   const {
     patronDataLoading,
     updatedAccountData: { holds, patron, pickupLocations },
@@ -64,7 +66,7 @@ const RequestsTab = () => {
           flexDirection: { base: "column", md: "row" },
         }}
       >
-        <CancelButton hold={hold} patron={patron} />
+        <CancelButton tabRef={tabRef} hold={hold} patron={patron} />
         {hold.canFreeze && hold.status === "REQUEST PENDING" && (
           <FreezeButton hold={hold} patron={patron} />
         )}
@@ -90,6 +92,11 @@ const RequestsTab = () => {
     <SkeletonLoader showImage={false} />
   ) : (
     <ItemsTab
+      // this element needs a ref, but it doesn't need to be defined on the
+      // props.
+      // @ts-ignore
+      ref={tabRef}
+      data-testid="request-tab"
       headers={holdsHeaders}
       data={holdsData}
       userAction={"requested"}
