@@ -77,5 +77,10 @@ describe("bibUtils", () => {
         "Displaying all 300 items"
       )
     })
+    it("returns the correct item table heading for when filters are applied and there are no matching items", () => {
+      expect(buildItemTableDisplayingString(1, 0, false, true)).toBe(
+        "No results found matching the applied filters"
+      )
+    })
   })
 })
