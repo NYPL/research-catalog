@@ -24,9 +24,11 @@ export function formatPatronName(name = "") {
   function capitalize(name: string) {
     return `${name.charAt(0)}${name.slice(1).toLowerCase()}`
   }
-  return `${firstName && capitalize(firstName.trim())} ${capitalize(
-    lastName.trim()
-  )}`
+  const splitAndCapitalize = (nameSegment) =>
+    nameSegment.split(" ").map(capitalize).join(" ")
+  return `${
+    firstName && splitAndCapitalize(firstName.trim())
+  } ${splitAndCapitalize(lastName.trim())}`
 }
 
 /**
