@@ -68,15 +68,12 @@ export default class Bib {
   }
 
   get itemTableData() {
-    return new ItemTableData(this.items, {
-      isArchiveCollection: this.isArchiveCollection,
-    })
-  }
-
-  // Items should be shown but there are none set in the items attribute
-  // Likely a problem with the pagination offset query in the initial Bib fetch
-  get showItemTableError() {
-    return this.showItemTable && !this.items
+    return (
+      this.items?.length &&
+      new ItemTableData(this.items, {
+        isArchiveCollection: this.isArchiveCollection,
+      })
+    )
   }
 
   get showViewAllItemsLink() {

@@ -47,6 +47,7 @@ export const buildItemTableDisplayingString = (
   const isPlural = totalResults > 1
   const totalString = totalResults.toLocaleString()
 
+  if (!totalResults) return "No items found"
   if (viewAllItems || totalResults <= ITEM_PAGINATION_BATCH_SIZE) {
     return isPlural
       ? `Displaying all ${totalString} ${

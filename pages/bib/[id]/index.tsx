@@ -67,7 +67,7 @@ export default function BibPage({
 
   const [bib, setBib] = useState(new Bib(discoveryBibResult))
   const [itemsLoading, setItemsLoading] = useState(false)
-  const [itemFetchError, setItemFetchError] = useState(bib.showItemTableError)
+  const [itemFetchError, setItemFetchError] = useState(false)
   const [viewAllExpanded, setViewAllExpanded] = useState(viewAllItems)
   const [appliedFilters, setAppliedFilters] = useState(
     parseItemFilterQueryParams(query)
@@ -275,21 +275,24 @@ export default function BibPage({
                       filtersAreApplied
                     )}
                   </Heading>
-                  <ItemTable itemTableData={bib.itemTableData} />
+                  {bib.itemTableData ? (
+                    <ItemTable itemTableData={bib.itemTableData} />
+                  ) : null}
                 </>
               )}
-
-              <ItemTableControls
-                bib={bib}
-                viewAllExpanded={viewAllExpanded}
-                itemsLoading={itemsLoading}
-                itemTablePage={itemTablePage}
-                handlePageChange={handlePageChange}
-                handleViewAllClick={handleViewAllClick}
-                viewAllLoadingTextRef={viewAllLoadingTextRef}
-                numItemsTotal={numItems}
-                filtersAreApplied={filtersAreApplied}
-              />
+              {bib.itemTableData ? (
+                <ItemTableControls
+                  bib={bib}
+                  viewAllExpanded={viewAllExpanded}
+                  itemsLoading={itemsLoading}
+                  itemTablePage={itemTablePage}
+                  handlePageChange={handlePageChange}
+                  handleViewAllClick={handleViewAllClick}
+                  viewAllLoadingTextRef={viewAllLoadingTextRef}
+                  numItemsTotal={numItems}
+                  filtersAreApplied={filtersAreApplied}
+                />
+              ) : null}
             </Box>
           </>
         ) : null}
