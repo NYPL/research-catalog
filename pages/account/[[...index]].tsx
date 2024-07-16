@@ -9,11 +9,7 @@ import initializePatronTokenAuth, {
 import { MyAccountFactory } from "../../src/models/MyAccount"
 import ProfileContainer from "../../src/components/MyAccount/ProfileContainer"
 import sierraClient from "../../src/server/sierraClient"
-import type {
-  MyAccountPatronData,
-  SierraCodeName,
-} from "../../src/types/myAccountTypes"
-import { useContext } from "react"
+import type { MyAccountPatronData } from "../../src/types/myAccountTypes"
 import { PatronDataProvider } from "../../src/context/PatronDataContext"
 interface MyAccountPropsType {
   accountData: MyAccountPatronData
@@ -120,10 +116,9 @@ export async function getServerSideProps({ req, res }) {
     }
     return {
       props: {
-        accountData: { checkouts, holds, patron, fines },
+        accountData: { checkouts, holds, patron, fines, pickupLocations },
         tabsPath,
         isAuthenticated,
-        pickupLocations,
         renderAuthServerError: !redirectBasedOnNyplAccountRedirects,
       },
     }

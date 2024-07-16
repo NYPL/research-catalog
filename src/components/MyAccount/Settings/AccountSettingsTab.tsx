@@ -25,7 +25,6 @@ const AccountSettingsTab = () => {
     getMostUpdatedSierraAccountData,
     updatedAccountData: { patron, pickupLocations },
   } = useContext(PatronDataContext)
-
   const [currentlyEditing, setCurrentlyEditing] = useState(false)
   const [modalProps, setModalProps] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
