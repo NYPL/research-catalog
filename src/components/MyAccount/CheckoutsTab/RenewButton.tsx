@@ -19,7 +19,6 @@ const RenewButton = ({
   checkout: Checkout
   patron: Patron
 }) => {
-  const renewButtonRef = useRef(null)
   const [isButtonDisabled, setButtonDisabled] = useState(false)
   const { onOpen, onClose, Modal } = useModal()
   const [modalProps, setModalProps] = useState(null)
@@ -47,7 +46,6 @@ const RenewButton = ({
       </h5>
     ),
     onClose: () => {
-      renewButtonRef.current.focus()
       onClose()
     },
   }
@@ -116,7 +114,6 @@ const RenewButton = ({
   return (
     <>
       <Button
-        ref={renewButtonRef}
         sx={{
           width: "100%",
         }}
