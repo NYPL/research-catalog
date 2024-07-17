@@ -37,7 +37,8 @@ const UpdateLocation = ({
   const updateLocationButtonRef = useRef(null)
   // this variable is used to help with focus management
   const [confirmationIsOpen, setConfirmationIsOpen] = useState(false)
-  const [focusOnChangeLocationButton, setFocusOnChangeButton] = useState(false)
+  const [focusOnChangeLocationButton, setFocusOnChangeLocationButton] =
+    useState(false)
 
   const { getMostUpdatedSierraAccountData, patronDataLoading } =
     useContext(PatronDataContext)
@@ -149,6 +150,7 @@ const UpdateLocation = ({
       )
       closeModal()
       getMostUpdatedSierraAccountData()
+      setFocusOnChangeLocationButton(true)
     },
   })
   const failureModalProps = {
@@ -192,9 +194,11 @@ const UpdateLocation = ({
   })
 
   useEffect(() => {
-    if (!patronDataLoading && updateLocationButtonRef?.current)
+    if (focusOnChangeLocationButton) {
+      console.log("focus on updatelocation ref")
       updateLocationButtonRef.current.focus()
-  })
+    }
+  }, [focusOnChangeLocationButton])
 
   return (
     <>
