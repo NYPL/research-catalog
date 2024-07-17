@@ -1,6 +1,9 @@
 import { type SyntheticEvent, useRef, useState } from "react"
 import React from "react"
 import {
+  FilterBarInline,
+  MultiSelectGroup,
+  MultiSelect,
   SearchBar,
   Box,
   useCloseDropDown,
@@ -99,8 +102,39 @@ const FiltersContainer = ({
     submitFilters([year], "year")
   }
 
+  const multiSelectItems = [
+    { id: "first", name: "Name", items: [{ id: "first", name: "First" }] },
+  ]
+
+  const selectedItems = {}
+
   return (
     <>
+      <FilterBarInline
+        renderChildren={() => (
+          <MultiSelectGroup
+            id="item-filters"
+            labelText="Filter by"
+            renderMultiSelect={() => {
+              return multiSelectItems.map((multiSelect) => (
+                <MultiSelect
+                  buttonText={multiSelect.name}
+                  id={multiSelect.id}
+                  items={multiSelect.items}
+                  key={multiSelect.id}
+                  onChange={(e) => {
+                    console.log(e.target.value)
+                  }}
+                  onClear={() => {
+                    console.log(multiSelect.id)
+                  }}
+                  selectedItems={selectedItems}
+                />
+              ))
+            }}
+          />
+        )}
+      />
       <Box
         className={styles.filtersContainer}
         sx={{
