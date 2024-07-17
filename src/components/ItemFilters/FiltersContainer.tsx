@@ -1,4 +1,4 @@
-import { type SyntheticEvent, useRef, useState } from "react"
+import { type SyntheticEvent, useRef, useState, useEffect } from "react"
 import React from "react"
 import {
   FilterBarInline,
@@ -101,6 +101,10 @@ const FiltersContainer = ({
     const year = e.target[0].value
     submitFilters([year], "year")
   }
+
+  useEffect(() => {
+    console.log(appliedFilters)
+  }, [appliedFilters])
 
   const multiSelectItems = [
     {
