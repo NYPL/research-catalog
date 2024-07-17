@@ -3,14 +3,15 @@ import { Box, Icon, Table } from "@nypl/design-system-react-components"
 import ExternalLink from "../Links/ExternalLink/ExternalLink"
 import styles from "../../../styles/components/MyAccount.module.scss"
 import { appConfig } from "../../config/config"
+import type { LegacyRef } from "react"
 
 const ItemsTab = ({
-  // ref,
+  tabRef,
   headers,
   data,
   userAction,
 }: {
-  // ref: LegacyRef<HTMLDivElement>
+  tabRef: LegacyRef<HTMLDivElement>
   headers: string[]
   data: any[]
   userAction: "requested" | "checked out"
@@ -18,11 +19,15 @@ const ItemsTab = ({
   return (
     <>
       {data?.length === 0 && (
-        <Box className={styles.notification}>
+        <Box ref={tabRef} className={styles.notification}>
           <span>You currently do not have any items {userAction}.</span>
         </Box>
       )}
-      <Box className={styles.notificationWithIcon}>
+      <Box
+        ref={tabRef}
+        data-testid="requests-tab"
+        className={styles.notificationWithIcon}
+      >
         <Icon size="medium" name="errorOutline" iconRotation="rotate180" />{" "}
         <span>
           See{" "}

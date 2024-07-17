@@ -34,9 +34,11 @@ const UpdateLocation = ({
   key,
 }: UpdateLocationPropsType) => {
   const selectRef = useRef(null)
+  const updateLocationButtonRef = useRef(null)
   // this variable is used to help with focus management
   const [confirmationIsOpen, setConfirmationIsOpen] = useState(false)
-  const { getMostUpdatedSierraAccountData } = useContext(PatronDataContext)
+  const { getMostUpdatedSierraAccountData, patronDataLoading } =
+    useContext(PatronDataContext)
   const { Modal, onOpen: openModal, onClose: closeModal } = useModal()
   const locationsWithSelectedFirst = [
     pickupLocation,
@@ -179,15 +181,23 @@ const UpdateLocation = ({
     ),
   }
   const buttonLabel = "Change location"
+
+  // keep focus on the selector while the selector modal is open
   useEffect(() => {
     setTimeout(() => {
       if (confirmationIsOpen && selectRef?.current) selectRef.current.focus()
     }, FOCUS_TIMEOUT)
   })
 
+  useEffect(() => {
+    if (!patronDataLoading && updateLocationButtonRef?.current)
+      updateLocationButtonRef.current.focus()
+  })
+
   return (
     <>
       <Button
+        ref={updateLocationButtonRef}
         aria-label={`${buttonLabel} for ${hold.title}`}
         size="small"
         pl={0}

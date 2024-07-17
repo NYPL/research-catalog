@@ -74,7 +74,10 @@ const RequestsTab = () => {
     ) : null,
   ])
   useEffect(() => {
-    if (tabRef?.current && !patronDataLoading) tabRef.current.focus()
+    if (tabRef?.current && !patronDataLoading) {
+      console.log("focus")
+      tabRef.current.focus()
+    }
   }, [patronDataLoading])
 
   function getStatusBadge(status) {
@@ -95,16 +98,13 @@ const RequestsTab = () => {
     <SkeletonLoader showImage={false} />
   ) : (
     <ItemsTab
-      // this element needs a ref, but it doesn't need to be defined on the
-      // props.
-      // @ts-ignore
-      ref={tabRef}
-      data-testid="requests-tab"
+      tabRef={tabRef}
       headers={holdsHeaders}
       data={holdsData}
       userAction={"requested"}
     />
   )
+
   return tabDisplay
 }
 
