@@ -19,7 +19,7 @@ import type {
 import { PatronDataContext } from "../../../context/PatronDataContext"
 
 const CancelButton = ({
-  tabRef,
+  setFocusOnRequestTab,
   hold,
   patron,
 }: {
@@ -57,13 +57,10 @@ const CancelButton = ({
           </>
         </h5>
       ),
-      onClose: () => {
+      onClose: async () => {
         closeModal()
-        getMostUpdatedSierraAccountData()
-        // if (tabRef?.current) {
-        //   // console.log("current", tabRef.current)
-        //   tabRef.current.focus()
-        // }
+        await getMostUpdatedSierraAccountData()
+        setFocusOnRequestTab(true)
       },
     }
   }
