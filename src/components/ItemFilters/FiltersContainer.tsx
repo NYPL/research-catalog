@@ -103,7 +103,21 @@ const FiltersContainer = ({
   }
 
   const multiSelectItems = [
-    { id: "first", name: "Name", items: [{ id: "first", name: "First" }] },
+    {
+      id: "location",
+      name: "Location",
+      items: [{ id: "first", name: "First" }],
+    },
+    {
+      id: "format",
+      name: "Format",
+      items: [{ id: "first", name: "First" }],
+    },
+    {
+      id: "status",
+      name: "Status",
+      items: [{ id: "first", name: "First" }],
+    },
   ]
 
   const selectedItems = {}
@@ -111,28 +125,59 @@ const FiltersContainer = ({
   return (
     <>
       <FilterBarInline
+        id="item-filters-container"
+        p="s"
+        width="full"
+        layout="row"
+        bg="ui.gray.x-light-cool"
+        sx={{ fieldset: { lg: { width: "50%" } } }}
         renderChildren={() => (
-          <MultiSelectGroup
-            id="item-filters"
-            labelText="Filter by"
-            renderMultiSelect={() => {
-              return multiSelectItems.map((multiSelect) => (
-                <MultiSelect
-                  buttonText={multiSelect.name}
-                  id={multiSelect.id}
-                  items={multiSelect.items}
-                  key={multiSelect.id}
-                  onChange={(e) => {
-                    console.log(e.target.value)
-                  }}
-                  onClear={() => {
-                    console.log(multiSelect.id)
-                  }}
-                  selectedItems={selectedItems}
-                />
-              ))
-            }}
-          />
+          <>
+            <MultiSelectGroup
+              id="item-filters"
+              labelText="Filter by"
+              renderMultiSelect={() => {
+                return multiSelectItems.map((multiSelect) => (
+                  <MultiSelect
+                    buttonText={multiSelect.name}
+                    id={multiSelect.id}
+                    items={multiSelect.items}
+                    key={multiSelect.id}
+                    width="fitContent"
+                    __css={{ flex: 1 }}
+                    onChange={(e) => {
+                      console.log(e.target.value)
+                    }}
+                    onClear={() => {
+                      console.log(multiSelect.id)
+                    }}
+                    selectedItems={selectedItems}
+                  />
+                ))
+              }}
+            />
+            <Box className={filterGroupClassName} minWidth={440}>
+              <Label
+                id="year-filter-label"
+                htmlFor="year-filter"
+                data-testid="year-filter-label"
+              >
+                Search by Year
+              </Label>
+              <SearchBar
+                id="year-filter"
+                labelText="Apply"
+                textInputProps={{
+                  placeholder: "YYYY",
+                  isClearable: true,
+                  labelText: "Search by year",
+                  name: "textInputName",
+                  value: appliedFilters.year[0] || "",
+                }}
+                onSubmit={handleYearSubmit}
+              />
+            </Box>
+          </>
         )}
       />
       <Box
