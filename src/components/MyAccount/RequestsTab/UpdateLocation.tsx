@@ -39,8 +39,6 @@ const UpdateLocation = ({
 
   const [focusOnChangeLocationButton, setFocusOnChangeLocationButton] =
     useState(false)
-  const [selectedPickupLocation, setSelectedPickupLocation] =
-    useState(pickupLocation)
 
   const { getMostUpdatedSierraAccountData } = useContext(PatronDataContext)
   const { Modal, onOpen: openModal, onClose: closeModal } = useModal()
@@ -52,7 +50,9 @@ const UpdateLocation = ({
     ),
   ]
   const handleSubmit = async () => {
-    setSelectedPickupLocation(selectRef.current.value)
+    const newLocation = pickupLocationOptions.find(
+      (loc) => loc.code === selectRef.current.value
+    )
     setModalProps({
       ...confirmLocationChangeModalProps,
       bodyContent: <SkeletonLoader showImage={false} />,
@@ -68,9 +68,10 @@ const UpdateLocation = ({
       }
     )
     if (response.status == 200) {
-      setModalProps(successModalProps as DefaultModalProps)
+      setModalProps(successModalProps(newLocation) as DefaultModalProps)
     } else setModalProps(failureModalProps as DefaultModalProps)
   }
+
   const confirmLocationChangeModalProps = {
     type: "default",
     bodyContent: (
@@ -81,7 +82,7 @@ const UpdateLocation = ({
         <FormField>
           <Select
             ref={selectRef}
-            value={selectedPickupLocation.code}
+            value={pickupLocation.code}
             id={`update-location-selector-${key}`}
             labelText="Pickup location"
             showLabel
@@ -123,13 +124,13 @@ const UpdateLocation = ({
     confirmLocationChangeModalProps as DefaultModalProps
   )
 
-  const successModalProps = {
+  const successModalProps = (newLocation) => ({
     type: "default",
     bodyContent: (
       <Box className={styles.modalBody}>
         <Text>
-          Your item will be available for pickup at the{" "}
-          {selectedPickupLocation.name} Library.
+          Your item will be available for pickup at the {newLocation.name}{" "}
+          Library.
         </Text>
       </Box>
     ),
@@ -152,7 +153,7 @@ const UpdateLocation = ({
       getMostUpdatedSierraAccountData()
       setFocusOnChangeLocationButton(true)
     },
-  }
+  })
   const failureModalProps = {
     type: "default",
     bodyContent: (
