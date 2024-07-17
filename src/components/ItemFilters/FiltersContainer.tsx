@@ -105,7 +105,8 @@ const FiltersContainer = ({
   useEffect(() => {
     console.log("appliedFilters", appliedFilters)
     console.log("filterData", filterData)
-  }, [appliedFilters, filterData])
+    console.log("itemAggregations", itemAggregations)
+  }, [appliedFilters, filterData, itemAggregations])
 
   const multiSelectItems = [
     {
