@@ -81,12 +81,10 @@ const RequestsTab = () => {
 
   useEffect(() => {
     if (focusOnRequestTab) {
-      setTimeout(() => {
-        console.log(tabRef.current)
-        console.log("focus")
-        tabRef.current.focus()
-        console.log(document.activeElement)
-      }, 2000)
+      console.log(tabRef.current)
+      console.log("focus")
+      tabRef.current.focus()
+      console.log(document.activeElement)
     }
   }, [focusOnRequestTab])
 
