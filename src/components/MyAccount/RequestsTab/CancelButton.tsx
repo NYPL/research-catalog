@@ -58,8 +58,8 @@ const CancelButton = ({
     ),
     onClose: async () => {
       closeModal()
-      await getMostUpdatedSierraAccountData()
       setFocusOnRequestTab(true)
+      await getMostUpdatedSierraAccountData()
     },
   }
 
