@@ -8,7 +8,6 @@ import {
   Select,
   Link as DSLink,
   type DefaultModalProps,
-  type ConfirmationModalProps,
   type BaseModalProps,
   SkeletonLoader,
   FormField,
@@ -17,7 +16,7 @@ import {
 import type { Hold, SierraCodeName } from "../../../types/myAccountTypes"
 import styles from "../../../../styles/components/MyAccount.module.scss"
 import { useContext, useRef, useState, useEffect } from "react"
-import { BASE_URL, FOCUS_TIMEOUT } from "../../../config/constants"
+import { BASE_URL } from "../../../config/constants"
 import { PatronDataContext } from "../../../context/PatronDataContext"
 
 interface UpdateLocationPropsType {
@@ -36,15 +35,16 @@ const UpdateLocation = ({
   key,
 }: UpdateLocationPropsType) => {
   const selectRef = useRef(null)
-
   const updateLocationButtonRef = useRef(null)
 
   const [focusOnChangeLocationButton, setFocusOnChangeLocationButton] =
     useState(false)
   const [selectedPickupLocation, setSelectedPickupLocation] =
     useState(pickupLocation)
+
   const { getMostUpdatedSierraAccountData } = useContext(PatronDataContext)
   const { Modal, onOpen: openModal, onClose: closeModal } = useModal()
+
   const locationsWithSelectedFirst = [
     pickupLocation,
     ...pickupLocationOptions.filter(
@@ -68,7 +68,7 @@ const UpdateLocation = ({
       }
     )
     if (response.status == 200) {
-      getMostUpdatedSierraAccountData()
+      setModalProps(successModalProps as DefaultModalProps)
     } else setModalProps(failureModalProps as DefaultModalProps)
   }
   const confirmLocationChangeModalProps = {
@@ -123,6 +123,36 @@ const UpdateLocation = ({
     confirmLocationChangeModalProps as DefaultModalProps
   )
 
+  const successModalProps = {
+    type: "default",
+    bodyContent: (
+      <Box className={styles.modalBody}>
+        <Text>
+          Your item will be available for pickup at the{" "}
+          {selectedPickupLocation.name} Library.
+        </Text>
+      </Box>
+    ),
+    closeButtonLabel: "OK",
+    headingText: (
+      <h5 className={styles.modalHeading}>
+        <>
+          <Icon
+            size="large"
+            name="actionCheckCircleFilled"
+            color="ui.success.primary"
+          />
+          Location change successful
+        </>
+      </h5>
+    ),
+    onClose: () => {
+      setModalProps(confirmLocationChangeModalProps as DefaultModalProps)
+      closeModal()
+      getMostUpdatedSierraAccountData()
+      setFocusOnChangeLocationButton(true)
+    },
+  }
   const failureModalProps = {
     type: "default",
     bodyContent: (
@@ -154,7 +184,6 @@ const UpdateLocation = ({
 
   useEffect(() => {
     if (focusOnChangeLocationButton) {
-      console.log("focus on updatelocation ref")
       updateLocationButtonRef.current.focus()
     }
   }, [focusOnChangeLocationButton])

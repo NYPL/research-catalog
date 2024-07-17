@@ -81,11 +81,11 @@ const RequestsTab = () => {
 
   useEffect(() => {
     if (focusOnRequestTab) {
-      console.log("macaron")
       setTimeout(() => {
         console.log(tabRef.current)
         console.log("focus")
         tabRef.current.focus()
+        console.log(document.activeElement)
       }, 2000)
     }
   }, [focusOnRequestTab])
@@ -104,19 +104,9 @@ const RequestsTab = () => {
       </StatusBadge>
     )
   }
-  const tabDisplay = patronDataLoading ? (
-    <SkeletonLoader showImage={false} />
-  ) : (
-    <ItemsTab
-      tabRef={tabRef}
-      headers={holdsHeaders}
-      data={holdsData}
-      userAction={"requested"}
-    />
-  )
-
-  return tabDisplay
-  // return (
+  // const tabDisplay = patronDataLoading ? (
+  //   <SkeletonLoader showImage={false} />
+  // ) : (
   //   <ItemsTab
   //     tabRef={tabRef}
   //     headers={holdsHeaders}
@@ -124,6 +114,16 @@ const RequestsTab = () => {
   //     userAction={"requested"}
   //   />
   // )
+
+  // return tabDisplay
+  return (
+    <ItemsTab
+      tabRef={tabRef}
+      headers={holdsHeaders}
+      data={holdsData}
+      userAction={"requested"}
+    />
+  )
 }
 
 export default RequestsTab
