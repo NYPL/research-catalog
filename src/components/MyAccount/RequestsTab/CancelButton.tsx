@@ -1,4 +1,4 @@
-import { type RefObject, useContext, useState } from "react"
+import { type Dispatch, useContext, useState } from "react"
 import type { Hold, Patron } from "../../../types/myAccountTypes"
 import {
   useModal,
@@ -23,125 +23,117 @@ const CancelButton = ({
   hold,
   patron,
 }: {
-  tabRef: RefObject<HTMLButtonElement>
+  setFocusOnRequestTab: Dispatch<boolean>
   hold: Hold
   patron: Patron
 }) => {
   const { onOpen: openModal, onClose: closeModal, Modal } = useModal()
   const { getMostUpdatedSierraAccountData } = useContext(PatronDataContext)
 
-  function successModalProps(hold) {
-    return {
-      type: "default",
-      bodyContent: (
-        <Box className={styles.modalBody}>
-          <Text>
-            Your request for{" "}
-            <span style={{ fontWeight: "var(--nypl-fontWeights-medium)" }}>
-              {hold.title}
-            </span>{" "}
-            has been canceled.
-          </Text>
-        </Box>
-      ),
-      closeButtonLabel: "OK",
-      headingText: (
-        <h5 className={styles.modalHeading}>
-          <>
-            <Icon
-              size="large"
-              name="actionCheckCircleFilled"
-              color="ui.success.primary"
-            />
-            Request canceled
-          </>
-        </h5>
-      ),
-      onClose: async () => {
-        closeModal()
-        await getMostUpdatedSierraAccountData()
-        setFocusOnRequestTab(true)
-      },
-    }
+  const successModalProps = {
+    type: "default",
+    bodyContent: (
+      <Box className={styles.modalBody}>
+        <Text>
+          Your request for{" "}
+          <span style={{ fontWeight: "var(--nypl-fontWeights-medium)" }}>
+            {hold.title}
+          </span>{" "}
+          has been canceled.
+        </Text>
+      </Box>
+    ),
+    closeButtonLabel: "OK",
+    headingText: (
+      <h5 className={styles.modalHeading}>
+        <>
+          <Icon
+            size="large"
+            name="actionCheckCircleFilled"
+            color="ui.success.primary"
+          />
+          Request canceled
+        </>
+      </h5>
+    ),
+    onClose: async () => {
+      closeModal()
+      await getMostUpdatedSierraAccountData()
+      setFocusOnRequestTab(true)
+    },
   }
 
-  function failureModalProps(hold) {
-    return {
-      type: "default",
-      bodyContent: (
-        <Box className={styles.modalBody}>
-          <Text>
-            Your request for{" "}
-            <span style={{ fontWeight: "var(--nypl-fontWeights-medium)" }}>
-              {hold.title}
-            </span>{" "}
-            has not been canceled. Please try again.
-          </Text>
-        </Box>
-      ),
-      closeButtonLabel: "OK",
-      headingText: (
-        <h5 className={styles.modalHeading}>
-          <>
-            <Icon size="large" name="errorFilled" color="ui.error.primary" />
-            Failed to cancel request
-          </>
-        </h5>
-      ),
-      onClose: closeModal(),
-    }
+  const failureModalProps = {
+    type: "default",
+    bodyContent: (
+      <Box className={styles.modalBody}>
+        <Text>
+          Your request for{" "}
+          <span style={{ fontWeight: "var(--nypl-fontWeights-medium)" }}>
+            {hold.title}
+          </span>{" "}
+          has not been canceled. Please try again.
+        </Text>
+      </Box>
+    ),
+    closeButtonLabel: "OK",
+    headingText: (
+      <h5 className={styles.modalHeading}>
+        <>
+          <Icon size="large" name="errorFilled" color="ui.error.primary" />
+          Failed to cancel request
+        </>
+      </h5>
+    ),
+    onClose: closeModal,
   }
 
-  function checkModalProps(hold) {
-    return {
-      type: "confirmation",
-      bodyContent: (
-        <Box className={styles.noIconBody}>
-          <Text>
-            Are you sure that you want to cancel your request for{" "}
-            <span style={{ fontWeight: "var(--nypl-fontWeights-medium)" }}>
-              {hold.title}
-            </span>
-            ?
-          </Text>
-          <Text>
-            This item will no longer be available for pickup once you cancel
-            this request.
-          </Text>
-        </Box>
-      ),
-      closeButtonLabel: "No, keep request",
-      confirmButtonLabel: "Yes, cancel request",
-      headingText: <h5 className={styles["noIconHeading"]}>Cancel request?</h5>,
-      onConfirm: async () => {
-        setModalProps({
-          ...checkModalProps(hold),
-          bodyContent: <SkeletonLoader showImage={false} />,
-        } as ConfirmationModalProps)
-        const response = await fetch(
-          `${BASE_URL}/api/account/holds/cancel/${hold.id}`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ patronId: patron.id }),
-          }
-        )
-        if (response.status == 200) {
-          // Open next modal to confirm request has been canceled.
-          setModalProps(successModalProps(hold) as DefaultModalProps)
-        } else {
-          setModalProps(failureModalProps(hold) as DefaultModalProps)
+  const checkModalProps = {
+    type: "confirmation",
+    bodyContent: (
+      <Box className={styles.noIconBody}>
+        <Text>
+          Are you sure that you want to cancel your request for{" "}
+          <span style={{ fontWeight: "var(--nypl-fontWeights-medium)" }}>
+            {hold.title}
+          </span>
+          ?
+        </Text>
+        <Text>
+          This item will no longer be available for pickup once you cancel this
+          request.
+        </Text>
+      </Box>
+    ),
+    closeButtonLabel: "No, keep request",
+    confirmButtonLabel: "Yes, cancel request",
+    headingText: <h5 className={styles["noIconHeading"]}>Cancel request?</h5>,
+    onConfirm: async () => {
+      setModalProps({
+        ...checkModalProps,
+        bodyContent: <SkeletonLoader showImage={false} />,
+      } as ConfirmationModalProps)
+      const response = await fetch(
+        `${BASE_URL}/api/account/holds/cancel/${hold.id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ patronId: patron.id }),
         }
-      },
-      onCancel: () => {
-        closeModal()
-      },
-    }
+      )
+      if (response.status == 200) {
+        // Open next modal to confirm request has been canceled.
+        setModalProps(successModalProps as DefaultModalProps)
+      } else {
+        setModalProps(failureModalProps as DefaultModalProps)
+      }
+    },
+    onCancel: closeModal,
   }
   const [modalProps, setModalProps] = useState<BaseModalProps>(
-    checkModalProps(hold) as ConfirmationModalProps
+    checkModalProps as ConfirmationModalProps
   )
   const buttonLabel = `Cancel${!hold.canFreeze ? " request" : ""}`
 
@@ -153,7 +145,7 @@ const CancelButton = ({
         buttonType="secondary"
         id={`cancel-${hold.id}`}
         onClick={() => {
-          setModalProps(checkModalProps(hold) as ConfirmationModalProps)
+          setModalProps(checkModalProps as ConfirmationModalProps)
           openModal()
         }}
       >
