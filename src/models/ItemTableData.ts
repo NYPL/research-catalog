@@ -41,7 +41,7 @@ export default class ItemTableData {
   }
 
   get tableData(): (string | ReactElement)[][] {
-    return this.items.map((item) => {
+    return this.items?.map((item) => {
       return [
         ...(this.showStatusColumn() ? [StatusLinks({ item })] : []),
         ...(this.showVolumeColumn() ? [item.volume] : []),

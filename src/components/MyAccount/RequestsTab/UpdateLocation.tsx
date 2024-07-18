@@ -75,7 +75,7 @@ const UpdateLocation = ({
         </Select>
       </Box>
     ),
-    closeButtonLabel: "Cancel location change",
+    closeButtonLabel: "Cancel",
     confirmButtonLabel: "Confirm location",
     onCancel: () => {
       closeModal()

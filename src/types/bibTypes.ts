@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import type { DiscoveryItemResult, JSONLDValue } from "./itemTypes"
 import type { AnnotatedMarc } from "./bibDetailsTypes"
+import type { Aggregation, ItemFilterQueryParams } from "./filterTypes"
 
 export interface DiscoveryBibResult {
   extent?: string[]
@@ -20,7 +21,9 @@ export interface DiscoveryBibResult {
   electronicResources?: ElectronicResource[]
   issuance?: JSONLDValue[]
   numItemsTotal?: number
+  numItemsMatched?: number
   items?: DiscoveryItemResult[]
+  itemAggregations?: Aggregation[]
   parallelTitleDisplay?: string[]
   supplementaryContent?: SupplementaryContent[]
   contributorLiteral?: string[]
@@ -77,13 +80,13 @@ export interface BibResponse {
   redirectUrl?: string
 }
 
-export interface BibQueryParams {
+export interface BibQueryParams extends ItemFilterQueryParams {
   id?: string
   features?: string
   item_page?: number
   items_size?: number
   items_from?: number
-  view_all_items?: string
+  view_all_items?: boolean
   batch_size?: number
 }
 

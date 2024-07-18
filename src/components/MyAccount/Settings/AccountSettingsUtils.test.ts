@@ -20,6 +20,9 @@ describe("Account settings utils", () => {
     it("falls back to the input name when not comma-separated", () => {
       expect(formatPatronName("QA Tester ILS")).toEqual("QA Tester ILS")
     })
+    it("can handle an initial", () => {
+      expect(formatPatronName("JOHNSON, LYNDON B")).toEqual("Lyndon B Johnson")
+    })
   })
   describe("formatPhoneNumber", () => {
     it("formats a 10 digit number", () => {

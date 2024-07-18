@@ -19,6 +19,8 @@ interface ItemTableControlsProps {
   handlePageChange: (selected: number) => void
   handleViewAllClick: (e: SyntheticEvent) => Promise<void>
   viewAllLoadingTextRef: RefObject<HTMLDivElement & HTMLLabelElement>
+  numItemsTotal?: number
+  filtersAreApplied?: boolean
 }
 
 /**
@@ -33,7 +35,12 @@ const ItemTableControls = ({
   handlePageChange,
   handleViewAllClick,
   viewAllLoadingTextRef,
+  numItemsTotal = 0,
+  filtersAreApplied = false,
 }: ItemTableControlsProps) => {
+  const viewAllLoadingMessage =
+    bib.getItemsViewAllLoadingMessage(filtersAreApplied)
+
   return (
     <Box display="flex" my="xl" justifyContent="space-between">
       {!viewAllExpanded ? (
@@ -41,9 +48,7 @@ const ItemTableControls = ({
           id="bib-items-pagination"
           initialPage={itemTablePage}
           currentPage={itemTablePage}
-          pageCount={Math.ceil(
-            bib.numPhysicalItems / ITEM_PAGINATION_BATCH_SIZE
-          )}
+          pageCount={Math.ceil(numItemsTotal / ITEM_PAGINATION_BATCH_SIZE)}
           onPageChange={handlePageChange}
           width="auto"
         />
@@ -58,7 +63,7 @@ const ItemTableControls = ({
           >
             <ProgressIndicator
               id="bib-all-items-loading"
-              labelText={bib.itemsViewAllLoadingMessage}
+              labelText={viewAllLoadingMessage}
               size="small"
               indicatorType="circular"
               mr="xs"
@@ -79,7 +84,7 @@ const ItemTableControls = ({
               // @ts-expect-error
               tabIndex={-1}
             >
-              {bib.itemsViewAllLoadingMessage}
+              {viewAllLoadingMessage}
             </Label>
           </Box>
         ) : !itemsLoading ? (
@@ -100,7 +105,7 @@ const ItemTableControls = ({
               <Box as="span" mr="xxs">
                 {viewAllExpanded
                   ? "View fewer items"
-                  : `View All ${bib.numItemsMessage}`}
+                  : `View All ${bib.getNumItemsMessage(filtersAreApplied)}`}
               </Box>
               <Icon
                 iconRotation={viewAllExpanded ? "rotate180" : "rotate0"}
