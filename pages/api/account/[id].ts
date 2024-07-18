@@ -23,7 +23,7 @@ export default async function handler(
   let responseMessage = ""
   let responseStatus = 400
   if (req.method !== "GET")
-    responseMessage = "Please make a POST request to this endpoint."
+    responseMessage = "Please make a GET request to this endpoint."
   else {
     const resp = await fetchPatronData(patronId)
     responseMessage = resp.message
