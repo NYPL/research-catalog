@@ -106,7 +106,7 @@ const UpdateLocation = ({
             onClick={handleSubmit}
             className={styles.formButton}
           >
-            Change location
+            Confirm location
           </Button>
         </FormField>
       </Form>

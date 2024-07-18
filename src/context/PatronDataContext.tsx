@@ -23,7 +23,6 @@ export const PatronDataProvider = ({
   const [patronDataLoading, setPatronDataLoading] = useState(false)
   const [updatedAccountData, setUpdatedAccountData] = useState(value)
   const getMostUpdatedSierraAccountData = async () => {
-    console.log("here we go")
     if (testSpy) testSpy()
     setPatronDataLoading(true)
     const resp = await fetch(

@@ -261,6 +261,6 @@ describe("RequestsTab", () => {
     await userEvent.click(component.getAllByText("Yes, cancel request")[0])
 
     await userEvent.click(component.getAllByText("OK")[0])
-    expect(component.getByTestId("requests-tab")).toHaveFocus()
+    expect(component.getByTestId("items-tab")).toHaveFocus()
   })
 })

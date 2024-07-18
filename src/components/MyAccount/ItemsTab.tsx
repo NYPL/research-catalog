@@ -17,13 +17,13 @@ const ItemsTab = ({
   userAction: "requested" | "checked out"
 }) => {
   return (
-    <Box tabIndex={-1} ref={tabRef}>
+    <Box data-testid="items-tab" tabIndex={-1} ref={tabRef}>
       {data?.length === 0 && (
         <Box className={styles.notification}>
           <span>You currently do not have any items {userAction}.</span>
         </Box>
       )}
-      <Box data-testid="requests-tab" className={styles.notificationWithIcon}>
+      <Box className={styles.notificationWithIcon}>
         <Icon size="medium" name="errorOutline" iconRotation="rotate180" />{" "}
         <span>
           See{" "}
