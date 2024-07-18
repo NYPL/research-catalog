@@ -34,14 +34,14 @@ export default class ItemTableData {
       ...(this.showStatusColumn() ? ["Status"] : []),
       ...(this.showVolumeColumn() ? [this.volumeColumnHeading()] : []),
       "Format",
-      "Call Number",
       ...(this.showAccessColumn() ? ["Access"] : []),
+      "Call Number",
       "Item Location",
     ]
   }
 
   get tableData(): (string | ReactElement)[][] {
-    return this.items.map((item) => {
+    return this.items?.map((item) => {
       return [
         ...(this.showStatusColumn() ? [StatusLinks({ item })] : []),
         ...(this.showVolumeColumn() ? [item.volume] : []),

@@ -1,7 +1,7 @@
 import type {
-  SearchResultsItem,
   JSONLDValue,
   ItemLocation,
+  DiscoveryItemResult,
 } from "../types/itemTypes"
 import { locationLabelToKey } from "../utils/itemUtils"
 import type Bib from "./Bib"
@@ -35,7 +35,7 @@ export default class Item {
   isEDDRequestable: boolean
   bibTitle: string
 
-  constructor(item: SearchResultsItem, bib: Bib) {
+  constructor(item: DiscoveryItemResult, bib: Bib) {
     this.id = item.uri || ""
     this.bibId = bib.id
     this.status = item.status?.length ? item.status[0] : null
@@ -61,7 +61,7 @@ export default class Item {
 
   // Item availability is determined by the existence of status id in the availability ids list
   get isAvailable(): boolean {
-    return itemAvailableIds.includes(this.status["@id"])
+    return itemAvailableIds.includes(this?.status?.["@id"]) || false
   }
 
   get isReCAP(): boolean {
@@ -78,7 +78,7 @@ export default class Item {
   }
 
   // Pre-processing logic for setting Item holding location
-  getLocationFromItem(item: SearchResultsItem): ItemLocation {
+  getLocationFromItem(item: DiscoveryItemResult): ItemLocation {
     let location = defaultNYPLLocation
     if (this.isPartnerReCAP) location = partnerDefaultLocation
 
@@ -100,7 +100,7 @@ export default class Item {
 
   // Determine if item is Non-NYPL ReCAP by existence of "Recap" string in item source attribute
   isPartnerReCAP(): boolean {
-    return this.source.indexOf("Recap") !== -1
+    return this.source?.indexOf("Recap") !== -1
   }
 
   // It's an NYPL-owned ReCAP item if item source is Sierra and location is ReCAP

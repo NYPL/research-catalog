@@ -1,4 +1,7 @@
-import { ITEM_BATCH_SIZE } from "../config/constants"
+import {
+  ITEM_PAGINATION_BATCH_SIZE,
+  ITEM_VIEW_ALL_BATCH_SIZE,
+} from "../config/constants"
 import type { BibQueryParams } from "../types/bibTypes"
 import { getPaginationOffsetStrings } from "./appUtils"
 
@@ -37,19 +40,32 @@ export const isItTheLastElement = (i, array) => !(i < array.length - 1)
 // based on pagination values
 export const buildItemTableDisplayingString = (
   page: number,
-  totalResults: number
+  totalResults: number,
+  viewAllItems = false,
+  filtersAreApplied = false
 ) => {
+  const isPlural = totalResults > 1
+  const totalString = totalResults.toLocaleString()
+
+  if (!totalResults && filtersAreApplied)
+    return "No results found matching the applied filters"
+  if (viewAllItems || totalResults <= ITEM_PAGINATION_BATCH_SIZE) {
+    return isPlural
+      ? `Displaying all ${totalString} ${
+          filtersAreApplied ? "matching " : ""
+        }items`
+      : "Displaying 1 item"
+  }
+
   const [resultsStart, resultsEnd] = getPaginationOffsetStrings(
     page,
     totalResults,
-    ITEM_BATCH_SIZE
+    ITEM_PAGINATION_BATCH_SIZE
   )
 
-  return `Displaying ${
-    totalResults > ITEM_BATCH_SIZE
-      ? `${resultsStart}-${resultsEnd}`
-      : totalResults.toLocaleString()
-  } of ${totalResults.toLocaleString()} item${totalResults > 1 ? "s" : ""}`
+  return `Displaying ${resultsStart}-${resultsEnd} of ${totalResults.toLocaleString()} ${
+    filtersAreApplied ? "matching " : ""
+  }item${isPlural ? "s" : ""}`
 }
 
 /**
@@ -65,27 +81,35 @@ export function isNyplBibID(id: string) {
  */
 export function getBibQueryString(
   bibQuery: BibQueryParams,
-  includeAnnotatedMarc = false
+  includeAnnotatedMarc = false,
+  viewAllItems = false
 ): string {
-  let itemsFrom = bibQuery?.items_from || 0
+  const batchSize = viewAllItems
+    ? ITEM_VIEW_ALL_BATCH_SIZE
+    : ITEM_PAGINATION_BATCH_SIZE
   const itemPage = bibQuery?.item_page || 1
-  itemsFrom = itemsFrom || (itemPage - 1) * ITEM_BATCH_SIZE
+  const itemsFrom = (itemPage - 1) * batchSize || 0
 
-  const itemFilterQuery = Object.keys(bibQuery)
-    .filter((key) => key !== "items_from")
-    .map((key) => `${key}=${bibQuery[key]}`)
-    .join("&")
+  const FILTER_QUERIES = [
+    "item_location",
+    "item_format",
+    "item_status",
+    "item_date",
+  ]
 
-  const itemQueries = []
+  const itemFilterQuery = bibQuery
+    ? Object.keys(bibQuery)
+        .filter((key) => FILTER_QUERIES.includes(key))
+        .map((key) => `&${key}=${bibQuery[key]}`)
+        .join("")
+    : ""
 
-  // Add items_size and items_from params when itemsFrom is defined, even when 0.
-  if (typeof itemsFrom !== "undefined")
-    itemQueries.push(`items_size=${ITEM_BATCH_SIZE}&items_from=${itemsFrom}`)
+  const paginationQuery = `items_size=${batchSize}&items_from=${itemsFrom}&item_page=${itemPage}`
 
-  if (!includeAnnotatedMarc) {
-    if (itemFilterQuery?.length) itemQueries.push(`${itemFilterQuery}`)
-    itemQueries.push("merge_checkin_card_items=true")
-  }
+  const mergeCheckinQuery = !includeAnnotatedMarc
+    ? "&merge_checkin_card_items=true"
+    : ""
 
-  return itemQueries.length ? `?${itemQueries.join("&")}` : ""
+  const viewAllQuery = viewAllItems ? "&view_all_items=true" : ""
+  return `?${paginationQuery}${itemFilterQuery}${viewAllQuery}${mergeCheckinQuery}`
 }

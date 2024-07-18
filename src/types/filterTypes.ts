@@ -6,17 +6,25 @@ export type AppliedItemFilters = {
   location: string[]
   format: string[]
   status: string[]
+  year: string[]
 }
+
 export interface AggregationOption {
   value: string
   count: number
   label: string
 }
 
+/* eslint-disable @typescript-eslint/naming-convention */
+export type ItemFilterQueryParams = {
+  item_location?: string
+  item_format?: string
+  item_status?: string
+  item_date?: string
+}
+
 export interface Aggregation {
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   "@type": string
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   "@id": string
   id: string
   field: string

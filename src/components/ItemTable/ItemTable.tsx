@@ -13,7 +13,6 @@ interface ItemTableProps {
  */
 const ItemTable = ({ itemTableData }: ItemTableProps) => {
   const { tableHeadings, tableData, items, inSearchResult } = itemTableData
-
   return (
     <Box>
       <Table

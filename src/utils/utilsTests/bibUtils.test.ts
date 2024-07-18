@@ -44,30 +44,22 @@ describe("bibUtils", () => {
   describe("getBibQueryString", () => {
     it("returns the correct query string with a bib ID and no bib params", () => {
       expect(getBibQueryString({ id: "b12082323" })).toBe(
-        "?items_size=20&items_from=0&id=b12082323&merge_checkin_card_items=true"
+        "?items_size=20&items_from=0&item_page=1&merge_checkin_card_items=true"
       )
     })
     it("returns the correct query string with a bib ID and query params", () => {
-      expect(getBibQueryString({ id: "b12082323", items_from: 5 })).toBe(
-        "?items_size=20&items_from=5&id=b12082323&merge_checkin_card_items=true"
-      )
       expect(getBibQueryString({ id: "b12082323", item_page: 5 })).toBe(
-        "?items_size=20&items_from=80&id=b12082323&item_page=5&merge_checkin_card_items=true"
-      )
-    })
-    it("returns the correct query string with various combinations of bib params and annotated marc setting enabled", () => {
-      expect(getBibQueryString({ id: "b12082323", items_from: 5 }, true)).toBe(
-        "?items_size=20&items_from=5"
-      )
-      expect(getBibQueryString({ id: "b12082323", item_page: 5 }, true)).toBe(
-        "?items_size=20&items_from=80"
+        "?items_size=20&items_from=80&item_page=5&merge_checkin_card_items=true"
       )
     })
   })
   describe("buildItemTableDisplayingString", () => {
     it("returns the correct item table heading when there is one item", () => {
-      expect(buildItemTableDisplayingString(1, 1)).toBe(
-        "Displaying 1 of 1 item"
+      expect(buildItemTableDisplayingString(1, 1)).toBe("Displaying 1 item")
+    })
+    it("returns the correct item table heading when the total number is greater than 1 but less than the pagination limit", () => {
+      expect(buildItemTableDisplayingString(1, 2)).toBe(
+        "Displaying all 2 items"
       )
     })
     it("returns the correct item table heading for first page when there are many items", () => {
@@ -78,6 +70,16 @@ describe("bibUtils", () => {
     it("returns the correct item table heading for pages greater than 1 when there are many items", () => {
       expect(buildItemTableDisplayingString(5, 300)).toBe(
         "Displaying 81-100 of 300 items"
+      )
+    })
+    it("returns the correct item table heading for when view all items is enabled", () => {
+      expect(buildItemTableDisplayingString(1, 300, true)).toBe(
+        "Displaying all 300 items"
+      )
+    })
+    it("returns the correct item table heading for when filters are applied and there are no matching items", () => {
+      expect(buildItemTableDisplayingString(1, 0, false, true)).toBe(
+        "No results found matching the applied filters"
       )
     })
   })

@@ -18,6 +18,9 @@ import type {
   Fine,
   SierraCodeName,
 } from "../../src/types/myAccountTypes"
+import TimedLogoutModal from "../../src/components/MyAccount/TimedLogoutModal"
+import { getIncrementedTime } from "../../src/utils/cookieUtils"
+import { useEffect, useState } from "react"
 interface MyAccountPropsType {
   patron?: Patron
   checkouts?: Checkout[]
@@ -40,6 +43,24 @@ export default function MyAccount({
   tabsPath,
 }: MyAccountPropsType) {
   const errorRetrievingPatronData = !patron
+
+  const [expirationTime, setExpirationTime] = useState("")
+  const [displayLogoutModal, setDisplayLogoutModal] = useState(false)
+
+  const resetCountdown = () => {
+    const inFive = getIncrementedTime(5)
+    const newExpirationTime = `accountPageExp=${inFive}; expires=${inFive}`
+    document.cookie = newExpirationTime
+    setExpirationTime(inFive)
+  }
+
+  useEffect(() => {
+    resetCountdown()
+    // to avoid a reference error on document in the modal, wait to render it
+    // until we are on the client side
+    setDisplayLogoutModal(true)
+  })
+
   return (
     <>
       <Head>
@@ -47,6 +68,12 @@ export default function MyAccount({
       </Head>
 
       <Layout isAuthenticated={isAuthenticated} activePage="account">
+        {displayLogoutModal && (
+          <TimedLogoutModal
+            stayLoggedIn={resetCountdown}
+            expirationTime={expirationTime}
+          />
+        )}
         {renderAuthServerError ? (
           <Text>
             We are unable to display your account information at this time due

@@ -784,6 +784,474 @@ export const bibWithItems = {
   },
 }
 
+export const bibNoItems = {
+  resource: {
+    "@context":
+      "http://discovery-api-production.us-east-1.elasticbeanstalk.com/api/v0.1/discovery/context_all.jsonld",
+    "@type": ["nypl:Item", "nypl:Resource"],
+    "@id": "res:b15080796",
+    carrierType: [
+      {
+        "@id": "carriertypes:nc",
+        prefLabel: "volume",
+      },
+    ],
+    createdString: ["1999"],
+    createdYear: 1999,
+    dateEndString: ["9999"],
+    dateEndYear: 9999,
+    dateStartYear: 1999,
+    dateString: ["1999"],
+    dimensions: ["22 cm."],
+    donor: [
+      "Gift of the DeWitt Wallace Endowment Fund, named in honor of the founder of Reader's Digest",
+    ],
+    electronicResources: [],
+    extent: ["v. : ill. ;"],
+    holdings: [
+      {
+        checkInBoxes: [
+          {
+            coverage: "Vol. 1  No. 1",
+            position: 1,
+            type: "nypl:CheckInBox",
+            shelfMark: ["JFK 01-374"],
+            status: "Arrived",
+          },
+          {
+            coverage: "Vol. 2 No. 1 (1999)",
+            position: 2,
+            type: "nypl:CheckInBox",
+            shelfMark: ["JFK 01-374"],
+            status: "Arrived",
+          },
+          {
+            coverage: "No. 3 (2000)",
+            position: 3,
+            type: "nypl:CheckInBox",
+            shelfMark: ["JFK 01-374"],
+            status: "Arrived",
+          },
+          {
+            coverage: "No. 4",
+            position: 4,
+            type: "nypl:CheckInBox",
+            shelfMark: ["JFK 01-374"],
+            status: "Arrived",
+          },
+        ],
+        holdingStatement: ["1(1998)-4(2001)."],
+        identifier: [
+          {
+            type: "bf:shelfMark",
+            value: "JFK 01-374",
+          },
+        ],
+        physicalLocation: ["JFK 01-374"],
+        format: ["PRINT"],
+        location: [
+          {
+            code: "loc:rc2ma",
+            label: "Offsite",
+          },
+        ],
+        shelfMark: ["JFK 01-374"],
+        uri: "h1046398",
+      },
+    ],
+    idIssn: ["1521-1371"],
+    idLccn: ["sn 98001765"],
+    idOclc: ["39690507"],
+    identifier: [
+      {
+        "@type": "bf:ShelfMark",
+        "@value": "JFK 01-374",
+      },
+      {
+        "@type": "nypl:Bnumber",
+        "@value": "15080796",
+      },
+      {
+        "@type": "nypl:Oclc",
+        "@value": "39690507",
+      },
+      {
+        "@type": "bf:Lccn",
+        "@value": "sn 98001765",
+      },
+      {
+        "@type": "bf:Issn",
+        "@value": "1521-1371",
+      },
+      {
+        "@type": "bf:Identifier",
+        "@value": "(WaOLN)S310000006",
+      },
+    ],
+    issuance: [
+      {
+        "@id": "urn:biblevel:s",
+        prefLabel: "serial",
+      },
+    ],
+    itemAggregations: [],
+    items: [],
+    language: [
+      {
+        "@id": "lang:eng",
+        prefLabel: "English",
+      },
+    ],
+    lccClassification: ["IN PROCESS"],
+    materialType: [
+      {
+        "@id": "resourcetypes:txt",
+        prefLabel: "Text",
+      },
+    ],
+    mediaType: [
+      {
+        "@id": "mediatypes:n",
+        prefLabel: "unmediated",
+      },
+    ],
+    numCheckinCardItems: 0,
+    numElectronicResources: 0,
+    numItemDatesParsed: 0,
+    numItemVolumesParsed: 0,
+    numItemsMatched: 0,
+    numItemsTotal: 0,
+    nyplSource: ["sierra-nypl"],
+    placeOfPublication: ["Mansfield, Ohio"],
+    publicationStatement: ["Mansfield, Ohio : Urban Spaghetti, [1999?-"],
+    publisherLiteral: ["Urban Spaghetti"],
+    serialPublicationDates: ["Vol. 1, issue 1-"],
+    shelfMark: ["JFK 01-374"],
+    subjectLiteral: [
+      "Arts, Modern -- United States -- Periodicals.",
+      "American literature -- 20th ccentury -- Periodicals.",
+    ],
+    title: ["Urban spaghetti."],
+    titleAlt: ["Urban spaghetti", "Urban spaghetti literary arts journal"],
+    titleDisplay: ["Urban spaghetti."],
+    type: ["nypl:Item"],
+    updatedAt: 1711024183694,
+    uri: "b15080796",
+    suppressed: false,
+    hasItemVolumes: true,
+    hasItemDates: true,
+    subjectHeadings: null,
+  },
+  annotatedMarc: {
+    id: "15080796",
+    nyplSource: "sierra-nypl",
+    fields: [
+      {
+        label: "Title",
+        values: [
+          {
+            content: "Urban spaghetti.",
+            source: {
+              fieldTag: "t",
+              marcTag: "245",
+              ind1: "0",
+              ind2: "0",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Urban spaghetti.",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Imprint",
+        values: [
+          {
+            content: "Mansfield, Ohio : Urban Spaghetti, [1999?-",
+            source: {
+              fieldTag: "p",
+              marcTag: "260",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Mansfield, Ohio :",
+                },
+                {
+                  tag: "b",
+                  content: "Urban Spaghetti,",
+                },
+                {
+                  tag: "c",
+                  content: "[1999?-",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Description",
+        values: [
+          {
+            content: "v. : ill. ; 22 cm.",
+            source: {
+              fieldTag: "r",
+              marcTag: "300",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "v. :",
+                },
+                {
+                  tag: "b",
+                  content: "ill. ;",
+                },
+                {
+                  tag: "c",
+                  content: "22 cm.",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Current Frequency",
+        values: [
+          {
+            content: "Semiannual",
+            source: {
+              fieldTag: "r",
+              marcTag: "310",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Semiannual",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Publication Date",
+        values: [
+          {
+            content: "Vol. 1, issue 1-",
+            source: {
+              fieldTag: "r",
+              marcTag: "362",
+              ind1: "0",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Vol. 1, issue 1-",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Subject",
+        values: [
+          {
+            content: "Arts, Modern -- United States -- Periodicals.",
+            source: {
+              fieldTag: "d",
+              marcTag: "650",
+              ind1: " ",
+              ind2: "0",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Arts, Modern",
+                },
+                {
+                  tag: "z",
+                  content: "United States",
+                },
+                {
+                  tag: "v",
+                  content: "Periodicals.",
+                },
+              ],
+            },
+          },
+          {
+            content: "American literature -- 20th ccentury -- Periodicals.",
+            source: {
+              fieldTag: "d",
+              marcTag: "650",
+              ind1: " ",
+              ind2: "0",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "American literature",
+                },
+                {
+                  tag: "y",
+                  content: "20th ccentury",
+                },
+                {
+                  tag: "v",
+                  content: "Periodicals.",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Abbreviated Title",
+        values: [
+          {
+            content: "Urban spaghetti",
+            source: {
+              fieldTag: "u",
+              marcTag: "210",
+              ind1: "0",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Urban spaghetti",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Cover Title",
+        values: [
+          {
+            content: "Urban spaghetti literary arts journal",
+            source: {
+              fieldTag: "u",
+              marcTag: "246",
+              ind1: "1",
+              ind2: "4",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Urban spaghetti literary arts journal",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Donor/Sponsor",
+        values: [
+          {
+            content:
+              "Gift of the DeWitt Wallace Endowment Fund, named in honor of the founder of Reader's Digest",
+            source: {
+              fieldTag: "u",
+              marcTag: "799",
+              ind1: "0",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content:
+                    "Gift of the DeWitt Wallace Endowment Fund, named in honor of the founder of Reader's Digest",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "LCCN",
+        values: [
+          {
+            content: "sn 98001765",
+            source: {
+              fieldTag: "l",
+              marcTag: "010",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "sn 98001765",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "ISSN",
+        values: [
+          {
+            content: "1521-1371",
+            source: {
+              fieldTag: "i",
+              marcTag: "022",
+              ind1: "0",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "1521-1371",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Research Call Number",
+        values: [
+          {
+            content: "JFK 01-374",
+            source: {
+              fieldTag: "q",
+              marcTag: "852",
+              ind1: "8",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "h",
+                  content: "JFK 01-374",
+                },
+              ],
+            },
+          },
+        ],
+      },
+    ],
+  },
+}
+
 export const bibWithManyItems = {
   resource: {
     "@context":

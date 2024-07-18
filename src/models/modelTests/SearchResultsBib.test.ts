@@ -1,4 +1,8 @@
-import { bibWithItems } from "../../../__test__/fixtures/bibFixtures"
+import {
+  bibWithItems,
+  bibWithSupplementaryContent as bibWithOneElectronicResource,
+  bibNoItems,
+} from "../../../__test__/fixtures/bibFixtures"
 import SearchResultsBib from "../SearchResultsBib"
 import ItemTableData from "../ItemTableData"
 
@@ -38,9 +42,19 @@ describe("SearchResultsBib model", () => {
     })
   })
 
-  describe("itemMessage", () => {
+  describe("getNumItemsMessage", () => {
     it("returns a message populated with the correct resource type and pluralization", () => {
-      expect(searchResultsBib.itemMessage).toBe("4 Items")
+      expect(searchResultsBib.getNumItemsMessage()).toBe("4 Items")
+    })
+    it("works for single eResource", () => {
+      const bibOneElectronicResource = new SearchResultsBib(
+        bibWithOneElectronicResource.resource
+      )
+      expect(bibOneElectronicResource.getNumItemsMessage()).toBe("1 Resource")
+    })
+    it("works for a bib with no items", () => {
+      const bibWithNoItems = new SearchResultsBib(bibNoItems.resource)
+      expect(bibWithNoItems.getNumItemsMessage()).toBe("0 Resources")
     })
   })
 
