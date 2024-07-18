@@ -239,7 +239,7 @@ describe("RequestsTab", () => {
     expect(confirmedRequestRow).not.toHaveTextContent("Freeze")
   })
 
-  it.only("should focus on the holds table after successfully canceling a request", async () => {
+  it("should focus on the holds table after successfully canceling a request", async () => {
     global.fetch = jest
       .fn()
       .mockResolvedValueOnce({
