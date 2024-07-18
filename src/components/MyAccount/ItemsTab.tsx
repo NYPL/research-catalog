@@ -11,7 +11,7 @@ const ItemsTab = ({
   data,
   userAction,
 }: {
-  tabRef: LegacyRef<HTMLDivElement>
+  tabRef?: LegacyRef<HTMLDivElement>
   headers: string[]
   data: any[]
   userAction: "requested" | "checked out"
