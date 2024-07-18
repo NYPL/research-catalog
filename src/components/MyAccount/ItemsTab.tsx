@@ -3,7 +3,7 @@ import { Text, Box, Icon, Table } from "@nypl/design-system-react-components"
 import ExternalLink from "../Links/ExternalLink/ExternalLink"
 import styles from "../../../styles/components/MyAccount.module.scss"
 import { appConfig } from "../../config/config"
-import type { LegacyRef } from "react"
+import type { RefObject } from "react"
 
 const ItemsTab = ({
   tabRef,
@@ -11,7 +11,7 @@ const ItemsTab = ({
   data,
   userAction,
 }: {
-  tabRef?: LegacyRef<HTMLDivElement>
+  tabRef?: RefObject<HTMLDivElement>
   headers: string[]
   data: any[]
   userAction: "requested" | "checked out"

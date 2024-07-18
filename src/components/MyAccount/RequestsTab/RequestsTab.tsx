@@ -81,6 +81,7 @@ const RequestsTab = () => {
   useEffect(() => {
     if (focusOnRequestTab) {
       tabRef.current.focus()
+      setFocusOnRequestTab(false)
     }
   }, [focusOnRequestTab])
 
