@@ -10,10 +10,11 @@ import { PatronDataProvider } from "../../../context/PatronDataContext"
 import { pickupLocations } from "../../../../__test__/fixtures/rawSierraAccountData"
 
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
-
+const patronFetchSpy = jest.fn()
 const renderWithPatronDataContext = () => {
   return render(
     <PatronDataProvider
+      testSpy={patronFetchSpy}
       value={{
         holds: processedHolds,
         patron: processedPatron,
@@ -27,6 +28,7 @@ const renderWithPatronDataContext = () => {
 describe("RequestsTab", () => {
   beforeEach(() => {
     window.localStorage.clear()
+    patronFetchSpy.mockReset()
   })
 
   it("renders", () => {
@@ -95,7 +97,7 @@ describe("RequestsTab", () => {
     )
     await userEvent.click(component.getAllByText("OK")[0])
     // TODO: figure out how to verify
-    expect(global.fetch).toHaveBeenCalledTimes(2)
+    expect(patronFetchSpy).toHaveBeenCalled()
   })
 
   it("does not fetch account data when cancel fails", async () => {
@@ -124,6 +126,7 @@ describe("RequestsTab", () => {
     await userEvent.click(screen.getAllByText("OK", { exact: false })[0])
 
     expect(global.fetch).toHaveBeenCalledTimes(1)
+    expect(patronFetchSpy).not.toHaveBeenCalled()
   })
   describe("updateHoldLocation", () => {
     it("only displays update pickup location button for request pending circ items", () => {
