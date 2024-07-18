@@ -41,14 +41,19 @@ export const isItTheLastElement = (i, array) => !(i < array.length - 1)
 export const buildItemTableDisplayingString = (
   page: number,
   totalResults: number,
-  viewAllItems = false
+  viewAllItems = false,
+  filtersAreApplied = false
 ) => {
   const isPlural = totalResults > 1
   const totalString = totalResults.toLocaleString()
 
+  if (!totalResults && filtersAreApplied)
+    return "No results found matching the applied filters"
   if (viewAllItems || totalResults <= ITEM_PAGINATION_BATCH_SIZE) {
     return isPlural
-      ? `Displaying all ${totalString} items`
+      ? `Displaying all ${totalString} ${
+          filtersAreApplied ? "matching " : ""
+        }items`
       : "Displaying 1 item"
   }
 
@@ -58,9 +63,9 @@ export const buildItemTableDisplayingString = (
     ITEM_PAGINATION_BATCH_SIZE
   )
 
-  return `Displaying ${resultsStart}-${resultsEnd} of ${totalResults.toLocaleString()} item${
-    isPlural ? "s" : ""
-  }`
+  return `Displaying ${resultsStart}-${resultsEnd} of ${totalResults.toLocaleString()} ${
+    filtersAreApplied ? "matching " : ""
+  }item${isPlural ? "s" : ""}`
 }
 
 /**
@@ -85,12 +90,18 @@ export function getBibQueryString(
   const itemPage = bibQuery?.item_page || 1
   const itemsFrom = (itemPage - 1) * batchSize || 0
 
-  const NON_FILTER_QUERIES = ["items_from", "item_page", "items_size"]
+  const FILTER_QUERIES = [
+    "item_location",
+    "item_format",
+    "item_status",
+    "item_date",
+  ]
 
   const itemFilterQuery = bibQuery
     ? Object.keys(bibQuery)
-        .filter((key) => !NON_FILTER_QUERIES.includes(key))
+        .filter((key) => FILTER_QUERIES.includes(key))
         .map((key) => `&${key}=${bibQuery[key]}`)
+        .join("")
     : ""
 
   const paginationQuery = `items_size=${batchSize}&items_from=${itemsFrom}&item_page=${itemPage}`
@@ -100,6 +111,5 @@ export function getBibQueryString(
     : ""
 
   const viewAllQuery = viewAllItems ? "&view_all_items=true" : ""
-
   return `?${paginationQuery}${itemFilterQuery}${viewAllQuery}${mergeCheckinQuery}`
 }

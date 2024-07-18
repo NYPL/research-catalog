@@ -34,7 +34,7 @@ const ItemFilterLabel = ({
     >
       {fieldFormatted}
       {appliedOptions.length > 0 && ` (${appliedOptions.length})`}
-      <Icon name={isOpen ? "minus" : "plus"} size="medium" />
+      <Icon name={isOpen ? "minus" : "plus"} size="small" />
     </Button>
   )
 }

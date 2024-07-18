@@ -39,11 +39,6 @@ export interface ItemMetadata {
   bibId?: string
 }
 
-export interface ItemsResponse {
-  items: DiscoveryItemResult[]
-  status: 200 | 400
-}
-
 /* eslint-disable @typescript-eslint/naming-convention */
 
 export interface JSONLDValue {

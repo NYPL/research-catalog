@@ -2,8 +2,8 @@ import {
   isRecapLocation,
   combineRecapLocations,
   parseItemFilterQueryParams,
-  buildItemFilterQueryString,
-  buildAppliedFiltersString,
+  buildItemFilterQuery,
+  buildAppliedFiltersTagSetData,
 } from "../itemFilterUtils"
 import { normalAggs } from "../../../__test__/fixtures/testAggregations"
 import { ItemFilterData } from "../../models/ItemFilterData"
@@ -50,6 +50,7 @@ describe("Item Filter Utils", () => {
         format: ["Text"],
         location: ["loc:mal", "Offsite"],
         status: ["status:a", "status:na"],
+        year: [],
       })
     })
     it("parses locations including multiple recap locations", () => {
@@ -62,6 +63,7 @@ describe("Item Filter Utils", () => {
         format: ["Text"],
         location: ["loc:abc", "Offsite"],
         status: ["status:a", "status:na"],
+        year: [],
       })
     })
   })
@@ -71,53 +73,75 @@ describe("Item Filter Utils", () => {
         format: ["Text"],
         location: ["loc:abc", "Offsite"],
         status: ["status:a", "status:na"],
+        year: [],
       }
       const recapLocations = "loc:rc2ma,loc:rc3ma,loc:rc4ma"
-      expect(buildItemFilterQueryString(query, recapLocations)).toBe(
-        "?item_location=loc:abc,loc:rc2ma,loc:rc3ma,loc:rc4ma&item_format=Text&item_status=status:a,status:na"
-      )
+      expect(buildItemFilterQuery(query, recapLocations)).toStrictEqual({
+        item_location: "loc:abc,loc:rc2ma,loc:rc3ma,loc:rc4ma",
+        item_format: "Text",
+        item_status: "status:a,status:na",
+      })
     })
     it("can handle only one param", () => {
       const query = {
         format: [],
         location: ["loc:abc", "Offsite"],
         status: [],
+        year: [],
       }
       const recapLocations = "loc:rc2ma,loc:rc3ma,loc:rc4ma"
-      expect(buildItemFilterQueryString(query, recapLocations)).toBe(
-        "?item_location=loc:abc,loc:rc2ma,loc:rc3ma,loc:rc4ma"
-      )
+      expect(buildItemFilterQuery(query, recapLocations)).toStrictEqual({
+        item_location: "loc:abc,loc:rc2ma,loc:rc3ma,loc:rc4ma",
+      })
     })
   })
 
-  describe("buildAppliedFiltersString", () => {
+  describe("buildAppliedFiltersTagSetData", () => {
     const query = parseItemFilterQueryParams({
       item_location: "loc:rc2ma,loc:rcma2",
       item_status: "status:a",
       item_format: "Text",
+      item_date: "2005",
     })
     const emptyQuery = parseItemFilterQueryParams({})
-    const aggs = normalAggs.map((agg) => new ItemFilterData(agg))
+    const aggregations = normalAggs.map(
+      (aggregation) => new ItemFilterData(aggregation)
+    )
     it("no filters", () => {
-      expect(buildAppliedFiltersString(emptyQuery, aggs)).toBeUndefined()
+      expect(
+        buildAppliedFiltersTagSetData(emptyQuery, aggregations)
+      ).toStrictEqual([])
     })
     it("with all filters", () => {
-      expect(buildAppliedFiltersString(query, aggs)).toBe(
-        "Filtered by location: 'Offsite', format: 'Text', status: 'Available'"
-      )
-    })
-    it("all filters filters", () => {
-      expect(buildAppliedFiltersString(query, aggs)).toBe(
-        "Filtered by location: 'Offsite', format: 'Text', status: 'Available'"
-      )
+      expect(buildAppliedFiltersTagSetData(query, aggregations)).toStrictEqual([
+        {
+          id: "Offsite",
+          label: "Location > Offsite",
+        },
+        { id: "Text", label: "Format > Text" },
+        {
+          id: "status:a",
+          label: "Status > Available",
+        },
+        { id: "2005", label: "Year > 2005" },
+      ])
     })
     it("one filter", () => {
       expect(
-        buildAppliedFiltersString(
+        buildAppliedFiltersTagSetData(
           parseItemFilterQueryParams({ item_status: "status:a,status:na" }),
-          aggs
+          aggregations
         )
-      ).toBe("Filtered by status: 'Available', 'Not available'")
+      ).toStrictEqual([
+        {
+          id: "status:a",
+          label: "Status > Available",
+        },
+        {
+          id: "status:na",
+          label: "Status > Not available",
+        },
+      ])
     })
   })
 })

@@ -6,12 +6,13 @@ import initializePatronTokenAuth, {
   doRedirectBasedOnNyplAccountRedirects,
   getLoginRedirect,
 } from "../../src/server/auth"
-import { MyAccountFactory } from "../../src/models/MyAccount"
 import ProfileContainer from "../../src/components/MyAccount/ProfileContainer"
-import sierraClient from "../../src/server/sierraClient"
 import type { MyAccountPatronData } from "../../src/types/myAccountTypes"
 import { PatronDataProvider } from "../../src/context/PatronDataContext"
 import { fetchPatronData } from "../api/account/[id]"
+import TimedLogoutModal from "../../src/components/MyAccount/TimedLogoutModal"
+import { getIncrementedTime } from "../../src/utils/cookieUtils"
+import { useEffect, useState } from "react"
 interface MyAccountPropsType {
   accountData: MyAccountPatronData
   isAuthenticated: boolean
@@ -25,7 +26,25 @@ export default function MyAccount({
   isAuthenticated,
   tabsPath,
 }: MyAccountPropsType) {
-  const errorRetrievingPatronData = !accountData?.patron
+  const errorRetrievingPatronData = !accountData.patron
+
+  const [expirationTime, setExpirationTime] = useState("")
+  const [displayLogoutModal, setDisplayLogoutModal] = useState(false)
+
+  const resetCountdown = () => {
+    const inFive = getIncrementedTime(5)
+    const newExpirationTime = `accountPageExp=${inFive}; expires=${inFive}`
+    document.cookie = newExpirationTime
+    setExpirationTime(inFive)
+  }
+
+  useEffect(() => {
+    resetCountdown()
+    // to avoid a reference error on document in the modal, wait to render it
+    // until we are on the client side
+    setDisplayLogoutModal(true)
+  })
+
   return (
     <>
       <Head>
@@ -33,6 +52,12 @@ export default function MyAccount({
       </Head>
 
       <Layout isAuthenticated={isAuthenticated} activePage="account">
+        {displayLogoutModal && (
+          <TimedLogoutModal
+            stayLoggedIn={resetCountdown}
+            expirationTime={expirationTime}
+          />
+        )}
         {renderAuthServerError ? (
           <Text>
             We are unable to display your account information at this time due
