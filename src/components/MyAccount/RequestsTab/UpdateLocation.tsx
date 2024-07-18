@@ -170,6 +170,7 @@ const UpdateLocation = ({
     onClose: () => {
       setModalProps(confirmLocationChangeModalProps as DefaultModalProps)
       closeModal()
+      setFocusOnChangeLocationButton(true)
     },
     closeButtonLabel: "OK",
     headingText: (
@@ -199,6 +200,7 @@ const UpdateLocation = ({
         onClick={openModal}
         id={`update-pickup-location-${key}`}
         buttonType="text"
+        data-testid="change-location-button"
       >
         <Icon name="editorMode" align="left" size="medium"></Icon>
         <Text fontSize={-1} className={styles.changeLocation}>
