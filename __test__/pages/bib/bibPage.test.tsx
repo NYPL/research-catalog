@@ -149,6 +149,7 @@ describe("Bib Page Item Table", () => {
           Promise.resolve({
             success: true,
             status: 200,
+            discoveryBibResult: bibWithManyItems.resource,
             items: Array(26).fill({}),
           }),
       })

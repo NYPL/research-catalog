@@ -24,12 +24,12 @@ import {
   isNyplBibID,
 } from "../../../src/utils/bibUtils"
 import BibDetailsModel from "../../../src/models/BibDetails"
-import ItemTableData from "../../../src/models/ItemTableData"
 import BibDetails from "../../../src/components/BibPage/BibDetail"
 import ItemTable from "../../../src/components/ItemTable/ItemTable"
 import ItemTableControls from "../../../src/components/ItemTable/ItemTableControls"
 import ElectronicResourcesLink from "../../../src/components/SearchResults/ElectronicResourcesLink"
 import ExternalLink from "../../../src/components/Links/ExternalLink/ExternalLink"
+import FiltersContainer from "../../../src/components/ItemFilters/FiltersContainer"
 import type {
   DiscoveryBibResult,
   BibQueryParams,
@@ -37,9 +37,12 @@ import type {
 import type { AnnotatedMarc } from "../../../src/types/bibDetailsTypes"
 import Bib from "../../../src/models/Bib"
 import initializePatronTokenAuth from "../../../src/server/auth"
-import Item from "../../../src/models/Item"
-import type { DiscoveryItemResult } from "../../../src/types/itemTypes"
+import type { ItemFilterQueryParams } from "../../../src/types/filterTypes"
 import type { ParsedUrlQueryInput } from "querystring"
+import {
+  parseItemFilterQueryParams,
+  areFiltersApplied,
+} from "../../../src/utils/itemFilterUtils"
 
 interface BibPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -61,16 +64,16 @@ export default function BibPage({
 }: BibPropsType) {
   const { push, query } = useRouter()
   const metadataTitle = `Item Details | ${SITE_NAME}`
-  const bib = new Bib(discoveryBibResult)
-  const displayLegacyCatalogLink = isNyplBibID(bib.id)
 
+  const [bib, setBib] = useState(new Bib(discoveryBibResult))
   const [itemsLoading, setItemsLoading] = useState(false)
-  const [itemFetchError, setItemFetchError] = useState(bib.showItemTableError)
+  const [itemFetchError, setItemFetchError] = useState(false)
   const [viewAllExpanded, setViewAllExpanded] = useState(viewAllItems)
-  const [bibItems, setBibItems] = useState(bib.items)
+  const [appliedFilters, setAppliedFilters] = useState(
+    parseItemFilterQueryParams(query)
+  )
   const [itemTablePage, setItemTablePage] = useState(itemPage)
 
-  const itemTableScrollRef = useRef<HTMLDivElement>(null)
   const itemTableHeadingRef = useRef<HTMLDivElement>(null)
   const viewAllLoadingTextRef = useRef<HTMLDivElement & HTMLLabelElement>(null)
   const controllerRef = useRef<AbortController>()
@@ -80,9 +83,14 @@ export default function BibPage({
     annotatedMarc
   )
 
-  const itemTableData = new ItemTableData(bibItems, {
-    isArchiveCollection: bib.isArchiveCollection,
-  })
+  const displayLegacyCatalogLink = isNyplBibID(bib.id)
+
+  const filtersAreApplied = areFiltersApplied(appliedFilters)
+
+  // If filters are applied, show the matching number of items, otherwise show the total number of items
+  const numItems = filtersAreApplied
+    ? bib.numItemsMatched
+    : bib.numPhysicalItems
 
   // Load all items via client-side fetch if page is first loaded with viewAllItems prop passed in
   // Namely, when the page is accessed with the /all route
@@ -122,35 +130,53 @@ export default function BibPage({
       }
     )
     const bibQueryString = getBibQueryString(newQuery, false, viewAllItems)
-
-    // Cancel any active fetches on new ItemTable refreshes
-    if (controllerRef.current) {
-      controllerRef.current.abort()
-    }
-    controllerRef.current = new AbortController()
-    const signal = controllerRef.current.signal
-
-    const response = await fetch(
-      `${BASE_URL}/api/bib/${bib.id}/items${bibQueryString}`,
-      {
-        method: "get",
-        signal,
+    try {
+      // Cancel any active fetches on new ItemTable refreshes
+      if (controllerRef.current) {
+        controllerRef.current.abort()
       }
-    )
-    if (response?.ok) {
-      const { items } = await response.json()
-      setBibItems(items.map((item: DiscoveryItemResult) => new Item(item, bib)))
-      setItemsLoading(false)
-      itemTableScrollRef.current?.scrollIntoView({
-        behavior: "smooth",
-      })
-      setTimeout(() => {
-        itemTableHeadingRef.current?.focus()
-      }, FOCUS_TIMEOUT)
-    } else {
-      setItemsLoading(false)
-      setItemFetchError(true)
+      controllerRef.current = new AbortController()
+      const signal = controllerRef.current.signal
+      const response = await fetch(
+        `${BASE_URL}/api/bib/${bib.id}${bibQueryString}`,
+        {
+          method: "get",
+          signal,
+        }
+      )
+      if (response?.ok) {
+        const { discoveryBibResult } = await response.json()
+        setBib(new Bib(discoveryBibResult))
+
+        setItemsLoading(false)
+        setTimeout(() => {
+          itemTableHeadingRef.current?.focus()
+        }, FOCUS_TIMEOUT)
+      } else {
+        console.log(response)
+        handleItemFetchError()
+      }
+    } catch (error) {
+      console.log(error)
+      handleItemFetchError()
     }
+  }
+
+  const handleItemFetchError = () => {
+    setItemsLoading(false)
+    setItemFetchError(true)
+  }
+
+  const handleFiltersChange = async (
+    newAppliedFilterQuery: ItemFilterQueryParams
+  ) => {
+    const newQuery = {
+      ...newAppliedFilterQuery,
+    } as BibQueryParams
+    if (newQuery.item_page) delete newQuery.item_page
+    setItemTablePage(1)
+    setAppliedFilters(parseItemFilterQueryParams(newAppliedFilterQuery))
+    await refreshItemTable(newQuery, viewAllExpanded)
   }
 
   const handlePageChange = async (page: number) => {
@@ -214,7 +240,13 @@ export default function BibPage({
               isDismissible
               mb="s"
             />
-            <Box id="item-table" ref={itemTableScrollRef}>
+            <FiltersContainer
+              itemAggregations={bib.itemAggregations}
+              handleFiltersChange={handleFiltersChange}
+              appliedFilters={appliedFilters}
+              filtersAreApplied={filtersAreApplied}
+            />
+            <Box id="item-table">
               {itemsLoading ? (
                 <SkeletonLoader showImage={false} />
               ) : itemFetchError ? (
@@ -234,23 +266,29 @@ export default function BibPage({
                   >
                     {buildItemTableDisplayingString(
                       itemTablePage,
-                      bib.numPhysicalItems,
-                      viewAllExpanded
+                      numItems,
+                      viewAllExpanded,
+                      filtersAreApplied
                     )}
                   </Heading>
-                  <ItemTable itemTableData={itemTableData} />
+                  {bib.itemTableData ? (
+                    <ItemTable itemTableData={bib.itemTableData} />
+                  ) : null}
                 </>
               )}
-
-              <ItemTableControls
-                bib={bib}
-                viewAllExpanded={viewAllExpanded}
-                itemsLoading={itemsLoading}
-                itemTablePage={itemTablePage}
-                handlePageChange={handlePageChange}
-                handleViewAllClick={handleViewAllClick}
-                viewAllLoadingTextRef={viewAllLoadingTextRef}
-              />
+              {bib.itemTableData ? (
+                <ItemTableControls
+                  bib={bib}
+                  viewAllExpanded={viewAllExpanded}
+                  itemsLoading={itemsLoading}
+                  itemTablePage={itemTablePage}
+                  handlePageChange={handlePageChange}
+                  handleViewAllClick={handleViewAllClick}
+                  viewAllLoadingTextRef={viewAllLoadingTextRef}
+                  numItemsTotal={numItems}
+                  filtersAreApplied={filtersAreApplied}
+                />
+              ) : null}
             </Box>
           </>
         ) : null}
