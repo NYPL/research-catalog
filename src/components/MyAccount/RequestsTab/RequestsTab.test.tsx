@@ -11,12 +11,12 @@ import { pickupLocations } from "../../../../__test__/fixtures/rawSierraAccountD
 
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 const patronFetchSpy = jest.fn()
-const renderWithPatronDataContext = () => {
+const renderWithPatronDataContext = (holds = processedHolds) => {
   return render(
     <PatronDataProvider
       testSpy={patronFetchSpy}
       value={{
-        holds: processedHolds,
+        holds: holds,
         patron: processedPatron,
         pickupLocations: pickupLocations,
       }}
@@ -266,11 +266,38 @@ describe("RequestsTab", () => {
     await userEvent.click(component.getAllByText("OK")[0])
     expect(component.getByTestId("items-tab")).toHaveFocus()
   })
-  describe("update location focus", () => {
+  describe("update location", () => {
     const openModal = async () => {
       const modalTrigger = screen.getAllByText("Change location")[0]
       await userEvent.click(modalTrigger)
     }
+    it("updated the location within the modal after updating", async () => {
+      global.fetch = jest.fn().mockResolvedValue({
+        json: async () =>
+          JSON.stringify({
+            patron: { id: 123 },
+            holds: [
+              {
+                ...processedHolds[2],
+                pickupLocation: { code: "ft", name: "53rd Street" },
+              },
+            ],
+            pickupLocations,
+          }),
+        status: 200,
+      } as Response)
+      renderWithPatronDataContext([processedHolds[2]])
+      // change location
+      await openModal()
+      const select = screen.getByLabelText("Pickup location")
+      await userEvent.selectOptions(select, "ft   ")
+      const submitButton = screen.getByText("Confirm location")
+      await userEvent.click(submitButton)
+      await userEvent.click(screen.getByText("OK"))
+      // reopen modal to ensure component rerendered
+      await openModal()
+      expect(select).toHaveValue("ft   ")
+    })
     it("focuses on update location button after updating and closing", async () => {
       global.fetch = jest.fn().mockResolvedValue({
         json: async () =>

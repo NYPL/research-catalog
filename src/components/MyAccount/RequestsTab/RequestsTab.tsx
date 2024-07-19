@@ -1,9 +1,4 @@
-import {
-  Box,
-  StatusBadge,
-  Text,
-  SkeletonLoader,
-} from "@nypl/design-system-react-components"
+import { Box, StatusBadge, Text } from "@nypl/design-system-react-components"
 
 import ExternalLink from "../../Links/ExternalLink/ExternalLink"
 import type { Hold } from "../../../types/myAccountTypes"
@@ -42,7 +37,7 @@ const RequestsTab = () => {
     "Pickup by",
     "Manage request",
   ]
-  const holdsData = holds.map((hold, i) => {
+  const holdsData = holds.map((hold) => {
     return [
       formatTitleElement(hold),
       getStatusBadge(hold.status),
