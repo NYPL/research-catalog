@@ -12,8 +12,7 @@ import { PatronDataProvider } from "../../src/context/PatronDataContext"
 import TimedLogoutModal from "../../src/components/MyAccount/TimedLogoutModal"
 import { getIncrementedTime } from "../../src/utils/cookieUtils"
 import { useEffect, useState } from "react"
-import sierraClient from "../../src/server/sierraClient"
-import { MyAccountFactory } from "../../src/models/MyAccount"
+import { getPatronData } from "../api/account/[id]"
 interface MyAccountPropsType {
   accountData: MyAccountPatronData
   isAuthenticated: boolean
@@ -110,9 +109,8 @@ export async function getServerSideProps({ req, res }) {
   const tabsPath = match ? match[1] : null
   const id = patronTokenResponse.decodedPatron.sub
   try {
-    const client = await sierraClient()
     const { checkouts, holds, patron, fines, pickupLocations } =
-      await MyAccountFactory(id, client)
+      await getPatronData(id)
     /*  Redirecting invalid paths (including /overdues if user has none) and
     // cleaning extra parts off valid paths. */
     if (tabsPath) {

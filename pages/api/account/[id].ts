@@ -2,10 +2,14 @@ import type { NextApiRequest, NextApiResponse } from "next"
 import sierraClient from "../../../src/server/sierraClient"
 import { MyAccountFactory } from "../../../src/models/MyAccount"
 
+export const getPatronData = async (id: string) => {
+  const client = await sierraClient()
+  return await MyAccountFactory(id, client)
+}
+
 export const fetchPatronData = async (id: string) => {
   try {
-    const client = await sierraClient()
-    const patronData = await MyAccountFactory(id, client)
+    const patronData = await getPatronData(id)
     return { status: 200, message: JSON.stringify(patronData) }
   } catch (e) {
     return {
