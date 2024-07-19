@@ -4,10 +4,7 @@ import MyAccount from "../../../models/MyAccount"
 import { fireEvent, render, screen } from "../../../utils/testUtils"
 import * as helpers from "../../../../pages/api/account/helpers"
 import userEvent from "@testing-library/user-event"
-import {
-  filteredPickupLocations,
-  processedHolds,
-} from "../../../../__test__/fixtures/processedMyAccountData"
+import { filteredPickupLocations } from "../../../../__test__/fixtures/processedMyAccountData"
 import { PatronDataProvider } from "../../../context/PatronDataContext"
 import { processedPatron } from "../../../../__test__/fixtures/processedMyAccountData"
 

@@ -26,7 +26,6 @@ describe("UpdateLocation modal trigger", () => {
           data-testId="click me"
           hold={processedHolds[0]}
           patronId={1234567}
-          pickupLocation={{ name: "SNFL", code: "sn" }}
           key={1}
         />
       </PatronDataProvider>
@@ -104,6 +103,42 @@ describe("UpdateLocation modal trigger", () => {
       const errorMessage = screen.getByText("Location change failed")
       expect(errorMessage).toBeInTheDocument()
       await userEvent.click(screen.getByText("OK"))
+    })
+  })
+  describe("focus", () => {
+    it("focuses on update location button after updating and closing", async () => {
+      global.fetch = jest.fn().mockResolvedValue({
+        json: async () => JSON.stringify({ id: "spaghetti" }),
+        status: 200,
+      } as Response)
+      await openModal()
+      const select = screen.getByLabelText("Pickup location")
+      await userEvent.selectOptions(select, "mp   ")
+      const submitButton = screen.getByText("Confirm location")
+      await userEvent.click(submitButton)
+      await userEvent.click(screen.getByText("OK"))
+      const updateLocation = screen.getByTestId("change-location-button")
+      expect(updateLocation).toHaveFocus()
+    })
+    it("focuses on update location button after closing modal without updating", async () => {
+      await openModal()
+      await userEvent.click(screen.getByText("Cancel"))
+      const updateLocation = screen.getByTestId("change-location-button")
+      expect(updateLocation).toHaveFocus()
+    })
+    it("focuses on update location button after failed update and closing modal", async () => {
+      global.fetch = jest.fn().mockResolvedValue({
+        json: async () => JSON.stringify({ id: "spaghetti" }),
+        status: 500,
+      } as Response)
+      await openModal()
+      const select = screen.getByLabelText("Pickup location")
+      await userEvent.selectOptions(select, "mp   ")
+      const submitButton = screen.getByText("Confirm location")
+      await userEvent.click(submitButton)
+      await userEvent.click(screen.getByText("OK"))
+      const updateLocation = screen.getByTestId("change-location-button")
+      expect(updateLocation).toHaveFocus()
     })
   })
 })

@@ -12,10 +12,12 @@ import CancelButton from "./CancelButton"
 import FreezeButton from "./FreezeButton"
 import UpdateLocation from "./UpdateLocation"
 import styles from "../../../../styles/components/MyAccount.module.scss"
-import { useContext } from "react"
+import { useContext, useEffect, useRef, useState } from "react"
 import { PatronDataContext } from "../../../context/PatronDataContext"
 
 const RequestsTab = () => {
+  const tabRef = useRef(null)
+  const [focusOnRequestTab, setFocusOnRequestTab] = useState(false)
   const {
     patronDataLoading,
     updatedAccountData: { holds, patron, pickupLocations },
@@ -50,7 +52,6 @@ const RequestsTab = () => {
           pickupLocationOptions={pickupLocations}
           patronId={patron.id}
           hold={hold}
-          pickupLocation={hold.pickupLocation}
           key={i}
         />
       )}
@@ -64,13 +65,24 @@ const RequestsTab = () => {
           flexDirection: { base: "column", md: "row" },
         }}
       >
-        <CancelButton hold={hold} patron={patron} />
+        <CancelButton
+          setFocusOnRequestTab={setFocusOnRequestTab}
+          hold={hold}
+          patron={patron}
+        />
         {hold.canFreeze && hold.status === "REQUEST PENDING" && (
           <FreezeButton hold={hold} patron={patron} />
         )}
       </Box>
     ) : null,
   ])
+
+  useEffect(() => {
+    if (focusOnRequestTab) {
+      tabRef.current.focus()
+      setFocusOnRequestTab(false)
+    }
+  }, [focusOnRequestTab])
 
   function getStatusBadge(status) {
     if (status == "READY FOR PICKUP") {
@@ -86,16 +98,15 @@ const RequestsTab = () => {
       </StatusBadge>
     )
   }
-  const tabDisplay = patronDataLoading ? (
-    <SkeletonLoader showImage={false} />
-  ) : (
+
+  return (
     <ItemsTab
+      tabRef={tabRef}
       headers={holdsHeaders}
       data={holdsData}
       userAction={"requested"}
     />
   )
-  return tabDisplay
 }
 
 export default RequestsTab

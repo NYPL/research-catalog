@@ -1,23 +1,26 @@
-import { Box, Icon, Table } from "@nypl/design-system-react-components"
+import { Text, Box, Icon, Table } from "@nypl/design-system-react-components"
 
 import ExternalLink from "../Links/ExternalLink/ExternalLink"
 import styles from "../../../styles/components/MyAccount.module.scss"
 import { appConfig } from "../../config/config"
+import type { RefObject } from "react"
 
 const ItemsTab = ({
+  tabRef,
   headers,
   data,
   userAction,
 }: {
+  tabRef?: RefObject<HTMLDivElement>
   headers: string[]
   data: any[]
   userAction: "requested" | "checked out"
 }) => {
   return (
-    <>
+    <Box data-testid="items-tab" tabIndex={-1} ref={tabRef}>
       {data?.length === 0 && (
         <Box className={styles.notification}>
-          <span>You currently do not have any items {userAction}.</span>
+          <Text>You currently do not have any items {userAction}.</Text>
         </Box>
       )}
       <Box className={styles.notificationWithIcon}>
@@ -39,7 +42,7 @@ const ItemsTab = ({
           tableData={data}
         />
       )}
-    </>
+    </Box>
   )
 }
 

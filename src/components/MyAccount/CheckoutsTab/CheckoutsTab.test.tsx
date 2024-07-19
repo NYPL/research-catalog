@@ -89,8 +89,9 @@ describe("CheckoutsTab", () => {
         body: JSON.stringify({ patronId: processedPatron.id }),
       }
     )
-    expect(renewButton).toBeDisabled()
     await userEvent.click(component.getByText("OK"))
+    expect(renewButton).toHaveAttribute("aria-disabled", "true")
+    expect(renewButton).toHaveFocus()
     // expect account data refresh to have happened
     expect(accountDataRefreshSpy).toHaveBeenCalled()
   })
