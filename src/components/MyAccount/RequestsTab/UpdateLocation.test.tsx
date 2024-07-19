@@ -26,7 +26,6 @@ describe("UpdateLocation modal trigger", () => {
           data-testId="click me"
           hold={processedHolds[0]}
           patronId={1234567}
-          pickupLocation={{ name: "SNFL", code: "sn" }}
           key={1}
         />
       </PatronDataProvider>
