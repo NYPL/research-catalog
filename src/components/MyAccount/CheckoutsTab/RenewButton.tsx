@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react"
+import { type Dispatch, useContext, useEffect, useState } from "react"
 import {
   useModal,
   Box,
@@ -17,9 +17,11 @@ import { PatronDataContext } from "../../../context/PatronDataContext"
 const RenewButton = ({
   checkout,
   patron,
-  checkoutRenewing,
+  renewingLoading,
   setCheckoutRenewing,
 }: {
+  renewingLoading: boolean
+  setCheckoutRenewing: Dispatch<string>
   checkout: Checkout
   patron: Patron
 }) => {
@@ -82,6 +84,7 @@ const RenewButton = ({
       </h5>
     ),
     onClose: () => {
+      setCheckoutRenewing(null)
       onClose()
     },
   }
@@ -122,6 +125,7 @@ const RenewButton = ({
     }
     onOpen()
   }
+  const showLoadingState = patronDataLoading && renewingLoading
 
   return (
     <>
@@ -132,10 +136,10 @@ const RenewButton = ({
         buttonType="secondary"
         id={`renew-${checkout.id}`}
         onClick={handleClick}
-        aria-disabled={isButtonDisabled}
+        aria-disabled={isButtonDisabled || showLoadingState}
         aria-label={`Renew ${checkout.title}`}
       >
-        {patronDataLoading && checkoutRenewing && (
+        {showLoadingState && (
           <ProgressIndicator
             id={"renew-loading"}
             labelText="Renew"
@@ -146,7 +150,7 @@ const RenewButton = ({
             isIndeterminate
           />
         )}
-        Renew
+        {showLoadingState ? "Loading" : "Renew"}
       </Button>
       <Modal {...modalProps} />
     </>

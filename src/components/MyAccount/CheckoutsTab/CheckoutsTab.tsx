@@ -38,7 +38,7 @@ const CheckoutsTab = () => {
     checkout.isResearch ? null : (
       <RenewButton
         setCheckoutRenewing={setCheckoutRenewing}
-        checkoutRenewing={checkoutRenewing === checkout.id}
+        renewingLoading={checkoutRenewing === checkout.id}
         checkout={checkout}
         patron={patron}
       />
