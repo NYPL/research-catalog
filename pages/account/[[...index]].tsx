@@ -9,10 +9,11 @@ import initializePatronTokenAuth, {
 import ProfileContainer from "../../src/components/MyAccount/ProfileContainer"
 import type { MyAccountPatronData } from "../../src/types/myAccountTypes"
 import { PatronDataProvider } from "../../src/context/PatronDataContext"
-import { fetchPatronData } from "../api/account/[id]"
 import TimedLogoutModal from "../../src/components/MyAccount/TimedLogoutModal"
 import { getIncrementedTime } from "../../src/utils/cookieUtils"
 import { useEffect, useState } from "react"
+import sierraClient from "../../src/server/sierraClient"
+import { MyAccountFactory } from "../../src/models/MyAccount"
 interface MyAccountPropsType {
   accountData: MyAccountPatronData
   isAuthenticated: boolean
@@ -109,11 +110,9 @@ export async function getServerSideProps({ req, res }) {
   const tabsPath = match ? match[1] : null
   const id = patronTokenResponse.decodedPatron.sub
   try {
-    const patronData = await fetchPatronData(id)
-    const { checkouts, holds, patron, fines, pickupLocations } = JSON.parse(
-      patronData.message
-    )
-
+    const client = await sierraClient()
+    const { checkouts, holds, patron, fines, pickupLocations } =
+      await MyAccountFactory(id, client)
     /*  Redirecting invalid paths (including /overdues if user has none) and
     // cleaning extra parts off valid paths. */
     if (tabsPath) {
