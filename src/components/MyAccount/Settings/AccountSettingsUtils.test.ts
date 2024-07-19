@@ -1,12 +1,10 @@
 import {
   parseAccountSettingsPayload,
   updatePhoneOrEmailArrayWithNewPrimary,
-  buildUpdatedPatronDisplayData,
   formatPhoneNumber,
 } from "./AccountSettingsUtils"
 import { processedPatron } from "../../../../__test__/fixtures/processedMyAccountData"
 import { formatDate, formatPatronName } from "../../../utils/myAccountUtils"
-import type { FixedField, Patron } from "../../../types/myAccountTypes"
 
 describe("Account settings utils", () => {
   describe("formatDate", () => {
@@ -38,91 +36,6 @@ describe("Account settings utils", () => {
     it("returns any other number", () => {
       const phones = [{ number: "1234567", type: "t" }]
       expect(formatPhoneNumber(phones)).toEqual("1234567")
-    })
-  })
-  describe("buildUpdatedPatronDisplayData", () => {
-    it("can handle an empty patron", () => {
-      const originalPatronData = {
-        formattedBarcode: undefined,
-        barcode: "1234567890",
-        emails: [],
-        expirationDate: "2025-03-28",
-        homeLibrary: { code: "sn   ", name: "SNFL (formerly Mid-Manhattan)" },
-        id: 2772226,
-        name: "NONNA, STREGA",
-        notificationPreference: "z",
-        phones: [],
-      } as Patron
-      const patronUpdateBody = {} as Patron
-      expect(
-        buildUpdatedPatronDisplayData(originalPatronData, patronUpdateBody)
-      ).toStrictEqual(originalPatronData)
-    })
-    it("can combine patron data and update body with all fields provided", () => {
-      const originalPatronData = {
-        barcode: "1234567890",
-        emails: ["email@mail.com"],
-        expirationDate: "2025-03-28",
-        homeLibrary: { code: "mp   ", name: "SNFL (formerly Mid-Manhattan)" },
-        id: 2772226,
-        name: "NONNA, STREGA",
-        notificationPreference: "z",
-        phones: [{ number: "2129876543", type: "t" }],
-      } as Patron
-      const patronUpdateBody = {
-        emails: ["hey@you.com", "email@mail.com"],
-        fixedFields: {
-          268: { label: "Notice Preference", value: "p" } as FixedField,
-        },
-        homeLibraryCode: "mp   ",
-        phones: [
-          { number: "2129876543", type: "t" },
-          { number: "1234567890", type: "t" },
-        ],
-      }
-      const { id, emails, phones, homeLibrary, notificationPreference } =
-        buildUpdatedPatronDisplayData(
-          originalPatronData,
-          patronUpdateBody,
-          "mp   @Morris Park"
-        )
-      expect(emails).toStrictEqual(["hey@you.com", "email@mail.com"])
-      expect(phones).toStrictEqual([
-        { number: "2129876543", type: "t" },
-        { number: "1234567890", type: "t" },
-      ])
-      expect(notificationPreference).toEqual("p")
-      expect(homeLibrary).toStrictEqual({ code: "mp   ", name: "Morris Park" })
-      expect(id).toEqual(originalPatronData.id)
-    })
-    it("populates with original data when updated data is missing fields", () => {
-      const originalPatronData = {
-        barcode: "1234567890",
-        emails: ["email@mail.com"],
-        expirationDate: "2025-03-28",
-        homeLibrary: { code: "sn   ", name: "SNFL (formerly Mid-Manhattan)" },
-        id: 2772226,
-        name: "NONNA, STREGA",
-        notificationPreference: "z",
-        phones: [{ number: "2129876543", type: "t" }],
-      } as Patron
-      const patronUpdateBody = {
-        fixedFields: {
-          "268": { label: "Notice Preference", value: "p" } as FixedField,
-        },
-        homeLibraryCode: "mp   ",
-      }
-      const { id, emails, phones, homeLibrary, notificationPreference } =
-        buildUpdatedPatronDisplayData(
-          originalPatronData,
-          patronUpdateBody,
-          "mp   @Morris Park"
-        )
-      expect(emails).toStrictEqual(originalPatronData.emails)
-      expect(phones).toStrictEqual(originalPatronData.phones)
-      expect(homeLibrary).toEqual({ code: "mp   ", name: "Morris Park" })
-      expect(notificationPreference).toEqual("p")
-      expect(id).toEqual(originalPatronData.id)
     })
   })
   describe("parseAccountSettingsPayload", () => {

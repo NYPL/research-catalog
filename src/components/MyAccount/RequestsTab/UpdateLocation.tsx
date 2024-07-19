@@ -8,110 +8,121 @@ import {
   Select,
   Link as DSLink,
   type DefaultModalProps,
-  type ConfirmationModalProps,
   type BaseModalProps,
   SkeletonLoader,
+  FormField,
+  Form,
 } from "@nypl/design-system-react-components"
 import type { Hold, SierraCodeName } from "../../../types/myAccountTypes"
 import styles from "../../../../styles/components/MyAccount.module.scss"
-import { useState } from "react"
+import { useContext, useRef, useState, useEffect } from "react"
 import { BASE_URL } from "../../../config/constants"
+import { PatronDataContext } from "../../../context/PatronDataContext"
 
 interface UpdateLocationPropsType {
   hold: Hold
-  pickupLocation: SierraCodeName
   pickupLocationOptions: SierraCodeName[]
   key: number
   patronId: number
-  updateHoldLocation: (holdId: string, location: SierraCodeName) => void
 }
 
 const UpdateLocation = ({
-  updateHoldLocation,
   pickupLocationOptions,
   patronId,
   hold,
-  pickupLocation,
   key,
 }: UpdateLocationPropsType) => {
+  const selectRef = useRef(null)
+  const updateLocationButtonRef = useRef(null)
+
+  const [focusOnChangeLocationButton, setFocusOnChangeLocationButton] =
+    useState(false)
+
+  const { getMostUpdatedSierraAccountData } = useContext(PatronDataContext)
   const { Modal, onOpen: openModal, onClose: closeModal } = useModal()
+
   const locationsWithSelectedFirst = [
-    pickupLocation,
+    hold.pickupLocation,
     ...pickupLocationOptions.filter(
-      (loc) => loc.code.trim() !== pickupLocation.code.trim()
+      (loc) => loc.code.trim() !== hold.pickupLocation.code.trim()
     ),
   ]
-  const confirmLocationChangeModalProps = (selected: SierraCodeName) => ({
-    type: "confirmation",
+  const handleSubmit = async () => {
+    const newLocation = pickupLocationOptions.find(
+      (loc) => loc.code === selectRef.current.value
+    )
+    setModalProps({
+      ...confirmLocationChangeModalProps,
+      bodyContent: <SkeletonLoader showImage={false} />,
+    } as DefaultModalProps)
+    const response = await fetch(
+      `${BASE_URL}/api/account/holds/update/${hold.id}`,
+      {
+        method: "PUT",
+        body: JSON.stringify({
+          pickupLocation: selectRef.current.value,
+          patronId: `${patronId}`,
+        }),
+      }
+    )
+    if (response.status == 200) {
+      setModalProps(successModalProps(newLocation) as DefaultModalProps)
+    } else setModalProps(failureModalProps as DefaultModalProps)
+  }
+
+  const confirmLocationChangeModalProps = {
+    type: "default",
     bodyContent: (
-      <Box className={styles.modalBody}>
-        <Select
-          value={selected.code}
-          onChange={(e: React.FormEvent<HTMLInputElement>) => {
-            const newLocation = locationsWithSelectedFirst.find(
-              (loc) => e.currentTarget.value === loc.code
-            )
-            setModalProps(
-              confirmLocationChangeModalProps(
-                newLocation
-              ) as ConfirmationModalProps
-            )
-          }}
-          id={`update-location-selector-${key}`}
-          labelText="Pickup location"
-          showLabel
-          name={"pickup-location"}
-        >
-          {locationsWithSelectedFirst.map((location, locationKey) => {
-            return (
-              <option
-                key={`pickupLocation-option-${key}${locationKey}`}
-                value={location.code}
-              >
-                {location.name}
-              </option>
-            )
-          })}
-        </Select>
-      </Box>
+      <Form
+        id={`update-pickup-location-hold-${hold.id}`}
+        className={styles.modalBody}
+      >
+        <FormField>
+          <Select
+            ref={selectRef}
+            value={hold.pickupLocation.code}
+            id={`update-location-selector-${key}`}
+            labelText="Pickup location"
+            showLabel
+            name={"pickup-location"}
+          >
+            {locationsWithSelectedFirst.map((location, locationKey) => {
+              return (
+                <option
+                  key={`pickupLocation-option-${key}${locationKey}`}
+                  value={location.code}
+                >
+                  {location.name}
+                </option>
+              )
+            })}
+          </Select>
+        </FormField>
+        <FormField>
+          <Button
+            id="submit"
+            onClick={handleSubmit}
+            className={styles.formButton}
+          >
+            Confirm location
+          </Button>
+        </FormField>
+      </Form>
     ),
     closeButtonLabel: "Cancel",
-    confirmButtonLabel: "Confirm location",
-    onCancel: () => {
-      closeModal()
-    },
-    onConfirm: async () => {
-      setModalProps({
-        ...confirmLocationChangeModalProps(selected),
-        bodyContent: <SkeletonLoader showImage={false} />,
-      } as ConfirmationModalProps)
-      const response = await fetch(
-        `${BASE_URL}/api/account/holds/update/${hold.id}`,
-        {
-          method: "PUT",
-          body: JSON.stringify({
-            pickupLocation: selected.code,
-            patronId: `${patronId}`,
-          }),
-        }
-      )
-      if (response.status == 200) {
-        // Open next modal to confirm request has been canceled.
-        setModalProps(successModalProps(selected) as DefaultModalProps)
-      } else setModalProps(failureModalProps as DefaultModalProps)
-    },
+    onClose: closeModal,
     headingText: (
       <h5 className={styles.modalHeading}>
         Where would you like to pick up this item?
       </h5>
     ),
-  })
+  }
 
   const [modalProps, setModalProps] = useState<BaseModalProps>(
-    confirmLocationChangeModalProps(pickupLocation) as ConfirmationModalProps
+    confirmLocationChangeModalProps as DefaultModalProps
   )
 
-  const successModalProps = (newLocation: SierraCodeName) => ({
+  const successModalProps = (newLocation) => ({
     type: "default",
     bodyContent: (
       <Box className={styles.modalBody}>
@@ -135,11 +146,10 @@ const UpdateLocation = ({
       </h5>
     ),
     onClose: () => {
-      updateHoldLocation(hold.id, newLocation)
-      setModalProps(
-        confirmLocationChangeModalProps(newLocation) as ConfirmationModalProps
-      )
+      setModalProps(confirmLocationChangeModalProps as DefaultModalProps)
       closeModal()
+      getMostUpdatedSierraAccountData()
+      setFocusOnChangeLocationButton(true)
     },
   })
   const failureModalProps = {
@@ -156,12 +166,9 @@ const UpdateLocation = ({
       </Box>
     ),
     onClose: () => {
-      setModalProps(
-        confirmLocationChangeModalProps(
-          pickupLocation
-        ) as ConfirmationModalProps
-      )
+      setModalProps(confirmLocationChangeModalProps as DefaultModalProps)
       closeModal()
+      setFocusOnChangeLocationButton(true)
     },
     closeButtonLabel: "OK",
     headingText: (
@@ -175,15 +182,23 @@ const UpdateLocation = ({
   }
   const buttonLabel = "Change location"
 
+  useEffect(() => {
+    if (focusOnChangeLocationButton) {
+      updateLocationButtonRef.current.focus()
+    }
+  }, [focusOnChangeLocationButton])
+
   return (
     <>
       <Button
+        ref={updateLocationButtonRef}
         aria-label={`${buttonLabel} for ${hold.title}`}
         size="small"
         pl={0}
         onClick={openModal}
         id={`update-pickup-location-${key}`}
         buttonType="text"
+        data-testid="change-location-button"
       >
         <Icon name="editorMode" align="left" size="medium"></Icon>
         <Text fontSize={-1} className={styles.changeLocation}>
