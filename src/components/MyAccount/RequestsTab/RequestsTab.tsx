@@ -18,6 +18,7 @@ import { PatronDataContext } from "../../../context/PatronDataContext"
 const RequestsTab = () => {
   const tabRef = useRef(null)
   const [focusOnRequestTab, setFocusOnRequestTab] = useState(false)
+  const [lastUpdatedHoldId, setLastUpdatedHoldId] = useState<string>(null)
   const {
     updatedAccountData: { holds, patron, pickupLocations },
   } = useContext(PatronDataContext)
@@ -49,6 +50,8 @@ const RequestsTab = () => {
         <Text>{hold.pickupLocation.name}</Text>
         {!hold.isResearch && hold.status === "REQUEST PENDING" && (
           <UpdateLocation
+            setLastUpdatedHoldId={setLastUpdatedHoldId}
+            focus={lastUpdatedHoldId === hold.id}
             pickupLocationOptions={pickupLocations}
             patronId={patron.id}
             hold={hold}

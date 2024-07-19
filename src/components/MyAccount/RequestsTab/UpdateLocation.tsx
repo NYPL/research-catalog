@@ -15,7 +15,7 @@ import {
 } from "@nypl/design-system-react-components"
 import type { Hold, SierraCodeName } from "../../../types/myAccountTypes"
 import styles from "../../../../styles/components/MyAccount.module.scss"
-import { useContext, useRef, useState, useEffect } from "react"
+import { useContext, useRef, useState, useEffect, type Dispatch } from "react"
 import { BASE_URL } from "../../../config/constants"
 import { PatronDataContext } from "../../../context/PatronDataContext"
 
@@ -24,6 +24,8 @@ interface UpdateLocationPropsType {
   pickupLocationOptions: SierraCodeName[]
   key: string
   patronId: number
+  setLastUpdatedHoldId: Dispatch<string>
+  focus: boolean
 }
 
 const UpdateLocation = ({
@@ -31,12 +33,14 @@ const UpdateLocation = ({
   patronId,
   hold,
   key,
+  setLastUpdatedHoldId,
+  focus,
 }: UpdateLocationPropsType) => {
   const selectRef = useRef(null)
   const updateLocationButtonRef = useRef(null)
 
   const [focusOnChangeLocationButton, setFocusOnChangeLocationButton] =
-    useState(false)
+    useState(focus)
 
   const { getMostUpdatedSierraAccountData } = useContext(PatronDataContext)
   const { Modal, onOpen: openModal, onClose: closeModal } = useModal()
@@ -67,6 +71,7 @@ const UpdateLocation = ({
     )
     if (response.status == 200) {
       setModalProps(successModalProps(newLocation) as DefaultModalProps)
+      setLastUpdatedHoldId(hold.id)
     } else setModalProps(failureModalProps as DefaultModalProps)
   }
 
