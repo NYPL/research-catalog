@@ -1,4 +1,9 @@
-import { Box, StatusBadge, Text } from "@nypl/design-system-react-components"
+import {
+  Box,
+  SkeletonLoader,
+  StatusBadge,
+  Text,
+} from "@nypl/design-system-react-components"
 
 import ExternalLink from "../../Links/ExternalLink/ExternalLink"
 import type { Hold } from "../../../types/myAccountTypes"
@@ -15,6 +20,7 @@ const RequestsTab = () => {
   const [focusOnRequestTab, setFocusOnRequestTab] = useState(false)
   const [lastUpdatedHoldId, setLastUpdatedHoldId] = useState<string>(null)
   const {
+    patronDataLoading,
     updatedAccountData: { holds, patron, pickupLocations },
   } = useContext(PatronDataContext)
   function formatTitleElement(hold: Hold) {
@@ -77,11 +83,11 @@ const RequestsTab = () => {
   })
 
   useEffect(() => {
-    if (focusOnRequestTab) {
+    if (!patronDataLoading && focusOnRequestTab) {
       tabRef.current.focus()
       setFocusOnRequestTab(false)
     }
-  }, [focusOnRequestTab])
+  }, [focusOnRequestTab, patronDataLoading])
 
   function getStatusBadge(status) {
     if (status == "READY FOR PICKUP") {
@@ -97,8 +103,9 @@ const RequestsTab = () => {
       </StatusBadge>
     )
   }
-
-  return (
+  const tabDisplay = patronDataLoading ? (
+    <SkeletonLoader showImage={false} />
+  ) : (
     <ItemsTab
       tabRef={tabRef}
       headers={holdsHeaders}
@@ -106,6 +113,8 @@ const RequestsTab = () => {
       userAction={"requested"}
     />
   )
+
+  return tabDisplay
 }
 
 export default RequestsTab
