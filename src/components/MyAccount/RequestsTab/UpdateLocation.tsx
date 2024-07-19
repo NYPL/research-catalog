@@ -151,7 +151,6 @@ const UpdateLocation = ({
       </h5>
     ),
     onClose: () => {
-      setModalProps(confirmLocationChangeModalProps as DefaultModalProps)
       closeModal()
       getMostUpdatedSierraAccountData()
       setFocusOnChangeLocationButton(true)
@@ -171,7 +170,6 @@ const UpdateLocation = ({
       </Box>
     ),
     onClose: () => {
-      setModalProps(confirmLocationChangeModalProps as DefaultModalProps)
       closeModal()
       setFocusOnChangeLocationButton(true)
     },
