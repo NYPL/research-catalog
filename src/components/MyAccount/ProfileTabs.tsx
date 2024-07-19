@@ -6,7 +6,7 @@ import CheckoutsTab from "./CheckoutsTab/CheckoutsTab"
 import RequestsTab from "./RequestsTab/RequestsTab"
 import FeesTab from "./FeesTab/FeesTab"
 import { PatronDataContext } from "../../context/PatronDataContext"
-import { useContext, useRef } from "react"
+import { useContext } from "react"
 
 interface ProfileTabsPropsType {
   activePath: string

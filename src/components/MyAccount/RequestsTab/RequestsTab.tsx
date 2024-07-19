@@ -52,7 +52,6 @@ const RequestsTab = () => {
           pickupLocationOptions={pickupLocations}
           patronId={patron.id}
           hold={hold}
-          pickupLocation={hold.pickupLocation}
           key={i}
         />
       )}
@@ -99,18 +98,7 @@ const RequestsTab = () => {
       </StatusBadge>
     )
   }
-  // const tabDisplay = patronDataLoading ? (
-  //   <SkeletonLoader showImage={false} />
-  // ) : (
-  //   <ItemsTab
-  //     tabRef={tabRef}
-  //     headers={holdsHeaders}
-  //     data={holdsData}
-  //     userAction={"requested"}
-  //   />
-  // )
 
-  // return tabDisplay
   return (
     <ItemsTab
       tabRef={tabRef}

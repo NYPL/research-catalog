@@ -21,7 +21,6 @@ import { PatronDataContext } from "../../../context/PatronDataContext"
 
 interface UpdateLocationPropsType {
   hold: Hold
-  pickupLocation: SierraCodeName
   pickupLocationOptions: SierraCodeName[]
   key: number
   patronId: number
@@ -31,7 +30,6 @@ const UpdateLocation = ({
   pickupLocationOptions,
   patronId,
   hold,
-  pickupLocation,
   key,
 }: UpdateLocationPropsType) => {
   const selectRef = useRef(null)
@@ -44,9 +42,9 @@ const UpdateLocation = ({
   const { Modal, onOpen: openModal, onClose: closeModal } = useModal()
 
   const locationsWithSelectedFirst = [
-    pickupLocation,
+    hold.pickupLocation,
     ...pickupLocationOptions.filter(
-      (loc) => loc.code.trim() !== pickupLocation.code.trim()
+      (loc) => loc.code.trim() !== hold.pickupLocation.code.trim()
     ),
   ]
   const handleSubmit = async () => {
@@ -82,7 +80,7 @@ const UpdateLocation = ({
         <FormField>
           <Select
             ref={selectRef}
-            value={pickupLocation.code}
+            value={hold.pickupLocation.code}
             id={`update-location-selector-${key}`}
             labelText="Pickup location"
             showLabel
