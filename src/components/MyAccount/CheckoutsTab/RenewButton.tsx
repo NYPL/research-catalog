@@ -5,6 +5,7 @@ import {
   Icon,
   Button,
   Text,
+  ProgressIndicator,
 } from "@nypl/design-system-react-components"
 
 import ExternalLink from "../../Links/ExternalLink/ExternalLink"
@@ -16,6 +17,8 @@ import { PatronDataContext } from "../../../context/PatronDataContext"
 const RenewButton = ({
   checkout,
   patron,
+  checkoutRenewing,
+  setCheckoutRenewing,
 }: {
   checkout: Checkout
   patron: Patron
@@ -23,7 +26,11 @@ const RenewButton = ({
   const [isButtonDisabled, setButtonDisabled] = useState(false)
   const { onOpen, onClose, Modal } = useModal()
   const [modalProps, setModalProps] = useState(null)
-  const { getMostUpdatedSierraAccountData } = useContext(PatronDataContext)
+  const {
+    getMostUpdatedSierraAccountData,
+    patronDataLoading,
+    setPatronDataLoading,
+  } = useContext(PatronDataContext)
 
   const successModalProps = {
     type: "default",
@@ -92,6 +99,8 @@ const RenewButton = ({
   }, [])
 
   const handleClick = async () => {
+    setCheckoutRenewing(checkout.id)
+    setPatronDataLoading(true)
     const response = await fetch(
       `${BASE_URL}/api/account/checkouts/renew/${checkout.id}`,
       {
@@ -126,6 +135,17 @@ const RenewButton = ({
         aria-disabled={isButtonDisabled}
         aria-label={`Renew ${checkout.title}`}
       >
+        {patronDataLoading && checkoutRenewing && (
+          <ProgressIndicator
+            id={"renew-loading"}
+            labelText="Renew"
+            showLabel={false}
+            size="small"
+            indicatorType="circular"
+            mr="xs"
+            isIndeterminate
+          />
+        )}
         Renew
       </Button>
       <Modal {...modalProps} />

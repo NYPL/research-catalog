@@ -3,7 +3,7 @@ import ExternalLink from "../../Links/ExternalLink/ExternalLink"
 import type { Checkout } from "../../../types/myAccountTypes"
 import RenewButton from "./RenewButton"
 import ItemsTab from "../ItemsTab"
-import { useContext } from "react"
+import { useContext, useState } from "react"
 import { PatronDataContext } from "../../../context/PatronDataContext"
 
 const CheckoutsTab = () => {
@@ -29,14 +29,19 @@ const CheckoutsTab = () => {
     "Due back by",
     "Manage checkout",
   ]
-
+  const [checkoutRenewing, setCheckoutRenewing] = useState<string>(null)
   const checkoutsData = checkouts.map((checkout) => [
     formatTitleElement(checkout),
     checkout.barcode,
     checkout.callNumber,
     checkout.dueDate,
     checkout.isResearch ? null : (
-      <RenewButton checkout={checkout} patron={patron} />
+      <RenewButton
+        setCheckoutRenewing={setCheckoutRenewing}
+        checkoutRenewing={checkoutRenewing === checkout.id}
+        checkout={checkout}
+        patron={patron}
+      />
     ),
   ])
   return (
