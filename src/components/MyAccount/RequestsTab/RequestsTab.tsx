@@ -19,7 +19,6 @@ const RequestsTab = () => {
   const tabRef = useRef(null)
   const [focusOnRequestTab, setFocusOnRequestTab] = useState(false)
   const {
-    patronDataLoading,
     updatedAccountData: { holds, patron, pickupLocations },
   } = useContext(PatronDataContext)
   function formatTitleElement(hold: Hold) {
@@ -42,40 +41,42 @@ const RequestsTab = () => {
     "Pickup by",
     "Manage request",
   ]
-  const holdsData = holds.map((hold, i) => [
-    formatTitleElement(hold),
-    getStatusBadge(hold.status),
-    <>
-      <Text>{hold.pickupLocation.name}</Text>
-      {!hold.isResearch && hold.status === "REQUEST PENDING" && (
-        <UpdateLocation
-          pickupLocationOptions={pickupLocations}
-          patronId={patron.id}
-          hold={hold}
-          key={i}
-        />
-      )}
-    </>,
-    hold.pickupByDate,
-    hold ? (
-      <Box
-        sx={{
-          display: "flex",
-          gap: "4px",
-          flexDirection: { base: "column", md: "row" },
-        }}
-      >
-        <CancelButton
-          setFocusOnRequestTab={setFocusOnRequestTab}
-          hold={hold}
-          patron={patron}
-        />
-        {hold.canFreeze && hold.status === "REQUEST PENDING" && (
-          <FreezeButton hold={hold} patron={patron} />
+  const holdsData = holds.map((hold, i) => {
+    return [
+      formatTitleElement(hold),
+      getStatusBadge(hold.status),
+      <>
+        <Text>{hold.pickupLocation.name}</Text>
+        {!hold.isResearch && hold.status === "REQUEST PENDING" && (
+          <UpdateLocation
+            pickupLocationOptions={pickupLocations}
+            patronId={patron.id}
+            hold={hold}
+            key={hold.pickupLocation.code}
+          />
         )}
-      </Box>
-    ) : null,
-  ])
+      </>,
+      hold.pickupByDate,
+      hold ? (
+        <Box
+          sx={{
+            display: "flex",
+            gap: "4px",
+            flexDirection: { base: "column", md: "row" },
+          }}
+        >
+          <CancelButton
+            setFocusOnRequestTab={setFocusOnRequestTab}
+            hold={hold}
+            patron={patron}
+          />
+          {hold.canFreeze && hold.status === "REQUEST PENDING" && (
+            <FreezeButton hold={hold} patron={patron} />
+          )}
+        </Box>
+      ) : null,
+    ]
+  })
 
   useEffect(() => {
     if (focusOnRequestTab) {

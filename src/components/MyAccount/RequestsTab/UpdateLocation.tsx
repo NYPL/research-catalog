@@ -22,7 +22,7 @@ import { PatronDataContext } from "../../../context/PatronDataContext"
 interface UpdateLocationPropsType {
   hold: Hold
   pickupLocationOptions: SierraCodeName[]
-  key: number
+  key: string
   patronId: number
 }
 
