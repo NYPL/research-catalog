@@ -198,7 +198,8 @@ describe("RequestsTab", () => {
       json: async () => "Nooo",
       status: 400,
     } as Response)
-    const component = renderWithPatronDataContext()
+    const theoreticallyFreezableHold = processedHolds[2]
+    const component = renderWithPatronDataContext([theoreticallyFreezableHold])
     expect(
       component.queryByText("Hold freeze failed", { exact: false })
     ).not.toBeInTheDocument()
@@ -209,8 +210,9 @@ describe("RequestsTab", () => {
     expect(
       component.getByText("Hold freeze failed", { exact: false })
     ).toBeInTheDocument()
-    await userEvent.click(screen.getAllByText("OK", { exact: false })[0])
-    freezeButtons = component.getAllByText("Freeze")
+    const ok = screen.getByRole("button", { name: "OK" })
+    await userEvent.click(ok)
+    freezeButtons = await component.findAllByText("Freeze")
     expect(freezeButtons.length).toBe(1)
   })
 
