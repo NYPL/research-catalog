@@ -112,6 +112,9 @@ const CancelButton = ({
       setModalProps({
         ...checkModalProps,
         bodyContent: <SkeletonLoader showImage={false} />,
+        onCancel: () => null,
+        onConfirm: () => null,
+        closeButtonLabel: "Loading",
       } as ConfirmationModalProps)
       const response = await fetch(
         `${BASE_URL}/api/account/holds/cancel/${hold.id}`,
