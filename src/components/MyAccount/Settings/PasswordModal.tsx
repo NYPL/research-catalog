@@ -5,6 +5,7 @@ import {
   Text,
   List,
   Button,
+  SkeletonLoader,
 } from "@nypl/design-system-react-components"
 import { useState } from "react"
 
@@ -41,7 +42,11 @@ const PasswordModal = ({ patron }: { patron: Patron }) => {
           </li>
           <li> PINs and PASSWORDS must NOT contain a period.</li>
         </List>
-        <PasswordChangeForm patron={patron} updateModal={updateModal} />
+        <PasswordChangeForm
+          patron={patron}
+          updateModal={updateModal}
+          updateModalToLoading={() => setModalProps(loadingProps)}
+        />
       </Box>
     ),
     closeButtonLabel: "Cancel",
@@ -49,6 +54,11 @@ const PasswordModal = ({ patron }: { patron: Patron }) => {
     onClose: () => {
       closeModal()
     },
+  }
+
+  const loadingProps = {
+    ...entryModalProps,
+    bodyContent: <SkeletonLoader showImage={false} />,
   }
 
   const [modalProps, setModalProps] = useState(entryModalProps)
