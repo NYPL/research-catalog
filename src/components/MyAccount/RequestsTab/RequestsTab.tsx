@@ -1,8 +1,8 @@
 import {
   Box,
+  SkeletonLoader,
   StatusBadge,
   Text,
-  SkeletonLoader,
 } from "@nypl/design-system-react-components"
 
 import ExternalLink from "../../Links/ExternalLink/ExternalLink"
@@ -18,6 +18,7 @@ import { PatronDataContext } from "../../../context/PatronDataContext"
 const RequestsTab = () => {
   const tabRef = useRef(null)
   const [focusOnRequestTab, setFocusOnRequestTab] = useState(false)
+  const [lastUpdatedHoldId, setLastUpdatedHoldId] = useState<string>(null)
   const {
     patronDataLoading,
     updatedAccountData: { holds, patron, pickupLocations },
@@ -42,47 +43,51 @@ const RequestsTab = () => {
     "Pickup by",
     "Manage request",
   ]
-  const holdsData = holds.map((hold, i) => [
-    formatTitleElement(hold),
-    getStatusBadge(hold.status),
-    <>
-      <Text>{hold.pickupLocation.name}</Text>
-      {!hold.isResearch && hold.status === "REQUEST PENDING" && (
-        <UpdateLocation
-          pickupLocationOptions={pickupLocations}
-          patronId={patron.id}
-          hold={hold}
-          key={i}
-        />
-      )}
-    </>,
-    hold.pickupByDate,
-    hold ? (
-      <Box
-        sx={{
-          display: "flex",
-          gap: "4px",
-          flexDirection: { base: "column", md: "row" },
-        }}
-      >
-        <CancelButton
-          setFocusOnRequestTab={setFocusOnRequestTab}
-          hold={hold}
-          patron={patron}
-        />
-        {hold.canFreeze && hold.status === "REQUEST PENDING" && (
-          <FreezeButton hold={hold} patron={patron} />
+  const holdsData = holds.map((hold) => {
+    return [
+      formatTitleElement(hold),
+      getStatusBadge(hold.status),
+      <>
+        <Text>{hold.pickupLocation.name}</Text>
+        {!hold.isResearch && hold.status === "REQUEST PENDING" && (
+          <UpdateLocation
+            setLastUpdatedHoldId={setLastUpdatedHoldId}
+            focus={lastUpdatedHoldId === hold.id}
+            pickupLocationOptions={pickupLocations}
+            patronId={patron.id}
+            hold={hold}
+            key={hold.pickupLocation.code}
+          />
         )}
-      </Box>
-    ) : null,
-  ])
+      </>,
+      hold.pickupByDate,
+      hold ? (
+        <Box
+          sx={{
+            display: "flex",
+            gap: "4px",
+            flexDirection: { base: "column", md: "row" },
+          }}
+        >
+          <CancelButton
+            setFocusOnRequestTab={setFocusOnRequestTab}
+            hold={hold}
+            patron={patron}
+          />
+          {hold.canFreeze && hold.status === "REQUEST PENDING" && (
+            <FreezeButton hold={hold} patron={patron} />
+          )}
+        </Box>
+      ) : null,
+    ]
+  })
 
   useEffect(() => {
-    if (focusOnRequestTab) {
+    if (!patronDataLoading && focusOnRequestTab) {
       tabRef.current.focus()
       setFocusOnRequestTab(false)
     }
-  }, [focusOnRequestTab])
+  }, [focusOnRequestTab, patronDataLoading])
 
   function getStatusBadge(status) {
     if (status == "READY FOR PICKUP") {
@@ -98,8 +103,9 @@ const RequestsTab = () => {
       </StatusBadge>
     )
   }
-
-  return (
+  const tabDisplay = patronDataLoading ? (
+    <SkeletonLoader showImage={false} />
+  ) : (
     <ItemsTab
       tabRef={tabRef}
       headers={holdsHeaders}
@@ -107,6 +113,8 @@ const RequestsTab = () => {
       userAction={"requested"}
     />
   )
+
+  return tabDisplay
 }
 
 export default RequestsTab
