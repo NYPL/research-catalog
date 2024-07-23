@@ -19,7 +19,6 @@ const RequestsTab = () => {
   const tabRef = useRef(null)
   const [focusOnRequestTab, setFocusOnRequestTab] = useState(false)
   const [lastUpdatedHoldId, setLastUpdatedHoldId] = useState<string>(null)
-  const [holdToFreeze, setHoldToFreeze] = useState<string>(null)
 
   const {
     patronDataLoading,
@@ -48,19 +47,23 @@ const RequestsTab = () => {
   const holdsData = holds.map((hold, i) => [
     formatTitleElement(hold),
     getStatusBadge(hold.status),
-    <>
-      <Text>{hold.pickupLocation.name}</Text>
-      {!hold.isResearch && hold.status === "REQUEST PENDING" && (
-        <UpdateLocation
-          setLastUpdatedHoldId={setLastUpdatedHoldId}
-          focus={lastUpdatedHoldId === hold.id}
-          pickupLocationOptions={pickupLocations}
-          patronId={patron.id}
-          hold={hold}
-          key={hold.pickupLocation.code}
-        />
-      )}
-    </>,
+    lastUpdatedHoldId === hold.id && patronDataLoading ? (
+      <SkeletonLoader showImage={false} />
+    ) : (
+      <>
+        <Text>{hold.pickupLocation.name}</Text>
+        {!hold.isResearch && hold.status === "REQUEST PENDING" && (
+          <UpdateLocation
+            setLastUpdatedHoldId={setLastUpdatedHoldId}
+            focus={lastUpdatedHoldId === hold.id}
+            pickupLocationOptions={pickupLocations}
+            patronId={patron.id}
+            hold={hold}
+            key={hold.pickupLocation.code}
+          />
+        )}
+      </>
+    ),
     hold.pickupByDate,
     hold ? (
       <Box
@@ -103,7 +106,8 @@ const RequestsTab = () => {
       </StatusBadge>
     )
   }
-  const tabDisplay = patronDataLoading ? (
+  const awaitingPatronUpdateAfterCancel = patronDataLoading && focusOnRequestTab
+  const tabDisplay = awaitingPatronUpdateAfterCancel ? (
     <SkeletonLoader showImage={false} />
   ) : (
     <ItemsTab
