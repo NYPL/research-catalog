@@ -59,6 +59,8 @@ const PasswordModal = ({ patron }: { patron: Patron }) => {
   const loadingProps = {
     ...entryModalProps,
     bodyContent: <SkeletonLoader showImage={false} />,
+    onClose: () => null,
+    closeButtonLabel: "Loading",
   }
 
   const [modalProps, setModalProps] = useState(entryModalProps)
