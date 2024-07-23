@@ -121,7 +121,7 @@ const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
         {isDisabled && (
           <ProgressIndicator
             id={"freeze-loading"}
-            labelText="Renew"
+            labelText="Loading"
             showLabel={false}
             size="small"
             indicatorType="circular"

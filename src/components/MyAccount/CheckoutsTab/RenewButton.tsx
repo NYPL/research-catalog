@@ -142,7 +142,7 @@ const RenewButton = ({
         {showLoadingState && (
           <ProgressIndicator
             id={"renew-loading"}
-            labelText="Renew"
+            labelText="Loading"
             showLabel={false}
             size="small"
             indicatorType="circular"
