@@ -1,8 +1,8 @@
 import {
   Box,
+  SkeletonLoader,
   StatusBadge,
   Text,
-  SkeletonLoader,
 } from "@nypl/design-system-react-components"
 
 import ExternalLink from "../../Links/ExternalLink/ExternalLink"
@@ -18,6 +18,9 @@ import { PatronDataContext } from "../../../context/PatronDataContext"
 const RequestsTab = () => {
   const tabRef = useRef(null)
   const [focusOnRequestTab, setFocusOnRequestTab] = useState(false)
+  const [lastUpdatedHoldId, setLastUpdatedHoldId] = useState<string>(null)
+  const [holdToFreeze, setHoldToFreeze] = useState<string>(null)
+
   const {
     patronDataLoading,
     updatedAccountData: { holds, patron, pickupLocations },
@@ -42,7 +45,6 @@ const RequestsTab = () => {
     "Pickup by",
     "Manage request",
   ]
-  const [holdToFreeze, setHoldToFreeze] = useState<string>(null)
   const holdsData = holds.map((hold, i) => [
     formatTitleElement(hold),
     getStatusBadge(hold.status),
@@ -50,10 +52,12 @@ const RequestsTab = () => {
       <Text>{hold.pickupLocation.name}</Text>
       {!hold.isResearch && hold.status === "REQUEST PENDING" && (
         <UpdateLocation
+          setLastUpdatedHoldId={setLastUpdatedHoldId}
+          focus={lastUpdatedHoldId === hold.id}
           pickupLocationOptions={pickupLocations}
           patronId={patron.id}
           hold={hold}
-          key={i}
+          key={hold.pickupLocation.code}
         />
       )}
     </>,
@@ -72,23 +76,18 @@ const RequestsTab = () => {
           patron={patron}
         />
         {hold.canFreeze && hold.status === "REQUEST PENDING" && (
-          <FreezeButton
-            setHoldToFreeze={setHoldToFreeze}
-            freezing={holdToFreeze === hold.id}
-            hold={hold}
-            patron={patron}
-          />
-        )}
+          <FreezeButton hold={hold} patron={patron} />
+        )}{" "}
       </Box>
     ) : null,
   ])
 
   useEffect(() => {
-    if (focusOnRequestTab) {
+    if (!patronDataLoading && focusOnRequestTab) {
       tabRef.current.focus()
       setFocusOnRequestTab(false)
     }
-  }, [focusOnRequestTab])
+  }, [focusOnRequestTab, patronDataLoading])
 
   function getStatusBadge(status) {
     if (status == "READY FOR PICKUP") {
@@ -104,8 +103,9 @@ const RequestsTab = () => {
       </StatusBadge>
     )
   }
-
-  return (
+  const tabDisplay = patronDataLoading ? (
+    <SkeletonLoader showImage={false} />
+  ) : (
     <ItemsTab
       tabRef={tabRef}
       headers={holdsHeaders}
@@ -113,6 +113,8 @@ const RequestsTab = () => {
       userAction={"requested"}
     />
   )
+
+  return tabDisplay
 }
 
 export default RequestsTab

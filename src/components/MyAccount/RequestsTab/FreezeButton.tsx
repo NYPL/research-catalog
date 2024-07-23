@@ -1,10 +1,4 @@
-import {
-  createRef,
-  type Dispatch,
-  useContext,
-  useEffect,
-  useState,
-} from "react"
+import { createRef, type Dispatch, useEffect, useState } from "react"
 import type { Hold, Patron } from "../../../types/myAccountTypes"
 import {
   Box,
@@ -15,24 +9,11 @@ import {
   ProgressIndicator,
 } from "@nypl/design-system-react-components"
 import styles from "../../../../styles/components/MyAccount.module.scss"
-import { PatronDataContext } from "../../../context/PatronDataContext"
 
-const FreezeButton = ({
-  hold,
-  patron,
-  freezing,
-  setHoldToFreeze,
-}: {
-  setHoldToFreeze: Dispatch<string>
-  freezing: boolean
-  hold: Hold
-  patron: Patron
-}) => {
+const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
   const [frozen, setFrozen] = useState(hold.frozen)
   const [isDisabled, setIsDisabled] = useState<boolean | null>(null)
   const [modalProps, setModalProps] = useState(null)
-  const { patronDataLoading, setPatronDataLoading } =
-    useContext(PatronDataContext)
   const buttonRef = createRef<HTMLButtonElement>()
   const { onOpen: openModal, onClose: closeModal, Modal } = useModal()
   const failureModalProps = {
@@ -56,7 +37,6 @@ const FreezeButton = ({
     ),
     onClose: () => {
       closeModal()
-      setHoldToFreeze(null)
       setIsDisabled(false)
     },
   }
@@ -101,8 +81,6 @@ const FreezeButton = ({
 
   const handleFreezeClick = async () => {
     // Disabling button while request happens.
-    setHoldToFreeze(hold.id)
-    setPatronDataLoading(true)
     setIsDisabled(true)
     const body = JSON.stringify({
       patronId: patron.id,
@@ -126,12 +104,7 @@ const FreezeButton = ({
       setIsDisabled(false)
     }
   }
-  const showLoadingState = patronDataLoading && freezing
-  const buttonLabel = showLoadingState
-    ? "Loading"
-    : frozen
-    ? "Unfreeze"
-    : "Freeze"
+  const buttonLabel = isDisabled ? "Loading" : frozen ? "Unfreeze" : "Freeze"
 
   return (
     <>
@@ -145,7 +118,7 @@ const FreezeButton = ({
         ref={buttonRef}
       >
         {" "}
-        {showLoadingState && (
+        {isDisabled && (
           <ProgressIndicator
             id={"freeze-loading"}
             labelText="Renew"
