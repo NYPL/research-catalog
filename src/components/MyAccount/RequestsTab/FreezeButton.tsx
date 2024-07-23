@@ -1,4 +1,10 @@
-import { createRef, useEffect, useState } from "react"
+import {
+  createRef,
+  type Dispatch,
+  useContext,
+  useEffect,
+  useState,
+} from "react"
 import type { Hold, Patron } from "../../../types/myAccountTypes"
 import {
   Box,
@@ -6,13 +12,27 @@ import {
   Icon,
   useModal,
   Text,
+  ProgressIndicator,
 } from "@nypl/design-system-react-components"
 import styles from "../../../../styles/components/MyAccount.module.scss"
+import { PatronDataContext } from "../../../context/PatronDataContext"
 
-const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
+const FreezeButton = ({
+  hold,
+  patron,
+  freezing,
+  setHoldToFreeze,
+}: {
+  setHoldToFreeze: Dispatch<string>
+  freezing: boolean
+  hold: Hold
+  patron: Patron
+}) => {
   const [frozen, setFrozen] = useState(hold.frozen)
   const [isDisabled, setIsDisabled] = useState<boolean | null>(null)
   const [modalProps, setModalProps] = useState(null)
+  const { patronDataLoading, setPatronDataLoading } =
+    useContext(PatronDataContext)
   const buttonRef = createRef<HTMLButtonElement>()
   const { onOpen: openModal, onClose: closeModal, Modal } = useModal()
   const failureModalProps = {
@@ -36,6 +56,7 @@ const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
     ),
     onClose: () => {
       closeModal()
+      setHoldToFreeze(null)
       setIsDisabled(false)
     },
   }
@@ -80,6 +101,8 @@ const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
 
   const handleFreezeClick = async () => {
     // Disabling button while request happens.
+    setHoldToFreeze(hold.id)
+    setPatronDataLoading(true)
     setIsDisabled(true)
     const body = JSON.stringify({
       patronId: patron.id,
@@ -103,7 +126,12 @@ const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
       setIsDisabled(false)
     }
   }
-  const buttonLabel = frozen ? "Unfreeze" : "Freeze"
+  const showLoadingState = patronDataLoading && freezing
+  const buttonLabel = showLoadingState
+    ? "Loading"
+    : frozen
+    ? "Unfreeze"
+    : "Freeze"
 
   return (
     <>
@@ -116,6 +144,18 @@ const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
         width="100%"
         ref={buttonRef}
       >
+        {" "}
+        {showLoadingState && (
+          <ProgressIndicator
+            id={"freeze-loading"}
+            labelText="Renew"
+            showLabel={false}
+            size="small"
+            indicatorType="circular"
+            mr="xs"
+            isIndeterminate
+          />
+        )}
         {buttonLabel}
       </Button>
       <Modal {...modalProps} />

@@ -42,6 +42,7 @@ const RequestsTab = () => {
     "Pickup by",
     "Manage request",
   ]
+  const [holdToFreeze, setHoldToFreeze] = useState<string>(null)
   const holdsData = holds.map((hold, i) => [
     formatTitleElement(hold),
     getStatusBadge(hold.status),
@@ -71,7 +72,12 @@ const RequestsTab = () => {
           patron={patron}
         />
         {hold.canFreeze && hold.status === "REQUEST PENDING" && (
-          <FreezeButton hold={hold} patron={patron} />
+          <FreezeButton
+            setHoldToFreeze={setHoldToFreeze}
+            freezing={holdToFreeze === hold.id}
+            hold={hold}
+            patron={patron}
+          />
         )}
       </Box>
     ) : null,
