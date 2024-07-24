@@ -17,11 +17,11 @@ import { PatronDataContext } from "../../../context/PatronDataContext"
 const RenewButton = ({
   checkout,
   patron,
-  renewingLoading,
-  setCheckoutRenewing,
+  isCheckoutRenewing,
+  setCheckoutToRenew,
 }: {
-  renewingLoading: boolean
-  setCheckoutRenewing: Dispatch<string>
+  isCheckoutRenewing: boolean
+  setCheckoutToRenew: Dispatch<string>
   checkout: Checkout
   patron: Patron
 }) => {
@@ -84,7 +84,7 @@ const RenewButton = ({
       </h5>
     ),
     onClose: () => {
-      setCheckoutRenewing(null)
+      setCheckoutToRenew(null)
       onClose()
     },
   }
@@ -102,7 +102,7 @@ const RenewButton = ({
   }, [])
 
   const handleClick = async () => {
-    setCheckoutRenewing(checkout.id)
+    setCheckoutToRenew(checkout.id)
     setPatronDataLoading(true)
     const response = await fetch(
       `${BASE_URL}/api/account/checkouts/renew/${checkout.id}`,
@@ -125,7 +125,7 @@ const RenewButton = ({
     }
     onOpen()
   }
-  const showLoadingState = patronDataLoading && renewingLoading
+  const showLoadingState = patronDataLoading && isCheckoutRenewing
 
   return (
     <>
@@ -142,7 +142,7 @@ const RenewButton = ({
         {showLoadingState && (
           <ProgressIndicator
             id={"renew-loading"}
-            labelText="Loading"
+            labelText="Renew"
             showLabel={false}
             size="small"
             indicatorType="circular"

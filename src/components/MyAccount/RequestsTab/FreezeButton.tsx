@@ -1,4 +1,4 @@
-import { createRef, type Dispatch, useEffect, useState } from "react"
+import { createRef, useEffect, useState } from "react"
 import type { Hold, Patron } from "../../../types/myAccountTypes"
 import {
   Box,
@@ -121,7 +121,7 @@ const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
         {isDisabled && (
           <ProgressIndicator
             id={"freeze-loading"}
-            labelText="Loading"
+            labelText="Renew"
             showLabel={false}
             size="small"
             indicatorType="circular"

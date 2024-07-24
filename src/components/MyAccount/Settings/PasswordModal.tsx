@@ -45,7 +45,7 @@ const PasswordModal = ({ patron }: { patron: Patron }) => {
         <PasswordChangeForm
           patron={patron}
           updateModal={updateModal}
-          updateModalToLoading={() => setModalProps(loadingProps)}
+          onModalSubmit={() => setModalProps(loadingProps)}
         />
       </Box>
     ),

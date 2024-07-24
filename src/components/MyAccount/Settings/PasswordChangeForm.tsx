@@ -12,11 +12,11 @@ import type { Patron } from "../../../types/myAccountTypes"
 const PasswordChangeForm = ({
   patron,
   updateModal,
-  updateModalToLoading,
+  onModalSubmit,
 }: {
   patron: Patron
   updateModal: (errorMessage?: string) => void
-  updateModalToLoading: () => void
+  onModalSubmit: () => void
 }) => {
   const [formData, setFormData] = useState({
     oldPassword: "",
@@ -58,7 +58,7 @@ const PasswordChangeForm = ({
   }
 
   const handleSubmit = async () => {
-    updateModalToLoading()
+    onModalSubmit()
     const res = await fetch(`${BASE_URL}/api/account/update-pin/${patron.id}`, {
       method: "PUT",
       headers: {

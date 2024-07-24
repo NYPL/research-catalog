@@ -29,7 +29,7 @@ const CheckoutsTab = () => {
     "Due back by",
     "Manage checkout",
   ]
-  const [checkoutRenewing, setCheckoutRenewing] = useState<string>(null)
+  const [checkoutToRenew, setCheckoutToRenew] = useState<string>(null)
   const checkoutsData = checkouts.map((checkout) => [
     formatTitleElement(checkout),
     checkout.barcode,
@@ -37,8 +37,8 @@ const CheckoutsTab = () => {
     checkout.dueDate,
     checkout.isResearch ? null : (
       <RenewButton
-        setCheckoutRenewing={setCheckoutRenewing}
-        renewingLoading={checkoutRenewing === checkout.id}
+        setCheckoutToRenew={setCheckoutToRenew}
+        isCheckoutRenewing={checkoutToRenew === checkout.id}
         checkout={checkout}
         patron={patron}
       />
