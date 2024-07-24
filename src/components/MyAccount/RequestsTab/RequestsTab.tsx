@@ -1,30 +1,29 @@
-import { Box, StatusBadge, Text } from "@nypl/design-system-react-components"
+import {
+  Box,
+  SkeletonLoader,
+  StatusBadge,
+  Text,
+} from "@nypl/design-system-react-components"
 
 import ExternalLink from "../../Links/ExternalLink/ExternalLink"
-import type {
-  Hold,
-  Patron,
-  SierraCodeName,
-} from "../../../types/myAccountTypes"
+import type { Hold } from "../../../types/myAccountTypes"
 import ItemsTab from "../ItemsTab"
 import CancelButton from "./CancelButton"
 import FreezeButton from "./FreezeButton"
 import UpdateLocation from "./UpdateLocation"
 import styles from "../../../../styles/components/MyAccount.module.scss"
+import { useContext, useEffect, useRef, useState } from "react"
+import { PatronDataContext } from "../../../context/PatronDataContext"
 
-const RequestsTab = ({
-  updateHoldLocation,
-  removeHold,
-  holds,
-  patron,
-  pickupLocations,
-}: {
-  updateHoldLocation
-  removeHold
-  holds: Hold[]
-  patron: Patron
-  pickupLocations: SierraCodeName[]
-}) => {
+const RequestsTab = () => {
+  const tabRef = useRef(null)
+  const [focusOnRequestTab, setFocusOnRequestTab] = useState(false)
+  const [lastUpdatedHoldId, setLastUpdatedHoldId] = useState<string>(null)
+
+  const {
+    patronDataLoading,
+    updatedAccountData: { holds, patron, pickupLocations },
+  } = useContext(PatronDataContext)
   function formatTitleElement(hold: Hold) {
     // If item is research/circ
     if (hold.catalogHref) {
@@ -48,22 +47,24 @@ const RequestsTab = ({
   const holdsData = holds.map((hold, i) => [
     formatTitleElement(hold),
     getStatusBadge(hold.status),
-    <>
-      <Text>{hold.pickupLocation.name}</Text>
-      {!hold.isResearch && hold.status === "REQUEST PENDING" && (
-        <UpdateLocation
-          updateHoldLocation={updateHoldLocation}
-          pickupLocationOptions={pickupLocations}
-          patronId={patron.id}
-          hold={hold}
-          pickupLocation={hold.pickupLocation}
-          key={i}
-        />
-      )}
-    </>,
+    lastUpdatedHoldId === hold.id && patronDataLoading ? (
+      <SkeletonLoader showImage={false} />
+    ) : (
+      <>
+        <Text>{hold.pickupLocation.name}</Text>
+        {!hold.isResearch && hold.status === "REQUEST PENDING" && (
+          <UpdateLocation
+            setLastUpdatedHoldId={setLastUpdatedHoldId}
+            focus={lastUpdatedHoldId === hold.id}
+            pickupLocationOptions={pickupLocations}
+            patronId={patron.id}
+            hold={hold}
+            key={hold.pickupLocation.code}
+          />
+        )}
+      </>
+    ),
     hold.pickupByDate,
-    /* Passing removeHold() down to the Cancel button so it can remove the hold from
-     * currentHolds */
     hold ? (
       <Box
         sx={{
@@ -72,13 +73,24 @@ const RequestsTab = ({
           flexDirection: { base: "column", md: "row" },
         }}
       >
-        <CancelButton removeHold={removeHold} hold={hold} patron={patron} />
+        <CancelButton
+          setFocusOnRequestTab={setFocusOnRequestTab}
+          hold={hold}
+          patron={patron}
+        />
         {hold.canFreeze && hold.status === "REQUEST PENDING" && (
           <FreezeButton hold={hold} patron={patron} />
-        )}
+        )}{" "}
       </Box>
     ) : null,
   ])
+
+  useEffect(() => {
+    if (!patronDataLoading && focusOnRequestTab) {
+      tabRef.current.focus()
+      setFocusOnRequestTab(false)
+    }
+  }, [focusOnRequestTab, patronDataLoading])
 
   function getStatusBadge(status) {
     if (status == "READY FOR PICKUP") {
@@ -94,14 +106,19 @@ const RequestsTab = ({
       </StatusBadge>
     )
   }
-
-  return (
+  const awaitingPatronUpdateAfterCancel = patronDataLoading && focusOnRequestTab
+  const tabDisplay = awaitingPatronUpdateAfterCancel ? (
+    <SkeletonLoader showImage={false} />
+  ) : (
     <ItemsTab
+      tabRef={tabRef}
       headers={holdsHeaders}
       data={holdsData}
       userAction={"requested"}
     />
   )
+
+  return tabDisplay
 }
 
 export default RequestsTab

@@ -1,67 +1,53 @@
 import React from "react"
 import { render, screen, within } from "../../../utils/testUtils"
 import {
-  filteredPickupLocations,
-  processedCheckouts,
-  processedFines,
   processedHolds,
   processedPatron,
 } from "../../../../__test__/fixtures/processedMyAccountData"
 import { userEvent } from "@testing-library/user-event"
-import ProfileTabs from "../ProfileTabs"
 import RequestsTab from "./RequestsTab"
+import { PatronDataProvider } from "../../../context/PatronDataContext"
+import { pickupLocations } from "../../../../__test__/fixtures/rawSierraAccountData"
 
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
-const mockRemoveHold = jest.fn()
-const mockUpdateHoldLocation = jest.fn()
-
+const patronFetchSpy = jest.fn()
+const renderWithPatronDataContext = (holds = processedHolds) => {
+  return render(
+    <PatronDataProvider
+      testSpy={patronFetchSpy}
+      value={{
+        holds: holds,
+        patron: processedPatron,
+        pickupLocations: pickupLocations,
+      }}
+    >
+      <RequestsTab />
+    </PatronDataProvider>
+  )
+}
 describe("RequestsTab", () => {
-  global.fetch = jest.fn().mockResolvedValue({
-    json: async () => "Canceled",
-    status: 200,
-  } as Response)
-
   beforeEach(() => {
     window.localStorage.clear()
+    patronFetchSpy.mockReset()
   })
 
   it("renders", () => {
-    const component = render(
-      <RequestsTab
-        pickupLocations={filteredPickupLocations}
-        updateHoldLocation={mockUpdateHoldLocation}
-        patron={processedPatron}
-        holds={processedHolds}
-        removeHold={mockRemoveHold}
-      />
-    )
+    const component = renderWithPatronDataContext()
     expect(component.getByText("I want to be spaghetti! / ", { exact: false }))
   })
 
   it("renders each hold request as a row", () => {
-    const component = render(
-      <RequestsTab
-        pickupLocations={filteredPickupLocations}
-        updateHoldLocation={mockUpdateHoldLocation}
-        patron={processedPatron}
-        holds={processedHolds}
-        removeHold={mockRemoveHold}
-      />
-    )
+    const component = renderWithPatronDataContext()
     const bodyRows = component.getAllByRole("rowgroup")[1]
     expect(within(bodyRows).getAllByRole("row").length).toBe(5)
   })
 
   it("calls hold cancel endpoint when Cancel button is clicked", async () => {
-    const component = render(
-      <RequestsTab
-        pickupLocations={filteredPickupLocations}
-        updateHoldLocation={mockUpdateHoldLocation}
-        patron={processedPatron}
-        holds={processedHolds}
-        removeHold={mockRemoveHold}
-      />
-    )
+    global.fetch = jest.fn().mockResolvedValueOnce({
+      json: async () => "Canceled",
+      status: 200,
+    } as Response)
+    const component = renderWithPatronDataContext()
 
     await userEvent.click(component.getAllByText("Cancel request")[0])
     await userEvent.click(component.getAllByText("Yes, cancel request")[0])
@@ -78,24 +64,28 @@ describe("RequestsTab", () => {
     )
   })
 
-  it("removes hold from list when cancel is successful", async () => {
-    const component = render(
-      <ProfileTabs
-        pickupLocations={filteredPickupLocations}
-        patron={processedPatron}
-        checkouts={processedCheckouts}
-        holds={processedHolds}
-        fines={processedFines}
-        activePath="requests"
-      />
-    )
-    let bodyRows = component.getAllByRole("rowgroup")[1]
-    expect(within(bodyRows).getAllByRole("row").length).toBe(5)
+  it("fetches account data when cancel is successful", async () => {
+    global.fetch = jest
+      .fn()
+      .mockResolvedValueOnce({
+        json: async () => "Canceled",
+        status: 200,
+      } as Response)
+      .mockResolvedValueOnce({
+        json: async () =>
+          JSON.stringify({
+            patron: { id: 123 },
+            holds: processedHolds,
+            pickupLocations,
+          }),
+        status: 200,
+      } as Response)
+    const component = renderWithPatronDataContext()
 
     await userEvent.click(component.getAllByText("Cancel request")[0])
     await userEvent.click(component.getAllByText("Yes, cancel request")[0])
 
-    expect(fetch).toHaveBeenCalledWith(
+    expect(global.fetch).toHaveBeenCalledWith(
       `/research/research-catalog/api/account/holds/cancel/${processedHolds[0].id}`,
       {
         method: "POST",
@@ -106,27 +96,18 @@ describe("RequestsTab", () => {
       }
     )
     await userEvent.click(component.getAllByText("OK")[0])
-    bodyRows = component.getAllByRole("rowgroup")[1]
-    expect(within(bodyRows).getAllByRole("row").length).toBe(4)
+    // TODO: figure out how to verify
+    expect(patronFetchSpy).toHaveBeenCalled()
   })
 
-  it("does not remove hold from list when cancel fails", async () => {
+  it("does not fetch account data when cancel fails", async () => {
     global.fetch = jest.fn().mockResolvedValue({
       json: async () => "Nooo",
       status: 400,
     } as Response)
-    const component = render(
-      <ProfileTabs
-        pickupLocations={filteredPickupLocations}
-        patron={processedPatron}
-        checkouts={processedCheckouts}
-        holds={processedHolds}
-        fines={processedFines}
-        activePath="requests"
-      />
-    )
+    const component = renderWithPatronDataContext()
 
-    let bodyRows = component.getAllByRole("rowgroup")[1]
+    const bodyRows = component.getAllByRole("rowgroup")[1]
     expect(within(bodyRows).getAllByRole("row").length).toBe(5)
     await userEvent.click(component.getAllByText("Cancel request")[0])
     await userEvent.click(component.getAllByText("Yes, cancel request")[0])
@@ -144,20 +125,12 @@ describe("RequestsTab", () => {
 
     await userEvent.click(screen.getAllByText("OK", { exact: false })[0])
 
-    bodyRows = component.getAllByRole("rowgroup")[1]
-    expect(within(bodyRows).getAllByRole("row").length).toBe(5)
+    expect(global.fetch).toHaveBeenCalledTimes(1)
+    expect(patronFetchSpy).not.toHaveBeenCalled()
   })
   describe("updateHoldLocation", () => {
     it("only displays update pickup location button for request pending circ items", () => {
-      render(
-        <RequestsTab
-          pickupLocations={filteredPickupLocations}
-          updateHoldLocation={mockUpdateHoldLocation}
-          patron={processedPatron}
-          holds={processedHolds}
-          removeHold={mockRemoveHold}
-        />
-      )
+      renderWithPatronDataContext()
       const numberOfPendingHolds = processedHolds.filter(
         (hold) => hold.status === "REQUEST PENDING" && !hold.isResearch
       ).length
@@ -168,15 +141,7 @@ describe("RequestsTab", () => {
   })
 
   it("displays freeze buttons only for holds that can be frozen", async () => {
-    const component = render(
-      <RequestsTab
-        pickupLocations={filteredPickupLocations}
-        updateHoldLocation={mockUpdateHoldLocation}
-        patron={processedPatron}
-        holds={processedHolds}
-        removeHold={mockRemoveHold}
-      />
-    )
+    const component = renderWithPatronDataContext()
     const numberOfFreezableHolds = processedHolds.filter(
       (hold) => hold.status === "REQUEST PENDING" && !hold.isResearch
     ).length
@@ -189,15 +154,7 @@ describe("RequestsTab", () => {
       json: async () => "Updated",
       status: 200,
     } as Response)
-    const component = render(
-      <RequestsTab
-        pickupLocations={filteredPickupLocations}
-        updateHoldLocation={mockUpdateHoldLocation}
-        patron={processedPatron}
-        holds={processedHolds}
-        removeHold={mockRemoveHold}
-      />
-    )
+    const component = renderWithPatronDataContext()
     const pendingRequest = processedHolds[2]
     const row = component.getByText(pendingRequest.title).closest("tr")
     const freezeButton = within(row).getByText("Freeze")
@@ -241,15 +198,8 @@ describe("RequestsTab", () => {
       json: async () => "Nooo",
       status: 400,
     } as Response)
-    const component = render(
-      <RequestsTab
-        pickupLocations={filteredPickupLocations}
-        updateHoldLocation={mockUpdateHoldLocation}
-        patron={processedPatron}
-        holds={processedHolds}
-        removeHold={mockRemoveHold}
-      />
-    )
+    const theoreticallyFreezableHold = processedHolds[2]
+    const component = renderWithPatronDataContext([theoreticallyFreezableHold])
     expect(
       component.queryByText("Hold freeze failed", { exact: false })
     ).not.toBeInTheDocument()
@@ -260,21 +210,14 @@ describe("RequestsTab", () => {
     expect(
       component.getByText("Hold freeze failed", { exact: false })
     ).toBeInTheDocument()
-    await userEvent.click(screen.getAllByText("OK", { exact: false })[0])
-    freezeButtons = component.getAllByText("Freeze")
+    const ok = screen.getByRole("button", { name: "OK" })
+    await userEvent.click(ok)
+    freezeButtons = await component.findAllByText("Freeze")
     expect(freezeButtons.length).toBe(1)
   })
 
   it("shows pick up by date and status when circ request is ready", () => {
-    const component = render(
-      <RequestsTab
-        pickupLocations={filteredPickupLocations}
-        updateHoldLocation={mockUpdateHoldLocation}
-        patron={processedPatron}
-        holds={processedHolds}
-        removeHold={mockRemoveHold}
-      />
-    )
+    const component = renderWithPatronDataContext()
     const readyRequest = processedHolds[0]
     const row = component.getByText(readyRequest.title).closest("tr")
 
@@ -282,15 +225,7 @@ describe("RequestsTab", () => {
     expect(row).toHaveTextContent("READY FOR PICKUP")
   })
   it("does not show freeze button on freezable request when it is anything other than pending", () => {
-    const component = render(
-      <RequestsTab
-        pickupLocations={filteredPickupLocations}
-        updateHoldLocation={mockUpdateHoldLocation}
-        patron={processedPatron}
-        holds={processedHolds}
-        removeHold={mockRemoveHold}
-      />
-    )
+    const component = renderWithPatronDataContext()
 
     const readyRequest = processedHolds[0]
     const readyCircRequestRow = component
@@ -307,5 +242,108 @@ describe("RequestsTab", () => {
 
     expect(confirmedRequestRow).toHaveTextContent("REQUEST CONFIRMED")
     expect(confirmedRequestRow).not.toHaveTextContent("Freeze")
+  })
+
+  it("should focus on the holds table after successfully canceling a request", async () => {
+    global.fetch = jest
+      .fn()
+      .mockResolvedValueOnce({
+        json: async () => "Canceled",
+        status: 200,
+      } as Response)
+      .mockResolvedValueOnce({
+        json: async () =>
+          JSON.stringify({
+            patron: { id: 123 },
+            holds: processedHolds,
+            pickupLocations,
+          }),
+        status: 200,
+      } as Response)
+    const component = renderWithPatronDataContext()
+
+    await userEvent.click(component.getAllByText("Cancel request")[0])
+    await userEvent.click(component.getAllByText("Yes, cancel request")[0])
+
+    await userEvent.click(component.getAllByText("OK")[0])
+    expect(component.getByTestId("items-tab")).toHaveFocus()
+  })
+  describe("update location", () => {
+    const openModal = async () => {
+      const modalTrigger = screen.getAllByText("Change location")[0]
+      await userEvent.click(modalTrigger)
+    }
+    it("updated the location within the modal after updating", async () => {
+      global.fetch = jest.fn().mockResolvedValue({
+        json: async () =>
+          JSON.stringify({
+            patron: { id: 123 },
+            holds: [
+              {
+                ...processedHolds[2],
+                pickupLocation: { code: "ft", name: "53rd Street" },
+              },
+            ],
+            pickupLocations,
+          }),
+        status: 200,
+      } as Response)
+      renderWithPatronDataContext([processedHolds[2]])
+      // change location
+      await openModal()
+      const select = screen.getByLabelText("Pickup location")
+      await userEvent.selectOptions(select, "ft   ")
+      const submitButton = screen.getByText("Confirm location")
+      await userEvent.click(submitButton)
+      await userEvent.click(screen.getByText("OK"))
+      // reopen modal to ensure component rerendered
+      await openModal()
+      expect(select).toHaveValue("ft   ")
+    })
+    it("focuses on update location button after updating and closing", async () => {
+      global.fetch = jest.fn().mockResolvedValue({
+        json: async () =>
+          JSON.stringify({
+            patron: { id: 123 },
+            holds: processedHolds,
+            pickupLocations,
+          }),
+        status: 200,
+      } as Response)
+      renderWithPatronDataContext()
+      await openModal()
+
+      const select = screen.getByLabelText("Pickup location")
+      await userEvent.selectOptions(select, "mp   ")
+      const submitButton = screen.getByText("Confirm location")
+      await userEvent.click(submitButton)
+      await userEvent.click(screen.getByText("OK"))
+      const updateLocation = screen.getByTestId("change-location-button")
+      expect(updateLocation).toHaveFocus()
+    })
+    it("focuses on update location button after closing modal without updating", async () => {
+      renderWithPatronDataContext()
+      await openModal()
+
+      await userEvent.click(screen.getByLabelText("Close"))
+      const updateLocation = screen.getByTestId("change-location-button")
+      expect(updateLocation).toHaveFocus()
+    })
+    it("focuses on update location button after failed update and closing modal", async () => {
+      global.fetch = jest.fn().mockResolvedValue({
+        json: async () => JSON.stringify({ id: "spaghetti" }),
+        status: 500,
+      } as Response)
+      renderWithPatronDataContext()
+      await openModal()
+
+      const select = screen.getByLabelText("Pickup location")
+      await userEvent.selectOptions(select, "mp   ")
+      const submitButton = screen.getByText("Confirm location")
+      await userEvent.click(submitButton)
+      await userEvent.click(screen.getByText("OK"))
+      const updateLocation = screen.getByTestId("change-location-button")
+      expect(updateLocation).toHaveFocus()
+    })
   })
 })

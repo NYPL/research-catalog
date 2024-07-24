@@ -6,6 +6,7 @@ import {
   Icon,
   useModal,
   Text,
+  ProgressIndicator,
 } from "@nypl/design-system-react-components"
 import styles from "../../../../styles/components/MyAccount.module.scss"
 
@@ -103,7 +104,7 @@ const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
       setIsDisabled(false)
     }
   }
-  const buttonLabel = frozen ? "Unfreeze" : "Freeze"
+  const buttonLabel = isDisabled ? "Loading" : frozen ? "Unfreeze" : "Freeze"
 
   return (
     <>
@@ -116,6 +117,18 @@ const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
         width="100%"
         ref={buttonRef}
       >
+        {" "}
+        {isDisabled && (
+          <ProgressIndicator
+            id={"freeze-loading"}
+            labelText="Renew"
+            showLabel={false}
+            size="small"
+            indicatorType="circular"
+            mr="xs"
+            isIndeterminate
+          />
+        )}
         {buttonLabel}
       </Button>
       <Modal {...modalProps} />

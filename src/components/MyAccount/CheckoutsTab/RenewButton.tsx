@@ -1,27 +1,38 @@
-import { useEffect, useState } from "react"
+import { type Dispatch, useContext, useEffect, useState } from "react"
 import {
   useModal,
   Box,
   Icon,
   Button,
   Text,
+  ProgressIndicator,
 } from "@nypl/design-system-react-components"
 
 import ExternalLink from "../../Links/ExternalLink/ExternalLink"
 import type { Checkout, Patron } from "../../../types/myAccountTypes"
 import { BASE_URL } from "../../../config/constants"
 import styles from "../../../../styles/components/MyAccount.module.scss"
+import { PatronDataContext } from "../../../context/PatronDataContext"
 
 const RenewButton = ({
   checkout,
   patron,
+  isCheckoutRenewing,
+  setCheckoutToRenew,
 }: {
+  isCheckoutRenewing: boolean
+  setCheckoutToRenew: Dispatch<string>
   checkout: Checkout
   patron: Patron
 }) => {
   const [isButtonDisabled, setButtonDisabled] = useState(false)
   const { onOpen, onClose, Modal } = useModal()
   const [modalProps, setModalProps] = useState(null)
+  const {
+    getMostUpdatedSierraAccountData,
+    patronDataLoading,
+    setPatronDataLoading,
+  } = useContext(PatronDataContext)
 
   const successModalProps = {
     type: "default",
@@ -45,7 +56,8 @@ const RenewButton = ({
         </>
       </h5>
     ),
-    onClose: () => {
+    onClose: async () => {
+      getMostUpdatedSierraAccountData()
       onClose()
     },
   }
@@ -72,6 +84,7 @@ const RenewButton = ({
       </h5>
     ),
     onClose: () => {
+      setCheckoutToRenew(null)
       onClose()
     },
   }
@@ -89,6 +102,8 @@ const RenewButton = ({
   }, [])
 
   const handleClick = async () => {
+    setCheckoutToRenew(checkout.id)
+    setPatronDataLoading(true)
     const response = await fetch(
       `${BASE_URL}/api/account/checkouts/renew/${checkout.id}`,
       {
@@ -110,6 +125,7 @@ const RenewButton = ({
     }
     onOpen()
   }
+  const showLoadingState = patronDataLoading && isCheckoutRenewing
 
   return (
     <>
@@ -120,11 +136,21 @@ const RenewButton = ({
         buttonType="secondary"
         id={`renew-${checkout.id}`}
         onClick={handleClick}
-        isDisabled={isButtonDisabled}
-        aria-disabled={isButtonDisabled}
+        aria-disabled={isButtonDisabled || showLoadingState}
         aria-label={`Renew ${checkout.title}`}
       >
-        Renew
+        {showLoadingState && (
+          <ProgressIndicator
+            id={"renew-loading"}
+            labelText="Renew"
+            showLabel={false}
+            size="small"
+            indicatorType="circular"
+            mr="xs"
+            isIndeterminate
+          />
+        )}
+        {showLoadingState ? "Loading" : "Renew"}
       </Button>
       <Modal {...modalProps} />
     </>

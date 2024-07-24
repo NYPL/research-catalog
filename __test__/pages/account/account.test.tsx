@@ -111,8 +111,13 @@ describe("MyAccount page", () => {
     expect(() =>
       render(
         <MyAccount
-          pickupLocations={null}
-          patron={processedPatron}
+          accountData={{
+            pickupLocations: filteredPickupLocations,
+            checkouts: null,
+            holds: null,
+            fines: null,
+            patron: processedPatron,
+          }}
           isAuthenticated={true}
         />
       )
@@ -121,7 +126,13 @@ describe("MyAccount page", () => {
   it("displays an error message when patron is empty", () => {
     render(
       <MyAccount
-        pickupLocations={filteredPickupLocations}
+        accountData={{
+          pickupLocations: filteredPickupLocations,
+          checkouts: null,
+          holds: null,
+          fines: null,
+          patron: null,
+        }}
         isAuthenticated={true}
       />
     )
@@ -223,12 +234,14 @@ describe("MyAccount page", () => {
   it("renders notification banner if user has fines", () => {
     render(
       <MyAccount
-        pickupLocations={filteredPickupLocations}
         isAuthenticated={true}
-        patron={processedPatron}
-        checkouts={processedCheckouts}
-        holds={processedHolds}
-        fines={processedFines}
+        accountData={{
+          checkouts: processedCheckouts,
+          holds: processedHolds,
+          patron: processedPatron,
+          fines: processedFines,
+          pickupLocations: filteredPickupLocations,
+        }}
       />
     )
     const notification = screen.queryByText("You have outstanding fees", {
@@ -240,12 +253,14 @@ describe("MyAccount page", () => {
   it("does not render notification banner if user does not have fines", () => {
     render(
       <MyAccount
-        pickupLocations={filteredPickupLocations}
         isAuthenticated={true}
-        patron={processedPatron}
-        checkouts={processedCheckouts}
-        holds={processedHolds}
-        fines={{ total: 0, entries: [] }}
+        accountData={{
+          pickupLocations: filteredPickupLocations,
+          patron: processedPatron,
+          checkouts: processedCheckouts,
+          holds: processedHolds,
+          fines: { total: 0, entries: [] },
+        }}
       />
     )
     const notification = screen.queryByText("You have outstanding fees", {
