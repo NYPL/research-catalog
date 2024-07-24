@@ -19,6 +19,7 @@ const RequestsTab = () => {
   const tabRef = useRef(null)
   const [focusOnRequestTab, setFocusOnRequestTab] = useState(false)
   const [lastUpdatedHoldId, setLastUpdatedHoldId] = useState<string>(null)
+
   const {
     patronDataLoading,
     updatedAccountData: { holds, patron, pickupLocations },
@@ -43,10 +44,12 @@ const RequestsTab = () => {
     "Pickup by",
     "Manage request",
   ]
-  const holdsData = holds.map((hold) => {
-    return [
-      formatTitleElement(hold),
-      getStatusBadge(hold.status),
+  const holdsData = holds.map((hold, i) => [
+    formatTitleElement(hold),
+    getStatusBadge(hold.status),
+    lastUpdatedHoldId === hold.id && patronDataLoading ? (
+      <SkeletonLoader showImage={false} />
+    ) : (
       <>
         <Text>{hold.pickupLocation.name}</Text>
         {!hold.isResearch && hold.status === "REQUEST PENDING" && (
@@ -59,28 +62,28 @@ const RequestsTab = () => {
             key={hold.pickupLocation.code}
           />
         )}
-      </>,
-      hold.pickupByDate,
-      hold ? (
-        <Box
-          sx={{
-            display: "flex",
-            gap: "4px",
-            flexDirection: { base: "column", md: "row" },
-          }}
-        >
-          <CancelButton
-            setFocusOnRequestTab={setFocusOnRequestTab}
-            hold={hold}
-            patron={patron}
-          />
-          {hold.canFreeze && hold.status === "REQUEST PENDING" && (
-            <FreezeButton hold={hold} patron={patron} />
-          )}
-        </Box>
-      ) : null,
-    ]
-  })
+      </>
+    ),
+    hold.pickupByDate,
+    hold ? (
+      <Box
+        sx={{
+          display: "flex",
+          gap: "4px",
+          flexDirection: { base: "column", md: "row" },
+        }}
+      >
+        <CancelButton
+          setFocusOnRequestTab={setFocusOnRequestTab}
+          hold={hold}
+          patron={patron}
+        />
+        {hold.canFreeze && hold.status === "REQUEST PENDING" && (
+          <FreezeButton hold={hold} patron={patron} />
+        )}{" "}
+      </Box>
+    ) : null,
+  ])
 
   useEffect(() => {
     if (!patronDataLoading && focusOnRequestTab) {
@@ -103,7 +106,8 @@ const RequestsTab = () => {
       </StatusBadge>
     )
   }
-  const tabDisplay = patronDataLoading ? (
+  const awaitingPatronUpdateAfterCancel = patronDataLoading && focusOnRequestTab
+  const tabDisplay = awaitingPatronUpdateAfterCancel ? (
     <SkeletonLoader showImage={false} />
   ) : (
     <ItemsTab

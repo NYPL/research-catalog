@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { type Dispatch, useState } from "react"
 import {
   Form,
   FormField,
@@ -12,9 +12,11 @@ import type { Patron } from "../../../types/myAccountTypes"
 const PasswordChangeForm = ({
   patron,
   updateModal,
+  onModalSubmit,
 }: {
   patron: Patron
   updateModal: (errorMessage?: string) => void
+  onModalSubmit: () => void
 }) => {
   const [formData, setFormData] = useState({
     oldPassword: "",
@@ -56,6 +58,7 @@ const PasswordChangeForm = ({
   }
 
   const handleSubmit = async () => {
+    onModalSubmit()
     const res = await fetch(`${BASE_URL}/api/account/update-pin/${patron.id}`, {
       method: "PUT",
       headers: {

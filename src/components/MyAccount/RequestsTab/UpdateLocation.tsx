@@ -58,6 +58,8 @@ const UpdateLocation = ({
     setModalProps({
       ...confirmLocationChangeModalProps,
       bodyContent: <SkeletonLoader showImage={false} />,
+      onClose: () => null,
+      closeButtonLabel: "Loading",
     } as DefaultModalProps)
     const response = await fetch(
       `${BASE_URL}/api/account/holds/update/${hold.id}`,
