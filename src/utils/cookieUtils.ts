@@ -26,7 +26,7 @@ const deleteCookie = (cookieName: string) =>
 export const buildTimeLeft = (expirationTime) => {
   const left =
     (new Date(expirationTime).getTime() - new Date().getTime()) / 1000
-  const minutes = Math.ceil(left / 60)
+  const minutes = Math.floor(left / 60)
   const seconds = Math.ceil(left) % 60
   return { minutes, seconds }
 }
