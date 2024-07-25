@@ -113,7 +113,7 @@ const FiltersContainer = ({
         layout="row"
         bg="ui.gray.x-light-cool"
         mb="m"
-        sx={{ fieldset: { lg: { width: "50%" } } }}
+        sx={{ fieldset: { lg: { width: "45%" } } }}
         renderChildren={() => (
           <>
             <MultiSelectGroup
@@ -141,7 +141,7 @@ const FiltersContainer = ({
                 ))
               }}
             />
-            <Box minWidth={440}>
+            <Box minWidth="440">
               <Label
                 id="year-filter-label"
                 htmlFor="year-filter"
