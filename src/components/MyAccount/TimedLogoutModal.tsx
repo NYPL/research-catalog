@@ -37,9 +37,6 @@ const TimedLogoutModal = ({
     router.push(redirectUri)
   }
 
-  if (!expirationTime) {
-    logOutAndRedirect()
-  }
   const [timeUntilExpiration, setTimeUntilExpiration] = useState(
     buildTimeLeft(expirationTime)
   )
@@ -48,11 +45,9 @@ const TimedLogoutModal = ({
     const timeout = setTimeout(() => {
       const { minutes, seconds } = buildTimeLeft(expirationTime)
       if (minutes < timeoutWindow) setOpen(true)
-      setTimeUntilExpiration(() => {
-        return {
-          minutes,
-          seconds,
-        }
+      setTimeUntilExpiration({
+        minutes,
+        seconds,
       })
     }, 1000)
     return () => {
