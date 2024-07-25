@@ -14,9 +14,12 @@ const AccountSettingsButtons = ({
   formValid,
   setCurrentlyEditing,
   editButtonRef,
+  setFocusOnAccountSettingsButton,
 }: AccountSettingsButtonsPropsType) => {
-  const toggleCurrentlyEditing = (doWeWantToEdit: boolean) =>
+  const toggleCurrentlyEditing = (doWeWantToEdit: boolean) => {
     setCurrentlyEditing(doWeWantToEdit)
+    setFocusOnAccountSettingsButton(!doWeWantToEdit)
+  }
   const editButton = (
     <Button
       ref={editButtonRef}
