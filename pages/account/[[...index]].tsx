@@ -32,7 +32,7 @@ export default function MyAccount({
   const [displayLogoutModal, setDisplayLogoutModal] = useState(false)
 
   const resetCountdown = () => {
-    const inFive = getIncrementedTime(5)
+    const inFive = getIncrementedTime(2)
     const newExpirationTime = `accountPageExp=${inFive}; expires=${inFive}`
     document.cookie = newExpirationTime
     setExpirationTime(inFive)

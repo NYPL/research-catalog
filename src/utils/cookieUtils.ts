@@ -28,6 +28,10 @@ export const buildTimeLeft = (expirationTime) => {
     (new Date(expirationTime).getTime() - new Date().getTime()) / 1000
   const minutes = Math.floor(left / 60)
   const seconds = Math.ceil(left) % 60
+  // edge case of 1 minute left
+  if (left > 0 && minutes === 0 && seconds === 0) {
+    return { minutes: 1, seconds: 0 }
+  }
   return { minutes, seconds }
 }
 
