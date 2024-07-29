@@ -21,7 +21,7 @@ import {
   mapElementsToSearchResultsBibs,
   getSearchQuery,
   getFreshSortByQuery,
-  hasOneResult,
+  checkForRedirectOnMatch,
 } from "../../src/utils/searchUtils"
 import type {
   SearchResultsResponse,
@@ -240,19 +240,10 @@ export async function getServerSideProps({ resolvedUrl, req, query }) {
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const results = await fetchResults(mapQueryToSearchParams(query))
 
-  if (
-    !(results instanceof Error) &&
-    hasOneResult(results) &&
-    query.oclc &&
-    query.redirectOnMatch
-  ) {
-    const matchedBib = results.results.itemListElement[0].result
-    return {
-      redirect: {
-        destination: `/bib/${matchedBib.uri}`,
-        permanent: false,
-      },
-    }
+  // Check for `redirectOnMatch` trigger:
+  const redirect = checkForRedirectOnMatch(results, query)
+  if (redirect) {
+    return { redirect }
   }
 
   const isAuthenticated = patronTokenResponse.isTokenValid
