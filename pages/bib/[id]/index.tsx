@@ -74,7 +74,6 @@ export default function BibPage({
   )
   const [itemTablePage, setItemTablePage] = useState(itemPage)
 
-  const itemTableScrollRef = useRef<HTMLDivElement>(null)
   const itemTableHeadingRef = useRef<HTMLDivElement>(null)
   const viewAllLoadingTextRef = useRef<HTMLDivElement & HTMLLabelElement>(null)
   const controllerRef = useRef<AbortController>()
@@ -150,9 +149,6 @@ export default function BibPage({
         setBib(new Bib(discoveryBibResult))
 
         setItemsLoading(false)
-        itemTableScrollRef.current?.scrollIntoView({
-          behavior: "smooth",
-        })
         setTimeout(() => {
           itemTableHeadingRef.current?.focus()
         }, FOCUS_TIMEOUT)
@@ -250,7 +246,7 @@ export default function BibPage({
               appliedFilters={appliedFilters}
               filtersAreApplied={filtersAreApplied}
             />
-            <Box id="item-table" ref={itemTableScrollRef}>
+            <Box id="item-table">
               {itemsLoading ? (
                 <SkeletonLoader showImage={false} />
               ) : itemFetchError ? (

@@ -4,26 +4,12 @@ import userEvent from "@testing-library/user-event"
 import {
   filteredPickupLocations as pickupLocations,
   processedHolds,
+  processedPatron,
 } from "../../../../__test__/fixtures/processedMyAccountData"
 import { BASE_URL } from "../../../config/constants"
+import { PatronDataProvider } from "../../../context/PatronDataContext"
 
-global.fetch = jest
-  .fn()
-  .mockResolvedValueOnce({
-    json: async () => "updated",
-    status: 200,
-  } as Response)
-  .mockResolvedValueOnce({
-    json: async () => "updated",
-    status: 200,
-  } as Response)
-  .mockResolvedValueOnce({
-    json: async () => "error",
-    status: 500,
-  } as Response)
-
-const mockUpdateHoldLocation = jest.fn()
-
+const accountFetchSpy = jest.fn()
 describe("UpdateLocation modal trigger", () => {
   const openModal = async () => {
     const modalTrigger = screen.getByText("Change location")
@@ -31,19 +17,23 @@ describe("UpdateLocation modal trigger", () => {
   }
   beforeEach(() => {
     render(
-      <>
+      <PatronDataProvider
+        testSpy={accountFetchSpy}
+        value={{ patron: processedPatron, pickupLocations }}
+      >
         <UpdateLocation
-          updateHoldLocation={mockUpdateHoldLocation}
           pickupLocationOptions={pickupLocations}
           data-testId="click me"
           hold={processedHolds[0]}
           patronId={1234567}
-          pickupLocation={{ name: "SNFL", code: "sn" }}
-          key={1}
+          key={processedHolds[0].pickupLocation.code}
+          focus={false}
+          setLastUpdatedHoldId={() => "spaghetti"}
         />
-      </>
+      </PatronDataProvider>
     )
   })
+  afterEach(() => accountFetchSpy.mockReset())
   it("opens a modal with selected location as first option", async () => {
     await openModal()
     const selectedOption = screen.getByText("SNFL", {
@@ -53,13 +43,22 @@ describe("UpdateLocation modal trigger", () => {
   })
   describe("submission", () => {
     it("submits a hold update request with patron id and new location as body", async () => {
-      const fetchSpy = jest.spyOn(global, "fetch")
+      global.fetch = jest
+        .fn()
+        .mockResolvedValueOnce({
+          json: async () => "updated",
+          status: 200,
+        } as Response)
+        .mockResolvedValueOnce({
+          json: async () => JSON.stringify(processedPatron),
+          status: 200,
+        })
       await openModal()
       const select = screen.getByLabelText("Pickup location")
       await userEvent.selectOptions(select, "mp   ")
       const submitButton = screen.getByText("Confirm location")
       await userEvent.click(submitButton)
-      expect(fetchSpy).toHaveBeenCalledWith(
+      expect(global.fetch).toHaveBeenCalledWith(
         `${BASE_URL}/api/account/holds/update/${processedHolds[0].id}`,
         {
           method: "PUT",
@@ -70,7 +69,17 @@ describe("UpdateLocation modal trigger", () => {
         }
       )
     })
-    it("displays success modal on successful update and updates hold location", async () => {
+    it("displays success modal on successful update and fetches accountData", async () => {
+      global.fetch = jest
+        .fn()
+        .mockResolvedValueOnce({
+          json: async () => "updated",
+          status: 200,
+        } as Response)
+        .mockResolvedValueOnce({
+          json: async () => JSON.stringify(processedPatron),
+          status: 200,
+        })
       await openModal()
       const select = screen.getByLabelText("Pickup location")
       await userEvent.selectOptions(select, "mp   ")
@@ -81,10 +90,13 @@ describe("UpdateLocation modal trigger", () => {
       })
       expect(successMessage).toBeInTheDocument()
       await userEvent.click(screen.getByText("OK"))
-      expect(mockUpdateHoldLocation).toHaveBeenCalled()
-      mockUpdateHoldLocation.mockReset()
+      expect(accountFetchSpy).toHaveBeenCalled()
     })
-    it("displays failure modal on failed update and does not update hold location", async () => {
+    it("displays failure modal on failed update", async () => {
+      global.fetch = jest.fn().mockResolvedValueOnce({
+        json: async () => "updated",
+        status: 500,
+      } as Response)
       await openModal()
       const select = screen.getByLabelText("Pickup location")
       await userEvent.selectOptions(select, "mp   ")
@@ -93,7 +105,6 @@ describe("UpdateLocation modal trigger", () => {
       const errorMessage = screen.getByText("Location change failed")
       expect(errorMessage).toBeInTheDocument()
       await userEvent.click(screen.getByText("OK"))
-      expect(mockUpdateHoldLocation).not.toHaveBeenCalled()
     })
   })
 })

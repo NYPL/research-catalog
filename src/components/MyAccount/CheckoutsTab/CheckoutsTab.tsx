@@ -1,16 +1,15 @@
 import { Text } from "@nypl/design-system-react-components"
 import ExternalLink from "../../Links/ExternalLink/ExternalLink"
-import type { Checkout, Patron } from "../../../types/myAccountTypes"
+import type { Checkout } from "../../../types/myAccountTypes"
 import RenewButton from "./RenewButton"
 import ItemsTab from "../ItemsTab"
+import { useContext, useState } from "react"
+import { PatronDataContext } from "../../../context/PatronDataContext"
 
-const CheckoutsTab = ({
-  checkouts,
-  patron,
-}: {
-  checkouts: Checkout[]
-  patron: Patron
-}) => {
+const CheckoutsTab = () => {
+  const {
+    updatedAccountData: { checkouts, patron },
+  } = useContext(PatronDataContext)
   function formatTitleElement(checkout: Checkout) {
     if (checkout.catalogHref) {
       return (
@@ -30,14 +29,19 @@ const CheckoutsTab = ({
     "Due back by",
     "Manage checkout",
   ]
-
+  const [checkoutToRenew, setCheckoutToRenew] = useState<string>(null)
   const checkoutsData = checkouts.map((checkout) => [
     formatTitleElement(checkout),
     checkout.barcode,
     checkout.callNumber,
     checkout.dueDate,
     checkout.isResearch ? null : (
-      <RenewButton checkout={checkout} patron={patron} />
+      <RenewButton
+        setCheckoutToRenew={setCheckoutToRenew}
+        isCheckoutRenewing={checkoutToRenew === checkout.id}
+        checkout={checkout}
+        patron={patron}
+      />
     ),
   ])
   return (
