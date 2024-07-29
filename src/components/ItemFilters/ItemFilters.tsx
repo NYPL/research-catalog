@@ -10,9 +10,9 @@ import {
   Label,
   TagSet,
   type TagSetFilterDataProps,
-  type MultiSelectProps,
 } from "@nypl/design-system-react-components"
 import type {
+  MultiSelectElement,
   Aggregation,
   ItemFilterQueryParams,
   AppliedItemFilters,
@@ -86,7 +86,7 @@ const ItemFilters = ({
   }
 
   // TODO: Replace this with actual filter data
-  const multiSelectElements: MultiSelectProps[] = [
+  const multiSelectElements: MultiSelectElement[] = [
     {
       id: "location",
       name: "Location",
@@ -139,7 +139,7 @@ const ItemFilters = ({
   }
 
   // function passed to multiSelectElements map callback for generating renderMultiSelect prop of MultiSelectGroup
-  const renderMultiSelect = (multiSelect: MultiSelectProps) => {
+  const renderMultiSelect = (multiSelect: MultiSelectElement) => {
     return (
       <MultiSelect
         buttonText={multiSelect.name}
