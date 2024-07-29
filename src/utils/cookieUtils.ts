@@ -25,12 +25,18 @@ const deleteCookie = (cookieName: string) =>
 
 export const buildTimeLeft = (expirationTime) => {
   const left =
-    (new Date(expirationTime).getTime() - new Date().getTime()) / 1000
+    // Math.floor isn't really necessary for this to work in the wild,
+    // but it facilitates local testing by allowing for timeout windows that are less than a minute
+    Math.floor(new Date(expirationTime).getTime() - new Date().getTime()) / 1000
   const minutes = Math.floor(left / 60)
   const seconds = Math.ceil(left) % 60
   // edge case of 1 minute left
   if (left > 0 && minutes === 0 && seconds === 0) {
     return { minutes: 1, seconds: 0 }
+  }
+  // seconds have to be Math.ceil'd, which makes it very unlikely to actually hit zero
+  if (Math.floor(left) === 0) {
+    return { minutes: 0, seconds: 0 }
   }
   return { minutes, seconds }
 }
