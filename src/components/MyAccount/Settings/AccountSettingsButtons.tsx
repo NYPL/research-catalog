@@ -7,6 +7,7 @@ interface AccountSettingsButtonsPropsType {
   formValid: boolean
   setCurrentlyEditing: Dispatch<React.SetStateAction<boolean>>
   editButtonRef: MutableRefObject<HTMLButtonElement>
+  setFocusOnAccountSettingsButton: Dispatch<React.SetStateAction<boolean>>
 }
 
 const AccountSettingsButtons = ({
