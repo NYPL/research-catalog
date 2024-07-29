@@ -10,6 +10,7 @@ import {
   Label,
   TagSet,
   type TagSetFilterDataProps,
+  type MultiSelectProps,
 } from "@nypl/design-system-react-components"
 import type {
   Aggregation,
@@ -84,7 +85,8 @@ const ItemFilters = ({
     submitFilters([year], "year")
   }
 
-  const multiSelectItems = [
+  // TODO: Replace this with actual filter data
+  const multiSelectElements: MultiSelectProps[] = [
     {
       id: "location",
       name: "Location",
@@ -102,7 +104,61 @@ const ItemFilters = ({
     },
   ]
 
-  const selectedItems = {}
+  // TODO: Connect this to the actual selected filters
+  const appliedFilterElements = {}
+
+  // function for renderChildren prop of FilterBarInline
+  const filterBarContent = () => {
+    return (
+      <>
+        <MultiSelectGroup
+          id="item-filters"
+          labelText="Filter by"
+          renderMultiSelect={() => multiSelectElements.map(renderMultiSelect)}
+        />
+        <Box minWidth="440">
+          <Label id="year-filter-label" htmlFor="year-filter">
+            Search by Year
+          </Label>
+          <SearchBar
+            id="year-filter"
+            labelText="Apply"
+            aria-labelledby="year-filter-label"
+            textInputProps={{
+              placeholder: "YYYY",
+              isClearable: true,
+              labelText: "Search by year",
+              name: "textInputName",
+              value: appliedFilters.year[0] || "",
+            }}
+            onSubmit={handleYearSubmit}
+          />
+        </Box>
+      </>
+    )
+  }
+
+  // function passed to multiSelectElements map callback for generating renderMultiSelect prop of MultiSelectGroup
+  const renderMultiSelect = (multiSelect: MultiSelectProps) => {
+    return (
+      <MultiSelect
+        buttonText={multiSelect.name}
+        id={`${multiSelect.id}-multi-select`}
+        data-testid={`${multiSelect.id}-multi-select`}
+        items={multiSelect.items}
+        key={multiSelect.id}
+        width="fitContent"
+        __css={{ flex: 1 }}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
+          console.log(e.target.value)
+        }}
+        onClear={() => {
+          console.log(multiSelect.id)
+        }}
+        selectedItems={appliedFilterElements}
+      />
+    )
+  }
 
   return (
     <>
@@ -122,54 +178,7 @@ const ItemFilters = ({
         onClear={() => {
           clearAllFilters()
         }}
-        renderChildren={() => (
-          <>
-            <MultiSelectGroup
-              id="item-filters"
-              labelText="Filter by"
-              renderMultiSelect={() => {
-                return multiSelectItems.map((multiSelect) => (
-                  <MultiSelect
-                    buttonText={multiSelect.name}
-                    id={`${multiSelect.id}-multi-select`}
-                    data-testid={`${multiSelect.id}-multi-select`}
-                    items={multiSelect.items}
-                    key={multiSelect.id}
-                    width="fitContent"
-                    __css={{ flex: 1 }}
-                    onChange={(
-                      e: React.ChangeEvent<HTMLInputElement>
-                    ): void => {
-                      console.log(e.target.value)
-                    }}
-                    onClear={() => {
-                      console.log(multiSelect.id)
-                    }}
-                    selectedItems={selectedItems}
-                  />
-                ))
-              }}
-            />
-            <Box minWidth="440">
-              <Label id="year-filter-label" htmlFor="year-filter">
-                Search by Year
-              </Label>
-              <SearchBar
-                id="year-filter"
-                labelText="Apply"
-                aria-labelledby="year-filter-label"
-                textInputProps={{
-                  placeholder: "YYYY",
-                  isClearable: true,
-                  labelText: "Search by year",
-                  name: "textInputName",
-                  value: appliedFilters.year[0] || "",
-                }}
-                onSubmit={handleYearSubmit}
-              />
-            </Box>
-          </>
-        )}
+        renderChildren={filterBarContent}
       />
       {filtersAreApplied ? (
         <Box display="flex" mr="s" mb="m">
