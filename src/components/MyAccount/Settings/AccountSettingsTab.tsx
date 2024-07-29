@@ -53,7 +53,6 @@ const AccountSettingsTab = () => {
     if (currentlyEditing) {
       firstInputRef.current?.focus()
     } else if (!patronDataLoading && focusOnAccountSettingsButton) {
-      console.log("spaghetti")
       editButtonRef.current?.focus()
     }
   }, [currentlyEditing, focusOnAccountSettingsButton, patronDataLoading])
