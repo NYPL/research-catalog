@@ -112,6 +112,10 @@ describe("Bib Page Item Table", () => {
     )
   })
 
+  it("renders the item filters container", async () => {
+    expect(screen.getByTestId("item-filters-container")).toBeInTheDocument()
+  })
+
   it("renders pagination when there are more than 20 items and updates the router on page button clicks", async () => {
     global.fetch = jest.fn().mockImplementationOnce(() =>
       Promise.resolve({

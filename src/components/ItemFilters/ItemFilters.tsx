@@ -30,7 +30,7 @@ interface ItemFilterContainerProps {
   filtersAreApplied?: boolean
 }
 
-const FiltersContainer = ({
+const ItemFilters = ({
   itemAggregations,
   handleFiltersChange,
   appliedFilters = { location: [], format: [], status: [], year: [] },
@@ -108,6 +108,7 @@ const FiltersContainer = ({
     <>
       <FilterBarInline
         id="item-filters-container"
+        data-testid="item-filters-container"
         p="s"
         width="full"
         layout="row"
@@ -130,7 +131,8 @@ const FiltersContainer = ({
                 return multiSelectItems.map((multiSelect) => (
                   <MultiSelect
                     buttonText={multiSelect.name}
-                    id={multiSelect.id}
+                    id={`${multiSelect.id}-multi-select`}
+                    data-testid={`${multiSelect.id}-multi-select`}
                     items={multiSelect.items}
                     key={multiSelect.id}
                     width="fitContent"
@@ -149,16 +151,13 @@ const FiltersContainer = ({
               }}
             />
             <Box minWidth="440">
-              <Label
-                id="year-filter-label"
-                htmlFor="year-filter"
-                data-testid="year-filter-label"
-              >
+              <Label id="year-filter-label" htmlFor="year-filter">
                 Search by Year
               </Label>
               <SearchBar
                 id="year-filter"
                 labelText="Apply"
+                aria-labelledby="year-filter-label"
                 textInputProps={{
                   placeholder: "YYYY",
                   isClearable: true,
@@ -197,4 +196,4 @@ const FiltersContainer = ({
   )
 }
 
-export default FiltersContainer
+export default ItemFilters
