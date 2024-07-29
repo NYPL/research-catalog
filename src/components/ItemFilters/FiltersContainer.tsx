@@ -114,6 +114,13 @@ const FiltersContainer = ({
         bg="ui.gray.x-light-cool"
         mb="m"
         sx={{ fieldset: { lg: { width: "45%" } } }}
+        onSubmit={() => {
+          // TODO: Pass active filters and refactor submitFilters to handle all filters
+          submitFilters([], "field")
+        }}
+        onClear={() => {
+          clearAllFilters()
+        }}
         renderChildren={() => (
           <>
             <MultiSelectGroup
