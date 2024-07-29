@@ -2,7 +2,7 @@ export type Locations = string[]
 
 export type CollapsedMultiValueAppliedFilters = Record<string, string[]>
 
-export interface MultiSelectElement {
+export interface FilterCheckboxGroup {
   id: string
   name: string
   items?: { id: string; name: string }[]

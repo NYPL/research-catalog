@@ -12,7 +12,7 @@ import {
   type TagSetFilterDataProps,
 } from "@nypl/design-system-react-components"
 import type {
-  MultiSelectElement,
+  FilterCheckboxGroup,
   Aggregation,
   ItemFilterQueryParams,
   AppliedItemFilters,
@@ -86,7 +86,7 @@ const ItemFilters = ({
   }
 
   // TODO: Replace this with actual filter data
-  const multiSelectElements: MultiSelectElement[] = [
+  const filterCheckboxGroups: FilterCheckboxGroup[] = [
     {
       id: "location",
       name: "Location",
@@ -104,9 +104,6 @@ const ItemFilters = ({
     },
   ]
 
-  // TODO: Connect this to the actual selected filters
-  const appliedFilterElements = {}
-
   // function for renderChildren prop of FilterBarInline
   const filterBarContent = () => {
     return (
@@ -114,7 +111,7 @@ const ItemFilters = ({
         <MultiSelectGroup
           id="item-filters"
           labelText="Filter by"
-          renderMultiSelect={() => multiSelectElements.map(renderMultiSelect)}
+          renderMultiSelect={() => filterCheckboxGroups.map(renderMultiSelect)}
         />
         <Box minWidth="440">
           <Label id="year-filter-label" htmlFor="year-filter">
@@ -138,24 +135,27 @@ const ItemFilters = ({
     )
   }
 
-  // function passed to multiSelectElements map callback for generating renderMultiSelect prop of MultiSelectGroup
-  const renderMultiSelect = (multiSelect: MultiSelectElement) => {
+  // function passed to filterElements map callback for generating renderMultiSelect prop of MultiSelectGroup
+  const renderMultiSelect = (
+    checkboxGroup: FilterCheckboxGroup,
+    appliedFilterData = {}
+  ) => {
     return (
       <MultiSelect
-        buttonText={multiSelect.name}
-        id={`${multiSelect.id}-multi-select`}
-        data-testid={`${multiSelect.id}-multi-select`}
-        items={multiSelect.items}
-        key={multiSelect.id}
+        buttonText={checkboxGroup.name}
+        id={`${checkboxGroup.id}-multi-select`}
+        data-testid={`${checkboxGroup.id}-multi-select`}
+        items={checkboxGroup.items}
+        key={checkboxGroup.id}
         width="fitContent"
         __css={{ flex: 1 }}
         onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
           console.log(e.target.value)
         }}
         onClear={() => {
-          console.log(multiSelect.id)
+          console.log(checkboxGroup.id)
         }}
-        selectedItems={appliedFilterElements}
+        selectedItems={appliedFilterData}
       />
     )
   }
