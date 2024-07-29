@@ -112,6 +112,7 @@ describe("Bib Page Item Table", () => {
     )
   })
 
+  // TODO: Add integration tests for filtering when the ItemFilters component is fully implemented
   it("renders the item filters container", async () => {
     expect(screen.getByTestId("item-filters-container")).toBeInTheDocument()
   })
