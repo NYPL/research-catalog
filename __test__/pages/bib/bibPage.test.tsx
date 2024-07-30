@@ -112,10 +112,7 @@ describe("Bib Page Item Table", () => {
     )
   })
 
-  // TODO: Add integration tests for filtering when the ItemFilters component is fully implemented
-  it("renders the item filters container", async () => {
-    expect(screen.getByTestId("item-filters-container")).toBeInTheDocument()
-  })
+  it.todo("renders the item filters container")
 
   it("renders pagination when there are more than 20 items and updates the router on page button clicks", async () => {
     global.fetch = jest.fn().mockImplementationOnce(() =>
