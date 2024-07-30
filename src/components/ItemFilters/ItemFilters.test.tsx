@@ -23,9 +23,11 @@ describe("ItemFilters", () => {
     expect(screen.getByTestId("item-filters-container")).toBeInTheDocument()
   })
 
-  it.todo(
-    "renders filters container with one MultiSelect per populated checkbox group"
-  )
+  it("renders filters container with one MultiSelect per populated checkbox group", async () => {
+    expect(screen.getByTestId("item-filters-container")).toBeInTheDocument()
+    expect(screen.getByTestId("format-multi-select")).toBeInTheDocument()
+    expect(screen.getByTestId("status-multi-select")).toBeInTheDocument()
+  })
 
   it("renders the year search form", async () => {
     expect(screen.getByLabelText("Search by Year")).toBeInTheDocument()

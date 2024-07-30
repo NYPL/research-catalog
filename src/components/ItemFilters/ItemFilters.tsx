@@ -95,12 +95,12 @@ const ItemFilters = ({
     {
       id: "format",
       name: "Format",
-      items: [],
+      items: [{ id: "item-id", name: "Test" }],
     },
     {
       id: "status",
       name: "Status",
-      items: [],
+      items: [{ id: "item-id", name: "Test" }],
     },
   ]
 
