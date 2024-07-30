@@ -111,7 +111,7 @@ const ItemFilters = ({
         <MultiSelectGroup
           id="item-filters"
           labelText="Filter by"
-          renderMultiSelect={() => filterCheckboxGroups.map(renderMultiSelect)}
+          renderMultiSelect={renderMultiSelect}
         />
         <Box minWidth="440">
           <Label id="year-filter-label" htmlFor="year-filter">
@@ -136,29 +136,29 @@ const ItemFilters = ({
   }
 
   // function passed to filterElements map callback for generating renderMultiSelect prop of MultiSelectGroup
-  const renderMultiSelect = (
-    checkboxGroup: FilterCheckboxGroup,
-    appliedFilterData = {}
-  ) => {
-    return checkboxGroup?.items.length ? (
-      <MultiSelect
-        buttonText={checkboxGroup.name}
-        id={`${checkboxGroup.id}-multi-select`}
-        data-testid={`${checkboxGroup.id}-multi-select`}
-        items={checkboxGroup.items}
-        key={checkboxGroup.id}
-        width="fitContent"
-        onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
-          console.log(e.target.value)
-        }}
-        onClear={() => {
-          console.log(checkboxGroup.id)
-        }}
-        selectedItems={appliedFilterData}
-        closeOnBlur
-      />
-    ) : null
-  }
+  const renderMultiSelect = ({ isBlockElement, multiSelectWidth }) =>
+    filterCheckboxGroups.map((checkboxGroup: FilterCheckboxGroup) =>
+      checkboxGroup?.items.length ? (
+        <MultiSelect
+          buttonText={checkboxGroup.name}
+          id={`${checkboxGroup.id}-multi-select`}
+          data-testid={`${checkboxGroup.id}-multi-select`}
+          items={checkboxGroup.items}
+          key={checkboxGroup.id}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
+            console.log(e.target.value)
+          }}
+          onClear={() => {
+            console.log(checkboxGroup.id)
+          }}
+          // TODO: Connect this to data
+          selectedItems={{}}
+          isBlockElement={isBlockElement}
+          width={multiSelectWidth}
+          closeOnBlur
+        />
+      ) : null
+    )
 
   return (
     <>
