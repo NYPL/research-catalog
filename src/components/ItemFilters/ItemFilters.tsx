@@ -162,24 +162,23 @@ const ItemFilters = ({
 
   return (
     <>
-      <FilterBarInline
-        id="item-filters-container"
-        data-testid="item-filters-container"
-        p="s"
-        width="full"
-        layout="row"
-        bg="ui.gray.x-light-cool"
-        mb="m"
-        sx={{ fieldset: { lg: { width: "45%" } } }}
-        onSubmit={() => {
-          // TODO: Pass active filters and refactor submitFilters to handle all filters
-          submitFilters([], "field")
-        }}
-        onClear={() => {
-          clearAllFilters()
-        }}
-        renderChildren={filterBarContent}
-      />
+      <Box p="inset.wide" bg="ui.gray.x-light-cool" mb="m">
+        <FilterBarInline
+          id="item-filters-container"
+          data-testid="item-filters-container"
+          width="full"
+          layout="row"
+          sx={{ fieldset: { lg: { width: "45%" } } }}
+          onSubmit={() => {
+            // TODO: Pass active filters and refactor submitFilters to handle all filters
+            submitFilters([], "field")
+          }}
+          onClear={() => {
+            clearAllFilters()
+          }}
+          renderChildren={filterBarContent}
+        />
+      </Box>
       {filtersAreApplied ? (
         <Box display="flex" mr="s" mb="m">
           <Text
