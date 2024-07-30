@@ -23,7 +23,7 @@ describe("ItemFilters", () => {
     expect(screen.getByTestId("item-filters-container")).toBeInTheDocument()
   })
 
-  it("renders multi select container with 3 multi selects corresponding to filter categories", async () => {
+  it("renders filters container with 3 MultiSelect components corresponding to filter categories", async () => {
     expect(screen.getByTestId("item-filters-container")).toBeInTheDocument()
     expect(screen.getByTestId("format-multi-select")).toBeInTheDocument()
     expect(screen.getByTestId("status-multi-select")).toBeInTheDocument()
