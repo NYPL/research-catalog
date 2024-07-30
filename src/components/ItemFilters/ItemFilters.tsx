@@ -140,7 +140,7 @@ const ItemFilters = ({
     checkboxGroup: FilterCheckboxGroup,
     appliedFilterData = {}
   ) => {
-    return (
+    return checkboxGroup?.items.length ? (
       <MultiSelect
         buttonText={checkboxGroup.name}
         id={`${checkboxGroup.id}-multi-select`}
@@ -157,7 +157,7 @@ const ItemFilters = ({
         }}
         selectedItems={appliedFilterData}
       />
-    )
+    ) : null
   }
 
   return (
