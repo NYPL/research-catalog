@@ -155,6 +155,7 @@ const ItemFilters = ({
           console.log(checkboxGroup.id)
         }}
         selectedItems={appliedFilterData}
+        closeOnBlur
       />
     ) : null
   }
