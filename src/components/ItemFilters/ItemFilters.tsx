@@ -148,7 +148,6 @@ const ItemFilters = ({
         items={checkboxGroup.items}
         key={checkboxGroup.id}
         width="fitContent"
-        __css={{ flex: 1 }}
         onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
           console.log(e.target.value)
         }}
