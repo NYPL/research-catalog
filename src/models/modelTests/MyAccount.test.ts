@@ -19,7 +19,7 @@ import type { Hold } from "../../types/myAccountTypes"
 
 describe("MyAccountModel", () => {
   const fetchBibs = MyAccount.prototype.fetchBibData
-  afterAll(() => {
+  afterEach(() => {
     MyAccount.prototype.fetchBibData = fetchBibs
   })
 
@@ -237,6 +237,16 @@ describe("MyAccountModel", () => {
       expect(patronWithFails.holds).not.toHaveLength(0)
       expect(patronWithFails.fines.total).toEqual(0)
       expect(patronWithFails.patron.name).toEqual("Strega Nonna")
+    })
+  })
+  describe("fetchBibData", () => {
+    it("can handle bib level holds with no item level holds", async () => {
+      const account = new MyAccount({ get: () => "spaghetti" }, "1234567")
+      const bibHolds = holds.entries.filter((hold) => !hold.record.bibIds)
+      const processedBibHolds = await account.fetchBibData(bibHolds, "record")
+      expect(processedBibHolds).toStrictEqual({
+        entries: bibHolds.map((hold) => hold.record),
+      })
     })
   })
 })

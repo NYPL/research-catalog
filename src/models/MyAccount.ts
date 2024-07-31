@@ -66,7 +66,7 @@ export default class MyAccount {
     try {
       holdBibData = await this.fetchBibData(holds.entries, "record")
     } catch (e) {
-      console.error("MyAccount#fetchBibData error: " + e.message)
+      console.error("MyAccount#fetchBibData error: " + e.message || e)
     }
 
     const holdsWithBibData = this.buildHolds(holds.entries, holdBibData.entries)
@@ -114,10 +114,19 @@ export default class MyAccount {
         bibLevelHolds.push(holdOrCheckout.record)
       }
     })
-    const bibData = await this.client.get(
-      `bibs?id=${itemLevelHoldsorCheckouts}&fields=default,varFields`
-    )
-    bibData.entries = bibData.entries.concat(bibLevelHolds)
+
+    const bibData = { entries: bibLevelHolds }
+    let itemLevelBibData
+    if (itemLevelHoldsorCheckouts.length) {
+      try {
+        itemLevelBibData = await this.client.get(
+          `bibs?id=${itemLevelHoldsorCheckouts}&fields=default,varFields`
+        )
+      } catch (e) {
+        throw `error getting bibs?id=${itemLevelHoldsorCheckouts}&fields=default,varFields`
+      }
+      bibData.entries = bibData.entries.concat(itemLevelBibData.entries)
+    }
     return bibData
   }
 
