@@ -13,7 +13,7 @@ export interface PatronDataContextType {
   patronDataLoading: boolean
   setUpdatedAccountData: Dispatch<SetStateAction<MyAccountPatronData>>
   updatedAccountData: MyAccountPatronData
-  getMostUpdatedSierraAccountData: () => void
+  getMostUpdatedSierraAccountData: () => Promise<void>
 }
 export interface SierraAccountData {
   checkouts: SierraCheckout[]
