@@ -22,6 +22,7 @@ import { PatronDataContext } from "../../../context/PatronDataContext"
 
 const AccountSettingsTab = () => {
   const {
+    patronDataLoading,
     getMostUpdatedSierraAccountData,
     updatedAccountData: { patron, pickupLocations },
   } = useContext(PatronDataContext)
@@ -46,11 +47,15 @@ const AccountSettingsTab = () => {
   ) : (
     <AccountSettingsDisplay patron={patron} />
   )
+  const [focusOnAccountSettingsButton, setFocusOnAccountSettingButton] =
+    useState(false)
   useEffect(() => {
     if (currentlyEditing) {
       firstInputRef.current?.focus()
-    } else editButtonRef.current?.focus()
-  }, [currentlyEditing])
+    } else if (!patronDataLoading && focusOnAccountSettingsButton) {
+      editButtonRef.current?.focus()
+    }
+  }, [currentlyEditing, focusOnAccountSettingsButton, patronDataLoading])
 
   const submitAccountSettings = async (e) => {
     e.preventDefault()
@@ -85,7 +90,10 @@ const AccountSettingsTab = () => {
         <Modal
           {...{
             ...modalProps,
-            onClose: closeModal,
+            onClose: () => {
+              closeModal()
+              setFocusOnAccountSettingButton(true)
+            },
           }}
         />
       )}
@@ -103,6 +111,7 @@ const AccountSettingsTab = () => {
         </List>
         <Spacer display={{ sm: "none", base: "none", md: "inline-block" }} />
         <AccountSettingsButtons
+          setFocusOnAccountSettingsButton={setFocusOnAccountSettingButton}
           editButtonRef={editButtonRef}
           currentlyEditing={currentlyEditing}
           setCurrentlyEditing={setCurrentlyEditing}
