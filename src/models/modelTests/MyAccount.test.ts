@@ -248,5 +248,13 @@ describe("MyAccountModel", () => {
         entries: bibHolds.map((hold) => hold.record),
       })
     })
+    it("requests bib info for item level holds", async () => {
+      const fetchSpy = jest.fn().mockResolvedValue({ entries: [{ id: "123" }] })
+      const account = new MyAccount({ get: fetchSpy }, "1234567")
+
+      await account.fetchBibData(holds.entries, "record")
+
+      expect(fetchSpy).toHaveBeenCalled()
+    })
   })
 })
