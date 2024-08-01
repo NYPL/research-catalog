@@ -11,13 +11,8 @@ export class ItemFilterData {
   field: string
 
   constructor(aggregation: Aggregation) {
-    this.options = this.formatOptions(aggregation.values)
+    this.options = aggregation.values
     this.field = aggregation.field
-  }
-
-  formatOptions(aggregationValues: AggregationOption[]): AggregationOption[] {
-    console.log(aggregationValues)
-    return []
   }
 
   displayOptions(): Option[] {
@@ -38,14 +33,17 @@ export class LocationFilterData extends ItemFilterData {
 
   displayOptions(): AggregationOption[] {
     let offsiteCount = 0
-    const optionsWithoutRecap = this.options.filter(({ value }) => {
+    const optionsWithoutRecap = this.options.filter(({ value, count }) => {
       if (isRecapLocation(value)) {
         offsiteCount += count
         return false
       } else return true
     })
     if (offsiteCount) {
-      return [...optionsWithoutRecap, { label: "Offsite", value: "Offsite" }]
+      return [
+        ...optionsWithoutRecap,
+        { label: "Offsite", value: "Offsite", count: offsiteCount },
+      ]
     } else return optionsWithoutRecap
   }
 
