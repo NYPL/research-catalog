@@ -1,10 +1,12 @@
+import { capitalize } from "lodash"
+
 import type {
   Aggregation,
   AggregationOption,
   Option,
 } from "../types/filterTypes"
-
 import { isRecapLocation } from "../utils/itemFilterUtils"
+import type { FilterCheckboxGroup } from "../types/filterTypes"
 
 export class ItemFilterData {
   options: AggregationOption[]
@@ -19,8 +21,18 @@ export class ItemFilterData {
     return this.options
   }
 
+  get formattedFilterData(): FilterCheckboxGroup {
+    return {
+      id: this.field,
+      name: capitalize(this.field),
+      items: this.displayOptions().map((option) => {
+        return { id: option.value, name: option.label }
+      }),
+    }
+  }
+
   labelForValue(value: string) {
-    return this.displayOptions().find((opt: Option) => {
+    return this.options.find((opt: Option) => {
       return opt.value === value || opt.label === value
     })?.label
   }

@@ -85,35 +85,8 @@ const ItemFilters = ({
     submitFilters([year], "year")
   }
 
-  // TODO: Replace this with actual filter data
-  // const filterCheckboxGroups: FilterCheckboxGroup[] = [
-  //   {
-  //     id: "location",
-  //     name: "Location",
-  //     items: [{ id: "item-id", name: "Test" }],
-  //   },
-  //   {
-  //     id: "format",
-  //     name: "Format",
-  //     items: [{ id: "item-id", name: "Test" }],
-  //   },
-  //   {
-  //     id: "status",
-  //     name: "Status",
-  //     items: [{ id: "item-id", name: "Test" }],
-  //   },
-  // ]
-
   const filterCheckboxGroups: FilterCheckboxGroup[] = filterData.map(
-    (filter) => {
-      return {
-        id: filter.field,
-        name: filter.field,
-        items: filter.displayOptions().map((option) => {
-          return { id: option.value, name: option.label }
-        }),
-      }
-    }
+    (filter) => filter.formattedFilterData
   )
 
   // function for renderChildren prop of FilterBarInline
