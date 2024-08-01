@@ -1,24 +1,23 @@
-import { type SyntheticEvent, useRef, useState } from "react"
+import { type SyntheticEvent, useRef } from "react"
 import React from "react"
 import {
+  FilterBarInline,
+  MultiSelectGroup,
+  MultiSelect,
   SearchBar,
   Box,
-  useCloseDropDown,
-  useNYPLBreakpoints,
   Text,
   Label,
   TagSet,
   type TagSetFilterDataProps,
 } from "@nypl/design-system-react-components"
-
-import styles from "../../../styles/components/ItemFilters.module.scss"
 import type {
+  FilterCheckboxGroup,
   Aggregation,
   ItemFilterQueryParams,
   AppliedItemFilters,
 } from "../../types/filterTypes"
 import { ItemFilterData, LocationFilterData } from "../../models/ItemFilterData"
-import ItemFilter from "./ItemFilter"
 import {
   buildAppliedFiltersTagSetData,
   buildItemFilterQuery,
@@ -32,17 +31,12 @@ interface ItemFilterContainerProps {
   filtersAreApplied?: boolean
 }
 
-const FiltersContainer = ({
+const ItemFilters = ({
   itemAggregations,
   handleFiltersChange,
   appliedFilters = { location: [], format: [], status: [], year: [] },
   filtersAreApplied = false,
 }: ItemFilterContainerProps) => {
-  const { isLargerThanLarge, isLargerThanMedium } = useNYPLBreakpoints()
-  const filterGroupClassName = isLargerThanLarge
-    ? styles.filterGroup
-    : styles.filterGroupMobile
-
   const filterData = useRef<ItemFilterData[]>(
     itemAggregations.map((aggregation: Aggregation) => {
       if (aggregation.field === "location")
@@ -56,12 +50,6 @@ const FiltersContainer = ({
     filterData
   )
 
-  const ref = useRef<HTMLDivElement>(null)
-
-  useCloseDropDown(() => setWhichFilterIsOpen(""), ref)
-
-  const [whichFilterIsOpen, setWhichFilterIsOpen] = useState("")
-
   const submitFilters = (selectedFilters: string[], field: string) => {
     const newFilters = { ...appliedFilters, [field]: selectedFilters }
     const locationFilterData = filterData.find(
@@ -72,12 +60,10 @@ const FiltersContainer = ({
       locationFilterData.recapLocations()
     )
     handleFiltersChange(itemFilterQuery)
-    setWhichFilterIsOpen("")
   }
 
   const clearAllFilters = () => {
     handleFiltersChange({})
-    setWhichFilterIsOpen("")
   }
 
   const handleRemoveFilterClick = ({ id }: TagSetFilterDataProps) => {
@@ -99,57 +85,42 @@ const FiltersContainer = ({
     submitFilters([year], "year")
   }
 
-  return (
-    <>
-      <Box
-        className={styles.filtersContainer}
-        sx={{
-          display: "flex",
-          flexDirection: isLargerThanMedium ? "row" : "column",
-        }}
-        mb="m"
-      >
-        <Box className={filterGroupClassName} ref={ref}>
-          <Label
-            id="filters-label"
-            htmlFor="item-filters"
-            fontWeight="bold"
-            data-testid="filters-label"
-          >
-            Filter By
-          </Label>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: isLargerThanLarge ? "row" : "column",
-            }}
-            gap="nypl-s"
-            id="item-filters"
-          >
-            {filterData.map((field: ItemFilterData) => (
-              <ItemFilter
-                isOpen={whichFilterIsOpen === field.field}
-                setWhichFilterIsOpen={setWhichFilterIsOpen}
-                key={field.field}
-                itemFilterData={field}
-                appliedFilters={appliedFilters}
-                submitFilters={submitFilters}
-              />
-            ))}
-          </Box>
-        </Box>
-        <Box className={filterGroupClassName} minWidth={440}>
-          <Label
-            id="year-filter-label"
-            htmlFor="year-filter"
-            fontWeight="bold"
-            data-testid="year-filter-label"
-          >
+  // TODO: Replace this with actual filter data
+  const filterCheckboxGroups: FilterCheckboxGroup[] = [
+    {
+      id: "location",
+      name: "Location",
+      items: [{ id: "item-id", name: "Test" }],
+    },
+    {
+      id: "format",
+      name: "Format",
+      items: [{ id: "item-id", name: "Test" }],
+    },
+    {
+      id: "status",
+      name: "Status",
+      items: [{ id: "item-id", name: "Test" }],
+    },
+  ]
+
+  // function for renderChildren prop of FilterBarInline
+  const filterBarContent = () => {
+    return (
+      <>
+        <MultiSelectGroup
+          id="item-filters"
+          labelText="Filter by"
+          renderMultiSelect={renderMultiSelect}
+        />
+        <Box minWidth="440">
+          <Label id="year-filter-label" htmlFor="year-filter">
             Search by Year
           </Label>
           <SearchBar
             id="year-filter"
             labelText="Apply"
+            aria-labelledby="year-filter-label"
             textInputProps={{
               placeholder: "YYYY",
               isClearable: true,
@@ -160,6 +131,53 @@ const FiltersContainer = ({
             onSubmit={handleYearSubmit}
           />
         </Box>
+      </>
+    )
+  }
+
+  // function passed to filterElements map callback for generating renderMultiSelect prop of MultiSelectGroup
+  const renderMultiSelect = ({ isBlockElement, multiSelectWidth }) =>
+    filterCheckboxGroups.map((checkboxGroup: FilterCheckboxGroup) =>
+      checkboxGroup?.items.length ? (
+        <MultiSelect
+          buttonText={checkboxGroup.name}
+          id={`${checkboxGroup.id}-multi-select`}
+          data-testid={`${checkboxGroup.id}-multi-select`}
+          items={checkboxGroup.items}
+          key={checkboxGroup.id}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
+            console.log(e.target.value)
+          }}
+          onClear={() => {
+            console.log(checkboxGroup.id)
+          }}
+          // TODO: Connect this to data
+          selectedItems={{}}
+          isBlockElement={isBlockElement}
+          width={multiSelectWidth}
+          closeOnBlur
+        />
+      ) : null
+    )
+
+  return (
+    <>
+      <Box p="inset.wide" bg="ui.gray.x-light-cool" mb="m">
+        <FilterBarInline
+          id="item-filters-container"
+          data-testid="item-filters-container"
+          width="full"
+          layout="row"
+          sx={{ fieldset: { lg: { width: "45%" } } }}
+          onSubmit={() => {
+            // TODO: Pass active filters and refactor submitFilters to handle all filters
+            submitFilters([], "field")
+          }}
+          onClear={() => {
+            clearAllFilters()
+          }}
+          renderChildren={filterBarContent}
+        />
       </Box>
       {filtersAreApplied ? (
         <Box display="flex" mr="s" mb="m">
@@ -186,4 +204,4 @@ const FiltersContainer = ({
   )
 }
 
-export default FiltersContainer
+export default ItemFilters

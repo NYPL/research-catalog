@@ -2,6 +2,12 @@ export type Locations = string[]
 
 export type CollapsedMultiValueAppliedFilters = Record<string, string[]>
 
+export interface FilterCheckboxGroup {
+  id: string
+  name: string
+  items?: { id: string; name: string }[]
+}
+
 export type AppliedItemFilters = {
   location: string[]
   format: string[]

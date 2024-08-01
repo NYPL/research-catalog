@@ -1,76 +1,51 @@
 import React from "react"
-import { render, screen } from "@testing-library/react"
-
-import FiltersContainer from "./FiltersContainer"
 import userEvent from "@testing-library/user-event"
 
-import { normalAggs } from "../../../__test__/fixtures/testAggregations"
+import { bibWithItems } from "../../../__test__/fixtures/bibFixtures"
+import { render, screen } from "../../utils/testUtils"
+import ItemFilters from "./ItemFilters"
+import Bib from "../../models/Bib"
 
-describe("Filters container", () => {
-  it("renders a single filter", () => {
-    render(<FiltersContainer itemAggregations={[normalAggs[0]]} />)
-    const filters = screen.getAllByTestId(/item-filter/)
-    expect(filters.length).toBe(1)
-  })
-  it("renders three filter boxes", () => {
-    render(<FiltersContainer itemAggregations={normalAggs} />)
-    const filters = screen.getAllByTestId(/item-filter/)
-    expect(filters.length).toBe(3)
-  })
-
-  it("renders the correct checkboxes for the applied filters", async () => {
+describe("ItemFilters", () => {
+  beforeEach(() => {
+    const bib = new Bib(bibWithItems.resource)
+    const filtersChangeMock = jest.fn()
     render(
-      <FiltersContainer
-        itemAggregations={normalAggs}
-        appliedFilters={{
-          location: ["Offsite"],
-          format: ["Text"],
-          status: ["status:a"],
-          year: ["2005"],
-        }}
+      <ItemFilters
+        itemAggregations={bib.itemAggregations}
+        handleFiltersChange={filtersChangeMock}
+        appliedFilters={{ location: [], format: [], status: [], year: [] }}
       />
     )
-    const { locationFilterButton, statusFilterButton, formatFilterButton } =
-      filterButtons()
-    await filterHasSelected(locationFilterButton, ["Offsite"])
-    await filterHasSelected(formatFilterButton, ["Text"])
-    await filterHasSelected(statusFilterButton, ["Available"])
   })
 
-  it("closes open filters when user clicks outside of the filter", async () => {
-    render(<FiltersContainer itemAggregations={normalAggs} />)
-    const { locationFilterButton } = filterButtons()
+  it("renders the Filter bar container", () => {
+    expect(screen.getByTestId("item-filters-container")).toBeInTheDocument()
+  })
+
+  it("renders filters container with one MultiSelect per populated checkbox group", async () => {
+    expect(screen.getByTestId("item-filters-container")).toBeInTheDocument()
+    expect(screen.getByTestId("format-multi-select")).toBeInTheDocument()
+    expect(screen.getByTestId("status-multi-select")).toBeInTheDocument()
+  })
+
+  it("renders the year search form", async () => {
+    expect(screen.getByLabelText("Search by Year")).toBeInTheDocument()
+  })
+
+  it("renders apply filters button", async () => {
+    expect(
+      screen.getByText("Apply filters", { selector: "button" })
+    ).toBeInTheDocument()
+  })
+
+  it.skip("closes open filters when user clicks outside of the filter", async () => {
     const outsideOfTheFilter = screen.getByTestId("year-filter-label")
 
-    await userEvent.click(locationFilterButton)
+    await userEvent.click(screen.getByTestId("location-item-filter"))
     const offsiteCheckbox = screen.getByLabelText("Offsite")
     await userEvent.click(offsiteCheckbox)
     await userEvent.click(outsideOfTheFilter)
     expect(offsiteCheckbox).not.toBeInTheDocument()
   })
 })
-
-const filterHasSelected = async (
-  checkboxGroupButton: Element,
-  values: string[]
-) => {
-  await userEvent.click(checkboxGroupButton)
-  const selectedValues = values.map((label) => screen.getByLabelText(label))
-  const checkboxes = screen.getAllByRole("checkbox", { checked: true })
-  expect(checkboxes.length).toBe(values.length)
-  selectedValues.forEach((checkbox) => {
-    expect(checkbox).toBeChecked()
-  })
-}
-
-const filterButtons = () => {
-  const locationFilterButton = screen.getByTestId("location-item-filter")
-  const statusFilterButton = screen.getByTestId("status-item-filter")
-  const formatFilterButton = screen.getByTestId("format-item-filter")
-
-  return {
-    locationFilterButton,
-    statusFilterButton,
-    formatFilterButton,
-  }
-}

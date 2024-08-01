@@ -29,7 +29,7 @@ import ItemTable from "../../../src/components/ItemTable/ItemTable"
 import ItemTableControls from "../../../src/components/ItemTable/ItemTableControls"
 import ElectronicResourcesLink from "../../../src/components/SearchResults/ElectronicResourcesLink"
 import ExternalLink from "../../../src/components/Links/ExternalLink/ExternalLink"
-import FiltersContainer from "../../../src/components/ItemFilters/FiltersContainer"
+import ItemFilters from "../../../src/components/ItemFilters/ItemFilters"
 import type {
   DiscoveryBibResult,
   BibQueryParams,
@@ -240,7 +240,7 @@ export default function BibPage({
               isDismissible
               mb="s"
             />
-            <FiltersContainer
+            <ItemFilters
               itemAggregations={bib.itemAggregations}
               handleFiltersChange={handleFiltersChange}
               appliedFilters={appliedFilters}

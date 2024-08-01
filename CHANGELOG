@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 
+- Replace custom ItemFilter components with FilterBarInline, MultiSelectGroup, and MultiSelect components from the DS (display-only except for clear button) (SCC-4176)
 - Pass bibDetail test ids as kebabCase (SCC-4150)
 - Refactored bibUtils and removed BibParams type (SCC-4136)
 - Created npm run test-watch-quiet to run tests for changed files without printing the HTML from RTL errors.
