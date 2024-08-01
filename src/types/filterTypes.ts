@@ -17,7 +17,6 @@ export type AppliedItemFilters = {
 
 export interface AggregationOption {
   value: string
-  count: number
   label: string
 }
 

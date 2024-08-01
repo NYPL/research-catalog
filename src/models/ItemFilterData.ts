@@ -8,13 +8,16 @@ import { isRecapLocation } from "../utils/itemFilterUtils"
 
 export class ItemFilterData {
   options: AggregationOption[]
-  aggregation: Aggregation
   field: string
 
   constructor(aggregation: Aggregation) {
-    this.aggregation = aggregation
-    this.options = aggregation.values
+    this.options = this.formatOptions(aggregation.values)
     this.field = aggregation.field
+  }
+
+  formatOptions(aggregationValues: AggregationOption[]): AggregationOption[] {
+    console.log(aggregationValues)
+    return []
   }
 
   displayOptions(): Option[] {
@@ -35,17 +38,14 @@ export class LocationFilterData extends ItemFilterData {
 
   displayOptions(): AggregationOption[] {
     let offsiteCount = 0
-    const optionsWithoutRecap = this.options.filter(({ value, count }) => {
+    const optionsWithoutRecap = this.options.filter(({ value }) => {
       if (isRecapLocation(value)) {
         offsiteCount += count
         return false
       } else return true
     })
     if (offsiteCount) {
-      return [
-        ...optionsWithoutRecap,
-        { label: "Offsite", value: "Offsite", count: offsiteCount },
-      ]
+      return [...optionsWithoutRecap, { label: "Offsite", value: "Offsite" }]
     } else return optionsWithoutRecap
   }
 
