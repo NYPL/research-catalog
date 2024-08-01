@@ -7,6 +7,7 @@ interface AccountSettingsButtonsPropsType {
   formValid: boolean
   setCurrentlyEditing: Dispatch<React.SetStateAction<boolean>>
   editButtonRef: MutableRefObject<HTMLButtonElement>
+  setFocusOnAccountSettingsButton: Dispatch<React.SetStateAction<boolean>>
 }
 
 const AccountSettingsButtons = ({
@@ -14,9 +15,12 @@ const AccountSettingsButtons = ({
   formValid,
   setCurrentlyEditing,
   editButtonRef,
+  setFocusOnAccountSettingsButton,
 }: AccountSettingsButtonsPropsType) => {
-  const toggleCurrentlyEditing = (doWeWantToEdit: boolean) =>
+  const toggleCurrentlyEditing = (doWeWantToEdit: boolean) => {
     setCurrentlyEditing(doWeWantToEdit)
+    setFocusOnAccountSettingsButton(!doWeWantToEdit)
+  }
   const editButton = (
     <Button
       ref={editButtonRef}

@@ -110,12 +110,11 @@ const CancelButton = ({
     headingText: <h5 className={styles["noIconHeading"]}>Cancel request?</h5>,
     onConfirm: async () => {
       setModalProps({
-        ...checkModalProps,
+        type: "default",
         bodyContent: <SkeletonLoader showImage={false} />,
-        onCancel: () => null,
-        onConfirm: () => null,
+        onClose: () => null,
         closeButtonLabel: "Loading",
-      } as ConfirmationModalProps)
+      } as DefaultModalProps)
       const response = await fetch(
         `${BASE_URL}/api/account/holds/cancel/${hold.id}`,
         {

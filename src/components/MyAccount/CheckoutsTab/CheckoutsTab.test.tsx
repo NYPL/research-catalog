@@ -131,4 +131,37 @@ describe("CheckoutsTab", () => {
     const expectedRenewButtons = component.getAllByText("Renew")
     expect(expectedRenewButtons.length).toBe(1)
   })
+
+  it("displays renew success modal with updated due date", async () => {
+    global.fetch = jest.fn().mockImplementation(async (...args) => {
+      if (args.length > 1)
+        return {
+          json: async () => ({ message: "Renewed", status: 200, body: {} }),
+        } as Response
+      else
+        return {
+          json: async () =>
+            JSON.stringify({
+              checkouts: [
+                { ...processedCheckouts[0], dueDate: "July 30, 2024" },
+              ].concat(processedCheckouts.slice(1)),
+              patron: processedPatron,
+            }),
+          status: 200,
+        } as Response
+    })
+
+    const component = renderWithPatronDataContext()
+    const renewableCheckout = processedCheckouts[0]
+    const row = component.getByText(renewableCheckout.title).closest("tr")
+    const renewButton = within(row).getByText("Renew")
+    expect(component.getByText("May 30, 2024")).toBeInTheDocument()
+
+    await userEvent.click(renewButton)
+    const modalText = await component.findByText(
+      "This item has been renewed. It is now due back on July 30, 2024.",
+      { exact: false }
+    )
+    expect(modalText).toBeInTheDocument()
+  })
 })

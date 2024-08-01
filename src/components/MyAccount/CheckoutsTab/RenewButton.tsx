@@ -28,6 +28,7 @@ const RenewButton = ({
   const [isButtonDisabled, setButtonDisabled] = useState(false)
   const { onOpen, onClose, Modal } = useModal()
   const [modalProps, setModalProps] = useState(null)
+  const [renewalSuccess, setRenewalSuccess] = useState(null)
   const {
     getMostUpdatedSierraAccountData,
     patronDataLoading,
@@ -57,7 +58,6 @@ const RenewButton = ({
       </h5>
     ),
     onClose: async () => {
-      getMostUpdatedSierraAccountData()
       onClose()
     },
   }
@@ -114,18 +114,26 @@ const RenewButton = ({
     const responseData = await response.json()
     if (responseData.message == "Renewed") {
       setButtonDisabled(true)
-      setModalProps(successModalProps)
+      await getMostUpdatedSierraAccountData()
       localStorage.setItem(
         `lastDisabledTime-${checkout.id}`,
         new Date().getTime().toString()
       )
+      setRenewalSuccess(true)
     } else {
-      setModalProps(failureModalProps)
+      setRenewalSuccess(false)
       //TO-DO: Log error console.log("error", responseData)
     }
-    onOpen()
   }
   const showLoadingState = patronDataLoading && isCheckoutRenewing
+
+  useEffect(() => {
+    // default state is null. We don't want this code to run on the inital render
+    if (renewalSuccess === null) return
+    if (renewalSuccess) setModalProps(successModalProps)
+    if (renewalSuccess === false) setModalProps(failureModalProps)
+    onOpen()
+  }, [renewalSuccess])
 
   return (
     <>
