@@ -15,7 +15,7 @@ import {
   checkoutBibs,
   empty,
 } from "../../../__test__/fixtures/rawSierraAccountData"
-import type { Hold } from "../../types/myAccountTypes"
+import type { Hold, SierraHold } from "../../types/myAccountTypes"
 
 describe("MyAccountModel", () => {
   const fetchBibs = MyAccount.prototype.fetchBibData
@@ -243,7 +243,10 @@ describe("MyAccountModel", () => {
     it("can handle bib level holds with no item level holds", async () => {
       const account = new MyAccount({ get: () => "spaghetti" }, "1234567")
       const bibHolds = holds.entries.filter((hold) => !hold.record.bibIds)
-      const processedBibHolds = await account.fetchBibData(bibHolds, "record")
+      const processedBibHolds = await account.fetchBibData(
+        bibHolds as SierraHold[],
+        "record"
+      )
       expect(processedBibHolds).toStrictEqual({
         entries: bibHolds.map((hold) => hold.record),
       })
@@ -252,7 +255,7 @@ describe("MyAccountModel", () => {
       const fetchSpy = jest.fn().mockResolvedValue({ entries: [{ id: "123" }] })
       const account = new MyAccount({ get: fetchSpy }, "1234567")
 
-      await account.fetchBibData(holds.entries, "record")
+      await account.fetchBibData(holds.entries as SierraHold[], "record")
 
       expect(fetchSpy).toHaveBeenCalled()
     })
