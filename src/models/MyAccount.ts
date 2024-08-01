@@ -95,7 +95,7 @@ export default class MyAccount {
   }
 
   async fetchBibData(
-    holdsOrCheckouts: any[],
+    holdsOrCheckouts: (SierraHold | SierraCheckout)[],
     itemOrRecord: string
   ): Promise<{
     total?: number
@@ -106,17 +106,18 @@ export default class MyAccount {
     const itemLevelHoldsorCheckouts = []
     const bibLevelHolds = []
 
-    // Separating bib level and item level records so we only fetch bib data for item level holds/checkouts.
+    // Separating bib level holds so we only fetch bib data for
+    // item level holds/checkouts.
     holdsOrCheckouts.forEach((holdOrCheckout) => {
       if (holdOrCheckout[itemOrRecord].bibIds) {
         itemLevelHoldsorCheckouts.push(holdOrCheckout[itemOrRecord].bibIds[0])
       } else {
-        bibLevelHolds.push(holdOrCheckout.record)
+        bibLevelHolds.push((holdOrCheckout as SierraHold).record)
       }
     })
 
     const bibData = { entries: bibLevelHolds }
-    let itemLevelBibData
+    let itemLevelBibData: { entries: SierraBibEntry[] }
     if (itemLevelHoldsorCheckouts.length) {
       try {
         itemLevelBibData = await this.client.get(
