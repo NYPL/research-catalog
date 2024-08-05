@@ -346,7 +346,7 @@ describe("RequestsTab", () => {
       const updateLocation = screen.getByTestId("change-location-button")
       expect(updateLocation).toHaveFocus()
     })
-    it.only("resets to selectPickupLocationProps after not updating to same location", async () => {
+    it("resets to selectPickupLocationProps after not updating to same location", async () => {
       renderWithPatronDataContext()
 
       global.fetch = jest.fn().mockResolvedValueOnce({
