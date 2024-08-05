@@ -268,6 +268,7 @@ describe("RequestsTab", () => {
     await userEvent.click(component.getAllByText("OK")[0])
     expect(component.getByTestId("items-tab")).toHaveFocus()
   })
+
   describe("update location", () => {
     const openModal = async () => {
       const modalTrigger = screen.getAllByText("Change location")[0]
@@ -344,6 +345,23 @@ describe("RequestsTab", () => {
       await userEvent.click(screen.getByText("OK"))
       const updateLocation = screen.getByTestId("change-location-button")
       expect(updateLocation).toHaveFocus()
+    })
+    it.only("resets to selectPickupLocationProps after not updating to same location", async () => {
+      renderWithPatronDataContext()
+
+      global.fetch = jest.fn().mockResolvedValueOnce({
+        json: async () => "updated",
+        status: 200,
+      } as Response)
+      await openModal()
+      const submitButton = screen.getByText("Confirm location")
+      await userEvent.click(submitButton)
+      await userEvent.click(screen.getByText("OK"))
+      const modalTrigger = await screen.findByText("Change location")
+      await userEvent.click(modalTrigger)
+      expect(
+        screen.getByText("Where would you like to pick up this item?")
+      ).toBeInTheDocument()
     })
   })
 })
