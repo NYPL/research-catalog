@@ -17,7 +17,6 @@ import Layout from "../../src/components/Layout/Layout"
 
 import { BASE_URL, SITE_NAME } from "../../src/config/constants"
 import { getPickupTimeEstimate, overrideNow } from "@nypl/pickup-time-estimator"
-
 import {
   fulfillmentOptions,
   scenarios,
