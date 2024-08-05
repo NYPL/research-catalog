@@ -16,10 +16,7 @@ import type { TextInputRefType } from "@nypl/design-system-react-components"
 import Layout from "../../src/components/Layout/Layout"
 
 import { BASE_URL, SITE_NAME } from "../../src/config/constants"
-import {
-  getPickupTimeEstimate,
-  overrideNow,
-} from "../../src/utils/pickupTimeEstimator"
+import { getPickupTimeEstimate, overrideNow } from "@nypl/pickup-time-estimator"
 
 import {
   fulfillmentOptions,
