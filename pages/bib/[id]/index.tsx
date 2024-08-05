@@ -92,14 +92,6 @@ export default function BibPage({
     ? bib.numItemsMatched
     : bib.numPhysicalItems
 
-  // Load all items via client-side fetch if page is first loaded with viewAllItems prop passed in
-  // Namely, when the page is accessed with the /all route
-  useEffect(() => {
-    if (viewAllItems) void refreshItemTable(query, true)
-    // Disable eslint exhaustive-deps rule because we only want this to run once on page load
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
   const refreshItemTable = async (
     newQuery: BibQueryParams,
     viewAllItems = false

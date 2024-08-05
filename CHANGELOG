@@ -64,6 +64,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 
+- Updated Bib Page to server-render the item table by default when accessed via the /all route (SCC-4187)
 - Created update patron settings functionality via the Settings tab in My Account. Currently only supports phone, email, and notification preference updates. (SCC-3928)
 - Extracted SearchResultsSort into its own component to render it in a different location on mobile.
 - No longer hiding the Item Location in the ItemTable on mobile.
