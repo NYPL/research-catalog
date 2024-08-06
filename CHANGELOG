@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update Account Settings notification preference selector to be a controlled component in order to validate based on the selected preference. This includes changing the Patron type that is returned from the My Account model
 - Extracted getEmailParams from Feedback API route and added test (SCC-4032)
 - Replaced all modals with new 'confirmation'/'default' variant (SCC-4110)
+- Extracted pickup time estimator and replaced with npm package @nypl/pickup-time-estimator
 
 ### Fixed
 
