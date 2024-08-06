@@ -7,9 +7,10 @@ import ItemFilters from "./ItemFilters"
 import Bib from "../../models/Bib"
 
 describe("ItemFilters", () => {
+  let filtersChangeMock: jest.Mock
   beforeEach(() => {
     const bib = new Bib(bibWithItems.resource)
-    const filtersChangeMock = jest.fn()
+    filtersChangeMock = jest.fn()
     render(
       <ItemFilters
         itemAggregations={bib.itemAggregations}
@@ -20,6 +21,7 @@ describe("ItemFilters", () => {
           status: ["Available"],
           year: [],
         }}
+        filtersAreApplied={true}
       />
     )
   })
@@ -50,5 +52,28 @@ describe("ItemFilters", () => {
 
     await userEvent.click(outsideOfTheFilter)
     expect(locationFilterButton).toHaveAttribute("aria-expanded", "false")
+  })
+
+  it("calls the change handler when filter values are changed", async () => {
+    await userEvent.click(screen.getByTestId("location-multi-select"))
+    const offsiteCheckbox = screen.getByLabelText("Offsite")
+
+    await userEvent.click(offsiteCheckbox)
+
+    expect(filtersChangeMock).toHaveBeenCalledTimes(1)
+
+    await userEvent.click(offsiteCheckbox)
+    expect(filtersChangeMock).toHaveBeenCalledTimes(2)
+  })
+
+  it("renders TagSet data when filters are applied and removes the filter when tag is clicked", async () => {
+    expect(screen.queryByText("Filters Applied")).toBeInTheDocument()
+    await userEvent.click(
+      screen.getByLabelText("Location > Offsite, click to remove filter")
+    )
+    expect(filtersChangeMock).toHaveBeenCalledWith({
+      item_format: "Text",
+      item_status: "Available",
+    })
   })
 })
