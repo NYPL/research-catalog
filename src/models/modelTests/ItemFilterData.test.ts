@@ -22,4 +22,17 @@ describe("Item model", () => {
       expect(itemFilterData.field).toBe("location")
     })
   })
+
+  describe("formattedFilterData", () => {
+    it("returns formatted filters data in the structure expected by the MultiSelect component", () => {
+      expect(itemFilterData.formattedFilterData).toStrictEqual({
+        id: "location",
+        items: [
+          { id: "loc:mak32", name: "SASB S3 - Periodicals Rm 108" },
+          { id: "loc:rc2ma", name: "Offsite" },
+        ],
+        name: "Location",
+      })
+    })
+  })
 })
