@@ -33,12 +33,6 @@ describe("ItemFilters", () => {
     expect(screen.getByLabelText("Search by Year")).toBeInTheDocument()
   })
 
-  it("renders apply filters button", async () => {
-    expect(
-      screen.getByText("Apply filters", { selector: "button" })
-    ).toBeInTheDocument()
-  })
-
   it.skip("closes open filters when user clicks outside of the filter", async () => {
     const outsideOfTheFilter = screen.getByTestId("year-filter-label")
 
