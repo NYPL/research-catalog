@@ -14,7 +14,12 @@ describe("ItemFilters", () => {
       <ItemFilters
         itemAggregations={bib.itemAggregations}
         handleFiltersChange={filtersChangeMock}
-        appliedFilters={{ location: [], format: [], status: [], year: [] }}
+        appliedFilters={{
+          location: ["Offsite"],
+          format: ["Text"],
+          status: ["Available"],
+          year: [],
+        }}
       />
     )
   })
@@ -33,13 +38,17 @@ describe("ItemFilters", () => {
     expect(screen.getByLabelText("Search by Year")).toBeInTheDocument()
   })
 
-  it.skip("closes open filters when user clicks outside of the filter", async () => {
-    const outsideOfTheFilter = screen.getByTestId("year-filter-label")
+  it("closes open filters when user clicks outside of the filter", async () => {
+    const outsideOfTheFilter = screen.getByLabelText("Search by Year")
 
-    await userEvent.click(screen.getByTestId("location-item-filter"))
-    const offsiteCheckbox = screen.getByLabelText("Offsite")
-    await userEvent.click(offsiteCheckbox)
+    const locationFilterButton = screen
+      .getByTestId("location-multi-select")
+      .querySelector("button")
+    await userEvent.click(locationFilterButton)
+
+    expect(locationFilterButton).toHaveAttribute("aria-expanded", "true")
+
     await userEvent.click(outsideOfTheFilter)
-    expect(offsiteCheckbox).not.toBeInTheDocument()
+    expect(locationFilterButton).toHaveAttribute("aria-expanded", "false")
   })
 })
