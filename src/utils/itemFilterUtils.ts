@@ -6,6 +6,7 @@ import type {
   AppliedItemFilters,
   CollapsedMultiValueAppliedFilters,
   ItemFilterQueryParams,
+  SelectedCheckboxes,
 } from "../types/filterTypes"
 
 export const isRecapLocation = (loc: string) => {
@@ -66,18 +67,31 @@ export const buildAppliedFiltersTagSetData = (
 }
 
 export const removeValueFromFilters = (
-  idToRemove: string,
+  id: string,
   appliedFilters: AppliedItemFilters
-): [values?: string[], field?: string] => {
-  let valuesAndField: [values?: string[], field?: string] = [null, null]
-  Object.keys(appliedFilters).forEach((field) => {
-    const filterValueIndex = appliedFilters[field].indexOf(idToRemove)
-    if (filterValueIndex >= 0) {
-      appliedFilters[field].splice(filterValueIndex, 1)
-      valuesAndField = [appliedFilters[field], field]
-    }
-  })
-  return valuesAndField
+): [string[], string] => {
+  let field: string
+  const filtersWithValueRemoved = Object.entries(appliedFilters).reduce(
+    (acc, [key, value]) => {
+      if (value.includes(id)) {
+        field = key
+        return value.filter((val) => val !== id)
+      }
+      return value
+    },
+    []
+  )
+  return [filtersWithValueRemoved, field]
+}
+
+export const getSelectedCheckboxesFromAppliedFilters = (
+  appliedFilters: AppliedItemFilters
+): SelectedCheckboxes => {
+  return {
+    location: { items: appliedFilters.location },
+    format: { items: appliedFilters.format },
+    status: { items: appliedFilters.status },
+  }
 }
 
 /* eslint-disable @typescript-eslint/naming-convention */

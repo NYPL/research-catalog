@@ -1,4 +1,4 @@
-import { type SyntheticEvent, useEffect, useRef } from "react"
+import { type SyntheticEvent, useRef } from "react"
 import React from "react"
 import {
   FilterBarInline,
@@ -16,11 +16,13 @@ import type {
   Aggregation,
   ItemFilterQueryParams,
   AppliedItemFilters,
+  SelectedCheckboxes,
 } from "../../types/filterTypes"
 import { ItemFilterData, LocationFilterData } from "../../models/ItemFilterData"
 import {
   buildAppliedFiltersTagSetData,
   buildItemFilterQuery,
+  getSelectedCheckboxesFromAppliedFilters,
   removeValueFromFilters,
 } from "../../utils/itemFilterUtils"
 
@@ -50,9 +52,8 @@ const ItemFilters = ({
     filterData
   )
 
-  useEffect(() => {
-    console.log("appliedFilters", appliedFilters)
-  }, [appliedFilters])
+  const selectectedCheckboxes: SelectedCheckboxes =
+    getSelectedCheckboxesFromAppliedFilters(appliedFilters)
 
   const submitFilters = (selectedFilters: string[], field: string) => {
     const newFilters = { ...appliedFilters, [field]: selectedFilters }
@@ -83,17 +84,14 @@ const ItemFilters = ({
     }
   }
 
-  const handleMultiSelectChange = async (
-    filterId: string,
-    filterGroupId: string
-  ) => {
-    const selectedCheckboxes = appliedFilters[filterGroupId]
-    const indexOfCheckboxId = selectedCheckboxes.indexOf(filterId)
+  const handleMultiSelectChange = async (filterId: string, field: string) => {
+    const selectedFieldCheckboxes = appliedFilters[field]
+    const indexOfCheckboxId = selectedFieldCheckboxes.indexOf(filterId)
 
     if (indexOfCheckboxId >= 0) {
       handleRemoveFilter(filterId)
     }
-    submitFilters([filterId, ...selectedCheckboxes], filterGroupId)
+    submitFilters([filterId, ...selectedFieldCheckboxes], field)
   }
 
   const handleYearSubmit = async (e: SyntheticEvent) => {
@@ -152,8 +150,7 @@ const ItemFilters = ({
           ): Promise<void> => {
             await handleMultiSelectChange(e.target.id, checkboxGroup.id)
           }}
-          // TODO: Connect this to data
-          selectedItems={{}}
+          selectedItems={selectectedCheckboxes}
           isBlockElement={isBlockElement}
           width={multiSelectWidth}
           closeOnBlur
