@@ -23,7 +23,7 @@ import {
   buildAppliedFiltersTagSetData,
   buildItemFilterQuery,
   getSelectedCheckboxesFromAppliedFilters,
-  removeValueFromFilter,
+  removeValueFromFilters,
 } from "../../utils/itemFilterUtils"
 
 interface ItemFilterContainerProps {
@@ -77,7 +77,7 @@ const ItemFilters = ({
     if (id === "clear-filters") {
       await clearAllFilters()
     } else {
-      const [newValues, field] = removeValueFromFilter(id, appliedFilters)
+      const [newValues, field] = removeValueFromFilters(id, appliedFilters)
       await submitFilters(newValues, field)
     }
   }
@@ -183,8 +183,8 @@ const ItemFilters = ({
             id="bib-details-applied-filters"
             isDismissible
             type="filter"
-            onClick={(filterToRemove: TagSetFilterDataProps) => {
-              handleRemoveFilter(filterToRemove.id)
+            onClick={async (filterToRemove: TagSetFilterDataProps) => {
+              await handleRemoveFilter(filterToRemove.id)
             }}
             tagSetData={appliedFiltersTagSetData}
           />

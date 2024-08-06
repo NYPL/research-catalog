@@ -71,7 +71,7 @@ export const buildAppliedFiltersTagSetData = (
  * We need to be able to remove a filter without prior knowledge of the filter group that contains it
  * So that we can clear individual filters with the TagSet clearing buttons.
  */
-export const removeValueFromFilter = (
+export const removeValueFromFilters = (
   id: string,
   appliedFilters: AppliedItemFilters
 ) => {

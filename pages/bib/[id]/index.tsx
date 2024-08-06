@@ -133,7 +133,7 @@ export default function BibPage({
     try {
       // Cancel any active fetches on new ItemTable refreshes
       if (controllerRef.current) {
-        controllerRef.current.abort()
+        controllerRef.current.abort("New fetch initiated")
       }
       controllerRef.current = new AbortController()
       const signal = controllerRef.current.signal
@@ -158,7 +158,7 @@ export default function BibPage({
       }
     } catch (error) {
       console.log(error)
-      handleItemFetchError()
+      if (error !== "New fetch initiated") handleItemFetchError()
     }
   }
 
