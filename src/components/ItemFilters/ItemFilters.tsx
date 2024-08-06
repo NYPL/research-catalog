@@ -1,4 +1,4 @@
-import { type SyntheticEvent, useRef } from "react"
+import { type SyntheticEvent, useEffect, useRef } from "react"
 import React from "react"
 import {
   FilterBarInline,
@@ -50,6 +50,10 @@ const ItemFilters = ({
     filterData
   )
 
+  useEffect(() => {
+    console.log("appliedFilters", appliedFilters)
+  }, [appliedFilters])
+
   const submitFilters = (selectedFilters: string[], field: string) => {
     const newFilters = { ...appliedFilters, [field]: selectedFilters }
     const locationFilterData = filterData.find(
@@ -66,7 +70,7 @@ const ItemFilters = ({
     handleFiltersChange({})
   }
 
-  const handleRemoveFilterClick = ({ id }: TagSetFilterDataProps) => {
+  const handleRemoveFilter = (id: string) => {
     if (id === "clear-filters") {
       clearAllFilters()
     } else {
@@ -77,6 +81,19 @@ const ItemFilters = ({
       if (filtersWithValueRemoved && field)
         submitFilters(filtersWithValueRemoved, field)
     }
+  }
+
+  const handleMultiSelectChange = async (
+    filterId: string,
+    filterGroupId: string
+  ) => {
+    const selectedCheckboxes = appliedFilters[filterGroupId]
+    const indexOfCheckboxId = selectedCheckboxes.indexOf(filterId)
+
+    if (indexOfCheckboxId >= 0) {
+      handleRemoveFilter(filterId)
+    }
+    submitFilters([filterId, ...selectedCheckboxes], filterGroupId)
   }
 
   const handleYearSubmit = async (e: SyntheticEvent) => {
@@ -126,15 +143,14 @@ const ItemFilters = ({
       checkboxGroup?.items.length ? (
         <MultiSelect
           buttonText={checkboxGroup.name}
-          id={`${checkboxGroup.id}-multi-select`}
+          id={`${checkboxGroup.id}`}
           data-testid={`${checkboxGroup.id}-multi-select`}
           items={checkboxGroup.items}
           key={checkboxGroup.id}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
-            console.log(e.target.value)
-          }}
-          onClear={() => {
-            console.log(checkboxGroup.id)
+          onChange={async (
+            e: React.ChangeEvent<HTMLInputElement>
+          ): Promise<void> => {
+            await handleMultiSelectChange(e.target.id, checkboxGroup.id)
           }}
           // TODO: Connect this to data
           selectedItems={{}}
@@ -154,13 +170,6 @@ const ItemFilters = ({
           width="full"
           layout="row"
           sx={{ fieldset: { lg: { width: "45%" } } }}
-          onSubmit={() => {
-            // TODO: Pass active filters and refactor submitFilters to handle all filters
-            submitFilters([], "field")
-          }}
-          onClear={() => {
-            clearAllFilters()
-          }}
           renderChildren={filterBarContent}
         />
       </Box>
@@ -180,7 +189,9 @@ const ItemFilters = ({
             id="bib-details-applied-filters"
             isDismissible
             type="filter"
-            onClick={handleRemoveFilterClick}
+            onClick={(filterToRemove: TagSetFilterDataProps) => {
+              handleRemoveFilter(filterToRemove.id)
+            }}
             tagSetData={appliedFiltersTagSetData}
           />
         </Box>
