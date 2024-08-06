@@ -66,22 +66,24 @@ export const buildAppliedFiltersTagSetData = (
   return filters
 }
 
-export const removeValueFromFilters = (
+/**
+ * Returns a tuple with the new filter values and the field that the value was removed from.
+ * We need to be able to remove a filter without prior knowledge of the filter group that contains it
+ * So that we can clear individual filters with the TagSet clearing buttons.
+ */
+export const removeValueFromFilter = (
   id: string,
   appliedFilters: AppliedItemFilters
-): [string[], string] => {
-  let field: string
-  const filtersWithValueRemoved = Object.entries(appliedFilters).reduce(
-    (acc, [key, value]) => {
-      if (value.includes(id)) {
-        field = key
-        return value.filter((val) => val !== id)
-      }
-      return value
-    },
-    []
+) => {
+  // find the filter field that includes the value to remove
+  const field = Object.keys(appliedFilters).find((field) => {
+    return appliedFilters[field].includes(id)
+  })
+  // get a copy of the filter values with the value removed
+  const newValues = appliedFilters[field].filter(
+    (filterValue: string) => filterValue !== id
   )
-  return [filtersWithValueRemoved, field]
+  return [newValues, field]
 }
 
 export const getSelectedCheckboxesFromAppliedFilters = (

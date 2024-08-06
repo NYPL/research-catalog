@@ -23,12 +23,14 @@ import {
   buildAppliedFiltersTagSetData,
   buildItemFilterQuery,
   getSelectedCheckboxesFromAppliedFilters,
-  removeValueFromFilters,
+  removeValueFromFilter,
 } from "../../utils/itemFilterUtils"
 
 interface ItemFilterContainerProps {
   itemAggregations: Aggregation[]
-  handleFiltersChange?: (newAppliedFilterQuery: ItemFilterQueryParams) => void
+  handleFiltersChange?: (
+    newAppliedFilterQuery: ItemFilterQueryParams
+  ) => Promise<void>
   appliedFilters?: AppliedItemFilters
   filtersAreApplied?: boolean
 }
@@ -52,10 +54,10 @@ const ItemFilters = ({
     filterData
   )
 
-  const selectectedCheckboxes: SelectedCheckboxes =
+  const selectedCheckboxes: SelectedCheckboxes =
     getSelectedCheckboxesFromAppliedFilters(appliedFilters)
 
-  const submitFilters = (selectedFilters: string[], field: string) => {
+  const submitFilters = async (selectedFilters: string[], field: string) => {
     const newFilters = { ...appliedFilters, [field]: selectedFilters }
     const locationFilterData = filterData.find(
       (filter) => filter.field === "location"
@@ -64,23 +66,19 @@ const ItemFilters = ({
       newFilters,
       locationFilterData.recapLocations()
     )
-    handleFiltersChange(itemFilterQuery)
+    await handleFiltersChange(itemFilterQuery)
   }
 
-  const clearAllFilters = () => {
-    handleFiltersChange({})
+  const clearAllFilters = async () => {
+    await handleFiltersChange({})
   }
 
-  const handleRemoveFilter = (id: string) => {
+  const handleRemoveFilter = async (id: string) => {
     if (id === "clear-filters") {
-      clearAllFilters()
+      await clearAllFilters()
     } else {
-      const [filtersWithValueRemoved, field] = removeValueFromFilters(
-        id,
-        appliedFilters
-      )
-      if (filtersWithValueRemoved && field)
-        submitFilters(filtersWithValueRemoved, field)
+      const [newValues, field] = removeValueFromFilter(id, appliedFilters)
+      await submitFilters(newValues, field)
     }
   }
 
@@ -89,15 +87,16 @@ const ItemFilters = ({
     const indexOfCheckboxId = selectedFieldCheckboxes.indexOf(filterId)
 
     if (indexOfCheckboxId >= 0) {
-      handleRemoveFilter(filterId)
+      await handleRemoveFilter(filterId)
+    } else {
+      await submitFilters([filterId, ...selectedFieldCheckboxes], field)
     }
-    submitFilters([filterId, ...selectedFieldCheckboxes], field)
   }
 
   const handleYearSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
     const year = e.target[0].value
-    submitFilters([year], "year")
+    await submitFilters([year], "year")
   }
 
   const filterCheckboxGroups: FilterCheckboxGroup[] = filterData.map(
@@ -145,12 +144,10 @@ const ItemFilters = ({
           data-testid={`${checkboxGroup.id}-multi-select`}
           items={checkboxGroup.items}
           key={checkboxGroup.id}
-          onChange={async (
-            e: React.ChangeEvent<HTMLInputElement>
-          ): Promise<void> => {
+          onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
             await handleMultiSelectChange(e.target.id, checkboxGroup.id)
           }}
-          selectedItems={selectectedCheckboxes}
+          selectedItems={selectedCheckboxes}
           isBlockElement={isBlockElement}
           width={multiSelectWidth}
           closeOnBlur
