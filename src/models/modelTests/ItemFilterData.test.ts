@@ -81,4 +81,10 @@ describe("LocationFilterData model", () => {
       })
     })
   })
+
+  describe("recapLocations", () => {
+    it("returns recap locations", () => {
+      expect(itemFilterData.recapLocations).toBe("loc:rc2ma")
+    })
+  })
 })

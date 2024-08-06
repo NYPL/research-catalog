@@ -64,7 +64,7 @@ const ItemFilters = ({
     ) as LocationFilterData
     const itemFilterQuery = buildItemFilterQuery(
       newFilters,
-      locationFilterData.recapLocations()
+      locationFilterData.recapLocations
     )
     await handleFiltersChange(itemFilterQuery)
   }

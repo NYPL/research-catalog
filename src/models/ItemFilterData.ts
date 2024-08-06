@@ -59,7 +59,7 @@ export class LocationFilterData extends ItemFilterData {
     } else return optionsWithoutRecap
   }
 
-  recapLocations(): string {
+  get recapLocations(): string {
     return (
       this.options
         .map(({ value }) => {
