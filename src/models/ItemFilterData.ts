@@ -32,7 +32,7 @@ export class ItemFilterData {
   }
 
   labelForValue(value: string) {
-    return this.options.find((opt: Option) => {
+    return this.displayOptions().find((opt: Option) => {
       return opt.value === value || opt.label === value
     })?.label
   }
