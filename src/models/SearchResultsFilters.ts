@@ -12,12 +12,18 @@ class SearchResultsFilters {
     this.labelTransformations = {
       "Greek, Modern (1453- )": "Greek, Modern (1453-present)",
     }
-    this.options = aggregationsResults
-      .find((f) => f.id === field.value)
-      ?.values.map((option) => ({
-        ...option,
-        label: this.labelTransformations[option.label] || option.label,
-      }))
+    this.options =
+      field.value === "holdingLocation"
+        ? [
+            { label: "Schomburg", value: "loc:scff2,loc:scff3" },
+            { label: "SASB", value: "loc:mal82,loc:mal92" },
+          ]
+        : aggregationsResults
+            .find((f) => f.id === field.value)
+            ?.values.map((option) => ({
+              ...option,
+              label: this.labelTransformations[option.label] || option.label,
+            }))
     this.field = field.value
   }
 }
