@@ -33,8 +33,7 @@ const RefineSearchCheckBoxField = ({
     setAppliedFilters((prevFilters) => {
       return {
         ...prevFilters,
-        [field.value]:
-          field.value === "holdingLocation" ? data[0].split(",") : data,
+        [field.value]: data,
       }
     })
   }

@@ -20,6 +20,7 @@ import {
   collapseMultiValueQueryParams,
   buildFilterQuery,
   getQueryWithoutFilters,
+  buildHoldingLocationFilters,
 } from "../../utils/refineSearchUtils"
 import type {
   Aggregation,
@@ -93,6 +94,7 @@ const RefineSearch = ({
       ...getQueryWithoutFilters(router.query),
       // build out multi-value query params for selected filters
       ...buildFilterQuery(appliedFilters),
+      ...buildHoldingLocationFilters(appliedFilters.holdingLocation),
     }
     router.push({
       pathname: "/search",
