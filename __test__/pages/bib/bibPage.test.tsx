@@ -158,7 +158,8 @@ describe("Bib Page Item Table", () => {
       screen.getAllByTestId("checkbox-group")[0].querySelector("input")
     )
 
-    expect(screen.queryByTestId("filter-tags")).toHaveTextContent("Text")
+    const tagButton = screen.queryByTestId("filter-tags")
+    expect(tagButton).toHaveTextContent("Text")
     expect(mockRouter.asPath).toBe("/bib/pb5579193?item_format=Text")
 
     await userEvent.click(tagButton)
