@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 
+- Refactor ItemTableData model to format data for DS components in ItemFilters (SCC-4203)
 - Replace custom ItemFilter components with FilterBarInline, MultiSelectGroup, and MultiSelect components from the DS (display-only except for clear button) (SCC-4176)
 - Pass bibDetail test ids as kebabCase (SCC-4150)
 - Refactored bibUtils and removed BibParams type (SCC-4136)
