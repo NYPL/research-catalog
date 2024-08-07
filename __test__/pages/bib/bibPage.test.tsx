@@ -1,5 +1,5 @@
 import React from "react"
-import { render, screen } from "../../../src/utils/testUtils"
+import { render, screen, fireEvent } from "../../../src/utils/testUtils"
 import mockRouter from "next-router-mock"
 import userEvent from "@testing-library/user-event"
 
@@ -112,7 +112,52 @@ describe("Bib Page Item Table", () => {
     )
   })
 
-  it.todo("renders the item filters container")
+  it("renders the filters container and populates the checkboxes", async () => {
+    expect(screen.getByTestId("item-filters-container")).toBeInTheDocument()
+    const checkboxGroups = screen.getAllByTestId("checkbox-group")
+    expect(checkboxGroups).toHaveLength(2)
+
+    expect(checkboxGroups[0].querySelectorAll("input")).toHaveLength(1)
+    expect(checkboxGroups[1].querySelectorAll("input")).toHaveLength(1)
+  })
+
+  it("updates the router when filter checkboxes are clicked", async () => {
+    global.fetch = jest.fn().mockImplementationOnce(() =>
+      Promise.resolve({
+        status: 200,
+        json: () => Promise.resolve({ success: true }),
+      })
+    )
+
+    const checkboxGroups = screen.getAllByTestId("checkbox-group")
+
+    await userEvent.click(checkboxGroups[0].querySelector("input"))
+    expect(mockRouter.asPath).toBe("/bib/pb5579193?item_format=Text")
+
+    await userEvent.click(checkboxGroups[0].querySelector("input"))
+    expect(mockRouter.asPath).toBe("/bib/pb5579193")
+  })
+
+  it("updates the router when year filter is submitted", async () => {
+    global.fetch = jest.fn().mockImplementationOnce(() =>
+      Promise.resolve({
+        status: 200,
+        json: () => Promise.resolve({ success: true }),
+      })
+    )
+    const yearFilter = screen.queryByTestId("year-filter")
+    const yearField = screen.queryByPlaceholderText("YYYY")
+    await userEvent.type(yearField, "2005")
+
+    await userEvent.click(yearFilter.querySelector("button[type='submit']"))
+
+    expect(mockRouter.asPath).toBe("/bib/pb5579193?item_date=2005")
+
+    // Clear the year field
+    await userEvent.click(yearFilter.querySelector("button[type='button']"))
+    await userEvent.click(yearFilter.querySelector("button[type='submit']"))
+    expect(mockRouter.asPath).toBe("/bib/pb5579193")
+  })
 
   it("renders pagination when there are more than 20 items and updates the router on page button clicks", async () => {
     global.fetch = jest.fn().mockImplementationOnce(() =>

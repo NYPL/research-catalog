@@ -1,4 +1,4 @@
-import { type SyntheticEvent, useRef } from "react"
+import { type SyntheticEvent, useState, useRef } from "react"
 import React from "react"
 import {
   FilterBarInline,
@@ -41,6 +41,7 @@ const ItemFilters = ({
   appliedFilters = { location: [], format: [], status: [], year: [] },
   filtersAreApplied = false,
 }: ItemFilterContainerProps) => {
+  const [year, setYear] = useState(appliedFilters.year[0])
   const filterData = useRef<ItemFilterData[]>(
     itemAggregations.map((aggregation: Aggregation) => {
       if (aggregation.field === "location")
@@ -95,8 +96,7 @@ const ItemFilters = ({
 
   const handleYearSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
-    const year = e.target[0].value
-    await submitFilters([year], "year")
+    await submitFilters(year.length ? [year] : [], "year")
   }
 
   const filterCheckboxGroups: FilterCheckboxGroup[] = filterData.map(
@@ -113,19 +113,22 @@ const ItemFilters = ({
           renderMultiSelect={renderMultiSelect}
         />
         <Box minWidth="440">
-          <Label id="year-filter-label" htmlFor="year-filter">
+          <Label id="year-filter-label" htmlFor="searchbar-form-year-filter">
             Search by Year
           </Label>
           <SearchBar
             id="year-filter"
-            labelText="Apply"
+            labelText="Apply year filter"
             aria-labelledby="year-filter-label"
+            data-testid="year-filter"
             textInputProps={{
               placeholder: "YYYY",
               isClearable: true,
               labelText: "Search by year",
-              name: "textInputName",
-              value: appliedFilters.year[0] || "",
+              name: "year-filter",
+              value: year || "",
+              onChange: ({ target }) => setYear(target.value),
+              isClearableCallback: () => setYear(""),
             }}
             onSubmit={handleYearSubmit}
           />
