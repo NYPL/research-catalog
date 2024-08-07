@@ -89,6 +89,7 @@ const RefineSearch = ({
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault()
     if (validateDateRange() === false) return
+    console.log("applied filters", appliedFilters)
     const updatedQuery = {
       // maintain any non-filter query params, eg q=spaghetti, journalTitle=pasta%20fancy
       ...getQueryWithoutFilters(router.query),

@@ -26,7 +26,6 @@ const RefineSearchCheckBoxField = ({
   options,
   setAppliedFilters,
 }: CheckboxGroupProps) => {
-  console.log(field.value)
   // Data is an array of strings corresponding to the selected options for this
   // field
   const updateCheckboxGroupValue = (data: string[]) => {
@@ -40,7 +39,6 @@ const RefineSearchCheckBoxField = ({
   }
 
   const checkboxes = options.map(({ value, label, count }) => {
-    if (value.includes("loc")) console.log(value)
     return (
       <Checkbox
         id={value}

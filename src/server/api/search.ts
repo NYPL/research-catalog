@@ -17,7 +17,6 @@ export async function fetchResults(
   searchParams: SearchParams
 ): Promise<SearchResultsResponse | Error> {
   const { q, field, filters } = searchParams
-
   // If user is making a search for bib number (i.e. field set to "standard_number"),
   // standardize the bib ID and pass it as the search keywords
   const keywordsOrBibId = field === "standard_number" ? standardizeBibId(q) : q
@@ -55,7 +54,7 @@ export async function fetchResults(
   //  - drb results
   const client = await nyplApiClient({ apiName: DISCOVERY_API_NAME })
   const drbClient = await nyplApiClient({ apiName: DRB_API_NAME })
-
+  console.log("query going to api", resultsQuery)
   const [resultsResponse, aggregationsResponse, drbResultsResponse] =
     await Promise.allSettled([
       client.get(`${DISCOVERY_API_SEARCH_ROUTE}${resultsQuery}`),

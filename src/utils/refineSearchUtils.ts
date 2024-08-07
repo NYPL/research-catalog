@@ -20,9 +20,8 @@ export const collapseMultiValueQueryParams = (
       else acc[field] = [queryParams[currentFilter]]
       return acc
     }, {})
-
-  const holdingLocations = collapseHoldingLocations(queryParams)
-  if (holdingLocations) collapsedFilters["holdingLocations"] = holdingLocations
+  const holdingLocation = collapseHoldingLocations(queryParams)
+  if (holdingLocation) collapsedFilters["holdingLocation"] = holdingLocation
   return collapsedFilters
 }
 export const collapseHoldingLocations = (queryParams) => {

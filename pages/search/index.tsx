@@ -238,6 +238,7 @@ export default function Search({
 export async function getServerSideProps({ resolvedUrl, req, query }) {
   const bannerNotification = process.env.SEARCH_RESULTS_NOTIFICATION || ""
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
+  console.log("query before mapquery", query)
   const results = await fetchResults(mapQueryToSearchParams(query))
 
   // Check for `redirectOnMatch` trigger:
