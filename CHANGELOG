@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add Bib model parent class and rendered ItemTable in Bib Details (SCC-3964)
 - Add update pickup location functionality to Requests tab in account page (SCC-3930)
 - Add caching of pickup location. Update Patron type to have a SierraCodeName for homeLibrary instead of a string for homeLibraryCode (SCC-4060)
+- Add support for `redirectOnMatch` for OCLC searches that match a single record (SCC-4166)
 
 ### Updated
 
@@ -26,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update Account Settings notification preference selector to be a controlled component in order to validate based on the selected preference. This includes changing the Patron type that is returned from the My Account model
 - Extracted getEmailParams from Feedback API route and added test (SCC-4032)
 - Replaced all modals with new 'confirmation'/'default' variant (SCC-4110)
+- Extracted pickup time estimator and replaced with npm package @nypl/pickup-time-estimator
 
 ### Fixed
 
@@ -63,8 +65,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 
+- Updated Bib Page to server-render the item table by default when accessed via the /all route (SCC-4187)
 - Created update patron settings functionality via the Settings tab in My Account. Currently only supports phone, email, and notification preference updates. (SCC-3928)
-
 - Extracted SearchResultsSort into its own component to render it in a different location on mobile.
 - No longer hiding the Item Location in the ItemTable on mobile.
 - Updated to DS v3.1.1 (as part of SCC-4090)

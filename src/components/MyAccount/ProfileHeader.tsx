@@ -49,7 +49,7 @@ const ProfileHeader = ({ patron }: { patron: Patron }) => {
     <List
       className={styles.myAccountList}
       id="my-account-profile-header"
-      title="My account"
+      title="My Account"
       type="dl"
       sx={{
         border: "none",

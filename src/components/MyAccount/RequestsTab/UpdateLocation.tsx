@@ -52,13 +52,14 @@ const UpdateLocation = ({
     ),
   ]
   const handleSubmit = async () => {
-    const newLocation = pickupLocationOptions.find(
-      (loc) => loc.code === selectRef.current.value
-    )
+    const newLocation =
+      pickupLocationOptions.find(
+        (loc) => loc.code === selectRef.current.value
+      ) || hold.pickupLocation
     setModalProps({
-      ...confirmLocationChangeModalProps,
+      ...selectLocationModalProps,
       bodyContent: <SkeletonLoader showImage={false} />,
-      onClose: () => null,
+      onClose: () => closeModal(),
       closeButtonLabel: "Loading",
     } as DefaultModalProps)
     const response = await fetch(
@@ -66,7 +67,7 @@ const UpdateLocation = ({
       {
         method: "PUT",
         body: JSON.stringify({
-          pickupLocation: selectRef.current.value,
+          pickupLocation: newLocation.code,
           patronId: `${patronId}`,
         }),
       }
@@ -74,10 +75,12 @@ const UpdateLocation = ({
     if (response.status == 200) {
       setModalProps(successModalProps(newLocation) as DefaultModalProps)
       setLastUpdatedHoldId(hold.id)
-    } else setModalProps(failureModalProps as DefaultModalProps)
+    } else {
+      setModalProps(failureModalProps as DefaultModalProps)
+    }
   }
 
-  const confirmLocationChangeModalProps = {
+  const selectLocationModalProps = {
     type: "default",
     bodyContent: (
       <Form
@@ -126,7 +129,7 @@ const UpdateLocation = ({
   }
 
   const [modalProps, setModalProps] = useState<BaseModalProps>(
-    confirmLocationChangeModalProps as DefaultModalProps
+    selectLocationModalProps as DefaultModalProps
   )
 
   const successModalProps = (newLocation) => ({
@@ -154,7 +157,11 @@ const UpdateLocation = ({
     ),
     onClose: () => {
       closeModal()
-      getMostUpdatedSierraAccountData()
+      if (newLocation.code !== hold.pickupLocation.code) {
+        getMostUpdatedSierraAccountData()
+      } else {
+        setModalProps(selectLocationModalProps as DefaultModalProps)
+      }
       setFocusOnChangeLocationButton(true)
     },
   })
@@ -173,6 +180,7 @@ const UpdateLocation = ({
     ),
     onClose: () => {
       closeModal()
+      setModalProps(selectLocationModalProps as DefaultModalProps)
       setFocusOnChangeLocationButton(true)
     },
     closeButtonLabel: "OK",
