@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Fixed an issue in ItemTable where an error message was displaying when an in-progress item fetch was aborted on subsequent filter changes.
 - Fixed issue caused by formatPatronName when a non-comma separated value is passed in (SCC-4175)
 - Fixed mobile tabs width on My Account page so text is readable when a user zooms in.
 
