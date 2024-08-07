@@ -159,6 +159,27 @@ describe("Bib Page Item Table", () => {
     expect(mockRouter.asPath).toBe("/bib/pb5579193")
   })
 
+  it("renders TagSet for applied filters and clears filters via tag click", async () => {
+    global.fetch = jest.fn().mockImplementationOnce(() =>
+      Promise.resolve({
+        status: 200,
+        json: () => Promise.resolve({ success: true }),
+      })
+    )
+    await userEvent.click(
+      screen.getAllByTestId("checkbox-group")[0].querySelector("input")
+    )
+
+    const tagButton = screen.queryByTestId("filter-tags")
+    expect(tagButton).toBeInTheDocument()
+    expect(tagButton).toHaveTextContent("Text")
+    expect(mockRouter.asPath).toBe("/bib/pb5579193?item_format=Text")
+
+    await userEvent.click(tagButton)
+    expect(screen.queryByTestId("filter-tags")).not.toBeInTheDocument()
+    expect(mockRouter.asPath).toBe("/bib/pb5579193")
+  })
+
   it("renders pagination when there are more than 20 items and updates the router on page button clicks", async () => {
     global.fetch = jest.fn().mockImplementationOnce(() =>
       Promise.resolve({
