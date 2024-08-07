@@ -1,5 +1,5 @@
 import React from "react"
-import { render, screen, fireEvent } from "../../../src/utils/testUtils"
+import { render, screen } from "../../../src/utils/testUtils"
 import mockRouter from "next-router-mock"
 import userEvent from "@testing-library/user-event"
 
@@ -103,6 +103,13 @@ describe("Bib Page no items", () => {
 
 describe("Bib Page Item Table", () => {
   beforeEach(() => {
+    global.fetch = jest.fn().mockImplementationOnce(() =>
+      Promise.resolve({
+        status: 200,
+        json: () => Promise.resolve({ success: true }),
+      })
+    )
+
     render(
       <BibPage
         discoveryBibResult={bibWithManyItems.resource}
@@ -122,13 +129,6 @@ describe("Bib Page Item Table", () => {
   })
 
   it("updates the router when filter checkboxes are clicked", async () => {
-    global.fetch = jest.fn().mockImplementationOnce(() =>
-      Promise.resolve({
-        status: 200,
-        json: () => Promise.resolve({ success: true }),
-      })
-    )
-
     const checkboxGroups = screen.getAllByTestId("checkbox-group")
 
     await userEvent.click(checkboxGroups[0].querySelector("input"))
@@ -139,12 +139,6 @@ describe("Bib Page Item Table", () => {
   })
 
   it("updates the router when year filter is submitted", async () => {
-    global.fetch = jest.fn().mockImplementationOnce(() =>
-      Promise.resolve({
-        status: 200,
-        json: () => Promise.resolve({ success: true }),
-      })
-    )
     const yearFilter = screen.queryByTestId("year-filter")
     const yearField = screen.queryByPlaceholderText("YYYY")
     await userEvent.type(yearField, "2005")
@@ -160,12 +154,6 @@ describe("Bib Page Item Table", () => {
   })
 
   it("renders TagSet for applied filters and clears filters via tag click", async () => {
-    global.fetch = jest.fn().mockImplementationOnce(() =>
-      Promise.resolve({
-        status: 200,
-        json: () => Promise.resolve({ success: true }),
-      })
-    )
     await userEvent.click(
       screen.getAllByTestId("checkbox-group")[0].querySelector("input")
     )
@@ -181,12 +169,6 @@ describe("Bib Page Item Table", () => {
   })
 
   it("TagSet should display a clear all button that clears all filters on click", async () => {
-    global.fetch = jest.fn().mockImplementationOnce(() =>
-      Promise.resolve({
-        status: 200,
-        json: () => Promise.resolve({ success: true }),
-      })
-    )
     await userEvent.click(
       screen.getAllByTestId("checkbox-group")[0].querySelector("input")
     )
@@ -210,12 +192,6 @@ describe("Bib Page Item Table", () => {
   })
 
   it("renders pagination when there are more than 20 items and updates the router on page button clicks", async () => {
-    global.fetch = jest.fn().mockImplementationOnce(() =>
-      Promise.resolve({
-        status: 200,
-        json: () => Promise.resolve({ success: true }),
-      })
-    )
     expect(
       screen.queryByText("Displaying 1-20 of 26 items")
     ).toBeInTheDocument()
