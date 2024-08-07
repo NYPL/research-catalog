@@ -1,5 +1,3 @@
-import { filter } from "underscore"
-import AppliedFilters from "../components/SearchFilters/AppliedFilters"
 import type { CollapsedMultiValueAppliedFilters } from "../types/filterTypes"
 
 // Filters are always multivalue query params in the form

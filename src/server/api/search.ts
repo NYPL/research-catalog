@@ -54,7 +54,6 @@ export async function fetchResults(
   //  - drb results
   const client = await nyplApiClient({ apiName: DISCOVERY_API_NAME })
   const drbClient = await nyplApiClient({ apiName: DRB_API_NAME })
-  console.log("query going to api", resultsQuery)
   const [resultsResponse, aggregationsResponse, drbResultsResponse] =
     await Promise.allSettled([
       client.get(`${DISCOVERY_API_SEARCH_ROUTE}${resultsQuery}`),

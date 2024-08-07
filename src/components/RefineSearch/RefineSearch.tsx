@@ -89,17 +89,13 @@ const RefineSearch = ({
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault()
     if (validateDateRange() === false) return
-    console.log("applied filters", appliedFilters)
-    const updatedQuery = {
-      // maintain any non-filter query params, eg q=spaghetti, journalTitle=pasta%20fancy
-      ...getQueryWithoutFilters(router.query),
-      // build out multi-value query params for selected filters
-      ...buildFilterQuery(appliedFilters),
-      ...buildHoldingLocationFilters(appliedFilters.holdingLocation),
-    }
     router.push({
       pathname: "/search",
-      query: updatedQuery,
+      query: {
+        ...router.query,
+        ...appliedFilters,
+        holdingLocation: appliedFilters.holdingLocation[0].split(","),
+      },
     })
     toggleRefine()
   }
