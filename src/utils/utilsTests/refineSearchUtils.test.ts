@@ -2,9 +2,28 @@ import {
   collapseMultiValueQueryParams,
   buildFilterQuery,
   buildHoldingLocationFilters,
+  collapseHoldingLocations,
 } from "../refineSearchUtils"
 
 describe("refineSearchUtils", () => {
+  describe("collapseHoldingLocations", () => {
+    it("can parse no holdingLocations", () => {
+      const query = { "filters[language][0]": "lang:fre" }
+      expect(collapseHoldingLocations(query)).toStrictEqual(null)
+    })
+    it("can parse sasb and sc locations", () => {
+      const query = {
+        "filters[holdingLocation][0]": "loc:mal82",
+        "filters[holdingLocation][1]": "loc:mal92",
+        "filters[holdingLocation][2]": "loc:scff2",
+        "filters[holdingLocation][3]": "loc:scff3",
+      }
+      expect(collapseHoldingLocations(query)).toStrictEqual([
+        "loc:scff2,loc:scff3",
+        "loc:mal82,loc:mal92",
+      ])
+    })
+  })
   describe("buildHoldingLocationFilters", () => {
     it("can handle undefined", () => {
       expect(buildHoldingLocationFilters(undefined)).not.toBeDefined()

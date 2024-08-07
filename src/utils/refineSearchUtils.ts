@@ -9,7 +9,7 @@ import type { CollapsedMultiValueAppliedFilters } from "../types/filterTypes"
 export const collapseMultiValueQueryParams = (
   queryParams: object
 ): CollapsedMultiValueAppliedFilters => {
-  const normalParams = Object.keys(queryParams)
+  const collapsedFilters = Object.keys(queryParams)
     .filter(
       (param) =>
         param.includes("filters[") && !param.includes("holdingLocation")
@@ -21,16 +21,26 @@ export const collapseMultiValueQueryParams = (
       return acc
     }, {})
 
-  const holdingLocations = Object.keys(queryParams)
+  const holdingLocations = collapseHoldingLocations(queryParams)
+  if (holdingLocations) collapsedFilters["holdingLocations"] = holdingLocations
+  return collapsedFilters
+}
+export const collapseHoldingLocations = (queryParams) => {
+  const sasb = { accessed: false, locations: "loc:mal82,loc:mal92" }
+  const sc = { accessed: false, locations: "loc:scff2,loc:scff3" }
+  Object.keys(queryParams)
     .filter(
       (param) => param.includes("filters[") && param.includes("holdingLocation")
     )
-    .reduce((acc, currentFilter) => {
-      const field = currentFilter.split("[")[1].split("]")[0]
-      if (acc[field]) acc[field].push(queryParams[currentFilter])
-      else acc[field] = [queryParams[currentFilter]]
-      return acc
-    }, {})
+    .map((currentFilter) => {
+      const paramValue = queryParams[currentFilter]
+      if (paramValue.includes("sc")) sc.accessed = true
+      if (paramValue.includes("mal")) sasb.accessed = true
+    })
+  const collapsedLocations = [sc, sasb]
+    .filter(({ accessed }) => accessed)
+    .map(({ locations }) => locations)
+  return collapsedLocations.length ? collapsedLocations : null
 }
 
 // This method does the inverse of the one above. Turn an object into a
