@@ -43,7 +43,7 @@ const ItemFilters = ({
 }: ItemFilterContainerProps) => {
   // We have to set the year value in state to be able to test form control in jest.
   // TODO: Remove this if we can find a better way to test form submissions in jest.
-  const [year, setYear] = useState(appliedFilters.year[0])
+  const [year, setYear] = useState(appliedFilters.year[0] || "")
   const filterData = useRef<ItemFilterData[]>(
     itemAggregations.map((aggregation: Aggregation) => {
       if (aggregation.field === "location")
@@ -129,7 +129,7 @@ const ItemFilters = ({
               isClearable: true,
               labelText: "Search by year",
               name: "year-filter",
-              value: year || "",
+              value: year,
               onChange: ({ target }) => setYear(target.value),
               isClearableCallback: () => setYear(""),
             }}
