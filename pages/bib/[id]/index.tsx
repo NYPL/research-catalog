@@ -15,6 +15,7 @@ import {
   SITE_NAME,
   BASE_URL,
   FOCUS_TIMEOUT,
+  ERROR_MESSAGES,
 } from "../../../src/config/constants"
 import { appConfig } from "../../../src/config/config"
 import { fetchBib } from "../../../src/server/api/bib"
@@ -133,7 +134,7 @@ export default function BibPage({
     try {
       // Cancel any active fetches on new ItemTable refreshes
       if (controllerRef.current) {
-        controllerRef.current.abort()
+        controllerRef.current.abort(ERROR_MESSAGES.ITEM_REFETCH_ABORT_REASON)
       }
       controllerRef.current = new AbortController()
       const signal = controllerRef.current.signal
@@ -158,7 +159,8 @@ export default function BibPage({
       }
     } catch (error) {
       console.log(error)
-      handleItemFetchError()
+      if (error !== ERROR_MESSAGES.ITEM_REFETCH_ABORT_REASON)
+        handleItemFetchError()
     }
   }
 
