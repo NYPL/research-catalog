@@ -193,13 +193,20 @@ describe("Bib Page Item Table", () => {
     await userEvent.click(
       screen.getAllByTestId("checkbox-group")[1].querySelector("input")
     )
+    await userEvent.type(screen.queryByPlaceholderText("YYYY"), "2005")
+
+    await userEvent.click(
+      screen.queryByTestId("year-filter").querySelector("button[type='submit']")
+    )
 
     expect(mockRouter.asPath).toBe(
-      "/bib/pb5579193?item_format=Text&item_status=status%3Aa"
+      "/bib/pb5579193?item_format=Text&item_status=status%3Aa&item_date=2005"
     )
     await userEvent.click(screen.getByText("Clear filters"))
 
     expect(mockRouter.asPath).toBe("/bib/pb5579193")
+    expect(screen.queryByTestId("filter-tags")).not.toBeInTheDocument()
+    expect(screen.queryByPlaceholderText("YYYY")).toHaveValue("")
   })
 
   it("renders pagination when there are more than 20 items and updates the router on page button clicks", async () => {

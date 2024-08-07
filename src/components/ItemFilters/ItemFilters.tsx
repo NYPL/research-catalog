@@ -71,6 +71,7 @@ const ItemFilters = ({
   }
 
   const clearAllFilters = async () => {
+    setYear("")
     await handleFiltersChange({})
   }
 
