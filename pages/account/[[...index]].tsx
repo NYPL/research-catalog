@@ -37,46 +37,54 @@ export default function MyAccount({
     document.cookie = newExpirationTime
     setExpirationTime(inFive)
   }
-
+  const serverError = (
+    <Text>
+      We are unable to display your account information at this time. Please
+      contact gethelp@nypl.org for assistance.
+    </Text>
+  )
+  const authError = (
+    <Text>
+      We are unable to display your account information at this time due an
+      error with our authentication server. Please contact gethelp@nypl.org for
+      assistance.
+    </Text>
+  )
   useEffect(() => {
     resetCountdown()
     // to avoid a reference error on document in the modal, wait to render it
     // until we are on the client side
     setDisplayLogoutModal(true)
   })
+  try {
+    return (
+      <>
+        <Head>
+          <title>My Account</title>
+        </Head>
 
-  return (
-    <>
-      <Head>
-        <title>My Account</title>
-      </Head>
-
-      <Layout isAuthenticated={isAuthenticated} activePage="account">
-        {displayLogoutModal && (
-          <TimedLogoutModal
-            stayLoggedIn={resetCountdown}
-            expirationTime={expirationTime}
-          />
-        )}
-        {renderAuthServerError ? (
-          <Text>
-            We are unable to display your account information at this time due
-            an error with our authentication server. Please contact
-            gethelp@nypl.org for assistance.
-          </Text>
-        ) : errorRetrievingPatronData ? (
-          <Text>
-            We are unable to display your account information at this time.
-            Please contact gethelp@nypl.org for assistance.
-          </Text>
-        ) : (
-          <PatronDataProvider value={{ ...accountData }}>
-            <ProfileContainer tabsPath={tabsPath} />
-          </PatronDataProvider>
-        )}
-      </Layout>
-    </>
-  )
+        <Layout isAuthenticated={isAuthenticated} activePage="account">
+          {displayLogoutModal && (
+            <TimedLogoutModal
+              stayLoggedIn={resetCountdown}
+              expirationTime={expirationTime}
+            />
+          )}
+          {renderAuthServerError ? (
+            authError
+          ) : errorRetrievingPatronData ? (
+            serverError
+          ) : (
+            <PatronDataProvider value={{ ...accountData }}>
+              <ProfileContainer tabsPath={tabsPath} />
+            </PatronDataProvider>
+          )}
+        </Layout>
+      </>
+    )
+  } catch (e) {
+    return serverError
+  }
 }
 
 export async function getServerSideProps({ req, res }) {
