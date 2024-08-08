@@ -324,7 +324,7 @@ export default class MyAccount {
   static getHoldStatus(status: SierraCodeName) {
     if (status.code === "i") {
       return "READY FOR PICKUP"
-    } else if (status.code === "t") {
+    } else if (status.code === "t" || status.code === "b") {
       return "REQUEST CONFIRMED"
     } else {
       return "REQUEST PENDING"
