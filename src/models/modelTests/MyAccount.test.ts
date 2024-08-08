@@ -38,6 +38,12 @@ describe("MyAccountModel", () => {
     it("returns the correct status", () => {
       expect(
         MyAccount.getHoldStatus({
+          code: "b",
+          name: "Requested item ready for pickup.",
+        })
+      ).toBe("READY FOR PICKUP")
+      expect(
+        MyAccount.getHoldStatus({
           code: "i",
           name: "Requested item ready for pickup.",
         })
