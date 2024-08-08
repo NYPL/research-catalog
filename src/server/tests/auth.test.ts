@@ -16,7 +16,7 @@ const mockPatronJwtDecodedObj = {
 }
 
 const mockReq = {
-  protocol: "https",
+  // protocol: "https",
   url: "/account",
   headers: {
     host: "local.nypl.org:8080",
@@ -68,13 +68,13 @@ describe("getLoginRedirect", () => {
       "/account"
     )
     expect(login).toStrictEqual(
-      "https://dev-login.nypl.org/auth/login?redirect_uri=https%3A%2F%2Flocal.nypl.org%3A8080%2Fresearch%2Fresearch-catalog%2Faccount"
+      "https://dev-login.nypl.org/auth/login?redirect_uri=http%3A%2F%2Flocal.nypl.org%3A8080%2Fresearch%2Fresearch-catalog%2Faccount"
     )
   })
   it("should return a redirect link based on the request", async () => {
     const login = getLoginRedirect({ ...mockReq, url: "/shep" })
     expect(login).toStrictEqual(
-      "https://dev-login.nypl.org/auth/login?redirect_uri=https%3A%2F%2Flocal.nypl.org%3A8080%2Fresearch%2Fresearch-catalog%2Fshep"
+      "https://dev-login.nypl.org/auth/login?redirect_uri=http%3A%2F%2Flocal.nypl.org%3A8080%2Fresearch%2Fresearch-catalog%2Fshep"
     )
   })
 })
