@@ -16,7 +16,7 @@ const mockPatronJwtDecodedObj = {
 }
 
 const mockReq = {
-  protocol: "http",
+  protocol: "https",
   url: "/account",
   headers: {
     host: "local.nypl.org:8080",
