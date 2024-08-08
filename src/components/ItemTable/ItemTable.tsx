@@ -1,8 +1,7 @@
 import { Box, Table } from "@nypl/design-system-react-components"
 
 import type ItemTableData from "../../models/ItemTableData"
-import RequestButtons from "./RequestButtons"
-import ItemAvailability from "./ItemAvailability"
+import StatusLinks from "./StatusLinks"
 import styles from "../../../styles/components/ItemTable.module.scss"
 
 interface ItemTableProps {
@@ -13,20 +12,24 @@ interface ItemTableProps {
  * The ItemTable displays item details, the RequestButtons
  */
 const ItemTable = ({ itemTableData }: ItemTableProps) => {
+  const { tableHeadings, tableData, items, inSearchResult } = itemTableData
   return (
     <Box>
       <Table
-        className={styles.itemTable}
-        columnHeaders={itemTableData.tableHeadings}
-        tableData={itemTableData.tableData}
+        className={`${styles.itemTable}${
+          inSearchResult ? " " + styles.inSearchResult : ""
+        }`}
+        columnHeaders={tableHeadings}
+        tableData={tableData}
+        showRowDividers={!inSearchResult}
         my={{ base: 0, md: "s" }}
+        data-testid={
+          !inSearchResult
+            ? "bib-details-item-table"
+            : "search-results-item-table"
+        }
       />
-      {!itemTableData.isBibPage && (
-        <Box>
-          <RequestButtons item={itemTableData.items[0]} />
-          <ItemAvailability item={itemTableData.items[0]} />
-        </Box>
-      )}
+      {inSearchResult && <StatusLinks item={items[0]} />}
     </Box>
   )
 }

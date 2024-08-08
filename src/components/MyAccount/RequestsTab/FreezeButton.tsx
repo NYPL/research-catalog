@@ -1,35 +1,71 @@
-import { useState } from "react"
+import { createRef, useEffect, useState } from "react"
 import type { Hold, Patron } from "../../../types/myAccountTypes"
 import {
   Box,
   Button,
-  Heading,
   Icon,
   useModal,
   Text,
+  ProgressIndicator,
 } from "@nypl/design-system-react-components"
 import styles from "../../../../styles/components/MyAccount.module.scss"
 
 const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
   const [frozen, setFrozen] = useState(hold.frozen)
-  const [isDisabled, setIsDisabled] = useState(false)
+  const [isDisabled, setIsDisabled] = useState<boolean | null>(null)
+  const [modalProps, setModalProps] = useState(null)
+  const buttonRef = createRef<HTMLButtonElement>()
   const { onOpen: openModal, onClose: closeModal, Modal } = useModal()
-  const modalProps = {
+  const failureModalProps = {
+    type: "default",
     bodyContent: (
       <Box className={styles.modalBody}>
-        <Text sx={{ marginLeft: "l", marginRight: "m" }}>
-          Please try again.
+        <Text>
+          We were unable to freeze your hold on this item. Please try again or
+          contact us for assistance.
         </Text>
       </Box>
     ),
     closeButtonLabel: "OK",
     headingText: (
-      <Heading className={styles.modalHeading}>
+      <h5 className={styles.modalHeading}>
         <>
           <Icon size="large" name="errorFilled" color="ui.error.primary" />
-          <Text sx={{ marginBottom: 0 }}> Freezing this hold failed </Text>
+          Hold {frozen ? "unfreeze" : "freeze"} failed
         </>
-      </Heading>
+      </h5>
+    ),
+    onClose: () => {
+      closeModal()
+      setIsDisabled(false)
+    },
+  }
+  const successModalProps = {
+    type: "default",
+    closeButtonLabel: "OK",
+    bodyContent: (
+      <Box className={styles.modalBody}>
+        <Text>
+          {`Your hold on this item has been ${
+            frozen
+              ? "unfrozen."
+              : "frozen. You will continue to advance in the queue but your \
+              request will not be filled until you unfreeze your hold."
+          }`}
+        </Text>
+      </Box>
+    ),
+    headingText: (
+      <h5 className={styles.modalHeading}>
+        <>
+          <Icon
+            size="large"
+            name="actionCheckCircleFilled"
+            color="ui.success.primary"
+          />
+          Hold {frozen ? "unfreeze" : "freeze"} successful
+        </>
+      </h5>
     ),
     onClose: () => {
       closeModal()
@@ -37,41 +73,63 @@ const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
     },
   }
 
+  useEffect(() => {
+    if (isDisabled === false) {
+      buttonRef.current?.focus()
+    }
+  }, [isDisabled, buttonRef])
+
   const handleFreezeClick = async () => {
     // Disabling button while request happens.
     setIsDisabled(true)
+    const body = JSON.stringify({
+      patronId: patron.id,
+      freeze: !frozen,
+      pickupLocation: hold.pickupLocation.code,
+    })
     const response = await fetch(
       `/research/research-catalog/api/account/holds/update/${hold.id}`,
       {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          patronId: patron.id,
-          freeze: !frozen,
-          pickupLocation: hold.pickupLocation.code,
-        }),
+        method: "PUT",
+        body,
       }
     )
     if (response.status !== 200) {
+      setModalProps(failureModalProps)
       openModal()
     } else {
+      setModalProps(successModalProps)
+      openModal()
       setFrozen((frozen) => !frozen)
       setIsDisabled(false)
     }
   }
+  const buttonLabel = isDisabled ? "Loading" : frozen ? "Unfreeze" : "Freeze"
 
   return (
     <>
       <Button
-        width="100%"
+        aria-label={`${buttonLabel} ${hold.title}`}
         buttonType="secondary"
         id={`freeze-${hold.id}`}
         onClick={handleFreezeClick}
         isDisabled={isDisabled}
+        width="100%"
+        ref={buttonRef}
       >
-        {frozen ? "Unfreeze" : "Freeze"}
+        {" "}
+        {isDisabled && (
+          <ProgressIndicator
+            id={"freeze-loading"}
+            labelText="Renew"
+            showLabel={false}
+            size="small"
+            indicatorType="circular"
+            mr="xs"
+            isIndeterminate
+          />
+        )}
+        {buttonLabel}
       </Button>
       <Modal {...modalProps} />
     </>

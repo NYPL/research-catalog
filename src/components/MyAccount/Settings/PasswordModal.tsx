@@ -1,13 +1,14 @@
-import { useState } from "react"
 import {
   useModal,
   Box,
   Icon,
   Text,
-  Heading,
   List,
   Button,
+  SkeletonLoader,
 } from "@nypl/design-system-react-components"
+import { useState } from "react"
+
 import styles from "../../../../styles/components/MyAccount.module.scss"
 import PasswordChangeForm from "./PasswordChangeForm"
 import type { Patron } from "../../../types/myAccountTypes"
@@ -16,8 +17,9 @@ const PasswordModal = ({ patron }: { patron: Patron }) => {
   const { onOpen: openModal, onClose: closeModal, Modal } = useModal()
 
   const entryModalProps = {
+    type: "default",
     bodyContent: (
-      <Box className={styles.modalBody}>
+      <Box className={styles.noIconBody}>
         <Text sx={{ fontWeight: "medium", paddingBottom: 0 }}>
           Use a strong PIN/PASSWORD to protect your security and identity.
         </Text>
@@ -40,23 +42,28 @@ const PasswordModal = ({ patron }: { patron: Patron }) => {
           </li>
           <li> PINs and PASSWORDS must NOT contain a period.</li>
         </List>
-        <PasswordChangeForm patron={patron} updateModal={updateModal} />
+        <PasswordChangeForm
+          patron={patron}
+          updateModal={updateModal}
+          onModalSubmit={() => setModalProps(loadingProps)}
+        />
       </Box>
     ),
     closeButtonLabel: "Cancel",
-    headingText: (
-      <Heading className={styles.modalHeading}>
-        <Text sx={{ marginBottom: 0 }}> Change PIN/PASSWORD </Text>
-      </Heading>
-    ),
+    headingText: <h5 className={styles.noIconHeading}>Change PIN/PASSWORD</h5>,
+    onClose: () => {
+      closeModal()
+    },
+  }
+
+  const loadingProps = {
+    ...entryModalProps,
+    bodyContent: <SkeletonLoader showImage={false} />,
+    onClose: () => null,
+    closeButtonLabel: "Loading",
   }
 
   const [modalProps, setModalProps] = useState(entryModalProps)
-
-  const resetModal = async () => {
-    closeModal()
-    setModalProps(entryModalProps)
-  }
 
   function updateModal(errorMessage?: string) {
     if (errorMessage) {
@@ -70,60 +77,65 @@ const PasswordModal = ({ patron }: { patron: Patron }) => {
   }
 
   const successModalProps = {
+    type: "default",
     bodyContent: (
       <Box className={styles.modalBody}>
-        <Text sx={{ marginLeft: "l" }}>Your PIN/PASSWORD was changed.</Text>
+        <Text>Your PIN/PASSWORD has been changed.</Text>
       </Box>
     ),
     closeButtonLabel: "OK",
     headingText: (
-      <Heading className={styles.modalHeading}>
+      <h5 className={styles.modalHeading}>
         <>
           <Icon
             size="large"
             name="actionCheckCircleFilled"
             color="ui.success.primary"
           />
-          <Text sx={{ marginBottom: 0 }}>
-            PIN/PASSWORD change was successful
-          </Text>
+          PIN/PASSWORD change was successful
         </>
-      </Heading>
+      </h5>
     ),
-    onClose: resetModal,
+    onClose: async () => {
+      closeModal()
+      setModalProps(entryModalProps)
+    },
   }
 
   const failureModalProps = (errorMessage) => ({
+    type: "default",
     bodyContent: (
       <Box className={styles.modalBody}>
-        <Text sx={{ marginLeft: "l", marginRight: "m" }}>
-          We were unable to change your PIN/PASSWORD: {errorMessage}
-        </Text>
-        <Text sx={{ marginLeft: "l", marginRight: "m" }}>
-          Please try again.
-        </Text>
+        <Text>We were unable to change your PIN/PASSWORD: {errorMessage}</Text>
+        <Text>Please try again.</Text>
       </Box>
     ),
     closeButtonLabel: "OK",
     headingText: (
-      <Heading className={styles.modalHeading}>
+      <h5 className={styles.modalHeading}>
         <>
           <Icon size="large" name="errorFilled" color="ui.error.primary" />
-          <Text sx={{ marginBottom: 0 }}> PIN/PASSWORD change failed </Text>
+          PIN/PASSWORD change failed
         </>
-      </Heading>
+      </h5>
     ),
-    onClose: resetModal,
+    onClose: async () => {
+      closeModal()
+      setModalProps(entryModalProps)
+    },
   })
 
   return (
     <>
       <Button
-        id="button"
+        size="medium"
+        pl="0"
+        pt="0"
+        id="pin-modal-button"
         buttonType="text"
         onClick={openModal}
-        sx={{ textDecoration: "underline", margin: "xs" }}
       >
+        <Icon name="editorMode" align="left" size="small" />
         Change pin/password
       </Button>
       <Modal {...modalProps} />

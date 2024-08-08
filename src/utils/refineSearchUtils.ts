@@ -1,8 +1,4 @@
-import type {
-  Aggregation,
-  CollapsedMultiValueAppliedFilters,
-  Option,
-} from "../types/filterTypes"
+import type { CollapsedMultiValueAppliedFilters } from "../types/filterTypes"
 
 // Filters are always multivalue query params in the form
 // filters[field][index]=value eg filters[materialType][0]=resourcetypes:aud.

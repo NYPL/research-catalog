@@ -1,3 +1,3032 @@
+export const bibWithItems = {
+  resource: {
+    "@context":
+      "http://discovery-api-production.us-east-1.elasticbeanstalk.com/api/v0.1/discovery/context_all.jsonld",
+    "@type": ["nypl:Item", "nypl:Resource"],
+    "@id": "res:b15080796",
+    carrierType: [
+      {
+        "@id": "carriertypes:nc",
+        prefLabel: "volume",
+      },
+    ],
+    createdString: ["1999"],
+    createdYear: 1999,
+    dateEndString: ["9999"],
+    dateEndYear: 9999,
+    dateStartYear: 1999,
+    dateString: ["1999"],
+    dimensions: ["22 cm."],
+    donor: [
+      "Gift of the DeWitt Wallace Endowment Fund, named in honor of the founder of Reader's Digest",
+    ],
+    electronicResources: [],
+    extent: ["v. : ill. ;"],
+    holdings: [
+      {
+        checkInBoxes: [
+          {
+            coverage: "Vol. 1  No. 1",
+            position: 1,
+            type: "nypl:CheckInBox",
+            shelfMark: ["JFK 01-374"],
+            status: "Arrived",
+          },
+          {
+            coverage: "Vol. 2 No. 1 (1999)",
+            position: 2,
+            type: "nypl:CheckInBox",
+            shelfMark: ["JFK 01-374"],
+            status: "Arrived",
+          },
+          {
+            coverage: "No. 3 (2000)",
+            position: 3,
+            type: "nypl:CheckInBox",
+            shelfMark: ["JFK 01-374"],
+            status: "Arrived",
+          },
+          {
+            coverage: "No. 4",
+            position: 4,
+            type: "nypl:CheckInBox",
+            shelfMark: ["JFK 01-374"],
+            status: "Arrived",
+          },
+        ],
+        holdingStatement: ["1(1998)-4(2001)."],
+        identifier: [
+          {
+            type: "bf:shelfMark",
+            value: "JFK 01-374",
+          },
+        ],
+        physicalLocation: ["JFK 01-374"],
+        format: ["PRINT"],
+        location: [
+          {
+            code: "loc:rc2ma",
+            label: "Offsite",
+          },
+        ],
+        shelfMark: ["JFK 01-374"],
+        uri: "h1046398",
+      },
+    ],
+    idIssn: ["1521-1371"],
+    idLccn: ["sn 98001765"],
+    idOclc: ["39690507"],
+    identifier: [
+      {
+        "@type": "bf:ShelfMark",
+        "@value": "JFK 01-374",
+      },
+      {
+        "@type": "nypl:Bnumber",
+        "@value": "15080796",
+      },
+      {
+        "@type": "nypl:Oclc",
+        "@value": "39690507",
+      },
+      {
+        "@type": "bf:Lccn",
+        "@value": "sn 98001765",
+      },
+      {
+        "@type": "bf:Issn",
+        "@value": "1521-1371",
+      },
+      {
+        "@type": "bf:Identifier",
+        "@value": "(WaOLN)S310000006",
+      },
+    ],
+    issuance: [
+      {
+        "@id": "urn:biblevel:s",
+        prefLabel: "serial",
+      },
+    ],
+    itemAggregations: [
+      {
+        "@type": "nypl:Aggregation",
+        "@id": "res:location",
+        id: "location",
+        field: "location",
+        values: [
+          {
+            value: "loc:mak32",
+            count: 2,
+            label: "SASB S3 - Periodicals Rm 108",
+          },
+          {
+            value: "loc:rc2ma",
+            count: 2,
+            label: "Offsite",
+          },
+        ],
+      },
+      {
+        "@type": "nypl:Aggregation",
+        "@id": "res:format",
+        id: "format",
+        field: "format",
+        values: [
+          {
+            value: "Text",
+            count: 4,
+            label: "Text",
+          },
+        ],
+      },
+      {
+        "@type": "nypl:Aggregation",
+        "@id": "res:status",
+        id: "status",
+        field: "status",
+        values: [
+          {
+            value: "status:a",
+            count: 4,
+            label: "Available",
+          },
+        ],
+      },
+    ],
+    items: [
+      {
+        "@id": "res:i39333697",
+        "@type": ["bf:Item"],
+        accessMessage: [
+          {
+            "@id": "accessMessage:2",
+            prefLabel: "Request in advance",
+          },
+        ],
+        catalogItemType: [
+          {
+            "@id": "catalogItemType:4",
+            prefLabel: "serial, loose",
+          },
+        ],
+        dateRange: [
+          {
+            gte: "2001",
+            lte: "2001",
+          },
+        ],
+        eddRequestable: false,
+        enumerationChronology: ["no. 4 (2001)"],
+        formatLiteral: ["Text"],
+        holdingLocation: [
+          {
+            "@id": "loc:mak32",
+            prefLabel: "SASB S3 - Periodicals Rm 108",
+            endpoint: "schwarzman",
+          },
+        ],
+        idBarcode: ["33433130221975"],
+        identifier: [
+          {
+            "@type": "bf:ShelfMark",
+            "@value": "JFK 01-374 no. 4 (2001)",
+          },
+          {
+            "@type": "bf:Barcode",
+            "@value": "33433130221975",
+          },
+        ],
+        physRequestable: false,
+        physicalLocation: ["JFK 01-374"],
+        requestable: [false],
+        shelfMark: ["JFK 01-374 no. 4 (2001)"],
+        specRequestable: false,
+        status: [
+          {
+            "@id": "status:a",
+            prefLabel: "Available",
+          },
+        ],
+        uri: "i39333697",
+        volumeRange: [
+          {
+            gte: 4,
+            lte: 4,
+          },
+        ],
+        idNyplSourceId: {
+          "@type": "SierraNypl",
+          "@value": "39333697",
+        },
+      },
+      {
+        "@id": "res:i39333648",
+        "@type": ["bf:Item"],
+        accessMessage: [
+          {
+            "@id": "accessMessage:2",
+            prefLabel: "Request in advance",
+          },
+        ],
+        catalogItemType: [
+          {
+            "@id": "catalogItemType:4",
+            prefLabel: "serial, loose",
+          },
+        ],
+        dateRange: [
+          {
+            gte: "2000",
+            lte: "2000",
+          },
+        ],
+        eddRequestable: false,
+        enumerationChronology: ["no. 3 (2000)"],
+        formatLiteral: ["Text"],
+        holdingLocation: [
+          {
+            "@id": "loc:mak32",
+            prefLabel: "SASB S3 - Periodicals Rm 108",
+            endpoint: "schwarzman",
+          },
+        ],
+        idBarcode: ["33433130221983"],
+        identifier: [
+          {
+            "@type": "bf:ShelfMark",
+            "@value": "JFK 01-374 no. 3 (2000)",
+          },
+          {
+            "@type": "bf:Barcode",
+            "@value": "33433130221983",
+          },
+        ],
+        physRequestable: false,
+        physicalLocation: ["JFK 01-374"],
+        requestable: [false],
+        shelfMark: ["JFK 01-374 no. 3 (2000)"],
+        specRequestable: false,
+        status: [
+          {
+            "@id": "status:a",
+            prefLabel: "Available",
+          },
+        ],
+        uri: "i39333648",
+        volumeRange: [
+          {
+            gte: 3,
+            lte: 3,
+          },
+        ],
+        idNyplSourceId: {
+          "@type": "SierraNypl",
+          "@value": "39333648",
+        },
+      },
+      {
+        "@id": "res:i29990380",
+        "@type": ["bf:Item"],
+        accessMessage: [
+          {
+            "@id": "accessMessage:2",
+            prefLabel: "Request in advance",
+          },
+        ],
+        catalogItemType: [
+          {
+            "@id": "catalogItemType:4",
+            prefLabel: "serial, loose",
+          },
+        ],
+        dateRange: [
+          {
+            gte: "1999",
+            lte: "1999",
+          },
+        ],
+        eddRequestable: true,
+        enumerationChronology: ["v. 2, no. 1 (1999)"],
+        formatLiteral: ["Text"],
+        holdingLocation: [
+          {
+            "@id": "loc:rc2ma",
+            prefLabel: "Offsite",
+          },
+        ],
+        idBarcode: ["33433106905643"],
+        identifier: [
+          {
+            "@type": "bf:ShelfMark",
+            "@value": "JFK 01-374 v. 2, no. 1 (1999)",
+          },
+          {
+            "@type": "bf:Barcode",
+            "@value": "33433106905643",
+          },
+        ],
+        owner: [
+          {
+            "@id": "orgs:1000",
+            prefLabel: "Stephen A. Schwarzman Building",
+          },
+        ],
+        physRequestable: true,
+        physicalLocation: ["JFK 01-374"],
+        recapCustomerCode: ["NH"],
+        requestable: [true],
+        shelfMark: ["JFK 01-374 v. 2, no. 1 (1999)"],
+        specRequestable: false,
+        status: [
+          {
+            "@id": "status:a",
+            prefLabel: "Available",
+          },
+        ],
+        uri: "i29990380",
+        volumeRange: [
+          {
+            gte: 2,
+            lte: 2,
+          },
+        ],
+        idNyplSourceId: {
+          "@type": "SierraNypl",
+          "@value": "29990380",
+        },
+      },
+      {
+        "@id": "res:i29990385",
+        "@type": ["bf:Item"],
+        accessMessage: [
+          {
+            "@id": "accessMessage:2",
+            prefLabel: "Request in advance",
+          },
+        ],
+        catalogItemType: [
+          {
+            "@id": "catalogItemType:4",
+            prefLabel: "serial, loose",
+          },
+        ],
+        dateRange: [
+          {
+            gte: "1998",
+            lte: "1998",
+          },
+        ],
+        eddRequestable: true,
+        enumerationChronology: ["v. 1, no. 1 (1998)"],
+        formatLiteral: ["Text"],
+        holdingLocation: [
+          {
+            "@id": "loc:rc2ma",
+            prefLabel: "Offsite",
+          },
+        ],
+        idBarcode: ["33433106905650"],
+        identifier: [
+          {
+            "@type": "bf:ShelfMark",
+            "@value": "JFK 01-374 v. 1, no. 1 (1998)",
+          },
+          {
+            "@type": "bf:Barcode",
+            "@value": "33433106905650",
+          },
+        ],
+        owner: [
+          {
+            "@id": "orgs:1000",
+            prefLabel: "Stephen A. Schwarzman Building",
+          },
+        ],
+        physRequestable: true,
+        physicalLocation: ["JFK 01-374"],
+        recapCustomerCode: ["NH"],
+        requestable: [true],
+        shelfMark: ["JFK 01-374 v. 1, no. 1 (1998)"],
+        specRequestable: false,
+        status: [
+          {
+            "@id": "status:a",
+            prefLabel: "Available",
+          },
+        ],
+        uri: "i29990385",
+        volumeRange: [
+          {
+            gte: 1,
+            lte: 1,
+          },
+        ],
+        idNyplSourceId: {
+          "@type": "SierraNypl",
+          "@value": "29990385",
+        },
+      },
+    ],
+    language: [
+      {
+        "@id": "lang:eng",
+        prefLabel: "English",
+      },
+    ],
+    lccClassification: ["IN PROCESS"],
+    materialType: [
+      {
+        "@id": "resourcetypes:txt",
+        prefLabel: "Text",
+      },
+    ],
+    mediaType: [
+      {
+        "@id": "mediatypes:n",
+        prefLabel: "unmediated",
+      },
+    ],
+    numCheckinCardItems: 0,
+    numElectronicResources: 0,
+    numItemDatesParsed: 4,
+    numItemVolumesParsed: 4,
+    numItemsMatched: 4,
+    numItemsTotal: 4,
+    nyplSource: ["sierra-nypl"],
+    placeOfPublication: ["Mansfield, Ohio"],
+    publicationStatement: ["Mansfield, Ohio : Urban Spaghetti, [1999?-"],
+    publisherLiteral: ["Urban Spaghetti"],
+    serialPublicationDates: ["Vol. 1, issue 1-"],
+    shelfMark: ["JFK 01-374"],
+    subjectLiteral: [
+      "Arts, Modern -- United States -- Periodicals.",
+      "American literature -- 20th ccentury -- Periodicals.",
+    ],
+    title: ["Urban spaghetti."],
+    titleAlt: ["Urban spaghetti", "Urban spaghetti literary arts journal"],
+    titleDisplay: ["Urban spaghetti."],
+    type: ["nypl:Item"],
+    updatedAt: 1711024183694,
+    uri: "b15080796",
+    suppressed: false,
+    hasItemVolumes: true,
+    hasItemDates: true,
+    subjectHeadings: null,
+  },
+  annotatedMarc: {
+    id: "15080796",
+    nyplSource: "sierra-nypl",
+    fields: [
+      {
+        label: "Title",
+        values: [
+          {
+            content: "Urban spaghetti.",
+            source: {
+              fieldTag: "t",
+              marcTag: "245",
+              ind1: "0",
+              ind2: "0",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Urban spaghetti.",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Imprint",
+        values: [
+          {
+            content: "Mansfield, Ohio : Urban Spaghetti, [1999?-",
+            source: {
+              fieldTag: "p",
+              marcTag: "260",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Mansfield, Ohio :",
+                },
+                {
+                  tag: "b",
+                  content: "Urban Spaghetti,",
+                },
+                {
+                  tag: "c",
+                  content: "[1999?-",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Description",
+        values: [
+          {
+            content: "v. : ill. ; 22 cm.",
+            source: {
+              fieldTag: "r",
+              marcTag: "300",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "v. :",
+                },
+                {
+                  tag: "b",
+                  content: "ill. ;",
+                },
+                {
+                  tag: "c",
+                  content: "22 cm.",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Current Frequency",
+        values: [
+          {
+            content: "Semiannual",
+            source: {
+              fieldTag: "r",
+              marcTag: "310",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Semiannual",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Publication Date",
+        values: [
+          {
+            content: "Vol. 1, issue 1-",
+            source: {
+              fieldTag: "r",
+              marcTag: "362",
+              ind1: "0",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Vol. 1, issue 1-",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Subject",
+        values: [
+          {
+            content: "Arts, Modern -- United States -- Periodicals.",
+            source: {
+              fieldTag: "d",
+              marcTag: "650",
+              ind1: " ",
+              ind2: "0",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Arts, Modern",
+                },
+                {
+                  tag: "z",
+                  content: "United States",
+                },
+                {
+                  tag: "v",
+                  content: "Periodicals.",
+                },
+              ],
+            },
+          },
+          {
+            content: "American literature -- 20th ccentury -- Periodicals.",
+            source: {
+              fieldTag: "d",
+              marcTag: "650",
+              ind1: " ",
+              ind2: "0",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "American literature",
+                },
+                {
+                  tag: "y",
+                  content: "20th ccentury",
+                },
+                {
+                  tag: "v",
+                  content: "Periodicals.",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Abbreviated Title",
+        values: [
+          {
+            content: "Urban spaghetti",
+            source: {
+              fieldTag: "u",
+              marcTag: "210",
+              ind1: "0",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Urban spaghetti",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Cover Title",
+        values: [
+          {
+            content: "Urban spaghetti literary arts journal",
+            source: {
+              fieldTag: "u",
+              marcTag: "246",
+              ind1: "1",
+              ind2: "4",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Urban spaghetti literary arts journal",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Donor/Sponsor",
+        values: [
+          {
+            content:
+              "Gift of the DeWitt Wallace Endowment Fund, named in honor of the founder of Reader's Digest",
+            source: {
+              fieldTag: "u",
+              marcTag: "799",
+              ind1: "0",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content:
+                    "Gift of the DeWitt Wallace Endowment Fund, named in honor of the founder of Reader's Digest",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "LCCN",
+        values: [
+          {
+            content: "sn 98001765",
+            source: {
+              fieldTag: "l",
+              marcTag: "010",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "sn 98001765",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "ISSN",
+        values: [
+          {
+            content: "1521-1371",
+            source: {
+              fieldTag: "i",
+              marcTag: "022",
+              ind1: "0",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "1521-1371",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Research Call Number",
+        values: [
+          {
+            content: "JFK 01-374",
+            source: {
+              fieldTag: "q",
+              marcTag: "852",
+              ind1: "8",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "h",
+                  content: "JFK 01-374",
+                },
+              ],
+            },
+          },
+        ],
+      },
+    ],
+  },
+}
+
+export const bibNoItems = {
+  resource: {
+    "@context":
+      "http://discovery-api-production.us-east-1.elasticbeanstalk.com/api/v0.1/discovery/context_all.jsonld",
+    "@type": ["nypl:Item", "nypl:Resource"],
+    "@id": "res:b15080796",
+    carrierType: [
+      {
+        "@id": "carriertypes:nc",
+        prefLabel: "volume",
+      },
+    ],
+    createdString: ["1999"],
+    createdYear: 1999,
+    dateEndString: ["9999"],
+    dateEndYear: 9999,
+    dateStartYear: 1999,
+    dateString: ["1999"],
+    dimensions: ["22 cm."],
+    donor: [
+      "Gift of the DeWitt Wallace Endowment Fund, named in honor of the founder of Reader's Digest",
+    ],
+    electronicResources: [],
+    extent: ["v. : ill. ;"],
+    holdings: [
+      {
+        checkInBoxes: [
+          {
+            coverage: "Vol. 1  No. 1",
+            position: 1,
+            type: "nypl:CheckInBox",
+            shelfMark: ["JFK 01-374"],
+            status: "Arrived",
+          },
+          {
+            coverage: "Vol. 2 No. 1 (1999)",
+            position: 2,
+            type: "nypl:CheckInBox",
+            shelfMark: ["JFK 01-374"],
+            status: "Arrived",
+          },
+          {
+            coverage: "No. 3 (2000)",
+            position: 3,
+            type: "nypl:CheckInBox",
+            shelfMark: ["JFK 01-374"],
+            status: "Arrived",
+          },
+          {
+            coverage: "No. 4",
+            position: 4,
+            type: "nypl:CheckInBox",
+            shelfMark: ["JFK 01-374"],
+            status: "Arrived",
+          },
+        ],
+        holdingStatement: ["1(1998)-4(2001)."],
+        identifier: [
+          {
+            type: "bf:shelfMark",
+            value: "JFK 01-374",
+          },
+        ],
+        physicalLocation: ["JFK 01-374"],
+        format: ["PRINT"],
+        location: [
+          {
+            code: "loc:rc2ma",
+            label: "Offsite",
+          },
+        ],
+        shelfMark: ["JFK 01-374"],
+        uri: "h1046398",
+      },
+    ],
+    idIssn: ["1521-1371"],
+    idLccn: ["sn 98001765"],
+    idOclc: ["39690507"],
+    identifier: [
+      {
+        "@type": "bf:ShelfMark",
+        "@value": "JFK 01-374",
+      },
+      {
+        "@type": "nypl:Bnumber",
+        "@value": "15080796",
+      },
+      {
+        "@type": "nypl:Oclc",
+        "@value": "39690507",
+      },
+      {
+        "@type": "bf:Lccn",
+        "@value": "sn 98001765",
+      },
+      {
+        "@type": "bf:Issn",
+        "@value": "1521-1371",
+      },
+      {
+        "@type": "bf:Identifier",
+        "@value": "(WaOLN)S310000006",
+      },
+    ],
+    issuance: [
+      {
+        "@id": "urn:biblevel:s",
+        prefLabel: "serial",
+      },
+    ],
+    itemAggregations: [],
+    items: [],
+    language: [
+      {
+        "@id": "lang:eng",
+        prefLabel: "English",
+      },
+    ],
+    lccClassification: ["IN PROCESS"],
+    materialType: [
+      {
+        "@id": "resourcetypes:txt",
+        prefLabel: "Text",
+      },
+    ],
+    mediaType: [
+      {
+        "@id": "mediatypes:n",
+        prefLabel: "unmediated",
+      },
+    ],
+    numCheckinCardItems: 0,
+    numElectronicResources: 0,
+    numItemDatesParsed: 0,
+    numItemVolumesParsed: 0,
+    numItemsMatched: 0,
+    numItemsTotal: 0,
+    nyplSource: ["sierra-nypl"],
+    placeOfPublication: ["Mansfield, Ohio"],
+    publicationStatement: ["Mansfield, Ohio : Urban Spaghetti, [1999?-"],
+    publisherLiteral: ["Urban Spaghetti"],
+    serialPublicationDates: ["Vol. 1, issue 1-"],
+    shelfMark: ["JFK 01-374"],
+    subjectLiteral: [
+      "Arts, Modern -- United States -- Periodicals.",
+      "American literature -- 20th ccentury -- Periodicals.",
+    ],
+    title: ["Urban spaghetti."],
+    titleAlt: ["Urban spaghetti", "Urban spaghetti literary arts journal"],
+    titleDisplay: ["Urban spaghetti."],
+    type: ["nypl:Item"],
+    updatedAt: 1711024183694,
+    uri: "b15080796",
+    suppressed: false,
+    hasItemVolumes: true,
+    hasItemDates: true,
+    subjectHeadings: null,
+  },
+  annotatedMarc: {
+    id: "15080796",
+    nyplSource: "sierra-nypl",
+    fields: [
+      {
+        label: "Title",
+        values: [
+          {
+            content: "Urban spaghetti.",
+            source: {
+              fieldTag: "t",
+              marcTag: "245",
+              ind1: "0",
+              ind2: "0",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Urban spaghetti.",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Imprint",
+        values: [
+          {
+            content: "Mansfield, Ohio : Urban Spaghetti, [1999?-",
+            source: {
+              fieldTag: "p",
+              marcTag: "260",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Mansfield, Ohio :",
+                },
+                {
+                  tag: "b",
+                  content: "Urban Spaghetti,",
+                },
+                {
+                  tag: "c",
+                  content: "[1999?-",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Description",
+        values: [
+          {
+            content: "v. : ill. ; 22 cm.",
+            source: {
+              fieldTag: "r",
+              marcTag: "300",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "v. :",
+                },
+                {
+                  tag: "b",
+                  content: "ill. ;",
+                },
+                {
+                  tag: "c",
+                  content: "22 cm.",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Current Frequency",
+        values: [
+          {
+            content: "Semiannual",
+            source: {
+              fieldTag: "r",
+              marcTag: "310",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Semiannual",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Publication Date",
+        values: [
+          {
+            content: "Vol. 1, issue 1-",
+            source: {
+              fieldTag: "r",
+              marcTag: "362",
+              ind1: "0",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Vol. 1, issue 1-",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Subject",
+        values: [
+          {
+            content: "Arts, Modern -- United States -- Periodicals.",
+            source: {
+              fieldTag: "d",
+              marcTag: "650",
+              ind1: " ",
+              ind2: "0",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Arts, Modern",
+                },
+                {
+                  tag: "z",
+                  content: "United States",
+                },
+                {
+                  tag: "v",
+                  content: "Periodicals.",
+                },
+              ],
+            },
+          },
+          {
+            content: "American literature -- 20th ccentury -- Periodicals.",
+            source: {
+              fieldTag: "d",
+              marcTag: "650",
+              ind1: " ",
+              ind2: "0",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "American literature",
+                },
+                {
+                  tag: "y",
+                  content: "20th ccentury",
+                },
+                {
+                  tag: "v",
+                  content: "Periodicals.",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Abbreviated Title",
+        values: [
+          {
+            content: "Urban spaghetti",
+            source: {
+              fieldTag: "u",
+              marcTag: "210",
+              ind1: "0",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Urban spaghetti",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Cover Title",
+        values: [
+          {
+            content: "Urban spaghetti literary arts journal",
+            source: {
+              fieldTag: "u",
+              marcTag: "246",
+              ind1: "1",
+              ind2: "4",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Urban spaghetti literary arts journal",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Donor/Sponsor",
+        values: [
+          {
+            content:
+              "Gift of the DeWitt Wallace Endowment Fund, named in honor of the founder of Reader's Digest",
+            source: {
+              fieldTag: "u",
+              marcTag: "799",
+              ind1: "0",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content:
+                    "Gift of the DeWitt Wallace Endowment Fund, named in honor of the founder of Reader's Digest",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "LCCN",
+        values: [
+          {
+            content: "sn 98001765",
+            source: {
+              fieldTag: "l",
+              marcTag: "010",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "sn 98001765",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "ISSN",
+        values: [
+          {
+            content: "1521-1371",
+            source: {
+              fieldTag: "i",
+              marcTag: "022",
+              ind1: "0",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "1521-1371",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Research Call Number",
+        values: [
+          {
+            content: "JFK 01-374",
+            source: {
+              fieldTag: "q",
+              marcTag: "852",
+              ind1: "8",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "h",
+                  content: "JFK 01-374",
+                },
+              ],
+            },
+          },
+        ],
+      },
+    ],
+  },
+}
+
+export const bibWithManyItems = {
+  resource: {
+    "@context":
+      "http://discovery-api-qa.us-east-1.elasticbeanstalk.com/api/v0.1/discovery/context_all.jsonld",
+    "@type": ["nypl:Item", "nypl:Resource"],
+    "@id": "res:pb5579193",
+    carrierType: [
+      {
+        "@id": "carriertypes:nc",
+        prefLabel: "volume",
+      },
+    ],
+    contributorLiteral: ["Yunnan Sheng she hui ke xue yuan."],
+    createdString: ["2006"],
+    createdYear: 2006,
+    dateEndString: ["9999"],
+    dateEndYear: 9999,
+    dateStartYear: 2006,
+    dateString: ["2006"],
+    dimensions: ["27 cm."],
+    electronicResources: [],
+    extent: ["v. : ill. ;"],
+    idIssn: ["1673-6974"],
+    idOclc: ["ocn259154062", "259154062", "SCSB-9177741"],
+    identifier: [
+      {
+        "@type": "nypl:Bnumber",
+        "@value": "5579193",
+      },
+      {
+        "@type": "bf:Issn",
+        "@value": "1673-6974",
+      },
+      {
+        "@type": "nypl:Oclc",
+        "@value": "ocn259154062",
+      },
+      {
+        "@type": "nypl:Oclc",
+        "@value": "259154062",
+      },
+      {
+        "@type": "nypl:Oclc",
+        "@value": "SCSB-9177741",
+      },
+      {
+        "@type": "bf:Identifier",
+        "@value": "(OCoLC)ocn259154062",
+      },
+      {
+        "@type": "bf:Identifier",
+        "@value": "(OCoLC)259154062",
+      },
+    ],
+    issuance: [
+      {
+        "@id": "urn:biblevel:s",
+        prefLabel: "serial",
+      },
+    ],
+    itemAggregations: [
+      {
+        "@type": "nypl:Aggregation",
+        "@id": "res:location",
+        id: "location",
+        field: "location",
+        values: [],
+      },
+      {
+        "@type": "nypl:Aggregation",
+        "@id": "res:format",
+        id: "format",
+        field: "format",
+        values: [
+          {
+            value: "Text",
+            count: 26,
+            label: "Text",
+          },
+        ],
+      },
+      {
+        "@type": "nypl:Aggregation",
+        "@id": "res:status",
+        id: "status",
+        field: "status",
+        values: [
+          {
+            value: "status:a",
+            count: 26,
+            label: "Available",
+          },
+        ],
+      },
+    ],
+    items: [
+      {
+        "@id": "res:pi6844248",
+        "@type": ["bf:Item"],
+        accessMessage: [
+          {
+            "@id": "accessMessage:1",
+            prefLabel: "Use in library",
+          },
+        ],
+        catalogItemType: [
+          {
+            "@id": "catalogItemType:1",
+            prefLabel: "non-circ",
+          },
+        ],
+        dateRange: [
+          {
+            lte: "2013",
+            gte: "2013",
+          },
+        ],
+        eddRequestable: true,
+        enumerationChronology: ["no.136-138 (2013)"],
+        formatLiteral: ["Text"],
+        idBarcode: ["32101093532461"],
+        identifier: [
+          {
+            "@type": "bf:ShelfMark",
+            "@value": "GF41 .H83 no.136-138 (2013)",
+          },
+          {
+            "@type": "bf:Barcode",
+            "@value": "32101093532461",
+          },
+        ],
+        owner: [
+          {
+            "@id": "orgs:0003",
+            prefLabel: "Princeton University Library",
+          },
+        ],
+        physRequestable: true,
+        physicalLocation: ["GF41 .H83"],
+        recapCustomerCode: ["PA"],
+        requestable: [true],
+        shelfMark: ["GF41 .H83 no.136-138 (2013)"],
+        specRequestable: false,
+        status: [
+          {
+            "@id": "status:a",
+            prefLabel: "Available",
+          },
+        ],
+        uri: "pi6844248",
+        volumeRange: [
+          {
+            lte: 138,
+            gte: 136,
+          },
+        ],
+        idNyplSourceId: {
+          "@type": "RecapPul",
+          "@value": "6844248",
+        },
+      },
+      {
+        "@id": "res:pi6829519",
+        "@type": ["bf:Item"],
+        accessMessage: [
+          {
+            "@id": "accessMessage:1",
+            prefLabel: "Use in library",
+          },
+        ],
+        catalogItemType: [
+          {
+            "@id": "catalogItemType:1",
+            prefLabel: "non-circ",
+          },
+        ],
+        dateRange: [
+          {
+            lte: "2013",
+            gte: "2013",
+          },
+        ],
+        eddRequestable: true,
+        enumerationChronology: ["no.133-135 (2013)"],
+        formatLiteral: ["Text"],
+        idBarcode: ["32101093199394"],
+        identifier: [
+          {
+            "@type": "bf:ShelfMark",
+            "@value": "GF41 .H83 no.133-135 (2013)",
+          },
+          {
+            "@type": "bf:Barcode",
+            "@value": "32101093199394",
+          },
+        ],
+        owner: [
+          {
+            "@id": "orgs:0003",
+            prefLabel: "Princeton University Library",
+          },
+        ],
+        physRequestable: true,
+        physicalLocation: ["GF41 .H83"],
+        recapCustomerCode: ["PA"],
+        requestable: [true],
+        shelfMark: ["GF41 .H83 no.133-135 (2013)"],
+        specRequestable: false,
+        status: [
+          {
+            "@id": "status:a",
+            prefLabel: "Available",
+          },
+        ],
+        uri: "pi6829519",
+        volumeRange: [
+          {
+            lte: 135,
+            gte: 133,
+          },
+        ],
+        idNyplSourceId: {
+          "@type": "RecapPul",
+          "@value": "6829519",
+        },
+      },
+      {
+        "@id": "res:pi6729585",
+        "@type": ["bf:Item"],
+        accessMessage: [
+          {
+            "@id": "accessMessage:1",
+            prefLabel: "Use in library",
+          },
+        ],
+        catalogItemType: [
+          {
+            "@id": "catalogItemType:1",
+            prefLabel: "non-circ",
+          },
+        ],
+        dateRange: [
+          {
+            lte: "2013",
+            gte: "2013",
+          },
+        ],
+        eddRequestable: true,
+        enumerationChronology: ["no.130-132 (2013)"],
+        formatLiteral: ["Text"],
+        idBarcode: ["32101093206231"],
+        identifier: [
+          {
+            "@type": "bf:ShelfMark",
+            "@value": "GF41 .H83 no.130-132 (2013)",
+          },
+          {
+            "@type": "bf:Barcode",
+            "@value": "32101093206231",
+          },
+        ],
+        owner: [
+          {
+            "@id": "orgs:0003",
+            prefLabel: "Princeton University Library",
+          },
+        ],
+        physRequestable: true,
+        physicalLocation: ["GF41 .H83"],
+        recapCustomerCode: ["PA"],
+        requestable: [true],
+        shelfMark: ["GF41 .H83 no.130-132 (2013)"],
+        specRequestable: false,
+        status: [
+          {
+            "@id": "status:a",
+            prefLabel: "Available",
+          },
+        ],
+        uri: "pi6729585",
+        volumeRange: [
+          {
+            lte: 132,
+            gte: 130,
+          },
+        ],
+        idNyplSourceId: {
+          "@type": "RecapPul",
+          "@value": "6729585",
+        },
+      },
+      {
+        "@id": "res:pi6701127",
+        "@type": ["bf:Item"],
+        accessMessage: [
+          {
+            "@id": "accessMessage:1",
+            prefLabel: "Use in library",
+          },
+        ],
+        catalogItemType: [
+          {
+            "@id": "catalogItemType:1",
+            prefLabel: "non-circ",
+          },
+        ],
+        dateRange: [
+          {
+            lte: "2013",
+            gte: "2013",
+          },
+        ],
+        eddRequestable: true,
+        enumerationChronology: ["no.127-129 (2013)"],
+        formatLiteral: ["Text"],
+        idBarcode: ["32101090108257"],
+        identifier: [
+          {
+            "@type": "bf:ShelfMark",
+            "@value": "GF41 .H83 no.127-129 (2013)",
+          },
+          {
+            "@type": "bf:Barcode",
+            "@value": "32101090108257",
+          },
+        ],
+        owner: [
+          {
+            "@id": "orgs:0003",
+            prefLabel: "Princeton University Library",
+          },
+        ],
+        physRequestable: true,
+        physicalLocation: ["GF41 .H83"],
+        recapCustomerCode: ["PA"],
+        requestable: [true],
+        shelfMark: ["GF41 .H83 no.127-129 (2013)"],
+        specRequestable: false,
+        status: [
+          {
+            "@id": "status:a",
+            prefLabel: "Available",
+          },
+        ],
+        uri: "pi6701127",
+        volumeRange: [
+          {
+            lte: 129,
+            gte: 127,
+          },
+        ],
+        idNyplSourceId: {
+          "@type": "RecapPul",
+          "@value": "6701127",
+        },
+      },
+      {
+        "@id": "res:pi6699165",
+        "@type": ["bf:Item"],
+        accessMessage: [
+          {
+            "@id": "accessMessage:1",
+            prefLabel: "Use in library",
+          },
+        ],
+        catalogItemType: [
+          {
+            "@id": "catalogItemType:1",
+            prefLabel: "non-circ",
+          },
+        ],
+        dateRange: [
+          {
+            lte: "2012",
+            gte: "2012",
+          },
+        ],
+        eddRequestable: true,
+        enumerationChronology: ["no.125-126 (2012)"],
+        formatLiteral: ["Text"],
+        idBarcode: ["32101088508419"],
+        identifier: [
+          {
+            "@type": "bf:ShelfMark",
+            "@value": "GF41 .H83 no.125-126 (2012)",
+          },
+          {
+            "@type": "bf:Barcode",
+            "@value": "32101088508419",
+          },
+        ],
+        owner: [
+          {
+            "@id": "orgs:0003",
+            prefLabel: "Princeton University Library",
+          },
+        ],
+        physRequestable: true,
+        physicalLocation: ["GF41 .H83"],
+        recapCustomerCode: ["PA"],
+        requestable: [true],
+        shelfMark: ["GF41 .H83 no.125-126 (2012)"],
+        specRequestable: false,
+        status: [
+          {
+            "@id": "status:a",
+            prefLabel: "Available",
+          },
+        ],
+        uri: "pi6699165",
+        volumeRange: [
+          {
+            lte: 126,
+            gte: 125,
+          },
+        ],
+        idNyplSourceId: {
+          "@type": "RecapPul",
+          "@value": "6699165",
+        },
+      },
+      {
+        "@id": "res:pi6699162",
+        "@type": ["bf:Item"],
+        accessMessage: [
+          {
+            "@id": "accessMessage:1",
+            prefLabel: "Use in library",
+          },
+        ],
+        catalogItemType: [
+          {
+            "@id": "catalogItemType:1",
+            prefLabel: "non-circ",
+          },
+        ],
+        dateRange: [
+          {
+            lte: "2012",
+            gte: "2012",
+          },
+        ],
+        eddRequestable: true,
+        enumerationChronology: ["no.122-124 (2012)"],
+        formatLiteral: ["Text"],
+        idBarcode: ["32101088508401"],
+        identifier: [
+          {
+            "@type": "bf:ShelfMark",
+            "@value": "GF41 .H83 no.122-124 (2012)",
+          },
+          {
+            "@type": "bf:Barcode",
+            "@value": "32101088508401",
+          },
+        ],
+        owner: [
+          {
+            "@id": "orgs:0003",
+            prefLabel: "Princeton University Library",
+          },
+        ],
+        physRequestable: true,
+        physicalLocation: ["GF41 .H83"],
+        recapCustomerCode: ["PA"],
+        requestable: [true],
+        shelfMark: ["GF41 .H83 no.122-124 (2012)"],
+        specRequestable: false,
+        status: [
+          {
+            "@id": "status:a",
+            prefLabel: "Available",
+          },
+        ],
+        uri: "pi6699162",
+        volumeRange: [
+          {
+            lte: 124,
+            gte: 122,
+          },
+        ],
+        idNyplSourceId: {
+          "@type": "RecapPul",
+          "@value": "6699162",
+        },
+      },
+      {
+        "@id": "res:pi6699160",
+        "@type": ["bf:Item"],
+        accessMessage: [
+          {
+            "@id": "accessMessage:1",
+            prefLabel: "Use in library",
+          },
+        ],
+        catalogItemType: [
+          {
+            "@id": "catalogItemType:1",
+            prefLabel: "non-circ",
+          },
+        ],
+        dateRange: [
+          {
+            lte: "2012",
+            gte: "2012",
+          },
+        ],
+        eddRequestable: true,
+        enumerationChronology: ["no.119-121 (2012)"],
+        formatLiteral: ["Text"],
+        idBarcode: ["32101088508393"],
+        identifier: [
+          {
+            "@type": "bf:ShelfMark",
+            "@value": "GF41 .H83 no.119-121 (2012)",
+          },
+          {
+            "@type": "bf:Barcode",
+            "@value": "32101088508393",
+          },
+        ],
+        owner: [
+          {
+            "@id": "orgs:0003",
+            prefLabel: "Princeton University Library",
+          },
+        ],
+        physRequestable: true,
+        physicalLocation: ["GF41 .H83"],
+        recapCustomerCode: ["PA"],
+        requestable: [true],
+        shelfMark: ["GF41 .H83 no.119-121 (2012)"],
+        specRequestable: false,
+        status: [
+          {
+            "@id": "status:a",
+            prefLabel: "Available",
+          },
+        ],
+        uri: "pi6699160",
+        volumeRange: [
+          {
+            lte: 121,
+            gte: 119,
+          },
+        ],
+        idNyplSourceId: {
+          "@type": "RecapPul",
+          "@value": "6699160",
+        },
+      },
+      {
+        "@id": "res:pi6567919",
+        "@type": ["bf:Item"],
+        accessMessage: [
+          {
+            "@id": "accessMessage:1",
+            prefLabel: "Use in library",
+          },
+        ],
+        catalogItemType: [
+          {
+            "@id": "catalogItemType:1",
+            prefLabel: "non-circ",
+          },
+        ],
+        dateRange: [
+          {
+            lte: "2012",
+            gte: "2012",
+          },
+        ],
+        eddRequestable: true,
+        enumerationChronology: ["no.115-118 (2012)"],
+        formatLiteral: ["Text"],
+        idBarcode: ["32101082103217"],
+        identifier: [
+          {
+            "@type": "bf:ShelfMark",
+            "@value": "GF41 .H83 no.115-118 (2012)",
+          },
+          {
+            "@type": "bf:Barcode",
+            "@value": "32101082103217",
+          },
+        ],
+        owner: [
+          {
+            "@id": "orgs:0003",
+            prefLabel: "Princeton University Library",
+          },
+        ],
+        physRequestable: true,
+        physicalLocation: ["GF41 .H83"],
+        recapCustomerCode: ["PA"],
+        requestable: [true],
+        shelfMark: ["GF41 .H83 no.115-118 (2012)"],
+        specRequestable: false,
+        status: [
+          {
+            "@id": "status:a",
+            prefLabel: "Available",
+          },
+        ],
+        uri: "pi6567919",
+        volumeRange: [
+          {
+            lte: 118,
+            gte: 115,
+          },
+        ],
+        idNyplSourceId: {
+          "@type": "RecapPul",
+          "@value": "6567919",
+        },
+      },
+      {
+        "@id": "res:pi6550898",
+        "@type": ["bf:Item"],
+        accessMessage: [
+          {
+            "@id": "accessMessage:1",
+            prefLabel: "Use in library",
+          },
+        ],
+        catalogItemType: [
+          {
+            "@id": "catalogItemType:1",
+            prefLabel: "non-circ",
+          },
+        ],
+        dateRange: [
+          {
+            lte: "2011",
+            gte: "2011",
+          },
+        ],
+        eddRequestable: true,
+        enumerationChronology: ["no.111-114 (2011)"],
+        formatLiteral: ["Text"],
+        idBarcode: ["32101049620683"],
+        identifier: [
+          {
+            "@type": "bf:ShelfMark",
+            "@value": "GF41 .H83 no.111-114 (2011)",
+          },
+          {
+            "@type": "bf:Barcode",
+            "@value": "32101049620683",
+          },
+        ],
+        owner: [
+          {
+            "@id": "orgs:0003",
+            prefLabel: "Princeton University Library",
+          },
+        ],
+        physRequestable: true,
+        physicalLocation: ["GF41 .H83"],
+        recapCustomerCode: ["PA"],
+        requestable: [true],
+        shelfMark: ["GF41 .H83 no.111-114 (2011)"],
+        specRequestable: false,
+        status: [
+          {
+            "@id": "status:a",
+            prefLabel: "Available",
+          },
+        ],
+        uri: "pi6550898",
+        volumeRange: [
+          {
+            lte: 114,
+            gte: 111,
+          },
+        ],
+        idNyplSourceId: {
+          "@type": "RecapPul",
+          "@value": "6550898",
+        },
+      },
+      {
+        "@id": "res:pi6312009",
+        "@type": ["bf:Item"],
+        accessMessage: [
+          {
+            "@id": "accessMessage:1",
+            prefLabel: "Use in library",
+          },
+        ],
+        catalogItemType: [
+          {
+            "@id": "catalogItemType:1",
+            prefLabel: "non-circ",
+          },
+        ],
+        dateRange: [
+          {
+            lte: "2011",
+            gte: "2011",
+          },
+        ],
+        eddRequestable: true,
+        enumerationChronology: ["no.107-110 & suppl. (2011)"],
+        formatLiteral: ["Text"],
+        idBarcode: ["32101086209457"],
+        identifier: [
+          {
+            "@type": "bf:ShelfMark",
+            "@value": "GF41 .H83 no.107-110 & suppl. (2011)",
+          },
+          {
+            "@type": "bf:Barcode",
+            "@value": "32101086209457",
+          },
+        ],
+        owner: [
+          {
+            "@id": "orgs:0003",
+            prefLabel: "Princeton University Library",
+          },
+        ],
+        physRequestable: true,
+        physicalLocation: ["GF41 .H83"],
+        recapCustomerCode: ["PA"],
+        requestable: [true],
+        shelfMark: ["GF41 .H83 no.107-110 & suppl. (2011)"],
+        specRequestable: false,
+        status: [
+          {
+            "@id": "status:a",
+            prefLabel: "Available",
+          },
+        ],
+        uri: "pi6312009",
+        volumeRange: [
+          {
+            lte: 110,
+            gte: 107,
+          },
+        ],
+        idNyplSourceId: {
+          "@type": "RecapPul",
+          "@value": "6312009",
+        },
+      },
+      {
+        "@id": "res:pi6157050",
+        "@type": ["bf:Item"],
+        accessMessage: [
+          {
+            "@id": "accessMessage:1",
+            prefLabel: "Use in library",
+          },
+        ],
+        catalogItemType: [
+          {
+            "@id": "catalogItemType:1",
+            prefLabel: "non-circ",
+          },
+        ],
+        dateRange: [
+          {
+            lte: "2011",
+            gte: "2011",
+          },
+        ],
+        eddRequestable: true,
+        enumerationChronology: ["no.103-106 (2011)"],
+        formatLiteral: ["Text"],
+        idBarcode: ["32101075479236"],
+        identifier: [
+          {
+            "@type": "bf:ShelfMark",
+            "@value": "GF41 .H83 no.103-106 (2011)",
+          },
+          {
+            "@type": "bf:Barcode",
+            "@value": "32101075479236",
+          },
+        ],
+        owner: [
+          {
+            "@id": "orgs:0003",
+            prefLabel: "Princeton University Library",
+          },
+        ],
+        physRequestable: true,
+        physicalLocation: ["GF41 .H83"],
+        recapCustomerCode: ["PA"],
+        requestable: [true],
+        shelfMark: ["GF41 .H83 no.103-106 (2011)"],
+        specRequestable: false,
+        status: [
+          {
+            "@id": "status:a",
+            prefLabel: "Available",
+          },
+        ],
+        uri: "pi6157050",
+        volumeRange: [
+          {
+            lte: 106,
+            gte: 103,
+          },
+        ],
+        idNyplSourceId: {
+          "@type": "RecapPul",
+          "@value": "6157050",
+        },
+      },
+      {
+        "@id": "res:pi6152040",
+        "@type": ["bf:Item"],
+        accessMessage: [
+          {
+            "@id": "accessMessage:1",
+            prefLabel: "Use in library",
+          },
+        ],
+        catalogItemType: [
+          {
+            "@id": "catalogItemType:1",
+            prefLabel: "non-circ",
+          },
+        ],
+        dateRange: [
+          {
+            lte: "2010",
+            gte: "2010",
+          },
+        ],
+        eddRequestable: true,
+        enumerationChronology: ["no.99-102 (2010)"],
+        formatLiteral: ["Text"],
+        idBarcode: ["32101075477891"],
+        identifier: [
+          {
+            "@type": "bf:ShelfMark",
+            "@value": "GF41 .H83 no.99-102 (2010)",
+          },
+          {
+            "@type": "bf:Barcode",
+            "@value": "32101075477891",
+          },
+        ],
+        owner: [
+          {
+            "@id": "orgs:0003",
+            prefLabel: "Princeton University Library",
+          },
+        ],
+        physRequestable: true,
+        physicalLocation: ["GF41 .H83"],
+        recapCustomerCode: ["PA"],
+        requestable: [true],
+        shelfMark: ["GF41 .H83 no.99-102 (2010)"],
+        specRequestable: false,
+        status: [
+          {
+            "@id": "status:a",
+            prefLabel: "Available",
+          },
+        ],
+        uri: "pi6152040",
+        volumeRange: [
+          {
+            lte: 102,
+            gte: 99,
+          },
+        ],
+        idNyplSourceId: {
+          "@type": "RecapPul",
+          "@value": "6152040",
+        },
+      },
+      {
+        "@id": "res:pi6312006",
+        "@type": ["bf:Item"],
+        accessMessage: [
+          {
+            "@id": "accessMessage:1",
+            prefLabel: "Use in library",
+          },
+        ],
+        catalogItemType: [
+          {
+            "@id": "catalogItemType:1",
+            prefLabel: "non-circ",
+          },
+        ],
+        dateRange: [
+          {
+            lte: "2010",
+            gte: "2010",
+          },
+        ],
+        eddRequestable: true,
+        enumerationChronology: ["no.95-98 & suppl. (2010)"],
+        formatLiteral: ["Text"],
+        idBarcode: ["32101086209440"],
+        identifier: [
+          {
+            "@type": "bf:ShelfMark",
+            "@value": "GF41 .H83 no.95-98 & suppl. (2010)",
+          },
+          {
+            "@type": "bf:Barcode",
+            "@value": "32101086209440",
+          },
+        ],
+        owner: [
+          {
+            "@id": "orgs:0003",
+            prefLabel: "Princeton University Library",
+          },
+        ],
+        physRequestable: true,
+        physicalLocation: ["GF41 .H83"],
+        recapCustomerCode: ["PA"],
+        requestable: [true],
+        shelfMark: ["GF41 .H83 no.95-98 & suppl. (2010)"],
+        specRequestable: false,
+        status: [
+          {
+            "@id": "status:a",
+            prefLabel: "Available",
+          },
+        ],
+        uri: "pi6312006",
+        volumeRange: [
+          {
+            lte: 98,
+            gte: 95,
+          },
+        ],
+        idNyplSourceId: {
+          "@type": "RecapPul",
+          "@value": "6312006",
+        },
+      },
+      {
+        "@id": "res:pi5840838",
+        "@type": ["bf:Item"],
+        accessMessage: [
+          {
+            "@id": "accessMessage:1",
+            prefLabel: "Use in library",
+          },
+        ],
+        catalogItemType: [
+          {
+            "@id": "catalogItemType:1",
+            prefLabel: "non-circ",
+          },
+        ],
+        dateRange: [
+          {
+            lte: "2010",
+            gte: "2010",
+          },
+        ],
+        eddRequestable: true,
+        enumerationChronology: ["no.91-94 (2010)"],
+        formatLiteral: ["Text"],
+        idBarcode: ["32101075968279"],
+        identifier: [
+          {
+            "@type": "bf:ShelfMark",
+            "@value": "GF41 .H83 no.91-94 (2010)",
+          },
+          {
+            "@type": "bf:Barcode",
+            "@value": "32101075968279",
+          },
+        ],
+        owner: [
+          {
+            "@id": "orgs:0003",
+            prefLabel: "Princeton University Library",
+          },
+        ],
+        physRequestable: true,
+        physicalLocation: ["GF41 .H83"],
+        recapCustomerCode: ["PA"],
+        requestable: [true],
+        shelfMark: ["GF41 .H83 no.91-94 (2010)"],
+        specRequestable: false,
+        status: [
+          {
+            "@id": "status:a",
+            prefLabel: "Available",
+          },
+        ],
+        uri: "pi5840838",
+        volumeRange: [
+          {
+            lte: 94,
+            gte: 91,
+          },
+        ],
+        idNyplSourceId: {
+          "@type": "RecapPul",
+          "@value": "5840838",
+        },
+      },
+      {
+        "@id": "res:pi5834958",
+        "@type": ["bf:Item"],
+        accessMessage: [
+          {
+            "@id": "accessMessage:1",
+            prefLabel: "Use in library",
+          },
+        ],
+        catalogItemType: [
+          {
+            "@id": "catalogItemType:1",
+            prefLabel: "non-circ",
+          },
+        ],
+        dateRange: [
+          {
+            lte: "2009",
+            gte: "2009",
+          },
+        ],
+        eddRequestable: true,
+        enumerationChronology: ["no.87-90 (2009)"],
+        formatLiteral: ["Text"],
+        idBarcode: ["32101075966901"],
+        identifier: [
+          {
+            "@type": "bf:ShelfMark",
+            "@value": "GF41 .H83 no.87-90 (2009)",
+          },
+          {
+            "@type": "bf:Barcode",
+            "@value": "32101075966901",
+          },
+        ],
+        owner: [
+          {
+            "@id": "orgs:0003",
+            prefLabel: "Princeton University Library",
+          },
+        ],
+        physRequestable: true,
+        physicalLocation: ["GF41 .H83"],
+        recapCustomerCode: ["PA"],
+        requestable: [true],
+        shelfMark: ["GF41 .H83 no.87-90 (2009)"],
+        specRequestable: false,
+        status: [
+          {
+            "@id": "status:a",
+            prefLabel: "Available",
+          },
+        ],
+        uri: "pi5834958",
+        volumeRange: [
+          {
+            lte: 90,
+            gte: 87,
+          },
+        ],
+        idNyplSourceId: {
+          "@type": "RecapPul",
+          "@value": "5834958",
+        },
+      },
+      {
+        "@id": "res:pi5733725",
+        "@type": ["bf:Item"],
+        accessMessage: [
+          {
+            "@id": "accessMessage:1",
+            prefLabel: "Use in library",
+          },
+        ],
+        catalogItemType: [
+          {
+            "@id": "catalogItemType:1",
+            prefLabel: "non-circ",
+          },
+        ],
+        dateRange: [
+          {
+            lte: "2009",
+            gte: "2009",
+          },
+        ],
+        eddRequestable: true,
+        enumerationChronology: ["no.83-86 (2009)"],
+        formatLiteral: ["Text"],
+        idBarcode: ["32101075414431"],
+        identifier: [
+          {
+            "@type": "bf:ShelfMark",
+            "@value": "GF41 .H83 no.83-86 (2009)",
+          },
+          {
+            "@type": "bf:Barcode",
+            "@value": "32101075414431",
+          },
+        ],
+        owner: [
+          {
+            "@id": "orgs:0003",
+            prefLabel: "Princeton University Library",
+          },
+        ],
+        physRequestable: true,
+        physicalLocation: ["GF41 .H83"],
+        recapCustomerCode: ["PA"],
+        requestable: [true],
+        shelfMark: ["GF41 .H83 no.83-86 (2009)"],
+        specRequestable: false,
+        status: [
+          {
+            "@id": "status:a",
+            prefLabel: "Available",
+          },
+        ],
+        uri: "pi5733725",
+        volumeRange: [
+          {
+            lte: 86,
+            gte: 83,
+          },
+        ],
+        idNyplSourceId: {
+          "@type": "RecapPul",
+          "@value": "5733725",
+        },
+      },
+      {
+        "@id": "res:pi5626144",
+        "@type": ["bf:Item"],
+        accessMessage: [
+          {
+            "@id": "accessMessage:1",
+            prefLabel: "Use in library",
+          },
+        ],
+        catalogItemType: [
+          {
+            "@id": "catalogItemType:1",
+            prefLabel: "non-circ",
+          },
+        ],
+        dateRange: [
+          {
+            lte: "2009",
+            gte: "2009",
+          },
+        ],
+        eddRequestable: true,
+        enumerationChronology: ["no.79-82 (2009)"],
+        formatLiteral: ["Text"],
+        idBarcode: ["32101072398645"],
+        identifier: [
+          {
+            "@type": "bf:ShelfMark",
+            "@value": "GF41 .H83 no.79-82 (2009)",
+          },
+          {
+            "@type": "bf:Barcode",
+            "@value": "32101072398645",
+          },
+        ],
+        owner: [
+          {
+            "@id": "orgs:0003",
+            prefLabel: "Princeton University Library",
+          },
+        ],
+        physRequestable: true,
+        physicalLocation: ["GF41 .H83"],
+        recapCustomerCode: ["PA"],
+        requestable: [true],
+        shelfMark: ["GF41 .H83 no.79-82 (2009)"],
+        specRequestable: false,
+        status: [
+          {
+            "@id": "status:a",
+            prefLabel: "Available",
+          },
+        ],
+        uri: "pi5626144",
+        volumeRange: [
+          {
+            lte: 82,
+            gte: 79,
+          },
+        ],
+        idNyplSourceId: {
+          "@type": "RecapPul",
+          "@value": "5626144",
+        },
+      },
+      {
+        "@id": "res:pi5626143",
+        "@type": ["bf:Item"],
+        accessMessage: [
+          {
+            "@id": "accessMessage:1",
+            prefLabel: "Use in library",
+          },
+        ],
+        catalogItemType: [
+          {
+            "@id": "catalogItemType:1",
+            prefLabel: "non-circ",
+          },
+        ],
+        dateRange: [
+          {
+            lte: "2008",
+            gte: "2008",
+          },
+        ],
+        eddRequestable: true,
+        enumerationChronology: ["no.75-78 (2008)"],
+        formatLiteral: ["Text"],
+        idBarcode: ["32101072398637"],
+        identifier: [
+          {
+            "@type": "bf:ShelfMark",
+            "@value": "GF41 .H83 no.75-78 (2008)",
+          },
+          {
+            "@type": "bf:Barcode",
+            "@value": "32101072398637",
+          },
+        ],
+        owner: [
+          {
+            "@id": "orgs:0003",
+            prefLabel: "Princeton University Library",
+          },
+        ],
+        physRequestable: true,
+        physicalLocation: ["GF41 .H83"],
+        recapCustomerCode: ["PA"],
+        requestable: [true],
+        shelfMark: ["GF41 .H83 no.75-78 (2008)"],
+        specRequestable: false,
+        status: [
+          {
+            "@id": "status:a",
+            prefLabel: "Available",
+          },
+        ],
+        uri: "pi5626143",
+        volumeRange: [
+          {
+            lte: 78,
+            gte: 75,
+          },
+        ],
+        idNyplSourceId: {
+          "@type": "RecapPul",
+          "@value": "5626143",
+        },
+      },
+      {
+        "@id": "res:pi5422941",
+        "@type": ["bf:Item"],
+        accessMessage: [
+          {
+            "@id": "accessMessage:1",
+            prefLabel: "Use in library",
+          },
+        ],
+        catalogItemType: [
+          {
+            "@id": "catalogItemType:1",
+            prefLabel: "non-circ",
+          },
+        ],
+        dateRange: [
+          {
+            lte: "2008",
+            gte: "2008",
+          },
+        ],
+        eddRequestable: true,
+        enumerationChronology: ["no.71-74 (2008)"],
+        formatLiteral: ["Text"],
+        idBarcode: ["32101072390659"],
+        identifier: [
+          {
+            "@type": "bf:ShelfMark",
+            "@value": "GF41 .H83 no.71-74 (2008)",
+          },
+          {
+            "@type": "bf:Barcode",
+            "@value": "32101072390659",
+          },
+        ],
+        owner: [
+          {
+            "@id": "orgs:0003",
+            prefLabel: "Princeton University Library",
+          },
+        ],
+        physRequestable: true,
+        physicalLocation: ["GF41 .H83"],
+        recapCustomerCode: ["PA"],
+        requestable: [true],
+        shelfMark: ["GF41 .H83 no.71-74 (2008)"],
+        specRequestable: false,
+        status: [
+          {
+            "@id": "status:a",
+            prefLabel: "Available",
+          },
+        ],
+        uri: "pi5422941",
+        volumeRange: [
+          {
+            lte: 74,
+            gte: 71,
+          },
+        ],
+        idNyplSourceId: {
+          "@type": "RecapPul",
+          "@value": "5422941",
+        },
+      },
+      {
+        "@id": "res:pi5327716",
+        "@type": ["bf:Item"],
+        accessMessage: [
+          {
+            "@id": "accessMessage:1",
+            prefLabel: "Use in library",
+          },
+        ],
+        catalogItemType: [
+          {
+            "@id": "catalogItemType:1",
+            prefLabel: "non-circ",
+          },
+        ],
+        dateRange: [
+          {
+            lte: "2008",
+            gte: "2008",
+          },
+        ],
+        eddRequestable: true,
+        enumerationChronology: ["no.67-70 (2008)"],
+        formatLiteral: ["Text"],
+        idBarcode: ["32101066014000"],
+        identifier: [
+          {
+            "@type": "bf:ShelfMark",
+            "@value": "GF41 .H83 no.67-70 (2008)",
+          },
+          {
+            "@type": "bf:Barcode",
+            "@value": "32101066014000",
+          },
+        ],
+        owner: [
+          {
+            "@id": "orgs:0003",
+            prefLabel: "Princeton University Library",
+          },
+        ],
+        physRequestable: true,
+        physicalLocation: ["GF41 .H83"],
+        recapCustomerCode: ["PA"],
+        requestable: [true],
+        shelfMark: ["GF41 .H83 no.67-70 (2008)"],
+        specRequestable: false,
+        status: [
+          {
+            "@id": "status:a",
+            prefLabel: "Available",
+          },
+        ],
+        uri: "pi5327716",
+        volumeRange: [
+          {
+            lte: 70,
+            gte: 67,
+          },
+        ],
+        idNyplSourceId: {
+          "@type": "RecapPul",
+          "@value": "5327716",
+        },
+      },
+    ],
+    language: [
+      {
+        "@id": "lang:chi",
+        prefLabel: "Chinese",
+      },
+    ],
+    materialType: [
+      {
+        "@id": "resourcetypes:txt",
+        prefLabel: "Text",
+      },
+    ],
+    mediaType: [
+      {
+        "@id": "mediatypes:n",
+        prefLabel: "unmediated",
+      },
+    ],
+    note: [
+      {
+        noteType: "Note",
+        "@type": "bf:Note",
+        prefLabel: "Title from cover.",
+      },
+      {
+        noteType: "Note",
+        "@type": "bf:Note",
+        prefLabel: "Latest issue consulted: 2008 nian 8 yue = zong di 74 qi.",
+      },
+      {
+        noteType: "Issued By",
+        "@type": "bf:Note",
+        prefLabel: "Sponsored by: Yunnan Sheng she hui ke xue yuan.",
+      },
+    ],
+    numAvailable: 26,
+    numCheckinCardItems: 0,
+    numElectronicResources: 0,
+    numItemDatesParsed: 26,
+    numItemVolumesParsed: 25,
+    numItems: 26,
+    numItemsMatched: 26,
+    numItemsTotal: 26,
+    nyplSource: ["recap-pul"],
+    parallelContributorLiteral: ["云南省社会科学院."],
+    parallelNote: [null, null, "Sponsored by: 云南省社会科学院."],
+    parallelPlaceOfPublication: ["昆明市"],
+    parallelPublicationStatement: ["昆明市 : 华夏地理杂志社, 2006-"],
+    parallelPublisherLiteral: ["华夏地理杂志社"],
+    parallelTitle: ["華夏地理 = National geographic."],
+    parallelTitleAlt: ["", "国宝山西 Suppl. 2009"],
+    parallelTitleDisplay: ["華夏地理 = National geographic."],
+    placeOfPublication: ["Kunming Shi"],
+    publicationStatement: ["Kunming Shi : Huaxia di li za zhi she, 2006-"],
+    publisherLiteral: ["Huaxia di li za zhi she"],
+    serialPublicationDates: ["Zong di 48 qi-"],
+    subjectLiteral: ["Human geography -- China -- Periodicals."],
+    title: ["Huaxia di li = National geographic."],
+    titleAlt: ["National geographic", "Guo bao Shanxi Suppl. 2009"],
+    titleDisplay: ["Huaxia di li = National geographic."],
+    type: ["nypl:Item"],
+    updatedAt: 1675258177507,
+    uri: "pb5579193",
+    suppressed: false,
+    hasItemVolumes: true,
+    hasItemDates: true,
+    subjectHeadings: null,
+  },
+  annotatedMarc: {
+    id: "15080796",
+    nyplSource: "sierra-nypl",
+    fields: [
+      {
+        label: "Title",
+        values: [
+          {
+            content: "Urban spaghetti.",
+            source: {
+              fieldTag: "t",
+              marcTag: "245",
+              ind1: "0",
+              ind2: "0",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Urban spaghetti.",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Imprint",
+        values: [
+          {
+            content: "Mansfield, Ohio : Urban Spaghetti, [1999?-",
+            source: {
+              fieldTag: "p",
+              marcTag: "260",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Mansfield, Ohio :",
+                },
+                {
+                  tag: "b",
+                  content: "Urban Spaghetti,",
+                },
+                {
+                  tag: "c",
+                  content: "[1999?-",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Description",
+        values: [
+          {
+            content: "v. : ill. ; 22 cm.",
+            source: {
+              fieldTag: "r",
+              marcTag: "300",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "v. :",
+                },
+                {
+                  tag: "b",
+                  content: "ill. ;",
+                },
+                {
+                  tag: "c",
+                  content: "22 cm.",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Current Frequency",
+        values: [
+          {
+            content: "Semiannual",
+            source: {
+              fieldTag: "r",
+              marcTag: "310",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Semiannual",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Publication Date",
+        values: [
+          {
+            content: "Vol. 1, issue 1-",
+            source: {
+              fieldTag: "r",
+              marcTag: "362",
+              ind1: "0",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Vol. 1, issue 1-",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Subject",
+        values: [
+          {
+            content: "Arts, Modern -- United States -- Periodicals.",
+            source: {
+              fieldTag: "d",
+              marcTag: "650",
+              ind1: " ",
+              ind2: "0",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Arts, Modern",
+                },
+                {
+                  tag: "z",
+                  content: "United States",
+                },
+                {
+                  tag: "v",
+                  content: "Periodicals.",
+                },
+              ],
+            },
+          },
+          {
+            content: "American literature -- 20th ccentury -- Periodicals.",
+            source: {
+              fieldTag: "d",
+              marcTag: "650",
+              ind1: " ",
+              ind2: "0",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "American literature",
+                },
+                {
+                  tag: "y",
+                  content: "20th ccentury",
+                },
+                {
+                  tag: "v",
+                  content: "Periodicals.",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Abbreviated Title",
+        values: [
+          {
+            content: "Urban spaghetti",
+            source: {
+              fieldTag: "u",
+              marcTag: "210",
+              ind1: "0",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Urban spaghetti",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Cover Title",
+        values: [
+          {
+            content: "Urban spaghetti literary arts journal",
+            source: {
+              fieldTag: "u",
+              marcTag: "246",
+              ind1: "1",
+              ind2: "4",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Urban spaghetti literary arts journal",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Donor/Sponsor",
+        values: [
+          {
+            content:
+              "Gift of the DeWitt Wallace Endowment Fund, named in honor of the founder of Reader's Digest",
+            source: {
+              fieldTag: "u",
+              marcTag: "799",
+              ind1: "0",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content:
+                    "Gift of the DeWitt Wallace Endowment Fund, named in honor of the founder of Reader's Digest",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "LCCN",
+        values: [
+          {
+            content: "sn 98001765",
+            source: {
+              fieldTag: "l",
+              marcTag: "010",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "sn 98001765",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "ISSN",
+        values: [
+          {
+            content: "1521-1371",
+            source: {
+              fieldTag: "i",
+              marcTag: "022",
+              ind1: "0",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "1521-1371",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Research Call Number",
+        values: [
+          {
+            content: "JFK 01-374",
+            source: {
+              fieldTag: "q",
+              marcTag: "852",
+              ind1: "8",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "h",
+                  content: "JFK 01-374",
+                },
+              ],
+            },
+          },
+        ],
+      },
+    ],
+  },
+}
+
 export const bibWithSupplementaryContent = {
   resource: {
     "@context":

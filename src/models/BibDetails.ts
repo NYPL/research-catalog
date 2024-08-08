@@ -1,4 +1,4 @@
-import type { Bib, Note } from "../types/bibTypes"
+import type { DiscoveryBibResult, Note } from "../types/bibTypes"
 import type {
   LinkedBibDetail,
   BibDetail,
@@ -11,7 +11,7 @@ import type {
 } from "../types/bibDetailsTypes"
 
 export default class BibDetails {
-  bib: Bib
+  bib: DiscoveryBibResult
   annotatedMarcDetails: AnyBibDetail[]
   holdingsDetails: AnyBibDetail[]
   topDetails: AnyBibDetail[]
@@ -20,8 +20,12 @@ export default class BibDetails {
   supplementaryContent: LinkedBibDetail
   extent: BibDetail
   subjectHeadings: SubjectHeadingDetail
-  constructor(bib: Bib, annotatedMarc?: AnnotatedMarc) {
-    this.bib = this.matchParallelToPrimaryValues(bib)
+
+  constructor(
+    discoveryBibResult: DiscoveryBibResult,
+    annotatedMarc?: AnnotatedMarc
+  ) {
+    this.bib = this.matchParallelToPrimaryValues(discoveryBibResult)
     // these properties are not string[] so they require separate processing
     this.supplementaryContent = this.buildSupplementaryContent()
     this.groupedNotes = this.buildGroupedNotes()
@@ -56,15 +60,19 @@ export default class BibDetails {
 
   buildHoldingsDetails(holdings): BibDetail[] {
     if (!holdings) return []
-    return [
-      { label: "Location", field: "location" },
-      { label: "Format", field: "format" },
-      { label: "Call Number", field: "shelfMark" },
-      { label: "Library Has", field: "holdingStatement" },
-      { label: "Notes", field: "notes" },
-    ]
-      .map((fieldMapping) => this.buildHoldingDetail(fieldMapping))
-      .filter((f) => f)
+    return holdings
+      ?.map((holding) => {
+        return [
+          { label: "Location", field: "location" },
+          { label: "Format", field: "format" },
+          { label: "Call Number", field: "shelfMark" },
+          { label: "Library Has", field: "holdingStatement" },
+          { label: "Notes", field: "notes" },
+        ]
+          .map((fieldMapping) => this.buildHoldingDetail(holding, fieldMapping))
+          .filter((f) => f)
+      })
+      .flat()
   }
 
   buildTopDetails(): AnyBibDetail[] {
@@ -147,8 +155,14 @@ export default class BibDetails {
     return resourceEndpointDetails.concat(filteredAnnotatedMarcDetails)
   }
 
-  buildHoldingDetail(fieldMapping: FieldMapping) {
-    const bibFieldValue = this.bib.holdings[fieldMapping.field]
+  buildHoldingDetail(holding, fieldMapping: FieldMapping) {
+    const bibFieldValue =
+      fieldMapping.field === "location"
+        ? // "location" is the only holding field that is an array of
+          // objects shaped like { code: "loc:...", label: "..." }
+          // Getting the first object in the array.
+          [holding[fieldMapping.field][0].label]
+        : holding[fieldMapping.field]
     return this.buildDetail(fieldMapping.label, bibFieldValue)
   }
 
@@ -267,7 +281,7 @@ export default class BibDetails {
    * The new rewritten field interleaves the parallel field and the paralleled (i.e. original) field together.
    * Skips over subject fields since these require changes to SHEP.
    */
-  matchParallelToPrimaryValues(bib: Bib) {
+  matchParallelToPrimaryValues(bib: DiscoveryBibResult) {
     const parallelFieldMatches = Object.keys(bib).map((key) => {
       if (key.match(/subject/i)) {
         return null

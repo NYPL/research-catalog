@@ -8,12 +8,13 @@ import { isRecapLocation } from "../utils/itemFilterUtils"
 
 export class ItemFilterData {
   options: AggregationOption[]
-  agg: Aggregation
+  aggregation: Aggregation
   field: string
-  constructor(agg: Aggregation) {
-    this.agg = agg
-    this.options = agg.values
-    this.field = agg.field
+
+  constructor(aggregation: Aggregation) {
+    this.aggregation = aggregation
+    this.options = aggregation.values
+    this.field = aggregation.field
   }
 
   displayOptions(): Option[] {
@@ -25,17 +26,11 @@ export class ItemFilterData {
       return opt.value === value || opt.label === value
     })?.label
   }
-
-  labelsForConcatenatedValues(values: string[]) {
-    return Array.from(
-      new Set(values.map((val: string) => `'${this.labelForValue(val)}'`))
-    ).join(", ")
-  }
 }
 
 export class LocationFilterData extends ItemFilterData {
-  constructor(aggs: Aggregation) {
-    super(aggs)
+  constructor(aggregation: Aggregation) {
+    super(aggregation)
   }
 
   displayOptions(): AggregationOption[] {

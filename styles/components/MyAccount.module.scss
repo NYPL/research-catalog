@@ -1,3 +1,10 @@
+.settingsEditButton {
+  margin-top: var(--nypl-space-m);
+  @media screen and (max-width: 800px) and (min-width: 601px) {
+    width: 250px;
+  }
+}
+
 .myAccountList {
   border: none;
   dl > dt,
@@ -22,26 +29,49 @@
   }
 }
 
+.statusBadge {
+  white-space: normal !important;
+  @media screen and (min-width: 600px) {
+    white-space: nowrap !important;
+  }
+}
+
 .accountSettingsTab {
-  display: flex;
-  button + button {
-    margin-left: var(--nypl-space-xs);
+  > div {
+    margin-top: var(--nypl-space-l);
+    display: flex;
+    flex-direction: column;
+    @media screen and (min-width: 600px) {
+      flex-direction: column-reverse;
+    }
+    @media screen and (min-width: 800px) {
+      flex-direction: row;
+    }
   }
 }
 .modalHeading {
   display: flex;
   justify-content: flex-start;
+  align-items: center;
   gap: 10px;
   margin-bottom: 0 !important;
+  padding-top: var(--nypl-space-s);
+  font-weight: var(--nypl-fontWeights-medium);
+  letter-spacing: normal;
+}
+
+.noIconHeading {
+  padding-left: var(--nypl-space-s);
+  padding-top: var(--nypl-space-s);
+}
+
+.noIconBody {
+  font-size: var(--nypl-fontSizes-desktop-body-body1);
+  display: flex;
+  flex-direction: column;
   p {
-    margin-top: var(--nypl-space-s);
-    margin-bottom: 0;
-    font-size: var(--nypl-fontSizes-desktop-heading-heading5);
-    font-weight: var(--nypl-fontWeights-medium);
-    letter-spacing: normal;
-  }
-  svg {
-    margin-top: var(--nypl-space-s);
+    margin-left: var(--nypl-space-s);
+    margin-right: var(--nypl-space-m);
   }
 }
 
@@ -50,6 +80,10 @@
   display: flex;
   flex-direction: column;
   padding-top: 0 !important;
+  p {
+    margin-left: var(--nypl-space-l);
+    margin-right: var(--nypl-space-m);
+  }
 }
 
 .notification {
@@ -75,6 +109,7 @@
 .itemsTable {
   thead > tr > th,
   thead > tr > th:last-of-type {
+    vertical-align: top;
     text-transform: unset;
     font-weight: var(--nypl-fontWeights-bold);
     border-color: var(--nypl-colors-ui-gray-light-cool);
@@ -99,11 +134,15 @@
   }
 }
 
+.changeLocation {
+  margin-bottom: 0;
+  width: max-content;
+}
+
 .feesTable {
   margin-top: var(--nypl-space-m);
   thead > tr > th,
   thead > tr > th:last-of-type {
-    text-transform: unset;
     font-weight: 700;
     border-color: var(--nypl-colors-ui-gray-light-cool);
   }
@@ -111,8 +150,20 @@
   tbody > tr > td:last-of-type {
     border-color: var(--nypl-colors-ui-gray-light-cool);
   }
+  @media only screen and (min-width: 600px) {
+    tr > th:last-of-type {
+      padding-right: var(--nypl-space-l);
+      text-align: right;
+    }
+  }
+  @media only screen and (min-width: 600px) {
+    tr > td:last-of-type {
+      text-align: right;
+      padding-right: var(--nypl-space-s);
+    }
+  }
   th:first-of-type {
-    width: auto;
+    width: 60%;
   }
   th,
   th:last-of-type {

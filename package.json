@@ -1,6 +1,6 @@
 {
   "name": "research-catalog",
-  "version": "0.1.0",
+  "version": "1.2.0",
   "scripts": {
     "dev": "next dev -p 8080",
     "build": "next build",
@@ -11,12 +11,14 @@
     "prettier": "prettier --write .",
     "prepare": "husky install",
     "test": "jest",
-    "test-watch": "jest --watch --verbose --silent=false",
+    "test-watch": "jest --watch",
+    "test-watch-quiet": "DEBUG_PRINT_LIMIT=0 npm run test-watch",
     "coverage": "jest --coverage"
   },
   "dependencies": {
-    "@nypl/design-system-react-components": "3.1.1",
+    "@nypl/design-system-react-components": "3.2.0",
     "@nypl/nypl-data-api-client": "1.0.5",
+    "@nypl/pickup-time-estimator": "^1.0.9",
     "@nypl/sierra-wrapper": "1.1.0",
     "@types/node": "20.3.1",
     "@types/react": "18.2.13",

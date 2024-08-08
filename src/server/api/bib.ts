@@ -1,24 +1,25 @@
-import type { BibParams, BibResponse } from "../../types/bibTypes"
+import type { BibQueryParams, BibResponse } from "../../types/bibTypes"
 import {
-  getBibQuery,
   isNyplBibID,
+  getBibQueryString,
   standardizeBibId,
 } from "../../utils/bibUtils"
 import nyplApiClient from "../nyplApiClient"
 import {
   DISCOVERY_API_NAME,
   DISCOVERY_API_SEARCH_ROUTE,
+  ITEM_VIEW_ALL_BATCH_SIZE,
   SHEP_HTTP_TIMEOUT,
 } from "../../config/constants"
 import { appConfig } from "../../config/config"
 import logger from "../../../logger"
+import type { DiscoveryItemResult } from "../../types/itemTypes"
 
 export async function fetchBib(
   id: string,
-  bibParams?: BibParams
+  bibQuery?: BibQueryParams
 ): Promise<BibResponse> {
   const standardizedId = standardizeBibId(id)
-
   // Redirect to Bib page with standardized version of the Bib ID
   if (id !== standardizedId) {
     return {
@@ -26,35 +27,44 @@ export async function fetchBib(
       redirectUrl: `/bib/${standardizedId}`,
     }
   }
-
   const client = await nyplApiClient({ apiName: DISCOVERY_API_NAME })
   const [bibResponse, annotatedMarcResponse] = await Promise.allSettled([
     await client.get(
-      `${DISCOVERY_API_SEARCH_ROUTE}/${getBibQuery(id, bibParams)}`
+      `${DISCOVERY_API_SEARCH_ROUTE}/${standardizedId}${getBibQueryString(
+        bibQuery
+      )}`
     ),
     // Don't fetch annotated-marc for partner records:
-    isNyplBibID(id) &&
+    isNyplBibID(standardizedId) &&
       (await client.get(
-        `${DISCOVERY_API_SEARCH_ROUTE}/${getBibQuery(id, bibParams, true)}`
+        `${DISCOVERY_API_SEARCH_ROUTE}/${standardizedId}.annotated-marc${getBibQueryString(
+          bibQuery,
+          true
+        )}`
       )),
   ])
 
   // Assign results values for each response when status is fulfilled
-  const bib = bibResponse.status === "fulfilled" && bibResponse.value
+  const discoveryBibResult =
+    bibResponse.status === "fulfilled" && bibResponse.value
   const annotatedMarc =
     annotatedMarcResponse.status === "fulfilled" && annotatedMarcResponse.value
 
   // Get subject headings from SHEP API
   // TODO: Revisit this after Enhanced Browse work to determine if it's still necessary
-  if (bib.subjectLiteral?.length) {
+  if (discoveryBibResult.subjectLiteral?.length) {
     const subjectHeadingData = await fetchBibSubjectHeadings(id)
-    bib.subjectHeadings =
+    discoveryBibResult.subjectHeadings =
       (subjectHeadingData && subjectHeadingData["subject_headings"]) || null
   }
 
   try {
     // If there's a problem with a bib, try to fetch from the Sierra API and redirect to circulating catalog
-    if (!bib || !bib.uri || !id.includes(bib.uri)) {
+    if (
+      !discoveryBibResult ||
+      !discoveryBibResult.uri ||
+      !id.includes(discoveryBibResult.uri)
+    ) {
       // TODO: Check if this ID slicing is correct and if this redirect logic is still accurate
       const sierraBibResponse = await client.get(
         `/bibs/sierra-nypl/${id.slice(1)}`
@@ -75,14 +85,24 @@ export async function fetchBib(
     }
     // The Discovery API currently returns HTML in the bib attribute when it can't find a bib.
     // TODO: Modify the error response in Discovery API to return a 404 status instead of an HTML string in the bib attribute
-    else if (typeof bib === "string") {
+    else if (typeof discoveryBibResult === "string") {
       logger.error("There was an error fetching the Bib from the Discovery API")
       return {
         status: 404,
       }
     }
+    // Populate bib's items with all the items if View All is enabled
+    if (bibQuery?.view_all_items) {
+      discoveryBibResult.items = await fetchAllBibItems(
+        bibQuery,
+        discoveryBibResult.numItemsMatched,
+        // allow control of batch size in query param for testing
+        bibQuery?.batch_size || ITEM_VIEW_ALL_BATCH_SIZE
+      )
+    }
+
     return {
-      bib,
+      discoveryBibResult,
       annotatedMarc: annotatedMarc?.bib || null,
       status: 200,
     }
@@ -115,4 +135,36 @@ async function fetchBibSubjectHeadings(bibId: string) {
   } finally {
     clearTimeout(timeoutId)
   }
+}
+
+async function fetchAllBibItems(
+  bibQuery: BibQueryParams,
+  numItems: number,
+  batchSize: number
+): Promise<DiscoveryItemResult[]> {
+  const items: DiscoveryItemResult[] = []
+  const client = await nyplApiClient({ apiName: DISCOVERY_API_NAME })
+  for (
+    let batchNum = 1;
+    batchNum <= Math.ceil(numItems / batchSize);
+    batchNum++
+  ) {
+    const pageQueryString = getBibQueryString(
+      {
+        ...bibQuery,
+        item_page: batchNum,
+      },
+      false,
+      true
+    )
+    const bibPage = await client.get(
+      `${DISCOVERY_API_SEARCH_ROUTE}/${bibQuery.id}${pageQueryString}`
+    )
+    if (bibPage?.items?.length) {
+      items.push(...bibPage.items)
+    } else {
+      throw new Error("There was en error fetching items in one of the batches")
+    }
+  }
+  return items
 }

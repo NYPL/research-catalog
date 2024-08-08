@@ -5,18 +5,14 @@ import {
   Box,
   Text,
   CardActions,
-  useNYPLBreakpoints,
   SimpleGrid,
 } from "@nypl/design-system-react-components"
 
 import RCLink from "../Links/RCLink/RCLink"
 import ElectronicResourcesLink from "./ElectronicResourcesLink"
 import ItemTable from "../ItemTable/ItemTable"
-import ItemTableData from "../../models/ItemTableData"
 import type SearchResultsBib from "../../models/SearchResultsBib"
-import { PATHS, ITEMS_PER_SEARCH_RESULT } from "../../config/constants"
-import DRBResult from "../../models/DRBResult"
-import DRBCard from "../DRB/DRBCard"
+import { PATHS } from "../../config/constants"
 
 interface SearchResultProps {
   bib: SearchResultsBib
@@ -26,19 +22,6 @@ interface SearchResultProps {
  * The SearchResult component displays a single search result element.
  */
 const SearchResult = ({ bib }: SearchResultProps) => {
-  const { isLargerThanLarge: isDesktop } = useNYPLBreakpoints()
-
-  // On Search Results, a separate ItemTable is constructed for each item up to the limit set in ITEMS_PER_SEARCH_RESULT.
-  // TODO: Move this preprocessing to SearchResultsBib model
-  const searchResultItems: ItemTableData[] =
-    bib.hasItems &&
-    bib.items.slice(0, ITEMS_PER_SEARCH_RESULT).map((item) => {
-      return new ItemTableData([item], {
-        isBibPage: false,
-        isDesktop,
-        isArchiveCollection: bib.isArchiveCollection,
-      })
-    })
   return (
     <Card
       sx={{
@@ -60,7 +43,7 @@ const SearchResult = ({ bib }: SearchResultProps) => {
           {bib.materialType && <Text>{bib.materialType}</Text>}
           {bib.publicationStatement && <Text>{bib.publicationStatement}</Text>}
           {bib.yearPublished && <Text>{bib.yearPublished}</Text>}
-          <Text>{bib.itemMessage}</Text>
+          <Text>{bib.getNumItemsMessage()}</Text>
         </Box>
 
         <SimpleGrid columns={1} gap="grid.l">
@@ -70,9 +53,9 @@ const SearchResult = ({ bib }: SearchResultProps) => {
               electronicResources={bib.electronicResources}
             />
           )}
-          {searchResultItems && (
+          {bib.itemTables && (
             <>
-              {searchResultItems.map((itemTableData) => (
+              {bib.itemTables.map((itemTableData) => (
                 <ItemTable
                   itemTableData={itemTableData}
                   key={`search-results-item-${itemTableData.items[0].id}`}
@@ -81,7 +64,7 @@ const SearchResult = ({ bib }: SearchResultProps) => {
               {bib.showViewAllItemsLink && (
                 <CardActions>
                   <RCLink
-                    href={`${bib.url}#items-table`}
+                    href={`${bib.url}#item-table`}
                     fontSize={{
                       base: "mobile.body.body2",
                       md: "desktop.body.body2",
@@ -89,7 +72,7 @@ const SearchResult = ({ bib }: SearchResultProps) => {
                     fontWeight="medium"
                     type="standalone"
                   >
-                    {`View All ${bib.itemMessage} `}
+                    {`View All ${bib.getNumItemsMessage()} `}
                   </RCLink>
                 </CardActions>
               )}

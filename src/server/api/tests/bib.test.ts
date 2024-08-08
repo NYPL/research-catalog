@@ -83,13 +83,82 @@ jest.mock("../../nyplApiClient", () => {
         })
       })
     })
+    .mockImplementationOnce(async () => {
+      return await new Promise((resolve) => {
+        resolve({
+          get: jest
+            .fn()
+            .mockResolvedValueOnce({
+              items: Array(20).fill({}),
+              numItemsTotal: 25,
+              numItemsMatched: 25,
+              uri: "b17418167",
+            })
+            .mockResolvedValueOnce({
+              items: Array(20).fill({}),
+            })
+            .mockResolvedValueOnce({
+              items: Array(5).fill({}),
+            }),
+        })
+      })
+    })
+    .mockImplementationOnce(async () => {
+      return await new Promise((resolve) => {
+        resolve({
+          get: jest
+            .fn()
+            .mockResolvedValueOnce({
+              items: Array(20).fill({}),
+              status: 200,
+            })
+            .mockResolvedValueOnce({
+              items: Array(5).fill({}),
+              status: 200,
+            }),
+        })
+      })
+    })
+    .mockImplementationOnce(async () => {
+      return await new Promise((resolve) => {
+        resolve({
+          get: jest
+            .fn()
+            .mockResolvedValueOnce({
+              items: Array(20).fill({}),
+              numItemsTotal: 25,
+              numItemsMatched: 25,
+              uri: "b17418167",
+            })
+            .mockResolvedValueOnce({
+              items: Array(20).fill({}),
+            })
+            .mockResolvedValueOnce({
+              items: Array(5).fill({}),
+            }),
+        })
+      })
+    })
+    .mockImplementationOnce(async () => {
+      return await new Promise((resolve) => {
+        resolve({
+          get: () => {
+            throw new Error(
+              "There was en error fetching items in one of the batches"
+            )
+          },
+        })
+      })
+    })
 })
 
 describe("fetchBib", () => {
   it("should return bib and annotated data with 200 status code when uri is present", async () => {
     const bibResponse = (await fetchBib("b17418167")) as BibResponse
-    expect(bibResponse.bib.numItemsTotal).toEqual(1)
-    expect(bibResponse.bib.title).toEqual(["Cats cats cats cats cats."])
+    expect(bibResponse.discoveryBibResult.numItemsTotal).toEqual(1)
+    expect(bibResponse.discoveryBibResult.title).toEqual([
+      "Cats cats cats cats cats.",
+    ])
 
     expect(bibResponse.annotatedMarc.id).toEqual("17418167")
     expect(bibResponse.annotatedMarc.fields.length).toEqual(7)
@@ -122,5 +191,22 @@ describe("fetchBib", () => {
     await expect(
       async () => (await fetchBib("b17418167")) as BibResponse
     ).rejects.toThrow("Bad API URL")
+  })
+
+  it("should load all the items in batches if view_all_items query param is true", async () => {
+    const bibResponse = (await fetchBib("b17418167", {
+      view_all_items: true,
+      batch_size: 20,
+    })) as BibResponse
+    expect(bibResponse.status).toEqual(200)
+    expect(bibResponse.discoveryBibResult.items.length).toEqual(25)
+  })
+
+  it("should throw an error on view all if one of the batched fetches fails", async () => {
+    const bibResponse = (await fetchBib("b17418167", {
+      view_all_items: true,
+      batch_size: 20,
+    })) as BibResponse
+    expect(bibResponse.status).toEqual(404)
   })
 })

@@ -1,24 +1,37 @@
-import { Box, StatusBadge, Text } from "@nypl/design-system-react-components"
+import {
+  Box,
+  SkeletonLoader,
+  StatusBadge,
+  Text,
+} from "@nypl/design-system-react-components"
 
 import ExternalLink from "../../Links/ExternalLink/ExternalLink"
-import type { Hold, Patron } from "../../../types/myAccountTypes"
+import type { Hold } from "../../../types/myAccountTypes"
 import ItemsTab from "../ItemsTab"
 import CancelButton from "./CancelButton"
 import FreezeButton from "./FreezeButton"
+import UpdateLocation from "./UpdateLocation"
+import styles from "../../../../styles/components/MyAccount.module.scss"
+import { useContext, useEffect, useRef, useState } from "react"
+import { PatronDataContext } from "../../../context/PatronDataContext"
 
-const RequestsTab = ({
-  removeHold,
-  holds,
-  patron,
-}: {
-  removeHold
-  holds: Hold[]
-  patron: Patron
-}) => {
+const RequestsTab = () => {
+  const tabRef = useRef(null)
+  const [focusOnRequestTab, setFocusOnRequestTab] = useState(false)
+  const [lastUpdatedHoldId, setLastUpdatedHoldId] = useState<string>(null)
+
+  const {
+    patronDataLoading,
+    updatedAccountData: { holds, patron, pickupLocations },
+  } = useContext(PatronDataContext)
   function formatTitleElement(hold: Hold) {
     // If item is research/circ
     if (hold.catalogHref) {
-      return <ExternalLink href={hold.catalogHref}>{hold.title}</ExternalLink>
+      return (
+        <ExternalLink isUnderlined={false} href={hold.catalogHref}>
+          {hold.title}
+        </ExternalLink>
+      )
     } else {
       // Item is a partner record
       return <Text>{hold.title}</Text>
@@ -31,36 +44,81 @@ const RequestsTab = ({
     "Pickup by",
     "Manage request",
   ]
-
-  const holdsData = holds.map((hold) => [
+  const holdsData = holds.map((hold, i) => [
     formatTitleElement(hold),
     getStatusBadge(hold.status),
-    hold.pickupLocation.name,
+    lastUpdatedHoldId === hold.id && patronDataLoading ? (
+      <SkeletonLoader showImage={false} />
+    ) : (
+      <>
+        <Text>{hold.pickupLocation.name}</Text>
+        {!hold.isResearch && hold.status === "REQUEST PENDING" && (
+          <UpdateLocation
+            setLastUpdatedHoldId={setLastUpdatedHoldId}
+            focus={lastUpdatedHoldId === hold.id}
+            pickupLocationOptions={pickupLocations}
+            patronId={patron.id}
+            hold={hold}
+            key={hold.pickupLocation.code}
+          />
+        )}
+      </>
+    ),
     hold.pickupByDate,
-    /* Passing removeHold() down to the Cancel button so it can remove the hold from
-     * currentHolds */
     hold ? (
-      <Box sx={{ display: "flex", gap: "4px" }}>
-        <CancelButton removeHold={removeHold} hold={hold} patron={patron} />
-        {hold.canFreeze && <FreezeButton hold={hold} patron={patron} />}
+      <Box
+        sx={{
+          display: "flex",
+          gap: "4px",
+          flexDirection: { base: "column", md: "row" },
+        }}
+      >
+        <CancelButton
+          setFocusOnRequestTab={setFocusOnRequestTab}
+          hold={hold}
+          patron={patron}
+        />
+        {hold.canFreeze && hold.status === "REQUEST PENDING" && (
+          <FreezeButton hold={hold} patron={patron} />
+        )}{" "}
       </Box>
     ) : null,
   ])
 
+  useEffect(() => {
+    if (!patronDataLoading && focusOnRequestTab) {
+      tabRef.current.focus()
+      setFocusOnRequestTab(false)
+    }
+  }, [focusOnRequestTab, patronDataLoading])
+
   function getStatusBadge(status) {
     if (status == "READY FOR PICKUP") {
-      return <StatusBadge type="positive">{status}</StatusBadge>
+      return (
+        <StatusBadge className={styles.statusBadge} type="positive">
+          {status}
+        </StatusBadge>
+      )
     }
-    return <StatusBadge type="neutral">{status}</StatusBadge>
+    return (
+      <StatusBadge className={styles.statusBadge} type="neutral">
+        {status}
+      </StatusBadge>
+    )
   }
-
-  return (
+  const awaitingPatronUpdateAfterCancel = patronDataLoading && focusOnRequestTab
+  const tabDisplay = awaitingPatronUpdateAfterCancel ? (
+    <SkeletonLoader showImage={false} />
+  ) : (
     <ItemsTab
+      tabRef={tabRef}
       headers={holdsHeaders}
       data={holdsData}
       userAction={"requested"}
     />
   )
+
+  return tabDisplay
 }
 
 export default RequestsTab

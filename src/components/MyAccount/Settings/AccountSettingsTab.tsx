@@ -1,78 +1,107 @@
 import {
-  Box,
   Form,
   List,
   Spacer,
   useModal,
+  SkeletonLoader,
+  type TextInputRefType,
 } from "@nypl/design-system-react-components"
-import { useState } from "react"
-import type { Patron } from "../../../types/myAccountTypes"
+import { useContext, useEffect, useRef, useState } from "react"
 import styles from "../../../../styles/components/MyAccount.module.scss"
 import AccountSettingsButtons from "./AccountSettingsButtons"
 import {
   AccountSettingsForm,
   AccountSettingsDisplay,
 } from "./AccountSettingsDisplayOptions"
+import { parseAccountSettingsPayload } from "./AccountSettingsUtils"
 import {
   successModalProps,
   failureModalProps,
-} from "./AccountSettingsFeedbackModalProps"
-import { parsePayload, updatePatronData } from "./AccountSettingsUtils"
-import { BASE_URL } from "../../../config/constants"
-import PasswordModal from "./PasswordModal"
+} from "./SuccessAndFailureModalProps"
+import { PatronDataContext } from "../../../context/PatronDataContext"
 
-const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
+const AccountSettingsTab = () => {
+  const {
+    patronDataLoading,
+    getMostUpdatedSierraAccountData,
+    updatedAccountData: { patron, pickupLocations },
+  } = useContext(PatronDataContext)
   const [currentlyEditing, setCurrentlyEditing] = useState(false)
-  const [mostRecentPatronData, setMostRecentPatronData] = useState(settingsData)
   const [modalProps, setModalProps] = useState(null)
+  const [isLoading, setIsLoading] = useState(false)
+
+  const { onOpen: openModal, onClose: closeModal, Modal } = useModal()
+
+  const [isFormValid, setIsFormValid] = useState(true)
+
+  const editButtonRef = useRef<HTMLButtonElement>()
+  const firstInputRef = useRef<TextInputRefType>()
+
   const listElements = currentlyEditing ? (
-    <AccountSettingsForm patron={mostRecentPatronData} />
+    <AccountSettingsForm
+      firstInputRef={firstInputRef}
+      patron={patron}
+      setIsFormValid={setIsFormValid}
+      pickupLocations={pickupLocations}
+    />
   ) : (
-    <AccountSettingsDisplay patron={mostRecentPatronData} />
+    <AccountSettingsDisplay patron={patron} />
   )
-  const { onOpen: openModal, Modal } = useModal()
+  const [focusOnAccountSettingsButton, setFocusOnAccountSettingButton] =
+    useState(false)
+  useEffect(() => {
+    if (currentlyEditing) {
+      firstInputRef.current?.focus()
+    } else if (!patronDataLoading && focusOnAccountSettingsButton) {
+      editButtonRef.current?.focus()
+    }
+  }, [currentlyEditing, focusOnAccountSettingsButton, patronDataLoading])
 
   const submitAccountSettings = async (e) => {
     e.preventDefault()
-    const payload = parsePayload(e.target, mostRecentPatronData)
-    try {
-      const response = await fetch(
-        `${BASE_URL}/api/account/settings/${mostRecentPatronData.id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
-        }
-      )
-      const responseData = await response.json()
-      if (response.ok) {
-        setMostRecentPatronData(updatePatronData(mostRecentPatronData, payload))
-        setCurrentlyEditing(false)
-        setModalProps(successModalProps)
-        openModal()
-      } else {
-        alert(`error: ${responseData}`)
-        setModalProps(failureModalProps)
-        openModal()
+    setIsLoading(true)
+    const payload = parseAccountSettingsPayload(e.target, patron)
+    const response = await fetch(
+      `/research/research-catalog/api/account/settings/${patron.id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
       }
-    } catch (error) {
-      alert("fetching error")
+    )
+    if (response.status === 200) {
+      await getMostUpdatedSierraAccountData()
+      setCurrentlyEditing(false)
+      setModalProps(successModalProps)
+      openModal()
+    } else {
+      setModalProps(failureModalProps)
+      openModal()
     }
+    setIsLoading(false)
   }
-
-  return (
-    <Box className={styles.accountSettingsTab}>
-      {modalProps && <Modal {...modalProps} />}
+  return isLoading ? (
+    <SkeletonLoader showImage={false} />
+  ) : (
+    <>
+      {modalProps && (
+        <Modal
+          {...{
+            ...modalProps,
+            onClose: () => {
+              closeModal()
+              setFocusOnAccountSettingButton(true)
+            },
+          }}
+        />
+      )}
       <Form
+        className={styles.accountSettingsTab}
         id="account-settings-container"
         onSubmit={(e) => submitAccountSettings(e)}
       >
-        <AccountSettingsButtons
-          currentlyEditing={currentlyEditing}
-          setCurrentlyEditing={setCurrentlyEditing}
-        />
         <List
           sx={{ border: "none", h2: { border: "none" } }}
           className={styles.myAccountList}
@@ -80,10 +109,16 @@ const AccountSettingsTab = ({ settingsData }: { settingsData: Patron }) => {
         >
           {listElements}
         </List>
-        <Spacer />
+        <Spacer display={{ sm: "none", base: "none", md: "inline-block" }} />
+        <AccountSettingsButtons
+          setFocusOnAccountSettingsButton={setFocusOnAccountSettingButton}
+          editButtonRef={editButtonRef}
+          currentlyEditing={currentlyEditing}
+          setCurrentlyEditing={setCurrentlyEditing}
+          formValid={isFormValid}
+        />
       </Form>
-      <PasswordModal patron={settingsData} />
-    </Box>
+    </>
   )
 }
 

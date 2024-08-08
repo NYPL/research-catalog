@@ -1,10 +1,12 @@
-import { filteredPickupLocations } from "../../../__test__/fixtures/processedMyAccountData"
-import MyAccount, {
-  MyAccountFactory,
-  filterPickupLocations,
-} from "../MyAccount"
 import {
-  pickupLocations,
+  emptyPatron,
+  processedCheckouts,
+  processedFines,
+  processedHolds,
+  processedPatron,
+} from "../../../__test__/fixtures/processedMyAccountData"
+import MyAccount, { MyAccountFactory } from "../MyAccount"
+import {
   holds,
   checkouts,
   patron,
@@ -13,17 +15,14 @@ import {
   checkoutBibs,
   empty,
 } from "../../../__test__/fixtures/rawSierraAccountData"
+import type { Hold, SierraHold } from "../../types/myAccountTypes"
 
 describe("MyAccountModel", () => {
   const fetchBibs = MyAccount.prototype.fetchBibData
-  afterAll(() => (MyAccount.prototype.fetchBibData = fetchBibs))
-  describe("fetchPickupLocations", () => {
-    it("filters out closed and research branches", () => {
-      expect(filterPickupLocations(pickupLocations)).toStrictEqual(
-        filteredPickupLocations
-      )
-    })
+  afterEach(() => {
+    MyAccount.prototype.fetchBibData = fetchBibs
   })
+
   describe("getRecordId", () => {
     it("can parse an id", () => {
       const idUrl =
@@ -34,6 +33,7 @@ describe("MyAccountModel", () => {
       expect(MyAccount.getRecordId("")).toBe(null)
     })
   })
+
   describe("getHoldStatus", () => {
     it("returns the correct status", () => {
       expect(
@@ -64,6 +64,7 @@ describe("MyAccountModel", () => {
       ).toBe("REQUEST PENDING")
     })
   })
+
   describe("fetcher", () => {
     it("can return checkouts", async () => {
       const mockSierraClient = {
@@ -77,32 +78,7 @@ describe("MyAccountModel", () => {
       }
       const fetcher = new MyAccount(mockSierraClient, "12345")
       const processedCheckouts = await fetcher.getCheckouts()
-      expect(processedCheckouts).toStrictEqual([
-        {
-          id: "65060571",
-          callNumber: "972.93 D",
-          barcode: "33333432264691",
-          dueDate: "February 9, 2024",
-          patron: "2772226",
-          title: "The Dominican Republic reader : history, culture, politics",
-          isResearch: false,
-          bibId: "21678146",
-          isNyplOwned: true,
-          catalogHref: "https://borrow.nypl.org/search/card?recordId=21678146",
-        },
-        {
-          id: "65060570",
-          callNumber: "Spa FIC ALVAREZ",
-          barcode: "33333455520789",
-          dueDate: "February 9, 2024",
-          patron: "2772226",
-          title: "En el tiempo de las mariposas",
-          isResearch: false,
-          bibId: "17699134",
-          isNyplOwned: true,
-          catalogHref: "https://borrow.nypl.org/search/card?recordId=17699134",
-        },
-      ])
+      expect(processedCheckouts).toStrictEqual(processedCheckouts)
     })
     it("can return holds", async () => {
       const mockSierraClient = {
@@ -116,59 +92,18 @@ describe("MyAccountModel", () => {
       }
       const fetcher = new MyAccount(mockSierraClient, "12345")
       const processedHolds = await fetcher.getHolds()
-      expect(processedHolds).toStrictEqual([
-        {
-          patron: "2772226",
-          id: "48636910",
-          pickupByDate: "February 15, 2024",
-          canFreeze: false,
-          frozen: false,
-          status: "READY FOR PICKUP",
-          pickupLocation: { code: "sn", name: "SNFL (formerly Mid-Manhattan)" },
-          title:
-            "Quit like a woman : the radical choice to not drink in a culture obsessed with alcohol",
-          isResearch: false,
-          bibId: "22002760",
-          isNyplOwned: true,
-          catalogHref: "https://borrow.nypl.org/search/card?recordId=22002760",
-        },
-        {
-          bibId: "21317166",
-          canFreeze: false,
-          catalogHref: "https://borrow.nypl.org/search/card?recordId=21317166",
-          frozen: false,
-          id: "42273371",
-          isNyplOwned: true,
-          isResearch: false,
-          patron: "2772226",
-          pickupByDate: null,
-          pickupLocation: {
-            code: "mp",
-            name: "Morris Park",
-          },
-          status: "REQUEST PENDING",
-          title: "2017 Tony Award Season.",
-        },
-      ])
+      expect(processedHolds).toStrictEqual(processedHolds)
     })
     it("can return fines", async () => {
       const mockSierraClient = {
-        get: async (path) => Promise.resolve(fines),
+        get: async () => Promise.resolve(fines),
       }
       const fetcher = new MyAccount(mockSierraClient, "12345")
       const processedFines = await fetcher.getFines()
-      expect(processedFines).toStrictEqual({
-        total: 14.99,
-        entries: [
-          {
-            detail: "Replacement",
-            amount: 14.99,
-            date: "June 15, 2023",
-          },
-        ],
-      })
+      expect(processedFines).toStrictEqual(processedFines)
     })
   })
+
   describe("getResearchAndOwnership", () => {
     it("can handle no varfields", () => {
       expect(MyAccount.getResearchAndOwnership({})).toStrictEqual({
@@ -213,6 +148,26 @@ describe("MyAccountModel", () => {
   })
 
   describe("MyAccountFactory", () => {
+    it("sortHolds", () => {
+      const holds = [
+        { pickupByDate: null },
+        { pickupByDate: "May 17, 2024" },
+        { pickupByDate: null },
+        { pickupByDate: "January 17, 2024" },
+        { pickupByDate: null },
+        { pickupByDate: "April 17, 2024" },
+        { pickupByDate: null },
+      ] as Hold[]
+      expect(MyAccount.sortHolds(holds)).toStrictEqual([
+        { pickupByDate: "May 17, 2024" },
+        { pickupByDate: "April 17, 2024" },
+        { pickupByDate: "January 17, 2024" },
+        { pickupByDate: null },
+        { pickupByDate: null },
+        { pickupByDate: null },
+        { pickupByDate: null },
+      ])
+    })
     it("builds Account data model", async () => {
       MyAccount.prototype.fetchCheckouts = async () =>
         Promise.resolve(checkouts)
@@ -227,97 +182,10 @@ describe("MyAccountModel", () => {
       // mocking the fetch calls.
       // @ts-ignore
       const account = await MyAccountFactory("12345", {})
-      expect(account.patron).toStrictEqual({
-        notificationPreference: "Email",
-        name: "NONNA, STREGA",
-        barcode: "23333121538324",
-        expirationDate: "2025-03-28",
-        emails: ["streganonna@gmail.com", "spaghettigrandma@gmail.com"],
-        phones: [
-          {
-            number: "123-456-7890",
-            type: "t",
-          },
-        ],
-        homeLibrary: {
-          code: "sn",
-          name: "Stavros Niarchos Foundation Library (SNFL)",
-        },
-        id: 2772226,
-      })
-      expect(account.holds).toStrictEqual([
-        {
-          patron: "2772226",
-          id: "48636910",
-          pickupByDate: "February 15, 2024",
-          canFreeze: false,
-          frozen: false,
-          status: "READY FOR PICKUP",
-          pickupLocation: {
-            code: "sn",
-            name: "SNFL (formerly Mid-Manhattan)",
-          },
-          title:
-            "Quit like a woman : the radical choice to not drink in a culture obsessed with alcohol",
-          isResearch: false,
-          bibId: "22002760",
-          isNyplOwned: true,
-          catalogHref: "https://borrow.nypl.org/search/card?recordId=22002760",
-        },
-        {
-          bibId: "21317166",
-          canFreeze: false,
-          catalogHref: "https://borrow.nypl.org/search/card?recordId=21317166",
-          frozen: false,
-          id: "42273371",
-          isNyplOwned: true,
-          isResearch: false,
-          patron: "2772226",
-          pickupByDate: null,
-          pickupLocation: {
-            code: "mp",
-            name: "Morris Park",
-          },
-          status: "REQUEST PENDING",
-          title: "2017 Tony Award Season.",
-        },
-      ])
-      expect(account.checkouts).toStrictEqual([
-        {
-          id: "65060571",
-          callNumber: "972.93 D",
-          barcode: "33333432264691",
-          dueDate: "February 9, 2024",
-          patron: "2772226",
-          title: "The Dominican Republic reader : history, culture, politics",
-          isResearch: false,
-          bibId: "21678146",
-          isNyplOwned: true,
-          catalogHref: "https://borrow.nypl.org/search/card?recordId=21678146",
-        },
-        {
-          id: "65060570",
-          callNumber: "Spa FIC ALVAREZ",
-          barcode: "33333455520789",
-          dueDate: "February 9, 2024",
-          patron: "2772226",
-          title: "En el tiempo de las mariposas",
-          isResearch: false,
-          bibId: "17699134",
-          isNyplOwned: true,
-          catalogHref: "https://borrow.nypl.org/search/card?recordId=17699134",
-        },
-      ])
-      expect(account.fines).toStrictEqual({
-        total: 14.99,
-        entries: [
-          {
-            detail: "Replacement",
-            amount: 14.99,
-            date: "June 15, 2023",
-          },
-        ],
-      })
+      expect(account.patron).toStrictEqual(processedPatron)
+      expect(account.holds).toStrictEqual(processedHolds)
+      expect(account.checkouts).toStrictEqual(processedCheckouts)
+      expect(account.fines).toStrictEqual(processedFines)
     })
     it("builds empty Account data model with empty phones and email", async () => {
       MyAccount.prototype.fetchCheckouts = async () => empty
@@ -331,19 +199,7 @@ describe("MyAccountModel", () => {
       MyAccount.prototype.fetchBibData = async () => ({ total: 0, entries: [] })
 
       const emptyAccount = await MyAccountFactory("12345", {})
-      expect(emptyAccount.patron).toStrictEqual({
-        notificationPreference: "Email",
-        name: "NONNA, STREGA",
-        barcode: "23333121538324",
-        expirationDate: "2025-03-28",
-        emails: [],
-        phones: [],
-        homeLibrary: {
-          code: "sn",
-          name: "Stavros Niarchos Foundation Library (SNFL)",
-        },
-        id: 2772226,
-      })
+      expect(emptyAccount.patron).toStrictEqual(emptyPatron)
       expect(emptyAccount.checkouts).toStrictEqual([])
       expect(emptyAccount.holds).toStrictEqual([])
       expect(emptyAccount.fines).toStrictEqual({ total: 0, entries: [] })
@@ -362,7 +218,7 @@ describe("MyAccountModel", () => {
       expect(patronWithFails.holds).toBeNull()
       expect(patronWithFails.checkouts).not.toHaveLength(0)
       expect(patronWithFails.fines.total).toEqual(0)
-      expect(patronWithFails.patron.name).toEqual("NONNA, STREGA")
+      expect(patronWithFails.patron.name).toEqual("Strega Nonna")
     })
     it("will return other processed data if an error is thrown", async () => {
       MyAccount.prototype.fetchCheckouts = async () =>
@@ -380,7 +236,28 @@ describe("MyAccountModel", () => {
       expect(patronWithFails.checkouts).toBe(null)
       expect(patronWithFails.holds).not.toHaveLength(0)
       expect(patronWithFails.fines.total).toEqual(0)
-      expect(patronWithFails.patron.name).toEqual("NONNA, STREGA")
+      expect(patronWithFails.patron.name).toEqual("Strega Nonna")
+    })
+  })
+  describe("fetchBibData", () => {
+    it("can handle bib level holds with no item level holds", async () => {
+      const account = new MyAccount({ get: () => "spaghetti" }, "1234567")
+      const bibHolds = holds.entries.filter((hold) => !hold.record.bibIds)
+      const processedBibHolds = await account.fetchBibData(
+        bibHolds as SierraHold[],
+        "record"
+      )
+      expect(processedBibHolds).toStrictEqual({
+        entries: bibHolds.map((hold) => hold.record),
+      })
+    })
+    it("requests bib info for item level holds", async () => {
+      const fetchSpy = jest.fn().mockResolvedValue({ entries: [{ id: "123" }] })
+      const account = new MyAccount({ get: fetchSpy }, "1234567")
+
+      await account.fetchBibData(holds.entries as SierraHold[], "record")
+
+      expect(fetchSpy).toHaveBeenCalled()
     })
   })
 })

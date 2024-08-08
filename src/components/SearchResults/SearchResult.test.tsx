@@ -5,7 +5,7 @@ import SearchResultsBib from "../../models/SearchResultsBib"
 import { searchResultPhysicalItems } from "../../../__test__/fixtures/searchResultPhysicalItems"
 import { searchResultManyPhysicalItems } from "../../../__test__/fixtures/searchResultManyPhysicalItems"
 import { searchResultElectronicResources } from "../../../__test__/fixtures/searchResultElectronicResources"
-import type { Bib } from "../../types/bibTypes"
+import type { DiscoveryBibResult } from "../../types/bibTypes"
 
 describe("SearchResult with Physical Items", () => {
   beforeEach(() => {
@@ -33,7 +33,9 @@ describe("SearchResult with Physical Items", () => {
 
 describe("SearchResult with Many Physical Items", () => {
   beforeEach(() => {
-    const bib = new SearchResultsBib(searchResultManyPhysicalItems as Bib)
+    const bib = new SearchResultsBib(
+      searchResultManyPhysicalItems as DiscoveryBibResult
+    )
     render(<SearchResult bib={bib} />)
   })
 
@@ -43,7 +45,7 @@ describe("SearchResult with Many Physical Items", () => {
     })
     expect(resultTitleLink).toHaveAttribute(
       "href",
-      "/research/research-catalog/bib/b14753192#items-table"
+      "/research/research-catalog/bib/b14753192#item-table"
     )
   })
 })

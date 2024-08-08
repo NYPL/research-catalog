@@ -1,29 +1,46 @@
 import type { IconNames } from "@nypl/design-system-react-components"
-import type { Patron, SierraCodeName } from "../../../types/myAccountTypes"
-import { notificationPreferenceMap } from "../../../utils/myAccountData"
-import { filteredPickupLocations } from "../../../../__test__/fixtures/processedMyAccountData"
+import type { Patron, PatronUpdateBody } from "../../../types/myAccountTypes"
 
-type PutRequestPayloadType = {
-  emails?: string[]
-  phones?: Phone[]
-  fixedFields?: {
-    /* eslint-disable @typescript-eslint/naming-convention */
-    268: {
-      label: "Notice Preference"
-      value: string
-    }
-  }
-  homeLibrary?: string
-}
+import { notificationPreferenceTuples } from "../../../utils/myAccountUtils"
+
 type Phone = { number: string; type: string }
 type PhoneOrEmail = string | Phone
+
+export const isFormValid = (updatedForm: {
+  emails: string
+  phones: string
+  notificationPreference: string
+}) => {
+  const phoneRegex = /^(?:\D*\d){10,11}\D*$/
+  if (updatedForm.notificationPreference === "p") {
+    return updatedForm.phones !== "" && phoneRegex.test(updatedForm.phones)
+  } else if (updatedForm.notificationPreference === "z") {
+    return updatedForm.emails !== ""
+  } else return true
+}
+
+export const formatPhoneNumber = (value: Phone[]) => {
+  const number = value[0]?.number
+  if (!number) return
+  if (number.length === 11) {
+    return `${number[0]}-${number.substring(1, 4)}-${number.substring(
+      4,
+      7
+    )}-${number.substring(7)}`
+  } else if (number.length === 10) {
+    return `${number.substring(0, 3)}-${number.substring(
+      3,
+      6
+    )}-${number.substring(6)}`
+  } else return number
+}
 
 export const accountSettings = [
   {
     field: "phones",
     icon: "communicationCall",
     term: "Phone",
-    description: (value: Phone[]) => value[0]?.number,
+    description: formatPhoneNumber,
   },
   {
     field: "emails",
@@ -35,18 +52,20 @@ export const accountSettings = [
     field: "notificationPreference",
     icon: "communicationChatBubble",
     term: "Notification preference",
+    description: (pref): [code: string, label: string] =>
+      notificationPreferenceTuples.find(([code]) => pref === code)[1],
   },
   {
     field: "homeLibrary",
     icon: "actionHome",
     term: "Home library",
-    description: (value: SierraCodeName) => value?.name,
+    description: (location) => location?.name,
   },
   {
     field: "pin",
     icon: "actionLockClosed",
     term: "Pin/Password",
-    description: (_) => "****",
+    description: () => "****",
   },
 ] as {
   field: string
@@ -55,7 +74,7 @@ export const accountSettings = [
   description?: (any) => string
 }[]
 
-export const updateArrayValue = (
+export const updatePhoneOrEmailArrayWithNewPrimary = (
   newPrimary: PhoneOrEmail,
   currentValues: PhoneOrEmail[]
 ) => {
@@ -69,26 +88,31 @@ export const updateArrayValue = (
 /** Parses the account settings form submission event target and turns it into
  * the payload for the patron settings update request.
  */
-export const parsePayload = (formSubmissionBody, settingsData: Patron) => {
+export const parseAccountSettingsPayload = (
+  formSubmissionBody,
+  settingsData: Patron
+) => {
   return accountSettings.reduce((putRequestPayload, setting) => {
     const field = setting.field
     const fieldValue = formSubmissionBody[field]?.value
-    if (fieldValue?.length < 1) return putRequestPayload
+    if (!fieldValue) {
+      return putRequestPayload
+    }
     switch (field) {
       case "pin":
         // pin is handled in a separate dialog
         break
       case "emails":
-        putRequestPayload["emails"] = updateArrayValue(
+        putRequestPayload["emails"] = updatePhoneOrEmailArrayWithNewPrimary(
           fieldValue,
           settingsData.emails
         ) as string[]
         break
-      // TODO: right now we are assuming that all phones are mobile phones.
-      // follow on ticket outlines two different inputs
+      // Accepting one phone number as primary, since NYPL currently doesn't differentiate between mobile
+      // and home phones.
       case "phones":
-        putRequestPayload["phones"] = updateArrayValue(
-          { number: fieldValue, type: "t" },
+        putRequestPayload["phones"] = updatePhoneOrEmailArrayWithNewPrimary(
+          { number: fieldValue.match(/\d+/g).join(""), type: "t" },
           settingsData.phones
         ) as Phone[]
         break
@@ -101,21 +125,11 @@ export const parsePayload = (formSubmissionBody, settingsData: Patron) => {
         }
         break
       case "homeLibrary":
-        putRequestPayload[field] = fieldValue
+        // Sierra API holds PUT endpoint only takes homeLibraryCode, which is a
+        // different type than the homeLibrary object used everywhere else in
+        // the app.
+        putRequestPayload.homeLibraryCode = fieldValue.split("@")[0]
     }
     return putRequestPayload
-  }, {} as PutRequestPayloadType)
-}
-
-export const updatePatronData = (
-  originalPatronData: Patron,
-  patronUpdateBody: PutRequestPayloadType
-) => {
-  const newData = { ...originalPatronData }
-  newData.notificationPreference =
-    notificationPreferenceMap[patronUpdateBody.fixedFields[268].value]
-  newData.emails = patronUpdateBody.emails
-  newData.phones = patronUpdateBody.phones
-  newData.homeLibrary = filteredPickupLocations[patronUpdateBody.homeLibrary]
-  return newData
+  }, {} as PatronUpdateBody)
 }

@@ -3,12 +3,16 @@ import {
   FormField,
   Select,
   TextInput,
+  Box,
+  type TextInputRefType,
 } from "@nypl/design-system-react-components"
-import { notificationPreferenceMap } from "../../../utils/myAccountData"
-import type { Patron } from "../../../types/myAccountTypes"
-import { accountSettings } from "./AccountSettingsUtils"
+import { notificationPreferenceTuples } from "../../../utils/myAccountUtils"
+import type { Patron, SierraCodeName } from "../../../types/myAccountTypes"
+import { accountSettings, isFormValid } from "./AccountSettingsUtils"
 import { buildListElementsWithIcons } from "../IconListElement"
-import type { JSX, ReactNode } from "react"
+import type { Dispatch, JSX, MutableRefObject, ReactNode } from "react"
+import { useState } from "react"
+import PasswordModal from "./PasswordModal"
 
 export const AccountSettingsDisplay = ({ patron }: { patron: Patron }) => {
   const terms = accountSettings
@@ -16,11 +20,9 @@ export const AccountSettingsDisplay = ({ patron }: { patron: Patron }) => {
       const description = setting.description
         ? setting.description(patron[setting.field])
         : patron[setting.field]
-
       return {
         icon: setting.icon,
         term: setting.term,
-        // pin is masked so description is a default "****"
         description,
       }
     })
@@ -28,7 +30,30 @@ export const AccountSettingsDisplay = ({ patron }: { patron: Patron }) => {
   return <>{terms.map(buildListElementsWithIcons)}</>
 }
 
-export const AccountSettingsForm = ({ patron }: { patron: Patron }) => {
+export const AccountSettingsForm = ({
+  pickupLocations,
+  patron,
+  setIsFormValid,
+  firstInputRef,
+}: {
+  pickupLocations: SierraCodeName[]
+  firstInputRef: MutableRefObject<TextInputRefType>
+  patron: Patron
+  setIsFormValid: Dispatch<React.SetStateAction<boolean>>
+}) => {
+  const [formData, setFormData] = useState({
+    phones: patron.phones[0]?.number,
+    emails: patron.emails[0],
+    notificationPreference: patron.notificationPreference[0],
+  })
+
+  const handleInputChange = (e) => {
+    const { value, name } = e.target
+    const updatedFormData = { ...formData, [name]: value }
+    setIsFormValid(isFormValid(updatedFormData))
+    setFormData(updatedFormData)
+  }
+
   const formInputs = accountSettings
     .map((setting) => {
       let inputField:
@@ -39,43 +64,65 @@ export const AccountSettingsForm = ({ patron }: { patron: Patron }) => {
         | Iterable<ReactNode>
       switch (setting.term) {
         case "Home library":
-          inputField = (
-            <Select
-              name={setting.field}
-              id="update-home-library-selector"
-              labelText="Update home library"
-              showLabel={false}
-            >
-              <option value={patron.homeLibrary.code}>
-                {patron.homeLibrary.name}
-              </option>
-            </Select>
-          )
+          {
+            if (pickupLocations) {
+              const sortedPickupLocations = [
+                patron.homeLibrary,
+                ...pickupLocations.filter(
+                  (loc) => loc.code.trim() !== patron.homeLibrary.code.trim()
+                ),
+              ]
+              inputField = (
+                <Select
+                  name={setting.field}
+                  id="update-home-library-selector"
+                  labelText="Update home library"
+                  showLabel={false}
+                >
+                  {sortedPickupLocations.map((loc, i) => (
+                    <option
+                      key={`location-option-${i}`}
+                      value={`${loc.code}@${loc.name}`}
+                    >
+                      {loc.name}
+                    </option>
+                  ))}
+                </Select>
+              )
+            }
+          }
           break
         case "Notification preference":
-          inputField = (
-            <Select
-              name={setting.field}
-              id="notification-preference-selector"
-              labelText="Update notification preference"
-              showLabel={false}
-            >
-              {Object.keys(notificationPreferenceMap).map((pref) => (
-                <option key={pref + "-option"} value={pref}>
-                  {notificationPreferenceMap[pref]}
-                </option>
-              ))}
-            </Select>
-          )
+          {
+            inputField = (
+              <Select
+                onChange={handleInputChange}
+                name={setting.field}
+                id="notification-preference-selector"
+                labelText="Update notification preference"
+                showLabel={false}
+                value={formData.notificationPreference}
+              >
+                {notificationPreferenceTuples.map((pref) => (
+                  <option key={pref + "-option"} value={pref[0]}>
+                    {pref[1]}
+                  </option>
+                ))}
+              </Select>
+            )
+          }
           break
         case "Phone":
           inputField = (
             <TextInput
+              ref={firstInputRef}
               name={setting.field}
-              defaultValue={patron.phones[0]?.number}
+              value={formData.phones}
               id="phone-text-input"
               labelText="Update phone number"
               showLabel={false}
+              onChange={handleInputChange}
+              placeholder="000-000-0000"
             />
           )
           break
@@ -83,15 +130,21 @@ export const AccountSettingsForm = ({ patron }: { patron: Patron }) => {
           inputField = (
             <TextInput
               name={setting.field}
-              defaultValue={patron.emails[0]}
+              value={formData.emails}
               id="email-text-input"
               labelText="Update email"
               showLabel={false}
+              onChange={handleInputChange}
             />
           )
           break
         case "Pin/Password":
-          inputField = <Text>****</Text>
+          inputField = (
+            <Box>
+              <Text mb="0">****</Text>
+              <PasswordModal patron={patron} />
+            </Box>
+          )
       }
       return {
         term: setting.term,

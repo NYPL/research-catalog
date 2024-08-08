@@ -1,5 +1,4 @@
 import {
-  getPaginationOffsetStrings,
   getSearchQuery,
   mapQueryToSearchParams,
   mapRequestBodyToSearchParams,
@@ -169,23 +168,6 @@ describe("searchUtils", () => {
       })
     })
   })
-  describe("getPaginationOffsetStrings", () => {
-    it("returns a tuple of strings with the correct start and end values for the first page", () => {
-      const [start, end] = getPaginationOffsetStrings(1, 1200)
-      expect(start).toEqual("1")
-      expect(end).toEqual("50")
-    })
-    it("returns a tuple of strings with the correct start and end values for any given page", () => {
-      const [start, end] = getPaginationOffsetStrings(5, 1200)
-      expect(start).toEqual("201")
-      expect(end).toEqual("250")
-    })
-    it("correctly sets the end value for the last page", () => {
-      const [start, end] = getPaginationOffsetStrings(24, 1195)
-      expect(start).toEqual("1,151")
-      expect(end).toEqual("1,195")
-    })
-  })
   describe("getSearchResultsHeading", () => {
     it("doesn't display empty keyword if other params are present", () => {
       const heading = getSearchResultsHeading(
@@ -256,6 +238,40 @@ describe("searchUtils", () => {
       expect(heading).toEqual(
         'Displaying 201-250 of 1,200 results for keyword "cats"'
       )
+    })
+
+    describe("identifier searches", () => {
+      it("returns the correct heading string for OCLC searches", () => {
+        const heading = getSearchResultsHeading(
+          { page: 1, identifiers: { oclc: "1234" } },
+          3
+        )
+        expect(heading).toEqual('Displaying 3 of 3 results for OCLC "1234"')
+      })
+
+      it("returns the correct heading string for ISBN searches", () => {
+        const heading = getSearchResultsHeading(
+          { page: 5, identifiers: { isbn: "1234" } },
+          3
+        )
+        expect(heading).toEqual('Displaying 3 of 3 results for ISBN "1234"')
+      })
+
+      it("returns the correct heading string for ISSN searches", () => {
+        const heading = getSearchResultsHeading(
+          { page: 5, identifiers: { issn: "1234" } },
+          3
+        )
+        expect(heading).toEqual('Displaying 3 of 3 results for ISSN "1234"')
+      })
+
+      it("returns the correct heading string for LCCN searches", () => {
+        const heading = getSearchResultsHeading(
+          { page: 5, identifiers: { lccn: "1234" } },
+          3
+        )
+        expect(heading).toEqual('Displaying 3 of 3 results for LCCN "1234"')
+      })
     })
   })
 })

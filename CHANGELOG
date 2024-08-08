@@ -5,9 +5,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Prerelease
+## [1.2.0] 2024-08-07
+
+### Added
+
+- Add Item Filtering functionality (SCC-4139)
+- Add Item Table View All functionality (SCC-4140)
+- Add Item Table pagination and Bib items API route (SCC-4136)
+- Add No DRB Results copy and image to DRBContainer (SCC-4116)
+- Add Bib model parent class and rendered ItemTable in Bib Details (SCC-3964)
+- Add update pickup location functionality to Requests tab in account page (SCC-3930)
+- Add caching of pickup location. Update Patron type to have a SierraCodeName for homeLibrary instead of a string for homeLibraryCode (SCC-4060)
+- Add support for `redirectOnMatch` for OCLC searches that match a single record (SCC-4166)
 
 ### Updated
+
+- Replace custom ItemFilter components with FilterBarInline, MultiSelectGroup, and MultiSelect components from the DS (display-only except for clear button) (SCC-4176)
+- Pass bibDetail test ids as kebabCase (SCC-4150)
+- Refactored bibUtils and removed BibParams type (SCC-4136)
+- Created npm run test-watch-quiet to run tests for changed files without printing the HTML from RTL errors.
+- Update Account Settings notification preference selector to be a controlled component in order to validate based on the selected preference. This includes changing the Patron type that is returned from the My Account model
+- Extracted getEmailParams from Feedback API route and added test (SCC-4032)
+- Replaced all modals with new 'confirmation'/'default' variant (SCC-4110)
+- Extracted pickup time estimator and replaced with npm package @nypl/pickup-time-estimator
+
+### Fixed
+
+- Fixed issue caused by formatPatronName when a non-comma separated value is passed in (SCC-4175)
+- Fixed mobile tabs width on My Account page so text is readable when a user zooms in.
 
 ## Hotfixes 2024-05-22
 
@@ -40,6 +65,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 
+- Updated Bib Page to server-render the item table by default when accessed via the /all route (SCC-4187)
+- Created update patron settings functionality via the Settings tab in My Account. Currently only supports phone, email, and notification preference updates. (SCC-3928)
 - Extracted SearchResultsSort into its own component to render it in a different location on mobile.
 - No longer hiding the Item Location in the ItemTable on mobile.
 - Updated to DS v3.1.1 (as part of SCC-4090)

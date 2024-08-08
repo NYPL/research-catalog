@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
 // Item structure coming from the Search Results API response
-export interface SearchResultsItem {
+
+export interface DiscoveryItemResult {
   uri?: string
   idNyplSourceId?: ItemSourceID
   accessMessage?: JSONLDValue[]
@@ -20,16 +21,14 @@ export interface SearchResultsItem {
 export interface ItemLocation extends JSONLDValue {
   customerCode?: string
   prefLabel?: string
-  endpoint?: ItemLocationEndpoint
+  endpoint?: string
 }
 
 export type ItemLocationKey = "Schwarzman" | "Performing" | "Schomburg"
 
-export type ItemLocationEndpoint = "schwarzman" | "lpa" | "schomburg"
-
 export interface ItemTableParams {
   isDesktop?: boolean
-  isBibPage?: boolean
+  inSearchResult?: boolean
   isArchiveCollection?: boolean
 }
 

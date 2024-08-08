@@ -1,5 +1,3 @@
-import logger from "../../logger"
-import sierraClient from "../server/sierraClient"
 import type { MarcSubfield } from "../types/bibDetailsTypes"
 import type {
   Checkout,
@@ -15,7 +13,9 @@ import type {
   SierraBibEntry,
   BibDataMapType,
 } from "../types/myAccountTypes"
-import { notificationPreferenceMap } from "../utils/myAccountData"
+
+import { buildPatron, formatDate } from "../utils/myAccountUtils"
+import { getPickupLocations } from "../utils/pickupLocationsUtils"
 
 class MyAccountModelError extends Error {
   constructor(errorDetail: string, error: Error) {
@@ -66,12 +66,12 @@ export default class MyAccount {
     try {
       holdBibData = await this.fetchBibData(holds.entries, "record")
     } catch (e) {
-      logger.error("MyAccount#fetchBibData error: " + e.message)
+      console.error("MyAccount#fetchBibData error: " + e.message || e)
     }
 
     const holdsWithBibData = this.buildHolds(holds.entries, holdBibData.entries)
-
-    return holdsWithBibData
+    const sortedHolds = MyAccount.sortHolds(holdsWithBibData)
+    return sortedHolds
   }
 
   async fetchPatron() {
@@ -95,30 +95,30 @@ export default class MyAccount {
   }
 
   async fetchBibData(
-    holdsOrCheckouts: any[],
-    itemOrRecord: string
+    holdsOrCheckouts: (SierraHold | SierraCheckout)[],
+    itemOrRecord: "item" | "record"
   ): Promise<{
     total?: number
     start?: number
     entries: SierraBibEntry[]
   }> {
     if (!holdsOrCheckouts?.length) return { entries: [] }
-    const itemLevelHoldsorCheckouts = []
-    const bibLevelHolds = []
 
-    // Separating bib level and item level records so we only fetch bib data for item level holds/checkouts.
-    holdsOrCheckouts.forEach((holdOrCheckout) => {
-      if (holdOrCheckout[itemOrRecord].bibIds) {
-        itemLevelHoldsorCheckouts.push(holdOrCheckout[itemOrRecord].bibIds[0])
-      } else {
-        bibLevelHolds.push(holdOrCheckout.record)
+    const { bibLevelHolds, itemLevelHoldsorCheckouts } =
+      MyAccount.filterBibLevelHolds(holdsOrCheckouts, itemOrRecord)
+
+    const bibData = { entries: bibLevelHolds }
+    let itemLevelBibData: { entries: SierraBibEntry[] }
+    if (itemLevelHoldsorCheckouts.length) {
+      try {
+        itemLevelBibData = await this.client.get(
+          `bibs?id=${itemLevelHoldsorCheckouts}&fields=default,varFields`
+        )
+      } catch (e) {
+        throw `error getting bibs?id=${itemLevelHoldsorCheckouts}&fields=default,varFields`
       }
-    })
-
-    const bibData = await this.client.get(
-      `bibs?id=${itemLevelHoldsorCheckouts}&fields=default,varFields`
-    )
-    bibData.entries = bibData.entries.concat(bibLevelHolds)
+      bibData.entries = bibData.entries.concat(itemLevelBibData.entries)
+    }
     return bibData
   }
 
@@ -151,14 +151,44 @@ export default class MyAccount {
     return { isResearch: true, isNyplOwned: false }
   }
 
+  static filterBibLevelHolds(
+    holdsOrCheckouts: (SierraHold | SierraCheckout)[],
+    itemOrRecord: "item" | "record"
+  ) {
+    const itemLevelHoldsorCheckouts = []
+    const bibLevelHolds = []
+    holdsOrCheckouts.forEach((holdOrCheckout) => {
+      const isItemLevel = holdOrCheckout[itemOrRecord].bibIds
+      if (isItemLevel) {
+        itemLevelHoldsorCheckouts.push(holdOrCheckout[itemOrRecord].bibIds[0])
+      } else {
+        bibLevelHolds.push((holdOrCheckout as SierraHold).record)
+      }
+    })
+    return { bibLevelHolds, itemLevelHoldsorCheckouts }
+  }
+
   static buildBibData(bibs: SierraBibEntry[]): BibDataMapType {
     return bibs.reduce((bibDataMap: BibDataMapType, bibFields) => {
       const { isResearch, isNyplOwned } =
         this.getResearchAndOwnership(bibFields)
-      const title = bibFields.title
+      const title = `${bibFields.title}${
+        bibFields.author && isNyplOwned ? ` / ${bibFields.author}` : ""
+      }`
       bibDataMap[bibFields.id] = { title, isResearch, isNyplOwned }
       return bibDataMap
     }, {})
+  }
+
+  static sortHolds(holds: Hold[]) {
+    const holdsWithNoPickupByDates = holds.filter((hold) => !hold.pickupByDate)
+    const holdsWithPickupByDates = holds.filter((hold) => hold.pickupByDate)
+    const sortedHoldsWithDates = holdsWithPickupByDates.sort((a, b) => {
+      return (
+        new Date(b.pickupByDate).valueOf() - new Date(a.pickupByDate).valueOf()
+      )
+    })
+    return [...sortedHoldsWithDates, ...holdsWithNoPickupByDates]
   }
 
   buildHolds(holds: SierraHold[], bibData: SierraBibEntry[]): Hold[] {
@@ -166,7 +196,7 @@ export default class MyAccount {
     try {
       bibDataMap = MyAccount.buildBibData(bibData)
     } catch (e) {
-      logger.error(
+      console.error(
         "Error building bibData in MyAccount#buildHolds: " + e.message
       )
       throw new MyAccountModelError("building bibData for holds", e)
@@ -196,7 +226,9 @@ export default class MyAccount {
         }
       })
     } catch (e) {
-      logger.error("Error building holds in MyAccount#buildHolds: " + e.message)
+      console.error(
+        "Error building holds in MyAccount#buildHolds: " + e.message
+      )
       throw new MyAccountModelError("building holds", e)
     }
   }
@@ -209,35 +241,39 @@ export default class MyAccount {
     try {
       bibDataMap = MyAccount.buildBibData(bibData)
     } catch (e) {
-      logger.error(
+      console.error(
         "MyAccount#buildCheckouts: Error building bib data for checkouts: ",
         e.message
       )
       throw new MyAccountModelError("building bibData for checkouts", e)
     }
     try {
-      return checkouts.map((checkout: SierraCheckout) => {
-        const bibId = checkout.item.bibIds[0]
-        const bibForCheckout = bibDataMap[bibId]
-        return {
-          id: MyAccount.getRecordId(checkout.id),
-          // Partner items do not have call numbers. Null has to be explicitly
-          // returned for JSON serialization in getServerSideProps
-          callNumber: checkout.item.callNumber || null,
-          barcode: checkout.item.barcode,
-          dueDate: MyAccount.formatDate(checkout.dueDate),
-          patron: MyAccount.getRecordId(checkout.patron),
-          title: bibForCheckout.title,
-          isResearch: bibForCheckout.isResearch,
-          bibId: bibId,
-          isNyplOwned: bibForCheckout.isNyplOwned,
-          catalogHref: bibForCheckout.isNyplOwned
-            ? bibForCheckout.isResearch
-              ? `https://nypl.org/research/research-catalog/bib/b${bibId}`
-              : `https://borrow.nypl.org/search/card?recordId=${bibId}`
-            : null,
-        }
-      })
+      return checkouts
+        .map((checkout: SierraCheckout) => {
+          const bibId = checkout.item.bibIds[0]
+          const bibForCheckout = bibDataMap[bibId]
+          return {
+            id: MyAccount.getRecordId(checkout.id),
+            // Partner items do not have call numbers. Null has to be explicitly
+            // returned for JSON serialization in getServerSideProps
+            callNumber: checkout.item.callNumber || null,
+            barcode: checkout.item.barcode,
+            dueDate: MyAccount.formatDate(checkout.dueDate),
+            patron: MyAccount.getRecordId(checkout.patron),
+            title: bibForCheckout.title,
+            isResearch: bibForCheckout.isResearch,
+            bibId: bibId,
+            isNyplOwned: bibForCheckout.isNyplOwned,
+            catalogHref: bibForCheckout.isNyplOwned
+              ? bibForCheckout.isResearch
+                ? `https://nypl.org/research/research-catalog/bib/b${bibId}`
+                : `https://borrow.nypl.org/search/card?recordId=${bibId}`
+              : null,
+          }
+        })
+        .sort((a, b) => {
+          return new Date(b.dueDate).valueOf() - new Date(a.dueDate).valueOf()
+        })
     } catch (e) {
       throw new MyAccountModelError("building checkouts", e)
     }
@@ -245,18 +281,7 @@ export default class MyAccount {
 
   buildPatron(patron: SierraPatron): Patron {
     try {
-      const notificationPreference =
-        notificationPreferenceMap[patron.fixedFields["268"].value]
-      return {
-        notificationPreference,
-        name: patron.names[0],
-        barcode: patron.barcodes[0],
-        expirationDate: patron.expirationDate,
-        emails: patron.emails || [],
-        phones: patron.phones || [],
-        homeLibrary: patron.homeLibrary || null,
-        id: patron.id,
-      }
+      return buildPatron(patron)
     } catch (e) {
       throw new MyAccountModelError("building patron", e)
     }
@@ -283,17 +308,13 @@ export default class MyAccount {
       throw new MyAccountModelError("building fines", e)
     }
   }
+
   /**
    * getDueDate
    * Returns date in readable string ("Month day, year")
    */
   static formatDate(date: string | number | Date) {
-    if (!date) return null
-    const d = new Date(date)
-    const year = d.getFullYear()
-    const day = d.getDate()
-    const month = d.toLocaleString("default", { month: "long" })
-    return `${month} ${day}, ${year}`
+    return formatDate(date)
   }
 
   /**
@@ -323,43 +344,17 @@ export default class MyAccount {
 export const MyAccountFactory = async (id: string, client) => {
   const patronFetcher = new MyAccount(client, id)
   const sierraData = await Promise.allSettled([
+    getPickupLocations(client),
     patronFetcher.getCheckouts(),
     patronFetcher.getHolds(),
     patronFetcher.getPatron(),
     patronFetcher.getFines(),
   ])
-  const [checkouts, holds, patron, fines] = sierraData.map((data) => {
-    if (data.status === "fulfilled") return data.value
-    else return null
-  }) as [Checkout[], Hold[], Patron, Fine]
-  return { checkouts, holds, patron, fines }
-}
-
-export const getPickupLocations = async () => {
-  const locations = await fetchPickupLocations()
-  return filterPickupLocations(locations)
-}
-
-const fetchPickupLocations = async () => {
-  const client = await sierraClient()
-  return await client.get("/branches/pickupLocations")
-}
-
-export const filterPickupLocations = (locations) => {
-  const pickupLocationDisqualification = [
-    "closed",
-    "onsite",
-    "staff only",
-    "edd",
-    "performing arts",
-    "reopening",
-  ]
-  const disqualified = (locationName, testString) =>
-    locationName.toLowerCase().includes(testString)
-  const isOpenBranchLocation = ({ name }: SierraCodeName, i) =>
-    !pickupLocationDisqualification.find((testString: string, j) =>
-      disqualified(name, testString)
-    )
-
-  return locations.filter(isOpenBranchLocation)
+  const [pickupLocations, checkouts, holds, patron, fines] = sierraData.map(
+    (data) => {
+      if (data.status === "fulfilled") return data.value
+      else return null
+    }
+  ) as [SierraCodeName[], Checkout[], Hold[], Patron, Fine]
+  return { pickupLocations, checkouts, holds, patron, fines }
 }

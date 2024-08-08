@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import type { SearchResultsItem, JSONLDValue } from "./itemTypes"
+import type { DiscoveryItemResult, JSONLDValue } from "./itemTypes"
 import type { AnnotatedMarc } from "./bibDetailsTypes"
+import type { Aggregation, ItemFilterQueryParams } from "./filterTypes"
 
-export interface Bib {
+export interface DiscoveryBibResult {
   extent?: string[]
   dimensions?: string[]
   note?: Note[]
@@ -20,7 +21,9 @@ export interface Bib {
   electronicResources?: ElectronicResource[]
   issuance?: JSONLDValue[]
   numItemsTotal?: number
-  items?: SearchResultsItem[]
+  numItemsMatched?: number
+  items?: DiscoveryItemResult[]
+  itemAggregations?: Aggregation[]
   parallelTitleDisplay?: string[]
   supplementaryContent?: SupplementaryContent[]
   contributorLiteral?: string[]
@@ -71,26 +74,20 @@ export interface ElectronicResource {
 }
 
 export interface BibResponse {
-  bib?: Bib
+  discoveryBibResult?: DiscoveryBibResult
   annotatedMarc?: AnnotatedMarc
   status: 200 | 307 | 404
   redirectUrl?: string
 }
 
-export interface Bib {
-  uri?: string
-}
-
-export interface BibParams {
-  itemsFrom?: number
-  itemFilterQuery?: string
-  features?: string[]
-}
-
-export interface BibQueryParams {
+export interface BibQueryParams extends ItemFilterQueryParams {
+  id?: string
   features?: string
   item_page?: number
+  items_size?: number
   items_from?: number
+  view_all_items?: boolean
+  batch_size?: number
 }
 
 type SubjectHeading = {
