@@ -69,7 +69,7 @@ export const doRedirectBasedOnNyplAccountRedirects = (count: number) => {
  * server url from the NextJS json API. We don't want NOTHING to do with that.
  */
 export function getLoginRedirect(req, defaultPath?: string) {
-  const protocol = req.protocol || "http"
+  const protocol = "https"
   const hostname = appConfig.apiEndpoints.domain[appConfig.environment]
   const path = req.url?.includes("_next") ? defaultPath : req.url
   const originalUrl = BASE_URL + path
