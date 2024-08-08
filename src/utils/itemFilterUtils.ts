@@ -6,6 +6,7 @@ import type {
   AppliedItemFilters,
   CollapsedMultiValueAppliedFilters,
   ItemFilterQueryParams,
+  SelectedCheckboxes,
 } from "../types/filterTypes"
 
 export const isRecapLocation = (loc: string) => {
@@ -65,19 +66,34 @@ export const buildAppliedFiltersTagSetData = (
   return filters
 }
 
+/**
+ * Returns a tuple with the new filter values and the field that the value was removed from.
+ * We need to be able to remove a filter without prior knowledge of the filter group that contains it
+ * So that we can clear individual filters with the TagSet clearing buttons.
+ */
 export const removeValueFromFilters = (
-  idToRemove: string,
+  id: string,
   appliedFilters: AppliedItemFilters
-): [values?: string[], field?: string] => {
-  let valuesAndField: [values?: string[], field?: string] = [null, null]
-  Object.keys(appliedFilters).forEach((field) => {
-    const filterValueIndex = appliedFilters[field].indexOf(idToRemove)
-    if (filterValueIndex >= 0) {
-      appliedFilters[field].splice(filterValueIndex, 1)
-      valuesAndField = [appliedFilters[field], field]
-    }
+) => {
+  // find the filter field that includes the value to remove
+  const field = Object.keys(appliedFilters).find((field) => {
+    return appliedFilters[field].includes(id)
   })
-  return valuesAndField
+  // get a copy of the filter values with the value removed
+  const newValues = appliedFilters[field].filter(
+    (filterValue: string) => filterValue !== id
+  )
+  return [newValues, field]
+}
+
+export const getSelectedCheckboxesFromAppliedFilters = (
+  appliedFilters: AppliedItemFilters
+): SelectedCheckboxes => {
+  return {
+    location: { items: appliedFilters.location },
+    format: { items: appliedFilters.format },
+    status: { items: appliedFilters.status },
+  }
 }
 
 /* eslint-disable @typescript-eslint/naming-convention */

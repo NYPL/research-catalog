@@ -1,4 +1,4 @@
-import { type SyntheticEvent, useRef } from "react"
+import { type SyntheticEvent, useState, useRef } from "react"
 import React from "react"
 import {
   FilterBarInline,
@@ -16,17 +16,21 @@ import type {
   Aggregation,
   ItemFilterQueryParams,
   AppliedItemFilters,
+  SelectedCheckboxes,
 } from "../../types/filterTypes"
 import { ItemFilterData, LocationFilterData } from "../../models/ItemFilterData"
 import {
   buildAppliedFiltersTagSetData,
   buildItemFilterQuery,
+  getSelectedCheckboxesFromAppliedFilters,
   removeValueFromFilters,
 } from "../../utils/itemFilterUtils"
 
 interface ItemFilterContainerProps {
   itemAggregations: Aggregation[]
-  handleFiltersChange?: (newAppliedFilterQuery: ItemFilterQueryParams) => void
+  handleFiltersChange?: (
+    newAppliedFilterQuery: ItemFilterQueryParams
+  ) => Promise<void>
   appliedFilters?: AppliedItemFilters
   filtersAreApplied?: boolean
 }
@@ -37,6 +41,9 @@ const ItemFilters = ({
   appliedFilters = { location: [], format: [], status: [], year: [] },
   filtersAreApplied = false,
 }: ItemFilterContainerProps) => {
+  // We have to set the year value in state to be able to test form control in jest.
+  // TODO: Remove this if we can find a better way to test form submissions in jest.
+  const [year, setYear] = useState(appliedFilters.year[0] || "")
   const filterData = useRef<ItemFilterData[]>(
     itemAggregations.map((aggregation: Aggregation) => {
       if (aggregation.field === "location")
@@ -50,59 +57,54 @@ const ItemFilters = ({
     filterData
   )
 
-  const submitFilters = (selectedFilters: string[], field: string) => {
+  const selectedCheckboxes: SelectedCheckboxes =
+    getSelectedCheckboxesFromAppliedFilters(appliedFilters)
+
+  const submitFilters = async (selectedFilters: string[], field: string) => {
     const newFilters = { ...appliedFilters, [field]: selectedFilters }
     const locationFilterData = filterData.find(
       (filter) => filter.field === "location"
     ) as LocationFilterData
     const itemFilterQuery = buildItemFilterQuery(
       newFilters,
-      locationFilterData.recapLocations()
+      locationFilterData.recapLocations
     )
-    handleFiltersChange(itemFilterQuery)
+    await handleFiltersChange(itemFilterQuery)
   }
 
-  const clearAllFilters = () => {
-    handleFiltersChange({})
+  const clearAllFilters = async () => {
+    setYear("")
+    await handleFiltersChange({})
   }
 
-  const handleRemoveFilterClick = ({ id }: TagSetFilterDataProps) => {
+  const handleRemoveFilter = async (id: string) => {
     if (id === "clear-filters") {
-      clearAllFilters()
+      await clearAllFilters()
     } else {
-      const [filtersWithValueRemoved, field] = removeValueFromFilters(
-        id,
-        appliedFilters
-      )
-      if (filtersWithValueRemoved && field)
-        submitFilters(filtersWithValueRemoved, field)
+      const [newValues, field] = removeValueFromFilters(id, appliedFilters)
+      await submitFilters(newValues, field)
+    }
+  }
+
+  const handleMultiSelectChange = async (filterId: string, field: string) => {
+    const selectedFieldCheckboxes = appliedFilters[field]
+    const indexOfCheckboxId = selectedFieldCheckboxes.indexOf(filterId)
+
+    if (indexOfCheckboxId >= 0) {
+      await handleRemoveFilter(filterId)
+    } else {
+      await submitFilters([filterId, ...selectedFieldCheckboxes], field)
     }
   }
 
   const handleYearSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
-    const year = e.target[0].value
-    submitFilters([year], "year")
+    await submitFilters(year.length ? [year] : [], "year")
   }
 
-  // TODO: Replace this with actual filter data
-  const filterCheckboxGroups: FilterCheckboxGroup[] = [
-    {
-      id: "location",
-      name: "Location",
-      items: [{ id: "item-id", name: "Test" }],
-    },
-    {
-      id: "format",
-      name: "Format",
-      items: [{ id: "item-id", name: "Test" }],
-    },
-    {
-      id: "status",
-      name: "Status",
-      items: [{ id: "item-id", name: "Test" }],
-    },
-  ]
+  const filterCheckboxGroups: FilterCheckboxGroup[] = filterData.map(
+    (filter) => filter.formattedFilterData
+  )
 
   // function for renderChildren prop of FilterBarInline
   const filterBarContent = () => {
@@ -114,19 +116,22 @@ const ItemFilters = ({
           renderMultiSelect={renderMultiSelect}
         />
         <Box minWidth="440">
-          <Label id="year-filter-label" htmlFor="year-filter">
+          <Label id="year-filter-label" htmlFor="searchbar-form-year-filter">
             Search by Year
           </Label>
           <SearchBar
             id="year-filter"
-            labelText="Apply"
+            labelText="Apply year filter"
             aria-labelledby="year-filter-label"
+            data-testid="year-filter"
             textInputProps={{
               placeholder: "YYYY",
               isClearable: true,
               labelText: "Search by year",
-              name: "textInputName",
-              value: appliedFilters.year[0] || "",
+              name: "year-filter",
+              value: year,
+              onChange: ({ target }) => setYear(target.value),
+              isClearableCallback: () => setYear(""),
             }}
             onSubmit={handleYearSubmit}
           />
@@ -141,18 +146,14 @@ const ItemFilters = ({
       checkboxGroup?.items.length ? (
         <MultiSelect
           buttonText={checkboxGroup.name}
-          id={`${checkboxGroup.id}-multi-select`}
+          id={`${checkboxGroup.id}`}
           data-testid={`${checkboxGroup.id}-multi-select`}
           items={checkboxGroup.items}
           key={checkboxGroup.id}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
-            console.log(e.target.value)
+          onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
+            await handleMultiSelectChange(e.target.id, checkboxGroup.id)
           }}
-          onClear={() => {
-            console.log(checkboxGroup.id)
-          }}
-          // TODO: Connect this to data
-          selectedItems={{}}
+          selectedItems={selectedCheckboxes}
           isBlockElement={isBlockElement}
           width={multiSelectWidth}
           closeOnBlur
@@ -169,13 +170,6 @@ const ItemFilters = ({
           width="full"
           layout="row"
           sx={{ fieldset: { lg: { width: "45%" } } }}
-          onSubmit={() => {
-            // TODO: Pass active filters and refactor submitFilters to handle all filters
-            submitFilters([], "field")
-          }}
-          onClear={() => {
-            clearAllFilters()
-          }}
           renderChildren={filterBarContent}
         />
       </Box>
@@ -195,7 +189,9 @@ const ItemFilters = ({
             id="bib-details-applied-filters"
             isDismissible
             type="filter"
-            onClick={handleRemoveFilterClick}
+            onClick={async (filterToRemove: TagSetFilterDataProps) => {
+              await handleRemoveFilter(filterToRemove.id)
+            }}
             tagSetData={appliedFiltersTagSetData}
           />
         </Box>

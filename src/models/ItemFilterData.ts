@@ -1,24 +1,34 @@
+import { capitalize } from "lodash"
+
 import type {
   Aggregation,
   AggregationOption,
   Option,
 } from "../types/filterTypes"
-
 import { isRecapLocation } from "../utils/itemFilterUtils"
+import type { FilterCheckboxGroup } from "../types/filterTypes"
 
 export class ItemFilterData {
   options: AggregationOption[]
-  aggregation: Aggregation
   field: string
 
   constructor(aggregation: Aggregation) {
-    this.aggregation = aggregation
     this.options = aggregation.values
     this.field = aggregation.field
   }
 
   displayOptions(): Option[] {
     return this.options
+  }
+
+  get formattedFilterData(): FilterCheckboxGroup {
+    return {
+      id: this.field,
+      name: capitalize(this.field),
+      items: this.displayOptions().map((option) => {
+        return { id: option.value, name: option.label }
+      }),
+    }
   }
 
   labelForValue(value: string) {
@@ -49,7 +59,7 @@ export class LocationFilterData extends ItemFilterData {
     } else return optionsWithoutRecap
   }
 
-  recapLocations(): string {
+  get recapLocations(): string {
     return (
       this.options
         .map(({ value }) => {
