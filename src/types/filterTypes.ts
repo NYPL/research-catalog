@@ -15,9 +15,15 @@ export type AppliedItemFilters = {
   year: string[]
 }
 
+export type SelectedCheckboxes = {
+  location: { items: string[] }
+  format: { items: string[] }
+  status: { items: string[] }
+}
+
 export interface AggregationOption {
   value: string
-  count: number
+  count?: number
   label: string
 }
 

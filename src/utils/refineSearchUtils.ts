@@ -7,14 +7,37 @@ import type { CollapsedMultiValueAppliedFilters } from "../types/filterTypes"
 export const collapseMultiValueQueryParams = (
   queryParams: object
 ): CollapsedMultiValueAppliedFilters => {
-  return Object.keys(queryParams)
-    .filter((param) => param.includes("filters["))
+  const collapsedFilters = Object.keys(queryParams)
+    .filter(
+      (param) =>
+        param.includes("filters[") && !param.includes("holdingLocation")
+    )
     .reduce((acc, currentFilter) => {
       const field = currentFilter.split("[")[1].split("]")[0]
       if (acc[field]) acc[field].push(queryParams[currentFilter])
       else acc[field] = [queryParams[currentFilter]]
       return acc
     }, {})
+  const holdingLocation = collapseHoldingLocations(queryParams)
+  if (holdingLocation) collapsedFilters["holdingLocation"] = holdingLocation
+  return collapsedFilters
+}
+export const collapseHoldingLocations = (queryParams) => {
+  const sasb = { accessed: false, locations: "loc:mal82,loc:mal92" }
+  const sc = { accessed: false, locations: "loc:scff2,loc:scff3" }
+  Object.keys(queryParams)
+    .filter(
+      (param) => param.includes("filters[") && param.includes("holdingLocation")
+    )
+    .map((currentFilter) => {
+      const paramValue = queryParams[currentFilter]
+      if (paramValue.includes("sc")) sc.accessed = true
+      if (paramValue.includes("mal")) sasb.accessed = true
+    })
+  const collapsedLocations = [sc, sasb]
+    .filter(({ accessed }) => accessed)
+    .map(({ locations }) => locations)
+  return collapsedLocations.length ? collapsedLocations : null
 }
 
 // This method does the inverse of the one above. Turn an object into a
@@ -23,13 +46,26 @@ export const buildFilterQuery = (
   filters: CollapsedMultiValueAppliedFilters
 ) => {
   return Object.keys(filters).reduce((acc, field) => {
-    if (filters[field]?.filter((x) => x).length) {
+    if (
+      filters[field]?.filter((x) => x).length &&
+      field !== "holdingLocation"
+    ) {
       filters[field].forEach(
         (option, i) => (acc[`filters[${field}][${i}]`] = option)
       )
     }
     return acc
   }, {})
+}
+
+export const buildHoldingLocationFilters = (holdingLocations: string[]) => {
+  return holdingLocations
+    ?.join(",")
+    .split(",")
+    .reduce((acc, location, i) => {
+      acc[`filters[holdingLocation][${i}]`] = location
+      return acc
+    }, {})
 }
 
 export const getQueryWithoutFilters = (filters: object) => {

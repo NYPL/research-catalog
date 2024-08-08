@@ -198,7 +198,6 @@ export function getSearchQuery({
 }: SearchParams): string {
   const searchKeywordsQuery = encodeURIComponent(q)
   const sortQuery = getSortQuery(sortBy, order)
-
   const filterQuery = getFilterQuery(filters)
   const fieldQuery = getFieldQuery(field)
   const identifierQuery = getIdentifierQuery(identifiers)
@@ -308,8 +307,7 @@ export function mapQueryToSearchParams({
   ...queryFilters
 }: SearchQueryParams): SearchParams {
   const hasIdentifiers = issn || isbn || oclc || lccn
-  const filters = collapseMultiValueQueryParams(queryFilters)
-
+  // const filters = collapseMultiValueQueryParams(queryFilters)
   return {
     q,
     field: search_scope,
@@ -324,7 +322,7 @@ export function mapQueryToSearchParams({
     ...(search_scope && q ? { [search_scope]: q } : {}),
     sortBy: sort,
     order: sort_direction,
-    filters: Object.keys(filters).length ? filters : undefined,
+    filters: Object.keys(queryFilters).length ? queryFilters : undefined,
     identifiers: hasIdentifiers && {
       issn,
       isbn,
