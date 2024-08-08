@@ -21,7 +21,7 @@ export const appConfig: AppConfig = {
     domain: {
       development: "local.nypl.org:8080",
       qa: "qa-www.nypl.org",
-      production: "nypl.org",
+      production: "www.nypl.org",
     },
     drb: {
       development: "https://digital-research-books-api.nypl.org/search",
