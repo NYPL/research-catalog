@@ -2,6 +2,7 @@
 import type { DiscoveryItemResult, JSONLDValue } from "./itemTypes"
 import type { AnnotatedMarc } from "./bibDetailsTypes"
 import type { Aggregation, ItemFilterQueryParams } from "./filterTypes"
+import type { HTTPStatusCode } from "./appTypes"
 
 export interface DiscoveryBibResult {
   extent?: string[]
@@ -76,7 +77,7 @@ export interface ElectronicResource {
 export interface BibResponse {
   discoveryBibResult?: DiscoveryBibResult
   annotatedMarc?: AnnotatedMarc
-  status: 200 | 307 | 404
+  status: HTTPStatusCode
   redirectUrl?: string
 }
 

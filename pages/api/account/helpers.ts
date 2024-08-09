@@ -1,4 +1,5 @@
 import sierraClient from "../../../src/server/sierraClient"
+import type { HTTPResponse } from "../../../src/types/appTypes"
 
 /**
  * PUT request to Sierra to update patron PIN, first validating with previous PIN.
@@ -9,7 +10,7 @@ export async function updatePin(
   barcode: string,
   oldPin: string,
   newPin: string
-) {
+): Promise<HTTPResponse> {
   try {
     const client = await sierraClient()
     await client.post("patrons/validate", {
@@ -29,7 +30,10 @@ export async function updatePin(
 /**
  * PUT request to Sierra to update patron settings. Returns status and message about request.
  */
-export async function updatePatronSettings(patronId: string, patronData: any) {
+export async function updatePatronSettings(
+  patronId: string,
+  patronData: any
+): Promise<HTTPResponse> {
   try {
     const client = await sierraClient()
     await client.put(`patrons/${patronId}`, patronData)
@@ -44,7 +48,10 @@ export async function updatePatronSettings(patronId: string, patronData: any) {
 /**
  * PUT request to Sierra to update a patron's hold. Returns status and message about request.
  */
-export async function updateHold(holdId: string, holdData: any) {
+export async function updateHold(
+  holdId: string,
+  holdData: any
+): Promise<HTTPResponse> {
   try {
     const client = await sierraClient()
     await client.put(`patrons/holds/${holdId}`, holdData)
@@ -60,7 +67,7 @@ export async function updateHold(holdId: string, holdData: any) {
 /**
  * DELETE request to Sierra to cancel a patron's hold. Returns status and message about request.
  */
-export async function cancelHold(holdId: string) {
+export async function cancelHold(holdId: string): Promise<HTTPResponse> {
   try {
     const client = await sierraClient()
     await client.deleteRequest(`patrons/holds/${holdId}`)
@@ -77,7 +84,7 @@ export async function cancelHold(holdId: string) {
  * POST request to Sierra to renew a patron's checkout. Returns status, message about request, and
  * (if successful) the checkout object.
  */
-export async function renewCheckout(checkoutId: string) {
+export async function renewCheckout(checkoutId: string): Promise<HTTPResponse> {
   try {
     const client = await sierraClient()
     const response = await client.post(
