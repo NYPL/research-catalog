@@ -4,9 +4,9 @@ import type {
   Aggregation,
   AggregationOption,
   Option,
+  FilterCheckboxGroup,
 } from "../types/filterTypes"
 import { isRecapLocation } from "../utils/itemFilterUtils"
-import type { FilterCheckboxGroup } from "../types/filterTypes"
 
 export class ItemFilterData {
   options: AggregationOption[]
