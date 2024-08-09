@@ -102,10 +102,6 @@ const ItemFilters = ({
     await submitFilters(year.length ? [year] : [], "year")
   }
 
-  const filterCheckboxGroups: FilterCheckboxGroup[] = filterData.map(
-    (filter) => filter.formattedFilterData
-  )
-
   // function for renderChildren prop of FilterBarInline
   const filterBarContent = () => {
     return (
@@ -142,8 +138,9 @@ const ItemFilters = ({
 
   // function passed to filterElements map callback for generating renderMultiSelect prop of MultiSelectGroup
   const renderMultiSelect = ({ isBlockElement, multiSelectWidth }) =>
-    filterCheckboxGroups.map((checkboxGroup: FilterCheckboxGroup) =>
-      checkboxGroup?.items.length ? (
+    filterData.map((itemFilterData: ItemFilterData) => {
+      const checkboxGroup = itemFilterData.formattedFilterData
+      return checkboxGroup?.items.length ? (
         <MultiSelect
           buttonText={checkboxGroup.name}
           id={`${checkboxGroup.id}`}
@@ -159,7 +156,7 @@ const ItemFilters = ({
           closeOnBlur
         />
       ) : null
-    )
+    })
 
   return (
     <>
