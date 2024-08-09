@@ -22,3 +22,11 @@ export interface Features {
 }
 
 export type Environment = "development" | "qa" | "production"
+
+export type HTTPStatusCode = 200 | 307 | 404 | 500
+
+export type EndpointResponse = {
+  status: HTTPStatusCode
+  message?: string
+  body?: string
+}
