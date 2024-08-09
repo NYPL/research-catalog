@@ -4,7 +4,6 @@ import {
   parseItemFilterQueryParams,
   buildItemFilterQuery,
   buildAppliedFiltersTagSetData,
-  getSelectedCheckboxesFromAppliedFilters,
 } from "../itemFilterUtils"
 import { normalAggs } from "../../../__test__/fixtures/testAggregations"
 import { ItemFilterData } from "../../models/ItemFilterData"
@@ -143,21 +142,6 @@ describe("Item Filter Utils", () => {
           label: "Status > Not available",
         },
       ])
-    })
-  })
-  describe("getSelectedCheckboxesFromAppliedFilters", () => {
-    it("returns selected checkboxes in the format expected by MultiSelect", () => {
-      const appliedFilters = {
-        location: ["loc:rc2ma", "Offsite"],
-        format: ["Text"],
-        status: ["status:a", "status:na"],
-        year: ["2005"],
-      }
-      expect(getSelectedCheckboxesFromAppliedFilters(appliedFilters)).toEqual({
-        location: { items: ["loc:rc2ma", "Offsite"] },
-        format: { items: ["Text"] },
-        status: { items: ["status:a", "status:na"] },
-      })
     })
   })
 })

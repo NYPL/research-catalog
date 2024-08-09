@@ -6,7 +6,6 @@ import type {
   AppliedItemFilters,
   CollapsedMultiValueAppliedFilters,
   ItemFilterQueryParams,
-  SelectedCheckboxes,
 } from "../types/filterTypes"
 
 export const isRecapLocation = (loc: string) => {
@@ -84,16 +83,6 @@ export const removeValueFromFilters = (
     (filterValue: string) => filterValue !== id
   )
   return [newValues, field]
-}
-
-export const getSelectedCheckboxesFromAppliedFilters = (
-  appliedFilters: AppliedItemFilters
-): SelectedCheckboxes => {
-  return {
-    location: { items: appliedFilters.location },
-    format: { items: appliedFilters.format },
-    status: { items: appliedFilters.status },
-  }
 }
 
 /* eslint-disable @typescript-eslint/naming-convention */

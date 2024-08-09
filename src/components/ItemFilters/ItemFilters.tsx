@@ -12,17 +12,14 @@ import {
   type TagSetFilterDataProps,
 } from "@nypl/design-system-react-components"
 import type {
-  FilterCheckboxGroup,
   Aggregation,
   ItemFilterQueryParams,
   AppliedItemFilters,
-  SelectedCheckboxes,
 } from "../../types/filterTypes"
 import { ItemFilterData, LocationFilterData } from "../../models/ItemFilterData"
 import {
   buildAppliedFiltersTagSetData,
   buildItemFilterQuery,
-  getSelectedCheckboxesFromAppliedFilters,
   removeValueFromFilters,
 } from "../../utils/itemFilterUtils"
 
@@ -56,9 +53,6 @@ const ItemFilters = ({
     appliedFilters,
     filterData
   )
-
-  const selectedCheckboxes: SelectedCheckboxes =
-    getSelectedCheckboxesFromAppliedFilters(appliedFilters)
 
   const submitFilters = async (selectedFilters: string[], field: string) => {
     const newFilters = { ...appliedFilters, [field]: selectedFilters }
@@ -150,7 +144,9 @@ const ItemFilters = ({
           onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
             await handleMultiSelectChange(e.target.id, checkboxGroup.id)
           }}
-          selectedItems={selectedCheckboxes}
+          selectedItems={{
+            [checkboxGroup.id]: { items: appliedFilters[checkboxGroup.id] },
+          }}
           isBlockElement={isBlockElement}
           width={multiSelectWidth}
           closeOnBlur
