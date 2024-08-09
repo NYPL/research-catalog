@@ -27,6 +27,6 @@ export type HTTPStatusCode = 200 | 307 | 404 | 500
 
 export type HTTPResponse = {
   status: HTTPStatusCode
-  message?: string
+  message: string
   body?: string
 }
