@@ -41,6 +41,13 @@ const TimedLogoutModal = ({
     buildTimeLeft(expirationTime)
   )
 
+  if (
+    typeof document !== "undefined" &&
+    !document.cookie.includes("accountPageExp")
+  ) {
+    logOutAndRedirect()
+  }
+
   useEffect(() => {
     const timeout = setTimeout(() => {
       const { minutes, seconds } = buildTimeLeft(expirationTime)
