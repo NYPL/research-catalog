@@ -13,7 +13,6 @@ export const getFeedbackEmailText = (
   const submissionText = Object.keys(fields)
     .map((label) => `${label}: ${encodeHTML(fields[label])}`)
     .join(", ")
-  console.log(submissionText)
   return `Question/Feedback from Research Catalog (SCC): ${submissionText} URL: ${fullUrl}`
 }
 
