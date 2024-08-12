@@ -57,7 +57,6 @@ export const getEmailParams = (
 
   const emailText = getFeedbackEmailText(fullUrl, fields)
   const emailHTML = getFeedbackEmailHTML(fullUrl, fields)
-  console.log(emailText)
   return {
     Destination: {
       ToAddresses: [toEmail],
