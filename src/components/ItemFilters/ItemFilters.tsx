@@ -82,9 +82,9 @@ const ItemFilters = ({
 
   const handleMultiSelectChange = async (filterId: string, field: string) => {
     const selectedFieldCheckboxes = appliedFilters[field]
-    const indexOfCheckboxId = selectedFieldCheckboxes.indexOf(filterId)
 
-    if (indexOfCheckboxId >= 0) {
+    // If the filter value is already in the array of selected values, remove it. Otherwise, add it.
+    if (selectedFieldCheckboxes.indexOf(filterId) >= 0) {
       await handleRemoveFilter(filterId)
     } else {
       await submitFilters([filterId, ...selectedFieldCheckboxes], field)
