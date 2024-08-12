@@ -46,14 +46,14 @@ export const accountSettings = [
     field: "emails",
     icon: "communicationEmail",
     term: "Email",
-    description: (value: string[]) => value[0],
+    description: (value: string[]) => value?.[0],
   },
   {
     field: "notificationPreference",
     icon: "communicationChatBubble",
     term: "Notification preference",
     description: (pref): [code: string, label: string] =>
-      notificationPreferenceTuples.find(([code]) => pref === code)[1],
+      notificationPreferenceTuples.find(([code]) => pref === code)?.[1],
   },
   {
     field: "homeLibrary",
