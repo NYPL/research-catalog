@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Prerelease
+
+### Updated
+
+- Refactor ItemTableData model to format data for DS components in ItemFilters (SCC-4203)
+
+### Fixed
+
+- Fixed an issue in ItemTable where an error message was displaying when an in-progress item fetch was aborted on subsequent filter changes.
+
 ## [1.2.1] 2024-08-12
 
 ### Hot fixes
@@ -28,7 +38,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 
-- Refactor ItemTableData model to format data for DS components in ItemFilters (SCC-4203)
 - Replace custom ItemFilter components with FilterBarInline, MultiSelectGroup, and MultiSelect components from the DS (display-only except for clear button) (SCC-4176)
 - Pass bibDetail test ids as kebabCase (SCC-4150)
 - Refactored bibUtils and removed BibParams type (SCC-4136)
@@ -40,7 +49,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Fixed an issue in ItemTable where an error message was displaying when an in-progress item fetch was aborted on subsequent filter changes.
 - Fixed issue caused by formatPatronName when a non-comma separated value is passed in (SCC-4175)
 - Fixed mobile tabs width on My Account page so text is readable when a user zooms in.
 
