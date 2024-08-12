@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Updated
 
 - Fix timed logout modal negative countdown ([SCC-4220](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4221))
+- Add status code 'b' to "READY FOR PICKUP" in My Account model
+- Fix auth redirect protocol
 
 ## [1.2.0] 2024-08-07
 
