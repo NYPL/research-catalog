@@ -1,5 +1,8 @@
 import { ItemFilterData, LocationFilterData } from "../ItemFilterData"
-import { bibWithItems } from "../../../__test__/fixtures/bibFixtures"
+import {
+  bibWithItems,
+  parallelsBib as bibWithMultipleOffsiteLocations,
+} from "../../../__test__/fixtures/bibFixtures"
 
 describe("ItemFilterData model", () => {
   let itemFilterData: ItemFilterData
@@ -72,6 +75,21 @@ describe("LocationFilterData model", () => {
             id: "loc:mak32",
             name: "SASB S3 - Periodicals Rm 108",
           },
+          {
+            id: "Offsite",
+            name: "Offsite",
+          },
+        ],
+        name: "Location",
+      })
+    })
+    it("formats multiple offsite locations as single checkbox value", () => {
+      const itemFilterDataMultipleOffsite = new LocationFilterData(
+        bibWithMultipleOffsiteLocations.resource.itemAggregations[0]
+      )
+      expect(itemFilterDataMultipleOffsite.formattedFilterData).toStrictEqual({
+        id: "location",
+        items: [
           {
             id: "Offsite",
             name: "Offsite",
