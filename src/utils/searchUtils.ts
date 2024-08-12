@@ -1,12 +1,13 @@
 import { isArray, isEmpty, mapObject, forEach } from "underscore"
 
-import { textInputFields } from "./advancedSearchUtils"
+import { textInputFields as advSearchFields } from "./advancedSearchUtils"
 import type {
   SearchParams,
   SearchQueryParams,
   SearchFilters,
   Identifiers,
   SearchResultsElement,
+  SearchResultsResponse,
 } from "../types/searchTypes"
 import SearchResultsBib from "../models/SearchResultsBib"
 import { RESULTS_PER_PAGE } from "../config/constants"
@@ -58,18 +59,29 @@ export function getSearchResultsHeading(
 }
 
 function buildQueryDisplayString(searchParams: SearchParams): string {
-  const searchFields = textInputFields.concat([
-    { name: "journal_title", label: "Journal Title" },
-    { name: "standard_number", label: "Standard Number" },
-    { name: "creatorLiteral", label: "author" },
-  ])
+  const searchFields = advSearchFields
+    // Lowercase the adv search field labels:
+    .map((field) => ({ ...field, label: field.label.toLowerCase() }))
+    .concat([
+      { name: "journal_title", label: "journal title" },
+      { name: "standard_number", label: "standard number" },
+      { name: "creatorLiteral", label: "author" },
+      { name: "oclc", label: "OCLC" },
+      { name: "isbn", label: "ISBN" },
+      { name: "issn", label: "ISSN" },
+      { name: "lccn", label: "LCCN" },
+    ])
   const paramsStringCollection = {}
-  const searchParamsObject = { ...searchParams, ...searchParams.filters }
+  const searchParamsObject = {
+    ...searchParams,
+    ...searchParams.filters,
+    ...searchParams.identifiers,
+  }
 
   Object.keys(searchParamsObject).forEach((param) => {
     const displayParam = searchFields.find((field) => field.name === param)
     if (displayParam && searchParamsObject[param]) {
-      let label = displayParam.label.toLowerCase()
+      let label = displayParam.label
       const value = searchParamsObject[param]
       const plural = label === "keyword" && value.indexOf(" ") > -1 ? "s" : ""
       // Special case for the author display string for both
@@ -320,4 +332,28 @@ export function mapQueryToSearchParams({
       lccn,
     },
   }
+}
+
+/**
+ * checkForRedirectOnMatch
+ * Given a SearchResultsResponse and a query object (representing a query string)
+ * returns an object representing a suitable redirect destination if there is
+ * only one result and the query indicates we should redirect on match.
+ * Otherwise returns `null`
+ */
+export function checkForRedirectOnMatch(
+  results: SearchResultsResponse | Error,
+  query
+): object {
+  const hasOneResult =
+    !(results instanceof Error) && results?.results?.totalResults === 1
+  if (hasOneResult && query.oclc && query.redirectOnMatch) {
+    const matchedBib = results.results.itemListElement[0].result
+    return {
+      destination: `/bib/${matchedBib.uri}`,
+      permanent: false,
+    }
+  }
+
+  return null
 }

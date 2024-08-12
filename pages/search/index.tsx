@@ -21,6 +21,7 @@ import {
   mapElementsToSearchResultsBibs,
   getSearchQuery,
   getFreshSortByQuery,
+  checkForRedirectOnMatch,
 } from "../../src/utils/searchUtils"
 import type {
   SearchResultsResponse,
@@ -55,6 +56,7 @@ export default function Search({
   const { push, query } = useRouter()
   const { itemListElement: searchResultsElements, totalResults } =
     results.results
+
   const drbResponse = results.drbResults?.data
   const drbWorks = drbResponse?.works
 
@@ -237,6 +239,13 @@ export async function getServerSideProps({ resolvedUrl, req, query }) {
   const bannerNotification = process.env.SEARCH_RESULTS_NOTIFICATION || ""
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const results = await fetchResults(mapQueryToSearchParams(query))
+
+  // Check for `redirectOnMatch` trigger:
+  const redirect = checkForRedirectOnMatch(results, query)
+  if (redirect) {
+    return { redirect }
+  }
+
   const isAuthenticated = patronTokenResponse.isTokenValid
   const isFreshSortByQuery = getFreshSortByQuery(
     req.headers.referer,

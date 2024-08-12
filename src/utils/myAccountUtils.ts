@@ -3,6 +3,7 @@ import type { Patron, SierraPatron } from "../types/myAccountTypes"
 export const notificationPreferenceMap = {
   z: "Email",
   p: "Phone",
+  "-": "None",
 }
 
 export const notificationPreferenceTuples = Object.keys(

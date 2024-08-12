@@ -239,5 +239,39 @@ describe("searchUtils", () => {
         'Displaying 201-250 of 1,200 results for keyword "cats"'
       )
     })
+
+    describe("identifier searches", () => {
+      it("returns the correct heading string for OCLC searches", () => {
+        const heading = getSearchResultsHeading(
+          { page: 1, identifiers: { oclc: "1234" } },
+          3
+        )
+        expect(heading).toEqual('Displaying 3 of 3 results for OCLC "1234"')
+      })
+
+      it("returns the correct heading string for ISBN searches", () => {
+        const heading = getSearchResultsHeading(
+          { page: 5, identifiers: { isbn: "1234" } },
+          3
+        )
+        expect(heading).toEqual('Displaying 3 of 3 results for ISBN "1234"')
+      })
+
+      it("returns the correct heading string for ISSN searches", () => {
+        const heading = getSearchResultsHeading(
+          { page: 5, identifiers: { issn: "1234" } },
+          3
+        )
+        expect(heading).toEqual('Displaying 3 of 3 results for ISSN "1234"')
+      })
+
+      it("returns the correct heading string for LCCN searches", () => {
+        const heading = getSearchResultsHeading(
+          { page: 5, identifiers: { lccn: "1234" } },
+          3
+        )
+        expect(heading).toEqual('Displaying 3 of 3 results for LCCN "1234"')
+      })
+    })
   })
 })

@@ -8,7 +8,7 @@ export default BibPage
 export async function getServerSideProps({ params, query, req }) {
   const { id } = params
   const { discoveryBibResult, annotatedMarc, status, redirectUrl } =
-    await fetchBib(id, query)
+    await fetchBib(id, { ...query, view_all_items: true })
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const isAuthenticated = patronTokenResponse.isTokenValid
 
