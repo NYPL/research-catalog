@@ -43,6 +43,7 @@ export class LocationFilterData extends ItemFilterData {
     super(aggregation)
   }
 
+  // Override display options to add Offsite if there are any Recap locations
   displayOptions(): FilterCheckbox[] {
     let offsiteCount = 0
     const optionsWithoutRecap = this.options.filter(({ value, count }) => {

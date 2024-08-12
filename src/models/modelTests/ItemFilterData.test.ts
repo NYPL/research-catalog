@@ -33,6 +33,16 @@ describe("ItemFilterData model", () => {
         name: "Format",
       })
     })
+    it("correctly groups offsite locations when there are multiple", () => {
+      const itemFilterDataMultipleOffsite = new LocationFilterData(
+        bibWithMultipleOffsiteLocations.resource.itemAggregations[0]
+      )
+      expect(itemFilterDataMultipleOffsite.formattedFilterData).toStrictEqual({
+        id: "location",
+        items: [{ id: "Offsite", name: "Offsite" }],
+        name: "Location",
+      })
+    })
   })
 })
 
