@@ -91,6 +91,10 @@ const ItemFilters = ({
     }
   }
 
+  const handleClearFilterGroup = async (field: string) => {
+    await submitFilters([], field)
+  }
+
   const handleYearSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
     await submitFilters(year.length ? [year] : [], "year")
@@ -148,6 +152,7 @@ const ItemFilters = ({
             [checkboxGroup.id]: { items: appliedFilters[checkboxGroup.id] },
           }}
           isBlockElement={isBlockElement}
+          onClear={() => handleClearFilterGroup(checkboxGroup.id)}
           width={multiSelectWidth}
           closeOnBlur
         />
