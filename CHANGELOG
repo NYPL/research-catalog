@@ -11,6 +11,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fix feedback formatting bug [SCC-4220](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4220)
 
+### Updated
+
+- Refactor ItemTableData model to format data for DS components in ItemFilters (SCC-4203)
+
+### Fixed
+
+- Fixed an issue in ItemTable where an error message was displaying when an in-progress item fetch was aborted on subsequent filter changes.
+
 ### Added
 
 - Added types for HTTPStatusCodes and HTTPResponse (SCC-4172)

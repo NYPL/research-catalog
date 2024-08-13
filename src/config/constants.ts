@@ -63,3 +63,7 @@ export const DAYS = {
   FRIDAY: 5,
   SATURDAY: 6,
 }
+
+export const ERROR_MESSAGES = {
+  ITEM_REFETCH_ABORT_REASON: "New Bib item fetch initiated",
+}
