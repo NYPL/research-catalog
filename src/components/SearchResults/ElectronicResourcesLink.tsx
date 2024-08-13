@@ -22,7 +22,11 @@ const ElectronicResourcesLink = ({
     ? {}
     : { border: "1px solid var(--nypl-colors-ui-border-default)", padding: "s" }
   return (
-    <Box mt={inSearchResults ? "l" : "s"} sx={wrapperStyles}>
+    <Box
+      mt={inSearchResults ? "l" : "s"}
+      sx={wrapperStyles}
+      data-testid="electronic-resources-link"
+    >
       <Text
         mb="xxs"
         fontSize={{ base: "mobile.body.body1", md: "desktop.body.body1" }}

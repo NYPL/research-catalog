@@ -8,6 +8,7 @@ import {
   bibWithSupplementaryContent as bibNoItems,
   bibWithItems,
   bibWithManyItems,
+  parallelsBib as bibNoElectronicResources,
 } from "../../fixtures/bibFixtures"
 
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
@@ -97,6 +98,42 @@ describe("Bib Page no items", () => {
   it("does not render an item table when there are no physical items in the bib", () => {
     expect(
       screen.queryByTestId("bib-details-item-table")
+    ).not.toBeInTheDocument()
+  })
+})
+
+describe("Bib Page with electronic resources", () => {
+  beforeEach(() => {
+    render(
+      <BibPage
+        discoveryBibResult={bibWithManyItems.resource}
+        annotatedMarc={bibWithManyItems.annotatedMarc}
+        isAuthenticated={false}
+      />
+    )
+  })
+
+  it("renders the electronic resources link when there are electronic resources", () => {
+    expect(
+      screen.queryByTestId("electronic-resources-link")
+    ).toBeInTheDocument()
+  })
+})
+
+describe("Bib Page no electronic resources", () => {
+  beforeEach(() => {
+    render(
+      <BibPage
+        discoveryBibResult={bibNoElectronicResources.resource}
+        annotatedMarc={bibNoElectronicResources.annotatedMarc}
+        isAuthenticated={false}
+      />
+    )
+  })
+
+  it("does not render the electronic resources link when there are no electronic resources", () => {
+    expect(
+      screen.queryByTestId("electronic-resources-link")
     ).not.toBeInTheDocument()
   })
 })
