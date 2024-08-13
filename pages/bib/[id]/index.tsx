@@ -208,11 +208,13 @@ export default function BibPage({
           {bib.title}
         </Heading>
         <BibDetails key="top-details" details={topDetails} />
-        <ElectronicResourcesLink
-          bibUrl={bib.url}
-          electronicResources={bib.electronicResources}
-          inSearchResults={false}
-        />
+        {bib.hasElectronicResources ? (
+          <ElectronicResourcesLink
+            bibUrl={bib.url}
+            electronicResources={bib.electronicResources}
+            inSearchResults={false}
+          />
+        ) : null}
         {bib.showItemTable ? (
           <>
             <Heading
