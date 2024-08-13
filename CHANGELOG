@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fix feedback formatting bug [SCC-4220](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4220)
 
+### Added
+
+- Added types for HTTPStatusCodes and HTTPResponse (SCC-4172)
+
 ## [1.2.1] 2024-08-12
 
 ### Hot fixes
