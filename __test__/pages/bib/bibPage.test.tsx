@@ -153,6 +153,28 @@ describe("Bib Page Item Table", () => {
     expect(mockRouter.asPath).toBe("/bib/pb5579193")
   })
 
+  it("clears a filter group when the MultiSelect clear button is clicked", async () => {
+    const checkboxGroups = screen.getAllByTestId("checkbox-group")
+
+    await userEvent.click(checkboxGroups[0].querySelector("input"))
+    await userEvent.click(checkboxGroups[1].querySelector("input"))
+    expect(mockRouter.asPath).toBe(
+      "/bib/pb5579193?item_format=Text&item_status=status%3Aa"
+    )
+
+    await userEvent.click(
+      screen.getByLabelText("remove 1 item selected from Format")
+    )
+
+    expect(mockRouter.asPath).toBe("/bib/pb5579193?item_status=status%3Aa")
+
+    await userEvent.click(
+      screen.getByLabelText("remove 1 item selected from Status")
+    )
+
+    expect(mockRouter.asPath).toBe("/bib/pb5579193")
+  })
+
   it("renders TagSet for applied filters and clears filters via tag click", async () => {
     await userEvent.click(
       screen.getAllByTestId("checkbox-group")[0].querySelector("input")
