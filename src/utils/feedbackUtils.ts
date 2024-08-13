@@ -45,18 +45,17 @@ export const getFeedbackEmailHTML = (
  * Get the params for Feedback email submission as expected by SES
  */
 export const getEmailParams = (
-  emailBody: FeedbackMetadataAndComment,
+  emailBody: string,
   referer: string,
   toEmail: string,
   sourceEmail: string
 ): SendEmailRequest => {
-  const fields = JSON.parse(JSON.stringify(emailBody))
+  const fields = JSON.parse(emailBody)
 
   const fullUrl = encodeHTML(referer)
 
   const emailText = getFeedbackEmailText(fullUrl, fields)
   const emailHTML = getFeedbackEmailHTML(fullUrl, fields)
-
   return {
     Destination: {
       ToAddresses: [toEmail],
