@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixed an issue in ItemTable where an error message was displaying when an in-progress item fetch was aborted on subsequent filter changes.
 
+### Added
+
+- Added types for HTTPStatusCodes and HTTPResponse (SCC-4172)
+
 ## [1.2.1] 2024-08-12
 
 ### Hot fixes
