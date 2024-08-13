@@ -100,18 +100,6 @@ describe("Bib Page no items", () => {
       screen.queryByTestId("bib-details-item-table")
     ).not.toBeInTheDocument()
   })
-})
-
-describe("Bib Page with electronic resources", () => {
-  beforeEach(() => {
-    render(
-      <BibPage
-        discoveryBibResult={bibWithManyItems.resource}
-        annotatedMarc={bibWithManyItems.annotatedMarc}
-        isAuthenticated={false}
-      />
-    )
-  })
 
   it("renders the electronic resources link when there are electronic resources", () => {
     expect(
