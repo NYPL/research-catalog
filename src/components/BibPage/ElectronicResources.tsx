@@ -33,10 +33,6 @@ const ElectronicResources = ({
     )
   const scrollToRef = useRef<null | HTMLDivElement>(null)
 
-  if (!electronicResources || !electronicResources.length) {
-    return null
-  }
-
   const eResourcesList = electronicResourcesList(electronicResourcesToDisplay)
 
   const onClick = () => {
