@@ -8,7 +8,7 @@ export interface DiscoveryBibResult {
   extent?: string[]
   dimensions?: string[]
   note?: Note[]
-  identifier?: object[]
+  identifier: object[]
   subjectLiteral?: string[]
   "@id"?: string
   uri?: string
