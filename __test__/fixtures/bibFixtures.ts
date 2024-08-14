@@ -10399,7 +10399,7 @@ export const bibManyEResources = {
         ],
         idNyplSourceId: {
           "@type": "SierraNypl",
-          "@value": 17145921,
+          "@value": "17145921",
         },
       },
       {
