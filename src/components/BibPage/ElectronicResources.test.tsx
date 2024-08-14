@@ -7,6 +7,7 @@ import Bib from "../../models/Bib"
 import ElectronicResources from "./ElectronicResources"
 
 import { render, screen } from "@testing-library/react"
+import exp from "constants"
 
 describe("ElectronicResources component", () => {
   describe("Many eResources", () => {
@@ -28,19 +29,25 @@ describe("ElectronicResources component", () => {
       const eResourcesList = eResourcesContainer.querySelector("ul")
       expect(eResourcesList.children).toHaveLength(3)
 
-      expect(
-        screen.queryByTestId("see-more-eresources-button")
-      ).toBeInTheDocument()
+      const moreLink = screen.queryByTestId("see-more-eresources-button")
+      expect(moreLink).toBeInTheDocument()
+      expect(moreLink).toHaveTextContent(
+        "View all 368 Available Online resources"
+      )
     })
 
     it("displays all eResources when view all button is clicked", async () => {
-      await userEvent.click(screen.queryByTestId("see-more-eresources-button"))
+      const moreLink = screen.queryByTestId("see-more-eresources-button")
+      await userEvent.click(moreLink)
 
       const eResourcesList = screen
         .queryByTestId("electronic-resources")
         .querySelector("ul")
 
       expect(eResourcesList.children).toHaveLength(368)
+      expect(moreLink).toHaveTextContent(
+        "View fewer Available Online resources"
+      )
     })
   })
 
