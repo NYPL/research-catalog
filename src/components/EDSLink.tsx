@@ -12,7 +12,7 @@ const EDSLink = () => {
         New!
       </span>{" "}
       Try our{" "}
-      <ExternalLink href="https://research.ebsco.com/c/2styhb">
+      <ExternalLink href="https://discovery.ebsco.com/c/tvrejk?acr_values=guest">
         <strong>Article Search</strong>
       </ExternalLink>{" "}
       to discover online journals, books, and more from home with your library
