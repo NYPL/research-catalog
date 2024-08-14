@@ -53,7 +53,12 @@ const ElectronicResources = ({
   }
 
   return (
-    <Card ref={scrollToRef} isBordered mt="l">
+    <Card
+      ref={scrollToRef}
+      isBordered
+      mt="l"
+      data-testid="electronic-resources"
+    >
       <CardHeading level="three">Available Online</CardHeading>
       <CardContent aria-expanded={!showMore}>
         {eResourcesList}
@@ -100,8 +105,6 @@ const electronicResourceLink = ({
  * Renders an unordered list of electronic resources links
  */
 const electronicResourcesList = (electronicResources: ElectronicResource[]) => {
-  if (!electronicResources.length) return null
-
   // If there is only one electronic resource, then
   // just render a single anchor element.
   if (electronicResources.length === 1) {
