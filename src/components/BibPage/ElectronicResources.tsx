@@ -65,6 +65,7 @@ const ElectronicResources = ({
         {electronicResources.length > ELECTRONIC_RESOURCES_PER_BIB_PAGE ? (
           <Button
             id="see-more-eresources-button"
+            data-testid="see-more-eresources-button"
             p={0}
             onClick={onClick}
             buttonType="link"
