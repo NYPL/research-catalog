@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 
+- Updated Ebsco link URL (SCC-4226)
 - Refactor ItemTableData model to format data for DS components in ItemFilters (SCC-4203)
 
 ### Fixed
