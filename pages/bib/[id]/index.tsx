@@ -65,6 +65,7 @@ export default function BibPage({
 }: BibPropsType) {
   const { push, query } = useRouter()
   const metadataTitle = `Item Details | ${SITE_NAME}`
+
   const [bib, setBib] = useState(new Bib(discoveryBibResult))
   const [itemsLoading, setItemsLoading] = useState(false)
   const [itemFetchError, setItemFetchError] = useState(false)
