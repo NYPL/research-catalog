@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Added check for hasElectronicResources in Bib Page before rendering ElectronicResourcesLink.
+- Added check for hasElectronicResources in Bib Page before rendering ElectronicResources.
 - Fixed an issue in ItemTable where an error message was displaying when an in-progress item fetch was aborted on subsequent filter changes.
 
 ### Added
