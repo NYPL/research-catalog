@@ -7,6 +7,7 @@ export const DRB_RESULTS_PER_PAGE = 3
 export const ITEMS_PER_SEARCH_RESULT = 3
 export const ITEM_PAGINATION_BATCH_SIZE = 20
 export const ITEM_VIEW_ALL_BATCH_SIZE = 150
+export const ELECTRONIC_RESOURCES_PER_BIB_PAGE = 1
 export const SHEP_HTTP_TIMEOUT = 4000
 export const FOCUS_TIMEOUT = 50
 

@@ -26,9 +26,9 @@ import {
 } from "../../../src/utils/bibUtils"
 import BibDetailsModel from "../../../src/models/BibDetails"
 import BibDetails from "../../../src/components/BibPage/BibDetail"
+import ElectronicResources from "../../../src/components/BibPage/ElectronicResources"
 import ItemTable from "../../../src/components/ItemTable/ItemTable"
 import ItemTableControls from "../../../src/components/ItemTable/ItemTableControls"
-import ElectronicResourcesLink from "../../../src/components/SearchResults/ElectronicResourcesLink"
 import ExternalLink from "../../../src/components/Links/ExternalLink/ExternalLink"
 import ItemFilters from "../../../src/components/ItemFilters/ItemFilters"
 import type {
@@ -209,11 +209,7 @@ export default function BibPage({
         </Heading>
         <BibDetails key="top-details" details={topDetails} />
         {bib.hasElectronicResources ? (
-          <ElectronicResourcesLink
-            bibUrl={bib.url}
-            electronicResources={bib.electronicResources}
-            inSearchResults={false}
-          />
+          <ElectronicResources electronicResources={bib.electronicResources} />
         ) : null}
         {bib.showItemTable ? (
           <>
