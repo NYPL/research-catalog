@@ -103,6 +103,13 @@ describe("Bib Page no items", () => {
 
 describe("Bib Page Item Table", () => {
   beforeEach(() => {
+    global.fetch = jest.fn().mockImplementationOnce(() =>
+      Promise.resolve({
+        status: 200,
+        json: () => Promise.resolve({ success: true }),
+      })
+    )
+
     render(
       <BibPage
         discoveryBibResult={bibWithManyItems.resource}
@@ -112,15 +119,100 @@ describe("Bib Page Item Table", () => {
     )
   })
 
-  it.todo("renders the item filters container")
+  it("renders the filters container and populates the checkboxes", async () => {
+    expect(screen.getByTestId("item-filters-container")).toBeInTheDocument()
+    const checkboxGroups = screen.getAllByTestId("checkbox-group")
+    expect(checkboxGroups).toHaveLength(2)
+
+    expect(checkboxGroups[0].querySelectorAll("input")).toHaveLength(1)
+    expect(checkboxGroups[1].querySelectorAll("input")).toHaveLength(1)
+  })
+
+  it("updates the router when filter checkboxes are clicked", async () => {
+    const checkboxGroups = screen.getAllByTestId("checkbox-group")
+
+    await userEvent.click(checkboxGroups[0].querySelector("input"))
+    expect(mockRouter.asPath).toBe("/bib/pb5579193?item_format=Text")
+
+    await userEvent.click(checkboxGroups[0].querySelector("input"))
+    expect(mockRouter.asPath).toBe("/bib/pb5579193")
+  })
+
+  it("updates the router when year filter is submitted", async () => {
+    const yearFilter = screen.queryByTestId("year-filter")
+    const yearField = screen.queryByPlaceholderText("YYYY")
+    await userEvent.type(yearField, "2005")
+
+    await userEvent.click(yearFilter.querySelector("button[type='submit']"))
+
+    expect(mockRouter.asPath).toBe("/bib/pb5579193?item_date=2005")
+
+    // Clear the year field
+    await userEvent.click(yearFilter.querySelector("button[type='button']"))
+    await userEvent.click(yearFilter.querySelector("button[type='submit']"))
+    expect(mockRouter.asPath).toBe("/bib/pb5579193")
+  })
+
+  it("clears a filter group when the MultiSelect clear button is clicked", async () => {
+    const checkboxGroups = screen.getAllByTestId("checkbox-group")
+
+    await userEvent.click(checkboxGroups[0].querySelector("input"))
+    await userEvent.click(checkboxGroups[1].querySelector("input"))
+    expect(mockRouter.asPath).toBe(
+      "/bib/pb5579193?item_format=Text&item_status=status%3Aa"
+    )
+
+    await userEvent.click(
+      screen.getByLabelText("remove 1 item selected from Format")
+    )
+
+    expect(mockRouter.asPath).toBe("/bib/pb5579193?item_status=status%3Aa")
+
+    await userEvent.click(
+      screen.getByLabelText("remove 1 item selected from Status")
+    )
+
+    expect(mockRouter.asPath).toBe("/bib/pb5579193")
+  })
+
+  it("renders TagSet for applied filters and clears filters via tag click", async () => {
+    await userEvent.click(
+      screen.getAllByTestId("checkbox-group")[0].querySelector("input")
+    )
+
+    const tagButton = screen.queryByTestId("filter-tags")
+    expect(tagButton).toHaveTextContent("Text")
+    expect(mockRouter.asPath).toBe("/bib/pb5579193?item_format=Text")
+
+    await userEvent.click(tagButton)
+    expect(screen.queryByTestId("filter-tags")).not.toBeInTheDocument()
+    expect(mockRouter.asPath).toBe("/bib/pb5579193")
+  })
+
+  it("TagSet should display a clear all button that clears all filters on click", async () => {
+    await userEvent.click(
+      screen.getAllByTestId("checkbox-group")[0].querySelector("input")
+    )
+    await userEvent.click(
+      screen.getAllByTestId("checkbox-group")[1].querySelector("input")
+    )
+    await userEvent.type(screen.queryByPlaceholderText("YYYY"), "2005")
+
+    await userEvent.click(
+      screen.queryByTestId("year-filter").querySelector("button[type='submit']")
+    )
+
+    expect(mockRouter.asPath).toBe(
+      "/bib/pb5579193?item_format=Text&item_status=status%3Aa&item_date=2005"
+    )
+    await userEvent.click(screen.getByText("Clear filters"))
+
+    expect(mockRouter.asPath).toBe("/bib/pb5579193")
+    expect(screen.queryByTestId("filter-tags")).not.toBeInTheDocument()
+    expect(screen.queryByPlaceholderText("YYYY")).toHaveValue("")
+  })
 
   it("renders pagination when there are more than 20 items and updates the router on page button clicks", async () => {
-    global.fetch = jest.fn().mockImplementationOnce(() =>
-      Promise.resolve({
-        status: 200,
-        json: () => Promise.resolve({ success: true }),
-      })
-    )
     expect(
       screen.queryByText("Displaying 1-20 of 26 items")
     ).toBeInTheDocument()

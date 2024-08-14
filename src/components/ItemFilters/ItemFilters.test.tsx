@@ -7,14 +7,21 @@ import ItemFilters from "./ItemFilters"
 import Bib from "../../models/Bib"
 
 describe("ItemFilters", () => {
+  let filtersChangeMock: jest.Mock
   beforeEach(() => {
     const bib = new Bib(bibWithItems.resource)
-    const filtersChangeMock = jest.fn()
+    filtersChangeMock = jest.fn()
     render(
       <ItemFilters
         itemAggregations={bib.itemAggregations}
         handleFiltersChange={filtersChangeMock}
-        appliedFilters={{ location: [], format: [], status: [], year: [] }}
+        appliedFilters={{
+          location: ["Offsite"],
+          format: ["Text"],
+          status: ["Available"],
+          year: [],
+        }}
+        filtersAreApplied={true}
       />
     )
   })
@@ -33,19 +40,40 @@ describe("ItemFilters", () => {
     expect(screen.getByLabelText("Search by Year")).toBeInTheDocument()
   })
 
-  it("renders apply filters button", async () => {
-    expect(
-      screen.getByText("Apply filters", { selector: "button" })
-    ).toBeInTheDocument()
+  it("closes open filters when user clicks outside of the filter", async () => {
+    const outsideOfTheFilter = screen.getByLabelText("Search by Year")
+
+    const locationFilterButton = screen
+      .getByTestId("location-multi-select")
+      .querySelector("button")
+    await userEvent.click(locationFilterButton)
+
+    expect(locationFilterButton).toHaveAttribute("aria-expanded", "true")
+
+    await userEvent.click(outsideOfTheFilter)
+    expect(locationFilterButton).toHaveAttribute("aria-expanded", "false")
   })
 
-  it.skip("closes open filters when user clicks outside of the filter", async () => {
-    const outsideOfTheFilter = screen.getByTestId("year-filter-label")
-
-    await userEvent.click(screen.getByTestId("location-item-filter"))
+  it("calls the change handler when filter values are changed", async () => {
+    await userEvent.click(screen.getByTestId("location-multi-select"))
     const offsiteCheckbox = screen.getByLabelText("Offsite")
+
     await userEvent.click(offsiteCheckbox)
-    await userEvent.click(outsideOfTheFilter)
-    expect(offsiteCheckbox).not.toBeInTheDocument()
+
+    expect(filtersChangeMock).toHaveBeenCalledTimes(1)
+
+    await userEvent.click(offsiteCheckbox)
+    expect(filtersChangeMock).toHaveBeenCalledTimes(2)
+  })
+
+  it("renders TagSet data when filters are applied and removes the filter when tag is clicked", async () => {
+    expect(screen.queryByText("Filters Applied")).toBeInTheDocument()
+    await userEvent.click(
+      screen.getByLabelText("Location > Offsite, click to remove filter")
+    )
+    expect(filtersChangeMock).toHaveBeenCalledWith({
+      item_format: "Text",
+      item_status: "Available",
+    })
   })
 })
