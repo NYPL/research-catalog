@@ -5,11 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Prerelase
+## [1.2.2] 2024-08-14
 
 ### Updated
 
 - Fix feedback formatting bug [SCC-4220](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4220)
+
+### Updated
+
+- Updated Ebsco link URL (SCC-4226)
+- Refactor ItemTableData model to format data for DS components in ItemFilters (SCC-4203)
+
+### Fixed
+
+- Fixed an issue in ItemTable where an error message was displaying when an in-progress item fetch was aborted on subsequent filter changes.
 
 ### Added
 
