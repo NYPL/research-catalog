@@ -48,8 +48,8 @@ export interface ItemMetadata {
 }
 
 export interface ItemDateRange {
-  gte: number | string
-  lte: number | string
+  gte: string
+  lte: string
 }
 
 /* eslint-disable @typescript-eslint/naming-convention */

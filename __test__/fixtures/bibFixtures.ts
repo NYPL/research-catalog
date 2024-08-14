@@ -10345,8 +10345,8 @@ export const bibManyEResources = {
         ],
         dateRange: [
           {
-            gte: 1794,
-            lte: 1794,
+            gte: "1794",
+            lte: "1794",
           },
         ],
         eddRequestable: true,
@@ -10399,7 +10399,7 @@ export const bibManyEResources = {
         ],
         idNyplSourceId: {
           "@type": "SierraNypl",
-          "@value": "17145921",
+          "@value": 17145921,
         },
       },
       {
@@ -10419,8 +10419,8 @@ export const bibManyEResources = {
         ],
         dateRange: [
           {
-            gte: 1793,
-            lte: 1793,
+            gte: "1793",
+            lte: "1793",
           },
         ],
         eddRequestable: true,
@@ -10493,8 +10493,8 @@ export const bibManyEResources = {
         ],
         dateRange: [
           {
-            gte: 1792,
-            lte: 1792,
+            gte: "1792",
+            lte: "1792",
           },
         ],
         eddRequestable: true,
@@ -10567,8 +10567,8 @@ export const bibManyEResources = {
         ],
         dateRange: [
           {
-            gte: 1791,
-            lte: 1791,
+            gte: "1791",
+            lte: "1791",
           },
         ],
         eddRequestable: true,
@@ -10641,8 +10641,8 @@ export const bibManyEResources = {
         ],
         dateRange: [
           {
-            gte: 1790,
-            lte: 1790,
+            gte: "1790",
+            lte: "1790",
           },
         ],
         eddRequestable: true,
@@ -10715,8 +10715,8 @@ export const bibManyEResources = {
         ],
         dateRange: [
           {
-            gte: 1789,
-            lte: 1789,
+            gte: "1789",
+            lte: "1789",
           },
         ],
         eddRequestable: true,
@@ -10789,8 +10789,8 @@ export const bibManyEResources = {
         ],
         dateRange: [
           {
-            gte: 1788,
-            lte: 1788,
+            gte: "1788",
+            lte: "1788",
           },
         ],
         eddRequestable: true,
@@ -10863,8 +10863,8 @@ export const bibManyEResources = {
         ],
         dateRange: [
           {
-            gte: 1787,
-            lte: 1787,
+            gte: "1787",
+            lte: "1787",
           },
         ],
         eddRequestable: true,
@@ -10937,8 +10937,8 @@ export const bibManyEResources = {
         ],
         dateRange: [
           {
-            gte: 1786,
-            lte: 1786,
+            gte: "1786",
+            lte: "1786",
           },
         ],
         eddRequestable: true,
@@ -11011,8 +11011,8 @@ export const bibManyEResources = {
         ],
         dateRange: [
           {
-            gte: 1785,
-            lte: 1785,
+            gte: "1785",
+            lte: "1785",
           },
         ],
         eddRequestable: true,
@@ -11085,8 +11085,8 @@ export const bibManyEResources = {
         ],
         dateRange: [
           {
-            gte: 1784,
-            lte: 1784,
+            gte: "1784",
+            lte: "1784",
           },
         ],
         eddRequestable: true,
@@ -11159,8 +11159,8 @@ export const bibManyEResources = {
         ],
         dateRange: [
           {
-            gte: 1783,
-            lte: 1783,
+            gte: "1783",
+            lte: "1783",
           },
         ],
         eddRequestable: true,
