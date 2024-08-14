@@ -43,4 +43,29 @@ describe("ElectronicResources component", () => {
       expect(eResourcesList.children).toHaveLength(368)
     })
   })
+
+  describe("Few eResources", () => {
+    const bib = new Bib(bibWithTwoEResouces.resource)
+    beforeEach(() => {
+      render(
+        <ElectronicResources electronicResources={bib.electronicResources} />
+      )
+    })
+
+    it("renders the correct heading", () => {
+      expect(screen.queryByText("Available Online")).toBeInTheDocument()
+    })
+
+    it("renders all eResources and does not display a view more button", () => {
+      const eResourcesContainer = screen.queryByTestId("electronic-resources")
+      expect(eResourcesContainer).toBeInTheDocument()
+
+      const eResourcesList = eResourcesContainer.querySelector("ul")
+      expect(eResourcesList.children).toHaveLength(2)
+
+      expect(
+        screen.queryByTestId("see-more-eresources-button")
+      ).not.toBeInTheDocument()
+    })
+  })
 })
