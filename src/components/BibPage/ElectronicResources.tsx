@@ -37,7 +37,7 @@ const ElectronicResources = ({
     return null
   }
 
-  const resources = renderERLinksList(electronicResourcesToDisplay)
+  const eResourcesList = electronicResourcesList(electronicResourcesToDisplay)
 
   const onClick = () => {
     if (!isTestMode && scrollToRef.current)
@@ -56,7 +56,7 @@ const ElectronicResources = ({
     <Card ref={scrollToRef} isBordered mt="l">
       <CardHeading level="three">Available Online</CardHeading>
       <CardContent aria-expanded={!showMore}>
-        {resources}
+        {eResourcesList}
         {electronicResources.length > ELECTRONIC_RESOURCES_PER_BIB_PAGE ? (
           <Button
             id="see-more-eresources-button"
@@ -82,41 +82,50 @@ const ElectronicResources = ({
 }
 
 /**
- * Builds unordered list of electronic resources links
+ * Renders a single electronic resource link
  */
-const renderERLinksList = (electronicResources) => {
-  if (!electronicResources) return null
-  const electronicResourcesLink = ({ href, label, prefLabel }) => (
-    <ExternalLink href={href} py="x">
-      <Box as="span" display="inline-block" my="xxs">
-        {label || prefLabel || href}
-      </Box>
-    </ExternalLink>
-  )
+const electronicResourceLink = ({
+  url,
+  title,
+  prefLabel,
+}: ElectronicResource) => (
+  <ExternalLink href={url} py="x">
+    <Box as="span" display="inline-block" my="xxs">
+      {title || prefLabel || url}
+    </Box>
+  </ExternalLink>
+)
+
+/**
+ * Renders an unordered list of electronic resources links
+ */
+const electronicResourcesList = (electronicResources: ElectronicResource[]) => {
+  if (!electronicResources.length) return null
+
   // If there is only one electronic resource, then
   // just render a single anchor element.
   if (electronicResources.length === 1) {
     const electronicItem = electronicResources[0]
-    return electronicResourcesLink({
-      href: electronicItem.url,
-      label: electronicItem.label || electronicItem.prefLabel,
+    return electronicResourceLink({
+      url: electronicItem.url,
+      title: electronicItem.title || electronicItem.prefLabel,
     })
-  } else {
-    // Otherwise, create a list of anchors.
-    return (
-      <List
-        type="ul"
-        noStyling
-        m={0}
-        listItems={electronicResources.map((resource) =>
-          electronicResourcesLink({
-            href: resource.url,
-            label: resource.label || resource.prefLabel,
-          })
-        )}
-      />
-    )
   }
+
+  // Otherwise, create a list of anchors.
+  return (
+    <List
+      type="ul"
+      noStyling
+      m={0}
+      listItems={electronicResources.map((resource) =>
+        electronicResourceLink({
+          url: resource.url,
+          title: resource.title || resource.prefLabel,
+        })
+      )}
+    />
+  )
 }
 
 export default ElectronicResources
