@@ -22,7 +22,7 @@ describe("ElectronicResources component", () => {
       expect(screen.queryByText("Available Online")).toBeInTheDocument()
     })
 
-    it("renders 3 links and a display more button when there are more than 3 eResources", () => {
+    it("renders 3 links and a View All button when there are more than 3 eResources", () => {
       const eResourcesContainer = screen.queryByTestId("electronic-resources")
       expect(eResourcesContainer).toBeInTheDocument()
 
@@ -63,7 +63,7 @@ describe("ElectronicResources component", () => {
       expect(screen.queryByText("Available Online")).toBeInTheDocument()
     })
 
-    it("renders all eResources and does not display a view more button", () => {
+    it("renders all eResources and does not display a View All button", () => {
       const eResourcesContainer = screen.queryByTestId("electronic-resources")
       expect(eResourcesContainer).toBeInTheDocument()
 
