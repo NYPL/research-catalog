@@ -101,7 +101,7 @@ describe("Bib Page no items", () => {
     ).not.toBeInTheDocument()
   })
 
-  it("renders the electronic resources link when there are electronic resources", () => {
+  it("renders the electronic resources component when there are electronic resources", () => {
     expect(screen.queryByTestId("electronic-resources")).toBeInTheDocument()
   })
 })
@@ -117,7 +117,7 @@ describe("Bib Page no electronic resources", () => {
     )
   })
 
-  it("does not render the electronic resources link when there are no electronic resources", () => {
+  it("does not render the electronic resources component when there are no electronic resources", () => {
     expect(screen.queryByTestId("electronic-resources")).not.toBeInTheDocument()
   })
 })
