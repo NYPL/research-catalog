@@ -19,7 +19,7 @@ export interface DiscoveryItemResult {
   requestable?: boolean[]
   eddRequestable?: boolean
   catalogItemType?: JSONLDValue[]
-  dateRange?: Record<"gte" | "lte", number>[]
+  dateRange?: ItemDateRange[]
   identifier?: ItemSourceID[]
   owner?: JSONLDValue[]
   physicalLocation?: string[]
@@ -45,6 +45,11 @@ export interface ItemMetadata {
   barcode?: string
   callNumber?: string
   bibId?: string
+}
+
+export interface ItemDateRange {
+  gte: number | string
+  lte: number | string
 }
 
 /* eslint-disable @typescript-eslint/naming-convention */
