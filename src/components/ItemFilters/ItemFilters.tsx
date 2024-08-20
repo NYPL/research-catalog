@@ -181,7 +181,7 @@ const ItemFilters = ({
             lineHeight={2}
             display="table-cell"
           >
-            Filters Applied
+            Active filters
           </Text>
           <TagSet
             id="bib-details-applied-filters"

@@ -67,7 +67,7 @@ describe("ItemFilters", () => {
   })
 
   it("renders TagSet data when filters are applied and removes the filter when tag is clicked", async () => {
-    expect(screen.queryByText("Filters Applied")).toBeInTheDocument()
+    expect(screen.queryByText("Active filters")).toBeInTheDocument()
     await userEvent.click(
       screen.getByLabelText("Location > Offsite, click to remove filter")
     )
