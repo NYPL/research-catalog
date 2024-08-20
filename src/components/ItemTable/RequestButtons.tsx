@@ -20,12 +20,12 @@ const RequestButtons = ({ item }: RequestButtonsProps) => {
         <ExternalLink
           href={item.aeonUrl}
           type={!item.isAvailable ? "buttonDisabled" : "buttonSecondary"}
-          aria-label={`Request Appointment, ${item.bibTitle}`}
+          aria-label={`Request appointment, ${item.bibTitle}`}
           disabled={!item.isAvailable}
           mb="s"
           target="_self"
         >
-          Request Appointment
+          Request appointment
         </ExternalLink>
       ) : (
         <>
