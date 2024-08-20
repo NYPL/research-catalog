@@ -33,12 +33,12 @@ const RequestButtons = ({ item }: RequestButtonsProps) => {
             <RCLink
               href={`/hold/request/${item.bibId}-${item.id}`}
               type={!item.isAvailable ? "buttonDisabled" : "buttonSecondary"}
-              aria-label={`Request for On-site Use, ${item.bibTitle}`}
+              aria-label={`Request for on-site use, ${item.bibTitle}`}
               disabled={!item.isAvailable}
               mb="s"
               target="_self"
             >
-              Request for On-site Use
+              Request for on-site use
             </RCLink>
           )}
           {item.isEDDRequestable && (
