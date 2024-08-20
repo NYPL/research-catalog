@@ -84,7 +84,7 @@ describe("Item model", () => {
     })
   })
 
-  describe("isAvailable", () => {
+  describe("Getter functions", () => {
     it("determines if an item is available based on the status label", () => {
       expect(item.isAvailable).toBe(true)
 
@@ -93,6 +93,16 @@ describe("Item model", () => {
 
       const unavailableItem = new Item(itemUnavailable, parentBib)
       expect(unavailableItem.isAvailable).toBe(false)
+    })
+
+    it("formats a title for the request buttons that includes the bib title and the volume if available", () => {
+      expect(item.requestTitle).toBe(
+        "A history of spaghetti eating and cooking for: spaghetti dinner., no. 4 (2001)"
+      )
+      const itemWithoutVolume = new Item(itemUnavailable, parentBib)
+      expect(itemWithoutVolume.requestTitle).toBe(
+        "A history of spaghetti eating and cooking for: spaghetti dinner."
+      )
     })
   })
 
