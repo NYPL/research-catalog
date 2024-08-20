@@ -35,8 +35,8 @@ export default class ItemTableData {
       ...(this.showVolumeColumn() ? [this.volumeColumnHeading()] : []),
       "Format",
       ...(this.showAccessColumn() ? ["Access"] : []),
-      "Call Number",
-      "Item Location",
+      "Call number",
+      "Item location",
     ]
   }
 

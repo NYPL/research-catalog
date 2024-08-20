@@ -111,7 +111,7 @@ const ItemFilters = ({
         />
         <Box minWidth="440">
           <Label id="year-filter-label" htmlFor="searchbar-form-year-filter">
-            Search by Year
+            Search by year
           </Label>
           <SearchBar
             id="year-filter"
@@ -121,7 +121,7 @@ const ItemFilters = ({
             textInputProps={{
               placeholder: "YYYY",
               isClearable: true,
-              labelText: "Search by year",
+              labelText: "Search by year form input",
               name: "year-filter",
               value: year,
               onChange: ({ target }) => setYear(target.value),

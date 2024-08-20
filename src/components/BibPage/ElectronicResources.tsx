@@ -54,7 +54,7 @@ const ElectronicResources = ({
       mt="l"
       data-testid="electronic-resources"
     >
-      <CardHeading level="three">Available Online</CardHeading>
+      <CardHeading level="three">Available online</CardHeading>
       <CardContent aria-expanded={!showMore}>
         <List
           type="ul"
@@ -83,7 +83,7 @@ const ElectronicResources = ({
             fontWeight="bold"
           >
             View {showMore ? `all ${electronicResources.length}` : "fewer"}{" "}
-            Available Online resources
+            available online resources
             <Icon
               ml="xs"
               iconRotation={`rotate${showMore ? 0 : 180}`}

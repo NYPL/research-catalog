@@ -20,7 +20,7 @@ describe("Electronic Resources Link with a single resource", () => {
   })
 
   it("renders the correct heading", async () => {
-    expect(screen.getByText("Available Online")).toBeInTheDocument()
+    expect(screen.getByText("Available online")).toBeInTheDocument()
   })
   it("renders the correct link with the label as the text when only one electronic resource is available", async () => {
     const link = screen.getByRole("link", {

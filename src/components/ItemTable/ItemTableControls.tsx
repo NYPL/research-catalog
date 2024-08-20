@@ -105,7 +105,7 @@ const ItemTableControls = ({
               <Box as="span" mr="xxs">
                 {viewAllExpanded
                   ? "View fewer items"
-                  : `View All ${bib.getNumItemsMessage(filtersAreApplied)}`}
+                  : `View all ${bib.getNumItemsMessage(filtersAreApplied)}`}
               </Box>
               <Icon
                 iconRotation={viewAllExpanded ? "rotate180" : "rotate0"}

@@ -44,17 +44,17 @@ describe("SearchResultsBib model", () => {
 
   describe("getNumItemsMessage", () => {
     it("returns a message populated with the correct resource type and pluralization", () => {
-      expect(searchResultsBib.getNumItemsMessage()).toBe("4 Items")
+      expect(searchResultsBib.getNumItemsMessage()).toBe("4 items")
     })
     it("works for single eResource", () => {
       const bibOneElectronicResource = new SearchResultsBib(
         bibWithOneElectronicResource.resource
       )
-      expect(bibOneElectronicResource.getNumItemsMessage()).toBe("1 Resource")
+      expect(bibOneElectronicResource.getNumItemsMessage()).toBe("1 resource")
     })
     it("works for a bib with no items", () => {
       const bibWithNoItems = new SearchResultsBib(bibNoItems.resource)
-      expect(bibWithNoItems.getNumItemsMessage()).toBe("0 Resources")
+      expect(bibWithNoItems.getNumItemsMessage()).toBe("0 resources")
     })
   })
 

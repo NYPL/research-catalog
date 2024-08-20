@@ -158,7 +158,7 @@ describe("Bib model", () => {
     it("can handle missing field", () => {
       expect(
         bibWithSupContentModel.bottomDetails.find(
-          (detail) => detail.label === "Call Number"
+          (detail) => detail.label === "Call number"
         )
       ).not.toBeDefined()
     })
@@ -189,7 +189,7 @@ describe("Bib model", () => {
     it("includes url in the field", () => {
       expect(bibWithSupContentModel.supplementaryContent).toStrictEqual({
         link: "external",
-        label: "Supplementary Content",
+        label: "Supplementary content",
         value: [
           {
             urlLabel: "Image",
@@ -207,7 +207,7 @@ describe("Bib model", () => {
       })
       expect(
         bogusBib.topDetails.find(
-          (detail) => detail.label === "Additional Author"
+          (detail) => detail.label === "Additional author"
         )
       ).not.toBeDefined()
     })
