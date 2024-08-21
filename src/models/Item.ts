@@ -64,7 +64,7 @@ export default class Item {
     return itemAvailableIds.includes(this?.status?.["@id"]) || false
   }
 
-  get requestTitle(): string {
+  get requestButtonAriaLabel(): string {
     return `${this.bibTitle}${this.volume ? `, ${this.volume}` : ""}`
   }
 

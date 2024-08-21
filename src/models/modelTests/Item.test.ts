@@ -95,12 +95,12 @@ describe("Item model", () => {
       expect(unavailableItem.isAvailable).toBe(false)
     })
 
-    it("formats a title for the request buttons that includes the bib title and the volume if available", () => {
-      expect(item.requestTitle).toBe(
+    it("formats an aria label for the request buttons that includes the bib title and the volume if available", () => {
+      expect(item.requestButtonAriaLabel).toBe(
         "A history of spaghetti eating and cooking for: spaghetti dinner., no. 4 (2001)"
       )
       const itemWithoutVolume = new Item(itemUnavailable, parentBib)
-      expect(itemWithoutVolume.requestTitle).toBe(
+      expect(itemWithoutVolume.requestButtonAriaLabel).toBe(
         "A history of spaghetti eating and cooking for: spaghetti dinner."
       )
     })

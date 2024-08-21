@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Fixed some accessibility issues including making Requeset button titles more specific and fixing a layout issue on zoom. (SCC-4234)
+- Fixed some accessibility issues including making Request button titles more specific and fixing a layout issue on zoom. (SCC-4234)
 
 ## [1.2.2] 2024-08-14
 
