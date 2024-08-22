@@ -18,6 +18,11 @@ const ProfileHeader = ({ patron }: { patron: Patron }) => {
     [
       { icon: "actionIdentityFilled", term: "Name", description: patron.name },
       {
+        icon: "actionIdentity",
+        term: "Username",
+        description: patron.username,
+      },
+      {
         icon: "actionPayment",
         term: "Card number",
         description: patron.formattedBarcode,
