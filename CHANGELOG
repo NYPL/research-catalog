@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added ElectronicResources component (SCC-4227)
 - Added check for hasElectronicResources in Bib Page before rendering ElectronicResources (SCC-4227).
+- Add username to account profile header ([SCC-4233](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4233))
 
 ## [1.2.2] 2024-08-14
 
