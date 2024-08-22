@@ -232,7 +232,7 @@ describe("MyAccount page", () => {
     expect(result.props.tabsPath).toBe("overdues")
   })
   it("can handle no username", () => {
-    const component = render(
+    render(
       <MyAccount
         isAuthenticated={true}
         accountData={{
@@ -244,7 +244,8 @@ describe("MyAccount page", () => {
         }}
       />
     )
-    expect(component.baseElement).toBeInTheDocument()
+    const username = screen.queryByText("Username")
+    expect(username).toBeNull()
   })
   it("renders notification banner if user has fines", () => {
     render(
