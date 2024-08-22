@@ -75,6 +75,7 @@ const ItemFilters = ({
     if (id === "clear-filters") {
       await clearAllFilters()
     } else {
+      setYear("")
       const [newValues, field] = removeValueFromFilters(id, appliedFilters)
       await submitFilters(newValues, field)
     }
