@@ -48,7 +48,9 @@ const ProfileHeader = ({ patron }: { patron: Patron }) => {
         description: patron.expirationDate,
       },
     ] as IconListElementPropType[]
-  ).map(buildListElementsWithIcons)
+  )
+    .filter((data) => data.description)
+    .map(buildListElementsWithIcons)
 
   return (
     <List
