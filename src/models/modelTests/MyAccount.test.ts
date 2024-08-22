@@ -193,13 +193,14 @@ describe("MyAccountModel", () => {
       expect(account.checkouts).toStrictEqual(processedCheckouts)
       expect(account.fines).toStrictEqual(processedFines)
     })
-    it("builds empty Account data model with empty phones and email", async () => {
+    it("builds empty Account data model with empty phones, email, username", async () => {
       MyAccount.prototype.fetchCheckouts = async () => empty
       MyAccount.prototype.fetchHolds = async () => empty
       MyAccount.prototype.fetchPatron = async () => ({
         ...patron,
         phones: [],
         emails: [],
+        varFields: [{ fieldtag: "not u", content: "irrelevant" }],
       })
       MyAccount.prototype.fetchFines = async () => ({ total: 0, entries: [] })
       MyAccount.prototype.fetchBibData = async () => ({ total: 0, entries: [] })

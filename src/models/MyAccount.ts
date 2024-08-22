@@ -76,7 +76,7 @@ export default class MyAccount {
 
   async fetchPatron() {
     return await this.client.get(
-      `${this.baseQuery}?fields=names,barcodes,expirationDate,homeLibrary,emails,phones,fixedFields`
+      `${this.baseQuery}?fields=names,barcodes,expirationDate,homeLibrary,emails,phones,fixedFields,varFields`
     )
   }
 
