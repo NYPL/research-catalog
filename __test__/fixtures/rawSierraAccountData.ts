@@ -1960,7 +1960,7 @@ export const patron = {
       type: "t",
     },
   ],
-  varFields: [{ fieldTag: "u", content: "spaghettimaster" }],
+  varFields: [{ fieldTag: "u", content: "pastadisciple" }],
   fixedFields: {
     "268": { label: "notification preference", value: "z" } as FixedField,
   },
