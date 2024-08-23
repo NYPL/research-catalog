@@ -74,8 +74,10 @@ export interface SierraRecord {
 }
 
 export type FixedField = { label: string; value: "z" | "p" }
+export type VarField = { fieldTag: string; content: string }
 
 export interface SierraPatron {
+  varFields?: VarField[]
   fixedFields?: Record<"268", FixedField>
   id?: number
   names?: string[]
@@ -120,6 +122,7 @@ export interface Hold {
 }
 
 export interface Patron {
+  username?: string
   notificationPreference: "z" | "p"
   name: string
   barcode: string

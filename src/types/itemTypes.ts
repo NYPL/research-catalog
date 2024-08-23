@@ -15,7 +15,15 @@ export interface DiscoveryItemResult {
   aeonUrl?: string[]
   dueDate?: string[]
   physRequestable?: boolean
+  specRequestable?: boolean
+  requestable?: boolean[]
   eddRequestable?: boolean
+  catalogItemType?: JSONLDValue[]
+  dateRange?: ItemDateRange[]
+  identifier?: ItemSourceID[]
+  owner?: JSONLDValue[]
+  physicalLocation?: string[]
+  recapCustomerCode?: string[]
 }
 
 export interface ItemLocation extends JSONLDValue {
@@ -37,6 +45,11 @@ export interface ItemMetadata {
   barcode?: string
   callNumber?: string
   bibId?: string
+}
+
+export interface ItemDateRange {
+  gte: string
+  lte: string
 }
 
 /* eslint-disable @typescript-eslint/naming-convention */

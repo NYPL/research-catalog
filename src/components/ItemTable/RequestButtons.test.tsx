@@ -18,7 +18,7 @@ describe("RequestButtons", () => {
     render(<RequestButtons item={item} />)
     expect(
       screen.getByRole("link", {
-        name: "Request Appointment, A history of spaghetti eating and cooking for: spaghetti dinner.",
+        name: "Request Appointment, A history of spaghetti eating and cooking for: spaghetti dinner., no. 4 (2001)",
       })
     ).toHaveAttribute(
       "href",
