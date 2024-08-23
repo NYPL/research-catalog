@@ -64,6 +64,10 @@ export default class Item {
     return itemAvailableIds.includes(this?.status?.["@id"]) || false
   }
 
+  get requestButtonAriaLabel(): string {
+    return `${this.bibTitle}${this.volume ? `, ${this.volume}` : ""}`
+  }
+
   get isReCAP(): boolean {
     return this.isPartnerReCAP() || this.isNYPLReCAP()
   }
