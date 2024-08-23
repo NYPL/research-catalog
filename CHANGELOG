@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added ElectronicResources component (SCC-4227)
 - Added check for hasElectronicResources in Bib Page before rendering ElectronicResources (SCC-4227).
 
+### Fixed
+
+- Fixed visual and copy issues found in VQA (SCC-4235)
+
 ## [1.2.2] 2024-08-14
 
 ### Updated
