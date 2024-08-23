@@ -1,0 +1,23 @@
+import { Text } from "@nypl/design-system-react-components"
+
+/**
+ * The ItemTableCell component renders a table cell for the ItemTable
+ *
+ * Its extraction into a separate component allows for styling and other overrides on plain text cells
+ * when rendered programatically in the ItemTableData class
+ */
+const ItemTableCell = ({ children }) => {
+  return (
+    <Text
+      fontSize={{
+        base: "mobile.body.body2",
+        md: "desktop.body.body2",
+      }}
+      noSpace
+    >
+      {children}
+    </Text>
+  )
+}
+
+export default ItemTableCell
