@@ -18,6 +18,11 @@ const ProfileHeader = ({ patron }: { patron: Patron }) => {
     [
       { icon: "actionIdentityFilled", term: "Name", description: patron.name },
       {
+        icon: "actionIdentity",
+        term: "Username",
+        description: patron.username,
+      },
+      {
         icon: "actionPayment",
         term: "Card number",
         description: patron.formattedBarcode,
@@ -43,7 +48,9 @@ const ProfileHeader = ({ patron }: { patron: Patron }) => {
         description: patron.expirationDate,
       },
     ] as IconListElementPropType[]
-  ).map(buildListElementsWithIcons)
+  )
+    .filter((data) => data.description)
+    .map(buildListElementsWithIcons)
 
   return (
     <List
