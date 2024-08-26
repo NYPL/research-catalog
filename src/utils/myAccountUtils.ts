@@ -52,7 +52,10 @@ export function formatDate(date: string | number | Date) {
 // importing the MyAccount files.
 export const buildPatron = (patron: SierraPatron): Patron => {
   const notificationPreference = patron.fixedFields?.["268"].value
-  return {
+  const username = patron.varFields?.find(
+    (field) => field.fieldTag === "u" && field.content.length
+  )?.content
+  const processedPatron = {
     notificationPreference,
     name: formatPatronName(patron.names?.[0]),
     barcode: patron.barcodes?.[0],
@@ -65,5 +68,7 @@ export const buildPatron = (patron: SierraPatron): Patron => {
     phones: patron.phones || [],
     homeLibrary: patron.homeLibrary || null,
     id: patron.id,
-  }
+  } as Patron
+  if (username) processedPatron.username = username
+  return processedPatron
 }
