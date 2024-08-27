@@ -1,4 +1,4 @@
-import { Text } from "@nypl/design-system-react-components"
+import { Box } from "@nypl/design-system-react-components"
 
 /**
  * The ItemTableCell component renders a table cell for the ItemTable
@@ -8,15 +8,15 @@ import { Text } from "@nypl/design-system-react-components"
  */
 const ItemTableCell = ({ children }) => {
   return (
-    <Text
+    <Box
+      as="span"
       fontSize={{
         base: "mobile.body.body2",
         md: "desktop.body.body2",
       }}
-      noSpace
     >
       {children}
-    </Text>
+    </Box>
   )
 }
 
