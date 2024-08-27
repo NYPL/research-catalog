@@ -20,6 +20,7 @@ import {
   collapseMultiValueQueryParams,
   buildFilterQuery,
   getQueryWithoutFilters,
+  buildHoldingLocationFilters,
 } from "../../utils/refineSearchUtils"
 import type {
   Aggregation,
@@ -27,6 +28,7 @@ import type {
 } from "../../types/filterTypes"
 
 const fields = [
+  { value: "holdingLocation", label: "Holding Location" },
   { value: "materialType", label: "Format" },
   { value: "language", label: "Language" },
   { value: "dateAfter", label: "Start Year" },
@@ -87,15 +89,13 @@ const RefineSearch = ({
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault()
     if (validateDateRange() === false) return
-    const updatedQuery = {
-      // maintain any non-filter query params, eg q=spaghetti, journalTitle=pasta%20fancy
-      ...getQueryWithoutFilters(router.query),
-      // build out multi-value query params for selected filters
-      ...buildFilterQuery(appliedFilters),
-    }
     router.push({
       pathname: "/search",
-      query: updatedQuery,
+      query: {
+        ...router.query,
+        ...appliedFilters,
+        holdingLocation: appliedFilters.holdingLocation[0].split(","),
+      },
     })
     toggleRefine()
   }

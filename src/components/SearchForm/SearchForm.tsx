@@ -28,7 +28,6 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
   const [appliedFilters, setAppliedFilters] = useState(
     collapseMultiValueQueryParams(router.query)
   )
-
   const isLoading = useLoading()
 
   const handleSubmit = async (e: SyntheticEvent) => {
