@@ -110,7 +110,7 @@ const ItemFilters = ({
           labelText="Filter by"
           renderMultiSelect={renderMultiSelect}
         />
-        <Box minWidth="440">
+        <Box minWidth={{ md: 440 }}>
           <Label id="year-filter-label" htmlFor="searchbar-form-year-filter">
             Search by year
           </Label>
