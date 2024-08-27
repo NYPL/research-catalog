@@ -11,6 +11,7 @@ export const getFeedbackEmailText = (
   fields: FeedbackMetadataAndComment
 ) => {
   const submissionText = Object.keys(fields)
+    .filter((label) => fields[label])
     .map((label) => `${label}: ${encodeHTML(fields[label])}`)
     .join(", ")
   return `Question/Feedback from Research Catalog (SCC): ${submissionText} URL: ${fullUrl}`
@@ -28,6 +29,7 @@ export const getFeedbackEmailHTML = (
         <h1>Question/Feedback from Research Catalog (SCC):</h1>
         <dl>
           ${Object.keys(fields)
+            .filter((label) => fields[label])
             .map(
               (label) => `
             <dt>${label}:</dt>
