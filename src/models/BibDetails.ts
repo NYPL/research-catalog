@@ -125,7 +125,7 @@ export default class BibDetails {
         else if (fieldMapping.field === "extent") detail = this.extent
         else if (fieldMapping.field === "owner")
           detail = this.bib.owner && {
-            label: fieldMapping.label,
+            label: convertToSentenceCase(fieldMapping.label),
             value: [this.bib.owner?.prefLabel],
           }
         else detail = this.buildStandardDetail(fieldMapping)

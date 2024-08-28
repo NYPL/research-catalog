@@ -35,18 +35,18 @@ describe("Bib model", () => {
         },
         { label: "Language (note)", value: ["Serbian;"] },
         {
-          label: "Issued By (note)",
+          label: "Issued by (note)",
           value: ["Issued by: Narodna biblioteka Kraljevo."],
         },
         {
-          label: "Linking Entry (note)",
+          label: "Linking entry (note)",
           value: [
             "Has supplement, <2005-> : Preporučeno, ISSN 1452-3531",
             "Has supplement, <2006-> : Види чуда, ISSN 1452-7316",
             "Has supplement, <2006-> : Vidi čuda, ISSN 1452-7316",
           ],
         },
-        { label: "Source of Description (note)", value: ["G. 46, 3 (2016)."] },
+        { label: "Source of description (note)", value: ["G. 46, 3 (2016)."] },
       ])
     })
   })
