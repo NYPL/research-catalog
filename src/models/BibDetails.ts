@@ -9,6 +9,7 @@ import type {
   AnnotatedMarc,
   AnyBibDetail,
 } from "../types/bibDetailsTypes"
+import { convertToSentenceCase } from "../utils/appUtils"
 
 export default class BibDetails {
   bib: DiscoveryBibResult
@@ -163,17 +164,27 @@ export default class BibDetails {
           // Getting the first object in the array.
           [holding[fieldMapping.field][0].label]
         : holding[fieldMapping.field]
-    return this.buildDetail(fieldMapping.label, bibFieldValue)
+    return this.buildDetail(
+      convertToSentenceCase(fieldMapping.label),
+      bibFieldValue
+    )
   }
 
   buildStandardDetail(fieldMapping: FieldMapping) {
     const bibFieldValue = this.bib[fieldMapping.field]
-    return this.buildDetail(fieldMapping.label, bibFieldValue)
+    return this.buildDetail(
+      convertToSentenceCase(fieldMapping.label),
+      bibFieldValue
+    )
   }
 
   buildDetail(label: string, value: string[]): BibDetail {
     if (!value?.length) return null
-    return { label, value }
+
+    return {
+      label: convertToSentenceCase(label),
+      value,
+    }
   }
 
   buildInternalLinkedDetail(fieldMapping: {
@@ -184,7 +195,7 @@ export default class BibDetails {
     if (!value?.length) return null
     return {
       link: "internal",
-      label: fieldMapping.label,
+      label: convertToSentenceCase(fieldMapping.label),
       value: value.map((v: string) => {
         const internalUrl = `/search?filters[${
           fieldMapping.field
@@ -196,7 +207,11 @@ export default class BibDetails {
 
   buildExternalLinkedDetail(label: string, values: Url[]): LinkedBibDetail {
     if (!values.length) return null
-    return { link: "external", value: values, label }
+    return {
+      link: "external",
+      value: values,
+      label: convertToSentenceCase(label),
+    }
   }
 
   addNotes(details: AnyBibDetail[]) {
@@ -221,7 +236,10 @@ export default class BibDetails {
         }, {})
       const notesAsDetails = []
       Object.keys(notesGroupedByNoteType).forEach((key: string) => {
-        notesAsDetails.push({ label: key, value: notesGroupedByNoteType[key] })
+        notesAsDetails.push({
+          label: convertToSentenceCase(key),
+          value: notesGroupedByNoteType[key],
+        })
       })
       return notesAsDetails
     }
@@ -340,7 +358,7 @@ export default class BibDetails {
         urlLabel: sc.label,
       }
     })
-    return this.buildExternalLinkedDetail(label, values)
+    return this.buildExternalLinkedDetail(convertToSentenceCase(label), values)
   }
 
   buildSubjectHeadings(): SubjectHeadingDetail {
