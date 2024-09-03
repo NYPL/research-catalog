@@ -8,6 +8,7 @@ import {
   Icon,
   List,
   Box,
+  Text,
 } from "@nypl/design-system-react-components"
 
 import { ELECTRONIC_RESOURCES_PER_BIB_PAGE } from "../../config/constants"
@@ -54,19 +55,24 @@ const ElectronicResources = ({
       mt="l"
       data-testid="electronic-resources"
     >
-      <CardHeading level="three">Available Online</CardHeading>
+      <CardHeading level="three" size="body1" mb="s">
+        Available online
+      </CardHeading>
       <CardContent aria-expanded={!showMore}>
         <List
           type="ul"
           noStyling
-          m={0}
+          mb="s"
           listItems={electronicResourcesToDisplay.map((resource) => (
-            <ExternalLink
-              href={resource.url}
-              py="x"
-              key={kebabCase(resource.title)}
-            >
-              <Box as="span" display="inline-block" my="xxs">
+            <ExternalLink href={resource.url} key={kebabCase(resource.title)}>
+              <Box
+                as="span"
+                display="inline-block"
+                fontSize={{
+                  base: "mobile.body.body2",
+                  md: "desktop.body.body2",
+                }}
+              >
                 {resource.title || resource.prefLabel || resource.url}
               </Box>
             </ExternalLink>
@@ -81,9 +87,10 @@ const ElectronicResources = ({
             buttonType="link"
             aria-expanded={!showMore}
             fontWeight="bold"
+            sx={{ textDecoration: "none", height: "auto" }}
           >
             View {showMore ? `all ${electronicResources.length}` : "fewer"}{" "}
-            Available Online resources
+            available online resources
             <Icon
               ml="xs"
               iconRotation={`rotate${showMore ? 0 : 180}`}

@@ -35,18 +35,18 @@ describe("Bib model", () => {
         },
         { label: "Language (note)", value: ["Serbian;"] },
         {
-          label: "Issued By (note)",
+          label: "Issued by (note)",
           value: ["Issued by: Narodna biblioteka Kraljevo."],
         },
         {
-          label: "Linking Entry (note)",
+          label: "Linking entry (note)",
           value: [
             "Has supplement, <2005-> : Preporučeno, ISSN 1452-3531",
             "Has supplement, <2006-> : Види чуда, ISSN 1452-7316",
             "Has supplement, <2006-> : Vidi čuda, ISSN 1452-7316",
           ],
         },
-        { label: "Source of Description (note)", value: ["G. 46, 3 (2016)."] },
+        { label: "Source of description (note)", value: ["G. 46, 3 (2016)."] },
       ])
     })
   })
@@ -158,7 +158,7 @@ describe("Bib model", () => {
     it("can handle missing field", () => {
       expect(
         bibWithSupContentModel.bottomDetails.find(
-          (detail) => detail.label === "Call Number"
+          (detail) => detail.label === "Call number"
         )
       ).not.toBeDefined()
     })
@@ -189,7 +189,7 @@ describe("Bib model", () => {
     it("includes url in the field", () => {
       expect(bibWithSupContentModel.supplementaryContent).toStrictEqual({
         link: "external",
-        label: "Supplementary Content",
+        label: "Supplementary content",
         value: [
           {
             urlLabel: "Image",
@@ -207,7 +207,7 @@ describe("Bib model", () => {
       })
       expect(
         bogusBib.topDetails.find(
-          (detail) => detail.label === "Additional Author"
+          (detail) => detail.label === "Additional author"
         )
       ).not.toBeDefined()
     })

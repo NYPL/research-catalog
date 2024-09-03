@@ -9,6 +9,7 @@ import type {
   AnnotatedMarc,
   AnyBibDetail,
 } from "../types/bibDetailsTypes"
+import { convertToSentenceCase } from "../utils/appUtils"
 
 export default class BibDetails {
   bib: DiscoveryBibResult
@@ -65,8 +66,8 @@ export default class BibDetails {
         return [
           { label: "Location", field: "location" },
           { label: "Format", field: "format" },
-          { label: "Call Number", field: "shelfMark" },
-          { label: "Library Has", field: "holdingStatement" },
+          { label: "Call number", field: "shelfMark" },
+          { label: "Library has", field: "holdingStatement" },
           { label: "Notes", field: "notes" },
         ]
           .map((fieldMapping) => this.buildHoldingDetail(holding, fieldMapping))
@@ -78,9 +79,9 @@ export default class BibDetails {
   buildTopDetails(): AnyBibDetail[] {
     return [
       { field: "titleDisplay", label: "Title" },
-      { field: "publicationStatement", label: "Published By" },
+      { field: "publicationStatement", label: "Published by" },
       // external link
-      { field: "supplementaryContent", label: "Supplementary Content" },
+      { field: "supplementaryContent", label: "Supplementary content" },
       // internal link
       { field: "creatorLiteral", label: "Author" },
     ]
@@ -95,25 +96,25 @@ export default class BibDetails {
   }
   buildBottomDetails(): AnyBibDetail[] {
     const resourceFields = [
-      { field: "contributorLiteral", label: "Additional Authors" },
-      { field: "partOf", label: "Found In" },
-      { field: "serialPublicationDates", label: "Publication Date" },
+      { field: "contributorLiteral", label: "Additional authors" },
+      { field: "partOf", label: "Found in" },
+      { field: "serialPublicationDates", label: "Publication date" },
       { field: "extent", label: "Description" },
       { field: "description", label: "Summary" },
       { field: "donor", label: "Donor/Sponsor" },
-      { field: "seriesStatement", label: "Series Statement" },
-      { field: "uniformTitle", label: "Uniform Title" },
-      { field: "titleAlt", label: "Alternative Title" },
-      { field: "formerTitle", label: "Former Title" },
+      { field: "seriesStatement", label: "Series statement" },
+      { field: "uniformTitle", label: "Uniform title" },
+      { field: "titleAlt", label: "Alternative title" },
+      { field: "formerTitle", label: "Former title" },
       { field: "subjectLiteral", label: "Subject" },
       { field: "genreForm", label: "Genre/Form" },
       { field: "tableOfContents", label: "Contents" },
-      { field: "shelfMark", label: "Call Number" },
+      { field: "shelfMark", label: "Call number" },
       { field: "isbn", label: "ISBN" },
       { field: "issn", label: "ISSN" },
       { field: "oclc", label: "OCLC" },
       { field: "lccn", label: "LCCN" },
-      { field: "owner", label: "Owning Institution" },
+      { field: "owner", label: "Owning institution" },
     ]
       .map((fieldMapping: FieldMapping): AnyBibDetail => {
         let detail: AnyBibDetail
@@ -124,7 +125,7 @@ export default class BibDetails {
         else if (fieldMapping.field === "extent") detail = this.extent
         else if (fieldMapping.field === "owner")
           detail = this.bib.owner && {
-            label: fieldMapping.label,
+            label: convertToSentenceCase(fieldMapping.label),
             value: [this.bib.owner?.prefLabel],
           }
         else detail = this.buildStandardDetail(fieldMapping)
@@ -163,17 +164,27 @@ export default class BibDetails {
           // Getting the first object in the array.
           [holding[fieldMapping.field][0].label]
         : holding[fieldMapping.field]
-    return this.buildDetail(fieldMapping.label, bibFieldValue)
+    return this.buildDetail(
+      convertToSentenceCase(fieldMapping.label),
+      bibFieldValue
+    )
   }
 
   buildStandardDetail(fieldMapping: FieldMapping) {
     const bibFieldValue = this.bib[fieldMapping.field]
-    return this.buildDetail(fieldMapping.label, bibFieldValue)
+    return this.buildDetail(
+      convertToSentenceCase(fieldMapping.label),
+      bibFieldValue
+    )
   }
 
   buildDetail(label: string, value: string[]): BibDetail {
     if (!value?.length) return null
-    return { label, value }
+
+    return {
+      label: convertToSentenceCase(label),
+      value,
+    }
   }
 
   buildInternalLinkedDetail(fieldMapping: {
@@ -184,7 +195,7 @@ export default class BibDetails {
     if (!value?.length) return null
     return {
       link: "internal",
-      label: fieldMapping.label,
+      label: convertToSentenceCase(fieldMapping.label),
       value: value.map((v: string) => {
         const internalUrl = `/search?filters[${
           fieldMapping.field
@@ -196,7 +207,11 @@ export default class BibDetails {
 
   buildExternalLinkedDetail(label: string, values: Url[]): LinkedBibDetail {
     if (!values.length) return null
-    return { link: "external", value: values, label }
+    return {
+      link: "external",
+      value: values,
+      label: convertToSentenceCase(label),
+    }
   }
 
   addNotes(details: AnyBibDetail[]) {
@@ -221,7 +236,10 @@ export default class BibDetails {
         }, {})
       const notesAsDetails = []
       Object.keys(notesGroupedByNoteType).forEach((key: string) => {
-        notesAsDetails.push({ label: key, value: notesGroupedByNoteType[key] })
+        notesAsDetails.push({
+          label: convertToSentenceCase(key),
+          value: notesGroupedByNoteType[key],
+        })
       })
       return notesAsDetails
     }
@@ -333,14 +351,14 @@ export default class BibDetails {
     ) {
       return null
     }
-    const label = "Supplementary Content"
+    const label = "Supplementary content"
     const values = this.bib.supplementaryContent.map((sc) => {
       return {
         url: sc.url,
         urlLabel: sc.label,
       }
     })
-    return this.buildExternalLinkedDetail(label, values)
+    return this.buildExternalLinkedDetail(convertToSentenceCase(label), values)
   }
 
   buildSubjectHeadings(): SubjectHeadingDetail {
