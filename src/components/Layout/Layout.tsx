@@ -47,7 +47,7 @@ const Layout = ({
       <TemplateAppContainer
         // This is a workaround to fix a text-wrapping issue when page is zoomed in on
         // TODO: Address this issue in the DS
-        sx={{ "main > div": { maxWidth: "100vw", gridColumnEnd: "none" } }}
+        sx={{ "main > div": { maxWidth: "100vw" } }}
         breakout={
           showHeader && (
             <>
