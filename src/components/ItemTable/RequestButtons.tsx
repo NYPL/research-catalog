@@ -25,7 +25,7 @@ const RequestButtons = ({ item }: RequestButtonsProps) => {
           mb="s"
           target="_self"
         >
-          Request Appointment
+          Request appointment
         </ExternalLink>
       ) : (
         <>
@@ -38,7 +38,7 @@ const RequestButtons = ({ item }: RequestButtonsProps) => {
               mb="s"
               target="_self"
             >
-              Request for On-site Use
+              Request for on-site use
             </RCLink>
           )}
           {item.isEDDRequestable && (
@@ -50,7 +50,7 @@ const RequestButtons = ({ item }: RequestButtonsProps) => {
               mb="s"
               target="_self"
             >
-              Request Scan
+              Request scan
             </RCLink>
           )}
         </>

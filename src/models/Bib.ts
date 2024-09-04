@@ -94,9 +94,9 @@ export default class Bib {
 
   getNumItemsMessage(filtersAreApplied = false) {
     const totalItems = filtersAreApplied ? this.numItemsMatched : this.numItems
-    return `${totalItems} ${filtersAreApplied ? "matching " : ""}${
-      this.resourceType
-    }${totalItems !== 1 ? "s" : ""}`
+    return `${totalItems} ${
+      filtersAreApplied ? "matching " : ""
+    }${this.resourceType.toLowerCase()}${totalItems !== 1 ? "s" : ""}`
   }
 
   getItemsViewAllLoadingMessage(filtersAreApplied = false) {

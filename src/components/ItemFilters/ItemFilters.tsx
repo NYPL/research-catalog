@@ -75,6 +75,7 @@ const ItemFilters = ({
     if (id === "clear-filters") {
       await clearAllFilters()
     } else {
+      setYear("")
       const [newValues, field] = removeValueFromFilters(id, appliedFilters)
       await submitFilters(newValues, field)
     }
@@ -111,7 +112,7 @@ const ItemFilters = ({
         />
         <Box minWidth={{ md: 440 }}>
           <Label id="year-filter-label" htmlFor="searchbar-form-year-filter">
-            Search by Year
+            Search by year
           </Label>
           <SearchBar
             id="year-filter"
@@ -121,7 +122,7 @@ const ItemFilters = ({
             textInputProps={{
               placeholder: "YYYY",
               isClearable: true,
-              labelText: "Search by year",
+              labelText: "Search by year form input",
               name: "year-filter",
               value: year,
               onChange: ({ target }) => setYear(target.value),
@@ -181,7 +182,7 @@ const ItemFilters = ({
             lineHeight={2}
             display="table-cell"
           >
-            Filters Applied
+            Active filters
           </Text>
           <TagSet
             id="bib-details-applied-filters"

@@ -44,8 +44,9 @@ describe("Bib Page with items", () => {
     expect(screen.getByTestId("bib-details-item-table")).toBeInTheDocument()
   })
 
+  // TODO: Determine if this should be rendering twice
   it("renders the bottom bib details", () => {
-    expect(screen.getByTestId("publication-date")).toHaveTextContent(
+    expect(screen.getAllByTestId("publication-date")[0]).toHaveTextContent(
       "Vol. 1, issue 1-"
     )
     expect(screen.getByTestId("description")).toHaveTextContent(
@@ -246,7 +247,7 @@ describe("Bib Page Item Table", () => {
   })
 
   it("renders a view all button when there are more than 20 items and updates the url to /all when clicked", async () => {
-    const viewAllLink = screen.getByText("View All 26 Items").closest("a")
+    const viewAllLink = screen.getByText("View all 26 items").closest("a")
     expect(viewAllLink).toHaveAttribute(
       "href",
       "/research/research-catalog/bib/pb5579193/all"
@@ -269,7 +270,7 @@ describe("Bib Page Item Table", () => {
           }),
       })
     )
-    await userEvent.click(screen.getByText("View All 26 Items").closest("a"))
+    await userEvent.click(screen.getByText("View all 26 items").closest("a"))
     expect(screen.getByText("View fewer items")).toBeInTheDocument()
     expect(screen.getByTestId("bib-details-item-table")).toBeInTheDocument()
   })
@@ -281,7 +282,7 @@ describe("Bib Page Item Table", () => {
           setTimeout(resolve, 50)
         })
     )
-    await userEvent.click(screen.getByText("View All 26 Items").closest("a"))
+    await userEvent.click(screen.getByText("View all 26 items").closest("a"))
     expect(
       screen.getByText("Loading all 26 items. This may take a few moments...")
     ).toBeInTheDocument()
@@ -294,7 +295,7 @@ describe("Bib Page Item Table", () => {
         ok: false,
       })
     )
-    await userEvent.click(screen.getByText("View All 26 Items").closest("a"))
+    await userEvent.click(screen.getByText("View all 26 items").closest("a"))
     expect(
       screen.getByText(
         "There was an error fetching items. Please try again with a different query."

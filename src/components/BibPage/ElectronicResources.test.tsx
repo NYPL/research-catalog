@@ -19,7 +19,7 @@ describe("ElectronicResources component", () => {
     })
 
     it("renders the correct heading", () => {
-      expect(screen.queryByText("Available Online")).toBeInTheDocument()
+      expect(screen.queryByText("Available online")).toBeInTheDocument()
     })
 
     it("renders 3 links and a View All button when there are more than 3 eResources", () => {
@@ -32,7 +32,7 @@ describe("ElectronicResources component", () => {
       const moreLink = screen.queryByTestId("see-more-eresources-button")
       expect(moreLink).toBeInTheDocument()
       expect(moreLink).toHaveTextContent(
-        "View all 368 Available Online resources"
+        "View all 368 available online resources"
       )
     })
 
@@ -46,7 +46,7 @@ describe("ElectronicResources component", () => {
 
       expect(eResourcesList.children).toHaveLength(368)
       expect(moreLink).toHaveTextContent(
-        "View fewer Available Online resources"
+        "View fewer available online resources"
       )
     })
   })
@@ -60,7 +60,7 @@ describe("ElectronicResources component", () => {
     })
 
     it("renders the correct heading", () => {
-      expect(screen.queryByText("Available Online")).toBeInTheDocument()
+      expect(screen.queryByText("Available online")).toBeInTheDocument()
     })
 
     it("renders all eResources and does not display a View All button", () => {

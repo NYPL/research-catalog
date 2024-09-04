@@ -72,7 +72,7 @@ const SearchResult = ({ bib }: SearchResultProps) => {
                     fontWeight="medium"
                     type="standalone"
                   >
-                    {`View All ${bib.getNumItemsMessage()} `}
+                    {`View all ${bib.getNumItemsMessage()} `}
                   </RCLink>
                 </CardActions>
               )}

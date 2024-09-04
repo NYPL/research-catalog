@@ -131,7 +131,7 @@ e.g. `filters`) is used for the parameters the respective APIs except.
 | <ul>'Language'                                | <ul>`filters[language]`                               | <ul>`filters` `language`                        |
 | _Filters linked to from a bib page_           |
 | <ul>'Author'                                  | <ul>`filters[creatorLiteral]`                         | <ul>`queries` `"field":"author"`                |
-| <ul>'Additional Authors'                      | <ul>`filters[creatorLiteral]`                         | <ul>`queries` `"field":"author"`                |
+| <ul>'Additional authors'                      | <ul>`filters[creatorLiteral]`                         | <ul>`queries` `"field":"author"`                |
 | <ul>'Subject'                                 | <ul>`filters[subjectLiteral]`                         | <ul>`queries` `"field":"subject"`               |
 | _Pagination_                                  | `page`                                                | `page`                                          |
 |                                               | `per_page`                                            | `per_page`                                      |

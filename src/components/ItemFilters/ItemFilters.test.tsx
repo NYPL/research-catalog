@@ -37,11 +37,11 @@ describe("ItemFilters", () => {
   })
 
   it("renders the year search form", async () => {
-    expect(screen.getByLabelText("Search by Year")).toBeInTheDocument()
+    expect(screen.getByLabelText("Search by year")).toBeInTheDocument()
   })
 
   it("closes open filters when user clicks outside of the filter", async () => {
-    const outsideOfTheFilter = screen.getByLabelText("Search by Year")
+    const outsideOfTheFilter = screen.getByLabelText("Search by year")
 
     const locationFilterButton = screen
       .getByTestId("location-multi-select")
@@ -67,7 +67,7 @@ describe("ItemFilters", () => {
   })
 
   it("renders TagSet data when filters are applied and removes the filter when tag is clicked", async () => {
-    expect(screen.queryByText("Filters Applied")).toBeInTheDocument()
+    expect(screen.queryByText("Active filters")).toBeInTheDocument()
     await userEvent.click(
       screen.getByLabelText("Location > Offsite, click to remove filter")
     )

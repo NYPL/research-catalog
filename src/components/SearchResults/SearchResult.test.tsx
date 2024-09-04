@@ -27,7 +27,7 @@ describe("SearchResult with Physical Items", () => {
     screen.getByText("Material")
     screen.getByText("New York, Abelard-Schuman [1955]")
     screen.getByText("1955")
-    screen.getByText("2 Items")
+    screen.getByText("2 items")
   })
 })
 
@@ -41,7 +41,7 @@ describe("SearchResult with Many Physical Items", () => {
 
   it("renders a link to the bib page with the correct text when there are more than the set limit of items per search result", async () => {
     const resultTitleLink = screen.getByRole("link", {
-      name: "View All 4 Items",
+      name: "View all 4 items",
     })
     expect(resultTitleLink).toHaveAttribute(
       "href",
@@ -54,6 +54,6 @@ describe("SearchResult with Electronic Resources", () => {
   it("renders the correct item message for bib with electronic resources", async () => {
     const bib = new SearchResultsBib(searchResultElectronicResources)
     render(<SearchResult bib={bib} />)
-    screen.getByText("1 Resource")
+    screen.getByText("1 resource")
   })
 })
