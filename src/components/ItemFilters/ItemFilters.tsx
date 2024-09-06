@@ -173,14 +173,18 @@ const ItemFilters = ({
         />
       </Box>
       {filtersAreApplied ? (
-        <Box display="flex" mr="s" mb="m">
+        <Box
+          display="flex"
+          flexDirection={{ base: "column", md: "row" }}
+          mb="m"
+        >
           <Text
-            fontSize="body2"
+            display="block"
+            fontSize="desktop.body.body2"
             fontWeight="bold"
-            mr="s"
-            mb={0}
+            mr={{ base: "0", md: "s" }}
+            mb={{ base: "xxs", md: 0 }}
             lineHeight={2}
-            display="table-cell"
           >
             Active filters
           </Text>
