@@ -69,6 +69,7 @@ export default function BibPage({
   const [bib, setBib] = useState(new Bib(discoveryBibResult))
   const [itemsLoading, setItemsLoading] = useState(false)
   const [itemFetchError, setItemFetchError] = useState(false)
+
   const [viewAllExpanded, setViewAllExpanded] = useState(viewAllItems)
   const [appliedFilters, setAppliedFilters] = useState(
     parseItemFilterQueryParams(query)
@@ -95,7 +96,8 @@ export default function BibPage({
 
   const refreshItemTable = async (
     newQuery: BibQueryParams,
-    viewAllItems = false
+    viewAllItems = false,
+    refreshedViaCheckbox = false
   ) => {
     setItemsLoading(true)
     setItemFetchError(false)
@@ -142,9 +144,13 @@ export default function BibPage({
         setBib(new Bib(discoveryBibResult))
 
         setItemsLoading(false)
-        setTimeout(() => {
-          itemTableHeadingRef.current?.focus()
-        }, FOCUS_TIMEOUT)
+
+        // TODO: This is a workaround to prevent the Displaying text from receiving focus when filters are controlled via a checkbox
+        // This is an accessibility issue that should be addressed when the dynamic refresh is replaced with a form and apply button
+        if (!refreshedViaCheckbox)
+          setTimeout(() => {
+            itemTableHeadingRef.current?.focus()
+          }, FOCUS_TIMEOUT)
       } else {
         console.log(response)
         handleItemFetchError()
@@ -162,7 +168,8 @@ export default function BibPage({
   }
 
   const handleFiltersChange = async (
-    newAppliedFilterQuery: ItemFilterQueryParams
+    newAppliedFilterQuery: ItemFilterQueryParams,
+    refreshedViaCheckbox = false
   ) => {
     const newQuery = {
       ...newAppliedFilterQuery,
@@ -170,7 +177,7 @@ export default function BibPage({
     if (newQuery.item_page) delete newQuery.item_page
     setItemTablePage(1)
     setAppliedFilters(parseItemFilterQueryParams(newAppliedFilterQuery))
-    await refreshItemTable(newQuery, viewAllExpanded)
+    await refreshItemTable(newQuery, viewAllExpanded, refreshedViaCheckbox)
   }
 
   const handlePageChange = async (page: number) => {
