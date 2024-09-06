@@ -38,8 +38,9 @@ const ItemTableControls = ({
   numItemsTotal = 0,
   filtersAreApplied = false,
 }: ItemTableControlsProps) => {
-  const viewAllLoadingMessage =
-    bib.getItemsViewAllLoadingMessage(filtersAreApplied)
+  const viewAllLoadingMessage = `Loading all ${
+    filtersAreApplied ? "matching" : numItemsTotal
+  } items. This may take a few moments...`
 
   return (
     <Box display="flex" my="xl" justifyContent="space-between">

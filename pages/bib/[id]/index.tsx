@@ -1,6 +1,6 @@
 import Head from "next/head"
 import type { SyntheticEvent } from "react"
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef } from "react"
 import { useRouter } from "next/router"
 import {
   Heading,
@@ -44,6 +44,7 @@ import {
   parseItemFilterQueryParams,
   areFiltersApplied,
 } from "../../../src/utils/itemFilterUtils"
+import ItemTableData from "../../../src/models/ItemTableData"
 
 interface BibPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -66,7 +67,12 @@ export default function BibPage({
   const { push, query } = useRouter()
   const metadataTitle = `Item Details | ${SITE_NAME}`
 
-  const [bib, setBib] = useState(new Bib(discoveryBibResult))
+  const bib = new Bib(discoveryBibResult)
+  const [itemTableData, setItemTableTata] = useState(
+    new ItemTableData(bib.items, {
+      isArchiveCollection: bib.isArchiveCollection,
+    })
+  )
   const [itemsLoading, setItemsLoading] = useState(false)
   const [itemFetchError, setItemFetchError] = useState(false)
   const [viewAllExpanded, setViewAllExpanded] = useState(viewAllItems)
@@ -263,12 +269,12 @@ export default function BibPage({
                       filtersAreApplied
                     )}
                   </Heading>
-                  {bib.itemTableData ? (
-                    <ItemTable itemTableData={bib.itemTableData} />
+                  {itemTableData.hasItems ? (
+                    <ItemTable itemTableData={itemTableData} />
                   ) : null}
                 </>
               )}
-              {bib.itemTableData ? (
+              {itemTableData.hasItems ? (
                 <ItemTableControls
                   bib={bib}
                   viewAllExpanded={viewAllExpanded}

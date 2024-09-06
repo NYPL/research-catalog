@@ -67,15 +67,6 @@ export default class Bib {
     return !this.isOnlyElectronicResources && this.hasPhysicalItems
   }
 
-  get itemTableData() {
-    return (
-      this.items?.length &&
-      new ItemTableData(this.items, {
-        isArchiveCollection: this.isArchiveCollection,
-      })
-    )
-  }
-
   get showViewAllItemsLink() {
     return this.numItemsMatched > ITEM_PAGINATION_BATCH_SIZE
   }
@@ -97,13 +88,6 @@ export default class Bib {
     return `${totalItems} ${
       filtersAreApplied ? "matching " : ""
     }${this.resourceType.toLowerCase()}${totalItems !== 1 ? "s" : ""}`
-  }
-
-  getItemsViewAllLoadingMessage(filtersAreApplied = false) {
-    // We don't want to show the number of filtered items since this may change during loading.
-    return `Loading all ${
-      filtersAreApplied ? "matching" : this.numPhysicalItems
-    } items. This may take a few moments...`
   }
 
   getTitleFromResult(result: DiscoveryBibResult) {
