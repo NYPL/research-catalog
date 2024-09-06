@@ -1,5 +1,4 @@
 import type { TagSetFilterDataProps } from "@nypl/design-system-react-components"
-import { capitalize } from "lodash"
 
 import type { ItemFilterData } from "../models/ItemFilterData"
 import type {
@@ -55,7 +54,7 @@ export const buildAppliedFiltersTagSetData = (
           : fieldAggregations?.labelForValue(filterValue)
       if (valueLabel) {
         filters.push({
-          label: `${capitalize(field)} > ${valueLabel}`,
+          label: `${field} > ${valueLabel}`,
           // This ID needs to be the filters value to allow for proper clearing of the individual filters
           id: filterValue,
         })

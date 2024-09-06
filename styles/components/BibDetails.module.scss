@@ -6,6 +6,13 @@
     border: none;
     margin-bottom: var(--nypl-space-m);
   }
+
+  dt {
+    @media (max-width: 600px) {
+      margin-bottom: var(--nypl-space-xxs);
+    }
+  }
+
   dl dt,
   dl dd {
     padding-top: 0;
