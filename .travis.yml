@@ -18,6 +18,10 @@ jobs:
           then
           export NEXT_PUBLIC_APP_ENV="qa";
           fi
+        - if [[ $TRAVIS_BRANCH == "train" ]];
+          then
+          export NEXT_PUBLIC_APP_ENV="train";
+          fi
         - if [[ "$TRAVIS_BRANCH" == "production" ]];
           then
           export NEXT_PUBLIC_APP_ENV="production";
@@ -46,6 +50,17 @@ jobs:
         - AWS_DEFAULT_REGION=us-east-1
         - AWS_REGION=us-east-1
         - CLUSTER_NAME=research-catalog-qa
+      install:
+        - pip install --user awscli
+      script:
+        - aws ecs update-service --cluster $CLUSTER_NAME --service $CLUSTER_NAME --force-new-deployment
+
+    - stage: deploy train
+      if: branch IN (train) AND type != pull_request
+      env:
+        - AWS_DEFAULT_REGION=us-east-1
+        - AWS_REGION=us-east-1
+        - CLUSTER_NAME=research-catalog-train
       install:
         - pip install --user awscli
       script:
