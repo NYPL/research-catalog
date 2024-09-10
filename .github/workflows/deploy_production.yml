@@ -36,6 +36,7 @@ jobs:
         run: |
           docker build --build-arg NEXT_PUBLIC_APP_ENV=production --tag $LOCAL_TAG_NAME .
           docker tag $LOCAL_TAG_NAME $ECR_URL
+          # Re-tag last latest image just in case
           MANIFEST=$(aws ecr batch-get-image --repository-name research-catalog --image-ids imageTag="production-latest" --output json | jq --raw-output --join-output '.images[0].imageManifest')
           aws ecr batch-delete-image --repository-name research-catalog --image-ids imageTag="production-previous" || true
           aws ecr put-image --repository-name research-catalog --image-tag "production-previous" --image-manifest "$MANIFEST" || true
