@@ -97,7 +97,7 @@ export default function BibPage({
   const refreshItemTable = async (
     newQuery: BibQueryParams,
     viewAllItems = false,
-    refreshedViaCheckbox = false
+    updateFocusOnItemTableHeading = false
   ) => {
     setItemsLoading(true)
     setItemFetchError(false)
@@ -147,7 +147,7 @@ export default function BibPage({
 
         // TODO: This is a workaround to prevent the Displaying text from receiving focus when filters are controlled via a checkbox
         // This is an accessibility issue that should be addressed when the dynamic refresh is replaced with a form and apply button
-        if (!refreshedViaCheckbox)
+        if (!updateFocusOnItemTableHeading)
           setTimeout(() => {
             itemTableHeadingRef.current?.focus()
           }, FOCUS_TIMEOUT)
@@ -168,7 +168,7 @@ export default function BibPage({
 
   const handleFiltersChange = async (
     newAppliedFilterQuery: ItemFilterQueryParams,
-    refreshedViaCheckbox = false
+    updateFocusOnItemTableHeading = false
   ) => {
     const newQuery = {
       ...newAppliedFilterQuery,
@@ -176,7 +176,11 @@ export default function BibPage({
     if (newQuery.item_page) delete newQuery.item_page
     setItemTablePage(1)
     setAppliedFilters(parseItemFilterQueryParams(newAppliedFilterQuery))
-    await refreshItemTable(newQuery, viewAllExpanded, refreshedViaCheckbox)
+    await refreshItemTable(
+      newQuery,
+      viewAllExpanded,
+      updateFocusOnItemTableHeading
+    )
   }
 
   const handlePageChange = async (page: number) => {
