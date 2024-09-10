@@ -152,7 +152,6 @@ export default function BibPage({
             itemTableHeadingRef.current?.focus()
           }, FOCUS_TIMEOUT)
       } else {
-        console.log(response)
         handleItemFetchError()
       }
     } catch (error) {
