@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - qa
+      - SCC-4218/move-rc-from-travis-to-github-actions
 
 permissions:
   id-token: write
@@ -33,14 +34,13 @@ jobs:
 
       - name: Build and push Docker image to Amazon ECR
         env:
-          APP_ENV: qa
-          NEW_RELIC_LICENSE_KEY: ${{ secrets.NEW_RELIC_LICENSE_KEY }}
-          ECR_URL: 946183545209.dkr.ecr.us-east-1.amazonaws.com/research-catalog:qa-latest
+          NEXT_PUBLIC_APP_ENV: qa
+          ECR_URL: 946183545209.dkr.ecr.us-east-1.amazonaws.com/research-catalog:$NEXT_PUBLIC_APP_ENV-latest
         run: |
-          docker build --build-arg APP_ENV=$APP_ENV --build-arg NEW_RELIC_LICENSE_KEY=$NEW_RELIC_LICENSE_KEY --tag $LOCAL_TAG_NAME .
+          docker build --build-arg NEXT_PUBLIC_APP_ENV=$NEXT_PUBLIC_APP_ENV --tag $LOCAL_TAG_NAME .
           docker tag $LOCAL_TAG_NAME $ECR_URL
-          docker push $ECR_URL
+          # docker push $ECR_URL
 
-      - name: Update ECS service
-        run: |
-          aws ecs update-service --cluster research-catalog-qa --service research-catalog-qa --force-new-deployment
+      # - name: Update ECS service
+      #   run: |
+      #     aws ecs update-service --cluster research-catalog-qa --service research-catalog-qa --force-new-deployment
