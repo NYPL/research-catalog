@@ -13,7 +13,8 @@ permissions:
 
 env:
   AWS_DEFAULT_REGION: us-east-1
-  LOCAL_TAG_NAME: research-catalog:${{ github.ref_name }}-${{ github.run_number }}
+  # LOCAL_TAG_NAME: research-catalog:${{ github.ref_name }}-${{ github.run_number }}
+  LOCAL_TAG_NAME: research-catalog:test-${{ github.run_number }}
   APP_ENV: qa
 
 jobs:
@@ -36,7 +37,7 @@ jobs:
       - name: Build and push Docker image to Amazon ECR
         env:
           ECR_URL: 946183545209.dkr.ecr.us-east-1.amazonaws.com/research-catalog:$APP_ENV-latest
-          MANIFEST: ${aws ecr batch-get-image --repository-name research-catalog --image-ids imageTag="$APP_ENV-latest" --output json | jq --raw-output --join-output '.images[0].imageManifest'}
+          MANIFEST: $(aws ecr batch-get-image --repository-name research-catalog --image-ids imageTag="$APP_ENV-latest" --output json | jq --raw-output --join-output '.images[0].imageManifest')
 
         run: |
           docker build --build-arg NEXT_PUBLIC_APP_ENV=$APP_ENV --tag $LOCAL_TAG_NAME .
