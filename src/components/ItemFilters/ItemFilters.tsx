@@ -42,6 +42,9 @@ const ItemFilters = ({
   // We have to set the year value in state to be able to test form control in jest.
   // TODO: Remove this if we can find a better way to test form submissions in jest.
   const [year, setYear] = useState(appliedFilters.year[0] || "")
+
+  const [invalidYear, setInvalidYear] = useState(false)
+
   const filterData = useRef<ItemFilterData[]>(
     itemAggregations.map((aggregation: Aggregation) => {
       if (aggregation.field === "location")
@@ -106,6 +109,8 @@ const ItemFilters = ({
 
   const handleYearSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
+
+    setInvalidYear(year.length !== 4)
     await submitFilters(year.length ? [year] : [], "year")
   }
 
