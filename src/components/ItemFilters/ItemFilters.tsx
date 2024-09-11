@@ -116,7 +116,6 @@ const ItemFilters = ({
       setInvalidYear(false)
       await submitFilters(year.length ? [year] : [], "year")
     }
-    
   }
 
   // function for renderChildren prop of FilterBarInline
@@ -128,7 +127,7 @@ const ItemFilters = ({
           labelText="Filter by"
           renderMultiSelect={renderMultiSelect}
         />
-        <Box minWidth={{ md: 440 }} >
+        <Box width={{ sm: "100%", md: 440 }}>
           <Label id="year-filter-label" htmlFor="searchbar-form-year-filter">
             Search by year
           </Label>
@@ -138,7 +137,7 @@ const ItemFilters = ({
             aria-labelledby="year-filter-label"
             data-testid="year-filter"
             isInvalid={invalidYear}
-            invalidText='Error: Please enter a valid year.'
+            invalidText="Error: Please enter a valid year."
             textInputProps={{
               placeholder: "YYYY",
               isClearable: true,
@@ -188,7 +187,10 @@ const ItemFilters = ({
           data-testid="item-filters-container"
           width="full"
           layout="row"
-          sx={{ fieldset: { lg: { width: "45%" } }, "div": {alignItems: "flex-start"} }}
+          sx={{
+            fieldset: { width: {sm: "100%", md: "45%"} },
+            "> div": { alignItems: "flex-start" },
+          }}
           renderChildren={filterBarContent}
         />
       </Box>
