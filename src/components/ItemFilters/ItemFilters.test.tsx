@@ -71,9 +71,12 @@ describe("ItemFilters", () => {
     await userEvent.click(
       screen.getByLabelText("Location > Offsite, click to remove filter")
     )
-    expect(filtersChangeMock).toHaveBeenCalledWith({
-      item_format: "Text",
-      item_status: "Available",
-    })
+    expect(filtersChangeMock).toHaveBeenCalledWith(
+      {
+        item_format: "Text",
+        item_status: "Available",
+      },
+      false
+    )
   })
 })
