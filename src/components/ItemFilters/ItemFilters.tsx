@@ -110,8 +110,13 @@ const ItemFilters = ({
   const handleYearSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
 
-    setInvalidYear(year.length !== 4)
-    await submitFilters(year.length ? [year] : [], "year")
+    if (year.length !== 4) {
+      setInvalidYear(true)
+    } else {
+      setInvalidYear(false)
+      await submitFilters(year.length ? [year] : [], "year")
+    }
+    
   }
 
   // function for renderChildren prop of FilterBarInline
@@ -123,7 +128,7 @@ const ItemFilters = ({
           labelText="Filter by"
           renderMultiSelect={renderMultiSelect}
         />
-        <Box minWidth={{ md: 440 }}>
+        <Box minWidth={{ md: 440 }} >
           <Label id="year-filter-label" htmlFor="searchbar-form-year-filter">
             Search by year
           </Label>
@@ -132,6 +137,8 @@ const ItemFilters = ({
             labelText="Apply year filter"
             aria-labelledby="year-filter-label"
             data-testid="year-filter"
+            isInvalid={invalidYear}
+            invalidText='Error: Please enter a valid year.'
             textInputProps={{
               placeholder: "YYYY",
               isClearable: true,
@@ -181,7 +188,7 @@ const ItemFilters = ({
           data-testid="item-filters-container"
           width="full"
           layout="row"
-          sx={{ fieldset: { lg: { width: "45%" } } }}
+          sx={{ fieldset: { lg: { width: "45%" } }, "div": {alignItems: "flex-start"} }}
           renderChildren={filterBarContent}
         />
       </Box>
