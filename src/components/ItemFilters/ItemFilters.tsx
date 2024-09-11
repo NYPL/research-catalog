@@ -109,12 +109,13 @@ const ItemFilters = ({
 
   const handleYearSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
+    const isNumeric: boolean= /^[0-9]*$/.test(year)
 
-    if (year.length !== 4) {
+    if (year.length !== 4 || !isNumeric) {
       setInvalidYear(true)
     } else {
       setInvalidYear(false)
-      await submitFilters(year.length ? [year] : [], "year")
+      await submitFilters([year], "year")
     }
   }
 
@@ -145,7 +146,7 @@ const ItemFilters = ({
               name: "year-filter",
               value: year,
               onChange: ({ target }) => setYear(target.value),
-              isClearableCallback: () => setYear(""),
+              isClearableCallback: () => setYear("")
             }}
             onSubmit={handleYearSubmit}
           />
@@ -188,7 +189,7 @@ const ItemFilters = ({
           width="full"
           layout="row"
           sx={{
-            fieldset: { width: {sm: "100%", md: "45%"} },
+            fieldset: { width: { sm: "100%", md: "45%" } },
             "> div": { alignItems: "flex-start" },
           }}
           renderChildren={filterBarContent}
