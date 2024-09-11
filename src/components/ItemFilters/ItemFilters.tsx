@@ -109,7 +109,7 @@ const ItemFilters = ({
 
   const handleYearSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
-    const isNumeric: boolean= /^[0-9]*$/.test(year)
+    const isNumeric: boolean = /^[0-9]*$/.test(year)
 
     if (year.length !== 4 || !isNumeric) {
       setInvalidYear(true)
@@ -146,7 +146,7 @@ const ItemFilters = ({
               name: "year-filter",
               value: year,
               onChange: ({ target }) => setYear(target.value),
-              isClearableCallback: () => setYear("")
+              isClearableCallback: () => setYear(""),
             }}
             onSubmit={handleYearSubmit}
           />
