@@ -168,11 +168,48 @@ describe("Bib Page Item Table", () => {
     await userEvent.click(yearFilter.querySelector("button[type='submit']"))
 
     expect(mockRouter.asPath).toBe("/bib/pb5579193?item_date=2005")
+  })
 
-    // Clear the year field
-    await userEvent.click(yearFilter.querySelector("button[type='button']"))
+  it("shows an error and doesn't update router when an invalid year is submitted", async () => {
+    const yearFilter = screen.queryByTestId("year-filter")
+    const yearField = screen.queryByPlaceholderText("YYYY")
+
+    // blank year
     await userEvent.click(yearFilter.querySelector("button[type='submit']"))
     expect(mockRouter.asPath).toBe("/bib/pb5579193")
+    expect(
+      screen.queryByText("Error: Please enter a valid year.")
+    ).toBeInTheDocument()
+
+    // non-numeric
+    await userEvent.type(yearField, "ABCD")
+    await userEvent.click(yearFilter.querySelector("button[type='submit']"))
+    expect(mockRouter.asPath).toBe("/bib/pb5579193")
+    expect(
+      screen.queryByText("Error: Please enter a valid year.")
+    ).toBeInTheDocument()
+
+    // not of length 3
+    await userEvent.type(yearField, "1")
+    await userEvent.click(yearFilter.querySelector("button[type='submit']"))
+    expect(mockRouter.asPath).toBe("/bib/pb5579193")
+    expect(
+      screen.queryByText("Error: Please enter a valid year.")
+    ).toBeInTheDocument()
+  })
+
+  it("shows an error and doesn't update router when a blank year us submitted", async () => {
+    const yearFilter = screen.queryByTestId("year-filter")
+    const yearField = screen.queryByPlaceholderText("YYYY")
+
+    await userEvent.click(yearFilter.querySelector("button[type='submit']"))
+
+    expect(mockRouter.asPath).toBe("/bib/pb5579193")
+    expect(
+      screen.queryByText("Error: Please enter a valid year.")
+    ).toBeInTheDocument()
+
+    await userEvent.type(yearField, "")
   })
 
   it("clears a filter group when the MultiSelect clear button is clicked", async () => {
