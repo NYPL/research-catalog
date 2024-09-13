@@ -45,5 +45,9 @@ describe("Bib model", () => {
       expect(typeof bib.items[0]).toBe("object")
       expect(bib.items[0] instanceof Item).toBe(true)
     })
+
+    it("initializes the hasItemDates field when present", () => {
+      expect(bib.hasItemDates).toBe(true)
+    })
   })
 })
