@@ -70,6 +70,7 @@ function buildQueryDisplayString(searchParams: SearchParams): string {
       { name: "isbn", label: "ISBN" },
       { name: "issn", label: "ISSN" },
       { name: "lccn", label: "LCCN" },
+      { name: "callnumber", label: "call number" },
     ])
   const paramsStringCollection = {}
   const searchParamsObject = {

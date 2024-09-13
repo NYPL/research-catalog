@@ -88,6 +88,7 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
               { text: "Title", value: "title" },
               { text: "Author/contributor", value: "contributor" },
               { text: "Journal title", value: "journal_title" },
+              { text: "Call number", value: "callnumber" },
               { text: "Control numbers/identifiers", value: "standard_number" },
               { text: "Subject", value: "subject" },
             ],
