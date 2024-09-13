@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+### Added
+
+- Call number search scope to search dropdown options
+
 ### Fixed
 
 - Fixed accessibility issue on Bib page where focus moves to Displaying text when filters are controlled via MultiSelect. This will change when dynamic updates are replaced with an apply button (SCC-4246)
@@ -14,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Updated
 
 - Replaced travis with github actions (SCC-4218)
+- Sentence case and rearrange search options (SCC-4260)
 
 ## [1.2.4] 2024-08-29
 
