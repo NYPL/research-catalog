@@ -24,6 +24,7 @@ export default class Bib {
   issuance?: JSONLDValue[]
   items?: Item[]
   itemAggregations?: Aggregation[]
+  hasItemDates?: boolean
 
   constructor(result: DiscoveryBibResult) {
     this.id = result["@id"] ? result["@id"].substring(4) : ""
@@ -37,6 +38,7 @@ export default class Bib {
     this.issuance = (result.issuance?.length && result.issuance) || null
     this.items = this.getItemsFromResult(result)
     this.itemAggregations = result.itemAggregations || null
+    this.hasItemDates = result.hasItemDates || false
   }
 
   get url() {

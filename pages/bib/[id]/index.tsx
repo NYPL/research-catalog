@@ -247,6 +247,7 @@ export default function BibPage({
               handleFiltersChange={handleFiltersChange}
               appliedFilters={appliedFilters}
               filtersAreApplied={filtersAreApplied}
+              showDateFilter={bib.hasItemDates}
             />
             <Box id="item-table">
               {itemsLoading ? (

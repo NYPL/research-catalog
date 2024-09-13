@@ -31,6 +31,7 @@ interface ItemFilterContainerProps {
   ) => Promise<void>
   appliedFilters?: AppliedItemFilters
   filtersAreApplied?: boolean
+  showDateFilter?: boolean
 }
 
 const ItemFilters = ({
@@ -38,6 +39,7 @@ const ItemFilters = ({
   handleFiltersChange,
   appliedFilters = { location: [], format: [], status: [], year: [] },
   filtersAreApplied = false,
+  showDateFilter = false,
 }: ItemFilterContainerProps) => {
   // We have to set the year value in state to be able to test form control in jest.
   // TODO: Remove this if we can find a better way to test form submissions in jest.
@@ -128,29 +130,31 @@ const ItemFilters = ({
           labelText="Filter by"
           renderMultiSelect={renderMultiSelect}
         />
-        <Box width={{ sm: "100%", md: 440 }}>
-          <Label id="year-filter-label" htmlFor="searchbar-form-year-filter">
-            Search by year
-          </Label>
-          <SearchBar
-            id="year-filter"
-            labelText="Apply year filter"
-            aria-labelledby="year-filter-label"
-            data-testid="year-filter"
-            isInvalid={invalidYear}
-            invalidText="Error: Please enter a valid year."
-            textInputProps={{
-              placeholder: "YYYY",
-              isClearable: true,
-              labelText: "Search by year form input",
-              name: "year-filter",
-              value: year,
-              onChange: ({ target }) => setYear(target.value),
-              isClearableCallback: () => setYear(""),
-            }}
-            onSubmit={handleYearSubmit}
-          />
-        </Box>
+        {showDateFilter ? (
+          <Box width={{ sm: "100%", md: 440 }}>
+            <Label id="year-filter-label" htmlFor="searchbar-form-year-filter">
+              Search by year
+            </Label>
+            <SearchBar
+              id="year-filter"
+              labelText="Apply year filter"
+              aria-labelledby="year-filter-label"
+              data-testid="year-filter"
+              isInvalid={invalidYear}
+              invalidText="Error: Please enter a valid year."
+              textInputProps={{
+                placeholder: "YYYY",
+                isClearable: true,
+                labelText: "Search by year form input",
+                name: "year-filter",
+                value: year,
+                onChange: ({ target }) => setYear(target.value),
+                isClearableCallback: () => setYear(""),
+              }}
+              onSubmit={handleYearSubmit}
+            />
+          </Box>
+        ) : null}
       </>
     )
   }
