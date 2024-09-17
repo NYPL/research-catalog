@@ -1,11 +1,20 @@
-import { Box, SearchBar } from "@nypl/design-system-react-components"
+import {
+  Box,
+  Icon,
+  SearchBar,
+  Text,
+} from "@nypl/design-system-react-components"
 import { useRouter } from "next/router"
 import type { SyntheticEvent, Dispatch, SetStateAction } from "react"
 import { useState, useEffect } from "react"
 
 import styles from "../../../styles/components/Search.module.scss"
 import RCLink from "../Links/RCLink/RCLink"
-import { getSearchQuery } from "../../utils/searchUtils"
+import {
+  getSearchQuery,
+  searchFormDropDownOptions,
+  searchTipForDropDownOption,
+} from "../../utils/searchUtils"
 import { BASE_URL, PATHS } from "../../config/constants"
 import EDSLink from "../EDSLink"
 import useLoading from "../../hooks/useLoading"
@@ -28,6 +37,7 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
   const [appliedFilters, setAppliedFilters] = useState(
     collapseMultiValueQueryParams(router.query)
   )
+  const searchTip = searchTipForDropDownOption(searchScope)
 
   const isLoading = useLoading()
 
@@ -71,6 +81,13 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
   return (
     <div className={styles.searchContainer}>
       <div className={styles.searchContainerInner}>
+        <Text size="body2" className={styles.searchTip}>
+          <Icon size="medium" name="errorOutline" />
+          <Box className={styles.searchTipText}>
+            <span>{"Search tip: "}</span>
+            {searchTip}
+          </Box>
+        </Text>
         <SearchBar
           id="mainContent"
           action={`${BASE_URL}/search`}
@@ -83,15 +100,7 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
             onChange: (e) => handleChange(e, setSearchScope),
             labelText: "Select a category",
             name: "search_scope",
-            optionsData: [
-              { text: "Keyword", value: "all" },
-              { text: "Title", value: "title" },
-              { text: "Author/contributor", value: "contributor" },
-              { text: "Journal title", value: "journal_title" },
-              { text: "Call number", value: "callnumber" },
-              { text: "Control numbers/identifiers", value: "standard_number" },
-              { text: "Subject", value: "subject" },
-            ],
+            optionsData: searchFormDropDownOptions,
           }}
           textInputProps={{
             isClearable: true,

@@ -14,6 +14,55 @@ import { RESULTS_PER_PAGE } from "../config/constants"
 import { collapseMultiValueQueryParams } from "./refineSearchUtils"
 import { getPaginationOffsetStrings } from "./appUtils"
 
+export const searchFormDropDownOptionsWithSearchTip = [
+  {
+    text: "Keyword",
+    value: "all",
+    searchTip: "Enter a title, or use quotes to search for an exact phrase.",
+  },
+  { text: "Title", value: "title", searchTip: "title tip" },
+  {
+    text: "Author/contributor",
+    value: "contributor",
+    searchTip:
+      "Enter the name of an author, contributor, or organization. Use Last Name, First Name for more accurate results.",
+  },
+  {
+    text: "Journal title",
+    value: "journal_title",
+    searchTip:
+      "Enter a journal or serial title, or use quotes to search for an exact phrase.",
+  },
+  {
+    text: "Call number",
+    value: "callnumber",
+    searchTip:
+      "Enter a call number, or the first few letters and numbers of a call number. ",
+  },
+  {
+    text: "Control numbers/identifiers",
+    value: "standard_number",
+    searchTip:
+      "Enter a control number or identifier. Examples include ISSN / ISBN / OCLC / LCCN numbers, barcodes, etc.",
+  },
+  {
+    text: "Subject",
+    value: "subject",
+    searchTip: "Enter a subject name or phrase. Learn more about searching.",
+  },
+]
+
+export const searchFormDropDownOptions =
+  searchFormDropDownOptionsWithSearchTip.map(({ text, value }) => ({
+    text,
+    value,
+  }))
+
+export const searchTipForDropDownOption = (optionValue: string) => {
+  return searchFormDropDownOptionsWithSearchTip.find(
+    (option) => option.value == optionValue
+  ).searchTip
+}
 /**
  * determineFreshSortByQuery
  * Returns true only if the last update to the query was a sort by change.
