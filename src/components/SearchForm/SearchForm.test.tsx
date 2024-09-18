@@ -46,4 +46,19 @@ describe("SearchForm", () => {
     const input = screen.getByDisplayValue("spaghetti")
     expect(input).toBeTruthy()
   })
+  describe("search scope options", () => {
+    it("updates the search tip when search scope is updated", async () => {
+      render(<SearchForm aggregations={normalAggs} />)
+      const searchScopeSelect = screen.getByLabelText("Select a category")
+      await userEvent.selectOptions(searchScopeSelect, "journal_title")
+      let searchTip = screen.getByText(
+        "Enter a journal or serial title, or use quotes to search for an exact phrase."
+      )
+      await userEvent.selectOptions(searchScopeSelect, "all")
+      searchTip = screen.getByText(
+        "Enter a title, or use quotes to search for an exact phrase."
+      )
+      expect(searchTip).toBeInTheDocument()
+    })
+  })
 })
