@@ -38,6 +38,7 @@
     "winston": "3.9.0"
   },
   "devDependencies": {
+    "@babel/plugin-transform-private-methods": "^7.25.4",
     "@testing-library/dom": "^9.3.3",
     "@testing-library/jest-dom": "6.1.4",
     "@testing-library/react": "14.0.0",

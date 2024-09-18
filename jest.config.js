@@ -37,10 +37,16 @@ module.exports = {
   transform: {
     // Use babel-jest to transpile __tests__ with the next/babel preset
     // https://jestjs.io/docs/configuration#transform-objectstring-pathtotransformer--pathtotransformer-object
-    "^.+\\.(js|jsx|ts|tsx)$": ["babel-jest", { presets: ["next/babel"] }],
+    "^.+\\.(js|jsx|ts|tsx)$": [
+      "babel-jest",
+      {
+        presets: ["next/babel"],
+        plugins: ["@babel/plugin-transform-private-methods"],
+      },
+    ],
   },
   transformIgnorePatterns: [
-    "/node_modules/",
+    "node_modules/(?!@nypl/pickup-time-estimator)/",
     "^.+\\.module\\.(css|sass|scss)$",
   ],
 }
