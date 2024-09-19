@@ -120,7 +120,7 @@ const TestPickupTimes = (params) => {
               <Select
                 id="scenario"
                 name="scenario"
-                labelText="Preloaded scenarios"
+                labelText="Preloaded Scenarios"
                 value={scenario}
                 onChange={(e) =>
                   setScenario((e.target as HTMLInputElement).value)

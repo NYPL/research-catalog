@@ -196,7 +196,7 @@ describe("Bib Page Item Table", () => {
       screen.queryByText("Error: Please enter a valid year.")
     ).toBeInTheDocument()
 
-    // not of length 3
+    // not of length 4
     await userEvent.type(yearField, "1")
     await userEvent.click(yearFilter.querySelector("button[type='submit']"))
     expect(mockRouter.asPath).toBe("/bib/pb5579193")
