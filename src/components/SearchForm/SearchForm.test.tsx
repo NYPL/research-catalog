@@ -10,7 +10,6 @@ import { getSearchTipForSearchFormOption } from "../../utils/searchUtils"
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
 describe("SearchForm", () => {
-  // const searchLabel = getSearchTipForSearchFormOption("all")
   const submit = () =>
     fireEvent(screen.getByText("Search"), new MouseEvent("click"))
   beforeEach(() => {
