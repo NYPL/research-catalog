@@ -5,33 +5,35 @@ import userEvent from "@testing-library/user-event"
 
 import SearchForm from "./SearchForm"
 import { normalAggs } from "../../../__test__/fixtures/testAggregations"
+import { getSearchTipForSearchFormOption } from "../../utils/searchUtils"
 
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
 describe("SearchForm", () => {
-  const searchLabel =
-    "Search by keyword, title, journal title, or author/contributor"
+  // const searchLabel = getSearchTipForSearchFormOption("all")
   const submit = () =>
     fireEvent(screen.getByText("Search"), new MouseEvent("click"))
   beforeEach(() => {
     mockRouter.query.q = ""
   })
   afterEach(async () => {
-    const input = screen.getByLabelText(searchLabel)
+    const input = screen.getByRole("textbox")
     await userEvent.clear(input)
   })
   it.todo("searches on an empty keyword after clearing the form")
   it.todo("searches for {TBD} on an empty query")
   it("submits a keyword query by default", async () => {
     render(<SearchForm aggregations={normalAggs} />)
-    const input = screen.getByLabelText(searchLabel)
+    const input = screen.getByRole("textbox")
+
     await userEvent.type(input, "spaghetti")
     submit()
     expect(mockRouter.asPath).toBe("/search?q=spaghetti")
   })
   it("submits a journal_title query", async () => {
     render(<SearchForm aggregations={normalAggs} />)
-    const input = screen.getByLabelText(searchLabel)
+    const input = screen.getByRole("textbox")
+
     const searchScopeSelect = screen.getByLabelText("Select a category")
     await userEvent.type(input, "spaghetti")
     await userEvent.selectOptions(searchScopeSelect, "journal_title")
@@ -52,12 +54,10 @@ describe("SearchForm", () => {
       const searchScopeSelect = screen.getByLabelText("Select a category")
       await userEvent.selectOptions(searchScopeSelect, "journal_title")
       let searchTip = screen.getByText(
-        "Enter a journal or serial title, or use quotes to search for an exact phrase."
+        getSearchTipForSearchFormOption("journal_title")
       )
       await userEvent.selectOptions(searchScopeSelect, "all")
-      searchTip = screen.getByText(
-        "Enter a title, or use quotes to search for an exact phrase."
-      )
+      searchTip = screen.getByText(getSearchTipForSearchFormOption("all"))
       expect(searchTip).toBeInTheDocument()
     })
   })
