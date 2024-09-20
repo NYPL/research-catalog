@@ -34,7 +34,7 @@ const SearchResult = ({ bib }: SearchResultProps) => {
         size="heading5"
         sx={{ a: { textDecoration: "none" } }}
       >
-        <RCLink href={`${PATHS.BIB}/${bib.id}`}>{bib.title}</RCLink>
+        <RCLink href={`${PATHS.BIB}/${bib.id}`}>{bib.titleDisplay}</RCLink>
       </CardHeading>
       <CardContent>
         <Box

@@ -84,11 +84,12 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
             labelText: "Select a category",
             name: "search_scope",
             optionsData: [
-              { text: "All fields", value: "all" },
+              { text: "Keyword", value: "all" },
               { text: "Title", value: "title" },
-              { text: "Journal Title", value: "journal_title" },
-              { text: "Author/Contributor", value: "contributor" },
-              { text: "Standard Numbers", value: "standard_number" },
+              { text: "Author/contributor", value: "contributor" },
+              { text: "Journal title", value: "journal_title" },
+              { text: "Call number", value: "callnumber" },
+              { text: "Control numbers/identifiers", value: "standard_number" },
               { text: "Subject", value: "subject" },
             ],
           }}
