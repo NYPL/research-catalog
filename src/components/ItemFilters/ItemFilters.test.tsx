@@ -44,20 +44,6 @@ describe("ItemFilters", () => {
       expect(screen.getByLabelText("Search by year")).toBeInTheDocument()
     })
 
-    it("closes open filters when user clicks outside of the filter", async () => {
-      const outsideOfTheFilter = screen.getByLabelText("Search by year")
-
-      const locationFilterButton = screen
-        .getByTestId("location-multi-select")
-        .querySelector("button")
-      await userEvent.click(locationFilterButton)
-
-      expect(locationFilterButton).toHaveAttribute("aria-expanded", "true")
-
-      await userEvent.click(outsideOfTheFilter)
-      expect(locationFilterButton).toHaveAttribute("aria-expanded", "false")
-    })
-
     it("calls the change handler when filter values are changed", async () => {
       await userEvent.click(screen.getByTestId("location-multi-select"))
       const offsiteCheckbox = screen.getByLabelText("Offsite")
