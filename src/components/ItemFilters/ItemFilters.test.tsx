@@ -49,7 +49,6 @@ describe("ItemFilters", () => {
       const offsiteCheckbox = screen.getByLabelText("Offsite")
 
       await userEvent.click(offsiteCheckbox)
-
       expect(filtersChangeMock).toHaveBeenCalledTimes(1)
 
       await userEvent.click(offsiteCheckbox)
