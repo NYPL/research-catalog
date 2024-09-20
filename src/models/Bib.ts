@@ -16,6 +16,7 @@ import ItemTableData from "./ItemTableData"
 export default class Bib {
   id: string
   title: string
+  titleDisplay: string
   electronicResources?: ElectronicResource[]
   numPhysicalItems: number
   numItemsMatched: number
@@ -23,10 +24,12 @@ export default class Bib {
   issuance?: JSONLDValue[]
   items?: Item[]
   itemAggregations?: Aggregation[]
+  hasItemDates?: boolean
 
   constructor(result: DiscoveryBibResult) {
     this.id = result["@id"] ? result["@id"].substring(4) : ""
-    this.title = this.getTitleFromResult(result)
+    this.title = result.title[0] || ""
+    this.titleDisplay = this.getTitleDisplayFromResult(result)
     this.electronicResources = result.electronicResources || null
     this.numPhysicalItems = result.numItemsTotal || 0
     this.numItemsMatched = result.numItemsMatched || 0
@@ -35,6 +38,7 @@ export default class Bib {
     this.issuance = (result.issuance?.length && result.issuance) || null
     this.items = this.getItemsFromResult(result)
     this.itemAggregations = result.itemAggregations || null
+    this.hasItemDates = result.hasItemDates || false
   }
 
   get url() {
@@ -106,7 +110,7 @@ export default class Bib {
     } items. This may take a few moments...`
   }
 
-  getTitleFromResult(result: DiscoveryBibResult) {
+  getTitleDisplayFromResult(result: DiscoveryBibResult) {
     if (!result.titleDisplay || !result.titleDisplay.length) {
       const author =
         result.creatorLiteral && result.creatorLiteral.length

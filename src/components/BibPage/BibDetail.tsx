@@ -14,6 +14,7 @@ import type {
 } from "../../types/bibDetailsTypes"
 import { rtlOrLtr, isItTheLastElement } from "../../utils/bibUtils"
 import type { ReactNode } from "react"
+import { BASE_URL } from "../../config/constants"
 
 interface BibDetailsProps {
   details: AnyBibDetail[]
@@ -126,7 +127,7 @@ const LinkElement = (url: Url, linkType: string) => {
   return (
     <Link
       dir={stringDirection}
-      href={url.url}
+      href={BASE_URL + url.url}
       key={url.url}
       includeBaseUrl={false}
       textDecoration="none"

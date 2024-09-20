@@ -12,7 +12,10 @@ describe("SearchForm", () => {
   const searchLabel =
     "Search by keyword, title, journal title, or author/contributor"
   const submit = () =>
-    fireEvent(screen.getByText("Search"), new MouseEvent("click"))
+    fireEvent(
+      screen.getByText("Search").closest("button"),
+      new MouseEvent("click")
+    )
   beforeEach(() => {
     mockRouter.query.q = ""
   })
