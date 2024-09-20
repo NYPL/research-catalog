@@ -12,8 +12,9 @@ import styles from "../../../styles/components/Search.module.scss"
 import RCLink from "../Links/RCLink/RCLink"
 import {
   getSearchQuery,
-  searchFormDropDownOptions,
-  searchTipForDropDownOption,
+  searchFormSelectOptions,
+  getSearchTipForSearchFormOption,
+  getPlaceholderForSearchFormOption,
 } from "../../utils/searchUtils"
 import { BASE_URL, PATHS } from "../../config/constants"
 import EDSLink from "../EDSLink"
@@ -37,7 +38,8 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
   const [appliedFilters, setAppliedFilters] = useState(
     collapseMultiValueQueryParams(router.query)
   )
-  const searchTip = searchTipForDropDownOption(searchScope)
+  const searchTip = getSearchTipForSearchFormOption(searchScope)
+  const placeholder = getPlaceholderForSearchFormOption(searchScope)
 
   const isLoading = useLoading()
 
@@ -100,17 +102,16 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
             onChange: (e) => handleChange(e, setSearchScope),
             labelText: "Select a category",
             name: "search_scope",
-            optionsData: searchFormDropDownOptions,
+            optionsData: searchFormSelectOptions,
           }}
           textInputProps={{
             isClearable: true,
             onChange: (e) => handleChange(e, setSearchTerm),
             isClearableCallback: () => setSearchTerm(""),
             value: searchTerm,
-            labelText:
-              "Search by keyword, title, journal title, or author/contributor",
+            labelText: searchTip,
             name: "q",
-            placeholder: "Keyword, title, journal title, or author/contributor",
+            placeholder,
           }}
           sx={{
             ".chakra-select__icon-wrapper": { "z-index": "999 !important" },
