@@ -8,12 +8,10 @@ import nyplApiClient from "../nyplApiClient"
 import {
   DISCOVERY_API_NAME,
   DISCOVERY_API_SEARCH_ROUTE,
-  ITEM_VIEW_ALL_BATCH_SIZE,
   SHEP_HTTP_TIMEOUT,
 } from "../../config/constants"
 import { appConfig } from "../../config/config"
 import logger from "../../../logger"
-import type { DiscoveryItemResult } from "../../types/itemTypes"
 
 export async function fetchBib(
   id: string,
@@ -27,6 +25,7 @@ export async function fetchBib(
       redirectUrl: `/bib/${standardizedId}`,
     }
   }
+
   const client = await nyplApiClient({ apiName: DISCOVERY_API_NAME })
   const [bibResponse, annotatedMarcResponse] = await Promise.allSettled([
     await client.get(
@@ -91,15 +90,6 @@ export async function fetchBib(
         status: 404,
       }
     }
-    // Populate bib's items with all the items if View All is enabled
-    if (bibQuery?.view_all_items) {
-      discoveryBibResult.items = await fetchAllBibItems(
-        bibQuery,
-        discoveryBibResult.numItemsMatched,
-        // allow control of batch size in query param for testing
-        bibQuery?.batch_size || ITEM_VIEW_ALL_BATCH_SIZE
-      )
-    }
 
     return {
       discoveryBibResult,
@@ -135,36 +125,4 @@ async function fetchBibSubjectHeadings(bibId: string) {
   } finally {
     clearTimeout(timeoutId)
   }
-}
-
-async function fetchAllBibItems(
-  bibQuery: BibQueryParams,
-  numItems: number,
-  batchSize: number
-): Promise<DiscoveryItemResult[]> {
-  const items: DiscoveryItemResult[] = []
-  const client = await nyplApiClient({ apiName: DISCOVERY_API_NAME })
-  for (
-    let batchNum = 1;
-    batchNum <= Math.ceil(numItems / batchSize);
-    batchNum++
-  ) {
-    const pageQueryString = getBibQueryString(
-      {
-        ...bibQuery,
-        item_page: batchNum,
-      },
-      false,
-      true
-    )
-    const bibPage = await client.get(
-      `${DISCOVERY_API_SEARCH_ROUTE}/${bibQuery.id}${pageQueryString}`
-    )
-    if (bibPage?.items?.length) {
-      items.push(...bibPage.items)
-    } else {
-      throw new Error("There was en error fetching items in one of the batches")
-    }
-  }
-  return items
 }

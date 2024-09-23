@@ -201,12 +201,4 @@ describe("fetchBib", () => {
     expect(bibResponse.status).toEqual(200)
     expect(bibResponse.discoveryBibResult.items.length).toEqual(25)
   })
-
-  it("should throw an error on view all if one of the batched fetches fails", async () => {
-    const bibResponse = (await fetchBib("b17418167", {
-      view_all_items: true,
-      batch_size: 20,
-    })) as BibResponse
-    expect(bibResponse.status).toEqual(404)
-  })
 })
