@@ -5,7 +5,7 @@ import userEvent from "@testing-library/user-event"
 
 import SearchForm from "./SearchForm"
 import { normalAggs } from "../../../__test__/fixtures/testAggregations"
-import { getSearchTipForSearchFormOption } from "../../utils/searchUtils"
+import { SEARCH_FORM_OPTIONS } from "../../config/constants"
 
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
@@ -53,10 +53,10 @@ describe("SearchForm", () => {
       const searchScopeSelect = screen.getByLabelText("Select a category")
       await userEvent.selectOptions(searchScopeSelect, "journal_title")
       let searchTip = screen.getByText(
-        getSearchTipForSearchFormOption("journal_title")
+        SEARCH_FORM_OPTIONS.journal_title.searchTip
       )
       await userEvent.selectOptions(searchScopeSelect, "all")
-      searchTip = screen.getByText(getSearchTipForSearchFormOption("all"))
+      searchTip = screen.getByText(SEARCH_FORM_OPTIONS.all.searchTip)
       expect(searchTip).toBeInTheDocument()
     })
   })

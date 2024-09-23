@@ -10,80 +10,15 @@ import type {
   SearchResultsResponse,
 } from "../types/searchTypes"
 import SearchResultsBib from "../models/SearchResultsBib"
-import { RESULTS_PER_PAGE } from "../config/constants"
+import { RESULTS_PER_PAGE, SEARCH_FORM_OPTIONS } from "../config/constants"
 import { collapseMultiValueQueryParams } from "./refineSearchUtils"
 import { getPaginationOffsetStrings } from "./appUtils"
 
-export const searchFormOptions = [
-  {
-    text: "Keyword",
-    value: "all",
-    searchTip:
-      "Enter one or more keywords, or use quotes to search for an exact phrase.",
-    placeholder: 'ex. climate change or "The New York Times"',
-  },
-  {
-    text: "Title",
-    value: "title",
-    searchTip: "Enter a title, or use quotes to search for an exact phrase.",
-    placeholder: 'ex. David Copperfield or "The Jewish Press That Was"',
-  },
-  {
-    text: "Author/contributor",
-    value: "contributor",
-    searchTip:
-      "Enter the name of an author, contributor, or organization. Use Last Name, First Name for more accurate results.",
-    placeholder: "ex. Dickens, Charles or American Law Association",
-  },
-  {
-    text: "Journal title",
-    value: "journal_title",
-    searchTip:
-      "Enter a journal or serial title, or use quotes to search for an exact phrase.",
-    placeholder:
-      'ex. The New York Times or "The Journal of Clinical Investigation"',
-  },
-  {
-    text: "Call number",
-    value: "callnumber",
-    searchTip:
-      "Enter a call number, or the first few letters and numbers of a call number. ",
-    placeholder: "ex. JFD 99-6057 or *ZAN-3174",
-  },
-  {
-    text: "Control numbers/identifiers",
-    value: "standard_number",
-    searchTip:
-      "Enter a control number or identifier. Examples include ISSN / ISBN / OCLC / LCCN numbers, barcodes, etc.",
-    placeholder: "ex. 1558584536 or 95008433",
-  },
-  {
-    text: "Subject",
-    value: "subject",
-    searchTip: "Enter a subject name or phrase. Learn more about searching.",
-    placeholder: "ex. ornithology or Greek architecture",
-  },
-]
-
-export const searchFormSelectOptions = searchFormOptions.map(
-  ({ text, value }) => ({
-    text,
-    value,
+export const searchFormSelectOptions = Object.keys(SEARCH_FORM_OPTIONS).map(
+  (key) => ({
+    text: SEARCH_FORM_OPTIONS[key].text,
+    value: key,
   })
-)
-
-const propForObjectInArray = (property, arrayOfObjects) => {
-  return (optionValue) =>
-    arrayOfObjects.find((option) => option.value == optionValue)[property]
-}
-
-export const getSearchTipForSearchFormOption = propForObjectInArray(
-  "searchTip",
-  searchFormOptions
-)
-export const getPlaceholderForSearchFormOption = propForObjectInArray(
-  "placeholder",
-  searchFormOptions
 )
 /**
  * determineFreshSortByQuery

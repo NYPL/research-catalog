@@ -13,10 +13,8 @@ import RCLink from "../Links/RCLink/RCLink"
 import {
   getSearchQuery,
   searchFormSelectOptions,
-  getSearchTipForSearchFormOption,
-  getPlaceholderForSearchFormOption,
 } from "../../utils/searchUtils"
-import { BASE_URL, PATHS } from "../../config/constants"
+import { BASE_URL, PATHS, SEARCH_FORM_OPTIONS } from "../../config/constants"
 import EDSLink from "../EDSLink"
 import useLoading from "../../hooks/useLoading"
 import RefineSearch from "../RefineSearch/RefineSearch"
@@ -38,8 +36,8 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
   const [appliedFilters, setAppliedFilters] = useState(
     collapseMultiValueQueryParams(router.query)
   )
-  const searchTip = getSearchTipForSearchFormOption(searchScope)
-  const placeholder = getPlaceholderForSearchFormOption(searchScope)
+  const searchTip = SEARCH_FORM_OPTIONS[searchScope].searchTip
+  const placeholder = SEARCH_FORM_OPTIONS[searchScope].placeholder
 
   const isLoading = useLoading()
 
