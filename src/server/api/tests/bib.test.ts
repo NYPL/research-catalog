@@ -195,7 +195,7 @@ describe("fetchBib", () => {
 
   it("should load all the items in batches if view_all_items query param is true", async () => {
     const bibResponse = (await fetchBib("b17418167", {
-      view_all_items: true,
+      all_items: true,
       batch_size: 20,
     })) as BibResponse
     expect(bibResponse.status).toEqual(200)
