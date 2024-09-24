@@ -362,6 +362,8 @@ export default class BibDetails {
   }
 
   buildSubjectHeadings(): SubjectHeadingDetail {
+    console.log("bib", this.bib)
+    console.log("subjectLiteral", this.bib?.subjectLiteral)
     if (!this.bib.subjectLiteral) return
     const subjectLiteralUrls = this.bib.subjectLiteral.map(
       (subject: string) => {

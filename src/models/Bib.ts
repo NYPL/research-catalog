@@ -1,4 +1,8 @@
-import type { DiscoveryBibResult, ElectronicResource } from "../types/bibTypes"
+import type {
+  DiscoveryBibResult,
+  ElectronicResource,
+  SubjectHeading,
+} from "../types/bibTypes"
 import type { JSONLDValue } from "../types/itemTypes"
 import type { Aggregation } from "../types/filterTypes"
 import Item from "../models/Item"
@@ -25,6 +29,7 @@ export default class Bib {
   items?: Item[]
   itemAggregations?: Aggregation[]
   hasItemDates?: boolean
+  subjectHeadings?: SubjectHeading[]
 
   constructor(result: DiscoveryBibResult) {
     this.id = result["@id"] ? result["@id"].substring(4) : ""
@@ -39,6 +44,7 @@ export default class Bib {
     this.items = this.getItemsFromResult(result)
     this.itemAggregations = result.itemAggregations || null
     this.hasItemDates = result.hasItemDates || false
+    this.subjectHeadings = result.subjectHeadings || null
   }
 
   get url() {
