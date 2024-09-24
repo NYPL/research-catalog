@@ -80,7 +80,6 @@ export function getBibQueryString(
   bibQuery: BibQueryParams,
   includeAnnotatedMarc = false
 ): string {
-  const viewAllItems = bibQuery?.all_items || false
   const batchSize = ITEM_PAGINATION_BATCH_SIZE
 
   const itemPage = bibQuery?.item_page || 1
@@ -100,15 +99,13 @@ export function getBibQueryString(
         .join("")
     : ""
 
-  const paginationQuery = !viewAllItems
-    ? `items_size=${batchSize}&items_from=${itemsFrom}&item_page=${itemPage}`
-    : ""
+  const paginationQuery = bibQuery?.all_items
+    ? "all_items=true"
+    : `items_size=${batchSize}&items_from=${itemsFrom}&item_page=${itemPage}`
 
   const mergeCheckinQuery = !includeAnnotatedMarc
     ? "&merge_checkin_card_items=true"
     : ""
 
-  const viewAllQuery = viewAllItems ? "&all_items=true" : ""
-
-  return `?${paginationQuery}${itemFilterQuery}${viewAllQuery}${mergeCheckinQuery}`
+  return `?${paginationQuery}${itemFilterQuery}${mergeCheckinQuery}`
 }
