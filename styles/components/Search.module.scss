@@ -21,6 +21,19 @@
   @include maxWidth;
 }
 
+.searchTip {
+  display: flex;
+  align-items: flex-start;
+  span {
+    font-weight: bold;
+    text-wrap: nowrap;
+  }
+  gap: var(--nypl-space-xxs);
+  svg {
+    margin-top: var(--nypl-space-xxxs);
+  }
+}
+
 .auxSearchContainer {
   display: flex;
   flex-direction: column;

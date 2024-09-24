@@ -68,3 +68,48 @@ export const DAYS = {
 export const ERROR_MESSAGES = {
   ITEM_REFETCH_ABORT_REASON: "New Bib item fetch initiated",
 }
+
+export const SEARCH_FORM_OPTIONS = {
+  all: {
+    text: "Keyword",
+    searchTip:
+      "Enter one or more keywords, or use quotes to search for an exact phrase.",
+    placeholder: 'ex. climate change or "The New York Times"',
+  },
+  title: {
+    text: "Title",
+    value: "title",
+    searchTip: "Enter a title, or use quotes to search for an exact phrase.",
+    placeholder: 'ex. David Copperfield or "The Jewish Press That Was"',
+  },
+  contributor: {
+    text: "Author/contributor",
+    searchTip:
+      "Enter the name of an author, contributor, or organization. Use Last Name, First Name for more accurate results.",
+    placeholder: "ex. Dickens, Charles or American Law Association",
+  },
+  journal_title: {
+    text: "Journal title",
+    searchTip:
+      "Enter a journal or serial title, or use quotes to search for an exact phrase.",
+    placeholder:
+      'ex. The New York Times or "The Journal of Clinical Investigation"',
+  },
+  callnumber: {
+    text: "Call number",
+    searchTip:
+      "Enter a call number, or the first few letters and numbers of a call number. ",
+    placeholder: "ex. JFD 99-6057 or *ZAN-3174",
+  },
+  standard_number: {
+    text: "Control numbers/identifiers",
+    searchTip:
+      "Enter a control number or identifier. Examples include ISSN / ISBN / OCLC / LCCN numbers, barcodes, etc.",
+    placeholder: "ex. 1558584536 or 95008433",
+  },
+  subject: {
+    text: "Subject",
+    searchTip: "Enter a subject name or phrase. Learn more about searching.",
+    placeholder: "ex. ornithology or Greek architecture",
+  },
+}
