@@ -92,7 +92,7 @@ export interface BibQueryParams extends ItemFilterQueryParams {
   batch_size?: number
 }
 
-type SubjectHeading = {
+export type SubjectHeading = {
   label?: string
   uuid?: string
   bib_count?: 10
