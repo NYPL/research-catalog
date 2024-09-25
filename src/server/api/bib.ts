@@ -8,10 +8,12 @@ import nyplApiClient from "../nyplApiClient"
 import {
   DISCOVERY_API_NAME,
   DISCOVERY_API_SEARCH_ROUTE,
+  ITEM_VIEW_ALL_BATCH_SIZE,
   SHEP_HTTP_TIMEOUT,
 } from "../../config/constants"
 import { appConfig } from "../../config/config"
 import logger from "../../../logger"
+import type { DiscoveryItemResult } from "../../types/itemTypes"
 
 export async function fetchBib(
   id: string,
@@ -91,6 +93,27 @@ export async function fetchBib(
       }
     }
 
+    // Populate bib's items with all the items if View All is enabled
+    // TODO: Remove this when view_all endpoint in discovery supports query params
+    const itemFilterParams = [
+      "item_location",
+      "item_format",
+      "item_status",
+      "item_date",
+    ]
+    // Only call the batched fetch when some of the filters are active
+    if (
+      bibQuery?.all_items &&
+      itemFilterParams.some((param) => param in Object.keys(bibQuery))
+    ) {
+      discoveryBibResult.items = await fetchAllBibItemsWithQuery(
+        bibQuery,
+        discoveryBibResult.numItemsMatched,
+        // allow control of batch size in query param for testing
+        bibQuery?.batch_size || ITEM_VIEW_ALL_BATCH_SIZE
+      )
+    }
+
     return {
       discoveryBibResult,
       annotatedMarc: annotatedMarc?.bib || null,
@@ -125,4 +148,36 @@ async function fetchBibSubjectHeadings(bibId: string) {
   } finally {
     clearTimeout(timeoutId)
   }
+}
+
+// TODO: Remove this when view_all endpoint in discovery supports query params
+async function fetchAllBibItemsWithQuery(
+  bibQuery: BibQueryParams,
+  numItems: number,
+  batchSize: number
+): Promise<DiscoveryItemResult[]> {
+  const items: DiscoveryItemResult[] = []
+  const client = await nyplApiClient({ apiName: DISCOVERY_API_NAME })
+  for (
+    let batchNum = 1;
+    batchNum <= Math.ceil(numItems / batchSize);
+    batchNum++
+  ) {
+    const pageQueryString = getBibQueryString(
+      {
+        ...bibQuery,
+        item_page: batchNum,
+      },
+      false
+    )
+    const bibPage = await client.get(
+      `${DISCOVERY_API_SEARCH_ROUTE}/${bibQuery.id}${pageQueryString}`
+    )
+    if (bibPage?.items?.length) {
+      items.push(...bibPage.items)
+    } else {
+      throw new Error("There was en error fetching items in one of the batches")
+    }
+  }
+  return items
 }
