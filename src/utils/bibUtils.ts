@@ -99,7 +99,7 @@ export function getBibQueryString(
         .join("")
     : ""
 
-  const paginationQuery = bibQuery?.all_items
+  const paginationOrAllQuery = bibQuery?.all_items
     ? "all_items=true"
     : `items_size=${batchSize}&items_from=${itemsFrom}&item_page=${itemPage}`
 
@@ -107,5 +107,5 @@ export function getBibQueryString(
     ? "&merge_checkin_card_items=true"
     : ""
 
-  return `?${paginationQuery}${itemFilterQuery}${mergeCheckinQuery}`
+  return `?${paginationOrAllQuery}${itemFilterQuery}${mergeCheckinQuery}`
 }
