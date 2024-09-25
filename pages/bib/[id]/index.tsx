@@ -94,6 +94,9 @@ export default function BibPage({
     ? bib.numItemsMatched
     : bib.numPhysicalItems
 
+  console.log("numItems", numItems)
+  console.log("bib.items.length", bib.items.length)
+
   const refreshItemTable = async (
     newQuery: BibQueryParams,
     viewAllItems = false,

@@ -101,11 +101,12 @@ export async function fetchBib(
       "item_status",
       "item_date",
     ]
-    // Only call the batched fetch when some of the filters are active
-    if (
+    const allItemsAndFiltersActive =
       bibQuery?.all_items &&
-      itemFilterParams.some((param) => param in Object.keys(bibQuery))
-    ) {
+      itemFilterParams.some((param) => bibQuery[param]?.length)
+
+    // Only call the batched fetch when some of the filters are active
+    if (allItemsAndFiltersActive) {
       discoveryBibResult.items = await fetchAllBibItemsWithQuery(
         bibQuery,
         discoveryBibResult.numItemsMatched,
