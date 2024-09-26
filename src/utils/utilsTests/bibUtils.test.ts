@@ -77,7 +77,26 @@ describe("bibUtils", () => {
         "?items_size=20&items_from=80&item_page=5&merge_checkin_card_items=true"
       )
     })
-    it("replaces pagination query params with all_items when all_items is true", () => {
+    // TODO: Uncomment when view_all endpoint in discovery supports query params
+    // it("replaces pagination query params with all_items when all_items is true", () => {
+    //   expect(
+    //     getBibQueryString({ id: "b12082323", item_page: 5, all_items: true })
+    //   ).toBe("?all_items=true&merge_checkin_card_items=true")
+    // })
+    // it("does not replace pagination query params when all_items is present and false", () => {
+    //   expect(
+    //     getBibQueryString({
+    //       id: "b12082323",
+    //       item_page: 5,
+    //       all_items: false,
+    //     })
+    //   ).toBe(
+    //     "?items_size=20&items_from=80&item_page=5&merge_checkin_card_items=true"
+    //   )
+    // })
+
+    // TODO: Remove this test when view_all endpoint in discovery supports query params
+    it("replaces pagination query params with all_items when all_items is true unless filters are applied", () => {
       expect(
         getBibQueryString({ id: "b12082323", item_page: 5, all_items: true })
       ).toBe("?all_items=true&merge_checkin_card_items=true")
@@ -91,6 +110,18 @@ describe("bibUtils", () => {
         })
       ).toBe(
         "?items_size=20&items_from=80&item_page=5&merge_checkin_card_items=true"
+      )
+    })
+    it("preserves pagination when filters are applied and all_items is true", () => {
+      expect(
+        getBibQueryString({
+          id: "b12082323",
+          item_page: 5,
+          all_items: true,
+          item_location: "location",
+        })
+      ).toBe(
+        "?items_size=150&items_from=600&item_page=5&all_items=true&item_location=location&merge_checkin_card_items=true"
       )
     })
   })
