@@ -1,4 +1,7 @@
-import { ITEM_PAGINATION_BATCH_SIZE } from "../config/constants"
+import {
+  ITEM_PAGINATION_BATCH_SIZE,
+  ITEM_FILTER_PARAMS,
+} from "../config/constants"
 import type { BibQueryParams } from "../types/bibTypes"
 import { getPaginationOffsetStrings } from "./appUtils"
 
@@ -85,16 +88,9 @@ export function getBibQueryString(
   const itemPage = bibQuery?.item_page || 1
   const itemsFrom = (itemPage - 1) * batchSize || 0
 
-  const FILTER_QUERIES = [
-    "item_location",
-    "item_format",
-    "item_status",
-    "item_date",
-  ]
-
   const itemFilterQuery = bibQuery
     ? Object.keys(bibQuery)
-        .filter((key) => FILTER_QUERIES.includes(key))
+        .filter((key) => ITEM_FILTER_PARAMS.includes(key))
         .map((key) => `&${key}=${bibQuery[key]}`)
         .join("")
     : ""

@@ -33,6 +33,13 @@ export const DRB_API_SEARCH_ROUTE = "/api/drb"
 // Query params
 export const SOURCE_PARAM = "?source=catalog"
 
+export const ITEM_FILTER_PARAMS = [
+  "item_location",
+  "item_format",
+  "item_status",
+  "item_date",
+]
+
 // External URLs
 export const DRB_BASE_URL =
   appConfig.apiEndpoints.drbFrontEnd[appConfig.environment]

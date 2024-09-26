@@ -10,6 +10,7 @@ import {
   DISCOVERY_API_SEARCH_ROUTE,
   ITEM_VIEW_ALL_BATCH_SIZE,
   SHEP_HTTP_TIMEOUT,
+  ITEM_FILTER_PARAMS,
 } from "../../config/constants"
 import { appConfig } from "../../config/config"
 import logger from "../../../logger"
@@ -95,15 +96,9 @@ export async function fetchBib(
 
     // Populate bib's items with all the items if View All is enabled
     // TODO: Remove this when view_all endpoint in discovery supports query params
-    const itemFilterParams = [
-      "item_location",
-      "item_format",
-      "item_status",
-      "item_date",
-    ]
     const allItemsAndFiltersActive =
       bibQuery?.all_items &&
-      itemFilterParams.some((param) => bibQuery[param]?.length)
+      ITEM_FILTER_PARAMS.some((param) => bibQuery[param]?.length)
 
     // Only call the batched fetch when some of the filters are active
     if (allItemsAndFiltersActive) {
