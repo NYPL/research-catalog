@@ -1,5 +1,6 @@
 import {
   ITEM_PAGINATION_BATCH_SIZE,
+  ITEM_VIEW_ALL_BATCH_SIZE,
   ITEM_FILTER_PARAMS,
 } from "../config/constants"
 import type { BibQueryParams } from "../types/bibTypes"
@@ -76,6 +77,11 @@ export function isNyplBibID(id: string) {
   return /^b/.test(id)
 }
 
+// Temp function to determine if view all and filters are active
+// TODO: Remove this when view_all endpoint in discovery supports query params
+export const itemFiltersActive = (bibQuery: BibQueryParams) =>
+  ITEM_FILTER_PARAMS.some((param) => bibQuery[param]?.length)
+
 /**
  * Given a BibQueryParams object and an includeAnnotatedMarc boolean, return a query string for the Bib fetch API call.
  */
@@ -83,7 +89,12 @@ export function getBibQueryString(
   bibQuery: BibQueryParams,
   includeAnnotatedMarc = false
 ): string {
-  const batchSize = ITEM_PAGINATION_BATCH_SIZE
+  const allItems = bibQuery?.all_items
+
+  // TODO: Remove this and set batch size to ITEM_PAGINATION_BATCH_SIZE when view_all endpoint in discovery supports query params
+  const batchSize = allItems
+    ? ITEM_VIEW_ALL_BATCH_SIZE
+    : ITEM_PAGINATION_BATCH_SIZE
 
   const itemPage = bibQuery?.item_page || 1
   const itemsFrom = (itemPage - 1) * batchSize || 0
@@ -95,9 +106,14 @@ export function getBibQueryString(
         .join("")
     : ""
 
-  const paginationOrAllQuery = bibQuery?.all_items
-    ? "all_items=true"
-    : `items_size=${batchSize}&items_from=${itemsFrom}&item_page=${itemPage}`
+  // TODO: Remove the filtersActive check and the bibQuery?.all_items check in the second part of the ternary
+  // when view_all endpoint in discovery supports query params
+  const paginationOrAllQuery =
+    allItems && !itemFiltersActive(bibQuery)
+      ? "all_items=true"
+      : `items_size=${batchSize}&items_from=${itemsFrom}&item_page=${itemPage}${
+          allItems ? "&all_items=true" : ""
+        }`
 
   const mergeCheckinQuery = !includeAnnotatedMarc
     ? "&merge_checkin_card_items=true"

@@ -3,6 +3,7 @@ import {
   isNyplBibID,
   getBibQueryString,
   standardizeBibId,
+  itemFiltersActive,
 } from "../../utils/bibUtils"
 import nyplApiClient from "../nyplApiClient"
 import {
@@ -10,7 +11,6 @@ import {
   DISCOVERY_API_SEARCH_ROUTE,
   ITEM_VIEW_ALL_BATCH_SIZE,
   SHEP_HTTP_TIMEOUT,
-  ITEM_FILTER_PARAMS,
 } from "../../config/constants"
 import { appConfig } from "../../config/config"
 import logger from "../../../logger"
@@ -96,12 +96,9 @@ export async function fetchBib(
 
     // Populate bib's items with all the items if View All is enabled
     // TODO: Remove this when view_all endpoint in discovery supports query params
-    const allItemsAndFiltersActive =
-      bibQuery?.all_items &&
-      ITEM_FILTER_PARAMS.some((param) => bibQuery[param]?.length)
 
     // Only call the batched fetch when some of the filters are active
-    if (allItemsAndFiltersActive) {
+    if (bibQuery?.all_items && itemFiltersActive(bibQuery)) {
       discoveryBibResult.items = await fetchAllBibItemsWithQuery(
         bibQuery,
         discoveryBibResult.numItemsMatched,
@@ -154,11 +151,9 @@ async function fetchAllBibItemsWithQuery(
 ): Promise<DiscoveryItemResult[]> {
   const items: DiscoveryItemResult[] = []
   const client = await nyplApiClient({ apiName: DISCOVERY_API_NAME })
-  for (
-    let batchNum = 1;
-    batchNum <= Math.ceil(numItems / batchSize);
-    batchNum++
-  ) {
+  const totalBatchNum = Math.ceil(numItems / batchSize)
+
+  for (let batchNum = 1; batchNum <= totalBatchNum; batchNum++) {
     const pageQueryString = getBibQueryString(
       {
         ...bibQuery,
