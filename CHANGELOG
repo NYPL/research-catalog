@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+### Added
+
+- Call number search scope to search dropdown options [(SCC-4260)](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4260)
+- Search tip per search scope [(SCC-4263)](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4263)
+
 ### Fixed
 
 - VQA second pass miscellaneous fixes (SCC-4264)
@@ -16,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Integrate view_all query param on client side and remove batched fetch (SCC-4287)
 - Replaced travis with github actions (SCC-4218)
+- Sentence case and rearrange search options (SCC-4260)
 
 ## [1.2.4] 2024-08-29
 

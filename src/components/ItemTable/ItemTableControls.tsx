@@ -51,7 +51,7 @@ const ItemTableControls = ({
           pageCount={Math.ceil(numItemsTotal / ITEM_PAGINATION_BATCH_SIZE)}
           onPageChange={handlePageChange}
           width="auto"
-          mb={{ base: "xs", md: 0 }}
+          mb={{ base: "m", md: 0 }}
         />
       ) : null}
       {bib.showViewAllItemsLink &&
