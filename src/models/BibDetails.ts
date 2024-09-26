@@ -364,6 +364,7 @@ export default class BibDetails {
   }
 
   buildSubjectHeadings(): SubjectHeadingDetail {
+    if (!this.bib.subjectHeadings) return
     const subjectHeadingsUrls = this.bib.subjectHeadings.map(
       ({ label, uuid }) => {
         if (!label || !uuid) return
