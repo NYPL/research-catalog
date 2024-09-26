@@ -164,10 +164,16 @@ async function fetchAllBibItemsWithQuery(
     const bibPage = await client.get(
       `${DISCOVERY_API_SEARCH_ROUTE}/${bibQuery.id}${pageQueryString}`
     )
-    if (bibPage?.items?.length) {
-      items.push(...bibPage.items)
-    } else {
-      throw new Error("There was en error fetching items in one of the batches")
+    try {
+      if (bibPage?.items?.length) {
+        items.push(...bibPage.items)
+      } else {
+        throw new Error(
+          "There was en error fetching items in one of the batches"
+        )
+      }
+    } catch (error) {
+      logger.error(error.message)
     }
   }
   return items
