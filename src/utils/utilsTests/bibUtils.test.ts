@@ -3,6 +3,7 @@ import {
   isNyplBibID,
   getBibQueryString,
   buildItemTableDisplayingString,
+  itemFiltersActive,
 } from "../bibUtils"
 
 describe("bibUtils", () => {
@@ -39,6 +40,30 @@ describe("bibUtils", () => {
       expect(isNyplBibID("b12082323")).toBe(true)
       expect(isNyplBibID("pb123456")).toBe(false)
       expect(isNyplBibID("hb10000202040400")).toBe(false)
+    })
+  })
+  describe("itemFiltersActive", () => {
+    it("returns true when any of the filter params are populated in the bib query string", () => {
+      expect(itemFiltersActive({ item_location: "location" })).toBe(true)
+      expect(itemFiltersActive({ item_format: "format" })).toBe(true)
+      expect(itemFiltersActive({ item_status: "status" })).toBe(true)
+      expect(itemFiltersActive({ item_date: "date" })).toBe(true)
+    })
+    it("returns false when item filter params are absent in the bib query or if they defined as empty strings", () => {
+      expect(
+        itemFiltersActive({
+          id: "b12082323",
+          item_page: 5,
+        })
+      ).toBe(false)
+      expect(
+        itemFiltersActive({
+          item_location: "",
+          item_status: "",
+          item_format: "",
+          item_date: "",
+        })
+      ).toBe(false)
     })
   })
   describe("getBibQueryString", () => {

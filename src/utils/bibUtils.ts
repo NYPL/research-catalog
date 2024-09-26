@@ -77,8 +77,7 @@ export function isNyplBibID(id: string) {
   return /^b/.test(id)
 }
 
-// Temp function to determine if view all and filters are active
-// TODO: Remove this when view_all endpoint in discovery supports query params
+// Check if any of the item filters in the bib query params are active
 export const itemFiltersActive = (bibQuery: BibQueryParams) =>
   ITEM_FILTER_PARAMS.some((param) => bibQuery[param]?.length)
 
