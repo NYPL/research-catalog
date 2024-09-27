@@ -1,12 +1,20 @@
-import { Box, SearchBar } from "@nypl/design-system-react-components"
+import {
+  Box,
+  Icon,
+  SearchBar,
+  Text,
+} from "@nypl/design-system-react-components"
 import { useRouter } from "next/router"
 import type { SyntheticEvent, Dispatch, SetStateAction } from "react"
 import { useState, useEffect } from "react"
 
 import styles from "../../../styles/components/Search.module.scss"
 import RCLink from "../Links/RCLink/RCLink"
-import { getSearchQuery } from "../../utils/searchUtils"
-import { BASE_URL, PATHS } from "../../config/constants"
+import {
+  getSearchQuery,
+  searchFormSelectOptions,
+} from "../../utils/searchUtils"
+import { BASE_URL, PATHS, SEARCH_FORM_OPTIONS } from "../../config/constants"
 import EDSLink from "../EDSLink"
 import useLoading from "../../hooks/useLoading"
 import RefineSearch from "../RefineSearch/RefineSearch"
@@ -28,6 +36,8 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
   const [appliedFilters, setAppliedFilters] = useState(
     collapseMultiValueQueryParams(router.query)
   )
+  const searchTip = SEARCH_FORM_OPTIONS[searchScope].searchTip
+  const placeholder = SEARCH_FORM_OPTIONS[searchScope].placeholder
 
   const isLoading = useLoading()
 
@@ -71,6 +81,13 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
   return (
     <div className={styles.searchContainer}>
       <div className={styles.searchContainerInner}>
+        <Text size="body2" className={styles.searchTip}>
+          <Icon size="medium" name="errorOutline" />
+          <Box className={styles.searchTipText}>
+            <span>{"Search tip: "}</span>
+            {searchTip}
+          </Box>
+        </Text>
         <SearchBar
           id="mainContent"
           action={`${BASE_URL}/search`}
@@ -83,25 +100,16 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
             onChange: (e) => handleChange(e, setSearchScope),
             labelText: "Select a category",
             name: "search_scope",
-            optionsData: [
-              { text: "Keyword", value: "all" },
-              { text: "Title", value: "title" },
-              { text: "Author/contributor", value: "contributor" },
-              { text: "Journal title", value: "journal_title" },
-              { text: "Call number", value: "callnumber" },
-              { text: "Control numbers/identifiers", value: "standard_number" },
-              { text: "Subject", value: "subject" },
-            ],
+            optionsData: searchFormSelectOptions,
           }}
           textInputProps={{
             isClearable: true,
             onChange: (e) => handleChange(e, setSearchTerm),
             isClearableCallback: () => setSearchTerm(""),
             value: searchTerm,
-            labelText:
-              "Search by keyword, title, journal title, or author/contributor",
+            labelText: searchTip,
             name: "q",
-            placeholder: "Keyword, title, journal title, or author/contributor",
+            placeholder,
           }}
           sx={{
             ".chakra-select__icon-wrapper": { "z-index": "999 !important" },
