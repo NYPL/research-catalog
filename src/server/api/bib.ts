@@ -94,10 +94,8 @@ export async function fetchBib(
       }
     }
 
-    // Populate bib's items with all the items if View All is enabled
-    // TODO: Remove this when view_all endpoint in discovery supports query params
-
     // Only call the batched fetch when some of the filters are active
+    // TODO: Remove this when view_all endpoint in discovery supports query params
     if (bibQuery?.all_items && itemFiltersActive(bibQuery)) {
       discoveryBibResult.items = await fetchAllBibItemsWithQuery(
         bibQuery,
