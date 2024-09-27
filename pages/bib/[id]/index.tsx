@@ -124,7 +124,11 @@ export default function BibPage({
         scroll: false,
       }
     )
-    const bibQueryString = getBibQueryString(newQuery, false, viewAllItems)
+    const bibQueryString = getBibQueryString(
+      { ...newQuery, all_items: viewAllItems },
+      false
+    )
+
     try {
       // Cancel any active fetches on new ItemTable refreshes
       if (controllerRef.current) {

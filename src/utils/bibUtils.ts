@@ -1,6 +1,7 @@
 import {
   ITEM_PAGINATION_BATCH_SIZE,
   ITEM_VIEW_ALL_BATCH_SIZE,
+  ITEM_FILTER_PARAMS,
 } from "../config/constants"
 import type { BibQueryParams } from "../types/bibTypes"
 import { getPaginationOffsetStrings } from "./appUtils"
@@ -76,40 +77,46 @@ export function isNyplBibID(id: string) {
   return /^b/.test(id)
 }
 
+// Check if any of the item filters in the bib query params are active
+export const itemFiltersActive = (bibQuery: BibQueryParams) =>
+  ITEM_FILTER_PARAMS.some((param) => bibQuery[param]?.length)
+
 /**
  * Given a BibQueryParams object and an includeAnnotatedMarc boolean, return a query string for the Bib fetch API call.
  */
 export function getBibQueryString(
   bibQuery: BibQueryParams,
-  includeAnnotatedMarc = false,
-  viewAllItems = false
+  includeAnnotatedMarc = false
 ): string {
-  const batchSize = viewAllItems
+  const allItems = bibQuery?.all_items
+
+  // TODO: Remove this and set batch size to ITEM_PAGINATION_BATCH_SIZE when view_all endpoint in discovery supports query params
+  const batchSize = allItems
     ? ITEM_VIEW_ALL_BATCH_SIZE
     : ITEM_PAGINATION_BATCH_SIZE
+
   const itemPage = bibQuery?.item_page || 1
   const itemsFrom = (itemPage - 1) * batchSize || 0
 
-  const FILTER_QUERIES = [
-    "item_location",
-    "item_format",
-    "item_status",
-    "item_date",
-  ]
-
   const itemFilterQuery = bibQuery
     ? Object.keys(bibQuery)
-        .filter((key) => FILTER_QUERIES.includes(key))
+        .filter((key) => ITEM_FILTER_PARAMS.includes(key))
         .map((key) => `&${key}=${bibQuery[key]}`)
         .join("")
     : ""
 
-  const paginationQuery = `items_size=${batchSize}&items_from=${itemsFrom}&item_page=${itemPage}`
+  // TODO: Remove the filtersActive check and the bibQuery?.all_items check in the second part of the ternary
+  // when view_all endpoint in discovery supports query params
+  const paginationOrAllQuery =
+    allItems && !itemFiltersActive(bibQuery)
+      ? "all_items=true"
+      : `items_size=${batchSize}&items_from=${itemsFrom}&item_page=${itemPage}${
+          allItems ? "&all_items=true" : ""
+        }`
 
   const mergeCheckinQuery = !includeAnnotatedMarc
     ? "&merge_checkin_card_items=true"
     : ""
 
-  const viewAllQuery = viewAllItems ? "&view_all_items=true" : ""
-  return `?${paginationQuery}${itemFilterQuery}${viewAllQuery}${mergeCheckinQuery}`
+  return `?${paginationOrAllQuery}${itemFilterQuery}${mergeCheckinQuery}`
 }
