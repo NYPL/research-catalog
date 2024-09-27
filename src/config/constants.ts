@@ -102,7 +102,7 @@ export const SEARCH_FORM_OPTIONS = {
     placeholder: "ex. JFD 99-6057 or *ZAN-3174",
   },
   standard_number: {
-    text: "Control numbers/identifiers",
+    text: "Indentifier",
     searchTip:
       "Enter a control number or identifier. Examples include ISSN / ISBN / OCLC / LCCN numbers, barcodes, etc.",
     placeholder: "ex. 1558584536 or 95008433",
