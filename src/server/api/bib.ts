@@ -154,17 +154,17 @@ async function fetchAllBibItemsWithQuery(
   const totalBatchNum = Math.ceil(numItems / batchSize)
 
   for (let batchNum = 1; batchNum <= totalBatchNum; batchNum++) {
-    const pageQueryString = getBibQueryString(
-      {
-        ...bibQuery,
-        item_page: batchNum,
-      },
-      false
-    )
-    const bibPage = await client.get(
-      `${DISCOVERY_API_SEARCH_ROUTE}/${bibQuery.id}${pageQueryString}`
-    )
     try {
+      const pageQueryString = getBibQueryString(
+        {
+          ...bibQuery,
+          item_page: batchNum,
+        },
+        false
+      )
+      const bibPage = await client.get(
+        `${DISCOVERY_API_SEARCH_ROUTE}/${bibQuery.id}${pageQueryString}`
+      )
       if (bibPage?.items?.length) {
         items.push(...bibPage.items)
       } else {
