@@ -61,7 +61,7 @@ export function getSearchResultsHeading(
     totalResults > RESULTS_PER_PAGE
       ? `${resultsStart}-${resultsEnd}`
       : totalResults.toLocaleString()
-  } of ${totalResults.toLocaleString()} results ${queryDisplayString}`
+  } of ${totalResults.toLocaleString()} results${queryDisplayString}`
 }
 
 // Shows the final part of the search query string (e.g. "for keyword 'cats'")
@@ -112,7 +112,7 @@ function buildQueryDisplayString(searchParams: SearchParams): string {
   const displayStringArray = Object.values(paramsStringCollection)
 
   return displayStringArray.length
-    ? `for ${displayStringArray.join(" and ")}`
+    ? ` for ${displayStringArray.join(" and ")}`
     : ""
 }
 
