@@ -11287,19 +11287,19 @@ export const bibWithSubjectHeadings = {
         prefLabel: "volume",
       },
     ],
-    createdString: ["2005"],
+    createdString: [2005],
     createdYear: 2005,
     creatorLiteral: ["Cortanze, Gérard de."],
     creatorLiteralNormalized: ["Gérard Cortanze", "Gérard de Cortanze"],
     creatorLiteralWithoutDates: ["Cortanze, Gérard de."],
     dateStartYear: 2005,
-    dateString: ["2005"],
+    dateString: [2005],
     dimensions: ["19 cm."],
     electronicResources: [],
     extent: ["193 p. : ill. ;"],
-    idIsbn: ["2070775178"],
-    idLccn: ["2005483039"],
-    idOclc: ["61868265"],
+    idIsbn: [2070775178],
+    idLccn: [2005483039],
+    idOclc: [61868265],
     identifier: [
       {
         "@type": "bf:ShelfMark",
@@ -11307,19 +11307,19 @@ export const bibWithSubjectHeadings = {
       },
       {
         "@type": "nypl:Bnumber",
-        "@value": "16145054",
+        "@value": 16145054,
       },
       {
         "@type": "bf:Isbn",
-        "@value": "2070775178",
+        "@value": 2070775178,
       },
       {
         "@type": "nypl:Oclc",
-        "@value": "61868265",
+        "@value": 61868265,
       },
       {
         "@type": "bf:Lccn",
-        "@value": "2005483039",
+        "@value": 2005483039,
       },
       {
         "@type": "bf:Identifier",
@@ -11400,7 +11400,7 @@ export const bibWithSubjectHeadings = {
             prefLabel: "Offsite",
           },
         ],
-        idBarcode: ["33433073236758"],
+        idBarcode: [33433073236758],
         identifier: [
           {
             "@type": "bf:ShelfMark",
@@ -11408,7 +11408,7 @@ export const bibWithSubjectHeadings = {
           },
           {
             "@type": "bf:Barcode",
-            "@value": "33433073236758",
+            "@value": 33433073236758,
           },
         ],
         owner: [
@@ -11435,7 +11435,7 @@ export const bibWithSubjectHeadings = {
         uri: "i15550040",
         idNyplSourceId: {
           "@type": "SierraNypl",
-          "@value": "15550040",
+          "@value": 15550040,
         },
       },
     ],
