@@ -95,6 +95,6 @@ export interface BibQueryParams extends ItemFilterQueryParams {
 export type SubjectHeading = {
   label?: string
   uuid?: string
-  bib_count?: 10
-  desc_count?: 0
+  bib_count?: number
+  desc_count?: number
 }
