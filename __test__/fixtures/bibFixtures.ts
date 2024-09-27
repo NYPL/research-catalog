@@ -11435,7 +11435,7 @@ export const bibWithSubjectHeadings = {
         uri: "i15550040",
         idNyplSourceId: {
           "@type": "SierraNypl",
-          "@value": 15550040,
+          "@value": "15550040",
         },
       },
     ],
