@@ -11400,7 +11400,7 @@ export const bibWithSubjectHeadings = {
             prefLabel: "Offsite",
           },
         ],
-        idBarcode: [33433073236758],
+        idBarcode: ["33433073236758"],
         identifier: [
           {
             "@type": "bf:ShelfMark",
@@ -11408,7 +11408,7 @@ export const bibWithSubjectHeadings = {
           },
           {
             "@type": "bf:Barcode",
-            "@value": 33433073236758,
+            "@value": "33433073236758",
           },
         ],
         owner: [
