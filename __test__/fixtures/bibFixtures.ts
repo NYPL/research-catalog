@@ -11273,3 +11273,256 @@ export const bibManyEResources = {
     subjectHeadings: null,
   },
 }
+
+export const bibWithSubjectHeadings = {
+  resource: {
+    "@context":
+      "http://discovery-api-qa.nypl.org/api/v0.1/discovery/context_all.jsonld",
+    "@type": ["nypl:Item", "nypl:Resource"],
+    "@id": "res:b16145054",
+    buildingLocationIds: ["rc"],
+    carrierType: [
+      {
+        "@id": "carriertypes:nc",
+        prefLabel: "volume",
+      },
+    ],
+    createdString: ["2005"],
+    createdYear: 2005,
+    creatorLiteral: ["Cortanze, Gérard de."],
+    creatorLiteralNormalized: ["Gérard Cortanze", "Gérard de Cortanze"],
+    creatorLiteralWithoutDates: ["Cortanze, Gérard de."],
+    dateStartYear: 2005,
+    dateString: ["2005"],
+    dimensions: ["19 cm."],
+    electronicResources: [],
+    extent: ["193 p. : ill. ;"],
+    idIsbn: ["2070775178"],
+    idLccn: ["2005483039"],
+    idOclc: ["61868265"],
+    identifier: [
+      {
+        "@type": "bf:ShelfMark",
+        "@value": "JFC 06-438",
+      },
+      {
+        "@type": "nypl:Bnumber",
+        "@value": "16145054",
+      },
+      {
+        "@type": "bf:Isbn",
+        "@value": "2070775178",
+      },
+      {
+        "@type": "nypl:Oclc",
+        "@value": "61868265",
+      },
+      {
+        "@type": "bf:Lccn",
+        "@value": "2005483039",
+      },
+      {
+        "@type": "bf:Identifier",
+        "@value": "(WaOLN)M040000221",
+      },
+    ],
+    issuance: [
+      {
+        "@id": "urn:biblevel:m",
+        prefLabel: "monograph/item",
+      },
+    ],
+    itemAggregations: [
+      {
+        "@type": "nypl:Aggregation",
+        "@id": "res:location",
+        id: "location",
+        field: "location",
+        values: [
+          {
+            value: "loc:rc2ma",
+            count: 1,
+            label: "Offsite",
+          },
+        ],
+      },
+      {
+        "@type": "nypl:Aggregation",
+        "@id": "res:format",
+        id: "format",
+        field: "format",
+        values: [
+          {
+            value: "Text",
+            count: 1,
+            label: "Text",
+          },
+        ],
+      },
+      {
+        "@type": "nypl:Aggregation",
+        "@id": "res:status",
+        id: "status",
+        field: "status",
+        values: [
+          {
+            value: "status:a",
+            count: 1,
+            label: "Available",
+          },
+        ],
+      },
+    ],
+    items: [
+      {
+        "@id": "res:i15550040",
+        "@type": ["bf:Item"],
+        accessMessage: [
+          {
+            "@id": "accessMessage:2",
+            prefLabel: "Request in advance",
+          },
+        ],
+        catalogItemType: [
+          {
+            "@id": "catalogItemType:55",
+            prefLabel: "book, limited circ, MaRLI",
+          },
+        ],
+        eddFulfillment: {
+          "@id": "fulfillment:recap-edd",
+        },
+        eddRequestable: true,
+        formatLiteral: ["Text"],
+        holdingLocation: [
+          {
+            "@id": "loc:rc2ma",
+            prefLabel: "Offsite",
+          },
+        ],
+        idBarcode: ["33433073236758"],
+        identifier: [
+          {
+            "@type": "bf:ShelfMark",
+            "@value": "JFC 06-438",
+          },
+          {
+            "@type": "bf:Barcode",
+            "@value": "33433073236758",
+          },
+        ],
+        owner: [
+          {
+            "@id": "orgs:1000",
+            prefLabel: "Stephen A. Schwarzman Building",
+          },
+        ],
+        physFulfillment: {
+          "@id": "fulfillment:recap-offsite",
+        },
+        physRequestable: true,
+        physicalLocation: ["JFC 06-438"],
+        recapCustomerCode: ["NA"],
+        requestable: [true],
+        shelfMark: ["JFC 06-438"],
+        specRequestable: false,
+        status: [
+          {
+            "@id": "status:a",
+            prefLabel: "Available",
+          },
+        ],
+        uri: "i15550040",
+        idNyplSourceId: {
+          "@type": "SierraNypl",
+          "@value": "15550040",
+        },
+      },
+    ],
+    language: [
+      {
+        "@id": "lang:fre",
+        prefLabel: "French",
+      },
+    ],
+    lccClassification: ["PQ2663.O7223 Z46 2005"],
+    materialType: [
+      {
+        "@id": "resourcetypes:txt",
+        prefLabel: "Text",
+      },
+    ],
+    mediaType: [
+      {
+        "@id": "mediatypes:n",
+        prefLabel: "unmediated",
+      },
+    ],
+    numCheckinCardItems: 0,
+    numElectronicResources: 0,
+    numItemDatesParsed: 0,
+    numItemVolumesParsed: 0,
+    numItemsMatched: 1,
+    numItemsTotal: 1,
+    nyplSource: ["sierra-nypl"],
+    placeOfPublication: ["[Paris, France]"],
+    popularity: 1,
+    publicationStatement: ["[Paris, France] : Gallimard, c2005."],
+    publisherLiteral: ["Gallimard"],
+    seriesStatement: ["Haute enfance"],
+    shelfMark: ["JFC 06-438"],
+    subjectLiteral: [
+      "Cortanze, Gérard de -- Childhood and youth.",
+      "Authors, French -- 20th century -- Biography.",
+      "Autobiographical Narrative",
+    ],
+    title: ["Spaghetti!"],
+    titleDisplay: ["Spaghetti! / Gérard de Cortanze."],
+    type: ["nypl:Item"],
+    uniformTitle: ["Haute enfance (Gallimard (Firm))"],
+    updatedAt: 1723133852918,
+    uri: "b16145054",
+    suppressed: false,
+    hasItemVolumes: false,
+    hasItemDates: false,
+    subjectHeadings: [
+      {
+        label: "Cortanze, Gérard de -- Childhood and youth",
+        uuid: "74746d11-638b-4cfb-a72a-9a2bd296e6fd",
+        bib_count: 1,
+        desc_count: 0,
+        parent: {
+          label: "Cortanze, Gérard de",
+          uuid: "cf347108-e1f2-4c0f-808a-ac4ace2f0765",
+          bib_count: 5,
+          desc_count: 4,
+        },
+      },
+      {
+        label: "Authors, French -- 20th century -- Biography",
+        uuid: "9391bc26-e44c-44ac-98cc-e3800da51926",
+        bib_count: 5319,
+        desc_count: 22,
+        parent: {
+          label: "Authors, French -- 20th century",
+          uuid: "e43674a7-5f02-44f1-95cd-dbcc776331b7",
+          bib_count: 8405,
+          desc_count: 197,
+          parent: {
+            label: "Authors, French",
+            uuid: "5fd065df-b4e9-48cb-b13c-ea15f36b96b4",
+            bib_count: 14275,
+            desc_count: 1012,
+          },
+        },
+      },
+      {
+        label: "Autobiographical Narrative",
+        uuid: "3a779ed6-8a07-4d27-80ef-e0c2b10fe78e",
+        bib_count: 505,
+        desc_count: 343,
+      },
+    ],
+  },
+  annotatedMarc: {},
+}
