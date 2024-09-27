@@ -11524,5 +11524,284 @@ export const bibWithSubjectHeadings = {
       },
     ],
   },
-  annotatedMarc: {},
+  annotatedMarc: {
+    id: "16145054",
+    nyplSource: "sierra-nypl",
+    fields: [
+      {
+        label: "Author",
+        values: [
+          {
+            content: "Cortanze, Gérard de.",
+            source: {
+              fieldTag: "a",
+              marcTag: "100",
+              ind1: "1",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Cortanze, Gérard de.",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Title",
+        values: [
+          {
+            content: "Spaghetti! / Gérard de Cortanze.",
+            source: {
+              fieldTag: "t",
+              marcTag: "245",
+              ind1: "1",
+              ind2: "0",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Spaghetti! /",
+                },
+                {
+                  tag: "c",
+                  content: "Gérard de Cortanze.",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Imprint",
+        values: [
+          {
+            content: "[Paris, France] : Gallimard, c2005.",
+            source: {
+              fieldTag: "p",
+              marcTag: "260",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "[Paris, France] :",
+                },
+                {
+                  tag: "b",
+                  content: "Gallimard,",
+                },
+                {
+                  tag: "c",
+                  content: "c2005.",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Description",
+        values: [
+          {
+            content: "193 p. : ill. ; 19 cm.",
+            source: {
+              fieldTag: "r",
+              marcTag: "300",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "193 p. :",
+                },
+                {
+                  tag: "b",
+                  content: "ill. ;",
+                },
+                {
+                  tag: "c",
+                  content: "19 cm.",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Series",
+        values: [
+          {
+            content: "Haute enfance",
+            source: {
+              fieldTag: "s",
+              marcTag: "490",
+              ind1: "1",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Haute enfance",
+                },
+              ],
+            },
+          },
+          {
+            content: "Haute enfance (Gallimard (Firm))",
+            source: {
+              fieldTag: "s",
+              marcTag: "830",
+              ind1: " ",
+              ind2: "0",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Haute enfance (Gallimard (Firm))",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Indexed Term",
+        values: [
+          {
+            content: "Autobiographical Narrative",
+            source: {
+              fieldTag: "d",
+              marcTag: "653",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Autobiographical Narrative",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Subject",
+        values: [
+          {
+            content: "Cortanze, Gérard de -- Childhood and youth.",
+            source: {
+              fieldTag: "d",
+              marcTag: "600",
+              ind1: "1",
+              ind2: "0",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Cortanze, Gérard de",
+                },
+                {
+                  tag: "x",
+                  content: "Childhood and youth.",
+                },
+              ],
+            },
+          },
+          {
+            content: "Authors, French -- 20th century -- Biography.",
+            source: {
+              fieldTag: "d",
+              marcTag: "650",
+              ind1: " ",
+              ind2: "0",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Authors, French",
+                },
+                {
+                  tag: "y",
+                  content: "20th century",
+                },
+                {
+                  tag: "v",
+                  content: "Biography.",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "LCCN",
+        values: [
+          {
+            content: "2005483039",
+            source: {
+              fieldTag: "l",
+              marcTag: "010",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "2005483039",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "ISBN",
+        values: [
+          {
+            content: "2070775178",
+            source: {
+              fieldTag: "i",
+              marcTag: "020",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "2070775178",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Research Call Number",
+        values: [
+          {
+            content: "JFC 06-438",
+            source: {
+              fieldTag: "q",
+              marcTag: "852",
+              ind1: "8",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "h",
+                  content: "JFC 06-438",
+                },
+              ],
+            },
+          },
+        ],
+      },
+    ],
+  },
 }
