@@ -78,7 +78,6 @@ export const SEARCH_FORM_OPTIONS = {
   },
   title: {
     text: "Title",
-    value: "title",
     searchTip: "Enter a title, or use quotes to search for an exact phrase.",
     placeholder: 'ex. David Copperfield or "The Jewish Press That Was"',
   },
