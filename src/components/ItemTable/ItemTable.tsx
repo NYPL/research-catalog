@@ -1,4 +1,8 @@
-import { Box, Table } from "@nypl/design-system-react-components"
+import {
+  Box,
+  Table,
+  useNYPLBreakpoints,
+} from "@nypl/design-system-react-components"
 
 import type ItemTableData from "../../models/ItemTableData"
 import StatusLinks from "./StatusLinks"
@@ -13,6 +17,8 @@ interface ItemTableProps {
  */
 const ItemTable = ({ itemTableData }: ItemTableProps) => {
   const { tableHeadings, tableData, items, inSearchResult } = itemTableData
+  const { isLargerThanSmall } = useNYPLBreakpoints()
+
   return (
     <Box>
       <Table
@@ -22,6 +28,7 @@ const ItemTable = ({ itemTableData }: ItemTableProps) => {
         columnHeaders={tableHeadings}
         tableData={tableData}
         showRowDividers={!inSearchResult}
+        isScrollable={!isLargerThanSmall}
         my={{ base: 0, md: "s" }}
         data-testid={
           !inSearchResult
