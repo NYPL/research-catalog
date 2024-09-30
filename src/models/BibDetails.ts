@@ -31,7 +31,9 @@ export default class BibDetails {
     this.supplementaryContent = this.buildSupplementaryContent()
     this.groupedNotes = this.buildGroupedNotes()
     this.extent = this.buildExtent()
-    this.subjectHeadings = this.buildSubjectHeadings()
+    // If we can't retreive subject headings from the SHEP API, we'll use the subjectLiteral
+    this.subjectHeadings =
+      this.buildSubjectHeadings() || this.buildSubjectLiterals()
     // these are the actual arrays of details that will be displayed
     this.annotatedMarcDetails = this.buildAnnotatedMarcDetails(
       annotatedMarc?.fields
@@ -362,6 +364,36 @@ export default class BibDetails {
   }
 
   buildSubjectHeadings(): SubjectHeadingDetail {
+    if (!this.bib.subjectHeadings) return
+    const subjectHeadingsUrls = this.bib.subjectHeadings.map(
+      ({ label, uuid }) => {
+        if (!label || !uuid) return
+        const subject = label.replace(/\.$/, "")
+        // stackedSubjectHeadings: ["a", "a -- b", "a -- b -- c"]
+        const stackedSubjectHeadings =
+          this.constructSubjectHeadingsArray(subject)
+        const shepUrl = `/subject_headings/${uuid}`
+        // splitSubjectHeadings: ["a", "b", "c"]
+        const splitSubjectHeadings = subject.split(" -- ")
+
+        return splitSubjectHeadings.map((heading, index) => {
+          const urlWithLabelParam = `${shepUrl}?label=${encodeURI(
+            stackedSubjectHeadings[index]
+          )}`
+          return {
+            url: urlWithLabelParam,
+            urlLabel: heading,
+          }
+        })
+      }
+    )
+    return {
+      label: "Subject",
+      value: subjectHeadingsUrls,
+    }
+  }
+
+  buildSubjectLiterals(): SubjectHeadingDetail {
     if (!this.bib.subjectLiteral) return
     const subjectLiteralUrls = this.bib.subjectLiteral.map(
       (subject: string) => {
