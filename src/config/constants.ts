@@ -86,7 +86,6 @@ export const SEARCH_FORM_OPTIONS = {
   },
   title: {
     text: "Title",
-    value: "title",
     searchTip: "Enter a title, or use quotes to search for an exact phrase.",
     placeholder: 'ex. David Copperfield or "The Jewish Press That Was"',
   },
@@ -103,14 +102,15 @@ export const SEARCH_FORM_OPTIONS = {
     placeholder:
       'ex. The New York Times or "The Journal of Clinical Investigation"',
   },
-  callnumber: {
-    text: "Call number",
-    searchTip:
-      "Enter a call number, or the first few letters and numbers of a call number. ",
-    placeholder: "ex. JFD 99-6057 or *ZAN-3174",
-  },
+  // SEARCH TIP CODE
+  // callnumber: {
+  //   text: "Call number",
+  //   searchTip:
+  //     "Enter a call number, or the first few letters and numbers of a call number. ",
+  //   placeholder: "ex. JFD 99-6057 or *ZAN-3174",
+  // },
   standard_number: {
-    text: "Control numbers/identifiers",
+    text: "Standard number",
     searchTip:
       "Enter a control number or identifier. Examples include ISSN / ISBN / OCLC / LCCN numbers, barcodes, etc.",
     placeholder: "ex. 1558584536 or 95008433",
