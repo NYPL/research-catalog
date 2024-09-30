@@ -61,9 +61,10 @@ export function getSearchResultsHeading(
     totalResults > RESULTS_PER_PAGE
       ? `${resultsStart}-${resultsEnd}`
       : totalResults.toLocaleString()
-  } of ${totalResults.toLocaleString()} results ${queryDisplayString}`
+  } of ${totalResults.toLocaleString()} results${queryDisplayString}`
 }
 
+// Shows the final part of the search query string (e.g. "for keyword 'cats'")
 function buildQueryDisplayString(searchParams: SearchParams): string {
   const searchFields = advSearchFields
     // Lowercase the adv search field labels:
@@ -110,11 +111,9 @@ function buildQueryDisplayString(searchParams: SearchParams): string {
 
   const displayStringArray = Object.values(paramsStringCollection)
 
-  return `for ${
-    displayStringArray.length > 1
-      ? displayStringArray.join(" and ")
-      : displayStringArray[0]
-  }`
+  return displayStringArray.length
+    ? ` for ${displayStringArray.join(" and ")}`
+    : ""
 }
 
 /**
