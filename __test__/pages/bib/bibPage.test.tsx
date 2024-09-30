@@ -185,7 +185,7 @@ describe("Bib Page Item Table", () => {
     await userEvent.click(yearFilter.querySelector("button[type='submit']"))
     expect(mockRouter.asPath).toBe("/bib/pb5579193")
     expect(
-      screen.queryByText("Error: Please enter a valid year.")
+      screen.queryByText("There was a problem. Please enter a valid year.")
     ).toBeInTheDocument()
 
     // non-numeric
@@ -193,7 +193,7 @@ describe("Bib Page Item Table", () => {
     await userEvent.click(yearFilter.querySelector("button[type='submit']"))
     expect(mockRouter.asPath).toBe("/bib/pb5579193")
     expect(
-      screen.queryByText("Error: Please enter a valid year.")
+      screen.queryByText("There was a problem. Please enter a valid year.")
     ).toBeInTheDocument()
 
     // not of length 4
@@ -201,7 +201,7 @@ describe("Bib Page Item Table", () => {
     await userEvent.click(yearFilter.querySelector("button[type='submit']"))
     expect(mockRouter.asPath).toBe("/bib/pb5579193")
     expect(
-      screen.queryByText("Error: Please enter a valid year.")
+      screen.queryByText("There was a problem. Please enter a valid year.")
     ).toBeInTheDocument()
   })
 
