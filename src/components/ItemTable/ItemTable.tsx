@@ -17,7 +17,7 @@ interface ItemTableProps {
  */
 const ItemTable = ({ itemTableData }: ItemTableProps) => {
   const { tableHeadings, tableData, items, inSearchResult } = itemTableData
-  const { isLargerThanSmall } = useNYPLBreakpoints()
+  const { isLargerThanMobile } = useNYPLBreakpoints()
 
   return (
     <Box>
@@ -28,7 +28,7 @@ const ItemTable = ({ itemTableData }: ItemTableProps) => {
         columnHeaders={tableHeadings}
         tableData={tableData}
         showRowDividers={!inSearchResult}
-        isScrollable={!isLargerThanSmall}
+        isScrollable={!isLargerThanMobile}
         my={{ base: 0, md: "s" }}
         data-testid={
           !inSearchResult
