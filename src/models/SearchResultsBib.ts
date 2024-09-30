@@ -43,6 +43,12 @@ export default class SearchResultsBib extends Bib {
       : null
   }
 
+  numItems() {
+    return this.hasPhysicalItems
+      ? this.numPhysicalItems
+      : this.numElectronicResources
+  }
+
   getYearFromResult(result: DiscoveryBibResult) {
     const { dateStartYear, dateEndYear } = result
 
