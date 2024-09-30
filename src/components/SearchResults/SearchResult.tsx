@@ -61,7 +61,7 @@ const SearchResult = ({ bib }: SearchResultProps) => {
                   key={`search-results-item-${itemTableData.items[0].id}`}
                 />
               ))}
-              {bib.showViewAllItemsLink && (
+              {bib.showViewAllItemsLink() && (
                 <CardActions>
                   <RCLink
                     href={`${bib.url}#item-table`}

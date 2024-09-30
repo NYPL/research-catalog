@@ -54,7 +54,7 @@ const ItemTableControls = ({
           mb={{ base: "m", md: 0 }}
         />
       ) : null}
-      {bib.showViewAllItemsLink &&
+      {bib.showViewAllItemsLink(filtersAreApplied) &&
         (itemsLoading && viewAllExpanded ? (
           <Box
             ml="auto"
