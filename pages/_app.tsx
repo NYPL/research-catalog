@@ -1,6 +1,5 @@
 import Head from "next/head"
-import { Helmet } from "react-helmet"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { useRouter } from "next/router"
 import Script from "next/script"
 import "@nypl/design-system-react-components/dist/styles.css"
@@ -14,24 +13,6 @@ import { FeedbackProvider } from "../src/context/FeedbackContext"
 // eslint-disable-next-line @typescript-eslint/naming-convention
 function App({ Component, pageProps }) {
   const router = useRouter()
-
-  const [isIOS, setIsIOS] = useState(false)
-
-  useEffect(() => {
-    const userAgent = typeof window !== "undefined" && navigator.userAgent
-    if (userAgent && /iPad|iPhone|iPod/.test(userAgent)) {
-      setIsIOS(true)
-    }
-  }, [])
-
-  const viewport = isIOS ? (
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1"
-    />
-  ) : (
-    <meta name="viewport" content="width=device-width" />
-  )
 
   // TODO: The code below is a verbose solution for page view tracking
   // in Adobe Analytics that guarantees that page views will only be sent
@@ -102,7 +83,7 @@ function App({ Component, pageProps }) {
 
       <Head>
         <meta charSet="utf-8" />
-        <Helmet>{viewport}</Helmet>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta httpEquiv="x-ua-compatible" content="ie=edge" />
         <link
           rel="icon"
