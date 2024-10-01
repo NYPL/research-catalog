@@ -29,11 +29,11 @@ const ItemTable = ({ itemTableData }: ItemTableProps) => {
         columnHeaders={tableHeadings}
         // TODO: Review these values with the design team
         columnStyles={[
-          { width: "35%", minWidth: 250, maxwidth: 300 },
-          { minwidth: 200, maxWidth: 250 },
+          { width: "35%", minWidth: 300, maxwidth: 350 },
           { minwidth: 150, maxWidth: 200 },
-          { minwidth: 150, maxWidth: 200 },
-          { minwidth: 150, maxWidth: 200 },
+          { minwidth: 150, maxWidth: 150 },
+          { minwidth: 150, maxWidth: 150 },
+          { minwidth: 150, maxWidth: 150 },
           { minwidth: 150, maxWidth: 200 },
         ]}
         tableData={tableData}
