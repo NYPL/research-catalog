@@ -80,7 +80,10 @@ export default function BibPage({
   const [appliedFilters, setAppliedFilters] = useState(
     parseItemFilterQueryParams(query)
   )
+  const filtersAreApplied = areFiltersApplied(appliedFilters)
+
   const [itemTablePage, setItemTablePage] = useState(itemPage)
+  const [numItems, setNumItems] = useState(bib.numItems(filtersAreApplied))
 
   const itemTableHeadingRef = useRef<HTMLDivElement>(null)
   const viewAllLoadingTextRef = useRef<HTMLDivElement & HTMLLabelElement>(null)
@@ -92,8 +95,6 @@ export default function BibPage({
   )
 
   const displayLegacyCatalogLink = isNyplBibID(bib.id)
-
-  const filtersAreApplied = areFiltersApplied(appliedFilters)
 
   const refreshItemTable = async (
     newQuery: BibQueryParams,
@@ -146,7 +147,15 @@ export default function BibPage({
       )
       if (response?.ok) {
         const { discoveryBibResult } = await response.json()
-        setBib(new Bib(discoveryBibResult))
+        const refreshedBib = new Bib(discoveryBibResult)
+
+        setNumItems(refreshedBib.numItems(filtersAreApplied))
+
+        setItemTableTata(
+          new ItemTableData(refreshedBib.items, {
+            isArchiveCollection: refreshedBib.isArchiveCollection,
+          })
+        )
 
         setItemsLoading(false)
 
@@ -274,7 +283,7 @@ export default function BibPage({
                   >
                     {buildItemTableDisplayingString(
                       itemTablePage,
-                      bib.numItems(filtersAreApplied),
+                      numItems,
                       viewAllExpanded,
                       filtersAreApplied
                     )}
@@ -293,7 +302,7 @@ export default function BibPage({
                   handlePageChange={handlePageChange}
                   handleViewAllClick={handleViewAllClick}
                   viewAllLoadingTextRef={viewAllLoadingTextRef}
-                  numItemsTotal={bib.numItems(filtersAreApplied)}
+                  numItemsTotal={numItems}
                   filtersAreApplied={filtersAreApplied}
                 />
               ) : null}
