@@ -55,12 +55,6 @@ export default class Bib {
     return this.electronicResources?.length || 0
   }
 
-  get numItems() {
-    return this.hasPhysicalItems
-      ? this.numPhysicalItems
-      : this.numElectronicResources
-  }
-
   get hasPhysicalItems() {
     return this.numPhysicalItems > 0
   }
@@ -86,10 +80,6 @@ export default class Bib {
     )
   }
 
-  get showViewAllItemsLink() {
-    return this.numItemsMatched > ITEM_PAGINATION_BATCH_SIZE
-  }
-
   get resourceType() {
     return this.hasPhysicalItems ? "Item" : "Resource"
   }
@@ -102,8 +92,16 @@ export default class Bib {
     )
   }
 
+  numItems(filtersAreApplied = false) {
+    return filtersAreApplied ? this.numItemsMatched : this.numPhysicalItems
+  }
+
+  showViewAllItemsLink(filtersAreApplied = false) {
+    return this.numItems(filtersAreApplied) > ITEM_PAGINATION_BATCH_SIZE
+  }
+
   getNumItemsMessage(filtersAreApplied = false) {
-    const totalItems = filtersAreApplied ? this.numItemsMatched : this.numItems
+    const totalItems = this.numItems(filtersAreApplied)
     return `${totalItems} ${
       filtersAreApplied ? "matching " : ""
     }${this.resourceType.toLowerCase()}${totalItems !== 1 ? "s" : ""}`

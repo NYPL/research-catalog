@@ -26,7 +26,7 @@ export default class SearchResultsBib extends Bib {
       : null
   }
 
-  get showViewAllItemsLink() {
+  showViewAllItemsLink() {
     return this.numPhysicalItems > ITEMS_PER_SEARCH_RESULT
   }
 
@@ -41,6 +41,12 @@ export default class SearchResultsBib extends Bib {
           })
         })
       : null
+  }
+
+  numItems() {
+    return this.hasPhysicalItems
+      ? this.numPhysicalItems
+      : this.numElectronicResources
   }
 
   getYearFromResult(result: DiscoveryBibResult) {

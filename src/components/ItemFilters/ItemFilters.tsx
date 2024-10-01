@@ -141,7 +141,7 @@ const ItemFilters = ({
               aria-labelledby="year-filter-label"
               data-testid="year-filter"
               isInvalid={invalidYear}
-              invalidText="Error: Please enter a valid year."
+              invalidText="Please enter a valid year."
               textInputProps={{
                 placeholder: "YYYY",
                 isClearable: true,
