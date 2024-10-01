@@ -1,57 +1,16 @@
 .itemTable {
   margin-top: var(--nypl-space-m);
   margin-bottom: var(--nypl-space-s);
-  width: unset !important;
-
-  thead {
-    margin-bottom: var(--nypl-space-xs);
-  }
 
   tr {
-    th,
-    td {
-      padding: null var(--nypl-space-xs);
-    }
-
-    th {
-      text-transform: uppercase;
-    }
-
     td:first-of-type,
     th:first-of-type {
-      padding: var(--nypl-space-s) var(--nypl-space-xs) var(--nypl-space-s) 0;
+      padding-left: 0;
     }
 
     td:last-of-type,
     th:last-of-type {
-      padding: var(--nypl-space-s) 0 var(--nypl-space-s) var(--nypl-space-xs);
-    }
-
-    th,
-    td,
-    td:first-of-type,
-    th:first-of-type {
-      // These min-widths are here temporarily to fix an issue with the table that causes the Format and Call number columns to appear to narrow
-      // TODO: These can be removed if the issue is addressed in the DS or during VQA.
-      @media screen and (min-width: 600px) {
-        min-width: 80px;
-      }
-
-      @media screen and (min-width: 900px) {
-        min-width: 100px;
-
-        &:first-child {
-          min-width: 340px;
-        }
-      }
-
-      // Fix for extra whitespace added by non-table cell styling on span coming from DS
-      // TODO: Bring this issue up with DS team and potentially fix there
-      > span + span {
-        @media screen and (min-width: 600px) {
-          display: table-cell;
-        }
-      }
+      padding-right: 0;
     }
   }
 
