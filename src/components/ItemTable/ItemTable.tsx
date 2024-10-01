@@ -26,6 +26,13 @@ const ItemTable = ({ itemTableData }: ItemTableProps) => {
           inSearchResult ? " " + styles.inSearchResult : ""
         }`}
         columnHeaders={tableHeadings}
+        columnStyles={[
+          { minWidth: 350, width: "35%" },
+          {},
+          {},
+          {},
+          { maxWidth: 200 },
+        ]}
         tableData={tableData}
         showRowDividers={!inSearchResult}
         isScrollable={!isLargerThanMobile}
