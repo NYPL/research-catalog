@@ -89,11 +89,6 @@ export default function BibPage({
 
   const filtersAreApplied = areFiltersApplied(appliedFilters)
 
-  // If filters are applied, show the matching number of items, otherwise show the total number of items
-  const numItems = filtersAreApplied
-    ? bib.numItemsMatched
-    : bib.numPhysicalItems
-
   const refreshItemTable = async (
     newQuery: BibQueryParams,
     viewAllItems = false,
@@ -273,7 +268,7 @@ export default function BibPage({
                   >
                     {buildItemTableDisplayingString(
                       itemTablePage,
-                      numItems,
+                      bib.numItems(filtersAreApplied),
                       viewAllExpanded,
                       filtersAreApplied
                     )}
@@ -292,7 +287,7 @@ export default function BibPage({
                   handlePageChange={handlePageChange}
                   handleViewAllClick={handleViewAllClick}
                   viewAllLoadingTextRef={viewAllLoadingTextRef}
-                  numItemsTotal={numItems}
+                  numItemsTotal={bib.numItems(filtersAreApplied)}
                   filtersAreApplied={filtersAreApplied}
                 />
               ) : null}

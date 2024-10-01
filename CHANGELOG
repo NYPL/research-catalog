@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+## Hotfix
+
+- Fix bug where the "View fewer" button was not appearing when filters weren't applied
+
 ### Fixed
 
 - Fix bug where "undefined" appears in the search results heading (SCC-4277)
