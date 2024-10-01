@@ -1,6 +1,6 @@
 import Head from "next/head"
 import { Helmet } from "react-helmet"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import Script from "next/script"
 import "@nypl/design-system-react-components/dist/styles.css"
