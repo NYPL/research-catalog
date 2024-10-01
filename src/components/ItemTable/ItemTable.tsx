@@ -20,7 +20,8 @@ const ItemTable = ({ itemTableData }: ItemTableProps) => {
   const { isLargerThanMobile } = useNYPLBreakpoints()
 
   return (
-    <Box>
+    // Display as grid to prevent bug where the outer container stretches to the Table's width on mobile
+    <Box display="grid">
       <Table
         className={`${styles.itemTable}${
           inSearchResult ? " " + styles.inSearchResult : ""
