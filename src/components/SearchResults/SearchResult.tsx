@@ -34,7 +34,7 @@ const SearchResult = ({ bib }: SearchResultProps) => {
         size="heading5"
         sx={{ a: { textDecoration: "none" } }}
       >
-        <RCLink href={`${PATHS.BIB}/${bib.id}`}>{bib.title}</RCLink>
+        <RCLink href={`${PATHS.BIB}/${bib.id}`}>{bib.titleDisplay}</RCLink>
       </CardHeading>
       <CardContent>
         <Box
@@ -61,7 +61,7 @@ const SearchResult = ({ bib }: SearchResultProps) => {
                   key={`search-results-item-${itemTableData.items[0].id}`}
                 />
               ))}
-              {bib.showViewAllItemsLink && (
+              {bib.showViewAllItemsLink() && (
                 <CardActions>
                   <RCLink
                     href={`${bib.url}#item-table`}

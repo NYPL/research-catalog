@@ -10,10 +10,16 @@ import type {
   SearchResultsResponse,
 } from "../types/searchTypes"
 import SearchResultsBib from "../models/SearchResultsBib"
-import { RESULTS_PER_PAGE } from "../config/constants"
+import { RESULTS_PER_PAGE, SEARCH_FORM_OPTIONS } from "../config/constants"
 import { collapseMultiValueQueryParams } from "./refineSearchUtils"
 import { getPaginationOffsetStrings } from "./appUtils"
 
+export const searchFormSelectOptions = Object.keys(SEARCH_FORM_OPTIONS).map(
+  (key) => ({
+    text: SEARCH_FORM_OPTIONS[key].text,
+    value: key,
+  })
+)
 /**
  * determineFreshSortByQuery
  * Returns true only if the last update to the query was a sort by change.
@@ -55,9 +61,10 @@ export function getSearchResultsHeading(
     totalResults > RESULTS_PER_PAGE
       ? `${resultsStart}-${resultsEnd}`
       : totalResults.toLocaleString()
-  } of ${totalResults.toLocaleString()} results ${queryDisplayString}`
+  } of ${totalResults.toLocaleString()} results${queryDisplayString}`
 }
 
+// Shows the final part of the search query string (e.g. "for keyword 'cats'")
 function buildQueryDisplayString(searchParams: SearchParams): string {
   const searchFields = advSearchFields
     // Lowercase the adv search field labels:
@@ -70,6 +77,7 @@ function buildQueryDisplayString(searchParams: SearchParams): string {
       { name: "isbn", label: "ISBN" },
       { name: "issn", label: "ISSN" },
       { name: "lccn", label: "LCCN" },
+      { name: "callnumber", label: "call number" },
     ])
   const paramsStringCollection = {}
   const searchParamsObject = {
@@ -103,11 +111,9 @@ function buildQueryDisplayString(searchParams: SearchParams): string {
 
   const displayStringArray = Object.values(paramsStringCollection)
 
-  return `for ${
-    displayStringArray.length > 1
-      ? displayStringArray.join(" and ")
-      : displayStringArray[0]
-  }`
+  return displayStringArray.length
+    ? ` for ${displayStringArray.join(" and ")}`
+    : ""
 }
 
 /**

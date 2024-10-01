@@ -75,6 +75,7 @@ export default function BibPage({
   )
   const [itemsLoading, setItemsLoading] = useState(false)
   const [itemFetchError, setItemFetchError] = useState(false)
+
   const [viewAllExpanded, setViewAllExpanded] = useState(viewAllItems)
   const [appliedFilters, setAppliedFilters] = useState(
     parseItemFilterQueryParams(query)
@@ -94,14 +95,10 @@ export default function BibPage({
 
   const filtersAreApplied = areFiltersApplied(appliedFilters)
 
-  // If filters are applied, show the matching number of items, otherwise show the total number of items
-  const numItems = filtersAreApplied
-    ? bib.numItemsMatched
-    : bib.numPhysicalItems
-
   const refreshItemTable = async (
     newQuery: BibQueryParams,
-    viewAllItems = false
+    viewAllItems = false,
+    updateFocusOnItemTableHeading = false
   ) => {
     setItemsLoading(true)
     setItemFetchError(false)
@@ -128,7 +125,11 @@ export default function BibPage({
         scroll: false,
       }
     )
-    const bibQueryString = getBibQueryString(newQuery, false, viewAllItems)
+    const bibQueryString = getBibQueryString(
+      { ...newQuery, all_items: viewAllItems },
+      false
+    )
+
     try {
       // Cancel any active fetches on new ItemTable refreshes
       if (controllerRef.current) {
@@ -148,11 +149,14 @@ export default function BibPage({
         setBib(new Bib(discoveryBibResult))
 
         setItemsLoading(false)
-        setTimeout(() => {
-          itemTableHeadingRef.current?.focus()
-        }, FOCUS_TIMEOUT)
+
+        // TODO: This is a workaround to prevent the Displaying text from receiving focus when filters are controlled via a checkbox
+        // This is an accessibility issue that should be addressed when the dynamic refresh is replaced with a form and apply button
+        if (!updateFocusOnItemTableHeading)
+          setTimeout(() => {
+            itemTableHeadingRef.current?.focus()
+          }, FOCUS_TIMEOUT)
       } else {
-        console.log(response)
         handleItemFetchError()
       }
     } catch (error) {
@@ -168,7 +172,8 @@ export default function BibPage({
   }
 
   const handleFiltersChange = async (
-    newAppliedFilterQuery: ItemFilterQueryParams
+    newAppliedFilterQuery: ItemFilterQueryParams,
+    updateFocusOnItemTableHeading = false
   ) => {
     const newQuery = {
       ...newAppliedFilterQuery,
@@ -176,7 +181,11 @@ export default function BibPage({
     if (newQuery.item_page) delete newQuery.item_page
     setItemTablePage(1)
     setAppliedFilters(parseItemFilterQueryParams(newAppliedFilterQuery))
-    await refreshItemTable(newQuery, viewAllExpanded)
+    await refreshItemTable(
+      newQuery,
+      viewAllExpanded,
+      updateFocusOnItemTableHeading
+    )
   }
 
   const handlePageChange = async (page: number) => {
@@ -243,6 +252,7 @@ export default function BibPage({
               handleFiltersChange={handleFiltersChange}
               appliedFilters={appliedFilters}
               filtersAreApplied={filtersAreApplied}
+              showDateFilter={bib.hasItemDates}
             />
             <Box id="item-table">
               {itemsLoading ? (
@@ -264,7 +274,7 @@ export default function BibPage({
                   >
                     {buildItemTableDisplayingString(
                       itemTablePage,
-                      numItems,
+                      bib.numItems(filtersAreApplied),
                       viewAllExpanded,
                       filtersAreApplied
                     )}
@@ -283,7 +293,7 @@ export default function BibPage({
                   handlePageChange={handlePageChange}
                   handleViewAllClick={handleViewAllClick}
                   viewAllLoadingTextRef={viewAllLoadingTextRef}
-                  numItemsTotal={numItems}
+                  numItemsTotal={bib.numItems(filtersAreApplied)}
                   filtersAreApplied={filtersAreApplied}
                 />
               ) : null}
