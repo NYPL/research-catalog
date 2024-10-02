@@ -79,7 +79,7 @@ export const ERROR_MESSAGES = {
 
 export const SEARCH_FORM_OPTIONS = {
   all: {
-    text: "Keyword",
+    text: "All fields",
     searchTip:
       "Enter one or more keywords, or use quotes to search for an exact phrase.",
     placeholder: 'ex. climate change or "The New York Times"',
@@ -89,18 +89,18 @@ export const SEARCH_FORM_OPTIONS = {
     searchTip: "Enter a title, or use quotes to search for an exact phrase.",
     placeholder: 'ex. David Copperfield or "The Jewish Press That Was"',
   },
-  contributor: {
-    text: "Author/contributor",
-    searchTip:
-      "Enter the name of an author, contributor, or organization. Use Last Name, First Name for more accurate results.",
-    placeholder: "ex. Dickens, Charles or American Law Association",
-  },
   journal_title: {
     text: "Journal title",
     searchTip:
       "Enter a journal or serial title, or use quotes to search for an exact phrase.",
     placeholder:
       'ex. The New York Times or "The Journal of Clinical Investigation"',
+  },
+  contributor: {
+    text: "Author/contributor",
+    searchTip:
+      "Enter the name of an author, contributor, or organization. Use Last Name, First Name for more accurate results.",
+    placeholder: "ex. Dickens, Charles or American Law Association",
   },
   // SEARCH TIP CODE
   // callnumber: {
