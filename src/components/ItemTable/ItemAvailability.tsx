@@ -107,6 +107,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
             p: 0,
             height: "auto",
             textAlign: "left",
+            minHeight: "auto",
           }}
           onClick={() =>
             onContact({
