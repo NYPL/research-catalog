@@ -44,7 +44,6 @@ import {
   parseItemFilterQueryParams,
   areFiltersApplied,
 } from "../../../src/utils/itemFilterUtils"
-import ItemTableData from "../../../src/models/ItemTableData"
 
 interface BibPropsType {
   discoveryBibResult: DiscoveryBibResult
