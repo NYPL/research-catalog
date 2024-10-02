@@ -12,11 +12,6 @@
     th:last-of-type {
       padding-right: 0;
     }
-
-    td {
-      font-size: var(--nypl-fontSizes-desktop-body-body2);
-      line-height: var(--nypl-lineHeights-desktop-body-body2);
-    }
   }
 
   &.inSearchResult {
