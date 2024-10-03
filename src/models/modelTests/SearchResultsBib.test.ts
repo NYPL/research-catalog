@@ -38,7 +38,7 @@ describe("SearchResultsBib model", () => {
 
   describe("showViewAllItemsLink", () => {
     it("returns true if the number of physical items is greater than ITEMS_PER_SEARCH_RESULT", () => {
-      expect(searchResultsBib.showViewAllItemsLink).toBe(true)
+      expect(searchResultsBib.showViewAllItemsLink()).toBe(true)
     })
   })
 
