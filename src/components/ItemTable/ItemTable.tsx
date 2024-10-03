@@ -20,12 +20,22 @@ const ItemTable = ({ itemTableData }: ItemTableProps) => {
   const { isLargerThanMobile } = useNYPLBreakpoints()
 
   return (
-    <Box>
+    // Display as grid to prevent bug where the outer container stretches to the Table's width on mobile
+    <Box display="grid">
       <Table
         className={`${styles.itemTable}${
           inSearchResult ? " " + styles.inSearchResult : ""
         }`}
         columnHeaders={tableHeadings}
+        // TODO: Review these values with the design team
+        columnStyles={[
+          { minWidth: 350, maxwidth: 350 },
+          { minwidth: 150, maxWidth: 200 },
+          { minwidth: 150, maxWidth: 150 },
+          { minwidth: 150, maxWidth: 150 },
+          { minwidth: 200, maxWidth: 250 },
+          { minwidth: 150, maxWidth: 200 },
+        ]}
         tableData={tableData}
         showRowDividers={!inSearchResult}
         isScrollable={!isLargerThanMobile}
