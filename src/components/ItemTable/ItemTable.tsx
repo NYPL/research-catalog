@@ -29,7 +29,7 @@ const ItemTable = ({ itemTableData }: ItemTableProps) => {
         columnHeaders={tableHeadings}
         columnStyles={
           inSearchResult
-            ? [{ width: 272 }]
+            ? [{ width: 272, minWidth: 272 }]
             : [
                 { width: "30%" },
                 { width: "14%" },

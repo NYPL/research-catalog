@@ -24,18 +24,24 @@
   }
 
   &.inSearchResult {
+    margin-top: 0;
+
     tr {
       border: 0 !important;
 
-      th {
-        font-size: var(--nypl-fontSizes-desktop-body-body1);
-        padding-top: 0;
-        padding-bottom: var(--nypl-space-xxs);
-      }
-
-      td {
+      th,
+      td,
+      th:first-of-type,
+      td:first-of-type {
+        width: 272px;
         padding-top: 0;
         padding-bottom: 0;
+      }
+
+      th {
+        line-height: 1;
+        font-size: var(--nypl-fontSizes-desktop-body-body1);
+        padding-bottom: var(--nypl-space-xs);
       }
     }
   }
