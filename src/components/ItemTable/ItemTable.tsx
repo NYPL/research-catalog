@@ -7,6 +7,7 @@ import {
 import type ItemTableData from "../../models/ItemTableData"
 import StatusLinks from "./StatusLinks"
 import styles from "../../../styles/components/ItemTable.module.scss"
+import { max } from "underscore"
 
 interface ItemTableProps {
   itemTableData: ItemTableData
@@ -28,14 +29,22 @@ const ItemTable = ({ itemTableData }: ItemTableProps) => {
         }`}
         columnHeaders={tableHeadings}
         // TODO: Review these values with the design team
-        columnStyles={[
-          { minWidth: 350, maxwidth: 350 },
-          { minwidth: 150, maxWidth: 200 },
-          { minwidth: 150, maxWidth: 150 },
-          { minwidth: 150, maxWidth: 150 },
-          { minwidth: 200, maxWidth: 250 },
-          { minwidth: 150, maxWidth: 200 },
-        ]}
+        columnStyles={
+          inSearchResult
+            ? [
+                { width: "33.3%", minWidth: 150, maxWidth: 250 },
+                { width: "33.3%", minWidth: 150, maxWidth: 250 },
+                { width: "33.3%", minWidth: 150, maxWidth: 250 },
+              ]
+            : [
+                { minWidth: 350, maxwidth: 350 },
+                { minwidth: 150, maxWidth: 200 },
+                { minwidth: 150, maxWidth: 150 },
+                { minwidth: 150, maxWidth: 150 },
+                { minwidth: 200, maxWidth: 250 },
+                { minwidth: 150, maxWidth: 200 },
+              ]
+        }
         tableData={tableData}
         showRowDividers={!inSearchResult}
         isScrollable={!isLargerThanMobile}

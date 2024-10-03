@@ -24,14 +24,19 @@
   }
 
   &.inSearchResult {
+    margin: var(--nypl-space-s) 0;
+
     tr {
       border: 0 !important;
 
-      th,
+      th {
+        padding-top: 0;
+        padding-bottom: var(--nypl-space-xxs);
+      }
+
       td {
-        padding: 0;
-        // Meant to be 240 col width + 32 (gap) = 272px
-        width: 272px;
+        padding-top: 0;
+        padding-bottom: 0;
       }
     }
   }
