@@ -48,23 +48,23 @@ const TimedLogoutModal = ({
   //   logOutAndRedirect()
   // }
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      const { minutes, seconds } = buildTimeLeft(expirationTime)
-      if (minutes < timeoutWindow) setOpen(true)
-      setTimeUntilExpiration({
-        minutes,
-        seconds,
-      })
-    }, 1000)
-    return () => {
-      clearTimeout(timeout)
-    }
-  })
+  // useEffect(() => {
+  //   const timeout = setTimeout(() => {
+  //     const { minutes, seconds } = buildTimeLeft(expirationTime)
+  //     if (minutes < timeoutWindow) setOpen(true)
+  //     setTimeUntilExpiration({
+  //       minutes,
+  //       seconds,
+  //     })
+  //   }, 1000)
+  //   return () => {
+  //     clearTimeout(timeout)
+  //   }
+  // })
 
-  if (timeUntilExpiration.minutes <= 0 && timeUntilExpiration.seconds <= 0) {
-    logOutAndRedirect()
-  }
+  // if (timeUntilExpiration.minutes <= 0 && timeUntilExpiration.seconds <= 0) {
+  //   logOutAndRedirect()
+  // }
   if (!open) return null
 
   return (
