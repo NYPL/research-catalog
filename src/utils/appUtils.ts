@@ -131,3 +131,12 @@ export function getPaginationOffsetStrings(
  */
 export const encodeHTML = (str: string) =>
   str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;")
+
+/**
+ * convertToSentenceCase
+ * Return a sentence-cased version of the string if it's more than 2 words (to avoid sentence-casing acronyms).
+ */
+export const convertToSentenceCase = (str: string) =>
+  str.split(" ").length > 1
+    ? str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
+    : str

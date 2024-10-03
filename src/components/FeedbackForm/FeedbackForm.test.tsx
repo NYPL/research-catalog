@@ -14,7 +14,7 @@ describe("FeedbackForm", () => {
 
     const titleText = screen.getByText("We are here to help!")
     expect(titleText).toBeInTheDocument()
-    expect(screen.getByLabelText("Comment (Required)")).toBeInTheDocument()
+    expect(screen.getByLabelText("Comment (required)")).toBeInTheDocument()
     expect(screen.getByLabelText("Email")).toBeInTheDocument()
 
     const cancelButton = screen.getByText("Cancel")

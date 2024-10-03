@@ -138,7 +138,7 @@ const TestPickupTimes = (params) => {
 
               <TextInput
                 id="holdingLocation"
-                labelText="Item Location"
+                labelText="Item location"
                 name="holdingLocation"
                 value={holdingLocation}
                 onChange={(e) => setHoldingLocation(e.target.value)}
@@ -163,7 +163,7 @@ const TestPickupTimes = (params) => {
               </Select>
               <TextInput
                 id="deliveryLocation"
-                labelText="Delivery Location (opt)"
+                labelText="Delivery location (opt)"
                 name="deliveryLocation"
                 value={deliveryLocation}
                 onChange={(e) => setDeliveryLocation(e.target.value)}

@@ -44,8 +44,9 @@ describe("Bib Page with items", () => {
     expect(screen.getByTestId("bib-details-item-table")).toBeInTheDocument()
   })
 
+  // TODO: Determine if this should be rendering twice
   it("renders the bottom bib details", () => {
-    expect(screen.getByTestId("publication-date")).toHaveTextContent(
+    expect(screen.getAllByTestId("publication-date")[0]).toHaveTextContent(
       "Vol. 1, issue 1-"
     )
     expect(screen.getByTestId("description")).toHaveTextContent(
@@ -167,11 +168,41 @@ describe("Bib Page Item Table", () => {
     await userEvent.click(yearFilter.querySelector("button[type='submit']"))
 
     expect(mockRouter.asPath).toBe("/bib/pb5579193?item_date=2005")
+  })
 
-    // Clear the year field
-    await userEvent.click(yearFilter.querySelector("button[type='button']"))
+  it("clears the year filter when the year tag is clicked", async () => {
+    const yearTag = screen.queryByText("Year > 2005").closest("button")
+    await userEvent.click(yearTag)
+
+    expect(mockRouter.asPath).toBe("/bib/pb5579193")
+  })
+
+  it("shows an error and doesn't update router when an invalid year is submitted", async () => {
+    const yearFilter = screen.queryByTestId("year-filter")
+    const yearField = screen.queryByPlaceholderText("YYYY")
+
+    // blank year
     await userEvent.click(yearFilter.querySelector("button[type='submit']"))
     expect(mockRouter.asPath).toBe("/bib/pb5579193")
+    expect(
+      screen.queryByText("There was a problem. Please enter a valid year.")
+    ).toBeInTheDocument()
+
+    // non-numeric
+    await userEvent.type(yearField, "ABCD")
+    await userEvent.click(yearFilter.querySelector("button[type='submit']"))
+    expect(mockRouter.asPath).toBe("/bib/pb5579193")
+    expect(
+      screen.queryByText("There was a problem. Please enter a valid year.")
+    ).toBeInTheDocument()
+
+    // not of length 4
+    await userEvent.type(yearField, "1")
+    await userEvent.click(yearFilter.querySelector("button[type='submit']"))
+    expect(mockRouter.asPath).toBe("/bib/pb5579193")
+    expect(
+      screen.queryByText("There was a problem. Please enter a valid year.")
+    ).toBeInTheDocument()
   })
 
   it("clears a filter group when the MultiSelect clear button is clicked", async () => {
@@ -246,7 +277,7 @@ describe("Bib Page Item Table", () => {
   })
 
   it("renders a view all button when there are more than 20 items and updates the url to /all when clicked", async () => {
-    const viewAllLink = screen.getByText("View All 26 Items").closest("a")
+    const viewAllLink = screen.getByText("View all 26 items").closest("a")
     expect(viewAllLink).toHaveAttribute(
       "href",
       "/research/research-catalog/bib/pb5579193/all"
@@ -269,7 +300,7 @@ describe("Bib Page Item Table", () => {
           }),
       })
     )
-    await userEvent.click(screen.getByText("View All 26 Items").closest("a"))
+    await userEvent.click(screen.getByText("View all 26 items").closest("a"))
     expect(screen.getByText("View fewer items")).toBeInTheDocument()
     expect(screen.getByTestId("bib-details-item-table")).toBeInTheDocument()
   })
@@ -281,7 +312,7 @@ describe("Bib Page Item Table", () => {
           setTimeout(resolve, 50)
         })
     )
-    await userEvent.click(screen.getByText("View All 26 Items").closest("a"))
+    await userEvent.click(screen.getByText("View all 26 items").closest("a"))
     expect(
       screen.getByText("Loading all 26 items. This may take a few moments...")
     ).toBeInTheDocument()
@@ -294,7 +325,7 @@ describe("Bib Page Item Table", () => {
         ok: false,
       })
     )
-    await userEvent.click(screen.getByText("View All 26 Items").closest("a"))
+    await userEvent.click(screen.getByText("View all 26 items").closest("a"))
     expect(
       screen.getByText(
         "There was an error fetching items. Please try again with a different query."

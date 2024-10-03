@@ -6,6 +6,7 @@ export const RESULTS_PER_PAGE = 50
 export const DRB_RESULTS_PER_PAGE = 3
 export const ITEMS_PER_SEARCH_RESULT = 3
 export const ITEM_PAGINATION_BATCH_SIZE = 20
+// TODO: Remove this when view_all endpoint in discovery supports query params
 export const ITEM_VIEW_ALL_BATCH_SIZE = 150
 export const ELECTRONIC_RESOURCES_PER_BIB_PAGE = 3
 export const SHEP_HTTP_TIMEOUT = 4000
@@ -31,6 +32,13 @@ export const DRB_API_SEARCH_ROUTE = "/api/drb"
 
 // Query params
 export const SOURCE_PARAM = "?source=catalog"
+
+export const ITEM_FILTER_PARAMS = [
+  "item_location",
+  "item_format",
+  "item_status",
+  "item_date",
+]
 
 // External URLs
 export const DRB_BASE_URL =
@@ -67,4 +75,49 @@ export const DAYS = {
 
 export const ERROR_MESSAGES = {
   ITEM_REFETCH_ABORT_REASON: "New Bib item fetch initiated",
+}
+
+export const SEARCH_FORM_OPTIONS = {
+  all: {
+    text: "All fields",
+    searchTip:
+      "Enter one or more keywords, or use quotes to search for an exact phrase.",
+    placeholder: 'ex. climate change or "The New York Times"',
+  },
+  title: {
+    text: "Title",
+    searchTip: "Enter a title, or use quotes to search for an exact phrase.",
+    placeholder: 'ex. David Copperfield or "The Jewish Press That Was"',
+  },
+  journal_title: {
+    text: "Journal title",
+    searchTip:
+      "Enter a journal or serial title, or use quotes to search for an exact phrase.",
+    placeholder:
+      'ex. The New York Times or "The Journal of Clinical Investigation"',
+  },
+  contributor: {
+    text: "Author/contributor",
+    searchTip:
+      "Enter the name of an author, contributor, or organization. Use Last Name, First Name for more accurate results.",
+    placeholder: "ex. Dickens, Charles or American Law Association",
+  },
+  // SEARCH TIP CODE
+  // callnumber: {
+  //   text: "Call number",
+  //   searchTip:
+  //     "Enter a call number, or the first few letters and numbers of a call number. ",
+  //   placeholder: "ex. JFD 99-6057 or *ZAN-3174",
+  // },
+  standard_number: {
+    text: "Standard number",
+    searchTip:
+      "Enter a control number or identifier. Examples include ISSN / ISBN / OCLC / LCCN numbers, barcodes, etc.",
+    placeholder: "ex. 1558584536 or 95008433",
+  },
+  subject: {
+    text: "Subject",
+    searchTip: "Enter a subject name or phrase. Learn more about searching.",
+    placeholder: "ex. ornithology or Greek architecture",
+  },
 }

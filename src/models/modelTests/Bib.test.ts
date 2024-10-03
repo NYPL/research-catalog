@@ -14,8 +14,12 @@ describe("Bib model", () => {
       expect(bib.id).toBe("b15080796")
     })
 
-    it("initializes the title as titleDisplay field when present", () => {
+    it("initializes the title when present", () => {
       expect(bib.title).toBe("Urban spaghetti.")
+    })
+
+    it("initializes the titleDisplay field when present", () => {
+      expect(bib.titleDisplay).toBe("Urban spaghetti.")
     })
 
     it("initializes the electronicResources as empty array when missing from bib result", () => {
@@ -40,6 +44,10 @@ describe("Bib model", () => {
       expect(bib.items.length).toBe(4)
       expect(typeof bib.items[0]).toBe("object")
       expect(bib.items[0] instanceof Item).toBe(true)
+    })
+
+    it("initializes the hasItemDates field when present", () => {
+      expect(bib.hasItemDates).toBe(true)
     })
   })
 })

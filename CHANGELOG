@@ -5,6 +5,35 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] 2024-10-3
+
+### Added
+
+## Hotfix
+
+- Fix bug where the "View fewer" button was not appearing when filters weren't applied
+
+### Fixed
+
+- Small styling fixes after DS version bump to 3.4.0 (SCC-4264)
+- Fix bug where "undefined" appears in the search results heading (SCC-4277)
+- VQA second pass miscellaneous fixes (SCC-4264)
+- Fixed accessibility issue on Bib page where focus moves to Displaying text when filters are controlled via MultiSelect. This will change when dynamic updates are replaced with an apply button (SCC-4246)
+
+### Updated
+
+- Bump DS version to 3.4.0
+- Bump nvmrc version to Node 20.
+- Update error message in Item Filter Year to include new error message prefix from the DS.
+- Integrate view_all query param on client side and remove batched fetch (SCC-4287)
+- Replaced travis with github actions (SCC-4218)
+- Sentence case and rearrange search options (SCC-4260)
+
+Added the following, but commented out for later release:
+
+- Call number search scope to search dropdown options [(SCC-4260)](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4260)
+- Search tip per search scope [(SCC-4263)](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4263)
+
 ## [1.2.4] 2024-08-29
 
 ### Fixed
@@ -23,6 +52,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fixed some accessibility issues including making Request button titles more specific and fixing a layout issue on zoom. (SCC-4234)
+
+### Fixed
+
+- Fixed visual and copy issues found in VQA (SCC-4235)
 
 ## [1.2.2] 2024-08-14
 

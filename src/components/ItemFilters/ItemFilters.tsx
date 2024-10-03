@@ -26,10 +26,12 @@ import {
 interface ItemFilterContainerProps {
   itemAggregations: Aggregation[]
   handleFiltersChange?: (
-    newAppliedFilterQuery: ItemFilterQueryParams
+    newAppliedFilterQuery: ItemFilterQueryParams,
+    refreshedViaCheckbox?: boolean
   ) => Promise<void>
   appliedFilters?: AppliedItemFilters
   filtersAreApplied?: boolean
+  showDateFilter?: boolean
 }
 
 const ItemFilters = ({
@@ -37,10 +39,14 @@ const ItemFilters = ({
   handleFiltersChange,
   appliedFilters = { location: [], format: [], status: [], year: [] },
   filtersAreApplied = false,
+  showDateFilter = false,
 }: ItemFilterContainerProps) => {
   // We have to set the year value in state to be able to test form control in jest.
   // TODO: Remove this if we can find a better way to test form submissions in jest.
   const [year, setYear] = useState(appliedFilters.year[0] || "")
+
+  const [invalidYear, setInvalidYear] = useState(false)
+
   const filterData = useRef<ItemFilterData[]>(
     itemAggregations.map((aggregation: Aggregation) => {
       if (aggregation.field === "location")
@@ -54,7 +60,11 @@ const ItemFilters = ({
     filterData
   )
 
-  const submitFilters = async (selectedFilters: string[], field: string) => {
+  const submitFilters = async (
+    selectedFilters: string[],
+    field: string,
+    refreshedViaCheckbox = false
+  ) => {
     const newFilters = { ...appliedFilters, [field]: selectedFilters }
     const locationFilterData = filterData.find(
       (filter) => filter.field === "location"
@@ -63,7 +73,7 @@ const ItemFilters = ({
       newFilters,
       locationFilterData.recapLocations
     )
-    await handleFiltersChange(itemFilterQuery)
+    await handleFiltersChange(itemFilterQuery, refreshedViaCheckbox)
   }
 
   const clearAllFilters = async () => {
@@ -71,12 +81,16 @@ const ItemFilters = ({
     await handleFiltersChange({})
   }
 
-  const handleRemoveFilter = async (id: string) => {
+  const handleRemoveFilter = async (
+    id: string,
+    refreshedViaCheckbox = false
+  ) => {
     if (id === "clear-filters") {
       await clearAllFilters()
     } else {
+      setYear("")
       const [newValues, field] = removeValueFromFilters(id, appliedFilters)
-      await submitFilters(newValues, field)
+      await submitFilters(newValues, field, refreshedViaCheckbox)
     }
   }
 
@@ -85,9 +99,9 @@ const ItemFilters = ({
 
     // If the filter value is already in the array of selected values, remove it. Otherwise, add it.
     if (selectedFieldCheckboxes.indexOf(filterId) >= 0) {
-      await handleRemoveFilter(filterId)
+      await handleRemoveFilter(filterId, true)
     } else {
-      await submitFilters([filterId, ...selectedFieldCheckboxes], field)
+      await submitFilters([filterId, ...selectedFieldCheckboxes], field, true)
     }
   }
 
@@ -97,7 +111,14 @@ const ItemFilters = ({
 
   const handleYearSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
-    await submitFilters(year.length ? [year] : [], "year")
+    const isNumeric: boolean = /^[0-9]*$/.test(year)
+
+    if (year.length !== 4 || !isNumeric) {
+      setInvalidYear(true)
+    } else {
+      setInvalidYear(false)
+      await submitFilters([year], "year")
+    }
   }
 
   // function for renderChildren prop of FilterBarInline
@@ -109,27 +130,31 @@ const ItemFilters = ({
           labelText="Filter by"
           renderMultiSelect={renderMultiSelect}
         />
-        <Box minWidth={{ md: 440 }}>
-          <Label id="year-filter-label" htmlFor="searchbar-form-year-filter">
-            Search by Year
-          </Label>
-          <SearchBar
-            id="year-filter"
-            labelText="Apply year filter"
-            aria-labelledby="year-filter-label"
-            data-testid="year-filter"
-            textInputProps={{
-              placeholder: "YYYY",
-              isClearable: true,
-              labelText: "Search by year",
-              name: "year-filter",
-              value: year,
-              onChange: ({ target }) => setYear(target.value),
-              isClearableCallback: () => setYear(""),
-            }}
-            onSubmit={handleYearSubmit}
-          />
-        </Box>
+        {showDateFilter ? (
+          <Box width={{ sm: "100%", md: 440 }}>
+            <Label id="year-filter-label" htmlFor="searchbar-form-year-filter">
+              Search by year
+            </Label>
+            <SearchBar
+              id="year-filter"
+              labelText="Apply year filter"
+              aria-labelledby="year-filter-label"
+              data-testid="year-filter"
+              isInvalid={invalidYear}
+              invalidText="Please enter a valid year."
+              textInputProps={{
+                placeholder: "YYYY",
+                isClearable: true,
+                labelText: "Search by year form input",
+                name: "year-filter",
+                value: year,
+                onChange: ({ target }) => setYear(target.value),
+                isClearableCallback: () => setYear(""),
+              }}
+              onSubmit={handleYearSubmit}
+            />
+          </Box>
+        ) : null}
       </>
     )
   }
@@ -167,21 +192,28 @@ const ItemFilters = ({
           data-testid="item-filters-container"
           width="full"
           layout="row"
-          sx={{ fieldset: { lg: { width: "45%" } } }}
+          sx={{
+            fieldset: { width: { sm: "100%", md: "45%" } },
+            "> div": { alignItems: "flex-start" },
+          }}
           renderChildren={filterBarContent}
         />
       </Box>
       {filtersAreApplied ? (
-        <Box display="flex" mr="s" mb="m">
+        <Box
+          display="flex"
+          flexDirection={{ base: "column", md: "row" }}
+          mb="m"
+        >
           <Text
-            fontSize="body2"
+            display="block"
+            fontSize="desktop.body.body2"
             fontWeight="bold"
-            mr="s"
-            mb={0}
+            mr={{ base: "0", md: "s" }}
+            mb={{ base: "xxs", md: 0 }}
             lineHeight={2}
-            display="table-cell"
           >
-            Filters Applied
+            Active filters
           </Text>
           <TagSet
             id="bib-details-applied-filters"

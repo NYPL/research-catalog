@@ -30,7 +30,7 @@ const ElectronicResourcesLink = ({
         fontSize={{ base: "mobile.body.body1", md: "desktop.body.body1" }}
         fontWeight="bold"
       >
-        Available Online
+        Available online
       </Text>
       {electronicResources.length === 1 ? (
         <ExternalLink
