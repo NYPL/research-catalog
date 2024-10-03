@@ -36,12 +36,12 @@ const ItemTable = ({ itemTableData }: ItemTableProps) => {
                 { width: "33.3%", minWidth: 150, maxWidth: 250 },
               ]
             : [
-                { minWidth: 350, maxwidth: 350 },
-                { minwidth: 150, maxWidth: 200 },
-                { minwidth: 150, maxWidth: 150 },
-                { minwidth: 150, maxWidth: 150 },
-                { minwidth: 200, maxWidth: 250 },
-                { minwidth: 150, maxWidth: 200 },
+                { minWidth: 350, maxWidth: 350 },
+                { minWidth: 150, maxWidth: 200 },
+                { minWidth: 150, maxWidth: 150 },
+                { minWidth: 150, maxWidth: 150 },
+                { minWidth: 200, maxWidth: 250 },
+                { minWidth: 150, maxWidth: 200 },
               ]
         }
         tableData={tableData}
