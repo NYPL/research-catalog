@@ -30,18 +30,14 @@ const ItemTable = ({ itemTableData }: ItemTableProps) => {
         // TODO: Review these values with the design team
         columnStyles={
           inSearchResult
-            ? [
-                { width: "33.3%", minWidth: 150, maxWidth: 250 },
-                { width: "33.3%", minWidth: 150, maxWidth: 250 },
-                { width: "33.3%", minWidth: 150, maxWidth: 250 },
-              ]
+            ? [{ width: 272 }]
             : [
-                { minWidth: 350, maxWidth: 350 },
-                { minWidth: 150, maxWidth: 200 },
-                { minWidth: 150, maxWidth: 150 },
-                { minWidth: 150, maxWidth: 150 },
-                { minWidth: 200, maxWidth: 250 },
-                { minWidth: 150, maxWidth: 200 },
+                { width: "30%" },
+                { width: "14%" },
+                { width: "14%" },
+                { width: "14%" },
+                { width: "14%" },
+                { width: "14%" },
               ]
         }
         tableData={tableData}
