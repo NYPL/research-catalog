@@ -7,7 +7,6 @@ import {
 import type ItemTableData from "../../models/ItemTableData"
 import StatusLinks from "./StatusLinks"
 import styles from "../../../styles/components/ItemTable.module.scss"
-import { max } from "underscore"
 
 interface ItemTableProps {
   itemTableData: ItemTableData
