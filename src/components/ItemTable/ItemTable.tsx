@@ -27,7 +27,6 @@ const ItemTable = ({ itemTableData }: ItemTableProps) => {
           inSearchResult ? " " + styles.inSearchResult : ""
         }`}
         columnHeaders={tableHeadings}
-        // TODO: Review these values with the design team
         columnStyles={
           inSearchResult
             ? [{ width: 272 }]
