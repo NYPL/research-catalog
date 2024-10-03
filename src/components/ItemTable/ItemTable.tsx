@@ -28,18 +28,26 @@ const ItemTable = ({ itemTableData }: ItemTableProps) => {
         }`}
         columnHeaders={tableHeadings}
         // TODO: Review these values with the design team
-        columnStyles={[
-          { minWidth: 350, maxwidth: 350 },
-          { minwidth: 150, maxWidth: 200 },
-          { minwidth: 150, maxWidth: 150 },
-          { minwidth: 150, maxWidth: 150 },
-          { minwidth: 200, maxWidth: 250 },
-          { minwidth: 150, maxWidth: 200 },
-        ]}
+        columnStyles={
+          inSearchResult
+            ? [
+                { width: "33.3%", minWidth: 150, maxWidth: 250 },
+                { width: "33.3%", minWidth: 150, maxWidth: 250 },
+                { width: "33.3%", minWidth: 150, maxWidth: 250 },
+              ]
+            : [
+                { minWidth: 350, maxwidth: 350 },
+                { minwidth: 150, maxWidth: 200 },
+                { minwidth: 150, maxWidth: 150 },
+                { minwidth: 150, maxWidth: 150 },
+                { minwidth: 200, maxWidth: 250 },
+                { minwidth: 150, maxWidth: 200 },
+              ]
+        }
         tableData={tableData}
         showRowDividers={!inSearchResult}
         isScrollable={!isLargerThanMobile}
-        my={{ base: 0, md: "s" }}
+        my={{ base: inSearchResult ? "s" : 0, md: "s" }}
         data-testid={
           !inSearchResult
             ? "bib-details-item-table"
