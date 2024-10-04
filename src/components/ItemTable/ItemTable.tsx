@@ -31,12 +31,12 @@ const ItemTable = ({ itemTableData }: ItemTableProps) => {
           inSearchResult
             ? [{ width: 272 }]
             : [
-                { width: "30%" },
-                { width: "14%" },
-                { width: "14%" },
-                { width: "14%" },
-                { width: "14%" },
-                { width: "14%" },
+                { width: "30%", minWidth: 350 },
+                { width: "14%", minWidth: 100 },
+                { width: "14%", minWidth: 100 },
+                { width: "14%", minWidth: 100 },
+                { width: "14%", minWidth: 100 },
+                { width: "14%", minWidth: 100 },
               ]
         }
         tableData={tableData}
