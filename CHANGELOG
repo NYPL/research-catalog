@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Adjust ItemTable styles according to design (SCC-4299)
-- Make min and maxwidth keys camel case on ItemTable (SCC-4299)
+- Remove border and padding from eResources link as part of post-Bib page launch VQA (SCC-4299)
 
 ### Hotfix
 
