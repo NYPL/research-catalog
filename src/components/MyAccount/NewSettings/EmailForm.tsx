@@ -5,13 +5,15 @@ import {
   Flex,
   Button,
 } from "@nypl/design-system-react-components"
-import { useState } from "react"
+import { useContext, useState } from "react"
+import { PatronDataContext } from "../../../context/PatronDataContext"
 
-const EmailForm = ({ patronData }) => {
-  console.log(patronData.emails)
+const EmailForm = ({ patronData, setIsLoading, setIsSuccess }) => {
+  const { getMostUpdatedSierraAccountData } = useContext(PatronDataContext)
   const [emails, setEmails] = useState(patronData?.emails || [])
   const [isEditing, setIsEditing] = useState(false)
   const [error, setError] = useState(false)
+
   const [tempEmails, setTempEmails] = useState([...emails])
 
   const validateEmail = (email) => {
@@ -19,40 +21,66 @@ const EmailForm = ({ patronData }) => {
     return emailRegex.test(email)
   }
 
+  const handleRemoveEmail = (index) => {
+    const updatedEmails = tempEmails.filter((_, i) => i !== index)
+    setTempEmails(updatedEmails)
+
+    // Immediately revalidate remaining emails.
+    const hasInvalidEmail = updatedEmails.some((email) => !validateEmail(email))
+    setError(hasInvalidEmail)
+  }
+
   const handleInputChange = (e, index) => {
     const { value } = e.target
     const updatedEmails = [...tempEmails]
     updatedEmails[index] = value
     setTempEmails(updatedEmails)
-    setError(!validateEmail(value))
-  }
 
-  const saveEmails = () => {
-    const hasInvalidEmail = tempEmails.some((email) => !validateEmail(email))
-    if (hasInvalidEmail) {
+    // The first email entry cannot be empty.
+    if (index === 0 && (!value || !validateEmail(value))) {
       setError(true)
-      return
+    } else {
+      const hasInvalidEmail = updatedEmails.some(
+        (email) => !validateEmail(email)
+      )
+      setError(hasInvalidEmail)
     }
-    submitEmails(tempEmails)
-    setEmails(tempEmails)
-    setIsEditing(false)
   }
 
-  const submitEmails = async (emails) => {
-    const response = await fetch(
-      `/research/research-catalog/api/account/settings/${patronData.id}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ emails }),
+  const handleClearableCallback = (index) => {
+    const updatedEmails = [...tempEmails]
+    updatedEmails[index] = ""
+    setTempEmails(updatedEmails)
+    setError(true)
+  }
+
+  const submitEmails = async () => {
+    setIsLoading(true)
+    const validEmails = tempEmails.filter((email) => validateEmail(email))
+
+    try {
+      const response = await fetch(
+        `/research/research-catalog/api/account/settings/${patronData.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ emails: validEmails }),
+        }
+      )
+
+      if (response.status === 200) {
+        await getMostUpdatedSierraAccountData()
+        setIsSuccess(true)
+        setIsEditing(false)
+      } else {
+        setTempEmails([...emails])
       }
-    )
-    if (response.status === 200) {
-      console.log("yay")
-    } else {
-      console.log(response)
+    } catch (error) {
+      console.error("Error submitting emails:", error)
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -63,79 +91,94 @@ const EmailForm = ({ patronData }) => {
   }
 
   const addEmailField = () => {
-    setTempEmails([...tempEmails, ""])
+    const updatedEmails = [...tempEmails, ""]
+    setTempEmails(updatedEmails)
+
+    // Immediately revalidate all emails.
+    const hasInvalidEmail = updatedEmails.some((email) => !validateEmail(email))
+    setError(hasInvalidEmail)
   }
 
   return (
-    <>
-      <Flex gap="xs" alignItems="center">
+    <Flex flexDir="row" alignItems="flex-start" width="100%">
+      <Flex gap="xs" alignItems={"center"} sx={{ paddingTop: "xs" }}>
         <Icon name="communicationEmail" size="medium" />
         <Text
           size="body1"
-          sx={{ fontWeight: "500", width: "305px", marginBottom: 0 }}
+          sx={{
+            fontWeight: "500",
+            width: "256px",
+            marginBottom: 0,
+          }}
         >
           Email
         </Text>
       </Flex>
-      <Flex gap="xs" alignItems="center" flexDir="column">
-        {isEditing ? (
-          <Flex flexDir={"column"}>
-            {tempEmails.map((email, index) => (
-              <Flex key={index} mb="s">
-                <TextInput
-                  name={`email-${index}`}
-                  value={email}
-                  id={`email-text-input-${index}`}
-                  labelText="Update email"
-                  showLabel={false}
-                  isInvalid={error && !validateEmail(email)}
-                  invalidText="Please enter a valid email address."
-                  onChange={(e) => handleInputChange(e, index)}
-                  isRequired
-                  isClearable
-                  sx={{ marginRight: "xl", width: "300px" }}
-                />
-                {index !== 0 && (
-                  <Button
-                    aria-label="Remove email"
-                    buttonType="text"
-                    id="remove-email-btn"
-                    onClick={() =>
-                      setTempEmails(tempEmails.filter((_, i) => i !== index))
-                    }
-                  >
-                    <Icon name="arrow" iconRotation="rotate270" size="small" />
-                  </Button>
-                )}
-              </Flex>
-            ))}
-            <Button
-              id="add-button"
-              buttonType="text"
-              onClick={addEmailField}
-              sx={{ justifyContent: "flex-start" }}
-            >
-              + Add an email address
-            </Button>
-          </Flex>
-        ) : (
-          <Flex flexDir={"row"} alignItems="center">
-            <Text sx={{ marginBottom: 0 }}>{emails[0]}</Text>
-            <Button
-              id="edit-email-button"
-              buttonType="text"
-              onClick={() => setIsEditing(true)}
-            >
-              <Icon name="editorMode" align="left" size="medium" />
-              Edit
-            </Button>
-          </Flex>
-        )}
-      </Flex>
-      {isEditing && (
-        <Flex>
+      {isEditing ? (
+        <Flex flexDir={"column"}>
+          {tempEmails.map((email, index) => (
+            <Flex key={index} mb="s">
+              <TextInput
+                name={`email-${index}`}
+                value={email}
+                id={`email-text-input-${index}`}
+                labelText="Update email"
+                showLabel={false}
+                isInvalid={error && !validateEmail(email)}
+                invalidText="Please enter a valid email address."
+                onChange={(e) => handleInputChange(e, index)}
+                isRequired
+                isClearable
+                isClearableCallback={() => handleClearableCallback(index)}
+                sx={{ width: "300px" }}
+              />
+              {index !== 0 && (
+                <Button
+                  aria-label="Remove email"
+                  buttonType="text"
+                  id="remove-email-btn"
+                  onClick={() => handleRemoveEmail(index)}
+                >
+                  {" "}
+                  <Icon name="actionDelete" size="large" />
+                </Button>
+              )}
+            </Flex>
+          ))}
           <Button
-            sx={{ marginRight: "s" }}
+            id="add-button"
+            buttonType="text"
+            onClick={addEmailField}
+            sx={{ justifyContent: "flex-start", width: "300px" }}
+          >
+            + Add an email address
+          </Button>
+        </Flex>
+      ) : (
+        <Flex flexDir="row" alignItems="flex-start">
+          <Flex flexDir="column" alignItems="flex-start">
+            {emails.map((email, index) => (
+              <Text key={index} sx={{ paddingTop: "xs", marginBottom: "xs" }}>
+                {email}{" "}
+                {index === 0 && <span style={{ color: "gray" }}>(P)</span>}
+              </Text>
+            ))}
+          </Flex>
+          <Button
+            id="edit-email-button"
+            buttonType="text"
+            onClick={() => setIsEditing(true)}
+            sx={{ paddingLeft: "xs", paddingRight: "xs", marginLeft: "xxl" }}
+          >
+            <Icon name="editorMode" align="left" size="medium" />
+            Edit
+          </Button>
+        </Flex>
+      )}
+      {isEditing && (
+        <Flex justifySelf="flex-end" sx={{ marginLeft: "auto" }}>
+          <Button
+            sx={{ marginLeft: "xxl", marginRight: "s" }}
             id="cancel-button"
             buttonType="secondary"
             onClick={cancelEditing}
@@ -146,13 +189,13 @@ const EmailForm = ({ patronData }) => {
             id="save-button"
             isDisabled={error}
             buttonType="primary"
-            onClick={saveEmails}
+            onClick={submitEmails}
           >
             Save changes
           </Button>
         </Flex>
       )}
-    </>
+    </Flex>
   )
 }
 
