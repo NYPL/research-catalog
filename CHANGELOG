@@ -5,17 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.3.2] 2024-10-4
+## [1.3.2] 2024-10-7
 
 ### Fixed
 
 - Adjust ItemTable styles according to design (SCC-4299)
 - Remove border and padding from eResources link as part of post-Bib page launch VQA (SCC-4299)
+- Remove base url from finding aid urls (SCC-4306)
+- Fix incorrect subject heading urls in Bib Details (SCC-4305)
 
 ### [1.3.1] Hotfix
 
 - Fix Table column widths on Search Results after DS 3.4.0 update (SCC-4299)
-- Remove base url from finding aid urls
 
 ## [1.3.0] 2024-10-3
 
