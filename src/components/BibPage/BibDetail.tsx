@@ -7,7 +7,7 @@ import RCLink from "../Links/RCLink/RCLink"
 import ExternalLink from "../Links/ExternalLink/ExternalLink"
 import type {
   BibDetail,
-  Url,
+  BibDetailURL,
   LinkedBibDetail,
   SubjectHeadingDetail,
   AnyBibDetail,
@@ -77,7 +77,7 @@ const PlainTextElement = (field: BibDetail) => {
 
 const CompoundSubjectHeadingElement = (field: SubjectHeadingDetail) => {
   const subjectHeadingLinksPerSubject = field.value.map(
-    (subjectHeadingUrls: Url[]) => {
+    (subjectHeadingUrls: BibDetailURL[]) => {
       return SingleSubjectHeadingElement(subjectHeadingUrls)
     }
   )
@@ -89,27 +89,30 @@ const CompoundSubjectHeadingElement = (field: SubjectHeadingDetail) => {
   return DetailElement(field.label, values)
 }
 
-const SingleSubjectHeadingElement = (subjectHeadingUrls: Url[]) => {
-  return subjectHeadingUrls.reduce((linksPerSubject, url: Url, index) => {
-    const divider = (
-      // this span will render as > in between the divided subject heading links
-      <span data-testid="divider" key={`divider-${index}`}>
-        {" "}
-        &gt;{" "}
-      </span>
-    )
-    const link = LinkElement(url, "internal")
-    linksPerSubject.push(link)
-    if (!isItTheLastElement(index, subjectHeadingUrls)) {
-      linksPerSubject.push(divider)
-    }
-    return linksPerSubject
-  }, [] as ReactElement[])
+const SingleSubjectHeadingElement = (subjectHeadingUrls: BibDetailURL[]) => {
+  return subjectHeadingUrls.reduce(
+    (linksPerSubject, url: BibDetailURL, index) => {
+      const divider = (
+        // this span will render as > in between the divided subject heading links
+        <span data-testid="divider" key={`divider-${index}`}>
+          {" "}
+          &gt;{" "}
+        </span>
+      )
+      const link = LinkElement(url, "internal")
+      linksPerSubject.push(link)
+      if (!isItTheLastElement(index, subjectHeadingUrls)) {
+        linksPerSubject.push(divider)
+      }
+      return linksPerSubject
+    },
+    [] as ReactElement[]
+  )
 }
 
 const LinkedDetailElement = (field: LinkedBibDetail) => {
   const internalOrExternal = field.link
-  const values = field.value.map((urlInfo: Url, i) => {
+  const values = field.value.map((urlInfo: BibDetailURL, i) => {
     return (
       <li key={`${kebabCase(field.label)}-${i}`}>
         {LinkElement(urlInfo, internalOrExternal)}
@@ -119,7 +122,7 @@ const LinkedDetailElement = (field: LinkedBibDetail) => {
   return DetailElement(field.label, values)
 }
 
-const LinkElement = (url: Url, linkType: string) => {
+const LinkElement = (url: BibDetailURL, linkType: string) => {
   let Link: typeof RCLink | typeof ExternalLink
   if (linkType === "internal") Link = RCLink
   else if (linkType === "external") Link = ExternalLink
@@ -127,9 +130,10 @@ const LinkElement = (url: Url, linkType: string) => {
   return (
     <Link
       dir={stringDirection}
-      href={BASE_URL + url.url}
+      href={url.url}
       key={url.url}
-      includeBaseUrl={false}
+      // external link does not include this prop
+      includeBaseUrl={true}
       textDecoration="none"
     >
       {url.urlLabel}
