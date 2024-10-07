@@ -1,8 +1,4 @@
-import {
-  Box,
-  Table,
-  useNYPLBreakpoints,
-} from "@nypl/design-system-react-components"
+import { Box, Table } from "@nypl/design-system-react-components"
 
 import type ItemTableData from "../../models/ItemTableData"
 import StatusLinks from "./StatusLinks"
@@ -17,7 +13,6 @@ interface ItemTableProps {
  */
 const ItemTable = ({ itemTableData }: ItemTableProps) => {
   const { tableHeadings, tableData, items, inSearchResult } = itemTableData
-  const { isLargerThanMobile } = useNYPLBreakpoints()
 
   return (
     // Display as grid to prevent bug where the outer container stretches to the Table's width on mobile
@@ -27,26 +22,26 @@ const ItemTable = ({ itemTableData }: ItemTableProps) => {
           inSearchResult ? " " + styles.inSearchResult : ""
         }`}
         columnHeaders={tableHeadings}
-        // TODO: Review these values with the design team
+        tableTextSize="body2"
         columnStyles={
           inSearchResult
             ? [
-                { width: "33.3%", minWidth: 150, maxWidth: 250 },
-                { width: "33.3%", minWidth: 150, maxWidth: 250 },
-                { width: "33.3%", minWidth: 150, maxWidth: 250 },
+                { width: 272, minWidth: 85 },
+                { width: 272, minWidth: 85 },
+                { width: 272, minWidth: 85 },
               ]
             : [
-                { minWidth: 350, maxwidth: 350 },
-                { minwidth: 150, maxWidth: 200 },
-                { minwidth: 150, maxWidth: 150 },
-                { minwidth: 150, maxWidth: 150 },
-                { minwidth: 200, maxWidth: 250 },
-                { minwidth: 150, maxWidth: 200 },
+                { width: "auto", minWidth: 250 },
+                { width: "14%", minWidth: 100 },
+                { width: "14%", minWidth: 100 },
+                { width: "14%", minWidth: 100 },
+                { width: "14%", minWidth: 100 },
+                { width: "14%", minWidth: 100 },
               ]
         }
         tableData={tableData}
         showRowDividers={!inSearchResult}
-        isScrollable={!isLargerThanMobile}
+        isScrollable={true}
         my={{ base: inSearchResult ? "s" : 0, md: "s" }}
         data-testid={
           !inSearchResult
