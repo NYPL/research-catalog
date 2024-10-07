@@ -58,6 +58,7 @@ export default function BibPage({
         <Heading level="h2" mb="l">
           Request for on-site use
         </Heading>
+        <Heading level="h3">Choose a pickup location</Heading>
         <Form
           id="holdForm"
           // We are using a post request on hold requests when JS is disabled
@@ -70,8 +71,10 @@ export default function BibPage({
             <RadioGroup
               name="pickup-location"
               id="pickup-location"
-              labelText="Choose a pickup location"
+              labelText="Pickup location"
               defaultValue="1"
+              isRequired
+              showLabel={false}
             >
               <Radio
                 id="1"
