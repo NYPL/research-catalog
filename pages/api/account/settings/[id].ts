@@ -22,6 +22,42 @@ export default async function handler(
   if (req.method == "GET") {
     responseMessage = "Please make a PUT request to this endpoint."
   }
+  if (req.method === "POST" && req.body._method === "PUT") {
+    const patronId = req.query.id as string
+    const patronData = req.body.emails
+
+    const emailRegex = /^[^@]+@[^@]+\.[^@]+$/
+    const invalidEmails = patronData.filter((email) => !emailRegex.test(email))
+
+    if (invalidEmails.length > 0) {
+      const errorMessage = `Please enter a valid email. Invalid emails: ${invalidEmails.join(
+        ", "
+      )}`
+      res.writeHead(302, {
+        Location: `/research/research-catalog/account/settings?error=${encodeURIComponent(
+          errorMessage
+        )}`,
+      })
+      res.end()
+      return
+    }
+
+    if (patronId == cookiePatronId) {
+      const response = await updatePatronSettings(patronId, {
+        emails: patronData,
+      })
+      responseStatus = response.status
+      responseMessage = response.message
+    } else {
+      responseStatus = 403
+      responseMessage = "Authenticated patron does not match request"
+    }
+    res.writeHead(302, {
+      Location: "/research/research-catalog/account/settings?success=true",
+    })
+    res.end()
+    return
+  }
   if (req.method == "PUT") {
     /**  We get the patron id from the request: */
     const patronId = req.query.id as string

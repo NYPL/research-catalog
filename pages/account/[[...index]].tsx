@@ -1,4 +1,4 @@
-import { Text } from "@nypl/design-system-react-components"
+import { Banner, Text } from "@nypl/design-system-react-components"
 import Head from "next/head"
 
 import Layout from "../../src/components/Layout/Layout"
@@ -18,6 +18,7 @@ interface MyAccountPropsType {
   isAuthenticated: boolean
   tabsPath?: string
   renderAuthServerError?: boolean
+  storedQueryString?
 }
 
 export default function MyAccount({
@@ -25,6 +26,7 @@ export default function MyAccount({
   accountData,
   isAuthenticated,
   tabsPath,
+  storedQueryString,
 }: MyAccountPropsType) {
   const errorRetrievingPatronData = !accountData.patron
 
@@ -50,6 +52,31 @@ export default function MyAccount({
       assistance.
     </Text>
   )
+
+  function formValidationMessage(storedQueryString) {
+    const queryString = decodeURIComponent(storedQueryString)
+    const type = queryString.split("=")[0] || ""
+    const message = queryString.split("=")[1] || ""
+    if (type === "success") {
+      return (
+        <Banner
+          sx={{ paddingBottom: "16px" }}
+          content={"Successfully updated settings."}
+          type="positive"
+          isDismissible
+        />
+      )
+    } else {
+      return (
+        <Banner
+          sx={{ paddingBottom: "16px" }}
+          content={message}
+          type="warning"
+          isDismissible
+        />
+      )
+    }
+  }
   useEffect(() => {
     resetCountdown()
     // to avoid a reference error on document in the modal, wait to render it
@@ -76,6 +103,7 @@ export default function MyAccount({
             serverError
           ) : (
             <PatronDataProvider value={{ ...accountData }}>
+              {storedQueryString && formValidationMessage(storedQueryString)}
               <ProfileContainer tabsPath={tabsPath} />
             </PatronDataProvider>
           )}
@@ -111,16 +139,25 @@ export async function getServerSideProps({ req, res }) {
       },
     }
   }
-  // Parsing path from url to pass to ProfileTabs.
+
+  // Parsing path and query from URL
   const tabsPathRegex = /\/account\/(.+)/
   const match = req.url.match(tabsPathRegex)
+  const queryString = req.url.split("?")[1] || "" // Extract query string
   const tabsPath = match ? match[1] : null
   const id = patronTokenResponse.decodedPatron.sub
+
   try {
     const { checkouts, holds, patron, fines, pickupLocations } =
       await getPatronData(id)
-    /*  Redirecting invalid paths (including /overdues if user has none) and
-    // cleaning extra parts off valid paths. */
+    // Collect query string from non-JS form submission.
+    if (queryString) {
+      res.setHeader(
+        "Set-Cookie",
+        `queryParams=${encodeURIComponent(queryString)}; Path=/; HttpOnly`
+      )
+    }
+    // Redirecting invalid paths and cleaning extra parts off valid paths.
     if (tabsPath) {
       const allowedPaths = ["items", "requests", "overdues", "settings"]
       if (
@@ -137,7 +174,7 @@ export async function getServerSideProps({ req, res }) {
         const matchedPath = allowedPaths.find((path) =>
           tabsPath.startsWith(path)
         )
-        if (tabsPath != matchedPath) {
+        if (tabsPath !== matchedPath) {
           return {
             redirect: {
               destination: "/account/" + matchedPath,
@@ -147,11 +184,14 @@ export async function getServerSideProps({ req, res }) {
         }
       }
     }
+
+    const storedQueryString = req.cookies.queryParams || ""
     return {
       props: {
         accountData: { checkouts, holds, patron, fines, pickupLocations },
         tabsPath,
         isAuthenticated,
+        storedQueryString,
         renderAuthServerError: !redirectBasedOnNyplAccountRedirects,
       },
     }
