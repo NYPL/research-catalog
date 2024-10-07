@@ -370,10 +370,10 @@ export default class BibDetails {
       if (!label || !uuid) return
       const subject = label.replace(/\.$/, "")
       // stackedSubjectHeadings: ["a", "a -- b", "a -- b -- c"]
-      const stackedSubjectHeadings = this.constructSubjectHeadingsArray(subject)
-      const shepUrl = `/subject_headings/${uuid}`
+      const stackedSubjectHeadings = this.constructSubjectHeadingsArray(heading)
       // splitSubjectHeadings: ["a", "b", "c"]
       const splitSubjectHeadings = subject.split(" -- ")
+      const shepUrl = ""
 
       return splitSubjectHeadings.map((heading, index) => {
         const urlWithLabelParam = `${shepUrl}?label=${encodeURI(
@@ -398,7 +398,7 @@ export default class BibDetails {
         subject = subject.replace(/\.$/, "")
         // stackedSubjectHeadings: ["a", "a -- b", "a -- b -- c"]
         const stackedSubjectHeadings =
-          this.constructSubjectHeadingsArray(subject)
+          this.constructSubjectLiteralsArray(subject)
         const filterQueryForSubjectHeading = "/search?filters[subjectLiteral]="
         // splitSubjectHeadings: ["a", "b", "c"]
         const splitSubjectHeadings = subject.split(" -- ")
@@ -419,9 +419,9 @@ export default class BibDetails {
     }
   }
 
-  constructSubjectHeadingsArray(subject: string) {
+  constructSubjectLiteralsArray(subject: string) {
     // subject = "Italian food -- Spaghetti"
-    let stackedSubjectHeading = ""
+    let stackedSubjectLiteral = ""
 
     return subject
       .split(" -- ") // ["Italian food", "spaghetti"]
@@ -429,17 +429,18 @@ export default class BibDetails {
         const dashDivided = index !== 0 ? " -- " : ""
         // First iteration "Italian food"
         // Second iteration "Italian food -- spaghetti"
-        stackedSubjectHeading = `${stackedSubjectHeading}${dashDivided}${urlString}`
+        stackedSubjectLiteral = `${stackedSubjectLiteral}${dashDivided}${urlString}`
 
-        return stackedSubjectHeading
+        return stackedSubjectLiteral
       })
   }
 
   /**
-   * Recurvisely create a list of subject heading links.
+   * Flatten subject headings into a list of objects with a url and a label
    */
-  constructSubjectHeading(heading) {
+  constructSubjectHeadingsArray(heading) {
     const { uuid, parent, label } = heading
+    let subjectHeadingsArray = []
     let subjectComponent
 
     if (label) {
@@ -451,10 +452,11 @@ export default class BibDetails {
     }
 
     if (!parent) {
-      return subjectLink
+      subjectHeadingsArray.push(subjectLink)
+      return subjectHeadingsArray
     }
 
-    return [this.constructSubjectHeading(parent), subjectLink]
+    return [this.constructSubjectHeadingsArray(parent)].concat(subjectLink)
   }
 
   getSubjectHeadingUrl(uuid: string, label: string) {
