@@ -71,6 +71,7 @@ export default function BibPage({
               name="pickup-location"
               id="pickup-location"
               labelText="Choose a pickup location"
+              defaultValue="1"
             >
               <Radio
                 id="1"
