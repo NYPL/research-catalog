@@ -38,7 +38,9 @@ const SearchResult = ({ bib }: SearchResultProps) => {
       </CardHeading>
       <CardContent>
         <Box
-          sx={{ p: { display: "inline", marginRight: "s", marginBottom: "s" } }}
+          sx={{
+            p: { display: "inline-block", marginRight: "s", marginBottom: "s" },
+          }}
         >
           {bib.materialType && <Text>{bib.materialType}</Text>}
           {bib.publicationStatement && <Text>{bib.publicationStatement}</Text>}

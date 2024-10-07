@@ -17,14 +17,7 @@ const ElectronicResourcesLink = ({
   electronicResources,
 }: ElectronicResourcesLinkProps) => {
   return (
-    <Box
-      mt="s"
-      sx={{
-        border: "1px solid var(--nypl-colors-ui-border-default)",
-        padding: "s",
-      }}
-      data-testid="electronic-resources-link"
-    >
+    <Box mt="s" data-testid="electronic-resources-link">
       <Text
         mb="xxs"
         fontSize={{ base: "mobile.body.body1", md: "desktop.body.body1" }}
