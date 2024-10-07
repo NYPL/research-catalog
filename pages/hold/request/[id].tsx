@@ -1,8 +1,15 @@
 import Head from "next/head"
-import { Heading } from "@nypl/design-system-react-components"
+import {
+  Heading,
+  Form,
+  Box,
+  RadioGroup,
+  Radio,
+  Accordion,
+} from "@nypl/design-system-react-components"
 
 import Layout from "../../../src/components/Layout/Layout"
-import { SITE_NAME } from "../../../src/config/constants"
+import { SITE_NAME, BASE_URL } from "../../../src/config/constants"
 
 import initializePatronTokenAuth from "../../../src/server/auth"
 
@@ -24,6 +31,11 @@ export default function BibPage({
   console.log("bibId", bibId)
   console.log("itemId", itemId)
 
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    console.log("submitting form")
+  }
+
   return (
     <>
       <Head>
@@ -37,9 +49,27 @@ export default function BibPage({
         <title key="main-title">{metadataTitle}</title>
       </Head>
       <Layout isAuthenticated={isAuthenticated} activePage="bib">
-        <Heading level="h2" size="heading3" mb="l">
+        <Heading level="h2" mb="l">
           Request for on-site use
         </Heading>
+        <Form
+          id="holdForm"
+          // We are using a post request on hold requests when JS is disabled
+          method="post"
+          action={`${BASE_URL}/search`}
+          onSubmit={handleSubmit}
+        >
+          <RadioGroup
+            name="pickup-location"
+            id="pickup-location"
+            labelText="Choose a pickup location"
+          >
+            <Radio id="1" labelText="Radio 1" value="1" />
+            <Radio id="2" labelText="Radio 2" value="2" />
+            <Radio id="3" labelText="Radio 3" value="3" />
+            <Radio id="4" labelText="Radio 4" value="4" />
+          </RadioGroup>
+        </Form>
       </Layout>
     </>
   )
