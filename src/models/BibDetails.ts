@@ -365,28 +365,26 @@ export default class BibDetails {
 
   buildSubjectHeadings(): SubjectHeadingDetail {
     if (!this.bib.subjectHeadings) return
-    const subjectHeadingsUrls = this.bib.subjectHeadings.map(
-      ({ label, uuid }) => {
-        if (!label || !uuid) return
-        const subject = label.replace(/\.$/, "")
-        // stackedSubjectHeadings: ["a", "a -- b", "a -- b -- c"]
-        const stackedSubjectHeadings =
-          this.constructSubjectHeadingsArray(subject)
-        const shepUrl = `/subject_headings/${uuid}`
-        // splitSubjectHeadings: ["a", "b", "c"]
-        const splitSubjectHeadings = subject.split(" -- ")
+    const subjectHeadingsUrls = this.bib.subjectHeadings.map((heading) => {
+      const { label, uuid } = heading
+      if (!label || !uuid) return
+      const subject = label.replace(/\.$/, "")
+      // stackedSubjectHeadings: ["a", "a -- b", "a -- b -- c"]
+      const stackedSubjectHeadings = this.constructSubjectHeadingsArray(subject)
+      const shepUrl = `/subject_headings/${uuid}`
+      // splitSubjectHeadings: ["a", "b", "c"]
+      const splitSubjectHeadings = subject.split(" -- ")
 
-        return splitSubjectHeadings.map((heading, index) => {
-          const urlWithLabelParam = `${shepUrl}?label=${encodeURI(
-            stackedSubjectHeadings[index]
-          )}`
-          return {
-            url: urlWithLabelParam,
-            urlLabel: heading,
-          }
-        })
-      }
-    )
+      return splitSubjectHeadings.map((heading, index) => {
+        const urlWithLabelParam = `${shepUrl}?label=${encodeURI(
+          stackedSubjectHeadings[index]
+        )}`
+        return {
+          url: urlWithLabelParam,
+          urlLabel: heading,
+        }
+      })
+    })
     return {
       label: "Subject",
       value: subjectHeadingsUrls,
@@ -435,5 +433,31 @@ export default class BibDetails {
 
         return stackedSubjectHeading
       })
+  }
+
+  /**
+   * Recurvisely create a list of subject heading links.
+   */
+  constructSubjectHeading(heading) {
+    const { uuid, parent, label } = heading
+    let subjectComponent
+
+    if (label) {
+      subjectComponent = label.split(" -- ").pop()
+    }
+    const subjectLink = {
+      url: this.getSubjectHeadingUrl(uuid, label),
+      subjectComponent: subjectComponent || null,
+    }
+
+    if (!parent) {
+      return subjectLink
+    }
+
+    return [this.constructSubjectHeading(parent), subjectLink]
+  }
+
+  getSubjectHeadingUrl(uuid: string, label: string) {
+    return `/subject_headings/${uuid}?label=${encodeURIComponent(label)}`
   }
 }
