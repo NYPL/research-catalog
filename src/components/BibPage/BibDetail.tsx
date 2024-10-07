@@ -127,9 +127,10 @@ const LinkElement = (url: Url, linkType: string) => {
   return (
     <Link
       dir={stringDirection}
-      href={BASE_URL + url.url}
+      href={url.url}
       key={url.url}
-      includeBaseUrl={false}
+      // external link does not include this prop
+      includeBaseUrl={true}
       textDecoration="none"
     >
       {url.urlLabel}
