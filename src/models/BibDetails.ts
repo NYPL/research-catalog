@@ -1,4 +1,8 @@
-import type { DiscoveryBibResult, Note } from "../types/bibTypes"
+import type {
+  DiscoveryBibResult,
+  Note,
+  SubjectHeading,
+} from "../types/bibTypes"
 import type {
   LinkedBibDetail,
   BibDetail,
@@ -365,30 +369,16 @@ export default class BibDetails {
 
   buildSubjectHeadings(): SubjectHeadingDetail {
     if (!this.bib.subjectHeadings) return
-    const subjectHeadingsUrls = this.bib.subjectHeadings.map((heading) => {
-      const { label, uuid } = heading
-      if (!label || !uuid) return
-      const subject = label.replace(/\.$/, "")
-      // stackedSubjectHeadings: ["a", "a -- b", "a -- b -- c"]
-      const stackedSubjectHeadings = this.constructSubjectHeadingsArray(heading)
-      // splitSubjectHeadings: ["a", "b", "c"]
-      const splitSubjectHeadings = subject.split(" -- ")
-      const shepUrl = ""
+    const subjectHeadingsUrls = this.bib.subjectHeadings.map((heading) =>
+      this.flattenSubjectHeadingUrls(heading)
+    )
 
-      return splitSubjectHeadings.map((heading, index) => {
-        const urlWithLabelParam = `${shepUrl}?label=${encodeURI(
-          stackedSubjectHeadings[index]
-        )}`
-        return {
-          url: urlWithLabelParam,
-          urlLabel: heading,
-        }
-      })
-    })
-    return {
-      label: "Subject",
-      value: subjectHeadingsUrls,
-    }
+    return (
+      subjectHeadingsUrls?.length && {
+        label: "Subject",
+        value: subjectHeadingsUrls,
+      }
+    )
   }
 
   buildSubjectLiterals(): SubjectHeadingDetail {
@@ -438,28 +428,30 @@ export default class BibDetails {
   /**
    * Flatten subject headings into a list of objects with a url and a label
    */
-  constructSubjectHeadingsArray(heading) {
-    const { uuid, parent, label } = heading
-    let subjectHeadingsArray = []
-    let subjectComponent
+  flattenSubjectHeadingUrls(heading): Url[] | null {
+    if (!heading.label || !heading.uuid) return null
+    const subjectHeadingsArray = []
 
-    if (label) {
-      subjectComponent = label.split(" -- ").pop()
-    }
-    const subjectLink = {
-      url: this.getSubjectHeadingUrl(uuid, label),
-      subjectComponent: subjectComponent || null,
-    }
+    // iterate through each nested subject until there's no parent element
+    let currentHeading = heading
 
-    if (!parent) {
-      subjectHeadingsArray.push(subjectLink)
-      return subjectHeadingsArray
+    while (currentHeading.parent) {
+      subjectHeadingsArray.unshift(
+        this.getSubjectHeadingUrl(currentHeading.uuid, currentHeading.label)
+      )
+      currentHeading = currentHeading.parent
     }
-
-    return [this.constructSubjectHeadingsArray(parent)].concat(subjectLink)
+    // add the top level subject heading
+    subjectHeadingsArray.unshift(
+      this.getSubjectHeadingUrl(currentHeading.uuid, currentHeading.label)
+    )
+    return subjectHeadingsArray
   }
 
-  getSubjectHeadingUrl(uuid: string, label: string) {
-    return `/subject_headings/${uuid}?label=${encodeURIComponent(label)}`
+  getSubjectHeadingUrl(uuid: string, label: string): Url {
+    return {
+      url: `/subject_headings/${uuid}?label=${encodeURIComponent(label)}`,
+      urlLabel: label.split(" -- ").pop(),
+    }
   }
 }
