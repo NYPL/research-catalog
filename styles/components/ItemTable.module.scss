@@ -13,9 +13,9 @@
       padding-right: 0;
     }
 
-    td {
-      font-size: var(--nypl-fontSizes-desktop-body-body2);
-      line-height: var(--nypl-lineHeights-body-body2);
+    th {
+      padding-top: 0;
+      padding-bottom: var(--nypl-space-xxs);
     }
 
     span {
@@ -24,17 +24,16 @@
   }
 
   &.inSearchResult {
+    margin-top: 0;
+
     tr {
       border: 0 !important;
 
-      th {
+      th,
+      td,
+      th:first-of-type,
+      td:first-of-type {
         padding-top: 0;
-        padding-bottom: var(--nypl-space-xxs);
-      }
-
-      td {
-        padding-top: 0;
-        padding-bottom: 0;
       }
     }
   }
