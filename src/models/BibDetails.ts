@@ -1,14 +1,10 @@
-import type {
-  DiscoveryBibResult,
-  Note,
-  SubjectHeading,
-} from "../types/bibTypes"
+import type { DiscoveryBibResult, Note } from "../types/bibTypes"
 import type {
   LinkedBibDetail,
   BibDetail,
   FieldMapping,
   AnnotatedMarcField,
-  Url,
+  BibDetailURL,
   SubjectHeadingDetail,
   AnnotatedMarc,
   AnyBibDetail,
@@ -211,7 +207,10 @@ export default class BibDetails {
     }
   }
 
-  buildExternalLinkedDetail(label: string, values: Url[]): LinkedBibDetail {
+  buildExternalLinkedDetail(
+    label: string,
+    values: BibDetailURL[]
+  ): LinkedBibDetail {
     if (!values.length) return null
     return {
       link: "external",
@@ -428,7 +427,7 @@ export default class BibDetails {
   /**
    * Flatten subject headings into a list of objects with a url and a label
    */
-  flattenSubjectHeadingUrls(heading): Url[] | null {
+  flattenSubjectHeadingUrls(heading): BibDetailURL[] | null {
     if (!heading.label || !heading.uuid) return null
     const subjectHeadingsArray = []
 
@@ -448,7 +447,7 @@ export default class BibDetails {
     return subjectHeadingsArray
   }
 
-  getSubjectHeadingUrl(uuid: string, label: string): Url {
+  getSubjectHeadingUrl(uuid: string, label: string): BibDetailURL {
     return {
       url: `/subject_headings/${uuid}?label=${encodeURIComponent(label)}`,
       urlLabel: label.split(" -- ").pop(),
