@@ -2,10 +2,13 @@ import Head from "next/head"
 import {
   Heading,
   Form,
+  FormField,
   RadioGroup,
   Radio,
   Accordion,
   Text,
+  ButtonGroup,
+  Button,
   type AccordionDataProps,
 } from "@nypl/design-system-react-components"
 
@@ -63,16 +66,23 @@ export default function BibPage({
           onSubmit={handleSubmit}
           mb="l"
         >
-          <RadioGroup
-            name="pickup-location"
-            id="pickup-location"
-            labelText="Choose a pickup location"
-          >
-            <Radio id="1" labelText="Radio 1" value="1" />
-            <Radio id="2" labelText="Radio 2" value="2" />
-            <Radio id="3" labelText="Radio 3" value="3" />
-            <Radio id="4" labelText="Radio 4" value="4" />
-          </RadioGroup>
+          <FormField>
+            <RadioGroup
+              name="pickup-location"
+              id="pickup-location"
+              labelText="Choose a pickup location"
+            >
+              <Radio id="1" labelText="Radio 1" value="1" />
+              <Radio id="2" labelText="Radio 2" value="2" />
+              <Radio id="3" labelText="Radio 3" value="3" />
+              <Radio id="4" labelText="Radio 4" value="4" />
+            </RadioGroup>
+          </FormField>
+          <ButtonGroup>
+            <Button id="holdRequestSubmit" type="submit" size="large">
+              Submit
+            </Button>
+          </ButtonGroup>
         </Form>
         <Heading level="h3" mb="l">
           Frequently asked questions
