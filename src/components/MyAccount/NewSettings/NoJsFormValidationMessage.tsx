@@ -6,7 +6,7 @@ const FormValidationMessage = ({ storedQueryString }) => {
   const message = queryString.split("=")[1] || ""
   return (
     <Banner
-      sx={{ paddingBottom: "24px", paddingTop: "24px" }}
+      sx={{ paddingBottom: "16px", paddingTop: "16px", marginBottom: "16px" }}
       content={type === "success" ? "Your changes were saved." : message}
       type={type === "success" ? "positive" : "warning"}
     />
