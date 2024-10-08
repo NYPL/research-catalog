@@ -66,14 +66,24 @@ export default function BibPage({
   const { push, query } = useRouter()
   const metadataTitle = `Item Details | ${SITE_NAME}`
 
-  const [bib, setBib] = useState(new Bib(discoveryBibResult))
-  const [itemsLoading, setItemsLoading] = useState(false)
-  const [itemFetchError, setItemFetchError] = useState(false)
+  // We do not need to preserve the whole bib in state since the bib details are constant
+  // and do not need to be updated in memory every time the item table data is refetched
+  const bib = new Bib(discoveryBibResult)
 
-  const [viewAllExpanded, setViewAllExpanded] = useState(viewAllItems)
+  // Item table data / filters state
+  const [itemTableData, setItemTableTata] = useState(bib.itemTableData)
   const [appliedFilters, setAppliedFilters] = useState(
     parseItemFilterQueryParams(query)
   )
+  const filtersAreApplied = areFiltersApplied(appliedFilters)
+  const [numItems, setNumItems] = useState(bib.numItems(filtersAreApplied))
+
+  // Item table status state
+  const [itemsLoading, setItemsLoading] = useState(false)
+  const [itemFetchError, setItemFetchError] = useState(false)
+
+  // Pagination state
+  const [viewAllExpanded, setViewAllExpanded] = useState(viewAllItems)
   const [itemTablePage, setItemTablePage] = useState(itemPage)
 
   const itemTableHeadingRef = useRef<HTMLDivElement>(null)
@@ -86,8 +96,6 @@ export default function BibPage({
   )
 
   const displayLegacyCatalogLink = isNyplBibID(bib.id)
-
-  const filtersAreApplied = areFiltersApplied(appliedFilters)
 
   const refreshItemTable = async (
     newQuery: BibQueryParams,
@@ -140,7 +148,11 @@ export default function BibPage({
       )
       if (response?.ok) {
         const { discoveryBibResult } = await response.json()
-        setBib(new Bib(discoveryBibResult))
+        const refreshedBib = new Bib(discoveryBibResult)
+
+        // Set values that need to be updated in state for the refreshed Bib
+        setNumItems(refreshedBib.numItems(filtersAreApplied))
+        setItemTableTata(refreshedBib.itemTableData)
 
         setItemsLoading(false)
 
@@ -268,17 +280,17 @@ export default function BibPage({
                   >
                     {buildItemTableDisplayingString(
                       itemTablePage,
-                      bib.numItems(filtersAreApplied),
+                      numItems,
                       viewAllExpanded,
                       filtersAreApplied
                     )}
                   </Heading>
-                  {bib.itemTableData ? (
-                    <ItemTable itemTableData={bib.itemTableData} />
+                  {itemTableData.hasItems ? (
+                    <ItemTable itemTableData={itemTableData} />
                   ) : null}
                 </>
               )}
-              {bib.itemTableData ? (
+              {itemTableData.hasItems ? (
                 <ItemTableControls
                   bib={bib}
                   viewAllExpanded={viewAllExpanded}
@@ -287,7 +299,7 @@ export default function BibPage({
                   handlePageChange={handlePageChange}
                   handleViewAllClick={handleViewAllClick}
                   viewAllLoadingTextRef={viewAllLoadingTextRef}
-                  numItemsTotal={bib.numItems(filtersAreApplied)}
+                  numItemsTotal={numItems}
                   filtersAreApplied={filtersAreApplied}
                 />
               ) : null}

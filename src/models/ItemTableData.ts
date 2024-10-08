@@ -58,6 +58,10 @@ export default class ItemTableData {
     })
   }
 
+  hasItems(): boolean {
+    return this.items?.length > 0
+  }
+
   showVolumeColumn(): boolean {
     return this.items?.some((item) => item.volume) && !this.inSearchResult
   }
