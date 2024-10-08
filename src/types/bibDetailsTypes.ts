@@ -1,7 +1,7 @@
 export type AnyBibDetail = BibDetail | LinkedBibDetail | SubjectHeadingDetail
 
 export interface SubjectHeadingDetail {
-  value: Url[][]
+  value: BibDetailURL[][]
   label: string
 }
 
@@ -13,7 +13,7 @@ export interface BibDetail {
 }
 
 export interface LinkedBibDetail {
-  value: Url[]
+  value: BibDetailURL[]
   // label is the formatted name of the field, such as "Author"
   label: string
   // indicates if a linked bib detail is internal, like a link to a creator
@@ -21,7 +21,7 @@ export interface LinkedBibDetail {
   link?: "internal" | "external"
 }
 
-export interface Url {
+export interface BibDetailURL {
   url: string
   urlLabel: string
 }

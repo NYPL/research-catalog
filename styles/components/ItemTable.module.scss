@@ -12,17 +12,28 @@
     th:last-of-type {
       padding-right: 0;
     }
+
+    th {
+      padding-top: 0;
+      padding-bottom: var(--nypl-space-xxs);
+    }
+
+    span {
+      vertical-align: top;
+    }
   }
 
   &.inSearchResult {
+    margin-top: 0;
+
     tr {
       border: 0 !important;
 
       th,
-      td {
-        padding: 0;
-        // Meant to be 240 col width + 32 (gap) = 272px
-        width: 272px;
+      td,
+      th:first-of-type,
+      td:first-of-type {
+        padding-top: 0;
       }
     }
   }

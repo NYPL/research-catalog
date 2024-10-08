@@ -4,7 +4,7 @@ import type {
   BibDetail,
   FieldMapping,
   AnnotatedMarcField,
-  Url,
+  BibDetailURL,
   SubjectHeadingDetail,
   AnnotatedMarc,
   AnyBibDetail,
@@ -207,7 +207,10 @@ export default class BibDetails {
     }
   }
 
-  buildExternalLinkedDetail(label: string, values: Url[]): LinkedBibDetail {
+  buildExternalLinkedDetail(
+    label: string,
+    values: BibDetailURL[]
+  ): LinkedBibDetail {
     if (!values.length) return null
     return {
       link: "external",
@@ -365,32 +368,16 @@ export default class BibDetails {
 
   buildSubjectHeadings(): SubjectHeadingDetail {
     if (!this.bib.subjectHeadings) return
-    const subjectHeadingsUrls = this.bib.subjectHeadings.map(
-      ({ label, uuid }) => {
-        if (!label || !uuid) return
-        const subject = label.replace(/\.$/, "")
-        // stackedSubjectHeadings: ["a", "a -- b", "a -- b -- c"]
-        const stackedSubjectHeadings =
-          this.constructSubjectHeadingsArray(subject)
-        const shepUrl = `/subject_headings/${uuid}`
-        // splitSubjectHeadings: ["a", "b", "c"]
-        const splitSubjectHeadings = subject.split(" -- ")
+    const subjectHeadingsUrls = this.bib.subjectHeadings.map((heading) =>
+      this.flattenSubjectHeadingUrls(heading)
+    )
 
-        return splitSubjectHeadings.map((heading, index) => {
-          const urlWithLabelParam = `${shepUrl}?label=${encodeURI(
-            stackedSubjectHeadings[index]
-          )}`
-          return {
-            url: urlWithLabelParam,
-            urlLabel: heading,
-          }
-        })
+    return (
+      subjectHeadingsUrls?.length && {
+        label: "Subject",
+        value: subjectHeadingsUrls,
       }
     )
-    return {
-      label: "Subject",
-      value: subjectHeadingsUrls,
-    }
   }
 
   buildSubjectLiterals(): SubjectHeadingDetail {
@@ -400,7 +387,7 @@ export default class BibDetails {
         subject = subject.replace(/\.$/, "")
         // stackedSubjectHeadings: ["a", "a -- b", "a -- b -- c"]
         const stackedSubjectHeadings =
-          this.constructSubjectHeadingsArray(subject)
+          this.constructSubjectLiteralsArray(subject)
         const filterQueryForSubjectHeading = "/search?filters[subjectLiteral]="
         // splitSubjectHeadings: ["a", "b", "c"]
         const splitSubjectHeadings = subject.split(" -- ")
@@ -421,9 +408,9 @@ export default class BibDetails {
     }
   }
 
-  constructSubjectHeadingsArray(subject: string) {
+  constructSubjectLiteralsArray(subject: string) {
     // subject = "Italian food -- Spaghetti"
-    let stackedSubjectHeading = ""
+    let stackedSubjectLiteral = ""
 
     return subject
       .split(" -- ") // ["Italian food", "spaghetti"]
@@ -431,9 +418,39 @@ export default class BibDetails {
         const dashDivided = index !== 0 ? " -- " : ""
         // First iteration "Italian food"
         // Second iteration "Italian food -- spaghetti"
-        stackedSubjectHeading = `${stackedSubjectHeading}${dashDivided}${urlString}`
+        stackedSubjectLiteral = `${stackedSubjectLiteral}${dashDivided}${urlString}`
 
-        return stackedSubjectHeading
+        return stackedSubjectLiteral
       })
+  }
+
+  /**
+   * Flatten subject headings into a list of objects with a url and a label
+   */
+  flattenSubjectHeadingUrls(heading): BibDetailURL[] | null {
+    if (!heading.label || !heading.uuid) return null
+    const subjectHeadingsArray = []
+
+    // iterate through each nested subject until there's no parent element
+    let currentHeading = heading
+
+    while (currentHeading.parent) {
+      subjectHeadingsArray.unshift(
+        this.getSubjectHeadingUrl(currentHeading.uuid, currentHeading.label)
+      )
+      currentHeading = currentHeading.parent
+    }
+    // add the top level subject heading
+    subjectHeadingsArray.unshift(
+      this.getSubjectHeadingUrl(currentHeading.uuid, currentHeading.label)
+    )
+    return subjectHeadingsArray
+  }
+
+  getSubjectHeadingUrl(uuid: string, label: string): BibDetailURL {
+    return {
+      url: `/subject_headings/${uuid}?label=${encodeURIComponent(label)}`,
+      urlLabel: label.split(" -- ").pop(),
+    }
   }
 }
