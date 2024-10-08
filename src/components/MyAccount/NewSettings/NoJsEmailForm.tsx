@@ -1,4 +1,9 @@
-import { Button, Icon, TextInput } from "@nypl/design-system-react-components"
+import {
+  Button,
+  Icon,
+  TextInput,
+  Text,
+} from "@nypl/design-system-react-components"
 
 const NoJsEmailForm = ({ patronData }) => {
   const tempEmails = patronData?.emails || []
@@ -10,52 +15,93 @@ const NoJsEmailForm = ({ patronData }) => {
         method="POST"
         style={{ width: "100%" }}
       >
-        <input type="hidden" name="_method" value="PUT" />
         <div
           style={{
             display: "flex",
             flexDirection: "row",
-            alignItems: "center",
+            alignItems: "flex-start",
           }}
         >
-          <h3
+          <div
             style={{
               display: "flex",
-              fontWeight: "500",
-              flexDirection: "row",
-              gap: "8px",
-              alignItems: "center",
             }}
           >
-            <Icon name="communicationEmail" size="medium" /> Email
-          </h3>
+            <h3
+              style={{
+                display: "flex",
+                fontWeight: "500",
+                flexDirection: "row",
+                width: "256px",
+                gap: "8px",
+                alignItems: "center",
+              }}
+            >
+              <Icon name="communicationEmail" size="medium" /> Email
+            </h3>
+          </div>
           <div
             style={{
               display: "flex",
               flexDirection: "column",
               paddingLeft: "24px",
               paddingRight: "8px",
-              width: "30%",
               gap: "8px",
             }}
           >
             {tempEmails.map((email, index) => (
-              <TextInput
+              <div
                 key={index}
-                type="email"
-                name={"emails"}
-                defaultValue={email}
-                required
-                id={`email-${index}`}
-                showLabel={false}
-                showHelperInvalidText={false}
-                labelText={"Email"}
-              />
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: "8px",
+                }}
+              >
+                <TextInput
+                  type="email"
+                  name={"emails"}
+                  defaultValue={email}
+                  required
+                  id={`email-${index}`}
+                  showLabel={false}
+                  showHelperInvalidText={false}
+                  labelText={"Email"}
+                  sx={{ width: "300px" }}
+                />
+                {index === 0 && <span style={{ color: "gray" }}>(P)</span>}
+                {index > 0 && (
+                  <button type="submit" name="delete" value={index}>
+                    <Icon
+                      name="actionDelete"
+                      size="large"
+                      color="ui.link.primary"
+                    />
+                  </button>
+                )}
+              </div>
             ))}
+            <Text size="caption" sx={{ marginBottom: 0 }}>
+              {" "}
+              Add an email address:{" "}
+            </Text>
+            <TextInput
+              type="email"
+              name="emails"
+              defaultValue=""
+              id={"email-new"}
+              showLabel={false}
+              showHelperInvalidText={false}
+              labelText="Add new email"
+              sx={{ width: "300px" }}
+            />
           </div>
-          <Button type="submit" sx={{ marginLeft: "32px" }} id={""}>
-            Save changes
-          </Button>
+          <div style={{ justifySelf: "flex-end", marginLeft: "auto" }}>
+            <Button type="submit" id={"submit-emails"}>
+              Save changes
+            </Button>
+          </div>
         </div>
       </form>
     </>

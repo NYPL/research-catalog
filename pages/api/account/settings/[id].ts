@@ -22,13 +22,27 @@ export default async function handler(
   if (req.method == "GET") {
     responseMessage = "Please make a PUT request to this endpoint."
   }
-  if (req.method === "POST" && req.body._method === "PUT") {
+
+  // Account settings form submission without JS.
+  if (req.method === "POST") {
+    const action = req.body.delete ? "delete" : "save"
     const patronId = req.query.id as string
-    const patronData = req.body.emails
+    const patronData = req.body.emails.filter((email) => email.trim() !== "")
 
+    if (action === "delete") {
+      const indexToDelete = parseInt(req.body.delete, 10)
+      if (indexToDelete >= 0) {
+        patronData.splice(indexToDelete, 1)
+      }
+    }
     const emailRegex = /^[^@]+@[^@]+\.[^@]+$/
-    const invalidEmails = patronData.filter((email) => !emailRegex.test(email))
 
+    // Filter out invalid emails
+    const invalidEmails = patronData.filter(
+      (email) => email && !emailRegex.test(email)
+    )
+
+    // If there are invalid emails, redirect back with an error message
     if (invalidEmails.length > 0) {
       const errorMessage = `Please enter a valid email. Invalid emails: ${invalidEmails.join(
         ", "
@@ -42,22 +56,47 @@ export default async function handler(
       return
     }
 
-    if (patronId == cookiePatronId) {
-      const response = await updatePatronSettings(patronId, {
-        emails: patronData,
+    // Remove duplicate emails while keeping the first
+    const uniqueEmails = patronData.reduce((acc, email) => {
+      const normalizedEmail = email.toLowerCase()
+      if (!acc.includes(normalizedEmail)) {
+        acc.push(normalizedEmail)
+      }
+      return acc
+    }, [])
+
+    const duplicateEmails = patronData.length !== uniqueEmails.length
+
+    if (duplicateEmails) {
+      const errorMessage = "Cannot use duplicate emails."
+      res.writeHead(302, {
+        Location: `/research/research-catalog/account/settings?error=${encodeURIComponent(
+          errorMessage
+        )}`,
       })
-      responseStatus = response.status
-      responseMessage = response.message
-    } else {
-      responseStatus = 403
-      responseMessage = "Authenticated patron does not match request"
+      res.end()
+      return
     }
-    res.writeHead(302, {
-      Location: "/research/research-catalog/account/settings?success=true",
+
+    const response = await updatePatronSettings(patronId, {
+      emails: patronData.filter((email) => email !== ""),
     })
+    if (response.status === 200) {
+      res.writeHead(302, {
+        Location: "/research/research-catalog/account/settings?success=true",
+      })
+    } else {
+      const errorMessage = `Error updating emails: ${response.message}`
+      res.writeHead(302, {
+        Location: `/research/research-catalog/account/settings?error=${encodeURIComponent(
+          errorMessage
+        )}`,
+      })
+    }
+
     res.end()
-    return
   }
+
   if (req.method == "PUT") {
     /**  We get the patron id from the request: */
     const patronId = req.query.id as string

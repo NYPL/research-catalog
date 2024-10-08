@@ -149,7 +149,12 @@ const EmailForm = ({ patronData, setIsLoading, setIsSuccess }) => {
             id="add-button"
             buttonType="text"
             onClick={addEmailField}
-            sx={{ justifyContent: "flex-start", width: "300px" }}
+            size="large"
+            sx={{
+              justifyContent: "flex-start",
+              width: "300px",
+              padding: "xxs",
+            }}
           >
             + Add an email address
           </Button>

@@ -13,6 +13,7 @@ import TimedLogoutModal from "../../src/components/MyAccount/TimedLogoutModal"
 import { getIncrementedTime } from "../../src/utils/cookieUtils"
 import { useEffect, useState } from "react"
 import { getPatronData } from "../api/account/[id]"
+import FormValidationMessage from "../../src/components/MyAccount/NewSettings/NoJsFormValidationMessage"
 interface MyAccountPropsType {
   accountData: MyAccountPatronData
   isAuthenticated: boolean
@@ -53,30 +54,6 @@ export default function MyAccount({
     </Text>
   )
 
-  function formValidationMessage(storedQueryString) {
-    const queryString = decodeURIComponent(storedQueryString)
-    const type = queryString.split("=")[0] || ""
-    const message = queryString.split("=")[1] || ""
-    if (type === "success") {
-      return (
-        <Banner
-          sx={{ paddingBottom: "16px" }}
-          content={"Successfully updated settings."}
-          type="positive"
-          isDismissible
-        />
-      )
-    } else {
-      return (
-        <Banner
-          sx={{ paddingBottom: "16px" }}
-          content={message}
-          type="warning"
-          isDismissible
-        />
-      )
-    }
-  }
   useEffect(() => {
     resetCountdown()
     // to avoid a reference error on document in the modal, wait to render it
@@ -103,7 +80,9 @@ export default function MyAccount({
             serverError
           ) : (
             <PatronDataProvider value={{ ...accountData }}>
-              {storedQueryString && formValidationMessage(storedQueryString)}
+              {storedQueryString && (
+                <FormValidationMessage storedQueryString={storedQueryString} />
+              )}
               <ProfileContainer tabsPath={tabsPath} />
             </PatronDataProvider>
           )}
@@ -143,7 +122,8 @@ export async function getServerSideProps({ req, res }) {
   // Parsing path and query from URL
   const tabsPathRegex = /\/account\/(.+)/
   const match = req.url.match(tabsPathRegex)
-  const queryString = req.url.split("?")[1] || "" // Extract query string
+  const queryString = req.url.split("?")[1] || null
+  console.log(queryString)
   const tabsPath = match ? match[1] : null
   const id = patronTokenResponse.decodedPatron.sub
 
@@ -186,6 +166,8 @@ export async function getServerSideProps({ req, res }) {
     }
 
     const storedQueryString = req.cookies.queryParams || ""
+    // Removing query string cookie so it doesn't persist on reload.
+    res.setHeader("Set-Cookie", "queryParams=; Path=/; HttpOnly; Max-Age=0")
     return {
       props: {
         accountData: { checkouts, holds, patron, fines, pickupLocations },
