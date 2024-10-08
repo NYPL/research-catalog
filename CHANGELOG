@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Prerelease
+
+### Updated
+
+- Bib page state optimizations (SCC-4193)
+
 ## [1.3.2] 2024-10-7
 
 ### Fixed
@@ -35,8 +41,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 
-- Bump DS version to 3.4.0
-- Bump nvmrc version to Node 20.
+- Bump nvmrc version to Node 20 and DS package to release candidate 3.4.0-rc.
 - Update error message in Item Filter Year to include new error message prefix from the DS.
 - Integrate view_all query param on client side and remove batched fetch (SCC-4287)
 - Replaced travis with github actions (SCC-4218)

@@ -44,7 +44,6 @@ import {
   parseItemFilterQueryParams,
   areFiltersApplied,
 } from "../../../src/utils/itemFilterUtils"
-import ItemTableData from "../../../src/models/ItemTableData"
 
 interface BibPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -68,11 +67,7 @@ export default function BibPage({
   const metadataTitle = `Item Details | ${SITE_NAME}`
 
   const bib = new Bib(discoveryBibResult)
-  const [itemTableData, setItemTableTata] = useState(
-    new ItemTableData(bib.items, {
-      isArchiveCollection: bib.isArchiveCollection,
-    })
-  )
+  const [itemTableData, setItemTableTata] = useState(bib.itemTableData)
   const [itemsLoading, setItemsLoading] = useState(false)
   const [itemFetchError, setItemFetchError] = useState(false)
 
@@ -149,13 +144,9 @@ export default function BibPage({
         const { discoveryBibResult } = await response.json()
         const refreshedBib = new Bib(discoveryBibResult)
 
+        // Set values that need to be updated in state for the refreshed Bib
         setNumItems(refreshedBib.numItems(filtersAreApplied))
-
-        setItemTableTata(
-          new ItemTableData(refreshedBib.items, {
-            isArchiveCollection: refreshedBib.isArchiveCollection,
-          })
-        )
+        setItemTableTata(refreshedBib.itemTableData)
 
         setItemsLoading(false)
 
