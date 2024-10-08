@@ -66,19 +66,25 @@ export default function BibPage({
   const { push, query } = useRouter()
   const metadataTitle = `Item Details | ${SITE_NAME}`
 
+  // We do not need to preserve the whole bib in state since the bib details are constant
+  // and do not need to be updated in memory every time the item table data is refetched
   const bib = new Bib(discoveryBibResult)
-  const [itemTableData, setItemTableTata] = useState(bib.itemTableData)
-  const [itemsLoading, setItemsLoading] = useState(false)
-  const [itemFetchError, setItemFetchError] = useState(false)
 
-  const [viewAllExpanded, setViewAllExpanded] = useState(viewAllItems)
+  // Item table data / filters state
+  const [itemTableData, setItemTableTata] = useState(bib.itemTableData)
   const [appliedFilters, setAppliedFilters] = useState(
     parseItemFilterQueryParams(query)
   )
   const filtersAreApplied = areFiltersApplied(appliedFilters)
-
-  const [itemTablePage, setItemTablePage] = useState(itemPage)
   const [numItems, setNumItems] = useState(bib.numItems(filtersAreApplied))
+
+  // Item table status state
+  const [itemsLoading, setItemsLoading] = useState(false)
+  const [itemFetchError, setItemFetchError] = useState(false)
+
+  // Pagination state
+  const [viewAllExpanded, setViewAllExpanded] = useState(viewAllItems)
+  const [itemTablePage, setItemTablePage] = useState(itemPage)
 
   const itemTableHeadingRef = useRef<HTMLDivElement>(null)
   const viewAllLoadingTextRef = useRef<HTMLDivElement & HTMLLabelElement>(null)
