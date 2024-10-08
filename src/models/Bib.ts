@@ -107,13 +107,6 @@ export default class Bib {
     }${this.resourceType.toLowerCase()}${totalItems !== 1 ? "s" : ""}`
   }
 
-  getItemsViewAllLoadingMessage(filtersAreApplied = false) {
-    // We don't want to show the number of filtered items since this may change during loading.
-    return `Loading all ${
-      filtersAreApplied ? "matching" : this.numPhysicalItems
-    } items. This may take a few moments...`
-  }
-
   getTitleDisplayFromResult(result: DiscoveryBibResult) {
     if (!result.titleDisplay || !result.titleDisplay.length) {
       const author =
