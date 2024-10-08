@@ -7,7 +7,6 @@ import {
 
 const NoJsEmailForm = ({ patronData }) => {
   const tempEmails = patronData?.emails || []
-
   return (
     <>
       <form
@@ -83,8 +82,7 @@ const NoJsEmailForm = ({ patronData }) => {
               </div>
             ))}
             <Text size="caption" sx={{ marginBottom: 0 }}>
-              {" "}
-              Add an email address:{" "}
+              Add an email address:
             </Text>
             <TextInput
               type="email"

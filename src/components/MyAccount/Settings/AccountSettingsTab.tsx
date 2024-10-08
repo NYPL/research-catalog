@@ -61,7 +61,6 @@ const AccountSettingsTab = () => {
     e.preventDefault()
     setIsLoading(true)
     const payload = parseAccountSettingsPayload(e.target, patron)
-    console.log(payload)
     const response = await fetch(
       `/research/research-catalog/api/account/settings/${patron.id}`,
       {
@@ -72,7 +71,6 @@ const AccountSettingsTab = () => {
         body: JSON.stringify(payload),
       }
     )
-    console.log(response)
     if (response.status === 200) {
       await getMostUpdatedSierraAccountData()
       setCurrentlyEditing(false)

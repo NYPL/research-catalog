@@ -21,15 +21,6 @@ const EmailForm = ({ patronData, setIsLoading, setIsSuccess }) => {
     return emailRegex.test(email)
   }
 
-  const handleRemoveEmail = (index) => {
-    const updatedEmails = tempEmails.filter((_, i) => i !== index)
-    setTempEmails(updatedEmails)
-
-    // Immediately revalidate remaining emails.
-    const hasInvalidEmail = updatedEmails.some((email) => !validateEmail(email))
-    setError(hasInvalidEmail)
-  }
-
   const handleInputChange = (e, index) => {
     const { value } = e.target
     const updatedEmails = [...tempEmails]
@@ -47,11 +38,35 @@ const EmailForm = ({ patronData, setIsLoading, setIsSuccess }) => {
     }
   }
 
+  const handleRemoveEmail = (index) => {
+    const updatedEmails = tempEmails.filter((_, i) => i !== index)
+    setTempEmails(updatedEmails)
+
+    // Immediately revalidate remaining emails.
+    const hasInvalidEmail = updatedEmails.some((email) => !validateEmail(email))
+    setError(hasInvalidEmail)
+  }
+
+  const handleAddEmail = () => {
+    const updatedEmails = [...tempEmails, ""]
+    setTempEmails(updatedEmails)
+
+    // Immediately revalidate all emails.
+    const hasInvalidEmail = updatedEmails.some((email) => !validateEmail(email))
+    setError(hasInvalidEmail)
+  }
+
   const handleClearableCallback = (index) => {
     const updatedEmails = [...tempEmails]
     updatedEmails[index] = ""
     setTempEmails(updatedEmails)
     setError(true)
+  }
+
+  const cancelEditing = () => {
+    setTempEmails([...emails])
+    setIsEditing(false)
+    setError(false)
   }
 
   const submitEmails = async () => {
@@ -82,21 +97,6 @@ const EmailForm = ({ patronData, setIsLoading, setIsSuccess }) => {
     } finally {
       setIsLoading(false)
     }
-  }
-
-  const cancelEditing = () => {
-    setTempEmails([...emails])
-    setIsEditing(false)
-    setError(false)
-  }
-
-  const addEmailField = () => {
-    const updatedEmails = [...tempEmails, ""]
-    setTempEmails(updatedEmails)
-
-    // Immediately revalidate all emails.
-    const hasInvalidEmail = updatedEmails.some((email) => !validateEmail(email))
-    setError(hasInvalidEmail)
   }
 
   return (
@@ -148,7 +148,7 @@ const EmailForm = ({ patronData, setIsLoading, setIsSuccess }) => {
           <Button
             id="add-button"
             buttonType="text"
-            onClick={addEmailField}
+            onClick={handleAddEmail}
             size="large"
             sx={{
               justifyContent: "flex-start",

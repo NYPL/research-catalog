@@ -58,9 +58,9 @@ export default async function handler(
 
     // Remove duplicate emails while keeping the first
     const uniqueEmails = patronData.reduce((acc, email) => {
-      const normalizedEmail = email.toLowerCase()
-      if (!acc.includes(normalizedEmail)) {
-        acc.push(normalizedEmail)
+      const lowercaseEmail = email.toLowerCase()
+      if (!acc.includes(lowercaseEmail)) {
+        acc.push(lowercaseEmail)
       }
       return acc
     }, [])

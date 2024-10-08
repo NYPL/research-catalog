@@ -1,4 +1,4 @@
-import { Banner, Text } from "@nypl/design-system-react-components"
+import { Text } from "@nypl/design-system-react-components"
 import Head from "next/head"
 
 import Layout from "../../src/components/Layout/Layout"
@@ -123,7 +123,6 @@ export async function getServerSideProps({ req, res }) {
   const tabsPathRegex = /\/account\/(.+)/
   const match = req.url.match(tabsPathRegex)
   const queryString = req.url.split("?")[1] || null
-  console.log(queryString)
   const tabsPath = match ? match[1] : null
   const id = patronTokenResponse.decodedPatron.sub
 
@@ -154,7 +153,7 @@ export async function getServerSideProps({ req, res }) {
         const matchedPath = allowedPaths.find((path) =>
           tabsPath.startsWith(path)
         )
-        if (tabsPath !== matchedPath) {
+        if (tabsPath != matchedPath) {
           return {
             redirect: {
               destination: "/account/" + matchedPath,
@@ -165,8 +164,8 @@ export async function getServerSideProps({ req, res }) {
       }
     }
 
+    // Saving the string and removing the cookie so it doesn't persist on reload.
     const storedQueryString = req.cookies.queryParams || ""
-    // Removing query string cookie so it doesn't persist on reload.
     res.setHeader("Set-Cookie", "queryParams=; Path=/; HttpOnly; Max-Age=0")
     return {
       props: {
