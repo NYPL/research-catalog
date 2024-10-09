@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Add optional chaining to to value in isRtl util to fix 500 error when bib detail url is missing a label (SCC-4308)
+- Add optional chaining to value in isRtl util to fix 500 error when bib detail url is missing a label (SCC-4308)
 
 ## [1.3.2] 2024-10-7
 
