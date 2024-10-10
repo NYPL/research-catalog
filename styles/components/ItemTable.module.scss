@@ -33,11 +33,12 @@
       th,
       td {
         padding-top: 0;
+        padding-left: 0;
         box-sizing: border-box;
 
-        &:nth-child(2) {
-          padding-left: 0;
-        }
+        // &:first-of-type {
+        //   padding-left: 0;
+        // }
       }
     }
   }
