@@ -33,7 +33,7 @@ export const rtlOrLtr = (value: string) => {
 
 // The "\u200F" right-to-left mark is found at the beginning of fields known
 // to be written in a script that reads from right to left
-const isRtl = (value: string) => value.substring(0, 1) === "\u200F"
+const isRtl = (value: string): boolean => value?.substring(0, 1) === "\u200F"
 
 export const isItTheLastElement = (i, array) => !(i < array.length - 1)
 
