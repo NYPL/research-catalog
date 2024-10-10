@@ -50,6 +50,7 @@ export default function MyAccount({
       assistance.
     </Text>
   )
+
   useEffect(() => {
     resetCountdown()
     // to avoid a reference error on document in the modal, wait to render it
@@ -111,16 +112,17 @@ export async function getServerSideProps({ req, res }) {
       },
     }
   }
-  // Parsing path from url to pass to ProfileTabs.
+
+  // Parsing path from URL
   const tabsPathRegex = /\/account\/(.+)/
   const match = req.url.match(tabsPathRegex)
   const tabsPath = match ? match[1] : null
   const id = patronTokenResponse.decodedPatron.sub
+
   try {
     const { checkouts, holds, patron, fines, pickupLocations } =
       await getPatronData(id)
-    /*  Redirecting invalid paths (including /overdues if user has none) and
-    // cleaning extra parts off valid paths. */
+    // Redirecting invalid paths and cleaning extra parts off valid paths.
     if (tabsPath) {
       const allowedPaths = ["items", "requests", "overdues", "settings"]
       if (
@@ -147,6 +149,7 @@ export async function getServerSideProps({ req, res }) {
         }
       }
     }
+
     return {
       props: {
         accountData: { checkouts, holds, patron, fines, pickupLocations },
