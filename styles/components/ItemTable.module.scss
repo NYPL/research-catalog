@@ -25,15 +25,16 @@
 
   &.inSearchResult {
     margin-top: 0;
+    width: fit-content;
 
     tr {
       border: 0 !important;
 
       th,
-      td,
-      th:first-of-type,
-      td:first-of-type {
+      td {
         padding-top: 0;
+        padding-left: 0;
+        box-sizing: border-box;
       }
     }
   }
