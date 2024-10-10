@@ -18,7 +18,6 @@ interface MyAccountPropsType {
   isAuthenticated: boolean
   tabsPath?: string
   renderAuthServerError?: boolean
-  storedQueryString?
 }
 
 export default function MyAccount({
