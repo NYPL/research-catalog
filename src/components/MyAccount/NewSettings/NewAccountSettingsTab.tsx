@@ -3,10 +3,9 @@ import {
   Flex,
   Banner,
 } from "@nypl/design-system-react-components"
-import { useContext, useEffect, useState } from "react"
+import { useContext, useState } from "react"
 import { PatronDataContext } from "../../../context/PatronDataContext"
 import EmailForm from "./EmailForm"
-import NoJsEmailForm from "./NoJsEmailForm"
 
 const NewAccountSettingsTab = () => {
   const {
@@ -14,11 +13,6 @@ const NewAccountSettingsTab = () => {
   } = useContext(PatronDataContext)
   const [isLoading, setIsLoading] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
-  const [isJsEnabled, setIsJsEnabled] = useState(false)
-
-  useEffect(() => {
-    setIsJsEnabled(true)
-  }, [])
 
   return isLoading ? (
     <SkeletonLoader contentSize={2} showImage={false} headingSize={0} />
@@ -35,15 +29,11 @@ const NewAccountSettingsTab = () => {
         />
       )}
       <Flex sx={{ marginTop: "xl" }}>
-        {isJsEnabled ? (
-          <EmailForm
-            patronData={patron}
-            setIsLoading={setIsLoading}
-            setIsSuccess={setIsSuccess}
-          />
-        ) : (
-          <NoJsEmailForm patronData={patron} />
-        )}
+        <EmailForm
+          patronData={patron}
+          setIsLoading={setIsLoading}
+          setIsSuccess={setIsSuccess}
+        />
       </Flex>
     </>
   )
