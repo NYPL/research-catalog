@@ -23,7 +23,7 @@ export interface LinkedBibDetail {
 
 export interface BibDetailURL {
   url: string
-  urlLabel: string
+  urlLabel?: string
 }
 
 export interface FieldMapping {
