@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next"
-import { fetchBib } from "../../../src/server/api/bib"
-import { PATHS, BASE_URL } from "../../../src/config/constants"
+import { fetchBib } from "../../../../src/server/api/bib"
 
 /**
  * Default API route handler for Hold request / EDD request pages
