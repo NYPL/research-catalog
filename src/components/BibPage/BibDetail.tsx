@@ -40,7 +40,6 @@ const BibDetails = ({ details, heading }: BibDetailsProps) => {
       >
         {details.map(
           (detail: BibDetail | LinkedBibDetail | SubjectHeadingDetail) => {
-            console.log("detail", detail)
             if (!detail) return
             if (detail.label === "Subject") {
               return CompoundSubjectHeadingElement(

@@ -159,6 +159,9 @@ export default class BibDetails {
   }
 
   buildHoldingDetail(holding, fieldMapping: FieldMapping) {
+    if (fieldMapping.field === "location") {
+      console.log("location", fieldMapping.field)
+    }
     const bibFieldValue =
       fieldMapping.field === "location" &&
       Array.isArray(holding[fieldMapping.field])
