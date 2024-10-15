@@ -42,7 +42,7 @@ interface BibPropsType {
 /**
  * The Bib page is responsible for fetching and displaying a single Bib's details.
  */
-export default function BibPage({
+export default function HoldRequestPage({
   discoveryBibResult,
   discoveryItemResult,
   isAuthenticated,
@@ -190,7 +190,7 @@ export async function getServerSideProps({ params, req, res }) {
         redirectCount + 1
       }; Max-Age=10; path=/; domain=.nypl.org;`
     )
-    const redirect = getLoginRedirect(req, `/hold/request/${id}`)
+    const redirect = getLoginRedirect(req, "/account")
 
     return {
       redirect: {
@@ -226,6 +226,7 @@ export async function getServerSideProps({ params, req, res }) {
     }
   } catch (error) {
     console.log(error)
+
     return {
       redirect: {
         destination: PATHS["404"],
