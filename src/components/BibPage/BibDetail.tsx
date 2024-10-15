@@ -1,4 +1,4 @@
-import { Heading, List } from "@nypl/design-system-react-components"
+import { Heading, List, Text } from "@nypl/design-system-react-components"
 import { kebabCase } from "lodash"
 import { type ReactElement } from "react"
 
@@ -54,7 +54,17 @@ const BibDetails = ({ details, heading }: BibDetailsProps) => {
 const DetailElement = (label: string, listChildren: ReactNode[]) => {
   return (
     <>
-      <dt>{label}</dt>
+      <dt>
+        <Text
+          fontSize={{
+            base: "mobile.body.body2",
+            md: "desktop.body.body2",
+          }}
+          isBold
+        >
+          {label}
+        </Text>
+      </dt>
       <dd>
         <List noStyling data-testid={kebabCase(label)} type="ol">
           {listChildren}

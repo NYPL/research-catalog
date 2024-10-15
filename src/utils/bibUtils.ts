@@ -4,7 +4,7 @@ import {
   ITEM_FILTER_PARAMS,
 } from "../config/constants"
 import type { BibQueryParams, DiscoveryBibResult } from "../types/bibTypes"
-import type Item from "../models/Item"
+import type { DiscoveryItemResult } from "../types/itemTypes"
 import { getPaginationOffsetStrings } from "./appUtils"
 
 /**
@@ -125,8 +125,5 @@ export function getBibQueryString(
 export const findItemInBibResult = (
   bibResult: DiscoveryBibResult,
   itemId: string
-): Item | null => {
-  console.log(bibResult)
-  // console.log(itemId)
-  return null
-}
+): DiscoveryItemResult | undefined =>
+  bibResult?.items?.find((item) => item.uri === itemId)

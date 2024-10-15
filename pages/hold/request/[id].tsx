@@ -1,4 +1,6 @@
 import Head from "next/head"
+import { useState } from "react"
+
 import {
   Heading,
   List,
@@ -39,8 +41,8 @@ import type { DiscoveryBibResult } from "../../../src/types/bibTypes"
 import type { DiscoveryItemResult } from "../../../src/types/itemTypes"
 
 interface BibPropsType {
-  discoveryBibResult?: DiscoveryBibResult
-  discoveryItemResult?: DiscoveryItemResult
+  discoveryBibResult: DiscoveryBibResult
+  discoveryItemResult: DiscoveryItemResult
   isAuthenticated?: boolean
 }
 
@@ -56,8 +58,7 @@ export default function BibPage({
   // console.log("discoveryBibResult", discoveryBibResult)
   // console.log("discoveryItemResult", discoveryItemResult)
   const bib = new Bib(discoveryBibResult)
-  console.log("discoveryItemResult", discoveryItemResult)
-  const item = discoveryItemResult ? new Item(discoveryItemResult, bib) : null
+  const item = new Item(discoveryItemResult, bib)
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -76,7 +77,7 @@ export default function BibPage({
         <meta name="twitter:title" content={metadataTitle} key="tw-title" />
         <title key="main-title">{metadataTitle}</title>
       </Head>
-      <Layout isAuthenticated={isAuthenticated} activePage="bib">
+      <Layout isAuthenticated={isAuthenticated} activePage="search">
         <Heading level="h2" mb="l">
           Request for on-site use
         </Heading>
@@ -85,14 +86,23 @@ export default function BibPage({
           type="dl"
           showRowDividers={false}
           className={bibDetailStyles.bibDetails}
+          mb="xs"
         >
           <LinkedDetailElement
             label="Title"
-            value={[{ url: `${PATHS.BIB}/${bib.id}`, urlLabel: bib.title }]}
+            value={[
+              { url: `${PATHS.BIB}/${bib.id}`, urlLabel: bib.titleDisplay },
+            ]}
             link="internal"
           />
+          <PlainTextElement label="Call number" value={[item.callNumber]} />
+          {item.volume ? (
+            <PlainTextElement label="Volume/date" value={[item.volume]} />
+          ) : null}
         </List>
-        <Heading level="h3">Choose a pickup location</Heading>
+        <Heading level="h3" size="heading4" mb="m">
+          Choose a pickup location
+        </Heading>
         <Form
           id="holdForm"
           // We are using a post request on hold requests when JS is disabled
@@ -109,6 +119,7 @@ export default function BibPage({
               defaultValue="1"
               isRequired
               showLabel={false}
+              mb="xs"
             >
               <Radio
                 id="1"
@@ -162,99 +173,10 @@ export default function BibPage({
             </Button>
           </ButtonGroup>
         </Form>
-        <Heading level="h3" mb="l">
-          Frequently asked questions
-        </Heading>
-        <Accordion accordionData={faqContentData} isDefaultOpen />
       </Layout>
     </>
   )
 }
-
-const faqContentData: AccordionDataProps[] = [
-  {
-    label: "What's next?",
-    panel: (
-      <>
-        <Text>
-          Please allow a few minutes for this item to show up in your{" "}
-          <RCLink href="/account">patron account</RCLink>.
-        </Text>
-        <Text>
-          The item will be listed as &quot;Ready for pickup&quot; under your
-          holds tab when it is available. You will receive an email confirmation
-          after your item has arrived.
-        </Text>
-      </>
-    ),
-  },
-  {
-    label: "When will my item be ready for pickup?",
-    panel: (
-      <>
-        <Text>
-          <strong>Items stored on-site:</strong> Materials requested up to an
-          hour before closing are usually ready for pickup within an hour.
-          Materials requested within an hour of closing or outside business
-          hours are ready about an hour after opening on the next business day.
-        </Text>
-        <Text>
-          <strong>Items stored off-site:</strong> Materials requested before
-          2:30 PM are usually ready for pickup about an hour after opening the
-          next day (check{" "}
-          <ExternalLink href="https://www.nypl.org/">nypl.org</ExternalLink> for
-          library hours). Materials requested after 2:30 PM Mon–Thu are usually
-          ready in two days; materials requested after 2:30 PM Fri–Sun are ready
-          on Tuesday. Some materials are not delivered on Saturdays.
-        </Text>
-      </>
-    ),
-  },
-  {
-    label: "How long will my item be available for?",
-    panel: (
-      <>
-        <Text>
-          We will hold books for up to 14 days, so you can request materials up
-          to two weeks in advance.
-        </Text>
-      </>
-    ),
-  },
-  {
-    label: "How do I pick up my item once it is ready?",
-    panel: (
-      <>
-        <Text>
-          Once your item is ready for pickup, please arrive at the pickup
-          location during business hours and proceed to a help desk. An NYPL
-          staff member will check your item out to you.
-        </Text>
-      </>
-    ),
-  },
-  {
-    label: "How do I cancel my request?",
-    panel: (
-      <>
-        <Text>
-          If you would like to cancel your request or have questions, please{" "}
-          <ExternalLink href="https://gethelp.nypl.org/customer/portal/emails/new">
-            email us
-          </ExternalLink>{" "}
-          or call 917-ASK-NYPL (
-          <ExternalLink href="tel:19172756975">917-275-6975</ExternalLink>).
-          Processed requests can also be canceled from the holds tab in your
-          patron account.
-        </Text>
-        <Text>
-          For more information about our requesting services, please see
-          Requesting Research Materials.
-        </Text>
-      </>
-    ),
-  },
-]
 
 export async function getServerSideProps({ params, req, res }) {
   const { id } = params
@@ -276,6 +198,7 @@ export async function getServerSideProps({ params, req, res }) {
       }; Max-Age=10; path=/; domain=.nypl.org;`
     )
     const redirect = getLoginRedirect(req, `/hold/request/${id}`)
+
     return {
       redirect: {
         destination: redirect,
@@ -294,7 +217,17 @@ export async function getServerSideProps({ params, req, res }) {
     const { discoveryBibResult } = await fetchBib(bibId, {
       all_items: true,
     })
-    const discoveryItemResult = findItemInBibResult(discoveryBibResult, itemId)
+    const discoveryItemResult =
+      discoveryBibResult && findItemInBibResult(discoveryBibResult, itemId)
+
+    if (!discoveryItemResult) {
+      return {
+        redirect: {
+          destination: PATHS["404"],
+          permanent: false,
+        },
+      }
+    }
 
     return {
       props: { discoveryBibResult, discoveryItemResult, isAuthenticated },
