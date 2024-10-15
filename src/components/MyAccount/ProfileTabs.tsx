@@ -1,7 +1,6 @@
 import { Tabs, Text } from "@nypl/design-system-react-components"
 import { useRouter } from "next/router"
 
-import AccountSettingsTab from "./Settings/AccountSettingsTab"
 import CheckoutsTab from "./CheckoutsTab/CheckoutsTab"
 import RequestsTab from "./RequestsTab/RequestsTab"
 import FeesTab from "./FeesTab/FeesTab"

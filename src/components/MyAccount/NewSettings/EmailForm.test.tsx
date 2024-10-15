@@ -25,11 +25,7 @@ describe("email form", () => {
         pickupLocations: filteredPickupLocations,
       }}
     >
-      <EmailForm
-        patronData={processedPatron}
-        setIsLoading={mockSetIsLoading}
-        setIsSuccess={mockSetIsSuccess}
-      />
+      <EmailForm patronData={processedPatron} setIsSuccess={mockSetIsSuccess} />
     </PatronDataProvider>
   )
 
@@ -54,6 +50,9 @@ describe("email form", () => {
     expect(
       screen.getByRole("button", { name: /save changes/i })
     ).toBeInTheDocument()
+    expect(
+      screen.getByRole("button", { name: /edit/i })
+    ).not.toBeInTheDocument()
   })
 
   it("validates email input correctly", () => {
@@ -80,7 +79,9 @@ describe("email form", () => {
       screen.getByRole("button", { name: /\+ add an email address/i })
     )
 
-    expect(screen.getAllByLabelText("Update email").length).toBe(3)
+    expect(screen.getAllByLabelText("Update email").length).toBe(
+      processedPatron.emails.length + 1
+    )
   })
 
   it("removes an email when delete icon is clicked", () => {
