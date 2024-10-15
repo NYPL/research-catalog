@@ -15,15 +15,21 @@ import {
 import Layout from "../../../src/components/Layout/Layout"
 import RCLink from "../../../src/components/Links/RCLink/RCLink"
 import ExternalLink from "../../../src/components/Links/ExternalLink/ExternalLink"
-import { SITE_NAME, BASE_URL } from "../../../src/config/constants"
+import { SITE_NAME, BASE_URL, PATHS } from "../../../src/config/constants"
 
 import { findItemInBibResult } from "../../../src/utils/bibUtils"
 import { fetchBib } from "../../../src/server/api/bib"
-import initializePatronTokenAuth from "../../../src/server/auth"
+import initializePatronTokenAuth, {
+  doRedirectBasedOnNyplAccountRedirects,
+  getLoginRedirect,
+} from "../../../src/server/auth"
+import { getPatronData } from "../../api/account/[id]"
+import type { DiscoveryBibResult } from "../../../src/types/bibTypes"
+import type { DiscoveryItemResult } from "../../../src/types/itemTypes"
 
 interface BibPropsType {
-  bibId?: string
-  itemId?: string
+  discoveryBibResult?: DiscoveryBibResult
+  discoveryItemResult?: DiscoveryItemResult
   isAuthenticated?: boolean
 }
 
@@ -31,13 +37,13 @@ interface BibPropsType {
  * The Bib page is responsible for fetching and displaying a single Bib's details.
  */
 export default function BibPage({
-  bibId,
-  itemId,
+  discoveryBibResult,
+  discoveryItemResult,
   isAuthenticated,
 }: BibPropsType) {
   const metadataTitle = `Item Request | ${SITE_NAME}`
-  console.log("bibId", bibId)
-  console.log("itemId", itemId)
+  console.log("discoveryBibResult", discoveryBibResult)
+  console.log("discoveryItemResult", discoveryItemResult)
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -224,18 +230,55 @@ const faqContentData: AccordionDataProps[] = [
   },
 ]
 
-export async function getServerSideProps({ params, req }) {
-  const { id } = params
-  const [bibId, itemId] = id.split("-")
-  const { discoveryBibResult, annotatedMarc, status } = await fetchBib(id, {
-    all_items: true,
-  })
-  const item = findItemInBibResult(discoveryBibResult, itemId)
-  // console.log("item", item)
+export async function getServerSideProps({ params, req, res }) {
+  // authentication redirect
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const isAuthenticated = patronTokenResponse.isTokenValid
+  const redirectTrackerCookie = req.cookies["nyplAccountRedirects"]
+  const redirectCount = parseInt(redirectTrackerCookie, 10) || 0
+  const redirectBasedOnNyplAccountRedirects =
+    doRedirectBasedOnNyplAccountRedirects(redirectCount)
 
-  return {
-    props: { bibId, itemId, isAuthenticated },
+  // If we end up not authenticated 3 times after redirecting to the login url, don't redirect.
+  if (redirectBasedOnNyplAccountRedirects && !isAuthenticated) {
+    res.setHeader(
+      "Set-Cookie",
+      `nyplAccountRedirects=${
+        redirectCount + 1
+      }; Max-Age=10; path=/; domain=.nypl.org;`
+    )
+    const redirect = getLoginRedirect(req, "/account")
+    return {
+      redirect: {
+        destination: redirect,
+        permanent: false,
+      },
+    }
+  }
+
+  try {
+    const patronId = patronTokenResponse.decodedPatron.sub
+    const { patron } = await getPatronData(patronId)
+    console.log(patron)
+
+    // fetch bib and item
+    const { id } = params
+    const [bibId, itemId] = id.split("-")
+    const { discoveryBibResult } = await fetchBib(bibId, {
+      all_items: true,
+    })
+    const discoveryItemResult = findItemInBibResult(discoveryBibResult, itemId)
+
+    return {
+      props: { discoveryBibResult, discoveryItemResult, isAuthenticated },
+    }
+  } catch (error) {
+    console.log(error)
+    return {
+      redirect: {
+        destination: PATHS["404"],
+        permanent: false,
+      },
+    }
   }
 }
