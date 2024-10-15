@@ -54,9 +54,7 @@ describe("email form", () => {
     expect(
       screen.getByRole("button", { name: /save changes/i })
     ).toBeInTheDocument()
-    expect(
-      screen.getByRole("button", { name: /edit/i })
-    ).not.toBeInTheDocument()
+    expect(screen.queryByText(/edit/)).not.toBeInTheDocument()
   })
 
   it("validates email input correctly", () => {
