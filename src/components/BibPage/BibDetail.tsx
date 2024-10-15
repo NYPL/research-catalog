@@ -25,7 +25,13 @@ const BibDetails = ({ details, heading }: BibDetailsProps) => {
   return (
     details?.length > 0 && (
       <List
-        title={heading && <Heading level="three">{heading}</Heading>}
+        title={
+          heading && (
+            <Heading level="three" border="none">
+              {heading}
+            </Heading>
+          )
+        }
         noStyling
         type="dl"
         showRowDividers={false}
