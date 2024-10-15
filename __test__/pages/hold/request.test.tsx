@@ -136,7 +136,7 @@ describe("Hold Request page", () => {
     })
 
     it("renders a hold request form", () => {
-      expect(screen.getAllByTestId("hold-request-form")[0]).toBeInTheDocument()
+      expect(screen.getByTestId("hold-request-form")).toBeInTheDocument()
     })
   })
 })
