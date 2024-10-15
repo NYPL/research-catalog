@@ -1,6 +1,7 @@
 import Head from "next/head"
 import {
   Heading,
+  List,
   Form,
   FormField,
   RadioGroup,
@@ -15,6 +16,10 @@ import {
 import Layout from "../../../src/components/Layout/Layout"
 import RCLink from "../../../src/components/Links/RCLink/RCLink"
 import ExternalLink from "../../../src/components/Links/ExternalLink/ExternalLink"
+import {
+  PlainTextElement,
+  LinkedDetailElement,
+} from "../../../src/components/BibPage/BibDetail"
 import { SITE_NAME, BASE_URL, PATHS } from "../../../src/config/constants"
 
 import { findItemInBibResult } from "../../../src/utils/bibUtils"
@@ -24,6 +29,12 @@ import initializePatronTokenAuth, {
   getLoginRedirect,
 } from "../../../src/server/auth"
 import { getPatronData } from "../../api/account/[id]"
+
+import Bib from "../../../src/models/Bib"
+import Item from "../../../src/models/Item"
+
+import bibDetailStyles from "../../../styles/components/BibDetails.module.scss"
+
 import type { DiscoveryBibResult } from "../../../src/types/bibTypes"
 import type { DiscoveryItemResult } from "../../../src/types/itemTypes"
 
@@ -42,8 +53,11 @@ export default function BibPage({
   isAuthenticated,
 }: BibPropsType) {
   const metadataTitle = `Item Request | ${SITE_NAME}`
-  console.log("discoveryBibResult", discoveryBibResult)
+  // console.log("discoveryBibResult", discoveryBibResult)
+  // console.log("discoveryItemResult", discoveryItemResult)
+  const bib = new Bib(discoveryBibResult)
   console.log("discoveryItemResult", discoveryItemResult)
+  const item = discoveryItemResult ? new Item(discoveryItemResult, bib) : null
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -66,6 +80,18 @@ export default function BibPage({
         <Heading level="h2" mb="l">
           Request for on-site use
         </Heading>
+        <List
+          noStyling
+          type="dl"
+          showRowDividers={false}
+          className={bibDetailStyles.bibDetails}
+        >
+          <LinkedDetailElement
+            label="Title"
+            value={[{ url: `${PATHS.BIB}/${bib.id}`, urlLabel: bib.title }]}
+            link="internal"
+          />
+        </List>
         <Heading level="h3">Choose a pickup location</Heading>
         <Form
           id="holdForm"
@@ -139,7 +165,7 @@ export default function BibPage({
         <Heading level="h3" mb="l">
           Frequently asked questions
         </Heading>
-        <Accordion accordionData={faqContentData} />
+        <Accordion accordionData={faqContentData} isDefaultOpen />
       </Layout>
     </>
   )
@@ -230,10 +256,9 @@ const faqContentData: AccordionDataProps[] = [
   },
 ]
 
-export async function getServerSideProps({ params, req, res, context }) {
+export async function getServerSideProps({ params, req, res }) {
   const { id } = params
-  console.log("params", params)
-  console.log("context", context)
+
   // authentication redirect
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const isAuthenticated = patronTokenResponse.isTokenValid

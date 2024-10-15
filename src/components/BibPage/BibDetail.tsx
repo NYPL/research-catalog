@@ -33,6 +33,7 @@ const BibDetails = ({ details, heading }: BibDetailsProps) => {
       >
         {details.map(
           (detail: BibDetail | LinkedBibDetail | SubjectHeadingDetail) => {
+            console.log("detail", detail)
             if (!detail) return
             if (detail.label === "Subject") {
               return CompoundSubjectHeadingElement(
@@ -63,7 +64,7 @@ const DetailElement = (label: string, listChildren: ReactNode[]) => {
   )
 }
 
-const PlainTextElement = (field: BibDetail) => {
+export const PlainTextElement = (field: BibDetail) => {
   const values = field?.value?.map((val: string, i: number) => {
     const stringDirection = rtlOrLtr(val)
     return (
@@ -110,7 +111,7 @@ const SingleSubjectHeadingElement = (subjectHeadingUrls: BibDetailURL[]) => {
   )
 }
 
-const LinkedDetailElement = (field: LinkedBibDetail) => {
+export const LinkedDetailElement = (field: LinkedBibDetail) => {
   const internalOrExternal = field.link
   const values = field.value.map((urlInfo: BibDetailURL, i) => {
     return (
