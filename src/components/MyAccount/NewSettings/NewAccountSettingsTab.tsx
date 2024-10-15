@@ -8,6 +8,7 @@ const NewAccountSettingsTab = () => {
     updatedAccountData: { patron },
   } = useContext(PatronDataContext)
   const [isSuccess, setIsSuccess] = useState(false)
+  const [isFailure, setIsFailure] = useState(false)
 
   return (
     <>
@@ -21,8 +22,24 @@ const NewAccountSettingsTab = () => {
           sx={{ marginTop: "m" }}
         />
       )}
+      {isFailure && (
+        <Banner
+          isDismissible
+          content={
+            <div style={{ alignItems: "center" }}>
+              Your changes were not saved.
+            </div>
+          }
+          type="warning"
+          sx={{ marginTop: "m" }}
+        />
+      )}
       <Flex sx={{ marginTop: "xl" }}>
-        <EmailForm patronData={patron} setIsSuccess={setIsSuccess} />
+        <EmailForm
+          patronData={patron}
+          setIsSuccess={setIsSuccess}
+          setIsFailure={setIsFailure}
+        />
       </Flex>
     </>
   )

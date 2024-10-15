@@ -10,7 +10,7 @@ import { useContext, useState } from "react"
 import { PatronDataContext } from "../../../context/PatronDataContext"
 import SaveCancelButtons from "./SaveCancelButtons"
 
-const EmailForm = ({ patronData, setIsSuccess }) => {
+const EmailForm = ({ patronData, setIsSuccess, setIsFailure }) => {
   const { patronDataLoading, getMostUpdatedSierraAccountData } =
     useContext(PatronDataContext)
   const [emails, setEmails] = useState(patronData?.emails || [])
@@ -95,6 +95,7 @@ const EmailForm = ({ patronData, setIsSuccess }) => {
         setIsSuccess(true)
         setIsEditing(false)
       } else {
+        setIsFailure(true)
         setTempEmails([...emails])
       }
     } catch (error) {

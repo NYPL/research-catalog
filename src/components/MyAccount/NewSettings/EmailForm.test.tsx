@@ -6,6 +6,7 @@ import { processedPatron } from "../../../../__test__/fixtures/processedMyAccoun
 
 describe("email form", () => {
   const mockSetIsSuccess = jest.fn()
+  const mockSetIsFailure = jest.fn()
 
   beforeEach(() => {
     jest.clearAllMocks()
@@ -24,7 +25,11 @@ describe("email form", () => {
         pickupLocations: filteredPickupLocations,
       }}
     >
-      <EmailForm patronData={processedPatron} setIsSuccess={mockSetIsSuccess} />
+      <EmailForm
+        patronData={processedPatron}
+        setIsSuccess={mockSetIsSuccess}
+        setIsFailure={mockSetIsFailure}
+      />
     </PatronDataProvider>
   )
 
