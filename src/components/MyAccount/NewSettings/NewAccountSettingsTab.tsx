@@ -1,8 +1,4 @@
-import {
-  SkeletonLoader,
-  Flex,
-  Banner,
-} from "@nypl/design-system-react-components"
+import { Flex, Banner } from "@nypl/design-system-react-components"
 import { useContext, useState } from "react"
 import { PatronDataContext } from "../../../context/PatronDataContext"
 import EmailForm from "./EmailForm"
@@ -11,12 +7,9 @@ const NewAccountSettingsTab = () => {
   const {
     updatedAccountData: { patron },
   } = useContext(PatronDataContext)
-  const [isLoading, setIsLoading] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
 
-  return isLoading ? (
-    <SkeletonLoader contentSize={2} showImage={false} headingSize={0} />
-  ) : (
+  return (
     <>
       {isSuccess && (
         <Banner
@@ -29,11 +22,7 @@ const NewAccountSettingsTab = () => {
         />
       )}
       <Flex sx={{ marginTop: "xl" }}>
-        <EmailForm
-          patronData={patron}
-          setIsLoading={setIsLoading}
-          setIsSuccess={setIsSuccess}
-        />
+        <EmailForm patronData={patron} setIsSuccess={setIsSuccess} />
       </Flex>
     </>
   )

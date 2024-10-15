@@ -4,13 +4,17 @@ import {
   Text,
   Flex,
   Button,
+  SkeletonLoader,
 } from "@nypl/design-system-react-components"
 import { useContext, useState } from "react"
 import { PatronDataContext } from "../../../context/PatronDataContext"
+import SaveCancelButtons from "./SaveCancelButtons"
 
-const EmailForm = ({ patronData, setIsLoading, setIsSuccess }) => {
-  const { getMostUpdatedSierraAccountData } = useContext(PatronDataContext)
+const EmailForm = ({ patronData, setIsSuccess }) => {
+  const { patronDataLoading, getMostUpdatedSierraAccountData } =
+    useContext(PatronDataContext)
   const [emails, setEmails] = useState(patronData?.emails || [])
+  const [isLoading, setIsLoading] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
   const [error, setError] = useState(false)
 
@@ -27,8 +31,9 @@ const EmailForm = ({ patronData, setIsLoading, setIsSuccess }) => {
     updatedEmails[index] = value
     setTempEmails(updatedEmails)
 
-    // The first email entry cannot be empty.
-    if (index === 0 && (!value || !validateEmail(value))) {
+    const firstEmailEmpty = index === 0
+
+    if (firstEmailEmpty && (!value || !validateEmail(value))) {
       setError(true)
     } else {
       const hasInvalidEmail = updatedEmails.some(
@@ -100,107 +105,135 @@ const EmailForm = ({ patronData, setIsLoading, setIsSuccess }) => {
   }
 
   return (
-    <Flex flexDir="row" alignItems="flex-start" width="100%">
-      <Flex gap="xs" alignItems={"center"} sx={{ paddingTop: "xs" }}>
-        <Icon name="communicationEmail" size="medium" />
-        <Text
-          size="body1"
-          sx={{
-            fontWeight: "500",
-            width: "256px",
-            marginBottom: 0,
-          }}
-        >
-          Email
-        </Text>
-      </Flex>
-      {isEditing ? (
-        <Flex flexDir={"column"}>
-          {tempEmails.map((email, index) => (
-            <Flex key={index} mb="s">
-              <TextInput
-                name={`email-${index}`}
-                value={email}
-                id={`email-text-input-${index}`}
-                labelText="Update email"
-                showLabel={false}
-                isInvalid={error && !validateEmail(email)}
-                invalidText="Please enter a valid email address."
-                onChange={(e) => handleInputChange(e, index)}
-                isRequired
-                isClearable
-                isClearableCallback={() => handleClearableCallback(index)}
-                sx={{ width: "300px" }}
-              />
-              {index !== 0 && (
-                <Button
-                  aria-label="Remove email"
-                  buttonType="text"
-                  id="remove-email-btn"
-                  onClick={() => handleRemoveEmail(index)}
-                >
-                  {" "}
-                  <Icon name="actionDelete" size="large" />
-                </Button>
-              )}
-            </Flex>
-          ))}
-          <Button
-            id="add-button"
-            buttonType="text"
-            onClick={handleAddEmail}
-            size="large"
-            sx={{
-              justifyContent: "flex-start",
-              width: "300px",
-              padding: "xxs",
-            }}
-          >
-            + Add an email address
-          </Button>
-        </Flex>
+    <>
+      {patronDataLoading || isLoading ? (
+        <SkeletonLoader contentSize={2} showImage={false} headingSize={0} />
       ) : (
-        <Flex flexDir="row" alignItems="flex-start">
-          <Flex flexDir="column" alignItems="flex-start">
-            {emails.map((email, index) => (
-              <Text key={index} sx={{ paddingTop: "xs", marginBottom: "xs" }}>
-                {email}{" "}
-                {index === 0 && <span style={{ color: "gray" }}>(P)</span>}
-              </Text>
-            ))}
+        <Flex
+          flexDir={{ base: "column", lg: "row" }}
+          alignItems="flex-start"
+          width="100%"
+        >
+          <Flex gap="xs" alignItems="center" paddingLeft="xs" paddingTop="xs">
+            <Icon name="communicationEmail" size="medium" />
+            <Text
+              size="body1"
+              sx={{
+                fontWeight: "500",
+                marginBottom: 0,
+                marginRight: { base: "l", lg: "200px" },
+              }}
+            >
+              Email
+            </Text>
           </Flex>
-          <Button
-            id="edit-email-button"
-            buttonType="text"
-            onClick={() => setIsEditing(true)}
-            sx={{ paddingLeft: "xs", paddingRight: "xs", marginLeft: "xxl" }}
-          >
-            <Icon name="editorMode" align="left" size="medium" />
-            Edit
-          </Button>
+          {isEditing ? (
+            <Flex
+              marginLeft={{ base: "l", lg: "unset" }}
+              marginTop={{ base: "xs", lg: "unset" }}
+              flexDir="column"
+              width="-webkit-fill-available"
+            >
+              {tempEmails.map((email, index) => (
+                <Flex key={index} mb="s" width="fill">
+                  <TextInput
+                    sx={{
+                      width: { base: "-webkit-fill-available", md: "300px" },
+                    }}
+                    name={`email-${index}`}
+                    value={email}
+                    id={`email-text-input-${index}`}
+                    labelText="Update email"
+                    showLabel={false}
+                    isInvalid={error && !validateEmail(email)}
+                    invalidText="Please enter a valid email address."
+                    onChange={(e) => handleInputChange(e, index)}
+                    isRequired
+                    isClearable
+                    isClearableCallback={() => handleClearableCallback(index)}
+                  />
+                  {index !== 0 && (
+                    <Button
+                      aria-label="Remove email"
+                      buttonType="text"
+                      id="remove-email-btn"
+                      width="20px"
+                      marginLeft="xs"
+                      onClick={() => handleRemoveEmail(index)}
+                    >
+                      {" "}
+                      <Icon name="actionDelete" size="large" />
+                    </Button>
+                  )}
+                </Flex>
+              ))}
+              <Button
+                id="add-button"
+                buttonType="text"
+                onClick={handleAddEmail}
+                size="large"
+                sx={{
+                  justifyContent: "flex-start",
+                  width: { base: "-webkit-fill-available", md: "300px" },
+                  padding: "xxs",
+                }}
+              >
+                + Add an email address
+              </Button>
+            </Flex>
+          ) : (
+            <Flex
+              marginLeft={{ base: "l", lg: "unset" }}
+              flexDir="row"
+              alignItems="flex-start"
+            >
+              <Flex flexDir="column" alignItems="flex-start">
+                {emails.map((email, index) => (
+                  <Text
+                    key={index}
+                    sx={{ paddingTop: "xs", marginBottom: "xs" }}
+                  >
+                    {email}{" "}
+                    {index === 0 && emails.length > 1 && (
+                      <Text
+                        sx={{
+                          display: "inline",
+                          padding: 0,
+                          margin: 0,
+                          color: "ui.gray.semi-dark",
+                        }}
+                      >
+                        (P)
+                      </Text>
+                    )}
+                  </Text>
+                ))}
+              </Flex>
+              <Button
+                id="edit-email-button"
+                buttonType="text"
+                onClick={() => setIsEditing(true)}
+                sx={{
+                  paddingLeft: "xs",
+                  paddingRight: "xs",
+                  marginLeft: "xxl",
+                }}
+              >
+                <Icon name="editorMode" align="left" size="medium" />
+                Edit
+              </Button>
+            </Flex>
+          )}
+          {isEditing && (
+            <SaveCancelButtons
+              onCancel={cancelEditing}
+              onSave={submitEmails}
+              error={error}
+            />
+          )}
         </Flex>
       )}
-      {isEditing && (
-        <Flex justifySelf="flex-end" sx={{ marginLeft: "auto" }}>
-          <Button
-            sx={{ marginLeft: "xxl", marginRight: "s" }}
-            id="cancel-button"
-            buttonType="secondary"
-            onClick={cancelEditing}
-          >
-            Cancel
-          </Button>
-          <Button
-            id="save-button"
-            isDisabled={error}
-            buttonType="primary"
-            onClick={submitEmails}
-          >
-            Save changes
-          </Button>
-        </Flex>
-      )}
-    </Flex>
+    </>
   )
 }
 
