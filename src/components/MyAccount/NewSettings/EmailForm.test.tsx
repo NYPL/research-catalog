@@ -5,7 +5,6 @@ import { PatronDataProvider } from "../../../context/PatronDataContext"
 import { processedPatron } from "../../../../__test__/fixtures/processedMyAccountData"
 
 describe("email form", () => {
-  const mockSetIsLoading = jest.fn()
   const mockSetIsSuccess = jest.fn()
 
   beforeEach(() => {
