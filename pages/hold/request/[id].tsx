@@ -230,7 +230,10 @@ const faqContentData: AccordionDataProps[] = [
   },
 ]
 
-export async function getServerSideProps({ params, req, res }) {
+export async function getServerSideProps({ params, req, res, context }) {
+  const { id } = params
+  console.log("params", params)
+  console.log("context", context)
   // authentication redirect
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const isAuthenticated = patronTokenResponse.isTokenValid
@@ -247,7 +250,7 @@ export async function getServerSideProps({ params, req, res }) {
         redirectCount + 1
       }; Max-Age=10; path=/; domain=.nypl.org;`
     )
-    const redirect = getLoginRedirect(req, "/account")
+    const redirect = getLoginRedirect(req, `/hold/request/${id}`)
     return {
       redirect: {
         destination: redirect,
@@ -262,7 +265,6 @@ export async function getServerSideProps({ params, req, res }) {
     console.log(patron)
 
     // fetch bib and item
-    const { id } = params
     const [bibId, itemId] = id.split("-")
     const { discoveryBibResult } = await fetchBib(bibId, {
       all_items: true,
