@@ -9,6 +9,7 @@ import {
 import { useContext, useState } from "react"
 import { PatronDataContext } from "../../../context/PatronDataContext"
 import SaveCancelButtons from "./SaveCancelButtons"
+import SettingsFormLabel from "./SettingsFormLabel"
 
 const EmailForm = ({ patronData, setIsSuccess, setIsFailure }) => {
   const { patronDataLoading, getMostUpdatedSierraAccountData } =
@@ -115,19 +116,7 @@ const EmailForm = ({ patronData, setIsSuccess, setIsFailure }) => {
           alignItems="flex-start"
           width="100%"
         >
-          <Flex gap="xs" alignItems="center" paddingLeft="xs" paddingTop="xs">
-            <Icon name="communicationEmail" size="medium" />
-            <Text
-              size="body1"
-              sx={{
-                fontWeight: "500",
-                marginBottom: 0,
-                marginRight: { base: "l", lg: "200px" },
-              }}
-            >
-              Email
-            </Text>
-          </Flex>
+          <SettingsFormLabel icon="communicationEmail" text="Email" />
           {isEditing ? (
             <Flex
               marginLeft={{ base: "l", lg: "unset" }}
