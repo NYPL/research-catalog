@@ -33,20 +33,22 @@ import bibDetailStyles from "../../../styles/components/BibDetails.module.scss"
 import type { DiscoveryBibResult } from "../../../src/types/bibTypes"
 import type { DiscoveryItemResult } from "../../../src/types/itemTypes"
 
-interface BibPropsType {
+interface HoldRequestPropsType {
   discoveryBibResult: DiscoveryBibResult
   discoveryItemResult: DiscoveryItemResult
   isAuthenticated?: boolean
 }
 
 /**
- * The Bib page is responsible for fetching and displaying a single Bib's details.
+ * The Hold Request page renders a form to request a hold an item.
+ * It renders some basic info about the bib and item based on the bib and item ids in the url,
+ * including pickup location options rendered as radio buttons in the form.
  */
 export default function HoldRequestPage({
   discoveryBibResult,
   discoveryItemResult,
   isAuthenticated,
-}: BibPropsType) {
+}: HoldRequestPropsType) {
   const metadataTitle = `Item Request | ${SITE_NAME}`
 
   const bib = new Bib(discoveryBibResult)
