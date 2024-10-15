@@ -30,6 +30,7 @@ const BibDetails = ({ details, heading }: BibDetailsProps) => {
         type="dl"
         showRowDividers={false}
         className={styles.bibDetails}
+        mt="xl"
       >
         {details.map(
           (detail: BibDetail | LinkedBibDetail | SubjectHeadingDetail) => {

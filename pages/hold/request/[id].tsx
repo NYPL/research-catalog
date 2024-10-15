@@ -1,6 +1,4 @@
 import Head from "next/head"
-import { useState } from "react"
-
 import {
   Heading,
   List,
@@ -8,16 +6,11 @@ import {
   FormField,
   RadioGroup,
   Radio,
-  Accordion,
-  Text,
   ButtonGroup,
   Button,
-  type AccordionDataProps,
 } from "@nypl/design-system-react-components"
 
 import Layout from "../../../src/components/Layout/Layout"
-import RCLink from "../../../src/components/Links/RCLink/RCLink"
-import ExternalLink from "../../../src/components/Links/ExternalLink/ExternalLink"
 import {
   PlainTextElement,
   LinkedDetailElement,
@@ -55,8 +48,7 @@ export default function BibPage({
   isAuthenticated,
 }: BibPropsType) {
   const metadataTitle = `Item Request | ${SITE_NAME}`
-  // console.log("discoveryBibResult", discoveryBibResult)
-  // console.log("discoveryItemResult", discoveryItemResult)
+
   const bib = new Bib(discoveryBibResult)
   const item = new Item(discoveryItemResult, bib)
 
@@ -78,7 +70,7 @@ export default function BibPage({
         <title key="main-title">{metadataTitle}</title>
       </Head>
       <Layout isAuthenticated={isAuthenticated} activePage="search">
-        <Heading level="h2" mb="l">
+        <Heading level="h2" mb="l" size="heading3">
           Request for on-site use
         </Heading>
         <List
@@ -87,6 +79,7 @@ export default function BibPage({
           showRowDividers={false}
           className={bibDetailStyles.bibDetails}
           mb="xs"
+          mt={0}
         >
           <LinkedDetailElement
             label="Title"
@@ -100,7 +93,7 @@ export default function BibPage({
             <PlainTextElement label="Volume/date" value={[item.volume]} />
           ) : null}
         </List>
-        <Heading level="h3" size="heading4" mb="m">
+        <Heading level="h3" size="heading4" mb="l">
           Choose a pickup location
         </Heading>
         <Form
@@ -210,7 +203,6 @@ export async function getServerSideProps({ params, req, res }) {
   try {
     const patronId = patronTokenResponse.decodedPatron.sub
     const { patron } = await getPatronData(patronId)
-    console.log(patron)
 
     // fetch bib and item
     const [bibId, itemId] = id.split("-")
