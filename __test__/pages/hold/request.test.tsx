@@ -106,7 +106,7 @@ describe("Hold Request page", () => {
       ])
     })
   })
-  describe("Item details", () => {
+  describe("Hold Request page UI", () => {
     beforeEach(() => {
       render(
         <HoldRequestPage
