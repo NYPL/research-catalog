@@ -126,7 +126,7 @@ export const findItemInBibResult = (
   bibResult: DiscoveryBibResult,
   itemId: string
 ): Item | null => {
-  console.log(bibResult.items)
+  console.log(bibResult)
   // console.log(itemId)
   return null
 }

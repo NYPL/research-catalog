@@ -227,7 +227,9 @@ const faqContentData: AccordionDataProps[] = [
 export async function getServerSideProps({ params, req }) {
   const { id } = params
   const [bibId, itemId] = id.split("-")
-  const { discoveryBibResult, annotatedMarc, status } = await fetchBib(id)
+  const { discoveryBibResult, annotatedMarc, status } = await fetchBib(id, {
+    all_items: true,
+  })
   const item = findItemInBibResult(discoveryBibResult, itemId)
   // console.log("item", item)
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
