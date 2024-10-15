@@ -134,5 +134,9 @@ describe("Hold Request page", () => {
         "no. 4 (2001)"
       )
     })
+
+    it("renders a hold request form", () => {
+      expect(screen.getAllByTestId("hold-request-form")[0]).toBeInTheDocument()
+    })
   })
 })

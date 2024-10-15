@@ -99,10 +99,11 @@ export default function HoldRequestPage({
           Choose a pickup location
         </Heading>
         <Form
-          id="holdForm"
+          id="hold-request-form"
+          data-testid="hold-request-form"
           // We are using a post request on hold requests when JS is disabled
           method="post"
-          action={`${BASE_URL}/search`}
+          action={`${BASE_URL}/hold/request/${bib.id}-${item.id}`}
           onSubmit={handleSubmit}
           mb="l"
         >
