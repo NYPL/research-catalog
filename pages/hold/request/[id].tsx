@@ -103,7 +103,7 @@ export default function HoldRequestPage({
           data-testid="hold-request-form"
           // We are using a post request on hold requests when JS is disabled
           method="post"
-          action={`${BASE_URL}/hold/request/${bib.id}-${item.id}`}
+          action={`${BASE_URL}/api/hold/request/${bib.id}-${item.id}`}
           onSubmit={handleSubmit}
           mb="l"
         >
