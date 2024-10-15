@@ -40,7 +40,7 @@ interface HoldRequestPropsType {
 }
 
 /**
- * The Hold Request page renders a form to request a hold an item.
+ * The Hold Request page renders a form to place a hold on an item.
  * It renders some basic info about the bib and item based on the bib and item ids in the url,
  * including pickup location options rendered as radio buttons in the form.
  */
