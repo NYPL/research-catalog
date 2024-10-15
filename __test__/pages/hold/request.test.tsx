@@ -12,9 +12,7 @@ jest.mock("../../../src/server/auth")
 jest.mock("../../../src/server/api/bib")
 jest.mock("../../../src/server/sierraClient")
 
-jest.mock("next/router", () => ({
-  useRouter: jest.fn(),
-}))
+jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
 const mockRes = {
   setHeader: jest.fn(),
@@ -31,18 +29,19 @@ const mockReq = {
 }
 
 describe("Hold Request page", () => {
-  beforeEach(() => {
-    ;(initializePatronTokenAuth as jest.Mock).mockResolvedValue({
-      isTokenValid: true,
-      errorCode: null,
-      decodedPatron: { sub: "123" },
-    })
-    ;(fetchBib as jest.Mock).mockResolvedValue({
-      discoveryBibResult: bibWithItems.resource,
-      status: 200,
-    })
-  })
   describe("logout redirect handling", () => {
+    beforeEach(() => {
+      ;(initializePatronTokenAuth as jest.Mock).mockResolvedValue({
+        isTokenValid: true,
+        errorCode: null,
+        decodedPatron: { sub: "123" },
+      })
+      ;(fetchBib as jest.Mock).mockResolvedValue({
+        discoveryBibResult: bibWithItems.resource,
+        status: 200,
+      })
+    })
+
     it("redirects if cookie count is less than 3", async () => {
       ;(doRedirectBasedOnNyplAccountRedirects as jest.Mock).mockReturnValue(
         true
@@ -105,6 +104,35 @@ describe("Hold Request page", () => {
         "Set-Cookie",
         "nyplAccountRedirects=1; Max-Age=10; path=/; domain=.nypl.org;",
       ])
+    })
+  })
+  describe("Item details", () => {
+    beforeEach(() => {
+      render(
+        <HoldRequestPage
+          discoveryBibResult={bibWithItems.resource}
+          discoveryItemResult={bibWithItems.resource.items[0]}
+          isAuthenticated={true}
+        />
+      )
+    })
+
+    it("renders an H2", () => {
+      expect(screen.getByRole("heading", { level: 2 })).toHaveTextContent(
+        "Request for on-site use"
+      )
+    })
+
+    it("renders the top bib and item details", () => {
+      expect(screen.getAllByTestId("title")[0]).toHaveTextContent(
+        "Urban spaghetti."
+      )
+      expect(screen.getByTestId("call-number")).toHaveTextContent(
+        "JFK 01-374 no. 4 (2001)"
+      )
+      expect(screen.getByTestId("volume-date")).toHaveTextContent(
+        "no. 4 (2001)"
+      )
     })
   })
 })
