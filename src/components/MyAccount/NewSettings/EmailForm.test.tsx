@@ -66,7 +66,7 @@ describe("email form", () => {
     fireEvent.change(input, { target: { value: "invalid-email" } })
 
     expect(
-      screen.getByText("Please enter a valid email address.")
+      screen.getByText("Please enter a valid and unique email address.")
     ).toBeInTheDocument()
 
     expect(screen.getByRole("button", { name: /save changes/i })).toBeDisabled()
