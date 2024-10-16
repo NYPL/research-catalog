@@ -71,7 +71,7 @@ export default function HoldRequestPage({
         <meta name="twitter:title" content={metadataTitle} key="tw-title" />
         <title key="main-title">{metadataTitle}</title>
       </Head>
-      <Layout isAuthenticated={isAuthenticated} activePage="search">
+      <Layout isAuthenticated={isAuthenticated} activePage="hold">
         <Heading level="h2" mb="l" size="heading3">
           Request for on-site use
         </Heading>
@@ -93,7 +93,9 @@ export default function HoldRequestPage({
           <PlainTextElement label="Call number" value={[item.callNumber]} />
           {item.volume ? (
             <PlainTextElement label="Volume/date" value={[item.volume]} />
-          ) : null}
+          ) : (
+            <></>
+          )}
         </List>
         <Heading level="h3" size="heading4" mb="l">
           Choose a pickup location

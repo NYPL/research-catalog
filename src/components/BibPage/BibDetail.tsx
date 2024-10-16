@@ -60,17 +60,7 @@ const BibDetails = ({ details, heading }: BibDetailsProps) => {
 const DetailElement = (label: string, listChildren: ReactNode[]) => {
   return (
     <>
-      <dt>
-        <Text
-          fontSize={{
-            base: "mobile.body.body2",
-            md: "desktop.body.body2",
-          }}
-          isBold
-        >
-          {label}
-        </Text>
-      </dt>
+      <dt>{label}</dt>
       <dd>
         <List noStyling data-testid={kebabCase(label)} type="ol">
           {listChildren}
