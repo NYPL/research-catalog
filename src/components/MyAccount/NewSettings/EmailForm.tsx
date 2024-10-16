@@ -148,7 +148,9 @@ const EmailForm = ({ patronData, setIsSuccess, setIsFailure }) => {
                       labelText="Update email"
                       showLabel={false}
                       isInvalid={error && !validateEmail(email, tempEmails)}
-                      invalidText={"Please enter a valid email address."}
+                      invalidText={
+                        "Please enter a valid and unique email address."
+                      }
                       onChange={(e) => handleInputChange(e, index)}
                       isRequired
                       isClearable
