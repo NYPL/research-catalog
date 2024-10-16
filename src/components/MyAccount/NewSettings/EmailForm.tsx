@@ -5,6 +5,7 @@ import {
   Flex,
   Button,
   SkeletonLoader,
+  Form,
 } from "@nypl/design-system-react-components"
 import { useContext, useState } from "react"
 import { PatronDataContext } from "../../../context/PatronDataContext"
@@ -123,41 +124,41 @@ const EmailForm = ({ patronData, setIsSuccess, setIsFailure }) => {
               width="-webkit-fill-available"
             >
               {tempEmails.map((email, index) => (
-                <Flex key={index} mb="s" width="fill">
-                  <TextInput
-                    sx={{
-                      width: {
-                        base: "87%",
-                        md: "300px",
-                      },
-                    }}
-                    name={`email-${index}`}
-                    value={email}
-                    id={`email-text-input-${index}`}
-                    key={index}
-                    labelText="Update email"
-                    showLabel={false}
-                    isInvalid={error && !validateEmail(email)}
-                    invalidText="Please enter a valid email address."
-                    onChange={(e) => handleInputChange(e, index)}
-                    isRequired
-                    isClearable
-                    isClearableCallback={() => handleClearableCallback(index)}
-                  />
-                  {index !== 0 && (
-                    <Button
-                      aria-label="Remove email"
-                      buttonType="text"
-                      id="remove-email-btn"
-                      width="20px"
-                      marginLeft="xs"
-                      onClick={() => handleRemoveEmail(index)}
-                    >
-                      {" "}
-                      <Icon name="actionDelete" size="large" />
-                    </Button>
-                  )}
-                </Flex>
+                <Form id="email-form" key={index} gap={"grid.xxs"}>
+                  <Flex mb="s" width="fill">
+                    <TextInput
+                      sx={{
+                        width: {
+                          base: "87%",
+                          md: "300px",
+                        },
+                      }}
+                      name={`email-${index}`}
+                      value={email}
+                      id={`email-text-input-${index}`}
+                      key={index}
+                      labelText="Update email"
+                      showLabel={false}
+                      isInvalid={error && !validateEmail(email)}
+                      invalidText="Please enter a valid email address."
+                      onChange={(e) => handleInputChange(e, index)}
+                      isRequired
+                      isClearable
+                      isClearableCallback={() => handleClearableCallback(index)}
+                    />
+                    {index !== 0 && (
+                      <Button
+                        aria-label="Remove email"
+                        buttonType="text"
+                        id="remove-email-btn"
+                        onClick={() => handleRemoveEmail(index)}
+                      >
+                        {" "}
+                        <Icon name="actionDelete" size="large" />
+                      </Button>
+                    )}
+                  </Flex>
+                </Form>
               ))}
               <Button
                 id="add-button"
