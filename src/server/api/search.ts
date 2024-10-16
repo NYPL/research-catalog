@@ -12,7 +12,6 @@ import {
 } from "../../config/constants"
 import { getDRBQueryStringFromSearchParams } from "../../utils/drbUtils"
 import nyplApiClient from "../nyplApiClient"
-import logger from "../../../logger"
 
 export async function fetchResults(
   searchParams: SearchParams
@@ -65,26 +64,13 @@ export async function fetchResults(
     ])
 
   console.log("drbClient", drbClient)
-  logger.info("drbClient", drbClient)
-
   console.log("drbQuery", drbQuery)
-  logger.info("drbQuery", drbQuery)
-
   console.log("drbResultsResponse", drbResultsResponse)
-  logger.info("drbResultsResponse", drbResultsResponse)
-
   console.log("drbResultsResponse.status", drbResultsResponse.status)
-  logger.info("drbResultsResponse.status", drbResultsResponse.status)
-
   console.log(
     "drbResultsResponse.value",
     drbResultsResponse.status === "fulfilled" && drbResultsResponse.value
   )
-  logger.info(
-    "drbResultsResponse.value",
-    drbResultsResponse.status === "fulfilled" && drbResultsResponse.value
-  )
-
   // Assign results values for each response when status is fulfilled
   const results =
     resultsResponse.status === "fulfilled" && resultsResponse.value
