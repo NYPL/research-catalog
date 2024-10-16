@@ -12,25 +12,17 @@ const NewAccountSettingsTab = () => {
 
   return (
     <>
-      {isSuccess && (
-        <Banner
-          isDismissible
-          content={
-            <div style={{ alignItems: "center" }}>Your changes were saved.</div>
-          }
-          type="positive"
-          sx={{ marginTop: "m" }}
-        />
-      )}
-      {isFailure && (
+      {(isSuccess || isFailure) && (
         <Banner
           isDismissible
           content={
             <div style={{ alignItems: "center" }}>
-              Your changes were not saved.
+              {isFailure
+                ? "Your changes were not saved."
+                : "Your changes were saved."}
             </div>
           }
-          type="warning"
+          type={isFailure ? "warning" : "positive"}
           sx={{ marginTop: "m" }}
         />
       )}

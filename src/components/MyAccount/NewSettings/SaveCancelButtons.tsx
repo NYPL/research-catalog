@@ -1,6 +1,16 @@
 import { ButtonGroup, Button } from "@nypl/design-system-react-components"
 
-const SaveCancelButtons = ({ error, onCancel, onSave }) => {
+type SaveCancelButtonProps = {
+  isDisabled: boolean
+  onCancel: () => void
+  onSave: () => void
+}
+
+const SaveCancelButtons = ({
+  isDisabled,
+  onCancel,
+  onSave,
+}: SaveCancelButtonProps) => {
   return (
     <ButtonGroup
       display="flex"
@@ -19,7 +29,7 @@ const SaveCancelButtons = ({ error, onCancel, onSave }) => {
       </Button>
       <Button
         id="save-button"
-        isDisabled={error}
+        isDisabled={isDisabled}
         buttonType="primary"
         minWidth={"123px"}
         onClick={onSave}

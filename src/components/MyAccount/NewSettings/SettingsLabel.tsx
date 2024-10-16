@@ -1,6 +1,6 @@
 import { Flex, Icon, Text } from "@nypl/design-system-react-components"
 
-const SettingsFormLabel = ({ icon, text }) => {
+const SettingsLabel = ({ icon, text }) => {
   return (
     <Flex gap="xs" alignItems="center" paddingLeft="xs" paddingTop="xs">
       <Icon name={icon} size="medium" />
@@ -18,4 +18,4 @@ const SettingsFormLabel = ({ icon, text }) => {
   )
 }
 
-export default SettingsFormLabel
+export default SettingsLabel

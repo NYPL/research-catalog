@@ -9,11 +9,10 @@ import {
 import { useContext, useState } from "react"
 import { PatronDataContext } from "../../../context/PatronDataContext"
 import SaveCancelButtons from "./SaveCancelButtons"
-import SettingsFormLabel from "./SettingsFormLabel"
+import SettingsLabel from "./SettingsLabel"
 
 const EmailForm = ({ patronData, setIsSuccess, setIsFailure }) => {
-  const { patronDataLoading, getMostUpdatedSierraAccountData } =
-    useContext(PatronDataContext)
+  const { getMostUpdatedSierraAccountData } = useContext(PatronDataContext)
   const [emails, setEmails] = useState(patronData?.emails || [])
   const [isLoading, setIsLoading] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
@@ -77,8 +76,8 @@ const EmailForm = ({ patronData, setIsSuccess, setIsFailure }) => {
 
   const submitEmails = async () => {
     setIsLoading(true)
+    setIsEditing(false)
     const validEmails = tempEmails.filter((email) => validateEmail(email))
-
     try {
       const response = await fetch(
         `/research/research-catalog/api/account/settings/${patronData.id}`,
@@ -94,7 +93,6 @@ const EmailForm = ({ patronData, setIsSuccess, setIsFailure }) => {
       if (response.status === 200) {
         await getMostUpdatedSierraAccountData()
         setIsSuccess(true)
-        setIsEditing(false)
       } else {
         setIsFailure(true)
         setTempEmails([...emails])
@@ -108,7 +106,7 @@ const EmailForm = ({ patronData, setIsSuccess, setIsFailure }) => {
 
   return (
     <>
-      {patronDataLoading || isLoading ? (
+      {isLoading ? (
         <SkeletonLoader contentSize={2} showImage={false} headingSize={0} />
       ) : (
         <Flex
@@ -116,7 +114,7 @@ const EmailForm = ({ patronData, setIsSuccess, setIsFailure }) => {
           alignItems="flex-start"
           width="100%"
         >
-          <SettingsFormLabel icon="communicationEmail" text="Email" />
+          <SettingsLabel icon="communicationEmail" text="Email" />
           {isEditing ? (
             <Flex
               marginLeft={{ base: "l", lg: "unset" }}
@@ -128,11 +126,15 @@ const EmailForm = ({ patronData, setIsSuccess, setIsFailure }) => {
                 <Flex key={index} mb="s" width="fill">
                   <TextInput
                     sx={{
-                      width: { base: "-webkit-fill-available", md: "300px" },
+                      width: {
+                        base: "87%",
+                        md: "300px",
+                      },
                     }}
                     name={`email-${index}`}
                     value={email}
                     id={`email-text-input-${index}`}
+                    key={index}
                     labelText="Update email"
                     showLabel={false}
                     isInvalid={error && !validateEmail(email)}
@@ -164,7 +166,7 @@ const EmailForm = ({ patronData, setIsSuccess, setIsFailure }) => {
                 size="large"
                 sx={{
                   justifyContent: "flex-start",
-                  width: { base: "-webkit-fill-available", md: "300px" },
+                  width: { base: "87%", md: "300px" },
                   padding: "xxs",
                 }}
               >
@@ -178,7 +180,7 @@ const EmailForm = ({ patronData, setIsSuccess, setIsFailure }) => {
               alignItems="flex-start"
             >
               <Flex flexDir="column" alignItems="flex-start">
-                {emails.map((email, index) => (
+                {tempEmails.map((email, index) => (
                   <Text
                     key={index}
                     sx={{ paddingTop: "xs", marginBottom: "xs" }}
@@ -218,7 +220,7 @@ const EmailForm = ({ patronData, setIsSuccess, setIsFailure }) => {
             <SaveCancelButtons
               onCancel={cancelEditing}
               onSave={submitEmails}
-              error={error}
+              isDisabled={error}
             />
           )}
         </Flex>
