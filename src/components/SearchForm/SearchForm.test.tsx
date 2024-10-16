@@ -47,18 +47,17 @@ describe("SearchForm", () => {
     const input = screen.getByDisplayValue("spaghetti")
     expect(input).toBeTruthy()
   })
-  // SEARCH TIP CODE
-  // describe("search scope options", () => {
-  //   it("updates the search tip when search scope is updated", async () => {
-  //     render(<SearchForm aggregations={normalAggs} />)
-  //     const searchScopeSelect = screen.getByLabelText("Select a category")
-  //     await userEvent.selectOptions(searchScopeSelect, "journal_title")
-  //     let searchTip = screen.getByText(
-  //       SEARCH_FORM_OPTIONS.journal_title.searchTip
-  //     )
-  //     await userEvent.selectOptions(searchScopeSelect, "all")
-  //     searchTip = screen.getByText(SEARCH_FORM_OPTIONS.all.searchTip)
-  //     expect(searchTip).toBeInTheDocument()
-  //   })
-  // })
+  describe("search scope options", () => {
+    it("updates the search tip when search scope is updated", async () => {
+      render(<SearchForm aggregations={normalAggs} />)
+      const searchScopeSelect = screen.getByLabelText("Select a category")
+      await userEvent.selectOptions(searchScopeSelect, "journal_title")
+      let searchTip = screen.getByText(
+        SEARCH_FORM_OPTIONS.journal_title.searchTip
+      )
+      await userEvent.selectOptions(searchScopeSelect, "all")
+      searchTip = screen.getByText(SEARCH_FORM_OPTIONS.all.searchTip)
+      expect(searchTip).toBeInTheDocument()
+    })
+  })
 })
