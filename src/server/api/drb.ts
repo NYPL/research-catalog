@@ -15,6 +15,7 @@ export async function fetchDRBResults(
   try {
     const client = await nyplApiClient({ apiName: DRB_API_NAME })
     const { data } = await client.get(drbQueryString)
+    console.log("data response in fetchDRBResults", data)
 
     return {
       works: data.works,
@@ -22,6 +23,7 @@ export async function fetchDRBResults(
     }
   } catch (error) {
     console.error(`Error fetching DRB results ${error.message}`)
+    console.log("error in fetchDRBResults", error)
     throw new Error(error)
   }
 }
