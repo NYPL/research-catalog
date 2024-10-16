@@ -21,9 +21,11 @@ const EmailForm = ({ patronData, setIsSuccess, setIsFailure }) => {
 
   const [tempEmails, setTempEmails] = useState([...emails])
 
-  const validateEmail = (email) => {
+  const validateEmail = (currentEmail, emails) => {
     const emailRegex = /^[^@]+@[^@]+\.[^@]+$/
-    return emailRegex.test(email)
+    const isEmailUnique =
+      emails.filter((email) => email === currentEmail).length === 1
+    return emailRegex.test(currentEmail) && isEmailUnique
   }
 
   const handleInputChange = (e, index) => {
@@ -34,11 +36,11 @@ const EmailForm = ({ patronData, setIsSuccess, setIsFailure }) => {
 
     const firstEmailEmpty = index === 0
 
-    if (firstEmailEmpty && (!value || !validateEmail(value))) {
+    if (firstEmailEmpty && (!value || !validateEmail(value, updatedEmails))) {
       setError(true)
     } else {
       const hasInvalidEmail = updatedEmails.some(
-        (email) => !validateEmail(email)
+        (email) => !validateEmail(email, updatedEmails)
       )
       setError(hasInvalidEmail)
     }
@@ -49,7 +51,9 @@ const EmailForm = ({ patronData, setIsSuccess, setIsFailure }) => {
     setTempEmails(updatedEmails)
 
     // Immediately revalidate remaining emails.
-    const hasInvalidEmail = updatedEmails.some((email) => !validateEmail(email))
+    const hasInvalidEmail = updatedEmails.some(
+      (email) => !validateEmail(email, updatedEmails)
+    )
     setError(hasInvalidEmail)
   }
 
@@ -58,7 +62,9 @@ const EmailForm = ({ patronData, setIsSuccess, setIsFailure }) => {
     setTempEmails(updatedEmails)
 
     // Immediately revalidate all emails.
-    const hasInvalidEmail = updatedEmails.some((email) => !validateEmail(email))
+    const hasInvalidEmail = updatedEmails.some(
+      (email) => !validateEmail(email, updatedEmails)
+    )
     setError(hasInvalidEmail)
   }
 
@@ -78,7 +84,9 @@ const EmailForm = ({ patronData, setIsSuccess, setIsFailure }) => {
   const submitEmails = async () => {
     setIsLoading(true)
     setIsEditing(false)
-    const validEmails = tempEmails.filter((email) => validateEmail(email))
+    const validEmails = tempEmails.filter((email) =>
+      validateEmail(email, tempEmails)
+    )
     try {
       const response = await fetch(
         `/research/research-catalog/api/account/settings/${patronData.id}`,
@@ -139,8 +147,8 @@ const EmailForm = ({ patronData, setIsSuccess, setIsFailure }) => {
                       key={index}
                       labelText="Update email"
                       showLabel={false}
-                      isInvalid={error && !validateEmail(email)}
-                      invalidText="Please enter a valid email address."
+                      isInvalid={error && !validateEmail(email, tempEmails)}
+                      invalidText={"Please enter a valid email address."}
                       onChange={(e) => handleInputChange(e, index)}
                       isRequired
                       isClearable
