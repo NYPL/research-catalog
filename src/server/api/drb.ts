@@ -3,7 +3,6 @@ import type { DRBResults } from "../../types/drbTypes"
 import { getDRBQueryStringFromSearchParams } from "../../utils/drbUtils"
 import nyplApiClient from "../nyplApiClient"
 import { DRB_API_NAME } from "../../config/constants"
-import logger from "../../../logger"
 
 /**
  * Getter function for DRB results. Accepts a SearchParams object as an argument.
