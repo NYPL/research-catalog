@@ -17,9 +17,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Replaced travis with github actions (SCC-4218)
 - Sentence case and rearrange search options (SCC-4260)
-
-Added the following, but commented out for later release:
-
 - Call number search scope to search dropdown options [(SCC-4260)](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4260)
 - Search tip per search scope [(SCC-4263)](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4263)
 
