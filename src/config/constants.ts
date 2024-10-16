@@ -77,47 +77,45 @@ export const ERROR_MESSAGES = {
   ITEM_REFETCH_ABORT_REASON: "New Bib item fetch initiated",
 }
 
+const useQuotes = "Use quotation marks to search for an exact phrase."
+const example = "Example: "
+
 export const SEARCH_FORM_OPTIONS = {
   all: {
-    text: "All fields",
-    searchTip:
-      "Enter one or more keywords, or use quotes to search for an exact phrase.",
-    placeholder: 'ex. climate change or "The New York Times"',
+    text: "Keyword",
+    searchTip: `Enter one or more keywords. ${useQuotes}`,
+    placeholder: `${example} Brooklyn Bridge or “New York City”`,
   },
   title: {
     text: "Title",
-    searchTip: "Enter a title, or use quotes to search for an exact phrase.",
-    placeholder: 'ex. David Copperfield or "The Jewish Press That Was"',
-  },
-  journal_title: {
-    text: "Journal title",
-    searchTip:
-      "Enter a journal or serial title, or use quotes to search for an exact phrase.",
-    placeholder:
-      'ex. The New York Times or "The Journal of Clinical Investigation"',
+    searchTip: `Enter a full title or part of a title. ${useQuotes}`,
+    placeholder: `${example} Middlemarch or “A Chorus Line”`,
   },
   contributor: {
     text: "Author/contributor",
     searchTip:
-      "Enter the name of an author, contributor, or organization. Use Last Name, First Name for more accurate results.",
-    placeholder: "ex. Dickens, Charles or American Law Association",
+      "Enter the name of an author, contributor, or organization. Use Last Name, First Name for more precise results.",
+    placeholder: `${example} Hughes, Langston or New York City Ballet`,
   },
-  // SEARCH TIP CODE
-  // callnumber: {
-  //   text: "Call number",
-  //   searchTip:
-  //     "Enter a call number, or the first few letters and numbers of a call number. ",
-  //   placeholder: "ex. JFD 99-6057 or *ZAN-3174",
-  // },
+  journal_title: {
+    text: "Journal title",
+    searchTip: `Enter a journal, newspaper, or other serial title. ${useQuotes}`,
+    placeholder: `${example} Amsterdam News or “Paris Review”`,
+  },
+  callnumber: {
+    text: "Call number",
+    searchTip: "Enter a call number or the beginning of a call number.",
+    placeholder: `${example} JFD 93-1962 or “**P (Ms. Heb.”`,
+  },
   standard_number: {
-    text: "Standard number",
+    text: "Unique identifier",
     searchTip:
-      "Enter a control number or identifier. Examples include ISSN / ISBN / OCLC / LCCN numbers, barcodes, etc.",
-    placeholder: "ex. 1558584536 or 95008433",
+      "Enter a control number or identifier (ISBN, ISSN, LCCN, OCLC number, barcode, etc.).",
+    placeholder: `${example} 9780889229600 or 82048999`,
   },
   subject: {
     text: "Subject",
-    searchTip: "Enter a subject name or phrase. Learn more about searching.",
-    placeholder: "ex. ornithology or Greek architecture",
+    searchTip: "Enter a subject keyword or phrase.",
+    placeholder: `${example} Ornithology or Greek Architecture`,
   },
 }
