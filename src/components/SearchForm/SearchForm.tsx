@@ -84,7 +84,7 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
         <Text size="body2" className={styles.searchTip}>
           <Icon size="medium" name="errorOutline" />
           <Box as="span" className={styles.searchTipText}>
-            <span>{"Search tip: "}</span>
+            <span className={styles.searchTipTitle}>{"Search tip: "}</span>
             {searchTip}
           </Box>
         </Text>

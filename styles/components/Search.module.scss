@@ -24,8 +24,10 @@
 .searchTip {
   display: flex;
   align-items: flex-start;
-  span {
+  .searchTipTitle {
     font-weight: bold;
+  }
+  span {
     text-wrap: nowrap;
   }
   gap: var(--nypl-space-xxs);
