@@ -36,9 +36,8 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
   const [appliedFilters, setAppliedFilters] = useState(
     collapseMultiValueQueryParams(router.query)
   )
-  // SEARCH TIP CODE
-  // const searchTip = SEARCH_FORM_OPTIONS[searchScope].searchTip
-  // const placeholder = SEARCH_FORM_OPTIONS[searchScope].placeholder
+  const searchTip = SEARCH_FORM_OPTIONS[searchScope].searchTip
+  const placeholder = SEARCH_FORM_OPTIONS[searchScope].placeholder
 
   const isLoading = useLoading()
 
@@ -82,14 +81,13 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
   return (
     <div className={styles.searchContainer}>
       <div className={styles.searchContainerInner}>
-        {/* SEARCH TIP CODE
         <Text size="body2" className={styles.searchTip}>
           <Icon size="medium" name="errorOutline" />
           <Box as="span" className={styles.searchTipText}>
-            <span>{"Search tip: "}</span>
+            <span className={styles.searchTipTitle}>{"Search tip: "}</span>
             {searchTip}
           </Box>
-        </Text> */}
+        </Text>
         <SearchBar
           id="mainContent"
           action={`${BASE_URL}/search`}
@@ -110,11 +108,8 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
             isClearableCallback: () => setSearchTerm(""),
             value: searchTerm,
             name: "q",
-            // SEARCH TIP CODE
-            //labelText: searchTip,
-            //placeholder
-            labelText: "Keyword, title, journal title, or author/contributor",
-            placeholder: "Keyword, title, journal title, or author/contributor",
+            labelText: searchTip,
+            placeholder,
           }}
           sx={{
             ".chakra-select__icon-wrapper": { "z-index": "999 !important" },
