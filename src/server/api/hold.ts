@@ -1,4 +1,6 @@
 import nyplApiClient from "../nyplApiClient"
+import type { DeliveryLocation } from "../../types/locationTypes"
+import { mapBarcodeApiResultToDeliveryLocations } from "../../utils/holdUtils"
 
 /**
  * Getter function for hold delivery locations.
@@ -6,12 +8,20 @@ import nyplApiClient from "../nyplApiClient"
 export async function fetchDeliveryLocations(
   barcode: string,
   patronId: string
-): Promise<string> {
+): Promise<DeliveryLocation[]> {
   const deliveryEndpoint = `/request/deliveryLocationsByBarcode?barcodes[]=${barcode}&patronId=${patronId}`
+
   try {
     const client = await nyplApiClient()
-    const response = await client.get(deliveryEndpoint)
-    return response
+    const discoveryLocationsResult = await client.get(deliveryEndpoint)
+    const deliveryLocations = mapBarcodeApiResultToDeliveryLocations(
+      discoveryLocationsResult
+    )
+
+    if (!deliveryLocations) {
+      throw new Error("No delivery locations found")
+    }
+    return deliveryLocations
   } catch (error) {
     console.error(`Error fetching delivery locations ${error.message}`)
     throw new Error(error)
