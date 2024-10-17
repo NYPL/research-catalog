@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Prerelease
+
+### Added
+
+- Add Hold Request Page UI with authentication redirect and dummy location data in the form (SCC-3757)
+
+### Fixed
+
+- Fixed 500 error bug ocurring when bib location data in the bib details coming from Discovery API isn't formatted as an array.
+
 ## [1.3.3] 2024-10-10
 
 ### Fixed
