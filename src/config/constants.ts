@@ -97,7 +97,7 @@ export const SEARCH_FORM_OPTIONS = {
   callnumber: {
     text: "Call number",
     searchTip: "Enter a call number or the beginning of a call number.",
-    placeholder: `${example} JFD 93-1962 or “**P (Ms. Heb.`,
+    placeholder: `${example} JFD 93-1962 or "**P (Ms. Heb"."`,
   },
   standard_number: {
     text: "Unique identifier",
