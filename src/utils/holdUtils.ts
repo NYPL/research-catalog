@@ -4,6 +4,7 @@ import type {
   DeliveryLocation,
 } from "../types/locationTypes"
 import { LOCATIONS_DETAILS } from "../config/constants"
+import { appConfig } from "../config/config"
 
 /**
  * Given a hash of SearchFilters, returns an array of DRBFilters
@@ -18,27 +19,46 @@ export function mapBarcodeApiResultToDeliveryLocations(
   if (!locationsFromResult) return null
 
   const deliveryLocations = locationsFromResult.map((locationElement) =>
-    getDeliveryLocationsFromResult(locationElement)
+    getOpenDeliveryLocationsFromResult(locationElement)
   )
 
   const eddRequestable = Boolean(itemListElement?.eddRequestable)
 }
 
-function getDeliveryLocationsFromResult(
+function getOpenDeliveryLocationsFromResult(
   locationElements: DiscoveryLocationElement[]
 ): DeliveryLocation[] {
+  const { closedLocations } = appConfig
+
   return locationElements.map((location) => {
     let deliveryLocation: DeliveryLocation
 
     const slug = getLocationSlug(location)
-    if (slug && LOCATIONS_DETAILS[slug]) {
-      const details = LOCATIONS_DETAILS[slug]
+    const details = LOCATIONS_DETAILS[slug]
 
+    if (!details) return null
+
+    const shortName = details["short-name"]
+    const label = formatDeliveryLocationLabel(location.prefLabel, shortName)
+
+    if (slug && LOCATIONS_DETAILS[slug]) {
       deliveryLocation.address = details.address.address1
-      deliveryLocation.shortName = details["short-name"]
+      deliveryLocation.shortName = label
     }
     return deliveryLocation
   })
+}
+
+function formatDeliveryLocationLabel(
+  prefLabel: string,
+  shortName: string
+): string {
+  if (!prefLabel || !shortName) return ""
+  const deliveryRoom = prefLabel.split(" - ")[1]
+    ? ` - ${prefLabel.split(" - ")[1]}`
+    : ""
+
+  return `${shortName}${deliveryRoom}`
 }
 
 function getLocationSlug(locationElement: DiscoveryLocationElement) {

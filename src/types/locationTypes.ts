@@ -1,4 +1,5 @@
 export interface DeliveryLocation {
+  label: string
   address: string
   shortName: string
   eddRequestable: boolean
