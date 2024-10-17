@@ -63,14 +63,6 @@ export async function fetchResults(
       drbClient.get(drbQuery),
     ])
 
-  console.log("drbClient", drbClient)
-  console.log("drbQuery", drbQuery)
-  console.log("drbResultsResponse", drbResultsResponse)
-  console.log("drbResultsResponse.status", drbResultsResponse.status)
-  console.log(
-    "drbResultsResponse.value",
-    drbResultsResponse.status === "fulfilled" && drbResultsResponse.value
-  )
   // Assign results values for each response when status is fulfilled
   const results =
     resultsResponse.status === "fulfilled" && resultsResponse.value
