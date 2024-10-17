@@ -19,6 +19,7 @@ import { SITE_NAME, BASE_URL, PATHS } from "../../../src/config/constants"
 
 import { findItemInBibResult } from "../../../src/utils/bibUtils"
 import { fetchBib } from "../../../src/server/api/bib"
+import { fetchDeliveryLocations } from "../../../src/server/api/hold"
 import initializePatronTokenAuth, {
   doRedirectBasedOnNyplAccountRedirects,
   getLoginRedirect,
@@ -36,6 +37,7 @@ import type { DiscoveryItemResult } from "../../../src/types/itemTypes"
 interface HoldRequestPropsType {
   discoveryBibResult: DiscoveryBibResult
   discoveryItemResult: DiscoveryItemResult
+  deliveryLocations?: any
   isAuthenticated?: boolean
 }
 
@@ -47,12 +49,14 @@ interface HoldRequestPropsType {
 export default function HoldRequestPage({
   discoveryBibResult,
   discoveryItemResult,
+  deliveryLocations,
   isAuthenticated,
 }: HoldRequestPropsType) {
   const metadataTitle = `Item Request | ${SITE_NAME}`
 
   const bib = new Bib(discoveryBibResult)
   const item = new Item(discoveryItemResult, bib)
+  console.log(deliveryLocations)
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -217,6 +221,17 @@ export async function getServerSideProps({ params, req, res }) {
     const discoveryItemResult =
       discoveryBibResult && findItemInBibResult(discoveryBibResult, itemId)
 
+    const deliveryLocations = await fetchDeliveryLocations(
+      discoveryItemResult.idBarcode[0],
+      String(patron.id)
+    )
+    console.log(
+      "discoveryItemResult.idBarcode[0]",
+      discoveryItemResult.idBarcode[0]
+    )
+    console.log("patron.id.toString()", String(patron.id))
+    console.log("deliveryLocations", deliveryLocations)
+
     if (!discoveryItemResult) {
       return {
         redirect: {
@@ -227,7 +242,12 @@ export async function getServerSideProps({ params, req, res }) {
     }
 
     return {
-      props: { discoveryBibResult, discoveryItemResult, isAuthenticated },
+      props: {
+        discoveryBibResult,
+        discoveryItemResult,
+        // deliveryLocations,
+        isAuthenticated,
+      },
     }
   } catch (error) {
     console.log(error)
