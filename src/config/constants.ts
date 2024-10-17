@@ -87,7 +87,7 @@ export const SEARCH_FORM_OPTIONS = {
     text: "Author/contributor",
     searchTip:
       "Enter the name of an author, contributor, or organization. Use Last Name, First Name for more precise results.",
-    placeholder: `${example} Hughes, Langston or New York City Ballet`,
+    placeholder: `${example} Hurston, Zora Neale or New York City Ballet`,
   },
   journal_title: {
     text: "Journal title",
@@ -97,7 +97,7 @@ export const SEARCH_FORM_OPTIONS = {
   callnumber: {
     text: "Call number",
     searchTip: "Enter a call number or the beginning of a call number.",
-    placeholder: `${example} JFD 93-1962 or “**P (Ms. Heb.”`,
+    placeholder: `${example} JFD 93-1962 or “**P (Ms. Heb.`,
   },
   standard_number: {
     text: "Unique identifier",
