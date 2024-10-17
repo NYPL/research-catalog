@@ -11,6 +11,7 @@ class SearchResultsFilters {
   constructor(aggregationsResults: Aggregation[], field: Option) {
     this.labelTransformations = {
       "Greek, Modern (1453- )": "Greek, Modern (1453-present)",
+      Offsite: "Offsite - (Deliverable to NYPL research libraries)",
     }
     this.options = aggregationsResults
       .find((f) => f.id === field.value)

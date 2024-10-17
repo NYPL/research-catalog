@@ -27,6 +27,7 @@ import type {
 } from "../../types/filterTypes"
 
 const fields = [
+  { value: "buildingLocation", label: "Location" },
   { value: "materialType", label: "Format" },
   { value: "language", label: "Language" },
   { value: "dateAfter", label: "Start Year" },
