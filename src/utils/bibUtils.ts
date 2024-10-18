@@ -3,8 +3,7 @@ import {
   ITEM_VIEW_ALL_BATCH_SIZE,
   ITEM_FILTER_PARAMS,
 } from "../config/constants"
-import type { BibQueryParams, DiscoveryBibResult } from "../types/bibTypes"
-import type { DiscoveryItemResult } from "../types/itemTypes"
+import type { BibQueryParams } from "../types/bibTypes"
 import { getPaginationOffsetStrings } from "./appUtils"
 
 /**
@@ -121,9 +120,3 @@ export function getBibQueryString(
 
   return `?${paginationOrAllQuery}${itemFilterQuery}${mergeCheckinQuery}`
 }
-
-export const findItemInBibResult = (
-  bibResult: DiscoveryBibResult,
-  itemId: string
-): DiscoveryItemResult | undefined =>
-  bibResult?.items?.find((item) => item.uri === itemId)
