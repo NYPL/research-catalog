@@ -66,4 +66,4 @@ export const locationIsClosed = (
 ): boolean =>
   closedLocations.some((closedLocationName) =>
     deliveryLocation.label.startsWith(closedLocationName)
-  )
+  ) || closedLocations.includes("all")

@@ -78,7 +78,8 @@ export const appConfig: AppConfig = {
     tokenUrl: "https://isso.nypl.org/",
   },
   // Array of closed locations based on the first part of the short-name key in the locations.ts config file (e.g. ['Library for the Performing Arts'])
-  // TODO: This behavior comes from DFE, determine if we should use location codes/slugs instead
+  // Can also include the key "all"
+  // TODO: This behavior comes from DFE, maybe we should change this to be an object of location keys set to booleans (e.g. CLOSED_LOCATIONS: {lpa: true})
   closedLocations: [],
   recapClosedLocations: [],
   nonRecapClosedLocations: [],

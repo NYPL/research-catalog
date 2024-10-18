@@ -171,9 +171,27 @@ describe("itemUtils", () => {
         shortName: "Schwarzman Building",
       }
 
-      expect(locationIsClosed(deliveryLocation, [])).toEqual(false)
+      expect(locationIsClosed(deliveryLocation, closedLocations)).toEqual(false)
 
       closedLocations = ["Schwarzman"]
+      expect(locationIsClosed(deliveryLocation, closedLocations)).toEqual(true)
+    })
+    it("always returns true if 'all' is in the closedLocations array", () => {
+      let closedLocations = ["all"]
+      let deliveryLocation = {
+        address: "476 Fifth Avenue (42nd St and Fifth Ave)",
+        label: "Schwarzman Building - Scholar Room 217",
+        shortName: "Schwarzman Building",
+      }
+
+      expect(locationIsClosed(deliveryLocation, closedLocations)).toEqual(true)
+
+      closedLocations = ["Schwarzman", "all"]
+      deliveryLocation = {
+        address: "40 Lincoln Center Plaza",
+        label: "Library for the Performing Arts",
+        shortName: "Library for the Performing Arts",
+      }
       expect(locationIsClosed(deliveryLocation, closedLocations)).toEqual(true)
     })
   })
