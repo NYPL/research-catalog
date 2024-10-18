@@ -16,12 +16,12 @@ export interface DiscoveryLocationsResult {
   itemListElement?: DiscoveryLocationItem[]
 }
 
-/* eslint-disable @typescript-eslint/naming-convention */
-
 export interface DiscoveryLocationItem {
   eddRequestable?: boolean
   deliveryLocation?: DiscoveryLocationElement[]
 }
+
+/* eslint-disable @typescript-eslint/naming-convention */
 
 export interface DiscoveryLocationElement {
   "@id"?: string
