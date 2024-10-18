@@ -43,7 +43,6 @@ export async function fetchDeliveryLocations(
     }
   } catch (error) {
     console.error(`Error fetching delivery locations ${error.message}`)
-    throw new Error(error)
 
     return {
       status: 500,
