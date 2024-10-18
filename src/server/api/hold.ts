@@ -1,6 +1,14 @@
 import nyplApiClient from "../nyplApiClient"
-import type { DeliveryLocationsResponse } from "../../types/locationTypes"
-import { mapLocationsFromResultToDeliveryLocations } from "../../utils/locationUtils"
+import type {
+  DeliveryLocation,
+  DeliveryLocationsResponse,
+  DiscoveryLocationElement,
+} from "../../types/locationTypes"
+import {
+  mapLocationElementToDeliveryLocation,
+  locationIsClosed,
+} from "../../utils/locationUtils"
+import { appConfig } from "../../config/config"
 
 /**
  * Getter function for hold delivery locations.
@@ -22,22 +30,25 @@ export async function fetchDeliveryLocations(
       throw new Error("Malformed response from delivery locations API")
     }
 
-    const deliveryLocations = mapLocationsFromResultToDeliveryLocations(
-      discoveryLocationsItem?.deliveryLocation
+    const deliveryLocations = discoveryLocationsItem?.deliveryLocation.map(
+      (locationElement: DiscoveryLocationElement) =>
+        mapLocationElementToDeliveryLocation(locationElement)
     )
     const eddRequestable = discoveryLocationsItem.eddRequestable || false
 
-    // No locations in response
-    if (!deliveryLocations) {
-      return {
-        deliveryLocations: [],
-        status: 200,
-      }
-    }
+    // Filter out closed locations
+    // TODO: We currently filter out closed locations here in DFE, we should determine if should be checked elsewhere.
+    const openLocations = deliveryLocations.filter(
+      (location: DeliveryLocation) =>
+        !locationIsClosed(location, appConfig.closedLocations)
+    )
 
-    // Locations found
+    /**
+     * Locations are returned with a status of 200.
+     * deliveryLocations can be an empty array if there are no open locations.
+     */
     return {
-      deliveryLocations,
+      deliveryLocations: openLocations,
       eddRequestable,
       status: 200,
     }
