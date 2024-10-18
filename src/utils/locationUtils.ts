@@ -10,7 +10,7 @@ import { appConfig } from "../config/config"
  * Given a hash of SearchFilters, returns an array of DRBFilters
  * as expected by the DRB API
  */
-export function mapBarcodeApiResultToDeliveryLocations(
+export function mapLocationsResultToDeliveryLocations(
   discoveryLocationsResult: DiscoveryLocationsResult
 ): DeliveryLocation[] | null {
   const itemListElement = discoveryLocationsResult?.itemListElement[0]
@@ -19,18 +19,21 @@ export function mapBarcodeApiResultToDeliveryLocations(
   if (!locationsFromResult) return null
 
   const deliveryLocations = locationsFromResult.map((locationElement) =>
-    getOpenDeliveryLocationsFromResult(locationElement)
+    getDeliveryLocationsFromResult(locationElement)
   )
+  // TODO: Do we need to check eddRequestable here?
+  // const eddRequestable = Boolean(itemListElement?.eddRequestable)
 
-  const eddRequestable = Boolean(itemListElement?.eddRequestable)
+  // TODO: Do we need to filter out closed locations here?
+  return deliveryLocations.filter((deliveryLocation: DeliveryLocation) =>
+    locationIsClosed(deliveryLocation.label, appConfig.closedLocations)
+  )
 }
 
-function getOpenDeliveryLocationsFromResult(
+const getDeliveryLocationsFromResult = (
   locationElements: DiscoveryLocationElement[]
-): DeliveryLocation[] {
-  const { closedLocations } = appConfig
-
-  return locationElements.map((location) => {
+): DeliveryLocation[] =>
+  locationElements.map((location) => {
     let deliveryLocation: DeliveryLocation
 
     const slug = getLocationSlug(location)
@@ -39,15 +42,16 @@ function getOpenDeliveryLocationsFromResult(
     if (!details) return null
 
     const shortName = details["short-name"]
-    const label = formatDeliveryLocationLabel(location.prefLabel, shortName)
 
-    if (slug && LOCATIONS_DETAILS[slug]) {
-      deliveryLocation.address = details.address.address1
-      deliveryLocation.shortName = label
-    }
+    deliveryLocation.address = details.address.address1
+    deliveryLocation.label = formatDeliveryLocationLabel(
+      location.prefLabel,
+      shortName
+    )
+    deliveryLocation.shortName = shortName
+
     return deliveryLocation
   })
-}
 
 function formatDeliveryLocationLabel(
   prefLabel: string,
@@ -62,10 +66,11 @@ function formatDeliveryLocationLabel(
 }
 
 function getLocationSlug(locationElement: DiscoveryLocationElement) {
-  if (!locationElement || !locationElement["@id"]) return null
+  if (!locationElement?.["@id"]) return null
 
-  const sierraId = locationElement["@id"].replace("loc:", "")
-  switch (sierraId.slice(0, 2)) {
+  const sierraId = getLocationSierraId(locationElement)
+
+  switch (sierraId?.slice(0, 2)) {
     case "my":
     case "lp":
     case "pa":
@@ -78,3 +83,16 @@ function getLocationSlug(locationElement: DiscoveryLocationElement) {
       return null
   }
 }
+
+const getLocationSierraId = (
+  locationElement: DiscoveryLocationElement
+): string | null =>
+  locationElement["@id"] ? locationElement["@id"].replace("loc:", "") : null
+
+const locationIsClosed = (
+  deliveryLabel: string,
+  closedLocations: string[]
+): boolean =>
+  closedLocations.some((closedLocationName) =>
+    deliveryLabel.startsWith(closedLocationName)
+  )

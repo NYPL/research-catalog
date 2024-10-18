@@ -1,4 +1,3 @@
-import { parseLocations } from "../utils/itemUtils"
 import type { AppConfig, Environment } from "../types/appTypes"
 
 export const appConfig: AppConfig = {
@@ -78,11 +77,9 @@ export const appConfig: AppConfig = {
       "https://www.nypl.org/help/request-research-materials",
     tokenUrl: "https://isso.nypl.org/",
   },
-  closedLocations: parseLocations(process.env.CLOSED_LOCATIONS),
-  recapClosedLocations: parseLocations(process.env.RECAP_CLOSED_LOCATIONS),
-  nonRecapClosedLocations: parseLocations(
-    process.env.NON_RECAP_CLOSED_LOCATIONS
-  ),
+  closedLocations: [],
+  recapClosedLocations: [],
+  nonRecapClosedLocations: [],
   jwtPublicKey: `-----BEGIN PUBLIC KEY-----
     MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA44ilHg/PxcJYsISHMRyo
     xsmez178qZpkJVXg7rOMVTLZuf05an7Pl+lX4nw/rqcvGQDXyrimciLgLkWu00xh

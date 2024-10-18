@@ -1,8 +1,7 @@
 export interface DeliveryLocation {
-  label: string
   address: string
   shortName: string
-  eddRequestable: boolean
+  label: string
 }
 
 export interface DiscoveryLocationsResult {

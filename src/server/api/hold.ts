@@ -1,6 +1,6 @@
 import nyplApiClient from "../nyplApiClient"
 import type { DeliveryLocation } from "../../types/locationTypes"
-import { mapBarcodeApiResultToDeliveryLocations } from "../../utils/holdUtils"
+import { mapLocationsResultToDeliveryLocations } from "../../utils/locationUtils"
 
 /**
  * Getter function for hold delivery locations.
@@ -14,7 +14,7 @@ export async function fetchDeliveryLocations(
   try {
     const client = await nyplApiClient()
     const discoveryLocationsResult = await client.get(deliveryEndpoint)
-    const deliveryLocations = mapBarcodeApiResultToDeliveryLocations(
+    const deliveryLocations = mapLocationsResultToDeliveryLocations(
       discoveryLocationsResult
     )
 
