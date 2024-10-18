@@ -19,11 +19,11 @@ const SubNav = ({ activePage, isAuthenticated }: SubNavProps) => {
         <li>
           <RCLink
             aria-current={
-              ["search", "advanced", "hold"].includes(activePage)
+              activePage === "search" || activePage === "advanced"
                 ? "page"
                 : undefined
             }
-            active={["search", "advanced", "hold"].includes(activePage)}
+            active={activePage === "search" || activePage === "advanced"}
             hasWhiteFocusRing
           >
             Search
