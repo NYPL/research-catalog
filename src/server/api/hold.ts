@@ -1,6 +1,6 @@
 import nyplApiClient from "../nyplApiClient"
 import type { DeliveryLocationsResponse } from "../../types/locationTypes"
-import { mapLocationsItemToDeliveryLocations } from "../../utils/locationUtils"
+import { mapLocationsFromResultToDeliveryLocations } from "../../utils/locationUtils"
 
 /**
  * Getter function for hold delivery locations.
@@ -22,8 +22,8 @@ export async function fetchDeliveryLocations(
       throw new Error("Malformed response from delivery locations API")
     }
 
-    const deliveryLocations = mapLocationsItemToDeliveryLocations(
-      discoveryLocationsItem
+    const deliveryLocations = mapLocationsFromResultToDeliveryLocations(
+      discoveryLocationsItem?.deliveryLocation
     )
     const eddRequestable = discoveryLocationsItem.eddRequestable || false
 

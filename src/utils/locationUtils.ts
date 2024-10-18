@@ -1,5 +1,4 @@
 import type {
-  DiscoveryLocationItem,
   DiscoveryLocationElement,
   DeliveryLocation,
 } from "../types/locationTypes"
@@ -10,11 +9,9 @@ import { appConfig } from "../config/config"
  * Given a hash of SearchFilters, returns an array of DRBFilters
  * as expected by the DRB API
  */
-export function mapLocationsItemToDeliveryLocations(
-  discoveryLocationItem: DiscoveryLocationItem
+export function mapLocationsFromResultToDeliveryLocations(
+  locationsFromResult: DiscoveryLocationElement[]
 ): DeliveryLocation[] | null {
-  const locationsFromResult = discoveryLocationItem?.deliveryLocation
-
   if (!locationsFromResult?.length) return null
 
   const deliveryLocations = locationsFromResult.map((locationElement) =>
