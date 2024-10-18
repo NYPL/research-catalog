@@ -1,4 +1,7 @@
-import type { DiscoveryLocationElement } from "../../types/locationTypes"
+import type {
+  DiscoveryLocationElement,
+  DiscoveryLocation,
+} from "../../types/locationTypes"
 
 import {
   mapLocationElementToDeliveryLocation,
@@ -129,7 +132,6 @@ describe("itemUtils", () => {
       })
     })
     it("returns null when the location is not found in the location details mapping found in this repo", () => {
-      // mal17
       const locationElement: DiscoveryLocationElement = {
         "@id": "loc:spaghetti",
         prefLabel: "Spaghetti Building - Scholar Room 1000",
@@ -148,8 +150,9 @@ describe("itemUtils", () => {
         null
       )
     })
+
+    // TODO: This behavior comes from DFE, determine if this is the desired behavior.
     it("returns an empty label when prefLabel is missing", () => {
-      // mal17
       const locationElement: DiscoveryLocationElement = {
         "@id": "loc:sc",
       }
@@ -159,6 +162,22 @@ describe("itemUtils", () => {
         label: "",
         shortName: "Schomburg Center",
       })
+    })
+  })
+
+  describe("locationIsClosed", () => {
+    it("determines if the location is closed based on the label and the closedLocations array set in config", () => {
+      let closedLocations = []
+      const deliveryLocation: DiscoveryLocation = {
+        address: "476 Fifth Avenue (42nd St and Fifth Ave)",
+        label: "Schwarzman Building - Scholar Room 217",
+        shortName: "Schwarzman Building",
+      }
+
+      expect(locationIsClosed(deliveryLocation, [])).toEqual(false)
+
+      closedLocations = ["Schwarzman"]
+      expect(locationIsClosed(deliveryLocation, closedLocations)).toEqual(true)
     })
   })
 })
