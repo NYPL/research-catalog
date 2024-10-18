@@ -221,15 +221,6 @@ export async function getServerSideProps({ params, req, res }) {
     const discoveryItemResult =
       discoveryBibResult && findItemInBibResult(discoveryBibResult, itemId)
 
-    const { deliveryLocations, eddRequestable, status } =
-      await fetchDeliveryLocations(
-        discoveryItemResult.idBarcode[0],
-        String(patron.id)
-      )
-    console.log(deliveryLocations)
-    console.log(eddRequestable)
-    console.log(status)
-
     if (!discoveryItemResult) {
       return {
         redirect: {
@@ -243,7 +234,6 @@ export async function getServerSideProps({ params, req, res }) {
       props: {
         discoveryBibResult,
         discoveryItemResult,
-        // deliveryLocations,
         isAuthenticated,
       },
     }
