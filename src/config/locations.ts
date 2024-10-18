@@ -1,5 +1,6 @@
 import type { LocationDetails } from "../types/locationTypes"
 
+// TODO: Determine if all of this is being used on research catalog and if this can be minimized and moved to constants.ts
 export const LOCATIONS_DETAILS: Record<string, LocationDetails> = {
   lpa: {
     id: "55",
