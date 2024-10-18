@@ -1,6 +1,6 @@
 import nyplApiClient from "../nyplApiClient"
-import type { DeliveryLocation } from "../../types/locationTypes"
-import { mapLocationsResultToDeliveryLocations } from "../../utils/locationUtils"
+import type { DeliveryLocationsResponse } from "../../types/locationTypes"
+import { mapLocationsItemToDeliveryLocations } from "../../utils/locationUtils"
 
 /**
  * Getter function for hold delivery locations.
@@ -8,22 +8,45 @@ import { mapLocationsResultToDeliveryLocations } from "../../utils/locationUtils
 export async function fetchDeliveryLocations(
   barcode: string,
   patronId: string
-): Promise<DeliveryLocation[]> {
+): Promise<DeliveryLocationsResponse> {
   const deliveryEndpoint = `/request/deliveryLocationsByBarcode?barcodes[]=${barcode}&patronId=${patronId}`
 
   try {
     const client = await nyplApiClient()
     const discoveryLocationsResult = await client.get(deliveryEndpoint)
-    const deliveryLocations = mapLocationsResultToDeliveryLocations(
-      discoveryLocationsResult
-    )
+    const discoveryLocationsItem =
+      discoveryLocationsResult?.itemListElement?.[0]
 
-    if (!deliveryLocations) {
-      throw new Error("No delivery locations found")
+    // Malformed response
+    if (!discoveryLocationsItem) {
+      throw new Error("Malformed response from delivery locations API")
     }
-    return deliveryLocations
+
+    const deliveryLocations = mapLocationsItemToDeliveryLocations(
+      discoveryLocationsItem
+    )
+    const eddRequestable = discoveryLocationsItem.eddRequestable || false
+
+    // No locations in response
+    if (!deliveryLocations) {
+      return {
+        deliveryLocations: [],
+        status: 200,
+      }
+    }
+
+    // Locations found
+    return {
+      deliveryLocations,
+      eddRequestable,
+      status: 200,
+    }
   } catch (error) {
     console.error(`Error fetching delivery locations ${error.message}`)
     throw new Error(error)
+
+    return {
+      status: 500,
+    }
   }
 }

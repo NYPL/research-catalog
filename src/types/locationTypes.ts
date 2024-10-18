@@ -1,3 +1,11 @@
+import type { HTTPStatusCode } from "./appTypes"
+
+export interface DeliveryLocationsResponse {
+  deliveryLocations?: DeliveryLocation[]
+  eddRequestable?: boolean
+  status: HTTPStatusCode
+}
+
 export interface DeliveryLocation {
   address: string
   shortName: string
@@ -5,13 +13,15 @@ export interface DeliveryLocation {
 }
 
 export interface DiscoveryLocationsResult {
-  itemListElement?: {
-    eddRequestable?: boolean
-  }
-  deliveryLocation?: DiscoveryLocationElement[]
+  itemListElement?: DiscoveryLocationItem[]
 }
 
 /* eslint-disable @typescript-eslint/naming-convention */
+
+export interface DiscoveryLocationItem {
+  eddRequestable?: boolean
+  deliveryLocation?: DiscoveryLocationElement[]
+}
 
 export interface DiscoveryLocationElement {
   "@id"?: string

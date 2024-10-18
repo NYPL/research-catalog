@@ -1,5 +1,5 @@
 import type {
-  DiscoveryLocationsResult,
+  DiscoveryLocationItem,
   DiscoveryLocationElement,
   DeliveryLocation,
 } from "../types/locationTypes"
@@ -10,41 +10,41 @@ import { appConfig } from "../config/config"
  * Given a hash of SearchFilters, returns an array of DRBFilters
  * as expected by the DRB API
  */
-export function mapLocationsResultToDeliveryLocations(
-  discoveryLocationsResult: DiscoveryLocationsResult
+export function mapLocationsItemToDeliveryLocations(
+  discoveryLocationItem: DiscoveryLocationItem
 ): DeliveryLocation[] | null {
-  const itemListElement = discoveryLocationsResult?.itemListElement[0]
-  const locationsFromResult = itemListElement?.deliveryLocation
+  const locationsFromResult = discoveryLocationItem?.deliveryLocation
 
   if (!locationsFromResult?.length) return null
 
-  const deliveryLocations = getDeliveryLocationsFromResult(locationsFromResult)
+  const deliveryLocations = locationsFromResult.map((locationElement) =>
+    mapLocationElementToDeliveryLocation(locationElement)
+  )
 
   // FROM DFE
-  // TODO: Do we need to filter out closed locations here?
+  // TODO: Is there a better place to filter out closed locations?
   return deliveryLocations.filter(
     (deliveryLocation: DeliveryLocation) =>
       !locationIsClosed(deliveryLocation, appConfig.closedLocations)
   )
 }
 
-const getDeliveryLocationsFromResult = (
-  locationElements: DiscoveryLocationElement[]
-): DeliveryLocation[] =>
-  locationElements.map((location) => {
-    const slug = getLocationSlug(location)
-    const details = LOCATIONS_DETAILS[slug]
+const mapLocationElementToDeliveryLocation = (
+  locationElement: DiscoveryLocationElement
+): DeliveryLocation => {
+  const slug = getLocationSlug(locationElement)
+  const details = LOCATIONS_DETAILS[slug]
 
-    if (!details) return null
+  if (!details) return null
 
-    const shortName = details["short-name"]
+  const shortName = details["short-name"]
 
-    return {
-      address: details.address.address1,
-      shortName,
-      label: formatDeliveryLocationLabel(location.prefLabel, shortName),
-    }
-  })
+  return {
+    address: details.address.address1,
+    shortName,
+    label: formatDeliveryLocationLabel(locationElement.prefLabel, shortName),
+  }
+}
 
 function formatDeliveryLocationLabel(
   prefLabel: string,

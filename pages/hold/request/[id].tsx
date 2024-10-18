@@ -221,11 +221,14 @@ export async function getServerSideProps({ params, req, res }) {
     const discoveryItemResult =
       discoveryBibResult && findItemInBibResult(discoveryBibResult, itemId)
 
-    const deliveryLocations = await fetchDeliveryLocations(
-      discoveryItemResult.idBarcode[0],
-      String(patron.id)
-    )
+    const { deliveryLocations, eddRequestable, status } =
+      await fetchDeliveryLocations(
+        discoveryItemResult.idBarcode[0],
+        String(patron.id)
+      )
     console.log(deliveryLocations)
+    console.log(eddRequestable)
+    console.log(status)
 
     if (!discoveryItemResult) {
       return {
