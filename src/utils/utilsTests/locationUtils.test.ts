@@ -1,7 +1,4 @@
-import type {
-  DiscoveryLocationElement,
-  DiscoveryLocation,
-} from "../../types/locationTypes"
+import type { DiscoveryLocationElement } from "../../types/locationTypes"
 
 import {
   mapLocationElementToDeliveryLocation,
@@ -168,7 +165,7 @@ describe("itemUtils", () => {
   describe("locationIsClosed", () => {
     it("determines if the location is closed based on the label and the closedLocations array set in config", () => {
       let closedLocations = []
-      const deliveryLocation: DiscoveryLocation = {
+      const deliveryLocation = {
         address: "476 Fifth Avenue (42nd St and Fifth Ave)",
         label: "Schwarzman Building - Scholar Room 217",
         shortName: "Schwarzman Building",
