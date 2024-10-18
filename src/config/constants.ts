@@ -1,4 +1,5 @@
 import { appConfig } from "./config"
+import type { DeliveryLocation, NYPLocationKey } from "../types/locationTypes"
 
 export const BASE_URL = "/research/research-catalog"
 export const SITE_NAME = "Research Catalog | NYPL"
@@ -117,5 +118,24 @@ export const SEARCH_FORM_OPTIONS = {
     text: "Subject",
     searchTip: "Enter a subject keyword or phrase.",
     placeholder: `${example} Ornithology or Greek Architecture`,
+  },
+}
+
+export const NYPL_LOCATIONS: Record<NYPLocationKey, DeliveryLocation> = {
+  lpa: {
+    shortName: "Library for the Performing Arts",
+    address: "40 Lincoln Center Plaza",
+  },
+  schomburg: {
+    shortName: "Schomburg Center",
+    address: "515 Malcolm X Boulevard",
+  },
+  schwarzman: {
+    shortName: "Schwarzman Building",
+    address: "476 Fifth Avenue (42nd St and Fifth Ave)",
+  },
+  sibl: {
+    shortName: "Science, Industry and Business Library",
+    address: "188 Madison Avenue @ 34th Street",
   },
 }

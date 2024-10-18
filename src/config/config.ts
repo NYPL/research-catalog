@@ -1,4 +1,3 @@
-import { parseLocations } from "../utils/itemUtils"
 import type { AppConfig, Environment } from "../types/appTypes"
 
 export const appConfig: AppConfig = {
@@ -78,11 +77,12 @@ export const appConfig: AppConfig = {
       "https://www.nypl.org/help/request-research-materials",
     tokenUrl: "https://isso.nypl.org/",
   },
-  closedLocations: parseLocations(process.env.CLOSED_LOCATIONS),
-  recapClosedLocations: parseLocations(process.env.RECAP_CLOSED_LOCATIONS),
-  nonRecapClosedLocations: parseLocations(
-    process.env.NON_RECAP_CLOSED_LOCATIONS
-  ),
+  // Array of closed locations based on the first part of the short-name key in the locations.ts config file (e.g. ['Library for the Performing Arts'])
+  // Can also include the key "all"
+  // TODO: This behavior comes from DFE, maybe we should change this to be an object of location keys set to booleans (e.g. CLOSED_LOCATIONS: {lpa: true})
+  closedLocations: [],
+  recapClosedLocations: [],
+  nonRecapClosedLocations: [],
   jwtPublicKey: `-----BEGIN PUBLIC KEY-----
     MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA44ilHg/PxcJYsISHMRyo
     xsmez178qZpkJVXg7rOMVTLZuf05an7Pl+lX4nw/rqcvGQDXyrimciLgLkWu00xh
