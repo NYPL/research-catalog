@@ -6,8 +6,8 @@ import { LOCATIONS_DETAILS } from "../config/locations"
 import { appConfig } from "../config/config"
 
 /**
- * Given a hash of SearchFilters, returns an array of DRBFilters
- * as expected by the DRB API
+ * Maps locations from the discovery API response to an array of the Delivery Locations type.
+ * Null is returned if there are no locations in the response.
  */
 export function mapLocationsFromResultToDeliveryLocations(
   locationsFromResult: DiscoveryLocationElement[]
@@ -19,13 +19,18 @@ export function mapLocationsFromResultToDeliveryLocations(
   )
 
   // FROM DFE
-  // TODO: Is there a better place to filter out closed locations?
+  // TODO: Is this the best place to filter out closed locations?
+  // If this is removed we can probably get rid of this whole function and call
+  // mapLocationElementToDeliveryLocation directly in fetchDeliveryLocations
   return deliveryLocations.filter(
     (deliveryLocation: DeliveryLocation) =>
       !locationIsClosed(deliveryLocation, appConfig.closedLocations)
   )
 }
 
+/**
+ * Maps a single location element from the discovery API response to a DeliveryLocation object.
+ */
 const mapLocationElementToDeliveryLocation = (
   locationElement: DiscoveryLocationElement
 ): DeliveryLocation => {
