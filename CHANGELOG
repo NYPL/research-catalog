@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add server side delivery location fetch and location utils (SCC-3759)
 
+### Updated
+
+- Moved closedLocations from environment variables to appConfig (SCC-3759)
+
 ### Fixed
 
 - Fix 500 error caused by assumption in buildHoldingDetails that location field will be present in the bib holdings returned from discovery (SCC-4314)
