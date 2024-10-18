@@ -13,11 +13,13 @@ import TimedLogoutModal from "../../src/components/MyAccount/TimedLogoutModal"
 import { getIncrementedTime } from "../../src/utils/cookieUtils"
 import { useEffect, useState } from "react"
 import { getPatronData } from "../api/account/[id]"
+import FormValidationMessage from "../../src/components/MyAccount/NewSettings/NoJsFormValidationMessage"
 interface MyAccountPropsType {
   accountData: MyAccountPatronData
   isAuthenticated: boolean
   tabsPath?: string
   renderAuthServerError?: boolean
+  storedQueryString?
 }
 
 export default function MyAccount({
@@ -25,6 +27,7 @@ export default function MyAccount({
   accountData,
   isAuthenticated,
   tabsPath,
+  storedQueryString,
 }: MyAccountPropsType) {
   const errorRetrievingPatronData = !accountData.patron
 
@@ -50,6 +53,7 @@ export default function MyAccount({
       assistance.
     </Text>
   )
+
   useEffect(() => {
     resetCountdown()
     // to avoid a reference error on document in the modal, wait to render it
@@ -76,6 +80,9 @@ export default function MyAccount({
             serverError
           ) : (
             <PatronDataProvider value={{ ...accountData }}>
+              {storedQueryString && (
+                <FormValidationMessage storedQueryString={storedQueryString} />
+              )}
               <ProfileContainer tabsPath={tabsPath} />
             </PatronDataProvider>
           )}
@@ -111,16 +118,25 @@ export async function getServerSideProps({ req, res }) {
       },
     }
   }
-  // Parsing path from url to pass to ProfileTabs.
+
+  // Parsing path and query from URL
   const tabsPathRegex = /\/account\/(.+)/
   const match = req.url.match(tabsPathRegex)
+  const queryString = req.url.split("?")[1] || null
   const tabsPath = match ? match[1] : null
   const id = patronTokenResponse.decodedPatron.sub
+
   try {
     const { checkouts, holds, patron, fines, pickupLocations } =
       await getPatronData(id)
-    /*  Redirecting invalid paths (including /overdues if user has none) and
-    // cleaning extra parts off valid paths. */
+    // Collect query string from non-JS form submission.
+    if (queryString) {
+      res.setHeader(
+        "Set-Cookie",
+        `queryParams=${encodeURIComponent(queryString)}; Path=/; HttpOnly`
+      )
+    }
+    // Redirecting invalid paths and cleaning extra parts off valid paths.
     if (tabsPath) {
       const allowedPaths = ["items", "requests", "overdues", "settings"]
       if (
@@ -147,11 +163,16 @@ export async function getServerSideProps({ req, res }) {
         }
       }
     }
+
+    // Saving the string and removing the cookie so it doesn't persist on reload.
+    const storedQueryString = req.cookies.queryParams || ""
+    res.setHeader("Set-Cookie", "queryParams=; Path=/; HttpOnly; Max-Age=0")
     return {
       props: {
         accountData: { checkouts, holds, patron, fines, pickupLocations },
         tabsPath,
         isAuthenticated,
+        storedQueryString,
         renderAuthServerError: !redirectBasedOnNyplAccountRedirects,
       },
     }
