@@ -77,6 +77,8 @@ export const appConfig: AppConfig = {
       "https://www.nypl.org/help/request-research-materials",
     tokenUrl: "https://isso.nypl.org/",
   },
+  // Array of closed locations based on the first part of the short-name key in the locations.ts config file (e.g. ['Library for the Performing Arts'])
+  // TODO: This behavior comes from DFE, determine if we should use location codes/slugs instead
   closedLocations: [],
   recapClosedLocations: [],
   nonRecapClosedLocations: [],
