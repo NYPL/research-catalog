@@ -3,7 +3,7 @@ import type {
   DiscoveryLocationElement,
   DeliveryLocation,
 } from "../types/locationTypes"
-import { LOCATIONS_DETAILS } from "../config/constants"
+import { LOCATIONS_DETAILS } from "../config/locations"
 import { appConfig } from "../config/config"
 
 /**
@@ -16,17 +16,15 @@ export function mapLocationsResultToDeliveryLocations(
   const itemListElement = discoveryLocationsResult?.itemListElement[0]
   const locationsFromResult = itemListElement?.deliveryLocation
 
-  if (!locationsFromResult) return null
+  if (!locationsFromResult?.length) return null
 
-  const deliveryLocations = locationsFromResult.map((locationElement) =>
-    getDeliveryLocationsFromResult(locationElement)
-  )
-  // TODO: Do we need to check eddRequestable here?
-  // const eddRequestable = Boolean(itemListElement?.eddRequestable)
+  const deliveryLocations = getDeliveryLocationsFromResult(locationsFromResult)
 
+  // FROM DFE
   // TODO: Do we need to filter out closed locations here?
-  return deliveryLocations.filter((deliveryLocation: DeliveryLocation) =>
-    locationIsClosed(deliveryLocation.label, appConfig.closedLocations)
+  return deliveryLocations.filter(
+    (deliveryLocation: DeliveryLocation) =>
+      !locationIsClosed(deliveryLocation, appConfig.closedLocations)
   )
 }
 
@@ -34,8 +32,6 @@ const getDeliveryLocationsFromResult = (
   locationElements: DiscoveryLocationElement[]
 ): DeliveryLocation[] =>
   locationElements.map((location) => {
-    let deliveryLocation: DeliveryLocation
-
     const slug = getLocationSlug(location)
     const details = LOCATIONS_DETAILS[slug]
 
@@ -43,14 +39,11 @@ const getDeliveryLocationsFromResult = (
 
     const shortName = details["short-name"]
 
-    deliveryLocation.address = details.address.address1
-    deliveryLocation.label = formatDeliveryLocationLabel(
-      location.prefLabel,
-      shortName
-    )
-    deliveryLocation.shortName = shortName
-
-    return deliveryLocation
+    return {
+      address: details.address.address1,
+      shortName,
+      label: formatDeliveryLocationLabel(location.prefLabel, shortName),
+    }
   })
 
 function formatDeliveryLocationLabel(
@@ -90,9 +83,9 @@ const getLocationSierraId = (
   locationElement["@id"] ? locationElement["@id"].replace("loc:", "") : null
 
 const locationIsClosed = (
-  deliveryLabel: string,
+  deliveryLocation: DeliveryLocation,
   closedLocations: string[]
 ): boolean =>
   closedLocations.some((closedLocationName) =>
-    deliveryLabel.startsWith(closedLocationName)
+    deliveryLocation.label.startsWith(closedLocationName)
   )
