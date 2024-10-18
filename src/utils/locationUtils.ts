@@ -1,8 +1,9 @@
 import type {
   DiscoveryLocationElement,
   DeliveryLocation,
+  NYPLocationKey,
 } from "../types/locationTypes"
-import { LOCATIONS_DETAILS } from "../config/locations"
+import { NYPL_LOCATIONS } from "../config/constants"
 
 /**
  * Maps a single location element from the discovery API response to a DeliveryLocation object.
@@ -10,17 +11,21 @@ import { LOCATIONS_DETAILS } from "../config/locations"
 export const mapLocationElementToDeliveryLocation = (
   locationElement: DiscoveryLocationElement
 ): DeliveryLocation => {
-  const slug = getLocationSlug(locationElement)
-  const details = LOCATIONS_DETAILS[slug]
+  const locationKey = getLocationKey(locationElement)
+  const details = NYPL_LOCATIONS[locationKey]
 
   if (!details) return null
 
-  const shortName = details["short-name"]
+  const shortName = details.shortName
+  const label = formatDeliveryLocationLabel(
+    locationElement.prefLabel,
+    shortName
+  )
 
   return {
-    address: details.address.address1,
+    address: details.address,
     shortName,
-    label: formatDeliveryLocationLabel(locationElement.prefLabel, shortName),
+    label,
   }
 }
 
@@ -28,15 +33,14 @@ function formatDeliveryLocationLabel(
   prefLabel: string,
   shortName: string
 ): string {
-  if (!prefLabel || !shortName) return ""
-  const deliveryRoom = prefLabel.split(" - ")[1]
-    ? ` - ${prefLabel.split(" - ")[1]}`
-    : ""
+  const deliveryRoom = prefLabel?.split(" - ")[1] || ""
 
-  return `${shortName}${deliveryRoom}`
+  return `${shortName}${deliveryRoom ? ` - ${deliveryRoom}` : ""}`
 }
 
-function getLocationSlug(locationElement: DiscoveryLocationElement) {
+function getLocationKey(
+  locationElement: DiscoveryLocationElement
+): NYPLocationKey | null {
   if (!locationElement?.["@id"]) return null
 
   const sierraId = getLocationSierraId(locationElement)
