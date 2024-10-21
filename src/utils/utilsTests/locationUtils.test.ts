@@ -12,7 +12,7 @@ describe("itemUtils", () => {
       // mal17
       let locationElement: DiscoveryLocationElement = {
         "@id": "loc:mal17",
-        prefLabel: `Schwarzman Building - Scholar Room 217`,
+        prefLabel: "Schwarzman Building - Scholar Room 217",
       }
 
       expect(mapLocationElementToDeliveryLocation(locationElement)).toEqual({

@@ -12,7 +12,7 @@ export interface DeliveryLocation {
   label: string
 }
 
-export type NYPLocationKey = "lpa" | "schwarzman" | "schomburg" | "sibl"
+export type NYPLocationKey = "lpa" | "schwarzman" | "schomburg" | "sibl" | "all"
 
 export interface DiscoveryLocationsResult {
   itemListElement?: DiscoveryLocationItem[]
