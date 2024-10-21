@@ -6,6 +6,7 @@ import { appConfig } from "../../config/config"
 import type Item from "../../models/Item"
 import { FeedbackContext } from "../../context/FeedbackContext"
 import type { ItemMetadata } from "../../types/itemTypes"
+import { BUTTON_LINK_STYLES } from "../../config/constants"
 
 interface ItemAvailabilityProps {
   item: Item
@@ -100,15 +101,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
         <Button
           id="contact-librarian"
           buttonType="link"
-          sx={{
-            display: "inline",
-            fontWeight: "inherit",
-            fontSize: "inherit",
-            p: 0,
-            height: "auto",
-            textAlign: "left",
-            minHeight: "auto",
-          }}
+          sx={BUTTON_LINK_STYLES}
           onClick={() =>
             onContact({
               id: item.id,

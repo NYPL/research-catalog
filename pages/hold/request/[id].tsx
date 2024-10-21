@@ -20,7 +20,12 @@ import {
   LinkedDetailElement,
 } from "../../../src/components/BibPage/BibDetail"
 import RCLink from "../../../src/components/Links/RCLink/RCLink"
-import { SITE_NAME, BASE_URL, PATHS } from "../../../src/config/constants"
+import {
+  SITE_NAME,
+  BASE_URL,
+  PATHS,
+  BUTTON_LINK_STYLES,
+} from "../../../src/config/constants"
 
 import { fetchBib } from "../../../src/server/api/bib"
 import initializePatronTokenAuth, {
@@ -61,13 +66,6 @@ export default function HoldRequestPage({
   const notificationRef = useRef<HTMLDivElement>()
   const { onOpen, setItemMetadata } = useContext(FeedbackContext)
 
-  setItemMetadata({
-    id: item.id,
-    barcode: item.barcode,
-    callNumber: item.callNumber,
-    bibId: item.bibId,
-  })
-
   useEffect(() => {
     if (alert && notificationRef.current) {
       notificationRef.current.focus()
@@ -77,6 +75,11 @@ export default function HoldRequestPage({
   const handleSubmit = (e) => {
     e.preventDefault()
     setAlert(true)
+  }
+
+  const onContact = (metadata: ItemMetadata) => {
+    setItemMetadata(metadata)
+    onOpen()
   }
 
   return (
@@ -99,11 +102,25 @@ export default function HoldRequestPage({
             <Banner
               type="negative"
               heading="Request failed"
+              sx={{ a: { color: "ui.link.primary" } }}
               content={
                 <>
                   We were unable to process your request at this time. Please
                   try again,{" "}
-                  <Button id="hold-contact" onClick={() => onOpen()}>
+                  <Button
+                    id="hold-contact"
+                    onClick={() =>
+                      onContact({
+                        id: item.id,
+                        barcode: item.barcode,
+                        callNumber: item.callNumber,
+                        bibId: item.bibId,
+                        notificationText: `Request failed for call number ${item.callNumber}`,
+                      })
+                    }
+                    buttonType="link"
+                    sx={BUTTON_LINK_STYLES}
+                  >
                     contact us
                   </Button>{" "}
                   for assistance, or{" "}
