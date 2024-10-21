@@ -226,7 +226,7 @@ export default function HoldRequestPage({
           </FormField>
           <ButtonGroup>
             <Button id="holdRequestSubmit" type="submit">
-              Submit
+              Submit request
             </Button>
           </ButtonGroup>
         </Form>
