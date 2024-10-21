@@ -17,13 +17,11 @@ import {
 } from "../../../src/components/BibPage/BibDetail"
 import { SITE_NAME, BASE_URL, PATHS } from "../../../src/config/constants"
 
-import { findItemInBibResult } from "../../../src/utils/bibUtils"
 import { fetchBib } from "../../../src/server/api/bib"
 import initializePatronTokenAuth, {
   doRedirectBasedOnNyplAccountRedirects,
   getLoginRedirect,
 } from "../../../src/server/auth"
-import { getPatronData } from "../../api/account/[id]"
 
 import Bib from "../../../src/models/Bib"
 import Item from "../../../src/models/Item"
@@ -206,16 +204,14 @@ export async function getServerSideProps({ params, req, res }) {
   }
 
   try {
-    const patronId = patronTokenResponse.decodedPatron.sub
-    const { patron } = await getPatronData(patronId)
+    const patronId = patronTokenResponse?.decodedPatron?.sub
+    console.log("patronId", patronId)
 
     // fetch bib and item
     const [bibId, itemId] = id.split("-")
-    const { discoveryBibResult } = await fetchBib(bibId, {
-      all_items: true,
-    })
-    const discoveryItemResult =
-      discoveryBibResult && findItemInBibResult(discoveryBibResult, itemId)
+    const { discoveryBibResult } = await fetchBib(bibId, {}, itemId)
+
+    const discoveryItemResult = discoveryBibResult?.items?.[0]
 
     if (!discoveryItemResult) {
       return {

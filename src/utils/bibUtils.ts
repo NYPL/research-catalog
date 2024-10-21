@@ -121,9 +121,3 @@ export function getBibQueryString(
 
   return `?${paginationOrAllQuery}${itemFilterQuery}${mergeCheckinQuery}`
 }
-
-export const findItemInBibResult = (
-  bibResult: DiscoveryBibResult,
-  itemId: string
-): DiscoveryItemResult | undefined =>
-  bibResult?.items?.find((item) => item.uri === itemId)
