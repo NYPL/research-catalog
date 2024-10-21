@@ -12,9 +12,16 @@ import { PATHS, BASE_URL } from "../../../src/config/constants"
  * result by calling fetchBib directly in getServerSideProps.
  */
 async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const id = req.query.id as string
+  let bibId = req.query.id as string
+  let itemId: string | undefined
+
+  // If the id contains a hyphen, the id contains a bibId and an itemId
+  if (bibId.includes("-")) {
+    bibId = bibId.split("-")[0]
+    itemId = bibId.split("-")[1]
+  }
   const { discoveryBibResult, annotatedMarc, status, redirectUrl } =
-    await fetchBib(id, req.query)
+    await fetchBib(bibId, req.query, itemId)
 
   if (req.method === "GET") {
     switch (status) {
