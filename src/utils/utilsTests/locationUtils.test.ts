@@ -1,4 +1,5 @@
 import type { DiscoveryLocationElement } from "../../types/locationTypes"
+import { NYPL_LOCATIONS } from "../../config/constants"
 
 import {
   mapLocationElementToDeliveryLocation,
@@ -11,13 +12,13 @@ describe("itemUtils", () => {
       // mal17
       let locationElement: DiscoveryLocationElement = {
         "@id": "loc:mal17",
-        prefLabel: "Schwarzman Building - Scholar Room 217",
+        prefLabel: `Schwarzman Building - Scholar Room 217`,
       }
 
       expect(mapLocationElementToDeliveryLocation(locationElement)).toEqual({
-        address: "476 Fifth Avenue (42nd St and Fifth Ave)",
-        label: "Schwarzman Building - Scholar Room 217",
-        shortName: "Schwarzman Building",
+        address: NYPL_LOCATIONS["schwarzman"].address,
+        label: `${NYPL_LOCATIONS["schwarzman"].shortName} - Scholar Room 217`,
+        shortName: NYPL_LOCATIONS["schwarzman"].shortName,
       })
 
       // mal
@@ -27,9 +28,9 @@ describe("itemUtils", () => {
       }
 
       expect(mapLocationElementToDeliveryLocation(locationElement)).toEqual({
-        address: "476 Fifth Avenue (42nd St and Fifth Ave)",
-        label: "Schwarzman Building - Main Reading Room 315",
-        shortName: "Schwarzman Building",
+        address: NYPL_LOCATIONS["schwarzman"].address,
+        label: `${NYPL_LOCATIONS["schwarzman"].shortName} - Main Reading Room 315`,
+        shortName: NYPL_LOCATIONS["schwarzman"].shortName,
       })
 
       // mab
@@ -39,9 +40,9 @@ describe("itemUtils", () => {
       }
 
       expect(mapLocationElementToDeliveryLocation(locationElement)).toEqual({
-        address: "476 Fifth Avenue (42nd St and Fifth Ave)",
-        label: "Schwarzman Building - Art & Architecture Room 300",
-        shortName: "Schwarzman Building",
+        address: NYPL_LOCATIONS["schwarzman"].address,
+        label: `${NYPL_LOCATIONS["schwarzman"].shortName} - Art & Architecture Room 300`,
+        shortName: NYPL_LOCATIONS["schwarzman"].shortName,
       })
 
       // maf
@@ -51,9 +52,9 @@ describe("itemUtils", () => {
       }
 
       expect(mapLocationElementToDeliveryLocation(locationElement)).toEqual({
-        address: "476 Fifth Avenue (42nd St and Fifth Ave)",
-        label: "Schwarzman Building - Dorot Jewish Division Room 111",
-        shortName: "Schwarzman Building",
+        address: NYPL_LOCATIONS["schwarzman"].address,
+        label: `${NYPL_LOCATIONS["schwarzman"].shortName} - Dorot Jewish Division Room 111`,
+        shortName: NYPL_LOCATIONS["schwarzman"].shortName,
       })
 
       // maf
@@ -63,9 +64,9 @@ describe("itemUtils", () => {
       }
 
       expect(mapLocationElementToDeliveryLocation(locationElement)).toEqual({
-        address: "476 Fifth Avenue (42nd St and Fifth Ave)",
-        label: "Schwarzman Building - Map Division Room 117",
-        shortName: "Schwarzman Building",
+        address: NYPL_LOCATIONS["schwarzman"].address,
+        label: `${NYPL_LOCATIONS["schwarzman"].shortName} - Map Division Room 117`,
+        shortName: NYPL_LOCATIONS["schwarzman"].shortName,
       })
 
       // map
@@ -75,9 +76,9 @@ describe("itemUtils", () => {
       }
 
       expect(mapLocationElementToDeliveryLocation(locationElement)).toEqual({
-        address: "476 Fifth Avenue (42nd St and Fifth Ave)",
-        label: "Schwarzman Building - Map Division Room 117",
-        shortName: "Schwarzman Building",
+        address: NYPL_LOCATIONS["schwarzman"].address,
+        label: `${NYPL_LOCATIONS["schwarzman"].shortName} - Map Division Room 117`,
+        shortName: NYPL_LOCATIONS["schwarzman"].shortName,
       })
 
       // mag
@@ -87,9 +88,9 @@ describe("itemUtils", () => {
       }
 
       expect(mapLocationElementToDeliveryLocation(locationElement)).toEqual({
-        address: "476 Fifth Avenue (42nd St and Fifth Ave)",
-        label: "Schwarzman Building - Milstein Division Room 121",
-        shortName: "Schwarzman Building",
+        address: NYPL_LOCATIONS["schwarzman"].address,
+        label: `${NYPL_LOCATIONS["schwarzman"].shortName} - Milstein Division Room 121`,
+        shortName: NYPL_LOCATIONS["schwarzman"].shortName,
       })
 
       // par
@@ -99,9 +100,9 @@ describe("itemUtils", () => {
       }
 
       expect(mapLocationElementToDeliveryLocation(locationElement)).toEqual({
-        address: "40 Lincoln Center Plaza",
-        label: "Library for the Performing Arts",
-        shortName: "Library for the Performing Arts",
+        address: NYPL_LOCATIONS["lpa"].address,
+        label: NYPL_LOCATIONS["lpa"].shortName,
+        shortName: NYPL_LOCATIONS["lpa"].shortName,
       })
 
       // sc
@@ -111,9 +112,9 @@ describe("itemUtils", () => {
       }
 
       expect(mapLocationElementToDeliveryLocation(locationElement)).toEqual({
-        address: "515 Malcolm X Boulevard",
-        label: "Schomburg Center - Research and Reference Division",
-        shortName: "Schomburg Center",
+        address: NYPL_LOCATIONS["schomburg"].address,
+        label: `${NYPL_LOCATIONS["schomburg"].shortName} - Research and Reference Division`,
+        shortName: NYPL_LOCATIONS["schomburg"].shortName,
       })
 
       // lpa
@@ -123,9 +124,9 @@ describe("itemUtils", () => {
       }
 
       expect(mapLocationElementToDeliveryLocation(locationElement)).toEqual({
-        address: "40 Lincoln Center Plaza",
-        label: "Library for the Performing Arts - Music Division",
-        shortName: "Library for the Performing Arts",
+        address: NYPL_LOCATIONS["lpa"].address,
+        label: `${NYPL_LOCATIONS["lpa"].shortName} - Music Division`,
+        shortName: NYPL_LOCATIONS["lpa"].shortName,
       })
     })
     it("returns null when the location is not found in the location details mapping found in this repo", () => {
@@ -148,16 +149,28 @@ describe("itemUtils", () => {
       )
     })
 
-    // TODO: This behavior comes from DFE, determine if this is the desired behavior.
-    it("returns an empty label when prefLabel is missing", () => {
+    it("doesn't add the delivery room to the location when prefLabel is missing", () => {
       const locationElement: DiscoveryLocationElement = {
         "@id": "loc:sc",
       }
 
       expect(mapLocationElementToDeliveryLocation(locationElement)).toEqual({
-        address: "515 Malcolm X Boulevard",
-        label: "",
-        shortName: "Schomburg Center",
+        address: NYPL_LOCATIONS["schomburg"].address,
+        label: NYPL_LOCATIONS["schomburg"].shortName,
+        shortName: NYPL_LOCATIONS["schomburg"].shortName,
+      })
+    })
+
+    it("doesn't add the delivery room when the prefLabel doesn't include a dash", () => {
+      const locationElement: DiscoveryLocationElement = {
+        "@id": "loc:sc",
+        prefLabel: NYPL_LOCATIONS["schomburg"].shortName,
+      }
+
+      expect(mapLocationElementToDeliveryLocation(locationElement)).toEqual({
+        address: NYPL_LOCATIONS["schomburg"].address,
+        label: NYPL_LOCATIONS["schomburg"].shortName,
+        shortName: NYPL_LOCATIONS["schomburg"].shortName,
       })
     })
   })
