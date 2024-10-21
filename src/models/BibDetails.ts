@@ -159,12 +159,8 @@ export default class BibDetails {
   }
 
   buildHoldingDetail(holding, fieldMapping: FieldMapping) {
-    if (fieldMapping.field === "location") {
-      console.log("location", fieldMapping.field)
-    }
     const bibFieldValue =
-      fieldMapping.field === "location" &&
-      Array.isArray(holding[fieldMapping.field])
+      fieldMapping.field === "location"
         ? // "location" is the only holding field that is an array of
           // objects shaped like { code: "loc:...", label: "..." }
           // Getting the first object in the array.
