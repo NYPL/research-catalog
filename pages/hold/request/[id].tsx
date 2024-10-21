@@ -40,6 +40,7 @@ import bibDetailStyles from "../../../styles/components/BibDetails.module.scss"
 
 import type { DiscoveryBibResult } from "../../../src/types/bibTypes"
 import type { DiscoveryItemResult } from "../../../src/types/itemTypes"
+import type { ItemMetadata } from "../../../src/types/itemTypes"
 
 interface HoldRequestPropsType {
   discoveryBibResult: DiscoveryBibResult
