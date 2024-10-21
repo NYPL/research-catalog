@@ -1,4 +1,5 @@
 import Head from "next/head"
+import { useState, useContext, useRef, useEffect } from "react"
 import {
   Heading,
   List,
@@ -8,13 +9,17 @@ import {
   Radio,
   ButtonGroup,
   Button,
+  Banner,
+  Box,
 } from "@nypl/design-system-react-components"
 
 import Layout from "../../../src/components/Layout/Layout"
+import { FeedbackContext } from "../../../src/context/FeedbackContext"
 import {
   PlainTextElement,
   LinkedDetailElement,
 } from "../../../src/components/BibPage/BibDetail"
+import RCLink from "../../../src/components/Links/RCLink/RCLink"
 import { SITE_NAME, BASE_URL, PATHS } from "../../../src/config/constants"
 
 import { fetchBib } from "../../../src/server/api/bib"
@@ -52,9 +57,26 @@ export default function HoldRequestPage({
   const bib = new Bib(discoveryBibResult)
   const item = new Item(discoveryItemResult, bib)
 
+  const [alert, setAlert] = useState(true)
+  const notificationRef = useRef<HTMLDivElement>()
+  const { onOpen, setItemMetadata } = useContext(FeedbackContext)
+
+  setItemMetadata({
+    id: item.id,
+    barcode: item.barcode,
+    callNumber: item.callNumber,
+    bibId: item.bibId,
+  })
+
+  useEffect(() => {
+    if (alert && notificationRef.current) {
+      notificationRef.current.focus()
+    }
+  }, [alert])
+
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log("submitting form")
+    setAlert(true)
   }
 
   return (
@@ -70,6 +92,28 @@ export default function HoldRequestPage({
         <title key="main-title">{metadataTitle}</title>
       </Head>
       <Layout isAuthenticated={isAuthenticated} activePage="hold">
+        {/* Always render the wrapper element that will display the
+          dynamically rendered notification */}
+        <Box tabIndex={-1} ref={notificationRef}>
+          {alert && (
+            <Banner
+              type="negative"
+              heading="Request failed"
+              content={
+                <>
+                  We were unable to process your request at this time. Please
+                  try again,{" "}
+                  <Button id="hold-contact" onClick={() => onOpen()}>
+                    contact us
+                  </Button>{" "}
+                  for assistance, or{" "}
+                  <RCLink href="/search">start a new search.</RCLink>
+                </>
+              }
+              mb="s"
+            />
+          )}
+        </Box>
         <Heading level="h2" mb="l" size="heading3">
           Request for on-site use
         </Heading>
