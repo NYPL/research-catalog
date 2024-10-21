@@ -166,7 +166,7 @@ export default function HoldRequestPage({
             </RadioGroup>
           </FormField>
           <ButtonGroup>
-            <Button id="holdRequestSubmit" type="submit" size="large">
+            <Button id="holdRequestSubmit" type="submit">
               Submit
             </Button>
           </ButtonGroup>
@@ -195,7 +195,7 @@ export async function getServerSideProps({ params, req, res }) {
         redirectCount + 1
       }; Max-Age=10; path=/; domain=.nypl.org;`
     )
-    const redirect = getLoginRedirect(req, "/account")
+    const redirect = getLoginRedirect(req, `/hold/request/[${id}]`)
 
     return {
       redirect: {
