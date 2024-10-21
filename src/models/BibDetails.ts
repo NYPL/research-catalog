@@ -159,6 +159,7 @@ export default class BibDetails {
   }
 
   buildHoldingDetail(holding, fieldMapping: FieldMapping) {
+    if (!holding[fieldMapping.field]) return null
     const bibFieldValue =
       fieldMapping.field === "location"
         ? // "location" is the only holding field that is an array of
