@@ -121,7 +121,7 @@ export const SEARCH_FORM_OPTIONS = {
   },
 }
 
-export const NYPL_LOCATIONS: Record<NYPLocationKey, DeliveryLocation> = {
+export const NYPL_LOCATIONS = {
   lpa: {
     shortName: "Library for the Performing Arts",
     address: "40 Lincoln Center Plaza",

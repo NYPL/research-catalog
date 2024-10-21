@@ -9,7 +9,7 @@ export interface DeliveryLocationsResponse {
 export interface DeliveryLocation {
   address: string
   shortName: string
-  label?: string
+  label: string
 }
 
 export type NYPLocationKey = "lpa" | "schwarzman" | "schomburg" | "sibl"
