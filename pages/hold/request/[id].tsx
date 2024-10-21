@@ -63,7 +63,7 @@ export default function HoldRequestPage({
   const bib = new Bib(discoveryBibResult)
   const item = new Item(discoveryItemResult, bib)
 
-  const [alert, setAlert] = useState(true)
+  const [alert, setAlert] = useState(false)
   const notificationRef = useRef<HTMLDivElement>()
   const { onOpen, setItemMetadata } = useContext(FeedbackContext)
 
