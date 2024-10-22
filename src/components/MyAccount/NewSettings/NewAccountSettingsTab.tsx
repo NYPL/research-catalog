@@ -1,7 +1,7 @@
 import { Flex, Banner } from "@nypl/design-system-react-components"
 import { useContext, useState } from "react"
 import { PatronDataContext } from "../../../context/PatronDataContext"
-import EmailForm from "./EmailForm"
+import PhoneEmailForm from "./PhoneEmailForm"
 
 const NewAccountSettingsTab = () => {
   const {
@@ -26,11 +26,18 @@ const NewAccountSettingsTab = () => {
           sx={{ marginTop: "m" }}
         />
       )}
-      <Flex sx={{ marginTop: "xl" }}>
-        <EmailForm
+      <Flex flexDir="column" sx={{ marginTop: "xl", gap: "s" }}>
+        <PhoneEmailForm
           patronData={patron}
           setIsSuccess={setIsSuccess}
           setIsFailure={setIsFailure}
+          inputType="phones"
+        />
+        <PhoneEmailForm
+          patronData={patron}
+          setIsSuccess={setIsSuccess}
+          setIsFailure={setIsFailure}
+          inputType="emails"
         />
       </Flex>
     </>
