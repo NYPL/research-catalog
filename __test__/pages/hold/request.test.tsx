@@ -208,7 +208,7 @@ describe("Hold Request page", () => {
 
         expect(
           screen.queryByText(
-            "Request failed for call number JFK 01-374 no. 4 (2001)",
+            `Request failed for call number ${bibWithItems.resource.items[0].shelfMark[0]}`,
             {
               exact: false,
             }
