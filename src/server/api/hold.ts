@@ -37,7 +37,6 @@ export async function fetchDeliveryLocations(
     const eddRequestable = discoveryLocationsItem.eddRequestable || false
 
     // Filter out closed locations
-    // TODO: We currently filter out closed locations here in DFE, we should determine if should be checked elsewhere.
     const openLocations = deliveryLocations.filter(
       (location: DeliveryLocation) =>
         !locationIsClosed(location, appConfig.closedLocations)
