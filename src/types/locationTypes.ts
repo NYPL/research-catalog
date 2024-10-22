@@ -13,6 +13,7 @@ export interface DeliveryLocation {
 }
 
 export type NYPLocationKey = "lpa" | "schwarzman" | "schomburg" | "all"
+export type RecapLocationKey = "all"
 
 export interface DiscoveryLocationsResult {
   itemListElement?: DiscoveryLocationItem[]

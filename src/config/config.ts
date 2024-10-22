@@ -1,5 +1,5 @@
 import type { AppConfig, Environment } from "../types/appTypes"
-import type { NYPLocationKey } from "../types/locationTypes"
+import type { NYPLocationKey, RecapLocationKey } from "../types/locationTypes"
 
 export const appConfig: AppConfig = {
   environment:
@@ -78,11 +78,11 @@ export const appConfig: AppConfig = {
       "https://www.nypl.org/help/request-research-materials",
     tokenUrl: "https://isso.nypl.org/",
   },
-  // Array of closed locations based on the first part of the short-name key in the locations.ts config file (e.g. ['Library for the Performing Arts'])
-  // Can also include the key "all"
+  // Array of closed location keys (available options for NYPL: all, schwarzman, schomburg, lpa)
+  // TODO: Add RecapLocation keys
   closedLocations: [] as NYPLocationKey[],
-  recapClosedLocations: [] as NYPLocationKey[],
-  nonRecapClosedLocations: [] as NYPLocationKey[],
+  recapClosedLocations: [] as RecapLocationKey[],
+  nonRecapClosedLocations: [] as (NYPLocationKey | RecapLocationKey)[],
   jwtPublicKey: `-----BEGIN PUBLIC KEY-----
     MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA44ilHg/PxcJYsISHMRyo
     xsmez178qZpkJVXg7rOMVTLZuf05an7Pl+lX4nw/rqcvGQDXyrimciLgLkWu00xh
