@@ -1,5 +1,6 @@
 import Head from "next/head"
 import { useState, useContext, useRef, useEffect } from "react"
+import { useRouter } from "next/router"
 import {
   Heading,
   List,
@@ -11,6 +12,7 @@ import {
   Button,
   Banner,
   Box,
+  SkeletonLoader,
 } from "@nypl/design-system-react-components"
 
 import Layout from "../../../src/components/Layout/Layout"
@@ -26,6 +28,7 @@ import {
   PATHS,
   BUTTON_LINK_STYLES,
 } from "../../../src/config/constants"
+import useLoading from "../../../src/hooks/useLoading"
 
 import { fetchBib } from "../../../src/server/api/bib"
 import initializePatronTokenAuth, {
@@ -62,10 +65,15 @@ export default function HoldRequestPage({
 
   const bib = new Bib(discoveryBibResult)
   const item = new Item(discoveryItemResult, bib)
+  const holdId = `${item.bibId}-${item.id}`
 
   const [alert, setAlert] = useState(false)
+  const [formPosting, setFormPosting] = useState(false)
   const notificationRef = useRef<HTMLDivElement>()
   const { onOpen, setItemMetadata } = useContext(FeedbackContext)
+
+  const router = useRouter()
+  const isLoading = useLoading()
 
   useEffect(() => {
     if (alert && notificationRef.current) {
@@ -73,9 +81,32 @@ export default function HoldRequestPage({
     }
   }, [alert])
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    setAlert(true)
+
+    try {
+      setFormPosting(true)
+      const response = await fetch(`${BASE_URL}/api/hold/request/${holdId}`, {
+        method: "POST",
+        body: JSON.stringify(e.target),
+      })
+      const responseJson = await response.json()
+
+      if (responseJson.error) {
+        console.error("Error in hold  request api response", responseJson.error)
+        setAlert(true)
+        setFormPosting(false)
+        return
+      }
+
+      // Success state
+      await router.push(`${PATHS.HOLD_CONFIRMATION}/${holdId}`)
+      setFormPosting(false)
+    } catch (error) {
+      console.error("Error in hold  request api response", error)
+      setAlert(true)
+      setFormPosting(false)
+    }
   }
 
   const onContact = (metadata: ItemMetadata) => {
@@ -96,141 +127,147 @@ export default function HoldRequestPage({
         <title key="main-title">{metadataTitle}</title>
       </Head>
       <Layout isAuthenticated={isAuthenticated} activePage="hold">
-        {/* Always render the wrapper element that will display the
+        {isLoading || formPosting ? (
+          <SkeletonLoader showImage={false} />
+        ) : (
+          <>
+            {/* Always render the wrapper element that will display the
           dynamically rendered notification */}
-        <Box tabIndex={-1} ref={notificationRef}>
-          {alert && (
-            <Banner
-              type="negative"
-              heading="Request failed"
-              sx={{ a: { color: "ui.link.primary" } }}
-              content={
-                <>
-                  We were unable to process your request at this time. Please
-                  try again,{" "}
-                  <Button
-                    id="hold-contact"
-                    onClick={() =>
-                      onContact({
-                        id: item.id,
-                        barcode: item.barcode,
-                        callNumber: item.callNumber,
-                        bibId: item.bibId,
-                        notificationText: `Request failed for call number ${item.callNumber}`,
-                      })
-                    }
-                    buttonType="link"
-                    sx={BUTTON_LINK_STYLES}
-                  >
-                    contact us
-                  </Button>{" "}
-                  for assistance, or{" "}
-                  <RCLink href="/search">start a new search.</RCLink>
-                </>
-              }
-              mb="s"
-            />
-          )}
-        </Box>
-        <Heading level="h2" mb="l" size="heading3">
-          Request for on-site use
-        </Heading>
-        <List
-          noStyling
-          type="dl"
-          showRowDividers={false}
-          className={bibDetailStyles.bibDetails}
-          mb="xs"
-          mt={0}
-        >
-          <LinkedDetailElement
-            label="Title"
-            value={[
-              { url: `${PATHS.BIB}/${bib.id}`, urlLabel: bib.titleDisplay },
-            ]}
-            link="internal"
-          />
-          <PlainTextElement label="Call number" value={[item.callNumber]} />
-          {item.volume ? (
-            <PlainTextElement label="Volume/date" value={[item.volume]} />
-          ) : (
-            <></>
-          )}
-        </List>
-        <Heading level="h3" size="heading4" mb="l">
-          Choose a pickup location
-        </Heading>
-        <Form
-          id="hold-request-form"
-          data-testid="hold-request-form"
-          // We are using a post request on hold requests when JS is disabled
-          method="post"
-          action={`${BASE_URL}/api/hold/request/${bib.id}-${item.id}`}
-          onSubmit={handleSubmit}
-          mb="l"
-        >
-          <FormField>
-            <RadioGroup
-              name="pickup-location"
-              id="pickup-location"
-              labelText="Pickup location"
-              defaultValue="1"
-              isRequired
-              showLabel={false}
+            <Box tabIndex={-1} ref={notificationRef}>
+              {alert && (
+                <Banner
+                  type="negative"
+                  heading="Request failed"
+                  sx={{ a: { color: "ui.link.primary" } }}
+                  content={
+                    <>
+                      We were unable to process your request at this time.
+                      Please try again,{" "}
+                      <Button
+                        id="hold-contact"
+                        onClick={() =>
+                          onContact({
+                            id: item.id,
+                            barcode: item.barcode,
+                            callNumber: item.callNumber,
+                            bibId: item.bibId,
+                            notificationText: `Request failed for call number ${item.callNumber}`,
+                          })
+                        }
+                        buttonType="link"
+                        sx={BUTTON_LINK_STYLES}
+                      >
+                        contact us
+                      </Button>{" "}
+                      for assistance, or{" "}
+                      <RCLink href="/search">start a new search.</RCLink>
+                    </>
+                  }
+                  mb="s"
+                />
+              )}
+            </Box>
+            <Heading level="h2" mb="l" size="heading3">
+              Request for on-site use
+            </Heading>
+            <List
+              noStyling
+              type="dl"
+              showRowDividers={false}
+              className={bibDetailStyles.bibDetails}
               mb="xs"
+              mt={0}
             >
-              <Radio
-                id="1"
-                labelText={
-                  <>
-                    My Scholar Room
-                    <br />
-                    476 Fifth Avenue (42nd St and Fifth Ave)
-                  </>
-                }
-                value="1"
+              <LinkedDetailElement
+                label="Title"
+                value={[
+                  { url: `${PATHS.BIB}/${bib.id}`, urlLabel: bib.titleDisplay },
+                ]}
+                link="internal"
               />
-              <Radio
-                id="2"
-                labelText={
-                  <>
-                    Schwarzman Building - Rose Main Reading Room
-                    <br />
-                    315 476 Fifth Avenue (42nd St and Fifth Ave)
-                  </>
-                }
-                value="2"
-              />
-              <Radio
-                id="3"
-                labelText={
-                  <>
-                    Schwarzman Building - Art & Architecture Room 300
-                    <br />
-                    476 Fifth Avenue (42nd St and Fifth Ave)
-                  </>
-                }
-                value="3"
-              />
-              <Radio
-                id="4"
-                labelText={
-                  <>
-                    Schwarzman Building - Dorot Jewish Division Room 111
-                    <br />
-                    476 Fifth Avenue (42nd St and Fifth Ave)
-                  </>
-                }
-                value="4"
-              />
-            </RadioGroup>
-          </FormField>
-          <ButtonGroup>
-            <Button id="holdRequestSubmit" type="submit">
-              Submit request
-            </Button>
-          </ButtonGroup>
-        </Form>
+              <PlainTextElement label="Call number" value={[item.callNumber]} />
+              {item.volume ? (
+                <PlainTextElement label="Volume/date" value={[item.volume]} />
+              ) : (
+                <></>
+              )}
+            </List>
+            <Heading level="h3" size="heading4" mb="l">
+              Choose a pickup location
+            </Heading>
+            <Form
+              id="hold-request-form"
+              data-testid="hold-request-form"
+              // We are using a post request on hold requests when JS is disabled
+              method="post"
+              action={`${BASE_URL}/api/hold/request/${bib.id}-${item.id}`}
+              onSubmit={handleSubmit}
+              mb="l"
+            >
+              <FormField>
+                <RadioGroup
+                  name="pickup-location"
+                  id="pickup-location"
+                  labelText="Pickup location"
+                  defaultValue="1"
+                  isRequired
+                  showLabel={false}
+                  mb="xs"
+                >
+                  <Radio
+                    id="1"
+                    labelText={
+                      <>
+                        My Scholar Room
+                        <br />
+                        476 Fifth Avenue (42nd St and Fifth Ave)
+                      </>
+                    }
+                    value="1"
+                  />
+                  <Radio
+                    id="2"
+                    labelText={
+                      <>
+                        Schwarzman Building - Rose Main Reading Room
+                        <br />
+                        315 476 Fifth Avenue (42nd St and Fifth Ave)
+                      </>
+                    }
+                    value="2"
+                  />
+                  <Radio
+                    id="3"
+                    labelText={
+                      <>
+                        Schwarzman Building - Art & Architecture Room 300
+                        <br />
+                        476 Fifth Avenue (42nd St and Fifth Ave)
+                      </>
+                    }
+                    value="3"
+                  />
+                  <Radio
+                    id="4"
+                    labelText={
+                      <>
+                        Schwarzman Building - Dorot Jewish Division Room 111
+                        <br />
+                        476 Fifth Avenue (42nd St and Fifth Ave)
+                      </>
+                    }
+                    value="4"
+                  />
+                </RadioGroup>
+              </FormField>
+              <ButtonGroup>
+                <Button id="holdRequestSubmit" type="submit">
+                  Submit request
+                </Button>
+              </ButtonGroup>
+            </Form>
+          </>
+        )}
       </Layout>
     </>
   )

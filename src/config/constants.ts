@@ -17,6 +17,8 @@ export const PATHS = {
   HOME: "/",
   SEARCH: "/search",
   ADVANCED_SEARCH: "/search/advanced",
+  HOLD_REQUEST: "/hold/request",
+  HOLD_CONFIRMATION: "/hold/confirmation",
   BIB: "/bib",
   "404": "/404",
   "404_REDIRECT": "/404/redirect",
