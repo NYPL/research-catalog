@@ -9,8 +9,8 @@ jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 describe("Home", () => {
   it("should render the search form", () => {
     render(<Home isAuthenticated={true} />)
-    const searchButton = screen.getByRole("button", { name: "Search" })
-    expect(searchButton).toBeInTheDocument()
+    const searchForm = screen.getByLabelText("Search Bar Label")
+    expect(searchForm).toBeInTheDocument()
   })
   it("should render an H2", () => {
     render(<Home isAuthenticated={true} />)

@@ -239,6 +239,10 @@ describe("searchUtils", () => {
         'Displaying 201-250 of 1,200 results for keyword "cats"'
       )
     })
+    it("doesn't display the 'for' part of the display text when the q param is absent", () => {
+      const heading = getSearchResultsHeading({ page: 5 }, 1200)
+      expect(heading).toEqual("Displaying 201-250 of 1,200 results")
+    })
 
     describe("identifier searches", () => {
       it("returns the correct heading string for OCLC searches", () => {

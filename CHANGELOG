@@ -7,15 +7,52 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
-### Added
+### Fixed
+
+- Fix 500 error caused by assumption in buildHoldingDetails that location field will be present in the bib holdings returned from discovery (SCC-4314)
+
+## [1.3.3] 2024-10-10
 
 ### Fixed
 
+- Add optional chaining to value in isRtl util to fix 500 error when bib detail url is missing a label (SCC-4308)
+- Adjust ItemTable CSS to make columns the same width in search results (SCC-4299)
+
+## [1.3.2] 2024-10-7
+
+### Fixed
+
+- Adjust ItemTable styles according to design (SCC-4299)
+- Remove border and padding from eResources link as part of post-Bib page launch VQA (SCC-4299)
+- Remove base url from finding aid urls (SCC-4306)
+- Fix incorrect subject heading urls in Bib Details (SCC-4305)
+
+### [1.3.1] Hotfix
+
+- Fix Table column widths on Search Results after DS 3.4.0 update (SCC-4299)
+
+## [1.3.0] 2024-10-3
+
+### Added
+
+### Hotfix
+
+- Fix bug where the "View fewer" button was not appearing when filters weren't applied
+
+### Fixed
+
+- Small styling fixes after DS version bump to 3.4.0 (SCC-4264)
+- Fix bug where "undefined" appears in the search results heading (SCC-4277)
+- VQA second pass miscellaneous fixes (SCC-4264)
 - Fixed accessibility issue on Bib page where focus moves to Displaying text when filters are controlled via MultiSelect. This will change when dynamic updates are replaced with an apply button (SCC-4246)
 
 ### Updated
 
 - Create banner container in Layout component and add EDS link to that container (SCC-4260)
+- Bump DS version to 3.4.0
+- Bump nvmrc version to Node 20.
+- Update error message in Item Filter Year to include new error message prefix from the DS.
+- Integrate view_all query param on client side and remove batched fetch (SCC-4287)
 - Replaced travis with github actions (SCC-4218)
 - Sentence case and rearrange search options (SCC-4260)
 - Call number search scope to search dropdown options [(SCC-4260)](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4260)

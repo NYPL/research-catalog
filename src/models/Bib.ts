@@ -1,4 +1,8 @@
-import type { DiscoveryBibResult, ElectronicResource } from "../types/bibTypes"
+import type {
+  DiscoveryBibResult,
+  ElectronicResource,
+  SubjectHeading,
+} from "../types/bibTypes"
 import type { JSONLDValue } from "../types/itemTypes"
 import type { Aggregation } from "../types/filterTypes"
 import Item from "../models/Item"
@@ -16,6 +20,7 @@ import ItemTableData from "./ItemTableData"
 export default class Bib {
   id: string
   title: string
+  titleDisplay: string
   electronicResources?: ElectronicResource[]
   numPhysicalItems: number
   numItemsMatched: number
@@ -23,10 +28,13 @@ export default class Bib {
   issuance?: JSONLDValue[]
   items?: Item[]
   itemAggregations?: Aggregation[]
+  hasItemDates?: boolean
+  subjectHeadings?: SubjectHeading[]
 
   constructor(result: DiscoveryBibResult) {
     this.id = result["@id"] ? result["@id"].substring(4) : ""
-    this.title = this.getTitleFromResult(result)
+    this.title = result.title[0] || ""
+    this.titleDisplay = this.getTitleDisplayFromResult(result)
     this.electronicResources = result.electronicResources || null
     this.numPhysicalItems = result.numItemsTotal || 0
     this.numItemsMatched = result.numItemsMatched || 0
@@ -35,6 +43,8 @@ export default class Bib {
     this.issuance = (result.issuance?.length && result.issuance) || null
     this.items = this.getItemsFromResult(result)
     this.itemAggregations = result.itemAggregations || null
+    this.hasItemDates = result.hasItemDates || false
+    this.subjectHeadings = result.subjectHeadings || null
   }
 
   get url() {
@@ -43,12 +53,6 @@ export default class Bib {
 
   get numElectronicResources() {
     return this.electronicResources?.length || 0
-  }
-
-  get numItems() {
-    return this.hasPhysicalItems
-      ? this.numPhysicalItems
-      : this.numElectronicResources
   }
 
   get hasPhysicalItems() {
@@ -76,10 +80,6 @@ export default class Bib {
     )
   }
 
-  get showViewAllItemsLink() {
-    return this.numItemsMatched > ITEM_PAGINATION_BATCH_SIZE
-  }
-
   get resourceType() {
     return this.hasPhysicalItems ? "Item" : "Resource"
   }
@@ -92,8 +92,16 @@ export default class Bib {
     )
   }
 
+  numItems(filtersAreApplied = false) {
+    return filtersAreApplied ? this.numItemsMatched : this.numPhysicalItems
+  }
+
+  showViewAllItemsLink(filtersAreApplied = false) {
+    return this.numItems(filtersAreApplied) > ITEM_PAGINATION_BATCH_SIZE
+  }
+
   getNumItemsMessage(filtersAreApplied = false) {
-    const totalItems = filtersAreApplied ? this.numItemsMatched : this.numItems
+    const totalItems = this.numItems(filtersAreApplied)
     return `${totalItems} ${
       filtersAreApplied ? "matching " : ""
     }${this.resourceType.toLowerCase()}${totalItems !== 1 ? "s" : ""}`
@@ -106,7 +114,7 @@ export default class Bib {
     } items. This may take a few moments...`
   }
 
-  getTitleFromResult(result: DiscoveryBibResult) {
+  getTitleDisplayFromResult(result: DiscoveryBibResult) {
     if (!result.titleDisplay || !result.titleDisplay.length) {
       const author =
         result.creatorLiteral && result.creatorLiteral.length

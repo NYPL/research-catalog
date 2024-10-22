@@ -11,7 +11,10 @@ jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
 describe("SearchForm", () => {
   const submit = () =>
-    fireEvent(screen.getByText("Search"), new MouseEvent("click"))
+    fireEvent(
+      screen.getByText("Search").closest("button"),
+      new MouseEvent("click")
+    )
   beforeEach(() => {
     mockRouter.query.q = ""
   })
