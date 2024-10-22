@@ -34,11 +34,13 @@ const SearchResult = ({ bib }: SearchResultProps) => {
         size="heading5"
         sx={{ a: { textDecoration: "none" } }}
       >
-        <RCLink href={`${PATHS.BIB}/${bib.id}`}>{bib.title}</RCLink>
+        <RCLink href={`${PATHS.BIB}/${bib.id}`}>{bib.titleDisplay}</RCLink>
       </CardHeading>
       <CardContent>
         <Box
-          sx={{ p: { display: "inline", marginRight: "s", marginBottom: "s" } }}
+          sx={{
+            p: { display: "inline-block", marginRight: "s", marginBottom: "s" },
+          }}
         >
           {bib.materialType && <Text>{bib.materialType}</Text>}
           {bib.publicationStatement && <Text>{bib.publicationStatement}</Text>}
@@ -61,7 +63,7 @@ const SearchResult = ({ bib }: SearchResultProps) => {
                   key={`search-results-item-${itemTableData.items[0].id}`}
                 />
               ))}
-              {bib.showViewAllItemsLink && (
+              {bib.showViewAllItemsLink() && (
                 <CardActions>
                   <RCLink
                     href={`${bib.url}#item-table`}

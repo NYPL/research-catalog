@@ -3,6 +3,7 @@ import {
   isNyplBibID,
   getBibQueryString,
   buildItemTableDisplayingString,
+  itemFiltersActive,
 } from "../bibUtils"
 
 describe("bibUtils", () => {
@@ -41,6 +42,30 @@ describe("bibUtils", () => {
       expect(isNyplBibID("hb10000202040400")).toBe(false)
     })
   })
+  describe("itemFiltersActive", () => {
+    it("returns true when any of the filter params are populated in the bib query string", () => {
+      expect(itemFiltersActive({ item_location: "location" })).toBe(true)
+      expect(itemFiltersActive({ item_format: "format" })).toBe(true)
+      expect(itemFiltersActive({ item_status: "status" })).toBe(true)
+      expect(itemFiltersActive({ item_date: "date" })).toBe(true)
+    })
+    it("returns false when item filter params are absent in the bib query or if they defined as empty strings", () => {
+      expect(
+        itemFiltersActive({
+          id: "b12082323",
+          item_page: 5,
+        })
+      ).toBe(false)
+      expect(
+        itemFiltersActive({
+          item_location: "",
+          item_status: "",
+          item_format: "",
+          item_date: "",
+        })
+      ).toBe(false)
+    })
+  })
   describe("getBibQueryString", () => {
     it("returns the correct query string with a bib ID and no bib params", () => {
       expect(getBibQueryString({ id: "b12082323" })).toBe(
@@ -50,6 +75,55 @@ describe("bibUtils", () => {
     it("returns the correct query string with a bib ID and query params", () => {
       expect(getBibQueryString({ id: "b12082323", item_page: 5 })).toBe(
         "?items_size=20&items_from=80&item_page=5&merge_checkin_card_items=true"
+      )
+    })
+    // TODO: Uncomment when view_all endpoint in discovery supports query params
+    // it("replaces pagination query params with all_items when all_items is true", () => {
+    //   expect(
+    //     getBibQueryString({ id: "b12082323", item_page: 5, all_items: true })
+    //   ).toBe("?all_items=true&merge_checkin_card_items=true")
+    // })
+    // it("does not replace pagination query params when all_items is present and false", () => {
+    //   expect(
+    //     getBibQueryString({
+    //       id: "b12082323",
+    //       item_page: 5,
+    //       all_items: false,
+    //     })
+    //   ).toBe(
+    //     "?items_size=20&items_from=80&item_page=5&merge_checkin_card_items=true"
+    //   )
+    // })
+
+    // TODO: Remove this test when view_all endpoint in discovery supports query params
+    it("replaces pagination query params with all_items when all_items is true unless filters are applied", () => {
+      expect(
+        getBibQueryString({ id: "b12082323", item_page: 5, all_items: true })
+      ).toBe("?all_items=true&merge_checkin_card_items=true")
+    })
+    // TODO: Remove this test when view_all endpoint in discovery supports query params
+    it("does not replace pagination query params when all_items is present and false", () => {
+      expect(
+        getBibQueryString({
+          id: "b12082323",
+          item_page: 5,
+          all_items: false,
+        })
+      ).toBe(
+        "?items_size=20&items_from=80&item_page=5&merge_checkin_card_items=true"
+      )
+    })
+    // TODO: Remove this test when view_all endpoint in discovery supports query params
+    it("preserves pagination when filters are applied and all_items is true", () => {
+      expect(
+        getBibQueryString({
+          id: "b12082323",
+          item_page: 5,
+          all_items: true,
+          item_location: "location",
+        })
+      ).toBe(
+        "?items_size=150&items_from=600&item_page=5&all_items=true&item_location=location&merge_checkin_card_items=true"
       )
     })
   })

@@ -106,6 +106,8 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
             fontSize: "inherit",
             p: 0,
             height: "auto",
+            textAlign: "left",
+            minHeight: "auto",
           }}
           onClick={() =>
             onContact({
