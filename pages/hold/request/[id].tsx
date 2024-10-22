@@ -4,11 +4,6 @@ import { useRouter } from "next/router"
 import {
   Heading,
   List,
-  Form,
-  FormField,
-  RadioGroup,
-  Radio,
-  ButtonGroup,
   Button,
   Banner,
   Box,
@@ -17,11 +12,14 @@ import {
 
 import Layout from "../../../src/components/Layout/Layout"
 import { FeedbackContext } from "../../../src/context/FeedbackContext"
+
+import HoldRequestForm from "../../../src/components/HoldPages/HoldRequestForm"
 import {
   PlainTextElement,
   LinkedDetailElement,
 } from "../../../src/components/BibPage/BibDetail"
 import RCLink from "../../../src/components/Links/RCLink/RCLink"
+
 import {
   SITE_NAME,
   BASE_URL,
@@ -200,77 +198,28 @@ export default function HoldRequestPage({
             <Heading level="h3" size="heading4" mb="l">
               Choose a pickup location
             </Heading>
-            <Form
-              id="hold-request-form"
-              data-testid="hold-request-form"
-              // We are using a post request on hold requests when JS is disabled
-              method="post"
-              action={`${BASE_URL}/api/hold/request/${bib.id}-${item.id}`}
-              onSubmit={handleSubmit}
-              mb="l"
-            >
-              <FormField>
-                <RadioGroup
-                  name="pickup-location"
-                  id="pickup-location"
-                  labelText="Pickup location"
-                  defaultValue="1"
-                  isRequired
-                  showLabel={false}
-                  mb="xs"
-                >
-                  <Radio
-                    id="1"
-                    labelText={
-                      <>
-                        My Scholar Room
-                        <br />
-                        476 Fifth Avenue (42nd St and Fifth Ave)
-                      </>
-                    }
-                    value="1"
-                  />
-                  <Radio
-                    id="2"
-                    labelText={
-                      <>
-                        Schwarzman Building - Rose Main Reading Room
-                        <br />
-                        315 476 Fifth Avenue (42nd St and Fifth Ave)
-                      </>
-                    }
-                    value="2"
-                  />
-                  <Radio
-                    id="3"
-                    labelText={
-                      <>
-                        Schwarzman Building - Art & Architecture Room 300
-                        <br />
-                        476 Fifth Avenue (42nd St and Fifth Ave)
-                      </>
-                    }
-                    value="3"
-                  />
-                  <Radio
-                    id="4"
-                    labelText={
-                      <>
-                        Schwarzman Building - Dorot Jewish Division Room 111
-                        <br />
-                        476 Fifth Avenue (42nd St and Fifth Ave)
-                      </>
-                    }
-                    value="4"
-                  />
-                </RadioGroup>
-              </FormField>
-              <ButtonGroup>
-                <Button id="holdRequestSubmit" type="submit">
-                  Submit request
-                </Button>
-              </ButtonGroup>
-            </Form>
+            <HoldRequestForm
+              deliveryLocations={[
+                {
+                  label: "My Scholar Room",
+                  address: "476 Fifth Avenue (42nd St and Fifth Ave)",
+                },
+                {
+                  label: "Schwarzman Building - Rose Main Reading Room",
+                  address: "315 476 Fifth Avenue (42nd St and Fifth Ave)",
+                },
+                {
+                  label: "Schwarzman Building - Art & Architecture Room 300",
+                  address: "476 Fifth Avenue (42nd St and Fifth Ave)",
+                },
+                {
+                  label: "Schwarzman Building - Dorot Jewish Division Room 111",
+                  address: "476 Fifth Avenue (42nd St and Fifth Ave)",
+                },
+              ]}
+              handleSubmit={handleSubmit}
+              holdId={holdId}
+            />
           </>
         )}
       </Layout>
