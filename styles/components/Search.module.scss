@@ -38,7 +38,6 @@
   flex-direction: column;
   justify-content: space-between;
   margin-top: var(--nypl-space-xs);
-  margin-bottom: var(--nypl-space-s);
 
   @media screen and (min-width: 600px) {
     flex-direction: row-reverse;
