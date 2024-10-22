@@ -15,9 +15,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(404).json({
       title: "Error posting Hold request",
       status: 404,
-    })
-
-    return res.status(200).json(response)
+    }) // Placeholder response
   } catch (error) {
     return res.status(500).json({
       title: "Error fetching DRB results",

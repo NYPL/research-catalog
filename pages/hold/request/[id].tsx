@@ -88,11 +88,13 @@ export default function HoldRequestPage({
       setFormPosting(true)
       const response = await fetch(`${BASE_URL}/api/hold/request/${holdId}`, {
         method: "POST",
-        body: JSON.stringify(e.target),
+        // TODO: serialize form data
+        body: "",
       })
       const responseJson = await response.json()
+      console.log(responseJson.status)
 
-      if (responseJson.error) {
+      if (response.status !== 200) {
         console.error("Error in hold  request api response", responseJson.error)
         setAlert(true)
         setFormPosting(false)
