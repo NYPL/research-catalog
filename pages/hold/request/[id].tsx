@@ -129,7 +129,7 @@ export default function HoldRequestPage({
       </Head>
       <Layout isAuthenticated={isAuthenticated} activePage="hold">
         {/* Always render the wrapper element that will display the
-          dynamically rendered notification */}
+          dynamically rendered notification for focus management */}
         <Box tabIndex={-1} ref={notificationRef}>
           {alert && (
             <Banner
