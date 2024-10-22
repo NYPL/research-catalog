@@ -15,7 +15,6 @@ import {
   searchFormSelectOptions,
 } from "../../utils/searchUtils"
 import { BASE_URL, PATHS, SEARCH_FORM_OPTIONS } from "../../config/constants"
-import EDSLink from "../EDSLink"
 import useLoading from "../../hooks/useLoading"
 import RefineSearch from "../RefineSearch/RefineSearch"
 import type { Aggregation } from "../../types/filterTypes"
@@ -132,7 +131,6 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
             />
           )}
         </Box>
-        <EDSLink />
       </div>
     </div>
   )
