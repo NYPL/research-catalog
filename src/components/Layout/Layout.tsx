@@ -1,5 +1,6 @@
 import { type ReactElement, type PropsWithChildren } from "react"
 import {
+  Flex,
   Box,
   TemplateAppContainer,
   Breadcrumbs,
@@ -15,6 +16,7 @@ import SearchForm from "../SearchForm/SearchForm"
 import { BASE_URL } from "../../config/constants"
 import FeedbackForm from "../FeedbackForm/FeedbackForm"
 import type { Aggregation } from "../../types/filterTypes"
+import EDSBanner from "../EDSBanner"
 
 interface LayoutProps {
   sidebar?: ReactElement
@@ -79,13 +81,22 @@ const Layout = ({
                 {showSearch && <SearchForm aggregations={searchAggregations} />}
               </div>
               {showNotification && bannerNotification && (
-                <Box sx={{ display: "flex", justifyContent: "center" }}>
+                <Flex
+                  gap="var(--nypl-space-l)"
+                  align="center"
+                  // justify="space-around"
+                  direction="column"
+                  sx={{
+                    padding: "2em 2em .5em 2em",
+                  }}
+                >
+                  <EDSBanner />
                   <Banner
-                    sx={{ maxWidth: "1248px", margin: "2em 2em .5em 2em" }}
+                    className={styles.banner}
                     heading="New Service Announcement"
                     content={bannerNotification}
                   />
-                </Box>
+                </Flex>
               )}
             </>
           )
