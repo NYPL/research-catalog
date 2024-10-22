@@ -23,6 +23,7 @@ interface HoldRequestFormProps {
 const HoldRequestForm = ({
   deliveryLocations,
   handleSubmit,
+  holdId,
 }: HoldRequestFormProps) => {
   return (
     <Form
