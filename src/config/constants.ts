@@ -134,8 +134,4 @@ export const NYPL_LOCATIONS = {
     shortName: "Schwarzman Building",
     address: "476 Fifth Avenue (42nd St and Fifth Ave)",
   },
-  sibl: {
-    shortName: "Science, Industry and Business Library",
-    address: "188 Madison Avenue @ 34th Street",
-  },
 }

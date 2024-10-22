@@ -45,7 +45,6 @@ function getLocationKey(
 
   const sierraId = getLocationSierraId(locationElement)
 
-  // TODO: Should sibl be accounted for?
   switch (sierraId?.slice(0, 2)) {
     case "my":
     case "lp":
