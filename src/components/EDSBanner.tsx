@@ -19,7 +19,9 @@ const EDSBanner = () => {
           </span>{" "}
           Try our{" "}
           <ExternalLink href="https://discovery.ebsco.com/c/tvrejk?acr_values=guest">
-            <strong>Article Search</strong>
+            <strong style={{ color: "var(--nypl-colors-ui-link-primary" }}>
+              Article Search
+            </strong>
           </ExternalLink>{" "}
           to discover online journals, books, and more from home with your
           library card.
