@@ -78,9 +78,9 @@ export const appConfig: AppConfig = {
       "https://www.nypl.org/help/request-research-materials",
     tokenUrl: "https://isso.nypl.org/",
   },
-  // Array of closed location keys (available options for NYPL: all, schwarzman, schomburg, lpa)
-  // TODO: Add RecapLocation keys
+  // Array of closed nypl location keys (available options for NYPL locations: all, schwarzman, schomburg, lpa)
   closedLocations: [] as NYPLocationKey[],
+  // Array of closed recap location keys (only "all" option available for now)
   recapClosedLocations: [] as RecapLocationKey[],
   nonRecapClosedLocations: [] as (NYPLocationKey | RecapLocationKey)[],
   jwtPublicKey: `-----BEGIN PUBLIC KEY-----
