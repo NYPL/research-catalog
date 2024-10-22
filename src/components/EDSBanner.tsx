@@ -13,13 +13,15 @@ const EDSBanner = () => {
       className={styles.banner}
       type="informative"
       content={
-        <Text>
+        <Text sx={{ marginBottom: 0 }}>
           <span style={{ color: "var(--nypl-colors-ui-success-primary)" }}>
             New!
           </span>{" "}
           Try our{" "}
           <ExternalLink href="https://discovery.ebsco.com/c/tvrejk?acr_values=guest">
-            <strong>Article Search</strong>
+            <strong style={{ color: "var(--nypl-colors-ui-link-primary" }}>
+              Article Search
+            </strong>
           </ExternalLink>{" "}
           to discover online journals, books, and more from home with your
           library card.
