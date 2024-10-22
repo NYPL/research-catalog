@@ -128,6 +128,68 @@ export default function HoldRequestPage({
         <title key="main-title">{metadataTitle}</title>
       </Head>
       <Layout isAuthenticated={isAuthenticated} activePage="hold">
+        {/* Always render the wrapper element that will display the
+          dynamically rendered notification */}
+        <Box tabIndex={-1} ref={notificationRef}>
+          {alert && (
+            <Banner
+              type="negative"
+              heading="Request failed"
+              data-testid="hold-request-error"
+              sx={{ a: { color: "ui.link.primary" } }}
+              content={
+                <>
+                  We were unable to process your request at this time. Please
+                  try again,{" "}
+                  <Button
+                    id="hold-contact"
+                    onClick={() =>
+                      onContact({
+                        id: item.id,
+                        barcode: item.barcode,
+                        callNumber: item.callNumber,
+                        bibId: item.bibId,
+                        notificationText: `Request failed for call number ${item.callNumber}`,
+                      })
+                    }
+                    buttonType="link"
+                    sx={BUTTON_LINK_STYLES}
+                  >
+                    contact us
+                  </Button>{" "}
+                  for assistance, or{" "}
+                  <RCLink href="/search">start a new search.</RCLink>
+                </>
+              }
+              mb="s"
+            />
+          )}
+        </Box>
+        <Heading level="h2" mb="l" size="heading3">
+          Request for on-site use
+        </Heading>
+        <List
+          noStyling
+          type="dl"
+          showRowDividers={false}
+          className={bibDetailStyles.bibDetails}
+          mb="xs"
+          mt={0}
+        >
+          <LinkedDetailElement
+            label="Title"
+            value={[
+              { url: `${PATHS.BIB}/${bib.id}`, urlLabel: bib.titleDisplay },
+            ]}
+            link="internal"
+          />
+          <PlainTextElement label="Call number" value={[item.callNumber]} />
+          {item.volume ? (
+            <PlainTextElement label="Volume/date" value={[item.volume]} />
+          ) : (
+            <></>
+          )}
+        </List>
         {isLoading || formPosting ? (
           <SkeletonLoader
             showImage={false}
@@ -135,68 +197,6 @@ export default function HoldRequestPage({
           />
         ) : (
           <>
-            {/* Always render the wrapper element that will display the
-          dynamically rendered notification */}
-            <Box tabIndex={-1} ref={notificationRef}>
-              {alert && (
-                <Banner
-                  type="negative"
-                  heading="Request failed"
-                  data-testid="hold-request-error"
-                  sx={{ a: { color: "ui.link.primary" } }}
-                  content={
-                    <>
-                      We were unable to process your request at this time.
-                      Please try again,{" "}
-                      <Button
-                        id="hold-contact"
-                        onClick={() =>
-                          onContact({
-                            id: item.id,
-                            barcode: item.barcode,
-                            callNumber: item.callNumber,
-                            bibId: item.bibId,
-                            notificationText: `Request failed for call number ${item.callNumber}`,
-                          })
-                        }
-                        buttonType="link"
-                        sx={BUTTON_LINK_STYLES}
-                      >
-                        contact us
-                      </Button>{" "}
-                      for assistance, or{" "}
-                      <RCLink href="/search">start a new search.</RCLink>
-                    </>
-                  }
-                  mb="s"
-                />
-              )}
-            </Box>
-            <Heading level="h2" mb="l" size="heading3">
-              Request for on-site use
-            </Heading>
-            <List
-              noStyling
-              type="dl"
-              showRowDividers={false}
-              className={bibDetailStyles.bibDetails}
-              mb="xs"
-              mt={0}
-            >
-              <LinkedDetailElement
-                label="Title"
-                value={[
-                  { url: `${PATHS.BIB}/${bib.id}`, urlLabel: bib.titleDisplay },
-                ]}
-                link="internal"
-              />
-              <PlainTextElement label="Call number" value={[item.callNumber]} />
-              {item.volume ? (
-                <PlainTextElement label="Volume/date" value={[item.volume]} />
-              ) : (
-                <></>
-              )}
-            </List>
             <Heading level="h3" size="heading4" mb="l">
               Choose a pickup location
             </Heading>
