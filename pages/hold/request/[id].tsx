@@ -92,7 +92,6 @@ export default function HoldRequestPage({
         body: "",
       })
       const responseJson = await response.json()
-      console.log(responseJson.status)
 
       if (response.status !== 200) {
         console.error("Error in hold  request api response", responseJson.error)
@@ -130,7 +129,10 @@ export default function HoldRequestPage({
       </Head>
       <Layout isAuthenticated={isAuthenticated} activePage="hold">
         {isLoading || formPosting ? (
-          <SkeletonLoader showImage={false} />
+          <SkeletonLoader
+            showImage={false}
+            data-testid="hold-request-loading"
+          />
         ) : (
           <>
             {/* Always render the wrapper element that will display the
@@ -140,6 +142,7 @@ export default function HoldRequestPage({
                 <Banner
                   type="negative"
                   heading="Request failed"
+                  data-testid="hold-request-error"
                   sx={{ a: { color: "ui.link.primary" } }}
                   content={
                     <>
@@ -306,7 +309,6 @@ export async function getServerSideProps({ params, req, res }) {
 
   try {
     const patronId = patronTokenResponse?.decodedPatron?.sub
-    console.log("patronId", patronId)
 
     // fetch bib and item
     const [bibId, itemId] = id.split("-")
