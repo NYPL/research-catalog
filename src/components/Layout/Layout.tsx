@@ -15,6 +15,8 @@ import SearchForm from "../SearchForm/SearchForm"
 import { BASE_URL } from "../../config/constants"
 import FeedbackForm from "../FeedbackForm/FeedbackForm"
 import type { Aggregation } from "../../types/filterTypes"
+import RCBanner from "./RCBanner"
+import EDSBanner from "../EDSBanner"
 
 interface LayoutProps {
   sidebar?: ReactElement
@@ -78,14 +80,12 @@ const Layout = ({
                 />
                 {showSearch && <SearchForm aggregations={searchAggregations} />}
               </div>
+              <EDSBanner />
               {showNotification && bannerNotification && (
-                <Box sx={{ display: "flex", justifyContent: "center" }}>
-                  <Banner
-                    sx={{ maxWidth: "1248px", margin: "2em 2em .5em 2em" }}
-                    heading="New Service Announcement"
-                    content={bannerNotification}
-                  />
-                </Box>
+                <RCBanner
+                  heading="New Service Announcement"
+                  content={bannerNotification}
+                />
               )}
             </>
           )
