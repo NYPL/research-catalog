@@ -312,17 +312,16 @@ export async function getServerSideProps({ params, req, res }) {
 
     // fetch bib and item
     const [bibId, itemId] = id.split("-")
+
+    if (!itemId) {
+      throw new Error("No item id in url")
+    }
     const { discoveryBibResult } = await fetchBib(bibId, {}, itemId)
 
     const discoveryItemResult = discoveryBibResult?.items?.[0]
 
     if (!discoveryItemResult) {
-      return {
-        redirect: {
-          destination: PATHS["404"],
-          permanent: false,
-        },
-      }
+      throw new Error("Item not found")
     }
 
     return {
