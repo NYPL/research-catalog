@@ -13,7 +13,7 @@ const EDSBanner = () => {
       className={styles.banner}
       type="informative"
       content={
-        <Text>
+        <Text sx={{ marginBottom: 0 }}>
           <span style={{ color: "var(--nypl-colors-ui-success-primary)" }}>
             New!
           </span>{" "}
