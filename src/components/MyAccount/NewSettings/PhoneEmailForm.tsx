@@ -239,16 +239,16 @@ const PhoneEmailForm = ({
                   >
                     {input}{" "}
                     {index === 0 && inputs.length > 1 && (
-                      <Text
-                        sx={{
+                      <span
+                        style={{
                           display: "inline",
                           padding: 0,
                           margin: 0,
-                          color: "ui.gray.semi-dark",
+                          color: "var(--nypl-colors-ui-gray-semi-dark)",
                         }}
                       >
                         (P)
-                      </Text>
+                      </span>
                     )}
                   </Text>
                 ))}
