@@ -26,6 +26,13 @@ const HoldRequestBanner = ({ item }: HoldRequestBannerProps) => {
       type="negative"
       heading="Request failed"
       data-testid="hold-request-error"
+      // TODO: Ask DS team to make button link variant match the default link styles
+      sx={{
+        button: {
+          color: "ui.error.primary",
+          "&:hover": { color: "ui.error.primary" },
+        },
+      }}
       content={
         <>
           We were unable to process your request at this time. Please try again,{" "}
