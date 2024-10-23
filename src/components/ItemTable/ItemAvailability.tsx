@@ -100,6 +100,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
         <Button
           id="contact-librarian"
           buttonType="link"
+          // TODO: Ask DS team to make button link variant match the default link styles
           sx={{
             display: "inline",
             fontWeight: "inherit",
