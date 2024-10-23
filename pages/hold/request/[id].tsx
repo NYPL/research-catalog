@@ -1,24 +1,21 @@
 import Head from "next/head"
-import { useState, useContext, useRef, useEffect } from "react"
+import { useState, useRef, useEffect } from "react"
 import { useRouter } from "next/router"
 import {
   Heading,
   List,
-  Button,
-  Banner,
   Box,
   SkeletonLoader,
 } from "@nypl/design-system-react-components"
 
 import Layout from "../../../src/components/Layout/Layout"
-import { FeedbackContext } from "../../../src/context/FeedbackContext"
 
 import HoldRequestForm from "../../../src/components/HoldPages/HoldRequestForm"
+import HoldRequestBanner from "../../../src/components/HoldPages/HoldRequestBanner"
 import {
   PlainTextElement,
   LinkedDetailElement,
 } from "../../../src/components/BibPage/BibDetail"
-import RCLink from "../../../src/components/Links/RCLink/RCLink"
 
 import { SITE_NAME, BASE_URL, PATHS } from "../../../src/config/constants"
 import useLoading from "../../../src/hooks/useLoading"
@@ -36,7 +33,6 @@ import bibDetailStyles from "../../../styles/components/BibDetails.module.scss"
 
 import type { DiscoveryBibResult } from "../../../src/types/bibTypes"
 import type { DiscoveryItemResult } from "../../../src/types/itemTypes"
-import type { ItemMetadata } from "../../../src/types/itemTypes"
 
 interface HoldRequestPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -63,7 +59,6 @@ export default function HoldRequestPage({
   const [alert, setAlert] = useState(false)
   const [formPosting, setFormPosting] = useState(false)
   const bannerContainerRef = useRef<HTMLDivElement>()
-  const { onOpen, setItemMetadata } = useContext(FeedbackContext)
 
   const router = useRouter()
   const isLoading = useLoading()
@@ -109,11 +104,6 @@ export default function HoldRequestPage({
     }
   }
 
-  const onContact = (metadata: ItemMetadata) => {
-    setItemMetadata(metadata)
-    onOpen()
-  }
-
   return (
     <>
       <Head>
@@ -130,49 +120,7 @@ export default function HoldRequestPage({
         {/* Always render the wrapper element that will display the
           dynamically rendered notification for focus management */}
         <Box tabIndex={-1} ref={bannerContainerRef}>
-          {alert && (
-            <Banner
-              type="negative"
-              heading="Request failed"
-              data-testid="hold-request-error"
-              content={
-                <>
-                  We were unable to process your request at this time. Please
-                  try again,{" "}
-                  <Button
-                    id="hold-contact"
-                    onClick={() =>
-                      onContact({
-                        id: item.id,
-                        barcode: item.barcode,
-                        callNumber: item.callNumber,
-                        bibId: item.bibId,
-                        notificationText: `Request failed for call number ${item.callNumber}`,
-                      })
-                    }
-                    buttonType="link"
-                    sx={{
-                      display: "inline",
-                      fontWeight: "inherit",
-                      fontSize: "inherit",
-                      p: 0,
-                      height: "auto",
-                      textAlign: "left",
-                      minHeight: "auto",
-                      textDecorationStyle: "dotted",
-                      textDecorationThickness: "1px",
-                      textUnderlineOffset: "2px",
-                    }}
-                  >
-                    contact us
-                  </Button>{" "}
-                  for assistance, or{" "}
-                  <RCLink href="/search">start a new search.</RCLink>
-                </>
-              }
-              mb="s"
-            />
-          )}
+          {alert && <HoldRequestBanner item={item} />}
         </Box>
         <Heading level="h2" mb="l" size="heading3">
           Request for on-site use
