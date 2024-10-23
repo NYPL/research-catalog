@@ -56,12 +56,16 @@ export default class Item {
     this.dueDate = item.dueDate?.length ? item.dueDate[0] : null
     this.isPhysicallyRequestable = item.physRequestable
     this.isEDDRequestable = item.eddRequestable
-    this.bibTitle = bib.title
+    this.bibTitle = bib.titleDisplay
   }
 
   // Item availability is determined by the existence of status id in the availability ids list
   get isAvailable(): boolean {
     return itemAvailableIds.includes(this?.status?.["@id"]) || false
+  }
+
+  get requestButtonAriaLabel(): string {
+    return `${this.bibTitle}${this.volume ? `, ${this.volume}` : ""}`
   }
 
   get isReCAP(): boolean {

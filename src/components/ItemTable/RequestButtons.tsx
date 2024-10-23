@@ -20,12 +20,12 @@ const RequestButtons = ({ item }: RequestButtonsProps) => {
         <ExternalLink
           href={item.aeonUrl}
           type={!item.isAvailable ? "buttonDisabled" : "buttonSecondary"}
-          aria-label={`Request Appointment, ${item.bibTitle}`}
+          aria-label={`Request Appointment, ${item.requestButtonAriaLabel}`}
           disabled={!item.isAvailable}
           mb="s"
           target="_self"
         >
-          Request Appointment
+          Request appointment
         </ExternalLink>
       ) : (
         <>
@@ -33,24 +33,24 @@ const RequestButtons = ({ item }: RequestButtonsProps) => {
             <RCLink
               href={`/hold/request/${item.bibId}-${item.id}`}
               type={!item.isAvailable ? "buttonDisabled" : "buttonSecondary"}
-              aria-label={`Request for On-site Use, ${item.bibTitle}`}
+              aria-label={`Request for On-site Use, ${item.requestButtonAriaLabel}`}
               disabled={!item.isAvailable}
               mb="s"
               target="_self"
             >
-              Request for On-site Use
+              Request for on-site use
             </RCLink>
           )}
           {item.isEDDRequestable && (
             <RCLink
               href={`/hold/request/${item.bibId}-${item.id}/edd`}
               type={!item.isAvailable ? "buttonDisabled" : "buttonSecondary"}
-              aria-label={`Request Scan, ${item.bibTitle}`}
+              aria-label={`Request Scan, ${item.requestButtonAriaLabel}`}
               disabled={!item.isAvailable}
               mb="s"
               target="_self"
             >
-              Request Scan
+              Request scan
             </RCLink>
           )}
         </>

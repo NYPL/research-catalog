@@ -317,6 +317,7 @@ export const filteredPickupLocations = [
 
 export const processedPatron = {
   notificationPreference: "z",
+  username: "pastadisciple",
   name: "Strega Nonna",
   barcode: "23333121538324",
   formattedBarcode: "2 3333 12153 8324",

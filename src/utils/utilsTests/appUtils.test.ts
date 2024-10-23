@@ -2,6 +2,7 @@ import {
   adobeAnalyticsRouteToPageName,
   encodeHTML,
   getPaginationOffsetStrings,
+  convertToSentenceCase,
 } from "../appUtils"
 import {
   ADOBE_ANALYTICS_RC_PREFIX,
@@ -90,6 +91,21 @@ describe("appUtils", () => {
       const [start, end] = getPaginationOffsetStrings(24, 1195, 50)
       expect(start).toEqual("1,151")
       expect(end).toEqual("1,195")
+    })
+  })
+  describe("convertToSentenceCase", () => {
+    it("converts a capitalized string to sentence case", () => {
+      expect(convertToSentenceCase("Convert This Sentence.")).toEqual(
+        "Convert this sentence."
+      )
+    })
+    it("converts a fully uppercase string to sentence case", () => {
+      expect(convertToSentenceCase("CONVERT THIS SENTENCE.")).toEqual(
+        "Convert this sentence."
+      )
+    })
+    it("returns the string that is passed in if it's a single word, to avoid sentence-casing acronyms", () => {
+      expect(convertToSentenceCase("ISSN")).toEqual("ISSN")
     })
   })
 })

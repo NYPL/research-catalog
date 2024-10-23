@@ -66,7 +66,7 @@ export default class MyAccount {
     try {
       holdBibData = await this.fetchBibData(holds.entries, "record")
     } catch (e) {
-      console.error("MyAccount#fetchBibData error: " + e.message)
+      console.error("MyAccount#fetchBibData error: " + e.message || e)
     }
 
     const holdsWithBibData = this.buildHolds(holds.entries, holdBibData.entries)
@@ -76,7 +76,7 @@ export default class MyAccount {
 
   async fetchPatron() {
     return await this.client.get(
-      `${this.baseQuery}?fields=names,barcodes,expirationDate,homeLibrary,emails,phones,fixedFields`
+      `${this.baseQuery}?fields=names,barcodes,expirationDate,homeLibrary,emails,phones,fixedFields,varFields`
     )
   }
 
@@ -95,29 +95,30 @@ export default class MyAccount {
   }
 
   async fetchBibData(
-    holdsOrCheckouts: any[],
-    itemOrRecord: string
+    holdsOrCheckouts: (SierraHold | SierraCheckout)[],
+    itemOrRecord: "item" | "record"
   ): Promise<{
     total?: number
     start?: number
     entries: SierraBibEntry[]
   }> {
     if (!holdsOrCheckouts?.length) return { entries: [] }
-    const itemLevelHoldsorCheckouts = []
-    const bibLevelHolds = []
 
-    // Separating bib level and item level records so we only fetch bib data for item level holds/checkouts.
-    holdsOrCheckouts.forEach((holdOrCheckout) => {
-      if (holdOrCheckout[itemOrRecord].bibIds) {
-        itemLevelHoldsorCheckouts.push(holdOrCheckout[itemOrRecord].bibIds[0])
-      } else {
-        bibLevelHolds.push(holdOrCheckout.record)
+    const { bibLevelHolds, itemLevelHoldsorCheckouts } =
+      MyAccount.filterBibLevelHolds(holdsOrCheckouts, itemOrRecord)
+
+    const bibData = { entries: bibLevelHolds }
+    let itemLevelBibData: { entries: SierraBibEntry[] }
+    if (itemLevelHoldsorCheckouts.length) {
+      try {
+        itemLevelBibData = await this.client.get(
+          `bibs?id=${itemLevelHoldsorCheckouts}&fields=default,varFields`
+        )
+      } catch (e) {
+        throw `error getting bibs?id=${itemLevelHoldsorCheckouts}&fields=default,varFields`
       }
-    })
-    const bibData = await this.client.get(
-      `bibs?id=${itemLevelHoldsorCheckouts}&fields=default,varFields`
-    )
-    bibData.entries = bibData.entries.concat(bibLevelHolds)
+      bibData.entries = bibData.entries.concat(itemLevelBibData.entries)
+    }
     return bibData
   }
 
@@ -148,6 +149,23 @@ export default class MyAccount {
     }
     // Default to most restrictive values
     return { isResearch: true, isNyplOwned: false }
+  }
+
+  static filterBibLevelHolds(
+    holdsOrCheckouts: (SierraHold | SierraCheckout)[],
+    itemOrRecord: "item" | "record"
+  ) {
+    const itemLevelHoldsorCheckouts = []
+    const bibLevelHolds = []
+    holdsOrCheckouts.forEach((holdOrCheckout) => {
+      const isItemLevel = holdOrCheckout[itemOrRecord].bibIds
+      if (isItemLevel) {
+        itemLevelHoldsorCheckouts.push(holdOrCheckout[itemOrRecord].bibIds[0])
+      } else {
+        bibLevelHolds.push((holdOrCheckout as SierraHold).record)
+      }
+    })
+    return { bibLevelHolds, itemLevelHoldsorCheckouts }
   }
 
   static buildBibData(bibs: SierraBibEntry[]): BibDataMapType {
@@ -304,7 +322,7 @@ export default class MyAccount {
    * Returns user-friendly status message
    */
   static getHoldStatus(status: SierraCodeName) {
-    if (status.code === "i") {
+    if (status.code === "i" || status.code === "b") {
       return "READY FOR PICKUP"
     } else if (status.code === "t") {
       return "REQUEST CONFIRMED"

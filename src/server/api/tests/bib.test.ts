@@ -192,21 +192,4 @@ describe("fetchBib", () => {
       async () => (await fetchBib("b17418167")) as BibResponse
     ).rejects.toThrow("Bad API URL")
   })
-
-  it("should load all the items in batches if view_all_items query param is true", async () => {
-    const bibResponse = (await fetchBib("b17418167", {
-      view_all_items: true,
-      batch_size: 20,
-    })) as BibResponse
-    expect(bibResponse.status).toEqual(200)
-    expect(bibResponse.discoveryBibResult.items.length).toEqual(25)
-  })
-
-  it("should throw an error on view all if one of the batched fetches fails", async () => {
-    const bibResponse = (await fetchBib("b17418167", {
-      view_all_items: true,
-      batch_size: 20,
-    })) as BibResponse
-    expect(bibResponse.status).toEqual(404)
-  })
 })

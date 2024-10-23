@@ -2,6 +2,7 @@
 import type { DiscoveryItemResult, JSONLDValue } from "./itemTypes"
 import type { AnnotatedMarc } from "./bibDetailsTypes"
 import type { Aggregation, ItemFilterQueryParams } from "./filterTypes"
+import type { HTTPStatusCode } from "./appTypes"
 
 export interface DiscoveryBibResult {
   extent?: string[]
@@ -30,6 +31,7 @@ export interface DiscoveryBibResult {
   holdings?: object
   owner?: { "@id": string; prefLabel: string }
   subjectHeadings?: SubjectHeading[]
+  hasItemDates?: boolean
 }
 
 // export interface Holding {
@@ -76,7 +78,7 @@ export interface ElectronicResource {
 export interface BibResponse {
   discoveryBibResult?: DiscoveryBibResult
   annotatedMarc?: AnnotatedMarc
-  status: 200 | 307 | 404
+  status: HTTPStatusCode
   redirectUrl?: string
 }
 
@@ -86,13 +88,13 @@ export interface BibQueryParams extends ItemFilterQueryParams {
   item_page?: number
   items_size?: number
   items_from?: number
-  view_all_items?: boolean
+  all_items?: boolean
   batch_size?: number
 }
 
-type SubjectHeading = {
+export type SubjectHeading = {
   label?: string
   uuid?: string
-  bib_count?: 10
-  desc_count?: 0
+  bib_count?: number
+  desc_count?: number
 }

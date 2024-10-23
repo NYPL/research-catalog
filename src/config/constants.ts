@@ -6,7 +6,9 @@ export const RESULTS_PER_PAGE = 50
 export const DRB_RESULTS_PER_PAGE = 3
 export const ITEMS_PER_SEARCH_RESULT = 3
 export const ITEM_PAGINATION_BATCH_SIZE = 20
+// TODO: Remove this when view_all endpoint in discovery supports query params
 export const ITEM_VIEW_ALL_BATCH_SIZE = 150
+export const ELECTRONIC_RESOURCES_PER_BIB_PAGE = 3
 export const SHEP_HTTP_TIMEOUT = 4000
 export const FOCUS_TIMEOUT = 50
 
@@ -30,6 +32,13 @@ export const DRB_API_SEARCH_ROUTE = "/api/drb"
 
 // Query params
 export const SOURCE_PARAM = "?source=catalog"
+
+export const ITEM_FILTER_PARAMS = [
+  "item_location",
+  "item_format",
+  "item_status",
+  "item_date",
+]
 
 // External URLs
 export const DRB_BASE_URL =
@@ -62,4 +71,51 @@ export const DAYS = {
   THURSDAY: 4,
   FRIDAY: 5,
   SATURDAY: 6,
+}
+
+export const ERROR_MESSAGES = {
+  ITEM_REFETCH_ABORT_REASON: "New Bib item fetch initiated",
+}
+
+const useQuotes = "Use quotation marks to search for an exact phrase."
+const example = "Example: "
+
+export const SEARCH_FORM_OPTIONS = {
+  all: {
+    text: "Keyword",
+    searchTip: `Enter one or more keywords. ${useQuotes}`,
+    placeholder: `${example} Brooklyn Bridge or “New York City”`,
+  },
+  title: {
+    text: "Title",
+    searchTip: `Enter a full title or part of a title. ${useQuotes}`,
+    placeholder: `${example} Middlemarch or “A Chorus Line”`,
+  },
+  contributor: {
+    text: "Author/contributor",
+    searchTip:
+      "Enter the name of an author, contributor, or organization. Use Last Name, First Name for more precise results.",
+    placeholder: `${example} Hurston, Zora Neale or New York City Ballet`,
+  },
+  journal_title: {
+    text: "Journal title",
+    searchTip: `Enter a journal, newspaper, or other serial title. ${useQuotes}`,
+    placeholder: `${example} Amsterdam News or “Paris Review”`,
+  },
+  callnumber: {
+    text: "Call number",
+    searchTip: "Enter a call number or the beginning of a call number.",
+    placeholder: `${example} JFD 93-1962 or "**P (Ms. Heb"."`,
+  },
+  standard_number: {
+    text: "Unique identifier",
+    searchTip:
+      "Enter a control number or identifier (ISBN, ISSN, LCCN, OCLC number, barcode, etc.).",
+    placeholder: `${example} 9780889229600 or 82048999`,
+  },
+  subject: {
+    text: "Subject",
+    searchTip: "Enter a subject keyword or phrase.",
+    placeholder: `${example} Ornithology or Greek Architecture`,
+  },
 }

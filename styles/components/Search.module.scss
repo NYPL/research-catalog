@@ -21,13 +21,23 @@
   @include maxWidth;
 }
 
+.searchTip {
+  display: flex;
+  align-items: flex-start;
+  .searchTipTitle {
+    font-weight: bold;
+  }
+  gap: var(--nypl-space-xxs);
+  svg {
+    margin-top: var(--nypl-space-xxxs);
+  }
+}
+
 .auxSearchContainer {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   margin-top: var(--nypl-space-xs);
-  margin-bottom: var(--nypl-space-s);
-
   @media screen and (min-width: 600px) {
     flex-direction: row-reverse;
   }

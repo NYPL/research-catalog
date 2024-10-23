@@ -20,9 +20,11 @@ export const PatronDataProvider = ({
   value: MyAccountPatronData
   testSpy?: () => void
 }) => {
-  const [patronDataLoading, setPatronDataLoading] = useState(false)
+  const [patronDataLoading, setPatronDataLoading] = useState(null)
   const [updatedAccountData, setUpdatedAccountData] = useState(value)
   const getMostUpdatedSierraAccountData = async () => {
+    // this method is only invoked to test that this method is being called
+    // during testing
     if (testSpy) testSpy()
     setPatronDataLoading(true)
     const resp = await fetch(

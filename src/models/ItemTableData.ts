@@ -3,6 +3,7 @@ import type { ReactElement } from "react"
 import type Item from "./Item"
 import type { ItemTableParams } from "../types/itemTypes"
 import StatusLinks from "../components/ItemTable/StatusLinks"
+import ItemTableCell from "../components/ItemTable/ItemTableCell"
 
 /**
  * The ItemTable class converts a Bib's item data to the format
@@ -35,20 +36,24 @@ export default class ItemTableData {
       ...(this.showVolumeColumn() ? [this.volumeColumnHeading()] : []),
       "Format",
       ...(this.showAccessColumn() ? ["Access"] : []),
-      "Call Number",
-      "Item Location",
+      "Call number",
+      "Item location",
     ]
   }
 
-  get tableData(): (string | ReactElement)[][] {
+  get tableData(): ReactElement[][] {
     return this.items?.map((item) => {
       return [
         ...(this.showStatusColumn() ? [StatusLinks({ item })] : []),
-        ...(this.showVolumeColumn() ? [item.volume] : []),
-        item.format,
-        ...(this.showAccessColumn() ? [item.accessMessage] : []),
-        item.callNumber,
-        item.location.prefLabel,
+        ...(this.showVolumeColumn()
+          ? [ItemTableCell({ children: item.volume })]
+          : []),
+        ItemTableCell({ children: item.format }),
+        ...(this.showAccessColumn()
+          ? [ItemTableCell({ children: item.accessMessage })]
+          : []),
+        ItemTableCell({ children: item.callNumber }),
+        ItemTableCell({ children: item.location.prefLabel }),
       ]
     })
   }
@@ -66,6 +71,6 @@ export default class ItemTableData {
   }
 
   volumeColumnHeading(): string {
-    return this.isArchiveCollection ? "Container" : "Vol/Date"
+    return this.isArchiveCollection ? "Container" : "Vol/date"
   }
 }

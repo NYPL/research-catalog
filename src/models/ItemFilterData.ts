@@ -1,30 +1,40 @@
+import { capitalize } from "lodash"
+
 import type {
   Aggregation,
   AggregationOption,
-  Option,
+  FilterCheckbox,
+  FilterCheckboxGroup,
 } from "../types/filterTypes"
-
 import { isRecapLocation } from "../utils/itemFilterUtils"
 
 export class ItemFilterData {
   options: AggregationOption[]
-  aggregation: Aggregation
   field: string
 
   constructor(aggregation: Aggregation) {
-    this.aggregation = aggregation
     this.options = aggregation.values
     this.field = aggregation.field
   }
 
-  displayOptions(): Option[] {
-    return this.options
+  displayOptions(): FilterCheckbox[] {
+    return this.options.map((option) => {
+      return { id: option.value, name: option.label }
+    })
+  }
+
+  get formattedFilterData(): FilterCheckboxGroup {
+    return {
+      id: this.field,
+      name: capitalize(this.field),
+      items: this.displayOptions(),
+    }
   }
 
   labelForValue(value: string) {
-    return this.displayOptions().find((opt: Option) => {
-      return opt.value === value || opt.label === value
-    })?.label
+    return this.displayOptions().find((checkbox: FilterCheckbox) => {
+      return checkbox.id === value || checkbox.name === value
+    })?.name
   }
 }
 
@@ -33,7 +43,8 @@ export class LocationFilterData extends ItemFilterData {
     super(aggregation)
   }
 
-  displayOptions(): AggregationOption[] {
+  // Override display options to add Offsite if there are any Recap locations
+  displayOptions(): FilterCheckbox[] {
     let offsiteCount = 0
     const optionsWithoutRecap = this.options.filter(({ value, count }) => {
       if (isRecapLocation(value)) {
@@ -41,15 +52,18 @@ export class LocationFilterData extends ItemFilterData {
         return false
       } else return true
     })
-    if (offsiteCount) {
-      return [
-        ...optionsWithoutRecap,
-        { label: "Offsite", value: "Offsite", count: offsiteCount },
-      ]
-    } else return optionsWithoutRecap
+
+    const newOptions = offsiteCount
+      ? [...optionsWithoutRecap, { label: "Offsite", value: "Offsite" }]
+      : optionsWithoutRecap
+
+    // Format the options for the MultiSelect component
+    return newOptions.map((option) => {
+      return { id: option.value, name: option.label }
+    })
   }
 
-  recapLocations(): string {
+  get recapLocations(): string {
     return (
       this.options
         .map(({ value }) => {

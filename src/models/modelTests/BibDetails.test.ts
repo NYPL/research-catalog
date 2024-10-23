@@ -3,6 +3,7 @@ import {
   noParallels,
   parallelsBib,
   yiddishBib,
+  bibWithSubjectHeadings,
 } from "../../../__test__/fixtures/bibFixtures"
 import type { LinkedBibDetail } from "../../types/bibDetailsTypes"
 import BibDetailsModel from "../BibDetails"
@@ -25,6 +26,11 @@ describe("Bib model", () => {
     yiddishBib.resource,
     yiddishBib.annotatedMarc
   )
+
+  const bibWithSubjectHeadingsModel = new BibDetailsModel(
+    bibWithSubjectHeadings.resource,
+    bibWithSubjectHeadings.annotatedMarc
+  )
   describe("note", () => {
     it("groups notes into an array of {label, value} details", () => {
       const model = bibWithParallelsModel
@@ -35,42 +41,82 @@ describe("Bib model", () => {
         },
         { label: "Language (note)", value: ["Serbian;"] },
         {
-          label: "Issued By (note)",
+          label: "Issued by (note)",
           value: ["Issued by: Narodna biblioteka Kraljevo."],
         },
         {
-          label: "Linking Entry (note)",
+          label: "Linking entry (note)",
           value: [
             "Has supplement, <2005-> : Preporučeno, ISSN 1452-3531",
             "Has supplement, <2006-> : Види чуда, ISSN 1452-7316",
             "Has supplement, <2006-> : Vidi čuda, ISSN 1452-7316",
           ],
         },
-        { label: "Source of Description (note)", value: ["G. 46, 3 (2016)."] },
+        { label: "Source of description (note)", value: ["G. 46, 3 (2016)."] },
       ])
     })
   })
   describe("subjectHeadings", () => {
-    it("maps single subjects to compound heading url", () => {
-      const filterQueryForSubjectHeading = "/search?filters[subjectLiteral]="
+    it("correctly formats the subjectHeading urls when the subjectHeadings are present in the bib result", () => {
       const subjectHeadingsObject = {
         label: "Subject",
         value: [
           [
             {
-              url: `${filterQueryForSubjectHeading}${encodeURI(
+              url: "/subject_headings/cf347108-e1f2-4c0f-808a-ac4ace2f0765?label=Cortanze%2C%20G%C3%A9rard%20de",
+              urlLabel: "Cortanze, Gérard de",
+            },
+            {
+              url: "/subject_headings/74746d11-638b-4cfb-a72a-9a2bd296e6fd?label=Cortanze%2C%20G%C3%A9rard%20de%20--%20Childhood%20and%20youth",
+              urlLabel: "Childhood and youth",
+            },
+          ],
+          [
+            {
+              url: "/subject_headings/5fd065df-b4e9-48cb-b13c-ea15f36b96b4?label=Authors%2C%20French",
+              urlLabel: "Authors, French",
+            },
+            {
+              url: "/subject_headings/e43674a7-5f02-44f1-95cd-dbcc776331b7?label=Authors%2C%20French%20--%2020th%20century",
+              urlLabel: "20th century",
+            },
+            {
+              url: "/subject_headings/9391bc26-e44c-44ac-98cc-e3800da51926?label=Authors%2C%20French%20--%2020th%20century%20--%20Biography",
+              urlLabel: "Biography",
+            },
+          ],
+          [
+            {
+              url: "/subject_headings/3a779ed6-8a07-4d27-80ef-e0c2b10fe78e?label=Autobiographical%20Narrative",
+              urlLabel: "Autobiographical Narrative",
+            },
+          ],
+        ],
+      }
+      expect(bibWithSubjectHeadingsModel.subjectHeadings).toMatchObject(
+        subjectHeadingsObject
+      )
+    })
+    it("falls back to subject literals when subject headings are absent in the bib and correctly formats the urls", () => {
+      const filterQueryForSubjectLiteral = "/search?filters[subjectLiteral]="
+      const subjectHeadingsObject = {
+        label: "Subject",
+        value: [
+          [
+            {
+              url: `${filterQueryForSubjectLiteral}${encodeURI(
                 "Authors, French"
               )}`,
               urlLabel: "Authors, French",
             },
             {
-              url: `${filterQueryForSubjectHeading}${encodeURI(
+              url: `${filterQueryForSubjectLiteral}${encodeURI(
                 "Authors, French -- 20th century"
               )}`,
               urlLabel: "20th century",
             },
             {
-              url: `${filterQueryForSubjectHeading}${encodeURI(
+              url: `${filterQueryForSubjectLiteral}${encodeURI(
                 "Authors, French -- 20th century -- Biography"
               )}`,
               urlLabel: "Biography",
@@ -78,7 +124,7 @@ describe("Bib model", () => {
           ],
           [
             {
-              url: `${filterQueryForSubjectHeading}${encodeURI(
+              url: `${filterQueryForSubjectLiteral}${encodeURI(
                 "Autobiographical Narrative"
               )}`,
               urlLabel: "Autobiographical Narrative",
@@ -86,13 +132,13 @@ describe("Bib model", () => {
           ],
           [
             {
-              url: `${filterQueryForSubjectHeading}${encodeURI(
+              url: `${filterQueryForSubjectLiteral}${encodeURI(
                 "Cortanze, Gérard de"
               )}`,
               urlLabel: "Cortanze, Gérard de",
             },
             {
-              url: `${filterQueryForSubjectHeading}${encodeURI(
+              url: `${filterQueryForSubjectLiteral}${encodeURI(
                 "Cortanze, Gérard de -- Childhood and youth"
               )}`,
               urlLabel: "Childhood and youth",
@@ -158,7 +204,7 @@ describe("Bib model", () => {
     it("can handle missing field", () => {
       expect(
         bibWithSupContentModel.bottomDetails.find(
-          (detail) => detail.label === "Call Number"
+          (detail) => detail.label === "Call number"
         )
       ).not.toBeDefined()
     })
@@ -189,7 +235,7 @@ describe("Bib model", () => {
     it("includes url in the field", () => {
       expect(bibWithSupContentModel.supplementaryContent).toStrictEqual({
         link: "external",
-        label: "Supplementary Content",
+        label: "Supplementary content",
         value: [
           {
             urlLabel: "Image",
@@ -207,7 +253,7 @@ describe("Bib model", () => {
       })
       expect(
         bogusBib.topDetails.find(
-          (detail) => detail.label === "Additional Author"
+          (detail) => detail.label === "Additional author"
         )
       ).not.toBeDefined()
     })

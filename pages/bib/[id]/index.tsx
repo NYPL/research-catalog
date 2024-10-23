@@ -1,6 +1,6 @@
 import Head from "next/head"
 import type { SyntheticEvent } from "react"
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef } from "react"
 import { useRouter } from "next/router"
 import {
   Heading,
@@ -15,6 +15,7 @@ import {
   SITE_NAME,
   BASE_URL,
   FOCUS_TIMEOUT,
+  ERROR_MESSAGES,
 } from "../../../src/config/constants"
 import { appConfig } from "../../../src/config/config"
 import { fetchBib } from "../../../src/server/api/bib"
@@ -25,11 +26,11 @@ import {
 } from "../../../src/utils/bibUtils"
 import BibDetailsModel from "../../../src/models/BibDetails"
 import BibDetails from "../../../src/components/BibPage/BibDetail"
+import ElectronicResources from "../../../src/components/BibPage/ElectronicResources"
 import ItemTable from "../../../src/components/ItemTable/ItemTable"
 import ItemTableControls from "../../../src/components/ItemTable/ItemTableControls"
-import ElectronicResourcesLink from "../../../src/components/SearchResults/ElectronicResourcesLink"
 import ExternalLink from "../../../src/components/Links/ExternalLink/ExternalLink"
-import FiltersContainer from "../../../src/components/ItemFilters/FiltersContainer"
+import ItemFilters from "../../../src/components/ItemFilters/ItemFilters"
 import type {
   DiscoveryBibResult,
   BibQueryParams,
@@ -68,6 +69,7 @@ export default function BibPage({
   const [bib, setBib] = useState(new Bib(discoveryBibResult))
   const [itemsLoading, setItemsLoading] = useState(false)
   const [itemFetchError, setItemFetchError] = useState(false)
+
   const [viewAllExpanded, setViewAllExpanded] = useState(viewAllItems)
   const [appliedFilters, setAppliedFilters] = useState(
     parseItemFilterQueryParams(query)
@@ -87,22 +89,10 @@ export default function BibPage({
 
   const filtersAreApplied = areFiltersApplied(appliedFilters)
 
-  // If filters are applied, show the matching number of items, otherwise show the total number of items
-  const numItems = filtersAreApplied
-    ? bib.numItemsMatched
-    : bib.numPhysicalItems
-
-  // Load all items via client-side fetch if page is first loaded with viewAllItems prop passed in
-  // Namely, when the page is accessed with the /all route
-  useEffect(() => {
-    if (viewAllItems) void refreshItemTable(query, true)
-    // Disable eslint exhaustive-deps rule because we only want this to run once on page load
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
   const refreshItemTable = async (
     newQuery: BibQueryParams,
-    viewAllItems = false
+    viewAllItems = false,
+    updateFocusOnItemTableHeading = false
   ) => {
     setItemsLoading(true)
     setItemFetchError(false)
@@ -129,11 +119,15 @@ export default function BibPage({
         scroll: false,
       }
     )
-    const bibQueryString = getBibQueryString(newQuery, false, viewAllItems)
+    const bibQueryString = getBibQueryString(
+      { ...newQuery, all_items: viewAllItems },
+      false
+    )
+
     try {
       // Cancel any active fetches on new ItemTable refreshes
       if (controllerRef.current) {
-        controllerRef.current.abort()
+        controllerRef.current.abort(ERROR_MESSAGES.ITEM_REFETCH_ABORT_REASON)
       }
       controllerRef.current = new AbortController()
       const signal = controllerRef.current.signal
@@ -149,16 +143,20 @@ export default function BibPage({
         setBib(new Bib(discoveryBibResult))
 
         setItemsLoading(false)
-        setTimeout(() => {
-          itemTableHeadingRef.current?.focus()
-        }, FOCUS_TIMEOUT)
+
+        // TODO: This is a workaround to prevent the Displaying text from receiving focus when filters are controlled via a checkbox
+        // This is an accessibility issue that should be addressed when the dynamic refresh is replaced with a form and apply button
+        if (!updateFocusOnItemTableHeading)
+          setTimeout(() => {
+            itemTableHeadingRef.current?.focus()
+          }, FOCUS_TIMEOUT)
       } else {
-        console.log(response)
         handleItemFetchError()
       }
     } catch (error) {
       console.log(error)
-      handleItemFetchError()
+      if (error !== ERROR_MESSAGES.ITEM_REFETCH_ABORT_REASON)
+        handleItemFetchError()
     }
   }
 
@@ -168,7 +166,8 @@ export default function BibPage({
   }
 
   const handleFiltersChange = async (
-    newAppliedFilterQuery: ItemFilterQueryParams
+    newAppliedFilterQuery: ItemFilterQueryParams,
+    updateFocusOnItemTableHeading = false
   ) => {
     const newQuery = {
       ...newAppliedFilterQuery,
@@ -176,7 +175,11 @@ export default function BibPage({
     if (newQuery.item_page) delete newQuery.item_page
     setItemTablePage(1)
     setAppliedFilters(parseItemFilterQueryParams(newAppliedFilterQuery))
-    await refreshItemTable(newQuery, viewAllExpanded)
+    await refreshItemTable(
+      newQuery,
+      viewAllExpanded,
+      updateFocusOnItemTableHeading
+    )
   }
 
   const handlePageChange = async (page: number) => {
@@ -214,11 +217,9 @@ export default function BibPage({
           {bib.title}
         </Heading>
         <BibDetails key="top-details" details={topDetails} />
-        <ElectronicResourcesLink
-          bibUrl={bib.url}
-          electronicResources={bib.electronicResources}
-          inSearchResults={false}
-        />
+        {bib.hasElectronicResources ? (
+          <ElectronicResources electronicResources={bib.electronicResources} />
+        ) : null}
         {bib.showItemTable ? (
           <>
             <Heading
@@ -240,11 +241,12 @@ export default function BibPage({
               isDismissible
               mb="s"
             />
-            <FiltersContainer
+            <ItemFilters
               itemAggregations={bib.itemAggregations}
               handleFiltersChange={handleFiltersChange}
               appliedFilters={appliedFilters}
               filtersAreApplied={filtersAreApplied}
+              showDateFilter={bib.hasItemDates}
             />
             <Box id="item-table">
               {itemsLoading ? (
@@ -266,7 +268,7 @@ export default function BibPage({
                   >
                     {buildItemTableDisplayingString(
                       itemTablePage,
-                      numItems,
+                      bib.numItems(filtersAreApplied),
                       viewAllExpanded,
                       filtersAreApplied
                     )}
@@ -285,7 +287,7 @@ export default function BibPage({
                   handlePageChange={handlePageChange}
                   handleViewAllClick={handleViewAllClick}
                   viewAllLoadingTextRef={viewAllLoadingTextRef}
-                  numItemsTotal={numItems}
+                  numItemsTotal={bib.numItems(filtersAreApplied)}
                   filtersAreApplied={filtersAreApplied}
                 />
               ) : null}

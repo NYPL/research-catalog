@@ -71,11 +71,11 @@ describe("feedbackUtils", () => {
   })
   describe("getEmailParams", () => {
     it("correctly formats the email params based on the required arguments", () => {
-      const body = {
+      const body = JSON.stringify({
         category: "comment",
         comment: "Body text",
         email: "replyTo@email.com",
-      }
+      })
       const referer = "http://localhost:8080"
       expect(
         getEmailParams(body, referer, "to@email.com", "source@email.com")
@@ -85,11 +85,41 @@ describe("feedbackUtils", () => {
           Body: {
             Html: {
               Charset: "UTF-8",
-              Data: getFeedbackEmailHTML(referer, body),
+              Data: getFeedbackEmailHTML(referer, JSON.parse(body)),
             },
             Text: {
               Charset: "UTF-8",
-              Data: getFeedbackEmailText(referer, body),
+              Data: getFeedbackEmailText(referer, JSON.parse(body)),
+            },
+          },
+          Subject: { Charset: "UTF-8", Data: "SCC Feedback" },
+        },
+        Source: "source@email.com",
+        ReplyToAddresses: ["replyTo@email.com"],
+      })
+    })
+
+    it("strips null values from item metadata", () => {
+      const body = JSON.stringify({
+        category: "comment",
+        comment: "Body text",
+        email: "replyTo@email.com",
+        barcode: null,
+      })
+      const referer = "http://localhost:8080"
+      expect(
+        getEmailParams(body, referer, "to@email.com", "source@email.com")
+      ).toStrictEqual({
+        Destination: { ToAddresses: ["to@email.com"] },
+        Message: {
+          Body: {
+            Html: {
+              Charset: "UTF-8",
+              Data: getFeedbackEmailHTML(referer, JSON.parse(body)),
+            },
+            Text: {
+              Charset: "UTF-8",
+              Data: getFeedbackEmailText(referer, JSON.parse(body)),
             },
           },
           Subject: { Charset: "UTF-8", Data: "SCC Feedback" },

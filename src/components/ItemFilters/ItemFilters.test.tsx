@@ -1,76 +1,93 @@
 import React from "react"
-import { render, screen } from "@testing-library/react"
-
-import FiltersContainer from "./FiltersContainer"
 import userEvent from "@testing-library/user-event"
 
-import { normalAggs } from "../../../__test__/fixtures/testAggregations"
+import { bibWithItems } from "../../../__test__/fixtures/bibFixtures"
+import { render, screen } from "../../utils/testUtils"
+import ItemFilters from "./ItemFilters"
+import Bib from "../../models/Bib"
 
-describe("Filters container", () => {
-  it("renders a single filter", () => {
-    render(<FiltersContainer itemAggregations={[normalAggs[0]]} />)
-    const filters = screen.getAllByTestId(/item-filter/)
-    expect(filters.length).toBe(1)
+describe("ItemFilters", () => {
+  let filtersChangeMock: jest.Mock
+
+  describe("ItemFilters with year filter", () => {
+    let filtersChangeMock: jest.Mock
+    beforeEach(() => {
+      const bib = new Bib(bibWithItems.resource)
+      filtersChangeMock = jest.fn()
+      render(
+        <ItemFilters
+          itemAggregations={bib.itemAggregations}
+          handleFiltersChange={filtersChangeMock}
+          appliedFilters={{
+            location: ["Offsite"],
+            format: ["Text"],
+            status: ["Available"],
+            year: [],
+          }}
+          filtersAreApplied={true}
+          showDateFilter={true}
+        />
+      )
+    })
+
+    it("renders the Filter bar container", () => {
+      expect(screen.getByTestId("item-filters-container")).toBeInTheDocument()
+    })
+
+    it("renders filters container with one MultiSelect per populated checkbox group", async () => {
+      expect(screen.getByTestId("item-filters-container")).toBeInTheDocument()
+      expect(screen.getByTestId("format-multi-select")).toBeInTheDocument()
+      expect(screen.getByTestId("status-multi-select")).toBeInTheDocument()
+    })
+
+    it("renders the year search form when showDateFilter is true", async () => {
+      expect(screen.getByLabelText("Search by year")).toBeInTheDocument()
+    })
+
+    it("calls the change handler when filter values are changed", async () => {
+      await userEvent.click(screen.getByTestId("location-multi-select"))
+      const offsiteCheckbox = screen.getByLabelText("Offsite")
+
+      await userEvent.click(offsiteCheckbox)
+      expect(filtersChangeMock).toHaveBeenCalledTimes(1)
+
+      await userEvent.click(offsiteCheckbox)
+      expect(filtersChangeMock).toHaveBeenCalledTimes(2)
+    })
+
+    it("renders TagSet data when filters are applied and removes the filter when tag is clicked", async () => {
+      expect(screen.queryByText("Active filters")).toBeInTheDocument()
+      await userEvent.click(
+        screen.getByLabelText("Location > Offsite, click to remove filter")
+      )
+      expect(filtersChangeMock).toHaveBeenCalledWith(
+        {
+          item_format: "Text",
+          item_status: "Available",
+        },
+        false
+      )
+    })
   })
-  it("renders three filter boxes", () => {
-    render(<FiltersContainer itemAggregations={normalAggs} />)
-    const filters = screen.getAllByTestId(/item-filter/)
-    expect(filters.length).toBe(3)
-  })
-
-  it("renders the correct checkboxes for the applied filters", async () => {
-    render(
-      <FiltersContainer
-        itemAggregations={normalAggs}
-        appliedFilters={{
-          location: ["Offsite"],
-          format: ["Text"],
-          status: ["status:a"],
-          year: ["2005"],
-        }}
-      />
-    )
-    const { locationFilterButton, statusFilterButton, formatFilterButton } =
-      filterButtons()
-    await filterHasSelected(locationFilterButton, ["Offsite"])
-    await filterHasSelected(formatFilterButton, ["Text"])
-    await filterHasSelected(statusFilterButton, ["Available"])
-  })
-
-  it("closes open filters when user clicks outside of the filter", async () => {
-    render(<FiltersContainer itemAggregations={normalAggs} />)
-    const { locationFilterButton } = filterButtons()
-    const outsideOfTheFilter = screen.getByTestId("year-filter-label")
-
-    await userEvent.click(locationFilterButton)
-    const offsiteCheckbox = screen.getByLabelText("Offsite")
-    await userEvent.click(offsiteCheckbox)
-    await userEvent.click(outsideOfTheFilter)
-    expect(offsiteCheckbox).not.toBeInTheDocument()
+  describe("ItemFilters no year filter", () => {
+    it("does not render the year search form when showDateFilter is false", async () => {
+      const bib = new Bib(bibWithItems.resource)
+      filtersChangeMock = jest.fn()
+      render(
+        <ItemFilters
+          itemAggregations={bib.itemAggregations}
+          handleFiltersChange={filtersChangeMock}
+          appliedFilters={{
+            location: ["Offsite"],
+            format: ["Text"],
+            status: ["Available"],
+            year: [],
+          }}
+          filtersAreApplied={true}
+          showDateFilter={false}
+        />
+      )
+      expect(screen.queryByLabelText("Search by year")).not.toBeInTheDocument()
+    })
   })
 })
-
-const filterHasSelected = async (
-  checkboxGroupButton: Element,
-  values: string[]
-) => {
-  await userEvent.click(checkboxGroupButton)
-  const selectedValues = values.map((label) => screen.getByLabelText(label))
-  const checkboxes = screen.getAllByRole("checkbox", { checked: true })
-  expect(checkboxes.length).toBe(values.length)
-  selectedValues.forEach((checkbox) => {
-    expect(checkbox).toBeChecked()
-  })
-}
-
-const filterButtons = () => {
-  const locationFilterButton = screen.getByTestId("location-item-filter")
-  const statusFilterButton = screen.getByTestId("status-item-filter")
-  const formatFilterButton = screen.getByTestId("format-item-filter")
-
-  return {
-    locationFilterButton,
-    statusFilterButton,
-    formatFilterButton,
-  }
-}

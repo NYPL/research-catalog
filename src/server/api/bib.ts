@@ -3,6 +3,7 @@ import {
   isNyplBibID,
   getBibQueryString,
   standardizeBibId,
+  itemFiltersActive,
 } from "../../utils/bibUtils"
 import nyplApiClient from "../nyplApiClient"
 import {
@@ -27,6 +28,7 @@ export async function fetchBib(
       redirectUrl: `/bib/${standardizedId}`,
     }
   }
+
   const client = await nyplApiClient({ apiName: DISCOVERY_API_NAME })
   const [bibResponse, annotatedMarcResponse] = await Promise.allSettled([
     await client.get(
@@ -91,9 +93,11 @@ export async function fetchBib(
         status: 404,
       }
     }
-    // Populate bib's items with all the items if View All is enabled
-    if (bibQuery?.view_all_items) {
-      discoveryBibResult.items = await fetchAllBibItems(
+
+    // Only call the batched fetch when some of the filters are active
+    // TODO: Remove this when view_all endpoint in discovery supports query params
+    if (bibQuery?.all_items && itemFiltersActive(bibQuery)) {
+      discoveryBibResult.items = await fetchAllBibItemsWithQuery(
         bibQuery,
         discoveryBibResult.numItemsMatched,
         // allow control of batch size in query param for testing
@@ -137,33 +141,37 @@ async function fetchBibSubjectHeadings(bibId: string) {
   }
 }
 
-async function fetchAllBibItems(
+// TODO: Remove this when view_all endpoint in discovery supports query params
+async function fetchAllBibItemsWithQuery(
   bibQuery: BibQueryParams,
   numItems: number,
   batchSize: number
 ): Promise<DiscoveryItemResult[]> {
   const items: DiscoveryItemResult[] = []
   const client = await nyplApiClient({ apiName: DISCOVERY_API_NAME })
-  for (
-    let batchNum = 1;
-    batchNum <= Math.ceil(numItems / batchSize);
-    batchNum++
-  ) {
-    const pageQueryString = getBibQueryString(
-      {
-        ...bibQuery,
-        item_page: batchNum,
-      },
-      false,
-      true
-    )
-    const bibPage = await client.get(
-      `${DISCOVERY_API_SEARCH_ROUTE}/${bibQuery.id}${pageQueryString}`
-    )
-    if (bibPage?.items?.length) {
-      items.push(...bibPage.items)
-    } else {
-      throw new Error("There was en error fetching items in one of the batches")
+  const totalBatchNum = Math.ceil(numItems / batchSize)
+
+  for (let batchNum = 1; batchNum <= totalBatchNum; batchNum++) {
+    try {
+      const pageQueryString = getBibQueryString(
+        {
+          ...bibQuery,
+          item_page: batchNum,
+        },
+        false
+      )
+      const bibPage = await client.get(
+        `${DISCOVERY_API_SEARCH_ROUTE}/${bibQuery.id}${pageQueryString}`
+      )
+      if (bibPage?.items?.length) {
+        items.push(...bibPage.items)
+      } else {
+        throw new Error(
+          "There was en error fetching items in one of the batches"
+        )
+      }
+    } catch (error) {
+      logger.error(error.message)
     }
   }
   return items

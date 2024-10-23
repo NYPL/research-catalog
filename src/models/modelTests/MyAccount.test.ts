@@ -15,11 +15,11 @@ import {
   checkoutBibs,
   empty,
 } from "../../../__test__/fixtures/rawSierraAccountData"
-import type { Hold } from "../../types/myAccountTypes"
+import type { Hold, SierraHold } from "../../types/myAccountTypes"
 
 describe("MyAccountModel", () => {
   const fetchBibs = MyAccount.prototype.fetchBibData
-  afterAll(() => {
+  afterEach(() => {
     MyAccount.prototype.fetchBibData = fetchBibs
   })
 
@@ -36,6 +36,12 @@ describe("MyAccountModel", () => {
 
   describe("getHoldStatus", () => {
     it("returns the correct status", () => {
+      expect(
+        MyAccount.getHoldStatus({
+          code: "b",
+          name: "Requested item ready for pickup.",
+        })
+      ).toBe("READY FOR PICKUP")
       expect(
         MyAccount.getHoldStatus({
           code: "i",
@@ -187,13 +193,14 @@ describe("MyAccountModel", () => {
       expect(account.checkouts).toStrictEqual(processedCheckouts)
       expect(account.fines).toStrictEqual(processedFines)
     })
-    it("builds empty Account data model with empty phones and email", async () => {
+    it("builds empty Account data model with empty phones, email, username", async () => {
       MyAccount.prototype.fetchCheckouts = async () => empty
       MyAccount.prototype.fetchHolds = async () => empty
       MyAccount.prototype.fetchPatron = async () => ({
         ...patron,
         phones: [],
         emails: [],
+        varFields: [{ fieldtag: "not u", content: "irrelevant" }],
       })
       MyAccount.prototype.fetchFines = async () => ({ total: 0, entries: [] })
       MyAccount.prototype.fetchBibData = async () => ({ total: 0, entries: [] })
@@ -237,6 +244,27 @@ describe("MyAccountModel", () => {
       expect(patronWithFails.holds).not.toHaveLength(0)
       expect(patronWithFails.fines.total).toEqual(0)
       expect(patronWithFails.patron.name).toEqual("Strega Nonna")
+    })
+  })
+  describe("fetchBibData", () => {
+    it("can handle bib level holds with no item level holds", async () => {
+      const account = new MyAccount({ get: () => "spaghetti" }, "1234567")
+      const bibHolds = holds.entries.filter((hold) => !hold.record.bibIds)
+      const processedBibHolds = await account.fetchBibData(
+        bibHolds as SierraHold[],
+        "record"
+      )
+      expect(processedBibHolds).toStrictEqual({
+        entries: bibHolds.map((hold) => hold.record),
+      })
+    })
+    it("requests bib info for item level holds", async () => {
+      const fetchSpy = jest.fn().mockResolvedValue({ entries: [{ id: "123" }] })
+      const account = new MyAccount({ get: fetchSpy }, "1234567")
+
+      await account.fetchBibData(holds.entries as SierraHold[], "record")
+
+      expect(fetchSpy).toHaveBeenCalled()
     })
   })
 })

@@ -8,6 +8,7 @@ import {
   bibWithSupplementaryContent as bibNoItems,
   bibWithItems,
   bibWithManyItems,
+  parallelsBib as bibNoElectronicResources,
 } from "../../fixtures/bibFixtures"
 
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
@@ -43,8 +44,9 @@ describe("Bib Page with items", () => {
     expect(screen.getByTestId("bib-details-item-table")).toBeInTheDocument()
   })
 
+  // TODO: Determine if this should be rendering twice
   it("renders the bottom bib details", () => {
-    expect(screen.getByTestId("publication-date")).toHaveTextContent(
+    expect(screen.getAllByTestId("publication-date")[0]).toHaveTextContent(
       "Vol. 1, issue 1-"
     )
     expect(screen.getByTestId("description")).toHaveTextContent(
@@ -99,10 +101,37 @@ describe("Bib Page no items", () => {
       screen.queryByTestId("bib-details-item-table")
     ).not.toBeInTheDocument()
   })
+
+  it("renders the electronic resources component when there are electronic resources", () => {
+    expect(screen.queryByTestId("electronic-resources")).toBeInTheDocument()
+  })
+})
+
+describe("Bib Page no electronic resources", () => {
+  beforeEach(() => {
+    render(
+      <BibPage
+        discoveryBibResult={bibNoElectronicResources.resource}
+        annotatedMarc={bibNoElectronicResources.annotatedMarc}
+        isAuthenticated={false}
+      />
+    )
+  })
+
+  it("does not render the electronic resources component when there are no electronic resources", () => {
+    expect(screen.queryByTestId("electronic-resources")).not.toBeInTheDocument()
+  })
 })
 
 describe("Bib Page Item Table", () => {
   beforeEach(() => {
+    global.fetch = jest.fn().mockImplementationOnce(() =>
+      Promise.resolve({
+        status: 200,
+        json: () => Promise.resolve({ success: true }),
+      })
+    )
+
     render(
       <BibPage
         discoveryBibResult={bibWithManyItems.resource}
@@ -112,13 +141,130 @@ describe("Bib Page Item Table", () => {
     )
   })
 
-  it("renders pagination when there are more than 20 items and updates the router on page button clicks", async () => {
-    global.fetch = jest.fn().mockImplementationOnce(() =>
-      Promise.resolve({
-        status: 200,
-        json: () => Promise.resolve({ success: true }),
-      })
+  it("renders the filters container and populates the checkboxes", async () => {
+    expect(screen.getByTestId("item-filters-container")).toBeInTheDocument()
+    const checkboxGroups = screen.getAllByTestId("checkbox-group")
+    expect(checkboxGroups).toHaveLength(2)
+
+    expect(checkboxGroups[0].querySelectorAll("input")).toHaveLength(1)
+    expect(checkboxGroups[1].querySelectorAll("input")).toHaveLength(1)
+  })
+
+  it("updates the router when filter checkboxes are clicked", async () => {
+    const checkboxGroups = screen.getAllByTestId("checkbox-group")
+
+    await userEvent.click(checkboxGroups[0].querySelector("input"))
+    expect(mockRouter.asPath).toBe("/bib/pb5579193?item_format=Text")
+
+    await userEvent.click(checkboxGroups[0].querySelector("input"))
+    expect(mockRouter.asPath).toBe("/bib/pb5579193")
+  })
+
+  it("updates the router when year filter is submitted", async () => {
+    const yearFilter = screen.queryByTestId("year-filter")
+    const yearField = screen.queryByPlaceholderText("YYYY")
+    await userEvent.type(yearField, "2005")
+
+    await userEvent.click(yearFilter.querySelector("button[type='submit']"))
+
+    expect(mockRouter.asPath).toBe("/bib/pb5579193?item_date=2005")
+  })
+
+  it("clears the year filter when the year tag is clicked", async () => {
+    const yearTag = screen.queryByText("Year > 2005").closest("button")
+    await userEvent.click(yearTag)
+
+    expect(mockRouter.asPath).toBe("/bib/pb5579193")
+  })
+
+  it("shows an error and doesn't update router when an invalid year is submitted", async () => {
+    const yearFilter = screen.queryByTestId("year-filter")
+    const yearField = screen.queryByPlaceholderText("YYYY")
+
+    // blank year
+    await userEvent.click(yearFilter.querySelector("button[type='submit']"))
+    expect(mockRouter.asPath).toBe("/bib/pb5579193")
+    expect(
+      screen.queryByText("There was a problem. Please enter a valid year.")
+    ).toBeInTheDocument()
+
+    // non-numeric
+    await userEvent.type(yearField, "ABCD")
+    await userEvent.click(yearFilter.querySelector("button[type='submit']"))
+    expect(mockRouter.asPath).toBe("/bib/pb5579193")
+    expect(
+      screen.queryByText("There was a problem. Please enter a valid year.")
+    ).toBeInTheDocument()
+
+    // not of length 4
+    await userEvent.type(yearField, "1")
+    await userEvent.click(yearFilter.querySelector("button[type='submit']"))
+    expect(mockRouter.asPath).toBe("/bib/pb5579193")
+    expect(
+      screen.queryByText("There was a problem. Please enter a valid year.")
+    ).toBeInTheDocument()
+  })
+
+  it("clears a filter group when the MultiSelect clear button is clicked", async () => {
+    const checkboxGroups = screen.getAllByTestId("checkbox-group")
+
+    await userEvent.click(checkboxGroups[0].querySelector("input"))
+    await userEvent.click(checkboxGroups[1].querySelector("input"))
+    expect(mockRouter.asPath).toBe(
+      "/bib/pb5579193?item_format=Text&item_status=status%3Aa"
     )
+
+    await userEvent.click(
+      screen.getByLabelText("remove 1 item selected from Format")
+    )
+
+    expect(mockRouter.asPath).toBe("/bib/pb5579193?item_status=status%3Aa")
+
+    await userEvent.click(
+      screen.getByLabelText("remove 1 item selected from Status")
+    )
+
+    expect(mockRouter.asPath).toBe("/bib/pb5579193")
+  })
+
+  it("renders TagSet for applied filters and clears filters via tag click", async () => {
+    await userEvent.click(
+      screen.getAllByTestId("checkbox-group")[0].querySelector("input")
+    )
+
+    const tagButton = screen.queryByTestId("filter-tags")
+    expect(tagButton).toHaveTextContent("Text")
+    expect(mockRouter.asPath).toBe("/bib/pb5579193?item_format=Text")
+
+    await userEvent.click(tagButton)
+    expect(screen.queryByTestId("filter-tags")).not.toBeInTheDocument()
+    expect(mockRouter.asPath).toBe("/bib/pb5579193")
+  })
+
+  it("TagSet should display a clear all button that clears all filters on click", async () => {
+    await userEvent.click(
+      screen.getAllByTestId("checkbox-group")[0].querySelector("input")
+    )
+    await userEvent.click(
+      screen.getAllByTestId("checkbox-group")[1].querySelector("input")
+    )
+    await userEvent.type(screen.queryByPlaceholderText("YYYY"), "2005")
+
+    await userEvent.click(
+      screen.queryByTestId("year-filter").querySelector("button[type='submit']")
+    )
+
+    expect(mockRouter.asPath).toBe(
+      "/bib/pb5579193?item_format=Text&item_status=status%3Aa&item_date=2005"
+    )
+    await userEvent.click(screen.getByText("Clear filters"))
+
+    expect(mockRouter.asPath).toBe("/bib/pb5579193")
+    expect(screen.queryByTestId("filter-tags")).not.toBeInTheDocument()
+    expect(screen.queryByPlaceholderText("YYYY")).toHaveValue("")
+  })
+
+  it("renders pagination when there are more than 20 items and updates the router on page button clicks", async () => {
     expect(
       screen.queryByText("Displaying 1-20 of 26 items")
     ).toBeInTheDocument()
@@ -131,7 +277,7 @@ describe("Bib Page Item Table", () => {
   })
 
   it("renders a view all button when there are more than 20 items and updates the url to /all when clicked", async () => {
-    const viewAllLink = screen.getByText("View All 26 Items").closest("a")
+    const viewAllLink = screen.getByText("View all 26 items").closest("a")
     expect(viewAllLink).toHaveAttribute(
       "href",
       "/research/research-catalog/bib/pb5579193/all"
@@ -154,7 +300,7 @@ describe("Bib Page Item Table", () => {
           }),
       })
     )
-    await userEvent.click(screen.getByText("View All 26 Items").closest("a"))
+    await userEvent.click(screen.getByText("View all 26 items").closest("a"))
     expect(screen.getByText("View fewer items")).toBeInTheDocument()
     expect(screen.getByTestId("bib-details-item-table")).toBeInTheDocument()
   })
@@ -166,7 +312,7 @@ describe("Bib Page Item Table", () => {
           setTimeout(resolve, 50)
         })
     )
-    await userEvent.click(screen.getByText("View All 26 Items").closest("a"))
+    await userEvent.click(screen.getByText("View all 26 items").closest("a"))
     expect(
       screen.getByText("Loading all 26 items. This may take a few moments...")
     ).toBeInTheDocument()
@@ -179,7 +325,7 @@ describe("Bib Page Item Table", () => {
         ok: false,
       })
     )
-    await userEvent.click(screen.getByText("View All 26 Items").closest("a"))
+    await userEvent.click(screen.getByText("View all 26 items").closest("a"))
     expect(
       screen.getByText(
         "There was an error fetching items. Please try again with a different query."

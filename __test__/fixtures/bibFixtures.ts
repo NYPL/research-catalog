@@ -8759,3 +8759,3049 @@ export const yiddishBib = {
     ],
   },
 }
+
+export const bibManyEResources = {
+  resource: {
+    "@context":
+      "http://discovery-api-production.nypl.org/api/v0.1/discovery/context_all.jsonld",
+    "@type": ["nypl:Item", "nypl:Resource"],
+    "@id": "res:b15109087",
+    carrierType: [
+      {
+        "@id": "carriertypes:nc",
+        prefLabel: "volume",
+      },
+    ],
+    contributorLiteral: ["Société de gens de lettres."],
+    createdString: ["17uu"],
+    createdYear: 17,
+    dateEndString: ["1uuu"],
+    dateEndYear: 1,
+    dateStartYear: 17,
+    dateString: ["17uu"],
+    dimensions: ["15 cm."],
+    electronicResources: [
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743126",
+        prefLabel: "Full text available via HathiTrust--Table (1782-1784)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743134",
+        prefLabel: "Full text available via HathiTrust--no. 4 (1818)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743142",
+        prefLabel: "Full text available via HathiTrust--no. 2-3 (1818)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743159",
+        prefLabel:
+          "Full text available via HathiTrust--no. 12, 1817-no. 1, 1818",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743167",
+        prefLabel: "Full text available via HathiTrust--no. 10-11 (1817)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743175",
+        prefLabel: "Full text available via HathiTrust--no. 8-9 (1817)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743183",
+        prefLabel: "Full text available via HathiTrust--no. 6-7 (1817)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743191",
+        prefLabel: "Full text available via HathiTrust--no. 4-5 (1817)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743209",
+        prefLabel: "Full text available via HathiTrust--no. 11-12 (1814)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743217",
+        prefLabel: "Full text available via HathiTrust--no. 9-10 (1814)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743225",
+        prefLabel: "Full text available via HathiTrust--no. 7-8 (1814)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743233",
+        prefLabel: "Full text available via HathiTrust--no. 5-6 (1814)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743241",
+        prefLabel: "Full text available via HathiTrust--no. 3-4 (1814)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743258",
+        prefLabel: "Full text available via HathiTrust--no. 1-2 (1814)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743266",
+        prefLabel: "Full text available via HathiTrust--no. 11-12 (1809)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743274",
+        prefLabel: "Full text available via HathiTrust--no. 9-10 (1809)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743282",
+        prefLabel: "Full text available via HathiTrust--no. 7-8 (1809)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743290",
+        prefLabel: "Full text available via HathiTrust--no. 5-6 (1809)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743308",
+        prefLabel: "Full text available via HathiTrust--no. 3-4 (1809)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743316",
+        prefLabel: "Full text available via HathiTrust--no. 1-2 (1809)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743324",
+        prefLabel: "Full text available via HathiTrust--no. 11-12 (1808)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743332",
+        prefLabel: "Full text available via HathiTrust--no. 9-10 (1808)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743340",
+        prefLabel: "Full text available via HathiTrust--no. 5-6 (1808)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743357",
+        prefLabel: "Full text available via HathiTrust--no. 3-4 (1808)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743365",
+        prefLabel: "Full text available via HathiTrust--no. 1-2 (1808)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743373",
+        prefLabel: "Full text available via HathiTrust--no. 11-12 (1807)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743381",
+        prefLabel: "Full text available via HathiTrust--no. 9-10 (1807)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743399",
+        prefLabel: "Full text available via HathiTrust--no. 7-8 (1807)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743407",
+        prefLabel: "Full text available via HathiTrust--no. 5-6 (1807)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743423",
+        prefLabel: "Full text available via HathiTrust--no. 11-12 (1806)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743431",
+        prefLabel: "Full text available via HathiTrust--no. 9-10 (1806)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743449",
+        prefLabel: "Full text available via HathiTrust--no. 7-8 (1806)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743456",
+        prefLabel: "Full text available via HathiTrust--no. 5-6 (1806)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743464",
+        prefLabel: "Full text available via HathiTrust--no. 3-4 (1806)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743472",
+        prefLabel: "Full text available via HathiTrust--no. 1-2 (1806)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743480",
+        prefLabel: "Full text available via HathiTrust--no. 11-12 (1805)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743498",
+        prefLabel: "Full text available via HathiTrust--no. 9-10 (1805)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743506",
+        prefLabel: "Full text available via HathiTrust--no. 7-8 (1805)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743514",
+        prefLabel: "Full text available via HathiTrust--no. 11-12 (1813)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743522",
+        prefLabel: "Full text available via HathiTrust--no. 9-10 (1813)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743530",
+        prefLabel: "Full text available via HathiTrust--no. 7-8 (1813)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743548",
+        prefLabel: "Full text available via HathiTrust--no. 5-6 (1813)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743555",
+        prefLabel: "Full text available via HathiTrust--no. 3-4 (1813)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743563",
+        prefLabel: "Full text available via HathiTrust--no. 1-2 (1813)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743571",
+        prefLabel: "Full text available via HathiTrust--no. 11-12 (1812)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743589",
+        prefLabel: "Full text available via HathiTrust--no. 9-10 (1812)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743597",
+        prefLabel: "Full text available via HathiTrust--no. 7-8 (1812)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743605",
+        prefLabel: "Full text available via HathiTrust--no. 5-6 (1812)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743613",
+        prefLabel: "Full text available via HathiTrust--no. 3-4 (1812)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743621",
+        prefLabel: "Full text available via HathiTrust--no. 1-2 (1812)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743639",
+        prefLabel: "Full text available via HathiTrust--no. 11-12 (1811)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743647",
+        prefLabel: "Full text available via HathiTrust--no. 9-10 (1811)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743654",
+        prefLabel: "Full text available via HathiTrust--no. 7-8 (1811)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743662",
+        prefLabel: "Full text available via HathiTrust--v. 5-6 (1811)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743670",
+        prefLabel: "Full text available via HathiTrust--no. 3-4 (1811)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743688",
+        prefLabel: "Full text available via HathiTrust--no. 1-2 (1811)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743696",
+        prefLabel: "Full text available via HathiTrust--no. 11-12 (1810)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743704",
+        prefLabel: "Full text available via HathiTrust--no. 9-10 (1810)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743712",
+        prefLabel: "Full text available via HathiTrust--no. 7-8 (1810)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743720",
+        prefLabel: "Full text available via HathiTrust--no. 7-8 (1808)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743738",
+        prefLabel: "Full text available via HathiTrust--no. 5-6 (1810)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743746",
+        prefLabel: "Full text available via HathiTrust--no. 3-4 (1810)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743753",
+        prefLabel: "Full text available via HathiTrust--no. 1-2 (1810)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743761",
+        prefLabel: "Full text available via HathiTrust--no. 2 (1793)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743779",
+        prefLabel: "Full text available via HathiTrust--no. 1 (1793)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743787",
+        prefLabel: "Full text available via HathiTrust--no. 12 (1792)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743795",
+        prefLabel: "Full text available via HathiTrust--no. 11 (1792)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743803",
+        prefLabel: "Full text available via HathiTrust--no. 10 (1792)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743811",
+        prefLabel: "Full text available via HathiTrust--no. 9 (1792)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743829",
+        prefLabel: "Full text available via HathiTrust--no. 8 (1792)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743837",
+        prefLabel: "Full text available via HathiTrust--no. 7 (1792)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743845",
+        prefLabel: "Full text available via HathiTrust--no. 6 (1792)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743852",
+        prefLabel: "Full text available via HathiTrust--no. 5 (1792)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743860",
+        prefLabel: "Full text available via HathiTrust--no. 4 (1792)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743878",
+        prefLabel: "Full text available via HathiTrust--no. 3 (1792)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743886",
+        prefLabel: "Full text available via HathiTrust--no. 2 (1792)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743894",
+        prefLabel: "Full text available via HathiTrust--no. 1 (1792)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743902",
+        prefLabel: "Full text available via HathiTrust--no. 12 (1791)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743910",
+        prefLabel: "Full text available via HathiTrust--no. 11 (1791)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743928",
+        prefLabel: "Full text available via HathiTrust--no. 10 (1791)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743936",
+        prefLabel: "Full text available via HathiTrust--no. 9 (1791)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743944",
+        prefLabel: "Full text available via HathiTrust--no. 8 (1791)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743951",
+        prefLabel: "Full text available via HathiTrust--no. 7 (1791)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743969",
+        prefLabel: "Full text available via HathiTrust--no. 6 (1791)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743977",
+        prefLabel: "Full text available via HathiTrust--no. 5 (1791)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743985",
+        prefLabel: "Full text available via HathiTrust--no. 4 (1791)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081743993",
+        prefLabel: "Full text available via HathiTrust--no. 3 (1791)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744009",
+        prefLabel: "Full text available via HathiTrust--no. 2 (1791)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744017",
+        prefLabel: "Full text available via HathiTrust--no. 1 (1791)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744025",
+        prefLabel: "Full text available via HathiTrust--no. 12 (1790)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744033",
+        prefLabel: "Full text available via HathiTrust--no. 11 (1790)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744041",
+        prefLabel: "Full text available via HathiTrust--no. 10 (1790)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744058",
+        prefLabel: "Full text available via HathiTrust--no. 9 (1790)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744066",
+        prefLabel: "Full text available via HathiTrust--no. 8 (1790)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744074",
+        prefLabel: "Full text available via HathiTrust--no. 7 (1790)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744082",
+        prefLabel: "Full text available via HathiTrust--no. 6 (1790)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744090",
+        prefLabel: "Full text available via HathiTrust--no. 5 (1790)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744108",
+        prefLabel: "Full text available via HathiTrust--no. 4 (1790)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744116",
+        prefLabel: "Full text available via HathiTrust--no. 3 (1790)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744124",
+        prefLabel: "Full text available via HathiTrust--no. 2 (1790)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744132",
+        prefLabel: "Full text available via HathiTrust--no. 1 (1790)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744140",
+        prefLabel: "Full text available via HathiTrust--no. 12 (1789)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744157",
+        prefLabel: "Full text available via HathiTrust--no. 11 (1789)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744165",
+        prefLabel: "Full text available via HathiTrust--no. 10 (1789)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744173",
+        prefLabel: "Full text available via HathiTrust--no. 9 (1789)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744181",
+        prefLabel: "Full text available via HathiTrust--no. 8 (1789)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744199",
+        prefLabel: "Full text available via HathiTrust--no. 7 (1789)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744207",
+        prefLabel: "Full text available via HathiTrust--no. 6 (1789)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744215",
+        prefLabel: "Full text available via HathiTrust--no. 5 (1789)",
+      },
+      {
+        url: "http://hdl.handle.net/2027/nyp.33433081744223",
+        prefLabel: "Full text available via HathiTrust--no. 4 (1789)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744231",
+        prefLabel: "Full text available via HathiTrust--no. 3 (1789)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744249",
+        prefLabel: "Full text available via HathiTrust--no. 2 (1789)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744256",
+        prefLabel: "Full text available via HathiTrust--no. 1 (1789)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744264",
+        prefLabel: "Full text available via HathiTrust--no. 9-12 (1795)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744272",
+        prefLabel: "Full text available via HathiTrust--no. 5-8 (1795)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744280",
+        prefLabel: "Full text available via HathiTrust--no. 1-4 (1795)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744298",
+        prefLabel: "Full text available via HathiTrust--no. 12 (1794)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744306",
+        prefLabel: "Full text available via HathiTrust--no. 11 (1794)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744314",
+        prefLabel: "Full text available via HathiTrust--no. 10 (1794)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744322",
+        prefLabel: "Full text available via HathiTrust--no. 9 (1794)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744330",
+        prefLabel: "Full text available via HathiTrust--no. 8 (1794)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744348",
+        prefLabel: "Full text available via HathiTrust--no. 7 (1794)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744355",
+        prefLabel: "Full text available via HathiTrust--no. 6 (1794)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744363",
+        prefLabel: "Full text available via HathiTrust--no. 5 (1794)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744371",
+        prefLabel: "Full text available via HathiTrust--no. 4 (1794)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744389",
+        prefLabel: "Full text available via HathiTrust--no. 3 (1794)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744397",
+        prefLabel: "Full text available via HathiTrust--no. 2 (1794)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744405",
+        prefLabel: "Full text available via HathiTrust--no. 1 (1794)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744413",
+        prefLabel: "Full text available via HathiTrust--no. 12 (1793)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744421",
+        prefLabel: "Full text available via HathiTrust--no. 11 (1793)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744439",
+        prefLabel: "Full text available via HathiTrust--no. 10 (1793)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744447",
+        prefLabel: "Full text available via HathiTrust--no. 9 (1793)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744454",
+        prefLabel: "Full text available via HathiTrust--no. 8 (1793)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744462",
+        prefLabel: "Full text available via HathiTrust--no. 7 (1793)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744470",
+        prefLabel: "Full text available via HathiTrust--no. 6 (1793)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744488",
+        prefLabel: "Full text available via HathiTrust--no. 5 (1793)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744496",
+        prefLabel: "Full text available via HathiTrust--no. 4 (1793)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744504",
+        prefLabel: "Full text available via HathiTrust--no. 3 (1793)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744512",
+        prefLabel: "Full text available via HathiTrust--no. 1-2 (1801)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744520",
+        prefLabel: "Full text available via HathiTrust--no. 11-12 (1800)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744538",
+        prefLabel: "Full text available via HathiTrust--no. 9-10 (1800)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744546",
+        prefLabel: "Full text available via HathiTrust--no. 7-8 (1800)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744553",
+        prefLabel: "Full text available via HathiTrust--no. 5-6 (1800)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744561",
+        prefLabel: "Full text available via HathiTrust--no. 3-4 (1800)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744579",
+        prefLabel: "Full text available via HathiTrust--no. 1-2 (1800)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744587",
+        prefLabel: "Full text available via HathiTrust--no. 11-12 (1799)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744595",
+        prefLabel: "Full text available via HathiTrust--no. 9-10 (1799)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744603",
+        prefLabel: "Full text available via HathiTrust--no. 7-8 (1799)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744611",
+        prefLabel: "Full text available via HathiTrust--no. 5-6 (1799)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744629",
+        prefLabel: "Full text available via HathiTrust--no. 3-4 (1799)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744637",
+        prefLabel: "Full text available via HathiTrust--no. 1-2 (1799)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744645",
+        prefLabel: "Full text available via HathiTrust--no. 11-12 (1798)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744652",
+        prefLabel: "Full text available via HathiTrust--no. 9-10 (1798)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744660",
+        prefLabel: "Full text available via HathiTrust--no. 7-8 (1798)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744678",
+        prefLabel: "Full text available via HathiTrust--no. 5-6 (1798)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744686",
+        prefLabel: "Full text available via HathiTrust--no. 3-4 (1798)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744694",
+        prefLabel: "Full text available via HathiTrust--no. 1-2 (1798)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744702",
+        prefLabel: "Full text available via HathiTrust--no. 9-12 (1797)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744710",
+        prefLabel: "Full text available via HathiTrust--no. 5-8 (1797)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744728",
+        prefLabel: "Full text available via HathiTrust--no. 1-4 (1797)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744736",
+        prefLabel: "Full text available via HathiTrust--no. 9-12 (1796)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744744",
+        prefLabel: "Full text available via HathiTrust--no. 5-8 (1796)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744751",
+        prefLabel: "Full text available via HathiTrust--no. 1-4 (1796)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744769",
+        prefLabel: "Full text available via HathiTrust--no. 3-4 (1807)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744777",
+        prefLabel: "Full text available via HathiTrust--no. 5-6 (1805)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744785",
+        prefLabel: "Full text available via HathiTrust--no. 3-4 (1805)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744793",
+        prefLabel: "Full text available via HathiTrust--no. 1-2 (1805)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744801",
+        prefLabel:
+          "Full text available via HathiTrust--Table Generale 1-28 (1803-1805)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744819",
+        prefLabel: "Full text available via HathiTrust--no. 11-12 (1804)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744827",
+        prefLabel: "Full text available via HathiTrust--no. 9-10 (1804)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744835",
+        prefLabel: "Full text available via HathiTrust--no. 7-8 (1804)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744843",
+        prefLabel: "Full text available via HathiTrust--no. 5-6 (1804)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744850",
+        prefLabel: "Full text available via HathiTrust--no. 3-4 (1804)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744868",
+        prefLabel: "Full text available via HathiTrust--no. 1-2 (1804)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744876",
+        prefLabel: "Full text available via HathiTrust--no. 11-12 (1803)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744884",
+        prefLabel: "Full text available via HathiTrust--no. 9-10 (1803)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744892",
+        prefLabel: "Full text available via HathiTrust--no. 1-3 (1803)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744900",
+        prefLabel: "Full text available via HathiTrust--no. 11-12 (1802)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744918",
+        prefLabel: "Full text available via HathiTrust--no. 9-10 (1802)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744926",
+        prefLabel: "Full text available via HathiTrust--no. 7-8 (1802)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744934",
+        prefLabel: "Full text available via HathiTrust--no. 5-6 (1802)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744942",
+        prefLabel: "Full text available via HathiTrust--no. 3-4 (1802)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744959",
+        prefLabel: "Full text available via HathiTrust--no. 1-2 (1802)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744967",
+        prefLabel: "Full text available via HathiTrust--no. 11-12 (1801)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744975",
+        prefLabel: "Full text available via HathiTrust--no. 9-10 (1801)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744983",
+        prefLabel: "Full text available via HathiTrust--no. 7-8 (1801)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081744991",
+        prefLabel: "Full text available via HathiTrust--no. 5-6 (1801)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745006",
+        prefLabel: "Full text available via HathiTrust--no. 3-4 (1801)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745014",
+        prefLabel: "Full text available via HathiTrust--no. 9 (1782)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745022",
+        prefLabel: "Full text available via HathiTrust--no. 8 (1782)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745030",
+        prefLabel: "Full text available via HathiTrust--no. 7 (1782)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745048",
+        prefLabel: "Full text available via HathiTrust--no. 6 (1782)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745055",
+        prefLabel: "Full text available via HathiTrust--no. 5 (1782)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745063",
+        prefLabel: "Full text available via HathiTrust--no. 4 (1782)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745071",
+        prefLabel: "Full text available via HathiTrust--no. 3 (1782)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745089",
+        prefLabel: "Full text available via HathiTrust--no. 2 (1782)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745097",
+        prefLabel: "Full text available via HathiTrust--no. 1 (1782)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745105",
+        prefLabel: "Full text available via HathiTrust--Table (1779-1781)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745113",
+        prefLabel: "Full text available via HathiTrust--no. 12 (1781)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745121",
+        prefLabel: "Full text available via HathiTrust--no. 11 (1781)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745139",
+        prefLabel: "Full text available via HathiTrust--no. 10 (1781)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745147",
+        prefLabel: "Full text available via HathiTrust--no. 9 (1781)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745154",
+        prefLabel: "Full text available via HathiTrust--no. 8 (1781)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745162",
+        prefLabel: "Full text available via HathiTrust--no. 3 (1781)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745170",
+        prefLabel: "Full text available via HathiTrust--no. 7 (1781)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745188",
+        prefLabel: "Full text available via HathiTrust--no. 6 (1781)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745196",
+        prefLabel: "Full text available via HathiTrust--no. 4 (1781)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745204",
+        prefLabel: "Full text available via HathiTrust--no. 5 (1781)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745212",
+        prefLabel: "Full text available via HathiTrust--no. 12 (1780)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745220",
+        prefLabel: "Full text available via HathiTrust--no. 2 (1781)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745238",
+        prefLabel: "Full text available via HathiTrust--no. 1 (1781)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745246",
+        prefLabel: "Full text available via HathiTrust--no. 11 (1780)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745253",
+        prefLabel: "Full text available via HathiTrust--no. 10 (1780)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745261",
+        prefLabel: "Full text available via HathiTrust--no. 9 (1780)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745279",
+        prefLabel: "Full text available via HathiTrust--no. 8 (1780)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745287",
+        prefLabel: "Full text available via HathiTrust--no. 7 (1780)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745295",
+        prefLabel: "Full text available via HathiTrust--no. 6 (1780)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745303",
+        prefLabel: "Full text available via HathiTrust--no. 5 (1780)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745311",
+        prefLabel: "Full text available via HathiTrust--no. 4 (1780)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745329",
+        prefLabel: "Full text available via HathiTrust--no. 3 (1780)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745337",
+        prefLabel: "Full text available via HathiTrust--no. 2 (1780)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745345",
+        prefLabel: "Full text available via HathiTrust--no. 1 (1780)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745352",
+        prefLabel: "Full text available via HathiTrust--no. 12 (1779)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745360",
+        prefLabel: "Full text available via HathiTrust--no. 11 (1779)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745378",
+        prefLabel: "Full text available via HathiTrust--no. 10 (1779)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745386",
+        prefLabel: "Full text available via HathiTrust--no. 9 (1779)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745394",
+        prefLabel: "Full text available via HathiTrust--no. 8 (1779)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745402",
+        prefLabel: "Full text available via HathiTrust--no. 7 (1779)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745410",
+        prefLabel: "Full text available via HathiTrust--no. 6 (1779)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745428",
+        prefLabel: "Full text available via HathiTrust--no. 5 (1779)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745436",
+        prefLabel: "Full text available via HathiTrust--no. 4 (1779)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745444",
+        prefLabel: "Full text available via HathiTrust--no. 3 (1779)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745451",
+        prefLabel: "Full text available via HathiTrust--no. 2 (1779)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745469",
+        prefLabel: "Full text available via HathiTrust--no. 1 (1779)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745477",
+        prefLabel: "Full text available via HathiTrust--Table (1776-1778)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745485",
+        prefLabel: "Full text available via HathiTrust--no. 12 (1778)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745493",
+        prefLabel: "Full text available via HathiTrust--no. 11 (1778)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745501",
+        prefLabel: "Full text available via HathiTrust--no. 10 (1778)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745519",
+        prefLabel: "Full text available via HathiTrust--no. 10 (1784)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745527",
+        prefLabel: "Full text available via HathiTrust--no. 9 (1784)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745535",
+        prefLabel: "Full text available via HathiTrust--no. 8 (1784)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745543",
+        prefLabel: "Full text available via HathiTrust--no. 7 (1784)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745550",
+        prefLabel: "Full text available via HathiTrust--no. 6 (1784)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745568",
+        prefLabel: "Full text available via HathiTrust--no. 5 (1784)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745576",
+        prefLabel: "Full text available via HathiTrust--no. 4 (1784)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745584",
+        prefLabel: "Full text available via HathiTrust--no. 3 (1784)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745592",
+        prefLabel: "Full text available via HathiTrust--no. 2 (1784)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745600",
+        prefLabel: "Full text available via HathiTrust--no. 1 (1784)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745618",
+        prefLabel: "Full text available via HathiTrust--no. 12 (1783)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745626",
+        prefLabel: "Full text available via HathiTrust--no. 11 (1783)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745634",
+        prefLabel: "Full text available via HathiTrust--no. 10 (1783)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745642",
+        prefLabel: "Full text available via HathiTrust--no. 9 (1783)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745659",
+        prefLabel: "Full text available via HathiTrust--no. 8 (1783)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745667",
+        prefLabel: "Full text available via HathiTrust--no. 7 (1783)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745675",
+        prefLabel: "Full text available via HathiTrust--no. 6 (1783)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745683",
+        prefLabel: "Full text available via HathiTrust--no. 5 (1783)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745691",
+        prefLabel: "Full text available via HathiTrust--no. 4 (1783)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745709",
+        prefLabel: "Full text available via HathiTrust--no. 3 (1783)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745717",
+        prefLabel: "Full text available via HathiTrust--no. 2 (1783)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745725",
+        prefLabel: "Full text available via HathiTrust--no. 1 (1783)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745733",
+        prefLabel: "Full text available via HathiTrust--no. 12 (1782)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745741",
+        prefLabel: "Full text available via HathiTrust--no. 11 (1782)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745758",
+        prefLabel: "Full text available via HathiTrust--no. 10 (1782)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745766",
+        prefLabel: "Full text available via HathiTrust--no. 6 (1787)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745774",
+        prefLabel: "Full text available via HathiTrust--no. 1 (1787)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745782",
+        prefLabel: "Full text available via HathiTrust--no. 5 (1787)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745790",
+        prefLabel: "Full text available via HathiTrust--no. 4 (1787)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745808",
+        prefLabel: "Full text available via HathiTrust--no. 8 (1785)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745816",
+        prefLabel: "Full text available via HathiTrust--no. 9 (1785)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745824",
+        prefLabel: "Full text available via HathiTrust--no. 7 (1785)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745832",
+        prefLabel: "Full text available via HathiTrust--no. 6 (1785)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745840",
+        prefLabel: "Full text available via HathiTrust--no. 5 (1785)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745857",
+        prefLabel: "Full text available via HathiTrust--no. 4 (1785)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745865",
+        prefLabel: "Full text available via HathiTrust--no. 3 (1785)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745873",
+        prefLabel: "Full text available via HathiTrust--no. 8 (1786)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745881",
+        prefLabel: "Full text available via HathiTrust--no. 7 (1786)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745899",
+        prefLabel: "Full text available via HathiTrust--no. 6 (1786)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745907",
+        prefLabel: "Full text available via HathiTrust--no. 5 (1786)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745915",
+        prefLabel: "Full text available via HathiTrust--no. 4 (1786)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745923",
+        prefLabel: "Full text available via HathiTrust--no. 3 (1786)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745931",
+        prefLabel: "Full text available via HathiTrust--no. 2 (1786)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745949",
+        prefLabel: "Full text available via HathiTrust--no. 1 (1786)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745956",
+        prefLabel: "Full text available via HathiTrust--no. 12 (1785)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745964",
+        prefLabel: "Full text available via HathiTrust--no. 11 (1785)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745972",
+        prefLabel: "Full text available via HathiTrust--no. 10 (1785)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745980",
+        prefLabel: "Full text available via HathiTrust--no. 1 (1785)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081745998",
+        prefLabel: "Full text available via HathiTrust--no. 12 (1784)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081746004",
+        prefLabel: "Full text available via HathiTrust--no. 11 (1784)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081746012",
+        prefLabel: "Full text available via HathiTrust--no. 12 (1788)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081746020",
+        prefLabel: "Full text available via HathiTrust--no. 11 (1788)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081746038",
+        prefLabel: "Full text available via HathiTrust--no. 10 (1788)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081746046",
+        prefLabel: "Full text available via HathiTrust--no. 9 (1788)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081746053",
+        prefLabel: "Full text available via HathiTrust--no. 8 (1788)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081746061",
+        prefLabel: "Full text available via HathiTrust--no. 7 (1788)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081746079",
+        prefLabel: "Full text available via HathiTrust--no. 6 (1788)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081746087",
+        prefLabel: "Full text available via HathiTrust--no. 5 (1788)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081746095",
+        prefLabel: "Full text available via HathiTrust--no. 4 (1788)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081746103",
+        prefLabel: "Full text available via HathiTrust--no. 3 (1788)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081746111",
+        prefLabel: "Full text available via HathiTrust--no. 2 (1788)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081746129",
+        prefLabel: "Full text available via HathiTrust--no. 1 (1788)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081746137",
+        prefLabel: "Full text available via HathiTrust--no. 12 (1787)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081746145",
+        prefLabel: "Full text available via HathiTrust--no. 11 (1787)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081746152",
+        prefLabel: "Full text available via HathiTrust--no. 10 (1787)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081746160",
+        prefLabel: "Full text available via HathiTrust--no. 9 (1787)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081746178",
+        prefLabel: "Full text available via HathiTrust--no. 8 (1787)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081746186",
+        prefLabel: "Full text available via HathiTrust--no. 7 (1787)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081746194",
+        prefLabel: "Full text available via HathiTrust--no. 12 (1786)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081746202",
+        prefLabel: "Full text available via HathiTrust--no. 11 (1786)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081746210",
+        prefLabel: "Full text available via HathiTrust--no. 10 (1786)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081746228",
+        prefLabel: "Full text available via HathiTrust--no. 9 (1786)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081746236",
+        prefLabel: "Full text available via HathiTrust--no. 2 (1785)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081746244",
+        prefLabel: "Full text available via HathiTrust--no. 3 (1787)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081746764",
+        prefLabel: "Full text available via HathiTrust--no. 10-12 (1773)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081746772",
+        prefLabel: "Full text available via HathiTrust--no. 7-9 (1773)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081746780",
+        prefLabel: "Full text available via HathiTrust--no. 4-6 (1773)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081746798",
+        prefLabel: "Full text available via HathiTrust--no. 1-3 (1773)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081746806",
+        prefLabel: "Full text available via HathiTrust--no. 10-12 (1772)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081746814",
+        prefLabel: "Full text available via HathiTrust--no. 7-9 (1772)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747010",
+        prefLabel: "Full text available via HathiTrust--no. 12 (1776)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747028",
+        prefLabel: "Full text available via HathiTrust--no. 11 (1776)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747036",
+        prefLabel: "Full text available via HathiTrust--no. 10 (1776)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747044",
+        prefLabel: "Full text available via HathiTrust--no. 9 (1776)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747051",
+        prefLabel: "Full text available via HathiTrust--no. 7 (1776)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747069",
+        prefLabel: "Full text available via HathiTrust--no. 8 (1776)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747077",
+        prefLabel: "Full text available via HathiTrust--no. 6 (1776)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747085",
+        prefLabel: "Full text available via HathiTrust--no. 5 (1776)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747093",
+        prefLabel: "Full text available via HathiTrust--no. 4 (1776)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747101",
+        prefLabel: "Full text available via HathiTrust--no. 3 (1776)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747119",
+        prefLabel: "Full text available via HathiTrust--no. 11 (1776)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747127",
+        prefLabel: "Full text available via HathiTrust--no. 10 (1775)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747135",
+        prefLabel: "Full text available via HathiTrust--no. 9 (1775)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747143",
+        prefLabel: "Full text available via HathiTrust--no. 8 (1775)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747150",
+        prefLabel: "Full text available via HathiTrust--no. 7 (1775)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747168",
+        prefLabel: "Full text available via HathiTrust--no. 6 (1775)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747176",
+        prefLabel: "Full text available via HathiTrust--no. 5 (1775)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747184",
+        prefLabel: "Full text available via HathiTrust--no. 4 (1775)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747192",
+        prefLabel: "Full text available via HathiTrust--no. 3 (1775)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747200",
+        prefLabel: "Full text available via HathiTrust--no. 2 (1775)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747218",
+        prefLabel: "Full text available via HathiTrust--no. 1 (1775)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747226",
+        prefLabel: "Full text available via HathiTrust--no. 10-12 (1774)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747234",
+        prefLabel: "Full text available via HathiTrust--no. 7-9 (1774)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747242",
+        prefLabel: "Full text available via HathiTrust--no. 4-6 (1774)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747259",
+        prefLabel: "Full text available via HathiTrust--no. 1-3 (1774)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747267",
+        prefLabel: "Full text available via HathiTrust--no. 9 (1778)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747275",
+        prefLabel: "Full text available via HathiTrust--no. 8 (1778)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747283",
+        prefLabel: "Full text available via HathiTrust--no. 7 (1778)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747291",
+        prefLabel: "Full text available via HathiTrust--no. 6 (1778)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747309",
+        prefLabel: "Full text available via HathiTrust--no. 5 (1778)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747317",
+        prefLabel: "Full text available via HathiTrust--no. 4 (1778)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747325",
+        prefLabel: "Full text available via HathiTrust--no. 3 (1778)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747333",
+        prefLabel: "Full text available via HathiTrust--no. 2 (1778)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747341",
+        prefLabel: "Full text available via HathiTrust--no. 1 (1778)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747358",
+        prefLabel: "Full text available via HathiTrust--no. 12 (1777)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747366",
+        prefLabel: "Full text available via HathiTrust--no. 11 (1777)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747374",
+        prefLabel: "Full text available via HathiTrust--no. 10 (1777)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747382",
+        prefLabel: "Full text available via HathiTrust--no. 9 (1777)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747390",
+        prefLabel: "Full text available via HathiTrust--no. 8 (1777)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747408",
+        prefLabel: "Full text available via HathiTrust--no. 7 (1777)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747416",
+        prefLabel: "Full text available via HathiTrust--no. 6 (1777)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747424",
+        prefLabel: "Full text available via HathiTrust--no. 5 (1777)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747432",
+        prefLabel: "Full text available via HathiTrust--no. 4 (1777)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747440",
+        prefLabel: "Full text available via HathiTrust--no. 3 (1777)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747457",
+        prefLabel: "Full text available via HathiTrust--no. 2 (1777)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747465",
+        prefLabel: "Full text available via HathiTrust--no. 1 (1777)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747473",
+        prefLabel: "Full text available via HathiTrust--no. 2 (1776)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747481",
+        prefLabel: "Full text available via HathiTrust--no. 1 (1776)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747499",
+        prefLabel: "Full text available via HathiTrust--Table (1772-1775)",
+      },
+      {
+        url: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433081747507",
+        prefLabel: "Full text available via HathiTrust--no. 12 (1775)",
+      },
+    ],
+    extent: ["v. : ill. ;"],
+    idOclc: [1568232],
+    identifier: [
+      {
+        "@type": "bf:ShelfMark",
+        "@value": "*DM (Esprit des Journaux, françois et etrangers)",
+      },
+      {
+        "@type": "nypl:Bnumber",
+        "@value": 15109087,
+      },
+      {
+        "@type": "nypl:Oclc",
+        "@value": 1568232,
+      },
+      {
+        "@type": "bf:Identifier",
+        "@value": 246617,
+      },
+      {
+        "@type": "bf:Identifier",
+        "@value": "(WaOLN)Z150000218",
+      },
+    ],
+    issuance: [
+      {
+        "@id": "urn:biblevel:s",
+        prefLabel: "serial",
+      },
+    ],
+    itemAggregations: [
+      {
+        "@type": "nypl:Aggregation",
+        "@id": "res:location",
+        id: "location",
+        field: "location",
+        values: [
+          {
+            value: "loc:rc2ma",
+            count: 370,
+            label: "Offsite",
+          },
+        ],
+      },
+      {
+        "@type": "nypl:Aggregation",
+        "@id": "res:format",
+        id: "format",
+        field: "format",
+        values: [
+          {
+            value: "Text",
+            count: 370,
+            label: "Text",
+          },
+        ],
+      },
+      {
+        "@type": "nypl:Aggregation",
+        "@id": "res:status",
+        id: "status",
+        field: "status",
+        values: [
+          {
+            value: "status:a",
+            count: 370,
+            label: "Available",
+          },
+        ],
+      },
+    ],
+    items: [
+      {
+        "@id": "res:i17145921",
+        "@type": ["bf:Item"],
+        accessMessage: [
+          {
+            "@id": "accessMessage:u",
+            prefLabel: "Supervised use",
+          },
+        ],
+        catalogItemType: [
+          {
+            "@id": "catalogItemType:33",
+            prefLabel: "google project, serial",
+          },
+        ],
+        dateRange: [
+          {
+            gte: "1794",
+            lte: "1794",
+          },
+        ],
+        eddRequestable: true,
+        enumerationChronology: ["no. 12 (1794)"],
+        formatLiteral: ["Text"],
+        holdingLocation: [
+          {
+            "@id": "loc:rc2ma",
+            prefLabel: "Offsite",
+          },
+        ],
+        idBarcode: ["33433081744298"],
+        identifier: [
+          {
+            "@type": "bf:ShelfMark",
+            "@value":
+              "*DM (Esprit des Journaux, françois et etrangers) no. 12 (1794)",
+          },
+          {
+            "@type": "bf:Barcode",
+            "@value": "33433081744298",
+          },
+        ],
+        owner: [
+          {
+            "@id": "orgs:1000",
+            prefLabel: "Stephen A. Schwarzman Building",
+          },
+        ],
+        physRequestable: true,
+        physicalLocation: ["*DM (Esprit des Journaux, françois et etrangers)"],
+        recapCustomerCode: ["NA"],
+        requestable: [true],
+        shelfMark: [
+          "*DM (Esprit des Journaux, françois et etrangers) no. 12 (1794)",
+        ],
+        specRequestable: false,
+        status: [
+          {
+            "@id": "status:a",
+            prefLabel: "Available",
+          },
+        ],
+        uri: "i17145921",
+        volumeRange: [
+          {
+            gte: 12,
+            lte: 12,
+          },
+        ],
+        idNyplSourceId: {
+          "@type": "SierraNypl",
+          "@value": "17145921",
+        },
+      },
+      {
+        "@id": "res:i17145909",
+        "@type": ["bf:Item"],
+        accessMessage: [
+          {
+            "@id": "accessMessage:u",
+            prefLabel: "Supervised use",
+          },
+        ],
+        catalogItemType: [
+          {
+            "@id": "catalogItemType:33",
+            prefLabel: "google project, serial",
+          },
+        ],
+        dateRange: [
+          {
+            gte: "1793",
+            lte: "1793",
+          },
+        ],
+        eddRequestable: true,
+        enumerationChronology: ["no. 12 (1793)"],
+        formatLiteral: ["Text"],
+        holdingLocation: [
+          {
+            "@id": "loc:rc2ma",
+            prefLabel: "Offsite",
+          },
+        ],
+        idBarcode: ["33433081744413"],
+        identifier: [
+          {
+            "@type": "bf:ShelfMark",
+            "@value":
+              "*DM (Esprit des Journaux, françois et etrangers) no. 12 (1793)",
+          },
+          {
+            "@type": "bf:Barcode",
+            "@value": "33433081744413",
+          },
+        ],
+        owner: [
+          {
+            "@id": "orgs:1000",
+            prefLabel: "Stephen A. Schwarzman Building",
+          },
+        ],
+        physRequestable: true,
+        physicalLocation: ["*DM (Esprit des Journaux, françois et etrangers)"],
+        recapCustomerCode: ["NA"],
+        requestable: [true],
+        shelfMark: [
+          "*DM (Esprit des Journaux, françois et etrangers) no. 12 (1793)",
+        ],
+        specRequestable: false,
+        status: [
+          {
+            "@id": "status:a",
+            prefLabel: "Available",
+          },
+        ],
+        uri: "i17145909",
+        volumeRange: [
+          {
+            gte: 12,
+            lte: 12,
+          },
+        ],
+        idNyplSourceId: {
+          "@type": "SierraNypl",
+          "@value": "17145909",
+        },
+      },
+      {
+        "@id": "res:i17145897",
+        "@type": ["bf:Item"],
+        accessMessage: [
+          {
+            "@id": "accessMessage:u",
+            prefLabel: "Supervised use",
+          },
+        ],
+        catalogItemType: [
+          {
+            "@id": "catalogItemType:33",
+            prefLabel: "google project, serial",
+          },
+        ],
+        dateRange: [
+          {
+            gte: "1792",
+            lte: "1792",
+          },
+        ],
+        eddRequestable: true,
+        enumerationChronology: ["no. 12 (1792)"],
+        formatLiteral: ["Text"],
+        holdingLocation: [
+          {
+            "@id": "loc:rc2ma",
+            prefLabel: "Offsite",
+          },
+        ],
+        idBarcode: ["33433081743787"],
+        identifier: [
+          {
+            "@type": "bf:ShelfMark",
+            "@value":
+              "*DM (Esprit des Journaux, françois et etrangers) no. 12 (1792)",
+          },
+          {
+            "@type": "bf:Barcode",
+            "@value": "33433081743787",
+          },
+        ],
+        owner: [
+          {
+            "@id": "orgs:1000",
+            prefLabel: "Stephen A. Schwarzman Building",
+          },
+        ],
+        physRequestable: true,
+        physicalLocation: ["*DM (Esprit des Journaux, françois et etrangers)"],
+        recapCustomerCode: ["NA"],
+        requestable: [true],
+        shelfMark: [
+          "*DM (Esprit des Journaux, françois et etrangers) no. 12 (1792)",
+        ],
+        specRequestable: false,
+        status: [
+          {
+            "@id": "status:a",
+            prefLabel: "Available",
+          },
+        ],
+        uri: "i17145897",
+        volumeRange: [
+          {
+            gte: 12,
+            lte: 12,
+          },
+        ],
+        idNyplSourceId: {
+          "@type": "SierraNypl",
+          "@value": "17145897",
+        },
+      },
+      {
+        "@id": "res:i17145885",
+        "@type": ["bf:Item"],
+        accessMessage: [
+          {
+            "@id": "accessMessage:u",
+            prefLabel: "Supervised use",
+          },
+        ],
+        catalogItemType: [
+          {
+            "@id": "catalogItemType:33",
+            prefLabel: "google project, serial",
+          },
+        ],
+        dateRange: [
+          {
+            gte: "1791",
+            lte: "1791",
+          },
+        ],
+        eddRequestable: true,
+        enumerationChronology: ["no. 12 (1791)"],
+        formatLiteral: ["Text"],
+        holdingLocation: [
+          {
+            "@id": "loc:rc2ma",
+            prefLabel: "Offsite",
+          },
+        ],
+        idBarcode: ["33433081743902"],
+        identifier: [
+          {
+            "@type": "bf:ShelfMark",
+            "@value":
+              "*DM (Esprit des Journaux, françois et etrangers) no. 12 (1791)",
+          },
+          {
+            "@type": "bf:Barcode",
+            "@value": "33433081743902",
+          },
+        ],
+        owner: [
+          {
+            "@id": "orgs:1000",
+            prefLabel: "Stephen A. Schwarzman Building",
+          },
+        ],
+        physRequestable: true,
+        physicalLocation: ["*DM (Esprit des Journaux, françois et etrangers)"],
+        recapCustomerCode: ["NA"],
+        requestable: [true],
+        shelfMark: [
+          "*DM (Esprit des Journaux, françois et etrangers) no. 12 (1791)",
+        ],
+        specRequestable: false,
+        status: [
+          {
+            "@id": "status:a",
+            prefLabel: "Available",
+          },
+        ],
+        uri: "i17145885",
+        volumeRange: [
+          {
+            gte: 12,
+            lte: 12,
+          },
+        ],
+        idNyplSourceId: {
+          "@type": "SierraNypl",
+          "@value": "17145885",
+        },
+      },
+      {
+        "@id": "res:i17145873",
+        "@type": ["bf:Item"],
+        accessMessage: [
+          {
+            "@id": "accessMessage:u",
+            prefLabel: "Supervised use",
+          },
+        ],
+        catalogItemType: [
+          {
+            "@id": "catalogItemType:33",
+            prefLabel: "google project, serial",
+          },
+        ],
+        dateRange: [
+          {
+            gte: "1790",
+            lte: "1790",
+          },
+        ],
+        eddRequestable: true,
+        enumerationChronology: ["no. 12 (1790)"],
+        formatLiteral: ["Text"],
+        holdingLocation: [
+          {
+            "@id": "loc:rc2ma",
+            prefLabel: "Offsite",
+          },
+        ],
+        idBarcode: ["33433081744025"],
+        identifier: [
+          {
+            "@type": "bf:ShelfMark",
+            "@value":
+              "*DM (Esprit des Journaux, françois et etrangers) no. 12 (1790)",
+          },
+          {
+            "@type": "bf:Barcode",
+            "@value": "33433081744025",
+          },
+        ],
+        owner: [
+          {
+            "@id": "orgs:1000",
+            prefLabel: "Stephen A. Schwarzman Building",
+          },
+        ],
+        physRequestable: true,
+        physicalLocation: ["*DM (Esprit des Journaux, françois et etrangers)"],
+        recapCustomerCode: ["NA"],
+        requestable: [true],
+        shelfMark: [
+          "*DM (Esprit des Journaux, françois et etrangers) no. 12 (1790)",
+        ],
+        specRequestable: false,
+        status: [
+          {
+            "@id": "status:a",
+            prefLabel: "Available",
+          },
+        ],
+        uri: "i17145873",
+        volumeRange: [
+          {
+            gte: 12,
+            lte: 12,
+          },
+        ],
+        idNyplSourceId: {
+          "@type": "SierraNypl",
+          "@value": "17145873",
+        },
+      },
+      {
+        "@id": "res:i17145861",
+        "@type": ["bf:Item"],
+        accessMessage: [
+          {
+            "@id": "accessMessage:u",
+            prefLabel: "Supervised use",
+          },
+        ],
+        catalogItemType: [
+          {
+            "@id": "catalogItemType:33",
+            prefLabel: "google project, serial",
+          },
+        ],
+        dateRange: [
+          {
+            gte: "1789",
+            lte: "1789",
+          },
+        ],
+        eddRequestable: true,
+        enumerationChronology: ["no. 12 (1789)"],
+        formatLiteral: ["Text"],
+        holdingLocation: [
+          {
+            "@id": "loc:rc2ma",
+            prefLabel: "Offsite",
+          },
+        ],
+        idBarcode: ["33433081744140"],
+        identifier: [
+          {
+            "@type": "bf:ShelfMark",
+            "@value":
+              "*DM (Esprit des Journaux, françois et etrangers) no. 12 (1789)",
+          },
+          {
+            "@type": "bf:Barcode",
+            "@value": "33433081744140",
+          },
+        ],
+        owner: [
+          {
+            "@id": "orgs:1000",
+            prefLabel: "Stephen A. Schwarzman Building",
+          },
+        ],
+        physRequestable: true,
+        physicalLocation: ["*DM (Esprit des Journaux, françois et etrangers)"],
+        recapCustomerCode: ["NA"],
+        requestable: [true],
+        shelfMark: [
+          "*DM (Esprit des Journaux, françois et etrangers) no. 12 (1789)",
+        ],
+        specRequestable: false,
+        status: [
+          {
+            "@id": "status:a",
+            prefLabel: "Available",
+          },
+        ],
+        uri: "i17145861",
+        volumeRange: [
+          {
+            gte: 12,
+            lte: 12,
+          },
+        ],
+        idNyplSourceId: {
+          "@type": "SierraNypl",
+          "@value": "17145861",
+        },
+      },
+      {
+        "@id": "res:i17145849",
+        "@type": ["bf:Item"],
+        accessMessage: [
+          {
+            "@id": "accessMessage:u",
+            prefLabel: "Supervised use",
+          },
+        ],
+        catalogItemType: [
+          {
+            "@id": "catalogItemType:33",
+            prefLabel: "google project, serial",
+          },
+        ],
+        dateRange: [
+          {
+            gte: "1788",
+            lte: "1788",
+          },
+        ],
+        eddRequestable: true,
+        enumerationChronology: ["no. 12 (1788)"],
+        formatLiteral: ["Text"],
+        holdingLocation: [
+          {
+            "@id": "loc:rc2ma",
+            prefLabel: "Offsite",
+          },
+        ],
+        idBarcode: ["33433081746012"],
+        identifier: [
+          {
+            "@type": "bf:ShelfMark",
+            "@value":
+              "*DM (Esprit des Journaux, françois et etrangers) no. 12 (1788)",
+          },
+          {
+            "@type": "bf:Barcode",
+            "@value": "33433081746012",
+          },
+        ],
+        owner: [
+          {
+            "@id": "orgs:1000",
+            prefLabel: "Stephen A. Schwarzman Building",
+          },
+        ],
+        physRequestable: true,
+        physicalLocation: ["*DM (Esprit des Journaux, françois et etrangers)"],
+        recapCustomerCode: ["NA"],
+        requestable: [true],
+        shelfMark: [
+          "*DM (Esprit des Journaux, françois et etrangers) no. 12 (1788)",
+        ],
+        specRequestable: false,
+        status: [
+          {
+            "@id": "status:a",
+            prefLabel: "Available",
+          },
+        ],
+        uri: "i17145849",
+        volumeRange: [
+          {
+            gte: 12,
+            lte: 12,
+          },
+        ],
+        idNyplSourceId: {
+          "@type": "SierraNypl",
+          "@value": "17145849",
+        },
+      },
+      {
+        "@id": "res:i17145837",
+        "@type": ["bf:Item"],
+        accessMessage: [
+          {
+            "@id": "accessMessage:u",
+            prefLabel: "Supervised use",
+          },
+        ],
+        catalogItemType: [
+          {
+            "@id": "catalogItemType:33",
+            prefLabel: "google project, serial",
+          },
+        ],
+        dateRange: [
+          {
+            gte: "1787",
+            lte: "1787",
+          },
+        ],
+        eddRequestable: true,
+        enumerationChronology: ["no. 12 (1787)"],
+        formatLiteral: ["Text"],
+        holdingLocation: [
+          {
+            "@id": "loc:rc2ma",
+            prefLabel: "Offsite",
+          },
+        ],
+        idBarcode: ["33433081746137"],
+        identifier: [
+          {
+            "@type": "bf:ShelfMark",
+            "@value":
+              "*DM (Esprit des Journaux, françois et etrangers) no. 12 (1787)",
+          },
+          {
+            "@type": "bf:Barcode",
+            "@value": "33433081746137",
+          },
+        ],
+        owner: [
+          {
+            "@id": "orgs:1000",
+            prefLabel: "Stephen A. Schwarzman Building",
+          },
+        ],
+        physRequestable: true,
+        physicalLocation: ["*DM (Esprit des Journaux, françois et etrangers)"],
+        recapCustomerCode: ["NA"],
+        requestable: [true],
+        shelfMark: [
+          "*DM (Esprit des Journaux, françois et etrangers) no. 12 (1787)",
+        ],
+        specRequestable: false,
+        status: [
+          {
+            "@id": "status:a",
+            prefLabel: "Available",
+          },
+        ],
+        uri: "i17145837",
+        volumeRange: [
+          {
+            gte: 12,
+            lte: 12,
+          },
+        ],
+        idNyplSourceId: {
+          "@type": "SierraNypl",
+          "@value": "17145837",
+        },
+      },
+      {
+        "@id": "res:i17145831",
+        "@type": ["bf:Item"],
+        accessMessage: [
+          {
+            "@id": "accessMessage:u",
+            prefLabel: "Supervised use",
+          },
+        ],
+        catalogItemType: [
+          {
+            "@id": "catalogItemType:33",
+            prefLabel: "google project, serial",
+          },
+        ],
+        dateRange: [
+          {
+            gte: "1786",
+            lte: "1786",
+          },
+        ],
+        eddRequestable: true,
+        enumerationChronology: ["no. 12 (1786)"],
+        formatLiteral: ["Text"],
+        holdingLocation: [
+          {
+            "@id": "loc:rc2ma",
+            prefLabel: "Offsite",
+          },
+        ],
+        idBarcode: ["33433081746194"],
+        identifier: [
+          {
+            "@type": "bf:ShelfMark",
+            "@value":
+              "*DM (Esprit des Journaux, françois et etrangers) no. 12 (1786)",
+          },
+          {
+            "@type": "bf:Barcode",
+            "@value": "33433081746194",
+          },
+        ],
+        owner: [
+          {
+            "@id": "orgs:1000",
+            prefLabel: "Stephen A. Schwarzman Building",
+          },
+        ],
+        physRequestable: true,
+        physicalLocation: ["*DM (Esprit des Journaux, françois et etrangers)"],
+        recapCustomerCode: ["NA"],
+        requestable: [true],
+        shelfMark: [
+          "*DM (Esprit des Journaux, françois et etrangers) no. 12 (1786)",
+        ],
+        specRequestable: false,
+        status: [
+          {
+            "@id": "status:a",
+            prefLabel: "Available",
+          },
+        ],
+        uri: "i17145831",
+        volumeRange: [
+          {
+            gte: 12,
+            lte: 12,
+          },
+        ],
+        idNyplSourceId: {
+          "@type": "SierraNypl",
+          "@value": "17145831",
+        },
+      },
+      {
+        "@id": "res:i17145805",
+        "@type": ["bf:Item"],
+        accessMessage: [
+          {
+            "@id": "accessMessage:u",
+            prefLabel: "Supervised use",
+          },
+        ],
+        catalogItemType: [
+          {
+            "@id": "catalogItemType:33",
+            prefLabel: "google project, serial",
+          },
+        ],
+        dateRange: [
+          {
+            gte: "1785",
+            lte: "1785",
+          },
+        ],
+        eddRequestable: true,
+        enumerationChronology: ["no. 12 (1785)"],
+        formatLiteral: ["Text"],
+        holdingLocation: [
+          {
+            "@id": "loc:rc2ma",
+            prefLabel: "Offsite",
+          },
+        ],
+        idBarcode: ["33433081745956"],
+        identifier: [
+          {
+            "@type": "bf:ShelfMark",
+            "@value":
+              "*DM (Esprit des Journaux, françois et etrangers) no. 12 (1785)",
+          },
+          {
+            "@type": "bf:Barcode",
+            "@value": "33433081745956",
+          },
+        ],
+        owner: [
+          {
+            "@id": "orgs:1000",
+            prefLabel: "Stephen A. Schwarzman Building",
+          },
+        ],
+        physRequestable: true,
+        physicalLocation: ["*DM (Esprit des Journaux, françois et etrangers)"],
+        recapCustomerCode: ["NA"],
+        requestable: [true],
+        shelfMark: [
+          "*DM (Esprit des Journaux, françois et etrangers) no. 12 (1785)",
+        ],
+        specRequestable: false,
+        status: [
+          {
+            "@id": "status:a",
+            prefLabel: "Available",
+          },
+        ],
+        uri: "i17145805",
+        volumeRange: [
+          {
+            gte: 12,
+            lte: 12,
+          },
+        ],
+        idNyplSourceId: {
+          "@type": "SierraNypl",
+          "@value": "17145805",
+        },
+      },
+      {
+        "@id": "res:i17145801",
+        "@type": ["bf:Item"],
+        accessMessage: [
+          {
+            "@id": "accessMessage:u",
+            prefLabel: "Supervised use",
+          },
+        ],
+        catalogItemType: [
+          {
+            "@id": "catalogItemType:33",
+            prefLabel: "google project, serial",
+          },
+        ],
+        dateRange: [
+          {
+            gte: "1784",
+            lte: "1784",
+          },
+        ],
+        eddRequestable: true,
+        enumerationChronology: ["no. 12 (1784)"],
+        formatLiteral: ["Text"],
+        holdingLocation: [
+          {
+            "@id": "loc:rc2ma",
+            prefLabel: "Offsite",
+          },
+        ],
+        idBarcode: ["33433081745998"],
+        identifier: [
+          {
+            "@type": "bf:ShelfMark",
+            "@value":
+              "*DM (Esprit des Journaux, françois et etrangers) no. 12 (1784)",
+          },
+          {
+            "@type": "bf:Barcode",
+            "@value": "33433081745998",
+          },
+        ],
+        owner: [
+          {
+            "@id": "orgs:1000",
+            prefLabel: "Stephen A. Schwarzman Building",
+          },
+        ],
+        physRequestable: true,
+        physicalLocation: ["*DM (Esprit des Journaux, françois et etrangers)"],
+        recapCustomerCode: ["NA"],
+        requestable: [true],
+        shelfMark: [
+          "*DM (Esprit des Journaux, françois et etrangers) no. 12 (1784)",
+        ],
+        specRequestable: false,
+        status: [
+          {
+            "@id": "status:a",
+            prefLabel: "Available",
+          },
+        ],
+        uri: "i17145801",
+        volumeRange: [
+          {
+            gte: 12,
+            lte: 12,
+          },
+        ],
+        idNyplSourceId: {
+          "@type": "SierraNypl",
+          "@value": "17145801",
+        },
+      },
+      {
+        "@id": "res:i17145789",
+        "@type": ["bf:Item"],
+        accessMessage: [
+          {
+            "@id": "accessMessage:u",
+            prefLabel: "Supervised use",
+          },
+        ],
+        catalogItemType: [
+          {
+            "@id": "catalogItemType:33",
+            prefLabel: "google project, serial",
+          },
+        ],
+        dateRange: [
+          {
+            gte: "1783",
+            lte: "1783",
+          },
+        ],
+        eddRequestable: true,
+        enumerationChronology: ["no. 12 (1783)"],
+        formatLiteral: ["Text"],
+        holdingLocation: [
+          {
+            "@id": "loc:rc2ma",
+            prefLabel: "Offsite",
+          },
+        ],
+        idBarcode: ["33433081745618"],
+        identifier: [
+          {
+            "@type": "bf:ShelfMark",
+            "@value":
+              "*DM (Esprit des Journaux, françois et etrangers) no. 12 (1783)",
+          },
+          {
+            "@type": "bf:Barcode",
+            "@value": "33433081745618",
+          },
+        ],
+        owner: [
+          {
+            "@id": "orgs:1000",
+            prefLabel: "Stephen A. Schwarzman Building",
+          },
+        ],
+        physRequestable: true,
+        physicalLocation: ["*DM (Esprit des Journaux, françois et etrangers)"],
+        recapCustomerCode: ["NA"],
+        requestable: [true],
+        shelfMark: [
+          "*DM (Esprit des Journaux, françois et etrangers) no. 12 (1783)",
+        ],
+        specRequestable: false,
+        status: [
+          {
+            "@id": "status:a",
+            prefLabel: "Available",
+          },
+        ],
+        uri: "i17145789",
+        volumeRange: [
+          {
+            gte: 12,
+            lte: 12,
+          },
+        ],
+        idNyplSourceId: {
+          "@type": "SierraNypl",
+          "@value": "17145789",
+        },
+      },
+    ],
+    language: [
+      {
+        "@id": "lang:fre",
+        prefLabel: "French",
+      },
+    ],
+    materialType: [
+      {
+        "@id": "resourcetypes:txt",
+        prefLabel: "Text",
+      },
+    ],
+    mediaType: [
+      {
+        "@id": "mediatypes:n",
+        prefLabel: "unmediated",
+      },
+    ],
+    note: [
+      {
+        noteType: "Note",
+        "@type": "bf:Note",
+        prefLabel: "Published at Bruxelles, 1773-1775; at Liége, 1776-1781.",
+      },
+      {
+        noteType: "Note",
+        "@type": "bf:Note",
+        prefLabel: "Description based on: 19th année, t. 10 (Oct. 1790).",
+      },
+    ],
+    numCheckinCardItems: 0,
+    numElectronicResources: 368,
+    numItemDatesParsed: 370,
+    numItemVolumesParsed: 365,
+    numItemsMatched: 370,
+    numItemsTotal: 370,
+    nyplSource: ["sierra-nypl"],
+    placeOfPublication: ["Paris"],
+    publicationStatement: ["Paris : Valade"],
+    publisherLiteral: ["Valade"],
+    shelfMark: ["*DM (Esprit des Journaux, françois et etrangers)"],
+    subjectLiteral: ["Periodicals."],
+    title: ["L'Esprit des journaux, françois et étrangers"],
+    titleAlt: ["Esprit des journaux"],
+    titleDisplay: [
+      "L'Esprit des journaux, françois et étrangers / par une Société de gens-de-lettres.",
+    ],
+    type: ["nypl:Item"],
+    updatedAt: 1711593229661,
+    uri: "b15109087",
+    suppressed: false,
+    hasItemVolumes: true,
+    hasItemDates: true,
+    subjectHeadings: null,
+  },
+}
+
+export const bibWithSubjectHeadings = {
+  resource: {
+    "@context":
+      "http://discovery-api-qa.nypl.org/api/v0.1/discovery/context_all.jsonld",
+    "@type": ["nypl:Item", "nypl:Resource"],
+    "@id": "res:b16145054",
+    buildingLocationIds: ["rc"],
+    carrierType: [
+      {
+        "@id": "carriertypes:nc",
+        prefLabel: "volume",
+      },
+    ],
+    createdString: [2005],
+    createdYear: 2005,
+    creatorLiteral: ["Cortanze, Gérard de."],
+    creatorLiteralNormalized: ["Gérard Cortanze", "Gérard de Cortanze"],
+    creatorLiteralWithoutDates: ["Cortanze, Gérard de."],
+    dateStartYear: 2005,
+    dateString: [2005],
+    dimensions: ["19 cm."],
+    electronicResources: [],
+    extent: ["193 p. : ill. ;"],
+    idIsbn: [2070775178],
+    idLccn: [2005483039],
+    idOclc: [61868265],
+    identifier: [
+      {
+        "@type": "bf:ShelfMark",
+        "@value": "JFC 06-438",
+      },
+      {
+        "@type": "nypl:Bnumber",
+        "@value": 16145054,
+      },
+      {
+        "@type": "bf:Isbn",
+        "@value": 2070775178,
+      },
+      {
+        "@type": "nypl:Oclc",
+        "@value": 61868265,
+      },
+      {
+        "@type": "bf:Lccn",
+        "@value": 2005483039,
+      },
+      {
+        "@type": "bf:Identifier",
+        "@value": "(WaOLN)M040000221",
+      },
+    ],
+    issuance: [
+      {
+        "@id": "urn:biblevel:m",
+        prefLabel: "monograph/item",
+      },
+    ],
+    itemAggregations: [
+      {
+        "@type": "nypl:Aggregation",
+        "@id": "res:location",
+        id: "location",
+        field: "location",
+        values: [
+          {
+            value: "loc:rc2ma",
+            count: 1,
+            label: "Offsite",
+          },
+        ],
+      },
+      {
+        "@type": "nypl:Aggregation",
+        "@id": "res:format",
+        id: "format",
+        field: "format",
+        values: [
+          {
+            value: "Text",
+            count: 1,
+            label: "Text",
+          },
+        ],
+      },
+      {
+        "@type": "nypl:Aggregation",
+        "@id": "res:status",
+        id: "status",
+        field: "status",
+        values: [
+          {
+            value: "status:a",
+            count: 1,
+            label: "Available",
+          },
+        ],
+      },
+    ],
+    items: [
+      {
+        "@id": "res:i15550040",
+        "@type": ["bf:Item"],
+        accessMessage: [
+          {
+            "@id": "accessMessage:2",
+            prefLabel: "Request in advance",
+          },
+        ],
+        catalogItemType: [
+          {
+            "@id": "catalogItemType:55",
+            prefLabel: "book, limited circ, MaRLI",
+          },
+        ],
+        eddFulfillment: {
+          "@id": "fulfillment:recap-edd",
+        },
+        eddRequestable: true,
+        formatLiteral: ["Text"],
+        holdingLocation: [
+          {
+            "@id": "loc:rc2ma",
+            prefLabel: "Offsite",
+          },
+        ],
+        idBarcode: ["33433073236758"],
+        identifier: [
+          {
+            "@type": "bf:ShelfMark",
+            "@value": "JFC 06-438",
+          },
+          {
+            "@type": "bf:Barcode",
+            "@value": "33433073236758",
+          },
+        ],
+        owner: [
+          {
+            "@id": "orgs:1000",
+            prefLabel: "Stephen A. Schwarzman Building",
+          },
+        ],
+        physFulfillment: {
+          "@id": "fulfillment:recap-offsite",
+        },
+        physRequestable: true,
+        physicalLocation: ["JFC 06-438"],
+        recapCustomerCode: ["NA"],
+        requestable: [true],
+        shelfMark: ["JFC 06-438"],
+        specRequestable: false,
+        status: [
+          {
+            "@id": "status:a",
+            prefLabel: "Available",
+          },
+        ],
+        uri: "i15550040",
+        idNyplSourceId: {
+          "@type": "SierraNypl",
+          "@value": "15550040",
+        },
+      },
+    ],
+    language: [
+      {
+        "@id": "lang:fre",
+        prefLabel: "French",
+      },
+    ],
+    lccClassification: ["PQ2663.O7223 Z46 2005"],
+    materialType: [
+      {
+        "@id": "resourcetypes:txt",
+        prefLabel: "Text",
+      },
+    ],
+    mediaType: [
+      {
+        "@id": "mediatypes:n",
+        prefLabel: "unmediated",
+      },
+    ],
+    numCheckinCardItems: 0,
+    numElectronicResources: 0,
+    numItemDatesParsed: 0,
+    numItemVolumesParsed: 0,
+    numItemsMatched: 1,
+    numItemsTotal: 1,
+    nyplSource: ["sierra-nypl"],
+    placeOfPublication: ["[Paris, France]"],
+    popularity: 1,
+    publicationStatement: ["[Paris, France] : Gallimard, c2005."],
+    publisherLiteral: ["Gallimard"],
+    seriesStatement: ["Haute enfance"],
+    shelfMark: ["JFC 06-438"],
+    subjectLiteral: [
+      "Cortanze, Gérard de -- Childhood and youth.",
+      "Authors, French -- 20th century -- Biography.",
+      "Autobiographical Narrative",
+    ],
+    title: ["Spaghetti!"],
+    titleDisplay: ["Spaghetti! / Gérard de Cortanze."],
+    type: ["nypl:Item"],
+    uniformTitle: ["Haute enfance (Gallimard (Firm))"],
+    updatedAt: 1723133852918,
+    uri: "b16145054",
+    suppressed: false,
+    hasItemVolumes: false,
+    hasItemDates: false,
+    subjectHeadings: [
+      {
+        label: "Cortanze, Gérard de -- Childhood and youth",
+        uuid: "74746d11-638b-4cfb-a72a-9a2bd296e6fd",
+        bib_count: 1,
+        desc_count: 0,
+        parent: {
+          label: "Cortanze, Gérard de",
+          uuid: "cf347108-e1f2-4c0f-808a-ac4ace2f0765",
+          bib_count: 5,
+          desc_count: 4,
+        },
+      },
+      {
+        label: "Authors, French -- 20th century -- Biography",
+        uuid: "9391bc26-e44c-44ac-98cc-e3800da51926",
+        bib_count: 5319,
+        desc_count: 22,
+        parent: {
+          label: "Authors, French -- 20th century",
+          uuid: "e43674a7-5f02-44f1-95cd-dbcc776331b7",
+          bib_count: 8405,
+          desc_count: 197,
+          parent: {
+            label: "Authors, French",
+            uuid: "5fd065df-b4e9-48cb-b13c-ea15f36b96b4",
+            bib_count: 14275,
+            desc_count: 1012,
+          },
+        },
+      },
+      {
+        label: "Autobiographical Narrative",
+        uuid: "3a779ed6-8a07-4d27-80ef-e0c2b10fe78e",
+        bib_count: 505,
+        desc_count: 343,
+      },
+    ],
+  },
+  annotatedMarc: {
+    id: "16145054",
+    nyplSource: "sierra-nypl",
+    fields: [
+      {
+        label: "Author",
+        values: [
+          {
+            content: "Cortanze, Gérard de.",
+            source: {
+              fieldTag: "a",
+              marcTag: "100",
+              ind1: "1",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Cortanze, Gérard de.",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Title",
+        values: [
+          {
+            content: "Spaghetti! / Gérard de Cortanze.",
+            source: {
+              fieldTag: "t",
+              marcTag: "245",
+              ind1: "1",
+              ind2: "0",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Spaghetti! /",
+                },
+                {
+                  tag: "c",
+                  content: "Gérard de Cortanze.",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Imprint",
+        values: [
+          {
+            content: "[Paris, France] : Gallimard, c2005.",
+            source: {
+              fieldTag: "p",
+              marcTag: "260",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "[Paris, France] :",
+                },
+                {
+                  tag: "b",
+                  content: "Gallimard,",
+                },
+                {
+                  tag: "c",
+                  content: "c2005.",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Description",
+        values: [
+          {
+            content: "193 p. : ill. ; 19 cm.",
+            source: {
+              fieldTag: "r",
+              marcTag: "300",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "193 p. :",
+                },
+                {
+                  tag: "b",
+                  content: "ill. ;",
+                },
+                {
+                  tag: "c",
+                  content: "19 cm.",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Series",
+        values: [
+          {
+            content: "Haute enfance",
+            source: {
+              fieldTag: "s",
+              marcTag: "490",
+              ind1: "1",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Haute enfance",
+                },
+              ],
+            },
+          },
+          {
+            content: "Haute enfance (Gallimard (Firm))",
+            source: {
+              fieldTag: "s",
+              marcTag: "830",
+              ind1: " ",
+              ind2: "0",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Haute enfance (Gallimard (Firm))",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Indexed Term",
+        values: [
+          {
+            content: "Autobiographical Narrative",
+            source: {
+              fieldTag: "d",
+              marcTag: "653",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Autobiographical Narrative",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Subject",
+        values: [
+          {
+            content: "Cortanze, Gérard de -- Childhood and youth.",
+            source: {
+              fieldTag: "d",
+              marcTag: "600",
+              ind1: "1",
+              ind2: "0",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Cortanze, Gérard de",
+                },
+                {
+                  tag: "x",
+                  content: "Childhood and youth.",
+                },
+              ],
+            },
+          },
+          {
+            content: "Authors, French -- 20th century -- Biography.",
+            source: {
+              fieldTag: "d",
+              marcTag: "650",
+              ind1: " ",
+              ind2: "0",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Authors, French",
+                },
+                {
+                  tag: "y",
+                  content: "20th century",
+                },
+                {
+                  tag: "v",
+                  content: "Biography.",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "LCCN",
+        values: [
+          {
+            content: "2005483039",
+            source: {
+              fieldTag: "l",
+              marcTag: "010",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "2005483039",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "ISBN",
+        values: [
+          {
+            content: "2070775178",
+            source: {
+              fieldTag: "i",
+              marcTag: "020",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "2070775178",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Research Call Number",
+        values: [
+          {
+            content: "JFC 06-438",
+            source: {
+              fieldTag: "q",
+              marcTag: "852",
+              ind1: "8",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "h",
+                  content: "JFC 06-438",
+                },
+              ],
+            },
+          },
+        ],
+      },
+    ],
+  },
+}
