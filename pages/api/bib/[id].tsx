@@ -17,8 +17,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   // If the id contains a hyphen, the id contains a bibId and an itemId
   if (bibId.includes("-")) {
-    bibId = bibId.split("-")[0]
-    itemId = bibId.split("-")[1]
+    ;[bibId, itemId] = bibId.split("-")
   }
   const { discoveryBibResult, annotatedMarc, status, redirectUrl } =
     await fetchBib(bibId, req.query, itemId)

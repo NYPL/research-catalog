@@ -2,7 +2,6 @@ import type { NextApiRequest, NextApiResponse } from "next"
 
 /**
  * Default API route handler for Hold requests
- * Calls a helper function that maps the query params object to a SearchParams object
  */
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
