@@ -117,7 +117,7 @@ export async function postHoldRequest(
       )
 
     return {
-      status: 200,
+      status: 307,
       redirectUrl:
         `${BASE_URL}/hold/confirmation/${bibId}-${itemId}?pickupLocation=` +
         `${pickupLocation}&requestId=${id}${searchKeywordsQuery}`,
@@ -134,7 +134,7 @@ export async function postHoldRequest(
         : ""
 
     return {
-      status: 500,
+      status: 307,
       redirectUrl:
         `${BASE_URL}/hold/confirmation/${bibId}-${itemId}?pickupLocation=` +
         `${pickupLocation}${errorStatus}${errorMessage}`,
