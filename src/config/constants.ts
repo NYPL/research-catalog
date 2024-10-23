@@ -121,16 +121,3 @@ export const SEARCH_FORM_OPTIONS = {
     placeholder: `${example} Ornithology or Greek Architecture`,
   },
 }
-
-export const BUTTON_LINK_STYLES = {
-  display: "inline",
-  fontWeight: "inherit",
-  fontSize: "inherit",
-  p: 0,
-  height: "auto",
-  textAlign: "left",
-  minHeight: "auto",
-  textDecorationStyle: "dotted",
-  textDecorationThickness: "1px",
-  textUnderlineOffset: "2px",
-}

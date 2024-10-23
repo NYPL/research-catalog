@@ -20,12 +20,7 @@ import {
 } from "../../../src/components/BibPage/BibDetail"
 import RCLink from "../../../src/components/Links/RCLink/RCLink"
 
-import {
-  SITE_NAME,
-  BASE_URL,
-  PATHS,
-  BUTTON_LINK_STYLES,
-} from "../../../src/config/constants"
+import { SITE_NAME, BASE_URL, PATHS } from "../../../src/config/constants"
 import useLoading from "../../../src/hooks/useLoading"
 
 import { fetchBib } from "../../../src/server/api/bib"
@@ -67,15 +62,15 @@ export default function HoldRequestPage({
 
   const [alert, setAlert] = useState(false)
   const [formPosting, setFormPosting] = useState(false)
-  const notificationRef = useRef<HTMLDivElement>()
+  const bannerContainerRef = useRef<HTMLDivElement>()
   const { onOpen, setItemMetadata } = useContext(FeedbackContext)
 
   const router = useRouter()
   const isLoading = useLoading()
 
   useEffect(() => {
-    if (alert && notificationRef.current) {
-      notificationRef.current.focus()
+    if (alert && bannerContainerRef.current) {
+      bannerContainerRef.current.focus()
     }
   }, [alert])
 
@@ -92,7 +87,10 @@ export default function HoldRequestPage({
       const responseJson = await response.json()
 
       if (response.status !== 200) {
-        console.error("Error in hold  request api response", responseJson.error)
+        console.error(
+          "HoldRequestPage: Error in hold request api response",
+          responseJson.error
+        )
         setAlert(true)
         setFormPosting(false)
         return
@@ -102,7 +100,10 @@ export default function HoldRequestPage({
       await router.push(`${PATHS.HOLD_CONFIRMATION}/${holdId}`)
       setFormPosting(false)
     } catch (error) {
-      console.error("Error in hold  request api response", error)
+      console.error(
+        "HoldRequestPage: Error in hold request api response",
+        error
+      )
       setAlert(true)
       setFormPosting(false)
     }
@@ -128,13 +129,12 @@ export default function HoldRequestPage({
       <Layout isAuthenticated={isAuthenticated} activePage="hold">
         {/* Always render the wrapper element that will display the
           dynamically rendered notification for focus management */}
-        <Box tabIndex={-1} ref={notificationRef}>
+        <Box tabIndex={-1} ref={bannerContainerRef}>
           {alert && (
             <Banner
               type="negative"
               heading="Request failed"
               data-testid="hold-request-error"
-              sx={{ a: { color: "ui.link.primary" } }}
               content={
                 <>
                   We were unable to process your request at this time. Please
@@ -151,7 +151,18 @@ export default function HoldRequestPage({
                       })
                     }
                     buttonType="link"
-                    sx={BUTTON_LINK_STYLES}
+                    sx={{
+                      display: "inline",
+                      fontWeight: "inherit",
+                      fontSize: "inherit",
+                      p: 0,
+                      height: "auto",
+                      textAlign: "left",
+                      minHeight: "auto",
+                      textDecorationStyle: "dotted",
+                      textDecorationThickness: "1px",
+                      textUnderlineOffset: "2px",
+                    }}
                   >
                     contact us
                   </Button>{" "}
