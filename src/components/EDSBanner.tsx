@@ -1,4 +1,4 @@
-import { Text, Banner } from "@nypl/design-system-react-components"
+import { Banner } from "@nypl/design-system-react-components"
 import ExternalLink from "./Links/ExternalLink/ExternalLink"
 import React from "react"
 

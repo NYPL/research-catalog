@@ -84,7 +84,6 @@ const Layout = ({
                 <Flex
                   gap="var(--nypl-space-l)"
                   align="center"
-                  // justify="space-around"
                   direction="column"
                   sx={{
                     padding: "2em 2em .5em 2em",
