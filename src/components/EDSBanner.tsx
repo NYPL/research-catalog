@@ -13,7 +13,7 @@ const EDSBanner = () => {
       className={styles.banner}
       type="informative"
       content={
-        <Text sx={{ marginBottom: 0 }}>
+        <>
           <span style={{ color: "var(--nypl-colors-ui-success-primary)" }}>
             New!
           </span>{" "}
@@ -25,7 +25,7 @@ const EDSBanner = () => {
           </ExternalLink>{" "}
           to discover online journals, books, and more from home with your
           library card.
-        </Text>
+        </>
       }
     />
   )
