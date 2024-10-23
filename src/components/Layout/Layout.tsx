@@ -88,7 +88,7 @@ const Layout = ({
                   padding: "2em 2em .5em 2em",
                 }}
               >
-                <EDSBanner />
+                {showSearch && <EDSBanner />}
                 {showNotification && bannerNotification && (
                   <Banner
                     className={styles.banner}
