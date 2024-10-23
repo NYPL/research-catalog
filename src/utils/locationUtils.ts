@@ -17,10 +17,12 @@ export const mapLocationElementToDeliveryLocation = (
   if (!details) return null
 
   const shortName = details.shortName
-  const label = formatDeliveryLocationLabel(
-    locationElement.prefLabel,
-    shortName
-  )
+
+  // LPA locations require label tranformation
+  const label =
+    locationKey === "lpa"
+      ? formatDeliveryLocationLabel(locationElement.prefLabel, shortName)
+      : locationElement.prefLabel
 
   return {
     address: details.address,
