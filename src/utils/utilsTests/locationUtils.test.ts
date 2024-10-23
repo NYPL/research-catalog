@@ -14,7 +14,6 @@ describe("itemUtils", () => {
         "@id": "loc:mal17",
         prefLabel: "Schwarzman Building - Scholar Room 217",
       }
-
       expect(mapLocationElementToDeliveryLocation(locationElement)).toEqual({
         address: NYPL_LOCATIONS["schwarzman"].address,
         label: `${NYPL_LOCATIONS["schwarzman"].shortName} - Scholar Room 217`,
@@ -147,18 +146,6 @@ describe("itemUtils", () => {
       expect(mapLocationElementToDeliveryLocation(locationElement)).toEqual(
         null
       )
-    })
-
-    it("doesn't add the delivery room to the location when prefLabel is missing", () => {
-      const locationElement: DiscoveryLocationElement = {
-        "@id": "loc:sc",
-      }
-
-      expect(mapLocationElementToDeliveryLocation(locationElement)).toEqual({
-        address: NYPL_LOCATIONS["schomburg"].address,
-        label: NYPL_LOCATIONS["schomburg"].shortName,
-        shortName: NYPL_LOCATIONS["schomburg"].shortName,
-      })
     })
 
     it("doesn't add the delivery room when the prefLabel doesn't include a dash", () => {

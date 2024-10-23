@@ -48,6 +48,8 @@ function getLocationKey(
   const sierraId = getLocationSierraId(locationElement)
 
   switch (sierraId?.slice(0, 2)) {
+    case "my":
+    case "lp":
     case "pa":
       return "lpa"
     case "ma":
