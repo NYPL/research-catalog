@@ -81,7 +81,7 @@ const Layout = ({
                 {showSearch && <SearchForm aggregations={searchAggregations} />}
               </div>
               <Flex
-                gap="var(--nypl-space-l)"
+                gap="l"
                 align="center"
                 direction="column"
                 sx={{
