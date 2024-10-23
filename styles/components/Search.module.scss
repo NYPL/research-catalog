@@ -24,9 +24,8 @@
 .searchTip {
   display: flex;
   align-items: flex-start;
-  span {
+  .searchTipTitle {
     font-weight: bold;
-    text-wrap: nowrap;
   }
   gap: var(--nypl-space-xxs);
   svg {
@@ -39,8 +38,6 @@
   flex-direction: column;
   justify-content: space-between;
   margin-top: var(--nypl-space-xs);
-  margin-bottom: var(--nypl-space-s);
-
   @media screen and (min-width: 600px) {
     flex-direction: row-reverse;
   }
