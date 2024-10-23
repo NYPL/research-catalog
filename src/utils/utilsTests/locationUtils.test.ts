@@ -1,4 +1,7 @@
-import type { DiscoveryLocationElement } from "../../types/locationTypes"
+import type {
+  DiscoveryLocationElement,
+  NYPLocationKey,
+} from "../../types/locationTypes"
 import { NYPL_LOCATIONS } from "../../config/constants"
 
 import {
@@ -15,6 +18,7 @@ describe("itemUtils", () => {
         prefLabel: "Schwarzman Building - Scholar Room 217",
       }
       expect(mapLocationElementToDeliveryLocation(locationElement)).toEqual({
+        key: "schwarzman",
         address: NYPL_LOCATIONS["schwarzman"].address,
         label: `${NYPL_LOCATIONS["schwarzman"].shortName} - Scholar Room 217`,
         shortName: NYPL_LOCATIONS["schwarzman"].shortName,
@@ -27,6 +31,7 @@ describe("itemUtils", () => {
       }
 
       expect(mapLocationElementToDeliveryLocation(locationElement)).toEqual({
+        key: "schwarzman",
         address: NYPL_LOCATIONS["schwarzman"].address,
         label: `${NYPL_LOCATIONS["schwarzman"].shortName} - Main Reading Room 315`,
         shortName: NYPL_LOCATIONS["schwarzman"].shortName,
@@ -39,6 +44,7 @@ describe("itemUtils", () => {
       }
 
       expect(mapLocationElementToDeliveryLocation(locationElement)).toEqual({
+        key: "schwarzman",
         address: NYPL_LOCATIONS["schwarzman"].address,
         label: `${NYPL_LOCATIONS["schwarzman"].shortName} - Art & Architecture Room 300`,
         shortName: NYPL_LOCATIONS["schwarzman"].shortName,
@@ -51,6 +57,7 @@ describe("itemUtils", () => {
       }
 
       expect(mapLocationElementToDeliveryLocation(locationElement)).toEqual({
+        key: "schwarzman",
         address: NYPL_LOCATIONS["schwarzman"].address,
         label: `${NYPL_LOCATIONS["schwarzman"].shortName} - Dorot Jewish Division Room 111`,
         shortName: NYPL_LOCATIONS["schwarzman"].shortName,
@@ -63,6 +70,7 @@ describe("itemUtils", () => {
       }
 
       expect(mapLocationElementToDeliveryLocation(locationElement)).toEqual({
+        key: "schwarzman",
         address: NYPL_LOCATIONS["schwarzman"].address,
         label: `${NYPL_LOCATIONS["schwarzman"].shortName} - Map Division Room 117`,
         shortName: NYPL_LOCATIONS["schwarzman"].shortName,
@@ -75,6 +83,7 @@ describe("itemUtils", () => {
       }
 
       expect(mapLocationElementToDeliveryLocation(locationElement)).toEqual({
+        key: "schwarzman",
         address: NYPL_LOCATIONS["schwarzman"].address,
         label: `${NYPL_LOCATIONS["schwarzman"].shortName} - Map Division Room 117`,
         shortName: NYPL_LOCATIONS["schwarzman"].shortName,
@@ -87,6 +96,7 @@ describe("itemUtils", () => {
       }
 
       expect(mapLocationElementToDeliveryLocation(locationElement)).toEqual({
+        key: "schwarzman",
         address: NYPL_LOCATIONS["schwarzman"].address,
         label: `${NYPL_LOCATIONS["schwarzman"].shortName} - Milstein Division Room 121`,
         shortName: NYPL_LOCATIONS["schwarzman"].shortName,
@@ -99,6 +109,7 @@ describe("itemUtils", () => {
       }
 
       expect(mapLocationElementToDeliveryLocation(locationElement)).toEqual({
+        key: "lpa",
         address: NYPL_LOCATIONS["lpa"].address,
         label: NYPL_LOCATIONS["lpa"].shortName,
         shortName: NYPL_LOCATIONS["lpa"].shortName,
@@ -111,6 +122,7 @@ describe("itemUtils", () => {
       }
 
       expect(mapLocationElementToDeliveryLocation(locationElement)).toEqual({
+        key: "schomburg",
         address: NYPL_LOCATIONS["schomburg"].address,
         label: `${NYPL_LOCATIONS["schomburg"].shortName} - Research and Reference Division`,
         shortName: NYPL_LOCATIONS["schomburg"].shortName,
@@ -123,6 +135,7 @@ describe("itemUtils", () => {
       }
 
       expect(mapLocationElementToDeliveryLocation(locationElement)).toEqual({
+        key: "lpa",
         address: NYPL_LOCATIONS["lpa"].address,
         label: `${NYPL_LOCATIONS["lpa"].shortName} - Music Division`,
         shortName: NYPL_LOCATIONS["lpa"].shortName,
@@ -155,6 +168,7 @@ describe("itemUtils", () => {
       }
 
       expect(mapLocationElementToDeliveryLocation(locationElement)).toEqual({
+        key: "schomburg",
         address: NYPL_LOCATIONS["schomburg"].address,
         label: NYPL_LOCATIONS["schomburg"].shortName,
         shortName: NYPL_LOCATIONS["schomburg"].shortName,
@@ -163,9 +177,10 @@ describe("itemUtils", () => {
   })
 
   describe("locationIsClosed", () => {
-    it("determines if the location is closed based on the label and the closedLocations array set in config", () => {
+    it("determines if the location is closed based on the key and the closedLocations array set in config", () => {
       let closedLocations = []
       const deliveryLocation = {
+        key: "schwarzman" as NYPLocationKey,
         address: "476 Fifth Avenue (42nd St and Fifth Ave)",
         label: "Schwarzman Building - Scholar Room 217",
         shortName: "Schwarzman Building",
@@ -173,12 +188,13 @@ describe("itemUtils", () => {
 
       expect(locationIsClosed(deliveryLocation, closedLocations)).toEqual(false)
 
-      closedLocations = ["Schwarzman"]
+      closedLocations = ["schwarzman"]
       expect(locationIsClosed(deliveryLocation, closedLocations)).toEqual(true)
     })
     it("always returns true if 'all' is in the closedLocations array", () => {
       let closedLocations = ["all"]
       let deliveryLocation = {
+        key: "schwarzman" as NYPLocationKey,
         address: "476 Fifth Avenue (42nd St and Fifth Ave)",
         label: "Schwarzman Building - Scholar Room 217",
         shortName: "Schwarzman Building",
@@ -188,6 +204,7 @@ describe("itemUtils", () => {
 
       closedLocations = ["Schwarzman", "all"]
       deliveryLocation = {
+        key: "lpa" as NYPLocationKey,
         address: "40 Lincoln Center Plaza",
         label: "Library for the Performing Arts",
         shortName: "Library for the Performing Arts",

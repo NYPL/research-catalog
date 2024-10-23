@@ -25,6 +25,7 @@ export const mapLocationElementToDeliveryLocation = (
       : locationElement.prefLabel
 
   return {
+    key: locationKey,
     address: details.address,
     shortName,
     label,
@@ -70,6 +71,6 @@ export const locationIsClosed = (
   deliveryLocation: DeliveryLocation,
   closedLocations: string[]
 ): boolean =>
-  closedLocations.some((closedLocationName) =>
-    deliveryLocation.label.startsWith(closedLocationName)
+  closedLocations.some(
+    (closedLocationKey) => deliveryLocation.key === closedLocationKey
   ) || closedLocations.includes("all")

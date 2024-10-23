@@ -7,13 +7,14 @@ export interface DeliveryLocationsResponse {
 }
 
 export interface DeliveryLocation {
+  key: NYPLocationKey
   address: string
   shortName: string
   label: string
 }
 
-export type NYPLocationKey = "lpa" | "schwarzman" | "schomburg" | "all"
-export type RecapLocationKey = "all"
+export type NYPLocationKey = "lpa" | "schwarzman" | "schomburg"
+export type RecapLocationKey = string
 
 export interface DiscoveryLocationsResult {
   itemListElement?: DiscoveryLocationItem[]

@@ -79,10 +79,10 @@ export const appConfig: AppConfig = {
     tokenUrl: "https://isso.nypl.org/",
   },
   // Array of closed nypl location keys (available options for NYPL locations: all, schwarzman, schomburg, lpa)
-  closedLocations: [] as NYPLocationKey[],
+  closedLocations: [] as (NYPLocationKey | "all")[],
   // Array of closed recap location keys (only "all" option available for now)
-  recapClosedLocations: [] as RecapLocationKey[],
-  nonRecapClosedLocations: [] as (NYPLocationKey | RecapLocationKey)[],
+  recapClosedLocations: [] as (RecapLocationKey | "all")[],
+  nonRecapClosedLocations: [] as (NYPLocationKey | "all")[],
   jwtPublicKey: `-----BEGIN PUBLIC KEY-----
     MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA44ilHg/PxcJYsISHMRyo
     xsmez178qZpkJVXg7rOMVTLZuf05an7Pl+lX4nw/rqcvGQDXyrimciLgLkWu00xh
