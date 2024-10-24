@@ -1,4 +1,4 @@
-import { Text, Banner } from "@nypl/design-system-react-components"
+import { Banner } from "@nypl/design-system-react-components"
 import ExternalLink from "./Links/ExternalLink/ExternalLink"
 import React from "react"
 
@@ -13,19 +13,19 @@ const EDSBanner = () => {
       className={styles.banner}
       type="informative"
       content={
-        <Text sx={{ marginBottom: 0 }}>
+        <>
           <span style={{ color: "var(--nypl-colors-ui-success-primary)" }}>
             New!
           </span>{" "}
           Try our{" "}
           <ExternalLink href="https://discovery.ebsco.com/c/tvrejk?acr_values=guest">
-            <strong style={{ color: "var(--nypl-colors-ui-link-primary" }}>
+            <b style={{ color: "var(--nypl-colors-ui-link-primary" }}>
               Article Search
-            </strong>
+            </b>
           </ExternalLink>{" "}
           to discover online journals, books, and more from home with your
           library card.
-        </Text>
+        </>
       }
     />
   )
