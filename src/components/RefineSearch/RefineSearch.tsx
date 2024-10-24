@@ -163,6 +163,7 @@ const RefineSearch = ({
               Cancel
             </Button>
             <CancelSubmitButtonGroup
+              formName="refine"
               cancelHandler={handleClear}
               submitLabel="Apply filters"
               cancelLabel="Clear filters"

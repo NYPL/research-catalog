@@ -16,6 +16,7 @@ import {
   Button,
   Box,
   Banner,
+  Spacer,
 } from "@nypl/design-system-react-components"
 
 import Layout from "../../src/components/Layout/Layout"
@@ -36,6 +37,7 @@ import { appConfig } from "../../src/config/config"
 import { useDateForm } from "../../src/hooks/useDateForm"
 import DateForm from "../../src/components/SearchFilters/DateForm"
 import AdvancedSearchCheckboxField from "../../src/components/RefineSearch/AdvancedSearchCheckboxField"
+import CancelSubmitButtonGroup from "../../src/components/RefineSearch/CancelSubmitButtonGroup"
 
 export const defaultEmptySearchErrorMessage =
   "Error: please enter at least one field to submit an advanced search."
@@ -211,27 +213,15 @@ export default function AdvancedSearch({ isAuthenticated }) {
             </Flex>
           </Flex>
           <HorizontalRule __css={{ margin: 0 }} />
-          <FormField>
-            <ButtonGroup
-              id="advancedSearchButtons"
-              __css={{
-                marginLeft: "auto",
-              }}
-            >
-              <Button
-                type="button"
-                id="advancedSearchClear"
-                buttonType="secondary"
-                onClick={handleClear}
-                size="large"
-              >
-                Clear
-              </Button>
-              <Button id="advancedSearchSubmit" type="submit" size="large">
-                Submit
-              </Button>
-            </ButtonGroup>
-          </FormField>
+          <Flex>
+            <Spacer />
+            <CancelSubmitButtonGroup
+              formName="advanced-search"
+              cancelHandler={handleClear}
+              cancelLabel="Clear fields"
+              submitLabel="Search"
+            />
+          </Flex>
         </Form>
       </Layout>
     </>

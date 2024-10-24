@@ -1,13 +1,21 @@
 import { Button, Icon, ButtonGroup } from "@nypl/design-system-react-components"
 import styles from "../../../styles/components/Search.module.scss"
 
-const SearchButtons = ({ cancelHandler, submitLabel, cancelLabel }) => {
+const SearchButtons = ({
+  cancelHandler,
+  submitLabel,
+  cancelLabel,
+  formName,
+}) => {
+  const submitIcon = submitLabel.toLowerCase().includes("search")
+    ? "actionSearch"
+    : "check"
   return (
-    <ButtonGroup className={styles.re}>
+    <ButtonGroup id={`${formName}-buttons`} className={styles.re}>
       <Button
-        data-testid="clear-filters-button"
+        data-testid={`clear-${formName}-button`}
         onClick={cancelHandler}
-        id="reset-refine"
+        id={`reset-${formName}`}
         type="reset"
         buttonType="secondary"
         backgroundColor="ui.white"
@@ -15,8 +23,8 @@ const SearchButtons = ({ cancelHandler, submitLabel, cancelLabel }) => {
         <Icon name="actionDelete" align="left" size="large" />
         {cancelLabel}
       </Button>
-      <Button id="submit-refine" type="submit" buttonType="primary">
-        <Icon name="check" align="left" size="large" />
+      <Button id={`submit-${formName}`} type="submit" buttonType="primary">
+        <Icon name={submitIcon} align="left" size="large" />
         {submitLabel}
       </Button>
     </ButtonGroup>
