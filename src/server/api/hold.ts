@@ -17,8 +17,8 @@ import {
 } from "../../utils/locationUtils"
 
 import { appConfig } from "../../config/config"
-// import { BASE_URL } from "../../config/constants"
-// import logger from "../../../logger"
+import { BASE_URL } from "../../config/constants"
+import logger from "../../../logger"
 
 /**
  * Getter function for hold delivery locations.
@@ -93,27 +93,21 @@ export async function postHoldRequest(
     numberOfCopies: 1,
   }
 
-  // logger.info(
-  //   "Making hold request in postHoldRequest server function",
-  //   holdPostParams
-  // )
-  console.log(
+  logger.info(
     "Making hold request in postHoldRequest server function",
     holdPostParams
   )
+
   try {
     const client = await nyplApiClient()
     const holdPostResult = await client.post("/hold-requests", holdPostParams)
     const { id: requestId } = holdPostResult.data
-    console.log(holdPostResult)
-    console.log(holdPostResult.data)
-    console.log("requestId", requestId)
 
     if (!requestId) {
-      // logger.error(
-      //   "postHoldRequest failed, no id returned from Discovery API",
-      //   holdPostResult
-      // )
+      logger.error(
+        "postHoldRequest failed, no id returned from Discovery API",
+        holdPostResult
+      )
       return {
         status: 400,
       }
@@ -125,10 +119,10 @@ export async function postHoldRequest(
       requestId,
     }
   } catch (error) {
-    // logger.error(
-    //   `Error posting hold request in postHoldRequest server function, bibId: ${bibId}, itemId: ${itemId}`,
-    //   error.message
-    // )
+    logger.error(
+      `Error posting hold request in postHoldRequest server function, itemId: ${itemId}`,
+      error.message
+    )
 
     return {
       status: 500,

@@ -90,6 +90,7 @@ export default function HoldRequestPage({
           patronId: patronId.value,
           source: source.value,
           pickupLocation: pickupLocation.value,
+          clientSidePost: true,
         }),
       })
       const responseJson = await response.json()
@@ -103,9 +104,13 @@ export default function HoldRequestPage({
         setFormPosting(false)
         return
       }
+      const { pickupLocation: pickupLocationFromResponse, requestId } =
+        responseJson
 
       // Success state
-      await router.push(`${PATHS.HOLD_CONFIRMATION}/${holdId}`)
+      await router.push(
+        `${PATHS.HOLD_CONFIRMATION}/${holdId}?pickupLocation=${pickupLocationFromResponse}&requestId=${requestId}`
+      )
       setFormPosting(false)
     } catch (error) {
       console.error(
