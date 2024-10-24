@@ -1,4 +1,4 @@
-import { Heading, List } from "@nypl/design-system-react-components"
+import { Heading, List, Text } from "@nypl/design-system-react-components"
 import { kebabCase } from "lodash"
 import { type ReactElement } from "react"
 
@@ -25,11 +25,18 @@ const BibDetails = ({ details, heading }: BibDetailsProps) => {
   return (
     details?.length > 0 && (
       <List
-        title={heading && <Heading level="three">{heading}</Heading>}
+        title={
+          heading && (
+            <Heading level="three" border="none">
+              {heading}
+            </Heading>
+          )
+        }
         noStyling
         type="dl"
         showRowDividers={false}
         className={styles.bibDetails}
+        mt="xl"
       >
         {details.map(
           (detail: BibDetail | LinkedBibDetail | SubjectHeadingDetail) => {
@@ -63,7 +70,7 @@ const DetailElement = (label: string, listChildren: ReactNode[]) => {
   )
 }
 
-const PlainTextElement = (field: BibDetail) => {
+export const PlainTextElement = (field: BibDetail) => {
   const values = field?.value?.map((val: string, i: number) => {
     const stringDirection = rtlOrLtr(val)
     return (
@@ -110,7 +117,7 @@ const SingleSubjectHeadingElement = (subjectHeadingUrls: BibDetailURL[]) => {
   )
 }
 
-const LinkedDetailElement = (field: LinkedBibDetail) => {
+export const LinkedDetailElement = (field: LinkedBibDetail) => {
   const internalOrExternal = field.link
   const values = field.value.map((urlInfo: BibDetailURL, i) => {
     return (

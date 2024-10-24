@@ -143,7 +143,7 @@ export default function AdvancedSearch({ isAuthenticated }) {
       </Head>
       <Layout isAuthenticated={isAuthenticated} activePage="advanced">
         {/* Always render the wrapper element that will display the
-          dynamically rendered notification */}
+          dynamically rendered notification for focus management */}
         <Box tabIndex={-1} ref={notificationRef}>
           {alert && <Banner type="negative" content={errorMessage} mb="s" />}
         </Box>
