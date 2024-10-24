@@ -3,7 +3,6 @@ import {
   Box,
   Button,
   HorizontalRule,
-  ButtonGroup,
   Form,
   Icon,
 } from "@nypl/design-system-react-components"
@@ -25,6 +24,7 @@ import type {
   Aggregation,
   CollapsedMultiValueAppliedFilters,
 } from "../../types/filterTypes"
+import CancelSubmitButtonGroup from "./CancelSubmitButtonGroup"
 
 const fields = [
   { value: "buildingLocation", label: "Location" },
@@ -162,23 +162,11 @@ const RefineSearch = ({
               <Icon name="close" size="large" align="left" />
               Cancel
             </Button>
-            <ButtonGroup className={styles.re}>
-              <Button
-                data-testid="clear-filters-button"
-                onClick={handleClear}
-                id="reset-refine"
-                type="reset"
-                buttonType="secondary"
-                backgroundColor="ui.white"
-              >
-                <Icon name="actionDelete" align="left" size="large" />
-                Clear Filters
-              </Button>
-              <Button id="submit-refine" type="submit" buttonType="primary">
-                <Icon name="check" align="left" size="large" />
-                Apply Filters
-              </Button>
-            </ButtonGroup>
+            <CancelSubmitButtonGroup
+              cancelHandler={handleClear}
+              submitLabel="Apply filters"
+              cancelLabel="Clear filters"
+            />
           </Box>
           <HorizontalRule m={0} />
           {filters}

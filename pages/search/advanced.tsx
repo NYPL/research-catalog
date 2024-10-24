@@ -8,11 +8,9 @@ import {
   Heading,
   Form,
   FormField,
-  FormRow,
+  Flex,
   TextInput,
   Select,
-  CheckboxGroup,
-  Checkbox,
   HorizontalRule,
   ButtonGroup,
   Button,
@@ -27,7 +25,6 @@ import {
   initialSearchFormState,
   textInputFields,
   languageOptions,
-  materialTypeOptions,
 } from "../../src/utils/advancedSearchUtils"
 import type {
   SearchParams,
@@ -157,88 +154,84 @@ export default function AdvancedSearch({ isAuthenticated }) {
           action={`${BASE_URL}/search`}
           onSubmit={handleSubmit}
         >
-          <FormField
+          <Flex
             sx={{
               gridTemplateColumns: {
                 md: "repeat(2, minmax(0, 1fr)) !important",
               },
             }}
           >
-            <FormRow gap="grid.m">
-              <FormField id="advancedSearchLeft" gap="grid.s">
-                {textInputFields.map(({ name, label }) => {
+            <Box id="advancedSearchLeft" gap="grid.s">
+              {textInputFields.map(({ name, label }) => {
+                return (
+                  <TextInput
+                    id={name}
+                    labelText={label}
+                    name={name}
+                    value={searchFormState[name]}
+                    key={name}
+                    onChange={debounce(
+                      (e) => handleInputChange(e, "input_change"),
+                      debounceInterval
+                    )}
+                    ref={inputRef}
+                  />
+                )
+              })}
+              <Select
+                id="languageSelect"
+                name="language"
+                labelText="Language"
+                value={searchFormState["filters"].language}
+                onChange={(e) => handleInputChange(e, "filter_change")}
+              >
+                {languageOptions.map((language) => {
                   return (
-                    <TextInput
-                      id={name}
-                      labelText={label}
-                      name={name}
-                      value={searchFormState[name]}
-                      key={name}
-                      onChange={debounce(
-                        (e) => handleInputChange(e, "input_change"),
-                        debounceInterval
-                      )}
-                      ref={inputRef}
-                    />
+                    <option value={language.value} key={language.value}>
+                      {language.label}
+                    </option>
                   )
                 })}
-                <Select
-                  id="languageSelect"
-                  name="language"
-                  labelText="Language"
-                  value={searchFormState["filters"].language}
-                  onChange={(e) => handleInputChange(e, "filter_change")}
-                >
-                  {languageOptions.map((language) => {
-                    return (
-                      <option value={language.value} key={language.value}>
-                        {language.label}
-                      </option>
-                    )
-                  })}
-                </Select>
-                <FormRow>
-                  <FormField>{<DateForm {...dateFormProps} />}</FormField>
-                </FormRow>
-              </FormField>
-            </FormRow>
-            <AdvancedSearchCheckboxField
-              name="location"
-              label="Location"
-              handleCheckboxChange={handleCheckboxChange}
-              searchFormState={searchFormState["filters"].buildingLocation}
-            />
-            <AdvancedSearchCheckboxField
-              name="format"
-              label="Format"
-              handleCheckboxChange={handleCheckboxChange}
-              searchFormState={searchFormState["filters"].materialType}
-            />
-          </FormField>
+              </Select>
+              <FormField>{<DateForm {...dateFormProps} />}</FormField>
+            </Box>
+            <Flex direction="column" gap="l">
+              <AdvancedSearchCheckboxField
+                name="location"
+                label="Location"
+                handleCheckboxChange={handleCheckboxChange}
+                searchFormState={searchFormState["filters"].buildingLocation}
+              />
+              <AdvancedSearchCheckboxField
+                name="format"
+                label="Format"
+                handleCheckboxChange={handleCheckboxChange}
+                searchFormState={searchFormState["filters"].materialType}
+              />
+            </Flex>
+          </Flex>
           <HorizontalRule __css={{ margin: 0 }} />
-          <FormRow>
-            <FormField>
-              <ButtonGroup
-                id="advancedSearchButtons"
-                __css={{
-                  marginLeft: "auto",
-                }}
+          <FormField>
+            <ButtonGroup
+              id="advancedSearchButtons"
+              __css={{
+                marginLeft: "auto",
+              }}
+            >
+              <Button
+                type="button"
+                id="advancedSearchClear"
+                buttonType="secondary"
+                onClick={handleClear}
+                size="large"
               >
-                <Button
-                  type="button"
-                  id="advancedSearchClear"
-                  buttonType="secondary"
-                  onClick={handleClear}
-                  size="large"
-                >
-                  Clear
-                </Button>
-                <Button id="advancedSearchSubmit" type="submit" size="large">
-                  Submit
-                </Button>
-              </ButtonGroup>
-            </FormField>
-          </FormRow>
+                Clear
+              </Button>
+              <Button id="advancedSearchSubmit" type="submit" size="large">
+                Submit
+              </Button>
+            </ButtonGroup>
+          </FormField>
         </Form>
       </Layout>
     </>
