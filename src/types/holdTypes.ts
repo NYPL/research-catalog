@@ -2,7 +2,6 @@ import type { NYPLocationKey } from "./locationTypes"
 import type { HTTPStatusCode } from "./appTypes"
 
 export interface HoldRequestParams {
-  bibId: string
   itemId: string
   patronId: string
   source: string

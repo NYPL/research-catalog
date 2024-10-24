@@ -8,6 +8,7 @@ export interface DeliveryLocationsResponse {
 
 export interface DeliveryLocation {
   key: NYPLocationKey
+  value?: string
   address: string
   shortName: string
   label: string

@@ -40,7 +40,8 @@ import type { DeliveryLocation } from "../../../src/types/locationTypes"
 interface HoldRequestPropsType {
   discoveryBibResult: DiscoveryBibResult
   discoveryItemResult: DiscoveryItemResult
-  deliveryLocations?: DeliveryLocation[]
+  deliveryLocations: DeliveryLocation[]
+  patronId: string
   isAuthenticated?: boolean
 }
 
@@ -52,13 +53,15 @@ interface HoldRequestPropsType {
 export default function HoldRequestPage({
   discoveryBibResult,
   discoveryItemResult,
-  deliveryLocations = [],
+  deliveryLocations,
+  patronId,
   isAuthenticated,
 }: HoldRequestPropsType) {
   const metadataTitle = `Item Request | ${SITE_NAME}`
 
   const bib = new Bib(discoveryBibResult)
   const item = new Item(discoveryItemResult, bib)
+
   const holdId = `${item.bibId}-${item.id}`
 
   const [alert, setAlert] = useState(false)
@@ -67,7 +70,6 @@ export default function HoldRequestPage({
 
   const router = useRouter()
   const isLoading = useLoading()
-  console.log(deliveryLocations)
 
   useEffect(() => {
     if (alert && bannerContainerRef.current) {
@@ -80,10 +82,15 @@ export default function HoldRequestPage({
 
     try {
       setFormPosting(true)
+      const { patronId, source, pickupLocation } = e.target
+
       const response = await fetch(`${BASE_URL}/api/hold/request/${holdId}`, {
         method: "POST",
-        // TODO: serialize form data
-        body: "",
+        body: JSON.stringify({
+          patronId: patronId.value,
+          source: source.value,
+          pickupLocation: pickupLocation.value,
+        }),
       })
       const responseJson = await response.json()
 
@@ -167,6 +174,8 @@ export default function HoldRequestPage({
               deliveryLocations={deliveryLocations}
               handleSubmit={handleSubmit}
               holdId={holdId}
+              patronId={patronId}
+              source={item.source}
             />
           </>
         )}
@@ -237,6 +246,7 @@ export async function getServerSideProps({ params, req, res }) {
         discoveryBibResult,
         discoveryItemResult,
         deliveryLocations,
+        patronId,
         isAuthenticated,
       },
     }
