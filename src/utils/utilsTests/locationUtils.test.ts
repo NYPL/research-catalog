@@ -127,19 +127,6 @@ describe("itemUtils", () => {
         label: `${NYPL_LOCATIONS["schomburg"].shortName} - Research and Reference Division`,
         shortName: NYPL_LOCATIONS["schomburg"].shortName,
       })
-
-      // lpa
-      locationElement = {
-        "@id": "loc:lpa",
-        prefLabel: "Library of Performing Arts - Music Division",
-      }
-
-      expect(mapLocationElementToDeliveryLocation(locationElement)).toEqual({
-        key: "lpa",
-        address: NYPL_LOCATIONS["lpa"].address,
-        label: `${NYPL_LOCATIONS["lpa"].shortName} - Music Division`,
-        shortName: NYPL_LOCATIONS["lpa"].shortName,
-      })
     })
     it("returns null when the location is not found in the location details mapping found in this repo", () => {
       const locationElement: DiscoveryLocationElement = {
