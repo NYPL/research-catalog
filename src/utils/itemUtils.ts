@@ -26,10 +26,3 @@ export const locationEndpointsMap: Record<ItemLocationKey, string> = {
 export function locationLabelToKey(label: string): ItemLocationKey {
   return label.replace(/SASB/, "Schwarzman").split(" ")[0] as ItemLocationKey
 }
-
-/**
- * parseLocations
- * Takes a semicolon-separated list of locations set in an ENV variable and maps them to an array.
- */
-export const parseLocations = (locations: string): string[] =>
-  locations ? locations.split(";") : []

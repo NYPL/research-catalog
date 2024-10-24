@@ -7,13 +7,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+### Added
+
+- Add server side delivery location fetch and location utils (SCC-3759)
+
+### Updated
+
+- Moved closedLocations from environment variables to appConfig (SCC-3759)
+
+## 1.3.5 2024-10-23
+
+### Updated
+
+- Create banner container in Layout component and add EDS link to that container (SCC-4260)
+- Sentence case and rearrange search options (SCC-4260)
+- Call number search scope to search dropdown options [(SCC-4260)](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4260)
+- Search tip per search scope [(SCC-4263)](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4263)
+
 ### Fixed
 
 - Fix 500 error caused by assumption in buildHoldingDetails that location field will be present in the bib holdings returned from discovery (SCC-4314)
 
-### Added
+### [1.3.4] Hotfix 2024-10-17
 
-- Add Hold Request Page UI with authentication redirect and dummy location data in the form (SCC-3757)
+### Fixed
+
+- Fix 500 error caused by assumption in buildHoldingDetails that location field will be present in the bib holdings returned from discovery (SCC-4314)
 
 ## [1.3.3] 2024-10-10
 
