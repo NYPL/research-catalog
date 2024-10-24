@@ -14,7 +14,7 @@ import initializePatronTokenAuth, {
 } from "../../../src/server/auth"
 import { fetchBib } from "../../../src/server/api/bib"
 import { bibWithItems } from "../../fixtures/bibFixtures"
-import { BASE_URL, PATHS } from "../../../src/config/constants"
+import { BASE_URL, PATHS, NYPL_LOCATIONS } from "../../../src/config/constants"
 
 jest.mock("../../../src/server/auth")
 jest.mock("../../../src/server/api/bib")
@@ -120,6 +120,8 @@ describe("Hold Request page", () => {
         <HoldRequestPage
           discoveryBibResult={bibWithItems.resource}
           discoveryItemResult={bibWithItems.resource.items[0]}
+          patronId="123"
+          deliveryLocations={[]}
           isAuthenticated={true}
         />
       )
@@ -153,6 +155,15 @@ describe("Hold Request page", () => {
         <HoldRequestPage
           discoveryBibResult={bibWithItems.resource}
           discoveryItemResult={bibWithItems.resource.items[0]}
+          patronId="123"
+          deliveryLocations={[
+            {
+              key: "schwarzman",
+              label: "Schwarzman",
+              value: "loc:mal17",
+              address: NYPL_LOCATIONS["schwarzman"].address,
+            },
+          ]}
           isAuthenticated={true}
         />
       )

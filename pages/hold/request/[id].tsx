@@ -21,6 +21,8 @@ import { SITE_NAME, BASE_URL, PATHS } from "../../../src/config/constants"
 import useLoading from "../../../src/hooks/useLoading"
 
 import { fetchBib } from "../../../src/server/api/bib"
+import { fetchDeliveryLocations } from "../../../src/server/api/hold"
+
 import initializePatronTokenAuth, {
   doRedirectBasedOnNyplAccountRedirects,
   getLoginRedirect,
@@ -33,10 +35,13 @@ import bibDetailStyles from "../../../styles/components/BibDetails.module.scss"
 
 import type { DiscoveryBibResult } from "../../../src/types/bibTypes"
 import type { DiscoveryItemResult } from "../../../src/types/itemTypes"
+import type { DeliveryLocation } from "../../../src/types/locationTypes"
 
 interface HoldRequestPropsType {
   discoveryBibResult: DiscoveryBibResult
   discoveryItemResult: DiscoveryItemResult
+  deliveryLocations: DeliveryLocation[]
+  patronId: string
   isAuthenticated?: boolean
 }
 
@@ -48,12 +53,15 @@ interface HoldRequestPropsType {
 export default function HoldRequestPage({
   discoveryBibResult,
   discoveryItemResult,
+  deliveryLocations,
+  patronId,
   isAuthenticated,
 }: HoldRequestPropsType) {
   const metadataTitle = `Item Request | ${SITE_NAME}`
 
   const bib = new Bib(discoveryBibResult)
   const item = new Item(discoveryItemResult, bib)
+
   const holdId = `${item.bibId}-${item.id}`
 
   const [alert, setAlert] = useState(false)
@@ -74,10 +82,16 @@ export default function HoldRequestPage({
 
     try {
       setFormPosting(true)
+      const { patronId, source, pickupLocation } = e.target
+
       const response = await fetch(`${BASE_URL}/api/hold/request/${holdId}`, {
         method: "POST",
-        // TODO: serialize form data
-        body: "",
+        body: JSON.stringify({
+          patronId: patronId.value,
+          source: source.value,
+          pickupLocation: pickupLocation.value,
+          clientSidePost: true,
+        }),
       })
       const responseJson = await response.json()
 
@@ -90,9 +104,13 @@ export default function HoldRequestPage({
         setFormPosting(false)
         return
       }
+      const { pickupLocation: pickupLocationFromResponse, requestId } =
+        responseJson
 
       // Success state
-      await router.push(`${PATHS.HOLD_CONFIRMATION}/${holdId}`)
+      await router.push(
+        `${PATHS.HOLD_CONFIRMATION}/${holdId}?pickupLocation=${pickupLocationFromResponse}&requestId=${requestId}`
+      )
       setFormPosting(false)
     } catch (error) {
       console.error(
@@ -158,26 +176,11 @@ export default function HoldRequestPage({
               Choose a pickup location
             </Heading>
             <HoldRequestForm
-              deliveryLocations={[
-                {
-                  label: "My Scholar Room",
-                  address: "476 Fifth Avenue (42nd St and Fifth Ave)",
-                },
-                {
-                  label: "Schwarzman Building - Rose Main Reading Room",
-                  address: "315 476 Fifth Avenue (42nd St and Fifth Ave)",
-                },
-                {
-                  label: "Schwarzman Building - Art & Architecture Room 300",
-                  address: "476 Fifth Avenue (42nd St and Fifth Ave)",
-                },
-                {
-                  label: "Schwarzman Building - Dorot Jewish Division Room 111",
-                  address: "476 Fifth Avenue (42nd St and Fifth Ave)",
-                },
-              ]}
+              deliveryLocations={deliveryLocations}
               handleSubmit={handleSubmit}
               holdId={holdId}
+              patronId={patronId}
+              source={item.source}
             />
           </>
         )}
@@ -232,8 +235,25 @@ export async function getServerSideProps({ params, req, res }) {
       throw new Error("Item not found")
     }
 
+    const barcode = discoveryItemResult?.idBarcode?.[0]
+
+    const { deliveryLocations, status: locationStatus } =
+      await fetchDeliveryLocations(barcode, patronId)
+
+    if (locationStatus !== 200) {
+      throw new Error(
+        "HoldRequestPage: Error fetching delivery locations in getServerSideProps"
+      )
+    }
+
     return {
-      props: { discoveryBibResult, discoveryItemResult, isAuthenticated },
+      props: {
+        discoveryBibResult,
+        discoveryItemResult,
+        deliveryLocations,
+        patronId,
+        isAuthenticated,
+      },
     }
   } catch (error) {
     console.log(error)
