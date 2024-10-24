@@ -38,6 +38,7 @@ import initializePatronTokenAuth from "../../src/server/auth"
 import { appConfig } from "../../src/config/config"
 import { useDateForm } from "../../src/hooks/useDateForm"
 import DateForm from "../../src/components/SearchFilters/DateForm"
+import AdvancedSearchCheckboxField from "../../src/components/RefineSearch/AdvancedSearchCheckboxField"
 
 export const defaultEmptySearchErrorMessage =
   "Error: please enter at least one field to submit an advanced search."
@@ -62,7 +63,6 @@ export default function AdvancedSearch({ isAuthenticated }) {
     searchFormReducer,
     initialSearchFormState
   )
-
   const {
     dateFormProps,
     validateDateRange,
@@ -202,38 +202,18 @@ export default function AdvancedSearch({ isAuthenticated }) {
                 </FormRow>
               </FormField>
             </FormRow>
-            <FormRow>
-              <FormField id="advancedSearchRight" gap="grid.s">
-                <CheckboxGroup
-                  id="formats"
-                  name="formats"
-                  labelText="Format"
-                  onChange={handleCheckboxChange}
-                  value={searchFormState["filters"].materialType}
-                  __css={{
-                    "> div": {
-                      display: "grid",
-                      gridTemplateColumns: { md: "repeat(2, minmax(0, 1fr))" },
-                      gridGap: "var(--nypl-space-s)",
-                      div: {
-                        marginTop: "0 !important",
-                      },
-                    },
-                  }}
-                >
-                  {materialTypeOptions.map((materialType) => {
-                    return (
-                      <Checkbox
-                        id={materialType.value}
-                        key={materialType.value}
-                        labelText={materialType.label}
-                        value={materialType.value}
-                      />
-                    )
-                  })}
-                </CheckboxGroup>
-              </FormField>
-            </FormRow>
+            <AdvancedSearchCheckboxField
+              name="location"
+              label="Location"
+              handleCheckboxChange={handleCheckboxChange}
+              searchFormState={searchFormState["filters"].buildingLocation}
+            />
+            <AdvancedSearchCheckboxField
+              name="format"
+              label="Format"
+              handleCheckboxChange={handleCheckboxChange}
+              searchFormState={searchFormState["filters"].materialType}
+            />
           </FormField>
           <HorizontalRule __css={{ margin: 0 }} />
           <FormRow>
