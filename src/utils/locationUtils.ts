@@ -28,7 +28,6 @@ export const mapLocationElementToDeliveryLocation = (
     key: locationKey,
     value: locationElement?.["@id"]?.replace("loc:", "") || null,
     address: details.address,
-    shortName,
     label,
   }
 }
