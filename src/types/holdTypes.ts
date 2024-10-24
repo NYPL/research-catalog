@@ -7,12 +7,12 @@ export interface HoldRequestParams {
   patronId: string
   source: string
   pickupLocation: NYPLocationKey | "edd"
-  searchKeywordsQuery?: string
 }
 
 export interface HoldResponse {
   status: HTTPStatusCode
-  redirectUrl?: string
+  pickupLocation?: NYPLocationKey | "edd"
+  requestId?: string
 }
 
 export interface DiscoveryHoldPostParams {

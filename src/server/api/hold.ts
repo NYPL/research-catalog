@@ -76,14 +76,7 @@ export async function fetchDeliveryLocations(
 export async function postHoldRequest(
   holdRequestParams: HoldRequestParams
 ): Promise<HoldResponse> {
-  const {
-    bibId,
-    itemId,
-    patronId,
-    source,
-    pickupLocation,
-    searchKeywordsQuery = "",
-  } = holdRequestParams
+  const { bibId, itemId, patronId, source, pickupLocation } = holdRequestParams
 
   // Remove non-numeric characters from item ID
   // TODO: This comes from DFE, is this still necessary?
@@ -108,36 +101,31 @@ export async function postHoldRequest(
   try {
     const client = await nyplApiClient()
     const holdPostResult = await client.post("/hold-requests", holdPostParams)
-    const { id } = holdPostResult.data
+    const { id: requestId } = holdPostResult.data
 
-    if (!id)
-      throw new Error(
+    if (!requestId) {
+      logger.error(
         "postHoldRequest failed, no id returned from Discovery API",
         holdPostResult
       )
+      return {
+        status: 400,
+      }
+    }
 
     return {
-      status: 307,
-      redirectUrl:
-        `${BASE_URL}/hold/confirmation/${bibId}-${itemId}?pickupLocation=` +
-        `${pickupLocation}&requestId=${id}${searchKeywordsQuery}`,
+      status: 200,
+      pickupLocation,
+      requestId,
     }
   } catch (error) {
     logger.error(
       `Error posting hold request in postHoldRequest server function, bibId: ${bibId}, itemId: ${itemId}`,
       error.message
     )
-    const errorStatus = error.status ? `&errorStatus=${error.status}` : ""
-    const errorMessage =
-      error.statusText || searchKeywordsQuery
-        ? `&errorMessage=${error.statusText}${searchKeywordsQuery}`
-        : ""
 
     return {
-      status: 307,
-      redirectUrl:
-        `${BASE_URL}/hold/confirmation/${bibId}-${itemId}?pickupLocation=` +
-        `${pickupLocation}${errorStatus}${errorMessage}`,
+      status: 500,
     }
   }
 }
