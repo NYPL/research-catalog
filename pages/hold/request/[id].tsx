@@ -40,8 +40,7 @@ import type { DeliveryLocation } from "../../../src/types/locationTypes"
 interface HoldRequestPropsType {
   discoveryBibResult: DiscoveryBibResult
   discoveryItemResult: DiscoveryItemResult
-  deliveryLocations: DeliveryLocation[]
-  eddRequestable?: boolean
+  deliveryLocations?: DeliveryLocation[]
   isAuthenticated?: boolean
 }
 
@@ -53,8 +52,7 @@ interface HoldRequestPropsType {
 export default function HoldRequestPage({
   discoveryBibResult,
   discoveryItemResult,
-  deliveryLocations,
-  eddRequestable,
+  deliveryLocations = [],
   isAuthenticated,
 }: HoldRequestPropsType) {
   const metadataTitle = `Item Request | ${SITE_NAME}`
@@ -225,11 +223,8 @@ export async function getServerSideProps({ params, req, res }) {
 
     const barcode = discoveryItemResult?.idBarcode?.[0]
 
-    const {
-      deliveryLocations,
-      eddRequestable,
-      status: locationStatus,
-    } = await fetchDeliveryLocations(barcode, patronId)
+    const { deliveryLocations, status: locationStatus } =
+      await fetchDeliveryLocations(barcode, patronId)
 
     if (locationStatus !== 200) {
       throw new Error(
@@ -242,7 +237,6 @@ export async function getServerSideProps({ params, req, res }) {
         discoveryBibResult,
         discoveryItemResult,
         deliveryLocations,
-        eddRequestable,
         isAuthenticated,
       },
     }
