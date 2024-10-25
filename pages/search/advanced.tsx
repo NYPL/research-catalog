@@ -213,8 +213,7 @@ export default function AdvancedSearch({ isAuthenticated }) {
             </Flex>
           </Flex>
           <HorizontalRule __css={{ margin: 0 }} />
-          <Flex>
-            <Spacer />
+          <Flex justifyContent="end">
             <CancelSubmitButtonGroup
               formName="advanced-search"
               cancelHandler={handleClear}
