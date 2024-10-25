@@ -165,8 +165,8 @@ const RefineSearch = ({
             <CancelSubmitButtonGroup
               formName="refine"
               cancelHandler={handleClear}
-              submitLabel="Apply filters"
-              cancelLabel="Clear filters"
+              submitLabel="Apply Filters"
+              cancelLabel="Clear Filters"
             />
           </Box>
           <HorizontalRule m={0} />

@@ -1,12 +1,21 @@
 import { Button, Icon, ButtonGroup } from "@nypl/design-system-react-components"
 import styles from "../../../styles/components/Search.module.scss"
 
+interface SearchButtonProps {
+  cancelHandler: () => void
+  submitLabel: string
+  cancelLabel: string
+  formName: string
+  disableSubmit?: boolean
+}
+
 const SearchButtons = ({
   cancelHandler,
-  submitLabel,
   cancelLabel,
+  submitLabel,
   formName,
-}) => {
+  disableSubmit,
+}: SearchButtonProps) => {
   const submitIcon = submitLabel.toLowerCase().includes("search")
     ? "actionSearch"
     : "check"
@@ -28,6 +37,7 @@ const SearchButtons = ({
         id={`submit-${formName}`}
         type="submit"
         buttonType="primary"
+        isDisabled={disableSubmit}
       >
         <Icon name={submitIcon} align="left" size="large" />
         {submitLabel}

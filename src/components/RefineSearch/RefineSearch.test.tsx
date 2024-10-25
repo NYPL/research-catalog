@@ -31,7 +31,7 @@ const selectSomeFilters = async (
   )
 }
 const clear = async () => {
-  const clearButton = screen.getByTestId("clear-filters-button")
+  const clearButton = screen.getByTestId("clear-refine-button")
   await userEvent.click(clearButton)
 }
 
