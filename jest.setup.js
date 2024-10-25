@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 import "@testing-library/jest-dom"
-
+import { configure } from "@testing-library/dom"
 // The scrollIntoView function is necessary for the Tabs component.
 window.HTMLElement.prototype.scrollIntoView = jest.fn()
 
@@ -48,3 +48,12 @@ import { MatchMedia } from "@nypl/design-system-react-components"
 new MatchMedia()
 
 window.HTMLElement.prototype.scrollIntoView = jest.fn()
+
+// configure({
+//   getElementError: (message) => {
+//     const error = new Error(message);
+//     error.name = "TestingLibraryElementError";
+//     error.stack = null;
+//     return error;
+//   },
+// })

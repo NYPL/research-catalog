@@ -218,7 +218,7 @@ export default function AdvancedSearch({ isAuthenticated }) {
             <CancelSubmitButtonGroup
               formName="advanced-search"
               cancelHandler={handleClear}
-              cancelLabel="Clear fields"
+              cancelLabel="Clear Fields"
               submitLabel="Search"
             />
           </Flex>

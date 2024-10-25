@@ -23,7 +23,12 @@ const SearchButtons = ({
         <Icon name="actionDelete" align="left" size="large" />
         {cancelLabel}
       </Button>
-      <Button id={`submit-${formName}`} type="submit" buttonType="primary">
+      <Button
+        data-testid={`submit-${formName}-button`}
+        id={`submit-${formName}`}
+        type="submit"
+        buttonType="primary"
+      >
         <Icon name={submitIcon} align="left" size="large" />
         {submitLabel}
       </Button>

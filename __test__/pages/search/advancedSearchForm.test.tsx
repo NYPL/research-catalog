@@ -12,10 +12,13 @@ jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
 describe("Advanced Search Form", () => {
   const submit = () => {
-    fireEvent(screen.getByText("Submit"), new MouseEvent("click"))
+    fireEvent(
+      screen.getByTestId("submit-advanced-search-button"),
+      new MouseEvent("click")
+    )
   }
   afterEach(async () => {
-    await userEvent.click(screen.getByText("Clear"))
+    await userEvent.click(screen.getByText("Clear Fields"))
   })
   it("displays alert when no fields are submitted", () => {
     render(<AdvancedSearch isAuthenticated={true} />)
@@ -93,7 +96,7 @@ describe("Advanced Search Form", () => {
     await userEvent.type(titleInput, "il amore di pasta")
     await userEvent.type(subjectInput, "italian food")
 
-    await userEvent.click(screen.getByText("Clear"))
+    await userEvent.click(screen.getByText("Clear Fields"))
     expect(notatedMusic).not.toBeChecked()
 
     submit()
