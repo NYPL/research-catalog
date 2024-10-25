@@ -48,12 +48,3 @@ import { MatchMedia } from "@nypl/design-system-react-components"
 new MatchMedia()
 
 window.HTMLElement.prototype.scrollIntoView = jest.fn()
-
-// configure({
-//   getElementError: (message) => {
-//     const error = new Error(message);
-//     error.name = "TestingLibraryElementError";
-//     error.stack = null;
-//     return error;
-//   },
-// })

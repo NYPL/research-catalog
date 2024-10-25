@@ -1,6 +1,7 @@
 import { Icon, Button, ButtonGroup } from "@nypl/design-system-react-components"
 import type { Dispatch, MutableRefObject } from "react"
 import styles from "../../../../styles/components/MyAccount.module.scss"
+import CancelSubmitButtonGroup from "../../RefineSearch/CancelSubmitButtonGroup"
 
 interface AccountSettingsButtonsPropsType {
   currentlyEditing: boolean
@@ -35,9 +36,18 @@ const AccountSettingsButtons = ({
   )
 
   const cancelAndSaveButtons = (
+    <CancelSubmitButtonGroup
+      cancelHandler={() => toggleCurrentlyEditing(false)}
+      formName="account-settings"
+      submitLabel="Save Changes"
+      cancelLabel="Cancel"
+      disableSubmit={!formValid}
+    />
+  )
+  const oldCancelAndSaveButtons = (
     <ButtonGroup className={styles.settingsEditButton}>
       <Button
-        onClick={() => toggleCurrentlyEditing(false)}
+        onClick={() => null}
         id="account-settings-cancel-update-button"
         screenreaderOnlyText="cancel account settings update"
         buttonType="secondary"

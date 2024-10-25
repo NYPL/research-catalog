@@ -20,7 +20,7 @@ const SearchButtons = ({
     ? "actionSearch"
     : "check"
   return (
-    <ButtonGroup id={`${formName}-buttons`} className={styles.re}>
+    <ButtonGroup id={`${formName}-buttons`}>
       <Button
         data-testid={`clear-${formName}-button`}
         onClick={cancelHandler}
