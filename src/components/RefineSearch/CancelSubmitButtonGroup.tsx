@@ -1,8 +1,8 @@
 import { Button, Icon, ButtonGroup } from "@nypl/design-system-react-components"
-import styles from "../../../styles/components/Search.module.scss"
+import type { SyntheticEvent } from "react"
 
 interface SearchButtonProps {
-  cancelHandler: () => void
+  cancelHandler: (e: SyntheticEvent) => void
   submitLabel: string
   cancelLabel: string
   formName: string
