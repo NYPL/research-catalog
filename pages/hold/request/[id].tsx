@@ -58,7 +58,8 @@ export default function HoldRequestPage({
 
   const holdId = `${item.bibId}-${item.id}`
 
-  const [alert, setAlert] = useState(false)
+  // Initialize alert to true if item is not available. This will show the error banner.
+  const [alert, setAlert] = useState(!item.isAvailable)
   const [formPosting, setFormPosting] = useState(false)
   const bannerContainerRef = useRef<HTMLDivElement>()
 
@@ -143,7 +144,7 @@ export default function HoldRequestPage({
             showImage={false}
             data-testid="hold-request-loading"
           />
-        ) : (
+        ) : item.isAvailable ? (
           <>
             <Heading level="h3" size="heading4" mb="l">
               Choose a pickup location
@@ -156,7 +157,7 @@ export default function HoldRequestPage({
               source={item.source}
             />
           </>
-        )}
+        ) : null}
       </Layout>
     </>
   )
