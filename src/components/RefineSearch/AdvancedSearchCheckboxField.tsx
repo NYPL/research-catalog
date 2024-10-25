@@ -39,13 +39,13 @@ const AdvancedSearchCheckboxField = ({
           value={searchFormState}
           __css={checkBoxCSS}
         >
-          {options[name].map((materialType) => {
+          {options[name].map((option) => {
             return (
               <Checkbox
-                id={materialType.value}
-                key={materialType.value}
-                labelText={materialType.label}
-                value={materialType.value}
+                id={option.value}
+                key={option.value}
+                labelText={option.label}
+                value={option.value}
               />
             )
           })}

@@ -6,6 +6,7 @@ import userEvent from "@testing-library/user-event"
 import AdvancedSearch, {
   defaultEmptySearchErrorMessage,
 } from "../../../pages/search/advanced"
+import { searchAggregations } from "../../../src/config/aggregations"
 
 // Mock next router
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
@@ -74,6 +75,17 @@ describe("Advanced Search Form", () => {
     // ("resourcetypes:not", "resourcetypes:car") to be in url
     expect(mockRouter.asPath).toBe(
       "/search?q=&filters%5BmaterialType%5D%5B0%5D=resourcetypes%3Anot&filters%5BmaterialType%5D%5B1%5D=resourcetypes%3Acar"
+    )
+  })
+  it("can check location checkboxes", async () => {
+    render(<AdvancedSearch isAuthenticated={true} />)
+    const location = searchAggregations.buildingLocation[0]
+    await userEvent.click(screen.getByLabelText(location.label))
+    submit()
+    // expect the label for notated music and cartographic
+    // ("resourcetypes:not", "resourcetypes:car") to be in url
+    expect(mockRouter.asPath).toBe(
+      `/search?q=&filters%5BbuildingLocation%5D%5B0%5D=${location.value}`
     )
   })
 

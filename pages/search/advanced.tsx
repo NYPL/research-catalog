@@ -85,11 +85,11 @@ export default function AdvancedSearch({ isAuthenticated }) {
     })
   }
 
-  const handleCheckboxChange = (types: string[]) => {
+  const handleCheckboxChange = (field: string, types: string[]) => {
     alert && setAlert(false)
     dispatch({
       type: "filter_change",
-      field: "materialType",
+      field: field,
       payload: types,
     })
   }
@@ -201,13 +201,17 @@ export default function AdvancedSearch({ isAuthenticated }) {
               <AdvancedSearchCheckboxField
                 name="location"
                 label="Location"
-                handleCheckboxChange={handleCheckboxChange}
+                handleCheckboxChange={(e) =>
+                  handleCheckboxChange("buildingLocation", e)
+                }
                 searchFormState={searchFormState["filters"].buildingLocation}
               />
               <AdvancedSearchCheckboxField
                 name="format"
                 label="Format"
-                handleCheckboxChange={handleCheckboxChange}
+                handleCheckboxChange={(e) =>
+                  handleCheckboxChange("materialType", e)
+                }
                 searchFormState={searchFormState["filters"].materialType}
               />
             </Flex>
