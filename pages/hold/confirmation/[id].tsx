@@ -11,6 +11,7 @@ import Layout from "../../../src/components/Layout/Layout"
 import { SITE_NAME, PATHS } from "../../../src/config/constants"
 import RCLink from "../../../src/components/Links/RCLink/RCLink"
 import ExternalLink from "../../../src/components/Links/ExternalLink/ExternalLink"
+import HoldItemDetails from "../../../src/components/HoldPages/HoldItemDetails"
 
 import initializePatronTokenAuth, {
   doRedirectBasedOnNyplAccountRedirects,
@@ -42,6 +43,7 @@ export default function HoldConfirmationPage({
         <Heading level="h2" mb="l" size="heading3">
           Request for on-site use
         </Heading>
+        {/* <HoldItemDetails item={item} /> */}
         <Banner
           type="positive"
           mb="m"

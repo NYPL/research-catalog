@@ -3,7 +3,6 @@ import { useState, useRef, useEffect } from "react"
 import { useRouter } from "next/router"
 import {
   Heading,
-  List,
   Box,
   SkeletonLoader,
 } from "@nypl/design-system-react-components"
@@ -12,10 +11,7 @@ import Layout from "../../../src/components/Layout/Layout"
 
 import HoldRequestForm from "../../../src/components/HoldPages/HoldRequestForm"
 import HoldRequestBanner from "../../../src/components/HoldPages/HoldRequestBanner"
-import {
-  PlainTextElement,
-  LinkedDetailElement,
-} from "../../../src/components/BibPage/BibDetail"
+import HoldItemDetails from "../../../src/components/HoldPages/HoldItemDetails"
 
 import { SITE_NAME, BASE_URL, PATHS } from "../../../src/config/constants"
 import useLoading from "../../../src/hooks/useLoading"
@@ -30,8 +26,6 @@ import initializePatronTokenAuth, {
 
 import Bib from "../../../src/models/Bib"
 import Item from "../../../src/models/Item"
-
-import bibDetailStyles from "../../../styles/components/BibDetails.module.scss"
 
 import type { DiscoveryBibResult } from "../../../src/types/bibTypes"
 import type { DiscoveryItemResult } from "../../../src/types/itemTypes"
@@ -143,28 +137,7 @@ export default function HoldRequestPage({
         <Heading level="h2" mb="l" size="heading3">
           Request for on-site use
         </Heading>
-        <List
-          noStyling
-          type="dl"
-          showRowDividers={false}
-          className={bibDetailStyles.bibDetails}
-          mb="xs"
-          mt={0}
-        >
-          <LinkedDetailElement
-            label="Title"
-            value={[
-              { url: `${PATHS.BIB}/${bib.id}`, urlLabel: bib.titleDisplay },
-            ]}
-            link="internal"
-          />
-          <PlainTextElement label="Call number" value={[item.callNumber]} />
-          {item.volume ? (
-            <PlainTextElement label="Volume/date" value={[item.volume]} />
-          ) : (
-            <></>
-          )}
-        </List>
+        <HoldItemDetails item={item} />
         {isLoading || formPosting ? (
           <SkeletonLoader
             showImage={false}
