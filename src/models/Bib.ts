@@ -33,7 +33,7 @@ export default class Bib {
 
   constructor(result: DiscoveryBibResult) {
     this.id = result["@id"] ? result["@id"].substring(4) : ""
-    this.title = result.title[0] || ""
+    this.title = result.title?.[0] || result.titleDisplay?.[0] || "[Untitled]"
     this.titleDisplay = this.getTitleDisplayFromResult(result)
     this.electronicResources = result.electronicResources || null
     this.numPhysicalItems = result.numItemsTotal || 0
