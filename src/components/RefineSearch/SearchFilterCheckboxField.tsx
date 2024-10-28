@@ -7,7 +7,7 @@ import type { Option } from "../../types/filterTypes"
 
 interface SearchFilterCheckboxFieldProps {
   searchFormState: string[]
-  handleCheckboxChange: (e: any) => void
+  handleCheckboxChange: (e: string[]) => void
   options: Option[]
   name: string
   label: string

@@ -14,7 +14,6 @@ import { useDateForm } from "../../hooks/useDateForm"
 
 import styles from "../../../styles/components/Search.module.scss"
 import SearchResultsFilters from "../../models/SearchResultsFilters"
-import RefineSearchCheckBoxField from "./RefineSearchCheckboxField"
 import {
   collapseMultiValueQueryParams,
   buildFilterQuery,
