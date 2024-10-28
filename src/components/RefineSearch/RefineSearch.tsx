@@ -25,6 +25,7 @@ import type {
   CollapsedMultiValueAppliedFilters,
 } from "../../types/filterTypes"
 import CancelSubmitButtonGroup from "./CancelSubmitButtonGroup"
+import SearchFilterCheckboxField from "./SearchFilterCheckboxField"
 
 const fields = [
   { value: "buildingLocation", label: "Location" },
@@ -73,11 +74,13 @@ const RefineSearch = ({
       const filterData = new SearchResultsFilters(aggregations, field)
       if (filterData.options) {
         return (
-          <RefineSearchCheckBoxField
-            setAppliedFilters={setAppliedFilters}
+          <SearchFilterCheckboxField
+            gridOptions={{ min: 2, max: 4 }}
+            handleCheckboxChange={(e) => handleCheckboxChange(field.value, e)}
             key={field.label}
-            field={field}
-            appliedFilters={appliedFilters[field.value]}
+            name={field.value}
+            label={field.label}
+            searchFormState={appliedFilters[field.value]}
             options={filterData.options}
           />
         )
@@ -129,6 +132,15 @@ const RefineSearch = ({
     })
     // close the dialog
     toggleRefine()
+  }
+  const handleCheckboxChange = (field: string, data: string[]) => {
+    // update the parent state to know about the updated selected values
+    setAppliedFilters((prevFilters) => {
+      return {
+        ...prevFilters,
+        [field]: data,
+      }
+    })
   }
 
   return (

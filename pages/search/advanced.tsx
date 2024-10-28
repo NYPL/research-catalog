@@ -33,10 +33,10 @@ import initializePatronTokenAuth from "../../src/server/auth"
 import { appConfig } from "../../src/config/config"
 import { useDateForm } from "../../src/hooks/useDateForm"
 import DateForm from "../../src/components/SearchFilters/DateForm"
-import AdvancedSearchCheckboxField from "../../src/components/RefineSearch/AdvancedSearchCheckboxField"
+import SearchFilterCheckboxField from "../../src/components/RefineSearch/SearchFilterCheckboxField"
 import CancelSubmitButtonGroup from "../../src/components/RefineSearch/CancelSubmitButtonGroup"
-import { materialTypeOptions } from "../../utils/advancedSearchUtils"
-import { searchAggregations } from "../../config/aggregations"
+import { materialTypeOptions } from "../../src/utils/advancedSearchUtils"
+import { searchAggregations } from "../../src/config/aggregations"
 
 export const defaultEmptySearchErrorMessage =
   "Error: please enter at least one field to submit an advanced search."
@@ -194,7 +194,7 @@ export default function AdvancedSearch({ isAuthenticated }) {
               <FormField>{<DateForm {...dateFormProps} />}</FormField>
             </Box>
             <Flex direction="column" gap="l">
-              <AdvancedSearchCheckboxField
+              <SearchFilterCheckboxField
                 options={searchAggregations.buildingLocation}
                 name="location"
                 label="Location"
@@ -203,7 +203,7 @@ export default function AdvancedSearch({ isAuthenticated }) {
                 }
                 searchFormState={searchFormState["filters"].buildingLocation}
               />
-              <AdvancedSearchCheckboxField
+              <SearchFilterCheckboxField
                 options={materialTypeOptions}
                 name="format"
                 label="Format"

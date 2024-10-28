@@ -49,6 +49,7 @@ export const addLabelPropAndParseFilters = (
     // for applied filter fields (yet). This is mainly the unsupported holding
     // location filter (eg filters[holdingLocation][0]=loc:scff2), which is
     // used by devs to assist QA. See line 69 for explanation of date exclusion.
+    const ignoreFields = ["date", "holdingLocation"]
     if (!matchingFieldAggregation && !appliedFilterField.includes("date"))
       continue
     appliedFilterValuesWithLabels[appliedFilterField] = appliedFilterValues[
