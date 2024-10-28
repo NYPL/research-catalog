@@ -133,7 +133,19 @@ export default function HoldRequestPage({
         {/* Always render the wrapper element that will display the
           dynamically rendered notification for focus management */}
         <Box tabIndex={-1} ref={bannerContainerRef}>
-          {alert && <HoldRequestBanner item={item} />}
+          {alert && (
+            <HoldRequestBanner
+              item={item}
+              heading={
+                !item.isAvailable ? "Item unavailable" : "Request failed"
+              }
+              errorMessage={
+                !item.isAvailable
+                  ? "This item is currently unavailable"
+                  : "We were unable to process your request at this time"
+              }
+            />
+          )}
         </Box>
         <Heading level="h2" mb="l" size="heading3">
           Request for on-site use
