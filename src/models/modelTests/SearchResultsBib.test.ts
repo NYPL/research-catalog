@@ -24,6 +24,22 @@ describe("SearchResultsBib model", () => {
         { "@id": "urn:biblevel:s", prefLabel: "serial" },
       ])
     })
+    it("defaults to title display when no title", () => {
+      const bibWithNoTitle = new SearchResultsBib({
+        ...bibWithItems.resource,
+        title: undefined,
+        titleDisplay: ["Display title"],
+      })
+      expect(bibWithNoTitle.title).toBe("Display title")
+    })
+    it("defaults to '[Untitled]' when no title or titleDisplay", () => {
+      const bibWithNoTitle = new SearchResultsBib({
+        ...bibWithItems.resource,
+        title: undefined,
+        titleDisplay: undefined,
+      })
+      expect(bibWithNoTitle.title).toBe("[Untitled]")
+    })
 
     it("initializes the yearPublished based on dateStartYear and dateEndYear", () => {
       expect(searchResultsBib.yearPublished).toBe("1999-present")
