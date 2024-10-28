@@ -8,23 +8,12 @@ import {
 } from "@nypl/design-system-react-components"
 
 import Layout from "../../../src/components/Layout/Layout"
-import { SITE_NAME, PATHS } from "../../../src/config/constants"
+import { SITE_NAME } from "../../../src/config/constants"
 import RCLink from "../../../src/components/Links/RCLink/RCLink"
 import ExternalLink from "../../../src/components/Links/ExternalLink/ExternalLink"
-import HoldItemDetails from "../../../src/components/HoldPages/HoldItemDetails"
+// import HoldItemDetails from "../../../src/components/HoldPages/HoldItemDetails"
 
-import initializePatronTokenAuth, {
-  doRedirectBasedOnNyplAccountRedirects,
-  getLoginRedirect,
-} from "../../../src/server/auth"
-
-interface HoldConfirmationPropsType {
-  isAuthenticated?: boolean
-}
-
-export default function HoldConfirmationPage({
-  isAuthenticated,
-}: HoldConfirmationPropsType) {
+export default function HoldConfirmationPage() {
   // TODO: Add real title
   const metadataTitle = `Hold request | ${SITE_NAME}`
   return (
@@ -148,50 +137,3 @@ const faqContentData: AccordionDataProps[] = [
     ),
   },
 ]
-
-export async function getServerSideProps({ params, req, res }) {
-  const { id } = params
-
-  // authentication redirect
-  const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
-  const isAuthenticated = patronTokenResponse.isTokenValid
-  const redirectTrackerCookie = req.cookies["nyplAccountRedirects"]
-  const redirectCount = parseInt(redirectTrackerCookie, 10) || 0
-  const redirectBasedOnNyplAccountRedirects =
-    doRedirectBasedOnNyplAccountRedirects(redirectCount)
-
-  // If we end up not authenticated 3 times after redirecting to the login url, don't redirect.
-  if (redirectBasedOnNyplAccountRedirects && !isAuthenticated) {
-    res.setHeader(
-      "Set-Cookie",
-      `nyplAccountRedirects=${
-        redirectCount + 1
-      }; Max-Age=10; path=/; domain=.nypl.org;`
-    )
-    const redirect = getLoginRedirect(req, `/hold/request/[${id}]`)
-
-    return {
-      redirect: {
-        destination: redirect,
-        permanent: false,
-      },
-    }
-  }
-
-  try {
-    return {
-      props: {
-        isAuthenticated,
-      },
-    }
-  } catch (error) {
-    console.log(error)
-
-    return {
-      redirect: {
-        destination: PATHS["404"],
-        permanent: false,
-      },
-    }
-  }
-}
