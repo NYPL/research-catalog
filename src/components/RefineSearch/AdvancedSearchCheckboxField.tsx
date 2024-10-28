@@ -1,22 +1,16 @@
 import {
-  FormRow,
   FormField,
   CheckboxGroup,
   Checkbox,
 } from "@nypl/design-system-react-components"
-import { materialTypeOptions } from "../../utils/advancedSearchUtils"
-import { searchAggregations } from "../../config/aggregations"
 
 const AdvancedSearchCheckboxField = ({
   searchFormState,
   handleCheckboxChange,
   name,
   label,
+  options,
 }) => {
-  const options = {
-    format: materialTypeOptions,
-    location: searchAggregations.buildingLocation,
-  }
   const checkBoxCSS = {
     "> div": {
       display: "grid",
@@ -38,7 +32,7 @@ const AdvancedSearchCheckboxField = ({
         value={searchFormState}
         __css={checkBoxCSS}
       >
-        {options[name].map((option) => {
+        {options.map((option) => {
           return (
             <Checkbox
               id={option.value}

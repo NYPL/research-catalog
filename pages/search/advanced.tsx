@@ -12,11 +12,8 @@ import {
   TextInput,
   Select,
   HorizontalRule,
-  ButtonGroup,
-  Button,
   Box,
   Banner,
-  Spacer,
 } from "@nypl/design-system-react-components"
 
 import Layout from "../../src/components/Layout/Layout"
@@ -38,6 +35,8 @@ import { useDateForm } from "../../src/hooks/useDateForm"
 import DateForm from "../../src/components/SearchFilters/DateForm"
 import AdvancedSearchCheckboxField from "../../src/components/RefineSearch/AdvancedSearchCheckboxField"
 import CancelSubmitButtonGroup from "../../src/components/RefineSearch/CancelSubmitButtonGroup"
+import { materialTypeOptions } from "../../utils/advancedSearchUtils"
+import { searchAggregations } from "../../config/aggregations"
 
 export const defaultEmptySearchErrorMessage =
   "Error: please enter at least one field to submit an advanced search."
@@ -196,6 +195,7 @@ export default function AdvancedSearch({ isAuthenticated }) {
             </Box>
             <Flex direction="column" gap="l">
               <AdvancedSearchCheckboxField
+                options={searchAggregations.buildingLocation}
                 name="location"
                 label="Location"
                 handleCheckboxChange={(e) =>
@@ -204,6 +204,7 @@ export default function AdvancedSearch({ isAuthenticated }) {
                 searchFormState={searchFormState["filters"].buildingLocation}
               />
               <AdvancedSearchCheckboxField
+                options={materialTypeOptions}
                 name="format"
                 label="Format"
                 handleCheckboxChange={(e) =>
