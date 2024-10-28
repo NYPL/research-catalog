@@ -166,35 +166,38 @@ export default function AdvancedSearch({ isAuthenticated }) {
             <Box id="advancedSearchLeft" gap="grid.s">
               {textInputFields.map(({ name, label }) => {
                 return (
-                  <TextInput
-                    id={name}
-                    labelText={label}
-                    name={name}
-                    value={searchFormState[name]}
-                    key={name}
-                    onChange={debounce(
-                      (e) => handleInputChange(e, "input_change"),
-                      debounceInterval
-                    )}
-                    ref={inputRef}
-                  />
+                  <FormField key={name}>
+                    <TextInput
+                      id={name}
+                      labelText={label}
+                      name={name}
+                      value={searchFormState[name]}
+                      onChange={debounce(
+                        (e) => handleInputChange(e, "input_change"),
+                        debounceInterval
+                      )}
+                      ref={inputRef}
+                    />
+                  </FormField>
                 )
               })}
-              <Select
-                id="languageSelect"
-                name="language"
-                labelText="Language"
-                value={searchFormState["filters"].language}
-                onChange={(e) => handleInputChange(e, "filter_change")}
-              >
-                {languageOptions.map((language) => {
-                  return (
-                    <option value={language.value} key={language.value}>
-                      {language.label}
-                    </option>
-                  )
-                })}
-              </Select>
+              <FormField>
+                <Select
+                  id="languageSelect"
+                  name="language"
+                  labelText="Language"
+                  value={searchFormState["filters"].language}
+                  onChange={(e) => handleInputChange(e, "filter_change")}
+                >
+                  {languageOptions.map((language) => {
+                    return (
+                      <option value={language.value} key={language.value}>
+                        {language.label}
+                      </option>
+                    )
+                  })}
+                </Select>
+              </FormField>
               <FormField>{<DateForm {...dateFormProps} />}</FormField>
             </Box>
             <Flex direction="column" gap="l">

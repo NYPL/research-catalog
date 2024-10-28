@@ -82,8 +82,6 @@ describe("Advanced Search Form", () => {
     const location = searchAggregations.buildingLocation[0]
     await userEvent.click(screen.getByLabelText(location.label))
     submit()
-    // expect the label for notated music and cartographic
-    // ("resourcetypes:not", "resourcetypes:car") to be in url
     expect(mockRouter.asPath).toBe(
       `/search?q=&filters%5BbuildingLocation%5D%5B0%5D=${location.value}`
     )

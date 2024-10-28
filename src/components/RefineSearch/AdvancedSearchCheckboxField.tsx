@@ -29,29 +29,27 @@ const AdvancedSearchCheckboxField = ({
   }
 
   return (
-    <FormRow>
-      <FormField id={`advancedSearchFormat${label}`} gap="grid.s">
-        <CheckboxGroup
-          id={name}
-          name={name}
-          labelText={label}
-          onChange={handleCheckboxChange}
-          value={searchFormState}
-          __css={checkBoxCSS}
-        >
-          {options[name].map((option) => {
-            return (
-              <Checkbox
-                id={option.value}
-                key={option.value}
-                labelText={option.label}
-                value={option.value}
-              />
-            )
-          })}
-        </CheckboxGroup>
-      </FormField>
-    </FormRow>
+    <FormField id={`advancedSearchFormat${label}`} gap="grid.s">
+      <CheckboxGroup
+        id={name}
+        name={name}
+        labelText={label}
+        onChange={handleCheckboxChange}
+        value={searchFormState}
+        __css={checkBoxCSS}
+      >
+        {options[name].map((option) => {
+          return (
+            <Checkbox
+              id={option.value}
+              key={option.value}
+              labelText={option.label}
+              value={option.value}
+            />
+          )
+        })}
+      </CheckboxGroup>
+    </FormField>
   )
 }
 
