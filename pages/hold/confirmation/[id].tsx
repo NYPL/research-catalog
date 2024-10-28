@@ -28,7 +28,7 @@ export default function HoldConfirmationPage() {
         <meta name="twitter:title" content={metadataTitle} key="tw-title" />
         <title key="main-title">{metadataTitle}</title>
       </Head>
-      <Layout isAuthenticated={isAuthenticated} activePage="hold">
+      <Layout activePage="hold">
         <Heading level="h2" mb="l" size="heading3">
           Request for on-site use
         </Heading>
