@@ -1,7 +1,7 @@
 import { Button, Icon, ButtonGroup } from "@nypl/design-system-react-components"
 import type { SyntheticEvent } from "react"
 
-interface SearchButtonProps {
+interface CancelSubmitButtonGroupProps {
   cancelHandler: (e: SyntheticEvent) => void
   submitLabel: string
   cancelLabel: string
@@ -9,13 +9,13 @@ interface SearchButtonProps {
   disableSubmit?: boolean
 }
 
-const SearchButtons = ({
+const CancelSubmitButtonGroup = ({
   cancelHandler,
   cancelLabel,
   submitLabel,
   formName,
   disableSubmit,
-}: SearchButtonProps) => {
+}: CancelSubmitButtonGroupProps) => {
   const submitIcon = submitLabel.toLowerCase().includes("search")
     ? "actionSearch"
     : "check"
@@ -46,4 +46,4 @@ const SearchButtons = ({
   )
 }
 
-export default SearchButtons
+export default CancelSubmitButtonGroup

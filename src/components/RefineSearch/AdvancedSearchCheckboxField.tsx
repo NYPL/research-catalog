@@ -4,6 +4,7 @@ import {
   Checkbox,
 } from "@nypl/design-system-react-components"
 
+// TODO: standardize refine search and advanced search checkbox fields
 const AdvancedSearchCheckboxField = ({
   searchFormState,
   handleCheckboxChange,
