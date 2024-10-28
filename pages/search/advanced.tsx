@@ -156,13 +156,7 @@ export default function AdvancedSearch({ isAuthenticated }) {
           action={`${BASE_URL}/search`}
           onSubmit={handleSubmit}
         >
-          <Flex
-            sx={{
-              gridTemplateColumns: {
-                md: "repeat(2, minmax(0, 1fr)) !important",
-              },
-            }}
-          >
+          <Flex flexDirection={{ base: "column", md: "row" }}>
             <Box id="advancedSearchLeft" gap="grid.s">
               {textInputFields.map(({ name, label }) => {
                 return (
