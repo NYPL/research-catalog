@@ -202,17 +202,26 @@ export async function getServerSideProps({ params, req, res }) {
       throw new Error("No item id in url")
     }
     const { discoveryBibResult } = await fetchBib(bibId, {}, itemId)
-
     const discoveryItemResult = discoveryBibResult?.items?.[0]
 
     if (!discoveryItemResult) {
       throw new Error("Item not found")
     }
 
-    const barcode = discoveryItemResult?.idBarcode?.[0]
+    const bib = new Bib(discoveryBibResult)
+    const item = new Item(discoveryItemResult, bib)
+
+    if (item.aeonUrl) {
+      return {
+        redirect: {
+          destination: item.aeonUrl,
+          permanent: false,
+        },
+      }
+    }
 
     const { deliveryLocations, status: locationStatus } =
-      await fetchDeliveryLocations(barcode, patronId)
+      await fetchDeliveryLocations(item.barcode, patronId)
 
     if (locationStatus !== 200) {
       throw new Error(
