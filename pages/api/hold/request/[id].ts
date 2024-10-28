@@ -31,7 +31,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { pickupLocation: pickupLocationFromResponse, requestId } =
       holdRequestResponse
 
-    // Body param only set when JS is enabled
+    // Return a 200 status when the hold request is posted successfully via client-side fetch
     if (clientSidePost) {
       return res.status(200).json({
         pickupLocation: pickupLocationFromResponse,
