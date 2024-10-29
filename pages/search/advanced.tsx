@@ -26,6 +26,7 @@ import {
   initialSearchFormState,
   textInputFields,
   languageOptions,
+  buildGoBackHref,
 } from "../../src/utils/advancedSearchUtils"
 import type {
   SearchParams,
@@ -49,7 +50,7 @@ export const defaultEmptySearchErrorMessage =
  * The Advanced Search page is responsible for displaying the Advanced Search form fields and
  * buttons that clear the fields and submit a search request.
  */
-export default function AdvancedSearch({ isAuthenticated }) {
+export default function AdvancedSearch({ isAuthenticated, goBackHref }) {
   const metadataTitle = `Advanced Search | ${SITE_NAME}`
   const router = useRouter()
   const inputRef = useRef<TextInputRefType>()
@@ -130,7 +131,7 @@ export default function AdvancedSearch({ isAuthenticated }) {
       notificationRef.current.focus()
     }
   }, [alert])
-
+  console.log(goBackHref)
   return (
     <>
       <Head>
@@ -219,7 +220,10 @@ export default function AdvancedSearch({ isAuthenticated }) {
             </Flex>
           </Flex>
           <HorizontalRule __css={{ margin: 0 }} />
-          <Flex justifyContent="space-between">
+          <Flex
+            justifyContent="space-between"
+            flexDirection={{ base: "column-reverse", md: "row" }}
+          >
             <RCLink
               display="flex"
               href="/"
@@ -249,9 +253,10 @@ export default function AdvancedSearch({ isAuthenticated }) {
 }
 
 export async function getServerSideProps({ req }) {
+  const goBackHref = buildGoBackHref(req.headers.referer)
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const isAuthenticated = patronTokenResponse.isTokenValid
   return {
-    props: { isAuthenticated },
+    props: { isAuthenticated, goBackHref },
   }
 }

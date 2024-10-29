@@ -36,3 +36,10 @@ export const languageOptions = [
 export const materialTypeOptions = searchAggregations.materialType.sort(
   (a, b) => (a.label > b.label ? 1 : -1)
 )
+
+export const buildGoBackHref = (referer) => {
+  const goBackEndpoint = referer.split("research-catalog")[1]
+  if (!referer) return null
+  else if (!goBackEndpoint) return "/"
+  else return goBackEndpoint
+}
