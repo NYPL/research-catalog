@@ -13,6 +13,10 @@ import RCLink from "../../../src/components/Links/RCLink/RCLink"
 import ExternalLink from "../../../src/components/Links/ExternalLink/ExternalLink"
 // import HoldItemDetails from "../../../src/components/HoldPages/HoldItemDetails"
 
+/**
+ * The Hold Confirmation page shows a success message, item details, and a FAQ accordion
+ * when a patron successfully places a hold request.
+ */
 export default function HoldConfirmationPage() {
   const metadataTitle = `Request Confirmation | ${SITE_NAME}`
   return (
