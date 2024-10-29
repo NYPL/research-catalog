@@ -26,7 +26,7 @@ export const mapLocationElementToDeliveryLocation = (
 
   return {
     key: locationKey,
-    value: locationElement?.["@id"]?.replace("loc:", "") || null,
+    value: getLocationSierraId(locationElement),
     address: details.address,
     label,
   }
