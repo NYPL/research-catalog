@@ -15,8 +15,8 @@ import type { Patron } from "../../../types/myAccountTypes"
 
 interface PhoneEmailFormProps {
   patronData: Patron
-  setIsSuccess
-  setIsFailure
+  setIsSuccess: (boolean) => void
+  setIsFailure: (boolean) => void
   inputType: "phones" | "emails"
 }
 
