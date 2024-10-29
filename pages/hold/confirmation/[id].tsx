@@ -14,8 +14,7 @@ import ExternalLink from "../../../src/components/Links/ExternalLink/ExternalLin
 // import HoldItemDetails from "../../../src/components/HoldPages/HoldItemDetails"
 
 export default function HoldConfirmationPage() {
-  // TODO: Add real title
-  const metadataTitle = `Hold request | ${SITE_NAME}`
+  const metadataTitle = `Request Confirmation | ${SITE_NAME}`
   return (
     <>
       <Head>

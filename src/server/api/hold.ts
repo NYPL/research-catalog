@@ -17,7 +17,6 @@ import {
 } from "../../utils/locationUtils"
 
 import { appConfig } from "../../config/config"
-import { BASE_URL } from "../../config/constants"
 import logger from "../../../logger"
 
 /**

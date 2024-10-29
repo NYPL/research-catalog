@@ -223,6 +223,7 @@ export async function getServerSideProps({ params, req, res }) {
     const bib = new Bib(discoveryBibResult)
     const item = new Item(discoveryItemResult, bib)
 
+    // Redirect if item has aeonUrl
     if (item.aeonUrl) {
       return {
         redirect: {
