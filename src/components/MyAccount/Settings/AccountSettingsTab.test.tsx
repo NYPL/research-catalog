@@ -106,7 +106,7 @@ describe("AccountSettingsTab", () => {
       const dropdowns = screen.getAllByRole("combobox")
       expect(dropdowns).toHaveLength(2)
       // save changes
-      await userEvent.click(screen.getByText("Save Changes"))
+      await userEvent.click(screen.getByText("Save changes"))
       expect(
         screen.queryByText("Your account settings were successfully updated.", {
           exact: false,
@@ -124,7 +124,7 @@ describe("AccountSettingsTab", () => {
       renderWithPatronProvider(myAccountPatron)
 
       await userEvent.click(screen.getByText("Edit account settings"))
-      await userEvent.click(screen.getByText("Save Changes"))
+      await userEvent.click(screen.getByText("Save changes"))
 
       expect(
         screen.queryByText("We were unable to update your account settings.", {
@@ -144,7 +144,7 @@ describe("AccountSettingsTab", () => {
       // open account settings
       await userEvent.click(screen.getByText("Edit account settings"))
       const saveButton = screen
-        .getByText("Save Changes", { exact: false })
+        .getByText("Save changes", { exact: false })
         .closest("button")
       expect(saveButton).not.toBeDisabled()
       // confirm patron has email ("z") selected
@@ -158,7 +158,7 @@ describe("AccountSettingsTab", () => {
       expect(saveButton).toBeDisabled()
       fireEvent.change(emailField, { target: { value: "email@email" } })
       expect(saveButton).not.toBeDisabled()
-      await userEvent.click(screen.getByText("Save Changes"))
+      await userEvent.click(screen.getByText("Save changes"))
       await userEvent.click(screen.getAllByText("OK")[0])
     })
     it("prevents users from submitting empty fields after changing notification preference", async () => {
@@ -170,7 +170,7 @@ describe("AccountSettingsTab", () => {
       // open account settings
       await userEvent.click(screen.getByText("Edit account settings"))
       const saveButton = screen
-        .getByText("Save Changes", { exact: false })
+        .getByText("Save changes", { exact: false })
         .closest("button")
       expect(saveButton).not.toBeDisabled()
       const notificationPreferenceSelector = screen.getByLabelText(

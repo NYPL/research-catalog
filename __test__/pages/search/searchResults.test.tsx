@@ -31,7 +31,7 @@ describe("Search Results page", () => {
         exact: false,
       })
       await userEvent.click(field)
-      await userEvent.click(screen.getByText("Apply Filters"))
+      await userEvent.click(screen.getByText("Apply filters"))
       // This was the only way to get this test to pass. waitFor was not in fact waiting, even with same timeout.
       setTimeout(() => {
         const resultsHeading = screen.getByTestId("search-results-heading")

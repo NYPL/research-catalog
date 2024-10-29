@@ -3,6 +3,7 @@ import type {
   Aggregation,
   Option,
 } from "../types/filterTypes"
+import { searchAggregations } from "../config/aggregations"
 
 class SearchResultsFilters {
   options: AggregationOption[]
@@ -11,6 +12,9 @@ class SearchResultsFilters {
   constructor(aggregationsResults: Aggregation[], field: Option) {
     this.labelTransformations = {
       "Greek, Modern (1453- )": "Greek, Modern (1453-present)",
+      Offsite: searchAggregations.buildingLocation.find(
+        (loc) => loc.value === "rc"
+      ).label,
     }
     this.options = aggregationsResults
       .find((f) => f.id === field.value)
