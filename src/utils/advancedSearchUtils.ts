@@ -1,5 +1,6 @@
 import type { SearchParams, SearchFormInputField } from "../types/searchTypes"
 import { searchAggregations } from "../config/aggregations"
+import { BASE_URL } from "../config/constants"
 
 export const textInputFields: SearchFormInputField[] = [
   { name: "q", label: "Keyword" },
@@ -38,8 +39,10 @@ export const materialTypeOptions = searchAggregations.materialType.sort(
 )
 
 export const buildGoBackHref = (referer) => {
-  const goBackEndpoint = referer.split("research-catalog")[1]
   if (!referer) return null
-  else if (!goBackEndpoint) return "/"
-  else return goBackEndpoint
+  const isNotRCUrl = !referer.includes(BASE_URL)
+  if (isNotRCUrl) return null
+  const goBackEndpoint = referer.split(BASE_URL)[1]
+  if (!goBackEndpoint) return "/"
+  return goBackEndpoint
 }

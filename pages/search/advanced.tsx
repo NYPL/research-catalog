@@ -14,9 +14,7 @@ import {
   HorizontalRule,
   Box,
   Banner,
-  Button,
   Icon,
-  Spacer,
 } from "@nypl/design-system-react-components"
 
 import Layout from "../../src/components/Layout/Layout"
@@ -131,7 +129,6 @@ export default function AdvancedSearch({ isAuthenticated, goBackHref }) {
       notificationRef.current.focus()
     }
   }, [alert])
-  console.log(goBackHref)
   return (
     <>
       <Head>
@@ -221,24 +218,26 @@ export default function AdvancedSearch({ isAuthenticated, goBackHref }) {
           </Flex>
           <HorizontalRule __css={{ margin: 0 }} />
           <Flex
-            justifyContent="space-between"
+            justifyContent={goBackHref ? "space-between" : "right"}
             flexDirection={{ base: "column-reverse", md: "row" }}
           >
-            <RCLink
-              display="flex"
-              href="/"
-              type="buttonSecondary"
-              id="back-to-search"
-            >
-              <Icon
-                name="arrow"
-                iconRotation="rotate90"
-                align="left"
-                size="small"
-                mr="xs"
-              />
-              Go back
-            </RCLink>
+            {goBackHref && (
+              <RCLink
+                display="flex"
+                href={goBackHref}
+                type="buttonSecondary"
+                id="back-to-search"
+              >
+                <Icon
+                  name="arrow"
+                  iconRotation="rotate90"
+                  align="left"
+                  size="small"
+                  mr="xs"
+                />
+                Go back
+              </RCLink>
+            )}
             <CancelSubmitButtonGroup
               formName="advanced-search"
               cancelHandler={handleClear}
