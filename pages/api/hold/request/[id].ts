@@ -31,6 +31,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { pickupLocation: pickupLocationFromResponse, requestId } =
       holdRequestResponse
 
+    if (!pickupLocationFromResponse || !requestId) {
+      throw new Error("Malformed response from hold request API")
+    }
+
     // Return a 200 status when the hold request is posted successfully via client-side fetch
     if (clientSidePost) {
       return res.status(200).json({
@@ -44,10 +48,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       `${BASE_URL}${PATHS.HOLD_CONFIRMATION}${holdId}?pickupLocation=${pickupLocationFromResponse}?requestId=${requestId}`
     )
   } catch (error) {
+    const { statusText } = error as Response
     return res.status(500).json({
-      title: "Error fetching DRB results",
+      title: "Error posting hold request to Discovery API",
       status: 500,
-      detail: error.message,
+      detail: statusText || error.message,
     })
   }
 }
