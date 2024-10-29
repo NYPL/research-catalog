@@ -3,7 +3,6 @@ import {
   Box,
   Button,
   HorizontalRule,
-  ButtonGroup,
   Form,
   Icon,
 } from "@nypl/design-system-react-components"
@@ -15,7 +14,6 @@ import { useDateForm } from "../../hooks/useDateForm"
 
 import styles from "../../../styles/components/Search.module.scss"
 import SearchResultsFilters from "../../models/SearchResultsFilters"
-import RefineSearchCheckBoxField from "./RefineSearchCheckboxField"
 import {
   collapseMultiValueQueryParams,
   buildFilterQuery,
@@ -25,8 +23,11 @@ import type {
   Aggregation,
   CollapsedMultiValueAppliedFilters,
 } from "../../types/filterTypes"
+import CancelSubmitButtonGroup from "./CancelSubmitButtonGroup"
+import SearchFilterCheckboxField from "./SearchFilterCheckboxField"
 
 const fields = [
+  { value: "buildingLocation", label: "Location" },
   { value: "materialType", label: "Format" },
   { value: "language", label: "Language" },
   { value: "dateAfter", label: "Start Year" },
@@ -72,11 +73,13 @@ const RefineSearch = ({
       const filterData = new SearchResultsFilters(aggregations, field)
       if (filterData.options) {
         return (
-          <RefineSearchCheckBoxField
-            setAppliedFilters={setAppliedFilters}
+          <SearchFilterCheckboxField
+            gridOptions={{ min: 2, max: 4 }}
+            handleCheckboxChange={(e) => handleCheckboxChange(field.value, e)}
             key={field.label}
-            field={field}
-            appliedFilters={appliedFilters[field.value]}
+            name={field.value}
+            label={field.label}
+            searchFormState={appliedFilters[field.value]}
             options={filterData.options}
           />
         )
@@ -129,6 +132,15 @@ const RefineSearch = ({
     // close the dialog
     toggleRefine()
   }
+  const handleCheckboxChange = (field: string, data: string[]) => {
+    // update the parent state to know about the updated selected values
+    setAppliedFilters((prevFilters) => {
+      return {
+        ...prevFilters,
+        [field]: data,
+      }
+    })
+  }
 
   return (
     <Box className={styles.refineSearchContainer}>
@@ -161,23 +173,12 @@ const RefineSearch = ({
               <Icon name="close" size="large" align="left" />
               Cancel
             </Button>
-            <ButtonGroup className={styles.re}>
-              <Button
-                data-testid="clear-filters-button"
-                onClick={handleClear}
-                id="reset-refine"
-                type="reset"
-                buttonType="secondary"
-                backgroundColor="ui.white"
-              >
-                <Icon name="actionDelete" align="left" size="large" />
-                Clear Filters
-              </Button>
-              <Button id="submit-refine" type="submit" buttonType="primary">
-                <Icon name="check" align="left" size="large" />
-                Apply Filters
-              </Button>
-            </ButtonGroup>
+            <CancelSubmitButtonGroup
+              formName="refine"
+              cancelHandler={handleClear}
+              submitLabel="Apply filters"
+              cancelLabel="Clear filters"
+            />
           </Box>
           <HorizontalRule m={0} />
           {filters}

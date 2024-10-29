@@ -1,4 +1,19 @@
 export const searchAggregations = {
+  buildingLocation: [
+    {
+      value: "sc",
+      label: "Schomburg Center - Research and Reference Division",
+    },
+    {
+      value: "ma",
+      label: "Stephen A. Schwarzman Building",
+    },
+    {
+      value: "rc",
+      label: "Offsite (Deliverable to NYPL research libraries)",
+    },
+    { value: "pa", label: "Performing Arts Library at Lincoln Center" },
+  ],
   materialType: [
     {
       value: "resourcetypes:txt",
