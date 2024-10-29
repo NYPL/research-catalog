@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Updated
 
 - Moved closedLocations from environment variables to appConfig (SCC-3759)
+- Better handling of bibs with no titles in SearchResultsBib model
 
 ## 1.3.5 2024-10-23
 
@@ -31,6 +32,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### [1.3.4] Hotfix 2024-10-17
 
 ### Fixed
+
+# <<<<<<< HEAD
+
+### [1.3.4] Hotfix 2024-10-17
+
+> > > > > > > f732651714e868475880d26d7ed00531ecf1314b
 
 - Fix 500 error caused by assumption in buildHoldingDetails that location field will be present in the bib holdings returned from discovery (SCC-4314)
 
