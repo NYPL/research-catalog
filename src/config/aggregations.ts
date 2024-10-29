@@ -10,7 +10,7 @@ export const searchAggregations = {
     },
     {
       value: "rc",
-      label: "Offsite - (Deliverable to NYPL research libraries)",
+      label: "Offsite (Deliverable to NYPL research libraries)",
     },
     { value: "pa", label: "Performing Arts Library at Lincoln Center" },
   ],
