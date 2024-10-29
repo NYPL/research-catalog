@@ -45,11 +45,7 @@ export const addLabelPropAndParseFilters = (
     const matchingFieldAggregation = aggregations.find(
       ({ field: aggregationField }) => aggregationField === appliedFilterField
     )
-    // There are some filters which don't return aggregations and are not used
-    // for applied filter fields (yet). This is mainly the unsupported holding
-    // location filter (eg filters[holdingLocation][0]=loc:scff2), which is
-    // used by devs to assist QA. See line 69 for explanation of date exclusion.
-    const ignoreFields = ["date", "holdingLocation"]
+    // See line 69 for explanation of date exclusion.
     if (!matchingFieldAggregation && !appliedFilterField.includes("date"))
       continue
     appliedFilterValuesWithLabels[appliedFilterField] = appliedFilterValues[

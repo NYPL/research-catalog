@@ -19,7 +19,7 @@ describe("Advanced Search Form", () => {
     )
   }
   afterEach(async () => {
-    await userEvent.click(screen.getByText("Clear Fields"))
+    await userEvent.click(screen.getByText("Clear fields"))
   })
   it("displays alert when no fields are submitted", () => {
     render(<AdvancedSearch isAuthenticated={true} />)
@@ -106,7 +106,7 @@ describe("Advanced Search Form", () => {
     await userEvent.type(titleInput, "il amore di pasta")
     await userEvent.type(subjectInput, "italian food")
 
-    await userEvent.click(screen.getByText("Clear Fields"))
+    await userEvent.click(screen.getByText("Clear fields"))
     expect(notatedMusic).not.toBeChecked()
 
     submit()
