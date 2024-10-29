@@ -14,6 +14,9 @@ import {
   HorizontalRule,
   Box,
   Banner,
+  Button,
+  Icon,
+  Spacer,
 } from "@nypl/design-system-react-components"
 
 import Layout from "../../src/components/Layout/Layout"
@@ -37,6 +40,7 @@ import SearchFilterCheckboxField from "../../src/components/RefineSearch/SearchF
 import CancelSubmitButtonGroup from "../../src/components/RefineSearch/CancelSubmitButtonGroup"
 import { materialTypeOptions } from "../../src/utils/advancedSearchUtils"
 import { searchAggregations } from "../../src/config/aggregations"
+import RCLink from "../../src/components/Links/RCLink/RCLink"
 
 export const defaultEmptySearchErrorMessage =
   "Error: please enter at least one field to submit an advanced search."
@@ -215,7 +219,22 @@ export default function AdvancedSearch({ isAuthenticated }) {
             </Flex>
           </Flex>
           <HorizontalRule __css={{ margin: 0 }} />
-          <Flex justifyContent="end">
+          <Flex justifyContent="space-between">
+            <RCLink
+              display="flex"
+              href="/"
+              type="buttonSecondary"
+              id="back-to-search"
+            >
+              <Icon
+                name="arrow"
+                iconRotation="rotate90"
+                align="left"
+                size="small"
+                mr="xs"
+              />
+              Go back
+            </RCLink>
             <CancelSubmitButtonGroup
               formName="advanced-search"
               cancelHandler={handleClear}
