@@ -40,15 +40,22 @@ import CancelSubmitButtonGroup from "../../src/components/RefineSearch/CancelSub
 import { materialTypeOptions } from "../../src/utils/advancedSearchUtils"
 import { searchAggregations } from "../../src/config/aggregations"
 import RCLink from "../../src/components/Links/RCLink/RCLink"
+import { String } from "aws-sdk/clients/batch"
 
 export const defaultEmptySearchErrorMessage =
   "Error: please enter at least one field to submit an advanced search."
-
+interface AdvancedSearchPropTypes {
+  isAuthenticated: boolean
+  goBackHref?: null | String
+}
 /**
  * The Advanced Search page is responsible for displaying the Advanced Search form fields and
  * buttons that clear the fields and submit a search request.
  */
-export default function AdvancedSearch({ isAuthenticated, goBackHref }) {
+export default function AdvancedSearch({
+  isAuthenticated,
+  goBackHref,
+}: AdvancedSearchPropTypes) {
   const metadataTitle = `Advanced Search | ${SITE_NAME}`
   const router = useRouter()
   const inputRef = useRef<TextInputRefType>()
