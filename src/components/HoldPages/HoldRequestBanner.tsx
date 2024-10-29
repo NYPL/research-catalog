@@ -13,7 +13,8 @@ interface HoldRequestBannerProps {
 }
 
 /**
- * The HoldRequestBanner renders the error notification for a failed response on the hold page.
+ * The HoldRequestBanner renders an error notification on the hold page that includes a button to
+ * open the feedback form, pre-populated with item metadata.
  */
 const HoldRequestBanner = ({
   item,
