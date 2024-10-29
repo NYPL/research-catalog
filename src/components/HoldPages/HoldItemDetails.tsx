@@ -11,7 +11,7 @@ interface HoldItemDetailsProps {
 }
 
 /**
- * The HoldRequestBanner renders the error notification for a failed response on the hold page.
+ * The HoldItemDetails renders item details on the hold page.
  */
 const HoldItemDetails = ({ item }: HoldItemDetailsProps) => {
   return (
