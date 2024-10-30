@@ -1,6 +1,6 @@
 import type { HTTPStatusCode } from "./appTypes"
 
-export interface DeliveryLocationsResponse {
+export interface DeliveryLocationsResult {
   deliveryLocations?: DeliveryLocation[]
   eddRequestable?: boolean
   status: HTTPStatusCode

@@ -3,7 +3,7 @@ import nyplApiClient from "../nyplApiClient"
 import type { HoldResponse } from "../../types/holdTypes"
 import type {
   DeliveryLocation,
-  DeliveryLocationsResponse,
+  DeliveryLocationsResult,
   DiscoveryLocationElement,
 } from "../../types/locationTypes"
 import type {
@@ -25,7 +25,7 @@ import logger from "../../../logger"
 export async function fetchDeliveryLocations(
   barcode: string,
   patronId: string
-): Promise<DeliveryLocationsResponse> {
+): Promise<DeliveryLocationsResult> {
   const deliveryEndpoint = `/request/deliveryLocationsByBarcode?barcodes[]=${barcode}&patronId=${patronId}`
 
   try {
