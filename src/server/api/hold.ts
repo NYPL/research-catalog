@@ -1,6 +1,6 @@
 import nyplApiClient from "../nyplApiClient"
 
-import type { HoldResponse } from "../../types/holdTypes"
+import type { HoldPostResult } from "../../types/holdTypes"
 import type {
   DeliveryLocation,
   DeliveryLocationsResult,
@@ -17,7 +17,6 @@ import {
 } from "../../utils/locationUtils"
 
 import { appConfig } from "../../config/config"
-import logger from "../../../logger"
 
 /**
  * Getter function for hold delivery locations.
@@ -74,11 +73,10 @@ export async function fetchDeliveryLocations(
  */
 export async function postHoldRequest(
   holdRequestParams: HoldRequestParams
-): Promise<HoldResponse> {
+): Promise<HoldPostResult> {
   const { itemId, patronId, source, pickupLocation } = holdRequestParams
 
   // Remove non-numeric characters from item ID
-  // TODO: This comes from DFE, is this still necessary?
   const itemIdNumeric = itemId.replace(/\D/g, "")
 
   const holdPostParams: DiscoveryHoldPostParams = {
@@ -92,7 +90,7 @@ export async function postHoldRequest(
     numberOfCopies: 1,
   }
 
-  logger.info(
+  console.log(
     "Making hold request in postHoldRequest server function",
     holdPostParams
   )
@@ -103,7 +101,7 @@ export async function postHoldRequest(
     const { id: requestId } = holdPostResult.data
 
     if (!requestId) {
-      logger.error(
+      console.log(
         "postHoldRequest failed, no id returned from Discovery API",
         holdPostResult
       )
@@ -118,7 +116,7 @@ export async function postHoldRequest(
       requestId,
     }
   } catch (error) {
-    logger.error(
+    console.log(
       `Error posting hold request in postHoldRequest server function, itemId: ${itemId}`,
       error.message
     )

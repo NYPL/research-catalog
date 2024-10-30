@@ -8,7 +8,7 @@ export interface HoldRequestParams {
   pickupLocation: NYPLocationKey | "edd"
 }
 
-export interface HoldResponse {
+export interface HoldPostResult {
   status: HTTPStatusCode
   pickupLocation?: NYPLocationKey | "edd"
   requestId?: string
