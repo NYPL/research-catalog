@@ -234,7 +234,6 @@ export async function getServerSideProps({ params, req, res }) {
 
     const { deliveryLocations, status: locationStatus } =
       await fetchDeliveryLocations(item.barcode, patronId)
-    console.log("deliveryLocations", deliveryLocations)
 
     if (locationStatus !== 200) {
       throw new Error(

@@ -13,7 +13,7 @@ import initializePatronTokenAuth, {
   doRedirectBasedOnNyplAccountRedirects,
 } from "../../../src/server/auth"
 import { fetchBib } from "../../../src/server/api/bib"
-import { bibWithItems } from "../../fixtures/bibFixtures"
+import { bibWithItems, bibWithSingleAeonItem } from "../../fixtures/bibFixtures"
 import { BASE_URL, PATHS, NYPL_LOCATIONS } from "../../../src/config/constants"
 import { fetchDeliveryLocations } from "../../../src/server/api/hold"
 
@@ -131,6 +131,31 @@ describe("Hold Request page", () => {
         "Set-Cookie",
         "nyplAccountRedirects=1; Max-Age=10; path=/; domain=.nypl.org;",
       ])
+    })
+  })
+  describe("aeon redirect handling", () => {
+    beforeEach(() => {
+      ;(initializePatronTokenAuth as jest.Mock).mockResolvedValue({
+        isTokenValid: true,
+        errorCode: null,
+        decodedPatron: { sub: "123" },
+      })
+      ;(fetchBib as jest.Mock).mockResolvedValue({
+        discoveryBibResult: bibWithSingleAeonItem.resource,
+        status: 200,
+      })
+    })
+
+    it("redirects to aeonUrl when present in the fetched item", async () => {
+      const responseWithAeonRedirect = await getServerSideProps({
+        params: { id },
+        res: mockRes,
+        req: mockReq,
+      })
+      expect(responseWithAeonRedirect.redirect).toStrictEqual({
+        destination: bibWithSingleAeonItem.resource.items[0].aeonUrl[0],
+        permanent: false,
+      })
     })
   })
   describe("Hold Request page UI", () => {
