@@ -6,16 +6,20 @@ import userEvent from "@testing-library/user-event"
 import AdvancedSearch, {
   defaultEmptySearchErrorMessage,
 } from "../../../pages/search/advanced"
+import { searchAggregations } from "../../../src/config/aggregations"
 
 // Mock next router
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
 describe("Advanced Search Form", () => {
   const submit = () => {
-    fireEvent(screen.getByText("Submit"), new MouseEvent("click"))
+    fireEvent(
+      screen.getByTestId("submit-advanced-search-button"),
+      new MouseEvent("click")
+    )
   }
   afterEach(async () => {
-    await userEvent.click(screen.getByText("Clear"))
+    await userEvent.click(screen.getByText("Clear fields"))
   })
   it("displays alert when no fields are submitted", () => {
     render(<AdvancedSearch isAuthenticated={true} />)
@@ -73,6 +77,15 @@ describe("Advanced Search Form", () => {
       "/search?q=&filters%5BmaterialType%5D%5B0%5D=resourcetypes%3Anot&filters%5BmaterialType%5D%5B1%5D=resourcetypes%3Acar"
     )
   })
+  it("can check location checkboxes", async () => {
+    render(<AdvancedSearch isAuthenticated={true} />)
+    const location = searchAggregations.buildingLocation[0]
+    await userEvent.click(screen.getByLabelText(location.label))
+    submit()
+    expect(mockRouter.asPath).toBe(
+      `/search?q=&filters%5BbuildingLocation%5D%5B0%5D=${location.value}`
+    )
+  })
 
   it("can clear the form", async () => {
     render(<AdvancedSearch isAuthenticated={true} />)
@@ -93,7 +106,7 @@ describe("Advanced Search Form", () => {
     await userEvent.type(titleInput, "il amore di pasta")
     await userEvent.type(subjectInput, "italian food")
 
-    await userEvent.click(screen.getByText("Clear"))
+    await userEvent.click(screen.getByText("Clear fields"))
     expect(notatedMusic).not.toBeChecked()
 
     submit()

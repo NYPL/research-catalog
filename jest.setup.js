@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 import "@testing-library/jest-dom"
-
+import { configure } from "@testing-library/dom"
 // The scrollIntoView function is necessary for the Tabs component.
 window.HTMLElement.prototype.scrollIntoView = jest.fn()
 
