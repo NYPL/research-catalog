@@ -10,7 +10,11 @@ export const searchAggregations = {
     },
     {
       value: "rc",
-      label: "Offsite - Deliverable to NYPL research libraries",
+      label: (
+        <>
+          Offsite - <i>Deliverable to NYPL research Libraries</i>
+        </>
+      ),
     },
     {
       value: "pa",

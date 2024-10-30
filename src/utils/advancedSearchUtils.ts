@@ -1,5 +1,5 @@
 import type { SearchParams, SearchFormInputField } from "../types/searchTypes"
-import { searchAggregations } from "../config/aggregations"
+import { searchAggregations } from "../config/aggregations.tsx"
 import { BASE_URL } from "../config/constants"
 
 export const textInputFields: SearchFormInputField[] = [

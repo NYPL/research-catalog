@@ -6,7 +6,7 @@ import userEvent from "@testing-library/user-event"
 import AdvancedSearch, {
   defaultEmptySearchErrorMessage,
 } from "../../../pages/search/advanced"
-import { searchAggregations } from "../../../src/config/aggregations"
+import { searchAggregations } from "../../../src/config/aggregations.tsx"
 
 // Mock next router
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
