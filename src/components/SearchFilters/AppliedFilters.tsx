@@ -25,6 +25,10 @@ const AppliedFilters = ({ aggregations }: { aggregations: Aggregation[] }) => {
     appliedFilters
   )
 
+  // this type cast is happening because Option type had to be updated to
+  // account for Offsite's Element label. That label does
+  // not pass thru this part of the code, but this is to placate the
+  // compiler.
   const tagSetData = buildTagsetData(
     appliedFiltersWithLabels
   ) as TagSetFilterDataProps[]
