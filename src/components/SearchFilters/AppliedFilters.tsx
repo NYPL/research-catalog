@@ -25,7 +25,9 @@ const AppliedFilters = ({ aggregations }: { aggregations: Aggregation[] }) => {
     appliedFilters
   )
 
-  const tagSetData = buildTagsetData(appliedFiltersWithLabels)
+  const tagSetData = buildTagsetData(
+    appliedFiltersWithLabels
+  ) as TagSetFilterDataProps[]
   const handleRemove = (tag: TagSetFilterDataProps) => {
     if (tag.label === "Clear filters") {
       router.push({
