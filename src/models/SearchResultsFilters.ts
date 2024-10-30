@@ -3,7 +3,7 @@ import type {
   Aggregation,
   Option,
 } from "../types/filterTypes"
-import { searchAggregations } from "../config/aggregations.tsx"
+import { searchAggregations } from "../config/aggregations"
 
 class SearchResultsFilters {
   options: AggregationOption[]

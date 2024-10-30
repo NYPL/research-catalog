@@ -38,7 +38,7 @@ import DateForm from "../../src/components/SearchFilters/DateForm"
 import SearchFilterCheckboxField from "../../src/components/RefineSearch/SearchFilterCheckboxField"
 import CancelSubmitButtonGroup from "../../src/components/RefineSearch/CancelSubmitButtonGroup"
 import { materialTypeOptions } from "../../src/utils/advancedSearchUtils"
-import { searchAggregations } from "../../src/config/aggregations.tsx"
+import { searchAggregations } from "../../src/config/aggregations"
 import RCLink from "../../src/components/Links/RCLink/RCLink"
 
 export const defaultEmptySearchErrorMessage =
