@@ -10,14 +10,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add server side delivery location fetch and location utils (SCC-3759)
+- Add holding location filters to refine search and advanced search panels
+- Add go back button to advanced search
 
 ### Updated
 
 - Better handling of bibs with no titles in SearchResultsBib model
 - Moved closedLocations from environment variables to appConfig (SCC-3759)
 - Create reusable save/cancel button group
-- Add holding location filters to refine search and advanced search panels
-- Add go back button to advanced search
 - Extract checkbox groups from refine search and advanced search
 
 ## [1.3.5] 2024-10-23
