@@ -10,10 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add server side delivery location fetch and location utils (SCC-3759)
-- Add sever-side hold request posting function (SCC-3759)
 - Add holding location filters to refine search and advanced search panels
 - Add go back button to advanced search
-- Add hold request post API endpoint and call on hold request submit (SCC-4330)
 
 ### Updated
 
