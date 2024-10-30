@@ -60,6 +60,7 @@ export default function HoldRequestPage({
 
   // Initialize alert to true if item is not available. This will show the error banner.
   const [alert, setAlert] = useState(!item.isAvailable)
+  const [errorDetail, setErrorDetail] = useState("")
   const [formPosting, setFormPosting] = useState(false)
   const bannerContainerRef = useRef<HTMLDivElement>()
 
@@ -95,24 +96,26 @@ export default function HoldRequestPage({
           responseJson.error
         )
         setAlert(true)
+        setErrorDetail(responseJson?.error?.detail || "")
         setFormPosting(false)
         return
       }
       const { pickupLocation: pickupLocationFromResponse, requestId } =
         responseJson
 
+      setFormPosting(false)
+
       // Success state
       await router.push(
         `${PATHS.HOLD_CONFIRMATION}/${holdId}?pickupLocation=${pickupLocationFromResponse}&requestId=${requestId}`
       )
-      setFormPosting(false)
     } catch (error) {
       console.error(
         "HoldRequestPage: Error in hold request api response",
         error
       )
-      setAlert(true)
       setFormPosting(false)
+      setAlert(true)
     }
   }
 
@@ -143,6 +146,7 @@ export default function HoldRequestPage({
                   ? "This item is currently unavailable"
                   : "We were unable to process your request at this time"
               }
+              errorDetail={errorDetail}
             />
           )}
         </Box>

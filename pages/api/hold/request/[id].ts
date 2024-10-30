@@ -48,6 +48,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     )
   } catch (error) {
     const { statusText } = error as Response
+
     return res.status(500).json({
       title: "Error posting hold request to Discovery API",
       status: 500,
