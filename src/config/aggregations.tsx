@@ -18,7 +18,7 @@ export const searchAggregations = {
     },
     {
       value: "pa",
-      label: "Library for the Performing Arts",
+      label: "The New York Public Library for the Performing Arts",
     },
   ],
   materialType: [

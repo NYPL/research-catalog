@@ -38,7 +38,7 @@ const SearchFilterCheckboxField = ({
   }
 
   const checkboxes = options.map(({ value, label, count }) => {
-    const labelCount = count ? `(${count})` : ""
+    const labelCount = count ? ` (${count})` : ""
 
     return (
       <Checkbox
@@ -47,7 +47,8 @@ const SearchFilterCheckboxField = ({
         value={value}
         labelText={
           <>
-            {label} {labelCount}
+            {label}
+            {labelCount}
           </>
         }
       />
