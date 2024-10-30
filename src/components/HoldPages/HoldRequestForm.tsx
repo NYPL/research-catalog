@@ -46,7 +46,7 @@ const HoldRequestForm = ({
           name="pickupLocation"
           id="pickup-location"
           labelText="Pickup location"
-          defaultValue={deliveryLocations[0].value}
+          defaultValue={deliveryLocations?.[0]?.value}
           isRequired
           showLabel={false}
           mb="xs"

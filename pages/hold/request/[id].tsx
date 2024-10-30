@@ -74,7 +74,6 @@ export default function HoldRequestPage({
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-
     try {
       setFormPosting(true)
       const { patronId, source, pickupLocation } = e.target
@@ -223,7 +222,7 @@ export async function getServerSideProps({ params, req, res }) {
     const bib = new Bib(discoveryBibResult)
     const item = new Item(discoveryItemResult, bib)
 
-    // Redirect if item has aeonUrl
+    // Redirect if to aeonUrl if present in the item response
     if (item.aeonUrl) {
       return {
         redirect: {
@@ -235,6 +234,7 @@ export async function getServerSideProps({ params, req, res }) {
 
     const { deliveryLocations, status: locationStatus } =
       await fetchDeliveryLocations(item.barcode, patronId)
+    console.log("deliveryLocations", deliveryLocations)
 
     if (locationStatus !== 200) {
       throw new Error(

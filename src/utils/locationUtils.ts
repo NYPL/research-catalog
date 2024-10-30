@@ -60,7 +60,7 @@ function getLocationKey(
   }
 }
 
-const getLocationSierraId = (
+export const getLocationSierraId = (
   locationElement: DiscoveryLocationElement
 ): string | null =>
   locationElement["@id"] ? locationElement["@id"].replace("loc:", "") : null

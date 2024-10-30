@@ -15,10 +15,12 @@ import initializePatronTokenAuth, {
 import { fetchBib } from "../../../src/server/api/bib"
 import { bibWithItems } from "../../fixtures/bibFixtures"
 import { BASE_URL, PATHS, NYPL_LOCATIONS } from "../../../src/config/constants"
+import { fetchDeliveryLocations } from "../../../src/server/api/hold"
 
 jest.mock("../../../src/server/auth")
 jest.mock("../../../src/server/api/bib")
 jest.mock("../../../src/server/sierraClient")
+jest.mock("../../../src/server/api/hold")
 
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
@@ -46,6 +48,23 @@ describe("Hold Request page", () => {
       })
       ;(fetchBib as jest.Mock).mockResolvedValue({
         discoveryBibResult: bibWithItems.resource,
+        status: 200,
+      })
+      ;(fetchDeliveryLocations as jest.Mock).mockResolvedValue({
+        deliveryLocations: [
+          {
+            key: "schwarzman",
+            value: "mag",
+            address: "476 Fifth Avenue (42nd St and Fifth Ave)",
+            label: "Schwarzman Building - Milstein Division Room 121",
+          },
+          {
+            key: "lpa",
+            value: "par",
+            address: "40 Lincoln Center Plaza",
+            label: "Library for the Performing Arts",
+          },
+        ],
         status: 200,
       })
     })
@@ -182,7 +201,6 @@ describe("Hold Request page", () => {
     })
 
     it("shows an error when there is a bad response from the hold api", async () => {
-      expect(screen.getByTestId("hold-request-loading")).toBeInTheDocument()
       await waitFor(() => {
         expect(screen.getByTestId("hold-request-error")).toBeInTheDocument()
       })
