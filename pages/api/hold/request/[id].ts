@@ -18,8 +18,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     const [, itemId] = holdId.split("-")
 
     const body = await req.body
-    const { patronId, source, pickupLocation, clientSidePost } =
-      JSON.parse(body)
+    const { patronId, source, pickupLocation, jsEnabled } = JSON.parse(body)
 
     const holdRequestResponse = await postHoldRequest({
       itemId,
@@ -35,8 +34,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       throw new Error("Malformed response from hold request API")
     }
 
-    // Return a 200 status when the hold request is posted successfully via client-side fetch
-    if (clientSidePost) {
+    // Return a 200 status when the hold request is posted successfully via JS fetch
+    if (jsEnabled) {
       return res.status(200).json({
         pickupLocation: pickupLocationFromResponse,
         requestId,

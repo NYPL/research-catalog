@@ -84,7 +84,7 @@ export default function HoldRequestPage({
           patronId: patronId.value,
           source: source.value,
           pickupLocation: pickupLocation.value,
-          clientSidePost: true,
+          jsEnabled: true,
         }),
       })
       const responseJson = await response.json()
