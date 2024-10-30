@@ -210,6 +210,7 @@ export default function AdvancedSearch({
                   handleCheckboxChange("buildingLocation", e)
                 }
                 searchFormState={searchFormState["filters"].buildingLocation}
+                gridOptions={{ min: 1, max: 1 }}
               />
               <SearchFilterCheckboxField
                 options={materialTypeOptions}

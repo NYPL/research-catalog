@@ -2,7 +2,7 @@ export const searchAggregations = {
   buildingLocation: [
     {
       value: "sc",
-      label: "Schomburg Center - Research and Reference Division",
+      label: "Schomburg Center for Research in Black Culture",
     },
     {
       value: "ma",
@@ -10,9 +10,12 @@ export const searchAggregations = {
     },
     {
       value: "rc",
-      label: "Offsite (Deliverable to NYPL research libraries)",
+      label: "Offsite - Deliverable to NYPL research libraries",
     },
-    { value: "pa", label: "Performing Arts Library at Lincoln Center" },
+    {
+      value: "pa",
+      label: "Library for the Performing Arts",
+    },
   ],
   materialType: [
     {

@@ -12,17 +12,22 @@ class SearchResultsFilters {
   constructor(aggregationsResults: Aggregation[], field: Option) {
     this.labelTransformations = {
       "Greek, Modern (1453- )": "Greek, Modern (1453-present)",
-      Offsite: searchAggregations.buildingLocation.find(
-        (loc) => loc.value === "rc"
-      ).label,
     }
+
     this.options = aggregationsResults
       .find((f) => f.id === field.value)
       ?.values.map((option) => ({
         ...option,
-        label: this.labelTransformations[option.label] || option.label,
+        label: this.getLabel(option, field),
       }))
     this.field = field.value
+  }
+  getLabel(option, field) {
+    if (field.value === "buildingLocation") {
+      return searchAggregations.buildingLocation.find(
+        (loc) => loc.value === option.value
+      ).label
+    } else return this.labelTransformations[option.label] || option.label
   }
 }
 
