@@ -156,7 +156,7 @@ const RefineSearch = ({
           id="refine-search"
           buttonType="secondary"
           backgroundColor="ui.white"
-          className={styles.refineSearchButton}
+          mt="xs"
         >
           <Icon />
           Filter results

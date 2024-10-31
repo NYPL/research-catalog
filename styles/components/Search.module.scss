@@ -35,15 +35,6 @@
   }
 }
 
-.refineSearchButton {
-  width: 100%;
-
-  @media screen and (min-width: 600px) {
-    width: auto;
-    margin-top: var(--nypl-space-xs);
-  }
-}
-
 .refineSearchContainer {
   background-color: var(--nypl-colors-ui-bg-default);
   width: fit-content;
