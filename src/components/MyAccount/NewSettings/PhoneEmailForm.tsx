@@ -81,6 +81,8 @@ const PhoneEmailForm = ({
   const handleRemove = (index) => {
     const updatedInputs = tempInputs.filter((_, i) => i !== index)
     setTempInputs(updatedInputs)
+
+    // Immediately revalidate remaining inputs.
     const hasInvalidInput = updatedInputs.some(
       (input) => !validateInput(input, updatedInputs)
     )
@@ -90,6 +92,8 @@ const PhoneEmailForm = ({
   const handleAdd = () => {
     const updatedInputs = [...tempInputs, ""]
     setTempInputs(updatedInputs)
+
+    // Immediately revalidate remaining inputs.
     const hasInvalidInput = updatedInputs.some(
       (input) => !validateInput(input, updatedInputs)
     )
