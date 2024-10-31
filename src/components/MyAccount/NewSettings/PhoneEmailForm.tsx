@@ -39,16 +39,21 @@ const PhoneEmailForm = ({
 
   const [tempInputs, setTempInputs] = useState([...inputs])
 
+  const formUtils = {
+    regex: isEmail ? /^[^@]+@[^@]+\.[^@]+$/ : /^\+?[1-9]\d{1,14}$/,
+    labelText: `Update ${inputType}`,
+    addButtonLabel: isEmail ? "+ Add an email address" : "+ Add a phone number",
+    errorMessage: `Please enter a valid and unique ${
+      isEmail ? "email address" : "phone number"
+    }.`,
+    icon: `communication${isEmail ? "Email" : "Call"}`,
+    inputLabel: isEmail ? "Email" : "Phone",
+  }
+
   const validateInput = (currentInput, inputs) => {
     const isInputUnique =
       inputs.filter((input) => input === currentInput).length === 1
-    if (isEmail) {
-      const emailRegex = /^[^@]+@[^@]+\.[^@]+$/
-      return emailRegex.test(currentInput) && isInputUnique
-    } else {
-      const phoneRegex = /^\+?[1-9]\d{1,14}$/
-      return phoneRegex.test(currentInput) && isInputUnique
-    }
+    return formUtils.regex.test(currentInput) && isInputUnique
   }
 
   const handleInputChange = (e, index) => {
@@ -76,8 +81,6 @@ const PhoneEmailForm = ({
   const handleRemove = (index) => {
     const updatedInputs = tempInputs.filter((_, i) => i !== index)
     setTempInputs(updatedInputs)
-
-    // Immediately revalidate remaining inputs.
     const hasInvalidInput = updatedInputs.some(
       (input) => !validateInput(input, updatedInputs)
     )
@@ -87,8 +90,6 @@ const PhoneEmailForm = ({
   const handleAdd = () => {
     const updatedInputs = [...tempInputs, ""]
     setTempInputs(updatedInputs)
-
-    // Immediately revalidate remaining inputs.
     const hasInvalidInput = updatedInputs.some(
       (input) => !validateInput(input, updatedInputs)
     )
@@ -160,10 +161,7 @@ const PhoneEmailForm = ({
           alignItems="flex-start"
           width="100%"
         >
-          <SettingsLabel
-            icon={`communication${isEmail ? "Email" : "Call"}`}
-            text={isEmail ? "Email" : "Phone"}
-          />
+          <SettingsLabel icon={formUtils.icon} text={formUtils.inputLabel} />
           {isEditing ? (
             <Flex
               marginLeft={{ base: "l", lg: "unset" }}
@@ -186,12 +184,10 @@ const PhoneEmailForm = ({
                       value={input}
                       id={`${inputType}-text-input-${index}`}
                       key={index}
-                      labelText={`Update ${inputType}`}
+                      labelText={formUtils.labelText}
                       showLabel={false}
                       isInvalid={error && !validateInput(input, tempInputs)}
-                      invalidText={`Please enter a valid and unique ${
-                        isEmail ? "email address" : "phone number"
-                      }.`}
+                      invalidText={formUtils.errorMessage}
                       onChange={(e) => handleInputChange(e, index)}
                       isRequired
                       isClearable
@@ -199,12 +195,12 @@ const PhoneEmailForm = ({
                     />
                     {(!isEmail || index !== 0) && (
                       <Button
-                        aria-label={`Remove ${isEmail ? "email" : "phone"}`}
+                        aria-label={`Remove ${formUtils.inputLabel.toLowerCase()}`}
                         buttonType="text"
                         id="remove-input-btn"
                         onClick={() => handleRemove(index)}
                       >
-                        {" "}
+                        {""}
                         <Icon name="actionDelete" size="large" />
                       </Button>
                     )}
@@ -222,7 +218,7 @@ const PhoneEmailForm = ({
                   padding: "xxs",
                 }}
               >
-                {isEmail ? "+ Add an email address" : "+ Add a phone number"}
+                {formUtils.addButtonLabel}
               </Button>
             </Flex>
           ) : isEmail || tempInputs.length != 0 ? (
@@ -285,7 +281,7 @@ const PhoneEmailForm = ({
                 paddingLeft: { base: "m", md: "unset" },
               }}
             >
-              + Add a phone number
+              {formUtils.addButtonLabel}
             </Button>
           )}
 
@@ -302,5 +298,4 @@ const PhoneEmailForm = ({
     </>
   )
 }
-
 export default PhoneEmailForm
