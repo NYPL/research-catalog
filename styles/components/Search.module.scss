@@ -49,13 +49,9 @@
   justify-content: space-between;
 }
 
-.refineCheckboxGroup {
-  display: flex;
-  flex-wrap: wrap;
-}
-
 .refineSearchContainer {
   background-color: var(--nypl-colors-ui-bg-default);
+  width: fit-content;
 }
 .refineSearchInner {
   @include maxWidth;

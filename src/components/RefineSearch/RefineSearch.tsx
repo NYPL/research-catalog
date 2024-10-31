@@ -143,7 +143,11 @@ const RefineSearch = ({
   }
 
   return (
-    <Box className={styles.refineSearchContainer}>
+    <Box
+      mt={refineSearchClosed ? "-8" : 0}
+      alignSelf="left"
+      className={styles.refineSearchContainer}
+    >
       {refineSearchClosed ? (
         <Button
           ref={refineOrCancelRef}

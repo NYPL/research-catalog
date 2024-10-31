@@ -115,11 +115,7 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
             ".chakra-select__icon-wrapper": { "z-index": "999 !important" },
           }}
         />
-        <Flex
-          direction={{ base: "column", md: "row-reverse" }}
-          justifyContent="space-between"
-          mt="xs"
-        >
+        <Flex direction="column" justifyContent="space-between" mt="xs">
           <RCLink
             className={styles.advancedSearch}
             href="/search/advanced"
@@ -130,6 +126,7 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
           </RCLink>
           {displayRefineResults && (
             <RefineSearch
+              align="left"
               setAppliedFilters={setAppliedFilters}
               appliedFilters={appliedFilters}
               aggregations={aggregations}
