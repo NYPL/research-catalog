@@ -1,14 +1,6 @@
 export const searchAggregations = {
   buildingLocation: [
     {
-      value: "sc",
-      label: "Schomburg Center for Research in Black Culture",
-    },
-    {
-      value: "ma",
-      label: "Stephen A. Schwarzman Building",
-    },
-    {
       value: "rc",
       label: (
         <>
@@ -19,6 +11,14 @@ export const searchAggregations = {
     {
       value: "pa",
       label: "The New York Public Library for the Performing Arts",
+    },
+    {
+      value: "ma",
+      label: "Stephen A. Schwarzman Building",
+    },
+    {
+      value: "sc",
+      label: "Schomburg Center for Research in Black Culture",
     },
   ],
   materialType: [

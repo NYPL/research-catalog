@@ -205,7 +205,7 @@ export default function AdvancedSearch({
               <SearchFilterCheckboxField
                 options={searchAggregations.buildingLocation}
                 name="location"
-                label="Location"
+                label="Item location"
                 handleCheckboxChange={(e) =>
                   handleCheckboxChange("buildingLocation", e)
                 }

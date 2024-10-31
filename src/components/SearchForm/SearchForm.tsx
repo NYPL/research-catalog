@@ -121,7 +121,7 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
             isUnderlined={false}
             mb="xs"
           >
-            Advanced Search
+            Advanced search
           </RCLink>
           {displayRefineResults && (
             <RefineSearch
