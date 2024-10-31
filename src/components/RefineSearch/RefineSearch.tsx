@@ -1,5 +1,6 @@
 import type { TextInputRefType } from "@nypl/design-system-react-components"
 import {
+  Flex,
   Box,
   Button,
   HorizontalRule,
@@ -163,7 +164,7 @@ const RefineSearch = ({
       ) : (
         <Form id="refine-search" onSubmit={handleSubmit}>
           <HorizontalRule mb={0} mt="s" />
-          <Box className={styles.refineButtons}>
+          <Flex justifyContent="space-between">
             <Button
               onClick={toggleRefine}
               id="cancel-refine"
@@ -180,7 +181,7 @@ const RefineSearch = ({
               submitLabel="Apply filters"
               cancelLabel="Clear filters"
             />
-          </Box>
+          </Flex>
           <HorizontalRule m={0} />
           {filters}
         </Form>
