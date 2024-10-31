@@ -53,7 +53,9 @@
   background-color: var(--nypl-colors-ui-bg-default);
   width: fit-content;
 }
+
 .refineSearchInner {
-  @include maxWidth;
   padding-bottom: var(--nypl-space-l);
+  padding-left: 0;
+  padding-right: 0;
 }

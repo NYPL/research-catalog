@@ -126,7 +126,6 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
           </RCLink>
           {displayRefineResults && (
             <RefineSearch
-              align="left"
               setAppliedFilters={setAppliedFilters}
               appliedFilters={appliedFilters}
               aggregations={aggregations}

@@ -161,12 +161,8 @@ const RefineSearch = ({
           Filter results
         </Button>
       ) : (
-        <Form
-          className={styles.refineSearchInner}
-          id="refine-search"
-          onSubmit={handleSubmit}
-        >
-          <HorizontalRule mb={0} />
+        <Form id="refine-search" onSubmit={handleSubmit}>
+          <HorizontalRule mb={0} mt="s" />
           <Box className={styles.refineButtons}>
             <Button
               onClick={toggleRefine}
