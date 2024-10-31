@@ -17,6 +17,7 @@ import { SITE_NAME, BASE_URL, PATHS } from "../../../../src/config/constants"
 import useLoading from "../../../../src/hooks/useLoading"
 
 import { fetchBib } from "../../../../src/server/api/bib"
+import { fetchDeliveryLocations } from "../../../../src/server/api/hold"
 
 import initializePatronTokenAuth, {
   doRedirectBasedOnNyplAccountRedirects,
@@ -34,6 +35,7 @@ interface EDDRequestPropsType {
   discoveryItemResult: DiscoveryItemResult
   patronId: string
   isAuthenticated?: boolean
+  eddRequestable?: boolean
 }
 
 /**
@@ -44,6 +46,7 @@ export default function EDDRequestPage({
   discoveryItemResult,
   patronId,
   isAuthenticated,
+  eddRequestable = false,
 }: EDDRequestPropsType) {
   const metadataTitle = `Item Request | ${SITE_NAME}`
 
@@ -51,9 +54,10 @@ export default function EDDRequestPage({
   const item = new Item(discoveryItemResult, bib)
 
   const holdId = `${item.bibId}-${item.id}`
+  const isEddAvailable = eddRequestable && item.isAvailable
 
   // Initialize alert to true if item is not available. This will show the error banner.
-  const [alert, setAlert] = useState(!item.isAvailable)
+  const [alert, setAlert] = useState(!isEddAvailable)
   const [errorDetail, setErrorDetail] = useState("")
   const [formPosting, setFormPosting] = useState(false)
   const bannerContainerRef = useRef<HTMLDivElement>()
@@ -132,8 +136,16 @@ export default function EDDRequestPage({
           {alert && (
             <HoldRequestBanner
               item={item}
-              heading={""}
-              errorMessage={""}
+              heading={
+                !isEddAvailable
+                  ? "Electronic delivery unavailable"
+                  : "Request failed"
+              }
+              errorMessage={
+                !isEddAvailable
+                  ? "Electronic delivery options for this item are currently unavailable."
+                  : "We were unable to process your request at this time"
+              }
               errorDetail={""}
             />
           )}
@@ -147,7 +159,7 @@ export default function EDDRequestPage({
             showImage={false}
             data-testid="hold-request-loading"
           />
-        ) : item.isAvailable ? (
+        ) : isEddAvailable ? (
           <EDDRequestForm
             handleSubmit={handleSubmit}
             holdId={holdId}
@@ -218,12 +230,22 @@ export async function getServerSideProps({ params, req, res }) {
       }
     }
 
+    const { eddRequestable, status: locationStatus } =
+      await fetchDeliveryLocations(item.barcode, patronId)
+
+    if (locationStatus !== 200) {
+      throw new Error(
+        "EDDRequestPage: Error fetching edd in getServerSideProps"
+      )
+    }
+
     return {
       props: {
         discoveryBibResult,
         discoveryItemResult,
         patronId,
         isAuthenticated,
+        eddRequestable,
       },
     }
   } catch (error) {
