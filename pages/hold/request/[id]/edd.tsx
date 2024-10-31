@@ -3,21 +3,22 @@ import { useState, useRef, useEffect } from "react"
 import { useRouter } from "next/router"
 import {
   Heading,
+  Text,
   Box,
   SkeletonLoader,
 } from "@nypl/design-system-react-components"
 
 import Layout from "../../../../src/components/Layout/Layout"
 
-import HoldRequestForm from "../../../../src/components/HoldPages/HoldRequestForm"
+import EDDRequestForm from "../../../../src/components/HoldPages/EDDRequestForm"
 import HoldRequestBanner from "../../../../src/components/HoldPages/HoldRequestBanner"
 import HoldItemDetails from "../../../../src/components/HoldPages/HoldItemDetails"
+import ExternalLink from "../../../../src/components/Links/ExternalLink/ExternalLink"
 
 import { SITE_NAME, BASE_URL, PATHS } from "../../../../src/config/constants"
 import useLoading from "../../../../src/hooks/useLoading"
 
 import { fetchBib } from "../../../../src/server/api/bib"
-import { fetchDeliveryLocations } from "../../../../src/server/api/hold"
 
 import initializePatronTokenAuth, {
   doRedirectBasedOnNyplAccountRedirects,
@@ -29,12 +30,10 @@ import Item from "../../../../src/models/Item"
 
 import type { DiscoveryBibResult } from "../../../../src/types/bibTypes"
 import type { DiscoveryItemResult } from "../../../../src/types/itemTypes"
-import type { DeliveryLocation } from "../../../../src/types/locationTypes"
 
-interface HoldRequestPropsType {
+interface EDDRequestPropsType {
   discoveryBibResult: DiscoveryBibResult
   discoveryItemResult: DiscoveryItemResult
-  deliveryLocations: DeliveryLocation[]
   patronId: string
   isAuthenticated?: boolean
 }
@@ -45,7 +44,6 @@ interface HoldRequestPropsType {
 export default function EDDRequestPage({
   discoveryBibResult,
   discoveryItemResult,
-  deliveryLocations,
   patronId,
   isAuthenticated,
 }: EDDRequestPropsType) {
@@ -153,11 +151,17 @@ export default function EDDRequestPage({
           />
         ) : item.isAvailable ? (
           <>
-            <Heading level="h3" size="heading4" mb="l">
-              Choose a pickup location
+            <Heading level="h3" size="heading4" mb="xs">
+              Required information
             </Heading>
-            <HoldRequestForm
-              deliveryLocations={deliveryLocations}
+            <Text noSpace>
+              You may request one chapter, one article, around 10% of work, or
+              50 pages for public domain works.
+            </Text>
+            <ExternalLink href="https://www.nypl.org/research/services/scan-and-deliver">
+              Read more about this service
+            </ExternalLink>
+            <EDDRequestForm
               handleSubmit={handleSubmit}
               holdId={holdId}
               patronId={patronId}
@@ -228,20 +232,10 @@ export async function getServerSideProps({ params, req, res }) {
       }
     }
 
-    const { deliveryLocations, status: locationStatus } =
-      await fetchDeliveryLocations(item.barcode, patronId)
-
-    if (locationStatus !== 200) {
-      throw new Error(
-        "HoldRequestPage: Error fetching delivery locations in getServerSideProps"
-      )
-    }
-
     return {
       props: {
         discoveryBibResult,
         discoveryItemResult,
-        deliveryLocations,
         patronId,
         isAuthenticated,
       },
