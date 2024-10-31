@@ -1,5 +1,6 @@
 import {
   Box,
+  Flex,
   Icon,
   SearchBar,
   Text,
@@ -114,7 +115,11 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
             ".chakra-select__icon-wrapper": { "z-index": "999 !important" },
           }}
         />
-        <Box className={styles.auxSearchContainer}>
+        <Flex
+          direction={{ base: "column", md: "row-reverse" }}
+          justifyContent="space-between"
+          mt="xs"
+        >
           <RCLink
             className={styles.advancedSearch}
             href="/search/advanced"
@@ -130,7 +135,7 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
               aggregations={aggregations}
             />
           )}
-        </Box>
+        </Flex>
       </div>
     </div>
   )

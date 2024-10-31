@@ -11,6 +11,6 @@ describe("SearchResultsFilter model", () => {
         label: "Item location",
       }
     )
-    filters.options.map((f) => console.log(f.label))
+    // filters.options.map((f) => console.log(f.label))
   })
 })

@@ -1,10 +1,6 @@
 import { useRouter } from "next/router"
-import {
-  TagSet,
-  type TagSetFilterDataProps,
-} from "@nypl/design-system-react-components"
+import { type TagSetFilterDataProps } from "@nypl/design-system-react-components"
 
-import styles from "../../../styles/components/Search.module.scss"
 import {
   getQueryWithoutFilters,
   buildFilterQuery,
@@ -16,6 +12,7 @@ import {
   addLabelPropAndParseFilters,
 } from "./appliedFilterUtils"
 import type { Aggregation } from "../../types/filterTypes"
+import ActiveFilters from "../ItemFilters/ActiveFilters"
 
 const AppliedFilters = ({ aggregations }: { aggregations: Aggregation[] }) => {
   const router = useRouter()
@@ -56,12 +53,10 @@ const AppliedFilters = ({ aggregations }: { aggregations: Aggregation[] }) => {
 
   if (!tagSetData.length) return null
   return (
-    <TagSet
-      className={styles.filterTags}
+    <ActiveFilters
       onClick={handleRemove}
       tagSetData={tagSetData}
-      isDismissible={true}
-      type="filter"
+      filterName="search-results"
     />
   )
 }

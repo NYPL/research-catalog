@@ -9,16 +9,16 @@ export const searchAggregations = {
       label: "The New York Public Library for the Performing Arts",
     },
     {
+      value: "sc",
+      label: "Schomburg Center for Research in Black Culture",
+    },
+    {
       value: "rc",
       label: (
         <>
           Off-site - <i>Deliverable to NYPL research Libraries</i>
         </>
       ),
-    },
-    {
-      value: "sc",
-      label: "Schomburg Center for Research in Black Culture",
     },
   ],
   materialType: [
