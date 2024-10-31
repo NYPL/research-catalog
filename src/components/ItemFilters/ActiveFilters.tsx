@@ -1,9 +1,4 @@
-import {
-  Box,
-  TagSet,
-  Text,
-  type TagSetFilterDataProps,
-} from "@nypl/design-system-react-components"
+import { Box, TagSet, Text } from "@nypl/design-system-react-components"
 
 const ActiveFilters = ({ filterName, onClick, tagSetData }) => {
   return (
