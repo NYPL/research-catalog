@@ -3,7 +3,6 @@ import { useState, useRef, useEffect } from "react"
 import { useRouter } from "next/router"
 import {
   Heading,
-  Text,
   Box,
   SkeletonLoader,
 } from "@nypl/design-system-react-components"
@@ -13,7 +12,6 @@ import Layout from "../../../../src/components/Layout/Layout"
 import EDDRequestForm from "../../../../src/components/HoldPages/EDDRequestForm"
 import HoldRequestBanner from "../../../../src/components/HoldPages/HoldRequestBanner"
 import HoldItemDetails from "../../../../src/components/HoldPages/HoldItemDetails"
-import ExternalLink from "../../../../src/components/Links/ExternalLink/ExternalLink"
 
 import { SITE_NAME, BASE_URL, PATHS } from "../../../../src/config/constants"
 import useLoading from "../../../../src/hooks/useLoading"
@@ -150,24 +148,12 @@ export default function EDDRequestPage({
             data-testid="hold-request-loading"
           />
         ) : item.isAvailable ? (
-          <>
-            <Heading level="h3" size="heading4" mb="xs">
-              Required information
-            </Heading>
-            <Text noSpace>
-              You may request one chapter, one article, around 10% of work, or
-              50 pages for public domain works.
-            </Text>
-            <ExternalLink href="https://www.nypl.org/research/services/scan-and-deliver">
-              Read more about this service
-            </ExternalLink>
-            <EDDRequestForm
-              handleSubmit={handleSubmit}
-              holdId={holdId}
-              patronId={patronId}
-              source={item.source}
-            />
-          </>
+          <EDDRequestForm
+            handleSubmit={handleSubmit}
+            holdId={holdId}
+            patronId={patronId}
+            source={item.source}
+          />
         ) : null}
       </Layout>
     </>
