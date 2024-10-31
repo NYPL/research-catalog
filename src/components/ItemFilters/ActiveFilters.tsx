@@ -7,7 +7,7 @@ import {
 
 const ActiveFilters = ({ filterName, onClick, tagSetData }) => {
   return (
-    <Box display="flex" flexDirection={{ base: "column", md: "row" }} mb="m">
+    <Box display="flex" flexDirection={{ base: "column", md: "row" }} mb="l">
       <Text
         display="block"
         fontSize="desktop.body.body2"
