@@ -55,7 +55,7 @@ export default function AdvancedSearch({
   isAuthenticated,
   goBackHref,
 }: AdvancedSearchPropTypes) {
-  const metadataTitle = `Advanced Search | ${SITE_NAME}`
+  const metadataTitle = `Advanced search | ${SITE_NAME}`
   const router = useRouter()
   const inputRef = useRef<TextInputRefType>()
   const notificationRef = useRef<HTMLDivElement>()
@@ -153,7 +153,7 @@ export default function AdvancedSearch({
         <Box tabIndex={-1} ref={notificationRef}>
           {alert && <Banner type="negative" content={errorMessage} mb="s" />}
         </Box>
-        <Heading level="h2">Advanced Search</Heading>
+        <Heading level="h2">Advanced search</Heading>
         <Form
           id="advancedSearchForm"
           // We are using a post request on advanced search when JS is disabled

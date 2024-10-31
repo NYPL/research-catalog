@@ -27,7 +27,7 @@ import CancelSubmitButtonGroup from "./CancelSubmitButtonGroup"
 import SearchFilterCheckboxField from "./SearchFilterCheckboxField"
 
 const fields = [
-  { value: "buildingLocation", label: "Location" },
+  { value: "buildingLocation", label: "Item location" },
   { value: "materialType", label: "Format" },
   { value: "language", label: "Language" },
   { value: "dateAfter", label: "Start Year" },
@@ -153,7 +153,8 @@ const RefineSearch = ({
           backgroundColor="ui.white"
           className={styles.refineSearchButton}
         >
-          Refine Search
+          <Icon />
+          Filter results
         </Button>
       ) : (
         <Form

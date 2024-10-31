@@ -1,20 +1,20 @@
 export const searchAggregations = {
   buildingLocation: [
     {
-      value: "rc",
-      label: (
-        <>
-          Offsite - <i>Deliverable to NYPL research Libraries</i>
-        </>
-      ),
+      value: "ma",
+      label: "Stephen A. Schwarzman Building",
     },
     {
       value: "pa",
       label: "The New York Public Library for the Performing Arts",
     },
     {
-      value: "ma",
-      label: "Stephen A. Schwarzman Building",
+      value: "rc",
+      label: (
+        <>
+          Off-site - <i>Deliverable to NYPL research Libraries</i>
+        </>
+      ),
     },
     {
       value: "sc",
