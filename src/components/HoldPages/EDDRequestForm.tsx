@@ -13,7 +13,6 @@ import {
 import { debounce } from "underscore"
 
 import { BASE_URL, DEBOUNCE_INTERVAL } from "../../config/constants"
-import type { EDDRequestRequiredParams } from "../../types/holdTypes"
 
 import ExternalLink from "../Links/ExternalLink/ExternalLink"
 
@@ -23,7 +22,6 @@ interface EDDRequestFormProps {
   holdId: string
   patronId: string
   source: string
-  formState: EDDRequestRequiredParams
 }
 
 /**
@@ -35,9 +33,7 @@ const EDDRequestForm = ({
   holdId,
   patronId,
   source,
-  formState,
 }: EDDRequestFormProps) => {
-  console.log(formState)
   return (
     <Form
       id="edd-request-form"
