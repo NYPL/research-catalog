@@ -1,20 +1,14 @@
 import Head from "next/head"
-import {
-  Banner,
-  Accordion,
-  Heading,
-  Text,
-} from "@nypl/design-system-react-components"
+import { Banner, Heading, Text } from "@nypl/design-system-react-components"
 
 import Layout from "../../../src/components/Layout/Layout"
 import {
   SITE_NAME,
   HOLD_PAGE_HEADING,
   EDD_PAGE_HEADING,
-  HOLD_CONFIRMATION_FAQ_DATA,
-  EDD_CONFIRMATION_FAQ_DATA,
 } from "../../../src/config/constants"
 
+import HoldConfirmationFAQ from "../../../src/components/HoldPages/HoldConfirmationFAQ"
 // import HoldItemDetails from "../../../src/components/HoldPages/HoldItemDetails"
 
 interface HoldConfirmationPageProps {
@@ -57,15 +51,7 @@ export default function HoldConfirmationPage({
             </Text>
           }
         />
-        <Heading level="h3" mb="l">
-          Frequently asked questions
-        </Heading>
-        <Accordion
-          accordionData={
-            isEDD ? EDD_CONFIRMATION_FAQ_DATA : HOLD_CONFIRMATION_FAQ_DATA
-          }
-          isDefaultOpen
-        />
+        <HoldConfirmationFAQ isEDD={isEDD} />
       </Layout>
     </>
   )

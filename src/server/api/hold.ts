@@ -93,18 +93,13 @@ export async function postHoldRequest(
     numberOfCopies: 1,
   }
 
-  console.log(
-    "Making hold request in postHoldRequest server function",
-    holdPostParams
-  )
-
   try {
     const client = await nyplApiClient()
     const holdPostResult = await client.post("/hold-requests", holdPostParams)
     const { id: requestId } = holdPostResult.data
 
     if (!requestId) {
-      console.log(
+      console.error(
         "postHoldRequest failed, no id returned from Discovery API",
         holdPostResult
       )
@@ -119,7 +114,7 @@ export async function postHoldRequest(
       requestId,
     }
   } catch (error) {
-    console.log(
+    console.error(
       `Error posting hold request in postHoldRequest server function, itemId: ${itemId}`,
       error.message
     )
