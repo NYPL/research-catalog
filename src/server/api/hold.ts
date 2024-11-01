@@ -38,11 +38,14 @@ export async function fetchDeliveryLocations(
       throw new Error("Malformed response from delivery locations API")
     }
 
-    const deliveryLocations = discoveryLocationsItem?.deliveryLocation.map(
-      (locationElement: DiscoveryLocationElement) =>
-        mapLocationElementToDeliveryLocation(locationElement)
-    )
-    const eddRequestable = discoveryLocationsItem.eddRequestable || false
+    console.log(discoveryLocationsResult)
+
+    const deliveryLocations =
+      discoveryLocationsItem?.deliveryLocation?.map(
+        (locationElement: DiscoveryLocationElement) =>
+          mapLocationElementToDeliveryLocation(locationElement)
+      ) || []
+    const eddRequestable = discoveryLocationsItem?.eddRequestable || false
 
     // Filter out closed locations
     const openLocations = deliveryLocations.filter(
