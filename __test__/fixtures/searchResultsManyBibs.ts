@@ -9074,6 +9074,34 @@ export const aggregationsResults = {
   itemListElement: [
     {
       "@type": "nypl:Aggregation",
+      "@id": "res:buildingLocation",
+      id: "buildingLocation",
+      field: "buildingLocation",
+      values: [
+        {
+          value: "sc",
+          count: 26,
+          label: "Not the label you should see - sc",
+        },
+        {
+          value: "rc",
+          count: 26,
+          label: "Not the lable you should see - rc",
+        },
+        {
+          value: "pa",
+          count: 2,
+          label: "Not the label you should see - pa",
+        },
+        {
+          value: "ma",
+          count: 1,
+          label: "Not the label you should see - ma",
+        },
+      ],
+    },
+    {
+      "@type": "nypl:Aggregation",
       "@id": "res:materialType",
       id: "materialType",
       field: "materialType",

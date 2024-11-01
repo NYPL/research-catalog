@@ -80,7 +80,7 @@ describe("Advanced Search Form", () => {
   it("can check location checkboxes", async () => {
     render(<AdvancedSearch isAuthenticated={true} />)
     const location = searchAggregations.buildingLocation[0]
-    await userEvent.click(screen.getByLabelText(location.label))
+    await userEvent.click(screen.getByLabelText(location.label as string))
     submit()
     expect(mockRouter.asPath).toBe(
       `/search?q=&filters%5BbuildingLocation%5D%5B0%5D=${location.value}`
@@ -93,10 +93,13 @@ describe("Advanced Search Form", () => {
     await userEvent.click(notatedMusic)
     const cartographic = screen.getByLabelText("Cartographic")
     await userEvent.click(cartographic)
-    await userEvent.selectOptions(
-      screen.getByLabelText("Language"),
-      "Azerbaijani"
-    )
+    const selector = screen.getByLabelText("Language")
+    await userEvent.selectOptions(selector, "Azerbaijani")
+    const schomburg = screen.getByLabelText("Schomburg Center for", {
+      exact: false,
+    })
+
+    await userEvent.click(schomburg)
     const keywordInput = screen.getByLabelText("Keyword")
     const titleInput = screen.getByLabelText("Title")
     const contributorInput = screen.getByLabelText("Author")
@@ -107,7 +110,15 @@ describe("Advanced Search Form", () => {
     await userEvent.type(subjectInput, "italian food")
 
     await userEvent.click(screen.getByText("Clear fields"))
-    expect(notatedMusic).not.toBeChecked()
+    ;[notatedMusic, cartographic, schomburg].forEach((input) =>
+      expect(input).not.toBeChecked()
+    )
+    expect(selector).not.toHaveDisplayValue("Azerbaijani")
+    ;[subjectInput, keywordInput, titleInput, contributorInput].forEach(
+      (input) => {
+        expect(input).toBeEmptyDOMElement()
+      }
+    )
 
     submit()
     // presence of alert means the form was cleared before hitting submit
