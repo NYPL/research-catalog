@@ -1,13 +1,5 @@
 @import "../utils/mixins";
 
-.filterTags {
-  margin-bottom: var(--nypl-space-xs);
-
-  button[id^="ts-filter-clear-all"] {
-    color: var(--nypl-colors-ui-link-primary);
-    text-decoration: underline;
-  }
-}
 .searchContainer {
   background-color: var(--nypl-colors-ui-bg-default);
   padding: var(--nypl-space-s) 0;
@@ -33,16 +25,6 @@
   }
 }
 
-.auxSearchContainer {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  margin-top: var(--nypl-space-xs);
-  @media screen and (min-width: 600px) {
-    flex-direction: row-reverse;
-  }
-}
-
 .advancedSearch {
   align-self: flex-start;
   min-width: 127px;
@@ -53,29 +35,6 @@
   }
 }
 
-.refineSearchButton {
-  width: 100%;
-
-  @media screen and (min-width: 600px) {
-    width: auto;
-    margin-top: var(--nypl-space-xs);
-  }
-}
-
-.refineButtons {
-  display: flex;
-  justify-content: space-between;
-}
-
-.refineCheckboxGroup {
-  display: flex;
-  flex-wrap: wrap;
-}
-
 .refineSearchContainer {
   background-color: var(--nypl-colors-ui-bg-default);
-}
-.refineSearchInner {
-  @include maxWidth;
-  padding-bottom: var(--nypl-space-l);
 }

@@ -12,7 +12,7 @@ import {
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
 const openRefineSearch = async () => {
-  const refineButton = screen.getByText("Refine Search")
+  const refineButton = screen.getByText("Filter results")
   await userEvent.click(refineButton)
 }
 const apply = async () => {
