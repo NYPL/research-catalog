@@ -22,16 +22,14 @@ const HoldConfirmationFAQ = ({ isEDD = false }: HoldConfirmationFAQProps) => {
         Frequently asked questions
       </Heading>
       <Accordion
-        accordionData={
-          isEDD ? EDD_CONFIRMATION_FAQ_DATA : HOLD_CONFIRMATION_FAQ_DATA
-        }
+        accordionData={isEDD ? eddConfirmationFAQData : holdConfirmationFAQData}
         isDefaultOpen
       />
     </>
   )
 }
 
-const HOLD_CONFIRMATION_FAQ_DATA: AccordionDataProps[] = [
+const holdConfirmationFAQData: AccordionDataProps[] = [
   {
     label: "What's next?",
     panel: (
@@ -116,7 +114,7 @@ const HOLD_CONFIRMATION_FAQ_DATA: AccordionDataProps[] = [
   },
 ]
 
-const EDD_CONFIRMATION_FAQ_DATA: AccordionDataProps[] = [
+const eddConfirmationFAQData: AccordionDataProps[] = [
   {
     label: "What’s next?",
     panel: (
