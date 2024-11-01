@@ -1,5 +1,6 @@
 import type { TextInputRefType } from "@nypl/design-system-react-components"
 import {
+  Flex,
   Box,
   Button,
   HorizontalRule,
@@ -27,7 +28,7 @@ import CancelSubmitButtonGroup from "./CancelSubmitButtonGroup"
 import SearchFilterCheckboxField from "./SearchFilterCheckboxField"
 
 const fields = [
-  { value: "buildingLocation", label: "Location" },
+  { value: "buildingLocation", label: "Item location" },
   { value: "materialType", label: "Format" },
   { value: "language", label: "Language" },
   { value: "dateAfter", label: "Start Year" },
@@ -143,27 +144,33 @@ const RefineSearch = ({
   }
 
   return (
-    <Box className={styles.refineSearchContainer}>
+    <Box
+      mt={{ md: refineSearchClosed ? "-4" : 0, base: 0 }}
+      width={{ md: "fit-content" }}
+      alignSelf="left"
+      className={styles.refineSearchContainer}
+    >
       {refineSearchClosed ? (
         <Button
+          width="100%"
           ref={refineOrCancelRef}
           onClick={toggleRefine}
           id="refine-search"
           buttonType="secondary"
           backgroundColor="ui.white"
-          className={styles.refineSearchButton}
         >
-          Refine Search
+          <Icon />
+          Filter results
         </Button>
       ) : (
-        <Form
-          className={styles.refineSearchInner}
-          id="refine-search"
-          onSubmit={handleSubmit}
-        >
-          <HorizontalRule mb={0} />
-          <Box className={styles.refineButtons}>
+        <Form id="refine-search" onSubmit={handleSubmit}>
+          <HorizontalRule mb={0} mt="s" />
+          <Flex
+            flexDirection={{ base: "column-reverse", md: "row" }}
+            justifyContent={{ md: "space-between", base: "center" }}
+          >
             <Button
+              margin={0}
               onClick={toggleRefine}
               id="cancel-refine"
               buttonType="secondary"
@@ -179,7 +186,7 @@ const RefineSearch = ({
               submitLabel="Apply filters"
               cancelLabel="Clear filters"
             />
-          </Box>
+          </Flex>
           <HorizontalRule m={0} />
           {filters}
         </Form>
