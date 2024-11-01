@@ -145,18 +145,19 @@ const RefineSearch = ({
 
   return (
     <Box
-      mt={refineSearchClosed ? "-8" : 0}
+      mt={{ md: refineSearchClosed ? "-4" : 0, base: 0 }}
+      width={{ md: "fit-content" }}
       alignSelf="left"
       className={styles.refineSearchContainer}
     >
       {refineSearchClosed ? (
         <Button
+          width="100%"
           ref={refineOrCancelRef}
           onClick={toggleRefine}
           id="refine-search"
           buttonType="secondary"
           backgroundColor="ui.white"
-          mt="xs"
         >
           <Icon />
           Filter results
@@ -164,7 +165,10 @@ const RefineSearch = ({
       ) : (
         <Form id="refine-search" onSubmit={handleSubmit}>
           <HorizontalRule mb={0} mt="s" />
-          <Flex justifyContent="space-between">
+          <Flex
+            flexDirection={{ base: "column-reverse", md: "row" }}
+            justifyContent={{ md: "space-between", base: "center" }}
+          >
             <Button
               onClick={toggleRefine}
               id="cancel-refine"

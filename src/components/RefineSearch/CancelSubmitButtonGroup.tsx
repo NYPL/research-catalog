@@ -20,7 +20,7 @@ const CancelSubmitButtonGroup = ({
     ? "actionSearch"
     : "check"
   return (
-    <ButtonGroup id={`${formName}-buttons`}>
+    <ButtonGroup mb={0} id={`${formName}-buttons`}>
       <Button
         data-testid={`clear-${formName}-button`}
         onClick={cancelHandler}
