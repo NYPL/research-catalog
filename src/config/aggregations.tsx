@@ -16,7 +16,7 @@ export const searchAggregations = {
       value: "rc",
       label: (
         <>
-          Off-site - <i>Deliverable to NYPL research Libraries</i>
+          Off-site - <i>Deliverable to NYPL all Research Libraries</i>
         </>
       ),
     },

@@ -164,7 +164,7 @@ export default function AdvancedSearch({
           onSubmit={handleSubmit}
         >
           <Flex flexDirection={{ base: "column", md: "row" }}>
-            <Box id="advancedSearchLeft" gap="grid.s">
+            <Flex id="advancedSearchLeft" gap="s" direction="column">
               {textInputFields.map(({ name, label }) => {
                 return (
                   <FormField key={name}>
@@ -200,7 +200,7 @@ export default function AdvancedSearch({
                 </Select>
               </FormField>
               <FormField>{<DateForm {...dateFormProps} />}</FormField>
-            </Box>
+            </Flex>
             <Flex direction="column" gap="l">
               <SearchFilterCheckboxField
                 options={searchAggregations.buildingLocation}

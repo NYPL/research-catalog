@@ -170,6 +170,7 @@ const RefineSearch = ({
             justifyContent={{ md: "space-between", base: "center" }}
           >
             <Button
+              margin={0}
               onClick={toggleRefine}
               id="cancel-refine"
               buttonType="secondary"
