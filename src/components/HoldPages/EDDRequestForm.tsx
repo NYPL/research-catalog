@@ -22,6 +22,7 @@ interface EDDRequestFormProps {
   holdId: string
   patronId: string
   source: string
+  invalidFields: Record<string, boolean>
 }
 
 /**
@@ -33,7 +34,9 @@ const EDDRequestForm = ({
   holdId,
   patronId,
   source,
+  invalidFields,
 }: EDDRequestFormProps) => {
+  console.log(invalidFields)
   return (
     <Form
       id="edd-request-form"
@@ -68,6 +71,7 @@ const EDDRequestForm = ({
           placeholder="theresa.smith@gmail.com"
           helperText="Your request will be delivered to the email address you enter above."
           invalidText="Enter a valid email address. Your request will be delivered to the email address you enter above."
+          isInvalid={invalidFields.email}
           onChange={debounce(handleInputChange, DEBOUNCE_INTERVAL)}
         />
       </FormField>
@@ -81,6 +85,7 @@ const EDDRequestForm = ({
             placeholder="Example: 1"
             helperText="Enter the first page you would like scanned."
             invalidText="Enter a page number. You may request a maximum of 50 pages."
+            isInvalid={invalidFields.startingNumber}
             onChange={debounce(handleInputChange, DEBOUNCE_INTERVAL)}
           />
         </FormField>
@@ -93,6 +98,7 @@ const EDDRequestForm = ({
             placeholder="Example: 20"
             helperText="Enter the last page you would like scanned."
             invalidText="Enter a page number. You may request a maximum of 50 pages."
+            isInvalid={invalidFields.endingNumber}
             onChange={debounce(handleInputChange, DEBOUNCE_INTERVAL)}
           />
         </FormField>
@@ -106,6 +112,7 @@ const EDDRequestForm = ({
           placeholder="Example: Chapter 1"
           helperText="Enter the name/number of the chapter or article you would like scanned."
           invalidText="Indicate the title of the chapter or article you are requesting."
+          isInvalid={invalidFields.chapter}
           onChange={debounce(handleInputChange, DEBOUNCE_INTERVAL)}
         />
       </FormField>

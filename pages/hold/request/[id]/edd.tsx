@@ -1,6 +1,7 @@
 import Head from "next/head"
 import { useState, useRef, useEffect, type SyntheticEvent } from "react"
 import { useRouter } from "next/router"
+import { isEmail } from "validator"
 import {
   Heading,
   Box,
@@ -82,6 +83,15 @@ export default function EDDRequestPage({
     e.preventDefault()
     alert && setAlert(false)
     const target = e.target as HTMLInputElement
+
+    setInvalidFields((prev) => ({
+      ...prev,
+      [target.name]: !target.value.length,
+    }))
+
+    if (target.name === "email") {
+      setInvalidFields((prev) => ({ ...prev, email: !isEmail(target.value) }))
+    }
   }
 
   const handleSubmit = async (e) => {
@@ -177,7 +187,7 @@ export default function EDDRequestPage({
             holdId={holdId}
             patronId={patronId}
             source={item.source}
-            // invalidFields={invalidFields}
+            invalidFields={invalidFields}
           />
         ) : null}
       </Layout>
