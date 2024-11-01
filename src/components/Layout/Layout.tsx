@@ -80,23 +80,25 @@ const Layout = ({
                 />
                 {showSearch && <SearchForm aggregations={searchAggregations} />}
               </div>
-              <Flex
-                gap="l"
-                align="center"
-                direction="column"
-                sx={{
-                  padding: "2em 2em .5em 2em",
-                }}
-              >
-                {showSearch && <EDSBanner />}
-                {showNotification && bannerNotification && (
-                  <Banner
-                    className={styles.banner}
-                    heading="New Service Announcement"
-                    content={bannerNotification}
-                  />
-                )}
-              </Flex>
+              {showSearch && (
+                <Flex
+                  gap="l"
+                  align="center"
+                  direction="column"
+                  sx={{
+                    padding: "2em 2em .5em 2em",
+                  }}
+                >
+                  <EDSBanner />
+                  {showNotification && bannerNotification && (
+                    <Banner
+                      className={styles.banner}
+                      heading="New Service Announcement"
+                      content={bannerNotification}
+                    />
+                  )}
+                </Flex>
+              )}
             </>
           )
         }

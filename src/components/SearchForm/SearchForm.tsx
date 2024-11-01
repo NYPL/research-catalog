@@ -1,5 +1,6 @@
 import {
   Box,
+  Flex,
   Icon,
   SearchBar,
   Text,
@@ -81,7 +82,7 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
     <div className={styles.searchContainer}>
       <div className={styles.searchContainerInner}>
         <Text size="body2" className={styles.searchTip}>
-          <Icon size="medium" name="errorOutline" />
+          <Icon size="medium" name="errorOutline" iconRotation="rotate180" />
           <Box as="span" className={styles.searchTipText}>
             <span className={styles.searchTipTitle}>{"Search tip: "}</span>
             {searchTip}
@@ -114,14 +115,14 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
             ".chakra-select__icon-wrapper": { "z-index": "999 !important" },
           }}
         />
-        <Box className={styles.auxSearchContainer}>
+        <Flex direction="column" justifyContent="space-between" mt="xs">
           <RCLink
             className={styles.advancedSearch}
             href="/search/advanced"
             isUnderlined={false}
             mb="xs"
           >
-            Advanced Search
+            Advanced search
           </RCLink>
           {displayRefineResults && (
             <RefineSearch
@@ -130,7 +131,7 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
               aggregations={aggregations}
             />
           )}
-        </Box>
+        </Flex>
       </div>
     </div>
   )

@@ -8,6 +8,7 @@ type ContributorLiteral = string
 type CreatorLiteral = string
 type Issuance = string
 type MaterialTypeFilter = string
+type BuildingLocationFilter = string
 
 export interface SearchFilters {
   materialType?: MaterialTypeFilter | MaterialTypeFilter[]
@@ -18,6 +19,7 @@ export interface SearchFilters {
   issuance?: Issuance | Issuance[]
   dateAfter?: string
   dateBefore?: string
+  buildingLocation?: BuildingLocationFilter | BuildingLocationFilter[]
 }
 
 export interface Identifiers {

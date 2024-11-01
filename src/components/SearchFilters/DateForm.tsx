@@ -3,6 +3,7 @@ import {
   Fieldset,
   TextInput,
   Notification,
+  Flex,
 } from "@nypl/design-system-react-components"
 import type { DateFormHookPropsType } from "../../hooks/useDateForm"
 
@@ -37,11 +38,7 @@ const DateForm = ({
         )}
       </div>
       <Fieldset id="date-fieldset" legendText="Date">
-        <Box
-          gridTemplateColumns="repeat(2, minmax(0, 1fr))"
-          display="grid"
-          gap="s"
-        >
+        <Flex gap="s">
           <TextInput
             id="date-from"
             labelText="Start"
@@ -60,7 +57,7 @@ const DateForm = ({
             onChange={(e) => changeHandler(e)}
             ref={inputRefs[1]}
           />
-        </Box>
+        </Flex>
       </Fieldset>
     </>
   )

@@ -6,9 +6,7 @@ import {
   MultiSelect,
   SearchBar,
   Box,
-  Text,
   Label,
-  TagSet,
   type TagSetFilterDataProps,
 } from "@nypl/design-system-react-components"
 import type {
@@ -22,6 +20,7 @@ import {
   buildItemFilterQuery,
   removeValueFromFilters,
 } from "../../utils/itemFilterUtils"
+import ActiveFilters from "./ActiveFilters"
 
 interface ItemFilterContainerProps {
   itemAggregations: Aggregation[]
@@ -200,31 +199,13 @@ const ItemFilters = ({
         />
       </Box>
       {filtersAreApplied ? (
-        <Box
-          display="flex"
-          flexDirection={{ base: "column", md: "row" }}
-          mb="m"
-        >
-          <Text
-            display="block"
-            fontSize="desktop.body.body2"
-            fontWeight="bold"
-            mr={{ base: "0", md: "s" }}
-            mb={{ base: "xxs", md: 0 }}
-            lineHeight={2}
-          >
-            Active filters
-          </Text>
-          <TagSet
-            id="bib-details-applied-filters"
-            isDismissible
-            type="filter"
-            onClick={async (filterToRemove: TagSetFilterDataProps) => {
-              await handleRemoveFilter(filterToRemove.id)
-            }}
-            tagSetData={appliedFiltersTagSetData}
-          />
-        </Box>
+        <ActiveFilters
+          filterName="bib-details"
+          onClick={async (filterToRemove: TagSetFilterDataProps) => {
+            await handleRemoveFilter(filterToRemove.id)
+          }}
+          tagSetData={appliedFiltersTagSetData}
+        />
       ) : null}
     </>
   )

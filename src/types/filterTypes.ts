@@ -41,7 +41,7 @@ export interface Aggregation {
 
 export type Option = {
   value: string
-  label: string
+  label: string | JSX.Element
   count?: number
   field?: string
 }
