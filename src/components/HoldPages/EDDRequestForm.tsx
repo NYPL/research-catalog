@@ -76,7 +76,6 @@ const EDDRequestForm = ({
           invalidText="Enter a valid email address. Your request will be delivered to the email address you enter above."
           isInvalid={invalidFields.email}
           onChange={debounce(handleInputChange, DEBOUNCE_INTERVAL)}
-          ref={(el) => (requiredFieldsRef.current[i] = el)}
         />
       </FormField>
       <FormRow>
