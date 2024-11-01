@@ -17,8 +17,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     const holdId = req.query.id as string
     const [, itemId] = holdId.split("-")
 
-    const body = await req.body
-    const { patronId, source, pickupLocation, jsEnabled } = JSON.parse(body)
+    const { patronId, source, pickupLocation, jsEnabled } = JSON.parse(req.body)
 
     const holdRequestResponse = await postHoldRequest({
       itemId,
