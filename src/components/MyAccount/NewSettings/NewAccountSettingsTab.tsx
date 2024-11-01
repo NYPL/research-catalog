@@ -2,10 +2,11 @@ import { Flex, Banner } from "@nypl/design-system-react-components"
 import { useContext, useState } from "react"
 import { PatronDataContext } from "../../../context/PatronDataContext"
 import PhoneEmailForm from "./PhoneEmailForm"
+import HomeLibraryNotificationForm from "./HomeLibraryNotificationForm"
 
 const NewAccountSettingsTab = () => {
   const {
-    updatedAccountData: { patron },
+    updatedAccountData: { patron, pickupLocations },
   } = useContext(PatronDataContext)
   const [isSuccess, setIsSuccess] = useState(false)
   const [isFailure, setIsFailure] = useState(false)
@@ -38,6 +39,20 @@ const NewAccountSettingsTab = () => {
           setIsSuccess={setIsSuccess}
           setIsFailure={setIsFailure}
           inputType="emails"
+        />
+        <HomeLibraryNotificationForm
+          patronData={patron}
+          pickupLocations={pickupLocations}
+          setIsSuccess={setIsSuccess}
+          setIsFailure={setIsFailure}
+          type="library"
+        />
+        <HomeLibraryNotificationForm
+          patronData={patron}
+          pickupLocations={pickupLocations}
+          setIsSuccess={setIsSuccess}
+          setIsFailure={setIsFailure}
+          type="notification"
         />
       </Flex>
     </>
