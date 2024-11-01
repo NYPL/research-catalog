@@ -1,10 +1,10 @@
 import { ButtonGroup, Button } from "@nypl/design-system-react-components"
 
 type SaveCancelButtonProps = {
-  isDisabled: boolean
+  isDisabled?: boolean
   onCancel: () => void
   onSave: () => void
-  inputType: "phones" | "emails"
+  inputType?: "phones" | "emails"
 }
 
 const SaveCancelButtons = ({

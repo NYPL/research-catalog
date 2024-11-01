@@ -41,7 +41,7 @@ Route parameter is the hold ID. Request body requires the **patron ID**, and can
 exampleBody: {
     patronId: '123456',
     freeze: true,
-    pickupLocation: 'sn',
+    homeLibraryCode: 'sn',
 },
 ```
 

@@ -101,7 +101,7 @@ describe("phone form", () => {
     ).not.toBeInTheDocument()
   })
 
-  it.skip("calls submit with valid data", async () => {
+  it("calls submit with valid data", async () => {
     render(component)
 
     fireEvent.click(screen.getByRole("button", { name: /edit/i }))
@@ -115,11 +115,11 @@ describe("phone form", () => {
 
     expect(fetch).toHaveBeenCalledWith(
       "/research/research-catalog/api/account/settings/6742743",
-      expect.objectContaining({
-        body: '{"phones":[{number:"1234", type: "t"}]}',
+      {
+        body: '{"phones":[{"number":"1234","type":"t"}]}',
         headers: { "Content-Type": "application/json" },
         method: "PUT",
-      })
+      }
     )
   })
 

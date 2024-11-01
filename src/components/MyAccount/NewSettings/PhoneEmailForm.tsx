@@ -235,7 +235,11 @@ const PhoneEmailForm = ({
                 {tempInputs.map((input, index) => (
                   <Text
                     key={index}
-                    sx={{ paddingTop: "xs", marginBottom: "xs" }}
+                    sx={{
+                      width: { base: "l", sm: "250px" },
+                      paddingTop: "xs",
+                      marginBottom: "xs",
+                    }}
                   >
                     {input}{" "}
                     {index === 0 && inputs.length > 1 && (
