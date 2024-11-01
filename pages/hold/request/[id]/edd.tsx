@@ -82,12 +82,6 @@ export default function EDDRequestPage({
     e.preventDefault()
     alert && setAlert(false)
     const target = e.target as HTMLInputElement
-
-    dispatch({
-      type: "input_change",
-      field: target.name,
-      payload: target.value,
-    })
   }
 
   const handleSubmit = async (e) => {
