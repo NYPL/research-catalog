@@ -67,6 +67,7 @@ export default function EDDRequestPage({
   )
 
   const bannerContainerRef = useRef<HTMLDivElement>()
+  const requiredFieldsRef = useRef()
 
   const router = useRouter()
   const isLoading = useLoading()
@@ -186,6 +187,7 @@ export default function EDDRequestPage({
             patronId={patronId}
             source={item.source}
             invalidFields={invalidFields}
+            // requiredFieldsRef={requiredFieldsRef}
           />
         ) : null}
       </Layout>

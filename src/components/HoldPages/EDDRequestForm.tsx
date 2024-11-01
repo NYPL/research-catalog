@@ -9,6 +9,7 @@ import {
   Heading,
   Text,
   Banner,
+  type TextInputRefType,
 } from "@nypl/design-system-react-components"
 import { debounce } from "underscore"
 
@@ -23,6 +24,7 @@ interface EDDRequestFormProps {
   patronId: string
   source: string
   invalidFields: EDDRequestFieldErrors
+  requiredFieldsRef?: React.MutableRefObject<Record<string, TextInputRefType>>
 }
 
 /**
@@ -35,6 +37,7 @@ const EDDRequestForm = ({
   patronId,
   source,
   invalidFields,
+  requiredFieldsRef,
 }: EDDRequestFormProps) => {
   console.log(invalidFields)
   return (
@@ -73,6 +76,7 @@ const EDDRequestForm = ({
           invalidText="Enter a valid email address. Your request will be delivered to the email address you enter above."
           isInvalid={invalidFields.email}
           onChange={debounce(handleInputChange, DEBOUNCE_INTERVAL)}
+          ref={(el) => (requiredFieldsRef.current[i] = el)}
         />
       </FormField>
       <FormRow>
