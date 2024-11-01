@@ -64,6 +64,7 @@ const EDDRequestForm = ({
           isRequired
           placeholder="theresa.smith@gmail.com"
           helperText="Your request will be delivered to the email address you enter above."
+          invalidText="Enter a valid email address. Your request will be delivered to the email address you enter above."
         />
       </FormField>
       <FormRow>
@@ -75,6 +76,7 @@ const EDDRequestForm = ({
             isRequired
             placeholder="Example: 1"
             helperText="Enter the first page you would like scanned."
+            invalidText="Enter a page number. You may request a maximum of 50 pages."
           />
         </FormField>
         <FormField>
@@ -85,6 +87,7 @@ const EDDRequestForm = ({
             isRequired
             placeholder="Example: 20"
             helperText="Enter the last page you would like scanned."
+            invalidText="Enter a page number. You may request a maximum of 50 pages."
           />
         </FormField>
       </FormRow>
@@ -96,6 +99,7 @@ const EDDRequestForm = ({
           isRequired
           placeholder="Example: Chapter 1"
           helperText="Enter the name/number of the chapter or article you would like scanned."
+          invalidText="Indicate the title of the chapter or article you are requesting."
         />
       </FormField>
       <Box>
