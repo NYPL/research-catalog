@@ -45,7 +45,7 @@ const EDDRequestForm = ({
       <input type="hidden" id="patronId" name="patronId" value={patronId} />
       <input type="hidden" id="source" name="source" value={source} />
       <Box>
-        <Heading level="h3" size="heading4" mb="xs">
+        <Heading level="h3" size="heading4" mb="m">
           Required information
         </Heading>
         <Text noSpace>
