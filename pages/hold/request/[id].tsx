@@ -57,10 +57,9 @@ export default function HoldRequestPage({
   const item = new Item(discoveryItemResult, bib)
 
   const holdId = `${item.bibId}-${item.id}`
-  const itemIsAvailable = item.isAvailable && deliveryLocations.length > 0
 
   // Initialize alert to true if item is not available. This will show the error banner.
-  const [alert, setAlert] = useState(!itemIsAvailable)
+  const [alert, setAlert] = useState(!item.isAvailable)
   const [errorDetail, setErrorDetail] = useState("")
   const [formPosting, setFormPosting] = useState(false)
   const bannerContainerRef = useRef<HTMLDivElement>()
@@ -139,9 +138,11 @@ export default function HoldRequestPage({
           {alert && (
             <HoldRequestBanner
               item={item}
-              heading={!itemIsAvailable ? "Item unavailable" : "Request failed"}
+              heading={
+                !item.isAvailable ? "Item unavailable" : "Request failed"
+              }
               errorMessage={
-                !itemIsAvailable
+                !item.isAvailable
                   ? "This item is currently unavailable"
                   : "We were unable to process your request at this time"
               }
@@ -158,7 +159,7 @@ export default function HoldRequestPage({
             showImage={false}
             data-testid="hold-request-loading"
           />
-        ) : itemIsAvailable ? (
+        ) : item.isAvailable ? (
           <>
             <Heading level="h3" size="heading4" mb="l">
               Choose a pickup location
