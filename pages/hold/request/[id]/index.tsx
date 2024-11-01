@@ -34,7 +34,7 @@ import type { DeliveryLocation } from "../../../../src/types/locationTypes"
 interface HoldRequestPropsType {
   discoveryBibResult: DiscoveryBibResult
   discoveryItemResult: DiscoveryItemResult
-  deliveryLocations: DeliveryLocation[]
+  deliveryLocations?: DeliveryLocation[]
   patronId: string
   isAuthenticated?: boolean
 }
@@ -47,7 +47,7 @@ interface HoldRequestPropsType {
 export default function HoldRequestPage({
   discoveryBibResult,
   discoveryItemResult,
-  deliveryLocations,
+  deliveryLocations = [],
   patronId,
   isAuthenticated,
 }: HoldRequestPropsType) {
@@ -57,9 +57,10 @@ export default function HoldRequestPage({
   const item = new Item(discoveryItemResult, bib)
 
   const holdId = `${item.bibId}-${item.id}`
+  const itemIsAvailable = item.isAvailable && deliveryLocations.length > 0
 
   // Initialize alert to true if item is not available. This will show the error banner.
-  const [alert, setAlert] = useState(!item.isAvailable)
+  const [alert, setAlert] = useState(!itemIsAvailable)
   const [errorDetail, setErrorDetail] = useState("")
   const [formPosting, setFormPosting] = useState(false)
   const bannerContainerRef = useRef<HTMLDivElement>()
@@ -138,11 +139,9 @@ export default function HoldRequestPage({
           {alert && (
             <HoldRequestBanner
               item={item}
-              heading={
-                !item.isAvailable ? "Item unavailable" : "Request failed"
-              }
+              heading={!itemIsAvailable ? "Item unavailable" : "Request failed"}
               errorMessage={
-                !item.isAvailable
+                !itemIsAvailable
                   ? "This item is currently unavailable"
                   : "We were unable to process your request at this time"
               }
@@ -159,7 +158,7 @@ export default function HoldRequestPage({
             showImage={false}
             data-testid="hold-request-loading"
           />
-        ) : item.isAvailable ? (
+        ) : itemIsAvailable ? (
           <>
             <Heading level="h3" size="heading4" mb="l">
               Choose a pickup location

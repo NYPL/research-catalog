@@ -165,7 +165,14 @@ describe("Hold Request page", () => {
           discoveryBibResult={bibWithItems.resource}
           discoveryItemResult={bibWithItems.resource.items[0]}
           patronId="123"
-          deliveryLocations={[]}
+          deliveryLocations={[
+            {
+              key: "schwarzman",
+              label: "Schwarzman",
+              value: "loc:mal17",
+              address: NYPL_LOCATIONS["schwarzman"].address,
+            },
+          ]}
           isAuthenticated={true}
         />
       )

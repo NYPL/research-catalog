@@ -4,7 +4,7 @@ import { render, screen } from "../../../src/utils/testUtils"
 describe("Hold Confirmation page", () => {
   describe("Hold Confirmation page UI", () => {
     beforeEach(() => {
-      render(<HoldConfirmationPage />)
+      render(<HoldConfirmationPage isEDD={false} />)
     })
 
     it("renders an H2", () => {
@@ -18,7 +18,6 @@ describe("Hold Confirmation page", () => {
         "Request successful"
       )
     })
-
     it("renders a faq accordion", () => {
       expect(screen.getByRole("heading", { level: 3 })).toHaveTextContent(
         "Frequently asked questions"
