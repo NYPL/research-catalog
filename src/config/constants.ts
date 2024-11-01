@@ -11,6 +11,7 @@ export const ITEM_VIEW_ALL_BATCH_SIZE = 150
 export const ELECTRONIC_RESOURCES_PER_BIB_PAGE = 3
 export const SHEP_HTTP_TIMEOUT = 4000
 export const FOCUS_TIMEOUT = 50
+export const DEBOUNCE_INTERVAL = 20
 
 // Internal path names
 export const PATHS = {

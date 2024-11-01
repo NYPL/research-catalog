@@ -1,5 +1,5 @@
 import Head from "next/head"
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect, type SyntheticEvent } from "react"
 import { useRouter } from "next/router"
 import {
   Heading,
@@ -58,8 +58,15 @@ export default function EDDRequestPage({
 
   // Initialize alert to true if item is not available. This will show the error banner.
   const [alert, setAlert] = useState(!isEddAvailable)
-  const [errorDetail, setErrorDetail] = useState("")
   const [formPosting, setFormPosting] = useState(false)
+
+  const [invalidFields, setInvalidFields] = useState({
+    email: false,
+    startingNumber: false,
+    endingNumber: false,
+    chapter: false,
+  })
+
   const bannerContainerRef = useRef<HTMLDivElement>()
 
   const router = useRouter()
@@ -70,6 +77,18 @@ export default function EDDRequestPage({
       bannerContainerRef.current.focus()
     }
   }, [alert])
+
+  const handleInputChange = (e: SyntheticEvent) => {
+    e.preventDefault()
+    alert && setAlert(false)
+    const target = e.target as HTMLInputElement
+
+    dispatch({
+      type: "input_change",
+      field: target.name,
+      payload: target.value,
+    })
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -94,7 +113,6 @@ export default function EDDRequestPage({
           responseJson.error
         )
         setAlert(true)
-        setErrorDetail(responseJson?.error?.detail || "")
         setFormPosting(false)
         return
       }
@@ -146,7 +164,6 @@ export default function EDDRequestPage({
                   ? "Electronic delivery options for this item are currently unavailable."
                   : "We were unable to process your request at this time"
               }
-              errorDetail={""}
             />
           )}
         </Box>
@@ -162,9 +179,11 @@ export default function EDDRequestPage({
         ) : isEddAvailable ? (
           <EDDRequestForm
             handleSubmit={handleSubmit}
+            handleInputChange={handleInputChange}
             holdId={holdId}
             patronId={patronId}
             source={item.source}
+            invalidFields={invalidFields}
           />
         ) : null}
       </Layout>

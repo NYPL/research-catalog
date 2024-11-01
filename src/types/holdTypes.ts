@@ -25,8 +25,8 @@ export type EDDRequestFormActionType = "input_change"
 
 export interface EDDRequestFormAction {
   type: EDDRequestFormActionType
-  field?: string
-  payload: EDDRequestRequiredParams
+  field: string
+  payload: string
 }
 
 export interface DiscoveryHoldPostParams {
