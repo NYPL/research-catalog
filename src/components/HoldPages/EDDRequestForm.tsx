@@ -13,8 +13,8 @@ import {
 import { debounce } from "underscore"
 
 import { BASE_URL, DEBOUNCE_INTERVAL } from "../../config/constants"
-
 import ExternalLink from "../Links/ExternalLink/ExternalLink"
+import type { EDDRequestFieldErrors } from "../../types/holdTypes"
 
 interface EDDRequestFormProps {
   handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void
@@ -22,7 +22,7 @@ interface EDDRequestFormProps {
   holdId: string
   patronId: string
   source: string
-  invalidFields: Record<string, boolean>
+  invalidFields: EDDRequestFieldErrors
 }
 
 /**

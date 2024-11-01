@@ -14,19 +14,11 @@ export interface HoldPostResult {
   requestId?: string
 }
 
-export interface EDDRequestRequiredParams {
-  email: string
-  startingNumber: string
-  endingNumber: string
-  chapter: string
-}
-
-export type EDDRequestFormActionType = "input_change"
-
-export interface EDDRequestFormAction {
-  type: EDDRequestFormActionType
-  field: string
-  payload: string
+export interface EDDRequestFieldErrors {
+  email: boolean
+  startingNumber: boolean
+  endingNumber: boolean
+  chapter: boolean
 }
 
 export interface DiscoveryHoldPostParams {

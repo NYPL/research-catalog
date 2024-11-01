@@ -19,6 +19,7 @@ import useLoading from "../../../../src/hooks/useLoading"
 
 import { fetchBib } from "../../../../src/server/api/bib"
 import { fetchDeliveryLocations } from "../../../../src/server/api/hold"
+import { eddRequestDefaultInvalidFields } from "../../../../src/utils/holdUtils"
 
 import initializePatronTokenAuth, {
   doRedirectBasedOnNyplAccountRedirects,
@@ -61,12 +62,9 @@ export default function EDDRequestPage({
   const [alert, setAlert] = useState(!isEddAvailable)
   const [formPosting, setFormPosting] = useState(false)
 
-  const [invalidFields, setInvalidFields] = useState({
-    email: false,
-    startingNumber: false,
-    endingNumber: false,
-    chapter: false,
-  })
+  const [invalidFields, setInvalidFields] = useState(
+    eddRequestDefaultInvalidFields
+  )
 
   const bannerContainerRef = useRef<HTMLDivElement>()
 
