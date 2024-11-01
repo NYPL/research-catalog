@@ -183,7 +183,7 @@ export default function EDDRequestPage({
             holdId={holdId}
             patronId={patronId}
             source={item.source}
-            invalidFields={invalidFields}
+            // invalidFields={invalidFields}
           />
         ) : null}
       </Layout>
