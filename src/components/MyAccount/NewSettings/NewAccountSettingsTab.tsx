@@ -1,8 +1,9 @@
 import { Flex, Banner } from "@nypl/design-system-react-components"
 import { useContext, useState } from "react"
 import { PatronDataContext } from "../../../context/PatronDataContext"
-import PhoneEmailForm from "./PhoneEmailForm"
-import HomeLibraryNotificationForm from "./HomeLibraryNotificationForm"
+import PhoneEmailForm from "./SettingsInputForm"
+import HomeLibraryNotificationForm from "./SettingsSelectForm"
+import PasswordForm from "./PasswordForm"
 
 const NewAccountSettingsTab = () => {
   const {
@@ -53,6 +54,11 @@ const NewAccountSettingsTab = () => {
           setIsSuccess={setIsSuccess}
           setIsFailure={setIsFailure}
           type="notification"
+        />
+        <PasswordForm
+          setIsSuccess={setIsSuccess}
+          setIsFailure={setIsFailure}
+          patronData={patron}
         />
       </Flex>
     </>

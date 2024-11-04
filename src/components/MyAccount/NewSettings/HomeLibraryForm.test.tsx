@@ -3,7 +3,7 @@ import { filteredPickupLocations } from "../../../../__test__/fixtures/processed
 import { PatronDataProvider } from "../../../context/PatronDataContext"
 import { processedPatron } from "../../../../__test__/fixtures/processedMyAccountData"
 import { pickupLocations } from "../../../../__test__/fixtures/rawSierraAccountData"
-import HomeLibraryNotificationForm from "./HomeLibraryNotificationForm"
+import HomeLibraryNotificationForm from "./SettingsSelectForm"
 
 describe("home library form", () => {
   const mockSetIsSuccess = jest.fn()

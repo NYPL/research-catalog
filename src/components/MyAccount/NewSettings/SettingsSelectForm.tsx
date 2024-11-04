@@ -133,6 +133,7 @@ const HomeLibraryNotificationForm = ({
               sx={{ marginTop: "xs", marginLeft: { base: "l", lg: "unset" } }}
             >
               <Select
+                maxWidth="320px"
                 name={`select-${type}`}
                 id={formUtils.selectorId}
                 labelText={`Update ${formUtils.label.toLowerCase()}`}

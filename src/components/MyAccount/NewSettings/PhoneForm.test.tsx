@@ -2,7 +2,7 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react"
 import { filteredPickupLocations } from "../../../../__test__/fixtures/processedMyAccountData"
 import { PatronDataProvider } from "../../../context/PatronDataContext"
 import { processedPatron } from "../../../../__test__/fixtures/processedMyAccountData"
-import PhoneEmailForm from "./PhoneEmailForm"
+import PhoneEmailForm from "./SettingsInputForm"
 
 describe("phone form", () => {
   const mockSetIsSuccess = jest.fn()
