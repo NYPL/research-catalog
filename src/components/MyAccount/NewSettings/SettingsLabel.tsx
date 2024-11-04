@@ -5,9 +5,7 @@ const SettingsLabel = ({ icon, text }) => {
     <Flex
       gap="xs"
       alignItems="center"
-      width="256px"
-      paddingLeft="xs"
-      paddingTop="xs"
+      sx={{ minWidth: { base: "unset", lg: "256px" } }}
     >
       <Icon name={icon} size="medium" />
       <Text
