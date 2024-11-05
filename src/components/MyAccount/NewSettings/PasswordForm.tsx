@@ -118,13 +118,13 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
               gap: "s",
             }}
           >
-            <Flex flexDir={"row"}>
+            <Flex flexDir={{ base: "column", lg: "row" }}>
               <SettingsLabel
                 icon="actionLockClosed"
                 text="Enter current pin/password"
               />
               <TextInput
-                maxWidth="320px"
+                width="320px"
                 id="oldPassword"
                 name="oldPassword"
                 type="password"
@@ -136,13 +136,13 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
                 onChange={handleInputChange}
               />
             </Flex>
-            <Flex flexDir={"row"}>
+            <Flex flexDir={{ base: "column", lg: "row" }}>
               <SettingsLabel
                 icon="actionLockClosed"
                 text="Enter new pin/password"
               />
               <TextInput
-                maxWidth="320px"
+                width="320px"
                 id="newPassword"
                 name="newPassword"
                 type="password"
@@ -154,7 +154,7 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
                 onChange={handleInputChange}
               />
             </Flex>
-            <Flex flexDir={"row"}>
+            <Flex flexDir={{ base: "column", lg: "row" }}>
               <SettingsLabel
                 icon="actionLockClosed"
                 text="Re-enter new pin/password"
