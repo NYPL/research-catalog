@@ -13,12 +13,14 @@ import initializePatronTokenAuth, {
   doRedirectBasedOnNyplAccountRedirects,
 } from "../../../src/server/auth"
 import { fetchBib } from "../../../src/server/api/bib"
-import { bibWithItems } from "../../fixtures/bibFixtures"
-import { BASE_URL, PATHS } from "../../../src/config/constants"
+import { bibWithItems, bibWithSingleAeonItem } from "../../fixtures/bibFixtures"
+import { BASE_URL, PATHS, NYPL_LOCATIONS } from "../../../src/config/constants"
+import { fetchDeliveryLocations } from "../../../src/server/api/hold"
 
 jest.mock("../../../src/server/auth")
 jest.mock("../../../src/server/api/bib")
 jest.mock("../../../src/server/sierraClient")
+jest.mock("../../../src/server/api/hold")
 
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
@@ -46,6 +48,23 @@ describe("Hold Request page", () => {
       })
       ;(fetchBib as jest.Mock).mockResolvedValue({
         discoveryBibResult: bibWithItems.resource,
+        status: 200,
+      })
+      ;(fetchDeliveryLocations as jest.Mock).mockResolvedValue({
+        deliveryLocations: [
+          {
+            key: "schwarzman",
+            value: "mag",
+            address: "476 Fifth Avenue (42nd St and Fifth Ave)",
+            label: "Schwarzman Building - Milstein Division Room 121",
+          },
+          {
+            key: "lpa",
+            value: "par",
+            address: "40 Lincoln Center Plaza",
+            label: "Library for the Performing Arts",
+          },
+        ],
         status: 200,
       })
     })
@@ -114,12 +133,46 @@ describe("Hold Request page", () => {
       ])
     })
   })
+  describe("aeon redirect handling", () => {
+    beforeEach(() => {
+      ;(initializePatronTokenAuth as jest.Mock).mockResolvedValue({
+        isTokenValid: true,
+        errorCode: null,
+        decodedPatron: { sub: "123" },
+      })
+      ;(fetchBib as jest.Mock).mockResolvedValue({
+        discoveryBibResult: bibWithSingleAeonItem.resource,
+        status: 200,
+      })
+    })
+
+    it("redirects to aeonUrl when present in the fetched item", async () => {
+      const responseWithAeonRedirect = await getServerSideProps({
+        params: { id },
+        res: mockRes,
+        req: mockReq,
+      })
+      expect(responseWithAeonRedirect.redirect).toStrictEqual({
+        destination: bibWithSingleAeonItem.resource.items[0].aeonUrl[0],
+        permanent: false,
+      })
+    })
+  })
   describe("Hold Request page UI", () => {
     beforeEach(() => {
       render(
         <HoldRequestPage
           discoveryBibResult={bibWithItems.resource}
           discoveryItemResult={bibWithItems.resource.items[0]}
+          patronId="123"
+          deliveryLocations={[
+            {
+              key: "schwarzman",
+              label: "Schwarzman",
+              value: "loc:mal17",
+              address: NYPL_LOCATIONS["schwarzman"].address,
+            },
+          ]}
           isAuthenticated={true}
         />
       )
@@ -153,6 +206,15 @@ describe("Hold Request page", () => {
         <HoldRequestPage
           discoveryBibResult={bibWithItems.resource}
           discoveryItemResult={bibWithItems.resource.items[0]}
+          patronId="123"
+          deliveryLocations={[
+            {
+              key: "schwarzman",
+              label: "Schwarzman",
+              value: "loc:mal17",
+              address: NYPL_LOCATIONS["schwarzman"].address,
+            },
+          ]}
           isAuthenticated={true}
         />
       )
@@ -171,7 +233,6 @@ describe("Hold Request page", () => {
     })
 
     it("shows an error when there is a bad response from the hold api", async () => {
-      expect(screen.getByTestId("hold-request-loading")).toBeInTheDocument()
       await waitFor(() => {
         expect(screen.getByTestId("hold-request-error")).toBeInTheDocument()
       })

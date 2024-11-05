@@ -1,4 +1,4 @@
-import { Heading, List, Text } from "@nypl/design-system-react-components"
+import { Heading, List } from "@nypl/design-system-react-components"
 import { kebabCase } from "lodash"
 import { type ReactElement } from "react"
 
@@ -14,7 +14,6 @@ import type {
 } from "../../types/bibDetailsTypes"
 import { rtlOrLtr, isItTheLastElement } from "../../utils/bibUtils"
 import type { ReactNode } from "react"
-import { BASE_URL } from "../../config/constants"
 
 interface BibDetailsProps {
   details: AnyBibDetail[]
@@ -35,8 +34,7 @@ const BibDetails = ({ details, heading }: BibDetailsProps) => {
         noStyling
         type="dl"
         showRowDividers={false}
-        className={styles.bibDetails}
-        mt="xl"
+        className={styles.bibDetails + styles.inBibPage}
       >
         {details.map(
           (detail: BibDetail | LinkedBibDetail | SubjectHeadingDetail) => {

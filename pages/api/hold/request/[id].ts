@@ -1,5 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 
+import { postHoldRequest } from "../../../../src/server/api/hold"
+import { BASE_URL, PATHS } from "../../../../src/config/constants"
+
 /**
  * Default API route handler for Hold requests
  */
@@ -11,15 +14,44 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   try {
-    return res.status(404).json({
-      title: "Error posting Hold request",
-      status: 404,
-    }) // Placeholder response
+    const holdId = req.query.id as string
+    const [, itemId] = holdId.split("-")
+
+    const { patronId, source, pickupLocation, jsEnabled } = JSON.parse(req.body)
+
+    const holdRequestResponse = await postHoldRequest({
+      itemId,
+      patronId,
+      source,
+      pickupLocation,
+    })
+
+    const { pickupLocation: pickupLocationFromResponse, requestId } =
+      holdRequestResponse
+
+    if (!pickupLocationFromResponse || !requestId) {
+      throw new Error("Malformed response from hold request API")
+    }
+
+    // Return a 200 status when the hold request is posted successfully via JS fetch
+    if (jsEnabled) {
+      return res.status(200).json({
+        pickupLocation: pickupLocationFromResponse,
+        requestId,
+      })
+    }
+
+    // Server side redirect in case user has JS disabled
+    res.redirect(
+      `${BASE_URL}${PATHS.HOLD_CONFIRMATION}${holdId}?pickupLocation=${pickupLocationFromResponse}?requestId=${requestId}`
+    )
   } catch (error) {
+    const { statusText } = error as Response
+
     return res.status(500).json({
-      title: "Error fetching DRB results",
+      title: "Error posting hold request to Discovery API",
       status: 500,
-      detail: error.message,
+      detail: statusText || error.message,
     })
   }
 }
