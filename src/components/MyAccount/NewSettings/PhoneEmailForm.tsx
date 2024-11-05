@@ -46,6 +46,7 @@ const PhoneEmailForm = ({
     errorMessage: `Please enter a valid and unique ${
       isEmail ? "email address" : "phone number"
     }.`,
+    formId: `${isEmail ? "email" : "phone"}-form`,
     icon: `communication${isEmail ? "Email" : "Call"}`,
     inputLabel: isEmail ? "Email" : "Phone",
   }
@@ -174,11 +175,7 @@ const PhoneEmailForm = ({
               width="-webkit-fill-available"
             >
               {tempInputs.map((input, index) => (
-                <Form
-                  id={`${isEmail ? "email" : "phone"}-form`}
-                  key={index}
-                  gap={"grid.xxs"}
-                >
+                <Form id={formUtils.formId} key={index} gap={"grid.xxs"}>
                   <Flex mb="s" width="fill">
                     <TextInput
                       sx={{
