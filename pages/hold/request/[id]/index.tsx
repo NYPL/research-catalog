@@ -34,7 +34,7 @@ import type { DeliveryLocation } from "../../../../src/types/locationTypes"
 interface HoldRequestPropsType {
   discoveryBibResult: DiscoveryBibResult
   discoveryItemResult: DiscoveryItemResult
-  deliveryLocations: DeliveryLocation[]
+  deliveryLocations?: DeliveryLocation[]
   patronId: string
   isAuthenticated?: boolean
 }
@@ -47,7 +47,7 @@ interface HoldRequestPropsType {
 export default function HoldRequestPage({
   discoveryBibResult,
   discoveryItemResult,
-  deliveryLocations,
+  deliveryLocations = [],
   patronId,
   isAuthenticated,
 }: HoldRequestPropsType) {

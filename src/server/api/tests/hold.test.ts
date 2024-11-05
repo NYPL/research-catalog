@@ -11,20 +11,7 @@ jest.mock("../../nyplApiClient", () => {
           get: jest.fn().mockReturnValueOnce({
             itemListElement: [
               {
-                deliveryLocation: [
-                  {
-                    key: "schwarzman",
-                    value: "mag",
-                    address: "476 Fifth Avenue (42nd St and Fifth Ave)",
-                    label: "Schwarzman Building - Milstein Division Room 121",
-                  },
-                  {
-                    key: "lpa",
-                    value: "par",
-                    address: "40 Lincoln Center Plaza",
-                    label: "Library for the Performing Arts",
-                  },
-                ],
+                deliveryLocation: [{}, {}],
               },
             ],
           }),
@@ -37,20 +24,7 @@ jest.mock("../../nyplApiClient", () => {
           get: jest.fn().mockReturnValueOnce({
             itemListElement: [
               {
-                deliveryLocation: [
-                  {
-                    key: "schwarzman",
-                    value: "mag",
-                    address: "476 Fifth Avenue (42nd St and Fifth Ave)",
-                    label: "Schwarzman Building - Milstein Division Room 121",
-                  },
-                  {
-                    key: "lpa",
-                    value: "par",
-                    address: "40 Lincoln Center Plaza",
-                    label: "Library for the Performing Arts",
-                  },
-                ],
+                deliveryLocation: [{}, {}],
                 eddRequestable: true,
               },
             ],

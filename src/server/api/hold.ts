@@ -38,11 +38,12 @@ export async function fetchDeliveryLocations(
       throw new Error("Malformed response from delivery locations API")
     }
 
-    const deliveryLocations = discoveryLocationsItem?.deliveryLocation.map(
-      (locationElement: DiscoveryLocationElement) =>
-        mapLocationElementToDeliveryLocation(locationElement)
-    )
-    const eddRequestable = discoveryLocationsItem.eddRequestable || false
+    const deliveryLocations =
+      discoveryLocationsItem?.deliveryLocation?.map(
+        (locationElement: DiscoveryLocationElement) =>
+          mapLocationElementToDeliveryLocation(locationElement)
+      ) || []
+    const eddRequestable = discoveryLocationsItem?.eddRequestable || false
 
     // Filter out closed locations
     const openLocations = deliveryLocations.filter(
@@ -86,14 +87,7 @@ export async function postHoldRequest(
     requestType: "hold",
     recordType: "i",
     pickupLocation,
-    // TODO: This is set on regular hold requests in DFE, is this necessary?
-    numberOfCopies: 1,
   }
-
-  console.log(
-    "Making hold request in postHoldRequest server function",
-    holdPostParams
-  )
 
   try {
     const client = await nyplApiClient()
@@ -101,7 +95,7 @@ export async function postHoldRequest(
     const { id: requestId } = holdPostResult.data
 
     if (!requestId) {
-      console.log(
+      console.error(
         "postHoldRequest failed, no id returned from Discovery API",
         holdPostResult
       )
@@ -116,7 +110,7 @@ export async function postHoldRequest(
       requestId,
     }
   } catch (error) {
-    console.log(
+    console.error(
       `Error posting hold request in postHoldRequest server function, itemId: ${itemId}`,
       error.message
     )

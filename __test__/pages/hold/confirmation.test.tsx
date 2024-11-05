@@ -18,7 +18,6 @@ describe("Hold Confirmation page", () => {
         "Request successful"
       )
     })
-
     it("renders a faq accordion", () => {
       expect(screen.getByRole("heading", { level: 3 })).toHaveTextContent(
         "Frequently asked questions"
