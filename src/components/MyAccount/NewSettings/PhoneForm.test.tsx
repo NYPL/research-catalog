@@ -4,7 +4,7 @@ import { PatronDataProvider } from "../../../context/PatronDataContext"
 import { processedPatron } from "../../../../__test__/fixtures/processedMyAccountData"
 import PhoneEmailForm from "./PhoneEmailForm"
 
-describe("email form", () => {
+describe("phone form", () => {
   const mockSetIsSuccess = jest.fn()
   const mockSetIsFailure = jest.fn()
 
@@ -29,15 +29,17 @@ describe("email form", () => {
         patronData={processedPatron}
         setIsSuccess={mockSetIsSuccess}
         setIsFailure={mockSetIsFailure}
-        inputType="emails"
+        inputType="phones"
       />
     </PatronDataProvider>
   )
 
-  it("renders correctly with initial email", () => {
+  it("renders correctly with initial phone", () => {
     render(component)
 
-    expect(screen.getByText("streganonna@gmail.com")).toBeInTheDocument()
+    expect(
+      screen.getByText(processedPatron.phones[0].number)
+    ).toBeInTheDocument()
 
     expect(screen.getByRole("button", { name: /edit/i })).toBeInTheDocument()
   })
@@ -46,9 +48,9 @@ describe("email form", () => {
     render(component)
     fireEvent.click(screen.getByRole("button", { name: /edit/i }))
 
-    expect(screen.getAllByLabelText("Update emails")[0]).toBeInTheDocument()
+    expect(screen.getAllByLabelText("Update phones")[0]).toBeInTheDocument()
     expect(
-      screen.getByDisplayValue("streganonna@gmail.com")
+      screen.getByDisplayValue(processedPatron.phones[0].number)
     ).toBeInTheDocument()
 
     expect(screen.getByRole("button", { name: /cancel/i })).toBeInTheDocument()
@@ -58,54 +60,54 @@ describe("email form", () => {
     expect(screen.queryByText(/edit/)).not.toBeInTheDocument()
   })
 
-  it("validates email input correctly", () => {
+  it("validates phone input correctly", () => {
     render(component)
 
     fireEvent.click(screen.getByRole("button", { name: /edit/i }))
 
-    const input = screen.getAllByLabelText("Update emails")[0]
-    fireEvent.change(input, { target: { value: "invalid-email" } })
+    const input = screen.getAllByLabelText("Update phones")[0]
+    fireEvent.change(input, { target: { value: "invalid-phone" } })
 
     expect(
-      screen.getByText("Please enter a valid and unique email address.")
+      screen.getByText("Please enter a valid and unique phone number.")
     ).toBeInTheDocument()
 
     expect(screen.getByRole("button", { name: /save changes/i })).toBeDisabled()
   })
 
-  it("allows adding a new email field", () => {
+  it("allows adding a new phone field", () => {
     render(component)
 
     fireEvent.click(screen.getByRole("button", { name: /edit/i }))
 
     fireEvent.click(
-      screen.getByRole("button", { name: /\+ add an email address/i })
+      screen.getByRole("button", { name: /\+ add a phone number/i })
     )
 
-    expect(screen.getAllByLabelText("Update emails").length).toBe(
-      processedPatron.emails.length + 1
+    expect(screen.getAllByLabelText("Update phones").length).toBe(
+      processedPatron.phones.length + 1
     )
   })
 
-  it("removes an email when delete icon is clicked", () => {
+  it("removes a phone when delete icon is clicked", () => {
     render(component)
 
     fireEvent.click(screen.getByRole("button", { name: /edit/i }))
 
-    fireEvent.click(screen.getByLabelText("Remove email"))
+    fireEvent.click(screen.getByLabelText("Remove phone"))
 
     expect(
-      screen.queryByDisplayValue("spaghettigrandma@gmail.com")
+      screen.queryByDisplayValue(processedPatron.phones[0].number)
     ).not.toBeInTheDocument()
   })
 
-  it("calls submitEmails with valid data", async () => {
+  it("calls submit with valid data", async () => {
     render(component)
 
     fireEvent.click(screen.getByRole("button", { name: /edit/i }))
 
-    const input = screen.getAllByLabelText("Update emails")[0]
-    fireEvent.change(input, { target: { value: "newemail@example.com" } })
+    const input = screen.getAllByLabelText("Update phones")[0]
+    fireEvent.change(input, { target: { value: "1234" } })
 
     fireEvent.click(screen.getByRole("button", { name: /save changes/i }))
 
@@ -113,11 +115,11 @@ describe("email form", () => {
 
     expect(fetch).toHaveBeenCalledWith(
       "/research/research-catalog/api/account/settings/6742743",
-      expect.objectContaining({
-        body: '{"emails":["newemail@example.com","spaghettigrandma@gmail.com"]}',
+      {
+        body: '{"phones":[{"number":"1234","type":"t"}]}',
         headers: { "Content-Type": "application/json" },
         method: "PUT",
-      })
+      }
     )
   })
 
@@ -126,14 +128,30 @@ describe("email form", () => {
 
     fireEvent.click(screen.getByRole("button", { name: /edit/i }))
 
-    const input = screen.getAllByLabelText("Update emails")[0]
-    fireEvent.change(input, { target: { value: "modified@example.com" } })
+    const input = screen.getAllByLabelText("Update phones")[0]
+    fireEvent.change(input, { target: { value: "4534" } })
 
     fireEvent.click(screen.getByRole("button", { name: /cancel/i }))
 
-    expect(screen.getByText("streganonna@gmail.com")).toBeInTheDocument()
-    expect(
-      screen.queryByDisplayValue("modified@example.com")
+    expect(screen.getByText("123-456-7890")).toBeInTheDocument()
+    expect(screen.queryByDisplayValue("4534")).not.toBeInTheDocument()
+  })
+
+  it("shows add phone number when there's no more phone numbers", async () => {
+    render(component)
+
+    fireEvent.click(screen.getByRole("button", { name: /edit/i }))
+
+    fireEvent.click(screen.getByLabelText("Remove phone"))
+
+    fireEvent.click(screen.getByRole("button", { name: /save changes/i }))
+
+    await expect(
+      screen.queryByText(processedPatron.phones[0].number)
     ).not.toBeInTheDocument()
+
+    await waitFor(() =>
+      expect(screen.getByText("+ Add a phone number")).toBeInTheDocument()
+    )
   })
 })

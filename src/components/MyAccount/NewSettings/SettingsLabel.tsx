@@ -2,7 +2,13 @@ import { Flex, Icon, Text } from "@nypl/design-system-react-components"
 
 const SettingsLabel = ({ icon, text }) => {
   return (
-    <Flex gap="xs" alignItems="center" paddingLeft="xs" paddingTop="xs">
+    <Flex
+      gap="xs"
+      alignItems="center"
+      maxWidth="256px"
+      paddingLeft="xs"
+      paddingTop="xs"
+    >
       <Icon name={icon} size="medium" />
       <Text
         size="body1"
