@@ -38,8 +38,6 @@ export async function fetchDeliveryLocations(
       throw new Error("Malformed response from delivery locations API")
     }
 
-    console.log(discoveryLocationsResult)
-
     const deliveryLocations =
       discoveryLocationsItem?.deliveryLocation?.map(
         (locationElement: DiscoveryLocationElement) =>
