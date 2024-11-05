@@ -11,25 +11,27 @@ import {
 import SettingsLabel from "./SettingsLabel"
 import SaveCancelButtons from "./SaveCancelButtons"
 import type { Patron, SierraCodeName } from "../../../types/myAccountTypes"
+import EditButton from "./EditButton"
 
 interface HomeLibraryNotificationFormProps {
   type: "library" | "notification"
   patronData: Patron
-  setIsSuccess: (boolean) => void
-  setIsFailure: (boolean) => void
+  settingsState
   pickupLocations: SierraCodeName[]
 }
 
 const HomeLibraryNotificationForm = ({
   type,
   patronData,
-  setIsSuccess,
-  setIsFailure,
+  settingsState,
   pickupLocations,
 }: HomeLibraryNotificationFormProps) => {
   const { getMostUpdatedSierraAccountData } = useContext(PatronDataContext)
   const [isLoading, setIsLoading] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
+
+  const { setIsSuccess, setIsFailure, isOtherEditing, setIsOtherEditing } =
+    settingsState
 
   const notificationPreferenceMap = [
     { code: "z", name: "Email" },
@@ -77,11 +79,13 @@ const HomeLibraryNotificationForm = ({
 
   const cancelEditing = () => {
     setIsEditing(false)
+    setIsOtherEditing(false)
   }
 
   const submitSelection = async () => {
     setIsLoading(true)
     setIsEditing(false)
+    setIsOtherEditing(false)
 
     const code =
       type === "notification"
@@ -160,19 +164,15 @@ const HomeLibraryNotificationForm = ({
               >
                 {selection}
               </Text>
-              <Button
-                id={`edit-${type}-button`}
-                buttonType="text"
-                onClick={() => setIsEditing(true)}
-                sx={{
-                  paddingLeft: "xs",
-                  paddingRight: "xs",
-                  marginLeft: "xxl",
-                }}
-              >
-                <Icon name="editorMode" align="left" size="medium" />
-                Edit
-              </Button>
+              {!isOtherEditing && (
+                <EditButton
+                  buttonId={`edit-${type}-button`}
+                  onClick={() => {
+                    setIsEditing(true)
+                    setIsOtherEditing(true)
+                  }}
+                />
+              )}
             </Flex>
           )}
           {isEditing && (

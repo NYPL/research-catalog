@@ -11,6 +11,14 @@ const NewAccountSettingsTab = () => {
   } = useContext(PatronDataContext)
   const [isSuccess, setIsSuccess] = useState(false)
   const [isFailure, setIsFailure] = useState(false)
+  const [isOtherEditing, setIsOtherEditing] = useState(false)
+
+  const settingsState = {
+    setIsSuccess,
+    setIsFailure,
+    isOtherEditing,
+    setIsOtherEditing,
+  }
 
   return (
     <>
@@ -31,35 +39,27 @@ const NewAccountSettingsTab = () => {
       <Flex flexDir="column" sx={{ marginTop: "xl", gap: "s" }}>
         <PhoneEmailForm
           patronData={patron}
-          setIsSuccess={setIsSuccess}
-          setIsFailure={setIsFailure}
+          settingsState={settingsState}
           inputType="phones"
         />
         <PhoneEmailForm
           patronData={patron}
-          setIsSuccess={setIsSuccess}
-          setIsFailure={setIsFailure}
+          settingsState={settingsState}
           inputType="emails"
         />
         <HomeLibraryNotificationForm
           patronData={patron}
           pickupLocations={pickupLocations}
-          setIsSuccess={setIsSuccess}
-          setIsFailure={setIsFailure}
+          settingsState={settingsState}
           type="library"
         />
         <HomeLibraryNotificationForm
           patronData={patron}
           pickupLocations={pickupLocations}
-          setIsSuccess={setIsSuccess}
-          setIsFailure={setIsFailure}
+          settingsState={settingsState}
           type="notification"
         />
-        <PasswordForm
-          setIsSuccess={setIsSuccess}
-          setIsFailure={setIsFailure}
-          patronData={patron}
-        />
+        <PasswordForm settingsState={settingsState} patronData={patron} />
       </Flex>
     </>
   )

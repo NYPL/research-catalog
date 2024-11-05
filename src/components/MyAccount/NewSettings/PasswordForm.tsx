@@ -15,18 +15,14 @@ import SaveCancelButtons from "./SaveCancelButtons"
 import type { Patron } from "../../../types/myAccountTypes"
 import { patron } from "../../../../__test__/fixtures/rawSierraAccountData"
 import { BASE_URL } from "../../../config/constants"
+import EditButton from "./EditButton"
 
 interface PasswordFormProps {
   patronData: Patron
-  setIsSuccess: (boolean) => void
-  setIsFailure: (boolean) => void
+  settingsState
 }
 
-const PasswordForm = ({
-  patronData,
-  setIsSuccess,
-  setIsFailure,
-}: PasswordFormProps) => {
+const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
   const { getMostUpdatedSierraAccountData } = useContext(PatronDataContext)
   const [isLoading, setIsLoading] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
@@ -36,9 +32,12 @@ const PasswordForm = ({
     confirmPassword: "",
     passwordsMatch: true,
   })
+  const { setIsSuccess, setIsFailure, isOtherEditing, setIsOtherEditing } =
+    settingsState
 
   const cancelEditing = () => {
     setIsEditing(false)
+    setIsOtherEditing(false)
   }
 
   const submitForm = async () => {
@@ -230,19 +229,15 @@ const PasswordForm = ({
             >
               ****
             </Text>
-            <Button
-              id="edit-password-button"
-              buttonType="text"
-              onClick={() => setIsEditing(true)}
-              sx={{
-                paddingLeft: "xs",
-                paddingRight: "xs",
-                marginLeft: "xxl",
-              }}
-            >
-              <Icon name="editorMode" align="left" size="medium" />
-              Edit
-            </Button>
+            {!isOtherEditing && (
+              <EditButton
+                buttonId="edit-password-button"
+                onClick={() => {
+                  setIsEditing(true)
+                  setIsOtherEditing(true)
+                }}
+              />
+            )}
           </Flex>
         </Flex>
       )}

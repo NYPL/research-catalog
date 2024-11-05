@@ -12,18 +12,17 @@ import { PatronDataContext } from "../../../context/PatronDataContext"
 import SaveCancelButtons from "./SaveCancelButtons"
 import SettingsLabel from "./SettingsLabel"
 import type { Patron } from "../../../types/myAccountTypes"
+import EditButton from "./EditButton"
 
 interface PhoneEmailFormProps {
   patronData: Patron
-  setIsSuccess: (boolean) => void
-  setIsFailure: (boolean) => void
+  settingsState
   inputType: "phones" | "emails"
 }
 
 const PhoneEmailForm = ({
   patronData,
-  setIsSuccess,
-  setIsFailure,
+  settingsState,
   inputType,
 }: PhoneEmailFormProps) => {
   const isEmail = inputType === "emails"
@@ -36,6 +35,9 @@ const PhoneEmailForm = ({
   const [isLoading, setIsLoading] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
   const [error, setError] = useState(false)
+
+  const { setIsSuccess, setIsFailure, isOtherEditing, setIsOtherEditing } =
+    settingsState
 
   const [tempInputs, setTempInputs] = useState([...inputs])
 
@@ -110,6 +112,7 @@ const PhoneEmailForm = ({
   const cancelEditing = () => {
     setTempInputs([...inputs])
     setIsEditing(false)
+    setIsOtherEditing(false)
     setError(false)
   }
 
@@ -257,22 +260,16 @@ const PhoneEmailForm = ({
                   </Text>
                 ))}
               </Flex>
-              <Button
-                id="edit-input-button"
-                buttonType="text"
-                onClick={() => {
-                  setTempInputs([...inputs])
-                  setIsEditing(true)
-                }}
-                sx={{
-                  paddingLeft: "xs",
-                  paddingRight: "xs",
-                  marginLeft: "xxl",
-                }}
-              >
-                <Icon name="editorMode" align="left" size="medium" />
-                Edit
-              </Button>
+              {!isOtherEditing && (
+                <EditButton
+                  buttonId={"edit-input-button"}
+                  onClick={() => {
+                    setTempInputs([...inputs])
+                    setIsEditing(true)
+                    setIsOtherEditing(true)
+                  }}
+                />
+              )}
             </Flex>
           ) : (
             <Button
@@ -280,6 +277,7 @@ const PhoneEmailForm = ({
               buttonType="text"
               onClick={() => {
                 setIsEditing(true)
+                setIsOtherEditing(true)
                 handleAdd()
               }}
               size="large"
