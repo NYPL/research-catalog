@@ -89,8 +89,6 @@ export async function postHoldRequest(
     requestType: "hold",
     recordType: "i",
     pickupLocation,
-    // TODO: This is set on regular hold requests in DFE, is this necessary?
-    numberOfCopies: 1,
   }
 
   try {
