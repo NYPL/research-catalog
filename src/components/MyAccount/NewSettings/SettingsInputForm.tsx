@@ -74,6 +74,12 @@ const PhoneEmailForm = ({
       (!value || !validateInput(value, updatedInputs))
     ) {
       setError(true)
+    } else if (
+      patronData.notificationPreference === "p" &&
+      firstInputEmpty &&
+      !isEmail
+    ) {
+      setError(true)
     } else {
       const hasInvalidInput = updatedInputs.some(
         (input) => !validateInput(input, updatedInputs)
@@ -157,6 +163,7 @@ const PhoneEmailForm = ({
       console.error("Error submitting", inputType, error)
     } finally {
       setIsLoading(false)
+      setIsOtherEditing(false)
     }
   }
 
@@ -198,7 +205,9 @@ const PhoneEmailForm = ({
                       isClearable
                       isClearableCallback={() => handleClearableCallback(index)}
                     />
-                    {(!isEmail || index !== 0) && (
+                    {((!isEmail &&
+                      !(patronData.notificationPreference === "p")) ||
+                      index !== 0) && (
                       <Button
                         aria-label={`Remove ${formUtils.inputLabel.toLowerCase()}`}
                         buttonType="text"

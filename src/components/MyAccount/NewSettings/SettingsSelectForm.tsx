@@ -85,7 +85,6 @@ const HomeLibraryNotificationForm = ({
   const submitSelection = async () => {
     setIsLoading(true)
     setIsEditing(false)
-    setIsOtherEditing(false)
 
     const code =
       type === "notification"
@@ -118,6 +117,7 @@ const HomeLibraryNotificationForm = ({
       console.error("Error submitting", error)
     } finally {
       setIsLoading(false)
+      setIsOtherEditing(false)
     }
   }
 
