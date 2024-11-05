@@ -4,7 +4,7 @@ import { render, screen } from "../../../src/utils/testUtils"
 describe("Hold Confirmation page", () => {
   describe("Hold Confirmation page UI", () => {
     beforeEach(() => {
-      render(<HoldConfirmationPage isEDD={false} />)
+      render(<HoldConfirmationPage />)
     })
 
     it("renders an H2", () => {
