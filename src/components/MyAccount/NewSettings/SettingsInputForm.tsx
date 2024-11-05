@@ -68,17 +68,7 @@ const PhoneEmailForm = ({
 
     const firstInputEmpty = index === 0
 
-    if (
-      isEmail &&
-      firstInputEmpty &&
-      (!value || !validateInput(value, updatedInputs))
-    ) {
-      setError(true)
-    } else if (
-      patronData.notificationPreference === "p" &&
-      firstInputEmpty &&
-      !isEmail
-    ) {
+    if (firstInputEmpty && (!value || !validateInput(value, updatedInputs))) {
       setError(true)
     } else {
       const hasInvalidInput = updatedInputs.some(
@@ -138,6 +128,7 @@ const PhoneEmailForm = ({
             type: "t",
           })),
         })
+    console.log(body)
     try {
       const response = await fetch(
         `/research/research-catalog/api/account/settings/${patronData.id}`,
@@ -205,9 +196,7 @@ const PhoneEmailForm = ({
                       isClearable
                       isClearableCallback={() => handleClearableCallback(index)}
                     />
-                    {((!isEmail &&
-                      !(patronData.notificationPreference === "p")) ||
-                      index !== 0) && (
+                    {index !== 0 && (
                       <Button
                         aria-label={`Remove ${formUtils.inputLabel.toLowerCase()}`}
                         buttonType="text"

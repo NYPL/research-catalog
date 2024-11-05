@@ -29,6 +29,7 @@ const HomeLibraryNotificationForm = ({
   const { getMostUpdatedSierraAccountData } = useContext(PatronDataContext)
   const [isLoading, setIsLoading] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
+  const [error, setError] = useState(false)
 
   const { setIsSuccess, setIsFailure, isOtherEditing, setIsOtherEditing } =
     settingsState
@@ -38,6 +39,12 @@ const HomeLibraryNotificationForm = ({
     { code: "p", name: "Phone" },
     { code: "-", name: "None" },
   ]
+
+  const validateInput = (input) => {
+    if (input == "Phone" && patronData.phones.length === 0) {
+      setError(true)
+    }
+  }
 
   const sortedPickupLocations = [
     patronData.homeLibrary,
@@ -75,6 +82,7 @@ const HomeLibraryNotificationForm = ({
 
   const handleSelectChange = (event) => {
     setTempSelection(event.target.value)
+    validateInput(event.target.value)
   }
 
   const cancelEditing = () => {
@@ -179,6 +187,7 @@ const HomeLibraryNotificationForm = ({
             <SaveCancelButtons
               onCancel={cancelEditing}
               onSave={submitSelection}
+              isDisabled={error}
             />
           )}
         </Flex>
