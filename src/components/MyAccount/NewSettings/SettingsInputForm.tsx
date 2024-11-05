@@ -13,6 +13,7 @@ import SaveCancelButtons from "./SaveCancelButtons"
 import SettingsLabel from "./SettingsLabel"
 import type { Patron } from "../../../types/myAccountTypes"
 import EditButton from "./EditButton"
+import AddButton from "./AddButton"
 
 interface PhoneEmailFormProps {
   patronData: Patron
@@ -48,6 +49,7 @@ const PhoneEmailForm = ({
     errorMessage: `Please enter a valid and unique ${
       isEmail ? "email address" : "phone number"
     }.`,
+    formId: `${isEmail ? "email" : "phone"}-form`,
     icon: `communication${isEmail ? "Email" : "Call"}`,
     inputLabel: isEmail ? "Email" : "Phone",
   }
@@ -177,11 +179,7 @@ const PhoneEmailForm = ({
               width="-webkit-fill-available"
             >
               {tempInputs.map((input, index) => (
-                <Form
-                  id={`${isEmail ? "email" : "phone"}-form`}
-                  key={index}
-                  gap={"grid.xxs"}
-                >
+                <Form id={formUtils.formId} key={index} gap={"grid.xxs"}>
                   <Flex mb="s" width="fill">
                     <TextInput
                       sx={{
@@ -214,19 +212,11 @@ const PhoneEmailForm = ({
                   </Flex>
                 </Form>
               ))}
-              <Button
-                id={`add-${inputType}-button`}
-                buttonType="text"
+              <AddButton
+                inputType={inputType}
+                label={formUtils.addButtonLabel}
                 onClick={handleAdd}
-                size="large"
-                sx={{
-                  justifyContent: "flex-start",
-                  width: { base: "87%", md: "300px" },
-                  padding: "xxs",
-                }}
-              >
-                {formUtils.addButtonLabel}
-              </Button>
+              />
             </Flex>
           ) : isEmail || tempInputs.length != 0 ? (
             <Flex
@@ -272,23 +262,15 @@ const PhoneEmailForm = ({
               )}
             </Flex>
           ) : (
-            <Button
-              id={`add-${inputType}-button`}
-              buttonType="text"
+            <AddButton
+              inputType={inputType}
               onClick={() => {
                 setIsEditing(true)
                 setIsOtherEditing(true)
                 handleAdd()
               }}
-              size="large"
-              sx={{
-                justifyContent: "flex-start",
-                width: { base: "87%", md: "300px" },
-                paddingLeft: { base: "m", md: "unset" },
-              }}
-            >
-              {formUtils.addButtonLabel}
-            </Button>
+              label={formUtils.addButtonLabel}
+            />
           )}
 
           {isEditing && (
