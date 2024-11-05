@@ -20,7 +20,18 @@ const CancelSubmitButtonGroup = ({
     ? "actionSearch"
     : "check"
   return (
-    <ButtonGroup id={`${formName}-buttons`}>
+    // @ts-ignore
+    <ButtonGroup mb={0} id={`${formName}-buttons`} layout="row-reverse">
+      <Button
+        data-testid={`submit-${formName}-button`}
+        id={`submit-${formName}`}
+        type="submit"
+        buttonType="primary"
+        isDisabled={disableSubmit}
+      >
+        <Icon name={submitIcon} align="left" size="large" />
+        {submitLabel}
+      </Button>
       <Button
         data-testid={`clear-${formName}-button`}
         onClick={cancelHandler}
@@ -31,16 +42,6 @@ const CancelSubmitButtonGroup = ({
       >
         <Icon name="actionDelete" align="left" size="large" />
         {cancelLabel}
-      </Button>
-      <Button
-        data-testid={`submit-${formName}-button`}
-        id={`submit-${formName}`}
-        type="submit"
-        buttonType="primary"
-        isDisabled={disableSubmit}
-      >
-        <Icon name={submitIcon} align="left" size="large" />
-        {submitLabel}
       </Button>
     </ButtonGroup>
   )

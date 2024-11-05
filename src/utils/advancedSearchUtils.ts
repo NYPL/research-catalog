@@ -19,6 +19,7 @@ export const initialSearchFormState: SearchParams = {
     dateBefore: "",
     dateAfter: "",
     materialType: [],
+    buildingLocation: [],
   },
 }
 
