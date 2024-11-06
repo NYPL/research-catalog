@@ -41,7 +41,7 @@ Route parameter is the hold ID. Request body requires the **patron ID**, and can
 exampleBody: {
     patronId: '123456',
     freeze: true,
-    homeLibraryCode: 'sn',
+    pickupLocation: 'sn',
 },
 ```
 
@@ -89,7 +89,8 @@ Route parameter is the patron ID. Request body can include any fields on the pat
 
 exampleBody: {
     emails: ['new@email.com'],
-    phones: [6466600432]
+    phones: [6466600432],
+    homeLibraryCode: 'sn'
 },
 
 ```
