@@ -3,11 +3,15 @@ import { filteredPickupLocations } from "../../../../__test__/fixtures/processed
 import { PatronDataProvider } from "../../../context/PatronDataContext"
 import { processedPatron } from "../../../../__test__/fixtures/processedMyAccountData"
 import { pickupLocations } from "../../../../__test__/fixtures/rawSierraAccountData"
-import HomeLibraryNotificationForm from "./SettingsSelectForm"
+import SettingsSelectForm from "./SettingsSelectForm"
 
 describe("notification preference form", () => {
-  const mockSetIsSuccess = jest.fn()
-  const mockSetIsFailure = jest.fn()
+  const mockSettingsState = {
+    setIsSuccess: jest.fn(),
+    setIsFailure: jest.fn(),
+    isOtherEditing: false,
+    setIsOtherEditing: jest.fn(),
+  }
 
   beforeEach(() => {
     jest.clearAllMocks()
@@ -36,10 +40,9 @@ describe("notification preference form", () => {
         pickupLocations: filteredPickupLocations,
       }}
     >
-      <HomeLibraryNotificationForm
+      <SettingsSelectForm
         patronData={processedPatron}
-        setIsSuccess={mockSetIsSuccess}
-        setIsFailure={mockSetIsFailure}
+        settingsState={mockSettingsState}
         pickupLocations={pickupLocations}
         type="notification"
       />

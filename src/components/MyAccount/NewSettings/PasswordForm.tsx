@@ -133,7 +133,7 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
                   showLabel={false}
                   isClearable
                   showRequiredLabel={false}
-                  labelText="Enter current PIN/PASSWORD"
+                  labelText="Enter current pin/password"
                   onChange={handleInputChange}
                 />
               </Flex>
@@ -156,7 +156,7 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
                   isClearable
                   showRequiredLabel={false}
                   showLabel={false}
-                  labelText="Enter new PIN/PASSWORD"
+                  labelText="Enter new pin/password"
                   onChange={handleInputChange}
                 />
               </Flex>
@@ -182,7 +182,7 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
                   isRequired
                   showLabel={false}
                   showRequiredLabel={false}
-                  labelText="Re-enter new PIN/PASSWORD"
+                  labelText="Re-enter new pin/password"
                 />
               </Flex>
             </Flex>

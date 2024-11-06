@@ -2,11 +2,15 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react"
 import { filteredPickupLocations } from "../../../../__test__/fixtures/processedMyAccountData"
 import { PatronDataProvider } from "../../../context/PatronDataContext"
 import { processedPatron } from "../../../../__test__/fixtures/processedMyAccountData"
-import PhoneEmailForm from "./SettingsInputForm"
+import SettingsInputForm from "./SettingsInputForm"
 
 describe("phone form", () => {
-  const mockSetIsSuccess = jest.fn()
-  const mockSetIsFailure = jest.fn()
+  const mockSettingsState = {
+    setIsSuccess: jest.fn(),
+    setIsFailure: jest.fn(),
+    isOtherEditing: false,
+    setIsOtherEditing: jest.fn(),
+  }
 
   beforeEach(() => {
     jest.clearAllMocks()
@@ -25,10 +29,9 @@ describe("phone form", () => {
         pickupLocations: filteredPickupLocations,
       }}
     >
-      <PhoneEmailForm
+      <SettingsInputForm
         patronData={processedPatron}
-        setIsSuccess={mockSetIsSuccess}
-        setIsFailure={mockSetIsFailure}
+        settingsState={mockSettingsState}
         inputType="phones"
       />
     </PatronDataProvider>
@@ -89,16 +92,28 @@ describe("phone form", () => {
     )
   })
 
-  it("removes a phone when delete icon is clicked", () => {
+  it("removes a phone when delete icon is clicked", async () => {
     render(component)
 
     fireEvent.click(screen.getByRole("button", { name: /edit/i }))
 
+    fireEvent.click(
+      screen.getByRole("button", { name: /\+ add a phone number/i })
+    )
+
+    const input = screen.getAllByLabelText("Update phones")[1]
+
+    fireEvent.change(input, { target: { value: "5106974153" } })
+
+    expect(screen.getAllByRole("textbox").length).toBe(
+      processedPatron.phones.length + 1
+    )
+
     fireEvent.click(screen.getByLabelText("Remove phone"))
 
-    expect(
-      screen.queryByDisplayValue(processedPatron.phones[0].number)
-    ).not.toBeInTheDocument()
+    expect(screen.getAllByLabelText("Update phones").length).toBe(
+      processedPatron.phones.length
+    )
   })
 
   it("calls submit with valid data", async () => {
@@ -135,23 +150,5 @@ describe("phone form", () => {
 
     expect(screen.getByText("123-456-7890")).toBeInTheDocument()
     expect(screen.queryByDisplayValue("4534")).not.toBeInTheDocument()
-  })
-
-  it("shows add phone number when there's no more phone numbers", async () => {
-    render(component)
-
-    fireEvent.click(screen.getByRole("button", { name: /edit/i }))
-
-    fireEvent.click(screen.getByLabelText("Remove phone"))
-
-    fireEvent.click(screen.getByRole("button", { name: /save changes/i }))
-
-    await expect(
-      screen.queryByText(processedPatron.phones[0].number)
-    ).not.toBeInTheDocument()
-
-    await waitFor(() =>
-      expect(screen.getByText("+ Add a phone number")).toBeInTheDocument()
-    )
   })
 })

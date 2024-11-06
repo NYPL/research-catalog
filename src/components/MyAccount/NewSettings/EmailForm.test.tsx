@@ -2,11 +2,15 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react"
 import { filteredPickupLocations } from "../../../../__test__/fixtures/processedMyAccountData"
 import { PatronDataProvider } from "../../../context/PatronDataContext"
 import { processedPatron } from "../../../../__test__/fixtures/processedMyAccountData"
-import PhoneEmailForm from "./SettingsInputForm"
+import SettingsInputForm from "./SettingsInputForm"
 
 describe("email form", () => {
-  const mockSetIsSuccess = jest.fn()
-  const mockSetIsFailure = jest.fn()
+  const mockSettingsState = {
+    setIsSuccess: jest.fn(),
+    setIsFailure: jest.fn(),
+    isOtherEditing: false,
+    setIsOtherEditing: jest.fn(),
+  }
 
   beforeEach(() => {
     jest.clearAllMocks()
@@ -25,10 +29,9 @@ describe("email form", () => {
         pickupLocations: filteredPickupLocations,
       }}
     >
-      <PhoneEmailForm
+      <SettingsInputForm
         patronData={processedPatron}
-        setIsSuccess={mockSetIsSuccess}
-        setIsFailure={mockSetIsFailure}
+        settingsState={mockSettingsState}
         inputType="emails"
       />
     </PatronDataProvider>

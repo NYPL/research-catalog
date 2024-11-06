@@ -6,9 +6,6 @@ import { pickupLocations } from "../../../../__test__/fixtures/rawSierraAccountD
 import HomeLibraryNotificationForm from "./SettingsSelectForm"
 
 describe("home library form", () => {
-  const mockSetIsSuccess = jest.fn()
-  const mockSetIsFailure = jest.fn()
-
   beforeEach(() => {
     jest.clearAllMocks()
     global.fetch = jest.fn().mockResolvedValue({
@@ -19,6 +16,13 @@ describe("home library form", () => {
     } as Response)
   })
 
+  const mockSettingsState = {
+    setIsSuccess: jest.fn(),
+    setIsFailure: jest.fn(),
+    isOtherEditing: false,
+    setIsOtherEditing: jest.fn(),
+  }
+
   const component = (
     <PatronDataProvider
       value={{
@@ -28,8 +32,7 @@ describe("home library form", () => {
     >
       <HomeLibraryNotificationForm
         patronData={processedPatron}
-        setIsSuccess={mockSetIsSuccess}
-        setIsFailure={mockSetIsFailure}
+        settingsState={mockSettingsState}
         pickupLocations={pickupLocations}
         type="library"
       />
