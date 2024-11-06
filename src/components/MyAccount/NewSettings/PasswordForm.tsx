@@ -36,8 +36,38 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
     setIsOtherEditing(false)
   }
 
+  const validateForm =
+    formData.oldPassword !== "" &&
+    formData.newPassword !== "" &&
+    formData.confirmPassword !== "" &&
+    formData.passwordsMatch
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target
+    let updatedFormData = { ...formData }
+
+    if (name === "confirmPassword") {
+      updatedFormData = {
+        ...updatedFormData,
+        confirmPassword: value,
+        passwordsMatch: updatedFormData.newPassword === value,
+      }
+    } else if (name === "newPassword") {
+      updatedFormData = {
+        ...updatedFormData,
+        newPassword: value,
+        passwordsMatch: updatedFormData.confirmPassword === value,
+      }
+    } else {
+      updatedFormData = {
+        ...updatedFormData,
+        [name]: value,
+      }
+    }
+    setFormData(updatedFormData)
+  }
+
   const submitForm = async () => {
-    console.log("submitting")
     setIsLoading(true)
     setIsEditing(false)
     setIsSuccess(false)
@@ -70,36 +100,6 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
       setIsLoading(false)
       setIsOtherEditing(false)
     }
-  }
-  const validateForm =
-    formData.oldPassword !== "" &&
-    formData.newPassword !== "" &&
-    formData.confirmPassword !== "" &&
-    formData.passwordsMatch
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target
-    let updatedFormData = { ...formData }
-
-    if (name === "confirmPassword") {
-      updatedFormData = {
-        ...updatedFormData,
-        confirmPassword: value,
-        passwordsMatch: updatedFormData.newPassword === value,
-      }
-    } else if (name === "newPassword") {
-      updatedFormData = {
-        ...updatedFormData,
-        newPassword: value,
-        passwordsMatch: updatedFormData.confirmPassword === value,
-      }
-    } else {
-      updatedFormData = {
-        ...updatedFormData,
-        [name]: value,
-      }
-    }
-    setFormData(updatedFormData)
   }
 
   return (
