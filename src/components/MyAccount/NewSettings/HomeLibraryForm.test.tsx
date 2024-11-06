@@ -22,9 +22,11 @@ describe("home library form", () => {
     isOtherEditing: false,
     setIsOtherEditing: jest.fn(),
   }
+  const accountFetchSpy = jest.fn()
 
   const component = (
     <PatronDataProvider
+      testSpy={accountFetchSpy}
       value={{
         patron: processedPatron,
         pickupLocations: filteredPickupLocations,

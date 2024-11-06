@@ -1,5 +1,5 @@
 import React from "react"
-import { render, fireEvent } from "../../../utils/testUtils"
+import { render, fireEvent, waitFor } from "../../../utils/testUtils"
 import PasswordForm from "./PasswordForm"
 import {
   filteredPickupLocations,
@@ -13,8 +13,11 @@ const mockSettingsState = {
   isOtherEditing: false,
   setIsOtherEditing: jest.fn(),
 }
+const accountFetchSpy = jest.fn()
+
 const component = (
   <PatronDataProvider
+    testSpy={accountFetchSpy}
     value={{
       patron: processedPatron,
       pickupLocations: filteredPickupLocations,
@@ -88,6 +91,10 @@ describe("Pin/password form", () => {
 
     const submitButton = getByText("Save changes")
     fireEvent.click(submitButton)
+    await waitFor(() =>
+      expect(mockSettingsState.setIsFailure).toHaveBeenCalledTimes(2)
+    )
+    expect(mockSettingsState.setIsFailure).toHaveBeenNthCalledWith(2, true)
   })
 
   test("sets failure if new password is invalid", async () => {
@@ -113,10 +120,13 @@ describe("Pin/password form", () => {
 
     const submitButton = getByText("Save changes")
     fireEvent.click(submitButton)
+    await waitFor(() =>
+      expect(mockSettingsState.setIsFailure).toHaveBeenCalledTimes(4)
+    )
+    expect(mockSettingsState.setIsFailure).toHaveBeenNthCalledWith(4, true)
   })
 
-  test("sets success if every field is valid", async () => {
-    // Failure response
+  test("successfully sets patron data if every field is valid", async () => {
     global.fetch = jest.fn().mockResolvedValue({
       status: 200,
       json: async () => "Updated",
@@ -138,5 +148,6 @@ describe("Pin/password form", () => {
 
     const submitButton = getByText("Save changes")
     fireEvent.click(submitButton)
+    await waitFor(() => expect(accountFetchSpy).toHaveBeenCalled())
   })
 })

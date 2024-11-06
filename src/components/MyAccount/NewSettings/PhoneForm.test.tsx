@@ -11,6 +11,7 @@ describe("phone form", () => {
     isOtherEditing: false,
     setIsOtherEditing: jest.fn(),
   }
+  const accountFetchSpy = jest.fn()
 
   beforeEach(() => {
     jest.clearAllMocks()
@@ -24,6 +25,7 @@ describe("phone form", () => {
 
   const component = (
     <PatronDataProvider
+      testSpy={accountFetchSpy}
       value={{
         patron: processedPatron,
         pickupLocations: filteredPickupLocations,

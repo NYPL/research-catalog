@@ -12,6 +12,7 @@ describe("notification preference form", () => {
     isOtherEditing: false,
     setIsOtherEditing: jest.fn(),
   }
+  const accountFetchSpy = jest.fn()
 
   beforeEach(() => {
     jest.clearAllMocks()
@@ -35,6 +36,7 @@ describe("notification preference form", () => {
 
   const component = (
     <PatronDataProvider
+      testSpy={accountFetchSpy}
       value={{
         patron: processedPatron,
         pickupLocations: filteredPickupLocations,
@@ -95,6 +97,7 @@ describe("notification preference form", () => {
         method: "PUT",
       }
     )
+    expect(accountFetchSpy).toHaveBeenCalled()
   })
 
   it("cancels editing and reverts state", () => {

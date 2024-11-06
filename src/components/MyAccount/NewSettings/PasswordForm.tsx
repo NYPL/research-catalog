@@ -37,6 +37,7 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
   }
 
   const submitForm = async () => {
+    console.log("submitting")
     setIsLoading(true)
     setIsEditing(false)
     setIsSuccess(false)
@@ -58,8 +59,8 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
       )
 
       if (response.status === 200) {
-        await getMostUpdatedSierraAccountData()
         setIsSuccess(true)
+        await getMostUpdatedSierraAccountData()
       } else {
         setIsFailure(true)
       }
@@ -67,6 +68,7 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
       console.error("Error submitting", error)
     } finally {
       setIsLoading(false)
+      setIsOtherEditing(false)
     }
   }
   const validateForm =
@@ -177,7 +179,7 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
                   name="confirmPassword"
                   type="password"
                   isInvalid={!formData.passwordsMatch}
-                  invalidText="PIN/PASSWORDS do not match"
+                  invalidText="Pin/passwords do not match."
                   onChange={handleInputChange}
                   isRequired
                   showLabel={false}
