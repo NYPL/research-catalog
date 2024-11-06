@@ -20,7 +20,7 @@ const HoldItemDetails = ({ item }: HoldItemDetailsProps) => {
       type="dl"
       showRowDividers={false}
       className={bibDetailStyles.bibDetails}
-      mb="xs"
+      mb="l"
       mt={0}
     >
       <LinkedDetailElement

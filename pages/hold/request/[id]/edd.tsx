@@ -1,6 +1,7 @@
 import Head from "next/head"
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect, type SyntheticEvent } from "react"
 import { useRouter } from "next/router"
+import { isEmail } from "validator"
 import {
   Heading,
   Box,
@@ -18,6 +19,7 @@ import useLoading from "../../../../src/hooks/useLoading"
 
 import { fetchBib } from "../../../../src/server/api/bib"
 import { fetchDeliveryLocations } from "../../../../src/server/api/hold"
+import { eddRequestDefaultInvalidFields } from "../../../../src/utils/holdUtils"
 
 import initializePatronTokenAuth, {
   doRedirectBasedOnNyplAccountRedirects,
@@ -58,9 +60,14 @@ export default function EDDRequestPage({
 
   // Initialize alert to true if item is not available. This will show the error banner.
   const [alert, setAlert] = useState(!isEddAvailable)
-  const [errorDetail, setErrorDetail] = useState("")
   const [formPosting, setFormPosting] = useState(false)
+
+  const [invalidFields, setInvalidFields] = useState(
+    eddRequestDefaultInvalidFields
+  )
+
   const bannerContainerRef = useRef<HTMLDivElement>()
+  const requiredFieldsRef = useRef()
 
   const router = useRouter()
   const isLoading = useLoading()
@@ -70,6 +77,21 @@ export default function EDDRequestPage({
       bannerContainerRef.current.focus()
     }
   }, [alert])
+
+  const handleInputChange = (e: SyntheticEvent) => {
+    e.preventDefault()
+    alert && setAlert(false)
+    const target = e.target as HTMLInputElement
+
+    setInvalidFields((prev) => ({
+      ...prev,
+      [target.name]: !target.value.length,
+    }))
+
+    if (target.name === "email") {
+      setInvalidFields((prev) => ({ ...prev, email: !isEmail(target.value) }))
+    }
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -94,7 +116,6 @@ export default function EDDRequestPage({
           responseJson.error
         )
         setAlert(true)
-        setErrorDetail(responseJson?.error?.detail || "")
         setFormPosting(false)
         return
       }
@@ -146,7 +167,6 @@ export default function EDDRequestPage({
                   ? "Electronic delivery options for this item are currently unavailable."
                   : "We were unable to process your request at this time"
               }
-              errorDetail={""}
             />
           )}
         </Box>
@@ -162,9 +182,12 @@ export default function EDDRequestPage({
         ) : isEddAvailable ? (
           <EDDRequestForm
             handleSubmit={handleSubmit}
+            handleInputChange={handleInputChange}
             holdId={holdId}
             patronId={patronId}
             source={item.source}
+            invalidFields={invalidFields}
+            // requiredFieldsRef={requiredFieldsRef}
           />
         ) : null}
       </Layout>
@@ -191,7 +214,7 @@ export async function getServerSideProps({ params, req, res }) {
         redirectCount + 1
       }; Max-Age=10; path=/; domain=.nypl.org;`
     )
-    const redirect = getLoginRedirect(req, `${PATHS.HOLD_REQUEST}[${id}]`)
+    const redirect = getLoginRedirect(req, `${PATHS.HOLD_REQUEST}[${id}]/edd`)
 
     return {
       redirect: {

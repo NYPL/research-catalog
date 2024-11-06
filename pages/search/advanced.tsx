@@ -1,8 +1,13 @@
 import Head from "next/head"
-import { useState, useReducer, useRef, useEffect } from "react"
+import {
+  useState,
+  useReducer,
+  useRef,
+  useEffect,
+  type SyntheticEvent,
+} from "react"
 import { useRouter } from "next/router"
 import { debounce } from "underscore"
-import type { SyntheticEvent } from "react"
 import type { TextInputRefType } from "@nypl/design-system-react-components"
 import {
   Heading,
@@ -18,7 +23,12 @@ import {
 } from "@nypl/design-system-react-components"
 
 import Layout from "../../src/components/Layout/Layout"
-import { BASE_URL, PATHS, SITE_NAME } from "../../src/config/constants"
+import {
+  BASE_URL,
+  PATHS,
+  SITE_NAME,
+  DEBOUNCE_INTERVAL,
+} from "../../src/config/constants"
 import { searchFormReducer } from "../../src/reducers/searchFormReducer"
 import {
   initialSearchFormState,
@@ -59,7 +69,6 @@ export default function AdvancedSearch({
   const router = useRouter()
   const inputRef = useRef<TextInputRefType>()
   const notificationRef = useRef<HTMLDivElement>()
-  const debounceInterval = 20
   const dateInputRefs = [useRef<TextInputRefType>(), useRef<TextInputRefType>()]
 
   const [alert, setAlert] = useState(false)
@@ -175,7 +184,7 @@ export default function AdvancedSearch({
                       value={searchFormState[name]}
                       onChange={debounce(
                         (e) => handleInputChange(e, "input_change"),
-                        debounceInterval
+                        DEBOUNCE_INTERVAL
                       )}
                       ref={inputRef}
                     />

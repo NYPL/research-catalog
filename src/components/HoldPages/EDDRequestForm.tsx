@@ -9,17 +9,22 @@ import {
   Heading,
   Text,
   Banner,
+  type TextInputRefType,
 } from "@nypl/design-system-react-components"
+import { debounce } from "underscore"
 
-import { BASE_URL } from "../../config/constants"
-
+import { BASE_URL, DEBOUNCE_INTERVAL } from "../../config/constants"
 import ExternalLink from "../Links/ExternalLink/ExternalLink"
+import type { EDDRequestFieldErrors } from "../../types/holdTypes"
 
 interface EDDRequestFormProps {
   handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void
+  handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void
   holdId: string
   patronId: string
   source: string
+  invalidFields: EDDRequestFieldErrors
+  requiredFieldsRef?: React.MutableRefObject<Record<string, TextInputRefType>>
 }
 
 /**
@@ -27,10 +32,14 @@ interface EDDRequestFormProps {
  */
 const EDDRequestForm = ({
   handleSubmit,
+  handleInputChange,
   holdId,
   patronId,
   source,
+  invalidFields,
+  requiredFieldsRef,
 }: EDDRequestFormProps) => {
+  console.log(invalidFields)
   return (
     <Form
       id="edd-request-form"
@@ -45,7 +54,7 @@ const EDDRequestForm = ({
       <input type="hidden" id="patronId" name="patronId" value={patronId} />
       <input type="hidden" id="source" name="source" value={source} />
       <Box>
-        <Heading level="h3" size="heading4" mb="xs">
+        <Heading level="h3" size="heading4" mb="m">
           Required information
         </Heading>
         <Text noSpace>
@@ -64,6 +73,9 @@ const EDDRequestForm = ({
           isRequired
           placeholder="theresa.smith@gmail.com"
           helperText="Your request will be delivered to the email address you enter above."
+          invalidText="Enter a valid email address. Your request will be delivered to the email address you enter above."
+          isInvalid={invalidFields.email}
+          onChange={debounce(handleInputChange, DEBOUNCE_INTERVAL)}
         />
       </FormField>
       <FormRow>
@@ -75,6 +87,9 @@ const EDDRequestForm = ({
             isRequired
             placeholder="Example: 1"
             helperText="Enter the first page you would like scanned."
+            invalidText="Enter a page number. You may request a maximum of 50 pages."
+            isInvalid={invalidFields.startingNumber}
+            onChange={debounce(handleInputChange, DEBOUNCE_INTERVAL)}
           />
         </FormField>
         <FormField>
@@ -85,6 +100,9 @@ const EDDRequestForm = ({
             isRequired
             placeholder="Example: 20"
             helperText="Enter the last page you would like scanned."
+            invalidText="Enter a page number. You may request a maximum of 50 pages."
+            isInvalid={invalidFields.endingNumber}
+            onChange={debounce(handleInputChange, DEBOUNCE_INTERVAL)}
           />
         </FormField>
       </FormRow>
@@ -96,6 +114,9 @@ const EDDRequestForm = ({
           isRequired
           placeholder="Example: Chapter 1"
           helperText="Enter the name/number of the chapter or article you would like scanned."
+          invalidText="Indicate the title of the chapter or article you are requesting."
+          isInvalid={invalidFields.chapter}
+          onChange={debounce(handleInputChange, DEBOUNCE_INTERVAL)}
         />
       </FormField>
       <Box>
