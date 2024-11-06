@@ -67,7 +67,6 @@ export default function EDDRequestPage({
   )
 
   const bannerContainerRef = useRef<HTMLDivElement>()
-  const requiredFieldsRef = useRef()
 
   const router = useRouter()
   const isLoading = useLoading()
@@ -93,8 +92,7 @@ export default function EDDRequestPage({
     }
   }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
+  const postHoldRequest = async () => {
     try {
       setFormPosting(true)
       const { patronId, source, pickupLocation } = e.target
@@ -181,7 +179,7 @@ export default function EDDRequestPage({
           />
         ) : isEddAvailable ? (
           <EDDRequestForm
-            handleSubmit={handleSubmit}
+            submitCallback={postHoldRequest}
             handleInputChange={handleInputChange}
             holdId={holdId}
             patronId={patronId}

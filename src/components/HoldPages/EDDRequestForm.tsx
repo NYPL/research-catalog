@@ -9,37 +9,50 @@ import {
   Heading,
   Text,
   Banner,
-  type TextInputRefType,
 } from "@nypl/design-system-react-components"
 import { debounce } from "underscore"
+import { useState, createRef } from "react"
 
 import { BASE_URL, DEBOUNCE_INTERVAL } from "../../config/constants"
 import ExternalLink from "../Links/ExternalLink/ExternalLink"
 import type { EDDRequestFieldErrors } from "../../types/holdTypes"
 
 interface EDDRequestFormProps {
-  handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void
+  submitCallback: () => void
   handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void
   holdId: string
   patronId: string
   source: string
   invalidFields: EDDRequestFieldErrors
-  requiredFieldsRef?: React.MutableRefObject<Record<string, TextInputRefType>>
 }
 
 /**
  * The EDDRequestForm renders the form for placing a electronic delivery hold on an item.
  */
 const EDDRequestForm = ({
-  handleSubmit,
+  submitCallback,
   handleInputChange,
   holdId,
   patronId,
   source,
   invalidFields,
-  requiredFieldsRef,
 }: EDDRequestFormProps) => {
-  console.log(invalidFields)
+  // Create refs for required fields to focus on the first invalid field on submit
+  const [requiredInputRefs] = useState(
+    Object.keys(invalidFields).reduce((acc, key) => {
+      return { ...acc, [key]: createRef() }
+    }, {})
+  )
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const firstInvalidKey = Object.keys(invalidFields)
+      .map((key) => (invalidFields[key] ? key : null))
+      .find((firstInvalidFieldKey) => firstInvalidFieldKey)
+
+    requiredInputRefs?.[firstInvalidKey]?.current.focus()
+    submitCallback()
+  }
   return (
     <Form
       id="edd-request-form"
@@ -76,6 +89,7 @@ const EDDRequestForm = ({
           invalidText="Enter a valid email address. Your request will be delivered to the email address you enter above."
           isInvalid={invalidFields.email}
           onChange={debounce(handleInputChange, DEBOUNCE_INTERVAL)}
+          ref={requiredInputRefs["email"]}
         />
       </FormField>
       <FormRow>
@@ -90,6 +104,7 @@ const EDDRequestForm = ({
             invalidText="Enter a page number. You may request a maximum of 50 pages."
             isInvalid={invalidFields.startingNumber}
             onChange={debounce(handleInputChange, DEBOUNCE_INTERVAL)}
+            ref={requiredInputRefs["startingNumber"]}
           />
         </FormField>
         <FormField>
@@ -103,6 +118,7 @@ const EDDRequestForm = ({
             invalidText="Enter a page number. You may request a maximum of 50 pages."
             isInvalid={invalidFields.endingNumber}
             onChange={debounce(handleInputChange, DEBOUNCE_INTERVAL)}
+            ref={requiredInputRefs["endingNumber"]}
           />
         </FormField>
       </FormRow>
@@ -117,6 +133,7 @@ const EDDRequestForm = ({
           invalidText="Indicate the title of the chapter or article you are requesting."
           isInvalid={invalidFields.chapter}
           onChange={debounce(handleInputChange, DEBOUNCE_INTERVAL)}
+          ref={requiredInputRefs["chapter"]}
         />
       </FormField>
       <Box>
