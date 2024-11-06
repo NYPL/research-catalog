@@ -8,16 +8,13 @@ import {
   Heading,
   Form,
   FormField,
-  FormRow,
+  Flex,
   TextInput,
   Select,
-  CheckboxGroup,
-  Checkbox,
   HorizontalRule,
-  ButtonGroup,
-  Button,
   Box,
   Banner,
+  Icon,
 } from "@nypl/design-system-react-components"
 
 import Layout from "../../src/components/Layout/Layout"
@@ -27,7 +24,7 @@ import {
   initialSearchFormState,
   textInputFields,
   languageOptions,
-  materialTypeOptions,
+  buildGoBackHref,
 } from "../../src/utils/advancedSearchUtils"
 import type {
   SearchParams,
@@ -38,16 +35,27 @@ import initializePatronTokenAuth from "../../src/server/auth"
 import { appConfig } from "../../src/config/config"
 import { useDateForm } from "../../src/hooks/useDateForm"
 import DateForm from "../../src/components/SearchFilters/DateForm"
+import SearchFilterCheckboxField from "../../src/components/RefineSearch/SearchFilterCheckboxField"
+import CancelSubmitButtonGroup from "../../src/components/RefineSearch/CancelSubmitButtonGroup"
+import { materialTypeOptions } from "../../src/utils/advancedSearchUtils"
+import { searchAggregations } from "../../src/config/aggregations"
+import RCLink from "../../src/components/Links/RCLink/RCLink"
 
 export const defaultEmptySearchErrorMessage =
   "Error: please enter at least one field to submit an advanced search."
-
+interface AdvancedSearchPropTypes {
+  isAuthenticated: boolean
+  goBackHref?: null | string
+}
 /**
  * The Advanced Search page is responsible for displaying the Advanced Search form fields and
  * buttons that clear the fields and submit a search request.
  */
-export default function AdvancedSearch({ isAuthenticated }) {
-  const metadataTitle = `Advanced Search | ${SITE_NAME}`
+export default function AdvancedSearch({
+  isAuthenticated,
+  goBackHref,
+}: AdvancedSearchPropTypes) {
+  const metadataTitle = `Advanced search | ${SITE_NAME}`
   const router = useRouter()
   const inputRef = useRef<TextInputRefType>()
   const notificationRef = useRef<HTMLDivElement>()
@@ -62,7 +70,6 @@ export default function AdvancedSearch({ isAuthenticated }) {
     searchFormReducer,
     initialSearchFormState
   )
-
   const {
     dateFormProps,
     validateDateRange,
@@ -86,11 +93,11 @@ export default function AdvancedSearch({ isAuthenticated }) {
     })
   }
 
-  const handleCheckboxChange = (types: string[]) => {
+  const handleCheckboxChange = (field: string, types: string[]) => {
     alert && setAlert(false)
     dispatch({
       type: "filter_change",
-      field: "materialType",
+      field: field,
       payload: types,
     })
   }
@@ -128,7 +135,6 @@ export default function AdvancedSearch({ isAuthenticated }) {
       notificationRef.current.focus()
     }
   }, [alert])
-
   return (
     <>
       <Head>
@@ -147,7 +153,7 @@ export default function AdvancedSearch({ isAuthenticated }) {
         <Box tabIndex={-1} ref={notificationRef}>
           {alert && <Banner type="negative" content={errorMessage} mb="s" />}
         </Box>
-        <Heading level="h2">Advanced Search</Heading>
+        <Heading level="h2">Advanced search</Heading>
         <Form
           id="advancedSearchForm"
           // We are using a post request on advanced search when JS is disabled
@@ -157,31 +163,26 @@ export default function AdvancedSearch({ isAuthenticated }) {
           action={`${BASE_URL}/search`}
           onSubmit={handleSubmit}
         >
-          <FormField
-            sx={{
-              gridTemplateColumns: {
-                md: "repeat(2, minmax(0, 1fr)) !important",
-              },
-            }}
-          >
-            <FormRow gap="grid.m">
-              <FormField id="advancedSearchLeft" gap="grid.s">
-                {textInputFields.map(({ name, label }) => {
-                  return (
+          <Flex flexDirection={{ base: "column", md: "row" }}>
+            <Flex id="advancedSearchLeft" gap="s" direction="column">
+              {textInputFields.map(({ name, label }) => {
+                return (
+                  <FormField key={name}>
                     <TextInput
                       id={name}
                       labelText={label}
                       name={name}
                       value={searchFormState[name]}
-                      key={name}
                       onChange={debounce(
                         (e) => handleInputChange(e, "input_change"),
                         debounceInterval
                       )}
                       ref={inputRef}
                     />
-                  )
-                })}
+                  </FormField>
+                )
+              })}
+              <FormField>
                 <Select
                   id="languageSelect"
                   name="language"
@@ -197,68 +198,60 @@ export default function AdvancedSearch({ isAuthenticated }) {
                     )
                   })}
                 </Select>
-                <FormRow>
-                  <FormField>{<DateForm {...dateFormProps} />}</FormField>
-                </FormRow>
               </FormField>
-            </FormRow>
-            <FormRow>
-              <FormField id="advancedSearchRight" gap="grid.s">
-                <CheckboxGroup
-                  id="formats"
-                  name="formats"
-                  labelText="Format"
-                  onChange={handleCheckboxChange}
-                  value={searchFormState["filters"].materialType}
-                  __css={{
-                    "> div": {
-                      display: "grid",
-                      gridTemplateColumns: { md: "repeat(2, minmax(0, 1fr))" },
-                      gridGap: "var(--nypl-space-s)",
-                      div: {
-                        marginTop: "0 !important",
-                      },
-                    },
-                  }}
-                >
-                  {materialTypeOptions.map((materialType) => {
-                    return (
-                      <Checkbox
-                        id={materialType.value}
-                        key={materialType.value}
-                        labelText={materialType.label}
-                        value={materialType.value}
-                      />
-                    )
-                  })}
-                </CheckboxGroup>
-              </FormField>
-            </FormRow>
-          </FormField>
+              <FormField>{<DateForm {...dateFormProps} />}</FormField>
+            </Flex>
+            <Flex direction="column" gap="l">
+              <SearchFilterCheckboxField
+                options={searchAggregations.buildingLocation}
+                name="location"
+                label="Item location"
+                handleCheckboxChange={(e) =>
+                  handleCheckboxChange("buildingLocation", e)
+                }
+                searchFormState={searchFormState["filters"].buildingLocation}
+                gridOptions={{ min: 1, max: 1 }}
+              />
+              <SearchFilterCheckboxField
+                options={materialTypeOptions}
+                name="format"
+                label="Format"
+                handleCheckboxChange={(e) =>
+                  handleCheckboxChange("materialType", e)
+                }
+                searchFormState={searchFormState["filters"].materialType}
+              />
+            </Flex>
+          </Flex>
           <HorizontalRule __css={{ margin: 0 }} />
-          <FormRow>
-            <FormField>
-              <ButtonGroup
-                id="advancedSearchButtons"
-                __css={{
-                  marginLeft: "auto",
-                }}
+          <Flex
+            justifyContent={goBackHref ? "space-between" : "right"}
+            flexDirection={{ base: "column-reverse", md: "row" }}
+          >
+            {goBackHref && (
+              <RCLink
+                display="flex"
+                href={goBackHref}
+                type="buttonSecondary"
+                id="back-to-search"
               >
-                <Button
-                  type="button"
-                  id="advancedSearchClear"
-                  buttonType="secondary"
-                  onClick={handleClear}
-                  size="large"
-                >
-                  Clear
-                </Button>
-                <Button id="advancedSearchSubmit" type="submit" size="large">
-                  Submit
-                </Button>
-              </ButtonGroup>
-            </FormField>
-          </FormRow>
+                <Icon
+                  name="arrow"
+                  iconRotation="rotate90"
+                  align="left"
+                  size="small"
+                  mr="xs"
+                />
+                Go back
+              </RCLink>
+            )}
+            <CancelSubmitButtonGroup
+              formName="advanced-search"
+              cancelHandler={handleClear}
+              cancelLabel="Clear fields"
+              submitLabel="Search"
+            />
+          </Flex>
         </Form>
       </Layout>
     </>
@@ -266,9 +259,10 @@ export default function AdvancedSearch({ isAuthenticated }) {
 }
 
 export async function getServerSideProps({ req }) {
+  const goBackHref = buildGoBackHref(req.headers.referer)
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const isAuthenticated = patronTokenResponse.isTokenValid
   return {
-    props: { isAuthenticated },
+    props: { isAuthenticated, goBackHref },
   }
 }

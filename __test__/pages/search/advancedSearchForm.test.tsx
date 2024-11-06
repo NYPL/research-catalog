@@ -6,16 +6,20 @@ import userEvent from "@testing-library/user-event"
 import AdvancedSearch, {
   defaultEmptySearchErrorMessage,
 } from "../../../pages/search/advanced"
+import { searchAggregations } from "../../../src/config/aggregations"
 
 // Mock next router
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
 describe("Advanced Search Form", () => {
   const submit = () => {
-    fireEvent(screen.getByText("Submit"), new MouseEvent("click"))
+    fireEvent(
+      screen.getByTestId("submit-advanced-search-button"),
+      new MouseEvent("click")
+    )
   }
   afterEach(async () => {
-    await userEvent.click(screen.getByText("Clear"))
+    await userEvent.click(screen.getByText("Clear fields"))
   })
   it("displays alert when no fields are submitted", () => {
     render(<AdvancedSearch isAuthenticated={true} />)
@@ -73,6 +77,15 @@ describe("Advanced Search Form", () => {
       "/search?q=&filters%5BmaterialType%5D%5B0%5D=resourcetypes%3Anot&filters%5BmaterialType%5D%5B1%5D=resourcetypes%3Acar"
     )
   })
+  it("can check location checkboxes", async () => {
+    render(<AdvancedSearch isAuthenticated={true} />)
+    const location = searchAggregations.buildingLocation[0]
+    await userEvent.click(screen.getByLabelText(location.label as string))
+    submit()
+    expect(mockRouter.asPath).toBe(
+      `/search?q=&filters%5BbuildingLocation%5D%5B0%5D=${location.value}`
+    )
+  })
 
   it("can clear the form", async () => {
     render(<AdvancedSearch isAuthenticated={true} />)
@@ -80,10 +93,13 @@ describe("Advanced Search Form", () => {
     await userEvent.click(notatedMusic)
     const cartographic = screen.getByLabelText("Cartographic")
     await userEvent.click(cartographic)
-    await userEvent.selectOptions(
-      screen.getByLabelText("Language"),
-      "Azerbaijani"
-    )
+    const selector = screen.getByLabelText("Language")
+    await userEvent.selectOptions(selector, "Azerbaijani")
+    const schomburg = screen.getByLabelText("Schomburg Center for", {
+      exact: false,
+    })
+
+    await userEvent.click(schomburg)
     const keywordInput = screen.getByLabelText("Keyword")
     const titleInput = screen.getByLabelText("Title")
     const contributorInput = screen.getByLabelText("Author")
@@ -93,8 +109,16 @@ describe("Advanced Search Form", () => {
     await userEvent.type(titleInput, "il amore di pasta")
     await userEvent.type(subjectInput, "italian food")
 
-    await userEvent.click(screen.getByText("Clear"))
-    expect(notatedMusic).not.toBeChecked()
+    await userEvent.click(screen.getByText("Clear fields"))
+    ;[notatedMusic, cartographic, schomburg].forEach((input) =>
+      expect(input).not.toBeChecked()
+    )
+    expect(selector).not.toHaveDisplayValue("Azerbaijani")
+    ;[subjectInput, keywordInput, titleInput, contributorInput].forEach(
+      (input) => {
+        expect(input).toBeEmptyDOMElement()
+      }
+    )
 
     submit()
     // presence of alert means the form was cleared before hitting submit

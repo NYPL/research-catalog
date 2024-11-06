@@ -25,13 +25,13 @@ describe("Search Results page", () => {
           results={{ results, aggregations: aggregationsResults }}
         />
       )
-      const refine = screen.getByText("Refine Search")
+      const refine = screen.getByText("Filter results")
       await userEvent.click(refine)
       const field = screen.getByLabelText("Greek, Modern (1453-present)", {
         exact: false,
       })
       await userEvent.click(field)
-      await userEvent.click(screen.getByText("Apply Filters"))
+      await userEvent.click(screen.getByText("Apply filters"))
       // This was the only way to get this test to pass. waitFor was not in fact waiting, even with same timeout.
       setTimeout(() => {
         const resultsHeading = screen.getByTestId("search-results-heading")
@@ -70,7 +70,7 @@ describe("Search Results page", () => {
       await userEvent.selectOptions(desktopSortBy, "Title (A - Z)")
       expect(desktopSortBy).toHaveFocus()
     })
-    it("focuses on cancel after clicking refine search", async () => {
+    it("focuses on cancel after clicking Filter results", async () => {
       mockRouter.push(`/search?q=${query}`)
       render(
         <SearchResults
@@ -79,12 +79,12 @@ describe("Search Results page", () => {
           results={{ results, aggregations: aggregationsResults }}
         />
       )
-      const refine = screen.getByText("Refine Search")
+      const refine = screen.getByText("Filter results")
       await userEvent.click(refine)
       const cancel = screen.getByText("Cancel")
       expect(cancel).toHaveFocus
     })
-    it("focuses on refine search after clicking cancel", async () => {
+    it("focuses on Filter results after clicking cancel", async () => {
       mockRouter.push(`/search?q=${query}`)
       render(
         <SearchResults
@@ -93,7 +93,7 @@ describe("Search Results page", () => {
           results={{ results, aggregations: aggregationsResults }}
         />
       )
-      const refine = screen.getByText("Refine Search")
+      const refine = screen.getByText("Filter results")
       await userEvent.click(refine)
       const cancel = screen.getByText("Cancel")
       await userEvent.click(cancel)

@@ -1,10 +1,6 @@
 import { useRouter } from "next/router"
-import {
-  TagSet,
-  type TagSetFilterDataProps,
-} from "@nypl/design-system-react-components"
+import { type TagSetFilterDataProps } from "@nypl/design-system-react-components"
 
-import styles from "../../../styles/components/Search.module.scss"
 import {
   getQueryWithoutFilters,
   buildFilterQuery,
@@ -16,6 +12,7 @@ import {
   addLabelPropAndParseFilters,
 } from "./appliedFilterUtils"
 import type { Aggregation } from "../../types/filterTypes"
+import ActiveFilters from "../ItemFilters/ActiveFilters"
 
 const AppliedFilters = ({ aggregations }: { aggregations: Aggregation[] }) => {
   const router = useRouter()
@@ -25,7 +22,13 @@ const AppliedFilters = ({ aggregations }: { aggregations: Aggregation[] }) => {
     appliedFilters
   )
 
-  const tagSetData = buildTagsetData(appliedFiltersWithLabels)
+  // this type cast is happening because Option type had to be updated to
+  // account for Offsite's Element label. That label does
+  // not pass thru this part of the code, but this is to placate the
+  // compiler.
+  const tagSetData = buildTagsetData(
+    appliedFiltersWithLabels
+  ) as TagSetFilterDataProps[]
   const handleRemove = (tag: TagSetFilterDataProps) => {
     if (tag.label === "Clear filters") {
       router.push({
@@ -50,12 +53,10 @@ const AppliedFilters = ({ aggregations }: { aggregations: Aggregation[] }) => {
 
   if (!tagSetData.length) return null
   return (
-    <TagSet
-      className={styles.filterTags}
+    <ActiveFilters
       onClick={handleRemove}
       tagSetData={tagSetData}
-      isDismissible={true}
-      type="filter"
+      filterName="search-results"
     />
   )
 }

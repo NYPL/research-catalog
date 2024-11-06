@@ -12,11 +12,11 @@ import {
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
 const openRefineSearch = async () => {
-  const refineButton = screen.getByText("Refine Search")
+  const refineButton = screen.getByText("Filter results")
   await userEvent.click(refineButton)
 }
 const apply = async () => {
-  const applyButton = screen.getByText("Apply Filters")
+  const applyButton = screen.getByText("Apply filters")
   await userEvent.click(applyButton)
 }
 const selectSomeFilters = async (
@@ -31,7 +31,7 @@ const selectSomeFilters = async (
   )
 }
 const clear = async () => {
-  const clearButton = screen.getByTestId("clear-filters-button")
+  const clearButton = screen.getByTestId("clear-refine-button")
   await userEvent.click(clearButton)
 }
 
@@ -158,7 +158,7 @@ describe("RefineSearch", () => {
     })
     it("applying filters closes refine search bar", async () => {
       await openRefineSearch()
-      const applyButton = screen.getByRole("button", { name: "Apply Filters" })
+      const applyButton = screen.getByRole("button", { name: "Apply filters" })
       await selectSomeFilters()
       await apply()
       expect(applyButton).not.toBeInTheDocument()
@@ -176,7 +176,7 @@ describe("RefineSearch", () => {
     it.todo("clearing filters should clear year filters")
     it("clearing filters should return to search results", async () => {
       await openRefineSearch()
-      const applyButton = screen.getByText("Apply Filters")
+      const applyButton = screen.getByText("Apply filters")
       await selectSomeFilters()
       await apply()
       await openRefineSearch()
@@ -187,7 +187,7 @@ describe("RefineSearch", () => {
     })
     it("cancelling with selected but unapplied filters should close refine search, clear selected filters, and return to search results", async () => {
       await openRefineSearch()
-      const applyButton = screen.getByText("Apply Filters")
+      const applyButton = screen.getByText("Apply filters")
       await selectSomeFilters()
       await userEvent.click(screen.getByText("Cancel"))
 
