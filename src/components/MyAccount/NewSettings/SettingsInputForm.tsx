@@ -127,7 +127,6 @@ const PhoneEmailForm = ({
             type: "t",
           })),
         })
-    console.log(body)
     try {
       const response = await fetch(
         `/research/research-catalog/api/account/settings/${patronData.id}`,

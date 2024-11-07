@@ -52,10 +52,17 @@ const HomeLibraryNotificationForm = ({
     ),
   ]
 
-  const options =
-    type === "notification" ? notificationPreferenceMap : sortedPickupLocations
-
   const formUtils = {
+    initialState:
+      type === "notification"
+        ? notificationPreferenceMap.find(
+            (pref) => pref.code === patronData.notificationPreference
+          )?.name
+        : patronData.homeLibrary.name,
+    options:
+      type === "notification"
+        ? notificationPreferenceMap
+        : sortedPickupLocations,
     icon: type === "notification" ? "communicationChatBubble" : "actionHome",
     label: type === "notification" ? "Notification preference" : "Home library",
     selectorId:
@@ -70,13 +77,8 @@ const HomeLibraryNotificationForm = ({
         : { homeLibraryCode: `${code}` },
   }
 
-  const [selection, setSelection] = useState(
-    type === "notification"
-      ? notificationPreferenceMap.find(
-          (pref) => pref.code === patronData.notificationPreference
-        )?.name
-      : patronData.homeLibrary.name
-  )
+  const [selection, setSelection] = useState(formUtils.initialState)
+
   const [tempSelection, setTempSelection] = useState(selection)
 
   const handleSelectChange = (event) => {
@@ -92,14 +94,13 @@ const HomeLibraryNotificationForm = ({
   const submitSelection = async () => {
     setIsLoading(true)
     setIsEditing(false)
-
-    const code =
+    setStatus("none")
+    const body = formUtils.body(
       type === "notification"
         ? notificationPreferenceMap.find((pref) => pref.name === tempSelection)
             ?.code
         : pickupLocations.find((loc) => loc.name === tempSelection)?.code
-
-    const body = formUtils.body(code)
+    )
 
     try {
       const response = await fetch(
@@ -152,7 +153,7 @@ const HomeLibraryNotificationForm = ({
                 onChange={handleSelectChange}
                 value={tempSelection}
               >
-                {options.map((option, index) => (
+                {formUtils.options.map((option, index) => (
                   <option key={`${type}-option-${index}`} value={option.name}>
                     {option.name}
                   </option>

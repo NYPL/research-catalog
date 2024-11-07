@@ -6,21 +6,10 @@ import { pickupLocations } from "../../../../__test__/fixtures/rawSierraAccountD
 import HomeLibraryNotificationForm from "./SettingsSelectForm"
 
 describe("home library form", () => {
-  beforeEach(() => {
-    jest.clearAllMocks()
-    global.fetch = jest.fn().mockResolvedValue({
-      json: async () => {
-        console.log("Updated")
-      },
-      status: 200,
-    } as Response)
-  })
-
   const mockSettingsState = {
-    setIsSuccess: jest.fn(),
-    setIsFailure: jest.fn(),
-    isOtherEditing: false,
-    setIsOtherEditing: jest.fn(),
+    setStatus: jest.fn(),
+    editingField: "",
+    setEditingField: jest.fn(),
   }
   const accountFetchSpy = jest.fn()
 
@@ -40,6 +29,16 @@ describe("home library form", () => {
       />
     </PatronDataProvider>
   )
+
+  beforeEach(() => {
+    jest.clearAllMocks()
+    global.fetch = jest.fn().mockResolvedValue({
+      json: async () => {
+        console.log("Updated")
+      },
+      status: 200,
+    } as Response)
+  })
 
   it("renders correctly with initial location", () => {
     render(component)

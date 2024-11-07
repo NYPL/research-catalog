@@ -6,10 +6,9 @@ import SettingsInputForm from "./SettingsInputForm"
 
 describe("email form", () => {
   const mockSettingsState = {
-    setIsSuccess: jest.fn(),
-    setIsFailure: jest.fn(),
-    isOtherEditing: false,
-    setIsOtherEditing: jest.fn(),
+    setStatus: jest.fn(),
+    editingField: "",
+    setEditingField: jest.fn(),
   }
   const accountFetchSpy = jest.fn()
 

@@ -7,10 +7,9 @@ import SettingsSelectForm from "./SettingsSelectForm"
 
 describe("notification preference form", () => {
   const mockSettingsState = {
-    setIsSuccess: jest.fn(),
-    setIsFailure: jest.fn(),
-    isOtherEditing: false,
-    setIsOtherEditing: jest.fn(),
+    setStatus: jest.fn(),
+    editingField: "",
+    setEditingField: jest.fn(),
   }
   const accountFetchSpy = jest.fn()
 

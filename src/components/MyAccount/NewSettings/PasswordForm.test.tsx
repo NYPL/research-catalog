@@ -8,10 +8,9 @@ import {
 import { PatronDataProvider } from "../../../context/PatronDataContext"
 
 const mockSettingsState = {
-  setIsSuccess: jest.fn(),
-  setIsFailure: jest.fn(),
-  isOtherEditing: false,
-  setIsOtherEditing: jest.fn(),
+  setStatus: jest.fn(),
+  editingField: "",
+  setEditingField: jest.fn(),
 }
 const accountFetchSpy = jest.fn()
 
@@ -92,9 +91,9 @@ describe("Pin/password form", () => {
     const submitButton = getByText("Save changes")
     fireEvent.click(submitButton)
     await waitFor(() =>
-      expect(mockSettingsState.setIsFailure).toHaveBeenCalledTimes(2)
+      expect(mockSettingsState.setStatus).toHaveBeenCalledTimes(2)
     )
-    expect(mockSettingsState.setIsFailure).toHaveBeenNthCalledWith(2, true)
+    expect(mockSettingsState.setStatus).toHaveBeenNthCalledWith(2, "failure")
   })
 
   test("sets failure if new password is invalid", async () => {
@@ -121,9 +120,9 @@ describe("Pin/password form", () => {
     const submitButton = getByText("Save changes")
     fireEvent.click(submitButton)
     await waitFor(() =>
-      expect(mockSettingsState.setIsFailure).toHaveBeenCalledTimes(4)
+      expect(mockSettingsState.setStatus).toHaveBeenCalledTimes(4)
     )
-    expect(mockSettingsState.setIsFailure).toHaveBeenNthCalledWith(4, true)
+    expect(mockSettingsState.setStatus).toHaveBeenNthCalledWith(4, "failure")
   })
 
   test("successfully sets patron data if every field is valid", async () => {
