@@ -1,7 +1,6 @@
 import Head from "next/head"
-import { useState, useRef, useEffect, type SyntheticEvent } from "react"
+import { useState, useRef, useEffect } from "react"
 import { useRouter } from "next/router"
-import { isEmail } from "validator"
 import {
   Heading,
   Box,
@@ -19,7 +18,6 @@ import useLoading from "../../../../src/hooks/useLoading"
 
 import { fetchBib } from "../../../../src/server/api/bib"
 import { fetchDeliveryLocations } from "../../../../src/server/api/hold"
-import { eddRequestDefaultInvalidFields } from "../../../../src/utils/holdUtils"
 
 import initializePatronTokenAuth, {
   doRedirectBasedOnNyplAccountRedirects,
@@ -62,10 +60,6 @@ export default function EDDRequestPage({
   const [alert, setAlert] = useState(!isEddAvailable)
   const [formPosting, setFormPosting] = useState(false)
 
-  const [invalidFields, setInvalidFields] = useState(
-    eddRequestDefaultInvalidFields
-  )
-
   const bannerContainerRef = useRef<HTMLDivElement>()
 
   const router = useRouter()
@@ -77,25 +71,11 @@ export default function EDDRequestPage({
     }
   }, [alert])
 
-  const handleInputChange = (e: SyntheticEvent) => {
-    e.preventDefault()
-    alert && setAlert(false)
-    const target = e.target as HTMLInputElement
-
-    setInvalidFields((prev) => ({
-      ...prev,
-      [target.name]: !target.value.length,
-    }))
-
-    if (target.name === "email") {
-      setInvalidFields((prev) => ({ ...prev, email: !isEmail(target.value) }))
-    }
-  }
-
-  const postHoldRequest = async () => {
+  const postHoldRequest = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
     try {
       setFormPosting(true)
-      const { patronId, source, pickupLocation } = e.target
+      const { patronId, source, pickupLocation } = event.target
 
       const response = await fetch(`${BASE_URL}/api/hold/request/${holdId}`, {
         method: "POST",
@@ -179,13 +159,10 @@ export default function EDDRequestPage({
           />
         ) : isEddAvailable ? (
           <EDDRequestForm
-            submitCallback={postHoldRequest}
-            handleInputChange={handleInputChange}
+            handleSubmit={postHoldRequest}
             holdId={holdId}
             patronId={patronId}
             source={item.source}
-            invalidFields={invalidFields}
-            // requiredFieldsRef={requiredFieldsRef}
           />
         ) : null}
       </Layout>

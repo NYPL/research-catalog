@@ -10,49 +10,80 @@ import {
   Text,
   Banner,
 } from "@nypl/design-system-react-components"
-import { debounce } from "underscore"
-import { useState, createRef } from "react"
+import { isEmail } from "validator"
+import { useState, createRef, type SyntheticEvent } from "react"
 
-import { BASE_URL, DEBOUNCE_INTERVAL } from "../../config/constants"
+import { BASE_URL } from "../../config/constants"
 import ExternalLink from "../Links/ExternalLink/ExternalLink"
-import type { EDDRequestFieldErrors } from "../../types/holdTypes"
 
 interface EDDRequestFormProps {
-  submitCallback: () => void
-  handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+  handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void
   holdId: string
   patronId: string
   source: string
-  invalidFields: EDDRequestFieldErrors
 }
 
 /**
  * The EDDRequestForm renders the form for placing a electronic delivery hold on an item.
  */
 const EDDRequestForm = ({
-  submitCallback,
-  handleInputChange,
+  handleSubmit,
   holdId,
   patronId,
   source,
-  invalidFields,
 }: EDDRequestFormProps) => {
-  // Create refs for required fields to focus on the first invalid field on submit
-  const [requiredInputRefs] = useState(
-    Object.keys(invalidFields).reduce((acc, key) => {
-      return { ...acc, [key]: createRef() }
+  const [invalidFields, setInvalidFields] = useState([
+    { key: "email", isInvalid: false },
+    { key: "startingNumber", isInvalid: false },
+    { key: "endingNumber", isInvalid: false },
+    { key: "chapter", isInvalid: false },
+  ])
+
+  // Create refs for fields that require validation to focus on the first invalid field on submit
+  const [validatedInputRefs] = useState(
+    invalidFields.reduce((acc, field) => {
+      return { ...acc, [field.key]: createRef() }
     }, {})
   )
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    const firstInvalidKey = Object.keys(invalidFields)
-      .map((key) => (invalidFields[key] ? key : null))
-      .find((firstInvalidFieldKey) => firstInvalidFieldKey)
+  const validateField = (e: SyntheticEvent) => {
+    e.preventDefault()
+    const target = e.target as HTMLInputElement
 
-    requiredInputRefs?.[firstInvalidKey]?.current.focus()
-    submitCallback()
+    setInvalidFields((prevInvalidFields) => {
+      return prevInvalidFields.map((field) => {
+        if (field.key === target.name) {
+          switch (field.key) {
+            // Validate email field
+            case "email":
+              return {
+                key: "email",
+                isInvalid: !target.value.length || !isEmail(target.value),
+              }
+            // Validate other fields
+            default:
+              return { key: field.key, isInvalid: !target.value.length }
+          }
+        }
+        return field
+      })
+    })
   }
+
+  const validateAndSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const firstInvalidField = invalidFields.find(
+      (firstInvalidFieldKey) => firstInvalidFieldKey.isInvalid
+    )
+
+    // Prevent form submission and focus on first invalid field if there is one
+    if (firstInvalidField) {
+      validatedInputRefs?.[firstInvalidField.key]?.current.focus()
+    } else {
+      handleSubmit(event)
+    }
+  }
+
   return (
     <Form
       id="edd-request-form"
@@ -60,7 +91,7 @@ const EDDRequestForm = ({
       // We are using a post request on hold requests when JS is disabled
       method="post"
       action={`${BASE_URL}/api/hold/request/${holdId}/edd`}
-      onSubmit={handleSubmit}
+      onSubmit={validateAndSubmit}
       mb="l"
       maxWidth={{ lg: "75%" }}
     >
@@ -87,9 +118,11 @@ const EDDRequestForm = ({
           placeholder="theresa.smith@gmail.com"
           helperText="Your request will be delivered to the email address you enter above."
           invalidText="Enter a valid email address. Your request will be delivered to the email address you enter above."
-          isInvalid={invalidFields.email}
-          onChange={debounce(handleInputChange, DEBOUNCE_INTERVAL)}
-          ref={requiredInputRefs["email"]}
+          isInvalid={
+            invalidFields.find((field) => field.key === "email").isInvalid
+          }
+          onBlur={validateField}
+          ref={validatedInputRefs["email"]}
         />
       </FormField>
       <FormRow>
@@ -102,9 +135,12 @@ const EDDRequestForm = ({
             placeholder="Example: 1"
             helperText="Enter the first page you would like scanned."
             invalidText="Enter a page number. You may request a maximum of 50 pages."
-            isInvalid={invalidFields.startingNumber}
-            onChange={debounce(handleInputChange, DEBOUNCE_INTERVAL)}
-            ref={requiredInputRefs["startingNumber"]}
+            isInvalid={
+              invalidFields.find((field) => field.key === "startingNumber")
+                .isInvalid
+            }
+            onBlur={validateField}
+            ref={validatedInputRefs["startingNumber"]}
           />
         </FormField>
         <FormField>
@@ -116,9 +152,12 @@ const EDDRequestForm = ({
             placeholder="Example: 20"
             helperText="Enter the last page you would like scanned."
             invalidText="Enter a page number. You may request a maximum of 50 pages."
-            isInvalid={invalidFields.endingNumber}
-            onChange={debounce(handleInputChange, DEBOUNCE_INTERVAL)}
-            ref={requiredInputRefs["endingNumber"]}
+            isInvalid={
+              invalidFields.find((field) => field.key === "endingNumber")
+                .isInvalid
+            }
+            onBlur={validateField}
+            ref={validatedInputRefs["endingNumber"]}
           />
         </FormField>
       </FormRow>
@@ -131,9 +170,11 @@ const EDDRequestForm = ({
           placeholder="Example: Chapter 1"
           helperText="Enter the name/number of the chapter or article you would like scanned."
           invalidText="Indicate the title of the chapter or article you are requesting."
-          isInvalid={invalidFields.chapter}
-          onChange={debounce(handleInputChange, DEBOUNCE_INTERVAL)}
-          ref={requiredInputRefs["chapter"]}
+          isInvalid={
+            invalidFields.find((field) => field.key === "chapter").isInvalid
+          }
+          onBlur={validateField}
+          ref={validatedInputRefs["chapter"]}
         />
       </FormField>
       <Box>

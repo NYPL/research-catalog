@@ -14,13 +14,6 @@ export interface HoldPostResult {
   requestId?: string
 }
 
-export interface EDDRequestFieldErrors {
-  email: boolean
-  startingNumber: boolean
-  endingNumber: boolean
-  chapter: boolean
-}
-
 export interface DiscoveryHoldPostParams {
   patron: string
   record: string
