@@ -108,7 +108,7 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
   const submitForm = async () => {
     setIsLoading(true)
     setIsEditing(false)
-    setStatus("")
+    setStatus("none")
     try {
       const response = await fetch(
         `${BASE_URL}/api/account/update-pin/${patronData.id}`,

@@ -30,7 +30,7 @@ const NewAccountSettingsTab = () => {
                 : "Your changes were saved."}
             </div>
           }
-          type={status === "failure" ? "warning" : "positive"}
+          type={status === "failure" ? "negative" : "positive"}
           sx={{ marginTop: "m" }}
         />
       )}
