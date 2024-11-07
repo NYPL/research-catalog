@@ -31,8 +31,7 @@ const HomeLibraryNotificationForm = ({
   const [isEditing, setIsEditing] = useState(false)
   const [error, setError] = useState(false)
 
-  const { setIsSuccess, setIsFailure, isOtherEditing, setIsOtherEditing } =
-    settingsState
+  const { setStatus, editingField, setEditingField } = settingsState
 
   const notificationPreferenceMap = [
     { code: "z", name: "Email" },
@@ -87,7 +86,7 @@ const HomeLibraryNotificationForm = ({
 
   const cancelEditing = () => {
     setIsEditing(false)
-    setIsOtherEditing(false)
+    setEditingField("")
   }
 
   const submitSelection = async () => {
@@ -114,18 +113,18 @@ const HomeLibraryNotificationForm = ({
 
       if (response.status === 200) {
         await getMostUpdatedSierraAccountData()
-        setIsSuccess(true)
+        setStatus("success")
         setSelection(tempSelection)
         setTempSelection(tempSelection)
       } else {
-        setIsFailure(true)
+        setStatus("failure")
         setTempSelection(tempSelection)
       }
     } catch (error) {
       console.error("Error submitting", error)
     } finally {
       setIsLoading(false)
-      setIsOtherEditing(false)
+      setEditingField("")
     }
   }
 
@@ -172,12 +171,12 @@ const HomeLibraryNotificationForm = ({
               >
                 {selection}
               </Text>
-              {!isOtherEditing && (
+              {editingField === "" && (
                 <EditButton
                   buttonId={`edit-${type}-button`}
                   onClick={() => {
                     setIsEditing(true)
-                    setIsOtherEditing(true)
+                    setEditingField(type)
                   }}
                 />
               )}

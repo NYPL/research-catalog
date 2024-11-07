@@ -37,8 +37,7 @@ const PhoneEmailForm = ({
   const [isEditing, setIsEditing] = useState(false)
   const [error, setError] = useState(false)
 
-  const { setIsSuccess, setIsFailure, isOtherEditing, setIsOtherEditing } =
-    settingsState
+  const { setStatus, editingField, setEditingField } = settingsState
 
   const [tempInputs, setTempInputs] = useState([...inputs])
 
@@ -110,7 +109,7 @@ const PhoneEmailForm = ({
   const cancelEditing = () => {
     setTempInputs([...inputs])
     setIsEditing(false)
-    setIsOtherEditing(false)
+    setEditingField("")
     setError(false)
   }
 
@@ -143,18 +142,18 @@ const PhoneEmailForm = ({
 
       if (response.status === 200) {
         await getMostUpdatedSierraAccountData()
-        setIsSuccess(true)
+        setStatus("success")
         setInputs([...validInputs])
         setTempInputs([...validInputs])
       } else {
-        setIsFailure(true)
+        setStatus("failure")
         setTempInputs([...inputs])
       }
     } catch (error) {
       console.error("Error submitting", inputType, error)
     } finally {
       setIsLoading(false)
-      setIsOtherEditing(false)
+      setEditingField("")
     }
   }
 
@@ -248,13 +247,12 @@ const PhoneEmailForm = ({
                   </Text>
                 ))}
               </Flex>
-              {!isOtherEditing && (
+              {editingField === "" && (
                 <EditButton
-                  buttonId={"edit-input-button"}
+                  buttonId={`edit-${inputType}-button`}
                   onClick={() => {
-                    setTempInputs([...inputs])
                     setIsEditing(true)
-                    setIsOtherEditing(true)
+                    setEditingField({ inputType })
                   }}
                 />
               )}
@@ -264,7 +262,7 @@ const PhoneEmailForm = ({
               inputType={inputType}
               onClick={() => {
                 setIsEditing(true)
-                setIsOtherEditing(true)
+                setEditingField(inputType)
                 handleAdd()
               }}
               label={formUtils.addButtonLabel}

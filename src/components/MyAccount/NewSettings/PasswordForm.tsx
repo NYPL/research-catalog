@@ -18,6 +18,45 @@ interface PasswordFormProps {
   settingsState
 }
 
+interface PasswordFormFieldProps {
+  label: string
+  handler: (e) => void
+  name: string
+  isInvalid?: boolean
+}
+
+const PasswordFormField = ({
+  label,
+  handler,
+  name,
+  isInvalid,
+}: PasswordFormFieldProps) => {
+  return (
+    <Flex
+      flexDir={{ base: "column", lg: "row" }}
+      alignItems="flex-start"
+      gap={{ base: "xs", lg: "unset" }}
+    >
+      <SettingsLabel icon="actionLockClosed" text={label} />
+      <TextInput
+        marginLeft={{ sm: "m", lg: 0 }}
+        width="320px"
+        id={name}
+        name={name}
+        type="password"
+        isRequired
+        showLabel={false}
+        isClearable
+        showRequiredLabel={false}
+        labelText={label}
+        onChange={handler}
+        invalidText="Pin/passwords do not match."
+        isInvalid={isInvalid}
+      />
+    </Flex>
+  )
+}
+
 const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
   const { getMostUpdatedSierraAccountData } = useContext(PatronDataContext)
   const [isLoading, setIsLoading] = useState(false)
@@ -28,12 +67,11 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
     confirmPassword: "",
     passwordsMatch: true,
   })
-  const { setIsSuccess, setIsFailure, isOtherEditing, setIsOtherEditing } =
-    settingsState
+  const { setStatus, editingField, setEditingField } = settingsState
 
   const cancelEditing = () => {
     setIsEditing(false)
-    setIsOtherEditing(false)
+    setEditingField("")
   }
 
   const validateForm =
@@ -70,8 +108,7 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
   const submitForm = async () => {
     setIsLoading(true)
     setIsEditing(false)
-    setIsSuccess(false)
-    setIsFailure(false)
+    setStatus("")
     try {
       const response = await fetch(
         `${BASE_URL}/api/account/update-pin/${patronData.id}`,
@@ -89,16 +126,16 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
       )
 
       if (response.status === 200) {
-        setIsSuccess(true)
+        setStatus("success")
         await getMostUpdatedSierraAccountData()
       } else {
-        setIsFailure(true)
+        setStatus("failure")
       }
     } catch (error) {
       console.error("Error submitting", error)
     } finally {
       setIsLoading(false)
-      setIsOtherEditing(false)
+      setEditingField("")
     }
   }
 
@@ -116,77 +153,22 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
                 gap: "s",
               }}
             >
-              <Flex
-                flexDir={{ base: "column", lg: "row" }}
-                alignItems="flex-start"
-                gap={{ base: "xs", lg: "unset" }}
-              >
-                <SettingsLabel
-                  icon="actionLockClosed"
-                  text="Enter current pin/password"
-                />
-                <TextInput
-                  marginLeft={{ sm: "m", lg: 0 }}
-                  width="320px"
-                  id="oldPassword"
-                  name="oldPassword"
-                  type="password"
-                  isRequired
-                  showLabel={false}
-                  isClearable
-                  showRequiredLabel={false}
-                  labelText="Enter current pin/password"
-                  onChange={handleInputChange}
-                />
-              </Flex>
-              <Flex
-                flexDir={{ base: "column", lg: "row" }}
-                alignItems="flex-start"
-                gap={{ base: "xs", lg: "unset" }}
-              >
-                <SettingsLabel
-                  icon="actionLockClosed"
-                  text="Enter new pin/password"
-                />
-                <TextInput
-                  marginLeft={{ sm: "m", lg: 0 }}
-                  width="320px"
-                  id="newPassword"
-                  name="newPassword"
-                  type="password"
-                  isRequired
-                  isClearable
-                  showRequiredLabel={false}
-                  showLabel={false}
-                  labelText="Enter new pin/password"
-                  onChange={handleInputChange}
-                />
-              </Flex>
-              <Flex
-                flexDir={{ base: "column", lg: "row" }}
-                alignItems="flex-start"
-                gap={{ base: "xs", lg: "unset" }}
-              >
-                <SettingsLabel
-                  icon="actionLockClosed"
-                  text="Re-enter new pin/password"
-                />
-                <TextInput
-                  marginLeft={{ sm: "m", lg: 0 }}
-                  isClearable
-                  width="320px"
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  type="password"
-                  isInvalid={!formData.passwordsMatch}
-                  invalidText="Pin/passwords do not match."
-                  onChange={handleInputChange}
-                  isRequired
-                  showLabel={false}
-                  showRequiredLabel={false}
-                  labelText="Re-enter new pin/password"
-                />
-              </Flex>
+              <PasswordFormField
+                label="Enter current pin/password"
+                name="oldPassword"
+                handler={handleInputChange}
+              />
+              <PasswordFormField
+                label="Enter new pin/password"
+                name="newPassword"
+                handler={handleInputChange}
+              />
+              <PasswordFormField
+                label="Re-enter new pin/password"
+                name="confirmPassword"
+                handler={handleInputChange}
+                isInvalid={!formData.passwordsMatch}
+              />
             </Flex>
             <SaveCancelButtons
               onCancel={cancelEditing}
@@ -243,12 +225,12 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
             >
               ****
             </Text>
-            {!isOtherEditing && (
+            {editingField === "" && (
               <EditButton
                 buttonId="edit-password-button"
                 onClick={() => {
                   setIsEditing(true)
-                  setIsOtherEditing(true)
+                  setEditingField("password")
                 }}
               />
             )}

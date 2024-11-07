@@ -1,59 +1,57 @@
 import { Flex, Banner } from "@nypl/design-system-react-components"
 import { useContext, useState } from "react"
 import { PatronDataContext } from "../../../context/PatronDataContext"
-import PhoneEmailForm from "./SettingsInputForm"
-import HomeLibraryNotificationForm from "./SettingsSelectForm"
+import SettingsInputForm from "./SettingsInputForm"
+import SettingsSelectForm from "./SettingsSelectForm"
 import PasswordForm from "./PasswordForm"
 
 const NewAccountSettingsTab = () => {
   const {
     updatedAccountData: { patron, pickupLocations },
   } = useContext(PatronDataContext)
-  const [isSuccess, setIsSuccess] = useState(false)
-  const [isFailure, setIsFailure] = useState(false)
-  const [isOtherEditing, setIsOtherEditing] = useState(false)
+  const [status, setStatus] = useState("none")
+  const [editingField, setEditingField] = useState("")
 
   const settingsState = {
-    setIsSuccess,
-    setIsFailure,
-    isOtherEditing,
-    setIsOtherEditing,
+    setStatus,
+    editingField,
+    setEditingField,
   }
 
   return (
     <>
-      {(isSuccess || isFailure) && (
+      {status !== "none" && (
         <Banner
           isDismissible
           content={
             <div style={{ alignItems: "center" }}>
-              {isFailure
+              {status === "failure"
                 ? "Your changes were not saved."
                 : "Your changes were saved."}
             </div>
           }
-          type={isFailure ? "warning" : "positive"}
+          type={status === "failure" ? "warning" : "positive"}
           sx={{ marginTop: "m" }}
         />
       )}
       <Flex flexDir="column" sx={{ marginTop: "xl", gap: "s" }}>
-        <PhoneEmailForm
+        <SettingsInputForm
           patronData={patron}
           settingsState={settingsState}
           inputType="phones"
         />
-        <PhoneEmailForm
+        <SettingsInputForm
           patronData={patron}
           settingsState={settingsState}
           inputType="emails"
         />
-        <HomeLibraryNotificationForm
+        <SettingsSelectForm
           patronData={patron}
           pickupLocations={pickupLocations}
           settingsState={settingsState}
           type="library"
         />
-        <HomeLibraryNotificationForm
+        <SettingsSelectForm
           patronData={patron}
           pickupLocations={pickupLocations}
           settingsState={settingsState}
