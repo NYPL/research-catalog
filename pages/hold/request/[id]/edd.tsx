@@ -76,10 +76,13 @@ export default function EDDRequestPage({
     try {
       setFormPosting(true)
 
-      const response = await fetch(`${BASE_URL}/api/hold/request/${holdId}`, {
-        method: "POST",
-        body: JSON.stringify(eddParams),
-      })
+      const response = await fetch(
+        `${BASE_URL}/api/hold/request/${holdId}/edd`,
+        {
+          method: "POST",
+          body: JSON.stringify({ ...eddParams, jsEnabled: true }),
+        }
+      )
       const responseJson = await response.json()
 
       if (response.status !== 200) {
