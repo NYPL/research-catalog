@@ -72,7 +72,7 @@ export default function EDDRequestPage({
     }
   }, [alert])
 
-  const postHoldRequest = async (eddParams: EDDRequestParams) => {
+  const postEDDRequest = async (eddParams: EDDRequestParams) => {
     try {
       setFormPosting(true)
 
@@ -156,7 +156,7 @@ export default function EDDRequestPage({
           />
         ) : isEddAvailable ? (
           <EDDRequestForm
-            handleSubmit={postHoldRequest}
+            handleSubmit={postEDDRequest}
             holdId={holdId}
             patronId={patronId}
             source={item.source}
