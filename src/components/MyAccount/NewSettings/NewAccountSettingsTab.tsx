@@ -1,4 +1,4 @@
-import { Flex, Banner } from "@nypl/design-system-react-components"
+import { Flex, Banner, Link, Text } from "@nypl/design-system-react-components"
 import { useContext, useState } from "react"
 import { PatronDataContext } from "../../../context/PatronDataContext"
 import SettingsInputForm from "./SettingsInputForm"
@@ -9,7 +9,7 @@ const NewAccountSettingsTab = () => {
   const {
     updatedAccountData: { patron, pickupLocations },
   } = useContext(PatronDataContext)
-  const [status, setStatus] = useState("none")
+  const [status, setStatus] = useState<[string, string?]>(["none"])
   const [editingField, setEditingField] = useState("")
 
   const settingsState = {
@@ -20,17 +20,40 @@ const NewAccountSettingsTab = () => {
 
   return (
     <>
-      {status !== "none" && (
+      {status[0] !== "none" && (
         <Banner
           isDismissible
           content={
             <div style={{ alignItems: "center" }}>
-              {status === "failure"
-                ? "Your changes were not saved."
-                : "Your changes were saved."}
+              {status[0] === "failure" ? (
+                status[1] ? (
+                  <Text marginBottom={0} color={"ui.black !important"}>
+                    {status[1]} Please try again or{" "}
+                    <Link
+                      sx={{
+                        color: "ui.link.primary !important",
+                        textDecorationColor: "ui.link.primary !important",
+                        textDecoration: "underline",
+                      }}
+                      href="https://www.nypl.org/get-help/contact-us"
+                    >
+                      contact us
+                    </Link>{" "}
+                    for assistance.
+                  </Text>
+                ) : (
+                  <Text marginBottom={0} color={"ui.black !important"}>
+                    Your changes were not saved.
+                  </Text>
+                )
+              ) : (
+                <Text marginBottom={0} color={"ui.black !important"}>
+                  Your changes were saved.
+                </Text>
+              )}
             </div>
           }
-          type={status === "failure" ? "negative" : "positive"}
+          type={status[0] === "failure" ? "negative" : "positive"}
           sx={{ marginTop: "m" }}
         />
       )}

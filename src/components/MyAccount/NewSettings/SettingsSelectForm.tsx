@@ -33,11 +33,17 @@ const HomeLibraryNotificationForm = ({
 
   const { setStatus, editingField, setEditingField } = settingsState
 
-  const notificationPreferenceMap = [
-    { code: "z", name: "Email" },
-    { code: "p", name: "Phone" },
-    { code: "-", name: "None" },
-  ]
+  const notificationPreferenceMap =
+    patronData.notificationPreference === "-"
+      ? [
+          { code: "z", name: "Email" },
+          { code: "p", name: "Phone" },
+          { code: "-", name: "None" },
+        ]
+      : [
+          { code: "z", name: "Email" },
+          { code: "p", name: "Phone" },
+        ]
 
   const validateInput = (input) => {
     if (input == "Phone" && patronData.phones.length === 0) {
@@ -94,7 +100,7 @@ const HomeLibraryNotificationForm = ({
   const submitSelection = async () => {
     setIsLoading(true)
     setIsEditing(false)
-    setStatus("none")
+    setStatus(["none"])
     const body = formUtils.body(
       type === "notification"
         ? notificationPreferenceMap.find((pref) => pref.name === tempSelection)
@@ -114,11 +120,11 @@ const HomeLibraryNotificationForm = ({
 
       if (response.status === 200) {
         await getMostUpdatedSierraAccountData()
-        setStatus("success")
+        setStatus(["success"])
         setSelection(tempSelection)
         setTempSelection(tempSelection)
       } else {
-        setStatus("failure")
+        setStatus(["failure"])
         setTempSelection(tempSelection)
       }
     } catch (error) {
@@ -131,67 +137,65 @@ const HomeLibraryNotificationForm = ({
 
   return (
     <>
-      {isLoading ? (
-        <SkeletonLoader contentSize={2} showImage={false} headingSize={0} />
-      ) : (
-        <Flex
-          flexDir={{ base: "column", lg: "row" }}
-          alignItems="flex-start"
-          width="100%"
-        >
-          <SettingsLabel icon={formUtils.icon} text={formUtils.label} />
-          {isEditing ? (
-            <Flex
-              sx={{ marginTop: "xs", marginLeft: { base: "l", lg: "unset" } }}
+      <Flex
+        flexDir={{ base: "column", lg: "row" }}
+        alignItems="flex-start"
+        width="100%"
+      >
+        <SettingsLabel icon={formUtils.icon} text={formUtils.label} />
+        {isLoading ? (
+          <SkeletonLoader contentSize={2} showImage={false} headingSize={0} />
+        ) : isEditing ? (
+          <Flex
+            sx={{ marginTop: "xs", marginLeft: { base: "l", lg: "unset" } }}
+          >
+            <Select
+              maxWidth="320px"
+              name={`select-${type}`}
+              id={formUtils.selectorId}
+              labelText={`Update ${formUtils.label.toLowerCase()}`}
+              showLabel={false}
+              onChange={handleSelectChange}
+              value={tempSelection}
             >
-              <Select
-                maxWidth="320px"
-                name={`select-${type}`}
-                id={formUtils.selectorId}
-                labelText={`Update ${formUtils.label.toLowerCase()}`}
-                showLabel={false}
-                onChange={handleSelectChange}
-                value={tempSelection}
-              >
-                {formUtils.options.map((option, index) => (
-                  <option key={`${type}-option-${index}`} value={option.name}>
-                    {option.name}
-                  </option>
-                ))}
-              </Select>
-            </Flex>
-          ) : (
-            <Flex>
-              <Text
-                sx={{
-                  width: { base: "l", sm: "250px" },
-                  marginTop: "xs",
-                  marginLeft: { base: "l", lg: "unset" },
-                  marginBottom: 0,
+              {formUtils.options.map((option, index) => (
+                <option key={`${type}-option-${index}`} value={option.name}>
+                  {option.name}
+                </option>
+              ))}
+            </Select>
+          </Flex>
+        ) : (
+          <Flex>
+            <Text
+              sx={{
+                width: { base: "l", sm: "250px" },
+                marginTop: "xs",
+                marginLeft: { base: "l", lg: "unset" },
+                marginBottom: 0,
+              }}
+            >
+              {selection}
+            </Text>
+            {editingField === "" && (
+              <EditButton
+                buttonId={`edit-${type}-button`}
+                onClick={() => {
+                  setIsEditing(true)
+                  setEditingField(type)
                 }}
-              >
-                {selection}
-              </Text>
-              {editingField === "" && (
-                <EditButton
-                  buttonId={`edit-${type}-button`}
-                  onClick={() => {
-                    setIsEditing(true)
-                    setEditingField(type)
-                  }}
-                />
-              )}
-            </Flex>
-          )}
-          {isEditing && (
-            <SaveCancelButtons
-              onCancel={cancelEditing}
-              onSave={submitSelection}
-              isDisabled={error}
-            />
-          )}
-        </Flex>
-      )}
+              />
+            )}
+          </Flex>
+        )}
+        {isEditing && (
+          <SaveCancelButtons
+            onCancel={cancelEditing}
+            onSave={submitSelection}
+            isDisabled={error}
+          />
+        )}
+      </Flex>
     </>
   )
 }
