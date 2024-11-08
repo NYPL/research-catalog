@@ -58,6 +58,10 @@ const EDDRequestForm = ({
     e.preventDefault()
     const target = e.target as HTMLInputElement
 
+    setInvalidFields((prevInvalidFields) =>
+      validateEDDFormFields(prevInvalidFields, target.name, target.value)
+    )
+
     dispatch({
       type: "input_change",
       field: target.name,
@@ -65,17 +69,8 @@ const EDDRequestForm = ({
     })
   }
 
-  const validateField = (e: SyntheticEvent) => {
+  const validateAndSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const target = e.target as HTMLInputElement
-
-    setInvalidFields((prevInvalidFields) =>
-      validateEDDFormFields(prevInvalidFields, target.name, target.value)
-    )
-  }
-
-  const validateAndSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
     const firstInvalidField = invalidFields.find(
       (firstInvalidFieldKey) => firstInvalidFieldKey.isInvalid
     )
@@ -137,7 +132,6 @@ const EDDRequestForm = ({
             invalidFields.find((field) => field.key === "email").isInvalid
           }
           onChange={handleInputChange}
-          onBlur={validateField}
           ref={validatedInputRefs["email"]}
         />
       </FormField>
@@ -157,7 +151,6 @@ const EDDRequestForm = ({
                 .isInvalid
             }
             onChange={handleInputChange}
-            onBlur={validateField}
             ref={validatedInputRefs["startingNumber"]}
           />
         </FormField>
@@ -176,7 +169,6 @@ const EDDRequestForm = ({
                 .isInvalid
             }
             onChange={handleInputChange}
-            onBlur={validateField}
             ref={validatedInputRefs["endingNumber"]}
           />
         </FormField>
@@ -195,7 +187,6 @@ const EDDRequestForm = ({
             invalidFields.find((field) => field.key === "chapter").isInvalid
           }
           onChange={handleInputChange}
-          onBlur={validateField}
           ref={validatedInputRefs["chapter"]}
         />
       </FormField>
