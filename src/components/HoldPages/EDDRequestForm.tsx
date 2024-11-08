@@ -18,7 +18,8 @@ import ExternalLink from "../Links/ExternalLink/ExternalLink"
 import { eddFormReducer } from "../../reducers/eddFormReducer"
 import {
   initialEDDFormState,
-  validateEDDFormFields,
+  validateEDDField,
+  validateEDDForm,
   initialEDDInvalidFields,
 } from "../../utils/holdUtils"
 import type { EDDRequestParams } from "../../types/holdTypes"
@@ -45,6 +46,7 @@ const EDDRequestForm = ({
     source,
   })
 
+  // Set the invalid fields as an array in state to keep track of the first invalid field for focus on submit
   const [invalidFields, setInvalidFields] = useState(initialEDDInvalidFields)
 
   // Create refs for fields that require validation to focus on the first invalid field on submit
@@ -59,7 +61,7 @@ const EDDRequestForm = ({
     const target = e.target as HTMLInputElement
 
     setInvalidFields((prevInvalidFields) =>
-      validateEDDFormFields(prevInvalidFields, target.name, target.value)
+      validateEDDField(prevInvalidFields, target.name, target.value)
     )
 
     dispatch({
@@ -72,6 +74,12 @@ const EDDRequestForm = ({
   const validateAndSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
+    // Validate the form on submission in case the user hasn't typed in all the required fields
+    setInvalidFields((prevInvalidFields) =>
+      validateEDDForm(prevInvalidFields, eddFormState)
+    )
+
+    // Find the first invalid field and focus on it
     const firstInvalidField = invalidFields.find(
       (firstInvalidFieldKey) => firstInvalidFieldKey.isInvalid
     )

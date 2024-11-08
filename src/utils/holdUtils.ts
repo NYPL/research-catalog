@@ -27,7 +27,7 @@ export const initialEDDInvalidFields: EDDFormValidatedField[] = [
   { key: "chapter", isInvalid: false },
 ]
 
-export const validateEDDFormFields = (
+export const validateEDDField = (
   prevInvalidFields: EDDFormValidatedField[],
   name: string,
   value: string
@@ -49,3 +49,11 @@ export const validateEDDFormFields = (
     return field
   })
 }
+
+export const validateEDDForm = (
+  prevInvalidFields: EDDFormValidatedField[],
+  eddForm: EDDRequestParams
+): EDDFormValidatedField[] =>
+  prevInvalidFields.reduce((prevInvalid, field) => {
+    return validateEDDField(prevInvalid, field.key, eddForm[field.key])
+  }, prevInvalidFields)
