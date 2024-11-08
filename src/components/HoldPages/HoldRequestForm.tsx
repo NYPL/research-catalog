@@ -7,14 +7,16 @@ import {
   Button,
 } from "@nypl/design-system-react-components"
 
-// import type { DeliveryLocation } from "../../../src/types/holdTypes"
+import type { DeliveryLocation } from "../../../src/types/locationTypes"
 
 import { BASE_URL } from "../../config/constants"
 
 interface HoldRequestFormProps {
-  deliveryLocations: any[] // Replace with DeliveryLocation
+  deliveryLocations: DeliveryLocation[]
   handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void
   holdId: string
+  patronId: string
+  source: string
 }
 
 /**
@@ -24,6 +26,8 @@ const HoldRequestForm = ({
   deliveryLocations,
   handleSubmit,
   holdId,
+  patronId,
+  source,
 }: HoldRequestFormProps) => {
   return (
     <Form
@@ -35,17 +39,19 @@ const HoldRequestForm = ({
       onSubmit={handleSubmit}
       mb="l"
     >
+      <input type="hidden" id="patronId" name="patronId" value={patronId} />
+      <input type="hidden" id="source" name="source" value={source} />
       <FormField>
         <RadioGroup
-          name="pickup-location"
+          name="pickupLocation"
           id="pickup-location"
           labelText="Pickup location"
-          defaultValue="1"
+          defaultValue={deliveryLocations?.[0]?.value}
           isRequired
           showLabel={false}
           mb="xs"
         >
-          {deliveryLocations.map((location: any, index) => (
+          {deliveryLocations.map((location: DeliveryLocation, index) => (
             <Radio
               id={`delivery-location-${index}`}
               key={`delivery-location-${index}`}
@@ -56,7 +62,7 @@ const HoldRequestForm = ({
                   {location.address}
                 </>
               }
-              value={index.toString()}
+              value={location.value}
             />
           ))}
         </RadioGroup>
