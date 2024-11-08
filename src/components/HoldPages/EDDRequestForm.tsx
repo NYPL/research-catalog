@@ -71,6 +71,7 @@ const EDDRequestForm = ({
 
   const validateAndSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+
     const firstInvalidField = invalidFields.find(
       (firstInvalidFieldKey) => firstInvalidFieldKey.isInvalid
     )
