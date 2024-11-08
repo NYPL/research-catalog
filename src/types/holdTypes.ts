@@ -45,4 +45,9 @@ export interface EDDFormAction {
   payload: HoldRequestParams | string | string[]
 }
 
+export interface EDDFormValidatedField {
+  key: string
+  isInvalid: boolean
+}
+
 export type EDDFormActionType = "input_change"

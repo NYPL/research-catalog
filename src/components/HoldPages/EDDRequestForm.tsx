@@ -10,21 +10,17 @@ import {
   Text,
   Banner,
 } from "@nypl/design-system-react-components"
-import { isEmail } from "validator"
-import { debounce } from "underscore"
-import {
-  useState,
-  createRef,
-  useReducer,
-  type SyntheticEvent,
-  useMemo,
-} from "react"
+import { useState, createRef, useReducer, type SyntheticEvent } from "react"
 
-import { BASE_URL, DEBOUNCE_INTERVAL } from "../../config/constants"
+import { BASE_URL } from "../../config/constants"
 import ExternalLink from "../Links/ExternalLink/ExternalLink"
 
 import { eddFormReducer } from "../../reducers/eddFormReducer"
-import { initialEDDFormState } from "../../utils/holdUtils"
+import {
+  initialEDDFormState,
+  validateEDDFormFields,
+  initialEDDInvalidFields,
+} from "../../utils/holdUtils"
 import type { EDDRequestParams } from "../../types/holdTypes"
 
 interface EDDRequestFormProps {
@@ -49,12 +45,7 @@ const EDDRequestForm = ({
     source,
   })
 
-  const [invalidFields, setInvalidFields] = useState([
-    { key: "email", isInvalid: false },
-    { key: "startingNumber", isInvalid: false },
-    { key: "endingNumber", isInvalid: false },
-    { key: "chapter", isInvalid: false },
-  ])
+  const [invalidFields, setInvalidFields] = useState(initialEDDInvalidFields)
 
   // Create refs for fields that require validation to focus on the first invalid field on submit
   const [validatedInputRefs] = useState(
@@ -64,6 +55,7 @@ const EDDRequestForm = ({
   )
 
   const handleInputChange = (e: SyntheticEvent) => {
+    e.preventDefault()
     const target = e.target as HTMLInputElement
 
     dispatch({
@@ -77,24 +69,9 @@ const EDDRequestForm = ({
     e.preventDefault()
     const target = e.target as HTMLInputElement
 
-    setInvalidFields((prevInvalidFields) => {
-      return prevInvalidFields.map((field) => {
-        if (field.key === target.name) {
-          switch (field.key) {
-            // Validate email field
-            case "email":
-              return {
-                key: "email",
-                isInvalid: !target.value.length || !isEmail(target.value),
-              }
-            // Validate other fields
-            default:
-              return { key: field.key, isInvalid: !target.value.length }
-          }
-        }
-        return field
-      })
-    })
+    setInvalidFields((prevInvalidFields) =>
+      validateEDDFormFields(prevInvalidFields, target.name, target.value)
+    )
   }
 
   const validateAndSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
