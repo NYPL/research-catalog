@@ -75,16 +75,11 @@ export default function EDDRequestPage({
     event.preventDefault()
     try {
       setFormPosting(true)
-      const { patronId, source, pickupLocation } = event.target
+      console.log(JSON.stringify(event.target))
 
       const response = await fetch(`${BASE_URL}/api/hold/request/${holdId}`, {
         method: "POST",
-        body: JSON.stringify({
-          patronId: patronId.value,
-          source: source.value,
-          pickupLocation: pickupLocation.value,
-          jsEnabled: true,
-        }),
+        body: JSON.stringify(event.target),
       })
       const responseJson = await response.json()
 
