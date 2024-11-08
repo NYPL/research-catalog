@@ -8,7 +8,6 @@ import {
 } from "@nypl/design-system-react-components"
 
 import Layout from "../../../../src/components/Layout/Layout"
-
 import EDDRequestForm from "../../../../src/components/HoldPages/EDDRequestForm"
 import HoldRequestBanner from "../../../../src/components/HoldPages/HoldRequestBanner"
 import HoldItemDetails from "../../../../src/components/HoldPages/HoldItemDetails"
@@ -29,6 +28,8 @@ import Item from "../../../../src/models/Item"
 
 import type { DiscoveryBibResult } from "../../../../src/types/bibTypes"
 import type { DiscoveryItemResult } from "../../../../src/types/itemTypes"
+
+import type { EDDRequestParams } from "../../../../src/types/holdTypes"
 
 interface EDDRequestPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -71,21 +72,19 @@ export default function EDDRequestPage({
     }
   }, [alert])
 
-  const postHoldRequest = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
+  const postHoldRequest = async (eddParams: EDDRequestParams) => {
     try {
       setFormPosting(true)
-      console.log(JSON.stringify(event.target))
 
       const response = await fetch(`${BASE_URL}/api/hold/request/${holdId}`, {
         method: "POST",
-        body: JSON.stringify(event.target),
+        body: JSON.stringify(eddParams),
       })
       const responseJson = await response.json()
 
       if (response.status !== 200) {
         console.error(
-          "HoldRequestPage: Error in hold request api response",
+          "HoldRequestPage: Error in edd request api response",
           responseJson.error
         )
         setAlert(true)
@@ -99,7 +98,7 @@ export default function EDDRequestPage({
 
       // Success state
       await router.push(
-        `${PATHS.HOLD_CONFIRMATION}/${holdId}?pickupLocation=${pickupLocationFromResponse}&requestId=${requestId}`
+        `${PATHS.HOLD_CONFIRMATION}/${holdId}?pickupLocation=${pickupLocationFromResponse}&requestId=${requestId}&isEdd=true`
       )
     } catch (error) {
       console.error(
@@ -184,7 +183,7 @@ export async function getServerSideProps({ params, req, res }) {
         redirectCount + 1
       }; Max-Age=10; path=/; domain=.nypl.org;`
     )
-    const redirect = getLoginRedirect(req, `${PATHS.HOLD_REQUEST}[${id}]/edd`)
+    const redirect = getLoginRedirect(req, `${PATHS.HOLD_REQUEST}/${id}/edd`)
 
     return {
       redirect: {

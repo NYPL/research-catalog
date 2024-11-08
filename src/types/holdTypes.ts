@@ -8,6 +8,19 @@ export interface HoldRequestParams {
   pickupLocation: NYPLocationKey | "edd"
 }
 
+export interface EDDRequestParams extends HoldRequestParams {
+  pickupLocation: "edd"
+  email: string
+  startingNumber: string
+  endingNumber: string
+  chapter: string
+  author?: string
+  publicationDate?: string
+  volume?: string
+  issue?: string
+  notes?: string
+}
+
 export interface HoldPostResult {
   status: HTTPStatusCode
   pickupLocation?: NYPLocationKey | "edd"
@@ -25,3 +38,11 @@ export interface DiscoveryHoldPostParams {
   // TODO: make this EDD form content object
   docDeliveryData?: string
 }
+
+export interface EDDFormAction {
+  type: EDDFormActionType
+  field?: string
+  payload: HoldRequestParams | string | string[]
+}
+
+export type EDDFormActionType = "input_change"

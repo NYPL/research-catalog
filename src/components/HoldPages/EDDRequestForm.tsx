@@ -11,13 +11,24 @@ import {
   Banner,
 } from "@nypl/design-system-react-components"
 import { isEmail } from "validator"
-import { useState, createRef, type SyntheticEvent } from "react"
+import { debounce } from "underscore"
+import {
+  useState,
+  createRef,
+  useReducer,
+  type SyntheticEvent,
+  useMemo,
+} from "react"
 
-import { BASE_URL } from "../../config/constants"
+import { BASE_URL, DEBOUNCE_INTERVAL } from "../../config/constants"
 import ExternalLink from "../Links/ExternalLink/ExternalLink"
 
+import { eddFormReducer } from "../../reducers/eddFormReducer"
+import { initialEDDFormState } from "../../utils/holdUtils"
+import type { EDDRequestParams } from "../../types/holdTypes"
+
 interface EDDRequestFormProps {
-  handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void
+  handleSubmit: (eddParams: EDDRequestParams) => void
   holdId: string
   patronId: string
   source: string
@@ -32,6 +43,12 @@ const EDDRequestForm = ({
   patronId,
   source,
 }: EDDRequestFormProps) => {
+  const [eddFormState, dispatch] = useReducer(eddFormReducer, {
+    ...initialEDDFormState,
+    patronId,
+    source,
+  })
+
   const [invalidFields, setInvalidFields] = useState([
     { key: "email", isInvalid: false },
     { key: "startingNumber", isInvalid: false },
@@ -45,6 +62,16 @@ const EDDRequestForm = ({
       return { ...acc, [field.key]: createRef() }
     }, {})
   )
+
+  const handleInputChange = (e: SyntheticEvent) => {
+    const target = e.target as HTMLInputElement
+
+    dispatch({
+      type: "input_change",
+      field: target.name,
+      payload: target.value,
+    })
+  }
 
   const validateField = (e: SyntheticEvent) => {
     e.preventDefault()
@@ -80,7 +107,7 @@ const EDDRequestForm = ({
     if (firstInvalidField) {
       validatedInputRefs?.[firstInvalidField.key]?.current.focus()
     } else {
-      handleSubmit(event)
+      handleSubmit(eddFormState)
     }
   }
 
@@ -95,8 +122,18 @@ const EDDRequestForm = ({
       mb="l"
       maxWidth={{ lg: "75%" }}
     >
-      <input type="hidden" id="patronId" name="patronId" value={patronId} />
-      <input type="hidden" id="source" name="source" value={source} />
+      <input
+        type="hidden"
+        id="patronId"
+        name="patronId"
+        value={eddFormState.patronId}
+      />
+      <input
+        type="hidden"
+        id="source"
+        name="source"
+        value={eddFormState.source}
+      />
       <Box>
         <Heading level="h3" size="heading4" mb="m">
           Required information
@@ -113,6 +150,7 @@ const EDDRequestForm = ({
         <TextInput
           id="email"
           name="email"
+          value={eddFormState.email}
           labelText="Email address"
           isRequired
           placeholder="theresa.smith@gmail.com"
@@ -121,6 +159,7 @@ const EDDRequestForm = ({
           isInvalid={
             invalidFields.find((field) => field.key === "email").isInvalid
           }
+          onChange={handleInputChange}
           onBlur={validateField}
           ref={validatedInputRefs["email"]}
         />
@@ -130,6 +169,7 @@ const EDDRequestForm = ({
           <TextInput
             id="starting-number"
             name="startingNumber"
+            value={eddFormState.startingNumber}
             labelText="Starting page number"
             isRequired
             placeholder="Example: 1"
@@ -139,6 +179,7 @@ const EDDRequestForm = ({
               invalidFields.find((field) => field.key === "startingNumber")
                 .isInvalid
             }
+            onChange={handleInputChange}
             onBlur={validateField}
             ref={validatedInputRefs["startingNumber"]}
           />
@@ -147,6 +188,7 @@ const EDDRequestForm = ({
           <TextInput
             id="ending-number"
             name="endingNumber"
+            value={eddFormState.endingNumber}
             labelText="Ending page number"
             isRequired
             placeholder="Example: 20"
@@ -156,6 +198,7 @@ const EDDRequestForm = ({
               invalidFields.find((field) => field.key === "endingNumber")
                 .isInvalid
             }
+            onChange={handleInputChange}
             onBlur={validateField}
             ref={validatedInputRefs["endingNumber"]}
           />
@@ -165,6 +208,7 @@ const EDDRequestForm = ({
         <TextInput
           id="chapter"
           name="chapter"
+          value={eddFormState.chapter}
           labelText="Chapter or article title"
           isRequired
           placeholder="Example: Chapter 1"
@@ -173,6 +217,7 @@ const EDDRequestForm = ({
           isInvalid={
             invalidFields.find((field) => field.key === "chapter").isInvalid
           }
+          onChange={handleInputChange}
           onBlur={validateField}
           ref={validatedInputRefs["chapter"]}
         />
@@ -190,8 +235,10 @@ const EDDRequestForm = ({
         <TextInput
           id="author"
           name="author"
+          value={eddFormState.author}
           labelText="Author"
           placeholder="Example: Charles Dickens"
+          onChange={handleInputChange}
         />
       </FormField>
       <FormRow>
@@ -199,24 +246,30 @@ const EDDRequestForm = ({
           <TextInput
             id="publication-date"
             name="publicationDate"
+            value={eddFormState.publicationDate}
             labelText="Date published"
             placeholder="Example: 1932"
+            onChange={handleInputChange}
           />
         </FormField>
         <FormField>
           <TextInput
             id="volume"
             name="volume"
+            value={eddFormState.volume}
             labelText="Volume"
             placeholder="Example: V3"
+            onChange={handleInputChange}
           />
         </FormField>
         <FormField>
           <TextInput
             id="issue"
             name="issue"
+            value={eddFormState.issue}
             labelText="Issue"
             placeholder="Example: Issue 27"
+            onChange={handleInputChange}
           />
         </FormField>
       </FormRow>
@@ -224,10 +277,12 @@ const EDDRequestForm = ({
         <TextInput
           id="notes"
           name="notes"
+          value={eddFormState.notes}
           type="textarea"
           labelText="Notes"
           placeholder="Example: Please include foldouts in the scan."
           helperText="Provide additional instructions here."
+          onChange={handleInputChange}
         />
       </FormField>
       <Banner
