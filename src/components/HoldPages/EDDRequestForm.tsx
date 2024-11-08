@@ -56,6 +56,7 @@ const EDDRequestForm = ({
     }, {})
   )
 
+  // Separate validation from input change to prevent validation on every keystroke on fields other than email
   const validateField = (e: SyntheticEvent) => {
     e.preventDefault()
     const target = e.target as HTMLInputElement
