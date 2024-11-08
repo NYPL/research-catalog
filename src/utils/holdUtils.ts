@@ -20,6 +20,7 @@ export const initialEDDFormState: EDDRequestParams = {
   pickupLocation: "edd",
 }
 
+// Initial state for invalid fields in the EDD form to keep track of the first invalid field for focus on submit
 export const initialEDDInvalidFields: EDDFormValidatedField[] = [
   { key: "email", isInvalid: false },
   { key: "startingNumber", isInvalid: false },
@@ -27,33 +28,35 @@ export const initialEDDInvalidFields: EDDFormValidatedField[] = [
   { key: "chapter", isInvalid: false },
 ]
 
-export const validateEDDField = (
-  prevInvalidFields: EDDFormValidatedField[],
-  name: string,
-  value: string
+// Updates the invalidFields in state based on the field name and value and validation rules per field
+export const updateInvalidFields = (
+  fieldName: string,
+  fieldValue: string,
+  prevInvalidFields: EDDFormValidatedField[]
 ): EDDFormValidatedField[] => {
   return prevInvalidFields.map((field) => {
-    if (field.key === name) {
+    if (field.key === fieldName) {
       switch (field.key) {
         // Validate email field
         case "email":
           return {
             key: "email",
-            isInvalid: !value.length || !isEmail(value),
+            isInvalid: !fieldValue.length || !isEmail(fieldValue),
           }
         // Validate other fields
         default:
-          return { key: field.key, isInvalid: !value.length }
+          return { key: field.key, isInvalid: !fieldValue.length }
       }
     }
     return field
   })
 }
 
+// Validates all fields on submit in case the user hasn't typed in all the required fields
 export const validateEDDForm = (
-  prevInvalidFields: EDDFormValidatedField[],
-  eddForm: EDDRequestParams
+  eddForm: EDDRequestParams,
+  prevInvalidFields: EDDFormValidatedField[]
 ): EDDFormValidatedField[] =>
-  prevInvalidFields.reduce((prevInvalid, field) => {
-    return validateEDDField(prevInvalid, field.key, eddForm[field.key])
+  prevInvalidFields.reduce((accumulator, field) => {
+    return updateInvalidFields(field.key, eddForm[field.key], accumulator)
   }, prevInvalidFields)

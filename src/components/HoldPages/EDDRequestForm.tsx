@@ -18,7 +18,7 @@ import ExternalLink from "../Links/ExternalLink/ExternalLink"
 import { eddFormReducer } from "../../reducers/eddFormReducer"
 import {
   initialEDDFormState,
-  validateEDDField,
+  updateInvalidFields,
   validateEDDForm,
   initialEDDInvalidFields,
 } from "../../utils/holdUtils"
@@ -56,12 +56,12 @@ const EDDRequestForm = ({
     }, {})
   )
 
-  const updateInvalidFields = (e: SyntheticEvent) => {
+  const validateField = (e: SyntheticEvent) => {
     e.preventDefault()
     const target = e.target as HTMLInputElement
 
     setInvalidFields((prevInvalidFields) =>
-      validateEDDField(prevInvalidFields, target.name, target.value)
+      updateInvalidFields(target.name, target.value, prevInvalidFields)
     )
   }
 
@@ -81,7 +81,7 @@ const EDDRequestForm = ({
 
     // Validate the form on submission in case the user hasn't typed in all the required fields
     setInvalidFields((prevInvalidFields) =>
-      validateEDDForm(prevInvalidFields, eddFormState)
+      validateEDDForm(eddFormState, prevInvalidFields)
     )
 
     // Find the first invalid field and focus on it
@@ -146,7 +146,7 @@ const EDDRequestForm = ({
             invalidFields.find((field) => field.key === "email").isInvalid
           }
           onChange={(e) => {
-            updateInvalidFields(e)
+            validateField(e)
             handleInputChange(e)
           }}
           ref={validatedInputRefs["email"]}
@@ -167,7 +167,7 @@ const EDDRequestForm = ({
               invalidFields.find((field) => field.key === "startingNumber")
                 .isInvalid
             }
-            onBlur={updateInvalidFields}
+            onBlur={validateField}
             onChange={handleInputChange}
             ref={validatedInputRefs["startingNumber"]}
           />
@@ -186,7 +186,7 @@ const EDDRequestForm = ({
               invalidFields.find((field) => field.key === "endingNumber")
                 .isInvalid
             }
-            onBlur={updateInvalidFields}
+            onBlur={validateField}
             onChange={handleInputChange}
             ref={validatedInputRefs["endingNumber"]}
           />
@@ -205,7 +205,7 @@ const EDDRequestForm = ({
           isInvalid={
             invalidFields.find((field) => field.key === "chapter").isInvalid
           }
-          onBlur={updateInvalidFields}
+          onBlur={validateField}
           onChange={handleInputChange}
           ref={validatedInputRefs["chapter"]}
         />
