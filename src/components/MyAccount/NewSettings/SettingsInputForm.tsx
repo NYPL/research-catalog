@@ -116,6 +116,7 @@ const PhoneEmailForm = ({
   const submitInputs = async () => {
     setIsLoading(true)
     setIsEditing(false)
+    setStatus(["none"])
     const validInputs = tempInputs.filter((input) =>
       validateInput(input, tempInputs)
     )
@@ -140,6 +141,7 @@ const PhoneEmailForm = ({
       )
 
       if (response.status === 200) {
+        console.log("hello")
         await getMostUpdatedSierraAccountData()
         setStatus(["success"])
         setInputs([...validInputs])

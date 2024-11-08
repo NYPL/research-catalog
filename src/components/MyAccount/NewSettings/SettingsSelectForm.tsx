@@ -1,9 +1,7 @@
 import { useContext, useState } from "react"
 import { PatronDataContext } from "../../../context/PatronDataContext"
 import {
-  Button,
   Flex,
-  Icon,
   Select,
   SkeletonLoader,
   Text,
