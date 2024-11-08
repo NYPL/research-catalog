@@ -20,6 +20,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     console.log(req.body)
 
     const { patronId, source, pickupLocation, jsEnabled } = JSON.parse(req.body)
+
     // TODO: Make this EDD request function or adapt the hold request function to handle EDD requests
     const holdRequestResponse = await postHoldRequest({
       itemId,
@@ -28,24 +29,22 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       pickupLocation,
     })
 
-    const { pickupLocation: pickupLocationFromResponse, requestId } =
-      holdRequestResponse
+    const { requestId } = holdRequestResponse
 
-    if (!pickupLocationFromResponse || !requestId) {
+    if (!requestId) {
       throw new Error("Malformed response from hold request API")
     }
 
     // Return a 200 status when the hold request is posted successfully via JS fetch
     if (jsEnabled) {
       return res.status(200).json({
-        pickupLocation: pickupLocationFromResponse,
         requestId,
       })
     }
 
     // Server side redirect in case user has JS disabled
     res.redirect(
-      `${BASE_URL}${PATHS.HOLD_CONFIRMATION}${holdId}?pickupLocation=${pickupLocationFromResponse}?requestId=${requestId}`
+      `${BASE_URL}${PATHS.HOLD_CONFIRMATION}${holdId}?pickupLocation=${pickupLocationFromResponse}?requestId=${requestId}?isEdd=true`
     )
   } catch (error) {
     const { statusText } = error as Response
