@@ -80,7 +80,7 @@ export default function EDDRequestPage({
         `${BASE_URL}/api/hold/request/${holdId}/edd`,
         {
           method: "POST",
-          body: JSON.stringify({ ...eddParams, jsEnabled: true }),
+          body: JSON.stringify({ ...eddParams }),
         }
       )
       const responseJson = await response.json()
