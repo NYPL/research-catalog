@@ -13,6 +13,8 @@ export const SHEP_HTTP_TIMEOUT = 4000
 export const FOCUS_TIMEOUT = 50
 export const DEBOUNCE_INTERVAL = 20
 
+export const EMAIL_REGEX = /^[^@]+@[^@]+\.[^@]+$/
+
 // Internal path names
 export const PATHS = {
   HOME: "/",

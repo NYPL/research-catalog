@@ -2,7 +2,8 @@ import type {
   EDDRequestParams,
   EDDFormValidatedField,
 } from "../types/holdTypes"
-import { isEmail } from "validator"
+
+import { EMAIL_REGEX } from "../config/constants"
 
 export const initialEDDFormState: EDDRequestParams = {
   email: "",
@@ -41,7 +42,7 @@ export const updateInvalidFields = (
         case "email":
           return {
             key: "email",
-            isInvalid: !fieldValue.length || !isEmail(fieldValue),
+            isInvalid: !fieldValue.length || !EMAIL_REGEX.test(fieldValue),
           }
         // Validate other fields
         default:
