@@ -116,7 +116,7 @@ const PhoneEmailForm = ({
   const submitInputs = async () => {
     setIsLoading(true)
     setIsEditing(false)
-    setStatus("none")
+    setStatus("")
     const validInputs = tempInputs.filter((input) =>
       validateInput(input, tempInputs)
     )
