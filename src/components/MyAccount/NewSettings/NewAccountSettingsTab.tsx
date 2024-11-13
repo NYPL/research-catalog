@@ -92,7 +92,7 @@ const NewAccountSettingsTab = () => {
         <SettingsSelectForm
           patronData={patron}
           pickupLocations={pickupLocations}
-          settingsState={passwordSettingsState}
+          settingsState={settingsState}
           type="notification"
         />
         <PasswordForm
