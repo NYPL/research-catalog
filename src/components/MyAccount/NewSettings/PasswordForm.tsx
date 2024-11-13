@@ -67,7 +67,8 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
     confirmPassword: "",
     passwordsMatch: true,
   })
-  const { setStatus, editingField, setEditingField } = settingsState
+  const { setStatus, setStatusMessage, editingField, setEditingField } =
+    settingsState
 
   const cancelEditing = () => {
     setIsEditing(false)
@@ -108,7 +109,7 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
   const submitForm = async () => {
     setIsLoading(true)
     setIsEditing(false)
-    setStatus(["none"])
+    setStatus("")
     try {
       const response = await fetch(
         `${BASE_URL}/api/account/update-pin/${patronData.id}`,
@@ -128,13 +129,14 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
       const errorMessage = await response.json()
       if (response.status === 200) {
         await getMostUpdatedSierraAccountData()
-        setStatus(["success"])
+        setStatus("success")
       } else {
+        setStatus("failure")
         if (errorMessage) {
           errorMessage.startsWith("Invalid parameter")
             ? // Returning a more user-friendly error message.
-              setStatus(["failure", "Incorrect current pin/password."])
-            : setStatus(["failure", "Invalid new pin/password."])
+              setStatusMessage("Incorrect current pin/password.")
+            : setStatusMessage("Invalid new pin/password.")
         }
       }
     } catch (error) {

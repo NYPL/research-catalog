@@ -9,8 +9,9 @@ const NewAccountSettingsTab = () => {
   const {
     updatedAccountData: { patron, pickupLocations },
   } = useContext(PatronDataContext)
-  const [status, setStatus] = useState<[string, string?]>(["none"])
-  const [editingField, setEditingField] = useState("")
+  const [status, setStatus] = useState<string>("")
+  const [statusMessage, setStatusMessage] = useState<string>("")
+  const [editingField, setEditingField] = useState<string>("")
   const bannerRef = useRef<HTMLDivElement>(null)
 
   const settingsState = {
@@ -19,25 +20,30 @@ const NewAccountSettingsTab = () => {
     setEditingField,
   }
 
+  const passwordSettingsState = {
+    ...settingsState,
+    setStatusMessage,
+  }
+
   useEffect(() => {
-    if (status[0] !== "none" && bannerRef.current) {
+    if (status !== "" && bannerRef.current) {
       bannerRef.current.focus()
     }
   }, [status])
 
   return (
     <>
-      {status[0] !== "none" && (
+      {status !== "" && (
         <div ref={bannerRef} tabIndex={-1}>
           <Banner
             sx={{ marginTop: "m" }}
             isDismissible
             content={
               <div style={{ alignItems: "center" }}>
-                {status[0] === "failure" ? (
-                  status[1] ? (
+                {status === "failure" ? (
+                  statusMessage !== "" ? (
                     <Text marginBottom={0} color={"ui.black !important"}>
-                      {status[1]} Please try again or{" "}
+                      {statusMessage} Please try again or{" "}
                       <Link
                         sx={{
                           color: "ui.link.primary !important",
@@ -62,7 +68,7 @@ const NewAccountSettingsTab = () => {
                 )}
               </div>
             }
-            type={status[0] === "failure" ? "negative" : "positive"}
+            type={status === "failure" ? "negative" : "positive"}
           />
         </div>
       )}
@@ -86,10 +92,13 @@ const NewAccountSettingsTab = () => {
         <SettingsSelectForm
           patronData={patron}
           pickupLocations={pickupLocations}
-          settingsState={settingsState}
+          settingsState={passwordSettingsState}
           type="notification"
         />
-        <PasswordForm settingsState={settingsState} patronData={patron} />
+        <PasswordForm
+          settingsState={passwordSettingsState}
+          patronData={patron}
+        />
       </Flex>
     </>
   )

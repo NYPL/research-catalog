@@ -116,7 +116,7 @@ const PhoneEmailForm = ({
   const submitInputs = async () => {
     setIsLoading(true)
     setIsEditing(false)
-    setStatus(["none"])
+    setStatus("none")
     const validInputs = tempInputs.filter((input) =>
       validateInput(input, tempInputs)
     )
@@ -141,13 +141,12 @@ const PhoneEmailForm = ({
       )
 
       if (response.status === 200) {
-        console.log("hello")
         await getMostUpdatedSierraAccountData()
-        setStatus(["success"])
+        setStatus("success")
         setInputs([...validInputs])
         setTempInputs([...validInputs])
       } else {
-        setStatus(["failure"])
+        setStatus("failure")
         setTempInputs([...inputs])
       }
     } catch (error) {
@@ -247,7 +246,7 @@ const PhoneEmailForm = ({
                 </Text>
               ))}
             </Flex>
-            {editingField === "" && (
+            {editingField === "" && tempInputs.length > 0 && (
               <EditButton
                 buttonId={`edit-${inputType}-button`}
                 onClick={() => {

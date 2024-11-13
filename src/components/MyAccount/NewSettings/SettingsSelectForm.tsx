@@ -98,7 +98,7 @@ const HomeLibraryNotificationForm = ({
   const submitSelection = async () => {
     setIsLoading(true)
     setIsEditing(false)
-    setStatus(["none"])
+    setStatus("")
     const body = formUtils.body(
       type === "notification"
         ? notificationPreferenceMap.find((pref) => pref.name === tempSelection)
@@ -118,11 +118,11 @@ const HomeLibraryNotificationForm = ({
 
       if (response.status === 200) {
         await getMostUpdatedSierraAccountData()
-        setStatus(["success"])
+        setStatus("success")
         setSelection(tempSelection)
         setTempSelection(tempSelection)
       } else {
-        setStatus(["failure"])
+        setStatus("failure")
         setTempSelection(tempSelection)
       }
     } catch (error) {

@@ -9,6 +9,7 @@ import { PatronDataProvider } from "../../../context/PatronDataContext"
 
 const mockSettingsState = {
   setStatus: jest.fn(),
+  setStatusMessage: jest.fn(),
   editingField: "",
   setEditingField: jest.fn(),
 }
@@ -93,10 +94,9 @@ describe("Pin/password form", () => {
     await waitFor(() =>
       expect(mockSettingsState.setStatus).toHaveBeenCalledTimes(2)
     )
-    expect(mockSettingsState.setStatus).toHaveBeenNthCalledWith(2, [
-      "failure",
-      "Incorrect current pin/password.",
-    ])
+    expect(mockSettingsState.setStatusMessage).toHaveBeenCalledWith(
+      "Incorrect current pin/password."
+    )
   })
 
   test("sets failure if new password is invalid", async () => {
@@ -125,10 +125,11 @@ describe("Pin/password form", () => {
     await waitFor(() =>
       expect(mockSettingsState.setStatus).toHaveBeenCalledTimes(4)
     )
-    expect(mockSettingsState.setStatus).toHaveBeenNthCalledWith(4, [
-      "failure",
-      "Invalid new pin/password.",
-    ])
+    expect(mockSettingsState.setStatus).toHaveBeenNthCalledWith(4, "failure")
+    expect(mockSettingsState.setStatusMessage).toHaveBeenNthCalledWith(
+      2,
+      "Invalid new pin/password."
+    )
   })
 
   test("successfully sets patron data if every field is valid", async () => {
