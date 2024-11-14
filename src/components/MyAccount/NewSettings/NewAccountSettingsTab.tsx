@@ -1,43 +1,107 @@
-import { Flex, Banner } from "@nypl/design-system-react-components"
-import { useContext, useState } from "react"
+import { Flex, Banner, Link, Text } from "@nypl/design-system-react-components"
+import { useContext, useEffect, useRef, useState } from "react"
 import { PatronDataContext } from "../../../context/PatronDataContext"
-import PhoneEmailForm from "./PhoneEmailForm"
+import SettingsInputForm from "./SettingsInputForm"
+import SettingsSelectForm from "./SettingsSelectForm"
+import PasswordForm from "./PasswordForm"
+
+type StatusType = "" | "failure" | "success"
 
 const NewAccountSettingsTab = () => {
   const {
-    updatedAccountData: { patron },
+    updatedAccountData: { patron, pickupLocations },
   } = useContext(PatronDataContext)
-  const [isSuccess, setIsSuccess] = useState(false)
-  const [isFailure, setIsFailure] = useState(false)
+  const [status, setStatus] = useState<StatusType>("")
+  const [statusMessage, setStatusMessage] = useState<string>("")
+  const [editingField, setEditingField] = useState<string>("")
+  const bannerRef = useRef<HTMLDivElement>(null)
+
+  const settingsState = {
+    setStatus,
+    editingField,
+    setEditingField,
+  }
+
+  const passwordSettingsState = {
+    ...settingsState,
+    setStatusMessage,
+  }
+
+  useEffect(() => {
+    if (status !== "" && bannerRef.current) {
+      bannerRef.current.focus()
+    }
+  }, [status])
+
+  const bannerContent = (
+    <div style={{ alignItems: "center" }}>
+      {status === "failure" ? (
+        statusMessage !== "" ? (
+          <Text marginBottom={0} color={"ui.black !important"}>
+            {statusMessage} Please try again or{" "}
+            <Link
+              sx={{
+                color: "ui.link.primary !important",
+                textDecorationColor: "ui.link.primary !important",
+                textDecoration: "underline",
+              }}
+              href="https://www.nypl.org/get-help/contact-us"
+            >
+              contact us
+            </Link>{" "}
+            for assistance.
+          </Text>
+        ) : (
+          <Text marginBottom={0} color={"ui.black !important"}>
+            Your changes were not saved.
+          </Text>
+        )
+      ) : (
+        <Text marginBottom={0} color={"ui.black !important"}>
+          Your changes were saved.
+        </Text>
+      )}
+    </div>
+  )
 
   return (
     <>
-      {(isSuccess || isFailure) && (
-        <Banner
-          isDismissible
-          content={
-            <div style={{ alignItems: "center" }}>
-              {isFailure
-                ? "Your changes were not saved."
-                : "Your changes were saved."}
-            </div>
-          }
-          type={isFailure ? "warning" : "positive"}
-          sx={{ marginTop: "m" }}
-        />
+      {status !== "" && (
+        <div ref={bannerRef} tabIndex={-1}>
+          <Banner
+            sx={{ marginTop: "m" }}
+            isDismissible
+            content={bannerContent}
+            type={status === "failure" ? "negative" : "positive"}
+          />
+        </div>
       )}
       <Flex flexDir="column" sx={{ marginTop: "xl", gap: "s" }}>
-        <PhoneEmailForm
+        <SettingsInputForm
           patronData={patron}
-          setIsSuccess={setIsSuccess}
-          setIsFailure={setIsFailure}
+          settingsState={settingsState}
           inputType="phones"
         />
-        <PhoneEmailForm
+        <SettingsInputForm
           patronData={patron}
-          setIsSuccess={setIsSuccess}
-          setIsFailure={setIsFailure}
+          settingsState={settingsState}
           inputType="emails"
+        />
+        <SettingsSelectForm
+          patronData={patron}
+          pickupLocations={pickupLocations}
+          settingsState={settingsState}
+          type="library"
+        />
+        <SettingsSelectForm
+          patronData={patron}
+          pickupLocations={pickupLocations}
+          settingsState={settingsState}
+          type="notification"
+        />
+        <PasswordForm
+          settingsState={passwordSettingsState}
+          patronData={patron}
         />
       </Flex>
     </>
