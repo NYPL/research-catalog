@@ -43,12 +43,6 @@ const HomeLibraryNotificationForm = ({
           { code: "p", name: "Phone" },
         ]
 
-  const validateInput = (input) => {
-    if (input == "Phone" && patronData.phones.length === 0) {
-      setError(true)
-    }
-  }
-
   const sortedPickupLocations = [
     patronData.homeLibrary,
     ...pickupLocations.filter(
@@ -56,34 +50,36 @@ const HomeLibraryNotificationForm = ({
     ),
   ]
 
-  const formUtils = {
-    initialState:
-      type === "notification"
-        ? notificationPreferenceMap.find(
-            (pref) => pref.code === patronData.notificationPreference
-          )?.name
-        : patronData.homeLibrary.name,
-    options:
-      type === "notification"
-        ? notificationPreferenceMap
-        : sortedPickupLocations,
-    icon: type === "notification" ? "communicationChatBubble" : "actionHome",
-    label: type === "notification" ? "Notification preference" : "Home library",
-    selectorId:
-      type === "notification"
-        ? "notification-preference-selector"
-        : "update-home-library-selector",
-    body: (code) =>
-      type === "notification"
-        ? {
-            fixedFields: { "268": { label: "Notice Preference", value: code } },
-          }
-        : { homeLibraryCode: `${code}` },
+  const notificationFormUtils = {
+    initialState: notificationPreferenceMap.find(
+      (pref) => pref.code === patronData.notificationPreference
+    )?.name,
+    options: notificationPreferenceMap,
+    icon: "communicationChatBubble",
+    label: "Notification preference",
+    selectorId: "notification-preference-selector",
   }
+
+  const libraryFormUtils = {
+    initialState: patronData.homeLibrary.name,
+    options: sortedPickupLocations,
+    icon: "actionHome",
+    label: "Home library",
+    selectorId: "update-home-library-selector",
+  }
+
+  const formUtils =
+    type === "notification" ? notificationFormUtils : libraryFormUtils
 
   const [selection, setSelection] = useState(formUtils.initialState)
 
   const [tempSelection, setTempSelection] = useState(selection)
+
+  const validateInput = (input) => {
+    if (input == "Phone" && patronData.phones.length === 0) {
+      setError(true)
+    }
+  }
 
   const handleSelectChange = (event) => {
     setTempSelection(event.target.value)
@@ -99,12 +95,18 @@ const HomeLibraryNotificationForm = ({
     setIsLoading(true)
     setIsEditing(false)
     setStatus("")
-    const body = formUtils.body(
+    const code =
       type === "notification"
         ? notificationPreferenceMap.find((pref) => pref.name === tempSelection)
             ?.code
         : pickupLocations.find((loc) => loc.name === tempSelection)?.code
-    )
+
+    const body =
+      type === "notification"
+        ? {
+            fixedFields: { "268": { label: "Notice Preference", value: code } },
+          }
+        : { homeLibraryCode: `${code}` }
 
     try {
       const response = await fetch(

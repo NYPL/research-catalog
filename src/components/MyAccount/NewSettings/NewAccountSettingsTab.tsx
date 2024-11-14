@@ -5,11 +5,13 @@ import SettingsInputForm from "./SettingsInputForm"
 import SettingsSelectForm from "./SettingsSelectForm"
 import PasswordForm from "./PasswordForm"
 
+type StatusType = "" | "failure" | "success"
+
 const NewAccountSettingsTab = () => {
   const {
     updatedAccountData: { patron, pickupLocations },
   } = useContext(PatronDataContext)
-  const [status, setStatus] = useState<string>("")
+  const [status, setStatus] = useState<StatusType>("")
   const [statusMessage, setStatusMessage] = useState<string>("")
   const [editingField, setEditingField] = useState<string>("")
   const bannerRef = useRef<HTMLDivElement>(null)

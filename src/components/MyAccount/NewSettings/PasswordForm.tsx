@@ -25,6 +25,11 @@ interface PasswordFormFieldProps {
   isInvalid?: boolean
 }
 
+export const passwordFormMessages = {
+  INCORRECT: "Incorrect current pin/password.",
+  INVALID: "Invalid new pin/password.",
+}
+
 const PasswordFormField = ({
   label,
   handler,
@@ -62,7 +67,7 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
   const [isLoading, setIsLoading] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
   const [formData, setFormData] = useState({
-    oldPassword: "",
+    currentPassword: "",
     newPassword: "",
     confirmPassword: "",
     passwordsMatch: true,
@@ -76,7 +81,7 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
   }
 
   const validateForm =
-    formData.oldPassword !== "" &&
+    formData.currentPassword !== "" &&
     formData.newPassword !== "" &&
     formData.confirmPassword !== "" &&
     formData.passwordsMatch
@@ -85,23 +90,14 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
     const { name, value } = e.target
     let updatedFormData = { ...formData }
 
+    updatedFormData = {
+      ...updatedFormData,
+      [name]: value,
+    }
     if (name === "confirmPassword") {
-      updatedFormData = {
-        ...updatedFormData,
-        confirmPassword: value,
-        passwordsMatch: updatedFormData.newPassword === value,
-      }
+      updatedFormData.passwordsMatch = updatedFormData.newPassword === value
     } else if (name === "newPassword") {
-      updatedFormData = {
-        ...updatedFormData,
-        newPassword: value,
-        passwordsMatch: updatedFormData.confirmPassword === value,
-      }
-    } else {
-      updatedFormData = {
-        ...updatedFormData,
-        [name]: value,
-      }
+      updatedFormData.passwordsMatch = updatedFormData.confirmPassword === value
     }
     setFormData(updatedFormData)
   }
@@ -119,7 +115,7 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            oldPin: formData.oldPassword,
+            oldPin: formData.currentPassword,
             newPin: formData.newPassword,
             barcode: patronData.barcode,
           }),
@@ -135,8 +131,8 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
         if (errorMessage) {
           errorMessage.startsWith("Invalid parameter")
             ? // Returning a more user-friendly error message.
-              setStatusMessage("Incorrect current pin/password.")
-            : setStatusMessage("Invalid new pin/password.")
+              setStatusMessage(passwordFormMessages.INCORRECT)
+            : setStatusMessage(passwordFormMessages.INVALID)
         }
       }
     } catch (error) {
@@ -163,7 +159,7 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
             >
               <PasswordFormField
                 label="Enter current pin/password"
-                name="oldPassword"
+                name="currentPassword"
                 handler={handleInputChange}
               />
               <PasswordFormField

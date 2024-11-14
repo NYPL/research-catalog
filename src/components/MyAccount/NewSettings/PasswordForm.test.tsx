@@ -6,6 +6,7 @@ import {
   processedPatron,
 } from "../../../../__test__/fixtures/processedMyAccountData"
 import { PatronDataProvider } from "../../../context/PatronDataContext"
+import { passwordFormMessages } from "./PasswordForm"
 
 const mockSettingsState = {
   setStatus: jest.fn(),
@@ -29,6 +30,12 @@ const component = (
     />
   </PatronDataProvider>
 )
+
+beforeEach(() => {
+  mockSettingsState.setStatus.mockClear()
+  mockSettingsState.setStatusMessage.mockClear()
+  mockSettingsState.setEditingField.mockClear()
+})
 
 describe("Pin/password form", () => {
   test("disables submit button if any form field is empty", async () => {
@@ -79,11 +86,13 @@ describe("Pin/password form", () => {
     const button = getByText("Edit")
     fireEvent.click(button)
 
-    const oldPasswordField = getByLabelText("Enter current pin/password")
+    const currentPasswordField = getByLabelText("Enter current pin/password")
     const newPasswordField = getByLabelText("Enter new pin/password")
     const confirmPasswordField = getByLabelText("Re-enter new pin/password")
 
-    fireEvent.change(oldPasswordField, { target: { value: "wrongPassword" } })
+    fireEvent.change(currentPasswordField, {
+      target: { value: "wrongPassword" },
+    })
     fireEvent.change(newPasswordField, { target: { value: "newPassword" } })
     fireEvent.change(confirmPasswordField, {
       target: { value: "newPassword" },
@@ -95,7 +104,7 @@ describe("Pin/password form", () => {
       expect(mockSettingsState.setStatus).toHaveBeenCalledTimes(2)
     )
     expect(mockSettingsState.setStatusMessage).toHaveBeenCalledWith(
-      "Incorrect current pin/password."
+      passwordFormMessages.INCORRECT
     )
   })
 
@@ -110,11 +119,13 @@ describe("Pin/password form", () => {
     const button = getByText("Edit")
     fireEvent.click(button)
 
-    const oldPasswordField = getByLabelText("Enter current pin/password")
+    const currentPasswordField = getByLabelText("Enter current pin/password")
     const newPasswordField = getByLabelText("Enter new pin/password")
     const confirmPasswordField = getByLabelText("Re-enter new pin/password")
 
-    fireEvent.change(oldPasswordField, { target: { value: "wrongPassword" } })
+    fireEvent.change(currentPasswordField, {
+      target: { value: "wrongPassword" },
+    })
     fireEvent.change(newPasswordField, { target: { value: "newPassword" } })
     fireEvent.change(confirmPasswordField, {
       target: { value: "newPassword" },
@@ -123,12 +134,11 @@ describe("Pin/password form", () => {
     const submitButton = getByText("Save changes")
     fireEvent.click(submitButton)
     await waitFor(() =>
-      expect(mockSettingsState.setStatus).toHaveBeenCalledTimes(4)
+      expect(mockSettingsState.setStatus).toHaveBeenCalledTimes(2)
     )
-    expect(mockSettingsState.setStatus).toHaveBeenNthCalledWith(4, "failure")
-    expect(mockSettingsState.setStatusMessage).toHaveBeenNthCalledWith(
-      2,
-      "Invalid new pin/password."
+    expect(mockSettingsState.setStatus).toHaveBeenNthCalledWith(2, "failure")
+    expect(mockSettingsState.setStatusMessage).toHaveBeenCalledWith(
+      passwordFormMessages.INVALID
     )
   })
 
@@ -142,11 +152,11 @@ describe("Pin/password form", () => {
     const button = getByText("Edit")
     fireEvent.click(button)
 
-    const oldPasswordField = getByLabelText("Enter current pin/password")
+    const currentPasswordField = getByLabelText("Enter current pin/password")
     const newPasswordField = getByLabelText("Enter new pin/password")
     const confirmPasswordField = getByLabelText("Re-enter new pin/password")
 
-    fireEvent.change(oldPasswordField, { target: { value: "oldPassword" } })
+    fireEvent.change(currentPasswordField, { target: { value: "oldPassword" } })
     fireEvent.change(newPasswordField, { target: { value: "newPassword" } })
     fireEvent.change(confirmPasswordField, {
       target: { value: "newPassword" },

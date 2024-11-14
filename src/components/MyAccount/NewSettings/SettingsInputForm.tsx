@@ -6,6 +6,7 @@ import {
   Button,
   SkeletonLoader,
   Form,
+  Box,
 } from "@nypl/design-system-react-components"
 import { useContext, useState } from "react"
 import { PatronDataContext } from "../../../context/PatronDataContext"
@@ -232,16 +233,17 @@ const PhoneEmailForm = ({
                 >
                   {input}{" "}
                   {index === 0 && inputs.length > 1 && (
-                    <span
-                      style={{
+                    <Box
+                      as="span"
+                      sx={{
                         display: "inline",
                         padding: 0,
                         margin: 0,
-                        color: "var(--nypl-colors-ui-gray-semi-dark)",
+                        color: "ui.gray.semi-dark",
                       }}
                     >
                       (P)
-                    </span>
+                    </Box>
                   )}
                 </Text>
               ))}
@@ -257,6 +259,7 @@ const PhoneEmailForm = ({
             )}
           </Flex>
         ) : (
+          // User has no phone or email.
           <AddButton
             inputType={inputType}
             onClick={() => {
