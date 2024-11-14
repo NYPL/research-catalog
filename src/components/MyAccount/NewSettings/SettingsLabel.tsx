@@ -4,11 +4,12 @@ const SettingsLabel = ({ icon, text }) => {
   return (
     <Flex
       gap="xs"
+      minHeight="48px"
       alignItems="flex-start"
       sx={{
         minWidth: { base: "unset", lg: "256px" },
-        marginTop: "xs",
         marginRight: "xs",
+        paddingTop: "xs",
       }}
     >
       <Icon marginTop="xxs" name={icon} size="medium" />

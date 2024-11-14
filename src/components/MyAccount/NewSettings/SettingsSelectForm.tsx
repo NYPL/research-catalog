@@ -11,19 +11,19 @@ import SaveCancelButtons from "./SaveCancelButtons"
 import type { Patron, SierraCodeName } from "../../../types/myAccountTypes"
 import EditButton from "./EditButton"
 
-interface HomeLibraryNotificationFormProps {
+interface SettingsSelectFormProps {
   type: "library" | "notification"
   patronData: Patron
   settingsState
   pickupLocations: SierraCodeName[]
 }
 
-const HomeLibraryNotificationForm = ({
+const SettingsSelectForm = ({
   type,
   patronData,
   settingsState,
   pickupLocations,
-}: HomeLibraryNotificationFormProps) => {
+}: SettingsSelectFormProps) => {
   const { getMostUpdatedSierraAccountData } = useContext(PatronDataContext)
   const [isLoading, setIsLoading] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
@@ -147,10 +147,15 @@ const HomeLibraryNotificationForm = ({
           <SkeletonLoader contentSize={2} showImage={false} headingSize={0} />
         ) : isEditing ? (
           <Flex
-            sx={{ marginTop: "xs", marginLeft: { base: "l", lg: "unset" } }}
+            sx={{
+              marginTop: "xs",
+              marginLeft: { base: "l", lg: "unset" },
+              paddingRight: { base: "l", md: "unset" },
+              width: "100%",
+            }}
           >
             <Select
-              maxWidth="320px"
+              width={{ base: "100%", md: "max-content" }}
               name={`select-${type}`}
               id={formUtils.selectorId}
               labelText={`Update ${formUtils.label.toLowerCase()}`}
@@ -200,4 +205,4 @@ const HomeLibraryNotificationForm = ({
   )
 }
 
-export default HomeLibraryNotificationForm
+export default SettingsSelectForm

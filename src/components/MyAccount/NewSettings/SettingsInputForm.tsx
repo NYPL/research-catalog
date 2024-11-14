@@ -16,17 +16,17 @@ import type { Patron } from "../../../types/myAccountTypes"
 import EditButton from "./EditButton"
 import AddButton from "./AddButton"
 
-interface PhoneEmailFormProps {
+interface SettingsInputFormProps {
   patronData: Patron
   settingsState
   inputType: "phones" | "emails"
 }
 
-const PhoneEmailForm = ({
+const SettingsInputForm = ({
   patronData,
   settingsState,
   inputType,
-}: PhoneEmailFormProps) => {
+}: SettingsInputFormProps) => {
   const isEmail = inputType === "emails"
   const { getMostUpdatedSierraAccountData } = useContext(PatronDataContext)
   const [inputs, setInputs] = useState(
@@ -284,4 +284,4 @@ const PhoneEmailForm = ({
   )
 }
 
-export default PhoneEmailForm
+export default SettingsInputForm
