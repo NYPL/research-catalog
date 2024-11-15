@@ -10,6 +10,7 @@ import styles from "../../../styles/components/MyAccount.module.scss"
 import type { Patron } from "../../types/myAccountTypes"
 import type { IconListElementPropType } from "./IconListElement"
 import { buildListElementsWithIcons } from "./IconListElement"
+import UsernameForm from "./NewSettings/UsernameForm"
 
 const ProfileHeader = ({ patron }: { patron: Patron }) => {
   const { isLargerThanMobile } = useNYPLBreakpoints()
@@ -17,11 +18,6 @@ const ProfileHeader = ({ patron }: { patron: Patron }) => {
   const profileData = (
     [
       { icon: "actionIdentityFilled", term: "Name", description: patron.name },
-      {
-        icon: "actionIdentity",
-        term: "Username",
-        description: patron.username,
-      },
       {
         icon: "actionPayment",
         term: "Card number",
@@ -53,19 +49,22 @@ const ProfileHeader = ({ patron }: { patron: Patron }) => {
     .map(buildListElementsWithIcons)
 
   return (
-    <List
-      className={styles.myAccountList}
-      id="my-account-profile-header"
-      title="My Account"
-      type="dl"
-      sx={{
-        border: "none",
-        h2: { border: "none", paddingTop: 0 },
-        marginBottom: "xxl",
-      }}
-    >
-      {profileData}
-    </List>
+    <>
+      <List
+        className={styles.myAccountList}
+        id="my-account-profile-header"
+        title="My Account"
+        type="dl"
+        sx={{
+          border: "none",
+          h2: { border: "none", paddingTop: 0 },
+          marginBottom: "xxl",
+        }}
+      >
+        {profileData}
+      </List>
+      <UsernameForm patron={patron} />
+    </>
   )
 }
 
