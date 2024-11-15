@@ -39,6 +39,13 @@ export interface DiscoveryHoldPostParams {
   docDeliveryData?: string
 }
 
+export type EDDPageStatus = null | "failed" | "unavailable" | "invalid"
+
+export interface EDDStatusMessage {
+  heading?: string
+  body: string
+}
+
 export interface EDDFormAction {
   type: EDDFormActionType
   field?: string

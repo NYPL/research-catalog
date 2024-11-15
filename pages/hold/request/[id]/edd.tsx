@@ -29,7 +29,10 @@ import Item from "../../../../src/models/Item"
 import type { DiscoveryBibResult } from "../../../../src/types/bibTypes"
 import type { DiscoveryItemResult } from "../../../../src/types/itemTypes"
 
-import type { EDDRequestParams } from "../../../../src/types/holdTypes"
+import type {
+  EDDRequestParams,
+  EDDPageStatus,
+} from "../../../../src/types/holdTypes"
 
 interface EDDRequestPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -59,6 +62,7 @@ export default function EDDRequestPage({
 
   // Initialize alert to true if item is not available. This will show the error banner.
   const [alert, setAlert] = useState(!isEddAvailable)
+  const [status, setStatus] = useState(null as EDDPageStatus)
   const [formPosting, setFormPosting] = useState(false)
 
   const bannerContainerRef = useRef<HTMLDivElement>()
@@ -129,7 +133,7 @@ export default function EDDRequestPage({
         {/* Always render the wrapper element that will display the
           dynamically rendered notification for focus management */}
         <Box tabIndex={-1} ref={bannerContainerRef}>
-          {alert && (
+          {status && (
             <HoldRequestBanner
               item={item}
               heading={
