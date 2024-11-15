@@ -18,7 +18,7 @@ import ExternalLink from "../Links/ExternalLink/ExternalLink"
 import { eddFormReducer } from "../../reducers/eddFormReducer"
 import {
   initialEDDFormState,
-  updateInvalidFields,
+  getUpdatedInvalidFields,
   validateEDDForm,
   initialEDDInvalidFields,
   isInvalidField,
@@ -65,7 +65,7 @@ const EDDRequestForm = ({
     const target = e.target as HTMLInputElement
 
     setInvalidFields((prevInvalidFields) =>
-      updateInvalidFields(target.name, target.value, prevInvalidFields)
+      getUpdatedInvalidFields(target.name, target.value, prevInvalidFields)
     )
   }
 

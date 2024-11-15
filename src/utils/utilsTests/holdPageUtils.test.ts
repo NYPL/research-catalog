@@ -1,10 +1,13 @@
-import { initialEDDInvalidFields, updateInvalidFields } from "../holdPageUtils"
+import {
+  initialEDDInvalidFields,
+  getUpdatedInvalidFields,
+} from "../holdPageUtils"
 
 describe("holdPageUtils", () => {
-  describe("updateInvalidFields", () => {
+  describe("getUpdatedInvalidFields", () => {
     it("returns correctly updated field validation statuses for different inputs", () => {
       expect(
-        updateInvalidFields("email", "test", initialEDDInvalidFields)
+        getUpdatedInvalidFields("email", "test", initialEDDInvalidFields)
       ).toStrictEqual([
         { isInvalid: true, key: "email" },
         { isInvalid: false, key: "startingNumber" },
@@ -12,7 +15,11 @@ describe("holdPageUtils", () => {
         { isInvalid: false, key: "chapter" },
       ])
       expect(
-        updateInvalidFields("email", "test@test.com", initialEDDInvalidFields)
+        getUpdatedInvalidFields(
+          "email",
+          "test@test.com",
+          initialEDDInvalidFields
+        )
       ).toStrictEqual([
         { isInvalid: false, key: "email" },
         { isInvalid: false, key: "startingNumber" },
@@ -20,7 +27,7 @@ describe("holdPageUtils", () => {
         { isInvalid: false, key: "chapter" },
       ])
       expect(
-        updateInvalidFields("email", "", initialEDDInvalidFields)
+        getUpdatedInvalidFields("email", "", initialEDDInvalidFields)
       ).toStrictEqual([
         { isInvalid: true, key: "email" },
         { isInvalid: false, key: "startingNumber" },
@@ -28,7 +35,7 @@ describe("holdPageUtils", () => {
         { isInvalid: false, key: "chapter" },
       ])
       expect(
-        updateInvalidFields("startingNumber", "", initialEDDInvalidFields)
+        getUpdatedInvalidFields("startingNumber", "", initialEDDInvalidFields)
       ).toStrictEqual([
         { isInvalid: false, key: "email" },
         { isInvalid: true, key: "startingNumber" },
@@ -36,7 +43,7 @@ describe("holdPageUtils", () => {
         { isInvalid: false, key: "chapter" },
       ])
       expect(
-        updateInvalidFields("endingNumber", "", initialEDDInvalidFields)
+        getUpdatedInvalidFields("endingNumber", "", initialEDDInvalidFields)
       ).toStrictEqual([
         { isInvalid: false, key: "email" },
         { isInvalid: false, key: "startingNumber" },
@@ -44,7 +51,7 @@ describe("holdPageUtils", () => {
         { isInvalid: false, key: "chapter" },
       ])
       expect(
-        updateInvalidFields("chapter", "", initialEDDInvalidFields)
+        getUpdatedInvalidFields("chapter", "", initialEDDInvalidFields)
       ).toStrictEqual([
         { isInvalid: false, key: "email" },
         { isInvalid: false, key: "startingNumber" },
@@ -54,7 +61,7 @@ describe("holdPageUtils", () => {
     })
     it("preserves unchanged field statuses as passed in the previous state param", () => {
       expect(
-        updateInvalidFields("email", "test", [
+        getUpdatedInvalidFields("email", "test", [
           { isInvalid: false, key: "email" },
           { isInvalid: true, key: "startingNumber" },
           { isInvalid: true, key: "endingNumber" },

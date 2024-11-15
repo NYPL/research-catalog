@@ -46,8 +46,8 @@ export const initialEDDInvalidFields: EDDFormValidatedField[] = [
   { key: "chapter", isInvalid: false },
 ]
 
-// Updates the invalidFields in state based on the field name and value and validation rules per field
-export const updateInvalidFields = (
+// Gets updated invalidFields to set them in state based on the inputted field name and value
+export const getUpdatedInvalidFields = (
   fieldName: string,
   fieldValue: string,
   prevInvalidFields: EDDFormValidatedField[]
@@ -61,7 +61,7 @@ export const updateInvalidFields = (
             key: "email",
             isInvalid: !fieldValue.length || !EMAIL_REGEX.test(fieldValue),
           }
-        // Validate other fields
+        // Validate presence of required fields
         default:
           return { key: field.key, isInvalid: !fieldValue.length }
       }
