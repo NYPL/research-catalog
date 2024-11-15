@@ -105,7 +105,7 @@ const EDDRequestForm = ({
   return (
     <Form
       id="edd-request-form"
-      data-testid="hold-request-form"
+      data-testid="edd-request-form"
       // We are using a post request on hold requests when JS is disabled
       method="post"
       action={`${BASE_URL}/api/hold/request/${holdId}/edd`}
