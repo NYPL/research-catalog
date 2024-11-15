@@ -78,3 +78,8 @@ export const validateEDDForm = (
   prevInvalidFields.reduce((accumulator, field) => {
     return updateInvalidFields(field.key, eddForm[field.key], accumulator)
   }, prevInvalidFields)
+
+export const isInvalidField = (
+  fieldName: string,
+  invalidFields: EDDFormValidatedField[]
+): boolean => invalidFields.find((field) => field.key === fieldName).isInvalid

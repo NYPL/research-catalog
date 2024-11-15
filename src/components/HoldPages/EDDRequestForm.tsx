@@ -21,6 +21,7 @@ import {
   updateInvalidFields,
   validateEDDForm,
   initialEDDInvalidFields,
+  isInvalidField,
 } from "../../utils/holdPageUtils"
 import type { EDDRequestParams, EDDPageStatus } from "../../types/holdPageTypes"
 
@@ -147,9 +148,7 @@ const EDDRequestForm = ({
           placeholder="theresa.smith@gmail.com"
           helperText="Your request will be delivered to the email address you enter above."
           invalidText="Enter a valid email address. Your request will be delivered to the email address you enter above."
-          isInvalid={
-            invalidFields.find((field) => field.key === "email").isInvalid
-          }
+          isInvalid={isInvalidField("email", invalidFields)}
           onChange={(e) => {
             validateField(e)
             handleInputChange(e)
@@ -168,10 +167,7 @@ const EDDRequestForm = ({
             placeholder="Example: 1"
             helperText="Enter the first page you would like scanned."
             invalidText="Enter a page number. You may request a maximum of 50 pages."
-            isInvalid={
-              invalidFields.find((field) => field.key === "startingNumber")
-                .isInvalid
-            }
+            isInvalid={isInvalidField("startingNumber", invalidFields)}
             onBlur={validateField}
             onChange={handleInputChange}
             ref={validatedInputRefs["startingNumber"]}
@@ -187,10 +183,7 @@ const EDDRequestForm = ({
             placeholder="Example: 20"
             helperText="Enter the last page you would like scanned."
             invalidText="Enter a page number. You may request a maximum of 50 pages."
-            isInvalid={
-              invalidFields.find((field) => field.key === "endingNumber")
-                .isInvalid
-            }
+            isInvalid={isInvalidField("endingNumber", invalidFields)}
             onBlur={validateField}
             onChange={handleInputChange}
             ref={validatedInputRefs["endingNumber"]}
@@ -207,9 +200,7 @@ const EDDRequestForm = ({
           placeholder="Example: Chapter 1"
           helperText="Enter the name/number of the chapter or article you would like scanned."
           invalidText="Indicate the title of the chapter or article you are requesting."
-          isInvalid={
-            invalidFields.find((field) => field.key === "chapter").isInvalid
-          }
+          isInvalid={isInvalidField("chapter", invalidFields)}
           onBlur={validateField}
           onChange={handleInputChange}
           ref={validatedInputRefs["chapter"]}
