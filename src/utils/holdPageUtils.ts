@@ -3,7 +3,7 @@ import type {
   EDDFormValidatedField,
   EDDPageStatus,
   EDDStatusMessage,
-} from "../types/holdTypes"
+} from "../types/holdPageTypes"
 
 import { EMAIL_REGEX } from "../config/constants"
 

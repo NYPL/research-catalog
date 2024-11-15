@@ -1,4 +1,4 @@
-import type { EDDRequestParams, EDDFormAction } from "../types/holdTypes"
+import type { EDDRequestParams, EDDFormAction } from "../types/holdPageTypes"
 
 export const eddFormReducer = (
   formState: EDDRequestParams,

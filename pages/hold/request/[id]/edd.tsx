@@ -17,7 +17,7 @@ import useLoading from "../../../../src/hooks/useLoading"
 
 import { fetchBib } from "../../../../src/server/api/bib"
 import { fetchDeliveryLocations } from "../../../../src/server/api/hold"
-import { EDDPageStatusMessages } from "../../../../src/utils/holdUtils"
+import { EDDPageStatusMessages } from "../../../../src/utils/holdPageUtils"
 
 import initializePatronTokenAuth, {
   doRedirectBasedOnNyplAccountRedirects,
@@ -33,7 +33,7 @@ import type { DiscoveryItemResult } from "../../../../src/types/itemTypes"
 import type {
   EDDRequestParams,
   EDDPageStatus,
-} from "../../../../src/types/holdTypes"
+} from "../../../../src/types/holdPageTypes"
 
 interface EDDRequestPropsType {
   discoveryBibResult: DiscoveryBibResult

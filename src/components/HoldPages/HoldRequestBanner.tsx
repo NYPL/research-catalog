@@ -48,7 +48,7 @@ const HoldRequestBanner = ({
         <>
           <Box>
             {errorMessage}
-            {pageStatus === "failed" || pageStatus === "unavailable" ? (
+            {pageStatus !== "invalid" ? (
               <>
                 {" Please try again, "}
                 <Button

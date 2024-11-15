@@ -21,8 +21,8 @@ import {
   updateInvalidFields,
   validateEDDForm,
   initialEDDInvalidFields,
-} from "../../utils/holdUtils"
-import type { EDDRequestParams, EDDPageStatus } from "../../types/holdTypes"
+} from "../../utils/holdPageUtils"
+import type { EDDRequestParams, EDDPageStatus } from "../../types/holdPageTypes"
 
 interface EDDRequestFormProps {
   handleSubmit: (eddParams: EDDRequestParams) => void
