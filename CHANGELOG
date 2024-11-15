@@ -9,11 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Added
 
+- Add EDD request page and field validation logic (SCC-3760)
 - Holding location filters to refine search and advanced search panels
 - "Go back" button to advanced search
-
-### Added
-
 - Add server side delivery location fetch and location utils (SCC-3759)
 - Add holding location filters to refine search and advanced search panels
 - Add go back button to advanced search
