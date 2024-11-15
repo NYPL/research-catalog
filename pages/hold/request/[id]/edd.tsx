@@ -53,7 +53,7 @@ export default function EDDRequestPage({
   isAuthenticated,
   eddRequestable = false,
 }: EDDRequestPropsType) {
-  const metadataTitle = `Item Request | ${SITE_NAME}`
+  const metadataTitle = `Electronic Delivery Request | ${SITE_NAME}`
 
   const bib = new Bib(discoveryBibResult)
   const item = new Item(discoveryItemResult, bib)
@@ -61,7 +61,9 @@ export default function EDDRequestPage({
   const holdId = `${item.bibId}-${item.id}`
   const isEddAvailable = eddRequestable && item.isAvailable
 
-  const [pageStatus, setPageStatus] = useState(null as EDDPageStatus)
+  const [pageStatus, setPageStatus] = useState(
+    (!isEddAvailable ? "unavailable" : null) as EDDPageStatus
+  )
   const [formPosting, setFormPosting] = useState(false)
 
   const bannerContainerRef = useRef<HTMLDivElement>()
@@ -113,6 +115,7 @@ export default function EDDRequestPage({
         error
       )
       setPageStatus("failed")
+      setFormPosting(false)
     }
   }
 
