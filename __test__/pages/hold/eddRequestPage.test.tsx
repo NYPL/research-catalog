@@ -150,7 +150,7 @@ describe("EDD Request page", () => {
       render(
         <EDDRequestPage
           discoveryBibResult={bibWithItems.resource}
-          discoveryItemResult={bibWithItems.resource.items[0]}
+          discoveryItemResult={bibWithItems.resource.items[2]}
           patronId="123"
           eddRequestable={true}
           isAuthenticated={true}
@@ -169,15 +169,15 @@ describe("EDD Request page", () => {
         "Urban spaghetti."
       )
       expect(screen.getByTestId("call-number")).toHaveTextContent(
-        "JFK 01-374 no. 4 (2001)"
+        "JFK 01-374 v. 2, no. 1 (1999)"
       )
       expect(screen.getByTestId("volume-date")).toHaveTextContent(
-        "no. 4 (2001)"
+        "v. 2, no. 1 (1999)"
       )
     })
 
     it("renders an edd request form", () => {
-      expect(screen.getByTestId("hold-request-form")).toBeInTheDocument()
+      expect(screen.getByTestId("edd-request-form")).toBeInTheDocument()
     })
   })
 })
