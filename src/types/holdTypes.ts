@@ -43,7 +43,7 @@ export type EDDPageStatus = null | "failed" | "unavailable" | "invalid"
 
 export interface EDDStatusMessage {
   heading?: string
-  body: string
+  message: string
 }
 
 export interface EDDFormAction {

@@ -11,6 +11,7 @@ interface HoldRequestBannerProps {
   heading: string
   errorMessage: string
   errorDetail?: string
+  pageStatus?: string
 }
 
 /**
@@ -22,6 +23,7 @@ const HoldRequestBanner = ({
   heading,
   errorMessage,
   errorDetail,
+  pageStatus = "failed",
 }: HoldRequestBannerProps) => {
   const { onOpen, setItemMetadata } = useContext(FeedbackContext)
 
@@ -45,37 +47,42 @@ const HoldRequestBanner = ({
       content={
         <>
           <Box>
-            {`${errorMessage}. Please try again, `}
-            <Button
-              id="hold-contact"
-              onClick={() =>
-                onContact({
-                  id: item.id,
-                  barcode: item.barcode,
-                  callNumber: item.callNumber,
-                  bibId: item.bibId,
-                  notificationText: `Request failed for call number ${item.callNumber}`,
-                })
-              }
-              buttonType="link"
-              // TODO: Ask DS team to make button link variant match the default link styles
-              sx={{
-                display: "inline",
-                fontWeight: "inherit",
-                fontSize: "inherit",
-                p: 0,
-                height: "auto",
-                textAlign: "left",
-                minHeight: "auto",
-                textDecorationStyle: "dotted",
-                textDecorationThickness: "1px",
-                textUnderlineOffset: "2px",
-              }}
-            >
-              contact us
-            </Button>{" "}
-            for assistance, or{" "}
-            <RCLink href="/search">start a new search.</RCLink>
+            {errorMessage}
+            {pageStatus === "failed" || pageStatus === "unavailable" ? (
+              <>
+                {" Please try again, "}
+                <Button
+                  id="hold-contact"
+                  onClick={() =>
+                    onContact({
+                      id: item.id,
+                      barcode: item.barcode,
+                      callNumber: item.callNumber,
+                      bibId: item.bibId,
+                      notificationText: `Request failed for call number ${item.callNumber}`,
+                    })
+                  }
+                  buttonType="link"
+                  // TODO: Ask DS team to make button link variant match the default link styles
+                  sx={{
+                    display: "inline",
+                    fontWeight: "inherit",
+                    fontSize: "inherit",
+                    p: 0,
+                    height: "auto",
+                    textAlign: "left",
+                    minHeight: "auto",
+                    textDecorationStyle: "dotted",
+                    textDecorationThickness: "1px",
+                    textUnderlineOffset: "2px",
+                  }}
+                >
+                  contact us
+                </Button>{" "}
+                for assistance, or{" "}
+                <RCLink href="/search">start a new search.</RCLink>
+              </>
+            ) : null}
           </Box>
           {errorDetail ? <Box>{errorDetail}</Box> : null}
         </>

@@ -17,6 +17,7 @@ import useLoading from "../../../../src/hooks/useLoading"
 
 import { fetchBib } from "../../../../src/server/api/bib"
 import { fetchDeliveryLocations } from "../../../../src/server/api/hold"
+import { EDDPageStatusMessages } from "../../../../src/utils/holdUtils"
 
 import initializePatronTokenAuth, {
   doRedirectBasedOnNyplAccountRedirects,
@@ -60,9 +61,7 @@ export default function EDDRequestPage({
   const holdId = `${item.bibId}-${item.id}`
   const isEddAvailable = eddRequestable && item.isAvailable
 
-  // Initialize alert to true if item is not available. This will show the error banner.
-  const [alert, setAlert] = useState(!isEddAvailable)
-  const [status, setStatus] = useState(null as EDDPageStatus)
+  const [pageStatus, setPageStatus] = useState(null as EDDPageStatus)
   const [formPosting, setFormPosting] = useState(false)
 
   const bannerContainerRef = useRef<HTMLDivElement>()
@@ -71,10 +70,10 @@ export default function EDDRequestPage({
   const isLoading = useLoading()
 
   useEffect(() => {
-    if (alert && bannerContainerRef.current) {
+    if (pageStatus && pageStatus !== "invalid" && bannerContainerRef.current) {
       bannerContainerRef.current.focus()
     }
-  }, [alert])
+  }, [pageStatus])
 
   const postEDDRequest = async (eddParams: EDDRequestParams) => {
     try {
@@ -94,13 +93,14 @@ export default function EDDRequestPage({
           "HoldRequestPage: Error in edd request api response",
           responseJson.error
         )
-        setAlert(true)
+        setPageStatus("failed")
         setFormPosting(false)
         return
       }
       const { pickupLocation: pickupLocationFromResponse, requestId } =
         responseJson
 
+      setPageStatus(null)
       setFormPosting(false)
 
       // Success state
@@ -112,8 +112,7 @@ export default function EDDRequestPage({
         "HoldRequestPage: Error in hold request api response",
         error
       )
-      setFormPosting(false)
-      setAlert(true)
+      setPageStatus("failed")
     }
   }
 
@@ -133,19 +132,12 @@ export default function EDDRequestPage({
         {/* Always render the wrapper element that will display the
           dynamically rendered notification for focus management */}
         <Box tabIndex={-1} ref={bannerContainerRef}>
-          {status && (
+          {pageStatus && (
             <HoldRequestBanner
               item={item}
-              heading={
-                !isEddAvailable
-                  ? "Electronic delivery unavailable"
-                  : "Request failed"
-              }
-              errorMessage={
-                !isEddAvailable
-                  ? "Electronic delivery options for this item are currently unavailable."
-                  : "We were unable to process your request at this time"
-              }
+              heading={EDDPageStatusMessages[pageStatus].heading}
+              errorMessage={EDDPageStatusMessages[pageStatus].message}
+              pageStatus={pageStatus}
             />
           )}
         </Box>
@@ -161,6 +153,7 @@ export default function EDDRequestPage({
         ) : isEddAvailable ? (
           <EDDRequestForm
             handleSubmit={postEDDRequest}
+            setPageStatus={setPageStatus}
             holdId={holdId}
             patronId={patronId}
             source={item.source}

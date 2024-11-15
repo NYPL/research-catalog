@@ -22,10 +22,11 @@ import {
   validateEDDForm,
   initialEDDInvalidFields,
 } from "../../utils/holdUtils"
-import type { EDDRequestParams } from "../../types/holdTypes"
+import type { EDDRequestParams, EDDPageStatus } from "../../types/holdTypes"
 
 interface EDDRequestFormProps {
   handleSubmit: (eddParams: EDDRequestParams) => void
+  setPageStatus: (status: EDDPageStatus) => void
   holdId: string
   patronId: string
   source: string
@@ -36,6 +37,7 @@ interface EDDRequestFormProps {
  */
 const EDDRequestForm = ({
   handleSubmit,
+  setPageStatus,
   holdId,
   patronId,
   source,
@@ -92,8 +94,10 @@ const EDDRequestForm = ({
 
     // Prevent form submission and focus on first invalid field if there is one
     if (firstInvalidField) {
+      setPageStatus("invalid")
       validatedInputRefs?.[firstInvalidField.key]?.current.focus()
     } else {
+      setPageStatus(null)
       handleSubmit(eddFormState)
     }
   }

@@ -26,14 +26,15 @@ export const initialEDDFormState: EDDRequestParams = {
 export const EDDPageStatusMessages: Record<EDDPageStatus, EDDStatusMessage> = {
   failed: {
     heading: "Request failed",
-    body: "We were unable to process your request at this time.",
+    message: "We were unable to process your request at this time.",
   },
   unavailable: {
     heading: "Electronic delivery unavailable",
-    body: "Electronic delivery options for this item are currently unavailable.",
+    message:
+      "Electronic delivery options for this item are currently unavailable.",
   },
   invalid: {
-    body: "Some fields contain errors. Please correct and submit again.",
+    message: "Some fields contain errors. Please correct and submit again.",
   },
 }
 
