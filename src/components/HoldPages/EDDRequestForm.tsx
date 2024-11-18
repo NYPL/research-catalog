@@ -8,13 +8,13 @@ import {
   Box,
   Heading,
   Text,
-  Banner,
 } from "@nypl/design-system-react-components"
 import { useState, createRef, useReducer, type SyntheticEvent } from "react"
 
 import { BASE_URL } from "../../config/constants"
 import ExternalLink from "../Links/ExternalLink/ExternalLink"
 
+import { CopyrightRestrictionsBanner } from "./CopyrightRestrictionsBanner"
 import { eddFormReducer } from "../../reducers/eddFormReducer"
 import {
   initialEDDFormState,
@@ -269,35 +269,7 @@ const EDDRequestForm = ({
           onChange={handleInputChange}
         />
       </FormField>
-      <Banner
-        type="neutral"
-        heading="Copyright restrictions"
-        content={
-          <Box>
-            <Text>
-              The copyright law of the United States (Title 17, United States
-              Code) governs the making of photocopies or other reproductions of
-              copyrighted material.
-            </Text>
-            <Text>
-              Under certain conditions specified in the law, libraries and
-              archives are authorized to furnish a photocopy or other
-              reproduction. One of these specific conditions is that the
-              photocopy or reproduction is not to be “used for any purpose other
-              than private study, scholarship, or research.” If a user makes a
-              request for, or later uses, a photocopy or reproduction for
-              purposes in excess of “fair use,” that user may be liable for
-              copyright infringement.
-            </Text>
-            <Text>
-              This institution reserves the right to refuse to accept a copying
-              order if, in its judgment, fulfillment of the order would involve
-              violation of copyright law.
-            </Text>
-          </Box>
-        }
-        mb="s"
-      />
+      <CopyrightRestrictionsBanner />
       <ButtonGroup>
         <Button id="edd-request-submit" type="submit">
           Submit request
