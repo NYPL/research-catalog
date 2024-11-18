@@ -143,8 +143,8 @@ export default function HoldRequestPage({
               }
               errorMessage={
                 !item.isAvailable
-                  ? "This item is currently unavailable"
-                  : "We were unable to process your request at this time"
+                  ? "This item is currently unavailable."
+                  : "We were unable to process your request at this time."
               }
               errorDetail={errorDetail}
             />

@@ -1,20 +1,13 @@
 import EDDRequestPage, {
   getServerSideProps,
 } from "../../../pages/hold/request/[id]/edd"
-import {
-  render,
-  screen,
-  fireEvent,
-  waitFor,
-} from "../../../src/utils/testUtils"
-import userEvent from "@testing-library/user-event"
+import { render, screen } from "../../../src/utils/testUtils"
 
 import initializePatronTokenAuth, {
   doRedirectBasedOnNyplAccountRedirects,
 } from "../../../src/server/auth"
 import { fetchBib } from "../../../src/server/api/bib"
 import { bibWithItems, bibWithSingleAeonItem } from "../../fixtures/bibFixtures"
-import { BASE_URL, PATHS } from "../../../src/config/constants"
 import { fetchDeliveryLocations } from "../../../src/server/api/hold"
 
 jest.mock("../../../src/server/auth")
