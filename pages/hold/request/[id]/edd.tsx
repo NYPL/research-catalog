@@ -149,10 +149,7 @@ export default function EDDRequestPage({
         </Heading>
         <HoldItemDetails item={item} />
         {isLoading || formPosting ? (
-          <SkeletonLoader
-            showImage={false}
-            data-testid="hold-request-loading"
-          />
+          <SkeletonLoader showImage={false} data-testid="edd-request-loading" />
         ) : isEddAvailable ? (
           <EDDRequestForm
             handleSubmit={postEDDRequest}
