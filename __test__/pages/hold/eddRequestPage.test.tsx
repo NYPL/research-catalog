@@ -1,13 +1,25 @@
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+} from "../../../src/utils/testUtils"
+import userEvent from "@testing-library/user-event"
+
 import EDDRequestPage, {
   getServerSideProps,
 } from "../../../pages/hold/request/[id]/edd"
-import { render, screen } from "../../../src/utils/testUtils"
 
 import initializePatronTokenAuth, {
   doRedirectBasedOnNyplAccountRedirects,
 } from "../../../src/server/auth"
 import { fetchBib } from "../../../src/server/api/bib"
 import { bibWithItems, bibWithSingleAeonItem } from "../../fixtures/bibFixtures"
+import {
+  BASE_URL,
+  PATHS,
+  EDD_FORM_FIELD_COPY,
+} from "../../../src/config/constants"
 import { fetchDeliveryLocations } from "../../../src/server/api/hold"
 
 jest.mock("../../../src/server/auth")
@@ -171,6 +183,102 @@ describe("EDD Request page", () => {
 
     it("renders an edd request form", () => {
       expect(screen.getByTestId("edd-request-form")).toBeInTheDocument()
+    })
+  })
+  describe("EDD Request error handling", () => {
+    beforeEach(async () => {
+      render(
+        <EDDRequestPage
+          discoveryBibResult={bibWithItems.resource}
+          discoveryItemResult={bibWithItems.resource.items[0]}
+          patronId="123"
+          eddRequestable={true}
+          isAuthenticated={true}
+        />
+      )
+
+      global.fetch = jest.fn().mockImplementationOnce(() =>
+        Promise.resolve({
+          status: 404,
+          json: () => Promise.resolve({ success: true }),
+        })
+      )
+
+      // Fill in all required form fields
+      await userEvent.type(
+        screen.getByPlaceholderText(EDD_FORM_FIELD_COPY.email.placeholder),
+        EDD_FORM_FIELD_COPY.email.placeholder
+      )
+      await userEvent.type(
+        screen.getByPlaceholderText(
+          EDD_FORM_FIELD_COPY.startingNumber.placeholder
+        ),
+        EDD_FORM_FIELD_COPY.startingNumber.placeholder
+      )
+      await userEvent.type(
+        screen.getByPlaceholderText(
+          EDD_FORM_FIELD_COPY.endingNumber.placeholder
+        ),
+        EDD_FORM_FIELD_COPY.endingNumber.placeholder
+      )
+      await userEvent.type(
+        screen.getByPlaceholderText(EDD_FORM_FIELD_COPY.chapter.placeholder),
+        EDD_FORM_FIELD_COPY.chapter.placeholder
+      )
+    })
+
+    it("shows an error when the request fails", async () => {
+      await fireEvent(
+        screen.getByText("Submit request"),
+        new MouseEvent("click")
+      )
+      await waitFor(() => {
+        expect(screen.getByTestId("hold-request-error")).toBeInTheDocument()
+      })
+
+      expect(screen.getByText("Request failed")).toBeInTheDocument()
+
+      expect(
+        screen.queryByText(
+          "We were unable to process your request at this time. Please try again, ",
+          { exact: false }
+        )
+      ).toBeInTheDocument()
+
+      expect(
+        screen.getByRole("button", { name: "contact us" })
+      ).toBeInTheDocument()
+
+      expect(
+        screen.getByText("start a new search", { exact: false })
+      ).toHaveAttribute("href", `${BASE_URL}${PATHS.SEARCH}`)
+    })
+
+    it("populates the feedback form with the call number and appropriate copy when the request fails", async () => {
+      await fireEvent(
+        screen.getByText("Submit request"),
+        new MouseEvent("click")
+      )
+      await waitFor(() => {
+        expect(screen.getByTestId("hold-request-error")).toBeInTheDocument()
+      })
+
+      await userEvent.click(screen.getByText("contact us"))
+
+      await waitFor(() => {
+        expect(
+          screen.queryByText("We are here to help!", { exact: false })
+        ).toBeInTheDocument()
+
+        expect(
+          screen.queryByText(
+            `Request failed for call number ${bibWithItems.resource.items[0].shelfMark[0]}`,
+            {
+              exact: false,
+            }
+          )
+        ).toBeInTheDocument()
+      })
     })
   })
 })

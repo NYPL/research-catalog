@@ -10,9 +10,8 @@ import {
   Text,
 } from "@nypl/design-system-react-components"
 import { useState, createRef, type SyntheticEvent } from "react"
-import { debounce } from "underscore"
 
-import { BASE_URL, DEBOUNCE_INTERVAL } from "../../config/constants"
+import { BASE_URL, EDD_FORM_FIELD_COPY } from "../../config/constants"
 import ExternalLink from "../Links/ExternalLink/ExternalLink"
 
 import { CopyrightRestrictionsBanner } from "./CopyrightRestrictionsBanner"
@@ -135,16 +134,16 @@ const EDDRequestForm = ({
           id="email"
           name="email"
           value={eddFormState.email}
-          labelText="Email address"
+          labelText={EDD_FORM_FIELD_COPY.email.label}
           isRequired
-          placeholder="theresa.smith@gmail.com"
-          helperText="Your request will be delivered to the email address you enter above."
-          invalidText="Enter a valid email address. Your request will be delivered to the email address you enter above."
+          placeholder={EDD_FORM_FIELD_COPY.email.placeholder}
+          helperText={EDD_FORM_FIELD_COPY.email.helperText}
+          invalidText={EDD_FORM_FIELD_COPY.email.invalidText}
           isInvalid={isInvalidField("email", invalidFields)}
-          onChange={debounce((e) => {
+          onChange={(e) => {
             validateField(e)
             handleInputChange(e)
-          }, DEBOUNCE_INTERVAL)}
+          }}
           ref={validatedInputRefs["email"]}
         />
       </FormField>
@@ -154,14 +153,14 @@ const EDDRequestForm = ({
             id="starting-number"
             name="startingNumber"
             value={eddFormState.startingNumber}
-            labelText="Starting page number"
+            labelText={EDD_FORM_FIELD_COPY.startingNumber.label}
             isRequired
-            placeholder="Example: 1"
-            helperText="Enter the first page you would like scanned."
-            invalidText="Enter a page number. You may request a maximum of 50 pages."
+            placeholder={EDD_FORM_FIELD_COPY.startingNumber.placeholder}
+            helperText={EDD_FORM_FIELD_COPY.startingNumber.helperText}
+            invalidText={EDD_FORM_FIELD_COPY.startingNumber.invalidText}
             isInvalid={isInvalidField("startingNumber", invalidFields)}
             onBlur={validateField}
-            onChange={debounce(handleInputChange, DEBOUNCE_INTERVAL)}
+            onChange={handleInputChange}
             ref={validatedInputRefs["startingNumber"]}
           />
         </FormField>
@@ -170,14 +169,14 @@ const EDDRequestForm = ({
             id="ending-number"
             name="endingNumber"
             value={eddFormState.endingNumber}
-            labelText="Ending page number"
+            labelText={EDD_FORM_FIELD_COPY.endingNumber.label}
             isRequired
-            placeholder="Example: 20"
-            helperText="Enter the last page you would like scanned."
-            invalidText="Enter a page number. You may request a maximum of 50 pages."
+            placeholder={EDD_FORM_FIELD_COPY.endingNumber.placeholder}
+            helperText={EDD_FORM_FIELD_COPY.endingNumber.helperText}
+            invalidText={EDD_FORM_FIELD_COPY.endingNumber.invalidText}
             isInvalid={isInvalidField("endingNumber", invalidFields)}
             onBlur={validateField}
-            onChange={debounce(handleInputChange, DEBOUNCE_INTERVAL)}
+            onChange={handleInputChange}
             ref={validatedInputRefs["endingNumber"]}
           />
         </FormField>
@@ -187,11 +186,11 @@ const EDDRequestForm = ({
           id="chapter"
           name="chapter"
           value={eddFormState.chapter}
-          labelText="Chapter or article title"
+          labelText={EDD_FORM_FIELD_COPY.chapter.label}
           isRequired
-          placeholder="Example: Chapter 1"
-          helperText="Enter the name/number of the chapter or article you would like scanned."
-          invalidText="Indicate the title of the chapter or article you are requesting."
+          placeholder={EDD_FORM_FIELD_COPY.chapter.placeholder}
+          helperText={EDD_FORM_FIELD_COPY.chapter.helperText}
+          invalidText={EDD_FORM_FIELD_COPY.chapter.invalidText}
           isInvalid={isInvalidField("chapter", invalidFields)}
           onBlur={validateField}
           onChange={handleInputChange}
@@ -212,8 +211,8 @@ const EDDRequestForm = ({
           id="author"
           name="author"
           value={eddFormState.author}
-          labelText="Author"
-          placeholder="Example: Charles Dickens"
+          labelText={EDD_FORM_FIELD_COPY.author.label}
+          placeholder={EDD_FORM_FIELD_COPY.author.placeholder}
           onChange={handleInputChange}
         />
       </FormField>
@@ -223,8 +222,8 @@ const EDDRequestForm = ({
             id="publication-date"
             name="publicationDate"
             value={eddFormState.publicationDate}
-            labelText="Date published"
-            placeholder="Example: 1932"
+            labelText={EDD_FORM_FIELD_COPY.publicationDate.label}
+            placeholder={EDD_FORM_FIELD_COPY.publicationDate.placeholder}
             onChange={handleInputChange}
           />
         </FormField>
@@ -233,8 +232,8 @@ const EDDRequestForm = ({
             id="volume"
             name="volume"
             value={eddFormState.volume}
-            labelText="Volume"
-            placeholder="Example: V3"
+            labelText={EDD_FORM_FIELD_COPY.volume.label}
+            placeholder={EDD_FORM_FIELD_COPY.volume.placeholder}
             onChange={handleInputChange}
           />
         </FormField>
@@ -243,8 +242,8 @@ const EDDRequestForm = ({
             id="issue"
             name="issue"
             value={eddFormState.issue}
-            labelText="Issue"
-            placeholder="Example: Issue 27"
+            labelText={EDD_FORM_FIELD_COPY.issue.label}
+            placeholder={EDD_FORM_FIELD_COPY.issue.placeholder}
             onChange={handleInputChange}
           />
         </FormField>
@@ -255,9 +254,9 @@ const EDDRequestForm = ({
           name="notes"
           value={eddFormState.notes}
           type="textarea"
-          labelText="Notes"
-          placeholder="Example: Please include foldouts in the scan."
-          helperText="Provide additional instructions here."
+          labelText={EDD_FORM_FIELD_COPY.notes.label}
+          placeholder={EDD_FORM_FIELD_COPY.notes.placeholder}
+          helperText={EDD_FORM_FIELD_COPY.notes.helperText}
           onChange={handleInputChange}
         />
       </FormField>
