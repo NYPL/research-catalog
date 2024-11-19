@@ -61,7 +61,7 @@ export async function getServerSideProps({ query }) {
   const { pickupLocation } = query
   return {
     props: {
-      isEdd: pickupLocation === "edd",
+      isEDD: pickupLocation === "edd",
     },
   }
 }
