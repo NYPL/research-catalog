@@ -37,26 +37,39 @@ export async function updateUsername(
   newUsername: string
 ): Promise<HTTPResponse> {
   try {
-    const platformClient = await nyplApiClient({
-      version: "v0.3",
-    })
-    const response = await platformClient.post("/validations/username", {
-      username: newUsername,
-    })
-    if (response?.type === "available-username") {
+    // If the new username is an empty string, skips validation and directly updates in Sierra.
+    const client = await sierraClient()
+    if (newUsername === "") {
       const client = await sierraClient()
       await client.put(`patrons/${patronId}`, {
         varFields: [{ fieldTag: "u", content: newUsername }],
       })
-      return { status: 200, message: `Username updated to ${newUsername}` }
-    } else if (response?.type === "unavailable-username") {
-      // Not an error for the username to be taken, FE should read the message
-      return { status: 200, message: "Username taken" }
-    } else return { status: 500, message: "Username update failed" }
+      return { status: 200, message: "Username removed successfully" }
+    } else {
+      const platformClient = await nyplApiClient({ version: "v0.3" })
+      const response = await platformClient.post("/validations/username", {
+        username: newUsername,
+      })
+
+      if (response?.type === "available-username") {
+        await client.put(`patrons/${patronId}`, {
+          varFields: [{ fieldTag: "u", content: newUsername }],
+        })
+        return { status: 200, message: `Username updated to ${newUsername}` }
+      } else if (response?.type === "unavailable-username") {
+        // Username taken but not an error, returns a message.
+        return { status: 200, message: "Username taken" }
+      } else {
+        return { status: 500, message: "Username update failed" }
+      }
+    }
   } catch (error) {
     return {
-      status: error.status,
-      message: error.message || error.response.data.description,
+      status: error?.status || 500,
+      message:
+        error?.message ||
+        error.response?.data?.description ||
+        "An error occurred",
     }
   }
 }

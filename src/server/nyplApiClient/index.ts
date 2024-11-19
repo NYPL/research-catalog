@@ -32,7 +32,6 @@ const nyplApiClient = async ({
 
   const baseUrl =
     appConfig.apiEndpoints[apiName][appEnvironment] + "/" + version
-  console.log(baseUrl)
 
   let decryptedId: string
   let decryptedSecret: string
