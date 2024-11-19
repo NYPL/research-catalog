@@ -47,7 +47,7 @@ interface EDDRequestPropsType {
 }
 
 /**
- * TODO: Add comment block for EDD
+ * The EDDRequestPage component renders a form for requesting the electronic delivery of an item
  */
 export default function EDDRequestPage({
   discoveryBibResult,

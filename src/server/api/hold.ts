@@ -130,21 +130,7 @@ export async function postHoldRequest(
 export async function postEDDRequest(
   eddRequestParams: EDDRequestParams
 ): Promise<HoldPostResult> {
-  const {
-    itemId,
-    patronId,
-    source,
-    email,
-    startingNumber,
-    endingNumber,
-    chapter,
-    author,
-    issue,
-    publicationDate,
-    volume,
-    notes,
-  } = eddRequestParams
-  console.log("itemId post", itemId)
+  const { itemId, patronId, source, ...rest } = eddRequestParams
 
   // Remove non-numeric characters from item ID
   const itemIdNumeric = itemId.replace(/\D/g, "")
@@ -157,15 +143,7 @@ export async function postEDDRequest(
     recordType: "i",
     pickupLocation: "edd",
     docDeliveryData: {
-      emailAddress: email,
-      startPage: startingNumber,
-      endPage: endingNumber,
-      chapterTitle: chapter,
-      author,
-      date: publicationDate,
-      issue,
-      volume,
-      requestNotes: notes,
+      ...rest,
     },
   }
 
