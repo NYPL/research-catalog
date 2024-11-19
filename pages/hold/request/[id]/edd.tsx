@@ -17,7 +17,10 @@ import useLoading from "../../../../src/hooks/useLoading"
 
 import { fetchBib } from "../../../../src/server/api/bib"
 import { fetchDeliveryLocations } from "../../../../src/server/api/hold"
-import { EDDPageStatusMessages } from "../../../../src/utils/holdPageUtils"
+import {
+  EDDPageStatusMessages,
+  initialEDDFormState,
+} from "../../../../src/utils/holdPageUtils"
 
 import initializePatronTokenAuth, {
   doRedirectBasedOnNyplAccountRedirects,
@@ -64,6 +67,11 @@ export default function EDDRequestPage({
   const [pageStatus, setPageStatus] = useState(
     (!isEddAvailable ? "unavailable" : null) as EDDPageStatus
   )
+  const [eddFormState, setEddFormState] = useState({
+    ...initialEDDFormState,
+    patronId,
+    source: item.source,
+  })
   const [formPosting, setFormPosting] = useState(false)
 
   const bannerContainerRef = useRef<HTMLDivElement>()
@@ -152,11 +160,11 @@ export default function EDDRequestPage({
           <SkeletonLoader showImage={false} data-testid="edd-request-loading" />
         ) : isEddAvailable ? (
           <EDDRequestForm
+            eddFormState={eddFormState}
+            setEddFormState={setEddFormState}
             handleSubmit={postEDDRequest}
             setPageStatus={setPageStatus}
             holdId={holdId}
-            patronId={patronId}
-            source={item.source}
           />
         ) : null}
       </Layout>

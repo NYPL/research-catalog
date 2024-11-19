@@ -9,15 +9,13 @@ import {
   Heading,
   Text,
 } from "@nypl/design-system-react-components"
-import { useState, createRef, useReducer, type SyntheticEvent } from "react"
+import { useState, createRef, type SyntheticEvent } from "react"
 
 import { BASE_URL } from "../../config/constants"
 import ExternalLink from "../Links/ExternalLink/ExternalLink"
 
 import { CopyrightRestrictionsBanner } from "./CopyrightRestrictionsBanner"
-import { eddFormReducer } from "../../reducers/eddFormReducer"
 import {
-  initialEDDFormState,
   getUpdatedInvalidFields,
   validateEDDForm,
   initialEDDInvalidFields,
@@ -26,29 +24,23 @@ import {
 import type { EDDRequestParams, EDDPageStatus } from "../../types/holdPageTypes"
 
 interface EDDRequestFormProps {
+  eddFormState: EDDRequestParams
+  setEddFormState: (params: EDDRequestParams) => void
   handleSubmit: (eddParams: EDDRequestParams) => void
   setPageStatus: (status: EDDPageStatus) => void
   holdId: string
-  patronId: string
-  source: string
 }
 
 /**
  * The EDDRequestForm renders the form for placing a electronic delivery hold on an item.
  */
 const EDDRequestForm = ({
+  eddFormState,
+  setEddFormState,
   handleSubmit,
   setPageStatus,
   holdId,
-  patronId,
-  source,
 }: EDDRequestFormProps) => {
-  const [eddFormState, dispatch] = useReducer(eddFormReducer, {
-    ...initialEDDFormState,
-    patronId,
-    source,
-  })
-
   // Set the invalid fields as an array in state to keep track of the first invalid field for focus on submit
   const [invalidFields, setInvalidFields] = useState(initialEDDInvalidFields)
 
@@ -73,11 +65,10 @@ const EDDRequestForm = ({
     e.preventDefault()
     const target = e.target as HTMLInputElement
 
-    dispatch({
-      type: "input_change",
-      field: target.name,
-      payload: target.value,
-    })
+    setEddFormState((prevEddFormState) => ({
+      ...prevEddFormState,
+      [target.name]: target.value,
+    }))
   }
 
   const validateAndSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
