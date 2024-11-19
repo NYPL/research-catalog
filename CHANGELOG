@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Added
 
+- Add server-side EDD form posting function (SCC-3760)
 - Add EDD request page and field validation logic (SCC-3760)
 - Holding location filters to refine search and advanced search panels
 - "Go back" button to advanced search

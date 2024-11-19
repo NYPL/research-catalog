@@ -144,7 +144,7 @@ export async function postEDDRequest(
     pickupLocation: "edd",
     docDeliveryData: {
       ...rest,
-    },
+    } as EDDRequestParams,
   }
 
   try {
