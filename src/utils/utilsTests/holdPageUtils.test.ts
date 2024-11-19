@@ -7,71 +7,71 @@ describe("holdPageUtils", () => {
   describe("getUpdatedInvalidFields", () => {
     it("returns correctly updated field validation statuses for different inputs", () => {
       expect(
-        getUpdatedInvalidFields("email", "test", initialEDDInvalidFields)
+        getUpdatedInvalidFields("emailAddress", "test", initialEDDInvalidFields)
       ).toStrictEqual([
-        { isInvalid: true, key: "email" },
-        { isInvalid: false, key: "startingNumber" },
-        { isInvalid: false, key: "endingNumber" },
-        { isInvalid: false, key: "chapter" },
+        { isInvalid: true, key: "emailAddress" },
+        { isInvalid: false, key: "startPage" },
+        { isInvalid: false, key: "endPage" },
+        { isInvalid: false, key: "chapterTitle" },
       ])
       expect(
         getUpdatedInvalidFields(
-          "email",
+          "emailAddress",
           "test@test.com",
           initialEDDInvalidFields
         )
       ).toStrictEqual([
-        { isInvalid: false, key: "email" },
-        { isInvalid: false, key: "startingNumber" },
-        { isInvalid: false, key: "endingNumber" },
-        { isInvalid: false, key: "chapter" },
+        { isInvalid: false, key: "emailAddress" },
+        { isInvalid: false, key: "startPage" },
+        { isInvalid: false, key: "endPage" },
+        { isInvalid: false, key: "chapterTitle" },
       ])
       expect(
-        getUpdatedInvalidFields("email", "", initialEDDInvalidFields)
+        getUpdatedInvalidFields("emailAddress", "", initialEDDInvalidFields)
       ).toStrictEqual([
-        { isInvalid: true, key: "email" },
-        { isInvalid: false, key: "startingNumber" },
-        { isInvalid: false, key: "endingNumber" },
-        { isInvalid: false, key: "chapter" },
+        { isInvalid: true, key: "emailAddress" },
+        { isInvalid: false, key: "startPage" },
+        { isInvalid: false, key: "endPage" },
+        { isInvalid: false, key: "chapterTitle" },
       ])
       expect(
-        getUpdatedInvalidFields("startingNumber", "", initialEDDInvalidFields)
+        getUpdatedInvalidFields("startPage", "", initialEDDInvalidFields)
       ).toStrictEqual([
-        { isInvalid: false, key: "email" },
-        { isInvalid: true, key: "startingNumber" },
-        { isInvalid: false, key: "endingNumber" },
-        { isInvalid: false, key: "chapter" },
+        { isInvalid: false, key: "emailAddress" },
+        { isInvalid: true, key: "startPage" },
+        { isInvalid: false, key: "endPage" },
+        { isInvalid: false, key: "chapterTitle" },
       ])
       expect(
-        getUpdatedInvalidFields("endingNumber", "", initialEDDInvalidFields)
+        getUpdatedInvalidFields("endPage", "", initialEDDInvalidFields)
       ).toStrictEqual([
-        { isInvalid: false, key: "email" },
-        { isInvalid: false, key: "startingNumber" },
-        { isInvalid: true, key: "endingNumber" },
-        { isInvalid: false, key: "chapter" },
+        { isInvalid: false, key: "emailAddress" },
+        { isInvalid: false, key: "startPage" },
+        { isInvalid: true, key: "endPage" },
+        { isInvalid: false, key: "chapterTitle" },
       ])
       expect(
-        getUpdatedInvalidFields("chapter", "", initialEDDInvalidFields)
+        getUpdatedInvalidFields("chapterTitle", "", initialEDDInvalidFields)
       ).toStrictEqual([
-        { isInvalid: false, key: "email" },
-        { isInvalid: false, key: "startingNumber" },
-        { isInvalid: false, key: "endingNumber" },
-        { isInvalid: true, key: "chapter" },
+        { isInvalid: false, key: "emailAddress" },
+        { isInvalid: false, key: "startPage" },
+        { isInvalid: false, key: "endPage" },
+        { isInvalid: true, key: "chapterTitle" },
       ])
     })
     it("preserves unchanged field statuses as passed in the previous state param", () => {
       expect(
-        getUpdatedInvalidFields("email", "test", [
-          { isInvalid: false, key: "email" },
-          { isInvalid: true, key: "startingNumber" },
-          { isInvalid: true, key: "endingNumber" },
-          { isInvalid: true, key: "chapter" },
+        getUpdatedInvalidFields("emailAddress", "test", [
+          { isInvalid: false, key: "emailAddress" },
+          { isInvalid: true, key: "startPage" },
+          { isInvalid: true, key: "endPage" },
+          { isInvalid: true, key: "chapterTitle" },
         ])
       ).toStrictEqual([
-        { isInvalid: true, key: "email" },
-        { isInvalid: true, key: "startingNumber" },
-        { isInvalid: true, key: "endingNumber" },
-        { isInvalid: true, key: "chapter" },
+        { isInvalid: true, key: "emailAddress" },
+        { isInvalid: true, key: "startPage" },
+        { isInvalid: true, key: "endPage" },
+        { isInvalid: true, key: "chapterTitle" },
       ])
     })
   })
