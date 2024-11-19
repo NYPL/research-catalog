@@ -44,6 +44,7 @@ interface EDDRequestPropsType {
   patronId: string
   isAuthenticated?: boolean
   eddRequestable?: boolean
+  status?: EDDPageStatus
 }
 
 /**
@@ -54,7 +55,7 @@ export default function EDDRequestPage({
   discoveryItemResult,
   patronId,
   isAuthenticated,
-  eddRequestable = false,
+  status,
 }: EDDRequestPropsType) {
   const metadataTitle = `Electronic Delivery Request | ${SITE_NAME}`
 
@@ -62,11 +63,8 @@ export default function EDDRequestPage({
   const item = new Item(discoveryItemResult, bib)
 
   const holdId = `${item.bibId}-${item.id}`
-  const isEddAvailable = eddRequestable && item.isAvailable
 
-  const [pageStatus, setPageStatus] = useState(
-    (!isEddAvailable ? "unavailable" : null) as EDDPageStatus
-  )
+  const [pageStatus, setPageStatus] = useState(status)
   const [eddFormState, setEddFormState] = useState({
     ...initialEDDFormState,
     patronId,
@@ -158,7 +156,7 @@ export default function EDDRequestPage({
         <HoldItemDetails item={item} />
         {isLoading || formPosting ? (
           <SkeletonLoader showImage={false} data-testid="edd-request-loading" />
-        ) : isEddAvailable ? (
+        ) : status !== "unavailable" ? (
           <EDDRequestForm
             eddFormState={eddFormState}
             setEddFormState={setEddFormState}
@@ -172,7 +170,7 @@ export default function EDDRequestPage({
   )
 }
 
-export async function getServerSideProps({ params, req, res }) {
+export async function getServerSideProps({ params, req, res, query }) {
   const { id } = params
 
   // authentication redirect
@@ -237,13 +235,20 @@ export async function getServerSideProps({ params, req, res }) {
       throw new Error("EDD Page - Error fetching edd in getServerSideProps")
     }
 
+    const isEddAvailable = eddRequestable && item.isAvailable
+    const { formInvalid } = query
+
     return {
       props: {
         discoveryBibResult,
         discoveryItemResult,
         patronId,
         isAuthenticated,
-        eddRequestable,
+        pageStatus: !isEddAvailable
+          ? "unavailable"
+          : formInvalid
+          ? "invalid"
+          : null,
       },
     }
   } catch (error) {

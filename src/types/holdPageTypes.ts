@@ -24,6 +24,7 @@ export interface EDDRequestParams extends HoldRequestParams {
 export interface HoldPostResult {
   status: HTTPStatusCode
   pickupLocation?: NYPLocationKey | "edd"
+  formInvalid?: boolean
   requestId?: string
 }
 

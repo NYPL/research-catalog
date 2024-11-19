@@ -2,6 +2,10 @@ import type { NextApiRequest, NextApiResponse } from "next"
 
 import { postEDDRequest } from "../../../../../src/server/api/hold"
 import { BASE_URL, PATHS } from "../../../../../src/config/constants"
+import {
+  initialEDDInvalidFields,
+  getUpdatedInvalidFields,
+} from "../../../../../src/utils/holdPageUtils"
 
 /**
  * Default API route handler for EDD requests
@@ -37,7 +41,17 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       })
     }
 
-    // Server side redirect in case user has JS disabled
+    // JS-Disabled functionality
+
+    // TODO: Determine if we can harness validation from discovery response or if we should add it here
+    const tempFormInvalid = false
+
+    if (tempFormInvalid) {
+      res.redirect(
+        `${BASE_URL}${PATHS.HOLD_REQUEST}/${holdId}/edd?formInvalid=true`
+      )
+    }
+    // Redirect to confirmation page if form is valid
     res.redirect(
       `${BASE_URL}${PATHS.HOLD_CONFIRMATION}/${holdId}?pickupLocation=edd?requestId=${requestId}`
     )
