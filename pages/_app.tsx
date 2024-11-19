@@ -50,6 +50,7 @@ function App({ Component, pageProps }) {
   // Track page view events to Adobe Analytics
   useEffect(() => {
     trackVirtualPageView(router.asPath)
+    console.log("On train env")
   })
 
   return (
