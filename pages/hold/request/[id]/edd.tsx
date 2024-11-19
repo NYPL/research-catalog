@@ -107,15 +107,14 @@ export default function EDDRequestPage({
         setFormPosting(false)
         return
       }
-      const { pickupLocation: pickupLocationFromResponse, requestId } =
-        responseJson
+      const { requestId } = responseJson
 
       setPageStatus(null)
       setFormPosting(false)
 
       // Success state
       await router.push(
-        `${PATHS.HOLD_CONFIRMATION}/${holdId}?pickupLocation=${pickupLocationFromResponse}&requestId=${requestId}&isEdd=true`
+        `${PATHS.HOLD_CONFIRMATION}/${holdId}?pickupLocation=edd&requestId=${requestId}`
       )
     } catch (error) {
       console.error(
