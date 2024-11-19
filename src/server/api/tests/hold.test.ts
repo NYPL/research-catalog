@@ -1,6 +1,6 @@
 import { fetchDeliveryLocations, postHoldRequest } from "../hold"
 import type { DeliveryLocationsResult } from "../../../types/locationTypes"
-import type { HoldPostResult } from "../../../types/holdTypes"
+import type { HoldPostResult } from "../../../types/holdPageTypes"
 
 jest.mock("../../nyplApiClient", () => {
   return jest

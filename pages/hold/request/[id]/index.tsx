@@ -7,29 +7,29 @@ import {
   SkeletonLoader,
 } from "@nypl/design-system-react-components"
 
-import Layout from "../../../src/components/Layout/Layout"
+import Layout from "../../../../src/components/Layout/Layout"
 
-import HoldRequestForm from "../../../src/components/HoldPages/HoldRequestForm"
-import HoldRequestBanner from "../../../src/components/HoldPages/HoldRequestBanner"
-import HoldItemDetails from "../../../src/components/HoldPages/HoldItemDetails"
+import HoldRequestForm from "../../../../src/components/HoldPages/HoldRequestForm"
+import HoldRequestBanner from "../../../../src/components/HoldPages/HoldRequestBanner"
+import HoldItemDetails from "../../../../src/components/HoldPages/HoldItemDetails"
 
-import { SITE_NAME, BASE_URL, PATHS } from "../../../src/config/constants"
-import useLoading from "../../../src/hooks/useLoading"
+import { SITE_NAME, BASE_URL, PATHS } from "../../../../src/config/constants"
+import useLoading from "../../../../src/hooks/useLoading"
 
-import { fetchBib } from "../../../src/server/api/bib"
-import { fetchDeliveryLocations } from "../../../src/server/api/hold"
+import { fetchBib } from "../../../../src/server/api/bib"
+import { fetchDeliveryLocations } from "../../../../src/server/api/hold"
 
 import initializePatronTokenAuth, {
   doRedirectBasedOnNyplAccountRedirects,
   getLoginRedirect,
-} from "../../../src/server/auth"
+} from "../../../../src/server/auth"
 
-import Bib from "../../../src/models/Bib"
-import Item from "../../../src/models/Item"
+import Bib from "../../../../src/models/Bib"
+import Item from "../../../../src/models/Item"
 
-import type { DiscoveryBibResult } from "../../../src/types/bibTypes"
-import type { DiscoveryItemResult } from "../../../src/types/itemTypes"
-import type { DeliveryLocation } from "../../../src/types/locationTypes"
+import type { DiscoveryBibResult } from "../../../../src/types/bibTypes"
+import type { DiscoveryItemResult } from "../../../../src/types/itemTypes"
+import type { DeliveryLocation } from "../../../../src/types/locationTypes"
 
 interface HoldRequestPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -143,8 +143,8 @@ export default function HoldRequestPage({
               }
               errorMessage={
                 !item.isAvailable
-                  ? "This item is currently unavailable"
-                  : "We were unable to process your request at this time"
+                  ? "This item is currently unavailable."
+                  : "We were unable to process your request at this time."
               }
               errorDetail={errorDetail}
             />
@@ -220,7 +220,7 @@ export async function getServerSideProps({ params, req, res }) {
     const discoveryItemResult = discoveryBibResult?.items?.[0]
 
     if (!discoveryItemResult) {
-      throw new Error("Item not found")
+      throw new Error("Hold Page - Item not found")
     }
 
     const bib = new Bib(discoveryBibResult)
@@ -241,7 +241,7 @@ export async function getServerSideProps({ params, req, res }) {
 
     if (locationStatus !== 200) {
       throw new Error(
-        "HoldRequestPage: Error fetching delivery locations in getServerSideProps"
+        "Hold Page - Error fetching delivery locations in getServerSideProps"
       )
     }
 

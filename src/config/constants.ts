@@ -11,6 +11,9 @@ export const ITEM_VIEW_ALL_BATCH_SIZE = 150
 export const ELECTRONIC_RESOURCES_PER_BIB_PAGE = 3
 export const SHEP_HTTP_TIMEOUT = 4000
 export const FOCUS_TIMEOUT = 50
+export const DEBOUNCE_INTERVAL = 20
+
+export const EMAIL_REGEX = /^[^@]+@[^@]+\.[^@]+$/
 
 // Internal path names
 export const PATHS = {
@@ -139,3 +142,55 @@ export const NYPL_LOCATIONS = {
 
 export const HOLD_PAGE_HEADING = "Request for on-site use"
 export const EDD_PAGE_HEADING = "Request scan"
+
+export const EDD_FORM_FIELD_COPY = {
+  emailAddress: {
+    label: "Email address",
+    placeholder: "theresa.smith@gmail.com",
+    helperText:
+      "Your request will be delivered to the email address you enter above.",
+    invalidText:
+      "Enter a valid email address. Your request will be delivered to the email address you enter above.",
+  },
+  startPage: {
+    label: "Starting page number",
+    placeholder: "Example: 1",
+    helperText: "Enter the first page you would like scanned.",
+    invalidText: "Enter a page number. You may request a maximum of 50 pages.",
+  },
+  endPage: {
+    label: "Ending page number",
+    placeholder: "Example: 20",
+    helperText: "Enter the last page you would like scanned.",
+    invalidText: "Enter a page number. You may request a maximum of 50 pages.",
+  },
+  chapterTitle: {
+    label: "Chapter or article title",
+    placeholder: "Example: Chapter 1",
+    helperText:
+      "Enter the name/number of the chapter or article you would like scanned.",
+    invalidText:
+      "Indicate the title of the chapter or article you are requesting.",
+  },
+  author: {
+    label: "Author",
+    placeholder: "Example: Charles Dickens",
+  },
+  date: {
+    label: "Date published",
+    placeholder: "Example: 1932",
+  },
+  volume: {
+    label: "Volume",
+    placeholder: "Example: V3",
+  },
+  issue: {
+    label: "Issue",
+    placeholder: "Example: Issue 27",
+  },
+  requestNotes: {
+    label: "Notes",
+    placeholder: "Example: Please include foldouts in the scan.",
+    helperText: "Provide additional instructions here.",
+  },
+}

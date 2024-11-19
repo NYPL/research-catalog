@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 
-import { postHoldRequest } from "../../../../src/server/api/hold"
-import { BASE_URL, PATHS } from "../../../../src/config/constants"
+import { postHoldRequest } from "../../../../../src/server/api/hold"
+import { BASE_URL, PATHS } from "../../../../../src/config/constants"
 
 /**
  * Default API route handler for Hold requests

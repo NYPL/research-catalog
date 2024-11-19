@@ -1,6 +1,6 @@
 import nyplApiClient from "../nyplApiClient"
 
-import type { HoldPostResult } from "../../types/holdTypes"
+import type { HoldPostResult } from "../../types/holdPageTypes"
 import type {
   DeliveryLocation,
   DeliveryLocationsResult,
@@ -9,7 +9,7 @@ import type {
 import type {
   DiscoveryHoldPostParams,
   HoldRequestParams,
-} from "../../types/holdTypes"
+} from "../../types/holdPageTypes"
 
 import {
   mapLocationElementToDeliveryLocation,
