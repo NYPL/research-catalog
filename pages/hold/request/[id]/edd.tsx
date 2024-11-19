@@ -44,7 +44,7 @@ interface EDDRequestPropsType {
   patronId: string
   isAuthenticated?: boolean
   eddRequestable?: boolean
-  status?: EDDPageStatus
+  pageStatus?: EDDPageStatus
 }
 
 /**
@@ -55,7 +55,7 @@ export default function EDDRequestPage({
   discoveryItemResult,
   patronId,
   isAuthenticated,
-  status,
+  pageStatus: defaultPageStatus,
 }: EDDRequestPropsType) {
   const metadataTitle = `Electronic Delivery Request | ${SITE_NAME}`
 
@@ -64,7 +64,7 @@ export default function EDDRequestPage({
 
   const holdId = `${item.bibId}-${item.id}`
 
-  const [pageStatus, setPageStatus] = useState(status)
+  const [pageStatus, setPageStatus] = useState(defaultPageStatus)
   const [eddFormState, setEddFormState] = useState({
     ...initialEDDFormState,
     patronId,
@@ -236,7 +236,6 @@ export async function getServerSideProps({ params, req, res, query }) {
     }
 
     const isEddAvailable = eddRequestable && item.isAvailable
-    const { formInvalid } = query
 
     return {
       props: {
@@ -246,7 +245,7 @@ export async function getServerSideProps({ params, req, res, query }) {
         isAuthenticated,
         pageStatus: !isEddAvailable
           ? "unavailable"
-          : formInvalid
+          : query?.formInvalid
           ? "invalid"
           : null,
       },
