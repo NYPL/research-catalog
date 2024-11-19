@@ -1,10 +1,11 @@
-# Deploys to research-catalog-qa
-name: deploy qa
+# Deploys to research-catalog-train
+name: deploy train
 
 on:
   push:
     branches:
-      - qa
+      - train
+      - set-up-train-env
 
 permissions:
   id-token: write
@@ -13,7 +14,7 @@ permissions:
 env:
   AWS_DEFAULT_REGION: us-east-1
   LOCAL_TAG_NAME: research-catalog:${{ github.ref_name }}-${{ github.run_number }}
-  ECR_URL: 946183545209.dkr.ecr.us-east-1.amazonaws.com/research-catalog:qa-latest
+  ECR_URL: 946183545209.dkr.ecr.us-east-1.amazonaws.com/research-catalog:train-latest
 
 jobs:
   deploy:
@@ -37,11 +38,11 @@ jobs:
           docker build --build-arg NEXT_PUBLIC_APP_ENV=qa --tag $LOCAL_TAG_NAME .
           docker tag $LOCAL_TAG_NAME $ECR_URL
           # Re-tag last latest image just in case
-          MANIFEST=$(aws ecr batch-get-image --repository-name research-catalog --image-ids imageTag="qa-latest" --output json | jq --raw-output --join-output '.images[0].imageManifest')
-          aws ecr batch-delete-image --repository-name research-catalog --image-ids imageTag="qa-previous" || true
-          aws ecr put-image --repository-name research-catalog --image-tag "qa-previous" --image-manifest "$MANIFEST" || true
+          MANIFEST=$(aws ecr batch-get-image --repository-name research-catalog --image-ids imageTag="train-latest" --output json | jq --raw-output --join-output '.images[0].imageManifest')
+          aws ecr batch-delete-image --repository-name research-catalog --image-ids imageTag="train-previous" || true
+          aws ecr put-image --repository-name research-catalog --image-tag "train-previous" --image-manifest "$MANIFEST" || true
           docker push $ECR_URL
 
       - name: Update ECS service
         run: |
-          aws ecs update-service --cluster research-catalog-qa --service research-catalog-qa --force-new-deployment
+          aws ecs update-service --cluster research-catalog-train --service research-catalog-train --force-new-deployment
