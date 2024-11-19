@@ -206,7 +206,7 @@ export async function getServerSideProps({ params, req, res }) {
     const discoveryItemResult = discoveryBibResult?.items?.[0]
 
     if (!discoveryItemResult) {
-      throw new Error("Item not found")
+      throw new Error("EDD Page - Item not found")
     }
 
     const bib = new Bib(discoveryBibResult)
