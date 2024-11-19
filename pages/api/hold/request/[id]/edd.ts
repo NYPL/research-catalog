@@ -2,10 +2,6 @@ import type { NextApiRequest, NextApiResponse } from "next"
 
 import { postEDDRequest } from "../../../../../src/server/api/hold"
 import { BASE_URL, PATHS } from "../../../../../src/config/constants"
-import {
-  initialEDDInvalidFields,
-  getUpdatedInvalidFields,
-} from "../../../../../src/utils/holdPageUtils"
 
 /**
  * Default API route handler for EDD requests
