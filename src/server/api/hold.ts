@@ -139,10 +139,12 @@ export async function postEDDRequest(
     endingNumber,
     chapter,
     author,
+    issue,
     publicationDate,
     volume,
     notes,
   } = eddRequestParams
+  console.log("itemId post", itemId)
 
   // Remove non-numeric characters from item ID
   const itemIdNumeric = itemId.replace(/\D/g, "")
@@ -155,22 +157,21 @@ export async function postEDDRequest(
     recordType: "i",
     pickupLocation: "edd",
     docDeliveryData: {
-      email,
-      startingNumber,
-      endingNumber,
-      chapter,
+      emailAddress: email,
+      startPage: startingNumber,
+      endPage: endingNumber,
+      chapterTitle: chapter,
       author,
-      publicationDate,
+      date: publicationDate,
+      issue,
       volume,
-      notes,
-    } as EDDRequestParams,
+      requestNotes: notes,
+    },
   }
-  console.log(eddPostParams)
 
   try {
     const client = await nyplApiClient()
     const eddPostResult = await client.post("/hold-requests", eddPostParams)
-    console.log("holdPostResult.data", eddPostResult)
     const { id: requestId } = eddPostResult.data
 
     if (!requestId) {

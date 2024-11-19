@@ -36,7 +36,17 @@ export interface DiscoveryHoldPostParams {
   pickupLocation?: NYPLocationKey | "edd"
   numberOfCopies?: number
   // TODO: make this EDD form content object
-  docDeliveryData?: EDDRequestParams
+  docDeliveryData?: {
+    emailAddress: string
+    startPage: string
+    endPage: string
+    chapterTitle: string
+    author?: string
+    date?: string
+    issue?: string
+    volume?: string
+    requestNotes?: string
+  }
 }
 
 export type EDDPageStatus = null | "failed" | "unavailable" | "invalid"

@@ -93,7 +93,7 @@ export default function EDDRequestPage({
         `${BASE_URL}/api/hold/request/${holdId}/edd`,
         {
           method: "POST",
-          body: JSON.stringify({ ...eddParams }),
+          body: JSON.stringify({ ...eddParams, jsEnabled: true }),
         }
       )
       const responseJson = await response.json()
@@ -108,6 +108,7 @@ export default function EDDRequestPage({
         return
       }
       const { requestId } = responseJson
+      console.log(responseJson)
 
       setPageStatus(null)
       setFormPosting(false)
