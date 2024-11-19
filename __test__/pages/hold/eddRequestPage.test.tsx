@@ -228,10 +228,7 @@ describe("EDD Request page", () => {
     })
 
     it("shows an error when the request fails", async () => {
-      await fireEvent(
-        screen.getByText("Submit request"),
-        new MouseEvent("click")
-      )
+      fireEvent(screen.getByText("Submit request"), new MouseEvent("click"))
       await waitFor(() => {
         expect(screen.getByTestId("hold-request-error")).toBeInTheDocument()
       })
@@ -255,10 +252,7 @@ describe("EDD Request page", () => {
     })
 
     it("populates the feedback form with the call number and appropriate copy when the request fails", async () => {
-      await fireEvent(
-        screen.getByText("Submit request"),
-        new MouseEvent("click")
-      )
+      fireEvent(screen.getByText("Submit request"), new MouseEvent("click"))
       await waitFor(() => {
         expect(screen.getByTestId("hold-request-error")).toBeInTheDocument()
       })
@@ -279,6 +273,23 @@ describe("EDD Request page", () => {
           )
         ).toBeInTheDocument()
       })
+    })
+
+    it("shows an error when any field is invalid", async () => {
+      fireEvent.change(
+        screen.getByPlaceholderText(EDD_FORM_FIELD_COPY.email.placeholder),
+        { target: { value: "bademail" } }
+      )
+      fireEvent(screen.getByText("Submit request"), new MouseEvent("click"))
+
+      await waitFor(() => {
+        expect(screen.getByTestId("hold-request-error")).toBeInTheDocument()
+      })
+      expect(
+        screen.getByText(
+          "Some fields contain errors. Please correct and submit again."
+        )
+      ).toBeInTheDocument()
     })
   })
 })
