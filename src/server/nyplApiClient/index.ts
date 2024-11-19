@@ -22,13 +22,17 @@ export class NyplApiClientError extends Error {
   }
 }
 
-const nyplApiClient = async (options = { apiName: "platform" }) => {
-  const { apiName } = options
+const nyplApiClient = async ({
+  apiName = "platform",
+  version = "v0.1",
+} = {}) => {
   if (CACHE.clients[apiName]) {
     return CACHE.clients[apiName]
   }
 
-  const baseUrl = appConfig.apiEndpoints[apiName][appEnvironment]
+  const baseUrl =
+    appConfig.apiEndpoints[apiName][appEnvironment] + "/" + version
+  console.log(baseUrl)
 
   let decryptedId: string
   let decryptedSecret: string
