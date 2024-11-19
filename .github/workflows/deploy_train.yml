@@ -6,6 +6,7 @@ on:
     branches:
       - train
       - set-up-train-env
+      - hold-pages
 
 permissions:
   id-token: write
