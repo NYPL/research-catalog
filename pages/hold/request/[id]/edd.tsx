@@ -106,7 +106,6 @@ export default function EDDRequestPage({
         return
       }
       const { requestId } = responseJson
-      console.log(responseJson)
 
       setPageStatus(null)
       setFormPosting(false)
