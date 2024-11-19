@@ -10,8 +10,9 @@ import {
   Text,
 } from "@nypl/design-system-react-components"
 import { useState, createRef, type SyntheticEvent } from "react"
+import { debounce } from "underscore"
 
-import { BASE_URL } from "../../config/constants"
+import { BASE_URL, DEBOUNCE_INTERVAL } from "../../config/constants"
 import ExternalLink from "../Links/ExternalLink/ExternalLink"
 
 import { CopyrightRestrictionsBanner } from "./CopyrightRestrictionsBanner"
@@ -25,7 +26,7 @@ import type { EDDRequestParams, EDDPageStatus } from "../../types/holdPageTypes"
 
 interface EDDRequestFormProps {
   eddFormState: EDDRequestParams
-  setEddFormState: (params: EDDRequestParams) => void
+  setEddFormState: React.Dispatch<React.SetStateAction<EDDRequestParams>>
   handleSubmit: (eddParams: EDDRequestParams) => void
   setPageStatus: (status: EDDPageStatus) => void
   holdId: string
@@ -140,10 +141,10 @@ const EDDRequestForm = ({
           helperText="Your request will be delivered to the email address you enter above."
           invalidText="Enter a valid email address. Your request will be delivered to the email address you enter above."
           isInvalid={isInvalidField("email", invalidFields)}
-          onChange={(e) => {
+          onChange={debounce((e) => {
             validateField(e)
             handleInputChange(e)
-          }}
+          }, DEBOUNCE_INTERVAL)}
           ref={validatedInputRefs["email"]}
         />
       </FormField>
@@ -160,7 +161,7 @@ const EDDRequestForm = ({
             invalidText="Enter a page number. You may request a maximum of 50 pages."
             isInvalid={isInvalidField("startingNumber", invalidFields)}
             onBlur={validateField}
-            onChange={handleInputChange}
+            onChange={debounce(handleInputChange, DEBOUNCE_INTERVAL)}
             ref={validatedInputRefs["startingNumber"]}
           />
         </FormField>
@@ -176,7 +177,7 @@ const EDDRequestForm = ({
             invalidText="Enter a page number. You may request a maximum of 50 pages."
             isInvalid={isInvalidField("endingNumber", invalidFields)}
             onBlur={validateField}
-            onChange={handleInputChange}
+            onChange={debounce(handleInputChange, DEBOUNCE_INTERVAL)}
             ref={validatedInputRefs["endingNumber"]}
           />
         </FormField>
