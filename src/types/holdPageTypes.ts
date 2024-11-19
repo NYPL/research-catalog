@@ -10,15 +10,15 @@ export interface HoldRequestParams {
 
 export interface EDDRequestParams extends HoldRequestParams {
   pickupLocation: "edd"
-  email: string
-  startingNumber: string
-  endingNumber: string
-  chapter: string
+  emailAddress: string
+  startPage: string
+  endPage: string
+  chapterTitle: string
   author?: string
-  publicationDate?: string
+  date?: string
   volume?: string
   issue?: string
-  notes?: string
+  requestNotes?: string
 }
 
 export interface HoldPostResult {

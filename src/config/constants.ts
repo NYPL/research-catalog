@@ -144,7 +144,7 @@ export const HOLD_PAGE_HEADING = "Request for on-site use"
 export const EDD_PAGE_HEADING = "Request scan"
 
 export const EDD_FORM_FIELD_COPY = {
-  email: {
+  emailAddress: {
     label: "Email address",
     placeholder: "theresa.smith@gmail.com",
     helperText:
@@ -152,19 +152,19 @@ export const EDD_FORM_FIELD_COPY = {
     invalidText:
       "Enter a valid email address. Your request will be delivered to the email address you enter above.",
   },
-  startingNumber: {
+  startPage: {
     label: "Starting page number",
     placeholder: "Example: 1",
     helperText: "Enter the first page you would like scanned.",
     invalidText: "Enter a page number. You may request a maximum of 50 pages.",
   },
-  endingNumber: {
+  endPage: {
     label: "Ending page number",
     placeholder: "Example: 20",
     helperText: "Enter the last page you would like scanned.",
     invalidText: "Enter a page number. You may request a maximum of 50 pages.",
   },
-  chapter: {
+  chapterTitle: {
     label: "Chapter or article title",
     placeholder: "Example: Chapter 1",
     helperText:
@@ -176,7 +176,7 @@ export const EDD_FORM_FIELD_COPY = {
     label: "Author",
     placeholder: "Example: Charles Dickens",
   },
-  publicationDate: {
+  date: {
     label: "Date published",
     placeholder: "Example: 1932",
   },
@@ -188,7 +188,7 @@ export const EDD_FORM_FIELD_COPY = {
     label: "Issue",
     placeholder: "Example: Issue 27",
   },
-  notes: {
+  requestNotes: {
     label: "Notes",
     placeholder: "Example: Please include foldouts in the scan.",
     helperText: "Provide additional instructions here.",

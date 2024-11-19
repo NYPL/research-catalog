@@ -206,24 +206,24 @@ describe("EDD Request page", () => {
 
       // Fill in all required form fields
       await userEvent.type(
-        screen.getByPlaceholderText(EDD_FORM_FIELD_COPY.email.placeholder),
-        EDD_FORM_FIELD_COPY.email.placeholder
+        screen.getByPlaceholderText(
+          EDD_FORM_FIELD_COPY.emailAddress.placeholder
+        ),
+        EDD_FORM_FIELD_COPY.emailAddress.placeholder
+      )
+      await userEvent.type(
+        screen.getByPlaceholderText(EDD_FORM_FIELD_COPY.startPage.placeholder),
+        EDD_FORM_FIELD_COPY.startPage.placeholder
+      )
+      await userEvent.type(
+        screen.getByPlaceholderText(EDD_FORM_FIELD_COPY.endPage.placeholder),
+        EDD_FORM_FIELD_COPY.endPage.placeholder
       )
       await userEvent.type(
         screen.getByPlaceholderText(
-          EDD_FORM_FIELD_COPY.startingNumber.placeholder
+          EDD_FORM_FIELD_COPY.chapterTitle.placeholder
         ),
-        EDD_FORM_FIELD_COPY.startingNumber.placeholder
-      )
-      await userEvent.type(
-        screen.getByPlaceholderText(
-          EDD_FORM_FIELD_COPY.endingNumber.placeholder
-        ),
-        EDD_FORM_FIELD_COPY.endingNumber.placeholder
-      )
-      await userEvent.type(
-        screen.getByPlaceholderText(EDD_FORM_FIELD_COPY.chapter.placeholder),
-        EDD_FORM_FIELD_COPY.chapter.placeholder
+        EDD_FORM_FIELD_COPY.chapterTitle.placeholder
       )
     })
 
@@ -277,7 +277,9 @@ describe("EDD Request page", () => {
 
     it("shows an error when any field is invalid", async () => {
       fireEvent.change(
-        screen.getByPlaceholderText(EDD_FORM_FIELD_COPY.email.placeholder),
+        screen.getByPlaceholderText(
+          EDD_FORM_FIELD_COPY.emailAddress.placeholder
+        ),
         { target: { value: "bademail" } }
       )
       fireEvent(screen.getByText("Submit request"), new MouseEvent("click"))

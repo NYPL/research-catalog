@@ -131,70 +131,70 @@ const EDDRequestForm = ({
       </Box>
       <FormField>
         <TextInput
-          id="email"
-          name="email"
-          value={eddFormState.email}
-          labelText={EDD_FORM_FIELD_COPY.email.label}
+          id="email-address"
+          name="emailAddress"
+          value={eddFormState.emailAddress}
+          labelText={EDD_FORM_FIELD_COPY.emailAddress.label}
           isRequired
-          placeholder={EDD_FORM_FIELD_COPY.email.placeholder}
-          helperText={EDD_FORM_FIELD_COPY.email.helperText}
-          invalidText={EDD_FORM_FIELD_COPY.email.invalidText}
-          isInvalid={isInvalidField("email", invalidFields)}
+          placeholder={EDD_FORM_FIELD_COPY.emailAddress.placeholder}
+          helperText={EDD_FORM_FIELD_COPY.emailAddress.helperText}
+          invalidText={EDD_FORM_FIELD_COPY.emailAddress.invalidText}
+          isInvalid={isInvalidField("emailAddress", invalidFields)}
           onChange={(e) => {
             validateField(e)
             handleInputChange(e)
           }}
-          ref={validatedInputRefs["email"]}
+          ref={validatedInputRefs["emailAddress"]}
         />
       </FormField>
       <FormRow>
         <FormField>
           <TextInput
-            id="starting-number"
-            name="startingNumber"
-            value={eddFormState.startingNumber}
-            labelText={EDD_FORM_FIELD_COPY.startingNumber.label}
+            id="start-page"
+            name="startPage"
+            value={eddFormState.startPage}
+            labelText={EDD_FORM_FIELD_COPY.startPage.label}
             isRequired
-            placeholder={EDD_FORM_FIELD_COPY.startingNumber.placeholder}
-            helperText={EDD_FORM_FIELD_COPY.startingNumber.helperText}
-            invalidText={EDD_FORM_FIELD_COPY.startingNumber.invalidText}
-            isInvalid={isInvalidField("startingNumber", invalidFields)}
+            placeholder={EDD_FORM_FIELD_COPY.startPage.placeholder}
+            helperText={EDD_FORM_FIELD_COPY.startPage.helperText}
+            invalidText={EDD_FORM_FIELD_COPY.startPage.invalidText}
+            isInvalid={isInvalidField("startPage", invalidFields)}
             onBlur={validateField}
             onChange={handleInputChange}
-            ref={validatedInputRefs["startingNumber"]}
+            ref={validatedInputRefs["startPage"]}
           />
         </FormField>
         <FormField>
           <TextInput
-            id="ending-number"
-            name="endingNumber"
-            value={eddFormState.endingNumber}
-            labelText={EDD_FORM_FIELD_COPY.endingNumber.label}
+            id="end-page"
+            name="endPage"
+            value={eddFormState.endPage}
+            labelText={EDD_FORM_FIELD_COPY.endPage.label}
             isRequired
-            placeholder={EDD_FORM_FIELD_COPY.endingNumber.placeholder}
-            helperText={EDD_FORM_FIELD_COPY.endingNumber.helperText}
-            invalidText={EDD_FORM_FIELD_COPY.endingNumber.invalidText}
-            isInvalid={isInvalidField("endingNumber", invalidFields)}
+            placeholder={EDD_FORM_FIELD_COPY.endPage.placeholder}
+            helperText={EDD_FORM_FIELD_COPY.endPage.helperText}
+            invalidText={EDD_FORM_FIELD_COPY.endPage.invalidText}
+            isInvalid={isInvalidField("endPage", invalidFields)}
             onBlur={validateField}
             onChange={handleInputChange}
-            ref={validatedInputRefs["endingNumber"]}
+            ref={validatedInputRefs["endPage"]}
           />
         </FormField>
       </FormRow>
       <FormField>
         <TextInput
-          id="chapter"
-          name="chapter"
-          value={eddFormState.chapter}
-          labelText={EDD_FORM_FIELD_COPY.chapter.label}
+          id="chapterTitle"
+          name="chapterTitle"
+          value={eddFormState.chapterTitle}
+          labelText={EDD_FORM_FIELD_COPY.chapterTitle.label}
           isRequired
-          placeholder={EDD_FORM_FIELD_COPY.chapter.placeholder}
-          helperText={EDD_FORM_FIELD_COPY.chapter.helperText}
-          invalidText={EDD_FORM_FIELD_COPY.chapter.invalidText}
-          isInvalid={isInvalidField("chapter", invalidFields)}
+          placeholder={EDD_FORM_FIELD_COPY.chapterTitle.placeholder}
+          helperText={EDD_FORM_FIELD_COPY.chapterTitle.helperText}
+          invalidText={EDD_FORM_FIELD_COPY.chapterTitle.invalidText}
+          isInvalid={isInvalidField("chapterTitle", invalidFields)}
           onBlur={validateField}
           onChange={handleInputChange}
-          ref={validatedInputRefs["chapter"]}
+          ref={validatedInputRefs["chapterTitle"]}
         />
       </FormField>
       <Box>
@@ -219,11 +219,11 @@ const EDDRequestForm = ({
       <FormRow>
         <FormField>
           <TextInput
-            id="publication-date"
-            name="publicationDate"
-            value={eddFormState.publicationDate}
-            labelText={EDD_FORM_FIELD_COPY.publicationDate.label}
-            placeholder={EDD_FORM_FIELD_COPY.publicationDate.placeholder}
+            id="date"
+            name="date"
+            value={eddFormState.date}
+            labelText={EDD_FORM_FIELD_COPY.date.label}
+            placeholder={EDD_FORM_FIELD_COPY.date.placeholder}
             onChange={handleInputChange}
           />
         </FormField>
@@ -252,11 +252,11 @@ const EDDRequestForm = ({
         <TextInput
           id="notes"
           name="notes"
-          value={eddFormState.notes}
+          value={eddFormState.requestNotes}
           type="textarea"
-          labelText={EDD_FORM_FIELD_COPY.notes.label}
-          placeholder={EDD_FORM_FIELD_COPY.notes.placeholder}
-          helperText={EDD_FORM_FIELD_COPY.notes.helperText}
+          labelText={EDD_FORM_FIELD_COPY.requestNotes.label}
+          placeholder={EDD_FORM_FIELD_COPY.requestNotes.placeholder}
+          helperText={EDD_FORM_FIELD_COPY.requestNotes.helperText}
           onChange={handleInputChange}
         />
       </FormField>
