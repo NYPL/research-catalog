@@ -4,5 +4,6 @@ export type RCPage =
   | "shep"
   | "account"
   | "bib"
+  | "hold"
   | "404"
   | ""

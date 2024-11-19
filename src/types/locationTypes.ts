@@ -1,6 +1,6 @@
 import type { HTTPStatusCode } from "./appTypes"
 
-export interface DeliveryLocationsResponse {
+export interface DeliveryLocationsResult {
   deliveryLocations?: DeliveryLocation[]
   eddRequestable?: boolean
   status: HTTPStatusCode
@@ -8,8 +8,8 @@ export interface DeliveryLocationsResponse {
 
 export interface DeliveryLocation {
   key: NYPLocationKey
+  value?: string
   address: string
-  shortName: string
   label: string
 }
 

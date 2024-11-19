@@ -1,5 +1,4 @@
 import { appConfig } from "./config"
-import type { DeliveryLocation, NYPLocationKey } from "../types/locationTypes"
 
 export const BASE_URL = "/research/research-catalog"
 export const SITE_NAME = "Research Catalog | NYPL"
@@ -18,6 +17,8 @@ export const PATHS = {
   HOME: "/",
   SEARCH: "/search",
   ADVANCED_SEARCH: "/search/advanced",
+  HOLD_REQUEST: "/hold/request",
+  HOLD_CONFIRMATION: "/hold/confirmation",
   BIB: "/bib",
   "404": "/404",
   "404_REDIRECT": "/404/redirect",
@@ -135,3 +136,6 @@ export const NYPL_LOCATIONS = {
     address: "476 Fifth Avenue (42nd St and Fifth Ave)",
   },
 }
+
+export const HOLD_PAGE_HEADING = "Request for on-site use"
+export const EDD_PAGE_HEADING = "Request scan"

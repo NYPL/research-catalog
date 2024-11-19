@@ -97,7 +97,7 @@ export default class Item {
 
       // Set branch endpoint based on API location label
       const locationKey = locationLabelToKey(location.prefLabel)
-      location.endpoint = locationEndpointsMap[locationKey]
+      location.endpoint = locationEndpointsMap[locationKey] || null
     }
     return location
   }

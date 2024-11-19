@@ -45,6 +45,7 @@ export interface ItemMetadata {
   barcode?: string
   callNumber?: string
   bibId?: string
+  notificationText?: string
 }
 
 export interface ItemDateRange {

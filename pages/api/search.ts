@@ -23,8 +23,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   // If we emit a POST request to the route handler, we are likely submitting an advanced search
   // with JS disabled. In this case, parse the request body and redirect to the results page.
   if (req.method === "POST") {
-    const body = await req.body
-    const searchParams = mapRequestBodyToSearchParams(body)
+    const searchParams = mapRequestBodyToSearchParams(req.body)
     const queryString = getSearchQuery(searchParams)
     res.redirect(BASE_URL + PATHS.SEARCH + queryString)
   }

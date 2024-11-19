@@ -7,6 +7,7 @@ import { NYPL_LOCATIONS } from "../../config/constants"
 import {
   mapLocationElementToDeliveryLocation,
   locationIsClosed,
+  getLocationSierraId,
 } from "../locationUtils"
 
 describe("itemUtils", () => {
@@ -21,7 +22,7 @@ describe("itemUtils", () => {
         key: "schwarzman",
         address: NYPL_LOCATIONS["schwarzman"].address,
         label: `${NYPL_LOCATIONS["schwarzman"].shortName} - Scholar Room 217`,
-        shortName: NYPL_LOCATIONS["schwarzman"].shortName,
+        value: getLocationSierraId(locationElement),
       })
 
       // mal
@@ -34,7 +35,7 @@ describe("itemUtils", () => {
         key: "schwarzman",
         address: NYPL_LOCATIONS["schwarzman"].address,
         label: `${NYPL_LOCATIONS["schwarzman"].shortName} - Main Reading Room 315`,
-        shortName: NYPL_LOCATIONS["schwarzman"].shortName,
+        value: getLocationSierraId(locationElement),
       })
 
       // mab
@@ -47,7 +48,7 @@ describe("itemUtils", () => {
         key: "schwarzman",
         address: NYPL_LOCATIONS["schwarzman"].address,
         label: `${NYPL_LOCATIONS["schwarzman"].shortName} - Art & Architecture Room 300`,
-        shortName: NYPL_LOCATIONS["schwarzman"].shortName,
+        value: getLocationSierraId(locationElement),
       })
 
       // maf
@@ -60,7 +61,7 @@ describe("itemUtils", () => {
         key: "schwarzman",
         address: NYPL_LOCATIONS["schwarzman"].address,
         label: `${NYPL_LOCATIONS["schwarzman"].shortName} - Dorot Jewish Division Room 111`,
-        shortName: NYPL_LOCATIONS["schwarzman"].shortName,
+        value: getLocationSierraId(locationElement),
       })
 
       // maf
@@ -73,7 +74,7 @@ describe("itemUtils", () => {
         key: "schwarzman",
         address: NYPL_LOCATIONS["schwarzman"].address,
         label: `${NYPL_LOCATIONS["schwarzman"].shortName} - Map Division Room 117`,
-        shortName: NYPL_LOCATIONS["schwarzman"].shortName,
+        value: getLocationSierraId(locationElement),
       })
 
       // map
@@ -86,7 +87,7 @@ describe("itemUtils", () => {
         key: "schwarzman",
         address: NYPL_LOCATIONS["schwarzman"].address,
         label: `${NYPL_LOCATIONS["schwarzman"].shortName} - Map Division Room 117`,
-        shortName: NYPL_LOCATIONS["schwarzman"].shortName,
+        value: getLocationSierraId(locationElement),
       })
 
       // mag
@@ -99,7 +100,7 @@ describe("itemUtils", () => {
         key: "schwarzman",
         address: NYPL_LOCATIONS["schwarzman"].address,
         label: `${NYPL_LOCATIONS["schwarzman"].shortName} - Milstein Division Room 121`,
-        shortName: NYPL_LOCATIONS["schwarzman"].shortName,
+        value: getLocationSierraId(locationElement),
       })
 
       // par
@@ -112,7 +113,7 @@ describe("itemUtils", () => {
         key: "lpa",
         address: NYPL_LOCATIONS["lpa"].address,
         label: NYPL_LOCATIONS["lpa"].shortName,
-        shortName: NYPL_LOCATIONS["lpa"].shortName,
+        value: getLocationSierraId(locationElement),
       })
 
       // sc
@@ -125,7 +126,7 @@ describe("itemUtils", () => {
         key: "schomburg",
         address: NYPL_LOCATIONS["schomburg"].address,
         label: `${NYPL_LOCATIONS["schomburg"].shortName} - Research and Reference Division`,
-        shortName: NYPL_LOCATIONS["schomburg"].shortName,
+        value: getLocationSierraId(locationElement),
       })
     })
     it("returns null when the location is not found in the location details mapping found in this repo", () => {
@@ -158,7 +159,7 @@ describe("itemUtils", () => {
         key: "schomburg",
         address: NYPL_LOCATIONS["schomburg"].address,
         label: NYPL_LOCATIONS["schomburg"].shortName,
-        shortName: NYPL_LOCATIONS["schomburg"].shortName,
+        value: getLocationSierraId(locationElement),
       })
     })
   })
@@ -170,7 +171,6 @@ describe("itemUtils", () => {
         key: "schwarzman" as NYPLocationKey,
         address: "476 Fifth Avenue (42nd St and Fifth Ave)",
         label: "Schwarzman Building - Scholar Room 217",
-        shortName: "Schwarzman Building",
       }
 
       expect(locationIsClosed(deliveryLocation, closedLocations)).toEqual(false)
@@ -184,7 +184,6 @@ describe("itemUtils", () => {
         key: "schwarzman" as NYPLocationKey,
         address: "476 Fifth Avenue (42nd St and Fifth Ave)",
         label: "Schwarzman Building - Scholar Room 217",
-        shortName: "Schwarzman Building",
       }
 
       expect(locationIsClosed(deliveryLocation, closedLocations)).toEqual(true)
@@ -194,7 +193,6 @@ describe("itemUtils", () => {
         key: "lpa" as NYPLocationKey,
         address: "40 Lincoln Center Plaza",
         label: "Library for the Performing Arts",
-        shortName: "Library for the Performing Arts",
       }
       expect(locationIsClosed(deliveryLocation, closedLocations)).toEqual(true)
     })
