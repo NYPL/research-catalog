@@ -241,7 +241,7 @@ export async function getServerSideProps({ params, req, res }) {
 
     if (locationStatus !== 200) {
       throw new Error(
-        "HoldRequestPage: Error fetching delivery locations in getServerSideProps"
+        "Hold Page - Error fetching delivery locations in getServerSideProps"
       )
     }
 

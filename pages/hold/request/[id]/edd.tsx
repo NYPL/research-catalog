@@ -226,9 +226,7 @@ export async function getServerSideProps({ params, req, res }) {
       await fetchDeliveryLocations(item.barcode, patronId)
 
     if (locationStatus !== 200) {
-      throw new Error(
-        "EDDRequestPage: Error fetching edd in getServerSideProps"
-      )
+      throw new Error("EDD Page - Error fetching edd in getServerSideProps")
     }
 
     return {
