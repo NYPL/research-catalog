@@ -12,7 +12,7 @@ export const initialEDDFormState: EDDRequestParams = {
   startPage: "",
   endPage: "",
   chapterTitle: "",
-  publicationDate: "",
+  date: "",
   volume: "",
   issue: "",
   itemId: "",
