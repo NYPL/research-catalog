@@ -348,6 +348,35 @@ describe("updateUsername", () => {
     expect(response.status).toBe(200)
     expect(response.message).toBe("Username taken")
   })
+
+  it("should return an error if there's a server error", async () => {
+    const newUsername = "newUsername"
+    const patronId = "678910"
+
+    const platformMethodMock = jest.fn().mockResolvedValueOnce({
+      status: 502,
+      type: "ils-integration-error",
+    })
+    ;(nyplApiClient as jest.Mock).mockResolvedValueOnce({
+      post: platformMethodMock,
+    })
+
+    const response = await updateUsername(patronId, newUsername)
+
+    expect(nyplApiClient).toHaveBeenCalled
+    expect(platformMethodMock).toHaveBeenNthCalledWith(
+      1,
+      "/validations/username",
+      {
+        username: newUsername,
+      }
+    )
+
+    expect(sierraClient).not.toHaveBeenCalled
+
+    expect(response.status).toBe(500)
+    expect(response.message).toBe("Username update failed")
+  })
 })
 
 describe("renewCheckout", () => {
