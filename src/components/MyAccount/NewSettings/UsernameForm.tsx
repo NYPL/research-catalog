@@ -66,7 +66,6 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
     setIsEditing(false)
     setUsernameStatus("")
     const submissionInput = tempInput === null ? "" : tempInput
-    console.log(JSON.stringify({ username: submissionInput }))
     try {
       const response = await fetch(
         `${BASE_URL}/api/account/username/${patron.id}`,
