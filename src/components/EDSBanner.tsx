@@ -18,7 +18,7 @@ const EDSBanner = () => {
             New!
           </span>{" "}
           Try{" "}
-          <ExternalLink href="https://discovery.ebsco.com/c/tvrejk?acr_values=guest">
+          <ExternalLink href="https://www.nypl.org/research/collections/online-resources-databases">
             <b style={{ color: "var(--nypl-colors-ui-link-primary" }}>
               Article Plus
             </b>
