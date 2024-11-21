@@ -17,10 +17,10 @@ const EDSBanner = () => {
           <span style={{ color: "var(--nypl-colors-ui-success-primary)" }}>
             New!
           </span>{" "}
-          Try our{" "}
+          Try{" "}
           <ExternalLink href="https://discovery.ebsco.com/c/tvrejk?acr_values=guest">
             <b style={{ color: "var(--nypl-colors-ui-link-primary" }}>
-              Article Search
+              Article Plus
             </b>
           </ExternalLink>{" "}
           to discover online journals, books, and more from home with your
