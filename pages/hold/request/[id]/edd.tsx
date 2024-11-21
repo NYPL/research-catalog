@@ -65,6 +65,7 @@ export default function EDDRequestPage({
   const holdId = `${item.bibId}-${item.id}`
 
   const [pageStatus, setPageStatus] = useState(defaultPageStatus)
+
   const [eddFormState, setEddFormState] = useState({
     ...initialEDDFormState,
     patronId,
@@ -155,7 +156,7 @@ export default function EDDRequestPage({
         <HoldItemDetails item={item} />
         {isLoading || formPosting ? (
           <SkeletonLoader showImage={false} data-testid="edd-request-loading" />
-        ) : status !== "unavailable" ? (
+        ) : pageStatus !== "unavailable" ? (
           <EDDRequestForm
             eddFormState={eddFormState}
             setEddFormState={setEddFormState}
