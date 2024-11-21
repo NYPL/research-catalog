@@ -93,7 +93,7 @@ export const trackVirtualPageView = (pathname = "") => {
   const adobeDataLayer = window["adobeDataLayer"] || []
   const route = pathname.toLowerCase().replace(BASE_URL, "")
   const queryIndex = route.indexOf("?")
-  const path = route.substring(0, queryIndex)
+  const path = queryIndex >= 0 ? route.substring(0, queryIndex) : route
   const queryParams = route.slice(queryIndex)
 
   adobeDataLayer.push({
