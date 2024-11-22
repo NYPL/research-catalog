@@ -21,10 +21,26 @@ export interface EDDRequestParams extends HoldRequestParams {
   requestNotes?: string
 }
 
+export interface HoldRequestDetailsParams {
+  requestId: string
+  patronId: string
+}
+
+export interface PatronEligibilityStatus {
+  eligibility: boolean
+  expired?: boolean
+  blocked?: boolean
+  moneyOwed?: boolean
+  ptypeDisallowsHolds?: boolean
+  reachedHoldLimit?: boolean
+  hasIssues?: boolean
+}
+
 export interface HoldPostResult {
   status: HTTPStatusCode
   pickupLocation?: NYPLocationKey | "edd"
   requestId?: string
+  errorMessage?: string
 }
 
 export interface DiscoveryHoldPostParams {

@@ -11,6 +11,8 @@ import {
 import HoldConfirmationFAQ from "../../../src/components/HoldPages/HoldConfirmationFAQ"
 // import HoldItemDetails from "../../../src/components/HoldPages/HoldItemDetails"
 
+import { fetchHoldRequestDetails } from "../../../src/server/api/hold"
+
 interface HoldConfirmationPageProps {
   isEDD?: boolean
 }
@@ -55,4 +57,14 @@ export default function HoldConfirmationPage({
       </Layout>
     </>
   )
+}
+
+export async function getServerSideProps({ query }) {
+  const { pickupLocation, requestId } = query
+  fetchHoldRequestDetails({ requestId, patronId: "" })
+  return {
+    props: {
+      isEDD: pickupLocation === "edd",
+    },
+  }
 }

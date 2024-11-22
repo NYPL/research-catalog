@@ -1,6 +1,9 @@
 import nyplApiClient from "../nyplApiClient"
 
-import type { HoldPostResult } from "../../types/holdPageTypes"
+import type {
+  HoldPostResult,
+  HoldRequestDetailsParams,
+} from "../../types/holdPageTypes"
 import type {
   DeliveryLocation,
   DeliveryLocationsResult,
@@ -9,6 +12,7 @@ import type {
 import type {
   DiscoveryHoldPostParams,
   HoldRequestParams,
+  PatronEligibilityStatus,
 } from "../../types/holdPageTypes"
 
 import {
@@ -92,15 +96,12 @@ export async function postHoldRequest(
   try {
     const client = await nyplApiClient()
     const holdPostResult = await client.post("/hold-requests", holdPostParams)
-    const { id: requestId } = holdPostResult.data
+    const requestId = holdPostResult?.data?.id
 
     if (!requestId) {
-      console.error(
-        "postHoldRequest failed, no id returned from Discovery API",
-        holdPostResult
-      )
       return {
         status: 400,
+        errorMessage: holdPostResult?.data?.message,
       }
     }
 
@@ -110,6 +111,7 @@ export async function postHoldRequest(
       requestId,
     }
   } catch (error) {
+    console.log("error", error)
     console.error(
       `Error posting hold request in postHoldRequest server function, itemId: ${itemId}`,
       error.message
@@ -118,5 +120,57 @@ export async function postHoldRequest(
     return {
       status: 500,
     }
+  }
+}
+
+/**
+ * Getter function for hold request details.
+ */
+export async function fetchHoldRequestDetails(
+  holdRequestDetailsParams: HoldRequestDetailsParams
+): Promise<void> {
+  const { requestId, patronId } = holdRequestDetailsParams
+
+  try {
+    const client = await nyplApiClient()
+    const holdDetailsResult = await client.get(`/hold-requests/${requestId}`)
+    if (patronId !== holdDetailsResult.data.patron) {
+      console.log("TODO: Redirect to 404 page")
+    }
+
+    console.log("holdDetailsResult", holdDetailsResult)
+    return
+  } catch (error) {
+    console.error(
+      `Error fetching hold request details in fetchHoldRequestDetails server function, requestId: ${requestId}`,
+      error.message
+    )
+
+    return
+  }
+}
+
+/**
+ * Getter function for hold request eligibility for patrons.
+ */
+export async function fetchHoldRequestEligibility(
+  patronId: string
+): Promise<PatronEligibilityStatus> {
+  const eligibilityEndpoint = `/patrons/${patronId}/hold-request-eligibility`
+
+  try {
+    const client = await nyplApiClient()
+    const eligibilityResult = await client.get(eligibilityEndpoint, {
+      cache: false,
+    })
+
+    return eligibilityResult as PatronEligibilityStatus
+  } catch (error) {
+    console.error(
+      `Error fetching hold request elligibility in fetchHoldRequestEligibility server function, patronId: ${patronId}`,
+      error.message
+    )
+
+    return { eligibility: false }
   }
 }
