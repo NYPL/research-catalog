@@ -26,7 +26,7 @@ export default async function handler(
     const patronId = req.query.id as string
     const { username } = req.body
     /**  We check that the patron cookie matches the patron id in the request,
-     * i.e.,the logged in user is updating their own useername. */
+     * i.e.,the logged in user is updating their own username. */
     if (patronId == cookiePatronId) {
       const response = await updateUsername(patronId, username)
       responseStatus = response.status

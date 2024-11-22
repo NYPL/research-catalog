@@ -12,7 +12,6 @@ describe("username form", () => {
     setUsernameStatus: jest.fn(),
     setUsernameStatusMessage: jest.fn(),
   }
-  const accountFetchSpy = jest.fn()
 
   beforeEach(() => {
     jest.clearAllMocks()
@@ -26,7 +25,6 @@ describe("username form", () => {
 
   const component = (
     <PatronDataProvider
-      testSpy={accountFetchSpy}
       value={{
         patron: processedPatron,
         pickupLocations: filteredPickupLocations,
@@ -41,7 +39,6 @@ describe("username form", () => {
 
   const noUsernameComponent = (
     <PatronDataProvider
-      testSpy={accountFetchSpy}
       value={{
         patron: emptyPatron,
         pickupLocations: filteredPickupLocations,
