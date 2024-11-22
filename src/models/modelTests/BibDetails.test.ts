@@ -4,6 +4,8 @@ import {
   parallelsBib,
   yiddishBib,
   bibWithSubjectHeadings,
+  bibNoItems,
+  princetonRecord,
 } from "../../../__test__/fixtures/bibFixtures"
 import type { LinkedBibDetail } from "../../types/bibDetailsTypes"
 import BibDetailsModel from "../BibDetails"
@@ -31,6 +33,19 @@ describe("Bib model", () => {
     bibWithSubjectHeadings.resource,
     bibWithSubjectHeadings.annotatedMarc
   )
+  describe.only("owner", () => {
+    it("populates owner when owner is present", () => {
+      const partnerBib = new BibDetailsModel(princetonRecord)
+      expect(partnerBib.owner).toBe("Princeton University Library")
+    })
+    it("does not populate owner if item is nypl", () => {
+      expect(bibWithRtlParallelsModel.owner).toBe(undefined)
+    })
+    it("can handle no items", () => {
+      const noItemsBib = new BibDetailsModel(bibNoItems.resource)
+      expect(noItemsBib.owner).toBe(undefined)
+    })
+  })
   describe("note", () => {
     it("groups notes into an array of {label, value} details", () => {
       const model = bibWithParallelsModel
