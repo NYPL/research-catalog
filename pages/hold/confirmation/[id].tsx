@@ -6,7 +6,6 @@ import {
   SITE_NAME,
   HOLD_PAGE_HEADING,
   EDD_PAGE_HEADING,
-  BASE_URL,
   PATHS,
 } from "../../../src/config/constants"
 
@@ -19,15 +18,6 @@ import initializePatronTokenAuth, {
   doRedirectBasedOnNyplAccountRedirects,
   getLoginRedirect,
 } from "../../../src/server/auth"
-
-import Bib from "../../../src/models/Bib"
-import Item from "../../../src/models/Item"
-
-import type { DiscoveryBibResult } from "../../../src/types/bibTypes"
-import type { DiscoveryItemResult } from "../../../src/types/itemTypes"
-
-import { fetchBib } from "../../../src/server/api/bib"
-import { fetchDeliveryLocations } from "../../../src/server/api/hold"
 
 interface HoldConfirmationPageProps {
   isEDD?: boolean
