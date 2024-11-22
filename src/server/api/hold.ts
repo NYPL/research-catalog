@@ -2,7 +2,7 @@ import nyplApiClient from "../nyplApiClient"
 
 import type {
   HoldPostResult,
-  HoldRequestDetailsParams,
+  HoldDetailsResult,
 } from "../../types/holdPageTypes"
 import type {
   DeliveryLocation,
@@ -126,27 +126,28 @@ export async function postHoldRequest(
 /**
  * Getter function for hold request details.
  */
-export async function fetchHoldRequestDetails(
-  holdRequestDetailsParams: HoldRequestDetailsParams
-): Promise<void> {
-  const { requestId, patronId } = holdRequestDetailsParams
-
+// TODO: Add return type
+export async function fetchHoldDetails(
+  requestId: string
+): Promise<HoldDetailsResult> {
   try {
     const client = await nyplApiClient()
     const holdDetailsResult = await client.get(`/hold-requests/${requestId}`)
-    if (patronId !== holdDetailsResult.data.patron) {
-      console.log("TODO: Redirect to 404 page")
-    }
+    const { id, pickupLocation, patron } = holdDetailsResult.data
 
-    console.log("holdDetailsResult", holdDetailsResult)
-    return
+    return {
+      requestId: id,
+      patronId: patron,
+      pickupLocation,
+      status: 200,
+    }
   } catch (error) {
     console.error(
       `Error fetching hold request details in fetchHoldRequestDetails server function, requestId: ${requestId}`,
       error.message
     )
 
-    return
+    return { status: 400 }
   }
 }
 

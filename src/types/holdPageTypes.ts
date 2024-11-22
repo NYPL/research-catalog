@@ -21,9 +21,19 @@ export interface EDDRequestParams extends HoldRequestParams {
   requestNotes?: string
 }
 
-export interface HoldRequestDetailsParams {
-  requestId: string
-  patronId: string
+export interface HoldPostResult {
+  status: HTTPStatusCode
+  pickupLocation?: NYPLocationKey | "edd"
+  formInvalid?: boolean
+  requestId?: string
+}
+
+export interface HoldDetailsResult {
+  status: HTTPStatusCode
+  pickupLocation?: NYPLocationKey | "edd"
+  patronId?: string
+  requestId?: string
+  errorMessage?: string
 }
 
 export interface PatronEligibilityStatus {
@@ -36,13 +46,6 @@ export interface PatronEligibilityStatus {
   hasIssues?: boolean
 }
 
-export interface HoldPostResult {
-  status: HTTPStatusCode
-  pickupLocation?: NYPLocationKey | "edd"
-  requestId?: string
-  errorMessage?: string
-}
-
 export interface DiscoveryHoldPostParams {
   patron: string
   record: string
@@ -52,7 +55,7 @@ export interface DiscoveryHoldPostParams {
   pickupLocation?: NYPLocationKey | "edd"
   numberOfCopies?: number
   // TODO: make this EDD form content object
-  docDeliveryData?: string
+  docDeliveryData?: EDDRequestParams
 }
 
 export type EDDPageStatus = null | "failed" | "unavailable" | "invalid"

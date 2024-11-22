@@ -6,12 +6,28 @@ import {
   SITE_NAME,
   HOLD_PAGE_HEADING,
   EDD_PAGE_HEADING,
+  BASE_URL,
+  PATHS,
 } from "../../../src/config/constants"
 
 import HoldConfirmationFAQ from "../../../src/components/HoldPages/HoldConfirmationFAQ"
 // import HoldItemDetails from "../../../src/components/HoldPages/HoldItemDetails"
 
-import { fetchHoldRequestDetails } from "../../../src/server/api/hold"
+import { fetchHoldDetails } from "../../../src/server/api/hold"
+
+import initializePatronTokenAuth, {
+  doRedirectBasedOnNyplAccountRedirects,
+  getLoginRedirect,
+} from "../../../src/server/auth"
+
+import Bib from "../../../src/models/Bib"
+import Item from "../../../src/models/Item"
+
+import type { DiscoveryBibResult } from "../../../src/types/bibTypes"
+import type { DiscoveryItemResult } from "../../../src/types/itemTypes"
+
+import { fetchBib } from "../../../src/server/api/bib"
+import { fetchDeliveryLocations } from "../../../src/server/api/hold"
 
 interface HoldConfirmationPageProps {
   isEDD?: boolean
@@ -59,12 +75,58 @@ export default function HoldConfirmationPage({
   )
 }
 
-export async function getServerSideProps({ query }) {
+export async function getServerSideProps({ req, res, query }) {
+  // authentication redirect
+  const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
+  const isAuthenticated = patronTokenResponse.isTokenValid
+  const redirectTrackerCookie = req.cookies["nyplAccountRedirects"]
+  const redirectCount = parseInt(redirectTrackerCookie, 10) || 0
+  const redirectBasedOnNyplAccountRedirects =
+    doRedirectBasedOnNyplAccountRedirects(redirectCount)
+
+  // If we end up not authenticated 3 times after redirecting to the login url, don't redirect.
+  if (redirectBasedOnNyplAccountRedirects && !isAuthenticated) {
+    res.setHeader(
+      "Set-Cookie",
+      `nyplAccountRedirects=${
+        redirectCount + 1
+      }; Max-Age=10; path=/; domain=.nypl.org;`
+    )
+    const redirect = getLoginRedirect(req, `${PATHS.HOLD_REQUEST}/${id}/edd`)
+
+    return {
+      redirect: {
+        destination: redirect,
+        permanent: false,
+      },
+    }
+  }
+
+  const patronId = patronTokenResponse?.decodedPatron?.sub
   const { pickupLocation, requestId } = query
-  fetchHoldRequestDetails({ requestId, patronId: "" })
-  return {
-    props: {
-      isEDD: pickupLocation === "edd",
-    },
+
+  try {
+    const { patronId: patronIdFromResponse } = await fetchHoldDetails(requestId)
+
+    if (patronId !== patronIdFromResponse) {
+      throw new Error(
+        "Error in HoldConfirmationPage getServerSideProps: Logged in patron Id doesn't match the patron Id in the hold request."
+      )
+    }
+
+    return {
+      props: {
+        isEDD: pickupLocation === "edd",
+      },
+    }
+  } catch (error) {
+    console.log(error)
+
+    return {
+      redirect: {
+        destination: PATHS["404"],
+        permanent: false,
+      },
+    }
   }
 }
