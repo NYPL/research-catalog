@@ -10,6 +10,7 @@ import type {
   AnyBibDetail,
 } from "../types/bibDetailsTypes"
 import { convertToSentenceCase } from "../utils/appUtils"
+import type { JSONLDValue } from "../types/itemTypes"
 
 export default class BibDetails {
   bib: DiscoveryBibResult
@@ -21,6 +22,7 @@ export default class BibDetails {
   supplementaryContent: LinkedBibDetail
   extent: BibDetail
   subjectHeadings: SubjectHeadingDetail
+  owner: JSONLDValue
 
   constructor(
     discoveryBibResult: DiscoveryBibResult,
@@ -31,6 +33,7 @@ export default class BibDetails {
     this.supplementaryContent = this.buildSupplementaryContent()
     this.groupedNotes = this.buildGroupedNotes()
     this.extent = this.buildExtent()
+    this.owner = this.buildOwner()
     // If we can't retreive subject headings from the SHEP API, we'll use the subjectLiteral
     this.subjectHeadings =
       this.buildSubjectHeadings() || this.buildSubjectLiterals()
@@ -41,6 +44,10 @@ export default class BibDetails {
     this.holdingsDetails = this.buildHoldingsDetails(this.bib.holdings)
     this.topDetails = this.buildTopDetails()
     this.bottomDetails = this.buildBottomDetails()
+  }
+
+  buildOwner() {
+    return this.bib.items?.[0]?.owner?.[0]
   }
 
   buildAnnotatedMarcDetails(
@@ -125,12 +132,12 @@ export default class BibDetails {
         else if (fieldMapping.field === "subjectLiteral")
           detail = this.subjectHeadings
         else if (fieldMapping.field === "extent") detail = this.extent
-        else if (fieldMapping.field === "owner")
-          detail = this.bib.owner && {
+        else if (fieldMapping.field === "owner") {
+          detail = this.owner && {
             label: convertToSentenceCase(fieldMapping.label),
-            value: [this.bib.owner?.prefLabel],
+            value: [this.owner.prefLabel],
           }
-        else detail = this.buildStandardDetail(fieldMapping)
+        } else detail = this.buildStandardDetail(fieldMapping)
         return detail
       })
       .filter((f) => f)
