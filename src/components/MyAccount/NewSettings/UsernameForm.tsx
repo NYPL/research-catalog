@@ -101,6 +101,94 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
     }
   }
 
+  const editUsernameField = (
+    <>
+      <Flex flexDir="row" alignItems="flex-start">
+        <TextInput
+          sx={{
+            width: { base: "87%", md: "300px" },
+            display: "flex",
+            flexDirection: "column-reverse",
+            label: {
+              fontWeight: "400",
+              color: error ? "ui.error.primary" : "ui.black",
+            },
+          }}
+          value={tempInput || ""}
+          id="username-input"
+          labelText="Must be 5-15 characters and use only letters (a-z) and numbers (0-9)"
+          showLabel
+          isInvalid={error && !validateUsername(tempInput)}
+          showHelperInvalidText={false}
+          onChange={handleInputChange}
+          isClearable
+          isClearableCallback={() => setError(true)}
+        />
+        <Button
+          aria-label="Remove username"
+          buttonType="text"
+          id="remove-username-btn"
+          onClick={() => {
+            setTempInput(null)
+            setError(false)
+          }}
+        >
+          {" "}
+          <Icon name="actionDelete" size="large" />
+        </Button>
+      </Flex>
+      <Banner
+        sx={{ marginTop: "xs", width: "fill" }}
+        content="If you delete your username, you will have to use your barcode to log in to your account in the future."
+        type="warning"
+      />
+    </>
+  )
+
+  const notEditingView = (
+    <Flex alignItems="center">
+      {input !== "" ? (
+        <>
+          <Text size="body1" sx={{ marginBottom: 0 }}>
+            {input}
+          </Text>
+          <EditButton
+            buttonId="edit-username-button"
+            onClick={() => setIsEditing(true)}
+          />
+        </>
+      ) : (
+        <AddButton
+          label="+ Add username"
+          onClick={() => {
+            setIsEditing(true)
+            setTempInput("")
+          }}
+        />
+      )}
+    </Flex>
+  )
+
+  const editingView = (
+    <Flex
+      flexDir="column"
+      marginLeft={{ base: "l", lg: "unset" }}
+      marginTop={{ base: "xs", lg: "unset" }}
+      maxWidth={{ base: "600px", md: "320px" }}
+    >
+      {tempInput !== null ? (
+        editUsernameField
+      ) : (
+        <AddButton
+          label="+ Add username"
+          onClick={() => {
+            setTempInput("")
+          }}
+        />
+      )}
+    </Flex>
+  )
+
   return (
     <Flex
       flexDir={{ base: "column", lg: "row" }}
@@ -110,85 +198,9 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
       {isLoading ? (
         <SkeletonLoader contentSize={2} showImage={false} headingSize={0} />
       ) : isEditing ? (
-        <Flex
-          flexDir="column"
-          marginLeft={{ base: "l", lg: "unset" }}
-          marginTop={{ base: "xs", lg: "unset" }}
-          maxWidth={{ base: "600px", md: "320px" }}
-        >
-          {tempInput !== null ? (
-            <>
-              <Flex flexDir="row" alignItems="flex-start">
-                <TextInput
-                  sx={{
-                    width: { base: "87%", md: "300px" },
-                    display: "flex",
-                    flexDirection: "column-reverse",
-                    label: {
-                      fontWeight: "400",
-                      color: error ? "ui.error.primary" : "ui.black",
-                    },
-                  }}
-                  value={tempInput || ""}
-                  id="username-input"
-                  labelText="Must be 5-15 characters and use only letters (a-z) and numbers (0-9)"
-                  showLabel
-                  isInvalid={error && !validateUsername(tempInput)}
-                  showHelperInvalidText={false}
-                  onChange={handleInputChange}
-                  isClearable
-                  isClearableCallback={() => setError(true)}
-                />
-                <Button
-                  aria-label="Remove username"
-                  buttonType="text"
-                  id="remove-username-btn"
-                  onClick={() => {
-                    setTempInput(null)
-                    setError(false)
-                  }}
-                >
-                  {" "}
-                  <Icon name="actionDelete" size="large" />
-                </Button>
-              </Flex>
-              <Banner
-                sx={{ marginTop: "xs", width: "fill" }}
-                content="If you delete your username, you will have to use your barcode to log in to your account in the future."
-                type="warning"
-              />
-            </>
-          ) : (
-            <AddButton
-              label="+ Add username"
-              onClick={() => {
-                setTempInput("")
-              }}
-            />
-          )}
-        </Flex>
+        editingView
       ) : (
-        <Flex alignItems="center">
-          {input !== "" ? (
-            <>
-              <Text size="body1" sx={{ marginBottom: 0 }}>
-                {input}
-              </Text>
-              <EditButton
-                buttonId="edit-username-button"
-                onClick={() => setIsEditing(true)}
-              />
-            </>
-          ) : (
-            <AddButton
-              label="+ Add username"
-              onClick={() => {
-                setIsEditing(true)
-                setTempInput("")
-              }}
-            />
-          )}
-        </Flex>
+        notEditingView
       )}
 
       {isEditing && (
