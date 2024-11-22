@@ -46,8 +46,14 @@ export default class BibDetails {
     this.bottomDetails = this.buildBottomDetails()
   }
 
-  buildOwner() {
-    return this.bib.items?.[0]?.owner?.[0]
+  buildOwner(): string {
+    if (!this.bib.items) return null
+
+    const firstRecapItem = this.bib.items
+      // Only consider items with a Recap source id
+      .find((item) => /^Recap/.test(item?.idNyplSourceId?.["@type"]))
+    // Only consider items with an `owner` (should be all, in practice)
+    return firstRecapItem?.owner?.[0]?.prefLabel
   }
 
   buildAnnotatedMarcDetails(
@@ -132,12 +138,7 @@ export default class BibDetails {
         else if (fieldMapping.field === "subjectLiteral")
           detail = this.subjectHeadings
         else if (fieldMapping.field === "extent") detail = this.extent
-        else if (fieldMapping.field === "owner") {
-          detail = this.owner && {
-            label: convertToSentenceCase(fieldMapping.label),
-            value: [this.owner.prefLabel],
-          }
-        } else detail = this.buildStandardDetail(fieldMapping)
+        else detail = this.buildStandardDetail(fieldMapping)
         return detail
       })
       .filter((f) => f)
