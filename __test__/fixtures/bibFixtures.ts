@@ -1,3 +1,184 @@
+export const princetonRecord = {
+  "@context":
+    "http://discovery-api-qa.nypl.org/api/v0.1/discovery/context_all.jsonld",
+  "@type": ["nypl:Item", "nypl:Resource"],
+  "@id": "res:pb2608686",
+  buildingLocationIds: [],
+  carrierType: [
+    {
+      "@id": "carriertypes:nc",
+      prefLabel: "volume",
+    },
+  ],
+  contributorLiteral: ["Brown, David, journalist, joint author."],
+  createdString: ["1943"],
+  createdYear: 1943,
+  creatorLiteral: ["Wagg, Alfred."],
+  dateStartYear: 1943,
+  dateString: ["1943"],
+  dimensions: ["23 cm."],
+  extent: ["231 p."],
+  idLccn: ["   44003956  "],
+  identifier: [
+    {
+      "@type": "nypl:Bnumber",
+      "@value": "2608686",
+    },
+    {
+      "@type": "bf:Lccn",
+      "@value": "   44003956  ",
+    },
+    {
+      "@type": "bf:Identifier",
+      "@value": "(OCoLC)ocm02088006",
+    },
+  ],
+  issuance: [
+    {
+      "@id": "urn:biblevel:m",
+      prefLabel: "monograph/item",
+    },
+  ],
+  itemAggregations: [
+    {
+      "@type": "nypl:Aggregation",
+      "@id": "res:location",
+      id: "location",
+      field: "location",
+      values: [],
+    },
+    {
+      "@type": "nypl:Aggregation",
+      "@id": "res:format",
+      id: "format",
+      field: "format",
+      values: [],
+    },
+    {
+      "@type": "nypl:Aggregation",
+      "@id": "res:status",
+      id: "status",
+      field: "status",
+      values: [
+        {
+          value: "status:a",
+          count: 1,
+          label: "Available",
+        },
+      ],
+    },
+  ],
+  items: [
+    {
+      "@id": "res:pi5153471",
+      accessMessage: [
+        {
+          "@id": "accessMessage:1",
+          prefLabel: "Use in library",
+        },
+      ],
+      catalogItemType: [
+        {
+          "@id": "catalogItemType:1",
+          prefLabel: "non-circ",
+        },
+      ],
+      eddFulfillment: {
+        "@id": "fulfillment:recap-edd",
+      },
+      eddRequestable: true,
+      idBarcode: ["32101067443802"],
+      identifier: [
+        {
+          "@type": "bf:ShelfMark",
+          "@value": "D763.I8 W3 1943",
+        },
+        {
+          "@type": "bf:Barcode",
+          "@value": "32101067443802",
+        },
+      ],
+      idNyplSourceId: {
+        "@type": "RecapPul",
+        "@value": "25791623",
+      },
+      owner: [
+        {
+          "@id": "orgs:0003",
+          prefLabel: "Princeton University Library",
+        },
+      ],
+      physFulfillment: {
+        "@id": "fulfillment:recap-offsite",
+      },
+      physRequestable: true,
+      requestable: [true],
+      shelfMark: ["D763.I8 W3 1943"],
+      specRequestable: false,
+      status: [
+        {
+          "@id": "status:na",
+          prefLabel: "Not available",
+        },
+      ],
+      uri: "pi5153471",
+      idNyplSourceId: {
+        "@type": "RecapPul",
+        "@value": "5153471",
+      },
+    },
+  ],
+  language: [
+    {
+      "@id": "lang:eng",
+      prefLabel: "English",
+    },
+  ],
+  lccClassification: ["D763.I8 W3"],
+  materialType: [
+    {
+      "@id": "resourcetypes:txt",
+      prefLabel: "Text",
+    },
+  ],
+  mediaType: [
+    {
+      "@id": "mediatypes:n",
+      prefLabel: "unmediated",
+    },
+  ],
+  note: [
+    {
+      noteType: "Note",
+      "@type": "bf:Note",
+      prefLabel: '"First published in 1943."',
+    },
+  ],
+  numAvailable: 1,
+  numItems: 1,
+  numItemsMatched: 1,
+  numItemsTotal: 1,
+  placeOfPublication: ["London,"],
+  publicationStatement: ["London, Nicholson & Watson [1943]"],
+  publisherLiteral: ["Nicholson & Watson"],
+  subjectLiteral: [
+    "World War, 1939-1945 -- Campaigns -- Italy.",
+    "World War, 1939-1945 -- Naval operations.",
+    "World War, 1939-1945 -- Personal narratives.",
+  ],
+  title: ["No spaghetti for breakfast"],
+  titleDisplay: [
+    "No spaghetti for breakfast [by] Alfred Wagg and David Brown.",
+  ],
+  type: ["nypl:Item"],
+  updatedAt: 1543536484228,
+  uri: "pb2608686",
+  updatedAtDate: "2018-11-30T00:08:04.228Z",
+  hasItemVolumes: false,
+  hasItemDates: false,
+  electronicResources: [],
+}
+
 export const bibWithItems = {
   resource: {
     "@context":
