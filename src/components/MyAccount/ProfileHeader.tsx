@@ -37,6 +37,13 @@ const ProfileHeader = ({ patron }: { patron: Patron }) => {
     [
       { icon: "actionIdentityFilled", term: "Name", description: patron.name },
       {
+        icon: "actionIdentity",
+        term: "Username",
+        description: (
+          <UsernameForm patron={patron} usernameState={usernameState} />
+        ),
+      },
+      {
         icon: "actionPayment",
         term: "Card number",
         description: patron.formattedBarcode,
@@ -90,19 +97,7 @@ const ProfileHeader = ({ patron }: { patron: Patron }) => {
           h2: { border: "none", paddingTop: 0 },
         }}
       >
-        {profileData[0]}
-      </List>
-      <UsernameForm patron={patron} usernameState={usernameState} />
-      <List
-        className={styles.myAccountList}
-        id="my-account-profile-header-2"
-        type="dl"
-        sx={{
-          border: "none",
-          marginBottom: "xxl",
-        }}
-      >
-        {profileData.slice(1)}
+        {profileData}
       </List>
     </>
   )

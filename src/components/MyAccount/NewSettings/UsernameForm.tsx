@@ -107,13 +107,6 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
       alignItems="flex-start"
       width="100%"
     >
-      <Flex gap="xs" marginRight="140px" paddingTop="xs" alignItems="center">
-        <Icon name="actionIdentity" size="large" />
-        <Text size="body1" sx={{ fontWeight: "500", marginBottom: 0 }}>
-          Username
-        </Text>
-      </Flex>
-
       {isLoading ? (
         <SkeletonLoader contentSize={2} showImage={false} headingSize={0} />
       ) : isEditing ? (
