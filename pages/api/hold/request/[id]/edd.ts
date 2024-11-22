@@ -39,15 +39,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
     // JS-Disabled functionality
 
-    // TODO: Determine if we can harness validation from discovery response or if we should add it here
-    const tempFormInvalid = false
-
-    if (tempFormInvalid) {
-      res.redirect(
-        `${BASE_URL}${PATHS.HOLD_REQUEST}/${holdId}/edd?formInvalid=true`
-      )
-    }
-    // Redirect to confirmation page if form is valid
+    // Redirect to confirmation page
     res.redirect(
       `${BASE_URL}${PATHS.HOLD_CONFIRMATION}/${holdId}?pickupLocation=edd?requestId=${requestId}`
     )

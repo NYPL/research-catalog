@@ -243,11 +243,7 @@ export async function getServerSideProps({ params, req, res, query }) {
         discoveryItemResult,
         patronId,
         isAuthenticated,
-        pageStatus: !isEddAvailable
-          ? "unavailable"
-          : query?.formInvalid === true
-          ? "invalid"
-          : null,
+        pageStatus: !isEddAvailable ? "unavailable" : null,
       },
     }
   } catch (error) {
