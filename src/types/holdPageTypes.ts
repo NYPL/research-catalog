@@ -26,6 +26,7 @@ export interface HoldPostResult {
   pickupLocation?: NYPLocationKey | "edd"
   formInvalid?: boolean
   requestId?: string
+  errorMessage?: string
 }
 
 export interface HoldDetailsResult {

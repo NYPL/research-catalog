@@ -66,6 +66,7 @@ export default function HoldConfirmationPage({
 }
 
 export async function getServerSideProps({ req, res, query }) {
+  const { pickupLocation, requestId } = query
   // authentication redirect
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const isAuthenticated = patronTokenResponse.isTokenValid
@@ -82,7 +83,10 @@ export async function getServerSideProps({ req, res, query }) {
         redirectCount + 1
       }; Max-Age=10; path=/; domain=.nypl.org;`
     )
-    const redirect = getLoginRedirect(req, `${PATHS.HOLD_REQUEST}/${id}/edd`)
+    const redirect = getLoginRedirect(
+      req,
+      `${PATHS.HOLD_CONFIRMATION}?pickupLocation=${pickupLocation}&requestId=${requestId}`
+    )
 
     return {
       redirect: {
@@ -93,7 +97,6 @@ export async function getServerSideProps({ req, res, query }) {
   }
 
   const patronId = patronTokenResponse?.decodedPatron?.sub
-  const { pickupLocation, requestId } = query
 
   try {
     const { patronId: patronIdFromResponse } = await fetchHoldDetails(requestId)
