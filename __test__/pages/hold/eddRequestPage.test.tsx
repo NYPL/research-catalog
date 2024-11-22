@@ -21,6 +21,7 @@ import {
   EDD_FORM_FIELD_COPY,
 } from "../../../src/config/constants"
 import { fetchDeliveryLocations } from "../../../src/server/api/hold"
+import { EDDPageStatusMessages } from "../../../src/utils/holdPageUtils"
 
 jest.mock("../../../src/server/auth")
 jest.mock("../../../src/server/api/bib")
@@ -163,7 +164,6 @@ describe("EDD Request page", () => {
           discoveryBibResult={bibWithItems.resource}
           discoveryItemResult={bibWithItems.resource.items[2]}
           patronId="123"
-          eddRequestable={true}
           isAuthenticated={true}
         />
       )
@@ -191,14 +191,13 @@ describe("EDD Request page", () => {
       expect(screen.getByTestId("edd-request-form")).toBeInTheDocument()
     })
   })
-  describe("EDD Request error handling", () => {
+  describe("EDD Request form validation", () => {
     beforeEach(async () => {
       render(
         <EDDRequestPage
           discoveryBibResult={bibWithItems.resource}
           discoveryItemResult={bibWithItems.resource.items[0]}
           patronId="123"
-          eddRequestable={true}
           isAuthenticated={true}
         />
       )
@@ -297,6 +296,50 @@ describe("EDD Request page", () => {
         screen.getByText(
           "Some fields contain errors. Please correct and submit again."
         )
+      ).toBeInTheDocument()
+    })
+  })
+  describe("EDD page status banner messages", () => {
+    it("shows an unavailable error message when the page loads with an unavailable status", async () => {
+      render(
+        <EDDRequestPage
+          discoveryBibResult={bibWithItems.resource}
+          discoveryItemResult={bibWithItems.resource.items[0]}
+          patronId="123"
+          isAuthenticated={true}
+          pageStatus="unavailable"
+        />
+      )
+      expect(
+        screen.getByText(EDDPageStatusMessages.unavailable.heading)
+      ).toBeInTheDocument()
+    })
+    it("shows a failed error message when the page loads with an failed status", async () => {
+      render(
+        <EDDRequestPage
+          discoveryBibResult={bibWithItems.resource}
+          discoveryItemResult={bibWithItems.resource.items[0]}
+          patronId="123"
+          isAuthenticated={true}
+          pageStatus="failed"
+        />
+      )
+      expect(
+        screen.getByText(EDDPageStatusMessages.failed.heading)
+      ).toBeInTheDocument()
+    })
+    it("shows an invalid error message when the page loads with an invalid status", async () => {
+      render(
+        <EDDRequestPage
+          discoveryBibResult={bibWithItems.resource}
+          discoveryItemResult={bibWithItems.resource.items[0]}
+          patronId="123"
+          isAuthenticated={true}
+          pageStatus="invalid"
+        />
+      )
+      expect(
+        screen.getByText(EDDPageStatusMessages.invalid.message)
       ).toBeInTheDocument()
     })
   })

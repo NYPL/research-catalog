@@ -245,7 +245,7 @@ export async function getServerSideProps({ params, req, res, query }) {
         isAuthenticated,
         pageStatus: !isEddAvailable
           ? "unavailable"
-          : query?.formInvalid
+          : query?.formInvalid === true
           ? "invalid"
           : null,
       },
