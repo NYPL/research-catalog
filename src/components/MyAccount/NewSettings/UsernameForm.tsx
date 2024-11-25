@@ -182,7 +182,7 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
   const editingView = (
     <Flex
       flexDir="column"
-      marginTop={{ base: "xs", lg: "unset" }}
+      marginTop={{ base: "xs", md: "-xs" }}
       maxWidth={{ base: "600px", md: "320px" }}
     >
       {currentUsernameNotDeleted ? (
