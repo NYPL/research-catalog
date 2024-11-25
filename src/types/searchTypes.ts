@@ -30,26 +30,19 @@ export interface Identifiers {
   lccn?: string
 }
 
-export interface SearchParams {
+export interface SearchParams extends AdvancedSearchQueryParams {
   q?: string
   field?: string
   sortBy?: SortKey
   order?: SortOrder
   filters?: SearchFilters
-  contributor?: string
-  title?: string
   journalTitle?: string
-  standard_number?: string
-  subject?: string
   page?: number
   identifiers?: Identifiers
-  callnumber?: string
 }
 
 export type SortKey = "relevance" | "title" | "date"
 export type SortOrder = "asc" | "desc"
-
-type SearchFormField = { value: string }
 
 export interface SearchResultsResponse {
   results?: SearchResults
@@ -88,29 +81,22 @@ export interface SearchFormAction {
   payload: SearchParams | SearchFilters | string | string[]
 }
 
-/* eslint-disable @typescript-eslint/naming-convention */
-
-export interface SearchQueryParams extends Identifiers {
-  q?: string
+export interface AdvancedSearchQueryParams {
   callnumber?: string
   standard_number?: string
   contributor?: string
   title?: string
   subject?: string
+}
+
+/* eslint-disable @typescript-eslint/naming-convention */
+
+export interface SearchQueryParams
+  extends Identifiers,
+    AdvancedSearchQueryParams {
+  q?: string
   sort?: SortKey
   sort_direction?: SortOrder
   search_scope?: string
   page?: string
-}
-
-export interface SearchFormEvent {
-  q?: SearchFormField
-  search_scope?: SearchFormField
-  title?: SearchFormField
-  contributor?: SearchFormField
-  subject?: SearchFormField
-  language?: SearchFormField
-  dateBefore?: SearchFormField
-  dateAfter?: SearchFormField
-  materialType?: SearchFormField
 }
