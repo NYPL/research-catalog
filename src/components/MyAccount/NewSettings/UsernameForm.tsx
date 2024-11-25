@@ -47,9 +47,6 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
   const { setUsernameStatus, setUsernameStatusMessage } = usernameState
 
   const validateUsername = (username: string) => {
-    if (!(username.length > 4)) {
-      return false
-    }
     const usernameRegex = /^[a-zA-Z0-9]{5,15}$/
     return usernameRegex.test(username)
   }
