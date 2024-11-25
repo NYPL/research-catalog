@@ -10,7 +10,6 @@ import type {
   AnyBibDetail,
 } from "../types/bibDetailsTypes"
 import { convertToSentenceCase } from "../utils/appUtils"
-import type { JSONLDValue } from "../types/itemTypes"
 
 export default class BibDetails {
   bib: DiscoveryBibResult
@@ -20,9 +19,9 @@ export default class BibDetails {
   bottomDetails: AnyBibDetail[]
   groupedNotes: AnyBibDetail[]
   supplementaryContent: LinkedBibDetail
-  extent: BibDetail
+  extent: string[]
   subjectHeadings: SubjectHeadingDetail
-  owner: JSONLDValue
+  owner: string[]
 
   constructor(
     discoveryBibResult: DiscoveryBibResult,
@@ -46,14 +45,15 @@ export default class BibDetails {
     this.bottomDetails = this.buildBottomDetails()
   }
 
-  buildOwner(): string {
+  buildOwner(): string[] {
     if (!this.bib.items) return null
 
     const firstRecapItem = this.bib.items
       // Only consider items with a Recap source id
       .find((item) => /^Recap/.test(item?.idNyplSourceId?.["@type"]))
     // Only consider items with an `owner` (should be all, in practice)
-    return firstRecapItem?.owner?.[0]?.prefLabel
+    const owner = firstRecapItem?.owner?.[0]?.prefLabel
+    if (owner) return [owner]
   }
 
   buildAnnotatedMarcDetails(
@@ -101,11 +101,16 @@ export default class BibDetails {
       { field: "creatorLiteral", label: "Author" },
     ]
       .map((fieldMapping) => {
-        if (fieldMapping.field === "supplementaryContent")
-          return this.supplementaryContent
-        else if (fieldMapping.field === "creatorLiteral")
-          return this.buildInternalLinkedDetail(fieldMapping)
-        else return this.buildStandardDetail(fieldMapping)
+        switch (fieldMapping.field) {
+          case "supplementaryContent":
+            return this.supplementaryContent
+          case "creatorLiteral":
+            return this.buildInternalLinkedDetail(fieldMapping)
+          case "owner":
+            return this.owner
+          default:
+            return this.buildStandardDetail(fieldMapping)
+        }
       })
       .filter((f) => f)
   }
@@ -137,12 +142,10 @@ export default class BibDetails {
           detail = this.buildInternalLinkedDetail(fieldMapping)
         else if (fieldMapping.field === "subjectLiteral")
           detail = this.subjectHeadings
-        else if (fieldMapping.field === "extent") detail = this.extent
         else detail = this.buildStandardDetail(fieldMapping)
         return detail
       })
       .filter((f) => f)
-
     const fieldsWithNotes = this.addNotes(resourceFields)
     const combinedFields = this.combineBibDetailsData(
       fieldsWithNotes,
@@ -182,7 +185,9 @@ export default class BibDetails {
   }
 
   buildStandardDetail(fieldMapping: FieldMapping) {
-    const bibFieldValue = this.bib[fieldMapping.field]
+    const bibFieldValue =
+      this.bib[fieldMapping.field] || this[fieldMapping.field]
+    if (!bibFieldValue) return
     return this.buildDetail(
       convertToSentenceCase(fieldMapping.label),
       bibFieldValue
@@ -334,7 +339,7 @@ export default class BibDetails {
     return Object.assign({}, bib, ...parallelFieldMatches)
   }
 
-  buildExtent(): BibDetail {
+  buildExtent(): string[] {
     let modifiedExtent: string[]
     const { extent, dimensions } = this.bib
     const removeSemiColon = (extent) => [extent[0].replace(/\s*;\s*$/, "")]
@@ -350,10 +355,8 @@ export default class BibDetails {
       parts.push(dimensions[0])
       modifiedExtent = [parts.join("; ")]
     }
-    return {
-      label: "Description",
-      value: modifiedExtent,
-    }
+
+    return modifiedExtent
   }
 
   buildSupplementaryContent(): LinkedBibDetail {
