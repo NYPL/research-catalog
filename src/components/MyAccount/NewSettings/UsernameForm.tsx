@@ -146,7 +146,7 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
   )
 
   const notEditingView = (
-    <Flex alignItems="center">
+    <Flex alignItems="center" marginTop={{ base: "unset", md: "-xs" }}>
       {input !== "" ? (
         <>
           <Text size="body1" sx={{ marginBottom: 0 }}>
@@ -195,14 +195,10 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
       alignItems="flex-start"
       width="100%"
     >
-      {isLoading ? (
+      {isLoading && (
         <SkeletonLoader contentSize={2} showImage={false} headingSize={0} />
-      ) : isEditing ? (
-        editingView
-      ) : (
-        notEditingView
       )}
-
+      {isEditing ? editingView : notEditingView}
       {isEditing && (
         <SaveCancelButtons
           onCancel={cancelEditing}

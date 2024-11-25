@@ -38,22 +38,27 @@ const specificFailureContent = (statusMessage: string) => {
   )
 }
 
-export const StatusBanner = ({ status, statusMessage }: StatusBannerProps) => {
-  const bannerContent = (
-    <div style={{ alignItems: "center" }}>
-      {status === "failure"
-        ? statusMessage !== ""
-          ? specificFailureContent(statusMessage)
-          : generalFailureContent
-        : successContent}
-    </div>
-  )
+const statusContent = (status, statusMessage) => {
+  if (status === "success") {
+    return successContent
+  }
+  if (status === "failure" && statusMessage !== "") {
+    return specificFailureContent(statusMessage)
+  } else {
+    return generalFailureContent
+  }
+}
 
+export const StatusBanner = ({ status, statusMessage }: StatusBannerProps) => {
   return (
     <Banner
       sx={{ marginTop: "m" }}
       isDismissible
-      content={bannerContent}
+      content={
+        <div style={{ alignItems: "center" }}>
+          {statusContent(status, statusMessage)}
+        </div>
+      }
       type={status === "failure" ? "negative" : "positive"}
     />
   )
