@@ -33,6 +33,11 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
   const [isLoading, setIsLoading] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
   const [error, setError] = useState(false)
+  /**
+   * In Sierra, the user NOT having a username is represented by the empty string: username = "".
+   * Within this form, the user NOT having a username is represented by: username = null, so the
+   * empty string is an invalid username.
+   */
   const [input, setInput] = useState(
     patron.username === "" ? null : patron.username
   )
