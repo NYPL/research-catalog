@@ -189,16 +189,24 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
     </Flex>
   )
 
+  let content
+  if (isLoading) {
+    content = (
+      <SkeletonLoader contentSize={2} showImage={false} headingSize={0} />
+    )
+  } else if (isEditing) {
+    content = editingView
+  } else {
+    content = notEditingView
+  }
+
   return (
     <Flex
       flexDir={{ base: "column", lg: "row" }}
       alignItems="flex-start"
       width="100%"
     >
-      {isLoading && (
-        <SkeletonLoader contentSize={2} showImage={false} headingSize={0} />
-      )}
-      {isEditing ? editingView : notEditingView}
+      {content}
       {isEditing && (
         <SaveCancelButtons
           onCancel={cancelEditing}

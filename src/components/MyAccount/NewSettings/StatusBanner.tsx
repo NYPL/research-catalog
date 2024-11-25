@@ -8,13 +8,13 @@ type StatusBannerProps = {
 }
 
 const successContent = (
-  <Text marginBottom={0} color={"ui.black !important"}>
+  <Text marginBottom={0} color="ui.black !important">
     Your changes were saved.
   </Text>
 )
 
 const generalFailureContent = (
-  <Text marginBottom={0} color={"ui.black !important"}>
+  <Text marginBottom={0} color="ui.black !important">
     Your changes were not saved.
   </Text>
 )
