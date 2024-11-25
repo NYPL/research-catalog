@@ -166,7 +166,7 @@ describe("Bib model", () => {
       )
     })
   })
-  xdescribe("extent", () => {
+  describe("extent", () => {
     it("should add a semicolon after extent if there is not one already", () => {
       const bib = new BibDetailsModel({
         identifier: [{ uri: "123456" }],
