@@ -24,6 +24,7 @@ export interface EDDRequestParams extends HoldRequestParams {
 export interface HoldPostResult {
   status: HTTPStatusCode
   pickupLocation?: NYPLocationKey | "edd"
+  formInvalid?: boolean
   requestId?: string
 }
 
@@ -36,7 +37,7 @@ export interface DiscoveryHoldPostParams {
   pickupLocation?: NYPLocationKey | "edd"
   numberOfCopies?: number
   // TODO: make this EDD form content object
-  docDeliveryData?: string
+  docDeliveryData?: EDDRequestParams
 }
 
 export type EDDPageStatus = null | "failed" | "unavailable" | "invalid"

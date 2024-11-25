@@ -56,3 +56,12 @@ export default function HoldConfirmationPage({
     </>
   )
 }
+
+export async function getServerSideProps({ query }) {
+  const { pickupLocation } = query
+  return {
+    props: {
+      isEDD: pickupLocation === "edd",
+    },
+  }
+}

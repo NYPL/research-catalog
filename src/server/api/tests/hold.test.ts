@@ -1,4 +1,8 @@
-import { fetchDeliveryLocations, postHoldRequest } from "../hold"
+import {
+  fetchDeliveryLocations,
+  postHoldRequest,
+  postEDDRequest,
+} from "../hold"
 import type { DeliveryLocationsResult } from "../../../types/locationTypes"
 import type { HoldPostResult } from "../../../types/holdPageTypes"
 
@@ -61,6 +65,26 @@ jest.mock("../../nyplApiClient", () => {
         })
       })
     })
+    .mockImplementationOnce(async () => {
+      return await new Promise((resolve) => {
+        resolve({
+          post: jest.fn().mockReturnValueOnce({
+            data: {
+              id: "123456",
+            },
+          }),
+        })
+      })
+    })
+    .mockImplementationOnce(async () => {
+      return await new Promise((resolve) => {
+        resolve({
+          get: () => {
+            throw new Error("Error posting EDD request")
+          },
+        })
+      })
+    })
 })
 
 describe("fetchDeliveryLocations", () => {
@@ -116,6 +140,34 @@ describe("postHoldRequest", () => {
       patronId: "456",
       source: "source",
       pickupLocation: "schwarzman",
+    })) as HoldPostResult
+
+    expect(holdPostResult.status).toEqual(500)
+  })
+})
+
+describe("postEDDRequest", () => {
+  it("should return a hold request ID from Discovery API", async () => {
+    const eddPostResult = (await postEDDRequest({
+      itemId: "123",
+      patronId: "456",
+      source: "source",
+      pickupLocation: "edd",
+      emailAddress: "test@test.com",
+      startPage: "1",
+      endPage: "2",
+      chapterTitle: "Chapter 1",
+    })) as HoldPostResult
+
+    expect(eddPostResult.status).toEqual(200)
+    expect(eddPostResult.requestId).toEqual("123456")
+  })
+  it("should return a 500 status if there was an error", async () => {
+    const holdPostResult = (await postHoldRequest({
+      itemId: "123",
+      patronId: "456",
+      source: "source",
+      pickupLocation: "edd",
     })) as HoldPostResult
 
     expect(holdPostResult.status).toEqual(500)

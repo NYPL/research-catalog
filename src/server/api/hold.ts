@@ -1,6 +1,9 @@
 import nyplApiClient from "../nyplApiClient"
 
-import type { HoldPostResult } from "../../types/holdPageTypes"
+import type {
+  EDDRequestParams,
+  HoldPostResult,
+} from "../../types/holdPageTypes"
 import type {
   DeliveryLocation,
   DeliveryLocationsResult,
@@ -112,6 +115,60 @@ export async function postHoldRequest(
   } catch (error) {
     console.error(
       `Error posting hold request in postHoldRequest server function, itemId: ${itemId}`,
+      error.message
+    )
+
+    return {
+      status: 500,
+    }
+  }
+}
+
+/**
+ * Post EDD requests to discovery API.
+ */
+export async function postEDDRequest(
+  eddRequestParams: EDDRequestParams
+): Promise<HoldPostResult> {
+  const { itemId, patronId, source, ...rest } = eddRequestParams
+
+  // Remove non-numeric characters from item ID
+  const itemIdNumeric = itemId.replace(/\D/g, "")
+
+  const eddPostParams: DiscoveryHoldPostParams = {
+    patron: patronId,
+    record: itemIdNumeric,
+    nyplSource: source,
+    requestType: "edd",
+    recordType: "i",
+    pickupLocation: "edd",
+    docDeliveryData: {
+      ...rest,
+    } as EDDRequestParams,
+  }
+
+  try {
+    const client = await nyplApiClient()
+    const eddPostResult = await client.post("/hold-requests", eddPostParams)
+    const { id: requestId } = eddPostResult.data
+
+    if (!requestId) {
+      console.error(
+        "postEDDRequest failed, no id returned from Discovery API",
+        eddPostResult
+      )
+      return {
+        status: 400,
+      }
+    }
+
+    return {
+      status: 200,
+      requestId,
+    }
+  } catch (error) {
+    console.error(
+      `Error posting hold request in postEDDRequest server function, itemId: ${itemId}`,
       error.message
     )
 
