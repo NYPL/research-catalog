@@ -136,6 +136,7 @@ export default class BibDetails {
     ]
       .map((fieldMapping: FieldMapping): AnyBibDetail => {
         let detail: AnyBibDetail
+        // TODO: standardize detail building by returning array of strings from all instance variables, so the detail can be returned from buildStandardDetail. That way, we won't be maintaining two different locations for labels.
         if (fieldMapping.field === "contributorLiteral")
           detail = this.buildInternalLinkedDetail(fieldMapping)
         else if (fieldMapping.field === "subjectLiteral")
