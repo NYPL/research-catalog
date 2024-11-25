@@ -182,7 +182,6 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
   const editingView = (
     <Flex
       flexDir="column"
-      marginLeft={{ base: "l", lg: "unset" }}
       marginTop={{ base: "xs", lg: "unset" }}
       maxWidth={{ base: "600px", md: "320px" }}
     >

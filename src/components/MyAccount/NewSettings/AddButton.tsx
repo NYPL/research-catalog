@@ -15,7 +15,7 @@ const AddButton = ({ inputType, label, onClick }: AddButtonProps) => {
       size="large"
       sx={{
         justifyContent: "flex-start",
-        width: { base: "87%", md: "300px" },
+        width: { base: "100%", md: "300px" },
         paddingLeft: { base: "m", md: "unset" },
         paddingTop: "xs",
         paddingBottom: "xs",
