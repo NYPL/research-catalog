@@ -122,10 +122,6 @@ export const princetonRecord = {
         },
       ],
       uri: "pi5153471",
-      idNyplSourceId: {
-        "@type": "RecapPul",
-        "@value": "5153471",
-      },
     },
   ],
   language: [
