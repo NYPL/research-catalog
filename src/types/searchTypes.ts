@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import type { DiscoveryBibResult } from "./bibTypes"
 import type { DRBResults } from "./drbTypes"
 import type { Aggregation } from "./filterTypes"
@@ -38,10 +39,11 @@ export interface SearchParams {
   contributor?: string
   title?: string
   journalTitle?: string
-  standardNumber?: string
+  standard_number?: string
   subject?: string
   page?: number
   identifiers?: Identifiers
+  callnumber?: string
 }
 
 export type SortKey = "relevance" | "title" | "date"
@@ -90,6 +92,8 @@ export interface SearchFormAction {
 
 export interface SearchQueryParams extends Identifiers {
   q?: string
+  callnumber?: string
+  standard_number?: string
   contributor?: string
   title?: string
   subject?: string
