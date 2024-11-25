@@ -50,7 +50,7 @@ describe("searchUtils", () => {
         })
       ).toBe(true)
     })
-    it.only("includes advanced search query params when field is set to 'all'", () => {
+    it("includes advanced search query params when field is set to 'all'", () => {
       const testQuery =
         "?q=shel%20silverstein&contributor=shel silverstein&title=the giving tree&subject=books"
       expect(
