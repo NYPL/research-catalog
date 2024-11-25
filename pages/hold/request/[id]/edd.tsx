@@ -44,17 +44,18 @@ interface EDDRequestPropsType {
   patronId: string
   isAuthenticated?: boolean
   eddRequestable?: boolean
+  pageStatus?: EDDPageStatus
 }
 
 /**
- * TODO: Add comment block for EDD
+ * The EDDRequestPage component renders a form for requesting the electronic delivery of an item
  */
 export default function EDDRequestPage({
   discoveryBibResult,
   discoveryItemResult,
   patronId,
   isAuthenticated,
-  eddRequestable = false,
+  pageStatus: defaultPageStatus,
 }: EDDRequestPropsType) {
   const metadataTitle = `Electronic Delivery Request | ${SITE_NAME}`
 
@@ -62,11 +63,9 @@ export default function EDDRequestPage({
   const item = new Item(discoveryItemResult, bib)
 
   const holdId = `${item.bibId}-${item.id}`
-  const isEddAvailable = eddRequestable && item.isAvailable
 
-  const [pageStatus, setPageStatus] = useState(
-    (!isEddAvailable ? "unavailable" : null) as EDDPageStatus
-  )
+  const [pageStatus, setPageStatus] = useState(defaultPageStatus)
+
   const [eddFormState, setEddFormState] = useState({
     ...initialEDDFormState,
     patronId,
@@ -93,7 +92,7 @@ export default function EDDRequestPage({
         `${BASE_URL}/api/hold/request/${holdId}/edd`,
         {
           method: "POST",
-          body: JSON.stringify({ ...eddParams }),
+          body: JSON.stringify({ ...eddParams, jsEnabled: true }),
         }
       )
       const responseJson = await response.json()
@@ -107,15 +106,14 @@ export default function EDDRequestPage({
         setFormPosting(false)
         return
       }
-      const { pickupLocation: pickupLocationFromResponse, requestId } =
-        responseJson
+      const { requestId } = responseJson
 
       setPageStatus(null)
       setFormPosting(false)
 
       // Success state
       await router.push(
-        `${PATHS.HOLD_CONFIRMATION}/${holdId}?pickupLocation=${pickupLocationFromResponse}&requestId=${requestId}&isEdd=true`
+        `${PATHS.HOLD_CONFIRMATION}/${holdId}?pickupLocation=edd&requestId=${requestId}`
       )
     } catch (error) {
       console.error(
@@ -158,7 +156,7 @@ export default function EDDRequestPage({
         <HoldItemDetails item={item} />
         {isLoading || formPosting ? (
           <SkeletonLoader showImage={false} data-testid="edd-request-loading" />
-        ) : isEddAvailable ? (
+        ) : pageStatus !== "unavailable" ? (
           <EDDRequestForm
             eddFormState={eddFormState}
             setEddFormState={setEddFormState}
@@ -172,7 +170,7 @@ export default function EDDRequestPage({
   )
 }
 
-export async function getServerSideProps({ params, req, res }) {
+export async function getServerSideProps({ params, req, res, query }) {
   const { id } = params
 
   // authentication redirect
@@ -237,13 +235,15 @@ export async function getServerSideProps({ params, req, res }) {
       throw new Error("EDD Page - Error fetching edd in getServerSideProps")
     }
 
+    const isEddAvailable = eddRequestable && item.isAvailable
+
     return {
       props: {
         discoveryBibResult,
         discoveryItemResult,
         patronId,
         isAuthenticated,
-        eddRequestable,
+        pageStatus: !isEddAvailable ? "unavailable" : null,
       },
     }
   } catch (error) {

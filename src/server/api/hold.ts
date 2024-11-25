@@ -1,6 +1,7 @@
 import nyplApiClient from "../nyplApiClient"
 
 import type {
+  EDDRequestParams,
   HoldPostResult,
   HoldDetailsResult,
 } from "../../types/holdPageTypes"
@@ -168,10 +169,64 @@ export async function fetchHoldRequestEligibility(
     return eligibilityResult as PatronEligibilityStatus
   } catch (error) {
     console.error(
-      `Error fetching hold request elligibility in fetchHoldRequestEligibility server function, patronId: ${patronId}`,
+      `Error fetching hold request eligibility in fetchHoldRequestEligibility server function, patronId: ${patronId}`,
       error.message
     )
 
     return { eligibility: false }
+  }
+}
+
+/**
+ * Post EDD requests to discovery API.
+ */
+export async function postEDDRequest(
+  eddRequestParams: EDDRequestParams
+): Promise<HoldPostResult> {
+  const { itemId, patronId, source, ...rest } = eddRequestParams
+
+  // Remove non-numeric characters from item ID
+  const itemIdNumeric = itemId.replace(/\D/g, "")
+
+  const eddPostParams: DiscoveryHoldPostParams = {
+    patron: patronId,
+    record: itemIdNumeric,
+    nyplSource: source,
+    requestType: "edd",
+    recordType: "i",
+    pickupLocation: "edd",
+    docDeliveryData: {
+      ...rest,
+    } as EDDRequestParams,
+  }
+
+  try {
+    const client = await nyplApiClient()
+    const eddPostResult = await client.post("/hold-requests", eddPostParams)
+    const { id: requestId } = eddPostResult.data
+
+    if (!requestId) {
+      console.error(
+        "postEDDRequest failed, no id returned from Discovery API",
+        eddPostResult
+      )
+      return {
+        status: 400,
+      }
+    }
+
+    return {
+      status: 200,
+      requestId,
+    }
+  } catch (error) {
+    console.error(
+      `Error posting hold request in postEDDRequest server function, itemId: ${itemId}`,
+      error.message
+    )
+
+    return {
+      status: 500,
+    }
   }
 }

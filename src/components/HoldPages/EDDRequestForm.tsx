@@ -250,8 +250,8 @@ const EDDRequestForm = ({
       </FormRow>
       <FormField>
         <TextInput
-          id="notes"
-          name="notes"
+          id="requestNotes"
+          name="requestNotes"
           value={eddFormState.requestNotes}
           type="textarea"
           labelText={EDD_FORM_FIELD_COPY.requestNotes.label}
