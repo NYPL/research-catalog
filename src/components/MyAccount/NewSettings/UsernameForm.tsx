@@ -38,11 +38,11 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
    * Within this form, the user NOT having a username is represented by: username = null, so the
    * empty string is an invalid username.
    */
-  const [input, setInput] = useState(
+  const [usernameInSierra, setusernameInSierra] = useState(
     patron.username === "" ? null : patron.username
   )
-  const [tempInput, setTempInput] = useState(input)
-  const currentUsernameNotDeleted = tempInput !== null
+  const [tempUsername, setTempUsername] = useState(usernameInSierra)
+  const currentUsernameNotDeleted = tempUsername !== null
 
   const { setUsernameStatus, setUsernameStatusMessage } = usernameState
 
@@ -52,14 +52,14 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
   }
 
   const cancelEditing = () => {
-    setTempInput(input)
+    setTempUsername(usernameInSierra)
     setIsEditing(false)
     setError(false)
   }
 
   const handleInputChange = (e) => {
     const { value } = e.target
-    setTempInput(value)
+    setTempUsername(value)
     if (!validateUsername(value)) {
       setError(true)
     } else {
@@ -71,7 +71,7 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
     setIsLoading(true)
     setIsEditing(false)
     setUsernameStatus("")
-    const submissionInput = tempInput === null ? "" : tempInput
+    const submissionInput = tempUsername === null ? "" : tempUsername
     try {
       const response = await fetch(
         `${BASE_URL}/api/account/username/${patron.id}`,
@@ -87,8 +87,8 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
       if (responseMessage !== "Username taken" && response.status === 200) {
         await getMostUpdatedSierraAccountData()
         setUsernameStatus("success")
-        setInput(submissionInput)
-        setTempInput(submissionInput)
+        setusernameInSierra(submissionInput)
+        setTempUsername(submissionInput)
       } else {
         setUsernameStatus("failure")
         setUsernameStatusMessage(
@@ -96,7 +96,7 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
             ? usernameStatusMessages.USERNAME_FAILURE
             : usernameStatusMessages.FAILURE
         )
-        setTempInput(input)
+        setTempUsername(usernameInSierra)
       }
     } catch (error) {
       setUsernameStatus("failure")
@@ -123,11 +123,11 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
               color: error ? "ui.error.primary" : "ui.black",
             },
           }}
-          value={tempInput}
+          value={tempUsername}
           id="username-input"
           labelText="Must be 5-15 characters and use only letters (a-z) and numbers (0-9)"
           showLabel
-          isInvalid={error && !validateUsername(tempInput)}
+          isInvalid={error && !validateUsername(tempUsername)}
           showHelperInvalidText={false}
           onChange={handleInputChange}
           isClearable
@@ -138,7 +138,7 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
           buttonType="text"
           id="remove-username-btn"
           onClick={() => {
-            setTempInput(null)
+            setTempUsername(null)
             setError(false)
           }}
         >
@@ -156,10 +156,10 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
 
   const notEditingView = (
     <Flex alignItems="center" marginTop={{ base: "unset", md: "-xs" }}>
-      {input ? (
+      {usernameInSierra ? (
         <>
           <Text size="body1" sx={{ marginBottom: 0 }}>
-            {input}
+            {usernameInSierra}
           </Text>
           <EditButton
             buttonId="edit-username-button"
@@ -171,7 +171,7 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
           label="+ Add username"
           onClick={() => {
             setIsEditing(true)
-            setTempInput("")
+            setTempUsername("")
             setError(true)
           }}
         />
@@ -192,7 +192,7 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
         <AddButton
           label="+ Add username"
           onClick={() => {
-            setTempInput("")
+            setTempUsername("")
             setError(true)
           }}
         />
