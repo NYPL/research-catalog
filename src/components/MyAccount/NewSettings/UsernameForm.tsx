@@ -37,8 +37,8 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
     patron.username === "" ? null : patron.username
   )
   const [tempInput, setTempInput] = useState(input)
+  const currentUsernameNotDeleted = tempInput !== null
 
-  console.log("input", input)
   const { setUsernameStatus, setUsernameStatusMessage } = usernameState
 
   const validateUsername = (username: string) => {
@@ -184,7 +184,7 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
       marginTop={{ base: "xs", lg: "unset" }}
       maxWidth={{ base: "600px", md: "320px" }}
     >
-      {tempInput !== null ? (
+      {currentUsernameNotDeleted ? (
         editUsernameField
       ) : (
         <AddButton

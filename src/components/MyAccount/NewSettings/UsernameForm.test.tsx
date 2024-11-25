@@ -97,6 +97,19 @@ describe("username form", () => {
     expect(screen.getByRole("button", { name: /save changes/i })).toBeDisabled()
   })
 
+  it("validates empty username correctly", () => {
+    render(component)
+
+    fireEvent.click(screen.getByRole("button", { name: /edit/i }))
+
+    const input = screen.getByLabelText(
+      "Must be 5-15 characters and use only letters (a-z) and numbers (0-9)"
+    )
+    fireEvent.change(input, { target: { value: "" } })
+
+    expect(screen.getByRole("button", { name: /save changes/i })).toBeDisabled()
+  })
+
   it("removes username when delete icon is clicked", () => {
     render(component)
 
