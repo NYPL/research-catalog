@@ -33,14 +33,18 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
   const [isLoading, setIsLoading] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
   const [error, setError] = useState(false)
-  const [input, setInput] = useState(patron.username || "")
+  const [input, setInput] = useState(
+    patron.username === "" ? null : patron.username
+  )
   const [tempInput, setTempInput] = useState(input)
 
+  console.log("input", input)
   const { setUsernameStatus, setUsernameStatusMessage } = usernameState
 
-  const validateUsername = (username: string | null) => {
-    if (username === null) return false
-    if (username === "") return true
+  const validateUsername = (username: string) => {
+    if (!(username.length > 4)) {
+      return false
+    }
     const usernameRegex = /^[a-zA-Z0-9]{5,15}$/
     return usernameRegex.test(username)
   }
@@ -117,7 +121,7 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
               color: error ? "ui.error.primary" : "ui.black",
             },
           }}
-          value={tempInput || ""}
+          value={tempInput}
           id="username-input"
           labelText="Must be 5-15 characters and use only letters (a-z) and numbers (0-9)"
           showLabel
@@ -150,7 +154,7 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
 
   const notEditingView = (
     <Flex alignItems="center" marginTop={{ base: "unset", md: "-xs" }}>
-      {input !== "" ? (
+      {input ? (
         <>
           <Text size="body1" sx={{ marginBottom: 0 }}>
             {input}
@@ -166,6 +170,7 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
           onClick={() => {
             setIsEditing(true)
             setTempInput("")
+            setError(true)
           }}
         />
       )}
@@ -186,6 +191,7 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
           label="+ Add username"
           onClick={() => {
             setTempInput("")
+            setError(true)
           }}
         />
       )}
