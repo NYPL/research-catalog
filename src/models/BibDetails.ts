@@ -106,8 +106,6 @@ export default class BibDetails {
             return this.supplementaryContent
           case "creatorLiteral":
             return this.buildInternalLinkedDetail(fieldMapping)
-          case "owner":
-            return this.owner
           default:
             return this.buildStandardDetail(fieldMapping)
         }
@@ -186,7 +184,7 @@ export default class BibDetails {
 
   buildStandardDetail(fieldMapping: FieldMapping) {
     const bibFieldValue =
-      this.bib[fieldMapping.field] || this[fieldMapping.field]
+      this[fieldMapping.field] || this.bib[fieldMapping.field]
     if (!bibFieldValue) return
     return this.buildDetail(
       convertToSentenceCase(fieldMapping.label),
@@ -355,7 +353,6 @@ export default class BibDetails {
       parts.push(dimensions[0])
       modifiedExtent = [parts.join("; ")]
     }
-
     return modifiedExtent
   }
 
