@@ -11,6 +11,8 @@ export const queryParamsEquality = (queryConstructor) => {
     const constructedQueries = queryConstructor(queryParamsToConstruct)
       .substring(1)
       .split("&")
+    console.log(constructedQueries)
+    console.log(testQueries)
     return (
       testQueries.every((queryParam) =>
         constructedQueries.includes(queryParam)
