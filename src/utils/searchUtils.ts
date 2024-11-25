@@ -326,6 +326,8 @@ export function mapQueryToSearchParams({
     q,
     field: search_scope,
     page: page ? parseInt(page) : 1,
+    callnumber,
+    standard_number,
     contributor,
     title,
     subject,
