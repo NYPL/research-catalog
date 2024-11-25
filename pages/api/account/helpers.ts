@@ -60,7 +60,7 @@ export async function updateUsername(
         // Username taken but not an error, returns a message.
         return { status: 200, message: "Username taken" }
       } else {
-        return { status: 500, message: "Username update failed" }
+        throw new Error("Username update failed")
       }
     }
   } catch (error) {
