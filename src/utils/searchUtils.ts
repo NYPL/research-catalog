@@ -321,7 +321,7 @@ export function mapQueryToSearchParams({
 }: SearchQueryParams): SearchParams {
   const hasIdentifiers = issn || isbn || oclc || lccn
   const filters = collapseMultiValueQueryParams(queryFilters)
-
+  //TODO: can we merge the SearchQueryParams and SearchParams types by renaming some params? e.g. search_scope, sort, sort_direction. Also maybe passing in identifiers so it maches this pattern.
   return {
     q,
     field: search_scope,
