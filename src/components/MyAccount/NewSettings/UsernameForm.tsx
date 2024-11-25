@@ -110,7 +110,10 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
             display: "flex",
             flexDirection: "column-reverse",
             label: {
+              paddingTop: "xxs",
               fontWeight: "400",
+              fontSize: "12px",
+              lineHeight: "150%",
               color: error ? "ui.error.primary" : "ui.black",
             },
           }}
@@ -192,7 +195,12 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
   let content
   if (isLoading) {
     content = (
-      <SkeletonLoader contentSize={2} showImage={false} headingSize={0} />
+      <SkeletonLoader
+        contentSize={2}
+        showImage={false}
+        headingSize={0}
+        sx={{ marginTop: "-s" }}
+      />
     )
   } else if (isEditing) {
     content = editingView
