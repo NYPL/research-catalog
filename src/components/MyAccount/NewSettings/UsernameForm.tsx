@@ -114,21 +114,22 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
           sx={{
             width: { base: "87%", md: "300px" },
             display: "flex",
-            flexDirection: "column-reverse",
-            label: {
-              paddingTop: "xxs",
-              fontWeight: "400",
-              fontSize: "12px",
-              lineHeight: "150%",
-              color: error ? "ui.error.primary" : "ui.black",
-            },
+            flexDirection: "column",
+            // label: {
+            //   paddingTop: "xxs",
+            //   fontWeight: "400",
+            //   fontSize: "12px",
+            //   lineHeight: "150%",
+            //   color: error ? "ui.error.primary" : "ui.black",
+            // },
           }}
           value={tempUsername}
           id="username-input"
-          labelText="Must be 5-15 characters and use only letters (a-z) and numbers (0-9)"
-          showLabel
+          labelText="Username"
+          showLabel={false}
+          invalidText="Must be 5-15 characters and use only letters (a-z) and numbers (0-9)"
           isInvalid={error && !validateUsername(tempUsername)}
-          showHelperInvalidText={false}
+          showHelperInvalidText={true}
           onChange={handleInputChange}
           isClearable
           isClearableCallback={() => setError(true)}
