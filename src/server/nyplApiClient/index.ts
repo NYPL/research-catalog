@@ -26,8 +26,8 @@ const nyplApiClient = async ({
   apiName = "platform",
   version = "v0.1",
 } = {}) => {
-  if (CACHE.clients[apiName]) {
-    return CACHE.clients[apiName]
+  if (CACHE.clients[`${apiName}${version}`]) {
+    return CACHE.clients[`${apiName}${version}`]
   }
 
   const baseUrl =

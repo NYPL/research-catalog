@@ -11,11 +11,9 @@ describe("home library form", () => {
     editingField: "",
     setEditingField: jest.fn(),
   }
-  const accountFetchSpy = jest.fn()
 
   const component = (
     <PatronDataProvider
-      testSpy={accountFetchSpy}
       value={{
         patron: processedPatron,
         pickupLocations: filteredPickupLocations,

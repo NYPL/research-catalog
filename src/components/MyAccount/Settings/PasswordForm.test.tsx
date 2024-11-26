@@ -38,7 +38,7 @@ beforeEach(() => {
 })
 
 describe("Pin/password form", () => {
-  test("disables submit button if any form field is empty", async () => {
+  it("disables submit button if any form field is empty", async () => {
     const { getByText, getByLabelText } = render(component)
     const button = getByText("Edit")
     fireEvent.click(button)
@@ -56,7 +56,7 @@ describe("Pin/password form", () => {
     expect(submitButton).toBeDisabled()
   })
 
-  test("disables submit button if passwords don't match", async () => {
+  it("disables submit button if passwords don't match", async () => {
     const { getByText, getByLabelText } = render(component)
     const button = getByText("Edit")
     fireEvent.click(button)
@@ -75,7 +75,7 @@ describe("Pin/password form", () => {
     expect(submitButton).toBeDisabled()
   })
 
-  test("sets failure if current password is wrong", async () => {
+  it("sets failure if current password is wrong", async () => {
     // Failure response
     global.fetch = jest.fn().mockResolvedValue({
       status: 400,
@@ -108,7 +108,7 @@ describe("Pin/password form", () => {
     )
   })
 
-  test("sets failure if new password is invalid", async () => {
+  it("sets failure if new password is invalid", async () => {
     // Failure response
     global.fetch = jest.fn().mockResolvedValue({
       status: 400,
@@ -142,7 +142,7 @@ describe("Pin/password form", () => {
     )
   })
 
-  test("successfully sets patron data if every field is valid", async () => {
+  it("successfully sets patron data if every field is valid", async () => {
     global.fetch = jest.fn().mockResolvedValue({
       status: 200,
       json: async () => "Updated",
