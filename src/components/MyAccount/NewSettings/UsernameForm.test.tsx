@@ -68,11 +68,7 @@ describe("username form", () => {
     render(component)
     fireEvent.click(screen.getByRole("button", { name: /edit/i }))
 
-    expect(
-      screen.getByLabelText(
-        "Must be 5-15 characters and use only letters (a-z) and numbers (0-9)"
-      )
-    ).toBeInTheDocument()
+    expect(screen.getByLabelText("Username")).toBeInTheDocument()
     expect(
       screen.getByDisplayValue(processedPatron.username)
     ).toBeInTheDocument()
@@ -89,9 +85,7 @@ describe("username form", () => {
 
     fireEvent.click(screen.getByRole("button", { name: /edit/i }))
 
-    const input = screen.getByLabelText(
-      "Must be 5-15 characters and use only letters (a-z) and numbers (0-9)"
-    )
+    const input = screen.getByLabelText("Username")
     fireEvent.change(input, { target: { value: "!!!!!" } })
 
     expect(screen.getByRole("button", { name: /save changes/i })).toBeDisabled()
@@ -102,9 +96,7 @@ describe("username form", () => {
 
     fireEvent.click(screen.getByRole("button", { name: /edit/i }))
 
-    const input = screen.getByLabelText(
-      "Must be 5-15 characters and use only letters (a-z) and numbers (0-9)"
-    )
+    const input = screen.getByLabelText("Username")
     fireEvent.change(input, { target: { value: "" } })
 
     expect(screen.getByRole("button", { name: /save changes/i })).toBeDisabled()
@@ -127,9 +119,7 @@ describe("username form", () => {
 
     fireEvent.click(screen.getByRole("button", { name: /edit/i }))
 
-    const input = screen.getByLabelText(
-      "Must be 5-15 characters and use only letters (a-z) and numbers (0-9)"
-    )
+    const input = screen.getByLabelText("Username")
     fireEvent.change(input, { target: { value: "newUsername" } })
 
     fireEvent.click(screen.getByRole("button", { name: /save changes/i }))
@@ -151,9 +141,7 @@ describe("username form", () => {
 
     fireEvent.click(screen.getByRole("button", { name: /edit/i }))
 
-    const input = screen.getByLabelText(
-      "Must be 5-15 characters and use only letters (a-z) and numbers (0-9)"
-    )
+    const input = screen.getByLabelText("Username")
     fireEvent.change(input, { target: { value: "modification" } })
 
     fireEvent.click(screen.getByRole("button", { name: /cancel/i }))
