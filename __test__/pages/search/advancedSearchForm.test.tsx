@@ -1,5 +1,10 @@
 import React from "react"
-import { fireEvent, render, screen } from "../../../src/utils/testUtils"
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from "../../../src/utils/testUtils"
 import mockRouter from "next-router-mock"
 import userEvent from "@testing-library/user-event"
 
@@ -31,30 +36,29 @@ describe("Advanced Search Form", () => {
   // this functionality works in the browser, but won't include
   // final input in output string in test. the broken test is
   // commented out below.
-  it.todo("can set keyword, contributor, title, subject")
-  // async () => {
-  //   render(<AdvancedSearch isAuthenticated={true}/>)
+  it("can set keyword, contributor, title, subject", async () => {
+    render(<AdvancedSearch isAuthenticated={true} />)
 
-  //   const [keywordInput, contributorInput, titleInput, subjectInput] = [
-  //     "Keywords",
-  //     "Title",
-  //     "Author",
-  //     "Subject",
-  //   ].map((field) => screen.getByLabelText(field))
-  //   await act(async () => {
-  //     await userEvent.type(subjectInput, "italian food")
-  //     await userEvent.type(keywordInput, "spaghetti")
-  //     await userEvent.type(contributorInput, "strega nonna")
-  //     await userEvent.type(titleInput, "il amore di pasta")
-  //     // this set stimeout is to ad
-  //     // eslint-disable-next-line @typescript-eslint/no-empty-function
-  //     setTimeout(() => {}, 300)
-  //     submit()
-  //     expect(mockRouter.asPath).toBe(
-  //       "/search?q=spaghetti&contributor=il+amore+di+pasta&title=strega+nonna&subject=italian+food"
-  //     )
-  //   })
-  // })
+    const [keywordInput, contributorInput, titleInput, subjectInput] = [
+      "Keyword",
+      "Title",
+      "Author",
+      "Subject",
+      "Call number",
+      "Unique identifier",
+    ].map((field) => screen.getByLabelText(field))
+    fireEvent.change(subjectInput, { target: { value: "italian food" } })
+    fireEvent.change(keywordInput, { target: { value: "spaghetti" } })
+    fireEvent.change(contributorInput, { target: { value: "strega nonna" } })
+    fireEvent.change(titleInput, { target: { value: "il amore di pasta" } })
+    submit()
+    await waitFor(() =>
+      expect(mockRouter.asPath).toBe(
+        "/search?q=spaghetti&contributor=il+amore+di+pasta&title=strega+nonna&subject=italian+food"
+      )
+    )
+  })
+
   it("can select languages", async () => {
     render(<AdvancedSearch isAuthenticated={true} />)
 
