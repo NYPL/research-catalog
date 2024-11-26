@@ -11,10 +11,10 @@ import styles from "../../../styles/components/MyAccount.module.scss"
 import type { Patron } from "../../types/myAccountTypes"
 import type { IconListElementPropType } from "./IconListElement"
 import { buildListElementsWithIcons } from "./IconListElement"
-import UsernameForm from "./NewSettings/UsernameForm"
+import UsernameForm from "./Settings/UsernameForm"
 import { useEffect, useRef, useState } from "react"
-import type { StatusType } from "./NewSettings/StatusBanner"
-import { StatusBanner } from "./NewSettings/StatusBanner"
+import type { StatusType } from "./Settings/StatusBanner"
+import { StatusBanner } from "./Settings/StatusBanner"
 
 const ProfileHeader = ({ patron }: { patron: Patron }) => {
   const { isLargerThanMobile } = useNYPLBreakpoints()
