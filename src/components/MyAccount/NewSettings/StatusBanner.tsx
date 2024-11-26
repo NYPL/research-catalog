@@ -26,7 +26,6 @@ const specificFailureContent = (statusMessage: string) => {
       <Link
         sx={{
           color: "ui.link.primary !important",
-          textDecorationColor: "var(--nypl-colors-ui-link-primary) !important",
           textDecoration: "underline",
         }}
         href="https://www.nypl.org/get-help/contact-us"
