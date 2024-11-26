@@ -89,8 +89,6 @@ export interface AdvancedSearchQueryParams {
   subject?: string
 }
 
-/* eslint-disable @typescript-eslint/naming-convention */
-
 export interface SearchQueryParams
   extends Identifiers,
     AdvancedSearchQueryParams {
