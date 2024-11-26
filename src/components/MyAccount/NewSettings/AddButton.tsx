@@ -1,7 +1,7 @@
 import { Button } from "@nypl/design-system-react-components"
 
 type AddButtonProps = {
-  inputType: string
+  inputType?: string
   label: string
   onClick: () => void
 }
@@ -9,13 +9,13 @@ type AddButtonProps = {
 const AddButton = ({ inputType, label, onClick }: AddButtonProps) => {
   return (
     <Button
-      id={`add-${inputType}-button`}
+      id={inputType ? `add-${inputType}-button` : "add-button"}
       buttonType="text"
       onClick={onClick}
       size="large"
       sx={{
         justifyContent: "flex-start",
-        width: { base: "87%", md: "300px" },
+        width: { base: "100%", md: "300px" },
         paddingLeft: { base: "m", md: "unset" },
         paddingTop: "xs",
         paddingBottom: "xs",

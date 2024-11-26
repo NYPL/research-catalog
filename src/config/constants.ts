@@ -23,7 +23,6 @@ export const PATHS = {
 }
 
 // API Names
-export const DISCOVERY_API_NAME = "discovery"
 export const DRB_API_NAME = "drb"
 
 // API Routes

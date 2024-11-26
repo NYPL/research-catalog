@@ -1,9 +1,10 @@
-import { Flex, Banner, Link, Text } from "@nypl/design-system-react-components"
+import { Flex } from "@nypl/design-system-react-components"
 import { useContext, useEffect, useRef, useState } from "react"
 import { PatronDataContext } from "../../../context/PatronDataContext"
 import SettingsInputForm from "./SettingsInputForm"
 import SettingsSelectForm from "./SettingsSelectForm"
 import PasswordForm from "./PasswordForm"
+import { StatusBanner } from "./StatusBanner"
 
 type StatusType = "" | "failure" | "success"
 
@@ -33,47 +34,11 @@ const NewAccountSettingsTab = () => {
     }
   }, [status])
 
-  const bannerContent = (
-    <div style={{ alignItems: "center" }}>
-      {status === "failure" ? (
-        statusMessage !== "" ? (
-          <Text marginBottom={0} color={"ui.black !important"}>
-            {statusMessage} Please try again or{" "}
-            <Link
-              sx={{
-                color: "ui.link.primary !important",
-                textDecorationColor: "ui.link.primary !important",
-                textDecoration: "underline",
-              }}
-              href="https://www.nypl.org/get-help/contact-us"
-            >
-              contact us
-            </Link>{" "}
-            for assistance.
-          </Text>
-        ) : (
-          <Text marginBottom={0} color={"ui.black !important"}>
-            Your changes were not saved.
-          </Text>
-        )
-      ) : (
-        <Text marginBottom={0} color={"ui.black !important"}>
-          Your changes were saved.
-        </Text>
-      )}
-    </div>
-  )
-
   return (
     <>
       {status !== "" && (
         <div ref={bannerRef} tabIndex={-1}>
-          <Banner
-            sx={{ marginTop: "m" }}
-            isDismissible
-            content={bannerContent}
-            type={status === "failure" ? "negative" : "positive"}
-          />
+          <StatusBanner status={status} statusMessage={statusMessage} />
         </div>
       )}
       <Flex flexDir="column" sx={{ marginTop: "xl", gap: "s" }}>
