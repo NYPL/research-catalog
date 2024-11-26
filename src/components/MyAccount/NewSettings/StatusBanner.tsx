@@ -23,15 +23,7 @@ const specificFailureContent = (statusMessage: string) => {
   return (
     <Text marginBottom={0} color={"ui.black !important"}>
       {statusMessage} Please try again or{" "}
-      <Link
-        sx={{
-          color: "ui.link.primary !important",
-          textDecoration: "underline",
-        }}
-        href="https://www.nypl.org/get-help/contact-us"
-      >
-        contact us
-      </Link>{" "}
+      <Link href="https://www.nypl.org/get-help/contact-us">contact us</Link>{" "}
       for assistance.
     </Text>
   )

@@ -113,20 +113,12 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
         <TextInput
           sx={{
             width: { base: "87%", md: "300px" },
-            display: "flex",
-            flexDirection: "column",
-            // label: {
-            //   paddingTop: "xxs",
-            //   fontWeight: "400",
-            //   fontSize: "12px",
-            //   lineHeight: "150%",
-            //   color: error ? "ui.error.primary" : "ui.black",
-            // },
           }}
           value={tempUsername}
           id="username-input"
           labelText="Username"
           showLabel={false}
+          helperText="Must be 5-15 characters and use only letters (a-z) and numbers (0-9)"
           invalidText="Must be 5-15 characters and use only letters (a-z) and numbers (0-9)"
           isInvalid={error && !validateUsername(tempUsername)}
           showHelperInvalidText={true}
