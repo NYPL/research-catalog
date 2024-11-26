@@ -26,6 +26,25 @@ export interface HoldPostResult {
   pickupLocation?: NYPLocationKey | "edd"
   formInvalid?: boolean
   requestId?: string
+  errorMessage?: string
+}
+
+export interface HoldDetailsResult {
+  status: HTTPStatusCode
+  pickupLocation?: NYPLocationKey | "edd"
+  patronId?: string
+  requestId?: string
+  errorMessage?: string
+}
+
+export interface PatronEligibilityStatus {
+  eligibility: boolean
+  expired?: boolean
+  blocked?: boolean
+  moneyOwed?: boolean
+  ptypeDisallowsHolds?: boolean
+  reachedHoldLimit?: boolean
+  hasIssues?: boolean
 }
 
 export interface DiscoveryHoldPostParams {

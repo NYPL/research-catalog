@@ -17,7 +17,10 @@ import { SITE_NAME, BASE_URL, PATHS } from "../../../../src/config/constants"
 import useLoading from "../../../../src/hooks/useLoading"
 
 import { fetchBib } from "../../../../src/server/api/bib"
-import { fetchDeliveryLocations } from "../../../../src/server/api/hold"
+import {
+  fetchDeliveryLocations,
+  fetchHoldRequestEligibility,
+} from "../../../../src/server/api/hold"
 
 import initializePatronTokenAuth, {
   doRedirectBasedOnNyplAccountRedirects,
@@ -209,6 +212,10 @@ export async function getServerSideProps({ params, req, res }) {
 
   try {
     const patronId = patronTokenResponse?.decodedPatron?.sub
+
+    // TODO: implement this function
+    const holdRequestEligibility = await fetchHoldRequestEligibility(patronId)
+    console.log("holdRequestEligibility", holdRequestEligibility)
 
     // fetch bib and item
     const [bibId, itemId] = id.split("-")
