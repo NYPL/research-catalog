@@ -6,17 +6,9 @@ export const appConfig: AppConfig = {
     (process.env.NEXT_PUBLIC_APP_ENV as Environment) || "development",
   apiEndpoints: {
     platform: {
-      development: "https://qa-platform.nypl.org/api/v0.1",
-      qa: "https://qa-platform.nypl.org/api/v0.1",
-      production: "https://platform.nypl.org/api/v0.1",
-    },
-    // The 'discovery' base URL should use DISCOVERY_API_BASE_URL if set,
-    // falling back on PLATFORM_API_BASE_URL if set,
-    // and finally falling back on a sensible default.
-    discovery: {
-      development: "https://qa-platform.nypl.org/api/v0.1",
-      qa: "https://qa-platform.nypl.org/api/v0.1",
-      production: "https://platform.nypl.org/api/v0.1",
+      development: "https://qa-platform.nypl.org/api",
+      qa: "https://qa-platform.nypl.org/api",
+      production: "https://platform.nypl.org/api",
     },
     domain: {
       development: "local.nypl.org:8080",
