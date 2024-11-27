@@ -80,7 +80,20 @@ describe("username form", () => {
     expect(screen.queryByText(/edit/)).not.toBeInTheDocument()
   })
 
-  it("validates username input correctly", () => {
+  it("allows editing when Add button is clicked from no username", () => {
+    render(noUsernameComponent)
+    fireEvent.click(screen.getByRole("button", { name: /add/i }))
+
+    expect(screen.getByLabelText("Username")).toBeInTheDocument()
+
+    expect(screen.getByRole("button", { name: /cancel/i })).toBeInTheDocument()
+    expect(
+      screen.getByRole("button", { name: /save changes/i })
+    ).toBeInTheDocument()
+    expect(screen.queryByText(/edit/)).not.toBeInTheDocument()
+  })
+
+  it("validates invalid username input correctly", () => {
     render(component)
 
     fireEvent.click(screen.getByRole("button", { name: /edit/i }))
@@ -91,7 +104,7 @@ describe("username form", () => {
     expect(screen.getByRole("button", { name: /save changes/i })).toBeDisabled()
   })
 
-  it("validates empty username correctly", () => {
+  it("validates empty username input correctly", () => {
     render(component)
 
     fireEvent.click(screen.getByRole("button", { name: /edit/i }))
@@ -112,6 +125,8 @@ describe("username form", () => {
     expect(
       screen.queryByDisplayValue(processedPatron.username)
     ).not.toBeInTheDocument()
+
+    expect(screen.getByText("+ Add username")).toBeInTheDocument()
   })
 
   it("calls submitInput with valid data", async () => {
@@ -142,11 +157,11 @@ describe("username form", () => {
     fireEvent.click(screen.getByRole("button", { name: /edit/i }))
 
     const input = screen.getByLabelText("Username")
-    fireEvent.change(input, { target: { value: "modification" } })
+    fireEvent.change(input, { target: { value: "newUsername" } })
 
     fireEvent.click(screen.getByRole("button", { name: /cancel/i }))
 
     expect(screen.getByText(processedPatron.username)).toBeInTheDocument()
-    expect(screen.queryByDisplayValue("modification")).not.toBeInTheDocument()
+    expect(screen.queryByDisplayValue("newUsername")).not.toBeInTheDocument()
   })
 })
