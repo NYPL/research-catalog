@@ -105,7 +105,7 @@ export default class BibDetails {
           case "supplementaryContent":
             return this.supplementaryContent
           case "creatorLiteral":
-            return this.buildInternalLinkedDetail(fieldMapping)
+            return this.buildSearchFilterUrl(fieldMapping)
           default:
             return this.buildStandardDetail(fieldMapping)
         }
@@ -137,9 +137,7 @@ export default class BibDetails {
       .map((fieldMapping: FieldMapping): AnyBibDetail => {
         let detail: AnyBibDetail
         if (fieldMapping.field === "contributorLiteral")
-          detail = this.buildInternalLinkedDetail(fieldMapping)
-        // else if (fieldMapping.field === "subjectLiteral")
-        //   detail = this.subjectHeadings
+          detail = this.buildSearchFilterUrl(fieldMapping)
         else detail = this.buildStandardDetail(fieldMapping)
         return detail
       })
@@ -201,7 +199,7 @@ export default class BibDetails {
     }
   }
 
-  buildInternalLinkedDetail(fieldMapping: {
+  buildSearchFilterUrl(fieldMapping: {
     label: string
     field: string
   }): LinkedBibDetail {
