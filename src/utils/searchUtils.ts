@@ -1,9 +1,6 @@
 import { isArray, isEmpty, mapObject, forEach } from "underscore"
 
-import {
-  textInputFields as advSearchFields,
-  textInputFields,
-} from "./advancedSearchUtils"
+import { textInputFields as advancedSearchFields } from "./advancedSearchUtils"
 import type {
   SearchParams,
   SearchQueryParams,
@@ -69,7 +66,7 @@ export function getSearchResultsHeading(
 
 // Shows the final part of the search query string (e.g. "for keyword 'cats'")
 function buildQueryDisplayString(searchParams: SearchParams): string {
-  const searchFields = advSearchFields
+  const searchFields = advancedSearchFields
     // Lowercase the adv search field labels:
     .map((field) => ({ ...field, label: field.label.toLowerCase() }))
     .concat([
@@ -211,7 +208,7 @@ export function getSearchQuery(params: SearchParams): string {
   const identifierQuery = getIdentifierQuery(identifiers)
   const pageQuery = page !== 1 ? `&page=${page}` : ""
 
-  const advancedSearchQueryParams = textInputFields
+  const advancedSearchQueryParams = advancedSearchFields
     .map(({ name: advancedSearchParam }) => {
       if (advancedSearchParam === "q") return
       return params[advancedSearchParam]
