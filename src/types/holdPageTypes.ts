@@ -37,7 +37,7 @@ export interface HoldDetailsResult {
   errorMessage?: string
 }
 
-export interface PatronEligibilityStatus {
+export interface PatronEligibility {
   eligibility: boolean
   expired?: boolean
   blocked?: boolean
