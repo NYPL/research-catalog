@@ -5,7 +5,6 @@ import type {
 import { standardizeBibId } from "../../utils/bibUtils"
 import { getSearchQuery } from "../../utils/searchUtils"
 import {
-  DISCOVERY_API_NAME,
   DISCOVERY_API_SEARCH_ROUTE,
   DRB_API_NAME,
   RESULTS_PER_PAGE,
@@ -53,7 +52,7 @@ export async function fetchResults(
   //  - search results
   //  - aggregations
   //  - drb results
-  const client = await nyplApiClient({ apiName: DISCOVERY_API_NAME })
+  const client = await nyplApiClient()
   const drbClient = await nyplApiClient({ apiName: DRB_API_NAME })
 
   const [resultsResponse, aggregationsResponse, drbResultsResponse] =
