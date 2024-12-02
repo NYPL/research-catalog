@@ -45,7 +45,7 @@ describe("Bib Page with items", () => {
   })
 
   // TODO: Determine if this should be rendering twice
-  it.only("renders the bottom bib details", () => {
+  it("renders the bottom bib details", () => {
     expect(screen.getAllByTestId("publication-date")[0]).toHaveTextContent(
       "Vol. 1, issue 1-"
     )
