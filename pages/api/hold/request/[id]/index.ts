@@ -43,7 +43,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
     // Server side redirect in case user has JS disabled
     res.redirect(
-      `${BASE_URL}${PATHS.HOLD_CONFIRMATION}${holdId}?pickupLocation=${pickupLocationFromResponse}?requestId=${requestId}`
+      `${BASE_URL}${PATHS.HOLD_CONFIRMATION}/${holdId}?pickupLocation=${pickupLocationFromResponse}?requestId=${requestId}`
     )
   } catch (error) {
     const { statusText } = error as Response
