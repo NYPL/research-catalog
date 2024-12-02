@@ -20,7 +20,7 @@ export default class BibDetails {
   groupedNotes: AnyBibDetail[]
   supplementaryContent: LinkedBibDetail
   extent: string[]
-  subjectHeadings: SubjectHeadingDetail
+  subjectLiteral: BibDetailURL[][]
   owner: string[]
 
   constructor(
@@ -34,7 +34,7 @@ export default class BibDetails {
     this.extent = this.buildExtent()
     this.owner = this.buildOwner()
     // If we can't retreive subject headings from the SHEP API, we'll use the subjectLiteral
-    this.subjectHeadings =
+    this.subjectLiteral =
       this.buildSubjectHeadings() || this.buildSubjectLiterals()
     // these are the actual arrays of details that will be displayed
     this.annotatedMarcDetails = this.buildAnnotatedMarcDetails(
@@ -136,11 +136,10 @@ export default class BibDetails {
     ]
       .map((fieldMapping: FieldMapping): AnyBibDetail => {
         let detail: AnyBibDetail
-        // TODO: standardize detail building by returning array of strings from all instance variables, so the detail can be returned from buildStandardDetail. That way, we won't be maintaining two different locations for labels.
         if (fieldMapping.field === "contributorLiteral")
           detail = this.buildInternalLinkedDetail(fieldMapping)
-        else if (fieldMapping.field === "subjectLiteral")
-          detail = this.subjectHeadings
+        // else if (fieldMapping.field === "subjectLiteral")
+        //   detail = this.subjectHeadings
         else detail = this.buildStandardDetail(fieldMapping)
         return detail
       })
@@ -376,21 +375,16 @@ export default class BibDetails {
     return this.buildExternalLinkedDetail(convertToSentenceCase(label), values)
   }
 
-  buildSubjectHeadings(): SubjectHeadingDetail {
+  buildSubjectHeadings(): BibDetailURL[][] {
     if (!this.bib.subjectHeadings) return
     const subjectHeadingsUrls = this.bib.subjectHeadings.map((heading) =>
       this.flattenSubjectHeadingUrls(heading)
     )
 
-    return (
-      subjectHeadingsUrls?.length && {
-        label: "Subject",
-        value: subjectHeadingsUrls,
-      }
-    )
+    return subjectHeadingsUrls?.length && subjectHeadingsUrls
   }
 
-  buildSubjectLiterals(): SubjectHeadingDetail {
+  buildSubjectLiterals(): BibDetailURL[][] {
     if (!this.bib.subjectLiteral) return
     const subjectLiteralUrls = this.bib.subjectLiteral.map(
       (subject: string) => {
@@ -412,10 +406,7 @@ export default class BibDetails {
         })
       }
     )
-    return {
-      label: "Subject",
-      value: subjectLiteralUrls,
-    }
+    return subjectLiteralUrls
   }
 
   constructSubjectLiteralsArray(subject: string) {
