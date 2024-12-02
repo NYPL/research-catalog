@@ -18,7 +18,7 @@ import useLoading from "../../../../src/hooks/useLoading"
 import { fetchBib } from "../../../../src/server/api/bib"
 import { fetchDeliveryLocations } from "../../../../src/server/api/hold"
 import {
-  EDDPageStatusMessages,
+  HoldPageStatusMessages,
   initialEDDFormState,
 } from "../../../../src/utils/holdPageUtils"
 
@@ -144,8 +144,8 @@ export default function EDDRequestPage({
           {pageStatus && (
             <HoldRequestBanner
               item={item}
-              heading={EDDPageStatusMessages[pageStatus].heading}
-              errorMessage={EDDPageStatusMessages[pageStatus].message}
+              heading={HoldPageStatusMessages[pageStatus].heading}
+              errorMessage={HoldPageStatusMessages[pageStatus].message}
               pageStatus={pageStatus}
             />
           )}

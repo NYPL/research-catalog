@@ -21,13 +21,16 @@ import {
   initialEDDInvalidFields,
   isInvalidField,
 } from "../../utils/holdPageUtils"
-import type { EDDRequestParams, EDDPageStatus } from "../../types/holdPageTypes"
+import type {
+  EDDRequestParams,
+  HoldPageStatus,
+} from "../../types/holdPageTypes"
 
 interface EDDRequestFormProps {
   eddFormState: EDDRequestParams
   setEddFormState: React.Dispatch<React.SetStateAction<EDDRequestParams>>
   handleSubmit: (eddParams: EDDRequestParams) => void
-  setPageStatus: (status: EDDPageStatus) => void
+  setPageStatus: (status: HoldPageStatus) => void
   holdId: string
 }
 
