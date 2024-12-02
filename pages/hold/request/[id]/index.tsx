@@ -213,7 +213,6 @@ export async function getServerSideProps({ params, req, res }) {
   try {
     const patronId = patronTokenResponse?.decodedPatron?.sub
 
-    // TODO: implement this function
     const holdRequestEligibility = await fetchHoldRequestEligibility(patronId)
     console.log("holdRequestEligibility", holdRequestEligibility)
 

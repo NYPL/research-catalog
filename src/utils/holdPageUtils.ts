@@ -1,7 +1,7 @@
 import type {
   EDDRequestParams,
   EDDFormValidatedField,
-  EDDPageStatus,
+  HoldPageStatus,
   EDDStatusMessage,
 } from "../types/holdPageTypes"
 
@@ -23,20 +23,25 @@ export const initialEDDFormState: EDDRequestParams = {
   pickupLocation: "edd",
 }
 
-export const EDDPageStatusMessages: Record<EDDPageStatus, EDDStatusMessage> = {
-  failed: {
-    heading: "Request failed",
-    message: "We were unable to process your request at this time.",
-  },
-  unavailable: {
-    heading: "Electronic delivery unavailable",
-    message:
-      "Electronic delivery options for this item are currently unavailable.",
-  },
-  invalid: {
-    message: "Some fields contain errors. Please correct and submit again.",
-  },
-}
+export const HoldPageStatusMessages: Record<HoldPageStatus, EDDStatusMessage> =
+  {
+    failed: {
+      heading: "Request failed",
+      message: "We were unable to process your request at this time.",
+    },
+    eddUnavailable: {
+      heading: "Electronic delivery unavailable",
+      message:
+        "Electronic delivery options for this item are currently unavailable.",
+    },
+    invalid: {
+      message: "Some fields contain errors. Please correct and submit again.",
+    },
+    patronIneligible: {
+      heading: "There is a problem with your library account.",
+      message: "This is because:",
+    },
+  }
 
 // Initial state for invalid fields in the EDD form to keep track of the first invalid field for focus on submit
 export const initialEDDInvalidFields: EDDFormValidatedField[] = [

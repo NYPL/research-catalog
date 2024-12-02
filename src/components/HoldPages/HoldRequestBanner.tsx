@@ -5,13 +5,14 @@ import { FeedbackContext } from "../../../src/context/FeedbackContext"
 import type { ItemMetadata } from "../../../src/types/itemTypes"
 import type Item from "../../../src/models/Item"
 import RCLink from "../Links/RCLink/RCLink"
+import type { HoldPageStatus } from "../../types/holdPageTypes"
 
 interface HoldRequestBannerProps {
   item: Item
   heading: string
   errorMessage: string
   errorDetail?: string
-  pageStatus?: string
+  pageStatus?: HoldPageStatus
 }
 
 /**

@@ -59,7 +59,12 @@ export interface DiscoveryHoldPostParams {
   docDeliveryData?: EDDRequestParams
 }
 
-export type EDDPageStatus = null | "failed" | "unavailable" | "invalid"
+export type HoldPageStatus =
+  | null
+  | "failed"
+  | "eddUnavailable"
+  | "invalid"
+  | "patronIneligible"
 
 export interface EDDStatusMessage {
   heading?: string

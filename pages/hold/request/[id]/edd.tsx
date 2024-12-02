@@ -35,7 +35,7 @@ import type { DiscoveryItemResult } from "../../../../src/types/itemTypes"
 
 import type {
   EDDRequestParams,
-  EDDPageStatus,
+  HoldPageStatus,
 } from "../../../../src/types/holdPageTypes"
 
 interface EDDRequestPropsType {
@@ -44,7 +44,7 @@ interface EDDRequestPropsType {
   patronId: string
   isAuthenticated?: boolean
   eddRequestable?: boolean
-  pageStatus?: EDDPageStatus
+  pageStatus?: HoldPageStatus
 }
 
 /**
