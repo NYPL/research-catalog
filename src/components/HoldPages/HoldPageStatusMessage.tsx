@@ -1,11 +1,11 @@
 import type {
   HoldPageStatus,
-  PatronEligibility,
+  PatronEligibilityStatus,
 } from "../../types/holdPageTypes"
 
 interface HoldPageStatusMessageProps {
   status: HoldPageStatus
-  patronEligibility?: PatronEligibility
+  patronEligibility?: PatronEligibilityStatus
 }
 
 /**

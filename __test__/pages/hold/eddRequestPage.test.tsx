@@ -307,11 +307,11 @@ describe("EDD Request page", () => {
           discoveryItemResult={bibWithItems.resource.items[0]}
           patronId="123"
           isAuthenticated={true}
-          pageStatus="unavailable"
+          pageStatus="eddUnavailable"
         />
       )
       expect(
-        screen.getByText(HoldPageStatusMessages.unavailable.heading)
+        screen.getByText(HoldPageStatusMessages.eddUnavailable.heading)
       ).toBeInTheDocument()
     })
     it("shows a failed error message when the page loads with an failed status", async () => {

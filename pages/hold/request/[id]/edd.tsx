@@ -156,7 +156,7 @@ export default function EDDRequestPage({
         <HoldItemDetails item={item} />
         {isLoading || formPosting ? (
           <SkeletonLoader showImage={false} data-testid="edd-request-loading" />
-        ) : pageStatus !== "unavailable" ? (
+        ) : pageStatus !== "eddUnavailable" ? (
           <EDDRequestForm
             eddFormState={eddFormState}
             setEddFormState={setEddFormState}
@@ -243,7 +243,7 @@ export async function getServerSideProps({ params, req, res, query }) {
         discoveryItemResult,
         patronId,
         isAuthenticated,
-        pageStatus: !isEddAvailable ? "unavailable" : null,
+        pageStatus: !isEddAvailable ? "eddUnavailable" : null,
       },
     }
   } catch (error) {
