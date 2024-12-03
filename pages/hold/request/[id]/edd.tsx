@@ -16,7 +16,10 @@ import { SITE_NAME, BASE_URL, PATHS } from "../../../../src/config/constants"
 import useLoading from "../../../../src/hooks/useLoading"
 
 import { fetchBib } from "../../../../src/server/api/bib"
-import { fetchDeliveryLocations } from "../../../../src/server/api/hold"
+import {
+  fetchDeliveryLocations,
+  fetchHoldRequestEligibility,
+} from "../../../../src/server/api/hold"
 import { initialEDDFormState } from "../../../../src/utils/holdPageUtils"
 
 import initializePatronTokenAuth, {
@@ -227,10 +230,18 @@ export async function getServerSideProps({ params, req, res, query }) {
       await fetchDeliveryLocations(item.barcode, patronId)
 
     if (locationStatus !== 200) {
-      throw new Error("EDD Page - Error fetching edd in getServerSideProps")
+      console.error("EDD Page - Error fetching edd in getServerSideProps")
     }
 
     const isEddAvailable = eddRequestable && item.isAvailable
+
+    const patronEligibilityStatus = await fetchHoldRequestEligibility(patronId)
+
+    if (!patronEligibilityStatus?.eligibility) {
+      console.error(
+        "EDD Page - Error fetching patronEligibilityStatus in getServerSideProps"
+      )
+    }
 
     return {
       props: {
@@ -238,7 +249,14 @@ export async function getServerSideProps({ params, req, res, query }) {
         discoveryItemResult,
         patronId,
         isAuthenticated,
-        errorStatus: !isEddAvailable ? "eddUnavailable" : null,
+        errorStatus:
+          locationStatus !== 200 || !patronEligibilityStatus?.eligibility
+            ? "failed"
+            : !patronEligibilityStatus.eligibility
+            ? "patronIneligible"
+            : !isEddAvailable
+            ? "eddUnavailable"
+            : null,
       },
     }
   } catch (error) {

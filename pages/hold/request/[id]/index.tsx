@@ -240,7 +240,19 @@ export async function getServerSideProps({ params, req, res }) {
     const { deliveryLocations, status: locationStatus } =
       await fetchDeliveryLocations(item.barcode, patronId)
 
+    if (locationStatus !== 200) {
+      console.error(
+        "HoldRequest Page - Error fetching deliveryLocations in getServerSideProps"
+      )
+    }
+
     const patronEligibilityStatus = await fetchHoldRequestEligibility(patronId)
+
+    if (!patronEligibilityStatus?.eligibility) {
+      console.error(
+        "HoldRequest Page - Error fetching patronEligibilityStatus in getServerSideProps"
+      )
+    }
 
     return {
       props: {
@@ -251,7 +263,7 @@ export async function getServerSideProps({ params, req, res }) {
         isAuthenticated,
         patronEligibilityStatus,
         errorStatus:
-          locationStatus !== 200 || !patronEligibilityStatus
+          locationStatus !== 200 || !patronEligibilityStatus?.eligibility
             ? "failed"
             : !patronEligibilityStatus.eligibility
             ? "patronIneligible"
