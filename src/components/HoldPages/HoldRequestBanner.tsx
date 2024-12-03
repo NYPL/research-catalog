@@ -1,16 +1,26 @@
 import { useContext } from "react"
 import { Box, Banner, Button } from "@nypl/design-system-react-components"
 
-import { HoldPageErrorHeadings } from "../../utils/holdPageUtils"
+import {
+  HoldPageErrorHeadings,
+  HoldPageContactPrefixes,
+} from "../../utils/holdPageUtils"
+import type {
+  HoldPageStatus,
+  PatronEligibilityStatus,
+} from "../../types/holdPageTypes"
 import { FeedbackContext } from "../../../src/context/FeedbackContext"
 import type { ItemMetadata } from "../../../src/types/itemTypes"
 import type Item from "../../../src/models/Item"
 import RCLink from "../Links/RCLink/RCLink"
-import type { HoldPageStatus } from "../../types/holdPageTypes"
+import ExternalLink from "../Links/ExternalLink/ExternalLink"
+import { PATHS } from "../../config/constants"
+import { appConfig } from "../../config/config"
 
 interface HoldRequestBannerProps {
   item: Item
   pageStatus?: HoldPageStatus
+  patronEligibilityStatus?: PatronEligibilityStatus
 }
 
 /**
@@ -20,6 +30,7 @@ interface HoldRequestBannerProps {
 const HoldRequestBanner = ({
   item,
   pageStatus = "failed",
+  patronEligibilityStatus,
 }: HoldRequestBannerProps) => {
   const { onOpen, setItemMetadata } = useContext(FeedbackContext)
 
@@ -43,8 +54,9 @@ const HoldRequestBanner = ({
       content={
         <>
           <Box>
-            {pageStatus !== "invalid" && pageStatus !== "patronIneligible" ? (
+            {HoldPageContactPrefixes?.[pageStatus] ? (
               <>
+                {HoldPageContactPrefixes?.[pageStatus]}
                 {" Please try again, "}
                 <Button
                   id="hold-contact"
@@ -78,11 +90,63 @@ const HoldRequestBanner = ({
                 <RCLink href="/search">start a new search.</RCLink>
               </>
             ) : null}
+            {(() => {
+              switch (pageStatus) {
+                case "invalid":
+                  return "Some fields contain errors. Please correct and submit again."
+                case "patronIneligible":
+                  return patronEligibilityStatus ? (
+                    <PatronErrors
+                      patronEligibilityStatus={patronEligibilityStatus}
+                    />
+                  ) : null
+                default:
+                  return null
+              }
+            })()}
           </Box>
         </>
       }
       mb="s"
     />
+  )
+}
+
+const PatronErrors = ({
+  patronEligibilityStatus,
+}: {
+  patronEligibilityStatus: PatronEligibilityStatus
+}) => {
+  const { expired, moneyOwed, ptypeDisallowsHolds, reachedHoldLimit } =
+    patronEligibilityStatus
+
+  return expired || moneyOwed || ptypeDisallowsHolds || reachedHoldLimit ? (
+    <>
+      {expired ? (
+        <>
+          Your account has expired -- Please see{" "}
+          <ExternalLink href={appConfig.urls.renewCard}>
+            Library Terms and Conditions -- Renewing or Validating Your Library
+            Card
+          </ExternalLink>{" "}
+          about renewing your card.
+        </>
+      ) : null}
+
+      {moneyOwed ? (
+        <>
+          Your fines have exceeded the limit — you can pay your fines in a
+          branch or online from the links under{" "}
+          <RCLink href={PATHS.MY_ACCOUNT}>My Account</RCLink>.
+        </>
+      ) : null}
+      {ptypeDisallowsHolds
+        ? "Your card does not permit placing holds on ReCAP materials."
+        : null}
+      {reachedHoldLimit ? "" : null}
+    </>
+  ) : (
+    "There is a problem with your library account."
   )
 }
 

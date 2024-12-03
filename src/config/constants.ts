@@ -20,6 +20,7 @@ export const PATHS = {
   HOME: "/",
   SEARCH: "/search",
   ADVANCED_SEARCH: "/search/advanced",
+  MY_ACCOUNT: "/account",
   HOLD_REQUEST: "/hold/request",
   HOLD_CONFIRMATION: "/hold/confirmation",
   BIB: "/bib",
