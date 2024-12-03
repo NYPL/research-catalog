@@ -120,7 +120,7 @@ describe("username form", () => {
 
     fireEvent.click(screen.getByRole("button", { name: /edit/i }))
 
-    fireEvent.click(screen.getByLabelText("Remove username"))
+    fireEvent.click(screen.getByLabelText("Delete username from your account"))
 
     expect(
       screen.queryByDisplayValue(processedPatron.username)
