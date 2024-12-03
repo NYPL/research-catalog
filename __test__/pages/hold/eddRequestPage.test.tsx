@@ -238,7 +238,9 @@ describe("EDD Request page", () => {
         expect(screen.getByTestId("hold-request-error")).toBeInTheDocument()
       })
 
-      expect(screen.getByText("Request failed")).toBeInTheDocument()
+      expect(
+        screen.getByText("Request failed.", { exact: false })
+      ).toBeInTheDocument()
 
       expect(
         screen.queryByText(

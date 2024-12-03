@@ -240,13 +240,7 @@ export async function getServerSideProps({ params, req, res }) {
     const { deliveryLocations, status: locationStatus } =
       await fetchDeliveryLocations(item.barcode, patronId)
 
-    // TODO: Make this not lead to 404
-
     const patronEligibilityStatus = await fetchHoldRequestEligibility(patronId)
-
-    if (!patronEligibilityStatus) {
-      throw new Error("Hold Page - Error fetching patron eligibility status")
-    }
 
     return {
       props: {

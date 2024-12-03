@@ -112,7 +112,6 @@ export async function postHoldRequest(
       requestId,
     }
   } catch (error) {
-    console.log("error", error)
     console.error(
       `Error posting hold request in postHoldRequest server function, itemId: ${itemId}`,
       error.message
