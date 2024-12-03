@@ -21,7 +21,7 @@ import {
   EDD_FORM_FIELD_COPY,
 } from "../../../src/config/constants"
 import { fetchDeliveryLocations } from "../../../src/server/api/hold"
-import { HoldPageStatusMessages } from "../../../src/utils/holdPageUtils"
+import { HoldPageErrorHeadings } from "../../../src/utils/holdPageUtils"
 
 jest.mock("../../../src/server/auth")
 jest.mock("../../../src/server/api/bib")
@@ -311,7 +311,7 @@ describe("EDD Request page", () => {
         />
       )
       expect(
-        screen.getByText(HoldPageStatusMessages.eddUnavailable.heading)
+        screen.getByText(HoldPageErrorHeadings.eddUnavailable)
       ).toBeInTheDocument()
     })
     it("shows a failed error message when the page loads with an failed status", async () => {
@@ -324,9 +324,7 @@ describe("EDD Request page", () => {
           pageStatus="failed"
         />
       )
-      expect(
-        screen.getByText(HoldPageStatusMessages.failed.heading)
-      ).toBeInTheDocument()
+      expect(screen.getByText(HoldPageErrorHeadings.failed)).toBeInTheDocument()
     })
     it("shows an invalid error message when the page loads with an invalid status", async () => {
       render(
@@ -339,7 +337,9 @@ describe("EDD Request page", () => {
         />
       )
       expect(
-        screen.getByText(HoldPageStatusMessages.invalid.message)
+        screen.getByText(
+          "Some fields contain errors. Please correct and submit again."
+        )
       ).toBeInTheDocument()
     })
   })

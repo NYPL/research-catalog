@@ -17,10 +17,7 @@ import useLoading from "../../../../src/hooks/useLoading"
 
 import { fetchBib } from "../../../../src/server/api/bib"
 import { fetchDeliveryLocations } from "../../../../src/server/api/hold"
-import {
-  HoldPageStatusMessages,
-  initialEDDFormState,
-} from "../../../../src/utils/holdPageUtils"
+import { initialEDDFormState } from "../../../../src/utils/holdPageUtils"
 
 import initializePatronTokenAuth, {
   doRedirectBasedOnNyplAccountRedirects,
@@ -142,12 +139,7 @@ export default function EDDRequestPage({
           dynamically rendered notification for focus management */}
         <Box tabIndex={-1} ref={bannerContainerRef}>
           {pageStatus && (
-            <HoldRequestBanner
-              item={item}
-              heading={HoldPageStatusMessages[pageStatus].heading}
-              errorMessage={HoldPageStatusMessages[pageStatus].message}
-              pageStatus={pageStatus}
-            />
+            <HoldRequestBanner item={item} pageStatus={pageStatus} />
           )}
         </Box>
         <Heading level="h2" mb="l" size="heading3">

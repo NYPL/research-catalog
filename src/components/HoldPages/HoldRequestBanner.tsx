@@ -1,6 +1,7 @@
 import { useContext } from "react"
 import { Box, Banner, Button } from "@nypl/design-system-react-components"
 
+import { HoldPageErrorHeadings } from "../../utils/holdPageUtils"
 import { FeedbackContext } from "../../../src/context/FeedbackContext"
 import type { ItemMetadata } from "../../../src/types/itemTypes"
 import type Item from "../../../src/models/Item"
@@ -9,9 +10,6 @@ import type { HoldPageStatus } from "../../types/holdPageTypes"
 
 interface HoldRequestBannerProps {
   item: Item
-  heading: string
-  errorMessage: string
-  errorDetail?: string
   pageStatus?: HoldPageStatus
 }
 
@@ -21,9 +19,6 @@ interface HoldRequestBannerProps {
  */
 const HoldRequestBanner = ({
   item,
-  heading,
-  errorMessage,
-  errorDetail,
   pageStatus = "failed",
 }: HoldRequestBannerProps) => {
   const { onOpen, setItemMetadata } = useContext(FeedbackContext)
@@ -36,7 +31,7 @@ const HoldRequestBanner = ({
   return (
     <Banner
       type="negative"
-      heading={heading}
+      heading={HoldPageErrorHeadings?.[pageStatus] || null}
       data-testid="hold-request-error"
       // TODO: Ask DS team to make button link variant match the default link styles
       sx={{
@@ -48,8 +43,7 @@ const HoldRequestBanner = ({
       content={
         <>
           <Box>
-            {errorMessage}
-            {pageStatus !== "invalid" ? (
+            {pageStatus !== "invalid" && pageStatus !== "patronIneligible" ? (
               <>
                 {" Please try again, "}
                 <Button
@@ -85,7 +79,6 @@ const HoldRequestBanner = ({
               </>
             ) : null}
           </Box>
-          {errorDetail ? <Box>{errorDetail}</Box> : null}
         </>
       }
       mb="s"

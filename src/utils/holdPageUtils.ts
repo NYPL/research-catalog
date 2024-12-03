@@ -23,25 +23,32 @@ export const initialEDDFormState: EDDRequestParams = {
   pickupLocation: "edd",
 }
 
-export const HoldPageStatusMessages: Record<HoldPageStatus, EDDStatusMessage> =
-  {
-    failed: {
-      heading: "Request failed",
-      message: "We were unable to process your request at this time.",
-    },
-    eddUnavailable: {
-      heading: "Electronic delivery unavailable",
-      message:
-        "Electronic delivery options for this item are currently unavailable.",
-    },
-    invalid: {
-      message: "Some fields contain errors. Please correct and submit again.",
-    },
-    patronIneligible: {
-      heading: "There is a problem with your library account.",
-      message: "This is because:",
-    },
-  }
+export const HoldPageErrorHeadings = {
+  failed: "Request failed",
+  eddUnavailable:
+    "Electronic delivery options for this item are currently unavailable.",
+  invalid: "Some fields contain errors. Please correct and submit again.",
+  patronIneligible: "There is a problem with your library account.",
+}
+
+export const HoldPageErrorMessages: Record<HoldPageStatus, EDDStatusMessage> = {
+  failed: {
+    heading: "Request failed",
+    message: "We were unable to process your request at this time.",
+  },
+  eddUnavailable: {
+    heading: "Electronic delivery unavailable",
+    message:
+      "Electronic delivery options for this item are currently unavailable.",
+  },
+  invalid: {
+    message: "Some fields contain errors. Please correct and submit again.",
+  },
+  patronIneligible: {
+    heading: "There is a problem with your library account.",
+    message: "This is because:",
+  },
+}
 
 // Initial state for invalid fields in the EDD form to keep track of the first invalid field for focus on submit
 export const initialEDDInvalidFields: EDDFormValidatedField[] = [
