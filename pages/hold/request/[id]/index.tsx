@@ -10,7 +10,7 @@ import {
 import Layout from "../../../../src/components/Layout/Layout"
 
 import HoldRequestForm from "../../../../src/components/HoldPages/HoldRequestForm"
-import HoldRequestBanner from "../../../../src/components/HoldPages/HoldRequestBanner"
+import HoldRequestErrorBanner from "../../../../src/components/HoldPages/HoldRequestErrorBanner"
 import HoldItemDetails from "../../../../src/components/HoldPages/HoldItemDetails"
 
 import { SITE_NAME, BASE_URL, PATHS } from "../../../../src/config/constants"
@@ -144,7 +144,7 @@ export default function HoldRequestPage({
           dynamically rendered notification for focus management */}
         <Box tabIndex={-1} ref={bannerContainerRef}>
           {errorStatus && (
-            <HoldRequestBanner
+            <HoldRequestErrorBanner
               item={item}
               errorStatus={errorStatus}
               patronEligibilityStatus={patronEligibilityStatus}

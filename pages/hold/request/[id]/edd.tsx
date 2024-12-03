@@ -9,7 +9,7 @@ import {
 
 import Layout from "../../../../src/components/Layout/Layout"
 import EDDRequestForm from "../../../../src/components/HoldPages/EDDRequestForm"
-import HoldRequestBanner from "../../../../src/components/HoldPages/HoldRequestBanner"
+import HoldRequestErrorBanner from "../../../../src/components/HoldPages/HoldRequestErrorBanner"
 import HoldItemDetails from "../../../../src/components/HoldPages/HoldItemDetails"
 
 import { SITE_NAME, BASE_URL, PATHS } from "../../../../src/config/constants"
@@ -142,7 +142,7 @@ export default function EDDRequestPage({
           dynamically rendered notification for focus management */}
         <Box tabIndex={-1} ref={bannerContainerRef}>
           {errorStatus && (
-            <HoldRequestBanner item={item} errorStatus={errorStatus} />
+            <HoldRequestErrorBanner item={item} errorStatus={errorStatus} />
           )}
         </Box>
         <Heading level="h2" mb="l" size="heading3">

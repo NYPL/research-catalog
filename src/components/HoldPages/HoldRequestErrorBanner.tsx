@@ -9,29 +9,29 @@ import type {
   HoldErrorStatus,
   PatronEligibilityStatus,
 } from "../../types/holdPageTypes"
-import { FeedbackContext } from "../../../src/context/FeedbackContext"
-import type { ItemMetadata } from "../../../src/types/itemTypes"
-import type Item from "../../../src/models/Item"
+import { FeedbackContext } from "../../context/FeedbackContext"
+import type { ItemMetadata } from "../../types/itemTypes"
+import type Item from "../../models/Item"
 import RCLink from "../Links/RCLink/RCLink"
 import ExternalLink from "../Links/ExternalLink/ExternalLink"
 import { PATHS } from "../../config/constants"
 import { appConfig } from "../../config/config"
 
-interface HoldRequestBannerProps {
+interface HoldRequestErrorBannerProps {
   item: Item
   errorStatus?: HoldErrorStatus
   patronEligibilityStatus?: PatronEligibilityStatus
 }
 
 /**
- * The HoldRequestBanner renders an error notification on the hold page that includes a button to
+ * The HoldRequestErrorBanner renders an error notification on the hold page that includes a button to
  * open the feedback form, pre-populated with item metadata.
  */
-const HoldRequestBanner = ({
+const HoldRequestErrorBanner = ({
   item,
   errorStatus = "failed",
   patronEligibilityStatus,
-}: HoldRequestBannerProps) => {
+}: HoldRequestErrorBannerProps) => {
   const { onOpen, setItemMetadata } = useContext(FeedbackContext)
 
   const onContact = (metadata: ItemMetadata) => {
@@ -150,4 +150,4 @@ const PatronErrors = ({
   )
 }
 
-export default HoldRequestBanner
+export default HoldRequestErrorBanner
