@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next"
+import { NextResponse } from "next/server"
 
 import {
   postHoldRequest,
@@ -22,20 +23,22 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     const holdId = req.query.id as string
     const [, itemId] = holdId.split("-")
 
-    const patronEligibility = await fetchHoldRequestEligibility(patronId)
+    const patronEligibilityStatus = await fetchHoldRequestEligibility(patronId)
 
-    if (!patronEligibility?.eligibility) {
+    if (patronEligibilityStatus && !patronEligibilityStatus?.eligibility) {
       switch (jsEnabled) {
         case true:
           return res.status(401).json({
-            patronEligibility,
+            patronEligibilityStatus,
           })
 
         // Server side redirect on ineligibility when Js is disabled
         // TODO: Move this to seaprate API route
+        // TODO: Parse these query params in getServerSideProps
         default:
-          res.redirect(
-            `${BASE_URL}${PATHS.HOLD_REQUEST}/${holdId}?patronEligibility=${patronEligibility}`
+          return NextResponse.redirect(
+            `${BASE_URL}${PATHS.HOLD_REQUEST}/${holdId}?patronEligibility=${patronEligibilityStatus}`,
+            307
           )
       }
     }
@@ -64,8 +67,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     }
 
     // Server side redirect in case user has JS disabled
-    res.redirect(
-      `${BASE_URL}${PATHS.HOLD_CONFIRMATION}/${holdId}?pickupLocation=${pickupLocationFromResponse}?requestId=${requestId}`
+    return NextResponse.redirect(
+      `${BASE_URL}${PATHS.HOLD_CONFIRMATION}/${holdId}?pickupLocation=${pickupLocationFromResponse}?requestId=${requestId}`,
+      307
     )
   } catch (error) {
     const { statusText } = error as Response

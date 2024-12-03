@@ -60,7 +60,7 @@ export default function HoldRequestPage({
   patronId,
   isAuthenticated,
   errorStatus: defaultErrorStatus,
-  patronEligibilityStatus,
+  patronEligibilityStatus: defaultEligibilityStatus,
 }: HoldRequestPropsType) {
   const metadataTitle = `Item Request | ${SITE_NAME}`
 
@@ -70,6 +70,9 @@ export default function HoldRequestPage({
   const holdId = `${item.bibId}-${item.id}`
 
   const [errorStatus, setErrorStatus] = useState(defaultErrorStatus)
+  const [patronEligibilityStatus, setPatronEligibilityStatus] = useState(
+    defaultEligibilityStatus
+  )
   const [formPosting, setFormPosting] = useState(false)
   const bannerContainerRef = useRef<HTMLDivElement>()
 
@@ -98,28 +101,29 @@ export default function HoldRequestPage({
         }),
       })
       const responseJson = await response.json()
-      const { pickupLocation: pickupLocationFromResponse, requestId } =
-        responseJson
 
       switch (response.status) {
+        // Patron is ineligible to place holds
         case 401:
-          setErrorStatus("patronIneligible")
           setFormPosting(false)
+          setErrorStatus("patronIneligible")
+          setPatronEligibilityStatus(responseJson.patronEligibilityStatus)
           bannerContainerRef.current.focus()
           break
+        // Server side error placing the hold request
         case 500:
+          setFormPosting(false)
           console.error(
             "HoldRequestPage: Error in hold request api response",
             responseJson.error
           )
           setErrorStatus("failed")
-          setFormPosting(false)
           break
         default:
           setFormPosting(false)
           // Success state
           await router.push(
-            `${PATHS.HOLD_CONFIRMATION}/${holdId}?pickupLocation=${pickupLocationFromResponse}&requestId=${requestId}`
+            `${PATHS.HOLD_CONFIRMATION}/${holdId}?pickupLocation=${responseJson.pickupLocation}&requestId=${responseJson.requestId}`
           )
       }
     } catch (error) {
