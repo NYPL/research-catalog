@@ -33,6 +33,10 @@ import Item from "../../../../src/models/Item"
 import type { DiscoveryBibResult } from "../../../../src/types/bibTypes"
 import type { DiscoveryItemResult } from "../../../../src/types/itemTypes"
 import type { DeliveryLocation } from "../../../../src/types/locationTypes"
+import type {
+  HoldErrorStatus,
+  PatronEligibilityStatus,
+} from "../../../../src/types/holdPageTypes"
 
 interface HoldRequestPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -40,6 +44,8 @@ interface HoldRequestPropsType {
   deliveryLocations?: DeliveryLocation[]
   patronId: string
   isAuthenticated?: boolean
+  errorStatus?: HoldErrorStatus
+  patronEligibilityStatus?: PatronEligibilityStatus
 }
 
 /**
@@ -53,6 +59,8 @@ export default function HoldRequestPage({
   deliveryLocations = [],
   patronId,
   isAuthenticated,
+  errorStatus: defaultErrorStatus,
+  patronEligibilityStatus,
 }: HoldRequestPropsType) {
   const metadataTitle = `Item Request | ${SITE_NAME}`
 
@@ -63,7 +71,7 @@ export default function HoldRequestPage({
 
   // Initialize alert to true if item is not available. This will show the error banner.
   const [alert, setAlert] = useState(!item.isAvailable)
-  const [errorDetail, setErrorDetail] = useState("")
+  const [errorStatus, setErrorStatus] = useState(defaultErrorStatus)
   const [formPosting, setFormPosting] = useState(false)
   const bannerContainerRef = useRef<HTMLDivElement>()
 
@@ -141,15 +149,8 @@ export default function HoldRequestPage({
           {alert && (
             <HoldRequestBanner
               item={item}
-              heading={
-                !item.isAvailable ? "Item unavailable" : "Request failed"
-              }
-              errorMessage={
-                !item.isAvailable
-                  ? "This item is currently unavailable."
-                  : "We were unable to process your request at this time."
-              }
-              errorDetail={errorDetail}
+              errorStatus={errorStatus}
+              patronEligibilityStatus={patronEligibilityStatus}
             />
           )}
         </Box>
@@ -213,9 +214,6 @@ export async function getServerSideProps({ params, req, res }) {
   try {
     const patronId = patronTokenResponse?.decodedPatron?.sub
 
-    const holdRequestEligibility = await fetchHoldRequestEligibility(patronId)
-    console.log("holdRequestEligibility", holdRequestEligibility)
-
     // fetch bib and item
     const [bibId, itemId] = id.split("-")
 
@@ -245,11 +243,14 @@ export async function getServerSideProps({ params, req, res }) {
     const { deliveryLocations, status: locationStatus } =
       await fetchDeliveryLocations(item.barcode, patronId)
 
+    // TODO: Make this not lead to 404
     if (locationStatus !== 200) {
       throw new Error(
         "Hold Page - Error fetching delivery locations in getServerSideProps"
       )
     }
+
+    const patronEligibilityStatus = await fetchHoldRequestEligibility(patronId)
 
     return {
       props: {
@@ -258,6 +259,7 @@ export async function getServerSideProps({ params, req, res }) {
         deliveryLocations,
         patronId,
         isAuthenticated,
+        patronEligibilityStatus,
       },
     }
   } catch (error) {

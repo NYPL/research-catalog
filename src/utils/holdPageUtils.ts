@@ -1,8 +1,6 @@
 import type {
   EDDRequestParams,
   EDDFormValidatedField,
-  HoldPageStatus,
-  EDDStatusMessage,
 } from "../types/holdPageTypes"
 
 import { EMAIL_REGEX } from "../config/constants"

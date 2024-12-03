@@ -57,7 +57,7 @@ export interface DiscoveryHoldPostParams {
   docDeliveryData?: EDDRequestParams
 }
 
-export type HoldPageStatus =
+export type HoldErrorStatus =
   | null
   | "failed"
   | "eddUnavailable"

@@ -32,7 +32,7 @@ import type { DiscoveryItemResult } from "../../../../src/types/itemTypes"
 
 import type {
   EDDRequestParams,
-  HoldPageStatus,
+  HoldErrorStatus,
 } from "../../../../src/types/holdPageTypes"
 
 interface EDDRequestPropsType {
@@ -40,8 +40,8 @@ interface EDDRequestPropsType {
   discoveryItemResult: DiscoveryItemResult
   patronId: string
   isAuthenticated?: boolean
+  errorStatus?: HoldErrorStatus
   eddRequestable?: boolean
-  pageStatus?: HoldPageStatus
 }
 
 /**
@@ -52,7 +52,7 @@ export default function EDDRequestPage({
   discoveryItemResult,
   patronId,
   isAuthenticated,
-  pageStatus: defaultPageStatus,
+  errorStatus: defaultErrorStatus,
 }: EDDRequestPropsType) {
   const metadataTitle = `Electronic Delivery Request | ${SITE_NAME}`
 
@@ -61,7 +61,7 @@ export default function EDDRequestPage({
 
   const holdId = `${item.bibId}-${item.id}`
 
-  const [pageStatus, setPageStatus] = useState(defaultPageStatus)
+  const [errorStatus, setErrorStatus] = useState(defaultErrorStatus)
 
   const [eddFormState, setEddFormState] = useState({
     ...initialEDDFormState,
@@ -76,10 +76,14 @@ export default function EDDRequestPage({
   const isLoading = useLoading()
 
   useEffect(() => {
-    if (pageStatus && pageStatus !== "invalid" && bannerContainerRef.current) {
+    if (
+      errorStatus &&
+      errorStatus !== "invalid" &&
+      bannerContainerRef.current
+    ) {
       bannerContainerRef.current.focus()
     }
-  }, [pageStatus])
+  }, [errorStatus])
 
   const postEDDRequest = async (eddParams: EDDRequestParams) => {
     try {
@@ -99,13 +103,13 @@ export default function EDDRequestPage({
           "HoldRequestPage: Error in edd request api response",
           responseJson.error
         )
-        setPageStatus("failed")
+        setErrorStatus("failed")
         setFormPosting(false)
         return
       }
       const { requestId } = responseJson
 
-      setPageStatus(null)
+      setErrorStatus(null)
       setFormPosting(false)
 
       // Success state
@@ -117,7 +121,7 @@ export default function EDDRequestPage({
         "HoldRequestPage: Error in hold request api response",
         error
       )
-      setPageStatus("failed")
+      setErrorStatus("failed")
       setFormPosting(false)
     }
   }
@@ -138,8 +142,8 @@ export default function EDDRequestPage({
         {/* Always render the wrapper element that will display the
           dynamically rendered notification for focus management */}
         <Box tabIndex={-1} ref={bannerContainerRef}>
-          {pageStatus && (
-            <HoldRequestBanner item={item} pageStatus={pageStatus} />
+          {errorStatus && (
+            <HoldRequestBanner item={item} errorStatus={errorStatus} />
           )}
         </Box>
         <Heading level="h2" mb="l" size="heading3">
@@ -148,12 +152,12 @@ export default function EDDRequestPage({
         <HoldItemDetails item={item} />
         {isLoading || formPosting ? (
           <SkeletonLoader showImage={false} data-testid="edd-request-loading" />
-        ) : pageStatus !== "eddUnavailable" ? (
+        ) : errorStatus !== "eddUnavailable" ? (
           <EDDRequestForm
             eddFormState={eddFormState}
             setEddFormState={setEddFormState}
             handleSubmit={postEDDRequest}
-            setPageStatus={setPageStatus}
+            setErrorStatus={setErrorStatus}
             holdId={holdId}
           />
         ) : null}

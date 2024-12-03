@@ -6,7 +6,7 @@ import {
   HoldPageContactPrefixes,
 } from "../../utils/holdPageUtils"
 import type {
-  HoldPageStatus,
+  HoldErrorStatus,
   PatronEligibilityStatus,
 } from "../../types/holdPageTypes"
 import { FeedbackContext } from "../../../src/context/FeedbackContext"
@@ -19,7 +19,7 @@ import { appConfig } from "../../config/config"
 
 interface HoldRequestBannerProps {
   item: Item
-  pageStatus?: HoldPageStatus
+  errorStatus?: HoldErrorStatus
   patronEligibilityStatus?: PatronEligibilityStatus
 }
 
@@ -29,7 +29,7 @@ interface HoldRequestBannerProps {
  */
 const HoldRequestBanner = ({
   item,
-  pageStatus = "failed",
+  errorStatus = "failed",
   patronEligibilityStatus,
 }: HoldRequestBannerProps) => {
   const { onOpen, setItemMetadata } = useContext(FeedbackContext)
@@ -42,7 +42,7 @@ const HoldRequestBanner = ({
   return (
     <Banner
       type="negative"
-      heading={HoldPageErrorHeadings?.[pageStatus] || null}
+      heading={HoldPageErrorHeadings?.[errorStatus] || null}
       data-testid="hold-request-error"
       // TODO: Ask DS team to make button link variant match the default link styles
       sx={{
@@ -54,9 +54,9 @@ const HoldRequestBanner = ({
       content={
         <>
           <Box>
-            {HoldPageContactPrefixes?.[pageStatus] ? (
+            {HoldPageContactPrefixes?.[errorStatus] ? (
               <>
-                {HoldPageContactPrefixes?.[pageStatus]}
+                {HoldPageContactPrefixes?.[errorStatus]}
                 {" Please try again, "}
                 <Button
                   id="hold-contact"
@@ -91,7 +91,7 @@ const HoldRequestBanner = ({
               </>
             ) : null}
             {(() => {
-              switch (pageStatus) {
+              switch (errorStatus) {
                 case "invalid":
                   return "Some fields contain errors. Please correct and submit again."
                 case "patronIneligible":

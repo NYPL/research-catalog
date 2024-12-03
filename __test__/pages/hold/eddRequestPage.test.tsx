@@ -307,7 +307,7 @@ describe("EDD Request page", () => {
           discoveryItemResult={bibWithItems.resource.items[0]}
           patronId="123"
           isAuthenticated={true}
-          pageStatus="eddUnavailable"
+          errorStatus="eddUnavailable"
         />
       )
       expect(
@@ -321,7 +321,7 @@ describe("EDD Request page", () => {
           discoveryItemResult={bibWithItems.resource.items[0]}
           patronId="123"
           isAuthenticated={true}
-          pageStatus="failed"
+          errorStatus="failed"
         />
       )
       expect(screen.getByText(HoldPageErrorHeadings.failed)).toBeInTheDocument()
@@ -333,7 +333,7 @@ describe("EDD Request page", () => {
           discoveryItemResult={bibWithItems.resource.items[0]}
           patronId="123"
           isAuthenticated={true}
-          pageStatus="invalid"
+          errorStatus="invalid"
         />
       )
       expect(
