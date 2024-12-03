@@ -215,7 +215,7 @@ const SettingsInputForm = ({
                     labelText={
                       index == 0
                         ? formUtils.primaryLabelText
-                        : `${formUtils.labelText} ${index}`
+                        : `${formUtils.labelText} ${index + 1}`
                     }
                     showLabel={false}
                     isInvalid={error && !validateInput(input, tempInputs)}

@@ -48,7 +48,9 @@ describe("email form", () => {
     render(component)
     fireEvent.click(screen.getByRole("button", { name: /edit/i }))
 
-    expect(screen.getAllByLabelText("Update emails")[0]).toBeInTheDocument()
+    expect(
+      screen.getByLabelText("Update primary email address")
+    ).toBeInTheDocument()
     expect(
       screen.getByDisplayValue("streganonna@gmail.com")
     ).toBeInTheDocument()
@@ -65,7 +67,7 @@ describe("email form", () => {
 
     fireEvent.click(screen.getByRole("button", { name: /edit/i }))
 
-    const input = screen.getAllByLabelText("Update emails")[0]
+    const input = screen.getByLabelText("Update primary email address")
     fireEvent.change(input, { target: { value: "invalid-email" } })
 
     expect(
@@ -84,7 +86,7 @@ describe("email form", () => {
       screen.getByRole("button", { name: /\+ add an email address/i })
     )
 
-    expect(screen.getAllByLabelText("Update emails").length).toBe(
+    expect(screen.getAllByRole("textbox").length).toBe(
       processedPatron.emails.length + 1
     )
   })
@@ -106,7 +108,7 @@ describe("email form", () => {
 
     fireEvent.click(screen.getByRole("button", { name: /edit/i }))
 
-    const input = screen.getAllByLabelText("Update emails")[0]
+    const input = screen.getByLabelText("Update primary email address")
     fireEvent.change(input, { target: { value: "newemail@example.com" } })
 
     fireEvent.click(screen.getByRole("button", { name: /save changes/i }))
@@ -128,7 +130,7 @@ describe("email form", () => {
 
     fireEvent.click(screen.getByRole("button", { name: /edit/i }))
 
-    const input = screen.getAllByLabelText("Update emails")[0]
+    const input = screen.getByLabelText("Update primary email address")
     fireEvent.change(input, { target: { value: "modified@example.com" } })
 
     fireEvent.click(screen.getByRole("button", { name: /cancel/i }))

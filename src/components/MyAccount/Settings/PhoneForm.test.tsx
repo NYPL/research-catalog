@@ -50,7 +50,9 @@ describe("phone form", () => {
     render(component)
     fireEvent.click(screen.getByRole("button", { name: /edit/i }))
 
-    expect(screen.getAllByLabelText("Update phones")[0]).toBeInTheDocument()
+    expect(
+      screen.getByLabelText("Update primary phone number")
+    ).toBeInTheDocument()
     expect(
       screen.getByDisplayValue(processedPatron.phones[0].number)
     ).toBeInTheDocument()
@@ -67,7 +69,7 @@ describe("phone form", () => {
 
     fireEvent.click(screen.getByRole("button", { name: /edit/i }))
 
-    const input = screen.getAllByLabelText("Update phones")[0]
+    const input = screen.getByLabelText("Update primary phone number")
     fireEvent.change(input, { target: { value: "invalid-phone" } })
 
     expect(
@@ -86,7 +88,7 @@ describe("phone form", () => {
       screen.getByRole("button", { name: /\+ add a phone number/i })
     )
 
-    expect(screen.getAllByLabelText("Update phones").length).toBe(
+    expect(screen.getAllByRole("textbox").length).toBe(
       processedPatron.phones.length + 1
     )
   })
@@ -100,7 +102,7 @@ describe("phone form", () => {
       screen.getByRole("button", { name: /\+ add a phone number/i })
     )
 
-    const input = screen.getAllByLabelText("Update phones")[1]
+    const input = screen.getByLabelText("Update phone number 2")
 
     fireEvent.change(input, { target: { value: "5106974153" } })
 
@@ -109,8 +111,7 @@ describe("phone form", () => {
     )
 
     fireEvent.click(screen.getByLabelText("Remove phone"))
-
-    expect(screen.getAllByLabelText("Update phones").length).toBe(
+    expect(screen.getAllByRole("textbox").length).toBe(
       processedPatron.phones.length
     )
   })
@@ -120,7 +121,7 @@ describe("phone form", () => {
 
     fireEvent.click(screen.getByRole("button", { name: /edit/i }))
 
-    const input = screen.getAllByLabelText("Update phones")[0]
+    const input = screen.getByLabelText("Update primary phone number")
     fireEvent.change(input, { target: { value: "1234" } })
 
     fireEvent.click(screen.getByRole("button", { name: /save changes/i }))
@@ -142,7 +143,7 @@ describe("phone form", () => {
 
     fireEvent.click(screen.getByRole("button", { name: /edit/i }))
 
-    const input = screen.getAllByLabelText("Update phones")[0]
+    const input = screen.getByLabelText("Update primary phone number")
     fireEvent.change(input, { target: { value: "4534" } })
 
     fireEvent.click(screen.getByRole("button", { name: /cancel/i }))
