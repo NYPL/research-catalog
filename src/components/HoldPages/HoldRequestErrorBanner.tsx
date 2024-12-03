@@ -120,41 +120,43 @@ const PatronErrors = ({
   const { expired, moneyOwed, ptypeDisallowsHolds, reachedHoldLimit } =
     patronEligibilityStatus
 
-  return expired || moneyOwed || ptypeDisallowsHolds || reachedHoldLimit ? (
-    <List
-      type="ul"
-      listItems={[
-        ...(expired
-          ? [
-              <>
-                Your account has expired -- Please see{" "}
-                <ExternalLink href={appConfig.urls.renewCard}>
-                  Library Terms and Conditions -- Renewing or Validating Your
-                  Library Card
-                </ExternalLink>{" "}
-                about renewing your card.
-              </>,
-            ]
-          : []),
-        ...(moneyOwed
-          ? [
-              <>
-                Your fines have exceeded the limit — you can pay your fines in a
-                branch or online from the links under{" "}
-                <RCLink href={PATHS.MY_ACCOUNT}>My Account</RCLink>.
-              </>,
-            ]
-          : []),
-        ...(ptypeDisallowsHolds
-          ? ["Your card does not permit placing holds on ReCAP materials."]
-          : []),
-        ...(reachedHoldLimit
-          ? ["You have reached the allowed number of holds."]
-          : []),
-      ]}
-    />
-  ) : (
-    "There is a problem with your library account."
+  return (
+    <Box>
+      This is because:
+      <List
+        type="ul"
+        margin={0}
+        listItems={[
+          ...(expired
+            ? [
+                <>
+                  Your account has expired -- Please see{" "}
+                  <ExternalLink href={appConfig.urls.renewCard}>
+                    Library Terms and Conditions -- Renewing or Validating Your
+                    Library Card
+                  </ExternalLink>{" "}
+                  about renewing your card.
+                </>,
+              ]
+            : []),
+          ...(moneyOwed
+            ? [
+                <>
+                  Your fines have exceeded the limit — you can pay your fines in
+                  a branch or online from the links under{" "}
+                  <RCLink href={PATHS.MY_ACCOUNT}>My Account</RCLink>.
+                </>,
+              ]
+            : []),
+          ...(ptypeDisallowsHolds
+            ? ["Your card does not permit placing holds on ReCAP materials."]
+            : []),
+          ...(reachedHoldLimit
+            ? ["You have reached the allowed number of holds."]
+            : []),
+        ]}
+      />
+    </Box>
   )
 }
 
