@@ -1,5 +1,11 @@
 import { useContext } from "react"
-import { Box, Banner, Button, List } from "@nypl/design-system-react-components"
+import {
+  Text,
+  Box,
+  Banner,
+  Button,
+  List,
+} from "@nypl/design-system-react-components"
 
 import type {
   HoldErrorStatus,
@@ -53,43 +59,45 @@ const HoldRequestErrorBanner = ({
       }}
       content={
         <>
-          <Box marginTop="xs">
-            {HOLD_PAGE_CONTACT_PREFIXES?.[errorStatus] ? (
-              <>
-                {HOLD_PAGE_CONTACT_PREFIXES?.[errorStatus]}
-                {" Please try again, "}
-                <Button
-                  id="hold-contact"
-                  onClick={() =>
-                    onContact({
-                      id: item.id,
-                      barcode: item.barcode,
-                      callNumber: item.callNumber,
-                      bibId: item.bibId,
-                      notificationText: `Request failed for call number ${item.callNumber}`,
-                    })
-                  }
-                  buttonType="link"
-                  // TODO: Ask DS team to make button link variant match the default link styles
-                  sx={{
-                    display: "inline",
-                    fontWeight: "inherit",
-                    fontSize: "inherit",
-                    p: 0,
-                    height: "auto",
-                    textAlign: "left",
-                    minHeight: "auto",
-                    textDecorationStyle: "dotted",
-                    textDecorationThickness: "1px",
-                    textUnderlineOffset: "2px",
-                  }}
-                >
-                  contact us
-                </Button>{" "}
-                for assistance, or{" "}
-                <RCLink href="/search">start a new search.</RCLink>
-              </>
-            ) : null}
+          <Box>
+            <Text>
+              {HOLD_PAGE_CONTACT_PREFIXES?.[errorStatus] ? (
+                <>
+                  {HOLD_PAGE_CONTACT_PREFIXES?.[errorStatus]}
+                  {" Please try again, "}
+                  <Button
+                    id="hold-contact"
+                    onClick={() =>
+                      onContact({
+                        id: item.id,
+                        barcode: item.barcode,
+                        callNumber: item.callNumber,
+                        bibId: item.bibId,
+                        notificationText: `Request failed for call number ${item.callNumber}`,
+                      })
+                    }
+                    buttonType="link"
+                    // TODO: Ask DS team to make button link variant match the default link styles
+                    sx={{
+                      display: "inline",
+                      fontWeight: "inherit",
+                      fontSize: "inherit",
+                      p: 0,
+                      height: "auto",
+                      textAlign: "left",
+                      minHeight: "auto",
+                      textDecorationStyle: "dotted",
+                      textDecorationThickness: "1px",
+                      textUnderlineOffset: "2px",
+                    }}
+                  >
+                    contact us
+                  </Button>{" "}
+                  for assistance, or{" "}
+                  <RCLink href="/search">start a new search.</RCLink>
+                </>
+              ) : null}
+            </Text>
             {(() => {
               switch (errorStatus) {
                 case "invalid":
@@ -122,7 +130,7 @@ const PatronErrors = ({
 
   return (
     <Box>
-      This is because:
+      <Text mb="xs">This is because:</Text>
       <List
         type="ul"
         margin={0}

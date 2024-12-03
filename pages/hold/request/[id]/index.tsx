@@ -98,25 +98,30 @@ export default function HoldRequestPage({
         }),
       })
       const responseJson = await response.json()
-
-      if (response.status !== 200) {
-        console.error(
-          "HoldRequestPage: Error in hold request api response",
-          responseJson.error
-        )
-        setErrorStatus("failed")
-        setFormPosting(false)
-        return
-      }
       const { pickupLocation: pickupLocationFromResponse, requestId } =
         responseJson
 
-      setFormPosting(false)
-
-      // Success state
-      await router.push(
-        `${PATHS.HOLD_CONFIRMATION}/${holdId}?pickupLocation=${pickupLocationFromResponse}&requestId=${requestId}`
-      )
+      switch (response.status) {
+        case 401:
+          setErrorStatus("patronIneligible")
+          setFormPosting(false)
+          bannerContainerRef.current.focus()
+          break
+        case 500:
+          console.error(
+            "HoldRequestPage: Error in hold request api response",
+            responseJson.error
+          )
+          setErrorStatus("failed")
+          setFormPosting(false)
+          break
+        default:
+          setFormPosting(false)
+          // Success state
+          await router.push(
+            `${PATHS.HOLD_CONFIRMATION}/${holdId}?pickupLocation=${pickupLocationFromResponse}&requestId=${requestId}`
+          )
+      }
     } catch (error) {
       console.error(
         "HoldRequestPage: Error in hold request api response",

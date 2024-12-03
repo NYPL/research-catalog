@@ -1,6 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 
-import { postHoldRequest } from "../../../../../src/server/api/hold"
+import {
+  postHoldRequest,
+  fetchHoldRequestEligibility,
+} from "../../../../../src/server/api/hold"
 import { BASE_URL, PATHS } from "../../../../../src/config/constants"
 
 /**
@@ -14,10 +17,28 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   try {
+    const { patronId, source, pickupLocation, jsEnabled } = JSON.parse(req.body)
+
     const holdId = req.query.id as string
     const [, itemId] = holdId.split("-")
 
-    const { patronId, source, pickupLocation, jsEnabled } = JSON.parse(req.body)
+    const patronEligibility = await fetchHoldRequestEligibility(patronId)
+
+    if (!patronEligibility?.eligibility) {
+      switch (jsEnabled) {
+        case true:
+          return res.status(401).json({
+            patronEligibility,
+          })
+
+        // Server side redirect on ineligibility when Js is disabled
+        // TODO: Move this to seaprate API route
+        default:
+          res.redirect(
+            `${BASE_URL}${PATHS.HOLD_REQUEST}/${holdId}?patronEligibility=${patronEligibility}`
+          )
+      }
+    }
 
     const holdRequestResponse = await postHoldRequest({
       itemId,
@@ -34,6 +55,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     }
 
     // Return a 200 status when the hold request is posted successfully via JS fetch
+    // TODO: Make this a separate API route instead of a fetch attribute
     if (jsEnabled) {
       return res.status(200).json({
         pickupLocation: pickupLocationFromResponse,
