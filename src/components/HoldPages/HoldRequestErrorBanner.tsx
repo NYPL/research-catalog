@@ -1,5 +1,5 @@
 import { useContext } from "react"
-import { Box, Banner, Button } from "@nypl/design-system-react-components"
+import { Box, Banner, Button, List } from "@nypl/design-system-react-components"
 
 import {
   HoldPageErrorHeadings,
@@ -121,30 +121,38 @@ const PatronErrors = ({
     patronEligibilityStatus
 
   return expired || moneyOwed || ptypeDisallowsHolds || reachedHoldLimit ? (
-    <>
-      {expired ? (
-        <>
-          Your account has expired -- Please see{" "}
-          <ExternalLink href={appConfig.urls.renewCard}>
-            Library Terms and Conditions -- Renewing or Validating Your Library
-            Card
-          </ExternalLink>{" "}
-          about renewing your card.
-        </>
-      ) : null}
-
-      {moneyOwed ? (
-        <>
-          Your fines have exceeded the limit — you can pay your fines in a
-          branch or online from the links under{" "}
-          <RCLink href={PATHS.MY_ACCOUNT}>My Account</RCLink>.
-        </>
-      ) : null}
-      {ptypeDisallowsHolds
-        ? "Your card does not permit placing holds on ReCAP materials."
-        : null}
-      {reachedHoldLimit ? "" : null}
-    </>
+    <List
+      type="ul"
+      listItems={[
+        ...(expired
+          ? [
+              <>
+                Your account has expired -- Please see{" "}
+                <ExternalLink href={appConfig.urls.renewCard}>
+                  Library Terms and Conditions -- Renewing or Validating Your
+                  Library Card
+                </ExternalLink>{" "}
+                about renewing your card.
+              </>,
+            ]
+          : []),
+        ...(moneyOwed
+          ? [
+              <>
+                Your fines have exceeded the limit — you can pay your fines in a
+                branch or online from the links under{" "}
+                <RCLink href={PATHS.MY_ACCOUNT}>My Account</RCLink>.
+              </>,
+            ]
+          : []),
+        ...(ptypeDisallowsHolds
+          ? ["Your card does not permit placing holds on ReCAP materials."]
+          : []),
+        ...(reachedHoldLimit
+          ? ["You have reached the allowed number of holds."]
+          : []),
+      ]}
+    />
   ) : (
     "There is a problem with your library account."
   )
