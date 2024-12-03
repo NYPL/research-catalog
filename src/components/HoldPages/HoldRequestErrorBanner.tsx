@@ -1,10 +1,6 @@
 import { useContext } from "react"
 import { Box, Banner, Button, List } from "@nypl/design-system-react-components"
 
-import {
-  HoldPageErrorHeadings,
-  HoldPageContactPrefixes,
-} from "../../utils/holdPageUtils"
 import type {
   HoldErrorStatus,
   PatronEligibilityStatus,
@@ -14,7 +10,11 @@ import type { ItemMetadata } from "../../types/itemTypes"
 import type Item from "../../models/Item"
 import RCLink from "../Links/RCLink/RCLink"
 import ExternalLink from "../Links/ExternalLink/ExternalLink"
-import { PATHS } from "../../config/constants"
+import {
+  PATHS,
+  HOLD_PAGE_ERROR_HEADINGS,
+  HOLD_PAGE_CONTACT_PREFIXES,
+} from "../../config/constants"
 import { appConfig } from "../../config/config"
 
 interface HoldRequestErrorBannerProps {
@@ -42,7 +42,7 @@ const HoldRequestErrorBanner = ({
   return (
     <Banner
       type="negative"
-      heading={HoldPageErrorHeadings?.[errorStatus] || null}
+      heading={HOLD_PAGE_ERROR_HEADINGS?.[errorStatus] || null}
       data-testid="hold-request-error"
       // TODO: Ask DS team to make button link variant match the default link styles
       sx={{
@@ -54,9 +54,9 @@ const HoldRequestErrorBanner = ({
       content={
         <>
           <Box>
-            {HoldPageContactPrefixes?.[errorStatus] ? (
+            {HOLD_PAGE_CONTACT_PREFIXES?.[errorStatus] ? (
               <>
-                {HoldPageContactPrefixes?.[errorStatus]}
+                {HOLD_PAGE_CONTACT_PREFIXES?.[errorStatus]}
                 {" Please try again, "}
                 <Button
                   id="hold-contact"

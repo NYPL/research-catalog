@@ -21,19 +21,6 @@ export const initialEDDFormState: EDDRequestParams = {
   pickupLocation: "edd",
 }
 
-export const HoldPageErrorHeadings = {
-  failed: "Request failed.",
-  eddUnavailable:
-    "Electronic delivery options for this item are currently unavailable.",
-  patronIneligible: "There is a problem with your library account.",
-}
-
-export const HoldPageContactPrefixes = {
-  failed: "We were unable to process your request at this time.",
-  eddUnavailable:
-    "Electronic delivery options for this item are currently unavailable.",
-}
-
 // Initial state for invalid fields in the EDD form to keep track of the first invalid field for focus on submit
 export const initialEDDInvalidFields: EDDFormValidatedField[] = [
   { key: "emailAddress", isInvalid: false },
