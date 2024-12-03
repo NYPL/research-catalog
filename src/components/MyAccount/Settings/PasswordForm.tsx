@@ -1,5 +1,6 @@
-import { useContext, useState } from "react"
+import { forwardRef, useContext, useRef, useState } from "react"
 import { PatronDataContext } from "../../../context/PatronDataContext"
+import type { TextInputRefType } from "@nypl/design-system-react-components"
 import {
   Banner,
   Flex,
@@ -30,37 +31,37 @@ export const passwordFormMessages = {
   INVALID: "Invalid new pin/password.",
 }
 
-const PasswordFormField = ({
-  label,
-  handler,
-  name,
-  isInvalid,
-}: PasswordFormFieldProps) => {
-  return (
-    <Flex
-      flexDir={{ base: "column", lg: "row" }}
-      alignItems="flex-start"
-      gap={{ base: "xs", lg: "unset" }}
-    >
-      <SettingsLabel icon="actionLockClosed" text={label} />
-      <TextInput
-        marginLeft={{ sm: "m", lg: 0 }}
-        width="320px"
-        id={name}
-        name={name}
-        type="password"
-        isRequired
-        showLabel={false}
-        isClearable
-        showRequiredLabel={false}
-        labelText={label}
-        onChange={handler}
-        invalidText="Pin/passwords do not match."
-        isInvalid={isInvalid}
-      />
-    </Flex>
-  )
-}
+const PasswordFormField = forwardRef<TextInputRefType, PasswordFormFieldProps>(
+  ({ label, handler, name, isInvalid }: PasswordFormFieldProps, ref) => {
+    return (
+      <Flex
+        flexDir={{ base: "column", lg: "row" }}
+        alignItems="flex-start"
+        gap={{ base: "xs", lg: "unset" }}
+      >
+        <SettingsLabel icon="actionLockClosed" text={label} />
+        <TextInput
+          ref={ref}
+          marginLeft={{ sm: "m", lg: 0 }}
+          width="320px"
+          id={name}
+          name={name}
+          type="password"
+          isRequired
+          showLabel={false}
+          isClearable
+          showRequiredLabel={false}
+          labelText={label}
+          onChange={handler}
+          invalidText="Pin/passwords do not match."
+          isInvalid={isInvalid}
+        />
+      </Flex>
+    )
+  }
+)
+
+PasswordFormField.displayName = "PasswordFormField"
 
 const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
   const { getMostUpdatedSierraAccountData } = useContext(PatronDataContext)
@@ -74,10 +75,15 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
   })
   const { setStatus, setStatusMessage, editingField, setEditingField } =
     settingsState
+  const editingRef = useRef<HTMLButtonElement | null>()
+  const inputRef = useRef<TextInputRefType | null>()
 
   const cancelEditing = () => {
     setIsEditing(false)
     setEditingField("")
+    setTimeout(() => {
+      editingRef.current?.focus()
+    }, 0)
   }
 
   const validateForm =
@@ -162,6 +168,7 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
               }}
             >
               <PasswordFormField
+                ref={inputRef}
                 label="Enter current pin/password"
                 name="currentPassword"
                 handler={handleInputChange}
@@ -235,11 +242,15 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
             </Text>
             {editingField === "" && (
               <EditButton
+                ref={editingRef}
                 buttonLabel="Edit password"
                 buttonId="edit-password-button"
                 onClick={() => {
                   setIsEditing(true)
                   setEditingField("password")
+                  setTimeout(() => {
+                    inputRef.current?.focus()
+                  }, 0)
                 }}
               />
             )}

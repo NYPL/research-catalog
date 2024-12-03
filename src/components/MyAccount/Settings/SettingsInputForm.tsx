@@ -44,6 +44,7 @@ const SettingsInputForm = ({
   const [tempInputs, setTempInputs] = useState([...inputs])
 
   const inputRefs = useRef<Array<TextInputRefType | null>>([])
+  const editingRef = useRef<HTMLButtonElement | null>()
 
   const focusLastInput = () => {
     const lastIndex = tempInputs.length - 1
@@ -59,6 +60,9 @@ const SettingsInputForm = ({
   const formUtils = {
     regex: isEmail ? /^[^@]+@[^@]+\.[^@]+$/ : /^\+?[1-9]\d{1,14}$/,
     labelText: isEmail ? "Update email address" : "Update phone number",
+    primaryLabelText: isEmail
+      ? "Update primary email address"
+      : "Update primary phone number",
     addButtonLabel: isEmail ? "+ Add an email address" : "+ Add a phone number",
     errorMessage: `Please enter a valid and unique ${
       isEmail ? "email address" : "phone number"
@@ -126,6 +130,9 @@ const SettingsInputForm = ({
     setIsEditing(false)
     setEditingField("")
     setError(false)
+    setTimeout(() => {
+      editingRef.current?.focus()
+    }, 0)
   }
 
   const submitInputs = async () => {
@@ -207,7 +214,7 @@ const SettingsInputForm = ({
                     id={`${inputType}-text-input-${index}`}
                     labelText={
                       index == 0
-                        ? `Update primary ${inputType}`
+                        ? formUtils.primaryLabelText
                         : `${formUtils.labelText} ${index}`
                     }
                     showLabel={false}
@@ -277,6 +284,7 @@ const SettingsInputForm = ({
             </Flex>
             {editingField === "" && tempInputs.length > 0 && (
               <EditButton
+                ref={editingRef}
                 buttonLabel={`Edit ${inputType}`}
                 buttonId={`edit-${inputType}-button`}
                 onClick={() => {

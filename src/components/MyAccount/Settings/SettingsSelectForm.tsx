@@ -1,4 +1,4 @@
-import { useContext, useState } from "react"
+import { useContext, useRef, useState } from "react"
 import { PatronDataContext } from "../../../context/PatronDataContext"
 import {
   Flex,
@@ -30,6 +30,8 @@ const SettingsSelectForm = ({
   const [error, setError] = useState(false)
 
   const { setStatus, editingField, setEditingField } = settingsState
+  const editingRef = useRef<HTMLButtonElement | null>()
+  const inputRef = useRef<HTMLSelectElement | null>()
 
   const notificationPreferenceMap =
     patronData.notificationPreference === "-"
@@ -89,6 +91,9 @@ const SettingsSelectForm = ({
   const cancelEditing = () => {
     setIsEditing(false)
     setEditingField("")
+    setTimeout(() => {
+      editingRef.current?.focus()
+    }, 0)
   }
 
   const submitSelection = async () => {
@@ -159,6 +164,7 @@ const SettingsSelectForm = ({
             width="-webkit-fill-available"
           >
             <Select
+              ref={inputRef}
               width={{ base: "100%", md: "max-content" }}
               name={`select-${type}`}
               id={formUtils.selectorId}
@@ -187,11 +193,15 @@ const SettingsSelectForm = ({
             </Text>
             {editingField === "" && (
               <EditButton
+                ref={editingRef}
                 buttonLabel={`Edit ${type}`}
                 buttonId={`edit-${type}-button`}
                 onClick={() => {
                   setIsEditing(true)
                   setEditingField(type)
+                  setTimeout(() => {
+                    inputRef.current?.focus()
+                  }, 0)
                 }}
               />
             )}
