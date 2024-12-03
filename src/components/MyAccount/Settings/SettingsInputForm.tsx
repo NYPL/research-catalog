@@ -8,7 +8,8 @@ import {
   Form,
   Box,
 } from "@nypl/design-system-react-components"
-import { useContext, useState } from "react"
+import type { TextInputRefType } from "@nypl/design-system-react-components"
+import { useContext, useEffect, useRef, useState } from "react"
 import { PatronDataContext } from "../../../context/PatronDataContext"
 import SaveCancelButtons from "./SaveCancelButtons"
 import SettingsLabel from "./SettingsLabel"
@@ -41,6 +42,19 @@ const SettingsInputForm = ({
   const { setStatus, editingField, setEditingField } = settingsState
 
   const [tempInputs, setTempInputs] = useState([...inputs])
+
+  const inputRefs = useRef<Array<TextInputRefType | null>>([])
+
+  const focusLastInput = () => {
+    const lastIndex = tempInputs.length - 1
+    if (inputRefs.current[lastIndex]) {
+      inputRefs.current[lastIndex]?.focus()
+    }
+  }
+
+  useEffect(() => {
+    focusLastInput()
+  }, [tempInputs])
 
   const formUtils = {
     regex: isEmail ? /^[^@]+@[^@]+\.[^@]+$/ : /^\+?[1-9]\d{1,14}$/,
@@ -186,7 +200,13 @@ const SettingsInputForm = ({
                   <TextInput
                     sx={{
                       width: { base: "87%", md: "300px" },
+                      " > div > input": {
+                        _focus: {
+                          outline: "2px green solid !important",
+                        },
+                      },
                     }}
+                    ref={(el) => (inputRefs.current[index] = el)}
                     name={`input-${index}`}
                     value={input}
                     id={`${inputType}-text-input-${index}`}
@@ -263,6 +283,7 @@ const SettingsInputForm = ({
                 onClick={() => {
                   setIsEditing(true)
                   setEditingField(inputType)
+                  setTimeout(() => focusLastInput(), 0)
                 }}
               />
             )}
