@@ -58,7 +58,7 @@ const SettingsInputForm = ({
 
   const formUtils = {
     regex: isEmail ? /^[^@]+@[^@]+\.[^@]+$/ : /^\+?[1-9]\d{1,14}$/,
-    labelText: `Update ${inputType}`,
+    labelText: isEmail ? "Update email address" : "Update phone number",
     addButtonLabel: isEmail ? "+ Add an email address" : "+ Add a phone number",
     errorMessage: `Please enter a valid and unique ${
       isEmail ? "email address" : "phone number"
@@ -200,17 +200,16 @@ const SettingsInputForm = ({
                   <TextInput
                     sx={{
                       width: { base: "87%", md: "300px" },
-                      " > div > input": {
-                        _focus: {
-                          outline: "2px green solid !important",
-                        },
-                      },
                     }}
                     ref={(el) => (inputRefs.current[index] = el)}
                     name={`input-${index}`}
                     value={input}
                     id={`${inputType}-text-input-${index}`}
-                    labelText={formUtils.labelText}
+                    labelText={
+                      index == 0
+                        ? `Update primary ${inputType}`
+                        : `${formUtils.labelText} ${index}`
+                    }
                     showLabel={false}
                     isInvalid={error && !validateInput(input, tempInputs)}
                     invalidText={formUtils.errorMessage}
