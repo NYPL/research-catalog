@@ -41,7 +41,6 @@ interface EDDRequestPropsType {
   patronId: string
   isAuthenticated?: boolean
   errorStatus?: HoldErrorStatus
-  eddRequestable?: boolean
 }
 
 /**
@@ -239,7 +238,7 @@ export async function getServerSideProps({ params, req, res, query }) {
         discoveryItemResult,
         patronId,
         isAuthenticated,
-        pageStatus: !isEddAvailable ? "eddUnavailable" : null,
+        errorStatus: !isEddAvailable ? "eddUnavailable" : null,
       },
     }
   } catch (error) {

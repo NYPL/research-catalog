@@ -63,6 +63,7 @@ export type HoldErrorStatus =
   | "eddUnavailable"
   | "invalid"
   | "patronIneligible"
+  | "serverError"
 
 export interface EDDFormAction {
   type: EDDFormActionType

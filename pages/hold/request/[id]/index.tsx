@@ -69,8 +69,6 @@ export default function HoldRequestPage({
 
   const holdId = `${item.bibId}-${item.id}`
 
-  // Initialize alert to true if item is not available. This will show the error banner.
-  const [alert, setAlert] = useState(!item.isAvailable)
   const [errorStatus, setErrorStatus] = useState(defaultErrorStatus)
   const [formPosting, setFormPosting] = useState(false)
   const bannerContainerRef = useRef<HTMLDivElement>()
@@ -79,10 +77,10 @@ export default function HoldRequestPage({
   const isLoading = useLoading()
 
   useEffect(() => {
-    if (alert && bannerContainerRef.current) {
+    if (errorStatus && bannerContainerRef.current) {
       bannerContainerRef.current.focus()
     }
-  }, [alert])
+  }, [errorStatus])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -106,8 +104,7 @@ export default function HoldRequestPage({
           "HoldRequestPage: Error in hold request api response",
           responseJson.error
         )
-        setAlert(true)
-        setErrorDetail(responseJson?.error?.detail || "")
+        setErrorStatus("failed")
         setFormPosting(false)
         return
       }
@@ -125,8 +122,8 @@ export default function HoldRequestPage({
         "HoldRequestPage: Error in hold request api response",
         error
       )
+      setErrorStatus("failed")
       setFormPosting(false)
-      setAlert(true)
     }
   }
 
@@ -146,7 +143,7 @@ export default function HoldRequestPage({
         {/* Always render the wrapper element that will display the
           dynamically rendered notification for focus management */}
         <Box tabIndex={-1} ref={bannerContainerRef}>
-          {alert && (
+          {errorStatus && (
             <HoldRequestBanner
               item={item}
               errorStatus={errorStatus}
@@ -244,13 +241,12 @@ export async function getServerSideProps({ params, req, res }) {
       await fetchDeliveryLocations(item.barcode, patronId)
 
     // TODO: Make this not lead to 404
-    if (locationStatus !== 200) {
-      throw new Error(
-        "Hold Page - Error fetching delivery locations in getServerSideProps"
-      )
-    }
 
     const patronEligibilityStatus = await fetchHoldRequestEligibility(patronId)
+
+    if (!patronEligibilityStatus) {
+      throw new Error("Hold Page - Error fetching patron eligibility status")
+    }
 
     return {
       props: {
@@ -260,6 +256,12 @@ export async function getServerSideProps({ params, req, res }) {
         patronId,
         isAuthenticated,
         patronEligibilityStatus,
+        errorStatus:
+          locationStatus !== 200 || !patronEligibilityStatus
+            ? "failed"
+            : !patronEligibilityStatus.eligibility
+            ? "patronIneligible"
+            : null,
       },
     }
   } catch (error) {

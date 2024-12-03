@@ -22,7 +22,7 @@ export const initialEDDFormState: EDDRequestParams = {
 }
 
 export const HoldPageErrorHeadings = {
-  failed: "Request failed",
+  failed: "Request failed.",
   eddUnavailable:
     "Electronic delivery options for this item are currently unavailable.",
   patronIneligible: "There is a problem with your library account.",
