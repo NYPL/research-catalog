@@ -151,10 +151,14 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
     <Flex alignItems="center" marginTop={{ base: "unset", md: "-xs" }}>
       {usernameInSierra ? (
         <>
-          <Text size="body1" sx={{ marginBottom: 0 }}>
+          <Text
+            size="body1"
+            sx={{ marginBottom: 0, width: { base: "l", sm: "250px" } }}
+          >
             {usernameInSierra}
           </Text>
           <EditButton
+            buttonLabel="Edit username"
             buttonId="edit-username-button"
             onClick={() => setIsEditing(true)}
           />
@@ -199,7 +203,7 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
         contentSize={2}
         showImage={false}
         headingSize={0}
-        sx={{ marginTop: "-s" }}
+        sx={{ marginTop: "-xs" }}
       />
     )
   } else if (isEditing) {

@@ -166,12 +166,16 @@ const SettingsInputForm = ({
         width="100%"
       >
         <SettingsLabel icon={formUtils.icon} text={formUtils.inputLabel} />
-
         {isLoading ? (
-          <SkeletonLoader contentSize={2} showImage={false} headingSize={0} />
+          <SkeletonLoader
+            sx={{ "> div": { marginTop: "-xs" } }}
+            contentSize={2}
+            showImage={false}
+            headingSize={0}
+          />
         ) : isEditing ? (
           <Flex
-            marginLeft={{ base: "l", lg: "unset" }}
+            marginLeft={{ base: "m", lg: "unset" }}
             marginTop={{ base: "xs", lg: "unset" }}
             flexDir="column"
             width="-webkit-fill-available"
@@ -195,6 +199,7 @@ const SettingsInputForm = ({
                     isClearable
                     isClearableCallback={() => handleClearableCallback(index)}
                   />
+                  {index == 0 && <div style={{ width: "57px" }}> </div>}
                   {index !== 0 && (
                     <Button
                       aria-label={`Remove ${formUtils.inputLabel.toLowerCase()}`}
@@ -209,15 +214,18 @@ const SettingsInputForm = ({
                 </Flex>
               </Form>
             ))}
-            <AddButton
-              inputType={inputType}
-              label={formUtils.addButtonLabel}
-              onClick={handleAdd}
-            />
+            <Flex flexDir="row">
+              <AddButton
+                inputType={inputType}
+                label={formUtils.addButtonLabel}
+                onClick={handleAdd}
+              />
+              <div style={{ width: "72px" }}> </div>
+            </Flex>
           </Flex>
         ) : isEmail || tempInputs.length !== 0 ? (
           <Flex
-            marginLeft={{ base: "l", lg: "unset" }}
+            marginLeft={{ base: "m", lg: "unset" }}
             flexDir="row"
             alignItems="flex-start"
           >
@@ -226,9 +234,9 @@ const SettingsInputForm = ({
                 <Text
                   key={index}
                   sx={{
-                    width: { base: "l", sm: "250px" },
-                    paddingTop: "xs",
+                    width: { base: "200px", sm: "250px" },
                     marginBottom: "xs",
+                    marginTop: { base: "xs", lg: "unset" },
                   }}
                 >
                   {input}{" "}
@@ -250,6 +258,7 @@ const SettingsInputForm = ({
             </Flex>
             {editingField === "" && tempInputs.length > 0 && (
               <EditButton
+                buttonLabel={`Edit ${inputType}`}
                 buttonId={`edit-${inputType}-button`}
                 onClick={() => {
                   setIsEditing(true)

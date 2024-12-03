@@ -146,13 +146,17 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
   return (
     <>
       {isLoading ? (
-        <SkeletonLoader contentSize={2} showImage={false} headingSize={0} />
+        <SkeletonLoader
+          sx={{ "> div": { marginTop: "-xs" } }}
+          contentSize={2}
+          showImage={false}
+          headingSize={0}
+        />
       ) : isEditing ? (
         <>
-          <Flex flexDir={{ base: "column", lg: "row" }}>
+          <Flex alignItems="flex-start" flexDir={{ base: "column", lg: "row" }}>
             <Flex
               sx={{
-                marginTop: "xs",
                 flexDir: "column",
                 gap: "s",
               }}
@@ -221,9 +225,9 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
           <Flex>
             <Text
               sx={{
-                width: { base: "l", sm: "250px" },
+                width: { base: "200px", sm: "250px" },
                 marginTop: "xs",
-                marginLeft: { base: "l", lg: "unset" },
+                marginLeft: { base: "m", lg: "unset" },
                 marginBottom: 0,
               }}
             >
@@ -231,6 +235,7 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
             </Text>
             {editingField === "" && (
               <EditButton
+                buttonLabel="Edit password"
                 buttonId="edit-password-button"
                 onClick={() => {
                   setIsEditing(true)

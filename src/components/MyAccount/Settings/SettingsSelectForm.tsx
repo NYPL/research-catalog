@@ -144,15 +144,19 @@ const SettingsSelectForm = ({
       >
         <SettingsLabel icon={formUtils.icon} text={formUtils.label} />
         {isLoading ? (
-          <SkeletonLoader contentSize={2} showImage={false} headingSize={0} />
+          <SkeletonLoader
+            sx={{ "> div": { marginTop: "-xs" } }}
+            contentSize={2}
+            showImage={false}
+            headingSize={0}
+          />
         ) : isEditing ? (
           <Flex
-            sx={{
-              marginTop: "xs",
-              marginLeft: { base: "l", lg: "unset" },
-              paddingRight: { base: "l", md: "unset" },
-              width: "100%",
-            }}
+            marginLeft={{ base: "m", lg: "unset" }}
+            marginTop={{ base: "s", md: "unset" }}
+            flexDir="column"
+            alignItems="flex-start"
+            width="-webkit-fill-available"
           >
             <Select
               width={{ base: "100%", md: "max-content" }}
@@ -171,12 +175,11 @@ const SettingsSelectForm = ({
             </Select>
           </Flex>
         ) : (
-          <Flex>
+          <Flex marginLeft={{ base: "m", lg: "unset" }}>
             <Text
               sx={{
-                width: { base: "l", sm: "250px" },
-                marginTop: "xs",
-                marginLeft: { base: "l", lg: "unset" },
+                marginTop: { base: "xs", lg: "unset" },
+                width: { base: "200px", sm: "250px" },
                 marginBottom: 0,
               }}
             >
@@ -184,6 +187,7 @@ const SettingsSelectForm = ({
             </Text>
             {editingField === "" && (
               <EditButton
+                buttonLabel={`Edit ${type}`}
                 buttonId={`edit-${type}-button`}
                 onClick={() => {
                   setIsEditing(true)

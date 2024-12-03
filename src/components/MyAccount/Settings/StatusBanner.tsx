@@ -7,21 +7,15 @@ type StatusBannerProps = {
   statusMessage: string
 }
 
-const successContent = (
-  <Text marginBottom={0} color="ui.black !important">
-    Your changes were saved.
-  </Text>
-)
+const successContent = <Text marginBottom={0}>Your changes were saved.</Text>
 
 const generalFailureContent = (
-  <Text marginBottom={0} color="ui.black !important">
-    Your changes were not saved.
-  </Text>
+  <Text marginBottom={0}>Your changes were not saved.</Text>
 )
 
 const specificFailureContent = (statusMessage: string) => {
   return (
-    <Text marginBottom={0} color={"ui.black !important"}>
+    <Text marginBottom={0}>
       {statusMessage} Please try again or{" "}
       <Link href="https://www.nypl.org/get-help/contact-us">contact us</Link>{" "}
       for assistance.

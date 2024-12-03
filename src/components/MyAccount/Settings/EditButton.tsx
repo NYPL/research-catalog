@@ -2,19 +2,22 @@ import { Button, Icon } from "@nypl/design-system-react-components"
 
 type EditButtonProps = {
   buttonId: string
+  buttonLabel: string
   onClick: () => void
 }
 
-const EditButton = ({ buttonId, onClick }: EditButtonProps) => {
+const EditButton = ({ buttonId, buttonLabel, onClick }: EditButtonProps) => {
   return (
     <Button
       id={buttonId}
+      aria-label={buttonLabel}
       buttonType="text"
       onClick={onClick}
       sx={{
+        paddingTop: "0",
+        paddingBottom: "0",
         paddingLeft: "xs",
         paddingRight: "xs",
-        marginLeft: "xxl",
       }}
     >
       <Icon name="editorMode" align="left" size="medium" />
