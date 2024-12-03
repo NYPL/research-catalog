@@ -135,9 +135,10 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
           isClearableCallback={() => setError(true)}
         />
         <Button
-          aria-label="Remove username"
+          aria-label="Delete username from your account"
+          aria-describedby="delete-warning-message"
           buttonType="text"
-          id="remove-username-btn"
+          id="delete-username-btn"
           onClick={() => {
             setTempUsername(null)
             setError(false)
@@ -151,6 +152,7 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
         </Button>
       </Flex>
       <Banner
+        id="delete-warning-message"
         sx={{ marginTop: "xs", width: "fill" }}
         content="If you delete your username, you will have to use your barcode to log in to your account in the future."
         type="warning"
