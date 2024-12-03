@@ -237,7 +237,7 @@ export async function getServerSideProps({ params, req, res, query }) {
 
     const patronEligibilityStatus = await fetchHoldRequestEligibility(patronId)
 
-    if (!patronEligibilityStatus?.eligibility) {
+    if (!patronEligibilityStatus) {
       console.error(
         "EDD Page - Error fetching patronEligibilityStatus in getServerSideProps"
       )
@@ -250,7 +250,7 @@ export async function getServerSideProps({ params, req, res, query }) {
         patronId,
         isAuthenticated,
         errorStatus:
-          locationStatus !== 200 || !patronEligibilityStatus?.eligibility
+          locationStatus !== 200 || !patronEligibilityStatus
             ? "failed"
             : !patronEligibilityStatus.eligibility
             ? "patronIneligible"
