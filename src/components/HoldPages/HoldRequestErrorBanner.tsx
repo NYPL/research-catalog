@@ -53,7 +53,7 @@ const HoldRequestErrorBanner = ({
       }}
       content={
         <>
-          <Box>
+          <Box marginTop="xs">
             {HOLD_PAGE_CONTACT_PREFIXES?.[errorStatus] ? (
               <>
                 {HOLD_PAGE_CONTACT_PREFIXES?.[errorStatus]}
