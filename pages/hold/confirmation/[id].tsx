@@ -99,6 +99,8 @@ export async function getServerSideProps({ req, res, query }) {
   const patronId = patronTokenResponse?.decodedPatron?.sub
 
   try {
+    const confirmationResponse = await fetchHoldDetails(requestId)
+    console.log(confirmationResponse)
     const { patronId: patronIdFromResponse } = await fetchHoldDetails(requestId)
 
     if (patronId !== patronIdFromResponse) {

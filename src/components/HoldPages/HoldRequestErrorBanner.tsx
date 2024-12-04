@@ -128,6 +128,12 @@ const PatronErrors = ({
   const { expired, moneyOwed, ptypeDisallowsHolds, reachedHoldLimit } =
     patronEligibilityStatus
 
+  const hasSpecificReason =
+    expired || moneyOwed || ptypeDisallowsHolds || reachedHoldLimit
+
+  // Generic patron error displayed in heading, don't show reasons list if there isn't one
+  if (hasSpecificReason) return null
+
   return (
     <Box>
       <Text mb="xs">This is because:</Text>
@@ -135,6 +141,9 @@ const PatronErrors = ({
         type="ul"
         margin={0}
         listItems={[
+          ...(ptypeDisallowsHolds
+            ? ["Your card does not permit placing holds on ReCAP materials."]
+            : []),
           ...(expired
             ? [
                 <>
