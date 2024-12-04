@@ -243,20 +243,22 @@ export async function getServerSideProps({ params, req, res, query }) {
       )
     }
 
+    const locationOrEligibilityFetchFailed =
+      locationStatus !== 200 || !patronEligibilityStatus
+
     return {
       props: {
         discoveryBibResult,
         discoveryItemResult,
         patronId,
         isAuthenticated,
-        errorStatus:
-          locationStatus !== 200 || !patronEligibilityStatus
-            ? "failed"
-            : !patronEligibilityStatus.eligibility
-            ? "patronIneligible"
-            : !isEddAvailable
-            ? "eddUnavailable"
-            : null,
+        errorStatus: locationOrEligibilityFetchFailed
+          ? "failed"
+          : patronEligibilityStatus.eligibility === false
+          ? "patronIneligible"
+          : !isEddAvailable
+          ? "eddUnavailable"
+          : null,
       },
     }
   } catch (error) {
