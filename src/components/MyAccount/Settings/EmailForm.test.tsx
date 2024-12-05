@@ -62,6 +62,31 @@ describe("email form", () => {
     expect(screen.queryByText(/edit/)).not.toBeInTheDocument()
   })
 
+  it("manages focus", async () => {
+    render(component)
+    fireEvent.click(screen.getByRole("button", { name: /edit/i }))
+
+    await waitFor(() =>
+      expect(screen.getByLabelText("Update email address 2")).toHaveFocus()
+    )
+
+    fireEvent.click(screen.getByRole("button", { name: /cancel/i }))
+
+    await waitFor(() =>
+      expect(screen.getByRole("button", { name: /edit/i })).toHaveFocus()
+    )
+
+    fireEvent.click(screen.getByRole("button", { name: /edit/i }))
+
+    fireEvent.click(screen.getByText("+ Add an email address"))
+
+    await waitFor(() => expect(screen.getAllByRole("textbox")[2]).toHaveFocus())
+
+    fireEvent.click(screen.getAllByLabelText("Remove email")[1])
+
+    await waitFor(() => expect(screen.getAllByRole("textbox")[1]).toHaveFocus())
+  })
+
   it("validates email input correctly", () => {
     render(component)
 

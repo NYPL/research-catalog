@@ -64,6 +64,31 @@ describe("phone form", () => {
     expect(screen.queryByText(/edit/)).not.toBeInTheDocument()
   })
 
+  it("manages focus", async () => {
+    render(component)
+    fireEvent.click(screen.getByRole("button", { name: /edit/i }))
+
+    await waitFor(() =>
+      expect(screen.getByLabelText("Update primary phone number")).toHaveFocus()
+    )
+
+    fireEvent.click(screen.getByRole("button", { name: /cancel/i }))
+
+    await waitFor(() =>
+      expect(screen.getByRole("button", { name: /edit/i })).toHaveFocus()
+    )
+
+    fireEvent.click(screen.getByRole("button", { name: /edit/i }))
+
+    fireEvent.click(screen.getByText("+ Add a phone number"))
+
+    await waitFor(() => expect(screen.getAllByRole("textbox")[1]).toHaveFocus())
+
+    fireEvent.click(screen.getByLabelText("Remove phone"))
+
+    await waitFor(() => expect(screen.getByRole("textbox")).toHaveFocus())
+  })
+
   it("validates phone input correctly", () => {
     render(component)
 

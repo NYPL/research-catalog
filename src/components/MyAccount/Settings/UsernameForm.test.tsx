@@ -64,6 +64,27 @@ describe("username form", () => {
     expect(screen.queryByRole("button", { name: /edit/i })).toBeNull()
   })
 
+  it("manages focus", async () => {
+    render(component)
+    fireEvent.click(screen.getByRole("button", { name: /edit/i }))
+
+    await waitFor(() => expect(screen.getByLabelText("Username")).toHaveFocus())
+
+    fireEvent.click(screen.getByRole("button", { name: /cancel/i }))
+
+    await waitFor(() =>
+      expect(screen.getByRole("button", { name: /edit/i })).toHaveFocus()
+    )
+
+    fireEvent.click(screen.getByRole("button", { name: /edit/i }))
+
+    fireEvent.click(screen.getByLabelText("Delete username from your account"))
+
+    await waitFor(() =>
+      expect(screen.getByRole("button", { name: /add /i })).toHaveFocus()
+    )
+  })
+
   it("allows editing when edit button is clicked", () => {
     render(component)
     fireEvent.click(screen.getByRole("button", { name: /edit/i }))
