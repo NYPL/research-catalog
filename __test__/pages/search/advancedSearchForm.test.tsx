@@ -1,5 +1,11 @@
 import React from "react"
-import { fireEvent, render, screen } from "../../../src/utils/testUtils"
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  delay,
+} from "../../../src/utils/testUtils"
 import mockRouter from "next-router-mock"
 import userEvent from "@testing-library/user-event"
 
@@ -17,10 +23,7 @@ describe("Advanced Search Form", () => {
     render(<AdvancedSearch isAuthenticated={true} />)
   })
   const submit = () => {
-    fireEvent(
-      screen.getByTestId("submit-advanced-search-button"),
-      new MouseEvent("click")
-    )
+    fireEvent.click(screen.getByTestId("submit-advanced-search-button"))
   }
   afterEach(async () => {
     await userEvent.click(screen.getByText("Clear fields"))
@@ -29,33 +32,29 @@ describe("Advanced Search Form", () => {
     submit()
     screen.getByText(defaultEmptySearchErrorMessage)
   })
-  // this test is broken due to debounce/userEvent/timing weirdness.
-  // this functionality works in the browser, but won't include
-  // final input in output string in test. the broken test is
-  // commented out below.
-  it.todo("can set keyword, contributor, title, subject")
-  // , async () => {
-  //
 
-  //   const [keywordInput, contributorInput, titleInput, subjectInput] = [
-  //     "Keyword",
-  //     "Title",
-  //     "Author",
-  //     "Subject",
-  //     "Call number",
-  //     "Unique identifier",
-  //   ].map((field) => screen.getByLabelText(field))
-  //   fireEvent.change(subjectInput, { target: { value: "italian food" } })
-  //   fireEvent.change(keywordInput, { target: { value: "spaghetti" } })
-  //   fireEvent.change(contributorInput, { target: { value: "strega nonna" } })
-  //   fireEvent.change(titleInput, { target: { value: "il amore di pasta" } })
-  //   submit()
-  //   await waitFor(() =>
-  //     expect(mockRouter.asPath).toBe(
-  //       "/search?q=spaghetti&contributor=il+amore+di+pasta&title=strega+nonna&subject=italian+food"
-  //     )
-  //   )
-  // })
+  it("can set keyword, contributor, title, subject", async () => {
+    const [keywordInput, contributorInput, titleInput, subjectInput] = [
+      "Keyword",
+      "Title",
+      "Author",
+      "Subject",
+      "Call number",
+      "Unique identifier",
+    ].map((field) => screen.getByLabelText(field))
+    fireEvent.change(subjectInput, { target: { value: "italian food" } })
+    fireEvent.change(keywordInput, { target: { value: "spaghetti" } })
+    fireEvent.change(contributorInput, { target: { value: "strega nonna" } })
+    fireEvent.change(titleInput, { target: { value: "il amore di pasta" } })
+    // without this delay, the input is not updated until after submit is called.
+    await delay(50)
+    submit()
+    await waitFor(() =>
+      expect(mockRouter.asPath).toBe(
+        "/search?q=spaghetti&title=strega+nonna&contributor=il+amore+di+pasta&subject=italian+food"
+      )
+    )
+  })
   it("renders inputs for all text input fields", () => {
     textInputFields.map(({ label }) => {
       const input = screen.getByLabelText(label)

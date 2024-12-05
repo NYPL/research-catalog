@@ -70,6 +70,7 @@ export default function AdvancedSearch({
     searchFormReducer,
     initialSearchFormState
   )
+
   const {
     dateFormProps,
     validateDateRange,
