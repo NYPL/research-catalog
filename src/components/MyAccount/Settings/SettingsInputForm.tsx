@@ -55,7 +55,7 @@ const SettingsInputForm = ({
 
   useEffect(() => {
     focusLastInput()
-  }, [tempInputs])
+  }, [tempInputs.length])
 
   const formUtils = {
     regex: isEmail ? /^[^@]+@[^@]+\.[^@]+$/ : /^\+?[1-9]\d{1,14}$/,
@@ -99,6 +99,9 @@ const SettingsInputForm = ({
   const handleRemove = (index) => {
     const updatedInputs = tempInputs.filter((_, i) => i !== index)
     setTempInputs(updatedInputs)
+
+    // Remove its corresponding ref.
+    inputRefs.current = inputRefs.current.filter((_, i) => i !== index)
 
     // Immediately revalidate remaining inputs.
     const hasInvalidInput = updatedInputs.some(

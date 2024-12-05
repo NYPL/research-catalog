@@ -246,6 +246,7 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
       {content}
       {isEditing && (
         <SaveCancelButtons
+          inputType="username"
           onCancel={cancelEditing}
           onSave={submitInput}
           isDisabled={error}
