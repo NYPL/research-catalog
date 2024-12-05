@@ -19,7 +19,7 @@ const AddButton = forwardRef<HTMLButtonElement, AddButtonProps>(
         sx={{
           justifyContent: "flex-start",
           width: { base: "100%", md: "300px" },
-          paddingLeft: { base: "m", md: "xs" },
+          paddingLeft: "xs",
           paddingTop: "xs",
           paddingBottom: "xs",
           paddingRight: "xs",
