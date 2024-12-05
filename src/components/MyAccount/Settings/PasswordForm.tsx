@@ -160,7 +160,7 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
         >
           <SettingsLabel icon="actionLockClosed" text="Pin/password" />
           <SkeletonLoader
-            sx={{ "> div": { marginTop: "-xs" } }}
+            sx={{ "> div": { marginTop: "-s" } }}
             contentSize={2}
             showImage={false}
             headingSize={0}
