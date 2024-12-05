@@ -182,6 +182,7 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
         </>
       ) : (
         <AddButton
+          ref={focusRef as React.Ref<HTMLButtonElement>}
           label="+ Add username"
           onClick={() => {
             setIsEditing(true)
