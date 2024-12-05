@@ -17,9 +17,7 @@ const EditButton = forwardRef<HTMLButtonElement, EditButtonProps>(
         buttonType="text"
         onClick={onClick}
         sx={{
-          _focus: {
-            outline: "2px green solid",
-          },
+          marginTop: { base: "unset", lg: "-xs" },
           paddingTop: "0",
           paddingBottom: "0",
           paddingLeft: "xs",

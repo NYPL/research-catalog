@@ -189,7 +189,7 @@ const SettingsInputForm = ({
         <SettingsLabel icon={formUtils.icon} text={formUtils.inputLabel} />
         {isLoading ? (
           <SkeletonLoader
-            sx={{ "> div": { marginTop: "-xs" } }}
+            sx={{ "> div": { marginTop: "-s" } }}
             contentSize={2}
             showImage={false}
             headingSize={0}
@@ -240,7 +240,7 @@ const SettingsInputForm = ({
                 </Flex>
               </Form>
             ))}
-            <Flex flexDir="row">
+            <Flex flexDir="row" width="fill">
               <AddButton
                 inputType={inputType}
                 label={formUtils.addButtonLabel}

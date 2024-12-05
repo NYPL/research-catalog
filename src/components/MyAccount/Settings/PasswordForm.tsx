@@ -41,9 +41,11 @@ const PasswordFormField = forwardRef<TextInputRefType, PasswordFormFieldProps>(
       >
         <SettingsLabel icon="actionLockClosed" text={label} />
         <TextInput
+          sx={{
+            width: { base: "100%", md: "300px" },
+          }}
           ref={ref}
-          marginLeft={{ sm: "m", lg: 0 }}
-          width="320px"
+          marginLeft={{ base: "m", lg: 0 }}
           id={name}
           name={name}
           type="password"
@@ -75,14 +77,13 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
   })
   const { setStatus, setStatusMessage, editingField, setEditingField } =
     settingsState
-  const editingRef = useRef<HTMLButtonElement | null>()
-  const inputRef = useRef<TextInputRefType | null>()
+  const focusRef = useRef<HTMLButtonElement | TextInputRefType | null>()
 
   const cancelEditing = () => {
     setIsEditing(false)
     setEditingField("")
     setTimeout(() => {
-      editingRef.current?.focus()
+      focusRef.current?.focus()
     }, 0)
   }
 
@@ -152,12 +153,19 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
   return (
     <>
       {isLoading ? (
-        <SkeletonLoader
-          sx={{ "> div": { marginTop: "-xs" } }}
-          contentSize={2}
-          showImage={false}
-          headingSize={0}
-        />
+        <Flex
+          flexDir={{ base: "column", lg: "row" }}
+          alignItems="flex-start"
+          width="100%"
+        >
+          <SettingsLabel icon="actionLockClosed" text="Pin/password" />
+          <SkeletonLoader
+            sx={{ "> div": { marginTop: "-xs" } }}
+            contentSize={2}
+            showImage={false}
+            headingSize={0}
+          />
+        </Flex>
       ) : isEditing ? (
         <>
           <Flex alignItems="flex-start" flexDir={{ base: "column", lg: "row" }}>
@@ -168,7 +176,7 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
               }}
             >
               <PasswordFormField
-                ref={inputRef}
+                ref={focusRef as React.Ref<TextInputRefType>}
                 label="Enter current pin/password"
                 name="currentPassword"
                 handler={handleInputChange}
@@ -242,14 +250,14 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
             </Text>
             {editingField === "" && (
               <EditButton
-                ref={editingRef}
+                ref={focusRef as React.Ref<HTMLButtonElement>}
                 buttonLabel="Edit password"
                 buttonId="edit-password-button"
                 onClick={() => {
                   setIsEditing(true)
                   setEditingField("password")
                   setTimeout(() => {
-                    inputRef.current?.focus()
+                    focusRef.current?.focus()
                   }, 0)
                 }}
               />

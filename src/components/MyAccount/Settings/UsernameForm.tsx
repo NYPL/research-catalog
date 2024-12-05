@@ -46,9 +46,7 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
   const currentUsernameNotDeleted = tempUsername !== null
 
   const { setUsernameStatus, setUsernameStatusMessage } = usernameState
-  const inputRef = useRef<TextInputRefType | null>()
-  const editingRef = useRef<HTMLButtonElement | null>()
-  const addButtonRef = useRef<HTMLButtonElement | null>()
+  const focusRef = useRef<HTMLButtonElement | TextInputRefType | null>()
 
   const validateUsername = (username: string) => {
     const usernameRegex = /^[a-zA-Z0-9]{5,15}$/
@@ -60,7 +58,7 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
     setIsEditing(false)
     setError(false)
     setTimeout(() => {
-      editingRef.current?.focus()
+      focusRef.current?.focus()
     }, 0)
   }
 
@@ -121,7 +119,7 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
           sx={{
             width: { base: "87%", md: "300px" },
           }}
-          ref={inputRef}
+          ref={focusRef as React.Ref<TextInputRefType>}
           value={tempUsername}
           id="username-input"
           labelText="Username"
@@ -143,7 +141,7 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
             setTempUsername(null)
             setError(false)
             setTimeout(() => {
-              addButtonRef.current?.focus()
+              focusRef.current?.focus()
             }, 0)
           }}
         >
@@ -171,13 +169,13 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
             {usernameInSierra}
           </Text>
           <EditButton
-            ref={editingRef}
+            ref={focusRef as React.Ref<HTMLButtonElement>}
             buttonLabel="Edit username"
             buttonId="edit-username-button"
             onClick={() => {
               setIsEditing(true)
               setTimeout(() => {
-                inputRef.current?.focus()
+                focusRef.current?.focus()
               }, 0)
             }}
           />
@@ -190,7 +188,7 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
             setTempUsername("")
             setError(true)
             setTimeout(() => {
-              inputRef.current?.focus()
+              focusRef.current?.focus()
             }, 0)
           }}
         />
@@ -208,13 +206,13 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
         editUsernameField
       ) : (
         <AddButton
-          ref={addButtonRef}
+          ref={focusRef as React.Ref<HTMLButtonElement>}
           label="+ Add username"
           onClick={() => {
             setTempUsername("")
             setError(true)
             setTimeout(() => {
-              inputRef.current?.focus()
+              focusRef.current?.focus()
             }, 0)
           }}
         />
@@ -229,7 +227,7 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
         contentSize={2}
         showImage={false}
         headingSize={0}
-        sx={{ marginTop: "-xs" }}
+        sx={{ marginTop: "-s" }}
       />
     )
   } else if (isEditing) {

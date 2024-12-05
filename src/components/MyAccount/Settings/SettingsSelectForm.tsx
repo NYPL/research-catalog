@@ -30,8 +30,7 @@ const SettingsSelectForm = ({
   const [error, setError] = useState(false)
 
   const { setStatus, editingField, setEditingField } = settingsState
-  const editingRef = useRef<HTMLButtonElement | null>()
-  const inputRef = useRef<HTMLSelectElement | null>()
+  const focusRef = useRef<HTMLSelectElement | HTMLButtonElement | null>()
 
   const notificationPreferenceMap =
     patronData.notificationPreference === "-"
@@ -92,7 +91,7 @@ const SettingsSelectForm = ({
     setIsEditing(false)
     setEditingField("")
     setTimeout(() => {
-      editingRef.current?.focus()
+      focusRef.current?.focus()
     }, 0)
   }
 
@@ -150,7 +149,7 @@ const SettingsSelectForm = ({
         <SettingsLabel icon={formUtils.icon} text={formUtils.label} />
         {isLoading ? (
           <SkeletonLoader
-            sx={{ "> div": { marginTop: "-xs" } }}
+            sx={{ "> div": { marginTop: "-s" } }}
             contentSize={2}
             showImage={false}
             headingSize={0}
@@ -164,7 +163,7 @@ const SettingsSelectForm = ({
             width="-webkit-fill-available"
           >
             <Select
-              ref={inputRef}
+              ref={focusRef as React.Ref<HTMLSelectElement>}
               width={{ base: "100%", md: "max-content" }}
               name={`select-${type}`}
               id={formUtils.selectorId}
@@ -193,14 +192,14 @@ const SettingsSelectForm = ({
             </Text>
             {editingField === "" && (
               <EditButton
-                ref={editingRef}
+                ref={focusRef as React.Ref<HTMLButtonElement>}
                 buttonLabel={`Edit ${type}`}
                 buttonId={`edit-${type}-button`}
                 onClick={() => {
                   setIsEditing(true)
                   setEditingField(type)
                   setTimeout(() => {
-                    inputRef.current?.focus()
+                    focusRef.current?.focus()
                   }, 0)
                 }}
               />
