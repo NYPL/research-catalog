@@ -84,7 +84,6 @@ export default function BibPage({
     discoveryBibResult,
     annotatedMarc
   )
-
   const displayLegacyCatalogLink = isNyplBibID(bib.id)
 
   const filtersAreApplied = areFiltersApplied(appliedFilters)
