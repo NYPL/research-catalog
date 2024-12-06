@@ -50,7 +50,7 @@ export default function HoldConfirmationPage({
   discoveryItemResult,
 }: HoldConfirmationPageProps) {
   const metadataTitle = `Request Confirmation | ${SITE_NAME}`
-  console.log(discoveryBibResult)
+
   const bib = new Bib(discoveryBibResult)
   const item = new Item(discoveryItemResult, bib)
 
@@ -186,7 +186,7 @@ export async function getServerSideProps({ params, req, res, query }) {
     const pickupLocationLabel = deliveryLocations.find(
       (location) => location.value === pickupLocation
     )?.label
-    console.log(pickupLocation)
+
     return {
       props: {
         isEDD: pickupLocation === "edd",
