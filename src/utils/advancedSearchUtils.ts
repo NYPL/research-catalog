@@ -6,9 +6,9 @@ export const textInputFields: SearchFormInputField[] = [
   { name: "q", label: "Keyword" },
   { name: "title", label: "Title" },
   { name: "contributor", label: "Author" },
-  { name: "subject", label: "Subject" },
   { name: "callnumber", label: "Call number" },
   { name: "standard_number", label: "Unique identifier" },
+  { name: "subject", label: "Subject" },
 ]
 
 export const initialSearchFormState: SearchParams = {
