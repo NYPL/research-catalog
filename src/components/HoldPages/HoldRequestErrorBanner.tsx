@@ -60,8 +60,8 @@ const HoldRequestErrorBanner = ({
       content={
         <>
           <Box>
-            <Text>
-              {HOLD_PAGE_CONTACT_PREFIXES?.[errorStatus] ? (
+            {HOLD_PAGE_CONTACT_PREFIXES?.[errorStatus] ? (
+              <Text>
                 <>
                   {HOLD_PAGE_CONTACT_PREFIXES?.[errorStatus]}
                   {" Please try again, "}
@@ -96,8 +96,8 @@ const HoldRequestErrorBanner = ({
                   for assistance, or{" "}
                   <RCLink href="/search">start a new search.</RCLink>
                 </>
-              ) : null}
-            </Text>
+              </Text>
+            ) : null}
             {(() => {
               switch (errorStatus) {
                 case "invalid":
@@ -132,7 +132,7 @@ const PatronErrors = ({
     expired || moneyOwed || ptypeDisallowsHolds || reachedHoldLimit
 
   // Generic patron error displayed in heading, don't show reasons list if there isn't one
-  if (hasSpecificReason) return null
+  if (!hasSpecificReason) return null
 
   return (
     <Box>
@@ -141,9 +141,6 @@ const PatronErrors = ({
         type="ul"
         margin={0}
         listItems={[
-          ...(ptypeDisallowsHolds
-            ? ["Your card does not permit placing holds on ReCAP materials."]
-            : []),
           ...(expired
             ? [
                 <>

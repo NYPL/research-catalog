@@ -168,7 +168,7 @@ export default function EDDRequestPage({
   )
 }
 
-export async function getServerSideProps({ params, req, res, query }) {
+export async function getServerSideProps({ params, req, res }) {
   const { id } = params
 
   // authentication redirect

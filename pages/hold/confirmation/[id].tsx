@@ -13,6 +13,7 @@ import HoldConfirmationFAQ from "../../../src/components/HoldPages/HoldConfirmat
 // import HoldItemDetails from "../../../src/components/HoldPages/HoldItemDetails"
 
 import { fetchHoldDetails } from "../../../src/server/api/hold"
+import { fetchBib } from "../../../src/server/api/bib"
 
 import initializePatronTokenAuth, {
   doRedirectBasedOnNyplAccountRedirects,
@@ -65,8 +66,10 @@ export default function HoldConfirmationPage({
   )
 }
 
-export async function getServerSideProps({ req, res, query }) {
-  const { pickupLocation, requestId } = query
+export async function getServerSideProps({ params, req, res, query }) {
+  const { id } = params
+  const { requestId } = query
+
   // authentication redirect
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const isAuthenticated = patronTokenResponse.isTokenValid
@@ -85,7 +88,7 @@ export async function getServerSideProps({ req, res, query }) {
     )
     const redirect = getLoginRedirect(
       req,
-      `${PATHS.HOLD_CONFIRMATION}?pickupLocation=${pickupLocation}&requestId=${requestId}`
+      `${PATHS.HOLD_CONFIRMATION}?requestId=${requestId}`
     )
 
     return {
@@ -99,15 +102,34 @@ export async function getServerSideProps({ req, res, query }) {
   const patronId = patronTokenResponse?.decodedPatron?.sub
 
   try {
-    const confirmationResponse = await fetchHoldDetails(requestId)
-    console.log(confirmationResponse)
-    const { patronId: patronIdFromResponse } = await fetchHoldDetails(requestId)
+    const {
+      patronId: patronIdFromResponse,
+      pickupLocation,
+      status: responseStatus,
+    } = await fetchHoldDetails(requestId)
 
     if (patronId !== patronIdFromResponse) {
       throw new Error(
         "Error in HoldConfirmationPage getServerSideProps: Logged in patron Id doesn't match the patron Id in the hold request."
       )
     }
+
+    // TODO: Determine error state when there are errors in hold details endpoint reponse
+    if (responseStatus !== 200) {
+      throw new Error(
+        "Hold Confirmation Page - Bad response from hold confirmation request"
+      )
+    }
+
+    // fetch bib and item
+    const [bibId, itemId] = id.split("-")
+
+    if (!itemId) {
+      throw new Error("No item id in url")
+    }
+    const { discoveryBibResult } = await fetchBib(bibId, {}, itemId)
+    const discoveryItemResult = discoveryBibResult?.items?.[0]
+    console.log(discoveryItemResult)
 
     return {
       props: {
