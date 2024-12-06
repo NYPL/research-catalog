@@ -135,7 +135,7 @@ const PatronErrors = ({
   if (!hasSpecificReason) return null
 
   return (
-    <Box>
+    <Box mt="xs">
       <Text mb="xs">This is because:</Text>
       <List
         type="ul"
