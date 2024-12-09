@@ -1,5 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from "next"
-import { NextResponse } from "next/server"
 
 import {
   postHoldRequest,
@@ -36,9 +35,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         // TODO: Move this to seaprate API route
         // TODO: Parse these query params in getServerSideProps
         default:
-          return NextResponse.redirect(
-            `${BASE_URL}${PATHS.HOLD_REQUEST}/${holdId}?patronEligibility=${patronEligibilityStatus}`,
-            307
+          return res.redirect(
+            `${BASE_URL}${PATHS.HOLD_REQUEST}/${holdId}?patronEligibility=${patronEligibilityStatus}`
           )
       }
     }
@@ -67,14 +65,13 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     }
 
     // Server side redirect in case user has JS disabled
-    return NextResponse.redirect(
-      `${BASE_URL}${PATHS.HOLD_CONFIRMATION}/${holdId}?pickupLocation=${pickupLocationFromResponse}?requestId=${requestId}`,
-      307
+    res.redirect(
+      `${BASE_URL}${PATHS.HOLD_CONFIRMATION}/${holdId}?pickupLocation=${pickupLocationFromResponse}?requestId=${requestId}`
     )
   } catch (error) {
     const { statusText } = error as Response
 
-    return res.status(500).json({
+    res.status(500).json({
       title: "Error posting hold request to Discovery API",
       status: 500,
       detail: statusText || error.message,
