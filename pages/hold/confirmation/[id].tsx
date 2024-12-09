@@ -166,14 +166,13 @@ export async function getServerSideProps({ params, req, res, query }) {
       throw new Error("No item id in url")
     }
     const { discoveryBibResult } = await fetchBib(bibId, {}, itemId)
-    const discoveryItemResult = discoveryBibResult?.items?.[0]
 
-    if (!discoveryItemResult) {
+    if (!discoveryBibResult?.items?.length) {
       throw new Error("Hold Confirmation Page - Item not found")
     }
 
     const bib = new Bib(discoveryBibResult)
-    const item = new Item(discoveryItemResult, bib)
+    const item = bib.items[0]
 
     const { deliveryLocations } = await fetchDeliveryLocations(
       item.barcode,
