@@ -25,6 +25,40 @@ describe("Advanced Search Form", () => {
   const submit = () => {
     fireEvent.click(screen.getByTestId("submit-advanced-search-button"))
   }
+  const updateAllFields = async () => {
+    const [
+      keywordInput,
+      contributorInput,
+      titleInput,
+      subjectInput,
+      callNumberInput,
+      uniqueIdentifierInput,
+    ] = [
+      "Keyword",
+      "Title",
+      "Author/Contributor",
+      "Subject",
+      "Call number",
+      "Unique identifier",
+    ].map((field) => screen.getByLabelText(field))
+    fireEvent.change(subjectInput, { target: { value: "italian food" } })
+    fireEvent.change(keywordInput, { target: { value: "spaghetti" } })
+    fireEvent.change(contributorInput, { target: { value: "strega nonna" } })
+    fireEvent.change(titleInput, { target: { value: "il amore di pasta" } })
+    fireEvent.change(callNumberInput, { target: { value: "12345" } })
+    fireEvent.change(uniqueIdentifierInput, { target: { value: "67890" } })
+
+    // without this delay, the input is not updated until after submit is called.
+    await delay(100)
+    return [
+      keywordInput,
+      contributorInput,
+      titleInput,
+      subjectInput,
+      callNumberInput,
+      uniqueIdentifierInput,
+    ]
+  }
   afterEach(async () => {
     await userEvent.click(screen.getByText("Clear fields"))
   })
@@ -34,25 +68,11 @@ describe("Advanced Search Form", () => {
   })
 
   it("can set keyword, contributor, title, subject", async () => {
-    const [keywordInput, contributorInput, titleInput, subjectInput] = [
-      "Keyword",
-      "Title",
-      "Author",
-      "Subject",
-      "Call number",
-      "Unique identifier",
-    ].map((field) => screen.getByLabelText(field))
-    fireEvent.change(subjectInput, { target: { value: "italian food" } })
-    fireEvent.change(keywordInput, { target: { value: "spaghetti" } })
-    fireEvent.change(contributorInput, { target: { value: "strega nonna" } })
-    fireEvent.change(titleInput, { target: { value: "il amore di pasta" } })
-    // without this delay, the input is not updated until after submit is called.
-    await delay(50)
+    await updateAllFields()
     submit()
-    await waitFor(() =>
-      expect(mockRouter.asPath).toBe(
-        "/search?q=spaghetti&title=strega+nonna&contributor=il+amore+di+pasta&subject=italian+food"
-      )
+
+    expect(mockRouter.asPath).toBe(
+      "/search?q=spaghetti&title=strega+nonna&contributor=il+amore+di+pasta&callnumber=12345&standard_number=67890&subject=italian+food"
     )
   })
   it("renders inputs for all text input fields", () => {
@@ -102,14 +122,8 @@ describe("Advanced Search Form", () => {
     })
 
     await userEvent.click(schomburg)
-    const keywordInput = screen.getByLabelText("Keyword")
-    const titleInput = screen.getByLabelText("Title")
-    const contributorInput = screen.getByLabelText("Author")
-    const subjectInput = screen.getByLabelText("Subject")
-    await userEvent.type(keywordInput, "spaghetti")
-    await userEvent.type(contributorInput, "strega nonna")
-    await userEvent.type(titleInput, "il amore di pasta")
-    await userEvent.type(subjectInput, "italian food")
+    const [subjectInput, keywordInput, titleInput, contributorInput] =
+      await updateAllFields()
 
     await userEvent.click(screen.getByText("Clear fields"))
     ;[notatedMusic, cartographic, schomburg].forEach((input) =>
