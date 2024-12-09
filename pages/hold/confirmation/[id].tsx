@@ -116,7 +116,7 @@ export default function HoldConfirmationPage({
           type="standalone"
           fontWeight="bold"
           isUnderlined={false}
-          mt="m"
+          my="l"
         >
           Start a new search
         </ExternalLink>
