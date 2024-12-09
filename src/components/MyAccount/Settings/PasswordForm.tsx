@@ -77,13 +77,14 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
   })
   const { setStatus, setStatusMessage, editingField, setEditingField } =
     settingsState
-  const focusRef = useRef<HTMLButtonElement | TextInputRefType | null>()
+  const editingRef = useRef<HTMLButtonElement | null>()
+  const inputRef = useRef<TextInputRefType | null>()
 
   const cancelEditing = () => {
     setIsEditing(false)
     setEditingField("")
     setTimeout(() => {
-      focusRef.current?.focus()
+      editingRef.current?.focus()
     }, 0)
   }
 
@@ -176,7 +177,7 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
               }}
             >
               <PasswordFormField
-                ref={focusRef as React.Ref<TextInputRefType>}
+                ref={inputRef}
                 label="Enter current pin/password"
                 name="currentPassword"
                 handler={handleInputChange}
@@ -251,14 +252,14 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
             </Text>
             {editingField === "" && (
               <EditButton
-                ref={focusRef as React.Ref<HTMLButtonElement>}
+                ref={editingRef}
                 buttonLabel="Edit password"
                 buttonId="edit-password-button"
                 onClick={() => {
                   setIsEditing(true)
                   setEditingField("password")
                   setTimeout(() => {
-                    focusRef.current?.focus()
+                    inputRef.current?.focus()
                   }, 0)
                 }}
               />

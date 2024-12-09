@@ -46,7 +46,9 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
   const currentUsernameNotDeleted = tempUsername !== null
 
   const { setUsernameStatus, setUsernameStatusMessage } = usernameState
-  const focusRef = useRef<HTMLButtonElement | TextInputRefType | null>()
+  const inputRef = useRef<TextInputRefType | null>()
+  const editingRef = useRef<HTMLButtonElement | null>()
+  const addButtonRef = useRef<HTMLButtonElement | null>()
 
   const validateUsername = (username: string) => {
     const usernameRegex = /^[a-zA-Z0-9]{5,15}$/
@@ -58,7 +60,7 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
     setIsEditing(false)
     setError(false)
     setTimeout(() => {
-      focusRef.current?.focus()
+      editingRef.current?.focus()
     }, 0)
   }
 
@@ -119,7 +121,7 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
           sx={{
             width: { base: "87%", md: "300px" },
           }}
-          ref={focusRef as React.Ref<TextInputRefType>}
+          ref={inputRef}
           value={tempUsername}
           id="username-input"
           labelText="Username"
@@ -130,7 +132,9 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
           showHelperInvalidText={true}
           onChange={handleInputChange}
           isClearable
-          isClearableCallback={() => setError(true)}
+          isClearableCallback={() => {
+            setError(true)
+          }}
         />
         <Button
           aria-label="Delete username from your account"
@@ -141,7 +145,7 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
             setTempUsername(null)
             setError(false)
             setTimeout(() => {
-              focusRef.current?.focus()
+              addButtonRef.current?.focus()
             }, 0)
           }}
         >
@@ -169,27 +173,27 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
             {usernameInSierra}
           </Text>
           <EditButton
-            ref={focusRef as React.Ref<HTMLButtonElement>}
+            ref={editingRef}
             buttonLabel="Edit username"
             buttonId="edit-username-button"
             onClick={() => {
               setIsEditing(true)
               setTimeout(() => {
-                focusRef.current?.focus()
+                inputRef?.current?.focus()
               }, 0)
             }}
           />
         </>
       ) : (
         <AddButton
-          ref={focusRef as React.Ref<HTMLButtonElement>}
+          ref={addButtonRef}
           label="+ Add username"
           onClick={() => {
             setIsEditing(true)
             setTempUsername("")
             setError(true)
             setTimeout(() => {
-              focusRef.current?.focus()
+              inputRef?.current?.focus()
             }, 0)
           }}
         />
@@ -207,13 +211,13 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
         editUsernameField
       ) : (
         <AddButton
-          ref={focusRef as React.Ref<HTMLButtonElement>}
+          ref={addButtonRef}
           label="+ Add username"
           onClick={() => {
             setTempUsername("")
             setError(true)
             setTimeout(() => {
-              focusRef.current?.focus()
+              inputRef.current?.focus()
             }, 0)
           }}
         />
