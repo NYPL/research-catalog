@@ -219,13 +219,17 @@ export async function fetchPatronEligibility(
       cache: false,
     })
 
-    return eligibilityResult as PatronEligibilityStatus
+    if (!eligibilityResult.eligibility) {
+      throw new Error("Improperly formatted eligibility from Discovery API")
+    }
+
+    return { status: 200, ...eligibilityResult } as PatronEligibilityStatus
   } catch (error) {
     console.error(
       `Error fetching hold request eligibility in fetchPatronEligibility server function, patronId: ${patronId}`,
       error.message
     )
 
-    return { eligibility: false }
+    return { status: 500 }
   }
 }

@@ -38,11 +38,12 @@ export interface HoldDetailsResult {
 }
 
 export interface PatronEligibilityStatus {
-  eligibility: boolean
+  eligibility?: boolean
   expired?: boolean
   moneyOwed?: boolean
   ptypeDisallowsHolds?: boolean
   reachedHoldLimit?: boolean
+  status: HTTPStatusCode
 }
 
 export interface DiscoveryHoldPostParams {

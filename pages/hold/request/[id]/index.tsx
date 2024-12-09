@@ -63,8 +63,6 @@ export default function HoldRequestPage({
   patronEligibilityStatus: defaultEligibilityStatus,
 }: HoldRequestPropsType) {
   const metadataTitle = `Item Request | ${SITE_NAME}`
-  console.log("defaultEligibilityStatus", defaultEligibilityStatus)
-  console.log("defaultErrorStatus", defaultErrorStatus)
 
   const bib = new Bib(discoveryBibResult)
   const item = new Item(discoveryItemResult, bib)
