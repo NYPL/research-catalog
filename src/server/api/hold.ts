@@ -201,7 +201,7 @@ export async function fetchHoldDetails(
       error.message
     )
 
-    return { status: 400 }
+    return { status: 500 }
   }
 }
 
@@ -219,8 +219,13 @@ export async function fetchPatronEligibility(
       cache: false,
     })
 
-    if (!eligibilityResult.eligibility) {
+    // There should always be en eligibilty boolean attribute returned from Discovery API
+    if (eligibilityResult.eligibility === undefined) {
       throw new Error("Improperly formatted eligibility from Discovery API")
+    }
+
+    if (eligibilityResult.eligibility === false) {
+      return { status: 401 }
     }
 
     return { status: 200, ...eligibilityResult } as PatronEligibilityStatus

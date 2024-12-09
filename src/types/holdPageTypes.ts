@@ -38,7 +38,6 @@ export interface HoldDetailsResult {
 }
 
 export interface PatronEligibilityStatus {
-  eligibility?: boolean
   expired?: boolean
   moneyOwed?: boolean
   ptypeDisallowsHolds?: boolean

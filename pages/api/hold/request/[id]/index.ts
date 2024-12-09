@@ -24,7 +24,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
     const patronEligibilityStatus = await fetchPatronEligibility(patronId)
 
-    if (patronEligibilityStatus && !patronEligibilityStatus?.eligibility) {
+    if (patronEligibilityStatus.status === 401) {
       switch (jsEnabled) {
         case true:
           return res.status(401).json({

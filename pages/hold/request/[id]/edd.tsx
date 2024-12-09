@@ -237,14 +237,9 @@ export async function getServerSideProps({ params, req, res }) {
 
     const patronEligibilityStatus = await fetchPatronEligibility(patronId)
 
-    if (!patronEligibilityStatus) {
-      console.error(
-        "EDD Page - Error fetching patronEligibilityStatus in getServerSideProps"
-      )
-    }
-
     const locationOrEligibilityFetchFailed =
-      locationStatus !== 200 || !patronEligibilityStatus
+      locationStatus !== 200 ||
+      ![200, 401].includes(patronEligibilityStatus?.status)
 
     return {
       props: {
@@ -254,7 +249,7 @@ export async function getServerSideProps({ params, req, res }) {
         isAuthenticated,
         errorStatus: locationOrEligibilityFetchFailed
           ? "failed"
-          : patronEligibilityStatus.eligibility === false
+          : patronEligibilityStatus.status === 401
           ? "patronIneligible"
           : !isEddAvailable
           ? "eddUnavailable"
