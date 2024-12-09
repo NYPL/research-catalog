@@ -1,4 +1,4 @@
-import { useContext, useState } from "react"
+import { useContext, useRef, useState } from "react"
 import { PatronDataContext } from "../../../context/PatronDataContext"
 import {
   Flex,
@@ -30,6 +30,8 @@ const SettingsSelectForm = ({
   const [error, setError] = useState(false)
 
   const { setStatus, editingField, setEditingField } = settingsState
+  const selectRef = useRef<HTMLSelectElement | null>()
+  const editingRef = useRef<HTMLButtonElement | null>()
 
   const notificationPreferenceMap =
     patronData.notificationPreference === "-"
@@ -89,6 +91,9 @@ const SettingsSelectForm = ({
   const cancelEditing = () => {
     setIsEditing(false)
     setEditingField("")
+    setTimeout(() => {
+      editingRef.current?.focus()
+    }, 0)
   }
 
   const submitSelection = async () => {
@@ -144,17 +149,22 @@ const SettingsSelectForm = ({
       >
         <SettingsLabel icon={formUtils.icon} text={formUtils.label} />
         {isLoading ? (
-          <SkeletonLoader contentSize={2} showImage={false} headingSize={0} />
+          <SkeletonLoader
+            sx={{ "> div": { marginTop: "-s" } }}
+            contentSize={2}
+            showImage={false}
+            headingSize={0}
+          />
         ) : isEditing ? (
           <Flex
-            sx={{
-              marginTop: "xs",
-              marginLeft: { base: "l", lg: "unset" },
-              paddingRight: { base: "l", md: "unset" },
-              width: "100%",
-            }}
+            marginLeft={{ base: "m", lg: "unset" }}
+            marginTop={{ base: "s", md: "unset" }}
+            flexDir="column"
+            alignItems="flex-start"
+            width="-webkit-fill-available"
           >
             <Select
+              ref={selectRef}
               width={{ base: "100%", md: "max-content" }}
               name={`select-${type}`}
               id={formUtils.selectorId}
@@ -171,12 +181,11 @@ const SettingsSelectForm = ({
             </Select>
           </Flex>
         ) : (
-          <Flex>
+          <Flex marginLeft={{ base: "m", lg: "unset" }}>
             <Text
               sx={{
-                width: { base: "l", sm: "250px" },
-                marginTop: "xs",
-                marginLeft: { base: "l", lg: "unset" },
+                marginTop: { base: "xs", lg: "unset" },
+                width: { base: "200px", sm: "250px" },
                 marginBottom: 0,
               }}
             >
@@ -184,10 +193,15 @@ const SettingsSelectForm = ({
             </Text>
             {editingField === "" && (
               <EditButton
+                ref={editingRef}
+                buttonLabel={`Edit ${type}`}
                 buttonId={`edit-${type}-button`}
                 onClick={() => {
                   setIsEditing(true)
                   setEditingField(type)
+                  setTimeout(() => {
+                    selectRef.current?.focus()
+                  }, 0)
                 }}
               />
             )}
@@ -195,6 +209,7 @@ const SettingsSelectForm = ({
         )}
         {isEditing && (
           <SaveCancelButtons
+            inputType={type}
             onCancel={cancelEditing}
             onSave={submitSelection}
             isDisabled={error}
