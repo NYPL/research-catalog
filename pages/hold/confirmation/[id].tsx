@@ -49,7 +49,7 @@ export default function HoldConfirmationPage({
   const metadataTitle = `Request Confirmation | ${SITE_NAME}`
 
   const bib = new Bib(discoveryBibResult)
-  const item = bib.getItemsFromResult[0]
+  const item = bib?.items[0]
 
   return (
     <>
