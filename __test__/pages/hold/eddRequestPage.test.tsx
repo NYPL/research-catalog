@@ -19,9 +19,9 @@ import {
   BASE_URL,
   PATHS,
   EDD_FORM_FIELD_COPY,
+  HOLD_PAGE_ERROR_HEADINGS,
 } from "../../../src/config/constants"
 import { fetchDeliveryLocations } from "../../../src/server/api/hold"
-import { EDDPageStatusMessages } from "../../../src/utils/holdPageUtils"
 
 jest.mock("../../../src/server/auth")
 jest.mock("../../../src/server/api/bib")
@@ -74,14 +74,12 @@ describe("EDD Request page", () => {
         params: { id },
         req: mockReq,
         res: mockRes,
-        query: {},
       })
       expect(responseWithZeroRedirects.redirect).toBeDefined()
       const responseWithTwoRedirects = await getServerSideProps({
         params: { id: "123-456" },
         req: { ...mockReq, cookies: { nyplAccountRedirects: 2 } },
         res: mockRes,
-        query: {},
       })
       expect(responseWithTwoRedirects.redirect).toBeDefined()
     })
@@ -98,7 +96,6 @@ describe("EDD Request page", () => {
         params: { id },
         req: mockReq,
         res: mockRes,
-        query: {},
       })
       expect(responseWithoutRedirect.redirect).not.toBeDefined()
     })
@@ -107,7 +104,6 @@ describe("EDD Request page", () => {
         params: { id },
         req: mockReq,
         res: mockRes,
-        query: {},
       })
       expect(response.redirect).toBeUndefined()
     })
@@ -123,7 +119,6 @@ describe("EDD Request page", () => {
         params: { id },
         res: mockRes,
         req: mockReq,
-        query: {},
       })
       expect(mockRes.setHeader.mock.calls[0]).toStrictEqual([
         "Set-Cookie",
@@ -149,7 +144,6 @@ describe("EDD Request page", () => {
         params: { id },
         res: mockRes,
         req: mockReq,
-        query: {},
       })
       expect(responseWithAeonRedirect.redirect).toStrictEqual({
         destination: bibWithSingleAeonItem.resource.items[0].aeonUrl[0],
@@ -238,7 +232,9 @@ describe("EDD Request page", () => {
         expect(screen.getByTestId("hold-request-error")).toBeInTheDocument()
       })
 
-      expect(screen.getByText("Request failed")).toBeInTheDocument()
+      expect(
+        screen.getByText("Request failed.", { exact: false })
+      ).toBeInTheDocument()
 
       expect(
         screen.queryByText(
@@ -307,11 +303,11 @@ describe("EDD Request page", () => {
           discoveryItemResult={bibWithItems.resource.items[0]}
           patronId="123"
           isAuthenticated={true}
-          pageStatus="unavailable"
+          errorStatus="eddUnavailable"
         />
       )
       expect(
-        screen.getByText(EDDPageStatusMessages.unavailable.heading)
+        screen.getByText(HOLD_PAGE_ERROR_HEADINGS.eddUnavailable)
       ).toBeInTheDocument()
     })
     it("shows a failed error message when the page loads with an failed status", async () => {
@@ -321,11 +317,11 @@ describe("EDD Request page", () => {
           discoveryItemResult={bibWithItems.resource.items[0]}
           patronId="123"
           isAuthenticated={true}
-          pageStatus="failed"
+          errorStatus="failed"
         />
       )
       expect(
-        screen.getByText(EDDPageStatusMessages.failed.heading)
+        screen.getByText(HOLD_PAGE_ERROR_HEADINGS.failed)
       ).toBeInTheDocument()
     })
     it("shows an invalid error message when the page loads with an invalid status", async () => {
@@ -335,11 +331,13 @@ describe("EDD Request page", () => {
           discoveryItemResult={bibWithItems.resource.items[0]}
           patronId="123"
           isAuthenticated={true}
-          pageStatus="invalid"
+          errorStatus="invalid"
         />
       )
       expect(
-        screen.getByText(EDDPageStatusMessages.invalid.message)
+        screen.getByText(
+          "Some fields contain errors. Please correct and submit again."
+        )
       ).toBeInTheDocument()
     })
   })
