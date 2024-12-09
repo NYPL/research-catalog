@@ -78,7 +78,8 @@ export default function HoldConfirmationPage({
           content={
             <>
               <Text mt="xs" noSpace>
-                You&apos;re all set! We have received your request for{" "}
+                You&apos;re all set! We have received your{" "}
+                {isEDD ? "scan " : ""}request for{" "}
                 <RCLink href={`${PATHS.BIB}/${item.bibId}`}>
                   {item.bibTitle}
                 </RCLink>
@@ -106,6 +107,19 @@ export default function HoldConfirmationPage({
           }
         />
         <HoldConfirmationFAQ isEDD={isEDD} />
+        <ExternalLink
+          href={PATHS.SEARCH}
+          fontSize={{
+            base: "mobile.body.body2",
+            md: "desktop.body.body2",
+          }}
+          type="standalone"
+          fontWeight="bold"
+          isUnderlined={false}
+          mt="m"
+        >
+          Start a new search
+        </ExternalLink>
       </Layout>
     </>
   )
@@ -183,7 +197,7 @@ export async function getServerSideProps({ params, req, res, query }) {
       item.barcode,
       patronId
     )
-    const pickupLocationLabel = deliveryLocations.find(
+    const pickupLocationLabel = deliveryLocations?.find(
       (location) => location.value === pickupLocation
     )?.label
 
