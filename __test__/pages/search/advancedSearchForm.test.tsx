@@ -36,7 +36,7 @@ describe("Advanced Search Form", () => {
     ] = [
       "Keyword",
       "Title",
-      "Author/Contributor",
+      "Author/contributor",
       "Subject",
       "Call number",
       "Unique identifier",
@@ -49,7 +49,7 @@ describe("Advanced Search Form", () => {
     fireEvent.change(uniqueIdentifierInput, { target: { value: "67890" } })
 
     // without this delay, the input is not updated until after submit is called.
-    await delay(100)
+    await delay(500)
     return [
       keywordInput,
       contributorInput,
