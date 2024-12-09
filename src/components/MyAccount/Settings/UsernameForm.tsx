@@ -131,10 +131,6 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
           isInvalid={error && !validateUsername(tempUsername)}
           showHelperInvalidText={true}
           onChange={handleInputChange}
-          isClearable
-          isClearableCallback={() => {
-            setError(true)
-          }}
         />
         <Button
           aria-label="Delete username from your account"

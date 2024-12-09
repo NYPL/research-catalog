@@ -121,13 +121,6 @@ const SettingsInputForm = ({
     setError(hasInvalidInput)
   }
 
-  const handleClearableCallback = (index) => {
-    const updatedInputs = [...tempInputs]
-    updatedInputs[index] = ""
-    setTempInputs(updatedInputs)
-    setError(true)
-  }
-
   const cancelEditing = () => {
     setTempInputs([...inputs])
     setIsEditing(false)
@@ -225,8 +218,6 @@ const SettingsInputForm = ({
                     invalidText={formUtils.errorMessage}
                     onChange={(e) => handleInputChange(e, index)}
                     isRequired
-                    isClearable
-                    isClearableCallback={() => handleClearableCallback(index)}
                   />
                   {index == 0 && <div style={{ width: "57px" }}> </div>}
                   {index !== 0 && (

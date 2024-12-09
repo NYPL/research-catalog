@@ -51,7 +51,6 @@ const PasswordFormField = forwardRef<TextInputRefType, PasswordFormFieldProps>(
           type="password"
           isRequired
           showLabel={false}
-          isClearable
           showRequiredLabel={false}
           labelText={label}
           onChange={handler}
