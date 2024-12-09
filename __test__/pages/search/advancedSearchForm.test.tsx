@@ -67,15 +67,14 @@ describe("Advanced Search Form", () => {
     screen.getByText(defaultEmptySearchErrorMessage)
   })
 
-  it.todo("can set keyword, contributor, title, subject")
-  //   async () => {
-  //   await updateAllFields()
-  //   submit()
+  it("can set keyword, contributor, title, subject", async () => {
+    await updateAllFields()
+    submit()
 
-  //   expect(mockRouter.asPath).toBe(
-  //     "/search?q=spaghetti&title=strega+nonna&contributor=il+amore+di+pasta&callnumber=12345&standard_number=67890&subject=italian+food"
-  //   )
-  // })
+    expect(mockRouter.asPath).toBe(
+      "/search?q=spaghetti&title=strega+nonna&contributor=il+amore+di+pasta&callnumber=12345&standard_number=67890&subject=italian+food"
+    )
+  })
   it("renders inputs for all text input fields", () => {
     textInputFields.map(({ label }) => {
       const input = screen.getByLabelText(label)
