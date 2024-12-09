@@ -186,7 +186,7 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
         </>
       ) : (
         <AddButton
-          ref={addButtonRef}
+          ref={editingRef}
           label="+ Add username"
           onClick={() => {
             setIsEditing(true)
