@@ -1,4 +1,5 @@
 import { Button } from "@nypl/design-system-react-components"
+import { forwardRef } from "react"
 
 type AddButtonProps = {
   inputType?: string
@@ -6,25 +7,30 @@ type AddButtonProps = {
   onClick: () => void
 }
 
-const AddButton = ({ inputType, label, onClick }: AddButtonProps) => {
-  return (
-    <Button
-      id={inputType ? `add-${inputType}-button` : "add-button"}
-      buttonType="text"
-      onClick={onClick}
-      size="large"
-      sx={{
-        justifyContent: "flex-start",
-        width: { base: "100%", md: "300px" },
-        paddingLeft: { base: "m", md: "unset" },
-        paddingTop: "xs",
-        paddingBottom: "xs",
-        paddingRight: "xs",
-      }}
-    >
-      {label}
-    </Button>
-  )
-}
+const AddButton = forwardRef<HTMLButtonElement, AddButtonProps>(
+  ({ inputType, label, onClick }, ref) => {
+    return (
+      <Button
+        ref={ref}
+        id={inputType ? `add-${inputType}-button` : "add-button"}
+        buttonType="text"
+        onClick={onClick}
+        size="large"
+        sx={{
+          justifyContent: "flex-start",
+          width: { base: "100%", md: "300px" },
+          paddingLeft: "xs",
+          paddingTop: "xs",
+          paddingBottom: "xs",
+          paddingRight: "xs",
+        }}
+      >
+        {label}
+      </Button>
+    )
+  }
+)
+
+AddButton.displayName = "AddButton"
 
 export default AddButton
