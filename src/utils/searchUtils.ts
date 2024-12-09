@@ -1,6 +1,6 @@
 import { isArray, isEmpty, mapObject, forEach } from "underscore"
 
-import { textInputFields as advSearchFields } from "./advancedSearchUtils"
+import { textInputFields as advancedSearchFields } from "./advancedSearchUtils"
 import type {
   SearchParams,
   SearchQueryParams,
@@ -66,7 +66,7 @@ export function getSearchResultsHeading(
 
 // Shows the final part of the search query string (e.g. "for keyword 'cats'")
 function buildQueryDisplayString(searchParams: SearchParams): string {
-  const searchFields = advSearchFields
+  const searchFields = advancedSearchFields
     // Lowercase the adv search field labels:
     .map((field) => ({ ...field, label: field.label.toLowerCase() }))
     .concat([
@@ -190,18 +190,16 @@ function getFilterQuery(filters: SearchFilters) {
  * getSearchQuery
  * Builds a query string from a SearchParams object
  */
-export function getSearchQuery({
-  sortBy = "relevance",
-  field = "all",
-  order,
-  filters = {},
-  identifiers = {},
-  q,
-  contributor,
-  title,
-  subject,
-  page = 1,
-}: SearchParams): string {
+export function getSearchQuery(params: SearchParams): string {
+  const {
+    sortBy = "relevance",
+    field = "all",
+    order,
+    filters = {},
+    identifiers = {},
+    q,
+    page = 1,
+  } = params
   const searchKeywordsQuery = encodeURIComponent(q)
   const sortQuery = getSortQuery(sortBy, order)
 
@@ -210,21 +208,24 @@ export function getSearchQuery({
   const identifierQuery = getIdentifierQuery(identifiers)
   const pageQuery = page !== 1 ? `&page=${page}` : ""
 
-  // advanced search query
-  const contributorQuery = contributor ? `&contributor=${contributor}` : ""
-  const titleQuery = title ? `&title=${title}` : ""
-  const subjectQuery = subject ? `&subject=${subject}` : ""
+  const advancedSearchQueryParams = advancedSearchFields
+    .map(({ name: advancedSearchParam }) => {
+      if (advancedSearchParam === "q") return
+      return params[advancedSearchParam]
+        ? `&${advancedSearchParam}=${params[advancedSearchParam]}`
+        : ""
+    })
+    .join("")
 
   // if a search_scope is "all", we want to clear the advanced search query params
   // and default to the q param
   const isAdvancedSearchOrAllFields = field.length && field === "all"
 
   const advancedQuery = isAdvancedSearchOrAllFields
-    ? `${contributorQuery}${titleQuery}${subjectQuery}`
+    ? advancedSearchQueryParams
     : ""
 
   const completeQuery = `${searchKeywordsQuery}${advancedQuery}${filterQuery}${sortQuery}${fieldQuery}${pageQuery}${identifierQuery}`
-
   return completeQuery?.length ? `?q=${completeQuery}` : ""
 }
 
@@ -303,6 +304,8 @@ export function mapQueryToSearchParams({
   search_scope,
   sort_direction,
   page,
+  callnumber,
+  standard_number,
   contributor,
   title,
   subject,
@@ -315,11 +318,13 @@ export function mapQueryToSearchParams({
 }: SearchQueryParams): SearchParams {
   const hasIdentifiers = issn || isbn || oclc || lccn
   const filters = collapseMultiValueQueryParams(queryFilters)
-
+  //TODO: can we merge the SearchQueryParams and SearchParams types by renaming some params? e.g. search_scope, sort, sort_direction. Also maybe passing in identifiers so it maches this pattern.
   return {
     q,
     field: search_scope,
     page: page ? parseInt(page) : 1,
+    callnumber,
+    standard_number,
     contributor,
     title,
     subject,
