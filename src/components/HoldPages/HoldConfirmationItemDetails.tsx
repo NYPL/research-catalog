@@ -5,7 +5,7 @@ import { PlainTextElement } from "../BibPage/BibDetail"
 
 import bibDetailStyles from "../../../styles/components/BibDetails.module.scss"
 
-interface HoldItemDetailsProps {
+interface HoldConfirmationItemDetailsProps {
   item: Item
   pickupLocationLabel?: string
 }
@@ -16,7 +16,7 @@ interface HoldItemDetailsProps {
 const HoldConfirmationItemDetails = ({
   item,
   pickupLocationLabel,
-}: HoldItemDetailsProps) => {
+}: HoldConfirmationItemDetailsProps) => {
   return (
     <List
       noStyling
