@@ -16,7 +16,7 @@ import RCLink from "../../../src/components/Links/RCLink/RCLink"
 import ExternalLink from "../../../src/components/Links/RCLink/RCLink"
 
 import HoldConfirmationFAQ from "../../../src/components/HoldPages/HoldConfirmationFAQ"
-import HoldItemDetails from "../../../src/components/HoldPages/HoldItemDetails"
+import HoldItemDetails from "../../../src/components/HoldPages/HoldRequestItemDetails"
 
 import {
   fetchHoldDetails,
@@ -31,6 +31,7 @@ import initializePatronTokenAuth, {
 
 import type { DiscoveryItemResult } from "../../../src/types/itemTypes"
 import type { DiscoveryBibResult } from "../../../src/types/bibTypes"
+import HoldConfirmationItemDetails from "../../../src/components/HoldPages/HoldConfirmationItemDetails"
 
 interface HoldConfirmationPageProps {
   isEDD?: boolean
@@ -70,10 +71,10 @@ export default function HoldConfirmationPage({
         <Heading level="h2" mb="l" size="heading3">
           {isEDD ? EDD_PAGE_HEADING : HOLD_PAGE_HEADING}
         </Heading>
-        <HoldItemDetails item={item} />
+
         <Banner
           type="positive"
-          mb="m"
+          mb="l"
           heading="Request successful"
           content={
             <>
@@ -84,27 +85,12 @@ export default function HoldConfirmationPage({
                   {item.bibTitle}
                 </RCLink>
               </Text>
-              {isEDD ? (
-                <Text mt="xs" noSpace>
-                  The item will be delivered to the email address you provided.
-                </Text>
-              ) : pickupLocationLabel ? (
-                <Text mt="xs" noSpace>
-                  The item will be delivered to: {pickupLocationLabel}.
-                </Text>
-              ) : (
-                <Text>
-                  please{" "}
-                  <ExternalLink href="https://gethelp.nypl.org/customer/portal/emails/new">
-                    email us
-                  </ExternalLink>{" "}
-                  or call 917-ASK-NYPL (
-                  <RCLink href="tel:19172756975">917-275-6975</RCLink>) for your
-                  delivery location.
-                </Text>
-              )}
             </>
           }
+        />
+        <HoldConfirmationItemDetails
+          item={item}
+          pickupLocationLabel={pickupLocationLabel}
         />
         <HoldConfirmationFAQ isEDD={isEDD} />
         <ExternalLink
