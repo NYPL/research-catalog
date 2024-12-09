@@ -208,6 +208,7 @@ const SettingsSelectForm = ({
         )}
         {isEditing && (
           <SaveCancelButtons
+            inputType={type}
             onCancel={cancelEditing}
             onSave={submitSelection}
             isDisabled={error}

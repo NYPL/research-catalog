@@ -194,6 +194,7 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
               />
             </Flex>
             <SaveCancelButtons
+              inputType="password"
               onCancel={cancelEditing}
               isDisabled={!validateForm}
               onSave={submitForm}
