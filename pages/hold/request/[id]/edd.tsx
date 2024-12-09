@@ -18,7 +18,7 @@ import useLoading from "../../../../src/hooks/useLoading"
 import { fetchBib } from "../../../../src/server/api/bib"
 import {
   fetchDeliveryLocations,
-  fetchHoldRequestEligibility,
+  fetchPatronEligibility,
 } from "../../../../src/server/api/hold"
 import { initialEDDFormState } from "../../../../src/utils/holdPageUtils"
 
@@ -235,7 +235,7 @@ export async function getServerSideProps({ params, req, res }) {
 
     const isEddAvailable = eddRequestable && item.isAvailable
 
-    const patronEligibilityStatus = await fetchHoldRequestEligibility(patronId)
+    const patronEligibilityStatus = await fetchPatronEligibility(patronId)
 
     if (!patronEligibilityStatus) {
       console.error(

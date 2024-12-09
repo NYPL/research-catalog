@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next"
 
 import {
   postHoldRequest,
-  fetchHoldRequestEligibility,
+  fetchPatronEligibility,
 } from "../../../../../src/server/api/hold"
 import { BASE_URL, PATHS } from "../../../../../src/config/constants"
 
@@ -22,7 +22,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     const holdId = req.query.id as string
     const [, itemId] = holdId.split("-")
 
-    const patronEligibilityStatus = await fetchHoldRequestEligibility(patronId)
+    const patronEligibilityStatus = await fetchPatronEligibility(patronId)
 
     if (patronEligibilityStatus && !patronEligibilityStatus?.eligibility) {
       switch (jsEnabled) {
