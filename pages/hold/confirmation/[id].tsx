@@ -16,7 +16,7 @@ import RCLink from "../../../src/components/Links/RCLink/RCLink"
 import ExternalLink from "../../../src/components/Links/RCLink/RCLink"
 
 import HoldConfirmationFAQ from "../../../src/components/HoldPages/HoldConfirmationFAQ"
-import HoldItemDetails from "../../../src/components/HoldPages/HoldRequestItemDetails"
+import HoldConfirmationItemDetails from "../../../src/components/HoldPages/HoldConfirmationItemDetails"
 
 import {
   fetchHoldDetails,
@@ -29,15 +29,12 @@ import initializePatronTokenAuth, {
   getLoginRedirect,
 } from "../../../src/server/auth"
 
-import type { DiscoveryItemResult } from "../../../src/types/itemTypes"
 import type { DiscoveryBibResult } from "../../../src/types/bibTypes"
-import HoldConfirmationItemDetails from "../../../src/components/HoldPages/HoldConfirmationItemDetails"
 
 interface HoldConfirmationPageProps {
   isEDD?: boolean
   pickupLocationLabel?: string
   discoveryBibResult: DiscoveryBibResult
-  discoveryItemResult: DiscoveryItemResult
 }
 
 /**
@@ -48,12 +45,11 @@ export default function HoldConfirmationPage({
   isEDD = false,
   pickupLocationLabel,
   discoveryBibResult,
-  discoveryItemResult,
 }: HoldConfirmationPageProps) {
   const metadataTitle = `Request Confirmation | ${SITE_NAME}`
 
   const bib = new Bib(discoveryBibResult)
-  const item = new Item(discoveryItemResult, bib)
+  const item = bib.getItemsFromResult[0]
 
   return (
     <>
@@ -192,7 +188,6 @@ export async function getServerSideProps({ params, req, res, query }) {
         isEDD: pickupLocation === "edd",
         pickupLocationLabel: pickupLocationLabel || null,
         discoveryBibResult,
-        discoveryItemResult,
       },
     }
   } catch (error) {
