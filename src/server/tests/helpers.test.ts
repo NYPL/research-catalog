@@ -1,13 +1,17 @@
 import sierraClient from "../../../src/server/sierraClient"
+import nyplApiClient from "../nyplApiClient"
 import {
   updatePin,
   updatePatronSettings,
   updateHold,
   renewCheckout,
   cancelHold,
+  updateUsername,
 } from "../../../pages/api/account/helpers"
 
 jest.mock("../../../src/server/sierraClient")
+jest.mock("../../../src/server/nyplApiClient")
+
 const mockCheckoutResponse = {
   id: "1234567",
   callNumber: "123 TEST",
@@ -269,6 +273,109 @@ describe("updatePin", () => {
     })
     expect(response.status).toBe(500)
     expect(response.message).toBe("Server error")
+  })
+})
+
+describe("updateUsername", () => {
+  it("should return a success message if username is updated", async () => {
+    const newUsername = "newUsername"
+    const patronId = "678910"
+
+    const platformMethodMock = jest.fn().mockResolvedValueOnce({
+      status: 200,
+      type: "available-username",
+    })
+    ;(nyplApiClient as jest.Mock).mockResolvedValueOnce({
+      post: platformMethodMock,
+    })
+
+    const sierraMethodMock = jest.fn().mockResolvedValueOnce({
+      status: 200,
+      message: `Username updated to ${newUsername}`,
+    })
+    ;(sierraClient as jest.Mock).mockResolvedValueOnce({
+      put: sierraMethodMock,
+    })
+
+    const response = await updateUsername(patronId, newUsername)
+
+    expect(nyplApiClient).toHaveBeenCalled
+    expect(platformMethodMock).toHaveBeenNthCalledWith(
+      1,
+      "/validations/username",
+      {
+        username: newUsername,
+      }
+    )
+
+    expect(sierraClient).toHaveBeenCalled
+    expect(sierraMethodMock).toHaveBeenNthCalledWith(1, `patrons/${patronId}`, {
+      varFields: [{ fieldTag: "u", content: newUsername }],
+    })
+
+    expect(response.status).toBe(200)
+    expect(response.message).toBe(`Username updated to ${newUsername}`)
+  })
+
+  it("should return a message if username is already taken or invalid", async () => {
+    const alreadyTakenUsername = "alreadyTakenUsername"
+    const patronId = "678910"
+
+    const platformMethodMock = jest.fn().mockResolvedValueOnce({
+      status: 400,
+      type: "unavailable-username",
+      title: "Bad Username",
+      detail:
+        "Usernames should be 5-25 characters, letters or numbers only. Please revise your username.",
+    })
+    ;(nyplApiClient as jest.Mock).mockResolvedValueOnce({
+      post: platformMethodMock,
+    })
+
+    const response = await updateUsername(patronId, alreadyTakenUsername)
+
+    expect(nyplApiClient).toHaveBeenCalled
+    expect(platformMethodMock).toHaveBeenNthCalledWith(
+      1,
+      "/validations/username",
+      {
+        username: alreadyTakenUsername,
+      }
+    )
+
+    expect(sierraClient).not.toHaveBeenCalled
+
+    expect(response.status).toBe(200)
+    expect(response.message).toBe("Username taken")
+  })
+
+  it("should return an error if there's a server error", async () => {
+    const newUsername = "newUsername"
+    const patronId = "678910"
+
+    const platformMethodMock = jest.fn().mockResolvedValueOnce({
+      status: 502,
+      type: "ils-integration-error",
+    })
+    ;(nyplApiClient as jest.Mock).mockResolvedValueOnce({
+      post: platformMethodMock,
+    })
+
+    const response = await updateUsername(patronId, newUsername)
+
+    expect(nyplApiClient).toHaveBeenCalled
+    expect(platformMethodMock).toHaveBeenNthCalledWith(
+      1,
+      "/validations/username",
+      {
+        username: newUsername,
+      }
+    )
+
+    expect(sierraClient).not.toHaveBeenCalled
+
+    expect(response.status).toBe(500)
+    expect(response.message).toBe("Username update failed")
   })
 })
 
