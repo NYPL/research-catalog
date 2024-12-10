@@ -94,9 +94,9 @@ export default function HoldRequestPage({
       const response = await fetch(`${BASE_URL}/api/hold/request/${holdId}`, {
         method: "POST",
         body: JSON.stringify({
-          patronId: patronId.value,
-          source: source.value,
-          pickupLocation: pickupLocation.value,
+          patronId: patronId?.value,
+          source: source?.value,
+          pickupLocation: pickupLocation?.value,
           jsEnabled: true,
         }),
       })
@@ -107,7 +107,7 @@ export default function HoldRequestPage({
         case 401:
           setFormPosting(false)
           setErrorStatus("patronIneligible")
-          setPatronEligibilityStatus(responseJson.patronEligibilityStatus)
+          setPatronEligibilityStatus(responseJson?.patronEligibilityStatus)
           bannerContainerRef.current.focus()
           break
         // Server side error placing the hold request

@@ -44,6 +44,26 @@ const mockReq = {
   },
 }
 
+const fillRequiredEDDFormFields = async () => {
+  // Fill in all required form fields
+  await userEvent.type(
+    screen.getByPlaceholderText(EDD_FORM_FIELD_COPY.emailAddress.placeholder),
+    EDD_FORM_FIELD_COPY.emailAddress.placeholder
+  )
+  await userEvent.type(
+    screen.getByPlaceholderText(EDD_FORM_FIELD_COPY.startPage.placeholder),
+    EDD_FORM_FIELD_COPY.startPage.placeholder
+  )
+  await userEvent.type(
+    screen.getByPlaceholderText(EDD_FORM_FIELD_COPY.endPage.placeholder),
+    EDD_FORM_FIELD_COPY.endPage.placeholder
+  )
+  await userEvent.type(
+    screen.getByPlaceholderText(EDD_FORM_FIELD_COPY.chapterTitle.placeholder),
+    EDD_FORM_FIELD_COPY.chapterTitle.placeholder
+  )
+}
+
 describe("EDD Request page", () => {
   describe("logout redirect handling", () => {
     beforeEach(() => {
@@ -198,32 +218,12 @@ describe("EDD Request page", () => {
 
       global.fetch = jest.fn().mockImplementationOnce(() =>
         Promise.resolve({
-          status: 404,
+          status: 500,
           json: () => Promise.resolve({ success: true }),
         })
       )
 
-      // Fill in all required form fields
-      await userEvent.type(
-        screen.getByPlaceholderText(
-          EDD_FORM_FIELD_COPY.emailAddress.placeholder
-        ),
-        EDD_FORM_FIELD_COPY.emailAddress.placeholder
-      )
-      await userEvent.type(
-        screen.getByPlaceholderText(EDD_FORM_FIELD_COPY.startPage.placeholder),
-        EDD_FORM_FIELD_COPY.startPage.placeholder
-      )
-      await userEvent.type(
-        screen.getByPlaceholderText(EDD_FORM_FIELD_COPY.endPage.placeholder),
-        EDD_FORM_FIELD_COPY.endPage.placeholder
-      )
-      await userEvent.type(
-        screen.getByPlaceholderText(
-          EDD_FORM_FIELD_COPY.chapterTitle.placeholder
-        ),
-        EDD_FORM_FIELD_COPY.chapterTitle.placeholder
-      )
+      await fillRequiredEDDFormFields()
     })
 
     it("shows an error when the request fails", async () => {
@@ -338,6 +338,87 @@ describe("EDD Request page", () => {
         screen.getByText(
           "Some fields contain errors. Please correct and submit again."
         )
+      ).toBeInTheDocument()
+    })
+  })
+  describe("EDD Request patron ineligibility messaging", () => {
+    beforeEach(async () => {
+      render(
+        <EDDRequestPage
+          discoveryBibResult={bibWithItems.resource}
+          discoveryItemResult={bibWithItems.resource.items[0]}
+          patronId="123"
+          isAuthenticated={true}
+        />
+      )
+
+      global.fetch = jest.fn().mockImplementationOnce(() =>
+        Promise.resolve({
+          status: 401,
+          json: () =>
+            Promise.resolve({
+              success: false,
+              patronEligibilityStatus: {
+                eligibility: false,
+                expired: true,
+                moneyOwed: true,
+                ptypeDisallowsHolds: true,
+                reachedHoldLimit: true,
+              },
+            }),
+        })
+      )
+
+      await fillRequiredEDDFormFields()
+
+      await fireEvent(
+        screen.getByText("Submit request"),
+        new MouseEvent("click")
+      )
+    })
+
+    it("shows an error listing ineligibility reasons when the patron is ineligibile to place holds", async () => {
+      await waitFor(() => {
+        expect(screen.getByTestId("hold-request-error")).toBeInTheDocument()
+      })
+
+      expect(
+        screen.getByText("There is a problem with your library account.", {
+          exact: false,
+        })
+      ).toBeInTheDocument()
+
+      expect(
+        screen.getByText("This is because:", {
+          exact: false,
+        })
+      ).toBeInTheDocument()
+
+      expect(
+        screen.getByText("Your account has expired", {
+          exact: false,
+        })
+      ).toBeInTheDocument()
+
+      expect(
+        screen.getByText("Your fines have exceeded the limit", {
+          exact: false,
+        })
+      ).toBeInTheDocument()
+
+      expect(
+        screen.getByText(
+          "Your card does not permit placing holds on ReCAP materials.",
+          {
+            exact: false,
+          }
+        )
+      ).toBeInTheDocument()
+
+      expect(
+        screen.getByText("You have reached the allowed number of holds.", {
+          exact: false,
+        })
       ).toBeInTheDocument()
     })
   })

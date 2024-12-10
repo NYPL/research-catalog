@@ -1,6 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 
-import { postEDDRequest } from "../../../../../src/server/api/hold"
+import {
+  postEDDRequest,
+  fetchPatronEligibility,
+} from "../../../../../src/server/api/hold"
 import { BASE_URL, PATHS } from "../../../../../src/config/constants"
 
 /**
@@ -14,10 +17,29 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   try {
+    const { patronId, jsEnabled, ...rest } = JSON.parse(req.body)
     const holdId = req.query.id as string
+
     const [, itemId] = holdId.split("-")
 
-    const { jsEnabled, ...rest } = JSON.parse(req.body)
+    const patronEligibilityStatus = await fetchPatronEligibility(patronId)
+
+    if (patronEligibilityStatus.status === 401) {
+      switch (jsEnabled) {
+        case true:
+          return res.status(401).json({
+            patronEligibilityStatus,
+          })
+
+        // Server side redirect on ineligibility when Js is disabled
+        // TODO: Move this to seaprate API route
+        // TODO: Parse these query params in getServerSideProps
+        default:
+          return res.redirect(
+            `${BASE_URL}${PATHS.HOLD_REQUEST}/${holdId}?patronEligibility=${patronEligibilityStatus}`
+          )
+      }
+    }
 
     const holdRequestResponse = await postEDDRequest({
       ...rest,

@@ -36,6 +36,7 @@ import type { DiscoveryItemResult } from "../../../../src/types/itemTypes"
 import type {
   EDDRequestParams,
   HoldErrorStatus,
+  PatronEligibilityStatus,
 } from "../../../../src/types/holdPageTypes"
 
 interface EDDRequestPropsType {
@@ -44,6 +45,7 @@ interface EDDRequestPropsType {
   patronId: string
   isAuthenticated?: boolean
   errorStatus?: HoldErrorStatus
+  patronEligibilityStatus?: PatronEligibilityStatus
 }
 
 /**
@@ -55,6 +57,7 @@ export default function EDDRequestPage({
   patronId,
   isAuthenticated,
   errorStatus: defaultErrorStatus,
+  patronEligibilityStatus: defaultEligibilityStatus,
 }: EDDRequestPropsType) {
   const metadataTitle = `Electronic Delivery Request | ${SITE_NAME}`
 
@@ -64,6 +67,9 @@ export default function EDDRequestPage({
   const holdId = `${item.bibId}-${item.id}`
 
   const [errorStatus, setErrorStatus] = useState(defaultErrorStatus)
+  const [patronEligibilityStatus, setPatronEligibilityStatus] = useState(
+    defaultEligibilityStatus
+  )
 
   const [eddFormState, setEddFormState] = useState({
     ...initialEDDFormState,
@@ -100,24 +106,30 @@ export default function EDDRequestPage({
       )
       const responseJson = await response.json()
 
-      if (response.status !== 200) {
-        console.error(
-          "HoldRequestPage: Error in edd request api response",
-          responseJson.error
-        )
-        setErrorStatus("failed")
-        setFormPosting(false)
-        return
+      switch (response.status) {
+        // Patron is ineligible to place holds
+        case 401:
+          setFormPosting(false)
+          setErrorStatus("patronIneligible")
+          setPatronEligibilityStatus(responseJson?.patronEligibilityStatus)
+          bannerContainerRef.current.focus()
+          break
+        // Server side error placing the hold request
+        case 500:
+          setFormPosting(false)
+          console.error(
+            "EDDRequestPage: Error in EDD request api response",
+            responseJson.error
+          )
+          setErrorStatus("failed")
+          break
+        default:
+          setFormPosting(false)
+          // Success state
+          await router.push(
+            `${PATHS.HOLD_CONFIRMATION}/${holdId}?pickupLocation=edd&requestId=${responseJson?.requestId}`
+          )
       }
-      const { requestId } = responseJson
-
-      setErrorStatus(null)
-      setFormPosting(false)
-
-      // Success state
-      await router.push(
-        `${PATHS.HOLD_CONFIRMATION}/${holdId}?pickupLocation=edd&requestId=${requestId}`
-      )
     } catch (error) {
       console.error(
         "HoldRequestPage: Error in hold request api response",
@@ -145,7 +157,11 @@ export default function EDDRequestPage({
           dynamically rendered notification for focus management */}
         <Box tabIndex={-1} ref={bannerContainerRef}>
           {errorStatus && (
-            <HoldRequestErrorBanner item={item} errorStatus={errorStatus} />
+            <HoldRequestErrorBanner
+              item={item}
+              errorStatus={errorStatus}
+              patronEligibilityStatus={patronEligibilityStatus}
+            />
           )}
         </Box>
         <Heading level="h2" mb="l" size="heading3">
