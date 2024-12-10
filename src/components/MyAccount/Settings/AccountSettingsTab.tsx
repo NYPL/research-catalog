@@ -8,7 +8,7 @@ import { StatusBanner } from "./StatusBanner"
 
 type StatusType = "" | "failure" | "success"
 
-const NewAccountSettingsTab = () => {
+const AccountSettingsTab = () => {
   const {
     updatedAccountData: { patron, pickupLocations },
   } = useContext(PatronDataContext)
@@ -41,7 +41,7 @@ const NewAccountSettingsTab = () => {
           <StatusBanner status={status} statusMessage={statusMessage} />
         </div>
       )}
-      <Flex flexDir="column" sx={{ marginTop: "xl", gap: "s" }}>
+      <Flex flexDir="column" sx={{ marginTop: "m", gap: "s" }}>
         <SettingsInputForm
           patronData={patron}
           settingsState={settingsState}
@@ -73,4 +73,4 @@ const NewAccountSettingsTab = () => {
   )
 }
 
-export default NewAccountSettingsTab
+export default AccountSettingsTab
