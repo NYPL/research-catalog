@@ -1,19 +1,19 @@
 import { List } from "@nypl/design-system-react-components"
 
-import type Item from "../../models/Item"
+import type Item from "../../../src/models/Item"
 import { LinkedDetailElement, PlainTextElement } from "../BibPage/BibDetail"
 
 import bibDetailStyles from "../../../styles/components/BibDetails.module.scss"
-import { PATHS } from "../../config/constants"
+import { PATHS } from "../../../src/config/constants"
 
-interface HoldRequestItemDetailsProps {
+interface HoldItemDetailsProps {
   item: Item
 }
 
 /**
- * The HoldRequestItemDetails renders item details on the hold page.
+ * The HoldItemDetails renders item details on the hold page.
  */
-const HoldRequestItemDetails = ({ item }: HoldRequestItemDetailsProps) => {
+const HoldItemDetails = ({ item }: HoldItemDetailsProps) => {
   return (
     <List
       noStyling
@@ -38,4 +38,4 @@ const HoldRequestItemDetails = ({ item }: HoldRequestItemDetailsProps) => {
   )
 }
 
-export default HoldRequestItemDetails
+export default HoldItemDetails

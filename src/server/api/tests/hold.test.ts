@@ -3,13 +3,11 @@ import {
   postHoldRequest,
   postEDDRequest,
   fetchPatronEligibility,
-  fetchHoldDetails,
 } from "../hold"
 import type { DeliveryLocationsResult } from "../../../types/locationTypes"
 import type {
   HoldPostResult,
   PatronEligibilityStatus,
-  HoldDetailsResult,
 } from "../../../types/holdPageTypes"
 
 jest.mock("../../nyplApiClient", () => {
@@ -265,22 +263,5 @@ describe("fetchPatronEligibility", () => {
     )) as PatronEligibilityStatus
 
     expect(patonEligibility.status).toEqual(500)
-  })
-})
-
-describe("fetchHoldDetails", () => {
-  it("should return details for a given hold request ID from Discovery API", async () => {
-    const holdDetails = (await fetchHoldDetails("123")) as HoldDetailsResult
-    expect(holdDetails).toEqual({
-      requestId: "123",
-      patronId: "456",
-      pickupLocation: "mal17",
-      status: 200,
-    })
-  })
-
-  it("should return return a 500 status if there was an error", async () => {
-    const holdDetails = (await fetchHoldDetails("123")) as HoldDetailsResult
-    expect(holdDetails.status).toEqual(500)
   })
 })
