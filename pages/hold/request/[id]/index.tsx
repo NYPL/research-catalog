@@ -214,8 +214,8 @@ export async function getServerSideProps({ params, req, res }) {
     const patronId = patronTokenResponse?.decodedPatron?.sub
 
     // TODO: implement this function
-    const holdRequestEligibility = await fetchHoldRequestEligibility(patronId)
-    console.log("holdRequestEligibility", holdRequestEligibility)
+    // const holdRequestEligibility = await fetchHoldRequestEligibility(patronId)
+    // console.log("holdRequestEligibility", holdRequestEligibility)
 
     // fetch bib and item
     const [bibId, itemId] = id.split("-")
