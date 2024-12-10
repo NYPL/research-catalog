@@ -9,18 +9,18 @@ import {
 
 import Layout from "../../../../src/components/Layout/Layout"
 import EDDRequestForm from "../../../../src/components/HoldPages/EDDRequestForm"
-import HoldRequestErrorBanner from "../../../../src/components/HoldPages/HoldRequestErrorBanner"
+import HoldRequestBanner from "../../../../src/components/HoldPages/HoldRequestBanner"
 import HoldRequestItemDetails from "../../../../src/components/HoldPages/HoldRequestItemDetails"
 
 import { SITE_NAME, BASE_URL, PATHS } from "../../../../src/config/constants"
 import useLoading from "../../../../src/hooks/useLoading"
 
 import { fetchBib } from "../../../../src/server/api/bib"
+import { fetchDeliveryLocations } from "../../../../src/server/api/hold"
 import {
-  fetchDeliveryLocations,
-  fetchPatronEligibility,
-} from "../../../../src/server/api/hold"
-import { initialEDDFormState } from "../../../../src/utils/holdPageUtils"
+  EDDPageStatusMessages,
+  initialEDDFormState,
+} from "../../../../src/utils/holdPageUtils"
 
 import initializePatronTokenAuth, {
   doRedirectBasedOnNyplAccountRedirects,
@@ -35,7 +35,7 @@ import type { DiscoveryItemResult } from "../../../../src/types/itemTypes"
 
 import type {
   EDDRequestParams,
-  HoldErrorStatus,
+  EDDPageStatus,
 } from "../../../../src/types/holdPageTypes"
 
 interface EDDRequestPropsType {
@@ -43,7 +43,8 @@ interface EDDRequestPropsType {
   discoveryItemResult: DiscoveryItemResult
   patronId: string
   isAuthenticated?: boolean
-  errorStatus?: HoldErrorStatus
+  eddRequestable?: boolean
+  pageStatus?: EDDPageStatus
 }
 
 /**
@@ -54,7 +55,7 @@ export default function EDDRequestPage({
   discoveryItemResult,
   patronId,
   isAuthenticated,
-  errorStatus: defaultErrorStatus,
+  pageStatus: defaultPageStatus,
 }: EDDRequestPropsType) {
   const metadataTitle = `Electronic Delivery Request | ${SITE_NAME}`
 
@@ -63,7 +64,7 @@ export default function EDDRequestPage({
 
   const holdId = `${item.bibId}-${item.id}`
 
-  const [errorStatus, setErrorStatus] = useState(defaultErrorStatus)
+  const [pageStatus, setPageStatus] = useState(defaultPageStatus)
 
   const [eddFormState, setEddFormState] = useState({
     ...initialEDDFormState,
@@ -78,14 +79,10 @@ export default function EDDRequestPage({
   const isLoading = useLoading()
 
   useEffect(() => {
-    if (
-      errorStatus &&
-      errorStatus !== "invalid" &&
-      bannerContainerRef.current
-    ) {
+    if (pageStatus && pageStatus !== "invalid" && bannerContainerRef.current) {
       bannerContainerRef.current.focus()
     }
-  }, [errorStatus])
+  }, [pageStatus])
 
   const postEDDRequest = async (eddParams: EDDRequestParams) => {
     try {
@@ -105,13 +102,13 @@ export default function EDDRequestPage({
           "HoldRequestPage: Error in edd request api response",
           responseJson.error
         )
-        setErrorStatus("failed")
+        setPageStatus("failed")
         setFormPosting(false)
         return
       }
       const { requestId } = responseJson
 
-      setErrorStatus(null)
+      setPageStatus(null)
       setFormPosting(false)
 
       // Success state
@@ -123,7 +120,7 @@ export default function EDDRequestPage({
         "HoldRequestPage: Error in hold request api response",
         error
       )
-      setErrorStatus("failed")
+      setPageStatus("failed")
       setFormPosting(false)
     }
   }
@@ -144,8 +141,13 @@ export default function EDDRequestPage({
         {/* Always render the wrapper element that will display the
           dynamically rendered notification for focus management */}
         <Box tabIndex={-1} ref={bannerContainerRef}>
-          {errorStatus && (
-            <HoldRequestErrorBanner item={item} errorStatus={errorStatus} />
+          {pageStatus && (
+            <HoldRequestBanner
+              item={item}
+              heading={EDDPageStatusMessages[pageStatus].heading}
+              errorMessage={EDDPageStatusMessages[pageStatus].message}
+              pageStatus={pageStatus}
+            />
           )}
         </Box>
         <Heading level="h2" mb="l" size="heading3">
@@ -154,12 +156,12 @@ export default function EDDRequestPage({
         <HoldRequestItemDetails item={item} />
         {isLoading || formPosting ? (
           <SkeletonLoader showImage={false} data-testid="edd-request-loading" />
-        ) : errorStatus !== "eddUnavailable" ? (
+        ) : pageStatus !== "unavailable" ? (
           <EDDRequestForm
             eddFormState={eddFormState}
             setEddFormState={setEddFormState}
             handleSubmit={postEDDRequest}
-            setErrorStatus={setErrorStatus}
+            setPageStatus={setPageStatus}
             holdId={holdId}
           />
         ) : null}
@@ -168,7 +170,7 @@ export default function EDDRequestPage({
   )
 }
 
-export async function getServerSideProps({ params, req, res }) {
+export async function getServerSideProps({ params, req, res, query }) {
   const { id } = params
 
   // authentication redirect
@@ -230,16 +232,10 @@ export async function getServerSideProps({ params, req, res }) {
       await fetchDeliveryLocations(item.barcode, patronId)
 
     if (locationStatus !== 200) {
-      console.error("EDD Page - Error fetching edd in getServerSideProps")
+      throw new Error("EDD Page - Error fetching edd in getServerSideProps")
     }
 
     const isEddAvailable = eddRequestable && item.isAvailable
-
-    const patronEligibilityStatus = await fetchPatronEligibility(patronId)
-
-    const locationOrEligibilityFetchFailed =
-      locationStatus !== 200 ||
-      ![200, 401].includes(patronEligibilityStatus?.status)
 
     return {
       props: {
@@ -247,13 +243,7 @@ export async function getServerSideProps({ params, req, res }) {
         discoveryItemResult,
         patronId,
         isAuthenticated,
-        errorStatus: locationOrEligibilityFetchFailed
-          ? "failed"
-          : patronEligibilityStatus.status === 401
-          ? "patronIneligible"
-          : !isEddAvailable
-          ? "eddUnavailable"
-          : null,
+        pageStatus: !isEddAvailable ? "unavailable" : null,
       },
     }
   } catch (error) {

@@ -112,6 +112,7 @@ export async function postHoldRequest(
       requestId,
     }
   } catch (error) {
+    console.log("error", error)
     console.error(
       `Error posting hold request in postHoldRequest server function, itemId: ${itemId}`,
       error.message
@@ -120,6 +121,59 @@ export async function postHoldRequest(
     return {
       status: 500,
     }
+  }
+}
+
+/**
+ * Getter function for hold request details.
+ */
+// TODO: Add return type
+export async function fetchHoldDetails(
+  requestId: string
+): Promise<HoldDetailsResult> {
+  try {
+    const client = await nyplApiClient()
+    const holdDetailsResult = await client.get(`/hold-requests/${requestId}`)
+    const { id, pickupLocation, patron } = holdDetailsResult.data
+
+    return {
+      requestId: id,
+      patronId: patron,
+      pickupLocation,
+      status: 200,
+    }
+  } catch (error) {
+    console.error(
+      `Error fetching hold request details in fetchHoldRequestDetails server function, requestId: ${requestId}`,
+      error.message
+    )
+
+    return { status: 500 }
+  }
+}
+
+/**
+ * Getter function for hold request eligibility for patrons.
+ */
+export async function fetchHoldRequestEligibility(
+  patronId: string
+): Promise<PatronEligibilityStatus> {
+  const eligibilityEndpoint = `/patrons/${patronId}/hold-request-eligibility`
+
+  try {
+    const client = await nyplApiClient()
+    const eligibilityResult = await client.get(eligibilityEndpoint, {
+      cache: false,
+    })
+
+    return eligibilityResult as PatronEligibilityStatus
+  } catch (error) {
+    console.error(
+      `Error fetching hold request eligibility in fetchHoldRequestEligibility server function, patronId: ${patronId}`,
+      error.message
+    )
+
+    return { eligibility: false }
   }
 }
 
@@ -174,67 +228,5 @@ export async function postEDDRequest(
     return {
       status: 500,
     }
-  }
-}
-
-/**
- * Getter function for hold request details.
- */
-// TODO: Add return type
-export async function fetchHoldDetails(
-  requestId: string
-): Promise<HoldDetailsResult> {
-  try {
-    const client = await nyplApiClient()
-    const holdDetailsResult = await client.get(`/hold-requests/${requestId}`)
-    const { id, pickupLocation, patron } = holdDetailsResult.data
-
-    return {
-      requestId: id,
-      patronId: patron,
-      pickupLocation,
-      status: 200,
-    }
-  } catch (error) {
-    console.error(
-      `Error fetching hold request details in fetchHoldRequestDetails server function, requestId: ${requestId}`,
-      error.message
-    )
-
-    return { status: 500 }
-  }
-}
-
-/**
- * Getter function for hold request eligibility for patrons.
- */
-export async function fetchPatronEligibility(
-  patronId: string
-): Promise<PatronEligibilityStatus> {
-  const eligibilityEndpoint = `/patrons/${patronId}/hold-request-eligibility`
-
-  try {
-    const client = await nyplApiClient()
-    const eligibilityResult = await client.get(eligibilityEndpoint, {
-      cache: false,
-    })
-
-    // There should always be en eligibilty boolean attribute returned from Discovery API
-    if (eligibilityResult.eligibility === undefined) {
-      throw new Error("Improperly formatted eligibility from Discovery API")
-    }
-
-    if (eligibilityResult.eligibility === false) {
-      return { status: 401 }
-    }
-
-    return { status: 200, ...eligibilityResult } as PatronEligibilityStatus
-  } catch (error) {
-    console.error(
-      `Error fetching hold request eligibility in fetchPatronEligibility server function, patronId: ${patronId}`,
-      error.message
-    )
-
-    return { status: 500 }
   }
 }

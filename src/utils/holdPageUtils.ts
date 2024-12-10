@@ -1,6 +1,8 @@
 import type {
   EDDRequestParams,
   EDDFormValidatedField,
+  EDDPageStatus,
+  EDDStatusMessage,
 } from "../types/holdPageTypes"
 
 import { EMAIL_REGEX } from "../config/constants"
@@ -19,6 +21,21 @@ export const initialEDDFormState: EDDRequestParams = {
   author: "",
   requestNotes: "",
   pickupLocation: "edd",
+}
+
+export const EDDPageStatusMessages: Record<EDDPageStatus, EDDStatusMessage> = {
+  failed: {
+    heading: "Request failed",
+    message: "We were unable to process your request at this time.",
+  },
+  unavailable: {
+    heading: "Electronic delivery unavailable",
+    message:
+      "Electronic delivery options for this item are currently unavailable.",
+  },
+  invalid: {
+    message: "Some fields contain errors. Please correct and submit again.",
+  },
 }
 
 // Initial state for invalid fields in the EDD form to keep track of the first invalid field for focus on submit
