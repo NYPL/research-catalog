@@ -84,7 +84,7 @@ describe("phone form", () => {
 
     await waitFor(() => expect(screen.getAllByRole("textbox")[1]).toHaveFocus())
 
-    fireEvent.click(screen.getByLabelText("Remove phone"))
+    fireEvent.click(screen.getByLabelText("Remove phone 2"))
 
     await waitFor(() => expect(screen.getByRole("textbox")).toHaveFocus())
   })
@@ -135,7 +135,7 @@ describe("phone form", () => {
       processedPatron.phones.length + 1
     )
 
-    fireEvent.click(screen.getByLabelText("Remove phone"))
+    fireEvent.click(screen.getByLabelText("Remove phone 2"))
     expect(screen.getAllByRole("textbox").length).toBe(
       processedPatron.phones.length
     )
