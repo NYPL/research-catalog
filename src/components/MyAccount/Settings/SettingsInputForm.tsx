@@ -8,7 +8,8 @@ import {
   Form,
   Box,
 } from "@nypl/design-system-react-components"
-import { useContext, useState } from "react"
+import type { TextInputRefType } from "@nypl/design-system-react-components"
+import { useContext, useEffect, useRef, useState } from "react"
 import { PatronDataContext } from "../../../context/PatronDataContext"
 import SaveCancelButtons from "./SaveCancelButtons"
 import SettingsLabel from "./SettingsLabel"
@@ -42,9 +43,26 @@ const SettingsInputForm = ({
 
   const [tempInputs, setTempInputs] = useState([...inputs])
 
+  const inputRefs = useRef<Array<TextInputRefType | null>>([])
+  const editingRef = useRef<HTMLButtonElement | null>()
+
+  const focusLastInput = () => {
+    const lastIndex = tempInputs.length - 1
+    if (inputRefs.current[lastIndex]) {
+      inputRefs.current[lastIndex]?.focus()
+    }
+  }
+
+  useEffect(() => {
+    focusLastInput()
+  }, [tempInputs.length])
+
   const formUtils = {
     regex: isEmail ? /^[^@]+@[^@]+\.[^@]+$/ : /^\+?[1-9]\d{1,14}$/,
-    labelText: `Update ${inputType}`,
+    labelText: isEmail ? "Update email address" : "Update phone number",
+    primaryLabelText: isEmail
+      ? "Update primary email address"
+      : "Update primary phone number",
     addButtonLabel: isEmail ? "+ Add an email address" : "+ Add a phone number",
     errorMessage: `Please enter a valid and unique ${
       isEmail ? "email address" : "phone number"
@@ -82,6 +100,9 @@ const SettingsInputForm = ({
     const updatedInputs = tempInputs.filter((_, i) => i !== index)
     setTempInputs(updatedInputs)
 
+    // Remove its corresponding ref.
+    inputRefs.current = inputRefs.current.filter((_, i) => i !== index)
+
     // Immediately revalidate remaining inputs.
     const hasInvalidInput = updatedInputs.some(
       (input) => !validateInput(input, updatedInputs)
@@ -100,18 +121,14 @@ const SettingsInputForm = ({
     setError(hasInvalidInput)
   }
 
-  const handleClearableCallback = (index) => {
-    const updatedInputs = [...tempInputs]
-    updatedInputs[index] = ""
-    setTempInputs(updatedInputs)
-    setError(true)
-  }
-
   const cancelEditing = () => {
     setTempInputs([...inputs])
     setIsEditing(false)
     setEditingField("")
     setError(false)
+    setTimeout(() => {
+      editingRef.current?.focus()
+    }, 0)
   }
 
   const submitInputs = async () => {
@@ -166,12 +183,16 @@ const SettingsInputForm = ({
         width="100%"
       >
         <SettingsLabel icon={formUtils.icon} text={formUtils.inputLabel} />
-
         {isLoading ? (
-          <SkeletonLoader contentSize={2} showImage={false} headingSize={0} />
+          <SkeletonLoader
+            sx={{ "> div": { marginTop: "-s" } }}
+            contentSize={2}
+            showImage={false}
+            headingSize={0}
+          />
         ) : isEditing ? (
           <Flex
-            marginLeft={{ base: "l", lg: "unset" }}
+            marginLeft={{ base: "m", lg: "unset" }}
             marginTop={{ base: "xs", lg: "unset" }}
             flexDir="column"
             width="-webkit-fill-available"
@@ -183,18 +204,22 @@ const SettingsInputForm = ({
                     sx={{
                       width: { base: "87%", md: "300px" },
                     }}
+                    ref={(el) => (inputRefs.current[index] = el)}
                     name={`input-${index}`}
                     value={input}
                     id={`${inputType}-text-input-${index}`}
-                    labelText={formUtils.labelText}
+                    labelText={
+                      index == 0
+                        ? formUtils.primaryLabelText
+                        : `${formUtils.labelText} ${index + 1}`
+                    }
                     showLabel={false}
                     isInvalid={error && !validateInput(input, tempInputs)}
                     invalidText={formUtils.errorMessage}
                     onChange={(e) => handleInputChange(e, index)}
                     isRequired
-                    isClearable
-                    isClearableCallback={() => handleClearableCallback(index)}
                   />
+                  {index == 0 && <div style={{ width: "57px" }}> </div>}
                   {index !== 0 && (
                     <Button
                       aria-label={`Remove ${formUtils.inputLabel.toLowerCase()}`}
@@ -209,15 +234,18 @@ const SettingsInputForm = ({
                 </Flex>
               </Form>
             ))}
-            <AddButton
-              inputType={inputType}
-              label={formUtils.addButtonLabel}
-              onClick={handleAdd}
-            />
+            <Flex flexDir="row" width="fill">
+              <AddButton
+                inputType={inputType}
+                label={formUtils.addButtonLabel}
+                onClick={handleAdd}
+              />
+              <div style={{ width: "72px" }}> </div>
+            </Flex>
           </Flex>
         ) : isEmail || tempInputs.length !== 0 ? (
           <Flex
-            marginLeft={{ base: "l", lg: "unset" }}
+            marginLeft={{ base: "m", lg: "unset" }}
             flexDir="row"
             alignItems="flex-start"
           >
@@ -226,9 +254,9 @@ const SettingsInputForm = ({
                 <Text
                   key={index}
                   sx={{
-                    width: { base: "l", sm: "250px" },
-                    paddingTop: "xs",
+                    width: { base: "200px", sm: "250px" },
                     marginBottom: "xs",
+                    marginTop: { base: "xs", lg: "unset" },
                   }}
                 >
                   {input}{" "}
@@ -250,10 +278,13 @@ const SettingsInputForm = ({
             </Flex>
             {editingField === "" && tempInputs.length > 0 && (
               <EditButton
+                ref={editingRef}
+                buttonLabel={`Edit ${inputType}`}
                 buttonId={`edit-${inputType}-button`}
                 onClick={() => {
                   setIsEditing(true)
                   setEditingField(inputType)
+                  setTimeout(() => focusLastInput(), 0)
                 }}
               />
             )}
