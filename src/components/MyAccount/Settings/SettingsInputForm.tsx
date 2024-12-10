@@ -222,7 +222,9 @@ const SettingsInputForm = ({
                   {index == 0 && <div style={{ width: "57px" }}> </div>}
                   {index !== 0 && (
                     <Button
-                      aria-label={`Remove ${formUtils.inputLabel.toLowerCase()}`}
+                      aria-label={`Remove ${formUtils.inputLabel.toLowerCase()} ${
+                        index + 1
+                      }`}
                       buttonType="text"
                       id="remove-input-btn"
                       onClick={() => handleRemove(index)}
