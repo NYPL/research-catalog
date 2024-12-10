@@ -48,6 +48,19 @@ describe("home library form", () => {
     expect(screen.getByRole("button", { name: /edit/i })).toBeInTheDocument()
   })
 
+  it("manages focus", async () => {
+    render(component)
+    fireEvent.click(screen.getByRole("button", { name: /edit/i }))
+
+    await waitFor(() => expect(screen.getByRole("combobox")).toHaveFocus())
+
+    fireEvent.click(screen.getByRole("button", { name: /cancel/i }))
+
+    await waitFor(() =>
+      expect(screen.getByRole("button", { name: /edit/i })).toHaveFocus()
+    )
+  })
+
   it("allows editing when edit button is clicked", () => {
     render(component)
     fireEvent.click(screen.getByRole("button", { name: /edit/i }))

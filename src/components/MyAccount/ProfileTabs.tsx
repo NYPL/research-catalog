@@ -6,7 +6,7 @@ import RequestsTab from "./RequestsTab/RequestsTab"
 import FeesTab from "./FeesTab/FeesTab"
 import { PatronDataContext } from "../../context/PatronDataContext"
 import { useContext } from "react"
-import NewAccountSettingsTab from "./Settings/NewAccountSettingsTab"
+import AccountSettingsTab from "./Settings/AccountSettingsTab"
 
 interface ProfileTabsPropsType {
   activePath: string
@@ -49,7 +49,7 @@ const ProfileTabs = ({ activePath }: ProfileTabsPropsType) => {
       : []),
     {
       label: "Account settings",
-      content: <NewAccountSettingsTab />,
+      content: <AccountSettingsTab />,
       urlPath: "settings",
     },
   ]

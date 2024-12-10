@@ -95,6 +95,7 @@ const ProfileHeader = ({ patron }: { patron: Patron }) => {
         sx={{
           border: "none",
           h2: { border: "none", paddingTop: 0 },
+          marginBottom: "l",
         }}
       >
         {profileData}

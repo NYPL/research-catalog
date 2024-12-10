@@ -7,7 +7,8 @@ import {
   SkeletonLoader,
   Banner,
 } from "@nypl/design-system-react-components"
-import { useContext, useState } from "react"
+import type { TextInputRefType } from "@nypl/design-system-react-components"
+import { useContext, useRef, useState } from "react"
 import { PatronDataContext } from "../../../context/PatronDataContext"
 import SaveCancelButtons from "./SaveCancelButtons"
 import type { Patron } from "../../../types/myAccountTypes"
@@ -45,6 +46,9 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
   const currentUsernameNotDeleted = tempUsername !== null
 
   const { setUsernameStatus, setUsernameStatusMessage } = usernameState
+  const inputRef = useRef<TextInputRefType | null>()
+  const editingRef = useRef<HTMLButtonElement | null>()
+  const addButtonRef = useRef<HTMLButtonElement | null>()
 
   const validateUsername = (username: string) => {
     const usernameRegex = /^[a-zA-Z0-9]{5,15}$/
@@ -55,6 +59,9 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
     setTempUsername(usernameInSierra)
     setIsEditing(false)
     setError(false)
+    setTimeout(() => {
+      editingRef.current?.focus()
+    }, 0)
   }
 
   const handleInputChange = (e) => {
@@ -114,6 +121,7 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
           sx={{
             width: { base: "87%", md: "300px" },
           }}
+          ref={inputRef}
           value={tempUsername}
           id="username-input"
           labelText="Username"
@@ -123,16 +131,18 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
           isInvalid={error && !validateUsername(tempUsername)}
           showHelperInvalidText={true}
           onChange={handleInputChange}
-          isClearable
-          isClearableCallback={() => setError(true)}
         />
         <Button
-          aria-label="Remove username"
+          aria-label="Delete username from your account"
+          aria-describedby="delete-warning-message"
           buttonType="text"
-          id="remove-username-btn"
+          id="delete-username-btn"
           onClick={() => {
             setTempUsername(null)
             setError(false)
+            setTimeout(() => {
+              addButtonRef.current?.focus()
+            }, 0)
           }}
         >
           {" "}
@@ -140,6 +150,7 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
         </Button>
       </Flex>
       <Banner
+        id="delete-warning-message"
         sx={{ marginTop: "xs", width: "fill" }}
         content="If you delete your username, you will have to use your barcode to log in to your account in the future."
         type="warning"
@@ -151,21 +162,35 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
     <Flex alignItems="center" marginTop={{ base: "unset", md: "-xs" }}>
       {usernameInSierra ? (
         <>
-          <Text size="body1" sx={{ marginBottom: 0 }}>
+          <Text
+            size="body1"
+            sx={{ marginBottom: 0, width: { base: "l", sm: "250px" } }}
+          >
             {usernameInSierra}
           </Text>
           <EditButton
+            ref={editingRef}
+            buttonLabel="Edit username"
             buttonId="edit-username-button"
-            onClick={() => setIsEditing(true)}
+            onClick={() => {
+              setIsEditing(true)
+              setTimeout(() => {
+                inputRef?.current?.focus()
+              }, 0)
+            }}
           />
         </>
       ) : (
         <AddButton
+          ref={editingRef}
           label="+ Add username"
           onClick={() => {
             setIsEditing(true)
             setTempUsername("")
             setError(true)
+            setTimeout(() => {
+              inputRef?.current?.focus()
+            }, 0)
           }}
         />
       )}
@@ -182,10 +207,14 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
         editUsernameField
       ) : (
         <AddButton
+          ref={addButtonRef}
           label="+ Add username"
           onClick={() => {
             setTempUsername("")
             setError(true)
+            setTimeout(() => {
+              inputRef.current?.focus()
+            }, 0)
           }}
         />
       )}
@@ -217,6 +246,7 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
       {content}
       {isEditing && (
         <SaveCancelButtons
+          inputType="username"
           onCancel={cancelEditing}
           onSave={submitInput}
           isDisabled={error}

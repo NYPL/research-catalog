@@ -4,15 +4,15 @@ const SettingsLabel = ({ icon, text }) => {
   return (
     <Flex
       gap="xs"
-      minHeight="48px"
       alignItems="flex-start"
       sx={{
-        minWidth: { base: "unset", lg: "256px" },
+        height: { base: "unset", lg: "48px" },
+        minWidth: { base: "unset", lg: "242px" },
         marginRight: "xs",
-        paddingTop: "xs",
+        marginTop: { base: "xs", lg: "unset" },
       }}
     >
-      <Icon marginTop="xxs" name={icon} size="medium" />
+      <Icon marginTop="xxs" name={icon} size="medium" paddingTop="0" />
       <Text
         size="body1"
         sx={{

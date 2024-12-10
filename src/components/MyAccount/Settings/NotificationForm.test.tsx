@@ -77,6 +77,19 @@ describe("notification preference form", () => {
     expect(screen.queryByText(/edit/)).not.toBeInTheDocument()
   })
 
+  it("manages focus", async () => {
+    render(component)
+    fireEvent.click(screen.getByRole("button", { name: /edit/i }))
+
+    await waitFor(() => expect(screen.getByRole("combobox")).toHaveFocus())
+
+    fireEvent.click(screen.getByRole("button", { name: /cancel/i }))
+
+    await waitFor(() =>
+      expect(screen.getByRole("button", { name: /edit/i })).toHaveFocus()
+    )
+  })
+
   it("calls submit with valid data", async () => {
     render(component)
 

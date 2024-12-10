@@ -1,5 +1,5 @@
 import React from "react"
-import { render, fireEvent, waitFor } from "../../../utils/testUtils"
+import { render, fireEvent, waitFor, screen } from "../../../utils/testUtils"
 import PasswordForm from "./PasswordForm"
 import {
   filteredPickupLocations,
@@ -38,6 +38,21 @@ beforeEach(() => {
 })
 
 describe("Pin/password form", () => {
+  it("manages focus", async () => {
+    render(component)
+    fireEvent.click(screen.getByRole("button", { name: /edit/i }))
+
+    await waitFor(() =>
+      expect(screen.getByLabelText("Enter current pin/password")).toHaveFocus()
+    )
+
+    fireEvent.click(screen.getByRole("button", { name: /cancel/i }))
+
+    await waitFor(() =>
+      expect(screen.getByRole("button", { name: /edit/i })).toHaveFocus()
+    )
+  })
+
   it("disables submit button if any form field is empty", async () => {
     const { getByText, getByLabelText } = render(component)
     const button = getByText("Edit")

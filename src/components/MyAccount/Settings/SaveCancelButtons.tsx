@@ -4,7 +4,13 @@ type SaveCancelButtonProps = {
   isDisabled?: boolean
   onCancel: () => void
   onSave: () => void
-  inputType?: "phones" | "emails"
+  inputType:
+    | "emails"
+    | "phones"
+    | "password"
+    | "username"
+    | "library"
+    | "notification"
 }
 
 const SaveCancelButtons = ({
