@@ -53,6 +53,12 @@ const SettingsInputForm = ({
     }
   }
 
+  const focusFirstInput = () => {
+    if (inputRefs.current[0]) {
+      inputRefs?.current[0]?.focus()
+    }
+  }
+
   useEffect(() => {
     focusLastInput()
   }, [tempInputs.length])
@@ -286,7 +292,8 @@ const SettingsInputForm = ({
                 onClick={() => {
                   setIsEditing(true)
                   setEditingField(inputType)
-                  setTimeout(() => focusLastInput(), 0)
+                  console.log("hello")
+                  setTimeout(() => focusFirstInput(), 0)
                 }}
               />
             )}
