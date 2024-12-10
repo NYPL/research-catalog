@@ -2,9 +2,13 @@ import {
   fetchDeliveryLocations,
   postHoldRequest,
   postEDDRequest,
+  fetchPatronEligibility,
 } from "../hold"
 import type { DeliveryLocationsResult } from "../../../types/locationTypes"
-import type { HoldPostResult } from "../../../types/holdPageTypes"
+import type {
+  HoldPostResult,
+  PatronEligibilityStatus,
+} from "../../../types/holdPageTypes"
 
 jest.mock("../../nyplApiClient", () => {
   return jest
@@ -79,8 +83,65 @@ jest.mock("../../nyplApiClient", () => {
     .mockImplementationOnce(async () => {
       return await new Promise((resolve) => {
         resolve({
-          get: () => {
+          post: () => {
             throw new Error("Error posting EDD request")
+          },
+        })
+      })
+    })
+    .mockImplementationOnce(async () => {
+      return await new Promise((resolve) => {
+        resolve({
+          get: jest.fn().mockReturnValueOnce({
+            eligibility: true,
+            expired: false,
+            moneyOwed: false,
+            ptypeDisallowsHolds: false,
+            reachedHoldLimit: false,
+          }),
+        })
+      })
+    })
+    .mockImplementationOnce(async () => {
+      return await new Promise((resolve) => {
+        resolve({
+          get: jest.fn().mockReturnValueOnce({
+            eligibility: false,
+            expired: true,
+            moneyOwed: true,
+            ptypeDisallowsHolds: false,
+            reachedHoldLimit: false,
+          }),
+        })
+      })
+    })
+    .mockImplementationOnce(async () => {
+      return await new Promise((resolve) => {
+        resolve({
+          get: () => {
+            throw new Error("Error getting patron eligibility status")
+          },
+        })
+      })
+    })
+    .mockImplementationOnce(async () => {
+      return await new Promise((resolve) => {
+        resolve({
+          get: jest.fn().mockReturnValueOnce({
+            data: {
+              id: "123",
+              patron: "456",
+              pickupLocation: "mal17",
+            },
+          }),
+        })
+      })
+    })
+    .mockImplementationOnce(async () => {
+      return await new Promise((resolve) => {
+        resolve({
+          get: () => {
+            throw new Error("Error getting hold details")
           },
         })
       })
@@ -171,5 +232,36 @@ describe("postEDDRequest", () => {
     })) as HoldPostResult
 
     expect(holdPostResult.status).toEqual(500)
+  })
+})
+
+describe("fetchPatronEligibility", () => {
+  it("should return a patron's hold eligibility status from Discovery API", async () => {
+    const patonEligibility = (await fetchPatronEligibility(
+      "123"
+    )) as PatronEligibilityStatus
+
+    expect(patonEligibility).toEqual({
+      status: 200,
+      eligibility: true,
+      expired: false,
+      moneyOwed: false,
+      ptypeDisallowsHolds: false,
+      reachedHoldLimit: false,
+    })
+  })
+  it("should return a 401 status if the patron is ineligibile", async () => {
+    const patonEligibility = (await fetchPatronEligibility(
+      "123"
+    )) as PatronEligibilityStatus
+
+    expect(patonEligibility.status).toEqual(401)
+  })
+  it("should return a 500 status if there was an error", async () => {
+    const patonEligibility = (await fetchPatronEligibility(
+      "123"
+    )) as PatronEligibilityStatus
+
+    expect(patonEligibility.status).toEqual(500)
   })
 })

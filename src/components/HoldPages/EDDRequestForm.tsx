@@ -21,13 +21,16 @@ import {
   initialEDDInvalidFields,
   isInvalidField,
 } from "../../utils/holdPageUtils"
-import type { EDDRequestParams, EDDPageStatus } from "../../types/holdPageTypes"
+import type {
+  EDDRequestParams,
+  HoldErrorStatus,
+} from "../../types/holdPageTypes"
 
 interface EDDRequestFormProps {
   eddFormState: EDDRequestParams
   setEddFormState: React.Dispatch<React.SetStateAction<EDDRequestParams>>
   handleSubmit: (eddParams: EDDRequestParams) => void
-  setPageStatus: (status: EDDPageStatus) => void
+  setErrorStatus: (errorStatus: HoldErrorStatus) => void
   holdId: string
 }
 
@@ -38,7 +41,7 @@ const EDDRequestForm = ({
   eddFormState,
   setEddFormState,
   handleSubmit,
-  setPageStatus,
+  setErrorStatus,
   holdId,
 }: EDDRequestFormProps) => {
   // Set the invalid fields as an array in state to keep track of the first invalid field for focus on submit
@@ -86,10 +89,10 @@ const EDDRequestForm = ({
 
     // Prevent form submission and focus on first invalid field if there is one
     if (firstInvalidField) {
-      setPageStatus("invalid")
+      setErrorStatus("invalid")
       validatedInputRefs?.[firstInvalidField.key]?.current.focus()
     } else {
-      setPageStatus(null)
+      setErrorStatus(null)
       handleSubmit(eddFormState)
     }
   }

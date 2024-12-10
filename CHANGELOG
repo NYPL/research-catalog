@@ -5,7 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## Prerelease
+
+### Added
+
+- Added fetchPatronEligibility server function that requests a patron's hold request eligibility status from Discovery API (SCC-3762)
+- Added patron ineligibility error messaging to HoldRequestErrorBanner component (SCC-3762)
+- Added eligibility checks to EDD and on-site request hold pages and API routes (SCC-3762)
 
 ### Updated
 
