@@ -10,7 +10,6 @@ import {
 } from "../../../src/config/constants"
 
 import Bib from "../../../src/models/Bib"
-import Item from "../../../src/models/Item"
 
 import RCLink from "../../../src/components/Links/RCLink/RCLink"
 import ExternalLink from "../../../src/components/Links/RCLink/RCLink"
