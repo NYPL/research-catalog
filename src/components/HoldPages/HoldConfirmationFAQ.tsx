@@ -1,4 +1,4 @@
-import { Heading, Accordion } from "@nypl/design-system-react-components"
+import { Heading, Accordion, Box } from "@nypl/design-system-react-components"
 
 import {
   holdConfirmationFAQData,
@@ -14,7 +14,7 @@ interface HoldConfirmationFAQProps {
  **/
 const HoldConfirmationFAQ = ({ isEDD = false }: HoldConfirmationFAQProps) => {
   return (
-    <>
+    <Box data-testid={`${isEDD ? "edd" : "on-site"}-confirmation-faq`}>
       <Heading level="h3" mb="l">
         Frequently asked questions
       </Heading>
@@ -22,7 +22,7 @@ const HoldConfirmationFAQ = ({ isEDD = false }: HoldConfirmationFAQProps) => {
         accordionData={isEDD ? eddConfirmationFAQData : holdConfirmationFAQData}
         isDefaultOpen
       />
-    </>
+    </Box>
   )
 }
 

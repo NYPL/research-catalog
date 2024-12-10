@@ -2,9 +2,13 @@ import {
   fetchDeliveryLocations,
   postHoldRequest,
   postEDDRequest,
+  fetchHoldDetails,
 } from "../hold"
 import type { DeliveryLocationsResult } from "../../../types/locationTypes"
-import type { HoldPostResult } from "../../../types/holdPageTypes"
+import type {
+  HoldPostResult,
+  HoldDetailsResult,
+} from "../../../types/holdPageTypes"
 
 jest.mock("../../nyplApiClient", () => {
   return jest
@@ -79,8 +83,30 @@ jest.mock("../../nyplApiClient", () => {
     .mockImplementationOnce(async () => {
       return await new Promise((resolve) => {
         resolve({
-          get: () => {
+          post: () => {
             throw new Error("Error posting EDD request")
+          },
+        })
+      })
+    })
+    .mockImplementationOnce(async () => {
+      return await new Promise((resolve) => {
+        resolve({
+          get: jest.fn().mockReturnValueOnce({
+            data: {
+              id: "123",
+              patron: "456",
+              pickupLocation: "mal17",
+            },
+          }),
+        })
+      })
+    })
+    .mockImplementationOnce(async () => {
+      return await new Promise((resolve) => {
+        resolve({
+          get: () => {
+            throw new Error("Error getting hold details")
           },
         })
       })
@@ -171,5 +197,22 @@ describe("postEDDRequest", () => {
     })) as HoldPostResult
 
     expect(holdPostResult.status).toEqual(500)
+  })
+})
+
+describe("fetchHoldDetails", () => {
+  it("should return details for a given hold request ID from Discovery API", async () => {
+    const holdDetails = (await fetchHoldDetails("123")) as HoldDetailsResult
+    expect(holdDetails).toEqual({
+      requestId: "123",
+      patronId: "456",
+      pickupLocation: "mal17",
+      status: 200,
+    })
+  })
+
+  it("should return return a 500 status if there was an error", async () => {
+    const holdDetails = (await fetchHoldDetails("123")) as HoldDetailsResult
+    expect(holdDetails.status).toEqual(500)
   })
 })
