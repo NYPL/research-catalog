@@ -6,7 +6,7 @@ export const CopyrightRestrictionsBanner = () => {
       type="neutral"
       heading="Copyright restrictions"
       content={
-        <Box>
+        <Box mt="m">
           <Text>
             The copyright law of the United States (Title 17, United States
             Code) governs the making of photocopies or other reproductions of

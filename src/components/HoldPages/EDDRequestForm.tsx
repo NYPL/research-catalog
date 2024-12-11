@@ -118,7 +118,7 @@ const EDDRequestForm = ({
         value={eddFormState.source}
       />
       <Box>
-        <Heading level="h3" size="heading4" mb="m">
+        <Heading level="h3" size="heading4">
           Required information
         </Heading>
         <Text noSpace>
@@ -197,8 +197,8 @@ const EDDRequestForm = ({
           ref={validatedInputRefs["chapterTitle"]}
         />
       </FormField>
-      <Box>
-        <Heading level="h3" size="heading4" mb="xs">
+      <Box mt="xs">
+        <Heading level="h3" size="heading4" mb="s">
           Optional information
         </Heading>
         <Text noSpace>

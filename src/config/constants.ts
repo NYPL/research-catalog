@@ -146,7 +146,7 @@ export const EDD_PAGE_HEADING = "Request scan"
 export const EDD_FORM_FIELD_COPY = {
   emailAddress: {
     label: "Email address",
-    placeholder: "theresa.smith@gmail.com",
+    placeholder: "Example: theresasmith@gmail.com",
     helperText:
       "Your request will be delivered to the email address you enter above.",
     invalidText:
