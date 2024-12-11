@@ -72,15 +72,13 @@ export default function HoldConfirmationPage({
           mb="l"
           heading="Request successful"
           content={
-            <>
-              <Text mt="xs" noSpace>
-                You&apos;re all set! We have received your{" "}
-                {isEDD ? "scan " : ""}request for{" "}
-                <RCLink href={`${PATHS.BIB}/${item.bibId}`}>
-                  {item.bibTitle}
-                </RCLink>
-              </Text>
-            </>
+            <Text mt="xs" noSpace>
+              You&apos;re all set! We have received your {isEDD ? "scan " : ""}
+              request for{" "}
+              <RCLink href={`${PATHS.BIB}/${item.bibId}`}>
+                {item.bibTitle}
+              </RCLink>
+            </Text>
           }
         />
         <HoldConfirmationItemDetails
