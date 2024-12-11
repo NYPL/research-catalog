@@ -164,15 +164,15 @@ export async function getServerSideProps({ params, req, res, query }) {
     }
     const { discoveryBibResult } = await fetchBib(bibId, {}, itemId)
 
-    if (!discoveryBibResult?.items?.length) {
+    // Get the item barcode's directly from discoveryBibResult to avoid initializing the entire Item model.
+    const itemBarcode = discoveryBibResult?.items?.[0]?.["idBarcode"]?.[0]
+
+    if (!itemBarcode) {
       throw new Error("Hold Confirmation Page - Item not found")
     }
 
-    const bib = new Bib(discoveryBibResult)
-    const item = bib.items[0]
-
     const { deliveryLocations } = await fetchDeliveryLocations(
-      item.barcode,
+      itemBarcode,
       patronId
     )
     const pickupLocationLabel = deliveryLocations?.find(
