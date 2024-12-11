@@ -61,14 +61,9 @@ const DetailElement = (label: string, listChildren: ReactNode[]) => {
     <>
       <dt>{label}</dt>
       <dd>
-        <List
-          noStyling
-          data-testid={kebabCase(label)}
-          type="ol"
-          listItems={listChildren.map((listElement) => (
-            <>{listElement}</>
-          ))}
-        />
+        <List noStyling data-testid={kebabCase(label)} type="ol">
+          {listChildren}
+        </List>
       </dd>
     </>
   )

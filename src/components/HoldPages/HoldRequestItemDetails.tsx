@@ -29,8 +29,10 @@ const HoldRequestItemDetails = ({ item }: HoldRequestItemDetailsProps) => {
         link="internal"
       />
       <PlainTextElement label="Call number" value={[item.callNumber]} />
-      {item.volume && (
+      {item.volume ? (
         <PlainTextElement label="Volume/date" value={[item.volume]} />
+      ) : (
+        <></>
       )}
     </List>
   )
