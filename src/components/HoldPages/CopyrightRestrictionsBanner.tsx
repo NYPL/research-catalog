@@ -22,7 +22,7 @@ export const CopyrightRestrictionsBanner = () => {
             excess of “fair use,” that user may be liable for copyright
             infringement.
           </Text>
-          <Text>
+          <Text noSpace>
             This institution reserves the right to refuse to accept a copying
             order if, in its judgment, fulfillment of the order would involve
             violation of copyright law.
