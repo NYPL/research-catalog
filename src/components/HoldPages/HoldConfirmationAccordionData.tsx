@@ -17,8 +17,8 @@ export const holdConfirmationFAQData: AccordionDataProps[] = [
         </Text>
         <Text noSpace>
           The item will be listed as &quot;Ready for pickup&quot; under your
-          holds tab when it is available. You will receive an email confirmation
-          after your item has arrived.
+          requests tab when it is available. You will receive an email
+          confirmation after your item has arrived.
         </Text>
       </>
     ),
@@ -79,12 +79,15 @@ export const holdConfirmationFAQData: AccordionDataProps[] = [
           </ExternalLink>{" "}
           or call 917-ASK-NYPL (
           <ExternalLink href="tel:19172756975">917-275-6975</ExternalLink>).
-          Processed requests can also be canceled from the holds tab in your
+          Processed requests can also be canceled from the requests tab in your
           patron account.
         </Text>
         <Text noSpace>
-          For more information about our requesting services, please see
-          Requesting Research Materials.
+          For more information about our requesting services, please see{" "}
+          <ExternalLink href="https://www.nypl.org/research/services/request-materials">
+            Requesting Research Materials
+          </ExternalLink>
+          .
         </Text>
       </>
     ),
