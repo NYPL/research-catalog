@@ -26,19 +26,15 @@ const HoldConfirmationItemDetails = ({
       mb="l"
       mt={0}
     >
-      {pickupLocationLabel ? (
+      {pickupLocationLabel && (
         <PlainTextElement
           label="Pickup location"
           value={[pickupLocationLabel]}
         />
-      ) : (
-        <></>
       )}
       <PlainTextElement label="Call number" value={[item.callNumber]} />
-      {item.barcode ? (
+      {item.barcode && (
         <PlainTextElement label="Barcode" value={[item.barcode]} />
-      ) : (
-        <></>
       )}
     </List>
   )

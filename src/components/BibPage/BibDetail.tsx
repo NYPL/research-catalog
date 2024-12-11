@@ -14,6 +14,7 @@ import type {
 } from "../../types/bibDetailsTypes"
 import { rtlOrLtr, isItTheLastElement } from "../../utils/bibUtils"
 import type { ReactNode } from "react"
+import { child } from "winston"
 
 interface BibDetailsProps {
   details: AnyBibDetail[]
@@ -60,9 +61,14 @@ const DetailElement = (label: string, listChildren: ReactNode[]) => {
     <>
       <dt>{label}</dt>
       <dd>
-        <List noStyling data-testid={kebabCase(label)} type="ol">
-          {listChildren}
-        </List>
+        <List
+          noStyling
+          data-testid={kebabCase(label)}
+          type="ol"
+          listItems={listChildren.map((listElement) => (
+            <>{listElement}</>
+          ))}
+        />
       </dd>
     </>
   )
