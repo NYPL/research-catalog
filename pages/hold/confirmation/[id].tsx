@@ -168,7 +168,9 @@ export async function getServerSideProps({ params, req, res, query }) {
     const itemBarcode = discoveryBibResult?.items?.[0]?.["idBarcode"]?.[0]
 
     if (!itemBarcode) {
-      throw new Error("Hold Confirmation Page - Item not found")
+      throw new Error(
+        "Hold Confirmation Page - Item barcode not found in discoveryBibResult"
+      )
     }
 
     const { deliveryLocations } = await fetchDeliveryLocations(
