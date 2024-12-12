@@ -148,7 +148,7 @@ export async function fetchHoldDetails(
       error.message
     )
 
-    return { status: 400 }
+    return { status: 500 }
   }
 }
 

@@ -10,7 +10,7 @@ import {
 import Layout from "../../../../src/components/Layout/Layout"
 import EDDRequestForm from "../../../../src/components/HoldPages/EDDRequestForm"
 import HoldRequestBanner from "../../../../src/components/HoldPages/HoldRequestBanner"
-import HoldItemDetails from "../../../../src/components/HoldPages/HoldItemDetails"
+import HoldRequestItemDetails from "../../../../src/components/HoldPages/HoldRequestItemDetails"
 
 import { SITE_NAME, BASE_URL, PATHS } from "../../../../src/config/constants"
 import useLoading from "../../../../src/hooks/useLoading"
@@ -153,7 +153,7 @@ export default function EDDRequestPage({
         <Heading level="h2" mb="l" size="heading3">
           Request scan
         </Heading>
-        <HoldItemDetails item={item} />
+        <HoldRequestItemDetails item={item} />
         {isLoading || formPosting ? (
           <SkeletonLoader showImage={false} data-testid="edd-request-loading" />
         ) : pageStatus !== "unavailable" ? (
