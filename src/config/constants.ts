@@ -20,6 +20,7 @@ export const PATHS = {
   HOME: "/",
   SEARCH: "/search",
   ADVANCED_SEARCH: "/search/advanced",
+  MY_ACCOUNT: "/account",
   HOLD_REQUEST: "/hold/request",
   HOLD_CONFIRMATION: "/hold/confirmation",
   BIB: "/bib",
@@ -194,4 +195,17 @@ export const EDD_FORM_FIELD_COPY = {
     placeholder: "Example: Please include foldouts in the scan.",
     helperText: "Provide additional instructions here.",
   },
+}
+
+export const HOLD_PAGE_ERROR_HEADINGS = {
+  failed: "Request failed.",
+  eddUnavailable:
+    "Electronic delivery options for this item are currently unavailable.",
+  patronIneligible: "There is a problem with your library account.",
+}
+
+export const HOLD_PAGE_CONTACT_PREFIXES = {
+  failed: "We were unable to process your request at this time.",
+  eddUnavailable:
+    "Electronic delivery options for this item are currently unavailable.",
 }
