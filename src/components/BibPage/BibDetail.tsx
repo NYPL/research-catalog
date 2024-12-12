@@ -14,7 +14,6 @@ import type {
 } from "../../types/bibDetailsTypes"
 import { rtlOrLtr, isItTheLastElement } from "../../utils/bibUtils"
 import type { ReactNode } from "react"
-import { child } from "winston"
 
 interface BibDetailsProps {
   details: AnyBibDetail[]
