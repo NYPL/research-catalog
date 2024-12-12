@@ -1,6 +1,7 @@
 import { useContext, useRef, useState } from "react"
 import { PatronDataContext } from "../../../context/PatronDataContext"
 import {
+  Banner,
   Flex,
   Select,
   SkeletonLoader,
@@ -33,17 +34,20 @@ const SettingsSelectForm = ({
   const selectRef = useRef<HTMLSelectElement | null>()
   const editingRef = useRef<HTMLButtonElement | null>()
 
-  const notificationPreferenceMap =
-    patronData.notificationPreference === "-"
-      ? [
-          { code: "z", name: "Email" },
-          { code: "p", name: "Phone" },
-          { code: "-", name: "None" },
-        ]
-      : [
-          { code: "z", name: "Email" },
-          { code: "p", name: "Phone" },
-        ]
+  const patronHasNonePref = patronData.notificationPreference === "-"
+  const patronHasPhone = patronData.phones.length > 0
+  const patronHasEmail = patronData.emails.length > 0
+
+  const notificationPreferenceMap = patronHasNonePref
+    ? [
+        { code: "z", name: "Email" },
+        { code: "p", name: "Phone" },
+        { code: "-", name: "None" },
+      ]
+    : [
+        { code: "z", name: "Email" },
+        { code: "p", name: "Phone" },
+      ]
 
   const sortedPickupLocations = [
     patronData.homeLibrary,
@@ -174,7 +178,14 @@ const SettingsSelectForm = ({
               value={tempSelection}
             >
               {formUtils.options.map((option, index) => (
-                <option key={`${type}-option-${index}`} value={option.name}>
+                <option
+                  key={`${type}-option-${index}`}
+                  value={option.name}
+                  disabled={
+                    (option.name === "Email" && !patronHasEmail) ||
+                    (option.name === "Phone" && !patronHasPhone)
+                  }
+                >
                   {option.name}
                 </option>
               ))}
@@ -182,17 +193,37 @@ const SettingsSelectForm = ({
           </Flex>
         ) : (
           <Flex marginLeft={{ base: "m", lg: "unset" }}>
-            <Text
-              sx={{
-                marginTop: { base: "xs", lg: "unset" },
-                width: { base: "200px", sm: "250px" },
-                marginBottom: 0,
-              }}
-            >
-              {selection}
-            </Text>
+            <Flex flexDir="column">
+              <Text
+                sx={{
+                  marginTop: { base: "xs", lg: "unset" },
+                  width: { base: "200px", sm: "250px" },
+                  marginBottom: 0,
+                }}
+              >
+                {selection}
+              </Text>
+              {type === "notification" &&
+                patronHasNonePref &&
+                !patronHasPhone &&
+                !patronHasEmail && (
+                  <Banner
+                    sx={{
+                      marginTop: "s",
+                      width: { base: "200px", sm: "250px" },
+                    }}
+                    content="Please set a phone number or email address to choose a notification preference."
+                  />
+                )}
+            </Flex>
             {editingField === "" && (
               <EditButton
+                isDisabled={
+                  type === "notification" &&
+                  patronHasNonePref &&
+                  !patronHasPhone &&
+                  !patronHasEmail
+                }
                 ref={editingRef}
                 buttonLabel={`Edit ${type}`}
                 buttonId={`edit-${type}-button`}

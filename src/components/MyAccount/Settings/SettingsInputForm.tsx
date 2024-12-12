@@ -251,7 +251,7 @@ const SettingsInputForm = ({
               <div style={{ width: "72px" }}> </div>
             </Flex>
           </Flex>
-        ) : isEmail || tempInputs.length !== 0 ? (
+        ) : tempInputs.length !== 0 ? (
           <Flex
             marginLeft={{ base: "m", lg: "unset" }}
             flexDir="row"
@@ -292,7 +292,6 @@ const SettingsInputForm = ({
                 onClick={() => {
                   setIsEditing(true)
                   setEditingField(inputType)
-                  console.log("hello")
                   setTimeout(() => focusFirstInput(), 0)
                 }}
               />
@@ -300,15 +299,17 @@ const SettingsInputForm = ({
           </Flex>
         ) : (
           // User has no phone or email.
-          <AddButton
-            inputType={inputType}
-            onClick={() => {
-              setIsEditing(true)
-              setEditingField(inputType)
-              handleAdd()
-            }}
-            label={formUtils.addButtonLabel}
-          />
+          <Box sx={{ marginTop: { base: "unset", lg: "-xs" } }}>
+            <AddButton
+              inputType={inputType}
+              onClick={() => {
+                setIsEditing(true)
+                setEditingField(inputType)
+                handleAdd()
+              }}
+              label={formUtils.addButtonLabel}
+            />
+          </Box>
         )}
 
         {isEditing && (

@@ -5,13 +5,15 @@ type EditButtonProps = {
   buttonId: string
   buttonLabel: string
   onClick: () => void
+  isDisabled?: boolean
 }
 
 const EditButton = forwardRef<HTMLButtonElement, EditButtonProps>(
-  ({ buttonLabel, buttonId, onClick }, ref) => {
+  ({ buttonLabel, buttonId, isDisabled, onClick }, ref) => {
     return (
       <Button
         ref={ref}
+        isDisabled={isDisabled}
         id={buttonId}
         aria-label={buttonLabel}
         buttonType="text"
