@@ -44,7 +44,7 @@ export interface PatronEligibilityStatus {
   moneyOwed?: boolean
   ptypeDisallowsHolds?: boolean
   reachedHoldLimit?: boolean
-  hasIssues?: boolean
+  status: HTTPStatusCode
 }
 
 export interface DiscoveryHoldPostParams {
@@ -59,12 +59,13 @@ export interface DiscoveryHoldPostParams {
   docDeliveryData?: EDDRequestParams
 }
 
-export type EDDPageStatus = null | "failed" | "unavailable" | "invalid"
-
-export interface EDDStatusMessage {
-  heading?: string
-  message: string
-}
+export type HoldErrorStatus =
+  | null
+  | "failed"
+  | "eddUnavailable"
+  | "invalid"
+  | "patronIneligible"
+  | "serverError"
 
 export interface EDDFormAction {
   type: EDDFormActionType

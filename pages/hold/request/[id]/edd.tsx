@@ -9,18 +9,18 @@ import {
 
 import Layout from "../../../../src/components/Layout/Layout"
 import EDDRequestForm from "../../../../src/components/HoldPages/EDDRequestForm"
-import HoldRequestBanner from "../../../../src/components/HoldPages/HoldRequestBanner"
+import HoldRequestErrorBanner from "../../../../src/components/HoldPages/HoldRequestErrorBanner"
 import HoldRequestItemDetails from "../../../../src/components/HoldPages/HoldRequestItemDetails"
 
 import { SITE_NAME, BASE_URL, PATHS } from "../../../../src/config/constants"
 import useLoading from "../../../../src/hooks/useLoading"
 
 import { fetchBib } from "../../../../src/server/api/bib"
-import { fetchDeliveryLocations } from "../../../../src/server/api/hold"
 import {
-  EDDPageStatusMessages,
-  initialEDDFormState,
-} from "../../../../src/utils/holdPageUtils"
+  fetchDeliveryLocations,
+  fetchPatronEligibility,
+} from "../../../../src/server/api/hold"
+import { initialEDDFormState } from "../../../../src/utils/holdPageUtils"
 
 import initializePatronTokenAuth, {
   doRedirectBasedOnNyplAccountRedirects,
@@ -35,7 +35,8 @@ import type { DiscoveryItemResult } from "../../../../src/types/itemTypes"
 
 import type {
   EDDRequestParams,
-  EDDPageStatus,
+  HoldErrorStatus,
+  PatronEligibilityStatus,
 } from "../../../../src/types/holdPageTypes"
 
 interface EDDRequestPropsType {
@@ -43,8 +44,8 @@ interface EDDRequestPropsType {
   discoveryItemResult: DiscoveryItemResult
   patronId: string
   isAuthenticated?: boolean
-  eddRequestable?: boolean
-  pageStatus?: EDDPageStatus
+  errorStatus?: HoldErrorStatus
+  patronEligibilityStatus?: PatronEligibilityStatus
 }
 
 /**
@@ -55,7 +56,8 @@ export default function EDDRequestPage({
   discoveryItemResult,
   patronId,
   isAuthenticated,
-  pageStatus: defaultPageStatus,
+  errorStatus: defaultErrorStatus,
+  patronEligibilityStatus: defaultEligibilityStatus,
 }: EDDRequestPropsType) {
   const metadataTitle = `Electronic Delivery Request | ${SITE_NAME}`
 
@@ -64,7 +66,10 @@ export default function EDDRequestPage({
 
   const holdId = `${item.bibId}-${item.id}`
 
-  const [pageStatus, setPageStatus] = useState(defaultPageStatus)
+  const [errorStatus, setErrorStatus] = useState(defaultErrorStatus)
+  const [patronEligibilityStatus, setPatronEligibilityStatus] = useState(
+    defaultEligibilityStatus
+  )
 
   const [eddFormState, setEddFormState] = useState({
     ...initialEDDFormState,
@@ -79,10 +84,14 @@ export default function EDDRequestPage({
   const isLoading = useLoading()
 
   useEffect(() => {
-    if (pageStatus && pageStatus !== "invalid" && bannerContainerRef.current) {
+    if (
+      errorStatus &&
+      errorStatus !== "invalid" &&
+      bannerContainerRef.current
+    ) {
       bannerContainerRef.current.focus()
     }
-  }, [pageStatus])
+  }, [errorStatus, patronEligibilityStatus])
 
   const postEDDRequest = async (eddParams: EDDRequestParams) => {
     try {
@@ -97,30 +106,35 @@ export default function EDDRequestPage({
       )
       const responseJson = await response.json()
 
-      if (response.status !== 200) {
-        console.error(
-          "HoldRequestPage: Error in edd request api response",
-          responseJson.error
-        )
-        setPageStatus("failed")
-        setFormPosting(false)
-        return
+      switch (response.status) {
+        // Patron is ineligible to place holds
+        case 401:
+          setFormPosting(false)
+          setErrorStatus("patronIneligible")
+          setPatronEligibilityStatus(responseJson?.patronEligibilityStatus)
+          break
+        // Server side error placing the hold request
+        case 500:
+          setFormPosting(false)
+          console.error(
+            "EDDRequestPage: Error in EDD request api response",
+            responseJson.error
+          )
+          setErrorStatus("failed")
+          break
+        default:
+          setFormPosting(false)
+          // Success state
+          await router.push(
+            `${PATHS.HOLD_CONFIRMATION}/${holdId}?pickupLocation=edd&requestId=${responseJson?.requestId}`
+          )
       }
-      const { requestId } = responseJson
-
-      setPageStatus(null)
-      setFormPosting(false)
-
-      // Success state
-      await router.push(
-        `${PATHS.HOLD_CONFIRMATION}/${holdId}?pickupLocation=edd&requestId=${requestId}`
-      )
     } catch (error) {
       console.error(
         "HoldRequestPage: Error in hold request api response",
         error
       )
-      setPageStatus("failed")
+      setErrorStatus("failed")
       setFormPosting(false)
     }
   }
@@ -141,12 +155,11 @@ export default function EDDRequestPage({
         {/* Always render the wrapper element that will display the
           dynamically rendered notification for focus management */}
         <Box tabIndex={-1} ref={bannerContainerRef}>
-          {pageStatus && (
-            <HoldRequestBanner
+          {errorStatus && (
+            <HoldRequestErrorBanner
               item={item}
-              heading={EDDPageStatusMessages[pageStatus].heading}
-              errorMessage={EDDPageStatusMessages[pageStatus].message}
-              pageStatus={pageStatus}
+              errorStatus={errorStatus}
+              patronEligibilityStatus={patronEligibilityStatus}
             />
           )}
         </Box>
@@ -156,12 +169,12 @@ export default function EDDRequestPage({
         <HoldRequestItemDetails item={item} />
         {isLoading || formPosting ? (
           <SkeletonLoader showImage={false} data-testid="edd-request-loading" />
-        ) : pageStatus !== "unavailable" ? (
+        ) : errorStatus !== "eddUnavailable" ? (
           <EDDRequestForm
             eddFormState={eddFormState}
             setEddFormState={setEddFormState}
             handleSubmit={postEDDRequest}
-            setPageStatus={setPageStatus}
+            setErrorStatus={setErrorStatus}
             holdId={holdId}
           />
         ) : null}
@@ -170,7 +183,7 @@ export default function EDDRequestPage({
   )
 }
 
-export async function getServerSideProps({ params, req, res, query }) {
+export async function getServerSideProps({ params, req, res }) {
   const { id } = params
 
   // authentication redirect
@@ -232,10 +245,16 @@ export async function getServerSideProps({ params, req, res, query }) {
       await fetchDeliveryLocations(item.barcode, patronId)
 
     if (locationStatus !== 200) {
-      throw new Error("EDD Page - Error fetching edd in getServerSideProps")
+      console.error("EDD Page - Error fetching edd in getServerSideProps")
     }
 
     const isEddAvailable = eddRequestable && item.isAvailable
+
+    const patronEligibilityStatus = await fetchPatronEligibility(patronId)
+
+    const locationOrEligibilityFetchFailed =
+      locationStatus !== 200 ||
+      ![200, 401].includes(patronEligibilityStatus?.status)
 
     return {
       props: {
@@ -243,7 +262,13 @@ export async function getServerSideProps({ params, req, res, query }) {
         discoveryItemResult,
         patronId,
         isAuthenticated,
-        pageStatus: !isEddAvailable ? "unavailable" : null,
+        errorStatus: locationOrEligibilityFetchFailed
+          ? "failed"
+          : patronEligibilityStatus.status === 401
+          ? "patronIneligible"
+          : !isEddAvailable
+          ? "eddUnavailable"
+          : null,
       },
     }
   } catch (error) {
