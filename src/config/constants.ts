@@ -149,19 +149,21 @@ export const EDD_FORM_FIELD_COPY = {
     helperText:
       "Your request will be delivered to the email address you enter above.",
     invalidText:
-      "Enter a valid email address. Your request will be delivered to the email address you enter above.",
+      "There was a problem. Enter a valid email address. Your request will be delivered to the email address you enter above.",
   },
   startPage: {
     label: "Starting page number",
     placeholder: "Example: 1",
     helperText: "Enter the first page you would like scanned.",
-    invalidText: "Enter a page number. You may request a maximum of 50 pages.",
+    invalidText:
+      "There was a problem. Enter a page number. You may request a maximum of 50 pages.",
   },
   endPage: {
     label: "Ending page number",
     placeholder: "Example: 20",
     helperText: "Enter the last page you would like scanned.",
-    invalidText: "Enter a page number. You may request a maximum of 50 pages.",
+    invalidText:
+      "There was a problem. Enter a page number. You may request a maximum of 50 pages.",
   },
   chapterTitle: {
     label: "Chapter or article title",
@@ -169,7 +171,7 @@ export const EDD_FORM_FIELD_COPY = {
     helperText:
       "Enter the name/number of the chapter or article you would like scanned.",
     invalidText:
-      "Indicate the title of the chapter or article you are requesting.",
+      "There was a problem. Indicate the title of the chapter or article you are requesting.",
   },
   author: {
     label: "Author",
