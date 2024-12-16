@@ -85,6 +85,11 @@ export default function HoldRequestPage({
     }
   }, [errorStatus, patronEligibilityStatus])
 
+  const setFailedRequestErrorState = () => {
+    setFormPosting(false)
+    setErrorStatus("failed")
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
@@ -111,12 +116,11 @@ export default function HoldRequestPage({
           break
         // Server side error placing the hold request
         case 500:
-          setFormPosting(false)
           console.error(
             "HoldRequestPage: Error in hold request api response",
             responseJson.error
           )
-          setErrorStatus("failed")
+          setFailedRequestErrorState()
           break
         default:
           setFormPosting(false)
@@ -130,8 +134,7 @@ export default function HoldRequestPage({
         "HoldRequestPage: Error in hold request api response",
         error
       )
-      setErrorStatus("failed")
-      setFormPosting(false)
+      setFailedRequestErrorState()
     }
   }
 
