@@ -1,10 +1,6 @@
 import { Text, Box, List } from "@nypl/design-system-react-components"
 
-import type {
-  HoldErrorStatus,
-  PatronEligibilityStatus,
-} from "../../types/holdPageTypes"
-import type Item from "../../models/Item"
+import type { PatronEligibilityStatus } from "../../types/holdPageTypes"
 import RCLink from "../Links/RCLink/RCLink"
 import ExternalLink from "../Links/ExternalLink/ExternalLink"
 import { PATHS } from "../../config/constants"
