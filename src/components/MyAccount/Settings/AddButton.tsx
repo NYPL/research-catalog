@@ -4,11 +4,12 @@ import { forwardRef } from "react"
 type AddButtonProps = {
   inputType?: string
   label: string
+  isDisabled?: boolean
   onClick: () => void
 }
 
 const AddButton = forwardRef<HTMLButtonElement, AddButtonProps>(
-  ({ inputType, label, onClick }, ref) => {
+  ({ inputType, label, isDisabled, onClick }, ref) => {
     return (
       <Button
         ref={ref}
@@ -16,6 +17,7 @@ const AddButton = forwardRef<HTMLButtonElement, AddButtonProps>(
         buttonType="text"
         onClick={onClick}
         size="large"
+        isDisabled={isDisabled}
         sx={{
           justifyContent: "flex-start",
           width: { base: "100%", md: "300px" },
