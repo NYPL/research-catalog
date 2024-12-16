@@ -301,6 +301,7 @@ const SettingsInputForm = ({
           // User has no phone or email.
           <Box sx={{ marginTop: { base: "unset", lg: "-xs" } }}>
             <AddButton
+              isDisabled={editingField !== ""}
               inputType={inputType}
               onClick={() => {
                 setIsEditing(true)
