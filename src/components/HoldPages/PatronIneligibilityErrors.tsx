@@ -33,39 +33,39 @@ const PatronIneligibilityErrors = ({
   return (
     <Box mt="xs">
       <Text mb="xs">This is because:</Text>
-      <List
-        type="ul"
-        margin={0}
-        listItems={[
-          ...(expired
-            ? [
-                <>
-                  Your account has expired -- Please see{" "}
-                  <ExternalLink href={appConfig.urls.renewCard}>
-                    Library Terms and Conditions -- Renewing or Validating Your
-                    Library Card
-                  </ExternalLink>{" "}
-                  about renewing your card.
-                </>,
-              ]
-            : []),
-          ...(moneyOwed
-            ? [
-                <>
-                  Your fines have exceeded the limit — you can pay your fines in
-                  a branch or online from the links under{" "}
-                  <RCLink href={PATHS.MY_ACCOUNT}>My Account</RCLink>.
-                </>,
-              ]
-            : []),
-          ...(ptypeDisallowsHolds
-            ? ["Your card does not permit placing holds on ReCAP materials."]
-            : []),
-          ...(reachedHoldLimit
-            ? ["You have reached the allowed number of holds."]
-            : []),
-        ]}
-      />
+      <List type="ul" margin={0}>
+        {expired ? (
+          <>
+            Your account has expired -- Please see{" "}
+            <ExternalLink href={appConfig.urls.renewCard}>
+              Library Terms and Conditions -- Renewing or Validating Your
+              Library Card
+            </ExternalLink>{" "}
+            about renewing your card.
+          </>
+        ) : (
+          <></>
+        )}
+        {moneyOwed ? (
+          <>
+            Your fines have exceeded the limit — you can pay your fines in a
+            branch or online from the links under{" "}
+            <RCLink href={PATHS.MY_ACCOUNT}>My Account</RCLink>.
+          </>
+        ) : (
+          <></>
+        )}
+        {ptypeDisallowsHolds ? (
+          "Your card does not permit placing holds on ReCAP materials."
+        ) : (
+          <></>
+        )}
+        {reachedHoldLimit ? (
+          "You have reached the allowed number of holds."
+        ) : (
+          <></>
+        )}
+      </List>
     </Box>
   )
 }
