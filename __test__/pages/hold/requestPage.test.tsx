@@ -14,7 +14,12 @@ import initializePatronTokenAuth, {
 } from "../../../src/server/auth"
 import { fetchBib } from "../../../src/server/api/bib"
 import { bibWithItems, bibWithSingleAeonItem } from "../../fixtures/bibFixtures"
-import { BASE_URL, PATHS, NYPL_LOCATIONS } from "../../../src/config/constants"
+import {
+  BASE_URL,
+  PATHS,
+  NYPL_LOCATIONS,
+  HOLD_PAGE_ERROR_HEADINGS,
+} from "../../../src/config/constants"
 import { fetchDeliveryLocations } from "../../../src/server/api/hold"
 
 jest.mock("../../../src/server/auth")
@@ -329,7 +334,7 @@ describe("Hold Request page", () => {
       })
 
       expect(
-        screen.getByText("There is a problem with your library account.", {
+        screen.getByText(HOLD_PAGE_ERROR_HEADINGS.patronIneligible, {
           exact: false,
         })
       ).toBeInTheDocument()

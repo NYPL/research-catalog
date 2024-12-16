@@ -383,7 +383,7 @@ describe("EDD Request page", () => {
       })
 
       expect(
-        screen.getByText("There is a problem with your library account.", {
+        screen.getByText(HOLD_PAGE_ERROR_HEADINGS.patronIneligible, {
           exact: false,
         })
       ).toBeInTheDocument()
