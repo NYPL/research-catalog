@@ -150,7 +150,7 @@ export async function postEDDRequest(
   try {
     const client = await nyplApiClient()
     const eddPostResult = await client.post("/hold-requests", eddPostParams)
-    const { id: requestId } = eddPostResult.data
+    const requestId = eddPostResult?.data?.id
 
     if (!requestId) {
       console.error(
