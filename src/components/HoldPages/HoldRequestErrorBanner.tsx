@@ -53,7 +53,7 @@ const HoldRequestErrorBanner = ({
       }}
       content={
         <Box>
-          {HOLD_PAGE_CONTACT_PREFIXES?.[errorStatus] ? (
+          {HOLD_PAGE_CONTACT_PREFIXES?.[errorStatus] && (
             <Text>
               {HOLD_PAGE_CONTACT_PREFIXES?.[errorStatus]}
               {" Please try again, "}
@@ -88,7 +88,7 @@ const HoldRequestErrorBanner = ({
               for assistance, or{" "}
               <RCLink href="/search">start a new search.</RCLink>
             </Text>
-          ) : null}
+          )}
           {(() => {
             switch (errorStatus) {
               case "invalid":
