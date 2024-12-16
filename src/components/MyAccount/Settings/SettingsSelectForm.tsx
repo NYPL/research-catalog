@@ -37,6 +37,7 @@ const SettingsSelectForm = ({
   const patronHasNonePref = patronData.notificationPreference === "-"
   const patronHasPhone = patronData.phones.length > 0
   const patronHasEmail = patronData.emails.length > 0
+  const isNotification = type === "notification"
 
   const notificationPreferenceMap = patronHasNonePref
     ? [
@@ -74,8 +75,7 @@ const SettingsSelectForm = ({
     selectorId: "update-home-library-selector",
   }
 
-  const formUtils =
-    type === "notification" ? notificationFormUtils : libraryFormUtils
+  const formUtils = isNotification ? notificationFormUtils : libraryFormUtils
 
   const [selection, setSelection] = useState(formUtils.initialState)
 
@@ -104,18 +104,16 @@ const SettingsSelectForm = ({
     setIsLoading(true)
     setIsEditing(false)
     setStatus("")
-    const code =
-      type === "notification"
-        ? notificationPreferenceMap.find((pref) => pref.name === tempSelection)
-            ?.code
-        : pickupLocations.find((loc) => loc.name === tempSelection)?.code
+    const code = isNotification
+      ? notificationPreferenceMap.find((pref) => pref.name === tempSelection)
+          ?.code
+      : pickupLocations.find((loc) => loc.name === tempSelection)?.code
 
-    const body =
-      type === "notification"
-        ? {
-            fixedFields: { "268": { label: "Notice Preference", value: code } },
-          }
-        : { homeLibraryCode: `${code}` }
+    const body = isNotification
+      ? {
+          fixedFields: { "268": { label: "Notice Preference", value: code } },
+        }
+      : { homeLibraryCode: `${code}` }
 
     try {
       const response = await fetch(
@@ -203,7 +201,7 @@ const SettingsSelectForm = ({
               >
                 {selection}
               </Text>
-              {type === "notification" &&
+              {isNotification &&
                 patronHasNonePref &&
                 !patronHasPhone &&
                 !patronHasEmail && (
@@ -219,7 +217,7 @@ const SettingsSelectForm = ({
             {editingField === "" && (
               <EditButton
                 isDisabled={
-                  type === "notification" &&
+                  isNotification &&
                   patronHasNonePref &&
                   !patronHasPhone &&
                   !patronHasEmail
