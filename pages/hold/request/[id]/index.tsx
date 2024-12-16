@@ -94,7 +94,7 @@ export default function HoldRequestPage({
       const response = await fetch(`${BASE_URL}/api/hold/request/${holdId}`, {
         method: "POST",
         body: JSON.stringify({
-          patronId: patronId.value,
+          patronId: patronId?.value,
           source: source?.value,
           pickupLocation: pickupLocation?.value,
           jsEnabled: true,

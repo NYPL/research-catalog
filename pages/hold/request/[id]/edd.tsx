@@ -248,7 +248,7 @@ export async function getServerSideProps({ params, req, res }) {
       console.error("EDD Page - Error fetching edd in getServerSideProps")
     }
 
-    const isEddAvailable = eddRequestable && item.isAvailable
+    const isEddAvailable = eddRequestable && item.isEDDRequestable
 
     const patronEligibilityStatus = await fetchPatronEligibility(patronId)
 
@@ -262,6 +262,7 @@ export async function getServerSideProps({ params, req, res }) {
         discoveryItemResult,
         patronId,
         isAuthenticated,
+        patronEligibilityStatus,
         errorStatus: locationOrEligibilityFetchFailed
           ? "failed"
           : patronEligibilityStatus.status === 401

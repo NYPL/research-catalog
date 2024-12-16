@@ -40,8 +40,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     }
 
     const holdRequestResponse = await postEDDRequest({
-      ...rest,
       itemId,
+      patronId,
+      ...rest,
     })
 
     const { requestId } = holdRequestResponse
