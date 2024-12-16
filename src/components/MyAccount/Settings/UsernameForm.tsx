@@ -17,10 +17,8 @@ import AddButton from "./AddButton"
 import { BASE_URL } from "../../../config/constants"
 
 export const usernameStatusMessages = {
-  USERNAME_FAILURE:
-    "This username already exists. Please try a different username or contact us for assistance.",
-  FAILURE:
-    "Your changes could not be saved. Please try again or contact us for assistance. ",
+  USERNAME_FAILURE: "This username already exists.",
+  FAILURE: "Your changes could not be saved.",
   SUCCESS: "Your changes were saved.",
 }
 

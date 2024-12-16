@@ -53,6 +53,12 @@ const SettingsInputForm = ({
     }
   }
 
+  const focusFirstInput = () => {
+    if (inputRefs.current[0]) {
+      inputRefs?.current[0]?.focus()
+    }
+  }
+
   useEffect(() => {
     focusLastInput()
   }, [tempInputs.length])
@@ -222,7 +228,9 @@ const SettingsInputForm = ({
                   {index == 0 && <div style={{ width: "57px" }}> </div>}
                   {index !== 0 && (
                     <Button
-                      aria-label={`Remove ${formUtils.inputLabel.toLowerCase()}`}
+                      aria-label={`Remove ${formUtils.inputLabel.toLowerCase()} ${
+                        index + 1
+                      }`}
                       buttonType="text"
                       id="remove-input-btn"
                       onClick={() => handleRemove(index)}
@@ -243,7 +251,7 @@ const SettingsInputForm = ({
               <div style={{ width: "72px" }}> </div>
             </Flex>
           </Flex>
-        ) : isEmail || tempInputs.length !== 0 ? (
+        ) : tempInputs.length !== 0 ? (
           <Flex
             marginLeft={{ base: "m", lg: "unset" }}
             flexDir="row"
@@ -284,22 +292,25 @@ const SettingsInputForm = ({
                 onClick={() => {
                   setIsEditing(true)
                   setEditingField(inputType)
-                  setTimeout(() => focusLastInput(), 0)
+                  setTimeout(() => focusFirstInput(), 0)
                 }}
               />
             )}
           </Flex>
         ) : (
           // User has no phone or email.
-          <AddButton
-            inputType={inputType}
-            onClick={() => {
-              setIsEditing(true)
-              setEditingField(inputType)
-              handleAdd()
-            }}
-            label={formUtils.addButtonLabel}
-          />
+          <Box sx={{ marginTop: { base: "unset", lg: "-xs" } }}>
+            <AddButton
+              isDisabled={editingField !== ""}
+              inputType={inputType}
+              onClick={() => {
+                setIsEditing(true)
+                setEditingField(inputType)
+                handleAdd()
+              }}
+              label={formUtils.addButtonLabel}
+            />
+          </Box>
         )}
 
         {isEditing && (
