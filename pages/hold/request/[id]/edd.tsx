@@ -93,6 +93,15 @@ export default function EDDRequestPage({
     }
   }, [errorStatus, patronEligibilityStatus])
 
+  const handleServerHoldPostError = (errorMessage: string) => {
+    console.error(
+      "EDDRequestPage: Error in EDD request api response",
+      errorMessage
+    )
+    setFormPosting(false)
+    setErrorStatus("failed")
+  }
+
   const postEDDRequest = async (eddParams: EDDRequestParams) => {
     try {
       setFormPosting(true)
@@ -113,14 +122,8 @@ export default function EDDRequestPage({
           setErrorStatus("patronIneligible")
           setPatronEligibilityStatus(responseJson?.patronEligibilityStatus)
           break
-        // Server side error placing the hold request
         case 500:
-          setFormPosting(false)
-          console.error(
-            "EDDRequestPage: Error in EDD request api response",
-            responseJson.error
-          )
-          setErrorStatus("failed")
+          handleServerHoldPostError(responseJson.error)
           break
         default:
           setFormPosting(false)
@@ -130,12 +133,7 @@ export default function EDDRequestPage({
           )
       }
     } catch (error) {
-      console.error(
-        "HoldRequestPage: Error in hold request api response",
-        error
-      )
-      setErrorStatus("failed")
-      setFormPosting(false)
+      handleServerHoldPostError(error)
     }
   }
 

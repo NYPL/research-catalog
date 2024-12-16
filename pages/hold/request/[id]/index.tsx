@@ -85,7 +85,11 @@ export default function HoldRequestPage({
     }
   }, [errorStatus, patronEligibilityStatus])
 
-  const setFailedRequestErrorState = () => {
+  const handleServerHoldPostError = (errorMessage: string) => {
+    console.error(
+      "HoldRequestPage: Error in hold request api response",
+      errorMessage
+    )
     setFormPosting(false)
     setErrorStatus("failed")
   }
@@ -114,13 +118,8 @@ export default function HoldRequestPage({
           setErrorStatus("patronIneligible")
           setPatronEligibilityStatus(responseJson?.patronEligibilityStatus)
           break
-        // Server side error placing the hold request
         case 500:
-          console.error(
-            "HoldRequestPage: Error in hold request api response",
-            responseJson.error
-          )
-          setFailedRequestErrorState()
+          handleServerHoldPostError(responseJson.error)
           break
         default:
           setFormPosting(false)
@@ -134,7 +133,7 @@ export default function HoldRequestPage({
         "HoldRequestPage: Error in hold request api response",
         error
       )
-      setFailedRequestErrorState()
+      handleServerHoldPostError(error)
     }
   }
 
