@@ -35,26 +35,32 @@ class ItemAvailability {
     this.location = location
     this.dueDate = dueDate
     this.itemMetadata = itemMetadata
+    this.specialCollections = specialCollections
+
     this.key = this.buildKey()
-    this.specialCollections =
-      specialCollections || this.findingAid || this.aeonUrl
+    console.log(this)
   }
   buildKey() {
     // All unavailable records have the same messaging.
+    // general collections messages
     if (!this.isAvailable) {
       return availabilityKeys.NOT_AVAILABLE
     }
     if (this.isReCAP && !this.specialCollections) {
       return availabilityKeys.RECAP
     }
-    if (this.aeonUrl && this.isReCAP) {
+    if (!this.isReCAP && !this.specialCollections) {
+      return availabilityKeys.ONSITE
+    }
+    // special collections messaging
+    if (this.aeonUrl && this.isReCAP && !this.findingAid) {
       return availabilityKeys.RECAP_AEON
     }
-    if (this.aeonUrl && !this.isReCAP) {
-      return availabilityKeys.ONSITE_AEON
+    if (this.aeonUrl && this.isReCAP && this.findingAid) {
+      return availabilityKeys.RECAP_AEON_FINDING_AID
     }
-    if (!this.isReCAP) {
-      return availabilityKeys.ONSITE
+    if (this.aeonUrl && !this.isReCAP && !this.findingAid) {
+      return availabilityKeys.ONSITE_AEON
     }
   }
 }

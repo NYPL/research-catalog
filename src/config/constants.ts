@@ -138,9 +138,11 @@ export const NYPL_LOCATIONS = {
 export const availabilityKeys = {
   // there is only one not available case, so availability is assumed as the default
   RECAP: "Recap",
+  ONSITE: "Onsite",
+  NOT_AVAILABLE: "notAvailable",
   RECAP_AEON: "RecapAeon",
   AEON: "Aeon",
   ONSITE_AEON: "OnsiteAeon",
-  ONSITE: "Onsite",
-  NOT_AVAILABLE: "notAvailable",
+  ONSITE_AEON_FINDING_AID: "onsiteAeonFindingAid",
+  RECAP_AEON_FINDING_AID: "recapAeonFindingAid",
 }
