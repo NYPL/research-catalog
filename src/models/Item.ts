@@ -35,7 +35,7 @@ export default class Item {
   isPhysicallyRequestable: boolean
   isEDDRequestable: boolean
   bibTitle: string
-  availabilityKey: string
+  availability: ItemAvailability
 
   constructor(item: DiscoveryItemResult, bib: Bib) {
     this.id = item.uri || ""
@@ -59,7 +59,7 @@ export default class Item {
     this.isPhysicallyRequestable = item.physRequestable
     this.isEDDRequestable = item.eddRequestable
     this.bibTitle = bib.titleDisplay
-    this.availabilityKey = new ItemAvailability(this).availabilityKey
+    this.availability = new ItemAvailability(this)
   }
 
   // Item availability is determined by the existence of status id in the availability ids list

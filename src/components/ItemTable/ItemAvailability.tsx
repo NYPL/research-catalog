@@ -17,24 +17,14 @@ interface ItemAvailabilityProps {
  * TODO: Add Feedback box, Due date, Available font styles
  */
 const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
-  let availabilityMessage
-  if (item.availabilityKey === "availableRecap") {
+  if (item.availability.key === "availableRecap") {
     return (
       <ExternalLink href={appConfig.urls.researchMaterialsHelp} fontSize="sm">
         How do I pick up this item and when will it be ready?
       </ExternalLink>
     )
   }
-  switch (item.availabilityKey) {
-    case "availableAeon":
-      availabilityMessage = <AvailableByAppointment item={item} />
-      break
-    case "availableOnsite":
-      availabilityMessage = <AvailableOnsite item={item} />
-      break
-    case "notAvailable":
-      availabilityMessage = <NotAvailable item={item} />
-  }
+
   return (
     <Text
       mb="0"
@@ -43,7 +33,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
         md: "desktop.body.body2",
       }}
     >
-      {availabilityMessage}
+      {item.availability.message()}
     </Text>
   )
 }
