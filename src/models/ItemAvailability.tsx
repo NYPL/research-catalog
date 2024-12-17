@@ -17,6 +17,7 @@ class ItemAvailability {
   aeonUrl: string
   findingAid: string
   needsButton: boolean
+  specialCollections?: boolean
   itemMetadata: {
     id: string
     barcode: string
@@ -31,9 +32,9 @@ class ItemAvailability {
     aeonUrl,
     findingAid,
     itemMetadata,
+    specialCollections,
   }) {
     this.findingAid = findingAid
-    this.needsButton = false
     this.dueDate = dueDate
     this.isReCAP = isReCAP
     this.isAvailable = isAvailable
@@ -42,32 +43,25 @@ class ItemAvailability {
     this.dueDate = dueDate
     this.itemMetadata = itemMetadata
     this.key = this.buildKey()
+    this.specialCollections =
+      specialCollections || this.findingAid || this.aeonUrl
   }
   buildKey() {
-    if (this.isAvailable && this.isReCAP && !this.aeonUrl) {
-      return availabilityKeys.RECAP
-    }
-    if (
-      this.isAvailable &&
-      this.aeonUrl &&
-      this.location?.endpoint &&
-      this.isReCAP
-    ) {
-      return availabilityKeys.RECAP_AEON
-    }
-    if (
-      this.isAvailable &&
-      this.aeonUrl &&
-      this.location?.endpoint &&
-      !this.isReCAP
-    ) {
-      return availabilityKeys.ONSITE_AEON
-    }
-    if (this.isAvailable && !this.isReCAP) {
-      return availabilityKeys.ONSITE
-    }
+    // All unavailable records have the same messaging.
     if (!this.isAvailable) {
       return availabilityKeys.NOT_AVAILABLE
+    }
+    if (this.isReCAP && !this.aeonUrl) {
+      return availabilityKeys.RECAP
+    }
+    if (this.aeonUrl && this.isReCAP) {
+      return availabilityKeys.RECAP_AEON
+    }
+    if (this.aeonUrl && this.location?.endpoint && !this.isReCAP) {
+      return availabilityKeys.ONSITE_AEON
+    }
+    if (!this.isReCAP) {
+      return availabilityKeys.ONSITE
     }
   }
   message() {
