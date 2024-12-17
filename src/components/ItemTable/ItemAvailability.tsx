@@ -7,9 +7,9 @@ import { availabilityKeys } from "../../config/constants"
 import {
   AvailableByAppointment,
   AvailableAt,
-} from "./ItemAvailabilityComponents/AvailableByAppointment"
-import AvailableOnsite from "./ItemAvailabilityComponents/AvailableOnsite"
-import NotAvailable from "./ItemAvailabilityComponents/NotAvailable"
+} from "./ItemAvailability/AvailableByAppointment"
+import AvailableOnsite from "./ItemAvailability/AvailableOnsite"
+import NotAvailable from "./ItemAvailability/NotAvailable"
 
 interface ItemAvailabilityProps {
   item: Item

@@ -2,7 +2,6 @@ import type Item from "./Item"
 import { availabilityKeys } from "../config/constants"
 
 class ItemAvailability {
-  item: Item
   key: string
   location: { endpoint: string }
   dueDate: string
@@ -45,13 +44,13 @@ class ItemAvailability {
     if (!this.isAvailable) {
       return availabilityKeys.NOT_AVAILABLE
     }
-    if (this.isReCAP && !this.aeonUrl) {
+    if (this.isReCAP && !this.specialCollections) {
       return availabilityKeys.RECAP
     }
     if (this.aeonUrl && this.isReCAP) {
       return availabilityKeys.RECAP_AEON
     }
-    if (this.aeonUrl && this.location?.endpoint && !this.isReCAP) {
+    if (this.aeonUrl && !this.isReCAP) {
       return availabilityKeys.ONSITE_AEON
     }
     if (!this.isReCAP) {

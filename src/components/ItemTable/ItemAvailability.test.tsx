@@ -31,7 +31,6 @@ describe("ItemAvailability", () => {
     const item = new Item(itemPhysicallyRequestable, parentBib)
 
     render(<ItemAvailability item={item} />)
-    console.log("item after construction", item)
     expect(screen.getByText("Available by appointment")).toBeInTheDocument()
     expect(
       screen.getByText("Schwarzman Building - Main Reading Room 315")
