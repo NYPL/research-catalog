@@ -1,11 +1,8 @@
-import { Text, Box } from "@nypl/design-system-react-components"
+import { Text } from "@nypl/design-system-react-components"
 
 import ExternalLink from "../Links/ExternalLink/ExternalLink"
 import { appConfig } from "../../config/config"
 import type Item from "../../models/Item"
-import AvailableByAppointment from "./ItemAvailabilityComponents/AvailableByAppointment"
-import NotAvailable from "./ItemAvailabilityComponents/NotAvailable"
-import AvailableOnsite from "./ItemAvailabilityComponents/AvailableOnsite"
 
 interface ItemAvailabilityProps {
   item: Item

@@ -1,8 +1,8 @@
-import type { JsxElement } from "typescript"
 import type Item from "./Item"
 import AvailableByAppointment from "../components/ItemTable/ItemAvailabilityComponents/AvailableByAppointment"
 import AvailableOnsite from "../components/ItemTable/ItemAvailabilityComponents/AvailableOnsite"
 import NotAvailable from "../components/ItemTable/ItemAvailabilityComponents/NotAvailable"
+import { availabilityKeys } from "../config/constants"
 
 class ItemAvailability {
   item: Item
@@ -13,29 +13,31 @@ class ItemAvailability {
   }
   buildKey() {
     if (this.item.isAvailable && this.item.isReCAP && !this.item.aeonUrl) {
-      return "availableRecap"
+      return availabilityKeys.AVAILABLE_RECAP
     }
     if (
       this.item.isAvailable &&
       this.item.aeonUrl &&
       this.item.location?.endpoint
     ) {
-      return "availableAeon"
+      return availabilityKeys.AVAILABLE_AEON
     }
     if (this.item.isAvailable && !this.item.isReCAP) {
-      return "availableOnsite"
+      return availabilityKeys.AVAILABLE_ONSITE
     }
     if (!this.item.isAvailable) {
-      return "notAvailable"
+      return availabilityKeys.NOT_AVAILABLE
     }
   }
   message() {
     switch (this.key) {
-      case "availableAeon":
+      case availabilityKeys.AVAILABLE_RECAP:
+        throw "This key doesn't have a message. This component should be returning earlier than this."
+      case availabilityKeys.AVAILABLE_AEON:
         return <AvailableByAppointment item={this.item} />
-      case "availableOnsite":
+      case availabilityKeys.AVAILABLE_ONSITE:
         return <AvailableOnsite item={this.item} />
-      case "notAvailable":
+      case availabilityKeys.NOT_AVAILABLE:
         return <NotAvailable item={this.item} />
     }
   }

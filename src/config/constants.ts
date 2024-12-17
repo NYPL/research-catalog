@@ -134,3 +134,11 @@ export const NYPL_LOCATIONS = {
     address: "476 Fifth Avenue (42nd St and Fifth Ave)",
   },
 }
+
+export const availabilityKeys = {
+  AVAILABLE_RECAP: "availableRecap",
+  AVAILABLE_RECAP_AEON: "availableRecapAeon",
+  AVAILABLE_AEON: "availableAeon",
+  AVAILABLE_ONSITE: "availableOnsite",
+  NOT_AVAILABLE: "notAvailable",
+}
