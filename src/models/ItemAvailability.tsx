@@ -1,10 +1,4 @@
 import type Item from "./Item"
-import {
-  AvailableAt,
-  AvailableByAppointment,
-} from "../components/ItemTable/ItemAvailabilityComponents/AvailableByAppointment"
-import AvailableOnsite from "../components/ItemTable/ItemAvailabilityComponents/AvailableOnsite"
-import NotAvailable from "../components/ItemTable/ItemAvailabilityComponents/NotAvailable"
 import { availabilityKeys } from "../config/constants"
 
 class ItemAvailability {
@@ -62,30 +56,6 @@ class ItemAvailability {
     }
     if (!this.isReCAP) {
       return availabilityKeys.ONSITE
-    }
-  }
-  message() {
-    switch (this.key) {
-      case availabilityKeys.RECAP:
-        throw "This key doesn't have a message. This component should be returning earlier than this."
-      case availabilityKeys.RECAP_AEON:
-        return <AvailableByAppointment />
-      case availabilityKeys.ONSITE_AEON:
-        return (
-          <>
-            <AvailableByAppointment />
-            <AvailableAt location={this.location} />
-          </>
-        )
-      case availabilityKeys.ONSITE:
-        return <AvailableOnsite location={this.location} />
-      case availabilityKeys.NOT_AVAILABLE:
-        return (
-          <NotAvailable
-            dueDate={this.dueDate}
-            itemMetadata={this.itemMetadata}
-          />
-        )
     }
   }
 }

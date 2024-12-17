@@ -4,6 +4,12 @@ import ExternalLink from "../Links/ExternalLink/ExternalLink"
 import { appConfig } from "../../config/config"
 import type Item from "../../models/Item"
 import { availabilityKeys } from "../../config/constants"
+import {
+  AvailableByAppointment,
+  AvailableAt,
+} from "./ItemAvailabilityComponents/AvailableByAppointment"
+import AvailableOnsite from "./ItemAvailabilityComponents/AvailableOnsite"
+import NotAvailable from "./ItemAvailabilityComponents/NotAvailable"
 
 interface ItemAvailabilityProps {
   item: Item
@@ -23,6 +29,34 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
     )
   }
 
+  let message
+  switch (item.availability.key) {
+    case availabilityKeys.RECAP:
+      throw "This key doesn't have a message. This component should be returning earlier than this."
+    case availabilityKeys.RECAP_AEON:
+      message = <AvailableByAppointment />
+      break
+    case availabilityKeys.ONSITE_AEON:
+      message = (
+        <>
+          <AvailableByAppointment />
+          <AvailableAt location={item.availability.location} />
+        </>
+      )
+      break
+    case availabilityKeys.ONSITE:
+      message = <AvailableOnsite location={item.availability.location} />
+      break
+    case availabilityKeys.NOT_AVAILABLE:
+      message = (
+        <NotAvailable
+          dueDate={item.availability.dueDate}
+          itemMetadata={item.availability.itemMetadata}
+        />
+      )
+      break
+  }
+
   return (
     <Text
       mb="0"
@@ -31,7 +65,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
         md: "desktop.body.body2",
       }}
     >
-      {item.availability.message()}
+      {message}
     </Text>
   )
 }
