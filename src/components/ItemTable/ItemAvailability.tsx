@@ -1,11 +1,9 @@
-import { useContext } from "react"
-import { Text, Button, Box } from "@nypl/design-system-react-components"
+import { Text, Box } from "@nypl/design-system-react-components"
 
 import ExternalLink from "../Links/ExternalLink/ExternalLink"
 import { appConfig } from "../../config/config"
 import type Item from "../../models/Item"
-import { FeedbackContext } from "../../context/FeedbackContext"
-import type { ItemMetadata } from "../../types/itemTypes"
+import ContactALibrarian from "./ItemAvailabilityComponents/ContactALibrarian"
 
 interface ItemAvailabilityProps {
   item: Item
@@ -17,13 +15,6 @@ interface ItemAvailabilityProps {
  * TODO: Add Feedback box, Due date, Available font styles
  */
 const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
-  const { onOpen, setItemMetadata } = useContext(FeedbackContext)
-
-  const onContact = (metadata: ItemMetadata) => {
-    setItemMetadata(metadata)
-    onOpen()
-  }
-
   // TODO: Move this logic into a getter function in the Item class that returns an availability status key
   // and replace this nested If with a simple switch statement
   switch (item.availabilityKey) {
@@ -93,31 +84,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
             Not available
           </Box>
           {item.dueDate && ` - In use until ${item.dueDate}`}
-          {" - Please "}
-          <Button
-            id="contact-librarian"
-            buttonType="link"
-            sx={{
-              display: "inline",
-              fontWeight: "inherit",
-              fontSize: "inherit",
-              p: 0,
-              height: "auto",
-              textAlign: "left",
-              minHeight: "auto",
-            }}
-            onClick={() =>
-              onContact({
-                id: item.id,
-                barcode: item.barcode,
-                callNumber: item.callNumber,
-                bibId: item.bibId,
-              })
-            }
-          >
-            contact a librarian
-          </Button>
-          {" for assistance."}
+          <ContactALibrarian item={item} />
         </Text>
       )
   }
