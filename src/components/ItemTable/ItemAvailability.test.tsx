@@ -29,6 +29,7 @@ describe("ItemAvailability", () => {
   })
   it("renders the correct text when item is available, has an aeon url, and has a location endpoint", async () => {
     const item = new Item(itemPhysicallyRequestable, parentBib)
+
     render(<ItemAvailability item={item} />)
     expect(screen.getByText("Available by appointment")).toBeInTheDocument()
     expect(
