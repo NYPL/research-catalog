@@ -26,15 +26,14 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
 
   // TODO: Move this logic into a getter function in the Item class that returns an availability status key
   // and replace this nested If with a simple switch statement
-  if (item.isAvailable) {
-    if (item.isReCAP && !item.aeonUrl) {
-      // Available ReCAP item
+  switch (item.availabilityKey) {
+    case "availableRecap":
       return (
         <ExternalLink href={appConfig.urls.researchMaterialsHelp} fontSize="sm">
           How do I pick up this item and when will it be ready?
         </ExternalLink>
       )
-    } else if (item.aeonUrl && item.location?.endpoint) {
+    case "availableAeon":
       return (
         <Text
           mb="0"
@@ -58,8 +57,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
           ) : null}
         </Text>
       )
-    } else {
-      // Available Onsite item
+    case "availableOnsite": {
       const locationShort = item.location.prefLabel.split("-")[0]
       return (
         <Text
@@ -82,47 +80,46 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
         </Text>
       )
     }
-  } else {
-    // Not available
-    return (
-      <Text
-        mb="0"
-        fontSize={{
-          base: "mobile.body.body2",
-          md: "desktop.body.body2",
-        }}
-      >
-        <Box as="span" color="ui.warning.tertiary">
-          Not available
-        </Box>
-        {item.dueDate && ` - In use until ${item.dueDate}`}
-        {" - Please "}
-        <Button
-          id="contact-librarian"
-          buttonType="link"
-          sx={{
-            display: "inline",
-            fontWeight: "inherit",
-            fontSize: "inherit",
-            p: 0,
-            height: "auto",
-            textAlign: "left",
-            minHeight: "auto",
+    case "notAvailable":
+      return (
+        <Text
+          mb="0"
+          fontSize={{
+            base: "mobile.body.body2",
+            md: "desktop.body.body2",
           }}
-          onClick={() =>
-            onContact({
-              id: item.id,
-              barcode: item.barcode,
-              callNumber: item.callNumber,
-              bibId: item.bibId,
-            })
-          }
         >
-          contact a librarian
-        </Button>
-        {" for assistance."}
-      </Text>
-    )
+          <Box as="span" color="ui.warning.tertiary">
+            Not available
+          </Box>
+          {item.dueDate && ` - In use until ${item.dueDate}`}
+          {" - Please "}
+          <Button
+            id="contact-librarian"
+            buttonType="link"
+            sx={{
+              display: "inline",
+              fontWeight: "inherit",
+              fontSize: "inherit",
+              p: 0,
+              height: "auto",
+              textAlign: "left",
+              minHeight: "auto",
+            }}
+            onClick={() =>
+              onContact({
+                id: item.id,
+                barcode: item.barcode,
+                callNumber: item.callNumber,
+                bibId: item.bibId,
+              })
+            }
+          >
+            contact a librarian
+          </Button>
+          {" for assistance."}
+        </Text>
+      )
   }
 }
 
