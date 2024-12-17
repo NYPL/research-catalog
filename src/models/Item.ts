@@ -59,7 +59,20 @@ export default class Item {
     this.isPhysicallyRequestable = item.physRequestable
     this.isEDDRequestable = item.eddRequestable
     this.bibTitle = bib.titleDisplay
-    this.availability = new ItemAvailability(this, bib.findingAid)
+    this.availability = new ItemAvailability({
+      location: this.location,
+      dueDate: this.dueDate,
+      isAvailable: this.isAvailable,
+      isReCAP: this.isReCAP,
+      aeonUrl: this.aeonUrl,
+      findingAid: bib.findingAid,
+      itemMetadata: {
+        id: this.id,
+        barcode: this.barcode,
+        callNumber: this.callNumber,
+        bibId: this.bibId,
+      },
+    })
   }
 
   // Item availability is determined by the existence of status id in the availability ids list

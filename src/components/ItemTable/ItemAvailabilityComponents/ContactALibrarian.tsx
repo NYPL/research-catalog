@@ -2,9 +2,17 @@ import { Button } from "@nypl/design-system-react-components"
 import { useContext } from "react"
 import { FeedbackContext } from "../../../context/FeedbackContext"
 import type { ItemMetadata } from "../../../types/itemTypes"
-import type Item from "../../../models/Item"
 
-const ContactALibrarian = ({ item }: { item: Item }) => {
+const ContactALibrarian = ({
+  item,
+}: {
+  item: {
+    id: string
+    barcode: string
+    callNumber: string
+    bibId: string
+  }
+}) => {
   const { onOpen, setItemMetadata } = useContext(FeedbackContext)
   const onContact = (metadata: ItemMetadata) => {
     setItemMetadata(metadata)

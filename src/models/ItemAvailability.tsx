@@ -1,5 +1,8 @@
 import type Item from "./Item"
-import AvailableByAppointment from "../components/ItemTable/ItemAvailabilityComponents/AvailableByAppointment"
+import {
+  AvailableAt,
+  AvailableByAppointment,
+} from "../components/ItemTable/ItemAvailabilityComponents/AvailableByAppointment"
 import AvailableOnsite from "../components/ItemTable/ItemAvailabilityComponents/AvailableOnsite"
 import NotAvailable from "../components/ItemTable/ItemAvailabilityComponents/NotAvailable"
 import { availabilityKeys } from "../config/constants"
@@ -7,36 +10,63 @@ import { availabilityKeys } from "../config/constants"
 class ItemAvailability {
   item: Item
   key: string
+  location: { endpoint: string }
+  dueDate: string
+  isAvailable: boolean
+  isReCAP: boolean
+  aeonUrl: string
   findingAid: string
-  constructor(item: Item, findingAid: string) {
-    this.item = item
-    this.key = this.buildKey()
+  needsButton: boolean
+  itemMetadata: {
+    id: string
+    barcode: string
+    callNumber: string
+    bibId: string
+  }
+  constructor({
+    location,
+    dueDate,
+    isAvailable,
+    isReCAP,
+    aeonUrl,
+    findingAid,
+    itemMetadata,
+  }) {
     this.findingAid = findingAid
+    this.needsButton = false
+    this.dueDate = dueDate
+    this.isReCAP = isReCAP
+    this.isAvailable = isAvailable
+    this.aeonUrl = aeonUrl
+    this.location = location
+    this.dueDate = dueDate
+    this.itemMetadata = itemMetadata
+    this.key = this.buildKey()
   }
   buildKey() {
-    if (this.item.isAvailable && this.item.isReCAP && !this.item.aeonUrl) {
+    if (this.isAvailable && this.isReCAP && !this.aeonUrl) {
       return availabilityKeys.RECAP
     }
     if (
-      this.item.isAvailable &&
-      this.item.aeonUrl &&
-      this.item.location?.endpoint &&
-      this.item.isReCAP
+      this.isAvailable &&
+      this.aeonUrl &&
+      this.location?.endpoint &&
+      this.isReCAP
     ) {
       return availabilityKeys.RECAP_AEON
     }
     if (
-      this.item.isAvailable &&
-      this.item.aeonUrl &&
-      this.item.location?.endpoint &&
-      !this.item.isReCAP
+      this.isAvailable &&
+      this.aeonUrl &&
+      this.location?.endpoint &&
+      !this.isReCAP
     ) {
       return availabilityKeys.ONSITE_AEON
     }
-    if (this.item.isAvailable && !this.item.isReCAP) {
+    if (this.isAvailable && !this.isReCAP) {
       return availabilityKeys.ONSITE
     }
-    if (!this.item.isAvailable) {
+    if (!this.isAvailable) {
       return availabilityKeys.NOT_AVAILABLE
     }
   }
@@ -45,13 +75,23 @@ class ItemAvailability {
       case availabilityKeys.RECAP:
         throw "This key doesn't have a message. This component should be returning earlier than this."
       case availabilityKeys.RECAP_AEON:
-        return <AvailableByAppointment item={this.item} />
+        return <AvailableByAppointment />
       case availabilityKeys.ONSITE_AEON:
-        return <AvailableByAppointment item={this.item} />
+        return (
+          <>
+            <AvailableByAppointment />
+            <AvailableAt location={this.location} />
+          </>
+        )
       case availabilityKeys.ONSITE:
-        return <AvailableOnsite item={this.item} />
+        return <AvailableOnsite location={this.location} />
       case availabilityKeys.NOT_AVAILABLE:
-        return <NotAvailable item={this.item} />
+        return (
+          <NotAvailable
+            dueDate={this.dueDate}
+            itemMetadata={this.itemMetadata}
+          />
+        )
     }
   }
 }
