@@ -7,9 +7,11 @@ import { availabilityKeys } from "../config/constants"
 class ItemAvailability {
   item: Item
   key: string
-  constructor(item: Item) {
+  findingAid: string
+  constructor(item: Item, findingAid: string) {
     this.item = item
     this.key = this.buildKey()
+    this.findingAid = findingAid
   }
   buildKey() {
     if (this.item.isAvailable && this.item.isReCAP && !this.item.aeonUrl) {
