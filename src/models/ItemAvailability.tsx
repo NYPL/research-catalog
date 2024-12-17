@@ -13,17 +13,17 @@ class ItemAvailability {
   }
   buildKey() {
     if (this.item.isAvailable && this.item.isReCAP && !this.item.aeonUrl) {
-      return availabilityKeys.AVAILABLE_RECAP
+      return availabilityKeys.RECAP
     }
     if (
       this.item.isAvailable &&
       this.item.aeonUrl &&
       this.item.location?.endpoint
     ) {
-      return availabilityKeys.AVAILABLE_AEON
+      return availabilityKeys.AEON
     }
     if (this.item.isAvailable && !this.item.isReCAP) {
-      return availabilityKeys.AVAILABLE_ONSITE
+      return availabilityKeys.ONSITE
     }
     if (!this.item.isAvailable) {
       return availabilityKeys.NOT_AVAILABLE
@@ -31,11 +31,11 @@ class ItemAvailability {
   }
   message() {
     switch (this.key) {
-      case availabilityKeys.AVAILABLE_RECAP:
+      case availabilityKeys.RECAP:
         throw "This key doesn't have a message. This component should be returning earlier than this."
-      case availabilityKeys.AVAILABLE_AEON:
+      case availabilityKeys.AEON:
         return <AvailableByAppointment item={this.item} />
-      case availabilityKeys.AVAILABLE_ONSITE:
+      case availabilityKeys.ONSITE:
         return <AvailableOnsite item={this.item} />
       case availabilityKeys.NOT_AVAILABLE:
         return <NotAvailable item={this.item} />

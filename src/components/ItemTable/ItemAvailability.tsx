@@ -3,6 +3,7 @@ import { Text } from "@nypl/design-system-react-components"
 import ExternalLink from "../Links/ExternalLink/ExternalLink"
 import { appConfig } from "../../config/config"
 import type Item from "../../models/Item"
+import { availabilityKeys } from "../../config/constants"
 
 interface ItemAvailabilityProps {
   item: Item
@@ -14,7 +15,7 @@ interface ItemAvailabilityProps {
  * TODO: Add Feedback box, Due date, Available font styles
  */
 const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
-  if (item.availability.key === "availableRecap") {
+  if (item.availability.key === availabilityKeys.RECAP) {
     return (
       <ExternalLink href={appConfig.urls.researchMaterialsHelp} fontSize="sm">
         How do I pick up this item and when will it be ready?
