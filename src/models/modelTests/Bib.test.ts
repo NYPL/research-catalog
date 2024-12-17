@@ -1,4 +1,7 @@
-import { bibWithItems } from "../../../__test__/fixtures/bibFixtures"
+import {
+  bibWithItems,
+  bibWithSupplementaryContent,
+} from "../../../__test__/fixtures/bibFixtures"
 import Bib from "../Bib"
 import Item from "../Item"
 
@@ -10,6 +13,32 @@ describe("Bib model", () => {
   })
 
   describe("constructor", () => {
+    describe("findingAid", () => {
+      it("initializes the finding aid when present", () => {
+        const findingAidBib = new Bib({
+          ...bibWithItems.resource,
+          supplementaryContent: [
+            {
+              "@type": "nypl:SupplementaryContent",
+              label: "Finding aid",
+              url: "http://archives.nypl.org/scm/29990",
+            },
+          ],
+        })
+        expect(findingAidBib.findingAid).toBe(
+          "http://archives.nypl.org/scm/29990"
+        )
+      })
+      it("does not initialize finding aid when no aid but supp content", () => {
+        const bibWithSupplementaryContentModel = new Bib(
+          bibWithSupplementaryContent.resource
+        )
+        expect(bibWithSupplementaryContentModel.findingAid).toBe(null)
+      })
+      it("can handle no supplementary content", () => {
+        expect(bib.findingAid).toBe(null)
+      })
+    })
     it("initializes the Bib ID with the with the Bib's @id field", () => {
       expect(bib.id).toBe("b15080796")
     })

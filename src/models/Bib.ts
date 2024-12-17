@@ -30,6 +30,7 @@ export default class Bib {
   itemAggregations?: Aggregation[]
   hasItemDates?: boolean
   subjectHeadings?: SubjectHeading[]
+  findingAid?: string
 
   constructor(result: DiscoveryBibResult) {
     this.id = result["@id"] ? result["@id"].substring(4) : ""
@@ -45,6 +46,9 @@ export default class Bib {
     this.itemAggregations = result.itemAggregations || null
     this.hasItemDates = result.hasItemDates || false
     this.subjectHeadings = result.subjectHeadings || null
+    this.findingAid =
+      result.supplementaryContent?.find((el) => el.label === "Finding aid")
+        ?.url || null
   }
 
   get url() {
