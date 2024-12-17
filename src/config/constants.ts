@@ -140,6 +140,7 @@ export const availabilityKeys = {
   RECAP: "Recap",
   RECAP_AEON: "RecapAeon",
   AEON: "Aeon",
+  ONSITE_AEON: "OnsiteAeon",
   ONSITE: "Onsite",
   NOT_AVAILABLE: "notAvailable",
 }
