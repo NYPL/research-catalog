@@ -2,6 +2,8 @@ import React from "react"
 import { render, screen } from "../../utils/testUtils"
 import userEvent from "@testing-library/user-event"
 
+import ItemAvailabilityModel from "../../models/ItemAvailability"
+
 import ItemAvailability from "./ItemAvailability"
 import Item from "../../models/Item"
 import SearchResultsBib from "../../models/SearchResultsBib"
@@ -17,6 +19,23 @@ import { searchResultPhysicalItems } from "../../../__test__/fixtures/searchResu
 const parentBib = new SearchResultsBib(searchResultPhysicalItems)
 
 describe("ItemAvailability", () => {
+  describe("special collections", () => {
+    it("recap aeon", () => {
+      // this item's metadata is not being used at all. it is here to satisfy
+      const item = new Item(itemPhysicallyRequestable, parentBib)
+      item.availability = new ItemAvailabilityModel({
+        location: { endpoint: "abc", prefLabel: "spaghetti" },
+        dueDate: "tomorrow",
+        isAvailable: true,
+        isReCAP: true,
+        aeonUrl: "spaghetti.com",
+        findingAid: null,
+        itemMetadata: null,
+        specialCollections: true,
+      })
+      render(<ItemAvailability item={item} />)
+    })
+  })
   it("renders the correct link when item is available, is reCAP, and does not have an aeon url", async () => {
     const item = new Item(itemNYPLReCAP, parentBib)
     render(<ItemAvailability item={item} />)
@@ -26,15 +45,6 @@ describe("ItemAvailability", () => {
       "href",
       "https://www.nypl.org/help/request-research-materials"
     )
-  })
-  xit("renders the correct text when item is available, has an aeon url, and has a location endpoint", async () => {
-    const item = new Item(itemPhysicallyRequestable, parentBib)
-
-    render(<ItemAvailability item={item} />)
-    expect(screen.getByText("Available by appointment")).toBeInTheDocument()
-    expect(
-      screen.getByText("Schwarzman Building - Main Reading Room 315")
-    ).toHaveAttribute("href", "https://www.nypl.org/locations/schwarzman")
   })
   it("renders the correct text for an available onsite item", async () => {
     const item = new Item(itemAvailableOnsite, parentBib)
