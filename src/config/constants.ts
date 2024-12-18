@@ -136,6 +136,7 @@ export const NYPL_LOCATIONS = {
 }
 
 export const availabilityKeys = {
+  EDGE_CASE: "edgeCase",
   // there is only one not available case, so availability is assumed as the default
   RECAP_GENERAL_COLLECTIONS: "Recap",
   ONSITE_GENERAL_COLLECTIONS: "Onsite",

@@ -36,6 +36,9 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
   switch (item.availability.key) {
     case availabilityKeys.RECAP_GENERAL_COLLECTIONS:
       throw "This key doesn't have a message. This component should be returning earlier than this."
+    case availabilityKeys.EDGE_CASE:
+      message = <ContactALibrarian item={item} />
+      break
     case (availabilityKeys.RECAP_AEON,
     availabilityKeys.ONSITE_AEON,
     availabilityKeys.RECAP_AEON_FINDING_AID):
