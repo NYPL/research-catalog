@@ -11,15 +11,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added and integrated hold confirmation details fetcher function (SCC-3762)
 - Added server-side auth redirect to hold confirmation page (SCC-3762)
+- Added fetchPatronEligibility server function that requests a patron's hold request eligibility status from Discovery API (SCC-3762)
+- Added patron ineligibility error messaging to HoldRequestErrorBanner component (SCC-3762)
+- Added eligibility checks to EDD and on-site request hold pages and API routes (SCC-3762)
+- Added email address field prepopulation on EDD Request form (SCC-4407)
 
 ### Updated
 
 - Updated phone, email, notification preference and home library to be individually editable in Account Settings (SCC-4337, SCC-4254, SCC-4253)
 - Updated username to be editable in My Account header (SCC-4236)
-
-## Added
-
-- Added email address field prepopulation on EDD Request form (SCC-4407)
 
 ## [1.3.6] 2024-11-6
 

@@ -14,7 +14,12 @@ import initializePatronTokenAuth, {
 } from "../../../src/server/auth"
 import { fetchBib } from "../../../src/server/api/bib"
 import { bibWithItems, bibWithSingleAeonItem } from "../../fixtures/bibFixtures"
-import { BASE_URL, PATHS, NYPL_LOCATIONS } from "../../../src/config/constants"
+import {
+  BASE_URL,
+  PATHS,
+  NYPL_LOCATIONS,
+  HOLD_PAGE_ERROR_HEADINGS,
+} from "../../../src/config/constants"
 import { fetchDeliveryLocations } from "../../../src/server/api/hold"
 
 jest.mock("../../../src/server/auth")
@@ -200,7 +205,7 @@ describe("Hold Request page", () => {
       expect(screen.getByTestId("hold-request-form")).toBeInTheDocument()
     })
   })
-  describe("Hold Request error handling", () => {
+  describe("Hold Request server error handling", () => {
     beforeEach(async () => {
       render(
         <HoldRequestPage
@@ -221,8 +226,8 @@ describe("Hold Request page", () => {
 
       global.fetch = jest.fn().mockImplementationOnce(() =>
         Promise.resolve({
-          status: 404,
-          json: () => Promise.resolve({ success: true }),
+          status: 500,
+          json: () => Promise.resolve({ success: false }),
         })
       )
 
@@ -237,7 +242,9 @@ describe("Hold Request page", () => {
         expect(screen.getByTestId("hold-request-error")).toBeInTheDocument()
       })
 
-      expect(screen.getByText("Request failed")).toBeInTheDocument()
+      expect(
+        screen.getByText("Request failed.", { exact: false })
+      ).toBeInTheDocument()
 
       expect(
         screen.queryByText(
@@ -276,6 +283,94 @@ describe("Hold Request page", () => {
           )
         ).toBeInTheDocument()
       })
+    })
+  })
+
+  describe("Hold Request patron ineligibility messaging", () => {
+    beforeEach(async () => {
+      render(
+        <HoldRequestPage
+          discoveryBibResult={bibWithItems.resource}
+          discoveryItemResult={bibWithItems.resource.items[0]}
+          patronId="123"
+          deliveryLocations={[
+            {
+              key: "schwarzman",
+              label: "Schwarzman",
+              value: "loc:mal17",
+              address: NYPL_LOCATIONS["schwarzman"].address,
+            },
+          ]}
+          isAuthenticated={true}
+        />
+      )
+
+      global.fetch = jest.fn().mockImplementationOnce(() =>
+        Promise.resolve({
+          status: 401,
+          json: () =>
+            Promise.resolve({
+              success: false,
+              patronEligibilityStatus: {
+                eligibility: false,
+                expired: true,
+                moneyOwed: true,
+                ptypeDisallowsHolds: true,
+                reachedHoldLimit: true,
+              },
+            }),
+        })
+      )
+
+      await fireEvent(
+        screen.getByText("Submit request"),
+        new MouseEvent("click")
+      )
+    })
+
+    it("shows an error listing ineligibility reasons when the patron is ineligibile to place holds", async () => {
+      await waitFor(() => {
+        expect(screen.getByTestId("hold-request-error")).toBeInTheDocument()
+      })
+
+      expect(
+        screen.getByText(HOLD_PAGE_ERROR_HEADINGS.patronIneligible, {
+          exact: false,
+        })
+      ).toBeInTheDocument()
+
+      expect(
+        screen.getByText("This is because:", {
+          exact: false,
+        })
+      ).toBeInTheDocument()
+
+      expect(
+        screen.getByText("Your account has expired", {
+          exact: false,
+        })
+      ).toBeInTheDocument()
+
+      expect(
+        screen.getByText("Your fines have exceeded the limit", {
+          exact: false,
+        })
+      ).toBeInTheDocument()
+
+      expect(
+        screen.getByText(
+          "Your card does not permit placing holds on ReCAP materials.",
+          {
+            exact: false,
+          }
+        )
+      ).toBeInTheDocument()
+
+      expect(
+        screen.getByText("You have reached the allowed number of holds.", {
+          exact: false,
+        })
+      ).toBeInTheDocument()
     })
   })
 })

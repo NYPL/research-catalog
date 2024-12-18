@@ -1,6 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 
-import { postHoldRequest } from "../../../../../src/server/api/hold"
+import {
+  postHoldRequest,
+  fetchPatronEligibility,
+} from "../../../../../src/server/api/hold"
 import { BASE_URL, PATHS } from "../../../../../src/config/constants"
 
 /**
@@ -8,16 +11,33 @@ import { BASE_URL, PATHS } from "../../../../../src/config/constants"
  */
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
-    res.status(500).json({
+    return res.status(500).json({
       error: "Please use a POST request for the Hold Request API endpoint",
     })
   }
 
   try {
+    const { patronId, source, pickupLocation, jsEnabled } = JSON.parse(req.body)
+
     const holdId = req.query.id as string
     const [, itemId] = holdId.split("-")
 
-    const { patronId, source, pickupLocation, jsEnabled } = JSON.parse(req.body)
+    const patronEligibilityStatus = await fetchPatronEligibility(patronId)
+
+    if (patronEligibilityStatus.status === 401) {
+      switch (jsEnabled) {
+        case true:
+          return res.status(401).json({
+            patronEligibilityStatus,
+          })
+
+        // Server side redirect on ineligibility when Js is disabled
+        // TODO: Move this to seaprate API route
+        // TODO: Parse these query params in getServerSideProps
+        default:
+          return res.redirect(`${BASE_URL}${PATHS.HOLD_REQUEST}/${holdId}`)
+      }
+    }
 
     const holdRequestResponse = await postHoldRequest({
       itemId,
@@ -34,6 +54,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     }
 
     // Return a 200 status when the hold request is posted successfully via JS fetch
+    // TODO: Make this a separate API route instead of a fetch attribute
     if (jsEnabled) {
       return res.status(200).json({
         pickupLocation: pickupLocationFromResponse,
@@ -42,7 +63,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     }
 
     // Server side redirect in case user has JS disabled
-    res.redirect(
+    return res.redirect(
       `${BASE_URL}${PATHS.HOLD_CONFIRMATION}/${holdId}?pickupLocation=${pickupLocationFromResponse}?requestId=${requestId}`
     )
   } catch (error) {
