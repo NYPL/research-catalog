@@ -73,12 +73,12 @@ export default function EDDRequestPage({
     defaultEligibilityStatus
   )
 
-  const [eddFormState, setEddFormState] = useState({
+  const [eddFormState, setEddFormState] = useState<EDDRequestParams>({
     ...initialEDDFormState,
     emailAddress: patronEmail,
     patronId,
     source: item.source,
-  } as EDDRequestParams)
+  })
   const [formPosting, setFormPosting] = useState(false)
 
   const bannerContainerRef = useRef<HTMLDivElement>()
