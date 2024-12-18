@@ -12,7 +12,7 @@ const AvailableByAppointment = () => {
   )
 }
 
-const AvailableAt = ({ location }) => {
+const AvailableAtLink = ({ location }) => {
   if (!location?.endpoint) return null
   return (
     <>
@@ -24,4 +24,9 @@ const AvailableAt = ({ location }) => {
   )
 }
 
-export { AvailableByAppointment, AvailableAt }
+const AvailableAt = ({ location }) => {
+  if (!location?.endpoint) return null
+  else return ` at ${location.prefLabel}`
+}
+
+export { AvailableByAppointment, AvailableAtLink, AvailableAt }

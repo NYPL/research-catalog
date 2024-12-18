@@ -7,6 +7,7 @@ import { availabilityKeys } from "../../config/constants"
 import {
   AvailableByAppointment,
   AvailableAt,
+  AvailableAtLink,
 } from "./ItemAvailability/AvailableByAppointment"
 import AvailableOnsite from "./ItemAvailability/AvailableOnsite"
 import NotAvailable from "./ItemAvailability/NotAvailable"
@@ -33,7 +34,18 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
   switch (item.availability.key) {
     case availabilityKeys.RECAP_GENERAL_COLLECTIONS:
       throw "This key doesn't have a message. This component should be returning earlier than this."
-    case availabilityKeys.RECAP_AEON:
+    case (availabilityKeys.RECAP_AEON, availabilityKeys.ONSITE_AEON):
+      message = <AvailableByAppointment />
+      break
+    case availabilityKeys.ONSITE_AEON_FINDING_AID:
+      message = (
+        <>
+          <AvailableByAppointment />
+          <AvailableAtLink location={item.location} />
+        </>
+      )
+      break
+    case availabilityKeys.RECAP_AEON_FINDING_AID:
       message = <AvailableByAppointment />
       break
     case availabilityKeys.ONSITE_AEON:

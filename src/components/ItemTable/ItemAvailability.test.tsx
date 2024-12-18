@@ -20,20 +20,52 @@ const parentBib = new SearchResultsBib(searchResultPhysicalItems)
 
 describe("ItemAvailability", () => {
   describe("special collections", () => {
-    it("recap aeon", () => {
-      // this item's metadata is not being used at all. it is here to satisfy
+    it("onsite aeon finding aid", () => {
       const item = new Item(itemPhysicallyRequestable, parentBib)
       item.availability = new ItemAvailabilityModel({
-        location: { endpoint: "abc", prefLabel: "spaghetti" },
-        dueDate: "tomorrow",
         isAvailable: true,
-        isReCAP: true,
+        isReCAP: false,
         aeonUrl: "spaghetti.com",
-        findingAid: null,
-        itemMetadata: null,
+        findingAid: "meatballs.com",
         specialCollections: true,
       })
       render(<ItemAvailability item={item} />)
+      expect(screen.getByText("Available by appointment")).toBeInTheDocument()
+      expect(screen.getByRole("link")).toHaveTextContent(
+        "Schwarzman Building - Main Reading Room 315"
+      )
+    })
+    it("recap aeon finding aid", () => {
+      const item = new Item(itemPhysicallyRequestable, parentBib)
+      item.availability = new ItemAvailabilityModel({
+        isAvailable: true,
+        isReCAP: true,
+        aeonUrl: "spaghetti.com",
+        findingAid: "meatballs.com",
+        specialCollections: true,
+      })
+      render(<ItemAvailability item={item} />)
+      expect(screen.getByText("Available by appointment")).toBeInTheDocument()
+      expect(screen.queryByRole("link")).not.toBeInTheDocument()
+      expect(
+        screen.queryByText("Schwarzman Building - Main Reading Room 315")
+      ).not.toBeInTheDocument()
+    })
+    it("recap aeon", () => {
+      const item = new Item(itemPhysicallyRequestable, parentBib)
+      item.availability = new ItemAvailabilityModel({
+        isAvailable: true,
+        isReCAP: true,
+        aeonUrl: "spaghetti.com",
+        findingAid: "meatballs.com",
+        specialCollections: true,
+      })
+      render(<ItemAvailability item={item} />)
+      expect(screen.getByText("Available by appointment")).toBeInTheDocument()
+      expect(screen.queryByRole("link")).not.toBeInTheDocument()
+      expect(
+        screen.queryByText("Schwarzman Building - Main Reading Room 315")
+      ).not.toBeInTheDocument()
     })
   })
   it("renders the correct link when item is available, is reCAP, and does not have an aeon url", async () => {
