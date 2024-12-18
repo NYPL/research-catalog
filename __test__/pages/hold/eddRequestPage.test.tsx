@@ -59,7 +59,7 @@ describe("EDD Request page", () => {
         status: 200,
       })
       ;(getPatronData as jest.Mock).mockResolvedValue({
-        emails: ["test@test.com"],
+        patron: { emails: ["test@test.com"] },
       })
       ;(fetchDeliveryLocations as jest.Mock).mockResolvedValue({
         eddRequestable: true,
@@ -194,6 +194,22 @@ describe("EDD Request page", () => {
 
     it("renders an edd request form", () => {
       expect(screen.getByTestId("edd-request-form")).toBeInTheDocument()
+    })
+  })
+  describe("EDD Request prepopulated form fields", () => {
+    beforeEach(() => {
+      render(
+        <EDDRequestPage
+          discoveryBibResult={bibWithItems.resource}
+          discoveryItemResult={bibWithItems.resource.items[2]}
+          patronId="123"
+          patronEmail="test@test.com"
+          isAuthenticated={true}
+        />
+      )
+    })
+    it("prepopulates the email field with the patron's email address if present", () => {
+      expect(screen.getByDisplayValue("test@test.com")).toBeInTheDocument()
     })
   })
   describe("EDD Request form validation", () => {
