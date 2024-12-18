@@ -16,6 +16,7 @@ import { SITE_NAME, BASE_URL, PATHS } from "../../../../src/config/constants"
 import useLoading from "../../../../src/hooks/useLoading"
 
 import { fetchBib } from "../../../../src/server/api/bib"
+import { getPatronData } from "../../../../pages/api/account/[id]"
 import {
   fetchDeliveryLocations,
   fetchPatronEligibility,
@@ -43,6 +44,7 @@ interface EDDRequestPropsType {
   discoveryBibResult: DiscoveryBibResult
   discoveryItemResult: DiscoveryItemResult
   patronId: string
+  patronEmail?: string
   isAuthenticated?: boolean
   errorStatus?: HoldErrorStatus
   patronEligibilityStatus?: PatronEligibilityStatus
@@ -55,12 +57,12 @@ export default function EDDRequestPage({
   discoveryBibResult,
   discoveryItemResult,
   patronId,
+  patronEmail,
   isAuthenticated,
   errorStatus: defaultErrorStatus,
   patronEligibilityStatus: defaultEligibilityStatus,
 }: EDDRequestPropsType) {
   const metadataTitle = `Electronic Delivery Request | ${SITE_NAME}`
-
   const bib = new Bib(discoveryBibResult)
   const item = new Item(discoveryItemResult, bib)
 
@@ -71,8 +73,9 @@ export default function EDDRequestPage({
     defaultEligibilityStatus
   )
 
-  const [eddFormState, setEddFormState] = useState({
+  const [eddFormState, setEddFormState] = useState<EDDRequestParams>({
     ...initialEDDFormState,
+    emailAddress: patronEmail,
     patronId,
     source: item.source,
   })
@@ -250,6 +253,10 @@ export async function getServerSideProps({ params, req, res }) {
 
     const patronEligibilityStatus = await fetchPatronEligibility(patronId)
 
+    // fetch patron's email to pre-populate the edd form if available
+    const patronData = await getPatronData(patronId)
+    const patronEmail = patronData?.patron?.emails?.[0]
+
     const locationOrEligibilityFetchFailed =
       locationStatus !== 200 ||
       ![200, 401].includes(patronEligibilityStatus?.status)
@@ -259,6 +266,7 @@ export async function getServerSideProps({ params, req, res }) {
         discoveryBibResult,
         discoveryItemResult,
         patronId,
+        patronEmail,
         isAuthenticated,
         patronEligibilityStatus,
         errorStatus: locationOrEligibilityFetchFailed
