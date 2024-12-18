@@ -40,20 +40,15 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
       message = (
         <>
           <AvailableByAppointment />
-          <AvailableAt location={item.availability.location} />
+          <AvailableAt location={item.location} />
         </>
       )
       break
     case availabilityKeys.ONSITE_GENERAL_COLLECTIONS:
-      message = <AvailableOnsite location={item.availability.location} />
+      message = <AvailableOnsite location={item.location} />
       break
     case availabilityKeys.NOT_AVAILABLE:
-      message = (
-        <NotAvailable
-          dueDate={item.availability.dueDate}
-          itemMetadata={item.availability.itemMetadata}
-        />
-      )
+      message = <NotAvailable item={item} />
       break
   }
 
