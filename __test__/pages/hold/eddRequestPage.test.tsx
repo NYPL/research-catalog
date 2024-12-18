@@ -9,6 +9,7 @@ import userEvent from "@testing-library/user-event"
 import EDDRequestPage, {
   getServerSideProps,
 } from "../../../pages/hold/request/[id]/edd"
+import { getPatronData } from "../../../pages/api/account/[id]"
 
 import initializePatronTokenAuth, {
   doRedirectBasedOnNyplAccountRedirects,
@@ -27,6 +28,7 @@ jest.mock("../../../src/server/auth")
 jest.mock("../../../src/server/api/bib")
 jest.mock("../../../src/server/sierraClient")
 jest.mock("../../../src/server/api/hold")
+jest.mock("../../../pages/api/account/[id]")
 
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
@@ -55,6 +57,9 @@ describe("EDD Request page", () => {
       ;(fetchBib as jest.Mock).mockResolvedValue({
         discoveryBibResult: bibWithItems.resource,
         status: 200,
+      })
+      ;(getPatronData as jest.Mock).mockResolvedValue({
+        emails: ["test@test.com"],
       })
       ;(fetchDeliveryLocations as jest.Mock).mockResolvedValue({
         eddRequestable: true,

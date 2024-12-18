@@ -33,7 +33,6 @@ import Item from "../../../../src/models/Item"
 
 import type { DiscoveryBibResult } from "../../../../src/types/bibTypes"
 import type { DiscoveryItemResult } from "../../../../src/types/itemTypes"
-import type { SierraPatron } from "../../../../src/types/myAccountTypes"
 
 import type {
   EDDRequestParams,
@@ -206,11 +205,6 @@ export async function getServerSideProps({ params, req, res, query }) {
   try {
     const patronId = patronTokenResponse?.decodedPatron?.sub
 
-    // get patron's email to pre-populate the edd form
-    const {
-      patron: { emails: patronEmails },
-    } = await getPatronData(patronId)
-
     // fetch bib and item
     const [bibId, itemId] = id.split("-")
 
@@ -226,6 +220,10 @@ export async function getServerSideProps({ params, req, res, query }) {
 
     const bib = new Bib(discoveryBibResult)
     const item = new Item(discoveryItemResult, bib)
+
+    // fetch patron's email to pre-populate the edd form if available
+    const patronData = await getPatronData(patronId)
+    const patronEmail = patronData?.patron?.emails?.[0]
 
     // Redirect if to aeonUrl if present in the item response
     if (item.aeonUrl) {
@@ -251,7 +249,7 @@ export async function getServerSideProps({ params, req, res, query }) {
         discoveryBibResult,
         discoveryItemResult,
         patronId,
-        patronEmail: patronEmails?.[0],
+        patronEmail,
         isAuthenticated,
         pageStatus: !isEddAvailable ? "unavailable" : null,
       },
