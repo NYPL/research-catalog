@@ -67,7 +67,9 @@ describe("email form", () => {
     fireEvent.click(screen.getByRole("button", { name: /edit/i }))
 
     await waitFor(() =>
-      expect(screen.getByLabelText("Update email address 2")).toHaveFocus()
+      expect(
+        screen.getByLabelText("Update primary email address")
+      ).toHaveFocus()
     )
 
     fireEvent.click(screen.getByRole("button", { name: /cancel/i }))
@@ -82,7 +84,7 @@ describe("email form", () => {
 
     await waitFor(() => expect(screen.getAllByRole("textbox")[2]).toHaveFocus())
 
-    fireEvent.click(screen.getAllByLabelText("Remove email")[1])
+    fireEvent.click(screen.getByLabelText("Remove email 2"))
 
     await waitFor(() => expect(screen.getAllByRole("textbox")[1]).toHaveFocus())
   })
@@ -121,7 +123,7 @@ describe("email form", () => {
 
     fireEvent.click(screen.getByRole("button", { name: /edit/i }))
 
-    fireEvent.click(screen.getByLabelText("Remove email"))
+    fireEvent.click(screen.getByLabelText("Remove email 2"))
 
     expect(
       screen.queryByDisplayValue("spaghettigrandma@gmail.com")
