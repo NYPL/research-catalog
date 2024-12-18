@@ -11,6 +11,7 @@ class ItemAvailability {
   findingAid: string
   needsButton: boolean
   specialCollections?: boolean
+  isOnsite: boolean
   itemMetadata: {
     id: string
     barcode: string
@@ -36,9 +37,9 @@ class ItemAvailability {
     this.dueDate = dueDate
     this.itemMetadata = itemMetadata
     this.specialCollections = specialCollections
+    this.isOnsite = !this.isReCAP
 
     this.key = this.buildKey()
-    console.log(this)
   }
   buildKey() {
     // All unavailable records have the same messaging.
@@ -47,10 +48,10 @@ class ItemAvailability {
       return availabilityKeys.NOT_AVAILABLE
     }
     if (this.isReCAP && !this.specialCollections) {
-      return availabilityKeys.RECAP
+      return availabilityKeys.RECAP_GENERAL_COLLECTIONS
     }
     if (!this.isReCAP && !this.specialCollections) {
-      return availabilityKeys.ONSITE
+      return availabilityKeys.ONSITE_GENERAL_COLLECTIONS
     }
     // special collections messaging
     if (this.aeonUrl && this.isReCAP && !this.findingAid) {
@@ -59,8 +60,23 @@ class ItemAvailability {
     if (this.aeonUrl && this.isReCAP && this.findingAid) {
       return availabilityKeys.RECAP_AEON_FINDING_AID
     }
-    if (this.aeonUrl && !this.isReCAP && !this.findingAid) {
+    if (this.aeonUrl && this.isOnsite && !this.findingAid) {
       return availabilityKeys.ONSITE_AEON
+    }
+    if (this.isOnsite && this.aeonUrl && this.findingAid) {
+      return availabilityKeys.ONSITE_AEON_FINDING_AID
+    }
+    if (this.isOnsite && this.findingAid && !this.aeonUrl) {
+      return availabilityKeys.ONSITE_FINDING_AID
+    }
+    if (this.isReCAP && this.findingAid && !this.aeonUrl) {
+      return availabilityKeys.RECAP_FINDING_AID
+    }
+    if (this.isOnsite && !this.findingAid && !this.aeonUrl) {
+      return availabilityKeys.ONSITE_NO_FINDING_AID_NO_AEON
+    }
+    if (this.isReCAP && !this.findingAid && !this.aeonUrl) {
+      return availabilityKeys.RECAP_NO_FINDING_AID_NO_AEON
     }
   }
 }

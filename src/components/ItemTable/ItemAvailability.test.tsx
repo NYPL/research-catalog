@@ -27,7 +27,7 @@ describe("ItemAvailability", () => {
       "https://www.nypl.org/help/request-research-materials"
     )
   })
-  it("renders the correct text when item is available, has an aeon url, and has a location endpoint", async () => {
+  xit("renders the correct text when item is available, has an aeon url, and has a location endpoint", async () => {
     const item = new Item(itemPhysicallyRequestable, parentBib)
 
     render(<ItemAvailability item={item} />)

@@ -21,7 +21,7 @@ interface ItemAvailabilityProps {
  * TODO: Add Feedback box, Due date, Available font styles
  */
 const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
-  if (item.availability.key === availabilityKeys.RECAP) {
+  if (item.availability.key === availabilityKeys.RECAP_GENERAL_COLLECTIONS) {
     return (
       <ExternalLink href={appConfig.urls.researchMaterialsHelp} fontSize="sm">
         How do I pick up this item and when will it be ready?
@@ -31,7 +31,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
 
   let message
   switch (item.availability.key) {
-    case availabilityKeys.RECAP:
+    case availabilityKeys.RECAP_GENERAL_COLLECTIONS:
       throw "This key doesn't have a message. This component should be returning earlier than this."
     case availabilityKeys.RECAP_AEON:
       message = <AvailableByAppointment />
@@ -44,7 +44,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
         </>
       )
       break
-    case availabilityKeys.ONSITE:
+    case availabilityKeys.ONSITE_GENERAL_COLLECTIONS:
       message = <AvailableOnsite location={item.availability.location} />
       break
     case availabilityKeys.NOT_AVAILABLE:

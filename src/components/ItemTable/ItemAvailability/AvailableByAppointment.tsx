@@ -13,15 +13,14 @@ const AvailableByAppointment = () => {
 }
 
 const AvailableAt = ({ location }) => {
+  if (!location?.endpoint) return null
   return (
-    location?.endpoint && (
-      <>
-        {" at "}
-        <ExternalLink href={`${appConfig.urls.locations}${location.endpoint}`}>
-          {location.prefLabel}
-        </ExternalLink>
-      </>
-    )
+    <>
+      {" at "}
+      <ExternalLink href={`${appConfig.urls.locations}${location.endpoint}`}>
+        {location.prefLabel}
+      </ExternalLink>
+    </>
   )
 }
 
