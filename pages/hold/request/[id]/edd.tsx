@@ -17,6 +17,7 @@ import useLoading from "../../../../src/hooks/useLoading"
 
 import { fetchBib } from "../../../../src/server/api/bib"
 import { fetchDeliveryLocations } from "../../../../src/server/api/hold"
+import { getPatronData } from "../../../../pages/api/account/[id]"
 import {
   EDDPageStatusMessages,
   initialEDDFormState,
@@ -32,6 +33,7 @@ import Item from "../../../../src/models/Item"
 
 import type { DiscoveryBibResult } from "../../../../src/types/bibTypes"
 import type { DiscoveryItemResult } from "../../../../src/types/itemTypes"
+import type { SierraPatron } from "../../../../src/types/myAccountTypes"
 
 import type {
   EDDRequestParams,
@@ -42,6 +44,7 @@ interface EDDRequestPropsType {
   discoveryBibResult: DiscoveryBibResult
   discoveryItemResult: DiscoveryItemResult
   patronId: string
+  patronEmail?: string
   isAuthenticated?: boolean
   eddRequestable?: boolean
   pageStatus?: EDDPageStatus
@@ -54,11 +57,11 @@ export default function EDDRequestPage({
   discoveryBibResult,
   discoveryItemResult,
   patronId,
+  patronEmail,
   isAuthenticated,
   pageStatus: defaultPageStatus,
 }: EDDRequestPropsType) {
   const metadataTitle = `Electronic Delivery Request | ${SITE_NAME}`
-
   const bib = new Bib(discoveryBibResult)
   const item = new Item(discoveryItemResult, bib)
 
@@ -68,9 +71,10 @@ export default function EDDRequestPage({
 
   const [eddFormState, setEddFormState] = useState({
     ...initialEDDFormState,
+    emailAddress: patronEmail,
     patronId,
     source: item.source,
-  })
+  } as EDDRequestParams)
   const [formPosting, setFormPosting] = useState(false)
 
   const bannerContainerRef = useRef<HTMLDivElement>()
@@ -202,6 +206,11 @@ export async function getServerSideProps({ params, req, res, query }) {
   try {
     const patronId = patronTokenResponse?.decodedPatron?.sub
 
+    // get patron's email to pre-populate the edd form
+    const {
+      patron: { emails: patronEmails },
+    } = await getPatronData(patronId)
+
     // fetch bib and item
     const [bibId, itemId] = id.split("-")
 
@@ -242,6 +251,7 @@ export async function getServerSideProps({ params, req, res, query }) {
         discoveryBibResult,
         discoveryItemResult,
         patronId,
+        patronEmail: patronEmails?.[0],
         isAuthenticated,
         pageStatus: !isEddAvailable ? "unavailable" : null,
       },
