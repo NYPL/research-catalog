@@ -15,6 +15,7 @@ import {
   itemUnavailable,
 } from "../../../__test__/fixtures/itemFixtures"
 import { searchResultPhysicalItems } from "../../../__test__/fixtures/searchResultPhysicalItems"
+import { notDeepEqual } from "assert"
 
 const parentBib = new SearchResultsBib(searchResultPhysicalItems)
 
@@ -66,6 +67,99 @@ describe("ItemAvailability", () => {
       expect(
         screen.queryByText("Schwarzman Building - Main Reading Room 315")
       ).not.toBeInTheDocument()
+    })
+    it("onsite aeon NO finding aid", () => {
+      const item = new Item(itemPhysicallyRequestable, parentBib)
+      item.availability = new ItemAvailabilityModel({
+        isAvailable: true,
+        isReCAP: false,
+        aeonUrl: "spaghetti.com",
+        findingAid: null,
+        specialCollections: true,
+      })
+      render(<ItemAvailability item={item} />)
+      expect(screen.getByText("Available by appointment")).toBeInTheDocument()
+      expect(screen.queryByRole("link")).not.toBeInTheDocument()
+      expect(
+        screen.getByText("at Schwarzman Building - Main Reading Room 315")
+      ).toBeInTheDocument()
+    })
+    it("onsite NO aeon YES finding aid", () => {
+      const item = new Item(itemPhysicallyRequestable, parentBib)
+      item.availability = new ItemAvailabilityModel({
+        isAvailable: true,
+        isReCAP: false,
+        aeonUrl: null,
+        findingAid: "meatballs.com",
+        specialCollections: true,
+      })
+      render(<ItemAvailability item={item} />)
+      expect(screen.getByText("Available by appointment")).toBeInTheDocument()
+      expect(screen.queryByRole("link")).toHaveTextContent("Finding aid")
+      expect(
+        screen.getByText(
+          "at Schwarzman Building - Main Reading Room 315. See the ",
+          { exact: false }
+        )
+      ).toBeInTheDocument()
+    })
+    it("recap NO aeon YES finding aid", () => {
+      const item = new Item(itemPhysicallyRequestable, parentBib)
+      item.availability = new ItemAvailabilityModel({
+        isAvailable: true,
+        isReCAP: true,
+        aeonUrl: null,
+        findingAid: "meatballs.com",
+        specialCollections: true,
+      })
+      render(<ItemAvailability item={item} />)
+      expect(screen.getByText("Available by appointment")).toBeInTheDocument()
+      expect(screen.queryByRole("link")).toHaveTextContent("Finding aid")
+      expect(
+        screen.queryByText("Schwarzman Building - Main Reading Room 315", {
+          exact: false,
+        })
+      ).not.toBeInTheDocument()
+    })
+    it("recap NO aeon NO finding aid", () => {
+      const item = new Item(itemPhysicallyRequestable, parentBib)
+      item.availability = new ItemAvailabilityModel({
+        isAvailable: true,
+        isReCAP: true,
+        aeonUrl: null,
+        findingAid: null,
+        specialCollections: true,
+      })
+      render(<ItemAvailability item={item} />)
+      expect(screen.getByText("Available by appointment")).toBeInTheDocument()
+      expect(screen.queryByRole("link")).not.toBeInTheDocument()
+      expect(
+        screen.queryByText("Schwarzman Building - Main Reading Room 315", {
+          exact: false,
+        })
+      ).not.toBeInTheDocument()
+      expect(screen.getByText("contact a librarian")).toBeInTheDocument()
+    })
+    it("recap NO aeon NO finding aid", () => {
+      const item = new Item(itemPhysicallyRequestable, parentBib)
+      item.availability = new ItemAvailabilityModel({
+        isAvailable: true,
+        isReCAP: false,
+        aeonUrl: null,
+        findingAid: null,
+        specialCollections: true,
+      })
+      render(<ItemAvailability item={item} />)
+      expect(screen.getByText("Available by appointment")).toBeInTheDocument()
+      expect(screen.getByRole("link")).toHaveTextContent(
+        "Schwarzman Building - Main Reading Room 315"
+      )
+      expect(
+        screen.queryByText("Schwarzman Building - Main Reading Room 315", {
+          exact: false,
+        })
+      ).toBeInTheDocument()
+      expect(screen.getByText("contact a librarian")).toBeInTheDocument()
     })
   })
   it("renders the correct link when item is available, is reCAP, and does not have an aeon url", async () => {

@@ -11,6 +11,8 @@ import {
 } from "./ItemAvailability/AvailableByAppointment"
 import AvailableOnsite from "./ItemAvailability/AvailableOnsite"
 import NotAvailable from "./ItemAvailability/NotAvailable"
+import FindingAid from "./ItemAvailability/FindingAid"
+import ContactALibrarian from "./ItemAvailability/ContactALibrarian"
 
 interface ItemAvailabilityProps {
   item: Item
@@ -34,7 +36,9 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
   switch (item.availability.key) {
     case availabilityKeys.RECAP_GENERAL_COLLECTIONS:
       throw "This key doesn't have a message. This component should be returning earlier than this."
-    case (availabilityKeys.RECAP_AEON, availabilityKeys.ONSITE_AEON):
+    case (availabilityKeys.RECAP_AEON,
+    availabilityKeys.ONSITE_AEON,
+    availabilityKeys.RECAP_AEON_FINDING_AID):
       message = <AvailableByAppointment />
       break
     case availabilityKeys.ONSITE_AEON_FINDING_AID:
@@ -45,14 +49,45 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
         </>
       )
       break
-    case availabilityKeys.RECAP_AEON_FINDING_AID:
-      message = <AvailableByAppointment />
-      break
     case availabilityKeys.ONSITE_AEON:
       message = (
         <>
           <AvailableByAppointment />
           <AvailableAt location={item.location} />
+        </>
+      )
+      break
+    case availabilityKeys.ONSITE_FINDING_AID:
+      message = (
+        <>
+          <AvailableByAppointment />
+          <AvailableAt location={item.location} />
+          <FindingAid url={item.availability.findingAid} />
+        </>
+      )
+      break
+    case availabilityKeys.RECAP_FINDING_AID:
+      message = (
+        <>
+          <AvailableByAppointment />
+          <FindingAid url={item.availability.findingAid} />
+        </>
+      )
+      break
+    case availabilityKeys.RECAP_NO_FINDING_AID_NO_AEON:
+      message = (
+        <>
+          <AvailableByAppointment />
+          <ContactALibrarian item={item} />
+        </>
+      )
+      break
+    case availabilityKeys.ONSITE_NO_FINDING_AID_NO_AEON:
+      message = (
+        <>
+          <AvailableByAppointment />
+          <AvailableAtLink location={item.location} />
+          <ContactALibrarian item={item} />
         </>
       )
       break
