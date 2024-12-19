@@ -22,26 +22,22 @@ class ItemAvailability {
   isReCAP: boolean
   aeonUrl: string
   findingAid: string
-  specialCollections?: boolean
+  isSpecRequestable?: boolean
   isOnsite: boolean
-  definitelyNotSpecialCollections: boolean
 
   constructor({
     isAvailable,
     isReCAP,
     aeonUrl,
     findingAid,
-    specialCollections,
+    isSpecRequestable,
   }) {
     this.findingAid = findingAid
     this.isReCAP = isReCAP
     this.isAvailable = isAvailable
     this.aeonUrl = aeonUrl
     this.isOnsite = !this.isReCAP
-    this.specialCollections = specialCollections
-    const practicallySpecialCollections = !!(findingAid || aeonUrl)
-    this.definitelyNotSpecialCollections =
-      !this.specialCollections && !practicallySpecialCollections
+    this.isSpecRequestable = isSpecRequestable
     this.key = this.buildKey()
   }
   buildKey() {
@@ -50,10 +46,10 @@ class ItemAvailability {
     if (!this.isAvailable) {
       return NOT_AVAILABLE
     }
-    if (this.isReCAP && this.definitelyNotSpecialCollections) {
+    if (this.isReCAP && !this.isSpecRequestable) {
       return RECAP_GENERAL_COLLECTIONS
     }
-    if (this.isOnsite && this.definitelyNotSpecialCollections) {
+    if (this.isOnsite && !this.isSpecRequestable) {
       return ONSITE_GENERAL_COLLECTIONS
     }
     // special collections messaging
@@ -79,7 +75,7 @@ class ItemAvailability {
       this.isOnsite &&
       !this.findingAid &&
       !this.aeonUrl &&
-      this.specialCollections
+      this.isSpecRequestable
     ) {
       return ONSITE_NO_FINDING_AID_NO_AEON
     }
@@ -87,7 +83,7 @@ class ItemAvailability {
       this.isReCAP &&
       !this.findingAid &&
       !this.aeonUrl &&
-      this.specialCollections
+      this.isSpecRequestable
     ) {
       return RECAP_NO_FINDING_AID_NO_AEON
     } else return EDGE_CASE

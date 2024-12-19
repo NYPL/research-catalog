@@ -4,7 +4,7 @@ const FindingAid = ({ url }: { url: string }) => {
   return (
     <>
       {". See the "}
-      <ExternalLink href={url}>{"Finding aid"}</ExternalLink>
+      <ExternalLink href={url}>{"finding aid"}</ExternalLink>
       {" for details"}
     </>
   )

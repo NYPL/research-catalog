@@ -46,8 +46,9 @@ export default class Bib {
     this.hasItemDates = result.hasItemDates || false
     this.subjectHeadings = result.subjectHeadings || null
     this.findingAid =
-      result.supplementaryContent?.find((el) => el.label === "Finding aid")
-        ?.url || null
+      result.supplementaryContent?.find(
+        (el) => el.label.toLocaleLowerCase() === "finding aid"
+      )?.url || null
     this.items = this.getItemsFromResult(result)
   }
 

@@ -60,6 +60,7 @@ export default class Item {
     this.isEDDRequestable = item.eddRequestable
     this.bibTitle = bib.titleDisplay
     this.availability = new ItemAvailability({
+      isSpecRequestable: item.specRequestable,
       isAvailable: this.isAvailable,
       isReCAP: this.isReCAP,
       aeonUrl: this.aeonUrl,
