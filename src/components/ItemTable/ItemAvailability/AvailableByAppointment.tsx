@@ -6,7 +6,7 @@ const AvailableByAppointment = () => {
   return (
     <>
       <Box as="span" color="ui.success.primary">
-        Available by appointment
+        Available by appointment.
       </Box>
     </>
   )
