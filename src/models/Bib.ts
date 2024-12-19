@@ -42,13 +42,13 @@ export default class Bib {
     this.materialType =
       (result.materialType?.length && result.materialType[0]?.prefLabel) || null
     this.issuance = (result.issuance?.length && result.issuance) || null
-    this.items = this.getItemsFromResult(result)
     this.itemAggregations = result.itemAggregations || null
     this.hasItemDates = result.hasItemDates || false
     this.subjectHeadings = result.subjectHeadings || null
     this.findingAid =
       result.supplementaryContent?.find((el) => el.label === "Finding aid")
         ?.url || null
+    this.items = this.getItemsFromResult(result)
   }
 
   get url() {

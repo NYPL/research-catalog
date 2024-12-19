@@ -1,5 +1,21 @@
 import { availabilityKeys } from "../config/constants"
 
+const {
+  EDGE_CASE,
+  RECAP_GENERAL_COLLECTIONS,
+  ONSITE_GENERAL_COLLECTIONS,
+  NOT_AVAILABLE,
+  // special collections availability keys
+  RECAP_AEON,
+  ONSITE_AEON,
+  ONSITE_AEON_FINDING_AID,
+  RECAP_AEON_FINDING_AID,
+  ONSITE_FINDING_AID,
+  RECAP_FINDING_AID,
+  ONSITE_NO_FINDING_AID_NO_AEON,
+  RECAP_NO_FINDING_AID_NO_AEON,
+} = availabilityKeys
+
 class ItemAvailability {
   key: string
   isAvailable: boolean
@@ -26,39 +42,38 @@ class ItemAvailability {
     const practicallySpecialCollections = !!(findingAid || aeonUrl)
     this.definitelyNotSpecialCollections =
       !this.specialCollections && !practicallySpecialCollections
-
     this.key = this.buildKey()
   }
   buildKey() {
     // All unavailable records have the same messaging.
     // general collections messages
     if (!this.isAvailable) {
-      return availabilityKeys.NOT_AVAILABLE
+      return NOT_AVAILABLE
     }
     if (this.isReCAP && this.definitelyNotSpecialCollections) {
-      return availabilityKeys.RECAP_GENERAL_COLLECTIONS
+      return RECAP_GENERAL_COLLECTIONS
     }
     if (this.isOnsite && this.definitelyNotSpecialCollections) {
-      return availabilityKeys.ONSITE_GENERAL_COLLECTIONS
+      return ONSITE_GENERAL_COLLECTIONS
     }
     // special collections messaging
     if (this.aeonUrl && this.isReCAP && !this.findingAid) {
-      return availabilityKeys.RECAP_AEON
+      return RECAP_AEON
     }
     if (this.aeonUrl && this.isReCAP && this.findingAid) {
-      return availabilityKeys.RECAP_AEON_FINDING_AID
+      return RECAP_AEON_FINDING_AID
     }
     if (this.aeonUrl && this.isOnsite && !this.findingAid) {
-      return availabilityKeys.ONSITE_AEON
+      return ONSITE_AEON
     }
     if (this.isOnsite && this.aeonUrl && this.findingAid) {
-      return availabilityKeys.ONSITE_AEON_FINDING_AID
+      return ONSITE_AEON_FINDING_AID
     }
     if (this.isOnsite && this.findingAid && !this.aeonUrl) {
-      return availabilityKeys.ONSITE_FINDING_AID
+      return ONSITE_FINDING_AID
     }
     if (this.isReCAP && this.findingAid && !this.aeonUrl) {
-      return availabilityKeys.RECAP_FINDING_AID
+      return RECAP_FINDING_AID
     }
     if (
       this.isOnsite &&
@@ -66,7 +81,7 @@ class ItemAvailability {
       !this.aeonUrl &&
       this.specialCollections
     ) {
-      return availabilityKeys.ONSITE_NO_FINDING_AID_NO_AEON
+      return ONSITE_NO_FINDING_AID_NO_AEON
     }
     if (
       this.isReCAP &&
@@ -74,8 +89,8 @@ class ItemAvailability {
       !this.aeonUrl &&
       this.specialCollections
     ) {
-      return availabilityKeys.RECAP_NO_FINDING_AID_NO_AEON
-    } else return availabilityKeys.EDGE_CASE
+      return RECAP_NO_FINDING_AID_NO_AEON
+    } else return EDGE_CASE
   }
 }
 

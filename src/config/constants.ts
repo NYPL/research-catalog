@@ -136,11 +136,12 @@ export const NYPL_LOCATIONS = {
 }
 
 export const availabilityKeys = {
+  // anything not covered by the cases below is EDGE_CASE
   EDGE_CASE: "edgeCase",
   // there is only one not available case, so availability is assumed as the default
+  NOT_AVAILABLE: "notAvailable",
   RECAP_GENERAL_COLLECTIONS: "Recap",
   ONSITE_GENERAL_COLLECTIONS: "Onsite",
-  NOT_AVAILABLE: "notAvailable",
   // special collections availability keys
   RECAP_AEON: "RecapAeon",
   AEON: "Aeon",

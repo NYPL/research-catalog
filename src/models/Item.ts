@@ -60,18 +60,10 @@ export default class Item {
     this.isEDDRequestable = item.eddRequestable
     this.bibTitle = bib.titleDisplay
     this.availability = new ItemAvailability({
-      location: this.location,
-      dueDate: this.dueDate,
       isAvailable: this.isAvailable,
       isReCAP: this.isReCAP,
       aeonUrl: this.aeonUrl,
       findingAid: bib.findingAid,
-      itemMetadata: {
-        id: this.id,
-        barcode: this.barcode,
-        callNumber: this.callNumber,
-        bibId: this.bibId,
-      },
     })
   }
 

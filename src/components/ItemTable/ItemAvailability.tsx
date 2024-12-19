@@ -18,13 +18,29 @@ interface ItemAvailabilityProps {
   item: Item
 }
 
+const {
+  EDGE_CASE,
+  RECAP_GENERAL_COLLECTIONS,
+  ONSITE_GENERAL_COLLECTIONS,
+  NOT_AVAILABLE,
+  // special collections availability keys
+  RECAP_AEON,
+  ONSITE_AEON,
+  ONSITE_AEON_FINDING_AID,
+  RECAP_AEON_FINDING_AID,
+  ONSITE_FINDING_AID,
+  RECAP_FINDING_AID,
+  ONSITE_NO_FINDING_AID_NO_AEON,
+  RECAP_NO_FINDING_AID_NO_AEON,
+} = availabilityKeys
+
 /**
  * The ItemAvailability component appears below the Item table and displays
  * info about an item's availability.
  * TODO: Add Feedback box, Due date, Available font styles
  */
 const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
-  if (item.availability.key === availabilityKeys.RECAP_GENERAL_COLLECTIONS) {
+  if (item.availability.key === RECAP_GENERAL_COLLECTIONS) {
     return (
       <ExternalLink href={appConfig.urls.researchMaterialsHelp} fontSize="sm">
         How do I pick up this item and when will it be ready?
@@ -34,17 +50,15 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
 
   let message
   switch (item.availability.key) {
-    case availabilityKeys.RECAP_GENERAL_COLLECTIONS:
+    case RECAP_GENERAL_COLLECTIONS:
       throw "This key doesn't have a message. This component should be returning earlier than this."
-    case availabilityKeys.EDGE_CASE:
+    case EDGE_CASE:
       message = <ContactALibrarian item={item} />
       break
-    case (availabilityKeys.RECAP_AEON,
-    availabilityKeys.ONSITE_AEON,
-    availabilityKeys.RECAP_AEON_FINDING_AID):
+    case (RECAP_AEON, ONSITE_AEON, RECAP_AEON_FINDING_AID):
       message = <AvailableByAppointment />
       break
-    case availabilityKeys.ONSITE_AEON_FINDING_AID:
+    case ONSITE_AEON_FINDING_AID:
       message = (
         <>
           <AvailableByAppointment />
@@ -52,7 +66,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
         </>
       )
       break
-    case availabilityKeys.ONSITE_AEON:
+    case ONSITE_AEON:
       message = (
         <>
           <AvailableByAppointment />
@@ -60,7 +74,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
         </>
       )
       break
-    case availabilityKeys.ONSITE_FINDING_AID:
+    case ONSITE_FINDING_AID:
       message = (
         <>
           <AvailableByAppointment />
@@ -69,7 +83,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
         </>
       )
       break
-    case availabilityKeys.RECAP_FINDING_AID:
+    case RECAP_FINDING_AID:
       message = (
         <>
           <AvailableByAppointment />
@@ -77,7 +91,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
         </>
       )
       break
-    case availabilityKeys.RECAP_NO_FINDING_AID_NO_AEON:
+    case RECAP_NO_FINDING_AID_NO_AEON:
       message = (
         <>
           <AvailableByAppointment />
@@ -85,7 +99,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
         </>
       )
       break
-    case availabilityKeys.ONSITE_NO_FINDING_AID_NO_AEON:
+    case ONSITE_NO_FINDING_AID_NO_AEON:
       message = (
         <>
           <AvailableByAppointment />
@@ -94,10 +108,10 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
         </>
       )
       break
-    case availabilityKeys.ONSITE_GENERAL_COLLECTIONS:
+    case ONSITE_GENERAL_COLLECTIONS:
       message = <AvailableOnsite location={item.location} />
       break
-    case availabilityKeys.NOT_AVAILABLE:
+    case NOT_AVAILABLE:
       message = <NotAvailable item={item} />
       break
   }
