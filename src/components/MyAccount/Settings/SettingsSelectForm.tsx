@@ -190,50 +190,52 @@ const SettingsSelectForm = ({
             </Select>
           </Flex>
         ) : (
-          <Flex marginLeft={{ base: "m", lg: "unset" }}>
-            <Flex flexDir="column">
-              <Text
-                sx={{
-                  marginTop: { base: "xs", lg: "unset" },
-                  width: { base: "200px", sm: "250px" },
-                  marginBottom: 0,
-                }}
-              >
-                {selection}
-              </Text>
-              {isNotification &&
-                patronHasNonePref &&
-                !patronHasPhone &&
-                !patronHasEmail && (
-                  <Banner
-                    sx={{
-                      marginTop: "s",
-                      width: { base: "200px", sm: "250px" },
-                    }}
-                    content="Please set a phone number or email address to choose a notification preference."
-                  />
-                )}
+          <Flex flexDir="column">
+            <Flex marginLeft={{ base: "m", lg: "unset" }}>
+              <Flex flexDir="column">
+                <Text
+                  sx={{
+                    marginTop: { base: "xs", lg: "unset" },
+                    width: { base: "200px", sm: "250px" },
+                    marginBottom: 0,
+                  }}
+                >
+                  {selection}
+                </Text>
+              </Flex>
+              {editingField === "" && (
+                <EditButton
+                  isDisabled={
+                    isNotification &&
+                    patronHasNonePref &&
+                    !patronHasPhone &&
+                    !patronHasEmail
+                  }
+                  ref={editingRef}
+                  buttonLabel={`Edit ${type}`}
+                  buttonId={`edit-${type}-button`}
+                  onClick={() => {
+                    setIsEditing(true)
+                    setEditingField(type)
+                    setTimeout(() => {
+                      selectRef.current?.focus()
+                    }, 0)
+                  }}
+                />
+              )}
             </Flex>
-            {editingField === "" && (
-              <EditButton
-                isDisabled={
-                  isNotification &&
-                  patronHasNonePref &&
-                  !patronHasPhone &&
-                  !patronHasEmail
-                }
-                ref={editingRef}
-                buttonLabel={`Edit ${type}`}
-                buttonId={`edit-${type}-button`}
-                onClick={() => {
-                  setIsEditing(true)
-                  setEditingField(type)
-                  setTimeout(() => {
-                    selectRef.current?.focus()
-                  }, 0)
-                }}
-              />
-            )}
+            {isNotification &&
+              patronHasNonePref &&
+              !patronHasPhone &&
+              !patronHasEmail && (
+                <Banner
+                  sx={{
+                    width: { base: "80%", sm: "320px" },
+                    marginLeft: { base: "m", lg: "unset" },
+                  }}
+                  content="Please set a phone number or email address to choose a notification preference."
+                />
+              )}
           </Flex>
         )}
         {isEditing && (
