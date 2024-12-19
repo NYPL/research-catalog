@@ -14,17 +14,17 @@ describe("Bib model", () => {
 
   describe("constructor", () => {
     describe("findingAid", () => {
+      const findingAidBib = new Bib({
+        ...bibWithItems.resource,
+        supplementaryContent: [
+          {
+            "@type": "nypl:SupplementaryContent",
+            label: "Finding aid",
+            url: "http://archives.nypl.org/scm/29990",
+          },
+        ],
+      })
       it("initializes the finding aid when present", () => {
-        const findingAidBib = new Bib({
-          ...bibWithItems.resource,
-          supplementaryContent: [
-            {
-              "@type": "nypl:SupplementaryContent",
-              label: "Finding aid",
-              url: "http://archives.nypl.org/scm/29990",
-            },
-          ],
-        })
         expect(findingAidBib.findingAid).toBe(
           "http://archives.nypl.org/scm/29990"
         )
@@ -37,6 +37,11 @@ describe("Bib model", () => {
       })
       it("can handle no supplementary content", () => {
         expect(bib.findingAid).toBe(null)
+      })
+      it("initializes finding aid in time to populate finding aid on item availability", () => {
+        expect(
+          findingAidBib.items.every((item) => item.availability.findingAid)
+        ).toBe(true)
       })
     })
     it("initializes the Bib ID with the with the Bib's @id field", () => {
