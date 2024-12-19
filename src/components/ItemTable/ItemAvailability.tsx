@@ -55,7 +55,8 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
     case EDGE_CASE:
       message = <ContactALibrarian item={item} />
       break
-    case (RECAP_AEON, ONSITE_AEON, RECAP_AEON_FINDING_AID):
+    case RECAP_AEON:
+    case RECAP_AEON_FINDING_AID:
       message = <AvailableByAppointment />
       break
     case ONSITE_AEON_FINDING_AID:
