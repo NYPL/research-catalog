@@ -180,8 +180,8 @@ export default function HoldRequestPage({
               handleSubmit={handleSubmit}
               holdId={holdId}
               patronId={patronId}
-              source={item.source}
               errorStatus={errorStatus}
+              source={item.formattedSourceForHoldRequest}
             />
           </>
         ) : null}

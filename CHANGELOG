@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added patron ineligibility error messaging to HoldRequestErrorBanner component (SCC-3762)
 - Added eligibility checks to EDD and on-site request hold pages and API routes (SCC-3762)
 - Added HoldContactButton component and update error copy per VQA requests (SCC-4427)
+- Added email address field prepopulation on EDD Request form (SCC-4407)
 
 ### Updated
 
