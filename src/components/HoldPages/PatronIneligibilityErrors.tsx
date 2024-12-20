@@ -73,7 +73,7 @@ const PatronIneligibilityErrors = ({
         <>
           {ineligibilityReasons.map((reason) => reason)} Please{" "}
           <HoldContactButton item={item}>contact us</HoldContactButton> for
-          assistance if required.
+          assistance.
         </>
       )}
     </Box>

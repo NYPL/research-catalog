@@ -1,4 +1,3 @@
-import { useContext } from "react"
 import { Text, Box, Banner } from "@nypl/design-system-react-components"
 
 import type {
@@ -6,7 +5,6 @@ import type {
   PatronEligibilityStatus,
 } from "../../types/holdPageTypes"
 
-import type { ItemMetadata } from "../../types/itemTypes"
 import type Item from "../../models/Item"
 
 import PatronIneligibilityErrors from "./PatronIneligibilityErrors"
