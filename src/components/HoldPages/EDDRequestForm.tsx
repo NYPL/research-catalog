@@ -121,7 +121,7 @@ const EDDRequestForm = ({
         value={eddFormState.source}
       />
       <Box>
-        <Heading level="h3" size="heading4" mb="m">
+        <Heading level="h3" size="heading4" mb="xs">
           Required information
         </Heading>
         <Text noSpace>
@@ -181,7 +181,7 @@ const EDDRequestForm = ({
           />
         </FormField>
       </FormRow>
-      <FormField>
+      <FormField mb="xs">
         <TextInput
           id="chapterTitle"
           name="chapterTitle"
@@ -247,7 +247,7 @@ const EDDRequestForm = ({
           />
         </FormField>
       </FormRow>
-      <FormField>
+      <FormField mb="xs">
         <TextInput
           id="requestNotes"
           name="requestNotes"
