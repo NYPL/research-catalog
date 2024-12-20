@@ -104,6 +104,10 @@ describe("Item model", () => {
         "A history of spaghetti eating and cooking for: spaghetti dinner."
       )
     })
+
+    it("returns the source in kebabcase for use in hold requests", () => {
+      expect(item.holdRequestSource).toBe("sierra-nypl")
+    })
   })
 
   describe("ReCAP checks", () => {

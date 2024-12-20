@@ -12,6 +12,7 @@ import {
   locationEndpointsMap,
 } from "../utils/itemUtils"
 import { appConfig } from "../config/config"
+import { convertCamelToShishKabobCase } from "../utils/appUtils"
 
 /**
  * The Item class contains the data and getter functions
@@ -79,6 +80,10 @@ export default class Item {
     return closedLocations
       .concat(this.isReCAP ? recapClosedLocations : nonRecapClosedLocations)
       .includes("all")
+  }
+
+  get holdRequestSource(): string {
+    return convertCamelToShishKabobCase(this.source)
   }
 
   // Pre-processing logic for setting Item holding location

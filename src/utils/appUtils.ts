@@ -140,3 +140,19 @@ export const convertToSentenceCase = (str: string) =>
   str.split(" ").length > 1
     ? str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
     : str
+
+/**
+ * Converts camel case string to shish kabob case
+ *
+ * e.g. camelToShishKabobCase("RecapPul")
+ *        => "recap-pul"
+ *      camelToShishKabobCase("firstCharCanBeLowerCase")
+ *        => "first-char-can-be-lower-case"
+ */
+export const convertCamelToShishKabobCase = (str: string) =>
+  str
+    // Change capital letters into "-{lowercase letter}"
+    .replace(/([A-Z])/g, (c, p1, i) => {
+      // If capital letter is not first character, precede with '-':
+      return (i > 0 ? "-" : "") + c.toLowerCase()
+    })
