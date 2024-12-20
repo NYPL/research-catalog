@@ -11,7 +11,6 @@ import type Item from "../../models/Item"
 import RCLink from "../Links/RCLink/RCLink"
 import PatronIneligibilityErrors from "./PatronIneligibilityErrors"
 import {
-  PATHS,
   HOLD_PAGE_ERROR_HEADINGS,
   HOLD_PAGE_CONTACT_PREFIXES,
 } from "../../config/constants"
@@ -28,7 +27,7 @@ interface HoldRequestErrorBannerProps {
  */
 const HoldRequestErrorBanner = ({
   item,
-  errorStatus = "failed",
+  errorStatus = "patronIneligible",
   patronEligibilityStatus,
 }: HoldRequestErrorBannerProps) => {
   const { onOpen, setItemMetadata } = useContext(FeedbackContext)
@@ -54,9 +53,9 @@ const HoldRequestErrorBanner = ({
       content={
         <Box>
           {HOLD_PAGE_CONTACT_PREFIXES?.[errorStatus] && (
-            <Text>
+            <Text noSpace mt="xs">
               {HOLD_PAGE_CONTACT_PREFIXES?.[errorStatus]}
-              {" Please try again, "}
+              {" Please "}
               <Button
                 id="hold-contact"
                 onClick={() =>
@@ -85,8 +84,7 @@ const HoldRequestErrorBanner = ({
               >
                 contact us
               </Button>{" "}
-              for assistance, or{" "}
-              <RCLink href="/search">start a new search.</RCLink>
+              for assistance.
             </Text>
           )}
           {(() => {

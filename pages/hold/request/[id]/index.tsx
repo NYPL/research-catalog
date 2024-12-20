@@ -69,10 +69,14 @@ export default function HoldRequestPage({
 
   const holdId = `${item.bibId}-${item.id}`
 
-  const [errorStatus, setErrorStatus] = useState(defaultErrorStatus)
-  const [patronEligibilityStatus, setPatronEligibilityStatus] = useState(
-    defaultEligibilityStatus
-  )
+  const [errorStatus, setErrorStatus] = useState("patronIneligible")
+  const [patronEligibilityStatus, setPatronEligibilityStatus] = useState({
+    expired: true,
+    moneyOwed: true,
+    ptypeDisallowsHolds: true,
+    reachedHoldLimit: true,
+    status: 401,
+  })
   const [formPosting, setFormPosting] = useState(false)
   const bannerContainerRef = useRef<HTMLDivElement>()
 
