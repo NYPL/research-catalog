@@ -20,6 +20,7 @@ import {
   validateEDDForm,
   initialEDDInvalidFields,
   isInvalidField,
+  holdButtonDisabledStatuses,
 } from "../../utils/holdPageUtils"
 import type {
   EDDRequestParams,
@@ -32,6 +33,7 @@ interface EDDRequestFormProps {
   handleSubmit: (eddParams: EDDRequestParams) => void
   setErrorStatus: (errorStatus: HoldErrorStatus) => void
   holdId: string
+  errorStatus?: HoldErrorStatus
 }
 
 /**
@@ -43,9 +45,15 @@ const EDDRequestForm = ({
   handleSubmit,
   setErrorStatus,
   holdId,
+  errorStatus,
 }: EDDRequestFormProps) => {
   // Set the invalid fields as an array in state to keep track of the first invalid field for focus on submit
   const [invalidFields, setInvalidFields] = useState(initialEDDInvalidFields)
+
+  // Disable the submit button for certain error statuses
+  const formDisabled = (["patronIneligible"] as HoldErrorStatus[]).includes(
+    errorStatus
+  )
 
   // Create refs for fields that require validation to focus on the first invalid field on submit
   const [validatedInputRefs] = useState(
@@ -261,7 +269,11 @@ const EDDRequestForm = ({
       </FormField>
       <CopyrightRestrictionsBanner />
       <ButtonGroup>
-        <Button id="edd-request-submit" type="submit">
+        <Button
+          id="edd-request-submit"
+          type="submit"
+          isDisabled={holdButtonDisabledStatuses.includes(errorStatus)}
+        >
           Submit request
         </Button>
       </ButtonGroup>
