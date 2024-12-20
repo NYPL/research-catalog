@@ -152,7 +152,7 @@ export const convertToSentenceCase = (str: string) =>
 export const convertCamelToShishKabobCase = (str: string) =>
   str
     // Change capital letters into "-{lowercase letter}"
-    .replace(/([A-Z])/g, (c, p1, i) => {
+    .replace(/([A-Z])/g, (capitalLetter, placeholderVar, index) => {
       // If capital letter is not first character, precede with '-':
-      return (i > 0 ? "-" : "") + c.toLowerCase()
+      return (index > 0 ? "-" : "") + capitalLetter.toLowerCase()
     })
