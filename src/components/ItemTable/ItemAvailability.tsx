@@ -40,18 +40,14 @@ const {
  * TODO: Add Feedback box, Due date, Available font styles
  */
 const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
-  if (item.availability.key === RECAP_GENERAL_COLLECTIONS) {
-    return (
-      <ExternalLink href={appConfig.urls.researchMaterialsHelp} fontSize="sm">
-        How do I pick up this item and when will it be ready?
-      </ExternalLink>
-    )
-  }
-
   let message
   switch (item.availability.key) {
     case RECAP_GENERAL_COLLECTIONS:
-      throw "This key doesn't have a message. This component should be returning earlier than this."
+      return (
+        <ExternalLink href={appConfig.urls.researchMaterialsHelp} fontSize="sm">
+          How do I pick up this item and when will it be ready?
+        </ExternalLink>
+      )
     case EDGE_CASE:
       message = <ContactALibrarian item={item} />
       break
