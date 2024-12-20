@@ -41,6 +41,12 @@ const {
  */
 const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
   let message
+  const itemMetadata = {
+    id: item.id,
+    barcode: item.barcode,
+    callNumber: item.callNumber,
+    bibId: item.bibId,
+  }
   switch (item.availability.key) {
     case RECAP_GENERAL_COLLECTIONS:
       return (
@@ -49,7 +55,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
         </ExternalLink>
       )
     case EDGE_CASE:
-      message = <ContactALibrarian item={item} />
+      message = <ContactALibrarian item={itemMetadata} />
       break
     case RECAP_AEON:
     case RECAP_AEON_FINDING_AID:
@@ -96,7 +102,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
       message = (
         <>
           <AvailableByAppointment displayPeriod />
-          <ContactALibrarian item={item} />
+          <ContactALibrarian item={itemMetadata} />
         </>
       )
       break
@@ -105,7 +111,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
         <>
           <AvailableByAppointment />
           <AvailableAtLink location={item.location} />
-          <ContactALibrarian item={item} />
+          <ContactALibrarian item={itemMetadata} />
         </>
       )
       break
@@ -113,7 +119,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
       message = <AvailableOnsite location={item.location} />
       break
     case NOT_AVAILABLE:
-      message = <NotAvailable item={item} />
+      message = <NotAvailable item={itemMetadata} dueDate={item.dueDate} />
       break
   }
 

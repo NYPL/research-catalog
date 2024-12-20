@@ -2,7 +2,18 @@ import { Box } from "@nypl/design-system-react-components"
 import ContactALibrarian from "./ContactALibrarian"
 import type Item from "../../../models/Item"
 
-const NotAvailable = ({ item }: { item: Item }) => {
+const NotAvailable = ({
+  item,
+  dueDate,
+}: {
+  dueDate: string
+  item: {
+    id: string
+    barcode: string
+    callNumber: string
+    bibId: string
+  }
+}) => {
   const itemMetadata = {
     id: item.id,
     barcode: item.barcode,
@@ -14,7 +25,7 @@ const NotAvailable = ({ item }: { item: Item }) => {
       <Box as="span" color="ui.warning.tertiary">
         Not available
       </Box>
-      {item.dueDate && ` - In use until ${item.dueDate}`}
+      {dueDate && ` - In use until ${dueDate}`}
       <ContactALibrarian item={itemMetadata} />
     </>
   )
