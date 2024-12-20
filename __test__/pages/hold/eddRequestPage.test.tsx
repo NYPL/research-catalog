@@ -27,7 +27,6 @@ jest.mock("../../../src/server/auth")
 jest.mock("../../../src/server/api/bib")
 jest.mock("../../../src/server/sierraClient")
 jest.mock("../../../src/server/api/hold")
-jest.mock("../../../pages/api/account/[id]")
 jest.mock("../../../src/models/MyAccount")
 
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
