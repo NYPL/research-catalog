@@ -79,15 +79,14 @@ const EDDRequestForm = ({
 
   const validateAndSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    const newValidatedFields = validateEDDForm(eddFormState, invalidFields)
 
     // Validate the form on submission in case the user hasn't typed in all the required fields
-    setInvalidFields((prevInvalidFields) =>
-      validateEDDForm(eddFormState, prevInvalidFields)
-    )
+    setInvalidFields(newValidatedFields)
 
     // Find the first invalid field and focus on it
-    const firstInvalidField = invalidFields.find(
-      (firstInvalidFieldKey) => firstInvalidFieldKey.isInvalid
+    const firstInvalidField = newValidatedFields.find(
+      (validatedFieldKey) => validatedFieldKey.isInvalid
     )
 
     // Prevent form submission and focus on first invalid field if there is one
