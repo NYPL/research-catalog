@@ -232,6 +232,7 @@ const SettingsSelectForm = ({
                   sx={{
                     width: { base: "80%", sm: "320px" },
                     marginLeft: { base: "m", lg: "unset" },
+                    marginTop: "-xxs",
                   }}
                   content="Please set a phone number or email address to choose a notification preference."
                 />
