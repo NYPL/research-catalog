@@ -46,7 +46,7 @@ describe("ItemAvailability", () => {
         isSpecRequestable: true,
       })
       render(<ItemAvailability item={item} />)
-      expect(screen.getByText("Available by appointment")).toBeInTheDocument()
+      expect(screen.getByText("Available by appointment.")).toBeInTheDocument()
       expect(screen.queryByRole("link")).not.toBeInTheDocument()
       expect(
         screen.queryByText("Schwarzman Building - Main Reading Room 315")
@@ -62,7 +62,7 @@ describe("ItemAvailability", () => {
         isSpecRequestable: true,
       })
       render(<ItemAvailability item={item} />)
-      expect(screen.getByText("Available by appointment")).toBeInTheDocument()
+      expect(screen.getByText("Available by appointment.")).toBeInTheDocument()
       expect(screen.queryByRole("link")).not.toBeInTheDocument()
       expect(
         screen.queryByText("Schwarzman Building - Main Reading Room 315")
@@ -81,7 +81,7 @@ describe("ItemAvailability", () => {
       expect(screen.getByText("Available by appointment")).toBeInTheDocument()
       expect(screen.queryByRole("link")).not.toBeInTheDocument()
       expect(
-        screen.getByText("at Schwarzman Building - Main Reading Room 315")
+        screen.getByText("at Schwarzman Building - Main Reading Room 315.")
       ).toBeInTheDocument()
     })
     it("onsite NO aeon YES finding aid", () => {
@@ -113,7 +113,7 @@ describe("ItemAvailability", () => {
         isSpecRequestable: true,
       })
       render(<ItemAvailability item={item} />)
-      expect(screen.getByText("Available by appointment")).toBeInTheDocument()
+      expect(screen.getByText("Available by appointment.")).toBeInTheDocument()
       expect(screen.queryByRole("link")).toHaveTextContent("finding aid")
       expect(
         screen.queryByText("Schwarzman Building - Main Reading Room 315", {
@@ -131,7 +131,7 @@ describe("ItemAvailability", () => {
         isSpecRequestable: true,
       })
       render(<ItemAvailability item={item} />)
-      expect(screen.getByText("Available by appointment")).toBeInTheDocument()
+      expect(screen.getByText("Available by appointment.")).toBeInTheDocument()
       expect(screen.queryByRole("link")).not.toBeInTheDocument()
       expect(
         screen.queryByText("Schwarzman Building - Main Reading Room 315", {
@@ -155,7 +155,7 @@ describe("ItemAvailability", () => {
         "Schwarzman Building - Main Reading Room 315"
       )
       expect(
-        screen.queryByText("Schwarzman Building - Main Reading Room 315", {
+        screen.queryByText("Schwarzman Building - Main Reading Room 315.", {
           exact: false,
         })
       ).toBeInTheDocument()

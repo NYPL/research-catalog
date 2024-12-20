@@ -57,7 +57,11 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
       break
     case RECAP_AEON:
     case RECAP_AEON_FINDING_AID:
-      message = <AvailableByAppointment />
+      message = (
+        <>
+          <AvailableByAppointment displayPeriod />
+        </>
+      )
       break
     case ONSITE_AEON_FINDING_AID:
       message = (
@@ -87,7 +91,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
     case RECAP_FINDING_AID:
       message = (
         <>
-          <AvailableByAppointment />
+          <AvailableByAppointment displayPeriod />
           <FindingAid url={item.availability.findingAid} />
         </>
       )
@@ -95,7 +99,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
     case RECAP_NO_FINDING_AID_NO_AEON:
       message = (
         <>
-          <AvailableByAppointment />
+          <AvailableByAppointment displayPeriod />
           <ContactALibrarian item={item} />
         </>
       )
