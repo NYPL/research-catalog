@@ -82,7 +82,7 @@ export default class Item {
       .includes("all")
   }
 
-  get holdRequestSource(): string {
+  get formattedSourceForHoldRequest(): string {
     return convertCamelToShishKabobCase(this.source)
   }
 

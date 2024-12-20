@@ -106,7 +106,7 @@ describe("Item model", () => {
     })
 
     it("returns the source in kebabcase for use in hold requests", () => {
-      expect(item.holdRequestSource).toBe("sierra-nypl")
+      expect(item.formattedSourceForHoldRequest).toBe("sierra-nypl")
     })
   })
 

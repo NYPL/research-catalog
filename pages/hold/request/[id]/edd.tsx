@@ -74,7 +74,7 @@ export default function EDDRequestPage({
   const [eddFormState, setEddFormState] = useState({
     ...initialEDDFormState,
     patronId,
-    source: item.holdRequestSource,
+    source: item.formattedSourceForHoldRequest,
   })
   const [formPosting, setFormPosting] = useState(false)
 
