@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added fetchPatronEligibility server function that requests a patron's hold request eligibility status from Discovery API (SCC-3762)
 - Added patron ineligibility error messaging to HoldRequestErrorBanner component (SCC-3762)
 - Added eligibility checks to EDD and on-site request hold pages and API routes (SCC-3762)
+- Added email address field prepopulation on EDD Request form (SCC-4407)
 
 ### Updated
 
