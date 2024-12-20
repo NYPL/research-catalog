@@ -50,11 +50,6 @@ const EDDRequestForm = ({
   // Set the invalid fields as an array in state to keep track of the first invalid field for focus on submit
   const [invalidFields, setInvalidFields] = useState(initialEDDInvalidFields)
 
-  // Disable the submit button for certain error statuses
-  const formDisabled = (["patronIneligible"] as HoldErrorStatus[]).includes(
-    errorStatus
-  )
-
   // Create refs for fields that require validation to focus on the first invalid field on submit
   const [validatedInputRefs] = useState(
     invalidFields.reduce((acc, field) => {
