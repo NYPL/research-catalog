@@ -7,6 +7,8 @@ import {
   SkeletonLoader,
 } from "@nypl/design-system-react-components"
 
+import sierraClient from "../../../../src/server/sierraClient"
+
 import Layout from "../../../../src/components/Layout/Layout"
 import EDDRequestForm from "../../../../src/components/HoldPages/EDDRequestForm"
 import HoldRequestErrorBanner from "../../../../src/components/HoldPages/HoldRequestErrorBanner"
@@ -16,7 +18,8 @@ import { SITE_NAME, BASE_URL, PATHS } from "../../../../src/config/constants"
 import useLoading from "../../../../src/hooks/useLoading"
 
 import { fetchBib } from "../../../../src/server/api/bib"
-import { getPatronData } from "../../../../pages/api/account/[id]"
+import MyAccount from "../../../../src/models/MyAccount"
+
 import {
   fetchDeliveryLocations,
   fetchPatronEligibility,
@@ -254,8 +257,10 @@ export async function getServerSideProps({ params, req, res }) {
     const patronEligibilityStatus = await fetchPatronEligibility(patronId)
 
     // fetch patron's email to pre-populate the edd form if available
-    const patronData = await getPatronData(patronId)
-    const patronEmail = patronData?.patron?.emails?.[0]
+    const client = await sierraClient()
+    const patronAccount = new MyAccount(client, patronId)
+    const patron = await patronAccount.getPatron()
+    const patronEmail = patron?.emails?.[0]
 
     const locationOrEligibilityFetchFailed =
       locationStatus !== 200 ||
