@@ -1,17 +1,15 @@
-import { useContext } from "react"
-import { Text, Box, Banner, Button } from "@nypl/design-system-react-components"
+import { Text, Box, Banner } from "@nypl/design-system-react-components"
 
 import type {
   HoldErrorStatus,
   PatronEligibilityStatus,
 } from "../../types/holdPageTypes"
-import { FeedbackContext } from "../../context/FeedbackContext"
-import type { ItemMetadata } from "../../types/itemTypes"
+
 import type Item from "../../models/Item"
-import RCLink from "../Links/RCLink/RCLink"
+
 import PatronIneligibilityErrors from "./PatronIneligibilityErrors"
+import { HoldContactButton } from "./HoldContactButton"
 import {
-  PATHS,
   HOLD_PAGE_ERROR_HEADINGS,
   HOLD_PAGE_CONTACT_PREFIXES,
 } from "../../config/constants"
@@ -28,16 +26,9 @@ interface HoldRequestErrorBannerProps {
  */
 const HoldRequestErrorBanner = ({
   item,
-  errorStatus = "failed",
+  errorStatus = "patronIneligible",
   patronEligibilityStatus,
 }: HoldRequestErrorBannerProps) => {
-  const { onOpen, setItemMetadata } = useContext(FeedbackContext)
-
-  const onContact = (metadata: ItemMetadata) => {
-    setItemMetadata(metadata)
-    onOpen()
-  }
-
   return (
     <Banner
       type="negative"
@@ -54,39 +45,11 @@ const HoldRequestErrorBanner = ({
       content={
         <Box>
           {HOLD_PAGE_CONTACT_PREFIXES?.[errorStatus] && (
-            <Text>
+            <Text noSpace mt="xs">
               {HOLD_PAGE_CONTACT_PREFIXES?.[errorStatus]}
-              {" Please try again, "}
-              <Button
-                id="hold-contact"
-                onClick={() =>
-                  onContact({
-                    id: item.id,
-                    barcode: item.barcode,
-                    callNumber: item.callNumber,
-                    bibId: item.bibId,
-                    notificationText: `Request failed for call number ${item.callNumber}`,
-                  })
-                }
-                buttonType="link"
-                // TODO: Ask DS team to make button link variant match the default link styles
-                sx={{
-                  display: "inline",
-                  fontWeight: "inherit",
-                  fontSize: "inherit",
-                  p: 0,
-                  height: "auto",
-                  textAlign: "left",
-                  minHeight: "auto",
-                  textDecorationStyle: "dotted",
-                  textDecorationThickness: "1px",
-                  textUnderlineOffset: "2px",
-                }}
-              >
-                contact us
-              </Button>{" "}
-              for assistance, or{" "}
-              <RCLink href="/search">start a new search.</RCLink>
+              {" Please "}
+              <HoldContactButton item={item}>contact us</HoldContactButton> for
+              assistance.
             </Text>
           )}
           {(() => {
@@ -97,6 +60,7 @@ const HoldRequestErrorBanner = ({
                 return patronEligibilityStatus ? (
                   <PatronIneligibilityErrors
                     patronEligibilityStatus={patronEligibilityStatus}
+                    item={item}
                   />
                 ) : null
               default:

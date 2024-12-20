@@ -179,6 +179,7 @@ export default function EDDRequestPage({
             setEddFormState={setEddFormState}
             handleSubmit={postEDDRequest}
             setErrorStatus={setErrorStatus}
+            errorStatus={errorStatus}
             holdId={holdId}
           />
         ) : null}
