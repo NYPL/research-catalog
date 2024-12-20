@@ -340,12 +340,6 @@ describe("Hold Request page", () => {
       ).toBeInTheDocument()
 
       expect(
-        screen.getByText("This is because:", {
-          exact: false,
-        })
-      ).toBeInTheDocument()
-
-      expect(
         screen.getByText("Your account has expired", {
           exact: false,
         })
@@ -371,6 +365,8 @@ describe("Hold Request page", () => {
           exact: false,
         })
       ).toBeInTheDocument()
+
+      expect(screen.getByText("Submit request")).toBeDisabled()
     })
   })
 })

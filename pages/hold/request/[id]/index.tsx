@@ -181,6 +181,7 @@ export default function HoldRequestPage({
               holdId={holdId}
               patronId={patronId}
               source={item.source}
+              errorStatus={errorStatus}
             />
           </>
         ) : null}
