@@ -28,36 +28,35 @@ const PatronIneligibilityErrors = ({
 
   return (
     <Box mt="xs">
-      <Text mb="xs">This is because:</Text>
       <List type="ul" margin={0}>
         {expired ? (
-          <>
+          <li>
             Your account has expired -- Please see{" "}
             <ExternalLink href={appConfig.urls.renewCard}>
               Library Terms and Conditions -- Renewing or Validating Your
               Library Card
             </ExternalLink>{" "}
             about renewing your card.
-          </>
+          </li>
         ) : (
           <></>
         )}
         {moneyOwed ? (
-          <>
+          <li>
             Your fines have exceeded the limit — you can pay your fines in a
             branch or online from the links under{" "}
             <RCLink href={PATHS.MY_ACCOUNT}>My Account</RCLink>.
-          </>
+          </li>
         ) : (
           <></>
         )}
         {ptypeDisallowsHolds ? (
-          "Your card does not permit placing holds on ReCAP materials."
+          <li>Your card does not permit placing holds on ReCAP materials.</li>
         ) : (
           <></>
         )}
         {reachedHoldLimit ? (
-          "You have reached the allowed number of holds."
+          <li>You have reached the allowed number of holds.</li>
         ) : (
           <></>
         )}
