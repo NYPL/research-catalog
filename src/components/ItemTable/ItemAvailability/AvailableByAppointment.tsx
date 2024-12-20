@@ -1,4 +1,4 @@
-import { Box } from "@nypl/design-system-react-components"
+import { Box, Text } from "@nypl/design-system-react-components"
 import { appConfig } from "../../../config/config"
 import ExternalLink from "../../Links/ExternalLink/ExternalLink"
 
@@ -26,7 +26,7 @@ const AvailableAtLink = ({ location }) => {
 
 const AvailableAt = ({ location }) => {
   if (!location?.endpoint) return null
-  else return ` at ${location.prefLabel}. `
+  else return <Text>` at ${location.prefLabel}. `</Text>
 }
 
 export { AvailableByAppointment, AvailableAtLink, AvailableAt }
