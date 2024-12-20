@@ -138,7 +138,6 @@ const EDDRequestForm = ({
           name="emailAddress"
           value={eddFormState.emailAddress}
           labelText={EDD_FORM_FIELD_COPY.emailAddress.label}
-          isRequired
           placeholder={EDD_FORM_FIELD_COPY.emailAddress.placeholder}
           helperText={EDD_FORM_FIELD_COPY.emailAddress.helperText}
           invalidText={EDD_FORM_FIELD_COPY.emailAddress.invalidText}
@@ -157,7 +156,6 @@ const EDDRequestForm = ({
             name="startPage"
             value={eddFormState.startPage}
             labelText={EDD_FORM_FIELD_COPY.startPage.label}
-            isRequired
             placeholder={EDD_FORM_FIELD_COPY.startPage.placeholder}
             helperText={EDD_FORM_FIELD_COPY.startPage.helperText}
             invalidText={EDD_FORM_FIELD_COPY.startPage.invalidText}
@@ -173,7 +171,6 @@ const EDDRequestForm = ({
             name="endPage"
             value={eddFormState.endPage}
             labelText={EDD_FORM_FIELD_COPY.endPage.label}
-            isRequired
             placeholder={EDD_FORM_FIELD_COPY.endPage.placeholder}
             helperText={EDD_FORM_FIELD_COPY.endPage.helperText}
             invalidText={EDD_FORM_FIELD_COPY.endPage.invalidText}
@@ -190,7 +187,6 @@ const EDDRequestForm = ({
           name="chapterTitle"
           value={eddFormState.chapterTitle}
           labelText={EDD_FORM_FIELD_COPY.chapterTitle.label}
-          isRequired
           placeholder={EDD_FORM_FIELD_COPY.chapterTitle.placeholder}
           helperText={EDD_FORM_FIELD_COPY.chapterTitle.helperText}
           invalidText={EDD_FORM_FIELD_COPY.chapterTitle.invalidText}
