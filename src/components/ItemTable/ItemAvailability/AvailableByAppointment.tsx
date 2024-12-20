@@ -26,7 +26,7 @@ const AvailableAtLink = ({ location }) => {
 
 const AvailableAt = ({ location }) => {
   if (!location?.endpoint) return null
-  else return <Text>` at ${location.prefLabel}. `</Text>
+  else return <> {` at ${location.prefLabel}. `}</>
 }
 
 export { AvailableByAppointment, AvailableAtLink, AvailableAt }
