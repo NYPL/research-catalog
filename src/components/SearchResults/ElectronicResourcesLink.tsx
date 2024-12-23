@@ -19,7 +19,7 @@ const ElectronicResourcesLink = ({
   return (
     <Box mt="xs" data-testid="electronic-resources-link">
       <Text
-        mb="xxs"
+        mb="xs"
         fontSize={{ base: "mobile.body.body1", md: "desktop.body.body1" }}
         fontWeight="bold"
       >
