@@ -93,4 +93,6 @@ export const appConfig: AppConfig = {
   },
   sourceEmail: process.env.SOURCE_EMAIL,
   libAnswersEmail: process.env.LIB_ANSWERS_EMAIL,
+  requireAnAppointmentUrl:
+    "https://libguides.nypl.org/c.php?g=1184379&p=9157736",
 }

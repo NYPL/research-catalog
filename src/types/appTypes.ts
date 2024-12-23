@@ -9,6 +9,7 @@ export interface AppConfig {
   features: Record<string, Features>
   sourceEmail: string
   libAnswersEmail: string
+  requireAnAppointmentUrl: string
 }
 export interface APIEndpoints {
   development: string

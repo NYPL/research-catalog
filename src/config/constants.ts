@@ -1,5 +1,4 @@
 import { appConfig } from "./config"
-import type { DeliveryLocation, NYPLocationKey } from "../types/locationTypes"
 
 export const BASE_URL = "/research/research-catalog"
 export const SITE_NAME = "Research Catalog | NYPL"

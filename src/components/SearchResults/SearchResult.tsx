@@ -14,7 +14,7 @@ import ElectronicResourcesLink from "./ElectronicResourcesLink"
 import ItemTable from "../ItemTable/ItemTable"
 import type SearchResultsBib from "../../models/SearchResultsBib"
 import { PATHS } from "../../config/constants"
-import FindingAid from "../BibPage/FindingAid"
+import FindingAid from "./FindingAid"
 
 interface SearchResultProps {
   bib: SearchResultsBib

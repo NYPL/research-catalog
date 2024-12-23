@@ -17,7 +17,7 @@ const ElectronicResourcesLink = ({
   electronicResources,
 }: ElectronicResourcesLinkProps) => {
   return (
-    <Box mt="s" data-testid="electronic-resources-link">
+    <Box mt="xs" data-testid="electronic-resources-link">
       <Text
         mb="xxs"
         fontSize={{ base: "mobile.body.body1", md: "desktop.body.body1" }}
