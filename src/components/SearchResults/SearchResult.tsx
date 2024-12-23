@@ -7,7 +7,6 @@ import {
   CardActions,
   SimpleGrid,
   StatusBadge,
-  Spacer,
 } from "@nypl/design-system-react-components"
 
 import RCLink from "../Links/RCLink/RCLink"
@@ -15,6 +14,7 @@ import ElectronicResourcesLink from "./ElectronicResourcesLink"
 import ItemTable from "../ItemTable/ItemTable"
 import type SearchResultsBib from "../../models/SearchResultsBib"
 import { PATHS } from "../../config/constants"
+import FindingAid from "../BibPage/FindingAid"
 
 interface SearchResultProps {
   bib: SearchResultsBib
@@ -63,6 +63,7 @@ const SearchResult = ({ bib }: SearchResultProps) => {
         </Box>
 
         <SimpleGrid columns={1} gap="grid.l">
+          {bib.findingAid && <FindingAid url={bib.findingAid} />}
           {bib.hasElectronicResources && (
             <ElectronicResourcesLink
               bibUrl={bib.url}
