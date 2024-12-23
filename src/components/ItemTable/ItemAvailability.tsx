@@ -110,7 +110,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
       message = (
         <>
           <AvailableByAppointment />
-          <AvailableAtLink location={item.location} />
+          <AvailableAt location={item.location} />
           <ContactALibrarian item={itemMetadata} />
         </>
       )
