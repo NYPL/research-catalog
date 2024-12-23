@@ -1,6 +1,7 @@
 import type {
   EDDRequestParams,
   EDDFormValidatedField,
+  HoldErrorStatus,
 } from "../types/holdPageTypes"
 
 import { EMAIL_REGEX } from "../config/constants"
@@ -27,6 +28,11 @@ export const initialEDDInvalidFields: EDDFormValidatedField[] = [
   { key: "startPage", isInvalid: false },
   { key: "endPage", isInvalid: false },
   { key: "chapterTitle", isInvalid: false },
+]
+
+// Disable the submit button on both hold request forms for the following statuses
+export const holdButtonDisabledStatuses: HoldErrorStatus[] = [
+  "patronIneligible",
 ]
 
 // Gets updated invalidFields to set them in state based on the inputted field name and value

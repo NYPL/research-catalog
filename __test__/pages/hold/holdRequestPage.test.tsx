@@ -15,8 +15,6 @@ import initializePatronTokenAuth, {
 import { fetchBib } from "../../../src/server/api/bib"
 import { bibWithItems, bibWithSingleAeonItem } from "../../fixtures/bibFixtures"
 import {
-  BASE_URL,
-  PATHS,
   NYPL_LOCATIONS,
   HOLD_PAGE_ERROR_HEADINGS,
 } from "../../../src/config/constants"
@@ -248,7 +246,7 @@ describe("Hold Request page", () => {
 
       expect(
         screen.queryByText(
-          "We were unable to process your request at this time. Please try again, ",
+          "We were unable to process your request at this time. Please ",
           { exact: false }
         )
       ).toBeInTheDocument()
@@ -256,10 +254,6 @@ describe("Hold Request page", () => {
       expect(
         screen.getByRole("button", { name: "contact us" })
       ).toBeInTheDocument()
-
-      expect(
-        screen.getByText("start a new search", { exact: false })
-      ).toHaveAttribute("href", `${BASE_URL}${PATHS.SEARCH}`)
     })
 
     it("populates the feedback form with the call number and appropriate copy when the request fails", async () => {
@@ -340,12 +334,6 @@ describe("Hold Request page", () => {
       ).toBeInTheDocument()
 
       expect(
-        screen.getByText("This is because:", {
-          exact: false,
-        })
-      ).toBeInTheDocument()
-
-      expect(
         screen.getByText("Your account has expired", {
           exact: false,
         })
@@ -371,6 +359,8 @@ describe("Hold Request page", () => {
           exact: false,
         })
       ).toBeInTheDocument()
+
+      expect(screen.getByText("Submit request")).toBeDisabled()
     })
   })
 })

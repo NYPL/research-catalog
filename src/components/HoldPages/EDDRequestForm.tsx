@@ -20,6 +20,7 @@ import {
   validateEDDForm,
   initialEDDInvalidFields,
   isInvalidField,
+  holdButtonDisabledStatuses,
 } from "../../utils/holdPageUtils"
 import type {
   EDDRequestParams,
@@ -32,6 +33,7 @@ interface EDDRequestFormProps {
   handleSubmit: (eddParams: EDDRequestParams) => void
   setErrorStatus: (errorStatus: HoldErrorStatus) => void
   holdId: string
+  errorStatus?: HoldErrorStatus
 }
 
 /**
@@ -43,6 +45,7 @@ const EDDRequestForm = ({
   handleSubmit,
   setErrorStatus,
   holdId,
+  errorStatus,
 }: EDDRequestFormProps) => {
   // Set the invalid fields as an array in state to keep track of the first invalid field for focus on submit
   const [invalidFields, setInvalidFields] = useState(initialEDDInvalidFields)
@@ -76,15 +79,14 @@ const EDDRequestForm = ({
 
   const validateAndSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    const newValidatedFields = validateEDDForm(eddFormState, invalidFields)
 
     // Validate the form on submission in case the user hasn't typed in all the required fields
-    setInvalidFields((prevInvalidFields) =>
-      validateEDDForm(eddFormState, prevInvalidFields)
-    )
+    setInvalidFields(newValidatedFields)
 
     // Find the first invalid field and focus on it
-    const firstInvalidField = invalidFields.find(
-      (firstInvalidFieldKey) => firstInvalidFieldKey.isInvalid
+    const firstInvalidField = newValidatedFields.find(
+      (validatedFieldKey) => validatedFieldKey.isInvalid
     )
 
     // Prevent form submission and focus on first invalid field if there is one
@@ -121,7 +123,7 @@ const EDDRequestForm = ({
         value={eddFormState.source}
       />
       <Box>
-        <Heading level="h3" size="heading4" mb="m">
+        <Heading level="h3" size="heading4" mb="xs">
           Required information
         </Heading>
         <Text noSpace>
@@ -138,7 +140,6 @@ const EDDRequestForm = ({
           name="emailAddress"
           value={eddFormState.emailAddress}
           labelText={EDD_FORM_FIELD_COPY.emailAddress.label}
-          isRequired
           placeholder={EDD_FORM_FIELD_COPY.emailAddress.placeholder}
           helperText={EDD_FORM_FIELD_COPY.emailAddress.helperText}
           invalidText={EDD_FORM_FIELD_COPY.emailAddress.invalidText}
@@ -157,7 +158,6 @@ const EDDRequestForm = ({
             name="startPage"
             value={eddFormState.startPage}
             labelText={EDD_FORM_FIELD_COPY.startPage.label}
-            isRequired
             placeholder={EDD_FORM_FIELD_COPY.startPage.placeholder}
             helperText={EDD_FORM_FIELD_COPY.startPage.helperText}
             invalidText={EDD_FORM_FIELD_COPY.startPage.invalidText}
@@ -173,7 +173,6 @@ const EDDRequestForm = ({
             name="endPage"
             value={eddFormState.endPage}
             labelText={EDD_FORM_FIELD_COPY.endPage.label}
-            isRequired
             placeholder={EDD_FORM_FIELD_COPY.endPage.placeholder}
             helperText={EDD_FORM_FIELD_COPY.endPage.helperText}
             invalidText={EDD_FORM_FIELD_COPY.endPage.invalidText}
@@ -184,13 +183,12 @@ const EDDRequestForm = ({
           />
         </FormField>
       </FormRow>
-      <FormField>
+      <FormField mb="xs">
         <TextInput
           id="chapterTitle"
           name="chapterTitle"
           value={eddFormState.chapterTitle}
           labelText={EDD_FORM_FIELD_COPY.chapterTitle.label}
-          isRequired
           placeholder={EDD_FORM_FIELD_COPY.chapterTitle.placeholder}
           helperText={EDD_FORM_FIELD_COPY.chapterTitle.helperText}
           invalidText={EDD_FORM_FIELD_COPY.chapterTitle.invalidText}
@@ -251,7 +249,7 @@ const EDDRequestForm = ({
           />
         </FormField>
       </FormRow>
-      <FormField>
+      <FormField mb="xs">
         <TextInput
           id="requestNotes"
           name="requestNotes"
@@ -265,7 +263,11 @@ const EDDRequestForm = ({
       </FormField>
       <CopyrightRestrictionsBanner />
       <ButtonGroup>
-        <Button id="edd-request-submit" type="submit">
+        <Button
+          id="edd-request-submit"
+          type="submit"
+          isDisabled={holdButtonDisabledStatuses.includes(errorStatus)}
+        >
           Submit request
         </Button>
       </ButtonGroup>
