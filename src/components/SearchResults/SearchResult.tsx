@@ -7,6 +7,7 @@ import {
   CardActions,
   SimpleGrid,
   StatusBadge,
+  Spacer,
 } from "@nypl/design-system-react-components"
 
 import RCLink from "../Links/RCLink/RCLink"
@@ -26,6 +27,7 @@ const SearchResult = ({ bib }: SearchResultProps) => {
   return (
     <Card
       sx={{
+        width: "fit-content",
         borderBottom: "1px solid var(--nypl-colors-ui-border-default)",
         paddingBottom: "l",
       }}
@@ -34,15 +36,19 @@ const SearchResult = ({ bib }: SearchResultProps) => {
         level="h3"
         size="heading5"
         sx={{ a: { textDecoration: "none" } }}
-        display="flex"
-        alignItems="baseline"
       >
-        <RCLink href={`${PATHS.BIB}/${bib.id}`}>{bib.titleDisplay}</RCLink>
         {bib.findingAid && (
-          <StatusBadge id={`${bib.id}-has-finding-aid`} type="informative">
+          <StatusBadge
+            id={`${bib.id}-has-finding-aid`}
+            type="informative"
+            mb="s"
+          >
             FINDING AID AVAILABLE
           </StatusBadge>
         )}
+        <RCLink flexShrink="2" href={`${PATHS.BIB}/${bib.id}`}>
+          {bib.titleDisplay}
+        </RCLink>
       </CardHeading>
       <CardContent>
         <Box
