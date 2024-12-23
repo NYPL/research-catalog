@@ -36,10 +36,7 @@ export default class Bib {
     this.id = result["@id"] ? result["@id"].substring(4) : ""
     this.title = result.title?.[0] || result.titleDisplay?.[0] || "[Untitled]"
     this.titleDisplay = this.getTitleDisplayFromResult(result)
-    this.electronicResources =
-      result.electronicResources.filter(
-        (resource) => resource.prefLabel.toLocaleLowerCase() !== "finding aid"
-      ) || null
+    this.electronicResources = result.electronicResources || null
     this.numPhysicalItems = result.numItemsTotal || 0
     this.numItemsMatched = result.numItemsMatched || 0
     this.materialType =

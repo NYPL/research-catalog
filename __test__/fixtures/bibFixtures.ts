@@ -1,3 +1,1468 @@
+export const bibWithElectronicResourcesAndFindingAid = {
+  "@context":
+    "http://discovery-api-production.nypl.org/api/v0.1/discovery/context_all.jsonld",
+  "@type": ["nypl:Item", "nypl:Resource"],
+  "@id": "res:b15893398",
+  buildingLocationIds: ["ma", "rc"],
+  carrierType: [
+    {
+      "@id": "carriertypes:nc",
+      prefLabel: "volume",
+    },
+  ],
+  contributorLiteral: [
+    "Ainger, Alfred, 1837-1904.",
+    "Barham, R. H. Dalton (Richard Harris Dalton), 1815-1886.",
+    "Bentley, George, 1828-1895.",
+    "Bentley, Richard, 1794-1871.",
+    "Brookfield, William Henry, 1809-1874.",
+    "Browne, Hablot Knight, 1815-1882.",
+    "Browning, Robert, 1812-1889.",
+    "Cattermole, George, 1800-1868.",
+    "Cerjat, William F. De.",
+    "Collins, Wilkie, 1824-1889.",
+    "Cruikshank, George, 1792-1878.",
+    "Cunningham, Peter, 1816-1869.",
+    "Dickens, Charles, 1837-1896.",
+    "Dickens, Frederick William, 1820-1868.",
+    "Dickens, Henry F. (Henry Fielding), Sir, 1849-1933.",
+    "Dolby, George, -1900.",
+    "Felton, C. C. (Cornelius Conway), 1807-1862.",
+    "Fields, James Thomas, 1817-1881.",
+    "Gaskell, Elizabeth Cleghorn, 1810-1865.",
+    "Hogarth, Georgina, 1827-1917.",
+    "Hunt, Leigh, 1784-1859.",
+    "Irving, Washington, 1783-1859.",
+    "Kelly, Frances Maria, 1790-1882.",
+    "Kitton, Frederic George, 1856-1904.",
+    "Landor, Walter Savage, 1775-1864.",
+    "La Rue, Emile de.",
+    "Leech, John, 1817-1864.",
+    "Lemon, Mark, 1809-1870.",
+    "Lewes, George Henry, 1817-1878.",
+    "Mackay, Charles, 1814-1889.",
+    "Maclise, Daniel, 1806-1870.",
+    "Macmillan, Alexander, 1818-1896.",
+    "Mitton, Thomas.",
+    "Morgan, E. S.",
+    "Nabokov, Vladimir Vladimirovich, 1899-1977.",
+    "Pailthorpe, F. W. (Frederic W.)",
+    "Poe, Edgar Allan, 1809-1849.",
+    "Roberts, David, 1896-1864.",
+    "Rossetti, William Michael, 1829-1919.",
+    "Stanfield, Clarkson, 1793-1867.",
+    "Talfourd, Thomas Noon, 1795-1854.",
+    "Tennent, James Emerson, Sir, 1804-1869.",
+    "Thackeray, William Makepeace, 1811-1863.",
+    "Trollope, Frances Milton, 1780-1863.",
+    "Trollope, Thomas Adolphus, 1810-1892.",
+    "Wills, W. Henry (William Henry), 1810-1880.",
+    "A. P. Watt and Son.",
+    "Chapman and Hall.",
+  ],
+  createdString: ["1833"],
+  createdYear: 1833,
+  creatorLiteral: ["Dickens, Charles, 1812-1870."],
+  dateEndString: ["1975"],
+  dateEndYear: 1975,
+  dateStartYear: 1833,
+  dateString: ["1833"],
+  description: [
+    "This is a synthetic collection consisting of manuscripts, typescripts, correspondence, diaires for 1867 and 1868, notebooks for 1843 through 1870, financial and legal documents, portraits and pictorial works.",
+  ],
+  electronicResources: [
+    {
+      url: "https://digitalcollections.nypl.org/search/index?keywords=b15893398",
+      prefLabel: "NYPL Digital Collections",
+    },
+  ],
+  extent: ["1,179 items."],
+  genreForm: ["Correspondence.", "Diaries.", "Notebooks."],
+  idOclc: ["NYPW04-A49"],
+  identifier: [
+    {
+      "@type": "bf:ShelfMark",
+      "@value": "Berg Coll MSS Dickens",
+    },
+    {
+      "@type": "nypl:Bnumber",
+      "@value": "15893398",
+    },
+    {
+      "@type": "nypl:Oclc",
+      "@value": "NYPW04-A49",
+    },
+    {
+      "@type": "bf:Identifier",
+      "@value": "(WaOLN)W110000007",
+    },
+  ],
+  issuance: [
+    {
+      "@id": "urn:biblevel:d",
+      prefLabel: "subunit",
+    },
+  ],
+  itemAggregations: [
+    {
+      "@type": "nypl:Aggregation",
+      "@id": "res:location",
+      id: "location",
+      field: "location",
+      values: [
+        {
+          value: "loc:rcmi2",
+          count: 18,
+          label: "Offsite",
+        },
+        {
+          value: "loc:maee2",
+          count: 1,
+          label: "Schwarzman Building - Berg Collection Room 320",
+        },
+      ],
+    },
+    {
+      "@type": "nypl:Aggregation",
+      "@id": "res:format",
+      id: "format",
+      field: "format",
+      values: [
+        {
+          value: "Mixed material",
+          count: 19,
+          label: "Mixed material",
+        },
+      ],
+    },
+    {
+      "@type": "nypl:Aggregation",
+      "@id": "res:status",
+      id: "status",
+      field: "status",
+      values: [
+        {
+          value: "status:a",
+          count: 70,
+          label: "Available",
+        },
+      ],
+    },
+  ],
+  items: [
+    {
+      "@id": "res:i14675897",
+      "@type": ["bf:Item"],
+      accessMessage: [
+        {
+          "@id": "accessMessage:p",
+          prefLabel: "Permit needed",
+        },
+      ],
+      catalogItemType: [
+        {
+          "@id": "catalogItemType:20",
+          prefLabel: "manuscript",
+        },
+      ],
+      eddRequestable: false,
+      formatLiteral: ["Mixed material"],
+      holdingLocation: [
+        {
+          "@id": "loc:maee2",
+          prefLabel: "Schwarzman Building - Berg Collection Room 320",
+        },
+      ],
+      identifier: [
+        {
+          "@type": "bf:ShelfMark",
+          "@value": "Berg Coll MSS Dickens [Text]",
+        },
+      ],
+      owner: [
+        {
+          "@id": "orgs:1104",
+          prefLabel:
+            "Henry W. and Albert A. Berg Collection of English and American Literature",
+        },
+      ],
+      physRequestable: false,
+      physicalLocation: ["Berg Coll MSS Dickens [Text]"],
+      requestable: [false],
+      shelfMark: ["Berg Coll MSS Dickens [Text]"],
+      specRequestable: false,
+      status: [
+        {
+          "@id": "status:a",
+          prefLabel: "Available",
+        },
+      ],
+      uri: "i14675897",
+      idNyplSourceId: {
+        "@type": "SierraNypl",
+        "@value": "14675897",
+      },
+    },
+    {
+      "@id": "res:i24178092",
+      "@type": ["bf:Item"],
+      accessMessage: [
+        {
+          "@id": "accessMessage:2",
+          prefLabel: "Request in advance",
+        },
+      ],
+      catalogItemType: [
+        {
+          "@id": "catalogItemType:6",
+          prefLabel: "microfilm service copy",
+        },
+      ],
+      eddFulfillment: {
+        "@id": "fulfillment:recap-edd",
+      },
+      eddRequestable: true,
+      enumerationChronology: ["Box 18"],
+      formatLiteral: ["Mixed material"],
+      holdingLocation: [
+        {
+          "@id": "loc:rcmi2",
+          prefLabel: "Offsite",
+        },
+      ],
+      idBarcode: ["33433075111835"],
+      identifier: [
+        {
+          "@type": "bf:ShelfMark",
+          "@value": "*Z-10344 Box 18",
+        },
+        {
+          "@type": "bf:Barcode",
+          "@value": "33433075111835",
+        },
+      ],
+      owner: [
+        {
+          "@id": "orgs:1000",
+          prefLabel: "Stephen A. Schwarzman Building",
+        },
+      ],
+      physFulfillment: {
+        "@id": "fulfillment:recap-offsite",
+      },
+      physRequestable: true,
+      physicalLocation: ["*Z-10344"],
+      recapCustomerCode: ["NA"],
+      requestable: [true],
+      shelfMark: ["*Z-10344 Box 18"],
+      specRequestable: false,
+      status: [
+        {
+          "@id": "status:a",
+          prefLabel: "Available",
+        },
+      ],
+      uri: "i24178092",
+      idNyplSourceId: {
+        "@type": "SierraNypl",
+        "@value": "24178092",
+      },
+    },
+    {
+      "@id": "res:i24178091",
+      "@type": ["bf:Item"],
+      accessMessage: [
+        {
+          "@id": "accessMessage:2",
+          prefLabel: "Request in advance",
+        },
+      ],
+      catalogItemType: [
+        {
+          "@id": "catalogItemType:6",
+          prefLabel: "microfilm service copy",
+        },
+      ],
+      eddFulfillment: {
+        "@id": "fulfillment:recap-edd",
+      },
+      eddRequestable: true,
+      enumerationChronology: ["Box 17"],
+      formatLiteral: ["Mixed material"],
+      holdingLocation: [
+        {
+          "@id": "loc:rcmi2",
+          prefLabel: "Offsite",
+        },
+      ],
+      idBarcode: ["33433075111843"],
+      identifier: [
+        {
+          "@type": "bf:ShelfMark",
+          "@value": "*Z-10344 Box 17",
+        },
+        {
+          "@type": "bf:Barcode",
+          "@value": "33433075111843",
+        },
+      ],
+      owner: [
+        {
+          "@id": "orgs:1000",
+          prefLabel: "Stephen A. Schwarzman Building",
+        },
+      ],
+      physFulfillment: {
+        "@id": "fulfillment:recap-offsite",
+      },
+      physRequestable: true,
+      physicalLocation: ["*Z-10344"],
+      recapCustomerCode: ["NA"],
+      requestable: [true],
+      shelfMark: ["*Z-10344 Box 17"],
+      specRequestable: false,
+      status: [
+        {
+          "@id": "status:a",
+          prefLabel: "Available",
+        },
+      ],
+      uri: "i24178091",
+      idNyplSourceId: {
+        "@type": "SierraNypl",
+        "@value": "24178091",
+      },
+    },
+    {
+      "@id": "res:i24178088",
+      "@type": ["bf:Item"],
+      accessMessage: [
+        {
+          "@id": "accessMessage:2",
+          prefLabel: "Request in advance",
+        },
+      ],
+      catalogItemType: [
+        {
+          "@id": "catalogItemType:6",
+          prefLabel: "microfilm service copy",
+        },
+      ],
+      eddFulfillment: {
+        "@id": "fulfillment:recap-edd",
+      },
+      eddRequestable: true,
+      enumerationChronology: ["Box 16"],
+      formatLiteral: ["Mixed material"],
+      holdingLocation: [
+        {
+          "@id": "loc:rcmi2",
+          prefLabel: "Offsite",
+        },
+      ],
+      idBarcode: ["33433075111850"],
+      identifier: [
+        {
+          "@type": "bf:ShelfMark",
+          "@value": "*Z-10344 Box 16",
+        },
+        {
+          "@type": "bf:Barcode",
+          "@value": "33433075111850",
+        },
+      ],
+      owner: [
+        {
+          "@id": "orgs:1000",
+          prefLabel: "Stephen A. Schwarzman Building",
+        },
+      ],
+      physFulfillment: {
+        "@id": "fulfillment:recap-offsite",
+      },
+      physRequestable: true,
+      physicalLocation: ["*Z-10344"],
+      recapCustomerCode: ["NA"],
+      requestable: [true],
+      shelfMark: ["*Z-10344 Box 16"],
+      specRequestable: false,
+      status: [
+        {
+          "@id": "status:a",
+          prefLabel: "Available",
+        },
+      ],
+      uri: "i24178088",
+      idNyplSourceId: {
+        "@type": "SierraNypl",
+        "@value": "24178088",
+      },
+    },
+    {
+      "@id": "res:i24178087",
+      "@type": ["bf:Item"],
+      accessMessage: [
+        {
+          "@id": "accessMessage:2",
+          prefLabel: "Request in advance",
+        },
+      ],
+      catalogItemType: [
+        {
+          "@id": "catalogItemType:6",
+          prefLabel: "microfilm service copy",
+        },
+      ],
+      eddFulfillment: {
+        "@id": "fulfillment:recap-edd",
+      },
+      eddRequestable: true,
+      enumerationChronology: ["Box 15"],
+      formatLiteral: ["Mixed material"],
+      holdingLocation: [
+        {
+          "@id": "loc:rcmi2",
+          prefLabel: "Offsite",
+        },
+      ],
+      idBarcode: ["33433075111876"],
+      identifier: [
+        {
+          "@type": "bf:ShelfMark",
+          "@value": "*Z-10344 Box 15",
+        },
+        {
+          "@type": "bf:Barcode",
+          "@value": "33433075111876",
+        },
+      ],
+      owner: [
+        {
+          "@id": "orgs:1000",
+          prefLabel: "Stephen A. Schwarzman Building",
+        },
+      ],
+      physFulfillment: {
+        "@id": "fulfillment:recap-offsite",
+      },
+      physRequestable: true,
+      physicalLocation: ["*Z-10344"],
+      recapCustomerCode: ["NA"],
+      requestable: [true],
+      shelfMark: ["*Z-10344 Box 15"],
+      specRequestable: false,
+      status: [
+        {
+          "@id": "status:a",
+          prefLabel: "Available",
+        },
+      ],
+      uri: "i24178087",
+      idNyplSourceId: {
+        "@type": "SierraNypl",
+        "@value": "24178087",
+      },
+    },
+    {
+      "@id": "res:i24178086",
+      "@type": ["bf:Item"],
+      accessMessage: [
+        {
+          "@id": "accessMessage:2",
+          prefLabel: "Request in advance",
+        },
+      ],
+      catalogItemType: [
+        {
+          "@id": "catalogItemType:6",
+          prefLabel: "microfilm service copy",
+        },
+      ],
+      eddFulfillment: {
+        "@id": "fulfillment:recap-edd",
+      },
+      eddRequestable: true,
+      enumerationChronology: ["Box 14"],
+      formatLiteral: ["Mixed material"],
+      holdingLocation: [
+        {
+          "@id": "loc:rcmi2",
+          prefLabel: "Offsite",
+        },
+      ],
+      idBarcode: ["33433075111868"],
+      identifier: [
+        {
+          "@type": "bf:ShelfMark",
+          "@value": "*Z-10344 Box 14",
+        },
+        {
+          "@type": "bf:Barcode",
+          "@value": "33433075111868",
+        },
+      ],
+      owner: [
+        {
+          "@id": "orgs:1000",
+          prefLabel: "Stephen A. Schwarzman Building",
+        },
+      ],
+      physFulfillment: {
+        "@id": "fulfillment:recap-offsite",
+      },
+      physRequestable: true,
+      physicalLocation: ["*Z-10344"],
+      recapCustomerCode: ["NA"],
+      requestable: [true],
+      shelfMark: ["*Z-10344 Box 14"],
+      specRequestable: false,
+      status: [
+        {
+          "@id": "status:a",
+          prefLabel: "Available",
+        },
+      ],
+      uri: "i24178086",
+      idNyplSourceId: {
+        "@type": "SierraNypl",
+        "@value": "24178086",
+      },
+    },
+    {
+      "@id": "res:i24178082",
+      "@type": ["bf:Item"],
+      accessMessage: [
+        {
+          "@id": "accessMessage:2",
+          prefLabel: "Request in advance",
+        },
+      ],
+      catalogItemType: [
+        {
+          "@id": "catalogItemType:6",
+          prefLabel: "microfilm service copy",
+        },
+      ],
+      eddFulfillment: {
+        "@id": "fulfillment:recap-edd",
+      },
+      eddRequestable: true,
+      enumerationChronology: ["Box 13"],
+      formatLiteral: ["Mixed material"],
+      holdingLocation: [
+        {
+          "@id": "loc:rcmi2",
+          prefLabel: "Offsite",
+        },
+      ],
+      idBarcode: ["33433075111884"],
+      identifier: [
+        {
+          "@type": "bf:ShelfMark",
+          "@value": "*Z-10344 Box 13",
+        },
+        {
+          "@type": "bf:Barcode",
+          "@value": "33433075111884",
+        },
+      ],
+      owner: [
+        {
+          "@id": "orgs:1000",
+          prefLabel: "Stephen A. Schwarzman Building",
+        },
+      ],
+      physFulfillment: {
+        "@id": "fulfillment:recap-offsite",
+      },
+      physRequestable: true,
+      physicalLocation: ["*Z-10344"],
+      recapCustomerCode: ["NA"],
+      requestable: [true],
+      shelfMark: ["*Z-10344 Box 13"],
+      specRequestable: false,
+      status: [
+        {
+          "@id": "status:a",
+          prefLabel: "Available",
+        },
+      ],
+      uri: "i24178082",
+      idNyplSourceId: {
+        "@type": "SierraNypl",
+        "@value": "24178082",
+      },
+    },
+    {
+      "@id": "res:i24178081",
+      "@type": ["bf:Item"],
+      accessMessage: [
+        {
+          "@id": "accessMessage:2",
+          prefLabel: "Request in advance",
+        },
+      ],
+      catalogItemType: [
+        {
+          "@id": "catalogItemType:6",
+          prefLabel: "microfilm service copy",
+        },
+      ],
+      eddFulfillment: {
+        "@id": "fulfillment:recap-edd",
+      },
+      eddRequestable: true,
+      enumerationChronology: ["Box 12"],
+      formatLiteral: ["Mixed material"],
+      holdingLocation: [
+        {
+          "@id": "loc:rcmi2",
+          prefLabel: "Offsite",
+        },
+      ],
+      idBarcode: ["33433075111892"],
+      identifier: [
+        {
+          "@type": "bf:ShelfMark",
+          "@value": "*Z-10344 Box 12",
+        },
+        {
+          "@type": "bf:Barcode",
+          "@value": "33433075111892",
+        },
+      ],
+      owner: [
+        {
+          "@id": "orgs:1000",
+          prefLabel: "Stephen A. Schwarzman Building",
+        },
+      ],
+      physFulfillment: {
+        "@id": "fulfillment:recap-offsite",
+      },
+      physRequestable: true,
+      physicalLocation: ["*Z-10344"],
+      recapCustomerCode: ["NA"],
+      requestable: [true],
+      shelfMark: ["*Z-10344 Box 12"],
+      specRequestable: false,
+      status: [
+        {
+          "@id": "status:a",
+          prefLabel: "Available",
+        },
+      ],
+      uri: "i24178081",
+      idNyplSourceId: {
+        "@type": "SierraNypl",
+        "@value": "24178081",
+      },
+    },
+    {
+      "@id": "res:i24178080",
+      "@type": ["bf:Item"],
+      accessMessage: [
+        {
+          "@id": "accessMessage:2",
+          prefLabel: "Request in advance",
+        },
+      ],
+      catalogItemType: [
+        {
+          "@id": "catalogItemType:6",
+          prefLabel: "microfilm service copy",
+        },
+      ],
+      eddFulfillment: {
+        "@id": "fulfillment:recap-edd",
+      },
+      eddRequestable: true,
+      enumerationChronology: ["Box 11"],
+      formatLiteral: ["Mixed material"],
+      holdingLocation: [
+        {
+          "@id": "loc:rcmi2",
+          prefLabel: "Offsite",
+        },
+      ],
+      idBarcode: ["33433075111900"],
+      identifier: [
+        {
+          "@type": "bf:ShelfMark",
+          "@value": "*Z-10344 Box 11",
+        },
+        {
+          "@type": "bf:Barcode",
+          "@value": "33433075111900",
+        },
+      ],
+      owner: [
+        {
+          "@id": "orgs:1000",
+          prefLabel: "Stephen A. Schwarzman Building",
+        },
+      ],
+      physFulfillment: {
+        "@id": "fulfillment:recap-offsite",
+      },
+      physRequestable: true,
+      physicalLocation: ["*Z-10344"],
+      recapCustomerCode: ["NA"],
+      requestable: [true],
+      shelfMark: ["*Z-10344 Box 11"],
+      specRequestable: false,
+      status: [
+        {
+          "@id": "status:a",
+          prefLabel: "Available",
+        },
+      ],
+      uri: "i24178080",
+      idNyplSourceId: {
+        "@type": "SierraNypl",
+        "@value": "24178080",
+      },
+    },
+    {
+      "@id": "res:i24178079",
+      "@type": ["bf:Item"],
+      accessMessage: [
+        {
+          "@id": "accessMessage:2",
+          prefLabel: "Request in advance",
+        },
+      ],
+      catalogItemType: [
+        {
+          "@id": "catalogItemType:6",
+          prefLabel: "microfilm service copy",
+        },
+      ],
+      eddFulfillment: {
+        "@id": "fulfillment:recap-edd",
+      },
+      eddRequestable: true,
+      enumerationChronology: ["Box 10"],
+      formatLiteral: ["Mixed material"],
+      holdingLocation: [
+        {
+          "@id": "loc:rcmi2",
+          prefLabel: "Offsite",
+        },
+      ],
+      idBarcode: ["33433075111918"],
+      identifier: [
+        {
+          "@type": "bf:ShelfMark",
+          "@value": "*Z-10344 Box 10",
+        },
+        {
+          "@type": "bf:Barcode",
+          "@value": "33433075111918",
+        },
+      ],
+      owner: [
+        {
+          "@id": "orgs:1000",
+          prefLabel: "Stephen A. Schwarzman Building",
+        },
+      ],
+      physFulfillment: {
+        "@id": "fulfillment:recap-offsite",
+      },
+      physRequestable: true,
+      physicalLocation: ["*Z-10344"],
+      recapCustomerCode: ["NA"],
+      requestable: [true],
+      shelfMark: ["*Z-10344 Box 10"],
+      specRequestable: false,
+      status: [
+        {
+          "@id": "status:a",
+          prefLabel: "Available",
+        },
+      ],
+      uri: "i24178079",
+      idNyplSourceId: {
+        "@type": "SierraNypl",
+        "@value": "24178079",
+      },
+    },
+    {
+      "@id": "res:i24178076",
+      "@type": ["bf:Item"],
+      accessMessage: [
+        {
+          "@id": "accessMessage:2",
+          prefLabel: "Request in advance",
+        },
+      ],
+      catalogItemType: [
+        {
+          "@id": "catalogItemType:6",
+          prefLabel: "microfilm service copy",
+        },
+      ],
+      eddFulfillment: {
+        "@id": "fulfillment:recap-edd",
+      },
+      eddRequestable: true,
+      enumerationChronology: ["Box 9"],
+      formatLiteral: ["Mixed material"],
+      holdingLocation: [
+        {
+          "@id": "loc:rcmi2",
+          prefLabel: "Offsite",
+        },
+      ],
+      idBarcode: ["33433075111926"],
+      identifier: [
+        {
+          "@type": "bf:ShelfMark",
+          "@value": "*Z-10344 Box 9",
+        },
+        {
+          "@type": "bf:Barcode",
+          "@value": "33433075111926",
+        },
+      ],
+      owner: [
+        {
+          "@id": "orgs:1000",
+          prefLabel: "Stephen A. Schwarzman Building",
+        },
+      ],
+      physFulfillment: {
+        "@id": "fulfillment:recap-offsite",
+      },
+      physRequestable: true,
+      physicalLocation: ["*Z-10344"],
+      recapCustomerCode: ["NA"],
+      requestable: [true],
+      shelfMark: ["*Z-10344 Box 9"],
+      specRequestable: false,
+      status: [
+        {
+          "@id": "status:a",
+          prefLabel: "Available",
+        },
+      ],
+      uri: "i24178076",
+      idNyplSourceId: {
+        "@type": "SierraNypl",
+        "@value": "24178076",
+      },
+    },
+    {
+      "@id": "res:i24178075",
+      "@type": ["bf:Item"],
+      accessMessage: [
+        {
+          "@id": "accessMessage:2",
+          prefLabel: "Request in advance",
+        },
+      ],
+      catalogItemType: [
+        {
+          "@id": "catalogItemType:6",
+          prefLabel: "microfilm service copy",
+        },
+      ],
+      eddFulfillment: {
+        "@id": "fulfillment:recap-edd",
+      },
+      eddRequestable: true,
+      enumerationChronology: ["Box 8"],
+      formatLiteral: ["Mixed material"],
+      holdingLocation: [
+        {
+          "@id": "loc:rcmi2",
+          prefLabel: "Offsite",
+        },
+      ],
+      idBarcode: ["33433075111934"],
+      identifier: [
+        {
+          "@type": "bf:ShelfMark",
+          "@value": "*Z-10344 Box 8",
+        },
+        {
+          "@type": "bf:Barcode",
+          "@value": "33433075111934",
+        },
+      ],
+      owner: [
+        {
+          "@id": "orgs:1000",
+          prefLabel: "Stephen A. Schwarzman Building",
+        },
+      ],
+      physFulfillment: {
+        "@id": "fulfillment:recap-offsite",
+      },
+      physRequestable: true,
+      physicalLocation: ["*Z-10344"],
+      recapCustomerCode: ["NA"],
+      requestable: [true],
+      shelfMark: ["*Z-10344 Box 8"],
+      specRequestable: false,
+      status: [
+        {
+          "@id": "status:a",
+          prefLabel: "Available",
+        },
+      ],
+      uri: "i24178075",
+      idNyplSourceId: {
+        "@type": "SierraNypl",
+        "@value": "24178075",
+      },
+    },
+    {
+      "@id": "res:i24178074",
+      "@type": ["bf:Item"],
+      accessMessage: [
+        {
+          "@id": "accessMessage:2",
+          prefLabel: "Request in advance",
+        },
+      ],
+      catalogItemType: [
+        {
+          "@id": "catalogItemType:6",
+          prefLabel: "microfilm service copy",
+        },
+      ],
+      eddFulfillment: {
+        "@id": "fulfillment:recap-edd",
+      },
+      eddRequestable: true,
+      enumerationChronology: ["Box 7"],
+      formatLiteral: ["Mixed material"],
+      holdingLocation: [
+        {
+          "@id": "loc:rcmi2",
+          prefLabel: "Offsite",
+        },
+      ],
+      idBarcode: ["33433075111942"],
+      identifier: [
+        {
+          "@type": "bf:ShelfMark",
+          "@value": "*Z-10344 Box 7",
+        },
+        {
+          "@type": "bf:Barcode",
+          "@value": "33433075111942",
+        },
+      ],
+      owner: [
+        {
+          "@id": "orgs:1000",
+          prefLabel: "Stephen A. Schwarzman Building",
+        },
+      ],
+      physFulfillment: {
+        "@id": "fulfillment:recap-offsite",
+      },
+      physRequestable: true,
+      physicalLocation: ["*Z-10344"],
+      recapCustomerCode: ["NA"],
+      requestable: [true],
+      shelfMark: ["*Z-10344 Box 7"],
+      specRequestable: false,
+      status: [
+        {
+          "@id": "status:a",
+          prefLabel: "Available",
+        },
+      ],
+      uri: "i24178074",
+      idNyplSourceId: {
+        "@type": "SierraNypl",
+        "@value": "24178074",
+      },
+    },
+    {
+      "@id": "res:i24178073",
+      "@type": ["bf:Item"],
+      accessMessage: [
+        {
+          "@id": "accessMessage:2",
+          prefLabel: "Request in advance",
+        },
+      ],
+      catalogItemType: [
+        {
+          "@id": "catalogItemType:6",
+          prefLabel: "microfilm service copy",
+        },
+      ],
+      eddFulfillment: {
+        "@id": "fulfillment:recap-edd",
+      },
+      eddRequestable: true,
+      enumerationChronology: ["Box 6"],
+      formatLiteral: ["Mixed material"],
+      holdingLocation: [
+        {
+          "@id": "loc:rcmi2",
+          prefLabel: "Offsite",
+        },
+      ],
+      idBarcode: ["33433075111959"],
+      identifier: [
+        {
+          "@type": "bf:ShelfMark",
+          "@value": "*Z-10344 Box 6",
+        },
+        {
+          "@type": "bf:Barcode",
+          "@value": "33433075111959",
+        },
+      ],
+      owner: [
+        {
+          "@id": "orgs:1000",
+          prefLabel: "Stephen A. Schwarzman Building",
+        },
+      ],
+      physFulfillment: {
+        "@id": "fulfillment:recap-offsite",
+      },
+      physRequestable: true,
+      physicalLocation: ["*Z-10344"],
+      recapCustomerCode: ["NA"],
+      requestable: [true],
+      shelfMark: ["*Z-10344 Box 6"],
+      specRequestable: false,
+      status: [
+        {
+          "@id": "status:a",
+          prefLabel: "Available",
+        },
+      ],
+      uri: "i24178073",
+      idNyplSourceId: {
+        "@type": "SierraNypl",
+        "@value": "24178073",
+      },
+    },
+    {
+      "@id": "res:i24178072",
+      "@type": ["bf:Item"],
+      accessMessage: [
+        {
+          "@id": "accessMessage:2",
+          prefLabel: "Request in advance",
+        },
+      ],
+      catalogItemType: [
+        {
+          "@id": "catalogItemType:6",
+          prefLabel: "microfilm service copy",
+        },
+      ],
+      eddFulfillment: {
+        "@id": "fulfillment:recap-edd",
+      },
+      eddRequestable: true,
+      enumerationChronology: ["Box 5"],
+      formatLiteral: ["Mixed material"],
+      holdingLocation: [
+        {
+          "@id": "loc:rcmi2",
+          prefLabel: "Offsite",
+        },
+      ],
+      idBarcode: ["33433075111967"],
+      identifier: [
+        {
+          "@type": "bf:ShelfMark",
+          "@value": "*Z-10344 Box 5",
+        },
+        {
+          "@type": "bf:Barcode",
+          "@value": "33433075111967",
+        },
+      ],
+      owner: [
+        {
+          "@id": "orgs:1000",
+          prefLabel: "Stephen A. Schwarzman Building",
+        },
+      ],
+      physFulfillment: {
+        "@id": "fulfillment:recap-offsite",
+      },
+      physRequestable: true,
+      physicalLocation: ["*Z-10344"],
+      recapCustomerCode: ["NA"],
+      requestable: [true],
+      shelfMark: ["*Z-10344 Box 5"],
+      specRequestable: false,
+      status: [
+        {
+          "@id": "status:a",
+          prefLabel: "Available",
+        },
+      ],
+      uri: "i24178072",
+      idNyplSourceId: {
+        "@type": "SierraNypl",
+        "@value": "24178072",
+      },
+    },
+    {
+      "@id": "res:i24178071",
+      "@type": ["bf:Item"],
+      accessMessage: [
+        {
+          "@id": "accessMessage:2",
+          prefLabel: "Request in advance",
+        },
+      ],
+      catalogItemType: [
+        {
+          "@id": "catalogItemType:6",
+          prefLabel: "microfilm service copy",
+        },
+      ],
+      eddFulfillment: {
+        "@id": "fulfillment:recap-edd",
+      },
+      eddRequestable: true,
+      enumerationChronology: ["Box 4"],
+      formatLiteral: ["Mixed material"],
+      holdingLocation: [
+        {
+          "@id": "loc:rcmi2",
+          prefLabel: "Offsite",
+        },
+      ],
+      idBarcode: ["33433075111975"],
+      identifier: [
+        {
+          "@type": "bf:ShelfMark",
+          "@value": "*Z-10344 Box 4",
+        },
+        {
+          "@type": "bf:Barcode",
+          "@value": "33433075111975",
+        },
+      ],
+      owner: [
+        {
+          "@id": "orgs:1000",
+          prefLabel: "Stephen A. Schwarzman Building",
+        },
+      ],
+      physFulfillment: {
+        "@id": "fulfillment:recap-offsite",
+      },
+      physRequestable: true,
+      physicalLocation: ["*Z-10344"],
+      recapCustomerCode: ["NA"],
+      requestable: [true],
+      shelfMark: ["*Z-10344 Box 4"],
+      specRequestable: false,
+      status: [
+        {
+          "@id": "status:a",
+          prefLabel: "Available",
+        },
+      ],
+      uri: "i24178071",
+      idNyplSourceId: {
+        "@type": "SierraNypl",
+        "@value": "24178071",
+      },
+    },
+    {
+      "@id": "res:i24178069",
+      "@type": ["bf:Item"],
+      accessMessage: [
+        {
+          "@id": "accessMessage:2",
+          prefLabel: "Request in advance",
+        },
+      ],
+      catalogItemType: [
+        {
+          "@id": "catalogItemType:6",
+          prefLabel: "microfilm service copy",
+        },
+      ],
+      eddFulfillment: {
+        "@id": "fulfillment:recap-edd",
+      },
+      eddRequestable: true,
+      enumerationChronology: ["Box 3"],
+      formatLiteral: ["Mixed material"],
+      holdingLocation: [
+        {
+          "@id": "loc:rcmi2",
+          prefLabel: "Offsite",
+        },
+      ],
+      idBarcode: ["33433075111983"],
+      identifier: [
+        {
+          "@type": "bf:ShelfMark",
+          "@value": "*Z-10344 Box 3",
+        },
+        {
+          "@type": "bf:Barcode",
+          "@value": "33433075111983",
+        },
+      ],
+      owner: [
+        {
+          "@id": "orgs:1000",
+          prefLabel: "Stephen A. Schwarzman Building",
+        },
+      ],
+      physFulfillment: {
+        "@id": "fulfillment:recap-offsite",
+      },
+      physRequestable: true,
+      physicalLocation: ["*Z-10344"],
+      recapCustomerCode: ["NA"],
+      requestable: [true],
+      shelfMark: ["*Z-10344 Box 3"],
+      specRequestable: false,
+      status: [
+        {
+          "@id": "status:a",
+          prefLabel: "Available",
+        },
+      ],
+      uri: "i24178069",
+      idNyplSourceId: {
+        "@type": "SierraNypl",
+        "@value": "24178069",
+      },
+    },
+    {
+      "@id": "res:i24178068",
+      "@type": ["bf:Item"],
+      accessMessage: [
+        {
+          "@id": "accessMessage:2",
+          prefLabel: "Request in advance",
+        },
+      ],
+      catalogItemType: [
+        {
+          "@id": "catalogItemType:6",
+          prefLabel: "microfilm service copy",
+        },
+      ],
+      eddFulfillment: {
+        "@id": "fulfillment:recap-edd",
+      },
+      eddRequestable: true,
+      enumerationChronology: ["Box 2"],
+      formatLiteral: ["Mixed material"],
+      holdingLocation: [
+        {
+          "@id": "loc:rcmi2",
+          prefLabel: "Offsite",
+        },
+      ],
+      idBarcode: ["33433075111991"],
+      identifier: [
+        {
+          "@type": "bf:ShelfMark",
+          "@value": "*Z-10344 Box 2",
+        },
+        {
+          "@type": "bf:Barcode",
+          "@value": "33433075111991",
+        },
+      ],
+      owner: [
+        {
+          "@id": "orgs:1000",
+          prefLabel: "Stephen A. Schwarzman Building",
+        },
+      ],
+      physFulfillment: {
+        "@id": "fulfillment:recap-offsite",
+      },
+      physRequestable: true,
+      physicalLocation: ["*Z-10344"],
+      recapCustomerCode: ["NA"],
+      requestable: [true],
+      shelfMark: ["*Z-10344 Box 2"],
+      specRequestable: false,
+      status: [
+        {
+          "@id": "status:a",
+          prefLabel: "Available",
+        },
+      ],
+      uri: "i24178068",
+      idNyplSourceId: {
+        "@type": "SierraNypl",
+        "@value": "24178068",
+      },
+    },
+    {
+      "@id": "res:i24178066",
+      "@type": ["bf:Item"],
+      accessMessage: [
+        {
+          "@id": "accessMessage:2",
+          prefLabel: "Request in advance",
+        },
+      ],
+      catalogItemType: [
+        {
+          "@id": "catalogItemType:6",
+          prefLabel: "microfilm service copy",
+        },
+      ],
+      eddFulfillment: {
+        "@id": "fulfillment:recap-edd",
+      },
+      eddRequestable: true,
+      enumerationChronology: ["Box 1"],
+      formatLiteral: ["Mixed material"],
+      holdingLocation: [
+        {
+          "@id": "loc:rcmi2",
+          prefLabel: "Offsite",
+        },
+      ],
+      idBarcode: ["33433075112007"],
+      identifier: [
+        {
+          "@type": "bf:ShelfMark",
+          "@value": "*Z-10344 Box 1",
+        },
+        {
+          "@type": "bf:Barcode",
+          "@value": "33433075112007",
+        },
+      ],
+      owner: [
+        {
+          "@id": "orgs:1000",
+          prefLabel: "Stephen A. Schwarzman Building",
+        },
+      ],
+      physFulfillment: {
+        "@id": "fulfillment:recap-offsite",
+      },
+      physRequestable: true,
+      physicalLocation: ["*Z-10344"],
+      recapCustomerCode: ["NA"],
+      requestable: [true],
+      shelfMark: ["*Z-10344 Box 1"],
+      specRequestable: false,
+      status: [
+        {
+          "@id": "status:a",
+          prefLabel: "Available",
+        },
+      ],
+      uri: "i24178066",
+      idNyplSourceId: {
+        "@type": "SierraNypl",
+        "@value": "24178066",
+      },
+    },
+  ],
+  language: [
+    {
+      "@id": "lang:eng",
+      prefLabel: "English",
+    },
+  ],
+  materialType: [
+    {
+      "@id": "resourcetypes:mix",
+      prefLabel: "Mixed material",
+    },
+  ],
+  mediaType: [
+    {
+      "@id": "mediatypes:n",
+      prefLabel: "unmediated",
+    },
+  ],
+  note: [
+    {
+      noteType: "Access",
+      "@type": "bf:Note",
+      prefLabel: "Restricted access;",
+    },
+    {
+      noteType: "Biography",
+      "@type": "bf:Note",
+      prefLabel:
+        "Charles Dickens was a British novelist, short story writer, essayist and journalist.",
+    },
+    {
+      noteType: "Indexes/Finding Aids",
+      "@type": "bf:Note",
+      prefLabel: "Inventory list and card catalog available in repository.",
+    },
+    {
+      noteType: "Provenance",
+      "@type": "bf:Note",
+      prefLabel:
+        "This is a synthetic collection, created from materials acquired through gift and purchase from various sources. The bulk of the materials is from Henry W. and Albert A. Berg, W. T. H. Howe, and Owen D. Young. Much of this and other materials were previously owned by Jerome Kern, B. W. Matz, Frederick William Cosens, Harry Glemby, Herschel V. Jones, M. C. D. Borden, George Barr McCutcheon, and Roderick Terry, Esther Leech, C. R. Leslie, Miss M. A. Browne, Eve Clendenin, Richard Henry Stoddard-Howe, Mrs. Rebecca Ball Wilson, Thomas Hatton, Hobart F. Cole, and William H. MacAfee. R. H. Barham's holograph notebook and commonplace book was a gift of Mr. & Mrs. Donald F. Hyde in honor of Dr. Albert A. Berg.",
+    },
+    {
+      noteType: "Processing Action",
+      "@type": "bf:Note",
+      prefLabel: "Cataloged",
+    },
+    {
+      noteType: "Processing Action",
+      "@type": "bf:Note",
+      prefLabel: "Will microfilm;",
+    },
+  ],
+  numCheckinCardItems: 0,
+  numElectronicResources: 1,
+  numItemDatesParsed: 0,
+  numItemVolumesParsed: 0,
+  numItemsMatched: 19,
+  numItemsTotal: 19,
+  nyplSource: ["sierra-nypl"],
+  shelfMark: ["Berg Coll MSS Dickens"],
+  subjectLiteral: [
+    "Dickens, Charles, 1812-1870.",
+    "Dickens, Charles, 1812-1870 -- Portraits.",
+    "Dickens, Charles, 1812-1870. -- Illustrations.",
+    "Dickens, Charles, 1812-1870. -- Illustations.",
+  ],
+  supplementaryContent: [
+    {
+      "@type": "nypl:SupplementaryContent",
+      label: "Finding Aid",
+      url: "http://www.nypl.org/archives/443",
+    },
+  ],
+  title: ["Charles Dickens collection of papers"],
+  titleDisplay: [
+    "Charles Dickens collection of papers, [1833]-[1975] bulk ([1833]-1909).",
+  ],
+  type: ["nypl:Item"],
+  updatedAt: 1711076115882,
+  uri: "b15893398",
+  updatedAtDate: "2024-03-22T02:55:15.882Z",
+  hasItemVolumes: false,
+  hasItemDates: false,
+  recordType: {
+    "@id": "p",
+    prefLabel: "Archival Mix",
+  },
+}
+
 export const bibWithItems = {
   resource: {
     "@context":

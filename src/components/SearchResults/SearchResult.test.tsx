@@ -5,6 +5,10 @@ import SearchResultsBib from "../../models/SearchResultsBib"
 import { searchResultPhysicalItems } from "../../../__test__/fixtures/searchResultPhysicalItems"
 import { searchResultManyPhysicalItems } from "../../../__test__/fixtures/searchResultManyPhysicalItems"
 import { searchResultElectronicResources } from "../../../__test__/fixtures/searchResultElectronicResources"
+import {
+  bibWithElectronicResourcesAndFindingAid,
+  bibWithItems,
+} from "../../../__test__/fixtures/bibFixtures"
 import type { DiscoveryBibResult } from "../../types/bibTypes"
 
 describe("SearchResult with Physical Items", () => {
@@ -51,9 +55,38 @@ describe("SearchResult with Many Physical Items", () => {
 })
 
 describe("SearchResult with Electronic Resources", () => {
-  it("renders the correct item message for bib with electronic resources", async () => {
+  it("renders the correct item message for bib with electronic resources", () => {
     const bib = new SearchResultsBib(searchResultElectronicResources)
     render(<SearchResult bib={bib} />)
     screen.getByText("1 resource")
+  })
+  it("renders a finding aid message and electronic resource information", () => {
+    const bib = new SearchResultsBib(bibWithElectronicResourcesAndFindingAid)
+    render(<SearchResult bib={bib} />)
+    expect(screen.getByText("Collection information")).toBeInTheDocument()
+    expect(screen.getByText("Available online")).toBeInTheDocument()
+  })
+  it("renders only a finding aid message and no electronic resource information", () => {
+    const bib = new SearchResultsBib({
+      ...bibWithElectronicResourcesAndFindingAid,
+      electronicResources: [],
+    })
+    render(<SearchResult bib={bib} />)
+    expect(screen.getByText("Collection information")).toBeInTheDocument()
+    expect(screen.queryByText("Available online")).not.toBeInTheDocument()
+  })
+  it("renders no finding aid message and only electronic resource information", () => {
+    const bib = new SearchResultsBib({
+      ...bibWithElectronicResourcesAndFindingAid,
+      supplementaryContent: [],
+    })
+    render(<SearchResult bib={bib} />)
+    expect(screen.getByText("Available online")).toBeInTheDocument()
+    expect(screen.queryByText("Collection information")).not.toBeInTheDocument()
+  })
+  it("renders finding aid status badge", () => {
+    const bib = new SearchResultsBib(bibWithElectronicResourcesAndFindingAid)
+    render(<SearchResult bib={bib} />)
+    expect(screen.getByText("FINDING AID AVAILABLE")).toBeInTheDocument()
   })
 })
