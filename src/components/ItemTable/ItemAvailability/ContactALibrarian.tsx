@@ -21,7 +21,7 @@ const ContactALibrarian = ({
   }
   return (
     <>
-      {" - Please "}
+      {" Please "}
       <Button
         id="contact-librarian"
         buttonType="link"
