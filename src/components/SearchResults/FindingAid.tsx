@@ -15,7 +15,6 @@ const FindingAid = ({ url }) => {
       </Text>
       <ExternalLink
         mb="xs"
-        // mt="xs"
         href={url}
         rel="noreferrer"
         type="standalone"
@@ -32,8 +31,8 @@ const FindingAid = ({ url }) => {
           mb="0"
         >
           The finding aid is a document containing details about the
-          organization and contents of this archival collection. Archival
-          collections{" "}
+          organization and contents of this archival collection. <br />
+          Archival collections{" "}
           <ExternalLink href={appConfig.requireAnAppointmentUrl}>
             require an appointment
           </ExternalLink>{" "}
