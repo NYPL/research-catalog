@@ -23,8 +23,9 @@ const NotAvailable = ({
   return (
     <>
       <Box as="span" color="ui.warning.tertiary">
-        Not available -
+        Not available
       </Box>
+      {" -"}
       {dueDate && ` - In use until ${dueDate} -`}
       <ContactALibrarian item={itemMetadata} />
     </>
