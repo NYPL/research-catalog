@@ -39,6 +39,7 @@ export const searchAggregations = {
       label: "E-Book",
     },
     {
+      value: "v",
       label: "DVD",
     },
     {
@@ -54,6 +55,7 @@ export const searchAggregations = {
       label: "Computer file",
     },
     {
+      value: "o",
       label: "Kit",
     },
     {
