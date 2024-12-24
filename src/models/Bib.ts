@@ -24,7 +24,7 @@ export default class Bib {
   electronicResources?: ElectronicResource[]
   numPhysicalItems: number
   numItemsMatched: number
-  materialType?: string
+  recordType?: string
   issuance?: JSONLDValue[]
   items?: Item[]
   itemAggregations?: Aggregation[]
@@ -38,8 +38,8 @@ export default class Bib {
     this.electronicResources = result.electronicResources || null
     this.numPhysicalItems = result.numItemsTotal || 0
     this.numItemsMatched = result.numItemsMatched || 0
-    this.materialType =
-      (result.materialType?.length && result.materialType[0]?.prefLabel) || null
+    this.recordType =
+      (result.recordType?.length && result.recordType[0]?.prefLabel) || null
     this.issuance = (result.issuance?.length && result.issuance) || null
     this.items = this.getItemsFromResult(result)
     this.itemAggregations = result.itemAggregations || null

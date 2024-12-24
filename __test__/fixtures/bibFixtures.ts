@@ -435,7 +435,7 @@ export const bibWithItems = {
       },
     ],
     lccClassification: ["IN PROCESS"],
-    materialType: [
+    recordType: [
       {
         "@id": "resourcetypes:txt",
         prefLabel: "Text",
@@ -903,7 +903,7 @@ export const bibNoItems = {
       },
     ],
     lccClassification: ["IN PROCESS"],
-    materialType: [
+    recordType: [
       {
         "@id": "resourcetypes:txt",
         prefLabel: "Text",
@@ -2655,7 +2655,7 @@ export const bibWithManyItems = {
         prefLabel: "Chinese",
       },
     ],
-    materialType: [
+    recordType: [
       {
         "@id": "resourcetypes:txt",
         prefLabel: "Text",
@@ -3127,7 +3127,7 @@ export const bibWithSupplementaryContent = {
       },
     ],
     lccClassification: ["FICTION WAT"],
-    materialType: [
+    recordType: [
       {
         "@id": "resourcetypes:txt",
         prefLabel: "Text",
@@ -6525,7 +6525,7 @@ export const parallelsBib = {
       },
     ],
     lccClassification: ["DR1932 .P68"],
-    materialType: [
+    recordType: [
       {
         "@id": "resourcetypes:txt",
         prefLabel: "Text",
@@ -7660,7 +7660,7 @@ export const noParallels = {
       },
     ],
     lccClassification: ["PQ2663.O7223 Z46 2005"],
-    materialType: [
+    recordType: [
       {
         "@id": "resourcetypes:txt",
         prefLabel: "Text",
@@ -8217,7 +8217,7 @@ export const yiddishBib = {
       },
     ],
     lccClassification: ["DS135.R93 K42 1968"],
-    materialType: [
+    recordType: [
       {
         "@id": "resourcetypes:txt",
         prefLabel: "Text",
@@ -11223,7 +11223,7 @@ export const bibManyEResources = {
         prefLabel: "French",
       },
     ],
-    materialType: [
+    recordType: [
       {
         "@id": "resourcetypes:txt",
         prefLabel: "Text",
@@ -11446,7 +11446,7 @@ export const bibWithSubjectHeadings = {
       },
     ],
     lccClassification: ["PQ2663.O7223 Z46 2005"],
-    materialType: [
+    recordType: [
       {
         "@id": "resourcetypes:txt",
         prefLabel: "Text",

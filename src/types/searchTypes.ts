@@ -7,11 +7,11 @@ type SubjectLiteral = string
 type ContributorLiteral = string
 type CreatorLiteral = string
 type Issuance = string
-type MaterialTypeFilter = string
+type recordTypeFilter = string
 type BuildingLocationFilter = string
 
 export interface SearchFilters {
-  materialType?: MaterialTypeFilter | MaterialTypeFilter[]
+  recordType?: recordTypeFilter | recordTypeFilter[]
   language?: Language | Language[]
   subjectLiteral?: SubjectLiteral | SubjectLiteral[]
   contributorLiteral?: ContributorLiteral | ContributorLiteral[]
@@ -108,5 +108,5 @@ export interface SearchFormEvent {
   language?: SearchFormField
   dateBefore?: SearchFormField
   dateAfter?: SearchFormField
-  materialType?: SearchFormField
+  recordType?: SearchFormField
 }

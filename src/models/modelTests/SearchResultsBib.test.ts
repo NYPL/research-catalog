@@ -19,7 +19,7 @@ describe("SearchResultsBib model", () => {
       expect(searchResultsBib.title).toBe("Urban spaghetti.")
       expect(searchResultsBib.electronicResources).toStrictEqual([])
       expect(searchResultsBib.numPhysicalItems).toBe(4)
-      expect(searchResultsBib.materialType).toBe("Text")
+      expect(searchResultsBib.recordType).toBe("Text")
       expect(searchResultsBib.issuance).toStrictEqual([
         { "@id": "urn:biblevel:s", prefLabel: "serial" },
       ])

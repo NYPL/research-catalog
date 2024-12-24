@@ -30,8 +30,8 @@ describe("Bib model", () => {
       expect(bib.numPhysicalItems).toBe(4)
     })
 
-    it("initializes materialType with the Bib's materialType field", () => {
-      expect(bib.materialType).toBe("Text")
+    it("initializes recordType with the Bib's recordType field", () => {
+      expect(bib.recordType).toBe("Text")
     })
 
     it("initializes issuance with the Bib's issuance field", () => {
