@@ -62,8 +62,8 @@ const SearchResult = ({ bib }: SearchResultProps) => {
           <Text>{bib.getNumItemsMessage()}</Text>
         </Box>
 
+        {bib.findingAid && <FindingAid url={bib.findingAid} />}
         <SimpleGrid columns={1} gap="grid.l">
-          {bib.findingAid && <FindingAid url={bib.findingAid} />}
           {bib.hasElectronicResources && (
             <ElectronicResourcesLink
               bibUrl={bib.url}

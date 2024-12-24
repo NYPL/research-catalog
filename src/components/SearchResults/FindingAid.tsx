@@ -28,7 +28,7 @@ const FindingAid = ({ url }) => {
         <Icon size="medium" name="errorOutline" iconRotation="rotate180" />
         <Text
           fontSize={{ base: "mobile.body.body2", md: "desktop.body.body2" }}
-          mb="0"
+          mb="xxxs"
         >
           The finding aid is a document containing details about the
           organization and contents of this archival collection. <br />
