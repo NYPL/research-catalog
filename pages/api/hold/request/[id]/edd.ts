@@ -22,10 +22,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   try {
     const { patronId, jsEnabled, ...rest } = req.body
+    const formState = rest
     const holdId = req.query.id as string
 
     // Server-side form validation
-    const validatedEDDFields = validateEDDForm(rest, initialEDDInvalidFields)
+    const validatedFields = validateEDDForm(formState, initialEDDInvalidFields)
 
     const [, itemId] = holdId.split("-")
 
@@ -70,16 +71,16 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     }
 
     // JS-Disabled functionality
-    const eddFormInvalid = !!validatedEDDFields.find(
+    const formInvalid = !!validatedFields.find(
       (validatedFieldKey) => validatedFieldKey.isInvalid
     )
-    if (eddFormInvalid) {
+    if (formInvalid) {
       return res.redirect(
         `${BASE_URL}${
           PATHS.HOLD_REQUEST
-        }/${holdId}/edd?validatedEDDFields=${JSON.stringify(
-          validatedEDDFields
-        )}`
+        }/${holdId}/edd?validatedFields=${JSON.stringify(
+          validatedFields
+        )}&formState=${JSON.stringify(formState)}`
       )
     }
 

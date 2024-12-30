@@ -51,8 +51,9 @@ interface EDDRequestPropsType {
   patronEmail?: string
   isAuthenticated?: boolean
   errorStatus?: HoldErrorStatus
+  initialFormState?: EDDRequestParams
   patronEligibilityStatus?: PatronEligibilityStatus
-  validatedEDDFields?: EDDFormValidatedField[]
+  validatedFields?: EDDFormValidatedField[]
 }
 
 /**
@@ -65,8 +66,9 @@ export default function EDDRequestPage({
   patronEmail,
   isAuthenticated,
   errorStatus: defaultErrorStatus,
+  initialFormState = initialEDDFormState,
   patronEligibilityStatus: defaultEligibilityStatus,
-  validatedEDDFields,
+  validatedFields,
 }: EDDRequestPropsType) {
   const metadataTitle = `Electronic Delivery Request | ${SITE_NAME}`
   const bib = new Bib(discoveryBibResult)
@@ -80,8 +82,8 @@ export default function EDDRequestPage({
   )
 
   const [eddFormState, setEddFormState] = useState<EDDRequestParams>({
-    ...initialEDDFormState,
-    emailAddress: patronEmail,
+    ...initialFormState,
+    emailAddress: initialFormState.emailAddress || patronEmail,
     patronId,
     source: item.formattedSourceForHoldRequest,
   })
@@ -183,7 +185,7 @@ export default function EDDRequestPage({
             handleSubmit={postEDDRequest}
             setErrorStatus={setErrorStatus}
             errorStatus={errorStatus}
-            validatedEDDFields={validatedEDDFields}
+            validatedEDDFields={validatedFields}
             holdId={holdId}
           />
         ) : null}
@@ -194,7 +196,7 @@ export default function EDDRequestPage({
 
 export async function getServerSideProps({ params, req, res, query }) {
   const { id } = params
-  const { validatedEDDFields } = query
+  const { validatedFields, formState } = query
 
   // authentication redirect
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
@@ -280,7 +282,8 @@ export async function getServerSideProps({ params, req, res, query }) {
         patronEmail,
         isAuthenticated,
         patronEligibilityStatus,
-        validatedEDDFields: JSON.parse(validatedEDDFields),
+        validatedFields: JSON.parse(validatedFields) || null,
+        initialFormState: JSON.parse(formState) || null,
         errorStatus: locationOrEligibilityFetchFailed
           ? "failed"
           : patronEligibilityStatus.status === 401

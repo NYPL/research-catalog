@@ -50,7 +50,6 @@ const EDDRequestForm = ({
   errorStatus,
   validatedEDDFields,
 }: EDDRequestFormProps) => {
-  console.log("validatedEDDFields", typeof validatedEDDFields)
   // Set the invalid fields as an array in state to keep track of the first invalid field for focus on submit
   const [invalidFields, setInvalidFields] = useState(
     validatedEDDFields || initialEDDInvalidFields
