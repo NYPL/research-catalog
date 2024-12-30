@@ -42,6 +42,8 @@ export const getUpdatedInvalidFields = (
   prevInvalidFields: EDDFormValidatedField[]
 ): EDDFormValidatedField[] => {
   return prevInvalidFields.map((field) => {
+    console.log("fieldName", fieldName)
+    console.log("field.key", field.key)
     if (field.key === fieldName) {
       switch (field.key) {
         // Validate email field

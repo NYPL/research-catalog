@@ -4,6 +4,10 @@ import {
   postEDDRequest,
   fetchPatronEligibility,
 } from "../../../../../src/server/api/hold"
+import {
+  initialEDDInvalidFields,
+  validateEDDForm,
+} from "../../../../../src/utils/holdPageUtils"
 import { BASE_URL, PATHS } from "../../../../../src/config/constants"
 
 /**
@@ -18,8 +22,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   try {
     const { patronId, jsEnabled, ...rest } = req.body
-
     const holdId = req.query.id as string
+
+    // Server-side form validation
+    const validatedEDDFields = validateEDDForm(rest, initialEDDInvalidFields)
 
     const [, itemId] = holdId.split("-")
 
@@ -33,10 +39,14 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           })
 
         // Server side redirect on ineligibility when Js is disabled
-        // TODO: Move this to seaprate API route
-        // TODO: Parse these query params in getServerSideProps
         default:
-          return res.redirect(`${BASE_URL}${PATHS.HOLD_REQUEST}/${holdId}/edd`)
+          return res.redirect(
+            `${BASE_URL}${
+              PATHS.HOLD_REQUEST
+            }/${holdId}/edd?patronEligibilityStatus=${JSON.stringify(
+              patronEligibilityStatus
+            )}`
+          )
       }
     }
 
@@ -60,6 +70,18 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     }
 
     // JS-Disabled functionality
+    const eddFormInvalid = !!validatedEDDFields.find(
+      (validatedFieldKey) => validatedFieldKey.isInvalid
+    )
+    if (eddFormInvalid) {
+      return res.redirect(
+        `${BASE_URL}${
+          PATHS.HOLD_REQUEST
+        }/${holdId}/edd?validatedEDDFields=${JSON.stringify(
+          validatedEDDFields
+        )}`
+      )
+    }
 
     // Redirect to confirmation page
     return res.redirect(

@@ -41,6 +41,7 @@ import type {
   EDDRequestParams,
   HoldErrorStatus,
   PatronEligibilityStatus,
+  EDDFormValidatedField,
 } from "../../../../src/types/holdPageTypes"
 
 interface EDDRequestPropsType {
@@ -51,6 +52,7 @@ interface EDDRequestPropsType {
   isAuthenticated?: boolean
   errorStatus?: HoldErrorStatus
   patronEligibilityStatus?: PatronEligibilityStatus
+  validatedEDDFields?: EDDFormValidatedField[]
 }
 
 /**
@@ -64,6 +66,7 @@ export default function EDDRequestPage({
   isAuthenticated,
   errorStatus: defaultErrorStatus,
   patronEligibilityStatus: defaultEligibilityStatus,
+  validatedEDDFields,
 }: EDDRequestPropsType) {
   const metadataTitle = `Electronic Delivery Request | ${SITE_NAME}`
   const bib = new Bib(discoveryBibResult)
@@ -180,6 +183,7 @@ export default function EDDRequestPage({
             handleSubmit={postEDDRequest}
             setErrorStatus={setErrorStatus}
             errorStatus={errorStatus}
+            validatedEDDFields={validatedEDDFields}
             holdId={holdId}
           />
         ) : null}
@@ -188,8 +192,9 @@ export default function EDDRequestPage({
   )
 }
 
-export async function getServerSideProps({ params, req, res }) {
+export async function getServerSideProps({ params, req, res, query }) {
   const { id } = params
+  const { validatedEDDFields } = query
 
   // authentication redirect
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
@@ -275,6 +280,7 @@ export async function getServerSideProps({ params, req, res }) {
         patronEmail,
         isAuthenticated,
         patronEligibilityStatus,
+        validatedEDDFields: JSON.parse(validatedEDDFields),
         errorStatus: locationOrEligibilityFetchFailed
           ? "failed"
           : patronEligibilityStatus.status === 401

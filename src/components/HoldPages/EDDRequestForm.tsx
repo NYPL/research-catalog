@@ -25,6 +25,7 @@ import {
 import type {
   EDDRequestParams,
   HoldErrorStatus,
+  EDDFormValidatedField,
 } from "../../types/holdPageTypes"
 
 interface EDDRequestFormProps {
@@ -34,6 +35,7 @@ interface EDDRequestFormProps {
   setErrorStatus: (errorStatus: HoldErrorStatus) => void
   holdId: string
   errorStatus?: HoldErrorStatus
+  validatedEDDFields?: EDDFormValidatedField[]
 }
 
 /**
@@ -46,9 +48,13 @@ const EDDRequestForm = ({
   setErrorStatus,
   holdId,
   errorStatus,
+  validatedEDDFields,
 }: EDDRequestFormProps) => {
+  console.log("validatedEDDFields", typeof validatedEDDFields)
   // Set the invalid fields as an array in state to keep track of the first invalid field for focus on submit
-  const [invalidFields, setInvalidFields] = useState(initialEDDInvalidFields)
+  const [invalidFields, setInvalidFields] = useState(
+    validatedEDDFields || initialEDDInvalidFields
+  )
 
   // Create refs for fields that require validation to focus on the first invalid field on submit
   const [validatedInputRefs] = useState(
