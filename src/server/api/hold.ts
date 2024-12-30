@@ -188,6 +188,7 @@ export async function fetchHoldDetails(
   try {
     const client = await nyplApiClient()
     const holdDetailsResult = await client.get(`/hold-requests/${requestId}`)
+
     const { id, pickupLocation, patron } = holdDetailsResult.data
 
     return {

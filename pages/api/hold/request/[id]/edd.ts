@@ -17,7 +17,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   try {
-    const { patronId, jsEnabled, ...rest } = JSON.parse(req.body)
+    const { patronId, jsEnabled, ...rest } = req.body
+
     const holdId = req.query.id as string
 
     const [, itemId] = holdId.split("-")
@@ -39,13 +40,13 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       }
     }
 
-    const holdRequestResponse = await postEDDRequest({
+    const eddRequestResponse = await postEDDRequest({
       itemId,
       patronId,
       ...rest,
     })
 
-    const { requestId } = holdRequestResponse
+    const { requestId } = eddRequestResponse
 
     if (!requestId) {
       throw new Error("Malformed response from hold request API")
@@ -62,7 +63,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
     // Redirect to confirmation page
     return res.redirect(
-      `${BASE_URL}${PATHS.HOLD_CONFIRMATION}/${holdId}?pickupLocation=edd?requestId=${requestId}`
+      `${BASE_URL}${PATHS.HOLD_CONFIRMATION}/${holdId}?pickupLocation=edd&requestId=${requestId}`
     )
   } catch (error) {
     const { statusText } = error as Response
