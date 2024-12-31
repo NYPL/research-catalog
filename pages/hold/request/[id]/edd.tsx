@@ -41,7 +41,6 @@ import type {
   EDDRequestParams,
   HoldErrorStatus,
   PatronEligibilityStatus,
-  EDDFormValidatedField,
 } from "../../../../src/types/holdPageTypes"
 
 interface EDDRequestPropsType {
@@ -51,9 +50,7 @@ interface EDDRequestPropsType {
   patronEmail?: string
   isAuthenticated?: boolean
   errorStatus?: HoldErrorStatus
-  initialFormState?: EDDRequestParams
   patronEligibilityStatus?: PatronEligibilityStatus
-  validatedFields?: EDDFormValidatedField[]
 }
 
 /**
@@ -66,9 +63,7 @@ export default function EDDRequestPage({
   patronEmail,
   isAuthenticated,
   errorStatus: defaultErrorStatus,
-  initialFormState = initialEDDFormState,
   patronEligibilityStatus: defaultEligibilityStatus,
-  validatedFields,
 }: EDDRequestPropsType) {
   const metadataTitle = `Electronic Delivery Request | ${SITE_NAME}`
   const bib = new Bib(discoveryBibResult)
@@ -81,18 +76,23 @@ export default function EDDRequestPage({
     defaultEligibilityStatus
   )
 
-  const [eddFormState, setEddFormState] = useState<EDDRequestParams>({
-    ...initialFormState,
-    emailAddress: initialFormState.emailAddress || patronEmail,
-    patronId,
-    source: item.formattedSourceForHoldRequest,
-  })
   const [formPosting, setFormPosting] = useState(false)
 
   const bannerContainerRef = useRef<HTMLDivElement>()
 
   const router = useRouter()
   const isLoading = useLoading()
+
+  // Populate form values from query string in case of js-disabled server-side redirect
+  const formStateFromQuery = JSON.parse(router.query?.formState as string)
+
+  const [eddFormState, setEddFormState] = useState<EDDRequestParams>({
+    ...initialEDDFormState,
+    emailAddress: patronEmail,
+    patronId,
+    source: item.formattedSourceForHoldRequest,
+    ...formStateFromQuery,
+  })
 
   useEffect(() => {
     if (
@@ -185,7 +185,6 @@ export default function EDDRequestPage({
             handleSubmit={postEDDRequest}
             setErrorStatus={setErrorStatus}
             errorStatus={errorStatus}
-            validatedEDDFields={validatedFields}
             holdId={holdId}
           />
         ) : null}
@@ -196,7 +195,8 @@ export default function EDDRequestPage({
 
 export async function getServerSideProps({ params, req, res, query }) {
   const { id } = params
-  const { validatedFields, formState } = query
+  const { formInvalid } = query
+  const serverValidationFailed = formInvalid ? JSON.parse(formInvalid) : false
 
   // authentication redirect
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
@@ -282,14 +282,14 @@ export async function getServerSideProps({ params, req, res, query }) {
         patronEmail,
         isAuthenticated,
         patronEligibilityStatus,
-        validatedFields: JSON.parse(validatedFields) || null,
-        initialFormState: JSON.parse(formState) || null,
         errorStatus: locationOrEligibilityFetchFailed
           ? "failed"
           : patronEligibilityStatus.status === 401
           ? "patronIneligible"
           : !isEddAvailable
           ? "eddUnavailable"
+          : serverValidationFailed
+          ? "invalid"
           : null,
       },
     }

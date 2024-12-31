@@ -7,6 +7,7 @@ import {
 import {
   initialEDDInvalidFields,
   validateEDDForm,
+  eddFormIsInvalid,
 } from "../../../../../src/utils/holdPageUtils"
 import { BASE_URL, PATHS } from "../../../../../src/config/constants"
 
@@ -71,14 +72,13 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     }
 
     // JS-Disabled functionality
-    const formInvalid = !!validatedFields.find(
-      (validatedFieldKey) => validatedFieldKey.isInvalid
-    )
+    const formInvalid = eddFormIsInvalid(validatedFields)
+
     if (formInvalid) {
       return res.redirect(
         `${BASE_URL}${
           PATHS.HOLD_REQUEST
-        }/${holdId}/edd?validatedFields=${JSON.stringify(
+        }/${holdId}/edd?formInvalid=${formInvalid}&validatedFields=${JSON.stringify(
           validatedFields
         )}&formState=${JSON.stringify(formState)}`
       )
