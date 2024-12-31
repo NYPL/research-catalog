@@ -22,7 +22,7 @@ import {
   isInvalidField,
   holdButtonDisabledStatuses,
   initialEDDInvalidFields,
-  getFirstInvalidField,
+  getFirstInvalidEDDField,
 } from "../../utils/holdPageUtils"
 import type {
   EDDRequestParams,
@@ -54,11 +54,14 @@ const EDDRequestForm = ({
   const router = useRouter()
 
   // Get form state from query in case of js-disabled server-side redirect
-  const { validatedFields: validatedFieldsFromQuery } = router.query
+  const { validatedFields } = router.query
+  const serverValidatedFields = validatedFields
+    ? JSON.parse(validatedFields as string)
+    : null
 
   // Set the invalid fields as an array in state to keep track of the first invalid field for focus on submit
   const [invalidFields, setInvalidFields] = useState<EDDFormValidatedField[]>(
-    JSON.parse(validatedFieldsFromQuery as string) || initialEDDInvalidFields
+    serverValidatedFields || initialEDDInvalidFields
   )
 
   // Create refs for fields that require validation to focus on the first invalid field on submit
@@ -96,7 +99,7 @@ const EDDRequestForm = ({
     setInvalidFields(newValidatedFields)
 
     // Find the first invalid field and focus on it
-    const firstInvalidField = getFirstInvalidField(newValidatedFields)
+    const firstInvalidField = getFirstInvalidEDDField(newValidatedFields)
 
     // Prevent form submission and focus on first invalid field if there is one
     if (firstInvalidField) {

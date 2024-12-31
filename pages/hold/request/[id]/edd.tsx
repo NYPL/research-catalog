@@ -84,7 +84,9 @@ export default function EDDRequestPage({
   const isLoading = useLoading()
 
   // Populate form values from query string in case of js-disabled server-side redirect
-  const formStateFromQuery = JSON.parse(router.query?.formState as string)
+  const formStateFromQuery = router.query?.formState
+    ? JSON.parse(router.query.formState as string)
+    : []
 
   const [eddFormState, setEddFormState] = useState<EDDRequestParams>({
     ...initialEDDFormState,

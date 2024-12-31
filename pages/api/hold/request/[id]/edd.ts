@@ -22,7 +22,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   try {
-    const { patronId, jsEnabled, ...rest } = req.body
+    const { patronId, jsEnabled, ...rest } =
+      typeof req.body === "string" ? JSON.parse(req.body) : req.body
     const formState = rest
     const holdId = req.query.id as string
 
@@ -55,7 +56,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     const eddRequestResponse = await postEDDRequest({
       itemId,
       patronId,
-      ...rest,
+      ...formState,
     })
 
     const { requestId } = eddRequestResponse
@@ -78,7 +79,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       return res.redirect(
         `${BASE_URL}${
           PATHS.HOLD_REQUEST
-        }/${holdId}/edd?formInvalid=${formInvalid}&validatedFields=${JSON.stringify(
+        }/${holdId}/edd?formInvalid=${JSON.stringify(
+          formInvalid
+        )}&validatedFields=${JSON.stringify(
           validatedFields
         )}&formState=${JSON.stringify(formState)}`
       )
