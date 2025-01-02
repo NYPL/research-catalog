@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## Added
+
+- ItemAvailability class and updated access messaging
+
 ### Updated
 
 - Updated phone, email, notification preference and home library to be individually editable in Account Settings (SCC-4337, SCC-4254, SCC-4253)
