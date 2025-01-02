@@ -53,7 +53,7 @@ const EDDRequestForm = ({
 }: EDDRequestFormProps) => {
   const router = useRouter()
 
-  // Get form state from query in case of js-disabled server-side redirect
+  // Derive form validation state from query in case of js-disabled server-side redirect
   const { validatedFields } = router.query
   const serverValidatedFields = validatedFields
     ? JSON.parse(validatedFields as string)

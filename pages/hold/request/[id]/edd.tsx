@@ -83,8 +83,8 @@ export default function EDDRequestPage({
   const router = useRouter()
   const isLoading = useLoading()
 
-  // Populate form values from query string in case of js-disabled server-side redirect
-  const formStateFromQuery = router.query?.formState
+  // Derive form values from query string in case of js-disabled server-side redirect
+  const formStateFromServer = router.query?.formState
     ? JSON.parse(router.query.formState as string)
     : []
 
@@ -93,7 +93,8 @@ export default function EDDRequestPage({
     emailAddress: patronEmail,
     patronId,
     source: item.formattedSourceForHoldRequest,
-    ...formStateFromQuery,
+    // Override values with server form state in the case of a no-js request
+    ...formStateFromServer,
   })
 
   useEffect(() => {
