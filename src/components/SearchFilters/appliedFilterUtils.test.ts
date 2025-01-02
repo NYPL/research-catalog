@@ -83,7 +83,7 @@ describe("Applied Filter utils", () => {
 
     it("takes applied filter values and adds the appropriate label", () => {
       const appliedFilterValues = {
-        materialType: ["resourcetypes:txt"],
+        recordType: ["resourcetypes:txt"],
         language: ["lang:ita"],
         subjectLiteral: ["Spaghetti Westerns -- History and criticism."],
       }
@@ -92,9 +92,7 @@ describe("Applied Filter utils", () => {
         appliedFilterValues
       )
       expect(parsed).toStrictEqual({
-        materialType: [
-          { value: "resourcetypes:txt", count: 371, label: "Text" },
-        ],
+        recordType: [{ value: "resourcetypes:txt", count: 371, label: "Text" }],
         language: [{ value: "lang:ita", count: 59, label: "Italian" }],
         subjectLiteral: [
           {

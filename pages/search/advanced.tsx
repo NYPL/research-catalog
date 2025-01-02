@@ -37,7 +37,7 @@ import { useDateForm } from "../../src/hooks/useDateForm"
 import DateForm from "../../src/components/SearchFilters/DateForm"
 import SearchFilterCheckboxField from "../../src/components/RefineSearch/SearchFilterCheckboxField"
 import CancelSubmitButtonGroup from "../../src/components/RefineSearch/CancelSubmitButtonGroup"
-import { materialTypeOptions } from "../../src/utils/advancedSearchUtils"
+import { recordTypeOptions } from "../../src/utils/advancedSearchUtils"
 import { searchAggregations } from "../../src/config/aggregations"
 import RCLink from "../../src/components/Links/RCLink/RCLink"
 
@@ -213,13 +213,13 @@ export default function AdvancedSearch({
                 gridOptions={{ min: 1, max: 1 }}
               />
               <SearchFilterCheckboxField
-                options={materialTypeOptions}
+                options={recordTypeOptions}
                 name="format"
                 label="Format"
                 handleCheckboxChange={(e) =>
-                  handleCheckboxChange("materialType", e)
+                  handleCheckboxChange("recordType", e)
                 }
-                searchFormState={searchFormState["filters"].materialType}
+                searchFormState={searchFormState["filters"].recordType}
               />
             </Flex>
           </Flex>

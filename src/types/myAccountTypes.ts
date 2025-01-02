@@ -154,7 +154,7 @@ export interface SierraBibEntry {
   lang: SierraCodeName
   title: string
   author: string
-  materialType: {
+  recordType: {
     code: string
     value: string
   }

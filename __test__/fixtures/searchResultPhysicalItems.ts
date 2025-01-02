@@ -174,7 +174,7 @@ export const searchResultPhysicalItems = {
     },
   ],
   lccClassification: ["TS2157 .P7"],
-  materialType: [
+  recordType: [
     {
       "@id": "resourcetypes:txt",
       prefLabel: "Material",

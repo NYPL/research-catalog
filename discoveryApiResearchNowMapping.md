@@ -19,7 +19,7 @@
 - `search_scope` string
   - "all", "title", "contributor", "subject", "series", "callnumber", "standard_number"
 - `filters` string
-  - "owner", "subjectLiteral", "holdingLocation", "deliveryLocation", "language", "materialType", "mediaType", "
+  - "owner", "subjectLiteral", "holdingLocation", "deliveryLocation", "language", "recordType", "mediaType", "
     carrierType", "publisher", "contributor", "creator", "issuance", "createdYear", "dateAfter"', or "dateBefore"
   - Specify a hash of filters to apply, where keys are from terms above
 
@@ -126,7 +126,7 @@ e.g. `filters`) is used for the parameters the respective APIs except.
 | <ul>'Author/Contributor'                      | <ul>"contributor"                                     | <ul>"author"                                    |
 | <ul>'Standard Number'                         | <ul>"standard_number"                                 | <ul> "standardNumber"                           |
 | _Search page filters_                         | `filters`                                             |                                                 |
-| <ul>'Format'                                  | <ul>`filters[materialType]`                           | <ul>N/A\*                                       |
+| <ul>'Format'                                  | <ul>`filters[recordType]`                             | <ul>N/A\*                                       |
 | <ul>'Date':<ul><li>'Start Year'<li>'End Year' | <ul><br>`filters[dateAfter]`<br>`filters[dateBefore]` | `filters`<br><ul>`years[start]`<br>`years[end]` |
 | <ul>'Language'                                | <ul>`filters[language]`                               | <ul>`filters` `language`                        |
 | _Filters linked to from a bib page_           |
@@ -138,7 +138,7 @@ e.g. `filters`) is used for the parameters the respective APIs except.
 | _Sorting_                                     | `sort`                                                | `sort[field]`                                   |
 |                                               | `sort_direction`                                      | `sort[direction]`                               |
 
-\* ResearchNow's `format` parameter does not correspond to the `materialType` in Discovery API. The former relates to
+\* ResearchNow's `format` parameter does not correspond to the `recordType` in Discovery API. The former relates to
 digital formats (pdf, epub, and html). The latter to physical material type.
 
 ## API Response Structure
@@ -233,7 +233,7 @@ digital formats (pdf, epub, and html). The latter to physical material type.
             "prefLabel": "string"
           }
         ],
-        "materialType": [
+        "recordType": [
           {
             "@type": "string",
             "@id": "string",

@@ -1,6 +1,6 @@
 {
   "selectedFilters": {
-    "materialType": [],
+    "recordType": [],
     "language": [],
     "dateAfter": "",
     "dateBefore": "",
@@ -320,9 +320,9 @@
       },
       {
         "@type": "nypl:Aggregation",
-        "@id": "res:materialType",
-        "id": "materialType",
-        "field": "materialType",
+        "@id": "res:recordType",
+        "id": "recordType",
+        "field": "recordType",
         "values": [
           {
             "value": "resourcetypes:txt",

@@ -15,7 +15,7 @@ export interface DiscoveryBibResult {
   titleDisplay?: string[]
   creatorLiteral?: string[]
   title?: string[]
-  materialType?: MaterialType[]
+  recordType?: recordType[]
   publicationStatement?: string[]
   dateStartYear?: number
   dateEndYear?: number
@@ -52,7 +52,7 @@ export interface DiscoveryBibResult {
 //   uri: string
 // }
 
-type MaterialType = {
+type recordType = {
   value?: string
   prefLabel?: string
 }

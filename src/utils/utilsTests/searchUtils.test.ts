@@ -152,7 +152,7 @@ describe("searchUtils", () => {
       const params = mapRequestBodyToSearchParams({
         q: "spaghetti",
         language: "igbo",
-        materialType: "scroll",
+        recordType: "scroll",
         dateAfter: "1900",
         dateBefore: "1902",
       })
@@ -161,7 +161,7 @@ describe("searchUtils", () => {
         page: 1,
         filters: {
           language: "igbo",
-          materialType: "scroll",
+          recordType: "scroll",
           dateAfter: "1900",
           dateBefore: "1902",
         },
