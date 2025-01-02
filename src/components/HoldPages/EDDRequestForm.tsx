@@ -37,7 +37,6 @@ interface EDDRequestFormProps {
   setErrorStatus: (errorStatus: HoldErrorStatus) => void
   holdId: string
   errorStatus?: HoldErrorStatus
-  validatedEDDFields?: EDDFormValidatedField[]
 }
 
 /**
