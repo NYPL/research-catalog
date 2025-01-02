@@ -19,7 +19,10 @@ import {
   EDD_FORM_FIELD_COPY,
   HOLD_PAGE_ERROR_HEADINGS,
 } from "../../../src/config/constants"
-import { fetchDeliveryLocations } from "../../../src/server/api/hold"
+import {
+  fetchDeliveryLocations,
+  fetchPatronEligibility,
+} from "../../../src/server/api/hold"
 
 jest.mock("../../../src/server/auth")
 jest.mock("../../../src/server/api/bib")
@@ -174,6 +177,40 @@ describe("EDD Request page", () => {
         destination: bibWithSingleAeonItem.resource.items[0].aeonUrl[0],
         permanent: false,
       })
+    })
+  })
+  describe("server-side validation", () => {
+    beforeEach(() => {
+      ;(initializePatronTokenAuth as jest.Mock).mockResolvedValue({
+        isTokenValid: true,
+        errorCode: null,
+        decodedPatron: { sub: "123" },
+      })
+      ;(fetchBib as jest.Mock).mockResolvedValue({
+        discoveryBibResult: {
+          ...bibWithItems.resource,
+          items: [{ ...bibWithItems.resource.items[0], eddRequestable: true }],
+        },
+        status: 200,
+      })
+      ;(fetchPatronEligibility as jest.Mock).mockResolvedValue({
+        eligibility: true,
+        status: 200,
+      })
+      ;(fetchDeliveryLocations as jest.Mock).mockResolvedValue({
+        eddRequestable: true,
+        status: 200,
+      })
+    })
+
+    it("initializes errorStatus as invalid when formInvalid query param is present url ", async () => {
+      const response = await getServerSideProps({
+        params: { id },
+        res: mockRes,
+        req: mockReq,
+        query: { formInvalid: "true" },
+      })
+      expect(response.props.errorStatus).toStrictEqual("invalid")
     })
   })
   describe("EDD Request page UI", () => {
