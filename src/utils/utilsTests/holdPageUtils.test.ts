@@ -1,5 +1,5 @@
 import {
-  initialEDDInvalidFields,
+  defaultValidatedEDDFields,
   getUpdatedInvalidFields,
 } from "../holdPageUtils"
 
@@ -7,7 +7,11 @@ describe("holdPageUtils", () => {
   describe("getUpdatedInvalidFields", () => {
     it("returns correctly updated field validation statuses for different inputs", () => {
       expect(
-        getUpdatedInvalidFields("emailAddress", "test", initialEDDInvalidFields)
+        getUpdatedInvalidFields(
+          "emailAddress",
+          "test",
+          defaultValidatedEDDFields
+        )
       ).toStrictEqual([
         { isInvalid: true, key: "emailAddress" },
         { isInvalid: false, key: "startPage" },
@@ -18,7 +22,7 @@ describe("holdPageUtils", () => {
         getUpdatedInvalidFields(
           "emailAddress",
           "test@test.com",
-          initialEDDInvalidFields
+          defaultValidatedEDDFields
         )
       ).toStrictEqual([
         { isInvalid: false, key: "emailAddress" },
@@ -27,7 +31,7 @@ describe("holdPageUtils", () => {
         { isInvalid: false, key: "chapterTitle" },
       ])
       expect(
-        getUpdatedInvalidFields("emailAddress", "", initialEDDInvalidFields)
+        getUpdatedInvalidFields("emailAddress", "", defaultValidatedEDDFields)
       ).toStrictEqual([
         { isInvalid: true, key: "emailAddress" },
         { isInvalid: false, key: "startPage" },
@@ -35,7 +39,7 @@ describe("holdPageUtils", () => {
         { isInvalid: false, key: "chapterTitle" },
       ])
       expect(
-        getUpdatedInvalidFields("startPage", "", initialEDDInvalidFields)
+        getUpdatedInvalidFields("startPage", "", defaultValidatedEDDFields)
       ).toStrictEqual([
         { isInvalid: false, key: "emailAddress" },
         { isInvalid: true, key: "startPage" },
@@ -43,7 +47,7 @@ describe("holdPageUtils", () => {
         { isInvalid: false, key: "chapterTitle" },
       ])
       expect(
-        getUpdatedInvalidFields("endPage", "", initialEDDInvalidFields)
+        getUpdatedInvalidFields("endPage", "", defaultValidatedEDDFields)
       ).toStrictEqual([
         { isInvalid: false, key: "emailAddress" },
         { isInvalid: false, key: "startPage" },
@@ -51,7 +55,7 @@ describe("holdPageUtils", () => {
         { isInvalid: false, key: "chapterTitle" },
       ])
       expect(
-        getUpdatedInvalidFields("chapterTitle", "", initialEDDInvalidFields)
+        getUpdatedInvalidFields("chapterTitle", "", defaultValidatedEDDFields)
       ).toStrictEqual([
         { isInvalid: false, key: "emailAddress" },
         { isInvalid: false, key: "startPage" },

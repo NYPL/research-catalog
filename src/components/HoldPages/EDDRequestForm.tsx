@@ -21,7 +21,7 @@ import {
   validateEDDForm,
   isInvalidField,
   holdButtonDisabledStatuses,
-  initialEDDInvalidFields,
+  defaultValidatedEDDFields,
   getFirstInvalidEDDField,
 } from "../../utils/holdPageUtils"
 import type {
@@ -61,7 +61,7 @@ const EDDRequestForm = ({
 
   // Set the invalid fields as an array in state to keep track of the first invalid field for focus on submit
   const [invalidFields, setInvalidFields] = useState<EDDFormValidatedField[]>(
-    serverValidatedFields || initialEDDInvalidFields
+    serverValidatedFields || defaultValidatedEDDFields
   )
 
   // Create refs for fields that require validation to focus on the first invalid field on submit

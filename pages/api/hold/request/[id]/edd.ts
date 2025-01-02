@@ -5,7 +5,7 @@ import {
   fetchPatronEligibility,
 } from "../../../../../src/server/api/hold"
 import {
-  initialEDDInvalidFields,
+  defaultValidatedEDDFields,
   validateEDDForm,
   eddFormIsInvalid,
 } from "../../../../../src/utils/holdPageUtils"
@@ -28,7 +28,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     const holdId = req.query.id as string
 
     // Server-side form validation
-    const validatedFields = validateEDDForm(formState, initialEDDInvalidFields)
+    const validatedFields = validateEDDForm(
+      formState,
+      defaultValidatedEDDFields
+    )
 
     const [, itemId] = holdId.split("-")
 

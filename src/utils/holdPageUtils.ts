@@ -23,7 +23,7 @@ export const initialEDDFormState: EDDRequestParams = {
 }
 
 // Initial state for invalid fields in the EDD form to keep track of the first invalid field for focus on submit
-export const initialEDDInvalidFields: EDDFormValidatedField[] = [
+export const defaultValidatedEDDFields: EDDFormValidatedField[] = [
   { key: "emailAddress", isInvalid: false },
   { key: "startPage", isInvalid: false },
   { key: "endPage", isInvalid: false },
