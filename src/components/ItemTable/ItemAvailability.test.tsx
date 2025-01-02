@@ -151,9 +151,7 @@ describe("ItemAvailability", () => {
       })
       render(<ItemAvailability item={item} />)
       expect(screen.getByText("Available by appointment")).toBeInTheDocument()
-      expect(screen.getByRole("link")).toHaveTextContent(
-        "Schwarzman Building - Main Reading Room 315"
-      )
+      expect(screen.queryByRole("link")).not.toBeInTheDocument()
       expect(
         screen.queryByText("Schwarzman Building - Main Reading Room 315.", {
           exact: false,
