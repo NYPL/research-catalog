@@ -5,6 +5,7 @@ import {
   waitFor,
 } from "../../../src/utils/testUtils"
 import userEvent from "@testing-library/user-event"
+import mockRouter from "next-router-mock"
 
 import EDDRequestPage, {
   getServerSideProps,
@@ -18,6 +19,7 @@ import { bibWithItems, bibWithSingleAeonItem } from "../../fixtures/bibFixtures"
 import {
   EDD_FORM_FIELD_COPY,
   HOLD_PAGE_ERROR_HEADINGS,
+  PATHS,
 } from "../../../src/config/constants"
 import {
   fetchDeliveryLocations,
@@ -345,6 +347,34 @@ describe("EDD Request page", () => {
       expect(
         screen.getByText(
           "Some fields contain errors. Please correct and submit again."
+        )
+      ).toBeInTheDocument()
+    })
+    it("shows a field errors when invalid field state is passed as a query param", async () => {
+      mockRouter.push(
+        `${PATHS.HOLD_REQUEST}/123-456/edd?formInvalid=true&validatedFields=[{%22key%22:%22emailAddress%22,%22isInvalid%22:true},{%22key%22:%22startPage%22,%22isInvalid%22:true},{%22key%22:%22endPage%22,%22isInvalid%22:true},{%22key%22:%22chapterTitle%22,%22isInvalid%22:true}]`
+      )
+      render(
+        <EDDRequestPage
+          discoveryBibResult={bibWithItems.resource}
+          discoveryItemResult={bibWithItems.resource.items[0]}
+          patronId="123"
+          isAuthenticated={true}
+        />
+      )
+      expect(
+        screen.getByText(
+          "There was a problem. Enter a valid email address. Your request will be delivered to the email address you enter above."
+        )
+      ).toBeInTheDocument()
+      expect(
+        screen.getAllByText(
+          "There was a problem. Enter a page number. You may request a maximum of 50 pages."
+        )
+      ).toHaveLength(2)
+      expect(
+        screen.getByText(
+          "There was a problem. Indicate the title of the chapter or article you are requesting."
         )
       ).toBeInTheDocument()
     })
