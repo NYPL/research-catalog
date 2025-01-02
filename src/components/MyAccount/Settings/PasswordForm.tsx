@@ -56,6 +56,7 @@ const PasswordFormField = forwardRef<TextInputRefType, PasswordFormFieldProps>(
           onChange={handler}
           invalidText="Pin/passwords do not match."
           isInvalid={isInvalid}
+          isClearable
         />
       </Flex>
     )
