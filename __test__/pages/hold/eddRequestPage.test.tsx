@@ -250,7 +250,7 @@ describe("EDD Request page", () => {
     })
   })
   describe("EDD Request prepopulated form fields", () => {
-    beforeEach(() => {
+    it("prepopulates the email field with the patron's email address if present", () => {
       render(
         <EDDRequestPage
           discoveryBibResult={bibWithItems.resource}
@@ -260,15 +260,27 @@ describe("EDD Request page", () => {
           isAuthenticated={true}
         />
       )
-    })
-    it("prepopulates the email field with the patron's email address if present", () => {
+
       expect(screen.getByDisplayValue("test@test.com")).toBeInTheDocument()
     })
     it("prepopulates all form fields and overwrites patron email when form fields are present in url", () => {
       mockRouter.push(
-        `${PATHS.HOLD_REQUEST}/123-456/edd?formState={%22source%22:%22sierra-nypl%22,%22emailAddress%22:%22test@test.com%22,%22startPage%22:%221%22,%22endPage%22:%225%22,%22chapterTitle%22:%22on%20spaghetti%22,%22author%22:%22%22,%22date%22:%22%22,%22volume%22:%22%22,%22issue%22:%22%22,%22requestNotes%22:%22%22}`
+        `${PATHS.HOLD_REQUEST}/123-456/edd?formState={%22source%22:%22sierra-nypl%22,%22emailAddress%22:%22test@test.com%22,%22startPage%22:%22ch%201%22,%22endPage%22:%22ch%205%22,%22chapterTitle%22:%22on%20spaghetti%22,%22author%22:%22%22,%22date%22:%22%22,%22volume%22:%22%22,%22issue%22:%22%22,%22requestNotes%22:%22%22}`
       )
+      render(
+        <EDDRequestPage
+          discoveryBibResult={bibWithItems.resource}
+          discoveryItemResult={bibWithItems.resource.items[2]}
+          patronId="123"
+          patronEmail="test@test.com"
+          isAuthenticated={true}
+        />
+      )
+
       expect(screen.getByDisplayValue("test@test.com")).toBeInTheDocument()
+      expect(screen.getByDisplayValue("ch 1")).toBeInTheDocument()
+      expect(screen.getByDisplayValue("ch 5")).toBeInTheDocument()
+      expect(screen.getByDisplayValue("on spaghetti")).toBeInTheDocument()
 
       // Clear query params for next test
       // TODO: Investigate if there's a more optimal way to test router changes without requiring cleanup for the next test
