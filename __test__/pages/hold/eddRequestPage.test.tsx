@@ -272,7 +272,7 @@ describe("EDD Request page", () => {
           discoveryBibResult={bibWithItems.resource}
           discoveryItemResult={bibWithItems.resource.items[2]}
           patronId="123"
-          patronEmail="test@test.com"
+          patronEmail="patron@test.com"
           isAuthenticated={true}
         />
       )
