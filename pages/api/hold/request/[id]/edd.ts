@@ -4,6 +4,11 @@ import {
   postEDDRequest,
   fetchPatronEligibility,
 } from "../../../../../src/server/api/hold"
+import {
+  defaultValidatedEDDFields,
+  validateEDDForm,
+  eddFormIsInvalid,
+} from "../../../../../src/utils/holdPageUtils"
 import { BASE_URL, PATHS } from "../../../../../src/config/constants"
 
 /**
@@ -17,8 +22,16 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   try {
-    const { patronId, jsEnabled, ...rest } = JSON.parse(req.body)
+    const { patronId, jsEnabled, ...rest } =
+      typeof req.body === "string" ? JSON.parse(req.body) : req.body
+    const formState = rest
     const holdId = req.query.id as string
+
+    // Server-side form validation
+    const validatedFields = validateEDDForm(
+      formState,
+      defaultValidatedEDDFields
+    )
 
     const [, itemId] = holdId.split("-")
 
@@ -32,20 +45,24 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           })
 
         // Server side redirect on ineligibility when Js is disabled
-        // TODO: Move this to seaprate API route
-        // TODO: Parse these query params in getServerSideProps
         default:
-          return res.redirect(`${BASE_URL}${PATHS.HOLD_REQUEST}/${holdId}/edd`)
+          return res.redirect(
+            `${BASE_URL}${
+              PATHS.HOLD_REQUEST
+            }/${holdId}/edd?patronEligibilityStatus=${JSON.stringify(
+              patronEligibilityStatus
+            )}`
+          )
       }
     }
 
-    const holdRequestResponse = await postEDDRequest({
+    const eddRequestResponse = await postEDDRequest({
       itemId,
       patronId,
-      ...rest,
+      ...formState,
     })
 
-    const { requestId } = holdRequestResponse
+    const { requestId } = eddRequestResponse
 
     if (!requestId) {
       throw new Error("Malformed response from hold request API")
@@ -58,11 +75,26 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       })
     }
 
-    // JS-Disabled functionality
+    // JS-Disabled error validation/redirect
+    const formInvalid = eddFormIsInvalid(validatedFields)
 
-    // Redirect to confirmation page
+    if (formInvalid) {
+      const formInvalidQuery = `formInvalid=${JSON.stringify(formInvalid)}`
+      const validatedFieldsQuery = `validatedFields=${JSON.stringify(
+        validatedFields
+      )}`
+      const formStateQuery = `formState=${JSON.stringify(formState)}`
+
+      const invalidFormRedirectUrl = encodeURI(
+        `${BASE_URL}${PATHS.HOLD_REQUEST}/${holdId}/edd?${formInvalidQuery}&${validatedFieldsQuery}&${formStateQuery}`
+      )
+
+      return res.redirect(invalidFormRedirectUrl)
+    }
+
+    // Redirect to confirmation page if there are no errors
     return res.redirect(
-      `${BASE_URL}${PATHS.HOLD_CONFIRMATION}/${holdId}?pickupLocation=edd?requestId=${requestId}`
+      `${BASE_URL}${PATHS.HOLD_CONFIRMATION}/${holdId}?pickupLocation=edd&requestId=${requestId}`
     )
   } catch (error) {
     const { statusText } = error as Response

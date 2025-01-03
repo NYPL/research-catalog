@@ -76,18 +76,26 @@ export default function EDDRequestPage({
     defaultEligibilityStatus
   )
 
-  const [eddFormState, setEddFormState] = useState<EDDRequestParams>({
-    ...initialEDDFormState,
-    emailAddress: patronEmail,
-    patronId,
-    source: item.formattedSourceForHoldRequest,
-  })
   const [formPosting, setFormPosting] = useState(false)
 
   const bannerContainerRef = useRef<HTMLDivElement>()
 
   const router = useRouter()
   const isLoading = useLoading()
+
+  // Derive form values from query string in case of js-disabled server-side redirect
+  const formStateFromServer = router.query?.formState
+    ? JSON.parse(router.query.formState as string)
+    : []
+
+  const [eddFormState, setEddFormState] = useState<EDDRequestParams>({
+    ...initialEDDFormState,
+    emailAddress: patronEmail,
+    patronId,
+    source: item.formattedSourceForHoldRequest,
+    // Override values with server form state in the case of a no-js request
+    ...formStateFromServer,
+  })
 
   useEffect(() => {
     if (
@@ -188,8 +196,10 @@ export default function EDDRequestPage({
   )
 }
 
-export async function getServerSideProps({ params, req, res }) {
+export async function getServerSideProps({ params, req, res, query }) {
   const { id } = params
+  const { formInvalid } = query
+  const serverValidationFailed = formInvalid ? JSON.parse(formInvalid) : false
 
   // authentication redirect
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
@@ -281,6 +291,8 @@ export async function getServerSideProps({ params, req, res }) {
           ? "patronIneligible"
           : !isEddAvailable
           ? "eddUnavailable"
+          : serverValidationFailed
+          ? "invalid"
           : null,
       },
     }

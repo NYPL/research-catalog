@@ -10,6 +10,7 @@ import {
   Text,
 } from "@nypl/design-system-react-components"
 import { useState, createRef, type SyntheticEvent } from "react"
+import { useRouter } from "next/router"
 
 import { BASE_URL, EDD_FORM_FIELD_COPY } from "../../config/constants"
 import ExternalLink from "../Links/ExternalLink/ExternalLink"
@@ -18,13 +19,15 @@ import { CopyrightRestrictionsBanner } from "./CopyrightRestrictionsBanner"
 import {
   getUpdatedInvalidFields,
   validateEDDForm,
-  initialEDDInvalidFields,
   isInvalidField,
   holdButtonDisabledStatuses,
+  defaultValidatedEDDFields,
+  getFirstInvalidEDDField,
 } from "../../utils/holdPageUtils"
 import type {
   EDDRequestParams,
   HoldErrorStatus,
+  EDDFormValidatedField,
 } from "../../types/holdPageTypes"
 
 interface EDDRequestFormProps {
@@ -47,8 +50,18 @@ const EDDRequestForm = ({
   holdId,
   errorStatus,
 }: EDDRequestFormProps) => {
+  const router = useRouter()
+
+  // Derive form validation state from query in case of js-disabled server-side redirect
+  const { validatedFields } = router.query
+  const serverValidatedFields = validatedFields
+    ? JSON.parse(validatedFields as string)
+    : null
+
   // Set the invalid fields as an array in state to keep track of the first invalid field for focus on submit
-  const [invalidFields, setInvalidFields] = useState(initialEDDInvalidFields)
+  const [invalidFields, setInvalidFields] = useState<EDDFormValidatedField[]>(
+    serverValidatedFields || defaultValidatedEDDFields
+  )
 
   // Create refs for fields that require validation to focus on the first invalid field on submit
   const [validatedInputRefs] = useState(
@@ -85,9 +98,7 @@ const EDDRequestForm = ({
     setInvalidFields(newValidatedFields)
 
     // Find the first invalid field and focus on it
-    const firstInvalidField = newValidatedFields.find(
-      (validatedFieldKey) => validatedFieldKey.isInvalid
-    )
+    const firstInvalidField = getFirstInvalidEDDField(newValidatedFields)
 
     // Prevent form submission and focus on first invalid field if there is one
     if (firstInvalidField) {

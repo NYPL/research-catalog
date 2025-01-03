@@ -17,7 +17,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   try {
-    const { patronId, source, pickupLocation, jsEnabled } = JSON.parse(req.body)
+    const { patronId, source, pickupLocation, jsEnabled } = req.body
 
     const holdId = req.query.id as string
     const [, itemId] = holdId.split("-")
@@ -64,7 +64,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
     // Server side redirect in case user has JS disabled
     return res.redirect(
-      `${BASE_URL}${PATHS.HOLD_CONFIRMATION}/${holdId}?pickupLocation=${pickupLocationFromResponse}?requestId=${requestId}`
+      `${BASE_URL}${PATHS.HOLD_CONFIRMATION}/${holdId}?pickupLocation=${pickupLocationFromResponse}&requestId=${requestId}`
     )
   } catch (error) {
     const { statusText } = error as Response
