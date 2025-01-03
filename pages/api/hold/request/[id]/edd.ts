@@ -85,9 +85,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       )}`
       const formStateQuery = `formState=${JSON.stringify(formState)}`
 
-      const invalidFormRedirectUrl =
-        encodeURI(`${BASE_URL}${PATHS.HOLD_REQUEST}/${holdId}/edd?
-    )}&${formInvalidQuery}&${validatedFieldsQuery}&${formStateQuery}`)
+      const invalidFormRedirectUrl = encodeURI(
+        `${BASE_URL}${PATHS.HOLD_REQUEST}/${holdId}/edd?${formInvalidQuery}&${validatedFieldsQuery}&${formStateQuery}`
+      )
 
       return res.redirect(invalidFormRedirectUrl)
     }
