@@ -4,11 +4,9 @@ import ExternalLink from "../../Links/ExternalLink/ExternalLink"
 
 const AvailableByAppointment = ({ displayPeriod = false }) => {
   return (
-    <>
-      <Box as="span" color="ui.success.primary">
-        {`Available by appointment${displayPeriod ? ". " : ""}`}
-      </Box>
-    </>
+    <Box as="span" color="ui.success.primary">
+      {`Available by appointment${displayPeriod ? ". " : ""}`}
+    </Box>
   )
 }
 
@@ -26,7 +24,7 @@ const AvailableAtLink = ({ location }) => {
 
 const AvailableAt = ({ location }) => {
   if (!location?.endpoint) return null
-  else return <> {` at ${location.prefLabel}. `}</>
+  return <> {` at ${location.prefLabel}. `}</>
 }
 
 export { AvailableByAppointment, AvailableAtLink, AvailableAt }

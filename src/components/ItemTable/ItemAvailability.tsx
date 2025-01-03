@@ -59,11 +59,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
       break
     case RECAP_AEON:
     case RECAP_AEON_FINDING_AID:
-      message = (
-        <>
-          <AvailableByAppointment displayPeriod />
-        </>
-      )
+      message = <AvailableByAppointment displayPeriod />
       break
     case ONSITE_AEON_FINDING_AID:
       message = (
