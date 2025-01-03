@@ -33,7 +33,7 @@ describe("ItemAvailability", () => {
         screen.queryByText("Schwarzman Building - Main Reading Room 315")
       ).not.toBeInTheDocument()
     })
-    it("onsite aeon finding aid", () => {
+    it("onsite YES aeon YES finding aid", () => {
       const item = new Item(itemPhysicallyRequestable, parentBib)
       item.availability = new ItemAvailabilityModel({
         isAvailable: true,
@@ -48,7 +48,7 @@ describe("ItemAvailability", () => {
         "Schwarzman Building - Main Reading Room 315"
       )
     })
-    it("recap aeon finding aid", () => {
+    it("recap YES aeon YES finding aid", () => {
       const item = new Item(itemPhysicallyRequestable, parentBib)
       item.availability = new ItemAvailabilityModel({
         isAvailable: true,
@@ -64,13 +64,13 @@ describe("ItemAvailability", () => {
         screen.queryByText("Schwarzman Building - Main Reading Room 315")
       ).not.toBeInTheDocument()
     })
-    it("recap aeon", () => {
+    it("recap YES aeon NO finding ait", () => {
       const item = new Item(itemPhysicallyRequestable, parentBib)
       item.availability = new ItemAvailabilityModel({
         isAvailable: true,
         isReCAP: true,
         aeonUrl: "spaghetti.com",
-        findingAid: "meatballs.com",
+        findingAid: null,
         isSpecRequestable: true,
       })
       render(<ItemAvailability item={item} />)
@@ -80,7 +80,7 @@ describe("ItemAvailability", () => {
         screen.queryByText("Schwarzman Building - Main Reading Room 315")
       ).not.toBeInTheDocument()
     })
-    it("onsite aeon NO finding aid", () => {
+    it("onsite YES aeon NO finding aid", () => {
       const item = new Item(itemPhysicallyRequestable, parentBib)
       item.availability = new ItemAvailabilityModel({
         isAvailable: true,
@@ -172,6 +172,7 @@ describe("ItemAvailability", () => {
       expect(screen.getByText("contact a librarian")).toBeInTheDocument()
     })
   })
+
   it("renders the correct link when item is available, is reCAP, and does not have an aeon url", async () => {
     const item = new Item(itemNYPLReCAP, parentBib)
     render(<ItemAvailability item={item} />)
