@@ -7,12 +7,7 @@ import type Item from "../../../models/Item"
 const ContactALibrarian = ({
   item,
 }: {
-  item: {
-    id: string
-    barcode: string
-    callNumber: string
-    bibId: string
-  }
+  item: Pick<Item, "id" | "barcode" | "callNumber" | "bibId">
 }) => {
   const { onOpen, setItemMetadata } = useContext(FeedbackContext)
   const onContact = (metadata: ItemMetadata) => {

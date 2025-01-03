@@ -15,12 +15,24 @@ import {
   itemUnavailable,
 } from "../../../__test__/fixtures/itemFixtures"
 import { searchResultPhysicalItems } from "../../../__test__/fixtures/searchResultPhysicalItems"
-import { notDeepEqual } from "assert"
 
 const parentBib = new SearchResultsBib(searchResultPhysicalItems)
 
 describe("ItemAvailability", () => {
   describe("special collections", () => {
+    it("edge case", () => {
+      const item = new Item(itemPhysicallyRequestable, parentBib)
+      item.availability.key = "edgeCase"
+      render(<ItemAvailability item={item} />)
+      expect(screen.getByText("contact a librarian")).toBeInTheDocument()
+      expect(
+        screen.queryByText("Available by appointment")
+      ).not.toBeInTheDocument()
+      expect(screen.queryByRole("link")).not.toBeInTheDocument()
+      expect(
+        screen.queryByText("Schwarzman Building - Main Reading Room 315")
+      ).not.toBeInTheDocument()
+    })
     it("onsite aeon finding aid", () => {
       const item = new Item(itemPhysicallyRequestable, parentBib)
       item.availability = new ItemAvailabilityModel({

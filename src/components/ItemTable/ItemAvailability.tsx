@@ -3,7 +3,7 @@ import { Text } from "@nypl/design-system-react-components"
 import ExternalLink from "../Links/ExternalLink/ExternalLink"
 import { appConfig } from "../../config/config"
 import type Item from "../../models/Item"
-import { availabilityKeys } from "../../config/constants"
+import { AVAILABILITY_KEYS } from "../../config/constants"
 import {
   AvailableByAppointment,
   AvailableAt,
@@ -32,7 +32,7 @@ const {
   RECAP_FINDING_AID,
   ONSITE_NO_FINDING_AID_NO_AEON,
   RECAP_NO_FINDING_AID_NO_AEON,
-} = availabilityKeys
+} = AVAILABILITY_KEYS
 
 /**
  * The ItemAvailability component appears below the Item table and displays
@@ -98,7 +98,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
       message = (
         <>
           <AvailableByAppointment displayPeriod />
-          <ContactALibrarian item={itemMetadata} />
+          <ContactALibrarian item={item} />
         </>
       )
       break

@@ -7,12 +7,7 @@ const NotAvailable = ({
   dueDate,
 }: {
   dueDate: string
-  item: {
-    id: string
-    barcode: string
-    callNumber: string
-    bibId: string
-  }
+  item: Pick<Item, "id" | "barcode" | "callNumber" | "bibId">
 }) => {
   const itemMetadata = {
     id: item.id,

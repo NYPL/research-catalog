@@ -1,4 +1,4 @@
-import { availabilityKeys } from "../config/constants"
+import { AVAILABILITY_KEYS } from "../config/constants"
 
 const {
   EDGE_CASE,
@@ -14,7 +14,7 @@ const {
   RECAP_FINDING_AID,
   ONSITE_NO_FINDING_AID_NO_AEON,
   RECAP_NO_FINDING_AID_NO_AEON,
-} = availabilityKeys
+} = AVAILABILITY_KEYS
 
 class ItemAvailability {
   key: string

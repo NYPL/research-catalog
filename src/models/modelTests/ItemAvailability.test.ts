@@ -1,4 +1,4 @@
-import { availabilityKeys } from "../../config/constants"
+import { AVAILABILITY_KEYS } from "../../config/constants"
 import ItemAvailability from "../ItemAvailability"
 
 describe("ItemAvailabilityFactory", () => {
@@ -10,7 +10,7 @@ describe("ItemAvailabilityFactory", () => {
       findingAid: null,
       isSpecRequestable: false,
     })
-    expect(availability.key).toBe(availabilityKeys.NOT_AVAILABLE)
+    expect(availability.key).toBe(AVAILABILITY_KEYS.NOT_AVAILABLE)
   })
   it("recap not special collections", () => {
     const availability = new ItemAvailability({
@@ -20,7 +20,7 @@ describe("ItemAvailabilityFactory", () => {
       findingAid: null,
       isSpecRequestable: false,
     })
-    expect(availability.key).toBe(availabilityKeys.RECAP_GENERAL_COLLECTIONS)
+    expect(availability.key).toBe(AVAILABILITY_KEYS.RECAP_GENERAL_COLLECTIONS)
   })
   it("recap aeon", () => {
     const availability = new ItemAvailability({
@@ -30,7 +30,7 @@ describe("ItemAvailabilityFactory", () => {
       findingAid: null,
       isSpecRequestable: true,
     })
-    expect(availability.key).toBe(availabilityKeys.RECAP_AEON)
+    expect(availability.key).toBe(AVAILABILITY_KEYS.RECAP_AEON)
   })
   it("recap aeon finding aid", () => {
     const availability = new ItemAvailability({
@@ -40,7 +40,7 @@ describe("ItemAvailabilityFactory", () => {
       findingAid: "meatballs.com",
       isSpecRequestable: true,
     })
-    expect(availability.key).toBe(availabilityKeys.RECAP_AEON_FINDING_AID)
+    expect(availability.key).toBe(AVAILABILITY_KEYS.RECAP_AEON_FINDING_AID)
   })
   it("onsite aeon", () => {
     const availability = new ItemAvailability({
@@ -50,7 +50,7 @@ describe("ItemAvailabilityFactory", () => {
       findingAid: false,
       isSpecRequestable: true,
     })
-    expect(availability.key).toBe(availabilityKeys.ONSITE_AEON)
+    expect(availability.key).toBe(AVAILABILITY_KEYS.ONSITE_AEON)
   })
   it("onsite aeon finding aid", () => {
     const availability = new ItemAvailability({
@@ -60,7 +60,7 @@ describe("ItemAvailabilityFactory", () => {
       findingAid: "meatballs.com",
       isSpecRequestable: true,
     })
-    expect(availability.key).toBe(availabilityKeys.ONSITE_AEON_FINDING_AID)
+    expect(availability.key).toBe(AVAILABILITY_KEYS.ONSITE_AEON_FINDING_AID)
   })
   it("onsite finding aid - no aeon", () => {
     const availability = new ItemAvailability({
@@ -70,7 +70,7 @@ describe("ItemAvailabilityFactory", () => {
       findingAid: "meatballs.com",
       isSpecRequestable: true,
     })
-    expect(availability.key).toBe(availabilityKeys.ONSITE_FINDING_AID)
+    expect(availability.key).toBe(AVAILABILITY_KEYS.ONSITE_FINDING_AID)
   })
   it("recap finding aid - no aeon", () => {
     const availability = new ItemAvailability({
@@ -80,7 +80,7 @@ describe("ItemAvailabilityFactory", () => {
       findingAid: "meatballs.com",
       isSpecRequestable: true,
     })
-    expect(availability.key).toBe(availabilityKeys.RECAP_FINDING_AID)
+    expect(availability.key).toBe(AVAILABILITY_KEYS.RECAP_FINDING_AID)
   })
   it("recap no finding aid no aeon", () => {
     const availability = new ItemAvailability({
@@ -90,7 +90,9 @@ describe("ItemAvailabilityFactory", () => {
       findingAid: false,
       isSpecRequestable: true,
     })
-    expect(availability.key).toBe(availabilityKeys.RECAP_NO_FINDING_AID_NO_AEON)
+    expect(availability.key).toBe(
+      AVAILABILITY_KEYS.RECAP_NO_FINDING_AID_NO_AEON
+    )
   })
   it("recap no finding aid no aeon", () => {
     const availability = new ItemAvailability({
@@ -101,7 +103,7 @@ describe("ItemAvailabilityFactory", () => {
       isSpecRequestable: true,
     })
     expect(availability.key).toBe(
-      availabilityKeys.ONSITE_NO_FINDING_AID_NO_AEON
+      AVAILABILITY_KEYS.ONSITE_NO_FINDING_AID_NO_AEON
     )
   })
 })

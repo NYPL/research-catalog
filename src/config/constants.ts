@@ -135,7 +135,7 @@ export const NYPL_LOCATIONS = {
   },
 }
 
-export const availabilityKeys = {
+export const AVAILABILITY_KEYS = {
   // anything not covered by the cases below is EDGE_CASE
   EDGE_CASE: "edgeCase",
   // there is only one not available case, so availability is assumed as the default
