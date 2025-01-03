@@ -75,22 +75,24 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       })
     }
 
-    // JS-Disabled functionality
+    // JS-Disabled error validation/redirect
     const formInvalid = eddFormIsInvalid(validatedFields)
 
     if (formInvalid) {
-      return res.redirect(
-        `${BASE_URL}${
-          PATHS.HOLD_REQUEST
-        }/${holdId}/edd?formInvalid=${JSON.stringify(
-          formInvalid
-        )}&validatedFields=${JSON.stringify(
-          validatedFields
-        )}&formState=${JSON.stringify(formState)}`
-      )
+      const formInvalidQuery = `formInvalid=${JSON.stringify(formInvalid)}`
+      const validatedFieldsQuery = `validatedFields=${JSON.stringify(
+        validatedFields
+      )}`
+      const formStateQuery = `formState=${JSON.stringify(formState)}`
+
+      const invalidFormRedirectUrl =
+        encodeURI(`${BASE_URL}${PATHS.HOLD_REQUEST}/${holdId}/edd?
+    )}&${formInvalidQuery}&${validatedFieldsQuery}&${formStateQuery}`)
+
+      return res.redirect(invalidFormRedirectUrl)
     }
 
-    // Redirect to confirmation page
+    // Redirect to confirmation page if there are no errors
     return res.redirect(
       `${BASE_URL}${PATHS.HOLD_CONFIRMATION}/${holdId}?pickupLocation=edd&requestId=${requestId}`
     )
