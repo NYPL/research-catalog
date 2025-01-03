@@ -64,7 +64,7 @@ describe("ItemAvailability", () => {
         screen.queryByText("Schwarzman Building - Main Reading Room 315")
       ).not.toBeInTheDocument()
     })
-    it("recap YES aeon NO finding ait", () => {
+    it("recap YES aeon NO finding aid", () => {
       const item = new Item(itemPhysicallyRequestable, parentBib)
       item.availability = new ItemAvailabilityModel({
         isAvailable: true,
