@@ -23,7 +23,7 @@ export const initialEDDFormState: EDDRequestParams = {
 }
 
 // Initial state for invalid fields in the EDD form to keep track of the first invalid field for focus on submit
-export const initialEDDInvalidFields: EDDFormValidatedField[] = [
+export const defaultValidatedEDDFields: EDDFormValidatedField[] = [
   { key: "emailAddress", isInvalid: false },
   { key: "startPage", isInvalid: false },
   { key: "endPage", isInvalid: false },
@@ -70,5 +70,14 @@ export const validateEDDForm = (
 
 export const isInvalidField = (
   fieldName: string,
-  invalidFields: EDDFormValidatedField[]
-): boolean => invalidFields.find((field) => field.key === fieldName).isInvalid
+  validatedFields: EDDFormValidatedField[]
+): boolean => validatedFields.find((field) => field.key === fieldName).isInvalid
+
+export const getFirstInvalidEDDField = (
+  validatedFields: EDDFormValidatedField[]
+): EDDFormValidatedField =>
+  validatedFields.find((validatedFieldKey) => validatedFieldKey.isInvalid)
+
+export const eddFormIsInvalid = (
+  validatedFields: EDDFormValidatedField[]
+): boolean => !!getFirstInvalidEDDField(validatedFields)

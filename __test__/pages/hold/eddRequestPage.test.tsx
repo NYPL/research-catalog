@@ -5,6 +5,7 @@ import {
   waitFor,
 } from "../../../src/utils/testUtils"
 import userEvent from "@testing-library/user-event"
+import mockRouter from "next-router-mock"
 
 import EDDRequestPage, {
   getServerSideProps,
@@ -18,8 +19,12 @@ import { bibWithItems, bibWithSingleAeonItem } from "../../fixtures/bibFixtures"
 import {
   EDD_FORM_FIELD_COPY,
   HOLD_PAGE_ERROR_HEADINGS,
+  PATHS,
 } from "../../../src/config/constants"
-import { fetchDeliveryLocations } from "../../../src/server/api/hold"
+import {
+  fetchDeliveryLocations,
+  fetchPatronEligibility,
+} from "../../../src/server/api/hold"
 
 jest.mock("../../../src/server/auth")
 jest.mock("../../../src/server/api/bib")
@@ -93,12 +98,14 @@ describe("EDD Request page", () => {
         params: { id },
         req: mockReq,
         res: mockRes,
+        query: {},
       })
       expect(responseWithZeroRedirects.redirect).toBeDefined()
       const responseWithTwoRedirects = await getServerSideProps({
         params: { id: "123-456" },
         req: { ...mockReq, cookies: { nyplAccountRedirects: 2 } },
         res: mockRes,
+        query: {},
       })
       expect(responseWithTwoRedirects.redirect).toBeDefined()
     })
@@ -115,6 +122,7 @@ describe("EDD Request page", () => {
         params: { id },
         req: mockReq,
         res: mockRes,
+        query: {},
       })
       expect(responseWithoutRedirect.redirect).not.toBeDefined()
     })
@@ -123,6 +131,7 @@ describe("EDD Request page", () => {
         params: { id },
         req: mockReq,
         res: mockRes,
+        query: {},
       })
       expect(response.redirect).toBeUndefined()
     })
@@ -138,6 +147,7 @@ describe("EDD Request page", () => {
         params: { id },
         res: mockRes,
         req: mockReq,
+        query: {},
       })
       expect(mockRes.setHeader.mock.calls[0]).toStrictEqual([
         "Set-Cookie",
@@ -163,11 +173,46 @@ describe("EDD Request page", () => {
         params: { id },
         res: mockRes,
         req: mockReq,
+        query: {},
       })
       expect(responseWithAeonRedirect.redirect).toStrictEqual({
         destination: bibWithSingleAeonItem.resource.items[0].aeonUrl[0],
         permanent: false,
       })
+    })
+  })
+  describe("server-side validation", () => {
+    beforeEach(() => {
+      ;(initializePatronTokenAuth as jest.Mock).mockResolvedValue({
+        isTokenValid: true,
+        errorCode: null,
+        decodedPatron: { sub: "123" },
+      })
+      ;(fetchBib as jest.Mock).mockResolvedValue({
+        discoveryBibResult: {
+          ...bibWithItems.resource,
+          items: [{ ...bibWithItems.resource.items[0], eddRequestable: true }],
+        },
+        status: 200,
+      })
+      ;(fetchPatronEligibility as jest.Mock).mockResolvedValue({
+        eligibility: true,
+        status: 200,
+      })
+      ;(fetchDeliveryLocations as jest.Mock).mockResolvedValue({
+        eddRequestable: true,
+        status: 200,
+      })
+    })
+
+    it("initializes errorStatus as invalid when formInvalid query param is present url ", async () => {
+      const response = await getServerSideProps({
+        params: { id },
+        res: mockRes,
+        req: mockReq,
+        query: { formInvalid: "true" },
+      })
+      expect(response.props.errorStatus).toStrictEqual("invalid")
     })
   })
   describe("EDD Request page UI", () => {
@@ -205,7 +250,7 @@ describe("EDD Request page", () => {
     })
   })
   describe("EDD Request prepopulated form fields", () => {
-    beforeEach(() => {
+    it("prepopulates the email field with the patron's email address if present", () => {
       render(
         <EDDRequestPage
           discoveryBibResult={bibWithItems.resource}
@@ -215,9 +260,31 @@ describe("EDD Request page", () => {
           isAuthenticated={true}
         />
       )
-    })
-    it("prepopulates the email field with the patron's email address if present", () => {
+
       expect(screen.getByDisplayValue("test@test.com")).toBeInTheDocument()
+    })
+    it("prepopulates all form fields and overwrites patron email when form fields are present in url", () => {
+      mockRouter.push(
+        `${PATHS.HOLD_REQUEST}/123-456/edd?formState={%22source%22:%22sierra-nypl%22,%22emailAddress%22:%22test@test.com%22,%22startPage%22:%22ch%201%22,%22endPage%22:%22ch%205%22,%22chapterTitle%22:%22on%20spaghetti%22,%22author%22:%22%22,%22date%22:%22%22,%22volume%22:%22%22,%22issue%22:%22%22,%22requestNotes%22:%22%22}`
+      )
+      render(
+        <EDDRequestPage
+          discoveryBibResult={bibWithItems.resource}
+          discoveryItemResult={bibWithItems.resource.items[2]}
+          patronId="123"
+          patronEmail="patron@test.com"
+          isAuthenticated={true}
+        />
+      )
+
+      expect(screen.getByDisplayValue("test@test.com")).toBeInTheDocument()
+      expect(screen.getByDisplayValue("ch 1")).toBeInTheDocument()
+      expect(screen.getByDisplayValue("ch 5")).toBeInTheDocument()
+      expect(screen.getByDisplayValue("on spaghetti")).toBeInTheDocument()
+
+      // Clear query params for next test
+      // TODO: Investigate if there's a more optimal way to test router changes without requiring cleanup for the next test
+      mockRouter.push(`${PATHS.HOLD_REQUEST}/123-456/edd`)
     })
   })
   describe("EDD Request form validation", () => {
@@ -302,6 +369,34 @@ describe("EDD Request page", () => {
       expect(
         screen.getByText(
           "Some fields contain errors. Please correct and submit again."
+        )
+      ).toBeInTheDocument()
+    })
+    it("shows a field errors when invalid field state is passed as a query param", async () => {
+      mockRouter.push(
+        `${PATHS.HOLD_REQUEST}/123-456/edd?formInvalid=true&validatedFields=[{%22key%22:%22emailAddress%22,%22isInvalid%22:true},{%22key%22:%22startPage%22,%22isInvalid%22:true},{%22key%22:%22endPage%22,%22isInvalid%22:true},{%22key%22:%22chapterTitle%22,%22isInvalid%22:true}]`
+      )
+      render(
+        <EDDRequestPage
+          discoveryBibResult={bibWithItems.resource}
+          discoveryItemResult={bibWithItems.resource.items[0]}
+          patronId="123"
+          isAuthenticated={true}
+        />
+      )
+      expect(
+        screen.getByText(
+          "There was a problem. Enter a valid email address. Your request will be delivered to the email address you enter above."
+        )
+      ).toBeInTheDocument()
+      expect(
+        screen.getAllByText(
+          "There was a problem. Enter a page number. You may request a maximum of 50 pages."
+        )
+      ).toHaveLength(2)
+      expect(
+        screen.getByText(
+          "There was a problem. Indicate the title of the chapter or article you are requesting."
         )
       ).toBeInTheDocument()
     })
