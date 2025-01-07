@@ -12,6 +12,7 @@ import {
   locationEndpointsMap,
 } from "../utils/itemUtils"
 import { appConfig } from "../config/config"
+import { convertCamelToShishKabobCase } from "../utils/appUtils"
 
 /**
  * The Item class contains the data and getter functions
@@ -81,6 +82,10 @@ export default class Item {
       .includes("all")
   }
 
+  get formattedSourceForHoldRequest(): string {
+    return convertCamelToShishKabobCase(this.source)
+  }
+
   // Pre-processing logic for setting Item holding location
   getLocationFromItem(item: DiscoveryItemResult): ItemLocation {
     let location = defaultNYPLLocation
@@ -97,7 +102,7 @@ export default class Item {
 
       // Set branch endpoint based on API location label
       const locationKey = locationLabelToKey(location.prefLabel)
-      location.endpoint = locationEndpointsMap[locationKey]
+      location.endpoint = locationEndpointsMap[locationKey] || null
     }
     return location
   }

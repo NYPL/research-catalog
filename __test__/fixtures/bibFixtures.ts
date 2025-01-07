@@ -11982,3 +11982,220 @@ export const bibWithSubjectHeadings = {
     ],
   },
 }
+
+export const bibWithSingleAeonItem = {
+  resource: {
+    "@context":
+      "http://discovery-api-qa.nypl.org/api/v0.1/discovery/context_all.jsonld",
+    "@type": ["nypl:Item", "nypl:Resource"],
+    "@id": "res:b21086080",
+    buildingLocationIds: ["rc"],
+    carrierType: [
+      {
+        "@id": "carriertypes:nc",
+        prefLabel: "volume",
+      },
+    ],
+    contributorLiteral: ["Street & Smith, publisher."],
+    createdString: [1939],
+    createdYear: 1939,
+    dateEndString: [1941],
+    dateEndYear: 1941,
+    dateStartYear: 1939,
+    dateString: [1939],
+    dimensions: ["24 cm"],
+    extent: ["v. : ill. ;"],
+    genreForm: ["Fantasy fiction.", "Horror fiction.", "Periodicals."],
+    idOclc: [20989396],
+    identifier: [
+      {
+        "@type": "bf:ShelfMark",
+        "@value": "ReCAP 16-24063",
+      },
+      {
+        "@type": "nypl:Bnumber",
+        "@value": 21086080,
+      },
+      {
+        "@type": "nypl:Oclc",
+        "@value": 20989396,
+      },
+      {
+        "@type": "bf:Identifier",
+        "@value": "(OCoLC)20989396",
+      },
+    ],
+    issuance: [
+      {
+        "@id": "urn:biblevel:s",
+        prefLabel: "serial",
+      },
+    ],
+    itemAggregations: [
+      {
+        "@type": "nypl:Aggregation",
+        "@id": "res:location",
+        id: "location",
+        field: "location",
+        values: [
+          {
+            value: "loc:rcmr2",
+            count: 1,
+            label: "Offsite",
+          },
+        ],
+      },
+      {
+        "@type": "nypl:Aggregation",
+        "@id": "res:format",
+        id: "format",
+        field: "format",
+        values: [
+          {
+            value: "Text",
+            count: 1,
+            label: "Text",
+          },
+        ],
+      },
+      {
+        "@type": "nypl:Aggregation",
+        "@id": "res:status",
+        id: "status",
+        field: "status",
+        values: [
+          {
+            value: "status:a",
+            count: 1,
+            label: "Available",
+          },
+        ],
+      },
+    ],
+    items: [
+      {
+        "@id": "res:i34439033",
+        "@type": ["bf:Item"],
+        accessMessage: [
+          {
+            "@id": "accessMessage:1",
+            prefLabel: "Use in library",
+          },
+        ],
+        aeonUrl: [
+          "https://specialcollections.nypl.org/aeon/Aeon.dll?Action=10&CallNumber=ReCAP+16-24063+&Date=1939&Form=30&Genre=serial&ItemInfo1=Use+in+library&ItemInfo3=https%3A%2F%2Fcatalog.nypl.org%2Frecord%3Db21086080&ItemISxN=i344390330&ItemNumber=33433117357388&ItemPlace=New+York&ItemPublisher=Street+%26+Smith%2C+1939-1941.&ItemVolume=Avon+science+fiction+-+Wonder+stories&Location=ReCAP&ReferenceNumber=b210860807&Site=SASRB&SubLocation=rcmr2&Title=Street+%26+Smith%27s+Unknown.",
+        ],
+        catalogItemType: [
+          {
+            "@id": "catalogItemType:3",
+            prefLabel: "serial",
+          },
+        ],
+        eddRequestable: false,
+        enumerationChronology: ["Avon science fiction - Wonder stories"],
+        formatLiteral: ["Text"],
+        holdingLocation: [
+          {
+            "@id": "loc:rcmr2",
+            prefLabel: "Offsite",
+            endpoint: null,
+          },
+        ],
+        idBarcode: [33433117357388],
+        identifier: [
+          {
+            "@type": "bf:ShelfMark",
+            "@value": "ReCAP 16-24063  Avon science fiction - Wonder stories",
+          },
+          {
+            "@type": "bf:Barcode",
+            "@value": 33433117357388,
+          },
+        ],
+        owner: [
+          {
+            "@id": "orgs:1000",
+            prefLabel: "Stephen A. Schwarzman Building",
+          },
+        ],
+        physRequestable: false,
+        physicalLocation: ["ReCAP 16-24063 "],
+        recapCustomerCode: ["NQ"],
+        requestable: [true],
+        shelfMark: ["ReCAP 16-24063  Avon science fiction - Wonder stories"],
+        specRequestable: true,
+        status: [
+          {
+            "@id": "status:a",
+            prefLabel: "Available",
+          },
+        ],
+        uri: "i34439033",
+        idNyplSourceId: {
+          "@type": "SierraNypl",
+          "@value": 34439033,
+        },
+      },
+    ],
+    language: [
+      {
+        "@id": "lang:eng",
+        prefLabel: "English",
+      },
+    ],
+    lccClassification: ["PZ1.Z9 U5"],
+    materialType: [
+      {
+        "@id": "resourcetypes:txt",
+        prefLabel: "Text",
+      },
+    ],
+    mediaType: [
+      {
+        "@id": "mediatypes:n",
+        prefLabel: "unmediated",
+      },
+    ],
+    note: [
+      {
+        noteType: "Source of Description",
+        "@type": "bf:Note",
+        prefLabel: "Description based on: v. 4 n. 4 (Dec. 1940).",
+      },
+      {
+        noteType: "Source of Description",
+        "@type": "bf:Note",
+        prefLabel: "Latest issue consulted: v. 5 n. 2 (Aug. 1941).",
+      },
+    ],
+    numCheckinCardItems: 0,
+    numElectronicResources: 0,
+    numItemDatesParsed: 0,
+    numItemVolumesParsed: 0,
+    numItemsMatched: 1,
+    numItemsTotal: 1,
+    nyplSource: ["sierra-nypl"],
+    placeOfPublication: ["New York"],
+    publicationStatement: ["New York : Street & Smith, 1939-1941."],
+    publisherLiteral: ["Street & Smith"],
+    serialPublicationDates: [
+      "Began with Mar. 1939; ceased with Aug. 1941 issue. Cf. Pulp magazine quick reference guide.",
+    ],
+    shelfMark: ["ReCAP 16-24063"],
+    subjectLiteral: [
+      "Fantasy fiction -- Periodicals.",
+      "Horror tales -- Periodicals.",
+    ],
+    title: ["Street & Smith's Unknown."],
+    titleAlt: ["Unknown"],
+    titleDisplay: ["Street & Smith's Unknown."],
+    type: ["nypl:Item"],
+    updatedAt: 1712871163628,
+    uri: "b21086080",
+    updatedAtDate: "2024-04-11T21:32:43.628Z",
+    hasItemVolumes: false,
+    hasItemDates: false,
+    electronicResources: [],
+    subjectHeadings: null,
+  },
+}

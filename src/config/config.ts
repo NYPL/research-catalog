@@ -69,6 +69,7 @@ export const appConfig: AppConfig = {
     researchMaterialsHelp:
       "https://www.nypl.org/help/request-research-materials",
     tokenUrl: "https://isso.nypl.org/",
+    renewCard: "https://www.nypl.org/help/library-card/terms-conditions#renew",
   },
   // Array of closed nypl location keys (available options for NYPL locations: all, schwarzman, schomburg, lpa)
   closedLocations: [] as (NYPLocationKey | "all")[],
