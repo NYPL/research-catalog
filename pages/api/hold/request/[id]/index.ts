@@ -17,7 +17,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   try {
-    const { patronId, source, pickupLocation, jsEnabled } = req.body
+    const { patronId, source, pickupLocation, jsEnabled } =
+      typeof req.body === "string" ? JSON.parse(req.body) : req.body
 
     const holdId = req.query.id as string
     const [, itemId] = holdId.split("-")
