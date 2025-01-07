@@ -7,7 +7,6 @@ import {
 } from "../../utils/bibUtils"
 import nyplApiClient from "../nyplApiClient"
 import {
-  DISCOVERY_API_NAME,
   DISCOVERY_API_SEARCH_ROUTE,
   ITEM_VIEW_ALL_BATCH_SIZE,
   SHEP_HTTP_TIMEOUT,
@@ -29,7 +28,7 @@ export async function fetchBib(
     }
   }
 
-  const client = await nyplApiClient({ apiName: DISCOVERY_API_NAME })
+  const client = await nyplApiClient()
   const [bibResponse, annotatedMarcResponse] = await Promise.allSettled([
     await client.get(
       `${DISCOVERY_API_SEARCH_ROUTE}/${standardizedId}${getBibQueryString(
@@ -148,7 +147,7 @@ async function fetchAllBibItemsWithQuery(
   batchSize: number
 ): Promise<DiscoveryItemResult[]> {
   const items: DiscoveryItemResult[] = []
-  const client = await nyplApiClient({ apiName: DISCOVERY_API_NAME })
+  const client = await nyplApiClient()
   const totalBatchNum = Math.ceil(numItems / batchSize)
 
   for (let batchNum = 1; batchNum <= totalBatchNum; batchNum++) {

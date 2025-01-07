@@ -123,7 +123,7 @@ export interface Hold {
 
 export interface Patron {
   username?: string
-  notificationPreference: "z" | "p"
+  notificationPreference: "z" | "p" | "-"
   name: string
   barcode: string
   formattedBarcode?: string

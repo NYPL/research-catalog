@@ -11,7 +11,7 @@ export interface IconListElementPropType {
 
 // This component is designed to centralize common styling patterns for a
 // description type List with icons
-const IconListElement = ({
+export const IconListElement = ({
   icon,
   term,
   description,

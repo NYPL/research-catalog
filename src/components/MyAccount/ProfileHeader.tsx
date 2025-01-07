@@ -1,4 +1,5 @@
 import {
+  Banner,
   Box,
   List,
   useNYPLBreakpoints,
@@ -10,9 +11,27 @@ import styles from "../../../styles/components/MyAccount.module.scss"
 import type { Patron } from "../../types/myAccountTypes"
 import type { IconListElementPropType } from "./IconListElement"
 import { buildListElementsWithIcons } from "./IconListElement"
+import UsernameForm from "./Settings/UsernameForm"
+import { useEffect, useRef, useState } from "react"
+import type { StatusType } from "./Settings/StatusBanner"
+import { StatusBanner } from "./Settings/StatusBanner"
 
 const ProfileHeader = ({ patron }: { patron: Patron }) => {
   const { isLargerThanMobile } = useNYPLBreakpoints()
+  const [usernameStatus, setUsernameStatus] = useState<StatusType>("")
+  const [usernameStatusMessage, setUsernameStatusMessage] = useState<string>("")
+  const usernameBannerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (usernameStatus !== "" && usernameBannerRef.current) {
+      usernameBannerRef.current.focus()
+    }
+  }, [usernameStatus])
+
+  const usernameState = {
+    setUsernameStatus,
+    setUsernameStatusMessage,
+  }
 
   const profileData = (
     [
@@ -20,7 +39,9 @@ const ProfileHeader = ({ patron }: { patron: Patron }) => {
       {
         icon: "actionIdentity",
         term: "Username",
-        description: patron.username,
+        description: (
+          <UsernameForm patron={patron} usernameState={usernameState} />
+        ),
       },
       {
         icon: "actionPayment",
@@ -53,19 +74,33 @@ const ProfileHeader = ({ patron }: { patron: Patron }) => {
     .map(buildListElementsWithIcons)
 
   return (
-    <List
-      className={styles.myAccountList}
-      id="my-account-profile-header"
-      title="My Account"
-      type="dl"
-      sx={{
-        border: "none",
-        h2: { border: "none", paddingTop: 0 },
-        marginBottom: "xxl",
-      }}
-    >
-      {profileData}
-    </List>
+    <>
+      {usernameStatus !== "" && (
+        <div
+          ref={usernameBannerRef}
+          tabIndex={-1}
+          style={{ marginBottom: "32px" }}
+        >
+          <StatusBanner
+            status={usernameStatus}
+            statusMessage={usernameStatusMessage}
+          />
+        </div>
+      )}
+      <List
+        className={styles.myAccountList}
+        id="my-account-profile-header"
+        title="My Account"
+        type="dl"
+        sx={{
+          border: "none",
+          h2: { border: "none", paddingTop: 0 },
+          marginBottom: "l",
+        }}
+      >
+        {profileData}
+      </List>
+    </>
   )
 }
 
