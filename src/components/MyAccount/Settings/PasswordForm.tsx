@@ -56,6 +56,7 @@ const PasswordFormField = forwardRef<TextInputRefType, PasswordFormFieldProps>(
           onChange={handler}
           invalidText="Pin/passwords do not match."
           isInvalid={isInvalid}
+          isClearable
         />
       </Flex>
     )
@@ -81,12 +82,21 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
 
   const cancelEditing = () => {
     setIsEditing(false)
+    clearForm()
     setEditingField("")
     setTimeout(() => {
       editingRef.current?.focus()
     }, 0)
   }
 
+  const clearForm = () => {
+    setFormData({
+      currentPassword: "",
+      newPassword: "",
+      confirmPassword: "",
+      passwordsMatch: true,
+    })
+  }
   const validateForm =
     formData.currentPassword !== "" &&
     formData.newPassword !== "" &&
@@ -146,6 +156,7 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
       console.error("Error submitting", error)
     } finally {
       setIsLoading(false)
+      clearForm()
       setEditingField("")
     }
   }

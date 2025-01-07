@@ -4,6 +4,8 @@ import {
   parallelsBib,
   yiddishBib,
   bibWithSubjectHeadings,
+  bibNoItems,
+  princetonRecord,
 } from "../../../__test__/fixtures/bibFixtures"
 import type { LinkedBibDetail } from "../../types/bibDetailsTypes"
 import BibDetailsModel from "../BibDetails"
@@ -31,6 +33,19 @@ describe("Bib model", () => {
     bibWithSubjectHeadings.resource,
     bibWithSubjectHeadings.annotatedMarc
   )
+  describe("owner", () => {
+    it("populates owner when owner is present", () => {
+      const partnerBib = new BibDetailsModel(princetonRecord)
+      expect(partnerBib.owner).toStrictEqual(["Princeton University Library"])
+    })
+    it("does not populate owner if item is nypl", () => {
+      expect(bibWithRtlParallelsModel.owner).toBe(undefined)
+    })
+    it("can handle no items", () => {
+      const noItemsBib = new BibDetailsModel(bibNoItems.resource)
+      expect(noItemsBib.owner).toBe(undefined)
+    })
+  })
   describe("note", () => {
     it("groups notes into an array of {label, value} details", () => {
       const model = bibWithParallelsModel
@@ -58,96 +73,90 @@ describe("Bib model", () => {
   })
   describe("subjectHeadings", () => {
     it("correctly formats the subjectHeading urls when the subjectHeadings are present in the bib result", () => {
-      const subjectHeadingsObject = {
-        label: "Subject",
-        value: [
-          [
-            {
-              url: "/subject_headings/cf347108-e1f2-4c0f-808a-ac4ace2f0765?label=Cortanze%2C%20G%C3%A9rard%20de",
-              urlLabel: "Cortanze, Gérard de",
-            },
-            {
-              url: "/subject_headings/74746d11-638b-4cfb-a72a-9a2bd296e6fd?label=Cortanze%2C%20G%C3%A9rard%20de%20--%20Childhood%20and%20youth",
-              urlLabel: "Childhood and youth",
-            },
-          ],
-          [
-            {
-              url: "/subject_headings/5fd065df-b4e9-48cb-b13c-ea15f36b96b4?label=Authors%2C%20French",
-              urlLabel: "Authors, French",
-            },
-            {
-              url: "/subject_headings/e43674a7-5f02-44f1-95cd-dbcc776331b7?label=Authors%2C%20French%20--%2020th%20century",
-              urlLabel: "20th century",
-            },
-            {
-              url: "/subject_headings/9391bc26-e44c-44ac-98cc-e3800da51926?label=Authors%2C%20French%20--%2020th%20century%20--%20Biography",
-              urlLabel: "Biography",
-            },
-          ],
-          [
-            {
-              url: "/subject_headings/3a779ed6-8a07-4d27-80ef-e0c2b10fe78e?label=Autobiographical%20Narrative",
-              urlLabel: "Autobiographical Narrative",
-            },
-          ],
+      const subjectHeadings = [
+        [
+          {
+            url: "/subject_headings/cf347108-e1f2-4c0f-808a-ac4ace2f0765?label=Cortanze%2C%20G%C3%A9rard%20de",
+            urlLabel: "Cortanze, Gérard de",
+          },
+          {
+            url: "/subject_headings/74746d11-638b-4cfb-a72a-9a2bd296e6fd?label=Cortanze%2C%20G%C3%A9rard%20de%20--%20Childhood%20and%20youth",
+            urlLabel: "Childhood and youth",
+          },
         ],
-      }
-      expect(bibWithSubjectHeadingsModel.subjectHeadings).toMatchObject(
-        subjectHeadingsObject
+        [
+          {
+            url: "/subject_headings/5fd065df-b4e9-48cb-b13c-ea15f36b96b4?label=Authors%2C%20French",
+            urlLabel: "Authors, French",
+          },
+          {
+            url: "/subject_headings/e43674a7-5f02-44f1-95cd-dbcc776331b7?label=Authors%2C%20French%20--%2020th%20century",
+            urlLabel: "20th century",
+          },
+          {
+            url: "/subject_headings/9391bc26-e44c-44ac-98cc-e3800da51926?label=Authors%2C%20French%20--%2020th%20century%20--%20Biography",
+            urlLabel: "Biography",
+          },
+        ],
+        [
+          {
+            url: "/subject_headings/3a779ed6-8a07-4d27-80ef-e0c2b10fe78e?label=Autobiographical%20Narrative",
+            urlLabel: "Autobiographical Narrative",
+          },
+        ],
+      ]
+      expect(bibWithSubjectHeadingsModel.subjectLiteral).toStrictEqual(
+        subjectHeadings
       )
     })
     it("falls back to subject literals when subject headings are absent in the bib and correctly formats the urls", () => {
       const filterQueryForSubjectLiteral = "/search?filters[subjectLiteral]="
-      const subjectHeadingsObject = {
-        label: "Subject",
-        value: [
-          [
-            {
-              url: `${filterQueryForSubjectLiteral}${encodeURI(
-                "Authors, French"
-              )}`,
-              urlLabel: "Authors, French",
-            },
-            {
-              url: `${filterQueryForSubjectLiteral}${encodeURI(
-                "Authors, French -- 20th century"
-              )}`,
-              urlLabel: "20th century",
-            },
-            {
-              url: `${filterQueryForSubjectLiteral}${encodeURI(
-                "Authors, French -- 20th century -- Biography"
-              )}`,
-              urlLabel: "Biography",
-            },
-          ],
-          [
-            {
-              url: `${filterQueryForSubjectLiteral}${encodeURI(
-                "Autobiographical Narrative"
-              )}`,
-              urlLabel: "Autobiographical Narrative",
-            },
-          ],
-          [
-            {
-              url: `${filterQueryForSubjectLiteral}${encodeURI(
-                "Cortanze, Gérard de"
-              )}`,
-              urlLabel: "Cortanze, Gérard de",
-            },
-            {
-              url: `${filterQueryForSubjectLiteral}${encodeURI(
-                "Cortanze, Gérard de -- Childhood and youth"
-              )}`,
-              urlLabel: "Childhood and youth",
-            },
-          ],
+      const subjectHeadings = [
+        [
+          {
+            url: `${filterQueryForSubjectLiteral}${encodeURI(
+              "Authors, French"
+            )}`,
+            urlLabel: "Authors, French",
+          },
+          {
+            url: `${filterQueryForSubjectLiteral}${encodeURI(
+              "Authors, French -- 20th century"
+            )}`,
+            urlLabel: "20th century",
+          },
+          {
+            url: `${filterQueryForSubjectLiteral}${encodeURI(
+              "Authors, French -- 20th century -- Biography"
+            )}`,
+            urlLabel: "Biography",
+          },
         ],
-      }
-      expect(bibWithNoParallelsModel.subjectHeadings).toMatchObject(
-        subjectHeadingsObject
+        [
+          {
+            url: `${filterQueryForSubjectLiteral}${encodeURI(
+              "Autobiographical Narrative"
+            )}`,
+            urlLabel: "Autobiographical Narrative",
+          },
+        ],
+        [
+          {
+            url: `${filterQueryForSubjectLiteral}${encodeURI(
+              "Cortanze, Gérard de"
+            )}`,
+            urlLabel: "Cortanze, Gérard de",
+          },
+          {
+            url: `${filterQueryForSubjectLiteral}${encodeURI(
+              "Cortanze, Gérard de -- Childhood and youth"
+            )}`,
+            urlLabel: "Childhood and youth",
+          },
+        ],
+      ]
+      expect(bibWithNoParallelsModel.subjectLiteral).toStrictEqual(
+        subjectHeadings
       )
     })
   })
@@ -158,7 +167,7 @@ describe("Bib model", () => {
         extent: ["99 bottles of beer"],
         dimensions: ["99 x 99 cm"],
       })
-      expect(bib.extent.value[0].includes("; "))
+      expect(bib.extent[0].includes("; "))
     })
     it("should append dimensions to extent", () => {
       const bib = new BibDetailsModel({
@@ -166,7 +175,7 @@ describe("Bib model", () => {
         extent: ["99 bottles of beer"],
         dimensions: ["99 x 99 cm"],
       })
-      expect(bib.extent.value[0]).toBe("99 bottles of beer; 99 x 99 cm")
+      expect(bib.extent[0]).toBe("99 bottles of beer; 99 x 99 cm")
     })
     it("should not add semicolon if it already is in extent", () => {
       const bib = new BibDetailsModel({
@@ -174,7 +183,7 @@ describe("Bib model", () => {
         extent: ["700 sheets of woven gold; "],
         dimensions: ["1 x 1 in."],
       })
-      expect(bib.extent.value[0]).toBe("700 sheets of woven gold; 1 x 1 in.")
+      expect(bib.extent[0]).toBe("700 sheets of woven gold; 1 x 1 in.")
     })
     it("should remove semicolon if there is no dimensions", () => {
       const bib = new BibDetailsModel({
@@ -185,15 +194,15 @@ describe("Bib model", () => {
         identifier: [{ uri: "123456" }],
         extent: ["700 sheets of woven gold;"],
       })
-      expect(bib.extent.value[0]).toBe("700 sheets of woven gold")
-      expect(anotherBib.extent.value[0]).toBe("700 sheets of woven gold")
+      expect(bib.extent[0]).toBe("700 sheets of woven gold")
+      expect(anotherBib.extent[0]).toBe("700 sheets of woven gold")
     })
     it("should display dimensions if there are dimensions and no extent", () => {
       const bib = new BibDetailsModel({
         identifier: [{ uri: "123456" }],
         dimensions: ["1,000,000mm x 7ft"],
       })
-      expect(bib.extent.value[0]).toBe("1,000,000mm x 7ft")
+      expect(bib.extent[0]).toBe("1,000,000mm x 7ft")
     })
     it("should do nothing if there are no dimensions or extent", () => {
       const bib = new BibDetailsModel({ identifier: [{ uri: "123456" }] })

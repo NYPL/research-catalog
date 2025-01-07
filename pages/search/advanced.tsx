@@ -79,6 +79,7 @@ export default function AdvancedSearch({
     searchFormReducer,
     initialSearchFormState
   )
+
   const {
     dateFormProps,
     validateDateRange,
@@ -94,7 +95,6 @@ export default function AdvancedSearch({
     e.preventDefault()
     alert && setAlert(false)
     const target = e.target as HTMLInputElement
-
     dispatch({
       type: type,
       field: target.name,
@@ -115,7 +115,6 @@ export default function AdvancedSearch({
     e.preventDefault()
     if (!validateDateRange()) return
     const queryString = getSearchQuery(searchFormState as SearchParams)
-
     if (!queryString.length) {
       setErrorMessage(defaultEmptySearchErrorMessage)
       setAlert(true)
@@ -173,7 +172,7 @@ export default function AdvancedSearch({
           onSubmit={handleSubmit}
         >
           <Flex flexDirection={{ base: "column", md: "row" }}>
-            <Flex id="advancedSearchLeft" gap="s" direction="column">
+            <Flex id="advancedSearchLeft" gap="s" direction="column" grow="1">
               {textInputFields.map(({ name, label }) => {
                 return (
                   <FormField key={name}>
@@ -210,7 +209,7 @@ export default function AdvancedSearch({
               </FormField>
               <FormField>{<DateForm {...dateFormProps} />}</FormField>
             </Flex>
-            <Flex direction="column" gap="l">
+            <Flex direction="column" gap="l" grow="1">
               <SearchFilterCheckboxField
                 options={searchAggregations.buildingLocation}
                 name="location"

@@ -18,6 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added email address field prepopulation on EDD Request form (SCC-4407)
 - Added server validation and form state prepopulation (SCC-4405)
 
+## [1.3.9] 2025-01-07
+
 ### Updated
 
 - Updated phone, email, notification preference and home library to be individually editable in Account Settings (SCC-4337, SCC-4254, SCC-4253)
@@ -28,6 +30,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fixed broken query param/JSON parsing in hold api routes causing errors when JS is disabled (SCC-4405)
+
+## [1.3.8] 2024-12-9
+
+Note this release was not merged to main before deploying.
+
+### Updated
+
+- add call number and standard numbers to advanced search ([SCC-4326](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4326))
+- Pull in Owning institution from items to populate bib details ([SCC-4334](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4334))
+
+### [1.3.7] Hotfix 2024-11-21
+
+- Fix analytics bug where routes without a query string do not emit the correct virtual page view event (SCC-4314)
 
 ## [1.3.6] 2024-11-6
 
