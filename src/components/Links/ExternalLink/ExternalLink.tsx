@@ -41,6 +41,8 @@ const ExternalLink = ({
       role="link"
       aria-disabled={disabled}
       tabIndex={disabled ? -1 : 0}
+      // TODO: Temporary fix for a DS issue where link text spills outside the parent container
+      whiteSpace="unset"
     >
       {children}
     </DSLink>
