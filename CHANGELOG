@@ -27,12 +27,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 
+- Update availability messaging for special collections materials (SCC-4124)
 - Fetch delivery locations and pass to radios in hold request page (SCC-3759)
 - Moved closedLocations from environment variables to appConfig (SCC-3759)
 - Format patron ineligibility reasons as list only when more than one (SCC-4427)
 - Disable Hold Request submit button when patron is ineligible (SCC-4427)
 
 ## [1.3.9] 2025-01-07
+
+## Added
+
+- ItemAvailability class and updated access messaging
 
 ### Updated
 

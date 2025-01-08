@@ -12,6 +12,7 @@ import {
   locationEndpointsMap,
 } from "../utils/itemUtils"
 import { appConfig } from "../config/config"
+import ItemAvailability from "./ItemAvailability"
 import { convertCamelToShishKabobCase } from "../utils/appUtils"
 
 /**
@@ -35,6 +36,7 @@ export default class Item {
   isPhysicallyRequestable: boolean
   isEDDRequestable: boolean
   bibTitle: string
+  availability: ItemAvailability
 
   constructor(item: DiscoveryItemResult, bib: Bib) {
     this.id = item.uri || ""
@@ -58,6 +60,13 @@ export default class Item {
     this.isPhysicallyRequestable = item.physRequestable
     this.isEDDRequestable = item.eddRequestable
     this.bibTitle = bib.titleDisplay
+    this.availability = new ItemAvailability({
+      isSpecRequestable: item.specRequestable,
+      isAvailable: this.isAvailable,
+      isReCAP: this.isReCAP,
+      aeonUrl: this.aeonUrl,
+      findingAid: bib.findingAid,
+    })
   }
 
   // Item availability is determined by the existence of status id in the availability ids list

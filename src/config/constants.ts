@@ -140,6 +140,24 @@ export const NYPL_LOCATIONS = {
   },
 }
 
+export const AVAILABILITY_KEYS = {
+  // anything not covered by the cases below is EDGE_CASE
+  EDGE_CASE: "edgeCase",
+  // there is only one not available case, so availability is assumed as the default
+  NOT_AVAILABLE: "notAvailable",
+  RECAP_GENERAL_COLLECTIONS: "Recap",
+  ONSITE_GENERAL_COLLECTIONS: "Onsite",
+  // special collections availability keys
+  RECAP_AEON: "RecapAeon",
+  AEON: "Aeon",
+  ONSITE_AEON: "OnsiteAeon",
+  ONSITE_AEON_FINDING_AID: "onsiteAeonFindingAid",
+  RECAP_AEON_FINDING_AID: "recapAeonFindingAid",
+  ONSITE_FINDING_AID: "onsiteFindingAid",
+  RECAP_FINDING_AID: "recapFindingAid",
+  ONSITE_NO_FINDING_AID_NO_AEON: "noFindingAidNoAeonOnsite",
+  RECAP_NO_FINDING_AID_NO_AEON: "noFindingAidNoAeonRecap",
+}
 export const HOLD_PAGE_HEADING = "Request for on-site use"
 export const EDD_PAGE_HEADING = "Request scan"
 
