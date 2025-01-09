@@ -57,9 +57,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     }
 
     const eddRequestResponse = await postEDDRequest({
+      ...formState,
       itemId,
       patronId,
-      ...formState,
     })
 
     const { requestId } = eddRequestResponse
