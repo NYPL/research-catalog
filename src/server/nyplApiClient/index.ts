@@ -4,7 +4,7 @@ import { appConfig } from "../../config/config"
 import { kmsDecryptCreds } from "../kms"
 
 interface KMSCache {
-  clients: string[]
+  clients: object
   id: string
   secret: string
 }
@@ -13,7 +13,7 @@ const encryptedClientId = process.env.PLATFORM_API_CLIENT_ID
 const encryptedClientSecret = process.env.PLATFORM_API_CLIENT_SECRET
 
 const creds = [encryptedClientId, encryptedClientSecret]
-const CACHE: KMSCache = { clients: [], secret: null, id: null }
+const CACHE: KMSCache = { clients: {}, secret: null, id: null }
 
 export class NyplApiClientError extends Error {
   constructor(message: string) {
@@ -26,9 +26,9 @@ const nyplApiClient = async ({
   apiName = "platform",
   version = "v0.1",
 } = {}) => {
-  const cacheKey = `${apiName}${version}`
-  if (CACHE.clients[cacheKey]) {
-    return CACHE.clients[cacheKey]
+  const clientCacheKey = `${apiName}${version}`
+  if (CACHE.clients[clientCacheKey]) {
+    return CACHE.clients[clientCacheKey]
   }
   // Hotfix to avoid adding v0.1 to DRB endpoint url.
   // TODO: Investigate the configuring of alternate versions of same endpoint without implicit appending of version number to url
@@ -57,7 +57,7 @@ const nyplApiClient = async ({
       oauth_secret: decryptedSecret,
       oauth_url: appConfig.urls.tokenUrl,
     })
-    CACHE.clients[cacheKey] = nyplApiClient
+    CACHE.clients[clientCacheKey] = nyplApiClient
     return nyplApiClient
   } catch (error) {
     throw new NyplApiClientError(error.message)
