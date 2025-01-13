@@ -26,8 +26,9 @@ const nyplApiClient = async ({
   apiName = "platform",
   version = "v0.1",
 } = {}) => {
-  if (CACHE.clients[`${apiName}${version}`]) {
-    return CACHE.clients[`${apiName}${version}`]
+  const cacheKey = `${apiName}${version}`
+  if (CACHE.clients[cacheKey]) {
+    return CACHE.clients[cacheKey]
   }
   // Hotfix to avoid adding v0.1 to DRB endpoint url.
   // TODO: Investigate the configuring of alternate versions of same endpoint without implicit appending of version number to url
@@ -56,7 +57,7 @@ const nyplApiClient = async ({
       oauth_secret: decryptedSecret,
       oauth_url: appConfig.urls.tokenUrl,
     })
-    CACHE.clients[apiName] = nyplApiClient
+    CACHE.clients[cacheKey] = nyplApiClient
     return nyplApiClient
   } catch (error) {
     throw new NyplApiClientError(error.message)
