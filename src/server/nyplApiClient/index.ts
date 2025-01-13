@@ -25,7 +25,6 @@ export class NyplApiClientError extends Error {
 const nyplApiClient = async ({
   apiName = "platform",
   version = "v0.1",
-  cache = CACHE,
 } = {}) => {
   const clientCacheKey = `${apiName}${version}`
   if (CACHE.clients[clientCacheKey]) {
@@ -39,14 +38,14 @@ const nyplApiClient = async ({
 
   let decryptedId: string
   let decryptedSecret: string
-  if (cache.secret && cache.id) {
-    decryptedId = cache.id
-    decryptedSecret = cache.secret
+  if (CACHE.secret && CACHE.id) {
+    decryptedId = CACHE.id
+    decryptedSecret = CACHE.secret
   } else {
     try {
       ;[decryptedId, decryptedSecret] = await kmsDecryptCreds(creds)
-      cache.id = decryptedId
-      cache.secret = decryptedSecret
+      CACHE.id = decryptedId
+      CACHE.secret = decryptedSecret
     } catch (exception) {
       throw new NyplApiClientError("Error decrypting creds")
     }
