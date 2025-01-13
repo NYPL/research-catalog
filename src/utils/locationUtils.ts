@@ -26,8 +26,8 @@ export const mapLocationElementToDeliveryLocation = (
 
   return {
     key: locationKey,
+    value: getLocationSierraId(locationElement),
     address: details.address,
-    shortName,
     label,
   }
 }
@@ -60,7 +60,7 @@ function getLocationKey(
   }
 }
 
-const getLocationSierraId = (
+export const getLocationSierraId = (
   locationElement: DiscoveryLocationElement
 ): string | null =>
   locationElement["@id"] ? locationElement["@id"].replace("loc:", "") : null

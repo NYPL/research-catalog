@@ -17,7 +17,8 @@ import type { DiscoveryItemResult } from "../../types/itemTypes"
 
 export async function fetchBib(
   id: string,
-  bibQuery?: BibQueryParams
+  bibQuery?: BibQueryParams,
+  itemId?: string
 ): Promise<BibResponse> {
   const standardizedId = standardizeBibId(id)
   // Redirect to Bib page with standardized version of the Bib ID
@@ -31,17 +32,16 @@ export async function fetchBib(
   const client = await nyplApiClient()
   const [bibResponse, annotatedMarcResponse] = await Promise.allSettled([
     await client.get(
-      `${DISCOVERY_API_SEARCH_ROUTE}/${standardizedId}${getBibQueryString(
-        bibQuery
-      )}`
+      `${DISCOVERY_API_SEARCH_ROUTE}/${standardizedId}${
+        itemId ? `-${itemId}` : ""
+      }${getBibQueryString(bibQuery)}`
     ),
     // Don't fetch annotated-marc for partner records:
     isNyplBibID(standardizedId) &&
       (await client.get(
-        `${DISCOVERY_API_SEARCH_ROUTE}/${standardizedId}.annotated-marc${getBibQueryString(
-          bibQuery,
-          true
-        )}`
+        `${DISCOVERY_API_SEARCH_ROUTE}/${standardizedId}${
+          itemId ? `-${itemId}` : ""
+        }.annotated-marc${getBibQueryString(bibQuery, true)}`
       )),
   ])
 

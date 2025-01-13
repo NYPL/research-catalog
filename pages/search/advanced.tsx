@@ -1,8 +1,13 @@
 import Head from "next/head"
-import { useState, useReducer, useRef, useEffect } from "react"
+import {
+  useState,
+  useReducer,
+  useRef,
+  useEffect,
+  type SyntheticEvent,
+} from "react"
 import { useRouter } from "next/router"
 import { debounce } from "underscore"
-import type { SyntheticEvent } from "react"
 import type { TextInputRefType } from "@nypl/design-system-react-components"
 import {
   Heading,
@@ -18,7 +23,12 @@ import {
 } from "@nypl/design-system-react-components"
 
 import Layout from "../../src/components/Layout/Layout"
-import { BASE_URL, PATHS, SITE_NAME } from "../../src/config/constants"
+import {
+  BASE_URL,
+  PATHS,
+  SITE_NAME,
+  DEBOUNCE_INTERVAL,
+} from "../../src/config/constants"
 import { searchFormReducer } from "../../src/reducers/searchFormReducer"
 import {
   initialSearchFormState,
@@ -59,7 +69,6 @@ export default function AdvancedSearch({
   const router = useRouter()
   const inputRef = useRef<TextInputRefType>()
   const notificationRef = useRef<HTMLDivElement>()
-  const debounceInterval = 20
   const dateInputRefs = [useRef<TextInputRefType>(), useRef<TextInputRefType>()]
 
   const [alert, setAlert] = useState(false)
@@ -70,6 +79,7 @@ export default function AdvancedSearch({
     searchFormReducer,
     initialSearchFormState
   )
+
   const {
     dateFormProps,
     validateDateRange,
@@ -85,7 +95,6 @@ export default function AdvancedSearch({
     e.preventDefault()
     alert && setAlert(false)
     const target = e.target as HTMLInputElement
-
     dispatch({
       type: type,
       field: target.name,
@@ -106,7 +115,6 @@ export default function AdvancedSearch({
     e.preventDefault()
     if (!validateDateRange()) return
     const queryString = getSearchQuery(searchFormState as SearchParams)
-
     if (!queryString.length) {
       setErrorMessage(defaultEmptySearchErrorMessage)
       setAlert(true)
@@ -149,7 +157,7 @@ export default function AdvancedSearch({
       </Head>
       <Layout isAuthenticated={isAuthenticated} activePage="advanced">
         {/* Always render the wrapper element that will display the
-          dynamically rendered notification */}
+          dynamically rendered notification for focus management */}
         <Box tabIndex={-1} ref={notificationRef}>
           {alert && <Banner type="negative" content={errorMessage} mb="s" />}
         </Box>
@@ -164,7 +172,7 @@ export default function AdvancedSearch({
           onSubmit={handleSubmit}
         >
           <Flex flexDirection={{ base: "column", md: "row" }}>
-            <Flex id="advancedSearchLeft" gap="s" direction="column">
+            <Flex id="advancedSearchLeft" gap="s" direction="column" grow="1">
               {textInputFields.map(({ name, label }) => {
                 return (
                   <FormField key={name}>
@@ -175,7 +183,7 @@ export default function AdvancedSearch({
                       value={searchFormState[name]}
                       onChange={debounce(
                         (e) => handleInputChange(e, "input_change"),
-                        debounceInterval
+                        DEBOUNCE_INTERVAL
                       )}
                       ref={inputRef}
                     />
@@ -201,7 +209,7 @@ export default function AdvancedSearch({
               </FormField>
               <FormField>{<DateForm {...dateFormProps} />}</FormField>
             </Flex>
-            <Flex direction="column" gap="l">
+            <Flex direction="column" gap="l" grow="1">
               <SearchFilterCheckboxField
                 options={searchAggregations.buildingLocation}
                 name="location"

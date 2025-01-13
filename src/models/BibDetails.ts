@@ -19,8 +19,9 @@ export default class BibDetails {
   bottomDetails: AnyBibDetail[]
   groupedNotes: AnyBibDetail[]
   supplementaryContent: LinkedBibDetail
-  extent: BibDetail
-  subjectHeadings: SubjectHeadingDetail
+  extent: string[]
+  subjectLiteral: BibDetailURL[][]
+  owner: string[]
 
   constructor(
     discoveryBibResult: DiscoveryBibResult,
@@ -31,8 +32,9 @@ export default class BibDetails {
     this.supplementaryContent = this.buildSupplementaryContent()
     this.groupedNotes = this.buildGroupedNotes()
     this.extent = this.buildExtent()
+    this.owner = this.buildOwner()
     // If we can't retreive subject headings from the SHEP API, we'll use the subjectLiteral
-    this.subjectHeadings =
+    this.subjectLiteral =
       this.buildSubjectHeadings() || this.buildSubjectLiterals()
     // these are the actual arrays of details that will be displayed
     this.annotatedMarcDetails = this.buildAnnotatedMarcDetails(
@@ -41,6 +43,17 @@ export default class BibDetails {
     this.holdingsDetails = this.buildHoldingsDetails(this.bib.holdings)
     this.topDetails = this.buildTopDetails()
     this.bottomDetails = this.buildBottomDetails()
+  }
+
+  buildOwner(): string[] {
+    if (!this.bib.items) return null
+
+    const firstRecapItem = this.bib.items
+      // Only consider items with a Recap source id
+      .find((item) => /^Recap/.test(item?.idNyplSourceId?.["@type"]))
+    // Only consider items with an `owner` (should be all, in practice)
+    const owner = firstRecapItem?.owner?.[0]?.prefLabel
+    if (owner) return [owner]
   }
 
   buildAnnotatedMarcDetails(
@@ -88,11 +101,14 @@ export default class BibDetails {
       { field: "creatorLiteral", label: "Author" },
     ]
       .map((fieldMapping) => {
-        if (fieldMapping.field === "supplementaryContent")
-          return this.supplementaryContent
-        else if (fieldMapping.field === "creatorLiteral")
-          return this.buildInternalLinkedDetail(fieldMapping)
-        else return this.buildStandardDetail(fieldMapping)
+        switch (fieldMapping.field) {
+          case "supplementaryContent":
+            return this.supplementaryContent
+          case "creatorLiteral":
+            return this.buildSearchFilterUrl(fieldMapping)
+          default:
+            return this.buildStandardDetail(fieldMapping)
+        }
       })
       .filter((f) => f)
   }
@@ -121,20 +137,11 @@ export default class BibDetails {
       .map((fieldMapping: FieldMapping): AnyBibDetail => {
         let detail: AnyBibDetail
         if (fieldMapping.field === "contributorLiteral")
-          detail = this.buildInternalLinkedDetail(fieldMapping)
-        else if (fieldMapping.field === "subjectLiteral")
-          detail = this.subjectHeadings
-        else if (fieldMapping.field === "extent") detail = this.extent
-        else if (fieldMapping.field === "owner")
-          detail = this.bib.owner && {
-            label: convertToSentenceCase(fieldMapping.label),
-            value: [this.bib.owner?.prefLabel],
-          }
+          detail = this.buildSearchFilterUrl(fieldMapping)
         else detail = this.buildStandardDetail(fieldMapping)
         return detail
       })
       .filter((f) => f)
-
     const fieldsWithNotes = this.addNotes(resourceFields)
     const combinedFields = this.combineBibDetailsData(
       fieldsWithNotes,
@@ -174,7 +181,9 @@ export default class BibDetails {
   }
 
   buildStandardDetail(fieldMapping: FieldMapping) {
-    const bibFieldValue = this.bib[fieldMapping.field]
+    const bibFieldValue =
+      this[fieldMapping.field] || this.bib[fieldMapping.field]
+    if (!bibFieldValue) return
     return this.buildDetail(
       convertToSentenceCase(fieldMapping.label),
       bibFieldValue
@@ -190,7 +199,7 @@ export default class BibDetails {
     }
   }
 
-  buildInternalLinkedDetail(fieldMapping: {
+  buildSearchFilterUrl(fieldMapping: {
     label: string
     field: string
   }): LinkedBibDetail {
@@ -326,7 +335,7 @@ export default class BibDetails {
     return Object.assign({}, bib, ...parallelFieldMatches)
   }
 
-  buildExtent(): BibDetail {
+  buildExtent(): string[] {
     let modifiedExtent: string[]
     const { extent, dimensions } = this.bib
     const removeSemiColon = (extent) => [extent[0].replace(/\s*;\s*$/, "")]
@@ -342,10 +351,7 @@ export default class BibDetails {
       parts.push(dimensions[0])
       modifiedExtent = [parts.join("; ")]
     }
-    return {
-      label: "Description",
-      value: modifiedExtent,
-    }
+    return modifiedExtent
   }
 
   buildSupplementaryContent(): LinkedBibDetail {
@@ -367,21 +373,16 @@ export default class BibDetails {
     return this.buildExternalLinkedDetail(convertToSentenceCase(label), values)
   }
 
-  buildSubjectHeadings(): SubjectHeadingDetail {
+  buildSubjectHeadings(): BibDetailURL[][] {
     if (!this.bib.subjectHeadings) return
     const subjectHeadingsUrls = this.bib.subjectHeadings.map((heading) =>
       this.flattenSubjectHeadingUrls(heading)
     )
 
-    return (
-      subjectHeadingsUrls?.length && {
-        label: "Subject",
-        value: subjectHeadingsUrls,
-      }
-    )
+    return subjectHeadingsUrls?.length && subjectHeadingsUrls
   }
 
-  buildSubjectLiterals(): SubjectHeadingDetail {
+  buildSubjectLiterals(): BibDetailURL[][] {
     if (!this.bib.subjectLiteral) return
     const subjectLiteralUrls = this.bib.subjectLiteral.map(
       (subject: string) => {
@@ -403,10 +404,7 @@ export default class BibDetails {
         })
       }
     )
-    return {
-      label: "Subject",
-      value: subjectLiteralUrls,
-    }
+    return subjectLiteralUrls
   }
 
   constructSubjectLiteralsArray(subject: string) {

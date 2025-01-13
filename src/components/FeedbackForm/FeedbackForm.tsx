@@ -65,7 +65,9 @@ const FeedbackForm = () => {
       showEmailField
       hiddenFields={itemMetadata}
       notificationText={
-        itemMetadata?.callNumber
+        itemMetadata?.notificationText
+          ? itemMetadata.notificationText
+          : itemMetadata?.callNumber
           ? `You are asking for help or information about ${itemMetadata.callNumber} in this record.`
           : null
       }

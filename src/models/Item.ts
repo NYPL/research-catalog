@@ -12,6 +12,8 @@ import {
   locationEndpointsMap,
 } from "../utils/itemUtils"
 import { appConfig } from "../config/config"
+import ItemAvailability from "./ItemAvailability"
+import { convertCamelToShishKabobCase } from "../utils/appUtils"
 
 /**
  * The Item class contains the data and getter functions
@@ -34,6 +36,7 @@ export default class Item {
   isPhysicallyRequestable: boolean
   isEDDRequestable: boolean
   bibTitle: string
+  availability: ItemAvailability
 
   constructor(item: DiscoveryItemResult, bib: Bib) {
     this.id = item.uri || ""
@@ -57,6 +60,13 @@ export default class Item {
     this.isPhysicallyRequestable = item.physRequestable
     this.isEDDRequestable = item.eddRequestable
     this.bibTitle = bib.titleDisplay
+    this.availability = new ItemAvailability({
+      isSpecRequestable: item.specRequestable,
+      isAvailable: this.isAvailable,
+      isReCAP: this.isReCAP,
+      aeonUrl: this.aeonUrl,
+      findingAid: bib.findingAid,
+    })
   }
 
   // Item availability is determined by the existence of status id in the availability ids list
@@ -81,6 +91,10 @@ export default class Item {
       .includes("all")
   }
 
+  get formattedSourceForHoldRequest(): string {
+    return convertCamelToShishKabobCase(this.source)
+  }
+
   // Pre-processing logic for setting Item holding location
   getLocationFromItem(item: DiscoveryItemResult): ItemLocation {
     let location = defaultNYPLLocation
@@ -97,7 +111,7 @@ export default class Item {
 
       // Set branch endpoint based on API location label
       const locationKey = locationLabelToKey(location.prefLabel)
-      location.endpoint = locationEndpointsMap[locationKey]
+      location.endpoint = locationEndpointsMap[locationKey] || null
     }
     return location
   }
