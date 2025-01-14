@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next"
+import initializePatronTokenAuth from "../../../../../src/server/auth"
 
 import {
   postEDDRequest,
@@ -15,6 +16,12 @@ import { BASE_URL, PATHS } from "../../../../../src/config/constants"
  * Default API route handler for EDD requests
  */
 async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
+  const cookiePatronId = patronTokenResponse.decodedPatron?.sub
+  if (!cookiePatronId) {
+    return res.status(403).json("EDD Request API - No authenticated patron")
+  }
+
   if (req.method !== "POST") {
     return res.status(500).json({
       error: "Please use a POST request for the EDD Request API endpoint",

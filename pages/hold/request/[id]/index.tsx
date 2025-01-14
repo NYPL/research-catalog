@@ -118,6 +118,10 @@ export default function HoldRequestPage({
           setErrorStatus("patronIneligible")
           setPatronEligibilityStatus(responseJson?.patronEligibilityStatus)
           break
+        case 403:
+          setFormPosting(false)
+          setErrorStatus("failed")
+          break
         case 500:
           handleServerHoldPostError(responseJson.error)
           break
