@@ -221,7 +221,9 @@ describe("Hold Request page", () => {
           isAuthenticated={true}
         />
       )
+    })
 
+    it("shows an error when there is a 500 error response from the hold api", async () => {
       global.fetch = jest.fn().mockImplementationOnce(() =>
         Promise.resolve({
           status: 500,
@@ -233,9 +235,40 @@ describe("Hold Request page", () => {
         screen.getByText("Submit request"),
         new MouseEvent("click")
       )
+
+      await waitFor(() => {
+        expect(screen.getByTestId("hold-request-error")).toBeInTheDocument()
+      })
+
+      expect(
+        screen.getByText("Request failed.", { exact: false })
+      ).toBeInTheDocument()
+
+      expect(
+        screen.queryByText(
+          "We were unable to process your request at this time. Please ",
+          { exact: false }
+        )
+      ).toBeInTheDocument()
+
+      expect(
+        screen.getByRole("button", { name: "contact us" })
+      ).toBeInTheDocument()
     })
 
-    it("shows an error when there is a bad response from the hold api", async () => {
+    it("shows an error when there is a invalid patron response response from the hold api", async () => {
+      global.fetch = jest.fn().mockImplementationOnce(() =>
+        Promise.resolve({
+          status: 403,
+          json: () => Promise.resolve({ success: false }),
+        })
+      )
+
+      await fireEvent(
+        screen.getByText("Submit request"),
+        new MouseEvent("click")
+      )
+
       await waitFor(() => {
         expect(screen.getByTestId("hold-request-error")).toBeInTheDocument()
       })
@@ -257,6 +290,18 @@ describe("Hold Request page", () => {
     })
 
     it("populates the feedback form with the call number and appropriate copy when the request fails", async () => {
+      global.fetch = jest.fn().mockImplementationOnce(() =>
+        Promise.resolve({
+          status: 500,
+          json: () => Promise.resolve({ success: false }),
+        })
+      )
+
+      await fireEvent(
+        screen.getByText("Submit request"),
+        new MouseEvent("click")
+      )
+
       await waitFor(() => {
         expect(screen.getByTestId("hold-request-error")).toBeInTheDocument()
       })

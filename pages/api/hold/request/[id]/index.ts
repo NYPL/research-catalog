@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next"
+import initializePatronTokenAuth from "../../../../../src/server/auth"
 
 import {
   postHoldRequest,
@@ -19,6 +20,14 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     const { patronId, source, pickupLocation, jsEnabled } =
       typeof req.body === "string" ? JSON.parse(req.body) : req.body
+
+    const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
+    const cookiePatronId = patronTokenResponse.decodedPatron?.sub
+
+    // Return a 403 if patron cookie does not patch patron id in request
+    if (!cookiePatronId || cookiePatronId !== patronId) {
+      return res.status(403).json("Hold Request API - No authenticated patron")
+    }
 
     const holdId = req.query.id as string
     const [, itemId] = holdId.split("-")

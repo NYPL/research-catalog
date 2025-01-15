@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next"
+import initializePatronTokenAuth from "../../../../../src/server/auth"
 
 import {
   postEDDRequest,
@@ -24,6 +25,15 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     const { patronId, jsEnabled, ...rest } =
       typeof req.body === "string" ? JSON.parse(req.body) : req.body
+
+    const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
+    const cookiePatronId = patronTokenResponse.decodedPatron?.sub
+
+    // Return a 403 if patron cookie does not patch patron id in request
+    if (!cookiePatronId || cookiePatronId !== patronId) {
+      return res.status(403).json("EDD Request API - No authenticated patron")
+    }
+
     const formState = rest
     const holdId = req.query.id as string
 
