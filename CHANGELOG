@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added HoldContactButton component and update error copy per VQA requests (SCC-4427)
 - Added email address field prepopulation on EDD Request form (SCC-4407)
 - Added server validation and form state prepopulation (SCC-4405)
+- Added patron authentication to hold api routes (SCC-4462)
 
 ### Updated
 
