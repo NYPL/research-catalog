@@ -11,12 +11,6 @@ import { BASE_URL, PATHS } from "../../../../../src/config/constants"
  * Default API route handler for Hold requests
  */
 async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
-  const cookiePatronId = patronTokenResponse.decodedPatron?.sub
-  if (!cookiePatronId) {
-    return res.status(403).json("Hold Request API - No authenticated patron")
-  }
-
   if (req.method !== "POST") {
     return res.status(500).json({
       error: "Please use a POST request for the Hold Request API endpoint",
@@ -26,6 +20,14 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     const { patronId, source, pickupLocation, jsEnabled } =
       typeof req.body === "string" ? JSON.parse(req.body) : req.body
+
+    const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
+    const cookiePatronId = patronTokenResponse.decodedPatron?.sub
+
+    // Return a 403 if patron cookie does not patch patron id in request
+    if (!cookiePatronId || cookiePatronId !== patronId) {
+      return res.status(403).json("Hold Request API - No authenticated patron")
+    }
 
     const holdId = req.query.id as string
     const [, itemId] = holdId.split("-")
