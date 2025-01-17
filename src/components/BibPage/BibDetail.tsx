@@ -35,8 +35,7 @@ const BibDetails = ({ details, heading }: BibDetailsProps) => {
         type="dl"
         showRowDividers={false}
         className={`${styles.bibDetails} ${styles.inBibPage}`}
-      >
-        {details.map(
+        listItems={details.map(
           (detail: BibDetail | LinkedBibDetail | SubjectHeadingDetail) => {
             if (!detail) return
             if (detail.label === "Subject") {
@@ -50,7 +49,7 @@ const BibDetails = ({ details, heading }: BibDetailsProps) => {
             }
           }
         )}
-      </List>
+      />
     )
   )
 }
@@ -60,9 +59,12 @@ const DetailElement = (label: string, listChildren: ReactNode[]) => {
     <>
       <dt>{label}</dt>
       <dd>
-        <List noStyling data-testid={kebabCase(label)} type="ol">
-          {listChildren}
-        </List>
+        <List
+          noStyling
+          data-testid={kebabCase(label)}
+          type="ol"
+          listItems={listChildren as JSX.Element[]}
+        />
       </dd>
     </>
   )
