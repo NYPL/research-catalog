@@ -56,38 +56,30 @@ const ItemTableControls = ({
       ) : null}
       {bib.showViewAllItemsLink(filtersAreApplied) &&
         (itemsLoading && viewAllExpanded ? (
-          <Box
-            ml="auto"
-            display="flex"
-            justifyContent="flex-start"
-            alignItems="center"
-          >
-            <ProgressIndicator
-              id="bib-all-items-loading"
-              labelText={viewAllLoadingMessage}
-              size="small"
-              indicatorType="circular"
-              mr="xs"
-              isIndeterminate
-            />
-            <Label
-              id="bib-all-items-loading-label"
-              htmlFor="bib-all-items-loading"
-              ref={viewAllLoadingTextRef}
-              fontSize={{
-                base: "mobile.body.body1",
-                md: "desktop.body.body1",
-              }}
-              fontWeight="medium"
-              mb={0}
-              // Label component does not expect tabIndex prop, so we are ignoring the typescript error that pops up.
-              // Add any additional props above this for typescript validation.
-              // @ts-expect-error
-              tabIndex={-1}
-            >
-              {viewAllLoadingMessage}
-            </Label>
-          </Box>
+          <ProgressIndicator
+            id="bib-all-items-loading"
+            labelText={viewAllLoadingMessage}
+            size="small"
+            indicatorType="circular"
+            isIndeterminate
+            marginLeft="auto"
+            sx={{
+              "> div": {
+                display: "flex",
+                justifyContent: "flex-start",
+                alignItems: "center",
+                flexDirection: "row",
+                "> div": {
+                  marginRight: "var(--nypl-space-xs)",
+                },
+              },
+              label: {
+                fontWeight: "var(--nypl-fontWeights-medium)",
+                fontSize: "var(--nypl-fontSizes-desktop-body-body2)",
+                marginBottom: 0,
+              },
+            }}
+          />
         ) : !itemsLoading ? (
           <>
             <RCLink
