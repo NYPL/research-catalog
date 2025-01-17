@@ -52,7 +52,6 @@ export default function Search({
   isAuthenticated,
   isFreshSortByQuery,
 }: SearchProps) {
-  console.log("Loading from Search")
   const metadataTitle = `Search Results | ${SITE_NAME}`
   const { push, query } = useRouter()
   const { itemListElement: searchResultsElements, totalResults } =

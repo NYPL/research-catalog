@@ -10,7 +10,6 @@ export const kmsDecryptCreds = async (creds: string[]) => {
 }
 
 const decryptKMS = async (key: string) => {
-  logger.info("Decrypt func INPUT: " + key)
   const params = {
     CiphertextBlob: Buffer.from(key, "base64"),
   }
