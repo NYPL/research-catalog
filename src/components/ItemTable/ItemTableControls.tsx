@@ -63,19 +63,15 @@ const ItemTableControls = ({
             indicatorType="circular"
             isIndeterminate
             marginLeft="auto"
+            labelPlacement="right"
             sx={{
-              "> div": {
-                display: "flex",
-                justifyContent: "flex-start",
-                alignItems: "center",
-                flexDirection: "row",
-                "> div": {
-                  marginRight: "var(--nypl-space-xs)",
-                },
-              },
+              "div[role=progressbar]": { marginRight: "xs" },
               label: {
-                fontWeight: "var(--nypl-fontWeights-medium)",
-                fontSize: "var(--nypl-fontSizes-desktop-body-body2)",
+                fontWeight: "medium",
+                fontSize: {
+                  base: "mobile.body.body2",
+                  md: "desktop.body.body2",
+                },
                 marginBottom: 0,
               },
             }}
