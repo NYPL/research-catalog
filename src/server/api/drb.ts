@@ -3,6 +3,7 @@ import type { DRBResults } from "../../types/drbTypes"
 import { getDRBQueryStringFromSearchParams } from "../../utils/drbUtils"
 import nyplApiClient from "../nyplApiClient"
 import { DRB_API_NAME } from "../../config/constants"
+import { logServerError } from "../../utils/appUtils"
 
 /**
  * Getter function for DRB results. Accepts a SearchParams object as an argument.
@@ -21,7 +22,7 @@ export async function fetchDRBResults(
       totalWorks: data.totalWorks,
     }
   } catch (error) {
-    console.error(`Error fetching DRB results ${error.message}`)
+    logServerError("fetchDRBResults", error.message)
     throw new Error(error)
   }
 }

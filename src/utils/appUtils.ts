@@ -4,8 +4,15 @@ import {
   ADOBE_ANALYTICS_RC_PREFIX,
   BASE_URL,
 } from "../config/constants"
-
+import logger from "../../logger"
 import { standardizeBibId } from "./bibUtils"
+
+export const logServerError = (
+  errorLocation: string,
+  errorMessage: string
+): void => {
+  logger.error(`Error in ${errorLocation}: ${errorMessage}`)
+}
 
 /**
  * adobeAnalyticsParam
