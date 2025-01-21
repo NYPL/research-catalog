@@ -314,9 +314,7 @@ describe("Bib Page Item Table", () => {
     )
     await userEvent.click(screen.getByText("View all 26 items").closest("a"))
     expect(
-      screen.queryAllByText(
-        "Loading all 26 items. This may take a few moments..."
-      )[0]
+      screen.queryByText("Loading all 26 items. This may take a few moments...")
     ).toBeInTheDocument()
   })
 
