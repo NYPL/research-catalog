@@ -14,6 +14,7 @@ import {
 import { appConfig } from "../../config/config"
 import { logServerError } from "../../utils/appUtils"
 import type { DiscoveryItemResult } from "../../types/itemTypes"
+import logger from "../../../logger"
 
 export async function fetchBib(
   id: string,
