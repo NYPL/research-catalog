@@ -137,7 +137,7 @@ async function fetchBibSubjectHeadings(bibId: string) {
     )
     return await response.json()
   } catch (error) {
-    console.error(
+    logger.error(
       "Error fetching SHEP API data (note: VPN should be used for local testing)",
       error
     )
