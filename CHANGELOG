@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.4.0] 2025-01-22
 
+## Release Notes
+
+- This release includes the Hold Pages (EDD and On-Site) and special collections access messaging.
+- This represents the last major release in the DFE Refactor project.
+
 ### Fixed
 
 - Fixed broken query param/JSON parsing in hold api routes causing errors when JS is disabled (SCC-4405)
