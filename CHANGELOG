@@ -5,7 +5,41 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-### [1.3.11] Hotfix 2025-1-17
+## [1.4.0] 2025-01-22
+
+## Release Notes
+
+- This release includes the Hold Pages (EDD and On-Site) and special collections access messaging.
+- This represents the last major release in the DFE Refactor project.
+
+### Fixed
+
+- Fixed broken query param/JSON parsing in hold api routes causing errors when JS is disabled (SCC-4405)
+
+### Added
+
+- Add server side delivery location fetch and location utils (SCC-3759)
+- Add server-side EDD form posting function (SCC-3760)
+- Add EDD request page and field validation logic (SCC-3760)
+- Added and integrated hold confirmation details fetcher function (SCC-3762)
+- Added server-side auth redirect to hold confirmation page (SCC-3762)
+- Added fetchPatronEligibility server function that requests a patron's hold request eligibility status from Discovery API (SCC-3762)
+- Added patron ineligibility error messaging to HoldRequestErrorBanner component (SCC-3762)
+- Added eligibility checks to EDD and on-site request hold pages and API routes (SCC-3762)
+- Added HoldContactButton component and update error copy per VQA requests (SCC-4427)
+- Added email address field prepopulation on EDD Request form (SCC-4407)
+- Added server validation and form state prepopulation (SCC-4405)
+- Added patron authentication to hold api routes (SCC-4462)
+
+### Updated
+
+- Update availability messaging for special collections materials (SCC-4124)
+- Fetch delivery locations and pass to radios in hold request page (SCC-3759)
+- Moved closedLocations from environment variables to appConfig (SCC-3759)
+- Format patron ineligibility reasons as list only when more than one (SCC-4427)
+- Disable Hold Request submit button when patron is ineligible (SCC-4427)
+
+### [1.3.12] Hotfix 2025-1-17
 
 - Fix duplicate View All loading text (SCC-4467).
 
@@ -18,6 +52,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Hotfix for bug on production where no results are appearing in DRB sidebar. Caused by implicit adding of version number to endpoint url.
 
 ## [1.3.9] 2025-01-07
+
+## Added
+
+- ItemAvailability class and updated access messaging
 
 ### Updated
 
@@ -43,8 +81,10 @@ Note this release was not merged to main before deploying.
 
 - Holding location filters to refine search and advanced search panels
 - "Go back" button to advanced search
+- Add holding location filters to refine search and advanced search panels
+- Add go back button to advanced search
 
-## Updated
+### Updated
 
 - Better handling of bibs with no titles in SearchResultsBib model
 - Create reusable save/cancel button group
@@ -55,21 +95,16 @@ Note this release was not merged to main before deploying.
 ### Updated
 
 - Create banner container in Layout component and add EDS link to that container (SCC-4260)
-- Sentence case and rearrange search options (SCC-4260)
 - Call number search scope to search dropdown options [(SCC-4260)](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4260)
 - Search tip per search scope [(SCC-4263)](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4263)
 
-### Added
-
-- Add server side delivery location fetch and location utils (SCC-3759)
-
-### Updated
-
-- Moved closedLocations from environment variables to appConfig (SCC-3759)
-
 ### Fixed
 
+- Fix 500 error caused by assumption in buildHoldingDetails that location field will be present in the bib holdings returned from discovery (SCC-4314)
+
 ### [1.3.4] Hotfix 2024-10-17
+
+### Fixed
 
 - Fix 500 error caused by assumption in buildHoldingDetails that location field will be present in the bib holdings returned from discovery (SCC-4314)
 

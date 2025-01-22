@@ -1,6 +1,6 @@
 ## Ticket:
 
-- JIRA ticket [xxx](url)
+- JIRA ticket [xxx](https://newyorkpubliclibrary.atlassian.net/browse/SCC-{fill in the ticket number})
 
 ## This PR does the following:
 
