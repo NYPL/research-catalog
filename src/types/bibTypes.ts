@@ -65,7 +65,7 @@ export interface Note {
 
 interface SupplementaryContent {
   "@type": string
-  label: string
+  label?: string
   url: string
 }
 
