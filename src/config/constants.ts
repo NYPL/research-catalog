@@ -158,7 +158,6 @@ export const AVAILABILITY_KEYS = {
   ONSITE_NO_FINDING_AID_NO_AEON: "noFindingAidNoAeonOnsite",
   RECAP_NO_FINDING_AID_NO_AEON: "noFindingAidNoAeonRecap",
 }
-
 export const HOLD_PAGE_HEADING = "Request for on-site use"
 export const EDD_PAGE_HEADING = "Request scan"
 
