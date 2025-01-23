@@ -62,7 +62,7 @@ const itemIdentifierTypeMappings = {
 
 // Copied from DFE as part of a hotfix (delivery locations not loading for some off-site partner items)
 // TODO: Refactor this as a follow-up if necessary
-export const identifiersArray = [{ name: "barcode", value: "" }]
+export const identifiersArray = [{ name: "barcode", value: "bf:Barcode" }]
 
 /**
  * Given an identifier value, returns same identifier transformed to entity representation.
