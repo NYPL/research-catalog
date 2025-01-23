@@ -10,6 +10,7 @@ import {
   RESULTS_PER_PAGE,
 } from "../../config/constants"
 import { getDRBQueryStringFromSearchParams } from "../../utils/drbUtils"
+import { logServerError } from "../../utils/appUtils"
 import nyplApiClient from "../nyplApiClient"
 
 export async function fetchResults(
@@ -78,6 +79,7 @@ export async function fetchResults(
       page: searchParams.page,
     }
   } catch (error) {
+    logServerError("fetchResults", error.message)
     return new Error("Error fetching Search Results")
   }
 }

@@ -46,7 +46,10 @@ export default async function initializePatronTokenAuth(reqCookies: unknown) {
       patronTokenResponse.errorCode = null
     } catch (error) {
       // Most likely the token is expired and it needs to be refreshed
-      console.log("error", error)
+      // Otherwise, log the error
+      if (error.code !== "ERR_JWT_EXPIRED") {
+        console.error(error)
+      }
       patronTokenResponse.errorCode = error.message
       patronTokenResponse.isTokenValid = false
     }

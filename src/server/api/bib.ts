@@ -12,8 +12,9 @@ import {
   SHEP_HTTP_TIMEOUT,
 } from "../../config/constants"
 import { appConfig } from "../../config/config"
-import logger from "../../../logger"
+import { logServerError } from "../../utils/appUtils"
 import type { DiscoveryItemResult } from "../../types/itemTypes"
+import logger from "../../../logger"
 
 export async function fetchBib(
   id: string,
@@ -78,7 +79,10 @@ export async function fetchBib(
           }/search/card?recordId=${id.replace(/^b/, "")}`,
         }
       } else {
-        logger.error("There was a problem fetching the bib from Sierra")
+        logServerError(
+          "fetchBib",
+          "There was a problem fetching the bib from Sierra"
+        )
         return {
           status: 404,
         }
@@ -87,7 +91,10 @@ export async function fetchBib(
     // The Discovery API currently returns HTML in the bib attribute when it can't find a bib.
     // TODO: Modify the error response in Discovery API to return a 404 status instead of an HTML string in the bib attribute
     else if (typeof discoveryBibResult === "string") {
-      logger.error("There was an error fetching the Bib from the Discovery API")
+      logServerError(
+        "fetchBib",
+        "There was an error fetching the Bib from the Discovery API"
+      )
       return {
         status: 404,
       }
@@ -110,7 +117,7 @@ export async function fetchBib(
       status: 200,
     }
   } catch (error) {
-    logger.error(error.message)
+    logServerError("fetchBib", error.message)
     return {
       status: 404,
     }
@@ -135,6 +142,7 @@ async function fetchBibSubjectHeadings(bibId: string) {
       "Error fetching SHEP API data (note: VPN should be used for local testing)",
       error
     )
+    logServerError("fetchBib", error.message)
   } finally {
     clearTimeout(timeoutId)
   }
@@ -170,7 +178,7 @@ async function fetchAllBibItemsWithQuery(
         )
       }
     } catch (error) {
-      logger.error(error.message)
+      logServerError("fetchBib", error.message)
     }
   }
   return items

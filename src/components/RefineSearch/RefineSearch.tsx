@@ -159,7 +159,6 @@ const RefineSearch = ({
           buttonType="secondary"
           backgroundColor="ui.white"
         >
-          <Icon />
           Filter results
         </Button>
       ) : (
