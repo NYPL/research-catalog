@@ -238,6 +238,7 @@ export async function getServerSideProps({ params, req, res }) {
     if (!discoveryItemResult) {
       throw new Error("Hold Page - Item not found")
     }
+    console.log("discoveryItemResult", discoveryItemResult)
 
     const bib = new Bib(discoveryBibResult)
     const item = new Item(discoveryItemResult, bib)
