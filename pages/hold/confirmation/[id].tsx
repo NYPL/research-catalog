@@ -166,7 +166,6 @@ export async function getServerSideProps({ params, req, res, query }) {
     const { discoveryBibResult } = await fetchBib(bibId, {}, itemId)
     const discoveryItemResult = discoveryBibResult?.items?.[0]
 
-    // Get the item barcode's directly from discoveryBibResult to avoid initializing the entire Item model.
     const bib = new Bib(discoveryBibResult)
     const item = new Item(discoveryItemResult, bib)
     const itemBarcode = item?.barcode
