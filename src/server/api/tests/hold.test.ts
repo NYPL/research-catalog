@@ -203,6 +203,10 @@ describe("fetchDeliveryLocations", () => {
     // expect(deliveryLocationResults.deliveryLocations.length).toEqual(0)
     expect(deliveryLocationResults.status).toEqual(500)
   })
+
+  it.todo(
+    "Add tests for filtering out locations that are not listed in NYPL_LOCATIONS constant (staff-only)"
+  )
 })
 
 describe("postHoldRequest", () => {
