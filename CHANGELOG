@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+- add searched_from=advanced param to track advanced searches
+
 ## [1.4.1] Hotfix 2025-1-23
 
 - Fix (derived from DFE) for failing delivery location fetch for off-site items with legacy barcode identifier.
