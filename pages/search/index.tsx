@@ -68,10 +68,13 @@ export default function Search({
   const drbResults = mapWorksToDRBResults(drbWorks)
 
   const isLoading = useLoading()
+  const searchedFromAdvanced = query.searched_from === "advanced"
 
   const handlePageChange = async (page: number) => {
     const newQuery = getSearchQuery({ ...searchParams, page })
-    await push(newQuery)
+    await push(
+      `${newQuery}${searchedFromAdvanced ? "&searched_from=advanced" : ""}`
+    )
   }
 
   const aggs = results?.aggregations?.itemListElement
