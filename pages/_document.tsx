@@ -1,4 +1,5 @@
 import { Html, Head, Main, NextScript } from "next/document"
+import { appConfig } from "../src/config/config"
 
 export default function Document() {
   return (
@@ -19,14 +20,14 @@ export default function Document() {
         <meta name="description" content="Research Catalog | NYPL" />
       </Head>
       <body>
-        {/* Google Tag Manager (noscript) */}
+        {/* Google tag manager: <noscript> */}
         <noscript>
           <iframe
-            src="https://www.googletagmanager.com/ns.html?id=GTM-RKWC"
+            src={`https://www.googletagmanager.com/ns.html?id=${appConfig.gtmTrackingId}`}
             height="0"
             width="0"
             style={{ display: "none", visibility: "hidden" }}
-          ></iframe>
+          />
         </noscript>
         {/* NYPL Header container */}
         <div id="Header-Placeholder">

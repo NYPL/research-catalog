@@ -85,6 +85,7 @@ export const appConfig: AppConfig = {
     Q9RrzMLTqxKnVVn2+hVpk4F/8tMsGCdd4s/AJqEQBy5lsq7ji1B63XYqi5fc1SnJ
     EQIDAQAB
     -----END PUBLIC KEY-----`,
+  gtmTrackingId: "GTM-RKWC",
   features: {
     reverseProxyEnabled: {
       development: false,
