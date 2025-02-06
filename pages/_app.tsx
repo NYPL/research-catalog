@@ -25,6 +25,7 @@ function App({ Component, pageProps }) {
         async
         src={appConfig.apiEndpoints.adobeEmbedUrl[appConfig.environment]}
       />
+      {/* Google tag manager */}
       <Script
         id="ga4-gtm"
         strategy="afterInteractive"
@@ -38,6 +39,7 @@ function App({ Component, pageProps }) {
           `,
         }}
       />
+      {/* Adobe Analytics data layer initialization */}
       <Script id="adobeDataLayerDefinition">
         {`
               // First define the global variable for the entire data layer array
