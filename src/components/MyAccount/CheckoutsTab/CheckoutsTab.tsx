@@ -29,6 +29,7 @@ const CheckoutsTab = () => {
     "Due back by",
     "Manage checkout",
   ]
+  console.log(checkouts)
   const [checkoutToRenew, setCheckoutToRenew] = useState<string>(null)
   const checkoutsData = checkouts.map((checkout) => [
     formatTitleElement(checkout),

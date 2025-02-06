@@ -25,6 +25,7 @@ export interface SierraAccountData {
 }
 
 export interface SierraCheckout {
+  numberOfRenewals: number
   id: string
   patron: string
   item: SierraItem
@@ -89,6 +90,7 @@ export interface SierraPatron {
 }
 
 export interface Checkout {
+  numberOfRenewals: number
   callNumber: string | null
   barcode: string
   dueDate: string
