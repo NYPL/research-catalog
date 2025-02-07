@@ -6,7 +6,6 @@ export interface AppConfig {
   recapClosedLocations: string[]
   nonRecapClosedLocations: string[]
   jwtPublicKey: string
-  gtmTrackingId: string
   features: Record<string, Features>
   sourceEmail: string
   libAnswersEmail: string

@@ -23,7 +23,7 @@ export default function Document() {
         {/* Google tag manager: <noscript> */}
         <noscript>
           <iframe
-            src={`https://www.googletagmanager.com/ns.html?id=${appConfig.gtmTrackingId}`}
+            src={"https://www.googletagmanager.com/ns.html?id=GTM-RKWC"}
             height="0"
             width="0"
             style={{ display: "none", visibility: "hidden" }}
