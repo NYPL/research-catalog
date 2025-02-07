@@ -17,6 +17,8 @@ const FeesTab = ({ fines }: { fines: Fine }) => {
       columnHeadersBackgroundColor={"ui.gray.x-light-cool"}
       columnHeaders={feesHeaders}
       tableData={feesData.concat(finalRow)}
+      isScrollable
+      columnStyles={feesHeaders.map((_) => ({ minWidth: "120px" }))}
     />
   )
 }
