@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## unreleased
+
+- add number of renewals to checkouts tab [SCC-4327](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4372)
+- update account tables with horizontal scrolling action
+
 ## [1.4.2] 2025-02-04
 
 - add searched_from=advanced param to track advanced searches
