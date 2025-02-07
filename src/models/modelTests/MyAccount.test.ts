@@ -83,8 +83,8 @@ describe("MyAccountModel", () => {
         },
       }
       const fetcher = new MyAccount(mockSierraClient, "12345")
-      const processedCheckouts = await fetcher.getCheckouts()
-      expect(processedCheckouts).toStrictEqual(processedCheckouts)
+      const builtProcessedCheckouts = await fetcher.getCheckouts()
+      expect(builtProcessedCheckouts).toStrictEqual(processedCheckouts)
     })
     it("can return holds", async () => {
       const mockSierraClient = {

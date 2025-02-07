@@ -367,7 +367,7 @@ export const processedCheckouts = [
     patron: "6742743",
     title: "Fish, fish, fish / Adams, Georgie.",
     isResearch: true,
-    numberOfRenewals: 0,
+    numberOfRenewals: 1,
     bibId: "17226308",
     isNyplOwned: true,
     catalogHref: "https://nypl.org/research/research-catalog/bib/b17226308",

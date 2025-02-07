@@ -55,7 +55,9 @@ const CheckoutsTab = () => {
             isItalic
             backgroundColor={{ base: "green", md: "yellow", mt: "tomato" }}
             color="ui.warning.tertiary"
-          >{`Renewed ${checkout.numberOfRenewals} times`}</Text>
+          >{`Renewed ${checkout.numberOfRenewals} time${
+            checkout.numberOfRenewals === 1 ? "" : "s"
+          }`}</Text>
         ) : null}
       </Flex>
     ),
