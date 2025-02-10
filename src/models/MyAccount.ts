@@ -253,6 +253,7 @@ export default class MyAccount {
           const bibId = checkout.item.bibIds[0]
           const bibForCheckout = bibDataMap[bibId]
           return {
+            numberOfRenewals: checkout.numberOfRenewals,
             id: MyAccount.getRecordId(checkout.id),
             // Partner items do not have call numbers. Null has to be explicitly
             // returned for JSON serialization in getServerSideProps
