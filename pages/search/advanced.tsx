@@ -123,9 +123,13 @@ export default function AdvancedSearch({
       // If the NEXT_PUBLIC_REVERSE_PROXY_ENABLED feature flag is present, use window.location.replace
       // instead of router.push to forward search results to DFE.
       if (appConfig.features.reverseProxyEnabled[appConfig.environment]) {
-        window.location.replace(`${BASE_URL}${PATHS.SEARCH}${queryString}`)
+        window.location.replace(
+          `${BASE_URL}${PATHS.SEARCH}${queryString}&searched_from=advanced`
+        )
       } else {
-        await router.push(`${PATHS.SEARCH}${queryString}`)
+        await router.push(
+          `${PATHS.SEARCH}${queryString}&searched_from=advanced`
+        )
       }
     }
   }
