@@ -18,7 +18,6 @@ const FeesTab = ({ fines }: { fines: Fine }) => {
       columnHeaders={feesHeaders}
       tableData={feesData.concat(finalRow)}
       isScrollable
-      columnStyles={feesHeaders.map((_) => ({ minWidth: "120px" }))}
     />
   )
 }
