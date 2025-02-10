@@ -42,7 +42,7 @@ const CheckoutsTab = () => {
     checkout.callNumber,
     checkout.dueDate,
     checkout.isResearch ? null : (
-      <Flex alignItems="end" justifyContent={"space-between"}>
+      <Flex alignItems="end" justifyContent="space-between">
         <RenewButton
           setCheckoutToRenew={setCheckoutToRenew}
           isCheckoutRenewing={checkoutToRenew === checkout.id}
@@ -50,14 +50,9 @@ const CheckoutsTab = () => {
           patron={patron}
         />
         {checkout.numberOfRenewals ? (
-          <Text
-            size="caption"
-            isItalic
-            backgroundColor={{ base: "green", md: "yellow", mt: "tomato" }}
-            color="ui.warning.tertiary"
-          >{`Renewed ${checkout.numberOfRenewals} time${
-            checkout.numberOfRenewals === 1 ? "" : "s"
-          }`}</Text>
+          <Text size="caption" isItalic color="ui.warning.tertiary">{`Renewed ${
+            checkout.numberOfRenewals
+          } time${checkout.numberOfRenewals === 1 ? "" : "s"}`}</Text>
         ) : null}
       </Flex>
     ),
@@ -67,7 +62,7 @@ const CheckoutsTab = () => {
       headers={checkoutsHeaders}
       data={checkoutsData}
       tableStyling={tableStyling}
-      userAction={"checked out"}
+      userAction="checked out"
     />
   )
 }
