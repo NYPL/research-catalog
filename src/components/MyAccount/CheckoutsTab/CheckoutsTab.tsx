@@ -42,7 +42,7 @@ const CheckoutsTab = () => {
     checkout.callNumber,
     checkout.dueDate,
     checkout.isResearch ? null : (
-      <Flex alignItems="end" justifyContent="space-between">
+      <Flex alignItems="end" gap="xs">
         <RenewButton
           setCheckoutToRenew={setCheckoutToRenew}
           isCheckoutRenewing={checkoutToRenew === checkout.id}
