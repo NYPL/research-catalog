@@ -109,14 +109,13 @@ const TestPickupTimes = (params) => {
           Test Pickup Times
         </Heading>
         <Form
-          id="advancedSearchForm"
-          // We are using a post request on advanced search when JS is disabled so that we can build the query
-          // string correctly on the server and redirect the user to the search results.
+          data-testid="testPickupTimeForm"
+          id="testPickupTimeForm"
           method="post"
           action={`${BASE_URL}/test-pickup-times`}
         >
           <FormRow gap="grid.m">
-            <FormField id="advancedSearchLeft" gap="grid.s">
+            <FormField gap="grid.s">
               <Select
                 id="scenario"
                 name="scenario"

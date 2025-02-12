@@ -45,10 +45,11 @@ export async function fetchDeliveryLocations(
     }
 
     const deliveryLocations =
-      discoveryLocationsItem?.deliveryLocation?.map(
-        (locationElement: DiscoveryLocationElement) =>
+      discoveryLocationsItem?.deliveryLocation
+        ?.map((locationElement: DiscoveryLocationElement) =>
           mapLocationElementToDeliveryLocation(locationElement)
-      ) || []
+        )
+        .filter((deliveryLocation) => deliveryLocation) || []
     const eddRequestable = discoveryLocationsItem?.eddRequestable || false
 
     // Filter out closed locations

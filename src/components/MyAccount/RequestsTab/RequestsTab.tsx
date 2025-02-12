@@ -44,6 +44,11 @@ const RequestsTab = () => {
     "Pickup by",
     "Manage request",
   ]
+  const tableStyles = holdsHeaders.map((_, index) => {
+    const width = index === 0 ? null : "16%"
+    const minWidth = index === 0 ? "320px" : "172px"
+    return { width, minWidth }
+  })
   const holdsData = holds.map((hold, i) => [
     formatTitleElement(hold),
     getStatusBadge(hold.status),
@@ -115,6 +120,7 @@ const RequestsTab = () => {
       headers={holdsHeaders}
       data={holdsData}
       userAction={"requested"}
+      tableStyling={tableStyles}
     />
   )
 

@@ -10,6 +10,7 @@ import {
 } from "../../../src/config/constants"
 
 import Bib from "../../../src/models/Bib"
+import Item from "../../../src/models/Item"
 
 import RCLink from "../../../src/components/Links/RCLink/RCLink"
 import ExternalLink from "../../../src/components/Links/RCLink/RCLink"
@@ -163,14 +164,14 @@ export async function getServerSideProps({ params, req, res, query }) {
       throw new Error("No item id in url")
     }
     const { discoveryBibResult } = await fetchBib(bibId, {}, itemId)
+    const discoveryItemResult = discoveryBibResult?.items?.[0]
 
-    // Get the item barcode's directly from discoveryBibResult to avoid initializing the entire Item model.
-    const itemBarcode = discoveryBibResult?.items?.[0]?.["idBarcode"]?.[0]
+    const bib = new Bib(discoveryBibResult)
+    const item = new Item(discoveryItemResult, bib)
+    const itemBarcode = item?.barcode
 
     if (!itemBarcode) {
-      throw new Error(
-        "Hold Confirmation Page - Item barcode not found in discoveryBibResult"
-      )
+      throw new Error("Hold Confirmation Page - Item barcode not found")
     }
 
     const { deliveryLocations } = await fetchDeliveryLocations(

@@ -138,9 +138,6 @@ const RenewButton = ({
   return (
     <>
       <Button
-        sx={{
-          width: "100%",
-        }}
         buttonType="secondary"
         id={`renew-${checkout.id}`}
         onClick={handleClick}

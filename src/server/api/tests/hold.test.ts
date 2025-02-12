@@ -21,7 +21,17 @@ jest.mock("../../nyplApiClient", () => {
           get: jest.fn().mockReturnValueOnce({
             itemListElement: [
               {
-                deliveryLocation: [{}, {}],
+                deliveryLocation: [
+                  {
+                    "@id": "loc:mal17",
+                    prefLabel: "Schwarzman Building - Scholar Room 217",
+                  },
+                  {
+                    "@id": "loc:mab",
+                    prefLabel:
+                      "Schwarzman Building - Art & Architecture Room 300",
+                  },
+                ],
               },
             ],
           }),
@@ -34,7 +44,17 @@ jest.mock("../../nyplApiClient", () => {
           get: jest.fn().mockReturnValueOnce({
             itemListElement: [
               {
-                deliveryLocation: [{}, {}],
+                deliveryLocation: [
+                  {
+                    "@id": "loc:mal17",
+                    prefLabel: "Schwarzman Building - Scholar Room 217",
+                  },
+                  {
+                    "@id": "loc:mab",
+                    prefLabel:
+                      "Schwarzman Building - Art & Architecture Room 300",
+                  },
+                ],
                 eddRequestable: true,
               },
             ],
@@ -183,6 +203,10 @@ describe("fetchDeliveryLocations", () => {
     // expect(deliveryLocationResults.deliveryLocations.length).toEqual(0)
     expect(deliveryLocationResults.status).toEqual(500)
   })
+
+  it.todo(
+    "Add tests for filtering out locations that are not listed in NYPL_LOCATIONS constant (staff-only)"
+  )
 })
 
 describe("postHoldRequest", () => {

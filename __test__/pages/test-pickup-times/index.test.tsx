@@ -10,8 +10,8 @@ describe("Test Pickup Times", () => {
     it("displays testing form", () => {
       render(<TestPickupTimes />)
 
-      const forms = screen.getAllByRole("form")
-      expect(forms).toHaveLength(1)
+      const forms = screen.getByTestId("testPickupTimeForm")
+      expect(forms).toBeInTheDocument()
     })
   })
 })

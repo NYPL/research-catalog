@@ -5,7 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Prerelease
+### Added
+
+- Added Google Tag Manager snippet and data layer initialization (SCC-4472)
+- add number of renewals to checkouts tab [SCC-4327](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4372)
+- update account tables with horizontal scrolling action
+
+## [1.4.2] 2025-02-04
+
+- add searched_from=advanced param to track advanced searches
+- remove icon warnings
+
+## [1.4.1] Hotfix 2025-1-23
+
+- Fix (derived from DFE) for failing delivery location fetch for off-site items with legacy barcode identifier.
+
+## [1.4.0] 2025-01-22
+
+## Release Notes
+
+- This release includes the Hold Pages (EDD and On-Site) and special collections access messaging.
+- This represents the last major release in the DFE Refactor project.
 
 ### Fixed
 
@@ -33,6 +53,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Moved closedLocations from environment variables to appConfig (SCC-3759)
 - Format patron ineligibility reasons as list only when more than one (SCC-4427)
 - Disable Hold Request submit button when patron is ineligible (SCC-4427)
+
+### [1.3.12] Hotfix 2025-1-17
+
+- Fix duplicate View All loading text (SCC-4467).
+
+### [1.3.11] Hotfix 2025-1-13
+
+- Fix nyplApiClient cache, so cache keys are updated with api version numbers.
 
 ### [1.3.10] Hotfix 2025-1-8
 
