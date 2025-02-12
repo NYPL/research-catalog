@@ -191,9 +191,9 @@ export async function fetchHoldDetails(
       status: 200,
     }
   } catch (error) {
-    console.error(
-      `Error fetching hold request details in fetchHoldRequestDetails server function, requestId: ${requestId}`,
-      error.message
+    logServerError(
+      "fetchHoldDetails",
+      `requestId: ${requestId}, error message: ${error.message}`
     )
 
     return { status: 500 }

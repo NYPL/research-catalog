@@ -14,7 +14,6 @@ import {
 import { appConfig } from "../../config/config"
 import { logServerError } from "../../utils/appUtils"
 import type { DiscoveryItemResult } from "../../types/itemTypes"
-import logger from "../../../logger"
 
 export async function fetchBib(
   id: string,
@@ -138,9 +137,9 @@ async function fetchBibSubjectHeadings(bibId: string) {
     )
     return await response.json()
   } catch (error) {
-    logger.error(
-      "Error fetching SHEP API data (note: VPN should be used for local testing)",
-      error
+    logServerError(
+      "fetchBib",
+      "Error fetching SHEP API data (note: VPN should be used for local testing)"
     )
     logServerError("fetchBib", error.message)
   } finally {
