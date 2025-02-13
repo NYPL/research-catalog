@@ -68,7 +68,7 @@ function App({ Component, pageProps }) {
               });
            `}
       </Script>
-      {/* OptinMonster */}
+      {/*  NYPL Advocacy Snippet for Marketing Campaigns */}
       <Script src="https://assets.nypl.org/js/advocacy.js" />
       {/* NYPL Header script */}
       <Script
