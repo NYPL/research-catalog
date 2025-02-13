@@ -68,7 +68,9 @@ const initializeLogger = () => {
 }
 
 const isRunningOnVercel = process.env.VERCEL === "1"
+const isRunningClientSide = typeof window !== "undefined"
 
-const logger = isRunningOnVercel ? console : initializeLogger()
+const logger =
+  isRunningOnVercel || isRunningClientSide ? console : initializeLogger()
 
 export default logger

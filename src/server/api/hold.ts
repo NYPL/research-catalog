@@ -22,6 +22,7 @@ import {
 } from "../../utils/locationUtils"
 
 import { appConfig } from "../../config/config"
+import { logServerError } from "../../utils/appUtils"
 
 /**
  * Getter function for hold delivery locations.
@@ -67,7 +68,7 @@ export async function fetchDeliveryLocations(
       status: 200,
     }
   } catch (error) {
-    console.error(`Error fetching delivery locations ${error.message}`)
+    logServerError("fetchDeliveryLocations", error.message)
 
     return {
       status: 500,
@@ -113,11 +114,7 @@ export async function postHoldRequest(
       requestId,
     }
   } catch (error) {
-    console.log("error", error)
-    console.error(
-      `Error posting hold request in postHoldRequest server function, itemId: ${itemId}`,
-      error.message
-    )
+    logServerError("postHoldRequest", error.message)
 
     return {
       status: 500,
@@ -154,10 +151,8 @@ export async function postEDDRequest(
     const requestId = eddPostResult?.data?.id
 
     if (!requestId) {
-      console.error(
-        "postEDDRequest failed, no id returned from Discovery API",
-        eddPostResult
-      )
+      logServerError("postEDDRequest", "No id returned from Discovery API")
+
       return {
         status: 400,
       }
@@ -168,10 +163,7 @@ export async function postEDDRequest(
       requestId,
     }
   } catch (error) {
-    console.error(
-      `Error posting hold request in postEDDRequest server function, itemId: ${itemId}`,
-      error.message
-    )
+    logServerError("postEDDRequest", error.message)
 
     return {
       status: 500,
@@ -199,9 +191,9 @@ export async function fetchHoldDetails(
       status: 200,
     }
   } catch (error) {
-    console.error(
-      `Error fetching hold request details in fetchHoldRequestDetails server function, requestId: ${requestId}`,
-      error.message
+    logServerError(
+      "fetchHoldDetails",
+      `requestId: ${requestId}, error message: ${error.message}`
     )
 
     return { status: 500 }
