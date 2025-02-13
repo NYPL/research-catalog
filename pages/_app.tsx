@@ -69,7 +69,10 @@ function App({ Component, pageProps }) {
            `}
       </Script>
       {/*  NYPL Advocacy Snippet for Marketing Campaigns */}
-      <Script src="https://assets.nypl.org/js/advocacy.js" />
+      <Script
+        src="https://assets.nypl.org/js/advocacy.js"
+        strategy="afterInteractive"
+      />
       {/* NYPL Header script */}
       <Script
         src={`${
