@@ -1,5 +1,4 @@
 import { Html, Head, Main, NextScript } from "next/document"
-import { appConfig } from "../src/config/config"
 
 export default function Document() {
   return (
