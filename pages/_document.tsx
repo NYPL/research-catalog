@@ -20,15 +20,6 @@ export default function Document() {
         <meta name="description" content="Research Catalog | NYPL" />
       </Head>
       <body>
-        {/* Google tag manager: <noscript> */}
-        <noscript>
-          <iframe
-            src={"https://www.googletagmanager.com/ns.html?id=GTM-RKWC"}
-            height="0"
-            width="0"
-            style={{ display: "none", visibility: "hidden" }}
-          />
-        </noscript>
         {/* NYPL Header container */}
         <div id="Header-Placeholder">
           <div id="nypl-header"></div>
