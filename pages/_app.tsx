@@ -36,6 +36,11 @@ function App({ Component, pageProps }) {
               });
            `}
       </Script>
+      {/*  NYPL Advocacy Snippet for Marketing Campaigns */}
+      <Script
+        src="https://assets.nypl.org/js/advocacy.js"
+        strategy="afterInteractive"
+      />
       {/* NYPL Header script */}
       <Script
         src={`${
@@ -48,7 +53,6 @@ function App({ Component, pageProps }) {
           appConfig.apiEndpoints.nyplHeaderUrl[appConfig.environment]
         }/footer.min.js?containerId=nypl-footer`}
       />
-
       <Head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
