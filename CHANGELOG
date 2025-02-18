@@ -5,13 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### Added
+## [1.4.4] 2025-02-18
+
+- Added utility function logServerError that standardizes Cloudwatch logging (SCC-4408).
+- add number of renewals to checkouts tab [SCC-4327](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4372)
+- update account tables with horizontal scrolling action
+- Prevented Webpack from polyfilling 'fs' in client builds to avoid errors when importing server-side functions using Winston in `getServerSideProps` (SCC-4408).
+
 ## [1.4.3] Hotfix 2025-2-13
 
 - Add NYPL Advocacy snippet from DFE (SCC-4536)
 
-## [1.4.2] Hotfix 2025-2-10
+## [1.4.2] 2025-02-04
 
-- Add searched_from=advanced param to track advanced searches
+- add searched_from=advanced param to track advanced searches
+- remove icon warnings
 
 ## [1.4.1] Hotfix 2025-1-23
 
