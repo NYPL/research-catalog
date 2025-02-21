@@ -1,7 +1,8 @@
 import Layout from "../../../src/components/Layout/Layout"
+import RCLink from "../../../src/components/Links/RCLink/RCLink"
 import type { EnhancedBrowseResult } from "../../../src/types/enhancedBrowseTypes"
 import { fetchEBResults } from "../../api/browse"
-import { Table } from "@nypl/design-system-react-components"
+import { Pagination, Table } from "@nypl/design-system-react-components"
 
 interface BrowseIndexPropsType {
   results: EnhancedBrowseResult[]
@@ -9,11 +10,15 @@ interface BrowseIndexPropsType {
 
 export default function Browse({ results }: BrowseIndexPropsType) {
   const headers = ["Label", "Bib count"]
-  // const buildBibResultsUrl = (query) =>
+  const buildBibResultsUrl = (subject) =>
+    "/search?filters[subjectLiteral]=" + subject
   const tableData = results.map(({ aggregateBibCount, label }) => [
-    label,
+    <RCLink key={label} href={buildBibResultsUrl(label)}>
+      {label}
+    </RCLink>,
     `${aggregateBibCount}`,
   ])
+
   return (
     <Layout>
       <Table tableData={tableData} columnHeaders={headers} />
