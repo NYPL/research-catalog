@@ -26,7 +26,11 @@ export default function BrowseBibResults({
 
 export async function getServerSideProps({ params }) {
   const { subject } = params
-  const searchParams = { filters: { subjectLiteral: [subject] }, q: "" }
+  const searchParams = {
+    page: 1,
+    filters: { subjectLiteral: [subject] },
+    q: "",
+  }
   const results = await fetchResults(searchParams)
   return {
     props: {
