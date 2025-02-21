@@ -10,8 +10,7 @@ interface BrowseIndexPropsType {
 
 export default function Browse({ results }: BrowseIndexPropsType) {
   const headers = ["Label", "Bib count"]
-  const buildBibResultsUrl = (subject) =>
-    "/search?filters[subjectLiteral]=" + subject
+  const buildBibResultsUrl = (subject) => "/browse/subjects/" + subject
   const tableData = results.map(({ aggregateBibCount, label }) => [
     <RCLink key={label} href={buildBibResultsUrl(label)}>
       {label}
