@@ -15,7 +15,12 @@ import {
   getSearchQuery,
   searchFormSelectOptions,
 } from "../../utils/searchUtils"
-import { BASE_URL, PATHS, SEARCH_FORM_OPTIONS } from "../../config/constants"
+import {
+  BASE_URL,
+  BROWSE_FORM_OPTIONS,
+  PATHS,
+  SEARCH_FORM_OPTIONS,
+} from "../../config/constants"
 import useLoading from "../../hooks/useLoading"
 import RefineSearch from "../RefineSearch/RefineSearch"
 import type { Aggregation } from "../../types/filterTypes"
@@ -32,16 +37,30 @@ const SearchForm = ({
   browseOrSearch: string
   aggregations?: Aggregation[]
 }) => {
+  const browseUtil = {
+    initialScope: "keyword",
+    path: PATHS.BROWSE_SUBJECT,
+    options: BROWSE_FORM_OPTIONS,
+  }
+  const searchUtil = {
+    initialScope: "all",
+    path: PATHS.SEARCH,
+    options: SEARCH_FORM_OPTIONS,
+  }
+  const [config, setConfig] = useState(
+    browseOrSearch === "search" ? searchUtil : browseUtil
+  )
   const router = useRouter()
   const [keyword, setKeyword] = useState((router?.query?.q as string) || "")
   const [scope, setScope] = useState(
-    (router?.query?.[`${browseOrSearch}_scope`] as string) || "all"
+    (router?.query?.[`${browseOrSearch}_scope`] as string) ||
+      config.initialScope
   )
   const [appliedFilters, setAppliedFilters] = useState(
     collapseMultiValueQueryParams(router.query)
   )
-  const tip = SEARCH_FORM_OPTIONS[scope].tip
-  const placeholder = SEARCH_FORM_OPTIONS[scope].placeholder
+  const tip = config.options[scope].tip
+  const placeholder = config.options[scope].placeholder
 
   const isLoading = useLoading()
 
@@ -52,18 +71,9 @@ const SearchForm = ({
       field: scope,
     }
 
-    // Keeping the feature where if the search scope from the select
-    // dropdown is "subject", it will redirect to SHEP.
-    if (scope === "subject") {
-      window.location.href = `${BASE_URL}/subject_headings?filter=${
-        keyword.charAt(0).toUpperCase() + keyword.slice(1)
-      }`
-      return
-    }
-
     const queryString = getSearchQuery(searchParams)
 
-    await router.push(`${PATHS.SEARCH}${queryString}`)
+    await router.push(`${config.path}${queryString}`)
   }
 
   const handleChange = (
@@ -106,7 +116,7 @@ const SearchForm = ({
             onChange: (e) => handleChange(e, setScope),
             labelText: "Select a category",
             name: `${browseOrSearch}_scope`,
-            optionsData: searchFormSelectOptions,
+            optionsData: searchFormSelectOptions(config.options),
           }}
           textInputProps={{
             isClearable: true,

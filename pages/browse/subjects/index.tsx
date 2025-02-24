@@ -2,7 +2,7 @@ import Layout from "../../../src/components/Layout/Layout"
 import RCLink from "../../../src/components/Links/RCLink/RCLink"
 import type { EnhancedBrowseResult } from "../../../src/types/enhancedBrowseTypes"
 import { fetchEBResults } from "../../api/browse"
-import { Pagination, Table } from "@nypl/design-system-react-components"
+import { Table } from "@nypl/design-system-react-components"
 
 interface BrowseIndexPropsType {
   results: EnhancedBrowseResult[]
@@ -19,7 +19,7 @@ export default function Browse({ results }: BrowseIndexPropsType) {
   ])
 
   return (
-    <Layout>
+    <Layout activePage="browse">
       <Table tableData={tableData} columnHeaders={headers} />
     </Layout>
   )

@@ -10,11 +10,11 @@ export const processEBResult = (EBResult) => {
 }
 
 export const fetchEBResults = async (query) => {
-  const { q, type } = query
-  if (q && type) {
+  const { q, search_scope } = query
+  if (q && search_scope) {
     const platformClient = await nyplApiClient()
     const data = await platformClient.get(
-      `/subject-headings?q=${q}&type=${type}&per_page=200`
+      `/subject-headings?q=${q}&type=${search_scope}&per_page=200`
     )
     const results = data.main.map(processEBResult)
     return results

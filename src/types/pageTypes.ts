@@ -1,4 +1,5 @@
 export type RCPage =
+  | "browse"
   | "search"
   | "advanced"
   | "shep"

@@ -41,9 +41,9 @@ const Layout = ({
   bannerNotification,
 }: PropsWithChildren<LayoutProps>) => {
   const showSearch = activePage === "search"
+  const showSearchOrBrowseBar = showSearch || activePage === "browse"
   const showHeader = activePage !== "404"
   const showNotification = activePage === "" || activePage === "search"
-
   return (
     <DSProvider>
       <TemplateAppContainer
@@ -78,9 +78,9 @@ const Layout = ({
                   isAuthenticated={isAuthenticated}
                   activePage={activePage}
                 />
-                {showSearch && (
+                {showSearchOrBrowseBar && (
                   <SearchForm
-                    browseOrSearch={"search"}
+                    browseOrSearch={activePage}
                     aggregations={searchAggregations}
                   />
                 )}

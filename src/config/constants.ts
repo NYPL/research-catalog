@@ -17,6 +17,7 @@ export const EMAIL_REGEX = /^[^@]+@[^@]+\.[^@]+$/
 
 // Internal path names
 export const PATHS = {
+  BROWSE_SUBJECT: "",
   HOME: "/",
   SEARCH: "/search",
   ADVANCED_SEARCH: "/search/advanced",
@@ -84,6 +85,19 @@ export const ERROR_MESSAGES = {
 
 const useQuotes = "Use quotation marks to search for an exact phrase."
 const example = "Example: "
+
+export const BROWSE_FORM_OPTIONS = {
+  keyword: {
+    text: "Subject headings containing",
+    tip: "it contains spaghetti",
+    placeholder: "something like spaghetti",
+  },
+  starts_with: {
+    text: "Subject headings starts with",
+    tip: "it starts with spaghetti",
+    placeholder: "begins with something like spaghetti",
+  },
+}
 
 export const SEARCH_FORM_OPTIONS = {
   all: {

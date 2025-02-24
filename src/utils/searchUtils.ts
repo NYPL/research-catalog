@@ -10,16 +10,15 @@ import type {
   SearchResultsResponse,
 } from "../types/searchTypes"
 import SearchResultsBib from "../models/SearchResultsBib"
-import { RESULTS_PER_PAGE, SEARCH_FORM_OPTIONS } from "../config/constants"
+import { RESULTS_PER_PAGE } from "../config/constants"
 import { collapseMultiValueQueryParams } from "./refineSearchUtils"
 import { getPaginationOffsetStrings } from "./appUtils"
 
-export const searchFormSelectOptions = Object.keys(SEARCH_FORM_OPTIONS).map(
-  (key) => ({
-    text: SEARCH_FORM_OPTIONS[key].text,
+export const searchFormSelectOptions = (formOptions) =>
+  Object.keys(formOptions).map((key) => ({
+    text: formOptions[key].text,
     value: key,
-  })
-)
+  }))
 /**
  * determineFreshSortByQuery
  * Returns true only if the last update to the query was a sort by change.
