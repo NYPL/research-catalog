@@ -10,8 +10,6 @@ import {
   defaultNYPLLocation,
   partnerDefaultLocation,
   locationEndpointsMap,
-  getIdentifiers,
-  identifiersArray,
 } from "../utils/itemUtils"
 import { appConfig } from "../config/config"
 import ItemAvailability from "./ItemAvailability"
