@@ -88,39 +88,37 @@ const example = "Example: "
 export const SEARCH_FORM_OPTIONS = {
   all: {
     text: "Keyword",
-    searchTip: `Enter one or more keywords. ${useQuotes}`,
+    tip: `Enter one or more keywords. ${useQuotes}`,
     placeholder: `${example} Brooklyn Bridge or “New York City”`,
   },
   title: {
     text: "Title",
-    searchTip: `Enter a full title or part of a title. ${useQuotes}`,
+    tip: `Enter a full title or part of a title. ${useQuotes}`,
     placeholder: `${example} Middlemarch or “A Chorus Line”`,
   },
   contributor: {
     text: "Author/contributor",
-    searchTip:
-      "Enter the name of an author, contributor, or organization. Use Last Name, First Name for more precise results.",
+    tip: "Enter the name of an author, contributor, or organization. Use Last Name, First Name for more precise results.",
     placeholder: `${example} Hurston, Zora Neale or New York City Ballet`,
   },
   journal_title: {
     text: "Journal title",
-    searchTip: `Enter a journal, newspaper, or other serial title. ${useQuotes}`,
+    tip: `Enter a journal, newspaper, or other serial title. ${useQuotes}`,
     placeholder: `${example} Amsterdam News or “Paris Review”`,
   },
   callnumber: {
     text: "Call number",
-    searchTip: "Enter a call number or the beginning of a call number.",
+    tip: "Enter a call number or the beginning of a call number.",
     placeholder: `${example} JFD 93-1962 or "**P (Ms. Heb"."`,
   },
   standard_number: {
     text: "Unique identifier",
-    searchTip:
-      "Enter a control number or identifier (ISBN, ISSN, LCCN, OCLC number, barcode, etc.).",
+    tip: "Enter a control number or identifier (ISBN, ISSN, LCCN, OCLC number, barcode, etc.).",
     placeholder: `${example} 9780889229600 or 82048999`,
   },
   subject: {
     text: "Subject",
-    searchTip: "Enter a subject keyword or phrase.",
+    tip: "Enter a subject keyword or phrase.",
     placeholder: `${example} Ornithology or Greek Architecture`,
   },
 }

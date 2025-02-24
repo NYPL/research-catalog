@@ -78,7 +78,12 @@ const Layout = ({
                   isAuthenticated={isAuthenticated}
                   activePage={activePage}
                 />
-                {showSearch && <SearchForm aggregations={searchAggregations} />}
+                {showSearch && (
+                  <SearchForm
+                    browseOrSearch={"search"}
+                    aggregations={searchAggregations}
+                  />
+                )}
               </div>
               {showSearch && (
                 <Flex

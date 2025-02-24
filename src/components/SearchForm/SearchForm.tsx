@@ -25,34 +25,38 @@ import { collapseMultiValueQueryParams } from "../../utils/refineSearchUtils"
  * The SearchForm component renders and controls the Search form and
  * advanced search link.
  */
-const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
+const SearchForm = ({
+  aggregations,
+  browseOrSearch,
+}: {
+  browseOrSearch: string
+  aggregations?: Aggregation[]
+}) => {
   const router = useRouter()
-  const [searchTerm, setSearchTerm] = useState(
-    (router?.query?.q as string) || ""
-  )
-  const [searchScope, setSearchScope] = useState(
-    (router?.query?.search_scope as string) || "all"
+  const [keyword, setKeyword] = useState((router?.query?.q as string) || "")
+  const [scope, setScope] = useState(
+    (router?.query?.[`${browseOrSearch}_scope`] as string) || "all"
   )
   const [appliedFilters, setAppliedFilters] = useState(
     collapseMultiValueQueryParams(router.query)
   )
-  const searchTip = SEARCH_FORM_OPTIONS[searchScope].searchTip
-  const placeholder = SEARCH_FORM_OPTIONS[searchScope].placeholder
+  const tip = SEARCH_FORM_OPTIONS[scope].tip
+  const placeholder = SEARCH_FORM_OPTIONS[scope].placeholder
 
   const isLoading = useLoading()
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
     const searchParams = {
-      q: searchTerm,
-      field: searchScope,
+      q: keyword,
+      field: scope,
     }
 
     // Keeping the feature where if the search scope from the select
     // dropdown is "subject", it will redirect to SHEP.
-    if (searchScope === "subject") {
+    if (scope === "subject") {
       window.location.href = `${BASE_URL}/subject_headings?filter=${
-        searchTerm.charAt(0).toUpperCase() + searchTerm.slice(1)
+        keyword.charAt(0).toUpperCase() + keyword.slice(1)
       }`
       return
     }
@@ -84,31 +88,33 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
         <Text size="body2" className={styles.searchTip}>
           <Icon size="medium" name="errorOutline" iconRotation="rotate180" />
           <Box as="span" className={styles.searchTipText}>
-            <span className={styles.searchTipTitle}>{"Search tip: "}</span>
-            {searchTip}
+            <span
+              className={styles.searchTipTitle}
+            >{`${browseOrSearch} tip: `}</span>
+            {tip}
           </Box>
         </Text>
         <SearchBar
           id="mainContent"
-          action={`${BASE_URL}/search`}
+          action={`${BASE_URL}/${browseOrSearch}`}
           method="get"
           onSubmit={handleSubmit}
           labelText="Search Bar Label"
           isDisabled={isLoading}
           selectProps={{
-            value: searchScope,
-            onChange: (e) => handleChange(e, setSearchScope),
+            value: scope,
+            onChange: (e) => handleChange(e, setScope),
             labelText: "Select a category",
-            name: "search_scope",
+            name: `${browseOrSearch}_scope`,
             optionsData: searchFormSelectOptions,
           }}
           textInputProps={{
             isClearable: true,
-            onChange: (e) => handleChange(e, setSearchTerm),
-            isClearableCallback: () => setSearchTerm(""),
-            value: searchTerm,
+            onChange: (e) => handleChange(e, setKeyword),
+            isClearableCallback: () => setKeyword(""),
+            value: keyword,
             name: "q",
-            labelText: searchTip,
+            labelText: tip,
             placeholder,
           }}
           sx={{
@@ -116,14 +122,16 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
           }}
         />
         <Flex direction="column" justifyContent="space-between" mt="xs">
-          <RCLink
-            className={styles.advancedSearch}
-            href="/search/advanced"
-            isUnderlined={false}
-            mb="xs"
-          >
-            Advanced search
-          </RCLink>
+          {browseOrSearch === "search" && (
+            <RCLink
+              className={styles.advancedSearch}
+              href="/search/advanced"
+              isUnderlined={false}
+              mb="xs"
+            >
+              Advanced search
+            </RCLink>
+          )}
           {displayRefineResults && (
             <RefineSearch
               setAppliedFilters={setAppliedFilters}
