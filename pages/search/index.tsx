@@ -33,7 +33,7 @@ import useLoading from "../../src/hooks/useLoading"
 import initializePatronTokenAuth from "../../src/server/auth"
 import SearchResults from "../../src/components/SearchResults/SearchResults"
 
-interface SearchProps {
+export type SearchProps = {
   bannerNotification?: string
   results: SearchResultsResponse
   isAuthenticated: boolean

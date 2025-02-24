@@ -1,30 +1,17 @@
 import Layout from "../../../src/components/Layout/Layout"
 
 import { fetchResults } from "../../../src/server/api/search"
-import SearchResults from "../../../src/components/SearchResults/SearchResults"
-import useLoading from "../../../src/hooks/useLoading"
-import { mapElementsToSearchResultsBibs } from "../../../src/utils/searchUtils"
-import type { SearchResultsResponse } from "../../../src/types/searchTypes"
+import BrowseResults, { type SearchProps } from "../../search/index"
+import { getFreshSortByQuery } from "../../../src/utils/searchUtils"
+import initializePatronTokenAuth from "../../../src/server/auth"
+import { Banner } from "@nypl/design-system-react-components"
 
-export default function BrowseBibResults({
-  results,
-}: {
-  results: SearchResultsResponse
-}) {
-  const { itemListElement: searchResultsElements } = results.results
-  const searchResultBibs = mapElementsToSearchResultsBibs(searchResultsElements)
-  const isLoading = useLoading()
-  return (
-    <Layout>
-      <SearchResults
-        isLoading={isLoading}
-        searchResultsBibs={searchResultBibs}
-      />
-    </Layout>
-  )
+export default function BrowseBibResults(props: SearchProps) {
+  return <BrowseResults {...props} />
 }
 
-export async function getServerSideProps({ params }) {
+export async function getServerSideProps({ params, req, resolvedUrl }) {
+  const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const { subject } = params
   const searchParams = {
     page: 1,
@@ -32,9 +19,19 @@ export async function getServerSideProps({ params }) {
     q: "",
   }
   const results = await fetchResults(searchParams)
+  const isAuthenticated = patronTokenResponse.isTokenValid
+  const isFreshSortByQuery = getFreshSortByQuery(
+    req.headers.referer,
+    resolvedUrl
+  )
+  const bannerNotification =
+    "<Banner type='recommendation'>subject notification</Banner>"
   return {
     props: {
+      isFreshSortByQuery,
+      bannerNotification,
       results,
+      isAuthenticated,
     },
   }
 }
