@@ -18,6 +18,7 @@ describe("Applied Filters", () => {
       )
       render(
         <Search
+          activePage="search"
           isFreshSortByQuery={false}
           isAuthenticated={true}
           results={{
@@ -39,6 +40,7 @@ describe("Applied Filters", () => {
       )
       render(
         <Search
+          activePage="search"
           isFreshSortByQuery={false}
           isAuthenticated={true}
           results={{
@@ -57,6 +59,7 @@ describe("Applied Filters", () => {
       )
       render(
         <Search
+          activePage="search"
           isFreshSortByQuery={false}
           isAuthenticated={true}
           results={{
@@ -78,6 +81,7 @@ describe("Applied Filters", () => {
     )
     render(
       <Search
+        activePage="search"
         isFreshSortByQuery={false}
         isAuthenticated={true}
         results={{
@@ -96,6 +100,7 @@ describe("Applied Filters", () => {
     )
     render(
       <Search
+        activePage="search"
         isFreshSortByQuery={false}
         isAuthenticated={true}
         results={{

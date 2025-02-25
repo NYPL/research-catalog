@@ -44,6 +44,7 @@ describe("RefineSearch", () => {
         )
         render(
           <Search
+            activePage="search"
             isFreshSortByQuery={false}
             isAuthenticated={true}
             results={{ page: 1, aggregations, results }}
@@ -66,6 +67,7 @@ describe("RefineSearch", () => {
       mockRouter.push("/search?filters[creatorLiteral]=Gaberscek, Carlo.")
       render(
         <Search
+          activePage="search"
           isFreshSortByQuery={false}
           isAuthenticated={true}
           results={{ page: 1, aggregations, results }}
@@ -102,6 +104,7 @@ describe("RefineSearch", () => {
       mockRouter.push("/search?q=spaghetti")
       render(
         <Search
+          activePage="search"
           isFreshSortByQuery={false}
           isAuthenticated={true}
           results={{ page: 1, aggregations, results }}
@@ -135,6 +138,7 @@ describe("RefineSearch", () => {
       mockRouter.push("/search")
       render(
         <Search
+          activePage="search"
           isFreshSortByQuery={false}
           isAuthenticated={true}
           results={{ aggregations, results }}
