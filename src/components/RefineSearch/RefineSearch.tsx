@@ -41,6 +41,7 @@ interface RefineSearchProps {
     React.SetStateAction<CollapsedMultiValueAppliedFilters>
   >
   appliedFilters: CollapsedMultiValueAppliedFilters
+  activePage: string
 }
 
 /**
