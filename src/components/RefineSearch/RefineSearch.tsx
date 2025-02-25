@@ -50,6 +50,7 @@ const RefineSearch = ({
   aggregations,
   appliedFilters,
   setAppliedFilters,
+  activePage,
 }: RefineSearchProps) => {
   const router = useRouter()
   const dateInputRefs = [useRef<TextInputRefType>(), useRef<TextInputRefType>()]
@@ -87,6 +88,7 @@ const RefineSearch = ({
       } else return null
     })
     .concat(<DateForm {...dateFormProps} />)
+  console.log(activePage)
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault()
@@ -98,7 +100,7 @@ const RefineSearch = ({
       ...buildFilterQuery(appliedFilters),
     }
     router.push({
-      pathname: "/search",
+      pathname: activePage === "browse results" ? "/browse/subject" : "/search",
       query: updatedQuery,
     })
     toggleRefine()

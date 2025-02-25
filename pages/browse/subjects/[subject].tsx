@@ -1,13 +1,10 @@
-import Layout from "../../../src/components/Layout/Layout"
-
 import { fetchResults } from "../../../src/server/api/search"
 import BrowseResults, { type SearchProps } from "../../search/index"
 import { getFreshSortByQuery } from "../../../src/utils/searchUtils"
 import initializePatronTokenAuth from "../../../src/server/auth"
-import { Banner } from "@nypl/design-system-react-components"
 
 export default function BrowseBibResults(props: SearchProps) {
-  return <BrowseResults {...props} />
+  return <BrowseResults activePage="browse results" {...props} />
 }
 
 export async function getServerSideProps({ params, req, resolvedUrl }) {

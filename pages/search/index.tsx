@@ -38,6 +38,7 @@ export type SearchProps = {
   results: SearchResultsResponse
   isAuthenticated: boolean
   isFreshSortByQuery: boolean
+  activePage: "browse" | "search"
 }
 
 /**
@@ -49,8 +50,9 @@ export default function Search({
   results,
   isAuthenticated,
   isFreshSortByQuery,
+  activePage = "search",
 }: SearchProps) {
-  const metadataTitle = `Search Results | ${SITE_NAME}`
+  const metadataTitle = `${activePage} Results | ${SITE_NAME}`
   const { push, query } = useRouter()
   const { itemListElement: searchResultsElements, totalResults } =
     results.results
@@ -120,7 +122,7 @@ export default function Search({
         bannerNotification={bannerNotification}
         searchAggregations={aggs}
         isAuthenticated={isAuthenticated}
-        activePage="search"
+        activePage={activePage}
         sidebar={
           <>
             {totalResults > 0 ? (
@@ -139,15 +141,16 @@ export default function Search({
                 }}
               />
             ) : null}
-            {isLoading ? (
-              <SkeletonLoader showImage={false} />
-            ) : (
-              <DRBContainer
-                drbResults={drbResults}
-                totalWorks={drbResponse?.totalWorks}
-                searchParams={searchParams}
-              />
-            )}
+            {activePage === "search" &&
+              (isLoading ? (
+                <SkeletonLoader showImage={false} />
+              ) : (
+                <DRBContainer
+                  drbResults={drbResults}
+                  totalWorks={drbResponse?.totalWorks}
+                  searchParams={searchParams}
+                />
+              ))}
           </>
         }
       >

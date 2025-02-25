@@ -41,7 +41,7 @@ const Layout = ({
   bannerNotification,
 }: PropsWithChildren<LayoutProps>) => {
   const showSearch = activePage === "search"
-  const showSearchOrBrowseBar = showSearch || activePage === "browse"
+  const showSearchOrBrowseBar = showSearch || activePage.includes("browse")
   const showHeader = activePage !== "404"
   const showNotification = activePage === "" || activePage === "search"
   return (
@@ -80,7 +80,7 @@ const Layout = ({
                 />
                 {showSearchOrBrowseBar && (
                   <SearchForm
-                    browseOrSearch={activePage}
+                    activePage={activePage}
                     aggregations={searchAggregations}
                   />
                 )}

@@ -32,9 +32,9 @@ import { collapseMultiValueQueryParams } from "../../utils/refineSearchUtils"
  */
 const SearchForm = ({
   aggregations,
-  browseOrSearch,
+  activePage,
 }: {
-  browseOrSearch: string
+  activePage: string
   aggregations?: Aggregation[]
 }) => {
   const browseUtil = {
@@ -47,14 +47,12 @@ const SearchForm = ({
     path: PATHS.SEARCH,
     options: SEARCH_FORM_OPTIONS,
   }
-  const [config, setConfig] = useState(
-    browseOrSearch === "search" ? searchUtil : browseUtil
-  )
+  const showSearchBar = ["browse", "search"].includes(activePage)
+  const config = activePage === "search" ? searchUtil : browseUtil
   const router = useRouter()
   const [keyword, setKeyword] = useState((router?.query?.q as string) || "")
   const [scope, setScope] = useState(
-    (router?.query?.[`${browseOrSearch}_scope`] as string) ||
-      config.initialScope
+    (router?.query?.[`${activePage}_scope`] as string) || config.initialScope
   )
   const [appliedFilters, setAppliedFilters] = useState(
     collapseMultiValueQueryParams(router.query)
@@ -95,44 +93,52 @@ const SearchForm = ({
   return (
     <div className={styles.searchContainer}>
       <div className={styles.searchContainerInner}>
-        <Text size="body2" className={styles.searchTip}>
-          <Icon size="medium" name="errorOutline" iconRotation="rotate180" />
-          <Box as="span" className={styles.searchTipText}>
-            <span
-              className={styles.searchTipTitle}
-            >{`${browseOrSearch} tip: `}</span>
-            {tip}
-          </Box>
-        </Text>
-        <SearchBar
-          id="mainContent"
-          action={`${BASE_URL}/${browseOrSearch}`}
-          method="get"
-          onSubmit={handleSubmit}
-          labelText="Search Bar Label"
-          isDisabled={isLoading}
-          selectProps={{
-            value: scope,
-            onChange: (e) => handleChange(e, setScope),
-            labelText: "Select a category",
-            name: `${browseOrSearch}_scope`,
-            optionsData: searchFormSelectOptions(config.options),
-          }}
-          textInputProps={{
-            isClearable: true,
-            onChange: (e) => handleChange(e, setKeyword),
-            isClearableCallback: () => setKeyword(""),
-            value: keyword,
-            name: "q",
-            labelText: tip,
-            placeholder,
-          }}
-          sx={{
-            ".chakra-select__icon-wrapper": { "z-index": "999 !important" },
-          }}
-        />
+        {showSearchBar && (
+          <>
+            <Text size="body2" className={styles.searchTip}>
+              <Icon
+                size="medium"
+                name="errorOutline"
+                iconRotation="rotate180"
+              />
+              <Box as="span" className={styles.searchTipText}>
+                <span
+                  className={styles.searchTipTitle}
+                >{`${activePage} tip: `}</span>
+                {tip}
+              </Box>
+            </Text>
+            <SearchBar
+              id="mainContent"
+              action={`${BASE_URL}/${activePage}`}
+              method="get"
+              onSubmit={handleSubmit}
+              labelText="Search Bar Label"
+              isDisabled={isLoading}
+              selectProps={{
+                value: scope,
+                onChange: (e) => handleChange(e, setScope),
+                labelText: "Select a category",
+                name: `${activePage}_scope`,
+                optionsData: searchFormSelectOptions(config.options),
+              }}
+              textInputProps={{
+                isClearable: true,
+                onChange: (e) => handleChange(e, setKeyword),
+                isClearableCallback: () => setKeyword(""),
+                value: keyword,
+                name: "q",
+                labelText: tip,
+                placeholder,
+              }}
+              sx={{
+                ".chakra-select__icon-wrapper": { "z-index": "999 !important" },
+              }}
+            />
+          </>
+        )}
         <Flex direction="column" justifyContent="space-between" mt="xs">
-          {browseOrSearch === "search" && (
+          {activePage === "search" && (
             <RCLink
               className={styles.advancedSearch}
               href="/search/advanced"
@@ -144,6 +150,7 @@ const SearchForm = ({
           )}
           {displayRefineResults && (
             <RefineSearch
+              activePage={activePage}
               setAppliedFilters={setAppliedFilters}
               appliedFilters={appliedFilters}
               aggregations={aggregations}
