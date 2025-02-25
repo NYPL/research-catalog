@@ -93,50 +93,44 @@ const SearchForm = ({
   return (
     <div className={styles.searchContainer}>
       <div className={styles.searchContainerInner}>
-        {showSearchBar && (
-          <>
-            <Text size="body2" className={styles.searchTip}>
-              <Icon
-                size="medium"
-                name="errorOutline"
-                iconRotation="rotate180"
-              />
-              <Box as="span" className={styles.searchTipText}>
-                <span
-                  className={styles.searchTipTitle}
-                >{`${activePage} tip: `}</span>
-                {tip}
-              </Box>
-            </Text>
-            <SearchBar
-              id="mainContent"
-              action={`${BASE_URL}/${activePage}`}
-              method="get"
-              onSubmit={handleSubmit}
-              labelText="Search Bar Label"
-              isDisabled={isLoading}
-              selectProps={{
-                value: scope,
-                onChange: (e) => handleChange(e, setScope),
-                labelText: "Select a category",
-                name: `${activePage}_scope`,
-                optionsData: searchFormSelectOptions(config.options),
-              }}
-              textInputProps={{
-                isClearable: true,
-                onChange: (e) => handleChange(e, setKeyword),
-                isClearableCallback: () => setKeyword(""),
-                value: keyword,
-                name: "q",
-                labelText: tip,
-                placeholder,
-              }}
-              sx={{
-                ".chakra-select__icon-wrapper": { "z-index": "999 !important" },
-              }}
-            />
-          </>
-        )}
+        <>
+          <Text size="body2" className={styles.searchTip}>
+            <Icon size="medium" name="errorOutline" iconRotation="rotate180" />
+            <Box as="span" className={styles.searchTipText}>
+              <span
+                className={styles.searchTipTitle}
+              >{`${activePage} tip: `}</span>
+              {tip}
+            </Box>
+          </Text>
+          <SearchBar
+            id="mainContent"
+            action={`${BASE_URL}/${activePage}`}
+            method="get"
+            onSubmit={handleSubmit}
+            labelText="Search Bar Label"
+            isDisabled={isLoading}
+            selectProps={{
+              value: scope,
+              onChange: (e) => handleChange(e, setScope),
+              labelText: "Select a category",
+              name: `${activePage}_scope`,
+              optionsData: searchFormSelectOptions(config.options),
+            }}
+            textInputProps={{
+              isClearable: true,
+              onChange: (e) => handleChange(e, setKeyword),
+              isClearableCallback: () => setKeyword(""),
+              value: keyword,
+              name: "q",
+              labelText: tip,
+              placeholder,
+            }}
+            sx={{
+              ".chakra-select__icon-wrapper": { "z-index": "999 !important" },
+            }}
+          />
+        </>
         <Flex direction="column" justifyContent="space-between" mt="xs">
           {activePage === "search" && (
             <RCLink
