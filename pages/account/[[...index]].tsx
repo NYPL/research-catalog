@@ -1,5 +1,4 @@
 import { Text } from "@nypl/design-system-react-components"
-import Head from "next/head"
 
 import Layout from "../../src/components/Layout/Layout"
 import initializePatronTokenAuth, {
@@ -13,6 +12,8 @@ import TimedLogoutModal from "../../src/components/MyAccount/TimedLogoutModal"
 import { getIncrementedTime } from "../../src/utils/cookieUtils"
 import { useEffect, useState } from "react"
 import { getPatronData } from "../api/account/[id]"
+import { appConfig } from "../../src/config/config"
+import RCHead from "../../src/components/Head/RCHead"
 interface MyAccountPropsType {
   accountData: MyAccountPatronData
   isAuthenticated: boolean
@@ -60,10 +61,7 @@ export default function MyAccount({
   try {
     return (
       <>
-        <Head>
-          <title>My Account</title>
-        </Head>
-
+        <RCHead metadataTitle={"My Account"} />
         <Layout isAuthenticated={isAuthenticated} activePage="account">
           {displayLogoutModal && (
             <TimedLogoutModal
