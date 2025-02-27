@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.4.5] 2025-02-24
 
+### Updated
+
+- Removed legacy barcode hotfix (SCC-4474)
+
 ### Added
 
 - Added Google Tag Manager snippet and data layer initialization (SCC-4472)
