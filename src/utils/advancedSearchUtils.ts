@@ -5,7 +5,9 @@ import { BASE_URL } from "../config/constants"
 export const textInputFields: SearchFormInputField[] = [
   { name: "q", label: "Keyword" },
   { name: "title", label: "Title" },
-  { name: "contributor", label: "Author" },
+  { name: "contributor", label: "Author/contributor" },
+  { name: "callnumber", label: "Call number" },
+  { name: "standard_number", label: "Unique identifier" },
   { name: "subject", label: "Subject" },
 ]
 
@@ -14,6 +16,8 @@ export const initialSearchFormState: SearchParams = {
   title: "",
   contributor: "",
   subject: "",
+  callnumber: "",
+  standard_number: "",
   filters: {
     language: "",
     dateBefore: "",

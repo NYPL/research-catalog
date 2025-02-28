@@ -1,6 +1,6 @@
 import React from "react"
 import userEvent from "@testing-library/user-event"
-import { render, screen } from "../../../src/utils/testUtils"
+import { render, screen, waitFor } from "../../../src/utils/testUtils"
 
 import mockRouter from "next-router-mock"
 
@@ -32,11 +32,10 @@ describe("Search Results page", () => {
       })
       await userEvent.click(field)
       await userEvent.click(screen.getByText("Apply filters"))
-      // This was the only way to get this test to pass. waitFor was not in fact waiting, even with same timeout.
-      setTimeout(() => {
+      waitFor(() => {
         const resultsHeading = screen.getByTestId("search-results-heading")
         expect(resultsHeading).toHaveFocus()
-      }, 500)
+      })
     })
     it("focuses on search results heading after loading a keyword search", () => {
       mockRouter.push(`/search?q=${query}`)

@@ -1,13 +1,26 @@
 import nyplApiClient from "../nyplApiClient"
+
+import type {
+  EDDRequestParams,
+  HoldPostResult,
+  HoldDetailsResult,
+} from "../../types/holdPageTypes"
 import type {
   DeliveryLocation,
-  DeliveryLocationsResponse,
+  DeliveryLocationsResult,
   DiscoveryLocationElement,
 } from "../../types/locationTypes"
+import type {
+  DiscoveryHoldPostParams,
+  HoldRequestParams,
+  PatronEligibilityStatus,
+} from "../../types/holdPageTypes"
+
 import {
   mapLocationElementToDeliveryLocation,
   locationIsClosed,
 } from "../../utils/locationUtils"
+
 import { appConfig } from "../../config/config"
 
 /**
@@ -16,7 +29,7 @@ import { appConfig } from "../../config/config"
 export async function fetchDeliveryLocations(
   barcode: string,
   patronId: string
-): Promise<DeliveryLocationsResponse> {
+): Promise<DeliveryLocationsResult> {
   const deliveryEndpoint = `/request/deliveryLocationsByBarcode?barcodes[]=${barcode}&patronId=${patronId}`
 
   try {
@@ -30,11 +43,12 @@ export async function fetchDeliveryLocations(
       throw new Error("Malformed response from delivery locations API")
     }
 
-    const deliveryLocations = discoveryLocationsItem?.deliveryLocation.map(
-      (locationElement: DiscoveryLocationElement) =>
-        mapLocationElementToDeliveryLocation(locationElement)
-    )
-    const eddRequestable = discoveryLocationsItem.eddRequestable || false
+    const deliveryLocations =
+      discoveryLocationsItem?.deliveryLocation?.map(
+        (locationElement: DiscoveryLocationElement) =>
+          mapLocationElementToDeliveryLocation(locationElement)
+      ) || []
+    const eddRequestable = discoveryLocationsItem?.eddRequestable || false
 
     // Filter out closed locations
     const openLocations = deliveryLocations.filter(
@@ -57,5 +71,172 @@ export async function fetchDeliveryLocations(
     return {
       status: 500,
     }
+  }
+}
+
+/**
+ * Post hold requests to discovery API.
+ */
+export async function postHoldRequest(
+  holdRequestParams: HoldRequestParams
+): Promise<HoldPostResult> {
+  const { itemId, patronId, source, pickupLocation } = holdRequestParams
+
+  // Remove non-numeric characters from item ID
+  const itemIdNumeric = itemId.replace(/\D/g, "")
+
+  const holdPostParams: DiscoveryHoldPostParams = {
+    patron: patronId,
+    record: itemIdNumeric,
+    nyplSource: source,
+    requestType: "hold",
+    recordType: "i",
+    pickupLocation,
+  }
+
+  try {
+    const client = await nyplApiClient()
+    const holdPostResult = await client.post("/hold-requests", holdPostParams)
+    const requestId = holdPostResult?.data?.id
+
+    if (!requestId) {
+      return {
+        status: 400,
+        errorMessage: holdPostResult?.data?.message,
+      }
+    }
+
+    return {
+      status: 200,
+      pickupLocation,
+      requestId,
+    }
+  } catch (error) {
+    console.log("error", error)
+    console.error(
+      `Error posting hold request in postHoldRequest server function, itemId: ${itemId}`,
+      error.message
+    )
+
+    return {
+      status: 500,
+    }
+  }
+}
+
+/**
+ * Post EDD requests to discovery API.
+ */
+export async function postEDDRequest(
+  eddRequestParams: EDDRequestParams
+): Promise<HoldPostResult> {
+  const { itemId, patronId, source, ...rest } = eddRequestParams
+
+  // Remove non-numeric characters from item ID
+  const itemIdNumeric = itemId.replace(/\D/g, "")
+
+  const eddPostParams: DiscoveryHoldPostParams = {
+    patron: patronId,
+    record: itemIdNumeric,
+    nyplSource: source,
+    requestType: "edd",
+    recordType: "i",
+    pickupLocation: "edd",
+    docDeliveryData: {
+      ...rest,
+    } as EDDRequestParams,
+  }
+
+  try {
+    const client = await nyplApiClient()
+    const eddPostResult = await client.post("/hold-requests", eddPostParams)
+    const requestId = eddPostResult?.data?.id
+
+    if (!requestId) {
+      console.error(
+        "postEDDRequest failed, no id returned from Discovery API",
+        eddPostResult
+      )
+      return {
+        status: 400,
+      }
+    }
+
+    return {
+      status: 200,
+      requestId,
+    }
+  } catch (error) {
+    console.error(
+      `Error posting hold request in postEDDRequest server function, itemId: ${itemId}`,
+      error.message
+    )
+
+    return {
+      status: 500,
+    }
+  }
+}
+
+/**
+ * Getter function for hold request details.
+ */
+// TODO: Add return type
+export async function fetchHoldDetails(
+  requestId: string
+): Promise<HoldDetailsResult> {
+  try {
+    const client = await nyplApiClient()
+    const holdDetailsResult = await client.get(`/hold-requests/${requestId}`)
+
+    const { id, pickupLocation, patron } = holdDetailsResult.data
+
+    return {
+      requestId: id,
+      patronId: patron,
+      pickupLocation,
+      status: 200,
+    }
+  } catch (error) {
+    console.error(
+      `Error fetching hold request details in fetchHoldRequestDetails server function, requestId: ${requestId}`,
+      error.message
+    )
+
+    return { status: 500 }
+  }
+}
+
+/**
+ * Getter function for hold request eligibility for patrons.
+ */
+export async function fetchPatronEligibility(
+  patronId: string
+): Promise<PatronEligibilityStatus> {
+  const eligibilityEndpoint = `/patrons/${patronId}/hold-request-eligibility`
+
+  try {
+    const client = await nyplApiClient()
+    const eligibilityResult = await client.get(eligibilityEndpoint, {
+      cache: false,
+    })
+
+    // There should always be en eligibilty boolean attribute returned from Discovery API
+    if (eligibilityResult.eligibility === undefined) {
+      throw new Error("Improperly formatted eligibility from Discovery API")
+    }
+
+    if (eligibilityResult.eligibility === false) {
+      return { status: 401, ...eligibilityResult }
+    }
+
+    return { status: 200, ...eligibilityResult }
+  } catch (error) {
+    console.error(
+      `Error fetching hold request eligibility in fetchPatronEligibility server function, patronId: ${patronId}`,
+      error.message
+    )
+
+    return { status: 500 }
   }
 }
