@@ -5,7 +5,6 @@ import type {
   FieldMapping,
   AnnotatedMarcField,
   BibDetailURL,
-  SubjectHeadingDetail,
   AnnotatedMarc,
   AnyBibDetail,
 } from "../types/bibDetailsTypes"

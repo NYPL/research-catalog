@@ -24,6 +24,18 @@ describe("Bib model", () => {
           },
         ],
       })
+      it("can handle supp content with no label", () => {
+        const bib = new Bib({
+          ...bibWithItems.resource,
+          supplementaryContent: [
+            {
+              "@type": "nypl:SupplementaryContent",
+              url: "http://archives.nypl.org/scm/29990",
+            },
+          ],
+        })
+        expect(bib.findingAid).toBe(null)
+      })
       it("initializes the finding aid when present", () => {
         expect(findingAidBib.findingAid).toBe(
           "http://archives.nypl.org/scm/29990"

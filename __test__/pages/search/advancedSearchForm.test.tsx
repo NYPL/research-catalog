@@ -72,7 +72,7 @@ describe("Advanced Search Form", () => {
     submit()
 
     expect(mockRouter.asPath).toBe(
-      "/search?q=spaghetti&title=strega+nonna&contributor=il+amore+di+pasta&callnumber=12345&standard_number=67890&subject=italian+food"
+      "/search?q=spaghetti&title=strega+nonna&contributor=il+amore+di+pasta&callnumber=12345&standard_number=67890&subject=italian+food&searched_from=advanced"
     )
   })
   it("renders inputs for all text input fields", () => {
@@ -88,7 +88,7 @@ describe("Advanced Search Form", () => {
     submit()
     // expect the label for Azerbaijani ("lang:aze") to be in url
     expect(mockRouter.asPath).toBe(
-      "/search?q=&filters%5Blanguage%5D=lang%3Aaze"
+      "/search?q=&filters%5Blanguage%5D=lang%3Aaze&searched_from=advanced"
     )
   })
   it("can check material checkboxes", async () => {
@@ -106,7 +106,7 @@ describe("Advanced Search Form", () => {
     await userEvent.click(screen.getByLabelText(location.label as string))
     submit()
     expect(mockRouter.asPath).toBe(
-      `/search?q=&filters%5BbuildingLocation%5D%5B0%5D=${location.value}`
+      `/search?q=&filters%5BbuildingLocation%5D%5B0%5D=${location.value}&searched_from=advanced`
     )
   })
 

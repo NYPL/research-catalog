@@ -522,7 +522,7 @@ export const checkouts = {
         callNumber: "J PIC A",
       },
       dueDate: "2024-05-07T08:00:00Z",
-      numberOfRenewals: 0,
+      numberOfRenewals: 1,
       outDate: "2024-05-06T19:11:01Z",
     },
     {

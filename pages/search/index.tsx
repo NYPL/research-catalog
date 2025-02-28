@@ -52,7 +52,6 @@ export default function Search({
   isAuthenticated,
   isFreshSortByQuery,
 }: SearchProps) {
-  console.log("Loading from Search")
   const metadataTitle = `Search Results | ${SITE_NAME}`
   const { push, query } = useRouter()
   const { itemListElement: searchResultsElements, totalResults } =
@@ -69,10 +68,13 @@ export default function Search({
   const drbResults = mapWorksToDRBResults(drbWorks)
 
   const isLoading = useLoading()
+  const searchedFromAdvanced = query.searched_from === "advanced"
 
   const handlePageChange = async (page: number) => {
     const newQuery = getSearchQuery({ ...searchParams, page })
-    await push(newQuery)
+    await push(
+      `${newQuery}${searchedFromAdvanced ? "&searched_from=advanced" : ""}`
+    )
   }
 
   const aggs = results?.aggregations?.itemListElement

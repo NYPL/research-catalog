@@ -10,6 +10,8 @@ import {
   defaultNYPLLocation,
   partnerDefaultLocation,
   locationEndpointsMap,
+  getIdentifiers,
+  identifiersArray,
 } from "../utils/itemUtils"
 import { appConfig } from "../config/config"
 import ItemAvailability from "./ItemAvailability"
@@ -114,6 +116,21 @@ export default class Item {
       location.endpoint = locationEndpointsMap[locationKey] || null
     }
     return location
+  }
+
+  // This logic was adapted from DFE as part of a hotfix (delivery locations not loading for some off-site partner items)
+  // TODO: Refactor this as a follow-up if necessary
+  getBarcodeFromItem(item: DiscoveryItemResult): string {
+    if (item.idBarcode?.length) {
+      return item.idBarcode[0]
+    }
+
+    const identifiers = getIdentifiers(item?.identifier, identifiersArray)
+
+    if (identifiers?.barcode) {
+      return identifiers.barcode
+    }
+    return null
   }
 
   // Determine if item is Non-NYPL ReCAP by existence of "Recap" string in item source attribute
