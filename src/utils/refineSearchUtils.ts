@@ -1,7 +1,7 @@
 import type { CollapsedMultiValueAppliedFilters } from "../types/filterTypes"
 
 // Filters are always multivalue query params in the form
-// filters[field][index]=value eg filters[recordType][0]=resourcetypes:aud.
+// filters[field][index]=value eg filters[format][0]=resourcetypes:aud.
 // This method returns an object that maps a field to an array of the values
 // provided in the query string with that field called out.
 export const collapseMultiValueQueryParams = (

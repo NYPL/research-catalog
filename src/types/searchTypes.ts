@@ -8,11 +8,11 @@ type SubjectLiteral = string
 type ContributorLiteral = string
 type CreatorLiteral = string
 type Issuance = string
-type recordTypeFilter = string
+type formatFilter = string
 type BuildingLocationFilter = string
 
 export interface SearchFilters {
-  recordType?: recordTypeFilter | recordTypeFilter[]
+  format?: formatFilter | formatFilter[]
   language?: Language | Language[]
   subjectLiteral?: SubjectLiteral | SubjectLiteral[]
   contributorLiteral?: ContributorLiteral | ContributorLiteral[]

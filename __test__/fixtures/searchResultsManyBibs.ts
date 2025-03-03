@@ -118,7 +118,7 @@ export const results = {
           },
         ],
         lccClassification: ["PQ2663.O7223 Z46 2005"],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:txt",
             prefLabel: "Text",
@@ -252,7 +252,7 @@ export const results = {
             prefLabel: "English",
           },
         ],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:txt",
             prefLabel: "Text",
@@ -466,7 +466,7 @@ export const results = {
           },
         ],
         lccClassification: ["TS2157 .P7"],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:txt",
             prefLabel: "Text",
@@ -610,7 +610,7 @@ export const results = {
           },
         ],
         lccClassification: ["D763.I8 W3"],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:txt",
             prefLabel: "Text",
@@ -733,7 +733,7 @@ export const results = {
           },
         ],
         lccClassification: ["PQ4916.E778 S63 2019"],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:aud",
             prefLabel: "Audio",
@@ -880,7 +880,7 @@ export const results = {
           },
         ],
         lccClassification: ["PZ7.F8596 Ed 1978"],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:txt",
             prefLabel: "Text",
@@ -1075,7 +1075,7 @@ export const results = {
           },
         ],
         lccClassification: ["PZ8.3.G427 On 1982"],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:txt",
             prefLabel: "Text",
@@ -1231,7 +1231,7 @@ export const results = {
             prefLabel: "No linguistic content",
           },
         ],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:not",
             prefLabel: "Notated music",
@@ -1417,7 +1417,7 @@ export const results = {
           },
         ],
         lccClassification: ["PZ7.D6224 Sp 2002"],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:txt",
             prefLabel: "Text",
@@ -1563,7 +1563,7 @@ export const results = {
             prefLabel: "English",
           },
         ],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:aud",
             prefLabel: "Audio",
@@ -1733,7 +1733,7 @@ export const results = {
             prefLabel: "English",
           },
         ],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:txt",
             prefLabel: "Text",
@@ -1893,7 +1893,7 @@ export const results = {
             prefLabel: "English",
           },
         ],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:aud",
             prefLabel: "Audio",
@@ -2133,7 +2133,7 @@ export const results = {
             prefLabel: "Italian",
           },
         ],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:aud",
             prefLabel: "Audio",
@@ -2316,7 +2316,7 @@ export const results = {
           },
         ],
         lccClassification: ["PQ4916.E778 S63 2013"],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:txt",
             prefLabel: "Text",
@@ -2474,7 +2474,7 @@ export const results = {
           },
         ],
         lccClassification: ["PQ4907.E54 S63 2015"],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:txt",
             prefLabel: "Text",
@@ -2629,7 +2629,7 @@ export const results = {
             prefLabel: "English",
           },
         ],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:mov",
             prefLabel: "Moving image",
@@ -2799,7 +2799,7 @@ export const results = {
           },
         ],
         lccClassification: ["D763.I8 W3"],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:txt",
             prefLabel: "Text",
@@ -2967,7 +2967,7 @@ export const results = {
           },
         ],
         lccClassification: ["PZ7.J6354 Onat 2006"],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:txt",
             prefLabel: "Text",
@@ -3575,7 +3575,7 @@ export const results = {
           },
         ],
         lccClassification: ["IN PROCESS"],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:txt",
             prefLabel: "Text",
@@ -3753,7 +3753,7 @@ export const results = {
             prefLabel: "English",
           },
         ],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:not",
             prefLabel: "Notated music",
@@ -4148,7 +4148,7 @@ export const results = {
           },
         ],
         lccClassification: ["PN1995.9.W4 M325 2012"],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:txt",
             prefLabel: "Text",
@@ -4303,7 +4303,7 @@ export const results = {
           },
         ],
         lccClassification: ["PZ40.O74 E85 2017"],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:aud",
             prefLabel: "Audio",
@@ -4418,7 +4418,7 @@ export const results = {
           },
         ],
         lccClassification: ["FICTION WAT"],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:txt",
             prefLabel: "Text",
@@ -4583,7 +4583,7 @@ export const results = {
           },
         ],
         lccClassification: ["PQ4916.E668 L33 2011"],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:txt",
             prefLabel: "Text",
@@ -4672,7 +4672,7 @@ export const results = {
           },
         ],
         lccClassification: ["PQ2722.A734 S96 2020"],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:txt",
             prefLabel: "Text",
@@ -4814,7 +4814,7 @@ export const results = {
             prefLabel: "German",
           },
         ],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:txt",
             prefLabel: "Text",
@@ -4983,7 +4983,7 @@ export const results = {
           },
         ],
         lccClassification: ["PN1995.9.W4 F75 2006"],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:txt",
             prefLabel: "Text",
@@ -5179,7 +5179,7 @@ export const results = {
           },
         ],
         lccClassification: ["M1035.E5 D38 2006"],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:not",
             prefLabel: "Notated music",
@@ -5377,7 +5377,7 @@ export const results = {
             prefLabel: "English",
           },
         ],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:aud",
             prefLabel: "Audio",
@@ -5704,7 +5704,7 @@ export const results = {
           },
         ],
         lccClassification: ["PN1995.9.W4 M325 2012"],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:txt",
             prefLabel: "Text",
@@ -5881,7 +5881,7 @@ export const results = {
           },
         ],
         lccClassification: ["PQ2668.A569 S63 1994"],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:txt",
             prefLabel: "Text",
@@ -6024,7 +6024,7 @@ export const results = {
           },
         ],
         lccClassification: ["TX809.M17 W3"],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:txt",
             prefLabel: "Text",
@@ -6186,7 +6186,7 @@ export const results = {
           },
         ],
         lccClassification: ["D805.I8"],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:txt",
             prefLabel: "Text",
@@ -6345,7 +6345,7 @@ export const results = {
           },
         ],
         lccClassification: ["PZ44.9 .P58 2015"],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:txt",
             prefLabel: "Text",
@@ -6500,7 +6500,7 @@ export const results = {
           },
         ],
         lccClassification: ["M1630.2.L96 S63 1950"],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:not",
             prefLabel: "Notated music",
@@ -6662,7 +6662,7 @@ export const results = {
           },
         ],
         lccClassification: ["PZ7.K8585 Fl"],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:txt",
             prefLabel: "Text",
@@ -6850,7 +6850,7 @@ export const results = {
           },
         ],
         lccClassification: ["PZ7.H572 Dad 1986"],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:txt",
             prefLabel: "Text",
@@ -6972,7 +6972,7 @@ export const results = {
           },
         ],
         lccClassification: ["PZ7.1.N342 On 2017eb"],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:txt",
             prefLabel: "Text",
@@ -7136,7 +7136,7 @@ export const results = {
             prefLabel: "German",
           },
         ],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:txt",
             prefLabel: "Text",
@@ -7241,7 +7241,7 @@ export const results = {
           },
         ],
         lccClassification: ["PZ7.W3298 Sts 2016ab"],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:aud",
             prefLabel: "Audio",
@@ -7397,7 +7397,7 @@ export const results = {
             prefLabel: "German",
           },
         ],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:txt",
             prefLabel: "Text",
@@ -7541,7 +7541,7 @@ export const results = {
           },
         ],
         lccClassification: ["HF5415 .P57 1998"],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:txt",
             prefLabel: "Text",
@@ -7696,7 +7696,7 @@ export const results = {
           },
         ],
         lccClassification: ["PZ7.K7877 Mar 1991"],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:txt",
             prefLabel: "Text",
@@ -7842,7 +7842,7 @@ export const results = {
           },
         ],
         lccClassification: ["PZ7.F8596 Eg 1983"],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:txt",
             prefLabel: "Text",
@@ -7976,7 +7976,7 @@ export const results = {
             },
           },
         ],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:txt",
             prefLabel: "Text",
@@ -8175,7 +8175,7 @@ export const results = {
           },
         ],
         lccClassification: ["M1035.E5 D38 2006"],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:not",
             prefLabel: "Notated music",
@@ -8373,7 +8373,7 @@ export const results = {
           },
         ],
         lccClassification: ["PQ7798.23.A657 C8"],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:txt",
             prefLabel: "Text",
@@ -8536,7 +8536,7 @@ export const results = {
           },
         ],
         lccClassification: ["PT2708.E4878 M36 2017"],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:txt",
             prefLabel: "Text",
@@ -8693,7 +8693,7 @@ export const results = {
           },
         ],
         lccClassification: ["GT2868.68 .M66 2021"],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:txt",
             prefLabel: "Text",
@@ -8936,7 +8936,7 @@ export const results = {
           },
         ],
         lccClassification: ["M1630.2 .S63 2007"],
-        recordType: [
+        format: [
           {
             "@id": "resourcetypes:aud",
             prefLabel: "Audio",
@@ -9017,9 +9017,9 @@ export const emptyAggregationsResults = {
     },
     {
       "@type": "nypl:Aggregation",
-      "@id": "res:recordType",
-      id: "recordType",
-      field: "recordType",
+      "@id": "res:format",
+      id: "format",
+      field: "format",
       values: [],
     },
     {
@@ -9102,9 +9102,9 @@ export const aggregationsResults = {
     },
     {
       "@type": "nypl:Aggregation",
-      "@id": "res:recordType",
-      id: "recordType",
-      field: "recordType",
+      "@id": "res:format",
+      id: "format",
+      field: "format",
       values: [
         {
           value: "resourcetypes:txt",

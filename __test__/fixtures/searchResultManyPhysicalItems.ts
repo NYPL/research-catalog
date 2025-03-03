@@ -257,7 +257,7 @@ export const searchResultManyPhysicalItems = {
       prefLabel: "English",
     },
   ],
-  recordType: [
+  format: [
     {
       "@id": "resourcetypes:txt",
       prefLabel: "Text",

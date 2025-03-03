@@ -76,8 +76,8 @@ describe("Bib model", () => {
       expect(bib.numPhysicalItems).toBe(4)
     })
 
-    it("initializes recordType with the Bib's recordType field", () => {
-      expect(bib.recordType).toBe("Text")
+    it("initializes format with the Bib's format field", () => {
+      expect(bib.format).toBe("Text")
     })
 
     it("initializes issuance with the Bib's issuance field", () => {

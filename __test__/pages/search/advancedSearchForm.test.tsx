@@ -98,7 +98,7 @@ describe("Advanced Search Form", () => {
     // expect the label for notated music and cartographic
     // ("resourcetypes:not", "resourcetypes:car") to be in url
     expect(mockRouter.asPath).toBe(
-      "/search?q=&filters%5BrecordType%5D%5B0%5D=c&filters%5BrecordType%5D%5B1%5D=e"
+      "/search?q=&filters%5Bformat%5D%5B0%5D=c&filters%5Bformat%5D%5B1%5D=e&searched_from=advanced"
     )
   })
   it("can check location checkboxes", async () => {

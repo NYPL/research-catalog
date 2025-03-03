@@ -612,7 +612,7 @@ export const bibWithItems = {
       },
     ],
     lccClassification: ["IN PROCESS"],
-    recordType: [
+    format: [
       {
         "@id": "resourcetypes:txt",
         prefLabel: "Text",
@@ -1080,7 +1080,7 @@ export const bibNoItems = {
       },
     ],
     lccClassification: ["IN PROCESS"],
-    recordType: [
+    format: [
       {
         "@id": "resourcetypes:txt",
         prefLabel: "Text",
@@ -2832,7 +2832,7 @@ export const bibWithManyItems = {
         prefLabel: "Chinese",
       },
     ],
-    recordType: [
+    format: [
       {
         "@id": "resourcetypes:txt",
         prefLabel: "Text",
@@ -3304,7 +3304,7 @@ export const bibWithSupplementaryContent = {
       },
     ],
     lccClassification: ["FICTION WAT"],
-    recordType: [
+    format: [
       {
         "@id": "resourcetypes:txt",
         prefLabel: "Text",
@@ -6702,7 +6702,7 @@ export const parallelsBib = {
       },
     ],
     lccClassification: ["DR1932 .P68"],
-    recordType: [
+    format: [
       {
         "@id": "resourcetypes:txt",
         prefLabel: "Text",
@@ -7837,7 +7837,7 @@ export const noParallels = {
       },
     ],
     lccClassification: ["PQ2663.O7223 Z46 2005"],
-    recordType: [
+    format: [
       {
         "@id": "resourcetypes:txt",
         prefLabel: "Text",
@@ -8394,7 +8394,7 @@ export const yiddishBib = {
       },
     ],
     lccClassification: ["DS135.R93 K42 1968"],
-    recordType: [
+    format: [
       {
         "@id": "resourcetypes:txt",
         prefLabel: "Text",
@@ -11400,7 +11400,7 @@ export const bibManyEResources = {
         prefLabel: "French",
       },
     ],
-    recordType: [
+    format: [
       {
         "@id": "resourcetypes:txt",
         prefLabel: "Text",
@@ -11623,7 +11623,7 @@ export const bibWithSubjectHeadings = {
       },
     ],
     lccClassification: ["PQ2663.O7223 Z46 2005"],
-    recordType: [
+    format: [
       {
         "@id": "resourcetypes:txt",
         prefLabel: "Text",

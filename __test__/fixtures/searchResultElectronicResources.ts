@@ -73,7 +73,7 @@ export const searchResultElectronicResources = {
     },
   ],
   lccClassification: ["PQ4916.E778 S63 2019"],
-  recordType: [
+  format: [
     {
       "@id": "resourcetypes:aud",
       prefLabel: "Audio",
@@ -189,7 +189,7 @@ export const searchResultElectronicResourcesNoLabel = {
     },
   ],
   lccClassification: ["PQ4916.E778 S63 2019"],
-  recordType: [
+  format: [
     {
       "@id": "resourcetypes:aud",
       prefLabel: "Audio",
@@ -311,7 +311,7 @@ export const searchResultMultipleElectronicResources = {
     },
   ],
   lccClassification: ["PQ4916.E778 S63 2019"],
-  recordType: [
+  format: [
     {
       "@id": "resourcetypes:aud",
       prefLabel: "Audio",

@@ -54,7 +54,7 @@ export default class Item {
       : null
     this.format = item.formatLiteral?.length
       ? item.formatLiteral[0]
-      : bib.recordType
+      : bib.format
     this.barcode = item.idBarcode?.length ? item.idBarcode[0] : null
     this.location = this.getLocationFromItem(item)
     this.aeonUrl = item.aeonUrl?.length ? item.aeonUrl[0] : null

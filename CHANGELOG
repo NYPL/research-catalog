@@ -87,7 +87,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Updated phone, email, notification preference and home library to be individually editable in Account Settings (SCC-4337, SCC-4254, SCC-4253)
 - Updated username to be editable in My Account header (SCC-4236)
-- replace deprecated `formatType` with `recordType` for refine search and advanced search.
+- replace deprecated `formatType` with `format` for refine search and advanced search.
 
 ## [1.3.8] 2024-12-9
 

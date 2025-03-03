@@ -14,7 +14,7 @@ describe("Applied Filters", () => {
   describe("tagset click handler", () => {
     it("can remove one filter", async () => {
       mockRouter.push(
-        "/search?q=spaghetti&filters[recordType][0]=resourcetypes%3Amov&filters[language][0]=lang%3Afre"
+        "/search?q=spaghetti&filters[format][0]=resourcetypes%3Amov&filters[language][0]=lang%3Afre"
       )
       render(
         <Search
@@ -35,7 +35,7 @@ describe("Applied Filters", () => {
     })
     it("can remove all filters", async () => {
       mockRouter.push(
-        "/search?q=spaghetti&filters[recordType][0]=resourcetypes%3Atxt&filters[language][0]=lang%3Afre"
+        "/search?q=spaghetti&filters[format][0]=resourcetypes%3Atxt&filters[language][0]=lang%3Afre"
       )
       render(
         <Search
@@ -53,7 +53,7 @@ describe("Applied Filters", () => {
     })
     it("can remove one of many field filters", async () => {
       mockRouter.push(
-        "/search?q=spaghetti&filters[recordType][0]=resourcetypes%3Atxt&filters[recordType][1]=resourcetypes%3Aaud&filters[recordType][2]=resourcetypes%3Amov&filters[language][0]=lang%3Afre"
+        "/search?q=spaghetti&filters[format][0]=resourcetypes%3Atxt&filters[format][1]=resourcetypes%3Aaud&filters[format][2]=resourcetypes%3Amov&filters[language][0]=lang%3Afre"
       )
       render(
         <Search
@@ -68,7 +68,7 @@ describe("Applied Filters", () => {
       )
       await userEvent.click(screen.getAllByTestId("filter-tags")[0])
       expect(decodeURI(mockRouter.asPath)).toBe(
-        "/search?q=spaghetti&filters[recordType][0]=resourcetypes%3Aaud&filters[recordType][1]=resourcetypes%3Amov&filters[language][0]=lang%3Afre"
+        "/search?q=spaghetti&filters[format][0]=resourcetypes%3Aaud&filters[format][1]=resourcetypes%3Amov&filters[language][0]=lang%3Afre"
       )
     })
   })
@@ -92,7 +92,7 @@ describe("Applied Filters", () => {
   })
   it("can handle a combination of filters with no results", () => {
     mockRouter.push(
-      "/search?q=spaghetti&filters[recordType][0]=resourcetypes%3Amix&filters[language][0]=lang%3Apol&filters[subjectLiteral][0]=Community life."
+      "/search?q=spaghetti&filters[format][0]=resourcetypes%3Amix&filters[language][0]=lang%3Apol&filters[subjectLiteral][0]=Community life."
     )
     render(
       <Search

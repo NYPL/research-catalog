@@ -21,7 +21,7 @@ export const searchAggregations = {
       ),
     },
   ],
-  recordType: [
+  format: [
     {
       value: "b",
       label: "Blu-ray",
