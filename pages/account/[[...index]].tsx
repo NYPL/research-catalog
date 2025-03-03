@@ -12,7 +12,6 @@ import TimedLogoutModal from "../../src/components/MyAccount/TimedLogoutModal"
 import { getIncrementedTime } from "../../src/utils/cookieUtils"
 import { useEffect, useState } from "react"
 import { getPatronData } from "../api/account/[id]"
-import { appConfig } from "../../src/config/config"
 import RCHead from "../../src/components/Head/RCHead"
 interface MyAccountPropsType {
   accountData: MyAccountPatronData
