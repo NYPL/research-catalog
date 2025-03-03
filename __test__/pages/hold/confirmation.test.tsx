@@ -177,10 +177,7 @@ describe("Hold Confirmation page", () => {
     })
     it("renders a back to search link", () => {
       const searchLink = screen.getByText("Start a new search")
-      expect(searchLink).toHaveAttribute(
-        "href",
-        "/research/research-catalog/search"
-      )
+      expect(searchLink).toHaveAttribute("href", "/research/research-catalog/")
     })
   })
   describe("Electronic Delivery Confirmation page UI", () => {
@@ -230,10 +227,7 @@ describe("Hold Confirmation page", () => {
     })
     it("renders a back to search link", () => {
       const searchLink = screen.getByText("Start a new search")
-      expect(searchLink).toHaveAttribute(
-        "href",
-        "/research/research-catalog/search"
-      )
+      expect(searchLink).toHaveAttribute("href", "/research/research-catalog/")
     })
   })
 })

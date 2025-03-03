@@ -1,4 +1,3 @@
-import Head from "next/head"
 import { Banner, Heading, Text } from "@nypl/design-system-react-components"
 
 import Layout from "../../../src/components/Layout/Layout"
@@ -30,6 +29,7 @@ import initializePatronTokenAuth, {
 } from "../../../src/server/auth"
 
 import type { DiscoveryBibResult } from "../../../src/types/bibTypes"
+import RCHead from "../../../src/components/Head/RCHead"
 
 interface HoldConfirmationPageProps {
   isEDD?: boolean
@@ -53,16 +53,7 @@ export default function HoldConfirmationPage({
 
   return (
     <>
-      <Head>
-        <meta property="og:title" content={metadataTitle} key="og-title" />
-        <meta
-          property="og:site_name"
-          content={metadataTitle}
-          key="og-site-name"
-        />
-        <meta name="twitter:title" content={metadataTitle} key="tw-title" />
-        <title key="main-title">{metadataTitle}</title>
-      </Head>
+      <RCHead metadataTitle={metadataTitle} />
       <Layout activePage="hold">
         <Heading level="h2" mb="l" size="heading3">
           {isEDD ? EDD_PAGE_HEADING : HOLD_PAGE_HEADING}
@@ -88,7 +79,7 @@ export default function HoldConfirmationPage({
         />
         <HoldConfirmationFAQ isEDD={isEDD} />
         <ExternalLink
-          href={PATHS.SEARCH}
+          href={PATHS.HOME}
           fontSize={{
             base: "mobile.body.body2",
             md: "desktop.body.body2",

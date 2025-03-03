@@ -1,4 +1,3 @@
-import Head from "next/head"
 import {
   useState,
   useReducer,
@@ -50,6 +49,7 @@ import CancelSubmitButtonGroup from "../../src/components/RefineSearch/CancelSub
 import { materialTypeOptions } from "../../src/utils/advancedSearchUtils"
 import { searchAggregations } from "../../src/config/aggregations"
 import RCLink from "../../src/components/Links/RCLink/RCLink"
+import RCHead from "../../src/components/Head/RCHead"
 
 export const defaultEmptySearchErrorMessage =
   "Error: please enter at least one field to submit an advanced search."
@@ -149,16 +149,7 @@ export default function AdvancedSearch({
   }, [alert])
   return (
     <>
-      <Head>
-        <meta property="og:title" content={metadataTitle} key="og-title" />
-        <meta
-          property="og:site_name"
-          content={metadataTitle}
-          key="og-site-name"
-        />
-        <meta name="twitter:title" content={metadataTitle} key="tw-title" />
-        <title key="main-title">{metadataTitle}</title>
-      </Head>
+      <RCHead metadataTitle={metadataTitle} />
       <Layout isAuthenticated={isAuthenticated} activePage="advanced">
         {/* Always render the wrapper element that will display the
           dynamically rendered notification for focus management */}
