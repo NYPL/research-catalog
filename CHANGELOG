@@ -7,9 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+### Updated
+
+- Send new searches back to home, not /search [SCC-4487](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4487)
+- Removed legacy barcode hotfix (SCC-4474)
+
 ### Added
 
 - Added Google Tag Manager snippet and data layer initialization (SCC-4472)
+- Hide non prod deployments from search indexing [SCC-4192](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4192)
 
 ## [1.4.4] 2025-02-18
 
