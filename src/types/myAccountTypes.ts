@@ -63,7 +63,7 @@ export interface SierraHold {
   pickupLocation: SierraCodeName
   pickupByDate: string
   patron: string
-  recordType: string
+  format: string
 }
 
 export interface SierraRecord {
@@ -156,7 +156,7 @@ export interface SierraBibEntry {
   lang: SierraCodeName
   title: string
   author: string
-  materialType: {
+  format: {
     code: string
     value: string
   }
