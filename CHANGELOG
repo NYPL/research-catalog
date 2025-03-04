@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Send new searches back to home, not /search [SCC-4487](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4487)
 - use new format instead of materialType for filter queries [SCC-4417](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4417)
+- Removed legacy barcode hotfix (SCC-4474)
 
 ### Added
 
