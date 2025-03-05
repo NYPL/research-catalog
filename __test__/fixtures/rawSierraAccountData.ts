@@ -599,7 +599,7 @@ export const checkoutBibs = {
       },
       title: "Good night, Little Fish",
       author: "Cousins, Lucy, author.",
-      materialType: {
+      format: {
         code: "a  ",
         value: "BOOK/TEXT",
       },
@@ -1499,7 +1499,7 @@ export const checkoutBibs = {
       },
       title: "Fish, fish, fish",
       author: "Adams, Georgie.",
-      materialType: {
+      format: {
         code: "a  ",
         value: "BOOK/TEXT",
       },
@@ -1852,7 +1852,7 @@ export const checkoutBibs = {
       },
       title: "test 5/6 01",
       author: "Spaghetti Monster",
-      materialType: {
+      format: {
         code: "-  ",
         value: "MISC",
       },
@@ -1904,7 +1904,7 @@ export const checkoutBibs = {
       title:
         "[Standard NYPL restrictions apply] HOF HA-KELAVIM HA-MESHUHRARIM = THE BEACH OF FREE DOGS / AVRON POLAKOW. [RECAP]",
       author: "Polakow, Avron, author.",
-      materialType: {
+      format: {
         code: "-  ",
         value: "MISC",
       },
@@ -1983,7 +1983,7 @@ export const holdBibs = {
       },
       title: "Spaghetti!",
       author: "Cortanze, Gérard de.",
-      materialType: {
+      format: {
         code: "a  ",
         value: "BOOK/TEXT",
       },
@@ -2466,7 +2466,7 @@ export const holdBibs = {
       },
       title: "The house of mirth : large print",
       author: "Wharton, Edith, 1862-1937.",
-      materialType: {
+      format: {
         code: "l  ",
         value: "LARGE PRINT",
       },
@@ -3154,7 +3154,7 @@ export const holdBibs = {
       },
       title: "I want to be spaghetti!",
       author: "Wright-Ruiz, Kiera, author.",
-      materialType: {
+      format: {
         code: "a  ",
         value: "BOOK/TEXT",
       },
@@ -3862,7 +3862,7 @@ export const holdBibs = {
       },
       title: "Partner record",
       author: "Spaghetti Monster",
-      materialType: {
+      format: {
         code: "-  ",
         value: "MISC",
       },
@@ -3912,7 +3912,7 @@ export const holdBibs = {
       lang: { code: "eng", name: "English" },
       title: "Pasta every day : make it, shape it, sauce it, eat it",
       author: "Feinstein, Meryl, author.",
-      materialType: { code: "a  ", value: "BOOK/TEXT" },
+      format: { code: "a  ", value: "BOOK/TEXT" },
       bibLevel: { code: "m", value: "MONOGRAPH" },
       publishYear: 2023,
       catalogDate: "2023-11-22",
@@ -3957,7 +3957,7 @@ export const holds = {
         code: "0",
         name: "on hold.",
       },
-      recordType: "i",
+      format: "i",
       canFreeze: false,
     },
     {
@@ -3975,7 +3975,7 @@ export const holds = {
         },
         title: "Pasta every day : make it, shape it, sauce it, eat it",
         author: "Feinstein, Meryl, author.",
-        materialType: {
+        format: {
           code: "a  ",
           value: "BOOK/TEXT",
         },
@@ -4002,7 +4002,7 @@ export const holds = {
         code: "0",
         name: "on hold.",
       },
-      recordType: "b",
+      format: "b",
       canFreeze: true,
     },
     {
@@ -4036,7 +4036,7 @@ export const holds = {
         code: "t",
         name: "Requested item is in transit.",
       },
-      recordType: "i",
+      format: "i",
       canFreeze: false,
     },
     {
@@ -4071,7 +4071,7 @@ export const holds = {
         code: "i",
         name: "Requested item ready for pickup.",
       },
-      recordType: "i",
+      format: "i",
       canFreeze: false,
     },
     {
@@ -4105,7 +4105,7 @@ export const holds = {
         code: "0",
         name: "on hold.",
       },
-      recordType: "i",
+      format: "i",
       canFreeze: false,
     },
   ],

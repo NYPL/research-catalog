@@ -22,7 +22,7 @@ export const initialSearchFormState: SearchParams = {
     language: "",
     dateBefore: "",
     dateAfter: "",
-    materialType: [],
+    format: [],
     buildingLocation: [],
   },
 }
@@ -39,8 +39,8 @@ export const languageOptions = [
 )
 
 // Returns an array of objects of Material Type options derived from the aggregations sorted by label text
-export const materialTypeOptions = searchAggregations.materialType.sort(
-  (a, b) => (a.label > b.label ? 1 : -1)
+export const formatOptions = searchAggregations.format.sort((a, b) =>
+  a.label > b.label ? 1 : -1
 )
 
 export const buildGoBackHref = (referer) => {
