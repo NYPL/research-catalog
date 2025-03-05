@@ -53,13 +53,22 @@ const nyplApiClient = async ({
   }
   try {
     const nyplApiClient = new NyplApiClient({
-      log_level: process.env.LOG_LEVEL || "error",
       base_url: baseUrl,
       oauth_key: decryptedId,
       oauth_secret: decryptedSecret,
       oauth_url: appConfig.urls.tokenUrl,
     })
     CACHE.clients[clientCacheKey] = nyplApiClient
+    const get = nyplApiClient.get.bind(nyplApiClient)
+    nyplApiClient.get = async function (path) {
+      logger.info(`GET ${baseUrl}/${path}`)
+      return get(path)
+    }
+    const post = nyplApiClient.post.bind(nyplApiClient)
+    nyplApiClient.post = async function (path, body) {
+      logger.info(`POST ${baseUrl}/${path}`)
+      return post(path, body)
+    }
     return nyplApiClient
   } catch (error) {
     throw new NyplApiClientError(error.message)
