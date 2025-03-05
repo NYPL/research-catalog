@@ -42,7 +42,6 @@ const initializeLogger = () => {
     }
     return JSON.stringify(logObject)
   })
-  console.log(process.env.LOG_LEVEL || "error")
   const transports = [
     new winston.transports.Console({ level: process.env.LOG_LEVEL || "error" }),
     new winston.transports.File({
@@ -51,7 +50,7 @@ const initializeLogger = () => {
       format: combine(winston.format.uncolorize(), formatter),
       maxsize: 5242880,
       maxFiles: 5,
-      level: process.env.LOG_LEVEL || "error"
+      level: process.env.LOG_LEVEL || "error",
     }),
   ]
 
