@@ -53,7 +53,7 @@ const nyplApiClient = async ({
   }
   try {
     const nyplApiClient = new NyplApiClient({
-      log_level: "DEBUG",
+      log_level: process.env.LOG_LEVEL || "error",
       base_url: baseUrl,
       oauth_key: decryptedId,
       oauth_secret: decryptedSecret,
