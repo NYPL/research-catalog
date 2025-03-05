@@ -50,7 +50,7 @@ export interface DiscoveryHoldPostParams {
   record: string
   nyplSource: string
   requestType: "edd" | "hold"
-  recordType: "i"
+  format: "i"
   pickupLocation?: NYPLocationKey | "edd"
   numberOfCopies?: number
   // TODO: make this EDD form content object
