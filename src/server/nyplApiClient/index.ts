@@ -64,6 +64,11 @@ const nyplApiClient = async ({
       logger.info(`GET ${baseUrl}/${path}`)
       return get(path)
     }
+    const post = nyplApiClient.post.bind(nyplApiClient)
+    nyplApiClient.post = async function (path, body) {
+      logger.info(`POST ${baseUrl}/${path}`)
+      return post(path, body)
+    }
     return nyplApiClient
   } catch (error) {
     throw new NyplApiClientError(error.message)
