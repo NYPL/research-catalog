@@ -66,7 +66,7 @@ const nyplApiClient = async ({
     }
     const post = nyplApiClient.post.bind(nyplApiClient)
     nyplApiClient.post = async function (path, body) {
-      logger.info(`POST ${baseUrl}/${path}`)
+      logger.info(`POSTing ${body} to ${baseUrl}/${path}`)
       return post(path, body)
     }
     return nyplApiClient
