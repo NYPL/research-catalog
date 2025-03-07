@@ -92,7 +92,7 @@ export async function postHoldRequest(
     record: itemIdNumeric,
     nyplSource: source,
     requestType: "hold",
-    format: "i",
+    recordType: "i",
     pickupLocation,
   }
 
@@ -138,7 +138,7 @@ export async function postEDDRequest(
     record: itemIdNumeric,
     nyplSource: source,
     requestType: "edd",
-    format: "i",
+    recordType: "i",
     pickupLocation: "edd",
     docDeliveryData: {
       ...rest,
