@@ -46,71 +46,75 @@ const Layout = ({
 
   return (
     <DSProvider>
-      <TemplateAppContainer
-        // This is a workaround to fix a text-wrapping issue when page is zoomed in on
-        // TODO: Address this issue in the DS
-        sx={{ "main > div": { maxWidth: "100vw" } }}
-        breakout={
-          showHeader && (
-            <>
-              <Breadcrumbs
-                data-testid="layout-breadcrumbs"
-                breadcrumbsType="research"
-                breadcrumbsData={[
-                  { url: "https://nypl.org", text: "Home" },
-                  { url: "https://www.nypl.org/research", text: "Research" },
-                  {
-                    url: `https://www.nypl.org${BASE_URL}`,
-                    text: "Research Catalog",
-                  },
-                ]}
-                __css={{
-                  a: {
-                    _focus: {
-                      outlineColor: "ui.white",
+      <Box fontWeight="regular">
+        <TemplateAppContainer
+          // This is a workaround to fix a text-wrapping issue when page is zoomed in on
+          // TODO: Address this issue in the DS
+          sx={{ "main > div": { maxWidth: "100vw" } }}
+          breakout={
+            showHeader && (
+              <>
+                <Breadcrumbs
+                  data-testid="layout-breadcrumbs"
+                  breadcrumbsType="research"
+                  breadcrumbsData={[
+                    { url: "https://nypl.org", text: "Home" },
+                    { url: "https://www.nypl.org/research", text: "Research" },
+                    {
+                      url: `https://www.nypl.org${BASE_URL}`,
+                      text: "Research Catalog",
                     },
-                  },
-                }}
-              />
-              <div className={styles.researchHeadingContainer}>
-                <Heading id="heading-h1" level="h1" text="Research Catalog" />
-                <SubNav
-                  isAuthenticated={isAuthenticated}
-                  activePage={activePage}
-                />
-                {showSearch && <SearchForm aggregations={searchAggregations} />}
-              </div>
-              {showSearch && (
-                <Flex
-                  gap="l"
-                  align="center"
-                  direction="column"
-                  sx={{
-                    padding: "2em 2em .5em 2em",
+                  ]}
+                  __css={{
+                    a: {
+                      _focus: {
+                        outlineColor: "ui.white",
+                      },
+                    },
                   }}
-                >
-                  <EDSBanner />
-                  {showNotification && bannerNotification && (
-                    <Banner
-                      className={styles.banner}
-                      heading="New Service Announcement"
-                      content={bannerNotification}
-                    />
+                />
+                <div className={styles.researchHeadingContainer}>
+                  <Heading id="heading-h1" level="h1" text="Research Catalog" />
+                  <SubNav
+                    isAuthenticated={isAuthenticated}
+                    activePage={activePage}
+                  />
+                  {showSearch && (
+                    <SearchForm aggregations={searchAggregations} />
                   )}
-                </Flex>
-              )}
-            </>
-          )
-        }
-        sidebar={sidebar ? sidebarPosition : "none"}
-        contentPrimary={
-          <Box pb="l">
-            {children}
-            <FeedbackForm />
-          </Box>
-        }
-        contentSidebar={sidebar && <Box pb="l">{sidebar}</Box>}
-      />
+                </div>
+                {showSearch && (
+                  <Flex
+                    gap="l"
+                    align="center"
+                    direction="column"
+                    sx={{
+                      padding: "2em 2em .5em 2em",
+                    }}
+                  >
+                    <EDSBanner />
+                    {showNotification && bannerNotification && (
+                      <Banner
+                        className={styles.banner}
+                        heading="New Service Announcement"
+                        content={bannerNotification}
+                      />
+                    )}
+                  </Flex>
+                )}
+              </>
+            )
+          }
+          sidebar={sidebar ? sidebarPosition : "none"}
+          contentPrimary={
+            <Box pb="l">
+              {children}
+              <FeedbackForm />
+            </Box>
+          }
+          contentSidebar={sidebar && <Box pb="l">{sidebar}</Box>}
+        />
+      </Box>
     </DSProvider>
   )
 }
