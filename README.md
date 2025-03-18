@@ -1,55 +1,86 @@
-# Research Catalog README
+# NYPL Research Catalog
 
-This is the new [NYPL Research Catalog](https://www.nypl.org/research/research-catalog) front end built in [Next.js](https://nextjs.org/).
+## Table of Contents
 
-## Local Environment Setup
+- [Introduction](#introduction)
+- [Getting Started](#getting-started)
+- [Project Architecture](#project-architecture)
+- [Key Features](#key-features)
+- [API Integration](#api-integration)
+- [Authentication](#authentication)
+- [Development Workflow](#development-workflow)
+- [Deployment](#deployment)
+- [Troubleshooting](#troubleshooting)
 
-### Getting Started
+## Introduction
 
-1. Install the required packages
+The [NYPL Research Catalog](https://www.nypl.org/research/research-catalog) is a [Next.js](https://nextjs.org/) application that serves as the front-end interface for the New York Public Library's research collections. It facilitates the searching, browsing, and requesting of materials from NYPL's extensive research holdings including the [shared collection](https://www.nypl.org/research/shared-collection-catalog).
 
-```bash
-npm install
-```
+### Technologies Used
 
-2. Ensure the required Environment Variables are set in your .env.local file.
-(see https://github.com/NYPL/research-catalog/blob/main/ENVIRONMENTVARS.md)
+- **Frontend Framework**: [Next.js](https://nextjs.org/)
+- **UI Components**: [@nypl/design-system-react-components](https://nypl.github.io/nypl-design-system/reservoir/)
+- **Data Fetching**: Server-side rendering with `getServerSideProps` and client-side fetching with JavaScript's native fetch API
+- **Styling**: SCSS modules and Style Props
+- **Testing**: Jest and React Testing Library
+- **Logging**: Winston
+- **Authentication**: JWT-based authentication with NYPL's authentication system
 
-### Running the app locally with npm:
+## Getting Started
+
+### Prerequisites
+
+- Node.js (version specified in `.nvmrc`)
+- npm
+
+### Installation
+
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Create a `.env.local` file based on `.env.example` with the required environment variables
+
+### Environment Variables
+
+The application uses environment variables for configuration. See [ENVIRONMENTVARS.md](ENVIRONMENTVARS.md) for detailed information about each variable.
+
+Key environment variables include:
+
+- `NEXT_PUBLIC_APP_ENV`: Application environment (development, qa, production)
+- `NYPL_HEADER_URL`: URL for NYPL header and footer scripts
+- `PLATFORM_API_CLIENT_ID` and `PLATFORM_API_CLIENT_SECRET`: Encrypted credentials for NYPL's API platform
+- `SIERRA_KEY` and `SIERRA_SECRET`: Encrypted credentials for Sierra API
+
+### Local Development
+
+#### Running with npm
 
 ```bash
 npm run dev
 ```
 
-### Local Hosting
+This starts the development server on port 8080.
 
-In order to successfully log in under a local deployment you'll need to update
-your machine's `etc/hosts` file. This file maps IP addresses to hostnames.
+#### Local Authentication Setup
 
-This is necessary because NYPL's authentication system works by reading cookies
-and parsing the patron's encrypted credentials. These cookies only work on
-`.nypl.org` domains, so we need to map our local deployment to a `.nypl.org`
-domain.
+To enable login functionality in local development:
 
-Add the following line to your `etc/hosts` file. There is no need to remove or
-update any other configuration in this file.
+1. Update your machine's `etc/hosts` file by adding:
+   ```
+   127.0.0.1       local.nypl.org
+   ```
+2. Access the application at http://local.nypl.org:8080/research/research-catalog
 
-```
-127.0.0.1       local.nypl.org
-```
+#### Running with Docker (optional)
 
-### Running the app locally with Docker (optional):
-
-Docker is a platform that allows reproducible development environments to be created and run across different local and production/test environments.
-
-Running the app locally via Docker is optional for now, and provided as an alternative to `npm run dev`.
-
-### Steps to run Docker container locally:
-
-1. [Download](https://docs.docker.com/get-docker/) and install Docker.
-2. `cd` into research-catalog repo
-3. Run `docker-compose up --build --force-recreate`
-4. Check that app is being served at http://localhost:8080/research/research-catalog
+1. Install Docker
+2. Run:
+   ```bash
+   docker-compose up --build --force-recreate
+   ```
+3. Access the application at http://localhost:8080/research/research-catalog
 
 ## Client and Server-Side Data Fetching
 
@@ -57,7 +88,7 @@ Page components on the Research Catalog make use of Next's getServerSideProps fu
 
 When getServerSideProps is used to fetch the initial data, Next automatically handles client-side data re-hydration on route changes without reloading the page. This eliminates the need for manual client-side data fetching/re-hydration in most cases.
 
-For instances where manual client-side data fetching is preferable (e.g. when we don't want data fetching to block the initial page load), we employ the [`SWR`](https://www.npmjs.com/package/swr) module. SWR provides hooks that handles the typical boilerplate for fetching data and setting loading and error states, as well as optimizations such as caching.
+For instances where manual client-side data fetching is preferable (e.g. when we don't want data fetching to block the initial page load), we use JavaScript's native fetch API. We implement custom hooks that handle the typical boilerplate for fetching data and setting loading and error states, as well as optimizations such as caching.
 
 ## Logging
 
@@ -70,4 +101,4 @@ For Vercel deployments, logging will appear in the console.
 
 ## My Account API Endpoints
 
-See the [My Account README](accountREADME.md).
+See the [My Account Documentation](/docs/MY_ACCOUNT.md).
