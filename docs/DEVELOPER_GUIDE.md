@@ -127,7 +127,7 @@ Each version entry in the changelog includes:
 
 ### Models/Classes
 
-- Use a Model/Class instead of a Type whenever a data structure contains functionality that operates on a sepecific instance of that data, or when the data structure returned from the API needs to be significantly reformatted for use in the Research Catalog app.
+- Use a Model/Class instead of a Type whenever a data structure contains functionality that operates on a specific instance of that data, or when the data structure returned from the API needs to be significantly reformatted for use in the Research Catalog app.
 - For example, a Bib model is instantiated for each Bib object returned from the Discovery API in order to extract deeply nested or ambiguously named properties, build urls and copy for that Bib, or to instantiate that Bib's associated Item objects.
 
 ### React

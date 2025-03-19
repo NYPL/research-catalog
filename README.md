@@ -48,7 +48,7 @@ The [NYPL Research Catalog](https://www.nypl.org/research/research-catalog) is a
 
 ### Environment Variables
 
-The application uses environment variables for configuration. See [ENVIRONMENTVARS.md](ENVIRONMENTVARS.md) for detailed information about each variable.
+The application uses environment variables for configuration. See [ENVIRONMENT_VARIABLES.md](ENVIRONMENT_VARIABLES.md) for detailed information about each variable.
 
 Key environment variables include:
 
