@@ -77,7 +77,7 @@ git checkout -b your-feature-name
 
 ### Branch names
 
-TODO
+- Branch names should include the Jira ticket and a basic description of the changes (e.g. `NYPL-1234/add-this-new-feature`)
 
 ### Changelog
 
@@ -282,7 +282,8 @@ All new code should include appropriate tests:
 
 - Unit tests for utility functions and small components
 - Integration tests for complex components and pages
-- Accessibility tests for UI components
+
+NB: While we currently do not have a coverage threshold in place (though we may in the future), the current rule of thumb is to add coverage for any practical scenario a user may experience, including edge cases when appropriate.
 
 ### Running Tests
 
@@ -407,4 +408,4 @@ The NYPL Research Catalog must be accessible to all users. Follow these guidelin
 
 - Perform manual testing with keyboard navigation
 - Test with screen readers
-- Verify color contrast
+- Major releases or changes to UI/functionality should be reviewed by an NYPL accessibility consultant
