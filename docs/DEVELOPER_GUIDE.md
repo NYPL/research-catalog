@@ -97,6 +97,19 @@ Each version entry in the changelog includes:
   - **Changed**: Modifications to existing functionality
   - **Fixed**: Bug fixes
 
+### Versioning Guidelines
+
+- **Major (X.0.0)**: Significant updates or feature release (e.g. the creation of a new page)
+- **Minor (X.Y.0)**: New features added to existing pages
+- **Patch (X.Y.Z)**: Bug fixes and small changes
+- **Hotfix Releases**: Emergency patches outside the regular release cycle including deployment date (e.g. `[1.4.3] Hotfix YYYY-MM-DD`)
+
+### Contribution Guidelines
+
+- All changes must be documented in `CHANGELOG.md` before merging into `main`.
+- Each entry should include a brief description of the change and, when applicable, reference to relevant tickets.
+- Formatting should remain consistent with previous entries
+
 ## Coding Standards
 
 ### State management
@@ -381,13 +394,21 @@ The release process is managed by the project maintainers:
 5. A tag is created with the version number
 6. The release is deployed to production
 
-### Versioning
+### Github Tags for Production Releases
 
-The project follows [Semantic Versioning](https://semver.org/):
+- Each production release is tagged in GitHub to maintain a clear history of deployed versions.
 
-- Major version (X.0.0): Breaking changes
-- Minor version (0.X.0): New features without breaking changes
-- Patch version (0.0.X): Bug fixes and minor improvements
+### Tagging Process
+
+1. Create a new Release in GitHub: Every production release should be tagged with the corresponding version number following [Semantic Versioning](https://semver.org/spec/v2.0.0.html). The format should be
+
+   ```
+   vX.Y.Z
+   ```
+
+2. Add changelog entry as the tag description
+3. Set target to `production` branch
+4. Publish the release
 
 ## Documentation
 
