@@ -6,6 +6,7 @@ This guide provides detailed technical information for developers working on the
 
 - [Getting Started](#getting-started)
 - [Development Workflow](#development-workflow)
+- [Changelog](#changelog)
 - [Coding Standards](#coding-standards)
   - [TypeScript](#typescript)
   - [React](#react)
@@ -79,9 +80,22 @@ git checkout -b your-feature-name
 
 - Branch names should include the Jira ticket and a basic description of the changes (e.g. `NYPL-1234/add-this-new-feature`)
 
-### Changelog
+## Changelog
 
-TODO
+### Changelog Process
+
+This project maintains a `CHANGELOG.md` file to document all notable changes. The changelog follows the [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) format and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+### Changelog Format
+
+Each version entry in the changelog includes:
+
+- A version number formatted as [MAJOR.MINOR.PATCH] (e.g. 1.4.5)
+- A list of changes grouped under standard categories such as
+  - **Added**: New features and functionality
+  - **Removed**: Features that have been removed
+  - **Changed**: Modifications to existing functionality
+  - **Fixed**: Bug fixes
 
 ## Coding Standards
 
