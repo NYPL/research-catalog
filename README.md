@@ -175,7 +175,7 @@ Both clients:
 
 #### External APIs
 
-- **Discovery API**: Main source for bibliographic and item data (accessed via nyplApiClient)
+- **Discovery API**: Main source for bib and item data (accessed via nyplApiClient)
 - **Sierra API**: Patron account management and item requests (accessed via sierraClient)
 - **SHEP API**: Subject heading data
 - **DRB API**: Digital Research Books data
