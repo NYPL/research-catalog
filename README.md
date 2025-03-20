@@ -205,6 +205,12 @@ Run tests with:
 npm test
 ```
 
+or
+
+```bash
+npm test-watch
+```
+
 For more information on the code quality and standards, see the [DEVELOPER_GUIDE.md](/docs/DEVELOPER_GUIDE.md)
 
 ## Deployment
