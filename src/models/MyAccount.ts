@@ -56,7 +56,7 @@ export default class MyAccount {
 
   async fetchHolds() {
     return await this.client.get(
-      `${this.baseQuery}/holds?expand=record&fields=canFreeze,status,pickupLocation,frozen,patron,pickupByDate,format,record`
+      `${this.baseQuery}/holds?expand=record&fields=canFreeze,status,pickupLocation,frozen,patron,pickupByDate,recordType,record`
     )
   }
 
