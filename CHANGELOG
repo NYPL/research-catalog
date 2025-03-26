@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+### Fixes
+
+- Updates Next.js to version 13.5.9.
+
+## [1.4.5] 2025-02-24
+
 ### Updated
 
 - Send new searches back to home, not /search [SCC-4487](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4487)
