@@ -1,7 +1,7 @@
 import React from "react"
 import mockRouter from "next-router-mock"
 import userEvent from "@testing-library/user-event"
-import { screen, render } from "../../utils/testUtils"
+import { screen, render, fireEvent } from "../../utils/testUtils"
 
 import Search from "../../../pages/search/index"
 import {
@@ -13,7 +13,7 @@ jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
 const openRefineSearch = async () => {
   const refineButton = screen.getByText("Filter results")
-  await userEvent.click(refineButton)
+  fireEvent.click(refineButton)
 }
 const apply = async () => {
   const applyButton = screen.getByText("Apply filters")
