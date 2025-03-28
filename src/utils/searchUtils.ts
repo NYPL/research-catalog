@@ -243,7 +243,7 @@ export function mapRequestBodyToSearchParams(
     title,
     subject,
     language,
-    materialType,
+    format,
     dateAfter,
     dateBefore,
   } = reqBody
@@ -254,7 +254,7 @@ export function mapRequestBodyToSearchParams(
     title,
     subject,
     filters: {
-      materialType,
+      format,
       language,
       dateAfter,
       dateBefore,

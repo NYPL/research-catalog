@@ -204,7 +204,7 @@ export default class MyAccount {
     try {
       return holds.map((hold: SierraHold) => {
         const bibId =
-          hold.recordType === "i" ? hold.record.bibIds[0] : hold.record.id
+          hold.format === "i" ? hold.record.bibIds[0] : hold.record.id
         const bibForHold = bibDataMap[bibId]
         return {
           patron: MyAccount.getRecordId(hold.patron),

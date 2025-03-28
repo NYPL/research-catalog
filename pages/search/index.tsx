@@ -1,4 +1,3 @@
-import Head from "next/head"
 import {
   Heading,
   SimpleGrid,
@@ -34,6 +33,7 @@ import type SearchResultsBib from "../../src/models/SearchResultsBib"
 
 import useLoading from "../../src/hooks/useLoading"
 import initializePatronTokenAuth from "../../src/server/auth"
+import RCHead from "../../src/components/Head/RCHead"
 
 interface SearchProps {
   bannerNotification?: string
@@ -108,16 +108,7 @@ export default function Search({
 
   return (
     <>
-      <Head>
-        <meta property="og:title" content={metadataTitle} key="og-title" />
-        <meta
-          property="og:site_name"
-          content={metadataTitle}
-          key="og-site-name"
-        />
-        <meta name="twitter:title" content={metadataTitle} key="tw-title" />
-        <title key="main-title">{metadataTitle}</title>
-      </Head>
+      <RCHead metadataTitle={metadataTitle} />
       <Layout
         bannerNotification={bannerNotification}
         searchAggregations={aggs}

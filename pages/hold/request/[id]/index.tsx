@@ -1,4 +1,3 @@
-import Head from "next/head"
 import { useState, useRef, useEffect } from "react"
 import { useRouter } from "next/router"
 import {
@@ -37,6 +36,7 @@ import type {
   HoldErrorStatus,
   PatronEligibilityStatus,
 } from "../../../../src/types/holdPageTypes"
+import RCHead from "../../../../src/components/Head/RCHead"
 
 interface HoldRequestPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -143,16 +143,7 @@ export default function HoldRequestPage({
 
   return (
     <>
-      <Head>
-        <meta property="og:title" content={metadataTitle} key="og-title" />
-        <meta
-          property="og:site_name"
-          content={metadataTitle}
-          key="og-site-name"
-        />
-        <meta name="twitter:title" content={metadataTitle} key="tw-title" />
-        <title key="main-title">{metadataTitle}</title>
-      </Head>
+      <RCHead metadataTitle={metadataTitle} />
       <Layout isAuthenticated={isAuthenticated} activePage="hold">
         {/* Always render the wrapper element that will display the
           dynamically rendered notification for focus management */}

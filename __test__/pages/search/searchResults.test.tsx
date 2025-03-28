@@ -1,6 +1,11 @@
 import React from "react"
 import userEvent from "@testing-library/user-event"
-import { render, screen, waitFor } from "../../../src/utils/testUtils"
+import {
+  render,
+  screen,
+  waitFor,
+  fireEvent,
+} from "../../../src/utils/testUtils"
 
 import mockRouter from "next-router-mock"
 
@@ -26,12 +31,12 @@ describe("Search Results page", () => {
         />
       )
       const refine = screen.getByText("Filter results")
-      await userEvent.click(refine)
+      fireEvent.click(refine)
       const field = screen.getByLabelText("Greek, Modern (1453-present)", {
         exact: false,
       })
-      await userEvent.click(field)
-      await userEvent.click(screen.getByText("Apply filters"))
+      fireEvent.click(field)
+      fireEvent.click(screen.getByText("Apply filters"))
       waitFor(() => {
         const resultsHeading = screen.getByTestId("search-results-heading")
         expect(resultsHeading).toHaveFocus()
@@ -79,7 +84,7 @@ describe("Search Results page", () => {
         />
       )
       const refine = screen.getByText("Filter results")
-      await userEvent.click(refine)
+      fireEvent.click(refine)
       const cancel = screen.getByText("Cancel")
       expect(cancel).toHaveFocus
     })
@@ -93,9 +98,9 @@ describe("Search Results page", () => {
         />
       )
       const refine = screen.getByText("Filter results")
-      await userEvent.click(refine)
+      fireEvent.click(refine)
       const cancel = screen.getByText("Cancel")
-      await userEvent.click(cancel)
+      fireEvent.click(cancel)
       expect(refine).toHaveFocus
     })
     it("keeps focus on the sort by selector after a sort is changed", async () => {
@@ -149,7 +154,7 @@ describe("Search Results page", () => {
       screen.getByLabelText("Pagination")
 
       const pageButton = screen.getByLabelText("Page 2")
-      await userEvent.click(pageButton)
+      fireEvent.click(pageButton)
       expect(mockRouter.asPath).toBe("/?q=spaghetti&page=2")
     })
     it("renders the sort select fields and updates the query string in the url on changes", async () => {

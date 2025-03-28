@@ -14,6 +14,7 @@ import {
 import { appConfig } from "../../config/config"
 import { logServerError } from "../../utils/appUtils"
 import type { DiscoveryItemResult } from "../../types/itemTypes"
+import logger from "../../../logger"
 
 export async function fetchBib(
   id: string,
@@ -66,6 +67,9 @@ export async function fetchBib(
       !discoveryBibResult.uri ||
       !id.includes(discoveryBibResult.uri)
     ) {
+      logger.warn(
+        `Missing discoveryBibResult for id ${id}, or id does not match uri on returned result`
+      )
       // TODO: Check if this ID slicing is correct and if this redirect logic is still accurate
       const sierraBibResponse = await client.get(
         `/bibs/sierra-nypl/${id.slice(1)}`
@@ -138,10 +142,10 @@ async function fetchBibSubjectHeadings(bibId: string) {
     return await response.json()
   } catch (error) {
     logServerError(
-      "fetchBib",
+      "fetchBibSubjectHeadings",
       "Error fetching SHEP API data (note: VPN should be used for local testing)"
     )
-    logServerError("fetchBib", error.message)
+    logServerError("fetchBibSubjectHeadings", error.message)
   } finally {
     clearTimeout(timeoutId)
   }
@@ -177,7 +181,7 @@ async function fetchAllBibItemsWithQuery(
         )
       }
     } catch (error) {
-      logServerError("fetchBib", error.message)
+      logServerError("fetchAllBibItemsWithQuery", error.message)
     }
   }
   return items

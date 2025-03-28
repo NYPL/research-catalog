@@ -7,7 +7,6 @@ import {
   Box,
   SkeletonLoader,
 } from "@nypl/design-system-react-components"
-import Head from "next/head"
 
 import Layout from "../src/components/Layout/Layout"
 import ExternalLink from "../src/components/Links/ExternalLink/ExternalLink"
@@ -16,6 +15,7 @@ import { SITE_NAME } from "../src/config/constants"
 import { appConfig } from "../src/config/config"
 import initializePatronTokenAuth from "../src/server/auth"
 import useLoading from "../src/hooks/useLoading"
+import RCHead from "../src/components/Head/RCHead"
 
 interface HomeProps {
   bannerNotification?: string
@@ -29,9 +29,7 @@ export default function Home({
   const isLoading = useLoading()
   return (
     <>
-      <Head>
-        <title key="main-title">{SITE_NAME}</title>
-      </Head>
+      <RCHead metadataTitle={SITE_NAME} />
       <Layout
         isAuthenticated={isAuthenticated}
         activePage="search"
