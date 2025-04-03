@@ -93,12 +93,12 @@ describe("Advanced Search Form", () => {
   })
   it("can check material checkboxes", async () => {
     await userEvent.click(screen.getByLabelText("Notated music"))
-    await userEvent.click(screen.getByLabelText("Cartographic"))
+    await userEvent.click(screen.getByLabelText("Map"))
     submit()
     // expect the label for notated music and cartographic
     // ("resourcetypes:not", "resourcetypes:car") to be in url
     expect(mockRouter.asPath).toBe(
-      "/search?q=&filters%5BmaterialType%5D%5B0%5D=resourcetypes%3Anot&filters%5BmaterialType%5D%5B1%5D=resourcetypes%3Acar&searched_from=advanced"
+      "/search?q=&filters%5Bformat%5D%5B0%5D=c&filters%5Bformat%5D%5B1%5D=e&searched_from=advanced"
     )
   })
   it("can check location checkboxes", async () => {
@@ -113,7 +113,7 @@ describe("Advanced Search Form", () => {
   it("can clear the form", async () => {
     const notatedMusic = screen.getByLabelText("Notated music")
     await userEvent.click(notatedMusic)
-    const cartographic = screen.getByLabelText("Cartographic")
+    const cartographic = screen.getByLabelText("Map")
     await userEvent.click(cartographic)
     const selector = screen.getByLabelText("Language")
     await userEvent.selectOptions(selector, "Azerbaijani")

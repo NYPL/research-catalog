@@ -1,4 +1,3 @@
-import Head from "next/head"
 import {
   useState,
   useReducer,
@@ -47,9 +46,10 @@ import { useDateForm } from "../../src/hooks/useDateForm"
 import DateForm from "../../src/components/SearchFilters/DateForm"
 import SearchFilterCheckboxField from "../../src/components/RefineSearch/SearchFilterCheckboxField"
 import CancelSubmitButtonGroup from "../../src/components/RefineSearch/CancelSubmitButtonGroup"
-import { materialTypeOptions } from "../../src/utils/advancedSearchUtils"
+import { formatOptions } from "../../src/utils/advancedSearchUtils"
 import { searchAggregations } from "../../src/config/aggregations"
 import RCLink from "../../src/components/Links/RCLink/RCLink"
+import RCHead from "../../src/components/Head/RCHead"
 
 export const defaultEmptySearchErrorMessage =
   "Error: please enter at least one field to submit an advanced search."
@@ -149,16 +149,7 @@ export default function AdvancedSearch({
   }, [alert])
   return (
     <>
-      <Head>
-        <meta property="og:title" content={metadataTitle} key="og-title" />
-        <meta
-          property="og:site_name"
-          content={metadataTitle}
-          key="og-site-name"
-        />
-        <meta name="twitter:title" content={metadataTitle} key="tw-title" />
-        <title key="main-title">{metadataTitle}</title>
-      </Head>
+      <RCHead metadataTitle={metadataTitle} />
       <Layout isAuthenticated={isAuthenticated} activePage="advanced">
         {/* Always render the wrapper element that will display the
           dynamically rendered notification for focus management */}
@@ -225,13 +216,11 @@ export default function AdvancedSearch({
                 gridOptions={{ min: 1, max: 1 }}
               />
               <SearchFilterCheckboxField
-                options={materialTypeOptions}
+                options={formatOptions}
                 name="format"
                 label="Format"
-                handleCheckboxChange={(e) =>
-                  handleCheckboxChange("materialType", e)
-                }
-                searchFormState={searchFormState["filters"].materialType}
+                handleCheckboxChange={(e) => handleCheckboxChange("format", e)}
+                searchFormState={searchFormState["filters"].format}
               />
             </Flex>
           </Flex>

@@ -201,8 +201,8 @@ export default class MyAccount {
       )
       throw new MyAccountModelError("building bibData for holds", e)
     }
-    try {
-      return holds.map((hold: SierraHold) => {
+    return holds.map((hold: SierraHold) => {
+      try {
         const bibId =
           hold.recordType === "i" ? hold.record.bibIds[0] : hold.record.id
         const bibForHold = bibDataMap[bibId]
@@ -224,13 +224,13 @@ export default class MyAccount {
               : `https://borrow.nypl.org/search/card?recordId=${bibId}`
             : null,
         }
-      })
-    } catch (e) {
-      console.error(
-        "Error building holds in MyAccount#buildHolds: " + e.message
-      )
-      throw new MyAccountModelError("building holds", e)
-    }
+      } catch (e) {
+        console.error(
+          "Error building hold in MyAccount#buildHolds: " + e.message
+        )
+        throw new MyAccountModelError("building holds", e)
+      }
+    })
   }
 
   buildCheckouts(

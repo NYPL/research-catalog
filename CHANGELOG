@@ -5,11 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Prerelease
+
+### Fixed
+
+- Updates Next.js to version 13.5.9 [SCC-4609](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4609)
+
 ## [1.4.5] 2025-02-24
+
+### Updated
+
+- Send new searches back to home, not /search [SCC-4487](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4487)
+- use new format instead of materialType for filter queries [SCC-4417](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4417)
+- Removed legacy barcode hotfix (SCC-4474)
 
 ### Added
 
 - Added Google Tag Manager snippet and data layer initialization (SCC-4472)
+- Hide non prod deployments from search indexing [SCC-4192](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4192)
 
 ## [1.4.4] 2025-02-18
 

@@ -21,39 +21,97 @@ export const searchAggregations = {
       ),
     },
   ],
-  materialType: [
+  format: [
     {
-      value: "resourcetypes:txt",
-      label: "Text",
+      value: "b",
+      label: "Blu-ray",
     },
     {
-      value: "resourcetypes:aud",
-      label: "Audio",
-    },
-    {
-      value: "resourcetypes:not",
+      value: "c",
       label: "Notated music",
     },
     {
-      value: "resourcetypes:mov",
-      label: "Moving image",
+      value: "i",
+      label: "Spoken word recording",
     },
     {
-      value: "resourcetypes:img",
-      label: "Still image",
+      value: "z",
+      label: "E-Book",
     },
     {
-      value: "resourcetypes:car",
-      label: "Cartographic",
+      value: "v",
+      label: "DVD",
     },
     {
-      value: "resourcetypes:mix",
-      label: "Mixed material",
+      value: "u",
+      label: "Audiobook",
     },
     {
-      value: "resourcetypes:mul",
-      label: "Multimedia",
+      value: "d",
+      label: "Manuscript notated music",
     },
+    {
+      value: "m",
+      label: "Computer file",
+    },
+    {
+      value: "o",
+      label: "Kit",
+    },
+    {
+      value: "p",
+      label: "Archival Mix",
+    },
+    {
+      value: "a",
+      label: "Book/Text",
+    },
+    {
+      value: "3",
+      label: "E-Video",
+    },
+    {
+      value: "l",
+      label: "Large print",
+    },
+    {
+      value: "e",
+      label: "Map",
+    },
+    {
+      value: "n",
+      label: "E-Audiobook",
+    },
+    {
+      value: "k",
+      label: "Picture",
+    },
+    {
+      value: "t",
+      label: "Manuscript",
+    },
+    { value: "s", label: "VHS" },
+    {
+      value: "j",
+      label: "Musical recording",
+    },
+    {
+      value: "y",
+      label: "Music CD",
+    },
+    {
+      value: "h",
+      label: "Microform",
+    },
+    {
+      value: "r",
+      label: "3-D Object",
+    },
+    {
+      value: "g",
+      label: "Film, Slide, etc.",
+    },
+    { value: "f", label: "Manuscript map" },
   ],
   language: [
     {

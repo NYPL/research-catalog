@@ -1,4 +1,3 @@
-import Head from "next/head"
 import type { SyntheticEvent } from "react"
 import { useState, useRef } from "react"
 import { useRouter } from "next/router"
@@ -44,6 +43,7 @@ import {
   parseItemFilterQueryParams,
   areFiltersApplied,
 } from "../../../src/utils/itemFilterUtils"
+import RCHead from "../../../src/components/Head/RCHead"
 
 interface BibPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -201,16 +201,7 @@ export default function BibPage({
 
   return (
     <>
-      <Head>
-        <meta property="og:title" content={metadataTitle} key="og-title" />
-        <meta
-          property="og:site_name"
-          content={metadataTitle}
-          key="og-site-name"
-        />
-        <meta name="twitter:title" content={metadataTitle} key="tw-title" />
-        <title key="main-title">{metadataTitle}</title>
-      </Head>
+      <RCHead metadataTitle={metadataTitle} />
       <Layout isAuthenticated={isAuthenticated} activePage="bib">
         <Heading level="h2" size="heading3" mb="l">
           {bib.title}

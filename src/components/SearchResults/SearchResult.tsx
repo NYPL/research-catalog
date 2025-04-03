@@ -42,7 +42,7 @@ const SearchResult = ({ bib }: SearchResultProps) => {
             p: { display: "inline-block", marginRight: "s", marginBottom: "s" },
           }}
         >
-          {bib.materialType && <Text>{bib.materialType}</Text>}
+          {bib.format && <Text>{bib.format}</Text>}
           {bib.publicationStatement && <Text>{bib.publicationStatement}</Text>}
           {bib.yearPublished && <Text>{bib.yearPublished}</Text>}
           <Text>{bib.getNumItemsMessage()}</Text>
