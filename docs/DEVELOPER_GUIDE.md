@@ -32,7 +32,7 @@ Before contributing, please read and familiarize yourself with [README.md](READM
 
 ### Deployment Process
 
-The Research Catalog uses GitHub Actions for continuous integration and deployment. The GitHub Actions workflow builds a Docker container and deploys it to AWS ECS:
+The Research Catalog uses GitHub Actions for continuous integration and deployment. The GitHub Actions workflow builds a Docker container and deploys it to AWS ECS in the `nypl-digital-dev` account:
 
 1. When code is pushed to the `main` branch, it is automatically deployed to the main [Vercel environment](https://research-catalog.vercel.app/)
 2. When code is pushed to the `qa` branch, it is automatically deployed to the [test environment](https://qa-www.nypl.org/research/research-catalog)
