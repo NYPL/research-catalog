@@ -106,7 +106,7 @@ This configuration is controlled by the `NEXT_PUBLIC_REVERSE_PROXY_ENABLED` envi
 
 #### Transition Plan
 
-The Subject Heading Explorer pages are the only remaining pages still served by the legacy DFE application. These will be replaced by the upcoming Enhanced Browse pages in the Research Catalog. Once the Enhanced Browse pages are launched, the legacy DFE application can be retired completely.
+The Subject Heading Explorer pages are the only remaining pages still served by the legacy DFE application. These will be replaced by the upcoming Enhanced Browse pages in the Research Catalog. Once the Enhanced Browse pages are launched, the legacy DFE application MUST sunset completely and this app must be updated accordingly.
 
 ## Key Features
 
