@@ -344,7 +344,7 @@ describe("SearchForm", () => {
 
 ## Pull Request Process
 
-1. **Create a Pull Request (PR)** from your feature branch to the `development` branch
+1. **Create a Pull Request (PR)** from your feature branch to the `main` branch
 2. **Fill out the PR template** with:
    - A clear description of the changes
    - Any related issues
@@ -373,7 +373,7 @@ Reviewers will check for:
 
 The release process is managed by the project maintainers:
 
-1. Changes are merged into the `development` branch
+1. Changes are merged into the `main` branch
 2. When ready for release, a release branch is created
 3. Final testing is performed on the release branch
 4. The release branch is merged into `main`
