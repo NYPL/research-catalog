@@ -244,14 +244,9 @@ The NYPL DevOps team is responsible for configuring and maintaining the reverse 
 2. **Deployment Coordination**: Major deployments that affect routing should be coordinated with the DevOps team
 3. **Rollbacks**: The DevOps team is responsible for performing rollbacks if issues occur in production
 
-### Rollback Process
+### Rollbacks
 
-If a deployment causes issues in production:
-
-1. Open a ticket with the DevOps team requesting a rollback
-2. Provide the specific version/tag to roll back to
-3. The DevOps team will handle the rollback process
-4. After rollback, investigate the issue and fix it in a new deployment
+The DevOps team is primarily responsible for rolling the app back to the previous working image in case there are issues with a production deployment, so they should be available at the time of any releases to production.
 
 ### Environment Variable Management
 
