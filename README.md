@@ -23,7 +23,7 @@ The [NYPL Research Catalog](https://www.nypl.org/research/research-catalog) is a
 - **Styling**: SCSS modules and Style Props
 - **Testing**: Jest and React Testing Library
 - **Logging**: Winston logging to AWS Cloudwatch
-- **Authentication**: JWT-based authentication with NYPL's authentication system
+- **Authentication**: JWT-based patron "log in" for developing and testing authenticated features (Account and Hold requests)
 
 ## Getting Started
 
