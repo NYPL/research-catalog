@@ -63,23 +63,8 @@ Feature branches are useful when:
 The project follows a feature branch workflow:
 
 1. `main` branch: Production-ready code
-2. `development` branch: Integration branch for features and fixes
-3. Feature branches: Created from `development` for new features or fixes
-
-### Creating a Feature Branch
-
-```bash
-# Ensure you're on the development branch
-git checkout development
-git pull origin development
-
-# Create a new feature branch
-git checkout -b your-feature-name
-```
-
-### Branch names
-
-- Branch names should include the Jira ticket and a basic description of the changes (e.g. `NYPL-1234/add-this-new-feature`)
+2. Branches for non-blocking changes associated with a JIRA ticket (`NYPL-1234/add-this-new-feature`), merged into `main` by the PR owner on approval.
+3. Feature branches: Created from `main` for major features that could potentially block smaller releases, typically associated with a JIRA epic (e.g. `feature-name`).
 
 ## Changelog
 
