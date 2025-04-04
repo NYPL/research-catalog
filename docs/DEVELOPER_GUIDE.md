@@ -32,11 +32,12 @@ Before contributing, please read and familiarize yourself with [README.md](READM
 
 ### Deployment Process
 
-The Research Catalog uses GitHub Actions for continuous integration and deployment. The GitHub Actions workflow builds a Docker container and deploys it to AWS ECS in the `nypl-digital-dev` account:
+The Research Catalog uses GitHub Actions for continuous integration and deployment. The GitHub Actions workflow builds a Docker container and deploys it to Vercel or AWS ECS (`nypl-digital-dev` account) depending on the branch:
 
 1. When code is pushed to the `main` branch, it is automatically deployed to the main [Vercel environment](https://research-catalog.vercel.app/)
-2. When code is pushed to the `qa` branch, it is automatically deployed to the [test environment](https://qa-www.nypl.org/research/research-catalog)
-3. When code is pushed to the `production` branch, it is automatically deployed to the [production environment](https://nypl.org/research/research-catalog)
+2. When code is pushed to the `qa` branch, it is automatically deployed to the [test environment](https://qa-www.nypl.org/research/research-catalog), hosted in the AWS ECS cluster `research-catalog-production` within the `nypl-digital-dev` account
+3. When code is pushed to the `production` branch, it is automatically deployed to the [production environment](https://nypl.org/research/research-catalog), hosted in the AWS ECS cluster `research-catalog-qa` within the `nypl-digital-dev` account.
+4. There is a third ECS Cluster reserved for the Research Catalog, `research-catalog-train`, that is used flexibly and is often reserved for testing feature branches, which can be configured in via the [github actions config file](../.github/workflows/deploy_train.yml)
 
 ### Merging Workflow
 
