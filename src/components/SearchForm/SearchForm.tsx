@@ -111,9 +111,6 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
             labelText: searchTip,
             placeholder,
           }}
-          sx={{
-            ".chakra-select__icon-wrapper": { "z-index": "999 !important" },
-          }}
         />
         <Flex direction="column" justifyContent="space-between" mt="xs">
           <RCLink
