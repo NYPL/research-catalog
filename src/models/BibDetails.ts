@@ -33,8 +33,7 @@ export default class BibDetails {
     this.extent = this.buildExtent()
     this.owner = this.buildOwner()
     // If we can't retreive subject headings from the SHEP API, we'll use the subjectLiteral
-    this.subjectLiteral =
-      this.buildSubjectHeadings() || this.buildSubjectLiterals()
+    this.subjectLiteral = this.buildSubjectLiterals()
     // these are the actual arrays of details that will be displayed
     this.annotatedMarcDetails = this.buildAnnotatedMarcDetails(
       annotatedMarc?.fields
