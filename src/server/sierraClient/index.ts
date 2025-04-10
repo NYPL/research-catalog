@@ -51,10 +51,10 @@ const sierraClient = async () => {
     CACHE.client = wrapper
     const get = wrapper.get.bind(wrapper)
     wrapper.get = async function (path) {
-      logger.info(`GET ${base}/${path}`)
+      logger.info(`GET ${base}${path}`)
       return await get(path)
     }
-    const post = wrapper.get.bind(wrapper)
+    const post = wrapper.post.bind(wrapper)
     wrapper.post = async function (path, body) {
       logger.info(`POST ${base}${path}`)
       return await post(path, body)
