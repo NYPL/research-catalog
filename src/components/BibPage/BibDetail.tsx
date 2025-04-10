@@ -100,8 +100,7 @@ const SingleSubjectHeadingElement = (subjectHeadingUrls: BibDetailURL[]) => {
       const divider = (
         // this span will render as > in between the divided subject heading links
         <span data-testid="divider" key={`divider-${index}`}>
-          {" "}
-          &gt;{" "}
+          {" --  "}
         </span>
       )
       const link = LinkElement(url, "internal")
