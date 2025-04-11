@@ -12,15 +12,17 @@ class AuthorityVarfield {
   label: string
   type: string
   url: string
+  display: boolean
   constructor(varField: VarField) {
     this.varField = varField
     this.label = this.getLabel()
     this.type = this.getHeadingType()
     this.url = `/search?filters[subjectLiteral][0]=${this.getSubjectLiteral()}`
+    this.display = true
   }
-  getSubfield(varfield: VarField, tag) {
-    const subfield = varfield.subfields.find((sf) => sf.tag === tag)
-    return subfield.content
+  getSubfield(tag) {
+    const subfield = this.varField.subfields.find((sf) => sf.tag === tag)
+    return subfield?.content
   }
   getLabel(opts = {}) {
     return (

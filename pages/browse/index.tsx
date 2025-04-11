@@ -4,14 +4,21 @@ import { run } from "./sierraUtils"
 import Heading from "../../src/models/Headings/Heading"
 import type AuthorityVarfield from "../../src/models/Headings/AuthorityVarfield"
 
-function HeadingDisplay({ url = null, label, type }: AuthorityVarfield) {
+function HeadingDisplay({
+  url = null,
+  label,
+  type,
+  display,
+}: AuthorityVarfield) {
   return (
-    <li>
-      <Flex flexDirection="row" alignItems="center">
-        {url ? <RCLink href={url}>{label}</RCLink> : label}
-        <Text>{"(" + type + ")"}</Text>
-      </Flex>
-    </li>
+    display && (
+      <li>
+        <Flex flexDirection="row" alignItems="center">
+          {url ? <RCLink href={url}>{label}</RCLink> : label}
+          <Text>{"(" + type + ")"}</Text>
+        </Flex>
+      </li>
+    )
   )
 }
 
