@@ -28,35 +28,47 @@ export default function Browse({ subjectHeadingsFromSierra }) {
   )
   return (
     <List type="ul">
-      {subjectHeadings.map(({ primary, fiveHundreds, fourHundreds }, i) => {
-        return (
-          <li key={i}>
-            <HeadingDisplay {...primary} />
-            {fiveHundreds.filter(({ display }) => display).length > 0 && (
-              <Flex>
-                {"See also 5xx fields (Links to browse search)"}
-                <List type="ul">
-                  {fiveHundreds.map((field, i) => {
-                    return <HeadingDisplay {...field} key={i} />
-                  })}
-                </List>
-              </Flex>
-            )}
-            {fourHundreds.filter(({ display }) => display).length > 0 && (
-              <Flex>
-                {
-                  "See 4xx fields (unauthorized but recognized variants in spelling, etc)"
-                }
-                <List type="ul">
-                  {fourHundreds.map((field, i) => {
-                    return <HeadingDisplay {...field} key={i} />
-                  })}
-                </List>
-              </Flex>
-            )}
-          </li>
-        )
-      })}
+      {subjectHeadings.map(
+        ({ primary, fiveHundreds, fourHundreds, broaderTerms }, i) => {
+          return (
+            <li key={i}>
+              <HeadingDisplay {...primary} />
+              {broaderTerms.filter(({ display }) => display).length > 0 && (
+                <Flex>
+                  {"Broader terms"}
+                  <List type="ul">
+                    {broaderTerms.map((field, i) => {
+                      return <HeadingDisplay {...field} key={i} />
+                    })}
+                  </List>
+                </Flex>
+              )}
+              {fiveHundreds.filter(({ display }) => display).length > 0 && (
+                <Flex>
+                  {"See also"}
+                  <List type="ul">
+                    {fiveHundreds.map((field, i) => {
+                      return <HeadingDisplay {...field} key={i} />
+                    })}
+                  </List>
+                </Flex>
+              )}
+              {/* {fourHundreds.filter(({ display }) => display).length > 0 && (
+                <Flex>
+                  {
+                    "See 4xx fields (unauthorized but recognized variants in spelling, etc)"
+                  }
+                  <List type="ul">
+                    {fourHundreds.map((field, i) => {
+                      return <HeadingDisplay {...field} key={i} />
+                    })}
+                  </List>
+                </Flex>
+              )} */}
+            </li>
+          )
+        }
+      )}
     </List>
   )
 }

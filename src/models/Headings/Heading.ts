@@ -10,11 +10,17 @@ class Heading {
   primary: AuthorityVarfield
   fiveHundreds: VariantVarfield[]
   fourHundreds: VariantVarfield[]
+  broaderTerms: VariantVarfield[]
   constructor(sierraAuthorityRecord: SierraAuthority) {
     this.primary = new AuthorityVarfield(
       this.getFieldTagD(sierraAuthorityRecord)
     )
-    this.fiveHundreds = this.getFiveHundreds(sierraAuthorityRecord)
+    this.fiveHundreds = this.getFiveHundreds(sierraAuthorityRecord).filter(
+      ({ broaderTerm }) => !broaderTerm
+    )
+    this.broaderTerms = this.getFiveHundreds(sierraAuthorityRecord).filter(
+      ({ broaderTerm }) => broaderTerm
+    )
     this.fourHundreds = this.getFourHundreds(sierraAuthorityRecord)
   }
   getFieldTagD(authorityRecord) {
