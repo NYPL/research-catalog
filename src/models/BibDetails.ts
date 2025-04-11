@@ -385,15 +385,15 @@ export default class BibDetails {
     const subjectLiteralUrls = this.bib.subjectLiteral.map(
       (subject: string) => {
         subject = subject.replace(/\.$/, "")
-        // stackedSubjectHeadings: ["a", "a -- b", "a -- b -- c"]
-        const stackedSubjectHeadings =
-          this.constructSubjectLiteralsArray(subject)
-        const filterQueryForSubjectHeading = "/search?filters[subjectLiteral]="
+        // // stackedSubjectHeadings: ["a", "a -- b", "a -- b -- c"]
+        // const stackedSubjectHeadings =
+        //   this.constructSubjectLiteralsArray(subject)
+        const filterQueryForSubjectHeading = "/browse?q="
         // splitSubjectHeadings: ["a", "b", "c"]
         const splitSubjectHeadings = subject.split(" -- ")
         return splitSubjectHeadings.map((heading, index) => {
           const urlWithFilterQuery = `${filterQueryForSubjectHeading}${encodeURI(
-            stackedSubjectHeadings[index]
+            heading
           )}`
           return {
             url: urlWithFilterQuery,
