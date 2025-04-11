@@ -24,7 +24,7 @@ class AuthorityVarfield {
     const subfield = this.varField.subfields.find((sf) => sf.tag === tag)
     return subfield?.content
   }
-  getLabel(opts = {}) {
+  getLabel(opts = { skipTag: null }) {
     return (
       this.varField.subfields
         // if there is a skip tag, pass the skip tag along

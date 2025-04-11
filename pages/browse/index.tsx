@@ -50,13 +50,7 @@ export default function Browse({ subjectHeadingsFromSierra }) {
               }
               <List type="ul">
                 {fourHundreds.map((field, i) => {
-                  return (
-                    <HeadingDisplay
-                      label={field.label}
-                      type={field.type}
-                      key={i}
-                    />
-                  )
+                  return <HeadingDisplay {...field} key={i} />
                 })}
               </List>
             </Flex>

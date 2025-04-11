@@ -11,7 +11,7 @@
  *  --type TYPE - Specify bib or item
  */
 
-import type { SierraAuthority } from "../../src/models/Headings/AuthorityVarfield"
+import type { VarField } from "../../src/models/Headings/AuthorityVarfield"
 import sierraClient from "../../src/server/sierraClient/index"
 type QueryOptions = {
   query: string
@@ -112,12 +112,10 @@ const getRecordsByName = async (
   }
 }
 
-const isDupe = (value, index, a) => a.indexOf(value) !== index
-
 export const run = async (
   options: QueryOptions,
   prefetchedIds?: string[]
-): Promise<SierraAuthority[]> => {
+): Promise<VarField[]> => {
   console.log(`Querying authorities  by ${options.query}`)
   let records
   if (prefetchedIds) {
