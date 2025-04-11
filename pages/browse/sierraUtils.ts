@@ -11,7 +11,7 @@
  *  --type TYPE - Specify bib or item
  */
 
-import type { SierraAuthority } from "../../src/models/Heading"
+import type { SierraAuthority } from "../../src/models/Headings/AuthorityVarfield"
 import sierraClient from "../../src/server/sierraClient/index"
 type QueryOptions = {
   query: string

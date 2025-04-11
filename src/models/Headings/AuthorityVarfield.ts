@@ -1,48 +1,30 @@
-type VarField = {
+export type VarField = {
   content: string
   fieldTag: string
   subfields?: { content: string; tag: string }[]
   marcTag: string
 }
-export type SierraAuthority = {
-  id: number
-  varFields: VarField[]
-}
 
-class AuthorizedHeading {
-  sierraHeadingData: SierraAuthority
+class AuthorityVarfield {
+  varField: VarField
   label: string
   type: string
   url: string
-  fourHundredVariants: any[]
-  fiveHundredVariants: any[]
-  constructor(sierraHeadingData: SierraAuthority) {
-    this.sierraHeadingData = sierraHeadingData
+  constructor(varField: VarField) {
+    this.varField = varField
     this.label = this.getLabel()
     this.type = this.getHeadingType()
     this.url = `/search?filters[subjectLiteral][0]=${this.getSubjectLiteral()}`
-    this.fourHundredVariants = this.get400Variants()
-    this.fiveHundredVariants = this.get500Variants()
   }
-  getFieldTagD() {
-    const fieldTagD = this.sierraHeadingData.varFields.find(
-      (f) => f.fieldTag === "d"
-    )
-    return fieldTagD
-  }
-  getSubfieldA() {
-    const subfieldA = this.getFieldTagD()?.subfields.find(
-      (sf) => sf.tag === "a"
-    )
-    return subfieldA.content
+  getSubfield(varfield: VarField, tag) {
+    const subfield = varfield.subfields.find((sf) => sf.tag === tag)
+    return subfield.content
   }
   getLabel() {
-    return this.getFieldTagD()
-      .subfields.map((sf) => sf.content)
-      .join(" -- ")
+    return this.varField.subfields.map((sf) => sf.content).join(" -- ")
   }
   buildSubfieldMap() {
-    return this.getFieldTagD().subfields.reduce((subFieldMap, field) => {
+    return this.varField.subfields.reduce((subFieldMap, field) => {
       subFieldMap[field.tag] = field.content
       return subFieldMap
     }, {})
@@ -72,37 +54,30 @@ class AuthorizedHeading {
     )
   }
   getHeadingType() {
-    const marcTag = this.getFieldTagD().marcTag
-    return headings[marcTag]
-  }
-  get400Variants() {
-    return []
-  }
-  get500Variants() {
-    return []
-  }
-  get300Variants() {
-    return []
+    const marcTag = this.varField.marcTag
+    const digits = parseInt(marcTag, 10) % 100
+    console.log(digits)
+    return headings[digits]
   }
 }
 
-export default AuthorizedHeading
+export default AuthorityVarfield
 
 const headings = {
-  100: "Personal Name",
-  110: "Corporate Name",
-  111: "Meeting Name",
-  130: "Uniform Title",
-  147: "Named Event",
-  148: "Chronological Term",
-  150: "Topical Term",
-  151: "Geographic Name",
-  155: "Genre/Form Term",
-  162: "Medium of Performance Term",
-  180: "General Subdivision",
-  181: "Geographic Subdivision",
-  182: "Chronological Subdivision",
-  185: "Form Subdivision",
+  0: "Personal Name",
+  10: "Corporate Name",
+  11: "Meeting Name",
+  30: "Uniform Title",
+  47: "Named Event",
+  48: "Chronological Term",
+  50: "Topical Term",
+  51: "Geographic Name",
+  55: "Genre/Form Term",
+  62: "Medium of Performance Term",
+  80: "General Subdivision",
+  81: "Geographic Subdivision",
+  82: "Chronological Subdivision",
+  85: "Form Subdivision",
 }
 
 /**
