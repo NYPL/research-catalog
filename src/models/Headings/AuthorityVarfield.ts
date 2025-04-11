@@ -1,3 +1,5 @@
+import { headings } from "../../../pages/browse/sierraUtils"
+
 export type VarField = {
   content: string
   fieldTag: string
@@ -10,9 +12,12 @@ class AuthorityVarfield {
   label: string
   type: string
   url: string
-  constructor(varField: VarField) {
+  constructor(varField: VarField, varfieldType: "4xx" | "5xx" | "6xx") {
     this.varField = varField
-    this.label = this.getLabel()
+    const skipTags = {
+      "5xx": "w",
+    }
+    this.label = this.getLabel(skipTags[varfieldType])
     this.type = this.getHeadingType()
     this.url = `/search?filters[subjectLiteral][0]=${this.getSubjectLiteral()}`
   }
@@ -20,8 +25,11 @@ class AuthorityVarfield {
     const subfield = varfield.subfields.find((sf) => sf.tag === tag)
     return subfield.content
   }
-  getLabel() {
-    return this.varField.subfields.map((sf) => sf.content).join(" -- ")
+  getLabel(skipTag: string) {
+    return this.varField.subfields
+      .filter(({ tag }) => tag !== skipTag)
+      .map(({ content }) => content)
+      .join(" -- ")
   }
   buildSubfieldMap() {
     return this.varField.subfields.reduce((subFieldMap, field) => {
@@ -56,29 +64,11 @@ class AuthorityVarfield {
   getHeadingType() {
     const marcTag = this.varField.marcTag
     const digits = parseInt(marcTag, 10) % 100
-    console.log(digits)
     return headings[digits]
   }
 }
 
 export default AuthorityVarfield
-
-const headings = {
-  0: "Personal Name",
-  10: "Corporate Name",
-  11: "Meeting Name",
-  30: "Uniform Title",
-  47: "Named Event",
-  48: "Chronological Term",
-  50: "Topical Term",
-  51: "Geographic Name",
-  55: "Genre/Form Term",
-  62: "Medium of Performance Term",
-  80: "General Subdivision",
-  81: "Geographic Subdivision",
-  82: "Chronological Subdivision",
-  85: "Form Subdivision",
-}
 
 /**
  *  Generally usable formatting utils

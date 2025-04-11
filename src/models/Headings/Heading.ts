@@ -26,7 +26,7 @@ class Heading {
       }
     )
     return fiveHundreds.map(
-      (fiveHundredField) => new AuthorityVarfield(fiveHundredField)
+      (fiveHundredField) => new AuthorityVarfield(fiveHundredField, "5xx")
     )
   }
 }

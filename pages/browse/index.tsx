@@ -6,10 +6,12 @@ import type AuthorityVarfield from "../../src/models/Headings/AuthorityVarfield"
 
 function HeadingDisplay({ url, label, type }: AuthorityVarfield) {
   return (
-    <Flex flexDirection="row" alignItems="center">
-      <RCLink href={url}>{label}</RCLink>
-      <Text>{"(" + type + ")"}</Text>
-    </Flex>
+    <li>
+      <Flex flexDirection="row" alignItems="center">
+        <RCLink href={url}>{label}</RCLink>
+        <Text>{"(" + type + ")"}</Text>
+      </Flex>
+    </li>
   )
 }
 
