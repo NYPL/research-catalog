@@ -14,12 +14,8 @@ function HeadingDisplay({
     display && (
       <li>
         <Flex flexDirection="row" alignItems="center">
-          {url ? (
-            <RCLink href={url}>{this.variantDescription + label}</RCLink>
-          ) : (
-            label
-          )}
-          <Text>{"(" + type + ")"}</Text>
+          {url ? <RCLink href={url}>{label}</RCLink> : label}
+          <Text>{" (" + type + ")"}</Text>
         </Flex>
       </li>
     )
@@ -36,24 +32,28 @@ export default function Browse({ subjectHeadingsFromSierra }) {
         return (
           <li key={i}>
             <HeadingDisplay {...primary} />
-            <Flex>
-              {"See also 5xx fields (Links to browse search)"}
-              <List type="ul">
-                {fiveHundreds.map((field, i) => {
-                  return <HeadingDisplay {...field} key={i} />
-                })}
-              </List>
-            </Flex>
-            <Flex>
-              {
-                "See 4xx fields (unauthorized but recognized variants in spelling, etc)"
-              }
-              <List type="ul">
-                {fourHundreds.map((field, i) => {
-                  return <HeadingDisplay {...field} key={i} />
-                })}
-              </List>
-            </Flex>
+            {fiveHundreds.filter(({ display }) => display).length > 0 && (
+              <Flex>
+                {"See also 5xx fields (Links to browse search)"}
+                <List type="ul">
+                  {fiveHundreds.map((field, i) => {
+                    return <HeadingDisplay {...field} key={i} />
+                  })}
+                </List>
+              </Flex>
+            )}
+            {fourHundreds.filter(({ display }) => display).length > 0 && (
+              <Flex>
+                {
+                  "See 4xx fields (unauthorized but recognized variants in spelling, etc)"
+                }
+                <List type="ul">
+                  {fourHundreds.map((field, i) => {
+                    return <HeadingDisplay {...field} key={i} />
+                  })}
+                </List>
+              </Flex>
+            )}
           </li>
         )
       })}
