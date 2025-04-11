@@ -4,7 +4,7 @@ class VariantVarfield extends AuthorityVarfield {
   broaderTerm: boolean
   constructor(varfield: VarField) {
     super(varfield)
-    this.label = this.getLabel({ skipTags: ["w", "i"] })
+    this.label = this.getLabel({ skipTags: ["w", "i", "0", "1"] })
     this.url = `/browse?q=${this.label.split(" -- ")[0]}`
     this.display = this.shouldDisplay()
     this.broaderTerm = this.getBroaderTerm()
