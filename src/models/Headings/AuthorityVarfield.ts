@@ -1,4 +1,4 @@
-import { headings } from "./sierraUtils"
+import { headings } from "../../utils/sierraUtils"
 
 export type VarField = {
   content: string

@@ -11,8 +11,8 @@
  *  --type TYPE - Specify bib or item
  */
 
-import type { VarField } from "./AuthorityVarfield"
-import sierraClient from "../../server/sierraClient/index"
+import type { VarField } from "../models/Headings/AuthorityVarfield"
+import sierraClient from "../server/sierraClient/index"
 type QueryOptions = {
   query: string
   limit?: number

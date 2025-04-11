@@ -1,6 +1,6 @@
 import { Flex, List, Text } from "@nypl/design-system-react-components"
 import RCLink from "../../src/components/Links/RCLink/RCLink"
-import { run } from "../../src/models/Headings/sierraUtils"
+import { run } from "../../src/utils/sierraUtils"
 import Heading from "../../src/models/Headings/Heading"
 import type AuthorityVarfield from "../../src/models/Headings/AuthorityVarfield"
 
