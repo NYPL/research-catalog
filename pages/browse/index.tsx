@@ -1,4 +1,4 @@
-import { List, Spacer, Text } from "@nypl/design-system-react-components"
+import { Flex, List, Text } from "@nypl/design-system-react-components"
 import RCLink from "../../src/components/Links/RCLink/RCLink"
 import { run } from "./sierraUtils"
 import SubjectHeading from "../../src/models/Heading"
@@ -12,9 +12,10 @@ export default function Browse({ subjectHeadingsFromSierra }) {
       {subjectHeadings?.map(({ label, url, type }, i) => {
         return (
           <li key={i}>
-            <RCLink href={url}>{label}</RCLink>
-            <Spacer />
-            <Text>{type}</Text>
+            <Flex>
+              <RCLink href={url}>{label}</RCLink>
+              <Text>{type}</Text>
+            </Flex>
           </li>
         )
       })}

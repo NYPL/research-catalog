@@ -72,9 +72,8 @@ class AuthorizedHeading {
     )
   }
   getHeadingType() {
-    const marcField = this.getFieldTagD().marcField
-    console.log(marcField)
-    return headings[marcField]
+    const marcTag = this.getFieldTagD().marcTag
+    return headings[marcTag]
   }
   get400Variants() {
     return []
