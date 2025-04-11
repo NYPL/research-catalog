@@ -13,9 +13,13 @@ class AuthorityVarfield {
   type: string
   url: string
   display: boolean
+  t: string
   constructor(varField: VarField) {
     this.varField = varField
-    this.label = this.getLabel()
+    this.t = this.getSubfieldContent("t")
+      ? " (-- " + this.getSubfieldContent("t") + ")"
+      : ""
+    this.label = this.getSubjectLiteral() + this.t
     this.type = this.getHeadingType()
     this.url = `/search?filters[subjectLiteral][0]=${this.getSubjectLiteral()}`
     this.display = true
@@ -49,6 +53,7 @@ class AuthorityVarfield {
           "d",
           "e",
           "g",
+
           "4",
         ])
           .map((v) => (Array.isArray(v) ? v.join(" ") : v))
