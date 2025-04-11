@@ -8,14 +8,14 @@ export type SierraAuthority = {
 
 class Heading {
   primary: AuthorityVarfield
-  fiveHundreds: VariantVarfield[]
+  seeAlso: VariantVarfield[]
   fourHundreds: VariantVarfield[]
   broaderTerms: VariantVarfield[]
   constructor(sierraAuthorityRecord: SierraAuthority) {
     this.primary = new AuthorityVarfield(
       this.getFieldTagD(sierraAuthorityRecord)
     )
-    this.fiveHundreds = this.getFiveHundreds(sierraAuthorityRecord).filter(
+    this.seeAlso = this.getFiveHundreds(sierraAuthorityRecord).filter(
       ({ broaderTerm }) => !broaderTerm
     )
     this.broaderTerms = this.getFiveHundreds(sierraAuthorityRecord).filter(

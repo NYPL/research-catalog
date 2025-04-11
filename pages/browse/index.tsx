@@ -29,7 +29,7 @@ export default function Browse({ subjectHeadingsFromSierra }) {
   return (
     <List type="ul">
       {subjectHeadings.map(
-        ({ primary, fiveHundreds, fourHundreds, broaderTerms }, i) => {
+        ({ primary, seeAlso, fourHundreds, broaderTerms }, i) => {
           return (
             <li key={i}>
               <HeadingDisplay {...primary} />
@@ -43,11 +43,11 @@ export default function Browse({ subjectHeadingsFromSierra }) {
                   </List>
                 </Flex>
               )}
-              {fiveHundreds.filter(({ display }) => display).length > 0 && (
+              {seeAlso.filter(({ display }) => display).length > 0 && (
                 <Flex>
                   {"See also"}
                   <List type="ul">
-                    {fiveHundreds.map((field, i) => {
+                    {seeAlso.map((field, i) => {
                       return <HeadingDisplay {...field} key={i} />
                     })}
                   </List>
