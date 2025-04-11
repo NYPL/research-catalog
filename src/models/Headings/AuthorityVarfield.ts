@@ -12,12 +12,9 @@ class AuthorityVarfield {
   label: string
   type: string
   url: string
-  constructor(varField: VarField, varfieldType: "4xx" | "5xx" | "6xx") {
+  constructor(varField: VarField) {
     this.varField = varField
-    const skipTags = {
-      "5xx": "w",
-    }
-    this.label = this.getLabel(skipTags[varfieldType])
+    this.label = this.getLabel()
     this.type = this.getHeadingType()
     this.url = `/search?filters[subjectLiteral][0]=${this.getSubjectLiteral()}`
   }
@@ -25,11 +22,14 @@ class AuthorityVarfield {
     const subfield = varfield.subfields.find((sf) => sf.tag === tag)
     return subfield.content
   }
-  getLabel(skipTag: string) {
-    return this.varField.subfields
-      .filter(({ tag }) => tag !== skipTag)
-      .map(({ content }) => content)
-      .join(" -- ")
+  getLabel(opts = {}) {
+    return (
+      this.varField.subfields
+        // if there is a skip tag, pass the skip tag along
+        .filter(({ tag }) => !opts.skipTag || tag !== opts.skipTag)
+        .map(({ content }) => content)
+        .join(" -- ")
+    )
   }
   buildSubfieldMap() {
     return this.varField.subfields.reduce((subFieldMap, field) => {
