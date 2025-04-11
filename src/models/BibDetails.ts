@@ -391,7 +391,7 @@ export default class BibDetails {
         const filterQueryForSubjectHeading = "/browse?q="
         // splitSubjectHeadings: ["a", "b", "c"]
         const splitSubjectHeadings = subject.split(" -- ")
-        return splitSubjectHeadings.map((heading, index) => {
+        return splitSubjectHeadings.map((heading) => {
           const urlWithFilterQuery = `${filterQueryForSubjectHeading}${encodeURI(
             heading
           )}`
