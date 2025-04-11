@@ -12,12 +12,12 @@ function HeadingDisplay({
 }: AuthorityVarfield) {
   return (
     display && (
-      <li>
-        <Flex flexDirection="row" alignItems="center">
-          {url ? <RCLink href={url}>{label}</RCLink> : label}
-          <Text>{" (" + type + ")"}</Text>
-        </Flex>
-      </li>
+      // <li>
+      <Flex flexDirection="row" alignItems="center">
+        {url ? <RCLink href={url}>{label}</RCLink> : label}
+        <Text>{" (" + type + ")"}</Text>
+      </Flex>
+      // </li>
     )
   )
 }
@@ -36,21 +36,21 @@ export default function Browse({ subjectHeadingsFromSierra }) {
               {broaderTerms.filter(({ display }) => display).length > 0 && (
                 <Flex>
                   {"Broader terms"}
-                  <List type="ul">
-                    {broaderTerms.map((field, i) => {
-                      return <HeadingDisplay {...field} key={i} />
-                    })}
-                  </List>
+                  {/* <List type="ul"> */}
+                  {broaderTerms.map((field, i) => {
+                    return <HeadingDisplay {...field} key={i} />
+                  })}
+                  {/* </List> */}
                 </Flex>
               )}
               {seeAlso.filter(({ display }) => display).length > 0 && (
                 <Flex>
                   {"See also"}
-                  <List type="ul">
-                    {seeAlso.map((field, i) => {
-                      return <HeadingDisplay {...field} key={i} />
-                    })}
-                  </List>
+                  {/* <List type="ul"> */}
+                  {seeAlso.map((field, i) => {
+                    return <HeadingDisplay {...field} key={i} />
+                  })}
+                  {/* </List> */}
                 </Flex>
               )}
               {/* {fourHundreds.filter(({ display }) => display).length > 0 && (
