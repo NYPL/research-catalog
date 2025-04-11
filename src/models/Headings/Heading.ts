@@ -1,5 +1,5 @@
 import AuthorityVarfield, { type VarField } from "./AuthorityVarfield"
-import FiveHundredVarfield from "./FiveHundredVarfield"
+import VariantVarfield from "./VariantVarfield"
 
 export type SierraAuthority = {
   id: number
@@ -8,8 +8,8 @@ export type SierraAuthority = {
 
 class Heading {
   primary: AuthorityVarfield
-  fiveHundreds: FiveHundredVarfield[]
-  fourHundreds: FiveHundredVarfield[]
+  fiveHundreds: VariantVarfield[]
+  fourHundreds: VariantVarfield[]
   constructor(sierraAuthorityRecord: SierraAuthority) {
     this.primary = new AuthorityVarfield(
       this.getFieldTagD(sierraAuthorityRecord)
@@ -34,12 +34,12 @@ class Heading {
   }
   getFiveHundreds(sierraAuthorityRecord) {
     return this.getXXFields(sierraAuthorityRecord, 500).map(
-      (field) => new FiveHundredVarfield(field)
+      (field) => new VariantVarfield(field)
     )
   }
   getFourHundreds(sierraAuthorityRecord) {
     return this.getXXFields(sierraAuthorityRecord, 400).map(
-      (field) => new FiveHundredVarfield(field)
+      (field) => new VariantVarfield(field)
     )
   }
 }

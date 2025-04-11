@@ -20,7 +20,7 @@ class AuthorityVarfield {
     this.url = `/search?filters[subjectLiteral][0]=${this.getSubjectLiteral()}`
     this.display = true
   }
-  getSubfield(tag) {
+  getSubfieldContent(tag) {
     const subfield = this.varField.subfields.find((sf) => sf.tag === tag)
     return subfield?.content
   }

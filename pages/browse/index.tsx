@@ -14,7 +14,11 @@ function HeadingDisplay({
     display && (
       <li>
         <Flex flexDirection="row" alignItems="center">
-          {url ? <RCLink href={url}>{label}</RCLink> : label}
+          {url ? (
+            <RCLink href={url}>{this.variantDescription + label}</RCLink>
+          ) : (
+            label
+          )}
           <Text>{"(" + type + ")"}</Text>
         </Flex>
       </li>
