@@ -12,6 +12,7 @@
  */
 
 import type { VarField } from "../models/Headings/AuthorityVarfield"
+import { SierraAuthority } from "../models/Headings/Heading"
 import sierraClient from "../server/sierraClient/index"
 type QueryOptions = {
   query: string
@@ -115,7 +116,7 @@ const getRecordsByName = async (
 export const run = async (
   options: QueryOptions,
   prefetchedIds?: string[]
-): Promise<VarField[]> => {
+): Promise<SierraAuthority[]> => {
   console.log(`Querying authorities  by ${options.query}`)
   let records
   if (prefetchedIds) {

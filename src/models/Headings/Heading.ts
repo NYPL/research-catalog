@@ -4,6 +4,7 @@ import VariantVarfield from "./VariantVarfield"
 export type SierraAuthority = {
   id: number
   varFields: VarField[]
+  count: number
 }
 
 class Heading {
@@ -11,40 +12,38 @@ class Heading {
   seeAlso: VariantVarfield[]
   fourHundreds: VariantVarfield[]
   broaderTerms: VariantVarfield[]
-  constructor(sierraAuthorityRecord: SierraAuthority) {
-    this.primary = new AuthorityVarfield(
-      this.getFieldTagD(sierraAuthorityRecord)
-    )
-    this.seeAlso = this.getFiveHundreds(sierraAuthorityRecord).filter(
+  count: number
+  constructor(sierraAuthorityData: SierraAuthority) {
+    this.count = sierraAuthorityData.count
+    this.primary = new AuthorityVarfield(this.getFieldTagD(sierraAuthorityData))
+    this.seeAlso = this.getFiveHundreds(sierraAuthorityData).filter(
       ({ broaderTerm }) => !broaderTerm
     )
-    this.broaderTerms = this.getFiveHundreds(sierraAuthorityRecord).filter(
+    this.broaderTerms = this.getFiveHundreds(sierraAuthorityData).filter(
       ({ broaderTerm }) => broaderTerm
     )
-    this.fourHundreds = this.getFourHundreds(sierraAuthorityRecord)
+    this.fourHundreds = this.getFourHundreds(sierraAuthorityData)
   }
   getFieldTagD(authorityRecord) {
     const fieldTagD = authorityRecord.varFields.find((f) => f.fieldTag === "d")
     return fieldTagD
   }
-  getXXFields(sierraAuthorityRecord, number: 400 | 500 | 600) {
+  getXXFields(sierraAuthorityData, number: 400 | 500 | 600) {
     const min = number - 1
     const max = number + 100
-    const xxFields = sierraAuthorityRecord.varFields.filter(
-      (field: VarField) => {
-        const tag = parseInt(field.marcTag, 10)
-        return tag > min && tag < max
-      }
-    )
+    const xxFields = sierraAuthorityData.varFields.filter((field: VarField) => {
+      const tag = parseInt(field.marcTag, 10)
+      return tag > min && tag < max
+    })
     return xxFields
   }
-  getFiveHundreds(sierraAuthorityRecord) {
-    return this.getXXFields(sierraAuthorityRecord, 500).map(
+  getFiveHundreds(sierraAuthorityData) {
+    return this.getXXFields(sierraAuthorityData, 500).map(
       (field) => new VariantVarfield(field)
     )
   }
-  getFourHundreds(sierraAuthorityRecord) {
-    return this.getXXFields(sierraAuthorityRecord, 400).map(
+  getFourHundreds(sierraAuthorityData) {
+    return this.getXXFields(sierraAuthorityData, 400).map(
       (field) => new VariantVarfield(field)
     )
   }
