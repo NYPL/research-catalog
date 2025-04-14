@@ -58,7 +58,9 @@ export default function Browse({ subjectHeadingsWithCounts }) {
     ]
   })
   const router = useRouter()
-  const [browseScope, setBrowseScope] = useState("has")
+  const [browseScope, setBrowseScope] = useState(
+    router.query.scope ? router.query.scope : "has"
+  )
   const columnHeaders = ["Subject", "Count", "See also", "Broader terms"]
   const [query, setQuery] = useState(router.query.q)
   return (
@@ -101,9 +103,10 @@ export default function Browse({ subjectHeadingsWithCounts }) {
 
 export async function getServerSideProps({ query }) {
   const { q, scope } = query
+  const operator = scope ? scope : "has"
   const subjectHeadingsFromSierra = await run({
     query: q,
-    operator: scope || "has",
+    operator,
   })
   const [esUri, esIndex, esApiKey] = await kmsDecryptCreds([
     process.env.NEXT_PUBLIC_ES_URI,
