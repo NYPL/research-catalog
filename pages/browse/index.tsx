@@ -72,7 +72,7 @@ export default function Browse({ subjectHeadingsWithCounts }) {
           onChange: (e: SyntheticEvent) => {
             setBrowseScope((e.target as HTMLInputElement).value)
           },
-          value: browseScope,
+          value: browseScope as string,
           name: "selectBrowseOption",
           optionsData: [
             { text: "Contains", value: "has" },
