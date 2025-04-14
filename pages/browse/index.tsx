@@ -1,10 +1,18 @@
-import { Flex, List, Table, Text } from "@nypl/design-system-react-components"
+import {
+  Flex,
+  List,
+  SearchBar,
+  Table,
+  Text,
+} from "@nypl/design-system-react-components"
 import RCLink from "../../src/components/Links/RCLink/RCLink"
 import { run } from "../../src/utils/sierraUtils"
 import Heading from "../../src/models/Headings/Heading"
 import type AuthorityVarfield from "../../src/models/Headings/AuthorityVarfield"
 import { kmsDecryptCreds } from "../../src/server/kms"
 import Layout from "../../src/components/Layout/Layout"
+import { SyntheticEvent, useState } from "react"
+import { useRouter } from "next/router"
 
 function HeadingDisplay({
   url = null,
@@ -48,9 +56,38 @@ export default function Browse({ subjectHeadingsWithCounts }) {
       )),
     ]
   })
+  const router = useRouter()
+  const [browseScope, setBrowseScope] = useState("has")
   const columnHeaders = ["Subject", "Count", "See also", "Broader terms"]
+  const [query, setQuery] = useState(router.query.q)
   return (
     <Layout>
+      <SearchBar
+        id="subject-browse-search-input"
+        labelText="Subject browse search input"
+        selectProps={{
+          onChange: (e) => {
+            setBrowseScope(e.target.value)
+          },
+          value: browseScope,
+          name: "selectBrowseOption",
+          optionsData: [
+            { text: "Contains", value: "has" },
+            { text: "Starts with", value: "starts_with" },
+          ],
+        }}
+        onSubmit={(e: SyntheticEvent) => {
+          router.push(`/browse?scope=${browseScope}&q=${query}`)
+        }}
+        textInputProps={{
+          labelText: "searchinput",
+          onChange: (e: SyntheticEvent) => {
+            setQuery(e.target.value)
+          },
+          value: query,
+          name: "q",
+        }}
+      />
       <Table
         showRowDividers
         useRowHeaders
@@ -62,8 +99,11 @@ export default function Browse({ subjectHeadingsWithCounts }) {
 }
 
 export async function getServerSideProps({ query }) {
-  const { q } = query
-  const subjectHeadingsFromSierra = await run({ query: q, operator: "has" })
+  const { q, scope } = query
+  const subjectHeadingsFromSierra = await run({
+    query: q,
+    operator: scope || "has",
+  })
   const [esUri, esIndex, esApiKey] = await kmsDecryptCreds([
     process.env.NEXT_PUBLIC_ES_URI,
     process.env.NEXT_PUBLIC_ES_INDEX,
