@@ -76,6 +76,11 @@ export default function Browse({ subjectHeadingsFromSierra }) {
 export async function getServerSideProps({ query }) {
   const { q } = query
   const subjectHeadingsFromSierra = await run({ query: q, operator: "has" })
+  const counts = await Promise.all(
+    subjectHeadingsFromSierra.map(async (sh) => {
+      const _es_uri = "spaghetti"
+    })
+  )
   return {
     props: {
       subjectHeadingsFromSierra,
