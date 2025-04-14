@@ -11,7 +11,7 @@ import {
   Text,
 } from "@nypl/design-system-react-components"
 
-import { ELECTRONIC_RESOURCES_PER_BIB_PAGE } from "../../config/constants"
+import { ELECTRONIC_RESOURCNEXT_PUBLIC_ES_PER_BIB_PAGE } from "../../config/constants"
 import ExternalLink from "../Links/ExternalLink/ExternalLink"
 import type { ElectronicResource } from "../../types/bibTypes"
 
@@ -31,7 +31,10 @@ const ElectronicResources = ({
   const [electronicResourcesToDisplay, setElectronicResourcesToDisplay] =
     useState(
       electronicResources &&
-        electronicResources.slice(0, ELECTRONIC_RESOURCES_PER_BIB_PAGE)
+        electronicResources.slice(
+          0,
+          ELECTRONIC_RESOURCNEXT_PUBLIC_ES_PER_BIB_PAGE
+        )
     )
   const scrollToRef = useRef<null | HTMLDivElement>(null)
 
@@ -42,7 +45,10 @@ const ElectronicResources = ({
       setElectronicResourcesToDisplay(
         prev
           ? electronicResources
-          : electronicResources.slice(0, ELECTRONIC_RESOURCES_PER_BIB_PAGE)
+          : electronicResources.slice(
+              0,
+              ELECTRONIC_RESOURCNEXT_PUBLIC_ES_PER_BIB_PAGE
+            )
       )
       return !prev
     })
@@ -78,7 +84,8 @@ const ElectronicResources = ({
             </ExternalLink>
           ))}
         />
-        {electronicResources.length > ELECTRONIC_RESOURCES_PER_BIB_PAGE ? (
+        {electronicResources.length >
+        ELECTRONIC_RESOURCNEXT_PUBLIC_ES_PER_BIB_PAGE ? (
           <Button
             id="see-more-eresources-button"
             data-testid="see-more-eresources-button"

@@ -65,11 +65,15 @@ export async function getServerSideProps({ query }) {
   const { q } = query
   const subjectHeadingsFromSierra = await run({ query: q, operator: "has" })
   const [esUri, esIndex, esApiKey] = await kmsDecryptCreds([
-    process.env.ES_URI,
-    process.env.ES_INDEX,
-    process.env.ES_API_KEY,
+    process.env.NEXT_PUBLIC_ES_URI,
+    process.env.NEXT_PUBLIC_ES_INDEX,
+    process.env.NEXT_PUBLIC_ES_API_KEY,
   ])
-
+  console.log(
+    process.env.NEXT_PUBLIC_ES_URI,
+    process.env.NEXT_PUBLIC_ES_INDEX,
+    process.env.NEXT_PUBLIC_ES_API_KEY
+  )
   const subjectHeadingsWithCounts = await Promise.all(
     subjectHeadingsFromSierra.map(async (sh) => {
       const esResponse = await fetch(`${esUri}/${esIndex}/_count`, {
