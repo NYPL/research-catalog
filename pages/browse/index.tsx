@@ -69,11 +69,6 @@ export async function getServerSideProps({ query }) {
     process.env.NEXT_PUBLIC_ES_INDEX,
     process.env.NEXT_PUBLIC_ES_API_KEY,
   ])
-  console.log(
-    process.env.NEXT_PUBLIC_ES_URI,
-    process.env.NEXT_PUBLIC_ES_INDEX,
-    process.env.NEXT_PUBLIC_ES_API_KEY
-  )
   const subjectHeadingsWithCounts = await Promise.all(
     subjectHeadingsFromSierra.map(async (sh) => {
       const esResponse = await fetch(`${esUri}/${esIndex}/_count`, {
