@@ -54,11 +54,11 @@ export async function fetchBib(
 
   // Get subject headings from SHEP API
   // TODO: Revisit this after Enhanced Browse work to determine if it's still necessary
-  if (discoveryBibResult.subjectLiteral?.length) {
-    const subjectHeadingData = await fetchBibSubjectHeadings(id)
-    discoveryBibResult.subjectHeadings =
-      (subjectHeadingData && subjectHeadingData["subject_headings"]) || null
-  }
+  // if (discoveryBibResult.subjectLiteral?.length) {
+  //   const subjectHeadingData = await fetchBibSubjectHeadings(id)
+  //   discoveryBibResult.subjectHeadings =
+  //     (subjectHeadingData && subjectHeadingData["subject_headings"]) || null
+  // }
 
   try {
     // If there's a problem with a bib, try to fetch from the Sierra API and redirect to circulating catalog

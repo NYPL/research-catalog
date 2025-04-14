@@ -33,8 +33,7 @@ export default class BibDetails {
     this.extent = this.buildExtent()
     this.owner = this.buildOwner()
     // If we can't retreive subject headings from the SHEP API, we'll use the subjectLiteral
-    this.subjectLiteral =
-      this.buildSubjectHeadings() || this.buildSubjectLiterals()
+    this.subjectLiteral = this.buildSubjectLiterals()
     // these are the actual arrays of details that will be displayed
     this.annotatedMarcDetails = this.buildAnnotatedMarcDetails(
       annotatedMarc?.fields
@@ -386,15 +385,15 @@ export default class BibDetails {
     const subjectLiteralUrls = this.bib.subjectLiteral.map(
       (subject: string) => {
         subject = subject.replace(/\.$/, "")
-        // stackedSubjectHeadings: ["a", "a -- b", "a -- b -- c"]
-        const stackedSubjectHeadings =
-          this.constructSubjectLiteralsArray(subject)
-        const filterQueryForSubjectHeading = "/search?filters[subjectLiteral]="
+        // // stackedSubjectHeadings: ["a", "a -- b", "a -- b -- c"]
+        // const stackedSubjectHeadings =
+        //   this.constructSubjectLiteralsArray(subject)
+        const filterQueryForSubjectHeading = "/browse?q="
         // splitSubjectHeadings: ["a", "b", "c"]
         const splitSubjectHeadings = subject.split(" -- ")
-        return splitSubjectHeadings.map((heading, index) => {
+        return splitSubjectHeadings.map((heading) => {
           const urlWithFilterQuery = `${filterQueryForSubjectHeading}${encodeURI(
-            stackedSubjectHeadings[index]
+            heading
           )}`
           return {
             url: urlWithFilterQuery,
