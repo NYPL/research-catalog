@@ -12,7 +12,7 @@
  */
 
 import type { VarField } from "../models/Headings/AuthorityVarfield"
-import { SierraAuthority } from "../models/Headings/Heading"
+import type { SierraAuthority } from "../models/Headings/Heading"
 import sierraClient from "../server/sierraClient/index"
 type QueryOptions = {
   query: string

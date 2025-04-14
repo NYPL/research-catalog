@@ -17,7 +17,7 @@ function HeadingDisplay({
       // <li>
       <Flex flexDirection="row" alignItems="center">
         {url ? <RCLink href={url}>{label}</RCLink> : label}
-        <Text>{` (${type}) ${count ? count : ""}`}</Text>
+        <Text>{` (${type}) ${count !== undefined ? count : ""}`}</Text>
       </Flex>
       // </li>
     )
@@ -32,10 +32,10 @@ export default function Browse({ subjectHeadingsWithCounts }) {
   return (
     <List type="ul">
       {subjectHeadings.map(
-        ({ primary, seeAlso, fourHundreds, broaderTerms }, i) => {
+        ({ primary, seeAlso, fourHundreds, broaderTerms, count }, i) => {
           return (
             <li key={i}>
-              <HeadingDisplay {...primary} />
+              <HeadingDisplay {...primary} count={count} />
               {broaderTerms.filter(({ display }) => display).length > 0 && (
                 <Flex>
                   {"Broader terms"}
@@ -110,7 +110,6 @@ export async function getServerSideProps({ query }) {
         }),
       })
       const count = await esResponse.json().then((json) => json.count)
-      console.log(count)
       return { ...sh, count }
     })
   )
