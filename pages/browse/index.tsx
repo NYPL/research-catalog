@@ -4,23 +4,27 @@ import { run } from "../../src/utils/sierraUtils"
 import Heading from "../../src/models/Headings/Heading"
 import type AuthorityVarfield from "../../src/models/Headings/AuthorityVarfield"
 import { kmsDecryptCreds } from "../../src/server/kms"
+import Layout from "../../src/components/Layout/Layout"
 
 function HeadingDisplay({
   url = null,
   label,
-  type,
+  // type,
   display,
-  count,
-}: AuthorityVarfield) {
+}: // count,
+{
+  url: string
+  label: string
+  display: boolean
+}) {
   return (
-    display && (
-      // <li>
-      <Flex flexDirection="row" alignItems="center">
-        {url ? <RCLink href={url}>{label}</RCLink> : label}
-        <Text>{` (${type}) ${count !== undefined ? count : ""}`}</Text>
-      </Flex>
-      // </li>
-    )
+    display &&
+    // <li>
+    // <Flex flexDirection="row" alignItems="center">
+    (url ? <RCLink href={url}>{label}</RCLink> : label)
+    // <Text>{` (${type})}`}</Text>
+    // </Flex>
+    // </li>
   )
 }
 
@@ -28,51 +32,28 @@ export default function Browse({ subjectHeadingsWithCounts }) {
   const subjectHeadings = subjectHeadingsWithCounts.map(
     (heading) => new Heading(heading)
   )
-
+  console.log(subjectHeadings)
+  const tableData = subjectHeadings.map((heading: Heading) => {
+    return [
+      <HeadingDisplay key={heading.primary.label} {...heading.primary} />,
+      heading.count,
+      heading.seeAlso.map((h, i) => (
+        <List key={i} type="ul">
+          <HeadingDisplay {...h} />
+        </List>
+      )),
+      heading.broaderTerms.map((h, i) => (
+        <List key={i} type="ul">
+          <HeadingDisplay {...h} />
+        </List>
+      )),
+    ]
+  })
+  const columnHeaders = ["Subject", "Count", "See also", "Broader terms"]
   return (
-    <List type="ul">
-      {subjectHeadings.map(
-        ({ primary, seeAlso, fourHundreds, broaderTerms, count }, i) => {
-          return (
-            <li key={i}>
-              <HeadingDisplay {...primary} count={count} />
-              {broaderTerms.filter(({ display }) => display).length > 0 && (
-                <Flex>
-                  {"Broader terms"}
-                  {/* <List type="ul"> */}
-                  {broaderTerms.map((field, i) => {
-                    return <HeadingDisplay {...field} key={i} />
-                  })}
-                  {/* </List> */}
-                </Flex>
-              )}
-              {seeAlso.filter(({ display }) => display).length > 0 && (
-                <Flex>
-                  {"See also"}
-                  {/* <List type="ul"> */}
-                  {seeAlso.map((field, i) => {
-                    return <HeadingDisplay {...field} key={i} />
-                  })}
-                  {/* </List> */}
-                </Flex>
-              )}
-              {/* {fourHundreds.filter(({ display }) => display).length > 0 && (
-                <Flex>
-                  {
-                    "See 4xx fields (unauthorized but recognized variants in spelling, etc)"
-                  }
-                  <List type="ul">
-                    {fourHundreds.map((field, i) => {
-                      return <HeadingDisplay {...field} key={i} />
-                    })}
-                  </List>
-                </Flex>
-              )} */}
-            </li>
-          )
-        }
-      )}
-    </List>
+    <Layout>
+      <Table columnHeaders={columnHeaders} tableData={tableData} />
+    </Layout>
   )
 }
 
