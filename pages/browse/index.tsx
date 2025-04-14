@@ -32,7 +32,6 @@ export default function Browse({ subjectHeadingsWithCounts }) {
   const subjectHeadings = subjectHeadingsWithCounts.map(
     (heading) => new Heading(heading)
   )
-  console.log(subjectHeadings)
   const tableData = subjectHeadings.map((heading: Heading) => {
     return [
       <HeadingDisplay key={heading.primary.label} {...heading.primary} />,
@@ -52,7 +51,12 @@ export default function Browse({ subjectHeadingsWithCounts }) {
   const columnHeaders = ["Subject", "Count", "See also", "Broader terms"]
   return (
     <Layout>
-      <Table columnHeaders={columnHeaders} tableData={tableData} />
+      <Table
+        showRowDividers
+        useRowHeaders
+        columnHeaders={columnHeaders}
+        tableData={tableData}
+      />
     </Layout>
   )
 }
