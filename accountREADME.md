@@ -89,7 +89,8 @@ Route parameter is the patron ID. Request body can include any fields on the pat
 
 exampleBody: {
     emails: ['new@email.com'],
-    phones: [6466600432]
+    phones: [12345678],
+    homeLibraryCode: 'sn'
 },
 
 ```

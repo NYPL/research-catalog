@@ -56,38 +56,26 @@ const ItemTableControls = ({
       ) : null}
       {bib.showViewAllItemsLink(filtersAreApplied) &&
         (itemsLoading && viewAllExpanded ? (
-          <Box
-            ml="auto"
-            display="flex"
-            justifyContent="flex-start"
-            alignItems="center"
-          >
-            <ProgressIndicator
-              id="bib-all-items-loading"
-              labelText={viewAllLoadingMessage}
-              size="small"
-              indicatorType="circular"
-              mr="xs"
-              isIndeterminate
-            />
-            <Label
-              id="bib-all-items-loading-label"
-              htmlFor="bib-all-items-loading"
-              ref={viewAllLoadingTextRef}
-              fontSize={{
-                base: "mobile.body.body1",
-                md: "desktop.body.body1",
-              }}
-              fontWeight="medium"
-              mb={0}
-              // Label component does not expect tabIndex prop, so we are ignoring the typescript error that pops up.
-              // Add any additional props above this for typescript validation.
-              // @ts-expect-error
-              tabIndex={-1}
-            >
-              {viewAllLoadingMessage}
-            </Label>
-          </Box>
+          <ProgressIndicator
+            id="bib-all-items-loading"
+            labelText={viewAllLoadingMessage}
+            size="small"
+            indicatorType="circular"
+            isIndeterminate
+            marginLeft="auto"
+            labelPlacement="right"
+            sx={{
+              "div[role=progressbar]": { marginRight: "xs" },
+              label: {
+                fontWeight: "medium",
+                fontSize: {
+                  base: "mobile.body.body2",
+                  md: "desktop.body.body2",
+                },
+                marginBottom: 0,
+              },
+            }}
+          />
         ) : !itemsLoading ? (
           <>
             <RCLink

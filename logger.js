@@ -42,21 +42,21 @@ const initializeLogger = () => {
     }
     return JSON.stringify(logObject)
   })
-
   const transports = [
-    new winston.transports.Console({ level: "debug" }),
+    new winston.transports.Console({ level: process.env.LOG_LEVEL || "error" }),
     new winston.transports.File({
       filename: path.resolve(process.cwd(), "log", "rc.log"),
       // Log format space limited
       format: combine(winston.format.uncolorize(), formatter),
       maxsize: 5242880,
       maxFiles: 5,
+      level: process.env.LOG_LEVEL || "error",
     }),
   ]
 
   return winston.createLogger({
     levels: nyplLogLevels,
-    level: process.env.LOG_LEVEL || "info",
+    level: process.env.LOG_LEVEL || "error",
     format: combine(
       timestamp({
         format: "YYYY-MM-DD hh:mm:ss.SSS A",
@@ -68,7 +68,9 @@ const initializeLogger = () => {
 }
 
 const isRunningOnVercel = process.env.VERCEL === "1"
+const isRunningClientSide = typeof window !== "undefined"
 
-const logger = isRunningOnVercel ? console : initializeLogger()
+const logger =
+  isRunningOnVercel || isRunningClientSide ? console : initializeLogger()
 
 export default logger

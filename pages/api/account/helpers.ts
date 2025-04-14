@@ -1,5 +1,6 @@
 import sierraClient from "../../../src/server/sierraClient"
 import type { HTTPResponse } from "../../../src/types/appTypes"
+import nyplApiClient from "../../../src/server/nyplApiClient"
 
 /**
  * PUT request to Sierra to update patron PIN, first validating with previous PIN.
@@ -23,6 +24,52 @@ export async function updatePin(
     return {
       status: error.response.status,
       message: error.response.data.message || error.response.data.description,
+    }
+  }
+}
+
+/**
+ * PUT request to Sierra to update patron username, first validating that it's available.
+ * Returns status and message about request.
+ */
+export async function updateUsername(
+  patronId: string,
+  newUsername: string
+): Promise<HTTPResponse> {
+  try {
+    // If the new username is an empty string, skips validation and directly updates in Sierra.
+    const client = await sierraClient()
+    if (newUsername === "") {
+      const client = await sierraClient()
+      await client.put(`patrons/${patronId}`, {
+        varFields: [{ fieldTag: "u", content: newUsername }],
+      })
+      return { status: 200, message: "Username removed successfully" }
+    } else {
+      const platformClient = await nyplApiClient({ version: "v0.3" })
+      const response = await platformClient.post("/validations/username", {
+        username: newUsername,
+      })
+
+      if (response?.type === "available-username") {
+        await client.put(`patrons/${patronId}`, {
+          varFields: [{ fieldTag: "u", content: newUsername }],
+        })
+        return { status: 200, message: `Username updated to ${newUsername}` }
+      } else if (response?.type === "unavailable-username") {
+        // Username taken but not an error, returns a message.
+        return { status: 200, message: "Username taken" }
+      } else {
+        throw new Error("Username update failed")
+      }
+    }
+  } catch (error) {
+    return {
+      status: error?.status || 500,
+      message:
+        error?.message ||
+        error.response?.data?.description ||
+        "An error occurred",
     }
   }
 }

@@ -8,6 +8,8 @@ import {
 } from "@nypl/design-system-react-components"
 
 import type { DeliveryLocation } from "../../../src/types/locationTypes"
+import type { HoldErrorStatus } from "../../../src/types/holdPageTypes"
+import { holdButtonDisabledStatuses } from "../../../src/utils/holdPageUtils"
 
 import { BASE_URL } from "../../config/constants"
 
@@ -17,6 +19,7 @@ interface HoldRequestFormProps {
   holdId: string
   patronId: string
   source: string
+  errorStatus?: HoldErrorStatus
 }
 
 /**
@@ -28,6 +31,7 @@ const HoldRequestForm = ({
   holdId,
   patronId,
   source,
+  errorStatus,
 }: HoldRequestFormProps) => {
   return (
     <Form
@@ -68,7 +72,11 @@ const HoldRequestForm = ({
         </RadioGroup>
       </FormField>
       <ButtonGroup>
-        <Button id="holdRequestSubmit" type="submit">
+        <Button
+          id="holdRequestSubmit"
+          type="submit"
+          isDisabled={holdButtonDisabledStatuses.includes(errorStatus)}
+        >
           Submit request
         </Button>
       </ButtonGroup>

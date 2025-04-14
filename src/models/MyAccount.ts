@@ -201,8 +201,8 @@ export default class MyAccount {
       )
       throw new MyAccountModelError("building bibData for holds", e)
     }
-    try {
-      return holds.map((hold: SierraHold) => {
+    return holds.map((hold: SierraHold) => {
+      try {
         const bibId =
           hold.recordType === "i" ? hold.record.bibIds[0] : hold.record.id
         const bibForHold = bibDataMap[bibId]
@@ -224,13 +224,13 @@ export default class MyAccount {
               : `https://borrow.nypl.org/search/card?recordId=${bibId}`
             : null,
         }
-      })
-    } catch (e) {
-      console.error(
-        "Error building holds in MyAccount#buildHolds: " + e.message
-      )
-      throw new MyAccountModelError("building holds", e)
-    }
+      } catch (e) {
+        console.error(
+          "Error building hold in MyAccount#buildHolds: " + e.message
+        )
+        throw new MyAccountModelError("building holds", e)
+      }
+    })
   }
 
   buildCheckouts(
@@ -253,6 +253,7 @@ export default class MyAccount {
           const bibId = checkout.item.bibIds[0]
           const bibForCheckout = bibDataMap[bibId]
           return {
+            numberOfRenewals: checkout.numberOfRenewals,
             id: MyAccount.getRecordId(checkout.id),
             // Partner items do not have call numbers. Null has to be explicitly
             // returned for JSON serialization in getServerSideProps

@@ -1,15 +1,38 @@
-import { useContext } from "react"
-import { Text, Button, Box } from "@nypl/design-system-react-components"
+import { Text } from "@nypl/design-system-react-components"
 
 import ExternalLink from "../Links/ExternalLink/ExternalLink"
 import { appConfig } from "../../config/config"
 import type Item from "../../models/Item"
-import { FeedbackContext } from "../../context/FeedbackContext"
-import type { ItemMetadata } from "../../types/itemTypes"
+import { AVAILABILITY_KEYS } from "../../config/constants"
+import {
+  AvailableByAppointment,
+  AvailableAt,
+  AvailableAtLink,
+} from "./ItemAvailability/AvailableByAppointment"
+import AvailableOnsite from "./ItemAvailability/AvailableOnsite"
+import NotAvailable from "./ItemAvailability/NotAvailable"
+import FindingAid from "./ItemAvailability/FindingAid"
+import ContactALibrarian from "./ItemAvailability/ContactALibrarian"
 
 interface ItemAvailabilityProps {
   item: Item
 }
+
+const {
+  EDGE_CASE,
+  RECAP_GENERAL_COLLECTIONS,
+  ONSITE_GENERAL_COLLECTIONS,
+  NOT_AVAILABLE,
+  // special collections availability keys
+  RECAP_AEON,
+  ONSITE_AEON,
+  ONSITE_AEON_FINDING_AID,
+  RECAP_AEON_FINDING_AID,
+  ONSITE_FINDING_AID,
+  RECAP_FINDING_AID,
+  ONSITE_NO_FINDING_AID_NO_AEON,
+  RECAP_NO_FINDING_AID_NO_AEON,
+} = AVAILABILITY_KEYS
 
 /**
  * The ItemAvailability component appears below the Item table and displays
@@ -17,117 +40,96 @@ interface ItemAvailabilityProps {
  * TODO: Add Feedback box, Due date, Available font styles
  */
 const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
-  const { onOpen, setItemMetadata } = useContext(FeedbackContext)
-
-  const onContact = (metadata: ItemMetadata) => {
-    setItemMetadata(metadata)
-    onOpen()
+  let message
+  const itemMetadata = {
+    id: item.id,
+    barcode: item.barcode,
+    callNumber: item.callNumber,
+    bibId: item.bibId,
   }
-
-  // TODO: Move this logic into a getter function in the Item class that returns an availability status key
-  // and replace this nested If with a simple switch statement
-  if (item.isAvailable) {
-    if (item.isReCAP && !item.aeonUrl) {
-      // Available ReCAP item
+  switch (item.availability.key) {
+    case RECAP_GENERAL_COLLECTIONS:
       return (
         <ExternalLink href={appConfig.urls.researchMaterialsHelp} fontSize="sm">
           How do I pick up this item and when will it be ready?
         </ExternalLink>
       )
-    } else if (item.aeonUrl && item.location?.endpoint) {
-      return (
-        <Text
-          mb="0"
-          fontSize={{
-            base: "mobile.body.body2",
-            md: "desktop.body.body2",
-          }}
-        >
-          <Box as="span" color="ui.success.primary">
-            Available by appointment
-          </Box>
-          {!item.isReCAP ? (
-            <>
-              {" at "}
-              <ExternalLink
-                href={`${appConfig.urls.locations}${item.location.endpoint}`}
-              >
-                {item.location.prefLabel}
-              </ExternalLink>
-            </>
-          ) : null}
-        </Text>
+    case EDGE_CASE:
+      message = <ContactALibrarian item={itemMetadata} />
+      break
+    case RECAP_AEON:
+    case RECAP_AEON_FINDING_AID:
+      message = <AvailableByAppointment displayPeriod />
+      break
+    case ONSITE_AEON_FINDING_AID:
+      message = (
+        <>
+          <AvailableByAppointment />
+          <AvailableAtLink location={item.location} />
+        </>
       )
-    } else {
-      // Available Onsite item
-      const locationShort = item.location.prefLabel.split("-")[0]
-      return (
-        <Text
-          mb="0"
-          fontSize={{
-            base: "mobile.body.body2",
-            md: "desktop.body.body2",
-          }}
-        >
-          <Box as="span" color="ui.success.primary">
-            Available
-          </Box>
-          {" - Can be used on site. Please visit "}
-          <ExternalLink
-            href={`${appConfig.urls.locations}${item.location.endpoint}`}
-          >
-            {`New York Public Library - ${locationShort}`}
-          </ExternalLink>
-          {" to submit a request in person."}
-        </Text>
+      break
+    case ONSITE_AEON:
+      message = (
+        <>
+          <AvailableByAppointment />
+          <AvailableAt location={item.location} />
+        </>
       )
-    }
-  } else {
-    // Not available
-    return (
-      <Text
-        mb="0"
-        fontSize={{
-          base: "mobile.body.body2",
-          md: "desktop.body.body2",
-        }}
-      >
-        <Box as="span" color="ui.warning.tertiary">
-          Not available
-        </Box>
-        {item.dueDate && ` - In use until ${item.dueDate}`}
-        {" - Please "}
-        <Button
-          id="contact-librarian"
-          buttonType="link"
-          // TODO: Ask DS team to make button link variant match the default link styles
-          sx={{
-            display: "inline",
-            fontWeight: "inherit",
-            fontSize: "inherit",
-            p: 0,
-            height: "auto",
-            textAlign: "left",
-            minHeight: "auto",
-            textDecorationStyle: "dotted",
-            textDecorationThickness: "1px",
-            textUnderlineOffset: "2px",
-          }}
-          onClick={() =>
-            onContact({
-              id: item.id,
-              barcode: item.barcode,
-              callNumber: item.callNumber,
-              bibId: item.bibId,
-            })
-          }
-        >
-          contact a librarian
-        </Button>
-        {" for assistance."}
-      </Text>
-    )
+      break
+    case ONSITE_FINDING_AID:
+      message = (
+        <>
+          <AvailableByAppointment />
+          <AvailableAt location={item.location} />
+          <FindingAid url={item.availability.findingAid} />
+        </>
+      )
+      break
+    case RECAP_FINDING_AID:
+      message = (
+        <>
+          <AvailableByAppointment displayPeriod />
+          <FindingAid url={item.availability.findingAid} />
+        </>
+      )
+      break
+    case RECAP_NO_FINDING_AID_NO_AEON:
+      message = (
+        <>
+          <AvailableByAppointment displayPeriod />
+          <ContactALibrarian item={item} />
+        </>
+      )
+      break
+    case ONSITE_NO_FINDING_AID_NO_AEON:
+      message = (
+        <>
+          <AvailableByAppointment />
+          <AvailableAt location={item.location} />
+          <ContactALibrarian item={itemMetadata} />
+        </>
+      )
+      break
+    case ONSITE_GENERAL_COLLECTIONS:
+      message = <AvailableOnsite location={item.location} />
+      break
+    case NOT_AVAILABLE:
+      message = <NotAvailable item={itemMetadata} dueDate={item.dueDate} />
+      break
   }
+
+  return (
+    <Text
+      mb="0"
+      fontSize={{
+        base: "mobile.body.body2",
+        md: "desktop.body.body2",
+      }}
+    >
+      {message}
+    </Text>
+  )
 }
 
 export default ItemAvailability

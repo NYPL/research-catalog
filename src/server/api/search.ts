@@ -5,12 +5,12 @@ import type {
 import { standardizeBibId } from "../../utils/bibUtils"
 import { getSearchQuery } from "../../utils/searchUtils"
 import {
-  DISCOVERY_API_NAME,
   DISCOVERY_API_SEARCH_ROUTE,
   DRB_API_NAME,
   RESULTS_PER_PAGE,
 } from "../../config/constants"
 import { getDRBQueryStringFromSearchParams } from "../../utils/drbUtils"
+import { logServerError } from "../../utils/appUtils"
 import nyplApiClient from "../nyplApiClient"
 
 export async function fetchResults(
@@ -38,7 +38,6 @@ export async function fetchResults(
     ...journalParams,
     q: keywordsOrBibId,
   }
-
   let queryString = getSearchQuery(modifiedSearchParams)
 
   // Fall back to a single "?" in the case of an empty query
@@ -53,9 +52,8 @@ export async function fetchResults(
   //  - search results
   //  - aggregations
   //  - drb results
-  const client = await nyplApiClient({ apiName: DISCOVERY_API_NAME })
-  const drbClient = await nyplApiClient({ apiName: DRB_API_NAME })
-
+  const client = await nyplApiClient()
+  const drbClient = await nyplApiClient({ apiName: DRB_API_NAME, version: "" })
   const [resultsResponse, aggregationsResponse, drbResultsResponse] =
     await Promise.allSettled([
       client.get(`${DISCOVERY_API_SEARCH_ROUTE}${resultsQuery}`),
@@ -81,6 +79,7 @@ export async function fetchResults(
       page: searchParams.page,
     }
   } catch (error) {
+    logServerError("fetchResults", error.message)
     return new Error("Error fetching Search Results")
   }
 }

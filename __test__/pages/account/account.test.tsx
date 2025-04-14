@@ -231,22 +231,6 @@ describe("MyAccount page", () => {
     const result = await getServerSideProps({ req: req, res: mockRes })
     expect(result.props.tabsPath).toBe("overdues")
   })
-  it("can handle no username", () => {
-    render(
-      <MyAccount
-        isAuthenticated={true}
-        accountData={{
-          checkouts: processedCheckouts,
-          holds: processedHolds,
-          patron: { ...processedPatron, username: undefined },
-          fines: processedFines,
-          pickupLocations: filteredPickupLocations,
-        }}
-      />
-    )
-    const username = screen.queryByText("Username")
-    expect(username).toBeNull()
-  })
   it("renders notification banner if user has fines", () => {
     render(
       <MyAccount

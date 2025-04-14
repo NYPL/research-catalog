@@ -51,7 +51,32 @@ describe("CheckoutsTab", () => {
   it("renders", () => {
     renderWithPatronDataContext()
   })
-
+  it("renders renewal count when count is greater than zero", () => {
+    const component = renderWithPatronDataContext()
+    const checkoutWithRenewalCount = processedCheckouts[0]
+    const row = component
+      .getByText(checkoutWithRenewalCount.title)
+      .closest("tr")
+    expect(within(row).getByText(/Renewed \d{1,2} times/)).toBeInTheDocument()
+  })
+  it("renders correct text with one renewal", () => {
+    const component = renderWithPatronDataContext()
+    const checkoutWithRenewalCount = processedCheckouts[2]
+    const row = component
+      .getByText(checkoutWithRenewalCount.title)
+      .closest("tr")
+    expect(within(row).queryByText(/Renewed 1 time/)).not.toBeInTheDocument()
+  })
+  it("does not render renewal count when count is zero", () => {
+    const component = renderWithPatronDataContext()
+    const checkoutWithRenewalCount = processedCheckouts[1]
+    const row = component
+      .getByText(checkoutWithRenewalCount.title)
+      .closest("tr")
+    expect(
+      within(row).queryByText(/Renewed \d{1,2} times/)
+    ).not.toBeInTheDocument()
+  })
   it("renders each checkout as a row", () => {
     const component = renderWithPatronDataContext()
     const bodyRows = component.getAllByRole("rowgroup")[1]

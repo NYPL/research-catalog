@@ -10,11 +10,13 @@ const ItemsTab = ({
   headers,
   data,
   userAction,
+  tableStyling,
 }: {
   tabRef?: RefObject<HTMLDivElement>
   headers: string[]
   data: any[]
   userAction: "requested" | "checked out"
+  tableStyling: any[]
 }) => {
   return (
     <Box data-testid="items-tab" tabIndex={-1} ref={tabRef}>
@@ -40,6 +42,8 @@ const ItemsTab = ({
           columnHeadersBackgroundColor={"ui.gray.x-light-cool"}
           columnHeaders={headers}
           tableData={data}
+          isScrollable
+          columnStyles={tableStyling}
         />
       )}
     </Box>

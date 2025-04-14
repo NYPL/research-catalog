@@ -29,7 +29,7 @@ import SearchFilterCheckboxField from "./SearchFilterCheckboxField"
 
 const fields = [
   { value: "buildingLocation", label: "Item location" },
-  { value: "materialType", label: "Format" },
+  { value: "format", label: "Format" },
   { value: "language", label: "Language" },
   { value: "dateAfter", label: "Start Year" },
   { value: "dateBefore", label: "End Year" },
@@ -159,7 +159,7 @@ const RefineSearch = ({
           buttonType="secondary"
           backgroundColor="ui.white"
         >
-          <Icon />
+          <Icon size="large" align="left" name="contentFilterList" />
           Filter results
         </Button>
       ) : (

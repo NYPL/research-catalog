@@ -1,4 +1,3 @@
-import Head from "next/head"
 import { useState, useRef, useEffect } from "react"
 import { useRouter } from "next/router"
 import {
@@ -7,29 +6,37 @@ import {
   SkeletonLoader,
 } from "@nypl/design-system-react-components"
 
-import Layout from "../../../src/components/Layout/Layout"
+import Layout from "../../../../src/components/Layout/Layout"
 
-import HoldRequestForm from "../../../src/components/HoldPages/HoldRequestForm"
-import HoldRequestBanner from "../../../src/components/HoldPages/HoldRequestBanner"
-import HoldItemDetails from "../../../src/components/HoldPages/HoldItemDetails"
+import HoldRequestForm from "../../../../src/components/HoldPages/HoldRequestForm"
+import HoldRequestErrorBanner from "../../../../src/components/HoldPages/HoldRequestErrorBanner"
+import HoldRequestItemDetails from "../../../../src/components/HoldPages/HoldRequestItemDetails"
 
-import { SITE_NAME, BASE_URL, PATHS } from "../../../src/config/constants"
-import useLoading from "../../../src/hooks/useLoading"
+import { SITE_NAME, BASE_URL, PATHS } from "../../../../src/config/constants"
+import useLoading from "../../../../src/hooks/useLoading"
 
-import { fetchBib } from "../../../src/server/api/bib"
-import { fetchDeliveryLocations } from "../../../src/server/api/hold"
+import { fetchBib } from "../../../../src/server/api/bib"
+import {
+  fetchDeliveryLocations,
+  fetchPatronEligibility,
+} from "../../../../src/server/api/hold"
 
 import initializePatronTokenAuth, {
   doRedirectBasedOnNyplAccountRedirects,
   getLoginRedirect,
-} from "../../../src/server/auth"
+} from "../../../../src/server/auth"
 
-import Bib from "../../../src/models/Bib"
-import Item from "../../../src/models/Item"
+import Bib from "../../../../src/models/Bib"
+import Item from "../../../../src/models/Item"
 
-import type { DiscoveryBibResult } from "../../../src/types/bibTypes"
-import type { DiscoveryItemResult } from "../../../src/types/itemTypes"
-import type { DeliveryLocation } from "../../../src/types/locationTypes"
+import type { DiscoveryBibResult } from "../../../../src/types/bibTypes"
+import type { DiscoveryItemResult } from "../../../../src/types/itemTypes"
+import type { DeliveryLocation } from "../../../../src/types/locationTypes"
+import type {
+  HoldErrorStatus,
+  PatronEligibilityStatus,
+} from "../../../../src/types/holdPageTypes"
+import RCHead from "../../../../src/components/Head/RCHead"
 
 interface HoldRequestPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -37,6 +44,8 @@ interface HoldRequestPropsType {
   deliveryLocations?: DeliveryLocation[]
   patronId: string
   isAuthenticated?: boolean
+  errorStatus?: HoldErrorStatus
+  patronEligibilityStatus?: PatronEligibilityStatus
 }
 
 /**
@@ -50,6 +59,8 @@ export default function HoldRequestPage({
   deliveryLocations = [],
   patronId,
   isAuthenticated,
+  errorStatus: defaultErrorStatus,
+  patronEligibilityStatus: defaultEligibilityStatus,
 }: HoldRequestPropsType) {
   const metadataTitle = `Item Request | ${SITE_NAME}`
 
@@ -58,9 +69,10 @@ export default function HoldRequestPage({
 
   const holdId = `${item.bibId}-${item.id}`
 
-  // Initialize alert to true if item is not available. This will show the error banner.
-  const [alert, setAlert] = useState(!item.isAvailable)
-  const [errorDetail, setErrorDetail] = useState("")
+  const [errorStatus, setErrorStatus] = useState(defaultErrorStatus)
+  const [patronEligibilityStatus, setPatronEligibilityStatus] = useState(
+    defaultEligibilityStatus
+  )
   const [formPosting, setFormPosting] = useState(false)
   const bannerContainerRef = useRef<HTMLDivElement>()
 
@@ -68,10 +80,19 @@ export default function HoldRequestPage({
   const isLoading = useLoading()
 
   useEffect(() => {
-    if (alert && bannerContainerRef.current) {
+    if (errorStatus && bannerContainerRef.current) {
       bannerContainerRef.current.focus()
     }
-  }, [alert])
+  }, [errorStatus, patronEligibilityStatus])
+
+  const handleServerHoldPostError = (errorMessage: string) => {
+    console.error(
+      "HoldRequestPage: Error in hold request api response",
+      errorMessage
+    )
+    setFormPosting(false)
+    setErrorStatus("failed")
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -82,78 +103,63 @@ export default function HoldRequestPage({
       const response = await fetch(`${BASE_URL}/api/hold/request/${holdId}`, {
         method: "POST",
         body: JSON.stringify({
-          patronId: patronId.value,
-          source: source.value,
-          pickupLocation: pickupLocation.value,
+          patronId: patronId?.value,
+          source: source?.value,
+          pickupLocation: pickupLocation?.value,
           jsEnabled: true,
         }),
       })
       const responseJson = await response.json()
 
-      if (response.status !== 200) {
-        console.error(
-          "HoldRequestPage: Error in hold request api response",
-          responseJson.error
-        )
-        setAlert(true)
-        setErrorDetail(responseJson?.error?.detail || "")
-        setFormPosting(false)
-        return
+      switch (response.status) {
+        // Patron is ineligible to place holds
+        case 401:
+          setFormPosting(false)
+          setErrorStatus("patronIneligible")
+          setPatronEligibilityStatus(responseJson?.patronEligibilityStatus)
+          break
+        case 403:
+          setFormPosting(false)
+          setErrorStatus("failed")
+          break
+        case 500:
+          handleServerHoldPostError(responseJson.error)
+          break
+        default:
+          setFormPosting(false)
+          // Success state
+          await router.push(
+            `${PATHS.HOLD_CONFIRMATION}/${holdId}?pickupLocation=${responseJson.pickupLocation}&requestId=${responseJson.requestId}`
+          )
       }
-      const { pickupLocation: pickupLocationFromResponse, requestId } =
-        responseJson
-
-      setFormPosting(false)
-
-      // Success state
-      await router.push(
-        `${PATHS.HOLD_CONFIRMATION}/${holdId}?pickupLocation=${pickupLocationFromResponse}&requestId=${requestId}`
-      )
     } catch (error) {
       console.error(
         "HoldRequestPage: Error in hold request api response",
         error
       )
-      setFormPosting(false)
-      setAlert(true)
+      handleServerHoldPostError(error)
     }
   }
 
   return (
     <>
-      <Head>
-        <meta property="og:title" content={metadataTitle} key="og-title" />
-        <meta
-          property="og:site_name"
-          content={metadataTitle}
-          key="og-site-name"
-        />
-        <meta name="twitter:title" content={metadataTitle} key="tw-title" />
-        <title key="main-title">{metadataTitle}</title>
-      </Head>
+      <RCHead metadataTitle={metadataTitle} />
       <Layout isAuthenticated={isAuthenticated} activePage="hold">
         {/* Always render the wrapper element that will display the
           dynamically rendered notification for focus management */}
         <Box tabIndex={-1} ref={bannerContainerRef}>
-          {alert && (
-            <HoldRequestBanner
+          {errorStatus && (
+            <HoldRequestErrorBanner
               item={item}
-              heading={
-                !item.isAvailable ? "Item unavailable" : "Request failed"
-              }
-              errorMessage={
-                !item.isAvailable
-                  ? "This item is currently unavailable"
-                  : "We were unable to process your request at this time"
-              }
-              errorDetail={errorDetail}
+              errorStatus={errorStatus}
+              patronEligibilityStatus={patronEligibilityStatus}
             />
           )}
         </Box>
         <Heading level="h2" mb="l" size="heading3">
           Request for on-site use
         </Heading>
-        <HoldItemDetails item={item} />
+        <HoldRequestItemDetails item={item} />
         {isLoading || formPosting ? (
           <SkeletonLoader
             showImage={false}
@@ -169,7 +175,8 @@ export default function HoldRequestPage({
               handleSubmit={handleSubmit}
               holdId={holdId}
               patronId={patronId}
-              source={item.source}
+              errorStatus={errorStatus}
+              source={item.formattedSourceForHoldRequest}
             />
           </>
         ) : null}
@@ -197,7 +204,7 @@ export async function getServerSideProps({ params, req, res }) {
         redirectCount + 1
       }; Max-Age=10; path=/; domain=.nypl.org;`
     )
-    const redirect = getLoginRedirect(req, `${PATHS.HOLD_REQUEST}[${id}]`)
+    const redirect = getLoginRedirect(req, `${PATHS.HOLD_REQUEST}/${id}`)
 
     return {
       redirect: {
@@ -220,7 +227,7 @@ export async function getServerSideProps({ params, req, res }) {
     const discoveryItemResult = discoveryBibResult?.items?.[0]
 
     if (!discoveryItemResult) {
-      throw new Error("Item not found")
+      throw new Error("Hold Page - Item not found")
     }
 
     const bib = new Bib(discoveryBibResult)
@@ -240,10 +247,16 @@ export async function getServerSideProps({ params, req, res }) {
       await fetchDeliveryLocations(item.barcode, patronId)
 
     if (locationStatus !== 200) {
-      throw new Error(
-        "HoldRequestPage: Error fetching delivery locations in getServerSideProps"
+      console.error(
+        "HoldRequest Page - Error fetching deliveryLocations in getServerSideProps"
       )
     }
+
+    const patronEligibilityStatus = await fetchPatronEligibility(patronId)
+
+    const locationOrEligibilityFetchFailed =
+      locationStatus !== 200 ||
+      ![200, 401].includes(patronEligibilityStatus?.status)
 
     return {
       props: {
@@ -252,6 +265,12 @@ export async function getServerSideProps({ params, req, res }) {
         deliveryLocations,
         patronId,
         isAuthenticated,
+        patronEligibilityStatus,
+        errorStatus: locationOrEligibilityFetchFailed
+          ? "failed"
+          : patronEligibilityStatus.status === 401
+          ? "patronIneligible"
+          : null,
       },
     }
   } catch (error) {

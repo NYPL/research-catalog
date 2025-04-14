@@ -1,7 +1,7 @@
 import React from "react"
 import mockRouter from "next-router-mock"
 import userEvent from "@testing-library/user-event"
-import { screen, render } from "../../utils/testUtils"
+import { screen, render, fireEvent } from "../../utils/testUtils"
 
 import Search from "../../../pages/search/index"
 import {
@@ -13,7 +13,7 @@ jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
 const openRefineSearch = async () => {
   const refineButton = screen.getByText("Filter results")
-  await userEvent.click(refineButton)
+  fireEvent.click(refineButton)
 }
 const apply = async () => {
   const applyButton = screen.getByText("Apply filters")
@@ -78,7 +78,7 @@ describe("RefineSearch", () => {
       await selectSomeFilters()
       await apply()
       expect(mockRouter.asPath).toBe(
-        "/search?filters%5BcreatorLiteral%5D%5B0%5D=Gaberscek%2C+Carlo.&filters%5Blanguage%5D%5B0%5D=lang%3Apor&filters%5BmaterialType%5D%5B0%5D=resourcetypes%3Aaud&filters%5BsubjectLiteral%5D%5B0%5D=Cooking%2C+Italian."
+        "/search?filters%5BcreatorLiteral%5D%5B0%5D=Gaberscek%2C+Carlo.&filters%5Blanguage%5D%5B0%5D=lang%3Apor&filters%5Bformat%5D%5B0%5D=resourcetypes%3Aaud&filters%5BsubjectLiteral%5D%5B0%5D=Cooking%2C+Italian."
       )
     })
     it("should clear refinement filters and creatorliteral filter", async () => {
@@ -116,7 +116,7 @@ describe("RefineSearch", () => {
       expect(mockRouter.query.q).toBe("spaghetti")
       expect(mockRouter.query).toStrictEqual({
         "filters[language][0]": "lang:por",
-        "filters[materialType][0]": "resourcetypes:aud",
+        "filters[format][0]": "resourcetypes:aud",
         "filters[subjectLiteral][0]": "Cooking, Italian.",
         q: "spaghetti",
       })
@@ -169,7 +169,7 @@ describe("RefineSearch", () => {
       await apply()
       expect(mockRouter.query).toStrictEqual({
         "filters[language][0]": "lang:por",
-        "filters[materialType][0]": "resourcetypes:aud",
+        "filters[format][0]": "resourcetypes:aud",
         "filters[subjectLiteral][0]": "Cooking, Italian.",
       })
     })
@@ -217,8 +217,8 @@ describe("RefineSearch", () => {
         "filters[language][0]": "lang:fre",
         "filters[language][1]": "lang:dut",
         "filters[language][2]": "lang:ita",
-        "filters[materialType][0]": "resourcetypes:aud",
-        "filters[materialType][1]": "resourcetypes:mov",
+        "filters[format][0]": "resourcetypes:aud",
+        "filters[format][1]": "resourcetypes:mov",
       })
     })
     it("deselecting and applying removes filters", async () => {
@@ -227,7 +227,7 @@ describe("RefineSearch", () => {
         query: {
           "filters[language][0]": "lang:por",
           "filters[language][1]": "lang:ita",
-          "filters[materialType][0]": "resourcetypes:aud",
+          "filters[format][0]": "resourcetypes:aud",
           "filters[subjectLiteral][0]": "Cooking, Italian.",
         },
       })

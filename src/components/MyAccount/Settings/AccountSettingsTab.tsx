@@ -1,123 +1,74 @@
-import {
-  Form,
-  List,
-  Spacer,
-  useModal,
-  SkeletonLoader,
-  type TextInputRefType,
-} from "@nypl/design-system-react-components"
+import { Flex } from "@nypl/design-system-react-components"
 import { useContext, useEffect, useRef, useState } from "react"
-import styles from "../../../../styles/components/MyAccount.module.scss"
-import AccountSettingsButtons from "./AccountSettingsButtons"
-import {
-  AccountSettingsForm,
-  AccountSettingsDisplay,
-} from "./AccountSettingsDisplayOptions"
-import { parseAccountSettingsPayload } from "./AccountSettingsUtils"
-import {
-  successModalProps,
-  failureModalProps,
-} from "./SuccessAndFailureModalProps"
 import { PatronDataContext } from "../../../context/PatronDataContext"
+import SettingsInputForm from "./SettingsInputForm"
+import SettingsSelectForm from "./SettingsSelectForm"
+import PasswordForm from "./PasswordForm"
+import { StatusBanner } from "./StatusBanner"
+
+type StatusType = "" | "failure" | "success"
 
 const AccountSettingsTab = () => {
   const {
-    patronDataLoading,
-    getMostUpdatedSierraAccountData,
     updatedAccountData: { patron, pickupLocations },
   } = useContext(PatronDataContext)
-  const [currentlyEditing, setCurrentlyEditing] = useState(false)
-  const [modalProps, setModalProps] = useState(null)
-  const [isLoading, setIsLoading] = useState(false)
+  const [status, setStatus] = useState<StatusType>("")
+  const [statusMessage, setStatusMessage] = useState<string>("")
+  const [editingField, setEditingField] = useState<string>("")
+  const bannerRef = useRef<HTMLDivElement>(null)
 
-  const { onOpen: openModal, onClose: closeModal, Modal } = useModal()
-
-  const [isFormValid, setIsFormValid] = useState(true)
-
-  const editButtonRef = useRef<HTMLButtonElement>()
-  const firstInputRef = useRef<TextInputRefType>()
-
-  const listElements = currentlyEditing ? (
-    <AccountSettingsForm
-      firstInputRef={firstInputRef}
-      patron={patron}
-      setIsFormValid={setIsFormValid}
-      pickupLocations={pickupLocations}
-    />
-  ) : (
-    <AccountSettingsDisplay patron={patron} />
-  )
-  const [focusOnAccountSettingsButton, setFocusOnAccountSettingButton] =
-    useState(false)
-  useEffect(() => {
-    if (currentlyEditing) {
-      firstInputRef.current?.focus()
-    } else if (!patronDataLoading && focusOnAccountSettingsButton) {
-      editButtonRef.current?.focus()
-    }
-  }, [currentlyEditing, focusOnAccountSettingsButton, patronDataLoading])
-
-  const submitAccountSettings = async (e) => {
-    e.preventDefault()
-    setIsLoading(true)
-    const payload = parseAccountSettingsPayload(e.target, patron)
-    const response = await fetch(
-      `/research/research-catalog/api/account/settings/${patron.id}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      }
-    )
-    if (response.status === 200) {
-      await getMostUpdatedSierraAccountData()
-      setCurrentlyEditing(false)
-      setModalProps(successModalProps)
-      openModal()
-    } else {
-      setModalProps(failureModalProps)
-      openModal()
-    }
-    setIsLoading(false)
+  const settingsState = {
+    setStatus,
+    editingField,
+    setEditingField,
   }
-  return isLoading ? (
-    <SkeletonLoader showImage={false} />
-  ) : (
+
+  const passwordSettingsState = {
+    ...settingsState,
+    setStatusMessage,
+  }
+
+  useEffect(() => {
+    if (status !== "" && bannerRef.current) {
+      bannerRef.current.focus()
+    }
+  }, [status])
+
+  return (
     <>
-      {modalProps && (
-        <Modal
-          {...{
-            ...modalProps,
-            onClose: () => {
-              closeModal()
-              setFocusOnAccountSettingButton(true)
-            },
-          }}
-        />
+      {status !== "" && (
+        <div ref={bannerRef} tabIndex={-1}>
+          <StatusBanner status={status} statusMessage={statusMessage} />
+        </div>
       )}
-      <Form
-        className={styles.accountSettingsTab}
-        id="account-settings-container"
-        onSubmit={(e) => submitAccountSettings(e)}
-      >
-        <List
-          sx={{ border: "none", h2: { border: "none" } }}
-          className={styles.myAccountList}
-          type="dl"
-        >
-          {listElements}
-        </List>
-        <Spacer display={{ sm: "none", base: "none", md: "inline-block" }} />
-        <AccountSettingsButtons
-          setFocusOnAccountSettingsButton={setFocusOnAccountSettingButton}
-          editButtonRef={editButtonRef}
-          currentlyEditing={currentlyEditing}
-          setCurrentlyEditing={setCurrentlyEditing}
-          formValid={isFormValid}
+      <Flex flexDir="column" sx={{ marginTop: "m", gap: "s" }}>
+        <SettingsInputForm
+          patronData={patron}
+          settingsState={settingsState}
+          inputType="phones"
         />
-      </Form>
+        <SettingsInputForm
+          patronData={patron}
+          settingsState={settingsState}
+          inputType="emails"
+        />
+        <SettingsSelectForm
+          patronData={patron}
+          pickupLocations={pickupLocations}
+          settingsState={settingsState}
+          type="library"
+        />
+        <SettingsSelectForm
+          patronData={patron}
+          pickupLocations={pickupLocations}
+          settingsState={settingsState}
+          type="notification"
+        />
+        <PasswordForm
+          settingsState={passwordSettingsState}
+          patronData={patron}
+        />
+      </Flex>
     </>
   )
 }

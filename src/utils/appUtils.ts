@@ -4,8 +4,15 @@ import {
   ADOBE_ANALYTICS_RC_PREFIX,
   BASE_URL,
 } from "../config/constants"
-
+import logger from "../../logger"
 import { standardizeBibId } from "./bibUtils"
+
+export const logServerError = (
+  errorLocation: string,
+  errorMessage: string
+): void => {
+  logger.error(`Error in ${errorLocation}: ${errorMessage}`)
+}
 
 /**
  * adobeAnalyticsParam
@@ -93,7 +100,7 @@ export const trackVirtualPageView = (pathname = "") => {
   const adobeDataLayer = window["adobeDataLayer"] || []
   const route = pathname.toLowerCase().replace(BASE_URL, "")
   const queryIndex = route.indexOf("?")
-  const path = route.substring(0, queryIndex)
+  const path = queryIndex >= 0 ? route.substring(0, queryIndex) : route
   const queryParams = route.slice(queryIndex)
 
   adobeDataLayer.push({
@@ -140,3 +147,19 @@ export const convertToSentenceCase = (str: string) =>
   str.split(" ").length > 1
     ? str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
     : str
+
+/**
+ * Converts camel case string to shish kabob case
+ *
+ * e.g. camelToShishKabobCase("RecapPul")
+ *        => "recap-pul"
+ *      camelToShishKabobCase("firstCharCanBeLowerCase")
+ *        => "first-char-can-be-lower-case"
+ */
+export const convertCamelToShishKabobCase = (str: string) =>
+  str
+    // Change capital letters into "-{lowercase letter}"
+    .replace(/([A-Z])/g, (capitalLetter, placeholderVar, index) => {
+      // If capital letter is not first character, precede with '-':
+      return (index > 0 ? "-" : "") + capitalLetter.toLowerCase()
+    })

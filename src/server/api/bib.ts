@@ -7,14 +7,14 @@ import {
 } from "../../utils/bibUtils"
 import nyplApiClient from "../nyplApiClient"
 import {
-  DISCOVERY_API_NAME,
   DISCOVERY_API_SEARCH_ROUTE,
   ITEM_VIEW_ALL_BATCH_SIZE,
   SHEP_HTTP_TIMEOUT,
 } from "../../config/constants"
 import { appConfig } from "../../config/config"
-import logger from "../../../logger"
+import { logServerError } from "../../utils/appUtils"
 import type { DiscoveryItemResult } from "../../types/itemTypes"
+import logger from "../../../logger"
 
 export async function fetchBib(
   id: string,
@@ -30,7 +30,7 @@ export async function fetchBib(
     }
   }
 
-  const client = await nyplApiClient({ apiName: DISCOVERY_API_NAME })
+  const client = await nyplApiClient()
   const [bibResponse, annotatedMarcResponse] = await Promise.allSettled([
     await client.get(
       `${DISCOVERY_API_SEARCH_ROUTE}/${standardizedId}${
@@ -67,6 +67,9 @@ export async function fetchBib(
       !discoveryBibResult.uri ||
       !id.includes(discoveryBibResult.uri)
     ) {
+      logger.warn(
+        `Missing discoveryBibResult for id ${id}, or id does not match uri on returned result`
+      )
       // TODO: Check if this ID slicing is correct and if this redirect logic is still accurate
       const sierraBibResponse = await client.get(
         `/bibs/sierra-nypl/${id.slice(1)}`
@@ -79,7 +82,10 @@ export async function fetchBib(
           }/search/card?recordId=${id.replace(/^b/, "")}`,
         }
       } else {
-        logger.error("There was a problem fetching the bib from Sierra")
+        logServerError(
+          "fetchBib",
+          "There was a problem fetching the bib from Sierra"
+        )
         return {
           status: 404,
         }
@@ -88,7 +94,10 @@ export async function fetchBib(
     // The Discovery API currently returns HTML in the bib attribute when it can't find a bib.
     // TODO: Modify the error response in Discovery API to return a 404 status instead of an HTML string in the bib attribute
     else if (typeof discoveryBibResult === "string") {
-      logger.error("There was an error fetching the Bib from the Discovery API")
+      logServerError(
+        "fetchBib",
+        "There was an error fetching the Bib from the Discovery API"
+      )
       return {
         status: 404,
       }
@@ -111,7 +120,7 @@ export async function fetchBib(
       status: 200,
     }
   } catch (error) {
-    logger.error(error.message)
+    logServerError("fetchBib", error.message)
     return {
       status: 404,
     }
@@ -132,10 +141,11 @@ async function fetchBibSubjectHeadings(bibId: string) {
     )
     return await response.json()
   } catch (error) {
-    logger.error(
-      "Error fetching SHEP API data (note: VPN should be used for local testing)",
-      error
+    logServerError(
+      "fetchBibSubjectHeadings",
+      "Error fetching SHEP API data (note: VPN should be used for local testing)"
     )
+    logServerError("fetchBibSubjectHeadings", error.message)
   } finally {
     clearTimeout(timeoutId)
   }
@@ -148,7 +158,7 @@ async function fetchAllBibItemsWithQuery(
   batchSize: number
 ): Promise<DiscoveryItemResult[]> {
   const items: DiscoveryItemResult[] = []
-  const client = await nyplApiClient({ apiName: DISCOVERY_API_NAME })
+  const client = await nyplApiClient()
   const totalBatchNum = Math.ceil(numItems / batchSize)
 
   for (let batchNum = 1; batchNum <= totalBatchNum; batchNum++) {
@@ -171,7 +181,7 @@ async function fetchAllBibItemsWithQuery(
         )
       }
     } catch (error) {
-      logger.error(error.message)
+      logServerError("fetchAllBibItemsWithQuery", error.message)
     }
   }
   return items

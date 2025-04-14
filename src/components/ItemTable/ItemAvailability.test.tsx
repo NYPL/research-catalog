@@ -2,6 +2,8 @@ import React from "react"
 import { render, screen } from "../../utils/testUtils"
 import userEvent from "@testing-library/user-event"
 
+import ItemAvailabilityModel from "../../models/ItemAvailability"
+
 import ItemAvailability from "./ItemAvailability"
 import Item from "../../models/Item"
 import SearchResultsBib from "../../models/SearchResultsBib"
@@ -17,6 +19,160 @@ import { searchResultPhysicalItems } from "../../../__test__/fixtures/searchResu
 const parentBib = new SearchResultsBib(searchResultPhysicalItems)
 
 describe("ItemAvailability", () => {
+  describe("special collections", () => {
+    it("edge case", () => {
+      const item = new Item(itemPhysicallyRequestable, parentBib)
+      item.availability.key = "edgeCase"
+      render(<ItemAvailability item={item} />)
+      expect(screen.getByText("contact a librarian")).toBeInTheDocument()
+      expect(
+        screen.queryByText("Available by appointment")
+      ).not.toBeInTheDocument()
+      expect(screen.queryByRole("link")).not.toBeInTheDocument()
+      expect(
+        screen.queryByText("Schwarzman Building - Main Reading Room 315")
+      ).not.toBeInTheDocument()
+    })
+    it("onsite YES aeon YES finding aid", () => {
+      const item = new Item(itemPhysicallyRequestable, parentBib)
+      item.availability = new ItemAvailabilityModel({
+        isAvailable: true,
+        isReCAP: false,
+        aeonUrl: "spaghetti.com",
+        findingAid: "meatballs.com",
+        isSpecRequestable: true,
+      })
+      render(<ItemAvailability item={item} />)
+      expect(screen.getByText("Available by appointment")).toBeInTheDocument()
+      expect(screen.getByRole("link")).toHaveTextContent(
+        "Schwarzman Building - Main Reading Room 315"
+      )
+    })
+    it("recap YES aeon YES finding aid", () => {
+      const item = new Item(itemPhysicallyRequestable, parentBib)
+      item.availability = new ItemAvailabilityModel({
+        isAvailable: true,
+        isReCAP: true,
+        aeonUrl: "spaghetti.com",
+        findingAid: "meatballs.com",
+        isSpecRequestable: true,
+      })
+      render(<ItemAvailability item={item} />)
+      expect(screen.getByText("Available by appointment.")).toBeInTheDocument()
+      expect(screen.queryByRole("link")).not.toBeInTheDocument()
+      expect(
+        screen.queryByText("Schwarzman Building - Main Reading Room 315")
+      ).not.toBeInTheDocument()
+    })
+    it("recap YES aeon NO finding aid", () => {
+      const item = new Item(itemPhysicallyRequestable, parentBib)
+      item.availability = new ItemAvailabilityModel({
+        isAvailable: true,
+        isReCAP: true,
+        aeonUrl: "spaghetti.com",
+        findingAid: null,
+        isSpecRequestable: true,
+      })
+      render(<ItemAvailability item={item} />)
+      expect(screen.getByText("Available by appointment.")).toBeInTheDocument()
+      expect(screen.queryByRole("link")).not.toBeInTheDocument()
+      expect(
+        screen.queryByText("Schwarzman Building - Main Reading Room 315")
+      ).not.toBeInTheDocument()
+    })
+    it("onsite YES aeon NO finding aid", () => {
+      const item = new Item(itemPhysicallyRequestable, parentBib)
+      item.availability = new ItemAvailabilityModel({
+        isAvailable: true,
+        isReCAP: false,
+        aeonUrl: "spaghetti.com",
+        findingAid: null,
+        isSpecRequestable: true,
+      })
+      render(<ItemAvailability item={item} />)
+      expect(screen.getByText("Available by appointment")).toBeInTheDocument()
+      expect(screen.queryByRole("link")).not.toBeInTheDocument()
+      expect(
+        screen.getByText("at Schwarzman Building - Main Reading Room 315.")
+      ).toBeInTheDocument()
+    })
+    it("onsite NO aeon YES finding aid", () => {
+      const item = new Item(itemPhysicallyRequestable, parentBib)
+      item.availability = new ItemAvailabilityModel({
+        isAvailable: true,
+        isReCAP: false,
+        aeonUrl: null,
+        findingAid: "meatballs.com",
+        isSpecRequestable: true,
+      })
+      render(<ItemAvailability item={item} />)
+      expect(screen.getByText("Available by appointment")).toBeInTheDocument()
+      expect(screen.queryByRole("link")).toHaveTextContent("finding aid")
+      expect(
+        screen.getByText(
+          "at Schwarzman Building - Main Reading Room 315. See the ",
+          { exact: false }
+        )
+      ).toBeInTheDocument()
+    })
+    it("recap NO aeon YES finding aid", () => {
+      const item = new Item(itemPhysicallyRequestable, parentBib)
+      item.availability = new ItemAvailabilityModel({
+        isAvailable: true,
+        isReCAP: true,
+        aeonUrl: null,
+        findingAid: "meatballs.com",
+        isSpecRequestable: true,
+      })
+      render(<ItemAvailability item={item} />)
+      expect(screen.getByText("Available by appointment.")).toBeInTheDocument()
+      expect(screen.queryByRole("link")).toHaveTextContent("finding aid")
+      expect(
+        screen.queryByText("Schwarzman Building - Main Reading Room 315", {
+          exact: false,
+        })
+      ).not.toBeInTheDocument()
+    })
+    it("recap NO aeon NO finding aid", () => {
+      const item = new Item(itemPhysicallyRequestable, parentBib)
+      item.availability = new ItemAvailabilityModel({
+        isAvailable: true,
+        isReCAP: true,
+        aeonUrl: null,
+        findingAid: null,
+        isSpecRequestable: true,
+      })
+      render(<ItemAvailability item={item} />)
+      expect(screen.getByText("Available by appointment.")).toBeInTheDocument()
+      expect(screen.queryByRole("link")).not.toBeInTheDocument()
+      expect(
+        screen.queryByText("Schwarzman Building - Main Reading Room 315", {
+          exact: false,
+        })
+      ).not.toBeInTheDocument()
+      expect(screen.getByText("contact a librarian")).toBeInTheDocument()
+    })
+    it("onsite NO aeon NO finding aid", () => {
+      const item = new Item(itemPhysicallyRequestable, parentBib)
+      item.availability = new ItemAvailabilityModel({
+        isAvailable: true,
+        isReCAP: false,
+        aeonUrl: null,
+        findingAid: null,
+        isSpecRequestable: true,
+      })
+      render(<ItemAvailability item={item} />)
+      expect(screen.getByText("Available by appointment")).toBeInTheDocument()
+      expect(screen.queryByRole("link")).not.toBeInTheDocument()
+      expect(
+        screen.queryByText("Schwarzman Building - Main Reading Room 315.", {
+          exact: false,
+        })
+      ).toBeInTheDocument()
+      expect(screen.getByText("contact a librarian")).toBeInTheDocument()
+    })
+  })
+
   it("renders the correct link when item is available, is reCAP, and does not have an aeon url", async () => {
     const item = new Item(itemNYPLReCAP, parentBib)
     render(<ItemAvailability item={item} />)
@@ -26,14 +182,6 @@ describe("ItemAvailability", () => {
       "href",
       "https://www.nypl.org/help/request-research-materials"
     )
-  })
-  it("renders the correct text when item is available, has an aeon url, and has a location endpoint", async () => {
-    const item = new Item(itemPhysicallyRequestable, parentBib)
-    render(<ItemAvailability item={item} />)
-    expect(screen.getByText("Available by appointment")).toBeInTheDocument()
-    expect(
-      screen.getByText("Schwarzman Building - Main Reading Room 315")
-    ).toHaveAttribute("href", "https://www.nypl.org/locations/schwarzman")
   })
   it("renders the correct text for an available onsite item", async () => {
     const item = new Item(itemAvailableOnsite, parentBib)

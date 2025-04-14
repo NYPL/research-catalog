@@ -22,6 +22,7 @@ export default async function handler(
   if (req.method == "GET") {
     responseMessage = "Please make a PUT request to this endpoint."
   }
+
   if (req.method == "PUT") {
     /**  We get the patron id from the request: */
     const patronId = req.query.id as string

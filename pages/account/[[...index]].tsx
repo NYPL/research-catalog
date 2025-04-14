@@ -1,5 +1,4 @@
 import { Text } from "@nypl/design-system-react-components"
-import Head from "next/head"
 
 import Layout from "../../src/components/Layout/Layout"
 import initializePatronTokenAuth, {
@@ -13,6 +12,7 @@ import TimedLogoutModal from "../../src/components/MyAccount/TimedLogoutModal"
 import { getIncrementedTime } from "../../src/utils/cookieUtils"
 import { useEffect, useState } from "react"
 import { getPatronData } from "../api/account/[id]"
+import RCHead from "../../src/components/Head/RCHead"
 interface MyAccountPropsType {
   accountData: MyAccountPatronData
   isAuthenticated: boolean
@@ -50,6 +50,7 @@ export default function MyAccount({
       assistance.
     </Text>
   )
+
   useEffect(() => {
     resetCountdown()
     // to avoid a reference error on document in the modal, wait to render it
@@ -59,10 +60,7 @@ export default function MyAccount({
   try {
     return (
       <>
-        <Head>
-          <title>My Account</title>
-        </Head>
-
+        <RCHead metadataTitle={"My Account"} />
         <Layout isAuthenticated={isAuthenticated} activePage="account">
           {displayLogoutModal && (
             <TimedLogoutModal
@@ -111,16 +109,17 @@ export async function getServerSideProps({ req, res }) {
       },
     }
   }
-  // Parsing path from url to pass to ProfileTabs.
+
+  // Parsing path from URL
   const tabsPathRegex = /\/account\/(.+)/
   const match = req.url.match(tabsPathRegex)
   const tabsPath = match ? match[1] : null
   const id = patronTokenResponse.decodedPatron.sub
+
   try {
     const { checkouts, holds, patron, fines, pickupLocations } =
       await getPatronData(id)
-    /*  Redirecting invalid paths (including /overdues if user has none) and
-    // cleaning extra parts off valid paths. */
+    // Redirecting invalid paths and cleaning extra parts off valid paths.
     if (tabsPath) {
       const allowedPaths = ["items", "requests", "overdues", "settings"]
       if (
@@ -147,6 +146,7 @@ export async function getServerSideProps({ req, res }) {
         }
       }
     }
+
     return {
       props: {
         accountData: { checkouts, holds, patron, fines, pickupLocations },

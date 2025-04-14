@@ -1,8 +1,12 @@
-import Head from "next/head"
-import { useState, useReducer, useRef, useEffect } from "react"
+import {
+  useState,
+  useReducer,
+  useRef,
+  useEffect,
+  type SyntheticEvent,
+} from "react"
 import { useRouter } from "next/router"
 import { debounce } from "underscore"
-import type { SyntheticEvent } from "react"
 import type { TextInputRefType } from "@nypl/design-system-react-components"
 import {
   Heading,
@@ -18,7 +22,12 @@ import {
 } from "@nypl/design-system-react-components"
 
 import Layout from "../../src/components/Layout/Layout"
-import { BASE_URL, PATHS, SITE_NAME } from "../../src/config/constants"
+import {
+  BASE_URL,
+  PATHS,
+  SITE_NAME,
+  DEBOUNCE_INTERVAL,
+} from "../../src/config/constants"
 import { searchFormReducer } from "../../src/reducers/searchFormReducer"
 import {
   initialSearchFormState,
@@ -37,9 +46,10 @@ import { useDateForm } from "../../src/hooks/useDateForm"
 import DateForm from "../../src/components/SearchFilters/DateForm"
 import SearchFilterCheckboxField from "../../src/components/RefineSearch/SearchFilterCheckboxField"
 import CancelSubmitButtonGroup from "../../src/components/RefineSearch/CancelSubmitButtonGroup"
-import { materialTypeOptions } from "../../src/utils/advancedSearchUtils"
+import { formatOptions } from "../../src/utils/advancedSearchUtils"
 import { searchAggregations } from "../../src/config/aggregations"
 import RCLink from "../../src/components/Links/RCLink/RCLink"
+import RCHead from "../../src/components/Head/RCHead"
 
 export const defaultEmptySearchErrorMessage =
   "Error: please enter at least one field to submit an advanced search."
@@ -59,7 +69,6 @@ export default function AdvancedSearch({
   const router = useRouter()
   const inputRef = useRef<TextInputRefType>()
   const notificationRef = useRef<HTMLDivElement>()
-  const debounceInterval = 20
   const dateInputRefs = [useRef<TextInputRefType>(), useRef<TextInputRefType>()]
 
   const [alert, setAlert] = useState(false)
@@ -70,6 +79,7 @@ export default function AdvancedSearch({
     searchFormReducer,
     initialSearchFormState
   )
+
   const {
     dateFormProps,
     validateDateRange,
@@ -85,7 +95,6 @@ export default function AdvancedSearch({
     e.preventDefault()
     alert && setAlert(false)
     const target = e.target as HTMLInputElement
-
     dispatch({
       type: type,
       field: target.name,
@@ -106,7 +115,6 @@ export default function AdvancedSearch({
     e.preventDefault()
     if (!validateDateRange()) return
     const queryString = getSearchQuery(searchFormState as SearchParams)
-
     if (!queryString.length) {
       setErrorMessage(defaultEmptySearchErrorMessage)
       setAlert(true)
@@ -115,9 +123,13 @@ export default function AdvancedSearch({
       // If the NEXT_PUBLIC_REVERSE_PROXY_ENABLED feature flag is present, use window.location.replace
       // instead of router.push to forward search results to DFE.
       if (appConfig.features.reverseProxyEnabled[appConfig.environment]) {
-        window.location.replace(`${BASE_URL}${PATHS.SEARCH}${queryString}`)
+        window.location.replace(
+          `${BASE_URL}${PATHS.SEARCH}${queryString}&searched_from=advanced`
+        )
       } else {
-        await router.push(`${PATHS.SEARCH}${queryString}`)
+        await router.push(
+          `${PATHS.SEARCH}${queryString}&searched_from=advanced`
+        )
       }
     }
   }
@@ -137,16 +149,7 @@ export default function AdvancedSearch({
   }, [alert])
   return (
     <>
-      <Head>
-        <meta property="og:title" content={metadataTitle} key="og-title" />
-        <meta
-          property="og:site_name"
-          content={metadataTitle}
-          key="og-site-name"
-        />
-        <meta name="twitter:title" content={metadataTitle} key="tw-title" />
-        <title key="main-title">{metadataTitle}</title>
-      </Head>
+      <RCHead metadataTitle={metadataTitle} />
       <Layout isAuthenticated={isAuthenticated} activePage="advanced">
         {/* Always render the wrapper element that will display the
           dynamically rendered notification for focus management */}
@@ -164,7 +167,7 @@ export default function AdvancedSearch({
           onSubmit={handleSubmit}
         >
           <Flex flexDirection={{ base: "column", md: "row" }}>
-            <Flex id="advancedSearchLeft" gap="s" direction="column">
+            <Flex id="advancedSearchLeft" gap="s" direction="column" grow="1">
               {textInputFields.map(({ name, label }) => {
                 return (
                   <FormField key={name}>
@@ -175,7 +178,7 @@ export default function AdvancedSearch({
                       value={searchFormState[name]}
                       onChange={debounce(
                         (e) => handleInputChange(e, "input_change"),
-                        debounceInterval
+                        DEBOUNCE_INTERVAL
                       )}
                       ref={inputRef}
                     />
@@ -201,7 +204,7 @@ export default function AdvancedSearch({
               </FormField>
               <FormField>{<DateForm {...dateFormProps} />}</FormField>
             </Flex>
-            <Flex direction="column" gap="l">
+            <Flex direction="column" gap="l" grow="1">
               <SearchFilterCheckboxField
                 options={searchAggregations.buildingLocation}
                 name="location"
@@ -213,13 +216,11 @@ export default function AdvancedSearch({
                 gridOptions={{ min: 1, max: 1 }}
               />
               <SearchFilterCheckboxField
-                options={materialTypeOptions}
+                options={formatOptions}
                 name="format"
                 label="Format"
-                handleCheckboxChange={(e) =>
-                  handleCheckboxChange("materialType", e)
-                }
-                searchFormState={searchFormState["filters"].materialType}
+                handleCheckboxChange={(e) => handleCheckboxChange("format", e)}
+                searchFormState={searchFormState["filters"].format}
               />
             </Flex>
           </Flex>

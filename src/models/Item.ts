@@ -12,6 +12,8 @@ import {
   locationEndpointsMap,
 } from "../utils/itemUtils"
 import { appConfig } from "../config/config"
+import ItemAvailability from "./ItemAvailability"
+import { convertCamelToShishKabobCase } from "../utils/appUtils"
 
 /**
  * The Item class contains the data and getter functions
@@ -34,6 +36,7 @@ export default class Item {
   isPhysicallyRequestable: boolean
   isEDDRequestable: boolean
   bibTitle: string
+  availability: ItemAvailability
 
   constructor(item: DiscoveryItemResult, bib: Bib) {
     this.id = item.uri || ""
@@ -49,7 +52,8 @@ export default class Item {
       : null
     this.format = item.formatLiteral?.length
       ? item.formatLiteral[0]
-      : bib.materialType
+      : bib.format
+
     this.barcode = item.idBarcode?.length ? item.idBarcode[0] : null
     this.location = this.getLocationFromItem(item)
     this.aeonUrl = item.aeonUrl?.length ? item.aeonUrl[0] : null
@@ -57,6 +61,13 @@ export default class Item {
     this.isPhysicallyRequestable = item.physRequestable
     this.isEDDRequestable = item.eddRequestable
     this.bibTitle = bib.titleDisplay
+    this.availability = new ItemAvailability({
+      isSpecRequestable: item.specRequestable,
+      isAvailable: this.isAvailable,
+      isReCAP: this.isReCAP,
+      aeonUrl: this.aeonUrl,
+      findingAid: bib.findingAid,
+    })
   }
 
   // Item availability is determined by the existence of status id in the availability ids list
@@ -79,6 +90,10 @@ export default class Item {
     return closedLocations
       .concat(this.isReCAP ? recapClosedLocations : nonRecapClosedLocations)
       .includes("all")
+  }
+
+  get formattedSourceForHoldRequest(): string {
+    return convertCamelToShishKabobCase(this.source)
   }
 
   // Pre-processing logic for setting Item holding location

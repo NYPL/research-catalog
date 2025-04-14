@@ -6,17 +6,9 @@ export const appConfig: AppConfig = {
     (process.env.NEXT_PUBLIC_APP_ENV as Environment) || "development",
   apiEndpoints: {
     platform: {
-      development: "https://qa-platform.nypl.org/api/v0.1",
-      qa: "https://qa-platform.nypl.org/api/v0.1",
-      production: "https://platform.nypl.org/api/v0.1",
-    },
-    // The 'discovery' base URL should use DISCOVERY_API_BASE_URL if set,
-    // falling back on PLATFORM_API_BASE_URL if set,
-    // and finally falling back on a sensible default.
-    discovery: {
-      development: "https://qa-platform.nypl.org/api/v0.1",
-      qa: "https://qa-platform.nypl.org/api/v0.1",
-      production: "https://platform.nypl.org/api/v0.1",
+      development: "https://qa-platform.nypl.org/api",
+      qa: "https://qa-platform.nypl.org/api",
+      production: "https://platform.nypl.org/api",
     },
     domain: {
       development: "local.nypl.org:8080",
@@ -77,6 +69,7 @@ export const appConfig: AppConfig = {
     researchMaterialsHelp:
       "https://www.nypl.org/help/request-research-materials",
     tokenUrl: "https://isso.nypl.org/",
+    renewCard: "https://www.nypl.org/help/library-card/terms-conditions#renew",
   },
   // Array of closed nypl location keys (available options for NYPL locations: all, schwarzman, schomburg, lpa)
   closedLocations: [] as (NYPLocationKey | "all")[],

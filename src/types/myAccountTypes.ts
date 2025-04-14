@@ -25,6 +25,7 @@ export interface SierraAccountData {
 }
 
 export interface SierraCheckout {
+  numberOfRenewals: number
   id: string
   patron: string
   item: SierraItem
@@ -89,6 +90,7 @@ export interface SierraPatron {
 }
 
 export interface Checkout {
+  numberOfRenewals: number
   callNumber: string | null
   barcode: string
   dueDate: string
@@ -123,7 +125,7 @@ export interface Hold {
 
 export interface Patron {
   username?: string
-  notificationPreference: "z" | "p"
+  notificationPreference: "z" | "p" | "-"
   name: string
   barcode: string
   formattedBarcode?: string
@@ -154,7 +156,7 @@ export interface SierraBibEntry {
   lang: SierraCodeName
   title: string
   author: string
-  materialType: {
+  recordType: {
     code: string
     value: string
   }
