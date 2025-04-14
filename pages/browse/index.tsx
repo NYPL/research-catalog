@@ -11,7 +11,8 @@ import Heading from "../../src/models/Headings/Heading"
 import type AuthorityVarfield from "../../src/models/Headings/AuthorityVarfield"
 import { kmsDecryptCreds } from "../../src/server/kms"
 import Layout from "../../src/components/Layout/Layout"
-import { SyntheticEvent, useState } from "react"
+import type { SyntheticEvent } from "react"
+import { useState } from "react"
 import { useRouter } from "next/router"
 
 function HeadingDisplay({
@@ -66,8 +67,8 @@ export default function Browse({ subjectHeadingsWithCounts }) {
         id="subject-browse-search-input"
         labelText="Subject browse search input"
         selectProps={{
-          onChange: (e) => {
-            setBrowseScope(e.target.value)
+          onChange: (e: SyntheticEvent) => {
+            setBrowseScope((e.target as HTMLInputElement).value)
           },
           value: browseScope,
           name: "selectBrowseOption",
@@ -82,9 +83,9 @@ export default function Browse({ subjectHeadingsWithCounts }) {
         textInputProps={{
           labelText: "searchinput",
           onChange: (e: SyntheticEvent) => {
-            setQuery(e.target.value)
+            setQuery((e.target as HTMLInputElement).value)
           },
-          value: query,
+          value: query as string,
           name: "q",
         }}
       />
