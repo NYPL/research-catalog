@@ -8,12 +8,12 @@ import {
 import RCLink from "../../src/components/Links/RCLink/RCLink"
 import { run } from "../../src/utils/sierraUtils"
 import Heading from "../../src/models/Headings/Heading"
-import type AuthorityVarfield from "../../src/models/Headings/AuthorityVarfield"
 import { kmsDecryptCreds } from "../../src/server/kms"
 import Layout from "../../src/components/Layout/Layout"
 import type { SyntheticEvent } from "react"
 import { useState } from "react"
 import { useRouter } from "next/router"
+import { getBibThatMatchesSubject } from "../../src/utils/browseUtils"
 
 function HeadingDisplay({
   url = null,
@@ -108,6 +108,13 @@ export async function getServerSideProps({ query }) {
     query: q,
     operator,
   })
+  if (subjectHeadingsFromSierra.length === 0) {
+    const bibUri = await getBibThatMatchesSubject(query.q)
+    console.log(bibUri)
+    //   return the bib id of the first bib that matches entire SH
+    // fetch bib from sierra
+    //   use
+  }
   const [esUri, esIndex, esApiKey] = await kmsDecryptCreds([
     process.env.NEXT_PUBLIC_ES_URI,
     process.env.NEXT_PUBLIC_ES_INDEX,
