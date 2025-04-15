@@ -7,7 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+## [1.4.6] 2025-04-14
+
 ### Fixed
+
+- Corrects Sierra client POST bug [SCC-4627](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4627)
+- Fixes keyword dropdown icon to not disappear on click [SCC-4601](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4601)
+
+### Updated
 
 - Updates Next.js to version 13.5.9 [SCC-4609](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4609)
 
