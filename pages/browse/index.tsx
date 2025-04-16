@@ -1,23 +1,16 @@
 import {
-  Flex,
   List,
   SearchBar,
   Table,
   Text,
 } from "@nypl/design-system-react-components"
 import RCLink from "../../src/components/Links/RCLink/RCLink"
-import { run } from "../../src/utils/sierraUtils"
 import Heading from "../../src/models/Headings/Heading"
 import { kmsDecryptCreds } from "../../src/server/kms"
 import Layout from "../../src/components/Layout/Layout"
 import type { SyntheticEvent } from "react"
 import { useState } from "react"
 import { useRouter } from "next/router"
-import {
-  getBibThatMatchesSubject,
-  getSubjectMarc,
-} from "../../src/utils/browseUtils"
-import AuthorityVarfield from "../../src/models/Headings/AuthorityVarfield"
 
 function HeadingDisplay({
   url = null,
@@ -31,20 +24,30 @@ function HeadingDisplay({
   display: boolean
 }) {
   return (
-    display &&
-    // <li>
-    // <Flex flexDirection="row" alignItems="center">
-    (url ? <RCLink href={url}>{label}</RCLink> : <Text>label</Text>)
-    // <Text>{` (${type})}`}</Text>
-    // </Flex>
-    // </li>
+    display && (url ? <RCLink href={url}>{label}</RCLink> : <Text>label</Text>)
   )
 }
 
 export default function Browse({ subjectHeadingsWithCounts }) {
-  const subjectHeadings = subjectHeadingsWithCounts.map(
+  const router = useRouter()
+  const [browseScope, setBrowseScope] = useState(
+    router.query.scope ? router.query.scope : "has"
+  )
+  let subjectHeadings = subjectHeadingsWithCounts.map(
     (heading) => new Heading(heading)
   )
+  if (browseScope === "has") {
+    subjectHeadings = subjectHeadings.sort((a, b) => {
+      if (a.primary.label < b.primary.label) {
+        return -1
+      }
+      if (a.primary.label > b.primary.label) {
+        return 1
+      }
+      return 0
+    })
+  }
+
   const tableData = subjectHeadings.map((heading: Heading) => {
     return [
       <HeadingDisplay key={heading.primary.label} {...heading.primary} />,
@@ -61,10 +64,6 @@ export default function Browse({ subjectHeadingsWithCounts }) {
       )),
     ]
   })
-  const router = useRouter()
-  const [browseScope, setBrowseScope] = useState(
-    router.query.scope ? router.query.scope : "has"
-  )
   const columnHeaders = ["Subject", "Count", "See also", "Broader terms"]
   const [query, setQuery] = useState(router.query.q)
   return (
@@ -116,13 +115,13 @@ export async function getServerSideProps({ query }) {
   const path = "/subjects/_search"
 
   const body = {
+    size: 100,
     query: {
-      [scope === "starts_with" ? "match_phrase_prefix" : "match"]: {
+      match: {
         normalizedLabel: q,
       },
     },
   }
-  console.log(body)
   const headers = {
     "Content-type": "application/json",
     Authorization:
@@ -139,7 +138,6 @@ export async function getServerSideProps({ query }) {
   const subjectHeadings = await subjectHeadingsFromLocalEs
     .json()
     .then((esResults) => {
-      console.log(esResults)
       return esResults.hits.hits.map(({ _source: result }) => {
         try {
           return {

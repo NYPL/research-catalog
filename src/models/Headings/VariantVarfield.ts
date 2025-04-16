@@ -5,9 +5,15 @@ class VariantVarfield extends AuthorityVarfield {
   constructor(varfield: VarField) {
     super(varfield)
     this.label = this.getLabel({ skipTags: ["w", "i", "0", "1"] })
-    this.url = `/browse?q=${this.label.split(" -- ")[0]}`
+    this.url = `/browse?q=${this.label}`
     this.display = this.shouldDisplay()
     this.broaderTerm = this.getBroaderTerm()
+  }
+  getNarrowTerm() {
+    const subfieldW = this.getSubfieldContent("w")?.split("")
+    const specialRelationship = subfieldW?.[0]
+    if (specialRelationship === "h") return true
+    else return false
   }
   getBroaderTerm() {
     const subfieldW = this.getSubfieldContent("w")?.split("")
