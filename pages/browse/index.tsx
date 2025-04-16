@@ -107,23 +107,57 @@ export default function Browse({ subjectHeadingsWithCounts }) {
 
 export async function getServerSideProps({ query }) {
   const { q, scope } = query
-  const operator = scope ? scope : "has"
-  const subjectHeadingsFromSierra = await run({
-    query: q,
-    operator,
-  })
-  if (subjectHeadingsFromSierra.length === 0) {
-    const bibUri = await getBibThatMatchesSubject(q)
-    const subjectMarc = await getSubjectMarc(bibUri, q)
-    const authority = new AuthorityVarfield(subjectMarc)
+  // const operator = scope ? scope : "has"
+  // let subjectHeadings = await run({
+  //   query: q,
+  //   operator,
+  // })
+  // if (subjectHeadings.length === 0) {
+  const path = "/subjects/_search"
+
+  const body = {
+    query: {
+      [scope === "starts_with" ? "match_phrase_prefix" : "match"]: {
+        normalizedLabel: q,
+      },
+    },
   }
+  console.log(body)
+  const headers = {
+    "Content-type": "application/json",
+    Authorization:
+      "apiKey cWRjaFA1WUJYX1R2bzVmRExUd2k6STR5Wl85b1F5NTRPYkZiN01VVDlDZw==",
+  }
+  const subjectHeadingsFromLocalEs = await fetch(
+    "http://localhost:9200" + path,
+    {
+      method: "POST",
+      headers,
+      body: JSON.stringify(body),
+    }
+  )
+  const subjectHeadings = await subjectHeadingsFromLocalEs
+    .json()
+    .then((esResults) => {
+      console.log(esResults)
+      return esResults.hits.hits.map(({ _source: result }) => {
+        try {
+          return {
+            varFields: [result.primaryMarc, ...result.fiveHundredsMarc],
+          }
+        } catch (e) {
+          console.log("caught", result)
+        }
+      })
+    })
+  // }
   const [esUri, esIndex, esApiKey] = await kmsDecryptCreds([
     process.env.NEXT_PUBLIC_ES_URI,
     process.env.NEXT_PUBLIC_ES_INDEX,
     process.env.NEXT_PUBLIC_ES_API_KEY,
   ])
   const subjectHeadingsWithCounts = await Promise.all(
-    subjectHeadingsFromSierra.map(async (sh) => {
+    subjectHeadings.map(async (sh) => {
       const esResponse = await fetch(`${esUri}/${esIndex}/_count`, {
         method: "POST",
         headers: {
