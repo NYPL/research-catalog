@@ -13,7 +13,11 @@ import Layout from "../../src/components/Layout/Layout"
 import type { SyntheticEvent } from "react"
 import { useState } from "react"
 import { useRouter } from "next/router"
-import { getBibThatMatchesSubject } from "../../src/utils/browseUtils"
+import {
+  getBibThatMatchesSubject,
+  getSubjectMarc,
+} from "../../src/utils/browseUtils"
+import AuthorityVarfield from "../../src/models/Headings/AuthorityVarfield"
 
 function HeadingDisplay({
   url = null,
@@ -109,11 +113,9 @@ export async function getServerSideProps({ query }) {
     operator,
   })
   if (subjectHeadingsFromSierra.length === 0) {
-    const bibUri = await getBibThatMatchesSubject(query.q)
-    console.log(bibUri)
-    //   return the bib id of the first bib that matches entire SH
-    // fetch bib from sierra
-    //   use
+    const bibUri = await getBibThatMatchesSubject(q)
+    const subjectMarc = await getSubjectMarc(bibUri, q)
+    const authority = new AuthorityVarfield(subjectMarc)
   }
   const [esUri, esIndex, esApiKey] = await kmsDecryptCreds([
     process.env.NEXT_PUBLIC_ES_URI,
