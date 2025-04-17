@@ -36,17 +36,17 @@ export default function Browse({ subjectHeadingsWithCounts }) {
   let subjectHeadings = subjectHeadingsWithCounts.map(
     (heading) => new Heading(heading)
   )
-  if (browseScope === "has") {
-    subjectHeadings = subjectHeadings.sort((a, b) => {
-      if (a.primary.label < b.primary.label) {
-        return -1
-      }
-      if (a.primary.label > b.primary.label) {
-        return 1
-      }
-      return 0
-    })
-  }
+  // if (browseScope === "has") {
+  //   subjectHeadings = subjectHeadings.sort((a, b) => {
+  //     if (a.primary.label < b.primary.label) {
+  //       return -1
+  //     }
+  //     if (a.primary.label > b.primary.label) {
+  //       return 1
+  //     }
+  //     return 0
+  //   })
+  // }
 
   const tableData = subjectHeadings.map((heading: Heading) => {
     return [
@@ -113,20 +113,31 @@ export async function getServerSideProps({ query }) {
   // })
   // if (subjectHeadings.length === 0) {
   const path = "/subjects/_search"
+  const startsWithQuery = (query) => ({
+    prefix: {
+      "normalizedLabel.keyword": { value: query, case_insensitive: true },
+    },
+  })
+  const hasQuery = (query) => {
+    return {
+      match: {
+        normalizedLabel: query,
+      },
+    }
+  }
+  const esQuery = scope === "has" ? hasQuery(q) : startsWithQuery(q)
 
   const body = {
     size: 100,
-    query: {
-      match: {
-        normalizedLabel: q,
-      },
-    },
+    query: esQuery,
   }
+
   const headers = {
     "Content-type": "application/json",
     Authorization:
       "apiKey cWRjaFA1WUJYX1R2bzVmRExUd2k6STR5Wl85b1F5NTRPYkZiN01VVDlDZw==",
   }
+  console.log(body)
   const subjectHeadingsFromLocalEs = await fetch(
     "http://localhost:9200" + path,
     {
