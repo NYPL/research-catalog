@@ -224,7 +224,6 @@ export function getSearchQuery(params: SearchParams): string {
   const advancedQuery = isAdvancedSearchOrAllFields
     ? advancedSearchQueryParams
     : ""
-
   const completeQuery = `${searchKeywordsQuery}${advancedQuery}${filterQuery}${sortQuery}${fieldQuery}${pageQuery}${identifierQuery}`
   return completeQuery?.length ? `?q=${completeQuery}` : ""
 }

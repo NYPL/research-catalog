@@ -14,38 +14,37 @@ class Heading {
   broaderTerms: VariantVarfield[]
   count: number
   constructor(sierraAuthorityData: SierraAuthority) {
+    this.sierraAuthorityData = sierraAuthorityData
     this.count = sierraAuthorityData.count
     this.primary = new AuthorityVarfield(this.getFieldTagD(sierraAuthorityData))
-    this.seeAlso = this.getFiveHundreds(sierraAuthorityData).filter(
+    this.seeAlso = this.getFiveHundreds().filter(
       ({ broaderTerm }) => !broaderTerm
     )
-    this.broaderTerms = this.getFiveHundreds(sierraAuthorityData).filter(
+    this.broaderTerms = this.getFiveHundreds().filter(
       ({ broaderTerm }) => broaderTerm
     )
-    this.fourHundreds = this.getFourHundreds(sierraAuthorityData)
+    this.fourHundreds = this.getFourHundreds()
   }
   getFieldTagD(authorityRecord) {
     const fieldTagD = authorityRecord.varFields.find((f) => f.fieldTag === "d")
     return fieldTagD
   }
-  getXXFields(sierraAuthorityData, number: 400 | 500 | 600) {
+  getXXFields(number: 400 | 500 | 600) {
     const min = number - 1
     const max = number + 100
-    const xxFields = sierraAuthorityData.varFields.filter((field: VarField) => {
-      const tag = parseInt(field.marcTag, 10)
-      return tag > min && tag < max
-    })
+    const xxFields = this.sierraAuthorityData.varFields.filter(
+      (field: VarField) => {
+        const tag = parseInt(field.marcTag, 10)
+        return tag > min && tag < max
+      }
+    )
     return xxFields
   }
-  getFiveHundreds(sierraAuthorityData) {
-    return this.getXXFields(sierraAuthorityData, 500).map(
-      (field) => new VariantVarfield(field)
-    )
+  getFiveHundreds() {
+    return this.getXXFields(500).map((field) => new VariantVarfield(field))
   }
-  getFourHundreds(sierraAuthorityData) {
-    return this.getXXFields(sierraAuthorityData, 400).map(
-      (field) => new VariantVarfield(field)
-    )
+  getFourHundreds() {
+    return this.getXXFields(400).map((field) => new VariantVarfield(field))
   }
 }
 

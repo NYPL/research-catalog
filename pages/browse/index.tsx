@@ -1,14 +1,11 @@
 import {
-  Flex,
   List,
   SearchBar,
   Table,
   Text,
 } from "@nypl/design-system-react-components"
 import RCLink from "../../src/components/Links/RCLink/RCLink"
-import { run } from "../../src/utils/sierraUtils"
 import Heading from "../../src/models/Headings/Heading"
-import type AuthorityVarfield from "../../src/models/Headings/AuthorityVarfield"
 import { kmsDecryptCreds } from "../../src/server/kms"
 import Layout from "../../src/components/Layout/Layout"
 import type { SyntheticEvent } from "react"
@@ -27,20 +24,20 @@ function HeadingDisplay({
   display: boolean
 }) {
   return (
-    display &&
-    // <li>
-    // <Flex flexDirection="row" alignItems="center">
-    (url ? <RCLink href={url}>{label}</RCLink> : <Text>label</Text>)
-    // <Text>{` (${type})}`}</Text>
-    // </Flex>
-    // </li>
+    display && (url ? <RCLink href={url}>{label}</RCLink> : <Text>label</Text>)
   )
 }
 
 export default function Browse({ subjectHeadingsWithCounts }) {
+  const router = useRouter()
+  const initialScope = router.query.scope
+    ? (router.query.scope as string)
+    : "has"
+  const [browseScope, setBrowseScope] = useState(initialScope)
   const subjectHeadings = subjectHeadingsWithCounts.map(
     (heading) => new Heading(heading)
   )
+
   const tableData = subjectHeadings.map((heading: Heading) => {
     return [
       <HeadingDisplay key={heading.primary.label} {...heading.primary} />,
@@ -57,10 +54,6 @@ export default function Browse({ subjectHeadingsWithCounts }) {
       )),
     ]
   })
-  const router = useRouter()
-  const [browseScope, setBrowseScope] = useState(
-    router.query.scope ? router.query.scope : "has"
-  )
   const columnHeaders = ["Subject", "Count", "See also", "Broader terms"]
   const [query, setQuery] = useState(router.query.q)
   return (
@@ -79,7 +72,7 @@ export default function Browse({ subjectHeadingsWithCounts }) {
             { text: "Starts with", value: "starts_with" },
           ],
         }}
-        onSubmit={(e: SyntheticEvent) => {
+        onSubmit={() => {
           router.push(`/browse?scope=${browseScope}&q=${query}`)
         }}
         textInputProps={{
@@ -103,24 +96,60 @@ export default function Browse({ subjectHeadingsWithCounts }) {
 
 export async function getServerSideProps({ query }) {
   const { q, scope } = query
-  const operator = scope ? scope : "has"
-  const subjectHeadingsFromSierra = await run({
-    query: q,
-    operator,
-  })
-  const [esUri, esIndex, esApiKey] = await kmsDecryptCreds([
+  const [esUri, esBibIndex, esApiKey] = await kmsDecryptCreds([
     process.env.NEXT_PUBLIC_ES_URI,
     process.env.NEXT_PUBLIC_ES_INDEX,
     process.env.NEXT_PUBLIC_ES_API_KEY,
   ])
+  const startsWithQuery = (query) => ({
+    prefix: {
+      "label.keyword": { value: query, case_insensitive: true },
+    },
+  })
+  const hasQuery = (query) => {
+    return {
+      match: {
+        label: query,
+      },
+    }
+  }
+  const esQuery = scope === "has" ? hasQuery(q) : startsWithQuery(q)
+
+  const body = {
+    size: 100,
+    query: esQuery,
+  }
+  const esHeaders = {
+    Authorization: `apiKey ${esApiKey}`,
+    "Content-type": "application/json",
+  }
+  const subjectHeadingsFromSubjectEs = await fetch(
+    esUri + "/subjects-test/_search",
+    {
+      method: "POST",
+      headers: esHeaders,
+      body: JSON.stringify(body),
+    }
+  )
+  const subjectHeadings = await subjectHeadingsFromSubjectEs
+    .json()
+    .then((esResults) => {
+      return esResults.hits.hits.map(({ _source: result }) => {
+        try {
+          return {
+            varFields: [result.primaryMarc, ...result.fiveHundredsMarc],
+          }
+        } catch (e) {
+          console.log("caught", result)
+        }
+      })
+    })
+
   const subjectHeadingsWithCounts = await Promise.all(
-    subjectHeadingsFromSierra.map(async (sh) => {
-      const esResponse = await fetch(`${esUri}/${esIndex}/_count`, {
+    subjectHeadings.map(async (sh) => {
+      const esResponse = await fetch(`${esUri}/${esBibIndex}/_count`, {
         method: "POST",
-        headers: {
-          Authorization: `apiKey ${esApiKey}`,
-          "Content-type": "application/json",
-        },
+        headers: esHeaders,
         body: JSON.stringify({
           query: {
             bool: {
