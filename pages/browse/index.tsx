@@ -33,7 +33,7 @@ export default function Browse({ subjectHeadingsWithCounts }) {
   const [browseScope, setBrowseScope] = useState(
     router.query.scope ? router.query.scope : "has"
   )
-  let subjectHeadings = subjectHeadingsWithCounts.map(
+  const subjectHeadings = subjectHeadingsWithCounts.map(
     (heading) => new Heading(heading)
   )
   // if (browseScope === "has") {
