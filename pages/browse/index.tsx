@@ -30,23 +30,13 @@ function HeadingDisplay({
 
 export default function Browse({ subjectHeadingsWithCounts }) {
   const router = useRouter()
-  const [browseScope, setBrowseScope] = useState(
-    router.query.scope ? router.query.scope : "has"
-  )
+  const initialScope = router.query.scope
+    ? (router.query.scope as string)
+    : "has"
+  const [browseScope, setBrowseScope] = useState(initialScope)
   const subjectHeadings = subjectHeadingsWithCounts.map(
     (heading) => new Heading(heading)
   )
-  // if (browseScope === "has") {
-  //   subjectHeadings = subjectHeadings.sort((a, b) => {
-  //     if (a.primary.label < b.primary.label) {
-  //       return -1
-  //     }
-  //     if (a.primary.label > b.primary.label) {
-  //       return 1
-  //     }
-  //     return 0
-  //   })
-  // }
 
   const tableData = subjectHeadings.map((heading: Heading) => {
     return [
@@ -82,7 +72,7 @@ export default function Browse({ subjectHeadingsWithCounts }) {
             { text: "Starts with", value: "starts_with" },
           ],
         }}
-        onSubmit={(e: SyntheticEvent) => {
+        onSubmit={() => {
           router.push(`/browse?scope=${browseScope}&q=${query}`)
         }}
         textInputProps={{
@@ -106,22 +96,20 @@ export default function Browse({ subjectHeadingsWithCounts }) {
 
 export async function getServerSideProps({ query }) {
   const { q, scope } = query
-  // const operator = scope ? scope : "has"
-  // let subjectHeadings = await run({
-  //   query: q,
-  //   operator,
-  // })
-  // if (subjectHeadings.length === 0) {
-  const path = "/subjects/_search"
+  const [esUri, esBibIndex, esApiKey] = await kmsDecryptCreds([
+    process.env.NEXT_PUBLIC_ES_URI,
+    process.env.NEXT_PUBLIC_ES_INDEX,
+    process.env.NEXT_PUBLIC_ES_API_KEY,
+  ])
   const startsWithQuery = (query) => ({
     prefix: {
-      "normalizedLabel.keyword": { value: query, case_insensitive: true },
+      "label.keyword": { value: query, case_insensitive: true },
     },
   })
   const hasQuery = (query) => {
     return {
       match: {
-        normalizedLabel: query,
+        label: query,
       },
     }
   }
@@ -131,22 +119,19 @@ export async function getServerSideProps({ query }) {
     size: 100,
     query: esQuery,
   }
-
-  const headers = {
+  const esHeaders = {
+    Authorization: `apiKey ${esApiKey}`,
     "Content-type": "application/json",
-    Authorization:
-      "apiKey cWRjaFA1WUJYX1R2bzVmRExUd2k6STR5Wl85b1F5NTRPYkZiN01VVDlDZw==",
   }
-  console.log(body)
-  const subjectHeadingsFromLocalEs = await fetch(
-    "http://localhost:9200" + path,
+  const subjectHeadingsFromSubjectEs = await fetch(
+    esUri + "/subjects-test/_search",
     {
       method: "POST",
-      headers,
+      headers: esHeaders,
       body: JSON.stringify(body),
     }
   )
-  const subjectHeadings = await subjectHeadingsFromLocalEs
+  const subjectHeadings = await subjectHeadingsFromSubjectEs
     .json()
     .then((esResults) => {
       return esResults.hits.hits.map(({ _source: result }) => {
@@ -159,20 +144,12 @@ export async function getServerSideProps({ query }) {
         }
       })
     })
-  // }
-  const [esUri, esIndex, esApiKey] = await kmsDecryptCreds([
-    process.env.NEXT_PUBLIC_ES_URI,
-    process.env.NEXT_PUBLIC_ES_INDEX,
-    process.env.NEXT_PUBLIC_ES_API_KEY,
-  ])
+
   const subjectHeadingsWithCounts = await Promise.all(
     subjectHeadings.map(async (sh) => {
-      const esResponse = await fetch(`${esUri}/${esIndex}/_count`, {
+      const esResponse = await fetch(`${esUri}/${esBibIndex}/_count`, {
         method: "POST",
-        headers: {
-          Authorization: `apiKey ${esApiKey}`,
-          "Content-type": "application/json",
-        },
+        headers: esHeaders,
         body: JSON.stringify({
           query: {
             bool: {
