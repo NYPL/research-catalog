@@ -13,6 +13,7 @@ class Heading {
   fourHundreds: VariantVarfield[]
   broaderTerms: VariantVarfield[]
   count: number
+  sierraAuthorityData: SierraAuthority
   constructor(sierraAuthorityData: SierraAuthority) {
     this.sierraAuthorityData = sierraAuthorityData
     this.count = sierraAuthorityData.count
