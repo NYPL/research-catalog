@@ -101,20 +101,18 @@ export async function getServerSideProps({ query }) {
     process.env.NEXT_PUBLIC_ES_INDEX,
     process.env.NEXT_PUBLIC_ES_API_KEY,
   ])
-  const startsWithQuery = (query) => ({
+  const startsWithQuery = {
     prefix: {
-      "label.keyword": { value: query, case_insensitive: true },
+      "label.keyword": { value: q, case_insensitive: true },
     },
-  })
-  const hasQuery = (query) => {
-    return {
-      match: {
-        label: query,
-      },
-    }
   }
-  const esQuery = scope === "has" ? hasQuery(q) : startsWithQuery(q)
+  const hasQuery = {
+    match: {
+      label: q,
+    },
+  }
 
+  const esQuery = scope === "has" ? hasQuery : startsWithQuery
   const body = {
     size: 100,
     query: esQuery,
