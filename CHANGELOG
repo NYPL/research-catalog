@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 
-- Removes `pickupLocation` from EDD requests [SCC-4614](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4614)
+- Removes `pickupLocation` from EDD hold requests [SCC-4614](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4614)
 
 ## [1.4.5] 2025-02-24
 
