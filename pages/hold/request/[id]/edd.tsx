@@ -117,7 +117,6 @@ export default function EDDRequestPage({
   }
 
   const postEDDRequest = async (eddParams: EDDRequestParams) => {
-    console.log("eddParams here: ", eddParams)
     try {
       setFormPosting(true)
 
