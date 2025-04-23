@@ -66,7 +66,7 @@ export default function Browse({ subjectHeadingsWithCounts }) {
             setBrowseScope((e.target as HTMLInputElement).value)
           },
           value: browseScope as string,
-          name: "selectBrowseOption",
+          name: "scope",
           optionsData: [
             { text: "Contains", value: "has" },
             { text: "Starts with", value: "starts_with" },
@@ -101,22 +101,25 @@ export async function getServerSideProps({ query }) {
     process.env.NEXT_PUBLIC_ES_INDEX,
     process.env.NEXT_PUBLIC_ES_API_KEY,
   ])
-  const startsWithQuery = {
-    prefix: {
-      "label.keyword": { value: q, case_insensitive: true },
+  const startsWithBody = {
+    size: 100,
+    query: {
+      prefix: {
+        "label.keyword": { value: q, case_insensitive: true },
+      },
     },
+    sort: { "label.keyword": { order: "asc" } },
   }
-  const hasQuery = {
-    match: {
-      label: q,
+  const hasBody = {
+    size: 100,
+    sort: { _score: "desc" },
+    query: {
+      match: {
+        label: q,
+      },
     },
   }
 
-  const esQuery = scope === "has" ? hasQuery : startsWithQuery
-  const body = {
-    size: 100,
-    query: esQuery,
-  }
   const esHeaders = {
     Authorization: `apiKey ${esApiKey}`,
     "Content-type": "application/json",
@@ -126,9 +129,10 @@ export async function getServerSideProps({ query }) {
     {
       method: "POST",
       headers: esHeaders,
-      body: JSON.stringify(body),
+      body: JSON.stringify(scope === "has" ? hasBody : startsWithBody),
     }
   )
+
   const subjectHeadings = await subjectHeadingsFromSubjectEs
     .json()
     .then((esResults) => {
