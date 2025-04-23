@@ -366,7 +366,7 @@ export default class BibDetails {
     }
     const label = "Supplementary content"
     const values = this.bib.supplementaryContent
-      .filter((sc) => sc.label !== "Finding Aid")
+      .filter((sc) => !sc.label.toLowerCase().includes("finding aid"))
       .map((sc) => ({
         url: sc.url,
         urlLabel: sc.label,
@@ -379,7 +379,7 @@ export default class BibDetails {
       return null
     }
     const findingAid = this.bib.supplementaryContent.find(
-      (sc) => sc.label === "Finding Aid" && !!sc.url
+      (sc) => sc.label.toLowerCase().includes("finding aid") && !!sc.url
     )
     return findingAid || null
   }

@@ -49,22 +49,21 @@ const ElectronicResources = ({
   }
 
   return (
-    <Card
-      ref={scrollToRef}
-      isBordered
-      mt="l"
-      data-testid="electronic-resources"
-    >
-      <CardHeading level="three" size="body1" mb="s">
+    <Card ref={scrollToRef} isBordered data-testid="electronic-resources">
+      <CardHeading level="three" size="body1" mb="xs">
         Available online
       </CardHeading>
       <CardContent aria-expanded={!showMore}>
         <List
           type="ul"
+          mb="0"
           noStyling
-          mb="s"
           listItems={electronicResourcesToDisplay.map((resource) => (
-            <ExternalLink href={resource.url} key={kebabCase(resource.title)}>
+            <ExternalLink
+              href={resource.url}
+              key={kebabCase(resource.title)}
+              type="standalone"
+            >
               <Box
                 as="span"
                 display="inline-block"
@@ -83,6 +82,7 @@ const ElectronicResources = ({
             id="see-more-eresources-button"
             data-testid="see-more-eresources-button"
             p={0}
+            mt="s"
             onClick={onClick}
             buttonType="link"
             aria-expanded={!showMore}

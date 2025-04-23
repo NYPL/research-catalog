@@ -45,6 +45,7 @@ import {
   areFiltersApplied,
 } from "../../../src/utils/itemFilterUtils"
 import RCHead from "../../../src/components/Head/RCHead"
+import FindingAid from "../../../src/components/BibPage/FindingAid"
 
 interface BibPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -219,7 +220,10 @@ export default function BibPage({
         </Heading>
         <BibDetails key="top-details" details={topDetails} />
         {findingAid ? (
-          <ElectronicResources electronicResources={bib.electronicResources} />
+          <FindingAid
+            findingAid={findingAid}
+            hasElectronicResources={bib.hasElectronicResources}
+          />
         ) : null}
         {bib.hasElectronicResources ? (
           <ElectronicResources electronicResources={bib.electronicResources} />
