@@ -6,6 +6,7 @@ import {
   SkeletonLoader,
   Box,
   Banner,
+  StatusBadge,
 } from "@nypl/design-system-react-components"
 
 import Layout from "../../../src/components/Layout/Layout"
@@ -80,13 +81,20 @@ export default function BibPage({
   const viewAllLoadingTextRef = useRef<HTMLDivElement & HTMLLabelElement>(null)
   const controllerRef = useRef<AbortController>()
 
-  const { topDetails, bottomDetails, holdingsDetails } = new BibDetailsModel(
-    discoveryBibResult,
-    annotatedMarc
-  )
+  const {
+    topDetails,
+    bottomDetails,
+    holdingsDetails,
+    supplementaryContent,
+    findingAid,
+  } = new BibDetailsModel(discoveryBibResult, annotatedMarc)
   const displayLegacyCatalogLink = isNyplBibID(bib.id)
 
   const filtersAreApplied = areFiltersApplied(appliedFilters)
+
+  console.log("supplementary content", supplementaryContent)
+  console.log("topDetails", topDetails)
+  console.log("finding aid", findingAid)
 
   const refreshItemTable = async (
     newQuery: BibQueryParams,
@@ -203,10 +211,16 @@ export default function BibPage({
     <>
       <RCHead metadataTitle={metadataTitle} />
       <Layout isAuthenticated={isAuthenticated} activePage="bib">
-        <Heading level="h2" size="heading3" mb="l">
+        {findingAid && (
+          <StatusBadge type="informative">FINDING AID AVAILABLE</StatusBadge>
+        )}
+        <Heading level="h2" size="heading3" mb="l" mt={findingAid ? "s" : 0}>
           {bib.title}
         </Heading>
         <BibDetails key="top-details" details={topDetails} />
+        {findingAid ? (
+          <ElectronicResources electronicResources={bib.electronicResources} />
+        ) : null}
         {bib.hasElectronicResources ? (
           <ElectronicResources electronicResources={bib.electronicResources} />
         ) : null}

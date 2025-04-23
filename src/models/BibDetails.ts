@@ -21,6 +21,7 @@ export default class BibDetails {
   extent: string[]
   subjectLiteral: BibDetailURL[][]
   owner: string[]
+  findingAid?: BibDetailURL
 
   constructor(
     discoveryBibResult: DiscoveryBibResult,
@@ -29,6 +30,7 @@ export default class BibDetails {
     this.bib = this.matchParallelToPrimaryValues(discoveryBibResult)
     // these properties are not string[] so they require separate processing
     this.supplementaryContent = this.buildSupplementaryContent()
+    this.findingAid = this.buildFindingAid()
     this.groupedNotes = this.buildGroupedNotes()
     this.extent = this.buildExtent()
     this.owner = this.buildOwner()
@@ -363,13 +365,23 @@ export default class BibDetails {
       return null
     }
     const label = "Supplementary content"
-    const values = this.bib.supplementaryContent.map((sc) => {
-      return {
+    const values = this.bib.supplementaryContent
+      .filter((sc) => sc.label !== "Finding Aid")
+      .map((sc) => ({
         url: sc.url,
         urlLabel: sc.label,
-      }
-    })
+      }))
     return this.buildExternalLinkedDetail(convertToSentenceCase(label), values)
+  }
+
+  buildFindingAid() {
+    if (!this.bib.supplementaryContent?.length) {
+      return null
+    }
+    const findingAid = this.bib.supplementaryContent.find(
+      (sc) => sc.label === "Finding Aid" && !!sc.url
+    )
+    return findingAid || null
   }
 
   buildSubjectHeadings(): BibDetailURL[][] {
