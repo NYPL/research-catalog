@@ -147,7 +147,7 @@ export default function EDDRequestPage({
           setFormPosting(false)
           // Success state
           await router.push(
-            `${PATHS.HOLD_CONFIRMATION}/${holdId}?requestId=${responseJson?.requestId}`
+            `${PATHS.HOLD_CONFIRMATION}/${holdId}?pickupLocation=edd&requestId=${responseJson?.requestId}`
           )
       }
     } catch (error) {
