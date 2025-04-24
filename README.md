@@ -1,73 +1,338 @@
-# Research Catalog README
+# NYPL Research Catalog
 
-This is the new [NYPL Research Catalog](https://www.nypl.org/research/research-catalog) front end built in [Next.js](https://nextjs.org/).
+## Table of Contents
 
-## Local Environment Setup
+- [Introduction](#introduction)
+- [Getting Started](#getting-started)
+- [Project Architecture](#project-architecture)
+- [Key Features](#key-features)
+- [API Integration](#api-integration)
+- [Authentication](#authentication)
+- [Deployment](#deployment)
+- [Troubleshooting](#troubleshooting)
 
-### Getting Started
+## Introduction
 
-1. Install the required packages
+The [NYPL Research Catalog](https://www.nypl.org/research/research-catalog) is a [Next.js](https://nextjs.org/) application that serves as the front-end interface for the New York Public Library's research collections. It facilitates the searching, browsing, and requesting of materials from NYPL's extensive research holdings including the [shared collection](https://www.nypl.org/research/shared-collection-catalog).
 
-```bash
-npm install
-```
+### Technologies Used
 
-2. Ensure the required Environment Variables are set in your .env.local file.
-(see https://github.com/NYPL/research-catalog/blob/main/ENVIRONMENTVARS.md)
+- **Frontend Framework**: [Next.js](https://nextjs.org/)
+- **UI Components**: [@nypl/design-system-react-components](https://nypl.github.io/nypl-design-system/reservoir/)
+- **Data Fetching**: Server-side rendering with `getServerSideProps` and client-side fetching with JavaScript's native fetch API
+- **Styling**: SCSS modules and Style Props
+- **Testing**: Jest and React Testing Library
+- **Logging**: Winston logging to AWS Cloudwatch
+- **Authentication**: JWT-based patron "log in" for developing and testing authenticated features (Account and Hold requests)
 
-### Running the app locally with npm:
+## Getting Started
+
+### Prerequisites
+
+1. **Node.js**: The application requires the Node.js version specified in the `.nvmrc` file. We recommend using [NVM (Node Version Manager)](https://github.com/nvm-sh/nvm) to manage Node.js versions.
+
+   ```bash
+   # Install and use the correct Node.js version
+   nvm install
+   nvm use
+   ```
+
+### Installation
+
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Create a `.env.local` file based on `.env.example` with the required environment variables
+
+### Environment Variables
+
+The application uses environment variables for configuration. See [ENVIRONMENT_VARIABLES.md](ENVIRONMENT_VARIABLES.md) for detailed information about each variable.
+
+Key environment variables include:
+
+- `NEXT_PUBLIC_APP_ENV`: Application environment (development, qa, production)
+- `NYPL_HEADER_URL`: URL for NYPL header and footer scripts
+- `PLATFORM_API_CLIENT_ID` and `PLATFORM_API_CLIENT_SECRET`: Encrypted credentials for NYPL's API platform
+- `SIERRA_KEY` and `SIERRA_SECRET`: Encrypted credentials for Sierra API
+
+### Local Development
+
+#### Running with npm
 
 ```bash
 npm run dev
 ```
 
-### Local Hosting
+This starts the development server on port 8080.
 
-In order to successfully log in under a local deployment you'll need to update
-your machine's `etc/hosts` file. This file maps IP addresses to hostnames.
+#### Local Authentication Setup
 
-This is necessary because NYPL's authentication system works by reading cookies
-and parsing the patron's encrypted credentials. These cookies only work on
-`.nypl.org` domains, so we need to map our local deployment to a `.nypl.org`
-domain.
+To enable login functionality in local development:
 
-Add the following line to your `etc/hosts` file. There is no need to remove or
-update any other configuration in this file.
+1. Update your machine's `etc/hosts` file by adding:
+   ```
+   127.0.0.1       local.nypl.org
+   ```
+2. Access the application at http://local.nypl.org:8080/research/research-catalog
 
+#### Running with Docker (optional)
+
+1. Install Docker
+2. Run:
+   ```bash
+   docker-compose up --build --force-recreate
+   ```
+3. Access the application at http://localhost:8080/research/research-catalog
+
+## Project Architecture
+
+### System Architecture
+
+The NYPL Research Catalog is part of a transitional architecture that involves both this Next.js application and the legacy discovery-front-end (DFE) application. The system uses NYPL's reverse proxy to route requests between these applications:
+
+- **Research Catalog (Next.js)**: Handles most of the functionality, including search, bib, hold request, and account pages.
+- **Discovery Front End (DFE)**: Currently only handles the [Subject Heading Explorer (SHEP)](https://www.nypl.org/research/research-catalog/subject_headings) pages.
+
+#### Reverse Proxy Configuration
+
+The NYPL reverse proxy is configured to route page requests to the appropriate application:
+
+- Most paths are routed to the Research Catalog Next.js application
+- Subject Heading Explorer paths are routed to the legacy DFE application
+
+This configuration is controlled by the `NEXT_PUBLIC_REVERSE_PROXY_ENABLED` environment variable, which is set to `true` in QA and production environments.
+
+#### Transition Plan
+
+The Subject Heading Explorer pages are the only remaining pages still served by the legacy DFE application. These will be replaced by the upcoming Enhanced Browse pages in the Research Catalog. Once the Enhanced Browse pages are launched, the legacy DFE application MUST sunset completely and this app must be updated accordingly.
+
+## Key Features
+
+### Search Functionality
+
+The Research Catalog provides both basic and advanced search capabilities:
+
+- **Basic Search**: Keyword search across all fields used to query and display Bib results as well as [DRB (Digital Research Books)](https://digitalcollections.nypl.org/) results in the sidebar.
+- **Advanced Search**: Targeted search by title, author, subject, call number, etc.
+- **Filters**: Refine search results by format, location, status, and date
+
+### Bib Display
+
+Bib pages (`/bib/[id]`) display detailed information about a Bib's items:
+
+- Bib details (title, author, publication info, etc.)
+- Item availability and location
+- Electronic resources
+- Holdings information
+- Request options
+
+### Item Availability
+
+The application displays real-time availability information for physical items:
+
+- Location (on-site or off-site)
+- Status (available, not available, etc.)
+- Request options based on availability
+
+### My Account
+
+Authenticated users can access account features:
+
+- View checkouts
+- Manage holds
+- Update account settings
+- Change PIN
+
+## API Integration
+
+### Internal API Endpoints
+
+The application provides several internal API endpoints:
+
+- `/api/bib/[id]`: Fetch bib data
+- `/api/search`: Search the catalog
+- `/api/account/*`: My Account endpoints (see [MY_ACCOUNT.md](/docs/MY_ACCOUNT.md))
+- `/api/hold/request/*`: Hold request endpoints
+
+### External API Integration
+
+The application integrates with several external APIs through custom client implementations:
+
+#### API Clients
+
+- **nyplApiClient**: A wrapper around the `@nypl/nypl-data-api-client` package that handles authentication, environment-specific configuration, and caching. Used primarily to interact with the Discovery API.
+
+- **sierraClient**: A wrapper around the `@nypl/sierra-wrapper` package that handles authentication, configuration, and caching for Sierra API interactions. Used primarily for patron account operations.
+
+Both clients:
+
+- Automatically decrypt credentials using AWS KMS
+- Cache client instances for better performance
+- Use environment-specific configuration based on NEXT_PUBLIC_APP_ENV
+- Include error handling and logging
+
+#### External APIs
+
+- **Discovery API**: Main source for bib and item data (accessed via nyplApiClient)
+- **Sierra API**: Patron account management and item requests (accessed via sierraClient)
+- **SHEP API**: Subject heading data
+- **DRB API**: Digital Research Books data
+
+## Authentication
+
+The application uses NYPL's authentication system:
+
+- JWT-based authentication
+- Cookie-based token storage
+- Server-side validation of authentication tokens
+
+## Development Workflow
+
+### Code Quality Tools
+
+- **TypeScript**: Static type checking
+- **ESLint**: Code linting
+- **Prettier**: Code formatting
+- **Husky**: Git hooks for pre-commit checks
+
+### Testing
+
+Run tests with:
+
+```bash
+npm test
 ```
-127.0.0.1       local.nypl.org
+
+or
+
+```bash
+npm test-watch
 ```
 
-### Running the app locally with Docker (optional):
+For more information on the code quality and standards, see the [DEVELOPER_GUIDE.md](/docs/DEVELOPER_GUIDE.md)
 
-Docker is a platform that allows reproducible development environments to be created and run across different local and production/test environments.
+## Deployment
 
-Running the app locally via Docker is optional for now, and provided as an alternative to `npm run dev`.
+The application is deployed to:
 
-### Steps to run Docker container locally:
+- **QA**: https://qa-www.nypl.org/research/research-catalog
+- **Production**: https://www.nypl.org/research/research-catalog
 
-1. [Download](https://docs.docker.com/get-docker/) and install Docker.
-2. `cd` into research-catalog repo
-3. Run `docker-compose up --build --force-recreate`
-4. Check that app is being served at http://localhost:8080/research/research-catalog
+### Vercel Preview Links
 
-## Client and Server-Side Data Fetching
+This repository uses Vercel to create preview links for pull requests. This allows developers to preview changes to the application before they are merged into the main branch.
 
-Page components on the Research Catalog make use of Next's getServerSideProps function to fetch data on the server at request time, populating the component's props before the initial page load.
+When a pull request is opened, Vercel automatically creates a preview link for the PR. This link is generated by building and deploying the application to a temporary environment.
 
-When getServerSideProps is used to fetch the initial data, Next automatically handles client-side data re-hydration on route changes without reloading the page. This eliminates the need for manual client-side data fetching/re-hydration in most cases.
+The preview link is then posted as a comment on the PR by the Vercel bot. This allows team members to easily access and test the changes in the PR.
 
-For instances where manual client-side data fetching is preferable (e.g. when we don't want data fetching to block the initial page load), we employ the [`SWR`](https://www.npmjs.com/package/swr) module. SWR provides hooks that handles the typical boilerplate for fetching data and setting loading and error states, as well as optimizations such as caching.
+### AWS Infrastructure
+
+The application is hosted on AWS:
+
+- **ECS** for container orchestration
+- **CloudWatch** for logging
+- **KMS** for secret management
+
+### Reverse Proxy Configuration
+
+The NYPL DevOps team is responsible for configuring and maintaining the reverse proxy that routes traffic between the Research Catalog and the legacy discovery-front-end (DFE) application:
+
+1. **Configuration Changes**: If changes to the reverse proxy configuration are needed (e.g., routing new paths), tickets should be opened with the DevOps team
+2. **Deployment Coordination**: Major deployments that affect routing should be coordinated with the DevOps team
+3. **Rollbacks**: The DevOps team is responsible for performing rollbacks if issues occur in production
+
+### Rollbacks
+
+The DevOps team is primarily responsible for rolling the app back to the previous working image in case there are issues with a production deployment, so they should be available at the time of any releases to production.
+
+### Environment Variable Management
+
+The Research Catalog is dockerized, which affects how environment variables are managed:
+
+1. **Terraform Configuration**: Environment variables for QA and production environments are configured by the DevOps team in Terraform
+2. **Task Definition Updates**: When a new ECS task definition is created during deployment, environment variables are set based on the Terraform configuration
+3. **Manual Changes Overwritten**: Any environment variables manually set in the AWS admin will be overwritten when a new task definition is created
+
+#### Environment Configuration with NEXT_PUBLIC_APP_ENV
+
+The application uses the `NEXT_PUBLIC_APP_ENV` environment variable to determine which configuration values to use from `src/config/config.ts`:
+
+```typescript
+// From src/config/config.ts
+export const appConfig: AppConfig = {
+  environment:
+    (process.env.NEXT_PUBLIC_APP_ENV as Environment) || "development",
+  apiEndpoints: {
+    platform: {
+      development: "https://qa-platform.nypl.org/api",
+      qa: "https://qa-platform.nypl.org/api",
+      production: "https://platform.nypl.org/api",
+    },
+    // Other endpoints with environment-specific values...
+  },
+  // Other configuration...
+}
+```
+
+This pattern allows the application to use different configuration values based on the environment without requiring code changes. When accessing configuration values in the code, you would use:
+
+```typescript
+import { appConfig } from "../config/config"
+
+// This will automatically use the correct URL based on NEXT_PUBLIC_APP_ENV
+const apiUrl = appConfig.apiEndpoints.platform[appConfig.environment]
+```
+
+#### Encrypted Variables in AWS Parameter Store
+
+Sensitive environment variables (such as API keys and secrets) are stored in AWS Parameter Store:
+
+1. **Parameter Store**: Encrypted variables are stored in the AWS Parameter Store
+2. **ECS Task Definition**: The ECS task definition references these parameters
+3. **Decryption**: At runtime, the application uses AWS KMS to decrypt the variables
+
+#### Adding or Changing Environment Variables
+
+When adding new environment variables or changing existing ones:
+
+1. Update the `.env.example` file in the repository to document the variable
+2. Update the [ENVIRONMENT_VARIABLES.md](/docs/ENVIRONMENT_VARIABLES.md) file with a description of the variable
+3. Open a ticket with the DevOps team to add or update the variable in Terraform
+   - For sensitive variables, specify that they should be stored in Parameter Store
+4. Specify the environment (QA, production, or both) and the value for each environment
+5. Wait for confirmation from DevOps before deploying code that relies on the new variable
+
+Failure to update environment variables in Terraform will result in the variables being unavailable or reverting to default values when a new deployment occurs.
 
 ## Logging
 
-This project uses [Winston](https://www.npmjs.com/package/winston) for serverside logging. See `logger.js` for the formatting and storage of logs. We structure our logs according to these [NYPL standards](https://github.com/NYPL/engineering-general/blob/main/standards/logging.md).
+The application uses Winston for server-side logging:
 
-Logs for this project's `qa` and `production` branches can be found in AWS Cloudwatch under the `nypl-digital-dev` account by searching "research-catalog". For the old DFE logs, search "discoveryui". 
+- Structured logs according to NYPL standards
+- Logs stored in AWS CloudWatch
+- Console logging for local development
 
-For Vercel deployments, logging will appear in the console. 
+### Accessing Logs
 
+- **QA/Production**: AWS CloudWatch under the `nypl-digital-dev` account (search for "research-catalog")
+- **Vercel Deployments**: Console output in the Vercel dashboard
 
-## My Account API Endpoints
+## Troubleshooting
 
-See the [My Account README](accountREADME.md).
+### Common Issues
+
+1. **Authentication Issues**:
+
+   - Ensure your machine's `etc/hosts` file is properly configured for local development
+   - Check that you're accessing the site via `local.nypl.org:8080` instead of `localhost:8080`
+
+2. **API Connection Issues**:
+
+   - Verify that environment variables are correctly set
+   - Check VPN connection for APIs that require it (e.g., SHEP API)
+
+3. **Environment Variable Encryption**:
+   - For issues with encrypted environment variables, refer to the encryption/decryption instructions in [ENVIRONMENT_VARIABLES.md](/docs/ENVIRONMENT_VARIABLES.md)
