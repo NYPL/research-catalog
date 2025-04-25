@@ -3342,6 +3342,839 @@ export const bibWithSupplementaryContent = {
         label: "Image",
         url: "http://images.contentreserve.com/ImageType-100/0293-1/{C87D2BB9-0E13-4851-A9E2-547643F41A0E}Img100.jpg",
       },
+      {
+        "@type": "nypl:SupplementaryContent",
+        label: "Finding Aid",
+        url: "http://archives.nypl.org/scm/20601",
+      },
+    ],
+    title: ["Stick Dog slurps spaghetti"],
+    titleDisplay: [
+      "Stick Dog slurps spaghetti / by Tom Watson ; [illustrations by Ethan Long based on original sketches by Tom Watson].",
+    ],
+    type: ["nypl:Item"],
+    updatedAt: 1681297059060,
+    uri: "b21255464",
+    suppressed: false,
+    hasItemVolumes: false,
+    hasItemDates: false,
+  },
+  annotatedMarc: {
+    id: "21255464",
+    nyplSource: "sierra-nypl",
+    fields: [
+      {
+        label: "Author",
+        values: [
+          {
+            content: "Watson, Tom, 1965- author.",
+            source: {
+              fieldTag: "a",
+              marcTag: "100",
+              ind1: "1",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Watson, Tom,",
+                },
+                {
+                  tag: "d",
+                  content: "1965-",
+                },
+                {
+                  tag: "e",
+                  content: "author.",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Title",
+        values: [
+          {
+            content:
+              "Stick Dog slurps spaghetti / by Tom Watson ; [illustrations by Ethan Long based on original sketches by Tom Watson].",
+            source: {
+              fieldTag: "t",
+              marcTag: "245",
+              ind1: "1",
+              ind2: "0",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Stick Dog slurps spaghetti /",
+                },
+                {
+                  tag: "c",
+                  content:
+                    "by Tom Watson ; [illustrations by Ethan Long based on original sketches by Tom Watson].",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Publisher",
+        values: [
+          {
+            content:
+              "New York, NY : Harper, An Imprint of HarperCollinsPublishers, [2016]",
+            source: {
+              fieldTag: "p",
+              marcTag: "264",
+              ind1: " ",
+              ind2: "1",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "New York, NY :",
+                },
+                {
+                  tag: "b",
+                  content: "Harper, An Imprint of HarperCollinsPublishers,",
+                },
+                {
+                  tag: "c",
+                  content: "[2016]",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Edition",
+        values: [
+          {
+            content: "First edition.",
+            source: {
+              fieldTag: "e",
+              marcTag: "250",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "First edition.",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Description",
+        values: [
+          {
+            content: "1 online resource (238 pages) : illustrations.",
+            source: {
+              fieldTag: "r",
+              marcTag: "300",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "1 online resource (238 pages) :",
+                },
+                {
+                  tag: "b",
+                  content: "illustrations.",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Type of Content",
+        values: [
+          {
+            content: "text",
+            source: {
+              fieldTag: "r",
+              marcTag: "336",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "text",
+                },
+                {
+                  tag: "b",
+                  content: "[redacted]",
+                },
+                {
+                  tag: "2",
+                  content: "[redacted]",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Type of Medium",
+        values: [
+          {
+            content: "computer",
+            source: {
+              fieldTag: "r",
+              marcTag: "337",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "computer",
+                },
+                {
+                  tag: "b",
+                  content: "[redacted]",
+                },
+                {
+                  tag: "2",
+                  content: "[redacted]",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Type of Carrier",
+        values: [
+          {
+            content: "online resource",
+            source: {
+              fieldTag: "r",
+              marcTag: "338",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "online resource",
+                },
+                {
+                  tag: "b",
+                  content: "[redacted]",
+                },
+                {
+                  tag: "2",
+                  content: "[redacted]",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Summary",
+        values: [
+          {
+            content:
+              "When they come across spaghetti in their search for a tug-of-war rope, Stick Dog and his hungry friends go on a quest for more pasta that sees them scale their suburb's tallest mountain and sneak into a restaurant filled with humans.",
+            source: {
+              fieldTag: "n",
+              marcTag: "520",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content:
+                    "When they come across spaghetti in their search for a tug-of-war rope, Stick Dog and his hungry friends go on a quest for more pasta that sees them scale their suburb's tallest mountain and sneak into a restaurant filled with humans.",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Source of description",
+        values: [
+          {
+            content: "Print version record.",
+            source: {
+              fieldTag: "n",
+              marcTag: "588",
+              ind1: "0",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Print version record.",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Connect to:",
+        values: [
+          {
+            label: "Access eNYPL",
+            content: "http://link.overdrive.com/?websiteID=37&titleID=2559851",
+            source: {
+              fieldTag: "y",
+              marcTag: "856",
+              ind1: "4",
+              ind2: "0",
+              content: null,
+              subfields: [
+                {
+                  tag: "u",
+                  content:
+                    "http://link.overdrive.com/?websiteID=37&titleID=2559851",
+                },
+                {
+                  tag: "y",
+                  content: "[redacted]",
+                },
+              ],
+            },
+          },
+          {
+            label: "Image",
+            content:
+              "http://images.contentreserve.com/ImageType-100/0293-1/{C87D2BB9-0E13-4851-A9E2-547643F41A0E}Img100.jpg",
+            source: {
+              fieldTag: "y",
+              marcTag: "856",
+              ind1: "4",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "3",
+                  content: "[redacted]",
+                },
+                {
+                  tag: "u",
+                  content:
+                    "http://images.contentreserve.com/ImageType-100/0293-1/{C87D2BB9-0E13-4851-A9E2-547643F41A0E}Img100.jpg",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Subject",
+        values: [
+          {
+            content: "Dogs -- Fiction.",
+            source: {
+              fieldTag: "d",
+              marcTag: "650",
+              ind1: " ",
+              ind2: "1",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Dogs",
+                },
+                {
+                  tag: "v",
+                  content: "Fiction.",
+                },
+              ],
+            },
+          },
+          {
+            content: "Pasta products -- Fiction.",
+            source: {
+              fieldTag: "d",
+              marcTag: "650",
+              ind1: " ",
+              ind2: "1",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Pasta products",
+                },
+                {
+                  tag: "v",
+                  content: "Fiction.",
+                },
+              ],
+            },
+          },
+          {
+            content: "Friendship -- Fiction.",
+            source: {
+              fieldTag: "d",
+              marcTag: "650",
+              ind1: " ",
+              ind2: "1",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Friendship",
+                },
+                {
+                  tag: "v",
+                  content: "Fiction.",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Genre/Form",
+        values: [
+          {
+            content: "Humorous fiction.",
+            source: {
+              fieldTag: "d",
+              marcTag: "655",
+              ind1: " ",
+              ind2: "7",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Humorous fiction.",
+                },
+                {
+                  tag: "2",
+                  content: "[redacted]",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Subject",
+        values: [
+          {
+            content: "Illustrated children's books.",
+            source: {
+              fieldTag: "d",
+              marcTag: "650",
+              ind1: " ",
+              ind2: "0",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Illustrated children's books.",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Genre/Form",
+        values: [
+          {
+            content: "Humorous fiction.",
+            source: {
+              fieldTag: "d",
+              marcTag: "655",
+              ind1: " ",
+              ind2: "7",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Humorous fiction.",
+                },
+                {
+                  tag: "2",
+                  content: "[redacted]",
+                },
+                {
+                  tag: "0",
+                  content: "[redacted]",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Subject",
+        values: [
+          {
+            content: "Illustrated children's books.",
+            source: {
+              fieldTag: "d",
+              marcTag: "650",
+              ind1: " ",
+              ind2: "7",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Illustrated children's books.",
+                },
+                {
+                  tag: "2",
+                  content: "[redacted]",
+                },
+                {
+                  tag: "0",
+                  content: "[redacted]",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Genre/Form",
+        values: [
+          {
+            content: "Electronic books.",
+            source: {
+              fieldTag: "d",
+              marcTag: "655",
+              ind1: " ",
+              ind2: "0",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Electronic books.",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Added Author",
+        values: [
+          {
+            content: "Long, Ethan, illustrator.",
+            source: {
+              fieldTag: "b",
+              marcTag: "700",
+              ind1: "1",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Long, Ethan,",
+                },
+                {
+                  tag: "e",
+                  content: "illustrator.",
+                },
+              ],
+            },
+          },
+          {
+            content: "OverDrive, Inc.",
+            source: {
+              fieldTag: "b",
+              marcTag: "710",
+              ind1: "2",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "OverDrive, Inc.",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Other Form:",
+        values: [
+          {
+            content:
+              "Print version: Watson, Tom, 1965- Stick Dog slurps spaghetti. First edition. New York, NY : Harper, An Imprint of HarperCollinsPublishers, [2016] 006234322X (DLC)  2016932092 (OCoLC)935985696",
+            source: {
+              fieldTag: "w",
+              marcTag: "776",
+              ind1: "0",
+              ind2: "8",
+              content: null,
+              subfields: [
+                {
+                  tag: "i",
+                  content: "Print version:",
+                },
+                {
+                  tag: "a",
+                  content: "Watson, Tom, 1965-",
+                },
+                {
+                  tag: "t",
+                  content: "Stick Dog slurps spaghetti.",
+                },
+                {
+                  tag: "b",
+                  content: "First edition.",
+                },
+                {
+                  tag: "d",
+                  content:
+                    "New York, NY : Harper, An Imprint of HarperCollinsPublishers, [2016]",
+                },
+                {
+                  tag: "z",
+                  content: "006234322X",
+                },
+                {
+                  tag: "w",
+                  content: "(DLC)  2016932092",
+                },
+                {
+                  tag: "w",
+                  content: "(OCoLC)935985696",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "ISBN",
+        values: [
+          {
+            content: "9780062343239 (electronic bk.)",
+            source: {
+              fieldTag: "i",
+              marcTag: "020",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "9780062343239",
+                },
+                {
+                  tag: "q",
+                  content: "(electronic bk.)",
+                },
+              ],
+            },
+          },
+          {
+            content: "0062343238 (electronic bk.)",
+            source: {
+              fieldTag: "i",
+              marcTag: "020",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "0062343238",
+                },
+                {
+                  tag: "q",
+                  content: "(electronic bk.)",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Branch Call Number",
+        values: [
+          {
+            content: "eNYPL Book",
+            source: {
+              fieldTag: "c",
+              marcTag: "091",
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              subfields: [
+                {
+                  tag: "a",
+                  content: "eNYPL Book",
+                },
+              ],
+            },
+          },
+        ],
+      },
+    ],
+  },
+}
+
+export const bibWithFindingAidAndTOC = {
+  resource: {
+    "@context":
+      "http://discovery-api-production.us-east-1.elasticbeanstalk.com/api/v0.1/discovery/context_all.jsonld",
+    "@type": ["nypl:Item", "nypl:Resource"],
+    "@id": "res:b21255464",
+    carrierType: [
+      {
+        "@id": "carriertypes:nc",
+        prefLabel: "volume",
+      },
+    ],
+    contributorLiteral: ["Long, Ethan", "OverDrive, Inc."],
+    createdString: ["2016"],
+    createdYear: 2016,
+    creatorLiteral: ["Watson, Tom, 1965-"],
+    dateStartYear: 2016,
+    dateString: ["2016"],
+    description: [
+      "When they come across spaghetti in their search for a tug-of-war rope, Stick Dog and his hungry friends go on a quest for more pasta that sees them scale their suburb's tallest mountain and sneak into a restaurant filled with humans.",
+    ],
+    electronicResources: [
+      {
+        url: "http://link.overdrive.com/?websiteID=37&titleID=2559851",
+        prefLabel: "Access eNYPL",
+      },
+      {
+        url: "http://link.overdrive.com/?websiteID=37&titleID=2559851",
+        prefLabel: "Table of contents only",
+      },
+    ],
+    extent: ["1 online resource (238 pages) : illustrations."],
+    genreForm: ["Humorous fiction."],
+    idIsbn: ["9780062343239", "0062343238"],
+    idOclc: ["959966725"],
+    identifier: [
+      {
+        "@type": "nypl:Bnumber",
+        "@value": "21255464",
+      },
+      {
+        "@type": "bf:Isbn",
+        "@value": "9780062343239",
+      },
+      {
+        "@type": "bf:Isbn",
+        "@value": "0062343238",
+      },
+      {
+        "@type": "nypl:Oclc",
+        "@value": "959966725",
+      },
+      {
+        "@type": "nypl:Oclc",
+        "@value": "959966725",
+      },
+      {
+        "@type": "bf:Identifier",
+        "@value": "(OCoLC)959966725",
+      },
+    ],
+    issuance: [
+      {
+        "@id": "urn:biblevel:m",
+        prefLabel: "monograph/item",
+      },
+    ],
+    itemAggregations: [
+      {
+        "@type": "nypl:Aggregation",
+        "@id": "res:location",
+        id: "location",
+        field: "location",
+        values: [],
+      },
+      {
+        "@type": "nypl:Aggregation",
+        "@id": "res:format",
+        id: "format",
+        field: "format",
+        values: [
+          {
+            value: "Text",
+            count: 1,
+            label: "Text",
+          },
+        ],
+      },
+      {
+        "@type": "nypl:Aggregation",
+        "@id": "res:status",
+        id: "status",
+        field: "status",
+        values: [],
+      },
+    ],
+    items: [],
+    language: [
+      {
+        "@id": "lang:eng",
+        prefLabel: "English",
+      },
+    ],
+    lccClassification: ["FICTION WAT"],
+    format: [
+      {
+        "@id": "resourcetypes:txt",
+        prefLabel: "Text",
+      },
+    ],
+    mediaType: [
+      {
+        "@id": "mediatypes:n",
+        prefLabel: "unmediated",
+      },
+    ],
+    numAvailable: 0,
+    numCheckinCardItems: 0,
+    numElectronicResources: 1,
+    numItemDatesParsed: 0,
+    numItemVolumesParsed: 0,
+    numItems: 0,
+    numItemsMatched: 0,
+    numItemsTotal: 0,
+    nyplSource: ["sierra-nypl"],
+    placeOfPublication: ["New York, NY"],
+    publicationStatement: [
+      "New York, NY : Harper, An Imprint of HarperCollinsPublishers, [2016]",
+    ],
+    publisherLiteral: ["Harper, An Imprint of HarperCollinsPublishers"],
+    subjectLiteral: [
+      "Dogs -- Fiction.",
+      "Pasta products -- Fiction.",
+      "Friendship -- Fiction.",
+      "Illustrated children's books.",
+    ],
+    supplementaryContent: [
+      {
+        "@type": "nypl:SupplementaryContent",
+        label: "Image",
+        url: "http://images.contentreserve.com/ImageType-100/0293-1/{C87D2BB9-0E13-4851-A9E2-547643F41A0E}Img100.jpg",
+      },
+      {
+        "@type": "nypl:SupplementaryContent",
+        label: "Finding Aid",
+        url: "http://archives.nypl.org/scm/20601",
+      },
     ],
     title: ["Stick Dog slurps spaghetti"],
     titleDisplay: [

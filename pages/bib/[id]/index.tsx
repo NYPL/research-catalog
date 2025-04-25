@@ -8,7 +8,6 @@ import {
   Banner,
   StatusBadge,
 } from "@nypl/design-system-react-components"
-
 import Layout from "../../../src/components/Layout/Layout"
 import {
   PATHS,
@@ -82,20 +81,11 @@ export default function BibPage({
   const viewAllLoadingTextRef = useRef<HTMLDivElement & HTMLLabelElement>(null)
   const controllerRef = useRef<AbortController>()
 
-  const {
-    topDetails,
-    bottomDetails,
-    holdingsDetails,
-    supplementaryContent,
-    findingAid,
-  } = new BibDetailsModel(discoveryBibResult, annotatedMarc)
+  const { topDetails, bottomDetails, holdingsDetails, findingAid } =
+    new BibDetailsModel(discoveryBibResult, annotatedMarc)
   const displayLegacyCatalogLink = isNyplBibID(bib.id)
 
   const filtersAreApplied = areFiltersApplied(appliedFilters)
-
-  console.log("supplementary content", supplementaryContent)
-  console.log("topDetails", topDetails)
-  console.log("finding aid", findingAid)
 
   const refreshItemTable = async (
     newQuery: BibQueryParams,
@@ -219,15 +209,19 @@ export default function BibPage({
           {bib.title}
         </Heading>
         <BibDetails key="top-details" details={topDetails} />
-        {findingAid ? (
-          <FindingAid
-            findingAid={findingAid}
-            hasElectronicResources={bib.hasElectronicResources}
-          />
-        ) : null}
-        {bib.hasElectronicResources ? (
-          <ElectronicResources electronicResources={bib.electronicResources} />
-        ) : null}
+        <Box mt="s">
+          {findingAid ? (
+            <FindingAid
+              findingAidURL={findingAid.url}
+              hasElectronicResources={bib.hasElectronicResources}
+            />
+          ) : null}
+          {bib.hasElectronicResources ? (
+            <ElectronicResources
+              electronicResources={bib.electronicResources}
+            />
+          ) : null}
+        </Box>
         {bib.showItemTable ? (
           <>
             <Heading
