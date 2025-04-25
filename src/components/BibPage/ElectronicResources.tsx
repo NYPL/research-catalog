@@ -50,7 +50,7 @@ const ElectronicResources = ({
 
   return (
     <Card ref={scrollToRef} isBordered data-testid="electronic-resources">
-      <CardHeading level="three" size="body1" mb="xs">
+      <CardHeading level="four" size="body1" mb="xs">
         Available online
       </CardHeading>
       <CardContent aria-expanded={!showMore}>

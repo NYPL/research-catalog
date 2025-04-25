@@ -8,32 +8,30 @@ import {
   Flex,
 } from "@nypl/design-system-react-components"
 import ExternalLink from "../Links/ExternalLink/ExternalLink"
-import type { BibDetailURL } from "../../types/bibDetailsTypes"
 
 interface FindingAidProps {
-  findingAid: BibDetailURL
+  findingAidURL: string
   hasElectronicResources: boolean
 }
 
 const FindingAid = ({
-  findingAid,
+  findingAidURL,
   hasElectronicResources,
 }: FindingAidProps) => {
   return (
     <Card
       isBordered
-      mt="m"
       data-testid="collection-information"
       sx={{
         borderBottom: hasElectronicResources ? "0px" : "1px ui.gray solid",
       }}
     >
-      <CardHeading level="three" size="body1" mb="xs">
+      <CardHeading level="four" size="body1" mb="xs">
         Collection information
       </CardHeading>
       <CardContent>
         <ExternalLink
-          href={findingAid.url}
+          href={findingAidURL}
           type="standalone"
           fontSize={{
             base: "mobile.body.body2",
@@ -50,7 +48,7 @@ const FindingAid = ({
             collections{" "}
             <Link
               hasVisitedState={false}
-              href={"https://libguides.nypl.org/c.php?g=1184379&p=9157736"}
+              href={"https://www.nypl.org/research/appointments"}
             >
               require an appointment
             </Link>{" "}
