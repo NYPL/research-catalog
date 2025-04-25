@@ -203,9 +203,11 @@ export default function BibPage({
       <RCHead metadataTitle={metadataTitle} />
       <Layout isAuthenticated={isAuthenticated} activePage="bib">
         {findingAid && (
-          <StatusBadge type="informative">FINDING AID AVAILABLE</StatusBadge>
+          <StatusBadge mb="s" type="informative">
+            FINDING AID AVAILABLE
+          </StatusBadge>
         )}
-        <Heading level="h2" size="heading3" mb="l" mt={findingAid ? "s" : 0}>
+        <Heading level="h2" size="heading3" mb="l">
           {bib.title}
         </Heading>
         <BibDetails key="top-details" details={topDetails} />
