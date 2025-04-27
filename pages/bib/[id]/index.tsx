@@ -212,17 +212,17 @@ export default function BibPage({
         </Heading>
         <BibDetails key="top-details" details={topDetails} />
         <Box mt="s">
-          {findingAid ? (
+          {findingAid && (
             <FindingAid
               findingAidURL={findingAid.url}
               hasElectronicResources={bib.hasElectronicResources}
             />
-          ) : null}
-          {bib.hasElectronicResources ? (
+          )}
+          {bib.hasElectronicResources && (
             <ElectronicResources
               electronicResources={bib.electronicResources}
             />
-          ) : null}
+          )}
         </Box>
         {bib.showItemTable ? (
           <>

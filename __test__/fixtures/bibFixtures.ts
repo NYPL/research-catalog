@@ -3342,11 +3342,6 @@ export const bibWithSupplementaryContent = {
         label: "Image",
         url: "http://images.contentreserve.com/ImageType-100/0293-1/{C87D2BB9-0E13-4851-A9E2-547643F41A0E}Img100.jpg",
       },
-      {
-        "@type": "nypl:SupplementaryContent",
-        label: "Finding Aid",
-        url: "http://archives.nypl.org/scm/20601",
-      },
     ],
     title: ["Stick Dog slurps spaghetti"],
     titleDisplay: [

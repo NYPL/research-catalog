@@ -365,18 +365,22 @@ export default class BibDetails {
       return null
     }
     const label = "Supplementary content"
+
     const hasTOCElectronicResource = this.bib.electronicResources.find(
       (resource) =>
         resource.prefLabel &&
         resource.prefLabel.toLowerCase().includes("table of contents")
     )
+
+    const isFindingAid = (label: string) => label.includes("finding aid")
+
+    const isTOC = (label: string) =>
+      hasTOCElectronicResource && label.includes("table of contents")
+
     const values = this.bib.supplementaryContent
       .filter((sc) => {
-        const label = sc.label?.toLowerCase() || ""
-        return (
-          !label.includes("finding aid") &&
-          !(hasTOCElectronicResource && label.includes("table of contents"))
-        )
+        const scLabel = sc.label?.toLowerCase() || ""
+        return !isFindingAid(scLabel) && !isTOC(scLabel)
       })
       .map((sc) => ({
         url: sc.url,
