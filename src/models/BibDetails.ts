@@ -374,13 +374,13 @@ export default class BibDetails {
 
     const isFindingAid = (label: string) => label.includes("finding aid")
 
-    const isTOC = (label: string) =>
+    const hasTOCERandTOC = (label: string) =>
       hasTOCElectronicResource && label.includes("table of contents")
 
     const values = this.bib.supplementaryContent
       .filter((sc) => {
         const scLabel = sc.label?.toLowerCase() || ""
-        return !isFindingAid(scLabel) && !isTOC(scLabel)
+        return !isFindingAid(scLabel) && !hasTOCERandTOC(scLabel)
       })
       .map((sc) => ({
         url: sc.url,
