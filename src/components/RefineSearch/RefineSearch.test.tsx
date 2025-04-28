@@ -36,100 +36,100 @@ const clear = async () => {
 }
 
 describe("RefineSearch", () => {
-  // describe("with dates in url query params", () => {
-  //   it("can populate date fields from url", async () => {
-  //     try {
-  //       mockRouter.push(
-  //         "/search?filters[dateBefore][0]=2000&filters[dateAfter][0]=1990"
-  //       )
-  //       render(
-  //         <Search
-  //           isFreshSortByQuery={false}
-  //           isAuthenticated={true}
-  //           results={{ page: 1, aggregations, results }}
-  //         />
-  //       )
-  //       await openRefineSearch()
-  //       const beforeDateInput = screen.getByDisplayValue("2000")
-  //       const afterDateInput = screen.getByDisplayValue("1990")
-  //       expect(beforeDateInput).toBeInTheDocument()
-  //       expect(afterDateInput).toBeInTheDocument()
-  //     } catch (e) {
-  //       // range error is being thrown due to timing of RTL stuff
-  //       if (!(e instanceof RangeError)) throw e
-  //     }
-  //   })
-  // })
+  describe("with dates in url query params", () => {
+    it("can populate date fields from url", async () => {
+      try {
+        mockRouter.push(
+          "/search?filters[dateBefore][0]=2000&filters[dateAfter][0]=1990"
+        )
+        render(
+          <Search
+            isFreshSortByQuery={false}
+            isAuthenticated={true}
+            results={{ page: 1, aggregations, results }}
+          />
+        )
+        await openRefineSearch()
+        const beforeDateInput = screen.getByDisplayValue("2000")
+        const afterDateInput = screen.getByDisplayValue("1990")
+        expect(beforeDateInput).toBeInTheDocument()
+        expect(afterDateInput).toBeInTheDocument()
+      } catch (e) {
+        // range error is being thrown due to timing of RTL stuff
+        if (!(e instanceof RangeError)) throw e
+      }
+    })
+  })
 
-  // describe("with initial creatorLiteral filter", () => {
-  //   const setup = () => {
-  //     mockRouter.push("/search?filters[creatorLiteral]=Gaberscek, Carlo.")
-  //     render(
-  //       <Search
-  //         isFreshSortByQuery={false}
-  //         isAuthenticated={true}
-  //         results={{ page: 1, aggregations, results }}
-  //       />
-  //     )
-  //   }
-  //   beforeEach(setup)
-  //   it("should add filters and maintain creatorliteral filter and search params", async () => {
-  //     await openRefineSearch()
-  //     await selectSomeFilters()
-  //     await apply()
-  //     expect(mockRouter.asPath).toBe(
-  //       "/search?filters%5BcreatorLiteral%5D%5B0%5D=Gaberscek%2C+Carlo.&filters%5Blanguage%5D%5B0%5D=lang%3Apor&filters%5Bformat%5D%5B0%5D=resourcetypes%3Aaud&filters%5BsubjectLiteral%5D%5B0%5D=Cooking%2C+Italian."
-  //     )
-  //   })
-  //   it("should clear refinement filters and creatorliteral filter", async () => {
-  //     await openRefineSearch()
-  //     await selectSomeFilters()
-  //     await apply()
-  //     await openRefineSearch()
-  //     await clear()
-  //     expect(mockRouter.asPath).toBe("/search")
-  //   })
-  //   it("applying no filters should maintain creatorliteral filter", async () => {
-  //     await openRefineSearch()
-  //     await apply()
-  //     expect(mockRouter.query).toStrictEqual({
-  //       "filters[creatorLiteral][0]": "Gaberscek, Carlo.",
-  //     })
-  //   })
-  // })
-  // describe("with search params", () => {
-  //   const setup = () => {
-  //     mockRouter.push("/search?q=spaghetti")
-  //     render(
-  //       <Search
-  //         isFreshSortByQuery={false}
-  //         isAuthenticated={true}
-  //         results={{ page: 1, aggregations, results }}
-  //       />
-  //     )
-  //   }
-  //   beforeEach(setup)
-  //   it("adding filters should maintain search params", async () => {
-  //     await openRefineSearch()
-  //     await selectSomeFilters()
-  //     await apply()
-  //     expect(mockRouter.query.q).toBe("spaghetti")
-  //     expect(mockRouter.query).toStrictEqual({
-  //       "filters[language][0]": "lang:por",
-  //       "filters[format][0]": "resourcetypes:aud",
-  //       "filters[subjectLiteral][0]": "Cooking, Italian.",
-  //       q: "spaghetti",
-  //     })
-  //   })
-  //   it("clearing filters should maintain search params", async () => {
-  //     await openRefineSearch()
-  //     await selectSomeFilters()
-  //     await apply()
-  //     await openRefineSearch()
-  //     await clear()
-  //     expect(mockRouter.asPath).toBe("/search?q=spaghetti")
-  //   })
-  // })
+  describe("with initial creatorLiteral filter", () => {
+    const setup = () => {
+      mockRouter.push("/search?filters[creatorLiteral]=Gaberscek, Carlo.")
+      render(
+        <Search
+          isFreshSortByQuery={false}
+          isAuthenticated={true}
+          results={{ page: 1, aggregations, results }}
+        />
+      )
+    }
+    beforeEach(setup)
+    it("should add filters and maintain creatorliteral filter and search params", async () => {
+      await openRefineSearch()
+      await selectSomeFilters()
+      await apply()
+      expect(mockRouter.asPath).toBe(
+        "/search?filters%5BcreatorLiteral%5D%5B0%5D=Gaberscek%2C+Carlo.&filters%5Blanguage%5D%5B0%5D=lang%3Apor&filters%5Bformat%5D%5B0%5D=resourcetypes%3Aaud&filters%5BsubjectLiteral%5D%5B0%5D=Cooking%2C+Italian."
+      )
+    })
+    it("should clear refinement filters and creatorliteral filter", async () => {
+      await openRefineSearch()
+      await selectSomeFilters()
+      await apply()
+      await openRefineSearch()
+      await clear()
+      expect(mockRouter.asPath).toBe("/search")
+    })
+    it("applying no filters should maintain creatorliteral filter", async () => {
+      await openRefineSearch()
+      await apply()
+      expect(mockRouter.query).toStrictEqual({
+        "filters[creatorLiteral][0]": "Gaberscek, Carlo.",
+      })
+    })
+  })
+  describe("with search params", () => {
+    const setup = () => {
+      mockRouter.push("/search?q=spaghetti")
+      render(
+        <Search
+          isFreshSortByQuery={false}
+          isAuthenticated={true}
+          results={{ page: 1, aggregations, results }}
+        />
+      )
+    }
+    beforeEach(setup)
+    it("adding filters should maintain search params", async () => {
+      await openRefineSearch()
+      await selectSomeFilters()
+      await apply()
+      expect(mockRouter.query.q).toBe("spaghetti")
+      expect(mockRouter.query).toStrictEqual({
+        "filters[language][0]": "lang:por",
+        "filters[format][0]": "resourcetypes:aud",
+        "filters[subjectLiteral][0]": "Cooking, Italian.",
+        q: "spaghetti",
+      })
+    })
+    it("clearing filters should maintain search params", async () => {
+      await openRefineSearch()
+      await selectSomeFilters()
+      await apply()
+      await openRefineSearch()
+      await clear()
+      expect(mockRouter.asPath).toBe("/search?q=spaghetti")
+    })
+  })
   describe("basic filter functionality", () => {
     const setup = () => {
       mockRouter.push("/search")
