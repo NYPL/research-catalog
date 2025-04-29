@@ -26,7 +26,7 @@ const FilterPrototype = () => {
             console.log("click")
           }}
           items={[{ id: "sasb", name: "Stephen A. Smith Building" }]}
-          selectedItems={undefined}
+          selectedItems={{}}
         />
       </CardContent>
     </Card>
