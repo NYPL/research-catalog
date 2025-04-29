@@ -45,9 +45,9 @@ export default class Bib {
     this.itemAggregations = result.itemAggregations || null
     this.hasItemDates = result.hasItemDates || false
     this.subjectHeadings = result.subjectHeadings || null
-    this.findingAid = result.supplementaryContent
-      ? getFindingAidFromSupplementaryContent(result.supplementaryContent)
-      : null
+    this.findingAid = getFindingAidFromSupplementaryContent(
+      result.supplementaryContent
+    )
     this.items = this.getItemsFromResult(result)
   }
 
