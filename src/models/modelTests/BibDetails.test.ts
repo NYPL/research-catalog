@@ -277,7 +277,7 @@ describe("Bib Details model", () => {
       const findingAidBibModel = new BibDetailsModel(
         bibWithFindingAidAndTOC.resource
       )
-      expect(findingAidBibModel.findingAid.url).toStrictEqual(
+      expect(findingAidBibModel.findingAid).toStrictEqual(
         "http://archives.nypl.org/scm/20601"
       )
     })

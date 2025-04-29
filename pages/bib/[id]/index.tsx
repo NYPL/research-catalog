@@ -214,7 +214,7 @@ export default function BibPage({
         <Box mt="s">
           {findingAid && (
             <FindingAid
-              findingAidURL={findingAid.url}
+              findingAidURL={findingAid}
               hasElectronicResources={bib.hasElectronicResources}
             />
           )}

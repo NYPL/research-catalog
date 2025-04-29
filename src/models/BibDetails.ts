@@ -9,6 +9,7 @@ import type {
   AnyBibDetail,
 } from "../types/bibDetailsTypes"
 import { convertToSentenceCase } from "../utils/appUtils"
+import { getFindingAidFromSupplementaryContent } from "../utils/bibUtils"
 
 export default class BibDetails {
   bib: DiscoveryBibResult
@@ -21,7 +22,7 @@ export default class BibDetails {
   extent: string[]
   subjectLiteral: BibDetailURL[][]
   owner: string[]
-  findingAid?: BibDetailURL
+  findingAid?: string
 
   constructor(
     discoveryBibResult: DiscoveryBibResult,
@@ -390,13 +391,7 @@ export default class BibDetails {
   }
 
   buildFindingAid() {
-    if (!this.bib.supplementaryContent?.length) {
-      return null
-    }
-    const findingAid = this.bib.supplementaryContent.find(
-      (sc) => sc.label.toLowerCase().includes("finding aid") && !!sc.url
-    )
-    return findingAid || null
+    return getFindingAidFromSupplementaryContent(this.bib.supplementaryContent)
   }
 
   buildSubjectHeadings(): BibDetailURL[][] {
