@@ -28,6 +28,9 @@ const SearchResult = ({ bib }: SearchResultProps) => {
       sx={{
         borderBottom: "1px solid var(--nypl-colors-ui-border-default)",
         paddingBottom: "l",
+        " > div": {
+          width: "100% !important",
+        },
       }}
     >
       <CardHeading
@@ -42,7 +45,7 @@ const SearchResult = ({ bib }: SearchResultProps) => {
         )}
         <RCLink href={`${PATHS.BIB}/${bib.id}`}>{bib.titleDisplay}</RCLink>
       </CardHeading>
-      <CardContent>
+      <CardContent data-testid="card-content">
         <Box
           sx={{
             p: { display: "inline-block", marginRight: "s", marginBottom: "s" },

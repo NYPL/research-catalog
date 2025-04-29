@@ -40,6 +40,7 @@ const ElectronicResourcesLink = ({
             fontSize={{ base: "mobile.body.body2", md: "desktop.body.body2" }}
             isUnderlined={false}
             hasVisitedState={false}
+            whiteSpace="wrap"
           >
             View all available online resources
           </RCLink>
