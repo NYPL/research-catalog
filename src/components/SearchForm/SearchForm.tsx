@@ -112,7 +112,7 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
             placeholder,
           }}
         />
-        <Flex direction="column" justifyContent="space-between" mt="xs">
+        {/* <Flex direction="column" justifyContent="space-between" mt="xs">
           <RCLink
             className={styles.advancedSearch}
             href="/search/advanced"
@@ -128,7 +128,7 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
               aggregations={aggregations}
             />
           )}
-        </Flex>
+        </Flex> */}
       </div>
     </div>
   )

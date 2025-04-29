@@ -3,6 +3,7 @@ import {
   SimpleGrid,
   Pagination,
   SkeletonLoader,
+  Flex,
 } from "@nypl/design-system-react-components"
 import { useEffect, useRef, type ChangeEvent } from "react"
 import { useRouter } from "next/router"
@@ -34,6 +35,7 @@ import type SearchResultsBib from "../../src/models/SearchResultsBib"
 import useLoading from "../../src/hooks/useLoading"
 import initializePatronTokenAuth from "../../src/server/auth"
 import RCHead from "../../src/components/Head/RCHead"
+import FilterPrototype from "../../src/components/FilterPrototype/FilterPrototype"
 
 interface SearchProps {
   bannerNotification?: string
@@ -117,20 +119,9 @@ export default function Search({
         sidebar={
           <>
             {totalResults > 0 ? (
-              <SearchResultsSort
-                searchParams={searchParams}
-                handleSortChange={handleSortChange}
-                // We have to render the sort select twice and toggle which is shown at the desktop breakpoint, since
-                // the design has it appearing in the sidebar on desktop and in the main content on mobile.
-                // Using inline styles to do this for now since using useNYPLBreakpoints had a visible lag.
-                // TODO: Extend the Layout component to receive a prop that contains content to be shown below the
-                //  main header, which will include the search results heading and the sort select, which would allow us
-                //  to only render the sort select once.
-                display={{
-                  base: "none",
-                  md: "block",
-                }}
-              />
+              <>
+                <FilterPrototype />
+              </>
             ) : null}
             {isLoading ? (
               <SkeletonLoader showImage={false} />
@@ -149,7 +140,7 @@ export default function Search({
             {isLoading ? (
               <SkeletonLoader showImage={false} mb="m" />
             ) : (
-              <>
+              <Flex justifyContent={"space-between"}>
                 {displayAppliedFilters && (
                   <AppliedFilters aggregations={aggs} />
                 )}
@@ -166,7 +157,21 @@ export default function Search({
                 >
                   {getSearchResultsHeading(searchParams, totalResults)}
                 </Heading>
-              </>
+                <SearchResultsSort
+                  searchParams={searchParams}
+                  handleSortChange={handleSortChange}
+                  // We have to render the sort select twice and toggle which is shown at the desktop breakpoint, since
+                  // the design has it appearing in the sidebar on desktop and in the main content on mobile.
+                  // Using inline styles to do this for now since using useNYPLBreakpoints had a visible lag.
+                  // TODO: Extend the Layout component to receive a prop that contains content to be shown below the
+                  //  main header, which will include the search results heading and the sort select, which would allow us
+                  //  to only render the sort select once.
+                  display={{
+                    base: "none",
+                    md: "block",
+                  }}
+                />
+              </Flex>
             )}
             <SearchResultsSort
               // Mobile only Search Results Sort Select

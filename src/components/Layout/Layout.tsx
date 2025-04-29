@@ -37,7 +37,7 @@ const Layout = ({
   isAuthenticated,
   sidebar,
   activePage,
-  sidebarPosition = "right",
+  sidebarPosition = "left",
   bannerNotification,
 }: PropsWithChildren<LayoutProps>) => {
   const showSearch = activePage === "search"
