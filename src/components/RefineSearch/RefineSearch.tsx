@@ -164,7 +164,7 @@ const RefineSearch = ({
           backgroundColor="ui.white"
         >
           <Icon size="large" align="left" name="contentFilterList" />
-          Filter results
+          Filter results **OLD!! BOOO!!**
         </Button>
       ) : (
         <Form id="refine-search" onSubmit={handleSubmit}>

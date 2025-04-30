@@ -28,6 +28,10 @@ const FilterPrototype = ({ aggregations }) => {
   const [appliedFilters, setAppliedFilters] = useState(
     collapseMultiValueQueryParams(router.query)
   )
+  useEffect(() => {
+    const collapsedFilters = collapseMultiValueQueryParams(router.query)
+    setAppliedFilters(collapsedFilters)
+  }, [router.query])
 
   const handleCheckboxChange = (field: string, optionValue: string) => {
     setAppliedFilters((prevFilters) => {
@@ -48,10 +52,14 @@ const FilterPrototype = ({ aggregations }) => {
         ...buildFilterQuery(newFilters),
       }
 
-      router.push({
-        pathname: "/search",
-        query: updatedQuery,
-      })
+      router.push(
+        {
+          pathname: "/search",
+          query: updatedQuery,
+        },
+        undefined,
+        { scroll: false }
+      )
 
       return newFilters
     })
@@ -59,15 +67,14 @@ const FilterPrototype = ({ aggregations }) => {
   const filters = fields
     .map((field) => {
       const filterData = new SearchResultsFilters(aggregations, field)
-      if (filterData.options) {
-        console.log("field is", field, filterData.options)
+      if (filterData.options && field) {
         return (
           <MultiSelect
             key={field.value}
-            isDefaultOpen
-            defaultItemsVisible={2}
+            isDefaultOpen={field.value !== "subjectLiteral"}
+            defaultItemsVisible={3}
             isBlockElement
-            isSearchable
+            isSearchable={field.value !== "buildingLocation"}
             id={field.value}
             buttonText={field.label}
             onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -99,7 +106,7 @@ const FilterPrototype = ({ aggregations }) => {
       borderRadius="5px"
       mb="s"
     >
-      <CardHeading size="h6" id="filter-results-heading">
+      <CardHeading size="heading6" id="filter-results-heading">
         Filter results
       </CardHeading>
       <CardContent>
