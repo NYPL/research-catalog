@@ -73,6 +73,9 @@ const FilterPrototype = ({
       return newFilters
     })
   }
+  //Last filter value: maintain all options
+  //const lastFilter
+
   const filters = fields.map((field) => {
     const filterData = new SearchResultsFilters(aggregations, field)
     if (filterData.options) {
