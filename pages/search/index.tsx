@@ -120,7 +120,7 @@ export default function Search({
           <>
             {totalResults > 0 ? (
               <>
-                <FilterPrototype />
+                <FilterPrototype aggregations={aggs} />
               </>
             ) : null}
             {isLoading ? (

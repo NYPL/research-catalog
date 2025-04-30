@@ -112,15 +112,15 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
             placeholder,
           }}
         />
-        {/* <Flex direction="column" justifyContent="space-between" mt="xs">
-          <RCLink
+        <Flex direction="column" justifyContent="space-between" mt="l">
+          {/* <RCLink
             className={styles.advancedSearch}
             href="/search/advanced"
             isUnderlined={false}
             mb="xs"
           >
             Advanced search
-          </RCLink>
+          </RCLink> */}
           {displayRefineResults && (
             <RefineSearch
               setAppliedFilters={setAppliedFilters}
@@ -128,7 +128,7 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
               aggregations={aggregations}
             />
           )}
-        </Flex> */}
+        </Flex>
       </div>
     </div>
   )
