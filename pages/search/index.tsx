@@ -36,6 +36,7 @@ import useLoading from "../../src/hooks/useLoading"
 import initializePatronTokenAuth from "../../src/server/auth"
 import RCHead from "../../src/components/Head/RCHead"
 import FilterPrototype from "../../src/components/FilterPrototype/FilterPrototype"
+import type { Aggregation } from "../../src/types/filterTypes"
 
 interface SearchProps {
   bannerNotification?: string
@@ -108,6 +109,9 @@ export default function Search({
     searchResultsHeadingRef?.current?.focus()
   }, [isLoading, isFreshSortByQuery])
 
+  const displayFilters = !!aggs?.filter((agg: Aggregation) => agg.values.length)
+    .length
+
   return (
     <>
       <RCHead metadataTitle={metadataTitle} />
@@ -118,7 +122,7 @@ export default function Search({
         activePage="search"
         sidebar={
           <>
-            {totalResults > 0 ? (
+            {displayFilters && totalResults > 0 ? (
               <>
                 <FilterPrototype aggregations={aggs} />
               </>

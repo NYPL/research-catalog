@@ -1,18 +1,24 @@
 import {
+  Accordion,
   Card,
   CardContent,
   CardHeading,
   Flex,
   MultiSelect,
 } from "@nypl/design-system-react-components"
+import type { TextInputRefType } from "@nypl/design-system-react-components"
 import SearchResultsFilters from "../../models/SearchResultsFilters"
 import { useRouter } from "next/router"
-import { useEffect, useState } from "react"
+import type { SyntheticEvent } from "react"
+
+import { useEffect, useRef, useState } from "react"
 import {
   buildFilterQuery,
   collapseMultiValueQueryParams,
   getQueryWithoutFilters,
 } from "../../utils/refineSearchUtils"
+import DatePrototype from "../SearchFilters/DatePrototype"
+import type { Aggregation } from "../../types/filterTypes"
 
 const fields = [
   { value: "buildingLocation", label: "Item location" },
@@ -23,7 +29,11 @@ const fields = [
   { value: "subjectLiteral", label: "Subject" },
 ]
 
-const FilterPrototype = ({ aggregations }) => {
+const FilterPrototype = ({
+  aggregations,
+}: {
+  aggregations?: Aggregation[]
+}) => {
   const router = useRouter()
   const [appliedFilters, setAppliedFilters] = useState(
     collapseMultiValueQueryParams(router.query)
@@ -46,7 +56,6 @@ const FilterPrototype = ({ aggregations }) => {
         [field]: updatedValues,
       }
 
-      // Update URL query
       const updatedQuery = {
         ...getQueryWithoutFilters(router.query),
         ...buildFilterQuery(newFilters),
@@ -64,39 +73,94 @@ const FilterPrototype = ({ aggregations }) => {
       return newFilters
     })
   }
-  const filters = fields
-    .map((field) => {
-      const filterData = new SearchResultsFilters(aggregations, field)
-      if (filterData.options && field) {
-        return (
-          <MultiSelect
-            key={field.value}
-            isDefaultOpen={field.value !== "subjectLiteral"}
-            defaultItemsVisible={3}
-            isBlockElement
-            isSearchable={field.value !== "buildingLocation"}
-            id={field.value}
-            buttonText={field.label}
-            onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
-              handleCheckboxChange(field.value, e.target.id)
-            }}
-            selectedItems={{
-              [field.value]: {
-                items: appliedFilters[field.value] || [],
-              },
-            }}
-            items={filterData.options.map((option) => ({
-              id: option.value,
-              name:
-                option.value === "rc"
-                  ? `Offsite (${option.count})`
-                  : `${option.label} (${option.count})`,
-            }))}
-          />
-        )
+  const filters = fields.map((field) => {
+    const filterData = new SearchResultsFilters(aggregations, field)
+    if (filterData.options) {
+      return (
+        <MultiSelect
+          key={field.value}
+          isDefaultOpen={field.value !== "subjectLiteral"}
+          defaultItemsVisible={3}
+          isBlockElement
+          isSearchable={field.value !== "buildingLocation"}
+          id={field.value}
+          buttonText={field.label}
+          onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
+            handleCheckboxChange(field.value, e.target.id)
+          }}
+          selectedItems={{
+            [field.value]: {
+              items: appliedFilters[field.value] || [],
+            },
+          }}
+          items={filterData.options.map((option) => ({
+            id: option.value,
+            name:
+              option.value === "rc"
+                ? `Offsite (${option.count})`
+                : `${option.label} (${option.count})`,
+          }))}
+        />
+      )
+    } else return null
+  })
+
+  const dateInputRefs = [useRef<TextInputRefType>(), useRef<TextInputRefType>()]
+  const dateFormProps = {
+    changeHandler: (e: SyntheticEvent) => {
+      const target = e.target as HTMLInputElement
+      // update the parent state to know about the updated dateValues
+      setAppliedFilters((prevFilters) => {
+        return {
+          ...prevFilters,
+          [target.name]: [target.value],
+        }
+      })
+    },
+    inputRefs: dateInputRefs,
+    dateAfter: appliedFilters.dateAfter?.[0],
+    dateBefore: appliedFilters.dateBefore?.[0],
+    applyHandler: () => {
+      const updatedQuery = {
+        ...getQueryWithoutFilters(router.query),
+        ...buildFilterQuery(appliedFilters),
       }
-    })
-    .filter(Boolean)
+      router.push(
+        {
+          pathname: "/search",
+          query: updatedQuery,
+        },
+        undefined,
+        { scroll: false }
+      )
+    },
+  }
+
+  const dateFilter = (
+    <Accordion
+      data-testid="acc"
+      sx={{
+        button: {
+          fontWeight: "400 !important",
+        },
+        bg: "ui.white",
+      }}
+      accordionData={[
+        {
+          accordionType: "default",
+          ariaLabel: "Date filter",
+          label: "Date",
+          panel: (
+            <Card isCentered layout="row">
+              <CardContent>
+                <DatePrototype {...dateFormProps} />
+              </CardContent>
+            </Card>
+          ),
+        },
+      ]}
+    />
+  )
 
   return (
     <Card
@@ -112,6 +176,7 @@ const FilterPrototype = ({ aggregations }) => {
       <CardContent>
         <Flex flexDir="column" gap="s">
           {filters}
+          {dateFilter}
         </Flex>
       </CardContent>
     </Card>

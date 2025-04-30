@@ -104,12 +104,18 @@ const Layout = ({
         }
         sidebar={sidebar ? sidebarPosition : "none"}
         contentPrimary={
-          <Box pb="l">
+          <Box pb="l" ml="l">
             {children}
             <FeedbackForm />
           </Box>
         }
-        contentSidebar={sidebar && <Box pb="l">{sidebar}</Box>}
+        contentSidebar={
+          sidebar && (
+            <Box pb="l" width="288px">
+              {sidebar}
+            </Box>
+          )
+        }
       />
     </DSProvider>
   )
