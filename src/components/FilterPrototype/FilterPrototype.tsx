@@ -6,9 +6,13 @@ import {
   MultiSelect,
 } from "@nypl/design-system-react-components"
 import SearchResultsFilters from "../../models/SearchResultsFilters"
-import { useRouter } from "next-router-mock"
+import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
-import { collapseMultiValueQueryParams } from "../../utils/refineSearchUtils"
+import {
+  buildFilterQuery,
+  collapseMultiValueQueryParams,
+  getQueryWithoutFilters,
+} from "../../utils/refineSearchUtils"
 
 const fields = [
   { value: "buildingLocation", label: "Item location" },
@@ -25,41 +29,65 @@ const FilterPrototype = ({ aggregations }) => {
     collapseMultiValueQueryParams(router.query)
   )
 
-  useEffect(() => {
-    setAppliedFilters(collapseMultiValueQueryParams(router.query))
-  }, [appliedFilters, router.query])
+  const handleCheckboxChange = (field: string, optionValue: string) => {
+    setAppliedFilters((prevFilters) => {
+      const currentValues = prevFilters[field] || []
+      const isAlreadySelected = currentValues.includes(optionValue)
+      const updatedValues = isAlreadySelected
+        ? currentValues.filter((val) => val !== optionValue)
+        : [...currentValues, optionValue]
 
-  const handleCheckboxChange = (field: string) => {
-    // update the parent state to know about the updated selected values
-    // setAppliedFilters((prevFilters) => {
-    //   return {
-    //     ...prevFilters,
-    //     [field]: data,
-    //   }
-    // })
+      const newFilters = {
+        ...prevFilters,
+        [field]: updatedValues,
+      }
+
+      // Update URL query
+      const updatedQuery = {
+        ...getQueryWithoutFilters(router.query),
+        ...buildFilterQuery(newFilters),
+      }
+
+      router.push({
+        pathname: "/search",
+        query: updatedQuery,
+      })
+
+      return newFilters
+    })
   }
-
   const filters = fields
     .map((field) => {
       const filterData = new SearchResultsFilters(aggregations, field)
-      if (!filterData.options?.length) return null
-      return (
-        <MultiSelect
-          key={field.value}
-          isDefaultOpen
-          defaultItemsVisible={2}
-          isBlockElement
-          isSearchable
-          id={field.value}
-          buttonText={field.label}
-          onChange={() => handleCheckboxChange(field.value)}
-          items={filterData.options.map((option) => ({
-            id: option.value,
-            name: option.label,
-          }))}
-          selectedItems={{}}
-        />
-      )
+      if (filterData.options) {
+        console.log("field is", field, filterData.options)
+        return (
+          <MultiSelect
+            key={field.value}
+            isDefaultOpen
+            defaultItemsVisible={2}
+            isBlockElement
+            isSearchable
+            id={field.value}
+            buttonText={field.label}
+            onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
+              handleCheckboxChange(field.value, e.target.id)
+            }}
+            selectedItems={{
+              [field.value]: {
+                items: appliedFilters[field.value] || [],
+              },
+            }}
+            items={filterData.options.map((option) => ({
+              id: option.value,
+              name:
+                option.value === "rc"
+                  ? `Offsite (${option.count})`
+                  : `${option.label} (${option.count})`,
+            }))}
+          />
+        )
+      }
     })
     .filter(Boolean)
 

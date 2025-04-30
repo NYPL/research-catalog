@@ -76,7 +76,10 @@ const RefineSearch = ({
         return (
           <SearchFilterCheckboxField
             gridOptions={{ min: 2, max: 4 }}
-            handleCheckboxChange={(e) => handleCheckboxChange(field.value, e)}
+            handleCheckboxChange={(e) => {
+              console.log(e)
+              handleCheckboxChange(field.value, e)
+            }}
             key={field.label}
             name={field.value}
             label={field.label}
@@ -141,6 +144,7 @@ const RefineSearch = ({
         [field]: data,
       }
     })
+    console.log("applied Filters now", appliedFilters)
   }
 
   return (
