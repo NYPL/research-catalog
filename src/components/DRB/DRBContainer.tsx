@@ -74,7 +74,6 @@ const DRBContainer = ({
                 md: "desktop.body.body2",
               }}
               type="standalone"
-              fontWeight="bold"
             >
               <>
                 View {totalWorks === 1 ? "" : "all"}{" "}

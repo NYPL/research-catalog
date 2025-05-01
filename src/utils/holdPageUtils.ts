@@ -19,7 +19,6 @@ export const initialEDDFormState: EDDRequestParams = {
   source: "",
   author: "",
   requestNotes: "",
-  pickupLocation: "edd",
 }
 
 // Initial state for invalid fields in the EDD form to keep track of the first invalid field for focus on submit
