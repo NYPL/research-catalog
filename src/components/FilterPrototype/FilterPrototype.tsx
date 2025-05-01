@@ -41,7 +41,33 @@ const FilterPrototype = ({
   useEffect(() => {
     const collapsedFilters = collapseMultiValueQueryParams(router.query)
     setAppliedFilters(collapsedFilters)
+    setFocusedFilter(null)
   }, [router.query])
+
+  const handleFilterClear = (field: string) => {
+    setAppliedFilters((prevFilters) => {
+      const newFilters = {
+        ...prevFilters,
+        [field]: [],
+      }
+
+      const updatedQuery = {
+        ...getQueryWithoutFilters(router.query),
+        ...buildFilterQuery(newFilters),
+      }
+
+      router.push(
+        {
+          pathname: "/search",
+          query: updatedQuery,
+        },
+        undefined,
+        { scroll: false }
+      )
+
+      return newFilters
+    })
+  }
 
   const handleCheckboxChange = (field: string, optionValue: string) => {
     setAppliedFilters((prevFilters) => {
@@ -73,37 +99,50 @@ const FilterPrototype = ({
       return newFilters
     })
   }
-  //Last filter value: maintain all options
-  //const lastFilter
 
+  const [focusedFilter, setFocusedFilter] = useState<string | null>(null)
   const filters = fields.map((field) => {
     const filterData = new SearchResultsFilters(aggregations, field)
     if (filterData.options) {
       return (
-        <MultiSelect
+        <div
           key={field.value}
-          isDefaultOpen={field.value !== "subjectLiteral"}
-          defaultItemsVisible={3}
-          isBlockElement
-          isSearchable={field.value !== "buildingLocation"}
-          id={field.value}
-          buttonText={field.label}
-          onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
-            handleCheckboxChange(field.value, e.target.id)
+          style={{
+            opacity: focusedFilter && focusedFilter !== field.value ? 0.4 : 1,
+            pointerEvents:
+              focusedFilter && focusedFilter !== field.value ? "none" : "unset",
+            transition: "opacity 0.2s ease",
           }}
-          selectedItems={{
-            [field.value]: {
-              items: appliedFilters[field.value] || [],
-            },
-          }}
-          items={filterData.options.map((option) => ({
-            id: option.value,
-            name:
-              option.value === "rc"
-                ? `Offsite (${option.count})`
-                : `${option.label} (${option.count})`,
-          }))}
-        />
+        >
+          <MultiSelect
+            isDefaultOpen={field.value !== "subjectLiteral"}
+            defaultItemsVisible={3}
+            isBlockElement
+            isSearchable={field.value !== "buildingLocation"}
+            id={field.value}
+            buttonText={field.label}
+            onClear={() => {
+              handleFilterClear(field.value)
+              setFocusedFilter(field.value)
+            }}
+            onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
+              handleCheckboxChange(field.value, e.target.id)
+              setFocusedFilter(field.value)
+            }}
+            selectedItems={{
+              [field.value]: {
+                items: appliedFilters[field.value] || [],
+              },
+            }}
+            items={filterData.options.map((option) => ({
+              id: option.value,
+              name:
+                option.value === "rc"
+                  ? `Offsite (${option.count})`
+                  : `${option.label} (${option.count})`,
+            }))}
+          />
+        </div>
       )
     } else return null
   })
@@ -140,29 +179,39 @@ const FilterPrototype = ({
   }
 
   const dateFilter = (
-    <Accordion
-      data-testid="acc"
-      sx={{
-        button: {
-          fontWeight: "400 !important",
-        },
-        bg: "ui.white",
+    <div
+      key="date"
+      style={{
+        opacity: focusedFilter && focusedFilter !== "date" ? 0.4 : 1,
+        pointerEvents:
+          focusedFilter && focusedFilter !== "date" ? "none" : "unset",
+        transition: "opacity 0.2s ease",
       }}
-      accordionData={[
-        {
-          accordionType: "default",
-          ariaLabel: "Date filter",
-          label: "Date",
-          panel: (
-            <Card isCentered layout="row">
-              <CardContent>
-                <DatePrototype {...dateFormProps} />
-              </CardContent>
-            </Card>
-          ),
-        },
-      ]}
-    />
+    >
+      <Accordion
+        data-testid="acc"
+        sx={{
+          button: {
+            fontWeight: "400 !important",
+          },
+          bg: "ui.white",
+        }}
+        accordionData={[
+          {
+            accordionType: "default",
+            ariaLabel: "Date filter",
+            label: "Date",
+            panel: (
+              <Card isCentered layout="row">
+                <CardContent>
+                  <DatePrototype {...dateFormProps} />
+                </CardContent>
+              </Card>
+            ),
+          },
+        ]}
+      />
+    </div>
   )
 
   return (
