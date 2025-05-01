@@ -379,6 +379,9 @@ export default class BibDetails {
       hasTOCElectronicResource && label.includes("table of contents")
 
     const values = this.bib.supplementaryContent
+      // If supplementary content contains a finding aid, don't display it
+      // Or, if supplementary content contains a table of contents
+      // and there's also a table of contents in electronic resources, don't display it
       .filter((sc) => {
         const scLabel = sc.label?.toLowerCase() || ""
         return !isFindingAid(scLabel) && !hasTOCERandTOC(scLabel)
