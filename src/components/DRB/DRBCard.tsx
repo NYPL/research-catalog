@@ -36,7 +36,6 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
             base: "mobile.subtitle.subtitle2",
             md: "desktop.subtitle.subtitle2",
           }}
-          fontWeight="medium"
           display="inline-block"
           mb="xs"
           lang={drbResult.language !== "en" ? drbResult.language : null}
@@ -53,7 +52,6 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
                 base: "mobile.body.body2",
                 md: "desktop.body.body2",
               }}
-              fontWeight="medium"
             >
               By
             </Box>{" "}
@@ -66,7 +64,6 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
                     base: "mobile.body.body2",
                     md: "desktop.body.body2",
                   }}
-                  fontWeight="light"
                 >
                   {author.name}
                 </ExternalLink>

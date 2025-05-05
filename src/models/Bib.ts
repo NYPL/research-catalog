@@ -8,6 +8,7 @@ import type { Aggregation } from "../types/filterTypes"
 import Item from "../models/Item"
 import { ITEM_PAGINATION_BATCH_SIZE } from "../config/constants"
 import ItemTableData from "./ItemTableData"
+import { getFindingAidFromSupplementaryContent } from "../utils/bibUtils"
 
 /**
  * The Bib class represents a single Bib entity and contains the data
@@ -44,10 +45,9 @@ export default class Bib {
     this.itemAggregations = result.itemAggregations || null
     this.hasItemDates = result.hasItemDates || false
     this.subjectHeadings = result.subjectHeadings || null
-    this.findingAid =
-      result.supplementaryContent?.find(
-        (el) => el.label?.toLocaleLowerCase() === "finding aid"
-      )?.url || null
+    this.findingAid = getFindingAidFromSupplementaryContent(
+      result.supplementaryContent
+    )
     this.items = this.getItemsFromResult(result)
   }
 
