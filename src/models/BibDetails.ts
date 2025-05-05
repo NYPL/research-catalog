@@ -367,24 +367,13 @@ export default class BibDetails {
     }
     const label = "Supplementary content"
 
-    const hasTOCElectronicResource = this.bib.electronicResources.find(
-      (resource) =>
-        resource.prefLabel &&
-        resource.prefLabel.toLowerCase().includes("table of contents")
-    )
-
     const isFindingAid = (label: string) => label.includes("finding aid")
-
-    const hasTOCERandTOC = (label: string) =>
-      hasTOCElectronicResource && label.includes("table of contents")
 
     const values = this.bib.supplementaryContent
       // If supplementary content contains a finding aid, don't display it
-      // Or, if supplementary content contains a table of contents
-      // and there's also a table of contents in electronic resources, don't display it
       .filter((sc) => {
         const scLabel = sc.label?.toLowerCase() || ""
-        return !isFindingAid(scLabel) && !hasTOCERandTOC(scLabel)
+        return !isFindingAid(scLabel)
       })
       .map((sc) => ({
         url: sc.url,
