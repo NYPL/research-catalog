@@ -1,5 +1,6 @@
 import {
   bibWithSupplementaryContent,
+  bibWithFindingAidAndTOC,
   noParallels,
   parallelsBib,
   yiddishBib,
@@ -10,10 +11,14 @@ import {
 import type { LinkedBibDetail } from "../../types/bibDetailsTypes"
 import BibDetailsModel from "../BibDetails"
 
-describe("Bib model", () => {
+describe("Bib Details model", () => {
   const bibWithSupContentModel = new BibDetailsModel(
     bibWithSupplementaryContent.resource,
     bibWithSupplementaryContent.annotatedMarc
+  )
+  const bibWithFindingAid = new BibDetailsModel(
+    bibWithFindingAidAndTOC.resource,
+    bibWithFindingAidAndTOC.annotatedMarc
   )
   const bibWithParallelsModel = new BibDetailsModel(
     parallelsBib.resource,
@@ -252,6 +257,33 @@ describe("Bib model", () => {
           },
         ],
       })
+    })
+    it("drops finding aid and table of contents links when necessary", () => {
+      // Bib with finding aid, and a table of contents in its electronic resources
+      expect(bibWithFindingAid.supplementaryContent).toStrictEqual({
+        link: "external",
+        label: "Supplementary content",
+        value: [
+          {
+            urlLabel: "Image",
+            url: "http://images.contentreserve.com/ImageType-100/0293-1/{C87D2BB9-0E13-4851-A9E2-547643F41A0E}Img100.jpg",
+          },
+        ],
+      })
+    })
+  })
+  describe("finding aid", () => {
+    it("populates finding aid when finding aid is present in supplementary content", () => {
+      const findingAidBibModel = new BibDetailsModel(
+        bibWithFindingAidAndTOC.resource
+      )
+      expect(findingAidBibModel.findingAid).toStrictEqual(
+        "http://archives.nypl.org/scm/20601"
+      )
+    })
+    it("sets finding aid to null when there is none", () => {
+      const noItemsBib = new BibDetailsModel(bibNoItems.resource)
+      expect(noItemsBib.findingAid).toBe(null)
     })
   })
   describe("internal linking fields", () => {
