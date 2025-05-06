@@ -28,7 +28,7 @@ const accountData = {
   pickupLocations: filteredPickupLocations,
 }
 
-const renderWithPatronDataProvider = (data) => {
+const renderAccountPageWithProviders = (data) => {
   return render(
     <FeedbackProvider value={null}>
       <PatronDataProvider value={{ ...data }}>
@@ -50,12 +50,12 @@ describe("Logout modal on my account page", () => {
   })
 
   it("does not show the logout modal on initial load", () => {
-    renderWithPatronDataProvider(accountData)
+    renderAccountPageWithProviders(accountData)
     expect(screen.queryByTestId("logout-modal")).toBeNull()
   })
 
   it("shows the logout modal after 5 minutes of inactivity", () => {
-    renderWithPatronDataProvider(accountData)
+    renderAccountPageWithProviders(accountData)
 
     act(() => {
       jest.advanceTimersByTime(5 * 60 * 1000) // 5 minutes
@@ -65,7 +65,7 @@ describe("Logout modal on my account page", () => {
   })
 
   it("resets the inactivity timer on user activity", () => {
-    renderWithPatronDataProvider(accountData)
+    renderAccountPageWithProviders(accountData)
 
     act(() => {
       jest.advanceTimersByTime(2 * 60 * 1000) // 2 mins
