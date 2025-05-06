@@ -52,7 +52,14 @@ export default function MyAccount({
       }, TIMEOUT_MINUTES)
     }
 
-    const events = ["mousemove", "keydown", "mousedown", "click", "touchstart"]
+    const events = [
+      "mousemove",
+      "keydown",
+      "mousedown",
+      "click",
+      "touchstart",
+      "scroll",
+    ]
     events.forEach((event) => window.addEventListener(event, handleActivity))
 
     handleActivity()
