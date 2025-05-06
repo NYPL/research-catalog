@@ -1,13 +1,85 @@
-import TimedLogoutModal from "./TimedLogoutModal"
-import { render, screen } from "../../../src/utils/testUtils"
+import React from "react"
+import { render, screen, act } from "@testing-library/react"
+import MyAccount from "../../../pages/account/[[...index]]"
+import { PatronDataProvider } from "../../context/PatronDataContext"
+import {
+  processedPatron,
+  processedFines,
+  processedCheckouts,
+  processedHolds,
+  filteredPickupLocations,
+} from "../../../__test__/fixtures/processedMyAccountData"
+import { FeedbackProvider } from "../../context/FeedbackContext"
 
-// Mock next router
-jest.mock("next/router", () => jest.requireActual("next-router-mock"))
-jest.useFakeTimers().setSystemTime(new Date("Mon, 08 Jul 2024 12:00:00 GMT"))
+jest.mock("next/router", () => ({
+  useRouter: jest.fn(),
+}))
 
-describe("TimedLogoutModal", () => {
-  it.todo("does not render if expiration is empty string")
-  it.todo("does not render until the timeout window has ellapsed")
-  it.todo("closes and redirects when time till expiration is zero")
-  it.todo("returns to account page when user clicks stay logged in")
+jest.mock("./TimedLogoutModal", () => ({
+  __esModule: true,
+  default: () => <div data-testid="logout-modal">Modal is showing</div>,
+}))
+
+const accountData = {
+  patron: processedPatron,
+  fines: processedFines,
+  checkouts: processedCheckouts,
+  holds: processedHolds,
+  pickupLocations: filteredPickupLocations,
+}
+
+const renderWithPatronDataProvider = (data) => {
+  return render(
+    <FeedbackProvider value={null}>
+      <PatronDataProvider value={{ ...data }}>
+        <MyAccount accountData={data} isAuthenticated={true} />
+      </PatronDataProvider>
+    </FeedbackProvider>
+  )
+}
+
+describe("Logout modal on my account page", () => {
+  beforeEach(() => {
+    jest.useFakeTimers()
+  })
+
+  afterEach(() => {
+    jest.runOnlyPendingTimers()
+    jest.useRealTimers()
+    jest.clearAllMocks()
+  })
+
+  it("does not show the logout modal on initial load", () => {
+    renderWithPatronDataProvider(accountData)
+    expect(screen.queryByTestId("logout-modal")).toBeNull()
+  })
+
+  it("shows the logout modal after 5 minutes of inactivity", () => {
+    renderWithPatronDataProvider(accountData)
+
+    act(() => {
+      jest.advanceTimersByTime(5 * 60 * 1000) // 5 minutes
+    })
+
+    expect(screen.getByTestId("logout-modal")).toBeInTheDocument()
+  })
+
+  it("resets the inactivity timer on user activity", () => {
+    renderWithPatronDataProvider(accountData)
+
+    act(() => {
+      jest.advanceTimersByTime(2 * 60 * 1000) // 2 mins
+      window.dispatchEvent(new Event("mousemove"))
+      jest.advanceTimersByTime(4 * 60 * 1000) // 4 more mins
+    })
+
+    expect(screen.queryByTestId("logout-modal")).toBeNull()
+
+    // Now wait 5 more minutes
+    act(() => {
+      jest.advanceTimersByTime(8 * 60 * 1000)
+    })
+
+    expect(screen.getByTestId("logout-modal")).toBeInTheDocument()
+  })
 })
