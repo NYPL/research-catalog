@@ -60,7 +60,9 @@ export default function MyAccount({
       "touchstart",
       "scroll",
     ]
-    events.forEach((event) => window.addEventListener(event, handleActivity))
+    events.forEach((event) =>
+      window.addEventListener(event, handleActivity, { passive: true })
+    )
 
     handleActivity()
 
