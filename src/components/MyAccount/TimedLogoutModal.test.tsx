@@ -64,12 +64,50 @@ describe("Logout modal on my account page", () => {
     expect(screen.getByTestId("logout-modal")).toBeInTheDocument()
   })
 
-  it("resets the inactivity timer on user activity", () => {
+  it("resets the inactivity timer on mouse move", () => {
     renderAccountPageWithProviders(accountData)
 
     act(() => {
       jest.advanceTimersByTime(2 * 60 * 1000) // 2 mins
       window.dispatchEvent(new Event("mousemove"))
+      jest.advanceTimersByTime(4 * 60 * 1000) // 4 more mins
+    })
+
+    expect(screen.queryByTestId("logout-modal")).toBeNull()
+
+    // Now wait 5 more minutes
+    act(() => {
+      jest.advanceTimersByTime(8 * 60 * 1000)
+    })
+
+    expect(screen.getByTestId("logout-modal")).toBeInTheDocument()
+  })
+
+  it("resets the inactivity timer on scroll", () => {
+    renderAccountPageWithProviders(accountData)
+
+    act(() => {
+      jest.advanceTimersByTime(2 * 60 * 1000) // 2 mins
+      window.dispatchEvent(new Event("scroll"))
+      jest.advanceTimersByTime(4 * 60 * 1000) // 4 more mins
+    })
+
+    expect(screen.queryByTestId("logout-modal")).toBeNull()
+
+    // Now wait 5 more minutes
+    act(() => {
+      jest.advanceTimersByTime(8 * 60 * 1000)
+    })
+
+    expect(screen.getByTestId("logout-modal")).toBeInTheDocument()
+  })
+
+  it("resets the inactivity timer on touch", () => {
+    renderAccountPageWithProviders(accountData)
+
+    act(() => {
+      jest.advanceTimersByTime(2 * 60 * 1000) // 2 mins
+      window.dispatchEvent(new Event("touchstart"))
       jest.advanceTimersByTime(4 * 60 * 1000) // 4 more mins
     })
 
