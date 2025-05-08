@@ -35,9 +35,7 @@ export default class BibDetails {
     this.groupedNotes = this.buildGroupedNotes()
     this.extent = this.buildExtent()
     this.owner = this.buildOwner()
-    // If we can't retreive subject headings from the SHEP API, we'll use the subjectLiteral
-    this.subjectLiteral =
-      this.buildSubjectHeadings() || this.buildSubjectLiterals()
+    this.subjectLiteral = this.buildSubjectLiterals()
     // these are the actual arrays of details that will be displayed
     this.annotatedMarcDetails = this.buildAnnotatedMarcDetails(
       annotatedMarc?.fields
@@ -386,15 +384,6 @@ export default class BibDetails {
     return getFindingAidFromSupplementaryContent(this.bib.supplementaryContent)
   }
 
-  buildSubjectHeadings(): BibDetailURL[][] {
-    if (!this.bib.subjectHeadings) return
-    const subjectHeadingsUrls = this.bib.subjectHeadings.map((heading) =>
-      this.flattenSubjectHeadingUrls(heading)
-    )
-
-    return subjectHeadingsUrls?.length && subjectHeadingsUrls
-  }
-
   buildSubjectLiterals(): BibDetailURL[][] {
     if (!this.bib.subjectLiteral) return
     const subjectLiteralUrls = this.bib.subjectLiteral.map(
@@ -434,35 +423,5 @@ export default class BibDetails {
 
         return stackedSubjectLiteral
       })
-  }
-
-  /**
-   * Flatten subject headings into a list of objects with a url and a label
-   */
-  flattenSubjectHeadingUrls(heading): BibDetailURL[] | null {
-    if (!heading.label || !heading.uuid) return null
-    const subjectHeadingsArray = []
-
-    // iterate through each nested subject until there's no parent element
-    let currentHeading = heading
-
-    while (currentHeading.parent) {
-      subjectHeadingsArray.unshift(
-        this.getSubjectHeadingUrl(currentHeading.uuid, currentHeading.label)
-      )
-      currentHeading = currentHeading.parent
-    }
-    // add the top level subject heading
-    subjectHeadingsArray.unshift(
-      this.getSubjectHeadingUrl(currentHeading.uuid, currentHeading.label)
-    )
-    return subjectHeadingsArray
-  }
-
-  getSubjectHeadingUrl(uuid: string, label: string): BibDetailURL {
-    return {
-      url: `/subject_headings/${uuid}?label=${encodeURIComponent(label)}`,
-      urlLabel: label.split(" -- ").pop(),
-    }
   }
 }

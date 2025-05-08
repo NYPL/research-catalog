@@ -9,7 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 
-- Updates DS to v3.6.1 (SCC-4630)
+- Updates DS to v3.6.1 [SCC-4630](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4630)
+- Updates timed logout modal to reset on user activity [SCC-4379](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4379)
+- Remove links to SHEP from bib details and subject searches [SCC-4640](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4640)
 
 ### Fixed
 
