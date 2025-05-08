@@ -37,6 +37,36 @@ export default function MyAccount({
     document.cookie = newExpirationTime
     setExpirationTime(inFive)
   }
+
+  useEffect(() => {
+    resetCountdown()
+
+    let inactivityTimer: ReturnType<typeof setTimeout>
+    const TIMEOUT_MINUTES = 5 * 60 * 1000
+
+    const handleActivity = () => {
+      clearTimeout(inactivityTimer)
+      resetCountdown()
+      inactivityTimer = setTimeout(() => {
+        setDisplayLogoutModal(true)
+      }, TIMEOUT_MINUTES)
+    }
+
+    const events = ["mousemove", "keydown", "mousedown", "touchstart", "scroll"]
+    events.forEach((event) =>
+      window.addEventListener(event, handleActivity, { passive: true })
+    )
+
+    handleActivity()
+
+    return () => {
+      clearTimeout(inactivityTimer)
+      events.forEach((event) =>
+        window.removeEventListener(event, handleActivity)
+      )
+    }
+  }, [])
+
   const serverError = (
     <Text>
       We are unable to display your account information at this time. Please
@@ -51,12 +81,6 @@ export default function MyAccount({
     </Text>
   )
 
-  useEffect(() => {
-    resetCountdown()
-    // to avoid a reference error on document in the modal, wait to render it
-    // until we are on the client side
-    setDisplayLogoutModal(true)
-  })
   try {
     return (
       <>
