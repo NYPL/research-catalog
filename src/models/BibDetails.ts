@@ -9,6 +9,7 @@ import type {
   AnyBibDetail,
 } from "../types/bibDetailsTypes"
 import { convertToSentenceCase } from "../utils/appUtils"
+import { getFindingAidFromSupplementaryContent } from "../utils/bibUtils"
 
 export default class BibDetails {
   bib: DiscoveryBibResult
@@ -21,6 +22,7 @@ export default class BibDetails {
   extent: string[]
   subjectLiteral: BibDetailURL[][]
   owner: string[]
+  findingAid?: string
 
   constructor(
     discoveryBibResult: DiscoveryBibResult,
@@ -29,6 +31,7 @@ export default class BibDetails {
     this.bib = this.matchParallelToPrimaryValues(discoveryBibResult)
     // these properties are not string[] so they require separate processing
     this.supplementaryContent = this.buildSupplementaryContent()
+    this.findingAid = this.buildFindingAid()
     this.groupedNotes = this.buildGroupedNotes()
     this.extent = this.buildExtent()
     this.owner = this.buildOwner()
@@ -361,13 +364,33 @@ export default class BibDetails {
       return null
     }
     const label = "Supplementary content"
-    const values = this.bib.supplementaryContent.map((sc) => {
-      return {
+
+    const isFindingAid = (label: string) => label.includes("finding aid")
+
+    const values = this.bib.supplementaryContent
+      // If supplementary content contains a finding aid, don't display it
+      .filter((sc) => {
+        const scLabel = sc.label?.toLowerCase() || ""
+        return !isFindingAid(scLabel)
+      })
+      .map((sc) => ({
         url: sc.url,
         urlLabel: sc.label,
-      }
-    })
+      }))
     return this.buildExternalLinkedDetail(convertToSentenceCase(label), values)
+  }
+
+  buildFindingAid() {
+    return getFindingAidFromSupplementaryContent(this.bib.supplementaryContent)
+  }
+
+  buildSubjectHeadings(): BibDetailURL[][] {
+    if (!this.bib.subjectHeadings) return
+    const subjectHeadingsUrls = this.bib.subjectHeadings.map((heading) =>
+      this.flattenSubjectHeadingUrls(heading)
+    )
+
+    return subjectHeadingsUrls?.length && subjectHeadingsUrls
   }
 
   buildSubjectLiterals(): BibDetailURL[][] {
