@@ -384,15 +384,6 @@ export default class BibDetails {
     return getFindingAidFromSupplementaryContent(this.bib.supplementaryContent)
   }
 
-  buildSubjectHeadings(): BibDetailURL[][] {
-    if (!this.bib.subjectHeadings) return
-    const subjectHeadingsUrls = this.bib.subjectHeadings.map((heading) =>
-      this.flattenSubjectHeadingUrls(heading)
-    )
-
-    return subjectHeadingsUrls?.length && subjectHeadingsUrls
-  }
-
   buildSubjectLiterals(): BibDetailURL[][] {
     if (!this.bib.subjectLiteral) return
     const subjectLiteralUrls = this.bib.subjectLiteral.map(
