@@ -6,13 +6,14 @@ import {
   Text,
   CardActions,
   SimpleGrid,
+  StatusBadge,
 } from "@nypl/design-system-react-components"
-
 import RCLink from "../Links/RCLink/RCLink"
 import ElectronicResourcesLink from "./ElectronicResourcesLink"
 import ItemTable from "../ItemTable/ItemTable"
 import type SearchResultsBib from "../../models/SearchResultsBib"
 import { PATHS } from "../../config/constants"
+import FindingAid from "../BibPage/FindingAid"
 
 interface SearchResultProps {
   bib: SearchResultsBib
@@ -27,6 +28,9 @@ const SearchResult = ({ bib }: SearchResultProps) => {
       sx={{
         borderBottom: "1px solid var(--nypl-colors-ui-border-default)",
         paddingBottom: "l",
+        " > div": {
+          width: "100% !important",
+        },
       }}
     >
       <CardHeading
@@ -34,9 +38,14 @@ const SearchResult = ({ bib }: SearchResultProps) => {
         size="heading5"
         sx={{ a: { textDecoration: "none" } }}
       >
+        {bib.findingAid && (
+          <StatusBadge type="informative" mb="s">
+            FINDING AID AVAILABLE
+          </StatusBadge>
+        )}
         <RCLink href={`${PATHS.BIB}/${bib.id}`}>{bib.titleDisplay}</RCLink>
       </CardHeading>
-      <CardContent>
+      <CardContent data-testid="card-content">
         <Box
           sx={{
             p: { display: "inline-block", marginRight: "s", marginBottom: "s" },
@@ -47,14 +56,19 @@ const SearchResult = ({ bib }: SearchResultProps) => {
           {bib.yearPublished && <Text>{bib.yearPublished}</Text>}
           <Text>{bib.getNumItemsMessage()}</Text>
         </Box>
-
-        <SimpleGrid columns={1} gap="grid.l">
-          {bib.hasElectronicResources && (
-            <ElectronicResourcesLink
-              bibUrl={bib.url}
-              electronicResources={bib.electronicResources}
-            />
-          )}
+        {bib.findingAid ? (
+          <FindingAid
+            findingAidURL={bib.findingAid}
+            hasElectronicResources={bib.hasElectronicResources}
+          />
+        ) : null}
+        {bib.hasElectronicResources ? (
+          <ElectronicResourcesLink
+            bibUrl={bib.url}
+            electronicResources={bib.electronicResources}
+          />
+        ) : null}
+        <SimpleGrid columns={1} mt="l" gap="grid.l">
           {bib.itemTables && (
             <>
               {bib.itemTables.map((itemTableData) => (
