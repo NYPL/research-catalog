@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+### Added
+
+- Adds GA events to onsite and EDD requests [SCC-4649](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4649)
+
 ### Updated
 
 - Updates DS to v3.6.1 [SCC-4630](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4630)
