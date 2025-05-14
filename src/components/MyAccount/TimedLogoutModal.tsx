@@ -117,7 +117,6 @@ const TimedLogoutModal = () => {
             isBordered={true}
             backgroundColor="ui.bg.default"
             className={styles.logoutModalBody}
-            maxWidth="472px"
           >
             <CardHeading
               sx={{ display: "flex", justifyContent: "space-between" }}
