@@ -13,7 +13,7 @@ import { deleteCookie } from "../../utils/cookieUtils"
 import router from "next/router"
 import { useLogoutRedirect } from "../../server/auth"
 
-const INACTIVITY_LIMIT = 5 * 60 * 1000 // 5 minutes (milliseconds)
+const INACTIVITY_LIMIT = 1 * 60 * 1000 // 5 minutes (milliseconds)
 const MODAL_COUNTDOWN = 2 * 60 // 2 minutes (seconds)
 
 /**
