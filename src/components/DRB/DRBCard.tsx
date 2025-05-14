@@ -22,6 +22,18 @@ interface DRBCardProps {
 const DRBCard = ({ drbResult }: DRBCardProps) => {
   if (!drbResult) return null
 
+  const handleReadOnlineGAEvent = () => {
+    if (typeof window !== "undefined") {
+      window.dataLayer = window.dataLayer || []
+      window.dataLayer.push({
+        event: "read_online",
+        item_title: drbResult.title,
+        item_author: drbResult.authors?.map((author) => author.name).join(","),
+        read_online_url: drbResult.readOnlineUrl,
+      })
+    }
+  }
+
   return (
     <Card backgroundColor="ui.white" p="s" borderRadius="5px">
       <CardHeading
@@ -79,6 +91,13 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
             type="buttonSecondary"
             mt="xs"
             isUnderlined={false}
+            onClick={(e) => {
+              e.preventDefault()
+              handleReadOnlineGAEvent()
+              setTimeout(() => {
+                window.location.href = drbResult.readOnlineUrl
+              }, 100)
+            }}
           >
             Read Online
           </ExternalLink>
