@@ -1,5 +1,4 @@
 import { Text } from "@nypl/design-system-react-components"
-
 import Layout from "../../src/components/Layout/Layout"
 import initializePatronTokenAuth, {
   doRedirectBasedOnNyplAccountRedirects,
@@ -8,11 +7,10 @@ import initializePatronTokenAuth, {
 import ProfileContainer from "../../src/components/MyAccount/ProfileContainer"
 import type { MyAccountPatronData } from "../../src/types/myAccountTypes"
 import { PatronDataProvider } from "../../src/context/PatronDataContext"
-import TimedLogoutModal from "../../src/components/MyAccount/TimedLogoutModal"
-import { getIncrementedTime } from "../../src/utils/cookieUtils"
-import { useEffect, useState } from "react"
 import { getPatronData } from "../api/account/[id]"
 import RCHead from "../../src/components/Head/RCHead"
+import TimedLogoutModal from "../../src/components/MyAccount/TimedLogoutModal"
+
 interface MyAccountPropsType {
   accountData: MyAccountPatronData
   isAuthenticated: boolean
@@ -27,45 +25,6 @@ export default function MyAccount({
   tabsPath,
 }: MyAccountPropsType) {
   const errorRetrievingPatronData = !accountData.patron
-
-  const [expirationTime, setExpirationTime] = useState("")
-  const [displayLogoutModal, setDisplayLogoutModal] = useState(false)
-
-  const resetCountdown = () => {
-    const inFive = getIncrementedTime(5)
-    const newExpirationTime = `accountPageExp=${inFive}; expires=${inFive}`
-    document.cookie = newExpirationTime
-    setExpirationTime(inFive)
-  }
-
-  useEffect(() => {
-    resetCountdown()
-
-    let inactivityTimer: ReturnType<typeof setTimeout>
-    const TIMEOUT_MINUTES = 5 * 60 * 1000
-
-    const handleActivity = () => {
-      clearTimeout(inactivityTimer)
-      resetCountdown()
-      inactivityTimer = setTimeout(() => {
-        setDisplayLogoutModal(true)
-      }, TIMEOUT_MINUTES)
-    }
-
-    const events = ["mousemove", "keydown", "mousedown", "touchstart", "scroll"]
-    events.forEach((event) =>
-      window.addEventListener(event, handleActivity, { passive: true })
-    )
-
-    handleActivity()
-
-    return () => {
-      clearTimeout(inactivityTimer)
-      events.forEach((event) =>
-        window.removeEventListener(event, handleActivity)
-      )
-    }
-  }, [])
 
   const serverError = (
     <Text>
@@ -86,12 +45,7 @@ export default function MyAccount({
       <>
         <RCHead metadataTitle={"My Account"} />
         <Layout isAuthenticated={isAuthenticated} activePage="account">
-          {displayLogoutModal && (
-            <TimedLogoutModal
-              stayLoggedIn={resetCountdown}
-              expirationTime={expirationTime}
-            />
-          )}
+          <TimedLogoutModal />
           {renderAuthServerError ? (
             authError
           ) : errorRetrievingPatronData ? (

@@ -1,121 +1,117 @@
+import { render, screen, fireEvent, act } from "@testing-library/react"
+import TimedLogoutModal from "./TimedLogoutModal"
 import React from "react"
-import { render, screen, act } from "@testing-library/react"
-import MyAccount from "../../../pages/account/[[...index]]"
-import { PatronDataProvider } from "../../context/PatronDataContext"
-import {
-  processedPatron,
-  processedFines,
-  processedCheckouts,
-  processedHolds,
-  filteredPickupLocations,
-} from "../../../__test__/fixtures/processedMyAccountData"
-import { FeedbackProvider } from "../../context/FeedbackContext"
+import router from "next/router"
+import { deleteCookie } from "../../utils/cookieUtils"
 
 jest.mock("next/router", () => ({
-  useRouter: jest.fn(),
-}))
-
-jest.mock("./TimedLogoutModal", () => ({
   __esModule: true,
-  default: () => <div data-testid="logout-modal">Modal is showing</div>,
+  default: { push: jest.fn() },
+}))
+jest.mock("../../utils/cookieUtils", () => ({
+  deleteCookie: jest.fn(),
+}))
+jest.mock("../../server/auth", () => ({
+  useLogoutRedirect: jest.fn().mockReturnValue("/login"),
 }))
 
-const accountData = {
-  patron: processedPatron,
-  fines: processedFines,
-  checkouts: processedCheckouts,
-  holds: processedHolds,
-  pickupLocations: filteredPickupLocations,
-}
-
-const renderAccountPageWithProviders = (data) => {
-  return render(
-    <FeedbackProvider value={null}>
-      <PatronDataProvider value={{ ...data }}>
-        <MyAccount accountData={data} isAuthenticated={true} />
-      </PatronDataProvider>
-    </FeedbackProvider>
-  )
-}
-
-describe("Logout modal on my account page", () => {
+describe("Logout modal", () => {
   beforeEach(() => {
     jest.useFakeTimers()
-  })
-
-  afterEach(() => {
-    jest.runOnlyPendingTimers()
-    jest.useRealTimers()
     jest.clearAllMocks()
   })
 
-  it("does not show the logout modal on initial load", () => {
-    renderAccountPageWithProviders(accountData)
-    expect(screen.queryByTestId("logout-modal")).toBeNull()
+  afterEach(() => {
+    jest.useRealTimers()
   })
 
-  it("shows the logout modal after 5 minutes of inactivity", () => {
-    renderAccountPageWithProviders(accountData)
+  it("should show the modal after inactivity timeout", async () => {
+    render(<TimedLogoutModal />)
+
+    expect(screen.queryByRole("dialog")).toBeNull()
+    expect(screen.queryByTestId("logout-modal")).not.toBeInTheDocument()
 
     act(() => {
-      jest.advanceTimersByTime(5 * 60 * 1000) // 5 minutes
+      jest.advanceTimersByTime(5 * 60 * 1000)
+    })
+
+    expect(screen.getByRole("dialog")).toBeInTheDocument()
+  })
+
+  it("should start countdown when the modal opens", async () => {
+    render(<TimedLogoutModal />)
+
+    act(() => {
+      jest.advanceTimersByTime(5 * 60 * 1000)
     })
 
     expect(screen.getByTestId("logout-modal")).toBeInTheDocument()
+
+    expect(screen.getByText("2:00")).toBeInTheDocument()
+
+    act(() => {
+      jest.advanceTimersByTime(1000)
+    })
+
+    expect(screen.getByText("1:59")).toBeInTheDocument()
   })
 
-  it("resets the inactivity timer on mouse move", () => {
-    renderAccountPageWithProviders(accountData)
+  it("should log out and redirect when countdown reaches 0", async () => {
+    render(<TimedLogoutModal />)
 
-    act(() => {
-      jest.advanceTimersByTime(2 * 60 * 1000) // 2 mins
-      window.dispatchEvent(new Event("mousemove"))
-      jest.advanceTimersByTime(4 * 60 * 1000) // 4 more mins
+    await act(() => {
+      jest.advanceTimersByTime(5 * 60 * 1000)
+      return Promise.resolve()
     })
 
-    expect(screen.queryByTestId("logout-modal")).toBeNull()
+    expect(screen.getByRole("dialog")).toBeInTheDocument()
 
-    // Now wait 5 more minutes
-    act(() => {
-      jest.advanceTimersByTime(8 * 60 * 1000)
-    })
+    // Have to step through individual ticks
+    for (let i = 0; i < 2 * 60; i++) {
+      await act(() => {
+        jest.advanceTimersByTime(1000)
+        return Promise.resolve()
+      })
+    }
 
-    expect(screen.getByTestId("logout-modal")).toBeInTheDocument()
+    expect(deleteCookie).toHaveBeenCalledWith("accountPageExp")
+    expect(router.push).toHaveBeenCalledWith("/login")
   })
 
-  it("resets the inactivity timer on scroll", () => {
-    renderAccountPageWithProviders(accountData)
+  it('should reset the timer when "Stay logged in" is clicked', async () => {
+    render(<TimedLogoutModal />)
 
     act(() => {
-      jest.advanceTimersByTime(2 * 60 * 1000) // 2 mins
-      window.dispatchEvent(new Event("scroll"))
-      jest.advanceTimersByTime(4 * 60 * 1000) // 4 more mins
+      jest.advanceTimersByTime(5 * 60 * 1000)
     })
 
-    expect(screen.queryByTestId("logout-modal")).toBeNull()
+    fireEvent.click(screen.getByText("Stay logged in"))
 
-    // Now wait 5 more minutes
-    act(() => {
-      jest.advanceTimersByTime(8 * 60 * 1000)
-    })
-
-    expect(screen.getByTestId("logout-modal")).toBeInTheDocument()
+    expect(screen.queryByTestId("logout-modal")).not.toBeInTheDocument()
+    expect(router.push).not.toHaveBeenCalled()
   })
 
-  it("resets the inactivity timer on touch", () => {
-    renderAccountPageWithProviders(accountData)
+  it("should reset the inactivity timer on user activity", async () => {
+    render(<TimedLogoutModal />)
+
+    expect(screen.queryByTestId("logout-modal")).not.toBeInTheDocument()
 
     act(() => {
-      jest.advanceTimersByTime(2 * 60 * 1000) // 2 mins
-      window.dispatchEvent(new Event("touchstart"))
-      jest.advanceTimersByTime(4 * 60 * 1000) // 4 more mins
+      jest.advanceTimersByTime(2 * 60 * 1000)
     })
 
-    expect(screen.queryByTestId("logout-modal")).toBeNull()
+    expect(screen.queryByTestId("logout-modal")).not.toBeInTheDocument()
 
-    // Now wait 5 more minutes
+    window.dispatchEvent(new Event("scroll"))
+
     act(() => {
-      jest.advanceTimersByTime(8 * 60 * 1000)
+      jest.advanceTimersByTime(4 * 60 * 1000)
+    })
+
+    expect(screen.queryByTestId("logout-modal")).not.toBeInTheDocument()
+
+    act(() => {
+      jest.advanceTimersByTime(5 * 60 * 1000)
     })
 
     expect(screen.getByTestId("logout-modal")).toBeInTheDocument()
