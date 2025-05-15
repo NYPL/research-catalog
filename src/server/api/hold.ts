@@ -139,7 +139,6 @@ export async function postEDDRequest(
     nyplSource: source,
     requestType: "edd",
     recordType: "i",
-    pickupLocation: "edd",
     docDeliveryData: {
       ...rest,
     } as EDDRequestParams,

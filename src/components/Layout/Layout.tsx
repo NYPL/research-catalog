@@ -82,7 +82,7 @@ const Layout = ({
               </div>
               {showSearch && (
                 <Flex
-                  gap="l"
+                  gap="s"
                   align="center"
                   direction="column"
                   sx={{

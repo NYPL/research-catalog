@@ -52,14 +52,6 @@ export async function fetchBib(
   const annotatedMarc =
     annotatedMarcResponse.status === "fulfilled" && annotatedMarcResponse.value
 
-  // Get subject headings from SHEP API
-  // TODO: Revisit this after Enhanced Browse work to determine if it's still necessary
-  if (discoveryBibResult.subjectLiteral?.length) {
-    const subjectHeadingData = await fetchBibSubjectHeadings(id)
-    discoveryBibResult.subjectHeadings =
-      (subjectHeadingData && subjectHeadingData["subject_headings"]) || null
-  }
-
   try {
     // If there's a problem with a bib, try to fetch from the Sierra API and redirect to circulating catalog
     if (
@@ -124,30 +116,6 @@ export async function fetchBib(
     return {
       status: 404,
     }
-  }
-}
-
-async function fetchBibSubjectHeadings(bibId: string) {
-  const controller = new AbortController()
-  const timeoutId = setTimeout(() => controller.abort(), SHEP_HTTP_TIMEOUT)
-  try {
-    const response = await fetch(
-      `${
-        appConfig.apiEndpoints.shep[appConfig.environment]
-      }/bibs/${bibId}/subject_headings`,
-      {
-        signal: controller.signal,
-      }
-    )
-    return await response.json()
-  } catch (error) {
-    logServerError(
-      "fetchBibSubjectHeadings",
-      "Error fetching SHEP API data (note: VPN should be used for local testing)"
-    )
-    logServerError("fetchBibSubjectHeadings", error.message)
-  } finally {
-    clearTimeout(timeoutId)
   }
 }
 

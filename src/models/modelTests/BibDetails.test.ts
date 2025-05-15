@@ -1,5 +1,6 @@
 import {
   bibWithSupplementaryContent,
+  bibWithFindingAidAndTOC,
   noParallels,
   parallelsBib,
   yiddishBib,
@@ -10,10 +11,14 @@ import {
 import type { LinkedBibDetail } from "../../types/bibDetailsTypes"
 import BibDetailsModel from "../BibDetails"
 
-describe("Bib model", () => {
+describe("Bib Details model", () => {
   const bibWithSupContentModel = new BibDetailsModel(
     bibWithSupplementaryContent.resource,
     bibWithSupplementaryContent.annotatedMarc
+  )
+  const bibWithFindingAid = new BibDetailsModel(
+    bibWithFindingAidAndTOC.resource,
+    bibWithFindingAidAndTOC.annotatedMarc
   )
   const bibWithParallelsModel = new BibDetailsModel(
     parallelsBib.resource,
@@ -72,44 +77,7 @@ describe("Bib model", () => {
     })
   })
   describe("subjectHeadings", () => {
-    it("correctly formats the subjectHeading urls when the subjectHeadings are present in the bib result", () => {
-      const subjectHeadings = [
-        [
-          {
-            url: "/subject_headings/cf347108-e1f2-4c0f-808a-ac4ace2f0765?label=Cortanze%2C%20G%C3%A9rard%20de",
-            urlLabel: "Cortanze, Gérard de",
-          },
-          {
-            url: "/subject_headings/74746d11-638b-4cfb-a72a-9a2bd296e6fd?label=Cortanze%2C%20G%C3%A9rard%20de%20--%20Childhood%20and%20youth",
-            urlLabel: "Childhood and youth",
-          },
-        ],
-        [
-          {
-            url: "/subject_headings/5fd065df-b4e9-48cb-b13c-ea15f36b96b4?label=Authors%2C%20French",
-            urlLabel: "Authors, French",
-          },
-          {
-            url: "/subject_headings/e43674a7-5f02-44f1-95cd-dbcc776331b7?label=Authors%2C%20French%20--%2020th%20century",
-            urlLabel: "20th century",
-          },
-          {
-            url: "/subject_headings/9391bc26-e44c-44ac-98cc-e3800da51926?label=Authors%2C%20French%20--%2020th%20century%20--%20Biography",
-            urlLabel: "Biography",
-          },
-        ],
-        [
-          {
-            url: "/subject_headings/3a779ed6-8a07-4d27-80ef-e0c2b10fe78e?label=Autobiographical%20Narrative",
-            urlLabel: "Autobiographical Narrative",
-          },
-        ],
-      ]
-      expect(bibWithSubjectHeadingsModel.subjectLiteral).toStrictEqual(
-        subjectHeadings
-      )
-    })
-    it("falls back to subject literals when subject headings are absent in the bib and correctly formats the urls", () => {
+    it("formats subject literals and urls correctly", () => {
       const filterQueryForSubjectLiteral = "/search?filters[subjectLiteral]="
       const subjectHeadings = [
         [
@@ -252,6 +220,33 @@ describe("Bib model", () => {
           },
         ],
       })
+    })
+    it("drops finding aid and table of contents links when necessary", () => {
+      // Bib with finding aid, and a table of contents in its electronic resources
+      expect(bibWithFindingAid.supplementaryContent).toStrictEqual({
+        link: "external",
+        label: "Supplementary content",
+        value: [
+          {
+            urlLabel: "Image",
+            url: "http://images.contentreserve.com/ImageType-100/0293-1/{C87D2BB9-0E13-4851-A9E2-547643F41A0E}Img100.jpg",
+          },
+        ],
+      })
+    })
+  })
+  describe("finding aid", () => {
+    it("populates finding aid when finding aid is present in supplementary content", () => {
+      const findingAidBibModel = new BibDetailsModel(
+        bibWithFindingAidAndTOC.resource
+      )
+      expect(findingAidBibModel.findingAid).toStrictEqual(
+        "http://archives.nypl.org/scm/20601"
+      )
+    })
+    it("sets finding aid to null when there is none", () => {
+      const noItemsBib = new BibDetailsModel(bibNoItems.resource)
+      expect(noItemsBib.findingAid).toBe(null)
     })
   })
   describe("internal linking fields", () => {

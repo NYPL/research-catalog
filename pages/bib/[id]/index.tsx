@@ -6,8 +6,8 @@ import {
   SkeletonLoader,
   Box,
   Banner,
+  StatusBadge,
 } from "@nypl/design-system-react-components"
-
 import Layout from "../../../src/components/Layout/Layout"
 import {
   PATHS,
@@ -44,6 +44,7 @@ import {
   areFiltersApplied,
 } from "../../../src/utils/itemFilterUtils"
 import RCHead from "../../../src/components/Head/RCHead"
+import FindingAid from "../../../src/components/BibPage/FindingAid"
 
 interface BibPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -80,10 +81,8 @@ export default function BibPage({
   const viewAllLoadingTextRef = useRef<HTMLDivElement & HTMLLabelElement>(null)
   const controllerRef = useRef<AbortController>()
 
-  const { topDetails, bottomDetails, holdingsDetails } = new BibDetailsModel(
-    discoveryBibResult,
-    annotatedMarc
-  )
+  const { topDetails, bottomDetails, holdingsDetails, findingAid } =
+    new BibDetailsModel(discoveryBibResult, annotatedMarc)
   const displayLegacyCatalogLink = isNyplBibID(bib.id)
 
   const filtersAreApplied = areFiltersApplied(appliedFilters)
@@ -203,13 +202,28 @@ export default function BibPage({
     <>
       <RCHead metadataTitle={metadataTitle} />
       <Layout isAuthenticated={isAuthenticated} activePage="bib">
+        {findingAid && (
+          <StatusBadge mb="s" type="informative">
+            FINDING AID AVAILABLE
+          </StatusBadge>
+        )}
         <Heading level="h2" size="heading3" mb="l">
           {bib.title}
         </Heading>
         <BibDetails key="top-details" details={topDetails} />
-        {bib.hasElectronicResources ? (
-          <ElectronicResources electronicResources={bib.electronicResources} />
-        ) : null}
+        <Box mt="s">
+          {findingAid && (
+            <FindingAid
+              findingAidURL={findingAid}
+              hasElectronicResources={bib.hasElectronicResources}
+            />
+          )}
+          {bib.hasElectronicResources && (
+            <ElectronicResources
+              electronicResources={bib.electronicResources}
+            />
+          )}
+        </Box>
         {bib.showItemTable ? (
           <>
             <Heading

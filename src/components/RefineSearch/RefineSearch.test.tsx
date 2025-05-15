@@ -232,8 +232,10 @@ describe("RefineSearch", () => {
         },
       })
       await openRefineSearch()
-      // this should actually deselect the filters as it is just clicking on filters
-      await selectSomeFilters(["Italian (59)", "Audio (37)"])
+
+      await userEvent.click(screen.getByText("Italian (59)"))
+      await userEvent.click(screen.getByText("Audio (37)"))
+
       await apply()
       expect(mockRouter.query).toStrictEqual({
         "filters[language][0]": "lang:por",

@@ -34,6 +34,7 @@ interface EDDRequestFormProps {
   eddFormState: EDDRequestParams
   setEddFormState: React.Dispatch<React.SetStateAction<EDDRequestParams>>
   handleSubmit: (eddParams: EDDRequestParams) => void
+  handleGAEvent: () => void
   setErrorStatus: (errorStatus: HoldErrorStatus) => void
   holdId: string
   errorStatus?: HoldErrorStatus
@@ -46,6 +47,7 @@ const EDDRequestForm = ({
   eddFormState,
   setEddFormState,
   handleSubmit,
+  handleGAEvent,
   setErrorStatus,
   holdId,
   errorStatus,
@@ -106,6 +108,7 @@ const EDDRequestForm = ({
       validatedInputRefs?.[firstInvalidField.key]?.current.focus()
     } else {
       setErrorStatus(null)
+      handleGAEvent()
       handleSubmit(eddFormState)
     }
   }
