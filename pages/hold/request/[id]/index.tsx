@@ -94,6 +94,21 @@ export default function HoldRequestPage({
     setErrorStatus("failed")
   }
 
+  const handleHoldRequestGAEvent = (item: Item) => {
+    if (typeof window !== "undefined") {
+      window.dataLayer = window.dataLayer || []
+      window.dataLayer.push({
+        event: "catalog_request",
+        catalog_type: "research",
+        request_type: "on_site",
+        item_title: item.bibTitle,
+        item_author: null,
+        record_i_number: item.id,
+        record_b_number: item.bibId,
+      })
+    }
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
@@ -128,6 +143,7 @@ export default function HoldRequestPage({
         default:
           setFormPosting(false)
           // Success state
+          handleHoldRequestGAEvent(item)
           await router.push(
             `${PATHS.HOLD_CONFIRMATION}/${holdId}?pickupLocation=${responseJson.pickupLocation}&requestId=${responseJson.requestId}`
           )

@@ -7,19 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+### Added
+
+- Adds GA events to onsite and EDD requests [SCC-4649](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4649)
+- Adds GA events to read online requests [SCC-4651](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4651)
+
 ### Updated
 
-- Updates DS to v3.6.1 (SCC-4630)
+- Updates DS to v3.6.1 [SCC-4630](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4630)
+- Updates timed logout modal to reset on user activity [SCC-4379](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4379)
+- Remove links to SHEP from bib details and subject searches [SCC-4640](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4640)
+
+## [1.4.6] 2025-04-14
 
 ### Fixed
 
 - Corrects Sierra client POST bug [SCC-4627](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4627)
-- Updates Next.js to version 13.5.9 [SCC-4609](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4609)
 - Fixes keyword dropdown icon to not disappear on click [SCC-4601](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4601)
 
 ### Updated
 
 - Removes `pickupLocation` from EDD hold requests [SCC-4614](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4614)
+- Updates Next.js to version 13.5.9 [SCC-4609](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4609)
 
 ## [1.4.5] 2025-02-24
 
