@@ -17,7 +17,7 @@ import {
   collapseMultiValueQueryParams,
   getQueryWithoutFilters,
 } from "../../utils/refineSearchUtils"
-import DatePrototype from "../SearchFilters/DatePrototype"
+import DatePrototype from "./DatePrototype"
 import type { Aggregation } from "../../types/filterTypes"
 
 const fields = [
@@ -29,11 +29,7 @@ const fields = [
   { value: "subjectLiteral", label: "Subject" },
 ]
 
-const FilterPrototype = ({
-  aggregations,
-}: {
-  aggregations?: Aggregation[]
-}) => {
+const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
   const router = useRouter()
   const [appliedFilters, setAppliedFilters] = useState(
     collapseMultiValueQueryParams(router.query)
@@ -151,7 +147,6 @@ const FilterPrototype = ({
   const dateFormProps = {
     changeHandler: (e: SyntheticEvent) => {
       const target = e.target as HTMLInputElement
-      // update the parent state to know about the updated dateValues
       setAppliedFilters((prevFilters) => {
         return {
           ...prevFilters,
@@ -219,7 +214,7 @@ const FilterPrototype = ({
       id="filter-sidebar-container"
       backgroundColor="ui.bg.default"
       p="s"
-      borderRadius="5px"
+      borderRadius="8px"
       mb="s"
     >
       <CardHeading size="heading6" id="filter-results-heading">
@@ -235,4 +230,4 @@ const FilterPrototype = ({
   )
 }
 
-export default FilterPrototype
+export default SearchFilters

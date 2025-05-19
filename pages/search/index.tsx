@@ -35,8 +35,8 @@ import type SearchResultsBib from "../../src/models/SearchResultsBib"
 import useLoading from "../../src/hooks/useLoading"
 import initializePatronTokenAuth from "../../src/server/auth"
 import RCHead from "../../src/components/Head/RCHead"
-import FilterPrototype from "../../src/components/FilterPrototype/FilterPrototype"
 import type { Aggregation } from "../../src/types/filterTypes"
+import SearchFilters from "../../src/components/SearchFilters/SearchFilters"
 
 interface SearchProps {
   bannerNotification?: string
@@ -124,7 +124,7 @@ export default function Search({
           <>
             {displayFilters && totalResults > 0 ? (
               <>
-                <FilterPrototype aggregations={aggs} />
+                <SearchFilters aggregations={aggs} />
               </>
             ) : null}
             {isLoading ? (
@@ -156,6 +156,7 @@ export default function Search({
                     // Heading component does not expect tabIndex prop, so we
                     // are ignoring the typescript error that pops up.
                     tabIndex={-1}
+                    paddingBottom="0"
                     mb={{ base: "s", md: "l" }}
                     minH="40px"
                     ref={searchResultsHeadingRef}
