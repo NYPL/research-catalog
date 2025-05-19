@@ -120,3 +120,17 @@ export function getBibQueryString(
 
   return `?${paginationOrAllQuery}${itemFilterQuery}${mergeCheckinQuery}`
 }
+
+export function getFindingAidFromSupplementaryContent(
+  supplementaryContent?: { label?: string; url: string }[]
+) {
+  if (!supplementaryContent?.length) {
+    return null
+  }
+
+  const findingAid = supplementaryContent.find(
+    (sc) => sc.label?.toLowerCase().includes("finding aid") && !!sc.url
+  )
+
+  return findingAid?.url || null
+}

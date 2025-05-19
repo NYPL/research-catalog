@@ -1,5 +1,4 @@
 import { Text } from "@nypl/design-system-react-components"
-
 import Layout from "../../src/components/Layout/Layout"
 import initializePatronTokenAuth, {
   doRedirectBasedOnNyplAccountRedirects,
@@ -8,11 +7,10 @@ import initializePatronTokenAuth, {
 import ProfileContainer from "../../src/components/MyAccount/ProfileContainer"
 import type { MyAccountPatronData } from "../../src/types/myAccountTypes"
 import { PatronDataProvider } from "../../src/context/PatronDataContext"
-import TimedLogoutModal from "../../src/components/MyAccount/TimedLogoutModal"
-import { getIncrementedTime } from "../../src/utils/cookieUtils"
-import { useEffect, useState } from "react"
 import { getPatronData } from "../api/account/[id]"
 import RCHead from "../../src/components/Head/RCHead"
+import TimedLogoutModal from "../../src/components/MyAccount/TimedLogoutModal"
+
 interface MyAccountPropsType {
   accountData: MyAccountPatronData
   isAuthenticated: boolean
@@ -28,15 +26,6 @@ export default function MyAccount({
 }: MyAccountPropsType) {
   const errorRetrievingPatronData = !accountData.patron
 
-  const [expirationTime, setExpirationTime] = useState("")
-  const [displayLogoutModal, setDisplayLogoutModal] = useState(false)
-
-  const resetCountdown = () => {
-    const inFive = getIncrementedTime(5)
-    const newExpirationTime = `accountPageExp=${inFive}; expires=${inFive}`
-    document.cookie = newExpirationTime
-    setExpirationTime(inFive)
-  }
   const serverError = (
     <Text>
       We are unable to display your account information at this time. Please
@@ -51,23 +40,12 @@ export default function MyAccount({
     </Text>
   )
 
-  useEffect(() => {
-    resetCountdown()
-    // to avoid a reference error on document in the modal, wait to render it
-    // until we are on the client side
-    setDisplayLogoutModal(true)
-  })
   try {
     return (
       <>
         <RCHead metadataTitle={"My Account"} />
         <Layout isAuthenticated={isAuthenticated} activePage="account">
-          {displayLogoutModal && (
-            <TimedLogoutModal
-              stayLoggedIn={resetCountdown}
-              expirationTime={expirationTime}
-            />
-          )}
+          <TimedLogoutModal />
           {renderAuthServerError ? (
             authError
           ) : errorRetrievingPatronData ? (

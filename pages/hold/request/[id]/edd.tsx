@@ -5,9 +5,7 @@ import {
   Box,
   SkeletonLoader,
 } from "@nypl/design-system-react-components"
-
 import sierraClient from "../../../../src/server/sierraClient"
-
 import Layout from "../../../../src/components/Layout/Layout"
 import EDDRequestForm from "../../../../src/components/HoldPages/EDDRequestForm"
 import HoldRequestErrorBanner from "../../../../src/components/HoldPages/HoldRequestErrorBanner"
@@ -116,6 +114,21 @@ export default function EDDRequestPage({
     setErrorStatus("failed")
   }
 
+  const handleEDDRequestGAEvent = (item: Item) => {
+    if (typeof window !== "undefined") {
+      window.dataLayer = window.dataLayer || []
+      window.dataLayer.push({
+        event: "catalog_request",
+        catalog_type: "research",
+        request_type: "scan",
+        item_title: item.bibTitle,
+        item_author: null,
+        record_i_number: item.id,
+        record_b_number: item.bibId,
+      })
+    }
+  }
+
   const postEDDRequest = async (eddParams: EDDRequestParams) => {
     try {
       setFormPosting(true)
@@ -183,6 +196,7 @@ export default function EDDRequestPage({
             handleSubmit={postEDDRequest}
             setErrorStatus={setErrorStatus}
             errorStatus={errorStatus}
+            handleGAEvent={() => handleEDDRequestGAEvent(item)}
             holdId={holdId}
           />
         ) : null}
