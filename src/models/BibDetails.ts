@@ -424,4 +424,34 @@ export default class BibDetails {
         return stackedSubjectLiteral
       })
   }
+
+  /**
+   * Flatten subject headings into a list of objects with a url and a label
+   */
+  flattenSubjectHeadingUrls(heading): BibDetailURL[] | null {
+    if (!heading.label || !heading.uuid) return null
+    const subjectHeadingsArray = []
+
+    // iterate through each nested subject until there's no parent element
+    let currentHeading = heading
+
+    while (currentHeading.parent) {
+      subjectHeadingsArray.unshift(
+        this.getSubjectHeadingUrl(currentHeading.uuid, currentHeading.label)
+      )
+      currentHeading = currentHeading.parent
+    }
+    // add the top level subject heading
+    subjectHeadingsArray.unshift(
+      this.getSubjectHeadingUrl(currentHeading.uuid, currentHeading.label)
+    )
+    return subjectHeadingsArray
+  }
+
+  getSubjectHeadingUrl(uuid: string, label: string): BibDetailURL {
+    return {
+      url: `/subject_headings/${uuid}?label=${encodeURIComponent(label)}`,
+      urlLabel: label.split(" -- ").pop(),
+    }
+  }
 }
