@@ -4,6 +4,7 @@ import {
   Pagination,
   SkeletonLoader,
   Flex,
+  Box,
 } from "@nypl/design-system-react-components"
 import { useEffect, useRef, type ChangeEvent } from "react"
 import { useRouter } from "next/router"
@@ -118,23 +119,29 @@ export default function Search({
       <Layout
         bannerNotification={bannerNotification}
         searchAggregations={aggs}
+        searchResultsCount={totalResults}
         isAuthenticated={isAuthenticated}
         activePage="search"
         sidebar={
           <>
             {displayFilters && totalResults > 0 ? (
-              <>
+              <Box
+                display={{
+                  base: "none",
+                  md: "block",
+                }}
+                pb="l"
+                mr="l"
+              >
                 <SearchFilters aggregations={aggs} />
-              </>
-            ) : null}
-            {isLoading ? (
-              <SkeletonLoader showImage={false} />
+                <DRBContainer
+                  drbResults={drbResults}
+                  totalWorks={drbResponse?.totalWorks}
+                  searchParams={searchParams}
+                />
+              </Box>
             ) : (
-              <DRBContainer
-                drbResults={drbResults}
-                totalWorks={drbResponse?.totalWorks}
-                searchParams={searchParams}
-              />
+              isLoading && <SkeletonLoader showImage={false} />
             )}
           </>
         }

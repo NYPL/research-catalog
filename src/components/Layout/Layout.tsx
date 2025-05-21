@@ -24,6 +24,7 @@ interface LayoutProps {
   sidebarPosition?: "right" | "left"
   isAuthenticated?: boolean
   searchAggregations?: Aggregation[]
+  searchResultsCount?: number
   bannerNotification?: string
 }
 
@@ -37,6 +38,7 @@ const Layout = ({
   isAuthenticated,
   sidebar,
   activePage,
+  searchResultsCount,
   sidebarPosition = "left",
   bannerNotification,
 }: PropsWithChildren<LayoutProps>) => {
@@ -78,7 +80,12 @@ const Layout = ({
                   isAuthenticated={isAuthenticated}
                   activePage={activePage}
                 />
-                {showSearch && <SearchForm aggregations={searchAggregations} />}
+                {showSearch && (
+                  <SearchForm
+                    aggregations={searchAggregations}
+                    searchResultsCount={searchResultsCount}
+                  />
+                )}
               </div>
               {showSearch && (
                 <Flex
@@ -104,18 +111,12 @@ const Layout = ({
         }
         sidebar={sidebar ? sidebarPosition : "none"}
         contentPrimary={
-          <Box pb="l" ml="l">
+          <Box pb="l">
             {children}
             <FeedbackForm />
           </Box>
         }
-        contentSidebar={
-          sidebar && (
-            <Box pb="l" width="288px">
-              {sidebar}
-            </Box>
-          )
-        }
+        contentSidebar={sidebar && <Box width="288px">{sidebar}</Box>}
       />
     </DSProvider>
   )

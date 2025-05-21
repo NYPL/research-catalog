@@ -2,23 +2,20 @@ import {
   Accordion,
   Card,
   CardContent,
-  CardHeading,
   Flex,
   MultiSelect,
 } from "@nypl/design-system-react-components"
 import type { TextInputRefType } from "@nypl/design-system-react-components"
 import SearchResultsFilters from "../../models/SearchResultsFilters"
-import { useRouter } from "next/router"
-import type { SyntheticEvent } from "react"
-
 import { useEffect, useRef, useState } from "react"
+import type { Aggregation } from "../../types/filterTypes"
+import { useRouter } from "next/router"
 import {
   buildFilterQuery,
   collapseMultiValueQueryParams,
   getQueryWithoutFilters,
 } from "../../utils/refineSearchUtils"
-import DatePrototype from "./DateFilter"
-import type { Aggregation } from "../../types/filterTypes"
+import DateFilter from "./DateFilter"
 
 const fields = [
   { value: "buildingLocation", label: "Item location" },
@@ -29,11 +26,16 @@ const fields = [
   { value: "subjectLiteral", label: "Subject" },
 ]
 
-const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
+const MobileSearchFilters = ({
+  aggregations,
+}: {
+  aggregations: Aggregation[]
+}) => {
   const router = useRouter()
   const [appliedFilters, setAppliedFilters] = useState(
     collapseMultiValueQueryParams(router.query)
   )
+
   useEffect(() => {
     const collapsedFilters = collapseMultiValueQueryParams(router.query)
     setAppliedFilters(collapsedFilters)
@@ -145,19 +147,12 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
 
   const dateInputRefs = [useRef<TextInputRefType>(), useRef<TextInputRefType>()]
   const dateFormProps = {
-    changeHandler: (e: SyntheticEvent) => {
-      const target = e.target as HTMLInputElement
-      setAppliedFilters((prevFilters) => {
-        return {
-          ...prevFilters,
-          [target.name]: [target.value],
-        }
-      })
-    },
+    setAppliedFilters: setAppliedFilters,
     inputRefs: dateInputRefs,
     dateAfter: appliedFilters.dateAfter?.[0],
     dateBefore: appliedFilters.dateBefore?.[0],
     applyHandler: () => {
+      setFocusedFilter("date")
       const updatedQuery = {
         ...getQueryWithoutFilters(router.query),
         ...buildFilterQuery(appliedFilters),
@@ -199,7 +194,7 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
             panel: (
               <Card isCentered layout="row">
                 <CardContent>
-                  <DatePrototype {...dateFormProps} />
+                  <DateFilter {...dateFormProps} />
                 </CardContent>
               </Card>
             ),
@@ -210,24 +205,11 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
   )
 
   return (
-    <Card
-      id="filter-sidebar-container"
-      backgroundColor="ui.bg.default"
-      p="s"
-      borderRadius="8px"
-      mb="s"
-    >
-      <CardHeading size="heading6" id="filter-results-heading">
-        Filter results
-      </CardHeading>
-      <CardContent>
-        <Flex flexDir="column" gap="s">
-          {filters}
-          {dateFilter}
-        </Flex>
-      </CardContent>
-    </Card>
+    <Flex flexDir="column" gap="s" pt="xxs">
+      {filters}
+      {dateFilter}
+    </Flex>
   )
 }
 
-export default SearchFilters
+export default MobileSearchFilters

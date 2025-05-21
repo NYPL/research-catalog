@@ -20,12 +20,19 @@ import useLoading from "../../hooks/useLoading"
 import RefineSearch from "../RefineSearch/RefineSearch"
 import type { Aggregation } from "../../types/filterTypes"
 import { collapseMultiValueQueryParams } from "../../utils/refineSearchUtils"
+import SearchFilterModal from "../SearchFilters/SearchFilterModal"
 
 /**
  * The SearchForm component renders and controls the Search form and
  * advanced search link.
  */
-const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
+const SearchForm = ({
+  aggregations,
+  searchResultsCount,
+}: {
+  aggregations?: Aggregation[]
+  searchResultsCount?: number
+}) => {
   const router = useRouter()
   const [searchTerm, setSearchTerm] = useState(
     (router?.query?.q as string) || ""
@@ -112,13 +119,10 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
           >
             Advanced search
           </RCLink>
-          {displayRefineResults && (
-            <RefineSearch
-              setAppliedFilters={setAppliedFilters}
-              appliedFilters={appliedFilters}
-              aggregations={aggregations}
-            />
-          )}
+          <SearchFilterModal
+            aggregations={aggregations}
+            searchResultsCount={searchResultsCount}
+          />
         </Flex>
       </div>
     </div>
