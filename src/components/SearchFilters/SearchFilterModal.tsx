@@ -7,7 +7,6 @@ import {
 } from "@nypl/design-system-react-components"
 import { useState } from "react"
 import type { Aggregation } from "../../types/filterTypes"
-import MobileSearchFilters from "./MobileSearchFilters"
 import {
   Modal as ChakraModal,
   ModalOverlay,
@@ -20,12 +19,14 @@ import {
   collapseMultiValueQueryParams,
   getQueryWithoutFilters,
 } from "../../utils/refineSearchUtils"
+import { filtersObjectLength } from "../../utils/searchUtils"
+import SearchFilters from "./SearchFilters"
 
 const SearchFilterModal = ({
   aggregations,
   searchResultsCount,
 }: {
-  aggregations?: Aggregation[]
+  aggregations: Aggregation[]
   searchResultsCount?: number
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -40,19 +41,12 @@ const SearchFilterModal = ({
     closeModal()
   }
 
-  function totalArrayLength(obj) {
-    let total = 0
-    for (const key in obj) {
-      if (Array.isArray(obj[key])) {
-        total += obj[key].length
-      }
-    }
-    return total
+  let filterCount = null
+  if (typeof window !== "undefined") {
+    filterCount = filtersObjectLength(
+      collapseMultiValueQueryParams(router.query)
+    )
   }
-
-  const filterCount = totalArrayLength(
-    collapseMultiValueQueryParams(router.query)
-  )
 
   return (
     <>
@@ -106,7 +100,7 @@ const SearchFilterModal = ({
               </Button>
             </Box>
             <ModalBody>
-              <MobileSearchFilters aggregations={aggregations} />
+              <SearchFilters aggregations={aggregations} />
             </ModalBody>
             <ModalFooter>
               <ButtonGroup
@@ -115,9 +109,11 @@ const SearchFilterModal = ({
                 flexDir="column"
                 gap="xs"
               >
-                <Button id="show-results" onClick={() => closeModal()}>{`Show ${
-                  searchResultsCount === 10000 ? "10000+" : searchResultsCount
-                } results`}</Button>
+                <Button id="show-results" onClick={() => closeModal()}>
+                  {`Show ${
+                    searchResultsCount === 10000 ? "10000+" : searchResultsCount
+                  } results`}
+                </Button>
                 <Button
                   id="clear-filters"
                   buttonType="secondary"
