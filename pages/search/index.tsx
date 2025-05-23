@@ -11,12 +11,11 @@ import {
 } from "@nypl/design-system-react-components"
 import { useEffect, useRef, type ChangeEvent } from "react"
 import { useRouter } from "next/router"
-
 import Layout from "../../src/components/Layout/Layout"
 import DRBContainer from "../../src/components/DRB/DRBContainer"
 import SearchResult from "../../src/components/SearchResults/SearchResult"
 import SearchResultsSort from "../../src/components/SearchResults/SearchResultsSort"
-import AppliedFilters from "../../src/components/SearchFilters/AppliedFilters"
+import AppliedFilters from "../../src/components/AppliedFilters/AppliedFilters"
 
 import { fetchResults } from "../../src/server/api/search"
 import {
@@ -35,7 +34,6 @@ import type {
 import { mapWorksToDRBResults } from "../../src/utils/drbUtils"
 import { SITE_NAME, RESULTS_PER_PAGE } from "../../src/config/constants"
 import type SearchResultsBib from "../../src/models/SearchResultsBib"
-
 import useLoading from "../../src/hooks/useLoading"
 import initializePatronTokenAuth from "../../src/server/auth"
 import RCHead from "../../src/components/Head/RCHead"

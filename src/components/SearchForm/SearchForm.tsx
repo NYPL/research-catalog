@@ -8,7 +8,6 @@ import {
 import { useRouter } from "next/router"
 import type { SyntheticEvent, Dispatch, SetStateAction } from "react"
 import { useState, useEffect } from "react"
-
 import styles from "../../../styles/components/Search.module.scss"
 import RCLink from "../Links/RCLink/RCLink"
 import {
