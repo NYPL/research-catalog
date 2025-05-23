@@ -5,6 +5,9 @@ import {
   SkeletonLoader,
   Flex,
   Box,
+  CardContent,
+  Card,
+  CardHeading,
 } from "@nypl/design-system-react-components"
 import { useEffect, useRef, type ChangeEvent } from "react"
 import { useRouter } from "next/router"
@@ -123,33 +126,53 @@ export default function Search({
         isAuthenticated={isAuthenticated}
         activePage="search"
         sidebar={
-          <>
-            {displayFilters && totalResults > 0 ? (
-              <Box
-                display={{
-                  base: "none",
-                  md: "block",
-                }}
-                pb="l"
-                mr="l"
-              >
-                <SearchFilters aggregations={aggs} />
-                <DRBContainer
-                  drbResults={drbResults}
-                  totalWorks={drbResponse?.totalWorks}
-                  searchParams={searchParams}
-                />
-              </Box>
-            ) : (
-              isLoading && <SkeletonLoader showImage={false} />
-            )}
-          </>
+          totalResults > 0 ? (
+            <Box display={{ base: "none", md: "block" }} width="100%" pb="l">
+              {displayFilters && (
+                <Card
+                  id="filter-sidebar-container"
+                  backgroundColor="ui.bg.default"
+                  p="s"
+                  borderRadius="8px"
+                  mb="s"
+                >
+                  <CardHeading size="heading6" id="filter-results-heading">
+                    Filter results
+                  </CardHeading>
+                  <CardContent>
+                    <SearchFilters aggregations={aggs} />
+                  </CardContent>
+                </Card>
+              )}
+              <DRBContainer
+                drbResults={drbResults}
+                totalWorks={drbResponse?.totalWorks}
+                searchParams={searchParams}
+              />
+            </Box>
+          ) : isLoading ? (
+            <SkeletonLoader showImage={false} />
+          ) : null
         }
       >
         {totalResults ? (
-          <>
+          <Box
+            sx={{
+              ["@media screen and (min-width: 600px)"]: {
+                ml: "32px",
+              },
+            }}
+          >
             {isLoading ? (
-              <SkeletonLoader showImage={false} mb="m" />
+              <SkeletonLoader
+                showImage={false}
+                mb="m"
+                sx={{
+                  ["@media screen and (min-width: 600px)"]: {
+                    ml: "32px",
+                  },
+                }}
+              />
             ) : (
               <Flex flexDir="column">
                 {displayAppliedFilters && (
@@ -220,7 +243,7 @@ export default function Search({
               pageCount={Math.ceil(totalResults / RESULTS_PER_PAGE)}
               onPageChange={handlePageChange}
             />
-          </>
+          </Box>
         ) : /**
          * TODO: The logic and copy for different scenarios will need to be added when
          * filters are implemented

@@ -45,7 +45,6 @@ const Layout = ({
   const showSearch = activePage === "search"
   const showHeader = activePage !== "404"
   const showNotification = activePage === "" || activePage === "search"
-
   return (
     <DSProvider>
       <TemplateAppContainer

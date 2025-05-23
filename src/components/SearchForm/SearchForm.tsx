@@ -17,14 +17,13 @@ import {
 } from "../../utils/searchUtils"
 import { BASE_URL, PATHS, SEARCH_FORM_OPTIONS } from "../../config/constants"
 import useLoading from "../../hooks/useLoading"
-import RefineSearch from "../RefineSearch/RefineSearch"
 import type { Aggregation } from "../../types/filterTypes"
 import { collapseMultiValueQueryParams } from "../../utils/refineSearchUtils"
 import SearchFilterModal from "../SearchFilters/SearchFilterModal"
 
 /**
- * The SearchForm component renders and controls the Search form and
- * advanced search link.
+ * The SearchForm component renders and controls the Search form,
+ * mobile filters, and advanced search link.
  */
 const SearchForm = ({
   aggregations,
@@ -68,7 +67,7 @@ const SearchForm = ({
     setValue(target.value)
   }
 
-  const displayRefineResults = !!aggregations?.filter(
+  const displayFilters = !!aggregations?.filter(
     (agg: Aggregation) => agg.values.length
   ).length
 
@@ -119,10 +118,12 @@ const SearchForm = ({
           >
             Advanced search
           </RCLink>
-          <SearchFilterModal
-            aggregations={aggregations}
-            searchResultsCount={searchResultsCount}
-          />
+          {displayFilters && (
+            <SearchFilterModal
+              aggregations={aggregations}
+              searchResultsCount={searchResultsCount}
+            />
+          )}
         </Flex>
       </div>
     </div>

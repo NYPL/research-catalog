@@ -368,3 +368,13 @@ export function checkForRedirectOnMatch(
 
   return null
 }
+
+export function filtersObjectLength(obj) {
+  let total = 0
+  for (const key in obj) {
+    if (Array.isArray(obj[key])) {
+      total += obj[key].length
+    }
+  }
+  return total
+}
