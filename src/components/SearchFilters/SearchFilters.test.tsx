@@ -83,6 +83,37 @@ describe("SearchFilters", () => {
       }, 100)
     })
 
+    it("searches filter options", async () => {
+      mockRouter.push("/search?q=spaghetti")
+      render(
+        <Search
+          isFreshSortByQuery={false}
+          isAuthenticated={true}
+          results={{ page: 1, aggregations, results }}
+        />
+      )
+      const formatMultiselect = screen.getByLabelText(/Format/, {
+        selector: "button",
+      })
+      expect(formatMultiselect).toHaveAttribute("aria-expanded", "true")
+      const formatFilterSearch = screen.getByLabelText(/Search Format/, {
+        selector: "input",
+      })
+      const audioFilter = screen.getByLabelText(/Audio/, {
+        selector: "input",
+      })
+      const notatedMusicFilter = screen.getByLabelText(/Notated music/, {
+        selector: "input",
+      })
+      expect(audioFilter).toBeInTheDocument()
+      expect(notatedMusicFilter).toBeInTheDocument()
+      userEvent.type(formatFilterSearch, "Notated")
+      setTimeout(() => {
+        expect(audioFilter).not.toBeInTheDocument()
+        expect(notatedMusicFilter).toBeInTheDocument()
+      }, 100)
+    })
+
     it("should update the router query and add filter on checkbox click", async () => {
       mockRouter.push("/search?q=spaghetti")
       render(
