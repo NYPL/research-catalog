@@ -116,6 +116,7 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
             isBlockElement
             isSearchable={field.value !== "buildingLocation"}
             id={field.value}
+            //data-testid={field.value}
             buttonText={field.label}
             onClear={() => {
               handleFilterClear(field.value)
@@ -190,7 +191,8 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
       }}
     >
       <Accordion
-        data-testid="acc"
+        data-testid="date-accordion"
+        id="date"
         sx={{
           button: {
             fontWeight: "400 !important",

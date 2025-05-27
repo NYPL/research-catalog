@@ -6,9 +6,7 @@ import {
   waitFor,
   fireEvent,
 } from "../../../src/utils/testUtils"
-
 import mockRouter from "next-router-mock"
-
 import {
   results,
   aggregationsResults,
@@ -30,13 +28,12 @@ describe("Search Results page", () => {
           results={{ results, aggregations: aggregationsResults }}
         />
       )
-      const refine = screen.getByText("Filter results")
-      fireEvent.click(refine)
-      const field = screen.getByLabelText("Greek, Modern (1453-present)", {
-        exact: false,
+      const formatMultiselect = screen.getByLabelText(/Format/, {
+        selector: "button",
       })
-      fireEvent.click(field)
-      fireEvent.click(screen.getByText("Apply filters"))
+      fireEvent.click(formatMultiselect)
+      const audioFilter = screen.getByLabelText(/Audio/, { selector: "input" })
+      fireEvent.click(audioFilter)
       waitFor(() => {
         const resultsHeading = screen.getByTestId("search-results-heading")
         expect(resultsHeading).toHaveFocus()
@@ -73,35 +70,6 @@ describe("Search Results page", () => {
       const desktopSortBy = screen.getAllByLabelText("Sort by")[1]
       await userEvent.selectOptions(desktopSortBy, "Title (A - Z)")
       expect(desktopSortBy).toHaveFocus()
-    })
-    it("focuses on cancel after clicking Filter results", async () => {
-      mockRouter.push(`/search?q=${query}`)
-      render(
-        <SearchResults
-          isFreshSortByQuery={false}
-          isAuthenticated={true}
-          results={{ results, aggregations: aggregationsResults }}
-        />
-      )
-      const refine = screen.getByText("Filter results")
-      fireEvent.click(refine)
-      const cancel = screen.getByText("Cancel")
-      expect(cancel).toHaveFocus
-    })
-    it("focuses on Filter results after clicking cancel", async () => {
-      mockRouter.push(`/search?q=${query}`)
-      render(
-        <SearchResults
-          isFreshSortByQuery={false}
-          isAuthenticated={true}
-          results={{ results, aggregations: aggregationsResults }}
-        />
-      )
-      const refine = screen.getByText("Filter results")
-      fireEvent.click(refine)
-      const cancel = screen.getByText("Cancel")
-      fireEvent.click(cancel)
-      expect(refine).toHaveFocus
     })
     it("keeps focus on the sort by selector after a sort is changed", async () => {
       mockRouter.push("")
