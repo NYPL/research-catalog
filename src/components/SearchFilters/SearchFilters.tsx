@@ -39,27 +39,28 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
     setFocusedFilter(null)
   }, [router.query])
 
+  const buildAndPushFilterQuery = (newFilters) => {
+    const updatedQuery = {
+      ...getQueryWithoutFilters(router.query),
+      ...buildFilterQuery(newFilters),
+    }
+    router.push(
+      {
+        pathname: "/search",
+        query: updatedQuery,
+      },
+      undefined,
+      { scroll: false }
+    )
+  }
+
   const handleFilterClear = (field: string) => {
     setAppliedFilters((prevFilters) => {
       const newFilters = {
         ...prevFilters,
         [field]: [],
       }
-
-      const updatedQuery = {
-        ...getQueryWithoutFilters(router.query),
-        ...buildFilterQuery(newFilters),
-      }
-
-      router.push(
-        {
-          pathname: "/search",
-          query: updatedQuery,
-        },
-        undefined,
-        { scroll: false }
-      )
-
+      buildAndPushFilterQuery(newFilters)
       return newFilters
     })
   }
@@ -77,20 +78,7 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
         [field]: updatedValues,
       }
 
-      const updatedQuery = {
-        ...getQueryWithoutFilters(router.query),
-        ...buildFilterQuery(newFilters),
-      }
-
-      router.push(
-        {
-          pathname: "/search",
-          query: updatedQuery,
-        },
-        undefined,
-        { scroll: false }
-      )
-
+      buildAndPushFilterQuery(newFilters)
       return newFilters
     })
   }
@@ -131,10 +119,7 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
             }}
             items={filterData.options.map((option) => ({
               id: option.value,
-              name:
-                option.value === "rc"
-                  ? `Offsite - deliverable to all NYPL research libraries (${option.count})`
-                  : `${option.label} (${option.count})`,
+              name: `${option.label} (${option.count})`,
             }))}
           />
         </div>
@@ -163,18 +148,7 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
         setFocusedFilter(null)
         return
       }
-      const updatedQuery = {
-        ...getQueryWithoutFilters(router.query),
-        ...buildFilterQuery(appliedFilters),
-      }
-      router.push(
-        {
-          pathname: "/search",
-          query: updatedQuery,
-        },
-        undefined,
-        { scroll: false }
-      )
+      buildAndPushFilterQuery(appliedFilters)
     },
   })
 
