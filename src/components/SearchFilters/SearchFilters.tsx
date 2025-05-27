@@ -9,7 +9,6 @@ import type { TextInputRefType } from "@nypl/design-system-react-components"
 import SearchResultsFilters from "../../models/SearchResultsFilters"
 import { useRouter } from "next/router"
 import type { SyntheticEvent } from "react"
-
 import { useEffect, useRef, useState } from "react"
 import {
   buildFilterQuery,
@@ -116,7 +115,6 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
             isBlockElement
             isSearchable={field.value !== "buildingLocation"}
             id={field.value}
-            //data-testid={field.value}
             buttonText={field.label}
             onClear={() => {
               handleFilterClear(field.value)

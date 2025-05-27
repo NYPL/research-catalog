@@ -41,6 +41,7 @@ const SearchFilterModal = ({
     closeModal()
   }
 
+  // Counts filters without storing appliedFilters state at this level.
   let filterCount = null
   if (typeof window !== "undefined") {
     filterCount = filtersObjectLength(
