@@ -33,29 +33,56 @@ describe("SearchFilters", () => {
     })
   })
 
-  describe("basic filter functionality", () => {
-    it("should not display filters until there's a search query", async () => {
-      mockRouter.push("/search")
-      render(
-        <Search
-          isFreshSortByQuery={false}
-          isAuthenticated={true}
-          results={{ results }}
-        />
-      )
-      expect(screen.queryByText("Filter results")).not.toBeInTheDocument()
+  describe("filter functionality", () => {
+    it("displays some filters open by default", async () => {
       mockRouter.push("/search?q=spaghetti")
       render(
         <Search
           isFreshSortByQuery={false}
           isAuthenticated={true}
-          results={{ aggregations, results }}
+          results={{ page: 1, aggregations, results }}
         />
       )
-      await waitFor(() => {
-        expect(screen.getByText("Filter results")).toBeInTheDocument()
+      const formatMultiselect = screen.getByLabelText(/Format/, {
+        selector: "button",
       })
+      const subjectMultiselect = screen.getByLabelText(/Subject/, {
+        selector: "button",
+      })
+      const dateMultiselect = screen.getByLabelText(/Date/, {
+        selector: "button",
+      })
+      expect(formatMultiselect).toHaveAttribute("aria-expanded", "true")
+      expect(subjectMultiselect).toHaveAttribute("aria-expanded", "false")
+      expect(dateMultiselect).toHaveAttribute("aria-expanded", "false")
     })
+    it("opens and closes filters", async () => {
+      mockRouter.push("/search?q=spaghetti")
+      render(
+        <Search
+          isFreshSortByQuery={false}
+          isAuthenticated={true}
+          results={{ page: 1, aggregations, results }}
+        />
+      )
+      const subjectMultiselect = screen.getByLabelText(/Subject/, {
+        selector: "button",
+      })
+      expect(subjectMultiselect).toHaveAttribute("aria-expanded", "false")
+      const topFilterOption = screen.getByLabelText(
+        /Spaghetti Westerns -- History and criticism./,
+        {
+          selector: "input",
+        }
+      )
+      expect(topFilterOption).not.toBeVisible()
+      userEvent.click(subjectMultiselect)
+      setTimeout(() => {
+        expect(subjectMultiselect).toHaveAttribute("aria-expanded", "true")
+        expect(topFilterOption).toBeVisible()
+      }, 100)
+    })
+
     it("should update the router query and add filter on checkbox click", async () => {
       mockRouter.push("/search?q=spaghetti")
       render(
@@ -69,7 +96,6 @@ describe("SearchFilters", () => {
         expect(screen.getAllByLabelText(/Format/)[0]).toBeInTheDocument()
         expect(screen.getAllByLabelText(/Item location/)[0]).toBeInTheDocument()
       })
-      userEvent.click(screen.getAllByLabelText(/Format/)[0])
       const audioFilter = screen.getByLabelText(/Audio/, { selector: "input" })
       userEvent.click(audioFilter)
       setTimeout(() => {
@@ -91,10 +117,6 @@ describe("SearchFilters", () => {
       expect(mockRouter.query).toStrictEqual({
         q: "spaghetti",
       })
-      const formatMultiselect = screen.getByLabelText(/Format/, {
-        selector: "button",
-      })
-      userEvent.click(formatMultiselect)
       const audioFilter = screen.getByLabelText(/Audio/, { selector: "input" })
       userEvent.click(audioFilter)
       setTimeout(() => {
