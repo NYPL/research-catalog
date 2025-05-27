@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+## [1.4.7] 2025-05-19
+
 ### Added
 
 - Adds GA events to onsite and EDD requests [SCC-4649](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4649)
@@ -16,7 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Updates DS to v3.6.1 [SCC-4630](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4630)
 - Updates timed logout modal to reset on user activity [SCC-4379](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4379)
-- Remove links to SHEP from bib details and subject searches [SCC-4640](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4640)
+- Remove links to SHEP from bib details [SCC-4640](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4640)
+- Updates finding aids to be more prominent [SCC-4105](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4105)
 
 ## [1.4.6] 2025-04-14
 
