@@ -19,6 +19,7 @@ describe("SearchFilters", () => {
       render(
         <Search
           isFreshSortByQuery={false}
+          isFreshFilterQuery={false}
           isAuthenticated={true}
           results={{ page: 1, aggregations, results }}
         />
@@ -39,6 +40,7 @@ describe("SearchFilters", () => {
       render(
         <Search
           isFreshSortByQuery={false}
+          isFreshFilterQuery={false}
           isAuthenticated={true}
           results={{ page: 1, aggregations, results }}
         />
@@ -61,6 +63,7 @@ describe("SearchFilters", () => {
       render(
         <Search
           isFreshSortByQuery={false}
+          isFreshFilterQuery={false}
           isAuthenticated={true}
           results={{ page: 1, aggregations, results }}
         />
@@ -88,6 +91,7 @@ describe("SearchFilters", () => {
       render(
         <Search
           isFreshSortByQuery={false}
+          isFreshFilterQuery={false}
           isAuthenticated={true}
           results={{ page: 1, aggregations, results }}
         />
@@ -119,6 +123,7 @@ describe("SearchFilters", () => {
       render(
         <Search
           isFreshSortByQuery={false}
+          isFreshFilterQuery={false}
           isAuthenticated={true}
           results={{ page: 1, aggregations, results }}
         />
@@ -141,6 +146,7 @@ describe("SearchFilters", () => {
       render(
         <Search
           isFreshSortByQuery={false}
+          isFreshFilterQuery={false}
           isAuthenticated={true}
           results={{ page: 1, aggregations, results }}
         />

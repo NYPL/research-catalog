@@ -46,7 +46,7 @@ interface SearchProps {
   results: SearchResultsResponse
   isAuthenticated: boolean
   isFreshSortByQuery: boolean
-  isFreshFilterQuery: string | null
+  isFreshFilterQuery: boolean
 }
 
 /**
