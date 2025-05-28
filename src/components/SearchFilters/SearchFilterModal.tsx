@@ -114,7 +114,7 @@ const SearchFilterModal = ({
                 <Button id="show-results" onClick={() => closeModal()}>
                   {`Show ${
                     searchResultsCount === 10000
-                      ? "over 10,0000"
+                      ? "over 10,000"
                       : searchResultsCount.toLocaleString()
                   } results`}
                 </Button>
