@@ -159,9 +159,7 @@ export default function Search({
         {totalResults ? (
           <Box
             sx={{
-              ["@media screen and (min-width: 600px)"]: {
-                ml: "32px",
-              },
+              ml: { base: "0px", md: "32px" },
             }}
           >
             {isLoading ? (
@@ -169,9 +167,7 @@ export default function Search({
                 showImage={false}
                 mb="m"
                 sx={{
-                  ["@media screen and (min-width: 600px)"]: {
-                    ml: "32px",
-                  },
+                  ml: { base: "0px", md: "32px" },
                 }}
               />
             ) : (
