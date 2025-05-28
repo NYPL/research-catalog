@@ -92,8 +92,6 @@ export const getFreshFilterQuery = (
       // If all values were removed, treat as no filters
       if (currSet.size === 0) return false
     }
-
-    if (changes > 1) return false // more than one change
   }
 
   return changes === 1
