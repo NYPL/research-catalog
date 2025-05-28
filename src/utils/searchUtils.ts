@@ -52,7 +52,7 @@ export const getFreshFilterQuery = (
   currentUrl: string
 ): boolean => {
   const getFilters = (url: string): Record<string, Set<string>> => {
-    const params = new URLSearchParams(url.split("?")[1])
+    const params = new URLSearchParams(url?.split("?")[1])
     const filters: Record<string, Set<string>> = {}
 
     for (const [key, value] of params.entries()) {
