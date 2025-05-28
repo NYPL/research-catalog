@@ -23,6 +23,7 @@ describe("Search Results page", () => {
       mockRouter.push(`/search?q=${query}`)
       render(
         <SearchResults
+          isFreshFilterQuery={false}
           isFreshSortByQuery={false}
           isAuthenticated={true}
           results={{ results, aggregations: aggregationsResults }}
@@ -43,6 +44,7 @@ describe("Search Results page", () => {
       mockRouter.push(`/search?q=${query}`)
       render(
         <SearchResults
+          isFreshFilterQuery={false}
           isFreshSortByQuery={false}
           isAuthenticated={true}
           results={{ results, aggregations: aggregationsResults }}
@@ -58,6 +60,7 @@ describe("Search Results page", () => {
 
       render(
         <SearchResults
+          isFreshFilterQuery={false}
           isFreshSortByQuery={false}
           isAuthenticated={true}
           results={{ results, aggregations: aggregationsResults }}
@@ -75,6 +78,7 @@ describe("Search Results page", () => {
       mockRouter.push("")
       render(
         <SearchResults
+          isFreshFilterQuery={false}
           isFreshSortByQuery={false}
           isAuthenticated={true}
           results={{ results, aggregations: aggregationsResults }}
@@ -96,6 +100,7 @@ describe("Search Results page", () => {
       await mockRouter.push(`/search?q=${query}`)
       render(
         <SearchResults
+          isFreshFilterQuery={false}
           isFreshSortByQuery={false}
           isAuthenticated={true}
           results={{ results }}
@@ -114,6 +119,7 @@ describe("Search Results page", () => {
       await mockRouter.push(`/search?q=${query}`)
       render(
         <SearchResults
+          isFreshFilterQuery={false}
           isFreshSortByQuery={false}
           isAuthenticated={true}
           results={{ results }}
@@ -129,6 +135,7 @@ describe("Search Results page", () => {
       await mockRouter.push(`/search?q=${query}`)
       render(
         <SearchResults
+          isFreshFilterQuery={false}
           isFreshSortByQuery={false}
           isAuthenticated={true}
           results={{ results }}
@@ -156,6 +163,7 @@ describe("Search Results page", () => {
       await mockRouter.push(`/search?q=${query}&page=2`)
       render(
         <SearchResults
+          isFreshFilterQuery={false}
           isFreshSortByQuery={false}
           isAuthenticated={true}
           results={{ results }}
@@ -173,6 +181,7 @@ describe("Search Results page", () => {
     it("displays No results message", () => {
       render(
         <SearchResults
+          isFreshFilterQuery={false}
           isFreshSortByQuery={false}
           isAuthenticated={true}
           results={noBibs}
