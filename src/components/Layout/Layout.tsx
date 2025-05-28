@@ -56,6 +56,12 @@ const Layout = ({
             base: "grid.m",
             md: "grid.l",
           },
+          main: {
+            rowGap: {
+              base: "grid.m",
+              md: "grid.l",
+            },
+          },
         }}
         breakout={
           showHeader && (
