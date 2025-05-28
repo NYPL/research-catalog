@@ -21,7 +21,7 @@ export const searchFormSelectOptions = Object.keys(SEARCH_FORM_OPTIONS).map(
   })
 )
 /**
- * determineFreshSortByQuery
+ * getFreshSortByQuery
  * Returns true only if the last update to the query was a sort by change.
  * Used to determine whether to focus on the search results header
  */
@@ -39,6 +39,64 @@ export const getFreshSortByQuery = (prevUrl: string, currentUrl: string) => {
     previousSortValues?.[1] !== currentSortValues[1]
   const sortValuesHaveUpdated = sortTypeHasChanged || sortDirectionHasChanged
   return sortValuesHaveUpdated
+}
+
+/**
+ * getFreshFilterQuery
+ * Returns true if the last update to the query was adding or removing a filter.
+ * If there are no more filters post removal, or it wasn't a filter update, returns false.
+ * Used to determine whether to focus on the search results header.
+ */
+export const getFreshFilterQuery = (
+  prevUrl: string,
+  currentUrl: string
+): boolean => {
+  const getFilters = (url: string): Record<string, Set<string>> => {
+    const params = new URLSearchParams(url.split("?")[1])
+    const filters: Record<string, Set<string>> = {}
+
+    for (const [key, value] of params.entries()) {
+      const match = key.match(/^filters\[(.*?)\]\[\d+\]$/)
+      if (match) {
+        const filterKey = match[1]
+        if (!filters[filterKey]) {
+          filters[filterKey] = new Set()
+        }
+        filters[filterKey].add(value)
+      }
+    }
+
+    return filters
+  }
+
+  const prevFilters = getFilters(prevUrl)
+  const currentFilters = getFilters(currentUrl)
+
+  const allKeys = new Set([
+    ...Object.keys(prevFilters),
+    ...Object.keys(currentFilters),
+  ])
+
+  let changes = 0
+
+  for (const key of allKeys) {
+    const prevSet = prevFilters[key] || new Set()
+    const currSet = currentFilters[key] || new Set()
+
+    const isSame =
+      prevSet.size === currSet.size &&
+      [...prevSet].every((val) => currSet.has(val))
+
+    if (!isSame) {
+      changes++
+      // If all values were removed, treat as no filters
+      if (currSet.size === 0) return false
+    }
+
+    if (changes > 1) return false // more than one change
+  }
+
+  return changes === 1
 }
 
 /**

@@ -9,7 +9,8 @@ import {
   Card,
   CardHeading,
 } from "@nypl/design-system-react-components"
-import { useEffect, useRef, type ChangeEvent } from "react"
+import { useEffect, useRef } from "react"
+import type { ChangeEvent } from "react"
 import { useRouter } from "next/router"
 import Layout from "../../src/components/Layout/Layout"
 import DRBContainer from "../../src/components/DRB/DRBContainer"
@@ -24,6 +25,7 @@ import {
   getSearchQuery,
   getFreshSortByQuery,
   checkForRedirectOnMatch,
+  getFreshFilterQuery,
 } from "../../src/utils/searchUtils"
 import type {
   SearchResultsResponse,
@@ -44,6 +46,7 @@ interface SearchProps {
   results: SearchResultsResponse
   isAuthenticated: boolean
   isFreshSortByQuery: boolean
+  isFreshFilterQuery: string | null
 }
 
 /**
@@ -55,6 +58,7 @@ export default function Search({
   results,
   isAuthenticated,
   isFreshSortByQuery,
+  isFreshFilterQuery,
 }: SearchProps) {
   const metadataTitle = `Search Results | ${SITE_NAME}`
   const { push, query } = useRouter()
@@ -104,11 +108,11 @@ export default function Search({
   useEffect(() => {
     // don't focus on "Displaying n results..." if the page is not done loading
     if (isLoading) return
-    // keep focus on sort by selector if the last update to the query was a sort
-    if (isFreshSortByQuery) return
+    // keep focus on sort by selector or on filter if the last update to the query was a sort/filter
+    if (isFreshSortByQuery || isFreshFilterQuery) return
     // otherwise, focus on "Displaying n results..."
     searchResultsHeadingRef?.current?.focus()
-  }, [isLoading, isFreshSortByQuery])
+  }, [isLoading, isFreshFilterQuery, isFreshSortByQuery])
 
   const displayFilters = !!aggs?.filter((agg: Aggregation) => agg.values.length)
     .length
@@ -275,9 +279,14 @@ export async function getServerSideProps({ resolvedUrl, req, query }) {
     req.headers.referer,
     resolvedUrl
   )
+  const isFreshFilterQuery = getFreshFilterQuery(
+    req.headers.referer,
+    resolvedUrl
+  )
   return {
     props: {
       isFreshSortByQuery,
+      isFreshFilterQuery,
       bannerNotification,
       results,
       isAuthenticated,
