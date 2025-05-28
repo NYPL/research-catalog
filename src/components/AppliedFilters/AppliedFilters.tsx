@@ -2,7 +2,7 @@ import { useRouter } from "next/router"
 import { type TagSetFilterDataProps } from "@nypl/design-system-react-components"
 
 import {
-  getQueryWithoutFilters,
+  getQueryWithoutFiltersOrPage,
   buildFilterQuery,
   collapseMultiValueQueryParams,
 } from "../../utils/refineSearchUtils"
@@ -33,7 +33,7 @@ const AppliedFilters = ({ aggregations }: { aggregations: Aggregation[] }) => {
     if (tag.label === "Clear filters") {
       router.push({
         pathname: "/search",
-        query: getQueryWithoutFilters(router.query),
+        query: getQueryWithoutFiltersOrPage(router.query),
       })
       return
     }
@@ -42,7 +42,7 @@ const AppliedFilters = ({ aggregations }: { aggregations: Aggregation[] }) => {
       appliedFiltersWithLabels
     )
     const updatedQuery = {
-      ...getQueryWithoutFilters(router.query),
+      ...getQueryWithoutFiltersOrPage(router.query),
       ...buildFilterQuery(updatedFilters),
     }
     router.push({

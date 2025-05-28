@@ -17,7 +17,7 @@ import {
 import router from "next/router"
 import {
   collapseMultiValueQueryParams,
-  getQueryWithoutFilters,
+  getQueryWithoutFiltersOrPage,
 } from "../../utils/refineSearchUtils"
 import { filtersObjectLength } from "../../utils/searchUtils"
 import SearchFilters from "./SearchFilters"
@@ -36,7 +36,7 @@ const SearchFilterModal = ({
   const handleClear = () => {
     router.push({
       pathname: "/search",
-      query: getQueryWithoutFilters(router.query),
+      query: getQueryWithoutFiltersOrPage(router.query),
     })
     closeModal()
   }
@@ -109,10 +109,13 @@ const SearchFilterModal = ({
                 display="flex"
                 flexDir="column"
                 gap="xs"
+                paddingTop="s"
               >
                 <Button id="show-results" onClick={() => closeModal()}>
                   {`Show ${
-                    searchResultsCount === 10000 ? "10000+" : searchResultsCount
+                    searchResultsCount === 10000
+                      ? "over 10,0000"
+                      : searchResultsCount.toLocaleString()
                   } results`}
                 </Button>
                 <Button

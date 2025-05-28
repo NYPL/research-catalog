@@ -14,7 +14,7 @@ export const searchAggregations = {
     },
     {
       value: "rc",
-      label: "Offsite- deliverable to all NYPL research libraries",
+      label: "Offsite - request in advance",
     },
   ],
   format: [

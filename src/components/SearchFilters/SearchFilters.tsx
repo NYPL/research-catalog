@@ -13,7 +13,7 @@ import { useEffect, useRef, useState } from "react"
 import {
   buildFilterQuery,
   collapseMultiValueQueryParams,
-  getQueryWithoutFilters,
+  getQueryWithoutFiltersOrPage,
 } from "../../utils/refineSearchUtils"
 import type { Aggregation } from "../../types/filterTypes"
 import DateFilter from "./DateFilter"
@@ -41,7 +41,7 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
 
   const buildAndPushFilterQuery = (newFilters) => {
     const updatedQuery = {
-      ...getQueryWithoutFilters(router.query),
+      ...getQueryWithoutFiltersOrPage(router.query),
       ...buildFilterQuery(newFilters),
     }
     router.push(
@@ -119,7 +119,7 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
             }}
             items={filterData.options.map((option) => ({
               id: option.value,
-              name: `${option.label} (${option.count})`,
+              name: `${option.label} (${option.count.toLocaleString()})`,
             }))}
           />
         </div>
