@@ -187,6 +187,7 @@ export default function Search({
                     mb={{ base: "s", md: "l" }}
                     minH="40px"
                     ref={searchResultsHeadingRef}
+                    aria-live="polite"
                   >
                     {getSearchResultsHeading(searchParams, totalResults)}
                   </Heading>
