@@ -34,7 +34,6 @@ describe("Search page", () => {
         })
 
         const response = await getServerSideProps({
-          resolvedUrl: "",
           req: mockReq,
           query: {
             oclc: "1234",
@@ -59,7 +58,6 @@ describe("Search page", () => {
         })
 
         const response = await getServerSideProps({
-          resolvedUrl: "",
           req: mockReq,
           query: {
             oclc: "1234",
