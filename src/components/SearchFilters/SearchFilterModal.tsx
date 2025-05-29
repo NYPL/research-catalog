@@ -5,7 +5,7 @@ import {
   Box,
   Heading,
 } from "@nypl/design-system-react-components"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import type { Aggregation } from "../../types/filterTypes"
 import {
   Modal as ChakraModal,
@@ -22,6 +22,7 @@ import {
 } from "../../utils/refineSearchUtils"
 import { filtersObjectLength } from "../../utils/searchUtils"
 import SearchFilters from "./SearchFilters"
+import { useFocusContext } from "../../context/FocusContext"
 
 const SearchFilterModal = ({
   aggregations,
@@ -31,10 +32,14 @@ const SearchFilterModal = ({
   searchResultsCount?: number
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const { lastFocusedId, setLastFocusedId } = useFocusContext()
 
-  const closeModal = () => setIsModalOpen(false)
+  const closeModal = () => {
+    setIsModalOpen(false)
+  }
 
   const handleClear = () => {
+    setLastFocusedId(null)
     router.push({
       pathname: "/search",
       query: getQueryWithoutFiltersOrPage(router.query),
@@ -49,6 +54,13 @@ const SearchFilterModal = ({
       collapseMultiValueQueryParams(router.query)
     )
   }
+
+  useEffect(() => {
+    if (lastFocusedId === "search-filters-modal") {
+      const el = document.querySelector("button[id=search-filters-modal]")
+      ;(el as HTMLElement)?.focus()
+    }
+  }, [isModalOpen, lastFocusedId])
 
   return (
     <>
@@ -101,7 +113,10 @@ const SearchFilterModal = ({
                   aria-label="Close"
                   id="close-btn"
                   buttonType="text"
-                  onClick={() => closeModal()}
+                  onClick={() => {
+                    setLastFocusedId("search-filters-modal")
+                    closeModal()
+                  }}
                 >
                   {" "}
                   <Icon name="close" size="large" color="ui.black" />
@@ -125,7 +140,13 @@ const SearchFilterModal = ({
                 gap="xs"
                 paddingTop="s"
               >
-                <Button id="show-results" onClick={() => closeModal()}>
+                <Button
+                  id="show-results"
+                  onClick={() => {
+                    setLastFocusedId(null)
+                    closeModal()
+                  }}
+                >
                   {`Show ${
                     searchResultsCount === 10000
                       ? "over 10,000"

@@ -23,9 +23,7 @@ import {
   mapQueryToSearchParams,
   mapElementsToSearchResultsBibs,
   getSearchQuery,
-  getFreshSortByQuery,
   checkForRedirectOnMatch,
-  getFreshFilterQuery,
 } from "../../src/utils/searchUtils"
 import type {
   SearchResultsResponse,
@@ -40,6 +38,7 @@ import initializePatronTokenAuth from "../../src/server/auth"
 import RCHead from "../../src/components/Head/RCHead"
 import type { Aggregation } from "../../src/types/filterTypes"
 import SearchFilters from "../../src/components/SearchFilters/SearchFilters"
+import { useFocusContext } from "../../src/context/FocusContext"
 
 interface SearchProps {
   bannerNotification?: string
@@ -57,8 +56,6 @@ export default function Search({
   bannerNotification,
   results,
   isAuthenticated,
-  isFreshSortByQuery,
-  isFreshFilterQuery,
 }: SearchProps) {
   const metadataTitle = `Search Results | ${SITE_NAME}`
   const { push, query } = useRouter()
@@ -78,8 +75,38 @@ export default function Search({
   const isLoading = useLoading()
   const searchedFromAdvanced = query.searched_from === "advanced"
 
+  const searchResultsHeadingRef = useRef(null)
+
+  const { lastFocusedId, setLastFocusedId } = useFocusContext()
+
+  const isFirstLoad = useRef<boolean>(false)
+
+  useEffect(() => {
+    if (isLoading) return
+    let didFocusElement = false
+
+    if (lastFocusedId) {
+      const selectors = ["button", "input", "p", "h2", "select"]
+      for (const selector of selectors) {
+        const el = document.querySelector(`${selector}[id="${lastFocusedId}"]`)
+        if (el) {
+          ;(el as HTMLElement).focus()
+          didFocusElement = true
+          break
+        }
+      }
+    }
+
+    if (!didFocusElement && isFirstLoad.current) {
+      searchResultsHeadingRef.current?.focus()
+    }
+
+    isFirstLoad.current = true
+  }, [isLoading])
+
   const handlePageChange = async (page: number) => {
     const newQuery = getSearchQuery({ ...searchParams, page })
+    setLastFocusedId(null)
     await push(
       `${newQuery}${searchedFromAdvanced ? "&searched_from=advanced" : ""}`
     )
@@ -98,21 +125,12 @@ export default function Search({
       SortKey,
       SortOrder | undefined
     ]
+    setLastFocusedId("search-results-sort")
     // Push the new query values, removing the page number if set.
     await push(
       getSearchQuery({ ...searchParams, sortBy, order, page: undefined })
     )
   }
-
-  const searchResultsHeadingRef = useRef(null)
-  useEffect(() => {
-    // don't focus on "Displaying n results..." if the page is not done loading
-    if (isLoading) return
-    // keep focus on sort by selector or on filter if the last update to the query was a sort/filter
-    if (isFreshSortByQuery || isFreshFilterQuery) return
-    // otherwise, focus on "Displaying n results..."
-    searchResultsHeadingRef?.current?.focus()
-  }, [isLoading, isFreshFilterQuery, isFreshSortByQuery])
 
   const displayFilters = !!aggs?.filter((agg: Aggregation) => agg.values.length)
     .length
@@ -137,7 +155,11 @@ export default function Search({
                   borderRadius="8px"
                   mb="s"
                 >
-                  <CardHeading size="heading6" id="filter-results-heading">
+                  <CardHeading
+                    size="heading6"
+                    id="filter-results-heading"
+                    tabIndex="0"
+                  >
                     Filter results
                   </CardHeading>
                   <CardContent>
@@ -164,7 +186,7 @@ export default function Search({
           >
             <Flex flexDir="column">
               {displayAppliedFilters && <AppliedFilters aggregations={aggs} />}
-              <Flex justifyContent="space-between">
+              <Flex justifyContent="space-between" marginTop="xxs">
                 <Heading
                   data-testid="search-results-heading"
                   level="h2"
@@ -239,15 +261,7 @@ export default function Search({
   )
 }
 
-/**
- * resolvedUrl is the original URL of the search page including the search query parameters.
- * It is provided by Next.js as an attribute of the context object that is passed to getServerSideProps.
- *
- * Here it is used to construct a SearchParams object from the parsed query parameters in order to fetch the
- * relevant search results on the server side (via fetchResults).
- *
- */
-export async function getServerSideProps({ resolvedUrl, req, query }) {
+export async function getServerSideProps({ req, query }) {
   const bannerNotification = process.env.SEARCH_RESULTS_NOTIFICATION || ""
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const results = await fetchResults(mapQueryToSearchParams(query))
@@ -259,18 +273,9 @@ export async function getServerSideProps({ resolvedUrl, req, query }) {
   }
 
   const isAuthenticated = patronTokenResponse.isTokenValid
-  const isFreshSortByQuery = getFreshSortByQuery(
-    req.headers.referer,
-    resolvedUrl
-  )
-  const isFreshFilterQuery = getFreshFilterQuery(
-    req.headers.referer,
-    resolvedUrl
-  )
+
   return {
     props: {
-      isFreshSortByQuery,
-      isFreshFilterQuery,
       bannerNotification,
       results,
       isAuthenticated,

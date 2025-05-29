@@ -18,6 +18,8 @@ import {
 import type { Aggregation } from "../../types/filterTypes"
 import DateFilter from "./DateFilter"
 import { useDateFilter } from "../../hooks/useDateFilter"
+import { useFocusContext } from "../../context/FocusContext"
+import { filtersObjectLength } from "../../utils/searchUtils"
 
 const fields = [
   { value: "buildingLocation", label: "Item location" },
@@ -33,6 +35,7 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
   const [appliedFilters, setAppliedFilters] = useState(
     collapseMultiValueQueryParams(router.query)
   )
+  const { setLastFocusedId } = useFocusContext()
   useEffect(() => {
     const collapsedFilters = collapseMultiValueQueryParams(router.query)
     setAppliedFilters(collapsedFilters)
@@ -78,6 +81,11 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
         [field]: updatedValues,
       }
 
+      setLastFocusedId(
+        filtersObjectLength(newFilters) > 0
+          ? optionValue
+          : "filter-results-heading"
+      )
       buildAndPushFilterQuery(newFilters)
       return newFilters
     })

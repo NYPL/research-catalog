@@ -19,6 +19,7 @@ import useLoading from "../../hooks/useLoading"
 import type { Aggregation } from "../../types/filterTypes"
 import { collapseMultiValueQueryParams } from "../../utils/refineSearchUtils"
 import SearchFilterModal from "../SearchFilters/SearchFilterModal"
+import { useFocusContext } from "../../context/FocusContext"
 
 /**
  * The SearchForm component renders and controls the Search form,
@@ -46,6 +47,8 @@ const SearchForm = ({
 
   const isLoading = useLoading()
 
+  const { setLastFocusedId } = useFocusContext()
+
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
     const searchParams = {
@@ -64,6 +67,7 @@ const SearchForm = ({
 
     const queryString = getSearchQuery(searchParams)
 
+    setLastFocusedId(null)
     await router.push(`${PATHS.SEARCH}${queryString}`)
   }
 
