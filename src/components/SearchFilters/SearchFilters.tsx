@@ -63,6 +63,9 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
         ...prevFilters,
         [field]: [],
       }
+      setLastFocusedId(
+        `accordion-button-multi-select-accordion-${field}-item-0`
+      )
       buildAndPushFilterQuery(newFilters)
       return newFilters
     })
