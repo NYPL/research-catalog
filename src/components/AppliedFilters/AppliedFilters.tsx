@@ -34,7 +34,7 @@ const AppliedFilters = ({ aggregations }: { aggregations: Aggregation[] }) => {
   ) as TagSetFilterDataProps[]
   const handleRemove = (tag: TagSetFilterDataProps) => {
     if (tag.label === "Clear filters") {
-      setLastFocusedId(null)
+      setLastFocusedId("filter-results-heading")
       router.push({
         pathname: "/search",
         query: getQueryWithoutFiltersOrPage(router.query),
