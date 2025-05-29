@@ -54,10 +54,14 @@ const AppliedFilters = ({ aggregations }: { aggregations: Aggregation[] }) => {
     } else {
       setLastFocusedId("filter-results-heading")
     }
-    router.push({
-      pathname: "/search",
-      query: updatedQuery,
-    })
+    router.push(
+      {
+        pathname: "/search",
+        query: updatedQuery,
+      },
+      undefined,
+      { scroll: false }
+    )
   }
 
   if (!tagSetData.length) return null
