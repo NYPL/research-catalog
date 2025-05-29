@@ -7,6 +7,7 @@ import {
 import mockRouter from "next-router-mock"
 import userEvent from "@testing-library/user-event"
 import Search from "../../../pages/search"
+import { FocusProvider } from "../../context/FocusContext"
 
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
@@ -17,16 +18,18 @@ describe("Applied Filters", () => {
         "/search?q=spaghetti&filters[format][0]=resourcetypes%3Amov&filters[language][0]=lang%3Afre"
       )
       render(
-        <Search
-          isFreshSortByQuery={false}
-          isFreshFilterQuery={false}
-          isAuthenticated={true}
-          results={{
-            page: 1,
-            results,
-            aggregations,
-          }}
-        />
+        <FocusProvider>
+          <Search
+            isFreshSortByQuery={false}
+            isFreshFilterQuery={false}
+            isAuthenticated={true}
+            results={{
+              page: 1,
+              results,
+              aggregations,
+            }}
+          />
+        </FocusProvider>
       )
 
       await userEvent.click(screen.getAllByTestId("filter-tags")[0])
@@ -39,16 +42,18 @@ describe("Applied Filters", () => {
         "/search?q=spaghetti&filters[format][0]=resourcetypes%3Atxt&filters[language][0]=lang%3Afre"
       )
       render(
-        <Search
-          isFreshSortByQuery={false}
-          isFreshFilterQuery={false}
-          isAuthenticated={true}
-          results={{
-            page: 1,
-            aggregations,
-            results,
-          }}
-        />
+        <FocusProvider>
+          <Search
+            isFreshSortByQuery={false}
+            isFreshFilterQuery={false}
+            isAuthenticated={true}
+            results={{
+              page: 1,
+              results,
+              aggregations,
+            }}
+          />
+        </FocusProvider>
       )
       await userEvent.click(screen.getByTestId("filter-clear-all"))
       expect(mockRouter.asPath).toBe("/search?q=spaghetti")
@@ -58,16 +63,18 @@ describe("Applied Filters", () => {
         "/search?q=spaghetti&filters[format][0]=resourcetypes%3Atxt&filters[format][1]=resourcetypes%3Aaud&filters[format][2]=resourcetypes%3Amov&filters[language][0]=lang%3Afre"
       )
       render(
-        <Search
-          isFreshSortByQuery={false}
-          isFreshFilterQuery={false}
-          isAuthenticated={true}
-          results={{
-            page: 1,
-            aggregations,
-            results,
-          }}
-        />
+        <FocusProvider>
+          <Search
+            isFreshSortByQuery={false}
+            isFreshFilterQuery={false}
+            isAuthenticated={true}
+            results={{
+              page: 1,
+              results,
+              aggregations,
+            }}
+          />
+        </FocusProvider>
       )
       await userEvent.click(screen.getAllByTestId("filter-tags")[0])
       expect(decodeURI(mockRouter.asPath)).toBe(
@@ -80,16 +87,18 @@ describe("Applied Filters", () => {
       "/search?q=spaghetti&filters[dateBefore][0]=2000&filters[dateAfter][0]=1990"
     )
     render(
-      <Search
-        isFreshSortByQuery={false}
-        isFreshFilterQuery={false}
-        isAuthenticated={true}
-        results={{
-          page: 1,
-          aggregations,
-          results,
-        }}
-      />
+      <FocusProvider>
+        <Search
+          isFreshSortByQuery={false}
+          isFreshFilterQuery={false}
+          isAuthenticated={true}
+          results={{
+            page: 1,
+            results,
+            aggregations,
+          }}
+        />
+      </FocusProvider>
     )
     expect(screen.getByText("Before 2000")).toBeInTheDocument()
     expect(screen.getByText("After 1990")).toBeInTheDocument()
@@ -99,16 +108,18 @@ describe("Applied Filters", () => {
       "/search?q=spaghetti&filters[format][0]=resourcetypes%3Amix&filters[language][0]=lang%3Apol&filters[subjectLiteral][0]=Community life."
     )
     render(
-      <Search
-        isFreshSortByQuery={false}
-        isFreshFilterQuery={false}
-        isAuthenticated={true}
-        results={{
-          page: 1,
-          aggregations: emptyAggregationsResults,
-          results: { ...results, totalResults: 0 },
-        }}
-      />
+      <FocusProvider>
+        <Search
+          isFreshSortByQuery={false}
+          isFreshFilterQuery={false}
+          isAuthenticated={true}
+          results={{
+            page: 1,
+            aggregations: emptyAggregationsResults,
+            results: { ...results, totalResults: 0 },
+          }}
+        />
+      </FocusProvider>
     )
     expect(screen.queryByTestId("filter-clear-all")).not.toBeInTheDocument()
   })

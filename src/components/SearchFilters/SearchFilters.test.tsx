@@ -7,23 +7,27 @@ import {
   aggregationsResults as aggregations,
   results,
 } from "../../../__test__/fixtures/searchResultsManyBibs"
+import { FocusProvider } from "../../context/FocusContext"
 
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
 describe("SearchFilters", () => {
+  const component = (
+    <FocusProvider>
+      <Search
+        isFreshSortByQuery={false}
+        isFreshFilterQuery={false}
+        isAuthenticated={true}
+        results={{ page: 1, aggregations, results }}
+      />
+    </FocusProvider>
+  )
   describe("with dates in url query params", () => {
     it("can populate date fields from url", async () => {
       mockRouter.push(
         "/search?q=dog&filters[dateBefore][0]=2000&filters[dateAfter][0]=1990"
       )
-      render(
-        <Search
-          isFreshSortByQuery={false}
-          isFreshFilterQuery={false}
-          isAuthenticated={true}
-          results={{ page: 1, aggregations, results }}
-        />
-      )
+      render(component)
       userEvent.click(screen.getByLabelText(/Date/))
       await waitFor(() => {
         const beforeDateInput = screen.getByDisplayValue("2000")
@@ -37,14 +41,7 @@ describe("SearchFilters", () => {
   describe("filter functionality", () => {
     it("displays some filters open by default", async () => {
       mockRouter.push("/search?q=spaghetti")
-      render(
-        <Search
-          isFreshSortByQuery={false}
-          isFreshFilterQuery={false}
-          isAuthenticated={true}
-          results={{ page: 1, aggregations, results }}
-        />
-      )
+      render(component)
       const formatMultiselect = screen.getByLabelText(/Format/, {
         selector: "button",
       })
@@ -60,14 +57,7 @@ describe("SearchFilters", () => {
     })
     it("opens and closes filters", async () => {
       mockRouter.push("/search?q=spaghetti")
-      render(
-        <Search
-          isFreshSortByQuery={false}
-          isFreshFilterQuery={false}
-          isAuthenticated={true}
-          results={{ page: 1, aggregations, results }}
-        />
-      )
+      render(component)
       const subjectMultiselect = screen.getByLabelText(/Subject/, {
         selector: "button",
       })
@@ -88,14 +78,7 @@ describe("SearchFilters", () => {
 
     it("searches filter options", async () => {
       mockRouter.push("/search?q=spaghetti")
-      render(
-        <Search
-          isFreshSortByQuery={false}
-          isFreshFilterQuery={false}
-          isAuthenticated={true}
-          results={{ page: 1, aggregations, results }}
-        />
-      )
+      render(component)
       const formatMultiselect = screen.getByLabelText(/Format/, {
         selector: "button",
       })
@@ -120,14 +103,7 @@ describe("SearchFilters", () => {
 
     it("should update the router query and add filter on checkbox click", async () => {
       mockRouter.push("/search?q=spaghetti")
-      render(
-        <Search
-          isFreshSortByQuery={false}
-          isFreshFilterQuery={false}
-          isAuthenticated={true}
-          results={{ page: 1, aggregations, results }}
-        />
-      )
+      render(component)
       await waitFor(() => {
         expect(screen.getAllByLabelText(/Format/)[0]).toBeInTheDocument()
         expect(screen.getAllByLabelText(/Item location/)[0]).toBeInTheDocument()
@@ -143,14 +119,7 @@ describe("SearchFilters", () => {
     })
     it("should update the router query and remove filter on checkbox de-select", async () => {
       mockRouter.push("/search?q=spaghetti")
-      render(
-        <Search
-          isFreshSortByQuery={false}
-          isFreshFilterQuery={false}
-          isAuthenticated={true}
-          results={{ page: 1, aggregations, results }}
-        />
-      )
+      render(component)
       expect(mockRouter.query).toStrictEqual({
         q: "spaghetti",
       })
