@@ -152,7 +152,7 @@ export default function Search({
               />
             </Box>
           ) : isLoading ? (
-            <SkeletonLoader showImage={false} />
+            <SkeletonLoader showImage={false} width="250px" />
           ) : null
         }
       >
@@ -162,49 +162,38 @@ export default function Search({
               ml: { base: "0px", md: "32px" },
             }}
           >
-            {isLoading ? (
-              <SkeletonLoader
-                showImage={false}
-                mb="m"
-                sx={{
-                  ml: { base: "0px", md: "32px" },
-                }}
-              />
-            ) : (
-              <Flex flexDir="column">
-                {displayAppliedFilters && (
-                  <AppliedFilters aggregations={aggs} />
-                )}
-                <Flex justifyContent="space-between">
-                  <Heading
-                    data-testid="search-results-heading"
-                    level="h2"
-                    size="heading5"
-                    // Heading component does not expect tabIndex prop, so we
-                    // are ignoring the typescript error that pops up.
-                    tabIndex={-1}
-                    paddingBottom="0"
-                    mb={{ base: "s", md: "l" }}
-                    minH="40px"
-                    ref={searchResultsHeadingRef}
-                    aria-live="polite"
-                  >
-                    {getSearchResultsHeading(searchParams, totalResults)}
-                  </Heading>
-                  <SearchResultsSort
-                    searchParams={searchParams}
-                    handleSortChange={handleSortChange}
-                    // TODO: Extend the Layout component to receive a prop that contains content to be shown below the
-                    //  main header, which will include the search results heading and the sort select, which would allow us
-                    //  to only render the sort select once.
-                    display={{
-                      base: "none",
-                      md: "block",
-                    }}
-                  />
-                </Flex>
+            <Flex flexDir="column">
+              {displayAppliedFilters && <AppliedFilters aggregations={aggs} />}
+              <Flex justifyContent="space-between">
+                <Heading
+                  data-testid="search-results-heading"
+                  level="h2"
+                  size="heading5"
+                  // Heading component does not expect tabIndex prop, so we
+                  // are ignoring the typescript error that pops up.
+                  tabIndex={-1}
+                  paddingBottom="0"
+                  mb={{ base: "s", md: "l" }}
+                  minH="40px"
+                  ref={searchResultsHeadingRef}
+                  aria-live="polite"
+                >
+                  {getSearchResultsHeading(searchParams, totalResults)}
+                </Heading>
+                <SearchResultsSort
+                  searchParams={searchParams}
+                  handleSortChange={handleSortChange}
+                  // TODO: Extend the Layout component to receive a prop that contains content to be shown below the
+                  //  main header, which will include the search results heading and the sort select, which would allow us
+                  //  to only render the sort select once.
+                  display={{
+                    base: "none",
+                    md: "block",
+                  }}
+                />
               </Flex>
-            )}
+            </Flex>
+
             <SearchResultsSort
               // Mobile only Search Results Sort Select
               // Necessary due to the placement of the Select in the main content on mobile only.
@@ -216,13 +205,15 @@ export default function Search({
                 md: "none",
               }}
             />
-            {!isLoading ? (
+            {isLoading ? (
+              <SkeletonLoader showImage={false} mb="m" />
+            ) : (
               <SimpleGrid columns={1} id="search-results-list" gap="grid.l">
                 {searchResultBibs.map((bib: SearchResultsBib) => {
                   return <SearchResult key={bib.id} bib={bib} />
                 })}
               </SimpleGrid>
-            ) : null}
+            )}
             <Pagination
               id="results-pagination"
               mt="xxl"
@@ -233,11 +224,7 @@ export default function Search({
               onPageChange={handlePageChange}
             />
           </Box>
-        ) : /**
-         * TODO: The logic and copy for different scenarios will need to be added when
-         * filters are implemented
-         */
-        isLoading ? (
+        ) : isLoading ? (
           <SkeletonLoader showImage={false} />
         ) : (
           // Heading component does not expect tabIndex prop, so we are ignoring
