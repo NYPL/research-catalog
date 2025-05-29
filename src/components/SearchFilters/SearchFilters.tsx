@@ -159,6 +159,7 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
         setFocusedFilter(null)
         return
       }
+      setLastFocusedId("apply-dates")
       buildAndPushFilterQuery(appliedFilters)
     },
   })
