@@ -12,6 +12,7 @@ import {
   ModalOverlay,
   ModalContent,
   ModalFooter,
+  ModalHeader,
   ModalBody,
 } from "@chakra-ui/react"
 import router from "next/router"
@@ -74,35 +75,48 @@ const SearchFilterModal = ({
         >
           <ModalOverlay />
           <ModalContent>
-            <Box
-              bg="ui.bg.default"
-              display="flex"
-              flexDir="row"
-              alignItems="center"
-              justifyContent="space-between"
-              mb="s"
-              pl="xs"
-              pr="xs"
-              sx={{
-                borderBottom: "1px solid var(--ui-border-default, #BDBDBD)",
-              }}
-            >
-              <Heading size="heading5" paddingTop="s" paddingLeft="m">
-                Filter results
-              </Heading>
-              <Button
-                aria-label="Close"
-                id="close-btn"
-                buttonType="text"
-                onClick={() => closeModal()}
+            <ModalHeader padding="0">
+              <Box
+                bg="ui.bg.default"
+                display="flex"
+                flexDir="row"
+                alignItems="center"
+                justifyContent="space-between"
+                mb="s"
+                pl="xs"
+                pr="xs"
+                sx={{
+                  borderBottom: "1px solid var(--ui-border-default, #BDBDBD)",
+                }}
               >
-                {" "}
-                <Icon name="close" size="large" color="ui.black" />
-              </Button>
-            </Box>
-            <ModalBody>
+                <Heading
+                  size="heading5"
+                  paddingTop="s"
+                  paddingBottom="s"
+                  paddingLeft="m"
+                >
+                  Filter results
+                </Heading>
+                <Button
+                  aria-label="Close"
+                  id="close-btn"
+                  buttonType="text"
+                  onClick={() => closeModal()}
+                >
+                  {" "}
+                  <Icon name="close" size="large" color="ui.black" />
+                </Button>
+              </Box>
+            </ModalHeader>
+            <Box
+              overflow="auto"
+              display="flex"
+              paddingLeft="l"
+              paddingRight="l"
+              paddingBottom="m"
+            >
               <SearchFilters aggregations={aggregations} />
-            </ModalBody>
+            </Box>
             <ModalFooter>
               <ButtonGroup
                 width="100%"
