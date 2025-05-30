@@ -34,6 +34,7 @@ const SearchResultsSort = ({
           : searchParams.sortBy
       }
       display={display}
+      className="no-print"
     >
       {Object.keys(sortOptions).map((key) => (
         <option value={key} key={`sort-by-${key}`}>

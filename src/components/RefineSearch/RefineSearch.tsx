@@ -148,7 +148,7 @@ const RefineSearch = ({
       mt={{ md: refineSearchClosed ? "-4" : 0, base: 0 }}
       width={{ md: "fit-content" }}
       alignSelf="left"
-      className={styles.refineSearchContainer}
+      className={`${styles.refineSearchContainer} no-print`}
     >
       {refineSearchClosed ? (
         <Button

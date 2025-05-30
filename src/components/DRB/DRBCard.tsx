@@ -98,6 +98,7 @@ const DRBCard = ({ drbResult }: DRBCardProps) => {
                 window.location.href = drbResult.readOnlineUrl
               }, 100)
             }}
+            className="no-print"
           >
             Read Online
           </ExternalLink>

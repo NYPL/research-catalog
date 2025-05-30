@@ -29,13 +29,13 @@ export default function Document() {
           />
         </noscript>
         {/* NYPL Header container */}
-        <div id="Header-Placeholder">
+        <div id="Header-Placeholder" className="no-print">
           <div id="nypl-header"></div>
         </div>
         <Main />
         <NextScript />
         {/* NYPL Footer container */}
-        <div id="nypl-footer"></div>
+        <div id="nypl-footer" className="no-print"></div>
       </body>
     </Html>
   )
