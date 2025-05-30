@@ -132,6 +132,15 @@ export default function Search({
     )
   }
 
+  // Ref for accessible announcement of loading state.
+  const liveLoadingRegionRef = useRef<HTMLDivElement | null>(null)
+
+  useEffect(() => {
+    if (liveLoadingRegionRef.current) {
+      liveLoadingRegionRef.current.textContent = "Loading results"
+    }
+  }, [isLoading])
+
   const displayFilters = !!aggs?.filter((agg: Aggregation) => agg.values.length)
     .length
 
@@ -228,7 +237,24 @@ export default function Search({
               }}
             />
             {isLoading ? (
-              <SkeletonLoader showImage={false} mb="m" />
+              <>
+                <SkeletonLoader showImage={false} mb="m" />
+                <div
+                  id="search-live-region"
+                  ref={liveLoadingRegionRef}
+                  aria-live="polite"
+                  style={{
+                    position: "absolute",
+                    width: "1px",
+                    height: "1px",
+                    margin: "-1px",
+                    padding: 0,
+                    overflow: "hidden",
+                    clip: "rect(0,0,0,0)",
+                    border: 0,
+                  }}
+                />
+              </>
             ) : (
               <SimpleGrid columns={1} id="search-results-list" gap="grid.l">
                 {searchResultBibs.map((bib: SearchResultsBib) => {

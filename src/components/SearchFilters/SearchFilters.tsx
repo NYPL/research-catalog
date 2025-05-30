@@ -84,11 +84,7 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
         [field]: updatedValues,
       }
 
-      setLastFocusedId(
-        filtersObjectLength(newFilters) > 0
-          ? optionValue
-          : "filter-results-heading"
-      )
+      setLastFocusedId(optionValue)
       buildAndPushFilterQuery(newFilters)
       return newFilters
     })
@@ -202,7 +198,7 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
   )
 
   return (
-    <Flex flexDir="column" gap="s" pt="xxs">
+    <Flex flexDir="column" gap="s" pt="xxs" width="100%">
       {filters}
       {dateFilter}
     </Flex>

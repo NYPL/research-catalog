@@ -13,7 +13,6 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-  ModalBody,
 } from "@chakra-ui/react"
 import router from "next/router"
 import {
@@ -35,11 +34,11 @@ const SearchFilterModal = ({
   const { lastFocusedId, setLastFocusedId } = useFocusContext()
 
   const closeModal = () => {
+    setLastFocusedId("search-filters-modal")
     setIsModalOpen(false)
   }
 
   const handleClear = () => {
-    setLastFocusedId(null)
     router.push({
       pathname: "/search",
       query: getQueryWithoutFiltersOrPage(router.query),
@@ -84,23 +83,24 @@ const SearchFilterModal = ({
           size={{ base: "full", md: "xl" }}
           isOpen={isModalOpen}
           onClose={closeModal}
+          aria-labelledby="Filter results"
         >
           <ModalOverlay />
           <ModalContent>
-            <ModalHeader padding="0">
-              <Box
-                bg="ui.bg.default"
-                display="flex"
-                flexDir="row"
-                alignItems="center"
-                justifyContent="space-between"
-                mb="s"
-                pl="xs"
-                pr="xs"
-                sx={{
-                  borderBottom: "1px solid var(--ui-border-default, #BDBDBD)",
-                }}
-              >
+            <Box
+              bg="ui.bg.default"
+              display="flex"
+              flexDir="row"
+              alignItems="center"
+              justifyContent="space-between"
+              mb="s"
+              pl="xs"
+              pr="xs"
+              sx={{
+                borderBottom: "1px solid var(--ui-border-default, #BDBDBD)",
+              }}
+            >
+              <ModalHeader padding="0" flex="1">
                 <Heading
                   size="heading5"
                   paddingTop="s"
@@ -109,20 +109,19 @@ const SearchFilterModal = ({
                 >
                   Filter results
                 </Heading>
-                <Button
-                  aria-label="Close"
-                  id="close-btn"
-                  buttonType="text"
-                  onClick={() => {
-                    setLastFocusedId("search-filters-modal")
-                    closeModal()
-                  }}
-                >
-                  {" "}
-                  <Icon name="close" size="large" color="ui.black" />
-                </Button>
-              </Box>
-            </ModalHeader>
+              </ModalHeader>
+              <Button
+                aria-label="Close"
+                id="close-btn"
+                buttonType="text"
+                onClick={() => {
+                  closeModal()
+                }}
+              >
+                {" "}
+                <Icon name="close" size="large" color="ui.black" />
+              </Button>
+            </Box>
             <Box
               overflow="auto"
               display="flex"
@@ -143,7 +142,6 @@ const SearchFilterModal = ({
                 <Button
                   id="show-results"
                   onClick={() => {
-                    setLastFocusedId(null)
                     closeModal()
                   }}
                 >
