@@ -95,7 +95,7 @@ const Layout = ({
                   <EDSBanner />
                   {showNotification && bannerNotification && (
                     <Banner
-                      className={styles.banner}
+                      className={`${styles.banner} no-print`}
                       heading="New Service Announcement"
                       content={bannerNotification}
                     />
