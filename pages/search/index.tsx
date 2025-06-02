@@ -242,7 +242,6 @@ export default function Search({
                 <div
                   id="search-live-region"
                   ref={liveLoadingRegionRef}
-                  aria-live="polite"
                   style={{
                     position: "absolute",
                     width: "1px",
