@@ -41,7 +41,6 @@ const ItemTable = ({ itemTableData }: ItemTableProps) => {
         }
         tableData={tableData}
         showRowDividers={!inSearchResult}
-        isScrollable={true}
         my={{ base: inSearchResult ? "s" : 0, md: "s" }}
         data-testid={
           !inSearchResult
