@@ -6,4 +6,10 @@
   .no-print {
     display: none !important;
   }
+  .itemTable td:first-child,
+  .itemTable th:first-child {
+    width: 200px !important;
+    min-width: 200px !important;
+    max-width: 200px !important;
+  }
 }
