@@ -128,7 +128,9 @@ export default function Search({
     setLastFocusedId("search-results-sort")
     // Push the new query values, removing the page number if set.
     await push(
-      getSearchQuery({ ...searchParams, sortBy, order, page: undefined })
+      getSearchQuery({ ...searchParams, sortBy, order, page: undefined }),
+      undefined,
+      { scroll: false }
     )
   }
 
