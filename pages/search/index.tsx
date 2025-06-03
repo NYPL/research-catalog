@@ -196,6 +196,7 @@ export default function Search({
               id="results-pagination"
               mt="xxl"
               mb="l"
+              className="no-print"
               initialPage={searchParams.page}
               currentPage={searchParams.page}
               pageCount={Math.ceil(totalResults / RESULTS_PER_PAGE)}
