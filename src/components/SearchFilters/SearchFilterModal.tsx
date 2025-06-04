@@ -15,13 +15,10 @@ import {
   ModalHeader,
 } from "@chakra-ui/react"
 import router from "next/router"
-import {
-  collapseMultiValueQueryParams,
-  getQueryWithoutFiltersOrPage,
-} from "../../utils/refineSearchUtils"
-import { filtersObjectLength } from "../../utils/searchUtils"
+import { getQueryWithoutFiltersOrPage } from "../../utils/refineSearchUtils"
 import SearchFilters from "./SearchFilters"
 import { useFocusContext } from "../../context/FocusContext"
+import { FilterCount } from "./FilterCount"
 
 const SearchFilterModal = ({
   aggregations,
@@ -46,17 +43,6 @@ const SearchFilterModal = ({
     closeModal()
   }
 
-  // Counts filters without storing appliedFilters state at this level.
-  const [filterCount, setFilterCount] = useState<number | null>(null)
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const count = filtersObjectLength(
-        collapseMultiValueQueryParams(router.query)
-      )
-      setFilterCount(count)
-    }
-  }, [router.query])
-
   useEffect(() => {
     if (lastFocusedId === "search-filters-modal") {
       const el = document.querySelector("button[id=search-filters-modal]")
@@ -75,9 +61,7 @@ const SearchFilterModal = ({
           display={{ base: "flex", md: "none" }}
         >
           <Icon size="large" align="left" name="contentFilterList" />
-          {`Show filters${
-            filterCount !== null && filterCount > 0 ? ` (${filterCount})` : ""
-          }`}
+          <FilterCount />
         </Button>
       )}
 
