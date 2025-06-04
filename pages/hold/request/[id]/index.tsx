@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { useState, useRef, useEffect } from "react"
 import { useRouter } from "next/router"
 import {
@@ -37,6 +38,7 @@ import type {
   PatronEligibilityStatus,
 } from "../../../../src/types/holdPageTypes"
 import RCHead from "../../../../src/components/Head/RCHead"
+import Custom404 from "../../../404"
 
 interface HoldRequestPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -46,6 +48,7 @@ interface HoldRequestPropsType {
   isAuthenticated?: boolean
   errorStatus?: HoldErrorStatus
   patronEligibilityStatus?: PatronEligibilityStatus
+  notFound?: boolean
 }
 
 /**
@@ -61,7 +64,11 @@ export default function HoldRequestPage({
   isAuthenticated,
   errorStatus: defaultErrorStatus,
   patronEligibilityStatus: defaultEligibilityStatus,
+  notFound = false,
 }: HoldRequestPropsType) {
+  if (notFound) {
+    return <Custom404 activePage="hold" />
+  }
   const metadataTitle = `Item Request | ${SITE_NAME}`
 
   const bib = new Bib(discoveryBibResult)
@@ -291,12 +298,8 @@ export async function getServerSideProps({ params, req, res }) {
     }
   } catch (error) {
     console.log(error)
-
     return {
-      redirect: {
-        destination: PATHS["404"],
-        permanent: false,
-      },
+      props: { notFound: true },
     }
   }
 }

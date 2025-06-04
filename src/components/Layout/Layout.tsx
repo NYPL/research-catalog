@@ -41,7 +41,6 @@ const Layout = ({
   bannerNotification,
 }: PropsWithChildren<LayoutProps>) => {
   const showSearch = activePage === "search"
-  const showHeader = activePage !== "404"
   const showNotification = activePage === "" || activePage === "search"
 
   return (
@@ -51,56 +50,54 @@ const Layout = ({
         // TODO: Address this issue in the DS
         sx={{ "main > div": { maxWidth: "100vw" } }}
         breakout={
-          showHeader && (
-            <>
-              <Breadcrumbs
-                data-testid="layout-breadcrumbs"
-                breadcrumbsType="research"
-                breadcrumbsData={[
-                  { url: "https://nypl.org", text: "Home" },
-                  { url: "https://www.nypl.org/research", text: "Research" },
-                  {
-                    url: `https://www.nypl.org${BASE_URL}`,
-                    text: "Research Catalog",
+          <>
+            <Breadcrumbs
+              data-testid="layout-breadcrumbs"
+              breadcrumbsType="research"
+              breadcrumbsData={[
+                { url: "https://nypl.org", text: "Home" },
+                { url: "https://www.nypl.org/research", text: "Research" },
+                {
+                  url: `https://www.nypl.org${BASE_URL}`,
+                  text: "Research Catalog",
+                },
+              ]}
+              __css={{
+                a: {
+                  _focus: {
+                    outlineColor: "ui.white",
                   },
-                ]}
-                __css={{
-                  a: {
-                    _focus: {
-                      outlineColor: "ui.white",
-                    },
-                  },
-                }}
+                },
+              }}
+            />
+            <div className={styles.researchHeadingContainer}>
+              <Heading id="heading-h1" level="h1" text="Research Catalog" />
+              <SubNav
+                isAuthenticated={isAuthenticated}
+                activePage={activePage}
               />
-              <div className={styles.researchHeadingContainer}>
-                <Heading id="heading-h1" level="h1" text="Research Catalog" />
-                <SubNav
-                  isAuthenticated={isAuthenticated}
-                  activePage={activePage}
-                />
-                {showSearch && <SearchForm aggregations={searchAggregations} />}
-              </div>
-              {showSearch && (
-                <Flex
-                  gap="s"
-                  align="center"
-                  direction="column"
-                  sx={{
-                    padding: "2em 2em .5em 2em",
-                  }}
-                >
-                  <EDSBanner />
-                  {showNotification && bannerNotification && (
-                    <Banner
-                      className={styles.banner}
-                      heading="New Service Announcement"
-                      content={bannerNotification}
-                    />
-                  )}
-                </Flex>
-              )}
-            </>
-          )
+              {showSearch && <SearchForm aggregations={searchAggregations} />}
+            </div>
+            {showSearch && (
+              <Flex
+                gap="s"
+                align="center"
+                direction="column"
+                sx={{
+                  padding: "2em 2em .5em 2em",
+                }}
+              >
+                <EDSBanner />
+                {showNotification && bannerNotification && (
+                  <Banner
+                    className={styles.banner}
+                    heading="New Service Announcement"
+                    content={bannerNotification}
+                  />
+                )}
+              </Flex>
+            )}
+          </>
         }
         sidebar={sidebar ? sidebarPosition : "none"}
         contentPrimary={

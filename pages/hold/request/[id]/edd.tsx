@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { useState, useRef, useEffect } from "react"
 import { useRouter } from "next/router"
 import {
@@ -40,6 +41,7 @@ import type {
   PatronEligibilityStatus,
 } from "../../../../src/types/holdPageTypes"
 import RCHead from "../../../../src/components/Head/RCHead"
+import Custom404 from "../../../404"
 
 interface EDDRequestPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -49,6 +51,7 @@ interface EDDRequestPropsType {
   isAuthenticated?: boolean
   errorStatus?: HoldErrorStatus
   patronEligibilityStatus?: PatronEligibilityStatus
+  notFound?: boolean
 }
 
 /**
@@ -62,7 +65,11 @@ export default function EDDRequestPage({
   isAuthenticated,
   errorStatus: defaultErrorStatus,
   patronEligibilityStatus: defaultEligibilityStatus,
+  notFound = false,
 }: EDDRequestPropsType) {
+  if (notFound) {
+    return <Custom404 activePage="hold" />
+  }
   const metadataTitle = `Electronic Delivery Request | ${SITE_NAME}`
   const bib = new Bib(discoveryBibResult)
   const item = new Item(discoveryItemResult, bib)
@@ -309,10 +316,7 @@ export async function getServerSideProps({ params, req, res, query }) {
     console.log(error)
 
     return {
-      redirect: {
-        destination: PATHS["404"],
-        permanent: false,
-      },
+      props: { notFound: true },
     }
   }
 }
