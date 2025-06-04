@@ -19,7 +19,6 @@ import type { Aggregation } from "../../types/filterTypes"
 import DateFilter from "./DateFilter"
 import { useDateFilter } from "../../hooks/useDateFilter"
 import { useFocusContext } from "../../context/FocusContext"
-import { filtersObjectLength } from "../../utils/searchUtils"
 
 const fields = [
   { value: "buildingLocation", label: "Item location" },

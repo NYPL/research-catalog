@@ -1,12 +1,11 @@
 import React from "react"
-import { render, screen, fireEvent } from "@testing-library/react"
+
 import mockRouter from "next-router-mock"
 import userEvent from "@testing-library/user-event"
-
 import SearchForm from "./SearchForm"
 import { normalAggs } from "../../../__test__/fixtures/testAggregations"
 import { SEARCH_FORM_OPTIONS } from "../../config/constants"
-import { FocusProvider } from "../../context/FocusContext"
+import { fireEvent, render, screen } from "../../utils/testUtils"
 
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
@@ -23,11 +22,7 @@ describe("SearchForm", () => {
     const input = screen.getByRole("textbox")
     await userEvent.clear(input)
   })
-  const component = (
-    <FocusProvider>
-      <SearchForm aggregations={normalAggs} />
-    </FocusProvider>
-  )
+  const component = <SearchForm aggregations={normalAggs} />
   it.todo("searches on an empty keyword after clearing the form")
   it.todo("searches for {TBD} on an empty query")
   it("submits a keyword query by default", async () => {

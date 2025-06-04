@@ -1,8 +1,6 @@
 import React from "react"
 import { render, screen, within } from "../../utils/testUtils"
-
 import Layout from "./Layout"
-import { FocusProvider } from "../../context/FocusContext"
 // Mock next router
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
@@ -24,19 +22,11 @@ describe("Layout", () => {
     expect(breadcrumbsUrls).toHaveLength(3)
   })
   it("should show search", () => {
-    render(
-      <FocusProvider>
-        <Layout activePage="search"></Layout>
-      </FocusProvider>
-    )
+    render(<Layout activePage="search"></Layout>)
     screen.getByLabelText(searchLabel)
   })
   it("should show search bar on search page", () => {
-    render(
-      <FocusProvider>
-        <Layout activePage="search"></Layout>
-      </FocusProvider>
-    )
+    render(<Layout activePage="search"></Layout>)
     screen.getByLabelText(searchLabel)
   })
   it("should hide header on 404", () => {

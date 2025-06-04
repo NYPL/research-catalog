@@ -2,17 +2,12 @@ import React from "react"
 import { render, screen } from "../../src/utils/testUtils"
 
 import Home from "../../pages/index"
-import { FocusProvider } from "../../src/context/FocusContext"
 
 // Mock next router
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
 describe("Home", () => {
-  const component = (
-    <FocusProvider>
-      <Home isAuthenticated={true} />
-    </FocusProvider>
-  )
+  const component = <Home isAuthenticated={true} />
   it("should render the search form", () => {
     render(component)
     const searchForm = screen.getByLabelText("Search Bar Label")

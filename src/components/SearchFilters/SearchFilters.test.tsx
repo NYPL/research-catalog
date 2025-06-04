@@ -7,20 +7,15 @@ import {
   aggregationsResults as aggregations,
   results,
 } from "../../../__test__/fixtures/searchResultsManyBibs"
-import { FocusProvider } from "../../context/FocusContext"
 
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
 describe("SearchFilters", () => {
   const component = (
-    <FocusProvider>
-      <Search
-        isFreshSortByQuery={false}
-        isFreshFilterQuery={false}
-        isAuthenticated={true}
-        results={{ page: 1, aggregations, results }}
-      />
-    </FocusProvider>
+    <Search
+      isAuthenticated={true}
+      results={{ page: 1, aggregations, results }}
+    />
   )
   describe("with dates in url query params", () => {
     it("can populate date fields from url", async () => {
