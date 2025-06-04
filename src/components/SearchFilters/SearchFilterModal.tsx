@@ -47,12 +47,15 @@ const SearchFilterModal = ({
   }
 
   // Counts filters without storing appliedFilters state at this level.
-  let filterCount = null
-  if (typeof window !== "undefined") {
-    filterCount = filtersObjectLength(
-      collapseMultiValueQueryParams(router.query)
-    )
-  }
+  const [filterCount, setFilterCount] = useState<number | null>(null)
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const count = filtersObjectLength(
+        collapseMultiValueQueryParams(router.query)
+      )
+      setFilterCount(count)
+    }
+  }, [router.query])
 
   useEffect(() => {
     if (lastFocusedId === "search-filters-modal") {
@@ -72,7 +75,9 @@ const SearchFilterModal = ({
           display={{ base: "flex", md: "none" }}
         >
           <Icon size="large" align="left" name="contentFilterList" />
-          {`Show filters ${filterCount ? `(${filterCount})` : ""}`}
+          {`Show filters${
+            filterCount !== null && filterCount > 0 ? ` (${filterCount})` : ""
+          }`}
         </Button>
       )}
 
