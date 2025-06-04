@@ -44,8 +44,6 @@ interface SearchProps {
   bannerNotification?: string
   results: SearchResultsResponse
   isAuthenticated: boolean
-  isFreshSortByQuery: boolean
-  isFreshFilterQuery: boolean
 }
 
 /**
@@ -79,29 +77,29 @@ export default function Search({
 
   const { lastFocusedId, setLastFocusedId } = useFocusContext()
 
-  const isFirstLoad = useRef<boolean>(false)
+  // Focus should not be set on any specific element on first page load
+  const isFirstLoad = useRef<boolean>(true)
 
   useEffect(() => {
     if (isLoading) return
-    let didFocusElement = false
 
+    // If user updated search query with filter/sort/pagination/keyword,
+    // focus on the last used control or the "Display results heading"
     if (lastFocusedId) {
       const selectors = ["button", "input", "p", "h2", "select"]
       for (const selector of selectors) {
         const el = document.querySelector(`${selector}[id="${lastFocusedId}"]`)
         if (el) {
           ;(el as HTMLElement).focus()
-          didFocusElement = true
           break
         }
       }
-    }
-
-    if (!didFocusElement && isFirstLoad.current) {
+      // In all other cases besides first load, focus on the "Display results heading"
+    } else if (!isFirstLoad.current) {
       searchResultsHeadingRef.current?.focus()
     }
 
-    isFirstLoad.current = true
+    isFirstLoad.current = false
   }, [isLoading])
 
   const handlePageChange = async (page: number) => {

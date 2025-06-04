@@ -5,6 +5,10 @@ interface FocusContextType {
   setLastFocusedId: (id: string | null) => void
 }
 
+/**
+ * Wrapper context component that maintains state of last used search control,
+ * allowing focus to go to the correct element on re-render
+ */
 const FocusContext = createContext<FocusContextType | undefined>(undefined)
 
 export const FocusProvider = ({ children }: { children: React.ReactNode }) => {
