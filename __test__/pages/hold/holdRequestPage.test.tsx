@@ -408,4 +408,18 @@ describe("Hold Request page", () => {
       expect(screen.getByText("Submit request")).toBeDisabled()
     })
   })
+
+  describe("Hold request not found", () => {
+    render(
+      <HoldRequestPage
+        discoveryBibResult={undefined}
+        discoveryItemResult={undefined}
+        patronId="123"
+        deliveryLocations={undefined}
+        isAuthenticated={true}
+        notFound={true}
+      />
+    )
+    expect(screen.getByText("404 Not Found")).toBeInTheDocument()
+  })
 })
