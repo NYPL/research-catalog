@@ -74,6 +74,7 @@ const DRBContainer = ({
                 md: "desktop.body.body2",
               }}
               type="standalone"
+              className="no-print"
             >
               <>
                 View {totalWorks === 1 ? "" : "all"}{" "}
@@ -87,6 +88,7 @@ const DRBContainer = ({
             <ExternalLink
               href={appConfig.urls.drbAbout}
               aria-label="Explore Digital Research Books Beta"
+              className="no-print"
             >
               <Box
                 as="span"
@@ -107,6 +109,7 @@ const DRBContainer = ({
               }}
               type="standalone"
               fontWeight="bold"
+              className="no-print"
             >
               Explore Digital Research Books Beta
             </ExternalLink>

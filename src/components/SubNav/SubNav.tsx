@@ -14,7 +14,10 @@ interface SubNavProps {
 const SubNav = ({ activePage, isAuthenticated }: SubNavProps) => {
   const logoutLink = useLogoutRedirect()
   return (
-    <nav className={styles.subNav} aria-label="Research Catalog main menu">
+    <nav
+      className={`${styles.subNav} no-print`}
+      aria-label="Research Catalog main menu"
+    >
       <ul>
         <li>
           <RCLink

@@ -50,7 +50,11 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
   switch (item.availability.key) {
     case RECAP_GENERAL_COLLECTIONS:
       return (
-        <ExternalLink href={appConfig.urls.researchMaterialsHelp} fontSize="sm">
+        <ExternalLink
+          href={appConfig.urls.researchMaterialsHelp}
+          fontSize="sm"
+          className="no-print"
+        >
           How do I pick up this item and when will it be ready?
         </ExternalLink>
       )
