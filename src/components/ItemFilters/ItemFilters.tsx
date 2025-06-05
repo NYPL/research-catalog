@@ -185,7 +185,7 @@ const ItemFilters = ({
 
   return (
     <>
-      <Box p="inset.wide" bg="ui.gray.x-light-cool" mb="m">
+      <Box p="inset.wide" bg="ui.gray.x-light-cool" mb="m" className="no-print">
         <FilterBarInline
           id="item-filters-container"
           data-testid="item-filters-container"

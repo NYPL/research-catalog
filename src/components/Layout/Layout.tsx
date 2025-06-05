@@ -83,9 +83,12 @@ const Layout = ({
                       outlineColor: "ui.white",
                     },
                   },
+                  "@media print": {
+                    display: "none !important",
+                  },
                 }}
               />
-              <div className={styles.researchHeadingContainer}>
+              <div className={`${styles.researchHeadingContainer} no-print`}>
                 <Heading id="heading-h1" level="h1" text="Research Catalog" />
                 <SubNav
                   isAuthenticated={isAuthenticated}
@@ -110,7 +113,7 @@ const Layout = ({
                   <EDSBanner />
                   {showNotification && bannerNotification && (
                     <Banner
-                      className={styles.banner}
+                      className={`${styles.banner} no-print`}
                       heading="New Service Announcement"
                       content={bannerNotification}
                     />

@@ -3,7 +3,7 @@ import { useEffect } from "react"
 import { useRouter } from "next/router"
 import Script from "next/script"
 import "@nypl/design-system-react-components/dist/styles.css"
-
+import "../public/styles/globals.css"
 import { trackVirtualPageView } from "../src/utils/appUtils"
 import { appConfig } from "../src/config/config"
 import { BASE_URL, SITE_NAME } from "../src/config/constants"
@@ -19,6 +19,33 @@ function App({ Component, pageProps }) {
   useEffect(() => {
     trackVirtualPageView(router.asPath)
   })
+
+  // Remove header and footer injections before print
+  useEffect(() => {
+    const handleBeforePrint = () => {
+      const header = document.getElementById("nypl-header")
+      const footer = document.getElementById("nypl-footer")
+
+      if (header) header.style.display = "none"
+      if (footer) footer.style.display = "none"
+    }
+
+    const handleAfterPrint = () => {
+      const header = document.getElementById("nypl-header")
+      const footer = document.getElementById("nypl-footer")
+
+      if (header) header.style.display = ""
+      if (footer) footer.style.display = ""
+    }
+
+    window.addEventListener("beforeprint", handleBeforePrint)
+    window.addEventListener("afterprint", handleAfterPrint)
+
+    return () => {
+      window.removeEventListener("beforeprint", handleBeforePrint)
+      window.removeEventListener("afterprint", handleAfterPrint)
+    }
+  }, [])
 
   return (
     <>

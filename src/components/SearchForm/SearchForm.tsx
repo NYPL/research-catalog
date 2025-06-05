@@ -88,7 +88,7 @@ const SearchForm = ({
   }, [router.query])
 
   return (
-    <div className={styles.searchContainer}>
+    <div className={`${styles.searchContainer} no-print`}>
       <div className={styles.searchContainerInner}>
         <Text size="body2" className={styles.searchTip}>
           <Icon size="medium" name="errorOutline" iconRotation="rotate180" />
