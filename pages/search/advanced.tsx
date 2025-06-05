@@ -42,14 +42,14 @@ import type {
 import { getSearchQuery } from "../../src/utils/searchUtils"
 import initializePatronTokenAuth from "../../src/server/auth"
 import { appConfig } from "../../src/config/config"
-import { useDateForm } from "../../src/hooks/useDateForm"
-import DateForm from "../../src/components/SearchFilters/DateForm"
-import SearchFilterCheckboxField from "../../src/components/RefineSearch/SearchFilterCheckboxField"
-import CancelSubmitButtonGroup from "../../src/components/RefineSearch/CancelSubmitButtonGroup"
+import SearchFilterCheckboxField from "../../src/components/AdvancedSearch/SearchFilterCheckboxField"
+import CancelSubmitButtonGroup from "../../src/components/AdvancedSearch/CancelSubmitButtonGroup"
 import { formatOptions } from "../../src/utils/advancedSearchUtils"
 import { searchAggregations } from "../../src/config/aggregations"
 import RCLink from "../../src/components/Links/RCLink/RCLink"
 import RCHead from "../../src/components/Head/RCHead"
+import { useDateFilter } from "../../src/hooks/useDateFilter"
+import DateFilter from "../../src/components/SearchFilters/DateFilter"
 
 export const defaultEmptySearchErrorMessage =
   "Error: please enter at least one field to submit an advanced search."
@@ -81,10 +81,10 @@ export default function AdvancedSearch({
   )
 
   const {
-    dateFormProps,
+    dateFilterProps,
     validateDateRange,
     clearInputs: clearDateInputs,
-  } = useDateForm({
+  } = useDateFilter({
     inputRefs: dateInputRefs,
     dateBefore: searchFormState["filters"].dateBefore,
     dateAfter: searchFormState["filters"].dateAfter,
@@ -202,7 +202,7 @@ export default function AdvancedSearch({
                   })}
                 </Select>
               </FormField>
-              <FormField>{<DateForm {...dateFormProps} />}</FormField>
+              <FormField>{<DateFilter {...dateFilterProps} />}</FormField>
             </Flex>
             <Flex direction="column" gap="l" grow="1">
               <SearchFilterCheckboxField

@@ -1,11 +1,11 @@
 import React from "react"
-import { render, screen, fireEvent } from "@testing-library/react"
+
 import mockRouter from "next-router-mock"
 import userEvent from "@testing-library/user-event"
-
 import SearchForm from "./SearchForm"
 import { normalAggs } from "../../../__test__/fixtures/testAggregations"
 import { SEARCH_FORM_OPTIONS } from "../../config/constants"
+import { fireEvent, render, screen } from "../../utils/testUtils"
 
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
@@ -22,10 +22,11 @@ describe("SearchForm", () => {
     const input = screen.getByRole("textbox")
     await userEvent.clear(input)
   })
+  const component = <SearchForm aggregations={normalAggs} />
   it.todo("searches on an empty keyword after clearing the form")
   it.todo("searches for {TBD} on an empty query")
   it("submits a keyword query by default", async () => {
-    render(<SearchForm aggregations={normalAggs} />)
+    render(component)
     const input = screen.getByRole("textbox")
 
     await userEvent.type(input, "spaghetti")
@@ -33,7 +34,7 @@ describe("SearchForm", () => {
     expect(mockRouter.asPath).toBe("/search?q=spaghetti")
   })
   it("submits a journal_title query", async () => {
-    render(<SearchForm aggregations={normalAggs} />)
+    render(component)
     const input = screen.getByRole("textbox")
 
     const searchScopeSelect = screen.getByLabelText("Select a category")
@@ -46,13 +47,13 @@ describe("SearchForm", () => {
   })
   it("gets keyword from url", () => {
     mockRouter.query.q = "spaghetti"
-    render(<SearchForm aggregations={normalAggs} />)
+    render(component)
     const input = screen.getByDisplayValue("spaghetti")
     expect(input).toBeTruthy()
   })
   describe("search scope options", () => {
     it("updates the search tip when search scope is updated", async () => {
-      render(<SearchForm aggregations={normalAggs} />)
+      render(component)
       const searchScopeSelect = screen.getByLabelText("Select a category")
       await userEvent.selectOptions(searchScopeSelect, "journal_title")
       let searchTip = screen.getByText(

@@ -8,7 +8,6 @@ import {
 import { useRouter } from "next/router"
 import type { SyntheticEvent, Dispatch, SetStateAction } from "react"
 import { useState, useEffect } from "react"
-
 import styles from "../../../styles/components/Search.module.scss"
 import RCLink from "../Links/RCLink/RCLink"
 import {
@@ -17,15 +16,22 @@ import {
 } from "../../utils/searchUtils"
 import { BASE_URL, PATHS, SEARCH_FORM_OPTIONS } from "../../config/constants"
 import useLoading from "../../hooks/useLoading"
-import RefineSearch from "../RefineSearch/RefineSearch"
 import type { Aggregation } from "../../types/filterTypes"
 import { collapseMultiValueQueryParams } from "../../utils/refineSearchUtils"
+import SearchFilterModal from "../SearchFilters/SearchFilterModal"
+import { useFocusContext } from "../../context/FocusContext"
 
 /**
- * The SearchForm component renders and controls the Search form and
- * advanced search link.
+ * The SearchForm component renders and controls the Search form,
+ * mobile filters, and advanced search link.
  */
-const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
+const SearchForm = ({
+  aggregations,
+  searchResultsCount,
+}: {
+  aggregations?: Aggregation[]
+  searchResultsCount?: number
+}) => {
   const router = useRouter()
   const [searchTerm, setSearchTerm] = useState(
     (router?.query?.q as string) || ""
@@ -40,6 +46,8 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
   const placeholder = SEARCH_FORM_OPTIONS[searchScope].placeholder
 
   const isLoading = useLoading()
+
+  const { setLastFocusedId } = useFocusContext()
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
@@ -59,6 +67,7 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
 
     const queryString = getSearchQuery(searchParams)
 
+    setLastFocusedId(null)
     await router.push(`${PATHS.SEARCH}${queryString}`)
   }
 
@@ -70,7 +79,7 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
     setValue(target.value)
   }
 
-  const displayRefineResults = !!aggregations?.filter(
+  const displayFilters = !!aggregations?.filter(
     (agg: Aggregation) => agg.values.length
   ).length
 
@@ -112,7 +121,7 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
             placeholder,
           }}
         />
-        <Flex direction="column" justifyContent="space-between" mt="xs">
+        <Flex direction="column" justifyContent="space-between" mt="s">
           <RCLink
             className={styles.advancedSearch}
             href="/search/advanced"
@@ -121,11 +130,10 @@ const SearchForm = ({ aggregations }: { aggregations?: Aggregation[] }) => {
           >
             Advanced search
           </RCLink>
-          {displayRefineResults && (
-            <RefineSearch
-              setAppliedFilters={setAppliedFilters}
-              appliedFilters={appliedFilters}
+          {displayFilters && (
+            <SearchFilterModal
               aggregations={aggregations}
+              searchResultsCount={searchResultsCount}
             />
           )}
         </Flex>

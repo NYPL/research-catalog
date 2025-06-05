@@ -1,18 +1,18 @@
 import {
   endDateInvalid,
   rangeContainsInvalidYearFormat,
-  useDateForm,
-} from "./useDateForm"
+  useDateFilter,
+} from "./useDateFilter"
 import { screen, render, renderHook } from "../utils/testUtils"
 import { type MutableRefObject, useRef } from "react"
 import {
   Button,
   type TextInputRefType,
 } from "@nypl/design-system-react-components"
-import DateForm from "../components/SearchFilters/DateForm"
 import userEvent from "@testing-library/user-event"
+import DateFilter from "../components/SearchFilters/DateFilter"
 
-// A hook which renders a date form and exposes the validate date range
+// A hook which renders the date form and exposes the validate date range
 // method for testing
 const setUpDateFormHook = (start: string, end: string) => {
   let refs: MutableRefObject<TextInputRefType>[]
@@ -24,24 +24,24 @@ const setUpDateFormHook = (start: string, end: string) => {
   render(<TestComponent />)
   const {
     result: {
-      current: { validateDateRange, dateFormProps },
+      current: { validateDateRange, dateFilterProps },
     },
   } = renderHook(() =>
-    useDateForm({
+    useDateFilter({
       inputRefs: refs,
       dateAfter: start,
       dateBefore: end,
       changeHandler: () => true,
     })
   )
-  render(<DateForm {...dateFormProps} />)
+  render(<DateFilter {...dateFilterProps} />)
   return validateDateRange
 }
 const useTestDateFormHookComponent = (start: string, end: string) => {
   let refs: MutableRefObject<TextInputRefType>[]
   const TestComponent = () => {
     refs = [useRef<TextInputRefType>(), useRef<TextInputRefType>()]
-    const { validateDateRange, dateFormProps, clearInputs } = useDateForm({
+    const { validateDateRange, dateFilterProps, clearInputs } = useDateFilter({
       inputRefs: refs,
       dateAfter: start,
       dateBefore: end,
@@ -56,7 +56,7 @@ const useTestDateFormHookComponent = (start: string, end: string) => {
         <Button id="test-submit" onClick={validateDateRange}>
           Submit
         </Button>
-        <DateForm {...dateFormProps} />
+        <DateFilter {...dateFilterProps} />
       </>
     )
   }

@@ -32,9 +32,11 @@ export const buildFilterQuery = (
   }, {})
 }
 
-export const getQueryWithoutFilters = (filters: object) => {
+export const getQueryWithoutFiltersOrPage = (filters: object) => {
   return Object.keys(filters).reduce((acc, field) => {
-    if (!field.includes("filters")) acc[field] = filters[field]
+    if (!field.includes("filters") && field !== "page") {
+      acc[field] = filters[field]
+    }
     return acc
-  }, {})
+  }, {} as Record<string, any>)
 }

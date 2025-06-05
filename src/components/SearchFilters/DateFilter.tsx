@@ -1,35 +1,43 @@
 import {
-  Box,
   Fieldset,
   TextInput,
   Notification,
   Flex,
+  Button,
 } from "@nypl/design-system-react-components"
-import type { DateFormHookPropsType } from "../../hooks/useDateForm"
+import type { DateFilterHookPropsType } from "../../hooks/useDateFilter"
 
-interface DateFormPropsType extends DateFormHookPropsType {
+interface DateFilterPropsType extends DateFilterHookPropsType {
   displayDateRangeError: string
 }
 
-const DateForm = ({
-  // This prop is used to display an error notification. It is
-  // an empty string by default. The validateDateRange method (returned
-  // from the useDateForm hook) is called in a parent component's
-  // onSubmit. If there is an error, this value is updated to an error
-  // message.
+const DateFilter = ({
+  /**
+   * This prop is used to display an error notification. It is
+   * an empty string by default. The validateDateRange method (returned
+   * from the useDateFilter hook) should be called in the parent component's
+   * onSubmit or in the applyHandler. If there is an error, this value is updated
+   * to an error message.
+   * */
   displayDateRangeError,
   // Used to focus on inputs in an error state and clear inputs
   inputRefs,
   dateAfter,
   dateBefore,
   changeHandler,
-}: DateFormPropsType) => {
+  /**
+   * In the sidebar filters, the DateFilter has its own submit button.
+   * In advanced search, the DateFilter uses the parent form's onSubmit.
+   * */
+  applyHandler,
+}: DateFilterPropsType) => {
   return (
     <>
       <div aria-live="polite">
         {displayDateRangeError && (
           <Notification
             data-testid="dateRangeErrorMessage"
+            padding="s"
             notificationType="warning"
             notificationContent={displayDateRangeError}
             noMargin
@@ -37,8 +45,11 @@ const DateForm = ({
           />
         )}
       </div>
-      <Fieldset id="date-fieldset" legendText="Date">
-        <Flex gap="s">
+      <Fieldset
+        id="date-fieldset"
+        {...(!applyHandler && { legendText: "Date" })}
+      >
+        <Flex gap="s" alignItems={"center"}>
           <TextInput
             id="date-from"
             labelText="Start"
@@ -57,10 +68,20 @@ const DateForm = ({
             onChange={(e) => changeHandler(e)}
             ref={inputRefs[1]}
           />
+          {applyHandler && (
+            <Button
+              width="90px"
+              buttonType="secondary"
+              id="apply-dates"
+              onClick={applyHandler}
+            >
+              Apply
+            </Button>
+          )}
         </Flex>
       </Fieldset>
     </>
   )
 }
 
-export default DateForm
+export default DateFilter
