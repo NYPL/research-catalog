@@ -86,13 +86,9 @@ export default function Search({
     // If user updated search query with filter/sort/pagination/keyword,
     // focus on the last used control or the "Display results heading"
     if (lastFocusedId) {
-      const selectors = ["button", "input", "p", "h2", "select"]
-      for (const selector of selectors) {
-        const el = document.querySelector(`${selector}[id="${lastFocusedId}"]`)
-        if (el) {
-          ;(el as HTMLElement).focus()
-          break
-        }
+      const el = document.getElementById(lastFocusedId)
+      if (el instanceof HTMLElement) {
+        el.focus()
       }
       // In all other cases besides first load, focus on the "Display results heading"
     } else if (!isFirstLoad.current) {
