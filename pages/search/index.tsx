@@ -79,7 +79,7 @@ export default function Search({
 
   const handlePageChange = async (page: number) => {
     const newQuery = getSearchQuery({ ...searchParams, page })
-    setPersistentFocus(null)
+    setPersistentFocus(idConstants.searchResultsHeading)
     await push(
       `${newQuery}${searchedFromAdvanced ? "&searched_from=advanced" : ""}`
     )

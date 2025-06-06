@@ -34,6 +34,8 @@ export const FocusProvider = ({ children }: { children: React.ReactNode }) => {
   const [activeElementId, setActiveElementId] = useState<string | null>(
     undefined
   )
+  const [prevActiveElementId, setPrevActiveElementId] =
+    useState(activeElementId)
   // Use this flag to avoid accessing document on the server
   const [isClient, setIsClient] = useState(false)
 
@@ -49,7 +51,10 @@ export const FocusProvider = ({ children }: { children: React.ReactNode }) => {
     [isClient]
   )
 
-  setFocusById(activeElementId)
+  if (activeElementId !== prevActiveElementId) {
+    setPrevActiveElementId(activeElementId)
+    setFocusById(activeElementId)
+  }
 
   const setPersistentFocus = useCallback(
     (id) => {
