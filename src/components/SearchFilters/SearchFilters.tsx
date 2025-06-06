@@ -57,36 +57,28 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
   }
 
   const handleFilterClear = (field: string) => {
-    setAppliedFilters((prevFilters) => {
-      const newFilters = {
-        ...prevFilters,
-        [field]: [],
-      }
-      setLastFocusedId(
-        `accordion-button-multi-select-accordion-${field}-item-0`
-      )
-      buildAndPushFilterQuery(newFilters)
-      return newFilters
-    })
+    const newFilters = {
+      ...appliedFilters,
+      [field]: [],
+    }
+    setPersistentFocus(
+      `accordion-button-multi-select-accordion-${field}-item-0`
+    )
+    setAppliedFilters(newFilters)
+    buildAndPushFilterQuery(newFilters)
   }
-
   const handleCheckboxChange = (field: string, optionValue: string) => {
-    setAppliedFilters((prevFilters) => {
-      const currentValues = prevFilters[field] || []
-      const isAlreadySelected = currentValues.includes(optionValue)
-      const updatedValues = isAlreadySelected
-        ? currentValues.filter((val) => val !== optionValue)
-        : [...currentValues, optionValue]
-
-      const newFilters = {
-        ...prevFilters,
-        [field]: updatedValues,
-      }
-
-      setLastFocusedId(optionValue)
-      buildAndPushFilterQuery(newFilters)
-      return newFilters
-    })
+    const currentValues = appliedFilters[field] || []
+    const isAlreadySelected = currentValues.includes(optionValue)
+    const updatedValues = isAlreadySelected
+      ? currentValues.filter((val) => val !== optionValue)
+      : [...currentValues, optionValue]
+    const newFilters = {
+      ...appliedFilters,
+      [field]: updatedValues,
+    }
+    setAppliedFilters(newFilters)
+    buildAndPushFilterQuery(newFilters)
   }
 
   const [focusedFilter, setFocusedFilter] = useState<string | null>(null)
