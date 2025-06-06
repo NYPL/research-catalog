@@ -1,5 +1,8 @@
 import { useRouter } from "next/router"
-import { type TagSetFilterDataProps } from "@nypl/design-system-react-components"
+import {
+  useNYPLBreakpoints,
+  type TagSetFilterDataProps,
+} from "@nypl/design-system-react-components"
 
 import {
   getQueryWithoutFiltersOrPage,
@@ -13,7 +16,7 @@ import {
 } from "./appliedFilterUtils"
 import type { Aggregation } from "../../types/filterTypes"
 import ActiveFilters from "../ItemFilters/ActiveFilters"
-import { useFocusContext } from "../../context/FocusContext"
+import { useFocusContext, idConstants } from "../../context/FocusContext"
 
 const AppliedFilters = ({ aggregations }: { aggregations: Aggregation[] }) => {
   const router = useRouter()
@@ -22,8 +25,8 @@ const AppliedFilters = ({ aggregations }: { aggregations: Aggregation[] }) => {
     aggregations,
     appliedFilters
   )
-
-  const { setLastFocusedId } = useFocusContext()
+  const { isLargerThanMobile } = useNYPLBreakpoints()
+  const { setPersistentFocus } = useFocusContext()
 
   // this type cast is happening because Option type had to be updated to
   // account for Offsite's Element label. That label does
@@ -34,7 +37,7 @@ const AppliedFilters = ({ aggregations }: { aggregations: Aggregation[] }) => {
   ) as TagSetFilterDataProps[]
   const handleRemove = (tag: TagSetFilterDataProps) => {
     if (tag.label === "Clear filters") {
-      setLastFocusedId("filter-results-heading")
+      setPersistentFocus(idConstants.filterResultsHeading)
       router.push({
         pathname: "/search",
         query: getQueryWithoutFiltersOrPage(router.query),
@@ -50,9 +53,13 @@ const AppliedFilters = ({ aggregations }: { aggregations: Aggregation[] }) => {
       ...buildFilterQuery(updatedFilters),
     }
     if (tagSetData.length >= 2) {
-      setLastFocusedId("active-filters-heading")
+      setPersistentFocus(idConstants.activeFiltersHeading)
     } else {
-      setLastFocusedId("filter-results-heading")
+      setPersistentFocus(
+        isLargerThanMobile
+          ? idConstants.filterResultsHeading
+          : idConstants.searchFiltersModal
+      )
     }
     router.push(
       {

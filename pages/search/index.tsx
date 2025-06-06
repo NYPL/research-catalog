@@ -38,7 +38,7 @@ import initializePatronTokenAuth from "../../src/server/auth"
 import RCHead from "../../src/components/Head/RCHead"
 import type { Aggregation } from "../../src/types/filterTypes"
 import SearchFilters from "../../src/components/SearchFilters/SearchFilters"
-import { useFocusContext } from "../../src/context/FocusContext"
+import { useFocusContext, idConstants } from "../../src/context/FocusContext"
 
 interface SearchProps {
   bannerNotification?: string
@@ -75,32 +75,11 @@ export default function Search({
 
   const searchResultsHeadingRef = useRef(null)
 
-  const { lastFocusedId, setLastFocusedId } = useFocusContext()
-
-  // Focus should not be set on any specific element on first page load
-  const isFirstLoad = useRef<boolean>(true)
-
-  useEffect(() => {
-    if (isLoading) return
-
-    // If user updated search query with filter/sort/pagination/keyword,
-    // focus on the last used control or the "Display results heading"
-    if (lastFocusedId) {
-      const el = document.getElementById(lastFocusedId)
-      if (el instanceof HTMLElement) {
-        el.focus()
-      }
-      // In all other cases besides first load, focus on the "Display results heading"
-    } else if (!isFirstLoad.current) {
-      searchResultsHeadingRef.current?.focus()
-    }
-
-    isFirstLoad.current = false
-  }, [isLoading])
+  const { setPersistentFocus } = useFocusContext()
 
   const handlePageChange = async (page: number) => {
     const newQuery = getSearchQuery({ ...searchParams, page })
-    setLastFocusedId(null)
+    setPersistentFocus(idConstants.searchResultsHeading)
     await push(
       `${newQuery}${searchedFromAdvanced ? "&searched_from=advanced" : ""}`
     )
@@ -119,7 +98,7 @@ export default function Search({
       SortKey,
       SortOrder | undefined
     ]
-    setLastFocusedId("search-results-sort")
+    setPersistentFocus(idConstants.searchResultsSort)
     // Push the new query values, removing the page number if set.
     await push(
       getSearchQuery({ ...searchParams, sortBy, order, page: undefined }),
@@ -193,6 +172,7 @@ export default function Search({
               {displayAppliedFilters && <AppliedFilters aggregations={aggs} />}
               <Flex justifyContent="space-between" marginTop="xxs">
                 <Heading
+                  id="search-results-heading"
                   data-testid="search-results-heading"
                   level="h2"
                   size="heading5"
