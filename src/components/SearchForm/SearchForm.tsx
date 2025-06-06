@@ -19,7 +19,7 @@ import useLoading from "../../hooks/useLoading"
 import type { Aggregation } from "../../types/filterTypes"
 import { collapseMultiValueQueryParams } from "../../utils/refineSearchUtils"
 import SearchFilterModal from "../SearchFilters/SearchFilterModal"
-import { useFocusContext } from "../../context/FocusContext"
+import { useFocusContext, idConstants } from "../../context/FocusContext"
 
 /**
  * The SearchForm component renders and controls the Search form,
@@ -47,7 +47,7 @@ const SearchForm = ({
 
   const isLoading = useLoading()
 
-  const { setLastFocusedId } = useFocusContext()
+  const { setPersistentFocus } = useFocusContext()
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
@@ -67,7 +67,10 @@ const SearchForm = ({
 
     const queryString = getSearchQuery(searchParams)
 
-    setLastFocusedId(null)
+    if (router.asPath.includes("/search?"))
+      setPersistentFocus(idConstants.searchResultsHeading)
+    // if we are doing a search from the home page, there should be no focused element when results are delivered
+    else setPersistentFocus(null)
     await router.push(`${PATHS.SEARCH}${queryString}`)
   }
 

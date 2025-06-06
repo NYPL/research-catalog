@@ -17,7 +17,7 @@ import {
 import router from "next/router"
 import { getQueryWithoutFiltersOrPage } from "../../utils/refineSearchUtils"
 import SearchFilters from "./SearchFilters"
-import { useFocusContext } from "../../context/FocusContext"
+import { useFocusContext, idConstants } from "../../context/FocusContext"
 import { FilterCount } from "./FilterCount"
 
 const SearchFilterModal = ({
@@ -28,10 +28,10 @@ const SearchFilterModal = ({
   searchResultsCount?: number
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const { lastFocusedId, setLastFocusedId } = useFocusContext()
+  const { setPersistentFocus } = useFocusContext()
 
   const closeModal = () => {
-    setLastFocusedId("search-filters-modal")
+    setPersistentFocus(idConstants.searchFiltersModal)
     setIsModalOpen(false)
   }
 
@@ -42,13 +42,6 @@ const SearchFilterModal = ({
     })
     closeModal()
   }
-
-  useEffect(() => {
-    if (lastFocusedId === "search-filters-modal") {
-      const el = document.querySelector("button[id=search-filters-modal]")
-      ;(el as HTMLElement)?.focus()
-    }
-  }, [isModalOpen, lastFocusedId])
 
   return (
     <>
