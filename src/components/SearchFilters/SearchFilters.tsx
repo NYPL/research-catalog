@@ -18,7 +18,7 @@ import {
 import type { Aggregation } from "../../types/filterTypes"
 import DateFilter from "./DateFilter"
 import { useDateFilter } from "../../hooks/useDateFilter"
-import { useFocusContext } from "../../context/FocusContext"
+import { useFocusContext, idConstants } from "../../context/FocusContext"
 
 const fields = [
   { value: "buildingLocation", label: "Item location" },
@@ -147,7 +147,7 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
         setFocusedFilter(null)
         return
       }
-      setPersistentFocus("apply-dates")
+      setPersistentFocus(idConstants.applyDates)
       buildAndPushFilterQuery(appliedFilters)
     },
   })

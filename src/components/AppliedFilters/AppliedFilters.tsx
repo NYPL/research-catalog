@@ -13,7 +13,7 @@ import {
 } from "./appliedFilterUtils"
 import type { Aggregation } from "../../types/filterTypes"
 import ActiveFilters from "../ItemFilters/ActiveFilters"
-import { useFocusContext } from "../../context/FocusContext"
+import { useFocusContext, idConstants } from "../../context/FocusContext"
 
 const AppliedFilters = ({ aggregations }: { aggregations: Aggregation[] }) => {
   const router = useRouter()
@@ -34,7 +34,7 @@ const AppliedFilters = ({ aggregations }: { aggregations: Aggregation[] }) => {
   ) as TagSetFilterDataProps[]
   const handleRemove = (tag: TagSetFilterDataProps) => {
     if (tag.label === "Clear filters") {
-      setPersistentFocus("filter-results-heading")
+      setPersistentFocus(idConstants.filterResultsHeading)
       router.push({
         pathname: "/search",
         query: getQueryWithoutFiltersOrPage(router.query),
@@ -50,9 +50,9 @@ const AppliedFilters = ({ aggregations }: { aggregations: Aggregation[] }) => {
       ...buildFilterQuery(updatedFilters),
     }
     if (tagSetData.length >= 2) {
-      setPersistentFocus("active-filters-heading")
+      setPersistentFocus(idConstants.activeFiltersHeading)
     } else {
-      setPersistentFocus("filter-results-heading")
+      setPersistentFocus(idConstants.filterResultsHeading)
     }
     router.push(
       {

@@ -21,6 +21,15 @@ interface FocusContextType {
  */
 const FocusContext = createContext<FocusContextType | undefined>(undefined)
 
+export const idConstants = {
+  searchResultsHeading: "search-results-heading",
+  searchResultsSort: "search-results-sort",
+  filterResultsHeading: "filter-results-heading",
+  activeFiltersHeading: "active-filters-heading",
+  searchFiltersModal: "search-filters-modal",
+  applyDates: "apply-dates",
+}
+
 export const FocusProvider = ({ children }: { children: React.ReactNode }) => {
   const [activeElementId, setActiveElementId] = useState<string | null>(
     undefined

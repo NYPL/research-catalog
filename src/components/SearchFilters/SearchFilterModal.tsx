@@ -17,7 +17,7 @@ import {
 import router from "next/router"
 import { getQueryWithoutFiltersOrPage } from "../../utils/refineSearchUtils"
 import SearchFilters from "./SearchFilters"
-import { useFocusContext } from "../../context/FocusContext"
+import { useFocusContext, idConstants } from "../../context/FocusContext"
 import { FilterCount } from "./FilterCount"
 
 const SearchFilterModal = ({
@@ -31,7 +31,7 @@ const SearchFilterModal = ({
   const { setPersistentFocus } = useFocusContext()
 
   const closeModal = () => {
-    setPersistentFocus("search-filters-modal")
+    setPersistentFocus(idConstants.searchFiltersModal)
     setIsModalOpen(false)
   }
 

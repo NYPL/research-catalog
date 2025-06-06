@@ -38,7 +38,7 @@ import initializePatronTokenAuth from "../../src/server/auth"
 import RCHead from "../../src/components/Head/RCHead"
 import type { Aggregation } from "../../src/types/filterTypes"
 import SearchFilters from "../../src/components/SearchFilters/SearchFilters"
-import { useFocusContext } from "../../src/context/FocusContext"
+import { useFocusContext, idConstants } from "../../src/context/FocusContext"
 
 interface SearchProps {
   bannerNotification?: string
@@ -98,7 +98,7 @@ export default function Search({
       SortKey,
       SortOrder | undefined
     ]
-    setPersistentFocus("search-results-sort")
+    setPersistentFocus(idConstants.searchResultsSort)
     // Push the new query values, removing the page number if set.
     await push(
       getSearchQuery({ ...searchParams, sortBy, order, page: undefined }),
