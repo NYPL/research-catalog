@@ -277,12 +277,20 @@ export default function BibPage({
                       filtersAreApplied
                     )}
                   </Heading>
-                  {bib.itemTableData ? (
-                    <ItemTable itemTableData={bib.itemTableData} />
-                  ) : null}
+                  {bib.getItemTable
+                    ? bib
+                        .getItemTable({ inSearchResult: false })
+                        .map((table, index) => (
+                          <ItemTable
+                            key={index}
+                            itemTableData={table}
+                            inSearchResult={false}
+                          />
+                        ))
+                    : null}
                 </>
               )}
-              {bib.itemTableData ? (
+              {bib.getItemTable ? (
                 <ItemTableControls
                   bib={bib}
                   viewAllExpanded={viewAllExpanded}

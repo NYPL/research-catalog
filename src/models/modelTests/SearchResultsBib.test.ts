@@ -4,7 +4,6 @@ import {
   bibNoItems,
 } from "../../../__test__/fixtures/bibFixtures"
 import SearchResultsBib from "../SearchResultsBib"
-import ItemTableData from "../ItemTableData"
 
 describe("SearchResultsBib model", () => {
   let searchResultsBib: SearchResultsBib
@@ -71,14 +70,6 @@ describe("SearchResultsBib model", () => {
     it("works for a bib with no items", () => {
       const bibWithNoItems = new SearchResultsBib(bibNoItems.resource)
       expect(bibWithNoItems.getNumItemsMessage()).toBe("0 resources")
-    })
-  })
-
-  describe("itemTables", () => {
-    it("returns an array of one ItemTableData object per item capped at the maximum of ITEMS_PER_SEARCH_RESULT", () => {
-      expect(searchResultsBib.itemTables.length).toBe(3)
-      expect(typeof searchResultsBib.itemTables[0]).toBe("object")
-      expect(searchResultsBib.itemTables[0] instanceof ItemTableData).toBe(true)
     })
   })
 })

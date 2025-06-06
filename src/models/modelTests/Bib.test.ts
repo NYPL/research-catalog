@@ -98,4 +98,116 @@ describe("Bib model", () => {
       expect(bib.hasItemDates).toBe(true)
     })
   })
+
+  describe("Item table", () => {
+    it("returns empty array if no items exist", () => {
+      const bibWithoutItems = new Bib({ ...bibWithItems.resource, items: [] })
+      expect(bibWithoutItems.getItemTable({ inSearchResult: false })).toEqual(
+        []
+      )
+    })
+
+    it("returns individual tables for items in search results", () => {
+      const result = bib.getItemTable({ inSearchResult: true, maxItems: 3 })
+      expect(result).toHaveLength(3)
+      result.forEach((table) => {
+        expect(table.items).toHaveLength(1)
+        expect(table.tableHeadings).toContain("Call number")
+        expect(Array.isArray(table.tableData)).toBe(true)
+      })
+    })
+
+    it("returns one table for all items outside of search results", () => {
+      const result = bib.getItemTable({ inSearchResult: false })
+      expect(result).toHaveLength(1)
+      const [table] = result
+      expect(table.items).toHaveLength(4)
+      expect(table.tableHeadings).toContain("Call number")
+      expect(Array.isArray(table.tableData)).toBe(true)
+      expect(table.tableData).toHaveLength(4)
+    })
+
+    describe("getItemTableHeadings", () => {
+      it("includes all columns outside search results", () => {
+        const headings = bib.getItemTableHeadings({ inSearchResult: false })
+        expect(headings).toEqual(
+          expect.arrayContaining([
+            "Status",
+            "Vol/date",
+            "Format",
+            "Access",
+            "Call number",
+            "Item location",
+          ])
+        )
+      })
+
+      it("excludes conditional columns in search results", () => {
+        const headings = bib.getItemTableHeadings({ inSearchResult: true })
+        expect(headings).toEqual(
+          expect.arrayContaining(["Format", "Call number", "Item location"])
+        )
+        expect(headings).not.toContain("Status")
+        expect(headings).not.toContain("Access")
+        expect(headings).not.toContain("Vol/date") // volume column is skipped for search results
+      })
+    })
+
+    describe("Column visibility logic", () => {
+      it("shows status column only outside of search results", () => {
+        expect(bib.showStatusColumn(false)).toBe(true)
+        expect(bib.showStatusColumn(true)).toBe(false)
+      })
+
+      it("shows access column only outside of search results", () => {
+        expect(bib.showAccessColumn(false)).toBe(true)
+        expect(bib.showAccessColumn(true)).toBe(false)
+      })
+
+      it("shows volume column only if at least one item has volume and not in search results", () => {
+        expect(bib.showVolumeColumn(false)).toBe(true)
+        expect(bib.showVolumeColumn(true)).toBe(false)
+      })
+
+      it("returns 'Container' as volume heading for archive collections", () => {
+        const archiveBib = new Bib({
+          ...bibWithItems.resource,
+          issuance: [{ "@id": "urn:biblevel:c", prefLabel: "collection" }],
+        })
+        expect(archiveBib.volumeColumnHeading()).toBe("Container")
+      })
+
+      it("returns 'Vol/date' as volume heading for non-archive bibs", () => {
+        expect(bib.volumeColumnHeading()).toBe("Vol/date")
+      })
+    })
+
+    describe("getItemTableContents", () => {
+      it("returns table content with proper structure outside of search results", () => {
+        const contents = bib.getItemTableContents({ inSearchResult: false })
+        expect(contents.length).toBe(4)
+        contents.forEach((row) => {
+          expect(Array.isArray(row)).toBe(true)
+          expect(row.length).toBe(6) // Status, Volume, Format, Access, Call number, Item location
+        })
+      })
+
+      it("returns table content with fewer columns in search results", () => {
+        const contents = bib.getItemTableContents({ inSearchResult: true })
+        expect(contents.length).toBe(4)
+        contents.forEach((row) => {
+          expect(row.length).toBe(3) // Format, Call number, Item location
+        })
+      })
+
+      it("uses specified items when passed explicitly", () => {
+        const subset = bib.items.slice(0, 2)
+        const contents = bib.getItemTableContents({
+          inSearchResult: true,
+          items: subset,
+        })
+        expect(contents.length).toBe(2)
+      })
+    })
+  })
 })

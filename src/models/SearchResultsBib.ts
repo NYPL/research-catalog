@@ -1,6 +1,5 @@
 import type { DiscoveryBibResult } from "../types/bibTypes"
 import Bib from "../models/Bib"
-import ItemTableData from "./ItemTableData"
 import { ITEMS_PER_SEARCH_RESULT } from "../config/constants"
 
 /**
@@ -28,19 +27,6 @@ export default class SearchResultsBib extends Bib {
 
   showViewAllItemsLink() {
     return this.numPhysicalItems > ITEMS_PER_SEARCH_RESULT
-  }
-
-  // Map Bib items to ItemTableData class instances
-  // Unlike the Bib Page, a Search Result renders an ItemTable component per Item
-  get itemTables(): ItemTableData[] {
-    return this.items
-      ? this.items.slice(0, ITEMS_PER_SEARCH_RESULT).map((item) => {
-          return new ItemTableData([item], {
-            inSearchResult: true,
-            isArchiveCollection: this.isArchiveCollection,
-          })
-        })
-      : null
   }
 
   numItems() {

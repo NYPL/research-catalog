@@ -12,7 +12,7 @@ import RCLink from "../Links/RCLink/RCLink"
 import ElectronicResourcesLink from "./ElectronicResourcesLink"
 import ItemTable from "../ItemTable/ItemTable"
 import type SearchResultsBib from "../../models/SearchResultsBib"
-import { PATHS } from "../../config/constants"
+import { ITEMS_PER_SEARCH_RESULT, PATHS } from "../../config/constants"
 import FindingAid from "../BibPage/FindingAid"
 
 interface SearchResultProps {
@@ -69,14 +69,20 @@ const SearchResult = ({ bib }: SearchResultProps) => {
           />
         ) : null}
         <SimpleGrid columns={1} mt="l" gap="grid.l">
-          {bib.itemTables && (
+          {bib.getItemTable && (
             <>
-              {bib.itemTables.map((itemTableData) => (
-                <ItemTable
-                  itemTableData={itemTableData}
-                  key={`search-results-item-${itemTableData.items[0].id}`}
-                />
-              ))}
+              {bib
+                .getItemTable({
+                  inSearchResult: true,
+                  maxItems: ITEMS_PER_SEARCH_RESULT,
+                })
+                .map((itemTableData) => (
+                  <ItemTable
+                    key={`item-table-${itemTableData.items[0].id}`}
+                    itemTableData={itemTableData}
+                    inSearchResult={true}
+                  />
+                ))}
               {bib.showViewAllItemsLink() && (
                 <CardActions>
                   <RCLink

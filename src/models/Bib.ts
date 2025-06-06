@@ -7,8 +7,10 @@ import type { JSONLDValue } from "../types/itemTypes"
 import type { Aggregation } from "../types/filterTypes"
 import Item from "../models/Item"
 import { ITEM_PAGINATION_BATCH_SIZE } from "../config/constants"
-import ItemTableData from "./ItemTableData"
 import { getFindingAidFromSupplementaryContent } from "../utils/bibUtils"
+import type { ReactElement } from "react"
+import ItemTableCell from "../components/ItemTable/ItemTableCell"
+import StatusLinks from "../components/ItemTable/StatusLinks"
 
 /**
  * The Bib class represents a single Bib entity and contains the data
@@ -75,13 +77,92 @@ export default class Bib {
     return !this.isOnlyElectronicResources && this.hasPhysicalItems
   }
 
-  get itemTableData() {
+  getItemTable({
+    inSearchResult,
+    maxItems,
+  }: {
+    inSearchResult: boolean
+    maxItems?: number
+  }): {
+    items: Item[]
+    tableHeadings: string[]
+    tableData: ReactElement[][]
+  }[] {
+    if (!this.items?.length) return []
+    if (inSearchResult) {
+      return this.items.slice(0, maxItems).map((item) => ({
+        items: [item],
+        tableHeadings: this.getItemTableHeadings({ inSearchResult }),
+        tableData: this.getItemTableContents({ inSearchResult, items: [item] }),
+      }))
+    }
+    return [
+      {
+        items: this.items,
+        tableHeadings: this.getItemTableHeadings({ inSearchResult }),
+        tableData: this.getItemTableContents({ inSearchResult }),
+      },
+    ]
+  }
+
+  getItemTableHeadings({
+    inSearchResult,
+  }: {
+    inSearchResult: boolean
+  }): string[] {
+    return [
+      ...(this.showStatusColumn(inSearchResult) ? ["Status"] : []),
+      ...(this.showVolumeColumn(inSearchResult)
+        ? [this.volumeColumnHeading()]
+        : []),
+      "Format",
+      ...(this.showAccessColumn(inSearchResult) ? ["Access"] : []),
+      "Call number",
+      "Item location",
+    ]
+  }
+
+  getItemTableContents({
+    inSearchResult,
+    items = this.items,
+  }: {
+    inSearchResult: boolean
+    items?: Item[]
+  }): ReactElement[][] {
     return (
-      this.items?.length &&
-      new ItemTableData(this.items, {
-        isArchiveCollection: this.isArchiveCollection,
-      })
+      items?.map((item) => {
+        return [
+          ...(this.showStatusColumn(inSearchResult)
+            ? [StatusLinks({ item })]
+            : []),
+          ...(this.showVolumeColumn(inSearchResult)
+            ? [ItemTableCell({ children: item.volume })]
+            : []),
+          ItemTableCell({ children: item.format }),
+          ...(this.showAccessColumn(inSearchResult)
+            ? [ItemTableCell({ children: item.accessMessage })]
+            : []),
+          ItemTableCell({ children: item.callNumber }),
+          ItemTableCell({ children: item.location.prefLabel }),
+        ]
+      }) || []
     )
+  }
+
+  showVolumeColumn(inSearchResult: boolean): boolean {
+    return this.items?.some((item) => item.volume) && !inSearchResult
+  }
+
+  showStatusColumn(inSearchResult: boolean): boolean {
+    return !inSearchResult
+  }
+
+  showAccessColumn(inSearchResult: boolean): boolean {
+    return !inSearchResult
+  }
+
+  volumeColumnHeading(): string {
+    return this.isArchiveCollection ? "Container" : "Vol/date"
   }
 
   get resourceType() {
