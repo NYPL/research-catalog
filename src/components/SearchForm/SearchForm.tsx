@@ -47,7 +47,7 @@ const SearchForm = ({
 
   const isLoading = useLoading()
 
-  const { setLastFocusedId } = useFocusContext()
+  const { setPersistentFocus } = useFocusContext()
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
@@ -67,7 +67,7 @@ const SearchForm = ({
 
     const queryString = getSearchQuery(searchParams)
 
-    setLastFocusedId(null)
+    setPersistentFocus(null)
     await router.push(`${PATHS.SEARCH}${queryString}`)
   }
 

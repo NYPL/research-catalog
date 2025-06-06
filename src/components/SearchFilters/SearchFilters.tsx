@@ -34,7 +34,7 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
   const [appliedFilters, setAppliedFilters] = useState(
     collapseMultiValueQueryParams(router.query)
   )
-  const { setLastFocusedId } = useFocusContext()
+  const { setPersistentFocus } = useFocusContext()
   useEffect(() => {
     const collapsedFilters = collapseMultiValueQueryParams(router.query)
     setAppliedFilters(collapsedFilters)
@@ -146,7 +146,7 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
         setFocusedFilter(null)
         return
       }
-      setLastFocusedId("apply-dates")
+      setPersistentFocus("apply-dates")
       buildAndPushFilterQuery(appliedFilters)
     },
   })

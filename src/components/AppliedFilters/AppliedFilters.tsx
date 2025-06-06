@@ -23,7 +23,7 @@ const AppliedFilters = ({ aggregations }: { aggregations: Aggregation[] }) => {
     appliedFilters
   )
 
-  const { setLastFocusedId } = useFocusContext()
+  const { setPersistentFocus } = useFocusContext()
 
   // this type cast is happening because Option type had to be updated to
   // account for Offsite's Element label. That label does
@@ -34,7 +34,7 @@ const AppliedFilters = ({ aggregations }: { aggregations: Aggregation[] }) => {
   ) as TagSetFilterDataProps[]
   const handleRemove = (tag: TagSetFilterDataProps) => {
     if (tag.label === "Clear filters") {
-      setLastFocusedId("filter-results-heading")
+      setPersistentFocus("filter-results-heading")
       router.push({
         pathname: "/search",
         query: getQueryWithoutFiltersOrPage(router.query),
@@ -50,9 +50,9 @@ const AppliedFilters = ({ aggregations }: { aggregations: Aggregation[] }) => {
       ...buildFilterQuery(updatedFilters),
     }
     if (tagSetData.length >= 2) {
-      setLastFocusedId("active-filters-heading")
+      setPersistentFocus("active-filters-heading")
     } else {
-      setLastFocusedId("filter-results-heading")
+      setPersistentFocus("filter-results-heading")
     }
     router.push(
       {

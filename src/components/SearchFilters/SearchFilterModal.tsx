@@ -28,10 +28,10 @@ const SearchFilterModal = ({
   searchResultsCount?: number
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const { lastFocusedId, setLastFocusedId } = useFocusContext()
+  const { setPersistentFocus } = useFocusContext()
 
   const closeModal = () => {
-    setLastFocusedId("search-filters-modal")
+    setPersistentFocus("search-filters-modal")
     setIsModalOpen(false)
   }
 
@@ -42,13 +42,6 @@ const SearchFilterModal = ({
     })
     closeModal()
   }
-
-  useEffect(() => {
-    if (lastFocusedId === "search-filters-modal") {
-      const el = document.querySelector("button[id=search-filters-modal]")
-      ;(el as HTMLElement)?.focus()
-    }
-  }, [isModalOpen, lastFocusedId])
 
   return (
     <>

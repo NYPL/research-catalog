@@ -75,23 +75,14 @@ export default function Search({
 
   const searchResultsHeadingRef = useRef(null)
 
-  const { lastFocusedId, setLastFocusedId } = useFocusContext()
+  const { setPersistentFocus } = useFocusContext()
 
   // Focus should not be set on any specific element on first page load
   const isFirstLoad = useRef<boolean>(true)
 
   useEffect(() => {
     if (isLoading) return
-
-    // If user updated search query with filter/sort/pagination/keyword,
-    // focus on the last used control or the "Display results heading"
-    if (lastFocusedId) {
-      const el = document.getElementById(lastFocusedId)
-      if (el instanceof HTMLElement) {
-        el.focus()
-      }
-      // In all other cases besides first load, focus on the "Display results heading"
-    } else if (!isFirstLoad.current) {
+    if (!isFirstLoad.current) {
       searchResultsHeadingRef.current?.focus()
     }
 
@@ -100,7 +91,7 @@ export default function Search({
 
   const handlePageChange = async (page: number) => {
     const newQuery = getSearchQuery({ ...searchParams, page })
-    setLastFocusedId(null)
+    setPersistentFocus(null)
     await push(
       `${newQuery}${searchedFromAdvanced ? "&searched_from=advanced" : ""}`
     )
@@ -119,7 +110,7 @@ export default function Search({
       SortKey,
       SortOrder | undefined
     ]
-    setLastFocusedId("search-results-sort")
+    setPersistentFocus("search-results-sort")
     // Push the new query values, removing the page number if set.
     await push(
       getSearchQuery({ ...searchParams, sortBy, order, page: undefined }),
