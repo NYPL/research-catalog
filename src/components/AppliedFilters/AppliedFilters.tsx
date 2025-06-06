@@ -1,5 +1,8 @@
 import { useRouter } from "next/router"
-import { type TagSetFilterDataProps } from "@nypl/design-system-react-components"
+import {
+  useNYPLBreakpoints,
+  type TagSetFilterDataProps,
+} from "@nypl/design-system-react-components"
 
 import {
   getQueryWithoutFiltersOrPage,
@@ -22,7 +25,7 @@ const AppliedFilters = ({ aggregations }: { aggregations: Aggregation[] }) => {
     aggregations,
     appliedFilters
   )
-
+  const { isLargerThanMobile } = useNYPLBreakpoints()
   const { setPersistentFocus } = useFocusContext()
 
   // this type cast is happening because Option type had to be updated to
@@ -52,7 +55,11 @@ const AppliedFilters = ({ aggregations }: { aggregations: Aggregation[] }) => {
     if (tagSetData.length >= 2) {
       setPersistentFocus(idConstants.activeFiltersHeading)
     } else {
-      setPersistentFocus(idConstants.filterResultsHeading)
+      setPersistentFocus(
+        isLargerThanMobile
+          ? idConstants.filterResultsHeading
+          : idConstants.searchFiltersModal
+      )
     }
     router.push(
       {
