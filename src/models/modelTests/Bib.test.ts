@@ -153,7 +153,7 @@ describe("Bib model", () => {
       })
     })
 
-    describe("Column visibility logic", () => {
+    describe("Item table column visibility", () => {
       it("shows status column only outside of search results", () => {
         expect(bib.showStatusColumn(false)).toBe(true)
         expect(bib.showStatusColumn(true)).toBe(false)
@@ -169,7 +169,7 @@ describe("Bib model", () => {
         expect(bib.showVolumeColumn(true)).toBe(false)
       })
 
-      it("returns 'Container' as volume heading for archive collections", () => {
+      it("returns Container as volume heading for archive collection", () => {
         const archiveBib = new Bib({
           ...bibWithItems.resource,
           issuance: [{ "@id": "urn:biblevel:c", prefLabel: "collection" }],
