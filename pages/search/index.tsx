@@ -77,18 +77,6 @@ export default function Search({
 
   const { setPersistentFocus } = useFocusContext()
 
-  // Focus should not be set on any specific element on first page load
-  const isFirstLoad = useRef<boolean>(true)
-
-  useEffect(() => {
-    if (isLoading) return
-    if (!isFirstLoad.current) {
-      searchResultsHeadingRef.current?.focus()
-    }
-
-    isFirstLoad.current = false
-  }, [isLoading])
-
   const handlePageChange = async (page: number) => {
     const newQuery = getSearchQuery({ ...searchParams, page })
     setPersistentFocus(null)
@@ -184,6 +172,7 @@ export default function Search({
               {displayAppliedFilters && <AppliedFilters aggregations={aggs} />}
               <Flex justifyContent="space-between" marginTop="xxs">
                 <Heading
+                  id="search-results-heading"
                   data-testid="search-results-heading"
                   level="h2"
                   size="heading5"

@@ -3,13 +3,12 @@ import React, {
   useCallback,
   useContext,
   useEffect,
-  useMemo,
   useState,
 } from "react"
 
 interface FocusContextType {
-  // lastFocusedId: string | null
-  // setLastFocusedId: (id: string | null) => void
+  activeElementId: string | null
+  // setActiveElementId: (id: string | null) => void
   setPersistentFocus: (id: string | null) => void
 }
 
@@ -23,7 +22,10 @@ interface FocusContextType {
 const FocusContext = createContext<FocusContextType | undefined>(undefined)
 
 export const FocusProvider = ({ children }: { children: React.ReactNode }) => {
-  const [lastFocusedId, setLastFocusedId] = useState<string | null>(null)
+  const [activeElementId, setActiveElementId] = useState<string | null>(
+    undefined
+  )
+  // Use this flag to avoid accessing document on the server
   const [isClient, setIsClient] = useState(false)
 
   const setFocusById = useCallback(
@@ -38,23 +40,22 @@ export const FocusProvider = ({ children }: { children: React.ReactNode }) => {
     [isClient]
   )
 
-  setFocusById(lastFocusedId)
+  setFocusById(activeElementId)
 
   const setPersistentFocus = useCallback(
     (id) => {
       setFocusById(id)
-      setLastFocusedId(id)
+      setActiveElementId(id)
     },
     [setFocusById]
   )
 
   useEffect(() => {
-    // This code only runs on the client side
     setIsClient(true)
   }, [])
 
   return (
-    <FocusContext.Provider value={{ setPersistentFocus }}>
+    <FocusContext.Provider value={{ setPersistentFocus, activeElementId }}>
       {children}
     </FocusContext.Provider>
   )

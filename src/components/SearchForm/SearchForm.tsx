@@ -67,7 +67,10 @@ const SearchForm = ({
 
     const queryString = getSearchQuery(searchParams)
 
-    setPersistentFocus(null)
+    if (router.asPath.includes("/search?"))
+      setPersistentFocus("search-results-heading")
+    // if we are doing a search from the home page, there should be no focused element when results are delivered
+    else setPersistentFocus(null)
     await router.push(`${PATHS.SEARCH}${queryString}`)
   }
 

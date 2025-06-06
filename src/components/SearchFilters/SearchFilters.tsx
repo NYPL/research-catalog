@@ -77,6 +77,7 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
       ...appliedFilters,
       [field]: updatedValues,
     }
+    setPersistentFocus(optionValue)
     setAppliedFilters(newFilters)
     buildAndPushFilterQuery(newFilters)
   }
