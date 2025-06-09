@@ -5,7 +5,6 @@ import {
   Box,
   Heading,
 } from "@nypl/design-system-react-components"
-import { useRef, useState } from "react"
 import type { Aggregation } from "../../types/filterTypes"
 import {
   Modal as ChakraModal,
@@ -19,7 +18,7 @@ import {
 import router from "next/router"
 import { getQueryWithoutFiltersOrPage } from "../../utils/refineSearchUtils"
 import SearchFilters from "./SearchFilters"
-import { useFocusContext, idConstants } from "../../context/FocusContext"
+import { idConstants } from "../../context/FocusContext"
 import { FilterCount } from "./FilterCount"
 
 const SearchFilterModal = ({
@@ -38,11 +37,9 @@ const SearchFilterModal = ({
     })
     onClose()
   }
-  const finalRef = useRef()
   return (
     <>
       <Button
-        // ref={finalRef}
         id={idConstants.searchFiltersModal}
         minWidth="44px"
         width="100%"
@@ -60,7 +57,6 @@ const SearchFilterModal = ({
         isOpen={isOpen}
         onClose={onClose}
         aria-labelledby="Filter results"
-        // finalFocusRef={finalRef}
       >
         <ModalOverlay />
         <ModalContent>
@@ -88,17 +84,6 @@ const SearchFilterModal = ({
               </Heading>
             </ModalHeader>
             <ModalCloseButton />
-            {/* <Button
-                aria-label="Close"
-                id="close-btn"
-                buttonType="text"
-                onClick={() => {
-                  closeModal()
-                }}
-              >
-                {" "}
-                <Icon name="close" size="large" color="ui.black" />
-              </Button> */}
           </Box>
           <Box
             overflow="auto"
