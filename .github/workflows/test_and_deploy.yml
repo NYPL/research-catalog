@@ -1,4 +1,4 @@
-# Run tests and deploy to research-catalog-qa or research-catalog-production based on branch
+# Run tests and deploy to research-catalog-qa, research-catalog-train, or research-catalog-production based on branch
 name: deploy
 
 on:
@@ -6,6 +6,7 @@ on:
     branches:
       - qa
       - production
+      - train
 
 permissions:
   id-token: write
