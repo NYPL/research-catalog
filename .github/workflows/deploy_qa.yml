@@ -16,8 +16,25 @@ env:
   ECR_URL: 946183545209.dkr.ecr.us-east-1.amazonaws.com/research-catalog:qa-latest
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20.x]
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: npm install
+        run: npm ci
+      - name: Unit tests
+        run: npm test
   deploy:
     runs-on: ubuntu-latest
+    needs: test
     steps:
       - name: Check out code
         uses: actions/checkout@v4
