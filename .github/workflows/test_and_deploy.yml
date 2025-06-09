@@ -51,25 +51,13 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2
 
       - name: Set environment-specific variables
-        id: set-vars
         run: |
-          if [[ "${GITHUB_REF_NAME}" == "production" ]]; then
-            echo "APP_ENV=production" >> $GITHUB_ENV
-            echo "ECR_TAG=production-latest" >> $GITHUB_ENV
-            echo "PREVIOUS_TAG=production-previous" >> $GITHUB_ENV
-            echo "CLUSTER=research-catalog-production" >> $GITHUB_ENV
-            echo "SERVICE=research-catalog-production" >> $GITHUB_ENV
-          elif [[ "${GITHUB_REF_NAME}" == "qa" ]]; then
-            echo "APP_ENV=qa" >> $GITHUB_ENV
-            echo "ECR_TAG=qa-latest" >> $GITHUB_ENV
-            echo "PREVIOUS_TAG=qa-previous" >> $GITHUB_ENV
-            echo "CLUSTER=research-catalog-qa" >> $GITHUB_ENV
-            echo "SERVICE=research-catalog-qa" >> $GITHUB_ENV
-          else
-            echo "Not deploying branch ${GITHUB_REF_NAME}"
-            exit 1
-          fi
-          echo "ECR_URL=946183545209.dkr.ecr.us-east-1.amazonaws.com/research-catalog:${ECR_TAG}" >> $GITHUB_ENV
+          echo "APP_ENV=${GITHUB_REF_NAME}" >> $GITHUB_ENV
+          echo "ECR_TAG=${GITHUB_REF_NAME}-latest" >> $GITHUB_ENV
+          echo "PREVIOUS_TAG=${GITHUB_REF_NAME}-previous" >> $GITHUB_ENV
+          echo "CLUSTER=research-catalog-${GITHUB_REF_NAME}" >> $GITHUB_ENV
+          echo "SERVICE=research-catalog-${GITHUB_REF_NAME}" >> $GITHUB_ENV
+          echo "ECR_URL=946183545209.dkr.ecr.us-east-1.amazonaws.com/research-catalog:${GITHUB_REF_NAME}-latest" >> $GITHUB_ENV
 
       - name: Build and push Docker image to Amazon ECR
         run: |
