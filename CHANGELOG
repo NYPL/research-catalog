@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+### Updated
+
+- Removes redirect for 404s on bib/hold pages and nonexistent paths, instead just displaying 404 view and unchanged URL [SCC-4751](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4751)
+
 ## [1.4.7] 2025-05-19
 
 ### Added
