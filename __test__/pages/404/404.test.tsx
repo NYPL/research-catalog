@@ -7,10 +7,8 @@ describe("404", () => {
   it("should display 404 text", () => {
     render(<Custom404 activePage="account" />)
     const container = screen.getByRole("main")
-
-    const fourOhFourText = "404 Not Found"
     const heading = within(container).getByRole("heading")
-    expect(heading).toHaveTextContent(fourOhFourText)
+    expect(heading).toHaveTextContent("404 Not Found")
   })
   it("should have links to homepage and legacy catalogs", () => {
     render(<Custom404 activePage="hold" />)
