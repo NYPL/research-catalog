@@ -83,7 +83,15 @@ const SearchFilterModal = ({
                 Filter results
               </Heading>
             </ModalHeader>
-            <ModalCloseButton />
+            <Button
+              aria-label="Close"
+              id="close-btn"
+              buttonType="text"
+              onClick={onClose}
+            >
+              {" "}
+              <Icon name="close" size="large" color="ui.black" />
+            </Button>
           </Box>
           <Box
             overflow="auto"
