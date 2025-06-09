@@ -1,0 +1,89 @@
+# Run tests and deploy to research-catalog-qa or research-catalog-production based on branch
+name: deploy
+
+on:
+  push:
+    branches:
+      - qa
+      - production
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AWS_DEFAULT_REGION: us-east-1
+  LOCAL_TAG_NAME: research-catalog:${{ github.ref_name }}-${{ github.run_number }}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20.x]
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: npm install
+        run: npm ci
+      - name: Unit tests
+        run: npm test
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::946183545209:role/GithubActionsDeployerRole
+          aws-region: us-east-1
+
+      - name: Log in to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Set environment-specific variables
+        id: set-vars
+        run: |
+          if [[ "${GITHUB_REF_NAME}" == "production" ]]; then
+            echo "APP_ENV=production" >> $GITHUB_ENV
+            echo "ECR_TAG=production-latest" >> $GITHUB_ENV
+            echo "PREVIOUS_TAG=production-previous" >> $GITHUB_ENV
+            echo "CLUSTER=research-catalog-production" >> $GITHUB_ENV
+            echo "SERVICE=research-catalog-production" >> $GITHUB_ENV
+          elif [[ "${GITHUB_REF_NAME}" == "qa" ]]; then
+            echo "APP_ENV=qa" >> $GITHUB_ENV
+            echo "ECR_TAG=qa-latest" >> $GITHUB_ENV
+            echo "PREVIOUS_TAG=qa-previous" >> $GITHUB_ENV
+            echo "CLUSTER=research-catalog-qa" >> $GITHUB_ENV
+            echo "SERVICE=research-catalog-qa" >> $GITHUB_ENV
+          else
+            echo "Not deploying branch ${GITHUB_REF_NAME}"
+            exit 1
+          fi
+          echo "ECR_URL=946183545209.dkr.ecr.us-east-1.amazonaws.com/research-catalog:${ECR_TAG}" >> $GITHUB_ENV
+
+      - name: Build and push Docker image to Amazon ECR
+        run: |
+          docker build --build-arg NEXT_PUBLIC_APP_ENV=${APP_ENV} --tag $LOCAL_TAG_NAME .
+          docker tag $LOCAL_TAG_NAME $ECR_URL
+
+          # Back up previous latest image
+          MANIFEST=$(aws ecr batch-get-image --repository-name research-catalog --image-ids imageTag="${ECR_TAG}" --output json | jq --raw-output --join-output '.images[0].imageManifest')
+          aws ecr batch-delete-image --repository-name research-catalog --image-ids imageTag="${PREVIOUS_TAG}" || true
+          aws ecr put-image --repository-name research-catalog --image-tag "${PREVIOUS_TAG}" --image-manifest "$MANIFEST" || true
+
+          # Push new image
+          docker push $ECR_URL
+
+      - name: Update ECS service
+        run: |
+          aws ecs update-service --cluster $CLUSTER --service $SERVICE --force-new-deployment
