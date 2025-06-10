@@ -114,7 +114,7 @@ The Subject Heading Explorer pages are the only remaining pages still served by 
 
 The Research Catalog provides both basic and advanced search capabilities:
 
-- **Basic Search**: Keyword search across all fields used to query and display Bib results as well as [DRB (Digital Research Books)](https://digitalcollections.nypl.org/) results in the sidebar.
+- **Basic Search**: Keyword search across all fields used to query and display bib results.
 - **Advanced Search**: Targeted search by title, author, subject, call number, etc.
 - **Filters**: Refine search results by format, location, status, and date
 
@@ -178,7 +178,6 @@ Both clients:
 - **Discovery API**: Main source for bib and item data (accessed via nyplApiClient)
 - **Sierra API**: Patron account management and item requests (accessed via sierraClient)
 - **SHEP API**: Subject heading data
-- **DRB API**: Digital Research Books data
 
 ## Authentication
 
