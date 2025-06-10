@@ -13,7 +13,6 @@ import {
   ModalFooter,
   ModalHeader,
   useDisclosure,
-  ModalCloseButton,
 } from "@chakra-ui/react"
 import router from "next/router"
 import { getQueryWithoutFiltersOrPage } from "../../utils/refineSearchUtils"
@@ -26,7 +25,7 @@ const SearchFilterModal = ({
   searchResultsCount,
 }: {
   aggregations: Aggregation[]
-  searchResultsCount?: number
+  searchResultsCount: number
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 

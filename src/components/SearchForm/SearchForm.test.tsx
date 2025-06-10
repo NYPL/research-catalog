@@ -22,7 +22,9 @@ describe("SearchForm", () => {
     const input = screen.getByRole("textbox")
     await userEvent.clear(input)
   })
-  const component = <SearchForm aggregations={normalAggs} />
+  const component = (
+    <SearchForm searchResultsCount={20} aggregations={normalAggs} />
+  )
   it.todo("searches on an empty keyword after clearing the form")
   it.todo("searches for {TBD} on an empty query")
   it("submits a keyword query by default", async () => {
