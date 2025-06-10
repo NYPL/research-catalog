@@ -50,7 +50,6 @@ export const FocusProvider = ({ children }: { children: React.ReactNode }) => {
     },
     [isClient]
   )
-
   if (activeElementId !== prevActiveElementId) {
     setPrevActiveElementId(activeElementId)
     setFocusById(activeElementId)
@@ -58,8 +57,8 @@ export const FocusProvider = ({ children }: { children: React.ReactNode }) => {
 
   const setPersistentFocus = useCallback(
     (id) => {
-      setFocusById(id)
       setActiveElementId(id)
+      setFocusById(id)
     },
     [setFocusById]
   )

@@ -39,7 +39,7 @@ const SearchForm = ({
   const [searchScope, setSearchScope] = useState(
     (router?.query?.search_scope as string) || "all"
   )
-  const [appliedFilters, setAppliedFilters] = useState(
+  const [, setAppliedFilters] = useState(
     collapseMultiValueQueryParams(router.query)
   )
   const searchTip = SEARCH_FORM_OPTIONS[searchScope].searchTip
