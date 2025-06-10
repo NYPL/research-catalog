@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+### Removed
+
+- Removed the DRB sidebar, API client, and all related code
+
 ### Added
 
 - Added focus context provider to manage focus with search [SCC-4721](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4721)

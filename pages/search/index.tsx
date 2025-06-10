@@ -13,7 +13,6 @@ import { useEffect, useRef } from "react"
 import type { ChangeEvent } from "react"
 import { useRouter } from "next/router"
 import Layout from "../../src/components/Layout/Layout"
-import DRBContainer from "../../src/components/DRB/DRBContainer"
 import SearchResult from "../../src/components/SearchResults/SearchResult"
 import SearchResultsSort from "../../src/components/SearchResults/SearchResultsSort"
 import AppliedFilters from "../../src/components/AppliedFilters/AppliedFilters"
@@ -30,7 +29,6 @@ import type {
   SortKey,
   SortOrder,
 } from "../../src/types/searchTypes"
-import { mapWorksToDRBResults } from "../../src/utils/drbUtils"
 import { SITE_NAME, RESULTS_PER_PAGE } from "../../src/config/constants"
 import type SearchResultsBib from "../../src/models/SearchResultsBib"
 import useLoading from "../../src/hooks/useLoading"
@@ -60,15 +58,10 @@ export default function Search({
   const { itemListElement: searchResultsElements, totalResults } =
     results.results
 
-  const drbResponse = results.drbResults?.data
-  const drbWorks = drbResponse?.works
-
   // TODO: Move this to global context
   const searchParams = mapQueryToSearchParams(query)
   // Map Search Results Elements from response to SearchResultBib objects
   const searchResultBibs = mapElementsToSearchResultsBibs(searchResultsElements)
-  // Map DRB Works from response to DRBResult objects
-  const drbResults = mapWorksToDRBResults(drbWorks)
 
   const isLoading = useLoading()
   const searchedFromAdvanced = query.searched_from === "advanced"
@@ -151,11 +144,6 @@ export default function Search({
                   </CardContent>
                 </Card>
               )}
-              <DRBContainer
-                drbResults={drbResults}
-                totalWorks={drbResponse?.totalWorks}
-                searchParams={searchParams}
-              />
             </Box>
           ) : isLoading ? (
             <SkeletonLoader showImage={false} width="250px" />
