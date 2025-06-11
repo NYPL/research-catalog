@@ -72,6 +72,7 @@ const FeedbackForm = () => {
           : null
       }
       view={feedbackFormScreen}
+      className="no-print"
     />
   )
 }

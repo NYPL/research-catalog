@@ -1,8 +1,11 @@
 import { useRouter } from "next/router"
-import { type TagSetFilterDataProps } from "@nypl/design-system-react-components"
+import {
+  useNYPLBreakpoints,
+  type TagSetFilterDataProps,
+} from "@nypl/design-system-react-components"
 
 import {
-  getQueryWithoutFilters,
+  getQueryWithoutFiltersOrPage,
   buildFilterQuery,
   collapseMultiValueQueryParams,
 } from "../../utils/refineSearchUtils"
@@ -13,6 +16,7 @@ import {
 } from "./appliedFilterUtils"
 import type { Aggregation } from "../../types/filterTypes"
 import ActiveFilters from "../ItemFilters/ActiveFilters"
+import { useFocusContext, idConstants } from "../../context/FocusContext"
 
 const AppliedFilters = ({ aggregations }: { aggregations: Aggregation[] }) => {
   const router = useRouter()
@@ -21,6 +25,8 @@ const AppliedFilters = ({ aggregations }: { aggregations: Aggregation[] }) => {
     aggregations,
     appliedFilters
   )
+  const { isLargerThanMobile } = useNYPLBreakpoints()
+  const { setPersistentFocus } = useFocusContext()
 
   // this type cast is happening because Option type had to be updated to
   // account for Offsite's Element label. That label does
@@ -31,9 +37,10 @@ const AppliedFilters = ({ aggregations }: { aggregations: Aggregation[] }) => {
   ) as TagSetFilterDataProps[]
   const handleRemove = (tag: TagSetFilterDataProps) => {
     if (tag.label === "Clear filters") {
+      setPersistentFocus(idConstants.filterResultsHeading)
       router.push({
         pathname: "/search",
-        query: getQueryWithoutFilters(router.query),
+        query: getQueryWithoutFiltersOrPage(router.query),
       })
       return
     }
@@ -42,13 +49,26 @@ const AppliedFilters = ({ aggregations }: { aggregations: Aggregation[] }) => {
       appliedFiltersWithLabels
     )
     const updatedQuery = {
-      ...getQueryWithoutFilters(router.query),
+      ...getQueryWithoutFiltersOrPage(router.query),
       ...buildFilterQuery(updatedFilters),
     }
-    router.push({
-      pathname: "/search",
-      query: updatedQuery,
-    })
+    if (tagSetData.length >= 2) {
+      setPersistentFocus(idConstants.activeFiltersHeading)
+    } else {
+      setPersistentFocus(
+        isLargerThanMobile
+          ? idConstants.filterResultsHeading
+          : idConstants.searchFiltersModal
+      )
+    }
+    router.push(
+      {
+        pathname: "/search",
+        query: updatedQuery,
+      },
+      undefined,
+      { scroll: false }
+    )
   }
 
   if (!tagSetData.length) return null

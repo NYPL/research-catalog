@@ -8,7 +8,6 @@ import {
   Icon,
   List,
   Box,
-  Text,
 } from "@nypl/design-system-react-components"
 
 import { ELECTRONIC_RESOURCES_PER_BIB_PAGE } from "../../config/constants"

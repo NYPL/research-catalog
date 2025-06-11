@@ -7,6 +7,7 @@ import {
 import mockRouter from "next-router-mock"
 import userEvent from "@testing-library/user-event"
 import Search from "../../../pages/search"
+import { FocusProvider } from "../../context/FocusContext"
 
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
@@ -18,7 +19,6 @@ describe("Applied Filters", () => {
       )
       render(
         <Search
-          isFreshSortByQuery={false}
           isAuthenticated={true}
           results={{
             page: 1,
@@ -39,12 +39,11 @@ describe("Applied Filters", () => {
       )
       render(
         <Search
-          isFreshSortByQuery={false}
           isAuthenticated={true}
           results={{
             page: 1,
-            aggregations,
             results,
+            aggregations,
           }}
         />
       )
@@ -57,12 +56,11 @@ describe("Applied Filters", () => {
       )
       render(
         <Search
-          isFreshSortByQuery={false}
           isAuthenticated={true}
           results={{
             page: 1,
-            aggregations,
             results,
+            aggregations,
           }}
         />
       )
@@ -78,12 +76,11 @@ describe("Applied Filters", () => {
     )
     render(
       <Search
-        isFreshSortByQuery={false}
         isAuthenticated={true}
         results={{
           page: 1,
-          aggregations,
           results,
+          aggregations,
         }}
       />
     )
@@ -96,7 +93,6 @@ describe("Applied Filters", () => {
     )
     render(
       <Search
-        isFreshSortByQuery={false}
         isAuthenticated={true}
         results={{
           page: 1,

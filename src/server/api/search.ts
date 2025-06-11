@@ -6,10 +6,8 @@ import { standardizeBibId } from "../../utils/bibUtils"
 import { getSearchQuery } from "../../utils/searchUtils"
 import {
   DISCOVERY_API_SEARCH_ROUTE,
-  DRB_API_NAME,
   RESULTS_PER_PAGE,
 } from "../../config/constants"
-import { getDRBQueryStringFromSearchParams } from "../../utils/drbUtils"
 import { logServerError } from "../../utils/appUtils"
 import nyplApiClient from "../nyplApiClient"
 
@@ -46,20 +44,15 @@ export async function fetchResults(
   }
   const aggregationQuery = `/aggregations${queryString}`
   const resultsQuery = `${queryString}&per_page=${RESULTS_PER_PAGE.toString()}`
-  const drbQuery = getDRBQueryStringFromSearchParams(modifiedSearchParams)
 
   // Get the following in parallel:
   //  - search results
   //  - aggregations
-  //  - drb results
   const client = await nyplApiClient()
-  const drbClient = await nyplApiClient({ apiName: DRB_API_NAME, version: "" })
-  const [resultsResponse, aggregationsResponse, drbResultsResponse] =
-    await Promise.allSettled([
-      client.get(`${DISCOVERY_API_SEARCH_ROUTE}${resultsQuery}`),
-      client.get(`${DISCOVERY_API_SEARCH_ROUTE}${aggregationQuery}`),
-      drbClient.get(drbQuery),
-    ])
+  const [resultsResponse, aggregationsResponse] = await Promise.allSettled([
+    client.get(`${DISCOVERY_API_SEARCH_ROUTE}${resultsQuery}`),
+    client.get(`${DISCOVERY_API_SEARCH_ROUTE}${aggregationQuery}`),
+  ])
 
   // Assign results values for each response when status is fulfilled
   const results =
@@ -68,14 +61,10 @@ export async function fetchResults(
   const aggregations =
     aggregationsResponse.status === "fulfilled" && aggregationsResponse.value
 
-  const drbResults =
-    drbResultsResponse.status === "fulfilled" && drbResultsResponse.value
-
   try {
     return {
       results,
       aggregations,
-      drbResults,
       page: searchParams.page,
     }
   } catch (error) {

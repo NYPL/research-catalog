@@ -24,6 +24,7 @@ interface LayoutProps {
   sidebarPosition?: "right" | "left"
   isAuthenticated?: boolean
   searchAggregations?: Aggregation[]
+  searchResultsCount?: number
   bannerNotification?: string
 }
 
@@ -37,18 +38,30 @@ const Layout = ({
   isAuthenticated,
   sidebar,
   activePage,
-  sidebarPosition = "right",
+  searchResultsCount,
+  sidebarPosition = "left",
   bannerNotification,
 }: PropsWithChildren<LayoutProps>) => {
   const showSearch = activePage === "search"
   const showNotification = activePage === "" || activePage === "search"
-
   return (
     <DSProvider>
       <TemplateAppContainer
         // This is a workaround to fix a text-wrapping issue when page is zoomed in on
         // TODO: Address this issue in the DS
-        sx={{ "main > div": { maxWidth: "100vw" } }}
+        sx={{
+          "main > div": { maxWidth: "100vw" },
+          rowGap: {
+            base: "grid.m",
+            md: "grid.l",
+          },
+          main: {
+            rowGap: {
+              base: "grid.m",
+              md: "grid.l",
+            },
+          },
+        }}
         breakout={
           <>
             <Breadcrumbs
@@ -68,15 +81,23 @@ const Layout = ({
                     outlineColor: "ui.white",
                   },
                 },
+                "@media print": {
+                  display: "none !important",
+                },
               }}
             />
-            <div className={styles.researchHeadingContainer}>
+            <div className={`${styles.researchHeadingContainer} no-print`}>
               <Heading id="heading-h1" level="h1" text="Research Catalog" />
               <SubNav
                 isAuthenticated={isAuthenticated}
                 activePage={activePage}
               />
-              {showSearch && <SearchForm aggregations={searchAggregations} />}
+              {showSearch && (
+                <SearchForm
+                  aggregations={searchAggregations}
+                  searchResultsCount={searchResultsCount}
+                />
+              )}
             </div>
             {showSearch && (
               <Flex
@@ -90,7 +111,7 @@ const Layout = ({
                 <EDSBanner />
                 {showNotification && bannerNotification && (
                   <Banner
-                    className={styles.banner}
+                    className={`${styles.banner} no-print`}
                     heading="New Service Announcement"
                     content={bannerNotification}
                   />
@@ -106,7 +127,7 @@ const Layout = ({
             <FeedbackForm />
           </Box>
         }
-        contentSidebar={sidebar && <Box pb="l">{sidebar}</Box>}
+        contentSidebar={sidebar && <Box width="288px">{sidebar}</Box>}
       />
     </DSProvider>
   )
