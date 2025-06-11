@@ -80,7 +80,7 @@ export default function EDDRequestPage({
     ignoreError: notFound,
     errorMessage: "Item undefined",
   })
-  const holdId = item.bibId && item.id ? `${item.bibId}-${item.id}` : ""
+  const holdId = item ? `${item.bibId}-${item.id}` : ""
 
   const [errorStatus, setErrorStatus] = useState(defaultErrorStatus)
   const [patronEligibilityStatus, setPatronEligibilityStatus] = useState(
@@ -103,7 +103,7 @@ export default function EDDRequestPage({
     ...initialEDDFormState,
     emailAddress: patronEmail,
     patronId,
-    source: item.formattedSourceForHoldRequest,
+    source: item?.formattedSourceForHoldRequest,
     // Override values with server form state in the case of a no-js request
     ...formStateFromServer,
   })
