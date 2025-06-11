@@ -80,7 +80,7 @@ export default function EDDRequestPage({
     ignoreError: notFound,
     errorMessage: "Item undefined",
   })
-  const holdId = `${item.bibId}-${item.id}`
+  const holdId = item.bibId && item.id ? `${item.bibId}-${item.id}` : ""
 
   const [errorStatus, setErrorStatus] = useState(defaultErrorStatus)
   const [patronEligibilityStatus, setPatronEligibilityStatus] = useState(
