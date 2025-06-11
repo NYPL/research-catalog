@@ -41,6 +41,7 @@ import type {
 } from "../../../../src/types/holdPageTypes"
 import RCHead from "../../../../src/components/Head/RCHead"
 import Custom404 from "../../../404"
+import { tryInstantiate } from "../../../../src/utils/appUtils"
 
 interface EDDRequestPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -67,9 +68,18 @@ export default function EDDRequestPage({
   notFound = false,
 }: EDDRequestPropsType) {
   const metadataTitle = `Electronic Delivery Request | ${SITE_NAME}`
-  const bib = new Bib(discoveryBibResult)
-  const item = new Item(discoveryItemResult, bib)
-
+  const bib = tryInstantiate({
+    constructor: Bib,
+    args: [discoveryBibResult],
+    ignoreError: notFound,
+    errorMessage: "Bib undefined",
+  })
+  const item = tryInstantiate({
+    constructor: Item,
+    args: [discoveryItemResult, bib],
+    ignoreError: notFound,
+    errorMessage: "Item undefined",
+  })
   const holdId = `${item.bibId}-${item.id}`
 
   const [errorStatus, setErrorStatus] = useState(defaultErrorStatus)

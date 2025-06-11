@@ -46,6 +46,7 @@ import {
 import RCHead from "../../../src/components/Head/RCHead"
 import FindingAid from "../../../src/components/BibPage/FindingAid"
 import Custom404 from "../../404"
+import { tryInstantiate } from "../../../src/utils/appUtils"
 
 interface BibPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -69,8 +70,14 @@ export default function BibPage({
 }: BibPropsType) {
   const { push, query } = useRouter()
   const metadataTitle = `Item Details | ${SITE_NAME}`
-
-  const [bib, setBib] = useState(new Bib(discoveryBibResult))
+  const [bib, setBib] = useState(
+    tryInstantiate({
+      constructor: Bib,
+      args: [discoveryBibResult],
+      ignoreError: notFound,
+      errorMessage: "Bib undefined",
+    })
+  )
   const [itemsLoading, setItemsLoading] = useState(false)
   const [itemFetchError, setItemFetchError] = useState(false)
 

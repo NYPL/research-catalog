@@ -34,24 +34,6 @@ export default class Bib {
   findingAid?: string
 
   constructor(result?: DiscoveryBibResult) {
-    // Result is undefined, returns an empty Bib.
-    if (!result) {
-      this.id = ""
-      this.title = "[Untitled]"
-      this.titleDisplay = ""
-      this.electronicResources = []
-      this.numPhysicalItems = 0
-      this.numItemsMatched = 0
-      this.format = null
-      this.issuance = null
-      this.itemAggregations = null
-      this.hasItemDates = false
-      this.subjectHeadings = []
-      this.findingAid = null
-      this.items = []
-      return
-    }
-
     this.id = result["@id"] ? result["@id"].substring(4) : ""
     this.title = result.title?.[0] || result.titleDisplay?.[0] || "[Untitled]"
     this.titleDisplay = this.getTitleDisplayFromResult(result)

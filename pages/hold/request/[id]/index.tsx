@@ -67,11 +67,6 @@ export default function HoldRequestPage({
 }: HoldRequestPropsType) {
   const metadataTitle = `Item Request | ${SITE_NAME}`
 
-  const bib = new Bib(discoveryBibResult)
-  const item = new Item(discoveryItemResult, bib)
-
-  const holdId = `${item.bibId}-${item.id}`
-
   const [errorStatus, setErrorStatus] = useState(defaultErrorStatus)
   const [patronEligibilityStatus, setPatronEligibilityStatus] = useState(
     defaultEligibilityStatus
@@ -91,6 +86,11 @@ export default function HoldRequestPage({
   if (notFound) {
     return <Custom404 activePage="hold" />
   }
+
+  const bib = new Bib(discoveryBibResult)
+  const item = new Item(discoveryItemResult, bib)
+
+  const holdId = `${item.bibId}-${item.id}`
 
   const handleServerHoldPostError = (errorMessage: string) => {
     console.error(

@@ -39,33 +39,6 @@ export default class Item {
   availability: ItemAvailability
 
   constructor(item: DiscoveryItemResult, bib: Bib) {
-    // Item result or bib is undefined, returns an empty Item.
-    if (!item || !bib) {
-      this.id = ""
-      this.bibId = ""
-      this.status = null
-      this.source = ""
-      this.accessMessage = ""
-      this.callNumber = null
-      this.volume = null
-      this.format = null
-      this.barcode = null
-      this.location = defaultNYPLLocation
-      this.aeonUrl = null
-      this.dueDate = null
-      this.isPhysicallyRequestable = false
-      this.isEDDRequestable = false
-      this.bibTitle = "[Untitled]"
-      this.availability = new ItemAvailability({
-        isSpecRequestable: false,
-        isAvailable: false,
-        isReCAP: false,
-        aeonUrl: null,
-        findingAid: null,
-      })
-      return
-    }
-
     this.id = item.uri || ""
     this.bibId = bib.id
     this.status = item.status?.length ? item.status[0] : null
