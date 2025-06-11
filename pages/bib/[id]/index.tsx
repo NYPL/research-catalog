@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import type { SyntheticEvent } from "react"
 import { useState, useRef } from "react"
 import { useRouter } from "next/router"
@@ -68,9 +67,6 @@ export default function BibPage({
   viewAllItems = false,
   notFound = false,
 }: BibPropsType) {
-  if (notFound) {
-    return <Custom404 activePage="bib" />
-  }
   const { push, query } = useRouter()
   const metadataTitle = `Item Details | ${SITE_NAME}`
 
@@ -87,6 +83,10 @@ export default function BibPage({
   const itemTableHeadingRef = useRef<HTMLDivElement>(null)
   const viewAllLoadingTextRef = useRef<HTMLDivElement & HTMLLabelElement>(null)
   const controllerRef = useRef<AbortController>()
+
+  if (notFound) {
+    return <Custom404 activePage="bib" />
+  }
 
   const { topDetails, bottomDetails, holdingsDetails, findingAid } =
     new BibDetailsModel(discoveryBibResult, annotatedMarc)

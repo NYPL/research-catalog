@@ -33,18 +33,36 @@ export default class Bib {
   subjectHeadings?: SubjectHeading[]
   findingAid?: string
 
-  constructor(result: DiscoveryBibResult) {
+  constructor(result?: DiscoveryBibResult) {
+    // Result is undefined, returns an empty Bib.
+    if (!result) {
+      this.id = ""
+      this.title = "[Untitled]"
+      this.titleDisplay = ""
+      this.electronicResources = []
+      this.numPhysicalItems = 0
+      this.numItemsMatched = 0
+      this.format = null
+      this.issuance = null
+      this.itemAggregations = null
+      this.hasItemDates = false
+      this.subjectHeadings = []
+      this.findingAid = null
+      this.items = []
+      return
+    }
+
     this.id = result["@id"] ? result["@id"].substring(4) : ""
     this.title = result.title?.[0] || result.titleDisplay?.[0] || "[Untitled]"
     this.titleDisplay = this.getTitleDisplayFromResult(result)
-    this.electronicResources = result.electronicResources || null
+    this.electronicResources = result.electronicResources || []
     this.numPhysicalItems = result.numItemsTotal || 0
     this.numItemsMatched = result.numItemsMatched || 0
     this.format = (result.format?.length && result.format[0]?.prefLabel) || null
     this.issuance = (result.issuance?.length && result.issuance) || null
     this.itemAggregations = result.itemAggregations || null
     this.hasItemDates = result.hasItemDates || false
-    this.subjectHeadings = result.subjectHeadings || null
+    this.subjectHeadings = result.subjectHeadings || []
     this.findingAid = getFindingAidFromSupplementaryContent(
       result.supplementaryContent
     )
@@ -131,9 +149,9 @@ export default class Bib {
     return result.titleDisplay[0]
   }
 
-  getItemsFromResult(result: DiscoveryBibResult): Item[] | null {
-    return result.items.length
+  getItemsFromResult(result: DiscoveryBibResult): Item[] {
+    return result?.items?.length
       ? result.items.map((item) => new Item(item, this))
-      : null
+      : []
   }
 }

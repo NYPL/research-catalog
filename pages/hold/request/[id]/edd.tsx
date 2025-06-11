@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import { useState, useRef, useEffect } from "react"
 import { useRouter } from "next/router"
 import {
@@ -67,9 +66,6 @@ export default function EDDRequestPage({
   patronEligibilityStatus: defaultEligibilityStatus,
   notFound = false,
 }: EDDRequestPropsType) {
-  if (notFound) {
-    return <Custom404 activePage="hold" />
-  }
   const metadataTitle = `Electronic Delivery Request | ${SITE_NAME}`
   const bib = new Bib(discoveryBibResult)
   const item = new Item(discoveryItemResult, bib)
@@ -111,6 +107,10 @@ export default function EDDRequestPage({
       bannerContainerRef.current.focus()
     }
   }, [errorStatus, patronEligibilityStatus])
+
+  if (notFound) {
+    return <Custom404 activePage="hold" />
+  }
 
   const handleServerHoldPostError = (errorMessage: string) => {
     console.error(
@@ -314,7 +314,6 @@ export async function getServerSideProps({ params, req, res, query }) {
     }
   } catch (error) {
     console.log(error)
-
     return {
       props: { notFound: true },
     }

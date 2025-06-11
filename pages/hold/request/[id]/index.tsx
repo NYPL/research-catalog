@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import { useState, useRef, useEffect } from "react"
 import { useRouter } from "next/router"
 import {
@@ -66,9 +65,6 @@ export default function HoldRequestPage({
   patronEligibilityStatus: defaultEligibilityStatus,
   notFound = false,
 }: HoldRequestPropsType) {
-  if (notFound) {
-    return <Custom404 activePage="hold" />
-  }
   const metadataTitle = `Item Request | ${SITE_NAME}`
 
   const bib = new Bib(discoveryBibResult)
@@ -91,6 +87,10 @@ export default function HoldRequestPage({
       bannerContainerRef.current.focus()
     }
   }, [errorStatus, patronEligibilityStatus])
+
+  if (notFound) {
+    return <Custom404 activePage="hold" />
+  }
 
   const handleServerHoldPostError = (errorMessage: string) => {
     console.error(
