@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Corrects `RCLink` and `ExternalLink` accessibility attributes [SCC-4149](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4149)
 - Updates filters to new sidebar design with live filtering [SCC-4721](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4721)
+- Updates GH actions to require tests before deploying, and consolidates `qa`, `train`, and `prod` deployment scripts [SCC-4272](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4272)
 
 ## [1.4.7] 2025-05-19
 
