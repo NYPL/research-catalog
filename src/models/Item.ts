@@ -44,7 +44,7 @@ export default class Item {
       this.id = ""
       this.bibId = ""
       this.status = null
-      this.source = null
+      this.source = ""
       this.accessMessage = ""
       this.callNumber = null
       this.volume = null
