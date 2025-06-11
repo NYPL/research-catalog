@@ -209,127 +209,125 @@ export default function BibPage({
     <>
       <RCHead metadataTitle={metadataTitle} />
       <Layout isAuthenticated={isAuthenticated} activePage="bib">
-        <>
+        {findingAid && (
+          <StatusBadge mb="s" type="informative">
+            FINDING AID AVAILABLE
+          </StatusBadge>
+        )}
+        <Heading level="h2" size="heading3" mb="l">
+          {bib.title}
+        </Heading>
+        <BibDetails key="top-details" details={topDetails} />
+        <Box mt="s">
           {findingAid && (
-            <StatusBadge mb="s" type="informative">
-              FINDING AID AVAILABLE
-            </StatusBadge>
+            <FindingAid
+              findingAidURL={findingAid}
+              hasElectronicResources={bib.hasElectronicResources}
+            />
           )}
-          <Heading level="h2" size="heading3" mb="l">
-            {bib.title}
-          </Heading>
-          <BibDetails key="top-details" details={topDetails} />
-          <Box mt="s">
-            {findingAid && (
-              <FindingAid
-                findingAidURL={findingAid}
-                hasElectronicResources={bib.hasElectronicResources}
-              />
-            )}
-            {bib.hasElectronicResources && (
-              <ElectronicResources
-                electronicResources={bib.electronicResources}
-              />
-            )}
-          </Box>
-          {bib.showItemTable ? (
-            <>
-              <Heading
-                data-testid="item-table-heading"
-                level="h3"
-                size="heading4"
-                mt="l"
-                mb="s"
-              >
-                Items in the library and off-site
-              </Heading>
-              <Banner
-                content={
-                  <ExternalLink href="https://www.nypl.org/help/request-research-materials">
-                    How do I request and pick up research materials for on-site
-                    use?
-                  </ExternalLink>
-                }
-                isDismissible
-                mb="s"
-                className="no-print"
-              />
-              <ItemFilters
-                itemAggregations={bib.itemAggregations}
-                handleFiltersChange={handleFiltersChange}
-                appliedFilters={appliedFilters}
-                filtersAreApplied={filtersAreApplied}
-                showDateFilter={bib.hasItemDates}
-              />
-              <Box id="item-table">
-                {itemsLoading ? (
-                  <SkeletonLoader showImage={false} />
-                ) : itemFetchError ? (
-                  <Banner
-                    type="negative"
-                    content="There was an error fetching items. Please try again with a different query."
-                  />
-                ) : (
-                  <>
-                    <Heading
-                      data-testid="item-table-displaying-text"
-                      ref={itemTableHeadingRef}
-                      level="h4"
-                      size="heading6"
-                      mb="s"
-                      tabIndex={-1}
-                    >
-                      {buildItemTableDisplayingString(
-                        itemTablePage,
-                        bib.numItems(filtersAreApplied),
-                        viewAllExpanded,
-                        filtersAreApplied
-                      )}
-                    </Heading>
-                    {bib.itemTableData ? (
-                      <ItemTable itemTableData={bib.itemTableData} />
-                    ) : null}
-                  </>
-                )}
-                {bib.itemTableData ? (
-                  <ItemTableControls
-                    bib={bib}
-                    viewAllExpanded={viewAllExpanded}
-                    itemsLoading={itemsLoading}
-                    itemTablePage={itemTablePage}
-                    handlePageChange={handlePageChange}
-                    handleViewAllClick={handleViewAllClick}
-                    viewAllLoadingTextRef={viewAllLoadingTextRef}
-                    numItemsTotal={bib.numItems(filtersAreApplied)}
-                    filtersAreApplied={filtersAreApplied}
-                  />
-                ) : null}
-              </Box>
-            </>
+          {bib.hasElectronicResources && (
+            <ElectronicResources
+              electronicResources={bib.electronicResources}
+            />
+          )}
+        </Box>
+        {bib.showItemTable ? (
+          <>
+            <Heading
+              data-testid="item-table-heading"
+              level="h3"
+              size="heading4"
+              mt="l"
+              mb="s"
+            >
+              Items in the library and off-site
+            </Heading>
+            <Banner
+              content={
+                <ExternalLink href="https://www.nypl.org/help/request-research-materials">
+                  How do I request and pick up research materials for on-site
+                  use?
+                </ExternalLink>
+              }
+              isDismissible
+              mb="s"
+              className="no-print"
+            />
+            <ItemFilters
+              itemAggregations={bib.itemAggregations}
+              handleFiltersChange={handleFiltersChange}
+              appliedFilters={appliedFilters}
+              filtersAreApplied={filtersAreApplied}
+              showDateFilter={bib.hasItemDates}
+            />
+            <Box id="item-table">
+              {itemsLoading ? (
+                <SkeletonLoader showImage={false} />
+              ) : itemFetchError ? (
+                <Banner
+                  type="negative"
+                  content="There was an error fetching items. Please try again with a different query."
+                />
+              ) : (
+                <>
+                  <Heading
+                    data-testid="item-table-displaying-text"
+                    ref={itemTableHeadingRef}
+                    level="h4"
+                    size="heading6"
+                    mb="s"
+                    tabIndex={-1}
+                  >
+                    {buildItemTableDisplayingString(
+                      itemTablePage,
+                      bib.numItems(filtersAreApplied),
+                      viewAllExpanded,
+                      filtersAreApplied
+                    )}
+                  </Heading>
+                  {bib.itemTableData ? (
+                    <ItemTable itemTableData={bib.itemTableData} />
+                  ) : null}
+                </>
+              )}
+              {bib.itemTableData ? (
+                <ItemTableControls
+                  bib={bib}
+                  viewAllExpanded={viewAllExpanded}
+                  itemsLoading={itemsLoading}
+                  itemTablePage={itemTablePage}
+                  handlePageChange={handlePageChange}
+                  handleViewAllClick={handleViewAllClick}
+                  viewAllLoadingTextRef={viewAllLoadingTextRef}
+                  numItemsTotal={bib.numItems(filtersAreApplied)}
+                  filtersAreApplied={filtersAreApplied}
+                />
+              ) : null}
+            </Box>
+          </>
+        ) : null}
+        <Box mb="xl">
+          <BibDetails
+            heading="Holdings"
+            key="holdings-details"
+            details={holdingsDetails}
+          />
+          <BibDetails
+            heading="Details"
+            key="bottom-details"
+            details={bottomDetails}
+          />
+          {displayLegacyCatalogLink ? (
+            <ExternalLink
+              id="legacy-catalog-link"
+              href={`${appConfig.urls.legacyCatalog}/record=${bib.id}`}
+              type="standalone"
+              mt="s"
+            >
+              View in legacy catalog
+            </ExternalLink>
           ) : null}
-          <Box mb="xl">
-            <BibDetails
-              heading="Holdings"
-              key="holdings-details"
-              details={holdingsDetails}
-            />
-            <BibDetails
-              heading="Details"
-              key="bottom-details"
-              details={bottomDetails}
-            />
-            {displayLegacyCatalogLink ? (
-              <ExternalLink
-                id="legacy-catalog-link"
-                href={`${appConfig.urls.legacyCatalog}/record=${bib.id}`}
-                type="standalone"
-                mt="s"
-              >
-                View in legacy catalog
-              </ExternalLink>
-            ) : null}
-          </Box>
-        </>
+        </Box>
       </Layout>
     </>
   )
