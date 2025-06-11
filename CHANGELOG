@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+## [1.4.8] 2025-06-12
+
 ### Removed
 
 - Removed the DRB sidebar, API client, and all related code
