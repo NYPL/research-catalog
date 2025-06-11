@@ -45,7 +45,7 @@ import {
 } from "../../../src/utils/itemFilterUtils"
 import RCHead from "../../../src/components/Head/RCHead"
 import FindingAid from "../../../src/components/BibPage/FindingAid"
-import Custom404 from "../../404"
+import CustomError from "../../404"
 
 interface BibPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -85,7 +85,7 @@ export default function BibPage({
   const controllerRef = useRef<AbortController>()
 
   if (notFound) {
-    return <Custom404 activePage="bib" />
+    return <CustomError statusCode={404} activePage="bib" />
   }
 
   const { topDetails, bottomDetails, holdingsDetails, findingAid } =
