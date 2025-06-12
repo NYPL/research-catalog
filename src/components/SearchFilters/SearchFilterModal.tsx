@@ -110,11 +110,11 @@ const SearchFilterModal = ({
               paddingTop="s"
             >
               <Button id="show-results" onClick={onClose}>
-                {`Show ${
-                  searchResultsCount === 10000
-                    ? "over 10,000"
-                    : searchResultsCount.toLocaleString()
-                } results`}
+                {searchResultsCount === 10000
+                  ? "Show over 10,000 results"
+                  : typeof searchResultsCount === "number"
+                  ? `Show ${searchResultsCount.toLocaleString()} results`
+                  : "Show results"}
               </Button>
               <Button
                 id="clear-filters"
