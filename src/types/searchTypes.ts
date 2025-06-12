@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import type { DiscoveryBibResult } from "./bibTypes"
-import type { DRBResults } from "./drbTypes"
 import type { Aggregation } from "./filterTypes"
 
 type Language = string
@@ -47,7 +46,6 @@ export type SortOrder = "asc" | "desc"
 export interface SearchResultsResponse {
   results?: SearchResults
   aggregations?: AggregationResults
-  drbResults?: DRBResults
   page?: number
 }
 

@@ -15,7 +15,7 @@ interface RequestButtonsProps {
 const RequestButtons = ({ item }: RequestButtonsProps) => {
   if (item.allLocationsClosed) return null
   return (
-    <Box sx={{ a: { marginRight: "xs" } }}>
+    <Box sx={{ a: { marginRight: "xs" } }} className="no-print">
       {item.aeonUrl && (
         <ExternalLink
           href={item.aeonUrl}

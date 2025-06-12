@@ -14,7 +14,6 @@ interface SearchFilterCheckboxFieldProps {
   gridOptions?: { min: number; max: number }
 }
 
-// TODO: standardize refine search and advanced search checkbox fields
 const SearchFilterCheckboxField = ({
   searchFormState,
   handleCheckboxChange,

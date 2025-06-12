@@ -3,23 +3,25 @@ import {
   SimpleGrid,
   Pagination,
   SkeletonLoader,
+  Flex,
+  Box,
+  CardContent,
+  Card,
+  CardHeading,
 } from "@nypl/design-system-react-components"
-import { useEffect, useRef, type ChangeEvent } from "react"
+import { useEffect, useRef } from "react"
+import type { ChangeEvent } from "react"
 import { useRouter } from "next/router"
-
 import Layout from "../../src/components/Layout/Layout"
-import DRBContainer from "../../src/components/DRB/DRBContainer"
 import SearchResult from "../../src/components/SearchResults/SearchResult"
 import SearchResultsSort from "../../src/components/SearchResults/SearchResultsSort"
-import AppliedFilters from "../../src/components/SearchFilters/AppliedFilters"
-
+import AppliedFilters from "../../src/components/AppliedFilters/AppliedFilters"
 import { fetchResults } from "../../src/server/api/search"
 import {
   getSearchResultsHeading,
   mapQueryToSearchParams,
   mapElementsToSearchResultsBibs,
   getSearchQuery,
-  getFreshSortByQuery,
   checkForRedirectOnMatch,
 } from "../../src/utils/searchUtils"
 import type {
@@ -27,19 +29,19 @@ import type {
   SortKey,
   SortOrder,
 } from "../../src/types/searchTypes"
-import { mapWorksToDRBResults } from "../../src/utils/drbUtils"
 import { SITE_NAME, RESULTS_PER_PAGE } from "../../src/config/constants"
 import type SearchResultsBib from "../../src/models/SearchResultsBib"
-
 import useLoading from "../../src/hooks/useLoading"
 import initializePatronTokenAuth from "../../src/server/auth"
 import RCHead from "../../src/components/Head/RCHead"
+import type { Aggregation } from "../../src/types/filterTypes"
+import SearchFilters from "../../src/components/SearchFilters/SearchFilters"
+import { useFocusContext, idConstants } from "../../src/context/FocusContext"
 
 interface SearchProps {
   bannerNotification?: string
   results: SearchResultsResponse
   isAuthenticated: boolean
-  isFreshSortByQuery: boolean
 }
 
 /**
@@ -50,28 +52,27 @@ export default function Search({
   bannerNotification,
   results,
   isAuthenticated,
-  isFreshSortByQuery,
 }: SearchProps) {
   const metadataTitle = `Search Results | ${SITE_NAME}`
   const { push, query } = useRouter()
   const { itemListElement: searchResultsElements, totalResults } =
     results.results
 
-  const drbResponse = results.drbResults?.data
-  const drbWorks = drbResponse?.works
-
   // TODO: Move this to global context
   const searchParams = mapQueryToSearchParams(query)
   // Map Search Results Elements from response to SearchResultBib objects
   const searchResultBibs = mapElementsToSearchResultsBibs(searchResultsElements)
-  // Map DRB Works from response to DRBResult objects
-  const drbResults = mapWorksToDRBResults(drbWorks)
 
   const isLoading = useLoading()
   const searchedFromAdvanced = query.searched_from === "advanced"
 
+  const searchResultsHeadingRef = useRef(null)
+
+  const { setPersistentFocus } = useFocusContext()
+
   const handlePageChange = async (page: number) => {
     const newQuery = getSearchQuery({ ...searchParams, page })
+    setPersistentFocus(idConstants.searchResultsHeading)
     await push(
       `${newQuery}${searchedFromAdvanced ? "&searched_from=advanced" : ""}`
     )
@@ -90,21 +91,26 @@ export default function Search({
       SortKey,
       SortOrder | undefined
     ]
+    setPersistentFocus(idConstants.searchResultsSort)
     // Push the new query values, removing the page number if set.
     await push(
-      getSearchQuery({ ...searchParams, sortBy, order, page: undefined })
+      getSearchQuery({ ...searchParams, sortBy, order, page: undefined }),
+      undefined,
+      { scroll: false }
     )
   }
 
-  const searchResultsHeadingRef = useRef(null)
+  // Ref for accessible announcement of loading state.
+  const liveLoadingRegionRef = useRef<HTMLDivElement | null>(null)
+
   useEffect(() => {
-    // don't focus on "Displaying n results..." if the page is not done loading
-    if (isLoading) return
-    // keep focus on sort by selector if the last update to the query was a sort
-    if (isFreshSortByQuery) return
-    // otherwise, focus on "Displaying n results..."
-    searchResultsHeadingRef?.current?.focus()
-  }, [isLoading, isFreshSortByQuery])
+    if (liveLoadingRegionRef.current) {
+      liveLoadingRegionRef.current.textContent = "Loading results"
+    }
+  }, [isLoading])
+
+  const displayFilters = !!aggs?.filter((agg: Aggregation) => agg.values.length)
+    .length
 
   return (
     <>
@@ -112,101 +118,125 @@ export default function Search({
       <Layout
         bannerNotification={bannerNotification}
         searchAggregations={aggs}
+        searchResultsCount={totalResults}
         isAuthenticated={isAuthenticated}
         activePage="search"
         sidebar={
-          <>
-            {totalResults > 0 ? (
-              <SearchResultsSort
-                searchParams={searchParams}
-                handleSortChange={handleSortChange}
-                // We have to render the sort select twice and toggle which is shown at the desktop breakpoint, since
-                // the design has it appearing in the sidebar on desktop and in the main content on mobile.
-                // Using inline styles to do this for now since using useNYPLBreakpoints had a visible lag.
-                // TODO: Extend the Layout component to receive a prop that contains content to be shown below the
-                //  main header, which will include the search results heading and the sort select, which would allow us
-                //  to only render the sort select once.
-                display={{
-                  base: "none",
-                  md: "block",
-                }}
-              />
-            ) : null}
-            {isLoading ? (
-              <SkeletonLoader showImage={false} />
-            ) : (
-              <DRBContainer
-                drbResults={drbResults}
-                totalWorks={drbResponse?.totalWorks}
-                searchParams={searchParams}
-              />
-            )}
-          </>
+          totalResults > 0 ? (
+            <Box display={{ base: "none", md: "block" }} width="100%" pb="l">
+              {displayFilters && (
+                <Card
+                  id="filter-sidebar-container"
+                  backgroundColor="ui.bg.default"
+                  p="s"
+                  borderRadius="8px"
+                  mb="s"
+                >
+                  <CardHeading
+                    size="heading6"
+                    id="filter-results-heading"
+                    tabIndex="0"
+                  >
+                    Filter results
+                  </CardHeading>
+                  <CardContent>
+                    <SearchFilters aggregations={aggs} />
+                  </CardContent>
+                </Card>
+              )}
+            </Box>
+          ) : isLoading ? (
+            <SkeletonLoader showImage={false} width="250px" />
+          ) : null
         }
       >
         {totalResults ? (
-          <>
-            {isLoading ? (
-              <SkeletonLoader showImage={false} mb="m" />
-            ) : (
-              <>
-                {displayAppliedFilters && (
-                  <AppliedFilters aggregations={aggs} />
-                )}
+          <Box
+            sx={{
+              ml: { base: "0px", md: "32px" },
+            }}
+          >
+            <Flex flexDir="column">
+              {displayAppliedFilters && <AppliedFilters aggregations={aggs} />}
+              <Flex justifyContent="space-between" marginTop="xxs">
                 <Heading
+                  id="search-results-heading"
                   data-testid="search-results-heading"
                   level="h2"
                   size="heading5"
                   // Heading component does not expect tabIndex prop, so we
                   // are ignoring the typescript error that pops up.
                   tabIndex={-1}
+                  paddingBottom="0"
                   mb={{ base: "s", md: "l" }}
                   minH="40px"
                   ref={searchResultsHeadingRef}
+                  aria-live="polite"
                 >
                   {getSearchResultsHeading(searchParams, totalResults)}
                 </Heading>
-              </>
-            )}
+                <SearchResultsSort
+                  searchParams={searchParams}
+                  handleSortChange={handleSortChange}
+                  // TODO: Extend the Layout component to receive a prop that contains content to be shown below the
+                  //  main header, which will include the search results heading and the sort select, which would allow us
+                  //  to only render the sort select once.
+                  display={{
+                    base: "none",
+                    md: "block",
+                  }}
+                />
+              </Flex>
+            </Flex>
+
             <SearchResultsSort
               // Mobile only Search Results Sort Select
               // Necessary due to the placement of the Select in the main content on mobile only.
               id="search-results-sort-mobile"
               searchParams={searchParams}
               handleSortChange={handleSortChange}
-              // We have to render the sort select twice and toggle which is shown at the desktop breakpoint, since
-              // the design has it appearing in the sidebar on desktop and in the main content on mobile.
-              // Using inline styles to do this for now since using useNYPLBreakpoints had a visible lag.
-              // TODO: Extend the Layout component to receive a prop that contains content to be shown below the
-              //  main header, which will include the search results heading and the sort select, which would allow us
-              //  to only render the sort select once.
               display={{
                 base: "block",
                 md: "none",
               }}
             />
-            {!isLoading ? (
+            {isLoading ? (
+              <>
+                <SkeletonLoader showImage={false} mb="m" />
+                <div
+                  id="search-live-region"
+                  ref={liveLoadingRegionRef}
+                  style={{
+                    position: "absolute",
+                    width: "1px",
+                    height: "1px",
+                    margin: "-1px",
+                    padding: 0,
+                    overflow: "hidden",
+                    clip: "rect(0,0,0,0)",
+                    border: 0,
+                  }}
+                />
+              </>
+            ) : (
               <SimpleGrid columns={1} id="search-results-list" gap="grid.l">
                 {searchResultBibs.map((bib: SearchResultsBib) => {
                   return <SearchResult key={bib.id} bib={bib} />
                 })}
               </SimpleGrid>
-            ) : null}
+            )}
             <Pagination
               id="results-pagination"
               mt="xxl"
               mb="l"
+              className="no-print"
               initialPage={searchParams.page}
               currentPage={searchParams.page}
               pageCount={Math.ceil(totalResults / RESULTS_PER_PAGE)}
               onPageChange={handlePageChange}
             />
-          </>
-        ) : /**
-         * TODO: The logic and copy for different scenarios will need to be added when
-         * filters are implemented
-         */
-        isLoading ? (
+          </Box>
+        ) : isLoading ? (
           <SkeletonLoader showImage={false} />
         ) : (
           // Heading component does not expect tabIndex prop, so we are ignoring
@@ -221,15 +251,7 @@ export default function Search({
   )
 }
 
-/**
- * resolvedUrl is the original URL of the search page including the search query parameters.
- * It is provided by Next.js as an attribute of the context object that is passed to getServerSideProps.
- *
- * Here it is used to construct a SearchParams object from the parsed query parameters in order to fetch the
- * relevant search results on the server side (via fetchResults).
- *
- */
-export async function getServerSideProps({ resolvedUrl, req, query }) {
+export async function getServerSideProps({ req, query }) {
   const bannerNotification = process.env.SEARCH_RESULTS_NOTIFICATION || ""
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const results = await fetchResults(mapQueryToSearchParams(query))
@@ -241,13 +263,9 @@ export async function getServerSideProps({ resolvedUrl, req, query }) {
   }
 
   const isAuthenticated = patronTokenResponse.isTokenValid
-  const isFreshSortByQuery = getFreshSortByQuery(
-    req.headers.referer,
-    resolvedUrl
-  )
+
   return {
     props: {
-      isFreshSortByQuery,
       bannerNotification,
       results,
       isAuthenticated,

@@ -20,26 +20,6 @@ export const searchFormSelectOptions = Object.keys(SEARCH_FORM_OPTIONS).map(
     value: key,
   })
 )
-/**
- * determineFreshSortByQuery
- * Returns true only if the last update to the query was a sort by change.
- * Used to determine whether to focus on the search results header
- */
-export const getFreshSortByQuery = (prevUrl: string, currentUrl: string) => {
-  if (!prevUrl) return false
-  const sortByAndDirection = (query) => {
-    const match = query.match(/sort=(.*?)&sort_direction=(.*?)(&|$)/)
-    if (match) return [match[1], match[2]]
-  }
-  const previousSortValues = sortByAndDirection(prevUrl)
-  const currentSortValues = sortByAndDirection(currentUrl)
-  if (!currentSortValues) return false
-  const sortTypeHasChanged = previousSortValues?.[0] !== currentSortValues[0]
-  const sortDirectionHasChanged =
-    previousSortValues?.[1] !== currentSortValues[1]
-  const sortValuesHaveUpdated = sortTypeHasChanged || sortDirectionHasChanged
-  return sortValuesHaveUpdated
-}
 
 /**
  * getSearchResultsHeading
@@ -61,7 +41,9 @@ export function getSearchResultsHeading(
     totalResults > RESULTS_PER_PAGE
       ? `${resultsStart}-${resultsEnd}`
       : totalResults.toLocaleString()
-  } of ${totalResults.toLocaleString()} results${queryDisplayString}`
+  } of${
+    totalResults === 10000 ? " over" : ""
+  } ${totalResults.toLocaleString()} results${queryDisplayString}`
 }
 
 // Shows the final part of the search query string (e.g. "for keyword 'cats'")
@@ -367,4 +349,14 @@ export function checkForRedirectOnMatch(
   }
 
   return null
+}
+
+export function filtersObjectLength(obj) {
+  let total = 0
+  for (const key in obj) {
+    if (Array.isArray(obj[key])) {
+      total += obj[key].length
+    }
+  }
+  return total
 }

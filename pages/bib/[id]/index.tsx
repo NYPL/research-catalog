@@ -244,6 +244,7 @@ export default function BibPage({
               }
               isDismissible
               mb="s"
+              className="no-print"
             />
             <ItemFilters
               itemAggregations={bib.itemAggregations}
