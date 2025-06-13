@@ -45,6 +45,8 @@ import {
 } from "../../../src/utils/itemFilterUtils"
 import RCHead from "../../../src/components/Head/RCHead"
 import FindingAid from "../../../src/components/BibPage/FindingAid"
+import Custom404 from "../../404"
+import { tryInstantiate } from "../../../src/utils/appUtils"
 
 interface BibPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -52,6 +54,7 @@ interface BibPropsType {
   isAuthenticated?: boolean
   itemPage?: number
   viewAllItems?: boolean
+  notFound?: boolean
 }
 
 /**
@@ -63,11 +66,18 @@ export default function BibPage({
   isAuthenticated,
   itemPage = 1,
   viewAllItems = false,
+  notFound = false,
 }: BibPropsType) {
   const { push, query } = useRouter()
   const metadataTitle = `Item Details | ${SITE_NAME}`
-
-  const [bib, setBib] = useState(new Bib(discoveryBibResult))
+  const [bib, setBib] = useState(
+    tryInstantiate({
+      constructor: Bib,
+      args: [discoveryBibResult],
+      ignoreError: notFound,
+      errorMessage: "Bib undefined",
+    })
+  )
   const [itemsLoading, setItemsLoading] = useState(false)
   const [itemFetchError, setItemFetchError] = useState(false)
 
@@ -80,6 +90,10 @@ export default function BibPage({
   const itemTableHeadingRef = useRef<HTMLDivElement>(null)
   const viewAllLoadingTextRef = useRef<HTMLDivElement & HTMLLabelElement>(null)
   const controllerRef = useRef<AbortController>()
+
+  if (notFound) {
+    return <Custom404 activePage="bib" />
+  }
 
   const { topDetails, bottomDetails, holdingsDetails, findingAid } =
     new BibDetailsModel(discoveryBibResult, annotatedMarc)
@@ -343,9 +357,8 @@ export async function getServerSideProps({ params, query, req }) {
       }
     case 404:
       return {
-        redirect: {
-          destination: PATHS["404"],
-          permanent: false,
+        props: {
+          notFound: true,
         },
       }
     default:

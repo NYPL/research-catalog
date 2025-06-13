@@ -565,4 +565,16 @@ describe("EDD Request page", () => {
       expect(screen.getByText("Submit request")).toBeDisabled()
     })
   })
+  describe("EDD request not found", () => {
+    render(
+      <EDDRequestPage
+        discoveryBibResult={undefined}
+        discoveryItemResult={undefined}
+        patronId="123"
+        isAuthenticated={true}
+        notFound={true}
+      />
+    )
+    expect(screen.getByText("404 Not Found")).toBeInTheDocument()
+  })
 })

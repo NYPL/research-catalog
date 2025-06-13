@@ -1,33 +1,22 @@
 import React from "react"
-import { render, screen } from "../../../src/utils/testUtils"
-
+import { render, screen, within } from "../../../src/utils/testUtils"
 import Custom404 from "../../../pages/404/index"
-import Redirect404 from "../../../pages/404/redirect"
 import { appConfig } from "../../../src/config/config"
 
 describe("404", () => {
   it("should display 404 text", () => {
-    render(<Custom404 />)
-
-    const FourOhFourText = "404 Not Found"
-    const heading = screen.getByRole("heading")
-    expect(heading).toHaveTextContent(FourOhFourText)
+    render(<Custom404 activePage="account" />)
+    const container = screen.getByRole("main")
+    const heading = within(container).getByRole("heading")
+    expect(heading).toHaveTextContent("404 Not Found")
   })
   it("should have links to homepage and legacy catalogs", () => {
-    render(<Custom404 />)
+    render(<Custom404 activePage="hold" />)
+    const container = screen.getByRole("main")
 
-    const homeLink = screen.getByText("Research Catalog")
+    const homeLink = within(container).getByText("Research Catalog")
     expect(homeLink).toHaveAttribute("href", "/research/research-catalog")
-    const legacyLink = screen.getByText("Legacy Catalog")
+    const legacyLink = within(container).getByText("Legacy Catalog")
     expect(legacyLink).toHaveAttribute("href", appConfig.urls.legacyCatalog)
-  })
-})
-
-describe("Redirect", () => {
-  it("should have we're sorry text", () => {
-    render(<Redirect404 />)
-    const wereSorry = "We're sorry..."
-    const heading = screen.getByRole("heading")
-    expect(heading).toHaveTextContent(wereSorry)
   })
 })
