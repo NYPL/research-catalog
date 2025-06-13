@@ -29,11 +29,6 @@ describe("Layout", () => {
     render(<Layout activePage="search"></Layout>)
     screen.getByLabelText(searchLabel)
   })
-  it("should hide header on 404", () => {
-    render(<Layout activePage="404"></Layout>)
-    const header = screen.queryByRole("heading", { level: 1 })
-    expect(header).not.toBeInTheDocument()
-  })
   it("should hide Log Out if user is not logged in", () => {
     render(<Layout isAuthenticated={false}></Layout>)
     const logout = screen.queryByText("Log Out")

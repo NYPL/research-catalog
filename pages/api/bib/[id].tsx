@@ -28,7 +28,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         res.redirect(redirectUrl)
         break
       case 404:
-        res.redirect(BASE_URL + PATHS["404"])
+        res.status(404).json({ error: `Bib ${bibId} not found` })
         break
       default:
         res.status(200).json({

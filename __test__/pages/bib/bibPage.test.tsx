@@ -333,3 +333,14 @@ describe("Bib Page Item Table", () => {
     ).toBeInTheDocument()
   })
 })
+
+describe("Bib not found", () => {
+  render(
+    <BibPage
+      notFound={true}
+      discoveryBibResult={undefined}
+      annotatedMarc={undefined}
+    />
+  )
+  expect(screen.getByText("404 Not Found")).toBeInTheDocument()
+})

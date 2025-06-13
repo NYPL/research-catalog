@@ -30,11 +30,13 @@ import initializePatronTokenAuth, {
 
 import type { DiscoveryBibResult } from "../../../src/types/bibTypes"
 import RCHead from "../../../src/components/Head/RCHead"
+import Custom404 from "../../404"
 
 interface HoldConfirmationPageProps {
   isEDD?: boolean
   pickupLocationLabel?: string
   discoveryBibResult: DiscoveryBibResult
+  notFound?: boolean
 }
 
 /**
@@ -45,9 +47,12 @@ export default function HoldConfirmationPage({
   isEDD = false,
   pickupLocationLabel,
   discoveryBibResult,
+  notFound = false,
 }: HoldConfirmationPageProps) {
+  if (notFound) {
+    return <Custom404 activePage="hold" />
+  }
   const metadataTitle = `Request Confirmation | ${SITE_NAME}`
-
   const bib = new Bib(discoveryBibResult)
   const item = bib?.items[0]
 
@@ -182,12 +187,8 @@ export async function getServerSideProps({ params, req, res, query }) {
     }
   } catch (error) {
     console.log(error)
-
     return {
-      redirect: {
-        destination: PATHS["404"],
-        permanent: false,
-      },
+      props: { notFound: true },
     }
   }
 }

@@ -6,13 +6,18 @@ import RCLink from "../../src/components/Links/RCLink/RCLink"
 import { SITE_NAME } from "../../src/config/constants"
 import ExternalLink from "../../src/components/Links/ExternalLink/ExternalLink"
 import RCHead from "../../src/components/Head/RCHead"
+import type { RCPage } from "../../src/types/pageTypes"
 
-export default function Custom404() {
+type ErrorPageProps = {
+  activePage: RCPage
+}
+
+export default function Custom404({ activePage }: ErrorPageProps) {
   const metadataTitle = `404 | ${SITE_NAME}`
   return (
     <>
       <RCHead metadataTitle={metadataTitle} />
-      <Layout activePage="404">
+      <Layout activePage={activePage}>
         <Heading level="h1">404 Not Found</Heading>
         <p>We&apos;re sorry...</p>
         <p>The page you were looking for doesn&apos;t exist.</p>

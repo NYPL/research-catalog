@@ -40,6 +40,8 @@ import type {
   PatronEligibilityStatus,
 } from "../../../../src/types/holdPageTypes"
 import RCHead from "../../../../src/components/Head/RCHead"
+import Custom404 from "../../../404"
+import { tryInstantiate } from "../../../../src/utils/appUtils"
 
 interface EDDRequestPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -49,6 +51,7 @@ interface EDDRequestPropsType {
   isAuthenticated?: boolean
   errorStatus?: HoldErrorStatus
   patronEligibilityStatus?: PatronEligibilityStatus
+  notFound?: boolean
 }
 
 /**
@@ -62,12 +65,22 @@ export default function EDDRequestPage({
   isAuthenticated,
   errorStatus: defaultErrorStatus,
   patronEligibilityStatus: defaultEligibilityStatus,
+  notFound = false,
 }: EDDRequestPropsType) {
   const metadataTitle = `Electronic Delivery Request | ${SITE_NAME}`
-  const bib = new Bib(discoveryBibResult)
-  const item = new Item(discoveryItemResult, bib)
-
-  const holdId = `${item.bibId}-${item.id}`
+  const bib = tryInstantiate({
+    constructor: Bib,
+    args: [discoveryBibResult],
+    ignoreError: notFound,
+    errorMessage: "Bib undefined",
+  })
+  const item = tryInstantiate({
+    constructor: Item,
+    args: [discoveryItemResult, bib],
+    ignoreError: notFound,
+    errorMessage: "Item undefined",
+  })
+  const holdId = item ? `${item.bibId}-${item.id}` : ""
 
   const [errorStatus, setErrorStatus] = useState(defaultErrorStatus)
   const [patronEligibilityStatus, setPatronEligibilityStatus] = useState(
@@ -90,7 +103,7 @@ export default function EDDRequestPage({
     ...initialEDDFormState,
     emailAddress: patronEmail,
     patronId,
-    source: item.formattedSourceForHoldRequest,
+    source: item?.formattedSourceForHoldRequest,
     // Override values with server form state in the case of a no-js request
     ...formStateFromServer,
   })
@@ -104,6 +117,10 @@ export default function EDDRequestPage({
       bannerContainerRef.current.focus()
     }
   }, [errorStatus, patronEligibilityStatus])
+
+  if (notFound) {
+    return <Custom404 activePage="hold" />
+  }
 
   const handleServerHoldPostError = (errorMessage: string) => {
     console.error(
@@ -307,12 +324,8 @@ export async function getServerSideProps({ params, req, res, query }) {
     }
   } catch (error) {
     console.log(error)
-
     return {
-      redirect: {
-        destination: PATHS["404"],
-        permanent: false,
-      },
+      props: { notFound: true },
     }
   }
 }
