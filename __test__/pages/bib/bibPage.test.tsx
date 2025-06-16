@@ -286,6 +286,30 @@ describe("Bib Page Item Table", () => {
     expect(mockRouter.asPath).toBe("/bib/pb5579193/all")
   })
 
+  it("shows 'view fewer items' button on /all route even when no filters are applied", async () => {
+    global.fetch = jest.fn().mockImplementationOnce(() =>
+      Promise.resolve({
+        status: 200,
+        ok: true,
+        json: () =>
+          Promise.resolve({
+            success: true,
+            status: 200,
+            discoveryBibResult: bibWithManyItems.resource,
+            items: Array(26).fill({}),
+          }),
+      })
+    )
+    await userEvent.click(screen.getByText("View all 26 items").closest("a"))
+    expect(mockRouter.asPath).toBe("/bib/pb5579193/all")
+
+    expect(screen.getByText("View fewer items")).toBeInTheDocument()
+    expect(screen.queryByTestId("filter-tags")).not.toBeInTheDocument()
+
+    await userEvent.click(screen.getByText("View fewer items"))
+    expect(mockRouter.asPath).toBe("/bib/pb5579193")
+  })
+
   it("shows all the items when the view all button is clicked", async () => {
     global.fetch = jest.fn().mockImplementationOnce(() =>
       Promise.resolve({
