@@ -46,6 +46,7 @@ import {
 import RCHead from "../../../src/components/Head/RCHead"
 import FindingAid from "../../../src/components/BibPage/FindingAid"
 import CustomError from "../../404"
+import type { HTTPStatusCode } from "../../../src/types/appTypes"
 
 interface BibPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -53,7 +54,7 @@ interface BibPropsType {
   isAuthenticated?: boolean
   itemPage?: number
   viewAllItems?: boolean
-  notFound?: boolean
+  errorStatus?: HTTPStatusCode | null
 }
 
 /**
@@ -65,7 +66,7 @@ export default function BibPage({
   isAuthenticated,
   itemPage = 1,
   viewAllItems = false,
-  notFound = false,
+  errorStatus = null,
 }: BibPropsType) {
   const { push, query } = useRouter()
   const metadataTitle = `Item Details | ${SITE_NAME}`
@@ -84,8 +85,8 @@ export default function BibPage({
   const viewAllLoadingTextRef = useRef<HTMLDivElement & HTMLLabelElement>(null)
   const controllerRef = useRef<AbortController>()
 
-  if (notFound) {
-    return <CustomError statusCode={404} activePage="bib" />
+  if (errorStatus) {
+    return <CustomError statusCode={errorStatus} activePage="bib" />
   }
 
   const { topDetails, bottomDetails, holdingsDetails, findingAid } =
@@ -351,7 +352,7 @@ export async function getServerSideProps({ params, query, req }) {
     case 404:
       return {
         props: {
-          notFound: true,
+          errorStatus: status,
         },
       }
     default:

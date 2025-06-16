@@ -41,6 +41,7 @@ import type {
 } from "../../../../src/types/holdPageTypes"
 import RCHead from "../../../../src/components/Head/RCHead"
 import Custom404 from "../../../404"
+import CustomError from "../../../404"
 
 interface EDDRequestPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -109,7 +110,7 @@ export default function EDDRequestPage({
   }, [errorStatus, patronEligibilityStatus])
 
   if (notFound) {
-    return <Custom404 activePage="hold" />
+    return <CustomError statusCode={404} activePage="hold" />
   }
 
   const handleServerHoldPostError = (errorMessage: string) => {

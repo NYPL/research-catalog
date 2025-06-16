@@ -37,11 +37,14 @@ import RCHead from "../../src/components/Head/RCHead"
 import type { Aggregation } from "../../src/types/filterTypes"
 import SearchFilters from "../../src/components/SearchFilters/SearchFilters"
 import { useFocusContext, idConstants } from "../../src/context/FocusContext"
+import type { HTTPStatusCode } from "../../src/types/appTypes"
+import CustomError from "../404"
 
 interface SearchProps {
   bannerNotification?: string
   results: SearchResultsResponse
   isAuthenticated: boolean
+  errorStatus?: HTTPStatusCode | null
 }
 
 /**
@@ -52,16 +55,16 @@ export default function Search({
   bannerNotification,
   results,
   isAuthenticated,
+  errorStatus = null,
 }: SearchProps) {
   const metadataTitle = `Search Results | ${SITE_NAME}`
+
   const { push, query } = useRouter()
-  const { itemListElement: searchResultsElements, totalResults } =
-    results.results
+  // const { itemListElement: searchResultsElements, totalResults } =
+  //   results.results
 
   // TODO: Move this to global context
   const searchParams = mapQueryToSearchParams(query)
-  // Map Search Results Elements from response to SearchResultBib objects
-  const searchResultBibs = mapElementsToSearchResultsBibs(searchResultsElements)
 
   const isLoading = useLoading()
   const searchedFromAdvanced = query.searched_from === "advanced"
@@ -77,12 +80,6 @@ export default function Search({
       `${newQuery}${searchedFromAdvanced ? "&searched_from=advanced" : ""}`
     )
   }
-
-  const aggs = results?.aggregations?.itemListElement
-  // if there are no results, then applied filters correspond to aggregations
-  // with no values, which will break our code down the line. Do not render
-  // the Applied Filters tagset.
-  const displayAppliedFilters = totalResults > 0
 
   const handleSortChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const selectedSortOption = e.target.value
@@ -109,8 +106,23 @@ export default function Search({
     }
   }, [isLoading])
 
+  if (errorStatus) {
+    return <CustomError statusCode={errorStatus} activePage="search" />
+  }
+  const { itemListElement: searchResultsElements, totalResults } =
+    results.results
+
+  const aggs = results?.aggregations?.itemListElement
+  // if there are no results, then applied filters correspond to aggregations
+  // with no values, which will break our code down the line. Do not render
+  // the Applied Filters tagset.
+  const displayAppliedFilters = totalResults > 0
+
   const displayFilters = !!aggs?.filter((agg: Aggregation) => agg.values.length)
     .length
+
+  // Map Search Results Elements from response to SearchResultBib objects
+  const searchResultBibs = mapElementsToSearchResultsBibs(searchResultsElements)
 
   return (
     <>
@@ -238,14 +250,7 @@ export default function Search({
           </Box>
         ) : isLoading ? (
           <SkeletonLoader showImage={false} />
-        ) : (
-          // Heading component does not expect tabIndex prop, so we are ignoring
-          // the typescript error that pops up.
-          // @ts-expect-error
-          <Heading ref={searchResultsHeadingRef} tabIndex="0" level="h3">
-            No results. Try a different search.
-          </Heading>
-        )}
+        ) : null}
       </Layout>
     </>
   )
@@ -254,7 +259,13 @@ export default function Search({
 export async function getServerSideProps({ req, query }) {
   const bannerNotification = process.env.SEARCH_RESULTS_NOTIFICATION || ""
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
+
   const results = await fetchResults(mapQueryToSearchParams(query))
+
+  // Handle API errors
+  if ("status" in results) {
+    return { props: { errorStatus: results.status } }
+  }
 
   // Check for `redirectOnMatch` trigger:
   const redirect = checkForRedirectOnMatch(results, query)

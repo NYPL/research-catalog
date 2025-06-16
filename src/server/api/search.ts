@@ -13,7 +13,7 @@ import nyplApiClient from "../nyplApiClient"
 
 export async function fetchResults(
   searchParams: SearchParams
-): Promise<SearchResultsResponse | Error> {
+): Promise<SearchResultsResponse | { status: number }> {
   const { q, field, filters } = searchParams
 
   // If user is making a search for bib number (i.e. field set to "standard_number"),
@@ -48,27 +48,38 @@ export async function fetchResults(
   // Get the following in parallel:
   //  - search results
   //  - aggregations
-  const client = await nyplApiClient()
-  const [resultsResponse, aggregationsResponse] = await Promise.allSettled([
-    client.get(`${DISCOVERY_API_SEARCH_ROUTE}${resultsQuery}`),
-    client.get(`${DISCOVERY_API_SEARCH_ROUTE}${aggregationQuery}`),
-  ])
-
-  // Assign results values for each response when status is fulfilled
-  const results =
-    resultsResponse.status === "fulfilled" && resultsResponse.value
-
-  const aggregations =
-    aggregationsResponse.status === "fulfilled" && aggregationsResponse.value
-
   try {
+    const client = await nyplApiClient()
+    const [resultsResponse, aggregationsResponse] = await Promise.allSettled([
+      client.get(`${DISCOVERY_API_SEARCH_ROUTE}${resultsQuery}`),
+      client.get(`${DISCOVERY_API_SEARCH_ROUTE}${aggregationQuery}`),
+    ])
+
+    if (
+      resultsResponse.status === "rejected" ||
+      aggregationsResponse.status === "rejected"
+    ) {
+      logServerError("fetchResults", "Server error")
+      return { status: 500 }
+    }
+
+    const results = resultsResponse.value
+    const aggregations = aggregationsResponse.value
+
+    // Handle empty results (a search 404)
+    if (!(results?.totalResults > 0)) {
+      return {
+        status: 404,
+      }
+    }
+
     return {
       results,
       aggregations,
       page: searchParams.page,
     }
-  } catch (error) {
+  } catch (error: any) {
     logServerError("fetchResults", error.message)
-    return new Error("Error fetching Search Results")
+    return { status: 500 }
   }
 }
