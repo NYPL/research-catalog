@@ -45,7 +45,7 @@ import {
 } from "../../../src/utils/itemFilterUtils"
 import RCHead from "../../../src/components/Head/RCHead"
 import FindingAid from "../../../src/components/BibPage/FindingAid"
-import CustomError from "../../404"
+import Custom404 from "../../404"
 import type { HTTPStatusCode } from "../../../src/types/appTypes"
 
 interface BibPropsType {
@@ -85,8 +85,8 @@ export default function BibPage({
   const viewAllLoadingTextRef = useRef<HTMLDivElement & HTMLLabelElement>(null)
   const controllerRef = useRef<AbortController>()
 
-  if (errorStatus) {
-    return <CustomError statusCode={errorStatus} activePage="bib" />
+  if (errorStatus === 404) {
+    return <Custom404 activePage="bib" />
   }
 
   const { topDetails, bottomDetails, holdingsDetails, findingAid } =

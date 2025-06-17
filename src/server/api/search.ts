@@ -13,7 +13,7 @@ import nyplApiClient from "../nyplApiClient"
 
 export async function fetchResults(
   searchParams: SearchParams
-): Promise<SearchResultsResponse | { status: number }> {
+): Promise<SearchResultsResponse | { status: number; message: string }> {
   const { q, field, filters } = searchParams
 
   // If user is making a search for bib number (i.e. field set to "standard_number"),
@@ -49,29 +49,40 @@ export async function fetchResults(
   //  - search results
   //  - aggregations
   try {
+    // Failure to build client will throw from this:
     const client = await nyplApiClient()
+
     const [resultsResponse, aggregationsResponse] = await Promise.allSettled([
       client.get(`${DISCOVERY_API_SEARCH_ROUTE}${resultsQuery}`),
       client.get(`${DISCOVERY_API_SEARCH_ROUTE}${aggregationQuery}`),
     ])
 
+    // Handle failed requests
     if (
-      resultsResponse.status === "rejected" ||
-      aggregationsResponse.status === "rejected"
+      resultsResponse.status !== "fulfilled" ||
+      aggregationsResponse.status !== "fulfilled"
     ) {
-      logServerError("fetchResults", "Server error")
-      return { status: 500 }
+      if (resultsResponse.status === "rejected") {
+        logServerError("fetchResults", resultsResponse.reason)
+        return { status: 500, message: resultsResponse.reason }
+      }
+      if (aggregationsResponse.status === "rejected") {
+        logServerError("fetchResults", aggregationsResponse.reason)
+        return { status: 500, message: aggregationsResponse.reason }
+      }
+    }
+
+    // Handle empty results (a search "404")
+    if (!(resultsResponse?.value?.totalResults > 0)) {
+      return {
+        status: 404,
+        message: "No results found",
+      }
     }
 
     const results = resultsResponse.value
-    const aggregations = aggregationsResponse.value
 
-    // Handle empty results (a search 404)
-    if (!(results?.totalResults > 0)) {
-      return {
-        status: 404,
-      }
-    }
+    const aggregations = aggregationsResponse.value
 
     return {
       results,
@@ -80,6 +91,6 @@ export async function fetchResults(
     }
   } catch (error: any) {
     logServerError("fetchResults", error.message)
-    return { status: 500 }
+    return { status: 500, message: error.message }
   }
 }
