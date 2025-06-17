@@ -424,11 +424,4 @@ export default class BibDetails {
         return stackedSubjectLiteral
       })
   }
-
-  getSubjectHeadingUrl(uuid: string, label: string): BibDetailURL {
-    return {
-      url: `/subject_headings/${uuid}?label=${encodeURIComponent(label)}`,
-      urlLabel: label.split(" -- ").pop(),
-    }
-  }
 }
