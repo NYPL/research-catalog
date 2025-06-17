@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+### Added
+
+- Added test for View all behavior on bib page [SCC-4296](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4296)
+
+### Update
+
+- send subject search scope queries to bib results instead of SHEP
+
 ## [1.4.8] 2025-06-12
 
 ### Removed
