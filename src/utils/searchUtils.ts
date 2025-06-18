@@ -335,13 +335,13 @@ export function mapQueryToSearchParams({
  * Otherwise returns `null`
  */
 export function checkForRedirectOnMatch(
-  results: SearchResultsResponse | Error,
+  results: SearchResultsResponse,
   query
 ): object {
-  const hasOneResult =
-    !(results instanceof Error) && results?.results?.totalResults === 1
+  const hasOneResult = results?.results?.totalResults === 1
   if (hasOneResult && query.oclc && query.redirectOnMatch) {
     const matchedBib = results.results.itemListElement[0].result
+
     return {
       destination: `/bib/${matchedBib.uri}`,
       permanent: false,
