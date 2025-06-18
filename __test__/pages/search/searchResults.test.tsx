@@ -65,16 +65,43 @@ describe("Search Results page", () => {
       )
     })
   })
-  describe("No bibs", () => {
-    it("displays No results message", () => {
-      render(<SearchResults isAuthenticated={true} results={noBibs} />)
-
-      const noResultsMessage = screen.getByRole("heading", { level: 3 })
-      expect(noResultsMessage).toHaveTextContent(
-        "No results. Try a different search."
+  describe("errors", () => {
+    it("displays 404 error", async () => {
+      await mockRouter.push(`/search?q=${query}`)
+      render(
+        <SearchResults
+          errorStatus={404}
+          results={undefined}
+          isAuthenticated={true}
+        />
       )
-      const cards = screen.queryAllByRole("heading", { level: 4 })
-      expect(cards).toHaveLength(0)
+      expect(screen.getByText("No results found.")).toBeInTheDocument()
+    })
+    it("displays server error", async () => {
+      await mockRouter.push(`/search?q=${query}`)
+      render(
+        <SearchResults
+          errorStatus={500}
+          results={undefined}
+          isAuthenticated={true}
+        />
+      )
+      expect(
+        screen.getByText("Something went wrong on our end.")
+      ).toBeInTheDocument()
+    })
+    it("displays server error", async () => {
+      await mockRouter.push(`/search?q=${query}`)
+      render(
+        <SearchResults
+          errorStatus={401}
+          results={undefined}
+          isAuthenticated={true}
+        />
+      )
+      expect(
+        screen.getByText("There was an unexpected error.")
+      ).toBeInTheDocument()
     })
   })
 })
