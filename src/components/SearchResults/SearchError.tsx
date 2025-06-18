@@ -8,13 +8,63 @@ import ExternalLink from "../Links/ExternalLink/ExternalLink"
 import { useContext } from "react"
 import { FeedbackContext } from "../../context/FeedbackContext"
 
-type ErrorPageProps = {
+type SearchErrorProps = {
   errorStatus: HTTPStatusCode
 }
 
-export default function SearchError({ errorStatus }: ErrorPageProps) {
+export default function SearchError({ errorStatus }: SearchErrorProps) {
   const metadataTitle = `${errorStatus} | ${SITE_NAME}`
   const { onOpen } = useContext(FeedbackContext)
+  const errorContent = (status) => {
+    switch (status) {
+      case 404:
+        return (
+          <>
+            <Heading level="h3">No results found.</Heading>
+            <p>
+              Try a different search, or search our{" "}
+              <ExternalLink href={appConfig.urls.legacyCatalog}>
+                Legacy Catalog
+              </ExternalLink>{" "}
+              for research materials.
+            </p>
+          </>
+        )
+      case 500:
+        return (
+          <>
+            <Heading level="h3">Something went wrong on our end.</Heading>
+            <Text marginBottom="0">
+              We encountered an error while trying to load the page.
+            </Text>
+            <Text marginBottom="0">
+              Try refreshing the page or{" "}
+              <Link onClick={onOpen} id={"feedback-link"}>
+                contact us
+              </Link>{" "}
+              if the error persists.
+            </Text>
+          </>
+        )
+      default:
+        // 400, 422, or other generic client errors
+        return (
+          <>
+            <Heading level="h3">There was an unexpected error.</Heading>
+            <Text marginBottom="0">
+              We couldn&apos;t process your request at this time.
+            </Text>
+            <Text marginBottom="0">
+              Try again later or{" "}
+              <Link onClick={onOpen} id={"feedback-link"}>
+                contact us
+              </Link>{" "}
+              if the error persists.
+            </Text>
+          </>
+        )
+    }
+  }
   return (
     <>
       <RCHead metadataTitle={metadataTitle} />
@@ -29,32 +79,7 @@ export default function SearchError({ errorStatus }: ErrorPageProps) {
           justifyContent="center"
           textAlign="center"
         >
-          {errorStatus === 404 ? (
-            <>
-              <Heading level="h3">No results found.</Heading>
-              <p>
-                Try a different search, or search our{" "}
-                <ExternalLink href={appConfig.urls.legacyCatalog}>
-                  Legacy Catalog
-                </ExternalLink>{" "}
-                for research materials.
-              </p>
-            </>
-          ) : (
-            <>
-              <Heading level="h3">Something went wrong on our end.</Heading>
-              <Text marginBottom="0">
-                We encountered an error while trying to load the page.
-              </Text>
-              <Text marginBottom="0">
-                Try refreshing the page or{" "}
-                <Link onClick={onOpen} id={"feedback-link"}>
-                  contact us
-                </Link>{" "}
-                if the error persists.
-              </Text>
-            </>
-          )}
+          {errorContent(errorStatus)}
         </Flex>
       </Layout>
     </>

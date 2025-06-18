@@ -13,6 +13,7 @@ import SearchResultsBib from "../models/SearchResultsBib"
 import { RESULTS_PER_PAGE, SEARCH_FORM_OPTIONS } from "../config/constants"
 import { collapseMultiValueQueryParams } from "./refineSearchUtils"
 import { getPaginationOffsetStrings } from "./appUtils"
+import { HTTPStatusCode } from "../types/appTypes"
 
 export const searchFormSelectOptions = Object.keys(SEARCH_FORM_OPTIONS).map(
   (key) => ({
@@ -335,13 +336,13 @@ export function mapQueryToSearchParams({
  * Otherwise returns `null`
  */
 export function checkForRedirectOnMatch(
-  results: SearchResultsResponse | Error,
+  results: SearchResultsResponse,
   query
 ): object {
-  const hasOneResult =
-    !(results instanceof Error) && results?.results?.totalResults === 1
+  const hasOneResult = results?.results?.totalResults === 1
   if (hasOneResult && query.oclc && query.redirectOnMatch) {
     const matchedBib = results.results.itemListElement[0].result
+
     return {
       destination: `/bib/${matchedBib.uri}`,
       permanent: false,

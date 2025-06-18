@@ -57,32 +57,49 @@ export async function fetchResults(
       client.get(`${DISCOVERY_API_SEARCH_ROUTE}${aggregationQuery}`),
     ])
 
-    // Handle failed requests
+    // Handle failed promises (500)
     if (
       resultsResponse.status !== "fulfilled" ||
       aggregationsResponse.status !== "fulfilled"
     ) {
       if (resultsResponse.status === "rejected") {
         logServerError("fetchResults", resultsResponse.reason)
-        return { status: 500, message: resultsResponse.reason }
+        return {
+          status: 500,
+          message:
+            resultsResponse.reason instanceof Error
+              ? resultsResponse.reason.message
+              : resultsResponse.reason,
+        }
       }
       if (aggregationsResponse.status === "rejected") {
         logServerError("fetchResults", aggregationsResponse.reason)
-        return { status: 500, message: aggregationsResponse.reason }
+        return {
+          status: 500,
+          message:
+            aggregationsResponse.reason instanceof Error
+              ? aggregationsResponse.reason.message
+              : aggregationsResponse.reason,
+        }
       }
     }
 
-    // Handle empty results (a search "404")
-    if (!(resultsResponse?.value?.totalResults > 0)) {
-      return {
-        status: 404,
-        message: "No results found",
-      }
-    }
-
+    // Assign results values for each response
     const results = resultsResponse.value
 
     const aggregations = aggregationsResponse.value
+
+    // Handle invalid parameter rejection or empty results (422, 404)
+    if (
+      results.status === 422 ||
+      results.status === 404 ||
+      !(results?.totalResults > 0)
+    ) {
+      return {
+        status: results.status ?? 404,
+        message: results.message ?? "No results found",
+      }
+    }
 
     return {
       results,

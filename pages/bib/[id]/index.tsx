@@ -54,7 +54,7 @@ interface BibPropsType {
   isAuthenticated?: boolean
   itemPage?: number
   viewAllItems?: boolean
-  errorStatus?: HTTPStatusCode | null
+  notFound?: boolean
 }
 
 /**
@@ -66,7 +66,7 @@ export default function BibPage({
   isAuthenticated,
   itemPage = 1,
   viewAllItems = false,
-  errorStatus = null,
+  notFound = false,
 }: BibPropsType) {
   const { push, query } = useRouter()
   const metadataTitle = `Item Details | ${SITE_NAME}`
@@ -85,7 +85,7 @@ export default function BibPage({
   const viewAllLoadingTextRef = useRef<HTMLDivElement & HTMLLabelElement>(null)
   const controllerRef = useRef<AbortController>()
 
-  if (errorStatus === 404) {
+  if (notFound) {
     return <Custom404 activePage="bib" />
   }
 
@@ -352,7 +352,7 @@ export async function getServerSideProps({ params, query, req }) {
     case 404:
       return {
         props: {
-          errorStatus: status,
+          notFound: true,
         },
       }
     default:
