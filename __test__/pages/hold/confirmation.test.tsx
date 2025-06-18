@@ -230,4 +230,14 @@ describe("Hold Confirmation page", () => {
       expect(searchLink).toHaveAttribute("href", "/research/research-catalog/")
     })
   })
+  describe("Hold confirmation not found", () => {
+    render(
+      <HoldConfirmationPage
+        discoveryBibResult={undefined}
+        pickupLocationLabel={undefined}
+        notFound={true}
+      />
+    )
+    expect(screen.getByText("404 Not Found")).toBeInTheDocument()
+  })
 })

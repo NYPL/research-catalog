@@ -5,7 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Prerelease
+## [1.5.0] 2025-06-18
+
+### Added
+
+- Added test for View all behavior on bib page [SCC-4296](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4296)
+
+### Update
+
+- send subject search scope queries to bib results instead of SHEP ([SCC-4726](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4726))
+- bib 404's maintain bib urls
 
 ## [1.4.8] 2025-06-12
 
@@ -22,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Corrects `RCLink` and `ExternalLink` accessibility attributes [SCC-4149](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4149)
 - Updates filters to new sidebar design with live filtering [SCC-4721](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4721)
+- Removes redirect for 404s on bib/hold pages and nonexistent paths, instead just displaying 404 view and unchanged URL [SCC-4751](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4751)
 - Updates GH actions to require tests before deploying, and consolidates `qa`, `train`, and `prod` deployment scripts [SCC-4272](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4272)
 
 ## [1.4.7] 2025-05-19

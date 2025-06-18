@@ -3,6 +3,7 @@ import {
   encodeHTML,
   getPaginationOffsetStrings,
   convertToSentenceCase,
+  tryInstantiate,
 } from "../appUtils"
 import {
   ADOBE_ANALYTICS_RC_PREFIX,
@@ -106,6 +107,51 @@ describe("appUtils", () => {
     })
     it("returns the string that is passed in if it's a single word, to avoid sentence-casing acronyms", () => {
       expect(convertToSentenceCase("ISSN")).toEqual("ISSN")
+    })
+  })
+  class TestClass {
+    value: number
+    constructor(value: number) {
+      this.value = value
+    }
+  }
+  class ErrorClass {
+    constructor() {
+      throw new Error("Constructor failed")
+    }
+  }
+
+  describe("tryInstantiate", () => {
+    test("creates instance with correct arguments", () => {
+      const instance = tryInstantiate({
+        constructor: TestClass,
+        args: [42],
+        ignoreError: false,
+        errorMessage: "Should not throw",
+      })
+      expect(instance).toBeInstanceOf(TestClass)
+      expect(instance?.value).toBe(42)
+    })
+
+    test("throws error when constructor fails and ignoreError is false", () => {
+      expect(() => {
+        tryInstantiate({
+          constructor: ErrorClass,
+          args: [],
+          ignoreError: false,
+          errorMessage: "Custom error message",
+        })
+      }).toThrow("Custom error message")
+    })
+
+    test("returns null when constructor fails and ignoreError is true", () => {
+      const result = tryInstantiate({
+        constructor: ErrorClass,
+        args: [],
+        ignoreError: true,
+        errorMessage: "This message is ignored",
+      })
+      expect(result).toBeNull()
     })
   })
 })

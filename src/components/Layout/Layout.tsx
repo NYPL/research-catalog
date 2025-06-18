@@ -43,7 +43,6 @@ const Layout = ({
   bannerNotification,
 }: PropsWithChildren<LayoutProps>) => {
   const showSearch = activePage === "search"
-  const showHeader = activePage !== "404"
   const showNotification = activePage === "" || activePage === "search"
   return (
     <DSProvider>
@@ -64,64 +63,62 @@ const Layout = ({
           },
         }}
         breakout={
-          showHeader && (
-            <>
-              <Breadcrumbs
-                data-testid="layout-breadcrumbs"
-                breadcrumbsType="research"
-                breadcrumbsData={[
-                  { url: "https://nypl.org", text: "Home" },
-                  { url: "https://www.nypl.org/research", text: "Research" },
-                  {
-                    url: `https://www.nypl.org${BASE_URL}`,
-                    text: "Research Catalog",
+          <>
+            <Breadcrumbs
+              data-testid="layout-breadcrumbs"
+              breadcrumbsType="research"
+              breadcrumbsData={[
+                { url: "https://nypl.org", text: "Home" },
+                { url: "https://www.nypl.org/research", text: "Research" },
+                {
+                  url: `https://www.nypl.org${BASE_URL}`,
+                  text: "Research Catalog",
+                },
+              ]}
+              __css={{
+                a: {
+                  _focus: {
+                    outlineColor: "ui.white",
                   },
-                ]}
-                __css={{
-                  a: {
-                    _focus: {
-                      outlineColor: "ui.white",
-                    },
-                  },
-                  "@media print": {
-                    display: "none !important",
-                  },
-                }}
+                },
+                "@media print": {
+                  display: "none !important",
+                },
+              }}
+            />
+            <div className={`${styles.researchHeadingContainer} no-print`}>
+              <Heading id="heading-h1" level="h1" text="Research Catalog" />
+              <SubNav
+                isAuthenticated={isAuthenticated}
+                activePage={activePage}
               />
-              <div className={`${styles.researchHeadingContainer} no-print`}>
-                <Heading id="heading-h1" level="h1" text="Research Catalog" />
-                <SubNav
-                  isAuthenticated={isAuthenticated}
-                  activePage={activePage}
+              {showSearch && (
+                <SearchForm
+                  aggregations={searchAggregations}
+                  searchResultsCount={searchResultsCount}
                 />
-                {showSearch && (
-                  <SearchForm
-                    aggregations={searchAggregations}
-                    searchResultsCount={searchResultsCount}
+              )}
+            </div>
+            {showSearch && (
+              <Flex
+                gap="s"
+                align="center"
+                direction="column"
+                sx={{
+                  padding: "2em 2em .5em 2em",
+                }}
+              >
+                <EDSBanner />
+                {showNotification && bannerNotification && (
+                  <Banner
+                    className={`${styles.banner} no-print`}
+                    heading="New Service Announcement"
+                    content={bannerNotification}
                   />
                 )}
-              </div>
-              {showSearch && (
-                <Flex
-                  gap="s"
-                  align="center"
-                  direction="column"
-                  sx={{
-                    padding: "2em 2em .5em 2em",
-                  }}
-                >
-                  <EDSBanner />
-                  {showNotification && bannerNotification && (
-                    <Banner
-                      className={`${styles.banner} no-print`}
-                      heading="New Service Announcement"
-                      content={bannerNotification}
-                    />
-                  )}
-                </Flex>
-              )}
-            </>
-          )
+              </Flex>
+            )}
+          </>
         }
         sidebar={sidebar ? sidebarPosition : "none"}
         contentPrimary={

@@ -163,3 +163,29 @@ export const convertCamelToShishKabobCase = (str: string) =>
       // If capital letter is not first character, precede with '-':
       return (index > 0 ? "-" : "") + capitalLetter.toLowerCase()
     })
+
+/**
+ * Attempts to instantiate an object using the provided constructor and arguments.
+ * If instantiation fails without a flag to ignore failure, throws an error with the given message.
+ * Otherwise, returns null.
+ */
+export function tryInstantiate<T>({
+  constructor,
+  args = [],
+  ignoreError = false,
+  errorMessage = "Failed to instantiate",
+}: {
+  constructor: new (...args: any[]) => T
+  args?: any[]
+  ignoreError?: boolean
+  errorMessage?: string
+}): T | null {
+  try {
+    return new constructor(...args)
+  } catch {
+    if (ignoreError === false) {
+      throw new Error(errorMessage)
+    }
+    return null
+  }
+}
