@@ -38,7 +38,8 @@ import type { Aggregation } from "../../src/types/filterTypes"
 import SearchFilters from "../../src/components/SearchFilters/SearchFilters"
 import { useFocusContext, idConstants } from "../../src/context/FocusContext"
 import type { HTTPStatusCode } from "../../src/types/appTypes"
-import CustomError from "../404"
+import Custom404 from "../404"
+import SearchError from "../../src/components/SearchResults/SearchError"
 
 interface SearchProps {
   bannerNotification?: string
@@ -107,8 +108,9 @@ export default function Search({
   }, [isLoading])
 
   if (errorStatus) {
-    return <CustomError statusCode={errorStatus} activePage="search" />
+    return <SearchError errorStatus={errorStatus} />
   }
+
   const { itemListElement: searchResultsElements, totalResults } =
     results.results
 
@@ -162,7 +164,14 @@ export default function Search({
           ) : null
         }
       >
-        {totalResults ? (
+        {isLoading ? (
+          <SkeletonLoader
+            sx={{
+              ml: { base: "0px", md: "32px" },
+            }}
+            showImage={false}
+          />
+        ) : (
           <Box
             sx={{
               ml: { base: "0px", md: "32px" },
@@ -248,9 +257,7 @@ export default function Search({
               onPageChange={handlePageChange}
             />
           </Box>
-        ) : isLoading ? (
-          <SkeletonLoader showImage={false} />
-        ) : null}
+        )}
       </Layout>
     </>
   )
