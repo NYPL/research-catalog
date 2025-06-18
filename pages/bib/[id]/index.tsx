@@ -46,7 +46,6 @@ import {
 import RCHead from "../../../src/components/Head/RCHead"
 import FindingAid from "../../../src/components/BibPage/FindingAid"
 import Custom404 from "../../404"
-import type { HTTPStatusCode } from "../../../src/types/appTypes"
 
 interface BibPropsType {
   discoveryBibResult: DiscoveryBibResult

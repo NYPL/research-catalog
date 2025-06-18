@@ -13,7 +13,6 @@ import SearchResultsBib from "../models/SearchResultsBib"
 import { RESULTS_PER_PAGE, SEARCH_FORM_OPTIONS } from "../config/constants"
 import { collapseMultiValueQueryParams } from "./refineSearchUtils"
 import { getPaginationOffsetStrings } from "./appUtils"
-import { HTTPStatusCode } from "../types/appTypes"
 
 export const searchFormSelectOptions = Object.keys(SEARCH_FORM_OPTIONS).map(
   (key) => ({
