@@ -60,8 +60,6 @@ export default function Search({
   const metadataTitle = `Search Results | ${SITE_NAME}`
 
   const { push, query } = useRouter()
-  // const { itemListElement: searchResultsElements, totalResults } =
-  //   results.results
 
   // TODO: Move this to global context
   const searchParams = mapQueryToSearchParams(query)
@@ -163,100 +161,91 @@ export default function Search({
           ) : null
         }
       >
-        {isLoading ? (
-          <SkeletonLoader
-            sx={{
-              ml: { base: "0px", md: "32px" },
-            }}
-            showImage={false}
-          />
-        ) : (
-          <Box
-            sx={{
-              ml: { base: "0px", md: "32px" },
-            }}
-          >
-            <Flex flexDir="column">
-              {displayAppliedFilters && <AppliedFilters aggregations={aggs} />}
-              <Flex justifyContent="space-between" marginTop="xxs">
-                <Heading
-                  id="search-results-heading"
-                  data-testid="search-results-heading"
-                  level="h2"
-                  size="heading5"
-                  // Heading component does not expect tabIndex prop, so we
-                  // are ignoring the typescript error that pops up.
-                  tabIndex={-1}
-                  paddingBottom="0"
-                  mb={{ base: "s", md: "l" }}
-                  minH="40px"
-                  ref={searchResultsHeadingRef}
-                  aria-live="polite"
-                >
-                  {getSearchResultsHeading(searchParams, totalResults)}
-                </Heading>
-                <SearchResultsSort
-                  searchParams={searchParams}
-                  handleSortChange={handleSortChange}
-                  // TODO: Extend the Layout component to receive a prop that contains content to be shown below the
-                  //  main header, which will include the search results heading and the sort select, which would allow us
-                  //  to only render the sort select once.
-                  display={{
-                    base: "none",
-                    md: "block",
-                  }}
-                />
-              </Flex>
+        <Box
+          sx={{
+            ml: { base: "0px", md: "32px" },
+          }}
+        >
+          <Flex flexDir="column">
+            {displayAppliedFilters && <AppliedFilters aggregations={aggs} />}
+            <Flex justifyContent="space-between" marginTop="xxs">
+              <Heading
+                id="search-results-heading"
+                data-testid="search-results-heading"
+                level="h2"
+                size="heading5"
+                // Heading component does not expect tabIndex prop, so we
+                // are ignoring the typescript error that pops up.
+                tabIndex={-1}
+                paddingBottom="0"
+                mb={{ base: "s", md: "l" }}
+                minH="40px"
+                ref={searchResultsHeadingRef}
+                aria-live="polite"
+              >
+                {getSearchResultsHeading(searchParams, totalResults)}
+              </Heading>
+              <SearchResultsSort
+                searchParams={searchParams}
+                handleSortChange={handleSortChange}
+                // TODO: Extend the Layout component to receive a prop that contains content to be shown below the
+                //  main header, which will include the search results heading and the sort select, which would allow us
+                //  to only render the sort select once.
+                display={{
+                  base: "none",
+                  md: "block",
+                }}
+              />
             </Flex>
+          </Flex>
 
-            <SearchResultsSort
-              // Mobile only Search Results Sort Select
-              // Necessary due to the placement of the Select in the main content on mobile only.
-              id="search-results-sort-mobile"
-              searchParams={searchParams}
-              handleSortChange={handleSortChange}
-              display={{
-                base: "block",
-                md: "none",
-              }}
-            />
-            {isLoading ? (
-              <>
-                <SkeletonLoader showImage={false} mb="m" />
-                <div
-                  id="search-live-region"
-                  ref={liveLoadingRegionRef}
-                  style={{
-                    position: "absolute",
-                    width: "1px",
-                    height: "1px",
-                    margin: "-1px",
-                    padding: 0,
-                    overflow: "hidden",
-                    clip: "rect(0,0,0,0)",
-                    border: 0,
-                  }}
-                />
-              </>
-            ) : (
-              <SimpleGrid columns={1} id="search-results-list" gap="grid.l">
-                {searchResultBibs.map((bib: SearchResultsBib) => {
-                  return <SearchResult key={bib.id} bib={bib} />
-                })}
-              </SimpleGrid>
-            )}
-            <Pagination
-              id="results-pagination"
-              mt="xxl"
-              mb="l"
-              className="no-print"
-              initialPage={searchParams.page}
-              currentPage={searchParams.page}
-              pageCount={Math.ceil(totalResults / RESULTS_PER_PAGE)}
-              onPageChange={handlePageChange}
-            />
-          </Box>
-        )}
+          <SearchResultsSort
+            // Mobile only Search Results Sort Select
+            // Necessary due to the placement of the Select in the main content on mobile only.
+            id="search-results-sort-mobile"
+            searchParams={searchParams}
+            handleSortChange={handleSortChange}
+            display={{
+              base: "block",
+              md: "none",
+            }}
+          />
+          {isLoading ? (
+            <>
+              <SkeletonLoader showImage={false} mb="m" />
+              <div
+                id="search-live-region"
+                ref={liveLoadingRegionRef}
+                style={{
+                  position: "absolute",
+                  width: "1px",
+                  height: "1px",
+                  margin: "-1px",
+                  padding: 0,
+                  overflow: "hidden",
+                  clip: "rect(0,0,0,0)",
+                  border: 0,
+                }}
+              />
+            </>
+          ) : (
+            <SimpleGrid columns={1} id="search-results-list" gap="grid.l">
+              {searchResultBibs.map((bib: SearchResultsBib) => {
+                return <SearchResult key={bib.id} bib={bib} />
+              })}
+            </SimpleGrid>
+          )}
+          <Pagination
+            id="results-pagination"
+            mt="xxl"
+            mb="l"
+            className="no-print"
+            initialPage={searchParams.page}
+            currentPage={searchParams.page}
+            pageCount={Math.ceil(totalResults / RESULTS_PER_PAGE)}
+            onPageChange={handlePageChange}
+          />
+        </Box>
       </Layout>
     </>
   )
