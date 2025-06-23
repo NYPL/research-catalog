@@ -78,7 +78,7 @@ export default function BibPage({
     })
   )
 
-  const metadataTitle = buildBibMetadataTitle(bib.title)
+  const metadataTitle = buildBibMetadataTitle(bib?.title)
   const [itemsLoading, setItemsLoading] = useState(false)
   const [itemFetchError, setItemFetchError] = useState(false)
 
