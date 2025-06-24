@@ -13,7 +13,7 @@ import nyplApiClient from "../nyplApiClient"
 
 export async function fetchResults(
   searchParams: SearchParams
-): Promise<SearchResultsResponse | { status: number; message: string }> {
+): Promise<SearchResultsResponse | { status: number; message?: string }> {
   const { q, field, filters } = searchParams
 
   // If user is making a search for bib number (i.e. field set to "standard_number"),

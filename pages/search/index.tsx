@@ -260,10 +260,7 @@ export async function getServerSideProps({ req, query }) {
   }
 
   // Check for `redirectOnMatch` trigger:
-  const redirect = checkForRedirectOnMatch(
-    results as SearchResultsResponse,
-    query
-  )
+  const redirect = checkForRedirectOnMatch(results, query)
   if (redirect) {
     return { redirect }
   }

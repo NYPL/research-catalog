@@ -28,6 +28,7 @@ describe("Search page", () => {
     describe("with redirectOnMatch", () => {
       it("returns results if count > 1", async () => {
         ;(fetchResults as jest.Mock).mockResolvedValue({
+          status: 200,
           results: {
             totalResults: 2,
           },
@@ -45,6 +46,7 @@ describe("Search page", () => {
 
       it("redirect to bib if oclc matches one bib", async () => {
         ;(fetchResults as jest.Mock).mockResolvedValue({
+          status: 200,
           results: {
             totalResults: 1,
             itemListElement: [
