@@ -2,6 +2,7 @@ import {
   ITEM_PAGINATION_BATCH_SIZE,
   ITEM_VIEW_ALL_BATCH_SIZE,
   ITEM_FILTER_PARAMS,
+  SITE_NAME,
 } from "../config/constants"
 import type { BibQueryParams } from "../types/bibTypes"
 import { getPaginationOffsetStrings } from "./appUtils"
@@ -133,4 +134,25 @@ export function getFindingAidFromSupplementaryContent(
   )
 
   return findingAid?.url || null
+}
+
+export function buildBibMetadataTitle(bibTitle?: string | null): string {
+  const TITLE_SUFFIX = `Item Details | ${SITE_NAME}`
+  const MAX_LENGTH = 100
+  const safeTitle = (bibTitle ?? "").trim()
+
+  if (!safeTitle) return TITLE_SUFFIX
+
+  const separator = " | "
+  const fullSuffix = `${separator}${TITLE_SUFFIX}`
+  const ellipsis = "..."
+
+  const maxTitleLength = MAX_LENGTH - fullSuffix.length
+
+  const truncatedTitle =
+    safeTitle.length > maxTitleLength
+      ? `${safeTitle.slice(0, maxTitleLength - ellipsis.length)}${ellipsis}`
+      : safeTitle
+
+  return `${truncatedTitle}${fullSuffix}`
 }

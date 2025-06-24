@@ -11,7 +11,6 @@ import {
 import Layout from "../../../src/components/Layout/Layout"
 import {
   PATHS,
-  SITE_NAME,
   BASE_URL,
   FOCUS_TIMEOUT,
   ERROR_MESSAGES,
@@ -22,6 +21,7 @@ import {
   getBibQueryString,
   buildItemTableDisplayingString,
   isNyplBibID,
+  buildBibMetadataTitle,
 } from "../../../src/utils/bibUtils"
 import BibDetailsModel from "../../../src/models/BibDetails"
 import BibDetails from "../../../src/components/BibPage/BibDetail"
@@ -46,6 +46,7 @@ import {
 import RCHead from "../../../src/components/Head/RCHead"
 import FindingAid from "../../../src/components/BibPage/FindingAid"
 import Custom404 from "../../404"
+import { tryInstantiate } from "../../../src/utils/appUtils"
 
 interface BibPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -68,9 +69,16 @@ export default function BibPage({
   notFound = false,
 }: BibPropsType) {
   const { push, query } = useRouter()
-  const metadataTitle = `Item Details | ${SITE_NAME}`
+  const [bib, setBib] = useState(
+    tryInstantiate({
+      constructor: Bib,
+      args: [discoveryBibResult],
+      ignoreError: notFound,
+      errorMessage: "Bib undefined",
+    })
+  )
 
-  const [bib, setBib] = useState(new Bib(discoveryBibResult))
+  const metadataTitle = buildBibMetadataTitle(bib?.title)
   const [itemsLoading, setItemsLoading] = useState(false)
   const [itemFetchError, setItemFetchError] = useState(false)
 
