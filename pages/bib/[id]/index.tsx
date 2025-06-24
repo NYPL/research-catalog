@@ -11,7 +11,6 @@ import {
 import Layout from "../../../src/components/Layout/Layout"
 import {
   PATHS,
-  SITE_NAME,
   BASE_URL,
   FOCUS_TIMEOUT,
   ERROR_MESSAGES,
@@ -22,6 +21,7 @@ import {
   getBibQueryString,
   buildItemTableDisplayingString,
   isNyplBibID,
+  buildBibMetadataTitle,
 } from "../../../src/utils/bibUtils"
 import BibDetailsModel from "../../../src/models/BibDetails"
 import BibDetails from "../../../src/components/BibPage/BibDetail"
@@ -69,7 +69,6 @@ export default function BibPage({
   notFound = false,
 }: BibPropsType) {
   const { push, query } = useRouter()
-  const metadataTitle = `Item Details | ${SITE_NAME}`
   const [bib, setBib] = useState(
     tryInstantiate({
       constructor: Bib,
@@ -78,6 +77,8 @@ export default function BibPage({
       errorMessage: "Bib undefined",
     })
   )
+
+  const metadataTitle = buildBibMetadataTitle(bib?.title)
   const [itemsLoading, setItemsLoading] = useState(false)
   const [itemFetchError, setItemFetchError] = useState(false)
 
