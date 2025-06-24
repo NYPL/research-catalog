@@ -120,7 +120,6 @@ export default function Search({
   const displayFilters = !!aggs?.filter((agg: Aggregation) => agg.values.length)
     .length
 
-  // Map Search Results Elements from response to SearchResultBib objects
   const searchResultBibs = mapElementsToSearchResultsBibs(searchResultsElements)
 
   return (
@@ -174,8 +173,6 @@ export default function Search({
                 data-testid="search-results-heading"
                 level="h2"
                 size="heading5"
-                // Heading component does not expect tabIndex prop, so we
-                // are ignoring the typescript error that pops up.
                 tabIndex={-1}
                 paddingBottom="0"
                 mb={{ base: "s", md: "l" }}
@@ -258,12 +255,15 @@ export async function getServerSideProps({ req, query }) {
   const results = await fetchResults(mapQueryToSearchParams(query))
 
   // Handle API errors
-  if ("status" in results) {
+  if (results.status !== 200) {
     return { props: { errorStatus: results.status } }
   }
 
   // Check for `redirectOnMatch` trigger:
-  const redirect = checkForRedirectOnMatch(results, query)
+  const redirect = checkForRedirectOnMatch(
+    results as SearchResultsResponse,
+    query
+  )
   if (redirect) {
     return { redirect }
   }

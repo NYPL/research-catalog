@@ -58,29 +58,24 @@ export async function fetchResults(
     ])
 
     // Handle failed promises (500)
-    if (
-      resultsResponse.status !== "fulfilled" ||
-      aggregationsResponse.status !== "fulfilled"
-    ) {
-      if (resultsResponse.status === "rejected") {
-        logServerError("fetchResults", resultsResponse.reason)
-        return {
-          status: 500,
-          message:
-            resultsResponse.reason instanceof Error
-              ? resultsResponse.reason.message
-              : resultsResponse.reason,
-        }
+    if (resultsResponse.status === "rejected") {
+      logServerError("fetchResults", resultsResponse.reason)
+      return {
+        status: 500,
+        message:
+          resultsResponse.reason instanceof Error
+            ? resultsResponse.reason.message
+            : resultsResponse.reason,
       }
-      if (aggregationsResponse.status === "rejected") {
-        logServerError("fetchResults", aggregationsResponse.reason)
-        return {
-          status: 500,
-          message:
-            aggregationsResponse.reason instanceof Error
-              ? aggregationsResponse.reason.message
-              : aggregationsResponse.reason,
-        }
+    }
+    if (aggregationsResponse.status === "rejected") {
+      logServerError("fetchResults", aggregationsResponse.reason)
+      return {
+        status: 500,
+        message:
+          aggregationsResponse.reason instanceof Error
+            ? aggregationsResponse.reason.message
+            : aggregationsResponse.reason,
       }
     }
 
@@ -95,6 +90,7 @@ export async function fetchResults(
       results.status === 404 ||
       !(results?.totalResults > 0)
     ) {
+      logServerError("fetchResults", results.message ?? "No results found")
       return {
         status: results.status ?? 404,
         message: results.message ?? "No results found",
@@ -102,6 +98,7 @@ export async function fetchResults(
     }
 
     return {
+      status: 200,
       results,
       aggregations,
       page: searchParams.page,

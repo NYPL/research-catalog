@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+import type { HTTPStatusCode } from "./appTypes"
 import type { DiscoveryBibResult } from "./bibTypes"
 import type { Aggregation } from "./filterTypes"
 
@@ -44,6 +45,7 @@ export type SortKey = "relevance" | "title" | "date"
 export type SortOrder = "asc" | "desc"
 
 export interface SearchResultsResponse {
+  status: HTTPStatusCode
   results?: SearchResults
   aggregations?: AggregationResults
   page?: number
