@@ -10,6 +10,7 @@ import type {
 } from "../types/bibDetailsTypes"
 import { convertToSentenceCase } from "../utils/appUtils"
 import { getFindingAidFromSupplementaryContent } from "../utils/bibUtils"
+import type { JSONLDValue } from "../types/itemTypes"
 
 export default class BibDetails {
   bib: DiscoveryBibResult
@@ -133,11 +134,14 @@ export default class BibDetails {
       { field: "oclc", label: "OCLC" },
       { field: "lccn", label: "LCCN" },
       { field: "owner", label: "Owning institution" },
+      { field: "language", label: "Language" },
     ]
       .map((fieldMapping: FieldMapping): AnyBibDetail => {
         let detail: AnyBibDetail
         if (fieldMapping.field === "contributorLiteral")
           detail = this.buildSearchFilterUrl(fieldMapping)
+        else if (fieldMapping.field === "language")
+          detail = this.buildLanguageDetail(fieldMapping)
         else detail = this.buildStandardDetail(fieldMapping)
         return detail
       })
@@ -196,6 +200,15 @@ export default class BibDetails {
     return {
       label: convertToSentenceCase(label),
       value,
+    }
+  }
+
+  buildLanguageDetail(fieldMapping: FieldMapping): BibDetail {
+    const bibFieldValue =
+      this[fieldMapping.field] || this.bib[fieldMapping.field]
+    return {
+      label: "Language",
+      value: [bibFieldValue[0].prefLabel],
     }
   }
 
