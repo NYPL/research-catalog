@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Added langauge back into resoruce feilds under `BibDetails` [SCC-4771](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4771)
+- Added language back into resource fields under `BibDetails` [SCC-4771](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4771)
 
 ## [1.5.0] 2025-06-18
 
