@@ -14,9 +14,6 @@ describe("404", () => {
     const container = screen.getByRole("main")
 
     const homeLink = within(container).getByText("new search")
-    expect(homeLink).toHaveAttribute(
-      "href",
-      "/research/research-catalog/search"
-    )
+    expect(homeLink).toHaveAttribute("href", "/research/research-catalog")
   })
 })
