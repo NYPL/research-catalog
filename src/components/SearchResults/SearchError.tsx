@@ -7,6 +7,8 @@ import Layout from "../Layout/Layout"
 import ExternalLink from "../Links/ExternalLink/ExternalLink"
 import { useContext } from "react"
 import { FeedbackContext } from "../../context/FeedbackContext"
+import Image from "next/image"
+import errorImage from "../../assets/errorImage.png"
 
 type SearchErrorProps = {
   errorStatus: HTTPStatusCode
@@ -23,14 +25,26 @@ export default function SearchError({ errorStatus }: SearchErrorProps) {
       errorContent = (
         <>
           <Heading level="h3" tabIndex={-1} id="search-results-heading">
-            No results found.
+            No results found
           </Heading>
-          <Text>
-            Try a different search, or search our{" "}
+          <Text noSpace>
+            We couldn&apos;t find anything matching your criteria. Try a
+            different search term.{" "}
+          </Text>
+          <Text noSpace>
+            You can also search our{" "}
+            <ExternalLink href={appConfig.urls.circulatingCatalog}>
+              Branch Catalog
+            </ExternalLink>{" "}
+            or{" "}
             <ExternalLink href={appConfig.urls.legacyCatalog}>
               Legacy Catalog
             </ExternalLink>{" "}
-            for research materials.
+            for more materials, or{" "}
+            <Link onClick={onOpen} id="feedback-link">
+              contact us
+            </Link>{" "}
+            for assistance.
           </Text>
         </>
       )
@@ -40,7 +54,7 @@ export default function SearchError({ errorStatus }: SearchErrorProps) {
       errorContent = (
         <>
           <Heading level="h3" tabIndex={-1} id="search-results-heading">
-            Something went wrong on our end.
+            Something went wrong on our end
           </Heading>
           <Text marginBottom="0">
             We encountered an error while trying to load the page.
@@ -60,7 +74,7 @@ export default function SearchError({ errorStatus }: SearchErrorProps) {
       errorContent = (
         <>
           <Heading level="h3" tabIndex={-1} id="search-results-heading">
-            There was an unexpected error.
+            There was an unexpected error
           </Heading>
           <Text marginBottom="0">
             We couldn&apos;t process your request at this time.
@@ -91,6 +105,13 @@ export default function SearchError({ errorStatus }: SearchErrorProps) {
           justifyContent="center"
           textAlign="center"
         >
+          <Image
+            src={errorImage}
+            alt="Error image"
+            width={96}
+            height={64}
+            style={{ marginBottom: "48px" }}
+          />
           {errorContent}
         </Flex>
       </Layout>

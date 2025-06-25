@@ -1,13 +1,13 @@
-import { Heading, Text, Flex } from "@nypl/design-system-react-components"
-import { appConfig } from "../../src/config/config"
+import { Heading, Text, Flex, Link } from "@nypl/design-system-react-components"
 import Layout from "../../src/components/Layout/Layout"
-import RCLink from "../../src/components/Links/RCLink/RCLink"
 import { SITE_NAME } from "../../src/config/constants"
-import ExternalLink from "../../src/components/Links/ExternalLink/ExternalLink"
 import RCHead from "../../src/components/Head/RCHead"
 import type { RCPage } from "../../src/types/pageTypes"
 import Image from "next/image"
 import errorImage from "../../src/assets/errorImage.png"
+import { useContext } from "react"
+import { FeedbackContext } from "../../src/context/FeedbackContext"
+import RCLink from "../../src/components/Links/RCLink/RCLink"
 
 type ErrorPageProps = {
   activePage: RCPage
@@ -15,6 +15,7 @@ type ErrorPageProps = {
 
 export default function Custom404({ activePage }: ErrorPageProps) {
   const metadataTitle = `404 | ${SITE_NAME}`
+  const { onOpen } = useContext(FeedbackContext)
   return (
     <>
       <RCHead metadataTitle={metadataTitle} />
@@ -37,18 +38,18 @@ export default function Custom404({ activePage }: ErrorPageProps) {
             style={{ marginBottom: "48px" }}
           />
 
-          <Heading level="h3">We couldn&apos;t find that page.</Heading>
-          <Text marginBottom="xs">
+          <Heading level="h3">We couldn&apos;t find that page</Heading>
+          <Text noSpace>
             The page you were looking for doesn&apos;t exist or may have moved
             elsewhere.
           </Text>
-          <p>
-            Search the <RCLink>Research Catalog</RCLink> or our{" "}
-            <ExternalLink href={appConfig.urls.legacyCatalog}>
-              Legacy Catalog
-            </ExternalLink>{" "}
-            for research materials.
-          </p>
+          <Text noSpace>
+            Try a <RCLink href="/search">new search</RCLink> or{" "}
+            <Link onClick={onOpen} id="feedback-link">
+              contact us
+            </Link>{" "}
+            if the error persists.
+          </Text>
         </Flex>
       </Layout>
     </>
