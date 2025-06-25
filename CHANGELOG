@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added language back into resource fields under `BibDetails` [SCC-4771](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4771)
 
+## Added
+
+- Added bib title to metadata tab title on bib page [SCC-4749](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4749)
+
 ## [1.5.0] 2025-06-18
 
 ### Added
