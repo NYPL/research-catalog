@@ -15,66 +15,72 @@ type SearchErrorProps = {
 export default function SearchError({ errorStatus }: SearchErrorProps) {
   const metadataTitle = `${errorStatus} | ${SITE_NAME}`
   const { onOpen } = useContext(FeedbackContext)
-  const errorContent = (status) => {
-    switch (status) {
-      case 404:
-        return (
-          <>
-            <Heading level="h3" tabIndex={-1} id="search-results-heading">
-              No results found.
-            </Heading>
-            <p>
-              Try a different search, or search our{" "}
-              <ExternalLink href={appConfig.urls.legacyCatalog}>
-                Legacy Catalog
-              </ExternalLink>{" "}
-              for research materials.
-            </p>
-          </>
-        )
-      case 500:
-        return (
-          <>
-            <Heading level="h3" tabIndex={-1} id="search-results-heading">
-              Something went wrong on our end.
-            </Heading>
-            <Text marginBottom="0">
-              We encountered an error while trying to load the page.
-            </Text>
-            <Text marginBottom="0">
-              Try refreshing the page or{" "}
-              <Link onClick={onOpen} id={"feedback-link"}>
-                contact us
-              </Link>{" "}
-              if the error persists.
-            </Text>
-          </>
-        )
-      default:
-        // 400, 422, or other generic client errors
-        return (
-          <>
-            <Heading level="h3" tabIndex={-1} id="search-results-heading">
-              There was an unexpected error.
-            </Heading>
-            <Text marginBottom="0">
-              We couldn&apos;t process your request at this time.
-            </Text>
-            <Text marginBottom="0">
-              Try again later or{" "}
-              <Link onClick={onOpen} id={"feedback-link"}>
-                contact us
-              </Link>{" "}
-              if the error persists.
-            </Text>
-          </>
-        )
-    }
+
+  let errorContent
+
+  switch (errorStatus) {
+    case 404:
+      errorContent = (
+        <>
+          <Heading level="h3" tabIndex={-1} id="search-results-heading">
+            No results found.
+          </Heading>
+          <Text>
+            Try a different search, or search our{" "}
+            <ExternalLink href={appConfig.urls.legacyCatalog}>
+              Legacy Catalog
+            </ExternalLink>{" "}
+            for research materials.
+          </Text>
+        </>
+      )
+      break
+
+    case 500:
+      errorContent = (
+        <>
+          <Heading level="h3" tabIndex={-1} id="search-results-heading">
+            Something went wrong on our end.
+          </Heading>
+          <Text marginBottom="0">
+            We encountered an error while trying to load the page.
+          </Text>
+          <Text marginBottom="0">
+            Try refreshing the page or{" "}
+            <Link onClick={onOpen} id="feedback-link">
+              contact us
+            </Link>{" "}
+            if the error persists.
+          </Text>
+        </>
+      )
+      break
+
+    default:
+      errorContent = (
+        <>
+          <Heading level="h3" tabIndex={-1} id="search-results-heading">
+            There was an unexpected error.
+          </Heading>
+          <Text marginBottom="0">
+            We couldn&apos;t process your request at this time.
+          </Text>
+          <Text marginBottom="0">
+            Try again later or{" "}
+            <Link onClick={onOpen} id="feedback-link">
+              contact us
+            </Link>{" "}
+            if the error persists.
+          </Text>
+        </>
+      )
+      break
   }
+
   return (
     <>
       <RCHead metadataTitle={metadataTitle} />
-      <Layout activePage={"search"}>
+      <Layout activePage="search">
         <Flex
           flexDir="column"
           marginTop="l"
@@ -85,7 +91,7 @@ export default function SearchError({ errorStatus }: SearchErrorProps) {
           justifyContent="center"
           textAlign="center"
         >
-          {errorContent(errorStatus)}
+          {errorContent}
         </Flex>
       </Layout>
     </>
