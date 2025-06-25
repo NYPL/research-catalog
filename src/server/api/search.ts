@@ -90,7 +90,12 @@ export async function fetchResults(
       results.status === 404 ||
       !(results?.totalResults > 0)
     ) {
-      logServerError("fetchResults", results.message ?? "No results found")
+      logServerError(
+        "fetchResults",
+        `${
+          results.message ? results.message : "No results found"
+        } Requests: ${DISCOVERY_API_SEARCH_ROUTE}${resultsQuery}, ${DISCOVERY_API_SEARCH_ROUTE}${aggregationQuery}`
+      )
       return {
         status: results.status ?? 404,
         message: results.message ?? "No results found",
