@@ -95,7 +95,7 @@ describe("Search Results page", () => {
           isAuthenticated={true}
         />
       )
-      expect(screen.getByText("No results found.")).toBeInTheDocument()
+      expect(screen.getByText("No results found")).toBeInTheDocument()
     })
     it("displays server error", async () => {
       await mockRouter.push(`/search?q=${query}`)
@@ -107,7 +107,7 @@ describe("Search Results page", () => {
         />
       )
       expect(
-        screen.getByText("Something went wrong on our end.")
+        screen.getByText("Something went wrong on our end")
       ).toBeInTheDocument()
     })
     it("displays server error", async () => {
@@ -120,7 +120,7 @@ describe("Search Results page", () => {
         />
       )
       expect(
-        screen.getByText("There was an unexpected error.")
+        screen.getByText("There was an unexpected error")
       ).toBeInTheDocument()
     })
   })
