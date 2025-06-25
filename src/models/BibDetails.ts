@@ -10,7 +10,6 @@ import type {
 } from "../types/bibDetailsTypes"
 import { convertToSentenceCase } from "../utils/appUtils"
 import { getFindingAidFromSupplementaryContent } from "../utils/bibUtils"
-import type { JSONLDValue } from "../types/itemTypes"
 
 export default class BibDetails {
   bib: DiscoveryBibResult
@@ -140,8 +139,6 @@ export default class BibDetails {
         let detail: AnyBibDetail
         if (fieldMapping.field === "contributorLiteral")
           detail = this.buildSearchFilterUrl(fieldMapping)
-        else if (fieldMapping.field === "language")
-          detail = this.buildLanguageDetail(fieldMapping)
         else detail = this.buildStandardDetail(fieldMapping)
         return detail
       })
@@ -185,9 +182,12 @@ export default class BibDetails {
   }
 
   buildStandardDetail(fieldMapping: FieldMapping) {
-    const bibFieldValue =
-      this[fieldMapping.field] || this.bib[fieldMapping.field]
+    let bibFieldValue = this[fieldMapping.field] || this.bib[fieldMapping.field]
     if (!bibFieldValue) return
+    // "language" is the only resource field with JSON-LD format
+    if (fieldMapping.field === "language") {
+      bibFieldValue = [bibFieldValue[0]?.prefLabel]
+    }
     return this.buildDetail(
       convertToSentenceCase(fieldMapping.label),
       bibFieldValue
@@ -200,15 +200,6 @@ export default class BibDetails {
     return {
       label: convertToSentenceCase(label),
       value,
-    }
-  }
-
-  buildLanguageDetail(fieldMapping: FieldMapping): BibDetail {
-    const bibFieldValue =
-      this[fieldMapping.field] || this.bib[fieldMapping.field]
-    return {
-      label: "Language",
-      value: [bibFieldValue[0].prefLabel],
     }
   }
 
