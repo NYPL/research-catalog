@@ -366,5 +366,5 @@ describe("Bib not found", () => {
       annotatedMarc={undefined}
     />
   )
-  expect(screen.getByText("We couldn't find that page.")).toBeInTheDocument()
+  expect(screen.getByText("We couldn't find that page")).toBeInTheDocument()
 })

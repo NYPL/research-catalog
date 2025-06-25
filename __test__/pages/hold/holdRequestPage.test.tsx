@@ -420,6 +420,6 @@ describe("Hold Request page", () => {
         notFound={true}
       />
     )
-    expect(screen.getByText("We couldn't find that page.")).toBeInTheDocument()
+    expect(screen.getByText("We couldn't find that page")).toBeInTheDocument()
   })
 })
