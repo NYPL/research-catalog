@@ -25,7 +25,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Updated
 
 - send subject search scope queries to bib results instead of SHEP ([SCC-4726](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4726))
-- bib 404's maintain bib urls
 
 ## [1.4.8] 2025-06-12
 
