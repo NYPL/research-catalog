@@ -28,6 +28,7 @@ describe("Search page", () => {
     describe("with redirectOnMatch", () => {
       it("returns results if count > 1", async () => {
         ;(fetchResults as jest.Mock).mockResolvedValue({
+          status: 200,
           results: {
             totalResults: 2,
           },
@@ -43,8 +44,9 @@ describe("Search page", () => {
         expect(response.props.results).toBeDefined()
       })
 
-      it("redirect to bib if oclc maches one bib", async () => {
+      it("redirect to bib if oclc matches one bib", async () => {
         ;(fetchResults as jest.Mock).mockResolvedValue({
+          status: 200,
           results: {
             totalResults: 1,
             itemListElement: [
@@ -68,6 +70,51 @@ describe("Search page", () => {
           destination: "/bib/bibid",
           permanent: false,
         })
+      })
+    })
+  })
+
+  describe("search errors", () => {
+    it("handles invalid parameters", async () => {
+      ;(fetchResults as jest.Mock).mockResolvedValue({
+        status: 422,
+        message: "Invalid parameters",
+      })
+
+      const response = await getServerSideProps({
+        req: mockReq,
+        query: { q: "spaghetti" },
+      })
+      expect(response).toEqual({
+        props: { errorStatus: 422 },
+      })
+    })
+    it("handles no results found 404", async () => {
+      ;(fetchResults as jest.Mock).mockResolvedValue({
+        status: 404,
+        message: "No results found",
+      })
+
+      const response = await getServerSideProps({
+        req: mockReq,
+        query: { q: "spaghetti" },
+      })
+      expect(response).toEqual({
+        props: { errorStatus: 404 },
+      })
+    })
+    it("handles general server errors", async () => {
+      ;(fetchResults as jest.Mock).mockResolvedValue({
+        status: 500,
+        message: "No results found",
+      })
+
+      const response = await getServerSideProps({
+        req: mockReq,
+        query: { q: "spaghetti" },
+      })
+      expect(response).toEqual({
+        props: { errorStatus: 500 },
       })
     })
   })

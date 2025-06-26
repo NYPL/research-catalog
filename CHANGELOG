@@ -36,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added focus context provider to manage focus with search [SCC-4721](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4721)
 - Adds global print styles to make RC more print-friendly [SCC-3300](https://newyorkpubliclibrary.atlassian.net/browse/SCC-3300)
+- Adds new 404 page, handling to cover common search response errors, and new search error view [SCC-3792](https://newyorkpubliclibrary.atlassian.net/browse/SCC-3792)
 
 ### Updated
 

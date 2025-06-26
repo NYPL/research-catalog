@@ -13,7 +13,7 @@ import nyplApiClient from "../nyplApiClient"
 
 export async function fetchResults(
   searchParams: SearchParams
-): Promise<SearchResultsResponse | Error> {
+): Promise<SearchResultsResponse | { status: number; message?: string }> {
   const { q, field, filters } = searchParams
 
   // If user is making a search for bib number (i.e. field set to "standard_number"),
@@ -48,27 +48,68 @@ export async function fetchResults(
   // Get the following in parallel:
   //  - search results
   //  - aggregations
-  const client = await nyplApiClient()
-  const [resultsResponse, aggregationsResponse] = await Promise.allSettled([
-    client.get(`${DISCOVERY_API_SEARCH_ROUTE}${resultsQuery}`),
-    client.get(`${DISCOVERY_API_SEARCH_ROUTE}${aggregationQuery}`),
-  ])
-
-  // Assign results values for each response when status is fulfilled
-  const results =
-    resultsResponse.status === "fulfilled" && resultsResponse.value
-
-  const aggregations =
-    aggregationsResponse.status === "fulfilled" && aggregationsResponse.value
-
   try {
+    // Failure to build client will throw from this:
+    const client = await nyplApiClient()
+
+    const [resultsResponse, aggregationsResponse] = await Promise.allSettled([
+      client.get(`${DISCOVERY_API_SEARCH_ROUTE}${resultsQuery}`),
+      client.get(`${DISCOVERY_API_SEARCH_ROUTE}${aggregationQuery}`),
+    ])
+
+    // Handle failed promises (500)
+    if (resultsResponse.status === "rejected") {
+      logServerError("fetchResults", resultsResponse.reason)
+      return {
+        status: 500,
+        message:
+          resultsResponse.reason instanceof Error
+            ? resultsResponse.reason.message
+            : resultsResponse.reason,
+      }
+    }
+    if (aggregationsResponse.status === "rejected") {
+      logServerError("fetchResults", aggregationsResponse.reason)
+      return {
+        status: 500,
+        message:
+          aggregationsResponse.reason instanceof Error
+            ? aggregationsResponse.reason.message
+            : aggregationsResponse.reason,
+      }
+    }
+
+    // Assign results values for each response
+    const results = resultsResponse.value
+
+    const aggregations = aggregationsResponse.value
+
+    // Handle invalid parameter rejection or empty results (422, 404)
+    if (
+      results.status === 422 ||
+      results.status === 404 ||
+      !(results?.totalResults > 0)
+    ) {
+      logServerError(
+        "fetchResults",
+        `${
+          results.message ? results.message : "No results found"
+        } Requests: ${DISCOVERY_API_SEARCH_ROUTE}${resultsQuery}, ${DISCOVERY_API_SEARCH_ROUTE}${aggregationQuery}`
+      )
+      return {
+        status: results.status ?? 404,
+        message: results.message ?? "No results found",
+      }
+    }
+
     return {
+      status: 200,
       results,
       aggregations,
       page: searchParams.page,
     }
-  } catch (error) {
+  } catch (error: any) {
     logServerError("fetchResults", error.message)
-    return new Error("Error fetching Search Results")
+    return { status: 500, message: error.message }
   }
 }

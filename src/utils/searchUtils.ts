@@ -334,12 +334,8 @@ export function mapQueryToSearchParams({
  * only one result and the query indicates we should redirect on match.
  * Otherwise returns `null`
  */
-export function checkForRedirectOnMatch(
-  results: SearchResultsResponse | Error,
-  query
-): object {
-  const hasOneResult =
-    !(results instanceof Error) && results?.results?.totalResults === 1
+export function checkForRedirectOnMatch(results, query): object {
+  const hasOneResult = results?.results?.totalResults === 1
   if (hasOneResult && query.oclc && query.redirectOnMatch) {
     const matchedBib = results.results.itemListElement[0].result
     return {

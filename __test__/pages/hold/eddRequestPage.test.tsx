@@ -575,6 +575,6 @@ describe("EDD Request page", () => {
         notFound={true}
       />
     )
-    expect(screen.getByText("404 Not Found")).toBeInTheDocument()
+    expect(screen.getByText("We couldn't find that page")).toBeInTheDocument()
   })
 })
