@@ -1,9 +1,7 @@
 import { Box, Banner } from "@nypl/design-system-react-components"
-import type Item from "../../models/Item"
 import RCLink from "../Links/RCLink/RCLink"
 
 type HoldRequestCompletedBannerProps = {
-  item: Item
   isEDD?: boolean
 }
 
@@ -12,7 +10,6 @@ type HoldRequestCompletedBannerProps = {
  * already requested a hold on this item. Triggered by a flag in session storage on the confirmation page.
  */
 const HoldRequestCompletedBanner = ({
-  item,
   isEDD = false,
 }: HoldRequestCompletedBannerProps) => {
   return (
@@ -26,11 +23,18 @@ const HoldRequestCompletedBanner = ({
       data-testid="hold-request-completed"
       mb="l"
       content={
-        <Box>
-          To cancel this request, go to the &apos;Requests&apos; tab in your{" "}
-          <RCLink href="/account">patron account</RCLink>. Please allow a few
-          minutes after requesting for this item to show up in your account.{" "}
-        </Box>
+        isEDD ? (
+          <Box>
+            To request a scan of a different part of this item, fill out the
+            form below and submit again.
+          </Box>
+        ) : (
+          <Box>
+            To cancel this request, go to the &apos;Requests&apos; tab in your{" "}
+            <RCLink href="/account">patron account</RCLink>. Please allow a few
+            minutes after requesting for this item to show up in your account.{" "}
+          </Box>
+        )
       }
     />
   )

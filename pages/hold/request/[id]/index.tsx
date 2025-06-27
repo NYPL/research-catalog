@@ -192,7 +192,7 @@ export default function HoldRequestPage({
               patronEligibilityStatus={patronEligibilityStatus}
             />
           )}
-          {holdCompleted && <HoldRequestCompletedBanner item={item} />}
+          {holdCompleted && <HoldRequestCompletedBanner />}
         </Box>
         <Heading level="h2" mb="l" size="heading3">
           Request for on-site use
@@ -203,7 +203,7 @@ export default function HoldRequestPage({
             showImage={false}
             data-testid="hold-request-loading"
           />
-        ) : (
+        ) : item.isAvailable ? (
           <>
             <Heading level="h3" size="heading4" mb="l">
               Choose a pickup location
@@ -215,10 +215,10 @@ export default function HoldRequestPage({
               patronId={patronId}
               errorStatus={errorStatus}
               source={item.formattedSourceForHoldRequest}
-              isDisabled={!item.isAvailable || holdCompleted}
+              isDisabled={holdCompleted}
             />
           </>
-        )}
+        ) : null}
       </Layout>
     </>
   )
