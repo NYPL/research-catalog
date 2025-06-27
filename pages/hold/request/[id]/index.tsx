@@ -28,7 +28,6 @@ import initializePatronTokenAuth, {
 
 import Bib from "../../../../src/models/Bib"
 import Item from "../../../../src/models/Item"
-
 import type { DiscoveryBibResult } from "../../../../src/types/bibTypes"
 import type { DiscoveryItemResult } from "../../../../src/types/itemTypes"
 import type { DeliveryLocation } from "../../../../src/types/locationTypes"
@@ -38,6 +37,7 @@ import type {
 } from "../../../../src/types/holdPageTypes"
 import RCHead from "../../../../src/components/Head/RCHead"
 import Custom404 from "../../../404"
+import HoldRequestCompletedBanner from "../../../../src/components/HoldPages/HoldRequestCompletedBanner"
 
 interface HoldRequestPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -66,6 +66,20 @@ export default function HoldRequestPage({
   notFound = false,
 }: HoldRequestPropsType) {
   const metadataTitle = `Item Request | ${SITE_NAME}`
+
+  const [holdCompleted, setHoldCompleted] = useState(false)
+
+  // Check if hold request was completed already.
+  useEffect(() => {
+    const bannerFlag = sessionStorage.getItem("holdCompleted")
+    if (bannerFlag === "true") {
+      setHoldCompleted(true)
+      sessionStorage.removeItem("holdCompleted")
+      if (bannerContainerRef.current) {
+        bannerContainerRef.current.focus()
+      }
+    }
+  }, [])
 
   const [errorStatus, setErrorStatus] = useState(defaultErrorStatus)
   const [patronEligibilityStatus, setPatronEligibilityStatus] = useState(
@@ -178,6 +192,7 @@ export default function HoldRequestPage({
               patronEligibilityStatus={patronEligibilityStatus}
             />
           )}
+          {holdCompleted && <HoldRequestCompletedBanner item={item} />}
         </Box>
         <Heading level="h2" mb="l" size="heading3">
           Request for on-site use
@@ -188,7 +203,27 @@ export default function HoldRequestPage({
             showImage={false}
             data-testid="hold-request-loading"
           />
-        ) : item.isAvailable ? (
+        ) : !item.isAvailable || holdCompleted ? (
+          <Box
+            aria-disabled="true"
+            sx={{
+              opacity: 0.5,
+              pointerEvents: "none",
+            }}
+          >
+            <Heading level="h3" size="heading4" mb="l">
+              Choose a pickup location
+            </Heading>
+            <HoldRequestForm
+              deliveryLocations={deliveryLocations}
+              handleSubmit={handleSubmit}
+              holdId={holdId}
+              patronId={patronId}
+              errorStatus={errorStatus}
+              source={item.formattedSourceForHoldRequest}
+            />
+          </Box>
+        ) : (
           <>
             <Heading level="h3" size="heading4" mb="l">
               Choose a pickup location
@@ -202,7 +237,7 @@ export default function HoldRequestPage({
               source={item.formattedSourceForHoldRequest}
             />
           </>
-        ) : null}
+        )}
       </Layout>
     </>
   )

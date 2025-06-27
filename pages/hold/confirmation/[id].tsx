@@ -31,6 +31,7 @@ import initializePatronTokenAuth, {
 import type { DiscoveryBibResult } from "../../../src/types/bibTypes"
 import RCHead from "../../../src/components/Head/RCHead"
 import Custom404 from "../../404"
+import { useEffect } from "react"
 
 interface HoldConfirmationPageProps {
   isEDD?: boolean
@@ -49,6 +50,11 @@ export default function HoldConfirmationPage({
   discoveryBibResult,
   notFound = false,
 }: HoldConfirmationPageProps) {
+  useEffect(() => {
+    // Set flag to show hold already happened, if user goes back to form page
+    sessionStorage.setItem("holdCompleted", "true")
+  }, [])
+
   if (notFound) {
     return <Custom404 activePage="hold" />
   }
