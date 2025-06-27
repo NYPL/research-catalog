@@ -188,6 +188,11 @@ describe("Hold Request page", () => {
       )
     })
 
+    it("does not render hold completed warning", () => {
+      const banner = screen.queryByTestId("hold-request-completed")
+      expect(banner).toBeNull()
+    })
+
     it("renders the top bib and item details", () => {
       expect(screen.getAllByTestId("title")[0]).toHaveTextContent(
         "Urban spaghetti."
