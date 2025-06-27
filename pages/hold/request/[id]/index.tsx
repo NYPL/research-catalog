@@ -203,26 +203,6 @@ export default function HoldRequestPage({
             showImage={false}
             data-testid="hold-request-loading"
           />
-        ) : !item.isAvailable || holdCompleted ? (
-          <Box
-            aria-disabled="true"
-            sx={{
-              opacity: 0.5,
-              pointerEvents: "none",
-            }}
-          >
-            <Heading level="h3" size="heading4" mb="l">
-              Choose a pickup location
-            </Heading>
-            <HoldRequestForm
-              deliveryLocations={deliveryLocations}
-              handleSubmit={handleSubmit}
-              holdId={holdId}
-              patronId={patronId}
-              errorStatus={errorStatus}
-              source={item.formattedSourceForHoldRequest}
-            />
-          </Box>
         ) : (
           <>
             <Heading level="h3" size="heading4" mb="l">
@@ -235,6 +215,7 @@ export default function HoldRequestPage({
               patronId={patronId}
               errorStatus={errorStatus}
               source={item.formattedSourceForHoldRequest}
+              isDisabled={!item.isAvailable || holdCompleted}
             />
           </>
         )}
