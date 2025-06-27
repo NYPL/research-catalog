@@ -6,6 +6,7 @@ import {
   screen,
   fireEvent,
   waitFor,
+  within,
 } from "../../../src/utils/testUtils"
 import userEvent from "@testing-library/user-event"
 
@@ -185,6 +186,11 @@ describe("Hold Request page", () => {
       expect(screen.getByRole("heading", { level: 2 })).toHaveTextContent(
         "Request for on-site use"
       )
+    })
+
+    it("does not render hold completed warning", () => {
+      const banner = screen.queryByTestId("hold-request-completed")
+      expect(banner).toBeNull()
     })
 
     it("renders the top bib and item details", () => {
@@ -421,5 +427,33 @@ describe("Hold Request page", () => {
       />
     )
     expect(screen.getByText("We couldn't find that page")).toBeInTheDocument()
+  })
+  describe("Hold request already completed renders warning banner", () => {
+    sessionStorage.setItem("holdCompleted", "true")
+    render(
+      <HoldRequestPage
+        discoveryBibResult={bibWithItems.resource}
+        discoveryItemResult={bibWithItems.resource.items[0]}
+        patronId="123"
+        deliveryLocations={[
+          {
+            key: "schwarzman",
+            label: "Schwarzman",
+            value: "loc:mal17",
+            address: NYPL_LOCATIONS["schwarzman"].address,
+          },
+        ]}
+        isAuthenticated={true}
+      />
+    )
+    expect(
+      screen.getByText("You've already requested this item")
+    ).toBeInTheDocument()
+    const banner = screen.getByTestId("hold-request-completed")
+    const accountLink = within(banner).getByText("patron account")
+    expect(accountLink).toHaveAttribute(
+      "href",
+      "/research/research-catalog/account"
+    )
   })
 })
