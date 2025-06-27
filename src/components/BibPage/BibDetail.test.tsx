@@ -32,7 +32,28 @@ describe("BibDetail component", () => {
     bibWithFindingAidAndTOC.annotatedMarc
   )
   describe("bottom details", () => {
-    it.todo("")
+    it("renders resource fields", () => {
+      render(<BibDetails details={noParallelsBibModel.bottomDetails} />, {
+        wrapper: MemoryRouterProvider,
+      })
+
+      expect(screen.getByText("Language")).toBeInTheDocument()
+      expect(screen.getByText("French")).toBeInTheDocument()
+      expect(screen.getByText("Series statement")).toBeInTheDocument()
+      expect(screen.queryAllByText(/Haute enfance/)[0]).toBeInTheDocument()
+    })
+    it("merges annotated MARC and resource fields without duplicates", () => {
+      const combinedDetails = noParallelsBibModel.bottomDetails
+      const labels = combinedDetails.map((d) => d.label)
+      const labelCounts = labels.reduce((acc, label) => {
+        acc[label] = (acc[label] || 0) + 1
+        return acc
+      }, {})
+
+      Object.values(labelCounts).forEach((count) => {
+        expect(count).toBeLessThanOrEqual(1)
+      })
+    })
   })
   describe("text only details", () => {
     it("single value", () => {

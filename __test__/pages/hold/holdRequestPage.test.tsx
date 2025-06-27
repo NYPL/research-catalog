@@ -426,7 +426,7 @@ describe("Hold Request page", () => {
         notFound={true}
       />
     )
-    expect(screen.getByText("404 Not Found")).toBeInTheDocument()
+    expect(screen.getByText("We couldn't find that page")).toBeInTheDocument()
   })
   describe("Hold request already completed renders warning banner", () => {
     sessionStorage.setItem("holdCompleted", "true")

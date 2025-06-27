@@ -133,6 +133,7 @@ export default class BibDetails {
       { field: "oclc", label: "OCLC" },
       { field: "lccn", label: "LCCN" },
       { field: "owner", label: "Owning institution" },
+      { field: "language", label: "Language" },
     ]
       .map((fieldMapping: FieldMapping): AnyBibDetail => {
         let detail: AnyBibDetail
@@ -181,9 +182,12 @@ export default class BibDetails {
   }
 
   buildStandardDetail(fieldMapping: FieldMapping) {
-    const bibFieldValue =
-      this[fieldMapping.field] || this.bib[fieldMapping.field]
+    let bibFieldValue = this[fieldMapping.field] || this.bib[fieldMapping.field]
     if (!bibFieldValue) return
+    // "language" is the only resource field with JSON-LD format
+    if (fieldMapping.field === "language") {
+      bibFieldValue = [bibFieldValue[0]?.prefLabel]
+    }
     return this.buildDetail(
       convertToSentenceCase(fieldMapping.label),
       bibFieldValue
