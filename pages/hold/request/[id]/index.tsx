@@ -94,12 +94,6 @@ export default function HoldRequestPage({
   const router = useRouter()
   const isLoading = useLoading()
 
-  useEffect(() => {
-    if (errorStatus) {
-      setPersistentFocus(idConstants.holdErrorBanner)
-    }
-  }, [errorStatus, patronEligibilityStatus])
-
   if (notFound) {
     return <Custom404 activePage="hold" />
   }
@@ -116,6 +110,7 @@ export default function HoldRequestPage({
     )
     setFormPosting(false)
     setErrorStatus("failed")
+    setPersistentFocus(idConstants.holdErrorBanner)
   }
 
   const handleHoldRequestGAEvent = (item: Item) => {
@@ -187,7 +182,7 @@ export default function HoldRequestPage({
       <Layout isAuthenticated={isAuthenticated} activePage="hold">
         {/* Always render the wrapper element that will display the
           dynamically rendered notification for focus management */}
-        <Box tabIndex={-1} id="hold-error">
+        <Box tabIndex={-1} id={idConstants.holdErrorBanner}>
           {errorStatus && (
             <HoldRequestErrorBanner
               item={item}
@@ -196,7 +191,7 @@ export default function HoldRequestPage({
             />
           )}
         </Box>
-        <Box tabIndex={-1} id="hold-completed">
+        <Box tabIndex={-1} id={idConstants.holdCompletedBanner}>
           {holdCompleted && <HoldRequestCompletedBanner />}
         </Box>
         <Heading level="h2" mb="l" size="heading3">
