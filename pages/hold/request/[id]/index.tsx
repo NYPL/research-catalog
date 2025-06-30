@@ -38,6 +38,10 @@ import type {
 import RCHead from "../../../../src/components/Head/RCHead"
 import Custom404 from "../../../404"
 import HoldRequestCompletedBanner from "../../../../src/components/HoldPages/HoldRequestCompletedBanner"
+import {
+  idConstants,
+  useFocusContext,
+} from "../../../../src/context/FocusContext"
 
 interface HoldRequestPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -69,15 +73,15 @@ export default function HoldRequestPage({
 
   const [holdCompleted, setHoldCompleted] = useState(false)
 
+  const { setPersistentFocus } = useFocusContext()
+
   // Check if hold request was completed already.
   useEffect(() => {
     const bannerFlag = sessionStorage.getItem("holdCompleted")
     if (bannerFlag === "true") {
       setHoldCompleted(true)
       sessionStorage.removeItem("holdCompleted")
-      if (bannerContainerRef.current) {
-        bannerContainerRef.current.focus()
-      }
+      setPersistentFocus(idConstants.holdCompletedBanner)
     }
   }, [])
 
@@ -86,14 +90,13 @@ export default function HoldRequestPage({
     defaultEligibilityStatus
   )
   const [formPosting, setFormPosting] = useState(false)
-  const bannerContainerRef = useRef<HTMLDivElement>()
 
   const router = useRouter()
   const isLoading = useLoading()
 
   useEffect(() => {
-    if (errorStatus && bannerContainerRef.current) {
-      bannerContainerRef.current.focus()
+    if (errorStatus) {
+      setPersistentFocus(idConstants.holdErrorBanner)
     }
   }, [errorStatus, patronEligibilityStatus])
 
@@ -184,7 +187,7 @@ export default function HoldRequestPage({
       <Layout isAuthenticated={isAuthenticated} activePage="hold">
         {/* Always render the wrapper element that will display the
           dynamically rendered notification for focus management */}
-        <Box tabIndex={-1} ref={bannerContainerRef}>
+        <Box tabIndex={-1} id="hold-error">
           {errorStatus && (
             <HoldRequestErrorBanner
               item={item}
@@ -192,6 +195,8 @@ export default function HoldRequestPage({
               patronEligibilityStatus={patronEligibilityStatus}
             />
           )}
+        </Box>
+        <Box tabIndex={-1} id="hold-completed">
           {holdCompleted && <HoldRequestCompletedBanner />}
         </Box>
         <Heading level="h2" mb="l" size="heading3">
