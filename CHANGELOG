@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+### Updated
+
+- Adding "Discovery" to `SearchResults`, `AggregationResults`, and `SearchResultsElement` to parallel `DiscoveryBibResult` and indicate the API structure [SCC-4148](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4148)
+
 ### Fixed
 
 - Added language back into resource fields under `BibDetails` [SCC-4771](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4771)
