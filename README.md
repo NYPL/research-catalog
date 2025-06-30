@@ -61,7 +61,7 @@ Key environment variables include:
 
 #### AWS Credentials
 
-We use environment variables to make authorized requests to NYPL's API platform. In order to be secure, we are encrypting and decrypting those environment variables using AWS KMS. Decryption (and by extension, use of these API clients) requires the user to have AWS credentials configured locally via the AWS CLI. Reach out to DevOps to get this set up and see our guide on [how we encrypt](docs/ENVIRONMENT_VARIABLES.md#encrypting).
+We store API credentials as KMS encrypted environment variables. Decryption (and by extension, use of these API clients) requires the user to have AWS credentials configured locally via the AWS CLI. Reach out to DevOps to get this set up and see our guide on [how we encrypt](docs/ENVIRONMENT_VARIABLES.md#encrypting).
 
 ### Local Development
 
