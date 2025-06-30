@@ -46,21 +46,21 @@ export type SortOrder = "asc" | "desc"
 
 export interface SearchResultsResponse {
   status: HTTPStatusCode
-  results?: SearchResults
-  aggregations?: AggregationResults
+  results?: DiscoverySearchResults
+  aggregations?: DiscoveryAggregationResults
   page?: number
 }
 
-export interface AggregationResults {
+export interface DiscoveryAggregationResults {
   totalResults: number
   itemListElement: Aggregation[]
 }
-export interface SearchResults {
+export interface DiscoverySearchResults {
   totalResults: number
-  itemListElement: SearchResultsElement[]
+  itemListElement: DiscoverySearchResultsElement[]
 }
 
-export interface SearchResultsElement {
+export interface DiscoverySearchResultsElement {
   result?: DiscoveryBibResult
   field?: string
 }
