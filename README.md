@@ -29,7 +29,9 @@ The [NYPL Research Catalog](https://www.nypl.org/research/research-catalog) is a
 
 ### Prerequisites
 
-1. **Node.js**: The application requires the Node.js version specified in the `.nvmrc` file. We recommend using [NVM (Node Version Manager)](https://github.com/nvm-sh/nvm) to manage Node.js versions.
+#### **Node.js** 
+
+The application requires the Node.js version specified in the `.nvmrc` file. We recommend using [NVM (Node Version Manager)](https://github.com/nvm-sh/nvm) to manage Node.js versions.
 
    ```bash
    # Install and use the correct Node.js version
@@ -37,7 +39,7 @@ The [NYPL Research Catalog](https://www.nypl.org/research/research-catalog) is a
    nvm use
    ```
 
-### Installation
+#### Installation
 
 1. Clone the repository
 2. Install dependencies:
@@ -48,7 +50,7 @@ The [NYPL Research Catalog](https://www.nypl.org/research/research-catalog) is a
 
 ### Environment Variables
 
-The application uses environment variables for configuration. See [ENVIRONMENT_VARIABLES.md](ENVIRONMENT_VARIABLES.md) for detailed information about each variable.
+The application uses environment variables for configuration. See [ENVIRONMENT_VARIABLES.md](docs/ENVIRONMENT_VARIABLES.md) for detailed information about each variable.
 
 Key environment variables include:
 
@@ -56,6 +58,10 @@ Key environment variables include:
 - `NYPL_HEADER_URL`: URL for NYPL header and footer scripts
 - `PLATFORM_API_CLIENT_ID` and `PLATFORM_API_CLIENT_SECRET`: Encrypted credentials for NYPL's API platform
 - `SIERRA_KEY` and `SIERRA_SECRET`: Encrypted credentials for Sierra API
+
+#### AWS Credentials
+
+We use environment variables to make authorized requests to NYPL's API platform. In order to be secure, we are encrypting and decrypting those environment variables using AWS KMS. Decryption (and by extension, use of these API clients) requires the user to have AWS credentials configured locally via the AWS CLI. Reach out to DevOps to get this set up and see our guide on [how we encrypt](docs/ENVIRONMENT_VARIABLES.md#encrypting)
 
 ### Local Development
 
@@ -330,8 +336,9 @@ The application uses Winston for server-side logging:
 
 2. **API Connection Issues**:
 
-   - Verify that environment variables are correctly set
+   - Verify that client keys/secrets are correctly set and decrypted
    - Check VPN connection for APIs that require it (e.g., SHEP API)
 
 3. **Environment Variable Encryption**:
+
    - For issues with encrypted environment variables, refer to the encryption/decryption instructions in [ENVIRONMENT_VARIABLES.md](/docs/ENVIRONMENT_VARIABLES.md)
