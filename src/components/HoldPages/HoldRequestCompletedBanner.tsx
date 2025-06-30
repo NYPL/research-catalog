@@ -30,7 +30,7 @@ const HoldRequestCompletedBanner = ({
           </Box>
         ) : (
           <Box>
-            To cancel this request, go to the &apos;Requests&apos; tab in your{" "}
+            To cancel this request, go to the &rsquo;Requests&rsquo; tab in your{" "}
             <RCLink href="/account">patron account</RCLink>. Please allow a few
             minutes after requesting for this item to show up in your account.{" "}
           </Box>
