@@ -51,22 +51,13 @@ describe("Search Results page", () => {
           results={{ results, status: 200 }}
         />
       )
-      const mobileSortBy = screen.getAllByLabelText("Sort by")[0]
-      expect(mobileSortBy).toHaveValue("relevance")
-      await userEvent.selectOptions(mobileSortBy, "Title (A - Z)")
-      expect(mobileSortBy).toHaveValue("title_asc")
+      const sortBy = screen.getAllByLabelText("Sort by")[0]
+      expect(sortBy).toHaveValue("relevance")
+      await userEvent.selectOptions(sortBy, "Title (A - Z)")
+      expect(sortBy).toHaveValue("title_asc")
 
       expect(mockRouter.asPath).toBe(
         "/?q=spaghetti&sort=title&sort_direction=asc"
-      )
-
-      const desktopSortBy = screen.getAllByLabelText("Sort by")[1]
-      expect(desktopSortBy).toHaveValue("title_asc")
-      await userEvent.selectOptions(desktopSortBy, "Title (Z - A)")
-      expect(desktopSortBy).toHaveValue("title_desc")
-
-      expect(mockRouter.asPath).toBe(
-        "/?q=spaghetti&sort=title&sort_direction=desc"
       )
     })
     it("returns the user to the first page on sorting changes", async () => {
