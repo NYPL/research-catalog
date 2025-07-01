@@ -20,6 +20,7 @@ interface HoldRequestFormProps {
   patronId: string
   source: string
   errorStatus?: HoldErrorStatus
+  isDisabled?: boolean
 }
 
 /**
@@ -32,6 +33,7 @@ const HoldRequestForm = ({
   patronId,
   source,
   errorStatus,
+  isDisabled = false,
 }: HoldRequestFormProps) => {
   return (
     <Form
@@ -42,6 +44,11 @@ const HoldRequestForm = ({
       action={`${BASE_URL}/api/hold/request/${holdId}`}
       onSubmit={handleSubmit}
       mb="l"
+      aria-disabled={isDisabled}
+      sx={{
+        opacity: isDisabled && 0.5,
+        pointerEvents: isDisabled && "none",
+      }}
     >
       <input type="hidden" id="patronId" name="patronId" value={patronId} />
       <input type="hidden" id="source" name="source" value={source} />
@@ -75,7 +82,9 @@ const HoldRequestForm = ({
         <Button
           id="holdRequestSubmit"
           type="submit"
-          isDisabled={holdButtonDisabledStatuses.includes(errorStatus)}
+          isDisabled={
+            holdButtonDisabledStatuses.includes(errorStatus) || isDisabled
+          }
         >
           Submit request
         </Button>

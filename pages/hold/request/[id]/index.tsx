@@ -28,7 +28,6 @@ import initializePatronTokenAuth, {
 
 import Bib from "../../../../src/models/Bib"
 import Item from "../../../../src/models/Item"
-
 import type { DiscoveryBibResult } from "../../../../src/types/bibTypes"
 import type { DiscoveryItemResult } from "../../../../src/types/itemTypes"
 import type { DeliveryLocation } from "../../../../src/types/locationTypes"
@@ -38,6 +37,11 @@ import type {
 } from "../../../../src/types/holdPageTypes"
 import RCHead from "../../../../src/components/Head/RCHead"
 import Custom404 from "../../../404"
+import HoldRequestCompletedBanner from "../../../../src/components/HoldPages/HoldRequestCompletedBanner"
+import {
+  idConstants,
+  useFocusContext,
+} from "../../../../src/context/FocusContext"
 
 interface HoldRequestPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -67,21 +71,28 @@ export default function HoldRequestPage({
 }: HoldRequestPropsType) {
   const metadataTitle = `Item Request | ${SITE_NAME}`
 
+  const [holdCompleted, setHoldCompleted] = useState(false)
+
+  const { setPersistentFocus } = useFocusContext()
+
+  // Check if hold request was completed already.
+  useEffect(() => {
+    const bannerFlag = sessionStorage.getItem("holdCompleted")
+    if (bannerFlag === "true") {
+      setHoldCompleted(true)
+      sessionStorage.removeItem("holdCompleted")
+      setPersistentFocus(idConstants.holdCompletedBanner)
+    }
+  }, [])
+
   const [errorStatus, setErrorStatus] = useState(defaultErrorStatus)
   const [patronEligibilityStatus, setPatronEligibilityStatus] = useState(
     defaultEligibilityStatus
   )
   const [formPosting, setFormPosting] = useState(false)
-  const bannerContainerRef = useRef<HTMLDivElement>()
 
   const router = useRouter()
   const isLoading = useLoading()
-
-  useEffect(() => {
-    if (errorStatus && bannerContainerRef.current) {
-      bannerContainerRef.current.focus()
-    }
-  }, [errorStatus, patronEligibilityStatus])
 
   if (notFound) {
     return <Custom404 activePage="hold" />
@@ -99,6 +110,7 @@ export default function HoldRequestPage({
     )
     setFormPosting(false)
     setErrorStatus("failed")
+    setPersistentFocus(idConstants.holdErrorBanner)
   }
 
   const handleHoldRequestGAEvent = (item: Item) => {
@@ -170,7 +182,7 @@ export default function HoldRequestPage({
       <Layout isAuthenticated={isAuthenticated} activePage="hold">
         {/* Always render the wrapper element that will display the
           dynamically rendered notification for focus management */}
-        <Box tabIndex={-1} ref={bannerContainerRef}>
+        <Box tabIndex={-1} id={idConstants.holdErrorBanner}>
           {errorStatus && (
             <HoldRequestErrorBanner
               item={item}
@@ -178,6 +190,9 @@ export default function HoldRequestPage({
               patronEligibilityStatus={patronEligibilityStatus}
             />
           )}
+        </Box>
+        <Box tabIndex={-1} id={idConstants.holdCompletedBanner}>
+          {holdCompleted && <HoldRequestCompletedBanner />}
         </Box>
         <Heading level="h2" mb="l" size="heading3">
           Request for on-site use
@@ -200,6 +215,7 @@ export default function HoldRequestPage({
               patronId={patronId}
               errorStatus={errorStatus}
               source={item.formattedSourceForHoldRequest}
+              isDisabled={holdCompleted}
             />
           </>
         ) : null}
