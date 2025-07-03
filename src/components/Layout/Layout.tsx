@@ -11,12 +11,12 @@ import {
 
 import { type RCPage } from "../../types/pageTypes"
 import styles from "../../../styles/components/Layout.module.scss"
-import SubNav from "../SubNav/SubNav"
 import SearchForm from "../SearchForm/SearchForm"
 import { BASE_URL } from "../../config/constants"
 import FeedbackForm from "../FeedbackForm/FeedbackForm"
 import type { Aggregation } from "../../types/filterTypes"
 import EDSBanner from "../EDSBanner"
+import RCSubNav from "../RCSubNav/RCSubNav"
 
 interface LayoutProps {
   sidebar?: ReactElement
@@ -87,18 +87,24 @@ const Layout = ({
               }}
             />
             <div className={`${styles.researchHeadingContainer} no-print`}>
-              <Heading id="heading-h1" level="h1" text="Research Catalog" />
-              <SubNav
-                isAuthenticated={isAuthenticated}
-                activePage={activePage}
+              <Heading
+                id="heading-h1"
+                level="h1"
+                text="Research Catalog"
+                marginBottom="m"
               />
-              {showSearch && (
-                <SearchForm
-                  aggregations={searchAggregations}
-                  searchResultsCount={searchResultsCount}
-                />
-              )}
             </div>
+            <RCSubNav
+              isAuthenticated={isAuthenticated}
+              activePage={activePage}
+            />
+            {showSearch && (
+              <SearchForm
+                aggregations={searchAggregations}
+                searchResultsCount={searchResultsCount}
+              />
+            )}
+
             {showSearch && (
               <Flex
                 gap="s"
