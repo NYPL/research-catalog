@@ -1,4 +1,4 @@
-import { type RCPage } from "../../types/pageTypes"
+import type { RCPage } from "../../types/pageTypes"
 import { useLogoutRedirect } from "../../server/auth"
 import { Icon, SubNav, SubNavLink } from "@nypl/design-system-react-components"
 
@@ -40,7 +40,7 @@ const RCSubNav = ({ activePage, isAuthenticated }: SubNavProps) => {
             isSelected={activePage === "shep"}
             aria-current={activePage === "shep" ? "page" : undefined}
           >
-            Browse the Catalog
+            Subject Heading Explorer
           </SubNavLink>
         </>
       }
