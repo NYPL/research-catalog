@@ -27,6 +27,7 @@ yarn-error.log*
 
 # local env files
 .env*.local
+X.env.local*
 
 # local editor config
 .vscode/launch.json
@@ -41,3 +42,14 @@ next-env.d.ts
 
 #logs 
 /log
+
+#patches.  added by c mulholland on 6/18/25 for local development.
+rescatpatch.zip
+kms-fix.patch
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
