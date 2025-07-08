@@ -7,7 +7,7 @@ function TestError() {
   }, [])
 }
 
-// SomePage.getInitialProps = () => {
+// TestError.getInitialProps = () => {
 //   throw new Error("Throwing a server test error")
 // }
 
