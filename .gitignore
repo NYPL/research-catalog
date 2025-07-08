@@ -27,8 +27,6 @@ yarn-error.log*
 
 # local env files
 .env*.local
-X.env.local*
-
 # local editor config
 .vscode/launch.json
 
