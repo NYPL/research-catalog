@@ -5,7 +5,7 @@
 
   h1 {
     @include maxWidth;
-    padding: var(--nypl-space-l) var(--nypl-space-s) var(--nypl-space-xs);
+    padding: var(--nypl-space-l) var(--nypl-space-s);
     color: var(--nypl-colors-ui-white);
   }
 }
