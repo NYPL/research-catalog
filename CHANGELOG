@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Adding "Discovery" to `SearchResults`, `AggregationResults`, and `SearchResultsElement` to parallel `DiscoveryBibResult` and indicate the API structure [SCC-4148](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4148)
 - Replace subnav with DS `SubNav` [SCC-4544](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4544)
+- Remove duplicate SearchResultSort component between mobile and desktop [SCC-4086](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4086)
 
 ### Fixed
 

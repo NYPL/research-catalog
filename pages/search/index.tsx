@@ -167,7 +167,11 @@ export default function Search({
         >
           <Flex flexDir="column">
             {displayAppliedFilters && <AppliedFilters aggregations={aggs} />}
-            <Flex justifyContent="space-between" marginTop="xxs">
+            <Flex
+              justifyContent="space-between"
+              marginTop="xxs"
+              direction={{ base: "column", md: "row" }}
+            >
               <Heading
                 id="search-results-heading"
                 data-testid="search-results-heading"
@@ -185,28 +189,10 @@ export default function Search({
               <SearchResultsSort
                 searchParams={searchParams}
                 handleSortChange={handleSortChange}
-                // TODO: Extend the Layout component to receive a prop that contains content to be shown below the
-                //  main header, which will include the search results heading and the sort select, which would allow us
-                //  to only render the sort select once.
-                display={{
-                  base: "none",
-                  md: "block",
-                }}
               />
             </Flex>
           </Flex>
 
-          <SearchResultsSort
-            // Mobile only Search Results Sort Select
-            // Necessary due to the placement of the Select in the main content on mobile only.
-            id="search-results-sort-mobile"
-            searchParams={searchParams}
-            handleSortChange={handleSortChange}
-            display={{
-              base: "block",
-              md: "none",
-            }}
-          />
           {isLoading ? (
             <>
               <SkeletonLoader showImage={false} mb="m" />
