@@ -218,6 +218,23 @@ npm test-watch
 
 For more information on the code quality and standards, see the [DEVELOPER_GUIDE.md](/docs/DEVELOPER_GUIDE.md)
 
+### Testing with Playwright
+This project includes Playwright, a powerful end-to-end testing framework for automating and verifying browser interactions across Chromium, Firefox, and WebKit.
+
+Install Playwright locally
+```bash
+npm init playwright@latest
+```
+Run all Playwright tests
+```bash
+npx playwright test
+```
+Various arguments can be added to test commands.  Here's an example that runs all tests contained in a specific test file.  And runs them only on Chrome.  And in headed mode, so you can see what is happening.
+```bash
+npx playwright test example.spec.ts --headed --project=chrome
+```
+
+
 ## Deployment
 
 The application is deployed to:
