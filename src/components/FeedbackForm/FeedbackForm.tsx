@@ -17,9 +17,13 @@ const FeedbackForm = () => {
     onOpen,
     itemMetadata,
     setItemMetadata,
+    requestURL,
+    setRequestURL,
   } = useContext(FeedbackContext)
-  const closeAndResetItemMetadata = () => {
+
+  const closeAndResetFeedbackData = () => {
     if (itemMetadata) setItemMetadata(null)
+    if (requestURL) setRequestURL(null)
     onClose()
     setFeedbackFormScreen("form")
 
@@ -32,45 +36,53 @@ const FeedbackForm = () => {
       }
     }, 250)
   }
+
   const submitFeedback = async (
     metadataAndComment: FeedbackMetadataAndComment
   ) => {
-    try {
-      // Changed this route to /feedback-rc to avoid conflicts with DFE with 2AD reverse proxy config
-      // TODO: Change this route name back to /feedback when all routes point to research catalog
-      const response = await fetch(`${BASE_URL}/api/feedback-rc`, {
-        method: "POST",
-        body: JSON.stringify(metadataAndComment),
-      })
-      const responseJson = await response.json()
-      if (responseJson.error) {
-        console.error("Error in feedback api response", responseJson.error)
-        setFeedbackFormScreen("error")
-      } else {
-        setFeedbackFormScreen("confirmation")
-      }
-    } catch (error) {
-      console.error("Error posting feedback", error)
-      setFeedbackFormScreen("error")
-    }
+    console.log(metadataAndComment)
+    // try {
+    //   // Changed this route to /feedback-rc to avoid conflicts with DFE with 2AD reverse proxy config
+    //   // TODO: Change this route name back to /feedback when all routes point to research catalog
+    //   // const response = await fetch(`${BASE_URL}/api/feedback-rc`, {
+    //   //   method: "POST",
+    //   //   body: JSON.stringify(metadataAndComment),
+    //   // })
+    //   //const responseJson = await response.json()
+    //   if (responseJson.error) {
+    //     console.error("Error in feedback api response", responseJson.error)
+    //     setFeedbackFormScreen("error")
+    //   } else {
+    //     setFeedbackFormScreen("confirmation")
+    //   }
+    // } catch (error) {
+    //   console.error("Error posting feedback", error)
+    //   setFeedbackFormScreen("error")
+    // }
   }
+
+  const notificationText = (itemMetadata, requestURL) => {
+    if (requestURL) {
+      return "You are asking for help or information about a page error"
+    }
+    if (itemMetadata?.notificationText) {
+      return itemMetadata.notificationText
+    } else if (itemMetadata?.callNumber) {
+      return `You are asking for help or information about ${itemMetadata.callNumber} in this record.`
+    } else return null
+  }
+
   return (
     <FeedbackBox
       onSubmit={submitFeedback}
       isOpen={isOpen}
-      onClose={closeAndResetItemMetadata}
+      onClose={closeAndResetFeedbackData}
       onOpen={onOpen}
       descriptionText="We are here to help!"
       title="Help and Feedback"
       showEmailField
-      hiddenFields={itemMetadata}
-      notificationText={
-        itemMetadata?.notificationText
-          ? itemMetadata.notificationText
-          : itemMetadata?.callNumber
-          ? `You are asking for help or information about ${itemMetadata.callNumber} in this record.`
-          : null
-      }
+      hiddenFields={{ ...itemMetadata, requestURL }}
+      notificationText={notificationText(itemMetadata, requestURL)}
       view={feedbackFormScreen}
       className="no-print"
     />

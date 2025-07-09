@@ -1,6 +1,6 @@
 import { Heading, Text, Flex, Link } from "@nypl/design-system-react-components"
 import Layout from "../../src/components/Layout/Layout"
-import { SITE_NAME } from "../../src/config/constants"
+import { BASE_URL, SITE_NAME } from "../../src/config/constants"
 import RCHead from "../../src/components/Head/RCHead"
 import type { RCPage } from "../../src/types/pageTypes"
 import Image from "next/image"
@@ -8,6 +8,7 @@ import errorImage from "../../src/assets/errorImage.png"
 import { useContext } from "react"
 import { FeedbackContext } from "../../src/context/FeedbackContext"
 import RCLink from "../../src/components/Links/RCLink/RCLink"
+import { useRouter } from "next/router"
 
 type ErrorPageProps = {
   activePage: RCPage
@@ -15,7 +16,13 @@ type ErrorPageProps = {
 
 export default function Custom404({ activePage }: ErrorPageProps) {
   const metadataTitle = `404 | ${SITE_NAME}`
-  const { onOpen } = useContext(FeedbackContext)
+  const { onOpen, setRequestURL } = useContext(FeedbackContext)
+  const router = useRouter()
+  const currentPath = router.asPath
+  const onContact = () => {
+    setRequestURL(`${BASE_URL}${currentPath}`)
+    onOpen()
+  }
   return (
     <>
       <RCHead metadataTitle={metadataTitle} />
@@ -45,7 +52,7 @@ export default function Custom404({ activePage }: ErrorPageProps) {
           </Text>
           <Text noSpace>
             Try a <RCLink href="/">new search</RCLink> or{" "}
-            <Link onClick={onOpen} id="feedback-link">
+            <Link onClick={onContact} id="feedback-link">
               contact us
             </Link>{" "}
             if the error persists.
