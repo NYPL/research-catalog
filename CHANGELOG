@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added bib title to metadata tab title on bib page [SCC-4749](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4749)
 - Adds warning to hold request pages if user has already completed the request [SCC-3360](https://newyorkpubliclibrary.atlassian.net/browse/SCC-3360)
 - Adds new 404 page, handling to cover common search response errors, and new search error view [SCC-3792](https://newyorkpubliclibrary.atlassian.net/browse/SCC-3792)
+- Adds general error boundary page `_error.tsx` and a test page that throws errors `testError.tsx` [SCC-4787](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4787)
 
 ## [1.5.0] 2025-06-18
 
