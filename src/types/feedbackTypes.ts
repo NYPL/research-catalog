@@ -19,4 +19,5 @@ export type FeedbackContextType = {
   setItemMetadata: (value: ItemMetadata) => void
   requestedURL?: string
   setRequestedURL: (value: string) => void
+  onContact: () => void
 }

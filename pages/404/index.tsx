@@ -1,6 +1,6 @@
 import { Heading, Text, Flex, Link } from "@nypl/design-system-react-components"
 import Layout from "../../src/components/Layout/Layout"
-import { BASE_URL, SITE_NAME } from "../../src/config/constants"
+import { SITE_NAME } from "../../src/config/constants"
 import RCHead from "../../src/components/Head/RCHead"
 import type { RCPage } from "../../src/types/pageTypes"
 import Image from "next/image"
@@ -8,7 +8,6 @@ import errorImage from "../../src/assets/errorImage.png"
 import { useContext } from "react"
 import { FeedbackContext } from "../../src/context/FeedbackContext"
 import RCLink from "../../src/components/Links/RCLink/RCLink"
-import { useRouter } from "next/router"
 
 type ErrorPageProps = {
   activePage: RCPage
@@ -16,13 +15,7 @@ type ErrorPageProps = {
 
 export default function Custom404({ activePage }: ErrorPageProps) {
   const metadataTitle = `404 | ${SITE_NAME}`
-  const { onOpen, setRequestedURL } = useContext(FeedbackContext)
-  const router = useRouter()
-  const currentPath = router.asPath
-  const onContact = () => {
-    setRequestedURL(`${BASE_URL}${currentPath}`)
-    onOpen()
-  }
+  const { onContact } = useContext(FeedbackContext)
   return (
     <>
       <RCHead metadataTitle={metadataTitle} />

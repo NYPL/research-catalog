@@ -3,6 +3,7 @@ import React, { useContext, useState } from "react"
 import { FeedbackContext } from "../../context/FeedbackContext"
 import type { FeedbackMetadataAndComment } from "../../types/feedbackTypes"
 import type { ItemMetadata } from "../../types/itemTypes"
+import { BASE_URL } from "../../config/constants"
 
 /**
  * Component that wraps the DS Feedback box. Can be opened by clicking the button rendered
@@ -41,29 +42,29 @@ const FeedbackForm = () => {
     metadataAndComment: FeedbackMetadataAndComment
   ) => {
     console.log(metadataAndComment)
-    // try {
-    //   // Changed this route to /feedback-rc to avoid conflicts with DFE with 2AD reverse proxy config
-    //   // TODO: Change this route name back to /feedback when all routes point to research catalog
-    //   // const response = await fetch(`${BASE_URL}/api/feedback-rc`, {
-    //   //   method: "POST",
-    //   //   body: JSON.stringify(metadataAndComment),
-    //   // })
-    //   //const responseJson = await response.json()
-    //   if (responseJson.error) {
-    //     console.error("Error in feedback api response", responseJson.error)
-    //     setFeedbackFormScreen("error")
-    //   } else {
-    //     setFeedbackFormScreen("confirmation")
-    //   }
-    // } catch (error) {
-    //   console.error("Error posting feedback", error)
-    //   setFeedbackFormScreen("error")
-    // }
+    try {
+      // Changed this route to /feedback-rc to avoid conflicts with DFE with 2AD reverse proxy config
+      // TODO: Change this route name back to /feedback when all routes point to research catalog
+      const response = await fetch(`${BASE_URL}/api/feedback-rc`, {
+        method: "POST",
+        body: JSON.stringify(metadataAndComment),
+      })
+      const responseJson = await response.json()
+      if (responseJson.error) {
+        console.error("Error in feedback api response", responseJson.error)
+        setFeedbackFormScreen("error")
+      } else {
+        setFeedbackFormScreen("confirmation")
+      }
+    } catch (error) {
+      console.error("Error posting feedback", error)
+      setFeedbackFormScreen("error")
+    }
   }
 
   const notificationText = (
-    itemMetadata: ItemMetadata,
-    requestedURL: string | null
+    itemMetadata?: ItemMetadata,
+    requestedURL?: string | null
   ) => {
     if (requestedURL) {
       return "You are asking for help or information about a page error"

@@ -14,6 +14,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       appConfig.libAnswersEmail,
       appConfig.sourceEmail
     )
+    console.log(emailParams)
     // Create the promise and SES service object
     const sendPromise = new aws.SES({ apiVersion: "2010-12-01" })
       .sendEmail(emailParams)
