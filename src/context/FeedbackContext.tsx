@@ -14,6 +14,8 @@ export const FeedbackProvider = ({ children, value }) => {
   const [itemMetadata, setItemMetadata] = useState(value?.itemMetadata || null)
   const [requestedURL, setRequestedURL] = useState(value?.requestURL || null)
   const { FeedbackBox, isOpen, onOpen, onClose } = useFeedbackBox()
+
+  // If user opens feedback box from an error page "contact us" link, add their URL to email data
   const onContact = () => {
     const currentPath = router.asPath
     const fullURL = `${BASE_URL}${currentPath}`
