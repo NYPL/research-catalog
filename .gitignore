@@ -41,9 +41,6 @@ next-env.d.ts
 #logs 
 /log
 
-#patches.  added by c mulholland on 6/18/25 for local development.
-rescatpatch.zip
-kms-fix.patch
 
 # Playwright
 node_modules/
