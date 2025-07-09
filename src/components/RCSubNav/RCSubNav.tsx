@@ -1,6 +1,11 @@
 import type { RCPage } from "../../types/pageTypes"
 import { useLogoutRedirect } from "../../server/auth"
-import { Icon, SubNav, SubNavLink } from "@nypl/design-system-react-components"
+import {
+  Icon,
+  SubNav,
+  SubNavLink,
+  Text,
+} from "@nypl/design-system-react-components"
 
 interface SubNavProps {
   activePage: RCPage
@@ -64,7 +69,17 @@ const RCSubNav = ({ activePage, isAuthenticated }: SubNavProps) => {
             screenreaderOnlyText="for NYPL.org"
           >
             <Icon name="actionIdentityFilled" size="medium" />
-            My account
+            <Text
+              noSpace
+              __css={{
+                display: "none",
+                ["@media screen and (min-width: 600px)"]: {
+                  display: "flex",
+                },
+              }}
+            >
+              My account
+            </Text>
           </SubNavLink>
         </>
       }
