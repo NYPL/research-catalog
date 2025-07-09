@@ -10,7 +10,7 @@ export const FeedbackContext = createContext<FeedbackContextType | null>(null)
 
 export const FeedbackProvider = ({ children, value }) => {
   const [itemMetadata, setItemMetadata] = useState(value?.itemMetadata || null)
-  const [requestURL, setRequestURL] = useState(value?.requestURL || null)
+  const [requestedURL, setRequestedURL] = useState(value?.requestURL || null)
   const { FeedbackBox, isOpen, onOpen, onClose } = useFeedbackBox()
 
   return (
@@ -22,8 +22,8 @@ export const FeedbackProvider = ({ children, value }) => {
         onClose,
         itemMetadata,
         setItemMetadata,
-        requestURL,
-        setRequestURL,
+        requestedURL,
+        setRequestedURL,
       }}
     >
       {children}

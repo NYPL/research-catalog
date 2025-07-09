@@ -1,7 +1,7 @@
 import { Heading, Flex, Link, Text } from "@nypl/design-system-react-components"
 import type { HTTPStatusCode } from "../../types/appTypes"
 import { appConfig } from "../../config/config"
-import { SITE_NAME } from "../../config/constants"
+import { BASE_URL, SITE_NAME } from "../../config/constants"
 import RCHead from "../Head/RCHead"
 import Layout from "../Layout/Layout"
 import ExternalLink from "../Links/ExternalLink/ExternalLink"
@@ -9,6 +9,7 @@ import { useContext } from "react"
 import { FeedbackContext } from "../../context/FeedbackContext"
 import Image from "next/image"
 import errorImage from "../../assets/errorImage.png"
+import { useRouter } from "next/router"
 
 type SearchErrorProps = {
   errorStatus: HTTPStatusCode
@@ -16,7 +17,13 @@ type SearchErrorProps = {
 
 export default function SearchError({ errorStatus }: SearchErrorProps) {
   const metadataTitle = `${errorStatus} | ${SITE_NAME}`
-  const { onOpen } = useContext(FeedbackContext)
+  const { onOpen, setRequestedURL } = useContext(FeedbackContext)
+  const router = useRouter()
+  const currentPath = router.asPath
+  const onContact = () => {
+    setRequestedURL(`${BASE_URL}${currentPath}`)
+    onOpen()
+  }
 
   let errorContent
 
@@ -41,7 +48,7 @@ export default function SearchError({ errorStatus }: SearchErrorProps) {
               Legacy Catalog
             </ExternalLink>{" "}
             for more materials, or{" "}
-            <Link onClick={onOpen} id="feedback-link">
+            <Link onClick={onContact} id="feedback-link">
               contact us
             </Link>{" "}
             for assistance.
@@ -61,7 +68,7 @@ export default function SearchError({ errorStatus }: SearchErrorProps) {
           </Text>
           <Text marginBottom="0">
             Try refreshing the page or{" "}
-            <Link onClick={onOpen} id="feedback-link">
+            <Link onClick={onContact} id="feedback-link">
               contact us
             </Link>{" "}
             if the error persists.
@@ -81,7 +88,7 @@ export default function SearchError({ errorStatus }: SearchErrorProps) {
           </Text>
           <Text marginBottom="0">
             Try again later or{" "}
-            <Link onClick={onOpen} id="feedback-link">
+            <Link onClick={onContact} id="feedback-link">
               contact us
             </Link>{" "}
             if the error persists.

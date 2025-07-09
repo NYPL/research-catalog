@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react"
 
 import { FeedbackContext } from "../../context/FeedbackContext"
 import type { FeedbackMetadataAndComment } from "../../types/feedbackTypes"
-import { BASE_URL } from "../../config/constants"
+import type { ItemMetadata } from "../../types/itemTypes"
 
 /**
  * Component that wraps the DS Feedback box. Can be opened by clicking the button rendered
@@ -17,13 +17,13 @@ const FeedbackForm = () => {
     onOpen,
     itemMetadata,
     setItemMetadata,
-    requestURL,
-    setRequestURL,
+    requestedURL,
+    setRequestedURL,
   } = useContext(FeedbackContext)
 
   const closeAndResetFeedbackData = () => {
     if (itemMetadata) setItemMetadata(null)
-    if (requestURL) setRequestURL(null)
+    if (requestedURL) setRequestedURL(null)
     onClose()
     setFeedbackFormScreen("form")
 
@@ -61,8 +61,11 @@ const FeedbackForm = () => {
     // }
   }
 
-  const notificationText = (itemMetadata, requestURL) => {
-    if (requestURL) {
+  const notificationText = (
+    itemMetadata: ItemMetadata,
+    requestedURL: string | null
+  ) => {
+    if (requestedURL) {
       return "You are asking for help or information about a page error"
     }
     if (itemMetadata?.notificationText) {
@@ -81,8 +84,11 @@ const FeedbackForm = () => {
       descriptionText="We are here to help!"
       title="Help and Feedback"
       showEmailField
-      hiddenFields={{ ...itemMetadata, requestURL }}
-      notificationText={notificationText(itemMetadata, requestURL)}
+      hiddenFields={{
+        ...itemMetadata,
+        ...(requestedURL ? { requestedURL } : {}),
+      }}
+      notificationText={notificationText(itemMetadata, requestedURL)}
       view={feedbackFormScreen}
       className="no-print"
     />

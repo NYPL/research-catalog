@@ -16,11 +16,11 @@ type ErrorPageProps = {
 
 export default function Custom404({ activePage }: ErrorPageProps) {
   const metadataTitle = `404 | ${SITE_NAME}`
-  const { onOpen, setRequestURL } = useContext(FeedbackContext)
+  const { onOpen, setRequestedURL } = useContext(FeedbackContext)
   const router = useRouter()
   const currentPath = router.asPath
   const onContact = () => {
-    setRequestURL(`${BASE_URL}${currentPath}`)
+    setRequestedURL(`${BASE_URL}${currentPath}`)
     onOpen()
   }
   return (
