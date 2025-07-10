@@ -7,8 +7,74 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+### Updated
+
+- Adding "Discovery" to `SearchResults`, `AggregationResults`, and `SearchResultsElement` to parallel `DiscoveryBibResult` and indicate the API structure [SCC-4148](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4148)
+- Replace subnav with DS `SubNav` [SCC-4544](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4544)
+- Remove duplicate SearchResultSort component between mobile and desktop [SCC-4086](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4086)
+
 ### Fixed
 
+- Added language back into resource fields under `BibDetails` [SCC-4771](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4771)
+
+## Added
+
+- Added bib title to metadata tab title on bib page [SCC-4749](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4749)
+- Adds warning to hold request pages if user has already completed the request [SCC-3360](https://newyorkpubliclibrary.atlassian.net/browse/SCC-3360)
+- Adds new 404 page, handling to cover common search response errors, and new search error view [SCC-3792](https://newyorkpubliclibrary.atlassian.net/browse/SCC-3792)
+
+## [1.5.0] 2025-06-18
+
+### Added
+
+- Added test for View all behavior on bib page [SCC-4296](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4296)
+
+### Updated
+
+- send subject search scope queries to bib results instead of SHEP ([SCC-4726](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4726))
+
+## [1.4.8] 2025-06-12
+
+### Removed
+
+- Removed the DRB sidebar, API client, and all related code
+
+### Added
+
+- Added focus context provider to manage focus with search [SCC-4721](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4721)
+- Adds global print styles to make RC more print-friendly [SCC-3300](https://newyorkpubliclibrary.atlassian.net/browse/SCC-3300)
+
+### Updated
+
+- Corrects `RCLink` and `ExternalLink` accessibility attributes [SCC-4149](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4149)
+- Updates filters to new sidebar design with live filtering [SCC-4721](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4721)
+- Removes redirect for 404s on bib/hold pages and nonexistent paths, instead just displaying 404 view and unchanged URL [SCC-4751](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4751)
+- Updates GH actions to require tests before deploying, and consolidates `qa`, `train`, and `prod` deployment scripts [SCC-4272](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4272)
+
+## [1.4.7] 2025-05-19
+
+### Added
+
+- Adds GA events to onsite and EDD requests [SCC-4649](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4649)
+- Adds GA events to read online requests [SCC-4651](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4651)
+
+### Updated
+
+- Updates DS to v3.6.1 [SCC-4630](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4630)
+- Updates timed logout modal to reset on user activity [SCC-4379](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4379)
+- Remove links to SHEP from bib details [SCC-4640](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4640)
+- Updates finding aids to be more prominent [SCC-4105](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4105)
+
+## [1.4.6] 2025-04-14
+
+### Fixed
+
+- Corrects Sierra client POST bug [SCC-4627](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4627)
+- Fixes keyword dropdown icon to not disappear on click [SCC-4601](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4601)
+
+### Updated
+
+- Removes `pickupLocation` from EDD hold requests [SCC-4614](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4614)
 - Updates Next.js to version 13.5.9 [SCC-4609](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4609)
 
 ## [1.4.5] 2025-02-24

@@ -45,8 +45,14 @@ describe("ItemFilters", () => {
     })
 
     it("calls the change handler when filter values are changed", async () => {
-      await userEvent.click(screen.getByTestId("location-multi-select"))
-      const offsiteCheckbox = screen.getByLabelText("Offsite")
+      await userEvent.click(
+        screen.getByRole("button", {
+          name: "Location, 1 item currently selected",
+        })
+      )
+      const offsiteCheckbox = screen.getByRole("checkbox", {
+        name: "Offsite",
+      })
 
       await userEvent.click(offsiteCheckbox)
       expect(filtersChangeMock).toHaveBeenCalledTimes(1)

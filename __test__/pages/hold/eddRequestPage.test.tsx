@@ -565,4 +565,30 @@ describe("EDD Request page", () => {
       expect(screen.getByText("Submit request")).toBeDisabled()
     })
   })
+  describe("EDD request already completed renders warning banner", () => {
+    sessionStorage.setItem("holdCompleted", "true")
+    render(
+      <EDDRequestPage
+        discoveryBibResult={bibWithItems.resource}
+        discoveryItemResult={bibWithItems.resource.items[0]}
+        patronId="123"
+        isAuthenticated={true}
+      />
+    )
+    expect(
+      screen.getByText("You've already requested a scan of this item")
+    ).toBeInTheDocument()
+  })
+  describe("EDD request not found", () => {
+    render(
+      <EDDRequestPage
+        discoveryBibResult={undefined}
+        discoveryItemResult={undefined}
+        patronId="123"
+        isAuthenticated={true}
+        notFound={true}
+      />
+    )
+    expect(screen.getByText("We couldn't find that page")).toBeInTheDocument()
+  })
 })

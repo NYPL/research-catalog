@@ -9,6 +9,7 @@ import type {
   AnyBibDetail,
 } from "../types/bibDetailsTypes"
 import { convertToSentenceCase } from "../utils/appUtils"
+import { getFindingAidFromSupplementaryContent } from "../utils/bibUtils"
 
 export default class BibDetails {
   bib: DiscoveryBibResult
@@ -21,6 +22,7 @@ export default class BibDetails {
   extent: string[]
   subjectLiteral: BibDetailURL[][]
   owner: string[]
+  findingAid?: string
 
   constructor(
     discoveryBibResult: DiscoveryBibResult,
@@ -29,10 +31,10 @@ export default class BibDetails {
     this.bib = this.matchParallelToPrimaryValues(discoveryBibResult)
     // these properties are not string[] so they require separate processing
     this.supplementaryContent = this.buildSupplementaryContent()
+    this.findingAid = this.buildFindingAid()
     this.groupedNotes = this.buildGroupedNotes()
     this.extent = this.buildExtent()
     this.owner = this.buildOwner()
-    // If we can't retreive subject headings from the SHEP API, we'll use the subjectLiteral
     this.subjectLiteral = this.buildSubjectLiterals()
     // these are the actual arrays of details that will be displayed
     this.annotatedMarcDetails = this.buildAnnotatedMarcDetails(
@@ -131,6 +133,7 @@ export default class BibDetails {
       { field: "oclc", label: "OCLC" },
       { field: "lccn", label: "LCCN" },
       { field: "owner", label: "Owning institution" },
+      { field: "language", label: "Language" },
     ]
       .map((fieldMapping: FieldMapping): AnyBibDetail => {
         let detail: AnyBibDetail
@@ -179,9 +182,12 @@ export default class BibDetails {
   }
 
   buildStandardDetail(fieldMapping: FieldMapping) {
-    const bibFieldValue =
-      this[fieldMapping.field] || this.bib[fieldMapping.field]
+    let bibFieldValue = this[fieldMapping.field] || this.bib[fieldMapping.field]
     if (!bibFieldValue) return
+    // "language" is the only resource field with JSON-LD format
+    if (fieldMapping.field === "language") {
+      bibFieldValue = [bibFieldValue[0]?.prefLabel]
+    }
     return this.buildDetail(
       convertToSentenceCase(fieldMapping.label),
       bibFieldValue
@@ -362,22 +368,24 @@ export default class BibDetails {
       return null
     }
     const label = "Supplementary content"
-    const values = this.bib.supplementaryContent.map((sc) => {
-      return {
+
+    const isFindingAid = (label: string) => label.includes("finding aid")
+
+    const values = this.bib.supplementaryContent
+      // If supplementary content contains a finding aid, don't display it
+      .filter((sc) => {
+        const scLabel = sc.label?.toLowerCase() || ""
+        return !isFindingAid(scLabel)
+      })
+      .map((sc) => ({
         url: sc.url,
         urlLabel: sc.label,
-      }
-    })
+      }))
     return this.buildExternalLinkedDetail(convertToSentenceCase(label), values)
   }
 
-  buildSubjectHeadings(): BibDetailURL[][] {
-    if (!this.bib.subjectHeadings) return
-    const subjectHeadingsUrls = this.bib.subjectHeadings.map((heading) =>
-      this.flattenSubjectHeadingUrls(heading)
-    )
-
-    return subjectHeadingsUrls?.length && subjectHeadingsUrls
+  buildFindingAid() {
+    return getFindingAidFromSupplementaryContent(this.bib.supplementaryContent)
   }
 
   buildSubjectLiterals(): BibDetailURL[][] {
@@ -419,35 +427,5 @@ export default class BibDetails {
 
         return stackedSubjectLiteral
       })
-  }
-
-  /**
-   * Flatten subject headings into a list of objects with a url and a label
-   */
-  flattenSubjectHeadingUrls(heading): BibDetailURL[] | null {
-    if (!heading.label || !heading.uuid) return null
-    const subjectHeadingsArray = []
-
-    // iterate through each nested subject until there's no parent element
-    let currentHeading = heading
-
-    while (currentHeading.parent) {
-      subjectHeadingsArray.unshift(
-        this.getSubjectHeadingUrl(currentHeading.uuid, currentHeading.label)
-      )
-      currentHeading = currentHeading.parent
-    }
-    // add the top level subject heading
-    subjectHeadingsArray.unshift(
-      this.getSubjectHeadingUrl(currentHeading.uuid, currentHeading.label)
-    )
-    return subjectHeadingsArray
-  }
-
-  getSubjectHeadingUrl(uuid: string, label: string): BibDetailURL {
-    return {
-      url: `/subject_headings/${uuid}?label=${encodeURIComponent(label)}`,
-      urlLabel: label.split(" -- ").pop(),
-    }
   }
 }

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+import type { HTTPStatusCode } from "./appTypes"
 import type { DiscoveryBibResult } from "./bibTypes"
-import type { DRBResults } from "./drbTypes"
 import type { Aggregation } from "./filterTypes"
 
 type Language = string
@@ -45,22 +45,22 @@ export type SortKey = "relevance" | "title" | "date"
 export type SortOrder = "asc" | "desc"
 
 export interface SearchResultsResponse {
-  results?: SearchResults
-  aggregations?: AggregationResults
-  drbResults?: DRBResults
+  status: HTTPStatusCode
+  results?: DiscoverySearchResults
+  aggregations?: DiscoveryAggregationResults
   page?: number
 }
 
-export interface AggregationResults {
+export interface DiscoveryAggregationResults {
   totalResults: number
   itemListElement: Aggregation[]
 }
-export interface SearchResults {
+export interface DiscoverySearchResults {
   totalResults: number
-  itemListElement: SearchResultsElement[]
+  itemListElement: DiscoverySearchResultsElement[]
 }
 
-export interface SearchResultsElement {
+export interface DiscoverySearchResultsElement {
   result?: DiscoveryBibResult
   field?: string
 }

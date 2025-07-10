@@ -6,12 +6,11 @@ import {
   SkeletonLoader,
   Box,
   Banner,
+  StatusBadge,
 } from "@nypl/design-system-react-components"
-
 import Layout from "../../../src/components/Layout/Layout"
 import {
   PATHS,
-  SITE_NAME,
   BASE_URL,
   FOCUS_TIMEOUT,
   ERROR_MESSAGES,
@@ -22,6 +21,7 @@ import {
   getBibQueryString,
   buildItemTableDisplayingString,
   isNyplBibID,
+  buildBibMetadataTitle,
 } from "../../../src/utils/bibUtils"
 import BibDetailsModel from "../../../src/models/BibDetails"
 import BibDetails from "../../../src/components/BibPage/BibDetail"
@@ -44,6 +44,9 @@ import {
   areFiltersApplied,
 } from "../../../src/utils/itemFilterUtils"
 import RCHead from "../../../src/components/Head/RCHead"
+import FindingAid from "../../../src/components/BibPage/FindingAid"
+import Custom404 from "../../404"
+import { tryInstantiate } from "../../../src/utils/appUtils"
 
 interface BibPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -51,6 +54,7 @@ interface BibPropsType {
   isAuthenticated?: boolean
   itemPage?: number
   viewAllItems?: boolean
+  notFound?: boolean
 }
 
 /**
@@ -62,11 +66,19 @@ export default function BibPage({
   isAuthenticated,
   itemPage = 1,
   viewAllItems = false,
+  notFound = false,
 }: BibPropsType) {
   const { push, query } = useRouter()
-  const metadataTitle = `Item Details | ${SITE_NAME}`
+  const [bib, setBib] = useState(
+    tryInstantiate({
+      constructor: Bib,
+      args: [discoveryBibResult],
+      ignoreError: notFound,
+      errorMessage: "Bib undefined",
+    })
+  )
 
-  const [bib, setBib] = useState(new Bib(discoveryBibResult))
+  const metadataTitle = buildBibMetadataTitle(bib?.title)
   const [itemsLoading, setItemsLoading] = useState(false)
   const [itemFetchError, setItemFetchError] = useState(false)
 
@@ -80,10 +92,12 @@ export default function BibPage({
   const viewAllLoadingTextRef = useRef<HTMLDivElement & HTMLLabelElement>(null)
   const controllerRef = useRef<AbortController>()
 
-  const { topDetails, bottomDetails, holdingsDetails } = new BibDetailsModel(
-    discoveryBibResult,
-    annotatedMarc
-  )
+  if (notFound) {
+    return <Custom404 activePage="bib" />
+  }
+
+  const { topDetails, bottomDetails, holdingsDetails, findingAid } =
+    new BibDetailsModel(discoveryBibResult, annotatedMarc)
   const displayLegacyCatalogLink = isNyplBibID(bib.id)
 
   const filtersAreApplied = areFiltersApplied(appliedFilters)
@@ -203,13 +217,28 @@ export default function BibPage({
     <>
       <RCHead metadataTitle={metadataTitle} />
       <Layout isAuthenticated={isAuthenticated} activePage="bib">
+        {findingAid && (
+          <StatusBadge mb="s" type="informative">
+            FINDING AID AVAILABLE
+          </StatusBadge>
+        )}
         <Heading level="h2" size="heading3" mb="l">
           {bib.title}
         </Heading>
         <BibDetails key="top-details" details={topDetails} />
-        {bib.hasElectronicResources ? (
-          <ElectronicResources electronicResources={bib.electronicResources} />
-        ) : null}
+        <Box mt="s">
+          {findingAid && (
+            <FindingAid
+              findingAidURL={findingAid}
+              hasElectronicResources={bib.hasElectronicResources}
+            />
+          )}
+          {bib.hasElectronicResources && (
+            <ElectronicResources
+              electronicResources={bib.electronicResources}
+            />
+          )}
+        </Box>
         {bib.showItemTable ? (
           <>
             <Heading
@@ -230,6 +259,7 @@ export default function BibPage({
               }
               isDismissible
               mb="s"
+              className="no-print"
             />
             <ItemFilters
               itemAggregations={bib.itemAggregations}
@@ -328,9 +358,8 @@ export async function getServerSideProps({ params, query, req }) {
       }
     case 404:
       return {
-        redirect: {
-          destination: PATHS["404"],
-          permanent: false,
+        props: {
+          notFound: true,
         },
       }
     default:

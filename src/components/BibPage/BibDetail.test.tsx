@@ -1,6 +1,7 @@
 // import userEvent from "@testing-library/user-event"
 import {
   bibWithSupplementaryContent,
+  bibWithFindingAidAndTOC,
   noParallels,
   parallelsBib,
 } from "../../../__test__/fixtures/bibFixtures"
@@ -26,8 +27,33 @@ describe("BibDetail component", () => {
     parallelsBib.resource,
     parallelsBib.annotatedMarc
   )
+  const findingAidBibModel = new BibDetailsModel(
+    bibWithFindingAidAndTOC.resource,
+    bibWithFindingAidAndTOC.annotatedMarc
+  )
   describe("bottom details", () => {
-    it.todo("")
+    it("renders resource fields", () => {
+      render(<BibDetails details={noParallelsBibModel.bottomDetails} />, {
+        wrapper: MemoryRouterProvider,
+      })
+
+      expect(screen.getByText("Language")).toBeInTheDocument()
+      expect(screen.getByText("French")).toBeInTheDocument()
+      expect(screen.getByText("Series statement")).toBeInTheDocument()
+      expect(screen.queryAllByText(/Haute enfance/)[0]).toBeInTheDocument()
+    })
+    it("merges annotated MARC and resource fields without duplicates", () => {
+      const combinedDetails = noParallelsBibModel.bottomDetails
+      const labels = combinedDetails.map((d) => d.label)
+      const labelCounts = labels.reduce((acc, label) => {
+        acc[label] = (acc[label] || 0) + 1
+        return acc
+      }, {})
+
+      Object.values(labelCounts).forEach((count) => {
+        expect(count).toBeLessThanOrEqual(1)
+      })
+    })
   })
   describe("text only details", () => {
     it("single value", () => {
@@ -46,7 +72,7 @@ describe("BibDetail component", () => {
     })
   })
   describe("linked details", () => {
-    xit("internal link", async () => {
+    it("renders internal links", async () => {
       mockRouter.push("/bib/b12345678")
       render(<BibDetails details={noParallelsBibModel.topDetails} />, {
         wrapper: MemoryRouterProvider,
@@ -54,7 +80,9 @@ describe("BibDetail component", () => {
       const creatorLiteralLink = screen.getByText("Cortanze, Gérard de.")
       expect(creatorLiteralLink).toHaveAttribute(
         "href",
-        "/search?filters[creatorLiteral][0]=Cortanze,%20G%C3%A9rard%20de."
+        expect.stringContaining(
+          "/search?filters[creatorLiteral][0]=Cortanze,%20G%C3%A9rard%20de."
+        )
       )
       // @TODO: This will work once the Nextjs `Link` component is used again
       // await userEvent.click(creatorLiteralLink)
@@ -62,7 +90,7 @@ describe("BibDetail component", () => {
       //   "/search?filters%5BcreatorLiteral%5D%5B0%5D=Cortanze%2C+G%C3%A9rard+de."
       // )
     })
-    it("external link", async () => {
+    it("renders external links", async () => {
       render(<BibDetails details={supplementaryContentModel.topDetails} />, {
         wrapper: MemoryRouterProvider,
       })
@@ -71,6 +99,12 @@ describe("BibDetail component", () => {
         "href",
         expect.stringContaining("images.contentreserve.com")
       )
+    })
+    it("does not render finding aid in supplementary content", async () => {
+      render(<BibDetails details={findingAidBibModel.topDetails} />, {
+        wrapper: MemoryRouterProvider,
+      })
+      expect(screen.queryByText("Finding aid")).not.toBeInTheDocument()
     })
   })
   describe("subject heading links", () => {

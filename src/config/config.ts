@@ -7,18 +7,14 @@ export const appConfig: AppConfig = {
   apiEndpoints: {
     platform: {
       development: "https://qa-platform.nypl.org/api",
-      qa: "https://qa-platform.nypl.org/api",
+      // qa: "https://qa-platform.nypl.org/api",
+      qa: "http://discovery-api-qa2.nypl.org/api",
       production: "https://platform.nypl.org/api",
     },
     domain: {
       development: "local.nypl.org:8080",
       qa: "qa-www.nypl.org",
       production: "www.nypl.org",
-    },
-    drb: {
-      development: "https://digital-research-books-api.nypl.org/search",
-      qa: "https://digital-research-books-api.nypl.org/search",
-      production: "https://digital-research-books-api.nypl.org/search",
     },
     shep: {
       development: process.env.SHEP_API,
@@ -37,17 +33,6 @@ export const appConfig: AppConfig = {
       production:
         "https://assets.adobedtm.com/1a9376472d37/8519dfce636d/launch-672b7e7f98ee.min.js",
     },
-    drbFrontEnd: {
-      development:
-        "http://sfr-front-end-development.us-east-1.elasticbeanstalk.com",
-      qa: "http://sfr-front-end-development.us-east-1.elasticbeanstalk.com",
-      production: "https://digital-research-books-beta.nypl.org",
-    },
-    drbEreader: {
-      development: "https://researchnow-reader.nypl.org",
-      qa: "https://researchnow-reader.nypl.org",
-      production: "https://digital-research-books-reader.nypl.org",
-    },
     loginUrl: {
       development: "https://dev-login.nypl.org/auth/login",
       qa: "https://dev-login.nypl.org/auth/login",
@@ -60,8 +45,6 @@ export const appConfig: AppConfig = {
     },
   },
   urls: {
-    drbAbout:
-      "https://digital-research-books-beta.nypl.org/about?source=catalog",
     circulatingCatalog: "https://borrow.nypl.org",
     legacyCatalog: "https://legacycatalog.nypl.org",
     login: "https://login.nypl.org/auth/login",

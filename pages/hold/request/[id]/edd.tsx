@@ -5,9 +5,7 @@ import {
   Box,
   SkeletonLoader,
 } from "@nypl/design-system-react-components"
-
 import sierraClient from "../../../../src/server/sierraClient"
-
 import Layout from "../../../../src/components/Layout/Layout"
 import EDDRequestForm from "../../../../src/components/HoldPages/EDDRequestForm"
 import HoldRequestErrorBanner from "../../../../src/components/HoldPages/HoldRequestErrorBanner"
@@ -42,6 +40,9 @@ import type {
   PatronEligibilityStatus,
 } from "../../../../src/types/holdPageTypes"
 import RCHead from "../../../../src/components/Head/RCHead"
+import Custom404 from "../../../404"
+import { tryInstantiate } from "../../../../src/utils/appUtils"
+import HoldRequestCompletedBanner from "../../../../src/components/HoldPages/HoldRequestCompletedBanner"
 
 interface EDDRequestPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -51,6 +52,7 @@ interface EDDRequestPropsType {
   isAuthenticated?: boolean
   errorStatus?: HoldErrorStatus
   patronEligibilityStatus?: PatronEligibilityStatus
+  notFound?: boolean
 }
 
 /**
@@ -64,12 +66,22 @@ export default function EDDRequestPage({
   isAuthenticated,
   errorStatus: defaultErrorStatus,
   patronEligibilityStatus: defaultEligibilityStatus,
+  notFound = false,
 }: EDDRequestPropsType) {
   const metadataTitle = `Electronic Delivery Request | ${SITE_NAME}`
-  const bib = new Bib(discoveryBibResult)
-  const item = new Item(discoveryItemResult, bib)
-
-  const holdId = `${item.bibId}-${item.id}`
+  const bib = tryInstantiate({
+    constructor: Bib,
+    args: [discoveryBibResult],
+    ignoreError: notFound,
+    errorMessage: "Bib undefined",
+  })
+  const item = tryInstantiate({
+    constructor: Item,
+    args: [discoveryItemResult, bib],
+    ignoreError: notFound,
+    errorMessage: "Item undefined",
+  })
+  const holdId = item ? `${item.bibId}-${item.id}` : ""
 
   const [errorStatus, setErrorStatus] = useState(defaultErrorStatus)
   const [patronEligibilityStatus, setPatronEligibilityStatus] = useState(
@@ -92,10 +104,24 @@ export default function EDDRequestPage({
     ...initialEDDFormState,
     emailAddress: patronEmail,
     patronId,
-    source: item.formattedSourceForHoldRequest,
+    source: item?.formattedSourceForHoldRequest,
     // Override values with server form state in the case of a no-js request
     ...formStateFromServer,
   })
+
+  const [holdCompleted, setHoldCompleted] = useState(false)
+
+  // Check if hold request was completed already.
+  useEffect(() => {
+    const bannerFlag = sessionStorage.getItem("holdCompleted")
+    if (bannerFlag === "true") {
+      setHoldCompleted(true)
+      sessionStorage.removeItem("holdCompleted")
+      if (bannerContainerRef.current) {
+        bannerContainerRef.current.focus()
+      }
+    }
+  }, [])
 
   useEffect(() => {
     if (
@@ -107,6 +133,10 @@ export default function EDDRequestPage({
     }
   }, [errorStatus, patronEligibilityStatus])
 
+  if (notFound) {
+    return <Custom404 activePage="hold" />
+  }
+
   const handleServerHoldPostError = (errorMessage: string) => {
     console.error(
       "EDDRequestPage: Error in EDD request api response",
@@ -114,6 +144,21 @@ export default function EDDRequestPage({
     )
     setFormPosting(false)
     setErrorStatus("failed")
+  }
+
+  const handleEDDRequestGAEvent = (item: Item) => {
+    if (typeof window !== "undefined") {
+      window.dataLayer = window.dataLayer || []
+      window.dataLayer.push({
+        event: "catalog_request",
+        catalog_type: "research",
+        request_type: "scan",
+        item_title: item.bibTitle,
+        item_author: null,
+        record_i_number: item.id,
+        record_b_number: item.bibId,
+      })
+    }
   }
 
   const postEDDRequest = async (eddParams: EDDRequestParams) => {
@@ -169,6 +214,7 @@ export default function EDDRequestPage({
               patronEligibilityStatus={patronEligibilityStatus}
             />
           )}
+          {holdCompleted && <HoldRequestCompletedBanner isEDD />}
         </Box>
         <Heading level="h2" mb="l" size="heading3">
           Request scan
@@ -183,6 +229,7 @@ export default function EDDRequestPage({
             handleSubmit={postEDDRequest}
             setErrorStatus={setErrorStatus}
             errorStatus={errorStatus}
+            handleGAEvent={() => handleEDDRequestGAEvent(item)}
             holdId={holdId}
           />
         ) : null}
@@ -293,12 +340,8 @@ export async function getServerSideProps({ params, req, res, query }) {
     }
   } catch (error) {
     console.log(error)
-
     return {
-      redirect: {
-        destination: PATHS["404"],
-        permanent: false,
-      },
+      props: { notFound: true },
     }
   }
 }

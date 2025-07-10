@@ -1,4 +1,4 @@
-import { Button } from "@nypl/design-system-react-components"
+import { Link } from "@nypl/design-system-react-components"
 import { useContext } from "react"
 import { FeedbackContext } from "../../../context/FeedbackContext"
 import type { ItemMetadata } from "../../../types/itemTypes"
@@ -17,18 +17,8 @@ const ContactALibrarian = ({
   return (
     <>
       {" Please "}
-      <Button
+      <Link
         id="contact-librarian"
-        buttonType="link"
-        sx={{
-          display: "inline",
-          fontWeight: "inherit",
-          fontSize: "inherit",
-          p: 0,
-          height: "auto",
-          textAlign: "left",
-          minHeight: "auto",
-        }}
         onClick={() =>
           onContact({
             id: item.id,
@@ -39,7 +29,8 @@ const ContactALibrarian = ({
         }
       >
         contact a librarian
-      </Button>
+      </Link>
+
       {" for assistance."}
     </>
   )

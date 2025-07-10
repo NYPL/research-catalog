@@ -28,7 +28,6 @@ import initializePatronTokenAuth, {
 
 import Bib from "../../../../src/models/Bib"
 import Item from "../../../../src/models/Item"
-
 import type { DiscoveryBibResult } from "../../../../src/types/bibTypes"
 import type { DiscoveryItemResult } from "../../../../src/types/itemTypes"
 import type { DeliveryLocation } from "../../../../src/types/locationTypes"
@@ -37,6 +36,12 @@ import type {
   PatronEligibilityStatus,
 } from "../../../../src/types/holdPageTypes"
 import RCHead from "../../../../src/components/Head/RCHead"
+import Custom404 from "../../../404"
+import HoldRequestCompletedBanner from "../../../../src/components/HoldPages/HoldRequestCompletedBanner"
+import {
+  idConstants,
+  useFocusContext,
+} from "../../../../src/context/FocusContext"
 
 interface HoldRequestPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -46,6 +51,7 @@ interface HoldRequestPropsType {
   isAuthenticated?: boolean
   errorStatus?: HoldErrorStatus
   patronEligibilityStatus?: PatronEligibilityStatus
+  notFound?: boolean
 }
 
 /**
@@ -61,29 +67,41 @@ export default function HoldRequestPage({
   isAuthenticated,
   errorStatus: defaultErrorStatus,
   patronEligibilityStatus: defaultEligibilityStatus,
+  notFound = false,
 }: HoldRequestPropsType) {
   const metadataTitle = `Item Request | ${SITE_NAME}`
 
-  const bib = new Bib(discoveryBibResult)
-  const item = new Item(discoveryItemResult, bib)
+  const [holdCompleted, setHoldCompleted] = useState(false)
 
-  const holdId = `${item.bibId}-${item.id}`
+  const { setPersistentFocus } = useFocusContext()
+
+  // Check if hold request was completed already.
+  useEffect(() => {
+    const bannerFlag = sessionStorage.getItem("holdCompleted")
+    if (bannerFlag === "true") {
+      setHoldCompleted(true)
+      sessionStorage.removeItem("holdCompleted")
+      setPersistentFocus(idConstants.holdCompletedBanner)
+    }
+  }, [])
 
   const [errorStatus, setErrorStatus] = useState(defaultErrorStatus)
   const [patronEligibilityStatus, setPatronEligibilityStatus] = useState(
     defaultEligibilityStatus
   )
   const [formPosting, setFormPosting] = useState(false)
-  const bannerContainerRef = useRef<HTMLDivElement>()
 
   const router = useRouter()
   const isLoading = useLoading()
 
-  useEffect(() => {
-    if (errorStatus && bannerContainerRef.current) {
-      bannerContainerRef.current.focus()
-    }
-  }, [errorStatus, patronEligibilityStatus])
+  if (notFound) {
+    return <Custom404 activePage="hold" />
+  }
+
+  const bib = new Bib(discoveryBibResult)
+  const item = new Item(discoveryItemResult, bib)
+
+  const holdId = `${item.bibId}-${item.id}`
 
   const handleServerHoldPostError = (errorMessage: string) => {
     console.error(
@@ -92,6 +110,22 @@ export default function HoldRequestPage({
     )
     setFormPosting(false)
     setErrorStatus("failed")
+    setPersistentFocus(idConstants.holdErrorBanner)
+  }
+
+  const handleHoldRequestGAEvent = (item: Item) => {
+    if (typeof window !== "undefined") {
+      window.dataLayer = window.dataLayer || []
+      window.dataLayer.push({
+        event: "catalog_request",
+        catalog_type: "research",
+        request_type: "on_site",
+        item_title: item.bibTitle,
+        item_author: null,
+        record_i_number: item.id,
+        record_b_number: item.bibId,
+      })
+    }
   }
 
   const handleSubmit = async (e) => {
@@ -128,6 +162,7 @@ export default function HoldRequestPage({
         default:
           setFormPosting(false)
           // Success state
+          handleHoldRequestGAEvent(item)
           await router.push(
             `${PATHS.HOLD_CONFIRMATION}/${holdId}?pickupLocation=${responseJson.pickupLocation}&requestId=${responseJson.requestId}`
           )
@@ -147,7 +182,7 @@ export default function HoldRequestPage({
       <Layout isAuthenticated={isAuthenticated} activePage="hold">
         {/* Always render the wrapper element that will display the
           dynamically rendered notification for focus management */}
-        <Box tabIndex={-1} ref={bannerContainerRef}>
+        <Box tabIndex={-1} id={idConstants.holdErrorBanner}>
           {errorStatus && (
             <HoldRequestErrorBanner
               item={item}
@@ -155,6 +190,9 @@ export default function HoldRequestPage({
               patronEligibilityStatus={patronEligibilityStatus}
             />
           )}
+        </Box>
+        <Box tabIndex={-1} id={idConstants.holdCompletedBanner}>
+          {holdCompleted && <HoldRequestCompletedBanner />}
         </Box>
         <Heading level="h2" mb="l" size="heading3">
           Request for on-site use
@@ -177,6 +215,7 @@ export default function HoldRequestPage({
               patronId={patronId}
               errorStatus={errorStatus}
               source={item.formattedSourceForHoldRequest}
+              isDisabled={holdCompleted}
             />
           </>
         ) : null}
@@ -275,12 +314,8 @@ export async function getServerSideProps({ params, req, res }) {
     }
   } catch (error) {
     console.log(error)
-
     return {
-      redirect: {
-        destination: PATHS["404"],
-        permanent: false,
-      },
+      props: { notFound: true },
     }
   }
 }

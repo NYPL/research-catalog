@@ -229,5 +229,18 @@ describe("Hold Confirmation page", () => {
       const searchLink = screen.getByText("Start a new search")
       expect(searchLink).toHaveAttribute("href", "/research/research-catalog/")
     })
+    it("sets sessionStorage key 'holdCompleted' to true on mount", () => {
+      expect(sessionStorage.getItem("holdCompleted")).toBe("true")
+    })
+  })
+  describe("Hold confirmation not found", () => {
+    render(
+      <HoldConfirmationPage
+        discoveryBibResult={undefined}
+        pickupLocationLabel={undefined}
+        notFound={true}
+      />
+    )
+    expect(screen.getByText("We couldn't find that page")).toBeInTheDocument()
   })
 })

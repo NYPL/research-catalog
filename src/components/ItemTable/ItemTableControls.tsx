@@ -52,6 +52,7 @@ const ItemTableControls = ({
           onPageChange={handlePageChange}
           width="auto"
           mb={{ base: "m", md: 0 }}
+          className="no-print"
         />
       ) : null}
       {bib.showViewAllItemsLink(filtersAreApplied) &&
@@ -90,6 +91,7 @@ const ItemTableControls = ({
               alignItems="center"
               ml="auto"
               isUnderlined={false}
+              className="no-print"
             >
               <Box as="span" mr="xxs">
                 {viewAllExpanded

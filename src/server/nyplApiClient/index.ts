@@ -13,6 +13,8 @@ const appEnvironment = appConfig.environment
 const encryptedClientId = process.env.PLATFORM_API_CLIENT_ID
 const encryptedClientSecret = process.env.PLATFORM_API_CLIENT_SECRET
 
+console.log("Encrypted: id", encryptedClientId)
+console.log("Encrypted secret", encryptedClientSecret)
 const creds = [encryptedClientId, encryptedClientSecret]
 const CACHE: KMSCache = { clients: {}, secret: null, id: null }
 
@@ -45,6 +47,7 @@ const nyplApiClient = async ({
   } else {
     try {
       ;[decryptedId, decryptedSecret] = await kmsDecryptCreds(creds)
+      console.log("Got ", decryptedId, decryptedSecret)
       CACHE.id = decryptedId
       CACHE.secret = decryptedSecret
     } catch (exception) {
@@ -58,6 +61,13 @@ const nyplApiClient = async ({
       oauth_secret: decryptedSecret,
       oauth_url: appConfig.urls.tokenUrl,
     })
+    console.log("Using config: ", {
+      base_url: baseUrl,
+      oauth_key: decryptedId,
+      oauth_secret: decryptedSecret,
+      oauth_url: appConfig.urls.tokenUrl,
+    })
+
     CACHE.clients[clientCacheKey] = nyplApiClient
     const get = nyplApiClient.get.bind(nyplApiClient)
     nyplApiClient.get = async function (path) {

@@ -5,9 +5,7 @@ import {
 } from "../../../__test__/fixtures/bibFixtures"
 import Bib from "../../models/Bib"
 import ElectronicResources from "./ElectronicResources"
-
 import { render, screen } from "@testing-library/react"
-import exp from "constants"
 
 describe("ElectronicResources component", () => {
   describe("Many eResources", () => {

@@ -1,6 +1,5 @@
 import React from "react"
 import { render, screen, within } from "../../utils/testUtils"
-
 import Layout from "./Layout"
 // Mock next router
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
@@ -30,20 +29,15 @@ describe("Layout", () => {
     render(<Layout activePage="search"></Layout>)
     screen.getByLabelText(searchLabel)
   })
-  it("should hide header on 404", () => {
-    render(<Layout activePage="404"></Layout>)
-    const header = screen.queryByRole("heading", { level: 1 })
-    expect(header).not.toBeInTheDocument()
-  })
   it("should hide Log Out if user is not logged in", () => {
     render(<Layout isAuthenticated={false}></Layout>)
-    const logout = screen.queryByText("Log Out")
-    expect(logout).not.toBeInTheDocument()
+    const logout = screen.queryByText("Log out")
+    expect(logout).not.toBeVisible()
   })
   it("should show Log Out if user is logged in", () => {
     render(<Layout isAuthenticated={true}></Layout>)
-    const logout = screen.queryByText("Log Out")
-    expect(logout).toBeInTheDocument()
+    const logout = screen.queryByText("Log out")
+    expect(logout).toBeVisible()
   })
   it("renders a feedback form component", () => {
     render(<Layout></Layout>)

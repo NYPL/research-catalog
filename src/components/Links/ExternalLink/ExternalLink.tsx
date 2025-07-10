@@ -37,10 +37,8 @@ const ExternalLink = ({
       hasVisitedState={false}
       target={target}
       {...rest}
-      // TODO: These were added in accessibility QA. Investigate adding these to the DS Link component.
-      role="link"
-      aria-disabled={disabled}
-      tabIndex={disabled ? -1 : 0}
+      tabIndex={disabled ? -1 : undefined}
+      aria-disabled={disabled || undefined}
       // TODO: Temporary fix for a DS issue where link text spills outside the parent container
       whiteSpace="unset"
     >

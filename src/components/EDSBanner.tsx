@@ -10,7 +10,7 @@ import styles from "../../styles/components/Layout.module.scss"
 const EDSBanner = () => {
   return (
     <Banner
-      className={styles.banner}
+      className={`${styles.banner} no-print`}
       type="informative"
       content={
         <>

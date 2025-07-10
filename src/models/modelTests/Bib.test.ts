@@ -41,12 +41,14 @@ describe("Bib model", () => {
           "http://archives.nypl.org/scm/29990"
         )
       })
+
       it("does not initialize finding aid when no aid but supp content", () => {
         const bibWithSupplementaryContentModel = new Bib(
           bibWithSupplementaryContent.resource
         )
         expect(bibWithSupplementaryContentModel.findingAid).toBe(null)
       })
+
       it("can handle no supplementary content", () => {
         expect(bib.findingAid).toBe(null)
       })

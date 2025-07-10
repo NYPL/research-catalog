@@ -1,35 +1,34 @@
 import type { TextInputRefType } from "@nypl/design-system-react-components"
 import { type SyntheticEvent, type MutableRefObject, useState } from "react"
 
-export interface DateFormHookPropsType {
-  inputRefs?: MutableRefObject<TextInputRefType>[] // to focus on error and clear
+export interface DateFilterHookPropsType {
+  inputRefs?: MutableRefObject<TextInputRefType>[]
   dateAfter: string
   dateBefore: string
   changeHandler: (e: SyntheticEvent) => void
+  applyHandler?: () => void
 }
 
 /**
- *
- * This hook encapsulates logic behind error states in the DateForm
- * Given DateForm props, the useDateForm hook returns:
+ * This hook encapsulates logic behind error states in the DateFilter.
+ * Given DateFilter props, the useDateFilter hook returns:
  * 1. a validation method for the parent component to run on submit. The
  * validation method checks for an error state, displays the error notification,
  * and focuses on the first date input. It returns a boolean
  * indicating whether the validation passed. If false, the onSubmit should return
  * immediately.
- * 2. props to pass into the DateForm component. Including original props, plus
- * methods and values used within the DateForm component to manage error state
- * and display an error message
- *
+ * 2. props to pass into the DateFilter component. Including original props, plus
+ * methods and values used within the DateFilter component to manage error state
+ * and display an error message.
  */
 
-export const useDateForm = (dateFormProps: DateFormHookPropsType) => {
-  if (dateFormProps.inputRefs.length !== 2) {
+export const useDateFilter = (dateFilterProps: DateFilterHookPropsType) => {
+  if (dateFilterProps.inputRefs.length !== 2) {
     console.warn(
-      "useDateForm hook requires inputRefs to contain two refs. Unexpected behavior may ensue."
+      "useDateFilter hook requires inputRefs to contain two refs. Unexpected behavior may ensue."
     )
   }
-  const { dateBefore, dateAfter } = dateFormProps
+  const { dateBefore, dateAfter } = dateFilterProps
   const [displayDateRangeError, setDisplayDateRangeError] = useState("")
 
   const invalidYearFormat = rangeContainsInvalidYearFormat(
@@ -44,8 +43,8 @@ export const useDateForm = (dateFormProps: DateFormHookPropsType) => {
     : "Error: Years must be 4 digits"
   const dateRangeError = invalid ? invalidReason : ""
 
-  const dateFormWithHookProps = {
-    ...dateFormProps,
+  const dateFilterWithHookProps = {
+    ...dateFilterProps,
     displayDateRangeError,
   }
 
@@ -53,7 +52,7 @@ export const useDateForm = (dateFormProps: DateFormHookPropsType) => {
     // dateRangeError is either an empty string or an error message. If error message is present, we want to
     // focus on the first dateForm input...
     if (dateRangeError) {
-      dateFormProps.inputRefs[0].current.focus()
+      dateFilterProps.inputRefs[0].current.focus()
     }
     // ...update the display value to include updated date ranger error
     setDisplayDateRangeError(dateRangeError)
@@ -62,11 +61,11 @@ export const useDateForm = (dateFormProps: DateFormHookPropsType) => {
   }
 
   const clearInputs = () => {
-    dateFormProps.inputRefs.forEach((ref) => (ref.current.value = ""))
+    dateFilterProps.inputRefs.forEach((ref) => (ref.current.value = ""))
   }
 
   return {
-    dateFormProps: dateFormWithHookProps,
+    dateFilterProps: dateFilterWithHookProps,
     validateDateRange,
     clearInputs,
   }

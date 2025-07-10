@@ -1,5 +1,4 @@
 import {
-  Banner,
   Box,
   List,
   useNYPLBreakpoints,

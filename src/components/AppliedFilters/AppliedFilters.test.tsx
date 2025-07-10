@@ -18,9 +18,9 @@ describe("Applied Filters", () => {
       )
       render(
         <Search
-          isFreshSortByQuery={false}
           isAuthenticated={true}
           results={{
+            status: 200,
             page: 1,
             results,
             aggregations,
@@ -39,12 +39,12 @@ describe("Applied Filters", () => {
       )
       render(
         <Search
-          isFreshSortByQuery={false}
           isAuthenticated={true}
           results={{
+            status: 200,
             page: 1,
-            aggregations,
             results,
+            aggregations,
           }}
         />
       )
@@ -57,12 +57,12 @@ describe("Applied Filters", () => {
       )
       render(
         <Search
-          isFreshSortByQuery={false}
           isAuthenticated={true}
           results={{
+            status: 200,
             page: 1,
-            aggregations,
             results,
+            aggregations,
           }}
         />
       )
@@ -78,12 +78,12 @@ describe("Applied Filters", () => {
     )
     render(
       <Search
-        isFreshSortByQuery={false}
         isAuthenticated={true}
         results={{
+          status: 200,
           page: 1,
-          aggregations,
           results,
+          aggregations,
         }}
       />
     )
@@ -96,9 +96,9 @@ describe("Applied Filters", () => {
     )
     render(
       <Search
-        isFreshSortByQuery={false}
         isAuthenticated={true}
         results={{
+          status: 200,
           page: 1,
           aggregations: emptyAggregationsResults,
           results: { ...results, totalResults: 0 },

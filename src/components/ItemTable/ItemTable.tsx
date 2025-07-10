@@ -20,7 +20,7 @@ const ItemTable = ({ itemTableData }: ItemTableProps) => {
       <Table
         className={`${styles.itemTable}${
           inSearchResult ? " " + styles.inSearchResult : ""
-        }`}
+        } itemTable`}
         columnHeaders={tableHeadings}
         tableTextSize="body2"
         columnStyles={
@@ -40,8 +40,8 @@ const ItemTable = ({ itemTableData }: ItemTableProps) => {
               ]
         }
         tableData={tableData}
+        isScrollable
         showRowDividers={!inSearchResult}
-        isScrollable={true}
         my={{ base: inSearchResult ? "s" : 0, md: "s" }}
         data-testid={
           !inSearchResult

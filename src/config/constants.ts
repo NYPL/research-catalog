@@ -3,7 +3,6 @@ import { appConfig } from "./config"
 export const BASE_URL = "/research/research-catalog"
 export const SITE_NAME = "Research Catalog | NYPL"
 export const RESULTS_PER_PAGE = 50
-export const DRB_RESULTS_PER_PAGE = 3
 export const ITEMS_PER_SEARCH_RESULT = 3
 export const ITEM_PAGINATION_BATCH_SIZE = 20
 // TODO: Remove this when view_all endpoint in discovery supports query params
@@ -28,12 +27,8 @@ export const PATHS = {
   "404_REDIRECT": "/404/redirect",
 }
 
-// API Names
-export const DRB_API_NAME = "drb"
-
 // API Routes
 export const DISCOVERY_API_SEARCH_ROUTE = "/discovery/resources"
-export const DRB_API_SEARCH_ROUTE = "/api/drb"
 
 // Query params
 export const SOURCE_PARAM = "?source=catalog"
@@ -44,10 +39,6 @@ export const ITEM_FILTER_PARAMS = [
   "item_status",
   "item_date",
 ]
-
-// External URLs
-export const DRB_BASE_URL =
-  appConfig.apiEndpoints.drbFrontEnd[appConfig.environment]
 
 // String used to namespace Research Catalog events in Adobe Analytics
 export const ADOBE_ANALYTICS_SITE_SECTION = "Research Catalog"

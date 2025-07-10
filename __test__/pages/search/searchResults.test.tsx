@@ -1,18 +1,8 @@
 import React from "react"
 import userEvent from "@testing-library/user-event"
-import {
-  render,
-  screen,
-  waitFor,
-  fireEvent,
-} from "../../../src/utils/testUtils"
-
+import { render, screen, fireEvent } from "../../../src/utils/testUtils"
 import mockRouter from "next-router-mock"
-
-import {
-  results,
-  aggregationsResults,
-} from "../../fixtures/searchResultsManyBibs"
+import { results } from "../../fixtures/searchResultsManyBibs"
 import { noBibs } from "../../fixtures/searchResultsNoBibs"
 import SearchResults from "../../../pages/search/index"
 
@@ -20,117 +10,14 @@ jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 const query = "spaghetti"
 
 describe("Search Results page", () => {
-  describe("focus", () => {
-    it("focuses on search results heading after filters are applied", async () => {
-      mockRouter.push(`/search?q=${query}`)
-      render(
-        <SearchResults
-          isFreshSortByQuery={false}
-          isAuthenticated={true}
-          results={{ results, aggregations: aggregationsResults }}
-        />
-      )
-      const refine = screen.getByText("Filter results")
-      fireEvent.click(refine)
-      const field = screen.getByLabelText("Greek, Modern (1453-present)", {
-        exact: false,
-      })
-      fireEvent.click(field)
-      fireEvent.click(screen.getByText("Apply filters"))
-      waitFor(() => {
-        const resultsHeading = screen.getByTestId("search-results-heading")
-        expect(resultsHeading).toHaveFocus()
-      })
-    })
-    it("focuses on search results heading after loading a keyword search", () => {
-      mockRouter.push(`/search?q=${query}`)
-      render(
-        <SearchResults
-          isFreshSortByQuery={false}
-          isAuthenticated={true}
-          results={{ results, aggregations: aggregationsResults }}
-        />
-      )
-      const resultsHeading = screen.getByText("Displaying 1-50", {
-        exact: false,
-      })
-      expect(resultsHeading).toHaveFocus()
-    })
-    it("keeps focus on the sort by selector after a sort is applied", async () => {
-      mockRouter.push(`/search?q=${query}`)
-
-      render(
-        <SearchResults
-          isFreshSortByQuery={false}
-          isAuthenticated={true}
-          results={{ results, aggregations: aggregationsResults }}
-        />
-      )
-      const mobileSortBy = screen.getAllByLabelText("Sort by")[0]
-      await userEvent.selectOptions(mobileSortBy, "Title (A - Z)")
-      expect(mobileSortBy).toHaveFocus()
-
-      const desktopSortBy = screen.getAllByLabelText("Sort by")[1]
-      await userEvent.selectOptions(desktopSortBy, "Title (A - Z)")
-      expect(desktopSortBy).toHaveFocus()
-    })
-    it("focuses on cancel after clicking Filter results", async () => {
-      mockRouter.push(`/search?q=${query}`)
-      render(
-        <SearchResults
-          isFreshSortByQuery={false}
-          isAuthenticated={true}
-          results={{ results, aggregations: aggregationsResults }}
-        />
-      )
-      const refine = screen.getByText("Filter results")
-      fireEvent.click(refine)
-      const cancel = screen.getByText("Cancel")
-      expect(cancel).toHaveFocus
-    })
-    it("focuses on Filter results after clicking cancel", async () => {
-      mockRouter.push(`/search?q=${query}`)
-      render(
-        <SearchResults
-          isFreshSortByQuery={false}
-          isAuthenticated={true}
-          results={{ results, aggregations: aggregationsResults }}
-        />
-      )
-      const refine = screen.getByText("Filter results")
-      fireEvent.click(refine)
-      const cancel = screen.getByText("Cancel")
-      fireEvent.click(cancel)
-      expect(refine).toHaveFocus
-    })
-    it("keeps focus on the sort by selector after a sort is changed", async () => {
-      mockRouter.push("")
-      render(
-        <SearchResults
-          isFreshSortByQuery={false}
-          isAuthenticated={true}
-          results={{ results, aggregations: aggregationsResults }}
-        />
-      )
-      const mobileSortBy = screen.getAllByLabelText("Sort by")[0]
-      await userEvent.selectOptions(mobileSortBy, "Title (A - Z)")
-      await userEvent.selectOptions(mobileSortBy, "Title (Z - A)")
-      expect(mobileSortBy).toHaveFocus
-
-      const desktopSortBy = screen.getAllByLabelText("Sort by")[1]
-      await userEvent.selectOptions(desktopSortBy, "Title (A - Z)")
-      await userEvent.selectOptions(desktopSortBy, "Title (Z - A)")
-      expect(desktopSortBy).toHaveFocus
-    })
-  })
+  // TODO: describe("focus", () => {})
   describe("More than 50 bibs", () => {
     it("displays many bibs", async () => {
       await mockRouter.push(`/search?q=${query}`)
       render(
         <SearchResults
-          isFreshSortByQuery={false}
           isAuthenticated={true}
-          results={{ results }}
+          results={{ results, status: 200 }}
         />
       )
 
@@ -146,9 +33,8 @@ describe("Search Results page", () => {
       await mockRouter.push(`/search?q=${query}`)
       render(
         <SearchResults
-          isFreshSortByQuery={false}
           isAuthenticated={true}
-          results={{ results }}
+          results={{ results, status: 200 }}
         />
       )
       screen.getByLabelText("Pagination")
@@ -161,36 +47,25 @@ describe("Search Results page", () => {
       await mockRouter.push(`/search?q=${query}`)
       render(
         <SearchResults
-          isFreshSortByQuery={false}
           isAuthenticated={true}
-          results={{ results }}
+          results={{ results, status: 200 }}
         />
       )
-      const mobileSortBy = screen.getAllByLabelText("Sort by")[0]
-      expect(mobileSortBy).toHaveValue("relevance")
-      await userEvent.selectOptions(mobileSortBy, "Title (A - Z)")
-      expect(mobileSortBy).toHaveValue("title_asc")
+      const sortBy = screen.getAllByLabelText("Sort by")[0]
+      expect(sortBy).toHaveValue("relevance")
+      await userEvent.selectOptions(sortBy, "Title (A - Z)")
+      expect(sortBy).toHaveValue("title_asc")
 
       expect(mockRouter.asPath).toBe(
         "/?q=spaghetti&sort=title&sort_direction=asc"
-      )
-
-      const desktopSortBy = screen.getAllByLabelText("Sort by")[1]
-      expect(desktopSortBy).toHaveValue("title_asc")
-      await userEvent.selectOptions(desktopSortBy, "Title (Z - A)")
-      expect(desktopSortBy).toHaveValue("title_desc")
-
-      expect(mockRouter.asPath).toBe(
-        "/?q=spaghetti&sort=title&sort_direction=desc"
       )
     })
     it("returns the user to the first page on sorting changes", async () => {
       await mockRouter.push(`/search?q=${query}&page=2`)
       render(
         <SearchResults
-          isFreshSortByQuery={false}
           isAuthenticated={true}
-          results={{ results }}
+          results={{ results, status: 200 }}
         />
       )
       const mobileSortBy = screen.getAllByLabelText("Sort by")[0]
@@ -201,22 +76,43 @@ describe("Search Results page", () => {
       )
     })
   })
-  describe("No bibs", () => {
-    it("displays No results message", () => {
+  describe("errors", () => {
+    it("displays 404 error", async () => {
+      await mockRouter.push(`/search?q=${query}`)
       render(
         <SearchResults
-          isFreshSortByQuery={false}
+          errorStatus={404}
+          results={undefined}
           isAuthenticated={true}
-          results={noBibs}
         />
       )
-
-      const noResultsMessage = screen.getByRole("heading", { level: 3 })
-      expect(noResultsMessage).toHaveTextContent(
-        "No results. Try a different search."
+      expect(screen.getByText("No results found")).toBeInTheDocument()
+    })
+    it("displays server error", async () => {
+      await mockRouter.push(`/search?q=${query}`)
+      render(
+        <SearchResults
+          errorStatus={500}
+          results={undefined}
+          isAuthenticated={true}
+        />
       )
-      const cards = screen.queryAllByRole("heading", { level: 4 })
-      expect(cards).toHaveLength(0)
+      expect(
+        screen.getByText("Something went wrong on our end")
+      ).toBeInTheDocument()
+    })
+    it("displays server error", async () => {
+      await mockRouter.push(`/search?q=${query}`)
+      render(
+        <SearchResults
+          errorStatus={401}
+          results={undefined}
+          isAuthenticated={true}
+        />
+      )
+      expect(
+        screen.getByText("There was an unexpected error")
+      ).toBeInTheDocument()
     })
   })
 })

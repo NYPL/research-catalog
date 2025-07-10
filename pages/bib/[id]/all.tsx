@@ -1,7 +1,6 @@
 import BibPage from "./index"
 import { fetchBib } from "../../../src/server/api/bib"
 import initializePatronTokenAuth from "../../../src/server/auth"
-import { PATHS } from "../../../src/config/constants"
 
 export default BibPage
 
@@ -22,9 +21,8 @@ export async function getServerSideProps({ params, query, req }) {
       }
     case 404:
       return {
-        redirect: {
-          destination: PATHS["404"],
-          permanent: false,
+        props: {
+          notFound: true,
         },
       }
     default:

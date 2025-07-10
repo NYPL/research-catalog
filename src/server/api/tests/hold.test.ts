@@ -239,7 +239,6 @@ describe("postEDDRequest", () => {
       itemId: "123",
       patronId: "456",
       source: "source",
-      pickupLocation: "edd",
       emailAddress: "test@test.com",
       startPage: "1",
       endPage: "2",
@@ -249,11 +248,13 @@ describe("postEDDRequest", () => {
     expect(eddPostResult.status).toEqual(200)
     expect(eddPostResult.requestId).toEqual("123456")
   })
+
   it("should return a 500 status if there was an error", async () => {
     const holdPostResult = (await postHoldRequest({
       itemId: "123",
       patronId: "456",
       source: "source",
+      // @ts-ignore: Invalid pick up location for a non EDD hold.
       pickupLocation: "edd",
     })) as HoldPostResult
 
