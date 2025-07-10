@@ -27,7 +27,6 @@ yarn-error.log*
 
 # local env files
 .env*.local
-
 # local editor config
 .vscode/launch.json
 
@@ -41,3 +40,11 @@ next-env.d.ts
 
 #logs 
 /log
+
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

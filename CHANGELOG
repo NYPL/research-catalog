@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+## Added
+
+- Added Playwright, the end-to-end testing framework for automating and verifying browser interactions across Chromium, Firefox, and WebKit. [SCC-4772] (https://newyorkpubliclibrary.atlassian.net/browse/SCC-4772)
+
 ### Updated
 
 - Adding "Discovery" to `SearchResults`, `AggregationResults`, and `SearchResultsElement` to parallel `DiscoveryBibResult` and indicate the API structure [SCC-4148](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4148)
