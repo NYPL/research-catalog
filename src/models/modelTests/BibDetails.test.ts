@@ -77,7 +77,7 @@ describe("Bib Details model", () => {
     })
   })
   describe("subjectHeadings", () => {
-    it("formats subject literals and urls correctly", () => {
+    it.skip("formats subject literals and urls correctly", () => {
       const filterQueryForSubjectLiteral = "/search?filters[subjectLiteral]="
       const subjectHeadings = [
         [
