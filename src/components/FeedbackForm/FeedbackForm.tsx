@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react"
 
 import { FeedbackContext } from "../../context/FeedbackContext"
 import type { FeedbackMetadataAndComment } from "../../types/feedbackTypes"
+import type { ItemMetadata } from "../../types/itemTypes"
 import { BASE_URL } from "../../config/constants"
 
 /**
@@ -17,9 +18,13 @@ const FeedbackForm = () => {
     onOpen,
     itemMetadata,
     setItemMetadata,
+    requestedURL,
+    setRequestedURL,
   } = useContext(FeedbackContext)
-  const closeAndResetItemMetadata = () => {
+
+  const closeAndResetFeedbackData = () => {
     if (itemMetadata) setItemMetadata(null)
+    if (requestedURL) setRequestedURL(null)
     onClose()
     setFeedbackFormScreen("form")
 
@@ -32,9 +37,11 @@ const FeedbackForm = () => {
       }
     }, 250)
   }
+
   const submitFeedback = async (
     metadataAndComment: FeedbackMetadataAndComment
   ) => {
+    console.log(metadataAndComment)
     try {
       // Changed this route to /feedback-rc to avoid conflicts with DFE with 2AD reverse proxy config
       // TODO: Change this route name back to /feedback when all routes point to research catalog
@@ -54,23 +61,35 @@ const FeedbackForm = () => {
       setFeedbackFormScreen("error")
     }
   }
+
+  const notificationText = (
+    itemMetadata?: ItemMetadata,
+    requestedURL?: string | null
+  ) => {
+    if (requestedURL) {
+      return "You are asking for help or information about a page error"
+    }
+    if (itemMetadata?.notificationText) {
+      return itemMetadata.notificationText
+    } else if (itemMetadata?.callNumber) {
+      return `You are asking for help or information about ${itemMetadata.callNumber} in this record.`
+    } else return null
+  }
+
   return (
     <FeedbackBox
       onSubmit={submitFeedback}
       isOpen={isOpen}
-      onClose={closeAndResetItemMetadata}
+      onClose={closeAndResetFeedbackData}
       onOpen={onOpen}
       descriptionText="We are here to help!"
       title="Help and Feedback"
       showEmailField
-      hiddenFields={itemMetadata}
-      notificationText={
-        itemMetadata?.notificationText
-          ? itemMetadata.notificationText
-          : itemMetadata?.callNumber
-          ? `You are asking for help or information about ${itemMetadata.callNumber} in this record.`
-          : null
-      }
+      hiddenFields={{
+        ...itemMetadata,
+        ...(requestedURL ? { requestedURL } : {}),
+      }}
+      notificationText={notificationText(itemMetadata, requestedURL)}
       view={feedbackFormScreen}
       className="no-print"
     />
