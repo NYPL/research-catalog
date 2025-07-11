@@ -14,9 +14,7 @@ const decryptKMS = async (key: string) => {
     CiphertextBlob: Buffer.from(key, "base64"),
   }
   try {
-    console.log("Decrypting ", key)
     const decrypted = await kms.decrypt(params).promise()
-    console.log(".. got decrypted ", key, decrypted.Plaintext)
     return decrypted.Plaintext.toString()
   } catch (exception) {
     logServerError("decryptKMS", exception)

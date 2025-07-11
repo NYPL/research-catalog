@@ -34,7 +34,9 @@ const sierraClient = async () => {
     decryptedSecret = CACHE.secret
   } else {
     try {
+      console.log("Decrypting sierra creds", creds)
       ;[decryptedKey, decryptedSecret] = await kmsDecryptCreds(creds)
+      console.log("Got decrypted sierra creds: ", decryptedKey.substr(0, 4), decryptedSecret.substr(0, 4))
       CACHE.key = decryptedKey
       CACHE.secret = decryptedSecret
     } catch (error) {
