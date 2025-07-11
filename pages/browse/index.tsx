@@ -95,6 +95,10 @@ export default function Browse({ subjectHeadingsWithCounts }) {
 }
 
 export async function getServerSideProps({ query }) {
+  if (!process.env.NEXT_PUBLIC_ES_URI) {
+    return { subjectHeadingsWithCounts: [] }
+  }
+
   const { q, scope } = query
   const [esUri, esBibIndex, esApiKey] = await kmsDecryptCreds([
     process.env.NEXT_PUBLIC_ES_URI,
