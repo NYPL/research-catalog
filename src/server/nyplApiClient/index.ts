@@ -46,7 +46,11 @@ const nyplApiClient = async ({
     try {
       console.log("Decrypting platform creds", creds)
       ;[decryptedId, decryptedSecret] = await kmsDecryptCreds(creds)
-      console.log("Got decrypted platform creds: ", decryptedId.substr(0, 4), decryptedSecret.substr(0, 4))
+      console.log(
+        "Got decrypted platform creds: ",
+        decryptedId.substr(0, 4),
+        decryptedSecret.substr(0, 4)
+      )
       CACHE.id = decryptedId
       CACHE.secret = decryptedSecret
     } catch (exception) {

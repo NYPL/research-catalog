@@ -6,6 +6,7 @@ const kms: aws.KMS = new aws.KMS({
 })
 
 export const kmsDecryptCreds = async (creds: string[]) => {
+  console.log("kmsDecryptCreds: " + creds.join(","))
   return await Promise.all(creds.map(decryptKMS))
 }
 
