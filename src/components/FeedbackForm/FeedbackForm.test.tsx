@@ -62,14 +62,14 @@ describe("FeedbackForm props in context", () => {
     setItemMetadata: jest.fn(),
     requestedURL: null,
     setRequestedURL: jest.fn(),
-    onContact: jest.fn(),
+    isError: false,
+    setError: jest.fn(),
+    onErrorContact: jest.fn(),
   }
 
-  it("renders notification text for requestedURL", () => {
+  it("renders notification text for error state", () => {
     render(
-      <FeedbackContext.Provider
-        value={{ ...baseContext, requestedURL: "https://example.com/error" }}
-      >
+      <FeedbackContext.Provider value={{ ...baseContext, isError: true }}>
         <FeedbackForm />
       </FeedbackContext.Provider>
     )

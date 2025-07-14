@@ -3,7 +3,7 @@ import React, { useState, createContext } from "react"
 import { useFeedbackBox } from "@nypl/design-system-react-components"
 import type { FeedbackContextType } from "../types/feedbackTypes"
 import { BASE_URL } from "../config/constants"
-import router from "next/router"
+import { useRouter } from "next/router"
 
 /**
  * Wrapper context component that controls state for the Feedback component
@@ -17,10 +17,12 @@ export const FeedbackProvider = ({ children, value }) => {
   const { FeedbackBox, isOpen, onOpen: boxOpen, onClose } = useFeedbackBox()
 
   // When user opens feedback box, get their URL and add to email data
+  const router = useRouter()
   const onOpen = () => {
-    const currentPath = router.asPath
-    const fullURL = `${BASE_URL}${currentPath}`
-    setRequestedURL(fullURL)
+    if (router && router.asPath) {
+      const fullURL = `${BASE_URL}${router.asPath}`
+      setRequestedURL(fullURL)
+    }
     boxOpen()
   }
 
