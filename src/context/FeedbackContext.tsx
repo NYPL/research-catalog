@@ -13,13 +13,21 @@ export const FeedbackContext = createContext<FeedbackContextType | null>(null)
 export const FeedbackProvider = ({ children, value }) => {
   const [itemMetadata, setItemMetadata] = useState(value?.itemMetadata || null)
   const [requestedURL, setRequestedURL] = useState(value?.requestURL || null)
-  const { FeedbackBox, isOpen, onOpen, onClose } = useFeedbackBox()
+  const [isError, setError] = useState(value?.error || false)
+  const { FeedbackBox, isOpen, onOpen: boxOpen, onClose } = useFeedbackBox()
 
-  // If user opens feedback box from an error page "contact us" link, add their URL to email data
-  const onContact = () => {
+  // When user opens feedback box, get their URL and add to email data
+  const onOpen = () => {
     const currentPath = router.asPath
     const fullURL = `${BASE_URL}${currentPath}`
     setRequestedURL(fullURL)
+    boxOpen()
+  }
+
+  // When user opens feedback box from an error page "contact us" link,
+  // set error flag on feedback box
+  const onErrorContact = () => {
+    setError(true)
     onOpen()
   }
 
@@ -34,7 +42,9 @@ export const FeedbackProvider = ({ children, value }) => {
         setItemMetadata,
         requestedURL,
         setRequestedURL,
-        onContact,
+        isError,
+        setError,
+        onErrorContact,
       }}
     >
       {children}

@@ -15,7 +15,7 @@ type ErrorPageProps = {
 
 export default function Custom404({ activePage }: ErrorPageProps) {
   const metadataTitle = `404 | ${SITE_NAME}`
-  const { onContact } = useContext(FeedbackContext)
+  const { onErrorContact } = useContext(FeedbackContext)
   return (
     <>
       <RCHead metadataTitle={metadataTitle} />
@@ -45,7 +45,7 @@ export default function Custom404({ activePage }: ErrorPageProps) {
           </Text>
           <Text noSpace>
             Try a <RCLink href="/">new search</RCLink> or{" "}
-            <Link onClick={onContact} id="feedback-link">
+            <Link onClick={onErrorContact} id="feedback-link">
               contact us
             </Link>{" "}
             if the error persists.

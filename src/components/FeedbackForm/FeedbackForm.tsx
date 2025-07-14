@@ -20,11 +20,15 @@ const FeedbackForm = () => {
     setItemMetadata,
     requestedURL,
     setRequestedURL,
+    isError,
+    setError,
+    onErrorContact,
   } = useContext(FeedbackContext)
 
   const closeAndResetFeedbackData = () => {
     if (itemMetadata) setItemMetadata(null)
     if (requestedURL) setRequestedURL(null)
+    if (isError) setError(false)
     onClose()
     setFeedbackFormScreen("form")
 
@@ -62,11 +66,8 @@ const FeedbackForm = () => {
     }
   }
 
-  const notificationText = (
-    itemMetadata?: ItemMetadata,
-    requestedURL?: string | null
-  ) => {
-    if (requestedURL) {
+  const notificationText = (itemMetadata?: ItemMetadata) => {
+    if (isError) {
       return "You are asking for help or information about a page error"
     }
     if (itemMetadata?.notificationText) {
@@ -87,9 +88,9 @@ const FeedbackForm = () => {
       showEmailField
       hiddenFields={{
         ...itemMetadata,
-        ...(requestedURL ? { requestedURL } : {}),
+        requestedURL,
       }}
-      notificationText={notificationText(itemMetadata, requestedURL)}
+      notificationText={notificationText(itemMetadata)}
       view={feedbackFormScreen}
       className="no-print"
     />

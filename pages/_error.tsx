@@ -14,8 +14,7 @@ type ErrorPageProps = {
 
 function Error({ activePage }: ErrorPageProps) {
   const metadataTitle = `500 | ${SITE_NAME}`
-  const { onContact } = useContext(FeedbackContext)
-
+  const { onErrorContact } = useContext(FeedbackContext)
   return (
     <>
       <RCHead metadataTitle={metadataTitle} />
@@ -43,7 +42,7 @@ function Error({ activePage }: ErrorPageProps) {
           </Text>
           <Text marginBottom="0">
             Try refreshing the page or{" "}
-            <Link onClick={onContact} id="feedback-link">
+            <Link onClick={onErrorContact} id="feedback-link">
               contact us
             </Link>{" "}
             if the error persists.
