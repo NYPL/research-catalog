@@ -9,6 +9,7 @@ import {
   TemplateBreakout,
   Template,
   TemplateSidebar,
+  TemplateContent,
   TemplateMain,
 } from "@nypl/design-system-react-components"
 import { type RCPage } from "../../types/pageTypes"
@@ -30,7 +31,7 @@ interface LayoutProps {
 }
 
 /**
- * The Layout component wraps the TemplateAppContainer from the DS and
+ * The Layout component wraps the Template from the DS and
  * controls the rendering of Research Catalog header components per-page.
  */
 const Layout = ({
@@ -46,24 +47,7 @@ const Layout = ({
   const showNotification = activePage === "" || activePage === "search"
   return (
     <DSProvider>
-      <Template
-        // This is a workaround to fix a text-wrapping issue when page is zoomed in on
-        // TODO: Address this issue in the DS
-        sx={{
-          "main > div": { maxWidth: "100vw" },
-          rowGap: {
-            base: "grid.m",
-            md: "grid.l",
-          },
-          main: {
-            rowGap: {
-              base: "grid.m",
-              md: "grid.l",
-            },
-          },
-        }}
-        variant="sidebarLeft"
-      >
+      <Template variant={sidebar ? "sidebarLeft" : "full"}>
         <TemplateBreakout>
           <>
             <Breadcrumbs
@@ -129,13 +113,17 @@ const Layout = ({
           </>
         </TemplateBreakout>
         <TemplateMain>
-          <TemplateSidebar>
-            {sidebar && <Box width="288px">{sidebar}</Box>}
-          </TemplateSidebar>
-          <Box pb="l">
-            {children}
-            <FeedbackForm />
-          </Box>
+          {sidebar && (
+            <TemplateSidebar>
+              <Box width="288px">{sidebar}</Box>
+            </TemplateSidebar>
+          )}
+          <TemplateContent>
+            <Box pb="l">
+              {children}
+              <FeedbackForm />
+            </Box>
+          </TemplateContent>
         </TemplateMain>
       </Template>
     </DSProvider>
