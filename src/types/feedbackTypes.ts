@@ -17,8 +17,6 @@ export type FeedbackContextType = {
   isOpen?: boolean
   itemMetadata: ItemMetadata
   setItemMetadata: (value: ItemMetadata) => void
-  requestedURL?: string
-  setRequestedURL: (value: string) => void
   isError?: boolean
   setError: (value: boolean) => void
   openFeedbackFormWithError: () => void

@@ -60,8 +60,6 @@ describe("FeedbackForm props in context", () => {
     onOpen: jest.fn(),
     itemMetadata: null,
     setItemMetadata: jest.fn(),
-    requestedURL: null,
-    setRequestedURL: jest.fn(),
     isError: false,
     setError: jest.fn(),
     openFeedbackFormWithError: jest.fn(),

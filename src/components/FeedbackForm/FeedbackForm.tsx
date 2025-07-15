@@ -17,8 +17,6 @@ const FeedbackForm = () => {
     onOpen,
     itemMetadata,
     setItemMetadata,
-    requestedURL,
-    setRequestedURL,
     isError,
     setError,
     openFeedbackFormWithError,
@@ -26,7 +24,7 @@ const FeedbackForm = () => {
 
   const closeAndResetFeedbackData = () => {
     setItemMetadata(null)
-    setRequestedURL(null)
+
     setError(false)
     onClose()
     setFeedbackFormScreen("form")
@@ -81,10 +79,7 @@ const FeedbackForm = () => {
       descriptionText="We are here to help!"
       title="Help and Feedback"
       showEmailField
-      hiddenFields={{
-        ...itemMetadata,
-        requestedURL,
-      }}
+      hiddenFields={itemMetadata}
       notificationText={notificationText}
       view={feedbackFormScreen}
       className="no-print"
