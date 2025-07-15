@@ -2,13 +2,15 @@ import { type ReactElement, type PropsWithChildren } from "react"
 import {
   Flex,
   Box,
-  TemplateAppContainer,
   Breadcrumbs,
   DSProvider,
   Heading,
   Banner,
+  TemplateBreakout,
+  Template,
+  TemplateSidebar,
+  TemplateMain,
 } from "@nypl/design-system-react-components"
-
 import { type RCPage } from "../../types/pageTypes"
 import styles from "../../../styles/components/Layout.module.scss"
 import SearchForm from "../SearchForm/SearchForm"
@@ -21,7 +23,6 @@ import RCSubNav from "../RCSubNav/RCSubNav"
 interface LayoutProps {
   sidebar?: ReactElement
   activePage?: RCPage
-  sidebarPosition?: "right" | "left"
   isAuthenticated?: boolean
   searchAggregations?: Aggregation[]
   searchResultsCount?: number
@@ -39,14 +40,13 @@ const Layout = ({
   sidebar,
   activePage,
   searchResultsCount,
-  sidebarPosition = "left",
   bannerNotification,
 }: PropsWithChildren<LayoutProps>) => {
   const showSearch = activePage === "search"
   const showNotification = activePage === "" || activePage === "search"
   return (
     <DSProvider>
-      <TemplateAppContainer
+      <Template
         // This is a workaround to fix a text-wrapping issue when page is zoomed in on
         // TODO: Address this issue in the DS
         sx={{
@@ -62,11 +62,13 @@ const Layout = ({
             },
           },
         }}
-        breakout={
+        variant="sidebarLeft"
+      >
+        <TemplateBreakout>
           <>
             <Breadcrumbs
               data-testid="layout-breadcrumbs"
-              breadcrumbsType="research"
+              variant="research"
               breadcrumbsData={[
                 { url: "https://nypl.org", text: "Home" },
                 { url: "https://www.nypl.org/research", text: "Research" },
@@ -125,16 +127,17 @@ const Layout = ({
               </Flex>
             )}
           </>
-        }
-        sidebar={sidebar ? sidebarPosition : "none"}
-        contentPrimary={
+        </TemplateBreakout>
+        <TemplateMain>
+          <TemplateSidebar>
+            {sidebar && <Box width="288px">{sidebar}</Box>}
+          </TemplateSidebar>
           <Box pb="l">
             {children}
             <FeedbackForm />
           </Box>
-        }
-        contentSidebar={sidebar && <Box width="288px">{sidebar}</Box>}
-      />
+        </TemplateMain>
+      </Template>
     </DSProvider>
   )
 }
