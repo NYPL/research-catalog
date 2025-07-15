@@ -30,6 +30,17 @@ const mockPatronJwtDecodedObj = {
   scope: "openid",
 }
 
+// Mock the router for feedback box, local mock will take precedence
+jest.mock("next/router", () => ({
+  useRouter: () => ({
+    asPath: "/mock",
+    push: jest.fn(),
+    replace: jest.fn(),
+    pathname: "/mock",
+    query: {},
+  }),
+}))
+
 // Mock the "jose" library that does the JWT verification.
 jest.mock("jose", () => ({
   importSPKI: async () => Promise.resolve("testPublicKey"),
