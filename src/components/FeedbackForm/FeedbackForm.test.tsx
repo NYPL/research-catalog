@@ -64,7 +64,7 @@ describe("FeedbackForm props in context", () => {
     setRequestedURL: jest.fn(),
     isError: false,
     setError: jest.fn(),
-    onErrorContact: jest.fn(),
+    openFeedbackFormWithError: jest.fn(),
   }
 
   it("renders notification text for error state", () => {

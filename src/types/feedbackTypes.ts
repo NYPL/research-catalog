@@ -21,5 +21,5 @@ export type FeedbackContextType = {
   setRequestedURL: (value: string) => void
   isError?: boolean
   setError: (value: boolean) => void
-  onErrorContact: () => void
+  openFeedbackFormWithError: () => void
 }

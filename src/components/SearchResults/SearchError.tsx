@@ -16,7 +16,7 @@ type SearchErrorProps = {
 
 export default function SearchError({ errorStatus }: SearchErrorProps) {
   const metadataTitle = `${errorStatus} | ${SITE_NAME}`
-  const { onErrorContact } = useContext(FeedbackContext)
+  const { openFeedbackFormWithError } = useContext(FeedbackContext)
 
   let errorContent
 
@@ -41,7 +41,7 @@ export default function SearchError({ errorStatus }: SearchErrorProps) {
               Legacy Catalog
             </ExternalLink>{" "}
             for more materials, or{" "}
-            <Link onClick={onErrorContact} id="feedback-link">
+            <Link onClick={openFeedbackFormWithError} id="feedback-link">
               contact us
             </Link>{" "}
             for assistance.
@@ -61,7 +61,7 @@ export default function SearchError({ errorStatus }: SearchErrorProps) {
           </Text>
           <Text marginBottom="0">
             Try refreshing the page or{" "}
-            <Link onClick={onErrorContact} id="feedback-link">
+            <Link onClick={openFeedbackFormWithError} id="feedback-link">
               contact us
             </Link>{" "}
             if the error persists.
@@ -81,7 +81,7 @@ export default function SearchError({ errorStatus }: SearchErrorProps) {
           </Text>
           <Text marginBottom="0">
             Try again later or{" "}
-            <Link onClick={onErrorContact} id="feedback-link">
+            <Link onClick={openFeedbackFormWithError} id="feedback-link">
               contact us
             </Link>{" "}
             if the error persists.

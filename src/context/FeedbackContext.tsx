@@ -28,7 +28,7 @@ export const FeedbackProvider = ({ children, value }) => {
 
   // When user opens feedback box from an error page "contact us" link,
   // set error flag on feedback box
-  const onErrorContact = () => {
+  const openFeedbackFormWithError = () => {
     setError(true)
     onOpen()
   }
@@ -46,7 +46,7 @@ export const FeedbackProvider = ({ children, value }) => {
         setRequestedURL,
         isError,
         setError,
-        onErrorContact,
+        openFeedbackFormWithError,
       }}
     >
       {children}

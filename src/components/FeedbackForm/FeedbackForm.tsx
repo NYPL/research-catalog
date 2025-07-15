@@ -2,7 +2,6 @@ import React, { useContext, useState } from "react"
 
 import { FeedbackContext } from "../../context/FeedbackContext"
 import type { FeedbackMetadataAndComment } from "../../types/feedbackTypes"
-import type { ItemMetadata } from "../../types/itemTypes"
 import { BASE_URL } from "../../config/constants"
 
 /**
@@ -22,13 +21,13 @@ const FeedbackForm = () => {
     setRequestedURL,
     isError,
     setError,
-    onErrorContact,
+    openFeedbackFormWithError,
   } = useContext(FeedbackContext)
 
   const closeAndResetFeedbackData = () => {
-    if (itemMetadata) setItemMetadata(null)
-    if (requestedURL) setRequestedURL(null)
-    if (isError) setError(false)
+    setItemMetadata(null)
+    setRequestedURL(null)
+    setError(false)
     onClose()
     setFeedbackFormScreen("form")
 
@@ -45,7 +44,6 @@ const FeedbackForm = () => {
   const submitFeedback = async (
     metadataAndComment: FeedbackMetadataAndComment
   ) => {
-    console.log(metadataAndComment)
     try {
       // Changed this route to /feedback-rc to avoid conflicts with DFE with 2AD reverse proxy config
       // TODO: Change this route name back to /feedback when all routes point to research catalog
@@ -66,16 +64,13 @@ const FeedbackForm = () => {
     }
   }
 
-  const notificationText = (itemMetadata?: ItemMetadata) => {
-    if (isError) {
-      return "You are asking for help or information about a page error"
-    }
-    if (itemMetadata?.notificationText) {
-      return itemMetadata.notificationText
-    } else if (itemMetadata?.callNumber) {
-      return `You are asking for help or information about ${itemMetadata.callNumber} in this record.`
-    } else return null
-  }
+  const notificationText = isError
+    ? "You are asking for help or information about a page error"
+    : itemMetadata?.notificationText
+    ? itemMetadata.notificationText
+    : itemMetadata?.callNumber
+    ? `You are asking for help or information about ${itemMetadata.callNumber} in this record.`
+    : null
 
   return (
     <FeedbackBox
@@ -90,7 +85,7 @@ const FeedbackForm = () => {
         ...itemMetadata,
         requestedURL,
       }}
-      notificationText={notificationText(itemMetadata)}
+      notificationText={notificationText}
       view={feedbackFormScreen}
       className="no-print"
     />
