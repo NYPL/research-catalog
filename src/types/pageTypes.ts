@@ -1,7 +1,7 @@
 export type RCPage =
   | "search"
   | "advanced"
-  | "sh-index"
+  | "browse"
   | "sh-results"
   | "account"
   | "bib"
