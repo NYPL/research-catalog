@@ -95,9 +95,9 @@ describe("Bib Details model", () => {
           },
           {
             url: `${filterQueryForSubjectLiteral}${encodeURI(
-              "Authors, French -- 20th century -- Biography"
+              "Authors, French -- 20th century -- Biography."
             )}`,
-            urlLabel: "Biography",
+            urlLabel: "Biography.",
           },
         ],
         [
@@ -117,9 +117,9 @@ describe("Bib Details model", () => {
           },
           {
             url: `${filterQueryForSubjectLiteral}${encodeURI(
-              "Cortanze, Gérard de -- Childhood and youth"
+              "Cortanze, Gérard de -- Childhood and youth."
             )}`,
-            urlLabel: "Childhood and youth",
+            urlLabel: "Childhood and youth.",
           },
         ],
       ]
