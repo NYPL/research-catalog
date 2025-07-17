@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Added
 
+- Added `browse/subjects` pages and page types, set up deployment of EB work to `train`[SCC-4554](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4554)
+
+## [1.5.1] 2025-07-17
+
+## Added
+
+- Added bib title to metadata tab title on bib page [SCC-4749](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4749)
+- Adds warning to hold request pages if user has already completed the request [SCC-3360](https://newyorkpubliclibrary.atlassian.net/browse/SCC-3360)
+- Adds new 404 page, handling to cover common search response errors, and new search error view [SCC-3792](https://newyorkpubliclibrary.atlassian.net/browse/SCC-3792)
+- Adds general error boundary page `_error.tsx` and a test page that throws errors `testError.tsx` [SCC-4787](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4787)
 - Adds Playwright, the end-to-end testing framework for automating and verifying browser interactions across Chromium, Firefox, and WebKit [SCC-4772](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4772)
 - Adds page error notification to feedback box [SCC-4776](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4776)
 
@@ -21,13 +31,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Added language back into resource fields under `BibDetails` [SCC-4771](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4771)
-
-## Added
-
-- Added bib title to metadata tab title on bib page [SCC-4749](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4749)
-- Adds warning to hold request pages if user has already completed the request [SCC-3360](https://newyorkpubliclibrary.atlassian.net/browse/SCC-3360)
-- Adds new 404 page, handling to cover common search response errors, and new search error view [SCC-3792](https://newyorkpubliclibrary.atlassian.net/browse/SCC-3792)
-- Adds general error boundary page `_error.tsx` and a test page that throws errors `testError.tsx` [SCC-4787](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4787)
 
 ## [1.5.0] 2025-06-18
 
