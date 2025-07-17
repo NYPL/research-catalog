@@ -40,12 +40,18 @@ const RCSubNav = ({ activePage, isAuthenticated }: SubNavProps) => {
             Search the Catalog
           </SubNavLink>
           <SubNavLink
-            href="/research/research-catalog/subject_headings"
+            href="/research/research-catalog/browse/subjects"
             id="subnav-browse"
-            isSelected={activePage === "shep"}
-            aria-current={activePage === "shep" ? "page" : undefined}
+            isSelected={
+              activePage === "sh-index" || activePage === "sh-results"
+            }
+            aria-current={
+              activePage === "sh-index" || activePage === "sh-results"
+                ? "page"
+                : undefined
+            }
           >
-            Subject Heading Explorer
+            Browse the Catalog
           </SubNavLink>
         </>
       }
