@@ -31,13 +31,13 @@ describe("Layout", () => {
   })
   it("should hide Log Out if user is not logged in", () => {
     render(<Layout isAuthenticated={false}></Layout>)
-    const logout = screen.queryByText("Log Out")
-    expect(logout).not.toBeInTheDocument()
+    const logout = screen.queryByText("Log out")
+    expect(logout).not.toBeVisible()
   })
   it("should show Log Out if user is logged in", () => {
     render(<Layout isAuthenticated={true}></Layout>)
-    const logout = screen.queryByText("Log Out")
-    expect(logout).toBeInTheDocument()
+    const logout = screen.queryByText("Log out")
+    expect(logout).toBeVisible()
   })
   it("renders a feedback form component", () => {
     render(<Layout></Layout>)

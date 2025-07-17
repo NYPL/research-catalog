@@ -42,6 +42,7 @@ import type {
 import RCHead from "../../../../src/components/Head/RCHead"
 import Custom404 from "../../../404"
 import { tryInstantiate } from "../../../../src/utils/appUtils"
+import HoldRequestCompletedBanner from "../../../../src/components/HoldPages/HoldRequestCompletedBanner"
 
 interface EDDRequestPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -107,6 +108,20 @@ export default function EDDRequestPage({
     // Override values with server form state in the case of a no-js request
     ...formStateFromServer,
   })
+
+  const [holdCompleted, setHoldCompleted] = useState(false)
+
+  // Check if hold request was completed already.
+  useEffect(() => {
+    const bannerFlag = sessionStorage.getItem(`holdCompleted-${item?.id}`)
+    if (bannerFlag === "true") {
+      setHoldCompleted(true)
+      sessionStorage.removeItem(`holdCompleted-${item?.id}`)
+      if (bannerContainerRef.current) {
+        bannerContainerRef.current.focus()
+      }
+    }
+  }, [])
 
   useEffect(() => {
     if (
@@ -199,6 +214,7 @@ export default function EDDRequestPage({
               patronEligibilityStatus={patronEligibilityStatus}
             />
           )}
+          {holdCompleted && <HoldRequestCompletedBanner isEDD />}
         </Box>
         <Heading level="h2" mb="l" size="heading3">
           Request scan

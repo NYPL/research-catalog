@@ -1,20 +1,19 @@
 import { Heading, Text, Flex, Link } from "@nypl/design-system-react-components"
-import Layout from "../../src/components/Layout/Layout"
-import { SITE_NAME } from "../../src/config/constants"
-import RCHead from "../../src/components/Head/RCHead"
-import type { RCPage } from "../../src/types/pageTypes"
+import Layout from "../src/components/Layout/Layout"
+import { SITE_NAME } from "../src/config/constants"
+import RCHead from "../src/components/Head/RCHead"
+import type { RCPage } from "../src/types/pageTypes"
 import Image from "next/image"
-import errorImage from "../../src/assets/errorImage.png"
+import errorImage from "../src/assets/errorImage.png"
 import { useContext } from "react"
-import { FeedbackContext } from "../../src/context/FeedbackContext"
-import RCLink from "../../src/components/Links/RCLink/RCLink"
+import { FeedbackContext } from "../src/context/FeedbackContext"
 
 type ErrorPageProps = {
   activePage: RCPage
 }
 
-export default function Custom404({ activePage }: ErrorPageProps) {
-  const metadataTitle = `404 | ${SITE_NAME}`
+function Error({ activePage }: ErrorPageProps) {
+  const metadataTitle = `500 | ${SITE_NAME}`
   const { openFeedbackFormWithError } = useContext(FeedbackContext)
   return (
     <>
@@ -37,14 +36,12 @@ export default function Custom404({ activePage }: ErrorPageProps) {
             height={68}
             style={{ marginBottom: "48px" }}
           />
-
-          <Heading level="h3">We couldn&apos;t find that page</Heading>
-          <Text noSpace>
-            The page you were looking for doesn&apos;t exist or may have moved
-            elsewhere.
+          <Heading level="h3">Something went wrong on our end</Heading>
+          <Text marginBottom="0">
+            We encountered an error while trying to load the page.
           </Text>
-          <Text noSpace>
-            Try a <RCLink href="/">new search</RCLink> or{" "}
+          <Text marginBottom="0">
+            Try refreshing the page or{" "}
             <Link onClick={openFeedbackFormWithError} id="feedback-link">
               contact us
             </Link>{" "}
@@ -55,3 +52,5 @@ export default function Custom404({ activePage }: ErrorPageProps) {
     </>
   )
 }
+
+export default Error

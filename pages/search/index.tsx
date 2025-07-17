@@ -37,11 +37,14 @@ import RCHead from "../../src/components/Head/RCHead"
 import type { Aggregation } from "../../src/types/filterTypes"
 import SearchFilters from "../../src/components/SearchFilters/SearchFilters"
 import { useFocusContext, idConstants } from "../../src/context/FocusContext"
+import type { HTTPStatusCode } from "../../src/types/appTypes"
+import SearchError from "../../src/components/SearchResults/SearchError"
 
 interface SearchProps {
   bannerNotification?: string
   results: SearchResultsResponse
   isAuthenticated: boolean
+  errorStatus?: HTTPStatusCode | null
 }
 
 /**
@@ -52,16 +55,14 @@ export default function Search({
   bannerNotification,
   results,
   isAuthenticated,
+  errorStatus = null,
 }: SearchProps) {
   const metadataTitle = `Search Results | ${SITE_NAME}`
+
   const { push, query } = useRouter()
-  const { itemListElement: searchResultsElements, totalResults } =
-    results.results
 
   // TODO: Move this to global context
   const searchParams = mapQueryToSearchParams(query)
-  // Map Search Results Elements from response to SearchResultBib objects
-  const searchResultBibs = mapElementsToSearchResultsBibs(searchResultsElements)
 
   const isLoading = useLoading()
   const searchedFromAdvanced = query.searched_from === "advanced"
@@ -77,12 +78,6 @@ export default function Search({
       `${newQuery}${searchedFromAdvanced ? "&searched_from=advanced" : ""}`
     )
   }
-
-  const aggs = results?.aggregations?.itemListElement
-  // if there are no results, then applied filters correspond to aggregations
-  // with no values, which will break our code down the line. Do not render
-  // the Applied Filters tagset.
-  const displayAppliedFilters = totalResults > 0
 
   const handleSortChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const selectedSortOption = e.target.value
@@ -109,8 +104,23 @@ export default function Search({
     }
   }, [isLoading])
 
+  if (errorStatus) {
+    return <SearchError errorStatus={errorStatus} />
+  }
+
+  const { itemListElement: searchResultsElements, totalResults } =
+    results.results
+
+  const aggs = results?.aggregations?.itemListElement
+  // if there are no results, then applied filters correspond to aggregations
+  // with no values, which will break our code down the line. Do not render
+  // the Applied Filters tagset.
+  const displayAppliedFilters = totalResults > 0
+
   const displayFilters = !!aggs?.filter((agg: Aggregation) => agg.values.length)
     .length
+
+  const searchResultBibs = mapElementsToSearchResultsBibs(searchResultsElements)
 
   return (
     <>
@@ -150,102 +160,75 @@ export default function Search({
           ) : null
         }
       >
-        {totalResults ? (
-          <Box
-            sx={{
-              ml: { base: "0px", md: "32px" },
-            }}
-          >
-            <Flex flexDir="column">
-              {displayAppliedFilters && <AppliedFilters aggregations={aggs} />}
-              <Flex justifyContent="space-between" marginTop="xxs">
-                <Heading
-                  id="search-results-heading"
-                  data-testid="search-results-heading"
-                  level="h2"
-                  size="heading5"
-                  // Heading component does not expect tabIndex prop, so we
-                  // are ignoring the typescript error that pops up.
-                  tabIndex={-1}
-                  paddingBottom="0"
-                  mb={{ base: "s", md: "l" }}
-                  minH="40px"
-                  ref={searchResultsHeadingRef}
-                  aria-live="polite"
-                >
-                  {getSearchResultsHeading(searchParams, totalResults)}
-                </Heading>
-                <SearchResultsSort
-                  searchParams={searchParams}
-                  handleSortChange={handleSortChange}
-                  // TODO: Extend the Layout component to receive a prop that contains content to be shown below the
-                  //  main header, which will include the search results heading and the sort select, which would allow us
-                  //  to only render the sort select once.
-                  display={{
-                    base: "none",
-                    md: "block",
-                  }}
-                />
-              </Flex>
+        <Box
+          sx={{
+            ml: { base: "0px", md: "32px" },
+          }}
+        >
+          <Flex flexDir="column">
+            {displayAppliedFilters && <AppliedFilters aggregations={aggs} />}
+            <Flex
+              justifyContent="space-between"
+              marginTop="xxs"
+              direction={{ base: "column", md: "row" }}
+            >
+              <Heading
+                id="search-results-heading"
+                data-testid="search-results-heading"
+                level="h2"
+                size="heading5"
+                tabIndex={-1}
+                paddingBottom="0"
+                mb={{ base: "s", md: "l" }}
+                minH="40px"
+                ref={searchResultsHeadingRef}
+                aria-live="polite"
+              >
+                {getSearchResultsHeading(searchParams, totalResults)}
+              </Heading>
+              <SearchResultsSort
+                searchParams={searchParams}
+                handleSortChange={handleSortChange}
+              />
             </Flex>
+          </Flex>
 
-            <SearchResultsSort
-              // Mobile only Search Results Sort Select
-              // Necessary due to the placement of the Select in the main content on mobile only.
-              id="search-results-sort-mobile"
-              searchParams={searchParams}
-              handleSortChange={handleSortChange}
-              display={{
-                base: "block",
-                md: "none",
-              }}
-            />
-            {isLoading ? (
-              <>
-                <SkeletonLoader showImage={false} mb="m" />
-                <div
-                  id="search-live-region"
-                  ref={liveLoadingRegionRef}
-                  style={{
-                    position: "absolute",
-                    width: "1px",
-                    height: "1px",
-                    margin: "-1px",
-                    padding: 0,
-                    overflow: "hidden",
-                    clip: "rect(0,0,0,0)",
-                    border: 0,
-                  }}
-                />
-              </>
-            ) : (
-              <SimpleGrid columns={1} id="search-results-list" gap="grid.l">
-                {searchResultBibs.map((bib: SearchResultsBib) => {
-                  return <SearchResult key={bib.id} bib={bib} />
-                })}
-              </SimpleGrid>
-            )}
-            <Pagination
-              id="results-pagination"
-              mt="xxl"
-              mb="l"
-              className="no-print"
-              initialPage={searchParams.page}
-              currentPage={searchParams.page}
-              pageCount={Math.ceil(totalResults / RESULTS_PER_PAGE)}
-              onPageChange={handlePageChange}
-            />
-          </Box>
-        ) : isLoading ? (
-          <SkeletonLoader showImage={false} />
-        ) : (
-          // Heading component does not expect tabIndex prop, so we are ignoring
-          // the typescript error that pops up.
-          // @ts-expect-error
-          <Heading ref={searchResultsHeadingRef} tabIndex="0" level="h3">
-            No results. Try a different search.
-          </Heading>
-        )}
+          {isLoading ? (
+            <>
+              <SkeletonLoader showImage={false} mb="m" />
+              <div
+                id="search-live-region"
+                ref={liveLoadingRegionRef}
+                style={{
+                  position: "absolute",
+                  width: "1px",
+                  height: "1px",
+                  margin: "-1px",
+                  padding: 0,
+                  overflow: "hidden",
+                  clip: "rect(0,0,0,0)",
+                  border: 0,
+                }}
+              />
+            </>
+          ) : (
+            <SimpleGrid columns={1} id="search-results-list" gap="grid.l">
+              {searchResultBibs.map((bib: SearchResultsBib) => {
+                return <SearchResult key={bib.id} bib={bib} />
+              })}
+            </SimpleGrid>
+          )}
+          <Pagination
+            id="results-pagination"
+            mt="xxl"
+            mb="l"
+            className="no-print"
+            initialPage={searchParams.page}
+            currentPage={searchParams.page}
+            pageCount={Math.ceil(totalResults / RESULTS_PER_PAGE)}
+            onPageChange={handlePageChange}
+          />
+        </Box>
       </Layout>
     </>
   )
@@ -254,7 +237,13 @@ export default function Search({
 export async function getServerSideProps({ req, query }) {
   const bannerNotification = process.env.SEARCH_RESULTS_NOTIFICATION || ""
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
+
   const results = await fetchResults(mapQueryToSearchParams(query))
+
+  // Handle API errors
+  if (results.status !== 200) {
+    return { props: { errorStatus: results.status } }
+  }
 
   // Check for `redirectOnMatch` trigger:
   const redirect = checkForRedirectOnMatch(results, query)

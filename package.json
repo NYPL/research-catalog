@@ -1,6 +1,6 @@
 {
   "name": "research-catalog",
-  "version": "1.4.8",
+  "version": "1.5.1",
   "scripts": {
     "dev": "next dev -p 8080",
     "build": "next build",
@@ -38,6 +38,7 @@
     "winston": "3.9.0"
   },
   "devDependencies": {
+    "@playwright/test": "1.53.2",
     "@testing-library/dom": "^9.3.3",
     "@testing-library/jest-dom": "6.1.4",
     "@testing-library/react": "14.0.0",

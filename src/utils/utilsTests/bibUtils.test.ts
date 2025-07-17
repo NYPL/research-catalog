@@ -4,6 +4,7 @@ import {
   getBibQueryString,
   buildItemTableDisplayingString,
   itemFiltersActive,
+  buildBibMetadataTitle,
 } from "../bibUtils"
 
 describe("bibUtils", () => {
@@ -154,6 +155,41 @@ describe("bibUtils", () => {
     it("returns the correct item table heading for when filters are applied and there are no matching items", () => {
       expect(buildItemTableDisplayingString(1, 0, false, true)).toBe(
         "No results found matching the applied filters"
+      )
+    })
+  })
+  describe("buildBibMetadataTitle", () => {
+    const suffix = " | Item Details | Research Catalog | NYPL"
+    const suffixLength = suffix.length
+
+    it("returns unmodified title if it's short enough", () => {
+      const title = "Short Title"
+      const result = buildBibMetadataTitle(title)
+      expect(result).toBe(`${title}${suffix}`)
+      expect(result.length).toBeLessThanOrEqual(100)
+    })
+
+    it("truncates long titles and appends suffix", () => {
+      const longTitle = "A".repeat(200)
+      const result = buildBibMetadataTitle(longTitle)
+
+      expect(result.endsWith(suffix)).toBe(true)
+      expect(result.length).toBe(100)
+
+      const expectedTruncatedLength = 100 - suffixLength
+      const prefix = result.slice(0, expectedTruncatedLength)
+      expect(prefix.endsWith("...")).toBe(true)
+    })
+
+    it("truncates at exact length and adds ellipsis", () => {
+      const exactLengthTitle = "A".repeat(100 - suffixLength)
+      const result = buildBibMetadataTitle(`${exactLengthTitle}EXTRA TEXT`)
+      expect(result.length).toBe(100)
+      expect(result.endsWith(suffix)).toBe(true)
+    })
+    it("returns fallback title if input is undefined", () => {
+      expect(buildBibMetadataTitle(undefined)).toBe(
+        "Item Details | Research Catalog | NYPL"
       )
     })
   })

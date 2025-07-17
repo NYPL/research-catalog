@@ -31,12 +31,14 @@ import initializePatronTokenAuth, {
 import type { DiscoveryBibResult } from "../../../src/types/bibTypes"
 import RCHead from "../../../src/components/Head/RCHead"
 import Custom404 from "../../404"
+import { useEffect } from "react"
 
 interface HoldConfirmationPageProps {
   isEDD?: boolean
   pickupLocationLabel?: string
   discoveryBibResult: DiscoveryBibResult
   notFound?: boolean
+  itemId?: string
 }
 
 /**
@@ -48,13 +50,22 @@ export default function HoldConfirmationPage({
   pickupLocationLabel,
   discoveryBibResult,
   notFound = false,
+  itemId,
 }: HoldConfirmationPageProps) {
+  useEffect(() => {
+    // Set flag to show hold already happened, if user goes back to form page
+    if (itemId) {
+      sessionStorage.setItem(`holdCompleted-${itemId}`, "true")
+    }
+  }, [])
+
   if (notFound) {
     return <Custom404 activePage="hold" />
   }
-  const metadataTitle = `Request Confirmation | ${SITE_NAME}`
+
   const bib = new Bib(discoveryBibResult)
   const item = bib?.items[0]
+  const metadataTitle = `Request Confirmation | ${SITE_NAME}`
 
   return (
     <>
@@ -183,6 +194,7 @@ export async function getServerSideProps({ params, req, res, query }) {
         isEDD: pickupLocation === "edd",
         pickupLocationLabel: pickupLocationLabel || null,
         discoveryBibResult,
+        itemId: item.id,
       },
     }
   } catch (error) {

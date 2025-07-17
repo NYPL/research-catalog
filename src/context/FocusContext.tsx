@@ -28,6 +28,8 @@ export const idConstants = {
   activeFiltersHeading: "active-filters-heading",
   searchFiltersModal: "search-filters-modal",
   applyDates: "apply-dates",
+  holdErrorBanner: "hold-error",
+  holdCompletedBanner: "hold-completed",
 }
 
 export const FocusProvider = ({ children }: { children: React.ReactNode }) => {

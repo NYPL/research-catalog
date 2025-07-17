@@ -32,7 +32,11 @@ module.exports = {
   },
   // Add more setup options before each __tests__ is run
   setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
-  testPathIgnorePatterns: ["<rootDir>/node_modules/", "<rootDir>/.next/"],
+  testPathIgnorePatterns: [
+    "<rootDir>/node_modules/",
+    "<rootDir>/.next/",
+    "<rootDir>/playwright/",
+  ],
   testEnvironment: "jsdom",
   transform: {
     // Use babel-jest to transpile __tests__ with the next/babel preset

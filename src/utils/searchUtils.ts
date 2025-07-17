@@ -6,8 +6,7 @@ import type {
   SearchQueryParams,
   SearchFilters,
   Identifiers,
-  SearchResultsElement,
-  SearchResultsResponse,
+  DiscoverySearchResultsElement,
 } from "../types/searchTypes"
 import SearchResultsBib from "../models/SearchResultsBib"
 import { RESULTS_PER_PAGE, SEARCH_FORM_OPTIONS } from "../config/constants"
@@ -246,10 +245,10 @@ export function mapRequestBodyToSearchParams(
 
 /**
  * mapElementsToSearchResultsBibs
- * Maps the SearchResultsElement structure from the search results response to an array of SearchResultsBib objects
+ * Maps the DiscoverySearchResultsElement structure from the search results response to an array of SearchResultsBib objects
  */
 export function mapElementsToSearchResultsBibs(
-  elements: SearchResultsElement[]
+  elements: DiscoverySearchResultsElement[]
 ): SearchResultsBib[] | null {
   return (
     elements
@@ -334,12 +333,8 @@ export function mapQueryToSearchParams({
  * only one result and the query indicates we should redirect on match.
  * Otherwise returns `null`
  */
-export function checkForRedirectOnMatch(
-  results: SearchResultsResponse | Error,
-  query
-): object {
-  const hasOneResult =
-    !(results instanceof Error) && results?.results?.totalResults === 1
+export function checkForRedirectOnMatch(results, query): object {
+  const hasOneResult = results?.results?.totalResults === 1
   if (hasOneResult && query.oclc && query.redirectOnMatch) {
     const matchedBib = results.results.itemListElement[0].result
     return {
