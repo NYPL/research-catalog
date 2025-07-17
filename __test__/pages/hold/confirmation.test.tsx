@@ -186,6 +186,7 @@ describe("Hold Confirmation page", () => {
         <HoldConfirmationPage
           discoveryBibResult={bibWithItems.resource}
           isEDD
+          holdId="test"
         />
       )
     })
@@ -229,8 +230,8 @@ describe("Hold Confirmation page", () => {
       const searchLink = screen.getByText("Start a new search")
       expect(searchLink).toHaveAttribute("href", "/research/research-catalog/")
     })
-    it("sets sessionStorage key 'holdCompleted' to true on mount", () => {
-      expect(sessionStorage.getItem("holdCompleted")).toBe("true")
+    it("sets sessionStorage key 'holdCompleted' with hold ID to true on mount", () => {
+      expect(sessionStorage.getItem("holdCompleted-test")).toBe("true")
     })
   })
   describe("Hold confirmation not found", () => {

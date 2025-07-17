@@ -38,6 +38,7 @@ interface HoldConfirmationPageProps {
   pickupLocationLabel?: string
   discoveryBibResult: DiscoveryBibResult
   notFound?: boolean
+  holdId?: string
 }
 
 /**
@@ -49,18 +50,22 @@ export default function HoldConfirmationPage({
   pickupLocationLabel,
   discoveryBibResult,
   notFound = false,
+  holdId,
 }: HoldConfirmationPageProps) {
   useEffect(() => {
     // Set flag to show hold already happened, if user goes back to form page
-    sessionStorage.setItem("holdCompleted", "true")
+    if (holdId) {
+      sessionStorage.setItem(`holdCompleted-${holdId}`, "true")
+    }
   }, [])
 
   if (notFound) {
     return <Custom404 activePage="hold" />
   }
-  const metadataTitle = `Request Confirmation | ${SITE_NAME}`
+
   const bib = new Bib(discoveryBibResult)
   const item = bib?.items[0]
+  const metadataTitle = `Request Confirmation | ${SITE_NAME}`
 
   return (
     <>
@@ -189,6 +194,7 @@ export async function getServerSideProps({ params, req, res, query }) {
         isEDD: pickupLocation === "edd",
         pickupLocationLabel: pickupLocationLabel || null,
         discoveryBibResult,
+        holdId: id,
       },
     }
   } catch (error) {

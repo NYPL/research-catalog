@@ -113,10 +113,10 @@ export default function EDDRequestPage({
 
   // Check if hold request was completed already.
   useEffect(() => {
-    const bannerFlag = sessionStorage.getItem("holdCompleted")
+    const bannerFlag = sessionStorage.getItem(`holdCompleted-${holdId}`)
     if (bannerFlag === "true") {
       setHoldCompleted(true)
-      sessionStorage.removeItem("holdCompleted")
+      sessionStorage.removeItem(`holdCompleted-${holdId}`)
       if (bannerContainerRef.current) {
         bannerContainerRef.current.focus()
       }

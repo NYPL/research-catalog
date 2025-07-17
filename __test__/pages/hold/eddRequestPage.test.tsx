@@ -566,7 +566,8 @@ describe("EDD Request page", () => {
     })
   })
   describe("EDD request already completed renders warning banner", () => {
-    sessionStorage.setItem("holdCompleted", "true")
+    // Hold ID from bibWithItems
+    sessionStorage.setItem("holdCompleted-b15080796-i39333697", "true")
     render(
       <EDDRequestPage
         discoveryBibResult={bibWithItems.resource}

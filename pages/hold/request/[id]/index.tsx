@@ -42,6 +42,7 @@ import {
   idConstants,
   useFocusContext,
 } from "../../../../src/context/FocusContext"
+import { tryInstantiate } from "../../../../src/utils/appUtils"
 
 interface HoldRequestPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -75,12 +76,26 @@ export default function HoldRequestPage({
 
   const { setPersistentFocus } = useFocusContext()
 
+  const bib = tryInstantiate({
+    constructor: Bib,
+    args: [discoveryBibResult],
+    ignoreError: notFound,
+    errorMessage: "Bib undefined",
+  })
+  const item = tryInstantiate({
+    constructor: Item,
+    args: [discoveryItemResult, bib],
+    ignoreError: notFound,
+    errorMessage: "Item undefined",
+  })
+  const holdId = item ? `${item.bibId}-${item.id}` : ""
+
   // Check if hold request was completed already.
   useEffect(() => {
-    const bannerFlag = sessionStorage.getItem("holdCompleted")
+    const bannerFlag = sessionStorage.getItem(`holdCompleted-${holdId}`)
     if (bannerFlag === "true") {
       setHoldCompleted(true)
-      sessionStorage.removeItem("holdCompleted")
+      sessionStorage.removeItem(`holdCompleted-${holdId}`)
       setPersistentFocus(idConstants.holdCompletedBanner)
     }
   }, [])
@@ -97,11 +112,6 @@ export default function HoldRequestPage({
   if (notFound) {
     return <Custom404 activePage="hold" />
   }
-
-  const bib = new Bib(discoveryBibResult)
-  const item = new Item(discoveryItemResult, bib)
-
-  const holdId = `${item.bibId}-${item.id}`
 
   const handleServerHoldPostError = (errorMessage: string) => {
     console.error(
