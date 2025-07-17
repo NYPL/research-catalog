@@ -30,7 +30,6 @@ export default class Bib {
   items?: Item[]
   itemAggregations?: Aggregation[]
   hasItemDates?: boolean
-  subjectHeadings?: SubjectHeading[]
   findingAid?: string
 
   constructor(result?: DiscoveryBibResult) {
@@ -44,7 +43,6 @@ export default class Bib {
     this.issuance = (result.issuance?.length && result.issuance) || null
     this.itemAggregations = result.itemAggregations || null
     this.hasItemDates = result.hasItemDates || false
-    this.subjectHeadings = result.subjectHeadings || []
     this.findingAid = getFindingAidFromSupplementaryContent(
       result.supplementaryContent
     )
