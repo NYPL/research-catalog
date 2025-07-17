@@ -186,7 +186,7 @@ describe("Hold Confirmation page", () => {
         <HoldConfirmationPage
           discoveryBibResult={bibWithItems.resource}
           isEDD
-          holdId="test"
+          itemId="test"
         />
       )
     })
@@ -230,7 +230,7 @@ describe("Hold Confirmation page", () => {
       const searchLink = screen.getByText("Start a new search")
       expect(searchLink).toHaveAttribute("href", "/research/research-catalog/")
     })
-    it("sets sessionStorage key 'holdCompleted' with hold ID to true on mount", () => {
+    it("sets sessionStorage key 'holdCompleted' with item ID to true on mount", () => {
       expect(sessionStorage.getItem("holdCompleted-test")).toBe("true")
     })
   })

@@ -92,10 +92,10 @@ export default function HoldRequestPage({
 
   // Check if hold request was completed already.
   useEffect(() => {
-    const bannerFlag = sessionStorage.getItem(`holdCompleted-${holdId}`)
+    const bannerFlag = sessionStorage.getItem(`holdCompleted-${item?.id}`)
     if (bannerFlag === "true") {
       setHoldCompleted(true)
-      sessionStorage.removeItem(`holdCompleted-${holdId}`)
+      sessionStorage.removeItem(`holdCompleted-${item?.id}`)
       setPersistentFocus(idConstants.holdCompletedBanner)
     }
   }, [])
