@@ -1,7 +1,6 @@
 import { type ReactElement, type PropsWithChildren } from "react"
 import {
   Flex,
-  Box,
   Breadcrumbs,
   DSProvider,
   Heading,
@@ -48,7 +47,7 @@ const Layout = ({
   return (
     <DSProvider>
       <Template variant={sidebar ? "sidebarLeft" : "full"}>
-        <TemplateBreakout>
+        <TemplateBreakout sx={{ px: "0px" }}>
           <>
             <Breadcrumbs
               data-testid="layout-breadcrumbs"
@@ -113,16 +112,10 @@ const Layout = ({
           </>
         </TemplateBreakout>
         <TemplateMain>
-          {sidebar && (
-            <TemplateSidebar>
-              <Box width="288px">{sidebar}</Box>
-            </TemplateSidebar>
-          )}
-          <TemplateContent>
-            <Box pb="l">
-              {children}
-              <FeedbackForm />
-            </Box>
+          {sidebar && <TemplateSidebar>{sidebar}</TemplateSidebar>}
+          <TemplateContent pb="l">
+            {children}
+            <FeedbackForm />
           </TemplateContent>
         </TemplateMain>
       </Template>

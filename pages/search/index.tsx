@@ -8,6 +8,7 @@ import {
   CardContent,
   Card,
   CardHeading,
+  useNYPLBreakpoints,
 } from "@nypl/design-system-react-components"
 import { useEffect, useRef } from "react"
 import type { ChangeEvent } from "react"
@@ -58,6 +59,7 @@ export default function Search({
   errorStatus = null,
 }: SearchProps) {
   const metadataTitle = `Search Results | ${SITE_NAME}`
+  const { isLargerThanLargeMobile } = useNYPLBreakpoints()
 
   const { push, query } = useRouter()
 
@@ -122,6 +124,27 @@ export default function Search({
 
   const searchResultBibs = mapElementsToSearchResultsBibs(searchResultsElements)
 
+  const sidebar = isLoading ? (
+    <SkeletonLoader showImage={false} width="250px" />
+  ) : isLargerThanLargeMobile && totalResults > 0 && displayFilters ? (
+    <Box width="100%" pb="l">
+      <Card
+        id="filter-sidebar-container"
+        backgroundColor="ui.bg.default"
+        p="s"
+        borderRadius="8px"
+        mb="s"
+      >
+        <CardHeading size="heading6" id="filter-results-heading" tabIndex="0">
+          Filter results
+        </CardHeading>
+        <CardContent>
+          <SearchFilters aggregations={aggs} />
+        </CardContent>
+      </Card>
+    </Box>
+  ) : null
+
   return (
     <>
       <RCHead metadataTitle={metadataTitle} />
@@ -131,40 +154,9 @@ export default function Search({
         searchResultsCount={totalResults}
         isAuthenticated={isAuthenticated}
         activePage="search"
-        sidebar={
-          totalResults > 0 ? (
-            <Box display={{ base: "none", md: "block" }} width="100%" pb="l">
-              {displayFilters && (
-                <Card
-                  id="filter-sidebar-container"
-                  backgroundColor="ui.bg.default"
-                  p="s"
-                  borderRadius="8px"
-                  mb="s"
-                >
-                  <CardHeading
-                    size="heading6"
-                    id="filter-results-heading"
-                    tabIndex="0"
-                  >
-                    Filter results
-                  </CardHeading>
-                  <CardContent>
-                    <SearchFilters aggregations={aggs} />
-                  </CardContent>
-                </Card>
-              )}
-            </Box>
-          ) : isLoading ? (
-            <SkeletonLoader showImage={false} width="250px" />
-          ) : null
-        }
+        sidebar={sidebar}
       >
-        <Box
-          sx={{
-            ml: { base: "0px", md: "32px" },
-          }}
-        >
+        <Box>
           <Flex flexDir="column">
             {displayAppliedFilters && <AppliedFilters aggregations={aggs} />}
             <Flex
