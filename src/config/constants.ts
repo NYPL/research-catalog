@@ -1,7 +1,7 @@
 export const BASE_URL = "/research/research-catalog"
 export const SITE_NAME = "Research Catalog | NYPL"
 export const RESULTS_PER_PAGE = 50
-export const SUBJECTS_PER_PAGE = 50
+export const SUBJECTS_PER_PAGE = 30
 export const ITEMS_PER_SEARCH_RESULT = 3
 export const ITEM_PAGINATION_BATCH_SIZE = 20
 // TODO: Remove this when view_all endpoint in discovery supports query params
