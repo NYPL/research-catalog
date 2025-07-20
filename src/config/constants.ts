@@ -1,8 +1,7 @@
-import { appConfig } from "./config"
-
 export const BASE_URL = "/research/research-catalog"
 export const SITE_NAME = "Research Catalog | NYPL"
 export const RESULTS_PER_PAGE = 50
+export const SUBJECTS_PER_PAGE = 50
 export const ITEMS_PER_SEARCH_RESULT = 3
 export const ITEM_PAGINATION_BATCH_SIZE = 20
 // TODO: Remove this when view_all endpoint in discovery supports query params
@@ -29,6 +28,7 @@ export const PATHS = {
 
 // API Routes
 export const DISCOVERY_API_SEARCH_ROUTE = "/discovery/resources"
+export const DISCOVERY_API_BROWSE_ROUTE = "/discovery/browse/subjects"
 
 // Query params
 export const SOURCE_PARAM = "?source=catalog"
