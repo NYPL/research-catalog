@@ -124,7 +124,6 @@ export default function Search({
 
   const searchResultBibs = mapElementsToSearchResultsBibs(searchResultsElements)
 
-  console.log(isLoading)
   return (
     <>
       <RCHead metadataTitle={metadataTitle} />
@@ -193,7 +192,7 @@ export default function Search({
             </Flex>
 
             {isLoading ? (
-              <>
+              <Box height="200px">
                 <SkeletonLoader showImage={false} mb="m" />
                 <div
                   id="search-live-region"
@@ -209,7 +208,7 @@ export default function Search({
                     border: 0,
                   }}
                 />
-              </>
+              </Box>
             ) : (
               <SimpleGrid columns={1} id="search-results-list" gap="grid.l">
                 {searchResultBibs.map((bib: SearchResultsBib) => {

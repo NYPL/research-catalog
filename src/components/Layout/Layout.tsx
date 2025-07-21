@@ -1,4 +1,4 @@
-import { type ReactElement, type PropsWithChildren } from "react"
+import { type PropsWithChildren } from "react"
 import {
   Flex,
   Breadcrumbs,
@@ -7,7 +7,6 @@ import {
   Banner,
   TemplateBreakout,
   Template,
-  TemplateSidebar,
   TemplateContent,
   TemplateMain,
 } from "@nypl/design-system-react-components"
@@ -21,7 +20,6 @@ import EDSBanner from "../EDSBanner"
 import RCSubNav from "../RCSubNav/RCSubNav"
 
 interface LayoutProps {
-  sidebar?: ReactElement
   activePage?: RCPage
   isAuthenticated?: boolean
   searchAggregations?: Aggregation[]
