@@ -29,7 +29,7 @@ export type DiscoverySubjectResult = {
   preferredTerm: string
   count: number
   uri: string
-  variants: string[]
-  narrowerTerms: string[]
-  broaderTerms: string[]
+  variants?: string[]
+  narrowerTerms?: string[]
+  broaderTerms?: string[]
 }
