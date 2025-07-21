@@ -67,6 +67,7 @@ export default function Search({
   const searchParams = mapQueryToSearchParams(query)
 
   const isLoading = useLoading()
+
   const searchedFromAdvanced = query.searched_from === "advanced"
 
   const searchResultsHeadingRef = useRef(null)
@@ -124,10 +125,9 @@ export default function Search({
 
   const searchResultBibs = mapElementsToSearchResultsBibs(searchResultsElements)
 
-  const sidebar = isLoading ? (
-    <SkeletonLoader showImage={false} width="250px" />
-  ) : isLargerThanLargeMobile && totalResults > 0 && displayFilters ? (
-    <Box width="100%" pb="l">
+  const sidebar = !isLargerThanLargeMobile ? null : totalResults > 0 &&
+    displayFilters ? (
+    <Box pb="l">
       <Card
         id="filter-sidebar-container"
         backgroundColor="ui.bg.default"
@@ -143,6 +143,8 @@ export default function Search({
         </CardContent>
       </Card>
     </Box>
+  ) : isLoading ? (
+    <SkeletonLoader showImage={false} width="250px" />
   ) : null
 
   return (

@@ -6,6 +6,7 @@ import {
   CardContent,
   Box,
   SkeletonLoader,
+  Flex,
 } from "@nypl/design-system-react-components"
 
 import Layout from "../src/components/Layout/Layout"
@@ -36,7 +37,15 @@ export default function Home({
         bannerNotification={bannerNotification}
       >
         {isLoading ? (
-          <SkeletonLoader showImage={false} />
+          <Flex
+            justifyContent="space-between"
+            marginTop="xxs"
+            direction="row"
+            gap="m"
+          >
+            <SkeletonLoader showImage={false} width="250px" />
+            <SkeletonLoader showImage={false} />
+          </Flex>
         ) : (
           <>
             <Heading level="h2">
