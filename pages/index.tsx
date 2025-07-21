@@ -6,7 +6,7 @@ import {
   CardContent,
   Box,
   SkeletonLoader,
-  Flex,
+  Text,
 } from "@nypl/design-system-react-components"
 
 import Layout from "../src/components/Layout/Layout"
@@ -40,11 +40,11 @@ export default function Home({
           <SkeletonLoader showImage={false} />
         ) : (
           <>
-            <Heading level="h2">
+            <Heading level="h2" marginBottom="s">
               Explore the Library&apos;s Vast Research Collections &amp; More
             </Heading>
             <Box>
-              <p>
+              <Text marginBottom="s">
                 Discover millions of items from The New York Public
                 Library&apos;s Stephen A. Schwarzman Building, Schomburg Center
                 for Research in Black Culture, and The New York Public Library
@@ -57,8 +57,8 @@ export default function Home({
                 >
                   Learn more.
                 </ExternalLink>
-              </p>
-              <p>
+              </Text>
+              <Text marginBottom="s">
                 Please note that the Research Catalog does not include
                 circulating materials. For books and more that you can check out
                 to take home please visit our{" "}
@@ -72,12 +72,10 @@ export default function Home({
                 is still available, but does not include all of our Scan &amp;
                 Deliver options or the Columbia University, Harvard University,
                 and Princeton University material from the Shared Collection.
-              </p>
+              </Text>
             </Box>
             <SimpleGrid columns={1} gap="grid.m">
-              <Heading level="h3" noSpace>
-                Research at NYPL
-              </Heading>
+              <Heading level="h3">Research at NYPL</Heading>
               <Card
                 imageProps={{
                   alt: "Manuscript from NYPL Research Archive",
