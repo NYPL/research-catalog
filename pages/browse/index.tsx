@@ -35,9 +35,7 @@ export async function getServerSideProps({ req, query }) {
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
 
   const subjectsResponse = await fetchSubjects({
-    q: "F",
-    page: 6,
-    sort: "count",
+    q: "",
   })
 
   // Handle API errors

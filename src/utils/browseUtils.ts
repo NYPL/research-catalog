@@ -35,7 +35,7 @@ export function getBrowseQuery(params: BrowseParams): string {
     searchScope = "has",
   } = params
   const browseKeywordsQuery = encodeURIComponent(q)
-  // TO DO: exclude default sort directions
+  // TO DO: confirm if this should enforce the respective default sorts
   const sortQuery = `&sort=${sort}&sort_direction=${sortDirection}`
   const scopeQuery = `&search_scope=${searchScope}`
   const pageQuery = page !== 1 ? `&page=${page}` : ""
