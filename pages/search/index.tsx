@@ -59,7 +59,6 @@ export default function Search({
   errorStatus = null,
 }: SearchProps) {
   const metadataTitle = `Search Results | ${SITE_NAME}`
-  const { isLargerThanLargeMobile } = useNYPLBreakpoints()
 
   const { push, query } = useRouter()
 
@@ -125,28 +124,7 @@ export default function Search({
 
   const searchResultBibs = mapElementsToSearchResultsBibs(searchResultsElements)
 
-  const sidebar = !isLargerThanLargeMobile ? null : totalResults > 0 &&
-    displayFilters ? (
-    <Box pb="l">
-      <Card
-        id="filter-sidebar-container"
-        backgroundColor="ui.bg.default"
-        p="s"
-        borderRadius="8px"
-        mb="s"
-      >
-        <CardHeading size="heading6" id="filter-results-heading" tabIndex="0">
-          Filter results
-        </CardHeading>
-        <CardContent>
-          <SearchFilters aggregations={aggs} />
-        </CardContent>
-      </Card>
-    </Box>
-  ) : isLoading ? (
-    <SkeletonLoader showImage={false} width="250px" />
-  ) : null
-
+  console.log(isLoading)
   return (
     <>
       <RCHead metadataTitle={metadataTitle} />
@@ -156,10 +134,38 @@ export default function Search({
         searchResultsCount={totalResults}
         isAuthenticated={isAuthenticated}
         activePage="search"
-        sidebar={sidebar}
       >
-        <Box>
-          <Flex flexDir="column">
+        <Flex direction="row" gap="l">
+          {totalResults > 0 && displayFilters ? (
+            <Box
+              display={{ base: "none", md: "block" }}
+              minWidth="288px"
+              pb="l"
+            >
+              <Card
+                id="filter-sidebar-container"
+                backgroundColor="ui.bg.default"
+                p="s"
+                borderRadius="8px"
+                mb="s"
+              >
+                <CardHeading
+                  size="heading6"
+                  id="filter-results-heading"
+                  tabIndex="0"
+                >
+                  Filter results
+                </CardHeading>
+                <CardContent>
+                  <SearchFilters aggregations={aggs} />
+                </CardContent>
+              </Card>
+            </Box>
+          ) : isLoading ? (
+            <SkeletonLoader showImage={false} width="250px" />
+          ) : null}
+
+          <Flex flexDir="column" width="100%">
             {displayAppliedFilters && <AppliedFilters aggregations={aggs} />}
             <Flex
               justifyContent="space-between"
@@ -185,44 +191,44 @@ export default function Search({
                 handleSortChange={handleSortChange}
               />
             </Flex>
-          </Flex>
 
-          {isLoading ? (
-            <>
-              <SkeletonLoader showImage={false} mb="m" />
-              <div
-                id="search-live-region"
-                ref={liveLoadingRegionRef}
-                style={{
-                  position: "absolute",
-                  width: "1px",
-                  height: "1px",
-                  margin: "-1px",
-                  padding: 0,
-                  overflow: "hidden",
-                  clip: "rect(0,0,0,0)",
-                  border: 0,
-                }}
-              />
-            </>
-          ) : (
-            <SimpleGrid columns={1} id="search-results-list" gap="grid.l">
-              {searchResultBibs.map((bib: SearchResultsBib) => {
-                return <SearchResult key={bib.id} bib={bib} />
-              })}
-            </SimpleGrid>
-          )}
-          <Pagination
-            id="results-pagination"
-            mt="xxl"
-            mb="l"
-            className="no-print"
-            initialPage={searchParams.page}
-            currentPage={searchParams.page}
-            pageCount={Math.ceil(totalResults / RESULTS_PER_PAGE)}
-            onPageChange={handlePageChange}
-          />
-        </Box>
+            {isLoading ? (
+              <>
+                <SkeletonLoader showImage={false} mb="m" />
+                <div
+                  id="search-live-region"
+                  ref={liveLoadingRegionRef}
+                  style={{
+                    position: "absolute",
+                    width: "1px",
+                    height: "1px",
+                    margin: "-1px",
+                    padding: 0,
+                    overflow: "hidden",
+                    clip: "rect(0,0,0,0)",
+                    border: 0,
+                  }}
+                />
+              </>
+            ) : (
+              <SimpleGrid columns={1} id="search-results-list" gap="grid.l">
+                {searchResultBibs.map((bib: SearchResultsBib) => {
+                  return <SearchResult key={bib.id} bib={bib} />
+                })}
+              </SimpleGrid>
+            )}
+            <Pagination
+              id="results-pagination"
+              mt="xxl"
+              mb="l"
+              className="no-print"
+              initialPage={searchParams.page}
+              currentPage={searchParams.page}
+              pageCount={Math.ceil(totalResults / RESULTS_PER_PAGE)}
+              onPageChange={handlePageChange}
+            />
+          </Flex>
+        </Flex>
       </Layout>
     </>
   )

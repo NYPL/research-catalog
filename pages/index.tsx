@@ -37,15 +37,7 @@ export default function Home({
         bannerNotification={bannerNotification}
       >
         {isLoading ? (
-          <Flex
-            justifyContent="space-between"
-            marginTop="xxs"
-            direction="row"
-            gap="m"
-          >
-            <SkeletonLoader showImage={false} width="250px" />
-            <SkeletonLoader showImage={false} />
-          </Flex>
+          <SkeletonLoader showImage={false} />
         ) : (
           <>
             <Heading level="h2">

@@ -37,7 +37,6 @@ const Layout = ({
   searchAggregations,
   children,
   isAuthenticated,
-  sidebar,
   activePage,
   searchResultsCount,
   bannerNotification,
@@ -46,7 +45,7 @@ const Layout = ({
   const showNotification = activePage === "" || activePage === "search"
   return (
     <DSProvider>
-      <Template variant={sidebar ? "sidebarLeft" : "full"}>
+      <Template variant="full">
         <TemplateBreakout sx={{ px: "0px" }}>
           <>
             <Breadcrumbs
@@ -112,7 +111,6 @@ const Layout = ({
           </>
         </TemplateBreakout>
         <TemplateMain>
-          {sidebar && <TemplateSidebar>{sidebar}</TemplateSidebar>}
           <TemplateContent pb="l">
             {children}
             <FeedbackForm />
