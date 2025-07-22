@@ -14,7 +14,7 @@ type ErrorPageProps = {
 
 function Error({ activePage }: ErrorPageProps) {
   const metadataTitle = `500 | ${SITE_NAME}`
-  const { onOpen } = useContext(FeedbackContext)
+  const { openFeedbackFormWithError } = useContext(FeedbackContext)
   return (
     <>
       <RCHead metadataTitle={metadataTitle} />
@@ -44,7 +44,7 @@ function Error({ activePage }: ErrorPageProps) {
           </Text>
           <Text marginBottom="0">
             Try refreshing the page or{" "}
-            <Link onClick={onOpen} id="feedback-link">
+            <Link onClick={openFeedbackFormWithError} id="feedback-link">
               contact us
             </Link>{" "}
             if the error persists.

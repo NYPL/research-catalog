@@ -429,7 +429,8 @@ describe("Hold Request page", () => {
     expect(screen.getByText("We couldn't find that page")).toBeInTheDocument()
   })
   describe("Hold request already completed renders warning banner", () => {
-    sessionStorage.setItem("holdCompleted", "true")
+    // Item ID from bibWithItems
+    sessionStorage.setItem("holdCompleted-i39333697", "true")
     render(
       <HoldRequestPage
         discoveryBibResult={bibWithItems.resource}
