@@ -110,7 +110,7 @@ const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
     <>
       <Button
         aria-label={`${buttonLabel} ${hold.title}`}
-        buttonType="secondary"
+        variant="secondary"
         id={`freeze-${hold.id}`}
         onClick={handleFreezeClick}
         isDisabled={isDisabled}

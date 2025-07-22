@@ -7,11 +7,9 @@ type StatusBannerProps = {
   statusMessage: string
 }
 
-const successContent = <Text marginBottom={0}>Your changes were saved.</Text>
+const successContent = <Text>Your changes were saved.</Text>
 
-const generalFailureContent = (
-  <Text marginBottom={0}>Your changes were not saved.</Text>
-)
+const generalFailureContent = <Text>Your changes were not saved.</Text>
 
 const specificFailureContent = (statusMessage: string) => {
   return (
@@ -44,7 +42,7 @@ export const StatusBanner = ({ status, statusMessage }: StatusBannerProps) => {
           {statusContent(status, statusMessage)}
         </div>
       }
-      type={status === "failure" ? "negative" : "positive"}
+      variant={status === "failure" ? "negative" : "positive"}
     />
   )
 }

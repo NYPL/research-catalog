@@ -137,7 +137,7 @@ const LinkElement = (url: BibDetailURL, linkType: string) => {
       href={url.url}
       key={url.url}
       // external link does not include this prop
-      includeBaseUrl={true}
+      {...(linkType === "internal" ? { includeBaseUrl: true } : {})}
       textDecoration="none"
     >
       {url.urlLabel}

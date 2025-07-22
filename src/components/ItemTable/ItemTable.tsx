@@ -22,7 +22,7 @@ const ItemTable = ({ itemTableData }: ItemTableProps) => {
           inSearchResult ? " " + styles.inSearchResult : ""
         } itemTable`}
         columnHeaders={tableHeadings}
-        tableTextSize="body2"
+        fontSize="body2"
         columnStyles={
           inSearchResult
             ? [

@@ -85,7 +85,7 @@ const SearchFilterModal = ({
             <Button
               aria-label="Close"
               id="close-btn"
-              buttonType="text"
+              variant="text"
               onClick={onClose}
             >
               {" "}
@@ -118,7 +118,7 @@ const SearchFilterModal = ({
               </Button>
               <Button
                 id="clear-filters"
-                buttonType="secondary"
+                variant="secondary"
                 onClick={() => handleClear()}
               >
                 Clear all filters
