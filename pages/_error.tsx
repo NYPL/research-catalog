@@ -36,7 +36,9 @@ function Error({ activePage }: ErrorPageProps) {
             height={68}
             style={{ marginBottom: "48px" }}
           />
-          <Heading level="h3">Something went wrong on our end</Heading>
+          <Heading level="h3" mb="s">
+            Something went wrong on our end
+          </Heading>
           <Text marginBottom="0">
             We encountered an error while trying to load the page.
           </Text>

@@ -13,7 +13,9 @@ export default function Redirect404() {
     <>
       <RCHead metadataTitle={metadataTitle} />
       <Layout activePage="404">
-        <Heading level="h1">We&apos;re sorry...</Heading>
+        <Heading level="h1" mb="s">
+          We&apos;re sorry...
+        </Heading>
         <p>You&apos;ve followed an out-of-date link to our research catalog.</p>
         <p>
           You may be able to find what you&apos;re looking for in the{" "}

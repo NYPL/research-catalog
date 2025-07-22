@@ -40,11 +40,11 @@ export default function Home({
           <SkeletonLoader showImage={false} />
         ) : (
           <>
-            <Heading level="h2" marginBottom="s">
+            <Heading level="h2" mb="s">
               Explore the Library&apos;s Vast Research Collections &amp; More
             </Heading>
             <Box>
-              <Text marginBottom="s">
+              <Text mb="s">
                 Discover millions of items from The New York Public
                 Library&apos;s Stephen A. Schwarzman Building, Schomburg Center
                 for Research in Black Culture, and The New York Public Library
@@ -58,7 +58,7 @@ export default function Home({
                   Learn more.
                 </ExternalLink>
               </Text>
-              <Text marginBottom="s">
+              <Text mb="s">
                 Please note that the Research Catalog does not include
                 circulating materials. For books and more that you can check out
                 to take home please visit our{" "}
