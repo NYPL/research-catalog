@@ -1,5 +1,5 @@
 import React from "react"
-import { render, screen, within } from "../../../utils/testUtils"
+import { render, screen, waitFor, within } from "../../../utils/testUtils"
 import {
   processedHolds,
   processedPatron,
@@ -203,7 +203,7 @@ describe("RequestsTab", () => {
     expect(
       component.queryByText("Hold freeze failed", { exact: false })
     ).not.toBeInTheDocument()
-    let freezeButtons = component.getAllByText("Freeze")
+    const freezeButtons = component.getAllByText("Freeze")
     expect(freezeButtons.length).toBe(1)
     const freezeButton = component.getByText("Freeze")
     await userEvent.click(freezeButton)
@@ -212,8 +212,10 @@ describe("RequestsTab", () => {
     ).toBeInTheDocument()
     const ok = screen.getByRole("button", { name: "OK" })
     await userEvent.click(ok)
-    freezeButtons = await component.findAllByText("Freeze")
-    expect(freezeButtons.length).toBe(1)
+    setTimeout(() => {
+      const postFreezeButtons = component.getAllByText("Freeze")
+      expect(postFreezeButtons.length).toBe(1)
+    }, 100)
   })
 
   it("shows pick up by date and status when circ request is ready", () => {

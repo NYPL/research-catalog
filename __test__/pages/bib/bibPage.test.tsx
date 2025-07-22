@@ -232,12 +232,12 @@ describe("Bib Page Item Table", () => {
       screen.getAllByTestId("checkbox-group")[0].querySelector("input")
     )
 
-    const tagButton = screen.queryByTestId("filter-tags")
+    const tagButton = screen.queryByTestId("ds-tagSetFilter-tags")
     expect(tagButton).toHaveTextContent("Text")
     expect(mockRouter.asPath).toBe("/bib/pb5579193?item_format=Text")
 
     await userEvent.click(tagButton)
-    expect(screen.queryByTestId("filter-tags")).not.toBeInTheDocument()
+    expect(screen.queryByTestId("ds-tagSetFilter-tags")).not.toBeInTheDocument()
     expect(mockRouter.asPath).toBe("/bib/pb5579193")
   })
 
@@ -260,7 +260,7 @@ describe("Bib Page Item Table", () => {
     await userEvent.click(screen.getByText("Clear filters"))
 
     expect(mockRouter.asPath).toBe("/bib/pb5579193")
-    expect(screen.queryByTestId("filter-tags")).not.toBeInTheDocument()
+    expect(screen.queryByTestId("ds-tagSetFilter-tags")).not.toBeInTheDocument()
     expect(screen.queryByPlaceholderText("YYYY")).toHaveValue("")
   })
 
@@ -277,7 +277,7 @@ describe("Bib Page Item Table", () => {
   })
 
   it("renders a view all button when there are more than 20 items and updates the url to /all when clicked", async () => {
-    const viewAllLink = screen.getByText("View all 26 items").closest("a")
+    const viewAllLink = screen.getByText(/View all 26 items/).closest("a")
     expect(viewAllLink).toHaveAttribute(
       "href",
       "/research/research-catalog/bib/pb5579193/all"
@@ -300,11 +300,11 @@ describe("Bib Page Item Table", () => {
           }),
       })
     )
-    await userEvent.click(screen.getByText("View all 26 items").closest("a"))
+    await userEvent.click(screen.getByText(/View all 26 items/).closest("a"))
     expect(mockRouter.asPath).toBe("/bib/pb5579193/all")
 
     expect(screen.getByText("View fewer items")).toBeInTheDocument()
-    expect(screen.queryByTestId("filter-tags")).not.toBeInTheDocument()
+    expect(screen.queryByTestId("ds-tagSetFilter-tags")).not.toBeInTheDocument()
 
     await userEvent.click(screen.getByText("View fewer items"))
     expect(mockRouter.asPath).toBe("/bib/pb5579193")
@@ -324,8 +324,8 @@ describe("Bib Page Item Table", () => {
           }),
       })
     )
-    await userEvent.click(screen.getByText("View all 26 items").closest("a"))
-    expect(screen.getByText("View fewer items")).toBeInTheDocument()
+    await userEvent.click(screen.getByText(/View all 26 items/).closest("a"))
+    expect(screen.getByText(/View fewer items/)).toBeInTheDocument()
     expect(screen.getByTestId("bib-details-item-table")).toBeInTheDocument()
   })
 
@@ -336,7 +336,7 @@ describe("Bib Page Item Table", () => {
           setTimeout(resolve, 50)
         })
     )
-    await userEvent.click(screen.getByText("View all 26 items").closest("a"))
+    await userEvent.click(screen.getByText(/View all 26 items/).closest("a"))
     expect(
       screen.queryByText("Loading all 26 items. This may take a few moments...")
     ).toBeInTheDocument()
@@ -349,7 +349,7 @@ describe("Bib Page Item Table", () => {
         ok: false,
       })
     )
-    await userEvent.click(screen.getByText("View all 26 items").closest("a"))
+    await userEvent.click(screen.getByText(/View all 26 items/).closest("a"))
     expect(
       screen.getByText(
         "There was an error fetching items. Please try again with a different query."
