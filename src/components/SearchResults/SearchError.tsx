@@ -27,11 +27,11 @@ export default function SearchError({ errorStatus }: SearchErrorProps) {
           <Heading level="h3" tabIndex={-1} id="search-results-heading">
             No results found
           </Heading>
-          <Text noSpace>
+          <Text>
             We couldn&apos;t find anything matching your criteria. Try a
             different search term.{" "}
           </Text>
-          <Text noSpace>
+          <Text>
             You can also search our{" "}
             <ExternalLink href={appConfig.urls.circulatingCatalog}>
               Branch Catalog

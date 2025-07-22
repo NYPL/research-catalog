@@ -26,13 +26,13 @@ const BibDetails = ({ details, heading }: BibDetailsProps) => {
       <List
         title={
           heading && (
-            <Heading level="three" border="none">
+            <Heading level="h3" border="none">
               {heading}
             </Heading>
           )
         }
         noStyling
-        type="dl"
+        variant="dl"
         showRowDividers={false}
         className={`${styles.bibDetails} ${styles.inBibPage}`}
       >
@@ -60,7 +60,7 @@ const DetailElement = (label: string, listChildren: ReactNode[]) => {
     <>
       <dt>{label}</dt>
       <dd>
-        <List noStyling data-testid={kebabCase(label)} type="ol">
+        <List noStyling data-testid={kebabCase(label)} variant="ol">
           {listChildren}
         </List>
       </dd>

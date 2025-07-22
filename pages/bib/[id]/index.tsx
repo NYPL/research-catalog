@@ -329,7 +329,7 @@ export default function BibPage({
             <ExternalLink
               id="legacy-catalog-link"
               href={`${appConfig.urls.legacyCatalog}/record=${bib.id}`}
-              type="standalone"
+              variant="standalone"
               mt="s"
             >
               View in legacy catalog

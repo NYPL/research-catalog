@@ -54,14 +54,14 @@ const ElectronicResources = ({
       </CardHeading>
       <CardContent aria-expanded={!showMore}>
         <List
-          type="ul"
+          variant="ul"
           mb="0"
           noStyling
           listItems={electronicResourcesToDisplay.map((resource) => (
             <ExternalLink
               href={resource.url}
               key={kebabCase(resource.title)}
-              type="standalone"
+              variant="standalone"
             >
               <Box
                 as="span"
@@ -83,7 +83,8 @@ const ElectronicResources = ({
             p={0}
             mt="s"
             onClick={onClick}
-            buttonType="link"
+            // TO DO
+            variant="text"
             aria-expanded={!showMore}
             fontWeight="bold"
             sx={{ textDecoration: "none", height: "auto" }}

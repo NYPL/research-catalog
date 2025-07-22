@@ -138,7 +138,7 @@ const RenewButton = ({
   return (
     <>
       <Button
-        buttonType="secondary"
+        variant="secondary"
         id={`renew-${checkout.id}`}
         onClick={handleClick}
         aria-disabled={isButtonDisabled || showLoadingState}

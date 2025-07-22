@@ -95,7 +95,7 @@ export default function HoldConfirmationPage({
             base: "mobile.body.body2",
             md: "desktop.body.body2",
           }}
-          type="standalone"
+          variant="standalone"
           fontWeight="bold"
           isUnderlined={false}
           my="l"

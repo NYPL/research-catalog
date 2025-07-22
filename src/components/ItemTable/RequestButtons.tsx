@@ -19,7 +19,7 @@ const RequestButtons = ({ item }: RequestButtonsProps) => {
       {item.aeonUrl && (
         <ExternalLink
           href={item.aeonUrl}
-          type={!item.isAvailable ? "buttonDisabled" : "buttonSecondary"}
+          variant={!item.isAvailable ? "buttonDisabled" : "buttonSecondary"}
           aria-label={`Request Appointment, ${item.requestButtonAriaLabel}`}
           disabled={!item.isAvailable}
           mb="s"
