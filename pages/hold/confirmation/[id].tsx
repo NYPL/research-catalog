@@ -71,11 +71,11 @@ export default function HoldConfirmationPage({
         </Heading>
 
         <Banner
-          type="positive"
+          variant="positive"
           mb="l"
           heading="Request successful"
           content={
-            <Text mt="xs" noSpace>
+            <Text mt="xs">
               You&apos;re all set! We have received your {isEDD ? "scan " : ""}
               request for{" "}
               <RCLink href={`${PATHS.BIB}/${item.bibId}`}>

@@ -38,12 +38,14 @@ export default function Custom404({ activePage }: ErrorPageProps) {
             style={{ marginBottom: "48px" }}
           />
 
-          <Heading level="h3">We couldn&apos;t find that page</Heading>
-          <Text noSpace>
+          <Heading level="h3" mb="s">
+            We couldn&apos;t find that page
+          </Heading>
+          <Text>
             The page you were looking for doesn&apos;t exist or may have moved
             elsewhere.
           </Text>
-          <Text noSpace>
+          <Text>
             Try a <RCLink href="/">new search</RCLink> or{" "}
             <Link onClick={onOpen} id="feedback-link">
               contact us
