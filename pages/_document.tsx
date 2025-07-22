@@ -10,7 +10,7 @@ export default function Document() {
         }
         @media screen and (min-width: 832px) {
           #Header-Placeholder {
-            min-height: 130px;
+            min-height: 114px;
           }
         }
       `}

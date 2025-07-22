@@ -38,9 +38,8 @@ const DateFilter = ({
           <Notification
             data-testid="dateRangeErrorMessage"
             padding="s"
-            notificationType="warning"
+            variant="warning"
             notificationContent={displayDateRangeError}
-            noMargin
             mb="s"
           />
         )}
@@ -71,7 +70,7 @@ const DateFilter = ({
           {applyHandler && (
             <Button
               width="90px"
-              buttonType="secondary"
+              variant="secondary"
               id="apply-dates"
               onClick={applyHandler}
             >

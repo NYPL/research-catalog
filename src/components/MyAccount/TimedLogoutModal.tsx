@@ -133,7 +133,7 @@ const TimedLogoutModal = () => {
               <CardActions className={styles.modalButtons}>
                 <Spacer />
                 <Button
-                  buttonType="secondary"
+                  variant="secondary"
                   onClick={logOutAndRedirect}
                   id="logout-button"
                 >

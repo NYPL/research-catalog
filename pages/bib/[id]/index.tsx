@@ -218,7 +218,7 @@ export default function BibPage({
       <RCHead metadataTitle={metadataTitle} />
       <Layout isAuthenticated={isAuthenticated} activePage="bib">
         {findingAid && (
-          <StatusBadge mb="s" type="informative">
+          <StatusBadge mb="s" variant="informative">
             FINDING AID AVAILABLE
           </StatusBadge>
         )}
@@ -273,7 +273,7 @@ export default function BibPage({
                 <SkeletonLoader showImage={false} />
               ) : itemFetchError ? (
                 <Banner
-                  type="negative"
+                  variant="negative"
                   content="There was an error fetching items. Please try again with a different query."
                 />
               ) : (
@@ -329,7 +329,7 @@ export default function BibPage({
             <ExternalLink
               id="legacy-catalog-link"
               href={`${appConfig.urls.legacyCatalog}/record=${bib.id}`}
-              type="standalone"
+              variant="standalone"
               mt="s"
             >
               View in legacy catalog

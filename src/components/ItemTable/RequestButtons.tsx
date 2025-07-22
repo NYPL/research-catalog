@@ -19,7 +19,7 @@ const RequestButtons = ({ item }: RequestButtonsProps) => {
       {item.aeonUrl && (
         <ExternalLink
           href={item.aeonUrl}
-          type={!item.isAvailable ? "buttonDisabled" : "buttonSecondary"}
+          variant={!item.isAvailable ? "buttonDisabled" : "buttonSecondary"}
           aria-label={`Request Appointment, ${item.requestButtonAriaLabel}`}
           disabled={!item.isAvailable}
           mb="s"
@@ -32,7 +32,7 @@ const RequestButtons = ({ item }: RequestButtonsProps) => {
       {item.isPhysicallyRequestable && (
         <RCLink
           href={`/hold/request/${item.bibId}-${item.id}`}
-          type={!item.isAvailable ? "buttonDisabled" : "buttonSecondary"}
+          variant={!item.isAvailable ? "buttonDisabled" : "buttonSecondary"}
           aria-label={`Request for On-site Use, ${item.requestButtonAriaLabel}`}
           disabled={!item.isAvailable}
           mb="s"
@@ -44,7 +44,7 @@ const RequestButtons = ({ item }: RequestButtonsProps) => {
       {item.isEDDRequestable && (
         <RCLink
           href={`/hold/request/${item.bibId}-${item.id}/edd`}
-          type={!item.isAvailable ? "buttonDisabled" : "buttonSecondary"}
+          variant={!item.isAvailable ? "buttonDisabled" : "buttonSecondary"}
           aria-label={`Request Scan, ${item.requestButtonAriaLabel}`}
           disabled={!item.isAvailable}
           mb="s"

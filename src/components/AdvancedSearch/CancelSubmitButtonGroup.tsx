@@ -26,7 +26,7 @@ const CancelSubmitButtonGroup = ({
         data-testid={`submit-${formName}-button`}
         id={`submit-${formName}`}
         type="submit"
-        buttonType="primary"
+        variant="primary"
         isDisabled={disableSubmit}
       >
         <Icon name={submitIcon} align="left" size="large" />
@@ -37,7 +37,7 @@ const CancelSubmitButtonGroup = ({
         onClick={cancelHandler}
         id={`reset-${formName}`}
         type="reset"
-        buttonType="secondary"
+        variant="secondary"
         backgroundColor="ui.white"
       >
         <Icon name="actionDelete" align="left" size="large" />
