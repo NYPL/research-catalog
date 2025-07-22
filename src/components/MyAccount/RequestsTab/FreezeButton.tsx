@@ -17,7 +17,7 @@ const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
   const buttonRef = createRef<HTMLButtonElement>()
   const { onOpen: openModal, onClose: closeModal, Modal } = useModal()
   const failureModalProps = {
-    type: "default",
+    variant: "default",
     bodyContent: (
       <Box className={styles.modalBody}>
         <Text>
@@ -41,7 +41,7 @@ const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
     },
   }
   const successModalProps = {
-    type: "default",
+    variant: "default",
     closeButtonLabel: "OK",
     bodyContent: (
       <Box className={styles.modalBody}>

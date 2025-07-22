@@ -50,7 +50,7 @@ const SearchFilterModal = ({
       </Button>
 
       <ChakraModal
-        id={"modal"}
+        id="modal"
         scrollBehavior="inside"
         size={{ base: "full", md: "xl" }}
         isOpen={isOpen}
