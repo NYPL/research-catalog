@@ -7,9 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+### Remove
+
+- Trailing period removal from subject literals [SCC-4801](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4801)
+
 ## [1.5.1] 2025-07-17
 
-## Added
+### Added
 
 - Added bib title to metadata tab title on bib page [SCC-4749](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4749)
 - Adds warning to hold request pages if user has already completed the request [SCC-3360](https://newyorkpubliclibrary.atlassian.net/browse/SCC-3360)
