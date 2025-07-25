@@ -1,5 +1,6 @@
 import RCHead from "../../src/components/Head/RCHead"
 import Layout from "../../src/components/Layout/Layout"
+import SubjectTable from "../../src/components/SubjectTable/SubjectTable"
 import { SITE_NAME } from "../../src/config/constants"
 import { fetchSubjects } from "../../src/server/api/browse"
 import initializePatronTokenAuth from "../../src/server/auth"
@@ -27,7 +28,7 @@ export default function Browse({
     <>
       <RCHead metadataTitle={metadataTitle} />
       <Layout activePage="browse" isAuthenticated={isAuthenticated}>
-        {/* <SubjectTable subjectTableData={results.subjects} /> */}
+        <SubjectTable subjectTableData={results.subjects} />
       </Layout>
     </>
   )
