@@ -7,7 +7,7 @@ import type { HTTPStatusCode } from "../../src/types/appTypes"
 import type { DiscoverySubjectsResponse } from "../../src/types/browseTypes"
 
 interface BrowseProps {
-  subjects: DiscoverySubjectsResponse
+  results: DiscoverySubjectsResponse
   isAuthenticated: boolean
   errorStatus?: HTTPStatusCode | null
 }
@@ -17,7 +17,7 @@ interface BrowseProps {
  * as well as displaying and controlling pagination and sort.
  */
 export default function Browse({
-  subjects,
+  results,
   isAuthenticated,
   errorStatus = null,
 }: BrowseProps) {
@@ -27,7 +27,7 @@ export default function Browse({
     <>
       <RCHead metadataTitle={metadataTitle} />
       <Layout activePage="browse" isAuthenticated={isAuthenticated}>
-        {/* <SubjectTable subjectTableData={subjects.subjects} /> */}
+        {/* <SubjectTable subjectTableData={results.subjects} /> */}
       </Layout>
     </>
   )
@@ -35,15 +35,23 @@ export default function Browse({
 
 export async function getServerSideProps({ req, query }) {
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
+  const { browseType = "subjects" } = query
 
-  const subjectsResponse = await fetchSubjects({
-    q: "P",
-    page: 1,
-  })
+  let response
+
+  switch (browseType) {
+    case "authors":
+      //response = await fetchAuthors({ q: "" })
+      break
+    case "subjects":
+    default:
+      response = await fetchSubjects({ q: "" })
+      break
+  }
 
   // Handle API errors
-  if (subjectsResponse.status !== 200) {
-    return { props: { errorStatus: subjectsResponse.status } }
+  if (response?.status !== 200) {
+    return { props: { errorStatus: response.status } }
   }
 
   const isAuthenticated = patronTokenResponse.isTokenValid
@@ -51,7 +59,7 @@ export async function getServerSideProps({ req, query }) {
   return {
     props: {
       isAuthenticated,
-      subjects: subjectsResponse,
+      results: response,
     },
   }
 }

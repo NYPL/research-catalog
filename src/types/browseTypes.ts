@@ -38,7 +38,7 @@ export type PreferredSubject = {
   url: string
   preferredTerm: string
   count: string
-  //seeAlso: SubjectLink[]
+  seeAlso: SubjectLink[]
   narrowerTerms: SubjectLink[]
   broaderTerms: SubjectLink[]
 }
