@@ -1,10 +1,13 @@
 import RCHead from "../../src/components/Head/RCHead"
 import Layout from "../../src/components/Layout/Layout"
 import { SITE_NAME } from "../../src/config/constants"
+import PreferredSubject from "../../src/models/PreferredSubject"
+import VariantSubject from "../../src/models/VariantSubject"
 import { fetchSubjects } from "../../src/server/api/browse"
 import initializePatronTokenAuth from "../../src/server/auth"
 import type { HTTPStatusCode } from "../../src/types/appTypes"
 import type { DiscoverySubjectsResponse } from "../../src/types/browseTypes"
+import { isVariantSubject } from "../../src/utils/browseUtils"
 
 interface BrowseProps {
   subjects: DiscoverySubjectsResponse
@@ -23,10 +26,14 @@ export default function Browse({
 }: BrowseProps) {
   const metadataTitle = `Browse Research Catalog | ${SITE_NAME}`
 
+  console.log(subjects.subjects)
+
   return (
     <>
       <RCHead metadataTitle={metadataTitle} />
-      <Layout activePage="browse" isAuthenticated={isAuthenticated}></Layout>
+      <Layout activePage="browse" isAuthenticated={isAuthenticated}>
+        {/* <SubjectTable subjectTableData={subjects.subjects} /> */}
+      </Layout>
     </>
   )
 }
@@ -36,6 +43,7 @@ export async function getServerSideProps({ req, query }) {
 
   const subjectsResponse = await fetchSubjects({
     q: "",
+    page: 1,
   })
 
   // Handle API errors

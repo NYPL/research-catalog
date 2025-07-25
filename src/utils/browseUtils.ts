@@ -43,3 +43,7 @@ export function getBrowseQuery(params: BrowseParams): string {
   const completeQuery = `${browseKeywordsQuery}${scopeQuery}${sortQuery}${pageQuery}`
   return completeQuery?.length ? `?q=${completeQuery}` : ""
 }
+
+export function isVariantSubject(subject): boolean {
+  return "variantTerm" in subject
+}
