@@ -5,6 +5,11 @@ import type {
 } from "../types/browseTypes"
 import { getSubjectURL } from "./PreferredSubject"
 
+/**
+ * The VariantSubject class represents an alternate term that points to
+ * an authorized subject heading (represented as a PreferredSubject). VariantSubjects
+ * and PreferredSubjects are displayed together on the browse index page.
+ */
 export default class VariantSubject {
   variantTerm: string
   preferredTerms: PreferredTerm[]

@@ -49,8 +49,7 @@ export type DiscoveryPreferredTermResult = { [term: string]: number }
 
 export type DiscoverySubjectVariantResult = {
   variantTerm?: string
-  uri: string
-  preferredTerms?: []
+  preferredTerms?: DiscoveryPreferredTermResult[]
 }
 
 export type DiscoverySubjectPreferredResult = {

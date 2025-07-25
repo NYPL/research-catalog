@@ -3,11 +3,17 @@ import type {
   SubjectLink,
 } from "../types/browseTypes"
 
+/**
+ * The PreferredSubject class represents an authorized subject heading,
+ * the number of bibs with this subject in the index, and its
+ * related subjects.
+ */
+
 export default class PreferredSubject {
   url: string
   preferredTerm: string
   count: string
-  //seeAlso: SubjectLink[]
+  seeAlso: SubjectLink[]
   narrowerTerms: SubjectLink[]
   broaderTerms: SubjectLink[]
 
@@ -15,8 +21,8 @@ export default class PreferredSubject {
     this.url = getSubjectURL(result.preferredTerm)
     this.preferredTerm = result.preferredTerm
     this.count = result.count.toString()
-    // this.seeAlso =
-    //   result.seeAlso.length && this.buildSubjectLinkList(result.seeAlso)
+    this.seeAlso =
+      result.seeAlso?.length && this.buildSubjectLinkList(result.seeAlso)
     this.narrowerTerms =
       result.narrowerTerms?.length &&
       this.buildSubjectLinkList(result.narrowerTerms)

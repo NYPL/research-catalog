@@ -1,4 +1,9 @@
-import type { BrowseParams, BrowseQueryParams } from "../types/browseTypes"
+import type {
+  BrowseParams,
+  BrowseQueryParams,
+  DiscoverySubjectResult,
+  DiscoverySubjectVariantResult,
+} from "../types/browseTypes"
 
 /**
  * mapQueryToBrowseParams
@@ -44,6 +49,8 @@ export function getBrowseQuery(params: BrowseParams): string {
   return completeQuery?.length ? `?q=${completeQuery}` : ""
 }
 
-export function isVariantSubject(subject): boolean {
+export function isVariantSubject(
+  subject: DiscoverySubjectResult
+): subject is DiscoverySubjectVariantResult {
   return "variantTerm" in subject
 }
