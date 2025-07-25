@@ -27,7 +27,7 @@ export default class VariantSubject {
       return {
         preferredTerm: term,
         url: getSubjectURL(term),
-        count: count.toString(),
+        count: count.toLocaleString(),
       }
     })
   }
