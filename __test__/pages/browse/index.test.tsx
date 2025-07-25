@@ -1,8 +1,10 @@
-import BrowseIndex from "../../../pages/browse"
+import Browse from "../../../pages/browse"
 import { render, screen } from "../../../src/utils/testUtils"
 
 describe("Browse index page", () => {
-  render(<BrowseIndex />)
+  render(
+    <Browse results={{ status: 200, subjects: [] }} isAuthenticated={false} />
+  )
   it("renders the subnav", () => {
     expect(screen.queryByText("Browse the Catalog")).toBeInTheDocument()
   })
