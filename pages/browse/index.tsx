@@ -26,7 +26,9 @@ export default function Browse({
   return (
     <>
       <RCHead metadataTitle={metadataTitle} />
-      <Layout activePage="browse" isAuthenticated={isAuthenticated}></Layout>
+      <Layout activePage="browse" isAuthenticated={isAuthenticated}>
+        {/* <SubjectTable subjectTableData={results.subjects} /> */}
+      </Layout>
     </>
   )
 }
