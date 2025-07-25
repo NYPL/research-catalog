@@ -38,24 +38,17 @@ export async function getServerSideProps({ req, query }) {
   let response
 
   switch (browseType) {
-    case "subjects":
-      response = await fetchSubjects({ q: "" })
-      break
     case "authors":
       //response = await fetchAuthors({ q: "" })
       break
+    case "subjects":
     default:
-      return {
-        props: {
-          errorStatus: 400,
-          isAuthenticated: patronTokenResponse.isTokenValid,
-          subjects: [],
-        },
-      }
+      response = await fetchSubjects({ q: "" })
+      break
   }
 
   // Handle API errors
-  if (response.status !== 200) {
+  if (response?.status !== 200) {
     return { props: { errorStatus: response.status } }
   }
 
