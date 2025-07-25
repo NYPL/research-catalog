@@ -60,12 +60,12 @@ describe("buildPreferredTermList()", () => {
 
     expect(variant.preferredTerms).toEqual([
       {
-        term: "Gautama Buddha",
+        preferredTerm: "Gautama Buddha",
         url: getSubjectURL("Gautama Buddha"),
         count: "300",
       },
       {
-        term: "Buddhism",
+        preferredTerm: "Buddhism",
         url: getSubjectURL("Buddhism"),
         count: "400",
       },
