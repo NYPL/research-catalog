@@ -14,9 +14,9 @@ export default class PreferredSubject {
   url: string
   preferredTerm: string
   count: string
-  seeAlso: SubjectLink[]
-  narrowerTerms: SubjectLink[]
-  broaderTerms: SubjectLink[]
+  seeAlso?: SubjectLink[]
+  narrowerTerms?: SubjectLink[]
+  broaderTerms?: SubjectLink[]
 
   constructor(result?: DiscoverySubjectPreferredResult) {
     this.url = getSubjectURL(result.preferredTerm)

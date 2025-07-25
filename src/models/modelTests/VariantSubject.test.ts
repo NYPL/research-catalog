@@ -19,12 +19,12 @@ describe("VariantSubject model", () => {
 
     const expectedPreferredTerms: PreferredTerm[] = [
       {
-        term: "Computer Science",
+        preferredTerm: "Computer Science",
         url: getSubjectURL("Computer Science"),
         count: "120",
       },
       {
-        term: "Computing",
+        preferredTerm: "Computing",
         url: getSubjectURL("Computing"),
         count: "45",
       },

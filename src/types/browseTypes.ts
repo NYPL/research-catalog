@@ -50,13 +50,16 @@ export type VariantSubject = {
   preferredTerms?: PreferredTerm[]
 }
 
-export type PreferredSubject = {
+export type PreferredTerm = {
   url: string
   preferredTerm: string
   count: string
-  seeAlso: SubjectLink[]
-  narrowerTerms: SubjectLink[]
-  broaderTerms: SubjectLink[]
+}
+
+export interface PreferredSubject extends PreferredTerm {
+  seeAlso?: SubjectLink[]
+  narrowerTerms?: SubjectLink[]
+  broaderTerms?: SubjectLink[]
 }
 
 export type Subject = PreferredSubject | VariantSubject
@@ -64,10 +67,4 @@ export type Subject = PreferredSubject | VariantSubject
 export type SubjectLink = {
   url: string
   term: string
-}
-
-export type PreferredTerm = {
-  url: string
-  term: string
-  count: string
 }

@@ -25,7 +25,7 @@ export default class VariantSubject {
     return terms.map((termObj) => {
       const [term, count] = Object.entries(termObj)[0]
       return {
-        term,
+        preferredTerm: term,
         url: getSubjectURL(term),
         count: count.toString(),
       }
