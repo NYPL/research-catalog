@@ -29,6 +29,22 @@ export type DiscoverySubjectResult =
   | DiscoverySubjectVariantResult
   | DiscoverySubjectPreferredResult
 
+export type DiscoveryPreferredTermResult = { [term: string]: number }
+
+export type DiscoverySubjectVariantResult = {
+  variantTerm: string
+  preferredTerms?: DiscoveryPreferredTermResult[]
+}
+
+export type DiscoverySubjectPreferredResult = {
+  preferredTerm: string
+  count: number
+  uri: string
+  seeAlso?: string[]
+  narrowerTerms?: string[]
+  broaderTerms?: string[]
+}
+
 export type VariantSubject = {
   variantTerm: string
   preferredTerms?: PreferredTerm[]
@@ -44,22 +60,6 @@ export type PreferredSubject = {
 }
 
 export type Subject = PreferredSubject | VariantSubject
-
-export type DiscoveryPreferredTermResult = { [term: string]: number }
-
-export type DiscoverySubjectVariantResult = {
-  variantTerm?: string
-  preferredTerms?: DiscoveryPreferredTermResult[]
-}
-
-export type DiscoverySubjectPreferredResult = {
-  preferredTerm?: string
-  count: number
-  uri: string
-  seeAlso?: string[]
-  narrowerTerms?: string[]
-  broaderTerms?: string[]
-}
 
 export type SubjectLink = {
   url: string
