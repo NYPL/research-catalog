@@ -1,10 +1,10 @@
 import VariantSubject from "../VariantSubject"
-import { getSubjectURL } from "../PreferredSubject"
 import type {
   DiscoveryPreferredTermResult,
   DiscoverySubjectVariantResult,
   PreferredTerm,
 } from "../../types/browseTypes"
+import { getSubjectURL } from "../../utils/browseUtils"
 
 describe("VariantSubject model", () => {
   const mockResult: DiscoverySubjectVariantResult = {
@@ -47,7 +47,7 @@ describe("VariantSubject model", () => {
 })
 
 describe("buildPreferredTermList()", () => {
-  it("should convert DiscoveryPreferredTermResult into PreferredTerm format", () => {
+  it("should convert DiscoveryPreferredTermResult into PreferredTerm", () => {
     const terms: DiscoveryPreferredTermResult[] = [
       { "Gautama Buddha": 300 },
       { Buddhism: 400 },

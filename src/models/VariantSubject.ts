@@ -3,7 +3,7 @@ import type {
   DiscoverySubjectVariantResult,
   PreferredTerm,
 } from "../types/browseTypes"
-import { getSubjectURL } from "./PreferredSubject"
+import { getSubjectURL } from "../utils/browseUtils"
 
 /**
  * The VariantSubject class represents an alternate term that points to

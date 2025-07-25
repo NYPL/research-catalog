@@ -1,5 +1,6 @@
-import PreferredSubject, { getSubjectURL } from "../PreferredSubject"
+import PreferredSubject from "../PreferredSubject"
 import type { DiscoverySubjectPreferredResult } from "../../types/browseTypes"
+import { getSubjectURL } from "../../utils/browseUtils"
 
 describe("PreferredSubject model", () => {
   const mockResult: DiscoverySubjectPreferredResult = {

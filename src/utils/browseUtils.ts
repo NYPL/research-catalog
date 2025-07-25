@@ -54,3 +54,8 @@ export function isVariantSubject(
 ): subject is DiscoverySubjectVariantResult {
   return "variantTerm" in subject
 }
+
+export function getSubjectURL(term: string) {
+  const subject = encodeURIComponent(term).replace(/%2D%2D/g, "--")
+  return `/browse/subjects/${subject}`
+}

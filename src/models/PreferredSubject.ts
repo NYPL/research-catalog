@@ -2,6 +2,7 @@ import type {
   DiscoverySubjectPreferredResult,
   SubjectLink,
 } from "../types/browseTypes"
+import { getSubjectURL } from "../utils/browseUtils"
 
 /**
  * The PreferredSubject class represents an authorized subject heading,
@@ -37,9 +38,4 @@ export default class PreferredSubject {
       term: term,
     }))
   }
-}
-
-export function getSubjectURL(term: string) {
-  const subject = encodeURIComponent(term).replace(/%2D%2D/g, "--")
-  return `/browse/subjects/${subject}`
 }
