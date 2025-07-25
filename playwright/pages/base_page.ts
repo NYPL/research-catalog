@@ -27,13 +27,14 @@ export class BasePage {
   readonly h1: Locator
   readonly search_the_catalog: Locator
   readonly shep: Locator
+  readonly my_account: Locator
 
   constructor(page: Page) {
     this.page = page
     this.nypl_logo = page.getByRole("link", {
       name: "The New York Public Library",
     })
-    this.nypl_logo_img = this.nypl_logo.locator("img")
+    this.nypl_logo_img = this.nypl_logo.locator("svg")
     this.header_my_account = page.getByRole("button", { name: "My Account" })
     this.header_locations = page
       .getByLabel("Header top links")
@@ -67,7 +68,7 @@ export class BasePage {
     this.header_get_help = page
       .getByLabel("Header bottom links")
       .getByRole("link", { name: "Get Help" })
-    this.header_search = page.getByRole("button", { name: "OpenSearch" })
+    this.header_search = page.locator("#searchButton")
     // breadcrumbs
     this.home_breadcrumb = page.getByRole("link", { name: "Home" })
     this.research_breadcrumb = page
@@ -85,5 +86,8 @@ export class BasePage {
       name: "Search the Catalog",
     })
     this.shep = page.getByRole("link", { name: "Subject Heading Explorer" })
+    this.my_account = page.getByRole("link", {
+      name: "My account for NYPL.org",
+    })
   }
 }
