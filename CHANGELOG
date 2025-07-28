@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Added
 
+- Added `VariantSubject` and `PreferredSubject` models [SCC-3727](https://newyorkpubliclibrary.atlassian.net/browse/SCC-3727)
 - Added `fetchSubjects` API handler for `browse` index page [SCC-4774](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4774)
 - Added `browse` and `browse/subjects/[...slug]` pages and page types, set up deployment of EB work to `train` [SCC-4554](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4554)
 
