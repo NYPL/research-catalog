@@ -22,13 +22,15 @@ export default class VariantSubject {
   buildPreferredTermList(
     terms: DiscoveryPreferredTermResult[]
   ): PreferredTerm[] {
-    return terms.map((termObj) => {
+    const preferredTerms: PreferredTerm[] = []
+    for (const termObj of terms) {
       const [term, count] = Object.entries(termObj)[0]
-      return {
+      preferredTerms.push({
         preferredTerm: term,
         url: getSubjectURL(term),
         count: count.toLocaleString(),
-      }
-    })
+      })
+    }
+    return preferredTerms
   }
 }
