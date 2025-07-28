@@ -1,30 +1,21 @@
 import { Flex, List, Text } from "@nypl/design-system-react-components"
 import RCLink from "../Links/RCLink/RCLink"
-import type {
-  PreferredSubject,
-  PreferredTerm,
-  SubjectLink,
-} from "../../types/browseTypes"
+import type { PreferredSubject, SubjectLink } from "../../types/browseTypes"
 
 const PreferredSubjectTableCell = ({
   subject,
 }: {
   subject: PreferredSubject
 }) => {
-  const RelatedSubjectLink = (subject: SubjectLink) => (
-    <RCLink key={subject.url} href={subject.url} isUnderlined={false}>
-      {subject.term}
-    </RCLink>
-  )
-
-  const renderCommaSeparatedLinks = (subjects: SubjectLink[]) => {
-    return subjects.map((s, i) => (
-      <span key={s.url}>
-        {RelatedSubjectLink(s)}
-        {i < subjects.length - 1 && ", "}
+  const commaSeparatedSubjectLinks = (terms: SubjectLink[]) =>
+    terms.map((term, i) => (
+      <span key={term.url}>
+        <RCLink href={term.url} isUnderlined={false}>
+          {term.term}
+        </RCLink>
+        {i < terms.length - 1 && ", "}
       </span>
     ))
-  }
 
   return (
     <Flex flexDir="column" gap="xs">
@@ -37,24 +28,24 @@ const PreferredSubjectTableCell = ({
         listItems={[
           ...(subject.seeAlso?.length
             ? [
-                <Text size="body2" noSpace mt="-24px" key="seeAlso">
-                  See also: {renderCommaSeparatedLinks(subject.seeAlso)}
+                <Text size="body2" noSpace mt="-m" key="seeAlso">
+                  See also: {commaSeparatedSubjectLinks(subject.seeAlso)}
                 </Text>,
               ]
             : []),
           ...(subject.broaderTerms?.length
             ? [
-                <Text size="body2" noSpace mt="-24px" key="broader">
+                <Text size="body2" noSpace mt="-m" key="broader">
                   Broader term:{" "}
-                  {renderCommaSeparatedLinks(subject.broaderTerms)}
+                  {commaSeparatedSubjectLinks(subject.broaderTerms)}
                 </Text>,
               ]
             : []),
           ...(subject.narrowerTerms?.length
             ? [
-                <Text size="body2" noSpace mt="-24px" key="narrower">
+                <Text size="body2" noSpace mt="-m" key="narrower">
                   Narrower term:{" "}
-                  {renderCommaSeparatedLinks(subject.narrowerTerms)}
+                  {commaSeparatedSubjectLinks(subject.narrowerTerms)}
                 </Text>,
               ]
             : []),

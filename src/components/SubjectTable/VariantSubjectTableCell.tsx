@@ -4,7 +4,7 @@ import type { PreferredTerm, VariantSubject } from "../../types/browseTypes"
 
 const VariantSubjectTableCell = ({ subject }: { subject: VariantSubject }) => {
   const PreferredTermLink = (prefTerm: PreferredTerm) => (
-    <Text size="body2" noSpace mt="-24px">
+    <Text size="body2" noSpace mt="-m">
       See:{" "}
       <RCLink href={prefTerm.url} isUnderlined={false}>
         {prefTerm.preferredTerm}

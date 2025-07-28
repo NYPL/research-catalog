@@ -1,3 +1,4 @@
+import { Heading, Menu, Flex } from "@nypl/design-system-react-components"
 import { discoverySubjectsResult } from "../../__test__/fixtures/subjectFixtures"
 import RCHead from "../../src/components/Head/RCHead"
 import Layout from "../../src/components/Layout/Layout"
@@ -29,6 +30,21 @@ export default function Browse({
     <>
       <RCHead metadataTitle={metadataTitle} />
       <Layout activePage="browse" isAuthenticated={isAuthenticated}>
+        <Flex flexDir="row" justifyContent="space-between" mt="l" mb="l">
+          <Heading
+            id="browse-results-heading"
+            data-testid="browse-results-heading"
+            level="h2"
+            size="heading5"
+            tabIndex={-1}
+            noSpace
+            minH="40px"
+            aria-live="polite"
+          >
+            Displaying x-x of x Subject Headings containing x
+          </Heading>
+          <Menu width="288px" labelText="placeholder sort" listItemsData={[]} />
+        </Flex>
         <SubjectTable subjectTableData={discoverySubjectsResult} />
       </Layout>
     </>

@@ -17,6 +17,7 @@ const SubjectTable = ({
 }) => {
   return (
     <Table
+      width="928px"
       sx={{
         td: {
           ["@media screen and (max-width: 600px)"]: {
