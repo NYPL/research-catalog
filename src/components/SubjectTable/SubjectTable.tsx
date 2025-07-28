@@ -17,7 +17,7 @@ const SubjectTable = ({
 }) => {
   return (
     <Table
-      width="928px"
+      maxWidth="928px"
       sx={{
         td: {
           ["@media screen and (max-width: 600px)"]: {
@@ -29,8 +29,12 @@ const SubjectTable = ({
       columnHeaders={["Subject heading", "Results"]}
       isScrollable
       columnStyles={[
-        { minWidth: "274px", width: "80%" },
-        { minWidth: "84px", width: "20%", textAlign: "right" },
+        { minWidth: "274px" },
+        {
+          minWidth: { base: "84px", md: "160px" },
+          width: "20%",
+          textAlign: "right",
+        },
       ]}
       tableData={subjectTableData.map((subject: DiscoverySubjectResult) => {
         if (isVariantSubject(subject)) {
