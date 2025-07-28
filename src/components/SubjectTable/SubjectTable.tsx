@@ -7,7 +7,8 @@ import PreferredSubject from "../../models/PreferredSubject"
 import PreferredSubjectTableCell from "./PreferredSubjectTableCell"
 
 /**
- * The SubjectTable displays the index of subject headings with their respective counts
+ * The SubjectTable displays the index of subject headings with their respective
+ * counts and related terms, or variants with their related terms
  */
 const SubjectTable = ({
   subjectTableData,
@@ -16,7 +17,20 @@ const SubjectTable = ({
 }) => {
   return (
     <Table
+      sx={{
+        td: {
+          ["@media screen and (max-width: 600px)"]: {
+            paddingRight: "xs",
+            paddingLeft: "xs",
+          },
+        },
+      }}
       columnHeaders={["Subject heading", "Results"]}
+      isScrollable
+      columnStyles={[
+        { minWidth: "274px", width: "80%" },
+        { minWidth: "84px", width: "20%", textAlign: "right" },
+      ]}
       tableData={subjectTableData.map((subject: DiscoverySubjectResult) => {
         if (isVariantSubject(subject)) {
           const newVariant = new VariantSubject(subject)
@@ -28,13 +42,13 @@ const SubjectTable = ({
             "",
           ]
         } else {
-          const newSubject = new PreferredSubject(subject)
+          const newPreferred = new PreferredSubject(subject)
           return [
             <PreferredSubjectTableCell
-              key={newSubject.preferredTerm}
-              subject={newSubject}
+              key={newPreferred.preferredTerm}
+              subject={newPreferred}
             />,
-            newSubject.count,
+            newPreferred.count,
           ]
         }
       })}

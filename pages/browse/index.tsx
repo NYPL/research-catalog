@@ -1,3 +1,4 @@
+import { discoverySubjectsResult } from "../../__test__/fixtures/subjectFixtures"
 import RCHead from "../../src/components/Head/RCHead"
 import Layout from "../../src/components/Layout/Layout"
 import SubjectTable from "../../src/components/SubjectTable/SubjectTable"
@@ -28,7 +29,7 @@ export default function Browse({
     <>
       <RCHead metadataTitle={metadataTitle} />
       <Layout activePage="browse" isAuthenticated={isAuthenticated}>
-        <SubjectTable subjectTableData={results.subjects} />
+        <SubjectTable subjectTableData={discoverySubjectsResult} />
       </Layout>
     </>
   )
@@ -46,7 +47,7 @@ export async function getServerSideProps({ req, query }) {
       break
     case "subjects":
     default:
-      response = await fetchSubjects({ q: "" })
+      response = await fetchSubjects({ q: "A", page: 2 })
       break
   }
 
