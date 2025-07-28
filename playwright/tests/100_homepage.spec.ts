@@ -66,4 +66,66 @@ test("Verify elements on the Research Catalog home page", async ({ page }) => {
   await expect(rcHomePage.search_subtmit_button).toBeVisible()
   console.log("Checking if advanced search link is visible...")
   await expect(rcHomePage.advanced_search_link).toBeVisible()
+  // assert that info banner is visible and contains some text
+  console.log("Checking if info banner is visible...")
+  await expect(rcHomePage.info_banner).toBeVisible()
+  console.log("Checking if info banner contains text 'New!'...")
+  await expect(rcHomePage.info_banner).toContainText("New!")
+  console.log("Checking if main body heading is visible...")
+  await expect(rcHomePage.body_main_heading).toBeVisible()
+  console.log("Checking if main body heading text is correct...")
+  await expect(rcHomePage.body_main_heading_text).toHaveText(
+    /^Discover millions of items/
+  )
+  console.log("Checking if 'Research at NYPL' heading is visible...")
+  await expect(rcHomePage.research_at_nypl_heading).toBeVisible()
+
+  console.log("Checking if 'Collections' heading is visible...")
+  await expect(rcHomePage.collections_heading).toBeVisible()
+  console.log("Checking if 'Collections' heading image is visible...")
+  await expect(rcHomePage.collections_heading_image).toBeVisible()
+  console.log("Checking if 'Collections' blurb text is correct...")
+  await expect(rcHomePage.collections_heading_blurb).toContainText(
+    "Discover our world-renowned research collections"
+  )
+
+  console.log("Checking if 'Locations' heading is visible...")
+  await expect(rcHomePage.locations_heading).toBeVisible()
+  console.log("Checking if 'Locations' heading image is visible...")
+  await expect(rcHomePage.locations_heading_image).toBeVisible()
+  console.log("Checking if 'Locations' heading blurb is correct...")
+  await expect(rcHomePage.locations_heading_blurb).toContainText(
+    "Access items, one-on-one"
+  )
+  console.log("Checking if 'Divisions' heading is visible...")
+  await expect(rcHomePage.divisions_heading).toBeVisible()
+  console.log("Checking if 'Divisions' heading image is visible...")
+  await expect(rcHomePage.divisions_heading_image).toBeVisible()
+  console.log("Checking if 'Divisions' heading blurb is correct...")
+  await expect(rcHomePage.divisions_heading_blurb).toContainText(
+    "Learn about the subject and media"
+  )
+
+  console.log("Checking if 'Support' heading is visible...")
+  await expect(rcHomePage.support_heading).toBeVisible()
+  console.log("Checking if 'Support' heading image is visible...")
+  await expect(rcHomePage.support_heading_image).toBeVisible()
+  console.log("Checking if 'Support' heading blurb is correct...")
+  await expect(rcHomePage.support_heading_blurb).toContainText(
+    "Plan your in-person"
+  )
+
+  console.log("Checking if 'Services' heading is visible...")
+  await expect(rcHomePage.services_heading).toBeVisible()
+  console.log("Checking if 'Services' heading image is visible...")
+  await expect(rcHomePage.services_heading_image).toBeVisible()
+  console.log("Checking if 'Services' heading blurb is correct...")
+  await expect(rcHomePage.services_heading_blurb).toContainText(
+    "Explore services"
+  )
+  // Footer
+  console.log("Checking if footer container is visible...")
+  await expect(rcHomePage.footer_container).toBeVisible()
+  console.log("Checking if 'Help and Feedback' button is visible...")
+  await expect(rcHomePage.help_and_feedback).toBeVisible()
 })
