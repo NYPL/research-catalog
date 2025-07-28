@@ -30,7 +30,12 @@ export default function Browse({
     <>
       <RCHead metadataTitle={metadataTitle} />
       <Layout activePage="browse" isAuthenticated={isAuthenticated}>
-        <Flex flexDir="row" justifyContent="space-between" mt="l" mb="l">
+        <Flex
+          direction={{ base: "column", md: "row" }}
+          justifyContent="space-between"
+          mt="l"
+          mb="l"
+        >
           <Heading
             id="browse-results-heading"
             data-testid="browse-results-heading"
