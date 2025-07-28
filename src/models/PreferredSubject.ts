@@ -21,7 +21,7 @@ export default class PreferredSubject {
   constructor(result?: DiscoverySubjectPreferredResult) {
     this.url = getSubjectURL(result.preferredTerm)
     this.preferredTerm = result.preferredTerm
-    this.count = result.count.toString()
+    this.count = result.count.toLocaleString()
     this.seeAlso =
       result.seeAlso?.length && this.buildSubjectLinkList(result.seeAlso)
     this.narrowerTerms =
