@@ -17,6 +17,7 @@ import FeedbackForm from "../FeedbackForm/FeedbackForm"
 import type { Aggregation } from "../../types/filterTypes"
 import EDSBanner from "../EDSBanner"
 import RCSubNav from "../RCSubNav/RCSubNav"
+import BrowseForm from "../BrowseForm/BrowseForm"
 
 interface LayoutProps {
   sidebar?: ReactElement
@@ -43,6 +44,7 @@ const Layout = ({
   bannerNotification,
 }: PropsWithChildren<LayoutProps>) => {
   const showSearch = activePage === "search"
+  const showBrowse = activePage === "browse" || activePage === "sh-results"
   const showNotification = activePage === "" || activePage === "search"
   return (
     <DSProvider>
@@ -104,6 +106,7 @@ const Layout = ({
                 searchResultsCount={searchResultsCount}
               />
             )}
+            {showBrowse && <BrowseForm />}
 
             {showSearch && (
               <Flex

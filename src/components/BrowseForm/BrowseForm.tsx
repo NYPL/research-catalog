@@ -1,46 +1,31 @@
 import {
   Box,
-  Flex,
   Icon,
   SearchBar,
   Text,
 } from "@nypl/design-system-react-components"
 import { useRouter } from "next/router"
 import type { SyntheticEvent, Dispatch, SetStateAction } from "react"
-import { useState, useEffect } from "react"
-import styles from "../../../styles/components/Search.module.scss"
-import RCLink from "../Links/RCLink/RCLink"
-import {
-  getSearchQuery,
-  searchFormSelectOptions,
-} from "../../utils/searchUtils"
-import { BASE_URL, PATHS, SEARCH_FORM_OPTIONS } from "../../config/constants"
+import { useState } from "react"
+import { BASE_URL, PATHS } from "../../config/constants"
 import useLoading from "../../hooks/useLoading"
-import type { Aggregation } from "../../types/filterTypes"
-import { collapseMultiValueQueryParams } from "../../utils/refineSearchUtils"
-import SearchFilterModal from "../SearchFilters/SearchFilterModal"
+import styles from "../../../styles/components/Search.module.scss"
 import { useFocusContext, idConstants } from "../../context/FocusContext"
-import { browseFormSelectOptions } from "../../utils/browseUtils"
+import {
+  browseFormSelectOptions,
+  getBrowseQuery,
+} from "../../utils/browseUtils"
 
 /**
  * The BrowseForm component renders and controls the Browse form.
  */
-const BrowseForm = ({
-  aggregations,
-  browseResultsCount,
-}: {
-  aggregations?: Aggregation[]
-  browseResultsCount?: number
-}) => {
+const BrowseForm = () => {
   const router = useRouter()
   const [browseTerm, setBrowseTerm] = useState(
     (router?.query?.q as string) || ""
   )
   const [searchScope, setSearchScope] = useState(
     (router?.query?.search_scope as string) || "has"
-  )
-  const [, setAppliedFilters] = useState(
-    collapseMultiValueQueryParams(router.query)
   )
 
   const isLoading = useLoading()
@@ -51,16 +36,15 @@ const BrowseForm = ({
     e.preventDefault()
     const browseParams = {
       q: browseTerm,
-      field: searchScope,
+      searchScope,
     }
+    const queryString = getBrowseQuery(browseParams)
 
-    const queryString = getSearchQuery(browseParams)
-
-    if (router.asPath.includes("/search?"))
-      setPersistentFocus(idConstants.searchResultsHeading)
+    if (router.asPath.includes("/browse?"))
+      setPersistentFocus(idConstants.browseResultsHeading)
     // if we are doing a search from the home page, there should be no focused element when results are delivered
     else setPersistentFocus(null)
-    await router.push(`${PATHS.SEARCH}${queryString}`)
+    await router.push(`${PATHS.BROWSE}${queryString}`)
   }
 
   const handleChange = (
@@ -71,19 +55,23 @@ const BrowseForm = ({
     setValue(target.value)
   }
 
-  useEffect(() => {
-    setAppliedFilters(collapseMultiValueQueryParams(router.query))
-  }, [router.query])
-
   return (
-    <Box className="no-print" backgroundColor="ui.bg.default">
-      <div className={styles.searchContainerInner}>
+    <Box className="no-print" backgroundColor="ui.bg.default" pt="l" pb="l">
+      <Box mb="0" mr="auto" ml="auto" mt="0" maxWidth="1280px" pr="s" pl="s">
+        <Text size="body2" className={styles.searchTip}>
+          <Icon size="medium" name="errorOutline" iconRotation="rotate180" />
+          <Box as="span" className={styles.searchTipText}>
+            <span className={styles.searchTipTitle}>{"Browse tip: "}</span>
+            Enter one or more keywords in any order to browse the Subject
+            Headings index.
+          </Box>
+        </Text>
         <SearchBar
           id="mainContent"
           action={`${BASE_URL}/browse`}
           method="get"
           onSubmit={handleSubmit}
-          labelText="Browse Bar Label"
+          labelText="Browse bar"
           isDisabled={isLoading}
           selectProps={{
             value: searchScope,
@@ -98,10 +86,11 @@ const BrowseForm = ({
             isClearableCallback: () => setBrowseTerm(""),
             value: browseTerm,
             name: "q",
-            labelText: "Ornithology -- Birds",
+            placeholder: "Example: Ornithology or Vietnam War",
+            labelText: "Enter one or more keywords.",
           }}
         />
-      </div>
+      </Box>
     </Box>
   )
 }

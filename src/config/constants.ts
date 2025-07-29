@@ -17,6 +17,7 @@ export const EMAIL_REGEX = /^[^@]+@[^@]+\.[^@]+$/
 export const PATHS = {
   HOME: "/",
   SEARCH: "/search",
+  BROWSE: "/browse",
   ADVANCED_SEARCH: "/search/advanced",
   MY_ACCOUNT: "/account",
   HOLD_REQUEST: "/hold/request",
