@@ -8,7 +8,11 @@ import { fetchSubjects } from "../../src/server/api/browse"
 import initializePatronTokenAuth from "../../src/server/auth"
 import type { HTTPStatusCode } from "../../src/types/appTypes"
 import type { DiscoverySubjectsResponse } from "../../src/types/browseTypes"
-import { getBrowseResultsHeading } from "../../src/utils/browseUtils"
+import {
+  getBrowseResultsHeading,
+  mapQueryToBrowseParams,
+} from "../../src/utils/browseUtils"
+import { useRouter } from "next/router"
 
 interface BrowseProps {
   results: DiscoverySubjectsResponse
@@ -26,6 +30,8 @@ export default function Browse({
   errorStatus = null,
 }: BrowseProps) {
   const metadataTitle = `Browse Research Catalog | ${SITE_NAME}`
+  const { push, query } = useRouter()
+  const browseParams = mapQueryToBrowseParams(query)
 
   return (
     <>
@@ -47,10 +53,7 @@ export default function Browse({
             minH="40px"
             aria-live="polite"
           >
-            {getBrowseResultsHeading(
-              { q: "hmm", searchScope: "has" },
-              results.subjects.length
-            )}
+            {getBrowseResultsHeading(browseParams, results.totalResults)}
           </Heading>
           <Menu width="288px" labelText="placeholder sort" listItemsData={[]} />
         </Flex>

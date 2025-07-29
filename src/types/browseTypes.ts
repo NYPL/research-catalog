@@ -14,6 +14,7 @@ export interface BrowseParams {
 
 export interface DiscoverySubjectsResponse {
   status: HTTPStatusCode
+  totalResults: number
   subjects: DiscoverySubjectResult[]
 }
 
