@@ -116,6 +116,15 @@ export const SEARCH_FORM_OPTIONS = {
   },
 }
 
+export const BROWSE_FORM_OPTIONS = {
+  starts_with: {
+    text: "Subject Headings beginning with",
+  },
+  has: {
+    text: "Subject Headings containing",
+  },
+}
+
 export const NYPL_LOCATIONS = {
   lpa: {
     shortName: "Library for the Performing Arts",

@@ -1,3 +1,4 @@
+import { BROWSE_FORM_OPTIONS } from "../config/constants"
 import type {
   BrowseParams,
   BrowseQueryParams,
@@ -59,3 +60,10 @@ export function getSubjectURL(term: string) {
   const subject = encodeURIComponent(term).replace(/%2D%2D/g, "--")
   return `/browse/subjects/${subject}`
 }
+
+export const browseFormSelectOptions = Object.keys(BROWSE_FORM_OPTIONS).map(
+  (key) => ({
+    text: BROWSE_FORM_OPTIONS[key].text,
+    value: key,
+  })
+)
