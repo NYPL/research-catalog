@@ -1,10 +1,11 @@
-import { BROWSE_FORM_OPTIONS } from "../config/constants"
+import { BROWSE_FORM_OPTIONS, SUBJECTS_PER_PAGE } from "../config/constants"
 import type {
   BrowseParams,
   BrowseQueryParams,
   DiscoverySubjectResult,
   DiscoverySubjectVariantResult,
 } from "../types/browseTypes"
+import { getPaginationOffsetStrings } from "./appUtils"
 
 /**
  * mapQueryToBrowseParams
@@ -67,3 +68,24 @@ export const browseFormSelectOptions = Object.keys(BROWSE_FORM_OPTIONS).map(
     value: key,
   })
 )
+
+/**
+ * getBrowsehResultsHeading
+ * Used to generate the browse results heading text (Displaying 1-30 of 300 Subject Headings containing "cats")
+ */
+export function getBrowseResultsHeading(
+  browseParams: BrowseParams,
+  totalResults: number
+): string {
+  const [resultsStart, resultsEnd] = getPaginationOffsetStrings(
+    browseParams.page,
+    totalResults,
+    SUBJECTS_PER_PAGE
+  )
+
+  return `Displaying ${
+    totalResults > SUBJECTS_PER_PAGE
+      ? `${resultsStart}-${resultsEnd}`
+      : totalResults.toLocaleString()
+  } of${totalResults === 10000 ? " over" : ""} ${totalResults.toLocaleString()}`
+}

@@ -8,6 +8,7 @@ import { fetchSubjects } from "../../src/server/api/browse"
 import initializePatronTokenAuth from "../../src/server/auth"
 import type { HTTPStatusCode } from "../../src/types/appTypes"
 import type { DiscoverySubjectsResponse } from "../../src/types/browseTypes"
+import { getBrowseResultsHeading } from "../../src/utils/browseUtils"
 
 interface BrowseProps {
   results: DiscoverySubjectsResponse
@@ -46,7 +47,10 @@ export default function Browse({
             minH="40px"
             aria-live="polite"
           >
-            Displaying x-x of x Subject Headings containing x
+            {getBrowseResultsHeading(
+              { q: "hmm", searchScope: "has" },
+              results.subjects.length
+            )}
           </Heading>
           <Menu width="288px" labelText="placeholder sort" listItemsData={[]} />
         </Flex>
@@ -68,7 +72,7 @@ export async function getServerSideProps({ req, query }) {
       break
     case "subjects":
     default:
-      response = await fetchSubjects({ q: "A", page: 2 })
+      response = await fetchSubjects({ q: "A" })
       break
   }
 
