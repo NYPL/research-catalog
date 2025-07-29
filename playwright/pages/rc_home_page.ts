@@ -49,7 +49,7 @@ export class RC_Home_Page extends BasePage {
     })
     this.info_banner = page.getByText("Banner informative iconNew!")
     this.body_main_heading = page.getByRole("heading", {
-      name: "Explore the Library's Vast",
+      name: "Explore the Library's Vast Research Collections & More",
     })
     this.body_main_heading_text = page.getByText("Discover millions of items")
     this.research_at_nypl_heading = page.getByRole("heading", {
@@ -100,9 +100,5 @@ export class RC_Home_Page extends BasePage {
 
   async goto() {
     await this.page.goto("/research/research-catalog")
-  }
-
-  async isHeadingVisible() {
-    return this.h1.isVisible()
   }
 }

@@ -7,9 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
-- Added Playwright tests for RC home page elements. found in /playwright. Deleted dummy test file that was created for initial Playwright install. [SCC-4792] (https://newyorkpubliclibrary.atlassian.net/browse/SCC-4792)
-
 ## Added
+
+- Added Playwright tests for RC home page elements. found in /playwright. Deleted dummy test file that was created for initial Playwright install. [SCC-4792] (https://newyorkpubliclibrary.atlassian.net/browse/SCC-4792)
 
 - Added Playwright, the end-to-end testing framework for automating and verifying browser interactions across Chromium, Firefox, and WebKit. [SCC-4772] (https://newyorkpubliclibrary.atlassian.net/browse/SCC-4772)
 
