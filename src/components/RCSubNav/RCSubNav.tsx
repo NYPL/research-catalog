@@ -3,6 +3,7 @@ import { useLogoutRedirect } from "../../server/auth"
 import {
   Icon,
   SubNav,
+  SubNavButton,
   SubNavLink,
   Text,
 } from "@nypl/design-system-react-components"
@@ -39,8 +40,8 @@ const RCSubNav = ({ activePage, isAuthenticated }: SubNavProps) => {
           >
             Search the Catalog
           </SubNavLink>
-          <SubNavLink
-            href="/research/research-catalog/browse"
+          <SubNavButton
+            onClick={activePage === "browse"}
             id="subnav-browse"
             isSelected={activePage === "browse" || activePage === "sh-results"}
             aria-current={
@@ -50,7 +51,7 @@ const RCSubNav = ({ activePage, isAuthenticated }: SubNavProps) => {
             }
           >
             Browse the Catalog
-          </SubNavLink>
+          </SubNavButton>
         </>
       }
       secondaryActions={

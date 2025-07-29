@@ -82,10 +82,13 @@ export function getBrowseResultsHeading(
     totalResults,
     SUBJECTS_PER_PAGE
   )
-
   return `Displaying ${
     totalResults > SUBJECTS_PER_PAGE
       ? `${resultsStart}-${resultsEnd}`
-      : totalResults.toLocaleString()
-  } of${totalResults === 10000 ? " over" : ""} ${totalResults.toLocaleString()}`
+      : totalResults?.toLocaleString()
+  } of${
+    totalResults === 10000 ? " over" : ""
+  } ${totalResults?.toLocaleString()} Subject Headings ${
+    browseParams.searchScope === "has" ? "containing" : "beginning with"
+  } "${browseParams.q}"`
 }

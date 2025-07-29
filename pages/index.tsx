@@ -32,7 +32,7 @@ export default function Home({
       <RCHead metadataTitle={SITE_NAME} />
       <Layout
         isAuthenticated={isAuthenticated}
-        activePage="search"
+        activePage=""
         bannerNotification={bannerNotification}
       >
         {isLoading ? (
