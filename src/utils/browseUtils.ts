@@ -70,7 +70,7 @@ export const browseFormSelectOptions = Object.keys(BROWSE_FORM_OPTIONS).map(
 )
 
 /**
- * getBrowsehResultsHeading
+ * getBrowseResultsHeading
  * Used to generate the browse results heading text (Displaying 1-30 of 300 Subject Headings containing "cats")
  */
 export function getBrowseResultsHeading(
@@ -89,6 +89,10 @@ export function getBrowseResultsHeading(
   } of${
     totalResults === 10000 ? " over" : ""
   } ${totalResults?.toLocaleString()} Subject Headings ${
-    browseParams.searchScope === "has" ? "containing" : "beginning with"
-  } "${browseParams.q}"`
+    browseParams.q.length
+      ? `${
+          browseParams.searchScope === "has" ? "containing" : "beginning with"
+        } "${browseParams.q}"`
+      : ""
+  }`
 }

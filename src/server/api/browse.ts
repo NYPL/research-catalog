@@ -39,6 +39,7 @@ export async function fetchSubjects(
     return {
       status: 200,
       subjects: res.subjects,
+      totalResults: res.totalResults,
     }
   } catch (error: any) {
     logServerError("fetchSubjects", error.message)
