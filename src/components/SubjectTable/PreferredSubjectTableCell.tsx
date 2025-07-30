@@ -17,39 +17,25 @@ const PreferredSubjectTableCell = ({
       </span>
     ))
 
+  const relatedTerms = [
+    subject.seeAlso,
+    subject.broaderTerms,
+    subject.narrowerTerms,
+  ].filter(Boolean)
+
   return (
     <Flex flexDir="column" gap="xs">
       <RCLink isUnderlined={false} href={subject.url}>
-        {subject.preferredTerm}
+        {subject.termLabel}
       </RCLink>
       <List
         type="ul"
         m="0"
-        listItems={[
-          ...(subject.seeAlso?.length
-            ? [
-                <Text size="body2" noSpace mt="-m" key="seeAlso">
-                  See also: {commaSeparatedSubjectLinks(subject.seeAlso)}
-                </Text>,
-              ]
-            : []),
-          ...(subject.broaderTerms?.length
-            ? [
-                <Text size="body2" noSpace mt="-m" key="broader">
-                  Broader term:{" "}
-                  {commaSeparatedSubjectLinks(subject.broaderTerms)}
-                </Text>,
-              ]
-            : []),
-          ...(subject.narrowerTerms?.length
-            ? [
-                <Text size="body2" noSpace mt="-m" key="narrower">
-                  Narrower term:{" "}
-                  {commaSeparatedSubjectLinks(subject.narrowerTerms)}
-                </Text>,
-              ]
-            : []),
-        ]}
+        listItems={relatedTerms?.map(({ label, terms }) => (
+          <Text size="body2" noSpace mt="-m" key={label}>
+            {label}: {commaSeparatedSubjectLinks(terms)}
+          </Text>
+        ))}
       />
     </Flex>
   )
