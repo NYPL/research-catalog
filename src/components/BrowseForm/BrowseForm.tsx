@@ -57,7 +57,7 @@ const BrowseForm = () => {
 
   return (
     <Box className="no-print" backgroundColor="ui.bg.default" pt="l" pb="xxl">
-      <Box mb="0" mr="auto" ml="auto" mt="0" maxWidth="1280px" pr="s" pl="s">
+      <Box mb="xs" mr="auto" ml="auto" mt="0" maxWidth="1280px" pr="s" pl="s">
         <Text size="body2" className={styles.searchTip}>
           <Icon size="medium" name="errorOutline" iconRotation="rotate180" />
           <Box as="span" className={styles.searchTipText}>

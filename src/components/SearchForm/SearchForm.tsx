@@ -42,8 +42,12 @@ const SearchForm = ({
   const [, setAppliedFilters] = useState(
     collapseMultiValueQueryParams(router.query)
   )
-  const searchTip = SEARCH_FORM_OPTIONS[searchScope].searchTip
-  const placeholder = SEARCH_FORM_OPTIONS[searchScope].placeholder
+  const searchTip =
+    SEARCH_FORM_OPTIONS[searchScope]?.searchTip ??
+    SEARCH_FORM_OPTIONS["all"].searchTip
+  const placeholder =
+    SEARCH_FORM_OPTIONS[searchScope]?.placeholder ??
+    SEARCH_FORM_OPTIONS["all"].placeholder
 
   const isLoading = useLoading()
 

@@ -65,7 +65,7 @@ export default function Browse({
             minH="40px"
             aria-live="polite"
           >
-            {getBrowseResultsHeading(browseParams, 100)}
+            {getBrowseResultsHeading(browseParams, results.totalResults)}
           </Heading>
           <Menu width="288px" labelText="placeholder sort" listItemsData={[]} />
         </Flex>

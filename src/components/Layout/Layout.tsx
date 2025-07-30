@@ -18,6 +18,7 @@ import type { Aggregation } from "../../types/filterTypes"
 import EDSBanner from "../EDSBanner"
 import RCSubNav from "../RCSubNav/RCSubNav"
 import BrowseForm from "../BrowseForm/BrowseForm"
+import { useMode } from "../../context/ModeContext"
 
 interface LayoutProps {
   sidebar?: ReactElement
@@ -43,8 +44,15 @@ const Layout = ({
   sidebarPosition = "left",
   bannerNotification,
 }: PropsWithChildren<LayoutProps>) => {
-  const showSearch = activePage === "search"
-  const showBrowse = activePage === "browse" || activePage === "sh-results"
+  const { mode } = useMode()
+  const showSearch =
+    mode === "search" && (activePage === "search" || activePage === "")
+  const showBrowse =
+    mode === "browse" &&
+    (activePage === "" ||
+      activePage === "browse" ||
+      activePage === "sh-results")
+
   const showNotification = activePage === "" || activePage === "search"
   return (
     <DSProvider>
@@ -108,7 +116,7 @@ const Layout = ({
             )}
             {showBrowse && <BrowseForm />}
 
-            {showSearch && (
+            {(showSearch || showBrowse) && (
               <Flex
                 gap="s"
                 align="center"

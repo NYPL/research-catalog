@@ -7,6 +7,8 @@ import {
   SubNavLink,
   Text,
 } from "@nypl/design-system-react-components"
+import { useRouter } from "next/router"
+import { useMode } from "../../context/ModeContext"
 
 interface SubNavProps {
   activePage: RCPage
@@ -19,6 +21,18 @@ interface SubNavProps {
  */
 const RCSubNav = ({ activePage, isAuthenticated }: SubNavProps) => {
   const logoutLink = useLogoutRedirect()
+  const router = useRouter()
+  const { mode, setMode } = useMode()
+
+  const searchSelected =
+    mode === "search" &&
+    (activePage === "" || activePage === "search" || activePage === "advanced")
+
+  const browseSelected =
+    mode === "browse" &&
+    (activePage === "" ||
+      activePage === "browse" ||
+      activePage === "sh-results")
 
   return (
     <SubNav
@@ -28,27 +42,25 @@ const RCSubNav = ({ activePage, isAuthenticated }: SubNavProps) => {
       aria-label="Research Catalog main menu"
       primaryActions={
         <>
-          <SubNavLink
-            href="/research/research-catalog/"
+          <SubNavButton
+            onClick={() => {
+              setMode("search")
+              router.push("/")
+            }}
             id="subnav-search"
-            isSelected={activePage === "search" || activePage === "advanced"}
-            aria-current={
-              activePage === "search" || activePage === "advanced"
-                ? "page"
-                : undefined
-            }
+            isSelected={searchSelected}
+            aria-current={searchSelected ? "page" : undefined}
           >
             Search the Catalog
-          </SubNavLink>
+          </SubNavButton>
           <SubNavButton
-            onClick={activePage === "browse"}
+            onClick={() => {
+              setMode("browse")
+              router.push("/")
+            }}
             id="subnav-browse"
-            isSelected={activePage === "browse" || activePage === "sh-results"}
-            aria-current={
-              activePage === "browse" || activePage === "sh-results"
-                ? "page"
-                : undefined
-            }
+            isSelected={browseSelected}
+            aria-current={browseSelected ? "page" : undefined}
           >
             Browse the Catalog
           </SubNavButton>
@@ -65,10 +77,13 @@ const RCSubNav = ({ activePage, isAuthenticated }: SubNavProps) => {
               Log out
             </SubNavLink>
           </div>
-          <SubNavLink
-            href="/research/research-catalog/account"
-            id="subnav-account"
+          <SubNavButton
+            onClick={() => {
+              setMode("")
+              router.push("/account")
+            }}
             isOutlined
+            id="subnav-account"
             isSelected={activePage === "account"}
             aria-current={activePage === "account" ? "page" : undefined}
             screenreaderOnlyText="for NYPL.org"
@@ -85,7 +100,7 @@ const RCSubNav = ({ activePage, isAuthenticated }: SubNavProps) => {
             >
               My account
             </Text>
-          </SubNavLink>
+          </SubNavButton>
         </>
       }
     />
