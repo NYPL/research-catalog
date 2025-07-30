@@ -68,7 +68,7 @@ export async function getServerSideProps({ req, query }) {
       break
     case "subjects":
     default:
-      response = await fetchSubjects({ q: "A", page: 2 })
+      response = await fetchSubjects({ q: "A", page: 1 })
       break
   }
 

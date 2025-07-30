@@ -7,7 +7,7 @@ const VariantSubjectTableCell = ({ subject }: { subject: VariantSubject }) => {
     <Text size="body2" noSpace mt="-m">
       See:{" "}
       <RCLink href={prefTerm.url} isUnderlined={false}>
-        {prefTerm.preferredTerm}
+        {prefTerm.termLabel}
       </RCLink>{" "}
       ({prefTerm.count})
     </Text>
@@ -15,12 +15,12 @@ const VariantSubjectTableCell = ({ subject }: { subject: VariantSubject }) => {
 
   return (
     <Flex flexDir="column" gap="xs">
-      <Text noSpace>{subject.variantTerm}</Text>
+      <Text noSpace>{subject.termLabel}</Text>
       <List
         type="ul"
         m="0"
         listItems={subject.preferredTerms.slice(0, 5).map((term) => (
-          <PreferredTermLink key={term.preferredTerm} {...term} />
+          <PreferredTermLink key={term.termLabel} {...term} />
         ))}
       />
     </Flex>

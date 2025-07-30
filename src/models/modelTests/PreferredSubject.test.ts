@@ -14,7 +14,7 @@ describe("PreferredSubject model", () => {
   it("should create a PreferredSubject instance with expected properties", () => {
     const subject = new PreferredSubject(mockResult)
 
-    expect(subject.preferredTerm).toBe("Science -- 19th century")
+    expect(subject.termLabel).toBe("Science -- 19th century")
     expect(subject.count).toBe("42")
     expect(subject.url).toBe("/browse/subjects/Science%20--%2019th%20century")
 

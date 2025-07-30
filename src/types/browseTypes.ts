@@ -46,20 +46,20 @@ export type DiscoverySubjectPreferredResult = {
 }
 
 export type VariantSubject = {
-  variantTerm: string
+  termLabel: string
   preferredTerms?: PreferredTerm[]
 }
 
 export type PreferredTerm = {
   url: string
-  preferredTerm: string
+  termLabel: string
   count: string
 }
 
 export interface PreferredSubject extends PreferredTerm {
-  seeAlso?: SubjectLink[]
-  narrowerTerms?: SubjectLink[]
-  broaderTerms?: SubjectLink[]
+  seeAlso?: { label: string; terms: SubjectLink[] }
+  narrowerTerms?: { label: string; terms: SubjectLink[] }
+  broaderTerms?: { label: string; terms: SubjectLink[] }
 }
 
 export type Subject = PreferredSubject | VariantSubject

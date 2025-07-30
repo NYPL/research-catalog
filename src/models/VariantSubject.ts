@@ -11,11 +11,11 @@ import { getSubjectURL } from "../utils/browseUtils"
  * and PreferredSubjects are displayed together on the browse index page.
  */
 export default class VariantSubject {
-  variantTerm: string
+  termLabel: string
   preferredTerms: PreferredTerm[]
 
   constructor(result?: DiscoverySubjectVariantResult) {
-    this.variantTerm = result.variantTerm
+    this.termLabel = result.variantTerm
     this.preferredTerms = this.buildPreferredTermList(result.preferredTerms)
   }
 
@@ -26,7 +26,7 @@ export default class VariantSubject {
     for (const termObj of terms) {
       const [term, count] = Object.entries(termObj)[0]
       preferredTerms.push({
-        preferredTerm: term,
+        termLabel: term,
         url: getSubjectURL(term),
         count: count.toLocaleString(),
       })
