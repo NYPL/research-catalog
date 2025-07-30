@@ -45,7 +45,9 @@ const RCSubNav = ({ activePage, isAuthenticated }: SubNavProps) => {
           <SubNavButton
             onClick={() => {
               setMode("search")
-              router.push("/")
+              if (router.pathname !== "/") {
+                router.push("/")
+              }
             }}
             id="subnav-search"
             isSelected={searchSelected}
@@ -56,7 +58,9 @@ const RCSubNav = ({ activePage, isAuthenticated }: SubNavProps) => {
           <SubNavButton
             onClick={() => {
               setMode("browse")
-              router.push("/")
+              if (router.pathname !== "/") {
+                router.push("/")
+              }
             }}
             id="subnav-browse"
             isSelected={browseSelected}
