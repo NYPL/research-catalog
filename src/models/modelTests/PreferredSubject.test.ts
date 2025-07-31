@@ -14,23 +14,23 @@ describe("PreferredSubject model", () => {
   it("should create a PreferredSubject instance with expected properties", () => {
     const subject = new PreferredSubject(mockResult)
 
-    expect(subject.preferredTerm).toBe("Science -- 19th century")
+    expect(subject.termLabel).toBe("Science -- 19th century")
     expect(subject.count).toBe("42")
     expect(subject.url).toBe("/browse/subjects/Science%20--%2019th%20century")
 
-    expect(subject.seeAlso).toEqual([
+    expect(subject.seeAlso.terms).toEqual([
       { term: "Biology", url: "/browse/subjects/Biology" },
       { term: "Physics", url: "/browse/subjects/Physics" },
     ])
 
-    expect(subject.narrowerTerms).toEqual([
+    expect(subject.narrowerTerms.terms).toEqual([
       {
         term: "Natural Science -- Chimpanzees",
         url: "/browse/subjects/Natural%20Science%20--%20Chimpanzees",
       },
     ])
 
-    expect(subject.broaderTerms).toEqual([
+    expect(subject.broaderTerms.terms).toEqual([
       { term: "Knowledge", url: "/browse/subjects/Knowledge" },
     ])
   })

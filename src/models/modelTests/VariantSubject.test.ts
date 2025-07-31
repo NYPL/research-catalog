@@ -15,16 +15,16 @@ describe("VariantSubject model", () => {
   it("should create a VariantSubject with correct properties", () => {
     const variant = new VariantSubject(mockResult)
 
-    expect(variant.variantTerm).toBe("CS")
+    expect(variant.termLabel).toBe("CS")
 
     const expectedPreferredTerms: PreferredTerm[] = [
       {
-        preferredTerm: "Computer Science",
+        termLabel: "Computer Science",
         url: getSubjectURL("Computer Science"),
         count: "120",
       },
       {
-        preferredTerm: "Computing",
+        termLabel: "Computing",
         url: getSubjectURL("Computing"),
         count: "45",
       },
@@ -41,7 +41,7 @@ describe("VariantSubject model", () => {
 
     const variant = new VariantSubject(emptyResult)
 
-    expect(variant.variantTerm).toBe("Math")
+    expect(variant.termLabel).toBe("Math")
     expect(variant.preferredTerms).toEqual([])
   })
 })
@@ -60,12 +60,12 @@ describe("buildPreferredTermList()", () => {
 
     expect(variant.preferredTerms).toEqual([
       {
-        preferredTerm: "Gautama Buddha",
+        termLabel: "Gautama Buddha",
         url: getSubjectURL("Gautama Buddha"),
         count: "300",
       },
       {
-        preferredTerm: "Buddhism",
+        termLabel: "Buddhism",
         url: getSubjectURL("Buddhism"),
         count: "400",
       },
