@@ -6,7 +6,7 @@ export class RC_Home_Page extends BasePage {
   readonly search_tip: Locator
   readonly search_dropdown: Locator
   readonly search_input: Locator
-  readonly search_subtmit_button: Locator
+  readonly search_submit_button: Locator
   readonly advanced_search_link: Locator
   readonly info_banner: Locator
   readonly body_main_heading: Locator
@@ -40,7 +40,7 @@ export class RC_Home_Page extends BasePage {
     this.search_input = page.getByRole("textbox", {
       name: "Enter one or more keywords.",
     })
-    this.search_subtmit_button = page.getByRole("button", {
+    this.search_submit_button = page.getByRole("button", {
       name: "Search",
       exact: true,
     })
@@ -64,9 +64,10 @@ export class RC_Home_Page extends BasePage {
       "Discover our world-renowned"
     )
 
-    this.locations_heading = page
-      .getByRole("heading", { name: "Locations" })
-      .locator("#undefined-link")
+    this.locations_heading = page.getByRole("heading", {
+      name: "Locations",
+      level: 4,
+    })
     this.locations_heading_image = page.getByRole("img", {
       name: "Exterior shot of Stephen A.",
     })
