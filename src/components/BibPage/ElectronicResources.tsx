@@ -83,7 +83,6 @@ const ElectronicResources = ({
             p={0}
             mt="s"
             onClick={onClick}
-            // TO DO
             variant="text"
             aria-expanded={!showMore}
             fontWeight="bold"

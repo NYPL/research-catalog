@@ -212,10 +212,8 @@ describe("RequestsTab", () => {
     ).toBeInTheDocument()
     const ok = screen.getByRole("button", { name: "OK" })
     await userEvent.click(ok)
-    setTimeout(() => {
-      const postFreezeButtons = component.getAllByText("Freeze")
-      expect(postFreezeButtons.length).toBe(1)
-    }, 100)
+    const postFreezeButtons = component.getAllByText("Freeze")
+    expect(postFreezeButtons.length).toBe(1)
   })
 
   it("shows pick up by date and status when circ request is ready", () => {
