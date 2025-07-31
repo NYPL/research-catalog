@@ -15,12 +15,26 @@ const SubjectTable = ({
 }: {
   subjectTableData: DiscoverySubjectResult[]
 }) => {
-  function createSubject(
-    subject: DiscoverySubjectResult
-  ): VariantSubject | PreferredSubject {
-    return isVariantSubject(subject)
-      ? new VariantSubject(subject)
-      : new PreferredSubject(subject)
+  function createSubjectCell(subject: DiscoverySubjectResult) {
+    if (isVariantSubject(subject)) {
+      const newSubject = new VariantSubject(subject)
+      return [
+        <VariantSubjectTableCell
+          key={newSubject.termLabel}
+          subject={newSubject}
+        />,
+        "",
+      ]
+    } else {
+      const newSubject = new PreferredSubject(subject)
+      return [
+        <PreferredSubjectTableCell
+          key={newSubject.termLabel}
+          subject={newSubject}
+        />,
+        newSubject.count,
+      ]
+    }
   }
   return (
     <Table
@@ -43,25 +57,9 @@ const SubjectTable = ({
           textAlign: "right",
         },
       ]}
-      tableData={subjectTableData.map((subject: DiscoverySubjectResult) => {
-        const newSubject = createSubject(subject)
-        if (newSubject instanceof VariantSubject) {
-          return [
-            <VariantSubjectTableCell
-              key={newSubject.termLabel}
-              subject={newSubject}
-            />,
-            "",
-          ]
-        }
-        return [
-          <PreferredSubjectTableCell
-            key={newSubject.termLabel}
-            subject={newSubject}
-          />,
-          newSubject.count,
-        ]
-      })}
+      tableData={subjectTableData.map((subject: DiscoverySubjectResult) =>
+        createSubjectCell(subject)
+      )}
       columnHeadersBackgroundColor="ui.bg.default"
       showRowDividers
     />
