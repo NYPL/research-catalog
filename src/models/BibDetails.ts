@@ -392,7 +392,6 @@ export default class BibDetails {
     if (!this.bib.subjectLiteral) return
     const subjectLiteralUrls = this.bib.subjectLiteral.map(
       (subject: string) => {
-        subject = subject.replace(/\.$/, "")
         // stackedSubjectHeadings: ["a", "a -- b", "a -- b -- c"]
         const stackedSubjectHeadings =
           this.constructSubjectLiteralsArray(subject)
