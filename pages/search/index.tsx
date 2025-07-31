@@ -38,7 +38,6 @@ import type { Aggregation } from "../../src/types/filterTypes"
 import SearchFilters from "../../src/components/SearchFilters/SearchFilters"
 import { useFocusContext, idConstants } from "../../src/context/FocusContext"
 import type { HTTPStatusCode } from "../../src/types/appTypes"
-import SearchError from "../../src/components/ResultsError/ResultsError"
 import ResultsError from "../../src/components/ResultsError/ResultsError"
 
 interface SearchProps {
