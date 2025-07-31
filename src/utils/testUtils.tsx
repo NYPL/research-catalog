@@ -2,14 +2,11 @@ import React, { type ReactElement } from "react"
 import { render, type RenderOptions } from "@testing-library/react"
 import { FeedbackProvider } from "../context/FeedbackContext"
 import { FocusProvider } from "../context/FocusContext"
-import { ModeProvider } from "../context/ModeContext"
 
 const AllTheProviders = ({ children }: { children: React.ReactNode }) => {
   return (
     <FeedbackProvider value={null}>
-      <FocusProvider>
-        <ModeProvider>{children}</ModeProvider>
-      </FocusProvider>
+      <FocusProvider>{children}</FocusProvider>
     </FeedbackProvider>
   )
 }

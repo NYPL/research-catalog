@@ -10,7 +10,6 @@ import { BASE_URL, SITE_NAME } from "../src/config/constants"
 
 import { FeedbackProvider } from "../src/context/FeedbackContext"
 import { FocusProvider } from "../src/context/FocusContext"
-import { ModeProvider } from "../src/context/ModeContext"
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 function App({ Component, pageProps }) {
@@ -123,9 +122,7 @@ function App({ Component, pageProps }) {
       </Head>
       <FeedbackProvider value={null}>
         <FocusProvider>
-          <ModeProvider>
-            <Component {...pageProps} />
-          </ModeProvider>
+          <Component {...pageProps} />
         </FocusProvider>
       </FeedbackProvider>
     </>

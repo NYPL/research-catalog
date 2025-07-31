@@ -3,6 +3,7 @@ import {
   Menu,
   Flex,
   SkeletonLoader,
+  Icon,
 } from "@nypl/design-system-react-components"
 import RCHead from "../../src/components/Head/RCHead"
 import Layout from "../../src/components/Layout/Layout"
@@ -51,9 +52,26 @@ export default function Browse({
       <RCHead metadataTitle={metadataTitle} />
       <Layout activePage="browse" isAuthenticated={isAuthenticated}>
         {browseParams.q.length === 0 ? (
-          <Heading level="h3" size="heading6" mt="l">
-            Please select a browse option to begin.
-          </Heading>
+          <Flex
+            direction="column"
+            justifyContent="space-between"
+            alignItems="center"
+            gap="xs"
+            mb="l"
+            mt="l"
+          >
+            <Icon
+              color="section.research.secondary"
+              decorative
+              name="utilitySearch"
+              size="xlarge"
+              type="default"
+            />
+            <Heading size="heading6" color="section.research.secondary">
+              Use the search bar above to start browsing the Subject Headings
+              index
+            </Heading>
+          </Flex>
         ) : (
           <>
             <Flex

@@ -1,8 +1,6 @@
 import React from "react"
 import RCSubNav from "./RCSubNav"
-import { render, screen, waitFor } from "../../utils/testUtils"
-import userEvent from "@testing-library/user-event"
-import mockRouter from "next-router-mock"
+import { render, screen } from "../../utils/testUtils"
 
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
@@ -44,35 +42,5 @@ describe("RCSubNav", () => {
     expect(subNavButtons).toHaveLength(3)
     const logoutLink = screen.getByText("Log out")
     expect(logoutLink).toBeInTheDocument()
-  })
-
-  it("sets mode to browse and redirects to '/' on click Browse", async () => {
-    render(<RCSubNav isAuthenticated={true} activePage="account" />)
-
-    const browseButton = screen.getByRole("button", {
-      name: /browse the catalog/i,
-    })
-    await userEvent.click(browseButton)
-
-    expect(mockRouter.asPath).toBe("/")
-
-    // // Expect the second button, "Browse", to be active and
-    // // have the aria-current attribute set to "page"
-    // const subNavButtons = screen.getAllByRole("button")
-    // expect(subNavButtons[1]).toHaveAttribute("aria-current", "page")
-  })
-
-  it("sets mode to '' on click My Account", async () => {
-    render(<RCSubNav isAuthenticated={true} activePage="" />)
-
-    const subNavButtons = screen.getAllByRole("button")
-
-    await userEvent.click(subNavButtons[2])
-
-    expect(mockRouter.asPath).toBe("/account")
-
-    // // Expect the third button, "My Account", to be active and
-    // // have the aria-current attribute set to "page"
-    // expect(subNavButtons[2]).toHaveAttribute("aria-current", "page")
   })
 })
