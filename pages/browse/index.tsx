@@ -67,7 +67,11 @@ export default function Browse({
           >
             {getBrowseResultsHeading(browseParams, results.totalResults)}
           </Heading>
-          <Menu width="288px" labelText="placeholder sort" listItemsData={[]} />
+          <Menu
+            width="288px"
+            labelText="Sort by: Ascending (A-Z)"
+            listItemsData={[]}
+          />
         </Flex>
         {isLoading ? (
           <>

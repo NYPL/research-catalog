@@ -35,10 +35,10 @@ export function mapQueryToBrowseParams({
  */
 export function getBrowseQuery(params: BrowseParams): string {
   const {
-    sort = "relevance",
+    sort = "preferredTerm",
     q,
     page = 1,
-    sortDirection = "desc",
+    sortDirection = "asc",
     searchScope = "has",
   } = params
   const browseKeywordsQuery = encodeURIComponent(q)
