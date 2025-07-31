@@ -50,56 +50,64 @@ export default function Browse({
     <>
       <RCHead metadataTitle={metadataTitle} />
       <Layout activePage="browse" isAuthenticated={isAuthenticated}>
-        <Flex
-          direction={{ base: "column", md: "row" }}
-          justifyContent="space-between"
-          mb="l"
-        >
-          <Heading
-            id="browse-results-heading"
-            data-testid="browse-results-heading"
-            level="h2"
-            size="heading5"
-            tabIndex={-1}
-            noSpace
-            minH="40px"
-            aria-live="polite"
-          >
-            {getBrowseResultsHeading(browseParams, results.totalResults)}
+        {browseParams.q.length === 0 ? (
+          <Heading level="h3" size="heading6" mt="l">
+            Please select a browse option to begin.
           </Heading>
-          <Menu
-            width="288px"
-            labelText="Sort by: Ascending (A-Z)"
-            listItemsData={[]}
-          />
-        </Flex>
-        {isLoading ? (
-          <>
-            <SkeletonLoader
-              showImage={false}
-              mb="m"
-              ml="0"
-              width="900px"
-              contentSize={5}
-              showHeading={false}
-            />
-            <div
-              id="browse-live-region"
-              ref={liveLoadingRegionRef}
-              style={{
-                position: "absolute",
-                width: "1px",
-                height: "1px",
-                margin: "-1px",
-                padding: 0,
-                overflow: "hidden",
-                clip: "rect(0,0,0,0)",
-                border: 0,
-              }}
-            />
-          </>
         ) : (
-          <SubjectTable subjectTableData={results.subjects} />
+          <>
+            <Flex
+              direction={{ base: "column", md: "row" }}
+              justifyContent="space-between"
+              mb="l"
+            >
+              <Heading
+                id="browse-results-heading"
+                data-testid="browse-results-heading"
+                level="h2"
+                size="heading5"
+                tabIndex={-1}
+                noSpace
+                minH="40px"
+                aria-live="polite"
+              >
+                {getBrowseResultsHeading(browseParams, results.totalResults)}
+              </Heading>
+              <Menu
+                width="288px"
+                labelText="Sort by: Ascending (A-Z)"
+                listItemsData={[]}
+              />
+            </Flex>
+            {isLoading ? (
+              <>
+                <SkeletonLoader
+                  showImage={false}
+                  mb="m"
+                  ml="0"
+                  width="900px"
+                  contentSize={5}
+                  showHeading={false}
+                />
+                <div
+                  id="browse-live-region"
+                  ref={liveLoadingRegionRef}
+                  style={{
+                    position: "absolute",
+                    width: "1px",
+                    height: "1px",
+                    margin: "-1px",
+                    padding: 0,
+                    overflow: "hidden",
+                    clip: "rect(0,0,0,0)",
+                    border: 0,
+                  }}
+                />
+              </>
+            ) : (
+              <SubjectTable subjectTableData={results.subjects} />
+            )}
+          </>
         )}
       </Layout>
     </>
@@ -110,24 +118,34 @@ export async function getServerSideProps({ req, query }) {
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const { browseType = "subjects" } = query
 
+  const browseParams = mapQueryToBrowseParams(query)
+  const isAuthenticated = patronTokenResponse.isTokenValid
+
+  // Skip request if no keywords
+  if (!browseParams.q || browseParams.q.length === 0) {
+    return {
+      props: {
+        isAuthenticated,
+        results: {},
+      },
+    }
+  }
+
   let response
 
   switch (browseType) {
     case "authors":
-      //response = await fetchAuthors({ q: "" })
+      // response = await fetchAuthors(browseParams)
       break
     case "subjects":
     default:
-      response = await fetchSubjects(mapQueryToBrowseParams(query))
+      response = await fetchSubjects(browseParams)
       break
   }
 
-  // Handle API errors
   if (response?.status !== 200) {
     return { props: { errorStatus: response.status } }
   }
-
-  const isAuthenticated = patronTokenResponse.isTokenValid
 
   return {
     props: {
