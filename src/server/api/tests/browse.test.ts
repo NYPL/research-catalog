@@ -17,6 +17,7 @@ describe("fetchSubjects", () => {
   it("fetches valid subject heading results", async () => {
     mockClient.get.mockResolvedValue({
       subjects: [{}, {}, {}, {}],
+      totalResults: 4,
     })
 
     const response = (await fetchSubjects({
@@ -58,6 +59,7 @@ describe("fetchSubjects", () => {
   it("handles valid response but no results", async () => {
     mockClient.get.mockResolvedValueOnce({
       subjects: [],
+      totalResults: 0,
     })
 
     const response = await fetchSubjects({ q: "empty" })

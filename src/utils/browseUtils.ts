@@ -1,9 +1,11 @@
+import { BROWSE_FORM_OPTIONS, SUBJECTS_PER_PAGE } from "../config/constants"
 import type {
   BrowseParams,
   BrowseQueryParams,
   DiscoverySubjectResult,
   DiscoverySubjectVariantResult,
 } from "../types/browseTypes"
+import { getPaginationOffsetStrings } from "./appUtils"
 
 /**
  * mapQueryToBrowseParams
@@ -33,10 +35,10 @@ export function mapQueryToBrowseParams({
  */
 export function getBrowseQuery(params: BrowseParams): string {
   const {
-    sort = "relevance",
+    sort = "preferredTerm",
     q,
     page = 1,
-    sortDirection = "desc",
+    sortDirection = "asc",
     searchScope = "has",
   } = params
   const browseKeywordsQuery = encodeURIComponent(q)
@@ -58,4 +60,39 @@ export function isVariantSubject(
 export function getSubjectURL(term: string) {
   const subject = encodeURIComponent(term).replace(/%2D%2D/g, "--")
   return `/browse/subjects/${subject}`
+}
+
+export const browseFormSelectOptions = Object.keys(BROWSE_FORM_OPTIONS).map(
+  (key) => ({
+    text: BROWSE_FORM_OPTIONS[key].text,
+    value: key,
+  })
+)
+
+/**
+ * getBrowseResultsHeading
+ * Used to generate the browse results heading text (Displaying 1-30 of 300 Subject Headings containing "cats")
+ */
+export function getBrowseResultsHeading(
+  browseParams: BrowseParams,
+  totalResults: number
+): string {
+  const [resultsStart, resultsEnd] = getPaginationOffsetStrings(
+    browseParams.page,
+    totalResults,
+    SUBJECTS_PER_PAGE
+  )
+  return `Displaying ${
+    totalResults > SUBJECTS_PER_PAGE
+      ? `${resultsStart}-${resultsEnd}`
+      : totalResults?.toLocaleString()
+  } of${
+    totalResults === 10000 ? " over" : ""
+  } ${totalResults?.toLocaleString()} Subject Headings ${
+    browseParams.q.length
+      ? `${
+          browseParams.searchScope === "has" ? "containing" : "beginning with"
+        } "${browseParams.q}"`
+      : ""
+  }`
 }
