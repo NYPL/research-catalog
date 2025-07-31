@@ -24,7 +24,7 @@ export class BasePage {
   readonly research_breadcrumb: Locator
   readonly research_catalog_breadcrumb: Locator
   // header elements below breadcrumbs
-  readonly h1: Locator
+  readonly researchCatalogHeading: Locator
   readonly search_the_catalog: Locator
   readonly shep: Locator
   readonly my_account: Locator
@@ -72,13 +72,13 @@ export class BasePage {
     // breadcrumbs
     this.home_breadcrumb = page.getByRole("link", { name: "Home" })
     this.research_breadcrumb = page
-      .getByTestId("layout-breadcrumbs")
+      .getByLabel("Breadcrumb")
       .getByRole("link", { name: "Research", exact: true })
     this.research_catalog_breadcrumb = page
-      .getByTestId("layout-breadcrumbs")
-      .getByRole("link", { name: "Research Catalog" })
+      .getByLabel("Breadcrumb")
+      .getByRole("link", { name: "Research Catalog", exact: true })
     // header elements below breadcrumbs
-    this.h1 = page.getByRole("heading", {
+    this.researchCatalogHeading = page.getByRole("heading", {
       level: 1,
       name: "Research Catalog",
     })
