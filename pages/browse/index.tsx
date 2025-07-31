@@ -21,6 +21,7 @@ import { useRouter } from "next/router"
 import useLoading from "../../src/hooks/useLoading"
 import { useRef } from "react"
 import BrowseError from "../../src/components/BrowseError/BrowseError"
+import { useFocusContext } from "../../src/context/FocusContext"
 
 interface BrowseProps {
   results: DiscoverySubjectsResponse
@@ -38,7 +39,7 @@ export default function Browse({
   errorStatus = null,
 }: BrowseProps) {
   const metadataTitle = `Browse Research Catalog | ${SITE_NAME}`
-  const { push, query } = useRouter()
+  const { query } = useRouter()
   const browseParams = mapQueryToBrowseParams(query)
   const isLoading = useLoading()
   // Ref for accessible announcement of loading state.
@@ -47,86 +48,99 @@ export default function Browse({
     return <BrowseError errorStatus={errorStatus} />
   }
 
+  const loader = (
+    <>
+      <SkeletonLoader
+        showImage={false}
+        mb="m"
+        ml="0"
+        width="900px"
+        contentSize={5}
+        showHeading={false}
+      />
+      <div
+        id="browse-live-region"
+        ref={liveLoadingRegionRef}
+        style={{
+          position: "absolute",
+          width: "1px",
+          height: "1px",
+          margin: "-1px",
+          padding: 0,
+          overflow: "hidden",
+          clip: "rect(0,0,0,0)",
+          border: 0,
+        }}
+      />
+    </>
+  )
+
+  const renderEmpty = () => {
+    return isLoading ? (
+      loader
+    ) : (
+      <Flex
+        direction="column"
+        justifyContent="space-between"
+        alignItems="center"
+        gap="xs"
+        mb="l"
+        mt="l"
+      >
+        <Icon
+          color="section.research.secondary"
+          decorative
+          name="utilitySearch"
+          size="xlarge"
+          type="default"
+        />
+        <Heading size="heading6" color="section.research.secondary">
+          Use the search bar above to start browsing the Subject Headings index
+        </Heading>
+      </Flex>
+    )
+  }
+
+  const renderResults = () => {
+    return (
+      <>
+        <Flex
+          direction={{ base: "column", md: "row" }}
+          justifyContent="space-between"
+          mb="l"
+        >
+          <Heading
+            id="browse-results-heading"
+            data-testid="browse-results-heading"
+            level="h2"
+            size="heading5"
+            tabIndex={-1}
+            noSpace
+            minH="40px"
+            aria-live="polite"
+          >
+            {getBrowseResultsHeading(browseParams, results.totalResults)}
+          </Heading>
+          <Menu
+            width="288px"
+            labelText="Sort by: Ascending (A-Z)"
+            listItemsData={[]}
+          />
+        </Flex>
+        {isLoading ? (
+          loader
+        ) : (
+          <SubjectTable subjectTableData={results.subjects} />
+        )}
+      </>
+    )
+  }
+
   return (
     <>
       <RCHead metadataTitle={metadataTitle} />
       <Layout activePage="browse" isAuthenticated={isAuthenticated}>
-        {browseParams.q.length === 0 ? (
-          <Flex
-            direction="column"
-            justifyContent="space-between"
-            alignItems="center"
-            gap="xs"
-            mb="l"
-            mt="l"
-          >
-            <Icon
-              color="section.research.secondary"
-              decorative
-              name="utilitySearch"
-              size="xlarge"
-              type="default"
-            />
-            <Heading size="heading6" color="section.research.secondary">
-              Use the search bar above to start browsing the Subject Headings
-              index
-            </Heading>
-          </Flex>
-        ) : (
-          <>
-            <Flex
-              direction={{ base: "column", md: "row" }}
-              justifyContent="space-between"
-              mb="l"
-            >
-              <Heading
-                id="browse-results-heading"
-                data-testid="browse-results-heading"
-                level="h2"
-                size="heading5"
-                tabIndex={-1}
-                noSpace
-                minH="40px"
-                aria-live="polite"
-              >
-                {getBrowseResultsHeading(browseParams, results.totalResults)}
-              </Heading>
-              <Menu
-                width="288px"
-                labelText="Sort by: Ascending (A-Z)"
-                listItemsData={[]}
-              />
-            </Flex>
-            {isLoading ? (
-              <>
-                <SkeletonLoader
-                  showImage={false}
-                  mb="m"
-                  ml="0"
-                  width="900px"
-                  contentSize={5}
-                  showHeading={false}
-                />
-                <div
-                  id="browse-live-region"
-                  ref={liveLoadingRegionRef}
-                  style={{
-                    position: "absolute",
-                    width: "1px",
-                    height: "1px",
-                    margin: "-1px",
-                    padding: 0,
-                    overflow: "hidden",
-                    clip: "rect(0,0,0,0)",
-                    border: 0,
-                  }}
-                />
-              </>
-            ) : (
-              <SubjectTable subjectTableData={results.subjects} />
-            )}
-          </>
-        )}
+        {browseParams.q.length === 0 ? renderEmpty() : renderResults()}
       </Layout>
     </>
   )

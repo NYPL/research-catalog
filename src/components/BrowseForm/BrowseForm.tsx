@@ -40,10 +40,8 @@ const BrowseForm = () => {
     }
     const queryString = getBrowseQuery(browseParams)
 
-    if (router.asPath.includes("/browse?"))
-      setPersistentFocus(idConstants.browseResultsHeading)
-    // if we are doing a search from the home page, there should be no focused element when results are delivered
-    else setPersistentFocus(null)
+    setPersistentFocus(idConstants.browseResultsHeading)
+
     await router.push(`${PATHS.BROWSE}${queryString}`)
   }
 
