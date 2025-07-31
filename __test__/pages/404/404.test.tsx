@@ -2,8 +2,6 @@ import React from "react"
 import { render, screen, within } from "../../../src/utils/testUtils"
 import Custom404 from "../../../pages/404/index"
 
-jest.mock("next/router", () => jest.requireActual("next-router-mock"))
-
 describe("404", () => {
   it("should display 404 text", () => {
     render(<Custom404 activePage="account" />)
