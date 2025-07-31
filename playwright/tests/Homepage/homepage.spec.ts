@@ -33,7 +33,9 @@ test.describe("Research Catalog Home Page", () => {
     const rcHomePage = new RC_Home_Page(page)
     await rcHomePage.goto()
     await expect(rcHomePage.header_my_account).toBeVisible()
-    await expect(rcHomePage.h1).toHaveText("Research Catalog")
+    await expect(rcHomePage.researchCatalogHeading).toHaveText(
+      "Research Catalog"
+    )
     await expect(page).toHaveTitle(rcHomePage.page_title)
     await expect(rcHomePage.home_breadcrumb).toBeVisible()
     await expect(rcHomePage.research_breadcrumb).toBeVisible()
