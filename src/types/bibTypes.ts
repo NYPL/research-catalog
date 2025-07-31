@@ -30,7 +30,6 @@ export interface DiscoveryBibResult {
   contributorLiteral?: string[]
   holdings?: object
   owner?: { "@id": string; prefLabel: string }
-  subjectHeadings?: SubjectHeading[]
   hasItemDates?: boolean
 }
 
