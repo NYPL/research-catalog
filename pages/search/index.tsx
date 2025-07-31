@@ -8,7 +8,6 @@ import {
   CardContent,
   Card,
   CardHeading,
-  useNYPLBreakpoints,
 } from "@nypl/design-system-react-components"
 import { useEffect, useRef } from "react"
 import type { ChangeEvent } from "react"
