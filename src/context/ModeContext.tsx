@@ -1,4 +1,11 @@
-import { createContext, useContext, useState, type ReactNode } from "react"
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  type ReactNode,
+} from "react"
+import { useRouter } from "next/router"
 
 type Mode = "search" | "browse" | ""
 
@@ -18,7 +25,18 @@ export const useMode = (): ModeContextType => {
 }
 
 export const ModeProvider = ({ children }: { children: ReactNode }) => {
-  const [mode, setMode] = useState<Mode>("search")
+  const router = useRouter()
+  const [mode, setMode] = useState<Mode>("")
+
+  useEffect(() => {
+    const path = router.asPath
+
+    if (path.includes("/search")) {
+      setMode("search")
+    } else if (path.includes("/browse") || path.includes("/sh-results")) {
+      setMode("browse")
+    }
+  }, [router.asPath])
 
   return (
     <ModeContext.Provider value={{ mode, setMode }}>
