@@ -9,22 +9,25 @@ import { useContext } from "react"
 import { FeedbackContext } from "../../context/FeedbackContext"
 import Image from "next/image"
 import errorImage from "../../assets/errorImage.png"
+import type { RCPage } from "../../types/pageTypes"
 
-type BrowseErrorProps = {
+type ResultsErrorProps = {
+  page: RCPage
   errorStatus: HTTPStatusCode
 }
 
-export default function BrowseError({ errorStatus }: BrowseErrorProps) {
+export default function ResultsError({ errorStatus, page }: ResultsErrorProps) {
   const metadataTitle = `${errorStatus} | ${SITE_NAME}`
   const { openFeedbackFormWithError } = useContext(FeedbackContext)
 
   let errorContent
+  const headingID = `${page}-results-heading`
 
   switch (errorStatus) {
     case 404:
       errorContent = (
         <>
-          <Heading level="h3" tabIndex={-1} id="browse-results-heading">
+          <Heading level="h3" tabIndex={-1} id={headingID}>
             No results found
           </Heading>
           <Text noSpace>
@@ -53,7 +56,7 @@ export default function BrowseError({ errorStatus }: BrowseErrorProps) {
     case 500:
       errorContent = (
         <>
-          <Heading level="h3" tabIndex={-1} id="browse-results-heading">
+          <Heading level="h3" tabIndex={-1} id={headingID}>
             Something went wrong on our end
           </Heading>
           <Text marginBottom="0">
@@ -73,7 +76,7 @@ export default function BrowseError({ errorStatus }: BrowseErrorProps) {
     default:
       errorContent = (
         <>
-          <Heading level="h3" tabIndex={-1} id="browse-results-heading">
+          <Heading level="h3" tabIndex={-1} id={headingID}>
             There was an unexpected error
           </Heading>
           <Text marginBottom="0">
@@ -94,7 +97,7 @@ export default function BrowseError({ errorStatus }: BrowseErrorProps) {
   return (
     <>
       <RCHead metadataTitle={metadataTitle} />
-      <Layout activePage="browse">
+      <Layout activePage={page}>
         <Flex
           flexDir="column"
           marginTop="l"

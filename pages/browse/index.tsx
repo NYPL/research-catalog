@@ -20,8 +20,7 @@ import {
 import { useRouter } from "next/router"
 import useLoading from "../../src/hooks/useLoading"
 import { useRef } from "react"
-import BrowseError from "../../src/components/BrowseError/BrowseError"
-import { useFocusContext } from "../../src/context/FocusContext"
+import ResultsError from "../../src/components/ResultsError/ResultsError"
 
 interface BrowseProps {
   results: DiscoverySubjectsResponse
@@ -45,7 +44,7 @@ export default function Browse({
   // Ref for accessible announcement of loading state.
   const liveLoadingRegionRef = useRef<HTMLDivElement | null>(null)
   if (errorStatus) {
-    return <BrowseError errorStatus={errorStatus} />
+    return <ResultsError errorStatus={errorStatus} page="browse" />
   }
 
   const loader = (
