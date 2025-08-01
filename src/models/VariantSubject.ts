@@ -13,10 +13,12 @@ import { getSubjectURL } from "../utils/browseUtils"
 export default class VariantSubject {
   termLabel: string
   preferredTerms: PreferredTerm[]
+  countDisplay: string
 
   constructor(result?: DiscoverySubjectVariantResult) {
     this.termLabel = result.variantTerm
     this.preferredTerms = this.buildPreferredTermList(result.preferredTerms)
+    this.countDisplay = ""
   }
 
   buildPreferredTermList(

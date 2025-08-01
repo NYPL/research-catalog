@@ -15,7 +15,7 @@ describe("PreferredSubject model", () => {
     const subject = new PreferredSubject(mockResult)
 
     expect(subject.termLabel).toBe("Science -- 19th century")
-    expect(subject.count).toBe("42")
+    expect(subject.countDisplay).toBe("42")
     expect(subject.url).toBe("/browse/subjects/Science%20--%2019th%20century")
 
     expect(subject.seeAlso.terms).toEqual([

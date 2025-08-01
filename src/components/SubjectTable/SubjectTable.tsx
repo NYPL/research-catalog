@@ -1,5 +1,9 @@
 import { Table } from "@nypl/design-system-react-components"
-import type { DiscoverySubjectResult } from "../../types/browseTypes"
+import type {
+  DiscoveryPreferredTermResult,
+  DiscoverySubjectResult,
+  DiscoverySubjectVariantResult,
+} from "../../types/browseTypes"
 import VariantSubjectTableCell from "./VariantSubjectTableCell"
 import { isVariantSubject } from "../../utils/browseUtils"
 import VariantSubject from "../../models/VariantSubject"
@@ -15,26 +19,18 @@ const SubjectTable = ({
 }: {
   subjectTableData: DiscoverySubjectResult[]
 }) => {
-  function createSubjectCell(subject: DiscoverySubjectResult) {
-    if (isVariantSubject(subject)) {
-      const newSubject = new VariantSubject(subject)
-      return [
-        <VariantSubjectTableCell
-          key={newSubject.termLabel}
-          subject={newSubject}
-        />,
-        "",
-      ]
-    } else {
-      const newSubject = new PreferredSubject(subject)
-      return [
-        <PreferredSubjectTableCell
-          key={newSubject.termLabel}
-          subject={newSubject}
-        />,
-        newSubject.count,
-      ]
-    }
+  function createSubjectRow(subject: DiscoverySubjectResult) {
+    let Subject
+    if (isVariantSubject(subject)) Subject = VariantSubject
+    else Subject = PreferredSubject
+    const TableCell = isVariantSubject(subject)
+      ? VariantSubjectTableCell
+      : PreferredSubjectTableCell
+    const subjectModel = new Subject(subject)
+    return [
+      <TableCell key={subjectModel.termLabel} subject={subjectModel} />,
+      subjectModel.countDisplay,
+    ]
   }
   return (
     <Table
@@ -58,7 +54,7 @@ const SubjectTable = ({
         },
       ]}
       tableData={subjectTableData.map((subject: DiscoverySubjectResult) =>
-        createSubjectCell(subject)
+        createSubjectRow(subject)
       )}
       columnHeadersBackgroundColor="ui.bg.default"
       showRowDividers

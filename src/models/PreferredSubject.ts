@@ -13,7 +13,7 @@ import { getSubjectURL } from "../utils/browseUtils"
 export default class PreferredSubject {
   url: string
   termLabel: string
-  count: string
+  countDisplay: string
   seeAlso?: { label: string; terms: SubjectLink[] }
   narrowerTerms?: { label: string; terms: SubjectLink[] }
   broaderTerms?: { label: string; terms: SubjectLink[] }
@@ -21,7 +21,7 @@ export default class PreferredSubject {
   constructor(result?: DiscoverySubjectPreferredResult) {
     this.url = getSubjectURL(result.preferredTerm)
     this.termLabel = result.preferredTerm
-    this.count = result.count.toLocaleString()
+    this.countDisplay = result.count.toLocaleString()
     this.seeAlso = result.seeAlso?.length && {
       label: "See also",
       terms: this.buildSubjectLinkList(result.seeAlso),

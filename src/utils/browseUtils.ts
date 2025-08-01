@@ -1,6 +1,7 @@
 import type {
   BrowseParams,
   BrowseQueryParams,
+  DiscoverySubjectPreferredResult,
   DiscoverySubjectResult,
   DiscoverySubjectVariantResult,
 } from "../types/browseTypes"
@@ -50,7 +51,7 @@ export function getBrowseQuery(params: BrowseParams): string {
 }
 
 export function isVariantSubject(
-  subject: DiscoverySubjectResult
+  subject: DiscoverySubjectVariantResult | DiscoverySubjectPreferredResult
 ): subject is DiscoverySubjectVariantResult {
   return "variantTerm" in subject
 }
