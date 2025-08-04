@@ -44,7 +44,7 @@ const Layout = ({
   return (
     <DSProvider>
       <Template variant="full">
-        <TemplateBreakout sx={{ px: "0px" }}>
+        <TemplateBreakout>
           <>
             <Breadcrumbs
               data-testid="layout-breadcrumbs"
