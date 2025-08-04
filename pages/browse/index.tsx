@@ -19,8 +19,9 @@ import {
 } from "../../src/utils/browseUtils"
 import { useRouter } from "next/router"
 import useLoading from "../../src/hooks/useLoading"
-import { useRef } from "react"
+import { useEffect, useRef } from "react"
 import ResultsError from "../../src/components/ResultsError/ResultsError"
+import { idConstants, useFocusContext } from "../../src/context/FocusContext"
 
 interface BrowseProps {
   results: DiscoverySubjectsResponse
@@ -41,8 +42,15 @@ export default function Browse({
   const { query } = useRouter()
   const browseParams = mapQueryToBrowseParams(query)
   const isLoading = useLoading()
+
   // Ref for accessible announcement of loading state.
   const liveLoadingRegionRef = useRef<HTMLDivElement | null>(null)
+  useEffect(() => {
+    if (liveLoadingRegionRef.current) {
+      liveLoadingRegionRef.current.textContent = "Loading results"
+    }
+  }, [isLoading])
+
   if (errorStatus) {
     return <ResultsError errorStatus={errorStatus} page="browse" />
   }
@@ -140,6 +148,7 @@ export default function Browse({
       <RCHead metadataTitle={metadataTitle} />
       <Layout activePage="browse" isAuthenticated={isAuthenticated}>
         {browseParams.q.length === 0 ? renderEmpty() : renderResults()}
+        {/* {renderResults()} */}
       </Layout>
     </>
   )
