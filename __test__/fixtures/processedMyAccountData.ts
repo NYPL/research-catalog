@@ -403,6 +403,7 @@ export const processedCheckouts = [
 
 export const processedHolds = [
   {
+    itemId: "40367309",
     patron: "6742743",
     id: "49438192",
     pickupByDate: "May 17, 2024",
@@ -417,6 +418,7 @@ export const processedHolds = [
     catalogHref: "https://borrow.nypl.org/search/card?recordId=23099273",
   },
   {
+    itemId: "15550040",
     patron: "6742743",
     id: "49438189",
     pickupByDate: null,
@@ -434,6 +436,7 @@ export const processedHolds = [
     catalogHref: "https://nypl.org/research/research-catalog/bib/b16145054",
   },
   {
+    itemId: "23167148",
     patron: "6742743",
     id: "49438190",
     pickupByDate: null,
@@ -449,6 +452,7 @@ export const processedHolds = [
     catalogHref: "https://borrow.nypl.org/search/card?recordId=23167148",
   },
   {
+    itemId: "37648023",
     patron: "6742743",
     id: "49438191",
     pickupByDate: null,
@@ -463,6 +467,7 @@ export const processedHolds = [
     catalogHref: "https://borrow.nypl.org/search/card?recordId=22046460",
   },
   {
+    itemId: "40875355",
     patron: "6742743",
     id: "49438193",
     pickupByDate: null,
