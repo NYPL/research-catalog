@@ -49,7 +49,7 @@ export default function Browse({
           </Heading>
           <Menu width="288px" labelText="placeholder sort" listItemsData={[]} />
         </Flex>
-        <SubjectTable subjectTableData={discoverySubjectsResult} />
+        <SubjectTable subjectTableData={results.subjects} />
       </Layout>
     </>
   )
