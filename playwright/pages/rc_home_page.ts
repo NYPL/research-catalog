@@ -98,8 +98,4 @@ export class RC_Home_Page extends BasePage {
       name: "Help and Feedback",
     })
   }
-
-  async goto() {
-    await this.page.goto("/research/research-catalog")
-  }
 }

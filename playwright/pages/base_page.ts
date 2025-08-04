@@ -90,4 +90,8 @@ export class BasePage {
       name: "My account for NYPL.org",
     })
   }
+
+  async goto() {
+    await this.page.goto("")
+  }
 }
