@@ -1,5 +1,8 @@
+import { Heading, Menu, Flex } from "@nypl/design-system-react-components"
+import { discoverySubjectsResult } from "../../__test__/fixtures/subjectFixtures"
 import RCHead from "../../src/components/Head/RCHead"
 import Layout from "../../src/components/Layout/Layout"
+import SubjectTable from "../../src/components/SubjectTable/SubjectTable"
 import { SITE_NAME } from "../../src/config/constants"
 import { fetchSubjects } from "../../src/server/api/browse"
 import initializePatronTokenAuth from "../../src/server/auth"
@@ -22,12 +25,31 @@ export default function Browse({
   errorStatus = null,
 }: BrowseProps) {
   const metadataTitle = `Browse Research Catalog | ${SITE_NAME}`
-
   return (
     <>
       <RCHead metadataTitle={metadataTitle} />
       <Layout activePage="browse" isAuthenticated={isAuthenticated}>
-        {/* <SubjectTable subjectTableData={results.subjects} /> */}
+        <Flex
+          direction={{ base: "column", md: "row" }}
+          justifyContent="space-between"
+          mt="l"
+          mb="l"
+        >
+          <Heading
+            id="browse-results-heading"
+            data-testid="browse-results-heading"
+            level="h2"
+            size="heading5"
+            tabIndex={-1}
+            noSpace
+            minH="40px"
+            aria-live="polite"
+          >
+            Displaying x-x of x Subject Headings containing x
+          </Heading>
+          <Menu width="288px" labelText="placeholder sort" listItemsData={[]} />
+        </Flex>
+        <SubjectTable subjectTableData={results.subjects} />
       </Layout>
     </>
   )
@@ -45,7 +67,7 @@ export async function getServerSideProps({ req, query }) {
       break
     case "subjects":
     default:
-      response = await fetchSubjects({ q: "" })
+      response = await fetchSubjects({ q: "A", page: 1 })
       break
   }
 

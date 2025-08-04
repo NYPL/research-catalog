@@ -1,8 +1,8 @@
 import type {
-  DiscoverySubjectPreferredResult,
+  DiscoveryPreferredSubjectResult,
   SubjectLink,
 } from "../types/browseTypes"
-import { getSubjectURL } from "../utils/browseUtils"
+import { buildSubjectLinks, getSubjectURL } from "../utils/browseUtils"
 
 /**
  * The PreferredSubject class represents an authorized subject heading,
@@ -12,30 +12,27 @@ import { getSubjectURL } from "../utils/browseUtils"
 
 export default class PreferredSubject {
   url: string
-  preferredTerm: string
+  termLabel: string
   count: string
-  seeAlso?: SubjectLink[]
-  narrowerTerms?: SubjectLink[]
-  broaderTerms?: SubjectLink[]
+  seeAlso?: { label: string; terms: SubjectLink[] }
+  narrowerTerms?: { label: string; terms: SubjectLink[] }
+  broaderTerms?: { label: string; terms: SubjectLink[] }
 
-  constructor(result?: DiscoverySubjectPreferredResult) {
-    this.url = getSubjectURL(result.preferredTerm)
-    this.preferredTerm = result.preferredTerm
-    this.count = result.count.toLocaleString()
-    this.seeAlso =
-      result.seeAlso?.length && this.buildSubjectLinkList(result.seeAlso)
-    this.narrowerTerms =
-      result.narrowerTerms?.length &&
-      this.buildSubjectLinkList(result.narrowerTerms)
-    this.broaderTerms =
-      result.broaderTerms?.length &&
-      this.buildSubjectLinkList(result.broaderTerms)
-  }
-
-  buildSubjectLinkList(terms: string[]): SubjectLink[] {
-    return terms.map((term) => ({
-      url: getSubjectURL(term),
-      term: term,
-    }))
+  constructor(result?: DiscoveryPreferredSubjectResult) {
+    this.url = getSubjectURL(result.termLabel)
+    this.termLabel = result.termLabel
+    this.count = result.count?.toLocaleString()
+    this.seeAlso = result.seeAlso?.length && {
+      label: "See also",
+      terms: buildSubjectLinks(result.seeAlso),
+    }
+    this.narrowerTerms = result.narrowerTerms?.length && {
+      label: "Narrower term",
+      terms: buildSubjectLinks(result.narrowerTerms),
+    }
+    this.broaderTerms = result.broaderTerms?.length && {
+      label: "Broader term",
+      terms: buildSubjectLinks(result.broaderTerms),
+    }
   }
 }

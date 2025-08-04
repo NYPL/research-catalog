@@ -26,45 +26,40 @@ export interface BrowseQueryParams {
 }
 
 export type DiscoverySubjectResult =
-  | DiscoverySubjectVariantResult
-  | DiscoverySubjectPreferredResult
+  | DiscoveryVariantSubjectResult
+  | DiscoveryPreferredSubjectResult
 
-export type DiscoveryPreferredTermResult = { [term: string]: number }
+export type DiscoveryPreferredTermResult = { label: string; count?: number }
 
-export type DiscoverySubjectVariantResult = {
-  variantTerm: string
+export type DiscoveryVariantSubjectResult = {
+  termLabel: string
   preferredTerms?: DiscoveryPreferredTermResult[]
 }
 
-export type DiscoverySubjectPreferredResult = {
-  preferredTerm: string
+export type DiscoveryPreferredSubjectResult = {
+  termLabel: string
   count: number
   uri: string
-  seeAlso?: string[]
-  narrowerTerms?: string[]
-  broaderTerms?: string[]
+  seeAlso?: DiscoveryPreferredTermResult[]
+  narrowerTerms?: DiscoveryPreferredTermResult[]
+  broaderTerms?: DiscoveryPreferredTermResult[]
 }
-
-export type VariantSubject = {
-  variantTerm: string
-  preferredTerms?: PreferredTerm[]
-}
-
-export type PreferredTerm = {
-  url: string
-  preferredTerm: string
-  count: string
-}
-
-export interface PreferredSubject extends PreferredTerm {
-  seeAlso?: SubjectLink[]
-  narrowerTerms?: SubjectLink[]
-  broaderTerms?: SubjectLink[]
-}
-
-export type Subject = PreferredSubject | VariantSubject
 
 export type SubjectLink = {
   url: string
-  term: string
+  termLabel: string
+  count?: string
 }
+
+export type VariantSubject = {
+  termLabel: string
+  preferredTerms?: SubjectLink[]
+}
+
+export interface PreferredSubject extends SubjectLink {
+  seeAlso?: { label: string; terms: SubjectLink[] }
+  narrowerTerms?: { label: string; terms: SubjectLink[] }
+  broaderTerms?: { label: string; terms: SubjectLink[] }
+}
+
+export type Subject = PreferredSubject | VariantSubject

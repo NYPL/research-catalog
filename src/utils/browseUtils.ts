@@ -1,8 +1,10 @@
 import type {
   BrowseParams,
   BrowseQueryParams,
+  DiscoveryPreferredSubjectResult,
+  DiscoveryPreferredTermResult,
   DiscoverySubjectResult,
-  DiscoverySubjectVariantResult,
+  SubjectLink,
 } from "../types/browseTypes"
 
 /**
@@ -49,13 +51,28 @@ export function getBrowseQuery(params: BrowseParams): string {
   return completeQuery?.length ? `?q=${completeQuery}` : ""
 }
 
-export function isVariantSubject(
+export function isPreferredSubject(
   subject: DiscoverySubjectResult
-): subject is DiscoverySubjectVariantResult {
-  return "variantTerm" in subject
+): subject is DiscoveryPreferredSubjectResult {
+  return "count" in subject
 }
 
 export function getSubjectURL(term: string) {
   const subject = encodeURIComponent(term).replace(/%2D%2D/g, "--")
   return `/browse/subjects/${subject}`
+}
+
+export function buildSubjectLinks(
+  terms: DiscoveryPreferredTermResult[]
+): SubjectLink[] {
+  const termLinks: SubjectLink[] = []
+
+  for (const termObj of terms) {
+    termLinks.push({
+      termLabel: termObj.label,
+      url: getSubjectURL(termObj.label),
+      count: termObj.count?.toLocaleString() || "",
+    })
+  }
+  return termLinks
 }
