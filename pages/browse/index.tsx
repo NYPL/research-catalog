@@ -25,7 +25,6 @@ export default function Browse({
   errorStatus = null,
 }: BrowseProps) {
   const metadataTitle = `Browse Research Catalog | ${SITE_NAME}`
-
   return (
     <>
       <RCHead metadataTitle={metadataTitle} />

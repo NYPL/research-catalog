@@ -11,7 +11,7 @@ const PreferredSubjectTableCell = ({
     terms.map((term, i) => (
       <span key={term.url}>
         <RCLink href={term.url} isUnderlined={false}>
-          {term.term}
+          {term.termLabel}
         </RCLink>
         {i < terms.length - 1 && ", "}
       </span>

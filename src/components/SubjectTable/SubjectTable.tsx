@@ -1,7 +1,7 @@
 import { Table } from "@nypl/design-system-react-components"
 import type { DiscoverySubjectResult } from "../../types/browseTypes"
 import VariantSubjectTableCell from "./VariantSubjectTableCell"
-import { isVariantSubject } from "../../utils/browseUtils"
+import { isPreferredSubject } from "../../utils/browseUtils"
 import VariantSubject from "../../models/VariantSubject"
 import PreferredSubject from "../../models/PreferredSubject"
 import PreferredSubjectTableCell from "./PreferredSubjectTableCell"
@@ -16,16 +16,7 @@ const SubjectTable = ({
   subjectTableData: DiscoverySubjectResult[]
 }) => {
   function createSubjectCell(subject: DiscoverySubjectResult) {
-    if (isVariantSubject(subject)) {
-      const newSubject = new VariantSubject(subject)
-      return [
-        <VariantSubjectTableCell
-          key={newSubject.termLabel}
-          subject={newSubject}
-        />,
-        "",
-      ]
-    } else {
+    if (isPreferredSubject(subject)) {
       const newSubject = new PreferredSubject(subject)
       return [
         <PreferredSubjectTableCell
@@ -33,6 +24,15 @@ const SubjectTable = ({
           subject={newSubject}
         />,
         newSubject.count,
+      ]
+    } else {
+      const newSubject = new VariantSubject(subject)
+      return [
+        <VariantSubjectTableCell
+          key={newSubject.termLabel}
+          subject={newSubject}
+        />,
+        "",
       ]
     }
   }
