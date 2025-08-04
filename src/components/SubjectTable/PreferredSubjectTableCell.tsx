@@ -11,7 +11,7 @@ const PreferredSubjectTableCell = ({
     terms.map((term, i) => (
       <span key={term.url}>
         <RCLink href={term.url} isUnderlined={false}>
-          {term.term}
+          {term.termLabel}
         </RCLink>
         {i < terms.length - 1 && ", "}
       </span>
@@ -28,15 +28,17 @@ const PreferredSubjectTableCell = ({
       <RCLink isUnderlined={false} href={subject.url}>
         {subject.termLabel}
       </RCLink>
-      <List
-        type="ul"
-        m="0"
-        listItems={relatedTerms?.map(({ label, terms }) => (
-          <Text size="body2" noSpace mt="-m" key={label}>
-            {label}: {commaSeparatedSubjectLinks(terms)}
-          </Text>
-        ))}
-      />
+      {relatedTerms.length > 0 && (
+        <List
+          type="ul"
+          m="0"
+          listItems={relatedTerms?.map(({ label, terms }) => (
+            <Text size="body2" mt="-23px" noSpace key={label}>
+              {label}: {commaSeparatedSubjectLinks(terms)}
+            </Text>
+          ))}
+        />
+      )}
     </Flex>
   )
 }
