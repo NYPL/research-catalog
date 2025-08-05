@@ -1,12 +1,15 @@
 import { test, expect } from "@playwright/test"
 import { RC_Home_Page } from "../../pages/rc_home_page"
 
+let rcHomePage: RC_Home_Page
+
+test.beforeEach(async ({ page }) => {
+  rcHomePage = new RC_Home_Page(page)
+  await rcHomePage.goto()
+})
+
 test.describe("Global Header", () => {
-  test("Verify global header elements appear on the Research Catalog home page", async ({
-    page,
-  }) => {
-    const rcHomePage = new RC_Home_Page(page)
-    await rcHomePage.goto()
+  test("Verify global header elements appear on the Research Catalog home page", async () => {
     await expect(rcHomePage.nypl_logo).toBeVisible()
     await expect(rcHomePage.nypl_logo_img).toBeVisible()
     await expect(rcHomePage.header_my_account).toBeVisible()
@@ -30,8 +33,6 @@ test.describe("Research Catalog Home Page", () => {
   test("Verify elements on the Research Catalog home page", async ({
     page,
   }) => {
-    const rcHomePage = new RC_Home_Page(page)
-    await rcHomePage.goto()
     await expect(rcHomePage.header_my_account).toBeVisible()
     await expect(rcHomePage.researchCatalogHeading).toHaveText(
       "Research Catalog"
@@ -81,11 +82,7 @@ test.describe("Research Catalog Home Page", () => {
 })
 
 test.describe("Global Footer", () => {
-  test("Verify global footer elements appear on the Research Catalog home page", async ({
-    page,
-  }) => {
-    const rcHomePage = new RC_Home_Page(page)
-    await rcHomePage.goto()
+  test("Verify global footer elements appear on the Research Catalog home page", async () => {
     await expect(rcHomePage.footer_container).toBeVisible()
     await expect(rcHomePage.help_and_feedback).toBeVisible()
   })

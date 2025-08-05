@@ -1,12 +1,17 @@
 import { test, expect } from "@playwright/test"
 import { BasePage } from "../pages/base_page"
 
+let basePage: BasePage
+
+test.beforeEach(async ({ page }) => {
+  basePage = new BasePage(page)
+  await basePage.goto()
+})
+
 test.describe("Global Header", () => {
   test("Verify global header elements appear and resolve to the correct landing pages", async ({
     page,
   }) => {
-    const basePage = new BasePage(page)
-    await basePage.goto()
     const headerLinks = [
       {
         locator: basePage.nypl_logo,
@@ -71,11 +76,7 @@ test.describe("Global Header", () => {
     }
   })
   // Search and My Account do not resolve to a new page.  Just test for visibility. Funcationality is tested elsewhere.
-  test("Verify Search and My Account buttons appear in header", async ({
-    page,
-  }) => {
-    const basePage = new BasePage(page)
-    await basePage.goto()
+  test("Verify Search and My Account buttons appear in header", async () => {
     await expect(basePage.header_search).toBeVisible()
     await expect(basePage.header_my_account).toBeVisible()
   })
