@@ -38,8 +38,6 @@ export async function fetchResults(
   }
   let queryString = getSearchQuery(modifiedSearchParams)
 
-  console.log(queryString)
-
   // Fall back to a single "?" in the case of an empty query
   if (!queryString.length) {
     queryString = "?"

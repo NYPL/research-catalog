@@ -21,7 +21,6 @@ const ResultsSort = ({
   display,
   sortOptions,
 }: ResultsSortProps) => {
-  console.log(params)
   const value =
     params.sortBy === "relevance"
       ? "relevance"
