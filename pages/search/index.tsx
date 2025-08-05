@@ -38,7 +38,7 @@ import type { Aggregation } from "../../src/types/filterTypes"
 import SearchFilters from "../../src/components/SearchFilters/SearchFilters"
 import { useFocusContext, idConstants } from "../../src/context/FocusContext"
 import type { HTTPStatusCode } from "../../src/types/appTypes"
-import SearchError from "../../src/components/SearchResults/SearchError"
+import ResultsError from "../../src/components/ResultsError/ResultsError"
 
 interface SearchProps {
   bannerNotification?: string
@@ -105,7 +105,7 @@ export default function Search({
   }, [isLoading])
 
   if (errorStatus) {
-    return <SearchError errorStatus={errorStatus} />
+    return <ResultsError errorStatus={errorStatus} page="search" />
   }
 
   const { itemListElement: searchResultsElements, totalResults } =

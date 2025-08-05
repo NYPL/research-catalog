@@ -30,9 +30,15 @@ const RCSubNav = ({ activePage, isAuthenticated }: SubNavProps) => {
           <SubNavLink
             href="/research/research-catalog/"
             id="subnav-search"
-            isSelected={activePage === "search" || activePage === "advanced"}
+            isSelected={
+              activePage === "search" ||
+              activePage === "advanced" ||
+              activePage === ""
+            }
             aria-current={
-              activePage === "search" || activePage === "advanced"
+              activePage === "search" ||
+              activePage === "advanced" ||
+              activePage === ""
                 ? "page"
                 : undefined
             }

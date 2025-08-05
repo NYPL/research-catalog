@@ -7,13 +7,14 @@ export type BrowseScope = "has" | "starts_with"
 export interface BrowseParams {
   q?: string
   page?: number
-  sort?: BrowseSort
-  sortDirection?: SortDirection
-  searchScope?: BrowseScope
+  sort?: string
+  sortDirection?: string
+  searchScope?: string
 }
 
 export interface DiscoverySubjectsResponse {
   status: HTTPStatusCode
+  totalResults: number
   subjects: DiscoverySubjectResult[]
 }
 

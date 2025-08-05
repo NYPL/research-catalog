@@ -1,5 +1,10 @@
-import { Heading, Menu, Flex } from "@nypl/design-system-react-components"
-import { discoverySubjectsResult } from "../../__test__/fixtures/subjectFixtures"
+import {
+  Heading,
+  Menu,
+  Flex,
+  SkeletonLoader,
+  Icon,
+} from "@nypl/design-system-react-components"
 import RCHead from "../../src/components/Head/RCHead"
 import Layout from "../../src/components/Layout/Layout"
 import SubjectTable from "../../src/components/SubjectTable/SubjectTable"
@@ -8,6 +13,14 @@ import { fetchSubjects } from "../../src/server/api/browse"
 import initializePatronTokenAuth from "../../src/server/auth"
 import type { HTTPStatusCode } from "../../src/types/appTypes"
 import type { DiscoverySubjectsResponse } from "../../src/types/browseTypes"
+import {
+  getBrowseResultsHeading,
+  mapQueryToBrowseParams,
+} from "../../src/utils/browseUtils"
+import { useRouter } from "next/router"
+import useLoading from "../../src/hooks/useLoading"
+import { useEffect, useRef } from "react"
+import ResultsError from "../../src/components/ResultsError/ResultsError"
 
 interface BrowseProps {
   results: DiscoverySubjectsResponse
@@ -25,14 +38,81 @@ export default function Browse({
   errorStatus = null,
 }: BrowseProps) {
   const metadataTitle = `Browse Research Catalog | ${SITE_NAME}`
-  return (
+  const { query } = useRouter()
+  const browseParams = mapQueryToBrowseParams(query)
+  const isLoading = useLoading()
+
+  // Ref for accessible announcement of loading state.
+  const liveLoadingRegionRef = useRef<HTMLDivElement | null>(null)
+  useEffect(() => {
+    if (liveLoadingRegionRef.current) {
+      liveLoadingRegionRef.current.textContent = "Loading results"
+    }
+  }, [isLoading])
+
+  if (errorStatus) {
+    return <ResultsError errorStatus={errorStatus} page="browse" />
+  }
+
+  const loader = (
     <>
-      <RCHead metadataTitle={metadataTitle} />
-      <Layout activePage="browse" isAuthenticated={isAuthenticated}>
+      <SkeletonLoader
+        showImage={false}
+        mb="m"
+        ml="0"
+        width="900px"
+        contentSize={5}
+        showHeading={false}
+      />
+      <div
+        id="browse-live-region"
+        ref={liveLoadingRegionRef}
+        style={{
+          position: "absolute",
+          width: "1px",
+          height: "1px",
+          margin: "-1px",
+          padding: 0,
+          overflow: "hidden",
+          clip: "rect(0,0,0,0)",
+          border: 0,
+        }}
+      />
+    </>
+  )
+
+  const renderEmpty = () => {
+    return isLoading ? (
+      loader
+    ) : (
+      <Flex
+        direction="column"
+        justifyContent="space-between"
+        alignItems="center"
+        gap="xs"
+        mb="l"
+        mt="l"
+      >
+        <Icon
+          color="section.research.secondary"
+          decorative
+          name="utilitySearch"
+          size="xlarge"
+          type="default"
+        />
+        <Heading size="heading6" color="section.research.secondary">
+          Use the search bar above to start browsing the Subject Headings index
+        </Heading>
+      </Flex>
+    )
+  }
+
+  const renderResults = () => {
+    return (
+      <>
         <Flex
           direction={{ base: "column", md: "row" }}
           justifyContent="space-between"
-          mt="l"
           mb="l"
         >
           <Heading
@@ -45,11 +125,29 @@ export default function Browse({
             minH="40px"
             aria-live="polite"
           >
-            Displaying x-x of x Subject Headings containing x
+            {getBrowseResultsHeading(browseParams, results.totalResults)}
           </Heading>
-          <Menu width="288px" labelText="placeholder sort" listItemsData={[]} />
+          <Menu
+            width="288px"
+            labelText="Sort by: Ascending (A-Z)"
+            listItemsData={[]}
+          />
         </Flex>
-        <SubjectTable subjectTableData={results.subjects} />
+        {isLoading ? (
+          loader
+        ) : (
+          <SubjectTable subjectTableData={results.subjects} />
+        )}
+      </>
+    )
+  }
+
+  return (
+    <>
+      <RCHead metadataTitle={metadataTitle} />
+      <Layout activePage="browse" isAuthenticated={isAuthenticated}>
+        {browseParams.q.length === 0 ? renderEmpty() : renderResults()}
+        {/* {renderResults()} */}
       </Layout>
     </>
   )
@@ -59,24 +157,34 @@ export async function getServerSideProps({ req, query }) {
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const { browseType = "subjects" } = query
 
+  const browseParams = mapQueryToBrowseParams(query)
+  const isAuthenticated = patronTokenResponse.isTokenValid
+
+  // Skip request if no keywords
+  if (!browseParams.q || browseParams.q.length === 0) {
+    return {
+      props: {
+        isAuthenticated,
+        results: {},
+      },
+    }
+  }
+
   let response
 
   switch (browseType) {
     case "authors":
-      //response = await fetchAuthors({ q: "" })
+      // response = await fetchAuthors(browseParams)
       break
     case "subjects":
     default:
-      response = await fetchSubjects({ q: "A", page: 1 })
+      response = await fetchSubjects(browseParams)
       break
   }
 
-  // Handle API errors
   if (response?.status !== 200) {
     return { props: { errorStatus: response.status } }
   }
-
-  const isAuthenticated = patronTokenResponse.isTokenValid
 
   return {
     props: {
