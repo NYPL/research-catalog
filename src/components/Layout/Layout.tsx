@@ -15,9 +15,10 @@ import SearchForm from "../SearchForm/SearchForm"
 import { BASE_URL } from "../../config/constants"
 import FeedbackForm from "../FeedbackForm/FeedbackForm"
 import type { Aggregation } from "../../types/filterTypes"
-import EDSBanner from "../EDSBanner"
+import EDSBanner from "../Banners/EDSBanner"
 import RCSubNav from "../RCSubNav/RCSubNav"
 import BrowseForm from "../BrowseForm/BrowseForm"
+import SubjectHeadingBanner from "../Banners/SubjectHeadingBanner"
 
 interface LayoutProps {
   sidebar?: ReactElement
@@ -46,6 +47,7 @@ const Layout = ({
   const showSearch = activePage === "search" || activePage === ""
   const showBrowse = activePage === "browse" || activePage === "sh-results"
   const showNotification = activePage === "" || activePage === "search"
+  const showBrowseBanner = activePage === "browse"
   return (
     <DSProvider>
       <TemplateAppContainer
@@ -106,7 +108,16 @@ const Layout = ({
                 searchResultsCount={searchResultsCount}
               />
             )}
-            {showBrowse && <BrowseForm />}
+            {showBrowse && (
+              <>
+                <BrowseForm />
+                {showBrowseBanner && (
+                  <Flex gap="s" align="center" direction="column" pb="l" pt="l">
+                    <SubjectHeadingBanner />
+                  </Flex>
+                )}
+              </>
+            )}
 
             {showSearch && (
               <Flex
