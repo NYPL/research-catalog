@@ -1,7 +1,7 @@
 import { render, screen } from "../../utils/testUtils"
 import type {
   PreferredSubject,
-  PreferredTerm,
+  SubjectLink,
   VariantSubject,
 } from "../../types/browseTypes"
 import PreferredSubjectTableCell from "./PreferredSubjectTableCell"
@@ -37,8 +37,12 @@ describe("PreferredSubjectTableCell", () => {
       seeAlso: {
         label: "See also",
         terms: [
-          { term: "Painting", url: "/browse/subject/painting" },
-          { term: "Sculpture", url: "/browse/subject/sculpture" },
+          { termLabel: "Painting", url: "/browse/subject/painting", count: "" },
+          {
+            termLabel: "Sculpture",
+            url: "/browse/subject/sculpture",
+            count: "",
+          },
         ],
       },
     })
@@ -60,7 +64,13 @@ describe("PreferredSubjectTableCell", () => {
     const subject = createPreferredSubject({
       broaderTerms: {
         label: "Broader term",
-        terms: [{ term: "Visual Arts", url: "/browse/subject/visual-arts" }],
+        terms: [
+          {
+            termLabel: "Visual Arts",
+            url: "/browse/subject/visual-arts",
+            count: "",
+          },
+        ],
       },
     })
 
@@ -77,7 +87,13 @@ describe("PreferredSubjectTableCell", () => {
     const subject = createPreferredSubject({
       narrowerTerms: {
         label: "Narrower term",
-        terms: [{ term: "Modernism", url: "/browse/subject/modernism" }],
+        terms: [
+          {
+            termLabel: "Modernism",
+            url: "/browse/subject/modernism",
+            count: "",
+          },
+        ],
       },
     })
 
@@ -95,8 +111,12 @@ describe("PreferredSubjectTableCell", () => {
       seeAlso: {
         label: "See also",
         terms: [
-          { term: "Painting", url: "/browse/subject/painting" },
-          { term: "Sculpture", url: "/browse/subject/sculpture" },
+          { termLabel: "Painting", url: "/browse/subject/painting", count: "" },
+          {
+            termLabel: "Sculpture",
+            url: "/browse/subject/sculpture",
+            count: "",
+          },
         ],
       },
     })
@@ -108,9 +128,9 @@ describe("PreferredSubjectTableCell", () => {
   })
 })
 
-const createPreferredTerm = (
-  overrides: Partial<PreferredTerm> = {}
-): PreferredTerm => ({
+const createSubjectLink = (
+  overrides: Partial<SubjectLink> = {}
+): SubjectLink => ({
   termLabel: "Beagle",
   url: "/browse/subject/beagle",
   count: "42",
@@ -135,7 +155,7 @@ describe("VariantSubjectTableCell", () => {
 
   it("renders a single preferred term link with label and count", () => {
     const subject = createVariantSubject({
-      preferredTerms: [createPreferredTerm()],
+      preferredTerms: [createSubjectLink()],
     })
 
     render(<VariantSubjectTableCell subject={subject} />)
@@ -151,12 +171,12 @@ describe("VariantSubjectTableCell", () => {
 
   it("renders multiple preferred term links", () => {
     const terms = [
-      createPreferredTerm({
+      createSubjectLink({
         termLabel: "Beagle",
         url: "/browse/subject/beagle",
         count: "42",
       }),
-      createPreferredTerm({
+      createSubjectLink({
         termLabel: "Poodle",
         url: "/browse/subject/poodle",
         count: "33",
@@ -184,7 +204,7 @@ describe("VariantSubjectTableCell", () => {
       "Dachshund",
     ]
     const terms = dogTerms.map((breed, i) =>
-      createPreferredTerm({
+      createSubjectLink({
         termLabel: breed,
         url: `/subject/${breed.toLowerCase()}`,
         count: (i + 10).toString(),

@@ -1,8 +1,8 @@
 import type {
-  DiscoverySubjectPreferredResult,
+  DiscoveryPreferredSubjectResult,
   SubjectLink,
 } from "../types/browseTypes"
-import { getSubjectURL } from "../utils/browseUtils"
+import { buildSubjectLinks, getSubjectURL } from "../utils/browseUtils"
 
 /**
  * The PreferredSubject class represents an authorized subject heading,
@@ -18,28 +18,21 @@ export default class PreferredSubject {
   narrowerTerms?: { label: string; terms: SubjectLink[] }
   broaderTerms?: { label: string; terms: SubjectLink[] }
 
-  constructor(result?: DiscoverySubjectPreferredResult) {
-    this.url = getSubjectURL(result.preferredTerm)
-    this.termLabel = result.preferredTerm
-    this.count = result.count.toLocaleString()
+  constructor(result?: DiscoveryPreferredSubjectResult) {
+    this.url = getSubjectURL(result.termLabel)
+    this.termLabel = result.termLabel
+    this.count = result.count?.toLocaleString()
     this.seeAlso = result.seeAlso?.length && {
       label: "See also",
-      terms: this.buildSubjectLinkList(result.seeAlso),
+      terms: buildSubjectLinks(result.seeAlso),
     }
     this.narrowerTerms = result.narrowerTerms?.length && {
       label: "Narrower term",
-      terms: this.buildSubjectLinkList(result.narrowerTerms),
+      terms: buildSubjectLinks(result.narrowerTerms),
     }
     this.broaderTerms = result.broaderTerms?.length && {
       label: "Broader term",
-      terms: this.buildSubjectLinkList(result.broaderTerms),
+      terms: buildSubjectLinks(result.broaderTerms),
     }
-  }
-
-  buildSubjectLinkList(terms: string[]): SubjectLink[] {
-    return terms.map((term) => ({
-      url: getSubjectURL(term),
-      term: term,
-    }))
   }
 }

@@ -1,7 +1,7 @@
 import { Table } from "@nypl/design-system-react-components"
 import type { DiscoverySubjectResult } from "../../types/browseTypes"
 import VariantSubjectTableCell from "./VariantSubjectTableCell"
-import { isVariantSubject } from "../../utils/browseUtils"
+import { isPreferredSubject } from "../../utils/browseUtils"
 import VariantSubject from "../../models/VariantSubject"
 import PreferredSubject from "../../models/PreferredSubject"
 import PreferredSubjectTableCell from "./PreferredSubjectTableCell"
@@ -15,12 +15,26 @@ const SubjectTable = ({
 }: {
   subjectTableData: DiscoverySubjectResult[]
 }) => {
-  function createSubject(
-    subject: DiscoverySubjectResult
-  ): VariantSubject | PreferredSubject {
-    return isVariantSubject(subject)
-      ? new VariantSubject(subject)
-      : new PreferredSubject(subject)
+  function createSubjectCell(subject: DiscoverySubjectResult) {
+    if (isPreferredSubject(subject)) {
+      const newSubject = new PreferredSubject(subject)
+      return [
+        <PreferredSubjectTableCell
+          key={newSubject.termLabel}
+          subject={newSubject}
+        />,
+        newSubject.count,
+      ]
+    } else {
+      const newSubject = new VariantSubject(subject)
+      return [
+        <VariantSubjectTableCell
+          key={newSubject.termLabel}
+          subject={newSubject}
+        />,
+        "",
+      ]
+    }
   }
   return (
     <Table
@@ -43,25 +57,9 @@ const SubjectTable = ({
           textAlign: "right",
         },
       ]}
-      tableData={subjectTableData.map((subject: DiscoverySubjectResult) => {
-        const newSubject = createSubject(subject)
-        if (newSubject instanceof VariantSubject) {
-          return [
-            <VariantSubjectTableCell
-              key={newSubject.termLabel}
-              subject={newSubject}
-            />,
-            "",
-          ]
-        }
-        return [
-          <PreferredSubjectTableCell
-            key={newSubject.termLabel}
-            subject={newSubject}
-          />,
-          newSubject.count,
-        ]
-      })}
+      tableData={subjectTableData.map((subject: DiscoverySubjectResult) =>
+        createSubjectCell(subject)
+      )}
       columnHeadersBackgroundColor="ui.bg.default"
       showRowDividers
     />
