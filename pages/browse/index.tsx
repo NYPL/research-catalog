@@ -1,6 +1,5 @@
 import {
   Heading,
-  Menu,
   Flex,
   SkeletonLoader,
   Icon,
@@ -12,15 +11,25 @@ import { SITE_NAME } from "../../src/config/constants"
 import { fetchSubjects } from "../../src/server/api/browse"
 import initializePatronTokenAuth from "../../src/server/auth"
 import type { HTTPStatusCode } from "../../src/types/appTypes"
-import type { DiscoverySubjectsResponse } from "../../src/types/browseTypes"
+import type {
+  BrowseSort,
+  DiscoverySubjectsResponse,
+} from "../../src/types/browseTypes"
 import {
+  browseSortOptions,
+  getBrowseQuery,
   getBrowseResultsHeading,
   mapQueryToBrowseParams,
 } from "../../src/utils/browseUtils"
 import { useRouter } from "next/router"
 import useLoading from "../../src/hooks/useLoading"
+import type { ChangeEvent } from "react"
 import { useRef } from "react"
 import ResultsError from "../../src/components/ResultsError/ResultsError"
+import { idConstants, useFocusContext } from "../../src/context/FocusContext"
+import type { SortOrder } from "../../src/types/searchTypes"
+import { sortOptions } from "../../src/utils/searchUtils"
+import ResultsSort from "../../src/components/SearchResults/ResultsSort"
 
 interface BrowseProps {
   results: DiscoverySubjectsResponse
@@ -38,9 +47,11 @@ export default function Browse({
   errorStatus = null,
 }: BrowseProps) {
   const metadataTitle = `Browse Research Catalog | ${SITE_NAME}`
-  const { query } = useRouter()
+  const { query, push } = useRouter()
   const browseParams = mapQueryToBrowseParams(query)
   const isLoading = useLoading()
+  const { setPersistentFocus } = useFocusContext()
+
   // Ref for accessible announcement of loading state.
   const liveLoadingRegionRef = useRef<HTMLDivElement | null>(null)
   if (errorStatus) {
@@ -120,11 +131,6 @@ export default function Browse({
           >
             {getBrowseResultsHeading(browseParams, results.totalResults)}
           </Heading>
-          <Menu
-            width="288px"
-            labelText="Sort by: Ascending (A-Z)"
-            listItemsData={[]}
-          />
         </Flex>
         {isLoading ? (
           loader

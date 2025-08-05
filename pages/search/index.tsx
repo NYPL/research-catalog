@@ -14,7 +14,6 @@ import type { ChangeEvent } from "react"
 import { useRouter } from "next/router"
 import Layout from "../../src/components/Layout/Layout"
 import SearchResult from "../../src/components/SearchResults/SearchResult"
-import SearchResultsSort from "../../src/components/SearchResults/SearchResultsSort"
 import AppliedFilters from "../../src/components/AppliedFilters/AppliedFilters"
 import { fetchResults } from "../../src/server/api/search"
 import {
@@ -23,6 +22,7 @@ import {
   mapElementsToSearchResultsBibs,
   getSearchQuery,
   checkForRedirectOnMatch,
+  sortOptions,
 } from "../../src/utils/searchUtils"
 import type {
   SearchResultsResponse,
@@ -39,6 +39,7 @@ import SearchFilters from "../../src/components/SearchFilters/SearchFilters"
 import { useFocusContext, idConstants } from "../../src/context/FocusContext"
 import type { HTTPStatusCode } from "../../src/types/appTypes"
 import ResultsError from "../../src/components/ResultsError/ResultsError"
+import ResultsSort from "../../src/components/SearchResults/ResultsSort"
 
 interface SearchProps {
   bannerNotification?: string
@@ -186,8 +187,10 @@ export default function Search({
               >
                 {getSearchResultsHeading(searchParams, totalResults)}
               </Heading>
-              <SearchResultsSort
-                searchParams={searchParams}
+              <ResultsSort
+                type="search"
+                sortOptions={sortOptions}
+                params={searchParams}
                 handleSortChange={handleSortChange}
               />
             </Flex>
