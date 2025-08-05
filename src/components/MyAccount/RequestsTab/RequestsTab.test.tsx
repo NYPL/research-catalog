@@ -78,6 +78,19 @@ describe("RequestsTab", () => {
       "My Account: Patron 6742743 deleted hold 49438192 on item 40367309"
     )
   })
+  it("logs when a cancellation fails", async () => {
+    global.fetch = jest.fn().mockResolvedValueOnce({
+      json: async () => "Canceled",
+      status: 500,
+    } as Response)
+    logger.info = jest.fn()
+    const component = renderWithPatronDataContext()
+    await userEvent.click(component.getAllByText("Cancel request")[0])
+    await userEvent.click(component.getAllByText("Yes, cancel request")[0])
+    expect(logger.info).toHaveBeenCalledWith(
+      "My Account: Patron 6742743 attempted and failed to delete hold 49438192 on item 40367309"
+    )
+  })
 
   it("fetches account data when cancel is successful", async () => {
     global.fetch = jest
