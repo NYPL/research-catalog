@@ -4,6 +4,7 @@ import {
   SkeletonLoader,
   Icon,
   Pagination,
+  Box,
 } from "@nypl/design-system-react-components"
 import RCHead from "../../src/components/Head/RCHead"
 import Layout from "../../src/components/Layout/Layout"
@@ -145,7 +146,7 @@ export default function Browse({
 
   const renderResults = () => {
     return (
-      <>
+      <Box mb="xxl">
         <Flex
           direction={{ base: "column", md: "row" }}
           justifyContent="space-between"
@@ -178,14 +179,13 @@ export default function Browse({
         <Pagination
           id="results-pagination"
           mt="xxl"
-          mb="xxl"
           className="no-print"
           initialPage={browseParams.page}
           currentPage={browseParams.page}
           pageCount={Math.ceil(results.totalResults / SUBJECTS_PER_PAGE)}
           onPageChange={handlePageChange}
         />
-      </>
+      </Box>
     )
   }
 

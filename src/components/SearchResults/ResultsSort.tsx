@@ -36,6 +36,7 @@ const ResultsSort = ({
       value={value}
       display={display}
       className="no-print"
+      mt={{ base: "s", md: 0 }}
     >
       {Object.entries(sortOptions).map(([key, label]) => (
         <option value={key} key={`sort-by-${key}`}>
