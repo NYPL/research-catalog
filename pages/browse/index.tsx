@@ -21,7 +21,6 @@ import { useRouter } from "next/router"
 import useLoading from "../../src/hooks/useLoading"
 import { useEffect, useRef } from "react"
 import ResultsError from "../../src/components/ResultsError/ResultsError"
-import { idConstants, useFocusContext } from "../../src/context/FocusContext"
 
 interface BrowseProps {
   results: DiscoverySubjectsResponse

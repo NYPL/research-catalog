@@ -35,7 +35,7 @@ const SearchForm = ({
       path={PATHS.SEARCH}
       tipTitle="Search tip: "
       selectOptions={SEARCH_FORM_OPTIONS}
-      queryParamKeys={{ searchTerm: "q", searchScope: "field" }}
+      scopeParamKey="field"
       getQueryString={getSearchQuery}
       onSubmitFocusId={idConstants.searchResultsHeading}
     >

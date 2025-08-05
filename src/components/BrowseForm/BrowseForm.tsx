@@ -10,7 +10,7 @@ const BrowseForm = () => {
       path={PATHS.BROWSE}
       tipTitle="Browse tip: "
       selectOptions={BROWSE_FORM_OPTIONS}
-      queryParamKeys={{ searchTerm: "q", searchScope: "searchScope" }}
+      scopeParamKey="searchScope"
       getQueryString={getBrowseQuery}
       onSubmitFocusId={idConstants.browseResultsHeading}
     />

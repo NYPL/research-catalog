@@ -1,4 +1,4 @@
-import { BROWSE_FORM_OPTIONS, SUBJECTS_PER_PAGE } from "../config/constants"
+import { SUBJECTS_PER_PAGE } from "../config/constants"
 import type {
   BrowseParams,
   BrowseQueryParams,

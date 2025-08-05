@@ -28,10 +28,7 @@ type SearchBrowseFormProps = {
       placeholder: string
     }
   }
-  queryParamKeys: {
-    searchTerm: string
-    searchScope: string
-  }
+  scopeParamKey: string
   getQueryString: (params: { [key: string]: string }) => string
   onSubmitFocusId?: string | null
   children?: React.ReactNode
@@ -43,7 +40,7 @@ const SearchBrowseForm = ({
   tipTitle,
   labelText = "Search Bar Label",
   selectOptions,
-  queryParamKeys,
+  scopeParamKey,
   getQueryString,
   onSubmitFocusId = null,
   children,
@@ -53,7 +50,7 @@ const SearchBrowseForm = ({
   const { setPersistentFocus } = useFocusContext()
 
   const [searchTerm, setSearchTerm] = useState(
-    (router?.query?.[queryParamKeys.searchTerm] as string) || ""
+    (router?.query?.q as string) || ""
   )
   const [searchScope, setSearchScope] = useState(
     (router?.query?.search_scope as string) || initialScope
@@ -79,8 +76,8 @@ const SearchBrowseForm = ({
     e.preventDefault()
 
     const params = {
-      [queryParamKeys.searchTerm]: searchTerm,
-      [queryParamKeys.searchScope]: searchScope,
+      q: searchTerm,
+      [scopeParamKey]: searchScope,
     }
 
     const queryString = getQueryString(params)
@@ -110,7 +107,7 @@ const SearchBrowseForm = ({
             value: searchScope,
             onChange: (e) => handleChange(e, setSearchScope),
             labelText: "Select a category",
-            name: queryParamKeys.searchScope,
+            name: scopeParamKey,
             optionsData: formattedSelectOptions,
           }}
           textInputProps={{
@@ -118,7 +115,7 @@ const SearchBrowseForm = ({
             onChange: (e) => handleChange(e, setSearchTerm),
             isClearableCallback: () => setSearchTerm(""),
             value: searchTerm,
-            name: queryParamKeys.searchTerm,
+            name: "q",
             placeholder,
             labelText: tipText,
           }}
