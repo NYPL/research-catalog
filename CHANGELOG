@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Added
 
+- Added `ResultsSort` to browse page [SCC-4571](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4571)
 - Added `SubjectHeadingBanner` to browse page [SCC-4569](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4569)
 - Added `BrowseForm` and updated `Layout` and `RCSubNav` to use it [SCC-4568](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4568)
 - Added `SubjectTable` and table cells [SCC-4570](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4570)
