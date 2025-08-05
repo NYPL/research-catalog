@@ -7,7 +7,6 @@ interface ResultsSortProps {
   type: "search" | "browse"
   params: SearchParams | BrowseParams
   handleSortChange: (e: ChangeEvent) => Promise<void>
-  display?: Record<string, string>
   sortOptions: Record<string, string>
 }
 
@@ -15,10 +14,9 @@ interface ResultsSortProps {
  * The ResultsSort component renders a Select element used for sorting Search or Browse results.
  */
 const ResultsSort = ({
-  type = "search",
+  type,
   params,
   handleSortChange,
-  display,
   sortOptions,
 }: ResultsSortProps) => {
   const value =
@@ -34,7 +32,6 @@ const ResultsSort = ({
       labelPosition="inline"
       onChange={handleSortChange}
       value={value}
-      display={display}
       className="no-print"
     >
       {Object.entries(sortOptions).map(([key, label]) => (
