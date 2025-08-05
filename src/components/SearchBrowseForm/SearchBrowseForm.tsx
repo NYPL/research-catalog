@@ -1,5 +1,3 @@
-// components/Shared/SearchBrowseForm.tsx
-
 import {
   Box,
   Flex,
@@ -10,7 +8,6 @@ import {
 import { useRouter } from "next/router"
 import {
   useState,
-  useEffect,
   type SyntheticEvent,
   type Dispatch,
   type SetStateAction,
@@ -22,11 +19,15 @@ import styles from "../../../styles/components/Search.module.scss"
 type SearchBrowseFormProps = {
   initialScope: string
   path: string
-  placeholder: string
   tipTitle: string
-  tipText: string
   labelText?: string
-  selectOptions: { text: string; value: string }[]
+  selectOptions: {
+    [key: string]: {
+      text: string
+      searchTip?: string
+      placeholder: string
+    }
+  }
   queryParamKeys: {
     searchTerm: string
     searchScope: string
@@ -39,10 +40,8 @@ type SearchBrowseFormProps = {
 const SearchBrowseForm = ({
   initialScope,
   path,
-  placeholder,
   tipTitle,
-  tipText,
-  labelText = "Search",
+  labelText = "Search Bar Label",
   selectOptions,
   queryParamKeys,
   getQueryString,
@@ -57,8 +56,16 @@ const SearchBrowseForm = ({
     (router?.query?.[queryParamKeys.searchTerm] as string) || ""
   )
   const [searchScope, setSearchScope] = useState(
-    (router?.query?.[queryParamKeys.searchScope] as string) || initialScope
+    (router?.query?.search_scope as string) || initialScope
   )
+
+  const placeholder = selectOptions[searchScope].placeholder
+  const tipText = selectOptions[searchScope].searchTip
+
+  const formattedSelectOptions = Object.keys(selectOptions).map((key) => ({
+    text: selectOptions[key].text,
+    value: key,
+  }))
 
   const handleChange = (
     e: SyntheticEvent,
@@ -70,6 +77,7 @@ const SearchBrowseForm = ({
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
+
     const params = {
       [queryParamKeys.searchTerm]: searchTerm,
       [queryParamKeys.searchScope]: searchScope,
@@ -103,7 +111,7 @@ const SearchBrowseForm = ({
             onChange: (e) => handleChange(e, setSearchScope),
             labelText: "Select a category",
             name: queryParamKeys.searchScope,
-            optionsData: selectOptions,
+            optionsData: formattedSelectOptions,
           }}
           textInputProps={{
             isClearable: true,

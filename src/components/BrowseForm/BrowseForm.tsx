@@ -1,21 +1,16 @@
-import {
-  browseFormSelectOptions,
-  getBrowseQuery,
-} from "../../utils/browseUtils"
-import { PATHS } from "../../config/constants"
+import { getBrowseQuery } from "../../utils/browseUtils"
+import { BROWSE_FORM_OPTIONS, PATHS } from "../../config/constants"
 import { idConstants } from "../../context/FocusContext"
-import SearchBrowseForm from "../SearchForm/SearchBrowseForm"
+import SearchBrowseForm from "../SearchBrowseForm/SearchBrowseForm"
 
 const BrowseForm = () => {
   return (
     <SearchBrowseForm
       initialScope="has"
       path={PATHS.BROWSE}
-      placeholder="Example: Ornithology or Vietnam War"
       tipTitle="Browse tip: "
-      tipText="Enter one or more keywords in any order to browse the Subject Headings index."
-      selectOptions={browseFormSelectOptions}
-      queryParamKeys={{ searchTerm: "q", searchScope: "search_scope" }}
+      selectOptions={BROWSE_FORM_OPTIONS}
+      queryParamKeys={{ searchTerm: "q", searchScope: "searchScope" }}
       getQueryString={getBrowseQuery}
       onSubmitFocusId={idConstants.browseResultsHeading}
     />
