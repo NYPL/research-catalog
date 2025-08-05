@@ -21,9 +21,11 @@ const ResultsSort = ({
   display,
   sortOptions,
 }: ResultsSortProps) => {
-  const value = params.order
-    ? `${params.sortBy}_${params.order}`
-    : params.sortBy
+  console.log(params)
+  const value =
+    params.sortBy === "relevance"
+      ? "relevance"
+      : `${params.sortBy}_${params.order ?? "asc"}`
 
   return (
     <Select
@@ -31,7 +33,6 @@ const ResultsSort = ({
       id={`${type}-results-sort`}
       labelText="Sort by"
       labelPosition="inline"
-      mb="l"
       onChange={handleSortChange}
       value={value}
       display={display}

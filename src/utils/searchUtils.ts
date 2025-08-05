@@ -101,7 +101,7 @@ function buildQueryDisplayString(searchParams: SearchParams): string {
  * getSortQuery
  * Get the sort type and order and format into query param snippet.
  */
-function getSortQuery(sortBy = "", order = ""): string {
+export function getSortQuery(sortBy = "", order = ""): string {
   const reset = sortBy === "relevance"
   let sortQuery = ""
   const sortDirectionQuery = order === "" ? "" : `&sort_direction=${order}`

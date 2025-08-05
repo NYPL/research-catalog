@@ -31,6 +31,11 @@ export function mapQueryToBrowseParams({
   }
 }
 
+function getSortQuery(sortBy: string, order: string): string {
+  const isDefaultSort = sortBy === "preferredTerm" && order === "asc"
+  return isDefaultSort ? "" : `&sort=${sortBy}&sort_direction=${order}`
+}
+
 /**
  * getBrowseQuery
  * Builds a query string from a BrowseParams object
@@ -44,8 +49,7 @@ export function getBrowseQuery(params: BrowseParams): string {
     searchScope = "has",
   } = params
   const browseKeywordsQuery = encodeURIComponent(q)
-  // TO DO: confirm if this should enforce the respective default sorts
-  const sortQuery = `&sort=${sortBy}&sort_direction=${order}`
+  const sortQuery = getSortQuery(sortBy, order)
   const scopeQuery = `&search_scope=${searchScope}`
   const pageQuery = page !== 1 ? `&page=${page}` : ""
 
@@ -104,9 +108,9 @@ export function getBrowseResultsHeading(
  * The allowed keys for the sort field and their respective labels
  */
 export const browseSortOptions: Record<string, string> = {
-  relevance: "Relevance",
   preferredTerm_asc: "Ascending (A - Z)",
   preferredTerm_desc: "Descending (Z - A)",
+  relevance: "Relevance",
 }
 
 export function buildSubjectLinks(

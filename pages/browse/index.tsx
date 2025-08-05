@@ -58,6 +58,26 @@ export default function Browse({
     return <ResultsError errorStatus={errorStatus} page="browse" />
   }
 
+  const handleSortChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    const selectedSortOption = e.target.value
+    // Extract sort key and order from selected sort option using "_" delineator
+    const [sortBy, order] = selectedSortOption.split("_") as [
+      BrowseSort,
+      SortOrder | undefined
+    ]
+    setPersistentFocus(idConstants.browseResultsSort)
+    await push(
+      getBrowseQuery({
+        ...browseParams,
+        sortBy,
+        order,
+        page: undefined,
+      }),
+      undefined,
+      { scroll: false }
+    )
+  }
+
   const loader = (
     <>
       <SkeletonLoader
@@ -131,6 +151,12 @@ export default function Browse({
           >
             {getBrowseResultsHeading(browseParams, results.totalResults)}
           </Heading>
+          <ResultsSort
+            type="browse"
+            params={browseParams}
+            sortOptions={browseSortOptions}
+            handleSortChange={handleSortChange}
+          />
         </Flex>
         {isLoading ? (
           loader
