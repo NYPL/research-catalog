@@ -207,6 +207,7 @@ export default class MyAccount {
           hold.recordType === "i" ? hold.record.bibIds[0] : hold.record.id
         const bibForHold = bibDataMap[bibId]
         return {
+          itemId: hold.record.id,
           patron: MyAccount.getRecordId(hold.patron),
           id: MyAccount.getRecordId(hold.id),
           pickupByDate: MyAccount.formatDate(hold.pickupByDate) || null,
