@@ -24,11 +24,10 @@ import {
 import { useRouter } from "next/router"
 import useLoading from "../../src/hooks/useLoading"
 import type { ChangeEvent } from "react"
-import { useRef } from "react"
+import { useRef, useEffect } from "react"
 import ResultsError from "../../src/components/ResultsError/ResultsError"
 import { idConstants, useFocusContext } from "../../src/context/FocusContext"
 import type { SortOrder } from "../../src/types/searchTypes"
-import { sortOptions } from "../../src/utils/searchUtils"
 import ResultsSort from "../../src/components/SearchResults/ResultsSort"
 
 interface BrowseProps {
@@ -54,6 +53,12 @@ export default function Browse({
 
   // Ref for accessible announcement of loading state.
   const liveLoadingRegionRef = useRef<HTMLDivElement | null>(null)
+  useEffect(() => {
+    if (liveLoadingRegionRef.current) {
+      liveLoadingRegionRef.current.textContent = "Loading results"
+    }
+  }, [isLoading])
+
   if (errorStatus) {
     return <ResultsError errorStatus={errorStatus} page="browse" />
   }

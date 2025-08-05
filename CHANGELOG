@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Added
 
 - Added `SubjectHeadingBanner` to browse page [SCC-4569](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4569)
+- Added `BrowseForm` and updated `Layout` and `RCSubNav` to use it [SCC-4568](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4568)
 - Added `SubjectTable` and table cells [SCC-4570](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4570)
 - Added `VariantSubject` and `PreferredSubject` models [SCC-3727](https://newyorkpubliclibrary.atlassian.net/browse/SCC-3727)
 - Added `fetchSubjects` API handler for `browse` index page [SCC-4774](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4774)
