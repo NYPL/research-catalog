@@ -1,15 +1,17 @@
 import VariantSubject from "../VariantSubject"
 import type {
-  DiscoveryPreferredTermResult,
-  DiscoverySubjectVariantResult,
-  PreferredTerm,
+  DiscoveryVariantSubjectResult,
+  SubjectLink,
 } from "../../types/browseTypes"
 import { getSubjectURL } from "../../utils/browseUtils"
 
 describe("VariantSubject model", () => {
-  const mockResult: DiscoverySubjectVariantResult = {
-    variantTerm: "CS",
-    preferredTerms: [{ "Computer Science": 120 }, { Computing: 45 }],
+  const mockResult: DiscoveryVariantSubjectResult = {
+    termLabel: "CS",
+    preferredTerms: [
+      { label: "Computer Science", count: 120 },
+      { label: "Computing", count: 45 },
+    ],
   }
 
   it("should create a VariantSubject with correct properties", () => {
@@ -17,7 +19,7 @@ describe("VariantSubject model", () => {
 
     expect(variant.termLabel).toBe("CS")
 
-    const expectedPreferredTerms: PreferredTerm[] = [
+    const expectedPreferredTerms: SubjectLink[] = [
       {
         termLabel: "Computer Science",
         url: getSubjectURL("Computer Science"),
@@ -34,8 +36,8 @@ describe("VariantSubject model", () => {
   })
 
   it("should handle an empty preferredTerms list", () => {
-    const emptyResult: DiscoverySubjectVariantResult = {
-      variantTerm: "Math",
+    const emptyResult: DiscoveryVariantSubjectResult = {
+      termLabel: "Math",
       preferredTerms: [],
     }
 
@@ -43,32 +45,5 @@ describe("VariantSubject model", () => {
 
     expect(variant.termLabel).toBe("Math")
     expect(variant.preferredTerms).toEqual([])
-  })
-})
-
-describe("buildPreferredTermList()", () => {
-  it("should convert DiscoveryPreferredTermResult into PreferredTerm", () => {
-    const terms: DiscoveryPreferredTermResult[] = [
-      { "Gautama Buddha": 300 },
-      { Buddhism: 400 },
-    ]
-
-    const variant = new VariantSubject({
-      variantTerm: "Buddha",
-      preferredTerms: terms,
-    })
-
-    expect(variant.preferredTerms).toEqual([
-      {
-        termLabel: "Gautama Buddha",
-        url: getSubjectURL("Gautama Buddha"),
-        count: "300",
-      },
-      {
-        termLabel: "Buddhism",
-        url: getSubjectURL("Buddhism"),
-        count: "400",
-      },
-    ])
   })
 })

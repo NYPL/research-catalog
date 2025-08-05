@@ -2,8 +2,10 @@ import { BROWSE_FORM_OPTIONS, SUBJECTS_PER_PAGE } from "../config/constants"
 import type {
   BrowseParams,
   BrowseQueryParams,
+  DiscoveryPreferredSubjectResult,
+  DiscoveryPreferredTermResult,
   DiscoverySubjectResult,
-  DiscoverySubjectVariantResult,
+  SubjectLink,
 } from "../types/browseTypes"
 import { getPaginationOffsetStrings } from "./appUtils"
 
@@ -51,10 +53,10 @@ export function getBrowseQuery(params: BrowseParams): string {
   return completeQuery?.length ? `?q=${completeQuery}` : ""
 }
 
-export function isVariantSubject(
+export function isPreferredSubject(
   subject: DiscoverySubjectResult
-): subject is DiscoverySubjectVariantResult {
-  return "variantTerm" in subject
+): subject is DiscoveryPreferredSubjectResult {
+  return "count" in subject
 }
 
 export function getSubjectURL(term: string) {
@@ -105,4 +107,19 @@ export const browseSortOptions: Record<string, string> = {
   relevance: "Relevance",
   preferredTerm_asc: "Ascending (A - Z)",
   preferredTerm_desc: "Descending (Z - A)",
+}
+
+export function buildSubjectLinks(
+  terms: DiscoveryPreferredTermResult[]
+): SubjectLink[] {
+  const termLinks: SubjectLink[] = []
+
+  for (const termObj of terms) {
+    termLinks.push({
+      termLabel: termObj.label,
+      url: getSubjectURL(termObj.label),
+      count: termObj.count?.toLocaleString() || "",
+    })
+  }
+  return termLinks
 }

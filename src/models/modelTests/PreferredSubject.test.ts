@@ -1,14 +1,14 @@
 import PreferredSubject from "../PreferredSubject"
-import type { DiscoverySubjectPreferredResult } from "../../types/browseTypes"
+import type { DiscoveryPreferredSubjectResult } from "../../types/browseTypes"
 
 describe("PreferredSubject model", () => {
-  const mockResult: DiscoverySubjectPreferredResult = {
+  const mockResult: DiscoveryPreferredSubjectResult = {
     uri: "123456",
-    preferredTerm: "Science -- 19th century",
+    termLabel: "Science -- 19th century",
     count: 42,
-    seeAlso: ["Biology", "Physics"],
-    narrowerTerms: ["Natural Science -- Chimpanzees"],
-    broaderTerms: ["Knowledge"],
+    seeAlso: [{ label: "Biology" }, { label: "Physics" }],
+    narrowerTerms: [{ label: "Natural Science -- Chimpanzees" }],
+    broaderTerms: [{ label: "Knowledge" }],
   }
 
   it("should create a PreferredSubject instance with expected properties", () => {
@@ -19,26 +19,31 @@ describe("PreferredSubject model", () => {
     expect(subject.url).toBe("/browse/subjects/Science%20--%2019th%20century")
 
     expect(subject.seeAlso.terms).toEqual([
-      { term: "Biology", url: "/browse/subjects/Biology" },
-      { term: "Physics", url: "/browse/subjects/Physics" },
+      { termLabel: "Biology", url: "/browse/subjects/Biology", count: "" },
+      { termLabel: "Physics", url: "/browse/subjects/Physics", count: "" },
     ])
 
     expect(subject.narrowerTerms.terms).toEqual([
       {
-        term: "Natural Science -- Chimpanzees",
+        termLabel: "Natural Science -- Chimpanzees",
         url: "/browse/subjects/Natural%20Science%20--%20Chimpanzees",
+        count: "",
       },
     ])
 
     expect(subject.broaderTerms.terms).toEqual([
-      { term: "Knowledge", url: "/browse/subjects/Knowledge" },
+      {
+        termLabel: "Knowledge",
+        url: "/browse/subjects/Knowledge",
+        count: "",
+      },
     ])
   })
 
   it("should handle empty seeAlso/narrower/broader results", () => {
-    const emptyResult: DiscoverySubjectPreferredResult = {
+    const emptyResult: DiscoveryPreferredSubjectResult = {
       uri: "67890",
-      preferredTerm: "History",
+      termLabel: "History",
       count: 0,
       seeAlso: [],
       narrowerTerms: [],
