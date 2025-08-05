@@ -7,19 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+## [1.5.2] 2025-07-31
+
 ### Updated
 
 - Updated finding aid copy and link [SCC-4803](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4803)
-
-### Removed
 
 ### Added
 
 - Added Playwright tests for global header, as it appears on the Research Catalog. [SCC-4793] (https://newyorkpubliclibrary.atlassian.net/browse/SCC-4793). Also increased the playwright timeout to 60 seconds to accomodate the global header tests.
 
-- Added Playwright tests for RC home page elements. found in /playwright. Deleted dummy test file that was created for initial Playwright install. [SCC-4792] (https://newyorkpubliclibrary.atlassian.net/browse/SCC-4792)
+- Added Playwright tests for global header, as it appears on the Research Catalog. [SCC-4793] (https://newyorkpubliclibrary.atlassian.net/browse/SCC-4793). Also increased the playwright timeout to 60 seconds to accomodate the global header tests.
 
-- Added Playwright, the end-to-end testing framework for automating and verifying browser interactions across Chromium, Firefox, and WebKit. [SCC-4772] (https://newyorkpubliclibrary.atlassian.net/browse/SCC-4772)
+- Added Playwright tests for RC home page elements. found in /playwright. Deleted dummy test file that was created for initial Playwright install. [SCC-4792](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4792)
+- Added Playwright, the end-to-end testing framework for automating and verifying browser interactions across Chromium, Firefox, and WebKit. [SCC-4772](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4772)
 - Trailing period removal from subject literals [SCC-4801](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4801)
 
 ## [1.5.1] 2025-07-17
