@@ -3,11 +3,12 @@ import {
   Flex,
   SkeletonLoader,
   Icon,
+  Pagination,
 } from "@nypl/design-system-react-components"
 import RCHead from "../../src/components/Head/RCHead"
 import Layout from "../../src/components/Layout/Layout"
 import SubjectTable from "../../src/components/SubjectTable/SubjectTable"
-import { SITE_NAME } from "../../src/config/constants"
+import { SITE_NAME, SUBJECTS_PER_PAGE } from "../../src/config/constants"
 import { fetchSubjects } from "../../src/server/api/browse"
 import initializePatronTokenAuth from "../../src/server/auth"
 import type { HTTPStatusCode } from "../../src/types/appTypes"
@@ -61,6 +62,12 @@ export default function Browse({
 
   if (errorStatus) {
     return <ResultsError errorStatus={errorStatus} page="browse" />
+  }
+
+  const handlePageChange = async (page: number) => {
+    const newQuery = getBrowseQuery({ ...browseParams, page })
+    setPersistentFocus(idConstants.browseResultsHeading)
+    await push(newQuery)
   }
 
   const handleSortChange = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -168,6 +175,16 @@ export default function Browse({
         ) : (
           <SubjectTable subjectTableData={results.subjects} />
         )}
+        <Pagination
+          id="results-pagination"
+          mt="xxl"
+          mb="xxl"
+          className="no-print"
+          initialPage={browseParams.page}
+          currentPage={browseParams.page}
+          pageCount={Math.ceil(results.totalResults / SUBJECTS_PER_PAGE)}
+          onPageChange={handlePageChange}
+        />
       </>
     )
   }
