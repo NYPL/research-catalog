@@ -157,7 +157,6 @@ export default function Browse({
             {getBrowseResultsHeading(browseParams, results.totalResults)}
           </Heading>
           <ResultsSort
-            type="browse"
             params={browseParams}
             sortOptions={browseSortOptions}
             handleSortChange={handleSortChange}

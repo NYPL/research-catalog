@@ -188,7 +188,6 @@ export default function Search({
                 {getSearchResultsHeading(searchParams, totalResults)}
               </Heading>
               <ResultsSort
-                type="search"
                 sortOptions={sortOptions}
                 params={searchParams}
                 handleSortChange={handleSortChange}

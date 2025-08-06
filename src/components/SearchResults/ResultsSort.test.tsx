@@ -10,7 +10,6 @@ describe("ResultsSort for search", () => {
     const onChange = jest.fn()
     render(
       <ResultsSort
-        type="search"
         sortOptions={sortOptions}
         params={{}}
         handleSortChange={onChange}
@@ -29,7 +28,6 @@ describe("ResultsSort for browse", () => {
     const onChange = jest.fn()
     render(
       <ResultsSort
-        type="browse"
         sortOptions={browseSortOptions}
         params={{}}
         handleSortChange={onChange}
@@ -43,7 +41,6 @@ describe("ResultsSort for browse", () => {
     const onChange = jest.fn()
     render(
       <ResultsSort
-        type="browse"
         sortOptions={browseSortOptions}
         params={{}}
         handleSortChange={onChange}
