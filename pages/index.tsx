@@ -105,7 +105,7 @@ export default function Home({
                 }}
                 layout="row"
               >
-                <CardHeading level="h4" url="/locations/map?libraries=research">
+                <CardHeading level="h4" url="/locations">
                   Locations
                 </CardHeading>
                 <CardContent>
