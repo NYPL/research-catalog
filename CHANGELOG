@@ -7,13 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
-### Fixed
-
-- Fixed broken homepage "Locations" link [SCC-4837](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4837)
+## [1.5.3] 2025-08-06
 
 ### Added
 
 - Logs on hold cancel button [SCC-4807] (https://newyorkpubliclibrary.atlassian.net/browse/SCC-4807)
+
+### Fixed
+
+- Fixed broken homepage "Locations" link [SCC-4837](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4837)
 
 ## [1.5.2] 2025-07-31
 
