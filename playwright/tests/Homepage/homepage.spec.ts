@@ -1,12 +1,15 @@
 import { test, expect } from "@playwright/test"
 import { RC_Home_Page } from "../../pages/rc_home_page"
 
+let rcHomePage: RC_Home_Page
+
+test.beforeEach(async ({ page }) => {
+  rcHomePage = new RC_Home_Page(page)
+  await page.goto("")
+})
+
 test.describe("Global Header", () => {
-  test("Verify global header elements appear on the Research Catalog home page", async ({
-    page,
-  }) => {
-    const rcHomePage = new RC_Home_Page(page)
-    await rcHomePage.goto()
+  test("Verify global header elements appear on the Research Catalog home page", async () => {
     await expect(rcHomePage.nypl_logo).toBeVisible()
     await expect(rcHomePage.nypl_logo_img).toBeVisible()
     await expect(rcHomePage.header_my_account).toBeVisible()
@@ -30,8 +33,6 @@ test.describe("Research Catalog Home Page", () => {
   test("Verify elements on the Research Catalog home page", async ({
     page,
   }) => {
-    const rcHomePage = new RC_Home_Page(page)
-    await rcHomePage.goto()
     await expect(rcHomePage.header_my_account).toBeVisible()
     await expect(rcHomePage.researchCatalogHeading).toHaveText(
       "Research Catalog"
@@ -81,12 +82,25 @@ test.describe("Research Catalog Home Page", () => {
 })
 
 test.describe("Global Footer", () => {
-  test("Verify global footer elements appear on the Research Catalog home page", async ({
-    page,
-  }) => {
-    const rcHomePage = new RC_Home_Page(page)
-    await rcHomePage.goto()
+  test("Verify global footer elements appear on the Research Catalog home page", async () => {
+    const links = await rcHomePage.page.locator("footer a").allTextContents()
+    console.log(links)
     await expect(rcHomePage.footer_container).toBeVisible()
+    await expect(rcHomePage.footer_library_text_image).toBeVisible()
+    await expect(rcHomePage.footer_building_image).toBeVisible()
+    await expect(rcHomePage.footer_copyright_text).toBeVisible()
+    await expect(rcHomePage.footer_legal_text).toBeVisible()
+    await expect(rcHomePage.footer_accessibility).toBeVisible()
+    await expect(rcHomePage.footer_press).toBeVisible()
+    await expect(rcHomePage.footer_careers).toBeVisible()
+    await expect(rcHomePage.footer_space_rental).toBeVisible()
+    await expect(rcHomePage.footer_privacy_policy).toBeVisible()
+    await expect(rcHomePage.footer_other_policies).toBeVisible()
+    await expect(rcHomePage.footer_terms).toBeVisible()
+    await expect(rcHomePage.footer_governance).toBeVisible()
+    await expect(rcHomePage.footer_rules_regulations).toBeVisible()
+    await expect(rcHomePage.footer_about).toBeVisible()
+    await expect(rcHomePage.footer_language).toBeVisible()
     await expect(rcHomePage.help_and_feedback).toBeVisible()
   })
 })
