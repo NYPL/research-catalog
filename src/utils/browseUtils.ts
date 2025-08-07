@@ -31,8 +31,20 @@ export function mapQueryToBrowseParams({
   }
 }
 
-function getSortQuery(sortBy: string, order: string): string {
-  const isDefaultSort = sortBy === "preferredTerm" && order === "asc"
+function getSortQuery(
+  sortBy: string,
+  order: string,
+  searchScope: string
+): string {
+  let defaultSortBy = "count"
+  let defaultOrder = "desc"
+
+  if (searchScope === "starts_with") {
+    defaultSortBy = "preferredTerm"
+    defaultOrder = "asc"
+  }
+
+  const isDefaultSort = sortBy === defaultSortBy && order === defaultOrder
   return isDefaultSort ? "" : `&sort=${sortBy}&sort_direction=${order}`
 }
 
@@ -40,16 +52,29 @@ function getSortQuery(sortBy: string, order: string): string {
  * getBrowseQuery
  * Builds a query string from a BrowseParams object
  */
+
 export function getBrowseQuery(params: BrowseParams): string {
-  const {
-    sortBy = "preferredTerm",
-    q,
-    page = 1,
-    order = "asc",
-    searchScope = "has",
-  } = params
+  const { q, page = 1, searchScope = "has" } = params
+
+  let sortBy = params.sortBy
+  let order = params.order
+
+  // Apply dynamic default sort based on searchScope
+  if (!sortBy || !order) {
+    if (searchScope === "has") {
+      sortBy = "count"
+      order = "desc"
+    } else if (searchScope.startsWith("startsWith")) {
+      sortBy = "preferredTerm"
+      order = "asc"
+    } else {
+      sortBy = "preferredTerm"
+      order = "asc"
+    }
+  }
+
   const browseKeywordsQuery = encodeURIComponent(q)
-  const sortQuery = getSortQuery(sortBy, order)
+  const sortQuery = getSortQuery(sortBy, order, searchScope)
   const scopeQuery = `&search_scope=${searchScope}`
   const pageQuery = page !== 1 ? `&page=${page}` : ""
 
@@ -103,7 +128,7 @@ export function getBrowseResultsHeading(
 export const browseSortOptions: Record<string, string> = {
   preferredTerm_asc: "Ascending (A - Z)",
   preferredTerm_desc: "Descending (Z - A)",
-  relevance: "Relevance",
+  count_desc: "Relevance",
 }
 
 export function buildSubjectLinks(
