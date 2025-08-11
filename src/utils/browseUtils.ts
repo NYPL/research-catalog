@@ -10,10 +10,20 @@ import type {
 import { getPaginationOffsetStrings } from "./appUtils"
 
 /**
+ * Default sort configuration per search scope
+ */
+export const defaultSortMap: Record<string, { sortBy: string; order: string }> =
+  {
+    starts_with: { sortBy: "preferredTerm", order: "asc" },
+    has: { sortBy: "count", order: "desc" },
+  }
+
+/**
  * mapQueryToBrowseParams
  * Maps the BrowseQueryParams structure from the request to a BrowseParams object,
- * which is expected by fetchSubjects
- * It also parses the results page number from a string, defaulting to 1 if absent
+ * which is expected by fetchSubjects.
+ * Parses default/valid sort from given sort and sort direction.
+ * Also parses the results page number from a string, defaulting to 1 if absent.
  */
 export function mapQueryToBrowseParams({
   q = "",
@@ -22,27 +32,53 @@ export function mapQueryToBrowseParams({
   page,
   sort,
 }: BrowseQueryParams): BrowseParams {
+  const validSortBys = ["preferredTerm", "count"]
+  const validOrders = ["asc", "desc"]
+
+  const sortDefaultOrders: Record<string, string> = {
+    preferredTerm: "asc",
+    count: "desc",
+  }
+
+  // Use "has" as the default search scope if none provided
+  const searchScope = search_scope || "has"
+
+  // Determine search scope default sort field/order
+  const scopeDefault = defaultSortMap[searchScope] || {
+    sortBy: "preferredTerm",
+    order: "asc",
+  }
+
+  // Validate or fallback sortBy
+  const sortBy = validSortBys.includes(sort as string)
+    ? (sort as string)
+    : scopeDefault.sortBy
+
+  // Validate or fallback order
+  const order = validOrders.includes(sort_direction as string)
+    ? sort_direction
+    : sortDefaultOrders[sortBy] || scopeDefault.order
+
   return {
-    q: q,
-    page: page ? parseInt(page) : 1,
-    searchScope: search_scope,
-    sortBy: sort,
-    order: sort_direction,
+    q,
+    page: page ? parseInt(page, 10) : 1,
+    searchScope,
+    sortBy,
+    order,
   }
 }
 
+/**
+ * Returns a sort query string unless using the default sort for the given scope.
+ */
 function getSortQuery(
   sortBy: string,
   order: string,
   searchScope: string
 ): string {
-  let defaultSortBy = "count"
-  let defaultOrder = "desc"
-
-  if (searchScope === "starts_with") {
-    defaultSortBy = "preferredTerm"
-    defaultOrder = "asc"
-  }
+  const { sortBy: defaultSortBy, order: defaultOrder } = defaultSortMap[
+    searchScope
+  ] || { sortBy: "preferredTerm", order: "asc" }
 
   const isDefaultSort = sortBy === defaultSortBy && order === defaultOrder
   return isDefaultSort ? "" : `&sort=${sortBy}&sort_direction=${order}`
@@ -52,25 +88,18 @@ function getSortQuery(
  * getBrowseQuery
  * Builds a query string from a BrowseParams object
  */
-
 export function getBrowseQuery(params: BrowseParams): string {
   const { q, page = 1, searchScope = "has" } = params
+  let { sortBy, order } = params
 
-  let sortBy = params.sortBy
-  let order = params.order
-
-  // Apply dynamic default sort based on searchScope
+  // If no sort, apply default sort based on search scope
   if (!sortBy || !order) {
-    if (searchScope === "has") {
-      sortBy = "count"
-      order = "desc"
-    } else if (searchScope.startsWith("startsWith")) {
-      sortBy = "preferredTerm"
-      order = "asc"
-    } else {
-      sortBy = "preferredTerm"
-      order = "asc"
+    const defaultSort = defaultSortMap[searchScope] || {
+      sortBy: "preferredTerm",
+      order: "asc",
     }
+    sortBy = defaultSort.sortBy
+    order = defaultSort.order
   }
 
   const browseKeywordsQuery = encodeURIComponent(q)
@@ -79,7 +108,7 @@ export function getBrowseQuery(params: BrowseParams): string {
   const pageQuery = page !== 1 ? `&page=${page}` : ""
 
   const completeQuery = `${browseKeywordsQuery}${scopeQuery}${sortQuery}${pageQuery}`
-  return completeQuery?.length ? `?q=${completeQuery}` : ""
+  return completeQuery ? `?q=${completeQuery}` : ""
 }
 
 export function isPreferredSubject(
@@ -126,9 +155,10 @@ export function getBrowseResultsHeading(
  * The allowed keys for the sort field and their respective labels
  */
 export const browseSortOptions: Record<string, string> = {
-  preferredTerm_asc: "Ascending (A - Z)",
-  preferredTerm_desc: "Descending (Z - A)",
-  count_desc: "Relevance",
+  preferredTerm_asc: "Subject heading (A - Z)",
+  preferredTerm_desc: "Subject heading (Z - A)",
+  count_desc: "Count (High - Low)",
+  count_asc: "Count (Low - High)",
 }
 
 export function buildSubjectLinks(

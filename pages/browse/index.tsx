@@ -48,6 +48,7 @@ export default function Browse({
   const metadataTitle = `Browse Research Catalog | ${SITE_NAME}`
   const { query, push } = useRouter()
   const browseParams = mapQueryToBrowseParams(query)
+
   const isLoading = useLoading()
   const { setPersistentFocus } = useFocusContext()
 

@@ -17,7 +17,9 @@ const ResultsSort = ({
   handleSortChange,
   sortOptions,
 }: ResultsSortProps) => {
-  const value = `${params.sortBy}_${params.order}`
+  const value = params.order
+    ? `${params.sortBy}_${params.order}`
+    : params.sortBy
 
   return (
     <Select
