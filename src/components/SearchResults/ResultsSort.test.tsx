@@ -10,7 +10,6 @@ describe("ResultsSort for search", () => {
     const onChange = jest.fn()
     render(
       <ResultsSort
-        type="search"
         sortOptions={sortOptions}
         params={{}}
         handleSortChange={onChange}
@@ -29,7 +28,6 @@ describe("ResultsSort for browse", () => {
     const onChange = jest.fn()
     render(
       <ResultsSort
-        type="browse"
         sortOptions={browseSortOptions}
         params={{}}
         handleSortChange={onChange}
@@ -37,13 +35,12 @@ describe("ResultsSort for browse", () => {
     )
     const sortSelect = screen.getByLabelText("Sort by")
     expect(sortSelect).toBeInTheDocument()
-    expect(screen.getByText("Ascending (A - Z)")).toBeInTheDocument()
+    expect(screen.getByText("Subject heading (A - Z)")).toBeInTheDocument()
   })
   it("calls the callback function when changed", async () => {
     const onChange = jest.fn()
     render(
       <ResultsSort
-        type="browse"
         sortOptions={browseSortOptions}
         params={{}}
         handleSortChange={onChange}
@@ -51,8 +48,8 @@ describe("ResultsSort for browse", () => {
     )
     const sortSelect = screen.getByLabelText("Sort by")
     expect(sortSelect).toBeInTheDocument()
-    expect(screen.getByText("Ascending (A - Z)")).toBeInTheDocument()
-    await userEvent.selectOptions(sortSelect, "Descending (Z - A)")
+    expect(screen.getByText("Subject heading (A - Z)")).toBeInTheDocument()
+    await userEvent.selectOptions(sortSelect, "Subject heading (Z - A)")
     expect(sortSelect).toHaveFocus()
     expect(onChange).toHaveBeenCalled()
   })

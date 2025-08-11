@@ -4,10 +4,8 @@ import type { ChangeEvent } from "react"
 import type { BrowseParams } from "../../types/browseTypes"
 
 interface ResultsSortProps {
-  type: "search" | "browse"
   params: SearchParams | BrowseParams
   handleSortChange: (e: ChangeEvent) => Promise<void>
-  display?: Record<string, string>
   sortOptions: Record<string, string>
 }
 
@@ -15,26 +13,22 @@ interface ResultsSortProps {
  * The ResultsSort component renders a Select element used for sorting Search or Browse results.
  */
 const ResultsSort = ({
-  type = "search",
   params,
   handleSortChange,
-  display,
   sortOptions,
 }: ResultsSortProps) => {
-  const value =
-    params.sortBy === "relevance"
-      ? "relevance"
-      : `${params.sortBy}_${params.order ?? "asc"}`
+  const value = params.order
+    ? `${params.sortBy}_${params.order}`
+    : params.sortBy
 
   return (
     <Select
       name="sort_direction"
-      id={`${type}-results-sort`}
+      id="results-sort"
       labelText="Sort by"
       labelPosition="inline"
       onChange={handleSortChange}
       value={value}
-      display={display}
       className="no-print"
       mt={{ base: "s", md: 0 }}
     >

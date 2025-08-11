@@ -50,6 +50,7 @@ export default function Browse({
   const metadataTitle = `Browse Research Catalog | ${SITE_NAME}`
   const { query, push } = useRouter()
   const browseParams = mapQueryToBrowseParams(query)
+
   const isLoading = useLoading()
   const { setPersistentFocus } = useFocusContext()
 
@@ -165,7 +166,6 @@ export default function Browse({
             {getBrowseResultsHeading(browseParams, results.totalResults)}
           </Heading>
           <ResultsSort
-            type="browse"
             params={browseParams}
             sortOptions={browseSortOptions}
             handleSortChange={handleSortChange}
