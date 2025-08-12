@@ -11,9 +11,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Updated DS to `v4` [SCC-4791](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4791)
 
+## [1.5.3] 2025-08-06
+
+### Added
+
+- Logs on hold cancel button [SCC-4807] (https://newyorkpubliclibrary.atlassian.net/browse/SCC-4807)
+
+### Fixed
+
+- Fixed broken homepage "Locations" link [SCC-4837](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4837)
+
+## [1.5.2] 2025-07-31
+
+### Updated
+
+- Updated finding aid copy and link [SCC-4803](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4803)
+
+### Added
+
+- Added Playwright tests for RC home page elements. found in /playwright. Deleted dummy test file that was created for initial Playwright install. [SCC-4792](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4792)
+- Added Playwright, the end-to-end testing framework for automating and verifying browser interactions across Chromium, Firefox, and WebKit. [SCC-4772](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4772)
+- Trailing period removal from subject literals [SCC-4801](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4801)
+
 ## [1.5.1] 2025-07-17
 
-## Added
+### Added
 
 - Added bib title to metadata tab title on bib page [SCC-4749](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4749)
 - Adds warning to hold request pages if user has already completed the request [SCC-3360](https://newyorkpubliclibrary.atlassian.net/browse/SCC-3360)

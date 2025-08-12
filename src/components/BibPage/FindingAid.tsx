@@ -48,9 +48,11 @@ const FindingAid = ({
             collections{" "}
             <Link
               hasVisitedState={false}
-              href={"https://www.nypl.org/research/appointments"}
+              href={
+                "https://libguides.nypl.org/special-collections-account-tutorial"
+              }
             >
-              require an appointment
+              may require an appointment
             </Link>{" "}
             to view and use on-site.
           </Text>
