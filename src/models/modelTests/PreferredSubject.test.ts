@@ -3,6 +3,7 @@ import type { DiscoveryPreferredSubjectResult } from "../../types/browseTypes"
 
 describe("PreferredSubject model", () => {
   const mockResult: DiscoveryPreferredSubjectResult = {
+    "@type": "preferredTerm",
     uri: "123456",
     termLabel: "Science -- 19th century",
     count: 42,
@@ -42,6 +43,7 @@ describe("PreferredSubject model", () => {
 
   it("should handle empty seeAlso/narrower/broader results", () => {
     const emptyResult: DiscoveryPreferredSubjectResult = {
+      "@type": "preferredTerm",
       uri: "67890",
       termLabel: "History",
       count: 0,

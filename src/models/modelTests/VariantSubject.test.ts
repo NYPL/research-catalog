@@ -7,6 +7,7 @@ import { getSubjectURL } from "../../utils/browseUtils"
 
 describe("VariantSubject model", () => {
   const mockResult: DiscoveryVariantSubjectResult = {
+    "@type": "variant",
     termLabel: "CS",
     preferredTerms: [
       { label: "Computer Science", count: 120 },
@@ -37,6 +38,7 @@ describe("VariantSubject model", () => {
 
   it("should handle an empty preferredTerms list", () => {
     const emptyResult: DiscoveryVariantSubjectResult = {
+      "@type": "variant",
       termLabel: "Math",
       preferredTerms: [],
     }
