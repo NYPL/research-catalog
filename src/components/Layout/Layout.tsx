@@ -111,11 +111,7 @@ const Layout = ({
             {showBrowse && (
               <>
                 <BrowseForm />
-                {showBrowseBanner && (
-                  <Flex gap="s" align="center" direction="column" pb="l" pt="l">
-                    <SubjectHeadingBanner />
-                  </Flex>
-                )}
+                {showBrowseBanner && <SubjectHeadingBanner />}
               </>
             )}
 

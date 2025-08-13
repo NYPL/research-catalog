@@ -1,4 +1,4 @@
-import { Banner } from "@nypl/design-system-react-components"
+import { Banner, Flex } from "@nypl/design-system-react-components"
 import React from "react"
 import RCLink from "../Links/RCLink/RCLink"
 import styles from "../../../styles/components/Layout.module.scss"
@@ -8,23 +8,27 @@ import styles from "../../../styles/components/Layout.module.scss"
  */
 const SubjectHeadingBanner = () => {
   return (
-    <Banner
-      className={`${styles.banner} no-print`}
-      type="recommendation"
-      isDismissible
-      content={
-        <>
-          <span style={{ fontWeight: "bold" }}>Subject Headings</span> are the
-          most effective strategy for browsing the{" "}
-          <RCLink href="/">NYPL Research Catalog</RCLink>. These descriptive
-          authorities, created by the Library of Congress, are used to group
-          similar materials together. Each item in the catalog is typically
-          assigned at least one relevant Subject Heading, and clicking through
-          the hyperlinked Subject Headings is the best way to gain a
-          comprehensive sense of NYPL collections.
-        </>
-      }
-    />
+    <Flex align="center" direction="column">
+      <Banner
+        className={`${styles.banner} no-print`}
+        type="recommendation"
+        mt="l"
+        mb="l"
+        isDismissible
+        content={
+          <>
+            <span style={{ fontWeight: "bold" }}>Subject Headings</span> are the
+            most effective strategy for browsing the{" "}
+            <RCLink href="/">NYPL Research Catalog</RCLink>. These descriptive
+            authorities, created by the Library of Congress, are used to group
+            similar materials together. Each item in the catalog is typically
+            assigned at least one relevant Subject Heading, and clicking through
+            the hyperlinked Subject Headings is the best way to gain a
+            comprehensive sense of NYPL collections.
+          </>
+        }
+      />
+    </Flex>
   )
 }
 
