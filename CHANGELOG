@@ -21,7 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 
-- Updated playwright homepage.spec.ts and related page objects to include assertions for footer elements. Also added before hook to that test file.
+- Updated playwright homepage.spec.ts and related page objects to include assertions for footer elements. Also added before hook to that test file. JIRA ticket [SCC-4805](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4805)
 
 - Updated finding aid copy and link [SCC-4803](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4803)
 
