@@ -1,6 +1,5 @@
 import {
   Heading,
-  Menu,
   Flex,
   SkeletonLoader,
   Icon,
@@ -12,15 +11,24 @@ import { SITE_NAME } from "../../src/config/constants"
 import { fetchSubjects } from "../../src/server/api/browse"
 import initializePatronTokenAuth from "../../src/server/auth"
 import type { HTTPStatusCode } from "../../src/types/appTypes"
-import type { DiscoverySubjectsResponse } from "../../src/types/browseTypes"
+import type {
+  BrowseSort,
+  DiscoverySubjectsResponse,
+} from "../../src/types/browseTypes"
 import {
+  browseSortOptions,
+  getBrowseQuery,
   getBrowseResultsHeading,
   mapQueryToBrowseParams,
 } from "../../src/utils/browseUtils"
 import { useRouter } from "next/router"
 import useLoading from "../../src/hooks/useLoading"
-import { useEffect, useRef } from "react"
+import type { ChangeEvent } from "react"
+import { useRef, useEffect } from "react"
 import ResultsError from "../../src/components/ResultsError/ResultsError"
+import { idConstants, useFocusContext } from "../../src/context/FocusContext"
+import type { SortOrder } from "../../src/types/searchTypes"
+import ResultsSort from "../../src/components/SearchResults/ResultsSort"
 
 interface BrowseProps {
   results: DiscoverySubjectsResponse
@@ -38,9 +46,11 @@ export default function Browse({
   errorStatus = null,
 }: BrowseProps) {
   const metadataTitle = `Browse Research Catalog | ${SITE_NAME}`
-  const { query } = useRouter()
+  const { query, push } = useRouter()
   const browseParams = mapQueryToBrowseParams(query)
+
   const isLoading = useLoading()
+  const { setPersistentFocus } = useFocusContext()
 
   // Ref for accessible announcement of loading state.
   const liveLoadingRegionRef = useRef<HTMLDivElement | null>(null)
@@ -52,6 +62,26 @@ export default function Browse({
 
   if (errorStatus) {
     return <ResultsError errorStatus={errorStatus} page="browse" />
+  }
+
+  const handleSortChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    const selectedSortOption = e.target.value
+    // Extract sort key and order from selected sort option using "_" delineator
+    const [sortBy, order] = selectedSortOption.split("_") as [
+      BrowseSort,
+      SortOrder | undefined
+    ]
+    setPersistentFocus(idConstants.browseResultsSort)
+    await push(
+      getBrowseQuery({
+        ...browseParams,
+        sortBy,
+        order,
+        page: undefined,
+      }),
+      undefined,
+      { scroll: false }
+    )
   }
 
   const loader = (
@@ -127,10 +157,10 @@ export default function Browse({
           >
             {getBrowseResultsHeading(browseParams, results.totalResults)}
           </Heading>
-          <Menu
-            width="288px"
-            labelText="Sort by: Ascending (A-Z)"
-            listItemsData={[]}
+          <ResultsSort
+            params={browseParams}
+            sortOptions={browseSortOptions}
+            handleSortChange={handleSortChange}
           />
         </Flex>
         {isLoading ? (
@@ -147,7 +177,6 @@ export default function Browse({
       <RCHead metadataTitle={metadataTitle} />
       <Layout activePage="browse" isAuthenticated={isAuthenticated}>
         {browseParams.q.length === 0 ? renderEmpty() : renderResults()}
-        {/* {renderResults()} */}
       </Layout>
     </>
   )
