@@ -72,7 +72,9 @@ describe("browseUtils", () => {
         page: 1,
         searchScope: "has",
       }
-      expect(getBrowseQuery(params)).toBe("?q=cats&search_scope=has")
+      expect(getBrowseQuery(params)).toBe(
+        "?q=cats&search_scope=has&sort=count&sort_direction=desc"
+      )
     })
 
     it("includes sort params if not default", () => {
@@ -97,7 +99,7 @@ describe("browseUtils", () => {
         order: "asc",
       }
       expect(getBrowseQuery(params)).toBe(
-        "?q=cats%20%26%20dogs&search_scope=starts_with"
+        "?q=cats%20%26%20dogs&search_scope=starts_with&sort=termLabel&sort_direction=asc"
       )
     })
 
@@ -109,7 +111,9 @@ describe("browseUtils", () => {
         sortBy: "",
         order: "",
       }
-      expect(getBrowseQuery(params)).toBe("?q=fish&search_scope=has")
+      expect(getBrowseQuery(params)).toBe(
+        "?q=fish&search_scope=has&sort=count&sort_direction=desc"
+      )
     })
   })
 
