@@ -30,7 +30,9 @@ describe("BrowseForm", () => {
 
     await userEvent.type(input, "Ornithology")
     submit()
-    expect(mockRouter.asPath).toBe("/browse?q=Ornithology&search_scope=has")
+    expect(mockRouter.asPath).toBe(
+      "/browse?q=Ornithology&search_scope=has&sort=count&sort_direction=desc"
+    )
   })
 
   it("submits with a different search scope", async () => {
@@ -42,7 +44,7 @@ describe("BrowseForm", () => {
     await userEvent.selectOptions(select, "starts_with")
     submit()
     expect(mockRouter.asPath).toBe(
-      "/browse?q=Vietnam+War&search_scope=starts_with"
+      "/browse?q=Vietnam+War&search_scope=starts_with&sort=termLabel&sort_direction=asc"
     )
   })
 

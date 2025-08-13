@@ -18,6 +18,16 @@ export const defaultSortMap: Record<string, { sortBy: string; order: string }> =
     has: { sortBy: "count", order: "desc" },
   }
 
+const getValidParam = (
+  validParams: string[],
+  param: string,
+  defaultParam: string
+) => {
+  return validParams.includes(param as string)
+    ? (param as string)
+    : defaultParam
+}
+
 /**
  * mapQueryToBrowseParams
  * Maps the BrowseQueryParams structure from the request to a BrowseParams object,
@@ -32,24 +42,23 @@ export function mapQueryToBrowseParams({
   page,
   sort,
 }: BrowseQueryParams): BrowseParams {
-  const validSortBys = ["termLabel", "count"]
-  const validOrders = ["asc", "desc"]
-
   // Use "has" as the default search scope if none provided
-  const searchScope = search_scope || "has"
+  const searchScope = getValidParam(["has", "starts_with"], search_scope, "has")
 
   const defaultSort = defaultSortMap[searchScope]
 
   // Validate or fall back to default sortBy
-  const sortBy = validSortBys.includes(sort as string)
-    ? (sort as string)
-    : defaultSort.sortBy
-
+  const sortBy = getValidParam(
+    ["termLabel", "count"],
+    sort as string,
+    defaultSort.sortBy
+  )
   // Validate or fall back to default order
-  const order = validOrders.includes(sort_direction as string)
-    ? sort_direction
-    : defaultSort.order
-
+  const order = getValidParam(
+    ["asc", "desc"],
+    sort_direction as string,
+    defaultSort.order
+  )
   return {
     q,
     page: page ? parseInt(page) : 1,
@@ -57,22 +66,6 @@ export function mapQueryToBrowseParams({
     sortBy,
     order,
   }
-}
-
-/**
- * Returns a sort query string unless using the default sort for the given scope.
- */
-function getSortQuery(
-  sortBy: string,
-  order: string,
-  searchScope: string
-): string {
-  const { sortBy: defaultSortBy, order: defaultOrder } = defaultSortMap[
-    searchScope
-  ] || { sortBy: "termLabel", order: "asc" }
-
-  const isDefaultSort = sortBy === defaultSortBy && order === defaultOrder
-  return isDefaultSort ? "" : `&sort=${sortBy}&sort_direction=${order}`
 }
 
 /**
@@ -85,16 +78,13 @@ export function getBrowseQuery(params: BrowseParams): string {
 
   // If no sort, apply default sort based on search scope
   if (!sortBy || !order) {
-    const defaultSort = defaultSortMap[searchScope] || {
-      sortBy: "termLabel",
-      order: "asc",
-    }
+    const defaultSort = defaultSortMap[searchScope]
     sortBy = defaultSort.sortBy
     order = defaultSort.order
   }
 
   const browseKeywordsQuery = encodeURIComponent(q)
-  const sortQuery = getSortQuery(sortBy, order, searchScope)
+  const sortQuery = `&sort=${sortBy}&sort_direction=${order}`
   const scopeQuery = `&search_scope=${searchScope}`
   const pageQuery = page !== 1 ? `&page=${page}` : ""
 
