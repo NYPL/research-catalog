@@ -67,5 +67,8 @@
     "sass": "^1.63.6",
     "typescript": "5.0.4",
     "user-event": "^4.0.0"
+  },
+  "overrides": {
+    "nwsapi": "2.2.13"
   }
 }
