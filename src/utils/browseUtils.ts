@@ -14,7 +14,7 @@ import { getPaginationOffsetStrings } from "./appUtils"
  */
 export const defaultSortMap: Record<string, { sortBy: string; order: string }> =
   {
-    starts_with: { sortBy: "preferredTerm", order: "asc" },
+    starts_with: { sortBy: "termLabel", order: "asc" },
     has: { sortBy: "count", order: "desc" },
   }
 
@@ -32,36 +32,27 @@ export function mapQueryToBrowseParams({
   page,
   sort,
 }: BrowseQueryParams): BrowseParams {
-  const validSortBys = ["preferredTerm", "count"]
+  const validSortBys = ["termLabel", "count"]
   const validOrders = ["asc", "desc"]
-
-  const sortDefaultOrders: Record<string, string> = {
-    preferredTerm: "asc",
-    count: "desc",
-  }
 
   // Use "has" as the default search scope if none provided
   const searchScope = search_scope || "has"
 
-  // Determine search scope default sort field/order
-  const scopeDefault = defaultSortMap[searchScope] || {
-    sortBy: "preferredTerm",
-    order: "asc",
-  }
+  const defaultSort = defaultSortMap[searchScope]
 
-  // Validate or fallback sortBy
+  // Validate or fall back to default sortBy
   const sortBy = validSortBys.includes(sort as string)
     ? (sort as string)
-    : scopeDefault.sortBy
+    : defaultSort.sortBy
 
-  // Validate or fallback order
+  // Validate or fall back to default order
   const order = validOrders.includes(sort_direction as string)
     ? sort_direction
-    : sortDefaultOrders[sortBy] || scopeDefault.order
+    : defaultSort.order
 
   return {
     q,
-    page: page ? parseInt(page, 10) : 1,
+    page: page ? parseInt(page) : 1,
     searchScope,
     sortBy,
     order,
@@ -78,7 +69,7 @@ function getSortQuery(
 ): string {
   const { sortBy: defaultSortBy, order: defaultOrder } = defaultSortMap[
     searchScope
-  ] || { sortBy: "preferredTerm", order: "asc" }
+  ] || { sortBy: "termLabel", order: "asc" }
 
   const isDefaultSort = sortBy === defaultSortBy && order === defaultOrder
   return isDefaultSort ? "" : `&sort=${sortBy}&sort_direction=${order}`
@@ -95,7 +86,7 @@ export function getBrowseQuery(params: BrowseParams): string {
   // If no sort, apply default sort based on search scope
   if (!sortBy || !order) {
     const defaultSort = defaultSortMap[searchScope] || {
-      sortBy: "preferredTerm",
+      sortBy: "termLabel",
       order: "asc",
     }
     sortBy = defaultSort.sortBy
@@ -114,7 +105,7 @@ export function getBrowseQuery(params: BrowseParams): string {
 export function isPreferredSubject(
   subject: DiscoverySubjectResult
 ): subject is DiscoveryPreferredSubjectResult {
-  return "count" in subject
+  return subject["@type"] === "preferredTerm"
 }
 
 export function getSubjectURL(term: string) {
@@ -155,8 +146,8 @@ export function getBrowseResultsHeading(
  * The allowed keys for the sort field and their respective labels
  */
 export const browseSortOptions: Record<string, string> = {
-  preferredTerm_asc: "Subject heading (A - Z)",
-  preferredTerm_desc: "Subject heading (Z - A)",
+  termLabel_asc: "Subject heading (A - Z)",
+  termLabel_desc: "Subject heading (Z - A)",
   count_desc: "Count (High - Low)",
   count_asc: "Count (Low - High)",
 }
