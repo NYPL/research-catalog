@@ -42,7 +42,7 @@ describe("BibDetail component", () => {
       expect(screen.getByText("Series statement")).toBeInTheDocument()
       expect(screen.queryAllByText(/Haute enfance/)[0]).toBeInTheDocument()
     })
-    it("merges annotated MARC and resource fields without duplicates", () => {
+    it("merges annotated MARC and resource fields without label duplicates", () => {
       const combinedDetails = noParallelsBibModel.bottomDetails
       const labels = combinedDetails.map((d) => d.label)
       const labelCounts = labels.reduce((acc, label) => {
@@ -51,6 +51,20 @@ describe("BibDetail component", () => {
       }, {})
 
       Object.values(labelCounts).forEach((count) => {
+        expect(count).toBeLessThanOrEqual(1)
+      })
+    })
+    it("merges annotated MARC and resource fields without value duplicates", () => {
+      const combinedDetails = noParallelsBibModel.bottomDetails
+      const allValues = combinedDetails.flatMap((d) =>
+        Array.isArray(d.value) ? d.value.map(String) : [String(d.value)]
+      )
+      const valueCounts = allValues.reduce((acc, value) => {
+        acc[value] = (acc[value] || 0) + 1
+        return acc
+      }, {} as Record<string, number>)
+
+      Object.entries(valueCounts).forEach(([value, count]) => {
         expect(count).toBeLessThanOrEqual(1)
       })
     })
