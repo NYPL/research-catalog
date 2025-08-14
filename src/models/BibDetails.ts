@@ -155,14 +155,61 @@ export default class BibDetails {
     resourceEndpointDetails: AnyBibDetail[],
     annotatedMarcDetails: AnyBibDetail[]
   ) => {
+    // Flatten values
+    const normalizeValues = (val: any) => {
+      if (!val) return []
+      return Array.isArray(val)
+        ? val
+            .flat()
+            .map((v) =>
+              typeof v === "string" ? v.trim() : v?.urlLabel?.trim()
+            )
+        : [typeof val === "string" ? val.trim() : val?.urlLabel?.trim()]
+    }
+
+    // Label set
     const resourceEndpointDetailsLabels = new Set(
       resourceEndpointDetails.map((detail: { label: string }) => {
         return detail.label
       })
     )
+
+    // Value set
+    const resourceValuesSet = new Set<string>()
+    const allBibDetails = [
+      ...resourceEndpointDetails,
+      ...(this.topDetails || []),
+    ]
+    allBibDetails.forEach((detail) => {
+      normalizeValues(detail.value).forEach((v) => {
+        if (v) resourceValuesSet.add(v)
+      })
+    })
+
     const filteredAnnotatedMarcDetails = annotatedMarcDetails.filter(
-      (detail: AnyBibDetail) => !resourceEndpointDetailsLabels.has(detail.label)
+      (detail) => {
+        // Drop if label already in resourceEndpointDetails
+        if (resourceEndpointDetailsLabels.has(detail.label)) {
+          return false
+        }
+
+        // Drop if any marc value matches any bib value
+        const marcValues = normalizeValues(detail.value)
+        const hasOverlap = marcValues.some((v) => resourceValuesSet.has(v))
+        if (hasOverlap) {
+          return false
+        }
+
+        // Keep if neither condition matched
+        console.log(
+          `[BibDetails] Keeping annotated MARC field "${
+            detail.label
+          }" — unique values: ${marcValues.join(", ")}`
+        )
+        return true
+      }
     )
+
     return resourceEndpointDetails.concat(filteredAnnotatedMarcDetails)
   }
 
