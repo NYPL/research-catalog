@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Remove annotated MARC duplicate values from bib details and log unique values [SCC-4763] (https://newyorkpubliclibrary.atlassian.net/browse/SCC-4763)
+- Remove annotated MARC duplicate values from bib details and log unique values [SCC-4763](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4763)
 
 ## [1.5.3] 2025-08-06
 
