@@ -170,9 +170,7 @@ export default class BibDetails {
 
     // Label set
     const resourceEndpointDetailsLabels = new Set(
-      resourceEndpointDetails.map((detail: { label: string }) => {
-        return detail.label
-      })
+      resourceEndpointDetails.map((detail) => detail.label)
     )
 
     // Value set
@@ -187,29 +185,31 @@ export default class BibDetails {
       })
     })
 
-    const filteredAnnotatedMarcDetails = annotatedMarcDetails.filter(
-      (detail) => {
-        // Drop if label already in resourceEndpointDetails
-        if (resourceEndpointDetailsLabels.has(detail.label)) {
-          return false
-        }
+    const filteredAnnotatedMarcDetails: AnyBibDetail[] = []
+    const keptByLabel: Record<string, string[]> = {}
 
-        // Drop if any marc value matches any bib value
-        const marcValues = normalizeValues(detail.value)
-        const hasOverlap = marcValues.some((v) => resourceValuesSet.has(v))
-        if (hasOverlap) {
-          return false
-        }
+    annotatedMarcDetails.forEach((detail) => {
+      if (resourceEndpointDetailsLabels.has(detail.label)) return
 
-        // Keep if neither condition matched
-        logger.info(
-          `Bib details: Keeping annotated MARC field "${
-            detail.label
-          }" — unique values: ${marcValues.join(", ")}`
-        )
-        return true
+      const marcValues = normalizeValues(detail.value)
+      const hasOverlap = marcValues.some((v) => resourceValuesSet.has(v))
+      if (!hasOverlap) {
+        filteredAnnotatedMarcDetails.push(detail)
+        keptByLabel[detail.label] = marcValues.filter(Boolean)
       }
+    })
+
+    const logEntries = Object.entries(keptByLabel).map(
+      ([label, values]) => `"${label}" — unique value(s): ${values.join(", ")}`
     )
+
+    if (logEntries.length > 0) {
+      logger.info(
+        `Bib details: Keeping annotated MARC fields on ${
+          this.bib["@id"]
+        }:\n${logEntries.join("\n")}`
+      )
+    }
 
     return resourceEndpointDetails.concat(filteredAnnotatedMarcDetails)
   }
