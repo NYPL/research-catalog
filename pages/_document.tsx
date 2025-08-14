@@ -23,8 +23,7 @@ export default function Document() {
       </Head>
       <body>
         {/* QA only banner */}
-        {appConfig.environment === "development" && <QABanner />}
-
+        {appConfig.environment === "qa" && <QABanner />}
         {/* Google tag manager: <noscript> */}
         <noscript>
           <iframe
