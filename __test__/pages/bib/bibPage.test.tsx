@@ -66,6 +66,9 @@ describe("Bib Page with items", () => {
     )
     expect(screen.getByTestId("lccn")).toHaveTextContent("sn 98001765")
     expect(screen.getByTestId("issn")).toHaveTextContent("1521-1371")
+
+    // Research call number duplicates call number
+    expect(screen.queryByTestId("research-call-number")).not.toBeInTheDocument()
   })
 })
 
