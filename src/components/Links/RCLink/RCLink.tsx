@@ -1,6 +1,6 @@
 import {
   Link as DSLink,
-  type LinkTypes,
+  type LinkVariants,
 } from "@nypl/design-system-react-components"
 import { type ReactNode } from "react"
 import { BASE_URL } from "../../../config/constants"
@@ -10,7 +10,7 @@ interface RCLinkProps {
   href?: string
   children: ReactNode
   className?: string
-  type?: LinkTypes
+  variant?: LinkVariants
   fontSize?: string | Record<string, string>
   isUnderlined?: boolean
   hasWhiteFocusRing?: boolean

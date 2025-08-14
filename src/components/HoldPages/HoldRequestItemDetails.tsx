@@ -17,7 +17,7 @@ const HoldRequestItemDetails = ({ item }: HoldRequestItemDetailsProps) => {
   return (
     <List
       noStyling
-      type="dl"
+      variant="dl"
       showRowDividers={false}
       className={bibDetailStyles.bibDetails}
       mb="l"

@@ -24,14 +24,14 @@ export default function SearchError({ errorStatus }: SearchErrorProps) {
     case 404:
       errorContent = (
         <>
-          <Heading level="h3" tabIndex={-1} id="search-results-heading">
+          <Heading level="h3" tabIndex={-1} id="search-results-heading" mb="s">
             No results found
           </Heading>
-          <Text noSpace>
+          <Text>
             We couldn&apos;t find anything matching your criteria. Try a
             different search term.{" "}
           </Text>
-          <Text noSpace>
+          <Text>
             You can also search our{" "}
             <ExternalLink href={appConfig.urls.circulatingCatalog}>
               Branch Catalog
@@ -53,7 +53,7 @@ export default function SearchError({ errorStatus }: SearchErrorProps) {
     case 500:
       errorContent = (
         <>
-          <Heading level="h3" tabIndex={-1} id="search-results-heading">
+          <Heading level="h3" tabIndex={-1} id="search-results-heading" mb="s">
             Something went wrong on our end
           </Heading>
           <Text marginBottom="0">
@@ -73,7 +73,7 @@ export default function SearchError({ errorStatus }: SearchErrorProps) {
     default:
       errorContent = (
         <>
-          <Heading level="h3" tabIndex={-1} id="search-results-heading">
+          <Heading level="h3" tabIndex={-1} id="search-results-heading" mb="s">
             There was an unexpected error
           </Heading>
           <Text marginBottom="0">

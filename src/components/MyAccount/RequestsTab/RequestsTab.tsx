@@ -100,13 +100,13 @@ const RequestsTab = () => {
   function getStatusBadge(status) {
     if (status == "READY FOR PICKUP") {
       return (
-        <StatusBadge className={styles.statusBadge} type="positive">
+        <StatusBadge className={styles.statusBadge} variant="positive">
           {status}
         </StatusBadge>
       )
     }
     return (
-      <StatusBadge className={styles.statusBadge} type="neutral">
+      <StatusBadge className={styles.statusBadge} variant="neutral">
         {status}
       </StatusBadge>
     )

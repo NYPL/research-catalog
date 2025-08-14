@@ -39,7 +39,7 @@ const SearchResult = ({ bib }: SearchResultProps) => {
         sx={{ a: { textDecoration: "none" } }}
       >
         {bib.findingAid && (
-          <StatusBadge type="informative" mb="s">
+          <StatusBadge variant="informative" mb="s">
             FINDING AID AVAILABLE
           </StatusBadge>
         )}
@@ -86,7 +86,7 @@ const SearchResult = ({ bib }: SearchResultProps) => {
                       md: "desktop.body.body2",
                     }}
                     fontWeight="medium"
-                    type="standalone"
+                    variant="standalone"
                   >
                     {`View all ${bib.getNumItemsMessage()} `}
                   </RCLink>

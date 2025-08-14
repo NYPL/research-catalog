@@ -16,6 +16,7 @@
 .searchTip {
   display: flex;
   align-items: flex-start;
+  margin-bottom: var(--nypl-space-s);
   .searchTipTitle {
     font-weight: bold;
   }

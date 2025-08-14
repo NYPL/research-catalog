@@ -28,7 +28,7 @@ describe("Applied Filters", () => {
         />
       )
 
-      await userEvent.click(screen.getAllByTestId("filter-tags")[0])
+      await userEvent.click(screen.getAllByTestId("ds-tagSetFilter-tags")[0])
       expect(decodeURI(mockRouter.asPath)).toBe(
         "/search?q=spaghetti&filters[language][0]=lang%3Afre"
       )
@@ -48,7 +48,7 @@ describe("Applied Filters", () => {
           }}
         />
       )
-      await userEvent.click(screen.getByTestId("filter-clear-all"))
+      await userEvent.click(screen.getByTestId("ds-tagSetFilter-clear-all"))
       expect(mockRouter.asPath).toBe("/search?q=spaghetti")
     })
     it("can remove one of many field filters", async () => {
@@ -66,7 +66,7 @@ describe("Applied Filters", () => {
           }}
         />
       )
-      await userEvent.click(screen.getAllByTestId("filter-tags")[0])
+      await userEvent.click(screen.getAllByTestId("ds-tagSetFilter-tags")[0])
       expect(decodeURI(mockRouter.asPath)).toBe(
         "/search?q=spaghetti&filters[format][0]=resourcetypes%3Aaud&filters[format][1]=resourcetypes%3Amov&filters[language][0]=lang%3Afre"
       )
@@ -105,6 +105,8 @@ describe("Applied Filters", () => {
         }}
       />
     )
-    expect(screen.queryByTestId("filter-clear-all")).not.toBeInTheDocument()
+    expect(
+      screen.queryByTestId("ds-tagSetFilter-clear-all")
+    ).not.toBeInTheDocument()
   })
 })
