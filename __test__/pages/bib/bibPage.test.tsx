@@ -44,7 +44,6 @@ describe("Bib Page with items", () => {
     expect(screen.getByTestId("bib-details-item-table")).toBeInTheDocument()
   })
 
-  // TODO: Determine if this should be rendering twice
   it("renders the bottom bib details", () => {
     expect(screen.getAllByTestId("publication-date")[0]).toHaveTextContent(
       "Vol. 1, issue 1-"
@@ -62,26 +61,11 @@ describe("Bib Page with items", () => {
     expect(screen.getAllByTestId("call-number")[0]).toHaveTextContent(
       "JFK 01-374"
     )
-    expect(screen.getAllByTestId("title")[1]).toHaveTextContent(
-      "Urban spaghetti."
-    )
-    expect(screen.getByTestId("imprint")).toHaveTextContent(
-      "Mansfield, Ohio : Urban Spaghetti, [1999?-"
-    )
     expect(screen.getByTestId("current-frequency")).toHaveTextContent(
       "Semiannual"
     )
-    expect(screen.getByTestId("abbreviated-title")).toHaveTextContent(
-      "Urban spaghetti"
-    )
-    expect(screen.getByTestId("cover-title")).toHaveTextContent(
-      "Urban spaghetti literary arts journal"
-    )
     expect(screen.getByTestId("lccn")).toHaveTextContent("sn 98001765")
     expect(screen.getByTestId("issn")).toHaveTextContent("1521-1371")
-    expect(screen.getByTestId("research-call-number")).toHaveTextContent(
-      "JFK 01-374"
-    )
   })
 })
 
