@@ -2,8 +2,6 @@ import { Html, Head, Main, NextScript } from "next/document"
 import { appConfig } from "../src/config/config"
 
 export default function Document() {
-  const isQA = appConfig.environment === "qa"
-
   return (
     <Html lang="en">
       <style>
@@ -16,7 +14,6 @@ export default function Document() {
                 min-height: 130px;
               }
             }
-            /* QA banner */
             #qa-banner {
               background: var(--nypl-colors-ui-link-primary-10);
               color: black;
@@ -32,8 +29,8 @@ export default function Document() {
         <meta name="description" content="Research Catalog | NYPL" />
       </Head>
       <body>
-        {/* QA banner */}
-        {isQA && (
+        {/* QA only banner */}
+        {appConfig.environment === "qa" && (
           <div id="qa-banner">
             This is the QA version of the Research Catalog website, used for
             internal testing purposes. To request items, go to the live website{" "}
@@ -45,8 +42,8 @@ export default function Document() {
         <noscript>
           <iframe
             src={"https://www.googletagmanager.com/ns.html?id=GTM-RKWC"}
-            height={0}
-            width={0}
+            height="0"
+            width="0"
             style={{ display: "none", visibility: "hidden" }}
           />
         </noscript>
