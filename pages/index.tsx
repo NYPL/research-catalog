@@ -16,7 +16,6 @@ import { appConfig } from "../src/config/config"
 import initializePatronTokenAuth from "../src/server/auth"
 import useLoading from "../src/hooks/useLoading"
 import RCHead from "../src/components/Head/RCHead"
-import logger from "../logger"
 
 interface HomeProps {
   bannerNotification?: string
@@ -28,10 +27,6 @@ export default function Home({
   isAuthenticated,
 }: HomeProps) {
   const isLoading = useLoading()
-  logger.info("Info log")
-  logger.warn("Warn log")
-  logger.error("Error log")
-  logger.debug("Debug log")
   return (
     <>
       <RCHead metadataTitle={SITE_NAME} />
