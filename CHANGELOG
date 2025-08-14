@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+### Added
+
+- Add QA only banner [SCC-4810](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4810)
+
 ## [1.5.3] 2025-08-06
 
 ### Added

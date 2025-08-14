@@ -1,5 +1,6 @@
 import { Html, Head, Main, NextScript } from "next/document"
 import { appConfig } from "../src/config/config"
+import QABanner from "../src/components/QABanner/QABanner"
 
 export default function Document() {
   return (
@@ -14,15 +15,7 @@ export default function Document() {
                 min-height: 130px;
               }
             }
-            #qa-banner {
-              background: var(--nypl-colors-ui-link-primary-10);
-              color: black;
-              font-size: 14px;
-              text-align: left;
-              padding: 16px;
-              border-left: 4px solid var(--nypl-colors-ui-link-primary);
-              a { text-decoration: underline; }
-            }
+            
           `}
       </style>
       <Head>
@@ -30,13 +23,7 @@ export default function Document() {
       </Head>
       <body>
         {/* QA only banner */}
-        {appConfig.environment === "qa" && (
-          <div id="qa-banner">
-            This is the QA version of the Research Catalog website, used for
-            internal testing purposes. To request items, go to the live website{" "}
-            <a href="https://www.nypl.org/research/research-catalog">here</a>.
-          </div>
-        )}
+        {appConfig.environment === "development" && <QABanner />}
 
         {/* Google tag manager: <noscript> */}
         <noscript>
