@@ -2,7 +2,7 @@ import { Html, Head, Main, NextScript } from "next/document"
 import { appConfig } from "../src/config/config"
 
 export default function Document() {
-  const isQA = appConfig.environment === "development"
+  const isQA = appConfig.environment === "qa"
 
   return (
     <Html lang="en">
