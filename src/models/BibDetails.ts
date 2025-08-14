@@ -10,6 +10,7 @@ import type {
 } from "../types/bibDetailsTypes"
 import { convertToSentenceCase } from "../utils/appUtils"
 import { getFindingAidFromSupplementaryContent } from "../utils/bibUtils"
+import logger from "../../logger"
 
 export default class BibDetails {
   bib: DiscoveryBibResult
@@ -201,8 +202,8 @@ export default class BibDetails {
         }
 
         // Keep if neither condition matched
-        console.log(
-          `[BibDetails] Keeping annotated MARC field "${
+        logger.info(
+          `Bib details: Keeping annotated MARC field "${
             detail.label
           }" — unique values: ${marcValues.join(", ")}`
         )
