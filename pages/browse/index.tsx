@@ -30,7 +30,6 @@ import ResultsError from "../../src/components/ResultsError/ResultsError"
 import { idConstants, useFocusContext } from "../../src/context/FocusContext"
 import type { SortOrder } from "../../src/types/searchTypes"
 import ResultsSort from "../../src/components/SearchResults/ResultsSort"
-import { discoverySubjectsResult } from "../../__test__/fixtures/subjectFixtures"
 
 interface BrowseProps {
   results: DiscoverySubjectsResponse
@@ -174,7 +173,7 @@ export default function Browse({
         {isLoading ? (
           loader
         ) : (
-          <SubjectTable subjectTableData={discoverySubjectsResult} />
+          <SubjectTable subjectTableData={results.subjects} />
         )}
         <Pagination
           id="results-pagination"
@@ -228,9 +227,9 @@ export async function getServerSideProps({ req, query }) {
       break
   }
 
-  // if (response?.status !== 200) {
-  //   return { props: { errorStatus: response.status } }
-  // }
+  if (response?.status !== 200) {
+    return { props: { errorStatus: response.status } }
+  }
 
   return {
     props: {
