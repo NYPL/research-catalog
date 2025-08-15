@@ -64,6 +64,11 @@ const sierraClient = async () => {
       logger.info(`PUT ${base}${path}`)
       return await put(path, body)
     }
+    const deleteRequest = wrapper.deleteRequest.bind(wrapper)
+    wrapper.deleteRequest = async function (path, body) {
+      logger.info(`DELETE ${base}${path}`)
+      return await deleteRequest(path, body)
+    }
     return wrapper
   } catch (error) {
     throw new SierraClientError(error.message)

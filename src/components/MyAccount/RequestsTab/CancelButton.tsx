@@ -127,15 +127,9 @@ const CancelButton = ({
         }
       )
       if (response.status == 200) {
-        logger.info(
-          `My Account: Patron ${patron.id} deleted hold ${hold.id} on item ${hold.itemId}`
-        )
         // Open next modal to confirm request has been canceled.
         setModalProps(successModalProps as DefaultModalProps)
       } else {
-        logger.info(
-          `My Account: Patron ${patron.id} attempted and failed to delete hold ${hold.id} on item ${hold.itemId}`
-        )
         setModalProps(failureModalProps as DefaultModalProps)
       }
     },
