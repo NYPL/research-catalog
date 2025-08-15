@@ -10,7 +10,6 @@ import {
   CardHeading,
 } from "@nypl/design-system-react-components"
 import { useEffect, useRef } from "react"
-import type { ChangeEvent } from "react"
 import { useRouter } from "next/router"
 import Layout from "../../src/components/Layout/Layout"
 import SearchResult from "../../src/components/SearchResults/SearchResult"
@@ -80,9 +79,7 @@ export default function Search({
     )
   }
 
-  const handleSortChange = async (e: ChangeEvent<HTMLInputElement>) => {
-    const selectedSortOption = e.target.value
-    // Extract sort key and order from selected sort option using "_" delineator
+  const handleSortChange = async (selectedSortOption: string) => {
     const [sortBy, order] = selectedSortOption.split("_") as [
       SortKey,
       SortOrder | undefined
@@ -242,7 +239,7 @@ export async function getServerSideProps({ req, query }) {
 
   const results = await fetchResults(mapQueryToSearchParams(query))
 
-  // Handle API errors
+  // // Handle API errors
   if (results.status !== 200) {
     return { props: { errorStatus: results.status } }
   }

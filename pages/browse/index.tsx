@@ -25,12 +25,12 @@ import {
 } from "../../src/utils/browseUtils"
 import { useRouter } from "next/router"
 import useLoading from "../../src/hooks/useLoading"
-import type { ChangeEvent } from "react"
 import { useRef, useEffect } from "react"
 import ResultsError from "../../src/components/ResultsError/ResultsError"
 import { idConstants, useFocusContext } from "../../src/context/FocusContext"
 import type { SortOrder } from "../../src/types/searchTypes"
 import ResultsSort from "../../src/components/SearchResults/ResultsSort"
+import { discoverySubjectsResult } from "../../__test__/fixtures/subjectFixtures"
 
 interface BrowseProps {
   results: DiscoverySubjectsResponse
@@ -72,9 +72,7 @@ export default function Browse({
     await push(newQuery)
   }
 
-  const handleSortChange = async (e: ChangeEvent<HTMLInputElement>) => {
-    const selectedSortOption = e.target.value
-    // Extract sort key and order from selected sort option using "_" delineator
+  const handleSortChange = async (selectedSortOption: string) => {
     const [sortBy, order] = selectedSortOption.split("_") as [
       BrowseSort,
       SortOrder | undefined
@@ -127,6 +125,7 @@ export default function Browse({
         direction="column"
         justifyContent="space-between"
         alignItems="center"
+        textAlign="center"
         gap="xs"
         mb="l"
         mt="l"
@@ -152,6 +151,7 @@ export default function Browse({
           direction={{ base: "column", md: "row" }}
           justifyContent="space-between"
           mb="l"
+          gap="xs"
         >
           <Heading
             id="browse-results-heading"
@@ -174,7 +174,7 @@ export default function Browse({
         {isLoading ? (
           loader
         ) : (
-          <SubjectTable subjectTableData={results.subjects} />
+          <SubjectTable subjectTableData={discoverySubjectsResult} />
         )}
         <Pagination
           id="results-pagination"
@@ -228,9 +228,9 @@ export async function getServerSideProps({ req, query }) {
       break
   }
 
-  if (response?.status !== 200) {
-    return { props: { errorStatus: response.status } }
-  }
+  // if (response?.status !== 200) {
+  //   return { props: { errorStatus: response.status } }
+  // }
 
   return {
     props: {
