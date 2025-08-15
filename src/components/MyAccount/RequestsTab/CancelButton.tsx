@@ -123,7 +123,11 @@ const CancelButton = ({
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ patronId: patron.id }),
+          body: JSON.stringify({
+            patronId: patron.id,
+            patronBarcode: patron.barcode,
+            itemId: hold.itemId,
+          }),
         }
       )
       if (response.status == 200) {
