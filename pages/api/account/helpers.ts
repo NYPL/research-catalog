@@ -114,7 +114,10 @@ export async function updateHold(
 /**
  * DELETE request to Sierra to cancel a patron's hold. Returns status and message about request.
  */
-export async function cancelHold(holdId: string): Promise<HTTPResponse> {
+export async function cancelHold(
+  holdId: string,
+  cancelHoldLogInfo
+): Promise<HTTPResponse> {
   try {
     const client = await sierraClient()
     await client.deleteRequest(`patrons/holds/${holdId}`)
