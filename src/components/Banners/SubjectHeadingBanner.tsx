@@ -13,7 +13,7 @@ const SubjectHeadingBanner = () => {
       direction="column"
       ml={{ base: "s", xl: 0 }}
       mr={{ base: "s", xl: 0 }}
-      mb={{ base: "xs", md: "xs" }}
+      mb="xs"
     >
       <Banner
         className={`${styles.banner} no-print`}
