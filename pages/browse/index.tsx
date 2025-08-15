@@ -96,7 +96,7 @@ export default function Browse({
         showImage={false}
         mb="m"
         ml="0"
-        width="900px"
+        maxWidth="900px"
         contentSize={5}
         showHeading={false}
       />

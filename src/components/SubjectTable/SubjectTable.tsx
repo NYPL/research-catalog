@@ -50,7 +50,7 @@ const SubjectTable = ({
       columnHeaders={["Subject heading", "Results"]}
       isScrollable
       columnStyles={[
-        { minWidth: "274px" },
+        { minWidth: "269px" },
         {
           minWidth: { base: "84px", md: "160px" },
           width: "20%",
