@@ -117,12 +117,12 @@ const Layout = ({
 
             {showSearch && (
               <Flex
-                gap="s"
                 align="center"
+                gap="s"
                 direction="column"
-                sx={{
-                  padding: "2em 2em .5em 2em",
-                }}
+                ml={{ base: "s", xl: 0 }}
+                mr={{ base: "s", xl: 0 }}
+                mb="xs"
               >
                 <EDSBanner />
                 {showNotification && bannerNotification && (

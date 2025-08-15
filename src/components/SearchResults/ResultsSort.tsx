@@ -1,11 +1,10 @@
-import { Select } from "@nypl/design-system-react-components"
+import { Menu } from "@nypl/design-system-react-components"
 import type { SearchParams } from "../../types/searchTypes"
-import type { ChangeEvent } from "react"
 import type { BrowseParams } from "../../types/browseTypes"
 
 interface ResultsSortProps {
   params: SearchParams | BrowseParams
-  handleSortChange: (e: ChangeEvent) => Promise<void>
+  handleSortChange: (string) => Promise<void>
   sortOptions: Record<string, string>
 }
 
@@ -19,25 +18,22 @@ const ResultsSort = ({
 }: ResultsSortProps) => {
   const value = params.order
     ? `${params.sortBy}_${params.order}`
-    : params.sortBy
+    : params.sortBy || "relevance"
 
   return (
-    <Select
-      name="sort_direction"
+    <Menu
       id="results-sort"
-      labelText="Sort by"
-      labelPosition="inline"
-      onChange={handleSortChange}
-      value={value}
+      showLabel
       className="no-print"
-      mt={{ base: "s", md: 0 }}
-    >
-      {Object.entries(sortOptions).map(([key, label]) => (
-        <option value={key} key={`sort-by-${key}`}>
-          {label}
-        </option>
-      ))}
-    </Select>
+      selectedItem={value}
+      labelText={`Sort by: ${sortOptions[value]}`}
+      listItemsData={Object.entries(sortOptions).map(([key, label]) => ({
+        id: key,
+        label,
+        onClick: () => handleSortChange(key),
+        type: "action",
+      }))}
+    />
   )
 }
 
