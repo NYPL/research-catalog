@@ -3,7 +3,6 @@ import userEvent from "@testing-library/user-event"
 import { render, screen, fireEvent } from "../../../src/utils/testUtils"
 import mockRouter from "next-router-mock"
 import { results } from "../../fixtures/searchResultsManyBibs"
-import { noBibs } from "../../fixtures/searchResultsNoBibs"
 import SearchResults from "../../../pages/search/index"
 
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
@@ -51,11 +50,10 @@ describe("Search Results page", () => {
           results={{ results, status: 200 }}
         />
       )
-      const sortBy = screen.getAllByLabelText("Sort by")[0]
-      expect(sortBy).toHaveValue("relevance")
-      await userEvent.selectOptions(sortBy, "Title (A - Z)")
-      expect(sortBy).toHaveValue("title_asc")
-
+      const sortBy = screen.getAllByLabelText("Sort by", { exact: false })[0]
+      userEvent.click(sortBy)
+      await userEvent.click(screen.getByText("Title (A - Z)"))
+      expect(sortBy).toHaveTextContent("Sort by: Title (A - Z)")
       expect(mockRouter.asPath).toBe(
         "/?q=spaghetti&sort=title&sort_direction=asc"
       )
@@ -68,8 +66,9 @@ describe("Search Results page", () => {
           results={{ results, status: 200 }}
         />
       )
-      const mobileSortBy = screen.getAllByLabelText("Sort by")[0]
-      await userEvent.selectOptions(mobileSortBy, "Title (Z - A)")
+      const sortBy = screen.getAllByLabelText("Sort by", { exact: false })[0]
+      userEvent.click(sortBy)
+      await userEvent.click(screen.getByText("Title (Z - A)"))
 
       expect(mockRouter.asPath).toBe(
         "/?q=spaghetti&sort=title&sort_direction=desc"
