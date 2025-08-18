@@ -1,12 +1,10 @@
 import { type ReactElement, type PropsWithChildren } from "react"
 import {
-  Flex,
   Box,
   TemplateAppContainer,
   Breadcrumbs,
   DSProvider,
   Heading,
-  Banner,
 } from "@nypl/design-system-react-components"
 
 import { type RCPage } from "../../types/pageTypes"
@@ -15,10 +13,10 @@ import SearchForm from "../SearchForm/SearchForm"
 import { BASE_URL } from "../../config/constants"
 import FeedbackForm from "../FeedbackForm/FeedbackForm"
 import type { Aggregation } from "../../types/filterTypes"
-import EDSBanner from "../Banners/EDSBanner"
 import RCSubNav from "../RCSubNav/RCSubNav"
 import BrowseForm from "../BrowseForm/BrowseForm"
 import SubjectHeadingBanner from "../Banners/SubjectHeadingBanner"
+import SearchBanners from "../Banners/SearchBanners"
 
 interface LayoutProps {
   sidebar?: ReactElement
@@ -61,7 +59,7 @@ const Layout = ({
           },
           main: {
             rowGap: {
-              base: "grid.m",
+              base: 0,
               md: "grid.l",
             },
           },
@@ -116,23 +114,10 @@ const Layout = ({
             )}
 
             {showSearch && (
-              <Flex
-                align="center"
-                gap="s"
-                direction="column"
-                ml={{ base: "s", xl: 0 }}
-                mr={{ base: "s", xl: 0 }}
-                mb="xs"
-              >
-                <EDSBanner />
-                {showNotification && bannerNotification && (
-                  <Banner
-                    className={`${styles.banner} no-print`}
-                    heading="New Service Announcement"
-                    content={bannerNotification}
-                  />
-                )}
-              </Flex>
+              <SearchBanners
+                showNotification={showNotification}
+                bannerNotification={bannerNotification}
+              />
             )}
           </>
         }

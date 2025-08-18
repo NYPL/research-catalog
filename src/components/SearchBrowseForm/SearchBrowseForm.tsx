@@ -103,6 +103,7 @@ const SearchBrowseForm = ({
           onSubmit={handleSubmit}
           labelText={labelText}
           isDisabled={isLoading}
+          pb={{ base: children ? 0 : "l", md: 0 }}
           selectProps={{
             value: searchScope,
             onChange: (e) => handleChange(e, setSearchScope),
@@ -121,7 +122,11 @@ const SearchBrowseForm = ({
           }}
         />
         {children && (
-          <Flex direction="column" justifyContent="space-between" mt="s">
+          <Flex
+            direction="column"
+            justifyContent="space-between"
+            mt={{ base: 0, md: "s" }}
+          >
             {children}
           </Flex>
         )}

@@ -1,6 +1,5 @@
 import { Banner, Flex } from "@nypl/design-system-react-components"
 import React from "react"
-import RCLink from "../Links/RCLink/RCLink"
 import styles from "../../../styles/components/Layout.module.scss"
 
 /**
@@ -13,12 +12,11 @@ const SubjectHeadingBanner = () => {
       direction="column"
       ml={{ base: "s", xl: 0 }}
       mr={{ base: "s", xl: 0 }}
-      mb="xs"
     >
       <Banner
         className={`${styles.banner} no-print`}
         type="recommendation"
-        mt="l"
+        mt={{ base: "s", lg: "l" }}
         isDismissible
         content={
           <>

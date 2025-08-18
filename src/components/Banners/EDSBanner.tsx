@@ -10,7 +10,6 @@ const EDSBanner = () => {
   return (
     <Banner
       className={`${styles.banner} no-print`}
-      mt="l"
       type="informative"
       content={
         <>
