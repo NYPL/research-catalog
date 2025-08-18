@@ -1,6 +1,7 @@
 import sierraClient from "../../../src/server/sierraClient"
 import type { HTTPResponse } from "../../../src/types/appTypes"
 import nyplApiClient from "../../../src/server/nyplApiClient"
+import logger from "../../../logger"
 
 /**
  * PUT request to Sierra to update patron PIN, first validating with previous PIN.
@@ -120,9 +121,23 @@ export async function cancelHold(
 ): Promise<HTTPResponse> {
   try {
     const client = await sierraClient()
+    logger.info("My account cancel hold request", {
+      ...cancelHoldLogInfo,
+      sierraHoldId: holdId,
+    })
     await client.deleteRequest(`patrons/holds/${holdId}`)
+    logger.info("My account cancel hold request successful", {
+      ...cancelHoldLogInfo,
+      sierraHoldId: holdId,
+      status: 200,
+    })
     return { status: 200, message: "Canceled" }
   } catch (error) {
+    logger.info("My account cancel hold request failed", {
+      ...cancelHoldLogInfo,
+      sierraHoldId: holdId,
+      status: error.response.status,
+    })
     return {
       status: error.response.status,
       message: error.response.data.name || error.response.data.description,
