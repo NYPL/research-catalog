@@ -35,7 +35,7 @@ describe("cancelHold", () => {
       deleteRequest: methodMock,
     })
 
-    const response = await cancelHold(holdId)
+    const response = await cancelHold(holdId, {})
 
     expect(sierraClient).toHaveBeenCalled()
     expect(methodMock).toHaveBeenCalledWith(`patrons/holds/${holdId}`)
@@ -57,7 +57,7 @@ describe("cancelHold", () => {
       deleteRequest: methodMock,
     })
 
-    const response = await cancelHold(holdId)
+    const response = await cancelHold(holdId, {})
     expect(sierraClient).toHaveBeenCalled()
     expect(methodMock).toHaveBeenCalledWith(`patrons/holds/${holdId}`)
     expect(response.status).toBe(404)
@@ -78,7 +78,7 @@ describe("cancelHold", () => {
       deleteRequest: methodMock,
     })
 
-    const response = await cancelHold(holdId)
+    const response = await cancelHold(holdId, {})
     expect(sierraClient).toHaveBeenCalled()
     expect(methodMock).toHaveBeenCalledWith(`patrons/holds/${holdId}`)
     expect(response.status).toBe(500)
