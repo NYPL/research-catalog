@@ -97,7 +97,7 @@ describe("updateHold", () => {
     ;(sierraClient as jest.Mock).mockResolvedValueOnce({ put: methodMock })
 
     const response = await updateHold(holdId, holdData, {
-      patronId: 123,
+      patronId: "123",
       itemId: "456",
     })
 
@@ -121,7 +121,7 @@ describe("updateHold", () => {
     ;(sierraClient as jest.Mock).mockResolvedValueOnce({ put: methodMock })
 
     const response = await updateHold(holdId, holdData, {
-      patronId: 123,
+      patronId: "123",
       itemId: "456",
     })
     expect(sierraClient).toHaveBeenCalled()
