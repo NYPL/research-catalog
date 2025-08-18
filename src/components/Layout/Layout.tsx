@@ -48,6 +48,7 @@ const Layout = ({
   const showBrowse = activePage === "browse" || activePage === "sh-results"
   const showNotification = activePage === "" || activePage === "search"
   const showBrowseBanner = activePage === "browse"
+  console.log("layout activepage", activePage)
   return (
     <DSProvider>
       <TemplateAppContainer

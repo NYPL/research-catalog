@@ -39,12 +39,15 @@ import { useFocusContext, idConstants } from "../../src/context/FocusContext"
 import type { HTTPStatusCode } from "../../src/types/appTypes"
 import ResultsError from "../../src/components/ResultsError/ResultsError"
 import ResultsSort from "../../src/components/SearchResults/ResultsSort"
+import type { RCPage } from "../../src/types/pageTypes"
 
 interface SearchProps {
   bannerNotification?: string
   results: SearchResultsResponse
   isAuthenticated: boolean
   errorStatus?: HTTPStatusCode | null
+  activePage?: RCPage
+  metadataTitle?: string
 }
 
 /**
@@ -56,10 +59,11 @@ export default function Search({
   results,
   isAuthenticated,
   errorStatus = null,
+  activePage,
+  metadataTitle,
 }: SearchProps) {
-  const metadataTitle = `Search Results | ${SITE_NAME}`
-
   const { push, query } = useRouter()
+  console.log("here", activePage)
 
   // TODO: Move this to global context
   const searchParams = mapQueryToSearchParams(query)
@@ -128,7 +132,7 @@ export default function Search({
         searchAggregations={aggs}
         searchResultsCount={totalResults}
         isAuthenticated={isAuthenticated}
-        activePage="search"
+        activePage={activePage}
         sidebar={
           totalResults > 0 ? (
             <Box display={{ base: "none", md: "block" }} width="100%" pb="l">
@@ -257,6 +261,7 @@ export async function getServerSideProps({ req, query }) {
       bannerNotification,
       results,
       isAuthenticated,
+      activePage: "search",
     },
   }
 }
