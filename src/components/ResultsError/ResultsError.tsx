@@ -27,7 +27,7 @@ export default function ResultsError({ errorStatus, page }: ResultsErrorProps) {
     case 404:
       errorContent = (
         <>
-          <Heading level="h3" tabIndex={-1} id={headingID}>
+          <Heading level="h2" size="heading3" tabIndex={-1} id={headingID}>
             No results found
           </Heading>
           <Text noSpace>
@@ -56,7 +56,7 @@ export default function ResultsError({ errorStatus, page }: ResultsErrorProps) {
     case 500:
       errorContent = (
         <>
-          <Heading level="h3" tabIndex={-1} id={headingID}>
+          <Heading level="h2" size="heading3" tabIndex={-1} id={headingID}>
             Something went wrong on our end
           </Heading>
           <Text marginBottom="0">
@@ -76,7 +76,7 @@ export default function ResultsError({ errorStatus, page }: ResultsErrorProps) {
     default:
       errorContent = (
         <>
-          <Heading level="h3" tabIndex={-1} id={headingID}>
+          <Heading level="h2" size="heading3" tabIndex={-1} id={headingID}>
             There was an unexpected error
           </Heading>
           <Text marginBottom="0">

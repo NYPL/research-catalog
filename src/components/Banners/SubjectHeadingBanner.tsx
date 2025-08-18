@@ -1,6 +1,5 @@
 import { Banner, Flex } from "@nypl/design-system-react-components"
 import React from "react"
-import RCLink from "../Links/RCLink/RCLink"
 import styles from "../../../styles/components/Layout.module.scss"
 
 /**
