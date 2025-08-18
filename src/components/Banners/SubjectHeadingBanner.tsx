@@ -13,12 +13,11 @@ const SubjectHeadingBanner = () => {
       direction="column"
       ml={{ base: "s", xl: 0 }}
       mr={{ base: "s", xl: 0 }}
-      mb="xs"
     >
       <Banner
         className={`${styles.banner} no-print`}
         type="recommendation"
-        mt="l"
+        mt={{ base: "s", lg: "l" }}
         isDismissible
         content={
           <>

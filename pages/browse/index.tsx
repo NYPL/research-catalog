@@ -150,7 +150,7 @@ export default function Browse({
           direction={{ base: "column", md: "row" }}
           justifyContent="space-between"
           mb="l"
-          gap="xs"
+          gap={{ base: 0, md: "xs" }}
         >
           <Heading
             id="browse-results-heading"
@@ -161,6 +161,7 @@ export default function Browse({
             noSpace
             minH="40px"
             aria-live="polite"
+            mb={{ base: "m", md: 0 }}
           >
             {getBrowseResultsHeading(browseParams, results.totalResults)}
           </Heading>

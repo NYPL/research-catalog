@@ -169,6 +169,7 @@ export default function Search({
               justifyContent="space-between"
               marginTop="xxs"
               direction={{ base: "column", md: "row" }}
+              mb={{ base: "m", md: 0 }}
             >
               <Heading
                 id="search-results-heading"
@@ -177,7 +178,7 @@ export default function Search({
                 size="heading5"
                 tabIndex={-1}
                 paddingBottom="0"
-                mb={{ base: "s", md: "l" }}
+                mb={{ base: "m", md: "l" }}
                 minH="40px"
                 ref={searchResultsHeadingRef}
                 aria-live="polite"
