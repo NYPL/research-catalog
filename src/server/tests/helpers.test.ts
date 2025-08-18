@@ -96,7 +96,10 @@ describe("updateHold", () => {
     })
     ;(sierraClient as jest.Mock).mockResolvedValueOnce({ put: methodMock })
 
-    const response = await updateHold(holdId, holdData)
+    const response = await updateHold(holdId, holdData, {
+      patronId: 123,
+      itemId: "456",
+    })
 
     expect(sierraClient).toHaveBeenCalled()
     expect(methodMock).toHaveBeenCalledWith(`patrons/holds/${holdId}`, holdData)
@@ -117,7 +120,10 @@ describe("updateHold", () => {
     })
     ;(sierraClient as jest.Mock).mockResolvedValueOnce({ put: methodMock })
 
-    const response = await updateHold(holdId, holdData)
+    const response = await updateHold(holdId, holdData, {
+      patronId: 123,
+      itemId: "456",
+    })
     expect(sierraClient).toHaveBeenCalled()
     expect(methodMock).toHaveBeenCalledWith(`patrons/holds/${holdId}`, holdData)
     expect(response.status).toBe(400)
@@ -139,7 +145,10 @@ describe("updateHold", () => {
     })
     ;(sierraClient as jest.Mock).mockResolvedValueOnce({ put: methodMock })
 
-    const response = await updateHold(holdId, holdData)
+    const response = await updateHold(holdId, holdData, {
+      patronId: "123",
+      itemId: "456",
+    })
     expect(sierraClient).toHaveBeenCalled()
     expect(methodMock).toHaveBeenCalledWith(`patrons/holds/${holdId}`, holdData)
     expect(response.status).toBe(500)
