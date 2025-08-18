@@ -22,7 +22,7 @@ import SubjectHeadingBanner from "../Banners/SubjectHeadingBanner"
 
 interface LayoutProps {
   sidebar?: ReactElement
-  activePage?: RCPage
+  activePage: RCPage
   sidebarPosition?: "right" | "left"
   isAuthenticated?: boolean
   searchAggregations?: Aggregation[]
@@ -48,7 +48,6 @@ const Layout = ({
   const showBrowse = activePage === "browse" || activePage === "sh-results"
   const showNotification = activePage === "" || activePage === "search"
   const showBrowseBanner = activePage === "browse"
-  console.log("layout activepage", activePage)
   return (
     <DSProvider>
       <TemplateAppContainer

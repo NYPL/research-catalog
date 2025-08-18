@@ -28,7 +28,7 @@ import type {
   SortKey,
   SortOrder,
 } from "../../src/types/searchTypes"
-import { SITE_NAME, RESULTS_PER_PAGE } from "../../src/config/constants"
+import { RESULTS_PER_PAGE } from "../../src/config/constants"
 import type SearchResultsBib from "../../src/models/SearchResultsBib"
 import useLoading from "../../src/hooks/useLoading"
 import initializePatronTokenAuth from "../../src/server/auth"
@@ -46,8 +46,9 @@ interface SearchProps {
   results: SearchResultsResponse
   isAuthenticated: boolean
   errorStatus?: HTTPStatusCode | null
-  activePage?: RCPage
+  activePage: RCPage
   metadataTitle?: string
+  initialQuery?: Record<string, any>
 }
 
 /**
@@ -61,12 +62,16 @@ export default function Search({
   errorStatus = null,
   activePage,
   metadataTitle,
+  initialQuery,
 }: SearchProps) {
   const { push, query } = useRouter()
-  console.log("here", activePage)
 
   // TODO: Move this to global context
-  const searchParams = mapQueryToSearchParams(query)
+  const effectiveQuery = initialQuery ?? query
+  console.log("initial query on search", initialQuery)
+  console.log("effective query on search", effectiveQuery)
+  const searchParams = mapQueryToSearchParams(effectiveQuery)
+  console.log("search params are", searchParams)
 
   const isLoading = useLoading()
   const searchedFromAdvanced = query.searched_from === "advanced"
@@ -262,6 +267,7 @@ export async function getServerSideProps({ req, query }) {
       results,
       isAuthenticated,
       activePage: "search",
+      initialQuery: "",
     },
   }
 }
