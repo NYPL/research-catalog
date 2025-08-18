@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 
+- Simplify winston instantiation [SCC-4807] (https://newyorkpubliclibrary.atlassian.net/browse/SCC-4807)
 - Updated finding aid copy and link [SCC-4803](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4803)
 
 ### Added
