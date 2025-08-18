@@ -181,6 +181,7 @@ describe("RequestsTab", () => {
           patronId: processedPatron.id,
           freeze: true,
           pickupLocation: "sn",
+          itemId: "23167148",
         }),
       }
     )
@@ -198,6 +199,7 @@ describe("RequestsTab", () => {
           patronId: processedPatron.id,
           freeze: false,
           pickupLocation: "sn",
+          itemId: "23167148",
         }),
       }
     )

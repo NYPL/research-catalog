@@ -98,13 +98,36 @@ export async function updatePatronSettings(
  */
 export async function updateHold(
   holdId: string,
-  holdData: any
+  holdData: {
+    freeze: boolean
+    pickupLocation: string
+  },
+  updateHoldLogInfo: {
+    patronId: string
+    itemId: string
+  }
 ): Promise<HTTPResponse> {
   try {
     const client = await sierraClient()
+    logger.info("My account update hold request", {
+      type: holdData.freeze ? "freeze" : "pickup location",
+      sierraHoldId: holdId,
+      ...updateHoldLogInfo,
+    })
     await client.put(`patrons/holds/${holdId}`, holdData)
+    logger.info("My account hold update sucessful", {
+      type: holdData.freeze ? "freeze" : "pickup location",
+      sierraHoldId: holdId,
+      ...updateHoldLogInfo,
+    })
     return { status: 200, message: "Updated" }
   } catch (error) {
+    logger.info("My account hold update failed", {
+      type: holdData.freeze ? "freeze" : "pickup location",
+      sierraHoldId: holdId,
+      ...updateHoldLogInfo,
+      status: error.response.status,
+    })
     return {
       status: error.response.status,
       message: error.response.data.message || error.response.data.description,
@@ -129,7 +152,6 @@ export async function cancelHold(
     logger.info("My account cancel hold request successful", {
       ...cancelHoldLogInfo,
       sierraHoldId: holdId,
-      status: 200,
     })
     return { status: 200, message: "Canceled" }
   } catch (error) {

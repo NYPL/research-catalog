@@ -34,7 +34,10 @@ export default async function handler(
     /**  We check that the patron cookie matches the patron id in the request,
      * i.e.,the logged in user is updating their own hold. */
     if (holdPatronId == cookiePatronId) {
-      const response = await updateHold(holdId, holdData)
+      const response = await updateHold(holdId, holdData, {
+        patronId: holdPatronId,
+        itemId: reqBody.itemId,
+      })
       responseStatus = response.status
       responseMessage = response.message
     } else {
