@@ -103,6 +103,7 @@ const SearchBrowseForm = ({
           onSubmit={handleSubmit}
           labelText={labelText}
           isDisabled={isLoading}
+          pb={{ base: children ? 0 : "l", md: 0 }}
           selectProps={{
             value: searchScope,
             onChange: (e) => handleChange(e, setSearchScope),

@@ -14,9 +14,7 @@ const BrowseForm = () => {
       scopeParamKey="searchScope"
       getQueryString={getBrowseQuery}
       onSubmitFocusId={idConstants.browseResultsHeading}
-    >
-      <Box height={{ base: "32px", md: 0 }} />
-    </SearchBrowseForm>
+    />
   )
 }
 
