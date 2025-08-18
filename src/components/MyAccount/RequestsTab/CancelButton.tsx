@@ -17,7 +17,6 @@ import type {
   DefaultModalProps,
 } from "@nypl/design-system-react-components"
 import { PatronDataContext } from "../../../context/PatronDataContext"
-import logger from "../../../../logger"
 
 const CancelButton = ({
   setFocusOnRequestTab,

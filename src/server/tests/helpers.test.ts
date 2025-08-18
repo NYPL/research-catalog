@@ -8,6 +8,7 @@ import {
   cancelHold,
   updateUsername,
 } from "../../../pages/api/account/helpers"
+import logger from "../../../logger"
 
 jest.mock("../../../src/server/sierraClient")
 jest.mock("../../../src/server/nyplApiClient")
@@ -26,6 +27,7 @@ const mockCheckoutResponse = {
 
 describe("cancelHold", () => {
   it("should return a success message if hold is canceled", async () => {
+    logger.info = jest.fn()
     const holdId = "12345"
     const methodMock = jest.fn().mockResolvedValueOnce({
       status: 200,
@@ -35,12 +37,36 @@ describe("cancelHold", () => {
       deleteRequest: methodMock,
     })
 
-    const response = await cancelHold(holdId, {})
+    const response = await cancelHold(holdId, {
+      patronId: "123",
+      itemId: "123",
+      patronBarcode: "patronBarcode",
+    })
 
     expect(sierraClient).toHaveBeenCalled()
     expect(methodMock).toHaveBeenCalledWith(`patrons/holds/${holdId}`)
     expect(response.status).toBe(200)
     expect(response.message).toBe("Canceled")
+    expect(logger.info.mock.calls).toEqual([
+      [
+        "My account cancel hold request",
+        {
+          itemId: "123",
+          patronBarcode: "patronBarcode",
+          patronId: "123",
+          sierraHoldId: "12345",
+        },
+      ],
+      [
+        "My account cancel hold request successful",
+        {
+          itemId: "123",
+          patronBarcode: "patronBarcode",
+          patronId: "123",
+          sierraHoldId: "12345",
+        },
+      ],
+    ])
   })
 
   it("should return a 404 error if hold DNE", async () => {
@@ -65,6 +91,7 @@ describe("cancelHold", () => {
   })
 
   it("should return a 500 error if server errors", async () => {
+    logger.info = jest.fn()
     const holdId = "12345"
     const methodMock = jest.fn().mockRejectedValueOnce({
       response: {
@@ -78,11 +105,27 @@ describe("cancelHold", () => {
       deleteRequest: methodMock,
     })
 
-    const response = await cancelHold(holdId, {})
+    const response = await cancelHold(holdId, {
+      itemId: "123",
+      patronBarcode: "patronBarcode",
+      patronId: "123",
+      sierraHoldId: "12345",
+    })
     expect(sierraClient).toHaveBeenCalled()
     expect(methodMock).toHaveBeenCalledWith(`patrons/holds/${holdId}`)
     expect(response.status).toBe(500)
     expect(response.message).toBe("Server error")
+    expect(logger.info).toHaveBeenCalledTimes(2)
+    expect(logger.info.mock.calls[1]).toEqual([
+      "My account cancel hold request failed",
+      {
+        itemId: "123",
+        patronBarcode: "patronBarcode",
+        patronId: "123",
+        sierraHoldId: "12345",
+        status: 500,
+      },
+    ])
   })
 })
 
