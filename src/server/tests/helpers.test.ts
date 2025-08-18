@@ -47,6 +47,7 @@ describe("cancelHold", () => {
     expect(methodMock).toHaveBeenCalledWith(`patrons/holds/${holdId}`)
     expect(response.status).toBe(200)
     expect(response.message).toBe("Canceled")
+    // @ts-ignore
     expect(logger.info.mock.calls).toEqual([
       [
         "My account cancel hold request",
@@ -116,6 +117,7 @@ describe("cancelHold", () => {
     expect(response.status).toBe(500)
     expect(response.message).toBe("Server error")
     expect(logger.info).toHaveBeenCalledTimes(2)
+    // @ts-ignore
     expect(logger.info.mock.calls[1]).toEqual([
       "My account cancel hold request failed",
       {
