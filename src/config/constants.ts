@@ -118,16 +118,16 @@ export const SEARCH_FORM_OPTIONS = {
 }
 
 export const BROWSE_FORM_OPTIONS = {
-  starts_with: {
-    text: "Subject Headings beginning with",
-    searchTip:
-      "Enter one or more keywords in exact order to browse the Subject Headings index.",
-    placeholder: "Example: Ornithology or Vietnam War",
-  },
   has: {
     text: "Subject Headings containing",
     searchTip:
       "Enter one or more keywords in any order to browse the Subject Headings index.",
+    placeholder: "Example: Ornithology or Vietnam War",
+  },
+  starts_with: {
+    text: "Subject Headings beginning with",
+    searchTip:
+      "Enter one or more keywords in exact order to browse the Subject Headings index.",
     placeholder: "Example: Ornithology or Vietnam War",
   },
 }
