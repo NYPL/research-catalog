@@ -48,9 +48,12 @@ const SearchBrowseForm = ({
   const router = useRouter()
   const isLoading = useLoading()
   const { setPersistentFocus } = useFocusContext()
+  const slug = Array.isArray(router.query.slug)
+    ? router.query.slug[0]
+    : router.query.slug
 
   const [searchTerm, setSearchTerm] = useState(
-    (router?.query?.q as string) || ""
+    (router?.query?.q as string) || slug || ""
   )
   const [searchScope, setSearchScope] = useState(
     (router?.query?.search_scope as string) || initialScope

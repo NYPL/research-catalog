@@ -109,7 +109,7 @@ const Layout = ({
             )}
             {showBrowse && (
               <>
-                <BrowseForm />
+                <BrowseForm activePage={activePage} />
                 {showBrowseBanner && <SubjectHeadingBanner />}
               </>
             )}

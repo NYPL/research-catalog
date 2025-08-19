@@ -12,7 +12,6 @@ import {
 import { RESULTS_PER_PAGE } from "../../config/constants"
 import type SearchResultsBib from "../../models/SearchResultsBib"
 import {
-  getSearchResultsHeading,
   mapElementsToSearchResultsBibs,
   sortOptions,
 } from "../../utils/searchUtils"
@@ -109,6 +108,7 @@ const Search = ({
         <Box
           sx={{
             ml: { base: "0px", md: "32px" },
+            mb: "l",
           }}
         >
           <Flex flexDir="column">
@@ -169,7 +169,6 @@ const Search = ({
           <Pagination
             id="results-pagination"
             mt="xxl"
-            mb="l"
             className="no-print"
             initialPage={searchParams.page}
             currentPage={searchParams.page}
