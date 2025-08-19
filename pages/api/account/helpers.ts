@@ -115,11 +115,6 @@ export async function updateHold(
       ...updateHoldLogInfo,
     })
     await client.put(`patrons/holds/${holdId}`, holdData)
-    logger.info("My account hold update sucessful", {
-      type: holdData.freeze ? "freeze" : "pickup location",
-      sierraHoldId: holdId,
-      ...updateHoldLogInfo,
-    })
     return { status: 200, message: "Updated" }
   } catch (error) {
     logger.info("My account hold update failed", {
@@ -149,10 +144,6 @@ export async function cancelHold(
       sierraHoldId: holdId,
     })
     await client.deleteRequest(`patrons/holds/${holdId}`)
-    logger.info("My account cancel hold request successful", {
-      ...cancelHoldLogInfo,
-      sierraHoldId: holdId,
-    })
     return { status: 200, message: "Canceled" }
   } catch (error) {
     logger.info("My account cancel hold request failed", {

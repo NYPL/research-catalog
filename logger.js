@@ -1,18 +1,21 @@
 import winston from "winston"
 
+const addPid = winston.format((info) => {
+  return {
+    ...info,
+    pid: process.pid,
+  }
+})
+const { combine, json, timestamp } = winston.format
 const initializeLogger = () => {
-  const format =
-    process.env.APP_ENV !== "development"
-      ? winston.format.json()
-      : // Locally, let's do colorized plaintext logging:
-        winston.format.combine(
-          winston.format.colorize(),
-          winston.format.simple()
-        )
   return winston.createLogger({
     level: process.env.LOG_LEVEL || "info",
-    format,
+    format: combine(
+      addPid(),
+      timestamp("YYYY-MM-DD hh:mm:ss.SSS A"),
+      json()),
     transports: [new winston.transports.Console()],
+    maxFiles: 5,
   })
 }
 

@@ -58,15 +58,6 @@ describe("cancelHold", () => {
           sierraHoldId: "12345",
         },
       ],
-      [
-        "My account cancel hold request successful",
-        {
-          itemId: "123",
-          patronBarcode: "patronBarcode",
-          patronId: "123",
-          sierraHoldId: "12345",
-        },
-      ],
     ])
   })
 
