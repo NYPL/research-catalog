@@ -66,10 +66,10 @@ export default function Search({
 }: SearchProps) {
   const { push, query } = useRouter()
 
-  // TODO: Move this to global context
   const effectiveQuery = initialQuery ?? query
   console.log("initial query on search", initialQuery)
   console.log("effective query on search", effectiveQuery)
+  // TODO: Move this to global context
   const searchParams = mapQueryToSearchParams(effectiveQuery)
   console.log("search params are", searchParams)
 
@@ -81,6 +81,7 @@ export default function Search({
   const { setPersistentFocus } = useFocusContext()
 
   const handlePageChange = async (page: number) => {
+    console.log({ ...searchParams, page })
     const newQuery = getSearchQuery({ ...searchParams, page })
     setPersistentFocus(idConstants.searchResultsHeading)
     await push(
@@ -268,7 +269,6 @@ export async function getServerSideProps({ req, query }) {
       results,
       isAuthenticated,
       activePage: "search",
-      initialQuery: "",
     },
   }
 }
