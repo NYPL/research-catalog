@@ -95,7 +95,10 @@ const Search = ({
                     Filter results
                   </CardHeading>
                   <CardContent>
-                    <SearchFilters aggregations={aggs} />
+                    <SearchFilters
+                      activePage={activePage}
+                      aggregations={aggs}
+                    />
                   </CardContent>
                 </Card>
               )}

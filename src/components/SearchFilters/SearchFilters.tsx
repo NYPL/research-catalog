@@ -19,6 +19,7 @@ import type { Aggregation } from "../../types/filterTypes"
 import DateFilter from "./DateFilter"
 import { useDateFilter } from "../../hooks/useDateFilter"
 import { useFocusContext, idConstants } from "../../context/FocusContext"
+import type { RCPage } from "../../types/pageTypes"
 
 const fields = [
   { value: "buildingLocation", label: "Item location" },
@@ -29,8 +30,17 @@ const fields = [
   { value: "subjectLiteral", label: "Subject" },
 ]
 
-const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
+const SearchFilters = ({
+  aggregations,
+  activePage,
+}: {
+  aggregations?: Aggregation[]
+  activePage: RCPage
+}) => {
   const router = useRouter()
+  const slug = Array.isArray(router.query.slug)
+    ? router.query.slug[0]
+    : router.query.slug
   const [appliedFilters, setAppliedFilters] = useState(
     collapseMultiValueQueryParams(router.query)
   )
@@ -67,16 +77,48 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
     setAppliedFilters(newFilters)
     buildAndPushFilterQuery(newFilters)
   }
+  // const handleCheckboxChange = (field: string, optionValue: string) => {
+  //   const currentValues = appliedFilters[field] || []
+  //   const isAlreadySelected = currentValues.includes(optionValue)
+  //   const updatedValues = isAlreadySelected
+  //     ? currentValues.filter((val) => val !== optionValue)
+  //     : [...currentValues, optionValue]
+  //   const newFilters = {
+  //     ...appliedFilters,
+  //     [field]: updatedValues,
+  //   }
+  //   setPersistentFocus(optionValue)
+  //   setAppliedFilters(newFilters)
+  //   buildAndPushFilterQuery(newFilters)
+  // }
+
   const handleCheckboxChange = (field: string, optionValue: string) => {
     const currentValues = appliedFilters[field] || []
     const isAlreadySelected = currentValues.includes(optionValue)
-    const updatedValues = isAlreadySelected
-      ? currentValues.filter((val) => val !== optionValue)
-      : [...currentValues, optionValue]
+
+    let updatedValues: string[]
+    // Handle locked subject heading
+    if (field === "subjectLiteral" && activePage === "sh-results") {
+      const nonSlugValues = currentValues.filter((v) => v !== slug)
+      if (isAlreadySelected) {
+        updatedValues = [
+          slug,
+          ...nonSlugValues.filter((v) => v !== optionValue),
+        ]
+      } else {
+        updatedValues = [slug, ...nonSlugValues, optionValue]
+      }
+    } else {
+      updatedValues = isAlreadySelected
+        ? currentValues.filter((val) => val !== optionValue)
+        : [...currentValues, optionValue]
+    }
+
     const newFilters = {
       ...appliedFilters,
       [field]: updatedValues,
     }
+
     setPersistentFocus(optionValue)
     setAppliedFilters(newFilters)
     buildAndPushFilterQuery(newFilters)
