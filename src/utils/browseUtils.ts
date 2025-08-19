@@ -1,4 +1,4 @@
-import { SUBJECTS_PER_PAGE } from "../config/constants"
+import { RESULTS_PER_PAGE, SUBJECTS_PER_PAGE } from "../config/constants"
 import type {
   BrowseParams,
   BrowseQueryParams,
@@ -7,6 +7,7 @@ import type {
   DiscoverySubjectResult,
   SubjectLink,
 } from "../types/browseTypes"
+import type { SearchParams } from "../types/searchTypes"
 import { getPaginationOffsetStrings } from "./appUtils"
 
 /**
@@ -104,10 +105,10 @@ export function getSubjectURL(term: string) {
 }
 
 /**
- * getBrowseResultsHeading
- * Used to generate the browse results heading text (Displaying 1-30 of 300 Subject Headings containing "cats")
+ * getBrowseIndexHeading
+ * Used to generate the browse index heading text (Displaying 1-30 of 300 Subject Headings containing "cats")
  */
-export function getBrowseResultsHeading(
+export function getBrowseIndexHeading(
   browseParams: BrowseParams,
   totalResults: number
 ): string {
@@ -129,6 +130,29 @@ export function getBrowseResultsHeading(
         } "${browseParams.q}"`
       : ""
   }`
+}
+
+/**
+ * getBrowseResultsHeading
+ * Used to generate the browse results heading text (Displaying 1-30 of 300 results for Subject Heading "cats")
+ */
+export function getBrowseResultsHeading(
+  searchParams: SearchParams,
+  totalResults: number
+): string {
+  const [resultsStart, resultsEnd] = getPaginationOffsetStrings(
+    searchParams.page,
+    totalResults,
+    RESULTS_PER_PAGE
+  )
+  const subjectHeading = searchParams.filters.subjectLiteral[0]
+  return `Displaying ${
+    totalResults > RESULTS_PER_PAGE
+      ? `${resultsStart}-${resultsEnd}`
+      : totalResults.toLocaleString()
+  } of${
+    totalResults === 10000 ? " over" : ""
+  } ${totalResults.toLocaleString()} results for Subject Heading "${subjectHeading}"`
 }
 
 /**

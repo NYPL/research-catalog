@@ -5,9 +5,12 @@ import {
   mapQueryToSearchParams,
   checkForRedirectOnMatch,
 } from "../../../src/utils/searchUtils"
-import Search from "../../search"
 import type { SearchResultsResponse } from "../../../src/types/searchTypes"
 import type { HTTPStatusCode } from "../../../src/types/appTypes"
+import Search from "../../../src/components/Search/Search"
+import { useRouter } from "next/router"
+import { idConstants, useFocusContext } from "../../../src/context/FocusContext"
+import { getBrowseResultsHeading } from "../../../src/utils/browseUtils"
 
 interface SubjectSearchProps {
   bannerNotification?: string
@@ -15,7 +18,6 @@ interface SubjectSearchProps {
   isAuthenticated: boolean
   errorStatus?: HTTPStatusCode | null
   metadataTitle?: string
-  initialQuery: Record<string, any>
 }
 
 export default function SubjectHeadingResults({
@@ -24,8 +26,51 @@ export default function SubjectHeadingResults({
   isAuthenticated,
   errorStatus = null,
   metadataTitle,
-  initialQuery,
 }: SubjectSearchProps) {
+  const { pathname, push, query } = useRouter()
+
+  const { setPersistentFocus } = useFocusContext()
+
+  const slug = Array.isArray(query.slug) ? query.slug[0] : query.slug
+  const subjectFilterKey = "filters[subjectLiteral][0]"
+
+  // Inject SH filter internally if it’s not already in query
+  const initialQuery = {
+    ...query,
+    [subjectFilterKey]: query[subjectFilterKey] ?? slug,
+    page: Array.isArray(query.page) ? query.page[0] : query.page ?? "1",
+  }
+
+  const searchParams = mapQueryToSearchParams(initialQuery)
+
+  const handlePageChange = async (newPage: number) => {
+    setPersistentFocus(idConstants.searchResultsHeading)
+    await push({
+      pathname: pathname,
+      query: {
+        ...query,
+        slug: Array.isArray(query.slug) ? query.slug : [query.slug],
+        page: newPage.toString(),
+      },
+    })
+  }
+
+  const handleSortChange = async (selectedSortOption: string) => {
+    const [sortBy, order] = selectedSortOption.split("_")
+
+    setPersistentFocus(idConstants.searchResultsSort)
+    await push({
+      pathname: "/browse/subjects/[...slug]",
+      query: {
+        ...query,
+        slug: Array.isArray(query.slug) ? query.slug : [query.slug],
+        sort: sortBy,
+        sort_direction: order,
+        page: "1", // reset page on sort
+      },
+    })
+  }
+
   return (
     <Search
       bannerNotification={bannerNotification}
@@ -34,7 +79,10 @@ export default function SubjectHeadingResults({
       errorStatus={errorStatus}
       metadataTitle={metadataTitle}
       activePage="sh-results"
-      initialQuery={initialQuery}
+      searchParams={searchParams}
+      handlePageChange={handlePageChange}
+      handleSortChange={handleSortChange}
+      getResultsHeading={getBrowseResultsHeading}
     />
   )
 }
@@ -44,19 +92,15 @@ export async function getServerSideProps({ req, query, params }) {
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
 
   const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug
-
-  // const existingSubjects = query.subject
-  //   ? Array.isArray(query.subject)
-  //     ? query.subject[0]
-  //     : [query.subject]
-  //   : []
-
-  // const subjects = [slug, ...existingSubjects.filter((s) => s !== slug)]
+  const subjectFilterKey = "filters[subjectLiteral][0]"
 
   const { slug: _ignore, ...otherQuery } = query
+
+  // Inject subject filter internally if not in query
   const baseQuery = {
     ...otherQuery,
-    subject: slug,
+    [subjectFilterKey]: otherQuery[subjectFilterKey] ?? slug,
+    page: Array.isArray(query.page) ? query.page[0] : query.page ?? "1",
   }
 
   const results = await fetchResults(mapQueryToSearchParams(baseQuery))
@@ -66,18 +110,15 @@ export async function getServerSideProps({ req, query, params }) {
   }
 
   const redirect = checkForRedirectOnMatch(results, query)
-  if (redirect) {
-    return { redirect }
-  }
-  console.log(baseQuery)
+  if (redirect) return { redirect }
+
   return {
     props: {
       bannerNotification,
       results,
       isAuthenticated: patronTokenResponse.isTokenValid,
-      activePage: "sh-results",
       metadataTitle: `Subject Heading Results | ${SITE_NAME}`,
-      initialQuery: baseQuery,
+      activePage: "sh-results",
     },
   }
 }

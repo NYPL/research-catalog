@@ -28,7 +28,6 @@ export function getSearchResultsHeading(
     RESULTS_PER_PAGE
   )
   const queryDisplayString = buildQueryDisplayString(searchParams)
-
   return `Displaying ${
     totalResults > RESULTS_PER_PAGE
       ? `${resultsStart}-${resultsEnd}`

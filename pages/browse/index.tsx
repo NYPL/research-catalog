@@ -20,7 +20,7 @@ import type {
 import {
   browseSortOptions,
   getBrowseQuery,
-  getBrowseResultsHeading,
+  getBrowseIndexHeading,
   mapQueryToBrowseParams,
 } from "../../src/utils/browseUtils"
 import { useRouter } from "next/router"
@@ -163,7 +163,7 @@ export default function Browse({
             aria-live="polite"
             mb={{ base: "m", md: 0 }}
           >
-            {getBrowseResultsHeading(browseParams, results.totalResults)}
+            {getBrowseIndexHeading(browseParams, results.totalResults)}
           </Heading>
           <ResultsSort
             params={browseParams}

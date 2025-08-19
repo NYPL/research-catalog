@@ -2,7 +2,7 @@ import {
   browseSortOptions,
   buildSubjectLinks,
   getBrowseQuery,
-  getBrowseResultsHeading,
+  getBrowseIndexHeading,
   getSubjectURL,
   isPreferredSubject,
   mapQueryToBrowseParams,
@@ -129,24 +129,24 @@ describe("browseUtils", () => {
     })
   })
 
-  describe("getBrowseResultsHeading", () => {
+  describe("getBrowseIndexHeading", () => {
     it("returns correct heading with totalResults less than SUBJECTS_PER_PAGE", () => {
       const params = { q: "cats", page: 1, searchScope: "has" }
-      const heading = getBrowseResultsHeading(params, 20)
+      const heading = getBrowseIndexHeading(params, 20)
       expect(heading).toContain("20")
       expect(heading).toContain('containing "cats"')
     })
 
     it("returns correct heading with totalResults more than SUBJECTS_PER_PAGE", () => {
       const params = { q: "dogs", page: 2, searchScope: "starts_with" }
-      const heading = getBrowseResultsHeading(params, 200)
+      const heading = getBrowseIndexHeading(params, 200)
       expect(heading).toContain("26-50")
       expect(heading).toContain('beginning with "dogs"')
     })
 
     it("adds 'over' for 10000 totalResults", () => {
       const params = { q: "", page: 1, searchScope: "has" }
-      const heading = getBrowseResultsHeading(params, 10000)
+      const heading = getBrowseIndexHeading(params, 10000)
       expect(heading).toContain("over")
     })
   })
