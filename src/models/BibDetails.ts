@@ -199,15 +199,11 @@ export default class BibDetails {
       }
     })
 
-    const logEntries = Object.entries(keptByLabel).map(
-      ([label, values]) => `"${label}" — unique value(s): ${values.join(", ")}`
-    )
-
-    if (logEntries.length > 0) {
+    if (Object.keys(keptByLabel).length > 0) {
       logger.info(
         `Bib details: Keeping annotated MARC fields on ${
           this.bib["@id"]
-        }:\n${logEntries.join("\n")}`
+        }:\n${JSON.stringify(keptByLabel, null, 2)}`
       )
     }
 
