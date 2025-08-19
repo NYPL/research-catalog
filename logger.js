@@ -10,10 +10,7 @@ const { combine, json, timestamp } = winston.format
 const initializeLogger = () => {
   return winston.createLogger({
     level: process.env.LOG_LEVEL || "info",
-    format: combine(
-      addPid(),
-      timestamp("YYYY-MM-DD hh:mm:ss.SSS A"),
-      json()),
+    format: combine(addPid(), timestamp("YYYY-MM-DD hh:mm:ss.SSS A"), json()),
     transports: [new winston.transports.Console()],
     maxFiles: 5,
   })
