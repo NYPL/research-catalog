@@ -51,7 +51,6 @@ const SearchBrowseForm = ({
   activePage,
 }: SearchBrowseFormProps) => {
   const router = useRouter()
-  console.log("ap", activePage)
   const isLoading = useLoading()
   const { setPersistentFocus } = useFocusContext()
   const slug = Array.isArray(router.query.slug)
