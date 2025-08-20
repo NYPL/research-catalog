@@ -25,6 +25,28 @@ import { useRef, useEffect } from "react"
 import type { Aggregation } from "../../types/filterTypes"
 import ResultsError from "../ResultsError/ResultsError"
 import useLoading from "../../hooks/useLoading"
+import type { HTTPStatusCode } from "../../types/appTypes"
+import type {
+  SearchParams,
+  SearchResultsResponse,
+} from "../../types/searchTypes"
+import type { RCPage } from "../../types/pageTypes"
+
+interface SearchProps {
+  errorStatus?: HTTPStatusCode | null
+  results: SearchResultsResponse
+  metadataTitle: string
+  activePage: RCPage
+  bannerNotification: string
+  isAuthenticated: boolean
+  searchParams: SearchParams
+  handlePageChange: (page: number) => Promise<void>
+  handleSortChange: (selectedSortOption: string) => Promise<void>
+  getResultsHeading: (
+    searchParams: SearchParams,
+    totalResults: number
+  ) => string
+}
 
 const Search = ({
   errorStatus,
@@ -37,7 +59,7 @@ const Search = ({
   handlePageChange,
   handleSortChange,
   getResultsHeading,
-}) => {
+}: SearchProps) => {
   const isLoading = useLoading()
 
   const searchResultsHeadingRef = useRef(null)
@@ -95,10 +117,7 @@ const Search = ({
                     Filter results
                   </CardHeading>
                   <CardContent>
-                    <SearchFilters
-                      activePage={activePage}
-                      aggregations={aggs}
-                    />
+                    <SearchFilters aggregations={aggs} />
                   </CardContent>
                 </Card>
               )}

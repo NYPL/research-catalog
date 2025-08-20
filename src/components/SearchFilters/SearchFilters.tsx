@@ -19,7 +19,6 @@ import type { Aggregation } from "../../types/filterTypes"
 import DateFilter from "./DateFilter"
 import { useDateFilter } from "../../hooks/useDateFilter"
 import { useFocusContext, idConstants } from "../../context/FocusContext"
-import type { RCPage } from "../../types/pageTypes"
 
 const fields = [
   { value: "buildingLocation", label: "Item location" },
@@ -30,17 +29,12 @@ const fields = [
   { value: "subjectLiteral", label: "Subject" },
 ]
 
-const SearchFilters = ({
-  aggregations,
-  activePage,
-}: {
-  aggregations?: Aggregation[]
-  activePage: RCPage
-}) => {
+const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
   const router = useRouter()
   const slug = Array.isArray(router.query.slug)
     ? router.query.slug[0]
     : router.query.slug
+
   const [appliedFilters, setAppliedFilters] = useState(
     collapseMultiValueQueryParams(router.query)
   )
@@ -58,7 +52,7 @@ const SearchFilters = ({
     }
     router.push(
       {
-        pathname: router.pathname,
+        pathname: "/search",
         query: updatedQuery,
       },
       undefined,
@@ -77,48 +71,16 @@ const SearchFilters = ({
     setAppliedFilters(newFilters)
     buildAndPushFilterQuery(newFilters)
   }
-  // const handleCheckboxChange = (field: string, optionValue: string) => {
-  //   const currentValues = appliedFilters[field] || []
-  //   const isAlreadySelected = currentValues.includes(optionValue)
-  //   const updatedValues = isAlreadySelected
-  //     ? currentValues.filter((val) => val !== optionValue)
-  //     : [...currentValues, optionValue]
-  //   const newFilters = {
-  //     ...appliedFilters,
-  //     [field]: updatedValues,
-  //   }
-  //   setPersistentFocus(optionValue)
-  //   setAppliedFilters(newFilters)
-  //   buildAndPushFilterQuery(newFilters)
-  // }
-
   const handleCheckboxChange = (field: string, optionValue: string) => {
     const currentValues = appliedFilters[field] || []
     const isAlreadySelected = currentValues.includes(optionValue)
-
-    let updatedValues: string[]
-    // Handle locked subject heading
-    if (field === "subjectLiteral" && activePage === "sh-results") {
-      const nonSlugValues = currentValues.filter((v) => v !== slug)
-      if (isAlreadySelected) {
-        updatedValues = [
-          slug,
-          ...nonSlugValues.filter((v) => v !== optionValue),
-        ]
-      } else {
-        updatedValues = [slug, ...nonSlugValues, optionValue]
-      }
-    } else {
-      updatedValues = isAlreadySelected
-        ? currentValues.filter((val) => val !== optionValue)
-        : [...currentValues, optionValue]
-    }
-
+    const updatedValues = isAlreadySelected
+      ? currentValues.filter((val) => val !== optionValue)
+      : [...currentValues, optionValue]
     const newFilters = {
       ...appliedFilters,
       [field]: updatedValues,
     }
-
     setPersistentFocus(optionValue)
     setAppliedFilters(newFilters)
     buildAndPushFilterQuery(newFilters)
@@ -128,6 +90,12 @@ const SearchFilters = ({
   const filters = fields.map((field) => {
     const filterData = new SearchResultsFilters(aggregations, field)
     if (filterData.options) {
+      // If slug is defined, filters are appearing on browse/subjects/[...slug]
+      // and we should filter out the locked SH filter
+      const filteredOptions =
+        field.value === "subjectLiteral"
+          ? filterData.options.filter((opt) => opt.value !== slug)
+          : filterData.options
       return (
         <div
           key={field.value}
@@ -158,7 +126,7 @@ const SearchFilters = ({
                 items: appliedFilters[field.value] || [],
               },
             }}
-            items={filterData.options.map((option) => ({
+            items={filteredOptions.map((option) => ({
               id: option.value,
               name: `${option.label} (${option.count.toLocaleString()})`,
             }))}

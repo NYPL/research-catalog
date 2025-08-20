@@ -39,7 +39,6 @@ export default function SearchPage({
 }: SearchPageProps) {
   const { push, query } = useRouter()
   // TODO: Move this to global context
-  console.log(query)
   const searchParams = mapQueryToSearchParams(query)
 
   const searchedFromAdvanced = query.searched_from === "advanced"

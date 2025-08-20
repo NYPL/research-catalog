@@ -60,7 +60,7 @@ export default function SubjectHeadingResults({
 
     setPersistentFocus(idConstants.searchResultsSort)
     await push({
-      pathname: "/browse/subjects/[...slug]",
+      pathname: pathname,
       query: {
         ...query,
         slug: Array.isArray(query.slug) ? query.slug : [query.slug],
@@ -92,14 +92,34 @@ export async function getServerSideProps({ req, query, params }) {
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
 
   const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug
-  const subjectFilterKey = "filters[subjectLiteral][0]"
 
   const { slug: _ignore, ...otherQuery } = query
 
-  // Inject subject filter internally if not in query
+  // Get any existing subject filters
+  const subjectFilters = Object.keys(otherQuery)
+    .filter((k) => k.startsWith("filters[subjectLiteral]"))
+    .map((k) => otherQuery[k])
+    .flat()
+
+  // Ensure locked SH is always first
+  const mergedSubjectFilters = [
+    slug,
+    ...subjectFilters.filter((f) => f !== slug),
+  ]
+
+  // Rebuild subject filter params with correct indices
+  const subjectFilterParams = mergedSubjectFilters.reduce((acc, val, idx) => {
+    acc[`filters[subjectLiteral][${idx}]`] = val
+    return acc
+  }, {})
+
   const baseQuery = {
-    ...otherQuery,
-    [subjectFilterKey]: otherQuery[subjectFilterKey] ?? slug,
+    ...Object.fromEntries(
+      Object.entries(otherQuery).filter(
+        ([k]) => !k.startsWith("filters[subjectLiteral]")
+      )
+    ),
+    ...subjectFilterParams,
     page: Array.isArray(query.page) ? query.page[0] : query.page ?? "1",
   }
 
