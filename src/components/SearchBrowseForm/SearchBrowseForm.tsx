@@ -52,12 +52,15 @@ const SearchBrowseForm = ({
 }: SearchBrowseFormProps) => {
   const router = useRouter()
   const isLoading = useLoading()
-  const [showBackButton, setShowBackButton] = useState(false)
+
+  const [backUrl, setBackUrl] = useState<string | null>(null)
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const referrer = document.referrer
-      setShowBackButton(referrer.includes("/browse?q"))
+      const ref = document.referrer
+      if (ref.includes("/browse?q")) {
+        setBackUrl(ref)
+      }
     }
   }, [])
   const { setPersistentFocus } = useFocusContext()
@@ -140,13 +143,13 @@ const SearchBrowseForm = ({
             mt={{ base: 0, md: "s" }}
           >
             {children}
-            {activePage === "sh-results" && showBackButton && (
+            {activePage === "sh-results" && backUrl && (
               <Button
                 buttonType="secondary"
                 id="back-index"
                 size="medium"
                 width="fit-content"
-                onClick={() => router.back()}
+                onClick={() => router.push(backUrl)}
                 gap="xxs"
                 background="white"
               >
