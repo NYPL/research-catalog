@@ -23,6 +23,11 @@ interface SubjectSearchProps {
   metadataTitle?: string
 }
 
+/**
+ * The Browse subject headings bib results page is responsible for fetching and displaying bib results
+ * filtered by at least one subject heading, as well as displaying and controlling pagination, sort,
+ * and other filters.
+ */
 export default function SubjectHeadingResults({
   bannerNotification,
   results,
