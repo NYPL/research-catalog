@@ -31,6 +31,7 @@ const SearchForm = ({
 
   return (
     <SearchBrowseForm
+      activePage="search"
       initialScope="all"
       path={PATHS.SEARCH}
       tipTitle="Search tip: "
