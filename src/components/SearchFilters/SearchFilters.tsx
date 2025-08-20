@@ -52,7 +52,7 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
     }
     router.push(
       {
-        pathname: "/search",
+        pathname: router.pathname,
         query: updatedQuery,
       },
       undefined,

@@ -10,7 +10,10 @@ import type { HTTPStatusCode } from "../../../src/types/appTypes"
 import Search from "../../../src/components/Search/Search"
 import { useRouter } from "next/router"
 import { idConstants, useFocusContext } from "../../../src/context/FocusContext"
-import { getBrowseResultsHeading } from "../../../src/utils/browseUtils"
+import {
+  buildSubjectQuery,
+  getBrowseResultsHeading,
+} from "../../../src/utils/browseUtils"
 
 interface SubjectSearchProps {
   bannerNotification?: string
@@ -91,37 +94,7 @@ export async function getServerSideProps({ req, query, params }) {
   const bannerNotification = process.env.SEARCH_RESULTS_NOTIFICATION || ""
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
 
-  const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug
-
-  const { slug: _ignore, ...otherQuery } = query
-
-  // Get any existing subject filters
-  const subjectFilters = Object.keys(otherQuery)
-    .filter((k) => k.startsWith("filters[subjectLiteral]"))
-    .map((k) => otherQuery[k])
-    .flat()
-
-  // Ensure locked SH is always first
-  const mergedSubjectFilters = [
-    slug,
-    ...subjectFilters.filter((f) => f !== slug),
-  ]
-
-  // Rebuild subject filter params with correct indices
-  const subjectFilterParams = mergedSubjectFilters.reduce((acc, val, idx) => {
-    acc[`filters[subjectLiteral][${idx}]`] = val
-    return acc
-  }, {})
-
-  const baseQuery = {
-    ...Object.fromEntries(
-      Object.entries(otherQuery).filter(
-        ([k]) => !k.startsWith("filters[subjectLiteral]")
-      )
-    ),
-    ...subjectFilterParams,
-    page: Array.isArray(query.page) ? query.page[0] : query.page ?? "1",
-  }
+  const baseQuery = buildSubjectQuery({ slug: params.slug, query })
 
   const results = await fetchResults(mapQueryToSearchParams(baseQuery))
 

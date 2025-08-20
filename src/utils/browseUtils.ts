@@ -180,3 +180,45 @@ export function buildSubjectLinks(
   }
   return termLinks
 }
+
+export function buildSubjectQuery(params: {
+  slug: string | string[]
+  query: Record<string, any>
+}) {
+  const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug
+
+  const { slug: _ignore, ...otherQuery } = params.query
+
+  // Get any existing subject filters
+  const subjectFilters = Object.keys(otherQuery)
+    .filter((key) => key.startsWith("filters[subjectLiteral]"))
+    .map((key) => otherQuery[key])
+    .flat()
+
+  // Ensure locked SH is always first
+  const mergedSubjectFilters = [
+    slug,
+    ...subjectFilters.filter((f) => f !== slug),
+  ]
+
+  // Rebuild subject filter params with correct indices
+  const subjectFilterParams = mergedSubjectFilters.reduce<Record<string, any>>(
+    (acc, val, idx) => {
+      acc[`filters[subjectLiteral][${idx}]`] = val
+      return acc
+    },
+    {}
+  )
+
+  return {
+    ...Object.fromEntries(
+      Object.entries(otherQuery).filter(
+        ([key]) => !key.startsWith("filters[subjectLiteral]")
+      )
+    ),
+    ...subjectFilterParams,
+    page: Array.isArray(params.query.page)
+      ? params.query.page[0]
+      : params.query.page ?? "1",
+  }
+}
