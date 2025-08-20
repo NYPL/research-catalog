@@ -8,6 +8,7 @@ import {
 } from "@nypl/design-system-react-components"
 import { useRouter } from "next/router"
 import {
+  useLayoutEffect,
   useState,
   type SyntheticEvent,
   type Dispatch,
@@ -52,13 +53,17 @@ const SearchBrowseForm = ({
 }: SearchBrowseFormProps) => {
   const router = useRouter()
   const isLoading = useLoading()
-  const { setPersistentFocus } = useFocusContext()
-  const slug = Array.isArray(router.query.slug)
-    ? router.query.slug[0]
-    : router.query.slug
+  const [showBackButton, setShowBackButton] = useState(false)
 
+  useLayoutEffect(() => {
+    if (typeof window !== "undefined") {
+      const referrer = document.referrer
+      setShowBackButton(referrer.includes("/browse"))
+    }
+  }, [])
+  const { setPersistentFocus } = useFocusContext()
   const [searchTerm, setSearchTerm] = useState(
-    (router?.query?.q as string) || slug || ""
+    (router?.query?.q as string) || ""
   )
   const [searchScope, setSearchScope] = useState(
     (router?.query?.search_scope as string) || initialScope
@@ -136,13 +141,13 @@ const SearchBrowseForm = ({
             mt={{ base: 0, md: "s" }}
           >
             {children}
-            {activePage === "sh-results" && (
+            {activePage === "sh-results" && showBackButton && (
               <Button
                 buttonType="secondary"
                 id="back-index"
                 size="medium"
                 width="fit-content"
-                onClick={() => router.push(PATHS.BROWSE)}
+                onClick={() => router.back()}
                 gap="xxs"
                 background="white"
               >
