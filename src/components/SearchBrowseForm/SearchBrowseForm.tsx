@@ -8,7 +8,7 @@ import {
 } from "@nypl/design-system-react-components"
 import { useRouter } from "next/router"
 import {
-  useLayoutEffect,
+  useEffect,
   useState,
   type SyntheticEvent,
   type Dispatch,
@@ -18,7 +18,6 @@ import { useFocusContext } from "../../context/FocusContext"
 import useLoading from "../../hooks/useLoading"
 import styles from "../../../styles/components/Search.module.scss"
 import type { RCPage } from "../../types/pageTypes"
-import { PATHS } from "../../config/constants"
 
 type SearchBrowseFormProps = {
   initialScope: string
@@ -55,7 +54,7 @@ const SearchBrowseForm = ({
   const isLoading = useLoading()
   const [showBackButton, setShowBackButton] = useState(false)
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (typeof window !== "undefined") {
       const referrer = document.referrer
       setShowBackButton(referrer.includes("/browse"))
