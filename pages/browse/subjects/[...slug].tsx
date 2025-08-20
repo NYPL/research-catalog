@@ -91,6 +91,7 @@ export default function SubjectHeadingResults({
       handlePageChange={handlePageChange}
       handleSortChange={handleSortChange}
       getResultsHeading={getBrowseResultsHeading}
+      subjectHeadingSlug={slug}
     />
   )
 }

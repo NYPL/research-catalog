@@ -138,14 +138,14 @@ export function getBrowseIndexHeading(
  */
 export function getBrowseResultsHeading(
   searchParams: SearchParams,
-  totalResults: number
+  totalResults: number,
+  subjectHeading: string
 ): string {
   const [resultsStart, resultsEnd] = getPaginationOffsetStrings(
     searchParams.page,
     totalResults,
     RESULTS_PER_PAGE
   )
-  const subjectHeading = searchParams.filters.subjectLiteral[0]
   return `Displaying ${
     totalResults > RESULTS_PER_PAGE
       ? `${resultsStart}-${resultsEnd}`

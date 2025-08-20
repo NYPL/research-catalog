@@ -44,8 +44,10 @@ interface SearchProps {
   handleSortChange: (selectedSortOption: string) => Promise<void>
   getResultsHeading: (
     searchParams: SearchParams,
-    totalResults: number
+    totalResults: number,
+    subjectHeading?: string
   ) => string
+  subjectHeadingSlug?: string
 }
 
 const Search = ({
@@ -59,6 +61,7 @@ const Search = ({
   handlePageChange,
   handleSortChange,
   getResultsHeading,
+  subjectHeadingSlug,
 }: SearchProps) => {
   const isLoading = useLoading()
 
@@ -153,7 +156,11 @@ const Search = ({
                 ref={searchResultsHeadingRef}
                 aria-live="polite"
               >
-                {getResultsHeading(searchParams, totalResults)}
+                {getResultsHeading(
+                  searchParams,
+                  totalResults,
+                  subjectHeadingSlug
+                )}
               </Heading>
               <ResultsSort
                 sortOptions={sortOptions}
