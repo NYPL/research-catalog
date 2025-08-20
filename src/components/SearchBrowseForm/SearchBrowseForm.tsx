@@ -57,7 +57,7 @@ const SearchBrowseForm = ({
   useEffect(() => {
     if (typeof window !== "undefined") {
       const referrer = document.referrer
-      setShowBackButton(referrer.includes("/browse"))
+      setShowBackButton(referrer.includes("/browse?q"))
     }
   }, [])
   const { setPersistentFocus } = useFocusContext()
