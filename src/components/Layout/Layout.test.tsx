@@ -8,7 +8,7 @@ describe("Layout", () => {
   const searchLabel = "Search Bar Label"
 
   it("should render an H1", () => {
-    render(<Layout></Layout>)
+    render(<Layout activePage="search"></Layout>)
 
     const header = screen.getByRole("heading", { level: 1 })
 
@@ -16,7 +16,7 @@ describe("Layout", () => {
     expect(header).toHaveTextContent(headerText)
   })
   it("should render breadcrumbs", () => {
-    render(<Layout></Layout>)
+    render(<Layout activePage="search"></Layout>)
     const breadcrumbs = screen.getByTestId("layout-breadcrumbs")
     const breadcrumbsUrls = within(breadcrumbs).getAllByRole("link")
     expect(breadcrumbsUrls).toHaveLength(3)
@@ -30,17 +30,17 @@ describe("Layout", () => {
     screen.getByLabelText(searchLabel)
   })
   it("should hide Log Out if user is not logged in", () => {
-    render(<Layout isAuthenticated={false}></Layout>)
+    render(<Layout activePage="search" isAuthenticated={false}></Layout>)
     const logout = screen.queryByText("Log out")
     expect(logout).not.toBeVisible()
   })
   it("should show Log Out if user is logged in", () => {
-    render(<Layout isAuthenticated={true}></Layout>)
+    render(<Layout activePage="search" isAuthenticated={true}></Layout>)
     const logout = screen.queryByText("Log out")
     expect(logout).toBeVisible()
   })
   it("renders a feedback form component", () => {
-    render(<Layout></Layout>)
+    render(<Layout activePage="search"></Layout>)
     expect(screen.getByText("Help and Feedback")).toBeInTheDocument()
   })
 })
