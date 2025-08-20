@@ -25,7 +25,6 @@ import {
 } from "../../src/utils/browseUtils"
 import { useRouter } from "next/router"
 import useLoading from "../../src/hooks/useLoading"
-import type { ChangeEvent } from "react"
 import { useRef, useEffect } from "react"
 import ResultsError from "../../src/components/ResultsError/ResultsError"
 import { idConstants, useFocusContext } from "../../src/context/FocusContext"
@@ -72,9 +71,7 @@ export default function Browse({
     await push(newQuery)
   }
 
-  const handleSortChange = async (e: ChangeEvent<HTMLInputElement>) => {
-    const selectedSortOption = e.target.value
-    // Extract sort key and order from selected sort option using "_" delineator
+  const handleSortChange = async (selectedSortOption: string) => {
     const [sortBy, order] = selectedSortOption.split("_") as [
       BrowseSort,
       SortOrder | undefined
@@ -98,7 +95,7 @@ export default function Browse({
         showImage={false}
         mb="m"
         ml="0"
-        width="900px"
+        maxWidth="900px"
         contentSize={5}
         showHeading={false}
       />
@@ -127,6 +124,7 @@ export default function Browse({
         direction="column"
         justifyContent="space-between"
         alignItems="center"
+        textAlign="center"
         gap="xs"
         mb="l"
         mt="l"
@@ -152,6 +150,7 @@ export default function Browse({
           direction={{ base: "column", md: "row" }}
           justifyContent="space-between"
           mb="l"
+          gap={{ base: 0, md: "xs" }}
         >
           <Heading
             id="browse-results-heading"
@@ -162,6 +161,7 @@ export default function Browse({
             noSpace
             minH="40px"
             aria-live="polite"
+            mb={{ base: "m", md: 0 }}
           >
             {getBrowseResultsHeading(browseParams, results.totalResults)}
           </Heading>
