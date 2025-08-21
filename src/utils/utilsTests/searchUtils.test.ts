@@ -250,5 +250,20 @@ describe("searchUtils", () => {
         expect(heading).toEqual('Displaying 3 of 3 results for LCCN "1234"')
       })
     })
+    describe("browse result searches", () => {
+      it("returns heading with browseOptions when slug and browseType are provided", () => {
+        const heading = getSearchResultsHeading(
+          { page: 1, q: "", title: "Strega Nonna" },
+          100,
+          {
+            slug: "History",
+            browseType: "Subject Heading",
+          }
+        )
+        expect(heading).toContain(
+          'Displaying 1-50 of 100 results for Subject Heading "History"'
+        )
+      })
+    })
   })
 })

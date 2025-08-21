@@ -12,6 +12,7 @@ import {
 import { RESULTS_PER_PAGE } from "../../config/constants"
 import type SearchResultsBib from "../../models/SearchResultsBib"
 import {
+  getSearchResultsHeading,
   mapElementsToSearchResultsBibs,
   sortOptions,
 } from "../../utils/searchUtils"
@@ -42,12 +43,7 @@ interface SearchProps {
   searchParams: SearchParams
   handlePageChange: (page: number) => Promise<void>
   handleSortChange: (selectedSortOption: string) => Promise<void>
-  getResultsHeading: (
-    searchParams: SearchParams,
-    totalResults: number,
-    subjectHeading?: string
-  ) => string
-  subjectHeadingSlug?: string
+  slug?: string
 }
 
 const Search = ({
@@ -60,8 +56,7 @@ const Search = ({
   searchParams,
   handlePageChange,
   handleSortChange,
-  getResultsHeading,
-  subjectHeadingSlug,
+  slug,
 }: SearchProps) => {
   const isLoading = useLoading()
 
@@ -120,7 +115,7 @@ const Search = ({
                     Filter results
                   </CardHeading>
                   <CardContent>
-                    <SearchFilters aggregations={aggs} />
+                    <SearchFilters aggregations={aggs} slug={slug} />
                   </CardContent>
                 </Card>
               )}
@@ -156,10 +151,15 @@ const Search = ({
                 ref={searchResultsHeadingRef}
                 aria-live="polite"
               >
-                {getResultsHeading(
+                {getSearchResultsHeading(
                   searchParams,
                   totalResults,
-                  subjectHeadingSlug
+                  slug
+                    ? {
+                        slug,
+                        browseType: "Subject Heading",
+                      }
+                    : undefined
                 )}
               </Heading>
               <ResultsSort

@@ -6,7 +6,7 @@ import {
   getSubjectURL,
   isPreferredSubject,
   mapQueryToBrowseParams,
-  buildSubjectQuery,
+  buildLockedBrowseQuery,
 } from "../browseUtils"
 
 describe("browseUtils", () => {
@@ -179,15 +179,19 @@ describe("browseUtils", () => {
     })
   })
 
-  describe("buildSubjectQuery", () => {
-    it("puts slug first and rebuilds subject filter params", () => {
+  describe("buildLockedBrowseQuery", () => {
+    it("puts slug first and rebuilds filter params", () => {
       const query = {
         "filters[subjectLiteral][0]": "History",
         "filters[subjectLiteral][1]": "Science",
         page: "2",
       }
 
-      const result = buildSubjectQuery({ slug: "Math", query })
+      const result = buildLockedBrowseQuery({
+        slug: "Math",
+        query,
+        filter: "subjectLiteral",
+      })
 
       expect(result).toMatchObject({
         "filters[subjectLiteral][0]": "Math",
@@ -198,7 +202,11 @@ describe("browseUtils", () => {
     })
 
     it("defaults page to 1 when missing", () => {
-      const result = buildSubjectQuery({ slug: "Art", query: {} })
+      const result = buildLockedBrowseQuery({
+        slug: "Art",
+        query: {},
+        filter: "subjectLiteral",
+      })
       expect(result.page).toBe("1")
     })
   })

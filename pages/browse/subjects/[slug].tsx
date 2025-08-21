@@ -10,15 +10,13 @@ import type { HTTPStatusCode } from "../../../src/types/appTypes"
 import Search from "../../../src/components/Search/Search"
 import { useRouter } from "next/router"
 import { idConstants, useFocusContext } from "../../../src/context/FocusContext"
-import {
-  buildSubjectQuery,
-  getBrowseResultsHeading,
-} from "../../../src/utils/browseUtils"
+import { buildLockedBrowseQuery } from "../../../src/utils/browseUtils"
 
 interface SubjectSearchProps {
   bannerNotification?: string
   results: SearchResultsResponse
   isAuthenticated: boolean
+  slug: string
   errorStatus?: HTTPStatusCode | null
   metadataTitle?: string
 }
@@ -34,30 +32,20 @@ export default function SubjectHeadingResults({
   isAuthenticated,
   errorStatus = null,
   metadataTitle,
+  slug,
 }: SubjectSearchProps) {
   const { pathname, push, query } = useRouter()
 
   const { setPersistentFocus } = useFocusContext()
 
-  const slug = Array.isArray(query.slug) ? query.slug[0] : query.slug
-  const subjectFilterKey = "filters[subjectLiteral][0]"
-
-  // Inject SH filter internally if it’s not already in query
-  const initialQuery = {
-    ...query,
-    [subjectFilterKey]: query[subjectFilterKey] ?? slug,
-    page: Array.isArray(query.page) ? query.page[0] : query.page ?? "1",
-  }
-
-  const searchParams = mapQueryToSearchParams(initialQuery)
+  const searchParams = mapQueryToSearchParams(query)
 
   const handlePageChange = async (newPage: number) => {
     setPersistentFocus(idConstants.searchResultsHeading)
     await push({
-      pathname: pathname,
+      pathname,
       query: {
         ...query,
-        slug: Array.isArray(query.slug) ? query.slug : [query.slug],
         page: newPage.toString(),
       },
     })
@@ -68,10 +56,9 @@ export default function SubjectHeadingResults({
 
     setPersistentFocus(idConstants.searchResultsSort)
     await push({
-      pathname: pathname,
+      pathname,
       query: {
         ...query,
-        slug: Array.isArray(query.slug) ? query.slug : [query.slug],
         sort: sortBy,
         sort_direction: order,
         page: "1", // reset page on sort
@@ -90,8 +77,7 @@ export default function SubjectHeadingResults({
       searchParams={searchParams}
       handlePageChange={handlePageChange}
       handleSortChange={handleSortChange}
-      getResultsHeading={getBrowseResultsHeading}
-      subjectHeadingSlug={slug}
+      slug={slug}
     />
   )
 }
@@ -99,8 +85,13 @@ export default function SubjectHeadingResults({
 export async function getServerSideProps({ req, query, params }) {
   const bannerNotification = process.env.SEARCH_RESULTS_NOTIFICATION || ""
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
+  const slug: string = params.slug as string
 
-  const baseQuery = buildSubjectQuery({ slug: params.slug, query })
+  const baseQuery = buildLockedBrowseQuery({
+    slug,
+    query,
+    filter: "subjectLiteral",
+  })
 
   const results = await fetchResults(mapQueryToSearchParams(baseQuery))
 
@@ -118,6 +109,7 @@ export async function getServerSideProps({ req, query, params }) {
       isAuthenticated: patronTokenResponse.isTokenValid,
       metadataTitle: `Subject Heading Results | ${SITE_NAME}`,
       activePage: "sh-results",
+      slug,
     },
   }
 }

@@ -1,4 +1,4 @@
-import { RESULTS_PER_PAGE, SUBJECTS_PER_PAGE } from "../config/constants"
+import { SUBJECTS_PER_PAGE } from "../config/constants"
 import type {
   BrowseParams,
   BrowseQueryParams,
@@ -7,8 +7,11 @@ import type {
   DiscoverySubjectResult,
   SubjectLink,
 } from "../types/browseTypes"
-import type { SearchParams } from "../types/searchTypes"
 import { getPaginationOffsetStrings } from "./appUtils"
+import {
+  buildFilterQuery,
+  collapseMultiValueQueryParams,
+} from "./refineSearchUtils"
 
 /**
  * Default sort configuration per search scope
@@ -133,29 +136,6 @@ export function getBrowseIndexHeading(
 }
 
 /**
- * getBrowseResultsHeading
- * Used to generate the browse results heading text (Displaying 1-30 of 300 results for Subject Heading "cats")
- */
-export function getBrowseResultsHeading(
-  searchParams: SearchParams,
-  totalResults: number,
-  subjectHeading: string
-): string {
-  const [resultsStart, resultsEnd] = getPaginationOffsetStrings(
-    searchParams.page,
-    totalResults,
-    RESULTS_PER_PAGE
-  )
-  return `Displaying ${
-    totalResults > RESULTS_PER_PAGE
-      ? `${resultsStart}-${resultsEnd}`
-      : totalResults.toLocaleString()
-  } of${
-    totalResults === 10000 ? " over" : ""
-  } ${totalResults.toLocaleString()} results for Subject Heading "${subjectHeading}"`
-}
-
-/**
  * browseSortOptions
  * The allowed keys for the sort field and their respective labels
  */
@@ -181,44 +161,35 @@ export function buildSubjectLinks(
   return termLinks
 }
 
-export function buildSubjectQuery(params: {
-  slug: string | string[]
+export function buildLockedBrowseQuery({
+  slug,
+  query,
+  filter,
+}: {
+  slug: string
   query: Record<string, any>
+  filter: string
 }) {
-  const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug
+  const collapsedFilters = collapseMultiValueQueryParams(query)
 
-  const { slug: _ignore, ...otherQuery } = params.query
-
-  // Get any existing subject filters
-  const subjectFilters = Object.keys(otherQuery)
-    .filter((key) => key.startsWith("filters[subjectLiteral]"))
-    .map((key) => otherQuery[key])
-    .flat()
-
-  // Ensure locked SH is always first
-  const mergedSubjectFilters = [
-    slug,
-    ...subjectFilters.filter((f) => f !== slug),
-  ]
-
-  // Rebuild subject filter params with correct indices
-  const subjectFilterParams = mergedSubjectFilters.reduce<Record<string, any>>(
-    (acc, val, idx) => {
-      acc[`filters[subjectLiteral][${idx}]`] = val
-      return acc
-    },
-    {}
-  )
+  // Merge the locked slug in, it should be first and unique in its filter array
+  const merged = {
+    ...collapsedFilters,
+    [filter]: [
+      slug,
+      ...(collapsedFilters[filter] ?? []).filter((f) => f !== slug),
+    ],
+  }
 
   return {
     ...Object.fromEntries(
-      Object.entries(otherQuery).filter(
-        ([key]) => !key.startsWith("filters[subjectLiteral]")
+      Object.entries(query).filter(
+        ([key]) => !key.startsWith(`filters[${filter}]`)
       )
     ),
-    ...subjectFilterParams,
-    page: Array.isArray(params.query.page)
-      ? params.query.page[0]
-      : params.query.page ?? "1",
+    // rebuild filters
+    ...buildFilterQuery(merged),
+    // normalize page
+    page: Array.isArray(query.page) ? query.page[0] : query.page ?? "1",
   }
 }

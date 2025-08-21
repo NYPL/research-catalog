@@ -4,7 +4,6 @@ import {
   mapQueryToSearchParams,
   getSearchQuery,
   checkForRedirectOnMatch,
-  getSearchResultsHeading,
 } from "../../src/utils/searchUtils"
 import type {
   SearchResultsResponse,
@@ -78,7 +77,6 @@ export default function SearchPage({
       searchParams={searchParams}
       handlePageChange={handlePageChange}
       handleSortChange={handleSortChange}
-      getResultsHeading={getSearchResultsHeading}
     />
   )
 }
