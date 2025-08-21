@@ -31,10 +31,10 @@ const fields = [
 
 const SearchFilters = ({
   aggregations,
-  slug,
+  lockedFilterValue,
 }: {
   aggregations?: Aggregation[]
-  slug?: string
+  lockedFilterValue?: string
 }) => {
   const router = useRouter()
 
@@ -93,12 +93,10 @@ const SearchFilters = ({
   const filters = fields.map((field) => {
     const filterData = new SearchResultsFilters(aggregations, field)
     if (filterData.options) {
-      // If slug is defined, filters are appearing on browse/subjects/[...slug]
-      // and we should filter out the locked SH filter
-      const filteredOptions =
-        field.value === "subjectLiteral"
-          ? filterData.options.filter((opt) => opt.value !== slug)
-          : filterData.options
+      // Do not display any locked filter values
+      const filteredOptions = filterData.options.filter(
+        (opt) => opt.value !== lockedFilterValue
+      )
       return (
         <div
           key={field.value}

@@ -90,7 +90,7 @@ export async function getServerSideProps({ req, query, params }) {
   const baseQuery = buildLockedBrowseQuery({
     slug,
     query,
-    filter: "subjectLiteral",
+    field: "subjectLiteral",
   })
 
   const results = await fetchResults(mapQueryToSearchParams(baseQuery))

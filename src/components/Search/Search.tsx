@@ -115,7 +115,10 @@ const Search = ({
                     Filter results
                   </CardHeading>
                   <CardContent>
-                    <SearchFilters aggregations={aggs} slug={slug} />
+                    <SearchFilters
+                      aggregations={aggs}
+                      lockedFilterValue={slug}
+                    />
                   </CardContent>
                 </Card>
               )}
