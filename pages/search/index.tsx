@@ -70,7 +70,7 @@ export default function SearchPage({
     <Search
       errorStatus={errorStatus}
       results={results}
-      metadataTitle={`Search Results | ${SITE_NAME}`}
+      metadataTitle={`Search | ${SITE_NAME}`}
       activePage="search"
       bannerNotification={bannerNotification}
       isAuthenticated={isAuthenticated}

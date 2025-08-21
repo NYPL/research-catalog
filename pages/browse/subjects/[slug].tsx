@@ -107,7 +107,7 @@ export async function getServerSideProps({ req, query, params }) {
       bannerNotification,
       results,
       isAuthenticated: patronTokenResponse.isTokenValid,
-      metadataTitle: `Subject Heading Results | ${SITE_NAME}`,
+      metadataTitle: `Search | ${SITE_NAME}`,
       activePage: "sh-results",
       slug,
     },
