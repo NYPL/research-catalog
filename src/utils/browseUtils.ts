@@ -182,13 +182,10 @@ export function buildSubjectLinks(
 }
 
 export function buildSubjectQuery(params: {
-  slug: string | string[]
+  slug: string
   query: Record<string, any>
 }) {
-  const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug
-
   const { slug: _ignore, ...otherQuery } = params.query
-
   // Get any existing subject filters
   const subjectFilters = Object.keys(otherQuery)
     .filter((key) => key.startsWith("filters[subjectLiteral]"))
@@ -197,8 +194,8 @@ export function buildSubjectQuery(params: {
 
   // Ensure locked SH is always first
   const mergedSubjectFilters = [
-    slug,
-    ...subjectFilters.filter((f) => f !== slug),
+    params.slug,
+    ...subjectFilters.filter((f) => f !== params.slug),
   ]
 
   // Rebuild subject filter params with correct indices
