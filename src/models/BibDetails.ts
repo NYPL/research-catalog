@@ -20,7 +20,7 @@ export default class BibDetails {
   groupedNotes: AnyBibDetail[]
   supplementaryContent: LinkedBibDetail
   extent: string[]
-  subjectLiteral: BibDetailURL[][]
+  subjectLiteral: LinkedBibDetail[]
   owner: string[]
   findingAid?: string
 
@@ -388,44 +388,14 @@ export default class BibDetails {
     return getFindingAidFromSupplementaryContent(this.bib.supplementaryContent)
   }
 
-  buildSubjectLiterals(): BibDetailURL[][] {
-    if (!this.bib.subjectLiteral) return
-    const subjectLiteralUrls = this.bib.subjectLiteral.map(
-      (subject: string) => {
-        subject = subject.replace(/\.$/, "")
-        // stackedSubjectHeadings: ["a", "a -- b", "a -- b -- c"]
-        const stackedSubjectHeadings =
-          this.constructSubjectLiteralsArray(subject)
-        const filterQueryForSubjectHeading = "/search?filters[subjectLiteral]="
-        // splitSubjectHeadings: ["a", "b", "c"]
-        const splitSubjectHeadings = subject.split(" -- ")
-        return splitSubjectHeadings.map((heading, index) => {
-          const urlWithFilterQuery = `${filterQueryForSubjectHeading}${encodeURI(
-            stackedSubjectHeadings[index]
-          )}`
-          return {
-            url: urlWithFilterQuery,
-            urlLabel: heading,
-          }
-        })
+  buildSubjectLiterals(): LinkedBibDetail[] {
+    if (!this.bib.subjectLiteral) return []
+    return this.bib.subjectLiteral.map((subject: string): LinkedBibDetail => {
+      return {
+        value: [{ url: `/browse/subjects/${subject}`, urlLabel: subject }],
+        label: subject,
+        link: "internal",
       }
-    )
-    return subjectLiteralUrls
-  }
-
-  constructSubjectLiteralsArray(subject: string) {
-    // subject = "Italian food -- Spaghetti"
-    let stackedSubjectLiteral = ""
-
-    return subject
-      .split(" -- ") // ["Italian food", "spaghetti"]
-      .map((urlString, index) => {
-        const dashDivided = index !== 0 ? " -- " : ""
-        // First iteration "Italian food"
-        // Second iteration "Italian food -- spaghetti"
-        stackedSubjectLiteral = `${stackedSubjectLiteral}${dashDivided}${urlString}`
-
-        return stackedSubjectLiteral
-      })
+    })
   }
 }

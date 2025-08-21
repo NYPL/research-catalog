@@ -9,10 +9,9 @@ import type {
   BibDetail,
   BibDetailURL,
   LinkedBibDetail,
-  SubjectHeadingDetail,
   AnyBibDetail,
 } from "../../types/bibDetailsTypes"
-import { rtlOrLtr, isItTheLastElement } from "../../utils/bibUtils"
+import { rtlOrLtr } from "../../utils/bibUtils"
 import type { ReactNode } from "react"
 
 interface BibDetailsProps {
@@ -21,6 +20,7 @@ interface BibDetailsProps {
 }
 
 const BibDetails = ({ details, heading }: BibDetailsProps) => {
+  console.log(details)
   return (
     details?.length > 0 && (
       <List
@@ -36,20 +36,16 @@ const BibDetails = ({ details, heading }: BibDetailsProps) => {
         showRowDividers={false}
         className={`${styles.bibDetails} ${styles.inBibPage}`}
       >
-        {details.map(
-          (detail: BibDetail | LinkedBibDetail | SubjectHeadingDetail) => {
-            if (!detail) return
-            if (detail.label === "Subject") {
-              return CompoundSubjectHeadingElement(
-                detail as SubjectHeadingDetail
-              )
-            } else if ("link" in detail) {
-              return LinkedDetailElement(detail as LinkedBibDetail)
-            } else {
-              return PlainTextElement(detail as BibDetail)
-            }
+        {details.map((detail: BibDetail | LinkedBibDetail) => {
+          if (!detail) return
+          if (detail.label === "Subject") {
+            return LinkedDetailElement(detail as LinkedBibDetail)
+          } else if ("link" in detail) {
+            return LinkedDetailElement(detail as LinkedBibDetail)
+          } else {
+            return PlainTextElement(detail as BibDetail)
           }
-        )}
+        })}
       </List>
     )
   )
@@ -80,38 +76,18 @@ export const PlainTextElement = (field: BibDetail) => {
   return DetailElement(field.label, values)
 }
 
-const CompoundSubjectHeadingElement = (field: SubjectHeadingDetail) => {
-  const subjectHeadingLinksPerSubject = field.value.map(
-    (subjectHeadingUrls: BibDetailURL[]) => {
-      return SingleSubjectHeadingElement(subjectHeadingUrls)
-    }
-  )
-  const values = subjectHeadingLinksPerSubject.map((subject, i) => (
-    <li key={`subject-heading-${i}`} data-testid="subject-links-per">
-      {subject}
-    </li>
-  ))
-  return DetailElement(field.label, values)
-}
-
-const SingleSubjectHeadingElement = (subjectHeadingUrls: BibDetailURL[]) => {
-  return subjectHeadingUrls.reduce(
-    (linksPerSubject, url: BibDetailURL, index) => {
-      const divider = (
-        // this span will render as > in between the divided subject heading links
-        <span data-testid="divider" key={`divider-${index}`}>
-          {" -- "}
-        </span>
-      )
-      const link = LinkElement(url, "internal")
-      linksPerSubject.push(link)
-      if (!isItTheLastElement(index, subjectHeadingUrls)) {
-        linksPerSubject.push(divider)
-      }
-      return linksPerSubject
-    },
-    [] as ReactElement[]
-  )
+const SubjectHeadingElement = (field: LinkedBibDetail) => {
+  // console.log(field)
+  // const values = subjectHeadingLinksPerSubject.map((subject, i) => (
+  //   <li
+  //     style={{ outline: "2px green solid" }}
+  //     key={`subject-heading-${i}`}
+  //     data-testid="subject-links-per"
+  //   >
+  //     {subject} - [Browse in index]
+  //   </li>
+  // ))
+  return DetailElement(field.label, [<></>])
 }
 
 export const LinkedDetailElement = (field: LinkedBibDetail) => {
