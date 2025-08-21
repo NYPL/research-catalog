@@ -29,11 +29,14 @@ const fields = [
   { value: "subjectLiteral", label: "Subject" },
 ]
 
-const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
+const SearchFilters = ({
+  aggregations,
+  slug,
+}: {
+  aggregations?: Aggregation[]
+  slug?: string
+}) => {
   const router = useRouter()
-  const slug = Array.isArray(router.query.slug)
-    ? router.query.slug[0]
-    : router.query.slug
 
   const [appliedFilters, setAppliedFilters] = useState(
     collapseMultiValueQueryParams(router.query)
