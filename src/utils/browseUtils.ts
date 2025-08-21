@@ -172,7 +172,7 @@ export function buildLockedBrowseQuery({
 }) {
   const collapsedFilters = collapseMultiValueQueryParams(query)
 
-  // Merge the locked slug in, it should be first and unique in its filter array
+  // Merge the locked slug in, it should be first in its filter array
   const merged = {
     ...collapsedFilters,
     [field]: [slug, ...(collapsedFilters[field] ?? [])],

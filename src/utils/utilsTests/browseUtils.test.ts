@@ -190,7 +190,7 @@ describe("browseUtils", () => {
       const result = buildLockedBrowseQuery({
         slug: "Math",
         query,
-        filter: "subjectLiteral",
+        field: "subjectLiteral",
       })
 
       expect(result).toMatchObject({
@@ -205,7 +205,7 @@ describe("browseUtils", () => {
       const result = buildLockedBrowseQuery({
         slug: "Art",
         query: {},
-        filter: "subjectLiteral",
+        field: "subjectLiteral",
       })
       expect(result.page).toBe("1")
     })
