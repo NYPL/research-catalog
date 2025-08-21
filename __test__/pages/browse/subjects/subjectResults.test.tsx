@@ -1,6 +1,6 @@
 import SubjectHeadingResults, {
   getServerSideProps,
-} from "../../../../pages/browse/subjects/[...slug]"
+} from "../../../../pages/browse/subjects/[slug]"
 import { fireEvent, render, screen } from "../../../../src/utils/testUtils"
 import mockRouter from "next-router-mock"
 import { fetchResults } from "../../../../src/server/api/search"
@@ -15,11 +15,11 @@ jest.mock("../../../../src/server/api/search")
 describe("Browse subject heading results page", () => {
   it("displays bibs and heading", async () => {
     await mockRouter.push({
-      pathname: "/browse/subjects/[...slug]",
-      query: { slug: ["test"] },
+      pathname: "/browse/subjects/test",
     })
     render(
       <SubjectHeadingResults
+        slug="test"
         isAuthenticated={true}
         results={{ results, status: 200 }}
       />
@@ -36,12 +36,12 @@ describe("Browse subject heading results page", () => {
 
   it("displays pagination and updates the router on page button clicks", async () => {
     await mockRouter.push({
-      pathname: "/browse/subjects/[...slug]",
-      query: { slug: ["test"] },
+      pathname: "/browse/subjects/test",
     })
     render(
       <SubjectHeadingResults
         isAuthenticated={true}
+        slug="test"
         results={{ results, status: 200 }}
       />
     )
@@ -54,12 +54,12 @@ describe("Browse subject heading results page", () => {
 
   it("renders the sort select fields and updates the query string in the url on changes", async () => {
     await mockRouter.push({
-      pathname: "/browse/subjects/[...slug]",
-      query: { slug: ["test"] },
+      pathname: "/browse/subjects/test",
     })
     render(
       <SubjectHeadingResults
         isAuthenticated={true}
+        slug="test"
         results={{ results, status: 200 }}
       />
     )
@@ -88,7 +88,7 @@ describe("getServerSideProps", () => {
     const args = {
       req: { cookies: {} },
       query: {},
-      params: { slug: ["history"] },
+      params: { slug: ["test"] },
     }
 
     const result = await getServerSideProps(args as any)

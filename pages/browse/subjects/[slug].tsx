@@ -10,10 +10,7 @@ import type { HTTPStatusCode } from "../../../src/types/appTypes"
 import Search from "../../../src/components/Search/Search"
 import { useRouter } from "next/router"
 import { idConstants, useFocusContext } from "../../../src/context/FocusContext"
-import {
-  buildSubjectQuery,
-  getBrowseResultsHeading,
-} from "../../../src/utils/browseUtils"
+import { buildLockedBrowseQuery } from "../../../src/utils/browseUtils"
 
 interface SubjectSearchProps {
   bannerNotification?: string
@@ -41,16 +38,7 @@ export default function SubjectHeadingResults({
 
   const { setPersistentFocus } = useFocusContext()
 
-  const subjectFilterKey = "filters[subjectLiteral][0]"
-
-  // Inject SH filter internally if it’s not already in query
-  const initialQuery = {
-    ...query,
-    [subjectFilterKey]: query[subjectFilterKey] ?? slug,
-    page: Array.isArray(query.page) ? query.page[0] : query.page ?? "1",
-  }
-
-  const searchParams = mapQueryToSearchParams(initialQuery)
+  const searchParams = mapQueryToSearchParams(query)
 
   const handlePageChange = async (newPage: number) => {
     setPersistentFocus(idConstants.searchResultsHeading)
@@ -89,8 +77,7 @@ export default function SubjectHeadingResults({
       searchParams={searchParams}
       handlePageChange={handlePageChange}
       handleSortChange={handleSortChange}
-      getResultsHeading={getBrowseResultsHeading}
-      subjectHeadingSlug={slug}
+      slug={slug}
     />
   )
 }
@@ -98,11 +85,13 @@ export default function SubjectHeadingResults({
 export async function getServerSideProps({ req, query, params }) {
   const bannerNotification = process.env.SEARCH_RESULTS_NOTIFICATION || ""
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
-  const slug: string = Array.isArray(params.slug)
-    ? params.slug[0]
-    : (params.slug as string)
+  const slug: string = params.slug as string
 
-  const baseQuery = buildSubjectQuery({ slug, query })
+  const baseQuery = buildLockedBrowseQuery({
+    slug,
+    query,
+    filter: "subjectLiteral",
+  })
 
   const results = await fetchResults(mapQueryToSearchParams(baseQuery))
 

@@ -16,18 +16,24 @@ import { getPaginationOffsetStrings } from "./appUtils"
 /**
  * getSearchResultsHeading
  * Used to generate the search results heading text (Displaying 100 results for keyword "cats")
+ * for search results or browse bib results.
  * TODO: Make search query type (i.e. "Keyword") dynamic
  */
 export function getSearchResultsHeading(
   searchParams: SearchParams,
-  totalResults: number
+  totalResults: number,
+  browseOptions?: { slug: string; browseType: string }
 ): string {
   const [resultsStart, resultsEnd] = getPaginationOffsetStrings(
     searchParams.page,
     totalResults,
     RESULTS_PER_PAGE
   )
-  const queryDisplayString = buildQueryDisplayString(searchParams)
+
+  const queryDisplayString = browseOptions
+    ? ` for ${browseOptions.browseType} "${browseOptions.slug}"`
+    : buildQueryDisplayString(searchParams)
+
   return `Displaying ${
     totalResults > RESULTS_PER_PAGE
       ? `${resultsStart}-${resultsEnd}`
