@@ -20,7 +20,6 @@ export default class BibDetails {
   groupedNotes: AnyBibDetail[]
   supplementaryContent: LinkedBibDetail
   extent: string[]
-  subjectLiteral: LinkedBibDetail[]
   owner: string[]
   findingAid?: string
 
@@ -35,7 +34,6 @@ export default class BibDetails {
     this.groupedNotes = this.buildGroupedNotes()
     this.extent = this.buildExtent()
     this.owner = this.buildOwner()
-    this.subjectLiteral = this.buildSubjectLiterals()
     // these are the actual arrays of details that will be displayed
     this.annotatedMarcDetails = this.buildAnnotatedMarcDetails(
       annotatedMarc?.fields
@@ -105,7 +103,7 @@ export default class BibDetails {
           case "supplementaryContent":
             return this.supplementaryContent
           case "creatorLiteral":
-            return this.buildSearchFilterUrl(fieldMapping)
+            return this.buildInternalLinkedDetail(fieldMapping)
           default:
             return this.buildStandardDetail(fieldMapping)
         }
@@ -137,18 +135,21 @@ export default class BibDetails {
     ]
       .map((fieldMapping: FieldMapping): AnyBibDetail => {
         let detail: AnyBibDetail
-        if (fieldMapping.field === "contributorLiteral")
-          detail = this.buildSearchFilterUrl(fieldMapping)
+        if (
+          fieldMapping.field === "contributorLiteral" ||
+          fieldMapping.field === "subjectLiteral"
+        )
+          detail = this.buildInternalLinkedDetail(fieldMapping)
         else detail = this.buildStandardDetail(fieldMapping)
         return detail
       })
       .filter((f) => f)
+
     const fieldsWithNotes = this.addNotes(resourceFields)
-    const combinedFields = this.combineBibDetailsData(
+    return this.combineBibDetailsData(
       fieldsWithNotes,
       this.annotatedMarcDetails
     )
-    return combinedFields.filter((f) => f)
   }
 
   combineBibDetailsData = (
@@ -203,19 +204,24 @@ export default class BibDetails {
     }
   }
 
-  buildSearchFilterUrl(fieldMapping: {
+  buildInternalLinkedDetail(fieldMapping: {
     label: string
     field: string
   }): LinkedBibDetail {
     const value = this.bib[fieldMapping.field]
     if (!value?.length) return null
+
     return {
       link: "internal",
       label: convertToSentenceCase(fieldMapping.label),
       value: value.map((v: string) => {
-        const internalUrl = `/search?filters[${
-          fieldMapping.field
-        }][0]=${encodeURI(v)}`
+        // subjectLiteral links to browse
+        const internalUrl =
+          fieldMapping.field === "subjectLiteral"
+            ? `/browse/subjects/${encodeURIComponent(v)}`
+            : `/search?filters[${fieldMapping.field}][0]=${encodeURIComponent(
+                v
+              )}`
         return { url: internalUrl, urlLabel: v }
       }),
     }
@@ -386,16 +392,5 @@ export default class BibDetails {
 
   buildFindingAid() {
     return getFindingAidFromSupplementaryContent(this.bib.supplementaryContent)
-  }
-
-  buildSubjectLiterals(): LinkedBibDetail[] {
-    if (!this.bib.subjectLiteral) return []
-    return this.bib.subjectLiteral.map((subject: string): LinkedBibDetail => {
-      return {
-        value: [{ url: `/browse/subjects/${subject}`, urlLabel: subject }],
-        label: subject,
-        link: "internal",
-      }
-    })
   }
 }

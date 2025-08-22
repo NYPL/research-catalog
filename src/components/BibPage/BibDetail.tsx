@@ -1,7 +1,5 @@
 import { Heading, List } from "@nypl/design-system-react-components"
 import { kebabCase } from "lodash"
-import { type ReactElement } from "react"
-
 import styles from "../../../styles/components/BibDetails.module.scss"
 import RCLink from "../Links/RCLink/RCLink"
 import ExternalLink from "../Links/ExternalLink/ExternalLink"
@@ -19,101 +17,93 @@ interface BibDetailsProps {
   heading?: string
 }
 
-const BibDetails = ({ details, heading }: BibDetailsProps) => {
-  console.log(details)
-  return (
-    details?.length > 0 && (
-      <List
-        title={
-          heading && (
-            <Heading level="three" border="none">
-              {heading}
-            </Heading>
+const BibDetails = ({ details, heading }: BibDetailsProps) =>
+  details?.length > 0 && (
+    <List
+      title={
+        heading && (
+          <Heading level="three" border="none">
+            {heading}
+          </Heading>
+        )
+      }
+      noStyling
+      type="dl"
+      showRowDividers={false}
+      className={`${styles.bibDetails} ${styles.inBibPage}`}
+    >
+      {details.map((detail) => {
+        if (!detail) return null
+        if ("link" in detail)
+          return LinkedDetailElement(
+            detail as LinkedBibDetail,
+            detail.label === "Subject"
           )
-        }
-        noStyling
-        type="dl"
-        showRowDividers={false}
-        className={`${styles.bibDetails} ${styles.inBibPage}`}
-      >
-        {details.map((detail: BibDetail | LinkedBibDetail) => {
-          if (!detail) return
-          if (detail.label === "Subject") {
-            return LinkedDetailElement(detail as LinkedBibDetail)
-          } else if ("link" in detail) {
-            return LinkedDetailElement(detail as LinkedBibDetail)
-          } else {
-            return PlainTextElement(detail as BibDetail)
-          }
-        })}
+        return PlainTextElement(detail as BibDetail)
+      })}
+    </List>
+  )
+
+const DetailElement = (label: string, children: ReactNode[]) => (
+  <>
+    <dt>{label}</dt>
+    <dd>
+      <List noStyling data-testid={kebabCase(label)} type="ol">
+        {children}
       </List>
-    )
-  )
-}
+    </dd>
+  </>
+)
 
-const DetailElement = (label: string, listChildren: ReactNode[]) => {
-  return (
-    <>
-      <dt>{label}</dt>
-      <dd>
-        <List noStyling data-testid={kebabCase(label)} type="ol">
-          {listChildren}
-        </List>
-      </dd>
-    </>
-  )
-}
-
-export const PlainTextElement = (field: BibDetail) => {
-  const values = field?.value?.map((val: string, i: number) => {
-    const stringDirection = rtlOrLtr(val)
-    return (
-      <li dir={stringDirection} key={`${kebabCase(field.label)}-${i}`}>
+export const PlainTextElement = ({ label, value }: BibDetail) =>
+  DetailElement(
+    label,
+    value?.map((val, i) => (
+      <li dir={rtlOrLtr(val)} key={`${kebabCase(label)}-${i}`}>
         {val}
       </li>
-    )
-  })
-  return DetailElement(field.label, values)
-}
+    ))
+  )
 
-const SubjectHeadingElement = (field: LinkedBibDetail) => {
-  // console.log(field)
-  // const values = subjectHeadingLinksPerSubject.map((subject, i) => (
-  //   <li
-  //     style={{ outline: "2px green solid" }}
-  //     key={`subject-heading-${i}`}
-  //     data-testid="subject-links-per"
-  //   >
-  //     {subject} - [Browse in index]
-  //   </li>
-  // ))
-  return DetailElement(field.label, [<></>])
-}
-
-export const LinkedDetailElement = (field: LinkedBibDetail) => {
-  const internalOrExternal = field.link
-  const values = field.value.map((urlInfo: BibDetailURL, i) => {
-    return (
+export const LinkedDetailElement = (
+  field: LinkedBibDetail,
+  withIndexLink = false
+) =>
+  DetailElement(
+    field.label,
+    field.value.map((urlInfo, i) => (
       <li key={`${kebabCase(field.label)}-${i}`}>
-        {LinkElement(urlInfo, internalOrExternal)}
+        {LinkElement(urlInfo, field.link)}
+        {withIndexLink && (
+          <>
+            {" - "}
+            {LinkElement(
+              {
+                url: `/browse?q=${urlInfo.urlLabel}&search_scope=starts_with`,
+                urlLabel: "[Browse in index]",
+              },
+              "internal",
+              true
+            )}
+          </>
+        )}
       </li>
-    )
-  })
-  return DetailElement(field.label, values)
-}
+    ))
+  )
 
-const LinkElement = (url: BibDetailURL, linkType: string) => {
-  let Link: typeof RCLink | typeof ExternalLink
-  if (linkType === "internal") Link = RCLink
-  else if (linkType === "external") Link = ExternalLink
-  const stringDirection = rtlOrLtr(url.urlLabel)
+const LinkElement = (
+  url: BibDetailURL,
+  linkType: "internal" | "external",
+  isBold = false
+) => {
+  const Link = linkType === "internal" ? RCLink : ExternalLink
   return (
     <Link
-      dir={stringDirection}
+      dir={rtlOrLtr(url.urlLabel)}
       href={url.url}
       key={url.url}
-      // external link does not include this prop
-      includeBaseUrl={true}
+      includeBaseUrl={linkType === "internal"}
+      fontWeight={isBold ? "700" : "400"}
       textDecoration="none"
     >
       {url.urlLabel}
