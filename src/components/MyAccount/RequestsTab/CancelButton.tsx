@@ -17,7 +17,6 @@ import type {
   DefaultModalProps,
 } from "@nypl/design-system-react-components"
 import { PatronDataContext } from "../../../context/PatronDataContext"
-import logger from "../../../../logger"
 
 const CancelButton = ({
   setFocusOnRequestTab,
@@ -123,19 +122,17 @@ const CancelButton = ({
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ patronId: patron.id }),
+          body: JSON.stringify({
+            patronId: patron.id,
+            patronBarcode: patron.barcode,
+            itemId: hold.itemId,
+          }),
         }
       )
       if (response.status == 200) {
-        logger.info(
-          `My Account: Patron ${patron.id} deleted hold ${hold.id} on item ${hold.itemId}`
-        )
         // Open next modal to confirm request has been canceled.
         setModalProps(successModalProps as DefaultModalProps)
       } else {
-        logger.info(
-          `My Account: Patron ${patron.id} attempted and failed to delete hold ${hold.id} on item ${hold.itemId}`
-        )
         setModalProps(failureModalProps as DefaultModalProps)
       }
     },

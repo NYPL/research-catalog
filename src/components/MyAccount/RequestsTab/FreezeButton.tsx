@@ -86,6 +86,7 @@ const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
       patronId: patron.id,
       freeze: !frozen,
       pickupLocation: hold.pickupLocation.code,
+      itemId: hold.itemId,
     })
     const response = await fetch(
       `/research/research-catalog/api/account/holds/update/${hold.id}`,

@@ -25,11 +25,11 @@ export default async function handler(
   if (req.method == "POST") {
     /**  We get the hold id and patron id from the request: */
     const holdId = req.query.id as string
-    const holdPatronId = JSON.parse(JSON.stringify(req.body)).patronId
+    const holdPatronId = req.body.patronId
     /**  We check that the patron cookie matches the patron id in the request body,
      * i.e.,the logged in user is the owner of the hold. */
     if (holdPatronId == cookiePatronId) {
-      const response = await cancelHold(holdId)
+      const response = await cancelHold(holdId, req.body)
       responseStatus = response.status
       responseMessage = response.message
     } else {

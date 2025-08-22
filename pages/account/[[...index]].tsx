@@ -10,6 +10,7 @@ import { PatronDataProvider } from "../../src/context/PatronDataContext"
 import { getPatronData } from "../api/account/[id]"
 import RCHead from "../../src/components/Head/RCHead"
 import TimedLogoutModal from "../../src/components/MyAccount/TimedLogoutModal"
+import logger from "../../logger"
 
 interface MyAccountPropsType {
   accountData: MyAccountPatronData
