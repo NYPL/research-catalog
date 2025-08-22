@@ -118,7 +118,7 @@ const Layout = ({
                 {showNotification && bannerNotification && (
                   <Banner
                     className={`${styles.banner} no-print`}
-                    heading="New Service Announcement"
+                    heading="Service Announcement"
                     content={bannerNotification}
                   />
                 )}
