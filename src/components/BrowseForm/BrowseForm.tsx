@@ -2,8 +2,9 @@ import { getBrowseQuery } from "../../utils/browseUtils"
 import { BROWSE_FORM_OPTIONS, PATHS } from "../../config/constants"
 import { idConstants } from "../../context/FocusContext"
 import SearchBrowseForm from "../SearchBrowseForm/SearchBrowseForm"
+import type { RCPage } from "../../types/pageTypes"
 
-const BrowseForm = () => {
+const BrowseForm = ({ activePage }: { activePage: RCPage }) => {
   return (
     <SearchBrowseForm
       initialScope="has"
@@ -13,6 +14,7 @@ const BrowseForm = () => {
       scopeParamKey="searchScope"
       getQueryString={getBrowseQuery}
       onSubmitFocusId={idConstants.browseResultsHeading}
+      activePage={activePage}
     />
   )
 }

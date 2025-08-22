@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Flex,
   Icon,
   SearchBar,
@@ -7,6 +8,7 @@ import {
 } from "@nypl/design-system-react-components"
 import { useRouter } from "next/router"
 import {
+  useEffect,
   useState,
   type SyntheticEvent,
   type Dispatch,
@@ -15,6 +17,7 @@ import {
 import { useFocusContext } from "../../context/FocusContext"
 import useLoading from "../../hooks/useLoading"
 import styles from "../../../styles/components/Search.module.scss"
+import type { RCPage } from "../../types/pageTypes"
 
 type SearchBrowseFormProps = {
   initialScope: string
@@ -32,6 +35,7 @@ type SearchBrowseFormProps = {
   getQueryString: (params: { [key: string]: string }) => string
   onSubmitFocusId?: string | null
   children?: React.ReactNode
+  activePage: RCPage
 }
 
 const SearchBrowseForm = ({
@@ -44,11 +48,22 @@ const SearchBrowseForm = ({
   getQueryString,
   onSubmitFocusId = null,
   children,
+  activePage,
 }: SearchBrowseFormProps) => {
   const router = useRouter()
   const isLoading = useLoading()
-  const { setPersistentFocus } = useFocusContext()
 
+  const [backUrl, setBackUrl] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const ref = document.referrer
+      if (ref.includes("/browse?q")) {
+        setBackUrl(ref)
+      }
+    }
+  }, [])
+  const { setPersistentFocus } = useFocusContext()
   const [searchTerm, setSearchTerm] = useState(
     (router?.query?.q as string) || ""
   )
@@ -121,13 +136,38 @@ const SearchBrowseForm = ({
             labelText: tipText,
           }}
         />
-        {children && (
+        {(children || activePage === "sh-results") && (
           <Flex
             direction="column"
             justifyContent="space-between"
             mt={{ base: 0, md: "s" }}
           >
             {children}
+            {activePage === "sh-results" && backUrl && (
+              <Button
+                buttonType="secondary"
+                id="back-index"
+                size="medium"
+                width="fit-content"
+                onClick={() => router.push(backUrl)}
+                gap="xxs"
+                background="white"
+              >
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M20 11H7.83L13.42 5.41L12 4L4 12L12 20L13.41 18.59L7.83 13H20V11Z"
+                    fill="#0069BF"
+                  />
+                </svg>
+                Back to index
+              </Button>
+            )}
           </Flex>
         )}
       </div>

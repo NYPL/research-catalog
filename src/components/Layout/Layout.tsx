@@ -20,7 +20,7 @@ import SearchBanners from "../Banners/SearchBanners"
 
 interface LayoutProps {
   sidebar?: ReactElement
-  activePage?: RCPage
+  activePage: RCPage
   sidebarPosition?: "right" | "left"
   isAuthenticated?: boolean
   searchAggregations?: Aggregation[]
@@ -45,7 +45,8 @@ const Layout = ({
   const showSearch = activePage === "search" || activePage === ""
   const showBrowse = activePage === "browse" || activePage === "sh-results"
   const showNotification = activePage === "" || activePage === "search"
-  const showBrowseBanner = activePage === "browse"
+  const showBrowseBanner =
+    activePage === "browse" || activePage === "sh-results"
   return (
     <DSProvider>
       <TemplateAppContainer
@@ -108,7 +109,7 @@ const Layout = ({
             )}
             {showBrowse && (
               <>
-                <BrowseForm />
+                <BrowseForm activePage={activePage} />
                 {showBrowseBanner && <SubjectHeadingBanner />}
               </>
             )}

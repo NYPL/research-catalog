@@ -39,7 +39,7 @@ const AppliedFilters = ({ aggregations }: { aggregations: Aggregation[] }) => {
     if (tag.label === "Clear filters") {
       setPersistentFocus(idConstants.filterResultsHeading)
       router.push({
-        pathname: "/search",
+        pathname: router.pathname,
         query: getQueryWithoutFiltersOrPage(router.query),
       })
       return
@@ -63,7 +63,7 @@ const AppliedFilters = ({ aggregations }: { aggregations: Aggregation[] }) => {
     }
     router.push(
       {
-        pathname: "/search",
+        pathname: router.pathname,
         query: updatedQuery,
       },
       undefined,

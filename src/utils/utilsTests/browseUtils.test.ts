@@ -2,10 +2,11 @@ import {
   browseSortOptions,
   buildSubjectLinks,
   getBrowseQuery,
-  getBrowseResultsHeading,
+  getBrowseIndexHeading,
   getSubjectURL,
   isPreferredSubject,
   mapQueryToBrowseParams,
+  buildLockedBrowseQuery,
 } from "../browseUtils"
 
 describe("browseUtils", () => {
@@ -129,24 +130,24 @@ describe("browseUtils", () => {
     })
   })
 
-  describe("getBrowseResultsHeading", () => {
+  describe("getBrowseIndexHeading", () => {
     it("returns correct heading with totalResults less than SUBJECTS_PER_PAGE", () => {
       const params = { q: "cats", page: 1, searchScope: "has" }
-      const heading = getBrowseResultsHeading(params, 20)
+      const heading = getBrowseIndexHeading(params, 20)
       expect(heading).toContain("20")
       expect(heading).toContain('containing "cats"')
     })
 
     it("returns correct heading with totalResults more than SUBJECTS_PER_PAGE", () => {
       const params = { q: "dogs", page: 2, searchScope: "starts_with" }
-      const heading = getBrowseResultsHeading(params, 200)
+      const heading = getBrowseIndexHeading(params, 200)
       expect(heading).toContain("26-50")
       expect(heading).toContain('beginning with "dogs"')
     })
 
     it("adds 'over' for 10000 totalResults", () => {
       const params = { q: "", page: 1, searchScope: "has" }
-      const heading = getBrowseResultsHeading(params, 10000)
+      const heading = getBrowseIndexHeading(params, 10000)
       expect(heading).toContain("over")
     })
   })
@@ -175,6 +176,38 @@ describe("browseUtils", () => {
       expect(results[0].url).toContain("/browse/subjects/foo")
 
       expect(results[2].count).toBe("")
+    })
+  })
+
+  describe("buildLockedBrowseQuery", () => {
+    it("puts slug first and rebuilds filter params", () => {
+      const query = {
+        "filters[subjectLiteral][0]": "History",
+        "filters[subjectLiteral][1]": "Science",
+        page: "2",
+      }
+
+      const result = buildLockedBrowseQuery({
+        slug: "Math",
+        query,
+        field: "subjectLiteral",
+      })
+
+      expect(result).toMatchObject({
+        "filters[subjectLiteral][0]": "Math",
+        "filters[subjectLiteral][1]": "History",
+        "filters[subjectLiteral][2]": "Science",
+        page: "2",
+      })
+    })
+
+    it("defaults page to 1 when missing", () => {
+      const result = buildLockedBrowseQuery({
+        slug: "Art",
+        query: {},
+        field: "subjectLiteral",
+      })
+      expect(result.page).toBe("1")
     })
   })
 })

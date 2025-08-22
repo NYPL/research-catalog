@@ -20,7 +20,7 @@ import type {
 import {
   browseSortOptions,
   getBrowseQuery,
-  getBrowseResultsHeading,
+  getBrowseIndexHeading,
   mapQueryToBrowseParams,
 } from "../../src/utils/browseUtils"
 import { useRouter } from "next/router"
@@ -46,7 +46,7 @@ export default function Browse({
   isAuthenticated,
   errorStatus = null,
 }: BrowseProps) {
-  const metadataTitle = `Browse Research Catalog | ${SITE_NAME}`
+  const metadataTitle = `Browse | ${SITE_NAME}`
   const { query, push } = useRouter()
   const browseParams = mapQueryToBrowseParams(query)
 
@@ -163,7 +163,7 @@ export default function Browse({
             aria-live="polite"
             mb={{ base: "m", md: 0 }}
           >
-            {getBrowseResultsHeading(browseParams, results.totalResults)}
+            {getBrowseIndexHeading(browseParams, results.totalResults)}
           </Heading>
           <ResultsSort
             params={browseParams}

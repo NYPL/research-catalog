@@ -8,6 +8,10 @@ import type {
   SubjectLink,
 } from "../types/browseTypes"
 import { getPaginationOffsetStrings } from "./appUtils"
+import {
+  buildFilterQuery,
+  collapseMultiValueQueryParams,
+} from "./refineSearchUtils"
 
 /**
  * Default sort configuration per search scope
@@ -104,10 +108,10 @@ export function getSubjectURL(term: string) {
 }
 
 /**
- * getBrowseResultsHeading
- * Used to generate the browse results heading text (Displaying 1-30 of 300 Subject Headings containing "cats")
+ * getBrowseIndexHeading
+ * Used to generate the browse index heading text (Displaying 1-30 of 300 Subject Headings containing "cats")
  */
-export function getBrowseResultsHeading(
+export function getBrowseIndexHeading(
   browseParams: BrowseParams,
   totalResults: number
 ): string {
@@ -155,4 +159,34 @@ export function buildSubjectLinks(
     })
   }
   return termLinks
+}
+
+export function buildLockedBrowseQuery({
+  slug,
+  query,
+  field,
+}: {
+  slug: string
+  query: Record<string, any>
+  field: string
+}) {
+  const collapsedFilters = collapseMultiValueQueryParams(query)
+
+  // Merge the locked slug in, it should be first in its filter array
+  const merged = {
+    ...collapsedFilters,
+    [field]: [slug, ...(collapsedFilters[field] ?? [])],
+  }
+
+  return {
+    ...Object.fromEntries(
+      Object.entries(query).filter(
+        ([key]) => !key.startsWith(`filters[${field}]`)
+      )
+    ),
+    // rebuild filters
+    ...buildFilterQuery(merged),
+    // normalize page
+    page: Array.isArray(query.page) ? query.page[0] : query.page ?? "1",
+  }
 }

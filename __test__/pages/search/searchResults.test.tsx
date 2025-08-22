@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event"
 import { render, screen, fireEvent } from "../../../src/utils/testUtils"
 import mockRouter from "next-router-mock"
 import { results } from "../../fixtures/searchResultsManyBibs"
-import SearchResults from "../../../pages/search/index"
+import SearchPage from "../../../pages/search/index"
 
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 const query = "spaghetti"
@@ -14,10 +14,7 @@ describe("Search Results page", () => {
     it("displays many bibs", async () => {
       await mockRouter.push(`/search?q=${query}`)
       render(
-        <SearchResults
-          isAuthenticated={true}
-          results={{ results, status: 200 }}
-        />
+        <SearchPage isAuthenticated={true} results={{ results, status: 200 }} />
       )
 
       const displayingText = screen.getByText(
@@ -31,10 +28,7 @@ describe("Search Results page", () => {
     it("displays pagination and updates the router on page button clicks", async () => {
       await mockRouter.push(`/search?q=${query}`)
       render(
-        <SearchResults
-          isAuthenticated={true}
-          results={{ results, status: 200 }}
-        />
+        <SearchPage isAuthenticated={true} results={{ results, status: 200 }} />
       )
       screen.getByLabelText("Pagination")
 
@@ -45,10 +39,7 @@ describe("Search Results page", () => {
     it("renders the sort select fields and updates the query string in the url on changes", async () => {
       await mockRouter.push(`/search?q=${query}`)
       render(
-        <SearchResults
-          isAuthenticated={true}
-          results={{ results, status: 200 }}
-        />
+        <SearchPage isAuthenticated={true} results={{ results, status: 200 }} />
       )
       const sortBy = screen.getAllByLabelText("Sort by", { exact: false })[0]
       userEvent.click(sortBy)
@@ -61,10 +52,7 @@ describe("Search Results page", () => {
     it("returns the user to the first page on sorting changes", async () => {
       await mockRouter.push(`/search?q=${query}&page=2`)
       render(
-        <SearchResults
-          isAuthenticated={true}
-          results={{ results, status: 200 }}
-        />
+        <SearchPage isAuthenticated={true} results={{ results, status: 200 }} />
       )
       const sortBy = screen.getAllByLabelText("Sort by", { exact: false })[0]
       userEvent.click(sortBy)
@@ -79,7 +67,7 @@ describe("Search Results page", () => {
     it("displays 404 error", async () => {
       await mockRouter.push(`/search?q=${query}`)
       render(
-        <SearchResults
+        <SearchPage
           errorStatus={404}
           results={undefined}
           isAuthenticated={true}
@@ -90,7 +78,7 @@ describe("Search Results page", () => {
     it("displays server error", async () => {
       await mockRouter.push(`/search?q=${query}`)
       render(
-        <SearchResults
+        <SearchPage
           errorStatus={500}
           results={undefined}
           isAuthenticated={true}
@@ -103,7 +91,7 @@ describe("Search Results page", () => {
     it("displays server error", async () => {
       await mockRouter.push(`/search?q=${query}`)
       render(
-        <SearchResults
+        <SearchPage
           errorStatus={401}
           results={undefined}
           isAuthenticated={true}

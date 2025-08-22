@@ -29,8 +29,15 @@ const fields = [
   { value: "subjectLiteral", label: "Subject" },
 ]
 
-const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
+const SearchFilters = ({
+  aggregations,
+  lockedFilterValue,
+}: {
+  aggregations?: Aggregation[]
+  lockedFilterValue?: string
+}) => {
   const router = useRouter()
+
   const [appliedFilters, setAppliedFilters] = useState(
     collapseMultiValueQueryParams(router.query)
   )
@@ -48,7 +55,7 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
     }
     router.push(
       {
-        pathname: "/search",
+        pathname: router.pathname,
         query: updatedQuery,
       },
       undefined,
@@ -86,6 +93,10 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
   const filters = fields.map((field) => {
     const filterData = new SearchResultsFilters(aggregations, field)
     if (filterData.options) {
+      // Do not display any locked filter values
+      const filteredOptions = filterData.options.filter(
+        (opt) => opt.value !== lockedFilterValue
+      )
       return (
         <div
           key={field.value}
@@ -116,7 +127,7 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
                 items: appliedFilters[field.value] || [],
               },
             }}
-            items={filterData.options.map((option) => ({
+            items={filteredOptions.map((option) => ({
               id: option.value,
               name: `${option.label} (${option.count.toLocaleString()})`,
             }))}
