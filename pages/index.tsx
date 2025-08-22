@@ -181,7 +181,9 @@ export default function Home({
 }
 
 export async function getServerSideProps({ req }) {
-  const bannerNotification = process.env.SEARCH_RESULTS_NOTIFICATION || ""
+  const bannerNotification =
+    process.env.SEARCH_RESULTS_NOTIFICATION ||
+    "Due to network connectivity issues, there may be delays in the Scan and Deliver service."
   // Every page that needs patron data must call initializePatronTokenAuth
   // to find if the token is valid and what the patron id is.
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)

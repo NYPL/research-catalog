@@ -235,7 +235,9 @@ export default function Search({
 }
 
 export async function getServerSideProps({ req, query }) {
-  const bannerNotification = process.env.SEARCH_RESULTS_NOTIFICATION || ""
+  const bannerNotification =
+    process.env.SEARCH_RESULTS_NOTIFICATION ||
+    "Due to network connectivity issues, there may be delays in the Scan and Deliver service."
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
 
   const results = await fetchResults(mapQueryToSearchParams(query))
