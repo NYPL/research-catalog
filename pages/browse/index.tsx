@@ -46,7 +46,7 @@ export default function Browse({
   isAuthenticated,
   errorStatus = null,
 }: BrowseProps) {
-  const metadataTitle = `Browse Research Catalog | ${SITE_NAME}`
+  const metadataTitle = `Browse | ${SITE_NAME}`
   const { query, push } = useRouter()
   const browseParams = mapQueryToBrowseParams(query)
 

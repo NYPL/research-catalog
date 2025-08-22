@@ -164,27 +164,24 @@ export function buildSubjectLinks(
 export function buildLockedBrowseQuery({
   slug,
   query,
-  filter,
+  field,
 }: {
   slug: string
   query: Record<string, any>
-  filter: string
+  field: string
 }) {
   const collapsedFilters = collapseMultiValueQueryParams(query)
 
-  // Merge the locked slug in, it should be first and unique in its filter array
+  // Merge the locked slug in, it should be first in its filter array
   const merged = {
     ...collapsedFilters,
-    [filter]: [
-      slug,
-      ...(collapsedFilters[filter] ?? []).filter((f) => f !== slug),
-    ],
+    [field]: [slug, ...(collapsedFilters[field] ?? [])],
   }
 
   return {
     ...Object.fromEntries(
       Object.entries(query).filter(
-        ([key]) => !key.startsWith(`filters[${filter}]`)
+        ([key]) => !key.startsWith(`filters[${field}]`)
       )
     ),
     // rebuild filters

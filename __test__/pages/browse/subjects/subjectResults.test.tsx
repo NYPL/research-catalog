@@ -94,4 +94,22 @@ describe("getServerSideProps", () => {
     const result = await getServerSideProps(args as any)
     expect(result).toEqual({ props: { errorStatus: 500 } })
   })
+
+  it("builds the expected request", async () => {
+    ;(fetchResults as jest.Mock).mockResolvedValue({ status: 200, results: [] })
+
+    const params = { slug: "test" }
+    const query = { page: "2" }
+    const req = { cookies: {} }
+
+    await getServerSideProps({ req, query, params })
+
+    expect(fetchResults).toHaveBeenNthCalledWith(
+      2,
+      expect.objectContaining({
+        filters: { subjectLiteral: ["test"] },
+        page: 2,
+      })
+    )
+  })
 })
