@@ -32,8 +32,8 @@ const BibDetails = ({ details, heading }: BibDetailsProps) =>
       showRowDividers={false}
       className={`${styles.bibDetails} ${styles.inBibPage}`}
     >
-      {details.map((detail) => {
-        if (!detail) return null
+      {details.map((detail: BibDetail | LinkedBibDetail) => {
+        if (!detail) return
         if ("link" in detail)
           return LinkedDetailElement(
             detail as LinkedBibDetail,
@@ -44,12 +44,12 @@ const BibDetails = ({ details, heading }: BibDetailsProps) =>
     </List>
   )
 
-const DetailElement = (label: string, children: ReactNode[]) => (
+const DetailElement = (label: string, listChildren: ReactNode[]) => (
   <>
     <dt>{label}</dt>
     <dd>
       <List noStyling data-testid={kebabCase(label)} type="ol">
-        {children}
+        {listChildren}
       </List>
     </dd>
   </>
@@ -96,7 +96,9 @@ const LinkElement = (
   linkType: "internal" | "external",
   isBold = false
 ) => {
-  const Link = linkType === "internal" ? RCLink : ExternalLink
+  let Link: typeof RCLink | typeof ExternalLink
+  if (linkType === "internal") Link = RCLink
+  else if (linkType === "external") Link = ExternalLink
   return (
     <Link
       dir={rtlOrLtr(url.urlLabel)}
