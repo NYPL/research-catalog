@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+## [1.5.4] 2025-08-22
+
+### Added
+
+- Scan and delivery delay banner [SCC-4868] (https://newyorkpubliclibrary.atlassian.net/browse/SCC-4868)
+
 ## [1.5.3] 2025-08-06
 
 ### Added
