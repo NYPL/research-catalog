@@ -130,8 +130,12 @@ const ItemFilters = ({
           renderMultiSelect={renderMultiSelect}
         />
         {showDateFilter ? (
-          <Box width={{ sm: "100%", md: 440 }}>
-            <Label id="year-filter-label" htmlFor="searchbar-form-year-filter">
+          <Box width={{ base: "100%", md: 440 }}>
+            <Label
+              id="year-filter-label"
+              pb="xs"
+              htmlFor="searchbar-form-year-filter"
+            >
               Search by year
             </Label>
             <SearchBar
@@ -185,14 +189,14 @@ const ItemFilters = ({
 
   return (
     <>
-      <Box p="inset.wide" bg="ui.gray.x-light-cool" mb="m" className="no-print">
+      <Box p="m" bg="ui.gray.x-light-cool" mb="m" className="no-print">
         <FilterBarInline
           id="item-filters-container"
           data-testid="item-filters-container"
           width="full"
           layout="row"
           sx={{
-            fieldset: { width: { sm: "100%", md: "45%" } },
+            fieldset: { width: { base: "100%", md: "45%" } },
             "> div": { alignItems: "flex-start" },
           }}
           renderChildren={filterBarContent}

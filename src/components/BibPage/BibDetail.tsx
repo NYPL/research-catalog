@@ -26,7 +26,7 @@ const BibDetails = ({ details, heading }: BibDetailsProps) => {
       <List
         title={
           heading && (
-            <Heading level="h3" border="none">
+            <Heading level="h3" size="heading4" border="none">
               {heading}
             </Heading>
           )
