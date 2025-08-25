@@ -62,7 +62,7 @@ interface BibPropsType {
  */
 export default function BibPage({
   discoveryBibResult,
-  annotatedMarc,
+  //annotatedMarc,
   isAuthenticated,
   itemPage = 1,
   viewAllItems = false,
@@ -97,7 +97,7 @@ export default function BibPage({
   }
 
   const { topDetails, bottomDetails, holdingsDetails, findingAid } =
-    new BibDetailsModel(discoveryBibResult, annotatedMarc)
+    new BibDetailsModel(discoveryBibResult)
   const displayLegacyCatalogLink = isNyplBibID(bib.id)
 
   const filtersAreApplied = areFiltersApplied(appliedFilters)
@@ -315,6 +315,7 @@ export default function BibPage({
           </>
         ) : null}
         <Box mb="xl">
+          <Banner type="warning" content="No annotated MARC fields included" />
           <BibDetails
             heading="Holdings"
             key="holdings-details"
