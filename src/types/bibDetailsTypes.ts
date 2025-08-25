@@ -1,9 +1,4 @@
-export type AnyBibDetail = BibDetail | LinkedBibDetail | SubjectHeadingDetail
-
-export interface SubjectHeadingDetail {
-  value: BibDetailURL[][]
-  label: string
-}
+export type AnyBibDetail = BibDetail | LinkedBibDetail
 
 export interface BibDetail {
   // label is the formatted name of the field, such as "Author"

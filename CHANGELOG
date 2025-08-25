@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+## Updated
+
+- Updated subject heading links in bib details [SCC-4800](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4800)
+
 ## Added
 
 - Added subject heading filtered bib results to `browse/subjects/[...slug]` page [SCC-4815](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4815)

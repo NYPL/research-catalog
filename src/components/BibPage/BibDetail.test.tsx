@@ -81,7 +81,7 @@ describe("BibDetail component", () => {
       expect(creatorLiteralLink).toHaveAttribute(
         "href",
         expect.stringContaining(
-          "/search?filters[creatorLiteral][0]=Cortanze,%20G%C3%A9rard%20de."
+          "/research/research-catalog/search?filters[creatorLiteral][0]=Cortanze%2C%20G%C3%A9rard%20de."
         )
       )
       // @TODO: This will work once the Nextjs `Link` component is used again
@@ -106,44 +106,15 @@ describe("BibDetail component", () => {
       })
       expect(screen.queryByText("Finding aid")).not.toBeInTheDocument()
     })
-  })
-  describe("subject heading links", () => {
-    let subjectHeadings
-    beforeEach(() => {
+
+    it("renders Subject field with index links", () => {
       render(<BibDetails details={noParallelsBibModel.bottomDetails} />, {
         wrapper: MemoryRouterProvider,
       })
-      subjectHeadings = screen.getAllByTestId("subject-links-per")
-    })
-    it("renders subject link groups per subject literal", () => {
-      expect(subjectHeadings).toHaveLength(
-        noParallelsBibModel.bib.subjectLiteral.length
-      )
-    })
-    it("splits individual subject headings with divider", () => {
-      const greaterThanSigns = screen.getAllByTestId("divider")
-      const numberOfDividersInSubjectLiteral = 3
-      expect(greaterThanSigns).toHaveLength(numberOfDividersInSubjectLiteral)
-    })
-    xit("links to stacked subject headings", () => {
-      const authorsSubject = screen.getByText("Authors, French")
-      const authors20Subject = screen.getByText("20th century")
-      const authors20BioSubject = screen.getByText("Biography")
-      expect(authorsSubject).toHaveAttribute(
+      const browseLink = screen.getAllByText("[Browse in index]")[0]
+      expect(browseLink).toHaveAttribute(
         "href",
-        `/search?filters[subjectLiteral]=${encodeURI("Authors, French")}`
-      )
-      expect(authors20Subject).toHaveAttribute(
-        "href",
-        `/search?filters[subjectLiteral]=${encodeURI(
-          "Authors, French -- 20th century"
-        )}`
-      )
-      expect(authors20BioSubject).toHaveAttribute(
-        "href",
-        `/search?filters[subjectLiteral]=${encodeURI(
-          "Authors, French -- 20th century -- Biography"
-        )}`
+        expect.stringContaining("/browse?q=")
       )
     })
   })
