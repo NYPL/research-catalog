@@ -97,7 +97,7 @@ export default function BibPage({
   }
 
   const { topDetails, bottomDetails, holdingsDetails, findingAid } =
-    new BibDetailsModel(discoveryBibResult)
+    new BibDetailsModel(discoveryBibResult) // , annotatedMARC
   const displayLegacyCatalogLink = isNyplBibID(bib.id)
 
   const filtersAreApplied = areFiltersApplied(appliedFilters)
