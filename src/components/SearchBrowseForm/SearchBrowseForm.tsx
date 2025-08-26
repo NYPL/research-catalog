@@ -142,7 +142,6 @@ const SearchBrowseForm = ({
             justifyContent="space-between"
             mt={{ base: 0, md: "s" }}
           >
-            {children}
             {activePage === "sh-results" && backUrl && (
               <Button
                 buttonType="secondary"
@@ -152,7 +151,7 @@ const SearchBrowseForm = ({
                 onClick={() => router.push(backUrl)}
                 gap="xxs"
                 background="white"
-                mt={{ base: "xs", md: 0 }}
+                mb={{ base: "xs", md: 0 }}
               >
                 <svg
                   width="24"
@@ -169,6 +168,7 @@ const SearchBrowseForm = ({
                 Back to index
               </Button>
             )}
+            {children}
           </Flex>
         )}
       </div>
