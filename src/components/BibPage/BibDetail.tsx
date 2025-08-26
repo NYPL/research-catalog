@@ -84,7 +84,7 @@ export const LinkedDetailElement = (
               },
               "internal",
               true,
-              `Browse in index for ${urlInfo.urlLabel}`
+              `Browse in index for "${urlInfo.urlLabel}"`
             )}
           </>
         )}
@@ -109,7 +109,7 @@ const LinkElement = (
       includeBaseUrl={linkType === "internal"}
       fontWeight={isBold ? "700" : "400"}
       textDecoration="none"
-      ariaLabel={ariaLabel}
+      aria-label={ariaLabel}
     >
       {url.urlLabel}
     </Link>
