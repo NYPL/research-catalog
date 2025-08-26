@@ -151,6 +151,7 @@ const Search = ({
                 paddingBottom="0"
                 mb={{ base: "m", md: "l" }}
                 minH="40px"
+                mr="m"
                 ref={searchResultsHeadingRef}
                 aria-live="polite"
               >

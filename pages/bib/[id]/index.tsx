@@ -222,7 +222,7 @@ export default function BibPage({
             FINDING AID AVAILABLE
           </StatusBadge>
         )}
-        <Heading level="h2" size="heading3" mb="l">
+        <Heading level="h2" size="heading3" mb="-m">
           {bib.title}
         </Heading>
         <BibDetails key="top-details" details={topDetails} />
