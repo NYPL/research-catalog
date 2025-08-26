@@ -42,7 +42,11 @@ const ItemTableControls = ({
     bib.getItemsViewAllLoadingMessage(filtersAreApplied)
 
   return (
-    <Box display={{ md: "flex" }} my="xl" justifyContent="space-between">
+    <Box
+      display={{ md: "flex" }}
+      my={bib.showViewAllItemsLink(filtersAreApplied) ? "xl" : 0}
+      justifyContent="space-between"
+    >
       {!viewAllExpanded ? (
         <Pagination
           id="bib-items-pagination"

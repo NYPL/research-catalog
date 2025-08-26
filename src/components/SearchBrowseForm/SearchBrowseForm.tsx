@@ -3,6 +3,7 @@ import {
   Button,
   Flex,
   Icon,
+  Link,
   SearchBar,
   Text,
 } from "@nypl/design-system-react-components"
@@ -143,8 +144,8 @@ const SearchBrowseForm = ({
             mt={{ base: 0, md: "s" }}
           >
             {activePage === "sh-results" && backUrl && (
-              <Button
-                buttonType="secondary"
+              <Link
+                type="buttonSecondary"
                 id="back-index"
                 size="medium"
                 width={{ base: "100%", md: "fit-content" }}
@@ -166,7 +167,7 @@ const SearchBrowseForm = ({
                   />
                 </svg>
                 Back to index
-              </Button>
+              </Link>
             )}
             {children}
           </Flex>

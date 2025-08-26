@@ -42,7 +42,8 @@ const ItemTable = ({ itemTableData }: ItemTableProps) => {
         tableData={tableData}
         isScrollable
         showRowDividers={!inSearchResult}
-        my={{ base: inSearchResult ? "s" : 0, md: "s" }}
+        mt={{ base: inSearchResult ? "s" : 0, md: "s" }}
+        mb={{ base: inSearchResult ? "s" : 0, md: 0 }}
         data-testid={
           !inSearchResult
             ? "bib-details-item-table"

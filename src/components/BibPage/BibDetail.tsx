@@ -83,7 +83,8 @@ export const LinkedDetailElement = (
                 urlLabel: "[Browse in index]",
               },
               "internal",
-              true
+              true,
+              `Browse in index for ${urlInfo.urlLabel}`
             )}
           </>
         )}
@@ -94,7 +95,8 @@ export const LinkedDetailElement = (
 const LinkElement = (
   url: BibDetailURL,
   linkType: "internal" | "external",
-  isBold = false
+  isBold = false,
+  ariaLabel?: string
 ) => {
   let Link: typeof RCLink | typeof ExternalLink
   if (linkType === "internal") Link = RCLink
@@ -107,6 +109,7 @@ const LinkElement = (
       includeBaseUrl={linkType === "internal"}
       fontWeight={isBold ? "700" : "400"}
       textDecoration="none"
+      ariaLabel={ariaLabel}
     >
       {url.urlLabel}
     </Link>

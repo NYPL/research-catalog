@@ -110,7 +110,7 @@ const Search = ({
                   <CardHeading
                     size="heading6"
                     id="filter-results-heading"
-                    tabIndex="0"
+                    tabIndex="-1"
                   >
                     Filter results
                   </CardHeading>
@@ -151,6 +151,7 @@ const Search = ({
                 paddingBottom="0"
                 mb={{ base: "m", md: "l" }}
                 minH="40px"
+                mr="m"
                 ref={searchResultsHeadingRef}
                 aria-live="polite"
               >
