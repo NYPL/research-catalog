@@ -148,10 +148,11 @@ const SearchBrowseForm = ({
                 buttonType="secondary"
                 id="back-index"
                 size="medium"
-                width="fit-content"
+                width={{ base: "100%", md: "fit-content" }}
                 onClick={() => router.push(backUrl)}
                 gap="xxs"
                 background="white"
+                mt={{ base: "xs", md: 0 }}
               >
                 <svg
                   width="24"

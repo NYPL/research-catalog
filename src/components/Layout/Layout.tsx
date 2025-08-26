@@ -109,7 +109,11 @@ const Layout = ({
             )}
             {showBrowse && (
               <>
-                <BrowseForm activePage={activePage} />
+                <BrowseForm
+                  activePage={activePage}
+                  aggregations={searchAggregations}
+                  searchResultsCount={searchResultsCount}
+                />
                 {showBrowseBanner && <SubjectHeadingBanner />}
               </>
             )}
