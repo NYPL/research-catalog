@@ -153,8 +153,8 @@ export function buildSubjectLinks(
 
   for (const termObj of terms) {
     termLinks.push({
-      termLabel: termObj.label,
-      url: getSubjectURL(termObj.label),
+      termLabel: termObj.termLabel,
+      url: getSubjectURL(termObj.termLabel),
       count: termObj.count?.toLocaleString() || "",
     })
   }
