@@ -272,7 +272,10 @@ export default class BibDetails {
     if (!values.length) return null
     return {
       link: "external",
-      value: values,
+      value: values.map((v) => ({
+        url: v.url,
+        urlLabel: v.urlLabel ?? null,
+      })),
       label: convertToSentenceCase(label),
     }
   }

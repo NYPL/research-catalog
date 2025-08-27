@@ -55,6 +55,7 @@ interface BibPropsType {
   itemPage?: number
   viewAllItems?: boolean
   notFound?: boolean
+  prebuiltBibDetails?: BibDetailsModel
 }
 
 /**
@@ -63,6 +64,7 @@ interface BibPropsType {
 export default function BibPage({
   discoveryBibResult,
   annotatedMarc,
+  prebuiltBibDetails,
   isAuthenticated,
   itemPage = 1,
   viewAllItems = false,
@@ -97,7 +99,7 @@ export default function BibPage({
   }
 
   const { topDetails, bottomDetails, holdingsDetails, findingAid } =
-    new BibDetailsModel(discoveryBibResult, annotatedMarc)
+    prebuiltBibDetails || new BibDetailsModel(discoveryBibResult, annotatedMarc)
   const displayLegacyCatalogLink = isNyplBibID(bib.id)
 
   const filtersAreApplied = areFiltersApplied(appliedFilters)
@@ -345,31 +347,34 @@ export async function getServerSideProps({ params, query, req }) {
   const { id } = params
   const { discoveryBibResult, annotatedMarc, status, redirectUrl } =
     await fetchBib(id, query)
+
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const isAuthenticated = patronTokenResponse.isTokenValid
 
   switch (status) {
     case 307:
       return {
-        redirect: {
-          destination: redirectUrl,
-          permanent: false,
-        },
+        redirect: { destination: redirectUrl, permanent: false },
       }
     case 404:
-      return {
-        props: {
-          notFound: true,
-        },
-      }
-    default:
+      return { props: { notFound: true } }
+    default: {
+      // Build bib details serverside, allows us to log our kept annotated MARC fields.
+      const bibDetails = new BibDetailsModel(discoveryBibResult, annotatedMarc)
       return {
         props: {
           discoveryBibResult,
           annotatedMarc,
           isAuthenticated,
           itemPage: query.item_page ? parseInt(query.item_page) : 1,
+          prebuiltBibDetails: {
+            topDetails: bibDetails.topDetails,
+            bottomDetails: bibDetails.bottomDetails,
+            holdingsDetails: bibDetails.holdingsDetails,
+            findingAid: bibDetails.findingAid,
+          },
         },
       }
+    }
   }
 }
