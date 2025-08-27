@@ -17,9 +17,8 @@ test.describe("Keyword Search", () => {
     await expect(rcHomePage.search_input).toBeVisible()
     await rcHomePage.search_input.fill("IBM 1401")
     await rcHomePage.search_submit_button.click()
-    // sleep 1 second
-    await page.waitForTimeout(1000)
-    await expect(searchPage.results_count).toContainText("keywords")
+
+    await expect(searchPage.results_count).toBeVisible()
     // assert that at least 8 of the first 10 results has the supplied keyword in the title field
     const titles = await searchPage.results_title.allTextContents()
     const matchingTitles = titles.filter((title) => title.includes("IBM 1401"))
