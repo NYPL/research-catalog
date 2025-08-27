@@ -4,27 +4,27 @@ export const discoverySubjectsResult = [
     termLabel: "M'Baye, Mariétou",
     preferredTerms: [
       {
-        label: "Ken Bugul",
+        termLabel: "Ken Bugul",
         count: 2,
       },
       {
-        label: "Ringo Starr",
+        termLabel: "Ringo Starr",
         count: 84,
       },
       {
-        label: "Yoko Ono",
+        termLabel: "Yoko Ono",
         count: 1600,
       },
       {
-        label: "George Harrison",
+        termLabel: "George Harrison",
         count: 678,
       },
       {
-        label: "Ousmane Sembène",
+        termLabel: "Ousmane Sembène",
         count: 678,
       },
       {
-        label: "Fatou Diome",
+        termLabel: "Fatou Diome",
         count: 677,
       },
     ],

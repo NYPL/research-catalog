@@ -163,9 +163,9 @@ describe("browseUtils", () => {
   describe("buildSubjectLinks", () => {
     it("builds links with termLabel, url, and count", () => {
       const terms = [
-        { label: "foo", count: 123 },
-        { label: "bar", count: 0 },
-        { label: "baz" },
+        { termLabel: "foo", count: 123 },
+        { termLabel: "bar", count: 0 },
+        { termLabel: "baz" },
       ]
       const results = buildSubjectLinks(terms)
       expect(results).toHaveLength(3)
