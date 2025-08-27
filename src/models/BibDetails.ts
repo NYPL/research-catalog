@@ -10,6 +10,7 @@ import type {
 } from "../types/bibDetailsTypes"
 import { convertToSentenceCase } from "../utils/appUtils"
 import { getFindingAidFromSupplementaryContent } from "../utils/bibUtils"
+import logger from "../../logger"
 
 export default class BibDetails {
   bib: DiscoveryBibResult
@@ -155,14 +156,57 @@ export default class BibDetails {
     resourceEndpointDetails: AnyBibDetail[],
     annotatedMarcDetails: AnyBibDetail[]
   ) => {
+    // Flatten values
+    const normalizeValues = (val: any) => {
+      if (!val) return []
+      return Array.isArray(val)
+        ? val
+            .flat()
+            .map((v) =>
+              typeof v === "string" ? v.trim() : v?.urlLabel?.trim()
+            )
+        : [typeof val === "string" ? val.trim() : val?.urlLabel?.trim()]
+    }
+
+    // Label set
     const resourceEndpointDetailsLabels = new Set(
-      resourceEndpointDetails.map((detail: { label: string }) => {
-        return detail.label
+      resourceEndpointDetails.map((detail) => detail.label)
+    )
+
+    // Value set
+    const resourceValuesSet = new Set<string>()
+    const allBibDetails = [
+      ...resourceEndpointDetails,
+      ...(this.topDetails || []),
+    ]
+    allBibDetails.forEach((detail) => {
+      normalizeValues(detail.value).forEach((v) => {
+        if (v) resourceValuesSet.add(v)
       })
-    )
-    const filteredAnnotatedMarcDetails = annotatedMarcDetails.filter(
-      (detail: AnyBibDetail) => !resourceEndpointDetailsLabels.has(detail.label)
-    )
+    })
+
+    const filteredAnnotatedMarcDetails: AnyBibDetail[] = []
+    const keptByLabel: Record<string, string[]> = {}
+
+    annotatedMarcDetails.forEach((detail) => {
+      if (resourceEndpointDetailsLabels.has(detail.label)) return
+
+      const marcValues = normalizeValues(detail.value)
+      const hasOverlap = marcValues.some((v) => resourceValuesSet.has(v))
+      if (!hasOverlap) {
+        filteredAnnotatedMarcDetails.push(detail)
+        keptByLabel[detail.label] = marcValues.filter(Boolean)
+      }
+    })
+
+    if (Object.keys(keptByLabel).length > 0) {
+      logger.info(
+        `Bib details: Keeping annotated MARC fields on ${
+          this.bib["@id"]
+        }:\n${JSON.stringify(keptByLabel, null, 2)}`
+      )
+    }
+
     return resourceEndpointDetails.concat(filteredAnnotatedMarcDetails)
   }
 
