@@ -55,7 +55,6 @@ interface BibPropsType {
   itemPage?: number
   viewAllItems?: boolean
   notFound?: boolean
-  prebuiltBibDetails?: BibDetailsModel
 }
 
 /**
@@ -64,7 +63,6 @@ interface BibPropsType {
 export default function BibPage({
   discoveryBibResult,
   annotatedMarc,
-  prebuiltBibDetails,
   isAuthenticated,
   itemPage = 1,
   viewAllItems = false,
@@ -99,7 +97,7 @@ export default function BibPage({
   }
 
   const { topDetails, bottomDetails, holdingsDetails, findingAid } =
-    prebuiltBibDetails || new BibDetailsModel(discoveryBibResult, annotatedMarc)
+    new BibDetailsModel(discoveryBibResult, annotatedMarc)
   const displayLegacyCatalogLink = isNyplBibID(bib.id)
 
   const filtersAreApplied = areFiltersApplied(appliedFilters)
@@ -359,20 +357,12 @@ export async function getServerSideProps({ params, query, req }) {
     case 404:
       return { props: { notFound: true } }
     default: {
-      // Build bib details serverside, allows us to log our kept annotated MARC fields.
-      const bibDetails = new BibDetailsModel(discoveryBibResult, annotatedMarc)
       return {
         props: {
           discoveryBibResult,
           annotatedMarc,
           isAuthenticated,
           itemPage: query.item_page ? parseInt(query.item_page) : 1,
-          prebuiltBibDetails: {
-            topDetails: bibDetails.topDetails,
-            bottomDetails: bibDetails.bottomDetails,
-            holdingsDetails: bibDetails.holdingsDetails,
-            findingAid: bibDetails.findingAid,
-          },
         },
       }
     }
