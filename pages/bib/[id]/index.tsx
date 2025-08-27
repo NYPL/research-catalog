@@ -345,18 +345,24 @@ export async function getServerSideProps({ params, query, req }) {
   const { id } = params
   const { discoveryBibResult, annotatedMarc, status, redirectUrl } =
     await fetchBib(id, query)
-
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const isAuthenticated = patronTokenResponse.isTokenValid
 
   switch (status) {
     case 307:
       return {
-        redirect: { destination: redirectUrl, permanent: false },
+        redirect: {
+          destination: redirectUrl,
+          permanent: false,
+        },
       }
     case 404:
-      return { props: { notFound: true } }
-    default: {
+      return {
+        props: {
+          notFound: true,
+        },
+      }
+    default:
       return {
         props: {
           discoveryBibResult,
@@ -365,6 +371,5 @@ export async function getServerSideProps({ params, query, req }) {
           itemPage: query.item_page ? parseInt(query.item_page) : 1,
         },
       }
-    }
   }
 }
