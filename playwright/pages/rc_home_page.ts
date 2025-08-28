@@ -27,8 +27,6 @@ export class RC_Home_Page extends BasePage {
   readonly services_heading: Locator
   readonly services_heading_image: Locator
   readonly services_heading_blurb: Locator
-  readonly footer_container: Locator
-  readonly help_and_feedback: Locator
 
   constructor(page: Page) {
     super(page)
@@ -92,14 +90,5 @@ export class RC_Home_Page extends BasePage {
       name: "Man wheeling cart in NYPL",
     })
     this.services_heading_blurb = page.getByText("Explore services for online")
-    // Footer
-    this.footer_container = page.locator("footer#footer")
-    this.help_and_feedback = page.getByRole("button", {
-      name: "Help and Feedback",
-    })
-  }
-
-  async goto() {
-    await this.page.goto("/research/research-catalog")
   }
 }

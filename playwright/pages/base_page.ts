@@ -28,6 +28,25 @@ export class BasePage {
   readonly search_the_catalog: Locator
   readonly shep: Locator
   readonly my_account: Locator
+  // global footer
+  readonly footer_library_text_image: Locator
+  readonly footer_building_image: Locator
+  readonly footer_copyright_text: Locator
+  readonly footer_legal_text: Locator
+  readonly footer_accessibility: Locator
+  readonly footer_press: Locator
+  readonly footer_careers: Locator
+  readonly footer_space_rental: Locator
+  readonly footer_privacy_policy: Locator
+  readonly footer_other_policies: Locator
+  readonly footer_terms: Locator
+  readonly footer_governance: Locator
+  readonly footer_rules_regulations: Locator
+  readonly footer_about: Locator
+  readonly footer_language: Locator
+
+  readonly footer_container: Locator
+  readonly help_and_feedback: Locator
 
   constructor(page: Page) {
     this.page = page
@@ -88,6 +107,45 @@ export class BasePage {
     this.shep = page.getByRole("link", { name: "Subject Heading Explorer" })
     this.my_account = page.getByRole("link", {
       name: "My account for NYPL.org",
+    })
+    // Footer
+    this.footer_library_text_image = page.getByRole("img", {
+      name: "The New York Public Library",
+    })
+    this.footer_building_image = page.getByRole("img", {
+      name: "NYPL Main Building Facade",
+    })
+    this.footer_copyright_text = page.getByText(
+      "© The New York Public Library,"
+    )
+    this.footer_legal_text = page.getByText(
+      "The New York Public Library is a 501(c)(3) | EIN 13-"
+    )
+    this.footer_accessibility = page
+      .locator("footer")
+      .getByRole("link", { name: "Accessibility" })
+    this.footer_press = page.getByRole("link", { name: "Press" })
+    this.footer_careers = page.getByRole("link", { name: "Careers" })
+    this.footer_space_rental = page.getByRole("link", {
+      name: "Space Rental",
+    })
+    this.footer_privacy_policy = page.getByRole("link", {
+      name: "Privacy Policy",
+    })
+    this.footer_other_policies = page.getByRole("link", {
+      name: "Other Policies",
+    })
+    this.footer_terms = page.getByRole("link", { name: "Terms & Conditions" })
+    this.footer_governance = page.getByRole("link", { name: "Governance" })
+    this.footer_rules_regulations = page.getByRole("link", {
+      name: "Rules & Regulations",
+    })
+    this.footer_about = page.getByRole("link", { name: "About NYPL" })
+    this.footer_language = page.getByRole("link", { name: "Language" })
+
+    this.footer_container = page.locator("footer#footer")
+    this.help_and_feedback = page.getByRole("button", {
+      name: "Help and Feedback",
     })
   }
 }

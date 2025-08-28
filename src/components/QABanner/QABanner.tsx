@@ -1,0 +1,52 @@
+const QABanner = () => {
+  return (
+    <div
+      id="qa-banner"
+      style={{
+        background: "var(--ui-status-primary, #F9E08E)",
+        color: "black",
+        fontSize: "14px",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: "8px",
+        justifyContent: "center",
+        padding: "16px",
+      }}
+    >
+      <svg
+        viewBox="0 0 24 24"
+        width="24px"
+        height="24px"
+        xmlns="http://www.w3.org/2000/svg"
+        style={{ flexShrink: 0 }}
+      >
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M10.5 2.75C10.5 1.92 11.17 1.25 12 1.25C12.83 1.25 13.5 1.92 13.5 2.75V3.92C16.64 4.6 19 7.4 19 10.75V16.75L21 18.75V19.75H3V18.75L5 16.75V10.75C5 7.4 7.36 4.6 10.5 3.92V2.75ZM12 5.75C14.76 5.75 17 7.99 17 10.75V17.75H7V10.75C7 7.99 9.24 5.75 12 5.75ZM10.01 20.76C10.01 21.86 10.9 22.75 12 22.75C13.1 22.75 13.99 21.86 13.99 20.76H10.01ZM13 7.75V11.75H11V7.75H13ZM13 15.75V13.75H11V15.75H13Z"
+        />
+      </svg>
+      <div style={{ textAlign: "center" }}>
+        <span style={{ fontWeight: "bold", fontSize: "20px" }}>
+          This is a test site.
+        </span>
+        <br />
+        This version of the Research Catalog website is used for internal
+        testing purposes only. Items cannot be requested from this test site.
+        <br />
+        <a
+          style={{
+            textDecoration: "underline dotted 1px",
+            textUnderlineOffset: "1.5px",
+          }}
+          href="https://www.nypl.org/research/research-catalog"
+        >
+          Go to the live site instead
+        </a>
+      </div>
+    </div>
+  )
+}
+
+export default QABanner
