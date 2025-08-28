@@ -2,16 +2,35 @@ import type { Page, Locator } from "@playwright/test"
 
 export class SearchPage {
   readonly page: Page
-  readonly results_count: Locator
-  readonly keyword: string
   readonly keywordResult: Locator
+  readonly search_input: Locator
+  readonly search_submit_button: Locator
+  readonly resultsHeading: Locator
+  readonly keyword: string
 
   constructor(page: Page, keyword: string) {
     this.page = page
+    this.keyword = keyword
+    this.search_input = page.getByRole("textbox", {
+      name: "Enter one or more keywords.",
+    })
+    this.search_submit_button = page.getByRole("button", {
+      name: "Search",
+      exact: true,
+    })
     this.keywordResult = page
       .locator("#search-results-list")
       .locator("h3")
       .getByRole("link", { name: new RegExp(keyword) })
-    this.results_count = page.locator("#search-results-heading")
+    this.resultsHeading = this.page.getByRole("heading", {
+      name: new RegExp(
+        `^Displaying (\\d+-\\d+|\\d+) of \\d+ results for keywords? "${this.keyword}"$`
+      ),
+    })
+  }
+
+  async searchFor(keyword: string) {
+    await this.search_input.fill(keyword)
+    await this.search_submit_button.click()
   }
 }
