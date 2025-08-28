@@ -10,8 +10,8 @@ describe("VariantSubject model", () => {
     "@type": "variant",
     termLabel: "CS",
     preferredTerms: [
-      { label: "Computer Science", count: 120 },
-      { label: "Computing", count: 45 },
+      { termLabel: "Computer Science", count: 120 },
+      { termLabel: "Computing", count: 45 },
     ],
   }
 

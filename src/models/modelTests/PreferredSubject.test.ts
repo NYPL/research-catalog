@@ -7,9 +7,9 @@ describe("PreferredSubject model", () => {
     uri: "123456",
     termLabel: "Science -- 19th century",
     count: 42,
-    seeAlso: [{ label: "Biology" }, { label: "Physics" }],
-    narrowerTerms: [{ label: "Natural Science -- Chimpanzees" }],
-    broaderTerms: [{ label: "Knowledge" }],
+    seeAlso: [{ termLabel: "Biology" }, { termLabel: "Physics" }],
+    narrowerTerms: [{ termLabel: "Natural Science -- Chimpanzees" }],
+    broaderTerms: [{ termLabel: "Knowledge" }],
   }
 
   it("should create a PreferredSubject instance with expected properties", () => {

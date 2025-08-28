@@ -30,7 +30,7 @@ export type DiscoverySubjectResult =
   | DiscoveryVariantSubjectResult
   | DiscoveryPreferredSubjectResult
 
-export type DiscoveryPreferredTermResult = { label: string; count?: number }
+export type DiscoveryPreferredTermResult = { termLabel: string; count?: number }
 
 export type DiscoveryVariantSubjectResult = {
   "@type": string
