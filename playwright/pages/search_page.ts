@@ -2,19 +2,16 @@ import type { Page, Locator } from "@playwright/test"
 
 export class SearchPage {
   readonly page: Page
-  readonly search_input: Locator
-  readonly search_submit_button: Locator
   readonly results_count: Locator
-  readonly results_title: Locator
+  readonly keyword: string
+  readonly keywordResult: Locator
 
-  constructor(page: Page) {
+  constructor(page: Page, keyword: string) {
     this.page = page
-    this.results_count = page.getByTestId("search-results-heading")
-    this.results_title = page.locator("#search-results-list h3 a")
-  }
-
-  async searchFor(keyword: string) {
-    await this.search_input.fill(keyword)
-    await this.search_submit_button.click()
+    this.keywordResult = page
+      .locator("#search-results-list")
+      .locator("h3")
+      .getByRole("link", { name: new RegExp(keyword) })
+    this.results_count = page.locator("#search-results-heading")
   }
 }
