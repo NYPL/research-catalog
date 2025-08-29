@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added Playwright test for keyword search. [SCC-4844](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4844)
+
 - Remove annotated MARC duplicate values from bib details and log unique values [SCC-4763](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4763)
 - Add QA only banner [SCC-4810](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4810)
 - Update playwright homepage.spec.ts and related page objects to include assertions for footer elements. Also added before hook to that test file. [SCC-4805](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4805)
@@ -41,8 +43,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Simplify winston instantiation [SCC-4807] (https://newyorkpubliclibrary.atlassian.net/browse/SCC-4807)
 - Updated finding aid copy and link [SCC-4803](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4803)
-
-### Added
 
 - Added Playwright tests for RC home page elements. found in /playwright. Deleted dummy test file that was created for initial Playwright install. [SCC-4792](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4792)
 - Added Playwright, the end-to-end testing framework for automating and verifying browser interactions across Chromium, Firefox, and WebKit. [SCC-4772](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4772)
