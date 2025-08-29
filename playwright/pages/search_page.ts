@@ -20,11 +20,10 @@ export class SearchPage {
     })
     this.keywordResult = page
       .locator("#search-results-list")
-      .locator("h3")
       .getByRole("link", { name: new RegExp(keyword) })
     this.resultsHeading = this.page.getByRole("heading", {
       name: new RegExp(
-        `^Displaying (\\d+-\\d+|\\d+) of \\d+ results for keywords? "${this.keyword}"$`
+        `^Displaying (\\d+-\\d+|\\d+) of (over )?\\d{1,3}(,\\d{3})* results for keywords? "${this.keyword}"$`
       ),
     })
   }
