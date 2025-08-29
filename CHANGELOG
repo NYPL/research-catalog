@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+### Updated
+
+- Updated copy/layout of redirected 404s [SCC-4876] (https://newyorkpubliclibrary.atlassian.net/browse/SCC-4876)
+
 ## [1.5.5] 2025-08-28
 
 ### Removed
