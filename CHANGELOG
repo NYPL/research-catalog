@@ -7,13 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+## [1.5.5] 2025-08-28
+
+### Removed
+
+- Remove scan and delivery delay banner [SCC-4888] (https://newyorkpubliclibrary.atlassian.net/browse/SCC-4888)
+
 ### Added
 
 - Added Playwright test for keyword search. [SCC-4844](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4844)
 
 - Remove annotated MARC duplicate values from bib details and log unique values [SCC-4763](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4763)
 - Add QA only banner [SCC-4810](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4810)
-- Updated playwright homepage.spec.ts and related page objects to include assertions for footer elements. Also added before hook to that test file. [SCC-4805](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4805)
+- Update playwright homepage.spec.ts and related page objects to include assertions for footer elements. Also added before hook to that test file. [SCC-4805](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4805)
 
 ## [1.5.4] 2025-08-22
 
