@@ -90,7 +90,7 @@ const SearchFilters = ({
   }
 
   const [focusedFilter, setFocusedFilter] = useState<string | null>(null)
-  if (router.query?.q === "" || !router.query) {
+  if (router.query?.q === "" || !router.query.q) {
     fields = fields.filter((field) => field.label !== "Subject")
   }
   const filters = fields.map((field) => {
