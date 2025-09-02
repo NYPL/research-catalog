@@ -90,9 +90,12 @@ const SearchFilters = ({
   }
 
   const [focusedFilter, setFocusedFilter] = useState<string | null>(null)
+
+  // Only display Subject filter if there's a query term
   if (router.query?.q === "" || !router.query.q) {
     fields = fields.filter((field) => field.label !== "Subject")
   }
+
   const filters = fields.map((field) => {
     const filterData = new SearchResultsFilters(aggregations, field)
     if (filterData.options) {
