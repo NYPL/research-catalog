@@ -135,5 +135,21 @@ describe("SearchFilters", () => {
         expect(audioFilter).not.toBeChecked()
       }, 100)
     })
+    it("does not display subject filter on empty query", async () => {
+      mockRouter.push("/search?q=&search_scope=callnumber")
+      render(component)
+      expect(mockRouter.query).toStrictEqual({
+        q: "",
+        search_scope: "callnumber",
+      })
+      const subjectMultiselect = screen.queryByLabelText(/Subject/, {
+        selector: "button",
+      })
+      const dateMultiselect = screen.queryByLabelText(/Date/, {
+        selector: "button",
+      })
+      expect(subjectMultiselect).not.toBeInTheDocument()
+      expect(dateMultiselect).toBeInTheDocument()
+    })
   })
 })

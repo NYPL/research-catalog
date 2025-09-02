@@ -20,7 +20,7 @@ import DateFilter from "./DateFilter"
 import { useDateFilter } from "../../hooks/useDateFilter"
 import { useFocusContext, idConstants } from "../../context/FocusContext"
 
-const fields = [
+let fields = [
   { value: "buildingLocation", label: "Item location" },
   { value: "format", label: "Format" },
   { value: "language", label: "Language" },
@@ -90,6 +90,9 @@ const SearchFilters = ({
   }
 
   const [focusedFilter, setFocusedFilter] = useState<string | null>(null)
+  if (router.query?.q === "" || !router.query) {
+    fields = fields.filter((field) => field.label !== "Subject")
+  }
   const filters = fields.map((field) => {
     const filterData = new SearchResultsFilters(aggregations, field)
     if (filterData.options) {
