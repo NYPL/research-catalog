@@ -28,7 +28,7 @@ type SearchBrowseFormProps = {
   selectOptions: {
     [key: string]: {
       text: string
-      searchTip?: string
+      searchTip?: string | JSX.Element
       placeholder: string
     }
   }

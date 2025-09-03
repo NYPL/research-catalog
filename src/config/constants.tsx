@@ -1,3 +1,5 @@
+import RCLink from "../components/Links/RCLink/RCLink"
+
 export const BASE_URL = "/research/research-catalog"
 export const SITE_NAME = "Research Catalog | NYPL"
 export const RESULTS_PER_PAGE = 50
@@ -112,8 +114,13 @@ export const SEARCH_FORM_OPTIONS = {
   },
   subject: {
     text: "Subject",
-    searchTip: "Enter a subject keyword or phrase.",
-    placeholder: `${example} Ornithology or Greek Architecture`,
+    searchTip: (
+      <span>
+        Enter a subject keyword or phrase. To browse a list of Subject Headings
+        instead, go to <RCLink href="/browse">Browse the Catalog</RCLink>.
+      </span>
+    ),
+    placeholder: "e.g., Ornithology or Greek Architecture",
   },
 }
 
