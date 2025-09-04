@@ -1,6 +1,7 @@
 import { Banner, Flex } from "@nypl/design-system-react-components"
 import React from "react"
 import styles from "../../../styles/components/Layout.module.scss"
+import ExternalLink from "../Links/ExternalLink/ExternalLink"
 
 /**
  * Renders SH information in a DS banner.
@@ -20,13 +21,26 @@ const SubjectHeadingBanner = () => {
         isDismissible
         content={
           <>
-            <span style={{ fontWeight: "bold" }}>Subject Headings</span> are the
-            most effective strategy for browsing the NYPL Research Catalog.
-            These descriptive authorities, created by the Library of Congress,
-            are used to group similar materials together. Each item in the
-            catalog is typically assigned at least one relevant Subject Heading,
-            and clicking through the hyperlinked Subject Headings is the best
-            way to gain a comprehensive sense of NYPL collections.
+            Browsing is an effective strategy for gaining a comprehensive sense
+            of the NYPL Research Catalog. The{" "}
+            <span style={{ fontWeight: "bold" }}>Subject Headings index</span>{" "}
+            draws from the Library of Congress Subject Headings (
+            <ExternalLink
+              sx={{
+                color: "ui.link.primary !important",
+                textDecoration: "underline dotted 1px",
+                textUnderlineOffset: "2px",
+              }}
+              href="https://id.loc.gov/authorities/subjects.html"
+            >
+              LCSH
+            </ExternalLink>
+            ), which are descriptive authorities created by the Library of
+            Congress and used by libraries to group similar materials together
+            by subject. Each item in the catalog is typically assigned at least
+            one relevant Subject Heading, and clicking through the hyperlinked
+            Subject Headings is a great way to discover more materials about
+            that subject.
           </>
         }
       />
