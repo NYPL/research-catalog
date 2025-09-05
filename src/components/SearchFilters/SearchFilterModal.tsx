@@ -31,7 +31,7 @@ const SearchFilterModal = ({
 
   const handleClear = () => {
     router.push({
-      pathname: "/search",
+      pathname: router.pathname,
       query: getQueryWithoutFiltersOrPage(router.query),
     })
     onClose()
