@@ -91,8 +91,11 @@ const SearchFilters = ({
 
   const [focusedFilter, setFocusedFilter] = useState<string | null>(null)
 
-  // Only display Subject filter if there's a query term
-  if (router.query?.q === "" || !router.query.q) {
+  // Do not display Subject filter if there is no query term and a subject filter is applied
+  if (
+    (router.query?.q === "" || !router.query.q) &&
+    Object.hasOwn(appliedFilters, "subjectLiteral")
+  ) {
     fields = fields.filter((field) => field.label !== "Subject")
   }
 

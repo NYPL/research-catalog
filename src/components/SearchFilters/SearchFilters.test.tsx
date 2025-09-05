@@ -135,12 +135,15 @@ describe("SearchFilters", () => {
         expect(audioFilter).not.toBeChecked()
       }, 100)
     })
-    it("does not display subject filter on empty search query", async () => {
-      mockRouter.push("/search?q=&search_scope=callnumber")
+    it("does not display subject filter on search with no query and SH filter", async () => {
+      mockRouter.push(
+        "/search?q=&search_scope=callnumber&filters%5BsubjectLiteral%5D%5B0%5D=French+fiction."
+      )
       render(component)
       expect(mockRouter.query).toStrictEqual({
         q: "",
         search_scope: "callnumber",
+        "filters[subjectLiteral][0]": "French fiction.",
       })
       const subjectMultiselect = screen.queryByLabelText(/Subject/, {
         selector: "button",
@@ -151,7 +154,7 @@ describe("SearchFilters", () => {
       expect(subjectMultiselect).not.toBeInTheDocument()
       expect(dateMultiselect).toBeInTheDocument()
     })
-    it("does not display subject filter on empty browse query", async () => {
+    it("does not display subject filter on browse SH results page", async () => {
       mockRouter.push(
         "/browse/subjects/Southern%20States%20--%20Social%20conditions."
       )
