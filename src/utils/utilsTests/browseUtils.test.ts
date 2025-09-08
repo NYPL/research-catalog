@@ -155,7 +155,7 @@ describe("browseUtils", () => {
   describe("browseSortOptions", () => {
     it("has expected keys and labels", () => {
       expect(browseSortOptions).toHaveProperty("termLabel_asc")
-      expect(browseSortOptions.termLabel_asc).toBe("Subject heading (A - Z)")
+      expect(browseSortOptions.termLabel_asc).toBe("Subject Heading (A - Z)")
       expect(browseSortOptions.count_desc).toBe("Count (High - Low)")
     })
   })
