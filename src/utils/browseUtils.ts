@@ -140,8 +140,8 @@ export function getBrowseIndexHeading(
  * The allowed keys for the sort field and their respective labels
  */
 export const browseSortOptions: Record<string, string> = {
-  termLabel_asc: "Subject heading (A - Z)",
-  termLabel_desc: "Subject heading (Z - A)",
+  termLabel_asc: "Subject Heading (A - Z)",
+  termLabel_desc: "Subject Heading (Z - A)",
   count_desc: "Count (High - Low)",
   count_asc: "Count (Low - High)",
 }
