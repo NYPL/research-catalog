@@ -19,6 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added Playwright test for title search. [SCC-4852](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4852)
+
 - Added Playwright test for keyword search. [SCC-4844](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4844)
 
 - Remove annotated MARC duplicate values from bib details and log unique values [SCC-4763](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4763)
