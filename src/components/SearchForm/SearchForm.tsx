@@ -83,7 +83,13 @@ const SearchForm = ({
 
   return (
     <div className={`${styles.searchContainer} no-print`}>
-      <div className={styles.searchContainerInner}>
+      <Box
+        sx={{
+          margin: "0 auto",
+          maxWidth: "1280px",
+          px: { base: "s", md: "m", xl: "s" },
+        }}
+      >
         <Text size="body2" className={styles.searchTip}>
           <Icon size="medium" name="errorOutline" iconRotation="rotate180" />
           <Box as="span" className={styles.searchTipText}>
@@ -131,7 +137,7 @@ const SearchForm = ({
             />
           )}
         </Flex>
-      </div>
+      </Box>
     </div>
   )
 }

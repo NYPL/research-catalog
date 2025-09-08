@@ -9,10 +9,6 @@
   }
 }
 
-.searchContainerInner {
-  @include maxWidth;
-}
-
 .searchTip {
   display: flex;
   align-items: flex-start;

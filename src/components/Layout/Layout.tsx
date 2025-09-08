@@ -9,6 +9,7 @@ import {
   Template,
   TemplateContent,
   TemplateMain,
+  Hero,
 } from "@nypl/design-system-react-components"
 import { type RCPage } from "../../types/pageTypes"
 import styles from "../../../styles/components/Layout.module.scss"
@@ -68,14 +69,20 @@ const Layout = ({
                 },
               }}
             />
-            <div className={`${styles.researchHeadingContainer} no-print`}>
-              <Heading
-                id="heading-h1"
-                level="h1"
-                text="Research Catalog"
-                marginBottom="m"
-              />
-            </div>
+
+            <Hero
+              backgroundColor="section.research.primary"
+              variant="tertiary"
+              foregroundColor="ui.white"
+              heading={
+                <Heading
+                  id="heading-h1"
+                  level="h1"
+                  text="Research Catalog"
+                  py={{ base: "m", xl: "unset" }}
+                />
+              }
+            />
             <RCSubNav
               isAuthenticated={isAuthenticated}
               activePage={activePage}
@@ -93,7 +100,9 @@ const Layout = ({
                 align="center"
                 direction="column"
                 sx={{
-                  padding: "2em 2em .5em 2em",
+                  px: { base: "s", md: "m", xl: "s" },
+                  pt: "l",
+                  pb: "xs",
                 }}
               >
                 <EDSBanner />
