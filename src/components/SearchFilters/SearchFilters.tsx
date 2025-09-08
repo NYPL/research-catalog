@@ -94,7 +94,7 @@ const SearchFilters = ({
   // Do not display Subject filter if there is no query term and a subject filter is applied
   if (
     (router.query?.q === "" || !router.query.q) &&
-    Object.hasOwn(appliedFilters, "subjectLiteral")
+    (Object.hasOwn(appliedFilters, "subjectLiteral") || lockedFilterValue)
   ) {
     fields = fields.filter((field) => field.label !== "Subject")
   }
