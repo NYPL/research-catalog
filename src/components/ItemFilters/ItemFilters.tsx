@@ -128,6 +128,7 @@ const ItemFilters = ({
           id="item-filters"
           labelText="Filter by"
           renderMultiSelect={renderMultiSelect}
+          mt="xxs"
         />
         {showDateFilter ? (
           <Box width={{ base: "100%", md: 440 }}>

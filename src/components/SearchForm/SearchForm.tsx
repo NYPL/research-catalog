@@ -121,7 +121,11 @@ const SearchForm = ({
             placeholder,
           }}
         />
-        <Flex direction="column" justifyContent="space-between" mt="s">
+        <Flex
+          direction="column"
+          justifyContent="space-between"
+          mt={{ base: 0, md: "xs" }}
+        >
           <RCLink
             className={styles.advancedSearch}
             href="/search/advanced"
