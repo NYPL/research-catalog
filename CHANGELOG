@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Updated copy/layout of redirected 404s [SCC-4876] (https://newyorkpubliclibrary.atlassian.net/browse/SCC-4876)
 
+### Added
+
+- Added Playwright test for title search. [SCC-4852](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4852)
+
 ## [1.5.5] 2025-08-28
 
 ### Removed
@@ -18,8 +22,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Remove scan and delivery delay banner [SCC-4888] (https://newyorkpubliclibrary.atlassian.net/browse/SCC-4888)
 
 ### Added
-
-- Added Playwright test for title search. [SCC-4852](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4852)
 
 - Added Playwright test for keyword search. [SCC-4844](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4844)
 
