@@ -13,6 +13,6 @@ test.describe("Title Search", () => {
   test("Do a title search and assert that at least 10 returned titles contain the supplied keyword", async () => {
     await searchPage.searchFor(searchterm, "Title")
     await expect(searchPage.resultsHeading).toBeVisible()
-    await expect(await searchPage.keywordResult.count()).toBeGreaterThan(10)
+    await expect(await searchPage.searchResult.count()).toBeGreaterThan(10)
   })
 })
