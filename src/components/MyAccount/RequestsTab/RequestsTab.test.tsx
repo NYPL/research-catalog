@@ -61,34 +61,12 @@ describe("RequestsTab", () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ patronId: processedPatron.id }),
+        body: JSON.stringify({
+          patronId: processedPatron.id,
+          patronBarcode: processedPatron.barcode,
+          itemId: processedHolds[0].itemId,
+        }),
       }
-    )
-  })
-  it("logs when a cancellation is successful", async () => {
-    global.fetch = jest.fn().mockResolvedValueOnce({
-      json: async () => "Canceled",
-      status: 200,
-    } as Response)
-    logger.info = jest.fn()
-    const component = renderWithPatronDataContext()
-    await userEvent.click(component.getAllByText("Cancel request")[0])
-    await userEvent.click(component.getAllByText("Yes, cancel request")[0])
-    expect(logger.info).toHaveBeenCalledWith(
-      "My Account: Patron 6742743 deleted hold 49438192 on item 40367309"
-    )
-  })
-  it("logs when a cancellation fails", async () => {
-    global.fetch = jest.fn().mockResolvedValueOnce({
-      json: async () => "Canceled",
-      status: 500,
-    } as Response)
-    logger.info = jest.fn()
-    const component = renderWithPatronDataContext()
-    await userEvent.click(component.getAllByText("Cancel request")[0])
-    await userEvent.click(component.getAllByText("Yes, cancel request")[0])
-    expect(logger.info).toHaveBeenCalledWith(
-      "My Account: Patron 6742743 attempted and failed to delete hold 49438192 on item 40367309"
     )
   })
 
@@ -120,7 +98,11 @@ describe("RequestsTab", () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ patronId: processedPatron.id }),
+        body: JSON.stringify({
+          patronId: processedPatron.id,
+          patronBarcode: processedPatron.barcode,
+          itemId: processedHolds[0].itemId,
+        }),
       }
     )
     await userEvent.click(component.getAllByText("OK")[0])
@@ -147,7 +129,11 @@ describe("RequestsTab", () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ patronId: processedPatron.id }),
+        body: JSON.stringify({
+          patronId: processedPatron.id,
+          patronBarcode: processedPatron.barcode,
+          itemId: processedHolds[0].itemId,
+        }),
       }
     )
 
@@ -195,6 +181,7 @@ describe("RequestsTab", () => {
           patronId: processedPatron.id,
           freeze: true,
           pickupLocation: "sn",
+          itemId: "23167148",
         }),
       }
     )
@@ -212,6 +199,7 @@ describe("RequestsTab", () => {
           patronId: processedPatron.id,
           freeze: false,
           pickupLocation: "sn",
+          itemId: "23167148",
         }),
       }
     )
