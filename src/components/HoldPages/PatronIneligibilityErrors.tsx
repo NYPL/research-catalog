@@ -63,8 +63,8 @@ const PatronIneligibilityErrors = ({
     <Box mt="xs">
       {ineligibilityReasons.length > 1 ? (
         <>
-          <List type="ul" margin={0} listItems={ineligibilityReasons} />
-          <Text noSpace mt="xs">
+          <List variant="ul" margin={0} listItems={ineligibilityReasons} />
+          <Text mt="xs">
             Please <HoldContactButton item={item}>contact us</HoldContactButton>{" "}
             for assistance if required.
           </Text>

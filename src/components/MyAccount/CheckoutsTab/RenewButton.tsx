@@ -36,7 +36,7 @@ const RenewButton = ({
   } = useContext(PatronDataContext)
 
   const successModalProps = {
-    type: "default",
+    variant: "default",
     bodyContent: (
       <Box className={styles.modalBody}>
         <Text>
@@ -62,7 +62,7 @@ const RenewButton = ({
     },
   }
   const failureModalProps = {
-    type: "default",
+    variant: "default",
     bodyContent: (
       <Box className={styles.modalBody}>
         <Text>
@@ -138,7 +138,7 @@ const RenewButton = ({
   return (
     <>
       <Button
-        buttonType="secondary"
+        variant="secondary"
         id={`renew-${checkout.id}`}
         onClick={handleClick}
         aria-disabled={isButtonDisabled || showLoadingState}

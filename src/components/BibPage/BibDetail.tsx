@@ -26,13 +26,13 @@ const BibDetails = ({ details, heading }: BibDetailsProps) => {
       <List
         title={
           heading && (
-            <Heading level="three" border="none">
+            <Heading level="h3" size="heading4" border="none">
               {heading}
             </Heading>
           )
         }
         noStyling
-        type="dl"
+        variant="dl"
         showRowDividers={false}
         className={`${styles.bibDetails} ${styles.inBibPage}`}
       >
@@ -60,7 +60,7 @@ const DetailElement = (label: string, listChildren: ReactNode[]) => {
     <>
       <dt>{label}</dt>
       <dd>
-        <List noStyling data-testid={kebabCase(label)} type="ol">
+        <List noStyling data-testid={kebabCase(label)} variant="ol">
           {listChildren}
         </List>
       </dd>
@@ -137,7 +137,7 @@ const LinkElement = (url: BibDetailURL, linkType: string) => {
       href={url.url}
       key={url.url}
       // external link does not include this prop
-      includeBaseUrl={true}
+      {...(linkType === "internal" ? { includeBaseUrl: true } : {})}
       textDecoration="none"
     >
       {url.urlLabel}

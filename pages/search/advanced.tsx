@@ -154,9 +154,11 @@ export default function AdvancedSearch({
         {/* Always render the wrapper element that will display the
           dynamically rendered notification for focus management */}
         <Box tabIndex={-1} ref={notificationRef}>
-          {alert && <Banner type="negative" content={errorMessage} mb="s" />}
+          {alert && <Banner variant="negative" content={errorMessage} mb="s" />}
         </Box>
-        <Heading level="h2">Advanced search</Heading>
+        <Heading level="h2" mb="s">
+          Advanced search
+        </Heading>
         <Form
           id="advancedSearchForm"
           // We are using a post request on advanced search when JS is disabled
@@ -233,7 +235,7 @@ export default function AdvancedSearch({
               <RCLink
                 display="flex"
                 href={goBackHref}
-                type="buttonSecondary"
+                variant="buttonSecondary"
                 id="back-to-search"
               >
                 <Icon
