@@ -60,7 +60,7 @@ const PatronIneligibilityErrors = ({
   if (!ineligibilityReasons.length) return null
 
   return (
-    <Box mt="xs">
+    <Box>
       {ineligibilityReasons.length > 1 ? (
         <>
           <List variant="ul" margin={0} listItems={ineligibilityReasons} />

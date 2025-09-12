@@ -45,7 +45,7 @@ const HoldRequestErrorBanner = ({
       content={
         <Box>
           {HOLD_PAGE_CONTACT_PREFIXES?.[errorStatus] && (
-            <Text mt="xs">
+            <Text>
               {HOLD_PAGE_CONTACT_PREFIXES?.[errorStatus]}
               {" Please "}
               <HoldContactButton item={item}>contact us</HoldContactButton> for
