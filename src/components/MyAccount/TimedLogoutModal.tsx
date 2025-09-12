@@ -6,6 +6,7 @@ import {
   CardActions,
   Spacer,
   Button,
+  Text,
 } from "@nypl/design-system-react-components"
 import React, { useEffect, useState, useCallback, useRef } from "react"
 import styles from "../../../styles/components/TimedLogoutModal.module.scss"
@@ -114,13 +115,11 @@ const TimedLogoutModal = () => {
         >
           <Card
             layout="row"
-            isBordered={true}
             backgroundColor="ui.bg.default"
             className={styles.logoutModalBody}
           >
             <CardHeading
               sx={{ display: "flex", justifyContent: "space-between" }}
-              subtitle="Do you want to stay logged in?"
               size="heading6"
             >
               Your session is about to expire
@@ -130,6 +129,7 @@ const TimedLogoutModal = () => {
               </Box>
             </CardHeading>
             <CardContent>
+              <Text mb="s"> Do you want to stay logged in? </Text>
               <CardActions className={styles.modalButtons}>
                 <Spacer />
                 <Button
