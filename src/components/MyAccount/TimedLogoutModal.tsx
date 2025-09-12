@@ -116,6 +116,7 @@ const TimedLogoutModal = () => {
           <Card
             layout="row"
             backgroundColor="ui.bg.default"
+            width={{ base: "100%", md: "472px" }}
             className={styles.logoutModalBody}
           >
             <CardHeading
