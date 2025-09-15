@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@nypl/design-system-react-components": "4.0.1",
+    "@nypl/nypl-core-objects": "3.0.4",
     "@nypl/nypl-data-api-client": "1.0.5",
     "@nypl/pickup-time-estimator": "1.5.2",
     "@nypl/sierra-wrapper": "1.1.0",

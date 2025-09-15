@@ -1,0 +1,505 @@
+{
+  "collection": {
+    "nyplCollection:bur": {
+      "holdingLocations": [
+        "bur51"
+      ],
+      "code": "bur",
+      "label": "Yoseloff Business Center"
+    },
+    "nyplCollection:mab": {
+      "holdingLocations": [
+        "mab01",
+        "mab0v",
+        "mab82",
+        "mab88",
+        "mab89",
+        "mab92",
+        "mab98",
+        "mab99",
+        "mabb1",
+        "mabb2",
+        "mabb3",
+        "mabm2",
+        "rcmb2",
+        "rcmb8",
+        "rcmb9"
+      ],
+      "code": "mab",
+      "label": "Art & Architecture Collection"
+    },
+    "nyplCollection:mac": {
+      "holdingLocations": [
+        "mac82",
+        "macc2"
+      ],
+      "code": "mac",
+      "label": "Arents Collection"
+    },
+    "nyplCollection:mae": {
+      "holdingLocations": [
+        "mae82",
+        "mae92",
+        "maee2"
+      ],
+      "code": "mae",
+      "label": "Berg Collection"
+    },
+    "nyplCollection:maf": {
+      "holdingLocations": [
+        "maf32",
+        "maf82",
+        "maf88",
+        "maf92",
+        "maf98",
+        "maf99",
+        "maff1",
+        "maff3",
+        "rcmf2",
+        "rcmf8",
+        "rcmf9"
+      ],
+      "code": "maf",
+      "label": "Dorot Jewish Division"
+    },
+    "nyplCollection:mag": {
+      "holdingLocations": [
+        "mag82",
+        "mag92",
+        "mag98",
+        "magg1",
+        "magg2",
+        "rcmg2",
+        "rcmg8",
+        "rcmg9",
+        "magg3"
+      ],
+      "code": "mag",
+      "label": "Milstein Division"
+    },
+    "nyplCollection:mak": {
+      "holdingLocations": [
+        "mak32",
+        "mak82",
+        "makk3"
+      ],
+      "code": "mak",
+      "label": "DeWitt Wallace Periodical Room"
+    },
+    "nyplCollection:mal": {
+      "holdingLocations": [
+        "mai32",
+        "mai82",
+        "mai92",
+        "mal17",
+        "mal23",
+        "mal42",
+        "mal72",
+        "mal82",
+        "mal92",
+        "mala",
+        "mala1",
+        "malc",
+        "mall1",
+        "malm2",
+        "maln",
+        "maln1",
+        "malv2",
+        "malw",
+        "malw1",
+        "rc2ma",
+        "rc2mj",
+        "rcma2",
+        "rcmi2",
+        "rcmj2",
+        "rcml2",
+        "rcml8"
+      ],
+      "code": "mal",
+      "label": "General Research Division"
+    },
+    "nyplCollection:mao": {
+      "holdingLocations": [
+        "mao82",
+        "mao92",
+        "maor2",
+        "rcmo2"
+      ],
+      "code": "mao",
+      "label": "Manuscripts and Archives Division"
+    },
+    "nyplCollection:map": {
+      "holdingLocations": [
+        "map08",
+        "map32",
+        "map42",
+        "map82",
+        "map92",
+        "map98",
+        "map99",
+        "mapp1",
+        "mapp2",
+        "mapp3",
+        "mapp8",
+        "mapp9",
+        "rcmp2",
+        "rcmp8",
+        "rcmp9"
+      ],
+      "code": "map",
+      "label": "Lionel Pincus and Princess Firyal Map Division"
+    },
+    "nyplCollection:maq": {
+      "holdingLocations": [
+        "maqq2",
+        "rcmq2"
+      ],
+      "code": "maq",
+      "label": "Pforzheimer Collection"
+    },
+    "nyplCollection:mar": {
+      "holdingLocations": [
+        "mar82",
+        "mar92",
+        "mard2",
+        "marr2",
+        "rcmr2"
+      ],
+      "code": "mar",
+      "label": "Rare Book Division"
+    },
+    "nyplCollection:mas": {
+      "holdingLocations": [
+        "mas82",
+        "mas92",
+        "masb2",
+        "mass2",
+        "masu2",
+        "rcms2"
+      ],
+      "code": "mas",
+      "label": "Photography Collection"
+    },
+    "nyplCollection:mau": {
+      "holdingLocations": [
+        "mauu1",
+        "mauu2"
+      ],
+      "code": "mau",
+      "label": "Print Collection"
+    },
+    "nyplCollection:pad": {
+      "holdingLocations": [
+        "pad11",
+        "pad22",
+        "pad28",
+        "pad32",
+        "pad38",
+        "pad42",
+        "rcpd2",
+        "rcpd8",
+        "rcpd9"
+      ],
+      "code": "pad",
+      "label": "Dance Division"
+    },
+    "nyplCollection:paf": {
+      "holdingLocations": [
+        "paf28",
+        "paf29",
+        "rcpf2",
+        "rcpf8",
+        "rcpf9"
+      ],
+      "code": "paf",
+      "label": "Theatre on Film and Tape Archive"
+    },
+    "nyplCollection:pah": {
+      "holdingLocations": [
+        "pah11",
+        "pah22",
+        "pah32",
+        "pah38",
+        "pah42",
+        "rcph2",
+        "rcph8",
+        "rcph9"
+      ],
+      "code": "pah",
+      "label": "Archives of Recorded Sound"
+    },
+    "nyplCollection:pam": {
+      "holdingLocations": [
+        "pam11",
+        "pam22",
+        "pam32",
+        "pam38",
+        "pam42",
+        "pam48",
+        "rcpm2",
+        "rcpm8",
+        "rcpm9"
+      ],
+      "code": "pam",
+      "label": "Music Division"
+    },
+    "nyplCollection:pat": {
+      "holdingLocations": [
+        "pat11",
+        "pat22",
+        "pat28",
+        "pat32",
+        "pat38",
+        "pat42",
+        "pat48",
+        "rcpt2",
+        "rcpt8",
+        "rcpt9"
+      ],
+      "code": "pat",
+      "label": "Theatre Division"
+    },
+    "nyplCollection:pav": {
+      "holdingLocations": [
+        "pav22",
+        "pav28",
+        "pav32",
+        "pav38",
+        "rcpr2",
+        "rcpr8",
+        "rcpr9"
+      ],
+      "code": "pav",
+      "label": "Reserve Film and Video"
+    },
+    "nyplCollection:scb": {
+      "holdingLocations": [
+        "scbb2",
+        "rccb2",
+        "rccb8",
+        "rccb9"
+      ],
+      "code": "scb",
+      "label": "Moving Image and Recorded Sound Division"
+    },
+    "nyplCollection:scc": {
+      "holdingLocations": [
+        "sccc2",
+        "sccc3",
+        "rcca9"
+      ],
+      "code": "scc",
+      "label": "Art and Artifacts Division"
+    },
+    "nyplCollection:scd": {
+      "holdingLocations": [
+        "scdd1",
+        "scdd2",
+        "rccd2",
+        "rccd8",
+        "rccd9"
+      ],
+      "code": "scd",
+      "label": "Manuscripts, Archives and Rare Books Division"
+    },
+    "nyplCollection:sce": {
+      "holdingLocations": [
+        "scedd",
+        "scee2",
+        "rcce2",
+        "rcce8",
+        "rcce9"
+      ],
+      "code": "sce",
+      "label": "Photographs and Prints Division"
+    },
+    "nyplCollection:scf": {
+      "holdingLocations": [
+        "scff1",
+        "scff2",
+        "scff3",
+        "rc2cf",
+        "rc2cm",
+        "rccf2",
+        "rccf8",
+        "rccf9"
+      ],
+      "code": "scf",
+      "label": "Jean Blackwell Hutson Research and Reference Division"
+    }
+  },
+  "format": {
+    "3": {
+      "id": "format:3",
+      "code": "3",
+      "label": "E-Video"
+    },
+    "4": {
+      "id": "format:4",
+      "code": "4",
+      "label": "Tablet"
+    },
+    "5": {
+      "id": "format:5",
+      "code": "5",
+      "label": "Read-Along Book"
+    },
+    "7": {
+      "id": "format:7",
+      "code": "7",
+      "label": "Teacher Audio"
+    },
+    "8": {
+      "id": "format:8",
+      "code": "8",
+      "label": "Teacher Set"
+    },
+    "-": {
+      "id": "format:-",
+      "code": "-",
+      "label": "Miscellaneous"
+    },
+    "a": {
+      "id": "format:a",
+      "code": "a",
+      "label": "Book/Text"
+    },
+    "b": {
+      "id": "format:b",
+      "code": "b",
+      "label": "Blu-ray"
+    },
+    "c": {
+      "id": "format:c",
+      "code": "c",
+      "label": "Notated music"
+    },
+    "d": {
+      "id": "format:d",
+      "code": "d",
+      "label": "Manuscript notated music"
+    },
+    "e": {
+      "id": "format:e",
+      "code": "e",
+      "label": "Map"
+    },
+    "g": {
+      "id": "format:g",
+      "code": "g",
+      "label": "Film, Slide, etc."
+    },
+    "h": {
+      "id": "format:h",
+      "code": "h",
+      "label": "Microform"
+    },
+    "i": {
+      "id": "format:i",
+      "code": "i",
+      "label": "Spoken word recording"
+    },
+    "j": {
+      "id": "format:j",
+      "code": "j",
+      "label": "Musical recording"
+    },
+    "k": {
+      "id": "format:k",
+      "code": "k",
+      "label": "Picture"
+    },
+    "l": {
+      "id": "format:l",
+      "code": "l",
+      "label": "Large print"
+    },
+    "m": {
+      "id": "format:m",
+      "code": "m",
+      "label": "Computer file"
+    },
+    "n": {
+      "id": "format:n",
+      "code": "n",
+      "label": "E-Audiobook"
+    },
+    "o": {
+      "id": "format:o",
+      "code": "o",
+      "label": "Kit"
+    },
+    "p": {
+      "id": "format:p",
+      "code": "p",
+      "label": "Archival Mix"
+    },
+    "r": {
+      "id": "format:r",
+      "code": "r",
+      "label": "3-D Object"
+    },
+    "s": {
+      "id": "format:s",
+      "code": "s",
+      "label": "VHS"
+    },
+    "t": {
+      "id": "format:t",
+      "code": "t",
+      "label": "Manuscript"
+    },
+    "u": {
+      "id": "format:u",
+      "code": "u",
+      "label": "Audiobook"
+    },
+    "v": {
+      "id": "format:v",
+      "code": "v",
+      "label": "DVD"
+    },
+    "w": {
+      "id": "format:w",
+      "code": "w",
+      "label": "Web Resource"
+    },
+    "x": {
+      "id": "format:x",
+      "code": "x",
+      "label": "Game"
+    },
+    "y": {
+      "id": "format:y",
+      "code": "y",
+      "label": "Music CD"
+    },
+    "z": {
+      "id": "format:z",
+      "code": "z",
+      "label": "E-Book"
+    }
+  },
+  "buildingLocation": [
+    {
+      "value": "ma",
+      "label": "Stephen A. Schwarzman Building (SASB)"
+    },
+    {
+      "value": "pa",
+      "label": "The New York Public Library for the Performing Arts (LPA)"
+    },
+    {
+      "value": "sc",
+      "label": "Schomburg Center for Research in Black Culture"
+    },
+    {
+      "value": "rc",
+      "label": "Offsite - request in advance"
+    },
+    {
+      "value": "bu",
+      "label": "Stavros Niarchos Foundation Library (SNFL)"
+    }
+  ]
+}
