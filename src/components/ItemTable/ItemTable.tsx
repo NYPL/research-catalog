@@ -28,11 +28,9 @@ const ItemTable = ({ itemTableData }: ItemTableProps) => {
             ? [
                 { width: 272, minWidth: 85 },
                 { width: 272, minWidth: 85 },
-                { width: 272, minWidth: 85 },
               ]
             : [
                 { width: "auto", minWidth: 250 },
-                { width: "14%", minWidth: 100 },
                 { width: "14%", minWidth: 100 },
                 { width: "14%", minWidth: 100 },
                 { width: "14%", minWidth: 100 },
