@@ -1,5 +1,5 @@
 import type { SearchParams, SearchFormInputField } from "../types/searchTypes"
-import { searchAggregations } from "../config/aggregations"
+import searchAggregations from "../../data/searchAggregations.json"
 import { BASE_URL } from "../config/constants"
 
 export const textInputFields: SearchFormInputField[] = [
@@ -35,11 +35,11 @@ export const languageOptions = [
     label: "-- Any -- ",
   },
 ].concat(
-  searchAggregations.language.sort((a, b) => (a.label > b.label ? 1 : -1))
+  searchAggregations.languages.sort((a, b) => (a.label > b.label ? 1 : -1))
 )
 
 // Returns an array of objects of Material Type options derived from the aggregations sorted by label text
-export const formatOptions = searchAggregations.format.sort((a, b) =>
+export const formatOptions = searchAggregations.formats.sort((a, b) =>
   a.label > b.label ? 1 : -1
 )
 

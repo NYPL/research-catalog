@@ -20,7 +20,7 @@ import {
   Banner,
   Icon,
 } from "@nypl/design-system-react-components"
-
+import searchAggregations from "../../data/searchAggregations.json"
 import Layout from "../../src/components/Layout/Layout"
 import {
   BASE_URL,
@@ -45,7 +45,6 @@ import { appConfig } from "../../src/config/config"
 import SearchFilterCheckboxField from "../../src/components/AdvancedSearch/SearchFilterCheckboxField"
 import CancelSubmitButtonGroup from "../../src/components/AdvancedSearch/CancelSubmitButtonGroup"
 import { formatOptions } from "../../src/utils/advancedSearchUtils"
-import { searchAggregations } from "../../src/config/aggregations"
 import RCLink from "../../src/components/Links/RCLink/RCLink"
 import RCHead from "../../src/components/Head/RCHead"
 import { useDateFilter } from "../../src/hooks/useDateFilter"
