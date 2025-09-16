@@ -70,7 +70,7 @@ describe("BibDetail component", () => {
     })
   })
   describe("text only details", () => {
-    it("single value", () => {
+    it("single value: title", () => {
       render(<BibDetails details={noParallelsBibModel.topDetails} />, {
         wrapper: MemoryRouterProvider,
       })
@@ -78,6 +78,15 @@ describe("BibDetail component", () => {
       const title = screen.getByText("Spaghetti! / Gérard de Cortanze.")
       expect(titleLabel).toBeInTheDocument()
       expect(title).toBeInTheDocument()
+    })
+    it("single value: format", () => {
+      render(<BibDetails details={noParallelsBibModel.topDetails} />, {
+        wrapper: MemoryRouterProvider,
+      })
+      const formatLabel = screen.getByText("Format")
+      const format = screen.getByText("Text")
+      expect(formatLabel).toBeInTheDocument()
+      expect(format).toBeInTheDocument()
     })
     it("renders multiple values, primaries and orphaned parallels", () => {
       render(<BibDetails details={parallelsBibModel.topDetails} />)

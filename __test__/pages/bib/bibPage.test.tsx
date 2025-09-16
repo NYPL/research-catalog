@@ -196,14 +196,6 @@ describe("Bib Page Item Table", () => {
     const checkboxGroups = screen.getAllByTestId("checkbox-group")
 
     await userEvent.click(checkboxGroups[0].querySelector("input"))
-    await userEvent.click(checkboxGroups[1].querySelector("input"))
-    expect(mockRouter.asPath).toBe(
-      "/bib/pb5579193?item_format=Text&item_status=status%3Aa"
-    )
-
-    await userEvent.click(
-      screen.getByLabelText("remove 1 item selected from Format")
-    )
 
     expect(mockRouter.asPath).toBe("/bib/pb5579193?item_status=status%3Aa")
 
@@ -221,7 +213,7 @@ describe("Bib Page Item Table", () => {
 
     const tagButton = screen.queryByTestId("ds-tagSetFilter-tags")
     expect(tagButton).toHaveTextContent("Text")
-    expect(mockRouter.asPath).toBe("/bib/pb5579193?item_format=Text")
+    expect(mockRouter.asPath).toBe("/bib/pb5579193?item_status=status")
 
     await userEvent.click(tagButton)
     expect(screen.queryByTestId("ds-tagSetFilter-tags")).not.toBeInTheDocument()
@@ -232,9 +224,6 @@ describe("Bib Page Item Table", () => {
     await userEvent.click(
       screen.getAllByTestId("checkbox-group")[0].querySelector("input")
     )
-    await userEvent.click(
-      screen.getAllByTestId("checkbox-group")[1].querySelector("input")
-    )
     await userEvent.type(screen.queryByPlaceholderText("YYYY"), "2005")
 
     await userEvent.click(
@@ -242,7 +231,7 @@ describe("Bib Page Item Table", () => {
     )
 
     expect(mockRouter.asPath).toBe(
-      "/bib/pb5579193?item_format=Text&item_status=status%3Aa&item_date=2005"
+      "/bib/pb5579193?item_status=status%3Aa&item_date=2005"
     )
     await userEvent.click(screen.getByText("Clear filters"))
 
