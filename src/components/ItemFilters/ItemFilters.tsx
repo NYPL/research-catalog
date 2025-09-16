@@ -36,7 +36,7 @@ interface ItemFilterContainerProps {
 const ItemFilters = ({
   itemAggregations,
   handleFiltersChange,
-  appliedFilters = { location: [], format: [], status: [], year: [] },
+  appliedFilters = { location: [], status: [], year: [] },
   filtersAreApplied = false,
   showDateFilter = false,
 }: ItemFilterContainerProps) => {
