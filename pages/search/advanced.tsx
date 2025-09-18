@@ -207,7 +207,7 @@ export default function AdvancedSearch({
             </Flex>
             <Flex direction="column" gap="l" grow="1">
               <SearchFilterCheckboxField
-                options={searchAggregations.buildingLocation}
+                options={searchAggregations.locations}
                 name="location"
                 label="Item location"
                 handleCheckboxChange={(e) =>
