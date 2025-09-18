@@ -103,7 +103,9 @@ describe("Advanced Search Form", () => {
   })
   it("can check location checkboxes", async () => {
     const location = searchAggregations.buildingLocation[0]
-    await userEvent.click(screen.getByLabelText(location.label as string))
+    await userEvent.click(
+      screen.getByLabelText(new RegExp(location.label as string, "i"))
+    )
     submit()
     expect(mockRouter.asPath).toBe(
       `/search?q=&filters%5BbuildingLocation%5D%5B0%5D=${location.value}&searched_from=advanced`
