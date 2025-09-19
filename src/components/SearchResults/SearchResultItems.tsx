@@ -2,14 +2,14 @@ import { Box, Text } from "@nypl/design-system-react-components"
 import type ItemTableData from "../../models/ItemTableData"
 import StatusLinks from "../ItemTable/StatusLinks"
 
-interface ItemTableProps {
+interface SearchResultItemsProps {
   itemTableData: ItemTableData
 }
 
 /**
- * Displays item format and
+ * Displays item information for search result card.
  */
-const SearchResultItems = ({ itemTableData }: ItemTableProps) => {
+const SearchResultItems = ({ itemTableData }: SearchResultItemsProps) => {
   const { tableHeadings, tableData, items } = itemTableData
   return (
     <Box display="grid">
@@ -27,7 +27,7 @@ const SearchResultItems = ({ itemTableData }: ItemTableProps) => {
               <td
                 style={{
                   width: "181px",
-                  minWidth: "85px",
+                  minWidth: "60px",
                 }}
               >
                 <Text
