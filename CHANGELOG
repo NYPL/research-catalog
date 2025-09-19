@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added Playwright test for journal title search. [SCC-4854](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4854)
 - Added Playwright test for author search. [SCC-4853](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4853)
 - Added Playwright test for title search. [SCC-4852](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4852)
 
