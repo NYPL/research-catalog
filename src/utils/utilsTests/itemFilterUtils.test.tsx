@@ -43,11 +43,9 @@ describe("Item Filter Utils", () => {
     it("parses locations including recap locations", () => {
       const query = {
         item_location: "loc:rc2ma,loc:mal",
-        item_format: "Text",
         item_status: "status:a,status:na",
       }
       expect(parseItemFilterQueryParams(query)).toEqual({
-        format: ["Text"],
         location: ["loc:mal", "Offsite"],
         status: ["status:a", "status:na"],
         year: [],
@@ -56,11 +54,9 @@ describe("Item Filter Utils", () => {
     it("parses locations including multiple recap locations", () => {
       const query = {
         item_location: "loc:rc2ma,loc:rc3ma,loc:rc4ma,loc:abc",
-        item_format: "Text",
         item_status: "status:a,status:na",
       }
       expect(parseItemFilterQueryParams(query)).toEqual({
-        format: ["Text"],
         location: ["loc:abc", "Offsite"],
         status: ["status:a", "status:na"],
         year: [],
@@ -70,7 +66,6 @@ describe("Item Filter Utils", () => {
   describe("buildItemFilterQuery", () => {
     it("maps offsite back to the recap locations", () => {
       const query = {
-        format: ["Text"],
         location: ["loc:abc", "Offsite"],
         status: ["status:a", "status:na"],
         year: [],
@@ -78,13 +73,11 @@ describe("Item Filter Utils", () => {
       const recapLocations = "loc:rc2ma,loc:rc3ma,loc:rc4ma"
       expect(buildItemFilterQuery(query, recapLocations)).toStrictEqual({
         item_location: "loc:abc,loc:rc2ma,loc:rc3ma,loc:rc4ma",
-        item_format: "Text",
         item_status: "status:a,status:na",
       })
     })
     it("can handle only one param", () => {
       const query = {
-        format: [],
         location: ["loc:abc", "Offsite"],
         status: [],
         year: [],
@@ -100,7 +93,6 @@ describe("Item Filter Utils", () => {
     const query = parseItemFilterQueryParams({
       item_location: "loc:rc2ma,loc:rcma2",
       item_status: "status:a",
-      item_format: "Text",
       item_date: "2005",
     })
     const emptyQuery = parseItemFilterQueryParams({})
@@ -118,7 +110,6 @@ describe("Item Filter Utils", () => {
           id: "Offsite",
           label: "Location > Offsite",
         },
-        { id: "Text", label: "Format > Text" },
         {
           id: "status:a",
           label: "Status > Available",

@@ -12,7 +12,6 @@ export type FilterCheckbox = { id: string; name: string }
 
 export type AppliedItemFilters = {
   location: string[]
-  format: string[]
   status: string[]
   year: string[]
 }
@@ -26,7 +25,6 @@ export interface AggregationOption {
 /* eslint-disable @typescript-eslint/naming-convention */
 export type ItemFilterQueryParams = {
   item_location?: string
-  item_format?: string
   item_status?: string
   item_date?: string
 }

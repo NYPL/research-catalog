@@ -36,7 +36,7 @@ interface ItemFilterContainerProps {
 const ItemFilters = ({
   itemAggregations,
   handleFiltersChange,
-  appliedFilters = { location: [], format: [], status: [], year: [] },
+  appliedFilters = { location: [], status: [], year: [] },
   filtersAreApplied = false,
   showDateFilter = false,
 }: ItemFilterContainerProps) => {
@@ -47,11 +47,15 @@ const ItemFilters = ({
   const [invalidYear, setInvalidYear] = useState(false)
 
   const filterData = useRef<ItemFilterData[]>(
-    itemAggregations.map((aggregation: Aggregation) => {
-      if (aggregation.field === "location")
-        return new LocationFilterData(aggregation)
-      else return new ItemFilterData(aggregation)
-    })
+    itemAggregations
+      .filter((aggregation: Aggregation) => aggregation.field !== "format")
+      .map((aggregation: Aggregation) => {
+        if (aggregation.field === "location") {
+          return new LocationFilterData(aggregation)
+        } else {
+          return new ItemFilterData(aggregation)
+        }
+      })
   ).current
 
   const appliedFiltersTagSetData = buildAppliedFiltersTagSetData(
@@ -184,6 +188,7 @@ const ItemFilters = ({
           onClear={() => handleClearFilterGroup(checkboxGroup.id)}
           width={multiSelectWidth}
           closeOnBlur
+          mt={{ base: "0", md: "6px" }}
         />
       ) : null
     })
