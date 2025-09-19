@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next"
 import nyplApiClient from "../../src/server/nyplApiClient"
 
 // Fetch all advanced search vocabularies from Discovery API. Exposes this endpoint
-// for `load-search-aggs`.
+// for `load-search-vocabs`.
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse

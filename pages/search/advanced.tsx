@@ -20,7 +20,6 @@ import {
   Banner,
   Icon,
 } from "@nypl/design-system-react-components"
-import searchAggregations from "../../data/searchAggregations.json"
 import Layout from "../../src/components/Layout/Layout"
 import {
   BASE_URL,
@@ -49,6 +48,7 @@ import RCLink from "../../src/components/Links/RCLink/RCLink"
 import RCHead from "../../src/components/Head/RCHead"
 import { useDateFilter } from "../../src/hooks/useDateFilter"
 import DateFilter from "../../src/components/SearchFilters/DateFilter"
+import { searchVocabularies } from "../../data/searchVocabularies"
 
 export const defaultEmptySearchErrorMessage =
   "Error: please enter at least one field to submit an advanced search."
@@ -207,7 +207,7 @@ export default function AdvancedSearch({
             </Flex>
             <Flex direction="column" gap="l" grow="1">
               <SearchFilterCheckboxField
-                options={searchAggregations.locations}
+                options={searchVocabularies.parentLocations}
                 name="location"
                 label="Item location"
                 handleCheckboxChange={(e) =>

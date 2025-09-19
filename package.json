@@ -14,7 +14,7 @@
     "test-watch": "jest --watch",
     "test-watch-quiet": "DEBUG_PRINT_LIMIT=0 npm run test-watch",
     "coverage": "jest --coverage",
-    "load-search-aggs": "concurrently -k -n \"NEXT,SCRIPT\" -c \"blue,magenta\" \"npm run dev\" \"npx tsx scripts/load-search-aggs.ts\""
+    "load-search-vocabs": "concurrently -k -n \"NEXT,SCRIPT\" -c \"blue,magenta\" \"npm run dev\" \"npx tsx scripts/load-search-vocabs.ts\""
   },
   "dependencies": {
     "@nypl/design-system-react-components": "4.0.1",

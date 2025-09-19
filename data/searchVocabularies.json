@@ -17,10 +17,6 @@
       "label": "Teacher Audio"
     },
     {
-      "value": "8",
-      "label": "Teacher Set"
-    },
-    {
       "value": "-",
       "label": "Miscellaneous"
     },
@@ -109,10 +105,6 @@
       "label": "Web Resource"
     },
     {
-      "value": "x",
-      "label": "Game"
-    },
-    {
       "value": "y",
       "label": "Music CD"
     },
@@ -125,7 +117,9 @@
     {
       "value": "bur",
       "label": "Yoseloff Business Center",
-      "holdingLocations": ["bur51"]
+      "holdingLocations": [
+        "bur51"
+      ]
     },
     {
       "value": "mab",
@@ -151,12 +145,19 @@
     {
       "value": "mac",
       "label": "Arents Collection",
-      "holdingLocations": ["mac82", "macc2"]
+      "holdingLocations": [
+        "mac82",
+        "macc2"
+      ]
     },
     {
       "value": "mae",
       "label": "Berg Collection",
-      "holdingLocations": ["mae82", "mae92", "maee2"]
+      "holdingLocations": [
+        "mae82",
+        "mae92",
+        "maee2"
+      ]
     },
     {
       "value": "maf",
@@ -193,7 +194,11 @@
     {
       "value": "mak",
       "label": "DeWitt Wallace Periodical Room",
-      "holdingLocations": ["mak32", "mak82", "makk3"]
+      "holdingLocations": [
+        "mak32",
+        "mak82",
+        "makk3"
+      ]
     },
     {
       "value": "mal",
@@ -230,7 +235,12 @@
     {
       "value": "mao",
       "label": "Manuscripts and Archives Division",
-      "holdingLocations": ["mao82", "mao92", "maor2", "rcmo2"]
+      "holdingLocations": [
+        "mao82",
+        "mao92",
+        "maor2",
+        "rcmo2"
+      ]
     },
     {
       "value": "map",
@@ -256,22 +266,41 @@
     {
       "value": "maq",
       "label": "Pforzheimer Collection",
-      "holdingLocations": ["maqq2", "rcmq2"]
+      "holdingLocations": [
+        "maqq2",
+        "rcmq2"
+      ]
     },
     {
       "value": "mar",
       "label": "Rare Book Division",
-      "holdingLocations": ["mar82", "mar92", "mard2", "marr2", "rcmr2"]
+      "holdingLocations": [
+        "mar82",
+        "mar92",
+        "mard2",
+        "marr2",
+        "rcmr2"
+      ]
     },
     {
       "value": "mas",
       "label": "Photography Collection",
-      "holdingLocations": ["mas82", "mas92", "masb2", "mass2", "masu2", "rcms2"]
+      "holdingLocations": [
+        "mas82",
+        "mas92",
+        "masb2",
+        "mass2",
+        "masu2",
+        "rcms2"
+      ]
     },
     {
       "value": "mau",
       "label": "Print Collection",
-      "holdingLocations": ["mauu1", "mauu2"]
+      "holdingLocations": [
+        "mauu1",
+        "mauu2"
+      ]
     },
     {
       "value": "pad",
@@ -291,7 +320,13 @@
     {
       "value": "paf",
       "label": "Theatre on Film and Tape Archive",
-      "holdingLocations": ["paf28", "paf29", "rcpf2", "rcpf8", "rcpf9"]
+      "holdingLocations": [
+        "paf28",
+        "paf29",
+        "rcpf2",
+        "rcpf8",
+        "rcpf9"
+      ]
     },
     {
       "value": "pah",
@@ -354,22 +389,43 @@
     {
       "value": "scb",
       "label": "Moving Image and Recorded Sound Division",
-      "holdingLocations": ["scbb2", "rccb2", "rccb8", "rccb9"]
+      "holdingLocations": [
+        "scbb2",
+        "rccb2",
+        "rccb8",
+        "rccb9"
+      ]
     },
     {
       "value": "scc",
       "label": "Art and Artifacts Division",
-      "holdingLocations": ["sccc2", "sccc3", "rcca9"]
+      "holdingLocations": [
+        "sccc2",
+        "sccc3",
+        "rcca9"
+      ]
     },
     {
       "value": "scd",
       "label": "Manuscripts, Archives and Rare Books Division",
-      "holdingLocations": ["scdd1", "scdd2", "rccd2", "rccd8", "rccd9"]
+      "holdingLocations": [
+        "scdd1",
+        "scdd2",
+        "rccd2",
+        "rccd8",
+        "rccd9"
+      ]
     },
     {
       "value": "sce",
       "label": "Photographs and Prints Division",
-      "holdingLocations": ["scedd", "scee2", "rcce2", "rcce8", "rcce9"]
+      "holdingLocations": [
+        "scedd",
+        "scee2",
+        "rcce2",
+        "rcce8",
+        "rcce9"
+      ]
     },
     {
       "value": "scf",
@@ -2888,7 +2944,7 @@
       "label": "Lojban (Artificial language)"
     }
   ],
-  "locations": [
+  "parentLocations": [
     {
       "value": "ma",
       "label": "Stephen A. Schwarzman Building (SASB)"

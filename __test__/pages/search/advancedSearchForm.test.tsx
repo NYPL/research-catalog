@@ -1,11 +1,5 @@
 import React from "react"
-import {
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-  delay,
-} from "../../../src/utils/testUtils"
+import { fireEvent, render, screen, delay } from "../../../src/utils/testUtils"
 import mockRouter from "next-router-mock"
 import userEvent from "@testing-library/user-event"
 
@@ -13,7 +7,7 @@ import { textInputFields } from "../../../src/utils/advancedSearchUtils"
 import AdvancedSearch, {
   defaultEmptySearchErrorMessage,
 } from "../../../pages/search/advanced"
-import { searchAggregations } from "../../../src/config/aggregations"
+import { searchVocabularies } from "../../../data/searchVocabularies"
 
 // Mock next router
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
@@ -102,10 +96,8 @@ describe("Advanced Search Form", () => {
     )
   })
   it("can check location checkboxes", async () => {
-    const location = searchAggregations.buildingLocation[0]
-    await userEvent.click(
-      screen.getByLabelText(new RegExp(location.label as string, "i"))
-    )
+    const location = searchVocabularies.parentLocations[0]
+    await userEvent.click(screen.getByLabelText(location.label))
     submit()
     expect(mockRouter.asPath).toBe(
       `/search?q=&filters%5BbuildingLocation%5D%5B0%5D=${location.value}&searched_from=advanced`
