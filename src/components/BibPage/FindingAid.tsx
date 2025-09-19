@@ -32,7 +32,7 @@ const FindingAid = ({
       <CardContent>
         <ExternalLink
           href={findingAidURL}
-          type="standalone"
+          variant="standalone"
           fontSize={{
             base: "mobile.body.body2",
             md: "desktop.body.body2",

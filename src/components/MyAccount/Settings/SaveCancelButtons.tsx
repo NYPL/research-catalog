@@ -30,7 +30,7 @@ const SaveCancelButtons = ({
       <Button
         sx={{ marginLeft: { base: "unset", lg: "xxl" } }}
         id={`cancel-${inputType}-button`}
-        buttonType="secondary"
+        variant="secondary"
         onClick={onCancel}
       >
         Cancel
@@ -38,7 +38,7 @@ const SaveCancelButtons = ({
       <Button
         id={`save-${inputType}-button`}
         isDisabled={isDisabled}
-        buttonType="primary"
+        variant="primary"
         minWidth={"123px"}
         onClick={onSave}
       >

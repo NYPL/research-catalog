@@ -1,14 +1,16 @@
-import { type ReactElement, type PropsWithChildren } from "react"
+import type { PropsWithChildren } from "react"
 import {
   Flex,
-  Box,
-  TemplateAppContainer,
   Breadcrumbs,
   DSProvider,
   Heading,
   Banner,
+  TemplateBreakout,
+  Template,
+  TemplateContent,
+  TemplateMain,
+  Hero,
 } from "@nypl/design-system-react-components"
-
 import { type RCPage } from "../../types/pageTypes"
 import styles from "../../../styles/components/Layout.module.scss"
 import SearchForm from "../SearchForm/SearchForm"
@@ -19,9 +21,7 @@ import EDSBanner from "../EDSBanner"
 import RCSubNav from "../RCSubNav/RCSubNav"
 
 interface LayoutProps {
-  sidebar?: ReactElement
   activePage?: RCPage
-  sidebarPosition?: "right" | "left"
   isAuthenticated?: boolean
   searchAggregations?: Aggregation[]
   searchResultsCount?: number
@@ -29,44 +29,27 @@ interface LayoutProps {
 }
 
 /**
- * The Layout component wraps the TemplateAppContainer from the DS and
+ * The Layout component wraps the Template from the DS and
  * controls the rendering of Research Catalog header components per-page.
  */
 const Layout = ({
   searchAggregations,
   children,
   isAuthenticated,
-  sidebar,
   activePage,
   searchResultsCount,
-  sidebarPosition = "left",
   bannerNotification,
 }: PropsWithChildren<LayoutProps>) => {
   const showSearch = activePage === "search"
   const showNotification = activePage === "" || activePage === "search"
   return (
     <DSProvider>
-      <TemplateAppContainer
-        // This is a workaround to fix a text-wrapping issue when page is zoomed in on
-        // TODO: Address this issue in the DS
-        sx={{
-          "main > div": { maxWidth: "100vw" },
-          rowGap: {
-            base: "grid.m",
-            md: "grid.l",
-          },
-          main: {
-            rowGap: {
-              base: "grid.m",
-              md: "grid.l",
-            },
-          },
-        }}
-        breakout={
+      <Template variant="full">
+        <TemplateBreakout>
           <>
             <Breadcrumbs
               data-testid="layout-breadcrumbs"
-              breadcrumbsType="research"
+              variant="research"
               breadcrumbsData={[
                 { url: "https://nypl.org", text: "Home" },
                 { url: "https://www.nypl.org/research", text: "Research" },
@@ -86,14 +69,20 @@ const Layout = ({
                 },
               }}
             />
-            <div className={`${styles.researchHeadingContainer} no-print`}>
-              <Heading
-                id="heading-h1"
-                level="h1"
-                text="Research Catalog"
-                marginBottom="m"
-              />
-            </div>
+
+            <Hero
+              backgroundColor="section.research.primary"
+              variant="tertiary"
+              foregroundColor="ui.white"
+              heading={
+                <Heading
+                  id="heading-h1"
+                  level="h1"
+                  text="Research Catalog"
+                  py={{ base: "m", xl: "unset" }}
+                />
+              }
+            />
             <RCSubNav
               isAuthenticated={isAuthenticated}
               activePage={activePage}
@@ -111,7 +100,9 @@ const Layout = ({
                 align="center"
                 direction="column"
                 sx={{
-                  padding: "2em 2em .5em 2em",
+                  px: { base: "s", md: "m", xl: "s" },
+                  pt: "l",
+                  pb: "xs",
                 }}
               >
                 <EDSBanner />
@@ -125,16 +116,14 @@ const Layout = ({
               </Flex>
             )}
           </>
-        }
-        sidebar={sidebar ? sidebarPosition : "none"}
-        contentPrimary={
-          <Box pb="l">
+        </TemplateBreakout>
+        <TemplateMain>
+          <TemplateContent pb="l">
             {children}
             <FeedbackForm />
-          </Box>
-        }
-        contentSidebar={sidebar && <Box width="288px">{sidebar}</Box>}
-      />
+          </TemplateContent>
+        </TemplateMain>
+      </Template>
     </DSProvider>
   )
 }

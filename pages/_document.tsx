@@ -7,16 +7,15 @@ export default function Document() {
     <Html lang="en">
       <style>
         {`
-            #Header-Placeholder {
-              min-height: 62px;
-            }
-            @media screen and (min-width: 832px) {
-              #Header-Placeholder {
-                min-height: 130px;
-              }
-            }
-            
-          `}
+          #Header-Placeholder {
+          min-height: 62px;
+        }
+        @media screen and (min-width: 832px) {
+          #Header-Placeholder {
+            min-height: 114px;
+          }
+        }
+      `}
       </style>
       <Head>
         <meta name="description" content="Research Catalog | NYPL" />

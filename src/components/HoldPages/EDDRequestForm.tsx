@@ -140,7 +140,7 @@ const EDDRequestForm = ({
         <Heading level="h3" size="heading4" mb="xs">
           Required information
         </Heading>
-        <Text noSpace>
+        <Text>
           You may request one chapter, one article, around 10% of work, or 50
           pages for public domain works.
         </Text>
@@ -216,7 +216,7 @@ const EDDRequestForm = ({
         <Heading level="h3" size="heading4" mb="xs">
           Optional information
         </Heading>
-        <Text noSpace>
+        <Text>
           Feel free to provide more information that could be helpful in
           processing your request.
         </Text>

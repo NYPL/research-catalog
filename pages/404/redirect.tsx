@@ -34,11 +34,13 @@ export default function Redirect404() {
             style={{ marginBottom: "48px" }}
           />
 
-          <Heading level="h3">We couldn&apos;t find that page</Heading>
-          <Text noSpace>
+          <Heading level="h3" mb="s">
+            We couldn&apos;t find that page
+          </Heading>
+          <Text>
             You&apos;ve followed an out-of-date link to our research catalog.
           </Text>
-          <Text noSpace>
+          <Text>
             Try our{" "}
             <ExternalLink href={appConfig.urls.circulatingCatalog}>
               Branch Catalog

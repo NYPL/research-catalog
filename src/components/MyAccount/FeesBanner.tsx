@@ -7,7 +7,7 @@ const FeesBanner = () => {
   return (
     <Banner
       mb="m"
-      type="negative"
+      variant="negative"
       content={
         <>
           <Text mb={0}>
