@@ -96,7 +96,7 @@ describe("Advanced Search Form", () => {
     )
   })
   it("can check location checkboxes", async () => {
-    const location = searchVocabularies.parentLocations[0]
+    const location = searchVocabularies.buildingLocations[0]
     await userEvent.click(screen.getByLabelText(location.label))
     submit()
     expect(mockRouter.asPath).toBe(
