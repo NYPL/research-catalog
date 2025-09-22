@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added Playwright test for author search. [SCC-4853](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4853)
 - Added Playwright test for title search. [SCC-4852](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4852)
+- Added `load-search-vocab` script and `vocbularies` endpoint to get advanced search vocabularies from Discovery API [SCC-4882](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4882)
 
 ## [1.5.5] 2025-08-28
 

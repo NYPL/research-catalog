@@ -13,7 +13,8 @@
     "test": "jest",
     "test-watch": "jest --watch",
     "test-watch-quiet": "DEBUG_PRINT_LIMIT=0 npm run test-watch",
-    "coverage": "jest --coverage"
+    "coverage": "jest --coverage",
+    "load-search-vocabs": "concurrently -k -n \"NEXT,SCRIPT\" -c \"blue,magenta\" \"npm run dev\" \"npx tsx scripts/load-search-vocabs.ts\""
   },
   "dependencies": {
     "@nypl/design-system-react-components": "4.0.1",
@@ -48,6 +49,7 @@
     "@types/qs": "^6.9.8",
     "@types/underscore": "^1.11.6",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "concurrently": "9.2.1",
     "eslint": "^8.45.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-config-standard-with-typescript": "^35.0.0",
