@@ -24,10 +24,7 @@ export interface MultiSelectItemsCountButtonProps {
 
 /**
  * The toggle button component used to open and close the `MultiSelect` menu.
- * A second button is rendered above the main button that displays the current
- * number of selected items. Clicking on the second button will clear all
- * the selected items and the main button's close event will not be fired
- * (as expected).
+ * Dropped in from Reservoir since this is not exported.
  */
 const MultiSelectItemsCountButton = forwardRef<
   HTMLButtonElement,

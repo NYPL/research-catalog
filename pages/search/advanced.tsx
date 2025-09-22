@@ -19,7 +19,6 @@ import {
   Box,
   Banner,
   Icon,
-  MultiSelect,
 } from "@nypl/design-system-react-components"
 import Layout from "../../src/components/Layout/Layout"
 import {
@@ -50,7 +49,7 @@ import RCHead from "../../src/components/Head/RCHead"
 import { useDateFilter } from "../../src/hooks/useDateFilter"
 import DateFilter from "../../src/components/SearchFilters/DateFilter"
 import { searchVocabularies } from "../../data/searchVocabularies"
-import GroupedMultiSelect from "../../src/components/AdvancedSearch/GroupedMultiselect"
+import GroupedMultiSelect from "../../src/components/AdvancedSearch/GroupedMultiselect/GroupedMultiselect"
 
 export const defaultEmptySearchErrorMessage =
   "Error: please enter at least one field to submit an advanced search."
@@ -91,6 +90,22 @@ export default function AdvancedSearch({
     dateAfter: searchFormState["filters"].dateAfter,
     changeHandler: (e) => handleInputChange(e, "filter_change"),
   })
+
+  const collectionGroupItems = searchVocabularies.buildingLocations
+    .filter((building) => building.value !== "rc")
+    .map((building) => {
+      const children = searchVocabularies.collections
+        .filter((col) => col.value.startsWith(building.value))
+        .map((col) => ({
+          id: col.value,
+          name: col.label,
+        }))
+      return {
+        id: building.value,
+        name: building.label,
+        children,
+      }
+    })
 
   const handleInputChange = (e: SyntheticEvent, type: SearchFormActionType) => {
     e.preventDefault()
@@ -225,7 +240,10 @@ export default function AdvancedSearch({
                 handleCheckboxChange={(e) => handleCheckboxChange("format", e)}
                 searchFormState={searchFormState["filters"].format}
               />
-              <GroupedMultiSelect buttonText={"hello"} />
+              <GroupedMultiSelect
+                name="collection"
+                groupedItems={collectionGroupItems}
+              />
             </Flex>
           </Flex>
           <HorizontalRule __css={{ margin: 0 }} />

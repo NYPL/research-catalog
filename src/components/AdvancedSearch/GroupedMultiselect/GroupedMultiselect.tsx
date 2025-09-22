@@ -1,0 +1,235 @@
+import { Box, useMultiStyleConfig } from "@chakra-ui/react"
+import React, { useEffect, useRef, useState } from "react"
+import {
+  Accordion,
+  Checkbox,
+  CheckboxGroup,
+  Text,
+  TextInput,
+} from "@nypl/design-system-react-components"
+import MultiSelectItemsCountButton from "./MultiSelectItemsCountButton"
+import { capitalize } from "lodash"
+
+export interface MultiSelectItem {
+  id: string
+  name: string
+  children?: MultiSelectItem[]
+}
+
+export interface SelectedItems {
+  [name: string]: { items: string[] }
+}
+
+export interface MultiSelectProps {
+  name: string
+  groupedItems: MultiSelectItem[]
+}
+
+/* Reservoir Multiselect modified to accept items with a group title that does not
+ ** appear as a checkbox. Used for the Collection filter in Advanced Search.
+ */
+const GroupedMultiSelect = ({ name, groupedItems }: MultiSelectProps) => {
+  const mainId = `${name}-multiselect`
+  const [userClickedOutside, setUserClickedOutside] = useState(false)
+  const [selectedItems, setSelectedItems] = useState<string[]>([])
+  const [searchTerm, setSearchTerm] = useState("")
+
+  const accordionButtonRef = useRef<HTMLDivElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  const filteredGroups = groupedItems
+    .map((group) => {
+      if (!searchTerm) return group
+      const matchingChildren = group.children.filter((child) =>
+        child.name.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+      return matchingChildren.length > 0
+        ? { ...group, children: matchingChildren }
+        : null
+    })
+    .filter(Boolean) as MultiSelectItem[]
+
+  const selectedItemsCount = selectedItems.length
+  const selectedItemsString = `item${selectedItemsCount === 1 ? "" : "s"}`
+  const ariaLabelValue = `${capitalize(
+    name
+  )} multiselect, ${selectedItemsCount} ${selectedItemsString} selected`
+
+  const styles = useMultiStyleConfig("MultiSelect", {
+    isBlockElement: false,
+    width: "full",
+  })
+
+  const handleClickOutside = (e: MouseEvent) => {
+    const multiSelect = containerRef.current
+    if (multiSelect && !multiSelect.contains(e.target as Node)) {
+      setUserClickedOutside(true)
+    } else {
+      setUserClickedOutside(false)
+    }
+  }
+
+  const handleTabOutside = (e: KeyboardEvent) => {
+    if (e.key === "Tab") {
+      const multiSelect = containerRef.current
+      setTimeout(() => {
+        if (multiSelect && !multiSelect.contains(document.activeElement)) {
+          setUserClickedOutside(true)
+        } else {
+          setUserClickedOutside(false)
+        }
+      }, 0)
+    }
+  }
+
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.id
+    setSelectedItems((prev) =>
+      prev.includes(value)
+        ? prev.filter((id) => id !== value)
+        : [...prev, value]
+    )
+  }
+
+  const NoSearchResults = (): JSX.Element => {
+    return (
+      <Box>
+        <Text size="body2">No options found</Text>
+      </Box>
+    )
+  }
+
+  const onChangeSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value.trim().toLowerCase())
+  }
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside)
+    document.addEventListener("keydown", handleTabOutside)
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+      document.removeEventListener("keydown", handleTabOutside)
+    }
+  }, [])
+
+  const renderGroups = (groups: MultiSelectItem[]) =>
+    groups.map((group) => (
+      <Box key={group.id} mb="xs">
+        <Text size="body2" mb="12px">
+          {group.name}
+        </Text>
+        <CheckboxGroup
+          id={`${name}-checkboxGroup-${group.id}`}
+          layout="column"
+          isFullWidth
+          labelText={group.name}
+          showLabel={false}
+          name={`multi-select-checkbox-group-${group.id}`}
+          marginLeft="m"
+          mb="0"
+        >
+          {group.children.map((item) => (
+            <Checkbox
+              key={item.id}
+              id={item.id}
+              labelText={item.name}
+              name={item.name}
+              isChecked={selectedItems.includes(item.id)}
+              onChange={handleCheckboxChange}
+            />
+          ))}
+        </CheckboxGroup>
+      </Box>
+    ))
+
+  const searchInput = (
+    <TextInput
+      id={`${mainId}-textInput`}
+      labelText={`Find a ${name}`}
+      isClearable
+      isClearableCallback={() => setSearchTerm("")}
+      placeholder={`Find a ${name}`}
+      onChange={onChangeSearch}
+      showLabel={false}
+      showRequiredLabel={false}
+      type="text"
+      marginBottom="0"
+    />
+  )
+
+  const accordionLabel = (
+    <Box
+      as="span"
+      sx={{
+        marginLeft: selectedItemsCount > 0 ? "56px" : "0",
+        marginBottom: "0",
+      }}
+    >
+      {`${capitalize(name)}`}
+    </Box>
+  )
+
+  const accordionPanel = (
+    <Box position="relative">
+      <Box position="sticky" top="0" marginBottom="12px" zIndex="1">
+        {searchInput}
+      </Box>
+      <Box
+        maxHeight="215px"
+        overflowY="auto"
+        paddingTop="xxs"
+        paddingLeft="xs"
+        paddingBottom="xxs"
+      >
+        {filteredGroups.length === 0 ? (
+          <NoSearchResults />
+        ) : (
+          renderGroups(filteredGroups)
+        )}
+      </Box>
+    </Box>
+  )
+
+  return (
+    <Box
+      data-testid="ds-multiSelect"
+      id={mainId}
+      ref={containerRef}
+      __css={styles.base}
+    >
+      <Accordion
+        accordionData={[
+          {
+            variant: "default",
+            buttonInteractionRef: accordionButtonRef,
+            label: accordionLabel,
+            panel: accordionPanel,
+          },
+        ]}
+        aria-label={ariaLabelValue}
+        id={`${mainId}-accordion`}
+        isDefaultOpen={false}
+        isAlwaysRendered
+        userClickedOutside={userClickedOutside}
+        panelMaxHeight="215px"
+        sx={{
+          ...styles.accordionStyles,
+        }}
+      />
+      {selectedItemsCount > 0 && (
+        <MultiSelectItemsCountButton
+          id={mainId}
+          multiSelectLabelText={name}
+          isOpen={false}
+          selectedItemsString={selectedItemsString}
+          selectedItemsCount={selectedItemsCount}
+          onClear={() => setSelectedItems([])}
+          accordionButtonRef={accordionButtonRef}
+        />
+      )}
+    </Box>
+  )
+}
+
+GroupedMultiSelect.displayName = "GroupedMultiSelect"
+export default GroupedMultiSelect
