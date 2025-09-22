@@ -17,6 +17,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added Playwright test for author search. [SCC-4853](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4853)
 - Added Playwright test for title search. [SCC-4852](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4852)
 
+### Removed
+
+- Removed item format from bib page item table, moving it to bib-level detail, and search result cards [SCC-4905](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4905)
+
 ## [1.5.5] 2025-08-28
 
 ### Removed

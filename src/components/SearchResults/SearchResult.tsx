@@ -14,6 +14,7 @@ import ItemTable from "../ItemTable/ItemTable"
 import type SearchResultsBib from "../../models/SearchResultsBib"
 import { PATHS } from "../../config/constants"
 import FindingAid from "../BibPage/FindingAid"
+import SearchResultItems from "./SearchResultItems"
 
 interface SearchResultProps {
   bib: SearchResultsBib
@@ -68,11 +69,11 @@ const SearchResult = ({ bib }: SearchResultProps) => {
             electronicResources={bib.electronicResources}
           />
         ) : null}
-        <SimpleGrid columns={1} mt="l" gap="grid.l">
+        <SimpleGrid columns={1} gap="grid.m">
           {bib.itemTables && (
             <>
               {bib.itemTables.map((itemTableData) => (
-                <ItemTable
+                <SearchResultItems
                   itemTableData={itemTableData}
                   key={`search-results-item-${itemTableData.items[0].id}`}
                 />

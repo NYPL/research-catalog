@@ -22,7 +22,7 @@ export const areFiltersApplied = (appliedFilters: AppliedItemFilters) =>
   Object.entries(appliedFilters).some(([, value]) => value.length > 0)
 
 export const buildItemFilterQuery = (
-  { location, format, status, year }: AppliedItemFilters,
+  { location, status, year }: AppliedItemFilters,
   recapLocations: string
 ) => {
   const locs = location.map((loc) => {
@@ -32,7 +32,6 @@ export const buildItemFilterQuery = (
 
   return {
     ...(locs.length && { item_location: locs.join(",") }),
-    ...(format.length && { item_format: format.join(",") }),
     ...(status.length && { item_status: status.join(",") }),
     ...(year.length && { item_date: year.join(",") }),
   }
@@ -88,7 +87,6 @@ export const removeValueFromFilters = (
 /* eslint-disable @typescript-eslint/naming-convention */
 export const parseItemFilterQueryParams = ({
   item_status,
-  item_format,
   item_location,
   item_date,
 }: ItemFilterQueryParams) => {
@@ -96,7 +94,6 @@ export const parseItemFilterQueryParams = ({
     location: item_location
       ? combineRecapLocations(item_location.split(","))
       : [],
-    format: item_format?.split(",") || [],
     status: item_status?.split(",") || [],
     year: item_date?.split(",") || [],
   }
