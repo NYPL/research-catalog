@@ -209,7 +209,7 @@ export default function AdvancedSearch({
             </Flex>
             <Flex direction="column" gap="l" grow="1">
               <SearchFilterCheckboxField
-                options={searchVocabularies.parentLocations}
+                options={searchVocabularies.buildingLocations}
                 name="location"
                 label="Item location"
                 handleCheckboxChange={(e) =>
