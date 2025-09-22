@@ -19,6 +19,7 @@ import {
   Box,
   Banner,
   Icon,
+  MultiSelect,
 } from "@nypl/design-system-react-components"
 import Layout from "../../src/components/Layout/Layout"
 import {
@@ -49,6 +50,7 @@ import RCHead from "../../src/components/Head/RCHead"
 import { useDateFilter } from "../../src/hooks/useDateFilter"
 import DateFilter from "../../src/components/SearchFilters/DateFilter"
 import { searchVocabularies } from "../../data/searchVocabularies"
+import GroupedMultiSelect from "../../src/components/AdvancedSearch/GroupedMultiselect"
 
 export const defaultEmptySearchErrorMessage =
   "Error: please enter at least one field to submit an advanced search."
@@ -223,6 +225,7 @@ export default function AdvancedSearch({
                 handleCheckboxChange={(e) => handleCheckboxChange("format", e)}
                 searchFormState={searchFormState["filters"].format}
               />
+              <GroupedMultiSelect buttonText={"hello"} />
             </Flex>
           </Flex>
           <HorizontalRule __css={{ margin: 0 }} />
