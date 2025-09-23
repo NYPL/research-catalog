@@ -52,11 +52,11 @@ describe("PreferredSubjectTableCell", () => {
     expect(screen.getByText("See also:")).toBeInTheDocument()
     expect(screen.getByRole("link", { name: "Painting" })).toHaveAttribute(
       "href",
-      "/research/research-catalog/browse/subject/painting"
+      "/research/research-catalog/browse?q=Painting&search_scope=starts_with"
     )
     expect(screen.getByRole("link", { name: "Sculpture" })).toHaveAttribute(
       "href",
-      "/research/research-catalog/browse/subject/sculpture"
+      "/research/research-catalog/browse?q=Sculpture&search_scope=starts_with"
     )
   })
 
@@ -79,7 +79,7 @@ describe("PreferredSubjectTableCell", () => {
     expect(screen.getByText("Broader term:")).toBeInTheDocument()
     expect(screen.getByRole("link", { name: "Visual Arts" })).toHaveAttribute(
       "href",
-      "/research/research-catalog/browse/subject/visual-arts"
+      "/research/research-catalog/browse?q=Visual Arts&search_scope=starts_with"
     )
   })
 
@@ -102,7 +102,7 @@ describe("PreferredSubjectTableCell", () => {
     expect(screen.getByText("Narrower term:")).toBeInTheDocument()
     expect(screen.getByRole("link", { name: "Modernism" })).toHaveAttribute(
       "href",
-      "/research/research-catalog/browse/subject/modernism"
+      "/research/research-catalog/browse?q=Modernism&search_scope=starts_with"
     )
   })
 
