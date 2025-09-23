@@ -19,6 +19,7 @@ import {
   Box,
   Banner,
   Icon,
+  MultiSelect,
 } from "@nypl/design-system-react-components"
 import Layout from "../../src/components/Layout/Layout"
 import {
@@ -33,6 +34,8 @@ import {
   textInputFields,
   languageOptions,
   buildGoBackHref,
+  collectionOptions,
+  buildingLocationOptions,
 } from "../../src/utils/advancedSearchUtils"
 import type {
   SearchParams,
@@ -91,22 +94,6 @@ export default function AdvancedSearch({
     changeHandler: (e) => handleInputChange(e, "filter_change"),
   })
 
-  const collectionGroupItems = searchVocabularies.buildingLocations
-    .filter((building) => building.value !== "rc")
-    .map((building) => {
-      const children = searchVocabularies.collections
-        .filter((col) => col.value.startsWith(building.value))
-        .map((col) => ({
-          id: col.value,
-          name: col.label,
-        }))
-      return {
-        id: building.value,
-        name: building.label,
-        children,
-      }
-    })
-
   const handleInputChange = (e: SyntheticEvent, type: SearchFormActionType) => {
     e.preventDefault()
     alert && setAlert(false)
@@ -118,13 +105,24 @@ export default function AdvancedSearch({
     })
   }
 
-  const handleCheckboxChange = (field: string, types: string[]) => {
+  const handleMultiSelectChange = (field: string, values: string[]) => {
     alert && setAlert(false)
     dispatch({
       type: "filter_change",
-      field: field,
-      payload: types,
+      field,
+      payload: values,
     })
+  }
+
+  const handleMultiSelectChange = async (filter: string, values: string) => {
+    const selectedFieldCheckboxes = appliedFilters[field]
+
+    // If the filter value is already in the array of selected values, remove it. Otherwise, add it.
+    if (selectedFieldCheckboxes.indexOf(filterId) >= 0) {
+      await handleRemoveFilter(filterId, true)
+    } else {
+      await submitFilters([filterId, ...selectedFieldCheckboxes], field, true)
+    }
   }
 
   const handleSubmit = async (e: SyntheticEvent) => {
@@ -203,46 +201,31 @@ export default function AdvancedSearch({
                   </FormField>
                 )
               })}
-              <FormField>
-                <Select
-                  id="languageSelect"
-                  name="language"
-                  labelText="Language"
-                  value={searchFormState["filters"].language}
-                  onChange={(e) => handleInputChange(e, "filter_change")}
-                >
-                  {languageOptions.map((language) => {
-                    return (
-                      <option value={language.value} key={language.value}>
-                        {language.label}
-                      </option>
-                    )
-                  })}
-                </Select>
-              </FormField>
               <FormField>{<DateFilter {...dateFilterProps} />}</FormField>
             </Flex>
             <Flex direction="column" gap="l" grow="1">
-              <SearchFilterCheckboxField
-                options={searchVocabularies.buildingLocations}
-                name="location"
-                label="Item location"
-                handleCheckboxChange={(e) =>
-                  handleCheckboxChange("buildingLocation", e)
+              <MultiSelect
+                buttonText="Item location"
+                items={buildingLocationOptions}
+                onChange={(selected) =>
+                  handleMultiSelectChange("buildingLocation", selected)
                 }
-                searchFormState={searchFormState["filters"].buildingLocation}
-                gridOptions={{ min: 1, max: 1 }}
               />
-              <SearchFilterCheckboxField
-                options={formatOptions}
-                name="format"
-                label="Format"
-                handleCheckboxChange={(e) => handleCheckboxChange("format", e)}
-                searchFormState={searchFormState["filters"].format}
+              <MultiSelect
+                buttonText="Format"
+                items={formatOptions}
+                onChange={(selected) =>
+                  handleMultiSelectChange("buildingLocation", selected)
+                }
+              />
+              <MultiSelect
+                buttonText="Language"
+                items={languageOptions}
+                onChange={{}}
               />
               <GroupedMultiSelect
                 name="collection"
-                groupedItems={collectionGroupItems}
+                groupedItems={collectionOptions}
               />
             </Flex>
           </Flex>
