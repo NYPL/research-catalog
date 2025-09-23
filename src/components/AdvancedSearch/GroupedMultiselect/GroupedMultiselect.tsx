@@ -23,15 +23,24 @@ export interface SelectedItems {
 export interface MultiSelectProps {
   name: string
   groupedItems: MultiSelectItem[]
+  /** The action to perform on the checkbox's onChange function. Note, if using
+   * this prop, it must be of the type listed below. */
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+  /** The selected items state (items that were checked by user). */
+  selectedItems: SelectedItems
 }
 
 /* Reservoir Multiselect modified to accept items with a group title that does not
  ** appear as a checkbox. Used for the Collection filter in Advanced Search.
  */
-const GroupedMultiSelect = ({ name, groupedItems }: MultiSelectProps) => {
+const GroupedMultiSelect = ({
+  name,
+  groupedItems,
+  onChange,
+  selectedItems,
+}: MultiSelectProps) => {
   const mainId = `${name}-multiselect`
   const [userClickedOutside, setUserClickedOutside] = useState(false)
-  const [selectedItems, setSelectedItems] = useState<string[]>([])
   const [searchTerm, setSearchTerm] = useState("")
 
   const accordionButtonRef = useRef<HTMLDivElement>(null)
@@ -49,7 +58,7 @@ const GroupedMultiSelect = ({ name, groupedItems }: MultiSelectProps) => {
     })
     .filter(Boolean) as MultiSelectItem[]
 
-  const selectedItemsCount = selectedItems.length
+  const selectedItemsCount: number = selectedItems[name]?.items.length || 0
   const selectedItemsString = `item${selectedItemsCount === 1 ? "" : "s"}`
   const ariaLabelValue = `${capitalize(
     name
@@ -82,19 +91,10 @@ const GroupedMultiSelect = ({ name, groupedItems }: MultiSelectProps) => {
     }
   }
 
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.id
-    setSelectedItems((prev) =>
-      prev.includes(value)
-        ? prev.filter((id) => id !== value)
-        : [...prev, value]
-    )
-  }
-
   const NoSearchResults = (): JSX.Element => {
     return (
       <Box>
-        <Text size="body2">No options found</Text>
+        <Text>No options found</Text>
       </Box>
     )
   }
@@ -111,6 +111,10 @@ const GroupedMultiSelect = ({ name, groupedItems }: MultiSelectProps) => {
       document.removeEventListener("keydown", handleTabOutside)
     }
   }, [])
+
+  const isChecked = (multiSelectId: string, itemId: string): boolean => {
+    return !!selectedItems[multiSelectId]?.items.includes(itemId)
+  }
 
   const renderGroups = (groups: MultiSelectItem[]) =>
     groups.map((group) => (
@@ -134,8 +138,8 @@ const GroupedMultiSelect = ({ name, groupedItems }: MultiSelectProps) => {
               id={item.id}
               labelText={item.name}
               name={item.name}
-              isChecked={selectedItems.includes(item.id)}
-              onChange={handleCheckboxChange}
+              isChecked={isChecked(mainId, item.id)}
+              onChange={onChange}
             />
           ))}
         </CheckboxGroup>
@@ -223,7 +227,7 @@ const GroupedMultiSelect = ({ name, groupedItems }: MultiSelectProps) => {
           isOpen={false}
           selectedItemsString={selectedItemsString}
           selectedItemsCount={selectedItemsCount}
-          onClear={() => setSelectedItems([])}
+          //onClear={}
           accordionButtonRef={accordionButtonRef}
         />
       )}

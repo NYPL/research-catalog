@@ -44,14 +44,12 @@ import type {
 import { getSearchQuery } from "../../src/utils/searchUtils"
 import initializePatronTokenAuth from "../../src/server/auth"
 import { appConfig } from "../../src/config/config"
-import SearchFilterCheckboxField from "../../src/components/AdvancedSearch/SearchFilterCheckboxField"
 import CancelSubmitButtonGroup from "../../src/components/AdvancedSearch/CancelSubmitButtonGroup"
 import { formatOptions } from "../../src/utils/advancedSearchUtils"
 import RCLink from "../../src/components/Links/RCLink/RCLink"
 import RCHead from "../../src/components/Head/RCHead"
 import { useDateFilter } from "../../src/hooks/useDateFilter"
 import DateFilter from "../../src/components/SearchFilters/DateFilter"
-import { searchVocabularies } from "../../data/searchVocabularies"
 import GroupedMultiSelect from "../../src/components/AdvancedSearch/GroupedMultiselect/GroupedMultiselect"
 
 export const defaultEmptySearchErrorMessage =
@@ -105,25 +103,26 @@ export default function AdvancedSearch({
     })
   }
 
-  const handleMultiSelectChange = (field: string, values: string[]) => {
-    alert && setAlert(false)
-    dispatch({
-      type: "filter_change",
-      field,
-      payload: values,
-    })
-  }
+  const handleMultiSelectChange =
+    (field: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+      alert && setAlert(false)
 
-  const handleMultiSelectChange = async (filter: string, values: string) => {
-    const selectedFieldCheckboxes = appliedFilters[field]
+      const { value, checked } = e.target
+      const currentValues = searchFormState["filters"][field] || []
 
-    // If the filter value is already in the array of selected values, remove it. Otherwise, add it.
-    if (selectedFieldCheckboxes.indexOf(filterId) >= 0) {
-      await handleRemoveFilter(filterId, true)
-    } else {
-      await submitFilters([filterId, ...selectedFieldCheckboxes], field, true)
+      let newValues: string[]
+      if (checked) {
+        newValues = [...currentValues, value]
+      } else {
+        newValues = currentValues.filter((v) => v !== value)
+      }
+
+      dispatch({
+        type: "filter_change",
+        field,
+        payload: newValues,
+      })
     }
-  }
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
@@ -207,25 +206,38 @@ export default function AdvancedSearch({
               <MultiSelect
                 buttonText="Item location"
                 items={buildingLocationOptions}
-                onChange={(selected) =>
-                  handleMultiSelectChange("buildingLocation", selected)
-                }
+                onChange={handleMultiSelectChange("buildingLocation")}
+                selectedItems={searchFormState["filters"].buildingLocation}
+                closeOnBlur
               />
+
               <MultiSelect
                 buttonText="Format"
                 items={formatOptions}
-                onChange={(selected) =>
-                  handleMultiSelectChange("buildingLocation", selected)
-                }
+                onChange={handleMultiSelectChange("format")}
+                selectedItems={searchFormState["filters"].format}
+                closeOnBlur
+                isSearchable
               />
+
               <MultiSelect
                 buttonText="Language"
                 items={languageOptions}
-                onChange={{}}
+                onChange={handleMultiSelectChange("language")}
+                selectedItems={searchFormState["filters"].language}
+                closeOnBlur
+                isSearchable
               />
+
               <GroupedMultiSelect
                 name="collection"
                 groupedItems={collectionOptions}
+                onChange={handleMultiSelectChange("collection")}
+                selectedItems={{
+                  collection: {
+                    items: searchFormState["filters"].collection || [],
+                  },
+                }}
               />
             </Flex>
           </Flex>

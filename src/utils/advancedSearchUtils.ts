@@ -38,6 +38,7 @@ export const languageOptions = [
   .concat(
     searchVocabularies.languages.sort((a, b) => (a.label > b.label ? 1 : -1))
   )
+  .filter((language) => language.label !== "")
   .map((language) => {
     return { id: language.value, name: language.label }
   })
