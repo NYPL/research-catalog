@@ -1,12 +1,5 @@
-import {
-  useState,
-  useReducer,
-  useRef,
-  useEffect,
-  type SyntheticEvent,
-} from "react"
+import { useState, useRef, useEffect, type SyntheticEvent } from "react"
 import { useRouter } from "next/router"
-import { debounce } from "underscore"
 import type { TextInputRefType } from "@nypl/design-system-react-components"
 import {
   Heading,
@@ -14,7 +7,6 @@ import {
   FormField,
   Flex,
   TextInput,
-  Select,
   HorizontalRule,
   Box,
   Banner,
@@ -22,13 +14,7 @@ import {
   MultiSelect,
 } from "@nypl/design-system-react-components"
 import Layout from "../../src/components/Layout/Layout"
-import {
-  BASE_URL,
-  PATHS,
-  SITE_NAME,
-  DEBOUNCE_INTERVAL,
-} from "../../src/config/constants"
-import { searchFormReducer } from "../../src/reducers/searchFormReducer"
+import { BASE_URL, PATHS, SITE_NAME } from "../../src/config/constants"
 import {
   initialSearchFormState,
   textInputFields,
@@ -36,16 +22,13 @@ import {
   buildGoBackHref,
   collectionOptions,
   buildingLocationOptions,
+  formatOptions,
 } from "../../src/utils/advancedSearchUtils"
-import type {
-  SearchParams,
-  SearchFormActionType,
-} from "../../src/types/searchTypes"
+import type { SearchParams } from "../../src/types/searchTypes"
 import { getSearchQuery } from "../../src/utils/searchUtils"
 import initializePatronTokenAuth from "../../src/server/auth"
 import { appConfig } from "../../src/config/config"
 import CancelSubmitButtonGroup from "../../src/components/AdvancedSearch/CancelSubmitButtonGroup"
-import { formatOptions } from "../../src/utils/advancedSearchUtils"
 import RCLink from "../../src/components/Links/RCLink/RCLink"
 import RCHead from "../../src/components/Head/RCHead"
 import { useDateFilter } from "../../src/hooks/useDateFilter"
@@ -54,14 +37,12 @@ import GroupedMultiSelect from "../../src/components/AdvancedSearch/GroupedMulti
 
 export const defaultEmptySearchErrorMessage =
   "Error: please enter at least one field to submit an advanced search."
+
 interface AdvancedSearchPropTypes {
   isAuthenticated: boolean
   goBackHref?: null | string
 }
-/**
- * The Advanced Search page is responsible for displaying the Advanced Search form fields and
- * buttons that clear the fields and submit a search request.
- */
+
 export default function AdvancedSearch({
   isAuthenticated,
   goBackHref,
@@ -76,10 +57,7 @@ export default function AdvancedSearch({
   const [errorMessage, setErrorMessage] = useState(
     defaultEmptySearchErrorMessage
   )
-  const [searchFormState, dispatch] = useReducer(
-    searchFormReducer,
-    initialSearchFormState
-  )
+  const [searchFormState, setSearchFormState] = useState(initialSearchFormState)
 
   const {
     dateFilterProps,
@@ -87,42 +65,46 @@ export default function AdvancedSearch({
     clearInputs: clearDateInputs,
   } = useDateFilter({
     inputRefs: dateInputRefs,
-    dateBefore: searchFormState["filters"].dateBefore,
-    dateAfter: searchFormState["filters"].dateAfter,
-    changeHandler: (e) => handleInputChange(e, "filter_change"),
+    dateBefore: searchFormState.filters.dateBefore,
+    dateAfter: searchFormState.filters.dateAfter,
+    changeHandler: (e) => handleInputChange(e),
   })
 
-  const handleInputChange = (e: SyntheticEvent, type: SearchFormActionType) => {
-    e.preventDefault()
-    alert && setAlert(false)
+  const handleInputChange = (e: SyntheticEvent) => {
     const target = e.target as HTMLInputElement
-    dispatch({
-      type: type,
-      field: target.name,
-      payload: target.value,
-    })
+    alert && setAlert(false)
+    setSearchFormState((prev) => ({
+      ...prev,
+      [target.name]: target.value,
+    }))
   }
 
-  const handleMultiSelectChange =
-    (field: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
-      alert && setAlert(false)
-
-      const { value, checked } = e.target
-      const currentValues = searchFormState["filters"][field] || []
-
-      let newValues: string[]
-      if (checked) {
-        newValues = [...currentValues, value]
-      } else {
-        newValues = currentValues.filter((v) => v !== value)
-      }
-
-      dispatch({
-        type: "filter_change",
-        field,
-        payload: newValues,
-      })
+  const handleFilterClear = (field: string) => {
+    const newFilters = {
+      ...searchFormState,
+      filters: {
+        ...searchFormState.filters,
+        [field]: [],
+      },
     }
+    setSearchFormState(newFilters)
+  }
+
+  const handleCheckboxChange = (field: string, optionValue: string) => {
+    const currentValues = searchFormState["filters"][field] || []
+    const isAlreadySelected = currentValues.includes(optionValue)
+    const updatedValues = isAlreadySelected
+      ? currentValues.filter((val) => val !== optionValue)
+      : [...currentValues, optionValue]
+    const newFilters = {
+      ...searchFormState,
+      filters: {
+        ...searchFormState.filters,
+        [field]: updatedValues,
+      },
+    }
+    setSearchFormState(newFilters)
+  }
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
@@ -131,10 +113,7 @@ export default function AdvancedSearch({
     if (!queryString.length) {
       setErrorMessage(defaultEmptySearchErrorMessage)
       setAlert(true)
-      // Very basic validation for the date range.
     } else {
-      // If the NEXT_PUBLIC_REVERSE_PROXY_ENABLED feature flag is present, use window.location.replace
-      // instead of router.push to forward search results to DFE.
       if (appConfig.features.reverseProxyEnabled[appConfig.environment]) {
         window.location.replace(
           `${BASE_URL}${PATHS.SEARCH}${queryString}&searched_from=advanced`
@@ -151,21 +130,57 @@ export default function AdvancedSearch({
     e.preventDefault()
     alert && setAlert(false)
     clearDateInputs()
-    inputRef.current.value = ""
-    dispatch({ type: "form_reset", payload: initialSearchFormState })
+    if (inputRef.current) inputRef.current.value = ""
+    setSearchFormState(initialSearchFormState)
   }
+
+  const fields = [
+    { value: "format", label: "Format", options: formatOptions },
+    {
+      value: "buildingLocation",
+      label: "Item location",
+      options: buildingLocationOptions,
+    },
+    { value: "language", label: "Language", options: languageOptions },
+  ]
+  const filters = fields.map((field) => {
+    if (searchFormState["filters"][field.value]) {
+      return (
+        <div key={field.value}>
+          <MultiSelect
+            defaultItemsVisible={1}
+            isSearchable
+            closeOnBlur
+            id={field.value}
+            buttonText={field.label}
+            onClear={() => {
+              handleFilterClear(field.value)
+            }}
+            onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
+              handleCheckboxChange(field.value, e.target.id)
+            }}
+            selectedItems={{
+              [field.value]: {
+                items: searchFormState["filters"][field.value] || [],
+              },
+            }}
+            items={field.options}
+          />
+        </div>
+      )
+    } else return null
+  })
 
   useEffect(() => {
     if (alert && notificationRef.current) {
       notificationRef.current.focus()
     }
   }, [alert])
+
   return (
     <>
       <RCHead metadataTitle={metadataTitle} />
       <Layout isAuthenticated={isAuthenticated} activePage="advanced">
-        {/* Always render the wrapper element that will display the
-          dynamically rendered notification for focus management */}
         <Box tabIndex={-1} ref={notificationRef}>
           {alert && <Banner variant="negative" content={errorMessage} mb="s" />}
         </Box>
@@ -174,68 +189,48 @@ export default function AdvancedSearch({
         </Heading>
         <Form
           id="advancedSearchForm"
-          // We are using a post request on advanced search when JS is disabled
-          // so that we can build the query string correctly on the server and
-          // redirect the user to the search results.
           method="post"
           action={`${BASE_URL}/search`}
           onSubmit={handleSubmit}
         >
           <Flex flexDirection={{ base: "column", md: "row" }}>
-            <Flex id="advancedSearchLeft" gap="s" direction="column" grow="1">
-              {textInputFields.map(({ name, label }) => {
-                return (
-                  <FormField key={name}>
-                    <TextInput
-                      id={name}
-                      labelText={label}
-                      name={name}
-                      value={searchFormState[name]}
-                      onChange={debounce(
-                        (e) => handleInputChange(e, "input_change"),
-                        DEBOUNCE_INTERVAL
-                      )}
-                      ref={inputRef}
-                    />
-                  </FormField>
-                )
-              })}
-              <FormField>{<DateFilter {...dateFilterProps} />}</FormField>
+            <Flex
+              id="advancedSearchLeft"
+              gap="s"
+              direction="column"
+              grow="1"
+              width="50%"
+            >
+              {textInputFields.map(({ name, label }) => (
+                <FormField key={name}>
+                  <TextInput
+                    id={name}
+                    labelText={label}
+                    name={name}
+                    value={searchFormState[name]}
+                    onChange={handleInputChange}
+                    ref={inputRef}
+                  />
+                </FormField>
+              ))}
+              <FormField>
+                <DateFilter {...dateFilterProps} />
+              </FormField>
             </Flex>
-            <Flex direction="column" gap="l" grow="1">
-              <MultiSelect
-                buttonText="Item location"
-                items={buildingLocationOptions}
-                onChange={handleMultiSelectChange("buildingLocation")}
-                selectedItems={searchFormState["filters"].buildingLocation}
-                closeOnBlur
-              />
-
-              <MultiSelect
-                buttonText="Format"
-                items={formatOptions}
-                onChange={handleMultiSelectChange("format")}
-                selectedItems={searchFormState["filters"].format}
-                closeOnBlur
-                isSearchable
-              />
-
-              <MultiSelect
-                buttonText="Language"
-                items={languageOptions}
-                onChange={handleMultiSelectChange("language")}
-                selectedItems={searchFormState["filters"].language}
-                closeOnBlur
-                isSearchable
-              />
-
+            <Flex direction="column" gap="l" grow="1" mt="m" width="50%">
+              {filters}
               <GroupedMultiSelect
-                name="collection"
+                field={{ value: "collection", label: "Collection" }}
                 groupedItems={collectionOptions}
-                onChange={handleMultiSelectChange("collection")}
+                onChange={(e) =>
+                  handleCheckboxChange("collection", e.target.id)
+                }
+                onClear={() => {
+                  handleFilterClear("collection")
+                }}
                 selectedItems={{
                   collection: {
-                    items: searchFormState["filters"].collection || [],
+                    items: [...searchFormState.filters.collection],
                   },
                 }}
               />

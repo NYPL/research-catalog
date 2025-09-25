@@ -21,25 +21,27 @@ export interface SelectedItems {
 }
 
 export interface MultiSelectProps {
-  name: string
+  field: { value: string; label: string }
   groupedItems: MultiSelectItem[]
   /** The action to perform on the checkbox's onChange function. Note, if using
    * this prop, it must be of the type listed below. */
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
   /** The selected items state (items that were checked by user). */
   selectedItems: SelectedItems
+  onClear: () => void
 }
 
 /* Reservoir Multiselect modified to accept items with a group title that does not
  ** appear as a checkbox. Used for the Collection filter in Advanced Search.
  */
 const GroupedMultiSelect = ({
-  name,
+  field,
   groupedItems,
   onChange,
   selectedItems,
+  onClear,
 }: MultiSelectProps) => {
-  const mainId = `${name}-multiselect`
+  const mainId = field.value
   const [userClickedOutside, setUserClickedOutside] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
 
@@ -58,11 +60,10 @@ const GroupedMultiSelect = ({
     })
     .filter(Boolean) as MultiSelectItem[]
 
-  const selectedItemsCount: number = selectedItems[name]?.items.length || 0
+  const selectedItemsCount: number =
+    selectedItems[field.value]?.items.length || 0
   const selectedItemsString = `item${selectedItemsCount === 1 ? "" : "s"}`
-  const ariaLabelValue = `${capitalize(
-    name
-  )} multiselect, ${selectedItemsCount} ${selectedItemsString} selected`
+  const ariaLabelValue = `${field.label} multiselect, ${selectedItemsCount} ${selectedItemsString} selected`
 
   const styles = useMultiStyleConfig("MultiSelect", {
     isBlockElement: false,
@@ -123,7 +124,7 @@ const GroupedMultiSelect = ({
           {group.name}
         </Text>
         <CheckboxGroup
-          id={`${name}-checkboxGroup-${group.id}`}
+          id={`${field.value}-checkboxGroup-${group.id}`}
           layout="column"
           isFullWidth
           labelText={group.name}
@@ -138,7 +139,7 @@ const GroupedMultiSelect = ({
               id={item.id}
               labelText={item.name}
               name={item.name}
-              isChecked={isChecked(mainId, item.id)}
+              isChecked={isChecked(field.value, item.id)}
               onChange={onChange}
             />
           ))}
@@ -149,10 +150,10 @@ const GroupedMultiSelect = ({
   const searchInput = (
     <TextInput
       id={`${mainId}-textInput`}
-      labelText={`Find a ${name}`}
+      labelText={`Find a ${field.value}`}
       isClearable
       isClearableCallback={() => setSearchTerm("")}
-      placeholder={`Find a ${name}`}
+      placeholder={`Find a ${field.value}`}
       onChange={onChangeSearch}
       showLabel={false}
       showRequiredLabel={false}
@@ -169,7 +170,7 @@ const GroupedMultiSelect = ({
         marginBottom: "0",
       }}
     >
-      {`${capitalize(name)}`}
+      {field.label}
     </Box>
   )
 
@@ -222,12 +223,12 @@ const GroupedMultiSelect = ({
       />
       {selectedItemsCount > 0 && (
         <MultiSelectItemsCountButton
-          id={mainId}
-          multiSelectLabelText={name}
+          id={field.value}
+          multiSelectLabelText={field.label}
           isOpen={false}
           selectedItemsString={selectedItemsString}
           selectedItemsCount={selectedItemsCount}
-          //onClear={}
+          onClear={onClear}
           accordionButtonRef={accordionButtonRef}
         />
       )}

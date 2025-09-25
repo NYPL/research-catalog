@@ -19,25 +19,19 @@ export const initialSearchFormState: SearchParams = {
   callnumber: "",
   standard_number: "",
   filters: {
-    language: "",
+    language: [],
     dateBefore: "",
     dateAfter: "",
     format: [],
     buildingLocation: [],
+    collection: [],
   },
 }
 
-// Returns an array of objects of Language options types derived from the aggregations sorted by label text,
-// including the empty default option of "Any".
-export const languageOptions = [
-  {
-    value: "",
-    label: "-- Any -- ",
-  },
-]
-  .concat(
-    searchVocabularies.languages.sort((a, b) => (a.label > b.label ? 1 : -1))
-  )
+// Returns an array of objects of Language options types derived from the aggregations sorted by label text.
+export const languageOptions = searchVocabularies.languages
+  .sort((a, b) => (a.label > b.label ? 1 : -1))
+
   .filter((language) => language.label !== "")
   .map((language) => {
     return { id: language.value, name: language.label }
