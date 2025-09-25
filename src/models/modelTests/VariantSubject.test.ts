@@ -3,7 +3,6 @@ import type {
   DiscoveryVariantSubjectResult,
   SubjectLink,
 } from "../../types/browseTypes"
-import { getSubjectSearchURL } from "../../utils/browseUtils"
 
 describe("VariantSubject model", () => {
   const mockResult: DiscoveryVariantSubjectResult = {
