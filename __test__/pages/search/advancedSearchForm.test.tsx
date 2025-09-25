@@ -100,7 +100,7 @@ describe("Advanced Search Form", () => {
     await userEvent.click(collectionMultiselect)
     expect(collectionMultiselect).toHaveAttribute("aria-expanded", "true")
 
-    const collectionFilterSearch = screen.getByLabelText(/Find a collection/, {
+    const collectionFilterSearch = screen.getByLabelText(/Search collections/, {
       selector: "input",
     })
     const milsteinDivisionOption = screen.getByLabelText(/Milstein Division/, {
