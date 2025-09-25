@@ -14,7 +14,12 @@ import {
   MultiSelect,
 } from "@nypl/design-system-react-components"
 import Layout from "../../src/components/Layout/Layout"
-import { BASE_URL, PATHS, SITE_NAME } from "../../src/config/constants"
+import {
+  BASE_URL,
+  DEBOUNCE_INTERVAL,
+  PATHS,
+  SITE_NAME,
+} from "../../src/config/constants"
 import {
   initialSearchFormState,
   textInputFields,
@@ -34,6 +39,7 @@ import RCHead from "../../src/components/Head/RCHead"
 import { useDateFilter } from "../../src/hooks/useDateFilter"
 import DateFilter from "../../src/components/SearchFilters/DateFilter"
 import GroupedMultiSelect from "../../src/components/AdvancedSearch/GroupedMultiselect/GroupedMultiselect"
+import { debounce } from "underscore"
 
 export const defaultEmptySearchErrorMessage =
   "Error: please enter at least one field to submit an advanced search."
@@ -49,7 +55,6 @@ export default function AdvancedSearch({
 }: AdvancedSearchPropTypes) {
   const metadataTitle = `Advanced search | ${SITE_NAME}`
   const router = useRouter()
-  const inputRef = useRef<TextInputRefType>()
   const notificationRef = useRef<HTMLDivElement>()
   const dateInputRefs = [useRef<TextInputRefType>(), useRef<TextInputRefType>()]
 
@@ -57,7 +62,15 @@ export default function AdvancedSearch({
   const [errorMessage, setErrorMessage] = useState(
     defaultEmptySearchErrorMessage
   )
-  const [searchFormState, setSearchFormState] = useState(initialSearchFormState)
+
+  const [textInputs, setTextInputs] = useState(
+    textInputFields.reduce((acc, { name }) => {
+      acc[name] = ""
+      return acc
+    }, {})
+  )
+
+  const [filters, setFilters] = useState(initialSearchFormState.filters)
 
   const {
     dateFilterProps,
@@ -65,51 +78,58 @@ export default function AdvancedSearch({
     clearInputs: clearDateInputs,
   } = useDateFilter({
     inputRefs: dateInputRefs,
-    dateBefore: searchFormState.filters.dateBefore,
-    dateAfter: searchFormState.filters.dateAfter,
-    changeHandler: (e) => handleInputChange(e),
+    dateBefore: filters.dateBefore,
+    dateAfter: filters.dateAfter,
+    changeHandler: (e) => {
+      const target = e.target as HTMLInputElement
+      alert && setAlert(false)
+      setFilters((prev) => ({
+        ...prev,
+        [target.name]: target.value,
+      }))
+    },
   })
 
-  const handleInputChange = (e: SyntheticEvent) => {
+  const handleTextInputChange = (e: SyntheticEvent) => {
     const target = e.target as HTMLInputElement
     alert && setAlert(false)
-    setSearchFormState((prev) => ({
+    setTextInputs((prev) => ({
       ...prev,
       [target.name]: target.value,
     }))
   }
 
   const handleFilterClear = (field: string) => {
-    const newFilters = {
-      ...searchFormState,
-      filters: {
-        ...searchFormState.filters,
-        [field]: [],
-      },
-    }
-    setSearchFormState(newFilters)
+    setFilters((prev) => ({
+      ...prev,
+      [field]: [],
+    }))
   }
 
   const handleCheckboxChange = (field: string, optionValue: string) => {
-    const currentValues = searchFormState["filters"][field] || []
+    const currentValues = filters[field] || []
     const isAlreadySelected = currentValues.includes(optionValue)
     const updatedValues = isAlreadySelected
       ? currentValues.filter((val) => val !== optionValue)
       : [...currentValues, optionValue]
-    const newFilters = {
-      ...searchFormState,
-      filters: {
-        ...searchFormState.filters,
-        [field]: updatedValues,
-      },
-    }
-    setSearchFormState(newFilters)
+
+    setFilters((prev) => ({
+      ...prev,
+      [field]: updatedValues,
+    }))
   }
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
+    if (alert) setAlert(false)
     if (!validateDateRange()) return
-    const queryString = getSearchQuery(searchFormState as SearchParams)
+
+    const formValues = {
+      ...textInputs,
+      filters: filters,
+    }
+    const queryString = getSearchQuery(formValues as SearchParams)
+
     if (!queryString.length) {
       setErrorMessage(defaultEmptySearchErrorMessage)
       setAlert(true)
@@ -130,8 +150,13 @@ export default function AdvancedSearch({
     e.preventDefault()
     alert && setAlert(false)
     clearDateInputs()
-    if (inputRef.current) inputRef.current.value = ""
-    setSearchFormState(initialSearchFormState)
+    setTextInputs(
+      textInputFields.reduce((acc, { name }) => {
+        acc[name] = ""
+        return acc
+      }, {} as Record<string, string>)
+    )
+    setFilters(initialSearchFormState.filters)
   }
 
   const fields = [
@@ -143,8 +168,9 @@ export default function AdvancedSearch({
     },
     { value: "language", label: "Language", options: languageOptions },
   ]
-  const filters = fields.map((field) => {
-    if (searchFormState["filters"][field.value]) {
+
+  const filterComponents = fields.map((field) => {
+    if (filters[field.value]) {
       return (
         <div key={field.value}>
           <MultiSelect
@@ -161,7 +187,7 @@ export default function AdvancedSearch({
             }}
             selectedItems={{
               [field.value]: {
-                items: searchFormState["filters"][field.value] || [],
+                items: filters[field.value] || [],
               },
             }}
             items={field.options}
@@ -199,7 +225,7 @@ export default function AdvancedSearch({
               gap="s"
               direction="column"
               grow="1"
-              width="50%"
+              width={{ base: "100%", md: "50%" }}
             >
               {textInputFields.map(({ name, label }) => (
                 <FormField key={name}>
@@ -207,9 +233,8 @@ export default function AdvancedSearch({
                     id={name}
                     labelText={label}
                     name={name}
-                    value={searchFormState[name]}
-                    onChange={handleInputChange}
-                    ref={inputRef}
+                    value={textInputs[name]}
+                    onChange={debounce((e) => handleTextInputChange(e), 300)}
                   />
                 </FormField>
               ))}
@@ -217,8 +242,14 @@ export default function AdvancedSearch({
                 <DateFilter {...dateFilterProps} />
               </FormField>
             </Flex>
-            <Flex direction="column" gap="l" grow="1" mt="m" width="50%">
-              {filters}
+            <Flex
+              direction="column"
+              gap="l"
+              grow="1"
+              mt="m"
+              width={{ base: "100%", md: "50%" }}
+            >
+              {filterComponents}
               <GroupedMultiSelect
                 field={{ value: "collection", label: "Collection" }}
                 groupedItems={collectionOptions}
@@ -230,7 +261,7 @@ export default function AdvancedSearch({
                 }}
                 selectedItems={{
                   collection: {
-                    items: [...searchFormState.filters.collection],
+                    items: [...filters.collection],
                   },
                 }}
               />
