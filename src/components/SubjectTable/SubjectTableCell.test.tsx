@@ -37,10 +37,14 @@ describe("PreferredSubjectTableCell", () => {
       seeAlso: {
         label: "See also",
         terms: [
-          { termLabel: "Painting", url: "/browse/subject/painting", count: "" },
+          {
+            termLabel: "Painting",
+            url: "/browse?q=Painting&search_scope=starts_with",
+            count: "",
+          },
           {
             termLabel: "Sculpture",
-            url: "/browse/subject/sculpture",
+            url: "/browse?q=Sculpture&search_scope=starts_with",
             count: "",
           },
         ],
@@ -67,7 +71,7 @@ describe("PreferredSubjectTableCell", () => {
         terms: [
           {
             termLabel: "Visual Arts",
-            url: "/browse/subject/visual-arts",
+            url: "/browse?q=Visual Arts&search_scope=starts_with",
             count: "",
           },
         ],
@@ -90,7 +94,7 @@ describe("PreferredSubjectTableCell", () => {
         terms: [
           {
             termLabel: "Modernism",
-            url: "/browse/subject/modernism",
+            url: "/browse?q=Modernism&search_scope=starts_with",
             count: "",
           },
         ],
@@ -111,10 +115,14 @@ describe("PreferredSubjectTableCell", () => {
       seeAlso: {
         label: "See also",
         terms: [
-          { termLabel: "Painting", url: "/browse/subject/painting", count: "" },
+          {
+            termLabel: "Painting",
+            url: "/browse?q=Painting&search_scope=starts_with",
+            count: "",
+          },
           {
             termLabel: "Sculpture",
-            url: "/browse/subject/sculpture",
+            url: "/browse?q=Sculpture&search_scope=starts_with",
             count: "",
           },
         ],
@@ -132,7 +140,7 @@ const createSubjectLink = (
   overrides: Partial<SubjectLink> = {}
 ): SubjectLink => ({
   termLabel: "Beagle",
-  url: "/browse/subject/beagle",
+  url: "/browse?q=Beagle&search_scope=starts_with",
   count: "42",
   ...overrides,
 })

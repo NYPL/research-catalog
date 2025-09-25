@@ -20,14 +20,22 @@ describe("PreferredSubject model", () => {
     expect(subject.url).toBe("/browse/subjects/Science%20--%2019th%20century")
 
     expect(subject.seeAlso.terms).toEqual([
-      { termLabel: "Biology", url: "/browse/subjects/Biology", count: "" },
-      { termLabel: "Physics", url: "/browse/subjects/Physics", count: "" },
+      {
+        termLabel: "Biology",
+        url: "/browse?q=Biology&search_scope=starts_with",
+        count: "",
+      },
+      {
+        termLabel: "Physics",
+        url: "/browse?q=Physics&search_scope=starts_with",
+        count: "",
+      },
     ])
 
     expect(subject.narrowerTerms.terms).toEqual([
       {
         termLabel: "Natural Science -- Chimpanzees",
-        url: "/browse/subjects/Natural%20Science%20--%20Chimpanzees",
+        url: "/browse?q=Natural Science -- Chimpanzees&search_scope=starts_with",
         count: "",
       },
     ])
@@ -35,7 +43,7 @@ describe("PreferredSubject model", () => {
     expect(subject.broaderTerms.terms).toEqual([
       {
         termLabel: "Knowledge",
-        url: "/browse/subjects/Knowledge",
+        url: "/browse?q=Knowledge&search_scope=starts_with",
         count: "",
       },
     ])

@@ -6,10 +6,7 @@ const VariantSubjectTableCell = ({ subject }: { subject: VariantSubject }) => {
   const PreferredTermLink = (prefTerm: SubjectLink) => (
     <Text size="body2" noSpace mt="-23px">
       See:{" "}
-      <RCLink
-        href={`/browse?q=${prefTerm.termLabel}&search_scope=starts_with`}
-        isUnderlined={false}
-      >
+      <RCLink href={prefTerm.url} isUnderlined={false}>
         {prefTerm.termLabel}
       </RCLink>{" "}
     </Text>

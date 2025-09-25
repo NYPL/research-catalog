@@ -102,7 +102,7 @@ export function isPreferredSubject(
   return subject["@type"] === "preferredTerm"
 }
 
-export function getSubjectURL(term: string) {
+export function getSubjectSearchURL(term: string) {
   const subject = encodeURIComponent(term).replace(/%2D%2D/g, "--")
   return `/browse/subjects/${subject}`
 }
@@ -154,7 +154,7 @@ export function buildSubjectLinks(
   for (const termObj of terms) {
     termLinks.push({
       termLabel: termObj.termLabel,
-      url: getSubjectURL(termObj.termLabel),
+      url: `/browse?q=${termObj.termLabel}&search_scope=starts_with`,
       count: termObj.count?.toLocaleString() || "",
     })
   }
