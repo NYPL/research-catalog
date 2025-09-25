@@ -75,59 +75,78 @@ describe("Advanced Search Form", () => {
       expect(input).toBeInTheDocument()
     })
   })
-
   it("can select languages", async () => {
-    const languageSelect = screen.getByLabelText("Language")
-    await userEvent.selectOptions(languageSelect, "Azerbaijani")
+    const languageMultiselect = screen.getByLabelText(/Language/, {
+      selector: "button",
+    })
+    expect(languageMultiselect).toHaveAttribute("aria-expanded", "false")
+    await userEvent.click(languageMultiselect)
+    expect(languageMultiselect).toHaveAttribute("aria-expanded", "true")
+    const languageFilter = screen.getByLabelText(/Afrikaans/, {
+      selector: "input",
+    })
+    await userEvent.click(languageFilter)
     submit()
-    // expect the label for Azerbaijani ("lang:aze") to be in url
+    // expect the label for Afrikaans (afr) to be in url
     expect(mockRouter.asPath).toBe(
-      "/search?q=&filters%5Blanguage%5D=lang%3Aaze&searched_from=advanced"
+      "/search?q=&filters%5Blanguage%5D%5B0%5D=lang%3Aafr&searched_from=advanced"
     )
   })
-  it("can check material checkboxes", async () => {
-    await userEvent.click(screen.getByLabelText("Notated music"))
-    await userEvent.click(screen.getByLabelText("Map"))
-    submit()
-    // expect the label for notated music and cartographic
-    // ("resourcetypes:not", "resourcetypes:car") to be in url
-    expect(mockRouter.asPath).toBe(
-      "/search?q=&filters%5Bformat%5D%5B0%5D=c&filters%5Bformat%5D%5B1%5D=e&searched_from=advanced"
+  it("can search and select collection checkboxes", async () => {
+    const collectionMultiselect = screen.getByLabelText(/Collection/, {
+      selector: "button",
+    })
+    expect(collectionMultiselect).toHaveAttribute("aria-expanded", "false")
+    await userEvent.click(collectionMultiselect)
+    expect(collectionMultiselect).toHaveAttribute("aria-expanded", "true")
+
+    const collectionFilterSearch = screen.getByLabelText(/Find a collection/, {
+      selector: "input",
+    })
+    const milsteinDivisionOption = screen.getByLabelText(/Milstein Division/, {
+      selector: "input",
+    })
+    expect(milsteinDivisionOption).toBeInTheDocument()
+    await userEvent.type(collectionFilterSearch, "Jean")
+    expect(milsteinDivisionOption).not.toBeInTheDocument()
+    await userEvent.click(
+      screen.getByLabelText(
+        "Jean Blackwell Hutson Research and Reference Division"
+      )
     )
-  })
-  it("can check location checkboxes", async () => {
-    const location = searchVocabularies.buildingLocations[0]
-    await userEvent.click(screen.getByLabelText(location.label))
     submit()
+    // expect Jean Blackwell Hutson collection code (scf) in url
     expect(mockRouter.asPath).toBe(
-      `/search?q=&filters%5BbuildingLocation%5D%5B0%5D=${location.value}&searched_from=advanced`
+      "/search?q=&filters%5Bcollection%5D%5B0%5D=scf&searched_from=advanced"
     )
   })
 
   it("can clear the form", async () => {
-    const notatedMusic = screen.getByLabelText("Notated music")
-    await userEvent.click(notatedMusic)
-    const cartographic = screen.getByLabelText("Map")
-    await userEvent.click(cartographic)
-    const selector = screen.getByLabelText("Language")
-    await userEvent.selectOptions(selector, "Azerbaijani")
-    const schomburg = screen.getByLabelText("Schomburg Center for", {
-      exact: false,
+    const collectionMultiselect = screen.getByLabelText(/Collection/, {
+      selector: "button",
     })
+    await userEvent.click(collectionMultiselect)
+    const milsteinDivisionOption = screen.getByLabelText(/Milstein Division/, {
+      selector: "input",
+    })
+    await userEvent.click(milsteinDivisionOption)
 
-    await userEvent.click(schomburg)
     const [subjectInput, keywordInput, titleInput, contributorInput] =
       await updateAllFields()
 
-    await userEvent.click(screen.getByText("Clear fields"))
-    ;[notatedMusic, cartographic, schomburg].forEach((input) =>
-      expect(input).not.toBeChecked()
+    expect(collectionMultiselect).toHaveAttribute(
+      "aria-label",
+      "Collection multiselect, 1 item selected"
     )
-    expect(selector).not.toHaveDisplayValue("Azerbaijani")
+    await userEvent.click(screen.getByText("Clear fields"))
     ;[subjectInput, keywordInput, titleInput, contributorInput].forEach(
       (input) => {
         expect(input).toBeEmptyDOMElement()
       }
+    )
+    expect(collectionMultiselect).toHaveAttribute(
+      "aria-label",
+      "Collection multiselect, 0 items selected"
     )
 
     submit()
