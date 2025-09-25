@@ -3,21 +3,23 @@ import {
   buildSubjectLinks,
   getBrowseQuery,
   getBrowseIndexHeading,
-  getSubjectURL,
+  getSubjectSearchURL,
   isPreferredSubject,
   mapQueryToBrowseParams,
   buildLockedBrowseQuery,
 } from "../browseUtils"
 
 describe("browseUtils", () => {
-  describe("getSubjectURL()", () => {
+  describe("getSubjectSearchURL()", () => {
     it("should encode the subject term into a valid URL", () => {
-      expect(getSubjectURL("Science")).toBe("/browse/subjects/Science")
-      expect(getSubjectURL("Social Science")).toBe(
+      expect(getSubjectSearchURL("Science")).toBe("/browse/subjects/Science")
+      expect(getSubjectSearchURL("Social Science")).toBe(
         "/browse/subjects/Social%20Science"
       )
       expect(
-        getSubjectURL("X, Malcolm, 1925-1965 -- Political and social views.")
+        getSubjectSearchURL(
+          "X, Malcolm, 1925-1965 -- Political and social views."
+        )
       ).toBe(
         "/browse/subjects/X%2C%20Malcolm%2C%201925-1965%20--%20Political%20and%20social%20views."
       )
@@ -173,7 +175,7 @@ describe("browseUtils", () => {
         termLabel: "foo",
         count: "123",
       })
-      expect(results[0].url).toContain("/browse/subjects/foo")
+      expect(results[0].url).toContain("/browse?q=foo&search_scope=starts_with")
 
       expect(results[2].count).toBe("")
     })

@@ -9,7 +9,6 @@ const VariantSubjectTableCell = ({ subject }: { subject: VariantSubject }) => {
       <RCLink href={prefTerm.url} isUnderlined={false}>
         {prefTerm.termLabel}
       </RCLink>{" "}
-      ({prefTerm.count})
     </Text>
   )
 

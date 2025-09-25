@@ -10,10 +10,7 @@ const PreferredSubjectTableCell = ({
   const commaSeparatedSubjectLinks = (terms: SubjectLink[]) =>
     terms.map((term, i) => (
       <span key={term.url}>
-        <RCLink
-          href={`/browse?q=${term.termLabel}&search_scope=starts_with`}
-          isUnderlined={false}
-        >
+        <RCLink href={term.url} isUnderlined={false}>
           {term.termLabel}
         </RCLink>
         {i < terms.length - 1 && ", "}
