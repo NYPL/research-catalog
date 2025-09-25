@@ -107,6 +107,10 @@ export function getSubjectSearchURL(term: string) {
   return `/browse/subjects/${subject}`
 }
 
+export function getSubjectBrowseURL(term: string) {
+  return `/browse?q=${term}&search_scope=starts_with`
+}
+
 /**
  * getBrowseIndexHeading
  * Used to generate the browse index heading text (Displaying 1-30 of 300 Subject Headings containing "cats")
@@ -154,7 +158,7 @@ export function buildSubjectLinks(
   for (const termObj of terms) {
     termLinks.push({
       termLabel: termObj.termLabel,
-      url: `/browse?q=${termObj.termLabel}&search_scope=starts_with`,
+      url: getSubjectBrowseURL(termObj.termLabel),
       count: termObj.count?.toLocaleString() || "",
     })
   }
