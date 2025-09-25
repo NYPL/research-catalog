@@ -153,7 +153,7 @@ describe("VariantSubjectTableCell", () => {
     expect(screen.getByText("Dogs")).toBeInTheDocument()
   })
 
-  it("renders a single preferred term link with label and count", () => {
+  it("renders a single preferred term link with label", () => {
     const subject = createVariantSubject({
       preferredTerms: [createSubjectLink()],
     })
@@ -163,10 +163,9 @@ describe("VariantSubjectTableCell", () => {
     const link = screen.getByRole("link", { name: "Beagle" })
     expect(link).toHaveAttribute(
       "href",
-      "/research/research-catalog/browse/subject/beagle"
+      "/research/research-catalog/browse?q=Beagle&search_scope=starts_with"
     )
     expect(screen.getByText(/See:/)).toBeInTheDocument()
-    expect(screen.getByText(/(42)/)).toBeInTheDocument()
   })
 
   it("renders multiple preferred term links", () => {
@@ -190,7 +189,6 @@ describe("VariantSubjectTableCell", () => {
     expect(screen.getAllByText(/See:/)[0]).toBeInTheDocument()
     expect(screen.getByRole("link", { name: "Beagle" })).toBeInTheDocument()
     expect(screen.getByRole("link", { name: "Poodle" })).toBeInTheDocument()
-    expect(screen.getByText(/(33)/)).toBeInTheDocument()
   })
 
   it("limits preferred terms to a maximum of 5", () => {
