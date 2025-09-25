@@ -140,6 +140,43 @@ export default function AdvancedSearch({
     }
   }, [alert])
 
+  const fields = [
+    { value: "format", label: "Format", options: formatOptions },
+    {
+      value: "buildingLocation",
+      label: "Item location",
+      options: buildingLocationOptions,
+    },
+    { value: "language", label: "Language", options: languageOptions },
+  ]
+  const multiselects = fields.map((field) => {
+    if (searchFormState["filters"][field.value]) {
+      return (
+        <div key={field.value}>
+          <MultiSelect
+            id={field.value}
+            isSearchable
+            closeOnBlur
+            buttonText={field.label}
+            selectedItems={{
+              [field.value]: {
+                items: searchFormState["filters"][field.value],
+              },
+            }}
+            items={field.options}
+            onChange={(e) =>
+              handleFilterChange(field.value, [
+                ...searchFormState["filters"][field.value],
+                e.target.id,
+              ])
+            }
+            onClear={() => handleFilterChange(field.value, [])}
+          />
+        </div>
+      )
+    } else return null
+  })
+
   return (
     <>
       <RCHead metadataTitle={metadataTitle} />
@@ -188,7 +225,6 @@ export default function AdvancedSearch({
                 <DateFilter {...dateFilterProps} />
               </FormField>
             </Flex>
-
             <Flex
               direction="column"
               gap={{ base: "m", md: "43px" }}
@@ -196,64 +232,7 @@ export default function AdvancedSearch({
               mt="m"
               width={{ base: "100%", md: "50%" }}
             >
-              <MultiSelect
-                id="buildingLocation"
-                buttonText="Item location"
-                isSearchable
-                closeOnBlur
-                selectedItems={{
-                  buildingLocation: {
-                    items: searchFormState["filters"].buildingLocation,
-                  },
-                }}
-                items={buildingLocationOptions}
-                onChange={(e) =>
-                  handleFilterChange("buildingLocation", [
-                    ...searchFormState["filters"].buildingLocation,
-                    e.target.id,
-                  ])
-                }
-                onClear={() => handleFilterChange("buildingLocation", [])}
-              />
-              <MultiSelect
-                id="language"
-                buttonText="Language"
-                isSearchable
-                closeOnBlur
-                selectedItems={{
-                  language: {
-                    items: searchFormState["filters"].language,
-                  },
-                }}
-                items={languageOptions}
-                onChange={(e) =>
-                  handleFilterChange("language", [
-                    ...searchFormState["filters"].language,
-                    e.target.id,
-                  ])
-                }
-                onClear={() => handleFilterChange("language", [])}
-              />
-              <MultiSelect
-                id="format"
-                buttonText="Format"
-                isSearchable
-                closeOnBlur
-                selectedItems={{
-                  format: {
-                    items: searchFormState["filters"].format,
-                  },
-                }}
-                items={formatOptions}
-                onChange={(e) =>
-                  handleFilterChange("format", [
-                    ...searchFormState["filters"].format,
-                    e.target.id,
-                  ])
-                }
-                onClear={() => handleFilterChange("format", [])}
-              />
-
+              {multiselects}
               <GroupedMultiSelect
                 field={{ value: "collection", label: "Collection" }}
                 groupedItems={collectionOptions}

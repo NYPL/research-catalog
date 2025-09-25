@@ -150,15 +150,16 @@ const GroupedMultiSelect = ({
   const searchInput = (
     <TextInput
       id={`${mainId}-textInput`}
-      labelText={`Find a ${field.value}`}
+      labelText="Search collections"
       isClearable
       isClearableCallback={() => setSearchTerm("")}
-      placeholder={`Find a ${field.value}`}
+      placeholder="Search"
       onChange={onChangeSearch}
       showLabel={false}
       showRequiredLabel={false}
       type="text"
       marginBottom="0"
+      __css={styles.menuSearchInputBox}
     />
   )
 
