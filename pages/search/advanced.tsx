@@ -18,7 +18,7 @@ import {
   Icon,
   MultiSelect,
 } from "@nypl/design-system-react-components"
-
+import type { TextInputRefType } from "@nypl/design-system-react-components"
 import Layout from "../../src/components/Layout/Layout"
 import {
   BASE_URL,
@@ -66,6 +66,7 @@ export default function AdvancedSearch({
   const metadataTitle = `Advanced search | ${SITE_NAME}`
   const router = useRouter()
   const notificationRef = useRef<HTMLDivElement>(null)
+  const dateInputRefs = [useRef<TextInputRefType>(), useRef<TextInputRefType>()]
 
   const [alert, setAlert] = useState(false)
   const [errorMessage, setErrorMessage] = useState(
@@ -76,8 +77,6 @@ export default function AdvancedSearch({
     searchFormReducer,
     initialSearchFormState
   )
-
-  const dateInputRefs = [useRef<any>(), useRef<any>()]
 
   const {
     dateFilterProps,
@@ -145,6 +144,8 @@ export default function AdvancedSearch({
     <>
       <RCHead metadataTitle={metadataTitle} />
       <Layout isAuthenticated={isAuthenticated} activePage="advanced">
+        {/* Always render the wrapper element that will display the
+          dynamically rendered notification for focus management */}
         <Box tabIndex={-1} ref={notificationRef}>
           {alert && <Banner variant="negative" content={errorMessage} mb="s" />}
         </Box>
@@ -153,6 +154,9 @@ export default function AdvancedSearch({
         </Heading>
         <Form
           id="advancedSearchForm"
+          // We are using a post request on advanced search when JS is disabled
+          // so that we can build the query string correctly on the server and
+          // redirect the user to the search results.
           method="post"
           action={`${BASE_URL}/search`}
           onSubmit={handleSubmit}
