@@ -127,7 +127,7 @@ const Search = ({
             <SkeletonLoader showImage={false} width="250px" />
           ) : null}
 
-          <Flex flexDir="column" width="100%">
+          <Flex flexDir="column" width="100%" mb="xl">
             {displayAppliedFilters && <AppliedFilters aggregations={aggs} />}
             <Flex
               justifyContent="space-between"
@@ -193,7 +193,6 @@ const Search = ({
             <Pagination
               id="results-pagination"
               mt="xxl"
-              mb="l"
               className="no-print"
               initialPage={searchParams.page}
               currentPage={searchParams.page}

@@ -146,7 +146,7 @@ const SearchBrowseForm = ({
           <Flex
             direction="column"
             justifyContent="space-between"
-            mt={{ base: 0, md: "xs" }}
+            mt={{ base: "0", md: "xs" }}
           >
             {activePage === "sh-results" && backUrl && (
               <Link
