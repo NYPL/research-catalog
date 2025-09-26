@@ -48,8 +48,8 @@ import RCLink from "../../src/components/Links/RCLink/RCLink"
 import RCHead from "../../src/components/Head/RCHead"
 import DateFilter from "../../src/components/SearchFilters/DateFilter"
 import { useDateFilter } from "../../src/hooks/useDateFilter"
-import GroupedMultiSelect from "../../src/components/AdvancedSearch/GroupedMultiselect/GroupedMultiselect"
 import { debounce } from "underscore"
+import MultiSelectWithGroupTitles from "../../src/components/AdvancedSearch/MultiSelectWithGroupTitles/MultiSelectWithGroupTitles"
 
 export const defaultEmptySearchErrorMessage =
   "Error: please enter at least one field to submit an advanced search."
@@ -148,35 +148,52 @@ export default function AdvancedSearch({
       options: buildingLocationOptions,
     },
     { value: "language", label: "Language", options: languageOptions },
+    { value: "collection", label: "Collection", options: collectionOptions },
   ]
-  const multiselects = fields.map((field) => {
-    if (searchFormState["filters"][field.value]) {
-      return (
-        <div key={field.value}>
-          <MultiSelect
-            id={field.value}
-            isSearchable
-            closeOnBlur
-            buttonText={field.label}
-            selectedItems={{
-              [field.value]: {
-                items: searchFormState["filters"][field.value],
-              },
-            }}
-            items={field.options}
-            onChange={(e) =>
-              handleFilterChange(field.value, [
-                ...searchFormState["filters"][field.value],
-                e.target.id,
-              ])
-            }
-            onClear={() => handleFilterChange(field.value, [])}
-          />
-        </div>
-      )
-    } else return null
-  })
 
+  const multiselects = fields.map((field) => {
+    return field.value !== "collection" ? (
+      <div key={field.value}>
+        <MultiSelect
+          id={field.value}
+          isSearchable
+          closeOnBlur
+          buttonText={field.label}
+          selectedItems={{
+            [field.value]: {
+              items: searchFormState["filters"][field.value],
+            },
+          }}
+          items={field.options}
+          onChange={(e) =>
+            handleFilterChange(field.value, [
+              ...searchFormState["filters"][field.value],
+              e.target.id,
+            ])
+          }
+          onClear={() => handleFilterChange(field.value, [])}
+        />
+      </div>
+    ) : (
+      <MultiSelectWithGroupTitles
+        key={field.value}
+        field={{ value: field.value, label: field.label }}
+        groupedItems={field.options}
+        onChange={(e) =>
+          handleFilterChange(field.value, [
+            ...searchFormState["filters"][field.value],
+            e.target.id,
+          ])
+        }
+        onClear={() => handleFilterChange(field.value, [])}
+        selectedItems={{
+          [field.value]: {
+            items: searchFormState["filters"][field.value],
+          },
+        }}
+      />
+    )
+  })
   return (
     <>
       <RCHead metadataTitle={metadataTitle} />
@@ -233,22 +250,6 @@ export default function AdvancedSearch({
               width={{ base: "100%", md: "50%" }}
             >
               {multiselects}
-              <GroupedMultiSelect
-                field={{ value: "collection", label: "Collection" }}
-                groupedItems={collectionOptions}
-                onChange={(e) =>
-                  handleFilterChange("collection", [
-                    ...searchFormState["filters"].collection,
-                    e.target.id,
-                  ])
-                }
-                onClear={() => handleFilterChange("collection", [])}
-                selectedItems={{
-                  collection: {
-                    items: searchFormState["filters"].collection,
-                  },
-                }}
-              />
             </Flex>
           </Flex>
 

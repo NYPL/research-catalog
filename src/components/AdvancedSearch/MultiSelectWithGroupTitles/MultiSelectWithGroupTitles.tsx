@@ -34,7 +34,7 @@ export interface MultiSelectProps {
 /* Reservoir Multiselect modified to accept items with a group title that does not
  ** appear as a checkbox. Used for the Collection filter in Advanced Search.
  */
-const GroupedMultiSelect = ({
+const MultiSelectWithGroupTitles = ({
   field,
   groupedItems,
   onChange,
@@ -47,18 +47,6 @@ const GroupedMultiSelect = ({
 
   const accordionButtonRef = useRef<HTMLDivElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
-
-  const filteredGroups = groupedItems
-    .map((group) => {
-      if (!searchTerm) return group
-      const matchingChildren = group.children.filter((child) =>
-        child.name.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-      return matchingChildren.length > 0
-        ? { ...group, children: matchingChildren }
-        : null
-    })
-    .filter(Boolean) as MultiSelectItem[]
 
   const selectedItemsCount: number =
     selectedItems[field.value]?.items.length || 0
@@ -117,6 +105,20 @@ const GroupedMultiSelect = ({
     return !!selectedItems[multiSelectId]?.items.includes(itemId)
   }
 
+  // Filter by search term without losing grouping.
+  const filteredGroups = groupedItems
+    .map((group) => {
+      if (!searchTerm) return group
+      const matchingChildren = group.children.filter((child) =>
+        child.name.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+      return matchingChildren.length > 0
+        ? { ...group, children: matchingChildren }
+        : null
+    })
+    .filter(Boolean) as MultiSelectItem[]
+
+  // Render group titles with checkbox groups.
   const renderGroups = (groups: MultiSelectItem[]) =>
     groups.map((group) => (
       <Box key={group.id} mb="xs">
@@ -237,5 +239,5 @@ const GroupedMultiSelect = ({
   )
 }
 
-GroupedMultiSelect.displayName = "GroupedMultiSelect"
-export default GroupedMultiSelect
+MultiSelectWithGroupTitles.displayName = "MultiSelectWithGroupTitles"
+export default MultiSelectWithGroupTitles
