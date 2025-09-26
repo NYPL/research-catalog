@@ -46,7 +46,6 @@ describe("bibUtils", () => {
   describe("itemFiltersActive", () => {
     it("returns true when any of the filter params are populated in the bib query string", () => {
       expect(itemFiltersActive({ item_location: "location" })).toBe(true)
-      expect(itemFiltersActive({ item_format: "format" })).toBe(true)
       expect(itemFiltersActive({ item_status: "status" })).toBe(true)
       expect(itemFiltersActive({ item_date: "date" })).toBe(true)
     })
@@ -61,7 +60,6 @@ describe("bibUtils", () => {
         itemFiltersActive({
           item_location: "",
           item_status: "",
-          item_format: "",
           item_date: "",
         })
       ).toBe(false)

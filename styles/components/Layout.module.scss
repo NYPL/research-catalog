@@ -1,15 +1,5 @@
 @import "../utils/mixins";
 
-.researchHeadingContainer {
-  background-color: var(--nypl-colors-section-research-primary);
-
-  h1 {
-    @include maxWidth;
-    padding: var(--nypl-space-l) var(--nypl-space-s);
-    color: var(--nypl-colors-ui-white);
-  }
-}
-
 .banner {
   max-width: 1248px;
 }

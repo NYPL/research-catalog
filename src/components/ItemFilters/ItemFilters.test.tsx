@@ -20,7 +20,6 @@ describe("ItemFilters", () => {
           handleFiltersChange={filtersChangeMock}
           appliedFilters={{
             location: ["Offsite"],
-            format: ["Text"],
             status: ["Available"],
             year: [],
           }}
@@ -36,7 +35,6 @@ describe("ItemFilters", () => {
 
     it("renders filters container with one MultiSelect per populated checkbox group", async () => {
       expect(screen.getByTestId("item-filters-container")).toBeInTheDocument()
-      expect(screen.getByTestId("format-multi-select")).toBeInTheDocument()
       expect(screen.getByTestId("status-multi-select")).toBeInTheDocument()
     })
 
@@ -68,7 +66,6 @@ describe("ItemFilters", () => {
       )
       expect(filtersChangeMock).toHaveBeenCalledWith(
         {
-          item_format: "Text",
           item_status: "Available",
         },
         false
@@ -85,7 +82,6 @@ describe("ItemFilters", () => {
           handleFiltersChange={filtersChangeMock}
           appliedFilters={{
             location: ["Offsite"],
-            format: ["Text"],
             status: ["Available"],
             year: [],
           }}

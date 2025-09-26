@@ -17,6 +17,5 @@ describe("Browse index page", () => {
       />
     )
     expect(screen.queryByText("Browse the Catalog")).toBeInTheDocument()
-    expect(screen.queryByRole("banner")).toBeInTheDocument()
   })
 })

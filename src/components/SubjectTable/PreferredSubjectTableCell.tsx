@@ -33,10 +33,10 @@ const PreferredSubjectTableCell = ({
       </RCLink>
       {relatedTerms.length > 0 && (
         <List
-          type="ul"
+          variant="ul"
           m="0"
           listItems={relatedTerms?.map(({ label, terms }) => (
-            <Text size="body2" mt="-23px" noSpace key={label}>
+            <Text size="body2" mt="-23px" key={label}>
               {label}: {commaSeparatedSubjectLinks(terms)}
             </Text>
           ))}

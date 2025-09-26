@@ -134,7 +134,7 @@ export default function Browse({
           decorative
           name="utilitySearch"
           size="xlarge"
-          type="default"
+          variant="default"
         />
         <Heading size="heading6" color="section.research.secondary">
           Use the search bar above to start browsing the Subject Headings index
@@ -158,7 +158,6 @@ export default function Browse({
             level="h2"
             size="heading5"
             tabIndex={-1}
-            noSpace
             minH="40px"
             aria-live="polite"
             mb={{ base: "m", md: 0 }}

@@ -36,7 +36,7 @@ function Error({ activePage }: ErrorPageProps) {
             height={68}
             style={{ marginBottom: "48px" }}
           />
-          <Heading level="h2" size="heading3">
+          <Heading level="h3" mb="s">
             Something went wrong on our end
           </Heading>
           <Text marginBottom="0">

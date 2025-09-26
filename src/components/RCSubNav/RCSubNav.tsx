@@ -80,7 +80,6 @@ const RCSubNav = ({ activePage, isAuthenticated }: SubNavProps) => {
           >
             <Icon name="actionIdentityFilled" size="medium" />
             <Text
-              noSpace
               __css={{
                 display: "none",
                 ["@media screen and (min-width: 600px)"]: {

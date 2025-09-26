@@ -109,6 +109,7 @@ export interface SierraCodeName {
 }
 
 export interface Hold {
+  itemId: string
   pickupByDate: string | null
   id: string | null
   canFreeze: boolean

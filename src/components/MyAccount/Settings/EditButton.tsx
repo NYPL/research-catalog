@@ -16,7 +16,7 @@ const EditButton = forwardRef<HTMLButtonElement, EditButtonProps>(
         isDisabled={isDisabled}
         id={buttonId}
         aria-label={buttonLabel}
-        buttonType="text"
+        variant="text"
         onClick={onClick}
         sx={{
           marginTop: { base: "unset", lg: "-xs" },

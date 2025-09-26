@@ -35,7 +35,7 @@ describe("Applied Filters", () => {
       )
       render(component)
 
-      await userEvent.click(screen.getAllByTestId("filter-tags")[0])
+      await userEvent.click(screen.getAllByTestId("ds-tagSetFilter-tags")[0])
       expect(decodeURI(mockRouter.asPath)).toBe(
         "/search?q=spaghetti&filters[language][0]=lang%3Afre"
       )
@@ -45,7 +45,7 @@ describe("Applied Filters", () => {
         "/search?q=spaghetti&filters[format][0]=resourcetypes%3Atxt&filters[language][0]=lang%3Afre"
       )
       render(component)
-      await userEvent.click(screen.getByTestId("filter-clear-all"))
+      await userEvent.click(screen.getByTestId("ds-tagSetFilter-clear-all"))
       expect(mockRouter.asPath).toBe("/search?q=spaghetti")
     })
     it("can remove one of many field filters", async () => {
@@ -53,7 +53,7 @@ describe("Applied Filters", () => {
         "/search?q=spaghetti&filters[format][0]=resourcetypes%3Atxt&filters[format][1]=resourcetypes%3Aaud&filters[format][2]=resourcetypes%3Amov&filters[language][0]=lang%3Afre"
       )
       render(component)
-      await userEvent.click(screen.getAllByTestId("filter-tags")[0])
+      await userEvent.click(screen.getAllByTestId("ds-tagSetFilter-tags")[0])
       expect(decodeURI(mockRouter.asPath)).toBe(
         "/search?q=spaghetti&filters[format][0]=resourcetypes%3Aaud&filters[format][1]=resourcetypes%3Amov&filters[language][0]=lang%3Afre"
       )
@@ -88,14 +88,16 @@ describe("Applied Filters", () => {
         handleSortChange={() => null}
       />
     )
-    expect(screen.queryByTestId("filter-clear-all")).not.toBeInTheDocument()
+    expect(
+      screen.queryByTestId("ds-tagSetFilter-clear-all")
+    ).not.toBeInTheDocument()
   })
   it("does not remove locked filter on clear all", async () => {
     mockRouter.push(
       "/browse/subjects/Dogs.?filters%5BbuildingLocation%5D%5B0%5D=rc&filters%5BbuildingLocation%5D%5B1%5D=ma"
     )
     render(component)
-    await userEvent.click(screen.getByTestId("filter-clear-all"))
+    await userEvent.click(screen.getByTestId("ds-tagSetFilter-clear-all"))
     expect(mockRouter.asPath).toBe("/browse/subjects/Dogs.")
   })
 })

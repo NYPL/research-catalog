@@ -10,7 +10,7 @@ const EDSBanner = () => {
   return (
     <Banner
       className={`${styles.banner} no-print`}
-      type="informative"
+      variant="informative"
       content={
         <>
           <span style={{ color: "var(--nypl-colors-ui-success-primary)" }}>

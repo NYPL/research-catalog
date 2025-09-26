@@ -1,6 +1,6 @@
 import {
   Link as DSLink,
-  type LinkTypes,
+  type LinkVariants,
 } from "@nypl/design-system-react-components"
 import { type ReactNode } from "react"
 
@@ -9,7 +9,7 @@ interface ExternalLinkProps {
   children: ReactNode
   className?: string
   target?: "_blank" | "_parent" | "_self" | "_top"
-  type?: LinkTypes
+  variant?: LinkVariants
   isUnderlined?: boolean
   disabled?: boolean
   [key: string]: any

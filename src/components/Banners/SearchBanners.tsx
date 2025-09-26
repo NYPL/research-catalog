@@ -14,9 +14,11 @@ const SearchBanners = ({
       align="center"
       gap="s"
       direction="column"
-      ml={{ base: "s", xl: 0 }}
-      mr={{ base: "s", xl: 0 }}
-      mt={{ base: "s", md: "l" }}
+      sx={{
+        px: { base: "s", md: "m", xl: "s" },
+        pt: "l",
+        pb: "xs",
+      }}
     >
       <EDSBanner />
       {showNotification && bannerNotification && (
