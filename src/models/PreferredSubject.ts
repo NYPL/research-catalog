@@ -2,7 +2,7 @@ import type {
   DiscoveryPreferredSubjectResult,
   SubjectLink,
 } from "../types/browseTypes"
-import { buildSubjectLinks, getSubjectURL } from "../utils/browseUtils"
+import { buildSubjectLinks, getSubjectSearchURL } from "../utils/browseUtils"
 
 /**
  * The PreferredSubject class represents an authorized subject heading,
@@ -19,7 +19,7 @@ export default class PreferredSubject {
   broaderTerms?: { label: string; terms: SubjectLink[] }
 
   constructor(result?: DiscoveryPreferredSubjectResult) {
-    this.url = getSubjectURL(result.termLabel)
+    this.url = getSubjectSearchURL(result.termLabel)
     this.termLabel = result.termLabel
     this.count = result.count?.toLocaleString()
     this.seeAlso = result.seeAlso?.length && {

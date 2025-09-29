@@ -3,7 +3,6 @@ import type {
   DiscoveryVariantSubjectResult,
   SubjectLink,
 } from "../../types/browseTypes"
-import { getSubjectURL } from "../../utils/browseUtils"
 
 describe("VariantSubject model", () => {
   const mockResult: DiscoveryVariantSubjectResult = {
@@ -23,12 +22,12 @@ describe("VariantSubject model", () => {
     const expectedPreferredTerms: SubjectLink[] = [
       {
         termLabel: "Computer Science",
-        url: getSubjectURL("Computer Science"),
+        url: "/browse?q=Computer Science&search_scope=starts_with",
         count: "120",
       },
       {
         termLabel: "Computing",
-        url: getSubjectURL("Computing"),
+        url: "/browse?q=Computing&search_scope=starts_with",
         count: "45",
       },
     ]
