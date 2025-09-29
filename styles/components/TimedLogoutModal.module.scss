@@ -13,9 +13,8 @@
 }
 
 .logoutModalBody {
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 768px) {
     width: 100vw;
-    height: 100vh;
     position: absolute;
   }
   background: var(--nypl-colors-ui-bg-default);
@@ -23,7 +22,8 @@
   border-radius: 5px;
   padding-left: var(--nypl-space-s);
   padding-right: var(--nypl-space-s);
-  width: 472px;
+  padding-top: var(--nypl-space-s);
+  padding-bottom: var(--nypl-space-s);
   margin-left: auto;
   margin-right: auto;
 }

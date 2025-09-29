@@ -10,7 +10,7 @@ import type {
   AnyBibDetail,
 } from "../../types/bibDetailsTypes"
 import { rtlOrLtr } from "../../utils/bibUtils"
-import type { ReactNode } from "react"
+import { Fragment, type ReactNode } from "react"
 
 interface BibDetailsProps {
   details: AnyBibDetail[]
@@ -22,13 +22,13 @@ const BibDetails = ({ details, heading }: BibDetailsProps) =>
     <List
       title={
         heading && (
-          <Heading level="three" border="none">
+          <Heading level="h3" size="heading4" border="none">
             {heading}
           </Heading>
         )
       }
       noStyling
-      type="dl"
+      variant="dl"
       showRowDividers={false}
       className={`${styles.bibDetails} ${styles.inBibPage}`}
     >
@@ -45,14 +45,14 @@ const BibDetails = ({ details, heading }: BibDetailsProps) =>
   )
 
 const DetailElement = (label: string, listChildren: ReactNode[]) => (
-  <>
+  <Fragment key={kebabCase(label)}>
     <dt>{label}</dt>
     <dd>
-      <List noStyling data-testid={kebabCase(label)} type="ol">
+      <List noStyling data-testid={kebabCase(label)} variant="ol">
         {listChildren}
       </List>
     </dd>
-  </>
+  </Fragment>
 )
 
 export const PlainTextElement = ({ label, value }: BibDetail) =>

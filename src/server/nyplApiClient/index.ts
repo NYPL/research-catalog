@@ -61,12 +61,19 @@ const nyplApiClient = async ({
     CACHE.clients[clientCacheKey] = nyplApiClient
     const get = nyplApiClient.get.bind(nyplApiClient)
     nyplApiClient.get = async function (path) {
-      logger.info(`GET ${baseUrl}/${path}`)
+      logger.info("Platform request", {
+        path: `${baseUrl}${path}`,
+        method: "GET",
+      })
       return get(path)
     }
     const post = nyplApiClient.post.bind(nyplApiClient)
     nyplApiClient.post = async function (path, body) {
-      logger.info(`POSTing ${JSON.stringify(body)} to ${baseUrl}/${path}`)
+      logger.info("Platform request", {
+        path: `${baseUrl}${path}`,
+        method: "GET",
+        body: JSON.stringify(body),
+      })
       return post(path, body)
     }
     return nyplApiClient

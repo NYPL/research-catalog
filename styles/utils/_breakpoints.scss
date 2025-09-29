@@ -1,5 +1,6 @@
-// Breakpoints derived from the DS.
-$nypl-breakpoint-medium: 600px;
-$nypl-breakpoint-large: 960px;
-$nypl-breakpoint-xl: 1280px;
-$nypl-max-width: $nypl-breakpoint-xl;
+// Breakpoints derived from DS.
+$nypl-breakpoint-sm-mobile: 480px;
+$nypl-breakpoint-lg-mobile: 768px;
+$nypl-breakpoint-sm-tablet: 1024px;
+$nypl-breakpoint-lg-tablet: 1280px;
+$nypl-max-width: $nypl-breakpoint-lg-tablet;

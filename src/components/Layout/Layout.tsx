@@ -1,14 +1,15 @@
-import { type ReactElement, type PropsWithChildren } from "react"
+import type { PropsWithChildren } from "react"
 import {
-  Box,
-  TemplateAppContainer,
   Breadcrumbs,
   DSProvider,
   Heading,
+  TemplateBreakout,
+  Template,
+  TemplateContent,
+  TemplateMain,
+  Hero,
 } from "@nypl/design-system-react-components"
-
 import { type RCPage } from "../../types/pageTypes"
-import styles from "../../../styles/components/Layout.module.scss"
 import SearchForm from "../SearchForm/SearchForm"
 import { BASE_URL } from "../../config/constants"
 import FeedbackForm from "../FeedbackForm/FeedbackForm"
@@ -19,9 +20,7 @@ import SubjectHeadingBanner from "../Banners/SubjectHeadingBanner"
 import SearchBanners from "../Banners/SearchBanners"
 
 interface LayoutProps {
-  sidebar?: ReactElement
-  activePage: RCPage
-  sidebarPosition?: "right" | "left"
+  activePage?: RCPage
   isAuthenticated?: boolean
   searchAggregations?: Aggregation[]
   searchResultsCount?: number
@@ -29,17 +28,15 @@ interface LayoutProps {
 }
 
 /**
- * The Layout component wraps the TemplateAppContainer from the DS and
+ * The Layout component wraps the Template from the DS and
  * controls the rendering of Research Catalog header components per-page.
  */
 const Layout = ({
   searchAggregations,
   children,
   isAuthenticated,
-  sidebar,
   activePage,
   searchResultsCount,
-  sidebarPosition = "left",
   bannerNotification,
 }: PropsWithChildren<LayoutProps>) => {
   const showSearch = activePage === "search" || activePage === ""
@@ -49,27 +46,12 @@ const Layout = ({
     activePage === "browse" || activePage === "sh-results"
   return (
     <DSProvider>
-      <TemplateAppContainer
-        // This is a workaround to fix a text-wrapping issue when page is zoomed in on
-        // TODO: Address this issue in the DS
-        sx={{
-          "main > div": { maxWidth: "100vw" },
-          rowGap: {
-            base: "grid.m",
-            md: "grid.l",
-          },
-          main: {
-            rowGap: {
-              base: 0,
-              md: "grid.l",
-            },
-          },
-        }}
-        breakout={
+      <Template variant="full">
+        <TemplateBreakout>
           <>
             <Breadcrumbs
               data-testid="layout-breadcrumbs"
-              breadcrumbsType="research"
+              variant="research"
               breadcrumbsData={[
                 { url: "https://nypl.org", text: "Home" },
                 { url: "https://www.nypl.org/research", text: "Research" },
@@ -89,14 +71,20 @@ const Layout = ({
                 },
               }}
             />
-            <div className={`${styles.researchHeadingContainer} no-print`}>
-              <Heading
-                id="heading-h1"
-                level="h1"
-                text="Research Catalog"
-                marginBottom="m"
-              />
-            </div>
+
+            <Hero
+              backgroundColor="section.research.primary"
+              variant="tertiary"
+              foregroundColor="ui.white"
+              heading={
+                <Heading
+                  id="heading-h1"
+                  level="h1"
+                  text="Research Catalog"
+                  py={{ base: "m", xl: "unset" }}
+                />
+              }
+            />
             <RCSubNav
               isAuthenticated={isAuthenticated}
               activePage={activePage}
@@ -125,16 +113,14 @@ const Layout = ({
               />
             )}
           </>
-        }
-        sidebar={sidebar ? sidebarPosition : "none"}
-        contentPrimary={
-          <Box pb="l">
+        </TemplateBreakout>
+        <TemplateMain>
+          <TemplateContent pb="l">
             {children}
             <FeedbackForm />
-          </Box>
-        }
-        contentSidebar={sidebar && <Box width="288px">{sidebar}</Box>}
-      />
+          </TemplateContent>
+        </TemplateMain>
+      </Template>
     </DSProvider>
   )
 }

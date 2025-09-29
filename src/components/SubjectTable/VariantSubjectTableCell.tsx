@@ -4,7 +4,7 @@ import type { SubjectLink, VariantSubject } from "../../types/browseTypes"
 
 const VariantSubjectTableCell = ({ subject }: { subject: VariantSubject }) => {
   const PreferredTermLink = (prefTerm: SubjectLink) => (
-    <Text size="body2" noSpace mt="-23px">
+    <Text size="body2" mt="-23px">
       See:{" "}
       <RCLink href={prefTerm.url} isUnderlined={false}>
         {prefTerm.termLabel}
@@ -14,9 +14,9 @@ const VariantSubjectTableCell = ({ subject }: { subject: VariantSubject }) => {
 
   return (
     <Flex flexDir="column" gap="xs">
-      <Text noSpace>{subject.termLabel}</Text>
+      <Text>{subject.termLabel}</Text>
       <List
-        type="ul"
+        variant="ul"
         m="0"
         listItems={subject.preferredTerms.slice(0, 5).map((term) => (
           <PreferredTermLink key={term.termLabel} {...term} />

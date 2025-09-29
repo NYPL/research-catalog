@@ -46,6 +46,7 @@ const SubjectTable = ({
             paddingLeft: "xs",
           },
         },
+        thead: { th: { fontSize: "14px" } },
       }}
       columnHeaders={["Subject heading", "Results"]}
       isScrollable

@@ -11,13 +11,15 @@ const SubjectHeadingBanner = () => {
     <Flex
       align="center"
       direction="column"
-      ml={{ base: "s", xl: 0 }}
-      mr={{ base: "s", xl: 0 }}
+      sx={{
+        px: { base: "s", md: "m", xl: "s" },
+        pt: "l",
+        pb: "xs",
+      }}
     >
       <Banner
         className={`${styles.banner} no-print`}
-        type="recommendation"
-        mt={{ base: "s", lg: "l" }}
+        variant="recommendation"
         isDismissible
         content={
           <>

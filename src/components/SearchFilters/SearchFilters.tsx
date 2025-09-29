@@ -193,7 +193,7 @@ const SearchFilters = ({
         }}
         accordionData={[
           {
-            accordionType: "default",
+            variant: "default",
             ariaLabel: "Date filter",
             label: "Date",
             panel: (

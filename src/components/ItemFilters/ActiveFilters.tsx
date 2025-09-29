@@ -25,7 +25,7 @@ const ActiveFilters = ({ filterName, onClick, tagSetData }) => {
       <TagSet
         id={`${filterName}-applied-filters`}
         isDismissible
-        type="filter"
+        variant="filter"
         onClick={onClick}
         tagSetData={tagSetData}
       />

@@ -42,7 +42,7 @@ describe("BibDetail component", () => {
       expect(screen.getByText("Series statement")).toBeInTheDocument()
       expect(screen.queryAllByText(/Haute enfance/)[0]).toBeInTheDocument()
     })
-    it("merges annotated MARC and resource fields without duplicates", () => {
+    it("merges annotated MARC and resource fields without label duplicates", () => {
       const combinedDetails = noParallelsBibModel.bottomDetails
       const labels = combinedDetails.map((d) => d.label)
       const labelCounts = labels.reduce((acc, label) => {
@@ -54,9 +54,25 @@ describe("BibDetail component", () => {
         expect(count).toBeLessThanOrEqual(1)
       })
     })
+    it("merges annotated MARC and resource fields without value duplicates", () => {
+      const combinedDetails = noParallelsBibModel.bottomDetails
+      const allValues = combinedDetails.flatMap((d) => {
+        // drop subjects, they don't need to be assessed for duplication
+        if (d.label === "Subject") return []
+        return Array.isArray(d.value) ? d.value.map(String) : [String(d.value)]
+      })
+      const valueCounts = allValues.reduce((acc, value) => {
+        acc[value] = (acc[value] || 0) + 1
+        return acc
+      }, {} as Record<string, number>)
+
+      Object.entries(valueCounts).forEach(([value, count]) => {
+        expect(count).toBeLessThanOrEqual(1)
+      })
+    })
   })
   describe("text only details", () => {
-    it("single value", () => {
+    it("single value: title", () => {
       render(<BibDetails details={noParallelsBibModel.topDetails} />, {
         wrapper: MemoryRouterProvider,
       })
@@ -64,6 +80,15 @@ describe("BibDetail component", () => {
       const title = screen.getByText("Spaghetti! / Gérard de Cortanze.")
       expect(titleLabel).toBeInTheDocument()
       expect(title).toBeInTheDocument()
+    })
+    it("single value: format", () => {
+      render(<BibDetails details={noParallelsBibModel.topDetails} />, {
+        wrapper: MemoryRouterProvider,
+      })
+      const formatLabel = screen.getByText("Format")
+      const format = screen.getByText("Text")
+      expect(formatLabel).toBeInTheDocument()
+      expect(format).toBeInTheDocument()
     })
     it("renders multiple values, primaries and orphaned parallels", () => {
       render(<BibDetails details={parallelsBibModel.topDetails} />)

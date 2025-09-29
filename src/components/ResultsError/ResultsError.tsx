@@ -27,14 +27,14 @@ export default function ResultsError({ errorStatus, page }: ResultsErrorProps) {
     case 404:
       errorContent = (
         <>
-          <Heading level="h2" size="heading3" tabIndex={-1} id={headingID}>
+          <Heading level="h3" tabIndex={-1} id={headingID} mb="s">
             No results found
           </Heading>
-          <Text noSpace>
+          <Text>
             We couldn&apos;t find anything matching your criteria. Try a
             different search term.{" "}
           </Text>
-          <Text noSpace>
+          <Text>
             You can also search our{" "}
             <ExternalLink href={appConfig.urls.circulatingCatalog}>
               Branch Catalog
@@ -56,7 +56,7 @@ export default function ResultsError({ errorStatus, page }: ResultsErrorProps) {
     case 500:
       errorContent = (
         <>
-          <Heading level="h2" size="heading3" tabIndex={-1} id={headingID}>
+          <Heading level="h3" tabIndex={-1} id={headingID} mb="s">
             Something went wrong on our end
           </Heading>
           <Text marginBottom="0">
@@ -76,7 +76,7 @@ export default function ResultsError({ errorStatus, page }: ResultsErrorProps) {
     default:
       errorContent = (
         <>
-          <Heading level="h2" size="heading3" tabIndex={-1} id={headingID}>
+          <Heading level="h3" tabIndex={-1} id={headingID} mb="s">
             There was an unexpected error
           </Heading>
           <Text marginBottom="0">

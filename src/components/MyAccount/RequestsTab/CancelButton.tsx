@@ -31,7 +31,7 @@ const CancelButton = ({
   const { getMostUpdatedSierraAccountData } = useContext(PatronDataContext)
 
   const successModalProps = {
-    type: "default",
+    variant: "default",
     bodyContent: (
       <Box className={styles.modalBody}>
         <Text>
@@ -64,7 +64,7 @@ const CancelButton = ({
   }
 
   const failureModalProps = {
-    type: "default",
+    variant: "default",
     bodyContent: (
       <Box className={styles.modalBody}>
         <Text>
@@ -89,7 +89,7 @@ const CancelButton = ({
   }
 
   const checkModalProps = {
-    type: "confirmation",
+    variant: "confirmation",
     bodyContent: (
       <Box className={styles.noIconBody}>
         <Text>
@@ -110,7 +110,7 @@ const CancelButton = ({
     headingText: <h5 className={styles["noIconHeading"]}>Cancel request?</h5>,
     onConfirm: async () => {
       setModalProps({
-        type: "default",
+        variant: "default",
         bodyContent: <SkeletonLoader showImage={false} />,
         onClose: () => null,
         closeButtonLabel: "Loading",
@@ -122,7 +122,11 @@ const CancelButton = ({
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ patronId: patron.id }),
+          body: JSON.stringify({
+            patronId: patron.id,
+            patronBarcode: patron.barcode,
+            itemId: hold.itemId,
+          }),
         }
       )
       if (response.status == 200) {
@@ -144,7 +148,7 @@ const CancelButton = ({
       <Button
         aria-label={`${buttonLabel} ${hold.title}`}
         width="100%"
-        buttonType="secondary"
+        variant="secondary"
         id={`cancel-${hold.id}`}
         onClick={() => {
           setModalProps(checkModalProps as ConfirmationModalProps)

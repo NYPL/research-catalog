@@ -25,6 +25,7 @@ const FindingAid = ({
       sx={{
         borderBottom: hasElectronicResources ? "0px" : "1px ui.gray solid",
       }}
+      marginBottom="s"
     >
       <CardHeading level="four" size="body1" mb="xs">
         Collection information
@@ -32,7 +33,7 @@ const FindingAid = ({
       <CardContent>
         <ExternalLink
           href={findingAidURL}
-          type="standalone"
+          variant="standalone"
           fontSize={{
             base: "mobile.body.body2",
             md: "desktop.body.body2",
@@ -48,9 +49,11 @@ const FindingAid = ({
             collections{" "}
             <Link
               hasVisitedState={false}
-              href={"https://www.nypl.org/research/appointments"}
+              href={
+                "https://libguides.nypl.org/special-collections-account-tutorial"
+              }
             >
-              require an appointment
+              may require an appointment
             </Link>{" "}
             to view and use on-site.
           </Text>

@@ -12,7 +12,7 @@ describe("Status banner", () => {
       "https://www.nypl.org/get-help/contact-us"
     )
     expect(screen.getByRole("complementary")).toHaveAttribute(
-      "data-type",
+      "data-variant",
       "negative"
     )
   })
@@ -21,7 +21,7 @@ describe("Status banner", () => {
     render(<StatusBanner status="failure" statusMessage="" />)
     expect(screen.getByText(/Your changes were not saved/)).toBeInTheDocument()
     expect(screen.getByRole("complementary")).toHaveAttribute(
-      "data-type",
+      "data-variant",
       "negative"
     )
   })
@@ -30,7 +30,7 @@ describe("Status banner", () => {
     render(<StatusBanner status="success" statusMessage="" />)
     expect(screen.getByText(/Your changes were saved/)).toBeInTheDocument()
     expect(screen.getByRole("complementary")).toHaveAttribute(
-      "data-type",
+      "data-variant",
       "positive"
     )
   })

@@ -1,5 +1,5 @@
 import React from "react"
-import { render, screen, within } from "../../../utils/testUtils"
+import { render, screen, waitFor, within } from "../../../utils/testUtils"
 import {
   processedHolds,
   processedPatron,
@@ -8,8 +8,10 @@ import { userEvent } from "@testing-library/user-event"
 import RequestsTab from "./RequestsTab"
 import { PatronDataProvider } from "../../../context/PatronDataContext"
 import { pickupLocations } from "../../../../__test__/fixtures/rawSierraAccountData"
+import logger from "../../../../logger.js"
 
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
+
 const patronFetchSpy = jest.fn()
 const renderWithPatronDataContext = (holds = processedHolds) => {
   return render(
@@ -59,7 +61,11 @@ describe("RequestsTab", () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ patronId: processedPatron.id }),
+        body: JSON.stringify({
+          patronId: processedPatron.id,
+          patronBarcode: processedPatron.barcode,
+          itemId: processedHolds[0].itemId,
+        }),
       }
     )
   })
@@ -92,7 +98,11 @@ describe("RequestsTab", () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ patronId: processedPatron.id }),
+        body: JSON.stringify({
+          patronId: processedPatron.id,
+          patronBarcode: processedPatron.barcode,
+          itemId: processedHolds[0].itemId,
+        }),
       }
     )
     await userEvent.click(component.getAllByText("OK")[0])
@@ -119,7 +129,11 @@ describe("RequestsTab", () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ patronId: processedPatron.id }),
+        body: JSON.stringify({
+          patronId: processedPatron.id,
+          patronBarcode: processedPatron.barcode,
+          itemId: processedHolds[0].itemId,
+        }),
       }
     )
 
@@ -167,6 +181,7 @@ describe("RequestsTab", () => {
           patronId: processedPatron.id,
           freeze: true,
           pickupLocation: "sn",
+          itemId: "23167148",
         }),
       }
     )
@@ -184,6 +199,7 @@ describe("RequestsTab", () => {
           patronId: processedPatron.id,
           freeze: false,
           pickupLocation: "sn",
+          itemId: "23167148",
         }),
       }
     )
@@ -203,7 +219,7 @@ describe("RequestsTab", () => {
     expect(
       component.queryByText("Hold freeze failed", { exact: false })
     ).not.toBeInTheDocument()
-    let freezeButtons = component.getAllByText("Freeze")
+    const freezeButtons = component.getAllByText("Freeze")
     expect(freezeButtons.length).toBe(1)
     const freezeButton = component.getByText("Freeze")
     await userEvent.click(freezeButton)
@@ -212,8 +228,8 @@ describe("RequestsTab", () => {
     ).toBeInTheDocument()
     const ok = screen.getByRole("button", { name: "OK" })
     await userEvent.click(ok)
-    freezeButtons = await component.findAllByText("Freeze")
-    expect(freezeButtons.length).toBe(1)
+    const postFreezeButtons = component.getAllByText("Freeze")
+    expect(postFreezeButtons.length).toBe(1)
   })
 
   it("shows pick up by date and status when circ request is ready", () => {

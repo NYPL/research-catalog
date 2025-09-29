@@ -11,12 +11,9 @@ import type {
   SortOrder,
 } from "../../src/types/searchTypes"
 import { SITE_NAME } from "../../src/config/constants"
-
 import initializePatronTokenAuth from "../../src/server/auth"
-
 import { useFocusContext, idConstants } from "../../src/context/FocusContext"
 import type { HTTPStatusCode } from "../../src/types/appTypes"
-
 import Search from "../../src/components/Search/Search"
 
 interface SearchPageProps {

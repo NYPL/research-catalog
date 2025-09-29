@@ -17,7 +17,7 @@ const ElectronicResourcesLink = ({
   electronicResources,
 }: ElectronicResourcesLinkProps) => {
   return (
-    <Card isBordered data-testid="electronic-resources-link">
+    <Card isBordered data-testid="electronic-resources-link" marginBottom="s">
       <CardHeading level="four" size="body1" mb="xs">
         Available online
       </CardHeading>
@@ -26,7 +26,7 @@ const ElectronicResourcesLink = ({
           <ExternalLink
             href={electronicResources[0].url}
             rel="noreferrer"
-            type="standalone"
+            variant="standalone"
             fontSize={{ base: "mobile.body.body2", md: "desktop.body.body2" }}
             isUnderlined={false}
             hasVisitedState={false}
@@ -36,7 +36,7 @@ const ElectronicResourcesLink = ({
         ) : (
           <RCLink
             href={`${bibUrl}#electronic-resources`}
-            type="standalone"
+            variant="standalone"
             fontSize={{ base: "mobile.body.body2", md: "desktop.body.body2" }}
             isUnderlined={false}
             hasVisitedState={false}

@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Flex,
   Icon,
   Link,
@@ -104,7 +103,13 @@ const SearchBrowseForm = ({
 
   return (
     <div className={`${styles.searchContainer} no-print`}>
-      <div className={styles.searchContainerInner}>
+      <Box
+        sx={{
+          margin: "0 auto",
+          maxWidth: "1280px",
+          px: { base: "s", md: "m", xl: "s" },
+        }}
+      >
         <Text size="body2" className={styles.searchTip}>
           <Icon size="medium" name="errorOutline" iconRotation="rotate180" />
           <Box as="span" className={styles.searchTipText}>
@@ -141,16 +146,16 @@ const SearchBrowseForm = ({
           <Flex
             direction="column"
             justifyContent="space-between"
-            mt={{ base: 0, md: "s" }}
+            mt={{ base: "0", md: "xs" }}
           >
             {activePage === "sh-results" && backUrl && (
               <Link
-                type="buttonSecondary"
+                variant="buttonSecondary"
                 id="back-index"
-                size="medium"
                 width={{ base: "100%", md: "fit-content" }}
                 onClick={() => router.push(backUrl)}
                 gap="xxs"
+                mt="xxs"
                 background="white"
                 mb={{ base: "xs", md: 0 }}
               >
@@ -172,7 +177,7 @@ const SearchBrowseForm = ({
             {children}
           </Flex>
         )}
-      </div>
+      </Box>
     </div>
   )
 }

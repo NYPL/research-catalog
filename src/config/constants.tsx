@@ -36,12 +36,7 @@ export const DISCOVERY_API_BROWSE_ROUTE = "/discovery/browse/subjects"
 // Query params
 export const SOURCE_PARAM = "?source=catalog"
 
-export const ITEM_FILTER_PARAMS = [
-  "item_location",
-  "item_format",
-  "item_status",
-  "item_date",
-]
+export const ITEM_FILTER_PARAMS = ["item_location", "item_status", "item_date"]
 
 // String used to namespace Research Catalog events in Adobe Analytics
 export const ADOBE_ANALYTICS_SITE_SECTION = "Research Catalog"

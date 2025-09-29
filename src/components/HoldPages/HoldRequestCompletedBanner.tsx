@@ -14,7 +14,7 @@ const HoldRequestCompletedBanner = ({
 }: HoldRequestCompletedBannerProps) => {
   return (
     <Banner
-      type="warning"
+      variant="warning"
       heading={
         isEDD
           ? "You've already requested a scan of this item"

@@ -7,13 +7,17 @@ import type {
   BibDetailURL,
   AnnotatedMarc,
   AnyBibDetail,
+  MarcLinkedDetail,
+  MarcDetail,
+  AnyMarcDetail,
 } from "../types/bibDetailsTypes"
 import { convertToSentenceCase } from "../utils/appUtils"
 import { getFindingAidFromSupplementaryContent } from "../utils/bibUtils"
+import logger from "../../logger"
 
 export default class BibDetails {
   bib: DiscoveryBibResult
-  annotatedMarcDetails: AnyBibDetail[]
+  annotatedMarcDetails: AnyMarcDetail[]
   holdingsDetails: AnyBibDetail[]
   topDetails: AnyBibDetail[]
   bottomDetails: AnyBibDetail[]
@@ -56,20 +60,53 @@ export default class BibDetails {
 
   buildAnnotatedMarcDetails(
     annotatedMarc: AnnotatedMarcField[]
-  ): AnyBibDetail[] {
+  ): AnyMarcDetail[] {
     if (!annotatedMarc) return []
     return annotatedMarc.map(({ label, values }: AnnotatedMarcField) => {
+      const fieldMarcTags = values.map((val) => val.source?.marcTag)
       if (label === "Connect to:") {
         const urlValues = values.map(({ label, content }) => ({
           url: content,
           urlLabel: label,
         }))
-        return this.buildExternalLinkedDetail("Connect to:", urlValues)
+        const detail = this.buildExternalLinkedDetail(
+          "Connect to:",
+          urlValues,
+          fieldMarcTags
+        )
+        return detail as MarcLinkedDetail
       } else {
         const fieldValues = values.map((val) => val.content)
-        return this.buildDetail(label, fieldValues)
+        return this.buildDetail(label, fieldValues, fieldMarcTags) as MarcDetail
       }
     })
+  }
+
+  buildDetail(
+    label: string,
+    value: string[],
+    fieldMarcTags?: string[]
+  ): BibDetail | MarcDetail {
+    if (!value?.length) return null
+
+    const base = { label: convertToSentenceCase(label), value }
+
+    return fieldMarcTags ? { ...base, marcTags: fieldMarcTags } : base
+  }
+
+  buildExternalLinkedDetail(
+    label: string,
+    value: BibDetailURL[],
+    fieldMarcTags?: string[]
+  ): LinkedBibDetail | MarcLinkedDetail {
+    if (!value.length) return null
+
+    const base: LinkedBibDetail = {
+      label: convertToSentenceCase(label),
+      value,
+      link: "external",
+    }
+    return fieldMarcTags ? { ...base, marcTags: fieldMarcTags } : base
   }
 
   buildHoldingsDetails(holdings): BibDetail[] {
@@ -93,6 +130,7 @@ export default class BibDetails {
     return [
       { field: "titleDisplay", label: "Title" },
       { field: "publicationStatement", label: "Published by" },
+      { field: "format", label: "Format" },
       // external link
       { field: "supplementaryContent", label: "Supplementary content" },
       // internal link
@@ -103,13 +141,14 @@ export default class BibDetails {
           case "supplementaryContent":
             return this.supplementaryContent
           case "creatorLiteral":
-            return this.buildInternalLinkedDetail(fieldMapping)
+            return this.buildSearchFilterUrl(fieldMapping)
           default:
             return this.buildStandardDetail(fieldMapping)
         }
       })
       .filter((f) => f)
   }
+
   buildBottomDetails(): AnyBibDetail[] {
     const resourceFields = [
       { field: "contributorLiteral", label: "Additional authors" },
@@ -139,7 +178,7 @@ export default class BibDetails {
           fieldMapping.field === "contributorLiteral" ||
           fieldMapping.field === "subjectLiteral"
         )
-          detail = this.buildInternalLinkedDetail(fieldMapping)
+          detail = this.buildSearchFilterUrl(fieldMapping)
         else detail = this.buildStandardDetail(fieldMapping)
         return detail
       })
@@ -152,19 +191,64 @@ export default class BibDetails {
     )
   }
 
-  combineBibDetailsData = (
+  combineBibDetailsData(
     resourceEndpointDetails: AnyBibDetail[],
-    annotatedMarcDetails: AnyBibDetail[]
-  ) => {
-    const resourceEndpointDetailsLabels = new Set(
-      resourceEndpointDetails.map((detail: { label: string }) => {
-        return detail.label
-      })
-    )
-    const filteredAnnotatedMarcDetails = annotatedMarcDetails.filter(
-      (detail: AnyBibDetail) => !resourceEndpointDetailsLabels.has(detail.label)
-    )
-    return resourceEndpointDetails.concat(filteredAnnotatedMarcDetails)
+    annotatedMarcDetails: AnyMarcDetail[]
+  ): AnyBibDetail[] {
+    const normalizeValues = (val: any) => {
+      if (!val) return []
+      if (Array.isArray(val)) {
+        return val
+          .flat()
+          .map((v) =>
+            typeof v === "string"
+              ? v.trim()
+              : v?.content?.trim() || v?.urlLabel?.trim()
+          )
+      }
+      if (typeof val === "string") return [val.trim()]
+      if (val?.content) return [val.content.trim()]
+      return [val?.urlLabel?.trim()]
+    }
+
+    const labelsSet = new Set(resourceEndpointDetails.map((d) => d.label))
+    const resourceValuesSet = new Set<string>()
+    const allDetails = [...resourceEndpointDetails, ...(this.topDetails || [])]
+
+    allDetails.forEach((detail) => {
+      normalizeValues(detail.value).forEach(
+        (v) => v && resourceValuesSet.add(v)
+      )
+    })
+
+    const filteredMarc: AnyBibDetail[] = []
+    const keptByLabel = {}
+
+    annotatedMarcDetails.forEach((detail) => {
+      if (labelsSet.has(detail.label)) return
+      const detailValues = normalizeValues(detail.value)
+      const detailMarcTags = detail.marcTags
+      const overlap = detailValues.some((v) => resourceValuesSet.has(v))
+      if (!overlap) {
+        filteredMarc.push(detail)
+        // store both values and marc tags in one object per AM label
+        keptByLabel[detail.label] = {
+          values: detailValues.filter(Boolean),
+          marcTags: detailMarcTags,
+        }
+      }
+    })
+
+    if (Object.keys(keptByLabel).length > 0) {
+      logger.info(
+        `Bib details: Keeping annotated MARC fields on ${this.bib["@id"]}`,
+        {
+          keptMarcFields: keptByLabel,
+        }
+      )
+    }
+
+    return resourceEndpointDetails.concat(filteredMarc)
   }
 
   buildHoldingDetail(holding, fieldMapping: FieldMapping) {
@@ -185,8 +269,8 @@ export default class BibDetails {
   buildStandardDetail(fieldMapping: FieldMapping) {
     let bibFieldValue = this[fieldMapping.field] || this.bib[fieldMapping.field]
     if (!bibFieldValue) return
-    // "language" is the only resource field with JSON-LD format
-    if (fieldMapping.field === "language") {
+    // "language" and "format" use JSON-LD format
+    if (fieldMapping.field === "language" || fieldMapping.field === "format") {
       bibFieldValue = [bibFieldValue[0]?.prefLabel]
     }
     return this.buildDetail(
@@ -195,16 +279,7 @@ export default class BibDetails {
     )
   }
 
-  buildDetail(label: string, value: string[]): BibDetail {
-    if (!value?.length) return null
-
-    return {
-      label: convertToSentenceCase(label),
-      value,
-    }
-  }
-
-  buildInternalLinkedDetail(fieldMapping: {
+  buildSearchFilterUrl(fieldMapping: {
     label: string
     field: string
   }): LinkedBibDetail {
@@ -224,18 +299,6 @@ export default class BibDetails {
               )}`
         return { url: internalUrl, urlLabel: v }
       }),
-    }
-  }
-
-  buildExternalLinkedDetail(
-    label: string,
-    values: BibDetailURL[]
-  ): LinkedBibDetail {
-    if (!values.length) return null
-    return {
-      link: "external",
-      value: values,
-      label: convertToSentenceCase(label),
     }
   }
 
@@ -322,7 +385,7 @@ export default class BibDetails {
    * matchParallels(bib)
    * Given a bib object returns a new copy of the bib in which fields with parallels have been rewritten
    * The new rewritten field interleaves the parallel field and the paralleled (i.e. original) field together.
-   * Skips over subject fields since these require changes to SHEP.
+   * Skips over subject fields.
    */
   matchParallelToPrimaryValues(bib: DiscoveryBibResult) {
     const parallelFieldMatches = Object.keys(bib).map((key) => {
