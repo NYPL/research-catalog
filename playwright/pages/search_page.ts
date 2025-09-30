@@ -10,6 +10,7 @@ export class SearchPage {
   readonly search_dropdown: Locator
   readonly searchType: string
   readonly searchResultsTitle: Locator
+  readonly searchResultsCallNumber: Locator
 
   constructor(page: Page, searchterm: string, searchType = "Keyword") {
     this.page = page
@@ -28,12 +29,16 @@ export class SearchPage {
       .getByRole("link", { name: new RegExp(this.searchterm) })
     this.resultsHeading = this.page.getByRole("heading", {
       name: new RegExp(
-        `^Displaying (\\d+-\\d+|\\d+) of (over )?\\d{1,3}(,\\d{3})* results for ${this.searchType}(s)? "${this.searchterm}"$`
+        `^Displaying (\\d+-\\d+|\\d+) of (over )?\\d{1,3}(,\\d{3})* results for ${this.searchType}s? "${this.searchterm}"$`,
+        "i"
       ),
     })
     this.searchResult = page
       .locator("#search-results-list")
       .getByRole("link", { name: new RegExp(this.searchterm) })
+    this.searchResultsCallNumber = page.locator(
+      '#search-results-list table td:has-text("CALL NUMBER") td p span'
+    )
   }
 
   async searchFor(searchterm: string, searchType = "Keyword") {
