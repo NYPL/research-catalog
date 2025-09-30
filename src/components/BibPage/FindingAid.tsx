@@ -25,6 +25,7 @@ const FindingAid = ({
       sx={{
         borderBottom: hasElectronicResources ? "0px" : "1px ui.gray solid",
       }}
+      marginBottom="s"
     >
       <CardHeading level="four" size="body1" mb="xs">
         Collection information
