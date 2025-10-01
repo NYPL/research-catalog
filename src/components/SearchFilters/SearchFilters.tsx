@@ -19,6 +19,8 @@ import type { Aggregation } from "../../types/filterTypes"
 import DateFilter from "./DateFilter"
 import { useDateFilter } from "../../hooks/useDateFilter"
 import { useFocusContext, idConstants } from "../../context/FocusContext"
+import MultiSelectWithGroupTitles from "../AdvancedSearch/MultiSelectWithGroupTitles/MultiSelectWithGroupTitles"
+import { collectionOptions } from "../../utils/advancedSearchUtils"
 
 const fields = [
   { value: "buildingLocation", label: "Item location" },
@@ -27,6 +29,7 @@ const fields = [
   { value: "dateAfter", label: "Start Year" },
   { value: "dateBefore", label: "End Year" },
   { value: "subjectLiteral", label: "Subject" },
+  { value: "collection", label: "Collection" },
 ]
 
 const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
@@ -96,31 +99,52 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
             transition: "opacity 0.2s ease",
           }}
         >
-          <MultiSelect
-            isDefaultOpen={field.value !== "subjectLiteral"}
-            defaultItemsVisible={1}
-            isBlockElement
-            isSearchable={field.value !== "buildingLocation"}
-            id={field.value}
-            buttonText={field.label}
-            onClear={() => {
-              handleFilterClear(field.value)
-              setFocusedFilter(field.value)
-            }}
-            onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
-              handleCheckboxChange(field.value, e.target.id)
-              setFocusedFilter(field.value)
-            }}
-            selectedItems={{
-              [field.value]: {
-                items: appliedFilters[field.value] || [],
-              },
-            }}
-            items={filterData.options.map((option) => ({
-              id: option.value,
-              name: `${option.label} (${option.count.toLocaleString()})`,
-            }))}
-          />
+          {!(field.value === "collection") ? (
+            <MultiSelect
+              isDefaultOpen={field.value !== "subjectLiteral"}
+              defaultItemsVisible={1}
+              isBlockElement
+              isSearchable={field.value !== "buildingLocation"}
+              id={field.value}
+              buttonText={field.label}
+              onClear={() => {
+                handleFilterClear(field.value)
+                setFocusedFilter(field.value)
+              }}
+              onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
+                handleCheckboxChange(field.value, e.target.id)
+                setFocusedFilter(field.value)
+              }}
+              selectedItems={{
+                [field.value]: {
+                  items: appliedFilters[field.value] || [],
+                },
+              }}
+              items={filterData.options.map((option) => ({
+                id: option.value,
+                name: `${option.label} (${option.count.toLocaleString()})`,
+              }))}
+            />
+          ) : (
+            <MultiSelectWithGroupTitles
+              key={field.value}
+              field={{ value: field.value, label: field.label }}
+              groupedItems={collectionOptions}
+              onChange={(e) => {
+                handleCheckboxChange(field.value, e.target.id)
+                setFocusedFilter(field.value)
+              }}
+              onClear={() => {
+                handleFilterClear(field.value)
+                setFocusedFilter(field.value)
+              }}
+              selectedItems={{
+                [field.value]: {
+                  items: appliedFilters["filters"][field.value],
+                },
+              }}
+            />
+          )}
         </div>
       )
     } else return null

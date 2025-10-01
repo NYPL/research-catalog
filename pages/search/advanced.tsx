@@ -237,9 +237,8 @@ export default function AdvancedSearch({
                   />
                 </FormField>
               ))}
-
               <FormField>
-                <DateFilter {...dateFilterProps} />
+                <DateFilter isAdvancedSearch {...dateFilterProps} />
               </FormField>
             </Flex>
             <Flex
