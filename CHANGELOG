@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+## Added
+
+- Added Playwright test for call number search. [SCC-4855](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4855)
+
 ### Updated
 
 - Fixed search result card children width [SCC-4939](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4939)
