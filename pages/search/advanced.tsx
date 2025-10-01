@@ -41,7 +41,6 @@ import type {
 } from "../../src/types/searchTypes"
 import { getSearchQuery } from "../../src/utils/searchUtils"
 import initializePatronTokenAuth from "../../src/server/auth"
-import { appConfig } from "../../src/config/config"
 import SearchFilterCheckboxField from "../../src/components/AdvancedSearch/SearchFilterCheckboxField"
 import CancelSubmitButtonGroup from "../../src/components/AdvancedSearch/CancelSubmitButtonGroup"
 import { formatOptions } from "../../src/utils/advancedSearchUtils"
@@ -120,17 +119,7 @@ export default function AdvancedSearch({
       setAlert(true)
       // Very basic validation for the date range.
     } else {
-      // If the NEXT_PUBLIC_REVERSE_PROXY_ENABLED feature flag is present, use window.location.replace
-      // instead of router.push to forward search results to DFE.
-      if (appConfig.features.reverseProxyEnabled[appConfig.environment]) {
-        window.location.replace(
-          `${BASE_URL}${PATHS.SEARCH}${queryString}&searched_from=advanced`
-        )
-      } else {
-        await router.push(
-          `${PATHS.SEARCH}${queryString}&searched_from=advanced`
-        )
-      }
+      await router.push(`${PATHS.SEARCH}${queryString}&searched_from=advanced`)
     }
   }
 
