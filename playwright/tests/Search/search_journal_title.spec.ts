@@ -13,6 +13,6 @@ test.describe("Journal Title Search", () => {
   test("Do a journal title search and assert that at least 5 returned titles contain the supplied journal title", async () => {
     await searchPage.searchFor(searchterm, "Journal title")
     await expect(searchPage.resultsHeading).toBeVisible()
-    await expect(await searchPage.searchResult.count()).toBeGreaterThan(5)
+    await expect(await searchPage.searchResultsTitle.count()).toBeGreaterThan(5)
   })
 })

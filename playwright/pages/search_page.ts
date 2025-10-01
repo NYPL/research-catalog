@@ -9,6 +9,7 @@ export class SearchPage {
   readonly searchterm: string
   readonly search_dropdown: Locator
   readonly searchType: string
+  readonly searchResults: Locator
   readonly searchResultsTitle: Locator
   readonly searchResultsCallNumber: Locator
 
@@ -33,7 +34,8 @@ export class SearchPage {
         "i"
       ),
     })
-    this.searchResult = page
+    this.searchResults = page.locator("#search-results-list h3 a")
+    this.searchResultsTitle = page
       .locator("#search-results-list")
       .getByRole("link", { name: new RegExp(this.searchterm) })
     this.searchResultsCallNumber = page.locator(
