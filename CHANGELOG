@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated subject related term links to index pages [SCC-4933](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4933)
 - Updated subject heading links in bib details [SCC-4800](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4800)
 - Update subject filter to only display if there's a query [SCC-4886](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4886)
+- Updated `RCLink` to use Next Link, allowing clientside routing [SCC-4874](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4886)
 
 ## Added
 
@@ -26,6 +27,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `VariantSubject` and `PreferredSubject` models [SCC-3727](https://newyorkpubliclibrary.atlassian.net/browse/SCC-3727)
 - Added `fetchSubjects` API handler for `browse` index page [SCC-4774](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4774)
 - Added `browse` and `browse/subjects/[...slug]` pages and page types, set up deployment of EB work to `train` [SCC-4554](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4554)
+
+## Removed
+
+- Removed reverse proxy environment variable and documentation [SCC-4874](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4886)
 
 ## [1.5.6] 2025-09-23
 
