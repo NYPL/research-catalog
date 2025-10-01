@@ -4,7 +4,6 @@ import {
   CardHeading,
 } from "@nypl/design-system-react-components"
 import RCLink from "../Links/RCLink/RCLink"
-import ExternalLink from "../Links/ExternalLink/ExternalLink"
 import type { ElectronicResource } from "../../types/bibTypes"
 
 interface ElectronicResourcesLinkProps {
@@ -23,16 +22,16 @@ const ElectronicResourcesLink = ({
       </CardHeading>
       <CardContent>
         {electronicResources.length === 1 ? (
-          <ExternalLink
+          <RCLink
+            isExternal
             href={electronicResources[0].url}
-            rel="noreferrer"
             variant="standalone"
             fontSize={{ base: "mobile.body.body2", md: "desktop.body.body2" }}
             isUnderlined={false}
             hasVisitedState={false}
           >
             {electronicResources[0].prefLabel || electronicResources[0].url}
-          </ExternalLink>
+          </RCLink>
         ) : (
           <RCLink
             href={`${bibUrl}#electronic-resources`}

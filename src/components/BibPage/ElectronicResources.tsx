@@ -11,8 +11,8 @@ import {
 } from "@nypl/design-system-react-components"
 
 import { ELECTRONIC_RESOURCES_PER_BIB_PAGE } from "../../config/constants"
-import ExternalLink from "../Links/ExternalLink/ExternalLink"
 import type { ElectronicResource } from "../../types/bibTypes"
+import RCLink from "../Links/RCLink/RCLink"
 
 interface ElectronicResourcesProps {
   electronicResources: ElectronicResource[]
@@ -58,7 +58,8 @@ const ElectronicResources = ({
           mb="0"
           noStyling
           listItems={electronicResourcesToDisplay.map((resource) => (
-            <ExternalLink
+            <RCLink
+              isExternal
               href={resource.url}
               key={kebabCase(resource.title)}
               variant="standalone"
@@ -73,7 +74,7 @@ const ElectronicResources = ({
               >
                 {resource.title || resource.prefLabel || resource.url}
               </Box>
-            </ExternalLink>
+            </RCLink>
           ))}
         />
         {electronicResources.length > ELECTRONIC_RESOURCES_PER_BIB_PAGE ? (

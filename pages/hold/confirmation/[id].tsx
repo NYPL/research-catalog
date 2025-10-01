@@ -12,7 +12,6 @@ import Bib from "../../../src/models/Bib"
 import Item from "../../../src/models/Item"
 
 import RCLink from "../../../src/components/Links/RCLink/RCLink"
-import ExternalLink from "../../../src/components/Links/RCLink/RCLink"
 
 import HoldConfirmationFAQ from "../../../src/components/HoldPages/HoldConfirmationFAQ"
 import HoldConfirmationItemDetails from "../../../src/components/HoldPages/HoldConfirmationItemDetails"
@@ -94,7 +93,7 @@ export default function HoldConfirmationPage({
           pickupLocationLabel={pickupLocationLabel}
         />
         <HoldConfirmationFAQ isEDD={isEDD} />
-        <ExternalLink
+        <RCLink
           href={PATHS.HOME}
           fontSize={{
             base: "mobile.body.body2",
@@ -106,7 +105,7 @@ export default function HoldConfirmationPage({
           my="l"
         >
           Start a new search
-        </ExternalLink>
+        </RCLink>
       </Layout>
     </>
   )

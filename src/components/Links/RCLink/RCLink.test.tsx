@@ -1,32 +1,77 @@
-import React from "react"
 import { render, screen } from "@testing-library/react"
+import "@testing-library/jest-dom"
 import RCLink from "./RCLink"
 
+// Mocking DS Link to render as plain <a>
+jest.mock("@nypl/design-system-react-components", () => ({
+  Link: ({ children, ...props }: any) => <a {...props}>{children}</a>,
+}))
+
 describe("RCLink", () => {
-  it("should render with the base url as the href by default", async () => {
-    render(<RCLink>Research Catalog</RCLink>)
-    const link = screen.getByText("Research Catalog")
-    expect(link).toHaveAttribute("href", "/research/research-catalog")
+  it("renders an internal link with NextLink", () => {
+    render(<RCLink href="/about">About</RCLink>)
+
+    const link = screen.getByRole("link", { name: /about/i })
+    expect(link).toHaveAttribute("href", "/about")
   })
-  it("can take an href and includes the base url by default", async () => {
-    render(<RCLink href="/spaghetti">Spaghetti</RCLink>)
-    const link = screen.getByText("Spaghetti")
-    expect(link).toHaveAttribute("href", "/research/research-catalog/spaghetti")
-  })
-  it("does not render the base url when includeBaseUrl is set to false", async () => {
+
+  it("renders an external link with target _blank by default", () => {
     render(
-      <RCLink href="/spaghetti" includeBaseUrl={false}>
-        Spaghetti
+      <RCLink isExternal href="https://nypl.org">
+        NYPL
       </RCLink>
     )
-    const link = screen.getByText("Spaghetti")
-    expect(link).toHaveAttribute("href", "/spaghetti")
-    expect(link).not.toHaveAttribute("aria-disabled")
+
+    const link = screen.getByRole("link", { name: /nypl/i })
+    expect(link).toHaveAttribute("href", "https://nypl.org")
+    expect(link).toHaveAttribute("target", "_blank")
+    expect(link).toHaveAttribute("rel", "noopener noreferrer")
   })
-  it("should add appropriate accessibility attributes when link is disabled", async () => {
-    render(<RCLink disabled>Spaghetti</RCLink>)
-    const link = screen.getByText("Spaghetti")
+
+  it("respects custom target on external link", () => {
+    render(
+      <RCLink isExternal href="https://nypl.org" target="_self">
+        NYPL
+      </RCLink>
+    )
+    const link = screen.getByRole("link", { name: /nypl/i })
+    expect(link).toHaveAttribute("target", "_self")
+    expect(link).not.toHaveAttribute("rel") // no rel for _self
+  })
+
+  it("applies bold fontWeight when active", () => {
+    render(
+      <RCLink href="/about" active>
+        About
+      </RCLink>
+    )
+    const link = screen.getByRole("link", { name: /about/i })
+    expect(link).toHaveAttribute("fontWeight", "bold")
+  })
+
+  it("sets aria-disabled and tabIndex when disabled", () => {
+    render(
+      <RCLink href="/about" disabled>
+        About
+      </RCLink>
+    )
+    const link = screen.getByRole("link", { name: /about/i })
     expect(link).toHaveAttribute("aria-disabled", "true")
-    expect(link).toHaveAttribute("tabindex", "-1")
+    expect(link).toHaveAttribute("tabIndex", "-1")
+  })
+
+  it("applies white focus ring CSS when hasWhiteFocusRing is true", () => {
+    render(
+      <RCLink href="/about" hasWhiteFocusRing>
+        About
+      </RCLink>
+    )
+    const link = screen.getByRole("link", { name: /about/i })
+    expect(link).toHaveAttribute(
+      "__css",
+      expect.objectContaining({
+        _focus: { outlineColor: "ui.white" },
+      }) as any
+    )
   })
 })

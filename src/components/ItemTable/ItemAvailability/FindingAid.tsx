@@ -1,10 +1,12 @@
-import ExternalLink from "../../Links/ExternalLink/ExternalLink"
+import RCLink from "../../Links/RCLink/RCLink"
 
 const FindingAid = ({ url }: { url: string }) => {
   return (
     <>
       {" See the "}
-      <ExternalLink href={url}>{"finding aid"}</ExternalLink>
+      <RCLink isExternal href={url}>
+        {"finding aid"}
+      </RCLink>
       {" for details."}
     </>
   )

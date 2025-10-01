@@ -4,7 +4,6 @@ import type { PatronEligibilityStatus } from "../../types/holdPageTypes"
 import type Item from "../../models/Item"
 
 import RCLink from "../Links/RCLink/RCLink"
-import ExternalLink from "../Links/ExternalLink/ExternalLink"
 import { HoldContactButton } from "./HoldContactButton"
 
 import { PATHS } from "../../config/constants"
@@ -31,10 +30,10 @@ const PatronIneligibilityErrors = ({
       ? [
           <>
             Your account has expired -- Please see{" "}
-            <ExternalLink href={appConfig.urls.renewCard}>
+            <RCLink isExternal href={appConfig.urls.renewCard}>
               Library Terms and Conditions -- Renewing or Validating Your
               Library Card
-            </ExternalLink>{" "}
+            </RCLink>{" "}
             about renewing your card.
           </>,
         ]

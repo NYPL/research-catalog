@@ -1,7 +1,7 @@
 import { Banner, Text } from "@nypl/design-system-react-components"
 
-import ExternalLink from "../Links/ExternalLink/ExternalLink"
 import { appConfig } from "../../config/config"
+import RCLink from "../Links/RCLink/RCLink"
 
 const FeesBanner = () => {
   return (
@@ -15,12 +15,13 @@ const FeesBanner = () => {
             for cardholders with replacement fees totaling $100 or more. Fees
             can be paid at any New York Public Library branch in cash, U.S.
             Postal money order, personal check, or{" "}
-            <ExternalLink
+            <RCLink
+              isExternal
               href={`${appConfig.urls.circulatingCatalog}?openAccount=fines-and-fees`}
             >
               {" "}
               online through the Library website
-            </ExternalLink>
+            </RCLink>
             .
           </Text>
         </>

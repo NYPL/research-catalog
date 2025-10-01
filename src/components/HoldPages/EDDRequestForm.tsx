@@ -13,7 +13,6 @@ import { useState, createRef, type SyntheticEvent } from "react"
 import { useRouter } from "next/router"
 
 import { BASE_URL, EDD_FORM_FIELD_COPY } from "../../config/constants"
-import ExternalLink from "../Links/ExternalLink/ExternalLink"
 
 import { CopyrightRestrictionsBanner } from "./CopyrightRestrictionsBanner"
 import {
@@ -29,6 +28,7 @@ import type {
   HoldErrorStatus,
   EDDFormValidatedField,
 } from "../../types/holdPageTypes"
+import RCLink from "../Links/RCLink/RCLink"
 
 interface EDDRequestFormProps {
   eddFormState: EDDRequestParams
@@ -144,9 +144,12 @@ const EDDRequestForm = ({
           You may request one chapter, one article, around 10% of work, or 50
           pages for public domain works.
         </Text>
-        <ExternalLink href="https://www.nypl.org/research/services/scan-and-deliver">
+        <RCLink
+          isExternal
+          href="https://www.nypl.org/research/services/scan-and-deliver"
+        >
           Read more about this service
-        </ExternalLink>
+        </RCLink>
       </Box>
       <FormField>
         <TextInput

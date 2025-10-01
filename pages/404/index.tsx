@@ -46,7 +46,7 @@ export default function Custom404({ activePage }: ErrorPageProps) {
             elsewhere.
           </Text>
           <Text>
-            Try a <RCLink href="/">new search</RCLink> or{" "}
+            Try a <RCLink href="/">new search</RCLink> or
             <Link onClick={openFeedbackFormWithError} id="feedback-link">
               contact us
             </Link>{" "}

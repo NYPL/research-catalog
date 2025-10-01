@@ -10,13 +10,12 @@ import {
 } from "@nypl/design-system-react-components"
 
 import Layout from "../src/components/Layout/Layout"
-import ExternalLink from "../src/components/Links/ExternalLink/ExternalLink"
-
 import { SITE_NAME } from "../src/config/constants"
 import { appConfig } from "../src/config/config"
 import initializePatronTokenAuth from "../src/server/auth"
 import useLoading from "../src/hooks/useLoading"
 import RCHead from "../src/components/Head/RCHead"
+import RCLink from "../src/components/Links/RCLink/RCLink"
 
 interface HomeProps {
   bannerNotification?: string
@@ -51,24 +50,25 @@ export default function Home({
                 for the Performing Arts. Plus, access materials from library
                 collections at Columbia University, Harvard University, and
                 Princeton University.{" "}
-                <ExternalLink
+                <RCLink
+                  isExternal
                   href="/research/collections/about/shared-collection-catalog"
                   aria-label="Learn more about the Research Catalog."
                 >
                   Learn more.
-                </ExternalLink>
+                </RCLink>
               </Text>
               <Text mb="s">
                 Please note that the Research Catalog does not include
                 circulating materials. For books and more that you can check out
                 to take home please visit our{" "}
-                <ExternalLink href={appConfig.urls.circulatingCatalog}>
+                <RCLink isExternal href={appConfig.urls.circulatingCatalog}>
                   circulating branch catalog.
-                </ExternalLink>{" "}
+                </RCLink>{" "}
                 The{" "}
-                <ExternalLink href={appConfig.urls.legacyCatalog}>
+                <RCLink isExternal href={appConfig.urls.legacyCatalog}>
                   legacy research catalog
-                </ExternalLink>{" "}
+                </RCLink>{" "}
                 is still available, but does not include all of our Scan &amp;
                 Deliver options or the Columbia University, Harvard University,
                 and Princeton University material from the Shared Collection.

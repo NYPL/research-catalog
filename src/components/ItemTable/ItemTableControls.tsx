@@ -2,7 +2,6 @@ import {
   Box,
   Pagination,
   ProgressIndicator,
-  Label,
   Icon,
 } from "@nypl/design-system-react-components"
 import type { RefObject, SyntheticEvent } from "react"

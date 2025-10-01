@@ -7,7 +7,7 @@ import {
   Link,
   Flex,
 } from "@nypl/design-system-react-components"
-import ExternalLink from "../Links/ExternalLink/ExternalLink"
+import RCLink from "../Links/RCLink/RCLink"
 
 interface FindingAidProps {
   findingAidURL: string
@@ -31,7 +31,8 @@ const FindingAid = ({
         Collection information
       </CardHeading>
       <CardContent>
-        <ExternalLink
+        <RCLink
+          isExternal
           href={findingAidURL}
           variant="standalone"
           fontSize={{
@@ -40,21 +41,22 @@ const FindingAid = ({
           }}
         >
           Finding aid
-        </ExternalLink>
+        </RCLink>
         <Flex justifyContent="center" gap="xxs" mt="xs">
           <Icon name="errorOutline" iconRotation="rotate180" size="medium" />
           <Text size="caption" mb="0">
             The finding aid is a document containing details about the
             organization and contents of this archival collection. Archival
             collections{" "}
-            <Link
+            <RCLink
+              isExternal
               hasVisitedState={false}
               href={
                 "https://libguides.nypl.org/special-collections-account-tutorial"
               }
             >
               may require an appointment
-            </Link>{" "}
+            </RCLink>{" "}
             to view and use on-site.
           </Text>
         </Flex>

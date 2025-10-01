@@ -1,5 +1,4 @@
 import { Box } from "@nypl/design-system-react-components"
-import ExternalLink from "../Links/ExternalLink/ExternalLink"
 import RCLink from "../Links/RCLink/RCLink"
 
 import type Item from "../../models/Item"
@@ -17,7 +16,8 @@ const RequestButtons = ({ item }: RequestButtonsProps) => {
   return (
     <Box sx={{ a: { marginRight: "xs" } }} className="no-print">
       {item.aeonUrl && (
-        <ExternalLink
+        <RCLink
+          isExternal
           href={item.aeonUrl}
           variant={!item.isAvailable ? "buttonDisabled" : "buttonSecondary"}
           aria-label={`Request Appointment, ${item.requestButtonAriaLabel}`}
@@ -26,7 +26,7 @@ const RequestButtons = ({ item }: RequestButtonsProps) => {
           target="_self"
         >
           Request appointment
-        </ExternalLink>
+        </RCLink>
       )}
 
       {item.isPhysicallyRequestable && (
@@ -36,7 +36,6 @@ const RequestButtons = ({ item }: RequestButtonsProps) => {
           aria-label={`Request for On-site Use, ${item.requestButtonAriaLabel}`}
           disabled={!item.isAvailable}
           mb="s"
-          target="_self"
         >
           Request for on-site use
         </RCLink>
@@ -48,7 +47,6 @@ const RequestButtons = ({ item }: RequestButtonsProps) => {
           aria-label={`Request Scan, ${item.requestButtonAriaLabel}`}
           disabled={!item.isAvailable}
           mb="s"
-          target="_self"
         >
           Request scan
         </RCLink>

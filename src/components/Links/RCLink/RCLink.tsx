@@ -2,10 +2,11 @@ import {
   Link as DSLink,
   type LinkVariants,
 } from "@nypl/design-system-react-components"
+import NextLink from "next/link"
 import { type ReactNode } from "react"
-import { BASE_URL } from "../../../config/constants"
 
 interface RCLinkProps {
+  isExternal?: boolean
   active?: boolean
   href?: string
   children: ReactNode
@@ -15,46 +16,50 @@ interface RCLinkProps {
   isUnderlined?: boolean
   hasWhiteFocusRing?: boolean
   disabled?: boolean
+  target?: "_blank" | "_parent" | "_self" | "_top"
   [key: string]: any
-  includeBaseUrl?: boolean
 }
 
-// TODO: once 2ad is phased out, replace with DS v3 Link which can wrap a
-// Next link.
-
 /**
- * The RCLink component is a utility that wraps the DS Link component with
- * Next's Link component to allow for correct navigation in Next per the design system's
- * docs. It also includes an 'active' prop used for styling the SubNav component.
+ * RCLink wraps the DS Link and its accompanying styles:
+ * - Internal links use Next.js routing (`as={NextLink}`) so basePath works
+ * - External links render a normal anchor
  */
 const RCLink = ({
+  isExternal = false,
   className,
   href = "",
   children,
   active = false,
   hasWhiteFocusRing = false,
   disabled,
-  includeBaseUrl = true,
+  target,
   ...rest
 }: RCLinkProps) => {
-  const resolvedHref = `${includeBaseUrl ? BASE_URL : ""}${href}`
-  return (
+  const commonProps = {
+    className,
+    fontWeight: active ? "bold" : undefined,
+    hasVisitedState: false,
+    tabIndex: disabled ? -1 : undefined,
+    "aria-disabled": disabled || undefined,
+    __css: hasWhiteFocusRing && {
+      _focus: { outlineColor: "ui.white" },
+    },
+    ...rest,
+  }
+
+  return isExternal ? (
     <DSLink
-      href={resolvedHref}
-      className={className}
-      fontWeight={active && "bold"}
-      hasVisitedState={false}
-      tabIndex={disabled ? -1 : undefined}
-      aria-disabled={disabled || undefined}
-      {...rest}
-      __css={
-        hasWhiteFocusRing && {
-          _focus: {
-            outlineColor: "ui.white",
-          },
-        }
-      }
+      href={href}
+      target={target || "_blank"}
+      rel={target === "_blank" ? "noopener noreferrer" : undefined}
+      whiteSpace="unset"
+      {...commonProps}
     >
+      {children}
+    </DSLink>
+  ) : (
+    <DSLink as={NextLink} href={href} {...commonProps}>
       {children}
     </DSLink>
   )

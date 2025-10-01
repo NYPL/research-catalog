@@ -4,12 +4,12 @@ import { appConfig } from "../../config/config"
 import { SITE_NAME } from "../../config/constants"
 import RCHead from "../Head/RCHead"
 import Layout from "../Layout/Layout"
-import ExternalLink from "../Links/ExternalLink/ExternalLink"
 import { useContext } from "react"
 import { FeedbackContext } from "../../context/FeedbackContext"
 import Image from "next/image"
 import errorImage from "../../assets/errorImage.png"
 import type { RCPage } from "../../types/pageTypes"
+import RCLink from "../Links/RCLink/RCLink"
 
 type ResultsErrorProps = {
   page: RCPage
@@ -36,13 +36,13 @@ export default function ResultsError({ errorStatus, page }: ResultsErrorProps) {
           </Text>
           <Text>
             You can also search our{" "}
-            <ExternalLink href={appConfig.urls.circulatingCatalog}>
+            <RCLink isExternal href={appConfig.urls.circulatingCatalog}>
               Branch Catalog
-            </ExternalLink>{" "}
+            </RCLink>{" "}
             or{" "}
-            <ExternalLink href={appConfig.urls.legacyCatalog}>
+            <RCLink isExternal href={appConfig.urls.legacyCatalog}>
               Legacy Catalog
-            </ExternalLink>{" "}
+            </RCLink>{" "}
             for more materials, or{" "}
             <Link onClick={openFeedbackFormWithError} id="feedback-link">
               contact us

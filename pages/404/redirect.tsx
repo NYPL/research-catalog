@@ -6,8 +6,8 @@ import { useContext } from "react"
 import { FeedbackContext } from "../../src/context/FeedbackContext"
 import Image from "next/image"
 import errorImage from "../../src/assets/errorImage.png"
-import ExternalLink from "../../src/components/Links/ExternalLink/ExternalLink"
 import { appConfig } from "../../src/config/config"
+import RCLink from "../../src/components/Links/RCLink/RCLink"
 
 export default function Redirect404() {
   const metadataTitle = `404 Redirect | ${SITE_NAME}`
@@ -42,13 +42,13 @@ export default function Redirect404() {
           </Text>
           <Text>
             Try our{" "}
-            <ExternalLink href={appConfig.urls.circulatingCatalog}>
+            <RCLink isExternal href={appConfig.urls.circulatingCatalog}>
               Branch Catalog
-            </ExternalLink>{" "}
+            </RCLink>{" "}
             or{" "}
-            <ExternalLink href={appConfig.urls.legacyCatalog}>
+            <RCLink isExternal href={appConfig.urls.legacyCatalog}>
               Legacy Catalog
-            </ExternalLink>{" "}
+            </RCLink>{" "}
             for more materials, or{" "}
             <Link onClick={openFeedbackFormWithError} id="feedback-link">
               contact us

@@ -2,9 +2,7 @@ import {
   Text,
   type AccordionDataProps,
 } from "@nypl/design-system-react-components"
-
 import RCLink from "../Links/RCLink/RCLink"
-import ExternalLink from "../Links/ExternalLink/ExternalLink"
 
 export const holdConfirmationFAQData: AccordionDataProps[] = [
   {
@@ -37,10 +35,12 @@ export const holdConfirmationFAQData: AccordionDataProps[] = [
           <strong>Items stored off-site:</strong> Materials requested before
           2:30 PM are usually ready for pickup about an hour after opening the
           next day (check{" "}
-          <ExternalLink href="https://www.nypl.org/">nypl.org</ExternalLink> for
-          library hours). Materials requested after 2:30 PM Mon–Thu are usually
-          ready in two days; materials requested after 2:30 PM Fri–Sun are ready
-          on Tuesday. Some materials are not delivered on Saturdays.
+          <RCLink isExternal href="https://www.nypl.org/">
+            nypl.org
+          </RCLink>{" "}
+          for library hours). Materials requested after 2:30 PM Mon–Thu are
+          usually ready in two days; materials requested after 2:30 PM Fri–Sun
+          are ready on Tuesday. Some materials are not delivered on Saturdays.
         </Text>
       </>
     ),
@@ -74,19 +74,27 @@ export const holdConfirmationFAQData: AccordionDataProps[] = [
       <>
         <Text>
           If you would like to cancel your request or have questions, please{" "}
-          <ExternalLink href="https://gethelp.nypl.org/customer/portal/emails/new">
+          <RCLink
+            isExternal
+            href="https://gethelp.nypl.org/customer/portal/emails/new"
+          >
             email us
-          </ExternalLink>{" "}
+          </RCLink>{" "}
           or call 917-ASK-NYPL (
-          <ExternalLink href="tel:19172756975">917-275-6975</ExternalLink>).
-          Processed requests can also be canceled from the requests tab in your
-          patron account.
+          <RCLink isExternal href="tel:19172756975">
+            917-275-6975
+          </RCLink>
+          ). Processed requests can also be canceled from the requests tab in
+          your patron account.
         </Text>
         <Text>
           For more information about our requesting services, please see{" "}
-          <ExternalLink href="https://www.nypl.org/research/services/request-materials">
+          <RCLink
+            isExternal
+            href="https://www.nypl.org/research/services/request-materials"
+          >
             Requesting Research Materials
-          </ExternalLink>
+          </RCLink>
           .
         </Text>
       </>
@@ -138,9 +146,12 @@ export const eddConfirmationFAQData: AccordionDataProps[] = [
           retrieved, it remains available to the user for five days. Each file
           can be retrieved a maximum of five times.
         </Text>
-        <ExternalLink href="https://www.nypl.org/research/services/scan-and-deliver">
+        <RCLink
+          isExternal
+          href="https://www.nypl.org/research/services/scan-and-deliver"
+        >
           Read more about this service.
-        </ExternalLink>
+        </RCLink>
       </>
     ),
   },
