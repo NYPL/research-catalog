@@ -20,7 +20,7 @@ import DateFilter from "./DateFilter"
 import { useDateFilter } from "../../hooks/useDateFilter"
 import { useFocusContext, idConstants } from "../../context/FocusContext"
 import MultiSelectWithGroupTitles from "../AdvancedSearch/MultiSelectWithGroupTitles/MultiSelectWithGroupTitles"
-import { collectionOptions } from "../../utils/advancedSearchUtils"
+import { mapCollectionsIntoLocations } from "../../utils/advancedSearchUtils"
 
 const fields = [
   { value: "buildingLocation", label: "Item location" },
@@ -88,6 +88,7 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
   const [focusedFilter, setFocusedFilter] = useState<string | null>(null)
   const filters = fields.map((field) => {
     const filterData = new SearchResultsFilters(aggregations, field)
+    console.log(filterData.options)
     if (filterData.options) {
       return (
         <div
@@ -128,8 +129,9 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
           ) : (
             <MultiSelectWithGroupTitles
               key={field.value}
+              isBlockElement
               field={{ value: field.value, label: field.label }}
-              groupedItems={collectionOptions}
+              groupedItems={mapCollectionsIntoLocations(filterData.options)}
               onChange={(e) => {
                 handleCheckboxChange(field.value, e.target.id)
                 setFocusedFilter(field.value)
@@ -140,7 +142,7 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
               }}
               selectedItems={{
                 [field.value]: {
-                  items: appliedFilters["filters"][field.value],
+                  items: appliedFilters[field.value],
                 },
               }}
             />

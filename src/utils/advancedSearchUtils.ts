@@ -50,21 +50,9 @@ export const buildingLocationOptions = searchVocabularies.buildingLocations.map(
   }
 )
 
-export const collectionOptions = searchVocabularies.buildingLocations
-  .filter((building) => building.value !== "rc")
-  .map((building) => {
-    const children = searchVocabularies.collections
-      .filter((col) => col.value.startsWith(building.value))
-      .map((col) => ({
-        id: col.value,
-        name: col.label,
-      }))
-    return {
-      id: building.value,
-      name: building.label,
-      children,
-    }
-  })
+export const collectionOptions = mapCollectionsIntoLocations(
+  searchVocabularies.collections
+)
 
 export const buildGoBackHref = (referer) => {
   if (!referer) return null
@@ -73,4 +61,28 @@ export const buildGoBackHref = (referer) => {
   const goBackEndpoint = referer.split(BASE_URL)[1]
   if (!goBackEndpoint) return "/"
   return goBackEndpoint
+}
+
+export function mapCollectionsIntoLocations(
+  collections: {
+    value: string
+    label: string
+  }[]
+) {
+  return searchVocabularies.buildingLocations
+    .filter((building) => building.value !== "rc")
+    .map((building) => {
+      const children = collections
+        .filter((col) => col.value.startsWith(building.value))
+        .map((col) => ({
+          id: col.value,
+          name: col.label,
+        }))
+      return {
+        id: building.value,
+        name: building.label,
+        children,
+      }
+    })
+    .filter((group) => group.children.length > 0)
 }

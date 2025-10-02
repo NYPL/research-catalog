@@ -10,6 +10,7 @@ import {
 } from "../../config/constants"
 import { logServerError } from "../../utils/appUtils"
 import nyplApiClient from "../nyplApiClient"
+import { aggsResult } from "../../../__test__/fixtures/aggsResult"
 
 export async function fetchResults(
   searchParams: SearchParams
