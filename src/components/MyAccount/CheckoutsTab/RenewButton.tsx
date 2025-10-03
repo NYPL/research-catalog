@@ -11,7 +11,7 @@ import type { Checkout, Patron } from "../../../types/myAccountTypes"
 import { BASE_URL } from "../../../config/constants"
 import styles from "../../../../styles/components/MyAccount.module.scss"
 import { PatronDataContext } from "../../../context/PatronDataContext"
-import RCLink from "../../Links/RCLink/RCLink"
+import RCLink from "../../Link/Link"
 
 const RenewButton = ({
   checkout,

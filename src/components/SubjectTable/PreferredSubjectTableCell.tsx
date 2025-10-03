@@ -1,5 +1,5 @@
 import { Flex, List, Text } from "@nypl/design-system-react-components"
-import RCLink from "../Links/RCLink/RCLink"
+import RCLink from "../Link/Link"
 import type { PreferredSubject, SubjectLink } from "../../types/browseTypes"
 
 const PreferredSubjectTableCell = ({

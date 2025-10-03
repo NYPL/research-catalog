@@ -5,7 +5,7 @@ import {
 import NextLink from "next/link"
 import { type ReactNode } from "react"
 
-interface RCLinkProps {
+interface LinkProps {
   isExternal?: boolean
   active?: boolean
   href?: string
@@ -21,11 +21,11 @@ interface RCLinkProps {
 }
 
 /**
- * RCLink wraps the DS Link and its accompanying styles:
+ * Our Link wraps the DS Link and its accompanying styles:
  * - Internal links use Next.js routing (`as={NextLink}`) so basePath works
  * - External links render a normal anchor
  */
-const RCLink = ({
+const Link = ({
   isExternal = false,
   className,
   href = "",
@@ -35,9 +35,10 @@ const RCLink = ({
   disabled,
   target,
   ...rest
-}: RCLinkProps) => {
+}: LinkProps) => {
   const commonProps = {
     className,
+    href,
     fontWeight: active ? "bold" : undefined,
     hasVisitedState: false,
     tabIndex: disabled ? -1 : undefined,
@@ -50,7 +51,6 @@ const RCLink = ({
 
   return isExternal ? (
     <DSLink
-      href={href}
       target={target || "_blank"}
       rel={target === "_blank" ? "noopener noreferrer" : undefined}
       whiteSpace="unset"
@@ -59,10 +59,10 @@ const RCLink = ({
       {children}
     </DSLink>
   ) : (
-    <DSLink as={NextLink} href={href} {...commonProps}>
+    <DSLink as={NextLink} {...commonProps}>
       {children}
     </DSLink>
   )
 }
 
-export default RCLink
+export default Link

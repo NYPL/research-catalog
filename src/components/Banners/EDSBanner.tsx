@@ -1,7 +1,7 @@
 import { Banner } from "@nypl/design-system-react-components"
 import React from "react"
 import styles from "../../../styles/components/Layout.module.scss"
-import RCLink from "../Links/RCLink/RCLink"
+import RCLink from "../Link/Link"
 
 /**
  * Renders EDS announcement in a DS banner.

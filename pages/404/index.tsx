@@ -1,4 +1,9 @@
-import { Heading, Text, Flex, Link } from "@nypl/design-system-react-components"
+import {
+  Heading,
+  Text,
+  Flex,
+  Link as DSLink,
+} from "@nypl/design-system-react-components"
 import Layout from "../../src/components/Layout/Layout"
 import { SITE_NAME } from "../../src/config/constants"
 import RCHead from "../../src/components/Head/RCHead"
@@ -7,7 +12,7 @@ import Image from "next/image"
 import errorImage from "../../src/assets/errorImage.png"
 import { useContext } from "react"
 import { FeedbackContext } from "../../src/context/FeedbackContext"
-import RCLink from "../../src/components/Links/RCLink/RCLink"
+import Link from "../../src/components/Link/Link"
 
 type ErrorPageProps = {
   activePage: RCPage
@@ -46,10 +51,10 @@ export default function Custom404({ activePage }: ErrorPageProps) {
             elsewhere.
           </Text>
           <Text>
-            Try a <RCLink href="/">new search</RCLink> or{" "}
-            <Link onClick={openFeedbackFormWithError} id="feedback-link">
+            Try a <Link href="/">new search</Link> or{" "}
+            <DSLink onClick={openFeedbackFormWithError} id="feedback-link">
               contact us
-            </Link>{" "}
+            </DSLink>{" "}
             if the error persists.
           </Text>
         </Flex>

@@ -46,7 +46,7 @@ import RCHead from "../../../src/components/Head/RCHead"
 import FindingAid from "../../../src/components/BibPage/FindingAid"
 import Custom404 from "../../404"
 import { tryInstantiate } from "../../../src/utils/appUtils"
-import RCLink from "../../../src/components/Links/RCLink/RCLink"
+import Link from "../../../src/components/Link/Link"
 
 interface BibPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -252,13 +252,13 @@ export default function BibPage({
             </Heading>
             <Banner
               content={
-                <RCLink
+                <Link
                   isExternal
                   href="https://www.nypl.org/help/request-research-materials"
                 >
                   How do I request and pick up research materials for on-site
                   use?
-                </RCLink>
+                </Link>
               }
               isDismissible
               mb="s"
@@ -329,7 +329,7 @@ export default function BibPage({
             details={bottomDetails}
           />
           {displayLegacyCatalogLink ? (
-            <RCLink
+            <Link
               isExternal
               id="legacy-catalog-link"
               href={`${appConfig.urls.legacyCatalog}/record=${bib.id}`}
@@ -337,7 +337,7 @@ export default function BibPage({
               mt="s"
             >
               View in legacy catalog
-            </RCLink>
+            </Link>
           ) : null}
         </Box>
       </Layout>

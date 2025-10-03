@@ -7,7 +7,7 @@ import {
 import type { RefObject, SyntheticEvent } from "react"
 
 import { ITEM_PAGINATION_BATCH_SIZE } from "../../config/constants"
-import RCLink from "../Links/RCLink/RCLink"
+import RCLink from "../Link/Link"
 import type Bib from "../../models/Bib"
 
 interface ItemTableControlsProps {

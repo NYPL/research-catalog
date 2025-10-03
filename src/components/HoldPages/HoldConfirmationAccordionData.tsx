@@ -2,7 +2,7 @@ import {
   Text,
   type AccordionDataProps,
 } from "@nypl/design-system-react-components"
-import RCLink from "../Links/RCLink/RCLink"
+import RCLink from "../Link/Link"
 
 export const holdConfirmationFAQData: AccordionDataProps[] = [
   {

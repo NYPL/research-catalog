@@ -12,7 +12,7 @@ import {
 
 import { ELECTRONIC_RESOURCES_PER_BIB_PAGE } from "../../config/constants"
 import type { ElectronicResource } from "../../types/bibTypes"
-import RCLink from "../Links/RCLink/RCLink"
+import RCLink from "../Link/Link"
 
 interface ElectronicResourcesProps {
   electronicResources: ElectronicResource[]

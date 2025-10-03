@@ -8,7 +8,7 @@ import {
   SimpleGrid,
   StatusBadge,
 } from "@nypl/design-system-react-components"
-import RCLink from "../Links/RCLink/RCLink"
+import RCLink from "../Link/Link"
 import ElectronicResourcesLink from "./ElectronicResourcesLink"
 import ItemTable from "../ItemTable/ItemTable"
 import type SearchResultsBib from "../../models/SearchResultsBib"

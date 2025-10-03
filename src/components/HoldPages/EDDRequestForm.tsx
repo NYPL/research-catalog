@@ -28,7 +28,7 @@ import type {
   HoldErrorStatus,
   EDDFormValidatedField,
 } from "../../types/holdPageTypes"
-import RCLink from "../Links/RCLink/RCLink"
+import RCLink from "../Link/Link"
 
 interface EDDRequestFormProps {
   eddFormState: EDDRequestParams

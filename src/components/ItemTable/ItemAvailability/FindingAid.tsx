@@ -1,4 +1,4 @@
-import RCLink from "../../Links/RCLink/RCLink"
+import RCLink from "../../Link/Link"
 
 const FindingAid = ({ url }: { url: string }) => {
   return (

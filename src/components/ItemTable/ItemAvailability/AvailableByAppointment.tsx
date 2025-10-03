@@ -1,6 +1,6 @@
 import { Box } from "@nypl/design-system-react-components"
 import { appConfig } from "../../../config/config"
-import RCLink from "../../Links/RCLink/RCLink"
+import RCLink from "../../Link/Link"
 
 const AvailableByAppointment = ({ displayPeriod = false }) => {
   return (

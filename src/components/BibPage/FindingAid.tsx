@@ -7,7 +7,7 @@ import {
   Link,
   Flex,
 } from "@nypl/design-system-react-components"
-import RCLink from "../Links/RCLink/RCLink"
+import RCLink from "../Link/Link"
 
 interface FindingAidProps {
   findingAidURL: string

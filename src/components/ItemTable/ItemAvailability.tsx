@@ -12,7 +12,7 @@ import AvailableOnsite from "./ItemAvailability/AvailableOnsite"
 import NotAvailable from "./ItemAvailability/NotAvailable"
 import FindingAid from "./ItemAvailability/FindingAid"
 import ContactALibrarian from "./ItemAvailability/ContactALibrarian"
-import RCLink from "../Links/RCLink/RCLink"
+import RCLink from "../Link/Link"
 
 interface ItemAvailabilityProps {
   item: Item

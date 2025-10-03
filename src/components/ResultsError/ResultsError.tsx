@@ -9,7 +9,7 @@ import { FeedbackContext } from "../../context/FeedbackContext"
 import Image from "next/image"
 import errorImage from "../../assets/errorImage.png"
 import type { RCPage } from "../../types/pageTypes"
-import RCLink from "../Links/RCLink/RCLink"
+import RCLink from "../Link/Link"
 
 type ResultsErrorProps = {
   page: RCPage

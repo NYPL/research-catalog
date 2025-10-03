@@ -4,7 +4,7 @@ import RenewButton from "./RenewButton"
 import ItemsTab from "../ItemsTab"
 import { useContext, useState } from "react"
 import { PatronDataContext } from "../../../context/PatronDataContext"
-import RCLink from "../../Links/RCLink/RCLink"
+import RCLink from "../../Link/Link"
 
 const CheckoutsTab = () => {
   const {

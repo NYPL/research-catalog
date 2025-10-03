@@ -13,7 +13,7 @@ import UpdateLocation from "./UpdateLocation"
 import styles from "../../../../styles/components/MyAccount.module.scss"
 import { useContext, useEffect, useRef, useState } from "react"
 import { PatronDataContext } from "../../../context/PatronDataContext"
-import RCLink from "../../Links/RCLink/RCLink"
+import RCLink from "../../Link/Link"
 
 const RequestsTab = () => {
   const tabRef = useRef(null)

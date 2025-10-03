@@ -11,7 +11,7 @@ import {
 import Bib from "../../../src/models/Bib"
 import Item from "../../../src/models/Item"
 
-import RCLink from "../../../src/components/Links/RCLink/RCLink"
+import RCLink from "../../../src/components/Link/Link"
 
 import HoldConfirmationFAQ from "../../../src/components/HoldPages/HoldConfirmationFAQ"
 import HoldConfirmationItemDetails from "../../../src/components/HoldPages/HoldConfirmationItemDetails"

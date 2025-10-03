@@ -1,10 +1,10 @@
 import { render, screen } from "@testing-library/react"
 import "@testing-library/jest-dom"
-import RCLink from "./RCLink"
+import Link from "./Link"
 
-describe("RCLink", () => {
+describe("Link", () => {
   it("renders an internal link with Next Link", () => {
-    render(<RCLink href="/about">About</RCLink>)
+    render(<Link href="/about">About</Link>)
 
     const link = screen.getByRole("link", { name: /about/i })
     expect(link).toHaveAttribute("href", "/about")
@@ -12,9 +12,9 @@ describe("RCLink", () => {
 
   it("renders an external link with target _blank by default", () => {
     render(
-      <RCLink isExternal href="https://nypl.org">
+      <Link isExternal href="https://nypl.org">
         NYPL
-      </RCLink>
+      </Link>
     )
     const link = screen.getByRole("link", { name: /nypl/i })
     expect(link).toHaveAttribute("href", "https://nypl.org")
@@ -23,9 +23,9 @@ describe("RCLink", () => {
 
   it("respects custom target on external link", () => {
     render(
-      <RCLink isExternal href="https://nypl.org" target="_self">
+      <Link isExternal href="https://nypl.org" target="_self">
         NYPL
-      </RCLink>
+      </Link>
     )
     const link = screen.getByRole("link", { name: /nypl/i })
     expect(link).toHaveAttribute("target", "_self")
@@ -34,9 +34,9 @@ describe("RCLink", () => {
 
   it("sets aria-disabled and tabIndex when disabled", () => {
     render(
-      <RCLink href="/about" disabled>
+      <Link href="/about" disabled>
         About
-      </RCLink>
+      </Link>
     )
     const link = screen.getByRole("link", { name: /about/i })
     expect(link).toHaveAttribute("aria-disabled", "true")

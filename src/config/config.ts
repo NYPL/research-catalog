@@ -16,11 +16,6 @@ export const appConfig: AppConfig = {
       qa: "qa-www.nypl.org",
       production: "www.nypl.org",
     },
-    shep: {
-      development: process.env.SHEP_API,
-      qa: process.env.SHEP_API,
-      production: process.env.SHEP_API,
-    },
     nyplHeaderUrl: {
       development: "https://qa-ds-header.nypl.org",
       qa: "https://qa-ds-header.nypl.org",

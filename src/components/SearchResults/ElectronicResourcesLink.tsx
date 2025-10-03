@@ -3,7 +3,7 @@ import {
   CardContent,
   CardHeading,
 } from "@nypl/design-system-react-components"
-import RCLink from "../Links/RCLink/RCLink"
+import RCLink from "../Link/Link"
 import type { ElectronicResource } from "../../types/bibTypes"
 
 interface ElectronicResourcesLinkProps {

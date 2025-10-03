@@ -1,7 +1,7 @@
 import { getSearchQuery } from "../../utils/searchUtils"
 import styles from "../../../styles/components/Search.module.scss"
 import { PATHS, SEARCH_FORM_OPTIONS } from "../../config/constants"
-import RCLink from "../Links/RCLink/RCLink"
+import RCLink from "../Link/Link"
 import SearchFilterModal from "../SearchFilters/SearchFilterModal"
 import { idConstants } from "../../context/FocusContext"
 import type { Aggregation } from "../../types/filterTypes"

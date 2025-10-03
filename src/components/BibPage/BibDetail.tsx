@@ -1,7 +1,7 @@
 import { Heading, List } from "@nypl/design-system-react-components"
 import { kebabCase } from "lodash"
 import styles from "../../../styles/components/BibDetails.module.scss"
-import RCLink from "../Links/RCLink/RCLink"
+import RCLink from "../Link/Link"
 import type {
   BibDetail,
   BibDetailURL,

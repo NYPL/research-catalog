@@ -3,7 +3,7 @@ import { Box, List, Text } from "@nypl/design-system-react-components"
 import type { PatronEligibilityStatus } from "../../types/holdPageTypes"
 import type Item from "../../models/Item"
 
-import RCLink from "../Links/RCLink/RCLink"
+import RCLink from "../Link/Link"
 import { HoldContactButton } from "./HoldContactButton"
 
 import { PATHS } from "../../config/constants"

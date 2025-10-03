@@ -2,7 +2,7 @@ import { Text, Box, Icon, Table } from "@nypl/design-system-react-components"
 import styles from "../../../styles/components/MyAccount.module.scss"
 import { appConfig } from "../../config/config"
 import type { RefObject } from "react"
-import RCLink from "../Links/RCLink/RCLink"
+import RCLink from "../Link/Link"
 
 const ItemsTab = ({
   tabRef,

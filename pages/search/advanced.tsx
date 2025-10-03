@@ -45,7 +45,7 @@ import SearchFilterCheckboxField from "../../src/components/AdvancedSearch/Searc
 import CancelSubmitButtonGroup from "../../src/components/AdvancedSearch/CancelSubmitButtonGroup"
 import { formatOptions } from "../../src/utils/advancedSearchUtils"
 import { searchAggregations } from "../../src/config/aggregations"
-import RCLink from "../../src/components/Links/RCLink/RCLink"
+import RCLink from "../../src/components/Link/Link"
 import RCHead from "../../src/components/Head/RCHead"
 import { useDateFilter } from "../../src/hooks/useDateFilter"
 import DateFilter from "../../src/components/SearchFilters/DateFilter"
@@ -117,7 +117,6 @@ export default function AdvancedSearch({
     if (!queryString.length) {
       setErrorMessage(defaultEmptySearchErrorMessage)
       setAlert(true)
-      // Very basic validation for the date range.
     } else {
       await router.push(`${PATHS.SEARCH}${queryString}&searched_from=advanced`)
     }
