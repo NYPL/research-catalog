@@ -7,7 +7,6 @@ import { textInputFields } from "../../../src/utils/advancedSearchUtils"
 import AdvancedSearch, {
   defaultEmptySearchErrorMessage,
 } from "../../../pages/search/advanced"
-import { searchVocabularies } from "../../../data/searchVocabularies"
 
 // Mock next router
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
