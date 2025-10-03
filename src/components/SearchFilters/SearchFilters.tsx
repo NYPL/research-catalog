@@ -88,7 +88,6 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
   const [focusedFilter, setFocusedFilter] = useState<string | null>(null)
   const filters = fields.map((field) => {
     const filterData = new SearchResultsFilters(aggregations, field)
-    console.log(filterData.options)
     if (filterData.options) {
       return (
         <div
