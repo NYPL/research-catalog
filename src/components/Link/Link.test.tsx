@@ -1,15 +1,26 @@
 import { render, screen } from "@testing-library/react"
 import "@testing-library/jest-dom"
 import Link from "./Link"
+import NextLink from "next/link"
+
+jest.mock("next/link", () => {
+  return jest.fn(({ children, ...props }) => <a {...props}>{children}</a>)
+})
 
 describe("Link", () => {
-  it("renders an internal link with Next Link", () => {
+  it("renders using Next.js Link internally", () => {
     render(<Link href="/about">About</Link>)
 
-    const link = screen.getByRole("link", { name: /about/i })
-    expect(link).toHaveAttribute("href", "/about")
-  })
+    expect(NextLink).toHaveBeenCalledWith(
+      expect.objectContaining({ href: "/about" }),
+      {}
+    )
 
+    expect(screen.getByRole("link", { name: /about/i })).toHaveAttribute(
+      "href",
+      "/about"
+    )
+  })
   it("renders an external link with target _blank by default", () => {
     render(
       <Link isExternal href="https://nypl.org">
