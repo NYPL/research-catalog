@@ -1,6 +1,6 @@
 import { Box } from "@nypl/design-system-react-components"
 import { appConfig } from "../../../config/config"
-import RCLink from "../../Link/Link"
+import Link from "../../Link/Link"
 
 const AvailableByAppointment = ({ displayPeriod = false }) => {
   return (
@@ -15,12 +15,9 @@ const AvailableAtLink = ({ location }) => {
   return (
     <>
       {" at "}
-      <RCLink
-        isExternal
-        href={`${appConfig.urls.locations}${location.endpoint}`}
-      >
+      <Link isExternal href={`${appConfig.urls.locations}${location.endpoint}`}>
         {location.prefLabel + "."}
-      </RCLink>
+      </Link>
     </>
   )
 }

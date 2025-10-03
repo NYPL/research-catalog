@@ -28,7 +28,7 @@ import type {
   HoldErrorStatus,
   EDDFormValidatedField,
 } from "../../types/holdPageTypes"
-import RCLink from "../Link/Link"
+import Link from "../Link/Link"
 
 interface EDDRequestFormProps {
   eddFormState: EDDRequestParams
@@ -144,12 +144,12 @@ const EDDRequestForm = ({
           You may request one chapter, one article, around 10% of work, or 50
           pages for public domain works.
         </Text>
-        <RCLink
+        <Link
           isExternal
           href="https://www.nypl.org/research/services/scan-and-deliver"
         >
           Read more about this service
-        </RCLink>
+        </Link>
       </Box>
       <FormField>
         <TextInput

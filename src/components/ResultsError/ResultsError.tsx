@@ -1,4 +1,9 @@
-import { Heading, Flex, Link, Text } from "@nypl/design-system-react-components"
+import {
+  Heading,
+  Flex,
+  Link as DSLink,
+  Text,
+} from "@nypl/design-system-react-components"
 import type { HTTPStatusCode } from "../../types/appTypes"
 import { appConfig } from "../../config/config"
 import { SITE_NAME } from "../../config/constants"
@@ -9,7 +14,7 @@ import { FeedbackContext } from "../../context/FeedbackContext"
 import Image from "next/image"
 import errorImage from "../../assets/errorImage.png"
 import type { RCPage } from "../../types/pageTypes"
-import RCLink from "../Link/Link"
+import Link from "../Link/Link"
 
 type ResultsErrorProps = {
   page: RCPage
@@ -36,17 +41,17 @@ export default function ResultsError({ errorStatus, page }: ResultsErrorProps) {
           </Text>
           <Text>
             You can also search our{" "}
-            <RCLink isExternal href={appConfig.urls.circulatingCatalog}>
+            <Link isExternal href={appConfig.urls.circulatingCatalog}>
               Branch Catalog
-            </RCLink>{" "}
-            or{" "}
-            <RCLink isExternal href={appConfig.urls.legacyCatalog}>
-              Legacy Catalog
-            </RCLink>{" "}
-            for more materials, or{" "}
-            <Link onClick={openFeedbackFormWithError} id="feedback-link">
-              contact us
             </Link>{" "}
+            or{" "}
+            <Link isExternal href={appConfig.urls.legacyCatalog}>
+              Legacy Catalog
+            </Link>{" "}
+            for more materials, or{" "}
+            <DSLink onClick={openFeedbackFormWithError} id="feedback-link">
+              contact us
+            </DSLink>{" "}
             for assistance.
           </Text>
         </>
@@ -64,9 +69,9 @@ export default function ResultsError({ errorStatus, page }: ResultsErrorProps) {
           </Text>
           <Text marginBottom="0">
             Try refreshing the page or{" "}
-            <Link onClick={openFeedbackFormWithError} id="feedback-link">
+            <DSLink onClick={openFeedbackFormWithError} id="feedback-link">
               contact us
-            </Link>{" "}
+            </DSLink>{" "}
             if the error persists.
           </Text>
         </>
@@ -84,9 +89,9 @@ export default function ResultsError({ errorStatus, page }: ResultsErrorProps) {
           </Text>
           <Text marginBottom="0">
             Try again later or{" "}
-            <Link onClick={openFeedbackFormWithError} id="feedback-link">
+            <DSLink onClick={openFeedbackFormWithError} id="feedback-link">
               contact us
-            </Link>{" "}
+            </DSLink>{" "}
             if the error persists.
           </Text>
         </>

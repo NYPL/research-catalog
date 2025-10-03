@@ -3,7 +3,7 @@ import { Box, List, Text } from "@nypl/design-system-react-components"
 import type { PatronEligibilityStatus } from "../../types/holdPageTypes"
 import type Item from "../../models/Item"
 
-import RCLink from "../Link/Link"
+import Link from "../Link/Link"
 import { HoldContactButton } from "./HoldContactButton"
 
 import { PATHS } from "../../config/constants"
@@ -30,10 +30,10 @@ const PatronIneligibilityErrors = ({
       ? [
           <>
             Your account has expired -- Please see{" "}
-            <RCLink isExternal href={appConfig.urls.renewCard}>
+            <Link isExternal href={appConfig.urls.renewCard}>
               Library Terms and Conditions -- Renewing or Validating Your
               Library Card
-            </RCLink>{" "}
+            </Link>{" "}
             about renewing your card.
           </>,
         ]
@@ -43,7 +43,7 @@ const PatronIneligibilityErrors = ({
           <>
             Your fines have exceeded the limit — you can pay your fines in a
             branch or online from the links under{" "}
-            <RCLink href={PATHS.MY_ACCOUNT}>My Account</RCLink>.
+            <Link href={PATHS.MY_ACCOUNT}>My Account</Link>.
           </>,
         ]
       : []),

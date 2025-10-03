@@ -12,7 +12,7 @@ import {
 
 import { ELECTRONIC_RESOURCES_PER_BIB_PAGE } from "../../config/constants"
 import type { ElectronicResource } from "../../types/bibTypes"
-import RCLink from "../Link/Link"
+import Link from "../Link/Link"
 
 interface ElectronicResourcesProps {
   electronicResources: ElectronicResource[]
@@ -58,7 +58,7 @@ const ElectronicResources = ({
           mb="0"
           noStyling
           listItems={electronicResourcesToDisplay.map((resource) => (
-            <RCLink
+            <Link
               isExternal
               href={resource.url}
               key={kebabCase(resource.title)}
@@ -74,7 +74,7 @@ const ElectronicResources = ({
               >
                 {resource.title || resource.prefLabel || resource.url}
               </Box>
-            </RCLink>
+            </Link>
           ))}
         />
         {electronicResources.length > ELECTRONIC_RESOURCES_PER_BIB_PAGE ? (

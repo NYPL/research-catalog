@@ -1,7 +1,7 @@
 import { Banner } from "@nypl/design-system-react-components"
 import React from "react"
 import styles from "../../../styles/components/Layout.module.scss"
-import RCLink from "../Link/Link"
+import Link from "../Link/Link"
 
 /**
  * Renders EDS announcement in a DS banner.
@@ -17,14 +17,14 @@ const EDSBanner = () => {
             New!
           </span>{" "}
           Try{" "}
-          <RCLink
+          <Link
             isExternal
             href="https://www.nypl.org/research/collections/online-resources-databases"
           >
             <b style={{ color: "var(--nypl-colors-ui-link-primary" }}>
               Article Plus
             </b>
-          </RCLink>{" "}
+          </Link>{" "}
           to discover online journals, books, and more from home with your
           library card.
         </>

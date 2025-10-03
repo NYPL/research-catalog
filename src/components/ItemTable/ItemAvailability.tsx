@@ -12,7 +12,7 @@ import AvailableOnsite from "./ItemAvailability/AvailableOnsite"
 import NotAvailable from "./ItemAvailability/NotAvailable"
 import FindingAid from "./ItemAvailability/FindingAid"
 import ContactALibrarian from "./ItemAvailability/ContactALibrarian"
-import RCLink from "../Link/Link"
+import Link from "../Link/Link"
 
 interface ItemAvailabilityProps {
   item: Item
@@ -50,14 +50,14 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
   switch (item.availability.key) {
     case RECAP_GENERAL_COLLECTIONS:
       return (
-        <RCLink
+        <Link
           isExternal
           href={appConfig.urls.researchMaterialsHelp}
           fontSize="sm"
           className="no-print"
         >
           How do I pick up this item and when will it be ready?
-        </RCLink>
+        </Link>
       )
     case EDGE_CASE:
       message = <ContactALibrarian item={itemMetadata} />

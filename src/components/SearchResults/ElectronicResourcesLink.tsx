@@ -3,7 +3,7 @@ import {
   CardContent,
   CardHeading,
 } from "@nypl/design-system-react-components"
-import RCLink from "../Link/Link"
+import Link from "../Link/Link"
 import type { ElectronicResource } from "../../types/bibTypes"
 
 interface ElectronicResourcesLinkProps {
@@ -22,7 +22,7 @@ const ElectronicResourcesLink = ({
       </CardHeading>
       <CardContent>
         {electronicResources.length === 1 ? (
-          <RCLink
+          <Link
             isExternal
             href={electronicResources[0].url}
             variant="standalone"
@@ -31,9 +31,9 @@ const ElectronicResourcesLink = ({
             hasVisitedState={false}
           >
             {electronicResources[0].prefLabel || electronicResources[0].url}
-          </RCLink>
+          </Link>
         ) : (
-          <RCLink
+          <Link
             href={`${bibUrl}#electronic-resources`}
             variant="standalone"
             fontSize={{ base: "mobile.body.body2", md: "desktop.body.body2" }}
@@ -42,7 +42,7 @@ const ElectronicResourcesLink = ({
             whiteSpace="wrap"
           >
             View all available online resources
-          </RCLink>
+          </Link>
         )}
       </CardContent>
     </Card>

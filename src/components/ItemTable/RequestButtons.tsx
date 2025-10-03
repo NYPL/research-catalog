@@ -1,5 +1,5 @@
 import { Box } from "@nypl/design-system-react-components"
-import RCLink from "../Link/Link"
+import Link from "../Link/Link"
 
 import type Item from "../../models/Item"
 
@@ -16,7 +16,7 @@ const RequestButtons = ({ item }: RequestButtonsProps) => {
   return (
     <Box sx={{ a: { marginRight: "xs" } }} className="no-print">
       {item.aeonUrl && (
-        <RCLink
+        <Link
           isExternal
           href={item.aeonUrl}
           variant={!item.isAvailable ? "buttonDisabled" : "buttonSecondary"}
@@ -26,11 +26,11 @@ const RequestButtons = ({ item }: RequestButtonsProps) => {
           target="_self"
         >
           Request appointment
-        </RCLink>
+        </Link>
       )}
 
       {item.isPhysicallyRequestable && (
-        <RCLink
+        <Link
           href={`/hold/request/${item.bibId}-${item.id}`}
           variant={!item.isAvailable ? "buttonDisabled" : "buttonSecondary"}
           aria-label={`Request for On-site Use, ${item.requestButtonAriaLabel}`}
@@ -38,10 +38,10 @@ const RequestButtons = ({ item }: RequestButtonsProps) => {
           mb="s"
         >
           Request for on-site use
-        </RCLink>
+        </Link>
       )}
       {item.isEDDRequestable && (
-        <RCLink
+        <Link
           href={`/hold/request/${item.bibId}-${item.id}/edd`}
           variant={!item.isAvailable ? "buttonDisabled" : "buttonSecondary"}
           aria-label={`Request Scan, ${item.requestButtonAriaLabel}`}
@@ -49,7 +49,7 @@ const RequestButtons = ({ item }: RequestButtonsProps) => {
           mb="s"
         >
           Request scan
-        </RCLink>
+        </Link>
       )}
     </Box>
   )

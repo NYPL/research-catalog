@@ -1,7 +1,7 @@
 import { Banner, Flex } from "@nypl/design-system-react-components"
 import React from "react"
 import styles from "../../../styles/components/Layout.module.scss"
-import RCLink from "../Link/Link"
+import Link from "../Link/Link"
 
 /**
  * Renders SH information in a DS banner.
@@ -27,7 +27,7 @@ const SubjectHeadingBanner = () => {
             of the NYPL Research Catalog. The{" "}
             <span style={{ fontWeight: "bold" }}>Subject Headings index</span>{" "}
             draws from the Library of Congress Subject Headings (
-            <RCLink
+            <Link
               isExternal
               sx={{
                 color: "ui.link.primary !important",
@@ -37,7 +37,7 @@ const SubjectHeadingBanner = () => {
               href="https://id.loc.gov/authorities/subjects.html"
             >
               LCSH
-            </RCLink>
+            </Link>
             ), which are descriptive authorities created by the Library of
             Congress and used by libraries to group similar materials together
             by subject. Each item in the catalog is typically assigned at least

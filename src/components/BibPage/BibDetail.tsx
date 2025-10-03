@@ -1,7 +1,7 @@
 import { Heading, List } from "@nypl/design-system-react-components"
 import { kebabCase } from "lodash"
 import styles from "../../../styles/components/BibDetails.module.scss"
-import RCLink from "../Link/Link"
+import Link from "../Link/Link"
 import type {
   BibDetail,
   BibDetailURL,
@@ -98,7 +98,7 @@ const LinkElement = (
   ariaLabel?: string
 ) => {
   return (
-    <RCLink
+    <Link
       dir={rtlOrLtr(url.urlLabel)}
       href={url.url}
       key={url.url}
@@ -108,7 +108,7 @@ const LinkElement = (
       aria-label={ariaLabel}
     >
       {url.urlLabel}
-    </RCLink>
+    </Link>
   )
 }
 

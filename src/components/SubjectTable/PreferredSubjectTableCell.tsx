@@ -1,5 +1,5 @@
 import { Flex, List, Text } from "@nypl/design-system-react-components"
-import RCLink from "../Link/Link"
+import Link from "../Link/Link"
 import type { PreferredSubject, SubjectLink } from "../../types/browseTypes"
 
 const PreferredSubjectTableCell = ({
@@ -10,9 +10,9 @@ const PreferredSubjectTableCell = ({
   const commaSeparatedSubjectLinks = (terms: SubjectLink[]) =>
     terms.map((term, i) => (
       <span key={term.url}>
-        <RCLink href={term.url} isUnderlined={false}>
+        <Link href={term.url} isUnderlined={false}>
           {term.termLabel}
-        </RCLink>
+        </Link>
         {i < terms.length - 1 && ", "}
       </span>
     ))
@@ -25,9 +25,9 @@ const PreferredSubjectTableCell = ({
 
   return (
     <Flex flexDir="column" gap="xs">
-      <RCLink isUnderlined={false} href={subject.url}>
+      <Link isUnderlined={false} href={subject.url}>
         {subject.termLabel}
-      </RCLink>
+      </Link>
       {relatedTerms.length > 0 && (
         <List
           variant="ul"

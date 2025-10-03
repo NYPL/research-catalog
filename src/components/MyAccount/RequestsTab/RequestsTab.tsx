@@ -13,7 +13,7 @@ import UpdateLocation from "./UpdateLocation"
 import styles from "../../../../styles/components/MyAccount.module.scss"
 import { useContext, useEffect, useRef, useState } from "react"
 import { PatronDataContext } from "../../../context/PatronDataContext"
-import RCLink from "../../Link/Link"
+import Link from "../../Link/Link"
 
 const RequestsTab = () => {
   const tabRef = useRef(null)
@@ -28,9 +28,9 @@ const RequestsTab = () => {
     // If item is research/circ
     if (hold.catalogHref) {
       return (
-        <RCLink isExternal isUnderlined={false} href={hold.catalogHref}>
+        <Link isExternal isUnderlined={false} href={hold.catalogHref}>
           {hold.title}
-        </RCLink>
+        </Link>
       )
     } else {
       // Item is a partner record

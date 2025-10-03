@@ -11,7 +11,7 @@ import {
 import Bib from "../../../src/models/Bib"
 import Item from "../../../src/models/Item"
 
-import RCLink from "../../../src/components/Link/Link"
+import Link from "../../../src/components/Link/Link"
 
 import HoldConfirmationFAQ from "../../../src/components/HoldPages/HoldConfirmationFAQ"
 import HoldConfirmationItemDetails from "../../../src/components/HoldPages/HoldConfirmationItemDetails"
@@ -82,9 +82,7 @@ export default function HoldConfirmationPage({
             <Text mt="xs">
               You&apos;re all set! We have received your {isEDD ? "scan " : ""}
               request for{" "}
-              <RCLink href={`${PATHS.BIB}/${item.bibId}`}>
-                {item.bibTitle}
-              </RCLink>
+              <Link href={`${PATHS.BIB}/${item.bibId}`}>{item.bibTitle}</Link>
             </Text>
           }
         />
@@ -93,7 +91,7 @@ export default function HoldConfirmationPage({
           pickupLocationLabel={pickupLocationLabel}
         />
         <HoldConfirmationFAQ isEDD={isEDD} />
-        <RCLink
+        <Link
           href={PATHS.HOME}
           fontSize={{
             base: "mobile.body.body2",
@@ -105,7 +103,7 @@ export default function HoldConfirmationPage({
           my="l"
         >
           Start a new search
-        </RCLink>
+        </Link>
       </Layout>
     </>
   )

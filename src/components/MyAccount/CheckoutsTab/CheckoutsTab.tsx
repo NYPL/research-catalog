@@ -4,7 +4,7 @@ import RenewButton from "./RenewButton"
 import ItemsTab from "../ItemsTab"
 import { useContext, useState } from "react"
 import { PatronDataContext } from "../../../context/PatronDataContext"
-import RCLink from "../../Link/Link"
+import Link from "../../Link/Link"
 
 const CheckoutsTab = () => {
   const {
@@ -13,9 +13,9 @@ const CheckoutsTab = () => {
   function formatTitleElement(checkout: Checkout) {
     if (checkout.catalogHref) {
       return (
-        <RCLink isExternal isUnderlined={false} href={checkout.catalogHref}>
+        <Link isExternal isUnderlined={false} href={checkout.catalogHref}>
           {checkout.title}
-        </RCLink>
+        </Link>
       )
     } else {
       return <Text>{checkout.title}</Text>
