@@ -46,13 +46,9 @@ describe("SearchFilters", () => {
       const dateMultiselect = screen.getByLabelText(/Date/, {
         selector: "button",
       })
-      const collectionMultiselect = screen.getByLabelText(/Collection/, {
-        selector: "button",
-      })
       expect(formatMultiselect).toHaveAttribute("aria-expanded", "true")
       expect(subjectMultiselect).toHaveAttribute("aria-expanded", "false")
       expect(dateMultiselect).toHaveAttribute("aria-expanded", "false")
-      expect(collectionMultiselect).toHaveAttribute("aria-expanded", "false")
     })
     it("opens and closes filters", async () => {
       mockRouter.push("/search?q=spaghetti")

@@ -171,6 +171,7 @@ const MultiSelectWithGroupTitles = ({
   const accordionLabel = (
     <Box
       as="span"
+      title={field.label}
       sx={{
         marginLeft: selectedItemsCount > 0 ? "56px" : "0",
         marginBottom: "0",
