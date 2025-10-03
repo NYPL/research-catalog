@@ -14,7 +14,7 @@ test.describe("Author Search", () => {
     page,
   }) => {
     await searchPage.searchFor(searchterm, "Author/contributor")
-    await expect(searchPage.resultsHeading).toBeVisible()
+    await expect(searchPage.searchResultsHeading).toBeVisible()
 
     // Collect all title link URLs (limit to 5)
     const titleLinks = await page.locator("#search-results-list h3 a").all()
