@@ -38,9 +38,6 @@ export class SearchPage {
     this.searchResultsTitle = page
       .locator("#search-results-list")
       .getByRole("link", { name: new RegExp(this.searchterm) })
-    this.searchResultsCallNumber = page.locator(
-      '#search-results-list table td:has-text("CALL NUMBER") td p span'
-    )
   }
 
   async searchFor(searchterm: string, searchType = "Keyword") {
