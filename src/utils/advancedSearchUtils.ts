@@ -63,12 +63,7 @@ export const buildGoBackHref = (referer) => {
   return goBackEndpoint
 }
 
-export function mapCollectionsIntoLocations(
-  collections: {
-    value: string
-    label: string
-  }[]
-) {
+export function mapCollectionsIntoLocations(collections) {
   return searchVocabularies.buildingLocations
     .filter((building) => building.value !== "rc")
     .map((building) => {
@@ -76,7 +71,10 @@ export function mapCollectionsIntoLocations(
         .filter((col) => col.value.startsWith(building.value))
         .map((col) => ({
           id: col.value,
-          name: col.label,
+          name: col.count
+            ? `${col.label} (${col.count.toLocaleString()})`
+            : col.label,
+          ...(col.count !== undefined ? { count: col.count } : {}),
         }))
       return {
         id: building.value,
@@ -85,4 +83,23 @@ export function mapCollectionsIntoLocations(
       }
     })
     .filter((group) => group.children.length > 0)
+}
+
+export function mapCollectionToFilterTag(collectionValue, collectionName) {
+  const building = searchVocabularies.buildingLocations.find(
+    (b) => collectionValue.toString().slice(0, 2) === b.value
+  )
+
+  const buildingNickname = [
+    { value: "ma", label: "SASB" },
+    { value: "pa", label: "LPA" },
+    { value: "sc", label: "Schomburg" },
+    { value: "bu", label: "SNFL" },
+  ]
+  if (building) {
+    const nickname = buildingNickname.find((b) => b.value === building.value)
+    return `${nickname.label} - ${collectionName}`
+  }
+
+  return collectionName
 }

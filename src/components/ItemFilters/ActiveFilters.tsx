@@ -17,6 +17,7 @@ const ActiveFilters = ({ filterName, onClick, tagSetData }) => {
         fontWeight="bold"
         mr={{ base: "0", md: "s" }}
         mb={{ base: "xs", md: "0" }}
+        pt="xxs"
         lineHeight="--nypl-lineHeights-taller"
       >
         Active filters
