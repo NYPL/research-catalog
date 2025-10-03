@@ -14,7 +14,7 @@ test.describe("Unique Identifier Search", () => {
     page,
   }) => {
     await searchPage.searchFor(searchterm, "Unique identifier")
-    await expect(searchPage.resultsHeading).toBeVisible()
+    await expect(searchPage.searchResultsHeading).toBeVisible()
     // click on the title of the first search result
     await searchPage.searchResults.first().click()
     // assert that the unique identifier is present on the item detail page

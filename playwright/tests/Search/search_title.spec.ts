@@ -15,8 +15,9 @@ test.describe("Title Search", () => {
   }) => {
     await searchPage.searchFor(searchterm, "Title")
     // sleep for 5 seconds to allow results to load
-    // await page.waitForTimeout(5000)
-    await expect(searchPage.resultsHeading).toBeVisible()
+    await page.waitForTimeout(10000)
+    await expect(searchPage.searchResultsHeading).toBeVisible()
+    // await page.waitForTimeout(10000) // waits 10 seconds before checking count
     await expect(await searchPage.searchResultsTitle.count()).toBeGreaterThan(
       10
     )

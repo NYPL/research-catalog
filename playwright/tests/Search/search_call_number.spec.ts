@@ -14,9 +14,10 @@ test.describe("Call Number Search", () => {
     page,
   }) => {
     await searchPage.searchFor(searchterm, "Call number")
-    await expect(searchPage.resultsHeading).toBeVisible()
+    await expect(searchPage.searchResultsHeading).toBeVisible()
     await expect(
-      searchPage.page.getByTestId("card-content").getByText("JFD 93-1962")
+      // the call number "JFD 93-1962" should be visible somewhere within the search results container
+      searchPage.searchResultsContainer.locator(`text=${searchterm}`)
     ).toBeVisible()
   })
 })
