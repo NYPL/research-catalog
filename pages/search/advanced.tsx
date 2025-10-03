@@ -41,12 +41,11 @@ import type {
 } from "../../src/types/searchTypes"
 import { getSearchQuery } from "../../src/utils/searchUtils"
 import initializePatronTokenAuth from "../../src/server/auth"
-import { appConfig } from "../../src/config/config"
 import SearchFilterCheckboxField from "../../src/components/AdvancedSearch/SearchFilterCheckboxField"
 import CancelSubmitButtonGroup from "../../src/components/AdvancedSearch/CancelSubmitButtonGroup"
 import { formatOptions } from "../../src/utils/advancedSearchUtils"
 import { searchAggregations } from "../../src/config/aggregations"
-import RCLink from "../../src/components/Links/RCLink/RCLink"
+import Link from "../../src/components/Link/Link"
 import RCHead from "../../src/components/Head/RCHead"
 import { useDateFilter } from "../../src/hooks/useDateFilter"
 import DateFilter from "../../src/components/SearchFilters/DateFilter"
@@ -118,19 +117,8 @@ export default function AdvancedSearch({
     if (!queryString.length) {
       setErrorMessage(defaultEmptySearchErrorMessage)
       setAlert(true)
-      // Very basic validation for the date range.
     } else {
-      // If the NEXT_PUBLIC_REVERSE_PROXY_ENABLED feature flag is present, use window.location.replace
-      // instead of router.push to forward search results to DFE.
-      if (appConfig.features.reverseProxyEnabled[appConfig.environment]) {
-        window.location.replace(
-          `${BASE_URL}${PATHS.SEARCH}${queryString}&searched_from=advanced`
-        )
-      } else {
-        await router.push(
-          `${PATHS.SEARCH}${queryString}&searched_from=advanced`
-        )
-      }
+      await router.push(`${PATHS.SEARCH}${queryString}&searched_from=advanced`)
     }
   }
 
@@ -232,7 +220,7 @@ export default function AdvancedSearch({
             flexDirection={{ base: "column-reverse", md: "row" }}
           >
             {goBackHref && (
-              <RCLink
+              <Link
                 display="flex"
                 href={goBackHref}
                 variant="buttonSecondary"
@@ -246,7 +234,7 @@ export default function AdvancedSearch({
                   mr="xs"
                 />
                 Go back
-              </RCLink>
+              </Link>
             )}
             <CancelSubmitButtonGroup
               formName="advanced-search"

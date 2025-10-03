@@ -1,10 +1,10 @@
 import { Flex, Text } from "@nypl/design-system-react-components"
-import ExternalLink from "../../Links/ExternalLink/ExternalLink"
 import type { Checkout } from "../../../types/myAccountTypes"
 import RenewButton from "./RenewButton"
 import ItemsTab from "../ItemsTab"
 import { useContext, useState } from "react"
 import { PatronDataContext } from "../../../context/PatronDataContext"
+import Link from "../../Link/Link"
 
 const CheckoutsTab = () => {
   const {
@@ -13,9 +13,9 @@ const CheckoutsTab = () => {
   function formatTitleElement(checkout: Checkout) {
     if (checkout.catalogHref) {
       return (
-        <ExternalLink isUnderlined={false} href={checkout.catalogHref}>
+        <Link isExternal isUnderlined={false} href={checkout.catalogHref}>
           {checkout.title}
-        </ExternalLink>
+        </Link>
       )
     } else {
       return <Text>{checkout.title}</Text>

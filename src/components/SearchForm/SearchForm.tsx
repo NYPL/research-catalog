@@ -1,7 +1,7 @@
 import { getSearchQuery } from "../../utils/searchUtils"
 import styles from "../../../styles/components/Search.module.scss"
 import { PATHS, SEARCH_FORM_OPTIONS } from "../../config/constants"
-import RCLink from "../Links/RCLink/RCLink"
+import Link from "../Link/Link"
 import SearchFilterModal from "../SearchFilters/SearchFilterModal"
 import { idConstants } from "../../context/FocusContext"
 import type { Aggregation } from "../../types/filterTypes"
@@ -40,14 +40,14 @@ const SearchForm = ({
       getQueryString={getSearchQuery}
       onSubmitFocusId={idConstants.searchResultsHeading}
     >
-      <RCLink
+      <Link
         className={styles.advancedSearch}
         href="/search/advanced"
         isUnderlined={false}
         mb="xs"
       >
         Advanced search
-      </RCLink>
+      </Link>
       {displayFilters && (
         <SearchFilterModal
           aggregations={aggregations}

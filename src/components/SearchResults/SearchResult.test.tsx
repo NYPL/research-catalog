@@ -17,10 +17,7 @@ describe("SearchResult with Physical Items", () => {
     const resultTitleLink = screen.getByRole("link", {
       name: "A history of spaghetti eating and cooking for: spaghetti dinner.",
     })
-    expect(resultTitleLink).toHaveAttribute(
-      "href",
-      "/research/research-catalog/bib/b12810991"
-    )
+    expect(resultTitleLink).toHaveAttribute("href", "/bib/b12810991")
   })
 
   it("renders the primary bib fields", async () => {
@@ -43,10 +40,7 @@ describe("SearchResult with Many Physical Items", () => {
     const resultTitleLink = screen.getByRole("link", {
       name: "View all 4 items",
     })
-    expect(resultTitleLink).toHaveAttribute(
-      "href",
-      "/research/research-catalog/bib/b14753192#item-table"
-    )
+    expect(resultTitleLink).toHaveAttribute("href", "/bib/b14753192#item-table")
   })
 })
 

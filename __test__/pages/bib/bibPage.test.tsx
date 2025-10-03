@@ -275,10 +275,7 @@ describe("Bib Page Item Table many items", () => {
 
   it("renders a view all button when there are more than 20 items and updates the url to /all when clicked", async () => {
     const viewAllLink = screen.getByText(/View all 26 items/).closest("a")
-    expect(viewAllLink).toHaveAttribute(
-      "href",
-      "/research/research-catalog/bib/pb5579193/all"
-    )
+    expect(viewAllLink).toHaveAttribute("href", "/bib/pb5579193/all")
     await userEvent.click(viewAllLink)
     expect(mockRouter.asPath).toBe("/bib/pb5579193/all")
   })

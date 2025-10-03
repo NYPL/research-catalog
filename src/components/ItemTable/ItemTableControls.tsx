@@ -2,13 +2,12 @@ import {
   Box,
   Pagination,
   ProgressIndicator,
-  Label,
   Icon,
 } from "@nypl/design-system-react-components"
 import type { RefObject, SyntheticEvent } from "react"
 
 import { ITEM_PAGINATION_BATCH_SIZE } from "../../config/constants"
-import RCLink from "../Links/RCLink/RCLink"
+import Link from "../Link/Link"
 import type Bib from "../../models/Bib"
 
 interface ItemTableControlsProps {
@@ -83,7 +82,7 @@ const ItemTableControls = ({
           />
         ) : !itemsLoading ? (
           <>
-            <RCLink
+            <Link
               href={`${bib.url}${!viewAllExpanded ? "/all" : ""}`}
               onClick={handleViewAllClick}
               fontSize={{
@@ -109,7 +108,7 @@ const ItemTableControls = ({
                 align="right"
                 color="ui.link.primary"
               />
-            </RCLink>
+            </Link>
           </>
         ) : null)}
     </Box>

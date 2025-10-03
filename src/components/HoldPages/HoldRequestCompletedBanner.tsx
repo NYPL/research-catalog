@@ -1,5 +1,5 @@
 import { Box, Banner } from "@nypl/design-system-react-components"
-import RCLink from "../Links/RCLink/RCLink"
+import Link from "../Link/Link"
 
 type HoldRequestCompletedBannerProps = {
   isEDD?: boolean
@@ -31,7 +31,7 @@ const HoldRequestCompletedBanner = ({
         ) : (
           <Box>
             To cancel this request, go to the &rsquo;Requests&rsquo; tab in your{" "}
-            <RCLink href="/account">patron account</RCLink>. Please allow a few
+            <Link href="/account">patron account</Link>. Please allow a few
             minutes after requesting for this item to show up in your account.{" "}
           </Box>
         )

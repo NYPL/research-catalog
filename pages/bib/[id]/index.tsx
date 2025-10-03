@@ -28,7 +28,6 @@ import BibDetails from "../../../src/components/BibPage/BibDetail"
 import ElectronicResources from "../../../src/components/BibPage/ElectronicResources"
 import ItemTable from "../../../src/components/ItemTable/ItemTable"
 import ItemTableControls from "../../../src/components/ItemTable/ItemTableControls"
-import ExternalLink from "../../../src/components/Links/ExternalLink/ExternalLink"
 import ItemFilters from "../../../src/components/ItemFilters/ItemFilters"
 import type {
   DiscoveryBibResult,
@@ -47,6 +46,7 @@ import RCHead from "../../../src/components/Head/RCHead"
 import FindingAid from "../../../src/components/BibPage/FindingAid"
 import Custom404 from "../../404"
 import { tryInstantiate } from "../../../src/utils/appUtils"
+import Link from "../../../src/components/Link/Link"
 
 interface BibPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -252,10 +252,13 @@ export default function BibPage({
             </Heading>
             <Banner
               content={
-                <ExternalLink href="https://www.nypl.org/help/request-research-materials">
+                <Link
+                  isExternal
+                  href="https://www.nypl.org/help/request-research-materials"
+                >
                   How do I request and pick up research materials for on-site
                   use?
-                </ExternalLink>
+                </Link>
               }
               isDismissible
               mb="s"
@@ -326,14 +329,15 @@ export default function BibPage({
             details={bottomDetails}
           />
           {displayLegacyCatalogLink ? (
-            <ExternalLink
+            <Link
+              isExternal
               id="legacy-catalog-link"
               href={`${appConfig.urls.legacyCatalog}/record=${bib.id}`}
               variant="standalone"
               mt="s"
             >
               View in legacy catalog
-            </ExternalLink>
+            </Link>
           ) : null}
         </Box>
       </Layout>
