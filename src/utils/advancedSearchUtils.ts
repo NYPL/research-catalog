@@ -1,6 +1,7 @@
 import type { SearchParams, SearchFormInputField } from "../types/searchTypes"
 import { BASE_URL } from "../config/constants"
 import { searchVocabularies } from "../../data/searchVocabularies"
+import type { MultiSelectItem } from "@nypl/design-system-react-components"
 
 export const textInputFields: SearchFormInputField[] = [
   { name: "q", label: "Keyword" },
@@ -63,7 +64,9 @@ export const buildGoBackHref = (referer) => {
   return goBackEndpoint
 }
 
-export function mapCollectionsIntoLocations(collections) {
+export function mapCollectionsIntoLocations(
+  collections: { value: string; label: string; count?: number }[]
+): MultiSelectItem[] {
   return searchVocabularies.buildingLocations
     .filter((building) => building.value !== "rc")
     .map((building) => {
@@ -85,21 +88,17 @@ export function mapCollectionsIntoLocations(collections) {
     .filter((group) => group.children.length > 0)
 }
 
+/** Get filter string as it displays in the Active filters tagset: with shortened parent location,
+ ** then the collection/division title. **/
 export function mapCollectionToFilterTag(collectionValue, collectionName) {
   const building = searchVocabularies.buildingLocations.find(
     (b) => collectionValue.toString().slice(0, 2) === b.value
   )
-
-  const buildingNickname = [
-    { value: "ma", label: "SASB" },
-    { value: "pa", label: "LPA" },
-    { value: "sc", label: "Schomburg" },
-    { value: "bu", label: "SNFL" },
-  ]
   if (building) {
-    const nickname = buildingNickname.find((b) => b.value === building.value)
+    const nickname = searchVocabularies.buildingNicknames.find(
+      (b) => b.value === building.value
+    )
     return `${nickname.label} - ${collectionName}`
   }
-
   return collectionName
 }
