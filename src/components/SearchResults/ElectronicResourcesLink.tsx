@@ -28,7 +28,6 @@ const ElectronicResourcesLink = ({
             variant="standalone"
             fontSize={{ base: "mobile.body.body2", md: "desktop.body.body2" }}
             isUnderlined={false}
-            hasVisitedState={false}
           >
             {electronicResources[0].prefLabel || electronicResources[0].url}
           </Link>
@@ -38,7 +37,6 @@ const ElectronicResourcesLink = ({
             variant="standalone"
             fontSize={{ base: "mobile.body.body2", md: "desktop.body.body2" }}
             isUnderlined={false}
-            hasVisitedState={false}
             whiteSpace="wrap"
           >
             View all available online resources

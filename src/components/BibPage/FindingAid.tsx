@@ -49,7 +49,6 @@ const FindingAid = ({
             collections{" "}
             <Link
               isExternal
-              hasVisitedState={false}
               href={
                 "https://libguides.nypl.org/special-collections-account-tutorial"
               }
