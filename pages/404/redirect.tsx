@@ -1,4 +1,4 @@
-import { Flex, Heading, Link, Text } from "@nypl/design-system-react-components"
+import { Flex, Heading, Text } from "@nypl/design-system-react-components"
 import { SITE_NAME } from "../../src/config/constants"
 import Layout from "../../src/components/Layout/Layout"
 import RCHead from "../../src/components/Head/RCHead"
@@ -6,8 +6,8 @@ import { useContext } from "react"
 import { FeedbackContext } from "../../src/context/FeedbackContext"
 import Image from "next/image"
 import errorImage from "../../src/assets/errorImage.png"
-import ExternalLink from "../../src/components/Links/ExternalLink/ExternalLink"
 import { appConfig } from "../../src/config/config"
+import Link from "../../src/components/Link/Link"
 
 export default function Redirect404() {
   const metadataTitle = `404 Redirect | ${SITE_NAME}`
@@ -42,13 +42,13 @@ export default function Redirect404() {
           </Text>
           <Text>
             Try our{" "}
-            <ExternalLink href={appConfig.urls.circulatingCatalog}>
+            <Link isExternal href={appConfig.urls.circulatingCatalog}>
               Branch Catalog
-            </ExternalLink>{" "}
+            </Link>{" "}
             or{" "}
-            <ExternalLink href={appConfig.urls.legacyCatalog}>
+            <Link isExternal href={appConfig.urls.legacyCatalog}>
               Legacy Catalog
-            </ExternalLink>{" "}
+            </Link>{" "}
             for more materials, or{" "}
             <Link onClick={openFeedbackFormWithError} id="feedback-link">
               contact us

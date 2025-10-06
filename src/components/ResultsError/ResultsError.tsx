@@ -1,15 +1,15 @@
-import { Heading, Flex, Link, Text } from "@nypl/design-system-react-components"
+import { Heading, Flex, Text } from "@nypl/design-system-react-components"
 import type { HTTPStatusCode } from "../../types/appTypes"
 import { appConfig } from "../../config/config"
 import { SITE_NAME } from "../../config/constants"
 import RCHead from "../Head/RCHead"
 import Layout from "../Layout/Layout"
-import ExternalLink from "../Links/ExternalLink/ExternalLink"
 import { useContext } from "react"
 import { FeedbackContext } from "../../context/FeedbackContext"
 import Image from "next/image"
 import errorImage from "../../assets/errorImage.png"
 import type { RCPage } from "../../types/pageTypes"
+import Link from "../Link/Link"
 
 type ResultsErrorProps = {
   page: RCPage
@@ -36,13 +36,13 @@ export default function ResultsError({ errorStatus, page }: ResultsErrorProps) {
           </Text>
           <Text>
             You can also search our{" "}
-            <ExternalLink href={appConfig.urls.circulatingCatalog}>
+            <Link isExternal href={appConfig.urls.circulatingCatalog}>
               Branch Catalog
-            </ExternalLink>{" "}
+            </Link>{" "}
             or{" "}
-            <ExternalLink href={appConfig.urls.legacyCatalog}>
+            <Link isExternal href={appConfig.urls.legacyCatalog}>
               Legacy Catalog
-            </ExternalLink>{" "}
+            </Link>{" "}
             for more materials, or{" "}
             <Link onClick={openFeedbackFormWithError} id="feedback-link">
               contact us

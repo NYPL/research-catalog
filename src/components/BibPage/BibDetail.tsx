@@ -1,8 +1,7 @@
 import { Heading, List } from "@nypl/design-system-react-components"
 import { kebabCase } from "lodash"
 import styles from "../../../styles/components/BibDetails.module.scss"
-import RCLink from "../Links/RCLink/RCLink"
-import ExternalLink from "../Links/ExternalLink/ExternalLink"
+import Link from "../Link/Link"
 import type {
   BibDetail,
   BibDetailURL,
@@ -98,15 +97,12 @@ const LinkElement = (
   isBold = false,
   ariaLabel?: string
 ) => {
-  let Link: typeof RCLink | typeof ExternalLink
-  if (linkType === "internal") Link = RCLink
-  else if (linkType === "external") Link = ExternalLink
   return (
     <Link
       dir={rtlOrLtr(url.urlLabel)}
       href={url.url}
       key={url.url}
-      includeBaseUrl={linkType === "internal"}
+      isExternal={linkType === "external"}
       fontWeight={isBold ? "700" : "400"}
       textDecoration="none"
       aria-label={ariaLabel}

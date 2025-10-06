@@ -452,9 +452,6 @@ describe("Hold Request page", () => {
     ).toBeInTheDocument()
     const banner = screen.getByTestId("hold-request-completed")
     const accountLink = within(banner).getByText("patron account")
-    expect(accountLink).toHaveAttribute(
-      "href",
-      "/research/research-catalog/account"
-    )
+    expect(accountLink).toHaveAttribute("href", "/account")
   })
 })

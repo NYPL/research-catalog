@@ -26,10 +26,7 @@ describe("PreferredSubjectTableCell", () => {
 
     const link = screen.getByRole("link", { name: "Art -- Artists" })
     expect(link).toBeInTheDocument()
-    expect(link).toHaveAttribute(
-      "href",
-      "/research/research-catalog/browse/subject/art%20--%20artists"
-    )
+    expect(link).toHaveAttribute("href", "/browse/subject/art%20--%20artists")
   })
 
   it("renders 'See also' section if seeAlso terms exist", () => {
@@ -56,11 +53,11 @@ describe("PreferredSubjectTableCell", () => {
     expect(screen.getByText("See also:")).toBeInTheDocument()
     expect(screen.getByRole("link", { name: "Painting" })).toHaveAttribute(
       "href",
-      "/research/research-catalog/browse?q=Painting&search_scope=starts_with"
+      "/browse?q=Painting&search_scope=starts_with"
     )
     expect(screen.getByRole("link", { name: "Sculpture" })).toHaveAttribute(
       "href",
-      "/research/research-catalog/browse?q=Sculpture&search_scope=starts_with"
+      "/browse?q=Sculpture&search_scope=starts_with"
     )
   })
 
@@ -83,7 +80,7 @@ describe("PreferredSubjectTableCell", () => {
     expect(screen.getByText("Broader term:")).toBeInTheDocument()
     expect(screen.getByRole("link", { name: "Visual Arts" })).toHaveAttribute(
       "href",
-      "/research/research-catalog/browse?q=Visual Arts&search_scope=starts_with"
+      "/browse?q=Visual Arts&search_scope=starts_with"
     )
   })
 
@@ -106,7 +103,7 @@ describe("PreferredSubjectTableCell", () => {
     expect(screen.getByText("Narrower term:")).toBeInTheDocument()
     expect(screen.getByRole("link", { name: "Modernism" })).toHaveAttribute(
       "href",
-      "/research/research-catalog/browse?q=Modernism&search_scope=starts_with"
+      "/browse?q=Modernism&search_scope=starts_with"
     )
   })
 
@@ -171,7 +168,7 @@ describe("VariantSubjectTableCell", () => {
     const link = screen.getByRole("link", { name: "Beagle" })
     expect(link).toHaveAttribute(
       "href",
-      "/research/research-catalog/browse?q=Beagle&search_scope=starts_with"
+      "/browse?q=Beagle&search_scope=starts_with"
     )
     expect(screen.getByText(/See:/)).toBeInTheDocument()
   })

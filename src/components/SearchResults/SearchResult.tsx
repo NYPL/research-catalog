@@ -8,9 +8,8 @@ import {
   SimpleGrid,
   StatusBadge,
 } from "@nypl/design-system-react-components"
-import RCLink from "../Links/RCLink/RCLink"
+import Link from "../Link/Link"
 import ElectronicResourcesLink from "./ElectronicResourcesLink"
-import ItemTable from "../ItemTable/ItemTable"
 import type SearchResultsBib from "../../models/SearchResultsBib"
 import { PATHS } from "../../config/constants"
 import FindingAid from "../BibPage/FindingAid"
@@ -44,7 +43,7 @@ const SearchResult = ({ bib }: SearchResultProps) => {
             FINDING AID AVAILABLE
           </StatusBadge>
         )}
-        <RCLink href={`${PATHS.BIB}/${bib.id}`}>{bib.titleDisplay}</RCLink>
+        <Link href={`${PATHS.BIB}/${bib.id}`}>{bib.titleDisplay}</Link>
       </CardHeading>
       <CardContent data-testid="card-content">
         <Box
@@ -82,7 +81,7 @@ const SearchResult = ({ bib }: SearchResultProps) => {
               ))}
               {bib.showViewAllItemsLink() && (
                 <CardActions>
-                  <RCLink
+                  <Link
                     href={`${bib.url}#item-table`}
                     fontSize={{
                       base: "mobile.body.body2",
@@ -92,7 +91,7 @@ const SearchResult = ({ bib }: SearchResultProps) => {
                     variant="standalone"
                   >
                     {`View all ${bib.getNumItemsMessage()} `}
-                  </RCLink>
+                  </Link>
                 </CardActions>
               )}
             </>
