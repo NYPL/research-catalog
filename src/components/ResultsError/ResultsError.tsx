@@ -1,9 +1,4 @@
-import {
-  Heading,
-  Flex,
-  Link as DSLink,
-  Text,
-} from "@nypl/design-system-react-components"
+import { Heading, Flex, Text } from "@nypl/design-system-react-components"
 import type { HTTPStatusCode } from "../../types/appTypes"
 import { appConfig } from "../../config/config"
 import { SITE_NAME } from "../../config/constants"
@@ -49,9 +44,9 @@ export default function ResultsError({ errorStatus, page }: ResultsErrorProps) {
               Legacy Catalog
             </Link>{" "}
             for more materials, or{" "}
-            <DSLink onClick={openFeedbackFormWithError} id="feedback-link">
+            <Link onClick={openFeedbackFormWithError} id="feedback-link">
               contact us
-            </DSLink>{" "}
+            </Link>{" "}
             for assistance.
           </Text>
         </>
@@ -69,9 +64,9 @@ export default function ResultsError({ errorStatus, page }: ResultsErrorProps) {
           </Text>
           <Text marginBottom="0">
             Try refreshing the page or{" "}
-            <DSLink onClick={openFeedbackFormWithError} id="feedback-link">
+            <Link onClick={openFeedbackFormWithError} id="feedback-link">
               contact us
-            </DSLink>{" "}
+            </Link>{" "}
             if the error persists.
           </Text>
         </>
@@ -89,9 +84,9 @@ export default function ResultsError({ errorStatus, page }: ResultsErrorProps) {
           </Text>
           <Text marginBottom="0">
             Try again later or{" "}
-            <DSLink onClick={openFeedbackFormWithError} id="feedback-link">
+            <Link onClick={openFeedbackFormWithError} id="feedback-link">
               contact us
-            </DSLink>{" "}
+            </Link>{" "}
             if the error persists.
           </Text>
         </>

@@ -1,9 +1,4 @@
-import {
-  Flex,
-  Heading,
-  Link as DSLink,
-  Text,
-} from "@nypl/design-system-react-components"
+import { Flex, Heading, Text } from "@nypl/design-system-react-components"
 import { SITE_NAME } from "../../src/config/constants"
 import Layout from "../../src/components/Layout/Layout"
 import RCHead from "../../src/components/Head/RCHead"
@@ -55,9 +50,9 @@ export default function Redirect404() {
               Legacy Catalog
             </Link>{" "}
             for more materials, or{" "}
-            <DSLink onClick={openFeedbackFormWithError} id="feedback-link">
+            <Link onClick={openFeedbackFormWithError} id="feedback-link">
               contact us
-            </DSLink>{" "}
+            </Link>{" "}
             for assistance.
           </Text>
         </Flex>
