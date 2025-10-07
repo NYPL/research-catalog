@@ -132,6 +132,7 @@ export default class BibDetails {
     return [
       { field: "titleDisplay", label: "Title" },
       { field: "publicationStatement", label: "Published by" },
+      { field: "format", label: "Format" },
       // external link
       { field: "supplementaryContent", label: "Supplementary content" },
       // internal link
@@ -267,8 +268,8 @@ export default class BibDetails {
   buildStandardDetail(fieldMapping: FieldMapping) {
     let bibFieldValue = this[fieldMapping.field] || this.bib[fieldMapping.field]
     if (!bibFieldValue) return
-    // "language" is the only resource field with JSON-LD format
-    if (fieldMapping.field === "language") {
+    // "language" and "format" use JSON-LD format
+    if (fieldMapping.field === "language" || fieldMapping.field === "format") {
       bibFieldValue = [bibFieldValue[0]?.prefLabel]
     }
     return this.buildDetail(

@@ -14,6 +14,7 @@ import ItemTable from "../ItemTable/ItemTable"
 import type SearchResultsBib from "../../models/SearchResultsBib"
 import { PATHS } from "../../config/constants"
 import FindingAid from "../BibPage/FindingAid"
+import SearchResultItems from "./SearchResultItems"
 
 interface SearchResultProps {
   bib: SearchResultsBib
@@ -28,7 +29,7 @@ const SearchResult = ({ bib }: SearchResultProps) => {
       sx={{
         borderBottom: "1px solid var(--nypl-colors-ui-border-default)",
         paddingBottom: "l",
-        " > div": {
+        "[data-body]": {
           width: "100% !important",
         },
       }}
@@ -56,23 +57,25 @@ const SearchResult = ({ bib }: SearchResultProps) => {
           {bib.yearPublished && <Text>{bib.yearPublished}</Text>}
           <Text>{bib.getNumItemsMessage()}</Text>
         </Box>
-        {bib.findingAid ? (
-          <FindingAid
-            findingAidURL={bib.findingAid}
-            hasElectronicResources={bib.hasElectronicResources}
-          />
-        ) : null}
-        {bib.hasElectronicResources ? (
-          <ElectronicResourcesLink
-            bibUrl={bib.url}
-            electronicResources={bib.electronicResources}
-          />
-        ) : null}
-        <SimpleGrid columns={1} mt="l" gap="grid.l">
+        <Box width="100%">
+          {bib.findingAid ? (
+            <FindingAid
+              findingAidURL={bib.findingAid}
+              hasElectronicResources={bib.hasElectronicResources}
+            />
+          ) : null}
+          {bib.hasElectronicResources ? (
+            <ElectronicResourcesLink
+              bibUrl={bib.url}
+              electronicResources={bib.electronicResources}
+            />
+          ) : null}
+        </Box>
+        <SimpleGrid columns={1} gap="grid.m">
           {bib.itemTables && (
             <>
               {bib.itemTables.map((itemTableData) => (
-                <ItemTable
+                <SearchResultItems
                   itemTableData={itemTableData}
                   key={`search-results-item-${itemTableData.items[0].id}`}
                 />

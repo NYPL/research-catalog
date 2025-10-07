@@ -8,7 +8,6 @@ import {
   TextInput,
 } from "@nypl/design-system-react-components"
 import MultiSelectItemsCountButton from "./MultiSelectItemsCountButton"
-import { capitalize } from "lodash"
 
 export interface MultiSelectItem {
   id: string
@@ -22,6 +21,9 @@ export interface SelectedItems {
 
 export interface MultiSelectProps {
   field: { value: string; label: string }
+  /** Boolean value used to control how the MultiSelect component will render
+   * within the page and interact with other DOM elements. The default value is false. */
+  isBlockElement?: boolean
   groupedItems: MultiSelectItem[]
   /** The action to perform on the checkbox's onChange function. Note, if using
    * this prop, it must be of the type listed below. */
@@ -36,6 +38,7 @@ export interface MultiSelectProps {
  */
 const MultiSelectWithGroupTitles = ({
   field,
+  isBlockElement = false,
   groupedItems,
   onChange,
   selectedItems,
@@ -49,12 +52,12 @@ const MultiSelectWithGroupTitles = ({
   const containerRef = useRef<HTMLDivElement>(null)
 
   const selectedItemsCount: number =
-    selectedItems[field.value]?.items.length || 0
+    selectedItems[field.value]?.items?.length || 0
   const selectedItemsString = `item${selectedItemsCount === 1 ? "" : "s"}`
   const ariaLabelValue = `${field.label} multiselect, ${selectedItemsCount} ${selectedItemsString} selected`
 
   const styles = useMultiStyleConfig("MultiSelect", {
-    isBlockElement: false,
+    isBlockElement,
     width: "full",
   })
 
@@ -102,7 +105,7 @@ const MultiSelectWithGroupTitles = ({
   }, [])
 
   const isChecked = (multiSelectId: string, itemId: string): boolean => {
-    return !!selectedItems[multiSelectId]?.items.includes(itemId)
+    return !!selectedItems[multiSelectId]?.items?.includes(itemId)
   }
 
   // Filter by search term without losing grouping.
@@ -132,7 +135,7 @@ const MultiSelectWithGroupTitles = ({
           labelText={group.name}
           showLabel={false}
           name={`multi-select-checkbox-group-${group.id}`}
-          marginLeft="m"
+          marginLeft={isBlockElement ? 0 : "m"}
           mb="0"
         >
           {group.children.map((item) => (
@@ -168,6 +171,7 @@ const MultiSelectWithGroupTitles = ({
   const accordionLabel = (
     <Box
       as="span"
+      title={field.label}
       sx={{
         marginLeft: selectedItemsCount > 0 ? "56px" : "0",
         marginBottom: "0",
@@ -222,6 +226,7 @@ const MultiSelectWithGroupTitles = ({
         panelMaxHeight="215px"
         sx={{
           ...styles.accordionStyles,
+          button: { height: "40px" },
         }}
       />
       {selectedItemsCount > 0 && (

@@ -150,7 +150,7 @@ export default function Search({
                 <CardHeading
                   size="heading6"
                   id="filter-results-heading"
-                  tabIndex="0"
+                  tabIndex="-1"
                 >
                   Filter results
                 </CardHeading>
@@ -179,6 +179,7 @@ export default function Search({
                 paddingBottom="0"
                 mb={{ base: "s", md: "l" }}
                 minH="40px"
+                mr="m"
                 ref={searchResultsHeadingRef}
                 aria-live="polite"
               >

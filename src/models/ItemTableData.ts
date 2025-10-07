@@ -34,7 +34,6 @@ export default class ItemTableData {
     return [
       ...(this.showStatusColumn() ? ["Status"] : []),
       ...(this.showVolumeColumn() ? [this.volumeColumnHeading()] : []),
-      "Format",
       ...(this.showAccessColumn() ? ["Access"] : []),
       "Call number",
       "Item location",
@@ -48,7 +47,6 @@ export default class ItemTableData {
         ...(this.showVolumeColumn()
           ? [ItemTableCell({ children: item.volume })]
           : []),
-        ItemTableCell({ children: item.format }),
         ...(this.showAccessColumn()
           ? [ItemTableCell({ children: item.accessMessage })]
           : []),

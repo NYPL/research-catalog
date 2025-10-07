@@ -1,6 +1,6 @@
 import { Heading, List } from "@nypl/design-system-react-components"
 import { kebabCase } from "lodash"
-import { type ReactElement } from "react"
+import { Fragment, type ReactElement } from "react"
 
 import styles from "../../../styles/components/BibDetails.module.scss"
 import RCLink from "../Links/RCLink/RCLink"
@@ -57,14 +57,14 @@ const BibDetails = ({ details, heading }: BibDetailsProps) => {
 
 const DetailElement = (label: string, listChildren: ReactNode[]) => {
   return (
-    <>
+    <Fragment key={kebabCase(label)}>
       <dt>{label}</dt>
       <dd>
         <List noStyling data-testid={kebabCase(label)} variant="ol">
           {listChildren}
         </List>
       </dd>
-    </>
+    </Fragment>
   )
 }
 
