@@ -101,7 +101,11 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
         >
           {!(field.value === "collection") ? (
             <MultiSelect
-              sx={{ button: { height: "40px" } }}
+              sx={{
+                "div > div > button": {
+                  height: "40px",
+                },
+              }}
               isDefaultOpen={field.value !== "subjectLiteral"}
               defaultItemsVisible={1}
               isBlockElement

@@ -162,7 +162,12 @@ export default function AdvancedSearch({
     return field.value !== "collection" ? (
       <div key={field.value}>
         <MultiSelect
-          sx={{ button: { height: "40px" }, mb: "25.5px" }}
+          sx={{
+            "div > div > button": {
+              height: "40px",
+            },
+            mb: "25.5px",
+          }}
           id={field.value}
           isSearchable
           closeOnBlur
