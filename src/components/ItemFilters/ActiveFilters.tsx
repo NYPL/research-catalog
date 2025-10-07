@@ -9,10 +9,11 @@ const ActiveFilters = ({ filterName, onClick, tagSetData }) => {
       mt="xxs"
     >
       <Text
+        as="h3"
         display="block"
         id="active-filters-heading"
         // @ts-expect-error
-        tabIndex="0"
+        tabIndex="-1"
         fontSize="desktop.body.body2"
         fontWeight="bold"
         mr={{ base: "0", md: "s" }}

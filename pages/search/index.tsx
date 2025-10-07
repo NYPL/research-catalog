@@ -150,7 +150,7 @@ export default function Search({
                 <CardHeading
                   size="heading6"
                   id="filter-results-heading"
-                  tabIndex="0"
+                  tabIndex="-1"
                 >
                   Filter results
                 </CardHeading>
