@@ -179,6 +179,7 @@ export default function Search({
                 paddingBottom="0"
                 mb={{ base: "s", md: "l" }}
                 minH="40px"
+                mr="m"
                 ref={searchResultsHeadingRef}
                 aria-live="polite"
               >
