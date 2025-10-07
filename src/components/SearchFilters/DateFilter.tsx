@@ -46,7 +46,12 @@ const DateFilter = ({
           />
         )}
       </div>
-      <Fieldset id="date-fieldset" mt={isAdvancedSearch && "-l"}>
+      <Fieldset
+        legendText="Filter by start and end date"
+        isLegendHidden={true}
+        id="date-fieldset"
+        mt={isAdvancedSearch && "-l"}
+      >
         <Flex
           gap={isAdvancedSearch ? "m" : "s"}
           alignItems="center"

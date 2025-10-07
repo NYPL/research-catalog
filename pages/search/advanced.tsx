@@ -67,7 +67,7 @@ export default function AdvancedSearch({
   const router = useRouter()
   const notificationRef = useRef<HTMLDivElement>(null)
   const dateInputRefs = [useRef<TextInputRefType>(), useRef<TextInputRefType>()]
-
+  const liveRegionRef = useRef<HTMLDivElement | null>(null)
   const [alert, setAlert] = useState(false)
   const [errorMessage, setErrorMessage] = useState(
     defaultEmptySearchErrorMessage
@@ -92,6 +92,9 @@ export default function AdvancedSearch({
   const handleInputChange = (e: SyntheticEvent, type: SearchFormActionType) => {
     e.preventDefault()
     alert && setAlert(false)
+    if (liveRegionRef.current) {
+      liveRegionRef.current.textContent = ""
+    }
     const target = e.target as HTMLInputElement
     dispatch({
       type: type,
@@ -132,6 +135,10 @@ export default function AdvancedSearch({
     setAlert(false)
     clearDateInputs()
     dispatch({ type: "form_reset", payload: initialSearchFormState })
+
+    if (liveRegionRef.current) {
+      liveRegionRef.current.textContent = "All fields have been cleared."
+    }
   }
 
   useEffect(() => {
@@ -203,6 +210,22 @@ export default function AdvancedSearch({
         <Box tabIndex={-1} ref={notificationRef}>
           {alert && <Banner variant="negative" content={errorMessage} mb="s" />}
         </Box>
+        <div
+          ref={liveRegionRef}
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+          style={{
+            position: "absolute",
+            width: "1px",
+            height: "1px",
+            margin: "-1px",
+            padding: "0",
+            border: "0",
+            overflow: "hidden",
+            clip: "rect(0 0 0 0)",
+          }}
+        ></div>
         <Heading level="h2" mb="s">
           Advanced search
         </Heading>
