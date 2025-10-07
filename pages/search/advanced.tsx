@@ -162,6 +162,7 @@ export default function AdvancedSearch({
     return field.value !== "collection" ? (
       <div key={field.value}>
         <MultiSelect
+          sx={{ button: { height: "40px" }, mb: "25.5px" }}
           id={field.value}
           isSearchable
           closeOnBlur
@@ -266,9 +267,9 @@ export default function AdvancedSearch({
             </Flex>
             <Flex
               direction="column"
-              gap={{ base: "m", md: "43px" }}
+              gap="s"
               grow="1"
-              mt="m"
+              mt="25px"
               width={{ base: "100%", md: "50%" }}
             >
               {multiselects}

@@ -226,6 +226,7 @@ const MultiSelectWithGroupTitles = ({
         panelMaxHeight="215px"
         sx={{
           ...styles.accordionStyles,
+          button: { height: "40px" },
         }}
       />
       {selectedItemsCount > 0 && (
