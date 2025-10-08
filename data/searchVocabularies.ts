@@ -2966,6 +2966,13 @@
       "value": "bu",
       "label": "Stavros Niarchos Foundation Library (SNFL)"
     }
+  ],
+  buildingNicknames: [
+    { value: "ma", label: "SASB" },
+    { value: "pa", label: "LPA" },
+    { value: "sc", label: "Schomburg" },
+    { value: "bu", label: "SNFL" },
   ]
+
 };
     
