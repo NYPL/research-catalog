@@ -103,12 +103,26 @@ export default function AdvancedSearch({
     })
   }
 
-  const handleFilterChange = (field: string, value: string[]) => {
+  const handleFilterChange = (field: string, value: string | null) => {
     setAlert(false)
+    if (value === null) {
+      dispatch({
+        type: "filter_change",
+        field,
+        payload: [],
+      })
+      return
+    }
+
+    const currentValues = searchFormState["filters"][field] || []
+    const updatedValues = currentValues.includes(value)
+      ? currentValues.filter((v) => v !== value)
+      : [...currentValues, value]
+
     dispatch({
       type: "filter_change",
       field,
-      payload: value,
+      payload: updatedValues,
     })
   }
 
@@ -178,13 +192,8 @@ export default function AdvancedSearch({
             },
           }}
           items={field.options}
-          onChange={(e) =>
-            handleFilterChange(field.value, [
-              ...searchFormState["filters"][field.value],
-              e.target.id,
-            ])
-          }
-          onClear={() => handleFilterChange(field.value, [])}
+          onChange={(e) => handleFilterChange(field.value, e.target.id)}
+          onClear={() => handleFilterChange(field.value, null)}
         />
       </div>
     ) : (
@@ -192,13 +201,8 @@ export default function AdvancedSearch({
         key={field.value}
         field={{ value: field.value, label: field.label }}
         groupedItems={field.options}
-        onChange={(e) =>
-          handleFilterChange(field.value, [
-            ...searchFormState["filters"][field.value],
-            e.target.id,
-          ])
-        }
-        onClear={() => handleFilterChange(field.value, [])}
+        onChange={(e) => handleFilterChange(field.value, e.target.id)}
+        onClear={() => handleFilterChange(field.value, null)}
         selectedItems={{
           [field.value]: {
             items: searchFormState["filters"][field.value],
