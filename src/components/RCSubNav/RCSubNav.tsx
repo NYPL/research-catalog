@@ -6,6 +6,7 @@ import {
   SubNavLink,
   Text,
 } from "@nypl/design-system-react-components"
+import NextLink from "next/link"
 
 interface SubNavProps {
   activePage: RCPage
@@ -28,8 +29,9 @@ const RCSubNav = ({ activePage, isAuthenticated }: SubNavProps) => {
       primaryActions={
         <>
           <SubNavLink
-            href="/research/research-catalog/"
+            href="/"
             id="subnav-search"
+            as={NextLink}
             isSelected={
               activePage === "search" ||
               activePage === "advanced" ||
@@ -46,7 +48,8 @@ const RCSubNav = ({ activePage, isAuthenticated }: SubNavProps) => {
             Search the Catalog
           </SubNavLink>
           <SubNavLink
-            href="/research/research-catalog/browse"
+            href="/browse"
+            as={NextLink}
             id="subnav-browse"
             isSelected={activePage === "browse" || activePage === "sh-results"}
             aria-current={
@@ -71,7 +74,8 @@ const RCSubNav = ({ activePage, isAuthenticated }: SubNavProps) => {
             </SubNavLink>
           </div>
           <SubNavLink
-            href="/research/research-catalog/account"
+            href="/account"
+            as={NextLink}
             id="subnav-account"
             isOutlined
             isSelected={activePage === "account"}
