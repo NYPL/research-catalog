@@ -2,6 +2,15 @@
 const nextConfig = {
   reactStrictMode: false,
   basePath: "/research/research-catalog",
+  async redirects() {
+    return [
+      {
+        source: "/research/collections/shared-collection-catalog",
+        destination: "/research/research-catalog",
+        permanent: true,
+      },
+    ]
+  },
   /**
    * Prevents Webpack from polyfilling 'fs' in client builds.
    * This avoids errors when server-side functions using Winston
