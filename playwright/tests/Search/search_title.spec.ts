@@ -10,9 +10,16 @@ test.beforeEach(async ({ page }) => {
 })
 
 test.describe("Title Search", () => {
-  test("Do a title search and assert that at least 10 returned titles contain the supplied keyword", async () => {
+  test("Do a title search and assert that at least 10 returned titles contain the supplied keyword", async ({
+    page,
+  }) => {
     await searchPage.searchFor(searchterm, "Title")
-    await expect(searchPage.resultsHeading).toBeVisible()
-    await expect(await searchPage.searchResult.count()).toBeGreaterThan(10)
+    // sleep for 5 seconds to allow results to load
+    await page.waitForTimeout(10000)
+    await expect(searchPage.searchResultsHeading).toBeVisible()
+    // await page.waitForTimeout(10000) // waits 10 seconds before checking count
+    await expect(await searchPage.searchResultsTitle.count()).toBeGreaterThan(
+      10
+    )
   })
 })

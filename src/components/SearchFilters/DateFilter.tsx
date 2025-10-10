@@ -9,6 +9,7 @@ import type { DateFilterHookPropsType } from "../../hooks/useDateFilter"
 
 interface DateFilterPropsType extends DateFilterHookPropsType {
   displayDateRangeError: string
+  isAdvancedSearch?: boolean
 }
 
 const DateFilter = ({
@@ -30,6 +31,7 @@ const DateFilter = ({
    * In advanced search, the DateFilter uses the parent form's onSubmit.
    * */
   applyHandler,
+  isAdvancedSearch = false,
 }: DateFilterPropsType) => {
   return (
     <>
@@ -45,24 +47,34 @@ const DateFilter = ({
         )}
       </div>
       <Fieldset
+        legendText="Filter by start and end date"
+        isLegendHidden={true}
         id="date-fieldset"
-        {...(!applyHandler && { legendText: "Date" })}
+        mt={isAdvancedSearch && "-l"}
       >
-        <Flex gap="s" alignItems={"center"}>
+        <Flex
+          gap={isAdvancedSearch ? "m" : "s"}
+          alignItems="center"
+          width="100%"
+        >
           <TextInput
             id="date-from"
-            labelText="Start"
+            width="100%"
+            labelText={isAdvancedSearch ? "Start date" : "Start"}
             name="dateAfter"
-            helperText="e.g. 1901"
+            helperText={isAdvancedSearch ? undefined : "ex. 1901"}
+            placeholder={isAdvancedSearch ? "Example: 1901" : undefined}
             value={dateAfter}
             onChange={(e) => changeHandler(e)}
             ref={inputRefs[0]}
           />
           <TextInput
+            width="100%"
             id="date-to"
-            labelText="End"
+            labelText={isAdvancedSearch ? "End date" : "End"}
             name="dateBefore"
-            helperText="e.g. 2000"
+            helperText={isAdvancedSearch ? undefined : "ex. 2000"}
+            placeholder={isAdvancedSearch ? "Example: 2000" : undefined}
             value={dateBefore}
             onChange={(e) => changeHandler(e)}
             ref={inputRefs[1]}
