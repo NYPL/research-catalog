@@ -6,8 +6,9 @@ const nextConfig = {
     return [
       {
         source: "/research/collections/shared-collection-catalog",
-        destination: "/research/research-catalog",
+        destination: "/research/research-catalog/", // final URL includes basePath
         permanent: true,
+        basePath: false,
       },
     ]
   },
