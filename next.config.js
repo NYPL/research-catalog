@@ -5,8 +5,8 @@ const nextConfig = {
   async redirects() {
     return [
       {
-        source: "/research/collections/shared-collection-catalog",
-        destination: "/research/research-catalog/", // final URL includes basePath
+        source: "/research/collections/shared-collection-catalog/:path*",
+        destination: "/research/research-catalog/:path*", // final URL includes basePath
         permanent: true,
         basePath: false,
       },
