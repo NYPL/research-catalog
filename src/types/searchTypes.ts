@@ -10,6 +10,7 @@ type CreatorLiteral = string
 type Issuance = string
 type FormatFilter = string
 type BuildingLocationFilter = string
+type CollectionFilter = string
 
 export interface SearchFilters {
   format?: FormatFilter | FormatFilter[]
@@ -21,6 +22,7 @@ export interface SearchFilters {
   dateAfter?: string
   dateBefore?: string
   buildingLocation?: BuildingLocationFilter | BuildingLocationFilter[]
+  collection?: CollectionFilter | CollectionFilter[]
 }
 
 export interface Identifiers {
