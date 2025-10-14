@@ -125,10 +125,12 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
                   items: appliedFilters[field.value] || [],
                 },
               }}
-              items={filterData.options.map((option) => ({
-                id: option.value,
-                name: `${option.label} (${option.count.toLocaleString()})`,
-              }))}
+              items={filterData.options
+                .filter((option) => option.label && option.label.trim() !== "")
+                .map((option) => ({
+                  id: option.value,
+                  name: `${option.label} (${option.count.toLocaleString()})`,
+                }))}
             />
           ) : (
             <MultiSelectWithGroupTitles
