@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+## Added
+
+- Added redirect from `research/collections/shared-collection-catalog` [SCC-4974](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4974)
+
 ## [1.5.7] 2025-10-14
 
 ## Added
