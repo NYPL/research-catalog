@@ -94,11 +94,8 @@ export function mapCollectionToFilterTag(collectionValue, collectionName) {
   const building = searchVocabularies.buildingLocations.find(
     (b) => collectionValue.toString().slice(0, 2) === b.value
   )
-  if (building) {
-    const nickname = searchVocabularies.buildingNicknames.find(
-      (b) => b.value === building.value
-    )
-    return `${nickname.label} - ${collectionName}`
+  if (building && building.nickname) {
+    return `${building.nickname} - ${collectionName}`
   }
   return collectionName
 }
