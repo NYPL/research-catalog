@@ -446,487 +446,482 @@
   "languages": [
     {
       "value": "lang:eng",
-      "count": 8489782,
+      "count": 8211656,
       "label": "English"
     },
     {
       "value": "lang:ger",
-      "count": 1907349,
+      "count": 1782321,
       "label": "German"
     },
     {
       "value": "lang:fre",
-      "count": 1511883,
+      "count": 1439569,
       "label": "French"
     },
     {
       "value": "lang:spa",
-      "count": 1284408,
+      "count": 1241128,
       "label": "Spanish"
     },
     {
       "value": "lang:ita",
-      "count": 859353,
+      "count": 834397,
       "label": "Italian"
     },
     {
       "value": "lang:rus",
-      "count": 786850,
+      "count": 718582,
       "label": "Russian"
     },
     {
       "value": "lang:ara",
-      "count": 511491,
+      "count": 459691,
       "label": "Arabic"
     },
     {
       "value": "lang:chi",
-      "count": 485572,
+      "count": 453873,
       "label": "Chinese"
     },
     {
-      "value": "lang:heb",
-      "count": 300203,
-      "label": "Hebrew"
-    },
-    {
-      "value": "lang:jpn",
-      "count": 297316,
-      "label": "Japanese"
-    },
-    {
       "value": "lang:por",
-      "count": 296936,
+      "count": 289368,
       "label": "Portuguese"
     },
     {
+      "value": "lang:jpn",
+      "count": 288806,
+      "label": "Japanese"
+    },
+    {
       "value": "lang:zxx",
-      "count": 282186,
+      "count": 282914,
       "label": "No linguistic content"
     },
     {
+      "value": "lang:heb",
+      "count": 269650,
+      "label": "Hebrew"
+    },
+    {
       "value": "lang:pol",
-      "count": 219661,
+      "count": 208585,
       "label": "Polish"
     },
     {
       "value": "lang:dut",
-      "count": 182321,
+      "count": 179633,
       "label": "Dutch"
     },
     {
-      "value": "lang:tur",
-      "count": 155638,
-      "label": "Turkish"
-    },
-    {
       "value": "lang:kor",
-      "count": 145186,
+      "count": 143845,
       "label": "Korean"
     },
     {
+      "value": "lang:tur",
+      "count": 132800,
+      "label": "Turkish"
+    },
+    {
       "value": "lang:per",
-      "count": 122335,
+      "count": 108133,
       "label": "Persian"
     },
     {
-      "value": "lang:lat",
-      "count": 101220,
-      "label": "Latin"
-    },
-    {
-      "value": "lang:ukr",
-      "count": 96752,
-      "label": "Ukrainian"
-    },
-    {
-      "value": "lang:swe",
-      "count": 95903,
-      "label": "Swedish"
-    },
-    {
-      "value": "lang:gre",
-      "count": 85529,
-      "label": "Greek, Modern (1453- )"
-    },
-    {
-      "value": "lang:cze",
-      "count": 82038,
-      "label": "Czech"
-    },
-    {
       "value": "lang:",
-      "count": 74655,
+      "count": 97727,
       "label": ""
     },
     {
+      "value": "lang:swe",
+      "count": 94195,
+      "label": "Swedish"
+    },
+    {
+      "value": "lang:ukr",
+      "count": 93981,
+      "label": "Ukrainian"
+    },
+    {
+      "value": "lang:lat",
+      "count": 87222,
+      "label": "Latin"
+    },
+    {
+      "value": "lang:cze",
+      "count": 78068,
+      "label": "Czech"
+    },
+    {
+      "value": "lang:gre",
+      "count": 74787,
+      "label": "Greek, Modern (1453- )"
+    },
+    {
       "value": "lang:dan",
-      "count": 64515,
+      "count": 63988,
       "label": "Danish"
     },
     {
       "value": "lang:hun",
-      "count": 58734,
+      "count": 58049,
       "label": "Hungarian"
     },
     {
       "value": "lang:hin",
-      "count": 48446,
+      "count": 51465,
       "label": "Hindi"
     },
     {
       "value": "lang:bul",
-      "count": 47754,
+      "count": 46622,
       "label": "Bulgarian"
     },
     {
       "value": "lang:cat",
-      "count": 43354,
+      "count": 43852,
       "label": "Catalan"
     },
     {
       "value": "lang:urd",
-      "count": 42413,
+      "count": 41718,
       "label": "Urdu"
     },
     {
       "value": "lang:rum",
-      "count": 39776,
+      "count": 39753,
       "label": "Romanian"
     },
     {
       "value": "lang:nor",
-      "count": 39526,
+      "count": 39261,
       "label": "Norwegian"
     },
     {
       "value": "lang:fin",
-      "count": 36866,
+      "count": 36604,
       "label": "Finnish"
     },
     {
       "value": "lang:hrv",
-      "count": 36442,
+      "count": 35786,
       "label": "Croatian"
     },
     {
       "value": "lang:srp",
-      "count": 33200,
+      "count": 32912,
       "label": "Serbian"
     },
     {
+      "value": "lang:und",
+      "count": 30933,
+      "label": "Undetermined"
+    },
+    {
       "value": "lang:ben",
-      "count": 27098,
+      "count": 27343,
       "label": "Bengali"
     },
     {
       "value": "lang:yid",
-      "count": 24854,
+      "count": 24602,
       "label": "Yiddish"
     },
     {
-      "value": "lang:tam",
-      "count": 24722,
-      "label": "Tamil"
-    },
-    {
-      "value": "lang:und",
-      "count": 24305,
-      "label": "Undetermined"
-    },
-    {
       "value": "lang:arm",
-      "count": 24209,
+      "count": 24328,
       "label": "Armenian"
     },
     {
+      "value": "lang:tam",
+      "count": 23872,
+      "label": "Tamil"
+    },
+    {
       "value": "lang:mul",
-      "count": 23185,
+      "count": 23137,
       "label": "Multiple languages"
     },
     {
-      "value": "lang:slo",
-      "count": 19316,
-      "label": "Slovak"
-    },
-    {
       "value": "lang:lav",
-      "count": 18323,
+      "count": 18471,
       "label": "Latvian"
     },
     {
-      "value": "lang:N/A",
-      "count": 16165,
-      "label": ""
+      "value": "lang:slo",
+      "count": 18241,
+      "label": "Slovak"
     },
     {
       "value": "lang:san",
-      "count": 16164,
+      "count": 16417,
       "label": "Sanskrit"
     },
     {
       "value": "lang:tib",
-      "count": 14832,
+      "count": 15422,
       "label": "Tibetan"
     },
     {
       "value": "lang:ind",
-      "count": 14443,
+      "count": 14543,
       "label": "Indonesian"
     },
     {
       "value": "lang:bel",
-      "count": 14384,
+      "count": 13723,
       "label": "Belarusian"
     },
     {
-      "value": "lang:ota",
-      "count": 11470,
-      "label": "Turkish, Ottoman"
-    },
-    {
-      "value": "lang:slv",
-      "count": 11380,
-      "label": "Slovenian"
-    },
-    {
       "value": "lang:lit",
-      "count": 11171,
+      "count": 11249,
       "label": "Lithuanian"
     },
     {
+      "value": "lang:slv",
+      "count": 11071,
+      "label": "Slovenian"
+    },
+    {
       "value": "lang:geo",
-      "count": 10989,
+      "count": 10941,
       "label": "Georgian"
     },
     {
       "value": "lang:est",
-      "count": 10199,
+      "count": 10410,
       "label": "Estonian"
     },
     {
-      "value": "lang:aze",
-      "count": 9696,
-      "label": "Azerbaijani"
-    },
-    {
       "value": "lang:uzb",
-      "count": 9429,
+      "count": 9417,
       "label": "Uzbek"
     },
     {
+      "value": "lang:aze",
+      "count": 9283,
+      "label": "Azerbaijani"
+    },
+    {
       "value": "lang:mac",
-      "count": 9116,
+      "count": 8964,
       "label": "Macedonian"
     },
     {
-      "value": "lang:ice",
-      "count": 8698,
-      "label": "Icelandic"
-    },
-    {
       "value": "lang:pan",
-      "count": 8400,
+      "count": 8835,
       "label": "Panjabi"
     },
     {
-      "value": "lang:afr",
-      "count": 8373,
-      "label": "Afrikaans"
+      "value": "lang:ice",
+      "count": 8617,
+      "label": "Icelandic"
     },
     {
       "value": "lang:alb",
-      "count": 8363,
+      "count": 8323,
       "label": "Albanian"
     },
     {
+      "value": "lang:afr",
+      "count": 8311,
+      "label": "Afrikaans"
+    },
+    {
       "value": "lang:kaz",
-      "count": 7652,
+      "count": 7569,
       "label": "Kazakh"
     },
     {
+      "value": "lang:ota",
+      "count": 7357,
+      "label": "Turkish, Ottoman"
+    },
+    {
       "value": "lang:nep",
-      "count": 6738,
+      "count": 7007,
       "label": "Nepali"
     },
     {
       "value": "lang:kur",
-      "count": 6518,
+      "count": 6942,
       "label": "Kurdish"
     },
     {
-      "value": "lang:grc",
-      "count": 5807,
-      "label": "Greek, Ancient (to 1453)"
-    },
-    {
-      "value": "lang:tel",
-      "count": 5761,
-      "label": "Telugu"
-    },
-    {
-      "value": "lang:glg",
-      "count": 5733,
-      "label": "Galician"
-    },
-    {
-      "value": "lang:wel",
-      "count": 5731,
-      "label": "Welsh"
-    },
-    {
-      "value": "lang:mal",
-      "count": 5660,
-      "label": "Malayalam"
-    },
-    {
-      "value": "lang:kan",
-      "count": 5310,
-      "label": "Kannada"
-    },
-    {
-      "value": "lang:gle",
-      "count": 5121,
-      "label": "Irish"
-    },
-    {
-      "value": "lang:bos",
-      "count": 4992,
-      "label": "Bosnian"
-    },
-    {
-      "value": "lang:snd",
-      "count": 4847,
-      "label": "Sindhi"
-    },
-    {
       "value": "lang:vie",
-      "count": 4825,
+      "count": 6439,
       "label": "Vietnamese"
     },
     {
+      "value": "lang:glg",
+      "count": 5953,
+      "label": "Galician"
+    },
+    {
+      "value": "lang:mal",
+      "count": 5806,
+      "label": "Malayalam"
+    },
+    {
+      "value": "lang:tel",
+      "count": 5788,
+      "label": "Telugu"
+    },
+    {
+      "value": "lang:wel",
+      "count": 5682,
+      "label": "Welsh"
+    },
+    {
+      "value": "lang:kan",
+      "count": 5382,
+      "label": "Kannada"
+    },
+    {
+      "value": "lang:bos",
+      "count": 5315,
+      "label": "Bosnian"
+    },
+    {
+      "value": "lang:gle",
+      "count": 5192,
+      "label": "Irish"
+    },
+    {
+      "value": "lang:snd",
+      "count": 4919,
+      "label": "Sindhi"
+    },
+    {
+      "value": "lang:grc",
+      "count": 4845,
+      "label": "Greek, Ancient (to 1453)"
+    },
+    {
       "value": "lang:kir",
-      "count": 4289,
+      "count": 4228,
       "label": "Kyrgyz"
     },
     {
-      "value": "lang:scr",
-      "count": 4085,
-      "label": ""
-    },
-    {
       "value": "lang:swa",
-      "count": 3992,
+      "count": 3916,
       "label": "Swahili"
     },
     {
-      "value": "lang:ori",
-      "count": 3604,
-      "label": "Oriya"
-    },
-    {
       "value": "lang:pus",
-      "count": 3565,
+      "count": 3617,
       "label": "Pushto"
     },
     {
+      "value": "lang:ori",
+      "count": 3587,
+      "label": "Oriya"
+    },
+    {
       "value": "lang:tat",
-      "count": 3334,
+      "count": 3335,
       "label": "Tatar"
     },
     {
       "value": "lang:mon",
-      "count": 3121,
+      "count": 3183,
       "label": "Mongolian"
     },
     {
       "value": "lang:guj",
-      "count": 2837,
+      "count": 3054,
       "label": "Gujarati"
     },
     {
+      "value": "lang:epo",
+      "count": 2793,
+      "label": "Esperanto"
+    },
+    {
       "value": "lang:may",
-      "count": 2787,
+      "count": 2781,
       "label": "Malay"
     },
     {
-      "value": "lang:tgk",
-      "count": 2651,
-      "label": "Tajik"
+      "value": "lang:mar",
+      "count": 2734,
+      "label": "Marathi"
     },
     {
       "value": "lang:uig",
-      "count": 2517,
+      "count": 2713,
       "label": "Uighur"
     },
     {
+      "value": "lang:tgk",
+      "count": 2666,
+      "label": "Tajik"
+    },
+    {
       "value": "lang:amh",
-      "count": 2452,
+      "count": 2433,
       "label": "Amharic"
     },
     {
-      "value": "lang:scc",
-      "count": 2442,
+      "value": "lang:asm",
+      "count": 2416,
+      "label": "Assamese"
+    },
+    {
+      "value": "lang:scr",
+      "count": 2388,
       "label": ""
     },
     {
       "value": "lang:bak",
-      "count": 2426,
+      "count": 2369,
       "label": "Bashkir"
     },
     {
-      "value": "lang:mar",
-      "count": 2403,
-      "label": "Marathi"
-    },
-    {
-      "value": "lang:asm",
-      "count": 2316,
-      "label": "Assamese"
-    },
-    {
-      "value": "lang:epo",
-      "count": 2226,
-      "label": "Esperanto"
-    },
-    {
       "value": "lang:tuk",
-      "count": 2136,
+      "count": 2111,
       "label": "Turkmen"
     },
     {
       "value": "lang:tut",
-      "count": 2041,
+      "count": 2013,
       "label": "Altaic (Other)"
     },
     {
       "value": "lang:chv",
-      "count": 2004,
+      "count": 1986,
       "label": "Chuvash"
     },
     {
-      "value": "lang:tha",
-      "count": 1804,
-      "label": "Thai"
-    },
-    {
       "value": "lang:baq",
-      "count": 1756,
+      "count": 1831,
       "label": "Basque"
     },
     {
+      "value": "lang:tha",
+      "count": 1787,
+      "label": "Thai"
+    },
+    {
+      "value": "lang:scc",
+      "count": 1565,
+      "label": ""
+    },
+    {
       "value": "lang:sin",
-      "count": 1449,
+      "count": 1458,
       "label": "Sinhalese"
     },
     {
       "value": "lang:nob",
-      "count": 1377,
+      "count": 1384,
       "label": "Norwegian (Bokmål)"
     },
     {
       "value": "lang:fiu",
-      "count": 1255,
+      "count": 1244,
       "label": "Finno-Ugrian (Other)"
     },
     {
@@ -935,184 +930,184 @@
       "label": "Yoruba"
     },
     {
-      "value": "lang:chu",
-      "count": 1216,
-      "label": "Church Slavic"
-    },
-    {
-      "value": "lang:cau",
-      "count": 1213,
-      "label": "Caucasian (Other)"
-    },
-    {
-      "value": "lang:tjk",
-      "count": 1199,
+      "value": "lang:N/A",
+      "count": 1225,
       "label": ""
     },
     {
+      "value": "lang:cau",
+      "count": 1214,
+      "label": "Caucasian (Other)"
+    },
+    {
+      "value": "lang:chu",
+      "count": 1160,
+      "label": "Church Slavic"
+    },
+    {
       "value": "lang:oci",
-      "count": 1094,
+      "count": 1079,
       "label": "Occitan (post-1500)"
     },
     {
+      "value": "lang:raj",
+      "count": 1055,
+      "label": "Rajasthani"
+    },
+    {
       "value": "lang:nic",
-      "count": 1073,
+      "count": 1053,
       "label": "Niger-Kordofanian (Other)"
     },
     {
       "value": "lang:fry",
-      "count": 1054,
+      "count": 1051,
       "label": "Frisian"
     },
     {
-      "value": "lang:raj",
-      "count": 1049,
-      "label": "Rajasthani"
-    },
-    {
       "value": "lang:bur",
-      "count": 1025,
+      "count": 1024,
       "label": "Burmese"
     },
     {
-      "value": "lang:myn",
-      "count": 1015,
-      "label": "Mayan languages"
-    },
-    {
       "value": "lang:mlt",
-      "count": 992,
+      "count": 995,
       "label": "Maltese"
     },
     {
+      "value": "lang:myn",
+      "count": 920,
+      "label": "Mayan languages"
+    },
+    {
       "value": "lang:wen",
-      "count": 945,
+      "count": 907,
       "label": "Sorbian (Other)"
     },
     {
       "value": "lang:bre",
-      "count": 864,
+      "count": 851,
       "label": "Breton"
     },
     {
-      "value": "lang:fro",
-      "count": 849,
-      "label": "French, Old (ca. 842-1300)"
-    },
-    {
       "value": "lang:new",
-      "count": 824,
+      "count": 819,
       "label": "Newari"
     },
     {
       "value": "lang:roa",
-      "count": 821,
+      "count": 800,
       "label": "Romance (Other)"
     },
     {
       "value": "lang:mlg",
-      "count": 787,
+      "count": 788,
       "label": "Malagasy"
     },
     {
       "value": "lang:cpf",
-      "count": 771,
+      "count": 753,
       "label": "Creoles and Pidgins, French-based (Other)"
     },
     {
+      "value": "lang:bal",
+      "count": 745,
+      "label": "Baluchi"
+    },
+    {
       "value": "lang:pra",
-      "count": 743,
+      "count": 735,
       "label": "Prakrit languages"
     },
     {
       "value": "lang:sna",
-      "count": 722,
+      "count": 728,
       "label": "Shona"
     },
     {
+      "value": "lang:fro",
+      "count": 721,
+      "label": "French, Old (ca. 842-1300)"
+    },
+    {
+      "value": "lang:fao",
+      "count": 686,
+      "label": "Faroese"
+    },
+    {
       "value": "lang:gem",
-      "count": 705,
+      "count": 680,
       "label": "Germanic (Other)"
     },
     {
       "value": "lang:roh",
-      "count": 694,
+      "count": 679,
       "label": "Raeto-Romance"
     },
     {
-      "value": "lang:fao",
-      "count": 679,
-      "label": "Faroese"
-    },
-    {
-      "value": "lang:gmh",
-      "count": 670,
-      "label": "German, Middle High (ca. 1050-1500)"
-    },
-    {
-      "value": "lang:frm",
-      "count": 655,
-      "label": "French, Middle (ca. 1300-1600)"
-    },
-    {
-      "value": "lang:bal",
-      "count": 654,
-      "label": "Baluchi"
-    },
-    {
       "value": "lang:hau",
-      "count": 642,
+      "count": 640,
       "label": "Hausa"
     },
     {
+      "value": "lang:frm",
+      "count": 625,
+      "label": "French, Middle (ca. 1300-1600)"
+    },
+    {
       "value": "lang:map",
-      "count": 621,
+      "count": 607,
       "label": "Austronesian (Other)"
     },
     {
+      "value": "lang:gmh",
+      "count": 582,
+      "label": "German, Middle High (ca. 1050-1500)"
+    },
+    {
+      "value": "lang:som",
+      "count": 580,
+      "label": "Somali"
+    },
+    {
+      "value": "lang:pli",
+      "count": 577,
+      "label": "Pali"
+    },
+    {
       "value": "lang:lad",
-      "count": 611,
+      "count": 566,
       "label": "Ladino"
     },
     {
       "value": "lang:enm",
-      "count": 598,
+      "count": 564,
       "label": "English, Middle (1100-1500)"
     },
     {
-      "value": "lang:pli",
-      "count": 583,
-      "label": "Pali"
-    },
-    {
-      "value": "lang:gla",
-      "count": 573,
-      "label": "Scottish Gaelic"
-    },
-    {
-      "value": "lang:som",
-      "count": 565,
-      "label": "Somali"
-    },
-    {
-      "value": "lang:syr",
-      "count": 563,
-      "label": "Syriac, Modern"
-    },
-    {
       "value": "lang:bnt",
-      "count": 556,
+      "count": 559,
       "label": "Bantu (Other)"
     },
     {
+      "value": "lang:gla",
+      "count": 557,
+      "label": "Scottish Gaelic"
+    },
+    {
       "value": "lang:oss",
-      "count": 550,
+      "count": 551,
       "label": "Ossetic"
     },
     {
-      "value": "lang:pro",
-      "count": 532,
-      "label": "Provençal (to 1500)"
+      "value": "lang:syr",
+      "count": 528,
+      "label": "Syriac, Modern"
+    },
+    {
+      "value": "lang:ber",
+      "count": 514,
+      "label": "Berber (Other)"
     },
     {
       "value": "lang:mai",
@@ -1125,93 +1120,93 @@
       "label": "Indic (Other)"
     },
     {
-      "value": "lang:ber",
-      "count": 500,
-      "label": "Berber (Other)"
-    },
-    {
       "value": "lang:chm",
-      "count": 500,
+      "count": 498,
       "label": "Mari"
     },
     {
+      "value": "lang:pro",
+      "count": 497,
+      "label": "Provençal (to 1500)"
+    },
+    {
       "value": "lang:sai",
-      "count": 499,
+      "count": 469,
       "label": "South American Indian (Other)"
     },
     {
-      "value": "lang:tir",
-      "count": 457,
-      "label": "Tigrinya"
-    },
-    {
-      "value": "lang:rom",
-      "count": 447,
-      "label": "Romani"
-    },
-    {
-      "value": "lang:egy",
-      "count": 445,
-      "label": "Egyptian"
-    },
-    {
-      "value": "lang:sot",
-      "count": 443,
-      "label": "Sotho"
-    },
-    {
-      "value": "lang:sah",
-      "count": 427,
-      "label": "Yakut"
-    },
-    {
-      "value": "lang:hat",
-      "count": 402,
-      "label": "Haitian French Creole"
-    },
-    {
       "value": "lang:dra",
-      "count": 401,
+      "count": 456,
       "label": "Dravidian (Other)"
     },
     {
-      "value": "lang:paa",
-      "count": 397,
-      "label": "Papuan (Other)"
+      "value": "lang:tir",
+      "count": 455,
+      "label": "Tigrinya"
+    },
+    {
+      "value": "lang:sah",
+      "count": 453,
+      "label": "Yakut"
+    },
+    {
+      "value": "lang:sot",
+      "count": 444,
+      "label": "Sotho"
+    },
+    {
+      "value": "lang:hat",
+      "count": 442,
+      "label": "Haitian French Creole"
     },
     {
       "value": "lang:tgl",
-      "count": 391,
+      "count": 442,
       "label": "Tagalog"
     },
     {
-      "value": "lang:udm",
-      "count": 389,
-      "label": "Udmurt"
-    },
-    {
-      "value": "lang:lug",
-      "count": 387,
-      "label": "Ganda"
+      "value": "lang:rom",
+      "count": 418,
+      "label": "Romani"
     },
     {
       "value": "lang:lus",
-      "count": 376,
+      "count": 403,
       "label": "Lushai"
     },
     {
+      "value": "lang:egy",
+      "count": 398,
+      "label": "Egyptian"
+    },
+    {
+      "value": "lang:lug",
+      "count": 391,
+      "label": "Ganda"
+    },
+    {
+      "value": "lang:paa",
+      "count": 387,
+      "label": "Papuan (Other)"
+    },
+    {
       "value": "lang:xho",
-      "count": 372,
+      "count": 383,
       "label": "Xhosa"
     },
     {
+      "value": "lang:udm",
+      "count": 379,
+      "label": "Udmurt"
+    },
+    {
       "value": "lang:tsn",
-      "count": 368,
+      "count": 378,
       "label": "Tswana"
     },
     {
       "value": "lang:zul",
-      "count": 359,
+      "count": 351,
       "label": "Zulu"
     },
     {
@@ -1221,23 +1216,18 @@
     },
     {
       "value": "lang:ful",
-      "count": 324,
+      "count": 321,
       "label": "Fula"
     },
     {
       "value": "lang:kaa",
-      "count": 319,
+      "count": 318,
       "label": "Kara-Kalpak"
     },
     {
-      "value": "lang:sla",
-      "count": 306,
-      "label": "Slavic (Other)"
-    },
-    {
-      "value": "lang:nya",
-      "count": 303,
-      "label": "Nyanja"
+      "value": "lang:nde",
+      "count": 314,
+      "label": "Ndebele (Zimbabwe)"
     },
     {
       "value": "lang:kom",
@@ -1245,133 +1235,138 @@
       "label": "Komi"
     },
     {
-      "value": "lang:wol",
+      "value": "lang:doi",
+      "count": 301,
+      "label": "Dogri"
+    },
+    {
+      "value": "lang:nya",
+      "count": 301,
+      "label": "Nyanja"
+    },
+    {
+      "value": "lang:sla",
       "count": 299,
+      "label": "Slavic (Other)"
+    },
+    {
+      "value": "lang:wol",
+      "count": 292,
       "label": "Wolof"
     },
     {
-      "value": "lang:nde",
-      "count": 298,
-      "label": "Ndebele (Zimbabwe)"
-    },
-    {
-      "value": "lang:jrb",
-      "count": 293,
-      "label": "Judeo-Arabic"
-    },
-    {
-      "value": "lang:orm",
-      "count": 291,
-      "label": "Oromo"
-    },
-    {
-      "value": "lang:che",
-      "count": 285,
-      "label": "Chechen"
-    },
-    {
-      "value": "lang:mol",
-      "count": 285,
-      "label": ""
-    },
-    {
       "value": "lang:bho",
-      "count": 284,
+      "count": 290,
       "label": "Bhojpuri"
     },
     {
-      "value": "lang:ang",
-      "count": 281,
-      "label": "English, Old (ca. 450-1100)"
+      "value": "lang:orm",
+      "count": 289,
+      "label": "Oromo"
     },
     {
       "value": "lang:bra",
-      "count": 281,
+      "count": 282,
       "label": "Braj"
     },
     {
+      "value": "lang:che",
+      "count": 280,
+      "label": "Chechen"
+    },
+    {
       "value": "lang:que",
-      "count": 266,
+      "count": 264,
       "label": "Quechua"
     },
     {
-      "value": "lang:cai",
-      "count": 262,
-      "label": "Central American Indian (Other)"
-    },
-    {
       "value": "lang:sit",
-      "count": 253,
+      "count": 264,
       "label": "Sino-Tibetan (Other)"
     },
     {
+      "value": "lang:lah",
+      "count": 263,
+      "label": "Lahndā"
+    },
+    {
+      "value": "lang:ang",
+      "count": 255,
+      "label": "English, Old (ca. 450-1100)"
+    },
+    {
+      "value": "lang:cai",
+      "count": 255,
+      "label": "Central American Indian (Other)"
+    },
+    {
+      "value": "lang:jrb",
+      "count": 236,
+      "label": "Judeo-Arabic"
+    },
+    {
+      "value": "lang:kha",
+      "count": 232,
+      "label": "Khasi"
+    },
+    {
       "value": "lang:crp",
-      "count": 244,
+      "count": 228,
       "label": "Creoles and Pidgins (Other)"
     },
     {
       "value": "lang:grn",
-      "count": 233,
+      "count": 226,
       "label": "Guarani"
     },
     {
-      "value": "lang:jav",
-      "count": 230,
-      "label": "Javanese"
-    },
-    {
-      "value": "lang:twi",
-      "count": 219,
-      "label": "Twi"
-    },
-    {
       "value": "lang:nno",
-      "count": 216,
+      "count": 224,
       "label": "Norwegian (Nynorsk)"
     },
     {
-      "value": "lang:lah",
-      "count": 214,
-      "label": "Lahndā"
+      "value": "lang:twi",
+      "count": 218,
+      "label": "Twi"
     },
     {
       "value": "lang:ibo",
-      "count": 213,
+      "count": 212,
       "label": "Igbo"
     },
     {
-      "value": "lang:doi",
-      "count": 209,
-      "label": "Dogri"
-    },
-    {
-      "value": "lang:arc",
-      "count": 207,
-      "label": "Aramaic"
+      "value": "lang:jav",
+      "count": 210,
+      "label": "Javanese"
     },
     {
       "value": "lang:kas",
-      "count": 203,
+      "count": 202,
       "label": "Kashmiri"
     },
     {
-      "value": "lang:haw",
-      "count": 197,
-      "label": "Hawaiian"
+      "value": "lang:arc",
+      "count": 188,
+      "label": "Aramaic"
+    },
+    {
+      "value": "lang:mol",
+      "count": 185,
+      "label": ""
     },
     {
       "value": "lang:man",
-      "count": 189,
+      "count": 183,
       "label": "Mandingo"
     },
     {
-      "value": "lang:kha",
-      "count": 186,
-      "label": "Khasi"
+      "value": "lang:haw",
+      "count": 181,
+      "label": "Hawaiian"
     },
     {
       "value": "lang:ssa",
-      "count": 173,
+      "count": 172,
       "label": "Nilo-Saharan (Other)"
     },
     {
@@ -1380,59 +1375,59 @@
       "label": "Philippine (Other)"
     },
     {
-      "value": "lang:mis",
-      "count": 157,
-      "label": "Miscellaneous languages"
-    },
-    {
-      "value": "lang:bam",
-      "count": 155,
-      "label": "Bambara"
-    },
-    {
-      "value": "lang:cop",
-      "count": 155,
-      "label": "Coptic"
-    },
-    {
-      "value": "lang:afa",
-      "count": 154,
-      "label": "Afroasiatic (Other)"
-    },
-    {
       "value": "lang:ava",
-      "count": 154,
+      "count": 156,
       "label": "Avaric"
     },
     {
-      "value": "lang:nai",
-      "count": 153,
-      "label": "North American Indian (Other)"
+      "value": "lang:bam",
+      "count": 151,
+      "label": "Bambara"
     },
     {
       "value": "lang:nah",
-      "count": 148,
+      "count": 151,
       "label": "Nahuatl"
     },
     {
+      "value": "lang:afa",
+      "count": 147,
+      "label": "Afroasiatic (Other)"
+    },
+    {
+      "value": "lang:nai",
+      "count": 145,
+      "label": "North American Indian (Other)"
+    },
+    {
       "value": "lang:nso",
-      "count": 141,
+      "count": 143,
       "label": "Northern Sotho"
     },
     {
+      "value": "lang:cop",
+      "count": 140,
+      "label": "Coptic"
+    },
+    {
+      "value": "lang:ady",
+      "count": 138,
+      "label": "Adygei"
+    },
+    {
+      "value": "lang:zza",
+      "count": 138,
+      "label": "Zaza"
+    },
+    {
       "value": "lang:kal",
-      "count": 137,
+      "count": 134,
       "label": "Kalâtdlisut"
     },
     {
       "value": "lang:kbd",
-      "count": 133,
+      "count": 134,
       "label": "Kabardian"
-    },
-    {
-      "value": "lang:ewe",
-      "count": 132,
-      "label": "Ewe"
     },
     {
       "value": "lang:pap",
@@ -1440,19 +1435,14 @@
       "label": "Papiamento"
     },
     {
-      "value": "lang:ady",
-      "count": 129,
-      "label": "Adygei"
+      "value": "lang:ewe",
+      "count": 130,
+      "label": "Ewe"
     },
     {
-      "value": "lang:cre",
-      "count": 129,
-      "label": "Cree"
-    },
-    {
-      "value": "lang:sco",
-      "count": 125,
-      "label": "Scots"
+      "value": "lang:mis",
+      "count": 130,
+      "label": "Miscellaneous languages"
     },
     {
       "value": "lang:kon",
@@ -1460,29 +1450,24 @@
       "label": "Kongo"
     },
     {
-      "value": "lang:oji",
+      "value": "lang:cre",
+      "count": 121,
+      "label": "Cree"
+    },
+    {
+      "value": "lang:sco",
       "count": 118,
+      "label": "Scots"
+    },
+    {
+      "value": "lang:oji",
+      "count": 116,
       "label": "Ojibwa"
     },
     {
-      "value": "lang:N A",
-      "count": 116,
-      "label": ""
-    },
-    {
       "value": "lang:khm",
-      "count": 116,
+      "count": 115,
       "label": "Khmer"
-    },
-    {
-      "value": "lang:mao",
-      "count": 116,
-      "label": "Maori"
-    },
-    {
-      "value": "lang:gez",
-      "count": 112,
-      "label": "Ethiopic"
     },
     {
       "value": "lang:ndo",
@@ -1490,28 +1475,33 @@
       "label": "Ndonga"
     },
     {
+      "value": "lang:gez",
+      "count": 109,
+      "label": "Ethiopic"
+    },
+    {
       "value": "lang:cpp",
-      "count": 107,
+      "count": 108,
       "label": "Creoles and Pidgins, Portuguese-based (Other)"
     },
     {
       "value": "lang:dzo",
-      "count": 107,
+      "count": 108,
       "label": "Dzongkha"
     },
     {
+      "value": "lang:mao",
+      "count": 105,
+      "label": "Maori"
+    },
+    {
       "value": "lang:kab",
-      "count": 107,
+      "count": 103,
       "label": "Kabyle"
     },
     {
-      "value": "lang:ira",
-      "count": 106,
-      "label": "Iranian (Other)"
-    },
-    {
       "value": "lang:awa",
-      "count": 102,
+      "count": 101,
       "label": "Awadhi"
     },
     {
@@ -1520,34 +1510,39 @@
       "label": "Gã"
     },
     {
+      "value": "lang:smi",
+      "count": 100,
+      "label": "Sami"
+    },
+    {
+      "value": "lang:mni",
+      "count": 99,
+      "label": "Manipuri"
+    },
+    {
       "value": "lang:ssw",
       "count": 99,
       "label": "Swazi"
     },
     {
-      "value": "lang:chg",
-      "count": 98,
-      "label": "Chagatai"
+      "value": "lang:ira",
+      "count": 97,
+      "label": "Iranian (Other)"
+    },
+    {
+      "value": "lang:tso",
+      "count": 96,
+      "label": "Tsonga"
+    },
+    {
+      "value": "lang:ast",
+      "count": 95,
+      "label": "Bable"
     },
     {
       "value": "lang:mus",
       "count": 95,
       "label": "Creek"
-    },
-    {
-      "value": "lang:smi",
-      "count": 95,
-      "label": "Sami"
-    },
-    {
-      "value": "lang:tso",
-      "count": 95,
-      "label": "Tsonga"
-    },
-    {
-      "value": "lang:akk",
-      "count": 94,
-      "label": "Akkadian"
     },
     {
       "value": "lang:bua",
@@ -1560,29 +1555,19 @@
       "label": "Dakota"
     },
     {
-      "value": "lang:kik",
-      "count": 93,
-      "label": "Kikuyu"
-    },
-    {
       "value": "lang:mno",
-      "count": 92,
+      "count": 93,
       "label": "Manobo languages"
     },
     {
-      "value": "lang:bem",
-      "count": 91,
-      "label": "Bemba"
-    },
-    {
-      "value": "lang:cpe",
+      "value": "lang:kik",
       "count": 90,
-      "label": "Creoles and Pidgins, English-based (Other)"
+      "label": "Kikuyu"
     },
     {
-      "value": "lang:ypk",
+      "value": "lang:bem",
       "count": 89,
-      "label": "Yupik languages"
+      "label": "Bemba"
     },
     {
       "value": "lang:cho",
@@ -1590,74 +1575,74 @@
       "label": "Choctaw"
     },
     {
-      "value": "lang:dum",
-      "count": 87,
-      "label": "Dutch, Middle (ca. 1050-1350)"
+      "value": "lang:ypk",
+      "count": 88,
+      "label": "Yupik languages"
     },
     {
-      "value": "lang:zza",
-      "count": 87,
-      "label": "Zaza"
-    },
-    {
-      "value": "lang:mni",
+      "value": "lang:lao",
       "count": 86,
-      "label": "Manipuri"
+      "label": "Lao"
     },
     {
-      "value": "lang:gag",
+      "value": "lang:cnr",
       "count": 85,
       "label": ""
     },
     {
-      "value": "lang:lao",
-      "count": 85,
-      "label": "Lao"
+      "value": "lang:cpe",
+      "count": 83,
+      "label": "Creoles and Pidgins, English-based (Other)"
+    },
+    {
+      "value": "lang:akk",
+      "count": 82,
+      "label": "Akkadian"
+    },
+    {
+      "value": "lang:chg",
+      "count": 80,
+      "label": "Chagatai"
     },
     {
       "value": "lang:mos",
-      "count": 82,
+      "count": 80,
       "label": "Mooré"
     },
     {
-      "value": "lang:srd",
-      "count": 82,
-      "label": "Sardinian"
-    },
-    {
       "value": "lang:myv",
-      "count": 81,
+      "count": 80,
       "label": "Erzya"
     },
     {
+      "value": "lang:dum",
+      "count": 79,
+      "label": "Dutch, Middle (ca. 1050-1350)"
+    },
+    {
+      "value": "lang:srd",
+      "count": 77,
+      "label": "Sardinian"
+    },
+    {
       "value": "lang:sun",
-      "count": 80,
+      "count": 76,
       "label": "Sundanese"
     },
     {
-      "value": "lang:ast",
-      "count": 79,
-      "label": "Bable"
-    },
-    {
-      "value": "lang:pal",
-      "count": 79,
-      "label": "Pahlavi"
-    },
-    {
       "value": "lang:aym",
-      "count": 78,
+      "count": 75,
       "label": "Aymara"
     },
     {
-      "value": "lang:zap",
+      "value": "lang:pal",
       "count": 75,
-      "label": "Zapotec"
+      "label": "Pahlavi"
     },
     {
-      "value": "lang:nds",
-      "count": 72,
-      "label": "Low German"
+      "value": "lang:zap",
+      "count": 73,
+      "label": "Zapotec"
     },
     {
       "value": "lang:snk",
@@ -1665,24 +1650,19 @@
       "label": "Soninke"
     },
     {
-      "value": "lang:alg",
-      "count": 69,
-      "label": "Algonquian (Other)"
-    },
-    {
       "value": "lang:run",
-      "count": 69,
+      "count": 68,
       "label": "Rundi"
     },
     {
-      "value": "lang:got",
+      "value": "lang:abk",
       "count": 67,
-      "label": "Gothic"
+      "label": "Abkhaz"
     },
     {
-      "value": "lang:abk",
+      "value": "lang:alg",
       "count": 66,
-      "label": "Abkhaz"
+      "label": "Algonquian (Other)"
     },
     {
       "value": "lang:kua",
@@ -1695,14 +1675,14 @@
       "label": "Cherokee"
     },
     {
-      "value": "lang:fur",
-      "count": 65,
-      "label": "Friulian"
+      "value": "lang:him",
+      "count": 64,
+      "label": "Western Pahari languages"
     },
     {
-      "value": "lang:xal",
-      "count": 64,
-      "label": "Oirat"
+      "value": "lang:gag",
+      "count": 63,
+      "label": ""
     },
     {
       "value": "lang:mdf",
@@ -1710,19 +1690,19 @@
       "label": "Moksha"
     },
     {
-      "value": "lang:srr",
+      "value": "lang:xal",
       "count": 63,
+      "label": "Oirat"
+    },
+    {
+      "value": "lang:fur",
+      "count": 62,
+      "label": "Friulian"
+    },
+    {
+      "value": "lang:srr",
+      "count": 61,
       "label": "Serer"
-    },
-    {
-      "value": "lang:him",
-      "count": 62,
-      "label": "Western Pahari languages"
-    },
-    {
-      "value": "lang:iri",
-      "count": 62,
-      "label": ""
     },
     {
       "value": "lang:kum",
@@ -1731,28 +1711,23 @@
     },
     {
       "value": "lang:crh",
-      "count": 57,
+      "count": 58,
       "label": "Crimean Tatar"
     },
     {
-      "value": "lang:son",
+      "value": "lang:syc",
       "count": 57,
-      "label": "Songhai"
+      "label": "Syriac"
+    },
+    {
+      "value": "lang:nds",
+      "count": 56,
+      "label": "Low German"
     },
     {
       "value": "lang:khi",
-      "count": 56,
+      "count": 55,
       "label": "Khoisan (Other)"
-    },
-    {
-      "value": "lang:ban",
-      "count": 55,
-      "label": "Balinese"
-    },
-    {
-      "value": "lang:cos",
-      "count": 55,
-      "label": "Corsican"
     },
     {
       "value": "lang:loz",
@@ -1760,9 +1735,9 @@
       "label": "Lozi"
     },
     {
-      "value": "lang:inh",
+      "value": "lang:got",
       "count": 54,
-      "label": "Ingush"
+      "label": "Gothic"
     },
     {
       "value": "lang:lin",
@@ -1770,29 +1745,39 @@
       "label": "Lingala"
     },
     {
-      "value": "lang:goh",
+      "value": "lang:inh",
+      "count": 53,
+      "label": "Ingush"
+    },
+    {
+      "value": "lang:her",
       "count": 52,
-      "label": "German, Old High (ca. 750-1050)"
+      "label": "Herero"
+    },
+    {
+      "value": "lang:mwr",
+      "count": 52,
+      "label": "Marwari"
+    },
+    {
+      "value": "lang:tyv",
+      "count": 52,
+      "label": "Tuvinian"
+    },
+    {
+      "value": "lang:ban",
+      "count": 51,
+      "label": "Balinese"
     },
     {
       "value": "lang:nap",
-      "count": 52,
+      "count": 51,
       "label": "Neapolitan Italian"
     },
     {
       "value": "lang:ven",
-      "count": 52,
+      "count": 51,
       "label": "Venda"
-    },
-    {
-      "value": "lang:fat",
-      "count": 51,
-      "label": "Fanti"
-    },
-    {
-      "value": "lang:her",
-      "count": 51,
-      "label": "Herero"
     },
     {
       "value": "lang:kar",
@@ -1805,39 +1790,19 @@
       "label": "Mohawk"
     },
     {
-      "value": "lang:mwr",
-      "count": 50,
-      "label": "Marwari"
-    },
-    {
-      "value": "lang:sam",
-      "count": 50,
-      "label": "Samaritan Aramaic"
-    },
-    {
-      "value": "lang:luo",
-      "count": 49,
-      "label": "Luo (Kenya and Tanzania)"
-    },
-    {
-      "value": "lang:tyv",
-      "count": 49,
-      "label": "Tuvinian"
-    },
-    {
       "value": "lang:dyu",
-      "count": 48,
+      "count": 49,
       "label": "Dyula"
     },
     {
-      "value": "lang:lan",
-      "count": 48,
-      "label": ""
+      "value": "lang:fat",
+      "count": 49,
+      "label": "Fanti"
     },
     {
-      "value": "lang:nyn",
-      "count": 48,
-      "label": "Nyankole"
+      "value": "lang:son",
+      "count": 49,
+      "label": "Songhai"
     },
     {
       "value": "lang:shn",
@@ -1850,14 +1815,29 @@
       "label": "Inuktitut"
     },
     {
-      "value": "lang:taj",
-      "count": 46,
-      "label": ""
+      "value": "lang:luo",
+      "count": 47,
+      "label": "Luo (Kenya and Tanzania)"
     },
     {
-      "value": "lang:arn",
+      "value": "lang:nyn",
+      "count": 47,
+      "label": "Nyankole"
+    },
+    {
+      "value": "lang:goh",
       "count": 45,
-      "label": "Mapuche"
+      "label": "German, Old High (ca. 750-1050)"
+    },
+    {
+      "value": "lang:ina",
+      "count": 45,
+      "label": "Interlingua (International Auxiliary Language Association)"
+    },
+    {
+      "value": "lang:iri",
+      "count": 45,
+      "label": ""
     },
     {
       "value": "lang:kro",
@@ -1866,13 +1846,23 @@
     },
     {
       "value": "lang:krc",
-      "count": 43,
+      "count": 42,
       "label": "Karachay-Balkar"
     },
     {
-      "value": "lang:ltz",
+      "value": "lang:mnc",
       "count": 42,
-      "label": "Luxembourgish"
+      "label": "Manchu"
+    },
+    {
+      "value": "lang:smo",
+      "count": 42,
+      "label": "Samoan"
+    },
+    {
+      "value": "lang:arn",
+      "count": 41,
+      "label": "Mapuche"
     },
     {
       "value": "lang:krl",
@@ -1880,89 +1870,64 @@
       "label": "Karelian"
     },
     {
-      "value": "lang:tar",
-      "count": 41,
-      "label": ""
-    },
-    {
-      "value": "lang:cnr",
-      "count": 40,
-      "label": ""
-    },
-    {
       "value": "lang:nav",
-      "count": 40,
+      "count": 41,
       "label": "Navajo"
     },
     {
-      "value": "lang:smo",
+      "value": "lang:ltz",
       "count": 40,
-      "label": "Samoan"
+      "label": "Luxembourgish"
     },
     {
-      "value": "lang:sux",
-      "count": 40,
-      "label": "Sumerian"
+      "value": "lang:sam",
+      "count": 38,
+      "label": "Samaritan Aramaic"
     },
     {
       "value": "lang:tah",
-      "count": 40,
+      "count": 38,
       "label": "Tahitian"
     },
     {
       "value": "lang:efi",
-      "count": 39,
+      "count": 37,
       "label": "Efik"
     },
     {
-      "value": "lang:gsw",
-      "count": 39,
-      "label": "Swiss German"
-    },
-    {
-      "value": "lang:mnc",
-      "count": 39,
-      "label": "Manchu"
-    },
-    {
-      "value": "lang:oto",
-      "count": 39,
-      "label": "Otomian languages"
-    },
-    {
-      "value": "lang:gae",
-      "count": 38,
-      "label": ""
-    },
-    {
       "value": "lang:iro",
-      "count": 38,
+      "count": 37,
       "label": "Iroquoian (Other)"
     },
     {
-      "value": "lang:aka",
+      "value": "lang:lez",
       "count": 37,
+      "label": "Lezgian"
+    },
+    {
+      "value": "lang:mun",
+      "count": 37,
+      "label": "Munda (Other)"
+    },
+    {
+      "value": "lang:oto",
+      "count": 37,
+      "label": "Otomian languages"
+    },
+    {
+      "value": "lang:aka",
+      "count": 36,
       "label": "Akan"
     },
     {
       "value": "lang:art",
-      "count": 37,
+      "count": 36,
       "label": "Artificial (Other)"
     },
     {
-      "value": "lang:lez",
+      "value": "lang:cos",
       "count": 36,
-      "label": "Lezgian"
-    },
-    {
-      "value": "lang:non",
-      "count": 36,
-      "label": "Old Norse"
-    },
-    {
-      "value": "lang:sho",
-      "count": 36,
-      "label": ""
+      "label": "Corsican"
     },
     {
       "value": "lang:cel",
@@ -1975,9 +1940,19 @@
       "label": "Cornish"
     },
     {
+      "value": "lang:gsw",
+      "count": 35,
+      "label": "Swiss German"
+    },
+    {
       "value": "lang:men",
       "count": 35,
       "label": "Mende"
+    },
+    {
+      "value": "lang:arg",
+      "count": 34,
+      "label": "Aragonese"
     },
     {
       "value": "lang:kok",
@@ -1985,19 +1960,19 @@
       "label": "Konkani"
     },
     {
+      "value": "lang:non",
+      "count": 33,
+      "label": "Old Norse"
+    },
+    {
       "value": "lang:sme",
-      "count": 34,
+      "count": 33,
       "label": "Northern Sami"
     },
     {
-      "value": "lang:arg",
-      "count": 33,
-      "label": "Aragonese"
-    },
-    {
-      "value": "lang:jpr",
-      "count": 33,
-      "label": "Judeo-Persian"
+      "value": "lang:ceb",
+      "count": 32,
+      "label": "Cebuano"
     },
     {
       "value": "lang:lol",
@@ -2005,34 +1980,19 @@
       "label": "Mongo-Nkundu"
     },
     {
-      "value": "lang:aar",
-      "count": 31,
-      "label": "Afar"
-    },
-    {
-      "value": "lang:ceb",
-      "count": 31,
-      "label": "Cebuano"
-    },
-    {
-      "value": "lang:engger",
-      "count": 31,
-      "label": ""
-    },
-    {
-      "value": "lang:kam",
-      "count": 31,
-      "label": "Kamba"
-    },
-    {
-      "value": "lang:tmh",
-      "count": 31,
-      "label": "Tamashek"
+      "value": "lang:sux",
+      "count": 32,
+      "label": "Sumerian"
     },
     {
       "value": "lang:bas",
-      "count": 30,
+      "count": 31,
       "label": "Basa"
+    },
+    {
+      "value": "lang:dar",
+      "count": 30,
+      "label": "Dargwa"
     },
     {
       "value": "lang:ilo",
@@ -2040,9 +2000,9 @@
       "label": "Iloko"
     },
     {
-      "value": "lang:ina",
+      "value": "lang:lan",
       "count": 30,
-      "label": "Interlingua (International Auxiliary Language Association)"
+      "label": ""
     },
     {
       "value": "lang:nzi",
@@ -2050,29 +2010,29 @@
       "label": "Nzima"
     },
     {
-      "value": "lang:dar",
-      "count": 29,
-      "label": "Dargwa"
+      "value": "lang:tmh",
+      "count": 30,
+      "label": "Tamashek"
     },
     {
-      "value": "lang:scn",
+      "value": "lang:gae",
       "count": 29,
-      "label": "Sicilian Italian"
+      "label": ""
     },
     {
-      "value": "lang:ave",
-      "count": 27,
-      "label": "Avestan"
+      "value": "lang:kam",
+      "count": 29,
+      "label": "Kamba"
+    },
+    {
+      "value": "lang:jpr",
+      "count": 28,
+      "label": "Judeo-Persian"
     },
     {
       "value": "lang:glv",
       "count": 27,
       "label": "Manx"
-    },
-    {
-      "value": "lang:mun",
-      "count": 27,
-      "label": "Munda (Other)"
     },
     {
       "value": "lang:tog",
@@ -2085,44 +2045,24 @@
       "label": "Altai"
     },
     {
-      "value": "lang:engfre",
-      "count": 26,
-      "label": ""
-    },
-    {
       "value": "lang:mag",
       "count": 26,
       "label": "Magahi"
     },
     {
+      "value": "lang:scn",
+      "count": 25,
+      "label": "Sicilian Italian"
+    },
+    {
+      "value": "lang:tar",
+      "count": 25,
+      "label": ""
+    },
+    {
       "value": "lang:tum",
-      "count": 26,
+      "count": 25,
       "label": "Tumbuka"
-    },
-    {
-      "value": "lang:csb",
-      "count": 25,
-      "label": "Kashubian"
-    },
-    {
-      "value": "lang:englat",
-      "count": 25,
-      "label": ""
-    },
-    {
-      "value": "lang:fri",
-      "count": 25,
-      "label": ""
-    },
-    {
-      "value": "lang:freeng",
-      "count": 24,
-      "label": ""
-    },
-    {
-      "value": "lang:grb",
-      "count": 24,
-      "label": "Grebo"
     },
     {
       "value": "lang:ijo",
@@ -2140,9 +2080,19 @@
       "label": "Bihari (Other)"
     },
     {
-      "value": "lang:spaeng",
+      "value": "lang:grb",
       "count": 23,
-      "label": ""
+      "label": "Grebo"
+    },
+    {
+      "value": "lang:pon",
+      "count": 23,
+      "label": "Pohnpeian"
+    },
+    {
+      "value": "lang:",
+      "count": 23,
+      "label": "t"
     },
     {
       "value": "lang:ada",
@@ -2150,19 +2100,14 @@
       "label": "Adangme"
     },
     {
-      "value": "lang:ath",
+      "value": "lang:csb",
       "count": 22,
-      "label": "Athapascan (Other)"
+      "label": "Kashubian"
     },
     {
-      "value": "lang:esk",
+      "value": "lang:ido",
       "count": 22,
-      "label": ""
-    },
-    {
-      "value": "lang:lateng",
-      "count": 22,
-      "label": ""
+      "label": "Ido"
     },
     {
       "value": "lang:nyo",
@@ -2170,14 +2115,19 @@
       "label": "Nyoro"
     },
     {
-      "value": "lang:fan",
+      "value": "lang:ath",
       "count": 21,
-      "label": "Fang"
+      "label": "Athapascan (Other)"
     },
     {
-      "value": "lang:fon",
+      "value": "lang:ave",
       "count": 21,
-      "label": "Fon"
+      "label": "Avestan"
+    },
+    {
+      "value": "lang:kru",
+      "count": 20,
+      "label": "Kurukh"
     },
     {
       "value": "lang:lub",
@@ -2185,29 +2135,29 @@
       "label": "Luba-Katanga"
     },
     {
-      "value": "lang:pon",
-      "count": 20,
-      "label": "Pohnpeian"
+      "value": "lang:fan",
+      "count": 19,
+      "label": "Fang"
+    },
+    {
+      "value": "lang:fon",
+      "count": 19,
+      "label": "Fon"
+    },
+    {
+      "value": "lang:hil",
+      "count": 19,
+      "label": "Hiligaynon"
     },
     {
       "value": "lang:sal",
-      "count": 20,
+      "count": 19,
       "label": "Salishan languages"
     },
     {
-      "value": "lang:esp",
-      "count": 19,
+      "value": "lang:N A",
+      "count": 18,
       "label": ""
-    },
-    {
-      "value": "lang:gereng",
-      "count": 19,
-      "label": ""
-    },
-    {
-      "value": "lang:nub",
-      "count": 19,
-      "label": "Nubian languages"
     },
     {
       "value": "lang:ach",
@@ -2215,14 +2165,14 @@
       "label": "Acoli"
     },
     {
-      "value": "lang:hil",
+      "value": "lang:hsb",
       "count": 18,
-      "label": "Hiligaynon"
+      "label": "Upper Sorbian"
     },
     {
-      "value": "lang:ido",
+      "value": "lang:nub",
       "count": 18,
-      "label": "Ido"
+      "label": "Nubian languages"
     },
     {
       "value": "lang:tem",
@@ -2230,29 +2180,9 @@
       "label": "Temne"
     },
     {
-      "value": "lang:uga",
-      "count": 18,
-      "label": "Ugaritic"
-    },
-    {
-      "value": "lang:a d",
-      "count": 17,
-      "label": ""
-    },
-    {
-      "value": "lang:dua",
-      "count": 17,
-      "label": "Duala"
-    },
-    {
       "value": "lang:kaw",
       "count": 17,
       "label": "Kawi"
-    },
-    {
-      "value": "lang:kru",
-      "count": 17,
-      "label": "Kurukh"
     },
     {
       "value": "lang:pam",
@@ -2260,9 +2190,19 @@
       "label": "Pampanga"
     },
     {
-      "value": "lang:syc",
-      "count": 17,
-      "label": "Syriac"
+      "value": "lang:dua",
+      "count": 16,
+      "label": "Duala"
+    },
+    {
+      "value": "lang:esp",
+      "count": 16,
+      "label": ""
+    },
+    {
+      "value": "lang:fri",
+      "count": 16,
+      "label": ""
     },
     {
       "value": "lang:gil",
@@ -2275,9 +2215,9 @@
       "label": "Pangasinan"
     },
     {
-      "value": "lang:aus",
-      "count": 15,
-      "label": "Australian languages"
+      "value": "lang:uga",
+      "count": 16,
+      "label": "Ugaritic"
     },
     {
       "value": "lang:cus",
@@ -2295,19 +2235,19 @@
       "label": "Ekajuk"
     },
     {
-      "value": "lang:nbl",
+      "value": "lang:tai",
       "count": 15,
-      "label": "Ndebele (South Africa)"
+      "label": "Tai (Other)"
+    },
+    {
+      "value": "lang:taj",
+      "count": 15,
+      "label": ""
     },
     {
       "value": "lang:wln",
       "count": 15,
       "label": "Walloon"
-    },
-    {
-      "value": "lang:arw",
-      "count": 14,
-      "label": "Arawak"
     },
     {
       "value": "lang:bai",
@@ -2320,14 +2260,9 @@
       "label": "Delaware"
     },
     {
-      "value": "lang:ewo",
+      "value": "lang:nbl",
       "count": 14,
-      "label": "Ewondo"
-    },
-    {
-      "value": "lang:fij",
-      "count": 14,
-      "label": "Fijian"
+      "label": "Ndebele (South Africa)"
     },
     {
       "value": "lang:nog",
@@ -2335,29 +2270,14 @@
       "label": "Nogai"
     },
     {
-      "value": "lang:tai",
-      "count": 14,
-      "label": "Tai (Other)"
-    },
-    {
-      "value": "lang:ton",
-      "count": 14,
-      "label": "Tongan"
-    },
-    {
-      "value": "lang:apa",
+      "value": "lang:aar",
       "count": 13,
-      "label": "Apache languages"
+      "label": "Afar"
     },
     {
-      "value": "lang:din",
+      "value": "lang:arw",
       "count": 13,
-      "label": "Dinka"
-    },
-    {
-      "value": "lang:eth",
-      "count": 13,
-      "label": ""
+      "label": "Arawak"
     },
     {
       "value": "lang:iba",
@@ -2370,24 +2290,24 @@
       "label": "Minangkabau"
     },
     {
-      "value": "lang:btk",
-      "count": 12,
-      "label": "Batak"
+      "value": "lang:mkh",
+      "count": 13,
+      "label": "Mon-Khmer (Other)"
     },
     {
-      "value": "lang:ine",
+      "value": "lang:apa",
       "count": 12,
-      "label": "Indo-European (Other)"
+      "label": "Apache languages"
     },
     {
-      "value": "lang:jap",
+      "value": "lang:esk",
       "count": 12,
       "label": ""
     },
     {
-      "value": "lang:mkh",
+      "value": "lang:mah",
       "count": 12,
-      "label": "Mon-Khmer (Other)"
+      "label": "Marshallese"
     },
     {
       "value": "lang:pau",
@@ -2395,24 +2315,34 @@
       "label": "Palauan"
     },
     {
-      "value": "lang:pa",
+      "value": "lang:ton",
       "count": 12,
-      "label": "|"
+      "label": "Tongan"
     },
     {
-      "value": "lang:yao",
+      "value": "lang:vol",
       "count": 12,
-      "label": "Yao (Africa)"
+      "label": "Volapük"
     },
     {
-      "value": "lang:engfreger",
+      "value": "lang:btk",
       "count": 11,
-      "label": ""
+      "label": "Batak"
     },
     {
-      "value": "lang:mah",
+      "value": "lang:ewo",
       "count": 11,
-      "label": "Marshallese"
+      "label": "Ewondo"
+    },
+    {
+      "value": "lang:fij",
+      "count": 11,
+      "label": "Fijian"
+    },
+    {
+      "value": "lang:ine",
+      "count": 11,
+      "label": "Indo-European (Other)"
     },
     {
       "value": "lang:mic",
@@ -2420,9 +2350,9 @@
       "label": "Micmac"
     },
     {
-      "value": "lang:sem",
+      "value": "lang:yao",
       "count": 11,
-      "label": "Semitic (Other)"
+      "label": "Yao (Africa)"
     },
     {
       "value": "lang:bat",
@@ -2430,19 +2360,14 @@
       "label": "Baltic (Other)"
     },
     {
-      "value": "lang:car",
+      "value": "lang:din",
       "count": 10,
-      "label": "Carib"
+      "label": "Dinka"
     },
     {
-      "value": "lang:chn",
+      "value": "lang:lua",
       "count": 10,
-      "label": "Chinook jargon"
-    },
-    {
-      "value": "lang:chy",
-      "count": 10,
-      "label": "Cheyenne"
+      "label": "Luba-Lulua"
     },
     {
       "value": "lang:mas",
@@ -2450,19 +2375,19 @@
       "label": "Maasai"
     },
     {
+      "value": "lang:sem",
+      "count": 10,
+      "label": "Semitic (Other)"
+    },
+    {
       "value": "lang:sio",
       "count": 10,
       "label": "Siouan (Other)"
     },
     {
-      "value": "lang:tag",
-      "count": 10,
-      "label": ""
-    },
-    {
-      "value": "lang:vol",
-      "count": 10,
-      "label": "Volapük"
+      "value": "lang:aus",
+      "count": 9,
+      "label": "Australian languages"
     },
     {
       "value": "lang:bla",
@@ -2470,29 +2395,24 @@
       "label": "Siksika"
     },
     {
-      "value": "lang:engita",
+      "value": "lang:car",
       "count": 9,
-      "label": ""
+      "label": "Carib"
     },
     {
-      "value": "lang:engspa",
+      "value": "lang:chy",
       "count": 9,
-      "label": ""
+      "label": "Cheyenne"
     },
     {
-      "value": "lang:ile",
+      "value": "lang:kmb",
       "count": 9,
-      "label": "Interlingue"
+      "label": "Kimbundu"
     },
     {
       "value": "lang:kos",
       "count": 9,
       "label": "Kosraean"
-    },
-    {
-      "value": "lang:lua",
-      "count": 9,
-      "label": "Luba-Lulua"
     },
     {
       "value": "lang:sad",
@@ -2520,12 +2440,12 @@
       "label": "Bugis"
     },
     {
-      "value": "lang:chk",
+      "value": "lang:chn",
       "count": 8,
-      "label": "Chuukese"
+      "label": "Chinook jargon"
     },
     {
-      "value": "lang:far",
+      "value": "lang:eth",
       "count": 8,
       "label": ""
     },
@@ -2535,24 +2455,14 @@
       "label": "Filipino"
     },
     {
-      "value": "lang:frr",
+      "value": "lang:hmn",
       "count": 8,
-      "label": "North Frisian"
+      "label": "Hmong"
     },
     {
-      "value": "lang:gal",
+      "value": "lang:ile",
       "count": 8,
-      "label": ""
-    },
-    {
-      "value": "lang:itaeng",
-      "count": 8,
-      "label": ""
-    },
-    {
-      "value": "lang:kmb",
-      "count": 8,
-      "label": "Kimbundu"
+      "label": "Interlingue"
     },
     {
       "value": "lang:kpe",
@@ -2595,12 +2505,27 @@
       "label": "Zuni"
     },
     {
+      "value": "lang:cha",
+      "count": 7,
+      "label": "Chamorro"
+    },
+    {
       "value": "lang:day",
       "count": 7,
       "label": "Dayak"
     },
     {
-      "value": "lang:fra",
+      "value": "lang:elx",
+      "count": 7,
+      "label": "Elamite"
+    },
+    {
+      "value": "lang:frr",
+      "count": 7,
+      "label": "North Frisian"
+    },
+    {
+      "value": "lang:gal",
       "count": 7,
       "label": ""
     },
@@ -2610,24 +2535,19 @@
       "label": "Gondi"
     },
     {
-      "value": "lang:gua",
-      "count": 7,
-      "label": ""
-    },
-    {
-      "value": "lang:kac",
-      "count": 7,
-      "label": "Kachin"
-    },
-    {
       "value": "lang:kau",
       "count": 7,
       "label": "Kanuri"
     },
     {
-      "value": "lang:rup",
+      "value": "lang:tag",
       "count": 7,
-      "label": "Aromanian"
+      "label": ""
+    },
+    {
+      "value": "lang:a d",
+      "count": 6,
+      "label": ""
     },
     {
       "value": "lang:ale",
@@ -2640,14 +2560,9 @@
       "label": "Bislama"
     },
     {
-      "value": "lang:cha",
+      "value": "lang:chk",
       "count": 6,
-      "label": "Chamorro"
-    },
-    {
-      "value": "lang:elx",
-      "count": 6,
-      "label": "Elamite"
+      "label": "Chuukese"
     },
     {
       "value": "lang:gay",
@@ -2655,9 +2570,9 @@
       "label": "Gayo"
     },
     {
-      "value": "lang:jpnchi",
+      "value": "lang:kac",
       "count": 6,
-      "label": ""
+      "label": "Kachin"
     },
     {
       "value": "lang:lun",
@@ -2685,17 +2600,7 @@
       "label": "Edo"
     },
     {
-      "value": "lang:freengger",
-      "count": 5,
-      "label": ""
-    },
-    {
-      "value": "lang:gerengfre",
-      "count": 5,
-      "label": ""
-    },
-    {
-      "value": "lang:gerlat",
+      "value": "lang:far",
       "count": 5,
       "label": ""
     },
@@ -2725,9 +2630,14 @@
       "label": "Mirandese"
     },
     {
-      "value": "lang:sga",
+      "value": "lang:rup",
       "count": 5,
-      "label": "Irish, Old (to 1100)"
+      "label": "Aromanian"
+    },
+    {
+      "value": "lang:sho",
+      "count": 5,
+      "label": ""
     },
     {
       "value": "lang:sus",
@@ -2740,31 +2650,6 @@
       "label": "Tsimshian"
     },
     {
-      "value": "lang:tsw",
-      "count": 5,
-      "label": ""
-    },
-    {
-      "value": "lang:wak",
-      "count": 5,
-      "label": "Wakashan languages"
-    },
-    {
-      "value": "lang:war",
-      "count": 5,
-      "label": "Waray"
-    },
-    {
-      "value": "lang:0 s",
-      "count": 4,
-      "label": ""
-    },
-    {
-      "value": "lang:]]]",
-      "count": 4,
-      "label": ""
-    },
-    {
       "value": "lang:_ru",
       "count": 4,
       "label": ""
@@ -2775,34 +2660,14 @@
       "label": "Angika"
     },
     {
-      "value": "lang:bru",
+      "value": "lang:cmc",
+      "count": 4,
+      "label": "Chamic languages"
+    },
+    {
+      "value": "lang:fra",
       "count": 4,
       "label": ""
-    },
-    {
-      "value": "lang:byn",
-      "count": 4,
-      "label": "Bilin"
-    },
-    {
-      "value": "lang:enk",
-      "count": 4,
-      "label": ""
-    },
-    {
-      "value": "lang:freger",
-      "count": 4,
-      "label": ""
-    },
-    {
-      "value": "lang:gerfre",
-      "count": 4,
-      "label": ""
-    },
-    {
-      "value": "lang:hmn",
-      "count": 4,
-      "label": "Hmong"
     },
     {
       "value": "lang:ipk",
@@ -2815,19 +2680,9 @@
       "label": "Rarotongan"
     },
     {
-      "value": "lang:rur",
+      "value": "lang:sga",
       "count": 4,
-      "label": ""
-    },
-    {
-      "value": "lang:ruseng",
-      "count": 4,
-      "label": ""
-    },
-    {
-      "value": "lang:sao",
-      "count": 4,
-      "label": ""
+      "label": "Irish, Old (to 1100)"
     },
     {
       "value": "lang:sid",
@@ -2850,11 +2705,6 @@
       "label": "Sogdian"
     },
     {
-      "value": "lang:srn",
-      "count": 4,
-      "label": "Sranan"
-    },
-    {
       "value": "lang:ter",
       "count": 4,
       "label": "Terena"
@@ -2865,29 +2715,29 @@
       "label": "Tupi languages"
     },
     {
-      "value": "lang:unr",
-      "count": 4,
-      "label": ""
-    },
-    {
       "value": "lang:vot",
       "count": 4,
       "label": "Votic"
     },
     {
-      "value": "lang:|sp",
+      "value": "lang:wak",
       "count": 4,
-      "label": ""
+      "label": "Wakashan languages"
     },
     {
-      "value": "lang:cam",
-      "count": 3,
-      "label": ""
+      "value": "lang:war",
+      "count": 4,
+      "label": "Waray"
     },
     {
-      "value": "lang:cmc",
+      "value": "lang:ain",
       "count": 3,
-      "label": "Chamic languages"
+      "label": "Ainu"
+    },
+    {
+      "value": "lang:byn",
+      "count": 3,
+      "label": "Bilin"
     },
     {
       "value": "lang:dsb",
@@ -2895,27 +2745,17 @@
       "label": "Lower Sorbian"
     },
     {
-      "value": "lang:dutger",
+      "value": "lang:engfreger",
       "count": 3,
       "label": ""
     },
     {
-      "value": "lang:engfregerita",
+      "value": "lang:engger",
       "count": 3,
       "label": ""
     },
     {
-      "value": "lang:engiri",
-      "count": 3,
-      "label": ""
-    },
-    {
-      "value": "lang:engjpn",
-      "count": 3,
-      "label": ""
-    },
-    {
-      "value": "lang:engund",
+      "value": "lang:enk",
       "count": 3,
       "label": ""
     },
@@ -2925,38 +2765,201 @@
       "label": "Gbaya"
     },
     {
+      "value": "lang:gua",
+      "count": 3,
+      "label": ""
+    },
+    {
       "value": "lang:hit",
       "count": 3,
       "label": "Hittite"
     },
     {
-      "value": "lang:hsb",
+      "value": "lang:peo",
       "count": 3,
-      "label": "Upper Sorbian"
+      "label": "Old Persian (ca. 600-400 B.C.)"
     },
     {
-      "value": "lang:int",
+      "value": "lang:sao",
       "count": 3,
       "label": ""
     },
     {
-      "value": "lang:jbo",
+      "value": "lang:sma",
       "count": 3,
-      "label": "Lojban (Artificial language)"
+      "label": "Southern Sami"
+    },
+    {
+      "value": "lang:srn",
+      "count": 3,
+      "label": "Sranan"
+    },
+    {
+      "value": "lang:tsw",
+      "count": 3,
+      "label": ""
+    },
+    {
+      "value": "lang:|sp",
+      "count": 3,
+      "label": ""
+    },
+    {
+      "value": "lang:bej",
+      "count": 2,
+      "label": "Beja"
+    },
+    {
+      "value": "lang:bru",
+      "count": 2,
+      "label": ""
+    },
+    {
+      "value": "lang:cad",
+      "count": 2,
+      "label": "Caddo"
+    },
+    {
+      "value": "lang:cam",
+      "count": 2,
+      "label": ""
+    },
+    {
+      "value": "lang:chb",
+      "count": 2,
+      "label": "Chibcha"
+    },
+    {
+      "value": "lang:deu",
+      "count": 2,
+      "label": ""
+    },
+    {
+      "value": "lang:dru",
+      "count": 2,
+      "label": ""
+    },
+    {
+      "value": "lang:engfre",
+      "count": 2,
+      "label": ""
+    },
+    {
+      "value": "lang:frs",
+      "count": 2,
+      "label": "East Frisian"
+    },
+    {
+      "value": "lang:g c",
+      "count": 2,
+      "label": ""
+    },
+    {
+      "value": "lang:gmhger",
+      "count": 2,
+      "label": ""
+    },
+    {
+      "value": "lang:int",
+      "count": 2,
+      "label": ""
+    },
+    {
+      "value": "lang:max",
+      "count": 2,
+      "label": ""
+    },
+    {
+      "value": "lang:nau",
+      "count": 2,
+      "label": "Nauru"
+    },
+    {
+      "value": "lang:nqo",
+      "count": 2,
+      "label": "N'Ko"
+    },
+    {
+      "value": "lang:osa",
+      "count": 2,
+      "label": "Osage"
+    },
+    {
+      "value": "lang:pa",
+      "count": 2,
+      "label": "|"
+    },
+    {
+      "value": "lang:rap",
+      "count": 2,
+      "label": "Rapanui"
+    },
+    {
+      "value": "lang:sas",
+      "count": 2,
+      "label": "Sasak"
+    },
+    {
+      "value": "lang:sms",
+      "count": 2,
+      "label": "Skolt Sami"
+    },
+    {
+      "value": "lang:suk",
+      "count": 2,
+      "label": "Sukuma"
+    },
+    {
+      "value": "lang:zha",
+      "count": 2,
+      "label": "Zhuang"
+    },
+    {
+      "value": "lang:znd",
+      "count": 2,
+      "label": "Zande languages"
+    },
+    {
+      "value": "lang:0 f",
+      "count": 1,
+      "label": ""
+    },
+    {
+      "value": "lang:0a0",
+      "count": 1,
+      "label": ""
+    },
+    {
+      "value": "lang:0re",
+      "count": 1,
+      "label": ""
+    },
+    {
+      "value": "lang:0tu",
+      "count": 1,
+      "label": ""
+    },
+    {
+      "value": "lang:???",
+      "count": 1,
+      "label": ""
     }
   ],
   "buildingLocations": [
     {
       "value": "ma",
-      "label": "Stephen A. Schwarzman Building (SASB)"
+      "label": "Stephen A. Schwarzman Building (SASB)",
+      "nickname": "SASB"
     },
     {
       "value": "pa",
-      "label": "The New York Public Library for the Performing Arts (LPA)"
+      "label": "The New York Public Library for the Performing Arts (LPA)",
+      "nickname": "LPA"
     },
     {
       "value": "sc",
-      "label": "Schomburg Center for Research in Black Culture"
+      "label": "Schomburg Center for Research in Black Culture",
+      "nickname": "Schomburg"
     },
     {
       "value": "rc",
@@ -2964,15 +2967,9 @@
     },
     {
       "value": "bu",
-      "label": "Stavros Niarchos Foundation Library (SNFL)"
+      "label": "Stavros Niarchos Foundation Library (SNFL)",
+      "nickname": "SNFL"
     }
-  ],
-  buildingNicknames: [
-    { value: "ma", label: "SASB" },
-    { value: "pa", label: "LPA" },
-    { value: "sc", label: "Schomburg" },
-    { value: "bu", label: "SNFL" },
   ]
-
 };
     
