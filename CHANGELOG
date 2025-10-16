@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+## Added
+
+- Added redirect from `research/collections/shared-collection-catalog` [SCC-4974](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4974)
+
+## [1.5.7] 2025-10-14
+
+## Added
+
+- Added Playwright test for subject search. [SCC-4857](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4857)
+- Added Playwright test for unique number search. [SCC-4856](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4856)
+- Added Playwright test for call number search. [SCC-4855](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4855)
+- Added `load-search-vocab` script and `vocabularies` endpoint to get advanced search vocabularies from Discovery API [SCC-4882](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4882)
+- Added custom `GroupedMultiselect` for advanced search [SCC-4881](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4881)
+- Added collection filter to search filters [SCC-4883](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4883)
+
 ### Updated
 
 - Updated variant preferred term links to index pages [SCC-4947](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4947)
@@ -31,6 +46,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Removed
 
 - Removed reverse proxy environment variable and documentation [SCC-4874](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4886)
+
+### Removed
+
+- Removed `dateEndYear` from display on search result [SCC-4836](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4936)
 
 ## [1.5.6] 2025-09-23
 

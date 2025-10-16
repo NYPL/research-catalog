@@ -9,8 +9,8 @@ const ActiveFilters = ({ filterName, onClick, tagSetData }) => {
       mt="xxs"
     >
       <Text
-        display="block"
         as="h3"
+        display="block"
         id="active-filters-heading"
         // @ts-expect-error
         tabIndex="-1"
@@ -18,6 +18,7 @@ const ActiveFilters = ({ filterName, onClick, tagSetData }) => {
         fontWeight="bold"
         mr={{ base: "0", md: "s" }}
         mb={{ base: "xs", md: "0" }}
+        pt="xxs"
         lineHeight="--nypl-lineHeights-taller"
       >
         Active filters

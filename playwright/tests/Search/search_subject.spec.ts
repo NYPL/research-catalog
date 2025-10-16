@@ -2,18 +2,18 @@ import { test, expect } from "@playwright/test"
 import { SearchPage } from "../../pages/search_page"
 
 let searchPage: SearchPage
-const searchterm = "Dryden, John"
+const searchterm = "Ornithology"
 
 test.beforeEach(async ({ page }) => {
-  searchPage = new SearchPage(page, searchterm, "author/contributor")
+  searchPage = new SearchPage(page, searchterm, "subject")
   await page.goto("")
 })
 
-test.describe("Author Search", () => {
-  test("Do an author search and assert that at least 5 returned titles contain the supplied author name", async ({
+test.describe("Subject Search", () => {
+  test("Do a subject search and assert that the first 5 returned titles contain the supplied subject", async ({
     page,
   }) => {
-    await searchPage.searchFor(searchterm, "Author/contributor")
+    await searchPage.searchFor(searchterm, "Subject")
     await expect(searchPage.searchResultsHeading).toBeVisible()
 
     // Collect all title link URLs (limit to 5)
@@ -25,11 +25,11 @@ test.describe("Author Search", () => {
 
     expect(urls.length).toBe(5)
 
-    // Visit each URL and assert searchterm (in this case, author) appears on the page as a link
+    // Visit each URL and assert searchterm (in this case, subject) appears on the page as a link
     for (const url of urls) {
       await page.goto(url)
       await expect(
-        page.getByRole("link", { name: new RegExp(searchterm) })
+        page.getByRole("link", { name: new RegExp(`^${searchterm}$`) }).first()
       ).toBeVisible()
     }
   })
