@@ -3,7 +3,7 @@ import SubjectHeadingResults, {
 } from "../../../../pages/browse/subjects/[slug]"
 import { fireEvent, render, screen } from "../../../../src/utils/testUtils"
 import mockRouter from "next-router-mock"
-import { fetchResults } from "../../../../src/server/api/search"
+import { fetchSearchResults } from "../../../../src/server/api/search"
 import { results } from "../../../fixtures/searchResultsManyBibs"
 import userEvent from "@testing-library/user-event"
 import initializePatronTokenAuth from "../../../../src/server/auth"
@@ -82,8 +82,8 @@ describe("getServerSideProps", () => {
     })
   })
 
-  it("returns errorStatus if fetchResults fails", async () => {
-    ;(fetchResults as jest.Mock).mockResolvedValue({ status: 500 })
+  it("returns errorStatus if fetchSearchResults fails", async () => {
+    ;(fetchSearchResults as jest.Mock).mockResolvedValue({ status: 500 })
 
     const args = {
       req: { cookies: {} },
@@ -96,7 +96,10 @@ describe("getServerSideProps", () => {
   })
 
   it("builds the expected request", async () => {
-    ;(fetchResults as jest.Mock).mockResolvedValue({ status: 200, results: [] })
+    ;(fetchSearchResults as jest.Mock).mockResolvedValue({
+      status: 200,
+      results: [],
+    })
 
     const params = { slug: "test" }
     const query = { page: "2" }
@@ -104,7 +107,7 @@ describe("getServerSideProps", () => {
 
     await getServerSideProps({ req, query, params })
 
-    expect(fetchResults).toHaveBeenNthCalledWith(
+    expect(fetchSearchResults).toHaveBeenNthCalledWith(
       2,
       expect.objectContaining({
         filters: { subjectLiteral: ["test"] },

@@ -17,14 +17,15 @@ type ResultsErrorProps = {
 }
 
 export default function ResultsError({ errorStatus, page }: ResultsErrorProps) {
-  const metadataTitle = `${errorStatus} | ${SITE_NAME}`
   const { openFeedbackFormWithError } = useContext(FeedbackContext)
-
+  let metadataTitle = "Error"
   let errorContent
   const headingID = `${page}-results-heading`
+  console.log("in results error", errorStatus)
 
   switch (errorStatus) {
     case 404:
+      metadataTitle = "Results not found"
       errorContent = (
         <>
           <Heading level="h3" tabIndex={-1} id={headingID} mb="s">
@@ -73,6 +74,7 @@ export default function ResultsError({ errorStatus, page }: ResultsErrorProps) {
       )
       break
 
+    // 4xx
     default:
       errorContent = (
         <>
@@ -96,7 +98,7 @@ export default function ResultsError({ errorStatus, page }: ResultsErrorProps) {
 
   return (
     <>
-      <RCHead metadataTitle={metadataTitle} />
+      <RCHead metadataTitle={`${metadataTitle} | ${SITE_NAME}`} />
       <Layout activePage={page}>
         <Flex
           flexDir="column"

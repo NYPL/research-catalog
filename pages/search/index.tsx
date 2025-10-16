@@ -1,5 +1,5 @@
 import { useRouter } from "next/router"
-import { fetchResults } from "../../src/server/api/search"
+import { fetchSearchResults } from "../../src/server/api/search"
 import {
   mapQueryToSearchParams,
   getSearchQuery,
@@ -82,9 +82,9 @@ export async function getServerSideProps({ req, query }) {
   const bannerNotification = process.env.SEARCH_RESULTS_NOTIFICATION || ""
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
 
-  const results = await fetchResults(mapQueryToSearchParams(query))
+  const results = await fetchSearchResults(mapQueryToSearchParams(query))
 
-  // // Handle API errors
+  // Direct to error display according to status
   if (results.status !== 200) {
     return { props: { errorStatus: results.status } }
   }

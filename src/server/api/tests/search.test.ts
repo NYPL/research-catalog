@@ -1,4 +1,4 @@
-import { fetchResults } from "../search"
+import { fetchSearchResults } from "../search"
 import type { SearchResultsResponse } from "../../../types/searchTypes"
 
 jest.mock("../../nyplApiClient")
@@ -13,7 +13,7 @@ beforeEach(() => {
   ;(nyplApiClient as jest.Mock).mockResolvedValue(mockClient)
 })
 
-describe("fetchResults", () => {
+describe("fetchSearchResults", () => {
   it("fetches valid search and aggregation results", async () => {
     mockClient.get
       .mockResolvedValueOnce({
@@ -25,7 +25,9 @@ describe("fetchResults", () => {
         totalResults: 4,
       })
 
-    const response = (await fetchResults({ q: "cat" })) as SearchResultsResponse
+    const response = (await fetchSearchResults({
+      q: "cat",
+    })) as SearchResultsResponse
 
     expect(response.results.totalResults).toBe(4)
     expect(response.results.itemListElement.length).toBe(4)
@@ -37,7 +39,7 @@ describe("fetchResults", () => {
       throw new Error("Bad API URL")
     })
 
-    const response = await fetchResults({ q: "cat" })
+    const response = await fetchSearchResults({ q: "cat" })
     expect(response).toEqual({ status: 500, message: "Bad API URL" })
   })
 
@@ -49,7 +51,7 @@ describe("fetchResults", () => {
         totalResults: 0,
       })
 
-    const response = await fetchResults({ q: "cat" })
+    const response = await fetchSearchResults({ q: "cat" })
     expect(response).toEqual({
       status: 500,
       message: expect.stringContaining("Results error"),
@@ -64,7 +66,7 @@ describe("fetchResults", () => {
       })
       .mockRejectedValueOnce(new Error("Aggregations error"))
 
-    const response = await fetchResults({ q: "cat" })
+    const response = await fetchSearchResults({ q: "cat" })
     expect(response).toEqual({
       status: 500,
       message: expect.stringContaining("Aggregations error"),
@@ -82,7 +84,7 @@ describe("fetchResults", () => {
         totalResults: 0,
       })
 
-    const response = await fetchResults({ q: "!!!" })
+    const response = await fetchSearchResults({ q: "!!!" })
     expect(response).toEqual({ status: 422, message: "Invalid query" })
   })
 
@@ -97,7 +99,7 @@ describe("fetchResults", () => {
         totalResults: 0,
       })
 
-    const response = await fetchResults({ q: "unknown" })
+    const response = await fetchSearchResults({ q: "unknown" })
     expect(response).toEqual({ status: 404, message: "Not found" })
   })
 
@@ -112,7 +114,7 @@ describe("fetchResults", () => {
         itemListElement: [],
       })
 
-    const response = await fetchResults({ q: "empty" })
+    const response = await fetchSearchResults({ q: "empty" })
     expect(response).toEqual({ status: 404, message: "No results found" })
   })
 })

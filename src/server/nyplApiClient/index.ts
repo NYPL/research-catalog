@@ -48,6 +48,7 @@ const nyplApiClient = async ({
       CACHE.id = decryptedId
       CACHE.secret = decryptedSecret
     } catch (exception) {
+      logger.info("Error decrypting creds")
       throw new NyplApiClientError("Error decrypting creds")
     }
   }
@@ -78,6 +79,7 @@ const nyplApiClient = async ({
     }
     return nyplApiClient
   } catch (error) {
+    logger.info(error.message)
     throw new NyplApiClientError(error.message)
   }
 }

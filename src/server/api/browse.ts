@@ -21,6 +21,7 @@ export async function fetchSubjects(
     const res = await client.get(
       `${DISCOVERY_API_BROWSE_ROUTE}${browseQuery}&per_page=${SUBJECTS_PER_PAGE.toString()}`
     )
+
     // Handle empty results (404)
     if (res.status === 404 || res.subjects.length === 0) {
       logServerError(
