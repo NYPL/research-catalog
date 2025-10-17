@@ -14,7 +14,7 @@ type ErrorPageProps = {
 }
 
 export default function Custom404({ activePage }: ErrorPageProps) {
-  const metadataTitle = `404 | ${SITE_NAME}`
+  const metadataTitle = `Page not found | ${SITE_NAME}`
   const { openFeedbackFormWithError } = useContext(FeedbackContext)
   return (
     <>

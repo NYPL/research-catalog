@@ -13,7 +13,7 @@ type ErrorPageProps = {
 }
 
 function Error({ activePage }: ErrorPageProps) {
-  const metadataTitle = `500 | ${SITE_NAME}`
+  const metadataTitle = `Error | ${SITE_NAME}`
   const { openFeedbackFormWithError } = useContext(FeedbackContext)
   return (
     <>

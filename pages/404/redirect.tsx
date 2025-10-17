@@ -10,7 +10,7 @@ import { appConfig } from "../../src/config/config"
 import Link from "../../src/components/Link/Link"
 
 export default function Redirect404() {
-  const metadataTitle = `404 Redirect | ${SITE_NAME}`
+  const metadataTitle = `Page not found | ${SITE_NAME}`
   const { openFeedbackFormWithError } = useContext(FeedbackContext)
   return (
     <>
