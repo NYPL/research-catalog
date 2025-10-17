@@ -15,20 +15,13 @@ import { logServerError } from "../../utils/appUtils"
 import type { DiscoveryItemResult } from "../../types/itemTypes"
 import logger from "../../../logger"
 import type { HTTPStatusCode } from "../../types/appTypes"
+import type { APIError } from "../../types/appTypes"
 
 export async function fetchBib(
   id: string,
   bibQuery?: BibQueryParams,
   itemId?: string
-): Promise<
-  | BibResponse
-  | {
-      status: HTTPStatusCode
-      name?: string
-      error?: string
-      redirectUrl?: string
-    }
-> {
+): Promise<BibResponse | APIError> {
   const standardizedId = standardizeBibId(id)
   // Redirect to bib page with standardized version of the bib ID
   if (id !== standardizedId) {

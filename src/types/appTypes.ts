@@ -30,3 +30,10 @@ export type HTTPResponse = {
   message: string
   body?: any
 }
+
+export type APIError = {
+  status: HTTPStatusCode
+  name?: string // Discovery API convention: IndexSearchError, etc.
+  error?: string // Error message
+  redirectUrl?: string
+}

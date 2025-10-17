@@ -10,12 +10,11 @@ import {
 } from "../../config/constants"
 import { logServerError } from "../../utils/appUtils"
 import nyplApiClient from "../nyplApiClient"
+import type { APIError } from "../../types/appTypes"
 
 export async function fetchSearchResults(
   searchParams: SearchParams
-): Promise<
-  SearchResultsResponse | { status: number; name?: string; error?: string }
-> {
+): Promise<SearchResultsResponse | APIError> {
   const { q, field, filters } = searchParams
 
   // If user is making a search for bib number (i.e. field set to "standard_number"),

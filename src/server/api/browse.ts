@@ -9,12 +9,11 @@ import type {
   DiscoverySubjectsResponse,
 } from "../../types/browseTypes"
 import { getBrowseQuery } from "../../utils/browseUtils"
+import type { APIError } from "../../types/appTypes"
 
 export async function fetchSubjects(
   browseParams?: BrowseParams
-): Promise<
-  DiscoverySubjectsResponse | { status: number; name?: string; error?: string }
-> {
+): Promise<DiscoverySubjectsResponse | APIError> {
   const browseQuery = getBrowseQuery(browseParams)
 
   try {
