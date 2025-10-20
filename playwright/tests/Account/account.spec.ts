@@ -54,5 +54,13 @@ test.describe("My Account Login", () => {
     ).toBeVisible()
     await expect(accountPage.account_items_table_header_due_date).toBeVisible()
     await expect(accountPage.account_items_table_header_manage).toBeVisible()
+
+    // assert at least one title is listed in checkouts
+    const checkoutsTable = page.locator("table", {
+      has: page.getByRole("columnheader", { name: "Title" }),
+    })
+    const titleLinks = checkoutsTable.getByRole("link")
+    const count = await titleLinks.count()
+    expect(count).toBeGreaterThan(0)
   })
 })
