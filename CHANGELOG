@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added redirect from `research/collections/shared-collection-catalog` [SCC-4974](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4974)
 
+### Removed
+
+- Removed subject heading links that come from annotated MARC rather than bib, just display as plain text [SCC-4984](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4984)
+
 ## [1.5.7] 2025-10-14
 
 ## Added
