@@ -227,6 +227,7 @@ export default class BibDetails {
       if (labelsSet.has(detail.label)) return
       const detailValues = normalizeValues(detail.value)
       const detailMarcTags = detail.marcTags
+      // include subjects, which will be displayed but not linked
       const overlap = detailValues.some((v) => resourceValuesSet.has(v))
       if (!overlap) {
         filteredMarc.push(detail)
