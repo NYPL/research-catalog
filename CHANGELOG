@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
-- Removed subject headings that come from annotated MARC rather than bib [SCC-4984](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4984)
+- Removed subject heading links that come from annotated MARC rather than bib, just display as plain text [SCC-4984](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4984)
 
 ## [1.5.7] 2025-10-14
 

@@ -81,17 +81,31 @@ export const PlainTextElement = (field: BibDetail) => {
 }
 
 const CompoundSubjectHeadingElement = (field: SubjectHeadingDetail) => {
+  if (!field?.value?.length) return null
+
+  const isLinkedData = (
+    val: SubjectHeadingDetail["value"]
+  ): val is BibDetailURL[][] =>
+    Array.isArray(val[0]) && !!(val[0] as BibDetailURL[])[0]?.urlLabel
+
+  if (!isLinkedData(field.value)) {
+    const values = (field.value as string[]).map((val, i) => (
+      <li dir={rtlOrLtr(val)} key={`${kebabCase(field.label)}-${i}`}>
+        {val}
+      </li>
+    ))
+    return DetailElement(field.label, values)
+  }
+
   const subjectHeadingLinksPerSubject = field.value.map(
-    (subjectHeadingUrls: BibDetailURL[]) => {
-      return SingleSubjectHeadingElement(subjectHeadingUrls)
-    }
+    (subjectHeadingUrls, i) => (
+      <li key={`subject-heading-${i}`} data-testid="subject-links-per">
+        {SingleSubjectHeadingElement(subjectHeadingUrls)}
+      </li>
+    )
   )
-  const values = subjectHeadingLinksPerSubject.map((subject, i) => (
-    <li key={`subject-heading-${i}`} data-testid="subject-links-per">
-      {subject}
-    </li>
-  ))
-  return DetailElement(field.label, values)
+
+  return DetailElement(field.label, subjectHeadingLinksPerSubject)
 }
 
 const SingleSubjectHeadingElement = (subjectHeadingUrls: BibDetailURL[]) => {
