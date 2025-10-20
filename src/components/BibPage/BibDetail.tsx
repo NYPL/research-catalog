@@ -83,6 +83,8 @@ export const PlainTextElement = (field: BibDetail) => {
 const CompoundSubjectHeadingElement = (field: SubjectHeadingDetail) => {
   if (!field?.value?.length) return null
 
+  // If subjects came from the annotated MARC, they won't and
+  // shouldn't have associated search filter URLs
   const isLinkedData = (
     val: SubjectHeadingDetail["value"]
   ): val is BibDetailURL[][] =>
