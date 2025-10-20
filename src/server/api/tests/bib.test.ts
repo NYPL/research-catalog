@@ -216,6 +216,7 @@ describe("fetchBib", () => {
   it("should respond with a 404 status when uri is not present and sierra call responds with a non-200 status", async () => {
     const bibResponse = (await fetchBib("b17418167")) as BibResponse
 
+    console.log(bibResponse)
     expect(bibResponse.status).toEqual(404)
   })
 

@@ -72,6 +72,7 @@ export async function fetchBib(
   const discoveryBibResult = bibResponse.value
   const annotatedMarc = annotatedMarcResponse.value
 
+  console.log("in fetcher", discoveryBibResult, annotatedMarc)
   // Handle bib error
   try {
     // First try to fetch from the Sierra API and redirect to circulating catalog
