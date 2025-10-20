@@ -39,7 +39,7 @@ export default class BibDetails {
     this.groupedNotes = this.buildGroupedNotes()
     this.extent = this.buildExtent()
     this.owner = this.buildOwner()
-    this.subjectLiteral = this.buildSubjectLiterals(annotatedMarc?.fields)
+    this.subjectLiteral = this.buildSubjectLiterals()
     // these are the actual arrays of details that will be displayed
     this.annotatedMarcDetails = this.buildAnnotatedMarcDetails(
       annotatedMarc?.fields
@@ -225,6 +225,12 @@ export default class BibDetails {
 
     annotatedMarcDetails.forEach((detail) => {
       if (labelsSet.has(detail.label)) return
+      if (
+        detail.label === "Subject" &&
+        (!this.bib.subjectLiteral || !this.bib.subjectLiteral.length)
+      ) {
+        return
+      }
       const detailValues = normalizeValues(detail.value)
       const detailMarcTags = detail.marcTags
       const overlap = detailValues.some((v) => resourceValuesSet.has(v))
@@ -451,35 +457,27 @@ export default class BibDetails {
     return getFindingAidFromSupplementaryContent(this.bib.supplementaryContent)
   }
 
-  buildSubjectLiterals(annotatedMarc?: AnnotatedMarcField[]): BibDetailURL[][] {
-    const fromBib = this.bib.subjectLiteral
-    const fromMarc = annotatedMarc
-      ?.filter((f) => f.label && f.label.toLowerCase().includes("subject"))
-      ?.flatMap((f) => f.values?.map((v) => v.content))
-      ?.filter(Boolean)
-
-    const subjects = fromBib?.length
-      ? fromBib
-      : fromMarc?.length
-      ? fromMarc
-      : null
-    if (!subjects) return
-
-    const filterQueryForSubjectHeading = "/search?filters[subjectLiteral]="
-
-    const subjectLiteralUrls = subjects.map((subject) => {
-      // stackedSubjectHeadings: ["a", "a -- b", "a -- b -- c"]
-      const stackedSubjectHeadings = this.constructSubjectLiteralsArray(subject)
-      // splitSubjectHeadings: ["a", "b", "c"]
-      const splitSubjectHeadings = subject.split(" -- ")
-      return splitSubjectHeadings.map((heading, index) => ({
-        url: `${filterQueryForSubjectHeading}${encodeURI(
-          stackedSubjectHeadings[index]
-        )}`,
-        urlLabel: heading,
-      }))
-    })
-
+  buildSubjectLiterals(): BibDetailURL[][] {
+    if (!this.bib.subjectLiteral) return
+    const subjectLiteralUrls = this.bib.subjectLiteral.map(
+      (subject: string) => {
+        // stackedSubjectHeadings: ["a", "a -- b", "a -- b -- c"]
+        const stackedSubjectHeadings =
+          this.constructSubjectLiteralsArray(subject)
+        const filterQueryForSubjectHeading = "/search?filters[subjectLiteral]="
+        // splitSubjectHeadings: ["a", "b", "c"]
+        const splitSubjectHeadings = subject.split(" -- ")
+        return splitSubjectHeadings.map((heading, index) => {
+          const urlWithFilterQuery = `${filterQueryForSubjectHeading}${encodeURI(
+            stackedSubjectHeadings[index]
+          )}`
+          return {
+            url: urlWithFilterQuery,
+            urlLabel: heading,
+          }
+        })
+      }
+    )
     return subjectLiteralUrls
   }
 
