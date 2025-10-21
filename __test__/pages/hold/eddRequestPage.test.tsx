@@ -587,7 +587,7 @@ describe("EDD Request page", () => {
         discoveryItemResult={undefined}
         patronId="123"
         isAuthenticated={true}
-        notFound={true}
+        pageError={404}
       />
     )
     expect(screen.getByText("We couldn't find that page")).toBeInTheDocument()

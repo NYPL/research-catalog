@@ -23,10 +23,17 @@ export interface Features {
 
 export type Environment = "development" | "qa" | "production"
 
-export type HTTPStatusCode = 200 | 307 | 400 | 401 | 404 | 500
+export type HTTPStatusCode = 200 | 307 | 400 | 401 | 404 | 422 | 500
 
 export type HTTPResponse = {
   status: HTTPStatusCode
   message: string
   body?: any
+}
+
+export type APIError = {
+  status: HTTPStatusCode
+  name?: string // Discovery API convention: IndexSearchError, etc.
+  error?: string // Error message
+  redirectUrl?: string
 }

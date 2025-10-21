@@ -44,9 +44,10 @@ import {
 } from "../../../src/utils/itemFilterUtils"
 import RCHead from "../../../src/components/Head/RCHead"
 import FindingAid from "../../../src/components/BibPage/FindingAid"
-import Custom404 from "../../404"
 import { tryInstantiate } from "../../../src/utils/appUtils"
 import Link from "../../../src/components/Link/Link"
+import type { HTTPStatusCode } from "../../../src/types/appTypes"
+import PageError from "../../../src/components/Error/PageError"
 
 interface BibPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -54,7 +55,7 @@ interface BibPropsType {
   isAuthenticated?: boolean
   itemPage?: number
   viewAllItems?: boolean
-  notFound?: boolean
+  errorStatus?: HTTPStatusCode | null
 }
 
 /**
@@ -66,14 +67,14 @@ export default function BibPage({
   isAuthenticated,
   itemPage = 1,
   viewAllItems = false,
-  notFound = false,
+  errorStatus = null,
 }: BibPropsType) {
   const { push, query } = useRouter()
   const [bib, setBib] = useState(
     tryInstantiate({
       constructor: Bib,
       args: [discoveryBibResult],
-      ignoreError: notFound,
+      ignoreError: !!errorStatus,
       errorMessage: "Bib undefined",
     })
   )
@@ -92,8 +93,16 @@ export default function BibPage({
   const viewAllLoadingTextRef = useRef<HTMLDivElement & HTMLLabelElement>(null)
   const controllerRef = useRef<AbortController>()
 
-  if (notFound) {
-    return <Custom404 activePage="bib" />
+  if (errorStatus) {
+    return (
+      <PageError
+        page="bib"
+        errorStatus={
+          // 422 = invalid bnum, which we also display as "Not found"
+          errorStatus === 404 || errorStatus === 422 ? 404 : errorStatus
+        }
+      />
+    )
   }
 
   const { topDetails, bottomDetails, holdingsDetails, findingAid } =
@@ -347,33 +356,33 @@ export default function BibPage({
 
 export async function getServerSideProps({ params, query, req }) {
   const { id } = params
-  const { discoveryBibResult, annotatedMarc, status, redirectUrl } =
-    await fetchBib(id, query)
+  const results = await fetchBib(id, query)
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const isAuthenticated = patronTokenResponse.isTokenValid
 
-  switch (status) {
-    case 307:
+  // Direct to error display according to status
+  if (!("discoveryBibResult" in results)) {
+    if (results.status === 307)
       return {
         redirect: {
-          destination: redirectUrl,
+          destination: results.redirectUrl,
           permanent: false,
         },
       }
-    case 404:
+    else
       return {
         props: {
-          notFound: true,
+          errorStatus: results.status,
         },
       }
-    default:
-      return {
-        props: {
-          discoveryBibResult,
-          annotatedMarc,
-          isAuthenticated,
-          itemPage: query.item_page ? parseInt(query.item_page) : 1,
-        },
-      }
+  }
+
+  return {
+    props: {
+      discoveryBibResult: results.discoveryBibResult,
+      annotatedMarc: results.annotatedMarc,
+      isAuthenticated,
+      itemPage: query.item_page ? parseInt(query.item_page) : 1,
+    },
   }
 }

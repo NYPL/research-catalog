@@ -28,7 +28,10 @@ import initializePatronTokenAuth, {
 
 import Bib from "../../../../src/models/Bib"
 import Item from "../../../../src/models/Item"
-import type { DiscoveryBibResult } from "../../../../src/types/bibTypes"
+import type {
+  BibResponse,
+  DiscoveryBibResult,
+} from "../../../../src/types/bibTypes"
 import type { DiscoveryItemResult } from "../../../../src/types/itemTypes"
 import type { DeliveryLocation } from "../../../../src/types/locationTypes"
 import type {
@@ -36,13 +39,14 @@ import type {
   PatronEligibilityStatus,
 } from "../../../../src/types/holdPageTypes"
 import RCHead from "../../../../src/components/Head/RCHead"
-import Custom404 from "../../../404"
 import HoldRequestCompletedBanner from "../../../../src/components/HoldPages/HoldRequestCompletedBanner"
 import {
   idConstants,
   useFocusContext,
 } from "../../../../src/context/FocusContext"
 import { tryInstantiate } from "../../../../src/utils/appUtils"
+import PageError from "../../../../src/components/Error/PageError"
+import type { HTTPStatusCode } from "../../../../src/types/appTypes"
 
 interface HoldRequestPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -50,9 +54,11 @@ interface HoldRequestPropsType {
   deliveryLocations?: DeliveryLocation[]
   patronId: string
   isAuthenticated?: boolean
-  errorStatus?: HoldErrorStatus
   patronEligibilityStatus?: PatronEligibilityStatus
-  notFound?: boolean
+  // Hold request process errors
+  errorStatus?: HoldErrorStatus
+  // Bib/item fetching errors
+  pageError?: HTTPStatusCode | null
 }
 
 /**
@@ -68,7 +74,7 @@ export default function HoldRequestPage({
   isAuthenticated,
   errorStatus: defaultErrorStatus,
   patronEligibilityStatus: defaultEligibilityStatus,
-  notFound = false,
+  pageError = null,
 }: HoldRequestPropsType) {
   const metadataTitle = `Item Request | ${SITE_NAME}`
 
@@ -79,13 +85,13 @@ export default function HoldRequestPage({
   const bib = tryInstantiate({
     constructor: Bib,
     args: [discoveryBibResult],
-    ignoreError: notFound,
+    ignoreError: !!pageError,
     errorMessage: "Bib undefined",
   })
   const item = tryInstantiate({
     constructor: Item,
     args: [discoveryItemResult, bib],
-    ignoreError: notFound,
+    ignoreError: !!pageError,
     errorMessage: "Item undefined",
   })
   const holdId = item ? `${item.bibId}-${item.id}` : ""
@@ -109,8 +115,8 @@ export default function HoldRequestPage({
   const router = useRouter()
   const isLoading = useLoading()
 
-  if (notFound) {
-    return <Custom404 activePage="hold" />
+  if (pageError) {
+    return <PageError page="hold" errorStatus={pageError} />
   }
 
   const handleServerHoldPostError = (errorMessage: string) => {
@@ -270,13 +276,19 @@ export async function getServerSideProps({ params, req, res }) {
     const [bibId, itemId] = id.split("-")
 
     if (!itemId) {
-      throw new Error("No item id in url")
+      throw new Error("Hold request: No item id in url")
     }
-    const { discoveryBibResult } = await fetchBib(bibId, {}, itemId)
+    const discoveryBib = await fetchBib(bibId, {}, itemId)
+    const discoveryBibResult = (discoveryBib as BibResponse).discoveryBibResult
     const discoveryItemResult = discoveryBibResult?.items?.[0]
 
+    if ("status" in discoveryBib && discoveryBib.status !== 200) {
+      return {
+        props: { pageError: discoveryBib.status },
+      }
+    }
     if (!discoveryItemResult) {
-      throw new Error("Hold Page - Item not found")
+      throw new Error("Hold request: Item not found")
     }
 
     const bib = new Bib(discoveryBibResult)
@@ -296,9 +308,7 @@ export async function getServerSideProps({ params, req, res }) {
       await fetchDeliveryLocations(item.barcode, patronId)
 
     if (locationStatus !== 200) {
-      console.error(
-        "HoldRequest Page - Error fetching deliveryLocations in getServerSideProps"
-      )
+      console.error("Hold request: error fetching deliveryLocations")
     }
 
     const patronEligibilityStatus = await fetchPatronEligibility(patronId)
@@ -325,7 +335,7 @@ export async function getServerSideProps({ params, req, res }) {
   } catch (error) {
     console.log(error)
     return {
-      props: { notFound: true },
+      props: { errorStatus: 500 },
     }
   }
 }

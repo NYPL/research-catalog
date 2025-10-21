@@ -7,13 +7,16 @@ import Image from "next/image"
 import errorImage from "../src/assets/errorImage.png"
 import { useContext } from "react"
 import { FeedbackContext } from "../src/context/FeedbackContext"
+import type { HTTPStatusCode } from "../src/types/appTypes"
 
 type ErrorPageProps = {
   activePage: RCPage
+  statusCode?: HTTPStatusCode | null
 }
 
-function Error({ activePage }: ErrorPageProps) {
-  const metadataTitle = `500 | ${SITE_NAME}`
+// Global catch-all for unhandled errors.
+function Error({ activePage, statusCode }: ErrorPageProps) {
+  const metadataTitle = `Error | ${SITE_NAME}`
   const { openFeedbackFormWithError } = useContext(FeedbackContext)
   return (
     <>
@@ -44,7 +47,10 @@ function Error({ activePage }: ErrorPageProps) {
           </Text>
           <Text marginBottom="0">
             Try refreshing the page or{" "}
-            <Link onClick={openFeedbackFormWithError} id="feedback-link">
+            <Link
+              onClick={() => openFeedbackFormWithError(statusCode)}
+              id="feedback-link"
+            >
               contact us
             </Link>{" "}
             if the error persists.
@@ -53,6 +59,11 @@ function Error({ activePage }: ErrorPageProps) {
       </Layout>
     </>
   )
+}
+
+Error.getInitialProps = ({ res, err }: { res?: any; err?: any }) => {
+  const statusCode = res?.statusCode ?? err?.statusCode ?? 500
+  return { statusCode }
 }
 
 export default Error

@@ -233,7 +233,7 @@ describe("Hold Confirmation page", () => {
       <HoldConfirmationPage
         discoveryBibResult={undefined}
         pickupLocationLabel={undefined}
-        notFound={true}
+        errorStatus={404}
       />
     )
     expect(screen.getByText("We couldn't find that page")).toBeInTheDocument()

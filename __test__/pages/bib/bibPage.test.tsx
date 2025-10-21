@@ -355,10 +355,21 @@ describe("Bib Page Item Table many items", () => {
 describe("Bib not found", () => {
   render(
     <BibPage
-      notFound={true}
+      errorStatus={404}
       discoveryBibResult={undefined}
       annotatedMarc={undefined}
     />
   )
   expect(screen.getByText("We couldn't find that page")).toBeInTheDocument()
+})
+
+describe("Bib error", () => {
+  render(
+    <BibPage
+      errorStatus={400}
+      discoveryBibResult={undefined}
+      annotatedMarc={undefined}
+    />
+  )
+  expect(screen.getByText("There was an unexpected error")).toBeInTheDocument()
 })

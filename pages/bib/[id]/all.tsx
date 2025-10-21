@@ -6,33 +6,31 @@ export default BibPage
 
 export async function getServerSideProps({ params, query, req }) {
   const { id } = params
-  const { discoveryBibResult, annotatedMarc, status, redirectUrl } =
-    await fetchBib(id, { ...query, all_items: true })
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const isAuthenticated = patronTokenResponse.isTokenValid
-
-  switch (status) {
-    case 307:
+  const results = await fetchBib(id, { ...query, all_items: true })
+  if (!("discoveryBibResult" in results)) {
+    if (results.status === 307)
       return {
         redirect: {
-          destination: redirectUrl,
+          destination: results.redirectUrl,
           permanent: false,
         },
       }
-    case 404:
+    else
       return {
         props: {
-          notFound: true,
+          errorStatus: results.status,
         },
       }
-    default:
-      return {
-        props: {
-          discoveryBibResult,
-          annotatedMarc,
-          isAuthenticated,
-          viewAllItems: true,
-        },
-      }
+  }
+
+  return {
+    props: {
+      discoveryBibResult: results.discoveryBibResult,
+      annotatedMarc: results.annotatedMarc,
+      isAuthenticated,
+      viewAllItems: true,
+    },
   }
 }

@@ -31,7 +31,10 @@ import initializePatronTokenAuth, {
 import Bib from "../../../../src/models/Bib"
 import Item from "../../../../src/models/Item"
 
-import type { DiscoveryBibResult } from "../../../../src/types/bibTypes"
+import type {
+  BibResponse,
+  DiscoveryBibResult,
+} from "../../../../src/types/bibTypes"
 import type { DiscoveryItemResult } from "../../../../src/types/itemTypes"
 
 import type {
@@ -40,9 +43,10 @@ import type {
   PatronEligibilityStatus,
 } from "../../../../src/types/holdPageTypes"
 import RCHead from "../../../../src/components/Head/RCHead"
-import Custom404 from "../../../404"
 import { tryInstantiate } from "../../../../src/utils/appUtils"
 import HoldRequestCompletedBanner from "../../../../src/components/HoldPages/HoldRequestCompletedBanner"
+import PageError from "../../../../src/components/Error/PageError"
+import type { HTTPStatusCode } from "../../../../src/types/appTypes"
 
 interface EDDRequestPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -50,9 +54,11 @@ interface EDDRequestPropsType {
   patronId: string
   patronEmail?: string
   isAuthenticated?: boolean
-  errorStatus?: HoldErrorStatus
   patronEligibilityStatus?: PatronEligibilityStatus
-  notFound?: boolean
+  // Hold request process errors
+  errorStatus?: HoldErrorStatus
+  // Bib/item fetching errors
+  pageError?: HTTPStatusCode | null
 }
 
 /**
@@ -66,19 +72,19 @@ export default function EDDRequestPage({
   isAuthenticated,
   errorStatus: defaultErrorStatus,
   patronEligibilityStatus: defaultEligibilityStatus,
-  notFound = false,
+  pageError = null,
 }: EDDRequestPropsType) {
   const metadataTitle = `Electronic Delivery Request | ${SITE_NAME}`
   const bib = tryInstantiate({
     constructor: Bib,
     args: [discoveryBibResult],
-    ignoreError: notFound,
+    ignoreError: !!pageError,
     errorMessage: "Bib undefined",
   })
   const item = tryInstantiate({
     constructor: Item,
     args: [discoveryItemResult, bib],
-    ignoreError: notFound,
+    ignoreError: !!pageError,
     errorMessage: "Item undefined",
   })
   const holdId = item ? `${item.bibId}-${item.id}` : ""
@@ -133,8 +139,8 @@ export default function EDDRequestPage({
     }
   }, [errorStatus, patronEligibilityStatus])
 
-  if (notFound) {
-    return <Custom404 activePage="hold" />
+  if (pageError) {
+    return <PageError page="hold" errorStatus={pageError} />
   }
 
   const handleServerHoldPostError = (errorMessage: string) => {
@@ -274,21 +280,29 @@ export async function getServerSideProps({ params, req, res, query }) {
 
     // fetch bib and item
     const [bibId, itemId] = id.split("-")
-
     if (!itemId) {
-      throw new Error("No item id in url")
+      throw new Error("No item ID in URL")
     }
-    const { discoveryBibResult } = await fetchBib(bibId, {}, itemId)
+    const discoveryBib = await fetchBib(bibId, {}, itemId)
+    const discoveryBibResult = (discoveryBib as BibResponse).discoveryBibResult
     const discoveryItemResult = discoveryBibResult?.items?.[0]
 
+    if ("status" in discoveryBib && discoveryBib.status !== 200) {
+      return {
+        props: { pageError: discoveryBib.status },
+      }
+    }
     if (!discoveryItemResult) {
-      throw new Error("EDD Page - Item not found")
+      console.error("EDD: Item not found")
+      return {
+        props: { pageError: discoveryBib.status },
+      }
     }
 
     const bib = new Bib(discoveryBibResult)
     const item = new Item(discoveryItemResult, bib)
 
-    // Redirect if to aeonUrl if present in the item response
+    // Redirect to aeonUrl if present in the item response
     if (item.aeonUrl) {
       return {
         redirect: {
@@ -302,7 +316,7 @@ export async function getServerSideProps({ params, req, res, query }) {
       await fetchDeliveryLocations(item.barcode, patronId)
 
     if (locationStatus !== 200) {
-      console.error("EDD Page - Error fetching edd in getServerSideProps")
+      console.error("EDD: Error fetching delivery locations")
     }
 
     const isEddAvailable = eddRequestable && item.isEDDRequestable
@@ -339,9 +353,9 @@ export async function getServerSideProps({ params, req, res, query }) {
       },
     }
   } catch (error) {
-    console.log(error)
+    console.error(error)
     return {
-      props: { notFound: true },
+      props: { pageError: 500 },
     }
   }
 }
