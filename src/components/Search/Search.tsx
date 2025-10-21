@@ -24,7 +24,7 @@ import ResultsSort from "../SearchResults/ResultsSort"
 import SearchResult from "../SearchResults/SearchResult"
 import { useRef, useEffect } from "react"
 import type { Aggregation } from "../../types/filterTypes"
-import ResultsError from "../ResultsError/ResultsError"
+import ResultsError from "../Error/ResultsError"
 import useLoading from "../../hooks/useLoading"
 import type { HTTPStatusCode } from "../../types/appTypes"
 import type {

@@ -26,7 +26,7 @@ import {
 import { useRouter } from "next/router"
 import useLoading from "../../src/hooks/useLoading"
 import { useRef, useEffect } from "react"
-import ResultsError from "../../src/components/ResultsError/ResultsError"
+import ResultsError from "../../src/components/Error/ResultsError"
 import { idConstants, useFocusContext } from "../../src/context/FocusContext"
 import type { SortOrder } from "../../src/types/searchTypes"
 import ResultsSort from "../../src/components/SearchResults/ResultsSort"

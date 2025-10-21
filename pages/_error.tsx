@@ -10,9 +10,11 @@ import { FeedbackContext } from "../src/context/FeedbackContext"
 
 type ErrorPageProps = {
   activePage: RCPage
+  statusCode?: number
 }
 
-function Error({ activePage }: ErrorPageProps) {
+// Global catch-all for unhandled errors.
+function Error({ activePage, statusCode }: ErrorPageProps) {
   const metadataTitle = `Error | ${SITE_NAME}`
   const { openFeedbackFormWithError } = useContext(FeedbackContext)
   return (
@@ -53,6 +55,11 @@ function Error({ activePage }: ErrorPageProps) {
       </Layout>
     </>
   )
+}
+
+Error.getInitialProps = ({ res, err }: { res?: any; err?: any }) => {
+  const statusCode = res?.statusCode ?? err?.statusCode ?? 500
+  return { statusCode }
 }
 
 export default Error

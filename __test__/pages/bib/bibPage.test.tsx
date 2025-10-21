@@ -362,3 +362,14 @@ describe("Bib not found", () => {
   )
   expect(screen.getByText("We couldn't find that page")).toBeInTheDocument()
 })
+
+describe("Bib error", () => {
+  render(
+    <BibPage
+      errorStatus={400}
+      discoveryBibResult={undefined}
+      annotatedMarc={undefined}
+    />
+  )
+  expect(screen.getByText("There was an unexpected error")).toBeInTheDocument()
+})

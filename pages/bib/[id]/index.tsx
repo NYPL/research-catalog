@@ -44,10 +44,10 @@ import {
 } from "../../../src/utils/itemFilterUtils"
 import RCHead from "../../../src/components/Head/RCHead"
 import FindingAid from "../../../src/components/BibPage/FindingAid"
-import Custom404 from "../../404"
 import { tryInstantiate } from "../../../src/utils/appUtils"
 import Link from "../../../src/components/Link/Link"
 import type { HTTPStatusCode } from "../../../src/types/appTypes"
+import PageError from "../../../src/components/Error/PageError"
 
 interface BibPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -93,9 +93,16 @@ export default function BibPage({
   const viewAllLoadingTextRef = useRef<HTMLDivElement & HTMLLabelElement>(null)
   const controllerRef = useRef<AbortController>()
 
-  // 422 = invalid bnum, which we also display as "Not found"
-  if (errorStatus === 404 || errorStatus === 422) {
-    return <Custom404 activePage="bib" />
+  if (errorStatus) {
+    return (
+      <PageError
+        page="bib"
+        errorStatus={
+          // 422 = invalid bnum, which we also display as "Not found"
+          errorStatus === 404 || errorStatus === 422 ? 404 : errorStatus
+        }
+      />
+    )
   }
 
   const { topDetails, bottomDetails, holdingsDetails, findingAid } =
