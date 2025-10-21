@@ -44,7 +44,10 @@ export default function ResultsError({ errorStatus, page }: ResultsErrorProps) {
               Legacy Catalog
             </Link>{" "}
             for more materials, or{" "}
-            <Link onClick={openFeedbackFormWithError} id="feedback-link">
+            <Link
+              onClick={() => openFeedbackFormWithError(errorStatus)}
+              id="feedback-link"
+            >
               contact us
             </Link>{" "}
             for assistance.
@@ -64,7 +67,10 @@ export default function ResultsError({ errorStatus, page }: ResultsErrorProps) {
           </Text>
           <Text marginBottom="0">
             Try refreshing the page or{" "}
-            <Link onClick={openFeedbackFormWithError} id="feedback-link">
+            <Link
+              onClick={() => openFeedbackFormWithError(errorStatus)}
+              id="feedback-link"
+            >
               contact us
             </Link>{" "}
             if the error persists.
@@ -85,7 +91,10 @@ export default function ResultsError({ errorStatus, page }: ResultsErrorProps) {
           </Text>
           <Text marginBottom="0">
             Try again later or{" "}
-            <Link onClick={openFeedbackFormWithError} id="feedback-link">
+            <Link
+              onClick={() => openFeedbackFormWithError(errorStatus)}
+              id="feedback-link"
+            >
               contact us
             </Link>{" "}
             if the error persists.

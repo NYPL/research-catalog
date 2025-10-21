@@ -11,11 +11,11 @@ export const FeedbackContext = createContext<FeedbackContextType | null>(null)
 
 export const FeedbackProvider = ({ children, value }) => {
   const [itemMetadata, setItemMetadata] = useState(value?.itemMetadata || null)
-  const [isError, setError] = useState(value?.error || null)
+  const [error, setError] = useState(value?.error || null)
   const { FeedbackBox, isOpen, onOpen, onClose } = useFeedbackBox()
 
   // When user opens feedback box from an error page "contact us" link,
-  // set error flag on feedback box
+  // set error on feedback box
   const openFeedbackFormWithError = (statusCode?: HTTPStatusCode) => {
     setError(statusCode)
     onOpen()
@@ -30,7 +30,7 @@ export const FeedbackProvider = ({ children, value }) => {
         onClose,
         itemMetadata,
         setItemMetadata,
-        isError,
+        error,
         setError,
         openFeedbackFormWithError,
       }}

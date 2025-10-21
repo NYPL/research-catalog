@@ -50,7 +50,10 @@ export default function Redirect404() {
               Legacy Catalog
             </Link>{" "}
             for more materials, or{" "}
-            <Link onClick={openFeedbackFormWithError} id="feedback-link">
+            <Link
+              onClick={() => openFeedbackFormWithError(404)}
+              id="feedback-link"
+            >
               contact us
             </Link>{" "}
             for assistance.

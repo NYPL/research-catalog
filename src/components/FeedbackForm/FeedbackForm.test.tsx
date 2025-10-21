@@ -67,7 +67,7 @@ describe("FeedbackForm props in context", () => {
 
   it("renders notification text for error state", () => {
     render(
-      <FeedbackContext.Provider value={{ ...baseContext, isError: true }}>
+      <FeedbackContext.Provider value={{ ...baseContext, error: 404 }}>
         <FeedbackForm />
       </FeedbackContext.Provider>
     )

@@ -3,6 +3,7 @@ import React, { useContext, useState } from "react"
 import { FeedbackContext } from "../../context/FeedbackContext"
 import type { FeedbackMetadataAndComment } from "../../types/feedbackTypes"
 import { BASE_URL } from "../../config/constants"
+import { stringify } from "querystring"
 
 /**
  * Component that wraps the DS Feedback box. Can be opened by clicking the button rendered
@@ -17,7 +18,7 @@ const FeedbackForm = () => {
     onOpen,
     itemMetadata,
     setItemMetadata,
-    isError,
+    error,
     setError,
     openFeedbackFormWithError,
   } = useContext(FeedbackContext)
@@ -25,7 +26,7 @@ const FeedbackForm = () => {
   const closeAndResetFeedbackData = () => {
     setItemMetadata(null)
 
-    setError(false)
+    setError(null)
     onClose()
     setFeedbackFormScreen("form")
 
@@ -62,7 +63,7 @@ const FeedbackForm = () => {
     }
   }
 
-  const notificationText = isError
+  const notificationText = error
     ? "You are asking for help or information about a page error"
     : itemMetadata?.notificationText
     ? itemMetadata.notificationText
@@ -79,7 +80,10 @@ const FeedbackForm = () => {
       descriptionText="We are here to help!"
       title="Help and Feedback"
       showEmailField
-      hiddenFields={itemMetadata}
+      hiddenFields={{
+        ...itemMetadata,
+        ...(error != null && { error: String(error) }),
+      }}
       notificationText={notificationText}
       view={feedbackFormScreen}
       className="no-print"

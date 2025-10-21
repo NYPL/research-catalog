@@ -7,10 +7,11 @@ import Image from "next/image"
 import errorImage from "../src/assets/errorImage.png"
 import { useContext } from "react"
 import { FeedbackContext } from "../src/context/FeedbackContext"
+import type { HTTPStatusCode } from "../src/types/appTypes"
 
 type ErrorPageProps = {
   activePage: RCPage
-  statusCode?: number
+  statusCode?: HTTPStatusCode | null
 }
 
 // Global catch-all for unhandled errors.
@@ -46,7 +47,10 @@ function Error({ activePage, statusCode }: ErrorPageProps) {
           </Text>
           <Text marginBottom="0">
             Try refreshing the page or{" "}
-            <Link onClick={openFeedbackFormWithError} id="feedback-link">
+            <Link
+              onClick={() => openFeedbackFormWithError(statusCode)}
+              id="feedback-link"
+            >
               contact us
             </Link>{" "}
             if the error persists.

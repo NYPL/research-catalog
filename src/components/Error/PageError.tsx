@@ -35,7 +35,10 @@ export default function PageError({ errorStatus, page }: PageErrorProps) {
           </Text>
           <Text>
             Try a <Link href="/">new search</Link> or{" "}
-            <Link onClick={openFeedbackFormWithError} id="feedback-link">
+            <Link
+              onClick={() => openFeedbackFormWithError(errorStatus)}
+              id="feedback-link"
+            >
               contact us
             </Link>{" "}
             if the error persists.
@@ -55,7 +58,10 @@ export default function PageError({ errorStatus, page }: PageErrorProps) {
           </Text>
           <Text marginBottom="0">
             Try refreshing the page or{" "}
-            <Link onClick={openFeedbackFormWithError} id="feedback-link">
+            <Link
+              onClick={() => openFeedbackFormWithError(errorStatus)}
+              id="feedback-link"
+            >
               contact us
             </Link>{" "}
             if the error persists.
@@ -76,7 +82,10 @@ export default function PageError({ errorStatus, page }: PageErrorProps) {
           </Text>
           <Text marginBottom="0">
             Try again later or{" "}
-            <Link onClick={openFeedbackFormWithError} id="feedback-link">
+            <Link
+              onClick={() => openFeedbackFormWithError(errorStatus)}
+              id="feedback-link"
+            >
               contact us
             </Link>{" "}
             if the error persists.
