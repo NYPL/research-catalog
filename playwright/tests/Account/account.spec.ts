@@ -62,5 +62,46 @@ test.describe("My Account Login", () => {
     const titleLinks = checkoutsTable.getByRole("link")
     const count = await titleLinks.count()
     expect(count).toBeGreaterThan(0)
-  })
-})
+
+    // assert at least one title is listed under requests
+    await accountPage.tab_requests.click()
+    const requestsTable = page.locator("table", {
+      has: page.getByRole("columnheader", { name: "Title" }),
+    })
+    const requestTitleLinks = requestsTable.getByRole("link")
+    const requestCount = await requestTitleLinks.count()
+    expect(requestCount).toBeGreaterThan(0)
+
+    // click on the fees tab
+    await accountPage.tab_fees.click()
+    // assert at least one fee is listed
+    const feesTable = page.locator("table", {
+      has: page.getByRole("columnheader", { name: "Amount" }),
+    })
+    const feeAmounts = feesTable.getByRole("cell", { name: /\$\d+/ })
+    const feeCount = await feeAmounts.count()
+    expect(feeCount).toBeGreaterThan(1)
+
+    // click on the account settings tab
+    await accountPage.tab_account_settings.click()
+    // assert that there are rows for Phone,Email, Home Library, Notification preference, and Pin/password
+    const phoneParagraph = page.locator("p", { hasText: /phone/i })
+    await expect(phoneParagraph).toBeVisible()
+
+    const emailParagraph = page.locator("p", { hasText: /email/i }).first()
+    await expect(emailParagraph).toBeVisible()
+
+    const homeLibraryParagraph = page.locator("p", { hasText: /home library/i })
+    await expect(homeLibraryParagraph).toBeVisible()
+
+    const notificationPreferenceParagraph = page.locator("p", {
+      hasText: /notification preference/i,
+    })
+    await expect(notificationPreferenceParagraph).toBeVisible()
+
+    const pinPasswordParagraph = page.locator("p", {
+      hasText: /pin\/password/i,
+    })
+    await expect(pinPasswordParagraph).toBeVisible()
+  }) // <-- closes the test function
+}) // <-- closes the test.describe block
