@@ -11,8 +11,10 @@ import { fetchSearchResults } from "../../src/server/api/search"
 /**
  * Default API route handler for Search
  * Calls a helper function that maps the query params object to a SearchParams object
- * It is then passed to , which fetches the results and returns a JSON response
+ * It is then passed to fetchSearchResults, which fetches the results and returns a JSON response
  * via its onSuccess callback on a successful fetch
+ * Note: This is primarily used for debugging since the search page fetches the
+ * result by calling fetchSearchResults directly in getServerSideProps.
  */
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "GET") {

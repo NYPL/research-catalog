@@ -169,7 +169,7 @@ export async function getServerSideProps({ params, req, res, query }) {
     const [bibId, itemId] = id.split("-")
 
     if (!itemId) {
-      throw new Error("Hold confirmation:No item id in url")
+      throw new Error("Hold confirmation: No item ID in url")
     }
     const discoveryBib = await fetchBib(bibId, {}, itemId)
     const discoveryBibResult = (discoveryBib as BibResponse).discoveryBibResult

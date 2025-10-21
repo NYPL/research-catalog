@@ -50,7 +50,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     }
   }
 
-  // Fallback in case fetchBib returns something unexpected
   return res.status(500).json({ error: "Unknown error fetching bib" })
 }
 
