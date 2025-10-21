@@ -355,7 +355,7 @@ describe("Bib Page Item Table many items", () => {
 describe("Bib not found", () => {
   render(
     <BibPage
-      notFound={true}
+      errorStatus={404}
       discoveryBibResult={undefined}
       annotatedMarc={undefined}
     />

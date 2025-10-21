@@ -21,7 +21,6 @@ export default function ResultsError({ errorStatus, page }: ResultsErrorProps) {
   let metadataTitle = "Error"
   let errorContent
   const headingID = `${page}-results-heading`
-  console.log("in results error", errorStatus)
 
   switch (errorStatus) {
     case 404:
