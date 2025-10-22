@@ -27,6 +27,11 @@ export class AccountPage extends BasePage {
   readonly account_items_table_header_callnumber: Locator
   readonly account_items_table_header_due_date: Locator
   readonly account_items_table_header_manage: Locator
+  readonly edit_phone_link: Locator
+  readonly edit_email_link: Locator
+  readonly edit_home_library_link: Locator
+  readonly edit_notification_preferences_link: Locator
+  readonly edit_pin_password_link: Locator
 
   constructor(page: Page) {
     super(page)
@@ -69,6 +74,13 @@ export class AccountPage extends BasePage {
     this.account_items_table_header_manage = page.getByRole("columnheader", {
       name: "Manage checkout",
     })
+    this.edit_phone_link = page.locator("#edit-phones-button")
+    this.edit_email_link = page.locator("#edit-emails-button")
+    this.edit_home_library_link = page.locator("#edit-library-button")
+    this.edit_notification_preferences_link = page.locator(
+      "#edit-notification-button"
+    )
+    this.edit_pin_password_link = page.locator("#edit-password-button")
   }
 
   async login(username: string, password: string) {

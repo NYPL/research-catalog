@@ -85,23 +85,53 @@ test.describe("My Account Login", () => {
     // click on the account settings tab
     await accountPage.tab_account_settings.click()
     // assert that there are rows for Phone,Email, Home Library, Notification preference, and Pin/password
-    const phoneParagraph = page.locator("p", { hasText: /phone/i })
-    await expect(phoneParagraph).toBeVisible()
+    const phonelabel = page.locator("p", { hasText: /phone/i })
+    await expect(phonelabel).toBeVisible()
 
-    const emailParagraph = page.locator("p", { hasText: /email/i }).first()
-    await expect(emailParagraph).toBeVisible()
+    const emailLabel = page.locator("p", { hasText: /email/i }).first()
+    await expect(emailLabel).toBeVisible()
 
-    const homeLibraryParagraph = page.locator("p", { hasText: /home library/i })
-    await expect(homeLibraryParagraph).toBeVisible()
+    const homeLibraryLabel = page.locator("p", { hasText: /home library/i })
+    await expect(homeLibraryLabel).toBeVisible()
 
-    const notificationPreferenceParagraph = page.locator("p", {
+    const notificationPreferenceLabel = page.locator("p", {
       hasText: /notification preference/i,
     })
-    await expect(notificationPreferenceParagraph).toBeVisible()
+    await expect(notificationPreferenceLabel).toBeVisible()
 
-    const pinPasswordParagraph = page.locator("p", {
+    const pinPasswordLabel = page.locator("p", {
       hasText: /pin\/password/i,
     })
-    await expect(pinPasswordParagraph).toBeVisible()
+    await expect(pinPasswordLabel).toBeVisible()
+    // NEED TO ADD ASSERTS FOR THE VALUES OF THE ABOVE FIELDS
+    // expect the div following phone label contains text 2125927256
+    const phoneValue = phonelabel.locator("xpath=following::div[1]")
+    await expect(phoneValue).toHaveText(/^2125927256/)
+
+    // expect the div following email label contains text chrismulholland@nypl.org
+    const emailValue = emailLabel.locator("xpath=following::div[1]")
+    await expect(emailValue).toHaveText(/^chrismulholland@nypl.org/)
+
+    // expect the div following home library label contains text Stavros Niarchos
+    const homeLibraryValue = homeLibraryLabel.locator("xpath=following::div[1]")
+    await expect(homeLibraryValue).toHaveText(/^Stavros Niarchos/)
+
+    // expect the div following notification preference label contains text Email
+    const notificationPreferenceValue = notificationPreferenceLabel.locator(
+      "xpath=following::div[1]"
+    )
+    await expect(notificationPreferenceValue).toHaveText(/^Email/)
+
+    // expect the div following pin/password label contains text ****
+    const pinPasswordValue = pinPasswordLabel.locator("xpath=following::div[1]")
+    await expect(pinPasswordValue).toHaveText(/^(\*\*\*\*)/)
+
+    // END OF VALUE ASSERTS
+    // assert edit links are visible
+    await expect(accountPage.edit_phone_link).toBeVisible()
+    await expect(accountPage.edit_email_link).toBeVisible()
+    await expect(accountPage.edit_home_library_link).toBeVisible()
+    await expect(accountPage.edit_notification_preferences_link).toBeVisible()
+    await expect(accountPage.edit_pin_password_link).toBeVisible()
   }) // <-- closes the test function
 }) // <-- closes the test.describe block
