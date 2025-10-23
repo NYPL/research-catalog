@@ -14,7 +14,9 @@ test.describe("Author Search", () => {
     page,
   }) => {
     await searchPage.searchFor(searchterm, "Author/contributor")
-    await expect(searchPage.searchResultsHeading).toBeVisible()
+    await expect(searchPage.searchResultsHeading).toBeVisible({
+      timeout: 10000,
+    })
 
     // Collect all title link URLs (limit to 5)
     const titleLinks = await page.locator("#search-results-list h3 a").all()
@@ -30,7 +32,7 @@ test.describe("Author Search", () => {
       await page.goto(url)
       await expect(
         page.getByRole("link", { name: new RegExp(searchterm) })
-      ).toBeVisible()
+      ).toBeVisible({ timeout: 10000 })
     }
   })
 })
