@@ -5,7 +5,7 @@ import {
   Flex,
   Button,
 } from "@nypl/design-system-react-components"
-import type { DateFilterHookPropsType } from "../../hooks/useDateFilter"
+import type { DateFilterHookPropsType } from "../../hooks/useDateFilter2"
 
 interface DateFilterPropsType extends DateFilterHookPropsType {
   displayDateRangeError: string

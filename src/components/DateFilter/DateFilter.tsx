@@ -3,12 +3,16 @@ import {
   TextInput,
   Flex,
   Button,
-  Notification,
+  Banner,
+  HelperErrorText,
 } from "@nypl/design-system-react-components"
-import type { DateFilterHookPropsType } from "../../hooks/useDateFilter2"
+import type {
+  DateErrorState,
+  DateFilterHookPropsType2,
+} from "../../hooks/useDateFilter2"
 
-interface DateFilterPropsType extends DateFilterHookPropsType {
-  dateError: string
+interface DateFilterPropsType extends DateFilterHookPropsType2 {
+  dateError: DateErrorState
 }
 
 const DateFilter = ({
@@ -19,6 +23,7 @@ const DateFilter = ({
   changeHandler,
   applyHandler,
 }: DateFilterPropsType) => {
+  const hasError = Object.values(dateError).some(Boolean)
   return (
     <>
       <Fieldset
@@ -27,6 +32,20 @@ const DateFilter = ({
         id="date-fieldset"
       >
         <Flex flexDir="column" gap="xs">
+          <Banner
+            variant="informative"
+            content="Enter dates in YYYY, YYYY/MM, or YYYY/MM/DD formats only"
+            sx={{
+              alignItems: "center",
+              paddingLeft: "s !important",
+              paddingRight: "0",
+              paddingTop: "xs",
+              paddingBottom: "xs",
+              fontSize: "desktop.caption",
+              fontWeight: "medium",
+            }}
+          />
+
           <Flex alignItems="center" width="100%" gap="xs">
             <TextInput
               id="date-from"
@@ -37,6 +56,9 @@ const DateFilter = ({
               value={dateFrom}
               onChange={(e) => changeHandler(e)}
               ref={inputRefs[0]}
+              isInvalid={!!dateError.from}
+              invalidText="Ex. 1900"
+              maxLength={10}
             />
             <TextInput
               width="100%"
@@ -47,16 +69,17 @@ const DateFilter = ({
               value={dateTo}
               onChange={(e) => changeHandler(e)}
               ref={inputRefs[1]}
+              isInvalid={!!dateError.to}
+              invalidText="Ex. 1950"
+              maxLength={10}
             />
           </Flex>
-          {dateError && (
+          {hasError && (
             <div aria-live="polite">
-              <Notification
+              <HelperErrorText
+                color="ui.error.primary"
                 data-testid="dateErrorMessage"
-                padding="s"
-                variant="warning"
-                notificationContent={dateError}
-                mb="s"
+                text={dateError.from || dateError.to || dateError.range}
               />
             </div>
           )}
@@ -65,7 +88,7 @@ const DateFilter = ({
             id="apply-dates"
             onClick={applyHandler}
             width="100%"
-            isDisabled={dateError !== ""}
+            isDisabled={hasError}
           >
             Apply
           </Button>

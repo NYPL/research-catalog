@@ -8,7 +8,6 @@ import {
 import type { TextInputRefType } from "@nypl/design-system-react-components"
 import SearchResultsFilters from "../../models/SearchResultsFilters"
 import { useRouter } from "next/router"
-import type { SyntheticEvent } from "react"
 import { useEffect, useRef, useState } from "react"
 import {
   buildFilterQuery,
@@ -160,10 +159,12 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
 
   const dateInputRefs = [useRef<TextInputRefType>(), useRef<TextInputRefType>()]
 
-  const { dateFilterProps, validateDates } = useDateFilter({
+  const { dateFilterProps, validateDates, formatDateInput } = useDateFilter({
     changeHandler: (e: React.SyntheticEvent) => {
       const target = e.target as HTMLInputElement
       validateDates()
+      // const formatted = formatDateInput(target.value)
+      // target.value = formatted
       setAppliedFilters((prevFilters) => {
         return {
           ...prevFilters,

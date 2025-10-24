@@ -6,7 +6,7 @@ import {
   useEffect,
 } from "react"
 
-export interface DateFilterHookPropsType {
+export interface DateFilterHookPropsType2 {
   inputRefs: MutableRefObject<TextInputRefType>[]
   dateFrom: string
   dateTo: string
@@ -14,9 +14,15 @@ export interface DateFilterHookPropsType {
   applyHandler?: () => void
 }
 
-export const useDateFilter = (props: DateFilterHookPropsType) => {
+export interface DateErrorState {
+  from?: string
+  to?: string
+  range?: string
+}
+
+export const useDateFilter = (props: DateFilterHookPropsType2) => {
   const { inputRefs, dateFrom, dateTo } = props
-  const [dateError, setDateError] = useState("")
+  const [dateError, setDateError] = useState<DateErrorState>({})
 
   if (inputRefs.length !== 2) {
     console.warn(
@@ -32,31 +38,30 @@ export const useDateFilter = (props: DateFilterHookPropsType) => {
   }, [dateFrom, dateTo])
 
   const validateDates = () => {
-    let errorMessage = ""
+    const errors: DateErrorState = {}
 
-    const formatErrorFrom = formatInvalid(dateFrom)
-    const formatErrorTo = formatInvalid(dateTo)
-    const rangeError = rangeInvalid(dateFrom, dateTo)
-
-    if (formatErrorFrom) {
-      errorMessage = "Please enter a valid 'from' date."
+    if (formatInvalid(dateFrom)) {
+      errors.from = "Please enter a valid 'from' date."
       inputRefs[0]?.current?.focus()
-    } else if (formatErrorTo) {
-      errorMessage = "Please enter a valid 'to' date."
-      inputRefs[1]?.current?.focus()
-    } else if (rangeError) {
-      errorMessage = "End date must be later than start date."
+    }
+
+    if (formatInvalid(dateTo)) {
+      errors.to = "Please enter a valid 'to' date."
       inputRefs[1]?.current?.focus()
     }
-    setDateError(errorMessage)
-    return !errorMessage
-  }
 
+    if (!errors.from && !errors.to && rangeInvalid(dateFrom, dateTo)) {
+      errors.range = "End date must be later than start date."
+    }
+
+    setDateError(errors)
+    return Object.keys(errors).length === 0
+  }
   const clearInputs = () => {
     inputRefs.forEach((ref) => {
       if (ref?.current) ref.current.value = ""
     })
-    setDateError("")
+    setDateError({})
   }
 
   return {
@@ -66,16 +71,33 @@ export const useDateFilter = (props: DateFilterHookPropsType) => {
     },
     validateDates,
     clearInputs,
+    formatDateInput,
   }
 }
 
 export const rangeInvalid = (dateFrom: string, dateTo: string) => {
   if (!dateFrom || !dateTo) return false
-  return parseInt(dateFrom, 10) > parseInt(dateTo, 10)
+
+  const parseDate = (date: string) => {
+    const digits = date.replace(/[^\d]/g, "")
+    const year = parseInt(digits.slice(0, 4), 10)
+    const month = digits.length >= 6 ? parseInt(digits.slice(4, 6), 10) - 1 : 0
+    const day = digits.length === 8 ? parseInt(digits.slice(6, 8), 10) : 1
+    return new Date(year, month, day)
+  }
+  return parseDate(dateFrom) > parseDate(dateTo)
 }
 
 export const formatInvalid = (date: string) => {
   if (!date) return false
-  const pattern = /^\d{4}(?:\/(0[1-9]|1[0-2])(?:\/(0[1-9]|[12][0-9]|3[01]))?)?$/
+  const pattern =
+    /^(\d{4})(?:[\\/]?(0[1-9]|1[0-2]))?(?:[\\/]?(0[1-9]|[12][0-9]|3[01]))?$/
   return !pattern.test(date)
+}
+
+export const formatDateInput = (value: string) => {
+  const digits = value.replace(/[^\d]/g, "")
+  if (digits.length <= 4) return digits
+  if (digits.length <= 6) return `${digits.slice(0, 4)}/${digits.slice(4)}`
+  return `${digits.slice(0, 4)}/${digits.slice(4, 6)}/${digits.slice(6, 8)}`
 }
