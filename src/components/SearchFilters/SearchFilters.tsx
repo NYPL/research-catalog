@@ -8,7 +8,6 @@ import {
 import type { TextInputRefType } from "@nypl/design-system-react-components"
 import SearchResultsFilters from "../../models/SearchResultsFilters"
 import { useRouter } from "next/router"
-import type { SyntheticEvent } from "react"
 import { useEffect, useRef, useState } from "react"
 import {
   buildFilterQuery,
@@ -16,11 +15,11 @@ import {
   getQueryWithoutFiltersOrPage,
 } from "../../utils/refineSearchUtils"
 import type { Aggregation } from "../../types/filterTypes"
-import DateFilter from "./DateFilter"
-import { useDateFilter } from "../../hooks/useDateFilter"
 import { useFocusContext, idConstants } from "../../context/FocusContext"
 import MultiSelectWithGroupTitles from "../AdvancedSearch/MultiSelectWithGroupTitles/MultiSelectWithGroupTitles"
 import { mapCollectionsIntoLocations } from "../../utils/advancedSearchUtils"
+import DateFilter from "../DateFilter/DateFilter"
+import { useDateFilter } from "../../hooks/useDateFilter2"
 
 const fields = [
   { value: "buildingLocation", label: "Item location" },
@@ -160,9 +159,12 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
 
   const dateInputRefs = [useRef<TextInputRefType>(), useRef<TextInputRefType>()]
 
-  const { dateFilterProps, validateDateRange } = useDateFilter({
-    changeHandler: (e: SyntheticEvent) => {
+  const { dateFilterProps, validateDates, formatDateInput } = useDateFilter({
+    changeHandler: (e: React.SyntheticEvent) => {
       const target = e.target as HTMLInputElement
+      validateDates()
+      // const formatted = formatDateInput(target.value)
+      // target.value = formatted
       setAppliedFilters((prevFilters) => {
         return {
           ...prevFilters,
@@ -171,11 +173,11 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
       })
     },
     inputRefs: dateInputRefs,
-    dateAfter: appliedFilters.dateAfter?.[0],
-    dateBefore: appliedFilters.dateBefore?.[0],
+    dateFrom: appliedFilters.dateAfter?.[0] ?? "",
+    dateTo: appliedFilters.dateBefore?.[0] ?? "",
     applyHandler: () => {
       setFocusedFilter("date")
-      if (validateDateRange() === false) {
+      if (validateDates() === false) {
         setFocusedFilter(null)
         return
       }

@@ -47,9 +47,9 @@ import CancelSubmitButtonGroup from "../../src/components/AdvancedSearch/CancelS
 import RCLink from "../../src/components/Links/RCLink/RCLink"
 import RCHead from "../../src/components/Head/RCHead"
 import DateFilter from "../../src/components/SearchFilters/DateFilter"
-import { useDateFilter } from "../../src/hooks/useDateFilter"
 import { debounce } from "underscore"
 import MultiSelectWithGroupTitles from "../../src/components/AdvancedSearch/MultiSelectWithGroupTitles/MultiSelectWithGroupTitles"
+import { useDateFilter } from "../../src/hooks/useDateFilter"
 
 export const defaultEmptySearchErrorMessage =
   "Error: please enter at least one field to submit an advanced search."
