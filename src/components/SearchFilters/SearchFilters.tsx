@@ -165,7 +165,9 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
     dateTo: appliedFilters.dateBefore?.[0] ?? "",
     applyHandler: () => {
       setFocusedFilter("date")
-      if (validateDates() === false) {
+      const from = appliedFilters.dateAfter?.[0] ?? ""
+      const to = appliedFilters.dateBefore?.[0] ?? ""
+      if (!validateDates(from, to)) {
         setFocusedFilter(null)
         return
       }

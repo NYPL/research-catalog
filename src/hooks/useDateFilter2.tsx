@@ -37,13 +37,12 @@ export const useDateFilter = (props: DateFilterHookPropsType2) => {
     return undefined
   }
 
-  // Debounce validation
+  // Debounced validation
   useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current)
 
     debounceRef.current = window.setTimeout(() => {
       const errors: DateErrorState = {}
-
       errors.from = validateField(dateFrom, "from")
       errors.to = validateField(dateTo, "to")
 
@@ -66,25 +65,18 @@ export const useDateFilter = (props: DateFilterHookPropsType2) => {
     }
   }, [dateFrom, dateTo])
 
-  // Manual validation for apply
-  const validateDates = () => {
+  // Manual validation (Apply button)
+  const validateDates = (from = dateFrom, to = dateTo) => {
     const errors: DateErrorState = {}
+    errors.from = validateField(from, "from")
+    errors.to = validateField(to, "to")
 
-    errors.from = validateField(dateFrom, "from")
-    errors.to = validateField(dateTo, "to")
-
-    if (
-      !errors.from &&
-      !errors.to &&
-      dateFrom &&
-      dateTo &&
-      rangeInvalid(dateFrom, dateTo)
-    ) {
+    if (!errors.from && !errors.to && from && to && rangeInvalid(from, to)) {
       errors.range = "End date must be later than start date."
     }
 
     setDateError(errors)
-    return Object.keys(errors).length === 0
+    return Object.values(errors).every((v) => v === undefined)
   }
 
   const clearInputs = () => {
