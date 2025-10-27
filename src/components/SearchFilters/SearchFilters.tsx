@@ -159,19 +159,7 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
 
   const dateInputRefs = [useRef<TextInputRefType>(), useRef<TextInputRefType>()]
 
-  const { dateFilterProps, validateDates, formatDateInput } = useDateFilter({
-    changeHandler: (e: React.SyntheticEvent) => {
-      const target = e.target as HTMLInputElement
-      validateDates()
-      // const formatted = formatDateInput(target.value)
-      // target.value = formatted
-      setAppliedFilters((prevFilters) => {
-        return {
-          ...prevFilters,
-          [target.name]: [target.value],
-        }
-      })
-    },
+  const { dateFilterProps, validateDates } = useDateFilter({
     inputRefs: dateInputRefs,
     dateFrom: appliedFilters.dateAfter?.[0] ?? "",
     dateTo: appliedFilters.dateBefore?.[0] ?? "",
@@ -183,6 +171,15 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
       }
       setPersistentFocus(idConstants.applyDates)
       buildAndPushFilterQuery(appliedFilters)
+    },
+    changeHandler: (e: React.SyntheticEvent) => {
+      const target = e.target as HTMLInputElement
+      setAppliedFilters((prevFilters) => {
+        return {
+          ...prevFilters,
+          [target.name]: [target.value],
+        }
+      })
     },
   })
 
