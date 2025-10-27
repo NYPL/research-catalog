@@ -33,7 +33,7 @@ export const useDateFilter = (props: DateFilterHookPropsType2) => {
   useEffect(() => {
     const timeout = setTimeout(() => {
       validateDates()
-    }, 300)
+    }, 600)
     return () => clearTimeout(timeout)
   }, [dateFrom, dateTo])
 
@@ -90,8 +90,7 @@ export const rangeInvalid = (dateFrom: string, dateTo: string) => {
 
 export const formatInvalid = (date: string) => {
   if (!date) return false
-  const pattern =
-    /^(\d{4})(?:[\\/]?(0[1-9]|1[0-2]))?(?:[\\/]?(0[1-9]|[12][0-9]|3[01]))?$/
+  const pattern = /^(\d{4})(?:\/(0[1-9]|1[0-2])(\/(0[1-9]|[12][0-9]|3[01]))?)?$/
   return !pattern.test(date)
 }
 
