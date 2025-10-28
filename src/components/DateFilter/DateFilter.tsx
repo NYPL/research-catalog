@@ -37,7 +37,7 @@ const DateFilter = ({
             content="Enter dates in YYYY, YYYY/MM, or YYYY/MM/DD formats only"
             sx={{
               alignItems: "center",
-              paddingLeft: "s !important",
+              paddingLeft: "12px !important",
               paddingRight: "0",
               paddingTop: "xs",
               paddingBottom: "xs",
@@ -51,7 +51,7 @@ const DateFilter = ({
               id="date-from"
               width="100%"
               labelText="From"
-              name="dateAfter"
+              name="dateFrom"
               helperText="Ex. 1900"
               value={dateFrom}
               onChange={(e) => changeHandler(e)}
@@ -64,7 +64,7 @@ const DateFilter = ({
               width="100%"
               id="date-to"
               labelText="To"
-              name="dateBefore"
+              name="dateTo"
               helperText="Ex. 1950"
               value={dateTo}
               onChange={(e) => changeHandler(e)}
