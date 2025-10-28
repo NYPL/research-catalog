@@ -46,9 +46,9 @@ describe("refineSearchUtils", () => {
 
   describe("buildFilterQuery", () => {
     it("ignores empty filter value", () => {
-      const filters = { dateBefore: [""], dateAfter: ["1990"] }
+      const filters = { dateTo: [""], dateFrom: ["1990"] }
       expect(buildFilterQuery(filters)).toStrictEqual({
-        "filters[dateAfter][0]": "1990",
+        "filters[dateFrom][0]": "1990",
       })
     })
     it("single filter single value", () => {
