@@ -8,10 +8,10 @@ import {
 } from "@nypl/design-system-react-components"
 import type {
   DateErrorState,
-  DateFilterHookPropsType2,
-} from "../../hooks/useDateFilter2"
+  DateFilterHookPropsType,
+} from "../../hooks/useDateFilter"
 
-interface DateFilterPropsType extends DateFilterHookPropsType2 {
+interface DateFilterPropsType extends DateFilterHookPropsType {
   dateError: DateErrorState
 }
 
@@ -56,7 +56,7 @@ const DateFilter = ({
               value={dateFrom}
               onChange={(e) => changeHandler(e)}
               ref={inputRefs[0]}
-              isInvalid={!!dateError.from}
+              isInvalid={!!(dateError.from || dateError.range)}
               invalidText="Ex. 1900"
               maxLength={10}
             />
@@ -69,7 +69,7 @@ const DateFilter = ({
               value={dateTo}
               onChange={(e) => changeHandler(e)}
               ref={inputRefs[1]}
-              isInvalid={!!dateError.to}
+              isInvalid={!!(dateError.to || dateError.range)}
               invalidText="Ex. 1950"
               maxLength={10}
             />

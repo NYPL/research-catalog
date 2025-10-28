@@ -105,16 +105,16 @@ describe("Applied Filter utils", () => {
     })
     it("takes applied date filter values and adds the appropriate label", () => {
       const appliedFilterValues = {
-        dateBefore: ["2009"],
-        dateAfter: ["2010"],
+        dateFrom: ["2009"],
+        dateTo: ["2010"],
       }
       const parsed = addLabelPropAndParseFilters(
         aggregationsResults.itemListElement,
         appliedFilterValues
       )
       expect(parsed).toStrictEqual({
-        dateBefore: [{ value: "2009", count: null, label: "Before 2009" }],
-        dateAfter: [{ value: "2010", count: null, label: "After 2010" }],
+        dateFrom: [{ value: "2009", count: null, label: "From 2009" }],
+        dateTo: [{ value: "2010", count: null, label: "To 2010" }],
       })
     })
   })

@@ -20,7 +20,7 @@ describe("SearchFilters", () => {
   describe("with dates in url query params", () => {
     it("can populate date fields from url", async () => {
       mockRouter.push(
-        "/search?q=dog&filters[dateBefore][0]=2000&filters[dateAfter][0]=1990"
+        "/search?q=dog&filters[dateTo][0]=2000&filters[dateFrom][0]=1990"
       )
       render(component)
       userEvent.click(screen.getByLabelText(/Date/))

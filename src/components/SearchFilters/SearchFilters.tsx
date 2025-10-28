@@ -19,14 +19,14 @@ import { useFocusContext, idConstants } from "../../context/FocusContext"
 import MultiSelectWithGroupTitles from "../AdvancedSearch/MultiSelectWithGroupTitles/MultiSelectWithGroupTitles"
 import { mapCollectionsIntoLocations } from "../../utils/advancedSearchUtils"
 import DateFilter from "../DateFilter/DateFilter"
-import { useDateFilter } from "../../hooks/useDateFilter2"
+import { useDateFilter } from "../../hooks/useDateFilter"
 
 const fields = [
   { value: "buildingLocation", label: "Item location" },
   { value: "format", label: "Format" },
   { value: "language", label: "Language" },
-  { value: "dateAfter", label: "Start Year" },
-  { value: "dateBefore", label: "End Year" },
+  { value: "dateFrom", label: "Start Year" },
+  { value: "dateTo", label: "End Year" },
   { value: "subjectLiteral", label: "Subject" },
   { value: "collection", label: "Collection" },
 ]
@@ -161,12 +161,12 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
 
   const { dateFilterProps, validateDates } = useDateFilter({
     inputRefs: dateInputRefs,
-    dateFrom: appliedFilters.dateAfter?.[0] ?? "",
-    dateTo: appliedFilters.dateBefore?.[0] ?? "",
+    dateFrom: appliedFilters.dateFrom?.[0] ?? "",
+    dateTo: appliedFilters.dateTo?.[0] ?? "",
     applyHandler: () => {
       setFocusedFilter("date")
-      const from = appliedFilters.dateAfter?.[0] ?? ""
-      const to = appliedFilters.dateBefore?.[0] ?? ""
+      const from = appliedFilters.dateFrom?.[0] ?? ""
+      const to = appliedFilters.dateTo?.[0] ?? ""
       if (!validateDates(from, to)) {
         setFocusedFilter(null)
         return
