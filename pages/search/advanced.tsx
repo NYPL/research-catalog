@@ -139,6 +139,11 @@ export default function AdvancedSearch({
       else if (range) dateFieldError = "End date must be later than start date."
       setErrorMessage(`${dateFieldError} ${dateErrorMessage}`)
       setAlert(true)
+      if (from && dateInputRefs[0]?.current) {
+        dateInputRefs[0].current.focus()
+      } else if (to && dateInputRefs[1]?.current) {
+        dateInputRefs[1].current.focus()
+      }
       return
     }
 
@@ -169,16 +174,12 @@ export default function AdvancedSearch({
 
   useEffect(() => {
     const { from, to, range } = dateFilterProps.dateError || {}
-    if (alert) {
-      if (from && dateInputRefs[0]?.current) {
-        dateInputRefs[0].current.focus()
-      } else if ((to || range) && dateInputRefs[1]?.current) {
-        dateInputRefs[1].current.focus()
-      } else {
-        notificationRef.current.focus()
-      }
+    if (alert && !from && !to && !range && notificationRef.current) {
+      setTimeout(() => {
+        notificationRef.current?.focus()
+      }, 0)
     }
-  }, [alert])
+  }, [alert, dateFilterProps.dateError])
 
   const fields = [
     { value: "format", label: "Format", options: formatOptions },
