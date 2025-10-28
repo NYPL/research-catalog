@@ -13,6 +13,7 @@ import type {
 
 interface DateFilterPropsType extends DateFilterHookPropsType {
   dateError: DateErrorState
+  isAdvancedSearch?: boolean
 }
 
 const DateFilter = ({
@@ -22,6 +23,7 @@ const DateFilter = ({
   dateFrom,
   changeHandler,
   applyHandler,
+  isAdvancedSearch = false,
 }: DateFilterPropsType) => {
   const hasError = Object.values(dateError).some(Boolean)
   return (
@@ -59,6 +61,7 @@ const DateFilter = ({
               isInvalid={!!(dateError.from || dateError.range)}
               invalidText="Ex. 1900"
               maxLength={10}
+              sx={{ label: { fontSize: isAdvancedSearch && "12px" } }}
             />
             <TextInput
               width="100%"
@@ -72,6 +75,7 @@ const DateFilter = ({
               isInvalid={!!(dateError.to || dateError.range)}
               invalidText="Ex. 1950"
               maxLength={10}
+              sx={{ label: { fontSize: isAdvancedSearch && "12px" } }}
             />
           </Flex>
           {hasError && (
@@ -83,15 +87,17 @@ const DateFilter = ({
               />
             </div>
           )}
-          <Button
-            variant="secondary"
-            id="apply-dates"
-            onClick={applyHandler}
-            width="100%"
-            isDisabled={hasError}
-          >
-            Apply
-          </Button>
+          {!isAdvancedSearch && (
+            <Button
+              variant="secondary"
+              id="apply-dates"
+              onClick={applyHandler}
+              width="100%"
+              isDisabled={hasError}
+            >
+              Apply
+            </Button>
+          )}
         </Flex>
       </Fieldset>
     </>

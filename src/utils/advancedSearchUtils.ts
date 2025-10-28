@@ -21,8 +21,8 @@ export const initialSearchFormState: SearchParams = {
   standard_number: "",
   filters: {
     language: [],
-    dateBefore: "",
-    dateAfter: "",
+    dateTo: "",
+    dateFrom: "",
     format: [],
     buildingLocation: [],
     collection: [],

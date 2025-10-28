@@ -19,8 +19,8 @@ export interface SearchFilters {
   contributorLiteral?: ContributorLiteral | ContributorLiteral[]
   creatorLiteral?: CreatorLiteral | CreatorLiteral[]
   issuance?: Issuance | Issuance[]
-  dateAfter?: string
-  dateBefore?: string
+  dateFrom?: string
+  dateTo?: string
   buildingLocation?: BuildingLocationFilter | BuildingLocationFilter[]
   collection?: CollectionFilter | CollectionFilter[]
 }
