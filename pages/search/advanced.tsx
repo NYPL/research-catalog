@@ -141,7 +141,7 @@ export default function AdvancedSearch({
       setAlert(true)
       if (from && dateInputRefs[0]?.current) {
         dateInputRefs[0].current.focus()
-      } else if (to && dateInputRefs[1]?.current) {
+      } else if ((to || range) && dateInputRefs[1]?.current) {
         dateInputRefs[1].current.focus()
       }
       return
