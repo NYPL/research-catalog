@@ -16,7 +16,7 @@ test.describe("Subject Search", () => {
     await searchPage.searchFor(searchterm, "Subject")
     await expect(searchPage.searchResultsHeading).toBeVisible({
       timeout: 15000,
-    }) // waits up to 15 seconds
+    })
 
     // Collect all title link URLs (limit to 5)
     const titleLinks = await page.locator("#search-results-list h3 a").all()
@@ -32,7 +32,7 @@ test.describe("Subject Search", () => {
       await page.goto(url)
       await expect(
         page.getByRole("link", { name: new RegExp(`^${searchterm}$`) }).first()
-      ).toBeVisible({ timeout: 10000 }) // waits up to 10 seconds
+      ).toBeVisible({ timeout: 10000 })
     }
   })
 })

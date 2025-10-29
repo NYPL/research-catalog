@@ -14,7 +14,7 @@ test.describe("Keyword Search", () => {
     await searchPage.searchFor(searchterm, "Keyword")
     await expect(searchPage.searchResultsHeading).toBeVisible({
       timeout: 15000,
-    }) // waits up to 15 seconds
+    })
     await expect(async () => {
       const count = await searchPage.searchResultsTitle.count()
       expect(count).toBeGreaterThan(10)

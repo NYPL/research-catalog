@@ -1,6 +1,5 @@
 import type { Page, Locator } from "@playwright/test"
 import { BasePage } from "./base_page"
-// import home page, too?
 
 export class AccountPage extends BasePage {
   readonly usernameInput: Locator
@@ -84,7 +83,6 @@ export class AccountPage extends BasePage {
   }
 
   async login(username: string, password: string) {
-    // await this.page.getByRole("link", { name: /my account/i }).click()
     await this.usernameInput.fill(username)
     await this.passwordInput.fill(password)
     await this.submitButton.click()
