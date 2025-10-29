@@ -291,7 +291,6 @@ export default function AdvancedSearch({
                 </FormField>
               ))}
               <FormField gridGap="xs">
-                <Label htmlFor="date-fieldset">Date</Label>
                 <DateFilter isAdvancedSearch {...dateFilterProps} />
               </FormField>
             </Flex>

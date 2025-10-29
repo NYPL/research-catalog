@@ -29,13 +29,14 @@ const DateFilter = ({
   return (
     <>
       <Fieldset
-        legendText="Filter by start and end date"
-        isLegendHidden={true}
+        legendText={isAdvancedSearch ? "Date" : "Filter by start and end date"}
+        isLegendHidden={!isAdvancedSearch}
         id="date-fieldset"
       >
         <Flex flexDir="column" gap="xs">
           <Banner
             variant="informative"
+            as="div"
             content="Enter dates in YYYY, YYYY/MM, or YYYY/MM/DD formats only"
             sx={{
               alignItems: "center",
