@@ -61,7 +61,9 @@ const DateFilter = ({
               isInvalid={!!(dateError.from || dateError.range)}
               invalidText="Ex. 1900"
               maxLength={10}
-              sx={{ label: { fontSize: isAdvancedSearch && "12px" } }}
+              sx={{
+                label: { fontSize: isAdvancedSearch ? "12px" : undefined },
+              }}
             />
             <TextInput
               width="100%"
@@ -75,7 +77,9 @@ const DateFilter = ({
               isInvalid={!!(dateError.to || dateError.range)}
               invalidText="Ex. 1950"
               maxLength={10}
-              sx={{ label: { fontSize: isAdvancedSearch && "12px" } }}
+              sx={{
+                label: { fontSize: isAdvancedSearch ? "12px" : undefined },
+              }}
             />
           </Flex>
           {hasError && (

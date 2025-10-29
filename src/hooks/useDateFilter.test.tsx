@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react"
 import { render, act, screen } from "@testing-library/react"
 import { useDateFilter, rangeInvalid, formatInvalid } from "./useDateFilter"
+import type { TextInputRefType } from "@nypl/design-system-react-components"
 
 jest.useFakeTimers()
 
@@ -13,13 +14,13 @@ const TestComponent = ({
   initialTo?: string
   changeHandler?: (e: React.SyntheticEvent) => void
 }) => {
-  const ref1 = useRef<HTMLInputElement>({ value: "" } as any)
-  const ref2 = useRef<HTMLInputElement>({ value: "" } as any)
+  const ref1 = useRef<TextInputRefType>({ value: "" } as TextInputRefType)
+  const ref2 = useRef<TextInputRefType>({ value: "" } as TextInputRefType)
   const [dateFrom, setDateFrom] = useState(initialFrom)
   const [dateTo, setDateTo] = useState(initialTo)
 
   const { dateFilterProps, validateDates, clearInputs } = useDateFilter({
-    inputRefs: [ref1 as any, ref2 as any],
+    inputRefs: [ref1, ref2],
     dateFrom,
     dateTo,
     changeHandler,
