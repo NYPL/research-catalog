@@ -2,7 +2,7 @@
   "name": "research-catalog",
   "version": "1.5.2",
   "scripts": {
-    "dev": "next dev -p 8080",
+    "dev": "NODE_OPTIONS='-r newrelic' next dev -p 8080",
     "build": "next build",
     "start": "next start",
     "local-prod": "next build && next start -p 8080",
@@ -27,6 +27,7 @@
     "eslint-config-next": "13.4.7",
     "iso8601-duration": "2.1.1",
     "jose": "5.2.0",
+    "newrelic": "^12.18.2",
     "next": "13.5.9",
     "qs": "6.11.2",
     "react": "18.2.0",
