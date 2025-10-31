@@ -8,13 +8,13 @@ import { logServerError } from "../utils/appUtils"
  * Otherwise, leave credentials undefined so the IAM role is used.
  */
 const kms = new KMSClient({
-  region: process.env.AWS_REGION || "us-east-1",
+  region: "us-east-1",
   credentials:
     process.env.APP_ENV === "development" ? fromNodeProviderChain() : undefined,
   requestHandler: new NodeHttpHandler({
-    socketTimeout: 5000,
     connectionTimeout: 5000,
-  }),
+    socketTimeout: 5000,
+  }) as any,
   maxAttempts: 1,
 })
 
