@@ -50,7 +50,7 @@ import RCHead from "../../src/components/Head/RCHead"
 import DateFilter from "../../src/components/DateFilter/DateFilter"
 import { debounce } from "underscore"
 import MultiSelectWithGroupTitles from "../../src/components/AdvancedSearch/MultiSelectWithGroupTitles/MultiSelectWithGroupTitles"
-import { useDateFilter } from "../../src/hooks/useDateFilter"
+import { rangeErrorMessage, useDateFilter } from "../../src/hooks/useDateFilter"
 
 export const defaultEmptySearchErrorMessage =
   "Error: please enter at least one field to submit an advanced search."
@@ -137,7 +137,7 @@ export default function AdvancedSearch({
       let dateFieldError = ""
       if (from) dateFieldError = "The 'from' date field contains an error."
       else if (to) dateFieldError = "The 'to' date field contains an error."
-      else if (range) dateFieldError = "End date must be later than start date."
+      else if (range) dateFieldError = rangeErrorMessage
       setErrorMessage(`${dateFieldError} ${dateErrorMessage}`)
       setAlert(true)
       if (from && dateInputRefs[0]?.current) {

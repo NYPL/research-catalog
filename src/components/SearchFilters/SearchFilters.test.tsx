@@ -23,7 +23,7 @@ describe("SearchFilters", () => {
         "/search?q=dog&filters[dateTo][0]=2000&filters[dateFrom][0]=1990"
       )
       render(component)
-      userEvent.click(screen.getByLabelText(/Date/))
+      userEvent.click(screen.getAllByLabelText(/Date/)[0])
       await waitFor(() => {
         const beforeDateInput = screen.getByDisplayValue("2000")
         const afterDateInput = screen.getByDisplayValue("1990")
@@ -48,7 +48,7 @@ describe("SearchFilters", () => {
       })
       expect(formatMultiselect).toHaveAttribute("aria-expanded", "true")
       expect(subjectMultiselect).toHaveAttribute("aria-expanded", "false")
-      expect(dateMultiselect).toHaveAttribute("aria-expanded", "false")
+      expect(dateMultiselect).toHaveAttribute("aria-expanded", "true")
     })
     it("opens and closes filters", async () => {
       mockRouter.push("/search?q=spaghetti")

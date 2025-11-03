@@ -20,7 +20,14 @@ export interface DateErrorState {
   to?: string
   range?: string
 }
+export const rangeErrorMessage = "End date must be later than start date."
 
+/**
+ * useDateFilter manages date range inputs.
+ * Provides format and range validation for 'from' and 'to' dates.
+ * Returns error state, validateDates() function (for manual validation),
+ * and clearInputs() function.
+ */
 export const useDateFilter = (props: DateFilterHookPropsType) => {
   const { inputRefs, dateFrom, dateTo } = props
   const [dateError, setDateError] = useState<DateErrorState>({})
@@ -53,7 +60,7 @@ export const useDateFilter = (props: DateFilterHookPropsType) => {
         dateTo &&
         rangeInvalid(dateFrom, dateTo)
       ) {
-        errors.range = "Error: End date must be later than start date."
+        errors.range = `Error: ${rangeErrorMessage}`
       }
 
       setDateError(errors)
@@ -72,7 +79,7 @@ export const useDateFilter = (props: DateFilterHookPropsType) => {
     errors.to = validateField(to, "to")
 
     if (!errors.from && !errors.to && from && to && rangeInvalid(from, to)) {
-      errors.range = "Error: End date must be later than start date."
+      errors.range = `Error: ${rangeErrorMessage}`
     }
 
     setDateError(errors)

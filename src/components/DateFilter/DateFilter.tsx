@@ -57,7 +57,7 @@ const DateFilter = ({
               name="dateFrom"
               helperText="Ex. 1900"
               value={dateFrom}
-              onChange={(e) => changeHandler(e)}
+              onChange={changeHandler}
               ref={inputRefs[0]}
               isInvalid={!!(dateError.from || dateError.range)}
               invalidText="Ex. 1900"
@@ -74,7 +74,7 @@ const DateFilter = ({
               name="dateTo"
               helperText="Ex. 1950"
               value={dateTo}
-              onChange={(e) => changeHandler(e)}
+              onChange={changeHandler}
               ref={inputRefs[1]}
               isInvalid={!!(dateError.to || dateError.range)}
               invalidText="Ex. 1950"
