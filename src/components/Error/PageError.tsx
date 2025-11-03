@@ -21,6 +21,14 @@ export default function PageError({ errorStatus, page }: PageErrorProps) {
   let metadataTitle = "Error"
   let errorContent
   const headingID = `${page}-results-heading`
+  const contactUsLink = (
+    <Link
+      onClick={() => openFeedbackFormWithError(errorStatus)}
+      id="feedback-link"
+    >
+      contact us
+    </Link>
+  )
 
   switch (errorStatus) {
     case 404:
@@ -35,14 +43,8 @@ export default function PageError({ errorStatus, page }: PageErrorProps) {
             elsewhere.
           </Text>
           <Text>
-            Try a <Link href="/">new search</Link> or{" "}
-            <Link
-              onClick={() => openFeedbackFormWithError(errorStatus)}
-              id="feedback-link"
-            >
-              contact us
-            </Link>{" "}
-            if the error persists.
+            Try a <Link href="/">new search</Link> or {contactUsLink} if the
+            error persists.
           </Text>
         </>
       )
@@ -58,13 +60,7 @@ export default function PageError({ errorStatus, page }: PageErrorProps) {
             We encountered an error while trying to load the page.
           </Text>
           <Text marginBottom="0">
-            Try refreshing the page or{" "}
-            <Link
-              onClick={() => openFeedbackFormWithError(errorStatus)}
-              id="feedback-link"
-            >
-              contact us
-            </Link>{" "}
+            Try refreshing the page or {contactUsLink}
             if the error persists.
           </Text>
         </>
@@ -82,13 +78,7 @@ export default function PageError({ errorStatus, page }: PageErrorProps) {
             We couldn&apos;t process your request at this time.
           </Text>
           <Text marginBottom="0">
-            Try again later or{" "}
-            <Link
-              onClick={() => openFeedbackFormWithError(errorStatus)}
-              id="feedback-link"
-            >
-              contact us
-            </Link>{" "}
+            Try again later or {contactUsLink}
             if the error persists.
           </Text>
         </>
