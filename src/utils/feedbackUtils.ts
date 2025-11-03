@@ -1,5 +1,5 @@
 import type { FeedbackMetadataAndComment } from "../types/feedbackTypes"
-import { type SendEmailRequest } from "aws-sdk/clients/ses"
+import { type SendEmailRequest } from "@aws-sdk/client-ses"
 import { encodeHTML } from "./appUtils"
 
 /**
