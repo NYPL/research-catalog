@@ -4,10 +4,9 @@ import { logServerError } from "../utils/appUtils"
 
 const kms = new KMSClient({
   region: "us-east-1",
-  credentials:
-    process.env.APP_ENV === "development"
-      ? fromSSO({ profile: "default" })
-      : undefined,
+  ...(process.env.APP_ENV === "development"
+    ? { credentials: fromSSO({ profile: "default" }) }
+    : {}),
 })
 
 const decryptKMS = async (key: string): Promise<string | null> => {
