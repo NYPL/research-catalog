@@ -129,12 +129,12 @@ export default class BibDetails {
   buildTopDetails(): AnyBibDetail[] {
     return [
       { field: "titleDisplay", label: "Title" },
+      // internal link
+      { field: "creatorLiteral", label: "Author" },
       { field: "publicationStatement", label: "Published by" },
       { field: "format", label: "Format" },
       // external link
       { field: "supplementaryContent", label: "Supplementary content" },
-      // internal link
-      { field: "creatorLiteral", label: "Author" },
     ]
       .map((fieldMapping) => {
         switch (fieldMapping.field) {
@@ -226,8 +226,15 @@ export default class BibDetails {
 
     annotatedMarcDetails.forEach((detail) => {
       if (labelsSet.has(detail.label)) return
+      if (
+        detail.label === "Subject" &&
+        (!this.bib.subjectLiteral || !this.bib.subjectLiteral.length)
+      ) {
+        return
+      }
       const detailValues = normalizeValues(detail.value)
       const detailMarcTags = detail.marcTags
+      // include subjects, which will be displayed but not linked
       const overlap = detailValues.some((v) => resourceValuesSet.has(v))
       if (!overlap) {
         filteredMarc.push(detail)
