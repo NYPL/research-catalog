@@ -1,7 +1,7 @@
-import { KMSClient, DecryptCommand } from "@aws-sdk/client-kms"
+import { DecryptCommand, KMS } from "@aws-sdk/client-kms"
 import { logServerError } from "../utils/appUtils"
 
-const kms = new KMSClient({
+const kms: KMS = new KMS({
   region: "us-east-1",
 })
 
