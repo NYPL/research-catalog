@@ -96,7 +96,7 @@ describe("fetchSearchResults", () => {
     expect(response).toEqual({
       status: 404,
       error:
-        "No results found for /discovery/resources?q=empty&per_page=50, /discovery/resources/aggregations?q=empty",
+        "No results found for search ?q=empty&per_page=50, aggregations /aggregations?q=empty",
     })
   })
 })
