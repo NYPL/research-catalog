@@ -71,6 +71,11 @@ const SearchBrowseForm = ({
     (router?.query?.search_scope as string) || initialScope
   )
 
+  useEffect(() => {
+    setSearchTerm((router.query.q as string) || "")
+    setSearchScope((router.query.search_scope as string) || initialScope)
+  }, [router.query.q, router.query.search_scope, initialScope])
+
   const placeholder = selectOptions[searchScope].placeholder
   const tipText = selectOptions[searchScope].searchTip
 

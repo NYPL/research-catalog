@@ -26,7 +26,11 @@ describe("PreferredSubjectTableCell", () => {
 
     const link = screen.getByRole("link", { name: "Art -- Artists" })
     expect(link).toBeInTheDocument()
-    expect(link).toHaveAttribute("href", "/browse/subject/art%20--%20artists")
+    expect(link).toHaveAttribute(
+      "href",
+      // Full page reload link, not Next Link with CSR
+      "/research/research-catalog/browse/subject/art%20--%20artists"
+    )
   })
 
   it("renders 'See also' section if seeAlso terms exist", () => {
