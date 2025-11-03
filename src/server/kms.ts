@@ -1,9 +1,7 @@
 import { DecryptCommand, KMS } from "@aws-sdk/client-kms"
 import { logServerError } from "../utils/appUtils"
 
-const kms: KMS = new KMS({
-  region: "us-east-1",
-})
+const kms: KMS = new KMS({ region: "us-east-1" })
 
 const decryptKMS = async (key: string): Promise<string | null> => {
   const params = {
