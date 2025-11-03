@@ -65,7 +65,6 @@ describe("fetchSearchResults", () => {
     mockClient.get
       .mockResolvedValueOnce({
         status: 422,
-        name: "InvalidParameterError",
         error: "Invalid query",
       })
       .mockResolvedValueOnce({
@@ -76,7 +75,6 @@ describe("fetchSearchResults", () => {
     const response = await fetchSearchResults({ q: "!!!" })
     expect(response).toEqual({
       status: 422,
-      name: "InvalidParameterError",
       error: "Invalid query",
     })
   })

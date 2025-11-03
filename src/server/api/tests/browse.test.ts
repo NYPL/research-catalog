@@ -49,14 +49,12 @@ describe("fetchSubjects", () => {
   it("handles 404 response", async () => {
     mockClient.get.mockResolvedValueOnce({
       status: 404,
-      name: "NotFoundError",
       error: "test",
     })
 
     const response = await fetchSubjects({ q: "unknown" })
     expect(response).toEqual({
       status: 404,
-      name: "NotFoundError",
       error: "test",
     })
   })
