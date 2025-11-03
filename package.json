@@ -17,9 +17,8 @@
     "load-search-vocabs": "concurrently -k -n \"NEXT,SCRIPT\" -c \"blue,magenta\" \"npm run dev\" \"npx tsx scripts/load-search-vocabs.ts\""
   },
   "dependencies": {
-    "@nypl/design-system-react-components": "4.0.3",
     "@aws-sdk/client-kms": "3.921.0",
-    "@aws-sdk/credential-providers": "3.922.0",
+    "@nypl/design-system-react-components": "4.0.3",
     "@nypl/nypl-data-api-client": "1.0.5",
     "@nypl/pickup-time-estimator": "1.5.2",
     "@nypl/sierra-wrapper": "1.1.0",
