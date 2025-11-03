@@ -4,6 +4,7 @@
   "scripts": {
     "dev": "next dev -p 8080",
     "build": "next build",
+    "predev": "scripts/check-sso-login.sh",
     "start": "next start",
     "local-prod": "next build && next start -p 8080",
     "check-types": "tsc --noemit",
