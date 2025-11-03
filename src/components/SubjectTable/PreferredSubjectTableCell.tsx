@@ -1,6 +1,7 @@
 import { Flex, List, Text } from "@nypl/design-system-react-components"
 import Link from "../Link/Link"
 import type { PreferredSubject, SubjectLink } from "../../types/browseTypes"
+import { BASE_URL } from "../../config/constants"
 
 const PreferredSubjectTableCell = ({
   subject,
@@ -25,9 +26,8 @@ const PreferredSubjectTableCell = ({
 
   return (
     <Flex flexDir="column" gap="xs">
-      <Link isUnderlined={false} href={subject.url}>
-        {subject.termLabel}
-      </Link>
+      {/* Using standard link instead of CSR, to trigger back to index button */}
+      <a href={`${BASE_URL}${subject.url}`}>{subject.termLabel}</a>
       {relatedTerms.length > 0 && (
         <List
           variant="ul"
