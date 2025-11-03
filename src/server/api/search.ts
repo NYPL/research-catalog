@@ -103,7 +103,6 @@ export async function fetchSearchResults(
       )
       return {
         status: results.status,
-        name: results.name,
         error: results.error,
       }
     }
