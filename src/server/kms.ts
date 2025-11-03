@@ -1,8 +1,12 @@
 import { KMSClient, DecryptCommand } from "@aws-sdk/client-kms"
+import { fromSSO } from "@aws-sdk/credential-providers"
 import { logServerError } from "../utils/appUtils"
 
 const kms = new KMSClient({
   region: "us-east-1",
+  ...(process.env.APP_ENV === "development"
+    ? { credentials: fromSSO({ profile: "default" }) }
+    : {}),
 })
 
 const decryptKMS = async (key: string): Promise<string | null> => {
@@ -13,7 +17,6 @@ const decryptKMS = async (key: string): Promise<string | null> => {
   try {
     const decrypted = await kms.send(new DecryptCommand(params))
     if (!decrypted.Plaintext) throw new Error("Empty plaintext")
-
     return Buffer.from(decrypted.Plaintext).toString("utf8")
   } catch (error: any) {
     logServerError("decryptKMS", error.message)
