@@ -16,6 +16,7 @@ type ResultsErrorProps = {
   errorStatus: HTTPStatusCode
 }
 
+/* Display error state that replaces browse/search results. */
 export default function ResultsError({ errorStatus, page }: ResultsErrorProps) {
   const { openFeedbackFormWithError } = useContext(FeedbackContext)
   let metadataTitle = "Error"

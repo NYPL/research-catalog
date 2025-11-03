@@ -15,6 +15,7 @@ type PageErrorProps = {
   errorStatus: HTTPStatusCode
 }
 
+/* Display error state that replaces entire page contents. */
 export default function PageError({ errorStatus, page }: PageErrorProps) {
   const { openFeedbackFormWithError } = useContext(FeedbackContext)
   let metadataTitle = "Error"

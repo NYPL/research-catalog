@@ -19,15 +19,14 @@ export async function fetchSubjects(
   try {
     // Failure to build client will throw from this:
     const client = await nyplApiClient()
-    const results = await client.get(
-      `${DISCOVERY_API_BROWSE_ROUTE}${browseQuery}&per_page=${SUBJECTS_PER_PAGE.toString()}`
-    )
+    const request = `${DISCOVERY_API_BROWSE_ROUTE}${browseQuery}&per_page=${SUBJECTS_PER_PAGE.toString()}`
+    const results = await client.get(request)
 
     // Handle no results (404)
     if (results?.totalResults === 0) {
       return {
         status: 404,
-        error: `No results found for ${DISCOVERY_API_BROWSE_ROUTE}${browseQuery}&per_page=${SUBJECTS_PER_PAGE.toString()}`,
+        error: `No results found for ${request}`,
       }
     }
 
@@ -35,9 +34,7 @@ export async function fetchSubjects(
     if (results.status) {
       logServerError(
         "fetchSubjects",
-        `${
-          results.error && results.error
-        } Request: ${DISCOVERY_API_BROWSE_ROUTE}${browseQuery}&per_page=${SUBJECTS_PER_PAGE.toString()}`
+        `${results.error && results.error} Request: ${request}`
       )
       return {
         status: results.status,

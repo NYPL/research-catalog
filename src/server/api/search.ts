@@ -44,7 +44,7 @@ export async function fetchSearchResults(
     queryString = "?"
   }
   const aggregationQuery = `/aggregations${queryString}`
-  const resultsQuery = `${queryString}&per_page=${RESULTS_PER_PAGE.toString()}`
+  const searchQuery = `${queryString}&per_page=${RESULTS_PER_PAGE.toString()}`
 
   // Get the following in parallel:
   //  - search results
@@ -54,7 +54,7 @@ export async function fetchSearchResults(
     const client = await nyplApiClient()
 
     const [resultsResponse, aggregationsResponse] = await Promise.allSettled([
-      client.get(`${DISCOVERY_API_SEARCH_ROUTE}${resultsQuery}`),
+      client.get(`${DISCOVERY_API_SEARCH_ROUTE}${searchQuery}`),
       client.get(`${DISCOVERY_API_SEARCH_ROUTE}${aggregationQuery}`),
     ])
 
@@ -89,7 +89,7 @@ export async function fetchSearchResults(
     if (results?.totalResults === 0) {
       return {
         status: 404,
-        error: `No results found for ${DISCOVERY_API_SEARCH_ROUTE}${resultsQuery}, ${DISCOVERY_API_SEARCH_ROUTE}${aggregationQuery}`,
+        error: `No results found for search ${searchQuery}, aggregations ${aggregationQuery}`,
       }
     }
 
@@ -99,7 +99,7 @@ export async function fetchSearchResults(
         "fetchSearchResults",
         `${
           results.error && results.error
-        } Requests: ${DISCOVERY_API_SEARCH_ROUTE}${resultsQuery}, ${DISCOVERY_API_SEARCH_ROUTE}${aggregationQuery}`
+        } Requests: search ${searchQuery}, aggregations ${aggregationQuery}`
       )
       return {
         status: results.status,

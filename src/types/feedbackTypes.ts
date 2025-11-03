@@ -8,7 +8,7 @@ export interface FeedbackMetadataAndComment {
   email: string
   id?: string
   barcode?: string
-  error?: string
+  errorStatus?: string
 }
 
 /* eslint-disable @typescript-eslint/naming-convention */
@@ -19,7 +19,7 @@ export type FeedbackContextType = {
   isOpen?: boolean
   itemMetadata: ItemMetadata
   setItemMetadata: (value: ItemMetadata) => void
-  error?: HTTPStatusCode | null
-  setError: (value: HTTPStatusCode) => void
+  errorStatus?: HTTPStatusCode | null
+  setErrorStatus: (value: HTTPStatusCode) => void
   openFeedbackFormWithError: (statusCode?: HTTPStatusCode) => void
 }
