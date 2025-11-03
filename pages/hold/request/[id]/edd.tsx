@@ -56,9 +56,9 @@ interface EDDRequestPropsType {
   isAuthenticated?: boolean
   patronEligibilityStatus?: PatronEligibilityStatus
   // Hold request process errors
-  errorStatus?: HoldErrorStatus
+  holdErrorStatus?: HoldErrorStatus
   // Bib/item fetching errors
-  pageError?: HTTPStatusCode | null
+  bibItemErrorStatus?: HTTPStatusCode | null
 }
 
 /**
@@ -70,26 +70,26 @@ export default function EDDRequestPage({
   patronId,
   patronEmail,
   isAuthenticated,
-  errorStatus: defaultErrorStatus,
+  holdErrorStatus: defaultErrorStatus,
   patronEligibilityStatus: defaultEligibilityStatus,
-  pageError = null,
+  bibItemErrorStatus = null,
 }: EDDRequestPropsType) {
   const metadataTitle = `Electronic Delivery Request | ${SITE_NAME}`
   const bib = tryInstantiate({
     constructor: Bib,
     args: [discoveryBibResult],
-    ignoreError: !!pageError,
+    ignoreError: !!bibItemErrorStatus,
     errorMessage: "Bib undefined",
   })
   const item = tryInstantiate({
     constructor: Item,
     args: [discoveryItemResult, bib],
-    ignoreError: !!pageError,
+    ignoreError: !!bibItemErrorStatus,
     errorMessage: "Item undefined",
   })
   const holdId = item ? `${item.bibId}-${item.id}` : ""
 
-  const [errorStatus, setErrorStatus] = useState(defaultErrorStatus)
+  const [holdErrorStatus, setHoldErrorStatus] = useState(defaultErrorStatus)
   const [patronEligibilityStatus, setPatronEligibilityStatus] = useState(
     defaultEligibilityStatus
   )
@@ -131,16 +131,16 @@ export default function EDDRequestPage({
 
   useEffect(() => {
     if (
-      errorStatus &&
-      errorStatus !== "invalid" &&
+      holdErrorStatus &&
+      holdErrorStatus !== "invalid" &&
       bannerContainerRef.current
     ) {
       bannerContainerRef.current.focus()
     }
-  }, [errorStatus, patronEligibilityStatus])
+  }, [holdErrorStatus, patronEligibilityStatus])
 
-  if (pageError) {
-    return <PageError page="hold" errorStatus={pageError} />
+  if (bibItemErrorStatus) {
+    return <PageError page="hold" errorStatus={bibItemErrorStatus} />
   }
 
   const handleServerHoldPostError = (errorMessage: string) => {
@@ -149,7 +149,7 @@ export default function EDDRequestPage({
       errorMessage
     )
     setFormPosting(false)
-    setErrorStatus("failed")
+    setHoldErrorStatus("failed")
   }
 
   const handleEDDRequestGAEvent = (item: Item) => {
@@ -184,12 +184,12 @@ export default function EDDRequestPage({
         // Patron is ineligible to place holds
         case 401:
           setFormPosting(false)
-          setErrorStatus("patronIneligible")
+          setHoldErrorStatus("patronIneligible")
           setPatronEligibilityStatus(responseJson?.patronEligibilityStatus)
           break
         case 403:
           setFormPosting(false)
-          setErrorStatus("failed")
+          setHoldErrorStatus("failed")
           break
         case 500:
           handleServerHoldPostError(responseJson.error)
@@ -213,10 +213,10 @@ export default function EDDRequestPage({
         {/* Always render the wrapper element that will display the
           dynamically rendered notification for focus management */}
         <Box tabIndex={-1} ref={bannerContainerRef}>
-          {errorStatus && (
+          {holdErrorStatus && (
             <HoldRequestErrorBanner
               item={item}
-              errorStatus={errorStatus}
+              errorStatus={holdErrorStatus}
               patronEligibilityStatus={patronEligibilityStatus}
             />
           )}
@@ -228,13 +228,13 @@ export default function EDDRequestPage({
         <HoldRequestItemDetails item={item} />
         {isLoading || formPosting ? (
           <SkeletonLoader showImage={false} data-testid="edd-request-loading" />
-        ) : errorStatus !== "eddUnavailable" ? (
+        ) : holdErrorStatus !== "eddUnavailable" ? (
           <EDDRequestForm
             eddFormState={eddFormState}
             setEddFormState={setEddFormState}
             handleSubmit={postEDDRequest}
-            setErrorStatus={setErrorStatus}
-            errorStatus={errorStatus}
+            setErrorStatus={setHoldErrorStatus}
+            errorStatus={holdErrorStatus}
             handleGAEvent={() => handleEDDRequestGAEvent(item)}
             holdId={holdId}
           />
@@ -289,13 +289,13 @@ export async function getServerSideProps({ params, req, res, query }) {
 
     if ("status" in discoveryBib && discoveryBib.status !== 200) {
       return {
-        props: { pageError: discoveryBib.status },
+        props: { bibItemErrorStatus: discoveryBib.status },
       }
     }
     if (!discoveryItemResult) {
       console.error("EDD: Item not found")
       return {
-        props: { pageError: discoveryBib.status },
+        props: { bibItemErrorStatus: discoveryBib.status },
       }
     }
 
@@ -341,7 +341,7 @@ export async function getServerSideProps({ params, req, res, query }) {
         patronEmail,
         isAuthenticated,
         patronEligibilityStatus,
-        errorStatus: locationOrEligibilityFetchFailed
+        holdErrorStatus: locationOrEligibilityFetchFailed
           ? "failed"
           : patronEligibilityStatus.status === 401
           ? "patronIneligible"
@@ -355,7 +355,7 @@ export async function getServerSideProps({ params, req, res, query }) {
   } catch (error) {
     console.error(error)
     return {
-      props: { pageError: 500 },
+      props: { bibItemErrorStatus: 500 },
     }
   }
 }

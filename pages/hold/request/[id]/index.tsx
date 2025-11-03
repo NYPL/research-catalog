@@ -56,9 +56,9 @@ interface HoldRequestPropsType {
   isAuthenticated?: boolean
   patronEligibilityStatus?: PatronEligibilityStatus
   // Hold request process errors
-  errorStatus?: HoldErrorStatus
+  holdErrorStatus?: HoldErrorStatus
   // Bib/item fetching errors
-  pageError?: HTTPStatusCode | null
+  bibItemErrorStatus?: HTTPStatusCode | null
 }
 
 /**
@@ -72,9 +72,9 @@ export default function HoldRequestPage({
   deliveryLocations = [],
   patronId,
   isAuthenticated,
-  errorStatus: defaultErrorStatus,
+  holdErrorStatus: defaultErrorStatus,
   patronEligibilityStatus: defaultEligibilityStatus,
-  pageError = null,
+  bibItemErrorStatus = null,
 }: HoldRequestPropsType) {
   const metadataTitle = `Item Request | ${SITE_NAME}`
 
@@ -85,13 +85,13 @@ export default function HoldRequestPage({
   const bib = tryInstantiate({
     constructor: Bib,
     args: [discoveryBibResult],
-    ignoreError: !!pageError,
+    ignoreError: !!bibItemErrorStatus,
     errorMessage: "Bib undefined",
   })
   const item = tryInstantiate({
     constructor: Item,
     args: [discoveryItemResult, bib],
-    ignoreError: !!pageError,
+    ignoreError: !!bibItemErrorStatus,
     errorMessage: "Item undefined",
   })
   const holdId = item ? `${item.bibId}-${item.id}` : ""
@@ -106,7 +106,7 @@ export default function HoldRequestPage({
     }
   }, [])
 
-  const [errorStatus, setErrorStatus] = useState(defaultErrorStatus)
+  const [holdErrorStatus, setHoldErrorStatus] = useState(defaultErrorStatus)
   const [patronEligibilityStatus, setPatronEligibilityStatus] = useState(
     defaultEligibilityStatus
   )
@@ -115,8 +115,8 @@ export default function HoldRequestPage({
   const router = useRouter()
   const isLoading = useLoading()
 
-  if (pageError) {
-    return <PageError page="hold" errorStatus={pageError} />
+  if (bibItemErrorStatus) {
+    return <PageError page="hold" errorStatus={bibItemErrorStatus} />
   }
 
   const handleServerHoldPostError = (errorMessage: string) => {
@@ -125,7 +125,7 @@ export default function HoldRequestPage({
       errorMessage
     )
     setFormPosting(false)
-    setErrorStatus("failed")
+    setHoldErrorStatus("failed")
     setPersistentFocus(idConstants.holdErrorBanner)
   }
 
@@ -165,12 +165,12 @@ export default function HoldRequestPage({
         // Patron is ineligible to place holds
         case 401:
           setFormPosting(false)
-          setErrorStatus("patronIneligible")
+          setHoldErrorStatus("patronIneligible")
           setPatronEligibilityStatus(responseJson?.patronEligibilityStatus)
           break
         case 403:
           setFormPosting(false)
-          setErrorStatus("failed")
+          setHoldErrorStatus("failed")
           break
         case 500:
           handleServerHoldPostError(responseJson.error)
@@ -199,10 +199,10 @@ export default function HoldRequestPage({
         {/* Always render the wrapper element that will display the
           dynamically rendered notification for focus management */}
         <Box tabIndex={-1} id={idConstants.holdErrorBanner}>
-          {errorStatus && (
+          {holdErrorStatus && (
             <HoldRequestErrorBanner
               item={item}
-              errorStatus={errorStatus}
+              errorStatus={holdErrorStatus}
               patronEligibilityStatus={patronEligibilityStatus}
             />
           )}
@@ -229,7 +229,7 @@ export default function HoldRequestPage({
               handleSubmit={handleSubmit}
               holdId={holdId}
               patronId={patronId}
-              errorStatus={errorStatus}
+              errorStatus={holdErrorStatus}
               source={item.formattedSourceForHoldRequest}
               isDisabled={holdCompleted}
             />
@@ -284,7 +284,7 @@ export async function getServerSideProps({ params, req, res }) {
 
     if ("status" in discoveryBib && discoveryBib.status !== 200) {
       return {
-        props: { pageError: discoveryBib.status },
+        props: { bibItemErrorStatus: discoveryBib.status },
       }
     }
     if (!discoveryItemResult) {
@@ -325,7 +325,7 @@ export async function getServerSideProps({ params, req, res }) {
         patronId,
         isAuthenticated,
         patronEligibilityStatus,
-        errorStatus: locationOrEligibilityFetchFailed
+        holdErrorStatus: locationOrEligibilityFetchFailed
           ? "failed"
           : patronEligibilityStatus.status === 401
           ? "patronIneligible"
@@ -335,7 +335,7 @@ export async function getServerSideProps({ params, req, res }) {
   } catch (error) {
     console.log(error)
     return {
-      props: { errorStatus: 500 },
+      props: { bibItemErrorStatus: 500 },
     }
   }
 }
