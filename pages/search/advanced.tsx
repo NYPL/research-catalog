@@ -91,6 +91,7 @@ export default function AdvancedSearch({
     dateFrom: searchFormState["filters"].dateFrom,
     changeHandler: (e) => handleInputChange(e, "filter_change"),
   })
+  const { dateError } = dateFilterProps
 
   const handleInputChange = (e: SyntheticEvent, type: SearchFormActionType) => {
     e.preventDefault()
@@ -132,7 +133,7 @@ export default function AdvancedSearch({
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
     if (!validateDates()) {
-      const { from, to, range } = dateFilterProps.dateError
+      const { from, to, range } = dateError
       let dateFieldError = ""
       if (from) dateFieldError = "The 'from' date field contains an error."
       else if (to) dateFieldError = "The 'to' date field contains an error."
@@ -173,13 +174,13 @@ export default function AdvancedSearch({
   }
 
   useEffect(() => {
-    const { from, to, range } = dateFilterProps.dateError || {}
+    const { from, to, range } = dateError || {}
     if (alert && !from && !to && !range && notificationRef.current) {
       setTimeout(() => {
         notificationRef.current?.focus()
       }, 0)
     }
-  }, [alert, dateFilterProps.dateError])
+  }, [alert, dateError])
 
   const fields = [
     { value: "format", label: "Format", options: formatOptions },

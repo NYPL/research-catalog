@@ -198,6 +198,7 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
       <Accordion
         data-testid="date-accordion"
         id="date"
+        isDefaultOpen
         sx={{
           button: {
             fontWeight: "400 !important",

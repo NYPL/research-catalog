@@ -33,7 +33,7 @@ export const useDateFilter = (props: DateFilterHookPropsType) => {
     if (!value) return undefined
     const digits = value.replace(/[^\d]/g, "")
     if (digits.length < 4 || formatInvalid(value))
-      return `Please enter a valid '${fieldName}' date.`
+      return `Error: Please enter a valid '${fieldName}' date.`
     return undefined
   }
 
@@ -53,7 +53,7 @@ export const useDateFilter = (props: DateFilterHookPropsType) => {
         dateTo &&
         rangeInvalid(dateFrom, dateTo)
       ) {
-        errors.range = "End date must be later than start date."
+        errors.range = "Error: End date must be later than start date."
       }
 
       setDateError(errors)
@@ -72,7 +72,7 @@ export const useDateFilter = (props: DateFilterHookPropsType) => {
     errors.to = validateField(to, "to")
 
     if (!errors.from && !errors.to && from && to && rangeInvalid(from, to)) {
-      errors.range = "End date must be later than start date."
+      errors.range = "Error: End date must be later than start date."
     }
 
     setDateError(errors)
