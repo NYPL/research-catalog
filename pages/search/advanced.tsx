@@ -81,11 +81,7 @@ export default function AdvancedSearch({
     initialSearchFormState
   )
 
-  const {
-    dateFilterProps,
-    validateDates,
-    clearInputs: clearDateInputs,
-  } = useDateFilter({
+  const { dateFilterProps, clearInputs: clearDateInputs } = useDateFilter({
     inputRefs: dateInputRefs,
     dateTo: searchFormState["filters"].dateTo,
     dateFrom: searchFormState["filters"].dateFrom,
@@ -135,12 +131,12 @@ export default function AdvancedSearch({
     const errors = dateFilterProps.onApply()
     if (Object.keys(errors).length > 0) {
       let dateFieldError = ""
-      if (errors.from)
+      if (errors.combined || errors.range || (errors.from && errors.to))
+        dateFieldError = "The 'from' and 'to' fields contain errors."
+      else if (errors.from)
         dateFieldError = "The 'from' date field contains an error."
       else if (errors.to)
         dateFieldError = "The 'to' date field contains an error."
-      else if (errors.both)
-        dateFieldError = "The 'from' and 'to' fields contain errors."
       setErrorMessage(`${dateFieldError} ${dateErrorMessage}`)
       setAlert(true)
       return
@@ -172,8 +168,8 @@ export default function AdvancedSearch({
   }
 
   useEffect(() => {
-    const { from, to, both } = dateError || {}
-    if (alert && !from && !to && !both && notificationRef.current) {
+    const { from, to, range } = dateError || {}
+    if (alert && !from && !to && !range && notificationRef.current) {
       setTimeout(() => {
         notificationRef.current?.focus()
       }, 0)

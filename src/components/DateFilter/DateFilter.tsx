@@ -31,6 +31,8 @@ const DateFilter = ({
   isAdvancedSearch = false,
 }: DateFilterPropsType) => {
   const hasError = Object.values(dateError).some(Boolean)
+  const errorText =
+    dateError.combined || dateError.from || dateError.to || dateError.range
   return (
     <>
       <Fieldset
@@ -65,7 +67,7 @@ const DateFilter = ({
               onChange={onChange}
               onBlur={onBlur}
               ref={inputRefs[0]}
-              isInvalid={!!(dateError.from || dateError.both)}
+              isInvalid={!!(dateError.from || dateError.range)}
               invalidText="Ex. 1900"
               maxLength={10}
               sx={{
@@ -83,7 +85,7 @@ const DateFilter = ({
               onChange={onChange}
               onBlur={onBlur}
               ref={inputRefs[1]}
-              isInvalid={!!(dateError.to || dateError.both)}
+              isInvalid={!!(dateError.to || dateError.range)}
               invalidText="Ex. 1950"
               maxLength={10}
               sx={{
@@ -94,9 +96,7 @@ const DateFilter = ({
           </Flex>
           <HelperErrorText
             color="ui.error.primary"
-            text={
-              hasError && (dateError.from || dateError.to || dateError.both)
-            }
+            text={hasError && `Error: ${errorText}`}
           />
 
           {!isAdvancedSearch && (
