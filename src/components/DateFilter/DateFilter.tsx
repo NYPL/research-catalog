@@ -65,7 +65,7 @@ const DateFilter = ({
               sx={{
                 label: { fontSize: isAdvancedSearch ? "12px" : undefined },
               }}
-              aria-describedby="date-from-helperErrorText dateErrorMessage"
+              aria-describedby="date-from-helperErrorText"
             />
             <TextInput
               width="100%"
@@ -82,17 +82,16 @@ const DateFilter = ({
               sx={{
                 label: { fontSize: isAdvancedSearch ? "12px" : undefined },
               }}
-              aria-describedby="date-to-helperErrorText dateErrorMessage"
+              aria-describedby="date-to-helperErrorText"
             />
           </Flex>
-          <div aria-label="Date error message" id="dateErrorMessage">
-            {hasError && (
-              <HelperErrorText
-                color="ui.error.primary"
-                text={dateError.from || dateError.to || dateError.range}
-              />
-            )}
-          </div>
+          <HelperErrorText
+            color="ui.error.primary"
+            text={
+              hasError && (dateError.from || dateError.to || dateError.range)
+            }
+          />
+
           {!isAdvancedSearch && (
             <Button
               variant="secondary"
