@@ -13,7 +13,6 @@ export interface DateErrorState {
   from?: string
   to?: string
   both?: string
-  range?: string
 }
 
 export const useDateFilter = (props: DateFilterHookPropsType) => {
@@ -48,7 +47,7 @@ export const useDateFilter = (props: DateFilterHookPropsType) => {
       if (
         errors.from &&
         errors.to &&
-        !rangeInvalid(parseDate(dateFrom)!, parseDate(dateTo)!)
+        !rangeInvalid(parseDate(dateFrom), parseDate(dateTo))
       ) {
         newErrors.both = errors.both
       } else {
@@ -180,7 +179,7 @@ export const validateDates = (
     !fromFuture &&
     !toFuture
   if (bothValid && rangeInvalid(fromParsed, toParsed))
-    errors.range = "Error: End date must be later than start date."
+    errors.both = "Error: End date must be later than start date."
 
   return errors
 }
