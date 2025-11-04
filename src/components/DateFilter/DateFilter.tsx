@@ -59,7 +59,7 @@ const DateFilter = ({
               value={dateFrom}
               onChange={changeHandler}
               ref={inputRefs[0]}
-              isInvalid={!!(dateError.from || dateError.range)}
+              isInvalid={!!(dateError.from || dateError.both)}
               invalidText="Ex. 1900"
               maxLength={10}
               sx={{
@@ -76,7 +76,7 @@ const DateFilter = ({
               value={dateTo}
               onChange={changeHandler}
               ref={inputRefs[1]}
-              isInvalid={!!(dateError.to || dateError.range)}
+              isInvalid={!!(dateError.to || dateError.both)}
               invalidText="Ex. 1950"
               maxLength={10}
               sx={{
@@ -88,7 +88,7 @@ const DateFilter = ({
           <HelperErrorText
             color="ui.error.primary"
             text={
-              hasError && (dateError.from || dateError.to || dateError.range)
+              hasError && (dateError.from || dateError.to || dateError.both)
             }
           />
 
@@ -98,7 +98,6 @@ const DateFilter = ({
               id="apply-dates"
               onClick={applyHandler}
               width="100%"
-              isDisabled={hasError}
             >
               Apply
             </Button>

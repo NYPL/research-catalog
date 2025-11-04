@@ -2,7 +2,7 @@
   "name": "research-catalog",
   "version": "1.5.7",
   "scripts": {
-    "dev": "next dev -p 8080",
+    "dev": "AWS_PROFILE=nypl-digital-dev next dev -p 8080",
     "build": "next build",
     "start": "next start",
     "local-prod": "next build && next start -p 8080",
