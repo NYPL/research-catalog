@@ -1,17 +1,11 @@
-import {
-  useState,
-  useEffect,
-  useRef,
-  type MutableRefObject,
-  type SyntheticEvent,
-} from "react"
+import { useState, type MutableRefObject, type SyntheticEvent } from "react"
 import type { TextInputRefType } from "@nypl/design-system-react-components"
 
 export interface DateFilterHookPropsType {
   inputRefs: MutableRefObject<TextInputRefType>[]
   dateFrom: string
   dateTo: string
-  changeHandler: (e: SyntheticEvent) => void
+  changeHandler?: (e: SyntheticEvent) => void
   applyHandler?: () => void
 }
 
@@ -19,49 +13,76 @@ export interface DateErrorState {
   from?: string
   to?: string
   both?: string
+  range?: string
 }
 
-/**
- * useDateFilter manages date range inputs.
- * Provides format and range validation for 'from' and 'to' dates.
- * Returns error state, validateDates() function (for manual validation),
- * and clearInputs() function.
- */
 export const useDateFilter = (props: DateFilterHookPropsType) => {
-  const { inputRefs, dateFrom, dateTo } = props
+  const { inputRefs, dateFrom, dateTo, changeHandler, applyHandler } = props
   const [dateError, setDateError] = useState<DateErrorState>({})
-  const debounceRef = useRef<number | null>(null)
 
-  // Debounced validation
-  useEffect(() => {
-    if (debounceRef.current) clearTimeout(debounceRef.current)
+  const onBlur = () => {
+    const errors = validateDates(dateFrom, dateTo)
+    setDateError(errors)
+  }
 
-    debounceRef.current = window.setTimeout(() => {
-      let errors: DateErrorState = {}
+  const onChange = (e: SyntheticEvent) => {
+    const target = e.target as HTMLInputElement
+    const { name, value } = target
 
-      errors = validateDates(dateFrom, dateTo)
-      setDateError(errors)
-      debounceRef.current = null
-    }, 600)
+    changeHandler?.(e) // propagate change
 
-    return () => {
-      if (debounceRef.current) clearTimeout(debounceRef.current)
+    // Re-run validation with the new value for this field
+    const errors = validateDates(
+      name === "dateFrom" ? value : dateFrom,
+      name === "dateTo" ? value : dateTo
+    )
+
+    setDateError((prev) => {
+      const newErrors: DateErrorState = { ...prev }
+
+      // Always update the field being typed into
+      if (name === "dateFrom") newErrors.from = undefined
+      if (name === "dateTo") newErrors.to = undefined
+
+      // Merge in errors for the other field only if they exist
+      if (name === "dateFrom" && errors.to) newErrors.to = errors.to
+      if (name === "dateTo" && errors.from) newErrors.from = errors.from
+
+      // Recompute 'both' only if both are invalid for the same type (format/future)
+      if (
+        errors.from &&
+        errors.to &&
+        !rangeInvalid(parseDate(dateFrom)!, parseDate(dateTo)!)
+      ) {
+        newErrors.both = errors.both
+      } else {
+        delete newErrors.both
+      }
+
+      return newErrors
+    })
+  }
+
+  const onApply = () => {
+    const errors = validateDates(dateFrom, dateTo)
+    setDateError(errors)
+
+    // Focus first invalid field
+    if (errors.from || errors.both) {
+      inputRefs[0]?.current?.focus()
+      return errors
     }
-  }, [dateFrom, dateTo])
+    if (errors.to) {
+      inputRefs[1]?.current?.focus()
+      return errors
+    }
 
-  // Manual validation (Apply button)
-  // const validateDates = (from = dateFrom, to = dateTo) => {
-  //   const errors: DateErrorState = {}
-  //   errors.from = validateField(from, "from")
-  //   errors.to = validateField(to, "to")
+    if (Object.keys(errors).length === 0 && applyHandler) {
+      applyHandler()
+    }
 
-  //   if (!errors.from && !errors.to && from && to && rangeInvalid(from, to)) {
-  //     errors.range = `Error: ${rangeErrorMessage}`
-  //   }
-
-  //   setDateError(errors)
-  //   return Object.values(errors).every((v) => v === undefined)
-  // }
+    return errors
+  }
 
   const clearInputs = () => {
     inputRefs.forEach((ref) => {
@@ -72,22 +93,25 @@ export const useDateFilter = (props: DateFilterHookPropsType) => {
 
   return {
     dateFilterProps: {
-      ...props,
+      dateFrom,
+      dateTo,
       dateError,
+      onChange,
+      onBlur,
+      inputRefs,
+      onApply,
     },
-    validateDates,
     clearInputs,
+    validateDates,
   }
 }
+
+/* -------------------- Validation utils -------------------- */
 
 const slashPattern =
   /^(\d{4})(?:\/(0[1-9]|1[0-2])(\/(0[1-9]|[12][0-9]|3[01]))?)?$/
 const hasFormatError = (v: string) => v && !slashPattern.test(v)
 
-/**
- * Parses a date string in YYYY, YYYY/MM, or YYYY/MM/DD format.
- * Returns null if the date is invalid or doesn't exist (ex. 2023/02/30).
- */
 export const parseDate = (value: string): Date | null => {
   if (!value) return null
   const digits = value.replace(/[^\d]/g, "")
@@ -111,61 +135,49 @@ export const parseDate = (value: string): Date | null => {
   return parsed
 }
 
-/**
- * Checks if a parsed date is in the future (today allowed).
- */
 export const isFutureDate = (date: Date): boolean => {
   const today = new Date()
   today.setHours(0, 0, 0, 0)
   return date.getTime() > today.getTime()
 }
 
-/**
- * Checks if end date comes before start date.
- */
-export const rangeInvalid = (from: Date, to: Date): boolean => {
+export const rangeInvalid = (from: Date | null, to: Date | null): boolean => {
+  if (!from || !to) return false
   return from.getTime() > to.getTime()
 }
 
-/**
- * Validates two date fields at once.
- * - Checks if both are formatted correctly and real dates
- * - Checks for future dates
- * - Checks that the range is valid
- */
 export const validateDates = (
   dateFrom: string,
   dateTo: string
 ): DateErrorState => {
   const errors: DateErrorState = {}
-
   const fromParsed = parseDate(dateFrom)
   const toParsed = parseDate(dateTo)
 
-  // Format and real date check
   const fromInvalid = !!dateFrom && (!fromParsed || hasFormatError(dateFrom))
   const toInvalid = !!dateTo && (!toParsed || hasFormatError(dateTo))
 
-  if (fromInvalid && toInvalid) {
+  // Both format/invalid
+  if (fromInvalid && toInvalid)
     errors.both = "Error: Please enter valid 'from' and 'to' dates."
-  } else {
+  else {
     if (fromInvalid) errors.from = "Error: Please enter a valid 'from' date."
     if (toInvalid) errors.to = "Error: Please enter a valid 'to' date."
   }
 
-  // Future date check
+  // Future dates
   const fromFuture = fromParsed && isFutureDate(fromParsed)
   const toFuture = toParsed && isFutureDate(toParsed)
 
-  if (fromFuture && toFuture) {
+  if (fromFuture && toFuture)
     errors.both = "Error: 'From' and 'To' fields cannot contain future dates."
-  } else {
+  else {
     if (fromFuture)
       errors.from = "Error: 'From' field cannot contain a future date."
     if (toFuture) errors.to = "Error: 'To' field cannot contain a future date."
   }
 
-  // Range check (only if both valid and not future)
+  // Range check
   const bothValid =
     fromParsed &&
     toParsed &&
@@ -173,10 +185,8 @@ export const validateDates = (
     !toInvalid &&
     !fromFuture &&
     !toFuture
-
-  if (bothValid && rangeInvalid(fromParsed, toParsed)) {
-    errors.both = "Error: End date must be later than start date."
-  }
+  if (bothValid && rangeInvalid(fromParsed, toParsed))
+    errors.range = "Error: End date must be later than start date."
 
   return errors
 }

@@ -10,9 +10,13 @@ import type {
   DateErrorState,
   DateFilterHookPropsType,
 } from "../../hooks/useDateFilter"
+import type { SyntheticEvent } from "react"
 
 interface DateFilterPropsType extends DateFilterHookPropsType {
   dateError: DateErrorState
+  onBlur: () => void
+  onApply: () => void
+  onChange: (e: SyntheticEvent) => void
   isAdvancedSearch?: boolean
 }
 
@@ -21,8 +25,9 @@ const DateFilter = ({
   inputRefs,
   dateTo,
   dateFrom,
-  changeHandler,
-  applyHandler,
+  onChange,
+  onBlur,
+  onApply,
   isAdvancedSearch = false,
 }: DateFilterPropsType) => {
   const hasError = Object.values(dateError).some(Boolean)
@@ -57,7 +62,8 @@ const DateFilter = ({
               name="dateFrom"
               helperText="Ex. 1900"
               value={dateFrom}
-              onChange={changeHandler}
+              onChange={onChange}
+              onBlur={onBlur}
               ref={inputRefs[0]}
               isInvalid={!!(dateError.from || dateError.both)}
               invalidText="Ex. 1900"
@@ -74,7 +80,8 @@ const DateFilter = ({
               name="dateTo"
               helperText="Ex. 1950"
               value={dateTo}
-              onChange={changeHandler}
+              onChange={onChange}
+              onBlur={onBlur}
               ref={inputRefs[1]}
               isInvalid={!!(dateError.to || dateError.both)}
               invalidText="Ex. 1950"
@@ -96,7 +103,7 @@ const DateFilter = ({
             <Button
               variant="secondary"
               id="apply-dates"
-              onClick={applyHandler}
+              onClick={onApply}
               width="100%"
             >
               Apply

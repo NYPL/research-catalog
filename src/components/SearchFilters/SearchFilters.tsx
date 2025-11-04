@@ -159,18 +159,12 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
 
   const dateInputRefs = [useRef<TextInputRefType>(), useRef<TextInputRefType>()]
 
-  const { dateFilterProps, validateDates } = useDateFilter({
+  const { dateFilterProps } = useDateFilter({
     inputRefs: dateInputRefs,
     dateFrom: appliedFilters.dateFrom?.[0],
     dateTo: appliedFilters.dateTo?.[0],
     applyHandler: () => {
       setFocusedFilter("date")
-      const from = appliedFilters.dateFrom?.[0]
-      const to = appliedFilters.dateTo?.[0]
-      if (!validateDates(from, to)) {
-        setFocusedFilter(null)
-        return
-      }
       setPersistentFocus(idConstants.applyDates)
       buildAndPushFilterQuery(appliedFilters)
     },

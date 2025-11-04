@@ -50,7 +50,7 @@ import RCHead from "../../src/components/Head/RCHead"
 import DateFilter from "../../src/components/DateFilter/DateFilter"
 import { debounce } from "underscore"
 import MultiSelectWithGroupTitles from "../../src/components/AdvancedSearch/MultiSelectWithGroupTitles/MultiSelectWithGroupTitles"
-import { rangeErrorMessage, useDateFilter } from "../../src/hooks/useDateFilter"
+import { useDateFilter } from "../../src/hooks/useDateFilter"
 
 export const defaultEmptySearchErrorMessage =
   "Error: please enter at least one field to submit an advanced search."
@@ -132,19 +132,17 @@ export default function AdvancedSearch({
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
-    if (!validateDates()) {
-      const { from, to, range } = dateError
+    const errors = dateFilterProps.onApply()
+    if (Object.keys(errors).length > 0) {
       let dateFieldError = ""
-      if (from) dateFieldError = "The 'from' date field contains an error."
-      else if (to) dateFieldError = "The 'to' date field contains an error."
-      else if (range) dateFieldError = rangeErrorMessage
+      if (errors.from)
+        dateFieldError = "The 'from' date field contains an error."
+      else if (errors.to)
+        dateFieldError = "The 'to' date field contains an error."
+      else if (errors.both)
+        dateFieldError = "The 'from' and 'to' fields contain errors."
       setErrorMessage(`${dateFieldError} ${dateErrorMessage}`)
       setAlert(true)
-      if (from && dateInputRefs[0]?.current) {
-        dateInputRefs[0].current.focus()
-      } else if ((to || range) && dateInputRefs[1]?.current) {
-        dateInputRefs[1].current.focus()
-      }
       return
     }
 
@@ -174,8 +172,8 @@ export default function AdvancedSearch({
   }
 
   useEffect(() => {
-    const { from, to, range } = dateError || {}
-    if (alert && !from && !to && !range && notificationRef.current) {
+    const { from, to, both } = dateError || {}
+    if (alert && !from && !to && !both && notificationRef.current) {
       setTimeout(() => {
         notificationRef.current?.focus()
       }, 0)
