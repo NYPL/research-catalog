@@ -30,7 +30,6 @@ const TestComponent = ({
     <div>
       <div data-testid="error-from">{dateFilterProps.dateError.from}</div>
       <div data-testid="error-to">{dateFilterProps.dateError.to}</div>
-      <div data-testid="error-range">{dateFilterProps.dateError.range}</div>
 
       <button
       // onClick={() => {
