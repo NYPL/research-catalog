@@ -72,10 +72,15 @@ const AppliedFilters = ({ aggregations }: { aggregations: Aggregation[] }) => {
   }
 
   if (!tagSetData.length) return null
+  const sortedTagSetData = [...tagSetData].sort((a, b) => {
+    if (a.field === "dateFrom" && b.field === "dateTo") return -1
+    if (a.field === "dateTo" && b.field === "dateFrom") return 1
+    return 0
+  })
   return (
     <ActiveFilters
       onClick={handleRemove}
-      tagSetData={tagSetData}
+      tagSetData={sortedTagSetData}
       filterName="search-results"
     />
   )
