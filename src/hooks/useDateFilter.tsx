@@ -29,9 +29,8 @@ export const useDateFilter = (props: DateFilterHookPropsType) => {
     const target = e.target as HTMLInputElement
     const { name, value } = target
 
-    changeHandler?.(e) // propagate change
+    changeHandler?.(e)
 
-    // Re-run validation with the new value for this field
     const errors = validateDates(
       name === "dateFrom" ? value : dateFrom,
       name === "dateTo" ? value : dateTo
@@ -40,15 +39,12 @@ export const useDateFilter = (props: DateFilterHookPropsType) => {
     setDateError((prev) => {
       const newErrors: DateErrorState = { ...prev }
 
-      // Always update the field being typed into
       if (name === "dateFrom") newErrors.from = undefined
       if (name === "dateTo") newErrors.to = undefined
 
-      // Merge in errors for the other field only if they exist
       if (name === "dateFrom" && errors.to) newErrors.to = errors.to
       if (name === "dateTo" && errors.from) newErrors.from = errors.from
 
-      // Recompute 'both' only if both are invalid for the same type (format/future)
       if (
         errors.from &&
         errors.to &&
@@ -105,8 +101,6 @@ export const useDateFilter = (props: DateFilterHookPropsType) => {
     validateDates,
   }
 }
-
-/* -------------------- Validation utils -------------------- */
 
 const slashPattern =
   /^(\d{4})(?:\/(0[1-9]|1[0-2])(\/(0[1-9]|[12][0-9]|3[01]))?)?$/
