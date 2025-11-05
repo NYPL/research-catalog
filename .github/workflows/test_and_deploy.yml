@@ -54,7 +54,6 @@ jobs:
       - name: Set environment-specific variables
         run: |
           echo "APP_ENV=${GITHUB_REF_NAME}" >> $GITHUB_ENV
-          echo "NEW_RELIC_APP_NAME=Research Catalog [${GITHUB_REF_NAME}]" >> $GITHUB_ENV
           echo "ECR_TAG=${GITHUB_REF_NAME}-latest" >> $GITHUB_ENV
           echo "PREVIOUS_TAG=${GITHUB_REF_NAME}-previous" >> $GITHUB_ENV
           echo "CLUSTER=research-catalog-${GITHUB_REF_NAME}" >> $GITHUB_ENV
