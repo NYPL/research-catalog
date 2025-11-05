@@ -76,7 +76,7 @@ const DateFilter = ({
                 sx={{
                   label: { fontSize: isAdvancedSearch ? "12px" : undefined },
                 }}
-                aria-describedby="date-from-helperText"
+                aria-describedby="date-from-helperText date-errorText"
               />
               <Text
                 fontSize="desktop.caption"
@@ -106,7 +106,7 @@ const DateFilter = ({
                 sx={{
                   label: { fontSize: isAdvancedSearch ? "12px" : undefined },
                 }}
-                aria-describedby="date-to-helperText"
+                aria-describedby="date-to-helperText date-errorText"
               />
               <Text
                 fontSize="desktop.caption"
@@ -123,6 +123,7 @@ const DateFilter = ({
           </Flex>
           <HelperErrorText
             color="ui.error.primary"
+            id="date-errorText"
             text={hasError && `Error: ${errorText}`}
           />
 

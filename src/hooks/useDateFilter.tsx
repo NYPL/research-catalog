@@ -133,11 +133,11 @@ export const useDateFilter = (props: DateFilterHookPropsType) => {
 
     // Focus first invalid field
     if (errors.from || errors.range) {
-      inputRefs[0]?.current?.focus()
+      setTimeout(() => inputRefs[0]?.current?.focus(), 0)
       return errors
     }
     if (errors.to) {
-      inputRefs[1]?.current?.focus()
+      setTimeout(() => inputRefs[1]?.current?.focus(), 0)
       return errors
     }
 
