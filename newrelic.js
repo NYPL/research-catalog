@@ -1,4 +1,6 @@
 "use strict"
+const NEW_RELIC_APP_NAME = process.env.NEW_RELIC_APP_NAME
+const NEW_RELIC_LICENSE_KEY = process.env.NEW_RELIC_LICENSE_KEY
 /**
  * New Relic agent configuration.
  *
@@ -6,21 +8,24 @@
  * description of configuration variables and their potential values.
  */
 exports.config = {
+  app_name: [NEW_RELIC_APP_NAME],
+  license_key: NEW_RELIC_LICENSE_KEY,
   /**
-   * Array of application names.
+   * This controls the New Relic Agent logger. When enabled, it will create a newrelic_agent.log file at the root of the app
+   * to assist in debugging the agent. This value has no bearing on sending app-related transaction logs to New Relic.
    */
-  app_name: ["Research Catalog"],
-  /**
-   * Your New Relic license key.
-   */
-  license_key: "",
   logging: {
+    enabled: false,
     /**
      * Level at which to log. 'trace' is most useful to New Relic when diagnosing
      * issues with the agent, 'info' and higher will impose the least overhead on
      * production applications.
      */
     level: "info",
+  },
+  // Browser monitoring is "enable: true" by default but stated here to turn off for any reason.
+  browser_monitoring: {
+    enable: true,
   },
   /**
    * When true, all request headers except for those listed in attributes.exclude
