@@ -131,6 +131,11 @@ const DateFilter = ({
             <Button
               variant="secondary"
               id="apply-dates"
+              onMouseDown={(e) => {
+                if (hasError) {
+                  e.preventDefault()
+                }
+              }}
               onClick={onApply}
               width="100%"
             >
