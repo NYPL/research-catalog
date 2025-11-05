@@ -131,13 +131,12 @@ export const useDateFilter = (props: DateFilterHookPropsType) => {
     const errors = validateDates(dateFrom, dateTo)
     setDateError(errors)
 
-    // Focus first invalid field
     if (errors.from || errors.range) {
-      setTimeout(() => inputRefs[0]?.current?.focus(), 0)
+      requestAnimationFrame(() => inputRefs[0]?.current?.focus())
       return errors
     }
     if (errors.to) {
-      setTimeout(() => inputRefs[1]?.current?.focus(), 0)
+      requestAnimationFrame(() => inputRefs[1]?.current?.focus())
       return errors
     }
 
