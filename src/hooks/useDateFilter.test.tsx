@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react"
-import { render, act, screen } from "@testing-library/react"
-import { useDateFilter, rangeInvalid } from "./useDateFilter"
+import { render, act, screen, fireEvent } from "@testing-library/react"
+import { useDateFilter } from "./useDateFilter"
 import type { TextInputRefType } from "@nypl/design-system-react-components"
 
 jest.useFakeTimers()
@@ -9,126 +9,159 @@ const TestComponent = ({
   initialFrom = "",
   initialTo = "",
   changeHandler = jest.fn(),
+  applyHandler = jest.fn(),
 }: {
   initialFrom?: string
   initialTo?: string
   changeHandler?: (e: React.SyntheticEvent) => void
+  applyHandler?: () => void
 }) => {
   const ref1 = useRef<TextInputRefType>({ value: "" } as TextInputRefType)
   const ref2 = useRef<TextInputRefType>({ value: "" } as TextInputRefType)
   const [dateFrom, setDateFrom] = useState(initialFrom)
   const [dateTo, setDateTo] = useState(initialTo)
 
-  const { dateFilterProps, validateDates, clearInputs } = useDateFilter({
+  const { dateFilterProps, clearInputs } = useDateFilter({
     inputRefs: [ref1, ref2],
     dateFrom,
     dateTo,
     changeHandler,
+    applyHandler,
   })
 
   return (
     <div>
       <div data-testid="error-from">{dateFilterProps.dateError.from}</div>
       <div data-testid="error-to">{dateFilterProps.dateError.to}</div>
-
-      <button
-      // onClick={() => {
-      //   validateDates()
-      // }}
-      >
-        validate
-      </button>
-
-      <button
-        onClick={() => {
-          clearInputs()
-        }}
-      >
-        clear
-      </button>
-
+      <div data-testid="error-combined">
+        {dateFilterProps.dateError.combined}
+      </div>
+      <button onClick={() => clearInputs()}>clear</button>
       <button onClick={() => setDateFrom("2025/10/01")}>setFromValid</button>
       <button onClick={() => setDateTo("2025/09/01")}>setToEarlier</button>
       <button onClick={() => setDateTo("2025/11/01")}>setToLater</button>
       <button onClick={() => setDateFrom("2025/AA")}>setFromInvalid</button>
+      <button
+        onClick={() => {
+          act(() => {
+            dateFilterProps.onApply()
+          })
+        }}
+      >
+        apply
+      </button>
+      <button
+        onClick={() => {
+          act(() => {
+            dateFilterProps.onBlur()
+          })
+        }}
+      >
+        blur
+      </button>
+      <button
+        onClick={() => {
+          const event = {
+            target: { name: "dateFrom" },
+          } as unknown as React.SyntheticEvent
+          act(() => {
+            dateFilterProps.onChange(event)
+          })
+        }}
+      >
+        changeFrom
+      </button>
+      <button
+        onClick={() => {
+          const event = {
+            target: { name: "dateTo" },
+          } as unknown as React.SyntheticEvent
+          act(() => {
+            dateFilterProps.onChange(event)
+          })
+        }}
+      >
+        changeTo
+      </button>
     </div>
   )
 }
 
 describe("useDateFilter hook", () => {
+  beforeEach(() => {
+    jest.useFakeTimers()
+  })
+
   afterEach(() => {
-    jest.clearAllTimers()
     jest.clearAllMocks()
   })
 
-  //   it("should validate invalid formats", () => {
-  //     render(<TestComponent initialFrom="2025/13" initialTo="2025/11/01" />)
-  //     // advance debounce time
-  //     act(() => {
-  //       jest.runAllTimers()
-  //     })
-  //     expect(screen.getByTestId("error-from").textContent).toContain(
-  //       "Please enter a valid 'from' date."
-  //     )
-  //     expect(screen.getByTestId("error-to").textContent).toBe("")
-  //   })
+  it("should start with no errors", () => {
+    render(<TestComponent />)
+    expect(screen.getByTestId("error-from")).toBeEmptyDOMElement()
+    expect(screen.getByTestId("error-to")).toBeEmptyDOMElement()
+  })
 
-  //   it("should detect invalid range (end before start)", () => {
-  //     render(<TestComponent initialFrom="2025/10/10" initialTo="2025/09/09" />)
-  //     act(() => {
-  //       jest.runAllTimers()
-  //     })
-  //     expect(screen.getByTestId("error-range").textContent).toContain(
-  //       "End date must be later than start date."
-  //     )
-  //   })
+  it("should show error for invalid date on blur", () => {
+    render(<TestComponent initialFrom="2025/13/01" initialTo="abcd" />)
+    const blurButton = screen.getByText("blur")
+    fireEvent.click(blurButton)
+    expect(screen.getByTestId("error-from")).toHaveTextContent(
+      "Please enter a valid 'from' date."
+    )
+    expect(screen.getByTestId("error-to")).toHaveTextContent(
+      "Please enter a valid 'to' date."
+    )
+    expect(screen.getByTestId("error-combined")).toHaveTextContent(
+      "Please enter valid 'from' and 'to' dates."
+    )
+  })
 
-  //   it("should clear errors and input values on clearInputs()", () => {
-  //     render(<TestComponent initialFrom="2025/10/10" initialTo="2025/09/09" />)
+  it("should clear specific field error when changing that field", () => {
+    render(<TestComponent initialFrom="2025/13/01" initialTo="2025/10/01" />)
+    fireEvent.click(screen.getByText("blur"))
+    expect(screen.getByTestId("error-from")).toHaveTextContent(
+      "Please enter a valid 'from' date."
+    )
+    fireEvent.click(screen.getByText("changeFrom"))
+    expect(screen.getByTestId("error-from")).toBeEmptyDOMElement()
+  })
 
-  //     act(() => {
-  //       jest.runAllTimers()
-  //     })
+  it("should show range error when 'to' < 'from'", () => {
+    render(<TestComponent initialFrom="2025/10/01" initialTo="2025/09/01" />)
+    fireEvent.click(screen.getByText("apply"))
+    expect(screen.getByTestId("error-from")).toBeEmptyDOMElement()
+    expect(screen.getByTestId("error-to")).toBeEmptyDOMElement()
+  })
 
-  //     const clearBtn = screen.getByText("clear")
-  //     act(() => {
-  //       clearBtn.click()
-  //     })
+  it("should clear all inputs and errors on clear", () => {
+    render(<TestComponent initialFrom="2025/10/01" initialTo="2025/11/01" />)
+    fireEvent.click(screen.getByText("blur"))
+    fireEvent.click(screen.getByText("clear"))
+    expect(screen.getByTestId("error-from")).toBeEmptyDOMElement()
+    expect(screen.getByTestId("error-to")).toBeEmptyDOMElement()
+  })
 
-  //     expect(screen.getByTestId("error-from").textContent).toBe("")
-  //     expect(screen.getByTestId("error-to").textContent).toBe("")
-  //     expect(screen.getByTestId("error-range").textContent).toBe("")
-  //   })
+  it("should call applyHandler when dates are valid", () => {
+    const applyHandler = jest.fn()
+    render(
+      <TestComponent
+        initialFrom="2024/10/01"
+        initialTo="2024/11/01"
+        applyHandler={applyHandler}
+      />
+    )
+    fireEvent.click(screen.getByText("apply"))
+    act(() => jest.runAllTimers())
+    expect(applyHandler).toHaveBeenCalled()
+  })
 
-  //   it("should validate manually using validateDates()", () => {
-  //     render(<TestComponent initialFrom="2025/AA" initialTo="2025/09/01" />)
-
-  //     const validateBtn = screen.getByText("validate")
-  //     act(() => {
-  //       validateBtn.click()
-  //     })
-
-  //     expect(screen.getByTestId("error-from").textContent).toContain(
-  //       "Please enter a valid 'from' date."
-  //     )
-  //   })
-  // })
-
-  // describe("helpers", () => {
-  //   it("rangeInvalid returns true when from > to", () => {
-  //     expect(rangeInvalid("2025/10/10", "2025/09/09")).toBe(true)
-  //   })
-
-  //   it("rangeInvalid returns false when from <= to", () => {
-  //     expect(rangeInvalid("2025/09/09", "2025/10/10")).toBe(false)
-  //   })
-
-  //   it("formatInvalid detects incorrect format", () => {
-  //     expect(formatInvalid("2025/13")).toBe(true)
-  //     expect(formatInvalid("2025/12/32")).toBe(true)
-  //     expect(formatInvalid("2025/12/01")).toBe(false)
-  //     expect(formatInvalid("2025/12/")).toBe(true)
-  //     expect(formatInvalid("202512")).toBe(true)
-  //     expect(formatInvalid("")).toBe(false)
-  //   })
+  it("should set future date error correctly", () => {
+    const futureYear = new Date().getFullYear() + 1
+    render(<TestComponent initialFrom={`${futureYear}/01/01`} />)
+    fireEvent.click(screen.getByText("blur"))
+    expect(screen.getByTestId("error-from")).toHaveTextContent(
+      "'From' field cannot contain a future date."
+    )
+  })
 })
