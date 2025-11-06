@@ -33,7 +33,7 @@ These environment variables control how certain elements on the page render and 
 
 ## AWS ECS Environment Variables
 
-As previously mentioned in the [README](README.md), we are using environment variables to make authorized requests to NYPL's API platform. In order to be secure, we are encrypting and decrypting those environment variables using AWS KMS. Please get these variables from someone on the LSP team.
+As previously mentioned in the [README](README.md), we are using environment variables to make authorized requests to NYPL's API platform. In order to be secure, we are encrypting and decrypting those environment variables using AWS KMS. Please get these variables from someone on the LSP team. Running this app locally requires you to have an ~/.aws/config file with SSO configuration for the nypl-digital-dev profile.
 
 | Variable                     | Description                                           |
 | ---------------------------- | ----------------------------------------------------- |
