@@ -72,11 +72,14 @@ const AppliedFilters = ({ aggregations }: { aggregations: Aggregation[] }) => {
   }
 
   if (!tagSetData.length) return null
+
+  // 'From' date filter should appear before 'to' date.
   const sortedTagSetData = [...tagSetData].sort((a, b) => {
     if (a.field === "dateFrom" && b.field === "dateTo") return -1
     if (a.field === "dateTo" && b.field === "dateFrom") return 1
     return 0
   })
+
   return (
     <ActiveFilters
       onClick={handleRemove}

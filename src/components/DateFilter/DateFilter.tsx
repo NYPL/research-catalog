@@ -21,6 +21,7 @@ interface DateFilterPropsType extends DateFilterHookPropsType {
   isAdvancedSearch?: boolean
 }
 
+// Render date filter fields and, if not in advanced search, Apply button.
 const DateFilter = ({
   dateError,
   inputRefs,
@@ -78,6 +79,7 @@ const DateFilter = ({
                 }}
                 aria-describedby="date-from-helperText date-errorText"
               />
+              {/* Replicating HelperErrorText without aria-live or aria-invalid */}
               <Text
                 fontSize="desktop.caption"
                 fontWeight="regular"
@@ -108,6 +110,7 @@ const DateFilter = ({
                 }}
                 aria-describedby="date-to-helperText date-errorText"
               />
+              {/* Replicating HelperErrorText without aria-live or aria-invalid */}
               <Text
                 fontSize="desktop.caption"
                 fontWeight="regular"

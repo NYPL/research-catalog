@@ -16,9 +16,85 @@ export interface DateErrorState {
   combined?: string
 }
 
-const slashPattern =
+/**
+ * Hook that manages validation and error states for the DateFilter.
+ *
+ * Validates 'from' and 'to' dates for YYYY/MM/DD format, future values, and range errors.
+ * Provides helper methods (`onChange`, `onBlur`, `onApply`, `clearInputs`) that
+ * update error state and focus for use in the DateFilter.
+ */
+
+export const useDateFilter = (props: DateFilterHookPropsType) => {
+  const { inputRefs, dateFrom, dateTo, changeHandler, applyHandler } = props
+  const [dateError, setDateError] = useState<DateErrorState>({})
+
+  const onBlur = () => {
+    const errors = validateDates(dateFrom, dateTo)
+    setDateError(errors)
+  }
+
+  const onChange = (e: SyntheticEvent) => {
+    const target = e.target as HTMLInputElement
+    const { name } = target
+    changeHandler?.(e)
+    setDateError((prev) => {
+      const newErrors = { ...prev }
+      if (name === "dateFrom") {
+        newErrors.from = undefined
+      } else if (name === "dateTo") {
+        newErrors.to = undefined
+      }
+      delete newErrors.combined
+      delete newErrors.range
+      return newErrors
+    })
+  }
+
+  const onApply = () => {
+    const errors = validateDates(dateFrom, dateTo)
+    setDateError(errors)
+
+    if (errors.from || errors.range) {
+      inputRefs[0]?.current?.focus()
+      return errors
+    }
+    if (errors.to) {
+      inputRefs[1]?.current?.focus()
+      return errors
+    }
+
+    if (Object.keys(errors).length === 0 && applyHandler) {
+      applyHandler()
+    }
+
+    return errors
+  }
+
+  const clearInputs = () => {
+    inputRefs.forEach((ref) => {
+      if (ref?.current) ref.current.value = ""
+    })
+    setDateError({})
+  }
+
+  return {
+    dateFilterProps: {
+      dateFrom,
+      dateTo,
+      dateError,
+      onChange,
+      onBlur,
+      inputRefs,
+      onApply,
+    },
+    clearInputs,
+    validateDates,
+  }
+}
+
+const dateSlashPattern =
   /^(\d{4})(?:\/(0[1-9]|1[0-2])(\/(0[1-9]|[12][0-9]|3[01]))?)?$/
-const hasFormatError = (v: string) => v && !slashPattern.test(v)
+const hasFormatError = (v: string) => v && !dateSlashPattern.test(v)
 
 export const parseDate = (value: string): Date | null => {
   if (!value) return null
@@ -87,7 +163,7 @@ export const validateDates = (
     errors.range = "End date must be later than start date."
   }
 
-  // Replace message if errors match
+  // Replace with combined message if errors match
   if (errors.from && errors.to) {
     if (errors.from.includes("valid") && errors.to.includes("valid")) {
       errors.combined = "Please enter valid 'from' and 'to' dates."
@@ -99,72 +175,4 @@ export const validateDates = (
   }
 
   return errors
-}
-
-export const useDateFilter = (props: DateFilterHookPropsType) => {
-  const { inputRefs, dateFrom, dateTo, changeHandler, applyHandler } = props
-  const [dateError, setDateError] = useState<DateErrorState>({})
-
-  const onBlur = () => {
-    const errors = validateDates(dateFrom, dateTo)
-    setDateError(errors)
-  }
-
-  const onChange = (e: SyntheticEvent) => {
-    const target = e.target as HTMLInputElement
-    const { name } = target
-    changeHandler?.(e)
-    setDateError((prev) => {
-      const newErrors = { ...prev }
-      if (name === "dateFrom") {
-        newErrors.from = undefined
-      } else if (name === "dateTo") {
-        newErrors.to = undefined
-      }
-      delete newErrors.combined
-      delete newErrors.range
-      return newErrors
-    })
-  }
-
-  const onApply = () => {
-    const errors = validateDates(dateFrom, dateTo)
-    setDateError(errors)
-
-    if (errors.from || errors.range) {
-      requestAnimationFrame(() => inputRefs[0]?.current?.focus())
-      return errors
-    }
-    if (errors.to) {
-      requestAnimationFrame(() => inputRefs[1]?.current?.focus())
-      return errors
-    }
-
-    if (Object.keys(errors).length === 0 && applyHandler) {
-      applyHandler()
-    }
-
-    return errors
-  }
-
-  const clearInputs = () => {
-    inputRefs.forEach((ref) => {
-      if (ref?.current) ref.current.value = ""
-    })
-    setDateError({})
-  }
-
-  return {
-    dateFilterProps: {
-      dateFrom,
-      dateTo,
-      dateError,
-      onChange,
-      onBlur,
-      inputRefs,
-      onApply,
-    },
-    clearInputs,
-    validateDates,
-  }
 }
