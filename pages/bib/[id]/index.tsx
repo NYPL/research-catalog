@@ -248,7 +248,7 @@ export default function BibPage({
               mt="l"
               mb="s"
             >
-              Items in the library and off-site
+              Items in the library and offsite
             </Heading>
             <Banner
               content={

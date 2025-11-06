@@ -34,9 +34,9 @@ export const holdConfirmationFAQData: AccordionDataProps[] = [
           hours are ready about an hour after opening on the next business day.
         </Text>
         <Text>
-          <strong>Items stored off-site:</strong> Materials requested before
-          2:30 PM are usually ready for pickup about an hour after opening the
-          next day (check{" "}
+          <strong>Items stored offsite:</strong> Materials requested before 2:30
+          PM are usually ready for pickup about an hour after opening the next
+          day (check{" "}
           <ExternalLink href="https://www.nypl.org/">nypl.org</ExternalLink> for
           library hours). Materials requested after 2:30 PM Mon–Thu are usually
           ready in two days; materials requested after 2:30 PM Fri–Sun are ready
@@ -120,7 +120,7 @@ export const eddConfirmationFAQData: AccordionDataProps[] = [
         </Text>
         <Text>
           <Text as="span" fontWeight="medium">
-            Items stored off-site:
+            Items stored offsite:
           </Text>{" "}
           Requests will be typically filled within 48 hours, but please be aware
           it may take up to two weeks (or longer, in cases where complex rights
