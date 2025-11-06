@@ -55,11 +55,11 @@ export const useDateFilter = (props: DateFilterHookPropsType) => {
     setDateError(errors)
 
     if (errors.from || errors.range) {
-      inputRefs[0]?.current?.focus()
+      requestAnimationFrame(() => inputRefs[0]?.current?.focus?.())
       return errors
     }
     if (errors.to) {
-      inputRefs[1]?.current?.focus()
+      requestAnimationFrame(() => inputRefs[1]?.current?.focus?.())
       return errors
     }
 
