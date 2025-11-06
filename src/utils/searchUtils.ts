@@ -275,7 +275,7 @@ export const sortOptions: Record<string, string> = {
 
 /**
  * mapQueryToSearchParams
- * Maps the SearchQueryParams structure from the request to a SearchParams object, which is expected by fetchResults
+ * Maps the SearchQueryParams structure from the request to a SearchParams object, which is expected by fetchSearchResults
  * It also parses the results page number from a string, defaulting to 1 if absent
  */
 export function mapQueryToSearchParams({

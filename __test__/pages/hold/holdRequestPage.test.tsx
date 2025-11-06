@@ -423,7 +423,7 @@ describe("Hold Request page", () => {
         patronId="123"
         deliveryLocations={undefined}
         isAuthenticated={true}
-        notFound={true}
+        bibItemErrorStatus={404}
       />
     )
     expect(screen.getByText("We couldn't find that page")).toBeInTheDocument()

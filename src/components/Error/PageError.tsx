@@ -1,6 +1,5 @@
 import { Heading, Flex, Text } from "@nypl/design-system-react-components"
 import type { HTTPStatusCode } from "../../types/appTypes"
-import { appConfig } from "../../config/config"
 import { SITE_NAME } from "../../config/constants"
 import RCHead from "../Head/RCHead"
 import Layout from "../Layout/Layout"
@@ -11,43 +10,41 @@ import errorImage from "../../assets/errorImage.png"
 import type { RCPage } from "../../types/pageTypes"
 import Link from "../Link/Link"
 
-type ResultsErrorProps = {
+type PageErrorProps = {
   page: RCPage
   errorStatus: HTTPStatusCode
 }
 
-export default function ResultsError({ errorStatus, page }: ResultsErrorProps) {
-  const metadataTitle = `${errorStatus} | ${SITE_NAME}`
+/* Display error state that replaces entire page contents. */
+export default function PageError({ errorStatus, page }: PageErrorProps) {
   const { openFeedbackFormWithError } = useContext(FeedbackContext)
-
+  let metadataTitle = "Error"
   let errorContent
   const headingID = `${page}-results-heading`
+  const contactUsLink = (
+    <Link
+      onClick={() => openFeedbackFormWithError(errorStatus)}
+      id="feedback-link"
+    >
+      contact us
+    </Link>
+  )
 
   switch (errorStatus) {
     case 404:
+      metadataTitle = "Page not found"
       errorContent = (
         <>
-          <Heading level="h3" tabIndex={-1} id={headingID} mb="s">
-            No results found
+          <Heading level="h3" mb="s">
+            We couldn&apos;t find that page
           </Heading>
           <Text>
-            We couldn&apos;t find anything matching your criteria. Try a
-            different search term.{" "}
+            The page you were looking for doesn&apos;t exist or may have moved
+            elsewhere.
           </Text>
           <Text>
-            You can also search our{" "}
-            <Link isExternal href={appConfig.urls.circulatingCatalog}>
-              Branch Catalog
-            </Link>{" "}
-            or{" "}
-            <Link isExternal href={appConfig.urls.legacyCatalog}>
-              Legacy Catalog
-            </Link>{" "}
-            for more materials, or{" "}
-            <Link onClick={openFeedbackFormWithError} id="feedback-link">
-              contact us
-            </Link>{" "}
-            for assistance.
+            Try a <Link href="/">new search</Link> or {contactUsLink} if the
+            error persists.
           </Text>
         </>
       )
@@ -63,16 +60,14 @@ export default function ResultsError({ errorStatus, page }: ResultsErrorProps) {
             We encountered an error while trying to load the page.
           </Text>
           <Text marginBottom="0">
-            Try refreshing the page or{" "}
-            <Link onClick={openFeedbackFormWithError} id="feedback-link">
-              contact us
-            </Link>{" "}
+            Try refreshing the page or {contactUsLink}
             if the error persists.
           </Text>
         </>
       )
       break
 
+    // 4xx
     default:
       errorContent = (
         <>
@@ -83,10 +78,7 @@ export default function ResultsError({ errorStatus, page }: ResultsErrorProps) {
             We couldn&apos;t process your request at this time.
           </Text>
           <Text marginBottom="0">
-            Try again later or{" "}
-            <Link onClick={openFeedbackFormWithError} id="feedback-link">
-              contact us
-            </Link>{" "}
+            Try again later or {contactUsLink}
             if the error persists.
           </Text>
         </>
@@ -96,7 +88,7 @@ export default function ResultsError({ errorStatus, page }: ResultsErrorProps) {
 
   return (
     <>
-      <RCHead metadataTitle={metadataTitle} />
+      <RCHead metadataTitle={`${metadataTitle} | ${SITE_NAME}`} />
       <Layout activePage={page}>
         <Flex
           flexDir="column"

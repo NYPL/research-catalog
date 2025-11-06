@@ -205,14 +205,14 @@ describe("EDD Request page", () => {
       })
     })
 
-    it("initializes errorStatus as invalid when formInvalid query param is present url ", async () => {
+    it("initializes holdErrorStatus as invalid when formInvalid query param is present url ", async () => {
       const response = await getServerSideProps({
         params: { id },
         res: mockRes,
         req: mockReq,
         query: { formInvalid: "true" },
       })
-      expect(response.props.errorStatus).toStrictEqual("invalid")
+      expect(response.props.holdErrorStatus).toStrictEqual("invalid")
     })
   })
   describe("EDD Request page UI", () => {
@@ -450,7 +450,7 @@ describe("EDD Request page", () => {
           discoveryItemResult={bibWithItems.resource.items[0]}
           patronId="123"
           isAuthenticated={true}
-          errorStatus="eddUnavailable"
+          holdErrorStatus="eddUnavailable"
         />
       )
       expect(
@@ -464,7 +464,7 @@ describe("EDD Request page", () => {
           discoveryItemResult={bibWithItems.resource.items[0]}
           patronId="123"
           isAuthenticated={true}
-          errorStatus="failed"
+          holdErrorStatus="failed"
         />
       )
       expect(
@@ -478,7 +478,7 @@ describe("EDD Request page", () => {
           discoveryItemResult={bibWithItems.resource.items[0]}
           patronId="123"
           isAuthenticated={true}
-          errorStatus="invalid"
+          holdErrorStatus="invalid"
         />
       )
       expect(
@@ -587,7 +587,7 @@ describe("EDD Request page", () => {
         discoveryItemResult={undefined}
         patronId="123"
         isAuthenticated={true}
-        notFound={true}
+        bibItemErrorStatus={404}
       />
     )
     expect(screen.getByText("We couldn't find that page")).toBeInTheDocument()

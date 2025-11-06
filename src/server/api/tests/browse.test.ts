@@ -33,27 +33,30 @@ describe("fetchSubjects", () => {
     })
 
     const response = await fetchSubjects({ q: "cat" })
-    expect(response).toEqual({ status: 500, message: "Bad API URL" })
+    expect(response).toEqual({ status: 500, error: "Bad API URL" })
   })
 
   it("returns 500 if API call fails", async () => {
-    mockClient.get.mockRejectedValueOnce(new Error("Results error"))
+    mockClient.get.mockRejectedValueOnce(new Error("Server error"))
 
     const response = await fetchSubjects({ q: "cat" })
     expect(response).toEqual({
       status: 500,
-      message: expect.stringContaining("Results error"),
+      error: "Server error",
     })
   })
 
   it("handles 404 response", async () => {
     mockClient.get.mockResolvedValueOnce({
       status: 404,
-      message: "Not found",
+      error: "test",
     })
 
     const response = await fetchSubjects({ q: "unknown" })
-    expect(response).toEqual({ status: 404, message: "Not found" })
+    expect(response).toEqual({
+      status: 404,
+      error: "test",
+    })
   })
 
   it("handles valid response but no results", async () => {
@@ -63,6 +66,10 @@ describe("fetchSubjects", () => {
     })
 
     const response = await fetchSubjects({ q: "empty" })
-    expect(response).toEqual({ status: 404, message: "No subjects found" })
+    expect(response).toEqual({
+      status: 404,
+      error:
+        "No results found for /discovery/browse/subjects?q=empty&search_scope=has&sort=count&sort_direction=desc&per_page=25",
+    })
   })
 })

@@ -14,14 +14,16 @@ import { appConfig } from "../../config/config"
 import { logServerError } from "../../utils/appUtils"
 import type { DiscoveryItemResult } from "../../types/itemTypes"
 import logger from "../../../logger"
+import type { HTTPStatusCode } from "../../types/appTypes"
+import type { APIError } from "../../types/appTypes"
 
 export async function fetchBib(
   id: string,
   bibQuery?: BibQueryParams,
   itemId?: string
-): Promise<BibResponse> {
+): Promise<BibResponse | APIError> {
   const standardizedId = standardizeBibId(id)
-  // Redirect to Bib page with standardized version of the Bib ID
+  // Redirect to bib page with standardized version of the bib ID
   if (id !== standardizedId) {
     return {
       status: 307,
@@ -36,7 +38,7 @@ export async function fetchBib(
         itemId ? `-${itemId}` : ""
       }${getBibQueryString(bibQuery)}`
     ),
-    // Don't fetch annotated-marc for partner records:
+    // Don't fetch annotated marc for partner records:
     isNyplBibID(standardizedId) &&
       (await client.get(
         `${DISCOVERY_API_SEARCH_ROUTE}/${standardizedId}${
@@ -45,23 +47,42 @@ export async function fetchBib(
       )),
   ])
 
-  // Assign results values for each response when status is fulfilled
-  const discoveryBibResult =
-    bibResponse.status === "fulfilled" && bibResponse.value
-  const annotatedMarc =
-    annotatedMarcResponse.status === "fulfilled" && annotatedMarcResponse.value
+  if (bibResponse.status === "rejected") {
+    logServerError("fetchBib", bibResponse.reason)
+    return {
+      status: 500,
+      error:
+        bibResponse.reason instanceof Error
+          ? bibResponse.reason.message
+          : bibResponse.reason,
+    }
+  }
+  if (annotatedMarcResponse.status === "rejected") {
+    logServerError("fetchBib", annotatedMarcResponse.reason)
+    return {
+      status: 500,
+      error:
+        annotatedMarcResponse.reason instanceof Error
+          ? annotatedMarcResponse.reason.message
+          : annotatedMarcResponse.reason,
+    }
+  }
 
+  // Assign results values for each response
+  const discoveryBibResult = bibResponse.value
+  const annotatedMarc = annotatedMarcResponse.value
+
+  // Handle bib error
   try {
-    // If there's a problem with a bib, try to fetch from the Sierra API and redirect to circulating catalog
+    // First try to fetch from the Sierra API and redirect to circulating catalog
     if (
-      !discoveryBibResult ||
+      discoveryBibResult.status === 404 ||
       !discoveryBibResult.uri ||
       !id.includes(discoveryBibResult.uri)
     ) {
       logger.warn(
         `Missing discoveryBibResult for id ${id}, or id does not match uri on returned result`
       )
-      // TODO: Check if this ID slicing is correct and if this redirect logic is still accurate
       const sierraBibResponse = await client.get(
         `/bibs/sierra-nypl/${id.slice(1)}`
       )
@@ -72,26 +93,32 @@ export async function fetchBib(
             appConfig.urls.circulatingCatalog
           }/search/card?recordId=${id.replace(/^b/, "")}`,
         }
+        // Otherwise forward the Discovery API error
       } else {
         logServerError(
           "fetchBib",
-          "There was a problem fetching the bib from Sierra"
+          `${
+            discoveryBibResult.error && discoveryBibResult.error
+          } Request: ${DISCOVERY_API_SEARCH_ROUTE}/${standardizedId}${
+            itemId ? `-${itemId}` : ""
+          }${getBibQueryString(bibQuery)}`
         )
         return {
-          status: 404,
+          status: discoveryBibResult.status,
+          name: discoveryBibResult.name,
+          error: discoveryBibResult.error,
         }
       }
     }
-    // The Discovery API currently returns HTML in the bib attribute when it can't find a bib.
-    // TODO: Modify the error response in Discovery API to return a 404 status instead of an HTML string in the bib attribute
-    else if (typeof discoveryBibResult === "string") {
+
+    // Log annotated marc error (but don't return an error– we still display bib)
+    if (annotatedMarc.status) {
       logServerError(
         "fetchBib",
-        "There was an error fetching the Bib from the Discovery API"
+        `${DISCOVERY_API_SEARCH_ROUTE}/${standardizedId}${
+          itemId ? `-${itemId}` : ""
+        }.annotated-marc${getBibQueryString(bibQuery, true)}`
       )
-      return {
-        status: 404,
-      }
     }
 
     // Only call the batched fetch when some of the filters are active
@@ -106,15 +133,13 @@ export async function fetchBib(
     }
 
     return {
+      status: 200,
       discoveryBibResult,
       annotatedMarc: annotatedMarc?.bib || null,
-      status: 200,
     }
-  } catch (error) {
-    logServerError("fetchBib", error.message)
-    return {
-      status: 404,
-    }
+  } catch (error: any) {
+    logServerError("fetchBib", error)
+    return { status: 500, error }
   }
 }
 
@@ -123,7 +148,7 @@ async function fetchAllBibItemsWithQuery(
   bibQuery: BibQueryParams,
   numItems: number,
   batchSize: number
-): Promise<DiscoveryItemResult[]> {
+): Promise<DiscoveryItemResult[] | { status: HTTPStatusCode; error?: string }> {
   const items: DiscoveryItemResult[] = []
   const client = await nyplApiClient()
   const totalBatchNum = Math.ceil(numItems / batchSize)
@@ -144,11 +169,12 @@ async function fetchAllBibItemsWithQuery(
         items.push(...bibPage.items)
       } else {
         throw new Error(
-          "There was en error fetching items in one of the batches"
+          "There was an error fetching items in one of the batches"
         )
       }
-    } catch (error) {
-      logServerError("fetchAllBibItemsWithQuery", error.message)
+    } catch (error: any) {
+      logServerError("fetchAllBibItemsWithQuery", error)
+      return { status: 500, error }
     }
   }
   return items

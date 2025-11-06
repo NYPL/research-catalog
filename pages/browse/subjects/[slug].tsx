@@ -1,5 +1,5 @@
 import { SITE_NAME } from "../../../src/config/constants"
-import { fetchResults } from "../../../src/server/api/search"
+import { fetchSearchResults } from "../../../src/server/api/search"
 import initializePatronTokenAuth from "../../../src/server/auth"
 import {
   mapQueryToSearchParams,
@@ -93,7 +93,7 @@ export async function getServerSideProps({ req, query, params }) {
     field: "subjectLiteral",
   })
 
-  const results = await fetchResults(mapQueryToSearchParams(baseQuery))
+  const results = await fetchSearchResults(mapQueryToSearchParams(baseQuery))
 
   if (results.status !== 200) {
     return { props: { errorStatus: results.status } }
