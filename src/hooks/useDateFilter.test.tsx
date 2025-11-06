@@ -36,6 +36,7 @@ const TestComponent = ({
       <div data-testid="error-combined">
         {dateFilterProps.dateError.combined}
       </div>
+      <div data-testid="error-range">{dateFilterProps.dateError.range}</div>
       <button onClick={() => clearInputs()}>clear</button>
       <button onClick={() => setDateFrom("2025/10/01")}>setFromValid</button>
       <button onClick={() => setDateTo("2025/09/01")}>setToEarlier</button>
@@ -102,7 +103,17 @@ describe("useDateFilter hook", () => {
     expect(screen.getByTestId("error-to")).toBeEmptyDOMElement()
   })
 
-  it("should show error for invalid date on blur", () => {
+  it("should show individual field error when changing that field", () => {
+    render(<TestComponent initialFrom="2025/13/01" initialTo="2025/10/01" />)
+    fireEvent.click(screen.getByText("blur"))
+    expect(screen.getByTestId("error-from")).toHaveTextContent(
+      "Please enter a valid 'from' date."
+    )
+    fireEvent.click(screen.getByText("changeFrom"))
+    expect(screen.getByTestId("error-from")).toBeEmptyDOMElement()
+  })
+
+  it("should show combined error for invalid dates on blur", () => {
     render(<TestComponent initialFrom="2025/13/01" initialTo="abcd" />)
     const blurButton = screen.getByText("blur")
     fireEvent.click(blurButton)
@@ -117,14 +128,30 @@ describe("useDateFilter hook", () => {
     )
   })
 
-  it("should clear specific field error when changing that field", () => {
-    render(<TestComponent initialFrom="2025/13/01" initialTo="2025/10/01" />)
+  it("should set future date error correctly", () => {
+    const futureYear = new Date().getFullYear() + 1
+    render(<TestComponent initialFrom={`${futureYear}/01/01`} />)
+    fireEvent.click(screen.getByText("blur"))
+    expect(screen.getByTestId("error-from")).toHaveTextContent(
+      "'From' field cannot contain a future date."
+    )
+  })
+
+  it("should clear only specific field error when changing that field", () => {
+    render(<TestComponent initialFrom="2025/13/01" initialTo="2025/10/32" />)
     fireEvent.click(screen.getByText("blur"))
     expect(screen.getByTestId("error-from")).toHaveTextContent(
       "Please enter a valid 'from' date."
     )
+    expect(screen.getByTestId("error-to")).toHaveTextContent(
+      "Please enter a valid 'to' date."
+    )
+    expect(screen.getByTestId("error-combined")).toHaveTextContent(
+      "Please enter valid 'from' and 'to' dates."
+    )
     fireEvent.click(screen.getByText("changeFrom"))
     expect(screen.getByTestId("error-from")).toBeEmptyDOMElement()
+    expect(screen.getByTestId("error-combined")).toBeEmptyDOMElement()
   })
 
   it("should show range error when 'to' < 'from'", () => {
@@ -132,6 +159,9 @@ describe("useDateFilter hook", () => {
     fireEvent.click(screen.getByText("apply"))
     expect(screen.getByTestId("error-from")).toBeEmptyDOMElement()
     expect(screen.getByTestId("error-to")).toBeEmptyDOMElement()
+    expect(screen.getByTestId("error-range")).toHaveTextContent(
+      "End date must be later than start date."
+    )
   })
 
   it("should clear all inputs and errors on clear", () => {
@@ -140,6 +170,7 @@ describe("useDateFilter hook", () => {
     fireEvent.click(screen.getByText("clear"))
     expect(screen.getByTestId("error-from")).toBeEmptyDOMElement()
     expect(screen.getByTestId("error-to")).toBeEmptyDOMElement()
+    expect(screen.getByTestId("error-range")).toBeEmptyDOMElement()
   })
 
   it("should call applyHandler when dates are valid", () => {
@@ -154,14 +185,5 @@ describe("useDateFilter hook", () => {
     fireEvent.click(screen.getByText("apply"))
     act(() => jest.runAllTimers())
     expect(applyHandler).toHaveBeenCalled()
-  })
-
-  it("should set future date error correctly", () => {
-    const futureYear = new Date().getFullYear() + 1
-    render(<TestComponent initialFrom={`${futureYear}/01/01`} />)
-    fireEvent.click(screen.getByText("blur"))
-    expect(screen.getByTestId("error-from")).toHaveTextContent(
-      "'From' field cannot contain a future date."
-    )
   })
 })
