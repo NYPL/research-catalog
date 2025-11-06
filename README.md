@@ -61,17 +61,19 @@ Key environment variables include:
 
 #### AWS Credentials
 
-We store API credentials as KMS encrypted environment variables. Decryption (and by extension, use of these API clients) requires the user to have AWS credentials configured locally via the AWS CLI. Reach out to DevOps to get this set up and see our guide on [how we encrypt](docs/ENVIRONMENT_VARIABLES.md#encrypting).
+We store API credentials as KMS encrypted environment variables. Decryption (and by extension, use of these API clients) requires the user to have AWS credentials configured locally via the AWS CLI. Reach out to DevOps to get this set up and see our guide on [how we encrypt](docs/ENVIRONMENT_VARIABLES.md#encrypting). 
+As of 10/30/2025, running this app locally depends on SSO configuration for the profile `nypl-digital-dev` in `~/.aws/config`.
 
 ### Local Development
 
 #### Running with npm
 
 ```bash
+aws sso login --profile nypl-digital-dev
 npm run dev
 ```
 
-This starts the development server on port 8080.
+This starts the development server on port 8080. The SSO token lasts one hour, so you may have to log in again during development.
 
 #### Local Authentication Setup
 
