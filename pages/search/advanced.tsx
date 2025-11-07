@@ -51,6 +51,7 @@ import DateFilter from "../../src/components/DateFilter/DateFilter"
 import { debounce } from "underscore"
 import MultiSelectWithGroupTitles from "../../src/components/AdvancedSearch/MultiSelectWithGroupTitles/MultiSelectWithGroupTitles"
 import { useDateFilter } from "../../src/hooks/useDateFilter"
+import { idConstants, useFocusContext } from "../../src/context/FocusContext"
 
 export const defaultEmptySearchErrorMessage =
   "Error: please enter at least one field to submit an advanced search."
@@ -68,13 +69,13 @@ export default function AdvancedSearch({
 }: AdvancedSearchPropTypes) {
   const metadataTitle = `Advanced search | ${SITE_NAME}`
   const router = useRouter()
-  const notificationRef = useRef<HTMLDivElement>(null)
   const dateInputRefs = [useRef<TextInputRefType>(), useRef<TextInputRefType>()]
   const liveRegionRef = useRef<HTMLDivElement | null>(null)
   const [alert, setAlert] = useState(false)
   const [errorMessage, setErrorMessage] = useState(
     defaultEmptySearchErrorMessage
   )
+  const { setPersistentFocus } = useFocusContext()
 
   const [searchFormState, dispatch] = useReducer(
     searchFormReducer,
@@ -169,14 +170,8 @@ export default function AdvancedSearch({
   }
 
   useEffect(() => {
-    if (
-      alert &&
-      !Object.keys(dateError || {}).length &&
-      notificationRef.current
-    ) {
-      setTimeout(() => {
-        notificationRef.current?.focus()
-      }, 0)
+    if (alert && !Object.keys(dateError || {}).length) {
+      setPersistentFocus(idConstants.advancedSearchError)
     }
   }, [alert, dateError])
 
@@ -239,7 +234,7 @@ export default function AdvancedSearch({
         </Heading>
         {/* Always render the wrapper element that will display the
           dynamically rendered notification for focus management */}
-        <Box tabIndex={-1} ref={notificationRef}>
+        <Box tabIndex={-1} id="advanced-search-error">
           {alert && <Banner variant="negative" content={errorMessage} mb="s" />}
         </Box>
         <div

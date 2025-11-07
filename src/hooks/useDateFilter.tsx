@@ -7,6 +7,7 @@ import {
   rangeInvalid,
   dateErrorMessage,
 } from "../utils/dateUtils"
+import { idConstants, useFocusContext } from "../context/FocusContext"
 
 export interface DateFilterHookPropsType {
   inputRefs: MutableRefObject<TextInputRefType>[]
@@ -34,6 +35,7 @@ export interface DateErrorState {
 export const useDateFilter = (props: DateFilterHookPropsType) => {
   const { inputRefs, dateFrom, dateTo, changeHandler, applyHandler } = props
   const [dateError, setDateError] = useState<DateErrorState>({})
+  const { setPersistentFocus } = useFocusContext()
 
   const onBlur = () => {
     const errors = validateDates(dateFrom, dateTo)
@@ -60,17 +62,11 @@ export const useDateFilter = (props: DateFilterHookPropsType) => {
   const onApply = () => {
     const errors = validateDates(dateFrom, dateTo)
     setDateError(errors)
-
-    if (errors.from || errors.range) {
-      requestAnimationFrame(() => inputRefs[0]?.current?.focus?.())
-      return errors
-    }
-    if (errors.to) {
-      requestAnimationFrame(() => inputRefs[1]?.current?.focus?.())
-      return errors
-    }
-
-    if (Object.keys(errors).length === 0 && applyHandler) {
+    if (errors.range || errors.from) {
+      setPersistentFocus(idConstants.dateFrom)
+    } else if (errors.to) {
+      setPersistentFocus(idConstants.dateTo)
+    } else if (Object.keys(errors).length === 0 && applyHandler) {
       applyHandler()
     }
 
