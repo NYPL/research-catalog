@@ -1,5 +1,12 @@
 import { useState, type MutableRefObject, type SyntheticEvent } from "react"
 import type { TextInputRefType } from "@nypl/design-system-react-components"
+import {
+  parseDate,
+  hasFormatError,
+  isFutureDate,
+  rangeInvalid,
+  dateErrorMessage,
+} from "../utils/dateUtils"
 
 export interface DateFilterHookPropsType {
   inputRefs: MutableRefObject<TextInputRefType>[]
@@ -92,42 +99,6 @@ export const useDateFilter = (props: DateFilterHookPropsType) => {
   }
 }
 
-const dateSlashPattern =
-  /^(\d{4})(?:\/(0[1-9]|1[0-2])(\/(0[1-9]|[12][0-9]|3[01]))?)?$/
-const hasFormatError = (v: string) => v && !dateSlashPattern.test(v)
-
-export const parseDate = (value: string): Date | null => {
-  if (!value) return null
-  const digits = value.replace(/[^\d]/g, "")
-  if (digits.length < 4) return null
-
-  const year = parseInt(digits.slice(0, 4), 10)
-  const month = digits.length >= 6 ? parseInt(digits.slice(4, 6), 10) - 1 : 0
-  const day = digits.length >= 8 ? parseInt(digits.slice(6, 8), 10) : 1
-
-  const parsed = new Date(year, month, day)
-  parsed.setHours(0, 0, 0, 0)
-
-  if (
-    parsed.getFullYear() !== year ||
-    parsed.getMonth() !== month ||
-    parsed.getDate() !== day
-  ) {
-    return null
-  }
-  return parsed
-}
-
-export const isFutureDate = (date: Date): boolean => {
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
-  return date.getTime() > today.getTime()
-}
-
-export const rangeInvalid = (from: Date, to: Date): boolean => {
-  return from.getTime() > to.getTime()
-}
-
 export const validateDates = (
   dateFrom: string,
   dateTo: string
@@ -140,15 +111,15 @@ export const validateDates = (
   const fromInvalid = !!dateFrom && (!fromParsed || hasFormatError(dateFrom))
   const toInvalid = !!dateTo && (!toParsed || hasFormatError(dateTo))
 
-  if (fromInvalid) errors.from = "Please enter a valid 'from' date."
-  if (toInvalid) errors.to = "Please enter a valid 'to' date."
+  if (fromInvalid) errors.from = dateErrorMessage.fromInvalid
+  if (toInvalid) errors.to = dateErrorMessage.toInvalid
 
   // Future date check
   const fromFuture = fromParsed && isFutureDate(fromParsed)
   const toFuture = toParsed && isFutureDate(toParsed)
 
-  if (fromFuture) errors.from = "'From' field cannot contain a future date."
-  if (toFuture) errors.to = "'To' field cannot contain a future date."
+  if (fromFuture) errors.from = dateErrorMessage.fromFuture
+  if (toFuture) errors.to = dateErrorMessage.toFuture
 
   // Range check
   if (
@@ -160,15 +131,15 @@ export const validateDates = (
     !toFuture &&
     rangeInvalid(fromParsed, toParsed)
   ) {
-    errors.range = "End date must be later than start date."
+    errors.range = dateErrorMessage.range
   }
 
   // Replace with combined message if errors match
   if (errors.from && errors.to) {
     if (errors.from.includes("valid") && errors.to.includes("valid")) {
-      errors.combined = "Please enter valid 'from' and 'to' dates."
+      errors.combined = dateErrorMessage.combinedInvalid
     } else if (errors.from.includes("future") && errors.to.includes("future")) {
-      errors.combined = "'From' and 'to' fields cannot contain a future date."
+      errors.combined = dateErrorMessage.combinedFuture
     } else {
       errors.combined = `${errors.from} ${errors.to}`
     }

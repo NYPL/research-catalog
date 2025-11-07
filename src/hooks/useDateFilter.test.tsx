@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react"
 import { render, act, screen, fireEvent } from "@testing-library/react"
 import { useDateFilter } from "./useDateFilter"
 import type { TextInputRefType } from "@nypl/design-system-react-components"
+import { dateErrorMessage } from "../utils/dateUtils"
 
 jest.useFakeTimers()
 
@@ -107,7 +108,7 @@ describe("useDateFilter hook", () => {
     render(<TestComponent initialFrom="2025/13/01" initialTo="2025/10/01" />)
     fireEvent.click(screen.getByText("blur"))
     expect(screen.getByTestId("error-from")).toHaveTextContent(
-      "Please enter a valid 'from' date."
+      dateErrorMessage.fromInvalid
     )
     fireEvent.click(screen.getByText("changeFrom"))
     expect(screen.getByTestId("error-from")).toBeEmptyDOMElement()
@@ -118,13 +119,13 @@ describe("useDateFilter hook", () => {
     const blurButton = screen.getByText("blur")
     fireEvent.click(blurButton)
     expect(screen.getByTestId("error-from")).toHaveTextContent(
-      "Please enter a valid 'from' date."
+      dateErrorMessage.fromInvalid
     )
     expect(screen.getByTestId("error-to")).toHaveTextContent(
-      "Please enter a valid 'to' date."
+      dateErrorMessage.toInvalid
     )
     expect(screen.getByTestId("error-combined")).toHaveTextContent(
-      "Please enter valid 'from' and 'to' dates."
+      dateErrorMessage.combinedInvalid
     )
   })
 
@@ -133,7 +134,7 @@ describe("useDateFilter hook", () => {
     render(<TestComponent initialFrom={`${futureYear}/01/01`} />)
     fireEvent.click(screen.getByText("blur"))
     expect(screen.getByTestId("error-from")).toHaveTextContent(
-      "'From' field cannot contain a future date."
+      dateErrorMessage.fromFuture
     )
   })
 
@@ -141,13 +142,13 @@ describe("useDateFilter hook", () => {
     render(<TestComponent initialFrom="2025/13/01" initialTo="2025/10/32" />)
     fireEvent.click(screen.getByText("blur"))
     expect(screen.getByTestId("error-from")).toHaveTextContent(
-      "Please enter a valid 'from' date."
+      dateErrorMessage.fromInvalid
     )
     expect(screen.getByTestId("error-to")).toHaveTextContent(
-      "Please enter a valid 'to' date."
+      dateErrorMessage.toInvalid
     )
     expect(screen.getByTestId("error-combined")).toHaveTextContent(
-      "Please enter valid 'from' and 'to' dates."
+      dateErrorMessage.combinedInvalid
     )
     fireEvent.click(screen.getByText("changeFrom"))
     expect(screen.getByTestId("error-from")).toBeEmptyDOMElement()
@@ -160,7 +161,7 @@ describe("useDateFilter hook", () => {
     expect(screen.getByTestId("error-from")).toBeEmptyDOMElement()
     expect(screen.getByTestId("error-to")).toBeEmptyDOMElement()
     expect(screen.getByTestId("error-range")).toHaveTextContent(
-      "End date must be later than start date."
+      dateErrorMessage.range
     )
   })
 

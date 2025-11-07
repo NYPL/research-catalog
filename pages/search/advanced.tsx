@@ -128,6 +128,7 @@ export default function AdvancedSearch({
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
+    dateFilterProps.onBlur()
     const errors = dateFilterProps.onApply()
     if (Object.keys(errors).length > 0) {
       let dateFieldError = ""
@@ -168,8 +169,11 @@ export default function AdvancedSearch({
   }
 
   useEffect(() => {
-    const { from, to, range } = dateError || {}
-    if (alert && !from && !to && !range && notificationRef.current) {
+    if (
+      alert &&
+      !Object.keys(dateError || {}).length &&
+      notificationRef.current
+    ) {
       setTimeout(() => {
         notificationRef.current?.focus()
       }, 0)
