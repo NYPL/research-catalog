@@ -1,8 +1,8 @@
 import React, { useRef, useState } from "react"
-import { render, act, screen, fireEvent } from "@testing-library/react"
 import { useDateFilter } from "./useDateFilter"
 import type { TextInputRefType } from "@nypl/design-system-react-components"
 import { dateErrorMessage } from "../utils/dateUtils"
+import { render, screen, fireEvent, act } from "../utils/testUtils"
 
 jest.useFakeTimers()
 
