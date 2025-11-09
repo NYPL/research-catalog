@@ -60,11 +60,15 @@ export const useDateFilter = (props: DateFilterHookPropsType) => {
   }
 
   const onApply = () => {
-    const errors = validateDates(dateFrom, dateTo)
+    const fromValue = inputRefs[0]?.current?.value ?? ""
+    const toValue = inputRefs[1]?.current?.value ?? ""
+
+    const errors = validateDates(fromValue, toValue)
     setDateError(errors)
-    if (errors.range || errors.from) {
+
+    if (errors.from) {
       setPersistentFocus(idConstants.dateFrom)
-    } else if (errors.to) {
+    } else if (errors.to || errors.range) {
       setPersistentFocus(idConstants.dateTo)
     } else if (Object.keys(errors).length === 0 && applyHandler) {
       applyHandler()

@@ -52,7 +52,6 @@ import { debounce } from "underscore"
 import MultiSelectWithGroupTitles from "../../src/components/AdvancedSearch/MultiSelectWithGroupTitles/MultiSelectWithGroupTitles"
 import { useDateFilter } from "../../src/hooks/useDateFilter"
 import { idConstants, useFocusContext } from "../../src/context/FocusContext"
-
 export const defaultEmptySearchErrorMessage =
   "Error: please enter at least one field to submit an advanced search."
 export const dateErrorMessage =

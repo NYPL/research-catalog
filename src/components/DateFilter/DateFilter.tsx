@@ -135,10 +135,8 @@ const DateFilter = ({
               variant="secondary"
               id="apply-dates"
               onMouseDown={(e) => {
-                if (hasError) {
-                  e.preventDefault() // prevent focus shift
-                  onBlur()
-                }
+                e.preventDefault()
+                onBlur()
               }}
               onClick={onApply}
               width="100%"
