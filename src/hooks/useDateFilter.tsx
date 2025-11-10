@@ -60,10 +60,7 @@ export const useDateFilter = (props: DateFilterHookPropsType) => {
   }
 
   const onApply = () => {
-    const fromValue = inputRefs[0]?.current?.value ?? ""
-    const toValue = inputRefs[1]?.current?.value ?? ""
-
-    const errors = validateDates(fromValue, toValue)
+    const errors = validateDates(dateFrom, dateTo)
     setDateError(errors)
 
     if (errors.from) {
