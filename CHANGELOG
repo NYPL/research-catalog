@@ -15,8 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Added
 
 - Added Playwright test for My Account. [SCC-4964](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4964)
-
 - Added redirect from `research/collections/shared-collection-catalog` [SCC-4974](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4974)
+- Added New Relic plus corresponding environment variables [SCC-4955](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4955)
 
 ### Removed
 
