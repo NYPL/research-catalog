@@ -446,12 +446,12 @@
   "languages": [
     {
       "value": "lang:eng",
-      "count": 8489782,
+      "count": 8489777,
       "label": "English"
     },
     {
       "value": "lang:ger",
-      "count": 1907349,
+      "count": 1907347,
       "label": "German"
     },
     {
@@ -461,12 +461,12 @@
     },
     {
       "value": "lang:spa",
-      "count": 1284408,
+      "count": 1284404,
       "label": "Spanish"
     },
     {
       "value": "lang:ita",
-      "count": 859353,
+      "count": 859352,
       "label": "Italian"
     },
     {
@@ -486,12 +486,12 @@
     },
     {
       "value": "lang:heb",
-      "count": 300203,
+      "count": 300202,
       "label": "Hebrew"
     },
     {
       "value": "lang:jpn",
-      "count": 297316,
+      "count": 297317,
       "label": "Japanese"
     },
     {
@@ -501,7 +501,7 @@
     },
     {
       "value": "lang:zxx",
-      "count": 282186,
+      "count": 282185,
       "label": "No linguistic content"
     },
     {
@@ -631,7 +631,7 @@
     },
     {
       "value": "lang:und",
-      "count": 24305,
+      "count": 24304,
       "label": "Undetermined"
     },
     {
@@ -706,7 +706,7 @@
     },
     {
       "value": "lang:aze",
-      "count": 9696,
+      "count": 9695,
       "label": "Azerbaijani"
     },
     {
@@ -811,7 +811,7 @@
     },
     {
       "value": "lang:scr",
-      "count": 4085,
+      "count": 4084,
       "label": ""
     },
     {
@@ -866,7 +866,7 @@
     },
     {
       "value": "lang:scc",
-      "count": 2442,
+      "count": 2441,
       "label": ""
     },
     {
@@ -2948,15 +2948,18 @@
   "buildingLocations": [
     {
       "value": "ma",
-      "label": "Stephen A. Schwarzman Building (SASB)"
+      "label": "Stephen A. Schwarzman Building (SASB)",
+      "nickname": "SASB"
     },
     {
       "value": "pa",
-      "label": "The New York Public Library for the Performing Arts (LPA)"
+      "label": "The New York Public Library for the Performing Arts (LPA)",
+      "nickname": "LPA"
     },
     {
       "value": "sc",
-      "label": "Schomburg Center for Research in Black Culture"
+      "label": "Schomburg Center for Research in Black Culture",
+      "nickname": "Schomburg"
     },
     {
       "value": "rc",
@@ -2964,15 +2967,9 @@
     },
     {
       "value": "bu",
-      "label": "Stavros Niarchos Foundation Library (SNFL)"
+      "label": "Stavros Niarchos Foundation Library (SNFL)",
+      "nickname": "SNFL"
     }
-  ],
-  buildingNicknames: [
-    { value: "ma", label: "SASB" },
-    { value: "pa", label: "LPA" },
-    { value: "sc", label: "Schomburg" },
-    { value: "bu", label: "SNFL" },
   ]
-
 };
     

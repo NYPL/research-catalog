@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+## [1.5.8] 2025-11-10
+
+## Updated
+
+- Reordered top details on bib page [SCC-4956](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4956)
+- Updated KMS decryption to use `aws-sdk` v3
+
+## Added
+
+- Added Playwright test for My Account. [SCC-4964](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4964)
+- Added redirect from `research/collections/shared-collection-catalog` [SCC-4974](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4974)
+
 ### Removed
 
 - Removed subject heading links that come from annotated MARC rather than bib, just display as plain text [SCC-4984](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4984)

@@ -19,6 +19,7 @@ const ActiveFilters = ({ filterName, onClick, tagSetData }) => {
         mr={{ base: "0", md: "s" }}
         mb={{ base: "xs", md: "0" }}
         pt="xxs"
+        whiteSpace="nowrap"
         lineHeight="--nypl-lineHeights-taller"
       >
         Active filters
