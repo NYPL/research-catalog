@@ -333,16 +333,27 @@ Failure to update environment variables in Terraform will result in the variable
 
 ## Logging
 
-The application uses Winston for server-side logging:
+The application uses Winston for server-side logging, and New Relic for both server and client-side logging.
 
-- Structured logs according to NYPL standards
-- Logs stored in AWS CloudWatch
-- Console logging for local development
+### Adding Logs
+
+Use (and then remove) console logs for local development. To test New Relic logs, you can run:
+```
+export NEW_RELIC_APP_NAME="Research Catalog [local]"
+export NEW_RELIC_LICENSE_KEY="<NEW_RELIC_LICENSE_KEY>"
+
+node server.js
+```
+and view results in New Relic under "Research Catalog [local]".
 
 ### Accessing Logs
 
-- **QA/Production**: AWS CloudWatch under the `nypl-digital-dev` account (search for "research-catalog")
+- **QA/Production**: AWS CloudWatch under the `nypl-digital-dev` account (search for "research-catalog"), New Relic under "Research Catalog [qa]" and "Research Catalog [production]"
 - **Vercel Deployments**: Console output in the Vercel dashboard
+
+
+
+
 
 ## Troubleshooting
 
