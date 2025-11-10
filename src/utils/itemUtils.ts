@@ -12,7 +12,7 @@ export const defaultNYPLLocation: ItemLocation = {
 // Default delivery location for a partner Recap item.
 export const partnerDefaultLocation: ItemLocation = {
   "@id": "",
-  prefLabel: "Off-site",
+  prefLabel: "Offsite",
   customerCode: "",
 }
 
