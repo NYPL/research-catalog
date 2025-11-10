@@ -157,10 +157,15 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
     } else return null
   })
 
-  const dateInputRefs = [useRef<TextInputRefType>(), useRef<TextInputRefType>()]
+  const clearDates = () => {
+    setAppliedFilters((prev) => ({
+      ...prev,
+      dateFrom: [""],
+      dateTo: [""],
+    }))
+  }
 
   const { dateFilterProps } = useDateFilter({
-    inputRefs: dateInputRefs,
     dateFrom: appliedFilters.dateFrom?.[0],
     dateTo: appliedFilters.dateTo?.[0],
     applyHandler: () => {
@@ -177,6 +182,7 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
         }
       })
     },
+    clearHandler: clearDates,
   })
 
   const dateFilter = (

@@ -1,5 +1,4 @@
-import { useState, type MutableRefObject, type SyntheticEvent } from "react"
-import type { TextInputRefType } from "@nypl/design-system-react-components"
+import { useState, type SyntheticEvent } from "react"
 import {
   parseDate,
   hasFormatError,
@@ -10,11 +9,11 @@ import {
 import { idConstants, useFocusContext } from "../context/FocusContext"
 
 export interface DateFilterHookPropsType {
-  inputRefs: MutableRefObject<TextInputRefType>[]
   dateFrom: string
   dateTo: string
   changeHandler?: (e: SyntheticEvent) => void
   applyHandler?: () => void
+  clearHandler?: () => void
 }
 
 export interface DateErrorState {
@@ -33,7 +32,7 @@ export interface DateErrorState {
  */
 
 export const useDateFilter = (props: DateFilterHookPropsType) => {
-  const { inputRefs, dateFrom, dateTo, changeHandler, applyHandler } = props
+  const { dateFrom, dateTo, changeHandler, applyHandler } = props
   const [dateError, setDateError] = useState<DateErrorState>({})
   const { setPersistentFocus } = useFocusContext()
 
@@ -74,10 +73,15 @@ export const useDateFilter = (props: DateFilterHookPropsType) => {
     return errors
   }
 
+  // const clearInputs = () => {
+  //   inputRefs.forEach((ref) => {
+  //     if (ref?.current) ref.current.value = ""
+  //   })
+  //   setDateError({})
+  // }
+
   const clearInputs = () => {
-    inputRefs.forEach((ref) => {
-      if (ref?.current) ref.current.value = ""
-    })
+    props.clearHandler?.() // parent clears state
     setDateError({})
   }
 
@@ -88,7 +92,6 @@ export const useDateFilter = (props: DateFilterHookPropsType) => {
       dateError,
       onChange,
       onBlur,
-      inputRefs,
       onApply,
     },
     clearInputs,

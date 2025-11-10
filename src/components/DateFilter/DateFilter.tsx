@@ -24,7 +24,6 @@ interface DateFilterPropsType extends DateFilterHookPropsType {
 // Render date filter fields and, if not in advanced search, Apply button.
 const DateFilter = ({
   dateError,
-  inputRefs,
   dateTo,
   dateFrom,
   onChange,
@@ -71,7 +70,6 @@ const DateFilter = ({
                 value={dateFrom || ""}
                 onChange={onChange}
                 onBlur={onBlur}
-                ref={inputRefs[0]}
                 isInvalid={fromError}
                 maxLength={10}
                 sx={{
@@ -102,7 +100,6 @@ const DateFilter = ({
                 value={dateTo || ""}
                 onChange={onChange}
                 onBlur={onBlur}
-                ref={inputRefs[1]}
                 isInvalid={!!(dateError.to || dateError.range)}
                 maxLength={10}
                 sx={{
