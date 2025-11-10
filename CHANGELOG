@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Reordered top details on bib page [SCC-4956](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4956)
 - Updated KMS decryption to use `aws-sdk` v3
-- Replace "off-site" with "offsite" in user-facing strings [SCC-4996](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4996)
+- Replace "off-site"/"on-site" with "offsite"/"onsite" in user-facing text [SCC-4996](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4996)
 
 ## Added
 
