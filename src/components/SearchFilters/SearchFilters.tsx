@@ -158,11 +158,13 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
   })
 
   const clearDates = () => {
-    setAppliedFilters((prev) => ({
-      ...prev,
+    const newFilters = {
+      ...appliedFilters,
       dateFrom: [""],
       dateTo: [""],
-    }))
+    }
+    setAppliedFilters(newFilters)
+    buildAndPushFilterQuery(newFilters)
   }
 
   const { dateFilterProps } = useDateFilter({

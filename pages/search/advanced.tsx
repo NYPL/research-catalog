@@ -17,9 +17,7 @@ import {
   Banner,
   Icon,
   MultiSelect,
-  Label,
 } from "@nypl/design-system-react-components"
-import type { TextInputRefType } from "@nypl/design-system-react-components"
 import Layout from "../../src/components/Layout/Layout"
 import {
   BASE_URL,
@@ -52,6 +50,7 @@ import { debounce } from "underscore"
 import MultiSelectWithGroupTitles from "../../src/components/AdvancedSearch/MultiSelectWithGroupTitles/MultiSelectWithGroupTitles"
 import { useDateFilter } from "../../src/hooks/useDateFilter"
 import { idConstants, useFocusContext } from "../../src/context/FocusContext"
+import { flushSync } from "react-dom"
 export const defaultEmptySearchErrorMessage =
   "Error: please enter at least one field to submit an advanced search."
 export const dateErrorMessage =
@@ -68,7 +67,6 @@ export default function AdvancedSearch({
 }: AdvancedSearchPropTypes) {
   const metadataTitle = `Advanced search | ${SITE_NAME}`
   const router = useRouter()
-  const dateInputRefs = [useRef<TextInputRefType>(), useRef<TextInputRefType>()]
   const liveRegionRef = useRef<HTMLDivElement | null>(null)
   const [alert, setAlert] = useState(false)
   const [errorMessage, setErrorMessage] = useState(
@@ -82,10 +80,21 @@ export default function AdvancedSearch({
   )
 
   const { dateFilterProps, clearInputs: clearDateInputs } = useDateFilter({
-    inputRefs: dateInputRefs,
     dateTo: searchFormState["filters"].dateTo,
     dateFrom: searchFormState["filters"].dateFrom,
     changeHandler: (e) => handleInputChange(e, "filter_change"),
+    clearHandler: () => {
+      dispatch({
+        type: "filter_change",
+        field: "dateFrom",
+        payload: "",
+      })
+      dispatch({
+        type: "filter_change",
+        field: "dateTo",
+        payload: "",
+      })
+    },
   })
   const { dateError } = dateFilterProps
 
@@ -128,7 +137,7 @@ export default function AdvancedSearch({
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
-    dateFilterProps.onBlur()
+    flushSync(() => dateFilterProps.onBlur())
     const errors = dateFilterProps.onApply()
     if (Object.keys(errors).length > 0) {
       let dateFieldError = ""

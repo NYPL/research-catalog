@@ -73,13 +73,6 @@ export const useDateFilter = (props: DateFilterHookPropsType) => {
     return errors
   }
 
-  // const clearInputs = () => {
-  //   inputRefs.forEach((ref) => {
-  //     if (ref?.current) ref.current.value = ""
-  //   })
-  //   setDateError({})
-  // }
-
   const clearInputs = () => {
     props.clearHandler?.() // parent clears state
     setDateError({})

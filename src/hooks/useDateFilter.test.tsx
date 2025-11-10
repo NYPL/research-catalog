@@ -1,6 +1,5 @@
-import React, { useRef, useState } from "react"
+import React, { useState } from "react"
 import { useDateFilter } from "./useDateFilter"
-import type { TextInputRefType } from "@nypl/design-system-react-components"
 import { dateErrorMessage } from "../utils/dateUtils"
 import { render, screen, fireEvent, act } from "../utils/testUtils"
 
@@ -17,19 +16,19 @@ const TestComponent = ({
   changeHandler?: (e: React.SyntheticEvent) => void
   applyHandler?: () => void
 }) => {
-  const ref1 = useRef<TextInputRefType>({ value: "" } as TextInputRefType)
-  const ref2 = useRef<TextInputRefType>({ value: "" } as TextInputRefType)
   const [dateFrom, setDateFrom] = useState(initialFrom)
   const [dateTo, setDateTo] = useState(initialTo)
 
   const { dateFilterProps, clearInputs } = useDateFilter({
-    inputRefs: [ref1, ref2],
     dateFrom,
     dateTo,
     changeHandler,
     applyHandler,
+    clearHandler: () => {
+      setDateFrom("")
+      setDateTo("")
+    },
   })
-
   return (
     <div>
       <div data-testid="error-from">{dateFilterProps.dateError.from}</div>
@@ -90,10 +89,6 @@ const TestComponent = ({
 }
 
 describe("useDateFilter hook", () => {
-  beforeEach(() => {
-    jest.useFakeTimers()
-  })
-
   afterEach(() => {
     jest.clearAllMocks()
   })
@@ -184,7 +179,6 @@ describe("useDateFilter hook", () => {
       />
     )
     fireEvent.click(screen.getByText("apply"))
-    act(() => jest.runAllTimers())
     expect(applyHandler).toHaveBeenCalled()
   })
 })
