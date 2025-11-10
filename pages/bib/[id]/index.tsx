@@ -253,7 +253,7 @@ export default function BibPage({
             <Banner
               content={
                 <ExternalLink href="https://www.nypl.org/help/request-research-materials">
-                  How do I request and pick up research materials for on-site
+                  How do I request and pick up research materials for onsite
                   use?
                 </ExternalLink>
               }

@@ -9,7 +9,7 @@ const AvailableOnsite = ({ location }) => {
       <Box as="span" color="ui.success.primary">
         Available
       </Box>
-      {" - Can be used on site. Please visit "}
+      {" - Can be used onsite. Please visit "}
       <ExternalLink href={`${appConfig.urls.locations}${location.endpoint}`}>
         {`New York Public Library - ${locationShort}`}
       </ExternalLink>

@@ -14,7 +14,7 @@ interface HoldConfirmationFAQProps {
  **/
 const HoldConfirmationFAQ = ({ isEDD = false }: HoldConfirmationFAQProps) => {
   return (
-    <Box data-testid={`${isEDD ? "edd" : "on-site"}-confirmation-faq`}>
+    <Box data-testid={`${isEDD ? "edd" : "onsite"}-confirmation-faq`}>
       <Heading level="h3" size="heading4" mb="l">
         Frequently asked questions
       </Heading>

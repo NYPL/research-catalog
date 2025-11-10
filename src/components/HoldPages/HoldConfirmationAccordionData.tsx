@@ -28,7 +28,7 @@ export const holdConfirmationFAQData: AccordionDataProps[] = [
     panel: (
       <>
         <Text>
-          <strong>Items stored on-site:</strong> Materials requested up to an
+          <strong>Items stored onsite:</strong> Materials requested up to an
           hour before closing are usually ready for pickup within an hour.
           Materials requested within an hour of closing or outside business
           hours are ready about an hour after opening on the next business day.
@@ -111,7 +111,7 @@ export const eddConfirmationFAQData: AccordionDataProps[] = [
       <>
         <Text>
           <Text as="span" fontWeight="medium">
-            Items stored on-site:
+            Items stored onsite:
           </Text>{" "}
           Requests will be typically filled as quickly as possible, but please
           be aware it may take up to two weeks (or longer, in cases where

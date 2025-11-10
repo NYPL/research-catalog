@@ -140,7 +140,7 @@ Bib pages (`/bib/[id]`) display detailed information about a Bib's items:
 
 The application displays real-time availability information for physical items:
 
-- Location (on-site or offsite)
+- Location (onsite or offsite)
 - Status (available, not available, etc.)
 - Request options based on availability
 
