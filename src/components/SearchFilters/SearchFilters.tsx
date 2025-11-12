@@ -21,7 +21,7 @@ import { mapCollectionsIntoLocations } from "../../utils/advancedSearchUtils"
 import DateFilter from "../DateFilter/DateFilter"
 import { useDateFilter } from "../../hooks/useDateFilter"
 
-const fields = [
+let fields = [
   { value: "buildingLocation", label: "Item location" },
   { value: "format", label: "Format" },
   { value: "language", label: "Language" },
@@ -31,8 +31,15 @@ const fields = [
   { value: "collection", label: "Collection" },
 ]
 
-const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
+const SearchFilters = ({
+  aggregations,
+  lockedFilterValue,
+}: {
+  aggregations?: Aggregation[]
+  lockedFilterValue?: string
+}) => {
   const router = useRouter()
+
   const [appliedFilters, setAppliedFilters] = useState(
     collapseMultiValueQueryParams(router.query)
   )
@@ -50,7 +57,7 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
     }
     router.push(
       {
-        pathname: "/search",
+        pathname: router.pathname,
         query: updatedQuery,
       },
       undefined,
@@ -85,9 +92,22 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
   }
 
   const [focusedFilter, setFocusedFilter] = useState<string | null>(null)
+
+  // Do not display Subject filter if there is no query term and a subject filter is applied
+  if (
+    (router.query?.q === "" || !router.query.q) &&
+    (Object.hasOwn(appliedFilters, "subjectLiteral") || lockedFilterValue)
+  ) {
+    fields = fields.filter((field) => field.label !== "Subject")
+  }
+
   const filters = fields.map((field) => {
     const filterData = new SearchResultsFilters(aggregations, field)
     if (filterData.options) {
+      // Do not display any locked filter values
+      const filteredOptions = filterData.options.filter(
+        (opt) => opt.value !== lockedFilterValue
+      )
       return (
         <div
           key={field.value}
@@ -124,7 +144,7 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
                   items: appliedFilters[field.value] || [],
                 },
               }}
-              items={filterData.options
+              items={filteredOptions
                 .filter((option) => option.label && option.label.trim() !== "")
                 .map((option) => ({
                   id: option.value,
@@ -136,7 +156,7 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
               key={field.value}
               isBlockElement
               field={{ value: field.value, label: field.label }}
-              groupedItems={mapCollectionsIntoLocations(filterData.options)}
+              groupedItems={mapCollectionsIntoLocations(filteredOptions)}
               onChange={(e) => {
                 handleCheckboxChange(field.value, e.target.id)
                 setFocusedFilter(field.value)

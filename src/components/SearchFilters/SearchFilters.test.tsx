@@ -135,5 +135,57 @@ describe("SearchFilters", () => {
         expect(audioFilter).not.toBeChecked()
       }, 100)
     })
+    it("does display subject filter on search with query and SH filter", async () => {
+      mockRouter.push(
+        "/search?q=hello&search_scope=callnumber&filters%5BsubjectLiteral%5D%5B0%5D=French+fiction."
+      )
+      render(component)
+      expect(mockRouter.query).toStrictEqual({
+        q: "hello",
+        search_scope: "callnumber",
+        "filters[subjectLiteral][0]": "French fiction.",
+      })
+      const subjectMultiselect = screen.queryAllByLabelText(/Subject/, {
+        selector: "button",
+      })[0]
+      const dateMultiselect = screen.queryAllByLabelText(/Date/, {
+        selector: "button",
+      })[0]
+      expect(subjectMultiselect).toBeInTheDocument()
+      expect(dateMultiselect).toBeInTheDocument()
+    })
+    it("does not display subject filter on search with no query and SH filter", async () => {
+      mockRouter.push(
+        "/search?q=&search_scope=callnumber&filters%5BsubjectLiteral%5D%5B0%5D=French+fiction."
+      )
+      render(component)
+      expect(mockRouter.query).toStrictEqual({
+        q: "",
+        search_scope: "callnumber",
+        "filters[subjectLiteral][0]": "French fiction.",
+      })
+      const subjectMultiselect = screen.queryByLabelText(/Subject/, {
+        selector: "button",
+      })
+      const dateMultiselect = screen.queryByLabelText(/Date/, {
+        selector: "button",
+      })
+      expect(subjectMultiselect).not.toBeInTheDocument()
+      expect(dateMultiselect).toBeInTheDocument()
+    })
+    it("does not display subject filter on browse SH results page", async () => {
+      mockRouter.push(
+        "/browse/subjects/Southern%20States%20--%20Social%20conditions."
+      )
+      render(component)
+      const subjectMultiselect = screen.queryByLabelText(/Subject/, {
+        selector: "button",
+      })
+      const dateMultiselect = screen.queryByLabelText(/Date/, {
+        selector: "button",
+      })
+      expect(subjectMultiselect).not.toBeInTheDocument()
+      expect(dateMultiselect).toBeInTheDocument()
+    })
   })
 })

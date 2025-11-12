@@ -32,10 +32,7 @@ describe("RequestButtons", () => {
       screen.getByRole("link", {
         name: "Request for onsite use, A history of spaghetti eating and cooking for: spaghetti dinner.",
       })
-    ).toHaveAttribute(
-      "href",
-      "/research/research-catalog/hold/request/b12810991-i14119377"
-    )
+    ).toHaveAttribute("href", "/hold/request/b12810991-i14119377")
   })
   it("renders an an request scan link if item is EDD requestable", async () => {
     const item = new Item(itemEddRequestable, parentBib)
@@ -44,9 +41,6 @@ describe("RequestButtons", () => {
       screen.getByRole("link", {
         name: "Request Scan, A history of spaghetti eating and cooking for: spaghetti dinner.",
       })
-    ).toHaveAttribute(
-      "href",
-      "/research/research-catalog/hold/request/b12810991-i15550040/edd"
-    )
+    ).toHaveAttribute("href", "/hold/request/b12810991-i15550040/edd")
   })
 })

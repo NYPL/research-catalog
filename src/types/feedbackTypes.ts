@@ -1,3 +1,4 @@
+import type { HTTPStatusCode } from "./appTypes"
 import type { ItemMetadata } from "./itemTypes"
 import type { ChakraComponent } from "@chakra-ui/react"
 
@@ -7,6 +8,7 @@ export interface FeedbackMetadataAndComment {
   email: string
   id?: string
   barcode?: string
+  errorStatus?: string
 }
 
 /* eslint-disable @typescript-eslint/naming-convention */
@@ -17,7 +19,7 @@ export type FeedbackContextType = {
   isOpen?: boolean
   itemMetadata: ItemMetadata
   setItemMetadata: (value: ItemMetadata) => void
-  isError?: boolean
-  setError: (value: boolean) => void
-  openFeedbackFormWithError: () => void
+  errorStatus?: HTTPStatusCode | null
+  setErrorStatus: (value: HTTPStatusCode) => void
+  openFeedbackFormWithError: (statusCode?: HTTPStatusCode) => void
 }

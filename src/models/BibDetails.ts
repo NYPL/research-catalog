@@ -24,7 +24,6 @@ export default class BibDetails {
   groupedNotes: AnyBibDetail[]
   supplementaryContent: LinkedBibDetail
   extent: string[]
-  subjectLiteral: BibDetailURL[][]
   owner: string[]
   findingAid?: string
 
@@ -39,7 +38,6 @@ export default class BibDetails {
     this.groupedNotes = this.buildGroupedNotes()
     this.extent = this.buildExtent()
     this.owner = this.buildOwner()
-    this.subjectLiteral = this.buildSubjectLiterals()
     // these are the actual arrays of details that will be displayed
     this.annotatedMarcDetails = this.buildAnnotatedMarcDetails(
       annotatedMarc?.fields
@@ -176,18 +174,21 @@ export default class BibDetails {
     ]
       .map((fieldMapping: FieldMapping): AnyBibDetail => {
         let detail: AnyBibDetail
-        if (fieldMapping.field === "contributorLiteral")
+        if (
+          fieldMapping.field === "contributorLiteral" ||
+          fieldMapping.field === "subjectLiteral"
+        )
           detail = this.buildSearchFilterUrl(fieldMapping)
         else detail = this.buildStandardDetail(fieldMapping)
         return detail
       })
       .filter((f) => f)
+
     const fieldsWithNotes = this.addNotes(resourceFields)
-    const combinedFields = this.combineBibDetailsData(
+    return this.combineBibDetailsData(
       fieldsWithNotes,
       this.annotatedMarcDetails
     )
-    return combinedFields.filter((f) => f)
   }
 
   combineBibDetailsData(
@@ -291,13 +292,18 @@ export default class BibDetails {
   }): LinkedBibDetail {
     const value = this.bib[fieldMapping.field]
     if (!value?.length) return null
+
     return {
       link: "internal",
       label: convertToSentenceCase(fieldMapping.label),
       value: value.map((v: string) => {
-        const internalUrl = `/search?filters[${
-          fieldMapping.field
-        }][0]=${encodeURI(v)}`
+        // subjectLiteral links to browse
+        const internalUrl =
+          fieldMapping.field === "subjectLiteral"
+            ? `/browse/subjects/${encodeURIComponent(v)}`
+            : `/search?filters[${fieldMapping.field}][0]=${encodeURIComponent(
+                v
+              )}`
         return { url: internalUrl, urlLabel: v }
       }),
     }
@@ -386,7 +392,7 @@ export default class BibDetails {
    * matchParallels(bib)
    * Given a bib object returns a new copy of the bib in which fields with parallels have been rewritten
    * The new rewritten field interleaves the parallel field and the paralleled (i.e. original) field together.
-   * Skips over subject fields since these require changes to SHEP.
+   * Skips over subject fields.
    */
   matchParallelToPrimaryValues(bib: DiscoveryBibResult) {
     const parallelFieldMatches = Object.keys(bib).map((key) => {
@@ -456,45 +462,5 @@ export default class BibDetails {
 
   buildFindingAid() {
     return getFindingAidFromSupplementaryContent(this.bib.supplementaryContent)
-  }
-
-  buildSubjectLiterals(): BibDetailURL[][] {
-    if (!this.bib.subjectLiteral) return
-    const subjectLiteralUrls = this.bib.subjectLiteral.map(
-      (subject: string) => {
-        // stackedSubjectHeadings: ["a", "a -- b", "a -- b -- c"]
-        const stackedSubjectHeadings =
-          this.constructSubjectLiteralsArray(subject)
-        const filterQueryForSubjectHeading = "/search?filters[subjectLiteral]="
-        // splitSubjectHeadings: ["a", "b", "c"]
-        const splitSubjectHeadings = subject.split(" -- ")
-        return splitSubjectHeadings.map((heading, index) => {
-          const urlWithFilterQuery = `${filterQueryForSubjectHeading}${encodeURI(
-            stackedSubjectHeadings[index]
-          )}`
-          return {
-            url: urlWithFilterQuery,
-            urlLabel: heading,
-          }
-        })
-      }
-    )
-    return subjectLiteralUrls
-  }
-
-  constructSubjectLiteralsArray(subject: string) {
-    // subject = "Italian food -- Spaghetti"
-    let stackedSubjectLiteral = ""
-
-    return subject
-      .split(" -- ") // ["Italian food", "spaghetti"]
-      .map((urlString, index) => {
-        const dashDivided = index !== 0 ? " -- " : ""
-        // First iteration "Italian food"
-        // Second iteration "Italian food -- spaghetti"
-        stackedSubjectLiteral = `${stackedSubjectLiteral}${dashDivided}${urlString}`
-
-        return stackedSubjectLiteral
-      })
   }
 }

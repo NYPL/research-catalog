@@ -6,27 +6,34 @@ import {
 } from "../../../__test__/fixtures/searchResultsManyBibs"
 import mockRouter from "next-router-mock"
 import userEvent from "@testing-library/user-event"
-import Search from "../../../pages/search"
+import Search from "../Search/Search"
 
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
 describe("Applied Filters", () => {
+  const component = (
+    <Search
+      isAuthenticated={true}
+      results={{
+        status: 200,
+        page: 1,
+        results,
+        aggregations,
+      }}
+      metadataTitle="Search"
+      activePage="search"
+      bannerNotification="Search"
+      searchParams={{ page: 1 }}
+      handlePageChange={() => null}
+      handleSortChange={() => null}
+    />
+  )
   describe("tagset click handler", () => {
     it("can remove one filter", async () => {
       mockRouter.push(
         "/search?q=spaghetti&filters[format][0]=resourcetypes%3Amov&filters[language][0]=lang%3Afre"
       )
-      render(
-        <Search
-          isAuthenticated={true}
-          results={{
-            status: 200,
-            page: 1,
-            results,
-            aggregations,
-          }}
-        />
-      )
+      render(component)
 
       await userEvent.click(screen.getAllByTestId("ds-tagSetFilter-tags")[0])
       expect(decodeURI(mockRouter.asPath)).toBe(
@@ -37,17 +44,7 @@ describe("Applied Filters", () => {
       mockRouter.push(
         "/search?q=spaghetti&filters[format][0]=resourcetypes%3Atxt&filters[language][0]=lang%3Afre"
       )
-      render(
-        <Search
-          isAuthenticated={true}
-          results={{
-            status: 200,
-            page: 1,
-            results,
-            aggregations,
-          }}
-        />
-      )
+      render(component)
       await userEvent.click(screen.getByTestId("ds-tagSetFilter-clear-all"))
       expect(mockRouter.asPath).toBe("/search?q=spaghetti")
     })
@@ -55,17 +52,7 @@ describe("Applied Filters", () => {
       mockRouter.push(
         "/search?q=spaghetti&filters[format][0]=resourcetypes%3Atxt&filters[format][1]=resourcetypes%3Aaud&filters[format][2]=resourcetypes%3Amov&filters[language][0]=lang%3Afre"
       )
-      render(
-        <Search
-          isAuthenticated={true}
-          results={{
-            status: 200,
-            page: 1,
-            results,
-            aggregations,
-          }}
-        />
-      )
+      render(component)
       await userEvent.click(screen.getAllByTestId("ds-tagSetFilter-tags")[0])
       expect(decodeURI(mockRouter.asPath)).toBe(
         "/search?q=spaghetti&filters[format][0]=resourcetypes%3Aaud&filters[format][1]=resourcetypes%3Amov&filters[language][0]=lang%3Afre"
@@ -76,17 +63,7 @@ describe("Applied Filters", () => {
     mockRouter.push(
       "/search?q=spaghetti&filters[dateTo][0]=2000&filters[dateFrom][0]=1990"
     )
-    render(
-      <Search
-        isAuthenticated={true}
-        results={{
-          status: 200,
-          page: 1,
-          results,
-          aggregations,
-        }}
-      />
-    )
+    render(component)
     expect(screen.getByText("To 2000")).toBeInTheDocument()
     expect(screen.getByText("From 1990")).toBeInTheDocument()
   })
@@ -103,10 +80,24 @@ describe("Applied Filters", () => {
           aggregations: emptyAggregationsResults,
           results: { ...results, totalResults: 0 },
         }}
+        metadataTitle="Search"
+        activePage="search"
+        bannerNotification="Search"
+        searchParams={{ page: 1 }}
+        handlePageChange={() => null}
+        handleSortChange={() => null}
       />
     )
     expect(
       screen.queryByTestId("ds-tagSetFilter-clear-all")
     ).not.toBeInTheDocument()
+  })
+  it("does not remove locked filter on clear all", async () => {
+    mockRouter.push(
+      "/browse/subjects/Dogs.?filters%5BbuildingLocation%5D%5B0%5D=rc&filters%5BbuildingLocation%5D%5B1%5D=ma"
+    )
+    render(component)
+    await userEvent.click(screen.getByTestId("ds-tagSetFilter-clear-all"))
+    expect(mockRouter.asPath).toBe("/browse/subjects/Dogs.")
   })
 })

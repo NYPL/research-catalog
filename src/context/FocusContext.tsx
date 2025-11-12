@@ -23,7 +23,9 @@ const FocusContext = createContext<FocusContextType | undefined>(undefined)
 
 export const idConstants = {
   searchResultsHeading: "search-results-heading",
+  browseResultsHeading: "browse-results-heading",
   searchResultsSort: "search-results-sort",
+  browseResultsSort: "browse-results-sort",
   filterResultsHeading: "filter-results-heading",
   activeFiltersHeading: "active-filters-heading",
   searchFiltersModal: "search-filters-modal",

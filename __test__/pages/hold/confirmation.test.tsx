@@ -158,10 +158,7 @@ describe("Hold Confirmation page", () => {
       ).toBeInTheDocument()
 
       const bibLink = screen.getByText("Urban spaghetti.")
-      expect(bibLink).toHaveAttribute(
-        "href",
-        "/research/research-catalog/bib/b15080796"
-      )
+      expect(bibLink).toHaveAttribute("href", "/bib/b15080796")
     })
     it("renders an item details table with a pickup location for onsite holds", () => {
       expect(screen.getByTestId("pickup-location")).toHaveTextContent(
@@ -177,7 +174,7 @@ describe("Hold Confirmation page", () => {
     })
     it("renders a back to search link", () => {
       const searchLink = screen.getByText("Start a new search")
-      expect(searchLink).toHaveAttribute("href", "/research/research-catalog/")
+      expect(searchLink).toHaveAttribute("href", "/")
     })
   })
   describe("Electronic Delivery Confirmation page UI", () => {
@@ -211,10 +208,7 @@ describe("Hold Confirmation page", () => {
       ).toBeInTheDocument()
 
       const bibLink = screen.getByText("Urban spaghetti.")
-      expect(bibLink).toHaveAttribute(
-        "href",
-        "/research/research-catalog/bib/b15080796"
-      )
+      expect(bibLink).toHaveAttribute("href", "/bib/b15080796")
     })
     it("renders an item details table without a pickup location for EDD holds", () => {
       expect(screen.queryByTestId("pickup-location")).not.toBeInTheDocument()
@@ -228,7 +222,7 @@ describe("Hold Confirmation page", () => {
     })
     it("renders a back to search link", () => {
       const searchLink = screen.getByText("Start a new search")
-      expect(searchLink).toHaveAttribute("href", "/research/research-catalog/")
+      expect(searchLink).toHaveAttribute("href", "/")
     })
     it("sets sessionStorage key 'holdCompleted' with item ID to true on mount", () => {
       expect(sessionStorage.getItem("holdCompleted-test")).toBe("true")
@@ -239,7 +233,7 @@ describe("Hold Confirmation page", () => {
       <HoldConfirmationPage
         discoveryBibResult={undefined}
         pickupLocationLabel={undefined}
-        notFound={true}
+        errorStatus={404}
       />
     )
     expect(screen.getByText("We couldn't find that page")).toBeInTheDocument()
