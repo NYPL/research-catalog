@@ -7,7 +7,7 @@ export const appConfig: AppConfig = {
   apiEndpoints: {
     platform: {
       development: "https://qa-platform.nypl.org/api",
-      qa: "https://qa-platform.nypl.org/api",
+      qa: "https://platform.nypl.org/api",
       //qa: "http://discovery-api-qa2.nypl.org/api",
       production: "https://platform.nypl.org/api",
     },
