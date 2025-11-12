@@ -9,7 +9,6 @@ import nyplApiClient from "../nyplApiClient"
 import {
   DISCOVERY_API_SEARCH_ROUTE,
   ITEM_VIEW_ALL_BATCH_SIZE,
-  SHEP_HTTP_TIMEOUT,
 } from "../../config/constants"
 import { appConfig } from "../../config/config"
 import { logServerError } from "../../utils/appUtils"
