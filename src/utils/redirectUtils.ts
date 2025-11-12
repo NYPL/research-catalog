@@ -1,4 +1,4 @@
-import shepToBrowse from "../../data/shepToBrowse.json"
+import { shepToBrowse } from "../../data/shepToBrowse"
 
 // Given a `/subject_headings*` URL, gets redirect destination in `/browse`
 export function getBrowseDestination(url) {

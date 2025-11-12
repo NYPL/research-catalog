@@ -1,4 +1,4 @@
-{
+export const shepToBrowse: Record<string, string> = {
   "/subject_headings/02102dda-d923-424d-b2fe-6b1e2fdc7953?label=Mediation and conciliation, Industrial -- United States": "/browse/subjects/Mediation and conciliation, Industrial -- United States.",
   "/subject_headings/0244810e-acbf-435d-ab87-dfc251e1ef6d": "/browse/subjects/Riverside Drive Region (New York, N.Y.) -- Maps.",
   "/subject_headings/02bae667-010e-4c63-a621-6dc7f59a8fbe": "/browse/subjects/Sephardim -- Harlem (New York, N.Y.)",
