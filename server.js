@@ -1,5 +1,7 @@
 // Importing New Relic first, otherwise replicating 'next start'
-import "newrelic"
+if (process.env.NEW_RELIC_LICENSE_KEY) {
+  await import("newrelic")
+}
 import next from "next"
 import http from "http"
 
