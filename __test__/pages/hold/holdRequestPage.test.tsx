@@ -184,7 +184,7 @@ describe("Hold Request page", () => {
 
     it("renders an H2", () => {
       expect(screen.getByRole("heading", { level: 2 })).toHaveTextContent(
-        "Request for on-site use"
+        "Request for onsite use"
       )
     })
 

@@ -128,7 +128,7 @@ describe("Hold Confirmation page", () => {
     })
   })
 
-  describe("On-site Confirmation page UI", () => {
+  describe("Onsite Confirmation page UI", () => {
     beforeEach(() => {
       render(
         <HoldConfirmationPage
@@ -140,7 +140,7 @@ describe("Hold Confirmation page", () => {
 
     it("renders an H2", () => {
       expect(screen.getAllByRole("heading", { level: 2 })[0]).toHaveTextContent(
-        "Request for on-site use"
+        "Request for onsite use"
       )
     })
 
@@ -160,7 +160,7 @@ describe("Hold Confirmation page", () => {
       const bibLink = screen.getByText("Urban spaghetti.")
       expect(bibLink).toHaveAttribute("href", "/bib/b15080796")
     })
-    it("renders an item details table with a pickup location for on-site holds", () => {
+    it("renders an item details table with a pickup location for onsite holds", () => {
       expect(screen.getByTestId("pickup-location")).toHaveTextContent(
         "Schwarzman Building"
       )
@@ -169,8 +169,8 @@ describe("Hold Confirmation page", () => {
       )
       expect(screen.getByTestId("barcode")).toHaveTextContent("33433130221975")
     })
-    it("renders an on-site specific faq accordion", () => {
-      expect(screen.getByTestId("on-site-confirmation-faq")).toBeInTheDocument()
+    it("renders an onsite specific faq accordion", () => {
+      expect(screen.getByTestId("onsite-confirmation-faq")).toBeInTheDocument()
     })
     it("renders a back to search link", () => {
       const searchLink = screen.getByText("Start a new search")

@@ -223,8 +223,8 @@ export function mapRequestBodyToSearchParams(
     subject,
     language,
     format,
-    dateAfter,
-    dateBefore,
+    dateFrom,
+    dateTo,
   } = reqBody
   return {
     q,
@@ -235,8 +235,8 @@ export function mapRequestBodyToSearchParams(
     filters: {
       format,
       language,
-      dateAfter,
-      dateBefore,
+      dateFrom,
+      dateTo,
     },
   }
 }

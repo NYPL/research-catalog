@@ -61,11 +61,11 @@ describe("Applied Filters", () => {
   })
   it("can handle dates", () => {
     mockRouter.push(
-      "/search?q=spaghetti&filters[dateBefore][0]=2000&filters[dateAfter][0]=1990"
+      "/search?q=spaghetti&filters[dateTo][0]=2000&filters[dateFrom][0]=1990"
     )
     render(component)
-    expect(screen.getByText("Before 2000")).toBeInTheDocument()
-    expect(screen.getByText("After 1990")).toBeInTheDocument()
+    expect(screen.getByText("To 2000")).toBeInTheDocument()
+    expect(screen.getByText("From 1990")).toBeInTheDocument()
   })
   it("can handle a combination of filters with no results", () => {
     mockRouter.push(

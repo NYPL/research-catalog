@@ -257,7 +257,7 @@ export default function BibPage({
               mt="l"
               mb="s"
             >
-              Items in the library and off-site
+              Items in the library and offsite
             </Heading>
             <Banner
               content={
@@ -265,7 +265,7 @@ export default function BibPage({
                   isExternal
                   href="https://www.nypl.org/help/request-research-materials"
                 >
-                  How do I request and pick up research materials for on-site
+                  How do I request and pick up research materials for onsite
                   use?
                 </Link>
               }

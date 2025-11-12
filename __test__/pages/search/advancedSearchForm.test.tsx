@@ -11,12 +11,17 @@ import AdvancedSearch, {
 // Mock next router
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
-describe("Advanced Search Form", () => {
+describe("Advanced search form", () => {
   beforeEach(async () => {
     render(<AdvancedSearch isAuthenticated={true} />)
   })
   const submit = () => {
     fireEvent.click(screen.getByTestId("submit-advanced-search-button"))
+  }
+  const getDateInputs = () => {
+    const fromInput = screen.getByRole("textbox", { name: /From/ })
+    const toInput = screen.getByRole("textbox", { name: /To/ })
+    return { fromInput, toInput }
   }
   const updateAllFields = async () => {
     const [
@@ -57,7 +62,7 @@ describe("Advanced Search Form", () => {
   })
   it("displays alert when no fields are submitted", () => {
     submit()
-    screen.getByText(defaultEmptySearchErrorMessage)
+    expect(screen.getByText(defaultEmptySearchErrorMessage)).toBeInTheDocument()
   })
 
   it("can set keyword, contributor, title, subject", async () => {
@@ -151,5 +156,53 @@ describe("Advanced Search Form", () => {
     submit()
     // presence of alert means the form was cleared before hitting submit
     expect(screen.getByText(defaultEmptySearchErrorMessage)).toBeInTheDocument()
+  })
+
+  it("submits with valid dates", async () => {
+    const { fromInput, toInput } = getDateInputs()
+    fireEvent.change(fromInput, { target: { value: "2000" } })
+    fireEvent.change(toInput, { target: { value: "2020" } })
+
+    submit()
+
+    expect(mockRouter.asPath).toBe(
+      "/search?q=&filters%5BdateTo%5D=2020&filters%5BdateFrom%5D=2000&searched_from=advanced"
+    )
+  })
+
+  it("shows date error", async () => {
+    const { fromInput, toInput } = getDateInputs()
+    fireEvent.change(fromInput, { target: { value: "abcd" } })
+    fireEvent.change(toInput, { target: { value: "2020" } })
+
+    submit()
+    // not mocking useDateFilter, so only the generic date error text appears
+    expect(
+      screen.getByText(/Please enter a valid date format/)
+    ).toBeInTheDocument()
+  })
+
+  it("shows error if 'to' date is before 'from' date", async () => {
+    const { fromInput, toInput } = getDateInputs()
+    fireEvent.change(fromInput, { target: { value: "2020" } })
+    fireEvent.change(toInput, { target: { value: "2010" } })
+
+    submit()
+
+    // not mocking useDateFilter, so only the generic date error text appears
+    expect(
+      screen.getByText(/Please enter a valid date format/)
+    ).toBeInTheDocument()
+  })
+
+  it("clears date inputs when 'Clear fields' is clicked", async () => {
+    const { fromInput, toInput } = getDateInputs()
+    fireEvent.change(fromInput, { target: { value: "2000" } })
+    fireEvent.change(toInput, { target: { value: "2020" } })
+
+    await userEvent.click(screen.getByText("Clear fields"))
+
+    expect(fromInput).toHaveValue("")
+    expect(toInput).toHaveValue("")
   })
 })

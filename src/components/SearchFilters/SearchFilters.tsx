@@ -8,7 +8,6 @@ import {
 import type { TextInputRefType } from "@nypl/design-system-react-components"
 import SearchResultsFilters from "../../models/SearchResultsFilters"
 import { useRouter } from "next/router"
-import type { SyntheticEvent } from "react"
 import { useEffect, useRef, useState } from "react"
 import {
   buildFilterQuery,
@@ -16,18 +15,18 @@ import {
   getQueryWithoutFiltersOrPage,
 } from "../../utils/refineSearchUtils"
 import type { Aggregation } from "../../types/filterTypes"
-import DateFilter from "./DateFilter"
-import { useDateFilter } from "../../hooks/useDateFilter"
 import { useFocusContext, idConstants } from "../../context/FocusContext"
 import MultiSelectWithGroupTitles from "../AdvancedSearch/MultiSelectWithGroupTitles/MultiSelectWithGroupTitles"
 import { mapCollectionsIntoLocations } from "../../utils/advancedSearchUtils"
+import DateFilter from "../DateFilter/DateFilter"
+import { useDateFilter } from "../../hooks/useDateFilter"
 
 let fields = [
   { value: "buildingLocation", label: "Item location" },
   { value: "format", label: "Format" },
   { value: "language", label: "Language" },
-  { value: "dateAfter", label: "Start Year" },
-  { value: "dateBefore", label: "End Year" },
+  { value: "dateFrom", label: "Start Year" },
+  { value: "dateTo", label: "End Year" },
   { value: "subjectLiteral", label: "Subject" },
   { value: "collection", label: "Collection" },
 ]
@@ -178,10 +177,25 @@ const SearchFilters = ({
     } else return null
   })
 
-  const dateInputRefs = [useRef<TextInputRefType>(), useRef<TextInputRefType>()]
+  const clearDates = () => {
+    const newFilters = {
+      ...appliedFilters,
+      dateFrom: [""],
+      dateTo: [""],
+    }
+    setAppliedFilters(newFilters)
+    buildAndPushFilterQuery(newFilters)
+  }
 
-  const { dateFilterProps, validateDateRange } = useDateFilter({
-    changeHandler: (e: SyntheticEvent) => {
+  const { dateFilterProps } = useDateFilter({
+    dateFrom: appliedFilters.dateFrom?.[0],
+    dateTo: appliedFilters.dateTo?.[0],
+    applyHandler: () => {
+      setFocusedFilter("date")
+      setPersistentFocus(idConstants.applyDates)
+      buildAndPushFilterQuery(appliedFilters)
+    },
+    changeHandler: (e: React.SyntheticEvent) => {
       const target = e.target as HTMLInputElement
       setAppliedFilters((prevFilters) => {
         return {
@@ -190,18 +204,7 @@ const SearchFilters = ({
         }
       })
     },
-    inputRefs: dateInputRefs,
-    dateAfter: appliedFilters.dateAfter?.[0],
-    dateBefore: appliedFilters.dateBefore?.[0],
-    applyHandler: () => {
-      setFocusedFilter("date")
-      if (validateDateRange() === false) {
-        setFocusedFilter(null)
-        return
-      }
-      setPersistentFocus(idConstants.applyDates)
-      buildAndPushFilterQuery(appliedFilters)
-    },
+    clearHandler: clearDates,
   })
 
   const dateFilter = (
@@ -217,6 +220,7 @@ const SearchFilters = ({
       <Accordion
         data-testid="date-accordion"
         id="date"
+        isDefaultOpen
         sx={{
           button: {
             fontWeight: "400 !important",

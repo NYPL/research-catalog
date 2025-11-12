@@ -211,7 +211,7 @@ export default function HoldRequestPage({
           {holdCompleted && <HoldRequestCompletedBanner />}
         </Box>
         <Heading level="h2" mb="l" size="heading3">
-          Request for on-site use
+          Request for onsite use
         </Heading>
         <HoldRequestItemDetails item={item} />
         {isLoading || formPosting ? (

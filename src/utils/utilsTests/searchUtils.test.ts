@@ -126,8 +126,8 @@ describe("searchUtils", () => {
         q: "spaghetti",
         language: "igbo",
         format: "scroll",
-        dateAfter: "1900",
-        dateBefore: "1902",
+        dateFrom: "1900",
+        dateTo: "1902",
       })
       expect(params).toEqual({
         q: "spaghetti",
@@ -135,8 +135,8 @@ describe("searchUtils", () => {
         filters: {
           language: "igbo",
           format: "scroll",
-          dateAfter: "1900",
-          dateBefore: "1902",
+          dateFrom: "1900",
+          dateTo: "1902",
         },
       })
     })

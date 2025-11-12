@@ -55,7 +55,7 @@ const FindingAid = ({
             >
               may require an appointment
             </Link>{" "}
-            to view and use on-site.
+            to view and use onsite.
           </Text>
         </Flex>
       </CardContent>
