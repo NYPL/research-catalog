@@ -7,15 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+## [1.5.9] 2025-11-12
+
 ### Updated
 
-- Replace "off-site"/"on-site" with "offsite"/"onsite" in user-facing text [SCC-4996](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4996)
+- Replaced date filter UI and error validation [SCC-4978](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4978)
+- Replaced "off-site"/"on-site" with "offsite"/"onsite" in user-facing text [SCC-4996](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4996)
+
+### Added
+
+- Added New Relic plus corresponding environment variables [SCC-4955](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4955)
 
 ## [1.5.8] 2025-11-10
 
 ### Updated
 
-- Updated date filter UI and error validation [SCC-4978](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4978)
 - Reordered top details on bib page [SCC-4956](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4956)
 - Updated KMS decryption to use `aws-sdk` v3
 
@@ -23,7 +29,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added Playwright test for My Account. [SCC-4964](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4964)
 - Added redirect from `research/collections/shared-collection-catalog` [SCC-4974](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4974)
-- Added New Relic plus corresponding environment variables [SCC-4955](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4955)
 
 ### Removed
 
