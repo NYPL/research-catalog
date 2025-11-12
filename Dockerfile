@@ -27,4 +27,4 @@ RUN npm run build
 # Explicitly set port 3000 as open to requests.
 EXPOSE 3000
 
-CMD ["node", "server.js"]
+CMD ["node", "server.mjs"]

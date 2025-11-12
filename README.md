@@ -342,7 +342,7 @@ Use (and then remove) console logs for local development. To test New Relic logs
 export NEW_RELIC_APP_NAME="Research Catalog [local]"
 export NEW_RELIC_LICENSE_KEY="<NEW_RELIC_LICENSE_KEY>"
 
-node server.js
+node server.mjs
 ```
 and view results in New Relic under "Research Catalog [local]".
 
