@@ -30,6 +30,9 @@ export const idConstants = {
   applyDates: "apply-dates",
   holdErrorBanner: "hold-error",
   holdCompletedBanner: "hold-completed",
+  dateFrom: "date-from",
+  dateTo: "date-to",
+  advancedSearchError: "advanced-search-error",
 }
 
 export const FocusProvider = ({ children }: { children: React.ReactNode }) => {

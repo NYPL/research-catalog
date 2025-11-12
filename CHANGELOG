@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 
+- Updated date filter UI and error validation [SCC-4978](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4978)
 - Reordered top details on bib page [SCC-4956](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4956)
 - Updated KMS decryption to use `aws-sdk` v3
 

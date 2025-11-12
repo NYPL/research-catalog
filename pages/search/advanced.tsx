@@ -18,7 +18,6 @@ import {
   Icon,
   MultiSelect,
 } from "@nypl/design-system-react-components"
-import type { TextInputRefType } from "@nypl/design-system-react-components"
 import Layout from "../../src/components/Layout/Layout"
 import {
   BASE_URL,
@@ -46,13 +45,16 @@ import { appConfig } from "../../src/config/config"
 import CancelSubmitButtonGroup from "../../src/components/AdvancedSearch/CancelSubmitButtonGroup"
 import RCLink from "../../src/components/Links/RCLink/RCLink"
 import RCHead from "../../src/components/Head/RCHead"
-import DateFilter from "../../src/components/SearchFilters/DateFilter"
-import { useDateFilter } from "../../src/hooks/useDateFilter"
+import DateFilter from "../../src/components/DateFilter/DateFilter"
 import { debounce } from "underscore"
 import MultiSelectWithGroupTitles from "../../src/components/AdvancedSearch/MultiSelectWithGroupTitles/MultiSelectWithGroupTitles"
-
+import { useDateFilter } from "../../src/hooks/useDateFilter"
+import { idConstants, useFocusContext } from "../../src/context/FocusContext"
+import { flushSync } from "react-dom"
 export const defaultEmptySearchErrorMessage =
   "Error: please enter at least one field to submit an advanced search."
+export const dateErrorMessage =
+  "Please enter a valid date format (YYYY, YYYY/MM, or YYYY/MM/DD) and try again."
 
 interface AdvancedSearchPropTypes {
   isAuthenticated: boolean
@@ -65,29 +67,36 @@ export default function AdvancedSearch({
 }: AdvancedSearchPropTypes) {
   const metadataTitle = `Advanced search | ${SITE_NAME}`
   const router = useRouter()
-  const notificationRef = useRef<HTMLDivElement>(null)
-  const dateInputRefs = [useRef<TextInputRefType>(), useRef<TextInputRefType>()]
   const liveRegionRef = useRef<HTMLDivElement | null>(null)
   const [alert, setAlert] = useState(false)
   const [errorMessage, setErrorMessage] = useState(
     defaultEmptySearchErrorMessage
   )
+  const { setPersistentFocus } = useFocusContext()
 
   const [searchFormState, dispatch] = useReducer(
     searchFormReducer,
     initialSearchFormState
   )
 
-  const {
-    dateFilterProps,
-    validateDateRange,
-    clearInputs: clearDateInputs,
-  } = useDateFilter({
-    inputRefs: dateInputRefs,
-    dateBefore: searchFormState["filters"].dateBefore,
-    dateAfter: searchFormState["filters"].dateAfter,
+  const { dateFilterProps, clearInputs: clearDateInputs } = useDateFilter({
+    dateTo: searchFormState["filters"].dateTo,
+    dateFrom: searchFormState["filters"].dateFrom,
     changeHandler: (e) => handleInputChange(e, "filter_change"),
+    clearHandler: () => {
+      dispatch({
+        type: "filter_change",
+        field: "dateFrom",
+        payload: "",
+      })
+      dispatch({
+        type: "filter_change",
+        field: "dateTo",
+        payload: "",
+      })
+    },
   })
+  const { dateError } = dateFilterProps
 
   const handleInputChange = (e: SyntheticEvent, type: SearchFormActionType) => {
     e.preventDefault()
@@ -128,7 +137,20 @@ export default function AdvancedSearch({
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
-    if (!validateDateRange()) return
+    flushSync(() => dateFilterProps.onBlur())
+    const errors = dateFilterProps.onApply()
+    if (Object.keys(errors).length > 0) {
+      let dateFieldError = ""
+      if (errors.combined || errors.range || (errors.from && errors.to))
+        dateFieldError = "The 'from' and 'to' fields contain errors."
+      else if (errors.from)
+        dateFieldError = "The 'from' date field contains an error."
+      else if (errors.to)
+        dateFieldError = "The 'to' date field contains an error."
+      setErrorMessage(`${dateFieldError} ${dateErrorMessage}`)
+      setAlert(true)
+      return
+    }
 
     const queryString = getSearchQuery(searchFormState as SearchParams)
     if (!queryString.length) {
@@ -156,10 +178,10 @@ export default function AdvancedSearch({
   }
 
   useEffect(() => {
-    if (alert && notificationRef.current) {
-      notificationRef.current.focus()
+    if (alert && !Object.keys(dateError || {}).length) {
+      setPersistentFocus(idConstants.advancedSearchError)
     }
-  }, [alert])
+  }, [alert, dateError])
 
   const fields = [
     { value: "format", label: "Format", options: formatOptions },
@@ -215,9 +237,12 @@ export default function AdvancedSearch({
     <>
       <RCHead metadataTitle={metadataTitle} />
       <Layout isAuthenticated={isAuthenticated} activePage="advanced">
+        <Heading level="h2" mb="s">
+          Advanced search
+        </Heading>
         {/* Always render the wrapper element that will display the
           dynamically rendered notification for focus management */}
-        <Box tabIndex={-1} ref={notificationRef}>
+        <Box tabIndex={-1} id="advanced-search-error">
           {alert && <Banner variant="negative" content={errorMessage} mb="s" />}
         </Box>
         <div
@@ -236,9 +261,6 @@ export default function AdvancedSearch({
             border: 0,
           }}
         ></div>
-        <Heading level="h2" mb="s">
-          Advanced search
-        </Heading>
         <Form
           id="advancedSearchForm"
           // We are using a post request on advanced search when JS is disabled
@@ -270,7 +292,7 @@ export default function AdvancedSearch({
                   />
                 </FormField>
               ))}
-              <FormField>
+              <FormField gridGap="xs">
                 <DateFilter isAdvancedSearch {...dateFilterProps} />
               </FormField>
             </Flex>
