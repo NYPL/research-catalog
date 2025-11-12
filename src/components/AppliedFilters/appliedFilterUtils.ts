@@ -53,7 +53,7 @@ export const addLabelPropAndParseFilters = (
       appliedFilterField
     ]
       .map((filterValue: string): Option => {
-        // dateBefore and dateAfter fields are not based on
+        // dateTo and dateFrom fields are not based on
         // aggregations results. Pass the year along with out
         // transforming fieldname or finding the label
         if (appliedFilterField.includes("date")) {

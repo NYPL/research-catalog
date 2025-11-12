@@ -188,7 +188,7 @@ describe("ItemAvailability", () => {
     render(<ItemAvailability item={item} />)
     expect(screen.getByText("Available")).toBeInTheDocument()
     expect(
-      screen.getByText("- Can be used on site. Please visit", { exact: false })
+      screen.getByText("- Can be used onsite. Please visit", { exact: false })
     ).toBeInTheDocument()
     expect(
       screen.getByText("New York Public Library - Schwarzman Building M2")

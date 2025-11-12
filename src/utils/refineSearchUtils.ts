@@ -5,16 +5,17 @@ import type { CollapsedMultiValueAppliedFilters } from "../types/filterTypes"
 // This method returns an object that maps a field to an array of the values
 // provided in the query string with that field called out.
 export const collapseMultiValueQueryParams = (
-  queryParams: object
+  queryParams: Record<string, any>
 ): CollapsedMultiValueAppliedFilters => {
   return Object.keys(queryParams)
     .filter((param) => param.includes("filters["))
     .reduce((acc, currentFilter) => {
       const field = currentFilter.split("[")[1].split("]")[0]
-      if (acc[field]) acc[field].push(queryParams[currentFilter])
-      else acc[field] = [queryParams[currentFilter]]
+      const value = queryParams[currentFilter] ?? ""
+      if (acc[field]) acc[field].push(String(value))
+      else acc[field] = [String(value)]
       return acc
-    }, {})
+    }, {} as CollapsedMultiValueAppliedFilters)
 }
 
 // This method does the inverse of the one above. Turn an object into a
