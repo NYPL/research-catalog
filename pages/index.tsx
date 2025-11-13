@@ -61,17 +61,28 @@ export default function Home({
               <Text mb="s">
                 Please note that the Research Catalog does not include
                 circulating materials. For books and more that you can check out
-                to take home please visit our{" "}
+                to take home, please visit our{" "}
                 <Link isExternal href={appConfig.urls.circulatingCatalog}>
                   circulating branch catalog.
-                </Link>{" "}
-                The{" "}
+                </Link>
+              </Text>
+              <Text mb="s">
+                We will begin a phased deprecation of the{" "}
                 <Link isExternal href={appConfig.urls.legacyCatalog}>
-                  legacy research catalog
+                  Legacy Catalog
                 </Link>{" "}
-                is still available, but does not include all of our Scan &amp;
-                Deliver options or the Columbia University, Harvard University,
-                and Princeton University material from the Shared Collection.
+                in December 2025. After this time it will be available onsite
+                only. The Legacy Catalog does not include our{" "}
+                <Link
+                  isExternal
+                  href={
+                    "https://www.nypl.org/research/services/scan-and-deliver"
+                  }
+                >
+                  Scan & Deliver
+                </Link>{" "}
+                service, or the Columbia University, Harvard University or
+                Princeton University material from the Shared Collection.
               </Text>
             </Box>
             <SimpleGrid columns={1} gap="grid.m">
