@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+## [1.5.9] 2025-11-13
+
 ### Updated
 
 - Updated error handling to standardize across API handlers and reflect improved Discovery API errors [SCC-4931](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4931)
