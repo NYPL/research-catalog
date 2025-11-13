@@ -98,23 +98,9 @@ To enable login functionality in local development:
 
 ### System Architecture
 
-The NYPL Research Catalog is part of a transitional architecture that involves both this Next.js application and the legacy discovery-front-end (DFE) application. The system uses NYPL's reverse proxy to route requests between these applications:
+The NYPL Research Catalog previously had a transitional architecture that involved both this application and the legacy discovery-front-end (DFE) application. The system used NYPL's reverse proxy to route requests for Subject Heading Explorer pages to [DFE](https://github.com/NYPL/discovery-front-end). 
 
-- **Research Catalog (Next.js)**: Handles most of the functionality, including search, bib, hold request, and account pages.
-- **Discovery Front End (DFE)**: Currently only handles the [Subject Heading Explorer (SHEP)](https://www.nypl.org/research/research-catalog/subject_headings) pages.
-
-#### Reverse Proxy Configuration
-
-The NYPL reverse proxy is configured to route page requests to the appropriate application:
-
-- Most paths are routed to the Research Catalog Next.js application
-- Subject Heading Explorer paths are routed to the legacy DFE application
-
-This configuration is controlled by the `NEXT_PUBLIC_REVERSE_PROXY_ENABLED` environment variable, which is set to `true` in QA and production environments.
-
-#### Transition Plan
-
-The Subject Heading Explorer pages are the only remaining pages still served by the legacy DFE application. These will be replaced by the upcoming Enhanced Browse pages in the Research Catalog. Once the Enhanced Browse pages are launched, the legacy DFE application MUST sunset completely and this app must be updated accordingly.
+With the release of the [browse](https://www.nypl.org/research/research-catalog/browse) pages replacing [SHEP](https://www.nypl.org/research/research-catalog/subject_headings), this is a standalone Next.js app. 
 
 ## Key Features
 
@@ -259,18 +245,6 @@ The application is hosted on AWS:
 - **ECS** for container orchestration
 - **CloudWatch** for logging
 - **KMS** for secret management
-
-### Reverse Proxy Configuration
-
-The NYPL DevOps team is responsible for configuring and maintaining the reverse proxy that routes traffic between the Research Catalog and the legacy discovery-front-end (DFE) application:
-
-1. **Configuration Changes**: If changes to the reverse proxy configuration are needed (e.g., routing new paths), tickets should be opened with the DevOps team
-2. **Deployment Coordination**: Major deployments that affect routing should be coordinated with the DevOps team
-3. **Rollbacks**: The DevOps team is responsible for performing rollbacks if issues occur in production
-
-### Rollbacks
-
-The DevOps team is primarily responsible for rolling the app back to the previous working image in case there are issues with a production deployment, so they should be available at the time of any releases to production.
 
 ### Environment Variable Management
 

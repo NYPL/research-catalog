@@ -41,16 +41,16 @@ import type {
 } from "../../src/types/searchTypes"
 import { getSearchQuery } from "../../src/utils/searchUtils"
 import initializePatronTokenAuth from "../../src/server/auth"
-import { appConfig } from "../../src/config/config"
 import CancelSubmitButtonGroup from "../../src/components/AdvancedSearch/CancelSubmitButtonGroup"
-import RCLink from "../../src/components/Links/RCLink/RCLink"
 import RCHead from "../../src/components/Head/RCHead"
 import DateFilter from "../../src/components/DateFilter/DateFilter"
 import { debounce } from "underscore"
 import MultiSelectWithGroupTitles from "../../src/components/AdvancedSearch/MultiSelectWithGroupTitles/MultiSelectWithGroupTitles"
+import Link from "../../src/components/Link/Link"
 import { useDateFilter } from "../../src/hooks/useDateFilter"
 import { idConstants, useFocusContext } from "../../src/context/FocusContext"
 import { flushSync } from "react-dom"
+
 export const defaultEmptySearchErrorMessage =
   "Error: please enter at least one field to submit an advanced search."
 export const dateErrorMessage =
@@ -157,12 +157,7 @@ export default function AdvancedSearch({
       setErrorMessage(defaultEmptySearchErrorMessage)
       setAlert(true)
     } else {
-      const url = `${PATHS.SEARCH}${queryString}&searched_from=advanced`
-      if (appConfig.features.reverseProxyEnabled[appConfig.environment]) {
-        window.location.replace(`${BASE_URL}${url}`)
-      } else {
-        await router.push(url)
-      }
+      await router.push(`${PATHS.SEARCH}${queryString}&searched_from=advanced`)
     }
   }
 
@@ -313,7 +308,7 @@ export default function AdvancedSearch({
             flexDirection={{ base: "column-reverse", md: "row" }}
           >
             {goBackHref && (
-              <RCLink
+              <Link
                 display="flex"
                 href={goBackHref}
                 variant="buttonSecondary"
@@ -327,7 +322,7 @@ export default function AdvancedSearch({
                   mr="xs"
                 />
                 Go back
-              </RCLink>
+              </Link>
             )}
             <CancelSubmitButtonGroup
               formName="advanced-search"

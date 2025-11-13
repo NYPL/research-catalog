@@ -7,6 +7,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+## [1.5.9] 2025-11-13
+
+### Updated
+
+- Updated error handling to standardize across API handlers and reflect improved Discovery API errors [SCC-4931](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4931)
+- Updated variant preferred term links to index pages [SCC-4947](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4947)
+- Updated subject related term links to index pages [SCC-4933](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4933)
+- Updated subject heading links in bib details [SCC-4800](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4800)
+- Update subject filter to only display if there's a query [SCC-4886](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4886)
+- Updated `RCLink` to `Link`, using Next Link, allowing clientside routing [SCC-4874](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4886)
+
+## Added
+
+- Added middleware to redirect deprecated SHEP URLs [SCC-5023](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5023)
+- Added subject heading filtered bib results to `browse/subjects/[...slug]` page [SCC-4815](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4815)
+- Added pagination to browse index [SCC-4572](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4572)
+- Added `ResultsSort` to browse index [SCC-4571](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4571)
+- Added `SubjectHeadingBanner` to browse page [SCC-4569](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4569)
+- Added `BrowseForm` and updated `Layout` and `RCSubNav` to use it [SCC-4568](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4568)
+- Added `SubjectTable` and table cells [SCC-4570](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4570)
+- Added `VariantSubject` and `PreferredSubject` models [SCC-3727](https://newyorkpubliclibrary.atlassian.net/browse/SCC-3727)
+- Added `fetchSubjects` API handler for `browse` index page [SCC-4774](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4774)
+- Added `browse` and `browse/subjects/[...slug]` pages and page types, set up deployment of EB work to `train` [SCC-4554](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4554)
+
+## Removed
+
+- Removed reverse proxy environment variable and documentation [SCC-4874](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4886)
+
 ## [1.5.9] 2025-11-12
 
 ### Updated
@@ -22,6 +50,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 
+- Updated error handling to standardize across API handlers and reflect improved Discovery API errors [SCC-4931](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4931)
 - Reordered top details on bib page [SCC-4956](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4956)
 - Updated KMS decryption to use `aws-sdk` v3
 
@@ -47,7 +76,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 
+- Updated variant preferred term links to index pages [SCC-4947](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4947)
 - Fixed search result card children width [SCC-4939](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4939)
+- Updated subject related term links to index pages [SCC-4933](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4933)
+- Updated subject heading links in bib details [SCC-4800](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4800)
+- Update subject filter to only display if there's a query [SCC-4886](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4886)
+- Updated `RCLink` to `Link`, using Next Link, allowing clientside routing [SCC-4874](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4886)
+
+## Added
+
+- Added subject heading filtered bib results to `browse/subjects/[...slug]` page [SCC-4815](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4815)
+- Added pagination to browse index [SCC-4572](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4572)
+- Added `ResultsSort` to browse index [SCC-4571](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4571)
+- Added `SubjectHeadingBanner` to browse page [SCC-4569](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4569)
+- Added `BrowseForm` and updated `Layout` and `RCSubNav` to use it [SCC-4568](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4568)
+- Added `SubjectTable` and table cells [SCC-4570](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4570)
+- Added `VariantSubject` and `PreferredSubject` models [SCC-3727](https://newyorkpubliclibrary.atlassian.net/browse/SCC-3727)
+- Added `fetchSubjects` API handler for `browse` index page [SCC-4774](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4774)
+- Added `browse` and `browse/subjects/[...slug]` pages and page types, set up deployment of EB work to `train` [SCC-4554](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4554)
+
+## Removed
+
+- Removed reverse proxy environment variable and documentation [SCC-4874](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4886)
 
 ### Removed
 

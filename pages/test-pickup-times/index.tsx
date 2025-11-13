@@ -104,7 +104,7 @@ const TestPickupTimes = (params) => {
       <Head>
         <title>Test Pickup Times | {SITE_NAME}</title>
       </Head>
-      <Layout>
+      <Layout activePage="">
         <Heading level="h2" mb="xl" size="heading4">
           Test Pickup Times
         </Heading>

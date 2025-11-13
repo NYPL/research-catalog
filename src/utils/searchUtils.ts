@@ -9,32 +9,30 @@ import type {
   DiscoverySearchResultsElement,
 } from "../types/searchTypes"
 import SearchResultsBib from "../models/SearchResultsBib"
-import { RESULTS_PER_PAGE, SEARCH_FORM_OPTIONS } from "../config/constants"
+import { RESULTS_PER_PAGE } from "../config/constants"
 import { collapseMultiValueQueryParams } from "./refineSearchUtils"
 import { getPaginationOffsetStrings } from "./appUtils"
-
-export const searchFormSelectOptions = Object.keys(SEARCH_FORM_OPTIONS).map(
-  (key) => ({
-    text: SEARCH_FORM_OPTIONS[key].text,
-    value: key,
-  })
-)
 
 /**
  * getSearchResultsHeading
  * Used to generate the search results heading text (Displaying 100 results for keyword "cats")
+ * for search results or browse bib results.
  * TODO: Make search query type (i.e. "Keyword") dynamic
  */
 export function getSearchResultsHeading(
   searchParams: SearchParams,
-  totalResults: number
+  totalResults: number,
+  browseOptions?: { slug: string; browseType: string }
 ): string {
   const [resultsStart, resultsEnd] = getPaginationOffsetStrings(
     searchParams.page,
     totalResults,
     RESULTS_PER_PAGE
   )
-  const queryDisplayString = buildQueryDisplayString(searchParams)
+
+  const queryDisplayString = browseOptions
+    ? ` for ${browseOptions.browseType} "${browseOptions.slug}"`
+    : buildQueryDisplayString(searchParams)
 
   return `Displaying ${
     totalResults > RESULTS_PER_PAGE
@@ -277,7 +275,7 @@ export const sortOptions: Record<string, string> = {
 
 /**
  * mapQueryToSearchParams
- * Maps the SearchQueryParams structure from the request to a SearchParams object, which is expected by fetchResults
+ * Maps the SearchQueryParams structure from the request to a SearchParams object, which is expected by fetchSearchResults
  * It also parses the results page number from a string, defaulting to 1 if absent
  */
 export function mapQueryToSearchParams({

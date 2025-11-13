@@ -11,8 +11,7 @@ import {
 import Bib from "../../../src/models/Bib"
 import Item from "../../../src/models/Item"
 
-import RCLink from "../../../src/components/Links/RCLink/RCLink"
-import ExternalLink from "../../../src/components/Links/RCLink/RCLink"
+import Link from "../../../src/components/Link/Link"
 
 import HoldConfirmationFAQ from "../../../src/components/HoldPages/HoldConfirmationFAQ"
 import HoldConfirmationItemDetails from "../../../src/components/HoldPages/HoldConfirmationItemDetails"
@@ -28,16 +27,20 @@ import initializePatronTokenAuth, {
   getLoginRedirect,
 } from "../../../src/server/auth"
 
-import type { DiscoveryBibResult } from "../../../src/types/bibTypes"
+import type {
+  BibResponse,
+  DiscoveryBibResult,
+} from "../../../src/types/bibTypes"
 import RCHead from "../../../src/components/Head/RCHead"
-import Custom404 from "../../404"
 import { useEffect } from "react"
+import PageError from "../../../src/components/Error/PageError"
+import type { HTTPStatusCode } from "../../../src/types/appTypes"
 
 interface HoldConfirmationPageProps {
   isEDD?: boolean
   pickupLocationLabel?: string
   discoveryBibResult: DiscoveryBibResult
-  notFound?: boolean
+  errorStatus?: HTTPStatusCode | null
   itemId?: string
 }
 
@@ -49,7 +52,7 @@ export default function HoldConfirmationPage({
   isEDD = false,
   pickupLocationLabel,
   discoveryBibResult,
-  notFound = false,
+  errorStatus = null,
   itemId,
 }: HoldConfirmationPageProps) {
   useEffect(() => {
@@ -59,8 +62,8 @@ export default function HoldConfirmationPage({
     }
   }, [])
 
-  if (notFound) {
-    return <Custom404 activePage="hold" />
+  if (errorStatus) {
+    return <PageError page="hold" errorStatus={errorStatus} />
   }
 
   const bib = new Bib(discoveryBibResult)
@@ -83,9 +86,7 @@ export default function HoldConfirmationPage({
             <Text mt="xs">
               You&apos;re all set! We have received your {isEDD ? "scan " : ""}
               request for{" "}
-              <RCLink href={`${PATHS.BIB}/${item.bibId}`}>
-                {item.bibTitle}
-              </RCLink>
+              <Link href={`${PATHS.BIB}/${item.bibId}`}>{item.bibTitle}</Link>
             </Text>
           }
         />
@@ -94,7 +95,7 @@ export default function HoldConfirmationPage({
           pickupLocationLabel={pickupLocationLabel}
         />
         <HoldConfirmationFAQ isEDD={isEDD} />
-        <ExternalLink
+        <Link
           href={PATHS.HOME}
           fontSize={{
             base: "mobile.body.body2",
@@ -106,7 +107,7 @@ export default function HoldConfirmationPage({
           my="l"
         >
           Start a new search
-        </ExternalLink>
+        </Link>
       </Layout>
     </>
   )
@@ -153,14 +154,14 @@ export async function getServerSideProps({ params, req, res, query }) {
 
     if (patronId !== patronIdFromResponse) {
       throw new Error(
-        "Error in HoldConfirmationPage getServerSideProps: Logged in patron Id doesn't match the patron Id in the hold request."
+        "Hold confirmation: Logged in patron ID doesn't match the patron ID in the hold request."
       )
     }
 
     // TODO: Determine error state when there are errors in hold details endpoint reponse
     if (responseStatus !== 200) {
       throw new Error(
-        "Hold Confirmation Page - Bad response from hold confirmation request"
+        "Hold confirmation: Bad response from hold confirmation request"
       )
     }
 
@@ -168,17 +169,30 @@ export async function getServerSideProps({ params, req, res, query }) {
     const [bibId, itemId] = id.split("-")
 
     if (!itemId) {
-      throw new Error("No item id in url")
+      throw new Error("Hold confirmation: No item ID in url")
     }
-    const { discoveryBibResult } = await fetchBib(bibId, {}, itemId)
+    const discoveryBib = await fetchBib(bibId, {}, itemId)
+    const discoveryBibResult = (discoveryBib as BibResponse).discoveryBibResult
     const discoveryItemResult = discoveryBibResult?.items?.[0]
+
+    if ("status" in discoveryBib && discoveryBib.status !== 200) {
+      return {
+        props: { pageError: discoveryBib.status },
+      }
+    }
+    if (!discoveryItemResult) {
+      console.error("Hold confirmation: Item not found")
+      return {
+        props: { pageError: discoveryBib.status },
+      }
+    }
 
     const bib = new Bib(discoveryBibResult)
     const item = new Item(discoveryItemResult, bib)
     const itemBarcode = item?.barcode
 
     if (!itemBarcode) {
-      throw new Error("Hold Confirmation Page - Item barcode not found")
+      throw new Error("Hold confirmation: Item barcode not found")
     }
 
     const { deliveryLocations } = await fetchDeliveryLocations(
@@ -200,7 +214,7 @@ export async function getServerSideProps({ params, req, res, query }) {
   } catch (error) {
     console.log(error)
     return {
-      props: { notFound: true },
+      props: { errorStatus: 500 },
     }
   }
 }
