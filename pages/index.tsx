@@ -81,7 +81,7 @@ export default function Home({
                 >
                   Scan & Deliver
                 </Link>{" "}
-                service, or the Columbia University, Harvard University or
+                service or the Columbia University, Harvard University, or
                 Princeton University material from the Shared Collection.
               </Text>
             </Box>
