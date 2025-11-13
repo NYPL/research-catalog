@@ -52,7 +52,7 @@ export default function Home({
                 Princeton University.{" "}
                 <Link
                   isExternal
-                  href="/research/collections/about/shared-collection-catalog"
+                  href="https://www.nypl.org/research/shared-collection-catalog"
                   aria-label="Learn more about the Research Catalog."
                 >
                   Learn more.
