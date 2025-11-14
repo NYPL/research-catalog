@@ -150,14 +150,26 @@ export default class BibDetails {
   }
 
   buildBottomDetails(): AnyBibDetail[] {
+    const linkedFields = [
+      "contributorLiteral",
+      "addedAuthorTitle",
+      "placeOfPublication",
+      "series",
+      "uniformTitle",
+      "subjectLiteral",
+      "titleAlt",
+      "donor",
+    ]
     const resourceFields = [
       { field: "contributorLiteral", label: "Additional authors" },
+      { field: "addedAuthorTitle", label: "Author added title" },
+      { field: "placeOfPublication", label: "Place of publication" },
       { field: "partOf", label: "Found in" },
       { field: "serialPublicationDates", label: "Publication date" },
       { field: "extent", label: "Description" },
       { field: "description", label: "Summary" },
       { field: "donor", label: "Donor/Sponsor" },
-      { field: "seriesStatement", label: "Series statement" },
+      { field: "series", label: "Series statement" },
       { field: "uniformTitle", label: "Uniform title" },
       { field: "titleAlt", label: "Alternative title" },
       { field: "formerTitle", label: "Former title" },
@@ -173,13 +185,10 @@ export default class BibDetails {
       { field: "language", label: "Language" },
     ]
       .map((fieldMapping: FieldMapping): AnyBibDetail => {
-        let detail: AnyBibDetail
-        if (
-          fieldMapping.field === "contributorLiteral" ||
-          fieldMapping.field === "subjectLiteral"
-        )
-          detail = this.buildSearchFilterUrl(fieldMapping)
-        else detail = this.buildStandardDetail(fieldMapping)
+        const isLinked = linkedFields.includes(fieldMapping.field)
+        const detail = isLinked
+          ? this.buildSearchFilterUrl(fieldMapping)
+          : this.buildStandardDetail(fieldMapping)
         return detail
       })
       .filter((f) => f)
