@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+## [1.5.9] 2025-11-13
+
 ### Updated
 
 - Updated landing page text with legacy deprecation info [SCC-5006](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5006)
@@ -19,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Added
 
+- Added middleware to redirect deprecated SHEP URLs [SCC-5023](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5023)
 - Added subject heading filtered bib results to `browse/subjects/[...slug]` page [SCC-4815](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4815)
 - Added pagination to browse index [SCC-4572](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4572)
 - Added `ResultsSort` to browse index [SCC-4571](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4571)
