@@ -7,11 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+### Updated
+
+- Updated landing page text with legacy deprecation info [SCC-5006](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5006)
+
 ## [1.5.9] 2025-11-13
 
 ### Updated
 
-- Updated landing page text with legacy deprecation info [SCC-5006](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5006)
 - Updated error handling to standardize across API handlers and reflect improved Discovery API errors [SCC-4931](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4931)
 - Updated variant preferred term links to index pages [SCC-4947](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4947)
 - Updated subject related term links to index pages [SCC-4933](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4933)
