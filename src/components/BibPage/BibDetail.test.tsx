@@ -38,6 +38,11 @@ describe("BibDetail component", () => {
         wrapper: MemoryRouterProvider,
       })
 
+      console.log(
+        noParallelsBibModel.bottomDetails,
+        noParallels.resources,
+        noParallels.annotatedMarc
+      )
       expect(screen.getByText("Language")).toBeInTheDocument()
       expect(screen.getByText("French")).toBeInTheDocument()
       expect(screen.getByText("Series statement")).toBeInTheDocument()
