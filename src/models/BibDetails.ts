@@ -306,13 +306,20 @@ export default class BibDetails {
       link: "internal",
       label: convertToSentenceCase(fieldMapping.label),
       value: value.map((v: string) => {
-        // subjectLiteral links to browse
-        const internalUrl =
-          fieldMapping.field === "subjectLiteral"
-            ? `/browse/subjects/${encodeURIComponent(v)}`
-            : `/search?filters[${fieldMapping.field}][0]=${encodeURIComponent(
-                v
-              )}`
+        const { field } = fieldMapping
+        let internalUrl: string
+        switch (field) {
+          case "subjectLiteral":
+            internalUrl = `/browse/subjects/${encodeURIComponent(v)}`
+            break
+          case "seriesStatement":
+            internalUrl = `/search?filters[series][0]=${encodeURIComponent(v)}`
+            break
+          default:
+            internalUrl = `/search?filters[${field}][0]=${encodeURIComponent(
+              v
+            )}`
+        }
         return { url: internalUrl, urlLabel: v }
       }),
     }

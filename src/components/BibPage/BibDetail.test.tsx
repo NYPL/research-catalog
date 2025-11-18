@@ -37,12 +37,6 @@ describe("BibDetail component", () => {
       render(<BibDetails details={noParallelsBibModel.bottomDetails} />, {
         wrapper: MemoryRouterProvider,
       })
-
-      console.log(
-        noParallelsBibModel.bottomDetails,
-        noParallels.resources,
-        noParallels.annotatedMarc
-      )
       expect(screen.getByText("Language")).toBeInTheDocument()
       expect(screen.getByText("French")).toBeInTheDocument()
       expect(screen.getByText("Series statement")).toBeInTheDocument()
@@ -62,21 +56,31 @@ describe("BibDetail component", () => {
     })
     it("merges annotated MARC and resource fields without value duplicates", () => {
       const combinedDetails = noParallelsBibModel.bottomDetails
+      // Stringify values for comparison
+      const toKey = (v: unknown): string => {
+        if (typeof v === "object" && v !== null) {
+          return JSON.stringify(v, Object.keys(v).sort())
+        }
+        return String(v)
+      }
       const allValues = combinedDetails.flatMap((d) => {
         // drop subjects, they don't need to be assessed for duplication
         if (d.label === "Subject") return []
-        return Array.isArray(d.value) ? d.value.map(String) : [String(d.value)]
+        const values = Array.isArray(d.value) ? d.value : [d.value]
+        return values.map(toKey)
       })
+
       const valueCounts = allValues.reduce((acc, value) => {
         acc[value] = (acc[value] || 0) + 1
         return acc
       }, {} as Record<string, number>)
 
-      Object.entries(valueCounts).forEach(([value, count]) => {
+      Object.values(valueCounts).forEach((count) => {
         expect(count).toBeLessThanOrEqual(1)
       })
     })
   })
+
   describe("text only details", () => {
     it("single value: title", () => {
       render(<BibDetails details={noParallelsBibModel.topDetails} />, {
@@ -145,6 +149,16 @@ describe("BibDetail component", () => {
       expect(browseLink).toHaveAttribute(
         "href",
         expect.stringContaining("/browse?q=")
+      )
+    })
+    it("renders series statement field with search filter series link", () => {
+      render(<BibDetails details={noParallelsBibModel.bottomDetails} />, {
+        wrapper: MemoryRouterProvider,
+      })
+      const seriesStatement = screen.getByText("Haute enfance")
+      expect(seriesStatement).toHaveAttribute(
+        "href",
+        expect.stringContaining("/search?filters[series][0]=Haute%20enfance")
       )
     })
   })
