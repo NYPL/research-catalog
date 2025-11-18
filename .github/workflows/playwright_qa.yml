@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - qa
+      - SCC-4993/playwright-gha-qa-tests # Add your branch temporarily
   workflow_dispatch:
     inputs:
       environment:
