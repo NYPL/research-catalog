@@ -24,8 +24,6 @@ test.describe("Subject Search", () => {
     for (const link of titleLinks.slice(0, 5)) {
       urls.push(await link.getAttribute("href"))
     }
-    // print the text of the urls array in a clean format
-    console.log("Collected URLs:", urls)
 
     expect(urls.length).toBe(5)
 
