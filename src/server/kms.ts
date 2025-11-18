@@ -1,9 +1,7 @@
-import { KMSClient, DecryptCommand } from "@aws-sdk/client-kms"
+import { DecryptCommand, KMS } from "@aws-sdk/client-kms"
 import { logServerError } from "../utils/appUtils"
 
-const kms = new KMSClient({
-  region: "us-east-1",
-})
+const kms: KMS = new KMS({ region: "us-east-1" })
 
 const decryptKMS = async (key: string): Promise<string | null> => {
   const params = {
@@ -13,7 +11,6 @@ const decryptKMS = async (key: string): Promise<string | null> => {
   try {
     const decrypted = await kms.send(new DecryptCommand(params))
     if (!decrypted.Plaintext) throw new Error("Empty plaintext")
-
     return Buffer.from(decrypted.Plaintext).toString("utf8")
   } catch (error: any) {
     logServerError("decryptKMS", error.message)

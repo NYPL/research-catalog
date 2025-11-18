@@ -1,6 +1,6 @@
 import { getServerSideProps } from "../../../pages/search/index"
 import initializePatronTokenAuth from "../../../src/server/auth"
-import { fetchResults } from "../../../src/server/api/search"
+import { fetchSearchResults } from "../../../src/server/api/search"
 
 jest.mock("../../../src/server/auth")
 jest.mock("../../../src/server/api/search")
@@ -27,7 +27,7 @@ describe("Search page", () => {
   describe("oclc search", () => {
     describe("with redirectOnMatch", () => {
       it("returns results if count > 1", async () => {
-        ;(fetchResults as jest.Mock).mockResolvedValue({
+        ;(fetchSearchResults as jest.Mock).mockResolvedValue({
           status: 200,
           results: {
             totalResults: 2,
@@ -45,7 +45,7 @@ describe("Search page", () => {
       })
 
       it("redirect to bib if oclc matches one bib", async () => {
-        ;(fetchResults as jest.Mock).mockResolvedValue({
+        ;(fetchSearchResults as jest.Mock).mockResolvedValue({
           status: 200,
           results: {
             totalResults: 1,
@@ -76,7 +76,7 @@ describe("Search page", () => {
 
   describe("search errors", () => {
     it("handles invalid parameters", async () => {
-      ;(fetchResults as jest.Mock).mockResolvedValue({
+      ;(fetchSearchResults as jest.Mock).mockResolvedValue({
         status: 422,
         message: "Invalid parameters",
       })
@@ -90,7 +90,7 @@ describe("Search page", () => {
       })
     })
     it("handles no results found 404", async () => {
-      ;(fetchResults as jest.Mock).mockResolvedValue({
+      ;(fetchSearchResults as jest.Mock).mockResolvedValue({
         status: 404,
         message: "No results found",
       })
@@ -104,7 +104,7 @@ describe("Search page", () => {
       })
     })
     it("handles general server errors", async () => {
-      ;(fetchResults as jest.Mock).mockResolvedValue({
+      ;(fetchSearchResults as jest.Mock).mockResolvedValue({
         status: 500,
         message: "No results found",
       })

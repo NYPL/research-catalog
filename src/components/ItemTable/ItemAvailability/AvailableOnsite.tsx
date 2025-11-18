@@ -1,6 +1,6 @@
 import { Box } from "@nypl/design-system-react-components"
 import { appConfig } from "../../../config/config"
-import ExternalLink from "../../Links/ExternalLink/ExternalLink"
+import Link from "../../Link/Link"
 
 const AvailableOnsite = ({ location }) => {
   const locationShort = location.prefLabel.split("-")[0]
@@ -9,10 +9,10 @@ const AvailableOnsite = ({ location }) => {
       <Box as="span" color="ui.success.primary">
         Available
       </Box>
-      {" - Can be used on site. Please visit "}
-      <ExternalLink href={`${appConfig.urls.locations}${location.endpoint}`}>
+      {" - Can be used onsite. Please visit "}
+      <Link isExternal href={`${appConfig.urls.locations}${location.endpoint}`}>
         {`New York Public Library - ${locationShort}`}
-      </ExternalLink>
+      </Link>
       {" to submit a request in person."}
     </>
   )

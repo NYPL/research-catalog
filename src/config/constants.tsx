@@ -1,14 +1,14 @@
-import { appConfig } from "./config"
+import Link from "../components/Link/Link"
 
 export const BASE_URL = "/research/research-catalog"
 export const SITE_NAME = "Research Catalog | NYPL"
 export const RESULTS_PER_PAGE = 50
+export const SUBJECTS_PER_PAGE = 25
 export const ITEMS_PER_SEARCH_RESULT = 3
 export const ITEM_PAGINATION_BATCH_SIZE = 20
 // TODO: Remove this when view_all endpoint in discovery supports query params
 export const ITEM_VIEW_ALL_BATCH_SIZE = 150
 export const ELECTRONIC_RESOURCES_PER_BIB_PAGE = 3
-export const SHEP_HTTP_TIMEOUT = 4000
 export const FOCUS_TIMEOUT = 50
 export const DEBOUNCE_INTERVAL = 20
 
@@ -18,6 +18,7 @@ export const EMAIL_REGEX = /^[^@]+@[^@]+\.[^@]+$/
 export const PATHS = {
   HOME: "/",
   SEARCH: "/search",
+  BROWSE: "/browse",
   ADVANCED_SEARCH: "/search/advanced",
   MY_ACCOUNT: "/account",
   HOLD_REQUEST: "/hold/request",
@@ -29,6 +30,7 @@ export const PATHS = {
 
 // API Routes
 export const DISCOVERY_API_SEARCH_ROUTE = "/discovery/resources"
+export const DISCOVERY_API_BROWSE_ROUTE = "/discovery/browse/subjects"
 
 // Query params
 export const SOURCE_PARAM = "?source=catalog"
@@ -106,8 +108,28 @@ export const SEARCH_FORM_OPTIONS = {
   },
   subject: {
     text: "Subject",
-    searchTip: "Enter a subject keyword or phrase.",
-    placeholder: `${example} Ornithology or Greek Architecture`,
+    searchTip: (
+      <span>
+        Enter a subject keyword or phrase. To browse a list of Subject Headings
+        instead, go to <Link href="/browse">Browse the Catalog</Link>.
+      </span>
+    ),
+    placeholder: "e.g., Ornithology or Greek Architecture",
+  },
+}
+
+export const BROWSE_FORM_OPTIONS = {
+  has: {
+    text: "Subject Headings containing",
+    searchTip:
+      "Enter one or more keywords in any order to browse the Subject Headings index.",
+    placeholder: "Example: Ornithology or Vietnam War",
+  },
+  starts_with: {
+    text: "Subject Headings beginning with",
+    searchTip:
+      "Enter one or more keywords in exact order to browse the Subject Headings index.",
+    placeholder: "Example: Ornithology or Vietnam War",
   },
 }
 
@@ -144,7 +166,7 @@ export const AVAILABILITY_KEYS = {
   ONSITE_NO_FINDING_AID_NO_AEON: "noFindingAidNoAeonOnsite",
   RECAP_NO_FINDING_AID_NO_AEON: "noFindingAidNoAeonRecap",
 }
-export const HOLD_PAGE_HEADING = "Request for on-site use"
+export const HOLD_PAGE_HEADING = "Request for onsite use"
 export const EDD_PAGE_HEADING = "Request scan"
 
 export const EDD_FORM_FIELD_COPY = {

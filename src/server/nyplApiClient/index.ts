@@ -31,11 +31,8 @@ const nyplApiClient = async ({
   if (CACHE.clients[clientCacheKey]) {
     return CACHE.clients[clientCacheKey]
   }
-  // Hotfix to avoid adding v0.1 to DRB endpoint url.
-  // TODO: Investigate the configuring of alternate versions of same endpoint without implicit appending of version number to url
-  const baseUrl = `${appConfig.apiEndpoints[apiName][appEnvironment]}${
-    version.length ? `/${version}` : ""
-  }`
+
+  const baseUrl = `${appConfig.apiEndpoints[apiName][appEnvironment]}/${version}`
 
   let decryptedId: string
   let decryptedSecret: string
@@ -48,6 +45,7 @@ const nyplApiClient = async ({
       CACHE.id = decryptedId
       CACHE.secret = decryptedSecret
     } catch (exception) {
+      logger.info("Error decrypting creds")
       throw new NyplApiClientError("Error decrypting creds")
     }
   }
@@ -78,6 +76,7 @@ const nyplApiClient = async ({
     }
     return nyplApiClient
   } catch (error) {
+    logger.info(error.message)
     throw new NyplApiClientError(error.message)
   }
 }

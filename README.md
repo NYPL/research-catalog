@@ -61,17 +61,19 @@ Key environment variables include:
 
 #### AWS Credentials
 
-We store API credentials as KMS encrypted environment variables. Decryption (and by extension, use of these API clients) requires the user to have AWS credentials configured locally via the AWS CLI. Reach out to DevOps to get this set up and see our guide on [how we encrypt](docs/ENVIRONMENT_VARIABLES.md#encrypting).
+We store API credentials as KMS encrypted environment variables. Decryption (and by extension, use of these API clients) requires the user to have AWS credentials configured locally via the AWS CLI. Reach out to DevOps to get this set up and see our guide on [how we encrypt](docs/ENVIRONMENT_VARIABLES.md#encrypting). 
+As of 10/30/2025, running this app locally depends on SSO configuration for the profile `nypl-digital-dev` in `~/.aws/config`.
 
 ### Local Development
 
 #### Running with npm
 
 ```bash
+aws sso login --profile nypl-digital-dev
 npm run dev
 ```
 
-This starts the development server on port 8080.
+This starts the development server on port 8080. The SSO token lasts one hour, so you may have to log in again during development.
 
 #### Local Authentication Setup
 
@@ -96,23 +98,9 @@ To enable login functionality in local development:
 
 ### System Architecture
 
-The NYPL Research Catalog is part of a transitional architecture that involves both this Next.js application and the legacy discovery-front-end (DFE) application. The system uses NYPL's reverse proxy to route requests between these applications:
+The NYPL Research Catalog previously had a transitional architecture that involved both this application and the legacy discovery-front-end (DFE) application. The system used NYPL's reverse proxy to route requests for Subject Heading Explorer pages to [DFE](https://github.com/NYPL/discovery-front-end). 
 
-- **Research Catalog (Next.js)**: Handles most of the functionality, including search, bib, hold request, and account pages.
-- **Discovery Front End (DFE)**: Currently only handles the [Subject Heading Explorer (SHEP)](https://www.nypl.org/research/research-catalog/subject_headings) pages.
-
-#### Reverse Proxy Configuration
-
-The NYPL reverse proxy is configured to route page requests to the appropriate application:
-
-- Most paths are routed to the Research Catalog Next.js application
-- Subject Heading Explorer paths are routed to the legacy DFE application
-
-This configuration is controlled by the `NEXT_PUBLIC_REVERSE_PROXY_ENABLED` environment variable, which is set to `true` in QA and production environments.
-
-#### Transition Plan
-
-The Subject Heading Explorer pages are the only remaining pages still served by the legacy DFE application. These will be replaced by the upcoming Enhanced Browse pages in the Research Catalog. Once the Enhanced Browse pages are launched, the legacy DFE application MUST sunset completely and this app must be updated accordingly.
+With the release of the [browse](https://www.nypl.org/research/research-catalog/browse) pages replacing [SHEP](https://www.nypl.org/research/research-catalog/subject_headings), this is a standalone Next.js app. 
 
 ## Key Features
 
@@ -138,7 +126,7 @@ Bib pages (`/bib/[id]`) display detailed information about a Bib's items:
 
 The application displays real-time availability information for physical items:
 
-- Location (on-site or off-site)
+- Location (onsite or offsite)
 - Status (available, not available, etc.)
 - Request options based on availability
 
@@ -258,18 +246,6 @@ The application is hosted on AWS:
 - **CloudWatch** for logging
 - **KMS** for secret management
 
-### Reverse Proxy Configuration
-
-The NYPL DevOps team is responsible for configuring and maintaining the reverse proxy that routes traffic between the Research Catalog and the legacy discovery-front-end (DFE) application:
-
-1. **Configuration Changes**: If changes to the reverse proxy configuration are needed (e.g., routing new paths), tickets should be opened with the DevOps team
-2. **Deployment Coordination**: Major deployments that affect routing should be coordinated with the DevOps team
-3. **Rollbacks**: The DevOps team is responsible for performing rollbacks if issues occur in production
-
-### Rollbacks
-
-The DevOps team is primarily responsible for rolling the app back to the previous working image in case there are issues with a production deployment, so they should be available at the time of any releases to production.
-
 ### Environment Variable Management
 
 The Research Catalog is dockerized, which affects how environment variables are managed:
@@ -331,16 +307,27 @@ Failure to update environment variables in Terraform will result in the variable
 
 ## Logging
 
-The application uses Winston for server-side logging:
+The application uses Winston for server-side logging, and New Relic for both server and client-side logging.
 
-- Structured logs according to NYPL standards
-- Logs stored in AWS CloudWatch
-- Console logging for local development
+### Adding Logs
+
+Use (and then remove) console logs for local development. To test New Relic logs, you can run:
+```
+export NEW_RELIC_APP_NAME="Research Catalog [local]"
+export NEW_RELIC_LICENSE_KEY="<NEW_RELIC_LICENSE_KEY>"
+
+node server.mjs
+```
+and view results in New Relic under "Research Catalog [local]".
 
 ### Accessing Logs
 
-- **QA/Production**: AWS CloudWatch under the `nypl-digital-dev` account (search for "research-catalog")
+- **QA/Production**: AWS CloudWatch under the `nypl-digital-dev` account (search for "research-catalog"), New Relic under "Research Catalog [qa]" and "Research Catalog [production]"
 - **Vercel Deployments**: Console output in the Vercel dashboard
+
+
+
+
 
 ## Troubleshooting
 

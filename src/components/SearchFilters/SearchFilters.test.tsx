@@ -20,10 +20,10 @@ describe("SearchFilters", () => {
   describe("with dates in url query params", () => {
     it("can populate date fields from url", async () => {
       mockRouter.push(
-        "/search?q=dog&filters[dateBefore][0]=2000&filters[dateAfter][0]=1990"
+        "/search?q=dog&filters[dateTo][0]=2000&filters[dateFrom][0]=1990"
       )
       render(component)
-      userEvent.click(screen.getByLabelText(/Date/))
+      userEvent.click(screen.getAllByLabelText(/Date/)[0])
       await waitFor(() => {
         const beforeDateInput = screen.getByDisplayValue("2000")
         const afterDateInput = screen.getByDisplayValue("1990")
@@ -48,7 +48,7 @@ describe("SearchFilters", () => {
       })
       expect(formatMultiselect).toHaveAttribute("aria-expanded", "true")
       expect(subjectMultiselect).toHaveAttribute("aria-expanded", "false")
-      expect(dateMultiselect).toHaveAttribute("aria-expanded", "false")
+      expect(dateMultiselect).toHaveAttribute("aria-expanded", "true")
     })
     it("opens and closes filters", async () => {
       mockRouter.push("/search?q=spaghetti")
@@ -134,6 +134,58 @@ describe("SearchFilters", () => {
         })
         expect(audioFilter).not.toBeChecked()
       }, 100)
+    })
+    it("does display subject filter on search with query and SH filter", async () => {
+      mockRouter.push(
+        "/search?q=hello&search_scope=callnumber&filters%5BsubjectLiteral%5D%5B0%5D=French+fiction."
+      )
+      render(component)
+      expect(mockRouter.query).toStrictEqual({
+        q: "hello",
+        search_scope: "callnumber",
+        "filters[subjectLiteral][0]": "French fiction.",
+      })
+      const subjectMultiselect = screen.queryAllByLabelText(/Subject/, {
+        selector: "button",
+      })[0]
+      const dateMultiselect = screen.queryAllByLabelText(/Date/, {
+        selector: "button",
+      })[0]
+      expect(subjectMultiselect).toBeInTheDocument()
+      expect(dateMultiselect).toBeInTheDocument()
+    })
+    it("does not display subject filter on search with no query and SH filter", async () => {
+      mockRouter.push(
+        "/search?q=&search_scope=callnumber&filters%5BsubjectLiteral%5D%5B0%5D=French+fiction."
+      )
+      render(component)
+      expect(mockRouter.query).toStrictEqual({
+        q: "",
+        search_scope: "callnumber",
+        "filters[subjectLiteral][0]": "French fiction.",
+      })
+      const subjectMultiselect = screen.queryByLabelText(/Subject/, {
+        selector: "button",
+      })
+      const dateMultiselect = screen.queryByLabelText(/Date/, {
+        selector: "button",
+      })
+      expect(subjectMultiselect).not.toBeInTheDocument()
+      expect(dateMultiselect).toBeInTheDocument()
+    })
+    it("does not display subject filter on browse SH results page", async () => {
+      mockRouter.push(
+        "/browse/subjects/Southern%20States%20--%20Social%20conditions."
+      )
+      render(component)
+      const subjectMultiselect = screen.queryByLabelText(/Subject/, {
+        selector: "button",
+      })
+      const dateMultiselect = screen.queryByLabelText(/Date/, {
+        selector: "button",
+      })
+      expect(subjectMultiselect).not.toBeInTheDocument()
+      expect(dateMultiselect).toBeInTheDocument()
     })
   })
 })

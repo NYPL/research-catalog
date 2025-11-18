@@ -15,11 +15,6 @@ export const appConfig: AppConfig = {
       qa: "qa-www.nypl.org",
       production: "www.nypl.org",
     },
-    shep: {
-      development: process.env.SHEP_API,
-      qa: process.env.SHEP_API,
-      production: process.env.SHEP_API,
-    },
     nyplHeaderUrl: {
       development: "https://qa-ds-header.nypl.org",
       qa: "https://qa-ds-header.nypl.org",
@@ -67,13 +62,7 @@ export const appConfig: AppConfig = {
     Q9RrzMLTqxKnVVn2+hVpk4F/8tMsGCdd4s/AJqEQBy5lsq7ji1B63XYqi5fc1SnJ
     EQIDAQAB
     -----END PUBLIC KEY-----`,
-  features: {
-    reverseProxyEnabled: {
-      development: false,
-      qa: true,
-      production: true,
-    },
-  },
+  features: {},
   sourceEmail: process.env.SOURCE_EMAIL,
   libAnswersEmail: process.env.LIB_ANSWERS_EMAIL,
 }

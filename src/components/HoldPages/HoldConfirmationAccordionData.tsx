@@ -2,9 +2,7 @@ import {
   Text,
   type AccordionDataProps,
 } from "@nypl/design-system-react-components"
-
-import RCLink from "../Links/RCLink/RCLink"
-import ExternalLink from "../Links/ExternalLink/ExternalLink"
+import Link from "../Link/Link"
 
 export const holdConfirmationFAQData: AccordionDataProps[] = [
   {
@@ -13,7 +11,7 @@ export const holdConfirmationFAQData: AccordionDataProps[] = [
       <>
         <Text>
           Please allow a few minutes for this item to show up in your{" "}
-          <RCLink href="/account">patron account</RCLink>.
+          <Link href="/account">patron account</Link>.
         </Text>
         <Text>
           The item will be listed as &quot;Ready for pickup&quot; under your
@@ -28,19 +26,21 @@ export const holdConfirmationFAQData: AccordionDataProps[] = [
     panel: (
       <>
         <Text>
-          <strong>Items stored on-site:</strong> Materials requested up to an
+          <strong>Items stored onsite:</strong> Materials requested up to an
           hour before closing are usually ready for pickup within an hour.
           Materials requested within an hour of closing or outside business
           hours are ready about an hour after opening on the next business day.
         </Text>
         <Text>
-          <strong>Items stored off-site:</strong> Materials requested before
-          2:30 PM are usually ready for pickup about an hour after opening the
-          next day (check{" "}
-          <ExternalLink href="https://www.nypl.org/">nypl.org</ExternalLink> for
-          library hours). Materials requested after 2:30 PM Mon–Thu are usually
-          ready in two days; materials requested after 2:30 PM Fri–Sun are ready
-          on Tuesday. Some materials are not delivered on Saturdays.
+          <strong>Items stored offsite:</strong> Materials requested before 2:30
+          PM are usually ready for pickup about an hour after opening the next
+          day (check{" "}
+          <Link isExternal href="https://www.nypl.org/">
+            nypl.org
+          </Link>{" "}
+          for library hours). Materials requested after 2:30 PM Mon-Thu are
+          usually ready in two days; materials requested after 2:30 PM Fri-Sun
+          are ready on Tuesday. Some materials are not delivered on Saturdays.
         </Text>
       </>
     ),
@@ -74,19 +74,27 @@ export const holdConfirmationFAQData: AccordionDataProps[] = [
       <>
         <Text>
           If you would like to cancel your request or have questions, please{" "}
-          <ExternalLink href="https://gethelp.nypl.org/customer/portal/emails/new">
+          <Link
+            isExternal
+            href="https://gethelp.nypl.org/customer/portal/emails/new"
+          >
             email us
-          </ExternalLink>{" "}
+          </Link>{" "}
           or call 917-ASK-NYPL (
-          <ExternalLink href="tel:19172756975">917-275-6975</ExternalLink>).
-          Processed requests can also be canceled from the requests tab in your
-          patron account.
+          <Link isExternal href="tel:19172756975">
+            917-275-6975
+          </Link>
+          ). Processed requests can also be canceled from the requests tab in
+          your patron account.
         </Text>
         <Text>
           For more information about our requesting services, please see{" "}
-          <ExternalLink href="https://www.nypl.org/research/services/request-materials">
+          <Link
+            isExternal
+            href="https://www.nypl.org/research/services/request-materials"
+          >
             Requesting Research Materials
-          </ExternalLink>
+          </Link>
           .
         </Text>
       </>
@@ -111,7 +119,7 @@ export const eddConfirmationFAQData: AccordionDataProps[] = [
       <>
         <Text>
           <Text as="span" fontWeight="medium">
-            Items stored on-site:
+            Items stored onsite:
           </Text>{" "}
           Requests will be typically filled as quickly as possible, but please
           be aware it may take up to two weeks (or longer, in cases where
@@ -120,7 +128,7 @@ export const eddConfirmationFAQData: AccordionDataProps[] = [
         </Text>
         <Text>
           <Text as="span" fontWeight="medium">
-            Items stored off-site:
+            Items stored offsite:
           </Text>{" "}
           Requests will be typically filled within 48 hours, but please be aware
           it may take up to two weeks (or longer, in cases where complex rights
@@ -138,9 +146,12 @@ export const eddConfirmationFAQData: AccordionDataProps[] = [
           retrieved, it remains available to the user for five days. Each file
           can be retrieved a maximum of five times.
         </Text>
-        <ExternalLink href="https://www.nypl.org/research/services/scan-and-deliver">
+        <Link
+          isExternal
+          href="https://www.nypl.org/research/services/scan-and-deliver"
+        >
           Read more about this service.
-        </ExternalLink>
+        </Link>
       </>
     ),
   },

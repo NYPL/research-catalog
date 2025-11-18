@@ -1,5 +1,4 @@
 import React, { useContext, useState } from "react"
-
 import { FeedbackContext } from "../../context/FeedbackContext"
 import type { FeedbackMetadataAndComment } from "../../types/feedbackTypes"
 import { BASE_URL } from "../../config/constants"
@@ -17,15 +16,15 @@ const FeedbackForm = () => {
     onOpen,
     itemMetadata,
     setItemMetadata,
-    isError,
-    setError,
+    errorStatus,
+    setErrorStatus,
     openFeedbackFormWithError,
   } = useContext(FeedbackContext)
 
   const closeAndResetFeedbackData = () => {
     setItemMetadata(null)
 
-    setError(false)
+    setErrorStatus(null)
     onClose()
     setFeedbackFormScreen("form")
 
@@ -62,7 +61,7 @@ const FeedbackForm = () => {
     }
   }
 
-  const notificationText = isError
+  const notificationText = errorStatus
     ? "You are asking for help or information about a page error"
     : itemMetadata?.notificationText
     ? itemMetadata.notificationText
@@ -79,7 +78,10 @@ const FeedbackForm = () => {
       descriptionText="We are here to help!"
       title="Help and Feedback"
       showEmailField
-      hiddenFields={itemMetadata}
+      hiddenFields={{
+        ...itemMetadata,
+        ...(errorStatus != null && { error: String(errorStatus) }),
+      }}
       notificationText={notificationText}
       view={feedbackFormScreen}
       className="no-print"
