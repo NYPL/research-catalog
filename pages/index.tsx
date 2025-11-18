@@ -63,7 +63,7 @@ export default function Home({
                 circulating materials. For books and more that you can check out
                 to take home, please visit our{" "}
                 <Link isExternal href={appConfig.urls.circulatingCatalog}>
-                  circulating branch catalog.
+                  Circulating Branch Catalog.
                 </Link>
               </Text>
               <Text mb="s">
