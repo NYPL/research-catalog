@@ -150,8 +150,20 @@ export default class BibDetails {
   }
 
   buildBottomDetails(): AnyBibDetail[] {
+    const linkedFields = [
+      "contributorLiteral",
+      "addedAuthorTitle",
+      "placeOfPublication",
+      "seriesStatement",
+      "uniformTitle",
+      "subjectLiteral",
+      "titleAlt",
+      "donor",
+    ]
     const resourceFields = [
       { field: "contributorLiteral", label: "Additional authors" },
+      { field: "addedAuthorTitle", label: "Author added title" },
+      { field: "placeOfPublication", label: "Place of publication" },
       { field: "partOf", label: "Found in" },
       { field: "serialPublicationDates", label: "Publication date" },
       { field: "extent", label: "Description" },
@@ -173,13 +185,10 @@ export default class BibDetails {
       { field: "language", label: "Language" },
     ]
       .map((fieldMapping: FieldMapping): AnyBibDetail => {
-        let detail: AnyBibDetail
-        if (
-          fieldMapping.field === "contributorLiteral" ||
-          fieldMapping.field === "subjectLiteral"
-        )
-          detail = this.buildSearchFilterUrl(fieldMapping)
-        else detail = this.buildStandardDetail(fieldMapping)
+        const isLinked = linkedFields.includes(fieldMapping.field)
+        const detail = isLinked
+          ? this.buildSearchFilterUrl(fieldMapping)
+          : this.buildStandardDetail(fieldMapping)
         return detail
       })
       .filter((f) => f)
@@ -297,13 +306,20 @@ export default class BibDetails {
       link: "internal",
       label: convertToSentenceCase(fieldMapping.label),
       value: value.map((v: string) => {
-        // subjectLiteral links to browse
-        const internalUrl =
-          fieldMapping.field === "subjectLiteral"
-            ? `/browse/subjects/${encodeURIComponent(v)}`
-            : `/search?filters[${fieldMapping.field}][0]=${encodeURIComponent(
-                v
-              )}`
+        const { field } = fieldMapping
+        let internalUrl: string
+        switch (field) {
+          case "subjectLiteral":
+            internalUrl = `/browse/subjects/${encodeURIComponent(v)}`
+            break
+          case "seriesStatement":
+            internalUrl = `/search?filters[series][0]=${encodeURIComponent(v)}`
+            break
+          default:
+            internalUrl = `/search?filters[${field}][0]=${encodeURIComponent(
+              v
+            )}`
+        }
         return { url: internalUrl, urlLabel: v }
       }),
     }
