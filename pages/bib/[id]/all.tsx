@@ -9,26 +9,25 @@ export async function getServerSideProps({ params, query, req }) {
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const isAuthenticated = patronTokenResponse.isTokenValid
   const results = await fetchBib(id, { ...query, all_items: true })
-  if (!("discoveryBibResult" in results)) {
-    if (results.status === 307)
-      return {
-        redirect: {
-          destination: results.redirectUrl,
-          permanent: false,
-        },
-      }
-    else
-      return {
-        props: {
-          errorStatus: results.status,
-        },
-      }
+  if (results.status === 307)
+    return {
+      redirect: {
+        destination: results.redirectUrl,
+        permanent: false,
+      },
+    }
+  else if (results.status !== 200) {
+    return {
+      props: {
+        errorStatus: results.status,
+      },
+    }
   }
 
   return {
     props: {
-      discoveryBibResult: results.discoveryBibResult,
-      annotatedMarc: results.annotatedMarc,
+      discoveryBibResult: (results as any).discoveryBibResult,
+      annotatedMarc: (results as any).annotatedMarc,
       isAuthenticated,
       viewAllItems: true,
     },
