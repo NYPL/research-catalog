@@ -40,7 +40,9 @@ const SearchResultItems = ({ itemTableData }: SearchResultItemsProps) => {
                 </Text>
               </td>
               <td>
-                <Text fontSize="small">{tableData[0][index]}</Text>
+                <Text display="inline" fontSize="small">
+                  {tableData[0][index]}
+                </Text>
               </td>
             </tr>
           ))}
