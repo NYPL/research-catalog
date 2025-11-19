@@ -36,4 +36,6 @@ jobs:
         run: npx playwright install
 
       - name: Run Playwright tests
+        env:
+          BASE_URL: https://qa-www.nypl.org/research/research-catalog
         run: npx playwright test
