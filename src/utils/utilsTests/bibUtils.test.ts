@@ -92,6 +92,22 @@ describe("bibUtils", () => {
         "?items_size=20&items_from=80&item_page=5&merge_checkin_card_items=true"
       )
     })
+    it("replaces pagination query params with all_items when all_items is true", () => {
+      expect(
+        getBibQueryString({ id: "b12082323", item_page: 5, all_items: true })
+      ).toBe("?all_items=true&merge_checkin_card_items=true")
+    })
+    it("does not replace pagination query params when all_items is present and false", () => {
+      expect(
+        getBibQueryString({
+          id: "b12082323",
+          item_page: 5,
+          all_items: false,
+        })
+      ).toBe(
+        "?items_size=20&items_from=80&item_page=5&merge_checkin_card_items=true"
+      )
+    })
   })
   describe("buildItemTableDisplayingString", () => {
     it("returns the correct item table heading when there is one item", () => {
