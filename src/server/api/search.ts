@@ -2,13 +2,12 @@ import type {
   SearchParams,
   SearchResultsResponse,
 } from "../../types/searchTypes"
-import { standardizeBibId } from "../../utils/bibUtils"
 import { getSearchQuery } from "../../utils/searchUtils"
 import {
   DISCOVERY_API_SEARCH_ROUTE,
   RESULTS_PER_PAGE,
 } from "../../config/constants"
-import { logServerError } from "../../utils/appUtils"
+import { logServerError, standardizeBibId } from "../../utils/appUtils"
 import nyplApiClient from "../nyplApiClient"
 import type { APIError } from "../../types/appTypes"
 

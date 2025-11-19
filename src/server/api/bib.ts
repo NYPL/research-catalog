@@ -2,7 +2,6 @@ import type { BibQueryParams, BibResponse } from "../../types/bibTypes"
 import {
   isNyplBibID,
   getBibQueryString,
-  standardizeBibId,
   itemFiltersActive,
 } from "../../utils/bibUtils"
 import nyplApiClient from "../nyplApiClient"
@@ -11,7 +10,7 @@ import {
   ITEM_VIEW_ALL_BATCH_SIZE,
 } from "../../config/constants"
 import { appConfig } from "../../config/config"
-import { logServerError } from "../../utils/appUtils"
+import { logServerError, standardizeBibId } from "../../utils/appUtils"
 import type { DiscoveryItemResult } from "../../types/itemTypes"
 import logger from "../../../logger"
 import type { HTTPStatusCode } from "../../types/appTypes"
