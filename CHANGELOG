@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Remove batched item fetch on bibs since `all_items` param is supported (SCC-4183)(https://newyorkpubliclibrary.atlassian.net/browse/SCC-4183)
 
+### Updated
+
+- Updated landing page text with legacy deprecation info [SCC-5006](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5006)
+
 ## [1.5.9] 2025-11-13
 
 ### Updated
