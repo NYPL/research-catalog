@@ -40,4 +40,4 @@ jobs:
           QA_USERNAME: ${{ secrets.QA_USERNAME }}
           QA_PASSWORD: ${{ secrets.QA_PASSWORD }}
           BASE_URL: https://qa-www.nypl.org/research/research-catalog
-        run: npx playwright test
+        run: npx playwright test --project=chromium

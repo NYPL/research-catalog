@@ -1,7 +1,10 @@
 import { defineConfig, devices } from "@playwright/test"
-
 import * as dotenv from "dotenv"
-dotenv.config({ path: ".env.local" })
+
+// Only load .env.local when NOT in CI
+if (!process.env.CI) {
+  dotenv.config({ path: ".env.local" })
+}
 
 export default defineConfig({
   timeout: 30 * 1000,
