@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Updated landing page text with legacy deprecation info [SCC-5006](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5006)
 
+### Removed
+
+- Removed Adobe Analytics and reverse proxy/SHEP environment variables [SCC-5036](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5036)
+
 ## [1.5.9] 2025-11-13
 
 ### Updated
