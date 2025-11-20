@@ -1,4 +1,4 @@
-name: Playwright Tests
+name: Run Playwright Tests
 
 on:
   push:
@@ -40,4 +40,4 @@ jobs:
           QA_USERNAME: ${{ secrets.QA_USERNAME }}
           QA_PASSWORD: ${{ secrets.QA_PASSWORD }}
           BASE_URL: https://qa-www.nypl.org/research/research-catalog
-        run: npx playwright test playwright/tests/Homepage/homepage.spec.ts --project=chromium
+        run: npx playwright test --project=chromium --reporter=list,github,html
