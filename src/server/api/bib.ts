@@ -3,18 +3,12 @@ import {
   isNyplBibID,
   getBibQueryString,
   standardizeBibId,
-  itemFiltersActive,
 } from "../../utils/bibUtils"
 import nyplApiClient from "../nyplApiClient"
-import {
-  DISCOVERY_API_SEARCH_ROUTE,
-  ITEM_VIEW_ALL_BATCH_SIZE,
-} from "../../config/constants"
+import { DISCOVERY_API_SEARCH_ROUTE } from "../../config/constants"
 import { appConfig } from "../../config/config"
 import { logServerError } from "../../utils/appUtils"
-import type { DiscoveryItemResult } from "../../types/itemTypes"
 import logger from "../../../logger"
-import type { HTTPStatusCode } from "../../types/appTypes"
 import type { APIError } from "../../types/appTypes"
 
 export async function fetchBib(
@@ -121,17 +115,6 @@ export async function fetchBib(
       )
     }
 
-    // Only call the batched fetch when some of the filters are active
-    // TODO: Remove this when view_all endpoint in discovery supports query params
-    if (bibQuery?.all_items && itemFiltersActive(bibQuery)) {
-      discoveryBibResult.items = await fetchAllBibItemsWithQuery(
-        bibQuery,
-        discoveryBibResult.numItemsMatched,
-        // allow control of batch size in query param for testing
-        bibQuery?.batch_size || ITEM_VIEW_ALL_BATCH_SIZE
-      )
-    }
-
     return {
       status: 200,
       discoveryBibResult,
@@ -141,41 +124,4 @@ export async function fetchBib(
     logServerError("fetchBib", error)
     return { status: 500, error }
   }
-}
-
-// TODO: Remove this when view_all endpoint in discovery supports query params
-async function fetchAllBibItemsWithQuery(
-  bibQuery: BibQueryParams,
-  numItems: number,
-  batchSize: number
-): Promise<DiscoveryItemResult[] | { status: HTTPStatusCode; error?: string }> {
-  const items: DiscoveryItemResult[] = []
-  const client = await nyplApiClient()
-  const totalBatchNum = Math.ceil(numItems / batchSize)
-
-  for (let batchNum = 1; batchNum <= totalBatchNum; batchNum++) {
-    try {
-      const pageQueryString = getBibQueryString(
-        {
-          ...bibQuery,
-          item_page: batchNum,
-        },
-        false
-      )
-      const bibPage = await client.get(
-        `${DISCOVERY_API_SEARCH_ROUTE}/${bibQuery.id}${pageQueryString}`
-      )
-      if (bibPage?.items?.length) {
-        items.push(...bibPage.items)
-      } else {
-        throw new Error(
-          "There was an error fetching items in one of the batches"
-        )
-      }
-    } catch (error: any) {
-      logServerError("fetchAllBibItemsWithQuery", error)
-      return { status: 500, error }
-    }
-  }
-  return items
 }
