@@ -3,6 +3,7 @@ import { BasePage } from "./base_page"
 
 export class AccountPage extends BasePage {
   readonly usernameInput: Locator
+  readonly unsernameEditInput: Locator
   readonly passwordInput: Locator
   readonly submitButton: Locator
   readonly accountHeader: Locator
@@ -43,6 +44,7 @@ export class AccountPage extends BasePage {
     this.usernameLabel = page.getByText("Username").first()
     this.username = page.getByText("qatester2")
     this.usernameEditLink = page.getByRole("button", { name: /edit username/i })
+    this.unsernameEditInput = page.locator("#username-input")
     this.cardnumberLabel = page.locator("dt", { hasText: "Card number" })
     this.cardnumber = page.getByTestId("Card number")
     this.barcode = page.getByLabel("barcode")
