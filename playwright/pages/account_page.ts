@@ -33,6 +33,16 @@ export class AccountPage extends BasePage {
   readonly edit_notification_preferences_link: Locator
   readonly edit_pin_password_link: Locator
 
+  // Add these new locators
+  readonly phoneInput: Locator
+  readonly emailInput: Locator
+  readonly homeLibrarySelect: Locator
+  readonly saveChangesButton: Locator
+  readonly successMessage: Locator
+  readonly phoneValue: Locator
+  readonly emailValue: Locator
+  readonly homeLibraryValue: Locator
+
   constructor(page: Page) {
     super(page)
     this.usernameInput = page.getByLabel("Barcode or Username")
@@ -82,6 +92,31 @@ export class AccountPage extends BasePage {
       "#edit-notification-button"
     )
     this.edit_pin_password_link = page.locator("#edit-password-button")
+
+    // New locators for editing functionality
+    this.phoneInput = page.getByRole("textbox", {
+      name: "Update primary phone number",
+    })
+    this.emailInput = page.getByRole("textbox", {
+      name: "Update primary email address",
+    })
+    this.homeLibrarySelect = page.getByLabel("Update home library")
+    this.saveChangesButton = page.getByRole("button", {
+      name: /save changes/i,
+    })
+    this.successMessage = page.getByText(/your changes were saved/i)
+
+    // Value locators for assertions
+    this.phoneValue = page
+      .locator("p", { hasText: /phone/i })
+      .locator("xpath=following::div[1]")
+    this.emailValue = page
+      .locator("p", { hasText: /email/i })
+      .first()
+      .locator("xpath=following::div[1]")
+    this.homeLibraryValue = page
+      .locator("p", { hasText: /home library/i })
+      .locator("xpath=following::div[1]")
   }
 
   async login(username: string, password: string) {

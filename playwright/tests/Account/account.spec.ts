@@ -96,20 +96,11 @@ test.describe("Account Settings", () => {
     const accountPage = await loginAndGetAccountPage(page)
     await accountPage.tab_account_settings.click()
 
-    const phonelabel = page.locator("p", { hasText: /phone/i })
-    await expect(phonelabel).toBeVisible()
-    const phoneValue = phonelabel.locator("xpath=following::div[1]")
-    await expect(phoneValue).toHaveText(/^2125927256/)
-
-    const emailLabel = page.locator("p", { hasText: /email/i }).first()
-    await expect(emailLabel).toBeVisible()
-    const emailValue = emailLabel.locator("xpath=following::div[1]")
-    await expect(emailValue).toContainText(/^chrismulholland@nypl.org/)
-
-    const homeLibraryLabel = page.locator("p", { hasText: /home library/i })
-    await expect(homeLibraryLabel).toBeVisible()
-    const homeLibraryValue = homeLibraryLabel.locator("xpath=following::div[1]")
-    await expect(homeLibraryValue).toHaveText(/^Stavros Niarchos/)
+    await expect(accountPage.phoneValue).toHaveText(/^2125927256/)
+    await expect(accountPage.emailValue).toContainText(
+      /^chrismulholland@nypl.org/
+    )
+    await expect(accountPage.homeLibraryValue).toHaveText(/^Stavros Niarchos/)
 
     const notificationPreferenceLabel = page.locator("p", {
       hasText: /notification preference/i,
@@ -134,126 +125,116 @@ test.describe("Account Settings", () => {
     await expect(accountPage.edit_pin_password_link).toBeVisible()
   })
 })
+
 test.describe("Account Settings edits", () => {
   test("should successfully edit user name", async ({ page }) => {
     const accountPage = await loginAndGetAccountPage(page)
-
-    // Navigate to account settings tab first
     await accountPage.tab_account_settings.click()
 
-    // Click edit link
     await accountPage.usernameEditLink.click()
     await expect(page.getByText("If you delete your username,")).toBeVisible()
-
-    // Wait for the input to be visible
     await accountPage.unsernameEditInput.waitFor({ state: "visible" })
 
-    // Change username to one that is too long
+    // Test invalid username (too long)
     const badnewUsername = "qatester2_EDITTED"
     await accountPage.unsernameEditInput.fill(badnewUsername)
     await expect(accountPage.unsernameEditInput).toHaveValue(badnewUsername)
-    // expect "Save changes" button to not be active
-    const saveChangesButton = page.getByRole("button", {
-      name: /save changes/i,
-    })
-    await expect(saveChangesButton).toBeDisabled()
-    // Change username to a valid one
+    await expect(accountPage.saveChangesButton).toBeDisabled()
+
+    // Test valid username
     const newUsername = "qatester2edit"
     await accountPage.unsernameEditInput.fill(newUsername)
     await expect(accountPage.unsernameEditInput).toHaveValue(newUsername)
-    // expect "Save changes" button to be active
-    await expect(saveChangesButton).toBeEnabled()
-    // Click "Save changes" button
-    await saveChangesButton.click()
-    // Expect success message
-    const successMessage = page.getByText(/your changes were saved/i)
-    await expect(successMessage).toBeVisible({ timeout: 15000 })
-    // Expect username value to be updated
+    await expect(accountPage.saveChangesButton).toBeEnabled()
+    await accountPage.saveChangesButton.click()
+
+    await expect(accountPage.successMessage).toBeVisible({ timeout: 15000 })
     await expect(accountPage.username).toHaveText(newUsername)
-    // Revert username change for future test runs
+
+    // Revert username
     await accountPage.usernameEditLink.click()
     await accountPage.unsernameEditInput.fill("qatester2")
-    await saveChangesButton.click()
-    await expect(successMessage).toBeVisible({ timeout: 15000 })
+    await accountPage.saveChangesButton.click()
+    await expect(accountPage.successMessage).toBeVisible({ timeout: 15000 })
     await expect(accountPage.username).toHaveText("qatester2")
   })
+
   test("should successfully edit phone number", async ({ page }) => {
     const accountPage = await loginAndGetAccountPage(page)
-
-    // Navigate to account settings tab first
     await accountPage.tab_account_settings.click()
 
-    // Click edit phone link
     await accountPage.edit_phone_link.click()
-    const phoneInput = page.getByRole("textbox", {
-      name: "Update primary phone number",
-    })
-    await phoneInput.waitFor({ state: "visible" })
+    await accountPage.phoneInput.waitFor({ state: "visible" })
 
-    // Change phone number
     const newPhoneNumber = "5551234567"
-    await phoneInput.fill(newPhoneNumber)
-    const saveChangesButton = page.getByRole("button", {
-      name: /save changes/i,
-    })
-    await expect(saveChangesButton).toBeEnabled()
-    await saveChangesButton.click()
+    await accountPage.phoneInput.fill(newPhoneNumber)
+    await expect(accountPage.saveChangesButton).toBeEnabled()
+    await accountPage.saveChangesButton.click()
 
-    // Expect success message
-    const successMessage = page.getByText(/your changes were saved/i)
-    await expect(successMessage).toBeVisible({ timeout: 15000 })
+    await expect(accountPage.successMessage).toBeVisible({ timeout: 15000 })
+    await expect(accountPage.phoneValue).toContainText(newPhoneNumber)
 
-    // Expect phone value to be updated
-    const phonelabel = page.locator("p", { hasText: /phone/i })
-    const phoneValue = phonelabel.locator("xpath=following::div[1]")
-    await expect(phoneValue).toContainText(newPhoneNumber)
-
-    // Revert phone number change for future test runs
+    // Revert phone number
     await accountPage.edit_phone_link.click()
-    await phoneInput.waitFor({ state: "visible" })
-    await phoneInput.fill("2125927256")
-    await saveChangesButton.click()
-    await expect(successMessage).toBeVisible({ timeout: 15000 })
-    await expect(phoneValue).toContainText("2125927256", { timeout: 15000 })
+    await accountPage.phoneInput.waitFor({ state: "visible" })
+    await accountPage.phoneInput.fill("2125927256")
+    await accountPage.saveChangesButton.click()
+    await expect(accountPage.successMessage).toBeVisible({ timeout: 15000 })
+    await expect(accountPage.phoneValue).toContainText("2125927256", {
+      timeout: 15000,
+    })
   })
+
   test("should successfully edit email address", async ({ page }) => {
     const accountPage = await loginAndGetAccountPage(page)
-
-    // Navigate to account settings tab first
     await accountPage.tab_account_settings.click()
 
-    // Click edit email link
     await accountPage.edit_email_link.click()
-    const emailInput = page.getByRole("textbox", {
-      name: "Update primary email address",
-    })
-    await emailInput.waitFor({ state: "visible" })
+    await accountPage.emailInput.waitFor({ state: "visible" })
 
-    // Change email address
     const newEmail = "testemail@nypl.org"
-    await emailInput.fill(newEmail)
-    const saveChangesButton = page.getByRole("button", {
-      name: /save changes/i,
-    })
-    await expect(saveChangesButton).toBeEnabled()
-    await saveChangesButton.click()
+    await accountPage.emailInput.fill(newEmail)
+    await expect(accountPage.saveChangesButton).toBeEnabled()
+    await accountPage.saveChangesButton.click()
 
-    // Expect success message
-    const successMessage = page.getByText(/your changes were saved/i)
-    await expect(successMessage).toBeVisible({ timeout: 15000 })
+    await expect(accountPage.successMessage).toBeVisible({ timeout: 15000 })
+    await expect(accountPage.emailValue).toContainText(newEmail)
 
-    // Expect email value to be updated
-    const emailLabel = page.locator("p", { hasText: /email/i }).first()
-    const emailValue = emailLabel.locator("xpath=following::div[1]")
-    await expect(emailValue).toContainText(newEmail)
-
-    // Revert email address change for future test runs
+    // Revert email address
     await accountPage.edit_email_link.click()
-    await emailInput.waitFor({ state: "visible" })
-    await emailInput.fill("chrismulholland@nypl.org")
-    await saveChangesButton.click()
-    await expect(successMessage).toBeVisible({ timeout: 15000 })
-    await expect(emailValue).toContainText("chrismulholland@nypl.org", {
+    await accountPage.emailInput.waitFor({ state: "visible" })
+    await accountPage.emailInput.fill("chrismulholland@nypl.org")
+    await accountPage.saveChangesButton.click()
+    await expect(accountPage.successMessage).toBeVisible({ timeout: 15000 })
+    await expect(accountPage.emailValue).toContainText(
+      "chrismulholland@nypl.org",
+      { timeout: 15000 }
+    )
+  })
+
+  test("should successfully edit home library", async ({ page }) => {
+    const accountPage = await loginAndGetAccountPage(page)
+    await accountPage.tab_account_settings.click()
+
+    await accountPage.edit_home_library_link.click()
+    await accountPage.homeLibrarySelect.waitFor({ state: "visible" })
+    await accountPage.homeLibrarySelect.selectOption({ label: "53rd Street" })
+
+    await expect(accountPage.saveChangesButton).toBeEnabled()
+    await accountPage.saveChangesButton.click()
+
+    await expect(accountPage.successMessage).toBeVisible({ timeout: 15000 })
+    await expect(accountPage.homeLibraryValue).toHaveText("53rd Street")
+
+    // Revert home library
+    await accountPage.edit_home_library_link.click()
+    await accountPage.homeLibrarySelect.waitFor({ state: "visible" })
+    await accountPage.homeLibrarySelect.selectOption({
+      label: "Stavros Niarchos",
+    })
+    await accountPage.saveChangesButton.click()
+    await expect(accountPage.successMessage).toBeVisible({ timeout: 15000 })
+    await expect(accountPage.homeLibraryValue).toHaveText("Stavros Niarchos", {
       timeout: 15000,
     })
   })
