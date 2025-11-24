@@ -171,7 +171,6 @@ Both clients:
 
 - **Discovery API**: Main source for bib and item data (accessed via nyplApiClient)
 - **Sierra API**: Patron account management and item requests (accessed via sierraClient)
-- **SHEP API**: Subject heading data
 
 ## Authentication
 
@@ -324,8 +323,6 @@ and view results in New Relic under "Research Catalog [local]".
 
 - **QA/Production**: AWS CloudWatch under the `nypl-digital-dev` account (search for "research-catalog"), New Relic under "Research Catalog [qa]" and "Research Catalog [production]"
 - **Vercel Deployments**: Console output in the Vercel dashboard
-
-
 
 
 

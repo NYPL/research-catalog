@@ -20,13 +20,6 @@ export const appConfig: AppConfig = {
       qa: "https://qa-ds-header.nypl.org",
       production: "https://ds-header.nypl.org",
     },
-    adobeEmbedUrl: {
-      development:
-        "https://assets.adobedtm.com/1a9376472d37/ddf1bedfe52e/launch-4eefcc91c90e.min.js",
-      qa: "https://assets.adobedtm.com/1a9376472d37/ddf1bedfe52e/launch-4eefcc91c90e.min.js",
-      production:
-        "https://assets.adobedtm.com/1a9376472d37/8519dfce636d/launch-672b7e7f98ee.min.js",
-    },
     loginUrl: {
       development: "https://dev-login.nypl.org/auth/login",
       qa: "https://dev-login.nypl.org/auth/login",
