@@ -39,6 +39,8 @@ describe("BibDetail component", () => {
       })
       expect(screen.getByText("Language")).toBeInTheDocument()
       expect(screen.getByText("French")).toBeInTheDocument()
+      expect(screen.getByText("Series")).toBeInTheDocument()
+      expect(screen.queryAllByText("Childhood")[0]).toBeInTheDocument()
       expect(screen.getByText("Series statement")).toBeInTheDocument()
       expect(screen.queryAllByText(/Haute enfance/)[0]).toBeInTheDocument()
     })
@@ -151,14 +153,14 @@ describe("BibDetail component", () => {
         expect.stringContaining("/browse?q=")
       )
     })
-    it("renders series statement field with search filter series link", () => {
+    it("renders series field with search filter series link", () => {
       render(<BibDetails details={noParallelsBibModel.bottomDetails} />, {
         wrapper: MemoryRouterProvider,
       })
-      const seriesStatement = screen.getByText("Haute enfance")
+      const seriesStatement = screen.getByText("Childhood")
       expect(seriesStatement).toHaveAttribute(
         "href",
-        expect.stringContaining("/search?filters[series][0]=Haute%20enfance")
+        expect.stringContaining("/search?filters[series][0]=Childhood")
       )
     })
   })

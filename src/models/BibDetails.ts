@@ -154,7 +154,7 @@ export default class BibDetails {
       "contributorLiteral",
       "addedAuthorTitle",
       "placeOfPublication",
-      "seriesStatement",
+      "series",
       "uniformTitle",
       "subjectLiteral",
       "titleAlt",
@@ -169,8 +169,8 @@ export default class BibDetails {
       { field: "extent", label: "Description" },
       { field: "description", label: "Summary" },
       { field: "donor", label: "Donor/Sponsor" },
-      { field: "seriesStatement", label: "Series statement" },
       { field: "series", label: "Series" },
+      { field: "seriesStatement", label: "Series statement" },
       { field: "uniformTitle", label: "Uniform title" },
       { field: "titleAlt", label: "Alternative title" },
       { field: "formerTitle", label: "Former title" },
@@ -205,7 +205,6 @@ export default class BibDetails {
     resourceEndpointDetails: AnyBibDetail[],
     annotatedMarcDetails: AnyMarcDetail[]
   ): AnyBibDetail[] {
-    console.log(this.bib)
     const normalizeValues = (val: any) => {
       if (!val) return []
       if (Array.isArray(val)) {
