@@ -20,9 +20,9 @@ The [NYPL Research Catalog](https://www.nypl.org/research/research-catalog) is a
 - **Frontend Framework**: [Next.js](https://nextjs.org/)
 - **UI Components**: [@nypl/design-system-react-components](https://nypl.github.io/nypl-design-system/reservoir/)
 - **Data Fetching**: Server-side rendering with `getServerSideProps` and client-side fetching with JavaScript's native fetch API
-- **Styling**: SCSS modules and Style Props
+- **Styling**: SCSS modules and inline style props
 - **Testing**: Jest and React Testing Library
-- **Logging**: Winston logging to AWS Cloudwatch
+- **Logging**: Winston logging to AWS Cloudwatch and New Relic
 - **Authentication**: JWT-based patron "log in" for developing and testing authenticated features (Account and Hold requests)
 
 ## Getting Started
@@ -236,10 +236,7 @@ To deploy to one of these environments from another branch, edit the [deploy wor
 
 First, identify the issue with the deployment using logs (Cloudwatch, New Relic, Vercel production build).
 Once the issue is identified, you can immediately resolve by doing an ECS rollback: re-deploy the last working task definition revision so the service runs the old Docker image and old environment configuration. 
-2. Git commit rollback: revert the repo to a previous commit and redeploy that version 
-
-
-
+Otherwise, "roll back" by Git commit: remove (or resolve) the introduced issue, commit, and deploy again. Alternatively, `git reset` to the last working commit and deploy again. Avoid `git revert`, if possible, to keep commit history clean. 
 
 ### Vercel Preview Links
 
