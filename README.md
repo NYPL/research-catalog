@@ -235,8 +235,12 @@ To deploy to one of these environments from another branch, edit the [deploy wor
 ### Rolling back a deployment
 
 First, identify the issue with the deployment using logs (Cloudwatch, New Relic, Vercel production build).
-Once the issue is identified, you can immediately resolve by doing an ECS rollback: re-deploy the last working task definition revision so the service runs the old Docker image and old environment configuration. 
-Otherwise, "roll back" by Git commit: remove (or resolve) the introduced issue, commit, and deploy again. Alternatively, `git reset` to the last working commit and deploy again. Avoid `git revert`, if possible, to prevent merge conflicts down the line. 
+
+
+Once the issue is identified, you can immediately resolve by doing an **ECS rollback**: re-deploy the last working task definition revision so the service runs the old Docker image and old environment configuration. 
+
+
+Otherwise, **"roll back" by Git commit**: remove (or resolve) the introduced issue, commit, and deploy again. Alternatively, `git reset` to the last working commit and deploy again. Avoid `git revert`, if possible, to prevent merge conflicts down the line. 
 
 ### Vercel Preview Links
 
