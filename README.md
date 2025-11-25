@@ -236,7 +236,7 @@ To deploy to one of these environments from another branch, edit the [deploy wor
 
 First, identify the issue with the deployment using logs (Cloudwatch, New Relic, Vercel production build).
 Once the issue is identified, you can immediately resolve by doing an ECS rollback: re-deploy the last working task definition revision so the service runs the old Docker image and old environment configuration. 
-Otherwise, "roll back" by Git commit: remove (or resolve) the introduced issue, commit, and deploy again. Alternatively, `git reset` to the last working commit and deploy again. Avoid `git revert`, if possible, to keep commit history clean. 
+Otherwise, "roll back" by Git commit: remove (or resolve) the introduced issue, commit, and deploy again. Alternatively, `git reset` to the last working commit and deploy again. Avoid `git revert`, if possible, to prevent merge conflicts down the line. 
 
 ### Vercel Preview Links
 
@@ -312,7 +312,7 @@ When adding new environment variables or changing existing ones:
 5. Wait for confirmation from DevOps before deploying code that relies on the new variable
 
 Failure to update environment variables in Terraform will result in the variables being unavailable or reverting to default values when a new deployment occurs. 
-For variables that only need to be updated temporarily, like `SEARCH_RESULTS_NOTIFICATION`, it may be okay to create and deploy a new task definition without updating Terraform, knowing that it will be reverted on the next deployment.
+For variables that only need to be updated temporarily, like `SEARCH_RESULTS_NOTIFICATION`, it may be okay to create and deploy a new task definition revision without updating Terraform, knowing that it will be reverted on the next deployment.
 
 
 ## Logging
