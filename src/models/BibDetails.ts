@@ -313,9 +313,6 @@ export default class BibDetails {
           case "subjectLiteral":
             internalUrl = `/browse/subjects/${encodeURIComponent(v)}`
             break
-          case "seriesStatement":
-            internalUrl = `/search?filters[series][0]=${encodeURIComponent(v)}`
-            break
           default:
             internalUrl = `/search?filters[${field}][0]=${encodeURIComponent(
               v
