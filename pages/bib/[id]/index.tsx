@@ -87,11 +87,6 @@ export default function BibPage({
   const [itemFetchError, setItemFetchError] = useState(false)
 
   // Just storing items in state, bib metadata doesn't need to be reactive
-  // const [itemsState, setItemsState] = useState({
-  //   itemTableData: bib.itemTableData ?? null,
-  //   itemAggregations: bib.itemAggregations ?? null,
-  //   numItems: bib.numItems(false),
-  // })
   const [itemsState, setItemsState] = useState(() => ({
     itemTableData: bib?.itemTableData ?? null,
     itemAggregations: bib?.itemAggregations ?? null,
