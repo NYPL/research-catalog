@@ -230,17 +230,18 @@ The application is deployed to:
 
 We deploy (and run automated tests) using [Github Actions](https://github.com/NYPL/research-catalog/blob/main/.github/workflows), which run on `push` to the QA and production branches. We also deploy on `push` to `train`, though it is not part of our usual staging.
 
-To deploy to one of these environments from another branch, edit the [deploy workflow file](https://github.com/NYPL/research-catalog/blob/main/.github/workflows/test_and_deploy.yml), making sure to escape the branch name (`github.ref_name`) where necessary.
+To deploy to one of these environments from another branch, update the [deploy workflow](https://github.com/NYPL/research-catalog/blob/main/.github/workflows/test_and_deploy.yml) to include the desired branch, making sure to escape the branch name (`github.ref_name`) where necessary.
 
 ### Rolling back a deployment
 
 First, identify the issue with the deployment using logs (Cloudwatch, New Relic, Vercel production build).
 
+Once the issue is identified, you can immediately resolve by doing an **ECS rollback**: re-deploy the last working task definition revision so the service ([QA](https://946183545209-nfcqnmzl.us-east-1.console.aws.amazon.com/ecs/v2/clusters/research-catalog-qa/services?region=us-east-1), [production](https://946183545209-nfcqnmzl.us-east-1.console.aws.amazon.com/ecs/v2/clusters/research-catalog-production/services?region=us-east-1)) runs the old Docker image and old environment configuration.  The rollback effectively restores the service to its last stable state. To do this:
+1. Identify the last working task definition revision in the ECS console or via the AWS CLI.
+2. Update the service to use that revision.
+3. Confirm the service has restarted the tasks successfully.
 
-Once the issue is identified, you can immediately resolve by doing an **ECS rollback**: re-deploy the last working task definition revision so the service runs the old Docker image and old environment configuration. 
-
-
-Otherwise, **"roll back" by Git commit**: remove (or resolve) the introduced issue, commit, and deploy again. Alternatively, `git reset` to the last working commit and deploy again. Avoid `git revert`, if possible, to prevent merge conflicts down the line. 
+Otherwise, **"roll back" by Git commit**: branch off `production`, remove (or resolve) the introduced issue, commit, and merge back into `production` to deploy again. Then backmerge changes through `qa` and `main`. 
 
 ### Vercel Preview Links
 
