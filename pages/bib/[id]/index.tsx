@@ -1,5 +1,5 @@
 import type { SyntheticEvent } from "react"
-import { useState, useRef } from "react"
+import { useState, useRef, useMemo } from "react"
 import { useRouter } from "next/router"
 import {
   Heading,
@@ -70,18 +70,33 @@ export default function BibPage({
   errorStatus = null,
 }: BibPropsType) {
   const { push, query } = useRouter()
-  const [bib, setBib] = useState(
-    tryInstantiate({
-      constructor: Bib,
-      args: [discoveryBibResult],
-      ignoreError: !!errorStatus,
-      errorMessage: "Bib undefined",
-    })
+
+  const bib = useMemo(
+    () =>
+      tryInstantiate({
+        constructor: Bib,
+        args: [discoveryBibResult],
+        ignoreError: !!errorStatus,
+        errorMessage: "Bib undefined",
+      }),
+    [discoveryBibResult]
   )
 
   const metadataTitle = buildBibMetadataTitle(bib?.title)
   const [itemsLoading, setItemsLoading] = useState(false)
   const [itemFetchError, setItemFetchError] = useState(false)
+
+  // Just storing items in state, bib metadata doesn't need to be reactive
+  // const [itemsState, setItemsState] = useState({
+  //   itemTableData: bib.itemTableData ?? null,
+  //   itemAggregations: bib.itemAggregations ?? null,
+  //   numItems: bib.numItems(false),
+  // })
+  const [itemsState, setItemsState] = useState(() => ({
+    itemTableData: bib?.itemTableData ?? null,
+    itemAggregations: bib?.itemAggregations ?? null,
+    numItems: bib?.numItems(false) ?? 0,
+  }))
 
   const [viewAllExpanded, setViewAllExpanded] = useState(viewAllItems)
   const [appliedFilters, setAppliedFilters] = useState(
@@ -136,11 +151,9 @@ export default function BibPage({
         query: newQuery as ParsedUrlQueryInput,
       },
       undefined,
-      {
-        shallow: true,
-        scroll: false,
-      }
+      { shallow: true, scroll: false }
     )
+
     const bibQueryString = getBibQueryString(
       { ...newQuery, all_items: viewAllItems },
       false
@@ -153,28 +166,28 @@ export default function BibPage({
       }
       controllerRef.current = new AbortController()
       const signal = controllerRef.current.signal
+
       const response = await fetch(
         `${BASE_URL}/api/bib/${bib.id}${bibQueryString}`,
-        {
-          method: "get",
-          signal,
-        }
+        { method: "get", signal }
       )
-      if (response?.ok) {
-        const { discoveryBibResult } = await response.json()
-        setBib(new Bib(discoveryBibResult))
+      if (!response.ok) throw new Error("Item fetch failed")
+      const { discoveryBibResult: refreshedResult } = await response.json()
 
-        setItemsLoading(false)
+      const processedBib = new Bib(refreshedResult)
 
-        // TODO: This is a workaround to prevent the Displaying text from receiving focus when filters are controlled via a checkbox
-        // This is an accessibility issue that should be addressed when the dynamic refresh is replaced with a form and apply button
-        if (!updateFocusOnItemTableHeading)
-          setTimeout(() => {
-            itemTableHeadingRef.current?.focus()
-          }, FOCUS_TIMEOUT)
-      } else {
-        handleItemFetchError()
-      }
+      setItemsState({
+        itemTableData: processedBib.itemTableData ?? null,
+        itemAggregations: processedBib.itemAggregations ?? null,
+        numItems: processedBib.numItems(filtersAreApplied),
+      })
+
+      setItemsLoading(false)
+
+      // TODO: This is a workaround to prevent the Displaying text from receiving focus when filters are controlled via a checkbox
+      // This is an accessibility issue that should be addressed when the dynamic refresh is replaced with a form and apply button
+      if (!updateFocusOnItemTableHeading)
+        setTimeout(() => itemTableHeadingRef.current?.focus(), FOCUS_TIMEOUT)
     } catch (error) {
       console.log(error)
       if (error !== ERROR_MESSAGES.ITEM_REFETCH_ABORT_REASON)
@@ -191,9 +204,7 @@ export default function BibPage({
     newAppliedFilterQuery: ItemFilterQueryParams,
     updateFocusOnItemTableHeading = false
   ) => {
-    const newQuery = {
-      ...newAppliedFilterQuery,
-    } as BibQueryParams
+    const newQuery = { ...newAppliedFilterQuery } as BibQueryParams
     if (newQuery.item_page) delete newQuery.item_page
     setItemTablePage(1)
     setAppliedFilters(parseItemFilterQueryParams(newAppliedFilterQuery))
@@ -231,10 +242,13 @@ export default function BibPage({
             FINDING AID AVAILABLE
           </StatusBadge>
         )}
+
         <Heading level="h2" size="heading3" mb="-m">
           {bib.title}
         </Heading>
+
         <BibDetails key="top-details" details={topDetails} />
+
         <Box mt="s">
           {findingAid && (
             <FindingAid
@@ -248,7 +262,8 @@ export default function BibPage({
             />
           )}
         </Box>
-        {bib.showItemTable ? (
+
+        {bib.showItemTable && (
           <>
             <Heading
               data-testid="item-table-heading"
@@ -259,6 +274,7 @@ export default function BibPage({
             >
               Items in the library and offsite
             </Heading>
+
             <Banner
               content={
                 <Link
@@ -273,13 +289,15 @@ export default function BibPage({
               mb="s"
               className="no-print"
             />
+
             <ItemFilters
-              itemAggregations={bib.itemAggregations}
+              itemAggregations={itemsState.itemAggregations}
               handleFiltersChange={handleFiltersChange}
               appliedFilters={appliedFilters}
               filtersAreApplied={filtersAreApplied}
               showDateFilter={bib.hasItemDates}
             />
+
             <Box id="item-table">
               {itemsLoading ? (
                 <SkeletonLoader showImage={false} />
@@ -300,17 +318,19 @@ export default function BibPage({
                   >
                     {buildItemTableDisplayingString(
                       itemTablePage,
-                      bib.numItems(filtersAreApplied),
+                      itemsState.numItems,
                       viewAllExpanded,
                       filtersAreApplied
                     )}
                   </Heading>
-                  {bib.itemTableData ? (
-                    <ItemTable itemTableData={bib.itemTableData} />
-                  ) : null}
+
+                  {itemsState.itemTableData && (
+                    <ItemTable itemTableData={itemsState.itemTableData} />
+                  )}
                 </>
               )}
-              {bib.itemTableData ? (
+
+              {itemsState.itemTableData && (
                 <ItemTableControls
                   bib={bib}
                   viewAllExpanded={viewAllExpanded}
@@ -319,13 +339,14 @@ export default function BibPage({
                   handlePageChange={handlePageChange}
                   handleViewAllClick={handleViewAllClick}
                   viewAllLoadingTextRef={viewAllLoadingTextRef}
-                  numItemsTotal={bib.numItems(filtersAreApplied)}
+                  numItemsTotal={itemsState.numItems}
                   filtersAreApplied={filtersAreApplied}
                 />
-              ) : null}
+              )}
             </Box>
           </>
-        ) : null}
+        )}
+
         <Box mb="xl">
           <BibDetails
             heading="Holdings"
@@ -337,7 +358,7 @@ export default function BibPage({
             key="bottom-details"
             details={bottomDetails}
           />
-          {displayLegacyCatalogLink ? (
+          {displayLegacyCatalogLink && (
             <Link
               isExternal
               id="legacy-catalog-link"
@@ -347,7 +368,7 @@ export default function BibPage({
             >
               View in legacy catalog
             </Link>
-          ) : null}
+          )}
         </Box>
       </Layout>
     </>
@@ -364,17 +385,9 @@ export async function getServerSideProps({ params, query, req }) {
   if (!("discoveryBibResult" in results)) {
     if (results.status === 307)
       return {
-        redirect: {
-          destination: results.redirectUrl,
-          permanent: false,
-        },
+        redirect: { destination: results.redirectUrl, permanent: false },
       }
-    else
-      return {
-        props: {
-          errorStatus: results.status,
-        },
-      }
+    else return { props: { errorStatus: results.status } }
   }
 
   return {
