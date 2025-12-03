@@ -142,9 +142,9 @@ describe("Bib Details model", () => {
     it("builds standard fields", () => {
       expect(
         bibWithSupContentModel.bottomDetails.find(
-          (detail) => detail.label === "Genre/Form"
+          (detail) => detail.label === "Language"
         )
-      ).toStrictEqual({ label: "Genre/Form", value: ["Humorous fiction."] })
+      ).toStrictEqual({ label: "Language", value: ["English"] })
     })
   })
   describe("combined bottom details", () => {
@@ -154,7 +154,7 @@ describe("Bib Details model", () => {
       )
       expect(subject).toHaveLength(1)
       const genreForm = bibWithSupContentModel.bottomDetails.filter(
-        (detail) => detail.label === "Genre/Form"
+        (detail) => detail.label === "Genre/form"
       )
       expect(genreForm).toHaveLength(1)
     })
@@ -222,12 +222,12 @@ describe("Bib Details model", () => {
         },
       ])
       const donor = bibWithItemsModel.bottomDetails.filter(
-        (detail) => detail.label === "Donor/Sponsor"
+        (detail) => detail.label === "Donor/sponsor"
       )
       expect(donor).toStrictEqual([
         {
           link: "internal",
-          label: "Donor/Sponsor",
+          label: "Donor/sponsor",
           value: [
             {
               url: "/search?filters[donor][0]=Gift%20of%20the%20DeWitt%20Wallace%20Endowment%20Fund%2C%20named%20in%20honor%20of%20the%20founder%20of%20Reader's%20Digest",
