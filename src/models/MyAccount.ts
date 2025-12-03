@@ -353,6 +353,7 @@ export const MyAccountFactory = async (id: string, client) => {
     patronFetcher.getPatron(),
     patronFetcher.getFines(),
   ])
+  logger.info("MyAccountFactory results: temporary check", sierraData)
   const [pickupLocations, checkouts, holds, patron, fines] = sierraData.map(
     (data) => {
       if (data.status === "fulfilled") return data.value
