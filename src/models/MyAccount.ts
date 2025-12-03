@@ -13,6 +13,7 @@ import type {
   SierraBibEntry,
   BibDataMapType,
 } from "../types/myAccountTypes"
+import logger from "../../logger"
 
 import { buildPatron, formatDate } from "../utils/myAccountUtils"
 import { getPickupLocations } from "../utils/pickupLocationsUtils"
@@ -36,7 +37,7 @@ export default class MyAccount {
     try {
       return await this.client.get(`${this.baseQuery}/checkouts?expand=item`)
     } catch (e) {
-      console.error("fetch checkouts error: ", e.message)
+      logger.error("MyAccount#fetchCheckouts error:", e)
       throw new MyAccountModelError(
         "MyAccount#fetchCheckouts error: ",
         e.message
@@ -66,7 +67,7 @@ export default class MyAccount {
     try {
       holdBibData = await this.fetchBibData(holds.entries, "record")
     } catch (e) {
-      console.error("MyAccount#fetchBibData error: " + e.message || e)
+      logger.error("MyAccount#fetchBibData error: " + e.message || e)
     }
 
     const holdsWithBibData = this.buildHolds(holds.entries, holdBibData.entries)
@@ -196,7 +197,7 @@ export default class MyAccount {
     try {
       bibDataMap = MyAccount.buildBibData(bibData)
     } catch (e) {
-      console.error(
+      logger.error(
         "Error building bibData in MyAccount#buildHolds: " + e.message
       )
       throw new MyAccountModelError("building bibData for holds", e)
@@ -226,7 +227,7 @@ export default class MyAccount {
             : null,
         }
       } catch (e) {
-        console.error(
+        logger.error(
           "Error building hold in MyAccount#buildHolds: " + e.message
         )
         throw new MyAccountModelError("building holds", e)
@@ -242,7 +243,7 @@ export default class MyAccount {
     try {
       bibDataMap = MyAccount.buildBibData(bibData)
     } catch (e) {
-      console.error(
+      logger.error(
         "MyAccount#buildCheckouts: Error building bib data for checkouts: ",
         e.message
       )
