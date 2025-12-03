@@ -353,7 +353,19 @@ export const MyAccountFactory = async (id: string, client) => {
     patronFetcher.getPatron(),
     patronFetcher.getFines(),
   ])
-  logger.info("MyAccountFactory results: temporary check", sierraData)
+  const names = ["pickupLocations", "checkouts", "holds", "patron", "fines"]
+  console.log(
+    "MyAccountFactory data, temporary check:",
+    sierraData
+      .map((r, i) => {
+        const len =
+          r.status === "fulfilled" && r.value?.length !== undefined
+            ? r.value.length
+            : "n/a"
+        return `${names[i]}=${r.status}(len:${len})`
+      })
+      .join(" | ")
+  )
   const [pickupLocations, checkouts, holds, patron, fines] = sierraData.map(
     (data) => {
       if (data.status === "fulfilled") return data.value
