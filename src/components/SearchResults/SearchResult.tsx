@@ -51,7 +51,8 @@ const SearchResult = ({ bib }: SearchResultProps) => {
         border: "1px solid var(--ui-gray-medium, #BDBDBD)",
         paddingLeft: "m",
         paddingRight: "m",
-        paddingTop: "m",
+        paddingTop: "l",
+        paddingBottom: bib.itemTables?.length > 0 ? 0 : "m",
         "[data-body]": {
           width: "100% !important",
         },
@@ -100,10 +101,11 @@ const SearchResult = ({ bib }: SearchResultProps) => {
             ) : null}
           </Box>
         )}
-        {bib.itemTables && (
+        {bib.itemTables?.length > 0 && (
           <SimpleGrid
             columns={1}
             gap="grid.m"
+            mt="s"
             sx={{
               "*:first-of-type table": {
                 borderTop: "none !important",
