@@ -51,7 +51,6 @@ const SearchResult = ({ bib }: SearchResultProps) => {
         border: "1px solid var(--ui-gray-medium, #BDBDBD)",
         paddingLeft: "m",
         paddingRight: "m",
-        paddingBottom: "s",
         paddingTop: "m",
         "[data-body]": {
           width: "100% !important",
@@ -75,7 +74,6 @@ const SearchResult = ({ bib }: SearchResultProps) => {
           sx={{
             p: {
               display: "inline-block",
-              marginBottom: "s",
             },
           }}
         >
@@ -86,30 +84,34 @@ const SearchResult = ({ bib }: SearchResultProps) => {
             </>
           ))}
         </Box>
-        <Box width="100%">
-          {bib.findingAid ? (
-            <FindingAid
-              findingAidURL={bib.findingAid}
-              hasElectronicResources={bib.hasElectronicResources}
-            />
-          ) : null}
-          {bib.hasElectronicResources ? (
-            <ElectronicResourcesLink
-              bibUrl={bib.url}
-              electronicResources={bib.electronicResources}
-            />
-          ) : null}
-        </Box>
-        <SimpleGrid
-          columns={1}
-          gap="grid.m"
-          sx={{
-            "*:first-of-type table": {
-              borderTop: "none !important",
-            },
-          }}
-        >
-          {bib.itemTables && (
+        {(bib.findingAid || bib.hasElectronicResources) && (
+          <Box width="100%" mt="s">
+            {bib.findingAid ? (
+              <FindingAid
+                findingAidURL={bib.findingAid}
+                hasElectronicResources={bib.hasElectronicResources}
+              />
+            ) : null}
+            {bib.hasElectronicResources ? (
+              <ElectronicResourcesLink
+                bibUrl={bib.url}
+                electronicResources={bib.electronicResources}
+              />
+            ) : null}
+          </Box>
+        )}
+        {bib.itemTables && (
+          <SimpleGrid
+            columns={1}
+            gap="grid.m"
+            sx={{
+              "*:first-of-type table": {
+                borderTop: "none !important",
+                paddingTop: "xs !important",
+              },
+              paddingBottom: bib.showViewAllItemsLink() ? "s" : "m",
+            }}
+          >
             <>
               {bib.itemTables.map((itemTableData) => (
                 <SearchResultItems
@@ -117,25 +119,31 @@ const SearchResult = ({ bib }: SearchResultProps) => {
                   key={`search-results-item-${itemTableData.items[0].id}`}
                 />
               ))}
-              {bib.showViewAllItemsLink() && (
-                <CardActions>
-                  <Link
-                    href={`${bib.url}#item-table`}
-                    fontSize={{
-                      base: "mobile.body.body2",
-                      md: "desktop.body.body2",
-                    }}
-                    fontWeight="medium"
-                    variant="standalone"
-                  >
-                    {`View all ${bib.getNumItemsMessage()} `}
-                  </Link>
-                </CardActions>
-              )}
             </>
-          )}
-        </SimpleGrid>
+          </SimpleGrid>
+        )}
       </CardContent>
+      {bib.showViewAllItemsLink() && (
+        <CardActions
+          sx={{
+            paddingTop: "s",
+            paddingBottom: "s",
+            borderTop: "1px dashed var(--ui-gray-medium, #BDBDBD)",
+          }}
+        >
+          <Link
+            href={`${bib.url}#item-table`}
+            fontSize={{
+              base: "mobile.body.body2",
+              md: "desktop.body.body2",
+            }}
+            fontWeight="medium"
+            variant="standalone"
+          >
+            {`View all ${bib.getNumItemsMessage()} `}
+          </Link>
+        </CardActions>
+      )}
     </Card>
   )
 }

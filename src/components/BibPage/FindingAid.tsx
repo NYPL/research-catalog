@@ -23,6 +23,7 @@ const FindingAid = ({
       data-testid="collection-information"
       p="s"
       marginBottom="s"
+      borderRadius="8px"
     >
       <CardHeading level="four" size="body1" mb="xs">
         Collection information
