@@ -195,7 +195,13 @@ const ItemFilters = ({
 
   return (
     <>
-      <Box p="m" bg="ui.gray.x-light-cool" mb="m" className="no-print">
+      <Box
+        p="m"
+        bg="ui.bg.default"
+        mb="m"
+        borderRadius="8px"
+        className="no-print"
+      >
         <FilterBarInline
           id="item-filters-container"
           data-testid="item-filters-container"
