@@ -15,10 +15,11 @@ const SearchResultItems = ({ itemTableData }: SearchResultItemsProps) => {
     <Box display="grid">
       <table
         style={{
-          marginBottom: "20px",
           width: "100%",
+          paddingTop: "24px",
           borderCollapse: "separate",
           borderSpacing: "0 4px",
+          borderTop: "1px dashed var(--ui-gray-medium, #BDBDBD)",
         }}
       >
         <tbody>

@@ -7,6 +7,7 @@ import {
   CardActions,
   SimpleGrid,
   StatusBadge,
+  Icon,
 } from "@nypl/design-system-react-components"
 import Link from "../Link/Link"
 import ElectronicResourcesLink from "./ElectronicResourcesLink"
@@ -23,11 +24,35 @@ interface SearchResultProps {
  * The SearchResult component displays a single search result element.
  */
 const SearchResult = ({ bib }: SearchResultProps) => {
+  const separatingDot = (
+    <Icon size="xxsmall" ml="xs" mr="xs" pb="xxs">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="4"
+        height="4"
+        viewBox="0 0 4 4"
+        fill="#000"
+      >
+        <circle cx="2" cy="2" r="2" fill="#000" />
+      </svg>
+    </Icon>
+  )
+  const metadata = [
+    bib.format,
+    bib.publicationStatement,
+    bib.yearPublished,
+    bib.getNumItemsMessage(),
+  ].filter(Boolean)
+
   return (
     <Card
       sx={{
-        borderBottom: "1px solid var(--nypl-colors-ui-border-default)",
-        paddingBottom: "l",
+        borderRadius: "8px",
+        border: "1px solid var(--ui-gray-medium, #BDBDBD)",
+        paddingLeft: "m",
+        paddingRight: "m",
+        paddingBottom: "s",
+        paddingTop: "m",
         "[data-body]": {
           width: "100% !important",
         },
@@ -40,7 +65,7 @@ const SearchResult = ({ bib }: SearchResultProps) => {
       >
         {bib.findingAid && (
           <StatusBadge variant="informative" mb="s">
-            FINDING AID AVAILABLE
+            Finding aid available
           </StatusBadge>
         )}
         <Link href={`${PATHS.BIB}/${bib.id}`}>{bib.titleDisplay}</Link>
@@ -48,13 +73,18 @@ const SearchResult = ({ bib }: SearchResultProps) => {
       <CardContent data-testid="card-content">
         <Box
           sx={{
-            p: { display: "inline-block", marginRight: "s", marginBottom: "s" },
+            p: {
+              display: "inline-block",
+              marginBottom: "s",
+            },
           }}
         >
-          {bib.format && <Text>{bib.format}</Text>}
-          {bib.publicationStatement && <Text>{bib.publicationStatement}</Text>}
-          {bib.yearPublished && <Text>{bib.yearPublished}</Text>}
-          <Text>{bib.getNumItemsMessage()}</Text>
+          {metadata.map((piece, index) => (
+            <>
+              <Text key={index}>{piece}</Text>
+              {index < metadata.length - 1 && separatingDot}
+            </>
+          ))}
         </Box>
         <Box width="100%">
           {bib.findingAid ? (
@@ -70,7 +100,15 @@ const SearchResult = ({ bib }: SearchResultProps) => {
             />
           ) : null}
         </Box>
-        <SimpleGrid columns={1} gap="grid.m">
+        <SimpleGrid
+          columns={1}
+          gap="grid.m"
+          sx={{
+            "*:first-of-type table": {
+              borderTop: "none !important",
+            },
+          }}
+        >
           {bib.itemTables && (
             <>
               {bib.itemTables.map((itemTableData) => (
