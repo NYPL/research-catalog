@@ -25,6 +25,7 @@ interface SearchResultProps {
  */
 const SearchResult = ({ bib }: SearchResultProps) => {
   const separatingDot = (
+    // @ts-ignore
     <Icon size="xxsmall" ml="xs" mr="xs" pb="xxs">
       <svg
         xmlns="http://www.w3.org/2000/svg"
