@@ -232,7 +232,7 @@ export default function BibPage({
         </Box>
         {findingAid && (
           <StatusBadge mb="s" variant="informative">
-            FINDING AID AVAILABLE
+            Finding aid available
           </StatusBadge>
         )}
         <Heading level="h2" size="heading3" mb="-m">

@@ -48,7 +48,14 @@ const ElectronicResources = ({
   }
 
   return (
-    <Card ref={scrollToRef} isBordered data-testid="electronic-resources">
+    <Card
+      ref={scrollToRef}
+      data-testid="electronic-resources"
+      bg="ui.bg.default"
+      p="s"
+      marginBottom="s"
+      borderRadius="8px"
+    >
       <CardHeading level="four" size="body1" mb="xs">
         Available online
       </CardHeading>

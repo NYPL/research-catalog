@@ -15,10 +15,11 @@ const SearchResultItems = ({ itemTableData }: SearchResultItemsProps) => {
     <Box display="grid">
       <table
         style={{
-          marginBottom: "20px",
           width: "100%",
+          paddingTop: "24px",
+          marginBottom: "20px",
           borderCollapse: "separate",
-          borderSpacing: "0 4px",
+          borderTop: "1px dashed var(--nypl-colors-ui-bg-active)",
         }}
       >
         <tbody>
@@ -46,7 +47,6 @@ const SearchResultItems = ({ itemTableData }: SearchResultItemsProps) => {
           ))}
         </tbody>
       </table>
-
       <StatusLinks item={items[0]} />
     </Box>
   )

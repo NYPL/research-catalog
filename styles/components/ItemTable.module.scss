@@ -2,6 +2,10 @@
   margin-top: var(--nypl-space-m);
   margin-bottom: var(--nypl-space-s);
 
+  tbody > tr > td {
+    border-style: dashed !important;
+  }
+
   tr {
     td:first-of-type,
     th:first-of-type {
@@ -14,6 +18,7 @@
     }
 
     th {
+      border-style: dashed !important;
       padding-top: 0;
       padding-bottom: var(--nypl-space-xxs);
     }
