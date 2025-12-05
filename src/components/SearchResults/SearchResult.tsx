@@ -131,7 +131,7 @@ const SearchResult = ({ bib }: SearchResultProps) => {
           sx={{
             paddingTop: "s",
             paddingBottom: "s",
-            borderTop: "1px dashed var(--ui-gray-medium, #BDBDBD)",
+            borderTop: "1px dashed var(--nypl-colors-ui-bg-active)",
           }}
         >
           <Link

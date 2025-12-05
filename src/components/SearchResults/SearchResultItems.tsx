@@ -19,7 +19,7 @@ const SearchResultItems = ({ itemTableData }: SearchResultItemsProps) => {
           paddingTop: "24px",
           marginBottom: "20px",
           borderCollapse: "separate",
-          borderTop: "1px dashed var(--ui-gray-medium, #BDBDBD)",
+          borderTop: "1px dashed var(--nypl-colors-ui-bg-active)",
         }}
       >
         <tbody>
