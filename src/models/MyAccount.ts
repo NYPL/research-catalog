@@ -140,6 +140,11 @@ export default class MyAccount {
     return { bibEntries, itemVarFieldsMap }
   }
 
+  /**
+   * getResearchAndOwnership
+   * Reads varFields of a item-level hold's bib data to return if it is a research item,
+   * and if it is owned by NYPL.
+   */
   static getResearchAndOwnership(bibFields) {
     // We don't fetch varfields for bib level holds. Bib level holds only happen
     // on circ, and therefore NYPL records.
