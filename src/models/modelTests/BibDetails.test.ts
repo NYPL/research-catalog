@@ -260,7 +260,7 @@ describe("Bib Details model", () => {
         value: [
           {
             urlLabel: "Watson, Tom, 1965-",
-            url: "/search?filters[creatorLiteral][0]=Watson%2C%20Tom%2C%201965-",
+            url: "/search?filters[contributorLiteral][0]=Watson%2C%20Tom%2C%201965-",
           },
         ],
       })

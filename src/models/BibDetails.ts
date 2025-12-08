@@ -314,6 +314,11 @@ export default class BibDetails {
           case "subjectLiteral":
             internalUrl = `/browse/subjects/${encodeURIComponent(v)}`
             break
+          case "creatorLiteral":
+            internalUrl = `/search?filters[contributorLiteral][0]=${encodeURIComponent(
+              v
+            )}`
+            break
           default:
             internalUrl = `/search?filters[${field}][0]=${encodeURIComponent(
               v
