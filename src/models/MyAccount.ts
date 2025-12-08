@@ -133,7 +133,7 @@ export default class MyAccount {
           itemVarFieldsMap[item.id] = item.varFields || []
         })
       } catch (e) {
-        throw new Error(`Error fetching bib or item data: ${e}`)
+        throw new Error(`Error fetching bib/item data: ${e}`)
       }
     }
 
@@ -242,7 +242,7 @@ export default class MyAccount {
           hold.recordType === "i" ? hold.record.bibIds[0] : hold.record.id
         const bibForHold = bibDataMap[bibId]
         const itemVarFields = itemVarFieldsMap[hold.record.id] || []
-        const volume = MyAccount.getItemVolume(itemVarFields)
+        const volumeForItem = MyAccount.getItemVolume(itemVarFields)
 
         return {
           itemId: hold.record.id,
@@ -253,7 +253,9 @@ export default class MyAccount {
           frozen: hold.frozen,
           status: MyAccount.getHoldStatus(hold.status),
           pickupLocation: hold.pickupLocation,
-          title: `${bibForHold.title} ${volume ?? ""}`,
+          title: `${bibForHold.title}${
+            volumeForItem ? ` ${volumeForItem}` : ""
+          }`,
           isResearch: bibForHold.isResearch,
           bibId,
           isNyplOwned: bibForHold.isNyplOwned,
@@ -293,7 +295,7 @@ export default class MyAccount {
           const bibId = checkout.item.bibIds[0]
           const bibForCheckout = bibDataMap[bibId]
           const itemVarFields = itemVarFieldsMap[checkout.item.id] || []
-          const volume = MyAccount.getItemVolume(itemVarFields)
+          const volumeForItem = MyAccount.getItemVolume(itemVarFields)
           return {
             numberOfRenewals: checkout.numberOfRenewals,
             id: MyAccount.getRecordId(checkout.id),
@@ -303,7 +305,9 @@ export default class MyAccount {
             barcode: checkout.item.barcode,
             dueDate: MyAccount.formatDate(checkout.dueDate),
             patron: MyAccount.getRecordId(checkout.patron),
-            title: `${bibForCheckout.title} ${volume ?? ""}`,
+            title: `${bibForCheckout.title}${
+              volumeForItem ? ` ${volumeForItem}` : ""
+            }`,
             isResearch: bibForCheckout.isResearch,
             bibId: bibId,
             isNyplOwned: bibForCheckout.isNyplOwned,
