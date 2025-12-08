@@ -47,12 +47,11 @@ export default class MyAccount {
 
   async getCheckouts() {
     const checkouts = await this.fetchCheckouts()
-    const checkoutBibData = await this.fetchBibData(checkouts.entries, "item")
-    const checkoutsWithBibData = this.buildCheckouts(
+    const { bibEntries, itemVarFieldsMap } = await this.fetchBibItemData(
       checkouts.entries,
-      checkoutBibData.entries
+      "item"
     )
-    return checkoutsWithBibData
+    return this.buildCheckouts(checkouts.entries, bibEntries, itemVarFieldsMap)
   }
 
   async fetchHolds() {
@@ -63,16 +62,17 @@ export default class MyAccount {
 
   async getHolds() {
     const holds = await this.fetchHolds()
-    let holdBibData
-    try {
-      holdBibData = await this.fetchBibData(holds.entries, "record")
-    } catch (e) {
-      logger.error("MyAccount#fetchBibData error: " + e.message || e)
-    }
 
-    const holdsWithBibData = this.buildHolds(holds.entries, holdBibData.entries)
-    const sortedHolds = MyAccount.sortHolds(holdsWithBibData)
-    return sortedHolds
+    const { bibEntries, itemVarFieldsMap } = await this.fetchBibItemData(
+      holds.entries,
+      "record"
+    )
+    const holdsWithBibData = this.buildHolds(
+      holds.entries,
+      bibEntries,
+      itemVarFieldsMap
+    )
+    return MyAccount.sortHolds(holdsWithBibData)
   }
 
   async fetchPatron() {
@@ -95,39 +95,50 @@ export default class MyAccount {
     return this.buildFines(fines)
   }
 
-  async fetchBibData(
+  async fetchBibItemData(
     holdsOrCheckouts: (SierraHold | SierraCheckout)[],
     itemOrRecord: "item" | "record"
   ): Promise<{
     total?: number
     start?: number
-    entries: SierraBibEntry[]
+    bibEntries: SierraBibEntry[]
+    itemVarFieldsMap: Record<string, any[]>
   }> {
-    if (!holdsOrCheckouts?.length) return { entries: [] }
+    if (!holdsOrCheckouts?.length)
+      return { bibEntries: [], itemVarFieldsMap: {} }
 
     const { bibLevelHolds, itemLevelHoldsorCheckouts } =
       MyAccount.filterBibLevelHolds(holdsOrCheckouts, itemOrRecord)
 
-    const bibData = { entries: bibLevelHolds }
-    let itemLevelBibData: { entries: SierraBibEntry[] }
+    const bibEntries = [...bibLevelHolds]
+    const itemVarFieldsMap: Record<string, any[]> = {}
+
     if (itemLevelHoldsorCheckouts.length) {
       try {
-        itemLevelBibData = await this.client.get(
-          `bibs?id=${itemLevelHoldsorCheckouts}&fields=default,varFields`
+        // Fetch bibs
+        const itemLevelBibData = await this.client.get(
+          `bibs?id=${itemLevelHoldsorCheckouts.map(
+            (x) => x.bibId
+          )}&fields=default,varFields`
         )
-      } catch (e) {
-        throw `error getting bibs?id=${itemLevelHoldsorCheckouts}&fields=default,varFields`
-      }
-      bibData.entries = bibData.entries.concat(itemLevelBibData.entries)
-    }
-    return bibData
-  }
+        bibEntries.push(...itemLevelBibData.entries)
 
-  /**
-   * getBibVarFields
-   * Reads varFields of a item-level hold's bib data to return if it is a research item,
-   * and if it is owned by NYPL.
-   */
+        // Fetch item-level varFields to get volume
+        const itemIds = itemLevelHoldsorCheckouts.map((x) => x.itemId)
+        const itemLevelData = await this.client.get(
+          `items?id=${itemIds}&fields=varFields`
+        )
+
+        itemLevelData.entries.forEach((item) => {
+          itemVarFieldsMap[item.id] = item.varFields || []
+        })
+      } catch (e) {
+        throw new Error(`Error fetching bib or item data: ${e}`)
+      }
+    }
+
+    return { bibEntries, itemVarFieldsMap }
+  }
 
   static getResearchAndOwnership(bibFields) {
     // We don't fetch varfields for bib level holds. Bib level holds only happen
@@ -152,32 +163,51 @@ export default class MyAccount {
     return { isResearch: true, isNyplOwned: false }
   }
 
+  static getItemVolume(itemVarFields) {
+    const volume = itemVarFields.find((field) => field.fieldTag === "v")
+    return volume?.content ?? null
+  }
+
   static filterBibLevelHolds(
     holdsOrCheckouts: (SierraHold | SierraCheckout)[],
     itemOrRecord: "item" | "record"
   ) {
-    const itemLevelHoldsorCheckouts = []
+    const itemLevelHoldsorCheckouts: { itemId: string; bibId: string }[] = []
     const bibLevelHolds = []
-    holdsOrCheckouts.forEach((holdOrCheckout) => {
-      const isItemLevel = holdOrCheckout[itemOrRecord].bibIds
-      if (isItemLevel) {
-        itemLevelHoldsorCheckouts.push(holdOrCheckout[itemOrRecord].bibIds[0])
-      } else {
-        bibLevelHolds.push((holdOrCheckout as SierraHold).record)
+
+    holdsOrCheckouts.forEach((hc) => {
+      if (itemOrRecord === "record" && "record" in hc) {
+        const isItemLevel = hc.record.bibIds?.length
+        if (isItemLevel) {
+          itemLevelHoldsorCheckouts.push({
+            itemId: hc.record.id,
+            bibId: hc.record.bibIds[0],
+          })
+        } else {
+          bibLevelHolds.push(hc.record)
+        }
+      } else if (itemOrRecord === "item" && "item" in hc) {
+        const isItemLevel = hc.item.bibIds?.length
+        if (isItemLevel) {
+          itemLevelHoldsorCheckouts.push({
+            itemId: hc.item.id,
+            bibId: hc.item.bibIds[0],
+          })
+        }
       }
     })
+
     return { bibLevelHolds, itemLevelHoldsorCheckouts }
   }
 
-  static buildBibData(bibs: SierraBibEntry[]): BibDataMapType {
-    return bibs.reduce((bibDataMap: BibDataMapType, bibFields) => {
-      const { isResearch, isNyplOwned } =
-        this.getResearchAndOwnership(bibFields)
-      const title = `${bibFields.title}${
-        bibFields.author && isNyplOwned ? ` / ${bibFields.author}` : ""
+  static buildBibData(bibs): BibDataMapType {
+    return bibs.reduce((map: BibDataMapType, bib) => {
+      const { isResearch, isNyplOwned } = this.getResearchAndOwnership(bib)
+      const title = `${bib.title}${
+        bib.author && isNyplOwned ? ` / ${bib.author}` : ""
       }`
-      bibDataMap[bibFields.id] = { title, isResearch, isNyplOwned }
-      return bibDataMap
+      map[bib.id] = { title, isResearch, isNyplOwned }
+      return map
     }, {})
   }
 
@@ -192,7 +222,11 @@ export default class MyAccount {
     return [...sortedHoldsWithDates, ...holdsWithNoPickupByDates]
   }
 
-  buildHolds(holds: SierraHold[], bibData: SierraBibEntry[]): Hold[] {
+  buildHolds(
+    holds: SierraHold[],
+    bibData: SierraBibEntry[],
+    itemVarFieldsMap: Record<string, any[]>
+  ): Hold[] {
     let bibDataMap: BibDataMapType
     try {
       bibDataMap = MyAccount.buildBibData(bibData)
@@ -207,6 +241,9 @@ export default class MyAccount {
         const bibId =
           hold.recordType === "i" ? hold.record.bibIds[0] : hold.record.id
         const bibForHold = bibDataMap[bibId]
+        const itemVarFields = itemVarFieldsMap[hold.record.id] || []
+        const volume = MyAccount.getItemVolume(itemVarFields)
+
         return {
           itemId: hold.record.id,
           patron: MyAccount.getRecordId(hold.patron),
@@ -216,7 +253,7 @@ export default class MyAccount {
           frozen: hold.frozen,
           status: MyAccount.getHoldStatus(hold.status),
           pickupLocation: hold.pickupLocation,
-          title: bibForHold.title,
+          title: `${bibForHold.title} ${volume ?? ""}`,
           isResearch: bibForHold.isResearch,
           bibId,
           isNyplOwned: bibForHold.isNyplOwned,
@@ -237,7 +274,8 @@ export default class MyAccount {
 
   buildCheckouts(
     checkouts: SierraCheckout[],
-    bibData: SierraBibEntry[]
+    bibData: SierraBibEntry[],
+    itemVarFieldsMap: Record<string, any[]> = {}
   ): Checkout[] {
     let bibDataMap: BibDataMapType
     try {
@@ -254,6 +292,8 @@ export default class MyAccount {
         .map((checkout: SierraCheckout) => {
           const bibId = checkout.item.bibIds[0]
           const bibForCheckout = bibDataMap[bibId]
+          const itemVarFields = itemVarFieldsMap[checkout.item.id] || []
+          const volume = MyAccount.getItemVolume(itemVarFields)
           return {
             numberOfRenewals: checkout.numberOfRenewals,
             id: MyAccount.getRecordId(checkout.id),
@@ -263,7 +303,7 @@ export default class MyAccount {
             barcode: checkout.item.barcode,
             dueDate: MyAccount.formatDate(checkout.dueDate),
             patron: MyAccount.getRecordId(checkout.patron),
-            title: bibForCheckout.title,
+            title: `${bibForCheckout.title} ${volume ?? ""}`,
             isResearch: bibForCheckout.isResearch,
             bibId: bibId,
             isNyplOwned: bibForCheckout.isNyplOwned,
