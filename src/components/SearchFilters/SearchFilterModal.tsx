@@ -31,7 +31,7 @@ const SearchFilterModal = ({
 
   const handleClear = () => {
     router.push({
-      pathname: "/search",
+      pathname: router.pathname,
       query: getQueryWithoutFiltersOrPage(router.query),
     })
     onClose()
@@ -50,7 +50,7 @@ const SearchFilterModal = ({
       </Button>
 
       <ChakraModal
-        id={"modal"}
+        id="modal"
         scrollBehavior="inside"
         size={{ base: "full", md: "xl" }}
         isOpen={isOpen}
@@ -85,7 +85,7 @@ const SearchFilterModal = ({
             <Button
               aria-label="Close"
               id="close-btn"
-              buttonType="text"
+              variant="text"
               onClick={onClose}
             >
               {" "}
@@ -118,7 +118,7 @@ const SearchFilterModal = ({
               </Button>
               <Button
                 id="clear-filters"
-                buttonType="secondary"
+                variant="secondary"
                 onClick={() => handleClear()}
               >
                 Clear all filters

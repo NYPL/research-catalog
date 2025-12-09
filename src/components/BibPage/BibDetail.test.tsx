@@ -1,4 +1,5 @@
 // import userEvent from "@testing-library/user-event"
+import userEvent from "@testing-library/user-event"
 import {
   bibWithSupplementaryContent,
   bibWithFindingAidAndTOC,
@@ -42,7 +43,7 @@ describe("BibDetail component", () => {
       expect(screen.getByText("Series statement")).toBeInTheDocument()
       expect(screen.queryAllByText(/Haute enfance/)[0]).toBeInTheDocument()
     })
-    it("merges annotated MARC and resource fields without duplicates", () => {
+    it("merges annotated MARC and resource fields without label duplicates", () => {
       const combinedDetails = noParallelsBibModel.bottomDetails
       const labels = combinedDetails.map((d) => d.label)
       const labelCounts = labels.reduce((acc, label) => {
@@ -54,9 +55,25 @@ describe("BibDetail component", () => {
         expect(count).toBeLessThanOrEqual(1)
       })
     })
+    it("merges annotated MARC and resource fields without value duplicates", () => {
+      const combinedDetails = noParallelsBibModel.bottomDetails
+      const allValues = combinedDetails.flatMap((d) => {
+        // drop subjects, they don't need to be assessed for duplication
+        if (d.label === "Subject") return []
+        return Array.isArray(d.value) ? d.value.map(String) : [String(d.value)]
+      })
+      const valueCounts = allValues.reduce((acc, value) => {
+        acc[value] = (acc[value] || 0) + 1
+        return acc
+      }, {} as Record<string, number>)
+
+      Object.entries(valueCounts).forEach(([value, count]) => {
+        expect(count).toBeLessThanOrEqual(1)
+      })
+    })
   })
   describe("text only details", () => {
-    it("single value", () => {
+    it("single value: title", () => {
       render(<BibDetails details={noParallelsBibModel.topDetails} />, {
         wrapper: MemoryRouterProvider,
       })
@@ -64,6 +81,15 @@ describe("BibDetail component", () => {
       const title = screen.getByText("Spaghetti! / Gérard de Cortanze.")
       expect(titleLabel).toBeInTheDocument()
       expect(title).toBeInTheDocument()
+    })
+    it("single value: format", () => {
+      render(<BibDetails details={noParallelsBibModel.topDetails} />, {
+        wrapper: MemoryRouterProvider,
+      })
+      const formatLabel = screen.getByText("Format")
+      const format = screen.getByText("Text")
+      expect(formatLabel).toBeInTheDocument()
+      expect(format).toBeInTheDocument()
     })
     it("renders multiple values, primaries and orphaned parallels", () => {
       render(<BibDetails details={parallelsBibModel.topDetails} />)
@@ -81,14 +107,13 @@ describe("BibDetail component", () => {
       expect(creatorLiteralLink).toHaveAttribute(
         "href",
         expect.stringContaining(
-          "/search?filters[creatorLiteral][0]=Cortanze,%20G%C3%A9rard%20de."
+          "/search?filters[creatorLiteral][0]=Cortanze%2C%20G%C3%A9rard%20de."
         )
       )
-      // @TODO: This will work once the Nextjs `Link` component is used again
-      // await userEvent.click(creatorLiteralLink)
-      // expect(mockRouter.asPath).toBe(
-      //   "/search?filters%5BcreatorLiteral%5D%5B0%5D=Cortanze%2C+G%C3%A9rard+de."
-      // )
+      await userEvent.click(creatorLiteralLink)
+      expect(mockRouter.asPath).toBe(
+        "/search?filters%5BcreatorLiteral%5D%5B0%5D=Cortanze%2C+G%C3%A9rard+de."
+      )
     })
     it("renders external links", async () => {
       render(<BibDetails details={supplementaryContentModel.topDetails} />, {
@@ -106,44 +131,15 @@ describe("BibDetail component", () => {
       })
       expect(screen.queryByText("Finding aid")).not.toBeInTheDocument()
     })
-  })
-  describe("subject heading links", () => {
-    let subjectHeadings
-    beforeEach(() => {
+
+    it("renders Subject field with index links", () => {
       render(<BibDetails details={noParallelsBibModel.bottomDetails} />, {
         wrapper: MemoryRouterProvider,
       })
-      subjectHeadings = screen.getAllByTestId("subject-links-per")
-    })
-    it("renders subject link groups per subject literal", () => {
-      expect(subjectHeadings).toHaveLength(
-        noParallelsBibModel.bib.subjectLiteral.length
-      )
-    })
-    it("splits individual subject headings with divider", () => {
-      const greaterThanSigns = screen.getAllByTestId("divider")
-      const numberOfDividersInSubjectLiteral = 3
-      expect(greaterThanSigns).toHaveLength(numberOfDividersInSubjectLiteral)
-    })
-    xit("links to stacked subject headings", () => {
-      const authorsSubject = screen.getByText("Authors, French")
-      const authors20Subject = screen.getByText("20th century")
-      const authors20BioSubject = screen.getByText("Biography")
-      expect(authorsSubject).toHaveAttribute(
+      const browseLink = screen.getAllByText("[Browse in index]")[0]
+      expect(browseLink).toHaveAttribute(
         "href",
-        `/search?filters[subjectLiteral]=${encodeURI("Authors, French")}`
-      )
-      expect(authors20Subject).toHaveAttribute(
-        "href",
-        `/search?filters[subjectLiteral]=${encodeURI(
-          "Authors, French -- 20th century"
-        )}`
-      )
-      expect(authors20BioSubject).toHaveAttribute(
-        "href",
-        `/search?filters[subjectLiteral]=${encodeURI(
-          "Authors, French -- 20th century -- Biography"
-        )}`
+        expect.stringContaining("/browse?q=")
       )
     })
   })

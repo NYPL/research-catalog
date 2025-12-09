@@ -2,9 +2,15 @@ import {
   getFeedbackEmailText,
   getFeedbackEmailHTML,
   getEmailParams,
+  maskEmail,
 } from "../feedbackUtils"
 
 describe("feedbackUtils", () => {
+  describe("maskEmail", () => {
+    it("parses and returns a masked email", () => {
+      expect(maskEmail("spaghetti@nypl.org")).toBe("s********@nypl.org")
+    })
+  })
   describe("getFeedbackEmailText", () => {
     it("correctly formats the feedback email text given a full url and a fields object", () => {
       expect(

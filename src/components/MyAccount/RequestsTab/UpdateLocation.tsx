@@ -6,7 +6,7 @@ import {
   Text,
   Button,
   Select,
-  Link as DSLink,
+  Link,
   type DefaultModalProps,
   type BaseModalProps,
   SkeletonLoader,
@@ -81,7 +81,7 @@ const UpdateLocation = ({
   }
 
   const selectLocationModalProps = {
-    type: "default",
+    variant: "default",
     bodyContent: (
       <Form
         id={`update-pickup-location-hold-${hold.id}`}
@@ -133,7 +133,7 @@ const UpdateLocation = ({
   )
 
   const successModalProps = (newLocation) => ({
-    type: "default",
+    variant: "default",
     bodyContent: (
       <Box className={styles.modalBody}>
         <Text>
@@ -166,14 +166,12 @@ const UpdateLocation = ({
     },
   })
   const failureModalProps = {
-    type: "default",
+    variant: "default",
     bodyContent: (
       <Box className={styles.modalBody}>
         <Text>
           We were unable to change the pickup location. Please contact{" "}
-          <DSLink href="https://www.nypl.org/get-help/contact-us">
-            AskNYPL
-          </DSLink>{" "}
+          <Link href="https://www.nypl.org/get-help/contact-us">AskNYPL</Link>{" "}
           for further assistance.
         </Text>
       </Box>
@@ -210,7 +208,7 @@ const UpdateLocation = ({
         pl={0}
         onClick={openModal}
         id={`update-pickup-location-${key}`}
-        buttonType="text"
+        variant="text"
         data-testid="change-location-button"
       >
         <Icon name="editorMode" align="left" size="medium"></Icon>

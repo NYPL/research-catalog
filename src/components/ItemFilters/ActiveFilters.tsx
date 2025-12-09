@@ -9,14 +9,17 @@ const ActiveFilters = ({ filterName, onClick, tagSetData }) => {
       mt="xxs"
     >
       <Text
+        as="h3"
         display="block"
         id="active-filters-heading"
         // @ts-expect-error
-        tabIndex="0"
+        tabIndex="-1"
         fontSize="desktop.body.body2"
         fontWeight="bold"
         mr={{ base: "0", md: "s" }}
         mb={{ base: "xs", md: "0" }}
+        pt="xxs"
+        whiteSpace="nowrap"
         lineHeight="--nypl-lineHeights-taller"
       >
         Active filters
@@ -24,7 +27,7 @@ const ActiveFilters = ({ filterName, onClick, tagSetData }) => {
       <TagSet
         id={`${filterName}-applied-filters`}
         isDismissible
-        type="filter"
+        variant="filter"
         onClick={onClick}
         tagSetData={tagSetData}
       />

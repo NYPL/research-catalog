@@ -17,17 +17,17 @@ const HoldRequestItemDetails = ({ item }: HoldRequestItemDetailsProps) => {
   return (
     <List
       noStyling
-      type="dl"
+      variant="dl"
       showRowDividers={false}
       className={bibDetailStyles.bibDetails}
       mb="l"
       mt={0}
     >
-      <LinkedDetailElement
-        label="Title"
-        value={[{ url: `${PATHS.BIB}/${item.bibId}`, urlLabel: item.bibTitle }]}
-        link="internal"
-      />
+      {LinkedDetailElement({
+        label: "Title",
+        value: [{ url: `${PATHS.BIB}/${item.bibId}`, urlLabel: item.bibTitle }],
+        link: "internal",
+      })}
       <PlainTextElement label="Call number" value={[item.callNumber]} />
       {item.volume ? (
         <PlainTextElement label="Volume/date" value={[item.volume]} />

@@ -7,9 +7,180 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+## Removed
+
+- Removed batched item fetch on bibs since `all_items` param is supported (SCC-4183)(https://newyorkpubliclibrary.atlassian.net/browse/SCC-4183)
+- Removed Adobe Analytics and reverse proxy/SHEP environment variables [SCC-5036](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5036)
+
+## [1.6.1] 2025-11-13
+
+### Updated
+
+- Updated landing page text with legacy deprecation info [SCC-5006](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5006)
+
+## [1.6.0] 2025-11-13
+
+### Updated
+
+- Updated error handling to standardize across API handlers and reflect improved Discovery API errors [SCC-4931](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4931)
+- Updated variant preferred term links to index pages [SCC-4947](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4947)
+- Updated subject related term links to index pages [SCC-4933](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4933)
+- Updated subject heading links in bib details [SCC-4800](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4800)
+- Updatex subject filter to only display if there's a query [SCC-4886](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4886)
+- Updated `RCLink` to `Link`, using Next Link, allowing clientside routing [SCC-4874](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4886)
+
 ## Added
 
-- Added Playwright, the end-to-end testing framework for automating and verifying browser interactions across Chromium, Firefox, and WebKit. [SCC-4772] (https://newyorkpubliclibrary.atlassian.net/browse/SCC-4772)
+- Added middleware to redirect deprecated SHEP URLs [SCC-5023](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5023)
+- Added subject heading filtered bib results to `browse/subjects/[...slug]` page [SCC-4815](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4815)
+- Added pagination to browse index [SCC-4572](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4572)
+- Added `ResultsSort` to browse index [SCC-4571](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4571)
+- Added `SubjectHeadingBanner` to browse page [SCC-4569](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4569)
+- Added `BrowseForm` and updated `Layout` and `RCSubNav` to use it [SCC-4568](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4568)
+- Added `SubjectTable` and table cells [SCC-4570](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4570)
+- Added `VariantSubject` and `PreferredSubject` models [SCC-3727](https://newyorkpubliclibrary.atlassian.net/browse/SCC-3727)
+- Added `fetchSubjects` API handler for `browse` index page [SCC-4774](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4774)
+- Added `browse` and `browse/subjects/[...slug]` pages and page types, set up deployment of EB work to `train` [SCC-4554](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4554)
+
+## Removed
+
+- Removed reverse proxy environment variable and documentation [SCC-4874](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4886)
+
+## [1.5.9] 2025-11-12
+
+### Updated
+
+- Replaced date filter UI and error validation [SCC-4978](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4978)
+- Replaced "off-site"/"on-site" with "offsite"/"onsite" in user-facing text [SCC-4996](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4996)
+
+### Added
+
+- Added New Relic plus corresponding environment variables [SCC-4955](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4955)
+
+## [1.5.8] 2025-11-10
+
+### Updated
+
+- Updated error handling to standardize across API handlers and reflect improved Discovery API errors [SCC-4931](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4931)
+- Reordered top details on bib page [SCC-4956](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4956)
+- Updated KMS decryption to use `aws-sdk` v3
+
+### Added
+
+- Added Playwright test for My Account. [SCC-4964](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4964)
+- Added redirect from `research/collections/shared-collection-catalog` [SCC-4974](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4974)
+
+### Removed
+
+- Removed subject heading links that come from annotated MARC rather than bib, just display as plain text [SCC-4984](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4984)
+
+## [1.5.7] 2025-10-14
+
+### Added
+
+- Added Playwright test for subject search. [SCC-4857](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4857)
+- Added Playwright test for unique number search. [SCC-4856](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4856)
+- Added Playwright test for call number search. [SCC-4855](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4855)
+- Added `load-search-vocab` script and `vocabularies` endpoint to get advanced search vocabularies from Discovery API [SCC-4882](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4882)
+- Added custom `GroupedMultiselect` for advanced search [SCC-4881](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4881)
+- Added collection filter to search filters [SCC-4883](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4883)
+
+### Updated
+
+- Updated variant preferred term links to index pages [SCC-4947](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4947)
+- Fixed search result card children width [SCC-4939](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4939)
+- Updated subject related term links to index pages [SCC-4933](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4933)
+- Updated subject heading links in bib details [SCC-4800](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4800)
+- Update subject filter to only display if there's a query [SCC-4886](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4886)
+- Updated `RCLink` to `Link`, using Next Link, allowing clientside routing [SCC-4874](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4886)
+
+## Added
+
+- Added subject heading filtered bib results to `browse/subjects/[...slug]` page [SCC-4815](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4815)
+- Added pagination to browse index [SCC-4572](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4572)
+- Added `ResultsSort` to browse index [SCC-4571](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4571)
+- Added `SubjectHeadingBanner` to browse page [SCC-4569](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4569)
+- Added `BrowseForm` and updated `Layout` and `RCSubNav` to use it [SCC-4568](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4568)
+- Added `SubjectTable` and table cells [SCC-4570](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4570)
+- Added `VariantSubject` and `PreferredSubject` models [SCC-3727](https://newyorkpubliclibrary.atlassian.net/browse/SCC-3727)
+- Added `fetchSubjects` API handler for `browse` index page [SCC-4774](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4774)
+- Added `browse` and `browse/subjects/[...slug]` pages and page types, set up deployment of EB work to `train` [SCC-4554](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4554)
+
+## Removed
+
+- Removed reverse proxy environment variable and documentation [SCC-4874](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4886)
+
+### Removed
+
+- Removed `dateEndYear` from display on search result [SCC-4836](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4936)
+
+## [1.5.6] 2025-09-23
+
+### Updated
+
+- Updated DS to `v4` [SCC-4791](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4791)
+- Updated copy/layout of redirected 404s [SCC-4876](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4876)
+
+### Added
+
+- Added Playwright test for journal title search. [SCC-4854](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4854)
+- Added Playwright test for author search. [SCC-4853](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4853)
+- Added Playwright test for title search. [SCC-4852](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4852)
+
+### Removed
+
+- Removed item format from bib page item table, moving it to bib-level detail, and search result cards [SCC-4905](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4905)
+
+## [1.5.5] 2025-08-28
+
+### Removed
+
+- Remove scan and delivery delay banner [SCC-4888] (https://newyorkpubliclibrary.atlassian.net/browse/SCC-4888)
+
+### Added
+
+- Added Playwright test for keyword search. [SCC-4844](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4844)
+- Remove annotated MARC duplicate values from bib details and log unique values [SCC-4763](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4763)
+- Add QA only banner [SCC-4810](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4810)
+- Update playwright homepage.spec.ts and related page objects to include assertions for footer elements. Also added before hook to that test file. [SCC-4805](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4805)
+
+## [1.5.4] 2025-08-22
+
+### Added
+
+- Scan and delivery delay banner [SCC-4868] (https://newyorkpubliclibrary.atlassian.net/browse/SCC-4868)
+
+## [1.5.3] 2025-08-06
+
+### Added
+
+- Logs on hold cancel button [SCC-4807] (https://newyorkpubliclibrary.atlassian.net/browse/SCC-4807)
+
+### Fixed
+
+- Fixed broken homepage "Locations" link [SCC-4837](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4837)
+
+## [1.5.2] 2025-07-31
+
+### Updated
+
+- Simplify winston instantiation [SCC-4807] (https://newyorkpubliclibrary.atlassian.net/browse/SCC-4807)
+- Updated finding aid copy and link [SCC-4803](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4803)
+
+- Added Playwright tests for RC home page elements. found in /playwright. Deleted dummy test file that was created for initial Playwright install. [SCC-4792](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4792)
+- Added Playwright, the end-to-end testing framework for automating and verifying browser interactions across Chromium, Firefox, and WebKit. [SCC-4772](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4772)
+- Trailing period removal from subject literals [SCC-4801](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4801)
+
+## [1.5.1] 2025-07-17
+
+### Added
+
+- Added bib title to metadata tab title on bib page [SCC-4749](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4749)
+- Adds warning to hold request pages if user has already completed the request [SCC-3360](https://newyorkpubliclibrary.atlassian.net/browse/SCC-3360)
+- Adds new 404 page, handling to cover common search response errors, and new search error view [SCC-3792](https://newyorkpubliclibrary.atlassian.net/browse/SCC-3792)
+- Adds general error boundary page `_error.tsx` and a test page that throws errors `testError.tsx` [SCC-4787](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4787)
+- Adds Playwright, the end-to-end testing framework for automating and verifying browser interactions across Chromium, Firefox, and WebKit [SCC-4772](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4772)
+- Adds page error notification to feedback box [SCC-4776](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4776)
 
 ### Updated
 
@@ -21,13 +192,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added language back into resource fields under `BibDetails` [SCC-4771](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4771)
 
-## Added
-
-- Added bib title to metadata tab title on bib page [SCC-4749](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4749)
-- Adds warning to hold request pages if user has already completed the request [SCC-3360](https://newyorkpubliclibrary.atlassian.net/browse/SCC-3360)
-- Adds new 404 page, handling to cover common search response errors, and new search error view [SCC-3792](https://newyorkpubliclibrary.atlassian.net/browse/SCC-3792)
-- Adds general error boundary page `_error.tsx` and a test page that throws errors `testError.tsx` [SCC-4787](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4787)
-
 ## [1.5.0] 2025-06-18
 
 ### Added
@@ -36,7 +200,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 
-- send subject search scope queries to bib results instead of SHEP ([SCC-4726](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4726))
+- Send subject search scope queries to bib results instead of SHEP ([SCC-4726](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4726))
 
 ## [1.4.8] 2025-06-12
 

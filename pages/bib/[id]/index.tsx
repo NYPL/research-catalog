@@ -28,7 +28,6 @@ import BibDetails from "../../../src/components/BibPage/BibDetail"
 import ElectronicResources from "../../../src/components/BibPage/ElectronicResources"
 import ItemTable from "../../../src/components/ItemTable/ItemTable"
 import ItemTableControls from "../../../src/components/ItemTable/ItemTableControls"
-import ExternalLink from "../../../src/components/Links/ExternalLink/ExternalLink"
 import ItemFilters from "../../../src/components/ItemFilters/ItemFilters"
 import type {
   DiscoveryBibResult,
@@ -45,8 +44,10 @@ import {
 } from "../../../src/utils/itemFilterUtils"
 import RCHead from "../../../src/components/Head/RCHead"
 import FindingAid from "../../../src/components/BibPage/FindingAid"
-import Custom404 from "../../404"
 import { tryInstantiate } from "../../../src/utils/appUtils"
+import Link from "../../../src/components/Link/Link"
+import type { HTTPStatusCode } from "../../../src/types/appTypes"
+import PageError from "../../../src/components/Error/PageError"
 
 interface BibPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -54,7 +55,7 @@ interface BibPropsType {
   isAuthenticated?: boolean
   itemPage?: number
   viewAllItems?: boolean
-  notFound?: boolean
+  errorStatus?: HTTPStatusCode | null
 }
 
 /**
@@ -66,14 +67,14 @@ export default function BibPage({
   isAuthenticated,
   itemPage = 1,
   viewAllItems = false,
-  notFound = false,
+  errorStatus = null,
 }: BibPropsType) {
   const { push, query } = useRouter()
   const [bib, setBib] = useState(
     tryInstantiate({
       constructor: Bib,
       args: [discoveryBibResult],
-      ignoreError: notFound,
+      ignoreError: !!errorStatus,
       errorMessage: "Bib undefined",
     })
   )
@@ -92,8 +93,16 @@ export default function BibPage({
   const viewAllLoadingTextRef = useRef<HTMLDivElement & HTMLLabelElement>(null)
   const controllerRef = useRef<AbortController>()
 
-  if (notFound) {
-    return <Custom404 activePage="bib" />
+  if (errorStatus) {
+    return (
+      <PageError
+        page="bib"
+        errorStatus={
+          // 422 = invalid bnum, which we also display as "Not found"
+          errorStatus === 404 || errorStatus === 422 ? 404 : errorStatus
+        }
+      />
+    )
   }
 
   const { topDetails, bottomDetails, holdingsDetails, findingAid } =
@@ -218,11 +227,11 @@ export default function BibPage({
       <RCHead metadataTitle={metadataTitle} />
       <Layout isAuthenticated={isAuthenticated} activePage="bib">
         {findingAid && (
-          <StatusBadge mb="s" type="informative">
+          <StatusBadge mb="s" variant="informative">
             FINDING AID AVAILABLE
           </StatusBadge>
         )}
-        <Heading level="h2" size="heading3" mb="l">
+        <Heading level="h2" size="heading3" mb="-m">
           {bib.title}
         </Heading>
         <BibDetails key="top-details" details={topDetails} />
@@ -248,14 +257,17 @@ export default function BibPage({
               mt="l"
               mb="s"
             >
-              Items in the library and off-site
+              Items in the library and offsite
             </Heading>
             <Banner
               content={
-                <ExternalLink href="https://www.nypl.org/help/request-research-materials">
-                  How do I request and pick up research materials for on-site
+                <Link
+                  isExternal
+                  href="https://www.nypl.org/help/request-research-materials"
+                >
+                  How do I request and pick up research materials for onsite
                   use?
-                </ExternalLink>
+                </Link>
               }
               isDismissible
               mb="s"
@@ -273,7 +285,7 @@ export default function BibPage({
                 <SkeletonLoader showImage={false} />
               ) : itemFetchError ? (
                 <Banner
-                  type="negative"
+                  variant="negative"
                   content="There was an error fetching items. Please try again with a different query."
                 />
               ) : (
@@ -326,14 +338,15 @@ export default function BibPage({
             details={bottomDetails}
           />
           {displayLegacyCatalogLink ? (
-            <ExternalLink
+            <Link
+              isExternal
               id="legacy-catalog-link"
               href={`${appConfig.urls.legacyCatalog}/record=${bib.id}`}
-              type="standalone"
+              variant="standalone"
               mt="s"
             >
               View in legacy catalog
-            </ExternalLink>
+            </Link>
           ) : null}
         </Box>
       </Layout>
@@ -343,33 +356,33 @@ export default function BibPage({
 
 export async function getServerSideProps({ params, query, req }) {
   const { id } = params
-  const { discoveryBibResult, annotatedMarc, status, redirectUrl } =
-    await fetchBib(id, query)
+  const results = await fetchBib(id, query)
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const isAuthenticated = patronTokenResponse.isTokenValid
 
-  switch (status) {
-    case 307:
+  // Direct to error display according to status
+  if (!("discoveryBibResult" in results)) {
+    if (results.status === 307)
       return {
         redirect: {
-          destination: redirectUrl,
+          destination: results.redirectUrl,
           permanent: false,
         },
       }
-    case 404:
+    else
       return {
         props: {
-          notFound: true,
+          errorStatus: results.status,
         },
       }
-    default:
-      return {
-        props: {
-          discoveryBibResult,
-          annotatedMarc,
-          isAuthenticated,
-          itemPage: query.item_page ? parseInt(query.item_page) : 1,
-        },
-      }
+  }
+
+  return {
+    props: {
+      discoveryBibResult: results.discoveryBibResult,
+      annotatedMarc: results.annotatedMarc,
+      isAuthenticated,
+      itemPage: query.item_page ? parseInt(query.item_page) : 1,
+    },
   }
 }

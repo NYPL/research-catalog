@@ -1,11 +1,11 @@
 {
   "name": "research-catalog",
-  "version": "1.4.8",
+  "version": "1.6.1",
   "scripts": {
-    "dev": "next dev -p 8080",
+    "dev": "AWS_PROFILE=nypl-digital-dev next dev -p 8080",
     "build": "next build",
     "start": "next start",
-    "local-prod": "next build && next start -p 8080",
+    "local-prod": "AWS_PROFILE=nypl-digital-dev next build && next start -p 8080",
     "check-types": "tsc --noemit",
     "lint": "eslint . --fix",
     "prettier": "prettier --write .",
@@ -13,20 +13,24 @@
     "test": "jest",
     "test-watch": "jest --watch",
     "test-watch-quiet": "DEBUG_PRINT_LIMIT=0 npm run test-watch",
-    "coverage": "jest --coverage"
+    "coverage": "jest --coverage",
+    "load-search-vocabs": "concurrently -k -n \"NEXT,SCRIPT\" -c \"blue,magenta\" \"npm run dev\" \"npx tsx scripts/load-search-vocabs.ts\""
   },
   "dependencies": {
-    "@nypl/design-system-react-components": "3.6.1",
+    "@aws-sdk/client-kms": "3.921.0",
+    "@nypl/design-system-react-components": "4.0.3",
+    "@aws-sdk/client-ses": "3.922.0",
     "@nypl/nypl-data-api-client": "1.0.5",
-    "@nypl/pickup-time-estimator": "^1.5.2",
+    "@nypl/pickup-time-estimator": "1.5.2",
     "@nypl/sierra-wrapper": "1.1.0",
     "@types/node": "20.3.1",
     "@types/react": "18.2.13",
     "@types/react-dom": "18.2.6",
-    "aws-sdk": "2.99.0",
+    "dotenv": "17.2.3",
     "eslint-config-next": "13.4.7",
     "iso8601-duration": "2.1.1",
     "jose": "5.2.0",
+    "newrelic": "13.6.2",
     "next": "13.5.9",
     "qs": "6.11.2",
     "react": "18.2.0",
@@ -35,19 +39,20 @@
     "swr": "2.2.1",
     "ts-jest": "29.1.1",
     "underscore": "1.13.6",
-    "winston": "3.9.0"
+    "winston": "3.17.0"
   },
   "devDependencies": {
     "@playwright/test": "1.53.2",
-    "@testing-library/dom": "^9.3.3",
+    "@testing-library/dom": "9.3.3",
     "@testing-library/jest-dom": "6.1.4",
     "@testing-library/react": "14.0.0",
-    "@testing-library/user-event": "^14.5.1",
+    "@testing-library/user-event": "14.5.1",
     "@types/jest": "^29.5.5",
     "@types/jest-axe": "^3.5.6",
     "@types/qs": "^6.9.8",
     "@types/underscore": "^1.11.6",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "concurrently": "9.2.1",
     "eslint": "^8.45.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-config-standard-with-typescript": "^35.0.0",
@@ -67,5 +72,8 @@
     "sass": "^1.63.6",
     "typescript": "5.0.4",
     "user-event": "^4.0.0"
+  },
+  "overrides": {
+    "nwsapi": "2.2.13"
   }
 }

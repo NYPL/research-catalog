@@ -39,7 +39,7 @@ const AppliedFilters = ({ aggregations }: { aggregations: Aggregation[] }) => {
     if (tag.label === "Clear filters") {
       setPersistentFocus(idConstants.filterResultsHeading)
       router.push({
-        pathname: "/search",
+        pathname: router.pathname,
         query: getQueryWithoutFiltersOrPage(router.query),
       })
       return
@@ -63,7 +63,7 @@ const AppliedFilters = ({ aggregations }: { aggregations: Aggregation[] }) => {
     }
     router.push(
       {
-        pathname: "/search",
+        pathname: router.pathname,
         query: updatedQuery,
       },
       undefined,
@@ -72,10 +72,18 @@ const AppliedFilters = ({ aggregations }: { aggregations: Aggregation[] }) => {
   }
 
   if (!tagSetData.length) return null
+
+  // 'From' date filter should appear before 'to' date.
+  const sortedTagSetData = [...tagSetData].sort((a, b) => {
+    if (a.field === "dateFrom" && b.field === "dateTo") return -1
+    if (a.field === "dateTo" && b.field === "dateFrom") return 1
+    return 0
+  })
+
   return (
     <ActiveFilters
       onClick={handleRemove}
-      tagSetData={tagSetData}
+      tagSetData={sortedTagSetData}
       filterName="search-results"
     />
   )

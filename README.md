@@ -20,9 +20,9 @@ The [NYPL Research Catalog](https://www.nypl.org/research/research-catalog) is a
 - **Frontend Framework**: [Next.js](https://nextjs.org/)
 - **UI Components**: [@nypl/design-system-react-components](https://nypl.github.io/nypl-design-system/reservoir/)
 - **Data Fetching**: Server-side rendering with `getServerSideProps` and client-side fetching with JavaScript's native fetch API
-- **Styling**: SCSS modules and Style Props
+- **Styling**: SCSS modules and inline style props
 - **Testing**: Jest and React Testing Library
-- **Logging**: Winston logging to AWS Cloudwatch
+- **Logging**: Winston logging to AWS Cloudwatch and New Relic
 - **Authentication**: JWT-based patron "log in" for developing and testing authenticated features (Account and Hold requests)
 
 ## Getting Started
@@ -61,17 +61,19 @@ Key environment variables include:
 
 #### AWS Credentials
 
-We store API credentials as KMS encrypted environment variables. Decryption (and by extension, use of these API clients) requires the user to have AWS credentials configured locally via the AWS CLI. Reach out to DevOps to get this set up and see our guide on [how we encrypt](docs/ENVIRONMENT_VARIABLES.md#encrypting).
+We store API credentials as KMS encrypted environment variables. Decryption (and by extension, use of these API clients) requires the user to have AWS credentials configured locally via the AWS CLI. Reach out to DevOps to get this set up and see our guide on [how we encrypt](docs/ENVIRONMENT_VARIABLES.md#encrypting). 
+As of 10/30/2025, running this app locally depends on SSO configuration for the profile `nypl-digital-dev` in `~/.aws/config`.
 
 ### Local Development
 
 #### Running with npm
 
 ```bash
+aws sso login --profile nypl-digital-dev
 npm run dev
 ```
 
-This starts the development server on port 8080.
+This starts the development server on port 8080. The SSO token lasts one hour, so you may have to log in again during development.
 
 #### Local Authentication Setup
 
@@ -96,23 +98,9 @@ To enable login functionality in local development:
 
 ### System Architecture
 
-The NYPL Research Catalog is part of a transitional architecture that involves both this Next.js application and the legacy discovery-front-end (DFE) application. The system uses NYPL's reverse proxy to route requests between these applications:
+The NYPL Research Catalog previously had a transitional architecture that involved both this application and the legacy discovery-front-end (DFE) application. The system used NYPL's reverse proxy to route requests for Subject Heading Explorer pages to [DFE](https://github.com/NYPL/discovery-front-end). 
 
-- **Research Catalog (Next.js)**: Handles most of the functionality, including search, bib, hold request, and account pages.
-- **Discovery Front End (DFE)**: Currently only handles the [Subject Heading Explorer (SHEP)](https://www.nypl.org/research/research-catalog/subject_headings) pages.
-
-#### Reverse Proxy Configuration
-
-The NYPL reverse proxy is configured to route page requests to the appropriate application:
-
-- Most paths are routed to the Research Catalog Next.js application
-- Subject Heading Explorer paths are routed to the legacy DFE application
-
-This configuration is controlled by the `NEXT_PUBLIC_REVERSE_PROXY_ENABLED` environment variable, which is set to `true` in QA and production environments.
-
-#### Transition Plan
-
-The Subject Heading Explorer pages are the only remaining pages still served by the legacy DFE application. These will be replaced by the upcoming Enhanced Browse pages in the Research Catalog. Once the Enhanced Browse pages are launched, the legacy DFE application MUST sunset completely and this app must be updated accordingly.
+With the release of the [browse](https://www.nypl.org/research/research-catalog/browse) pages replacing [SHEP](https://www.nypl.org/research/research-catalog/subject_headings), this is a standalone Next.js app. 
 
 ## Key Features
 
@@ -138,7 +126,7 @@ Bib pages (`/bib/[id]`) display detailed information about a Bib's items:
 
 The application displays real-time availability information for physical items:
 
-- Location (on-site or off-site)
+- Location (onsite or offsite)
 - Status (available, not available, etc.)
 - Request options based on availability
 
@@ -183,7 +171,6 @@ Both clients:
 
 - **Discovery API**: Main source for bib and item data (accessed via nyplApiClient)
 - **Sierra API**: Patron account management and item requests (accessed via sierraClient)
-- **SHEP API**: Subject heading data
 
 ## Authentication
 
@@ -234,13 +221,17 @@ Various arguments can be added to test commands.  Here's an example that runs al
 npx playwright test example.spec.ts --headed --project=chromium
 ```
 
-
 ## Deployment
 
 The application is deployed to:
 
 - **QA**: https://qa-www.nypl.org/research/research-catalog
 - **Production**: https://www.nypl.org/research/research-catalog
+
+We deploy (and run automated tests) using [Github Actions](https://github.com/NYPL/research-catalog/blob/main/.github/workflows), which run on `push` to the QA and production branches. We also deploy on `push` to `train`, though it is not part of our usual staging.
+
+To deploy to one of these environments from another branch, update the [deploy workflow](https://github.com/NYPL/research-catalog/blob/main/.github/workflows/test_and_deploy.yml) to include the desired branch, and merge that workflow into the default branch used for deployment (usually `train` for experiments), making sure to escape the branch name (`github.ref_name`) where necessary.
+
 
 ### Vercel Preview Links
 
@@ -257,18 +248,6 @@ The application is hosted on AWS:
 - **ECS** for container orchestration
 - **CloudWatch** for logging
 - **KMS** for secret management
-
-### Reverse Proxy Configuration
-
-The NYPL DevOps team is responsible for configuring and maintaining the reverse proxy that routes traffic between the Research Catalog and the legacy discovery-front-end (DFE) application:
-
-1. **Configuration Changes**: If changes to the reverse proxy configuration are needed (e.g., routing new paths), tickets should be opened with the DevOps team
-2. **Deployment Coordination**: Major deployments that affect routing should be coordinated with the DevOps team
-3. **Rollbacks**: The DevOps team is responsible for performing rollbacks if issues occur in production
-
-### Rollbacks
-
-The DevOps team is primarily responsible for rolling the app back to the previous working image in case there are issues with a production deployment, so they should be available at the time of any releases to production.
 
 ### Environment Variable Management
 
@@ -327,20 +306,30 @@ When adding new environment variables or changing existing ones:
 4. Specify the environment (QA, production, or both) and the value for each environment
 5. Wait for confirmation from DevOps before deploying code that relies on the new variable
 
-Failure to update environment variables in Terraform will result in the variables being unavailable or reverting to default values when a new deployment occurs.
+Failure to update environment variables in Terraform will result in the variables being unavailable or reverting to default values when a new deployment occurs. 
+For variables that only need to be updated temporarily, like `SEARCH_RESULTS_NOTIFICATION`, it may be okay to create and deploy a new task definition revision without updating Terraform, knowing that it will be reverted on the next deployment.
+
 
 ## Logging
 
-The application uses Winston for server-side logging:
+The application uses Winston for server-side logging, and New Relic for both server and client-side logging.
 
-- Structured logs according to NYPL standards
-- Logs stored in AWS CloudWatch
-- Console logging for local development
+### Adding Logs
+
+Use (and then remove) console logs for local development. To test New Relic logs, you can run:
+```
+export NEW_RELIC_APP_NAME="Research Catalog [local]"
+export NEW_RELIC_LICENSE_KEY="<NEW_RELIC_LICENSE_KEY>"
+
+node server.mjs
+```
+and view results in New Relic under "Research Catalog [local]".
 
 ### Accessing Logs
 
-- **QA/Production**: AWS CloudWatch under the `nypl-digital-dev` account (search for "research-catalog")
+- **QA/Production**: AWS CloudWatch under the `nypl-digital-dev` account (search for "research-catalog"), New Relic under "Research Catalog qa" and "Research Catalog prod"
 - **Vercel Deployments**: Console output in the Vercel dashboard
+
 
 ## Troubleshooting
 
@@ -350,12 +339,10 @@ The application uses Winston for server-side logging:
 
    - Ensure your machine's `etc/hosts` file is properly configured for local development
    - Check that you're accessing the site via `local.nypl.org:8080` instead of `localhost:8080`
+   - Check that your AWS SSO token is refreshed (`aws sso login --profile nypl-digital-dev`)
+      - For more information on issues with KMS and encrypted environment variables, refer to [ENVIRONMENT_VARIABLES.md](/docs/ENVIRONMENT_VARIABLES.md)
 
 2. **API Connection Issues**:
 
    - Verify that client keys/secrets are correctly set and decrypted
-   - Check VPN connection for APIs that require it (e.g., SHEP API)
-
-3. **Environment Variable Encryption**:
-
-   - For issues with encrypted environment variables, refer to the encryption/decryption instructions in [ENVIRONMENT_VARIABLES.md](/docs/ENVIRONMENT_VARIABLES.md)
+   - Check VPN connection (for QA APIs)

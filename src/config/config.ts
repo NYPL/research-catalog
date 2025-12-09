@@ -7,8 +7,7 @@ export const appConfig: AppConfig = {
   apiEndpoints: {
     platform: {
       development: "https://qa-platform.nypl.org/api",
-      // qa: "https://qa-platform.nypl.org/api",
-      qa: "http://discovery-api-qa2.nypl.org/api",
+      qa: "https://qa-platform.nypl.org/api",
       production: "https://platform.nypl.org/api",
     },
     domain: {
@@ -16,22 +15,10 @@ export const appConfig: AppConfig = {
       qa: "qa-www.nypl.org",
       production: "www.nypl.org",
     },
-    shep: {
-      development: process.env.SHEP_API,
-      qa: process.env.SHEP_API,
-      production: process.env.SHEP_API,
-    },
     nyplHeaderUrl: {
       development: "https://qa-ds-header.nypl.org",
       qa: "https://qa-ds-header.nypl.org",
       production: "https://ds-header.nypl.org",
-    },
-    adobeEmbedUrl: {
-      development:
-        "https://assets.adobedtm.com/1a9376472d37/ddf1bedfe52e/launch-4eefcc91c90e.min.js",
-      qa: "https://assets.adobedtm.com/1a9376472d37/ddf1bedfe52e/launch-4eefcc91c90e.min.js",
-      production:
-        "https://assets.adobedtm.com/1a9376472d37/8519dfce636d/launch-672b7e7f98ee.min.js",
     },
     loginUrl: {
       development: "https://dev-login.nypl.org/auth/login",
@@ -68,13 +55,7 @@ export const appConfig: AppConfig = {
     Q9RrzMLTqxKnVVn2+hVpk4F/8tMsGCdd4s/AJqEQBy5lsq7ji1B63XYqi5fc1SnJ
     EQIDAQAB
     -----END PUBLIC KEY-----`,
-  features: {
-    reverseProxyEnabled: {
-      development: false,
-      qa: true,
-      production: true,
-    },
-  },
+  features: {},
   sourceEmail: process.env.SOURCE_EMAIL,
   libAnswersEmail: process.env.LIB_ANSWERS_EMAIL,
 }

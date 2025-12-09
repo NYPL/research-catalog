@@ -240,7 +240,7 @@ const SettingsInputForm = ({
                       aria-label={`Remove ${formUtils.inputLabel.toLowerCase()} ${
                         index + 1
                       }`}
-                      buttonType="text"
+                      variant="text"
                       id="remove-input-btn"
                       onClick={() => handleRemove(index)}
                     >

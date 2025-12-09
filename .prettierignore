@@ -1,3 +1,8 @@
 node_modules
 .next
 README.md
+data*
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

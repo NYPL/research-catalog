@@ -41,6 +41,10 @@ const sierraClient = async () => {
       throw new SierraClientError("Error decrypting creds")
     }
   }
+
+  if (!decryptedKey || !decryptedSecret) {
+    logger.error("Failed to decrypt Sierra creds")
+  }
   try {
     await wrapper.config({
       key: decryptedKey,
@@ -51,18 +55,38 @@ const sierraClient = async () => {
     CACHE.client = wrapper
     const get = wrapper.get.bind(wrapper)
     wrapper.get = async function (path) {
-      logger.info(`GET ${base}/${path}`)
+      logger.info("Sierra request", {
+        path,
+        method: "GET",
+      })
       return await get(path)
     }
     const post = wrapper.post.bind(wrapper)
     wrapper.post = async function (path, body) {
-      logger.info(`POST ${base}${path}`)
+      logger.info("Sierra request", {
+        path,
+        method: "POST",
+        body: JSON.stringify(body),
+      })
       return await post(path, body)
     }
     const put = wrapper.put.bind(wrapper)
     wrapper.put = async function (path, body) {
-      logger.info(`PUT ${base}${path}`)
+      logger.info("Sierra request", {
+        path,
+        method: "PUT",
+        body: JSON.stringify(body),
+      })
       return await put(path, body)
+    }
+    const deleteRequest = wrapper.deleteRequest.bind(wrapper)
+    wrapper.deleteRequest = async function (path, body) {
+      logger.info("Sierra request", {
+        path,
+        method: "DELETE",
+        body: JSON.stringify(body),
+      })
+      return await deleteRequest(path, body)
     }
     return wrapper
   } catch (error) {

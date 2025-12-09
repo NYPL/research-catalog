@@ -1,22 +1,23 @@
-import aws from "aws-sdk"
+import { DecryptCommand, KMS } from "@aws-sdk/client-kms"
 import { logServerError } from "../utils/appUtils"
 
-const kms: aws.KMS = new aws.KMS({
-  region: "us-east-1",
-})
+const kms: KMS = new KMS({ region: "us-east-1" })
 
-export const kmsDecryptCreds = async (creds: string[]) => {
-  return await Promise.all(creds.map(decryptKMS))
+const decryptKMS = async (key: string): Promise<string | null> => {
+  const params = {
+    CiphertextBlob: new Uint8Array(Buffer.from(key, "base64")),
+  }
+
+  try {
+    const decrypted = await kms.send(new DecryptCommand(params))
+    if (!decrypted.Plaintext) throw new Error("Empty plaintext")
+    return Buffer.from(decrypted.Plaintext).toString("utf8")
+  } catch (error: any) {
+    logServerError("decryptKMS", error.message)
+    return null
+  }
 }
 
-const decryptKMS = async (key: string) => {
-  const params = {
-    CiphertextBlob: Buffer.from(key, "base64"),
-  }
-  try {
-    const decrypted = await kms.decrypt(params).promise()
-    return decrypted.Plaintext.toString()
-  } catch (exception) {
-    logServerError("decryptKMS", exception)
-  }
+export const kmsDecryptCreds = async (creds: string[]) => {
+  return Promise.all(creds.map(decryptKMS))
 }

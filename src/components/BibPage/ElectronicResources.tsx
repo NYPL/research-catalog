@@ -11,8 +11,8 @@ import {
 } from "@nypl/design-system-react-components"
 
 import { ELECTRONIC_RESOURCES_PER_BIB_PAGE } from "../../config/constants"
-import ExternalLink from "../Links/ExternalLink/ExternalLink"
 import type { ElectronicResource } from "../../types/bibTypes"
+import Link from "../Link/Link"
 
 interface ElectronicResourcesProps {
   electronicResources: ElectronicResource[]
@@ -54,14 +54,15 @@ const ElectronicResources = ({
       </CardHeading>
       <CardContent aria-expanded={!showMore}>
         <List
-          type="ul"
+          variant="ul"
           mb="0"
           noStyling
           listItems={electronicResourcesToDisplay.map((resource) => (
-            <ExternalLink
+            <Link
+              isExternal
               href={resource.url}
               key={kebabCase(resource.title)}
-              type="standalone"
+              variant="standalone"
             >
               <Box
                 as="span"
@@ -73,7 +74,7 @@ const ElectronicResources = ({
               >
                 {resource.title || resource.prefLabel || resource.url}
               </Box>
-            </ExternalLink>
+            </Link>
           ))}
         />
         {electronicResources.length > ELECTRONIC_RESOURCES_PER_BIB_PAGE ? (
@@ -83,7 +84,7 @@ const ElectronicResources = ({
             p={0}
             mt="s"
             onClick={onClick}
-            buttonType="link"
+            variant="text"
             aria-expanded={!showMore}
             fontWeight="bold"
             sx={{ textDecoration: "none", height: "auto" }}

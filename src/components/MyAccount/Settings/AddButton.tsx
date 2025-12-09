@@ -14,7 +14,7 @@ const AddButton = forwardRef<HTMLButtonElement, AddButtonProps>(
       <Button
         ref={ref}
         id={inputType ? `add-${inputType}-button` : "add-button"}
-        buttonType="text"
+        variant="text"
         onClick={onClick}
         size="large"
         isDisabled={isDisabled}

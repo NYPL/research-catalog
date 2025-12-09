@@ -7,20 +7,23 @@ import type {
   BibDetailURL,
   AnnotatedMarc,
   AnyBibDetail,
+  MarcLinkedDetail,
+  MarcDetail,
+  AnyMarcDetail,
 } from "../types/bibDetailsTypes"
 import { convertToSentenceCase } from "../utils/appUtils"
 import { getFindingAidFromSupplementaryContent } from "../utils/bibUtils"
+import logger from "../../logger"
 
 export default class BibDetails {
   bib: DiscoveryBibResult
-  annotatedMarcDetails: AnyBibDetail[]
+  annotatedMarcDetails: AnyMarcDetail[]
   holdingsDetails: AnyBibDetail[]
   topDetails: AnyBibDetail[]
   bottomDetails: AnyBibDetail[]
   groupedNotes: AnyBibDetail[]
   supplementaryContent: LinkedBibDetail
   extent: string[]
-  subjectLiteral: BibDetailURL[][]
   owner: string[]
   findingAid?: string
 
@@ -35,7 +38,6 @@ export default class BibDetails {
     this.groupedNotes = this.buildGroupedNotes()
     this.extent = this.buildExtent()
     this.owner = this.buildOwner()
-    this.subjectLiteral = this.buildSubjectLiterals()
     // these are the actual arrays of details that will be displayed
     this.annotatedMarcDetails = this.buildAnnotatedMarcDetails(
       annotatedMarc?.fields
@@ -58,20 +60,53 @@ export default class BibDetails {
 
   buildAnnotatedMarcDetails(
     annotatedMarc: AnnotatedMarcField[]
-  ): AnyBibDetail[] {
+  ): AnyMarcDetail[] {
     if (!annotatedMarc) return []
     return annotatedMarc.map(({ label, values }: AnnotatedMarcField) => {
+      const fieldMarcTags = values.map((val) => val.source?.marcTag)
       if (label === "Connect to:") {
         const urlValues = values.map(({ label, content }) => ({
           url: content,
           urlLabel: label,
         }))
-        return this.buildExternalLinkedDetail("Connect to:", urlValues)
+        const detail = this.buildExternalLinkedDetail(
+          "Connect to:",
+          urlValues,
+          fieldMarcTags
+        )
+        return detail as MarcLinkedDetail
       } else {
         const fieldValues = values.map((val) => val.content)
-        return this.buildDetail(label, fieldValues)
+        return this.buildDetail(label, fieldValues, fieldMarcTags) as MarcDetail
       }
     })
+  }
+
+  buildDetail(
+    label: string,
+    value: string[],
+    fieldMarcTags?: string[]
+  ): BibDetail | MarcDetail {
+    if (!value?.length) return null
+
+    const base = { label: convertToSentenceCase(label), value }
+
+    return fieldMarcTags ? { ...base, marcTags: fieldMarcTags } : base
+  }
+
+  buildExternalLinkedDetail(
+    label: string,
+    value: BibDetailURL[],
+    fieldMarcTags?: string[]
+  ): LinkedBibDetail | MarcLinkedDetail {
+    if (!value.length) return null
+
+    const base: LinkedBibDetail = {
+      label: convertToSentenceCase(label),
+      value,
+      link: "external",
+    }
+    return fieldMarcTags ? { ...base, marcTags: fieldMarcTags } : base
   }
 
   buildHoldingsDetails(holdings): BibDetail[] {
@@ -94,11 +129,12 @@ export default class BibDetails {
   buildTopDetails(): AnyBibDetail[] {
     return [
       { field: "titleDisplay", label: "Title" },
-      { field: "publicationStatement", label: "Published by" },
-      // external link
-      { field: "supplementaryContent", label: "Supplementary content" },
       // internal link
       { field: "creatorLiteral", label: "Author" },
+      { field: "publicationStatement", label: "Published by" },
+      { field: "format", label: "Format" },
+      // external link
+      { field: "supplementaryContent", label: "Supplementary content" },
     ]
       .map((fieldMapping) => {
         switch (fieldMapping.field) {
@@ -112,6 +148,7 @@ export default class BibDetails {
       })
       .filter((f) => f)
   }
+
   buildBottomDetails(): AnyBibDetail[] {
     const resourceFields = [
       { field: "contributorLiteral", label: "Additional authors" },
@@ -137,33 +174,88 @@ export default class BibDetails {
     ]
       .map((fieldMapping: FieldMapping): AnyBibDetail => {
         let detail: AnyBibDetail
-        if (fieldMapping.field === "contributorLiteral")
+        if (
+          fieldMapping.field === "contributorLiteral" ||
+          fieldMapping.field === "subjectLiteral"
+        )
           detail = this.buildSearchFilterUrl(fieldMapping)
         else detail = this.buildStandardDetail(fieldMapping)
         return detail
       })
       .filter((f) => f)
+
     const fieldsWithNotes = this.addNotes(resourceFields)
-    const combinedFields = this.combineBibDetailsData(
+    return this.combineBibDetailsData(
       fieldsWithNotes,
       this.annotatedMarcDetails
     )
-    return combinedFields.filter((f) => f)
   }
 
-  combineBibDetailsData = (
+  combineBibDetailsData(
     resourceEndpointDetails: AnyBibDetail[],
-    annotatedMarcDetails: AnyBibDetail[]
-  ) => {
-    const resourceEndpointDetailsLabels = new Set(
-      resourceEndpointDetails.map((detail: { label: string }) => {
-        return detail.label
-      })
-    )
-    const filteredAnnotatedMarcDetails = annotatedMarcDetails.filter(
-      (detail: AnyBibDetail) => !resourceEndpointDetailsLabels.has(detail.label)
-    )
-    return resourceEndpointDetails.concat(filteredAnnotatedMarcDetails)
+    annotatedMarcDetails: AnyMarcDetail[]
+  ): AnyBibDetail[] {
+    const normalizeValues = (val: any) => {
+      if (!val) return []
+      if (Array.isArray(val)) {
+        return val
+          .flat()
+          .map((v) =>
+            typeof v === "string"
+              ? v.trim()
+              : v?.content?.trim() || v?.urlLabel?.trim()
+          )
+      }
+      if (typeof val === "string") return [val.trim()]
+      if (val?.content) return [val.content.trim()]
+      return [val?.urlLabel?.trim()]
+    }
+
+    const labelsSet = new Set(resourceEndpointDetails.map((d) => d.label))
+    const resourceValuesSet = new Set<string>()
+    const allDetails = [...resourceEndpointDetails, ...(this.topDetails || [])]
+
+    allDetails.forEach((detail) => {
+      normalizeValues(detail.value).forEach(
+        (v) => v && resourceValuesSet.add(v)
+      )
+    })
+
+    const filteredMarc: AnyBibDetail[] = []
+    const keptByLabel = {}
+
+    annotatedMarcDetails.forEach((detail) => {
+      if (labelsSet.has(detail.label)) return
+      if (
+        detail.label === "Subject" &&
+        (!this.bib.subjectLiteral || !this.bib.subjectLiteral.length)
+      ) {
+        return
+      }
+      const detailValues = normalizeValues(detail.value)
+      const detailMarcTags = detail.marcTags
+      // include subjects, which will be displayed but not linked
+      const overlap = detailValues.some((v) => resourceValuesSet.has(v))
+      if (!overlap) {
+        filteredMarc.push(detail)
+        // store both values and marc tags in one object per AM label
+        keptByLabel[detail.label] = {
+          values: detailValues.filter(Boolean),
+          marcTags: detailMarcTags,
+        }
+      }
+    })
+
+    if (Object.keys(keptByLabel).length > 0) {
+      logger.info(
+        `Bib details: Keeping annotated MARC fields on ${this.bib["@id"]}`,
+        {
+          keptMarcFields: keptByLabel,
+        }
+      )
+    }
+
+    return resourceEndpointDetails.concat(filteredMarc)
   }
 
   buildHoldingDetail(holding, fieldMapping: FieldMapping) {
@@ -184,8 +276,8 @@ export default class BibDetails {
   buildStandardDetail(fieldMapping: FieldMapping) {
     let bibFieldValue = this[fieldMapping.field] || this.bib[fieldMapping.field]
     if (!bibFieldValue) return
-    // "language" is the only resource field with JSON-LD format
-    if (fieldMapping.field === "language") {
+    // "language" and "format" use JSON-LD format
+    if (fieldMapping.field === "language" || fieldMapping.field === "format") {
       bibFieldValue = [bibFieldValue[0]?.prefLabel]
     }
     return this.buildDetail(
@@ -194,42 +286,26 @@ export default class BibDetails {
     )
   }
 
-  buildDetail(label: string, value: string[]): BibDetail {
-    if (!value?.length) return null
-
-    return {
-      label: convertToSentenceCase(label),
-      value,
-    }
-  }
-
   buildSearchFilterUrl(fieldMapping: {
     label: string
     field: string
   }): LinkedBibDetail {
     const value = this.bib[fieldMapping.field]
     if (!value?.length) return null
+
     return {
       link: "internal",
       label: convertToSentenceCase(fieldMapping.label),
       value: value.map((v: string) => {
-        const internalUrl = `/search?filters[${
-          fieldMapping.field
-        }][0]=${encodeURI(v)}`
+        // subjectLiteral links to browse
+        const internalUrl =
+          fieldMapping.field === "subjectLiteral"
+            ? `/browse/subjects/${encodeURIComponent(v)}`
+            : `/search?filters[${fieldMapping.field}][0]=${encodeURIComponent(
+                v
+              )}`
         return { url: internalUrl, urlLabel: v }
       }),
-    }
-  }
-
-  buildExternalLinkedDetail(
-    label: string,
-    values: BibDetailURL[]
-  ): LinkedBibDetail {
-    if (!values.length) return null
-    return {
-      link: "external",
-      value: values,
-      label: convertToSentenceCase(label),
     }
   }
 
@@ -316,7 +392,7 @@ export default class BibDetails {
    * matchParallels(bib)
    * Given a bib object returns a new copy of the bib in which fields with parallels have been rewritten
    * The new rewritten field interleaves the parallel field and the paralleled (i.e. original) field together.
-   * Skips over subject fields since these require changes to SHEP.
+   * Skips over subject fields.
    */
   matchParallelToPrimaryValues(bib: DiscoveryBibResult) {
     const parallelFieldMatches = Object.keys(bib).map((key) => {
@@ -386,46 +462,5 @@ export default class BibDetails {
 
   buildFindingAid() {
     return getFindingAidFromSupplementaryContent(this.bib.supplementaryContent)
-  }
-
-  buildSubjectLiterals(): BibDetailURL[][] {
-    if (!this.bib.subjectLiteral) return
-    const subjectLiteralUrls = this.bib.subjectLiteral.map(
-      (subject: string) => {
-        subject = subject.replace(/\.$/, "")
-        // stackedSubjectHeadings: ["a", "a -- b", "a -- b -- c"]
-        const stackedSubjectHeadings =
-          this.constructSubjectLiteralsArray(subject)
-        const filterQueryForSubjectHeading = "/search?filters[subjectLiteral]="
-        // splitSubjectHeadings: ["a", "b", "c"]
-        const splitSubjectHeadings = subject.split(" -- ")
-        return splitSubjectHeadings.map((heading, index) => {
-          const urlWithFilterQuery = `${filterQueryForSubjectHeading}${encodeURI(
-            stackedSubjectHeadings[index]
-          )}`
-          return {
-            url: urlWithFilterQuery,
-            urlLabel: heading,
-          }
-        })
-      }
-    )
-    return subjectLiteralUrls
-  }
-
-  constructSubjectLiteralsArray(subject: string) {
-    // subject = "Italian food -- Spaghetti"
-    let stackedSubjectLiteral = ""
-
-    return subject
-      .split(" -- ") // ["Italian food", "spaghetti"]
-      .map((urlString, index) => {
-        const dashDivided = index !== 0 ? " -- " : ""
-        // First iteration "Italian food"
-        // Second iteration "Italian food -- spaghetti"
-        stackedSubjectLiteral = `${stackedSubjectLiteral}${dashDivided}${urlString}`
-
-        return stackedSubjectLiteral
-      })
   }
 }

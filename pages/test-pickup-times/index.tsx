@@ -104,7 +104,7 @@ const TestPickupTimes = (params) => {
       <Head>
         <title>Test Pickup Times | {SITE_NAME}</title>
       </Head>
-      <Layout>
+      <Layout activePage="">
         <Heading level="h2" mb="xl" size="heading4">
           Test Pickup Times
         </Heading>
@@ -122,7 +122,7 @@ const TestPickupTimes = (params) => {
                 labelText="Preloaded Scenarios"
                 value={scenario}
                 onChange={(e) =>
-                  setScenario((e.target as HTMLInputElement).value)
+                  setScenario((e.target as HTMLSelectElement).value)
                 }
               >
                 {scenarioOptions.map((opt) => {
@@ -149,7 +149,7 @@ const TestPickupTimes = (params) => {
                 labelText="Fulfillment"
                 value={fulfillment}
                 onChange={(e) =>
-                  setFulfillment((e.target as HTMLInputElement).value)
+                  setFulfillment((e.target as HTMLSelectElement).value)
                 }
               >
                 {fulfillmentOptions.map((opt) => {

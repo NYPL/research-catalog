@@ -50,16 +50,10 @@ export default class SearchResultsBib extends Bib {
   }
 
   getYearFromResult(result: DiscoveryBibResult) {
-    const { dateStartYear, dateEndYear } = result
-
+    const { dateStartYear } = result
     const displayStartYear: string =
       dateStartYear === 999 ? "unknown" : dateStartYear?.toString()
-    const displayEndYear: string =
-      dateEndYear === 9999 ? "present" : dateEndYear?.toString()
-
-    if (dateStartYear && dateEndYear) {
-      return `${displayStartYear}-${displayEndYear}`
-    } else if (dateStartYear) {
+    if (dateStartYear) {
       return displayStartYear
     }
     return null

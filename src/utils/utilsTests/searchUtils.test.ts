@@ -126,8 +126,8 @@ describe("searchUtils", () => {
         q: "spaghetti",
         language: "igbo",
         format: "scroll",
-        dateAfter: "1900",
-        dateBefore: "1902",
+        dateFrom: "1900",
+        dateTo: "1902",
       })
       expect(params).toEqual({
         q: "spaghetti",
@@ -135,8 +135,8 @@ describe("searchUtils", () => {
         filters: {
           language: "igbo",
           format: "scroll",
-          dateAfter: "1900",
-          dateBefore: "1902",
+          dateFrom: "1900",
+          dateTo: "1902",
         },
       })
     })
@@ -248,6 +248,17 @@ describe("searchUtils", () => {
           3
         )
         expect(heading).toEqual('Displaying 3 of 3 results for LCCN "1234"')
+      })
+    })
+    describe("browse result searches", () => {
+      it("returns heading with browseOptions when slug and browseType are provided", () => {
+        const heading = getSearchResultsHeading({ page: 1, q: "" }, 100, {
+          slug: "History",
+          browseType: "Subject Heading",
+        })
+        expect(heading).toContain(
+          'Displaying 1-50 of 100 results for Subject Heading "History"'
+        )
       })
     })
   })

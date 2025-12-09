@@ -1,11 +1,5 @@
 import React from "react"
-import {
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-  delay,
-} from "../../../src/utils/testUtils"
+import { fireEvent, render, screen, delay } from "../../../src/utils/testUtils"
 import mockRouter from "next-router-mock"
 import userEvent from "@testing-library/user-event"
 
@@ -13,17 +7,21 @@ import { textInputFields } from "../../../src/utils/advancedSearchUtils"
 import AdvancedSearch, {
   defaultEmptySearchErrorMessage,
 } from "../../../pages/search/advanced"
-import { searchAggregations } from "../../../src/config/aggregations"
 
 // Mock next router
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
-describe("Advanced Search Form", () => {
+describe("Advanced search form", () => {
   beforeEach(async () => {
     render(<AdvancedSearch isAuthenticated={true} />)
   })
   const submit = () => {
     fireEvent.click(screen.getByTestId("submit-advanced-search-button"))
+  }
+  const getDateInputs = () => {
+    const fromInput = screen.getByRole("textbox", { name: /From/ })
+    const toInput = screen.getByRole("textbox", { name: /To/ })
+    return { fromInput, toInput }
   }
   const updateAllFields = async () => {
     const [
@@ -64,7 +62,7 @@ describe("Advanced Search Form", () => {
   })
   it("displays alert when no fields are submitted", () => {
     submit()
-    screen.getByText(defaultEmptySearchErrorMessage)
+    expect(screen.getByText(defaultEmptySearchErrorMessage)).toBeInTheDocument()
   })
 
   it("can set keyword, contributor, title, subject", async () => {
@@ -81,63 +79,130 @@ describe("Advanced Search Form", () => {
       expect(input).toBeInTheDocument()
     })
   })
-
   it("can select languages", async () => {
-    const languageSelect = screen.getByLabelText("Language")
-    await userEvent.selectOptions(languageSelect, "Azerbaijani")
+    const languageMultiselect = screen.getByLabelText(/Language/, {
+      selector: "button",
+    })
+    expect(languageMultiselect).toHaveAttribute("aria-expanded", "false")
+    await userEvent.click(languageMultiselect)
+    expect(languageMultiselect).toHaveAttribute("aria-expanded", "true")
+    const languageFilter = screen.getByLabelText(/Afrikaans/, {
+      selector: "input",
+    })
+    await userEvent.click(languageFilter)
     submit()
-    // expect the label for Azerbaijani ("lang:aze") to be in url
+    // expect the label for Afrikaans (afr) to be in url
     expect(mockRouter.asPath).toBe(
-      "/search?q=&filters%5Blanguage%5D=lang%3Aaze&searched_from=advanced"
+      "/search?q=&filters%5Blanguage%5D%5B0%5D=lang%3Aafr&searched_from=advanced"
     )
   })
-  it("can check material checkboxes", async () => {
-    await userEvent.click(screen.getByLabelText("Notated music"))
-    await userEvent.click(screen.getByLabelText("Map"))
-    submit()
-    // expect the label for notated music and cartographic
-    // ("resourcetypes:not", "resourcetypes:car") to be in url
-    expect(mockRouter.asPath).toBe(
-      "/search?q=&filters%5Bformat%5D%5B0%5D=c&filters%5Bformat%5D%5B1%5D=e&searched_from=advanced"
+  it("can search and select collection checkboxes", async () => {
+    const collectionMultiselect = screen.getByLabelText(/Collection/, {
+      selector: "button",
+    })
+    expect(collectionMultiselect).toHaveAttribute("aria-expanded", "false")
+    await userEvent.click(collectionMultiselect)
+    expect(collectionMultiselect).toHaveAttribute("aria-expanded", "true")
+
+    const collectionFilterSearch = screen.getByLabelText(/Search collections/, {
+      selector: "input",
+    })
+    const milsteinDivisionOption = screen.getByLabelText(/Milstein Division/, {
+      selector: "input",
+    })
+    expect(milsteinDivisionOption).toBeInTheDocument()
+    await userEvent.type(collectionFilterSearch, "Jean")
+    expect(milsteinDivisionOption).not.toBeInTheDocument()
+    await userEvent.click(
+      screen.getByLabelText(
+        "Jean Blackwell Hutson Research and Reference Division"
+      )
     )
-  })
-  it("can check location checkboxes", async () => {
-    const location = searchAggregations.buildingLocation[0]
-    await userEvent.click(screen.getByLabelText(location.label as string))
     submit()
+    // expect Jean Blackwell Hutson collection code (scf) in url
     expect(mockRouter.asPath).toBe(
-      `/search?q=&filters%5BbuildingLocation%5D%5B0%5D=${location.value}&searched_from=advanced`
+      "/search?q=&filters%5Bcollection%5D%5B0%5D=scf&searched_from=advanced"
     )
   })
 
   it("can clear the form", async () => {
-    const notatedMusic = screen.getByLabelText("Notated music")
-    await userEvent.click(notatedMusic)
-    const cartographic = screen.getByLabelText("Map")
-    await userEvent.click(cartographic)
-    const selector = screen.getByLabelText("Language")
-    await userEvent.selectOptions(selector, "Azerbaijani")
-    const schomburg = screen.getByLabelText("Schomburg Center for", {
-      exact: false,
+    const collectionMultiselect = screen.getByLabelText(/Collection/, {
+      selector: "button",
     })
+    await userEvent.click(collectionMultiselect)
+    const milsteinDivisionOption = screen.getByLabelText(/Milstein Division/, {
+      selector: "input",
+    })
+    await userEvent.click(milsteinDivisionOption)
 
-    await userEvent.click(schomburg)
     const [subjectInput, keywordInput, titleInput, contributorInput] =
       await updateAllFields()
 
-    await userEvent.click(screen.getByText("Clear fields"))
-    ;[notatedMusic, cartographic, schomburg].forEach((input) =>
-      expect(input).not.toBeChecked()
+    expect(collectionMultiselect).toHaveAttribute(
+      "aria-label",
+      "Collection multiselect, 1 item selected"
     )
-    expect(selector).not.toHaveDisplayValue("Azerbaijani")
+    await userEvent.click(screen.getByText("Clear fields"))
     ;[subjectInput, keywordInput, titleInput, contributorInput].forEach(
       (input) => {
         expect(input).toBeEmptyDOMElement()
       }
     )
+    expect(collectionMultiselect).toHaveAttribute(
+      "aria-label",
+      "Collection multiselect, 0 items selected"
+    )
 
     submit()
     // presence of alert means the form was cleared before hitting submit
     expect(screen.getByText(defaultEmptySearchErrorMessage)).toBeInTheDocument()
+  })
+
+  it("submits with valid dates", async () => {
+    const { fromInput, toInput } = getDateInputs()
+    fireEvent.change(fromInput, { target: { value: "2000" } })
+    fireEvent.change(toInput, { target: { value: "2020" } })
+
+    submit()
+
+    expect(mockRouter.asPath).toBe(
+      "/search?q=&filters%5BdateTo%5D=2020&filters%5BdateFrom%5D=2000&searched_from=advanced"
+    )
+  })
+
+  it("shows date error", async () => {
+    const { fromInput, toInput } = getDateInputs()
+    fireEvent.change(fromInput, { target: { value: "abcd" } })
+    fireEvent.change(toInput, { target: { value: "2020" } })
+
+    submit()
+    // not mocking useDateFilter, so only the generic date error text appears
+    expect(
+      screen.getByText(/Please enter a valid date format/)
+    ).toBeInTheDocument()
+  })
+
+  it("shows error if 'to' date is before 'from' date", async () => {
+    const { fromInput, toInput } = getDateInputs()
+    fireEvent.change(fromInput, { target: { value: "2020" } })
+    fireEvent.change(toInput, { target: { value: "2010" } })
+
+    submit()
+
+    // not mocking useDateFilter, so only the generic date error text appears
+    expect(
+      screen.getByText(/Please enter a valid date format/)
+    ).toBeInTheDocument()
+  })
+
+  it("clears date inputs when 'Clear fields' is clicked", async () => {
+    const { fromInput, toInput } = getDateInputs()
+    fireEvent.change(fromInput, { target: { value: "2000" } })
+    fireEvent.change(toInput, { target: { value: "2020" } })
+
+    await userEvent.click(screen.getByText("Clear fields"))
+
+    expect(fromInput).toHaveValue("")
+    expect(toInput).toHaveValue("")
   })
 })

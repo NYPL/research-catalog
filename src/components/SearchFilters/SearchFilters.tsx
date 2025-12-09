@@ -8,7 +8,6 @@ import {
 import type { TextInputRefType } from "@nypl/design-system-react-components"
 import SearchResultsFilters from "../../models/SearchResultsFilters"
 import { useRouter } from "next/router"
-import type { SyntheticEvent } from "react"
 import { useEffect, useRef, useState } from "react"
 import {
   buildFilterQuery,
@@ -16,21 +15,31 @@ import {
   getQueryWithoutFiltersOrPage,
 } from "../../utils/refineSearchUtils"
 import type { Aggregation } from "../../types/filterTypes"
-import DateFilter from "./DateFilter"
-import { useDateFilter } from "../../hooks/useDateFilter"
 import { useFocusContext, idConstants } from "../../context/FocusContext"
+import MultiSelectWithGroupTitles from "../AdvancedSearch/MultiSelectWithGroupTitles/MultiSelectWithGroupTitles"
+import { mapCollectionsIntoLocations } from "../../utils/advancedSearchUtils"
+import DateFilter from "../DateFilter/DateFilter"
+import { useDateFilter } from "../../hooks/useDateFilter"
 
-const fields = [
+let fields = [
   { value: "buildingLocation", label: "Item location" },
   { value: "format", label: "Format" },
   { value: "language", label: "Language" },
-  { value: "dateAfter", label: "Start Year" },
-  { value: "dateBefore", label: "End Year" },
+  { value: "dateFrom", label: "Start Year" },
+  { value: "dateTo", label: "End Year" },
   { value: "subjectLiteral", label: "Subject" },
+  { value: "collection", label: "Collection" },
 ]
 
-const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
+const SearchFilters = ({
+  aggregations,
+  lockedFilterValue,
+}: {
+  aggregations?: Aggregation[]
+  lockedFilterValue?: string
+}) => {
   const router = useRouter()
+
   const [appliedFilters, setAppliedFilters] = useState(
     collapseMultiValueQueryParams(router.query)
   )
@@ -48,7 +57,7 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
     }
     router.push(
       {
-        pathname: "/search",
+        pathname: router.pathname,
         query: updatedQuery,
       },
       undefined,
@@ -83,9 +92,22 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
   }
 
   const [focusedFilter, setFocusedFilter] = useState<string | null>(null)
+
+  // Do not display Subject filter if there is no query term and a subject filter is applied
+  if (
+    (router.query?.q === "" || !router.query.q) &&
+    (Object.hasOwn(appliedFilters, "subjectLiteral") || lockedFilterValue)
+  ) {
+    fields = fields.filter((field) => field.label !== "Subject")
+  }
+
   const filters = fields.map((field) => {
     const filterData = new SearchResultsFilters(aggregations, field)
     if (filterData.options) {
+      // Do not display any locked filter values
+      const filteredOptions = filterData.options.filter(
+        (opt) => opt.value !== lockedFilterValue
+      )
       return (
         <div
           key={field.value}
@@ -96,40 +118,84 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
             transition: "opacity 0.2s ease",
           }}
         >
-          <MultiSelect
-            isDefaultOpen={field.value !== "subjectLiteral"}
-            defaultItemsVisible={1}
-            isBlockElement
-            isSearchable={field.value !== "buildingLocation"}
-            id={field.value}
-            buttonText={field.label}
-            onClear={() => {
-              handleFilterClear(field.value)
-              setFocusedFilter(field.value)
-            }}
-            onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
-              handleCheckboxChange(field.value, e.target.id)
-              setFocusedFilter(field.value)
-            }}
-            selectedItems={{
-              [field.value]: {
-                items: appliedFilters[field.value] || [],
-              },
-            }}
-            items={filterData.options.map((option) => ({
-              id: option.value,
-              name: `${option.label} (${option.count.toLocaleString()})`,
-            }))}
-          />
+          {!(field.value === "collection") ? (
+            <MultiSelect
+              sx={{
+                "div > div > button": {
+                  height: "40px",
+                },
+              }}
+              isDefaultOpen={field.value !== "subjectLiteral"}
+              defaultItemsVisible={1}
+              isBlockElement
+              isSearchable={field.value !== "buildingLocation"}
+              id={field.value}
+              buttonText={field.label}
+              onClear={() => {
+                handleFilterClear(field.value)
+                setFocusedFilter(field.value)
+              }}
+              onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
+                handleCheckboxChange(field.value, e.target.id)
+                setFocusedFilter(field.value)
+              }}
+              selectedItems={{
+                [field.value]: {
+                  items: appliedFilters[field.value] || [],
+                },
+              }}
+              items={filteredOptions
+                .filter((option) => option.label && option.label.trim() !== "")
+                .map((option) => ({
+                  id: option.value,
+                  name: `${option.label} (${option.count.toLocaleString()})`,
+                }))}
+            />
+          ) : (
+            <MultiSelectWithGroupTitles
+              key={field.value}
+              isBlockElement
+              field={{ value: field.value, label: field.label }}
+              groupedItems={mapCollectionsIntoLocations(filteredOptions)}
+              onChange={(e) => {
+                handleCheckboxChange(field.value, e.target.id)
+                setFocusedFilter(field.value)
+              }}
+              onClear={() => {
+                handleFilterClear(field.value)
+                setFocusedFilter(field.value)
+              }}
+              selectedItems={{
+                [field.value]: {
+                  items: appliedFilters[field.value],
+                },
+              }}
+            />
+          )}
         </div>
       )
     } else return null
   })
 
-  const dateInputRefs = [useRef<TextInputRefType>(), useRef<TextInputRefType>()]
+  const clearDates = () => {
+    const newFilters = {
+      ...appliedFilters,
+      dateFrom: [""],
+      dateTo: [""],
+    }
+    setAppliedFilters(newFilters)
+    buildAndPushFilterQuery(newFilters)
+  }
 
-  const { dateFilterProps, validateDateRange } = useDateFilter({
-    changeHandler: (e: SyntheticEvent) => {
+  const { dateFilterProps } = useDateFilter({
+    dateFrom: appliedFilters.dateFrom?.[0],
+    dateTo: appliedFilters.dateTo?.[0],
+    applyHandler: () => {
+      setFocusedFilter("date")
+      setPersistentFocus(idConstants.applyDates)
+      buildAndPushFilterQuery(appliedFilters)
+    },
+    changeHandler: (e: React.SyntheticEvent) => {
       const target = e.target as HTMLInputElement
       setAppliedFilters((prevFilters) => {
         return {
@@ -138,18 +204,7 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
         }
       })
     },
-    inputRefs: dateInputRefs,
-    dateAfter: appliedFilters.dateAfter?.[0],
-    dateBefore: appliedFilters.dateBefore?.[0],
-    applyHandler: () => {
-      setFocusedFilter("date")
-      if (validateDateRange() === false) {
-        setFocusedFilter(null)
-        return
-      }
-      setPersistentFocus(idConstants.applyDates)
-      buildAndPushFilterQuery(appliedFilters)
-    },
+    clearHandler: clearDates,
   })
 
   const dateFilter = (
@@ -165,6 +220,7 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
       <Accordion
         data-testid="date-accordion"
         id="date"
+        isDefaultOpen
         sx={{
           button: {
             fontWeight: "400 !important",
@@ -173,7 +229,7 @@ const SearchFilters = ({ aggregations }: { aggregations?: Aggregation[] }) => {
         }}
         accordionData={[
           {
-            accordionType: "default",
+            variant: "default",
             ariaLabel: "Date filter",
             label: "Date",
             panel: (

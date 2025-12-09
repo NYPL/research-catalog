@@ -28,7 +28,10 @@ import initializePatronTokenAuth, {
 
 import Bib from "../../../../src/models/Bib"
 import Item from "../../../../src/models/Item"
-import type { DiscoveryBibResult } from "../../../../src/types/bibTypes"
+import type {
+  BibResponse,
+  DiscoveryBibResult,
+} from "../../../../src/types/bibTypes"
 import type { DiscoveryItemResult } from "../../../../src/types/itemTypes"
 import type { DeliveryLocation } from "../../../../src/types/locationTypes"
 import type {
@@ -36,12 +39,14 @@ import type {
   PatronEligibilityStatus,
 } from "../../../../src/types/holdPageTypes"
 import RCHead from "../../../../src/components/Head/RCHead"
-import Custom404 from "../../../404"
 import HoldRequestCompletedBanner from "../../../../src/components/HoldPages/HoldRequestCompletedBanner"
 import {
   idConstants,
   useFocusContext,
 } from "../../../../src/context/FocusContext"
+import { tryInstantiate } from "../../../../src/utils/appUtils"
+import PageError from "../../../../src/components/Error/PageError"
+import type { HTTPStatusCode } from "../../../../src/types/appTypes"
 
 interface HoldRequestPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -49,9 +54,11 @@ interface HoldRequestPropsType {
   deliveryLocations?: DeliveryLocation[]
   patronId: string
   isAuthenticated?: boolean
-  errorStatus?: HoldErrorStatus
   patronEligibilityStatus?: PatronEligibilityStatus
-  notFound?: boolean
+  // Hold request process errors
+  holdErrorStatus?: HoldErrorStatus
+  // Bib/item fetching errors
+  bibItemErrorStatus?: HTTPStatusCode | null
 }
 
 /**
@@ -65,9 +72,9 @@ export default function HoldRequestPage({
   deliveryLocations = [],
   patronId,
   isAuthenticated,
-  errorStatus: defaultErrorStatus,
+  holdErrorStatus: defaultErrorStatus,
   patronEligibilityStatus: defaultEligibilityStatus,
-  notFound = false,
+  bibItemErrorStatus = null,
 }: HoldRequestPropsType) {
   const metadataTitle = `Item Request | ${SITE_NAME}`
 
@@ -75,17 +82,31 @@ export default function HoldRequestPage({
 
   const { setPersistentFocus } = useFocusContext()
 
+  const bib = tryInstantiate({
+    constructor: Bib,
+    args: [discoveryBibResult],
+    ignoreError: !!bibItemErrorStatus,
+    errorMessage: "Bib undefined",
+  })
+  const item = tryInstantiate({
+    constructor: Item,
+    args: [discoveryItemResult, bib],
+    ignoreError: !!bibItemErrorStatus,
+    errorMessage: "Item undefined",
+  })
+  const holdId = item ? `${item.bibId}-${item.id}` : ""
+
   // Check if hold request was completed already.
   useEffect(() => {
-    const bannerFlag = sessionStorage.getItem("holdCompleted")
+    const bannerFlag = sessionStorage.getItem(`holdCompleted-${item?.id}`)
     if (bannerFlag === "true") {
       setHoldCompleted(true)
-      sessionStorage.removeItem("holdCompleted")
+      sessionStorage.removeItem(`holdCompleted-${item?.id}`)
       setPersistentFocus(idConstants.holdCompletedBanner)
     }
   }, [])
 
-  const [errorStatus, setErrorStatus] = useState(defaultErrorStatus)
+  const [holdErrorStatus, setHoldErrorStatus] = useState(defaultErrorStatus)
   const [patronEligibilityStatus, setPatronEligibilityStatus] = useState(
     defaultEligibilityStatus
   )
@@ -94,14 +115,9 @@ export default function HoldRequestPage({
   const router = useRouter()
   const isLoading = useLoading()
 
-  if (notFound) {
-    return <Custom404 activePage="hold" />
+  if (bibItemErrorStatus) {
+    return <PageError page="hold" errorStatus={bibItemErrorStatus} />
   }
-
-  const bib = new Bib(discoveryBibResult)
-  const item = new Item(discoveryItemResult, bib)
-
-  const holdId = `${item.bibId}-${item.id}`
 
   const handleServerHoldPostError = (errorMessage: string) => {
     console.error(
@@ -109,7 +125,7 @@ export default function HoldRequestPage({
       errorMessage
     )
     setFormPosting(false)
-    setErrorStatus("failed")
+    setHoldErrorStatus("failed")
     setPersistentFocus(idConstants.holdErrorBanner)
   }
 
@@ -149,12 +165,12 @@ export default function HoldRequestPage({
         // Patron is ineligible to place holds
         case 401:
           setFormPosting(false)
-          setErrorStatus("patronIneligible")
+          setHoldErrorStatus("patronIneligible")
           setPatronEligibilityStatus(responseJson?.patronEligibilityStatus)
           break
         case 403:
           setFormPosting(false)
-          setErrorStatus("failed")
+          setHoldErrorStatus("failed")
           break
         case 500:
           handleServerHoldPostError(responseJson.error)
@@ -183,10 +199,10 @@ export default function HoldRequestPage({
         {/* Always render the wrapper element that will display the
           dynamically rendered notification for focus management */}
         <Box tabIndex={-1} id={idConstants.holdErrorBanner}>
-          {errorStatus && (
+          {holdErrorStatus && (
             <HoldRequestErrorBanner
               item={item}
-              errorStatus={errorStatus}
+              errorStatus={holdErrorStatus}
               patronEligibilityStatus={patronEligibilityStatus}
             />
           )}
@@ -195,7 +211,7 @@ export default function HoldRequestPage({
           {holdCompleted && <HoldRequestCompletedBanner />}
         </Box>
         <Heading level="h2" mb="l" size="heading3">
-          Request for on-site use
+          Request for onsite use
         </Heading>
         <HoldRequestItemDetails item={item} />
         {isLoading || formPosting ? (
@@ -213,7 +229,7 @@ export default function HoldRequestPage({
               handleSubmit={handleSubmit}
               holdId={holdId}
               patronId={patronId}
-              errorStatus={errorStatus}
+              errorStatus={holdErrorStatus}
               source={item.formattedSourceForHoldRequest}
               isDisabled={holdCompleted}
             />
@@ -260,13 +276,19 @@ export async function getServerSideProps({ params, req, res }) {
     const [bibId, itemId] = id.split("-")
 
     if (!itemId) {
-      throw new Error("No item id in url")
+      throw new Error("Hold request: No item id in url")
     }
-    const { discoveryBibResult } = await fetchBib(bibId, {}, itemId)
+    const discoveryBib = await fetchBib(bibId, {}, itemId)
+    const discoveryBibResult = (discoveryBib as BibResponse).discoveryBibResult
     const discoveryItemResult = discoveryBibResult?.items?.[0]
 
+    if ("status" in discoveryBib && discoveryBib.status !== 200) {
+      return {
+        props: { bibItemErrorStatus: discoveryBib.status },
+      }
+    }
     if (!discoveryItemResult) {
-      throw new Error("Hold Page - Item not found")
+      throw new Error("Hold request: Item not found")
     }
 
     const bib = new Bib(discoveryBibResult)
@@ -286,9 +308,7 @@ export async function getServerSideProps({ params, req, res }) {
       await fetchDeliveryLocations(item.barcode, patronId)
 
     if (locationStatus !== 200) {
-      console.error(
-        "HoldRequest Page - Error fetching deliveryLocations in getServerSideProps"
-      )
+      console.error("Hold request: error fetching deliveryLocations")
     }
 
     const patronEligibilityStatus = await fetchPatronEligibility(patronId)
@@ -305,7 +325,7 @@ export async function getServerSideProps({ params, req, res }) {
         patronId,
         isAuthenticated,
         patronEligibilityStatus,
-        errorStatus: locationOrEligibilityFetchFailed
+        holdErrorStatus: locationOrEligibilityFetchFailed
           ? "failed"
           : patronEligibilityStatus.status === 401
           ? "patronIneligible"
@@ -315,7 +335,7 @@ export async function getServerSideProps({ params, req, res }) {
   } catch (error) {
     console.log(error)
     return {
-      props: { notFound: true },
+      props: { bibItemErrorStatus: 500 },
     }
   }
 }

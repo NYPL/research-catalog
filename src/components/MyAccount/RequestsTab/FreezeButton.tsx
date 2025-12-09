@@ -17,7 +17,7 @@ const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
   const buttonRef = createRef<HTMLButtonElement>()
   const { onOpen: openModal, onClose: closeModal, Modal } = useModal()
   const failureModalProps = {
-    type: "default",
+    variant: "default",
     bodyContent: (
       <Box className={styles.modalBody}>
         <Text>
@@ -41,7 +41,7 @@ const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
     },
   }
   const successModalProps = {
-    type: "default",
+    variant: "default",
     closeButtonLabel: "OK",
     bodyContent: (
       <Box className={styles.modalBody}>
@@ -86,6 +86,7 @@ const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
       patronId: patron.id,
       freeze: !frozen,
       pickupLocation: hold.pickupLocation.code,
+      itemId: hold.itemId,
     })
     const response = await fetch(
       `/research/research-catalog/api/account/holds/update/${hold.id}`,
@@ -110,7 +111,7 @@ const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
     <>
       <Button
         aria-label={`${buttonLabel} ${hold.title}`}
-        buttonType="secondary"
+        variant="secondary"
         id={`freeze-${hold.id}`}
         onClick={handleFreezeClick}
         isDisabled={isDisabled}

@@ -6,16 +6,16 @@ import {
   CardContent,
   Box,
   SkeletonLoader,
+  Text,
 } from "@nypl/design-system-react-components"
 
 import Layout from "../src/components/Layout/Layout"
-import ExternalLink from "../src/components/Links/ExternalLink/ExternalLink"
-
 import { SITE_NAME } from "../src/config/constants"
 import { appConfig } from "../src/config/config"
 import initializePatronTokenAuth from "../src/server/auth"
 import useLoading from "../src/hooks/useLoading"
 import RCHead from "../src/components/Head/RCHead"
+import Link from "../src/components/Link/Link"
 
 interface HomeProps {
   bannerNotification?: string
@@ -32,51 +32,61 @@ export default function Home({
       <RCHead metadataTitle={SITE_NAME} />
       <Layout
         isAuthenticated={isAuthenticated}
-        activePage="search"
+        activePage=""
         bannerNotification={bannerNotification}
       >
         {isLoading ? (
           <SkeletonLoader showImage={false} />
         ) : (
           <>
-            <Heading level="h2">
+            <Heading level="h2" mb="s">
               Explore the Library&apos;s Vast Research Collections &amp; More
             </Heading>
             <Box>
-              <p>
+              <Text mb="s">
                 Discover millions of items from The New York Public
                 Library&apos;s Stephen A. Schwarzman Building, Schomburg Center
                 for Research in Black Culture, and The New York Public Library
                 for the Performing Arts. Plus, access materials from library
                 collections at Columbia University, Harvard University, and
                 Princeton University.{" "}
-                <ExternalLink
-                  href="/research/collections/about/shared-collection-catalog"
+                <Link
+                  isExternal
+                  href="https://www.nypl.org/research/shared-collection-catalog"
                   aria-label="Learn more about the Research Catalog."
                 >
                   Learn more.
-                </ExternalLink>
-              </p>
-              <p>
+                </Link>
+              </Text>
+              <Text mb="s">
                 Please note that the Research Catalog does not include
                 circulating materials. For books and more that you can check out
-                to take home please visit our{" "}
-                <ExternalLink href={appConfig.urls.circulatingCatalog}>
-                  circulating branch catalog.
-                </ExternalLink>{" "}
-                The{" "}
-                <ExternalLink href={appConfig.urls.legacyCatalog}>
-                  legacy research catalog
-                </ExternalLink>{" "}
-                is still available, but does not include all of our Scan &amp;
-                Deliver options or the Columbia University, Harvard University,
-                and Princeton University material from the Shared Collection.
-              </p>
+                to take home, please visit our{" "}
+                <Link isExternal href={appConfig.urls.circulatingCatalog}>
+                  Circulating Branch Catalog.
+                </Link>
+              </Text>
+              <Text mb="s">
+                We will begin a phased deprecation of the{" "}
+                <Link isExternal href={appConfig.urls.legacyCatalog}>
+                  Legacy Catalog
+                </Link>{" "}
+                in December 2025. After this time it will be available onsite
+                only. The Legacy Catalog does not include our{" "}
+                <Link
+                  isExternal
+                  href={
+                    "https://www.nypl.org/research/services/scan-and-deliver"
+                  }
+                >
+                  Scan & Deliver
+                </Link>{" "}
+                service or the Columbia University, Harvard University, or
+                Princeton University material from the Shared Collection.
+              </Text>
             </Box>
             <SimpleGrid columns={1} gap="grid.m">
-              <Heading level="h3" noSpace>
-                Research at NYPL
-              </Heading>
+              <Heading level="h3">Research at NYPL</Heading>
               <Card
                 imageProps={{
                   alt: "Manuscript from NYPL Research Archive",
@@ -105,7 +115,7 @@ export default function Home({
                 }}
                 layout="row"
               >
-                <CardHeading level="h4" url="/locations/map?libraries=research">
+                <CardHeading level="h4" url="/locations">
                   Locations
                 </CardHeading>
                 <CardContent>

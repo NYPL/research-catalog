@@ -24,11 +24,11 @@ describe("FindingAid component", () => {
 
   it("renders the appointments link", () => {
     const appointmentsLink = screen.getByRole("link", {
-      name: "require an appointment",
+      name: "may require an appointment",
     })
     expect(appointmentsLink).toHaveAttribute(
       "href",
-      "https://www.nypl.org/research/appointments"
+      "https://libguides.nypl.org/special-collections-account-tutorial"
     )
   })
 })

@@ -76,58 +76,6 @@ describe("Bib Details model", () => {
       ])
     })
   })
-  describe("subjectHeadings", () => {
-    it("formats subject literals and urls correctly", () => {
-      const filterQueryForSubjectLiteral = "/search?filters[subjectLiteral]="
-      const subjectHeadings = [
-        [
-          {
-            url: `${filterQueryForSubjectLiteral}${encodeURI(
-              "Authors, French"
-            )}`,
-            urlLabel: "Authors, French",
-          },
-          {
-            url: `${filterQueryForSubjectLiteral}${encodeURI(
-              "Authors, French -- 20th century"
-            )}`,
-            urlLabel: "20th century",
-          },
-          {
-            url: `${filterQueryForSubjectLiteral}${encodeURI(
-              "Authors, French -- 20th century -- Biography"
-            )}`,
-            urlLabel: "Biography",
-          },
-        ],
-        [
-          {
-            url: `${filterQueryForSubjectLiteral}${encodeURI(
-              "Autobiographical Narrative"
-            )}`,
-            urlLabel: "Autobiographical Narrative",
-          },
-        ],
-        [
-          {
-            url: `${filterQueryForSubjectLiteral}${encodeURI(
-              "Cortanze, Gérard de"
-            )}`,
-            urlLabel: "Cortanze, Gérard de",
-          },
-          {
-            url: `${filterQueryForSubjectLiteral}${encodeURI(
-              "Cortanze, Gérard de -- Childhood and youth"
-            )}`,
-            urlLabel: "Childhood and youth",
-          },
-        ],
-      ]
-      expect(bibWithNoParallelsModel.subjectLiteral).toStrictEqual(
-        subjectHeadings
-      )
-    })
-  })
   describe("extent", () => {
     it("should add a semicolon after extent if there is not one already", () => {
       const bib = new BibDetailsModel({
@@ -272,10 +220,17 @@ describe("Bib Details model", () => {
         value: [
           {
             urlLabel: "Watson, Tom, 1965-",
-            url: "/search?filters[creatorLiteral][0]=Watson,%20Tom,%201965-",
+            url: "/search?filters[creatorLiteral][0]=Watson%2C%20Tom%2C%201965-",
           },
         ],
       })
+    })
+    it("renders subjects with correct internal urls", () => {
+      const subjects = bibWithSubjectHeadingsModel.bottomDetails.find(
+        (d) => d.label === "Subject"
+      ) as LinkedBibDetail
+      expect(subjects.link).toBe("internal")
+      expect(subjects.value[0].url).toContain("/browse/subjects/")
     })
   })
 

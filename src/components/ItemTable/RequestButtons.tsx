@@ -1,6 +1,5 @@
 import { Box } from "@nypl/design-system-react-components"
-import ExternalLink from "../Links/ExternalLink/ExternalLink"
-import RCLink from "../Links/RCLink/RCLink"
+import Link from "../Link/Link"
 
 import type Item from "../../models/Item"
 
@@ -17,41 +16,40 @@ const RequestButtons = ({ item }: RequestButtonsProps) => {
   return (
     <Box sx={{ a: { marginRight: "xs" } }} className="no-print">
       {item.aeonUrl && (
-        <ExternalLink
+        <Link
+          isExternal
           href={item.aeonUrl}
-          type={!item.isAvailable ? "buttonDisabled" : "buttonSecondary"}
+          variant={!item.isAvailable ? "buttonDisabled" : "buttonSecondary"}
           aria-label={`Request Appointment, ${item.requestButtonAriaLabel}`}
           disabled={!item.isAvailable}
           mb="s"
           target="_self"
         >
           Request appointment
-        </ExternalLink>
+        </Link>
       )}
 
       {item.isPhysicallyRequestable && (
-        <RCLink
+        <Link
           href={`/hold/request/${item.bibId}-${item.id}`}
-          type={!item.isAvailable ? "buttonDisabled" : "buttonSecondary"}
-          aria-label={`Request for On-site Use, ${item.requestButtonAriaLabel}`}
+          variant={!item.isAvailable ? "buttonDisabled" : "buttonSecondary"}
+          aria-label={`Request for onsite use, ${item.requestButtonAriaLabel}`}
           disabled={!item.isAvailable}
           mb="s"
-          target="_self"
         >
-          Request for on-site use
-        </RCLink>
+          Request for onsite use
+        </Link>
       )}
       {item.isEDDRequestable && (
-        <RCLink
+        <Link
           href={`/hold/request/${item.bibId}-${item.id}/edd`}
-          type={!item.isAvailable ? "buttonDisabled" : "buttonSecondary"}
+          variant={!item.isAvailable ? "buttonDisabled" : "buttonSecondary"}
           aria-label={`Request Scan, ${item.requestButtonAriaLabel}`}
           disabled={!item.isAvailable}
           mb="s"
-          target="_self"
         >
           Request scan
-        </RCLink>
+        </Link>
       )}
     </Box>
   )

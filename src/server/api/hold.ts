@@ -23,6 +23,7 @@ import {
 
 import { appConfig } from "../../config/config"
 import { logServerError } from "../../utils/appUtils"
+import logger from "../../../logger"
 
 /**
  * Getter function for hold delivery locations.
@@ -213,6 +214,7 @@ export async function fetchPatronEligibility(
       cache: false,
     })
 
+    logger.info(`fetchPatronEligibility: Got result for ${patronId}:`, eligibilityResult)
     // There should always be en eligibilty boolean attribute returned from Discovery API
     if (eligibilityResult.eligibility === undefined) {
       throw new Error("Improperly formatted eligibility from Discovery API")
@@ -224,7 +226,7 @@ export async function fetchPatronEligibility(
 
     return { status: 200, ...eligibilityResult }
   } catch (error) {
-    console.error(
+    logger.error(
       `Error fetching hold request eligibility in fetchPatronEligibility server function, patronId: ${patronId}`,
       error.message
     )

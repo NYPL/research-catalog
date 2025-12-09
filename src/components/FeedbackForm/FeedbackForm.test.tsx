@@ -3,8 +3,9 @@ import userEvent from "@testing-library/user-event"
 
 import { render, screen } from "../../utils/testUtils"
 import FeedbackForm from "./FeedbackForm"
+import { FeedbackContext } from "../../context/FeedbackContext"
 
-describe("FeedbackForm", () => {
+describe("rendering FeedbackForm", () => {
   it("renders a feedback button, expands the form on click, and closes it on cancel button click", async () => {
     render(<FeedbackForm></FeedbackForm>)
 
@@ -42,5 +43,81 @@ describe("FeedbackForm", () => {
         "Oops! Something went wrong. An error occured while processing your feedback."
       )
     ).toBeInTheDocument()
+  })
+})
+
+describe("FeedbackForm props in context", () => {
+  const baseContext = {
+    FeedbackBox: (props: any) => {
+      return (
+        <div>
+          <div data-testid="notificationText">{props.notificationText}</div>
+        </div>
+      )
+    },
+    isOpen: true,
+    onClose: jest.fn(),
+    onOpen: jest.fn(),
+    itemMetadata: null,
+    setItemMetadata: jest.fn(),
+    errorStatus: null,
+    setErrorStatus: jest.fn(),
+    openFeedbackFormWithError: jest.fn(),
+  }
+
+  it("renders notification text for error state", () => {
+    render(
+      <FeedbackContext.Provider value={{ ...baseContext, errorStatus: 404 }}>
+        <FeedbackForm />
+      </FeedbackContext.Provider>
+    )
+
+    expect(screen.getByTestId("notificationText")).toHaveTextContent(
+      "You are asking for help or information about a page error"
+    )
+  })
+
+  it("renders notification text from itemMetadata.notificationText", () => {
+    render(
+      <FeedbackContext.Provider
+        value={{
+          ...baseContext,
+          itemMetadata: { notificationText: "Item metadata notification" },
+        }}
+      >
+        <FeedbackForm />
+      </FeedbackContext.Provider>
+    )
+
+    expect(screen.getByTestId("notificationText")).toHaveTextContent(
+      "Item metadata notification"
+    )
+  })
+
+  it("renders notification text from itemMetadata.callNumber", () => {
+    render(
+      <FeedbackContext.Provider
+        value={{
+          ...baseContext,
+          itemMetadata: { callNumber: "QA 1234 .B56" },
+        }}
+      >
+        <FeedbackForm />
+      </FeedbackContext.Provider>
+    )
+
+    expect(screen.getByTestId("notificationText")).toHaveTextContent(
+      "You are asking for help or information about QA 1234 .B56 in this record."
+    )
+  })
+
+  it("renders no notification text when itemMetadata and requestedURL are null", () => {
+    render(
+      <FeedbackContext.Provider value={baseContext}>
+        <FeedbackForm />
+      </FeedbackContext.Provider>
+    )
+
+    expect(screen.getByTestId("notificationText")).toBeEmptyDOMElement()
   })
 })

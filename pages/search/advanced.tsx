@@ -1,38 +1,38 @@
 import {
-  useState,
   useReducer,
   useRef,
   useEffect,
   type SyntheticEvent,
+  useState,
 } from "react"
 import { useRouter } from "next/router"
-import { debounce } from "underscore"
-import type { TextInputRefType } from "@nypl/design-system-react-components"
 import {
   Heading,
   Form,
   FormField,
   Flex,
   TextInput,
-  Select,
   HorizontalRule,
   Box,
   Banner,
   Icon,
+  MultiSelect,
 } from "@nypl/design-system-react-components"
-
 import Layout from "../../src/components/Layout/Layout"
 import {
   BASE_URL,
+  DEBOUNCE_INTERVAL,
   PATHS,
   SITE_NAME,
-  DEBOUNCE_INTERVAL,
 } from "../../src/config/constants"
 import { searchFormReducer } from "../../src/reducers/searchFormReducer"
 import {
   initialSearchFormState,
   textInputFields,
   languageOptions,
+  collectionOptions,
+  buildingLocationOptions,
+  formatOptions,
   buildGoBackHref,
 } from "../../src/utils/advancedSearchUtils"
 import type {
@@ -41,59 +41,69 @@ import type {
 } from "../../src/types/searchTypes"
 import { getSearchQuery } from "../../src/utils/searchUtils"
 import initializePatronTokenAuth from "../../src/server/auth"
-import { appConfig } from "../../src/config/config"
-import SearchFilterCheckboxField from "../../src/components/AdvancedSearch/SearchFilterCheckboxField"
 import CancelSubmitButtonGroup from "../../src/components/AdvancedSearch/CancelSubmitButtonGroup"
-import { formatOptions } from "../../src/utils/advancedSearchUtils"
-import { searchAggregations } from "../../src/config/aggregations"
-import RCLink from "../../src/components/Links/RCLink/RCLink"
 import RCHead from "../../src/components/Head/RCHead"
+import DateFilter from "../../src/components/DateFilter/DateFilter"
+import { debounce } from "underscore"
+import MultiSelectWithGroupTitles from "../../src/components/AdvancedSearch/MultiSelectWithGroupTitles/MultiSelectWithGroupTitles"
+import Link from "../../src/components/Link/Link"
 import { useDateFilter } from "../../src/hooks/useDateFilter"
-import DateFilter from "../../src/components/SearchFilters/DateFilter"
+import { idConstants, useFocusContext } from "../../src/context/FocusContext"
+import { flushSync } from "react-dom"
 
 export const defaultEmptySearchErrorMessage =
   "Error: please enter at least one field to submit an advanced search."
+export const dateErrorMessage =
+  "Please enter a valid date format (YYYY, YYYY/MM, or YYYY/MM/DD) and try again."
+
 interface AdvancedSearchPropTypes {
   isAuthenticated: boolean
   goBackHref?: null | string
 }
-/**
- * The Advanced Search page is responsible for displaying the Advanced Search form fields and
- * buttons that clear the fields and submit a search request.
- */
+
 export default function AdvancedSearch({
   isAuthenticated,
   goBackHref,
 }: AdvancedSearchPropTypes) {
   const metadataTitle = `Advanced search | ${SITE_NAME}`
   const router = useRouter()
-  const inputRef = useRef<TextInputRefType>()
-  const notificationRef = useRef<HTMLDivElement>()
-  const dateInputRefs = [useRef<TextInputRefType>(), useRef<TextInputRefType>()]
-
+  const liveRegionRef = useRef<HTMLDivElement | null>(null)
   const [alert, setAlert] = useState(false)
   const [errorMessage, setErrorMessage] = useState(
     defaultEmptySearchErrorMessage
   )
+  const { setPersistentFocus } = useFocusContext()
+
   const [searchFormState, dispatch] = useReducer(
     searchFormReducer,
     initialSearchFormState
   )
 
-  const {
-    dateFilterProps,
-    validateDateRange,
-    clearInputs: clearDateInputs,
-  } = useDateFilter({
-    inputRefs: dateInputRefs,
-    dateBefore: searchFormState["filters"].dateBefore,
-    dateAfter: searchFormState["filters"].dateAfter,
+  const { dateFilterProps, clearInputs: clearDateInputs } = useDateFilter({
+    dateTo: searchFormState["filters"].dateTo,
+    dateFrom: searchFormState["filters"].dateFrom,
     changeHandler: (e) => handleInputChange(e, "filter_change"),
+    clearHandler: () => {
+      dispatch({
+        type: "filter_change",
+        field: "dateFrom",
+        payload: "",
+      })
+      dispatch({
+        type: "filter_change",
+        field: "dateTo",
+        payload: "",
+      })
+    },
   })
+  const { dateError } = dateFilterProps
 
   const handleInputChange = (e: SyntheticEvent, type: SearchFormActionType) => {
     e.preventDefault()
     alert && setAlert(false)
+    if (liveRegionRef.current) {
+      liveRegionRef.current.textContent = ""
+    }
     const target = e.target as HTMLInputElement
     dispatch({
       type: type,
@@ -102,61 +112,150 @@ export default function AdvancedSearch({
     })
   }
 
-  const handleCheckboxChange = (field: string, types: string[]) => {
-    alert && setAlert(false)
+  const handleFilterChange = (field: string, value: string | null) => {
+    setAlert(false)
+    if (value === null) {
+      dispatch({
+        type: "filter_change",
+        field,
+        payload: [],
+      })
+      return
+    }
+
+    const currentValues = searchFormState["filters"][field] || []
+    const updatedValues = currentValues.includes(value)
+      ? currentValues.filter((v) => v !== value)
+      : [...currentValues, value]
+
     dispatch({
       type: "filter_change",
-      field: field,
-      payload: types,
+      field,
+      payload: updatedValues,
     })
   }
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
-    if (!validateDateRange()) return
+    flushSync(() => dateFilterProps.onBlur())
+    const errors = dateFilterProps.onApply()
+    if (Object.keys(errors).length > 0) {
+      let dateFieldError = ""
+      if (errors.combined || errors.range || (errors.from && errors.to))
+        dateFieldError = "The 'from' and 'to' fields contain errors."
+      else if (errors.from)
+        dateFieldError = "The 'from' date field contains an error."
+      else if (errors.to)
+        dateFieldError = "The 'to' date field contains an error."
+      setErrorMessage(`${dateFieldError} ${dateErrorMessage}`)
+      setAlert(true)
+      return
+    }
+
     const queryString = getSearchQuery(searchFormState as SearchParams)
     if (!queryString.length) {
       setErrorMessage(defaultEmptySearchErrorMessage)
       setAlert(true)
-      // Very basic validation for the date range.
     } else {
-      // If the NEXT_PUBLIC_REVERSE_PROXY_ENABLED feature flag is present, use window.location.replace
-      // instead of router.push to forward search results to DFE.
-      if (appConfig.features.reverseProxyEnabled[appConfig.environment]) {
-        window.location.replace(
-          `${BASE_URL}${PATHS.SEARCH}${queryString}&searched_from=advanced`
-        )
-      } else {
-        await router.push(
-          `${PATHS.SEARCH}${queryString}&searched_from=advanced`
-        )
-      }
+      await router.push(`${PATHS.SEARCH}${queryString}&searched_from=advanced`)
     }
   }
 
   const handleClear = (e: SyntheticEvent) => {
     e.preventDefault()
-    alert && setAlert(false)
+    setAlert(false)
     clearDateInputs()
-    inputRef.current.value = ""
     dispatch({ type: "form_reset", payload: initialSearchFormState })
+
+    if (liveRegionRef.current) {
+      liveRegionRef.current.textContent = "All fields have been cleared."
+    }
   }
 
   useEffect(() => {
-    if (alert && notificationRef.current) {
-      notificationRef.current.focus()
+    if (alert && !Object.keys(dateError || {}).length) {
+      setPersistentFocus(idConstants.advancedSearchError)
     }
-  }, [alert])
+  }, [alert, dateError])
+
+  const fields = [
+    { value: "format", label: "Format", options: formatOptions },
+    {
+      value: "buildingLocation",
+      label: "Item location",
+      options: buildingLocationOptions,
+    },
+    { value: "language", label: "Language", options: languageOptions },
+    { value: "collection", label: "Collection", options: collectionOptions },
+  ]
+
+  const multiselects = fields.map((field) => {
+    return field.value !== "collection" ? (
+      <div key={field.value}>
+        <MultiSelect
+          sx={{
+            "div > div > button": {
+              height: "40px",
+            },
+            mb: "25.5px",
+          }}
+          id={field.value}
+          isSearchable
+          closeOnBlur
+          buttonText={field.label}
+          selectedItems={{
+            [field.value]: {
+              items: searchFormState["filters"][field.value],
+            },
+          }}
+          items={field.options}
+          onChange={(e) => handleFilterChange(field.value, e.target.id)}
+          onClear={() => handleFilterChange(field.value, null)}
+        />
+      </div>
+    ) : (
+      <MultiSelectWithGroupTitles
+        key={field.value}
+        field={{ value: field.value, label: field.label }}
+        groupedItems={field.options}
+        onChange={(e) => handleFilterChange(field.value, e.target.id)}
+        onClear={() => handleFilterChange(field.value, null)}
+        selectedItems={{
+          [field.value]: {
+            items: searchFormState["filters"][field.value],
+          },
+        }}
+      />
+    )
+  })
   return (
     <>
       <RCHead metadataTitle={metadataTitle} />
       <Layout isAuthenticated={isAuthenticated} activePage="advanced">
+        <Heading level="h2" mb="s">
+          Advanced search
+        </Heading>
         {/* Always render the wrapper element that will display the
           dynamically rendered notification for focus management */}
-        <Box tabIndex={-1} ref={notificationRef}>
-          {alert && <Banner type="negative" content={errorMessage} mb="s" />}
+        <Box tabIndex={-1} id="advanced-search-error">
+          {alert && <Banner variant="negative" content={errorMessage} mb="s" />}
         </Box>
-        <Heading level="h2">Advanced search</Heading>
+        <div
+          ref={liveRegionRef}
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+          style={{
+            position: "absolute",
+            width: "1px",
+            height: "1px",
+            margin: "-1px",
+            padding: 0,
+            overflow: "hidden",
+            clip: "rect(0,0,0,0)",
+            border: 0,
+          }}
+        ></div>
         <Form
           id="advancedSearchForm"
           // We are using a post request on advanced search when JS is disabled
@@ -167,73 +266,52 @@ export default function AdvancedSearch({
           onSubmit={handleSubmit}
         >
           <Flex flexDirection={{ base: "column", md: "row" }}>
-            <Flex id="advancedSearchLeft" gap="s" direction="column" grow="1">
-              {textInputFields.map(({ name, label }) => {
-                return (
-                  <FormField key={name}>
-                    <TextInput
-                      id={name}
-                      labelText={label}
-                      name={name}
-                      value={searchFormState[name]}
-                      onChange={debounce(
-                        (e) => handleInputChange(e, "input_change"),
-                        DEBOUNCE_INTERVAL
-                      )}
-                      ref={inputRef}
-                    />
-                  </FormField>
-                )
-              })}
-              <FormField>
-                <Select
-                  id="languageSelect"
-                  name="language"
-                  labelText="Language"
-                  value={searchFormState["filters"].language}
-                  onChange={(e) => handleInputChange(e, "filter_change")}
-                >
-                  {languageOptions.map((language) => {
-                    return (
-                      <option value={language.value} key={language.value}>
-                        {language.label}
-                      </option>
-                    )
-                  })}
-                </Select>
+            <Flex
+              id="advancedSearchLeft"
+              gap="s"
+              direction="column"
+              grow="1"
+              width={{ base: "100%", md: "50%" }}
+            >
+              {textInputFields.map(({ name, label }) => (
+                <FormField key={name}>
+                  <TextInput
+                    id={name}
+                    labelText={label}
+                    name={name}
+                    value={searchFormState[name]}
+                    onChange={debounce(
+                      (e) => handleInputChange(e, "input_change"),
+                      DEBOUNCE_INTERVAL
+                    )}
+                  />
+                </FormField>
+              ))}
+              <FormField gridGap="xs">
+                <DateFilter isAdvancedSearch {...dateFilterProps} />
               </FormField>
-              <FormField>{<DateFilter {...dateFilterProps} />}</FormField>
             </Flex>
-            <Flex direction="column" gap="l" grow="1">
-              <SearchFilterCheckboxField
-                options={searchAggregations.buildingLocation}
-                name="location"
-                label="Item location"
-                handleCheckboxChange={(e) =>
-                  handleCheckboxChange("buildingLocation", e)
-                }
-                searchFormState={searchFormState["filters"].buildingLocation}
-                gridOptions={{ min: 1, max: 1 }}
-              />
-              <SearchFilterCheckboxField
-                options={formatOptions}
-                name="format"
-                label="Format"
-                handleCheckboxChange={(e) => handleCheckboxChange("format", e)}
-                searchFormState={searchFormState["filters"].format}
-              />
+            <Flex
+              direction="column"
+              gap="s"
+              grow="1"
+              mt="25px"
+              width={{ base: "100%", md: "50%" }}
+            >
+              {multiselects}
             </Flex>
           </Flex>
+
           <HorizontalRule __css={{ margin: 0 }} />
           <Flex
             justifyContent={goBackHref ? "space-between" : "right"}
             flexDirection={{ base: "column-reverse", md: "row" }}
           >
             {goBackHref && (
-              <RCLink
+              <Link
                 display="flex"
                 href={goBackHref}
-                type="buttonSecondary"
+                variant="buttonSecondary"
                 id="back-to-search"
               >
                 <Icon
@@ -244,7 +322,7 @@ export default function AdvancedSearch({
                   mr="xs"
                 />
                 Go back
-              </RCLink>
+              </Link>
             )}
             <CancelSubmitButtonGroup
               formName="advanced-search"
@@ -263,7 +341,5 @@ export async function getServerSideProps({ req }) {
   const goBackHref = buildGoBackHref(req.headers.referer)
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const isAuthenticated = patronTokenResponse.isTokenValid
-  return {
-    props: { isAuthenticated, goBackHref },
-  }
+  return { props: { isAuthenticated, goBackHref } }
 }

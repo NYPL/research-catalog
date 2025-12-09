@@ -4,10 +4,9 @@ import {
   CardHeading,
   Icon,
   Text,
-  Link,
   Flex,
 } from "@nypl/design-system-react-components"
-import ExternalLink from "../Links/ExternalLink/ExternalLink"
+import Link from "../Link/Link"
 
 interface FindingAidProps {
   findingAidURL: string
@@ -25,21 +24,23 @@ const FindingAid = ({
       sx={{
         borderBottom: hasElectronicResources ? "0px" : "1px ui.gray solid",
       }}
+      marginBottom="s"
     >
       <CardHeading level="four" size="body1" mb="xs">
         Collection information
       </CardHeading>
       <CardContent>
-        <ExternalLink
+        <Link
+          isExternal
           href={findingAidURL}
-          type="standalone"
+          variant="standalone"
           fontSize={{
             base: "mobile.body.body2",
             md: "desktop.body.body2",
           }}
         >
           Finding aid
-        </ExternalLink>
+        </Link>
         <Flex justifyContent="center" gap="xxs" mt="xs">
           <Icon name="errorOutline" iconRotation="rotate180" size="medium" />
           <Text size="caption" mb="0">
@@ -47,12 +48,14 @@ const FindingAid = ({
             organization and contents of this archival collection. Archival
             collections{" "}
             <Link
-              hasVisitedState={false}
-              href={"https://www.nypl.org/research/appointments"}
+              isExternal
+              href={
+                "https://libguides.nypl.org/special-collections-account-tutorial"
+              }
             >
-              require an appointment
+              may require an appointment
             </Link>{" "}
-            to view and use on-site.
+            to view and use onsite.
           </Text>
         </Flex>
       </CardContent>
