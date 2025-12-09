@@ -129,24 +129,26 @@ const SearchBrowseForm = ({
             width: "100%",
           }}
         >
-          <span
-            style={{
-              position: "absolute",
-              top: "-10px",
-              left: "-40px",
-              background: "green",
-              color: "white",
-              fontSize: "12px",
-              padding: "2px 6px",
-              borderRadius: "10px",
-              fontWeight: "bold",
-              zIndex: 999,
-              transform: "rotate(-12deg)",
-              transformOrigin: "center",
-            }}
-          >
-            NYQL prototype
-          </span>
+          {searchScope === "cql" && (
+            <span
+              style={{
+                position: "absolute",
+                top: "-10px",
+                left: "-40px",
+                background: "green",
+                color: "white",
+                fontSize: "12px",
+                padding: "2px 6px",
+                borderRadius: "10px",
+                fontWeight: "bold",
+                zIndex: 999,
+                transform: "rotate(-12deg)",
+                transformOrigin: "center",
+              }}
+            >
+              NYQL prototype
+            </span>
+          )}
           <SearchBar
             id="mainContent"
             action={path}
