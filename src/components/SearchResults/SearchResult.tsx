@@ -45,6 +45,12 @@ const SearchResult = ({ bib }: SearchResultProps) => {
     bib.getNumItemsMessage(),
   ].filter(Boolean)
 
+  const joinedMetadata = metadata.reduce((acc, piece, i) => {
+    if (i > 0) acc.push(separatingDot)
+    acc.push(<Text key={i}>{piece}</Text>)
+    return acc
+  }, [])
+
   return (
     <Card
       sx={{
@@ -79,12 +85,7 @@ const SearchResult = ({ bib }: SearchResultProps) => {
             },
           }}
         >
-          {metadata.map((piece, index) => (
-            <>
-              <Text key={index}>{piece}</Text>
-              {index < metadata.length - 1 && separatingDot}
-            </>
-          ))}
+          {joinedMetadata}
         </Box>
         {(bib.findingAid || bib.hasElectronicResources) && (
           <Box width="100%" mt="s">
