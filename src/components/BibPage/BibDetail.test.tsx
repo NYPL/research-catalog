@@ -114,16 +114,17 @@ describe("BibDetail component", () => {
       render(<BibDetails details={noParallelsBibModel.topDetails} />, {
         wrapper: MemoryRouterProvider,
       })
+      // creatorLiteral should link to contributorLiteral
       const creatorLiteralLink = screen.getByText("Cortanze, Gérard de.")
       expect(creatorLiteralLink).toHaveAttribute(
         "href",
         expect.stringContaining(
-          "/search?filters[creatorLiteral][0]=Cortanze%2C%20G%C3%A9rard%20de."
+          "/search?filters[contributorLiteral][0]=Cortanze%2C%20G%C3%A9rard%20de."
         )
       )
       await userEvent.click(creatorLiteralLink)
       expect(mockRouter.asPath).toBe(
-        "/search?filters%5BcreatorLiteral%5D%5B0%5D=Cortanze%2C+G%C3%A9rard+de."
+        "/search?filters%5BcontributorLiteral%5D%5B0%5D=Cortanze%2C+G%C3%A9rard+de."
       )
     })
     it("renders external links", async () => {
