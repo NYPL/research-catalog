@@ -7,6 +7,7 @@ on:
       - qa
       - production
       - train
+      - nyql # Deploying NYQL prototype to train for easier testing
 
 permissions:
   id-token: write
@@ -51,15 +52,26 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
+      - name: Set deployment environment
+        id: set-env
+        run: |
+          if [[ "${GITHUB_REF_NAME}" == "nyql" || "${GITHUB_REF_NAME}" == "train" ]]; then
+            echo "DEPLOY_ENV=train" >> $GITHUB_ENV
+            echo "ECR_REF_NAME=train" >> $GITHUB_ENV
+            echo "APP_ENV=qa" >> $GITHUB_ENV  # Use qa env for train and NYQL branch
+          else
+            echo "DEPLOY_ENV=${GITHUB_REF_NAME}" >> $GITHUB_ENV
+            echo "ECR_REF_NAME=${GITHUB_REF_NAME}" >> $GITHUB_ENV
+            echo "APP_ENV=${GITHUB_REF_NAME}" >> $GITHUB_ENV
+          fi
+
       - name: Set environment-specific variables
         run: |
-          # When building train, use APP_ENV=qa
-          echo "APP_ENV=${GITHUB_REF_NAME/train/qa}" >> $GITHUB_ENV
-          echo "ECR_TAG=${GITHUB_REF_NAME}-latest" >> $GITHUB_ENV
-          echo "PREVIOUS_TAG=${GITHUB_REF_NAME}-previous" >> $GITHUB_ENV
-          echo "CLUSTER=research-catalog-${GITHUB_REF_NAME}" >> $GITHUB_ENV
-          echo "SERVICE=research-catalog-${GITHUB_REF_NAME}" >> $GITHUB_ENV
-          echo "ECR_URL=946183545209.dkr.ecr.us-east-1.amazonaws.com/research-catalog:${GITHUB_REF_NAME}-latest" >> $GITHUB_ENV
+          echo "ECR_TAG=${ECR_REF_NAME}-latest" >> $GITHUB_ENV
+          echo "PREVIOUS_TAG=${ECR_REF_NAME}-previous" >> $GITHUB_ENV
+          echo "CLUSTER=research-catalog-${DEPLOY_ENV}" >> $GITHUB_ENV
+          echo "SERVICE=research-catalog-${DEPLOY_ENV}" >> $GITHUB_ENV
+          echo "ECR_URL=946183545209.dkr.ecr.us-east-1.amazonaws.com/research-catalog:${ECR_REF_NAME}-latest" >> $GITHUB_ENV
 
       - name: Build and push Docker image to Amazon ECR
         run: |
