@@ -96,6 +96,12 @@ export const SEARCH_FORM_OPTIONS = {
     ),
     placeholder: "e.g., Ornithology or Greek Architecture",
   },
+  cql: {
+    text: "CQL",
+    searchTip: <span>NYQL prototype! Enter a CQL query.</span>,
+    placeholder:
+      'Example: title any "ocean life" and contributor = "Jacques Cousteau"',
+  },
 }
 
 export const BROWSE_FORM_OPTIONS = {
