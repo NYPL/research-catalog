@@ -188,11 +188,11 @@ describe("MyAccountModel", () => {
         .fn()
         .mockResolvedValueOnce({
           bibEntries: checkoutBibs.entries,
-          itemVarFieldsMap: {},
+          itemEntries: {},
         })
         .mockResolvedValueOnce({
           bibEntries: holdBibs.entries,
-          itemVarFieldsMap: {},
+          itemEntries: {},
         })
       // passing in an empty object for a mock sierra client triggers a type error. ignore because we are
       // mocking the fetch calls.
@@ -217,7 +217,7 @@ describe("MyAccountModel", () => {
       MyAccount.prototype.fetchBibItemData = async () => ({
         total: 0,
         bibEntries: [],
-        itemVarFieldsMap: { entries: [] },
+        itemEntries: {},
       })
 
       const emptyAccount = await MyAccountFactory("12345", {})
@@ -236,11 +236,11 @@ describe("MyAccountModel", () => {
         .fn()
         .mockResolvedValueOnce({
           bibEntries: checkoutBibs.entries,
-          itemVarFieldsMap: {},
+          itemEntries: {},
         })
         .mockResolvedValueOnce({
           bibEntries: holdBibs.entries,
-          itemVarFieldsMap: {},
+          itemEntries: {},
         })
       const patronWithFails = await MyAccountFactory("123", {})
       expect(patronWithFails.holds).toBeNull()
@@ -261,7 +261,7 @@ describe("MyAccountModel", () => {
         })
         .mockResolvedValueOnce({
           bibEntries: holdBibs.entries,
-          itemVarFieldsMap: {},
+          itemEntries: {},
         })
       const patronWithFails = await MyAccountFactory("123", {})
       expect(patronWithFails.checkouts).toBe(null)
@@ -280,7 +280,7 @@ describe("MyAccountModel", () => {
       )
       expect(processedBibHolds).toStrictEqual({
         bibEntries: bibHolds.map((hold) => hold.record),
-        itemVarFieldsMap: {},
+        itemEntries: {},
       })
     })
     it("requests bib and item info for item level holds", async () => {
@@ -313,7 +313,7 @@ describe("MyAccountModel", () => {
 
       account.fetchBibItemData = jest.fn().mockResolvedValue({
         bibEntries: [{ id: "bib123", title: "Test Book", varFields: [] }],
-        itemVarFieldsMap: {
+        itemEntries: {
           item123: [{ fieldTag: "v", content: "v.1" }],
         },
       })

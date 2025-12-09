@@ -47,11 +47,11 @@ export default class MyAccount {
 
   async getCheckouts() {
     const checkouts = await this.fetchCheckouts()
-    const { bibEntries, itemVarFieldsMap } = await this.fetchBibItemData(
+    const { bibEntries, itemEntries } = await this.fetchBibItemData(
       checkouts.entries,
       "item"
     )
-    return this.buildCheckouts(checkouts.entries, bibEntries, itemVarFieldsMap)
+    return this.buildCheckouts(checkouts.entries, bibEntries, itemEntries)
   }
 
   async fetchHolds() {
@@ -62,15 +62,14 @@ export default class MyAccount {
 
   async getHolds() {
     const holds = await this.fetchHolds()
-
-    const { bibEntries, itemVarFieldsMap } = await this.fetchBibItemData(
+    const { bibEntries, itemEntries } = await this.fetchBibItemData(
       holds.entries,
       "record"
     )
     const holdsWithBibData = this.buildHolds(
       holds.entries,
       bibEntries,
-      itemVarFieldsMap
+      itemEntries
     )
     return MyAccount.sortHolds(holdsWithBibData)
   }
@@ -102,16 +101,15 @@ export default class MyAccount {
     total?: number
     start?: number
     bibEntries: SierraBibEntry[]
-    itemVarFieldsMap: Record<string, any[]>
+    itemEntries: Record<string, any[]>
   }> {
-    if (!holdsOrCheckouts?.length)
-      return { bibEntries: [], itemVarFieldsMap: {} }
+    if (!holdsOrCheckouts?.length) return { bibEntries: [], itemEntries: {} }
 
     const { bibLevelHolds, itemLevelHoldsorCheckouts } =
       MyAccount.filterBibLevelHolds(holdsOrCheckouts, itemOrRecord)
 
     const bibEntries = [...bibLevelHolds]
-    const itemVarFieldsMap: Record<string, any[]> = {}
+    let itemEntries = {}
 
     if (itemLevelHoldsorCheckouts.length) {
       try {
@@ -123,21 +121,34 @@ export default class MyAccount {
         )
         bibEntries.push(...itemLevelBibData.entries)
 
-        // Fetch item-level varFields to get volume
-        const itemIds = itemLevelHoldsorCheckouts.map((x) => x.itemId)
-        const itemLevelData = await this.client.get(
-          `items?id=${itemIds}&fields=varFields`
-        )
-
-        itemLevelData.entries.forEach((item) => {
-          itemVarFieldsMap[item.id] = item.varFields || []
-        })
+        // Fetch items
+        itemEntries = await this.fetchItemVarFields(itemLevelHoldsorCheckouts)
       } catch (e) {
         throw new Error(`Error fetching bib/item data: ${e}`)
       }
     }
 
-    return { bibEntries, itemVarFieldsMap }
+    return { bibEntries, itemEntries }
+  }
+
+  async fetchItemVarFields(
+    itemLevelHoldsorCheckouts: {
+      itemId: string
+      bibId: string
+    }[]
+  ) {
+    const itemEntries: Record<string, any[]> = {}
+
+    const itemIds = itemLevelHoldsorCheckouts.map((x) => x.itemId)
+    const itemLevelData = await this.client.get(
+      `items?id=${itemIds}&fields=varFields`
+    )
+
+    itemLevelData.entries.forEach((item) => {
+      itemEntries[item.id] = item.varFields || []
+    })
+
+    return itemEntries
   }
 
   /**
@@ -230,7 +241,7 @@ export default class MyAccount {
   buildHolds(
     holds: SierraHold[],
     bibData: SierraBibEntry[],
-    itemVarFieldsMap: Record<string, any[]>
+    itemData: Record<string, any[]>
   ): Hold[] {
     let bibDataMap: BibDataMapType
     try {
@@ -246,7 +257,7 @@ export default class MyAccount {
         const bibId =
           hold.recordType === "i" ? hold.record.bibIds[0] : hold.record.id
         const bibForHold = bibDataMap[bibId]
-        const itemVarFields = itemVarFieldsMap[hold.record.id] || []
+        const itemVarFields = itemData[hold.record.id] || []
         const volumeForItem = MyAccount.getItemVolume(itemVarFields)
 
         return {
@@ -282,7 +293,7 @@ export default class MyAccount {
   buildCheckouts(
     checkouts: SierraCheckout[],
     bibData: SierraBibEntry[],
-    itemVarFieldsMap: Record<string, any[]> = {}
+    itemData: Record<string, any[]> = {}
   ): Checkout[] {
     let bibDataMap: BibDataMapType
     try {
@@ -299,7 +310,7 @@ export default class MyAccount {
         .map((checkout: SierraCheckout) => {
           const bibId = checkout.item.bibIds[0]
           const bibForCheckout = bibDataMap[bibId]
-          const itemVarFields = itemVarFieldsMap[checkout.item.id] || []
+          const itemVarFields = itemData[checkout.item.id] || []
           const volumeForItem = MyAccount.getItemVolume(itemVarFields)
           return {
             numberOfRenewals: checkout.numberOfRenewals,
