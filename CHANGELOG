@@ -7,9 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+### Updated
+
+- Adds search filter links to bib's `addedAuthorTitle`, `placeOfPublication`, `series`, `uniformTitle`, `titleAlt`, and `donor` fields [SCC-4921](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4921)
+- Updated bib author to use `contributorLiteral` filter [SCC-4929](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4929)
+
+### Added
+
+- Added user guide banner (SCC-5060)(https://newyorkpubliclibrary.atlassian.net/browse/SCC-5060)
+
 ## Removed
 
-- Remove batched item fetch on bibs since `all_items` param is supported (SCC-4183)(https://newyorkpubliclibrary.atlassian.net/browse/SCC-4183)
+- Removed batched item fetch on bibs since `all_items` param is supported (SCC-4183)(https://newyorkpubliclibrary.atlassian.net/browse/SCC-4183)
+- Removed Adobe Analytics and reverse proxy/SHEP environment variables [SCC-5036](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5036)
 
 ## [1.6.1] 2025-11-13
 
@@ -25,7 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated variant preferred term links to index pages [SCC-4947](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4947)
 - Updated subject related term links to index pages [SCC-4933](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4933)
 - Updated subject heading links in bib details [SCC-4800](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4800)
-- Update subject filter to only display if there's a query [SCC-4886](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4886)
+- Updatex subject filter to only display if there's a query [SCC-4886](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4886)
 - Updated `RCLink` to `Link`, using Next Link, allowing clientside routing [SCC-4874](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4886)
 
 ## Added
