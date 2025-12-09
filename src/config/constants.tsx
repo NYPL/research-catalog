@@ -98,7 +98,7 @@ export const SEARCH_FORM_OPTIONS = {
   },
   cql: {
     text: "CQL",
-    searchTip: <span>NYQL prototype! Enter a CQL query.</span>,
+    searchTip: <span>NYQL prototype, enter a CQL query.</span>,
     placeholder:
       'Example: title any "ocean life" and contributor = "Jacques Cousteau"',
   },

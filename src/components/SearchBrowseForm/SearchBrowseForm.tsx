@@ -122,31 +122,57 @@ const SearchBrowseForm = ({
             {tipText}
           </Box>
         </Text>
-        <SearchBar
-          id="mainContent"
-          action={path}
-          method="get"
-          onSubmit={handleSubmit}
-          labelText={labelText}
-          isDisabled={isLoading}
-          pb={{ base: children ? 0 : "l", md: 0 }}
-          selectProps={{
-            value: searchScope,
-            onChange: (e) => handleChange(e, setSearchScope),
-            labelText: "Select a category",
-            name: scopeParamKey,
-            optionsData: formattedSelectOptions,
+        <div
+          style={{
+            position: "relative",
+            display: "inline-block",
+            width: "100%",
           }}
-          textInputProps={{
-            isClearable: true,
-            onChange: (e) => handleChange(e, setSearchTerm),
-            isClearableCallback: () => setSearchTerm(""),
-            value: searchTerm,
-            name: "q",
-            placeholder,
-            labelText: tipText,
-          }}
-        />
+        >
+          <span
+            style={{
+              position: "absolute",
+              top: "-10px",
+              left: "-40px",
+              background: "green",
+              color: "white",
+              fontSize: "12px",
+              padding: "2px 6px",
+              borderRadius: "10px",
+              fontWeight: "bold",
+              zIndex: 999,
+              transform: "rotate(-12deg)",
+              transformOrigin: "center",
+            }}
+          >
+            NYQL prototype
+          </span>
+          <SearchBar
+            id="mainContent"
+            action={path}
+            method="get"
+            onSubmit={handleSubmit}
+            labelText={labelText}
+            isDisabled={isLoading}
+            pb={{ base: children ? 0 : "l", md: 0 }}
+            selectProps={{
+              value: searchScope,
+              onChange: (e) => handleChange(e, setSearchScope),
+              labelText: "Select a category",
+              name: scopeParamKey,
+              optionsData: formattedSelectOptions,
+            }}
+            textInputProps={{
+              isClearable: true,
+              onChange: (e) => handleChange(e, setSearchTerm),
+              isClearableCallback: () => setSearchTerm(""),
+              value: searchTerm,
+              name: "q",
+              placeholder,
+              labelText: tipText,
+            }}
+          />
+        </div>
         {(children || activePage === "sh-results") && (
           <Flex
             direction="column"
