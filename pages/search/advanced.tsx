@@ -216,7 +216,7 @@ export default function AdvancedSearch({
     ) : (
       <MultiSelectWithGroupTitles
         key={field.value}
-        field={{ value: field.value, label: field.label }}
+        field={{ value: field.value, label: "Division" }}
         groupedItems={field.options}
         onChange={(e) => handleFilterChange(field.value, e.target.id)}
         onClear={() => handleFilterChange(field.value, null)}

@@ -1,5 +1,9 @@
 import type { CollapsedMultiValueAppliedFilters } from "../types/filterTypes"
 
+const FILTER_ALIASES: Record<string, string> = {
+  division: "collection",
+}
+
 // Filters are always multivalue query params in the form
 // filters[field][index]=value eg filters[format][0]=resourcetypes:aud.
 // This method returns an object that maps a field to an array of the values
@@ -10,10 +14,14 @@ export const collapseMultiValueQueryParams = (
   return Object.keys(queryParams)
     .filter((param) => param.includes("filters["))
     .reduce((acc, currentFilter) => {
-      const field = currentFilter.split("[")[1].split("]")[0]
+      const rawField = currentFilter.split("[")[1].split("]")[0]
+      const field = FILTER_ALIASES[rawField] ?? rawField
+
       const value = queryParams[currentFilter] ?? ""
+
       if (acc[field]) acc[field].push(String(value))
       else acc[field] = [String(value)]
+
       return acc
     }, {} as CollapsedMultiValueAppliedFilters)
 }
@@ -24,15 +32,17 @@ export const buildFilterQuery = (
   filters: CollapsedMultiValueAppliedFilters
 ) => {
   return Object.keys(filters).reduce((acc, field) => {
-    if (filters[field]?.filter((x) => x).length) {
+    //const canonicalField = FILTER_ALIASES[field] ?? field
+
+    if (filters[field]?.filter(Boolean).length) {
       filters[field].forEach(
-        (option, i) => (acc[`filters[${field}][${i}]`] = option)
+        (value, i) => (acc[`filters[${field}][${i}]`] = value)
       )
     }
+
     return acc
   }, {})
 }
-
 export const getQueryWithoutFiltersOrPage = (filters: object) => {
   return Object.keys(filters).reduce((acc, field) => {
     if (!field.includes("filters") && field !== "page") {
