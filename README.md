@@ -20,9 +20,9 @@ The [NYPL Research Catalog](https://www.nypl.org/research/research-catalog) is a
 - **Frontend Framework**: [Next.js](https://nextjs.org/)
 - **UI Components**: [@nypl/design-system-react-components](https://nypl.github.io/nypl-design-system/reservoir/)
 - **Data Fetching**: Server-side rendering with `getServerSideProps` and client-side fetching with JavaScript's native fetch API
-- **Styling**: SCSS modules and Style Props
+- **Styling**: SCSS modules and inline style props
 - **Testing**: Jest and React Testing Library
-- **Logging**: Winston logging to AWS Cloudwatch
+- **Logging**: Winston logging to AWS Cloudwatch and New Relic
 - **Authentication**: JWT-based patron "log in" for developing and testing authenticated features (Account and Hold requests)
 
 ## Getting Started
@@ -171,7 +171,6 @@ Both clients:
 
 - **Discovery API**: Main source for bib and item data (accessed via nyplApiClient)
 - **Sierra API**: Patron account management and item requests (accessed via sierraClient)
-- **SHEP API**: Subject heading data
 
 ## Authentication
 
@@ -222,13 +221,17 @@ Various arguments can be added to test commands.  Here's an example that runs al
 npx playwright test example.spec.ts --headed --project=chromium
 ```
 
-
 ## Deployment
 
 The application is deployed to:
 
 - **QA**: https://qa-www.nypl.org/research/research-catalog
 - **Production**: https://www.nypl.org/research/research-catalog
+
+We deploy (and run automated tests) using [Github Actions](https://github.com/NYPL/research-catalog/blob/main/.github/workflows), which run on `push` to the QA and production branches. We also deploy on `push` to `train`, though it is not part of our usual staging.
+
+To deploy to one of these environments from another branch, update the [deploy workflow](https://github.com/NYPL/research-catalog/blob/main/.github/workflows/test_and_deploy.yml) to include the desired branch, and merge that workflow into the default branch used for deployment (usually `train` for experiments), making sure to escape the branch name (`github.ref_name`) where necessary.
+
 
 ### Vercel Preview Links
 
@@ -303,7 +306,9 @@ When adding new environment variables or changing existing ones:
 4. Specify the environment (QA, production, or both) and the value for each environment
 5. Wait for confirmation from DevOps before deploying code that relies on the new variable
 
-Failure to update environment variables in Terraform will result in the variables being unavailable or reverting to default values when a new deployment occurs.
+Failure to update environment variables in Terraform will result in the variables being unavailable or reverting to default values when a new deployment occurs. 
+For variables that only need to be updated temporarily, like `SEARCH_RESULTS_NOTIFICATION`, it may be okay to create and deploy a new task definition revision without updating Terraform, knowing that it will be reverted on the next deployment.
+
 
 ## Logging
 
@@ -322,11 +327,8 @@ and view results in New Relic under "Research Catalog [local]".
 
 ### Accessing Logs
 
-- **QA/Production**: AWS CloudWatch under the `nypl-digital-dev` account (search for "research-catalog"), New Relic under "Research Catalog [qa]" and "Research Catalog [production]"
+- **QA/Production**: AWS CloudWatch under the `nypl-digital-dev` account (search for "research-catalog"), New Relic under "Research Catalog qa" and "Research Catalog prod"
 - **Vercel Deployments**: Console output in the Vercel dashboard
-
-
-
 
 
 ## Troubleshooting
@@ -337,12 +339,10 @@ and view results in New Relic under "Research Catalog [local]".
 
    - Ensure your machine's `etc/hosts` file is properly configured for local development
    - Check that you're accessing the site via `local.nypl.org:8080` instead of `localhost:8080`
+   - Check that your AWS SSO token is refreshed (`aws sso login --profile nypl-digital-dev`)
+      - For more information on issues with KMS and encrypted environment variables, refer to [ENVIRONMENT_VARIABLES.md](/docs/ENVIRONMENT_VARIABLES.md)
 
 2. **API Connection Issues**:
 
    - Verify that client keys/secrets are correctly set and decrypted
-   - Check VPN connection for APIs that require it (e.g., SHEP API)
-
-3. **Environment Variable Encryption**:
-
-   - For issues with encrypted environment variables, refer to the encryption/decryption instructions in [ENVIRONMENT_VARIABLES.md](/docs/ENVIRONMENT_VARIABLES.md)
+   - Check VPN connection (for QA APIs)

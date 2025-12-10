@@ -41,6 +41,10 @@ const sierraClient = async () => {
       throw new SierraClientError("Error decrypting creds")
     }
   }
+
+  if (!decryptedKey || !decryptedSecret) {
+    logger.error("Failed to decrypt Sierra creds")
+  }
   try {
     await wrapper.config({
       key: decryptedKey,

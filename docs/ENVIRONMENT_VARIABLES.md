@@ -12,7 +12,7 @@ Environment variables are used in this code repository to control how the applic
 
 General environment variables are declared in the `.env.example` file. A copy of this file should be made and saved as `.env.local` where real values should be added.
 
-Generally, environment variables are meant to be read through the `process.env` object _on the server_. Variables intended for use on the client side should be prefaced with NEXT*PUBLIC* per Next's [docs](https://nextjs.org/docs/pages/building-your-application/configuring/environment-variables).
+Generally, environment variables are meant to be read through the `process.env` object _on the server_. Variables intended for use on the client side should be prefaced with NEXT\__PUBLIC_ per Next's [docs](https://nextjs.org/docs/pages/building-your-application/configuring/environment-variables).
 
 If an environment variable is updated, make sure to restart the server for the application to pick up the new value.
 
@@ -20,24 +20,21 @@ If an environment variable is updated, make sure to restart the server for the a
 
 These environment variables control how certain elements on the page render and where to fetch data.
 
-| Variable                            | Type    | Value Example                                                                                | Description                                                                                                                             |
-| ----------------------------------- | ------- | -------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| `NEXT_PUBLIC_APP_ENV`               | string  | "development"                                                                                | App environment key used to determine various environment-specific app settings                                                         |
-| `NYPL_HEADER_URL`                   | string  | "https://ds-header.nypl.org"                                                                 | The base URL of the NYPL environment-specific header and footer scripts                                                                 |
-| `ADOBE_EMBED_URL`                   | string  | ""                                                                                           | Url endpoint used for Adobe Analytics event tracking                                                                                    |
-| `SHEP_API`                          | string  | ""                                                                                           | SHEP API endpoint used for fetching Subject Heading data                                                                                |
-| `SEARCH_RESULTS_NOTIFICATION`       | string  | "Due to winter holiday closures, the delivery time for off-site requests will be delayed..." | A string that can include HTML that will be rendered as a notification on the Home and Search Results pages                             |
-| `LOGIN_BASE_URL`                    | string  | ""                                                                                           | The base URL used to construct the environment-dependent login/logout link.                                                             |
-| `NEXT_PUBLIC_REVERSE_PROXY_ENABLED` | boolean | true                                                                                         | Feature flag that disables Next router navigation on Searches to fix issues navigating between research-catalog and discovery-front-end |
-| `SIERRA_BASE`                       | string  | ""                                                                                           | Sierra base url                                                                                                                         |
-| `SOURCE_EMAIL`                      | string  | ""                                                                                           | Default source email used in feedback form submissions                                                                                  |
-| `LIB_ANSWERS_EMAIL`                 | string  | ""                                                                                           | Destination email for feedback form submissions                                                                                         |
-| `NEW_RELIC_APP_NAME`                | string  | "Research Catalog [Local]"                                                                   | App name for New Relic                                                                                                                  |
-| `NEW_RELIC_LICENSE_KEY`             | string  | ""                                                                                           | Authentication for New Relic                                                                                                            |
+| Variable                      | Type   | Value Example                                                                               | Description                                                                                                 |
+| ----------------------------- | ------ | ------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_APP_ENV`         | string | "development"                                                                               | App environment key used to determine various environment-specific app settings                             |
+| `NYPL_HEADER_URL`             | string | "https://ds-header.nypl.org"                                                                | The base URL of the NYPL environment-specific header and footer scripts                                     |
+| `SEARCH_RESULTS_NOTIFICATION` | string | "Due to winter holiday closures, the delivery time for offsite requests will be delayed..." | A string that can include HTML that will be rendered as a notification on the Home and Search Results pages |
+| `LOGIN_BASE_URL`              | string | ""                                                                                          | The base URL used to construct the environment-dependent login/logout link                                  |
+| `SIERRA_BASE`                 | string | ""                                                                                          | Sierra base URL                                                                                             |
+| `SOURCE_EMAIL`                | string | ""                                                                                          | Default source email used in feedback form submissions                                                      |
+| `LIB_ANSWERS_EMAIL`           | string | ""                                                                                          | Destination email for feedback form submissions                                                             |
+| `NEW_RELIC_APP_NAME`          | string | "Research Catalog [Local]"                                                                  | App name for New Relic                                                                                      |
+| `NEW_RELIC_LICENSE_KEY`       | string | ""                                                                                          | Authentication key for New Relic                                                                            |
 
 ## AWS ECS Environment Variables
 
-As previously mentioned in the [README](README.md), we are using environment variables to make authorized requests to NYPL's API platform. In order to be secure, we are encrypting and decrypting those environment variables using AWS KMS. Please get these variables from someone on the LSP team. Running this app locally requires you to have an ~/.aws/config file with SSO configuration for the nypl-digital-dev profile.
+As previously mentioned in the [README](README.md), we are using environment variables to make authorized requests to NYPL's API platform. In order to be secure, we are encrypting and decrypting those environment variables using AWS KMS. Please get these variables from someone on the LSP team. Running this app locally requires you to have an `~/.aws/config` file with SSO configuration for the `nypl-digital-dev` profile.
 
 | Variable                     | Description                                           |
 | ---------------------------- | ----------------------------------------------------- |
