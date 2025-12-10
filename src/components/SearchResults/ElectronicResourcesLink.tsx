@@ -16,7 +16,13 @@ const ElectronicResourcesLink = ({
   electronicResources,
 }: ElectronicResourcesLinkProps) => {
   return (
-    <Card isBordered data-testid="electronic-resources-link" marginBottom="s">
+    <Card
+      bg="ui.bg.default"
+      p="s"
+      data-testid="electronic-resources-link"
+      marginBottom="s"
+      borderRadius="8px"
+    >
       <CardHeading level="four" size="body1" mb="xs">
         Available online
       </CardHeading>

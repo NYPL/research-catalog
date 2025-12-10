@@ -18,9 +18,9 @@ import {
 import type { Hold, SierraHold } from "../../types/myAccountTypes"
 
 describe("MyAccountModel", () => {
-  const fetchBibs = MyAccount.prototype.fetchBibData
+  const fetchBibs = MyAccount.prototype.fetchBibItemData
   afterEach(() => {
-    MyAccount.prototype.fetchBibData = fetchBibs
+    MyAccount.prototype.fetchBibItemData = fetchBibs
   })
 
   describe("getRecordId", () => {
@@ -79,13 +79,14 @@ describe("MyAccountModel", () => {
             return Promise.resolve(checkouts)
           } else if (path.includes("bibs")) {
             return Promise.resolve(checkoutBibs)
+          } else if (path.includes("items")) {
+            return Promise.resolve({ entries: [] })
           }
         },
       }
-      const fixtureProcessedCheckouts = processedCheckouts
       const fetcher = new MyAccount(mockSierraClient, "12345")
       const processedCheckoutsToTest = await fetcher.getCheckouts()
-      expect(processedCheckoutsToTest).toStrictEqual(fixtureProcessedCheckouts)
+      expect(processedCheckoutsToTest).toStrictEqual(processedCheckouts)
     })
     it("can return holds", async () => {
       const mockSierraClient = {
@@ -94,20 +95,22 @@ describe("MyAccountModel", () => {
             return Promise.resolve(holds)
           } else if (path.includes("bibs")) {
             return Promise.resolve(holdBibs)
+          } else if (path.includes("items")) {
+            return Promise.resolve({ entries: [] })
           }
         },
       }
       const fetcher = new MyAccount(mockSierraClient, "12345")
-      const processedHolds = await fetcher.getHolds()
-      expect(processedHolds).toStrictEqual(processedHolds)
+      const processedHoldsToTest = await fetcher.getHolds()
+      expect(processedHoldsToTest).toStrictEqual(processedHolds)
     })
     it("can return fines", async () => {
       const mockSierraClient = {
         get: async () => Promise.resolve(fines),
       }
       const fetcher = new MyAccount(mockSierraClient, "12345")
-      const processedFines = await fetcher.getFines()
-      expect(processedFines).toStrictEqual(processedFines)
+      const processedFinesToTest = await fetcher.getFines()
+      expect(processedFinesToTest).toStrictEqual(processedFines)
     })
   })
 
@@ -181,10 +184,16 @@ describe("MyAccountModel", () => {
       MyAccount.prototype.fetchHolds = async () => Promise.resolve(holds)
       MyAccount.prototype.fetchPatron = async () => Promise.resolve(patron)
       MyAccount.prototype.fetchFines = async () => Promise.resolve(fines)
-      MyAccount.prototype.fetchBibData = jest
+      MyAccount.prototype.fetchBibItemData = jest
         .fn()
-        .mockResolvedValueOnce(checkoutBibs)
-        .mockResolvedValueOnce(holdBibs)
+        .mockResolvedValueOnce({
+          bibEntries: checkoutBibs.entries,
+          itemEntries: {},
+        })
+        .mockResolvedValueOnce({
+          bibEntries: holdBibs.entries,
+          itemEntries: {},
+        })
       // passing in an empty object for a mock sierra client triggers a type error. ignore because we are
       // mocking the fetch calls.
       // @ts-ignore
@@ -194,6 +203,7 @@ describe("MyAccountModel", () => {
       expect(account.checkouts).toStrictEqual(processedCheckouts)
       expect(account.fines).toStrictEqual(processedFines)
     })
+
     it("builds empty Account data model with empty phones, email, username", async () => {
       MyAccount.prototype.fetchCheckouts = async () => empty
       MyAccount.prototype.fetchHolds = async () => empty
@@ -204,7 +214,11 @@ describe("MyAccountModel", () => {
         varFields: [{ fieldtag: "not u", content: "irrelevant" }],
       })
       MyAccount.prototype.fetchFines = async () => ({ total: 0, entries: [] })
-      MyAccount.prototype.fetchBibData = async () => ({ total: 0, entries: [] })
+      MyAccount.prototype.fetchBibItemData = async () => ({
+        total: 0,
+        bibEntries: [],
+        itemEntries: {},
+      })
 
       const emptyAccount = await MyAccountFactory("12345", {})
       expect(emptyAccount.patron).toStrictEqual(emptyPatron)
@@ -218,10 +232,16 @@ describe("MyAccountModel", () => {
       MyAccount.prototype.fetchHolds = jest.fn().mockRejectedValue({})
       MyAccount.prototype.fetchPatron = async () => Promise.resolve(patron)
       MyAccount.prototype.fetchFines = async () => ({ total: 0, entries: [] })
-      MyAccount.prototype.fetchBibData = jest
+      MyAccount.prototype.fetchBibItemData = jest
         .fn()
-        .mockResolvedValueOnce(checkoutBibs)
-        .mockResolvedValueOnce(holdBibs)
+        .mockResolvedValueOnce({
+          bibEntries: checkoutBibs.entries,
+          itemEntries: {},
+        })
+        .mockResolvedValueOnce({
+          bibEntries: holdBibs.entries,
+          itemEntries: {},
+        })
       const patronWithFails = await MyAccountFactory("123", {})
       expect(patronWithFails.holds).toBeNull()
       expect(patronWithFails.checkouts).not.toHaveLength(0)
@@ -234,12 +254,15 @@ describe("MyAccountModel", () => {
       MyAccount.prototype.fetchHolds = async () => Promise.resolve(holds)
       MyAccount.prototype.fetchPatron = async () => Promise.resolve(patron)
       MyAccount.prototype.fetchFines = async () => ({ total: 0, entries: [] })
-      MyAccount.prototype.fetchBibData = jest
+      MyAccount.prototype.fetchBibItemData = jest
         .fn()
         .mockImplementationOnce(() => {
           throw new Error("spahget")
         })
-        .mockResolvedValueOnce(holdBibs)
+        .mockResolvedValueOnce({
+          bibEntries: holdBibs.entries,
+          itemEntries: {},
+        })
       const patronWithFails = await MyAccountFactory("123", {})
       expect(patronWithFails.checkouts).toBe(null)
       expect(patronWithFails.holds).not.toHaveLength(0)
@@ -247,25 +270,64 @@ describe("MyAccountModel", () => {
       expect(patronWithFails.patron.name).toEqual("Strega Nonna")
     })
   })
-  describe("fetchBibData", () => {
+  describe("fetchBibItemData", () => {
     it("can handle bib level holds with no item level holds", async () => {
       const account = new MyAccount({ get: () => "spaghetti" }, "1234567")
       const bibHolds = holds.entries.filter((hold) => !hold.record.bibIds)
-      const processedBibHolds = await account.fetchBibData(
+      const processedBibHolds = await account.fetchBibItemData(
         bibHolds as SierraHold[],
         "record"
       )
       expect(processedBibHolds).toStrictEqual({
-        entries: bibHolds.map((hold) => hold.record),
+        bibEntries: bibHolds.map((hold) => hold.record),
+        itemEntries: {},
       })
     })
-    it("requests bib info for item level holds", async () => {
+    it("requests bib and item info for item level holds", async () => {
       const fetchSpy = jest.fn().mockResolvedValue({ entries: [{ id: "123" }] })
       const account = new MyAccount({ get: fetchSpy }, "1234567")
 
-      await account.fetchBibData(holds.entries as SierraHold[], "record")
+      await account.fetchBibItemData(holds.entries as SierraHold[], "record")
 
-      expect(fetchSpy).toHaveBeenCalled()
+      expect(fetchSpy).toHaveBeenCalledTimes(2)
+    })
+  })
+  describe("item-level volume appending", () => {
+    it("fetches item data and adds volume to title", async () => {
+      const itemLevelCheckout = [
+        {
+          id: "checkout123",
+          item: {
+            id: "item123",
+            bibIds: ["bib123"],
+            callNumber: "QA123",
+            barcode: "barcode123",
+          },
+          numberOfRenewals: 0,
+          patron: "patron123",
+          dueDate: "2025-12-08",
+        },
+      ]
+
+      const account = new MyAccount({ get: jest.fn() }, "patron123")
+
+      account.fetchBibItemData = jest.fn().mockResolvedValue({
+        bibEntries: [{ id: "bib123", title: "Test Book", varFields: [] }],
+        itemEntries: {
+          item123: [{ fieldTag: "v", content: "v.1" }],
+        },
+      })
+
+      account.fetchCheckouts = jest.fn().mockResolvedValue({
+        entries: itemLevelCheckout,
+      })
+      const checkouts = await account.getCheckouts()
+
+      expect(checkouts[0].title).toBe("Test Book v.1")
+      expect(account.fetchBibItemData).toHaveBeenCalledWith(
+        itemLevelCheckout,
+        "item"
+      )
     })
   })
 })
