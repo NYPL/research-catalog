@@ -270,7 +270,7 @@ export default class MyAccount {
           status: MyAccount.getHoldStatus(hold.status),
           pickupLocation: hold.pickupLocation,
           title: `${bibForHold.title}${
-            volumeForItem ? ` ${volumeForItem}` : ""
+            volumeForItem ? `\n${volumeForItem}` : ""
           }`,
           isResearch: bibForHold.isResearch,
           bibId,
@@ -322,7 +322,7 @@ export default class MyAccount {
             dueDate: MyAccount.formatDate(checkout.dueDate),
             patron: MyAccount.getRecordId(checkout.patron),
             title: `${bibForCheckout.title}${
-              volumeForItem ? ` ${volumeForItem}` : ""
+              volumeForItem ? `\n${volumeForItem}` : ""
             }`,
             isResearch: bibForCheckout.isResearch,
             bibId: bibId,
@@ -413,19 +413,6 @@ export const MyAccountFactory = async (id: string, client) => {
     patronFetcher.getPatron(),
     patronFetcher.getFines(),
   ])
-  const names = ["pickupLocations", "checkouts", "holds", "patron", "fines"]
-  console.log(
-    "MyAccountFactory data, temporary check:",
-    sierraData
-      .map((r, i) => {
-        const len =
-          r.status === "fulfilled" && r.value?.length !== undefined
-            ? r.value.length
-            : "n/a"
-        return `${names[i]}=${r.status}(len:${len})`
-      })
-      .join(" | ")
-  )
   const [pickupLocations, checkouts, holds, patron, fines] = sierraData.map(
     (data) => {
       if (data.status === "fulfilled") return data.value
