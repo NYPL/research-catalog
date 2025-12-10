@@ -9,16 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 
+- Updated search result card and finding aid/electronic resource styling [SCC-5038](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5038)
 - Adds search filter links to bib's `addedAuthorTitle`, `placeOfPublication`, `series`, `uniformTitle`, `titleAlt`, and `donor` fields [SCC-4921](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4921)
 - Updated bib author to use `contributorLiteral` filter [SCC-4929](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4929)
 
 ### Added
 
-- Added user guide banner (SCC-5060)(https://newyorkpubliclibrary.atlassian.net/browse/SCC-5060)
+- Added user guide banner [SCC-5060](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5060)
 
 ## Removed
 
-- Removed batched item fetch on bibs since `all_items` param is supported (SCC-4183)(https://newyorkpubliclibrary.atlassian.net/browse/SCC-4183)
+- Removed batched item fetch on bibs since `all_items` param is supported [SCC-4183](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4183)
 - Removed Adobe Analytics and reverse proxy/SHEP environment variables [SCC-5036](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5036)
 
 ## [1.6.1] 2025-11-13
