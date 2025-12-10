@@ -42,6 +42,13 @@ describe("SearchResult with Many Physical Items", () => {
     })
     expect(resultTitleLink).toHaveAttribute("href", "/bib/b14753192#item-table")
   })
+  it("displays the volume next to call number when it's there", async () => {
+    const firstItemRow = screen.getAllByRole("row")[0]
+    const text = firstItemRow.textContent?.replace(/\s+/g, " ").trim()
+    expect(text).toContain(
+      "Arents BIP (Hearn. Japanese) AL 04-11 [Text] Volume 4"
+    )
+  })
 })
 
 describe("SearchResult with Electronic Resources", () => {

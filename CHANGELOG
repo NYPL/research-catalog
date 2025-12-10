@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added user guide banner [SCC-5060](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5060)
+- Added volume to checkout/hold title display in My Account [SCC-5067](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5067)
+- Added volume to call number display on search result card [SCC-5079](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5079)
 
 ## Removed
 
