@@ -323,7 +323,8 @@ describe("MyAccountModel", () => {
       })
       const checkouts = await account.getCheckouts()
 
-      expect(checkouts[0].title).toBe("Test Book v.1")
+      expect(checkouts[0].title).toBe("Test Book")
+      expect(checkouts[0].volume).toBe("v.1")
       expect(account.fetchBibItemData).toHaveBeenCalledWith(
         itemLevelCheckout,
         "item"

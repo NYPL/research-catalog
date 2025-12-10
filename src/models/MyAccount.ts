@@ -179,7 +179,7 @@ export default class MyAccount {
     return { isResearch: true, isNyplOwned: false }
   }
 
-  static getItemVolume(itemVarFields) {
+  static getItemVolume(itemVarFields): string | null {
     const volume = itemVarFields.find((field) => field.fieldTag === "v")
     return volume?.content ?? null
   }
@@ -269,9 +269,8 @@ export default class MyAccount {
           frozen: hold.frozen,
           status: MyAccount.getHoldStatus(hold.status),
           pickupLocation: hold.pickupLocation,
-          title: `${bibForHold.title}${
-            volumeForItem ? `\n${volumeForItem}` : ""
-          }`,
+          title: bibForHold.title,
+          volume: volumeForItem,
           isResearch: bibForHold.isResearch,
           bibId,
           isNyplOwned: bibForHold.isNyplOwned,
@@ -321,9 +320,8 @@ export default class MyAccount {
             barcode: checkout.item.barcode,
             dueDate: MyAccount.formatDate(checkout.dueDate),
             patron: MyAccount.getRecordId(checkout.patron),
-            title: `${bibForCheckout.title}${
-              volumeForItem ? `\n${volumeForItem}` : ""
-            }`,
+            title: bibForCheckout.title,
+            volume: volumeForItem,
             isResearch: bibForCheckout.isResearch,
             bibId: bibId,
             isNyplOwned: bibForCheckout.isNyplOwned,

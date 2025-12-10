@@ -35,11 +35,17 @@ const RequestsTab = () => {
           href={hold.catalogHref}
         >
           {hold.title}
+          {hold.volume && `\n${hold.volume}`}
         </Link>
       )
     } else {
       // Item is a partner record
-      return <Text whiteSpace="pre-line">{hold.title}</Text>
+      return (
+        <Text whiteSpace="pre-line">
+          {hold.title}
+          {hold.volume && `\n${hold.volume}`}
+        </Text>
+      )
     }
   }
   const holdsHeaders = [
