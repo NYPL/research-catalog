@@ -1,25 +1,15 @@
 import Head from "next/head"
 import { useEffect } from "react"
-import { useRouter } from "next/router"
 import Script from "next/script"
 import "@nypl/design-system-react-components/dist/styles.css"
 import "../public/styles/globals.css"
-import { trackVirtualPageView } from "../src/utils/appUtils"
 import { appConfig } from "../src/config/config"
 import { BASE_URL, SITE_NAME } from "../src/config/constants"
-
 import { FeedbackProvider } from "../src/context/FeedbackContext"
 import { FocusProvider } from "../src/context/FocusContext"
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 function App({ Component, pageProps }) {
-  const router = useRouter()
-
-  // Track page view events to Adobe Analytics
-  useEffect(() => {
-    trackVirtualPageView(router.asPath)
-  })
-
   // Remove header and footer injections before print
   useEffect(() => {
     const handleBeforePrint = () => {
@@ -49,10 +39,6 @@ function App({ Component, pageProps }) {
 
   return (
     <>
-      <Script
-        async
-        src={appConfig.apiEndpoints.adobeEmbedUrl[appConfig.environment]}
-      />
       {/* Google tag manager */}
       <Script
         id="ga4-gtm"
@@ -67,17 +53,6 @@ function App({ Component, pageProps }) {
           `,
         }}
       />
-      {/* Adobe Analytics data layer initialization */}
-      <Script id="adobeDataLayerDefinition">
-        {`
-              // First define the global variable for the entire data layer array
-              window.adobeDataLayer = window.adobeDataLayer || [];
-              // Then push in the variables required in the Initial Data Layer Definition
-              window.adobeDataLayer.push({
-                disable_page_view: true
-              });
-           `}
-      </Script>
       {/*  NYPL Advocacy Snippet for Marketing Campaigns */}
       <Script
         src="https://assets.nypl.org/js/advocacy.js"

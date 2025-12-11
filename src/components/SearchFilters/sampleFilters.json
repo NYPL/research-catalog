@@ -2,8 +2,8 @@
   "selectedFilters": {
     "format": [],
     "language": [],
-    "dateAfter": "",
-    "dateBefore": "",
+    "dateFrom": "",
+    "dateTo": "",
     "subjectLiteral": []
   },
   "searchKeywords": "spaghetti",

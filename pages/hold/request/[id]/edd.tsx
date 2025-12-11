@@ -31,7 +31,10 @@ import initializePatronTokenAuth, {
 import Bib from "../../../../src/models/Bib"
 import Item from "../../../../src/models/Item"
 
-import type { DiscoveryBibResult } from "../../../../src/types/bibTypes"
+import type {
+  BibResponse,
+  DiscoveryBibResult,
+} from "../../../../src/types/bibTypes"
 import type { DiscoveryItemResult } from "../../../../src/types/itemTypes"
 
 import type {
@@ -40,9 +43,10 @@ import type {
   PatronEligibilityStatus,
 } from "../../../../src/types/holdPageTypes"
 import RCHead from "../../../../src/components/Head/RCHead"
-import Custom404 from "../../../404"
 import { tryInstantiate } from "../../../../src/utils/appUtils"
 import HoldRequestCompletedBanner from "../../../../src/components/HoldPages/HoldRequestCompletedBanner"
+import PageError from "../../../../src/components/Error/PageError"
+import type { HTTPStatusCode } from "../../../../src/types/appTypes"
 
 interface EDDRequestPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -50,9 +54,11 @@ interface EDDRequestPropsType {
   patronId: string
   patronEmail?: string
   isAuthenticated?: boolean
-  errorStatus?: HoldErrorStatus
   patronEligibilityStatus?: PatronEligibilityStatus
-  notFound?: boolean
+  // Hold request process errors
+  holdErrorStatus?: HoldErrorStatus
+  // Bib/item fetching errors
+  bibItemErrorStatus?: HTTPStatusCode | null
 }
 
 /**
@@ -64,26 +70,26 @@ export default function EDDRequestPage({
   patronId,
   patronEmail,
   isAuthenticated,
-  errorStatus: defaultErrorStatus,
+  holdErrorStatus: defaultErrorStatus,
   patronEligibilityStatus: defaultEligibilityStatus,
-  notFound = false,
+  bibItemErrorStatus = null,
 }: EDDRequestPropsType) {
   const metadataTitle = `Electronic Delivery Request | ${SITE_NAME}`
   const bib = tryInstantiate({
     constructor: Bib,
     args: [discoveryBibResult],
-    ignoreError: notFound,
+    ignoreError: !!bibItemErrorStatus,
     errorMessage: "Bib undefined",
   })
   const item = tryInstantiate({
     constructor: Item,
     args: [discoveryItemResult, bib],
-    ignoreError: notFound,
+    ignoreError: !!bibItemErrorStatus,
     errorMessage: "Item undefined",
   })
   const holdId = item ? `${item.bibId}-${item.id}` : ""
 
-  const [errorStatus, setErrorStatus] = useState(defaultErrorStatus)
+  const [holdErrorStatus, setHoldErrorStatus] = useState(defaultErrorStatus)
   const [patronEligibilityStatus, setPatronEligibilityStatus] = useState(
     defaultEligibilityStatus
   )
@@ -125,16 +131,16 @@ export default function EDDRequestPage({
 
   useEffect(() => {
     if (
-      errorStatus &&
-      errorStatus !== "invalid" &&
+      holdErrorStatus &&
+      holdErrorStatus !== "invalid" &&
       bannerContainerRef.current
     ) {
       bannerContainerRef.current.focus()
     }
-  }, [errorStatus, patronEligibilityStatus])
+  }, [holdErrorStatus, patronEligibilityStatus])
 
-  if (notFound) {
-    return <Custom404 activePage="hold" />
+  if (bibItemErrorStatus) {
+    return <PageError page="hold" errorStatus={bibItemErrorStatus} />
   }
 
   const handleServerHoldPostError = (errorMessage: string) => {
@@ -143,7 +149,7 @@ export default function EDDRequestPage({
       errorMessage
     )
     setFormPosting(false)
-    setErrorStatus("failed")
+    setHoldErrorStatus("failed")
   }
 
   const handleEDDRequestGAEvent = (item: Item) => {
@@ -178,12 +184,12 @@ export default function EDDRequestPage({
         // Patron is ineligible to place holds
         case 401:
           setFormPosting(false)
-          setErrorStatus("patronIneligible")
+          setHoldErrorStatus("patronIneligible")
           setPatronEligibilityStatus(responseJson?.patronEligibilityStatus)
           break
         case 403:
           setFormPosting(false)
-          setErrorStatus("failed")
+          setHoldErrorStatus("failed")
           break
         case 500:
           handleServerHoldPostError(responseJson.error)
@@ -207,10 +213,10 @@ export default function EDDRequestPage({
         {/* Always render the wrapper element that will display the
           dynamically rendered notification for focus management */}
         <Box tabIndex={-1} ref={bannerContainerRef}>
-          {errorStatus && (
+          {holdErrorStatus && (
             <HoldRequestErrorBanner
               item={item}
-              errorStatus={errorStatus}
+              errorStatus={holdErrorStatus}
               patronEligibilityStatus={patronEligibilityStatus}
             />
           )}
@@ -222,13 +228,13 @@ export default function EDDRequestPage({
         <HoldRequestItemDetails item={item} />
         {isLoading || formPosting ? (
           <SkeletonLoader showImage={false} data-testid="edd-request-loading" />
-        ) : errorStatus !== "eddUnavailable" ? (
+        ) : holdErrorStatus !== "eddUnavailable" ? (
           <EDDRequestForm
             eddFormState={eddFormState}
             setEddFormState={setEddFormState}
             handleSubmit={postEDDRequest}
-            setErrorStatus={setErrorStatus}
-            errorStatus={errorStatus}
+            setErrorStatus={setHoldErrorStatus}
+            errorStatus={holdErrorStatus}
             handleGAEvent={() => handleEDDRequestGAEvent(item)}
             holdId={holdId}
           />
@@ -274,21 +280,29 @@ export async function getServerSideProps({ params, req, res, query }) {
 
     // fetch bib and item
     const [bibId, itemId] = id.split("-")
-
     if (!itemId) {
-      throw new Error("No item id in url")
+      throw new Error("No item ID in URL")
     }
-    const { discoveryBibResult } = await fetchBib(bibId, {}, itemId)
+    const discoveryBib = await fetchBib(bibId, {}, itemId)
+    const discoveryBibResult = (discoveryBib as BibResponse).discoveryBibResult
     const discoveryItemResult = discoveryBibResult?.items?.[0]
 
+    if ("status" in discoveryBib && discoveryBib.status !== 200) {
+      return {
+        props: { bibItemErrorStatus: discoveryBib.status },
+      }
+    }
     if (!discoveryItemResult) {
-      throw new Error("EDD Page - Item not found")
+      console.error("EDD: Item not found")
+      return {
+        props: { bibItemErrorStatus: discoveryBib.status },
+      }
     }
 
     const bib = new Bib(discoveryBibResult)
     const item = new Item(discoveryItemResult, bib)
 
-    // Redirect if to aeonUrl if present in the item response
+    // Redirect to aeonUrl if present in the item response
     if (item.aeonUrl) {
       return {
         redirect: {
@@ -302,7 +316,7 @@ export async function getServerSideProps({ params, req, res, query }) {
       await fetchDeliveryLocations(item.barcode, patronId)
 
     if (locationStatus !== 200) {
-      console.error("EDD Page - Error fetching edd in getServerSideProps")
+      console.error("EDD: Error fetching delivery locations")
     }
 
     const isEddAvailable = eddRequestable && item.isEDDRequestable
@@ -327,7 +341,7 @@ export async function getServerSideProps({ params, req, res, query }) {
         patronEmail,
         isAuthenticated,
         patronEligibilityStatus,
-        errorStatus: locationOrEligibilityFetchFailed
+        holdErrorStatus: locationOrEligibilityFetchFailed
           ? "failed"
           : patronEligibilityStatus.status === 401
           ? "patronIneligible"
@@ -339,9 +353,9 @@ export async function getServerSideProps({ params, req, res, query }) {
       },
     }
   } catch (error) {
-    console.log(error)
+    console.error(error)
     return {
-      props: { notFound: true },
+      props: { bibItemErrorStatus: 500 },
     }
   }
 }

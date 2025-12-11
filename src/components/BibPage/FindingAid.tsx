@@ -4,10 +4,9 @@ import {
   CardHeading,
   Icon,
   Text,
-  Link,
   Flex,
 } from "@nypl/design-system-react-components"
-import ExternalLink from "../Links/ExternalLink/ExternalLink"
+import Link from "../Link/Link"
 
 interface FindingAidProps {
   findingAidURL: string
@@ -20,18 +19,18 @@ const FindingAid = ({
 }: FindingAidProps) => {
   return (
     <Card
-      isBordered
+      bg="ui.bg.default"
       data-testid="collection-information"
-      sx={{
-        borderBottom: hasElectronicResources ? "0px" : "1px ui.gray solid",
-      }}
+      p="s"
       marginBottom="s"
+      borderRadius="8px"
     >
       <CardHeading level="four" size="body1" mb="xs">
         Collection information
       </CardHeading>
       <CardContent>
-        <ExternalLink
+        <Link
+          isExternal
           href={findingAidURL}
           variant="standalone"
           fontSize={{
@@ -40,22 +39,26 @@ const FindingAid = ({
           }}
         >
           Finding aid
-        </ExternalLink>
-        <Flex justifyContent="center" gap="xxs" mt="xs">
-          <Icon name="errorOutline" iconRotation="rotate180" size="medium" />
-          <Text size="caption" mb="0">
-            The finding aid is a document containing details about the
-            organization and contents of this archival collection. Archival
-            collections{" "}
+        </Link>
+        <Flex justifyContent="center" gap="xxs" mt="xs" direction="column">
+          <Flex gap="xxs" mt="xs">
+            <Icon name="errorOutline" iconRotation="rotate180" size="medium" />
+            <Text size="caption" mb="0">
+              The finding aid is a document containing details about the
+              organization and contents of this archival collection.
+            </Text>
+          </Flex>
+          <Text size="caption" mb="0" ml="24px">
+            Archival collections{" "}
             <Link
-              hasVisitedState={false}
+              isExternal
               href={
                 "https://libguides.nypl.org/special-collections-account-tutorial"
               }
             >
               may require an appointment
             </Link>{" "}
-            to view and use on-site.
+            to view and use onsite.
           </Text>
         </Flex>
       </CardContent>

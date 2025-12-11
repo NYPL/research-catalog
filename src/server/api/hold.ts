@@ -23,6 +23,7 @@ import {
 
 import { appConfig } from "../../config/config"
 import { logServerError } from "../../utils/appUtils"
+import logger from "../../../logger"
 
 /**
  * Getter function for hold delivery locations.
@@ -224,7 +225,7 @@ export async function fetchPatronEligibility(
 
     return { status: 200, ...eligibilityResult }
   } catch (error) {
-    console.error(
+    logger.error(
       `Error fetching hold request eligibility in fetchPatronEligibility server function, patronId: ${patronId}`,
       error.message
     )

@@ -6,7 +6,7 @@ import {
   Text,
   Button,
   Select,
-  Link as DSLink,
+  Link,
   type DefaultModalProps,
   type BaseModalProps,
   SkeletonLoader,
@@ -171,9 +171,7 @@ const UpdateLocation = ({
       <Box className={styles.modalBody}>
         <Text>
           We were unable to change the pickup location. Please contact{" "}
-          <DSLink href="https://www.nypl.org/get-help/contact-us">
-            AskNYPL
-          </DSLink>{" "}
+          <Link href="https://www.nypl.org/get-help/contact-us">AskNYPL</Link>{" "}
           for further assistance.
         </Text>
       </Box>

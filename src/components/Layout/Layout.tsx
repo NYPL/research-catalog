@@ -1,10 +1,8 @@
 import type { PropsWithChildren } from "react"
 import {
-  Flex,
   Breadcrumbs,
   DSProvider,
   Heading,
-  Banner,
   TemplateBreakout,
   Template,
   TemplateContent,
@@ -12,13 +10,14 @@ import {
   Hero,
 } from "@nypl/design-system-react-components"
 import { type RCPage } from "../../types/pageTypes"
-import styles from "../../../styles/components/Layout.module.scss"
 import SearchForm from "../SearchForm/SearchForm"
 import { BASE_URL } from "../../config/constants"
 import FeedbackForm from "../FeedbackForm/FeedbackForm"
 import type { Aggregation } from "../../types/filterTypes"
-import EDSBanner from "../EDSBanner"
 import RCSubNav from "../RCSubNav/RCSubNav"
+import BrowseForm from "../BrowseForm/BrowseForm"
+import SubjectHeadingBanner from "../Banners/SubjectHeadingBanner"
+import SearchBanners from "../Banners/SearchBanners"
 
 interface LayoutProps {
   activePage?: RCPage
@@ -40,8 +39,11 @@ const Layout = ({
   searchResultsCount,
   bannerNotification,
 }: PropsWithChildren<LayoutProps>) => {
-  const showSearch = activePage === "search"
+  const showSearch = activePage === "search" || activePage === ""
+  const showBrowse = activePage === "browse" || activePage === "sh-results"
   const showNotification = activePage === "" || activePage === "search"
+  const showBrowseBanner =
+    activePage === "browse" || activePage === "sh-results"
   return (
     <DSProvider>
       <Template variant="full">
@@ -93,27 +95,22 @@ const Layout = ({
                 searchResultsCount={searchResultsCount}
               />
             )}
+            {showBrowse && (
+              <>
+                <BrowseForm
+                  activePage={activePage}
+                  aggregations={searchAggregations}
+                  searchResultsCount={searchResultsCount}
+                />
+                {showBrowseBanner && <SubjectHeadingBanner />}
+              </>
+            )}
 
             {showSearch && (
-              <Flex
-                gap="s"
-                align="center"
-                direction="column"
-                sx={{
-                  px: { base: "s", md: "m", xl: "s" },
-                  pt: "l",
-                  pb: "xs",
-                }}
-              >
-                <EDSBanner />
-                {showNotification && bannerNotification && (
-                  <Banner
-                    className={`${styles.banner} no-print`}
-                    heading="Service Announcement"
-                    content={bannerNotification}
-                  />
-                )}
-              </Flex>
+              <SearchBanners
+                showNotification={showNotification}
+                bannerNotification={bannerNotification}
+              />
             )}
           </>
         </TemplateBreakout>

@@ -1,9 +1,8 @@
 import { Text, Box, Icon, Table } from "@nypl/design-system-react-components"
-
-import ExternalLink from "../Links/ExternalLink/ExternalLink"
 import styles from "../../../styles/components/MyAccount.module.scss"
 import { appConfig } from "../../config/config"
 import type { RefObject } from "react"
+import Link from "../Link/Link"
 
 const ItemsTab = ({
   tabRef,
@@ -29,9 +28,9 @@ const ItemsTab = ({
         <Icon size="medium" name="errorOutline" iconRotation="rotate180" />{" "}
         <span>
           See{" "}
-          <ExternalLink href={appConfig.urls.circulatingCatalog}>
+          <Link isExternal href={appConfig.urls.circulatingCatalog}>
             eBooks and eAudiobooks
-          </ExternalLink>{" "}
+          </Link>{" "}
           {userAction} by you
         </span>
       </Box>

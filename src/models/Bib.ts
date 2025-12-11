@@ -1,8 +1,4 @@
-import type {
-  DiscoveryBibResult,
-  ElectronicResource,
-  SubjectHeading,
-} from "../types/bibTypes"
+import type { DiscoveryBibResult, ElectronicResource } from "../types/bibTypes"
 import type { JSONLDValue } from "../types/itemTypes"
 import type { Aggregation } from "../types/filterTypes"
 import Item from "../models/Item"

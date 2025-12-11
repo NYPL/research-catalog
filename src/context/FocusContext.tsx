@@ -23,13 +23,18 @@ const FocusContext = createContext<FocusContextType | undefined>(undefined)
 
 export const idConstants = {
   searchResultsHeading: "search-results-heading",
+  browseResultsHeading: "browse-results-heading",
   searchResultsSort: "search-results-sort",
+  browseResultsSort: "browse-results-sort",
   filterResultsHeading: "filter-results-heading",
   activeFiltersHeading: "active-filters-heading",
   searchFiltersModal: "search-filters-modal",
   applyDates: "apply-dates",
   holdErrorBanner: "hold-error",
   holdCompletedBanner: "hold-completed",
+  dateFrom: "date-from",
+  dateTo: "date-to",
+  advancedSearchError: "advanced-search-error",
 }
 
 export const FocusProvider = ({ children }: { children: React.ReactNode }) => {

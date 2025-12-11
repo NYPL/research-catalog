@@ -8686,6 +8686,7 @@ export const noParallels = {
     placeOfPublication: ["[Paris, France] :"],
     publicationStatement: ["[Paris, France] : Gallimard, c2005."],
     publisherLiteral: ["Gallimard,"],
+    series: ["Childhood"],
     seriesStatement: ["Haute enfance"],
     shelfMark: ["JFC 06-438"],
     subjectLiteral: [

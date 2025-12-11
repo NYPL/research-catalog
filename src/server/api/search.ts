@@ -10,10 +10,11 @@ import {
 } from "../../config/constants"
 import { logServerError } from "../../utils/appUtils"
 import nyplApiClient from "../nyplApiClient"
+import type { APIError } from "../../types/appTypes"
 
-export async function fetchResults(
+export async function fetchSearchResults(
   searchParams: SearchParams
-): Promise<SearchResultsResponse | { status: number; message?: string }> {
+): Promise<SearchResultsResponse | APIError> {
   const { q, field, filters } = searchParams
 
   // If user is making a search for bib number (i.e. field set to "standard_number"),
@@ -43,7 +44,7 @@ export async function fetchResults(
     queryString = "?"
   }
   const aggregationQuery = `/aggregations${queryString}`
-  const resultsQuery = `${queryString}&per_page=${RESULTS_PER_PAGE.toString()}`
+  const searchQuery = `${queryString}&per_page=${RESULTS_PER_PAGE.toString()}`
 
   // Get the following in parallel:
   //  - search results
@@ -53,26 +54,26 @@ export async function fetchResults(
     const client = await nyplApiClient()
 
     const [resultsResponse, aggregationsResponse] = await Promise.allSettled([
-      client.get(`${DISCOVERY_API_SEARCH_ROUTE}${resultsQuery}`),
+      client.get(`${DISCOVERY_API_SEARCH_ROUTE}${searchQuery}`),
       client.get(`${DISCOVERY_API_SEARCH_ROUTE}${aggregationQuery}`),
     ])
 
-    // Handle failed promises (500)
+    // Handle failed promises
     if (resultsResponse.status === "rejected") {
-      logServerError("fetchResults", resultsResponse.reason)
+      logServerError("fetchSearchResults", resultsResponse.reason)
       return {
         status: 500,
-        message:
+        error:
           resultsResponse.reason instanceof Error
             ? resultsResponse.reason.message
             : resultsResponse.reason,
       }
     }
     if (aggregationsResponse.status === "rejected") {
-      logServerError("fetchResults", aggregationsResponse.reason)
+      logServerError("fetchSearchResults", aggregationsResponse.reason)
       return {
         status: 500,
-        message:
+        error:
           aggregationsResponse.reason instanceof Error
             ? aggregationsResponse.reason.message
             : aggregationsResponse.reason,
@@ -84,21 +85,25 @@ export async function fetchResults(
 
     const aggregations = aggregationsResponse.value
 
-    // Handle invalid parameter rejection or empty results (422, 404)
-    if (
-      results.status === 422 ||
-      results.status === 404 ||
-      !(results?.totalResults > 0)
-    ) {
+    // Handle no results (404)
+    if (results?.totalResults === 0) {
+      return {
+        status: 404,
+        error: `No results found for search ${searchQuery}, aggregations ${aggregationQuery}`,
+      }
+    }
+
+    // Handle general error
+    if (results.status) {
       logServerError(
-        "fetchResults",
+        "fetchSearchResults",
         `${
-          results.message ? results.message : "No results found"
-        } Requests: ${DISCOVERY_API_SEARCH_ROUTE}${resultsQuery}, ${DISCOVERY_API_SEARCH_ROUTE}${aggregationQuery}`
+          results.error && results.error
+        } Requests: search ${searchQuery}, aggregations ${aggregationQuery}`
       )
       return {
-        status: results.status ?? 404,
-        message: results.message ?? "No results found",
+        status: results.status,
+        error: results.error,
       }
     }
 
@@ -109,7 +114,7 @@ export async function fetchResults(
       page: searchParams.page,
     }
   } catch (error: any) {
-    logServerError("fetchResults", error.message)
-    return { status: 500, message: error.message }
+    logServerError("fetchSearchResults", error)
+    return { status: 500, error }
   }
 }

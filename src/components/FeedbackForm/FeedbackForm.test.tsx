@@ -60,14 +60,14 @@ describe("FeedbackForm props in context", () => {
     onOpen: jest.fn(),
     itemMetadata: null,
     setItemMetadata: jest.fn(),
-    isError: false,
-    setError: jest.fn(),
+    errorStatus: null,
+    setErrorStatus: jest.fn(),
     openFeedbackFormWithError: jest.fn(),
   }
 
   it("renders notification text for error state", () => {
     render(
-      <FeedbackContext.Provider value={{ ...baseContext, isError: true }}>
+      <FeedbackContext.Provider value={{ ...baseContext, errorStatus: 404 }}>
         <FeedbackForm />
       </FeedbackContext.Provider>
     )

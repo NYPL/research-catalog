@@ -11,7 +11,6 @@ const decryptKMS = async (key: string): Promise<string | null> => {
   try {
     const decrypted = await kms.send(new DecryptCommand(params))
     if (!decrypted.Plaintext) throw new Error("Empty plaintext")
-
     return Buffer.from(decrypted.Plaintext).toString("utf8")
   } catch (error: any) {
     logServerError("decryptKMS", error.message)
