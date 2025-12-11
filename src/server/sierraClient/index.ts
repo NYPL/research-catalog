@@ -51,6 +51,11 @@ const sierraClient = async () => {
       secret: decryptedSecret,
       base: base,
     })
+    logger.info("Sierra client initialized", {
+      base,
+      keyPresent: !!decryptedKey,
+      secretPresent: !!decryptedSecret,
+    })
 
     CACHE.client = wrapper
     const get = wrapper.get.bind(wrapper)
