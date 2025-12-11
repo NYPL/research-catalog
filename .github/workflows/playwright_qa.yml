@@ -34,4 +34,4 @@ jobs:
         env:
           QA_USERNAME: ${{ secrets.QA_USERNAME }}
           QA_PASSWORD: ${{ secrets.QA_PASSWORD }}
-        run: npx playwright test --project=chromium --reporter=list,github,html --workers=2
+        run: npx playwright test --project=chromium --reporter=list,github,html --workers=1
