@@ -41,11 +41,20 @@ const sierraClient = async () => {
       throw new SierraClientError("Error decrypting creds")
     }
   }
+
+  if (!decryptedKey || !decryptedSecret) {
+    logger.error("Failed to decrypt Sierra creds")
+  }
   try {
     await wrapper.config({
       key: decryptedKey,
       secret: decryptedSecret,
       base: base,
+    })
+    logger.info("Sierra client initialized", {
+      base,
+      keyPresent: !!decryptedKey,
+      secretPresent: !!decryptedSecret,
     })
 
     CACHE.client = wrapper

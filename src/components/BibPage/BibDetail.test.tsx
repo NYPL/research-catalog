@@ -37,9 +37,10 @@ describe("BibDetail component", () => {
       render(<BibDetails details={noParallelsBibModel.bottomDetails} />, {
         wrapper: MemoryRouterProvider,
       })
-
       expect(screen.getByText("Language")).toBeInTheDocument()
       expect(screen.getByText("French")).toBeInTheDocument()
+      expect(screen.getByText("Series")).toBeInTheDocument()
+      expect(screen.queryAllByText("Childhood")[0]).toBeInTheDocument()
       expect(screen.getByText("Series statement")).toBeInTheDocument()
       expect(screen.queryAllByText(/Haute enfance/)[0]).toBeInTheDocument()
     })
@@ -57,21 +58,31 @@ describe("BibDetail component", () => {
     })
     it("merges annotated MARC and resource fields without value duplicates", () => {
       const combinedDetails = noParallelsBibModel.bottomDetails
+      // Stringify values for comparison
+      const toKey = (v: unknown): string => {
+        if (typeof v === "object" && v !== null) {
+          return JSON.stringify(v, Object.keys(v).sort())
+        }
+        return String(v)
+      }
       const allValues = combinedDetails.flatMap((d) => {
         // drop subjects, they don't need to be assessed for duplication
         if (d.label === "Subject") return []
-        return Array.isArray(d.value) ? d.value.map(String) : [String(d.value)]
+        const values = Array.isArray(d.value) ? d.value : [d.value]
+        return values.map(toKey)
       })
+
       const valueCounts = allValues.reduce((acc, value) => {
         acc[value] = (acc[value] || 0) + 1
         return acc
       }, {} as Record<string, number>)
 
-      Object.entries(valueCounts).forEach(([value, count]) => {
+      Object.values(valueCounts).forEach((count) => {
         expect(count).toBeLessThanOrEqual(1)
       })
     })
   })
+
   describe("text only details", () => {
     it("single value: title", () => {
       render(<BibDetails details={noParallelsBibModel.topDetails} />, {
@@ -103,16 +114,17 @@ describe("BibDetail component", () => {
       render(<BibDetails details={noParallelsBibModel.topDetails} />, {
         wrapper: MemoryRouterProvider,
       })
+      // creatorLiteral should link to contributorLiteral
       const creatorLiteralLink = screen.getByText("Cortanze, Gérard de.")
       expect(creatorLiteralLink).toHaveAttribute(
         "href",
         expect.stringContaining(
-          "/search?filters[creatorLiteral][0]=Cortanze%2C%20G%C3%A9rard%20de."
+          "/search?filters[contributorLiteral][0]=Cortanze%2C%20G%C3%A9rard%20de."
         )
       )
       await userEvent.click(creatorLiteralLink)
       expect(mockRouter.asPath).toBe(
-        "/search?filters%5BcreatorLiteral%5D%5B0%5D=Cortanze%2C+G%C3%A9rard+de."
+        "/search?filters%5BcontributorLiteral%5D%5B0%5D=Cortanze%2C+G%C3%A9rard+de."
       )
     })
     it("renders external links", async () => {
@@ -140,6 +152,16 @@ describe("BibDetail component", () => {
       expect(browseLink).toHaveAttribute(
         "href",
         expect.stringContaining("/browse?q=")
+      )
+    })
+    it("renders series field with search filter series link", () => {
+      render(<BibDetails details={noParallelsBibModel.bottomDetails} />, {
+        wrapper: MemoryRouterProvider,
+      })
+      const seriesStatement = screen.getByText("Childhood")
+      expect(seriesStatement).toHaveAttribute(
+        "href",
+        expect.stringContaining("/search?filters[series][0]=Childhood")
       )
     })
   })

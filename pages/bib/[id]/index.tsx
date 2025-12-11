@@ -48,6 +48,7 @@ import { tryInstantiate } from "../../../src/utils/appUtils"
 import Link from "../../../src/components/Link/Link"
 import type { HTTPStatusCode } from "../../../src/types/appTypes"
 import PageError from "../../../src/components/Error/PageError"
+import UserGuideBanner from "../../../src/components/Banners/UserGuideBanner"
 
 interface BibPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -226,9 +227,12 @@ export default function BibPage({
     <>
       <RCHead metadataTitle={metadataTitle} />
       <Layout isAuthenticated={isAuthenticated} activePage="bib">
+        <Box mb="l">
+          <UserGuideBanner />
+        </Box>
         {findingAid && (
           <StatusBadge mb="s" variant="informative">
-            FINDING AID AVAILABLE
+            Finding aid available
           </StatusBadge>
         )}
         <Heading level="h2" size="heading3" mb="-m">
@@ -259,20 +263,6 @@ export default function BibPage({
             >
               Items in the library and offsite
             </Heading>
-            <Banner
-              content={
-                <Link
-                  isExternal
-                  href="https://www.nypl.org/help/request-research-materials"
-                >
-                  How do I request and pick up research materials for onsite
-                  use?
-                </Link>
-              }
-              isDismissible
-              mb="s"
-              className="no-print"
-            />
             <ItemFilters
               itemAggregations={bib.itemAggregations}
               handleFiltersChange={handleFiltersChange}

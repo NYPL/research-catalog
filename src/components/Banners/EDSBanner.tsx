@@ -13,17 +13,13 @@ const EDSBanner = () => {
       variant="informative"
       content={
         <>
-          <span style={{ color: "var(--nypl-colors-ui-success-primary)" }}>
-            New!
-          </span>{" "}
           Try{" "}
           <Link
+            style={{ color: "var(--nypl-colors-ui-link-primary" }}
             isExternal
             href="https://www.nypl.org/research/collections/online-resources-databases"
           >
-            <b style={{ color: "var(--nypl-colors-ui-link-primary" }}>
-              Article Plus
-            </b>
+            Article Plus
           </Link>{" "}
           to discover online journals, books, and more from home with your
           library card.

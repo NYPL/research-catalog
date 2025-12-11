@@ -23,11 +23,11 @@ describe("Layout", () => {
   })
   it("should show search", () => {
     render(<Layout activePage="search"></Layout>)
-    screen.getByLabelText(searchLabel)
+    expect(screen.getByLabelText(searchLabel)).toBeInTheDocument()
   })
-  it("should show search bar on search page", () => {
+  it("should show search banners", () => {
     render(<Layout activePage="search"></Layout>)
-    screen.getByLabelText(searchLabel)
+    expect(screen.getAllByRole("complementary")).toHaveLength(2)
   })
   it("should hide Log Out if user is not logged in", () => {
     render(<Layout activePage="search" isAuthenticated={false}></Layout>)
