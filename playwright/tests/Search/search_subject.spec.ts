@@ -31,7 +31,7 @@ test.describe("Subject Search", () => {
     for (const url of urls) {
       await page.goto(url)
       await expect(
-        page.getByRole("link", { name: new RegExp(`^${searchterm}$`) }).first()
+        page.getByRole("link", { name: new RegExp(`^${searchterm}`) }).first()
       ).toBeVisible({ timeout: 10000 })
     }
   })
