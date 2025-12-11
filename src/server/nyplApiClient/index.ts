@@ -34,6 +34,10 @@ const nyplApiClient = async ({
 
   const baseUrl = `${appConfig.apiEndpoints[apiName][appEnvironment]}/${version}`
 
+  if (!encryptedClientId || !baseUrl || !encryptedClientSecret) {
+    console.error("Missing Platform API credentials")
+  }
+
   let decryptedId: string
   let decryptedSecret: string
   if (CACHE.secret && CACHE.id) {
