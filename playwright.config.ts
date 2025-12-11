@@ -17,10 +17,7 @@ export default defineConfig({
   reporter: "html",
 
   use: {
-    // Use BASE_URL from environment, or fall back to local
-    baseURL:
-      process.env.BASE_URL ||
-      "http://local.nypl.org:8080/research/research-catalog",
+    baseURL: "http://localhost:8080/research/research-catalog",
     trace: "on-first-retry",
   },
 
@@ -39,13 +36,10 @@ export default defineConfig({
     },
   ],
 
-  // Only start local server when NOT in CI
-  webServer: process.env.CI
-    ? undefined
-    : {
-        command: "npm run dev",
-        url: "http://local.nypl.org:8080/research/research-catalog",
-        reuseExistingServer: !process.env.CI,
-        timeout: 120 * 1000,
-      },
+  webServer: {
+    command: "npm run dev",
+    url: "http://localhost.org:8080/research/research-catalog",
+    reuseExistingServer: !process.env.CI,
+    timeout: 120 * 1000,
+  },
 })
