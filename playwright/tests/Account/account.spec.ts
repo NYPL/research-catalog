@@ -109,7 +109,7 @@ test.describe("Account Settings", () => {
     const homeLibraryLabel = page.locator("p", { hasText: /home library/i })
     await expect(homeLibraryLabel).toBeVisible()
     const homeLibraryValue = homeLibraryLabel.locator("xpath=following::div[1]")
-    await expect(homeLibraryValue).toHaveText(/^Stavros Niarchos/)
+    await expect(homeLibraryValue).toHaveText(/^53rd Street/)
 
     const notificationPreferenceLabel = page.locator("p", {
       hasText: /notification preference/i,

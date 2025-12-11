@@ -45,7 +45,7 @@ export default defineConfig({
     : {
         command: "npm run dev",
         url: "http://local.nypl.org:8080/research/research-catalog",
-        reuseExistingServer: true,
+        reuseExistingServer: !process.env.CI,
         timeout: 120 * 1000,
       },
 })

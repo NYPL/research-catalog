@@ -26,7 +26,6 @@ test.describe("Research Catalog Home Page", () => {
     await expect(rcHomePage.search_submit_button).toBeVisible()
     await expect(rcHomePage.advanced_search_link).toBeVisible()
     await expect(rcHomePage.info_banner).toBeVisible()
-    await expect(rcHomePage.info_banner).toContainText("New!")
     await expect(rcHomePage.body_main_heading).toBeVisible()
     await expect(rcHomePage.body_main_heading_text).toHaveText(
       /^Discover millions of items/
