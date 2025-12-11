@@ -37,7 +37,7 @@ export default defineConfig({
   ],
 
   webServer: {
-    command: "npm run start",
+    command: process.env.CI ? "npm run start" : "npm run dev",
     url: "http://localhost:8080/research/research-catalog",
     reuseExistingServer: true,
     timeout: 120000,

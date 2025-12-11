@@ -17,6 +17,7 @@ test.describe("Title Search", () => {
     await expect(searchPage.searchResultsHeading).toBeVisible({
       timeout: 15000,
     })
+    await page.screenshot({ path: "ci-failure.png", fullPage: true })
     await expect(await searchPage.searchResultsTitle.count()).toBeGreaterThan(
       10
     )
