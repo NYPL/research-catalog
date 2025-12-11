@@ -1,8 +1,9 @@
-name: Playwright Tests
+name: Run Playwright Tests
 
 on:
   push:
     branches:
+      - qa
       - playwright-gha-test
   workflow_dispatch:
 
@@ -30,4 +31,7 @@ jobs:
         run: npx playwright install
 
       - name: Run Playwright tests
-        run: npx playwright test
+        env:
+          QA_USERNAME: ${{ secrets.QA_USERNAME }}
+          QA_PASSWORD: ${{ secrets.QA_PASSWORD }}
+        run: npx playwright test --project=chromium --reporter=list,github,html --workers=2
