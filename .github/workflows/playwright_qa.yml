@@ -16,6 +16,8 @@ jobs:
       SIERRA_KEY: ${{ secrets.SIERRA_KEY }}
       SIERRA_SECRET: ${{ secrets.SIERRA_SECRET }}
       SIERRA_BASE: ${{ secrets.SIERRA_BASE }}
+      PLATFORM_API_CLIENT_ID: ${{ secrets.PLATFORM_API_CLIENT_ID}}
+      PLATFORM_API_CLIENT_SECRET: ${{ secrets.PLATFORM_API_CLIENT_SECRET}}
     strategy:
       matrix:
         node-version: [20.x]
