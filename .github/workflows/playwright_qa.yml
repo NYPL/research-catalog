@@ -30,6 +30,8 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install
 
+      - name: Build
+        run: npm run build
       - name: Run Playwright tests
         env:
           QA_USERNAME: ${{ secrets.QA_USERNAME }}
