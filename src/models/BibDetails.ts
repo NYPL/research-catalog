@@ -150,33 +150,19 @@ export default class BibDetails {
   }
 
   buildBottomDetails(): AnyBibDetail[] {
-    const linkedFields = [
-      "contributorLiteral",
-      "addedAuthorTitle",
-      "placeOfPublication",
-      "series",
-      "uniformTitle",
-      "subjectLiteral",
-      "titleAlt",
-      "donor",
-      "genreForm",
-    ]
     const resourceFields = [
       { field: "contributorLiteral", label: "Additional authors" },
-      { field: "addedAuthorTitle", label: "Author added title" },
-      { field: "placeOfPublication", label: "Place of publication" },
       { field: "partOf", label: "Found in" },
       { field: "serialPublicationDates", label: "Publication date" },
       { field: "extent", label: "Description" },
       { field: "description", label: "Summary" },
-      { field: "donor", label: "Donor/sponsor" },
-      { field: "series", label: "Series" },
+      { field: "donor", label: "Donor/Sponsor" },
       { field: "seriesStatement", label: "Series statement" },
       { field: "uniformTitle", label: "Uniform title" },
       { field: "titleAlt", label: "Alternative title" },
       { field: "formerTitle", label: "Former title" },
       { field: "subjectLiteral", label: "Subject" },
-      { field: "genreForm", label: "Genre/form" },
+      { field: "genreForm", label: "Genre/Form" },
       { field: "tableOfContents", label: "Contents" },
       { field: "shelfMark", label: "Call number" },
       { field: "isbn", label: "ISBN" },
@@ -187,10 +173,13 @@ export default class BibDetails {
       { field: "language", label: "Language" },
     ]
       .map((fieldMapping: FieldMapping): AnyBibDetail => {
-        const isLinked = linkedFields.includes(fieldMapping.field)
-        const detail = isLinked
-          ? this.buildSearchFilterUrl(fieldMapping)
-          : this.buildStandardDetail(fieldMapping)
+        let detail: AnyBibDetail
+        if (
+          fieldMapping.field === "contributorLiteral" ||
+          fieldMapping.field === "subjectLiteral"
+        )
+          detail = this.buildSearchFilterUrl(fieldMapping)
+        else detail = this.buildStandardDetail(fieldMapping)
         return detail
       })
       .filter((f) => f)
@@ -308,22 +297,13 @@ export default class BibDetails {
       link: "internal",
       label: convertToSentenceCase(fieldMapping.label),
       value: value.map((v: string) => {
-        const { field } = fieldMapping
-        let internalUrl: string
-        switch (field) {
-          case "subjectLiteral":
-            internalUrl = `/browse/subjects/${encodeURIComponent(v)}`
-            break
-          case "creatorLiteral":
-            internalUrl = `/search?filters[contributorLiteral][0]=${encodeURIComponent(
-              v
-            )}`
-            break
-          default:
-            internalUrl = `/search?filters[${field}][0]=${encodeURIComponent(
-              v
-            )}`
-        }
+        // subjectLiteral links to browse
+        const internalUrl =
+          fieldMapping.field === "subjectLiteral"
+            ? `/browse/subjects/${encodeURIComponent(v)}`
+            : `/search?filters[${fieldMapping.field}][0]=${encodeURIComponent(
+                v
+              )}`
         return { url: internalUrl, urlLabel: v }
       }),
     }
