@@ -13,6 +13,13 @@ test.describe("Title Search", () => {
   test("Do a title search and assert at least 10 returned titles contain the supplied keyword", async () => {
     await searchPage.searchFor(searchterm, "Title")
 
+    const firstResult = searchPage.searchResultsTitle.first()
+    await firstResult.scrollIntoViewIfNeeded()
+
+    await expect(searchPage.searchResultsTitle.first()).toBeVisible({
+      timeout: 15000,
+    })
+
     await expect(searchPage.searchResultsHeading).toBeVisible({
       timeout: 15000,
     })

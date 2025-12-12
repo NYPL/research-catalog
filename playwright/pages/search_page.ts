@@ -17,9 +17,7 @@ export class SearchPage {
     this.searchterm = searchterm
     this.searchType = searchType
 
-    this.search_dropdown = page.getByRole("combobox", {
-      name: "Select a category",
-    })
+    this.search_dropdown = page.getByLabel("Select a category")
     this.search_input = page.getByRole("textbox")
     this.search_submit_button = page.getByRole("button", {
       name: "Search",
@@ -28,9 +26,9 @@ export class SearchPage {
 
     this.searchResultsContainer = page.locator("#search-results-list")
     this.searchResults = page.locator("#search-results-list h3 a")
-    this.searchResultsTitle = page
-      .locator("#search-results-list")
-      .getByRole("link", { name: new RegExp(this.searchterm, "i") })
+    this.searchResultsTitle = page.locator("#search-results-list a", {
+      hasText: this.searchterm,
+    })
   }
 
   get searchResultsHeading() {
@@ -42,25 +40,13 @@ export class SearchPage {
     })
   }
 
-  // Perform search and automatically wait for results
+  // Perform search
   async searchFor(searchterm: string, searchType = "Keyword") {
     this.searchType = searchType
-
-    // Wait for dropdown visible before selecting
-    await this.search_dropdown.waitFor({ state: "visible", timeout: 10000 })
     await this.search_dropdown.selectOption({ label: searchType })
 
     await this.search_input.fill(searchterm)
     await this.search_submit_button.click()
-
-    // Wait for at least one search result to appear
-    await this.searchResultsTitle
-      .first()
-      .waitFor({ state: "visible", timeout: 20000 })
-
-    // Scroll first result into view to trigger lazy loading in CI
-    await this.searchResultsTitle.first().scrollIntoViewIfNeeded()
-    await this.page.waitForTimeout(500)
   }
 
   // Scroll all results
