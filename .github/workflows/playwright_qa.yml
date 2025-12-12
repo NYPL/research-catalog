@@ -38,7 +38,7 @@ jobs:
       - name: Build
         run: npm run build
       - name: Run Playwright tests
-        run: npx playwright test --project=chromium --reporter=list,github,html --workers=4
+        run: npm run playwright
       - name: Upload Playwright report on failure
         if: failure()
         uses: actions/upload-artifact@v4

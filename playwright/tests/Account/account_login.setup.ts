@@ -5,7 +5,7 @@ const password = process.env.QA_PASSWORD
 
 // Logs in the test patron and saves their storage state for the following Playwright tests
 setup("authenticate test patron", async () => {
-  const browser = await chromium.launch({ headless: false })
+  const browser = await chromium.launch()
   const page = await browser.newPage()
 
   await page.goto("")
