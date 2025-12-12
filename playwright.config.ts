@@ -19,7 +19,8 @@ export default defineConfig({
   use: {
     baseURL: "http://localhost:8080/research/research-catalog",
     trace: "on-first-retry",
-    screenshot: "only-on-failure",
+    screenshot: "on",
+    video: "retain-on-failure",
   },
 
   projects: [
@@ -27,14 +28,14 @@ export default defineConfig({
       name: "chromium",
       use: { ...devices["Desktop Chrome"] },
     },
-    {
-      name: "firefox",
-      use: { ...devices["Desktop Firefox"] },
-    },
-    {
-      name: "webkit",
-      use: { ...devices["Desktop Safari"] },
-    },
+    // {
+    //   name: "firefox",
+    //   use: { ...devices["Desktop Firefox"] },
+    // },
+    // {
+    //   name: "webkit",
+    //   use: { ...devices["Desktop Safari"] },
+    // },
   ],
 
   webServer: {
