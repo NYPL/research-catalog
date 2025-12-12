@@ -13,6 +13,8 @@ test.describe("Keyword Search", () => {
   test("Do a keyword search and assert that at least 10 returned titles contain the supplied keyword", async () => {
     await searchPage.searchFor(searchterm, "Keyword")
 
+    console.log("Current page URL:", searchPage.page.url())
+
     await expect(searchPage.searchResultsHeading).toBeVisible({
       timeout: 15000,
     })
