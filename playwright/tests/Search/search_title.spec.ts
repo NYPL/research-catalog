@@ -24,8 +24,6 @@ test.describe("Title Search", () => {
       timeout: 15000,
     })
 
-    await searchPage.scrollAllResults()
-
     const resultCount = await searchPage.searchResultsTitle.count()
     expect(resultCount).toBeGreaterThan(10)
   })

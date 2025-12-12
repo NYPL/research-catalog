@@ -47,23 +47,24 @@ export class SearchPage {
 
     await this.search_input.fill(searchterm)
     await this.search_submit_button.click()
-    await this.scrollAllResults()
+    await this.scrollPageToBottom()
   }
 
   // Scroll all results
-  async scrollAllResults() {
-    let prevHeight = 0
-    for (let i = 0; i < 20; i++) {
-      // max 20 scrolls
-      const height = await this.searchResultsContainer.evaluate(
-        (el) => el.scrollHeight
+  async scrollPageToBottom(delay = 500, maxScrolls = 20) {
+    let lastHeight = 0
+
+    for (let i = 0; i < maxScrolls; i++) {
+      const currentHeight = await this.page.evaluate(
+        () => document.body.scrollHeight
       )
-      if (height === prevHeight) break
-      await this.searchResultsContainer.evaluate((el) =>
-        el.scrollBy(0, el.scrollHeight)
-      )
-      prevHeight = height
-      await this.page.waitForTimeout(500)
+
+      if (currentHeight === lastHeight) break
+
+      await this.page.evaluate(() => window.scrollBy(0, window.innerHeight))
+      lastHeight = currentHeight
+
+      await this.page.waitForTimeout(delay)
     }
   }
 }
