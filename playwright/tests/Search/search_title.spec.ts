@@ -30,7 +30,6 @@ test.describe("Title Search", () => {
 
     // Scroll twice? to load results below the fold in CI
     await scrollOneScreen(page)
-    await scrollOneScreen(page)
 
     const resultCount = await searchPage.searchResultsTitle.count()
     expect(resultCount).toBeGreaterThan(10)
