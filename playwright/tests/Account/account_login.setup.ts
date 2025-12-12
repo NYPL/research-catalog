@@ -1,15 +1,14 @@
 import { test as setup, chromium } from "@playwright/test"
 
-const STORAGE_PATH = "playwright/auth/user.json"
-
 const username = process.env.QA_USERNAME
 const password = process.env.QA_PASSWORD
 
+// Logs in the test patron and saves their storage state for the following Playwright tests
 setup("authenticate test patron", async () => {
   const browser = await chromium.launch()
   const page = await browser.newPage()
 
-  await page.goto("http://local.nypl.org:8080/research/research-catalog")
+  await page.goto("")
   await page.getByRole("link", { name: /my account/i }).click()
 
   await page.getByLabel(/barcode/i).fill(username)
@@ -19,7 +18,7 @@ setup("authenticate test patron", async () => {
 
   await page.waitForURL("**/account")
 
-  await page.context().storageState({ path: STORAGE_PATH })
+  await page.context().storageState({ path: "playwright/auth/user.json" })
 
   await browser.close()
 })

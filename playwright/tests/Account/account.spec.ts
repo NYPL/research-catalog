@@ -7,6 +7,7 @@ test.beforeEach(async ({ page }) => {
   await page.goto("")
   await page.getByRole("link", { name: /my account/i }).click()
   accountPage = new AccountPage(page)
+  await page.waitForSelector('h2:has-text("My Account")')
 })
 
 test.describe("Account info", () => {
