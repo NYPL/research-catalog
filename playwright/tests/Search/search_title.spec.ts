@@ -6,21 +6,20 @@ const searchterm = "It happened in New York"
 
 test.beforeEach(async ({ page }) => {
   searchPage = new SearchPage(page, searchterm)
-  await page.goto("")
+  await page.goto("/")
 })
 
 test.describe("Title Search", () => {
-  test("Do a title search and assert that at least 10 returned titles contain the supplied keyword", async ({
-    page,
-  }) => {
+  test("Do a title search and assert at least 10 returned titles contain the supplied keyword", async () => {
     await searchPage.searchFor(searchterm, "Title")
+
     await expect(searchPage.searchResultsHeading).toBeVisible({
       timeout: 15000,
     })
-    await page.screenshot({ path: "search_debug.png", fullPage: true })
-    console.log(await page.locator("body").innerHTML())
-    await expect(await searchPage.searchResultsTitle.count()).toBeGreaterThan(
-      10
-    )
+
+    await searchPage.scrollAllResults()
+
+    const resultCount = await searchPage.searchResultsTitle.count()
+    expect(resultCount).toBeGreaterThan(10)
   })
 })
