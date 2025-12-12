@@ -13,7 +13,7 @@
     "test": "jest",
     "test-watch": "jest --watch",
     "playwright:setup": "npx playwright test --project=setup",
-    "playwright:test": "npx playwright test --project=chromium,firefox,webkit",
+    "playwright:test": "npx playwright test --project=chromium --project=firefox --project=webkit",
     "playwright": "npm run playwright:setup && npm run playwright:test",
     "test-watch-quiet": "DEBUG_PRINT_LIMIT=0 npm run test-watch",
     "coverage": "jest --coverage",

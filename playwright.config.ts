@@ -20,6 +20,7 @@ export default defineConfig({
     baseURL: "http://localhost:8080/research/research-catalog",
     trace: "on-first-retry",
     screenshot: "on",
+    video: "on",
   },
 
   projects: [
