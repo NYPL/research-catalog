@@ -17,7 +17,7 @@ export default defineConfig({
   reporter: "html",
 
   use: {
-    baseURL: "http://localhost:8080/research/research-catalog",
+    baseURL: "http://local.nypl.org/research/research-catalog",
     viewport: { width: 1920, height: 4000 },
     trace: "on-first-retry",
     screenshot: "on",
@@ -29,19 +29,19 @@ export default defineConfig({
       name: "chromium",
       use: { ...devices["Desktop Chrome"] },
     },
-    // {
-    //   name: "firefox",
-    //   use: { ...devices["Desktop Firefox"] },
-    // },
-    // {
-    //   name: "webkit",
-    //   use: { ...devices["Desktop Safari"] },
-    // },
+    {
+      name: "firefox",
+      use: { ...devices["Desktop Firefox"] },
+    },
+    {
+      name: "webkit",
+      use: { ...devices["Desktop Safari"] },
+    },
   ],
 
   webServer: {
     command: process.env.CI ? "npm run start" : "npm run dev",
-    url: "http://localhost:8080/research/research-catalog",
+    url: "http://local.nypl.org:8080/research/research-catalog",
     reuseExistingServer: true,
     timeout: 120000,
   },
