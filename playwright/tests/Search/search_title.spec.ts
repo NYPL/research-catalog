@@ -6,7 +6,7 @@ const searchterm = "It happened in New York"
 
 test.beforeEach(async ({ page }) => {
   searchPage = new SearchPage(page, searchterm)
-  await page.goto("/")
+  await page.goto("")
 })
 
 test.describe("Title Search", () => {
