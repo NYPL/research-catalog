@@ -16,6 +16,8 @@ test.describe("Title Search", () => {
     const firstResult = searchPage.searchResultsTitle.first()
     await firstResult.scrollIntoViewIfNeeded()
 
+    console.log("Current page URL:", searchPage.page.url())
+
     await expect(searchPage.searchResultsTitle.first()).toBeVisible({
       timeout: 15000,
     })
