@@ -5,7 +5,7 @@ let searchPage: SearchPage
 const searchterm = "82048999"
 
 test.beforeEach(async ({ page }) => {
-  searchPage = new SearchPage(page, searchterm, "Unique identifier")
+  searchPage = new SearchPage(page, searchterm)
   await page.goto("")
 })
 

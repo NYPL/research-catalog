@@ -9,6 +9,9 @@ const password = process.env.QA_PASSWORD
 async function loginAndGetAccountPage(page) {
   const homePage = new RC_Home_Page(page)
   await page.goto("")
+  await expect(page.getByRole("link", { name: /my account/i })).toBeVisible({
+    timeout: 10000,
+  })
   await page.getByRole("link", { name: /my account/i }).click()
   const accountPage = new AccountPage(page)
   await accountPage.login(username, password)

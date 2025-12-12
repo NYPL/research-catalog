@@ -5,7 +5,7 @@ let searchPage: SearchPage
 const searchterm = "IBM 1401"
 
 test.beforeEach(async ({ page }) => {
-  searchPage = new SearchPage(page, searchterm, "keyword")
+  searchPage = new SearchPage(page, searchterm)
   await page.goto("")
 })
 
