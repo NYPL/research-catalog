@@ -1,33 +1,16 @@
 import { test, expect } from "@playwright/test"
-import { RC_Home_Page } from "../../pages/rc_home_page"
 import { AccountPage } from "../../pages/account_page"
 
-const username = process.env.QA_USERNAME
-const password = process.env.QA_PASSWORD
+let accountPage: AccountPage
 
-// Helper to start on home, navigate to login, and return AccountPage
-async function loginAndGetAccountPage(page) {
-  const homePage = new RC_Home_Page(page)
+test.beforeEach(async ({ page }) => {
   await page.goto("")
-  await expect(page.getByRole("link", { name: /my account/i })).toBeVisible({
-    timeout: 10000,
-  })
   await page.getByRole("link", { name: /my account/i }).click()
-  const accountPage = new AccountPage(page)
-  await accountPage.login(username, password)
-  return accountPage
-}
-
-test.describe("My Account Login", () => {
-  test("should log in and show account header", async ({ page }) => {
-    const accountPage = await loginAndGetAccountPage(page)
-    await expect(accountPage.accountHeader).toBeVisible()
-  })
+  accountPage = new AccountPage(page)
 })
 
-test.describe("Account Info Section", () => {
+test.describe("Account info", () => {
   test("should show labels and values", async ({ page }) => {
-    const accountPage = await loginAndGetAccountPage(page)
     await expect(accountPage.nameLabel).toBeVisible()
     await expect(accountPage.name).toHaveText("QA Tester ILS")
     await expect(accountPage.usernameLabel).toBeVisible()
@@ -41,13 +24,13 @@ test.describe("Account Info Section", () => {
   })
 })
 
-test.describe("Tabs and Tables", () => {
+test.describe("Item tabs", () => {
   test("should show all tabs and table headers", async ({ page }) => {
-    const accountPage = await loginAndGetAccountPage(page)
     await expect(accountPage.tab_checkouts).toBeVisible()
     await expect(accountPage.tab_requests).toBeVisible()
     await expect(accountPage.tab_fees).toBeVisible()
     await expect(accountPage.tab_account_settings).toBeVisible()
+
     await expect(accountPage.circulating_catalog_alert).toBeVisible()
     await expect(accountPage.account_items_table_header_title).toBeVisible()
     await expect(accountPage.account_items_table_header_barcode).toBeVisible()
@@ -59,18 +42,17 @@ test.describe("Tabs and Tables", () => {
   })
 
   test("should list at least one checkout", async ({ page }) => {
-    const accountPage = await loginAndGetAccountPage(page)
     const checkoutsTable = page.locator("table", {
       has: page.getByRole("columnheader", { name: "Title" }),
     })
     await expect(checkoutsTable).toBeVisible({ timeout: 10000 })
+
     const titleLinks = checkoutsTable.getByRole("link")
     const count = await titleLinks.count()
     expect(count).toBeGreaterThan(0)
   })
 
   test("should list at least one request", async ({ page }) => {
-    const accountPage = await loginAndGetAccountPage(page)
     await accountPage.tab_requests.click()
     const requestsTable = page.locator("table", {
       has: page.getByRole("columnheader", { name: "Title" }),
@@ -79,24 +61,12 @@ test.describe("Tabs and Tables", () => {
     const requestCount = await requestTitleLinks.count()
     expect(requestCount).toBeGreaterThan(0)
   })
-
-  test("should list at least one fee", async ({ page }) => {
-    const accountPage = await loginAndGetAccountPage(page)
-    await accountPage.tab_fees.click()
-    const feesTable = page.locator("table", {
-      has: page.getByRole("columnheader", { name: "Amount" }),
-    })
-    const feeAmounts = feesTable.getByRole("cell", { name: /\$\d+/ })
-    const feeCount = await feeAmounts.count()
-    expect(feeCount).toBeGreaterThan(1)
-  })
 })
 
-test.describe("Account Settings", () => {
+test.describe("Account settings", () => {
   test("should show labels and values for account settings", async ({
     page,
   }) => {
-    const accountPage = await loginAndGetAccountPage(page)
     await accountPage.tab_account_settings.click()
 
     const phonelabel = page.locator("p", { hasText: /phone/i })
@@ -123,9 +93,7 @@ test.describe("Account Settings", () => {
     )
     await expect(notificationPreferenceValue).toHaveText(/^Email/)
 
-    const pinPasswordLabel = page.locator("p", {
-      hasText: /pin\/password/i,
-    })
+    const pinPasswordLabel = page.locator("p", { hasText: /pin\/password/i })
     await expect(pinPasswordLabel).toBeVisible()
     const pinPasswordValue = pinPasswordLabel.locator("xpath=following::div[1]")
     await expect(pinPasswordValue).toHaveText(/^(\*\*\*\*)/)

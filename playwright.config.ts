@@ -17,31 +17,45 @@ export default defineConfig({
   reporter: "html",
 
   use: {
-    baseURL: "http://local.nypl.org/research/research-catalog",
-    viewport: { width: 1920, height: 4000 },
+    baseURL: "http://localhost:8080/research/research-catalog",
     trace: "on-first-retry",
     screenshot: "on",
-    video: "retain-on-failure",
   },
 
   projects: [
     {
+      name: "setup",
+      testMatch: /.*account_login\.setup\.ts$/,
+      use: {},
+    },
+    {
       name: "chromium",
-      use: { ...devices["Desktop Chrome"] },
+      use: {
+        storageState: "playwright/auth/user.json",
+        ...devices["Desktop Chrome"],
+      },
+      dependencies: ["setup"],
     },
     {
       name: "firefox",
-      use: { ...devices["Desktop Firefox"] },
+      use: {
+        storageState: "playwright/auth/user.json",
+        ...devices["Desktop Firefox"],
+      },
+      dependencies: ["setup"],
     },
     {
       name: "webkit",
-      use: { ...devices["Desktop Safari"] },
+      use: {
+        storageState: "playwright/auth/user.json",
+        ...devices["Desktop Safari"],
+      },
     },
   ],
 
   webServer: {
     command: process.env.CI ? "npm run start" : "npm run dev",
-    url: "http://local.nypl.org:8080/research/research-catalog",
+    url: "http://localhost:8080/research/research-catalog",
     reuseExistingServer: true,
     timeout: 120000,
   },
