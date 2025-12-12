@@ -18,6 +18,7 @@ export default defineConfig({
 
   use: {
     baseURL: "http://localhost:8080/research/research-catalog",
+    viewport: { width: 1920, height: 4000 },
     trace: "on-first-retry",
     screenshot: "on",
     video: "retain-on-failure",
