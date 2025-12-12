@@ -47,6 +47,7 @@ export class SearchPage {
 
     await this.search_input.fill(searchterm)
     await this.search_submit_button.click()
+    await this.scrollAllResults()
   }
 
   // Scroll all results
