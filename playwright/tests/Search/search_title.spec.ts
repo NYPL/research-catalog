@@ -17,6 +17,8 @@ test.describe("Title Search", () => {
     await expect(searchPage.searchResultsHeading).toBeVisible({
       timeout: 15000,
     })
+    await page.screenshot({ path: "search_debug.png", fullPage: true })
+    console.log(await page.locator("body").innerHTML())
     await expect(await searchPage.searchResultsTitle.count()).toBeGreaterThan(
       10
     )
