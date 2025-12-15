@@ -223,12 +223,6 @@ Various arguments can be added to test commands.  Here's an example that runs al
 npx playwright test example.spec.ts --headed --project=chromium
 ```
 
-To test account pages that require an authenticated user, run the setup test `account_login.setup.ts`, which will then save the logged in state in `auth/user.json` for following tests.
-The command: 
-```bash
-npm run playwright
-```
-enforces this sequence, and is used for Playwright testing in Github Actions. 
 
 
 ## Deployment
