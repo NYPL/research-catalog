@@ -218,7 +218,10 @@ export default function AdvancedSearch({
         key={field.value}
         field={{ value: field.value, label: "Division" }}
         groupedItems={field.options}
-        onChange={(e) => handleFilterChange(field.value, e.target.id)}
+        onChange={(e) => {
+          console.log(field.value, e.target.id)
+          handleFilterChange("division", e.target.id)
+        }}
         onClear={() => handleFilterChange(field.value, null)}
         selectedItems={{
           [field.value]: {
