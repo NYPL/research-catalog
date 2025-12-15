@@ -22,8 +22,7 @@ export interface SearchFilters {
   dateFrom?: string
   dateTo?: string
   buildingLocation?: BuildingLocationFilter | BuildingLocationFilter[]
-  division?: CollectionFilter | CollectionFilter[]
-  collection?: CollectionFilter | CollectionFilter[] //HM
+  collection?: CollectionFilter | CollectionFilter[]
 }
 
 export interface Identifiers {

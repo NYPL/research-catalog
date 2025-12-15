@@ -158,7 +158,7 @@ const SearchFilters = ({
               field={{ value: field.value, label: "Division" }}
               groupedItems={mapCollectionsIntoLocations(filteredOptions)}
               onChange={(e) => {
-                handleCheckboxChange("division", e.target.id)
+                handleCheckboxChange(field.value, e.target.id)
                 setFocusedFilter(field.value)
               }}
               onClear={() => {

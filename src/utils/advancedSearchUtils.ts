@@ -25,7 +25,7 @@ export const initialSearchFormState: SearchParams = {
     dateFrom: "",
     format: [],
     buildingLocation: [],
-    division: [],
+    collection: [],
   },
 }
 

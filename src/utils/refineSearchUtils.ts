@@ -1,9 +1,5 @@
 import type { CollapsedMultiValueAppliedFilters } from "../types/filterTypes"
 
-const FILTER_ALIASES: Record<string, string> = {
-  division: "collection",
-}
-
 // Filters are always multivalue query params in the form
 // filters[field][index]=value eg filters[format][0]=resourcetypes:aud.
 // This method returns an object that maps a field to an array of the values
@@ -14,8 +10,7 @@ export const collapseMultiValueQueryParams = (
   return Object.keys(queryParams)
     .filter((param) => param.includes("filters["))
     .reduce((acc, currentFilter) => {
-      const rawField = currentFilter.split("[")[1].split("]")[0]
-      const field = FILTER_ALIASES[rawField] ?? rawField
+      const field = currentFilter.split("[")[1].split("]")[0]
 
       const value = queryParams[currentFilter] ?? ""
 
