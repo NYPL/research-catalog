@@ -11,12 +11,9 @@ export const collapseMultiValueQueryParams = (
     .filter((param) => param.includes("filters["))
     .reduce((acc, currentFilter) => {
       const field = currentFilter.split("[")[1].split("]")[0]
-
       const value = queryParams[currentFilter] ?? ""
-
       if (acc[field]) acc[field].push(String(value))
       else acc[field] = [String(value)]
-
       return acc
     }, {} as CollapsedMultiValueAppliedFilters)
 }
@@ -27,17 +24,15 @@ export const buildFilterQuery = (
   filters: CollapsedMultiValueAppliedFilters
 ) => {
   return Object.keys(filters).reduce((acc, field) => {
-    //const canonicalField = FILTER_ALIASES[field] ?? field
-
-    if (filters[field]?.filter(Boolean).length) {
+    if (filters[field]?.filter((x) => x).length) {
       filters[field].forEach(
-        (value, i) => (acc[`filters[${field}][${i}]`] = value)
+        (option, i) => (acc[`filters[${field}][${i}]`] = option)
       )
     }
-
     return acc
   }, {})
 }
+
 export const getQueryWithoutFiltersOrPage = (filters: object) => {
   return Object.keys(filters).reduce((acc, field) => {
     if (!field.includes("filters") && field !== "page") {
