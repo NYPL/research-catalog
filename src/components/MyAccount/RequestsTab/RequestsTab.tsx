@@ -28,13 +28,24 @@ const RequestsTab = () => {
     // If item is research/circ
     if (hold.catalogHref) {
       return (
-        <Link isExternal isUnderlined={false} href={hold.catalogHref}>
+        <Link
+          isExternal
+          whiteSpace="pre-line"
+          isUnderlined={false}
+          href={hold.catalogHref}
+        >
           {hold.title}
+          {hold.volume && `\n${hold.volume}`}
         </Link>
       )
     } else {
       // Item is a partner record
-      return <Text>{hold.title}</Text>
+      return (
+        <Text whiteSpace="pre-line">
+          {hold.title}
+          {hold.volume && `\n${hold.volume}`}
+        </Text>
+      )
     }
   }
   const holdsHeaders = [
