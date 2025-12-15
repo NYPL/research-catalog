@@ -1,17 +1,34 @@
 import { test, expect } from "@playwright/test"
+import type { Browser, Page } from "@playwright/test"
 import { AccountPage } from "../../pages/account_page"
 
+let page: Page
 let accountPage: AccountPage
 
-test.beforeEach(async ({ page }) => {
-  await page.goto("")
-  await page.getByRole("link", { name: /my account/i }).click()
-  accountPage = new AccountPage(page)
-  await page.waitForSelector('h2:has-text("My Account")')
-})
+const username = process.env.QA_USERNAME
+const password = process.env.QA_PASSWORD
 
-test.describe("Account info", () => {
-  test("should show labels and values", async ({ page }) => {
+test.describe.serial("Account page", () => {
+  test.beforeAll(async ({ browser }: { browser: Browser }) => {
+    const context = await browser.newContext()
+    page = await context.newPage()
+
+    await page.goto("")
+    await page.getByRole("link", { name: /my account/i }).click()
+    await page.getByLabel(/barcode/i).fill(username)
+    await page.getByLabel(/pin/i).fill(password)
+    await page.getByRole("button", { name: /submit/i }).click()
+
+    await page.waitForSelector('h2:has-text("My Account")')
+
+    accountPage = new AccountPage(page)
+  })
+
+  test.afterAll(async () => {
+    await page.context().close()
+  })
+
+  test("Account info: should show labels and values", async () => {
     await expect(accountPage.nameLabel).toBeVisible()
     await expect(accountPage.name).toHaveText("QA Tester ILS")
     await expect(accountPage.usernameLabel).toBeVisible()
@@ -23,10 +40,8 @@ test.describe("Account info", () => {
     await expect(accountPage.expirationLabel).toBeVisible()
     await expect(accountPage.expiration).toBeVisible()
   })
-})
 
-test.describe("Item tabs", () => {
-  test("should show all tabs and table headers", async ({ page }) => {
+  test("Item tabs: should show all tabs and table headers", async () => {
     await expect(accountPage.tab_checkouts).toBeVisible()
     await expect(accountPage.tab_requests).toBeVisible()
     await expect(accountPage.tab_fees).toBeVisible()
@@ -42,10 +57,11 @@ test.describe("Item tabs", () => {
     await expect(accountPage.account_items_table_header_manage).toBeVisible()
   })
 
-  test("should list at least one checkout", async ({ page }) => {
+  test("Item tabs: should list at least one checkout", async () => {
     const checkoutsTable = page.locator("table", {
       has: page.getByRole("columnheader", { name: "Title" }),
     })
+
     await expect(checkoutsTable).toBeVisible({ timeout: 10000 })
 
     const titleLinks = checkoutsTable.getByRole("link")
@@ -53,51 +69,52 @@ test.describe("Item tabs", () => {
     expect(count).toBeGreaterThan(0)
   })
 
-  test("should list at least one request", async ({ page }) => {
+  test("Item tabs: should list at least one request", async () => {
     await accountPage.tab_requests.click()
+
     const requestsTable = page.locator("table", {
       has: page.getByRole("columnheader", { name: "Title" }),
     })
-    const requestTitleLinks = requestsTable.getByRole("link")
-    const requestCount = await requestTitleLinks.count()
-    expect(requestCount).toBeGreaterThan(0)
-  })
-})
 
-test.describe("Account settings", () => {
-  test("should show labels and values for account settings", async ({
-    page,
-  }) => {
+    const requestTitleLinks = requestsTable.getByRole("link")
+    const count = await requestTitleLinks.count()
+    expect(count).toBeGreaterThan(0)
+  })
+
+  test("Account settings: should show labels, values, and edit links", async () => {
     await accountPage.tab_account_settings.click()
 
     const phonelabel = page.locator("p", { hasText: /phone/i })
     await expect(phonelabel).toBeVisible()
-    const phoneValue = phonelabel.locator("xpath=following::div[1]")
-    await expect(phoneValue).toHaveText(/^2125927256/)
+    await expect(phonelabel.locator("xpath=following::div[1]")).toHaveText(
+      /^2125927256/
+    )
 
     const emailLabel = page.locator("p", { hasText: /email/i }).first()
     await expect(emailLabel).toBeVisible()
-    const emailValue = emailLabel.locator("xpath=following::div[1]")
-    await expect(emailValue).toHaveText(/^chrismulholland@nypl.org/)
+    await expect(emailLabel.locator("xpath=following::div[1]")).toHaveText(
+      /^chrismulholland@nypl.org/
+    )
 
     const homeLibraryLabel = page.locator("p", { hasText: /home library/i })
     await expect(homeLibraryLabel).toBeVisible()
-    const homeLibraryValue = homeLibraryLabel.locator("xpath=following::div[1]")
-    await expect(homeLibraryValue).toHaveText(/^53rd Street/)
+    await expect(
+      homeLibraryLabel.locator("xpath=following::div[1]")
+    ).toHaveText(/^53rd Street/)
 
     const notificationPreferenceLabel = page.locator("p", {
       hasText: /notification preference/i,
     })
     await expect(notificationPreferenceLabel).toBeVisible()
-    const notificationPreferenceValue = notificationPreferenceLabel.locator(
-      "xpath=following::div[1]"
-    )
-    await expect(notificationPreferenceValue).toHaveText(/^Email/)
+    await expect(
+      notificationPreferenceLabel.locator("xpath=following::div[1]")
+    ).toHaveText(/^Email/)
 
     const pinPasswordLabel = page.locator("p", { hasText: /pin\/password/i })
     await expect(pinPasswordLabel).toBeVisible()
-    const pinPasswordValue = pinPasswordLabel.locator("xpath=following::div[1]")
-    await expect(pinPasswordValue).toHaveText(/^(\*\*\*\*)/)
+    await expect(
+      pinPasswordLabel.locator("xpath=following::div[1]")
+    ).toHaveText(/^(\*\*\*\*)/)
 
     await expect(accountPage.edit_phone_link).toBeVisible()
     await expect(accountPage.edit_email_link).toBeVisible()

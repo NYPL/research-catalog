@@ -23,34 +23,34 @@ export default defineConfig({
   },
 
   projects: [
-    {
-      name: "setup",
-      testMatch: /.*account_login\.setup\.ts$/,
-      use: {},
-    },
+    // {
+    //   name: "setup",
+    //   testMatch: /.*account_login\.setup\.ts$/,
+    //   use: {},
+    // },
     {
       name: "chromium",
       use: {
-        storageState: "playwright/auth/user.json",
+        //storageState: "playwright/auth/user.json",
         ...devices["Desktop Chrome"],
       },
-      dependencies: ["setup"],
+      //dependencies: ["setup"],
     },
     {
       name: "firefox",
       use: {
-        storageState: "playwright/auth/user.json",
+        // storageState: "playwright/auth/user.json",
         ...devices["Desktop Firefox"],
       },
-      dependencies: ["setup"],
+      //dependencies: ["setup"],
     },
     {
       name: "webkit",
       use: {
-        storageState: "playwright/auth/user.json",
+        //storageState: "playwright/auth/user.json",
         ...devices["Desktop Safari"],
       },
-      dependencies: ["setup"],
+      //dependencies: ["setup"],
     },
   ],
 

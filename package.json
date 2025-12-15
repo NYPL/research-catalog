@@ -14,7 +14,7 @@
     "test-watch": "jest --watch",
     "playwright:setup": "npx playwright test --project=setup",
     "playwright:test": "npx playwright test --project=chromium --project=firefox",
-    "playwright": "npm run playwright:setup && npm run playwright:test",
+    "playwright": "npm run playwright:test",
     "test-watch-quiet": "DEBUG_PRINT_LIMIT=0 npm run test-watch",
     "coverage": "jest --coverage",
     "load-search-vocabs": "concurrently -k -n \"NEXT,SCRIPT\" -c \"blue,magenta\" \"npm run dev\" \"npx tsx scripts/load-search-vocabs.ts\""
