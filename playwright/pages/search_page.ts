@@ -47,24 +47,5 @@ export class SearchPage {
 
     await this.search_input.fill(searchterm)
     await this.search_submit_button.click()
-    await this.scrollPageToBottom()
-  }
-
-  // Scroll all results
-  async scrollPageToBottom(delay = 500, maxScrolls = 20) {
-    let lastHeight = 0
-
-    for (let i = 0; i < maxScrolls; i++) {
-      const currentHeight = await this.page.evaluate(
-        () => document.body.scrollHeight
-      )
-
-      if (currentHeight === lastHeight) break
-
-      await this.page.evaluate(() => window.scrollBy(0, window.innerHeight))
-      lastHeight = currentHeight
-
-      await this.page.waitForTimeout(delay)
-    }
   }
 }
