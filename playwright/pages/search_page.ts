@@ -3,11 +3,11 @@ import type { Page, Locator } from "@playwright/test"
 export class SearchPage {
   readonly page: Page
   readonly searchterm: string
-  readonly search_input: Locator
+  searchType: string
+
   readonly search_dropdown: Locator
-  readonly searchType: string
+  readonly search_input: Locator
   readonly search_submit_button: Locator
-  readonly searchResultsHeading: Locator
   readonly searchResultsContainer: Locator
   readonly searchResults: Locator
   readonly searchResultsTitle: Locator
@@ -16,30 +16,55 @@ export class SearchPage {
     this.page = page
     this.searchterm = searchterm
     this.searchType = searchType
-    this.search_dropdown = page.getByRole("combobox", {
-      name: "Select a category",
-    })
+
+    this.search_dropdown = page.getByLabel("Select a category")
     this.search_input = page.getByRole("textbox")
     this.search_submit_button = page.getByRole("button", {
       name: "Search",
       exact: true,
     })
+
     this.searchResultsContainer = page.locator("#search-results-list")
-    this.searchResultsHeading = this.page.getByRole("heading", {
+    this.searchResults = page.locator("#search-results-list h3 a")
+    this.searchResultsTitle = page.locator("#search-results-list a", {
+      hasText: this.searchterm,
+    })
+  }
+
+  get searchResultsHeading() {
+    return this.page.getByRole("heading", {
       name: new RegExp(
-        `^Displaying (\\d+-\\d+|\\d+) of (over )?\\d{1,3}(,\\d{3})* results for ${this.searchType}s? "${this.searchterm}"$`,
+        `Displaying (\\d+-\\d+|\\d+) of (over )?\\d{1,3}(,\\d{3})* results for ${this.searchType}s? "${this.searchterm}"`,
         "i"
       ),
     })
-    this.searchResults = page.locator("#search-results-list h3 a")
-    this.searchResultsTitle = page
-      .locator("#search-results-list")
-      .getByRole("link", { name: new RegExp(this.searchterm) })
   }
 
+  // Perform search
   async searchFor(searchterm: string, searchType = "Keyword") {
+    this.searchType = searchType
     await this.search_dropdown.selectOption({ label: searchType })
+
     await this.search_input.fill(searchterm)
     await this.search_submit_button.click()
+    await this.scrollPageToBottom()
+  }
+
+  // Scroll all results
+  async scrollPageToBottom(delay = 500, maxScrolls = 20) {
+    let lastHeight = 0
+
+    for (let i = 0; i < maxScrolls; i++) {
+      const currentHeight = await this.page.evaluate(
+        () => document.body.scrollHeight
+      )
+
+      if (currentHeight === lastHeight) break
+
+      await this.page.evaluate(() => window.scrollBy(0, window.innerHeight))
+      lastHeight = currentHeight
+
+      await this.page.waitForTimeout(delay)
+    }
   }
 }

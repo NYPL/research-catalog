@@ -1,0 +1,52 @@
+name: Run Playwright Tests
+
+on:
+  push:
+    branches:
+      - qa
+      - playwright-gha-test
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      QA_USERNAME: ${{ secrets.QA_USERNAME }}
+      QA_PASSWORD: ${{ secrets.QA_PASSWORD }}
+      SIERRA_KEY: ${{ secrets.SIERRA_KEY }}
+      SIERRA_SECRET: ${{ secrets.SIERRA_SECRET }}
+      SIERRA_BASE: ${{ secrets.SIERRA_BASE }}
+      PLATFORM_API_CLIENT_ID: ${{ secrets.PLATFORM_API_CLIENT_ID}}
+      PLATFORM_API_CLIENT_SECRET: ${{ secrets.PLATFORM_API_CLIENT_SECRET}}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    strategy:
+      matrix:
+        node-version: [20.x]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Add local.nypl.org host alias
+        run: |
+          echo "127.0.0.1 local.nypl.org" | sudo tee -a /etc/hosts
+          cat /etc/hosts | tail -n 5
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Playwright browsers
+        run: npx playwright install
+      - name: Build
+        run: npm run build
+      - name: Run Playwright tests
+        run: npm run playwright
+      - name: Upload Playwright report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30

@@ -1,77 +1,63 @@
 import { defineConfig, devices } from "@playwright/test"
-
 import * as dotenv from "dotenv"
-dotenv.config({ path: ".env.local" })
 
-/**
- * See https://playwright.dev/docs/test-configuration.
- */
+// Only load .env.local when NOT in CI
+if (!process.env.CI) {
+  dotenv.config({ path: ".env.local" })
+}
+
 export default defineConfig({
   timeout: 30 * 1000,
   globalTimeout: 20 * 30 * 1000,
   testDir: "./playwright",
-  /* Run tests in files in parallel */
   fullyParallel: true,
-  /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
-  /* Retry on CI only */
-  retries: process.env.CI ? 2 : 4,
-  /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : undefined,
-  /* Reporter to use. See https://playwright.dev/docs/test-reporters */
+  retries: process.env.CI ? 1 : 0,
+  workers: process.env.CI ? 2 : undefined,
   reporter: "html",
-  /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
-  use: {
-    /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: "http://local.nypl.org:8080/research/research-catalog",
-    //baseURL: "https://www.nypl.org/research/research-catalog",
 
-    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
+  use: {
+    baseURL: "http://local.nypl.org:8080/research/research-catalog",
     trace: "on-first-retry",
+    screenshot: "only-on-failure",
   },
 
-  /* Configure projects for major browsers */
   projects: [
     {
-      name: "chromium",
-      use: { ...devices["Desktop Chrome"] },
+      name: "setup",
+      testMatch: /.*account_login\.setup\.ts$/,
+      use: {},
     },
-
+    {
+      name: "chromium",
+      use: {
+        storageState: "playwright/auth/user.json",
+        ...devices["Desktop Chrome"],
+      },
+      dependencies: ["setup"],
+    },
     {
       name: "firefox",
-      use: { ...devices["Desktop Firefox"] },
+      use: {
+        storageState: "playwright/auth/user.json",
+        ...devices["Desktop Firefox"],
+      },
+      dependencies: ["setup"],
     },
-
     {
       name: "webkit",
-      use: { ...devices["Desktop Safari"] },
+      use: {
+        storageState: "playwright/auth/user.json",
+        ...devices["Desktop Safari"],
+      },
+      dependencies: ["setup"],
     },
-
-    /* Test against mobile viewports. */
-    // {
-    //   name: 'Mobile Chrome',
-    //   use: { ...devices['Pixel 5'] },
-    // },
-    // {
-    //   name: 'Mobile Safari',
-    //   use: { ...devices['iPhone 12'] },
-    // },
-
-    /* Test against branded browsers. */
-    // {
-    //   name: 'Microsoft Edge',
-    //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
-    // },
-    // {
-    //   name: 'Google Chrome',
-    //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
-    // },
   ],
 
-  /* Run your local dev server before starting the tests */
   webServer: {
-    command: "npm run dev",
+    command: process.env.CI ? "npm run start" : "npm run dev",
     url: "http://local.nypl.org:8080/research/research-catalog",
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: true,
+    timeout: 120000,
   },
 })
