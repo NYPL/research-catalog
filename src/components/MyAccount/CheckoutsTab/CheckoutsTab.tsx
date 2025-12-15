@@ -13,12 +13,23 @@ const CheckoutsTab = () => {
   function formatTitleElement(checkout: Checkout) {
     if (checkout.catalogHref) {
       return (
-        <Link isExternal isUnderlined={false} href={checkout.catalogHref}>
+        <Link
+          isExternal
+          whiteSpace="pre-line"
+          isUnderlined={false}
+          href={checkout.catalogHref}
+        >
           {checkout.title}
+          {checkout.volume && `\n${checkout.volume}`}
         </Link>
       )
     } else {
-      return <Text>{checkout.title}</Text>
+      return (
+        <Text whiteSpace="pre-line">
+          {checkout.title}
+          {checkout.volume && `\n${checkout.volume}`}
+        </Text>
+      )
     }
   }
 

@@ -7,6 +7,7 @@ import {
   CardActions,
   SimpleGrid,
   StatusBadge,
+  Icon,
 } from "@nypl/design-system-react-components"
 import Link from "../Link/Link"
 import ElectronicResourcesLink from "./ElectronicResourcesLink"
@@ -23,11 +24,42 @@ interface SearchResultProps {
  * The SearchResult component displays a single search result element.
  */
 const SearchResult = ({ bib }: SearchResultProps) => {
+  const separatingDot = (
+    // @ts-ignore
+    <Icon size="xxsmall" ml="xs" mr="xs" pb="xxs">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="4"
+        height="4"
+        viewBox="0 0 4 4"
+        fill="#000"
+      >
+        <circle cx="2" cy="2" r="2" fill="#000" />
+      </svg>
+    </Icon>
+  )
+  const metadata = [
+    bib.format,
+    bib.publicationStatement,
+    bib.yearPublished,
+    bib.getNumItemsMessage(),
+  ].filter(Boolean)
+
+  const joinedMetadata = metadata.reduce((acc, piece, i) => {
+    if (i > 0) acc.push(separatingDot)
+    acc.push(<Text key={i}>{piece}</Text>)
+    return acc
+  }, [])
+
   return (
     <Card
       sx={{
-        borderBottom: "1px solid var(--nypl-colors-ui-border-default)",
-        paddingBottom: "l",
+        borderRadius: "8px",
+        border: "1px solid var(--ui-gray-medium, #BDBDBD)",
+        paddingLeft: "m",
+        paddingRight: "m",
+        paddingTop: "l",
+        paddingBottom: bib.itemTables?.length > 0 ? 0 : "m",
         "[data-body]": {
           width: "100% !important",
         },
@@ -40,7 +72,7 @@ const SearchResult = ({ bib }: SearchResultProps) => {
       >
         {bib.findingAid && (
           <StatusBadge variant="informative" mb="s">
-            FINDING AID AVAILABLE
+            Finding aid available
           </StatusBadge>
         )}
         <Link href={`${PATHS.BIB}/${bib.id}`}>{bib.titleDisplay}</Link>
@@ -48,30 +80,42 @@ const SearchResult = ({ bib }: SearchResultProps) => {
       <CardContent data-testid="card-content">
         <Box
           sx={{
-            p: { display: "inline-block", marginRight: "s", marginBottom: "s" },
+            p: {
+              display: "inline-block",
+            },
           }}
         >
-          {bib.format && <Text>{bib.format}</Text>}
-          {bib.publicationStatement && <Text>{bib.publicationStatement}</Text>}
-          {bib.yearPublished && <Text>{bib.yearPublished}</Text>}
-          <Text>{bib.getNumItemsMessage()}</Text>
+          {joinedMetadata}
         </Box>
-        <Box width="100%">
-          {bib.findingAid ? (
-            <FindingAid
-              findingAidURL={bib.findingAid}
-              hasElectronicResources={bib.hasElectronicResources}
-            />
-          ) : null}
-          {bib.hasElectronicResources ? (
-            <ElectronicResourcesLink
-              bibUrl={bib.url}
-              electronicResources={bib.electronicResources}
-            />
-          ) : null}
-        </Box>
-        <SimpleGrid columns={1} gap="grid.m">
-          {bib.itemTables && (
+        {(bib.findingAid || bib.hasElectronicResources) && (
+          <Box width="100%" mt="s">
+            {bib.findingAid ? (
+              <FindingAid
+                findingAidURL={bib.findingAid}
+                hasElectronicResources={bib.hasElectronicResources}
+              />
+            ) : null}
+            {bib.hasElectronicResources ? (
+              <ElectronicResourcesLink
+                bibUrl={bib.url}
+                electronicResources={bib.electronicResources}
+              />
+            ) : null}
+          </Box>
+        )}
+        {bib.itemTables?.length > 0 && (
+          <SimpleGrid
+            columns={1}
+            gap="grid.m"
+            mt="s"
+            sx={{
+              "*:first-of-type table": {
+                borderTop: "none !important",
+                paddingTop: "xs !important",
+              },
+              paddingBottom: bib.showViewAllItemsLink() ? "s" : "m",
+            }}
+          >
             <>
               {bib.itemTables.map((itemTableData) => (
                 <SearchResultItems
@@ -79,25 +123,31 @@ const SearchResult = ({ bib }: SearchResultProps) => {
                   key={`search-results-item-${itemTableData.items[0].id}`}
                 />
               ))}
-              {bib.showViewAllItemsLink() && (
-                <CardActions>
-                  <Link
-                    href={`${bib.url}#item-table`}
-                    fontSize={{
-                      base: "mobile.body.body2",
-                      md: "desktop.body.body2",
-                    }}
-                    fontWeight="medium"
-                    variant="standalone"
-                  >
-                    {`View all ${bib.getNumItemsMessage()} `}
-                  </Link>
-                </CardActions>
-              )}
             </>
-          )}
-        </SimpleGrid>
+          </SimpleGrid>
+        )}
       </CardContent>
+      {bib.showViewAllItemsLink() && (
+        <CardActions
+          sx={{
+            paddingTop: "s",
+            paddingBottom: "s",
+            borderTop: "1px dashed var(--nypl-colors-ui-bg-active)",
+          }}
+        >
+          <Link
+            href={`${bib.url}#item-table`}
+            fontSize={{
+              base: "mobile.body.body2",
+              md: "desktop.body.body2",
+            }}
+            fontWeight="medium"
+            variant="standalone"
+          >
+            {`View all ${bib.getNumItemsMessage()} `}
+          </Link>
+        </CardActions>
+      )}
     </Card>
   )
 }
