@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - qa
-      - playwright-gha-test
   workflow_dispatch:
 
 jobs:
