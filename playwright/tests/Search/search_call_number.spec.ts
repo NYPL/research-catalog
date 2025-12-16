@@ -5,7 +5,7 @@ let searchPage: SearchPage
 const searchterm = "JFD 93-1962"
 
 test.beforeEach(async ({ page }) => {
-  searchPage = new SearchPage(page, searchterm, "Call number")
+  searchPage = new SearchPage(page, searchterm)
   await page.goto("")
 })
 

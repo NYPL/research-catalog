@@ -12,40 +12,41 @@ export default defineConfig({
   testDir: "./playwright",
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 4,
-  workers: process.env.CI ? 1 : undefined,
+  retries: process.env.CI ? 1 : 0,
+  workers: process.env.CI ? 2 : undefined,
   reporter: "html",
 
   use: {
-    // Use BASE_URL from environment, or fall back to local
-    baseURL:
-      process.env.BASE_URL ||
-      "http://local.nypl.org:8080/research/research-catalog",
+    baseURL: "http://local.nypl.org:8080/research/research-catalog",
     trace: "on-first-retry",
+    screenshot: "only-on-failure",
   },
 
   projects: [
     {
       name: "chromium",
-      use: { ...devices["Desktop Chrome"] },
+      use: {
+        ...devices["Desktop Chrome"],
+      },
     },
     {
       name: "firefox",
-      use: { ...devices["Desktop Firefox"] },
+      use: {
+        ...devices["Desktop Firefox"],
+      },
     },
     {
       name: "webkit",
-      use: { ...devices["Desktop Safari"] },
+      use: {
+        ...devices["Desktop Safari"],
+      },
     },
   ],
 
-  // Only start local server when NOT in CI
-  webServer: process.env.CI
-    ? undefined
-    : {
-        command: "npm run dev",
-        url: "http://local.nypl.org:8080/research/research-catalog",
-        reuseExistingServer: true,
-        timeout: 120 * 1000,
-      },
+  webServer: {
+    command: process.env.CI ? "npm run start" : "npm run dev",
+    url: "http://local.nypl.org:8080/research/research-catalog",
+    reuseExistingServer: true,
+    timeout: 120000,
+  },
 })
