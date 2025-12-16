@@ -5,7 +5,7 @@ let searchPage: SearchPage
 const searchterm = "Dryden, John"
 
 test.beforeEach(async ({ page }) => {
-  searchPage = new SearchPage(page, searchterm, "author/contributor")
+  searchPage = new SearchPage(page, searchterm)
   await page.goto("")
 })
 
