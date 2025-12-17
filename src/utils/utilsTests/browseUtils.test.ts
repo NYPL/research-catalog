@@ -21,7 +21,7 @@ describe("browseUtils", () => {
           "X, Malcolm, 1925-1965 -- Political and social views."
         )
       ).toBe(
-        "/browse/subjects/X%2C%20Malcolm%2C%201925-1965%20--%20Political%20and%20social%20views."
+        "/browse/subjects/X%2C%20Malcolm%2C%201925-1965%20--%20Political%20and%20social%20views%2E"
       )
     })
   })
