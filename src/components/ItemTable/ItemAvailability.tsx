@@ -45,6 +45,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
     id: item.id,
     barcode: item.barcode,
     callNumber: item.callNumber,
+    volume: item.volume,
     bibId: item.bibId,
   }
   switch (item.availability.key) {
