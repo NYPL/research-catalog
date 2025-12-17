@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Updated
 
 - Updated bib author to use `contributorLiteral` filter [SCC-4929](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4929)
+- Updated collection filter to display as "Division" [SCC-5080](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5080)
 
 ### Added
 
