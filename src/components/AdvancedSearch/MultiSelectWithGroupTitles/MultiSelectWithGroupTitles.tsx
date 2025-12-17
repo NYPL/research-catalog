@@ -34,7 +34,7 @@ export interface MultiSelectProps {
 }
 
 /* Reservoir Multiselect modified to accept items with a group title that does not
- ** appear as a checkbox. Used for the Collection filter in Advanced Search.
+ ** appear as a checkbox. Used for the Division filter in Advanced Search.
  */
 const MultiSelectWithGroupTitles = ({
   field,
@@ -44,7 +44,7 @@ const MultiSelectWithGroupTitles = ({
   selectedItems,
   onClear,
 }: MultiSelectProps) => {
-  const mainId = field.value
+  const mainId = "division"
   const [userClickedOutside, setUserClickedOutside] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
 
@@ -129,7 +129,7 @@ const MultiSelectWithGroupTitles = ({
           {group.name}
         </Text>
         <CheckboxGroup
-          id={`${field.value}-checkboxGroup-${group.id}`}
+          id={`division-checkboxGroup-${group.id}`}
           layout="column"
           isFullWidth
           labelText={group.name}
@@ -155,7 +155,7 @@ const MultiSelectWithGroupTitles = ({
   const searchInput = (
     <TextInput
       id={`${mainId}-textInput`}
-      labelText="Search collections"
+      labelText="Search divisions"
       isClearable
       isClearableCallback={() => setSearchTerm("")}
       placeholder="Search"

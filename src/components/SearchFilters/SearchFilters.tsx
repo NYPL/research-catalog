@@ -155,7 +155,7 @@ const SearchFilters = ({
             <MultiSelectWithGroupTitles
               key={field.value}
               isBlockElement
-              field={{ value: field.value, label: field.label }}
+              field={{ value: field.value, label: "Division" }}
               groupedItems={mapCollectionsIntoLocations(filteredOptions)}
               onChange={(e) => {
                 handleCheckboxChange(field.value, e.target.id)
