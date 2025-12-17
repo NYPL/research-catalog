@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added workflow to run playwright tests on merge to qa branch. https://newyorkpubliclibrary.atlassian.net/browse/SCC-4993
 - Added search filter links to bib's `addedAuthorTitle`, `placeOfPublication`, `series`, `uniformTitle`, `titleAlt`, and `donor` fields [SCC-4921](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4921)
+- Added periods to URI encoding [SCC-5064](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5064)
 
 ## [1.6.2] 2025-12-11
 
