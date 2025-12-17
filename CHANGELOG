@@ -9,13 +9,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 
-- Updated search result card and finding aid/electronic resource styling [SCC-5038](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5038)
 - Updated bib author to use `contributorLiteral` filter [SCC-4929](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4929)
 
 ### Added
 
-- Added user guide banner [SCC-5060](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5060)
+- Added workflow to run playwright tests on merge to qa branch. https://newyorkpubliclibrary.atlassian.net/browse/SCC-4993
 - Added search filter links to bib's `addedAuthorTitle`, `placeOfPublication`, `series`, `uniformTitle`, `titleAlt`, and `donor` fields [SCC-4921](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4921)
+
+## [1.6.2] 2025-12-11
+
+### Updated
+
+- Updated search result card and finding aid/electronic resource styling [SCC-5038](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5038)
+
+### Added
+
+- Added user guide banner [SCC-5060](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5060)
 - Added volume to checkout/hold title display in My Account [SCC-5067](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5067)
 - Added volume to call number display on search result card [SCC-5079](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5079)
 
