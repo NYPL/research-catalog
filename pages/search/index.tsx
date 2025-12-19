@@ -10,7 +10,10 @@ import type {
   SortKey,
   SortOrder,
 } from "../../src/types/searchTypes"
-import { SITE_NAME, SEARCH_RESULTS_NOTIFICATION } from "../../src/config/constants"
+import {
+  SITE_NAME,
+  SEARCH_RESULTS_NOTIFICATION,
+} from "../../src/config/constants"
 import initializePatronTokenAuth from "../../src/server/auth"
 import { useFocusContext, idConstants } from "../../src/context/FocusContext"
 import type { HTTPStatusCode } from "../../src/types/appTypes"

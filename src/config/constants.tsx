@@ -216,4 +216,5 @@ export const HOLD_PAGE_CONTACT_PREFIXES = {
     "Electronic delivery options for this item are currently unavailable.",
 }
 
-export const SEARCH_RESULTS_NOTIFICATION = "Due to winter holiday closures, the delivery time for offsite retrieval and scan requests will be delayed from December 22 until early January 2026. Please submit requests for offsite materials as early as possible."
+export const SEARCH_RESULTS_NOTIFICATION =
+  "Due to winter holiday closures, the delivery time for offsite retrieval and scan requests will be delayed from December 22 until early January 2026. Please submit requests for offsite materials as early as possible."

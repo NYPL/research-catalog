@@ -1,4 +1,7 @@
-import { SITE_NAME, SEARCH_RESULTS_NOTIFICATION } from "../../../src/config/constants"
+import {
+  SITE_NAME,
+  SEARCH_RESULTS_NOTIFICATION,
+} from "../../../src/config/constants"
 import { fetchSearchResults } from "../../../src/server/api/search"
 import initializePatronTokenAuth from "../../../src/server/auth"
 import {
