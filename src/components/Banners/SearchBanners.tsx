@@ -21,16 +21,16 @@ const SearchBanners = ({
         pb: "xs",
       }}
     >
-      <EDSBanner />
-      <UserGuideBanner />
       {showNotification && bannerNotification && (
         <Banner
-          mt="0"
-          className={`${styles.banner} no-print`}
-          heading="Service announcement"
-          content={bannerNotification}
+        mt="0"
+        className={`${styles.banner} no-print`}
+        heading="Service announcement"
+        content={bannerNotification}
         />
       )}
+      <EDSBanner />
+      <UserGuideBanner />
     </Flex>
   )
 }

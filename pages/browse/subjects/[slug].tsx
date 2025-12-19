@@ -1,4 +1,4 @@
-import { SITE_NAME } from "../../../src/config/constants"
+import { SITE_NAME, SEARCH_RESULTS_NOTIFICATION } from "../../../src/config/constants"
 import { fetchSearchResults } from "../../../src/server/api/search"
 import initializePatronTokenAuth from "../../../src/server/auth"
 import {
@@ -83,7 +83,7 @@ export default function SubjectHeadingResults({
 }
 
 export async function getServerSideProps({ req, query, params }) {
-  const bannerNotification = process.env.SEARCH_RESULTS_NOTIFICATION || ""
+  const bannerNotification = SEARCH_RESULTS_NOTIFICATION || ""
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const slug: string = params.slug as string
 
