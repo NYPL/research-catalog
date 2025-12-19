@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Updated
 
 - Updated bib author to use `contributorLiteral` filter [SCC-4929](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4929)
+- Updated landing page legacy deprecation date to January 2026 [SCC-5112](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5112)
 - Updated collection filter to display as "Division" [SCC-5080](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5080)
 - Updated landing page legacy deprecation date to January 2026 [SCC-5112](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5112)
 

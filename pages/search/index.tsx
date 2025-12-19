@@ -10,7 +10,10 @@ import type {
   SortKey,
   SortOrder,
 } from "../../src/types/searchTypes"
-import { SITE_NAME } from "../../src/config/constants"
+import {
+  SITE_NAME,
+  SEARCH_RESULTS_NOTIFICATION,
+} from "../../src/config/constants"
 import initializePatronTokenAuth from "../../src/server/auth"
 import { useFocusContext, idConstants } from "../../src/context/FocusContext"
 import type { HTTPStatusCode } from "../../src/types/appTypes"
@@ -79,7 +82,7 @@ export default function SearchPage({
 }
 
 export async function getServerSideProps({ req, query }) {
-  const bannerNotification = process.env.SEARCH_RESULTS_NOTIFICATION || ""
+  const bannerNotification = SEARCH_RESULTS_NOTIFICATION || ""
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
 
   const results = await fetchSearchResults(mapQueryToSearchParams(query))
