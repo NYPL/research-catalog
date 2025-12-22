@@ -71,7 +71,7 @@ export default function Home({
                 <Link isExternal href={appConfig.urls.legacyCatalog}>
                   Legacy Catalog
                 </Link>{" "}
-                in January 2026. After this time it will be available onsite
+                on January 22, 2026. After this time it will be available onsite
                 only. The Legacy Catalog does not include our{" "}
                 <Link
                   isExternal
