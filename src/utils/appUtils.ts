@@ -33,6 +33,14 @@ export const encodeHTML = (str: string) =>
   str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;")
 
 /**
+ * encodeURIComponentWithPeriods
+ * Return a URI-encoded string that also encodes periods
+ */
+export const encodeURIComponentWithPeriods = (str: string) => {
+  return encodeURIComponent(str).replace(/\./g, "%2E")
+}
+
+/**
  * convertToSentenceCase
  * Return a sentence-cased version of the string if it's more than 2 words (to avoid sentence-casing acronyms).
  */

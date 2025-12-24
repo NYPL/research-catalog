@@ -11,6 +11,7 @@ import {
   eddFormIsInvalid,
 } from "../../../../../src/utils/holdPageUtils"
 import { BASE_URL, PATHS } from "../../../../../src/config/constants"
+import { encodeURIComponentWithPeriods } from "../../../../../src/utils/appUtils"
 
 /**
  * Default API route handler for EDD requests
@@ -95,7 +96,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       )}`
       const formStateQuery = `formState=${JSON.stringify(formState)}`
 
-      const invalidFormRedirectUrl = encodeURI(
+      const invalidFormRedirectUrl = encodeURIComponentWithPeriods(
         `${BASE_URL}${PATHS.HOLD_REQUEST}/${holdId}/edd?${formInvalidQuery}&${validatedFieldsQuery}&${formStateQuery}`
       )
 

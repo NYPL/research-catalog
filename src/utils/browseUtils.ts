@@ -7,7 +7,10 @@ import type {
   DiscoverySubjectResult,
   SubjectLink,
 } from "../types/browseTypes"
-import { getPaginationOffsetStrings } from "./appUtils"
+import {
+  encodeURIComponentWithPeriods,
+  getPaginationOffsetStrings,
+} from "./appUtils"
 import {
   buildFilterQuery,
   collapseMultiValueQueryParams,
@@ -87,7 +90,7 @@ export function getBrowseQuery(params: BrowseParams): string {
     order = defaultSort.order
   }
 
-  const browseKeywordsQuery = encodeURIComponent(q)
+  const browseKeywordsQuery = encodeURIComponentWithPeriods(q)
   const sortQuery = `&sort=${sortBy}&sort_direction=${order}`
   const scopeQuery = `&search_scope=${searchScope}`
   const pageQuery = page !== 1 ? `&page=${page}` : ""
@@ -103,7 +106,7 @@ export function isPreferredSubject(
 }
 
 export function getSubjectSearchURL(term: string) {
-  const subject = encodeURIComponent(term).replace(/%2D%2D/g, "--")
+  const subject = encodeURIComponentWithPeriods(term).replace(/%2D%2D/g, "--")
   return `/browse/subjects/${subject}`
 }
 

@@ -23,7 +23,7 @@ describe("getBrowseDestination", () => {
   it("redirects UUID with label URLs and adds final period if missing", () => {
     const url = new URL("http://localhost/subject_headings/uuid?label=Emma")
     const dest = getBrowseDestination(url)
-    expect(dest).toBe("/browse/subjects/Emma.")
+    expect(dest).toBe("/browse/subjects/Emma%2E")
   })
 
   it("does not add extra period if label ends with a parenthesis", () => {
@@ -31,7 +31,7 @@ describe("getBrowseDestination", () => {
       "http://localhost/subject_headings/uuid?label=Some Subject (N.Y.)"
     )
     const dest = getBrowseDestination(url)
-    expect(dest).toBe("/browse/subjects/Some%20Subject%20(N.Y.)")
+    expect(dest).toBe("/browse/subjects/Some%20Subject%20(N%2EY%2E)")
   })
 
   it("catch-all redirect to /browse", () => {

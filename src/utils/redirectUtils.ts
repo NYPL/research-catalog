@@ -1,4 +1,5 @@
 import { shepToBrowse } from "../../data/shepToBrowse"
+import { encodeURIComponentWithPeriods } from "./appUtils"
 
 // Given a `/subject_headings*` URL, gets redirect destination in `/browse`
 export function getBrowseDestination(url) {
@@ -14,7 +15,9 @@ export function getBrowseDestination(url) {
   // Check filter param
   if (url.searchParams.has("filter")) {
     const filter = url.searchParams.get("filter")
-    return `/browse?q=${encodeURIComponent(filter)}&search_scope=starts_with`
+    return `/browse?q=${encodeURIComponentWithPeriods(
+      filter
+    )}&search_scope=starts_with`
   }
 
   // Check label param
@@ -22,7 +25,7 @@ export function getBrowseDestination(url) {
     let label = url.searchParams.get("label")
     // Ensure ending period
     if (!label.endsWith(".") && !label.endsWith(")")) label += "."
-    return `/browse/subjects/${encodeURIComponent(label)}`
+    return `/browse/subjects/${encodeURIComponentWithPeriods(label)}`
   }
 
   // Catch-all

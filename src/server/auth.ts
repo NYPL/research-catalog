@@ -4,6 +4,7 @@ import { importSPKI, jwtVerify, type JWTPayload } from "jose"
 import { appConfig } from "../config/config"
 import { BASE_URL } from "../config/constants"
 import { useEffect, useState } from "react"
+import { encodeURIComponentWithPeriods } from "../utils/appUtils"
 
 interface UserJwtPayload extends JWTPayload {
   iss: string
@@ -76,7 +77,9 @@ export function getLoginRedirect(req, defaultPath?: string) {
   const hostname = appConfig.apiEndpoints.domain[appConfig.environment]
   const path = req.url?.includes("_next") ? defaultPath : req.url
   const originalUrl = BASE_URL + path
-  const fullUrl = encodeURIComponent(`${protocol}://${hostname}${originalUrl}`)
+  const fullUrl = encodeURIComponentWithPeriods(
+    `${protocol}://${hostname}${originalUrl}`
+  )
   const redirect = `${
     appConfig.apiEndpoints.loginUrl[appConfig.environment]
   }?redirect_uri=${fullUrl}`
