@@ -11,7 +11,10 @@ import type {
   MarcDetail,
   AnyMarcDetail,
 } from "../types/bibDetailsTypes"
-import { convertToSentenceCase } from "../utils/appUtils"
+import {
+  convertToSentenceCase,
+  encodeURIComponentWithPeriods,
+} from "../utils/appUtils"
 import { getFindingAidFromSupplementaryContent } from "../utils/bibUtils"
 import logger from "../../logger"
 
@@ -312,15 +315,15 @@ export default class BibDetails {
         let internalUrl: string
         switch (field) {
           case "subjectLiteral":
-            internalUrl = `/browse/subjects/${encodeURIComponent(v)}`
+            internalUrl = `/browse/subjects/${encodeURIComponentWithPeriods(v)}`
             break
           case "creatorLiteral":
-            internalUrl = `/search?filters[contributorLiteral][0]=${encodeURIComponent(
+            internalUrl = `/search?filters[contributorLiteral][0]=${encodeURIComponentWithPeriods(
               v
             )}`
             break
           default:
-            internalUrl = `/search?filters[${field}][0]=${encodeURIComponent(
+            internalUrl = `/search?filters[${field}][0]=${encodeURIComponentWithPeriods(
               v
             )}`
         }
