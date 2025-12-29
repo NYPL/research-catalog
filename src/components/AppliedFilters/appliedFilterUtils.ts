@@ -26,71 +26,76 @@ export const buildAppliedFiltersValueArrayWithTagRemoved = (
 }
 
 export const addLabelPropAndParseFilters = (
-  aggregations: Aggregation[], // from the api response
+  aggregations: Aggregation[], // from the API response
   appliedFilterValues: CollapsedMultiValueAppliedFilters // parsed from url query params
 ): Record<string, Option[]> => {
   const appliedFilterValuesWithLabels = {}
-
   for (const appliedFilterField in appliedFilterValues) {
     // Find the aggregation that corresponds to the filter field we are working on
     const matchingFieldAggregation = aggregations.find(
       ({ field: aggregationField }) => aggregationField === appliedFilterField
     )
-
     // See line 69 for explanation of date exclusion.
     if (!matchingFieldAggregation && !appliedFilterField.includes("date"))
       continue
 
     appliedFilterValuesWithLabels[appliedFilterField] = appliedFilterValues[
       appliedFilterField
-    ].map((filterValue: string): Option => {
-      // dateTo and dateFrom fields are not based on
-      // aggregations results. Pass the year along without
-      // transforming fieldname or finding the label
-      if (appliedFilterField.includes("date")) {
-        const labelPrefix = appliedFilterField.split("date")[1]
-        return {
-          count: null,
-          value: filterValue,
-          label: `${labelPrefix} ${filterValue}`,
+    ]
+      .map((filterValue: string): Option | null => {
+        // dateTo and dateFrom fields are not based on
+        // aggregations results. Pass the year along without
+        // transforming fieldname or finding the label
+        if (appliedFilterField.includes("date")) {
+          const labelPrefix = appliedFilterField.split("date")[1]
+          return {
+            count: null,
+            value: filterValue,
+            label: `${labelPrefix} ${filterValue}`,
+          }
         }
-      }
 
-      // Subject literals can be combinations of multiple subjects
-      if (appliedFilterField === "subjectLiteral") {
-        return {
-          count: null,
-          value: filterValue,
-          label: filterValue,
+        // Subject literals can be combinations of multiple subjects
+        if (appliedFilterField === "subjectLiteral")
+          return {
+            count: null,
+            value: filterValue,
+            label: filterValue,
+          }
+
+        if (appliedFilterField === "collection") {
+          const collectionName = matchingFieldAggregation.values.find(
+            (option: Option) => option.value === filterValue
+          )
+          return {
+            count: null,
+            value: filterValue,
+            label: mapCollectionToFilterTag(filterValue, collectionName.label),
+          }
         }
-      }
 
-      if (appliedFilterField === "collection") {
-        const collectionName = matchingFieldAggregation?.values.find(
+        // Find the option with the same value, so we can eventually display the label
+        const matchingOption = matchingFieldAggregation.values.find(
           (option: Option) => option.value === filterValue
         )
 
-        return {
-          count: null,
-          value: filterValue,
-          label: mapCollectionToFilterTag(filterValue, collectionName?.label),
+        // Only fall back to raw value for creatorLiteral or contributorLiteral
+        if (matchingOption) return matchingOption
+        if (
+          appliedFilterField === "creatorLiteral" ||
+          appliedFilterField === "contributorLiteral"
+        ) {
+          return {
+            count: null,
+            value: filterValue,
+            label: filterValue,
+          }
         }
-      }
 
-      // Find the option with the same value, so we can display the label
-      const matchingOption = matchingFieldAggregation?.values.find(
-        (option: Option) => option.value === filterValue
-      )
-
-      // Fall back to filter value when aggregation option is missing
-      return (
-        matchingOption ?? {
-          count: null,
-          value: filterValue,
-          label: filterValue,
-        }
-      )
-    })
+        // Otherwise, drop it
+        return null
+      })
+      .filter((option) => option)
   }
 
   delete appliedFilterValuesWithLabels["q"]
