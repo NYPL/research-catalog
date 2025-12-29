@@ -119,7 +119,7 @@ describe("BibDetail component", () => {
       expect(creatorLiteralLink).toHaveAttribute(
         "href",
         expect.stringContaining(
-          "/search?filters[contributorLiteral][0]=Cortanze%2C%20G%C3%A9rard%20de."
+          "/search?filters[contributorLiteral][0]=Cortanze%2C%20G%C3%A9rard%20de%2E"
         )
       )
       await userEvent.click(creatorLiteralLink)
