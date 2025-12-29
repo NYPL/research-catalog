@@ -7,14 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+## [1.6.4] 2025-12-22
+
+### Updated
+
+- Updated landing page legacy deprecation date to January 22, 2026 [SCC-5119](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5119)
+
+## [1.6.3] 2025-12-18
+
 ### Updated
 
 - Updated bib author to use `contributorLiteral` filter [SCC-4929](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4929)
+- Updated landing page legacy deprecation date to January 2026 [SCC-5112](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5112)
 - Updated collection filter to display as "Division" [SCC-5080](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5080)
+- Updated landing page legacy deprecation date to January 2026 [SCC-5112](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5112)
 
 ### Added
 
-- Added workflow to run playwright tests on merge to qa branch. https://newyorkpubliclibrary.atlassian.net/browse/SCC-4993
+- Added workflow to run Playwright tests on `qa` [SCC-4993](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4993)
 - Added search filter links to bib's `addedAuthorTitle`, `placeOfPublication`, `series`, `uniformTitle`, `titleAlt`, and `donor` fields [SCC-4921](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4921)
 - Added periods to URI encoding [SCC-5064](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5064)
 
