@@ -25,7 +25,8 @@ describe("searchUtils", () => {
     })
     it("includes advanced search query params when field is set to 'all'", () => {
       const testQuery =
-        "?q=shel%20silverstein&contributor=shel silverstein&title=the giving tree&subject=books"
+        "?q=shel%20silverstein&contributor=shel%20silverstein&title=the%20giving%20tree&subject=books"
+
       expect(
         checkQueryParamsEquality(testQuery, {
           q: "shel silverstein",
@@ -67,6 +68,20 @@ describe("searchUtils", () => {
           contributor: "shel silverstein",
           subject: "books",
           field: "contributor",
+        })
+      ).toBe(true)
+    })
+    it("encodes special characters in advanced search params", () => {
+      const testQuery =
+        "?q=uber&title=%C3%9Cber%20den%20Prozess&contributor=G%C3%BCnther&subject=%C3%84sthetik"
+
+      expect(
+        checkQueryParamsEquality(testQuery, {
+          q: "uber",
+          title: "Über den Prozess",
+          contributor: "Günther",
+          subject: "Ästhetik",
+          field: "all",
         })
       ).toBe(true)
     })

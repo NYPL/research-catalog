@@ -194,9 +194,11 @@ export function getSearchQuery(params: SearchParams): string {
 
   const advancedSearchQueryParams = advancedSearchFields
     .map(({ name: advancedSearchParam }) => {
-      if (advancedSearchParam === "q") return
+      if (advancedSearchParam === "q") return ""
       return params[advancedSearchParam]
-        ? `&${advancedSearchParam}=${params[advancedSearchParam]}`
+        ? `&${advancedSearchParam}=${encodeURIComponentWithPeriods(
+            params[advancedSearchParam]
+          )}`
         : ""
     })
     .join("")
