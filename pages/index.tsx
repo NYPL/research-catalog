@@ -10,7 +10,7 @@ import {
 } from "@nypl/design-system-react-components"
 
 import Layout from "../src/components/Layout/Layout"
-import { SITE_NAME, SEARCH_RESULTS_NOTIFICATION } from "../src/config/constants"
+import { SITE_NAME } from "../src/config/constants"
 import { appConfig } from "../src/config/config"
 import initializePatronTokenAuth from "../src/server/auth"
 import useLoading from "../src/hooks/useLoading"
@@ -191,7 +191,7 @@ export default function Home({
 }
 
 export async function getServerSideProps({ req }) {
-  const bannerNotification = SEARCH_RESULTS_NOTIFICATION || ""
+  const bannerNotification = process.env.SEARCH_RESULTS_NOTIFICATION || ""
   // Every page that needs patron data must call initializePatronTokenAuth
   // to find if the token is valid and what the patron id is.
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
