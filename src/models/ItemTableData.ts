@@ -51,9 +51,11 @@ export default class ItemTableData {
           ? [ItemTableCell({ children: item.accessMessage })]
           : []),
         ItemTableCell({
-          children: `${item.callNumber}${
-            item.volume && !this.showVolumeColumn() ? ` ${item.volume}` : ""
-          }`,
+          children: item.callNumber
+            ? `${item.callNumber}${
+                item.volume && !this.showVolumeColumn() ? ` ${item.volume}` : ""
+              }`
+            : "",
         }),
         ItemTableCell({ children: item.location.prefLabel }),
       ]
