@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+### Updated
+
+- Fixed call number/volume to not appear as string-coerced 'null' [SCC-5121](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5121)
+
 ### Added
 
 - Added volume/date to feedback form item metadata [SCC-4252](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4252)
