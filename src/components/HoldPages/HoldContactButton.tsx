@@ -30,6 +30,7 @@ export const HoldContactButton = ({
           barcode: item.barcode,
           callNumber: item.callNumber,
           bibId: item.bibId,
+          volume: item.volume,
           notificationText: `Request failed for call number ${item.callNumber}`,
         })
       }
