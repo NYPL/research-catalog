@@ -196,7 +196,9 @@ export function getSearchQuery(params: SearchParams): string {
     .map(({ name: advancedSearchParam }) => {
       if (advancedSearchParam === "q") return
       return params[advancedSearchParam]
-        ? `&${advancedSearchParam}=${params[advancedSearchParam]}`
+        ? `&${advancedSearchParam}=${encodeURIComponentWithPeriods(
+            params[advancedSearchParam]
+          )}`
         : ""
     })
     .join("")
