@@ -25,8 +25,11 @@ export const buildAppliedFiltersValueArrayWithTagRemoved = (
   return updatedFilters
 }
 
+// The aggregations from the api response have the label we want to display
+// in the filter dialog. The applied filter values parsed from the url only have
+// values. Using the filter values, find the label from the aggregations array.
 export const addLabelPropAndParseFilters = (
-  aggregations: Aggregation[], // from the API response
+  aggregations: Aggregation[], // from the api response
   appliedFilterValues: CollapsedMultiValueAppliedFilters // parsed from url query params
 ): Record<string, Option[]> => {
   const appliedFilterValuesWithLabels = {}
@@ -38,13 +41,12 @@ export const addLabelPropAndParseFilters = (
     // See line 69 for explanation of date exclusion.
     if (!matchingFieldAggregation && !appliedFilterField.includes("date"))
       continue
-
     appliedFilterValuesWithLabels[appliedFilterField] = appliedFilterValues[
       appliedFilterField
     ]
-      .map((filterValue: string): Option | null => {
+      .map((filterValue: string): Option => {
         // dateTo and dateFrom fields are not based on
-        // aggregations results. Pass the year along without
+        // aggregations results. Pass the year along with out
         // transforming fieldname or finding the label
         if (appliedFilterField.includes("date")) {
           const labelPrefix = appliedFilterField.split("date")[1]
@@ -54,15 +56,15 @@ export const addLabelPropAndParseFilters = (
             label: `${labelPrefix} ${filterValue}`,
           }
         }
-
-        // Subject literals can be combinations of multiple subjects
+        // Subject literals can be combinations of multiple subjects, ie a -- b -- c.
+        // We need special handling for when a query is made for a -- b, but
+        // aggregations only returns a -- b -- c.
         if (appliedFilterField === "subjectLiteral")
           return {
             count: null,
             value: filterValue,
             label: filterValue,
           }
-
         if (appliedFilterField === "collection") {
           const collectionName = matchingFieldAggregation.values.find(
             (option: Option) => option.value === filterValue
@@ -73,31 +75,17 @@ export const addLabelPropAndParseFilters = (
             label: mapCollectionToFilterTag(filterValue, collectionName.label),
           }
         }
-
         // Find the option with the same value, so we can eventually display the label
         const matchingOption = matchingFieldAggregation.values.find(
           (option: Option) => option.value === filterValue
         )
-
-        // Only fall back to raw value for creatorLiteral or contributorLiteral
-        if (matchingOption) return matchingOption
-        if (
-          appliedFilterField === "creatorLiteral" ||
-          appliedFilterField === "contributorLiteral"
-        ) {
-          return {
-            count: null,
-            value: filterValue,
-            label: filterValue,
-          }
-        }
-
-        // Otherwise, drop it
-        return null
+        return matchingOption
       })
+      // don't pass on falsy options. this happens when no aggregations are
+      // returned for a given param, which is not uncommon when many filters
+      // are applied at once (and possibly in other scenarios).
       .filter((option) => option)
   }
-
   delete appliedFilterValuesWithLabels["q"]
   return appliedFilterValuesWithLabels
 }
