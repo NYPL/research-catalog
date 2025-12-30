@@ -8,25 +8,17 @@ import { mapCollectionToFilterTag } from "../../utils/advancedSearchUtils"
 
 export const buildAppliedFiltersValueArrayWithTagRemoved = (
   tag: TagSetFilterDataProps,
-  appliedFiltersWithLabels: Record<string, Option[]>
-): Record<string, string[]> => {
+  appliedFilters: CollapsedMultiValueAppliedFilters
+): CollapsedMultiValueAppliedFilters => {
   const fieldToUpdate = tag.field
-  const doesNotMatchLabelToRemove = (option: Option) =>
-    option.label !== tag.label
-
   const updatedFilters = {} as CollapsedMultiValueAppliedFilters
-  for (const field in appliedFiltersWithLabels) {
+  for (const field in appliedFilters) {
     if (field !== fieldToUpdate) {
-      updatedFilters[field] = appliedFiltersWithLabels[field].map(
-        (option: Option) => option.value
-      )
+      updatedFilters[field] = appliedFilters[field]
     } else {
-      // regenerate the selected options for the relevant field by removing only
-      // the tag that was selected.
-      updatedFilters[field] = appliedFiltersWithLabels[field]
-        .filter(doesNotMatchLabelToRemove)
-        // only return the value so we can generate the query again
-        .map((option: Option) => option.value)
+      updatedFilters[field] = appliedFilters[field].filter(
+        (value) => value !== tag.value
+      )
     }
   }
 
@@ -110,6 +102,7 @@ export const buildTagsetData = (
           id: field + "-" + filter?.label,
           label: filter?.label,
           field,
+          value: filter.value,
         }
       })
     })

@@ -122,25 +122,16 @@ describe("Applied Filter utils", () => {
     it("removes the provided tag", () => {
       const tagToRemove = {
         label: "Tag",
-        field: "tags",
+        field: "filterField",
         value: "remove",
         id: "id",
       }
-      const tagToKeep = {
-        label: "Tag 2",
-        field: "tags",
-        value: "keep",
-        id: "id",
-      }
-      const appliedFiltersWithLabels = {
-        tags: [tagToRemove, tagToKeep],
+      const appliedFilters = {
+        filterField: ["remove", "keep"],
       }
       expect(
-        buildAppliedFiltersValueArrayWithTagRemoved(
-          tagToRemove,
-          appliedFiltersWithLabels
-        )
-      ).toStrictEqual({ tags: ["keep"] })
+        buildAppliedFiltersValueArrayWithTagRemoved(tagToRemove, appliedFilters)
+      ).toStrictEqual({ filterField: ["keep"] })
     })
   })
   describe("buildTagsetData", () => {
@@ -176,21 +167,25 @@ describe("Applied Filter utils", () => {
           id: "language-English",
           label: "English",
           field: "language",
+          value: "lang:eng",
         },
         {
           id: "language-French",
           label: "French",
           field: "language",
+          value: "lang:fre",
         },
         {
           id: "subjectLiteral-Spaghetti Westerns -- History and criticism.",
           label: "Spaghetti Westerns -- History and criticism.",
           field: "subjectLiteral",
+          value: "Spaghetti Westerns -- History and criticism.",
         },
         {
           id: "subjectLiteral-COOKING -- General.",
           label: "COOKING -- General.",
           field: "subjectLiteral",
+          value: "COOKING -- General.",
         },
       ])
     })
