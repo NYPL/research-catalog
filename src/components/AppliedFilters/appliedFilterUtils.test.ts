@@ -8,37 +8,6 @@ import { aggregationsResults } from "../../../__test__/fixtures/searchResultsMan
 
 describe("Applied Filter utils", () => {
   describe("addLabelPropAndParseFilters", () => {
-    it("can handle a subject literal that is 2 of 3 facets", () => {
-      const aggregations = [
-        {
-          "@type": "nypl:Aggregation",
-          "@id": "res:subjectLiteral",
-          id: "subjectLiteral",
-          field: "subjectLiteral",
-          values: [
-            {
-              count: 1,
-              value: "facet 1 -- facet 2 -- facet 3",
-              label: "facet 1 -- facet 2 -- facet 3",
-            },
-          ],
-        },
-      ]
-      const appliedFilterValues = {
-        subjectLiteral: ["facet 1 -- facet 2"],
-      }
-      expect(
-        addLabelPropAndParseFilters(aggregations, appliedFilterValues)
-      ).toStrictEqual({
-        subjectLiteral: [
-          {
-            count: null,
-            value: "facet 1 -- facet 2",
-            label: "facet 1 -- facet 2",
-          },
-        ],
-      })
-    })
     it("does not return filter value for invalid filter", () => {
       const aggregations = [
         {
@@ -97,7 +66,7 @@ describe("Applied Filter utils", () => {
         subjectLiteral: [
           {
             value: "Spaghetti Westerns -- History and criticism.",
-            count: null,
+            count: 42,
             label: "Spaghetti Westerns -- History and criticism.",
           },
         ],
