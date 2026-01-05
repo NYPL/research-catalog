@@ -59,22 +59,40 @@ export interface AnnotatedMarc {
   fields: AnnotatedMarcField[]
 }
 
+export interface Marc {
+  id: string
+  nyplSource: string
+  fields: MarcField[]
+}
+
 export interface AnnotatedMarcField {
   label: string
   values: AnnotatedMarcFieldValue[]
 }
 
+export interface MarcField {
+  fieldTag: string
+  marcTag: string
+  ind1?: string
+  ind2?: string
+  content: string | null
+  subfields: MarcSubfield[]
+}
+
+export interface LeaderField {
+  fieldTag: string
+  content: string
+}
+
+export interface ControlField {
+  marcTag: string
+  content: string
+}
+
 export interface AnnotatedMarcFieldValue {
   label?: string
   content: string
-  source: {
-    fieldTag: string
-    marcTag: string
-    ind1?: string
-    ind2?: string
-    content: string | null
-    subfields: MarcSubfield[]
-  }
+  source: MarcField
 }
 
 export interface MarcSubfield {
