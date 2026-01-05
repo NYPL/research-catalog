@@ -8,6 +8,7 @@ export interface FeedbackMetadataAndComment {
   email: string
   id?: string
   barcode?: string
+  volume?: string
   errorStatus?: string
 }
 
