@@ -10,7 +10,7 @@ interface KMSCache {
   secret: string
 }
 const appEnvironment = appConfig.environment
-const encryptedClientId = process.env.PLATFORM_API_CLIENT_ID
+const encryptedClientId = getConfigPLATFORM_API_CLIENT_ID
 const encryptedClientSecret = process.env.PLATFORM_API_CLIENT_SECRET
 
 const creds = [encryptedClientId, encryptedClientSecret]
