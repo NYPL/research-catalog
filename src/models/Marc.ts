@@ -1,5 +1,6 @@
 import type {
   ControlField,
+  DiscoveryMarcResult,
   LeaderField,
   MarcField,
 } from "../types/bibDetailsTypes"
@@ -11,23 +12,40 @@ export default class Marc {
   controlFields: ControlField[]
   dataFields: MarcField[]
 
-  constructor(result?: Marc) {
-    this.id = result.id
-    this.nyplSource = result.nyplSource
-    this.leader = this.buildLeader()
-    this.controlFields = this.buildControlFields()
-    this.dataFields = this.buildDataFields()
+  constructor(result?: DiscoveryMarcResult) {
+    this.id = result.bib.id
+    this.nyplSource = result.bib.nyplSource
+    this.leader = this.buildLeader(result.bib.fields)
+    this.controlFields = this.buildControlFields(result.bib.fields)
+    this.dataFields = this.buildDataFields(result.bib.fields)
   }
 
-  buildControlFields(): ControlField[] {
-    return []
+  buildControlFields(fields): ControlField[] {
+    return fields
+      .filter(
+        (field): field is ControlField =>
+          typeof field.marcTag === "string" &&
+          /^[0][0-9][0-9]$/.test(field.marcTag) &&
+          (!field.subfields || field.subfields.length === 0) &&
+          typeof field.content === "string"
+      )
+      .map((field) => ({
+        marcTag: field.marcTag,
+        content: field.content,
+      }))
   }
 
-  buildLeader(): LeaderField {
-    return { fieldTag: "_", content: "" }
+  buildLeader(fields): LeaderField {
+    const leaderField = fields.find(
+      (field) =>
+        field.fieldTag === "_" &&
+        field.marcTag === null &&
+        typeof field.content === "string"
+    )
+    return { fieldTag: "_", content: leaderField.content }
   }
 
-  buildDataFields(): MarcField[] {
+  buildDataFields(fields): MarcField[] {
     return []
   }
 }

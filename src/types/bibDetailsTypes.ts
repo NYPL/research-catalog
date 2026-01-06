@@ -65,6 +65,10 @@ export interface Marc {
   fields: MarcField[]
 }
 
+export interface DiscoveryMarcResult {
+  bib: Marc
+}
+
 export interface AnnotatedMarcField {
   label: string
   values: AnnotatedMarcFieldValue[]
