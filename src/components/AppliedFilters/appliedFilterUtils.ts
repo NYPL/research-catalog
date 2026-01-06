@@ -68,7 +68,7 @@ export const addLabelPropAndParseFilters = (
         }
         if (appliedFilterField === "contributorLiteral") {
           // contributorLiteral filters use special display string rather than tags
-          // with agg-derived labels
+          // TO DO: Remove this condition when Discovery API stops returning contributorLiteral aggs
           return null
         }
         // Find the option with the same value, so we can eventually display the label
