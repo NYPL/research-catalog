@@ -59,17 +59,17 @@ function App({ Component, pageProps }) {
         strategy="afterInteractive"
       />
       {/* NYPL Header script */}
-      <Script
+      {/* <Script
         src={`${
           appConfig.apiEndpoints.nyplHeaderUrl[appConfig.environment]
         }/header.min.js?containerId=nypl-header`}
-      />
+      /> */}
       {/* NYPL Footer script */}
-      <Script
+      {/* <Script
         src={`${
           appConfig.apiEndpoints.nyplHeaderUrl[appConfig.environment]
         }/footer.min.js?containerId=nypl-footer`}
-      />
+      /> */}
       <Head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
