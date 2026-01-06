@@ -38,9 +38,6 @@ jest.mock("jose", () => ({
   }),
 }))
 
-// Set NEXT_PUBLIC_APP_ENV to "development" for jest tests
-process.env.NEXT_PUBLIC_APP_ENV = "development"
-
 // Related to the useNYPLBreakpoints hook which is used in: ButtonGroup,
 // FeedbackBox, Modal, MultiSelectGroup, and NewsletterSignup.
 import { MatchMedia } from "@nypl/design-system-react-components"
