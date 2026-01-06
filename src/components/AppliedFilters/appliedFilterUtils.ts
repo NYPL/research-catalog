@@ -66,9 +66,13 @@ export const addLabelPropAndParseFilters = (
             label: mapCollectionToFilterTag(filterValue, collectionName.label),
           }
         }
-        if (appliedFilterField === "contributorLiteral") {
+        if (
+          appliedFilterField === "contributorLiteral" ||
+          appliedFilterField === "creatorLiteral"
+        ) {
           // contributorLiteral filters use special display string rather than tags
-          // TO DO: Remove this condition when Discovery API stops returning contributorLiteral aggs
+          // TO DO: Remove this condition when Discovery API stops returning
+          // contributorLiteral/creatorLiteral aggs
           return null
         }
         // Find the option with the same value, so we can eventually display the label
