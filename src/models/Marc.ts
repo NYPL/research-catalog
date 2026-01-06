@@ -8,15 +8,15 @@ export default class Marc {
   id: string
   nyplSource: string
   leader: LeaderField
-  controls: ControlField[]
-  fields: MarcField[]
+  controlFields: ControlField[]
+  dataFields: MarcField[]
 
   constructor(result?: Marc) {
     this.id = result.id
     this.nyplSource = result.nyplSource
     this.leader = this.buildLeader()
-    this.controls = this.buildControlFields()
-    this.fields = this.buildVarFields()
+    this.controlFields = this.buildControlFields()
+    this.dataFields = this.buildDataFields()
   }
 
   buildControlFields(): ControlField[] {
@@ -27,7 +27,7 @@ export default class Marc {
     return { fieldTag: "_", content: "" }
   }
 
-  buildVarFields(): MarcField[] {
+  buildDataFields(): MarcField[] {
     return []
   }
 }
