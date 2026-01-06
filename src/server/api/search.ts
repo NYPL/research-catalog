@@ -45,7 +45,6 @@ export async function fetchSearchResults(
   }
   const aggregationQuery = `/aggregations${queryString}`
   const searchQuery = `${queryString}&per_page=${RESULTS_PER_PAGE.toString()}`
-
   // Get the following in parallel:
   //  - search results
   //  - aggregations

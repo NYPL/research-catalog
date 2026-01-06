@@ -1,86 +1,87 @@
 import NyplApiClient from "@nypl/nypl-data-api-client"
-
-import { appConfig } from "../../config/config"
-import { kmsDecryptCreds } from "../kms"
+import { config } from "@nypl/node-utils"
 import logger from "../../../logger"
+import { appConfig } from "../../config/config"
 
 interface KMSCache {
-  clients: object
-  id: string
-  secret: string
+  clients: Record<string, any>
+  id: string | null
+  secret: string | null
 }
-const appEnvironment = appConfig.environment
-const encryptedClientId = getConfigPLATFORM_API_CLIENT_ID
-const encryptedClientSecret = process.env.PLATFORM_API_CLIENT_SECRET
 
-const creds = [encryptedClientId, encryptedClientSecret]
-const CACHE: KMSCache = { clients: {}, secret: null, id: null }
+const CACHE: KMSCache = {
+  clients: {},
+  id: null,
+  secret: null,
+}
 
 export class NyplApiClientError extends Error {
   constructor(message: string) {
-    super()
-    this.message = "Error building NYPL data api client: " + message
+    super(`Error building NYPL data api client: ${message}`)
+    this.name = "NyplApiClientError"
   }
+}
+
+type NyplApiClientOptions = {
+  apiName?: string
+  version?: string
 }
 
 const nyplApiClient = async ({
   apiName = "platform",
   version = "v0.1",
-} = {}) => {
+}: NyplApiClientOptions = {}) => {
+  const appEnvironment = appConfig.environment
+  await config.loadConfig(process.env.APP_ENV || "development")
+
+  const { PLATFORM_API_CLIENT_ID, PLATFORM_API_CLIENT_SECRET } =
+    config.getConfig()
+
   const clientCacheKey = `${apiName}${version}`
   if (CACHE.clients[clientCacheKey]) {
     return CACHE.clients[clientCacheKey]
   }
 
+  if (!PLATFORM_API_CLIENT_ID || !PLATFORM_API_CLIENT_SECRET) {
+    logger.error("Missing Platform API configuration")
+    throw new NyplApiClientError("Missing Platform API configuration")
+  }
+
   const baseUrl = `${appConfig.apiEndpoints[apiName][appEnvironment]}/${version}`
 
-  if (!encryptedClientId || !baseUrl || !encryptedClientSecret) {
-    console.error("Missing Platform API credentials")
-  }
-
-  let decryptedId: string
-  let decryptedSecret: string
-  if (CACHE.secret && CACHE.id) {
-    decryptedId = CACHE.id
-    decryptedSecret = CACHE.secret
-  } else {
-    try {
-      ;[decryptedId, decryptedSecret] = await kmsDecryptCreds(creds)
-      CACHE.id = decryptedId
-      CACHE.secret = decryptedSecret
-    } catch (exception) {
-      logger.info("Error decrypting creds")
-      throw new NyplApiClientError("Error decrypting creds")
-    }
-  }
   try {
-    const nyplApiClient = new NyplApiClient({
+    const client = new NyplApiClient({
       base_url: baseUrl,
-      oauth_key: decryptedId,
-      oauth_secret: decryptedSecret,
+      oauth_key: PLATFORM_API_CLIENT_ID,
+      oauth_secret: PLATFORM_API_CLIENT_SECRET,
       oauth_url: appConfig.urls.tokenUrl,
     })
-    CACHE.clients[clientCacheKey] = nyplApiClient
-    const get = nyplApiClient.get.bind(nyplApiClient)
-    nyplApiClient.get = async function (path) {
+
+    const originalGet = client.get.bind(client)
+    client.get = async (path: string) => {
       logger.info("Platform request", {
-        path: `${baseUrl}${path}`,
         method: "GET",
+        path: `${baseUrl}${path}`,
       })
-      return get(path)
+      return originalGet(path)
     }
-    const post = nyplApiClient.post.bind(nyplApiClient)
-    nyplApiClient.post = async function (path, body) {
+
+    const originalPost = client.post.bind(client)
+    client.post = async (path: string, body: unknown) => {
       logger.info("Platform request", {
+        method: "POST",
         path: `${baseUrl}${path}`,
-        method: "GET",
-        body: JSON.stringify(body),
+        body,
       })
-      return post(path, body)
+      return originalPost(path, body)
     }
-    return nyplApiClient
-  } catch (error) {
-    logger.info(error.message)
+
+    CACHE.clients[clientCacheKey] = client
+    return client
+  } catch (error: any) {
+    logger.error("Failed to create NYPL API client", {
+      message: error.message,
+    })
     throw new NyplApiClientError(error.message)
   }
 }
