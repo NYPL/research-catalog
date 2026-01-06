@@ -29,6 +29,7 @@ export default class Marc {
           (!field.subfields || field.subfields.length === 0) &&
           typeof field.content === "string"
       )
+      .sort((a, b) => a.marcTag.localeCompare(b.marcTag))
       .map((field) => ({
         marcTag: field.marcTag,
         content: field.content,

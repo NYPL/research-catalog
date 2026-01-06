@@ -14,11 +14,14 @@ describe("Marc model", () => {
       content: "00000nam  2200109 a 4500",
     })
   })
-  it("has expected control fields", () => {
-    expect(everythingMarcModel.controlFields).toStrictEqual([
+  it("has expected control fields in ascending order", () => {
+    expect(classicMarcModel.controlFields).toStrictEqual([
+      { marcTag: "001", content: "2386894" },
+      { marcTag: "003", content: "OCoLC" },
+      { marcTag: "005", content: "20000629191647.0" },
       {
-        content: "      cyyyy2011nyua   f      000 faeng dnam a ",
         marcTag: "008",
+        content: "760820m18881906nyuaf         000 0 eng  camI  ",
       },
     ])
   })
