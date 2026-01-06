@@ -8,37 +8,6 @@ import { aggregationsResults } from "../../../__test__/fixtures/searchResultsMan
 
 describe("Applied Filter utils", () => {
   describe("addLabelPropAndParseFilters", () => {
-    it("can handle a subject literal that is 2 of 3 facets", () => {
-      const aggregations = [
-        {
-          "@type": "nypl:Aggregation",
-          "@id": "res:subjectLiteral",
-          id: "subjectLiteral",
-          field: "subjectLiteral",
-          values: [
-            {
-              count: 1,
-              value: "facet 1 -- facet 2 -- facet 3",
-              label: "facet 1 -- facet 2 -- facet 3",
-            },
-          ],
-        },
-      ]
-      const appliedFilterValues = {
-        subjectLiteral: ["facet 1 -- facet 2"],
-      }
-      expect(
-        addLabelPropAndParseFilters(aggregations, appliedFilterValues)
-      ).toStrictEqual({
-        subjectLiteral: [
-          {
-            count: null,
-            value: "facet 1 -- facet 2",
-            label: "facet 1 -- facet 2",
-          },
-        ],
-      })
-    })
     it("does not return filter value for invalid filter", () => {
       const aggregations = [
         {
@@ -97,7 +66,7 @@ describe("Applied Filter utils", () => {
         subjectLiteral: [
           {
             value: "Spaghetti Westerns -- History and criticism.",
-            count: null,
+            count: 42,
             label: "Spaghetti Westerns -- History and criticism.",
           },
         ],
@@ -122,25 +91,16 @@ describe("Applied Filter utils", () => {
     it("removes the provided tag", () => {
       const tagToRemove = {
         label: "Tag",
-        field: "tags",
+        field: "filterField",
         value: "remove",
         id: "id",
       }
-      const tagToKeep = {
-        label: "Tag 2",
-        field: "tags",
-        value: "keep",
-        id: "id",
-      }
-      const appliedFiltersWithLabels = {
-        tags: [tagToRemove, tagToKeep],
+      const appliedFilters = {
+        filterField: ["remove", "keep"],
       }
       expect(
-        buildAppliedFiltersValueArrayWithTagRemoved(
-          tagToRemove,
-          appliedFiltersWithLabels
-        )
-      ).toStrictEqual({ tags: ["keep"] })
+        buildAppliedFiltersValueArrayWithTagRemoved(tagToRemove, appliedFilters)
+      ).toStrictEqual({ filterField: ["keep"] })
     })
   })
   describe("buildTagsetData", () => {
@@ -176,21 +136,25 @@ describe("Applied Filter utils", () => {
           id: "language-English",
           label: "English",
           field: "language",
+          value: "lang:eng",
         },
         {
           id: "language-French",
           label: "French",
           field: "language",
+          value: "lang:fre",
         },
         {
           id: "subjectLiteral-Spaghetti Westerns -- History and criticism.",
           label: "Spaghetti Westerns -- History and criticism.",
           field: "subjectLiteral",
+          value: "Spaghetti Westerns -- History and criticism.",
         },
         {
           id: "subjectLiteral-COOKING -- General.",
           label: "COOKING -- General.",
           field: "subjectLiteral",
+          value: "COOKING -- General.",
         },
       ])
     })
