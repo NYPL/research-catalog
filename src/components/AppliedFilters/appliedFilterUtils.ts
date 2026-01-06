@@ -66,6 +66,11 @@ export const addLabelPropAndParseFilters = (
             label: mapCollectionToFilterTag(filterValue, collectionName.label),
           }
         }
+        if (appliedFilterField === "contributorLiteral") {
+          // contributorLiteral filters use special display string rather than tags
+          // with agg-derived labels
+          return null
+        }
         // Find the option with the same value, so we can eventually display the label
         const matchingOption = matchingFieldAggregation.values.find(
           (option: Option) => option.value === filterValue
