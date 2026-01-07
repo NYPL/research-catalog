@@ -84,7 +84,6 @@ export interface MarcField {
 }
 
 export interface LeaderField {
-  fieldTag: string
   content: string
 }
 

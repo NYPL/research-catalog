@@ -22,13 +22,7 @@ export default class Marc {
 
   buildControlFields(fields): ControlField[] {
     return fields
-      .filter(
-        (field): field is ControlField =>
-          typeof field.marcTag === "string" &&
-          /^[0][0-9][0-9]$/.test(field.marcTag) &&
-          (!field.subfields || field.subfields.length === 0) &&
-          typeof field.content === "string"
-      )
+      .filter((field): field is ControlField => this.isControlField(field))
       .sort((a, b) => a.marcTag.localeCompare(b.marcTag))
       .map((field) => ({
         marcTag: field.marcTag,
@@ -37,16 +31,49 @@ export default class Marc {
   }
 
   buildLeader(fields): LeaderField {
-    const leaderField = fields.find(
-      (field) =>
-        field.fieldTag === "_" &&
-        field.marcTag === null &&
-        typeof field.content === "string"
+    const leaderField = fields.find((field) => this.isLeader(field))
+    return {
+      content: leaderField.content || "",
+    }
+  }
+
+  isLeader(field): field is LeaderField {
+    return (
+      field.fieldTag === "_" &&
+      field.marcTag === null &&
+      typeof field.content === "string"
     )
-    return { fieldTag: "_", content: leaderField.content }
+  }
+
+  isControlField(field): field is ControlField {
+    return (
+      typeof field.marcTag === "string" &&
+      /^[0][0-9][0-9]$/.test(field.marcTag) &&
+      (!field.subfields || field.subfields.length === 0)
+    )
   }
 
   buildDataFields(fields): MarcField[] {
-    return []
+    return fields
+      .filter(
+        (field): field is MarcField =>
+          !this.isLeader(field) && !this.isControlField(field)
+      )
+      .sort((a, b) => a.marcTag.localeCompare(b.marcTag))
+      .map((field) => ({
+        ...field,
+
+        // replace blank indicators with underscore
+        ind1: field.ind1 === " " || field.ind1 === "" ? "_" : field.ind1,
+        ind2: field.ind2 === " " || field.ind2 === "" ? "_" : field.ind2,
+
+        // prefix | to subfield tags & remove redacted subfields
+        subfields: field.subfields
+          ?.map((subfield) => ({
+            ...subfield,
+            tag: `|${subfield.tag}`,
+          }))
+          .filter((subfield) => subfield.content !== "[redacted]"),
+      }))
   }
 }
