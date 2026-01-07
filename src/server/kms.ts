@@ -7,6 +7,7 @@ const decryptKMS = async (key: string): Promise<string | null> => {
   const params = {
     CiphertextBlob: new Uint8Array(Buffer.from(key, "base64")),
   }
+  console.log("key", key)
 
   try {
     const decrypted = await kms.send(new DecryptCommand(params))

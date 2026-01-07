@@ -45,7 +45,9 @@ const nyplApiClient = async ({
     decryptedSecret = CACHE.secret
   } else {
     try {
+      console.log("pre decryption", encryptedClientId, encryptedClientSecret)
       ;[decryptedId, decryptedSecret] = await kmsDecryptCreds(creds)
+
       CACHE.id = decryptedId
       CACHE.secret = decryptedSecret
     } catch (exception) {
