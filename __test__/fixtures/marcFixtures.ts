@@ -4620,10 +4620,6 @@ export const classicMarcResult = {
             tag: "u",
             content: "http://hdl.handle.net/2027/nyp.33433089902252",
           },
-          {
-            tag: "z",
-            content: "[redacted]",
-          },
         ],
       },
       {
@@ -4636,10 +4632,6 @@ export const classicMarcResult = {
           {
             tag: "u",
             content: "http://hdl.handle.net/2027/nyp.33433089902468",
-          },
-          {
-            tag: "z",
-            content: "[redacted]",
           },
         ],
       },
@@ -4654,10 +4646,6 @@ export const classicMarcResult = {
             tag: "u",
             content: "http://hdl.handle.net/2027/nyp.33433089902427",
           },
-          {
-            tag: "z",
-            content: "[redacted]",
-          },
         ],
       },
       {
@@ -4670,10 +4658,6 @@ export const classicMarcResult = {
           {
             tag: "u",
             content: "http://hdl.handle.net/2027/nyp.33433089902385",
-          },
-          {
-            tag: "z",
-            content: "[redacted]",
           },
         ],
       },
@@ -4688,10 +4672,6 @@ export const classicMarcResult = {
             tag: "u",
             content: "http://hdl.handle.net/2027/nyp.33433089902344",
           },
-          {
-            tag: "z",
-            content: "[redacted]",
-          },
         ],
       },
       {
@@ -4704,10 +4684,6 @@ export const classicMarcResult = {
           {
             tag: "u",
             content: "http://hdl.handle.net/2027/nyp.33433089902302",
-          },
-          {
-            tag: "z",
-            content: "[redacted]",
           },
         ],
       },
@@ -4722,10 +4698,6 @@ export const classicMarcResult = {
             tag: "u",
             content: "http://hdl.handle.net/2027/nyp.33433089909547",
           },
-          {
-            tag: "z",
-            content: "[redacted]",
-          },
         ],
       },
       {
@@ -4738,10 +4710,6 @@ export const classicMarcResult = {
           {
             tag: "u",
             content: "http://hdl.handle.net/2027/nyp.33433089902260",
-          },
-          {
-            tag: "z",
-            content: "[redacted]",
           },
         ],
       },
@@ -4756,10 +4724,6 @@ export const classicMarcResult = {
             tag: "u",
             content: "http://hdl.handle.net/2027/nyp.33433089902229",
           },
-          {
-            tag: "z",
-            content: "[redacted]",
-          },
         ],
       },
       {
@@ -4772,10 +4736,6 @@ export const classicMarcResult = {
           {
             tag: "u",
             content: "http://hdl.handle.net/2027/nyp.33433089902351",
-          },
-          {
-            tag: "z",
-            content: "[redacted]",
           },
         ],
       },
@@ -4813,10 +4773,6 @@ export const classicMarcResult = {
           {
             tag: "u",
             content: "http://babel.hathitrust.org/cgi/pt?id=nyp.33433074894290",
-          },
-          {
-            tag: "z",
-            content: "[redacted]",
           },
         ],
       },

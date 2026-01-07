@@ -5,6 +5,22 @@ import type {
   MarcField,
 } from "../types/bibDetailsTypes"
 
+export function isLeader(field): field is LeaderField {
+  return (
+    field.fieldTag === "_" &&
+    field.marcTag === null &&
+    typeof field.content === "string"
+  )
+}
+
+export function isControlField(field): field is ControlField {
+  return (
+    typeof field.marcTag === "string" &&
+    /^[0][0-9][0-9]$/.test(field.marcTag) &&
+    (!field.subfields || field.subfields.length === 0)
+  )
+}
+
 export default class Marc {
   id: string
   nyplSource: string
@@ -22,7 +38,7 @@ export default class Marc {
 
   buildControlFields(fields): ControlField[] {
     return fields
-      .filter((field): field is ControlField => this.isControlField(field))
+      .filter((field): field is ControlField => isControlField(field))
       .sort((a, b) => a.marcTag.localeCompare(b.marcTag))
       .map((field) => ({
         marcTag: field.marcTag,
@@ -31,49 +47,30 @@ export default class Marc {
   }
 
   buildLeader(fields): LeaderField {
-    const leaderField = fields.find((field) => this.isLeader(field))
+    const leaderField = fields.find((field) => isLeader(field))
     return {
-      content: leaderField.content || "",
+      content: leaderField?.content || "",
     }
-  }
-
-  isLeader(field): field is LeaderField {
-    return (
-      field.fieldTag === "_" &&
-      field.marcTag === null &&
-      typeof field.content === "string"
-    )
-  }
-
-  isControlField(field): field is ControlField {
-    return (
-      typeof field.marcTag === "string" &&
-      /^[0][0-9][0-9]$/.test(field.marcTag) &&
-      (!field.subfields || field.subfields.length === 0)
-    )
   }
 
   buildDataFields(fields): MarcField[] {
     return fields
       .filter(
         (field): field is MarcField =>
-          !this.isLeader(field) && !this.isControlField(field)
+          !isLeader(field) && !isControlField(field)
       )
       .sort((a, b) => a.marcTag.localeCompare(b.marcTag))
       .map((field) => ({
         ...field,
-
-        // replace blank indicators with underscore
+        // replace blank indicators with underscores
         ind1: field.ind1 === " " || field.ind1 === "" ? "_" : field.ind1,
         ind2: field.ind2 === " " || field.ind2 === "" ? "_" : field.ind2,
 
-        // prefix | to subfield tags & remove redacted subfields
-        subfields: field.subfields
-          ?.map((subfield) => ({
-            ...subfield,
-            tag: `|${subfield.tag}`,
-          }))
-          .filter((subfield) => subfield.content !== "[redacted]"),
+        // prefix tags with |
+        subfields: field.subfields?.map((subfield) => ({
+          ...subfield,
+          tag: `|${subfield.tag}`,
+        })),
       }))
   }
 }

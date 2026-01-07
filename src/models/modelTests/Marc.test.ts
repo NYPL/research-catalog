@@ -1,11 +1,7 @@
-import {
-  classicMarcResult,
-  everythingMarcResult,
-} from "../../../__test__/fixtures/marcFixtures"
-import MarcModel from "../Marc"
+import { classicMarcResult } from "../../../__test__/fixtures/marcFixtures"
+import MarcModel, { isLeader, isControlField } from "../Marc"
 
 describe("Marc model", () => {
-  const everythingMarcModel = new MarcModel(everythingMarcResult)
   const classicMarcModel = new MarcModel(classicMarcResult)
 
   it("has expected leader", () => {
@@ -524,5 +520,44 @@ describe("Marc model", () => {
         ],
       },
     ])
+  })
+  describe("Marc type guards", () => {
+    describe("isLeader", () => {
+      it("returns true for a proper leader field", () => {
+        const field = {
+          fieldTag: "_",
+          marcTag: null,
+          content: "01234nam a2200301 a 4500",
+        }
+        expect(isLeader(field)).toBe(true)
+      })
+
+      it("returns false if fieldTag is not _", () => {
+        const field = { fieldTag: "a", marcTag: null, content: "01234" }
+        expect(isLeader(field)).toBe(false)
+      })
+
+      it("returns false if marcTag is not null", () => {
+        const field = { fieldTag: "_", marcTag: "001", content: "01234" }
+        expect(isLeader(field)).toBe(false)
+      })
+    })
+
+    describe("isControlField", () => {
+      it("returns true for a proper control field (001-009) with no subfields", () => {
+        const field = { marcTag: "001", subfields: [], content: "000000123" }
+        expect(isControlField(field)).toBe(true)
+      })
+
+      it("returns true for a control field without subfields property", () => {
+        const field = { marcTag: "005", content: "20260107123456.0" }
+        expect(isControlField(field)).toBe(true)
+      })
+
+      it("returns false if marcTag is not 001-009", () => {
+        const field = { marcTag: "100", subfields: [], content: null }
+        expect(isControlField(field)).toBe(false)
+      })
+    })
   })
 })
