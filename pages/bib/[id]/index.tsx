@@ -80,7 +80,7 @@ export default function BibPage({
     })
   )
 
-  const metadataTitle = buildBibMetadataTitle(bib?.title)
+  const metadataTitle = buildBibMetadataTitle({ bibTitle: bib?.title })
   const [itemsLoading, setItemsLoading] = useState(false)
   const [itemFetchError, setItemFetchError] = useState(false)
 
@@ -338,6 +338,14 @@ export default function BibPage({
               View in legacy catalog
             </Link>
           ) : null}
+          <Link
+            id="marc-link"
+            href={`${appConfig.urls.legacyCatalog}/record=${bib.id}`}
+            variant="standalone"
+            mt="s"
+          >
+            View MARC record
+          </Link>
         </Box>
       </Layout>
     </>

@@ -141,18 +141,19 @@ describe("bibUtils", () => {
   })
   describe("buildBibMetadataTitle", () => {
     const suffix = " | Item Details | Research Catalog | NYPL"
+    const marcSuffix = " | MARC record | Research Catalog | NYPL"
     const suffixLength = suffix.length
 
     it("returns unmodified title if it's short enough", () => {
       const title = "Short Title"
-      const result = buildBibMetadataTitle(title)
+      const result = buildBibMetadataTitle({ bibTitle: title })
       expect(result).toBe(`${title}${suffix}`)
       expect(result.length).toBeLessThanOrEqual(100)
     })
 
     it("truncates long titles and appends suffix", () => {
       const longTitle = "A".repeat(200)
-      const result = buildBibMetadataTitle(longTitle)
+      const result = buildBibMetadataTitle({ bibTitle: longTitle })
 
       expect(result.endsWith(suffix)).toBe(true)
       expect(result.length).toBe(100)
@@ -164,7 +165,9 @@ describe("bibUtils", () => {
 
     it("truncates at exact length and adds ellipsis", () => {
       const exactLengthTitle = "A".repeat(100 - suffixLength)
-      const result = buildBibMetadataTitle(`${exactLengthTitle}EXTRA TEXT`)
+      const result = buildBibMetadataTitle({
+        bibTitle: `${exactLengthTitle}EXTRA TEXT`,
+      })
       expect(result.length).toBe(100)
       expect(result.endsWith(suffix)).toBe(true)
     })
@@ -172,6 +175,12 @@ describe("bibUtils", () => {
       expect(buildBibMetadataTitle(undefined)).toBe(
         "Item Details | Research Catalog | NYPL"
       )
+    })
+    it("returns MARC string", () => {
+      const title = "Title"
+      const result = buildBibMetadataTitle({ bibTitle: title, marc: true })
+      expect(result).toBe(`${title}${marcSuffix}`)
+      expect(result.length).toBeLessThanOrEqual(100)
     })
   })
 })
