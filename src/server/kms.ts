@@ -8,6 +8,11 @@ const decryptKMS = async (key: string): Promise<string | null> => {
     CiphertextBlob: new Uint8Array(Buffer.from(key, "base64")),
   }
   console.log("key", key)
+  console.log({
+    hasAccessKey: !!process.env.AWS_ACCESS_KEY_ID,
+    hasSecretKey: !!process.env.AWS_SECRET_ACCESS_KEY,
+    hasSessionToken: !!process.env.AWS_SESSION_TOKEN,
+  })
 
   try {
     const decrypted = await kms.send(new DecryptCommand(params))
