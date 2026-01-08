@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+## [1.6.5] 2025-01-08
+
+### Updated
+
+- Updated filter tags to clear without removing un-tagged filters [SCC-5166](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5166)
+- Fixed call number/volume to not appear as string-coerced 'null' [SCC-5121](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5121)
+
+### Added
+
+- Added volume/date to feedback form item metadata [SCC-4252](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4252)
+- Added periods to URI encoding [SCC-5064](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5064)
+- Added URI encoding to advanced search filter values [SCC-5122](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5122)
+
 ## [1.6.4] 2025-12-22
 
 ### Updated
