@@ -1,18 +1,24 @@
 import { DecryptCommand, KMS } from "@aws-sdk/client-kms"
 import { logServerError } from "../utils/appUtils"
 
-const kms: KMS = new KMS({ region: "us-east-1" })
+const isVercel = !!process.env.VERCEL
+
+const kms: KMS = new KMS({
+  region: "us-east-1",
+
+  // Ignore session token for static creds on Vercel
+  ...(isVercel && {
+    credentials: {
+      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    },
+  }),
+})
 
 const decryptKMS = async (key: string): Promise<string | null> => {
   const params = {
     CiphertextBlob: new Uint8Array(Buffer.from(key, "base64")),
   }
-  console.log("key", key)
-  console.log({
-    hasAccessKey: !!process.env.AWS_ACCESS_KEY_ID,
-    hasSecretKey: !!process.env.AWS_SECRET_ACCESS_KEY,
-    hasSessionToken: !!process.env.AWS_SESSION_TOKEN,
-  })
 
   try {
     const decrypted = await kms.send(new DecryptCommand(params))
