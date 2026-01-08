@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+## [1.6.5] 2025-01-08
+
 ### Updated
 
 - Updated `contributorLiteral` filter to display in results string, not in filter tags [SCC-5120](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5120)
