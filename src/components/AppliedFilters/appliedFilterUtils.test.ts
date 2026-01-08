@@ -8,7 +8,7 @@ import { aggregationsResults } from "../../../__test__/fixtures/searchResultsMan
 
 describe("Applied Filter utils", () => {
   describe("addLabelPropAndParseFilters", () => {
-    it("does not return filter value for invalid filter", () => {
+    it("does not return values for filters we don't display", () => {
       const aggregations = [
         {
           "@type": "nypl:Aggregation",
