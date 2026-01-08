@@ -13,6 +13,8 @@ import { fetchMarc } from "../../../../src/server/api/marc"
 import PageError from "../../../../src/components/Error/PageError"
 import Link from "../../../../src/components/Link/Link"
 import { Flex, Heading, Text } from "@nypl/design-system-react-components"
+import Marc from "../../../../src/models/Marc"
+import MarcTable from "../../../../src/components/Marc/MarcTable"
 
 interface MarcPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -38,6 +40,15 @@ export default function MarcPage({
       errorMessage: "Bib undefined",
     })
   )
+
+  const marc = tryInstantiate({
+    constructor: Marc,
+    args: [discoveryMarcResult],
+    ignoreError: !!errorStatus,
+    errorMessage: "Marc undefined",
+  })
+
+  console.log(marc)
 
   const metadataTitle = buildBibMetadataTitle({
     bibTitle: bib.title,
@@ -66,6 +77,7 @@ export default function MarcPage({
             href={`/bib/${bib.id}`}
             variant="standalone"
             mt="s"
+            width="max-content"
           >
             <Text
               sx={{
@@ -83,6 +95,7 @@ export default function MarcPage({
           <Heading level="h3" size="heading5" mt="m">
             MARC record
           </Heading>
+          <MarcTable marc={marc} />
         </Flex>
       </Layout>
     </>

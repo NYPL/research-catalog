@@ -9,16 +9,18 @@ export interface AnnotatedMarc {
 export interface Marc {
   id: string
   nyplSource: string
-  fields: MarcField[]
+  leader: LeaderField
+  controlFields: ControlField[]
+  dataFields: MarcField[]
+}
+
+export interface DiscoveryMarcResult {
+  bib: { id: string; nyplSource: string; fields: MarcField[] }
 }
 
 export interface MarcResponse {
   discoveryMarcResult?: DiscoveryMarcResult
   status: HTTPStatusCode
-}
-
-export interface DiscoveryMarcResult {
-  bib: Marc
 }
 
 export interface AnnotatedMarcField {
