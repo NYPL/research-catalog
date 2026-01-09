@@ -30,7 +30,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     }
 
     const holdId = req.query.id as string
-    const [, itemId] = holdId.split("-")
+    const [bibId, itemId] = holdId.split("-")
 
     const patronEligibilityStatus = await fetchPatronEligibility(patronId)
 
@@ -53,6 +53,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       itemId,
       patronId,
       source,
+      bibId,
       pickupLocation,
     })
 
