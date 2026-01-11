@@ -25,7 +25,7 @@ const AppliedFilters = ({ aggregations }: { aggregations: Aggregation[] }) => {
     aggregations,
     appliedFilters
   )
-  const { isLargerThanMobile } = useNYPLBreakpoints()
+  const { isLargerThanSmallTablet } = useNYPLBreakpoints()
   const { setPersistentFocus } = useFocusContext()
 
   // this type cast is happening because Option type had to be updated to
@@ -35,6 +35,7 @@ const AppliedFilters = ({ aggregations }: { aggregations: Aggregation[] }) => {
   const tagSetData = buildTagsetData(
     appliedFiltersWithLabels
   ) as TagSetFilterDataProps[]
+
   const handleRemove = (tag: TagSetFilterDataProps) => {
     if (tag.label === "Clear filters") {
       setPersistentFocus(idConstants.filterResultsHeading)
@@ -44,19 +45,22 @@ const AppliedFilters = ({ aggregations }: { aggregations: Aggregation[] }) => {
       })
       return
     }
+
     const updatedFilters = buildAppliedFiltersValueArrayWithTagRemoved(
       tag,
-      appliedFiltersWithLabels
+      appliedFilters
     )
+
     const updatedQuery = {
       ...getQueryWithoutFiltersOrPage(router.query),
       ...buildFilterQuery(updatedFilters),
     }
-    if (tagSetData.length >= 2) {
+    if (tagSetData.length > 1) {
+      // If there's still 1 or more filter tags after removing one
       setPersistentFocus(idConstants.activeFiltersHeading)
     } else {
       setPersistentFocus(
-        isLargerThanMobile
+        isLargerThanSmallTablet
           ? idConstants.filterResultsHeading
           : idConstants.searchFiltersModal
       )

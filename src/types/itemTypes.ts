@@ -45,6 +45,7 @@ export interface ItemMetadata {
   barcode?: string
   callNumber?: string
   bibId?: string
+  volume?: string
   notificationText?: string
 }
 

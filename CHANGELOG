@@ -9,11 +9,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 
-- Updated bib author to use `contributorLiteral` filter [SCC-4929](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4929)
+- Update KMS decryption to ignore session token in Vercel
+- Updated `contributorLiteral` filter to display in results string, not in filter tags [SCC-5120](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5120)
+
+## [1.6.5] 2025-01-08
+
+### Updated
+
+- Updated filter tags to clear without removing un-tagged filters [SCC-5166](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5166)
+- Fixed call number/volume to not appear as string-coerced 'null' [SCC-5121](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5121)
 
 ### Added
 
-- Added workflow to run playwright tests on merge to qa branch. https://newyorkpubliclibrary.atlassian.net/browse/SCC-4993
+- Added volume/date to feedback form item metadata [SCC-4252](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4252)
+- Added periods to URI encoding [SCC-5064](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5064)
+- Added URI encoding to advanced search filter values [SCC-5122](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5122)
+
+## [1.6.4] 2025-12-22
+
+### Updated
+
+- Updated landing page legacy deprecation date to January 22, 2026 [SCC-5119](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5119)
+
+## [1.6.3] 2025-12-18
+
+### Updated
+
+- Updated bib author to use `contributorLiteral` filter [SCC-4929](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4929)
+- Updated landing page legacy deprecation date to January 2026 [SCC-5112](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5112)
+- Updated collection filter to display as "Division" [SCC-5080](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5080)
+- Updated landing page legacy deprecation date to January 2026 [SCC-5112](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5112)
+
+### Added
+
+- Added workflow to run Playwright tests on `qa` [SCC-4993](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4993)
 - Added search filter links to bib's `addedAuthorTitle`, `placeOfPublication`, `series`, `uniformTitle`, `titleAlt`, and `donor` fields [SCC-4921](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4921)
 
 ## [1.6.2] 2025-12-11

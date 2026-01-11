@@ -53,6 +53,7 @@ const SearchResult = ({ bib }: SearchResultProps) => {
 
   return (
     <Card
+      key={bib.id}
       sx={{
         borderRadius: "8px",
         border: "1px solid var(--ui-gray-medium, #BDBDBD)",
