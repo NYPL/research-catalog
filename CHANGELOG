@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added periods to URI encoding [SCC-5064](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5064)
 - Added URI encoding to advanced search filter values [SCC-5122](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5122)
 - Added MARC model [SCC-5106](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5106)
+- Added MARC view page and table [SCC-5107](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5107)
 
 ## [1.6.4] 2025-12-22
 
