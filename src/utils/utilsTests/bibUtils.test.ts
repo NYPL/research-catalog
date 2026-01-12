@@ -172,7 +172,8 @@ describe("bibUtils", () => {
       expect(result.endsWith(suffix)).toBe(true)
     })
     it("returns fallback title if input is undefined", () => {
-      expect(buildBibMetadataTitle(undefined)).toBe(
+      // @ts-ignore
+      expect(buildBibMetadataTitle({ bibTitle: undefined })).toBe(
         "Item Details | Research Catalog | NYPL"
       )
     })

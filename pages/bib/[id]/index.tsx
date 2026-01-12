@@ -335,6 +335,7 @@ export default function BibPage({
                 id="legacy-catalog-link"
                 href={`${appConfig.urls.legacyCatalog}/record=${bib.id}`}
                 variant="standalone"
+                width="max-content"
                 mt="s"
               >
                 View in legacy catalog
@@ -344,6 +345,7 @@ export default function BibPage({
               id="marc-link"
               href={`/bib/${bib.id}/marc`}
               variant="standalone"
+              width="max-content"
               mt="s"
             >
               View MARC record

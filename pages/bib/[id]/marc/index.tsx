@@ -48,13 +48,6 @@ export default function MarcPage({
     errorMessage: "Marc undefined",
   })
 
-  console.log(marc)
-
-  const metadataTitle = buildBibMetadataTitle({
-    bibTitle: bib.title,
-    marc: true,
-  })
-
   if (errorStatus) {
     return (
       <PageError
@@ -66,12 +59,16 @@ export default function MarcPage({
       />
     )
   }
+  const metadataTitle = buildBibMetadataTitle({
+    bibTitle: bib.title,
+    marc: true,
+  })
 
   return (
     <>
       <RCHead metadataTitle={metadataTitle} />
       <Layout isAuthenticated={isAuthenticated} activePage="marc">
-        <Flex flexDirection="column">
+        <Flex flexDirection="column" mb="xxl">
           <Link
             id="bib-link"
             href={`/bib/${bib.id}`}
