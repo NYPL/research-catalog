@@ -54,7 +54,7 @@ function buildQueryDisplayString(searchParams: SearchParams): string {
     .concat([
       { name: "journal_title", label: "journal title" },
       { name: "standard_number", label: "standard number" },
-      { name: "creatorLiteral", label: "author" },
+      { name: "contributorLiteral", label: "author" },
       { name: "oclc", label: "OCLC" },
       { name: "isbn", label: "ISBN" },
       { name: "issn", label: "ISSN" },
@@ -75,8 +75,8 @@ function buildQueryDisplayString(searchParams: SearchParams): string {
       const value = searchParamsObject[param]
       const plural = label === "keyword" && value.indexOf(" ") > -1 ? "s" : ""
       // Special case for the author display string for both
-      // the "contributor" field and the "creatorLiteral" filter.
-      if (label === "author" && displayParam.name !== "creatorLiteral") {
+      // the "contributor" search scope and the "contributorLiteral" filter.
+      if (label === "author") {
         label = "author/contributor"
       }
 

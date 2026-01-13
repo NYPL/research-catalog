@@ -16,6 +16,7 @@ export const initialEDDFormState: EDDRequestParams = {
   issue: "",
   itemId: "",
   patronId: "",
+  bibId: "",
   source: "",
   author: "",
   requestNotes: "",

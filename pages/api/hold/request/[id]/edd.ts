@@ -44,7 +44,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       defaultValidatedEDDFields
     )
 
-    const [, itemId] = holdId.split("-")
+    const [bibId, itemId] = holdId.split("-")
 
     const patronEligibilityStatus = await fetchPatronEligibility(patronId)
 
@@ -71,6 +71,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       ...formState,
       itemId,
       patronId,
+      bibId,
     })
 
     const { requestId } = eddRequestResponse
