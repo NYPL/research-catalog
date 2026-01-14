@@ -15,6 +15,7 @@ import initializePatronTokenAuth from "../../src/server/auth"
 import { useFocusContext, idConstants } from "../../src/context/FocusContext"
 import type { HTTPStatusCode } from "../../src/types/appTypes"
 import Search from "../../src/components/Search/Search"
+import { ensureConfig, getConfig } from "../../lib/config"
 
 interface SearchPageProps {
   bannerNotification?: string
@@ -79,7 +80,10 @@ export default function SearchPage({
 }
 
 export async function getServerSideProps({ req, query }) {
-  const bannerNotification = process.env.SEARCH_RESULTS_NOTIFICATION || ""
+  await ensureConfig()
+
+  const { SEARCH_RESULTS_NOTIFICATION } = getConfig()
+  const bannerNotification = SEARCH_RESULTS_NOTIFICATION || ""
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
 
   const results = await fetchSearchResults(mapQueryToSearchParams(query))
