@@ -13,7 +13,7 @@ export async function fetchMarc(
   try {
     const client = await nyplApiClient()
     const marcResult = await client.get(
-      `${DISCOVERY_API_SEARCH_ROUTE}/xxx.marc`
+      `${DISCOVERY_API_SEARCH_ROUTE}/${standardizedId}.marc`
     )
     // Handle MARC error (log and forward Discovery API error)
     if (marcResult.error || !marcResult.bib) {
