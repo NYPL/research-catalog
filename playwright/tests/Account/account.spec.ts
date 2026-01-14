@@ -15,6 +15,7 @@ import { AccountPage } from "../../pages/account_page"
 let page: Page
 let accountPage: AccountPage
 
+// credentials
 const username = process.env.QA_USERNAME
 const password = process.env.QA_PASSWORD
 
