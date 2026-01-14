@@ -16,6 +16,7 @@ import initializePatronTokenAuth from "../src/server/auth"
 import useLoading from "../src/hooks/useLoading"
 import RCHead from "../src/components/Head/RCHead"
 import Link from "../src/components/Link/Link"
+import { config } from "@nypl/node-utils"
 
 interface HomeProps {
   bannerNotification?: string
@@ -191,7 +192,8 @@ export default function Home({
 }
 
 export async function getServerSideProps({ req }) {
-  const bannerNotification = process.env.SEARCH_RESULTS_NOTIFICATION || ""
+  const { SEARCH_RESULTS_NOTIFICATION } = config.getConfig()
+  const bannerNotification = SEARCH_RESULTS_NOTIFICATION || ""
   // Every page that needs patron data must call initializePatronTokenAuth
   // to find if the token is valid and what the patron id is.
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
