@@ -7,21 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+### Added
+
+- Added MARC model [SCC-5106](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5106)
+
+## [1.6.6] 2026-01-15
+
 ### Updated
 
 - Update KMS decryption to ignore session token in Vercel
 - Updated `contributorLiteral` filter to display in results string, not in filter tags [SCC-5120](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5120)
 - Passing bibId into hold request service. [SCC-5132](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5132)
 
-### Added
-
-- Added MARC model [SCC-5106](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5106)
-
-## [1.6.5] 2025-01-08
+## [1.6.5] 2026-01-08
 
 ### Updated
 
-- Updated filter tags to clear without removing un-tagged filters [SCC-5166](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5166)
+- Updated filter tags to clear without removing un-tagged filters [SCC-5116](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5116)
 - Fixed call number/volume to not appear as string-coerced 'null' [SCC-5121](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5121)
 
 ### Added
