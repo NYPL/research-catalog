@@ -170,19 +170,19 @@ describe("searchUtils", () => {
         'Displaying 1-50 of 100 results for keyword "spaghetti"'
       )
     })
-    it("handles the special case for the author field", () => {
+    it("handles the special case for the author search scope", () => {
       const heading = getSearchResultsHeading({ contributor: "spaghetti" }, 100)
       expect(heading).toEqual(
         'Displaying 1-50 of 100 results for author/contributor "spaghetti"'
       )
     })
-    it("handles the special case for the creatorLiteral field", () => {
+    it("handles the special case for the contributorLiteral filter", () => {
       const heading = getSearchResultsHeading(
-        { filters: { creatorLiteral: ["spaghetti"] } },
+        { filters: { contributorLiteral: ["spaghetti"] } },
         100
       )
       expect(heading).toEqual(
-        'Displaying 1-50 of 100 results for author "spaghetti"'
+        'Displaying 1-50 of 100 results for author/contributor "spaghetti"'
       )
     })
     it("displays all of the values from advanced search and nothing else", () => {
