@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated `contributorLiteral` filter to display in results string, not in filter tags [SCC-5120](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5120)
 - Passing bibId into hold request service. [SCC-5132](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5132)
 
+### Added
+
+- Added MARC model [SCC-5106](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5106)
+
 ## [1.6.5] 2025-01-08
 
 ### Updated
@@ -25,7 +29,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added volume/date to feedback form item metadata [SCC-4252](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4252)
 - Added periods to URI encoding [SCC-5064](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5064)
 - Added URI encoding to advanced search filter values [SCC-5122](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5122)
-- Added MARC model [SCC-5106](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5106)
 
 ## [1.6.4] 2025-12-22
 
