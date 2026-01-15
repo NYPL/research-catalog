@@ -4,6 +4,7 @@ import type { HTTPStatusCode } from "./appTypes"
 export interface HoldRequestParams {
   itemId: string
   patronId: string
+  bibId: string
   source: string
   pickupLocation: NYPLocationKey
 }
@@ -12,6 +13,7 @@ export interface EDDRequestParams {
   itemId: string
   patronId: string
   source: string
+  bibId: string
   emailAddress: string
   startPage: string
   endPage: string
@@ -51,6 +53,7 @@ export interface DiscoveryHoldPostParams {
   patron: string
   record: string
   nyplSource: string
+  bibId: number
   requestType: "edd" | "hold"
   recordType: "i"
   pickupLocation?: NYPLocationKey
