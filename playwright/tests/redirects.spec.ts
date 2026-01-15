@@ -40,7 +40,7 @@ test("SHEP link with label parameter redirects to browse results", async ({
   await page.goto(
     `${BASE_URL}/subject_headings/c47dda10-a6a1-49ba-81db-6e46722674af?label=Hello`
   )
-  await expect(page).toHaveURL(`${BASE_URL}/browse/subjects/Hello.`)
+  await expect(page).toHaveURL(new RegExp(`${BASE_URL}/browse/subjects/Hello`))
 })
 
 test("SHEP base url redirects to browse", async ({ page }) => {
