@@ -89,6 +89,20 @@ const MarcTable = ({ marc }: { marc: Marc }) => {
           <col style={{ width: "32px" }} />
           <col style={{ minWidth: "624px" }} />
         </colgroup>
+        <thead
+          style={{
+            position: "absolute",
+            top: "-9999px",
+            left: "-9999px",
+          }}
+        >
+          <tr>
+            <th>MARC field tag</th>
+            <th>Indicator 1</th>
+            <th>Indicator 2</th>
+            <th>Subfield content</th>
+          </tr>
+        </thead>
 
         <tbody>
           {rows.map((row, index) => (
