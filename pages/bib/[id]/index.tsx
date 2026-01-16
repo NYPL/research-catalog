@@ -7,6 +7,7 @@ import {
   Box,
   Banner,
   StatusBadge,
+  Flex,
 } from "@nypl/design-system-react-components"
 import Layout from "../../../src/components/Layout/Layout"
 import {
@@ -33,7 +34,7 @@ import type {
   DiscoveryBibResult,
   BibQueryParams,
 } from "../../../src/types/bibTypes"
-import type { AnnotatedMarc } from "../../../src/types/bibDetailsTypes"
+import type { AnnotatedMarc } from "../../../src/types/marcTypes"
 import Bib from "../../../src/models/Bib"
 import initializePatronTokenAuth from "../../../src/server/auth"
 import type { ItemFilterQueryParams } from "../../../src/types/filterTypes"
@@ -80,7 +81,7 @@ export default function BibPage({
     })
   )
 
-  const metadataTitle = buildBibMetadataTitle(bib?.title)
+  const metadataTitle = buildBibMetadataTitle({ bibTitle: bib?.title })
   const [itemsLoading, setItemsLoading] = useState(false)
   const [itemFetchError, setItemFetchError] = useState(false)
 
@@ -327,17 +328,29 @@ export default function BibPage({
             key="bottom-details"
             details={bottomDetails}
           />
-          {displayLegacyCatalogLink ? (
+          <Flex flexDirection="column">
+            {displayLegacyCatalogLink ? (
+              <Link
+                isExternal
+                id="legacy-catalog-link"
+                href={`${appConfig.urls.legacyCatalog}/record=${bib.id}`}
+                variant="standalone"
+                width="max-content"
+                mt="s"
+              >
+                View in legacy catalog (available onsite only)
+              </Link>
+            ) : null}
             <Link
-              isExternal
-              id="legacy-catalog-link"
-              href={`${appConfig.urls.legacyCatalog}/record=${bib.id}`}
+              id="marc-link"
+              href={`/bib/${bib.id}/marc`}
               variant="standalone"
+              width="max-content"
               mt="s"
             >
-              View in legacy catalog (available onsite only)
+              View MARC record
             </Link>
-          ) : null}
+          </Flex>
         </Box>
       </Layout>
     </>

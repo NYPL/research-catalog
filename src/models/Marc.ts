@@ -3,7 +3,7 @@ import type {
   DiscoveryMarcResult,
   LeaderField,
   MarcField,
-} from "../types/bibDetailsTypes"
+} from "../types/marcTypes"
 
 export function isLeader(field): field is LeaderField {
   return (
