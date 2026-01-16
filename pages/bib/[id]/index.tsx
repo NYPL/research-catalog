@@ -335,7 +335,7 @@ export default function BibPage({
               variant="standalone"
               mt="s"
             >
-              View in legacy catalog
+              View in legacy catalog (available onsite only)
             </Link>
           ) : null}
         </Box>
