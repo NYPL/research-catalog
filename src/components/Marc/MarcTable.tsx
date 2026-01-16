@@ -1,19 +1,21 @@
 import { Fragment } from "react"
 import type { Marc } from "../../types/marcTypes"
-import { Text } from "@nypl/design-system-react-components"
+import { Text, useNYPLBreakpoints } from "@nypl/design-system-react-components"
 
 /**
  * The MarcTable formats and displays MARC fields
  */
 const MarcTable = ({ marc }: { marc: Marc }) => {
+  const { isLargerThanSmallTablet } = useNYPLBreakpoints()
+
   const rows: JSX.Element[] = []
 
   // Leader row
   rows.push(
     <tr key="ldr">
-      <td>
+      <th scope="row" style={{ textAlign: "left" }}>
         <Text isBold>LDR</Text>
-      </td>
+      </th>
       <td /> <td />
       <td>
         <Text isBold>{marc.leader.content}</Text>
@@ -25,9 +27,9 @@ const MarcTable = ({ marc }: { marc: Marc }) => {
   marc.controlFields.forEach((field, i) => {
     rows.push(
       <tr key={`control-field-${field.marcTag}`}>
-        <td>
+        <th scope="row" style={{ textAlign: "left" }}>
           <Text isBold>{field.marcTag}</Text>
-        </td>
+        </th>
         <td /> <td />
         <td>
           <Text>{field.content}</Text>
@@ -55,9 +57,9 @@ const MarcTable = ({ marc }: { marc: Marc }) => {
   marc.dataFields.forEach((field, i) => {
     rows.push(
       <tr key={`data-field-${field.marcTag}-${i}`}>
-        <td>
+        <th scope="row" style={{ textAlign: "left" }}>
           <Text isBold>{field.marcTag}</Text>
-        </td>
+        </th>
         <td>
           <Text isBold>{field.ind1}</Text>
         </td>
@@ -74,7 +76,13 @@ const MarcTable = ({ marc }: { marc: Marc }) => {
   })
 
   return (
-    <div style={{ overflowX: "auto" }}>
+    <div
+      style={{ overflowX: "auto" }}
+      {...(!isLargerThanSmallTablet && {
+        tabIndex: 0,
+        role: "region",
+      })}
+    >
       <table
         style={{
           width: "100%",
