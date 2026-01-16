@@ -100,6 +100,7 @@ export async function postHoldRequest(
   }
 
   try {
+    if (appConfig.features.skipBibId) delete holdPostParams.bibId
     const client = await nyplApiClient()
     const holdPostResult = await client.post("/hold-requests", holdPostParams)
     const requestId = holdPostResult?.data?.id
@@ -150,6 +151,7 @@ export async function postEDDRequest(
   }
 
   try {
+    if (appConfig.features.skipBibId) delete eddPostParams.bibId
     const client = await nyplApiClient()
     const eddPostResult = await client.post("/hold-requests", eddPostParams)
     const requestId = eddPostResult?.data?.id
