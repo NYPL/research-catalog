@@ -6,7 +6,7 @@ export interface AppConfig {
   recapClosedLocations: string[]
   nonRecapClosedLocations: string[]
   jwtPublicKey: string
-  features: Record<string, Features>
+  features: Record<string, boolean>
   sourceEmail: string
   libAnswersEmail: string
 }
