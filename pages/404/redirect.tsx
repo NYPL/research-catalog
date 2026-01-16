@@ -45,10 +45,6 @@ export default function Redirect404() {
             <Link isExternal href={appConfig.urls.circulatingCatalog}>
               Branch Catalog
             </Link>{" "}
-            or{" "}
-            <Link isExternal href={appConfig.urls.legacyCatalog}>
-              Legacy Catalog
-            </Link>{" "}
             for more materials, or{" "}
             <Link
               onClick={() => openFeedbackFormWithError(404)}

@@ -1,7 +1,7 @@
 import { standardizeBibId } from "../../utils/bibUtils"
 import nyplApiClient from "../nyplApiClient"
 import { DISCOVERY_API_SEARCH_ROUTE } from "../../config/constants"
-import { logServerError } from "../../utils/appUtils"
+import { logServerError } from "../../utils/logUtils"
 import type { APIError } from "../../types/appTypes"
 import type { MarcResponse } from "../../types/marcTypes"
 

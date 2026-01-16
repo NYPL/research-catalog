@@ -1,5 +1,5 @@
 import { DecryptCommand, KMS } from "@aws-sdk/client-kms"
-import { logServerError } from "../utils/appUtils"
+import { logServerError } from "../utils/logUtils"
 
 const isVercel = !!process.env.VERCEL
 
