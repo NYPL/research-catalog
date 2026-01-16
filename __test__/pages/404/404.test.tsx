@@ -36,11 +36,5 @@ describe("redirect 404", () => {
       "href",
       `${appConfig.urls.circulatingCatalog}`
     )
-
-    const legacyLink = within(container).getByText("Legacy Catalog")
-    expect(legacyLink).toHaveAttribute(
-      "href",
-      `${appConfig.urls.legacyCatalog}`
-    )
   })
 })

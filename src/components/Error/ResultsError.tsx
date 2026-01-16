@@ -40,10 +40,6 @@ export default function ResultsError({ errorStatus, page }: ResultsErrorProps) {
             <Link isExternal href={appConfig.urls.circulatingCatalog}>
               Branch Catalog
             </Link>{" "}
-            or{" "}
-            <Link isExternal href={appConfig.urls.legacyCatalog}>
-              Legacy Catalog
-            </Link>{" "}
             for more materials, or{" "}
             <Link
               onClick={() => openFeedbackFormWithError(errorStatus)}
