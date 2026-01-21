@@ -1,4 +1,4 @@
-import type { MarcSubfield } from "../types/bibDetailsTypes"
+import type { MarcSubfield } from "../types/marcTypes"
 import type {
   Checkout,
   Hold,
