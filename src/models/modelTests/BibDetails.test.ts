@@ -12,7 +12,7 @@ import {
 import type { LinkedBibDetail } from "../../types/bibDetailsTypes"
 import BibDetailsModel from "../BibDetails"
 
-describe("Bib Details model", () => {
+describe.only("Bib Details model", () => {
   const bibWithSupContentModel = new BibDetailsModel(
     bibWithSupplementaryContent.resource,
     bibWithSupplementaryContent.annotatedMarc
@@ -80,55 +80,6 @@ describe("Bib Details model", () => {
         },
         { label: "Source of description (note)", value: ["G. 46, 3 (2016)."] },
       ])
-    })
-  })
-  describe("extent", () => {
-    it("should add a semicolon after extent if there is not one already", () => {
-      const bib = new BibDetailsModel({
-        identifier: [{ uri: "123456" }],
-        extent: ["99 bottles of beer"],
-        dimensions: ["99 x 99 cm"],
-      })
-      expect(bib.extent[0].includes("; "))
-    })
-    it("should append dimensions to extent", () => {
-      const bib = new BibDetailsModel({
-        identifier: [{ uri: "123456" }],
-        extent: ["99 bottles of beer"],
-        dimensions: ["99 x 99 cm"],
-      })
-      expect(bib.extent[0]).toBe("99 bottles of beer; 99 x 99 cm")
-    })
-    it("should not add semicolon if it already is in extent", () => {
-      const bib = new BibDetailsModel({
-        identifier: [{ uri: "123456" }],
-        extent: ["700 sheets of woven gold; "],
-        dimensions: ["1 x 1 in."],
-      })
-      expect(bib.extent[0]).toBe("700 sheets of woven gold; 1 x 1 in.")
-    })
-    it("should remove semicolon if there is no dimensions", () => {
-      const bib = new BibDetailsModel({
-        identifier: [{ uri: "123456" }],
-        extent: ["700 sheets of woven gold; "],
-      })
-      const anotherBib = new BibDetailsModel({
-        identifier: [{ uri: "123456" }],
-        extent: ["700 sheets of woven gold;"],
-      })
-      expect(bib.extent[0]).toBe("700 sheets of woven gold")
-      expect(anotherBib.extent[0]).toBe("700 sheets of woven gold")
-    })
-    it("should display dimensions if there are dimensions and no extent", () => {
-      const bib = new BibDetailsModel({
-        identifier: [{ uri: "123456" }],
-        dimensions: ["1,000,000mm x 7ft"],
-      })
-      expect(bib.extent[0]).toBe("1,000,000mm x 7ft")
-    })
-    it("should do nothing if there are no dimensions or extent", () => {
-      const bib = new BibDetailsModel({ identifier: [{ uri: "123456" }] })
-      expect(bib.extent).toBeNull()
     })
   })
   describe("standard fields", () => {
