@@ -2,7 +2,7 @@ import {
   DISCOVERY_API_BROWSE_ROUTE,
   SUBJECTS_PER_PAGE,
 } from "../../config/constants"
-import { logServerError } from "../../utils/appUtils"
+import { logServerError } from "../../utils/logUtils"
 import nyplApiClient from "../nyplApiClient"
 import type {
   BrowseParams,
