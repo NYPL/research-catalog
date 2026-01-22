@@ -50,14 +50,19 @@ export class AccountPage extends BasePage {
     this.submitButton = page.getByRole("button", { name: /submit/i })
     this.accountHeader = page.getByRole("heading", { name: /my account/i })
     this.nameLabel = page.getByText("Name").first()
-    this.name = page.getByText("QA Tester ILS")
+    // Selects the name value as the first div following the 'Name' label
+    // Use env variable for name value
+    this.name = page
+      .getByText("Name")
+      .first()
+      .locator("xpath=following::div[1]")
     this.usernameLabel = page.getByText("Username").first()
-    this.username = page.getByText("qatester2")
+    this.username = page.getByText(process.env.QA_USERNAME)
     this.usernameEditLink = page.getByRole("button", { name: /edit username/i })
     this.unsernameEditInput = page.locator("#username-input")
     this.cardnumberLabel = page.locator("dt", { hasText: "Card number" })
-    this.cardnumber = page.getByTestId("Card number")
-    this.barcode = page.getByLabel("barcode")
+    this.cardnumber = page.getByText(process.env.QA_BARCODE || "")
+    this.barcode = page.getByLabel("barcode", { exact: true })
     this.expirationLabel = page.locator("dt", { hasText: "Expiration date" })
     this.expiration = page.getByTestId("Expiration date")
     this.tab_checkouts = page.getByRole("tab", { name: /^Checkouts/ })

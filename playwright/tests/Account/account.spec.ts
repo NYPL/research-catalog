@@ -43,13 +43,13 @@ test.describe.serial("Account page", () => {
   test.describe("Account info", () => {
     test("should show labels and values", async () => {
       await expect(accountPage.nameLabel).toBeVisible()
-      await expect(accountPage.name).toHaveText("QA Tester ILS")
+      await expect(accountPage.name).toHaveText(process.env.QA_NAME)
       await expect(accountPage.usernameLabel).toBeVisible()
-      await expect(accountPage.username).toBeVisible()
+      await expect(accountPage.username).toHaveText(process.env.QA_USERNAME)
       await expect(accountPage.usernameEditLink).toBeVisible()
       await expect(accountPage.cardnumberLabel).toBeVisible()
-      await expect(accountPage.cardnumber).toBeVisible()
-      await expect(accountPage.barcode).toBeVisible()
+      await expect(accountPage.cardnumber).toHaveText(process.env.QA_CARDNUMBER)
+      await expect(accountPage.barcode).toHaveValue(process.env.QA_BARCODE)
       await expect(accountPage.expirationLabel).toBeVisible()
       await expect(accountPage.expiration).toBeVisible()
     })
