@@ -16,6 +16,7 @@ jobs:
       QA_NAME: ${{ secrets.QA_NAME }}
       QA_USERNAME: ${{ secrets.QA_USERNAME }}
       QA_PASSWORD: ${{ secrets.QA_PASSWORD }}
+      QA_CARDNUMBER: ${{ secrets.QA_CARDNUMBER }}
       SIERRA_KEY: ${{ secrets.SIERRA_KEY }}
       SIERRA_SECRET: ${{ secrets.SIERRA_SECRET }}
       SIERRA_BASE: ${{ secrets.SIERRA_BASE }}
