@@ -48,8 +48,6 @@ test.describe.serial("Account page", () => {
       await expect(accountPage.username).toHaveText(process.env.QA_USERNAME)
       await expect(accountPage.usernameEditLink).toBeVisible()
       await expect(accountPage.cardnumberLabel).toBeVisible()
-      // prints cardnumber to console for debugging
-      console.log("Cardnumber:", await accountPage.cardnumber.textContent())
       await expect(accountPage.cardnumber).toHaveText(process.env.QA_CARDNUMBER)
       await expect(accountPage.barcode).toBeVisible()
       await expect(accountPage.expirationLabel).toBeVisible()

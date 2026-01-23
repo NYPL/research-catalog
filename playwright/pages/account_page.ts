@@ -63,7 +63,7 @@ export class AccountPage extends BasePage {
     this.usernameEditLink = page.getByRole("button", { name: /edit username/i })
     this.unsernameEditInput = page.locator("#username-input")
     this.cardnumberLabel = page.locator("dt", { hasText: "Card number" })
-    this.cardnumber = page.getByText(process.env.QA_CARDNUMBER || "")
+    this.cardnumber = page.getByTestId("Card number")
     this.barcode = page.getByLabel("barcode")
     this.expirationLabel = page.locator("dt", { hasText: "Expiration date" })
     this.expiration = page.getByTestId("Expiration date")
