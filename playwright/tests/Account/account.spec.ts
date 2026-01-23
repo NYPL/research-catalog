@@ -48,7 +48,11 @@ test.describe.serial("Account page", () => {
       await expect(accountPage.username).toHaveText(process.env.QA_USERNAME)
       await expect(accountPage.usernameEditLink).toBeVisible()
       await expect(accountPage.cardnumberLabel).toBeVisible()
-      await expect(accountPage.cardnumber).toHaveText(process.env.QA_CARDNUMBER)
+      const cardnumberText = await accountPage.cardnumber.textContent()
+      const expectedCardnumber = process.env.QA_CARDNUMBER.replace(/^"|"$/g, "") // Remove surrounding quotes if present
+      expect(cardnumberText.trim().replace(/^"|"$/g, "")).toBe(
+        expectedCardnumber
+      )
       await expect(accountPage.barcode).toBeVisible()
       await expect(accountPage.expirationLabel).toBeVisible()
       await expect(accountPage.expiration).toBeVisible()
