@@ -207,7 +207,10 @@ export const physicalDescriptionBib = {
   numItemsMatched: 1,
   numItemsTotal: 1,
   nyplSource: ["sierra-nypl"],
-  physicalDescription: ["13 pages [on 20 leaves] ; 37 cm", "another physical description"],
+  physicalDescription: [
+    "13 pages [on 20 leaves] ; 37 cm",
+    "another physical description",
+  ],
   placeOfPublication: ["New York"],
   publicationStatement: ["New York : Richard Copley, [1935?-1939?]"],
   publisherLiteral: ["Richard Copley"],
