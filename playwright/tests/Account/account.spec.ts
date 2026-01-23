@@ -121,7 +121,7 @@ test.describe.serial("Account page", () => {
 
       const phonelabel = page.locator("p", { hasText: /phone/i })
       await expect(phonelabel).toBeVisible()
-      const phoneValue = phonelabel.locator("xpath=following::div[1]")
+      const phoneValue = phonelabel.locator("xpath=following::div[1]/div/p")
       await expect(phoneValue).toHaveText(/\d{7,}/)
 
       const emailLabel = page.locator("p", { hasText: /email/i }).first()
