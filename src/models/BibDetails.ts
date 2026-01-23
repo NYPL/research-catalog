@@ -31,7 +31,7 @@ export default class BibDetails {
   physicalDescription: string[]
   owner: string[]
   findingAid?: string
-  summary: string
+  summary: string[]
 
   constructor(
     discoveryBibResult: DiscoveryBibResult,
@@ -42,7 +42,7 @@ export default class BibDetails {
     this.supplementaryContent = this.buildSupplementaryContent()
     this.findingAid = this.buildFindingAid()
     this.groupedNotes = this.buildGroupedNotes()
-    // description is a deprecated field
+    // TODO: remove || this.bib.description once ES has been updated to replace summary with description
     this.summary = this.bib.summary || this.bib.description
     this.owner = this.buildOwner()
     // these are the actual arrays of details that will be displayed

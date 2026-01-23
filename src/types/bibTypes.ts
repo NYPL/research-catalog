@@ -31,8 +31,8 @@ export interface DiscoveryBibResult {
   holdings?: object
   owner?: { "@id": string; prefLabel: string }
   hasItemDates?: boolean
-  description?: string
-  summary?: string
+  description?: string[]
+  summary?: string[]
   physicalDescription?: string[]
 }
 

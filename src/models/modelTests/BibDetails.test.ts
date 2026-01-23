@@ -8,11 +8,12 @@ import {
   bibNoItems,
   princetonRecord,
   bibWithItems,
+  physicalDescriptionBib,
 } from "../../../__test__/fixtures/bibFixtures"
 import type { LinkedBibDetail } from "../../types/bibDetailsTypes"
 import BibDetailsModel from "../BibDetails"
 
-describe.only("Bib Details model", () => {
+describe("Bib Details model", () => {
   const bibWithSupContentModel = new BibDetailsModel(
     bibWithSupplementaryContent.resource,
     bibWithSupplementaryContent.annotatedMarc
@@ -80,6 +81,41 @@ describe.only("Bib Details model", () => {
         },
         { label: "Source of description (note)", value: ["G. 46, 3 (2016)."] },
       ])
+    })
+  })
+  describe("Description", () => {
+    const physicalDescriptionBibModel = new BibDetailsModel(
+      physicalDescriptionBib
+    )
+    it("populates Description with physicalDescription", () => {
+      const description = physicalDescriptionBibModel.bottomDetails.find(
+        (detail) => detail.label === "Description"
+      ).value
+      expect(description).toStrictEqual(
+        physicalDescriptionBib.physicalDescription
+      )
+    })
+  })
+  describe("Summary", () => {
+    const physicalDescriptionBibModel = new BibDetailsModel(
+      physicalDescriptionBib
+    )
+    it("populates summary with summary instead of description", () => {
+      const summary = physicalDescriptionBibModel.bottomDetails.find(
+        (detail) => detail.label === "Summary"
+      ).value
+      expect(summary).toStrictEqual(physicalDescriptionBib.description)
+    })
+    it("populates summary with description when summary is not present", () => {
+      const summaryValue = ["summary"]
+      const summaryBibModel = new BibDetailsModel({
+        ...physicalDescriptionBib,
+        summary: summaryValue,
+      })
+      const summary = summaryBibModel.bottomDetails.find(
+        (detail) => detail.label === "Summary"
+      ).value
+      expect(summary).toStrictEqual(summaryValue)
     })
   })
   describe("standard fields", () => {
