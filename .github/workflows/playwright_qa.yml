@@ -13,6 +13,7 @@ jobs:
     # if: false
     runs-on: ubuntu-latest
     env:
+      QA_NAME: ${{ secrets.QA_NAME }}
       QA_USERNAME: ${{ secrets.QA_USERNAME }}
       QA_PASSWORD: ${{ secrets.QA_PASSWORD }}
       SIERRA_KEY: ${{ secrets.SIERRA_KEY }}
