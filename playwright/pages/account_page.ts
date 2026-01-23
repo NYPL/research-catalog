@@ -2,10 +2,12 @@ import type { Page, Locator } from "@playwright/test"
 import { BasePage } from "./base_page"
 
 export class AccountPage extends BasePage {
+  // log in page locators
   readonly usernameInput: Locator
   readonly unsernameEditInput: Locator
   readonly passwordInput: Locator
   readonly submitButton: Locator
+  // account page locators
   readonly accountHeader: Locator
   readonly nameLabel: Locator
   readonly name: Locator
@@ -27,6 +29,7 @@ export class AccountPage extends BasePage {
   readonly account_items_table_header_callnumber: Locator
   readonly account_items_table_header_due_date: Locator
   readonly account_items_table_header_manage: Locator
+  // account settings edit links
   readonly edit_phone_link: Locator
   readonly edit_email_link: Locator
   readonly edit_home_library_link: Locator
@@ -45,24 +48,23 @@ export class AccountPage extends BasePage {
 
   constructor(page: Page) {
     super(page)
+    // log in page locators
     this.usernameInput = page.getByLabel("Barcode or Username")
     this.passwordInput = page.getByLabel("PIN/ Password")
     this.submitButton = page.getByRole("button", { name: /submit/i })
+    // account page locators
     this.accountHeader = page.getByRole("heading", { name: /my account/i })
     this.nameLabel = page.getByText("Name").first()
     // Selects the name value as the first div following the 'Name' label
     // Use env variable for name value
-    this.name = page
-      .getByText("Name")
-      .first()
-      .locator("xpath=following::div[1]")
+    this.name = page.getByTestId("Name")
     this.usernameLabel = page.getByText("Username").first()
     this.username = page.getByText(process.env.QA_USERNAME)
     this.usernameEditLink = page.getByRole("button", { name: /edit username/i })
     this.unsernameEditInput = page.locator("#username-input")
     this.cardnumberLabel = page.locator("dt", { hasText: "Card number" })
-    this.cardnumber = page.getByText(process.env.QA_BARCODE || "")
-    this.barcode = page.getByLabel("barcode", { exact: true })
+    this.cardnumber = page.getByText(process.env.QA_CARDNUMBER || "")
+    this.barcode = page.getByLabel("barcode")
     this.expirationLabel = page.locator("dt", { hasText: "Expiration date" })
     this.expiration = page.getByTestId("Expiration date")
     this.tab_checkouts = page.getByRole("tab", { name: /^Checkouts/ })
@@ -115,10 +117,10 @@ export class AccountPage extends BasePage {
     this.phoneValue = page
       .locator("p", { hasText: /phone/i })
       .locator("xpath=following::div[1]")
-    this.emailValue = page
-      .locator("p", { hasText: /email/i })
-      .first()
-      .locator("xpath=following::div[1]")
+    // this.emailValue = page
+    //   .locator("p", { hasText: /email/i })
+    //   .first()
+    //   .locator("xpath=following::div[1]")
     this.homeLibraryValue = page
       .locator("p", { hasText: /home library/i })
       .locator("xpath=following::div[1]")
