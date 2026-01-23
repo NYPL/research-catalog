@@ -10,7 +10,7 @@ on:
 jobs:
   test:
     # Disabled until we have a stable test account
-    # if: false
+    if: false
     runs-on: ubuntu-latest
     env:
       QA_NAME: ${{ secrets.QA_NAME }}

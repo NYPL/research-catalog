@@ -134,7 +134,7 @@ test.describe.serial("Account page", () => {
       const homeLibraryLabel = page.locator("p", { hasText: /home library/i })
       await expect(homeLibraryLabel).toBeVisible()
       const homeLibraryValue = homeLibraryLabel.locator(
-        "xpath=following::div[1]"
+        "xpath=following::div[1]/div"
       )
       await expect(homeLibraryValue).toHaveText(/^Allerton/)
 
