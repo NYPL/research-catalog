@@ -4,13 +4,13 @@ on:
   push:
     branches:
       - qa
-      # - SCC-5000/playwright-account-editing
+      - SCC-5000/playwright-account-editing
   workflow_dispatch:
 
 jobs:
   test:
     # Disabled until we have a stable test account
-    if: false
+    # if: false
     runs-on: ubuntu-latest
     env:
       QA_USERNAME: ${{ secrets.QA_USERNAME }}
