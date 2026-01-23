@@ -146,8 +146,8 @@ test.describe.serial("Account page", () => {
       })
       await expect(pinPasswordLabel).toBeVisible()
       await expect(
-        pinPasswordLabel.locator("xpath=following::div[1]")
-      ).toHaveText(/^(\*\*\*\*)/)
+        pinPasswordLabel.locator("xpath=following::div[1]/p")
+      ).toHaveText(/^"?\*{4,}"?$/)
 
       await expect(accountPage.edit_phone_link).toBeVisible()
       await expect(accountPage.edit_email_link).toBeVisible()
