@@ -15,6 +15,7 @@ export async function bootstrapConfig() {
     console.log(configPath)
     await config.loadConfig(env)
   } else {
+    console.log("wtf")
     throw new Error(`Config file not found at ${configPath}`)
   }
 
