@@ -11,6 +11,12 @@
     },
     "pages/api/*.js": {
       "maxDuration": 60
+    },
+    "api/**/*.js": {
+      "includeFiles": "config/*.yaml"
+    },
+    "src/server/*": {
+      "includeFiles": "config/*.yaml"
     }
   }
 }
