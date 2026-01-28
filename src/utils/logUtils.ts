@@ -1,4 +1,4 @@
-import logger from "../../lib/logger"
+import { logger } from "@nypl/node-utils"
 
 export const logServerError = (
   errorLocation: string,

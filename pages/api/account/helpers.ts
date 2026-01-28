@@ -1,7 +1,7 @@
 import sierraClient from "../../../src/server/sierraClient"
 import type { HTTPResponse } from "../../../src/types/appTypes"
 import nyplApiClient from "../../../src/server/nyplApiClient"
-import logger from "../../../lib/logger"
+import { logger } from "@nypl/node-utils"
 
 /**
  * PUT request to Sierra to update patron PIN, first validating with previous PIN.
