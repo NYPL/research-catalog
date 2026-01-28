@@ -1,6 +1,7 @@
 import type { AppConfig, Environment } from "../types/appTypes"
 import type { NYPLocationKey, RecapLocationKey } from "../types/locationTypes"
 
+// Client side environment variables
 export const appConfig: AppConfig = {
   environment:
     (process.env.NEXT_PUBLIC_APP_ENV as Environment) || "development",
@@ -61,6 +62,6 @@ export const appConfig: AppConfig = {
     EQIDAQAB
     -----END PUBLIC KEY-----`,
   features: {},
-  sourceEmail: process.env.SOURCE_EMAIL,
-  libAnswersEmail: process.env.LIB_ANSWERS_EMAIL,
+  sourceEmail: "no-reply@mylibrarynyc.org",
+  libAnswersEmail: "gethelp@libanswers.nypl.org",
 }

@@ -65,6 +65,7 @@ export default function MyAccount({
 }
 
 export async function getServerSideProps({ req, res }) {
+  // Ensure config is loaded before initializing Sierra client.
   await bootstrap()
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const isAuthenticated = patronTokenResponse.isTokenValid
