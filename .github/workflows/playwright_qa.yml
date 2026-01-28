@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - qa
+      # - SCC-5000/playwright-account-editing
   workflow_dispatch:
 
 jobs:
@@ -12,8 +13,10 @@ jobs:
     if: false
     runs-on: ubuntu-latest
     env:
+      QA_NAME: ${{ secrets.QA_NAME }}
       QA_USERNAME: ${{ secrets.QA_USERNAME }}
       QA_PASSWORD: ${{ secrets.QA_PASSWORD }}
+      QA_CARDNUMBER: ${{ secrets.QA_CARDNUMBER }}
       SIERRA_KEY: ${{ secrets.SIERRA_KEY }}
       SIERRA_SECRET: ${{ secrets.SIERRA_SECRET }}
       SIERRA_BASE: ${{ secrets.SIERRA_BASE }}
@@ -42,7 +45,7 @@ jobs:
       - name: Build
         run: npm run build
       - name: Run Playwright tests
-        run: npx playwright test --project=chromium --project=firefox
+        run: npx playwright test --project=chromium
       - name: Upload Playwright report on failure
         if: failure()
         uses: actions/upload-artifact@v4

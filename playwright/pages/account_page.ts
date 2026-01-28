@@ -1,10 +1,15 @@
 import type { Page, Locator } from "@playwright/test"
 import { BasePage } from "./base_page"
+import { start } from "repl"
+import { getByRole } from "../../src/utils/testUtils"
 
 export class AccountPage extends BasePage {
+  // log in page locators
   readonly usernameInput: Locator
+  readonly unsernameEditInput: Locator
   readonly passwordInput: Locator
   readonly submitButton: Locator
+  // account page locators
   readonly accountHeader: Locator
   readonly nameLabel: Locator
   readonly name: Locator
@@ -26,23 +31,40 @@ export class AccountPage extends BasePage {
   readonly account_items_table_header_callnumber: Locator
   readonly account_items_table_header_due_date: Locator
   readonly account_items_table_header_manage: Locator
+  // account settings edit links
   readonly edit_phone_link: Locator
+  readonly removePhoneIcon: Locator
   readonly edit_email_link: Locator
   readonly edit_home_library_link: Locator
   readonly edit_notification_preferences_link: Locator
   readonly edit_pin_password_link: Locator
 
+  // Add these new locators
+  readonly phoneInput: Locator
+  readonly emailInput: Locator
+  readonly homeLibrarySelect: Locator
+  readonly saveChangesButton: Locator
+  readonly successMessage: Locator
+  readonly phoneValue: Locator
+  readonly emailValue: Locator
+  readonly homeLibraryValue: Locator
+
   constructor(page: Page) {
     super(page)
+    // log in page locators
     this.usernameInput = page.getByLabel("Barcode or Username")
     this.passwordInput = page.getByLabel("PIN/ Password")
     this.submitButton = page.getByRole("button", { name: /submit/i })
+    // account page locators
     this.accountHeader = page.getByRole("heading", { name: /my account/i })
     this.nameLabel = page.getByText("Name").first()
-    this.name = page.getByText("QA Tester ILS")
+    // Selects the name value as the first div following the 'Name' label
+    // Use env variable for name value
+    this.name = page.getByTestId("Name")
     this.usernameLabel = page.getByText("Username").first()
-    this.username = page.getByText("qatester2")
+    this.username = page.getByText(process.env.QA_USERNAME)
     this.usernameEditLink = page.getByRole("button", { name: /edit username/i })
+    this.unsernameEditInput = page.locator("#username-input")
     this.cardnumberLabel = page.locator("dt", { hasText: "Card number" })
     this.cardnumber = page.getByTestId("Card number")
     this.barcode = page.getByLabel("barcode")
@@ -74,12 +96,38 @@ export class AccountPage extends BasePage {
       name: "Manage checkout",
     })
     this.edit_phone_link = page.locator("#edit-phones-button")
+    this.removePhoneIcon = page.getByRole("button", { name: /^Remove phone/i })
     this.edit_email_link = page.locator("#edit-emails-button")
     this.edit_home_library_link = page.locator("#edit-library-button")
     this.edit_notification_preferences_link = page.locator(
       "#edit-notification-button"
     )
     this.edit_pin_password_link = page.locator("#edit-password-button")
+
+    // New locators for editing functionality
+    this.phoneInput = page.getByRole("textbox", {
+      name: "Update primary phone number",
+    })
+    this.emailInput = page.getByRole("textbox", {
+      name: "Update primary email address",
+    })
+    this.homeLibrarySelect = page.getByLabel("Update home library")
+    this.saveChangesButton = page.getByRole("button", {
+      name: /save changes/i,
+    })
+    this.successMessage = page.getByText(/your changes were saved/i)
+
+    // Value locators for assertions
+    this.phoneValue = page
+      .locator("p", { hasText: /phone/i })
+      .locator("xpath=following::div[1]")
+    // this.emailValue = page
+    //   .locator("p", { hasText: /email/i })
+    //   .first()
+    //   .locator("xpath=following::div[1]")
+    this.homeLibraryValue = page
+      .locator("p", { hasText: /home library/i })
+      .locator("xpath=following::div[1]")
   }
 
   async login(username: string, password: string) {
