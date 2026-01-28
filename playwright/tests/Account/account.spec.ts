@@ -31,7 +31,7 @@ test.describe.serial("Account page", () => {
   test.describe("Account info", () => {
     test("should show labels and values", async () => {
       await expect(accountPage.nameLabel).toBeVisible()
-      await expect(accountPage.name).toHaveText("QA Tester ILS")
+      await expect(accountPage.name).toHaveText("PLAYWRIGHT TEST ACCOUNT GHA")
       await expect(accountPage.usernameLabel).toBeVisible()
       await expect(accountPage.username).toBeVisible()
       await expect(accountPage.usernameEditLink).toBeVisible()
@@ -105,9 +105,12 @@ test.describe.serial("Account page", () => {
 
       const phonelabel = page.locator("p", { hasText: /phone/i })
       await expect(phonelabel).toBeVisible()
-      await expect(phonelabel.locator("xpath=following::div[1]")).toHaveText(
-        /^2125927256/
-      )
+      await expect(
+        page
+          .locator("p")
+          .filter({ hasText: /phone/i })
+          .locator("xpath=following::div[1]")
+      ).toHaveText(/917[-]?660[-]?3326/)
 
       const emailLabel = page.locator("p", { hasText: /email/i }).first()
       await expect(emailLabel).toBeVisible()
@@ -121,7 +124,7 @@ test.describe.serial("Account page", () => {
       await expect(homeLibraryLabel).toBeVisible()
       await expect(
         homeLibraryLabel.locator("xpath=following::div[1]")
-      ).toHaveText(/^53rd Street/)
+      ).toHaveText(/^Allerton/)
 
       const notificationPreferenceLabel = page.locator("p", {
         hasText: /notification preference/i,
