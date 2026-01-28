@@ -22,7 +22,7 @@ import {
 } from "../../utils/locationUtils"
 
 import { appConfig } from "../../config/config"
-import { logServerError } from "../../utils/loggerUtils"
+import { logServerError } from "../../utils/logUtils"
 import logger from "../../../logger"
 
 /**

@@ -8,7 +8,7 @@ import {
   DISCOVERY_API_SEARCH_ROUTE,
   RESULTS_PER_PAGE,
 } from "../../config/constants"
-import { logServerError } from "../../utils/loggerUtils"
+import { logServerError } from "../../utils/logUtils"
 import nyplApiClient from "../nyplApiClient"
 import type { APIError } from "../../types/appTypes"
 

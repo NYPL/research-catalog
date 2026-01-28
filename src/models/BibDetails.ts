@@ -3,12 +3,9 @@ import type {
   LinkedBibDetail,
   BibDetail,
   FieldMapping,
-  AnnotatedMarcField,
   BibDetailURL,
-  AnnotatedMarc,
   AnyBibDetail,
   MarcLinkedDetail,
-  MarcDetail,
   AnyMarcDetail,
 } from "../types/bibDetailsTypes"
 import {
@@ -16,6 +13,11 @@ import {
   encodeURIComponentWithPeriods,
 } from "../utils/appUtils"
 import { getFindingAidFromSupplementaryContent } from "../utils/bibUtils"
+import type {
+  AnnotatedMarc,
+  AnnotatedMarcField,
+  MarcDetail,
+} from "../types/marcTypes"
 
 export default class BibDetails {
   bib: DiscoveryBibResult

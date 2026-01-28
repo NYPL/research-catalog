@@ -7,7 +7,7 @@ import {
 import nyplApiClient from "../nyplApiClient"
 import { DISCOVERY_API_SEARCH_ROUTE } from "../../config/constants"
 import { appConfig } from "../../config/config"
-import { logServerError } from "../../utils/loggerUtils"
+import { logServerError } from "../../utils/logUtils"
 import logger from "../../../logger"
 import type { APIError } from "../../types/appTypes"
 
