@@ -1,3 +1,249 @@
+export const physicalDescriptionBib = {
+  "@context":
+    "http://discovery-api-qa.nypl.org/api/v0.1/discovery/context_all.jsonld",
+  "@type": ["nypl:Item", "nypl:Resource"],
+  "@id": "res:b10118017",
+  buildingLocationIds: ["pa"],
+  carrierType: [
+    {
+      "@id": "carriertypes:nc",
+      prefLabel: "volume",
+    },
+  ],
+  contributorLiteral: ["Kavenoki, Severin"],
+  createdString: ["1935"],
+  createdYear: 1935,
+  creatorLiteral: ["Copley, Richard"],
+  dateEndString: ["1939"],
+  dateEndYear: 1939,
+  dateStartYear: 1935,
+  dateString: ["1935"],
+  dates: [
+    {
+      range: {
+        lt: "1936",
+        gte: "1935",
+      },
+      raw: "731024q19351939nyu                 eng dcpcIia",
+      tag: "q",
+    },
+    {
+      range: {
+        lt: "1940",
+        gte: "1939",
+      },
+      raw: "731024q19351939nyu                 eng dcpcIia",
+      tag: "q",
+    },
+  ],
+  description: [
+    "Typescript reproduction of press releases by Richard Copley intended to be distributed to concert managers and press as publicity for concerts of music composed by, played by, or conducted by Igor Stravinsky.",
+  ],
+  dimensions: ["37 cm"],
+  extent: ["13 pages [on 20 leaves] ;"],
+  idOclc: ["80535211"],
+  identifier: [
+    {
+      "@type": "bf:ShelfMark",
+      "@value": "JOG 73-164",
+    },
+    {
+      "@type": "nypl:Bnumber",
+      "@value": "10118017",
+    },
+    {
+      "@type": "nypl:Oclc",
+      "@value": "80535211",
+    },
+    {
+      "@type": "bf:Identifier",
+      "@value": "(OCoLC)80535211",
+    },
+  ],
+  issuance: [
+    {
+      "@id": "urn:biblevel:c",
+      prefLabel: "collection",
+    },
+  ],
+  itemAggregations: [
+    {
+      "@type": "nypl:Aggregation",
+      "@id": "res:location",
+      id: "location",
+      field: "location",
+      values: [
+        {
+          value: "loc:pam38",
+          count: 1,
+          label: "Performing Arts Research Collections - Music",
+        },
+      ],
+    },
+    {
+      "@type": "nypl:Aggregation",
+      "@id": "res:format",
+      id: "format",
+      field: "format",
+      values: [
+        {
+          value: "Archival Mix",
+          count: 1,
+          label: "Archival Mix",
+        },
+      ],
+    },
+    {
+      "@type": "nypl:Aggregation",
+      "@id": "res:status",
+      id: "status",
+      field: "status",
+      values: [
+        {
+          value: "status:a",
+          count: 1,
+          label: "Available",
+        },
+      ],
+    },
+  ],
+  items: [
+    {
+      "@id": "res:i14777680",
+      "@type": ["bf:Item"],
+      accessMessage: [
+        {
+          "@id": "accessMessage:u",
+          prefLabel: "Supervised use",
+        },
+      ],
+      aeonUrl: [
+        "https://nypl-aeon-test.aeon.atlas-sys.com/aeon/Aeon.dll?Action=10&Author=Copley%2C+Richard&CallNumber=JOG+73-164&Date=1935&Form=30&Genre=archival+material&ItemInfo1=Supervised+use&ItemInfo3=https%3A%2F%2Fcatalog.nypl.org%2Frecord%3Db10118017&ItemISxN=i147776806&ItemNumber=33433093824898&ItemPlace=New+York&ItemPublisher=Richard+Copley%2C+%5B1935%3F-1939%3F%5D&Location=Performing+Arts+Music+and+Recorded+Sound+Division&ReferenceNumber=b101180172&Site=LPAMR&Title=Press+book+for+Igor+Stravinsky",
+      ],
+      catalogItemType: [
+        {
+          "@id": "catalogItemType:21",
+          prefLabel: "archival material",
+        },
+      ],
+      eddRequestable: false,
+      formatLiteral: ["Archival Mix"],
+      holdingLocation: [
+        {
+          "@id": "loc:pam38",
+          prefLabel: "Performing Arts Research Collections - Music",
+        },
+      ],
+      idBarcode: ["33433093824898"],
+      identifier: [
+        {
+          "@type": "bf:ShelfMark",
+          "@value": "JOG 73-164",
+        },
+        {
+          "@type": "bf:Barcode",
+          "@value": "33433093824898",
+        },
+      ],
+      physRequestable: false,
+      physicalLocation: ["JOG 73-164"],
+      requestable: [true],
+      shelfMark: ["JOG 73-164"],
+      specRequestable: true,
+      status: [
+        {
+          "@id": "status:a",
+          prefLabel: "Available",
+        },
+      ],
+      uri: "i14777680",
+      idNyplSourceId: {
+        "@type": "SierraNypl",
+        "@value": "14777680",
+      },
+    },
+  ],
+  language: [
+    {
+      "@id": "lang:eng",
+      prefLabel: "English",
+    },
+  ],
+  materialType: [
+    {
+      "@id": "resourcetypes:mix",
+      prefLabel: "Mixed material",
+    },
+  ],
+  mediaType: [
+    {
+      "@id": "mediatypes:n",
+      prefLabel: "unmediated",
+    },
+  ],
+  note: [
+    {
+      noteType: "Note",
+      "@type": "bf:Note",
+      prefLabel:
+        '"It is suggested that the enclosed articles, combined as desired, be retyped and filled in as to the date of concert, place, time, etc. before they are submitted to periodicals" -- on page of table of contents.',
+    },
+    {
+      noteType: "Biography",
+      "@type": "bf:Note",
+      prefLabel:
+        "Richard Copley (May 27, 1875-February 27, 1939) was an American concert agent.  He was Igor Stravinsky's New York agent from 1935 until his death. Severin Kavenoki (later: Severin Kaven) was employed by Richard Copley.",
+    },
+    {
+      noteType: "Provenance",
+      "@type": "bf:Note",
+      prefLabel: "From the collection of Severin Kavenoki.",
+    },
+  ],
+  numCheckinCardItems: 0,
+  numElectronicResources: 0,
+  numItemDatesParsed: 0,
+  numItemVolumesParsed: 0,
+  numItemsMatched: 1,
+  numItemsTotal: 1,
+  nyplSource: ["sierra-nypl"],
+  physicalDescription: [
+    "13 pages [on 20 leaves] ; 37 cm",
+    "another physical description",
+  ],
+  placeOfPublication: ["New York"],
+  publicationStatement: ["New York : Richard Copley, [1935?-1939?]"],
+  publisherLiteral: ["Richard Copley"],
+  shelfMark: ["JOG 73-164"],
+  subjectLiteral: ["Stravinsky, Igor, 1882-1971.", "Press releases."],
+  tableOfContents: [
+    "Stravinsky comes to America -- Biography of the composer -- Ballet of a poker game -- Stravinsky as a conductor -- Stravinsky as a pianist -- The man Stravinsky -- Stravinsky, a figure in modern art -- Music and controversy -- Stravinsky explains himself -- Stravinsky, at home anywhere -- Stravinsky's laboratory -- Stravinsky finds a collaborator -- Stravinsky and Dushkin.",
+  ],
+  title: ["Press book for Igor Stravinsky"],
+  titleDisplay: ["Press book for Igor Stravinsky / Richard Copley."],
+  type: ["nypl:Item"],
+  updatedAt: 1765575864350,
+  uri: "b10118017",
+  updatedAtDate: "2025-12-12T21:44:24.350Z",
+  hasItemVolumes: false,
+  hasItemDates: false,
+  collection: [
+    {
+      "@id": "pam",
+      prefLabel: "Music Division",
+      buildingLocationLabel:
+        "The New York Public Library for the Performing Arts (LPA)",
+    },
+  ],
+  format: [
+    {
+      "@id": "p",
+      prefLabel: "Archival mix",
+    },
+  ],
+  electronicResources: [],
+}
+
 export const princetonRecord = {
   "@context":
     "http://discovery-api-qa.nypl.org/api/v0.1/discovery/context_all.jsonld",
