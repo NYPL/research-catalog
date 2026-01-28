@@ -1,6 +1,5 @@
 /* eslint-disable no-undef */
 import "@testing-library/jest-dom"
-import { configure } from "@testing-library/dom"
 // The scrollIntoView function is necessary for the Tabs component.
 window.HTMLElement.prototype.scrollIntoView = jest.fn()
 
@@ -37,6 +36,27 @@ jest.mock("jose", () => ({
     payload: mockPatronJwtDecodedObj,
   }),
 }))
+
+// Mock logger
+jest.mock("@nypl/node-utils", () => {
+  const mockLogger = {
+    info: jest.fn(),
+    warning: jest.fn(),
+    error: jest.fn(),
+    debug: jest.fn(),
+    initialize: jest.fn(),
+  }
+
+  const mockConfig = {
+    loadConfig: jest.fn().mockResolvedValue({ LOG_LEVEL: "debug" }),
+    getConfig: jest.fn().mockReturnValue({ LOG_LEVEL: "debug" }),
+  }
+
+  return {
+    logger: mockLogger,
+    config: mockConfig,
+  }
+})
 
 // Related to the useNYPLBreakpoints hook which is used in: ButtonGroup,
 // FeedbackBox, Modal, MultiSelectGroup, and NewsletterSignup.

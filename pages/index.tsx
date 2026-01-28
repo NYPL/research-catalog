@@ -16,7 +16,8 @@ import initializePatronTokenAuth from "../src/server/auth"
 import useLoading from "../src/hooks/useLoading"
 import RCHead from "../src/components/Head/RCHead"
 import Link from "../src/components/Link/Link"
-import { ensureConfig, getConfig } from "../lib/config"
+import { getConfig } from "../lib/config"
+import { bootstrap } from "../lib/bootstrap"
 
 interface HomeProps {
   bannerNotification?: string
@@ -192,8 +193,7 @@ export default function Home({
 }
 
 export async function getServerSideProps({ req }) {
-  await ensureConfig()
-
+  await bootstrap()
   const { SEARCH_RESULTS_NOTIFICATION } = getConfig()
   const bannerNotification = SEARCH_RESULTS_NOTIFICATION || ""
   // Every page that needs patron data must call initializePatronTokenAuth

@@ -7,7 +7,7 @@ import {
 import nyplApiClient from "../nyplApiClient"
 import { DISCOVERY_API_SEARCH_ROUTE } from "../../config/constants"
 import { appConfig } from "../../config/config"
-import { logServerError } from "../../utils/appUtils"
+import { logServerError } from "../../utils/loggerUtils"
 import logger from "../../../logger"
 import type { APIError } from "../../types/appTypes"
 
@@ -74,7 +74,7 @@ export async function fetchBib(
       !discoveryBibResult.uri ||
       !id.includes(discoveryBibResult.uri)
     ) {
-      logger.warn(
+      logger.warning(
         `Missing discoveryBibResult for id ${id}, or id does not match uri on returned result`
       )
       const sierraBibResponse = await client.get(

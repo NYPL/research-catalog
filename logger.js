@@ -1,25 +1,19 @@
-import winston from "winston"
+import { logger, config } from "@nypl/node-utils"
 
-const addPid = winston.format((info) => {
-  return {
-    ...info,
-    pid: process.pid,
-  }
-})
-const { combine, json, timestamp } = winston.format
-const initializeLogger = () => {
-  return winston.createLogger({
-    level: "info",
-    format: combine(addPid(), timestamp("YYYY-MM-DD hh:mm:ss.SSS A"), json()),
-    transports: [new winston.transports.Console()],
-    maxFiles: 5,
+let initialized = false
+
+export async function initLogger() {
+  if (initialized) return logger
+
+  await config.loadConfig(process.env.NODE_ENV || "development")
+
+  logger.initialize({
+    level: process.env.LOG_LEVEL || "info",
+    json: true,
   })
+
+  initialized = true
+  return logger
 }
-
-const isRunningOnVercel = process.env.VERCEL === "1"
-const isRunningClientSide = typeof window !== "undefined"
-
-const logger =
-  isRunningOnVercel || isRunningClientSide ? console : initializeLogger()
 
 export default logger

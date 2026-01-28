@@ -15,7 +15,8 @@ import initializePatronTokenAuth from "../../src/server/auth"
 import { useFocusContext, idConstants } from "../../src/context/FocusContext"
 import type { HTTPStatusCode } from "../../src/types/appTypes"
 import Search from "../../src/components/Search/Search"
-import { ensureConfig, getConfig } from "../../lib/config"
+import { bootstrap } from "../../lib/bootstrap"
+import { getConfig } from "../../lib/config"
 
 interface SearchPageProps {
   bannerNotification?: string
@@ -80,7 +81,7 @@ export default function SearchPage({
 }
 
 export async function getServerSideProps({ req, query }) {
-  await ensureConfig()
+  await bootstrap()
 
   const { SEARCH_RESULTS_NOTIFICATION } = getConfig()
   const bannerNotification = SEARCH_RESULTS_NOTIFICATION || ""
