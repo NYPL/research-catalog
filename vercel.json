@@ -14,9 +14,6 @@
     },
     "pages/api/**/*.ts": {
       "includeFiles": "config/*.yaml"
-    },
-    "src/server/api/*.ts": {
-      "includeFiles": "config/*.yaml"
     }
   }
 }
