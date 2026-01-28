@@ -12,6 +12,7 @@ export async function bootstrapConfig() {
   const configPath = path.join(process.cwd(), "config", `${env}.yaml`)
 
   if (fs.existsSync(configPath)) {
+    console.log(configPath)
     await config.loadConfig(env)
   } else {
     throw new Error(`Config file not found at ${configPath}`)
