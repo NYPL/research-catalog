@@ -3,7 +3,7 @@ import { SES } from "@aws-sdk/client-ses"
 
 import { getEmailParams, maskEmail } from "../../src/utils/feedbackUtils"
 import { appConfig } from "../../src/config/config"
-import logger from "../../logger"
+import logger from "../../lib/logger"
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {

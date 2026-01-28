@@ -23,7 +23,7 @@ import {
 
 import { appConfig } from "../../config/config"
 import { logServerError } from "../../utils/logUtils"
-import logger from "../../../logger"
+import logger from "../../../lib/logger"
 
 /**
  * Getter function for hold delivery locations.

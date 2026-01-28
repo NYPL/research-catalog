@@ -50,4 +50,6 @@ node_modules/
 /blob-report/
 /playwright/.cache/
 
-/config/*
+/config/development.yaml
+/config/qa.yaml
+/config/production.yaml

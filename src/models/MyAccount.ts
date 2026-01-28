@@ -13,7 +13,7 @@ import type {
   SierraBibEntry,
   BibDataMapType,
 } from "../types/myAccountTypes"
-import logger from "../../logger"
+import logger from "../../lib/logger"
 
 import { buildPatron, formatDate } from "../utils/myAccountUtils"
 import { getPickupLocations } from "../utils/pickupLocationsUtils"

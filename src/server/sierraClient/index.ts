@@ -1,6 +1,6 @@
 import wrapper from "@nypl/sierra-wrapper"
-import logger from "../../../logger"
 import { config } from "@nypl/node-utils"
+import logger from "../../../lib/logger"
 
 export class SierraClientError extends Error {
   constructor(message: string) {

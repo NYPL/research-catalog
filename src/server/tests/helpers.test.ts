@@ -8,7 +8,7 @@ import {
   cancelHold,
   updateUsername,
 } from "../../../pages/api/account/helpers"
-import logger from "../../../logger"
+import logger from "../../../lib/logger"
 
 jest.mock("../../../src/server/sierraClient")
 jest.mock("../../../src/server/nyplApiClient")

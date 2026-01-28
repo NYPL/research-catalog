@@ -16,18 +16,12 @@ import initializePatronTokenAuth from "../src/server/auth"
 import useLoading from "../src/hooks/useLoading"
 import RCHead from "../src/components/Head/RCHead"
 import Link from "../src/components/Link/Link"
-import { getConfig } from "../lib/config"
-import { bootstrap } from "../lib/bootstrap"
 
 interface HomeProps {
-  bannerNotification?: string
   isAuthenticated: boolean
 }
 
-export default function Home({
-  bannerNotification,
-  isAuthenticated,
-}: HomeProps) {
+export default function Home({ isAuthenticated }: HomeProps) {
   const isLoading = useLoading()
   return (
     <>
@@ -35,7 +29,7 @@ export default function Home({
       <Layout
         isAuthenticated={isAuthenticated}
         activePage=""
-        bannerNotification={bannerNotification}
+        bannerNotification={appConfig.searchNotification[appConfig.environment]}
       >
         {isLoading ? (
           <SkeletonLoader showImage={false} />
@@ -193,9 +187,6 @@ export default function Home({
 }
 
 export async function getServerSideProps({ req }) {
-  await bootstrap()
-  const { SEARCH_RESULTS_NOTIFICATION } = getConfig()
-  const bannerNotification = SEARCH_RESULTS_NOTIFICATION || ""
   // Every page that needs patron data must call initializePatronTokenAuth
   // to find if the token is valid and what the patron id is.
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
@@ -204,6 +195,6 @@ export async function getServerSideProps({ req }) {
   const isAuthenticated = patronTokenResponse.isTokenValid
   // return props object
   return {
-    props: { isAuthenticated, bannerNotification },
+    props: { isAuthenticated },
   }
 }
