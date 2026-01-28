@@ -49,7 +49,7 @@ describe("Bib Page with items", () => {
       "Vol. 1, issue 1-"
     )
     expect(screen.getByTestId("description")).toHaveTextContent(
-      "v. : ill.; 22 cm."
+      "v. : ill. ; 22 cm."
     )
     expect(screen.getByTestId("donor-sponsor")).toHaveTextContent(
       "Gift of the DeWitt Wallace Endowment Fund, named in honor of the founder of Reader's Digest"
