@@ -12,7 +12,7 @@
     "pages/api/*.js": {
       "maxDuration": 60
     },
-    "api/**/*.js": {
+    "api/**/*.ts": {
       "includeFiles": "config/*.yaml"
     },
     "src/server/*": {
