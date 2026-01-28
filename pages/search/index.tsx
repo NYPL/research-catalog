@@ -15,7 +15,7 @@ import initializePatronTokenAuth from "../../src/server/auth"
 import { useFocusContext, idConstants } from "../../src/context/FocusContext"
 import type { HTTPStatusCode } from "../../src/types/appTypes"
 import Search from "../../src/components/Search/Search"
-import { appConfig } from "../../src/config/config"
+import { appConfig } from "../../src/config/appConfig"
 
 interface SearchPageProps {
   bannerNotification?: string

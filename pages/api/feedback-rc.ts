@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next"
 import { SES } from "@aws-sdk/client-ses"
 
 import { getEmailParams, maskEmail } from "../../src/utils/feedbackUtils"
-import { appConfig } from "../../src/config/config"
+import { appConfig } from "../../src/config/appConfig"
 import logger from "../../lib/logger"
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {

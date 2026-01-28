@@ -1,7 +1,7 @@
 import NyplApiClient from "@nypl/nypl-data-api-client"
 import { config } from "@nypl/node-utils"
 import logger from "../../../lib/logger"
-import { appConfig } from "../../config/config"
+import { appConfig } from "../../config/appConfig"
 
 interface KMSCache {
   clients: Record<string, any>

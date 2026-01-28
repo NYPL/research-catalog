@@ -11,7 +11,7 @@ import {
 
 import Layout from "../src/components/Layout/Layout"
 import { SITE_NAME } from "../src/config/constants"
-import { appConfig } from "../src/config/config"
+import { appConfig } from "../src/config/appConfig"
 import initializePatronTokenAuth from "../src/server/auth"
 import useLoading from "../src/hooks/useLoading"
 import RCHead from "../src/components/Head/RCHead"

@@ -11,7 +11,7 @@ import {
   partnerDefaultLocation,
   locationEndpointsMap,
 } from "../utils/itemUtils"
-import { appConfig } from "../config/config"
+import { appConfig } from "../config/appConfig"
 import ItemAvailability from "./ItemAvailability"
 import { convertCamelToShishKabobCase } from "../utils/appUtils"
 

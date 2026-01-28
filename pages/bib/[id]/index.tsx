@@ -16,7 +16,7 @@ import {
   FOCUS_TIMEOUT,
   ERROR_MESSAGES,
 } from "../../../src/config/constants"
-import { appConfig } from "../../../src/config/config"
+import { appConfig } from "../../../src/config/appConfig"
 import { fetchBib } from "../../../src/server/api/bib"
 import {
   getBibQueryString,

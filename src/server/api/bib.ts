@@ -6,7 +6,7 @@ import {
 } from "../../utils/bibUtils"
 import nyplApiClient from "../nyplApiClient"
 import { DISCOVERY_API_SEARCH_ROUTE } from "../../config/constants"
-import { appConfig } from "../../config/config"
+import { appConfig } from "../../config/appConfig"
 import { logServerError } from "../../utils/logUtils"
 import logger from "../../../lib/logger"
 import type { APIError } from "../../types/appTypes"

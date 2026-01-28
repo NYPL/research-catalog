@@ -21,7 +21,7 @@ import {
   locationIsClosed,
 } from "../../utils/locationUtils"
 
-import { appConfig } from "../../config/config"
+import { appConfig } from "../../config/appConfig"
 import { logServerError } from "../../utils/logUtils"
 import logger from "../../../lib/logger"
 

@@ -1,3 +1,4 @@
+# Get values from team members. You should have 3 .yaml files: development, qa, and production.
 PLAINTEXT_VARIABLES:
   SIERRA_BASE: ##
   QA_USERNAME: ##
