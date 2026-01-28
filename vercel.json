@@ -12,10 +12,10 @@
     "pages/api/*.js": {
       "maxDuration": 60
     },
-    "api/**/*.{js,ts,tsx}": {
+    "pages/api/**/*.ts": {
       "includeFiles": "config/*.yaml"
     },
-    "src/server/*.{js,ts}": {
+    "src/server/api/*.ts": {
       "includeFiles": "config/*.yaml"
     }
   }
