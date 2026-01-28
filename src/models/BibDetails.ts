@@ -16,7 +16,6 @@ import {
   encodeURIComponentWithPeriods,
 } from "../utils/appUtils"
 import { getFindingAidFromSupplementaryContent } from "../utils/bibUtils"
-import logger from "../../logger"
 
 export default class BibDetails {
   bib: DiscoveryBibResult
@@ -261,7 +260,7 @@ export default class BibDetails {
     })
 
     if (Object.keys(keptByLabel).length > 0) {
-      logger.info(
+      console.log(
         `Bib details: Keeping annotated MARC fields on ${this.bib["@id"]}`,
         {
           keptMarcFields: keptByLabel,
