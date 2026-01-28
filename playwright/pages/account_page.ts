@@ -1,5 +1,7 @@
 import type { Page, Locator } from "@playwright/test"
 import { BasePage } from "./base_page"
+import { start } from "repl"
+import { getByRole } from "../../src/utils/testUtils"
 
 export class AccountPage extends BasePage {
   // log in page locators
@@ -31,6 +33,7 @@ export class AccountPage extends BasePage {
   readonly account_items_table_header_manage: Locator
   // account settings edit links
   readonly edit_phone_link: Locator
+  readonly removePhoneIcon: Locator
   readonly edit_email_link: Locator
   readonly edit_home_library_link: Locator
   readonly edit_notification_preferences_link: Locator
@@ -93,6 +96,7 @@ export class AccountPage extends BasePage {
       name: "Manage checkout",
     })
     this.edit_phone_link = page.locator("#edit-phones-button")
+    this.removePhoneIcon = page.getByRole("button", { name: /^Remove phone/i })
     this.edit_email_link = page.locator("#edit-emails-button")
     this.edit_home_library_link = page.locator("#edit-library-button")
     this.edit_notification_preferences_link = page.locator(
