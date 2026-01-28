@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 
+- Update Summary and Description values in BibDetails [SCC-4784](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5007)
 - Updated and removed references to legacy catalog to indicate only onsite access [SCC-5007](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5007), [SCC-5139](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5139)
 
 ### Added
