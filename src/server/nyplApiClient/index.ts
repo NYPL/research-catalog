@@ -1,6 +1,7 @@
 import NyplApiClient from "@nypl/nypl-data-api-client"
 import { config, logger } from "@nypl/node-utils"
 import { appConfig } from "../../config/appConfig"
+import { bootstrapConfig } from "../../../lib/bootstrap"
 
 interface KMSCache {
   clients: Record<string, any>
@@ -31,7 +32,7 @@ const nyplApiClient = async ({
   version = "v0.1",
 }: NyplApiClientOptions = {}) => {
   const appEnvironment = appConfig.environment
-  await config.loadConfig(process.env.APP_ENV || "development")
+  await bootstrapConfig()
 
   const { PLATFORM_API_CLIENT_ID, PLATFORM_API_CLIENT_SECRET } =
     config.getConfig()

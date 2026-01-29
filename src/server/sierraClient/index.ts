@@ -1,5 +1,6 @@
 import wrapper from "@nypl/sierra-wrapper"
 import { config, logger } from "@nypl/node-utils"
+import { bootstrapConfig } from "../../../lib/bootstrap"
 
 export class SierraClientError extends Error {
   constructor(message: string) {
@@ -13,6 +14,7 @@ const CACHE: {
 } = {}
 
 async function buildClient() {
+  await bootstrapConfig()
   const { SIERRA_KEY, SIERRA_SECRET, SIERRA_BASE } = config.getConfig()
 
   if (!SIERRA_KEY || !SIERRA_SECRET || !SIERRA_BASE) {
