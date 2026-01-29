@@ -8,6 +8,7 @@ import {
   bibNoItems,
   princetonRecord,
   bibWithItems,
+  physicalDescriptionBib,
 } from "../../../__test__/fixtures/bibFixtures"
 import type { LinkedBibDetail } from "../../types/bibDetailsTypes"
 import BibDetailsModel from "../BibDetails"
@@ -82,53 +83,39 @@ describe("Bib Details model", () => {
       ])
     })
   })
-  describe("extent", () => {
-    it("should add a semicolon after extent if there is not one already", () => {
-      const bib = new BibDetailsModel({
-        identifier: [{ uri: "123456" }],
-        extent: ["99 bottles of beer"],
-        dimensions: ["99 x 99 cm"],
-      })
-      expect(bib.extent[0].includes("; "))
+  describe("Description", () => {
+    const physicalDescriptionBibModel = new BibDetailsModel(
+      physicalDescriptionBib
+    )
+    it("populates Description with physicalDescription", () => {
+      const description = physicalDescriptionBibModel.bottomDetails.find(
+        (detail) => detail.label === "Description"
+      ).value
+      expect(description).toStrictEqual(
+        physicalDescriptionBib.physicalDescription
+      )
     })
-    it("should append dimensions to extent", () => {
-      const bib = new BibDetailsModel({
-        identifier: [{ uri: "123456" }],
-        extent: ["99 bottles of beer"],
-        dimensions: ["99 x 99 cm"],
-      })
-      expect(bib.extent[0]).toBe("99 bottles of beer; 99 x 99 cm")
+  })
+  describe("Summary", () => {
+    const physicalDescriptionBibModel = new BibDetailsModel(
+      physicalDescriptionBib
+    )
+    it("populates summary with summary instead of description", () => {
+      const summary = physicalDescriptionBibModel.bottomDetails.find(
+        (detail) => detail.label === "Summary"
+      ).value
+      expect(summary).toStrictEqual(physicalDescriptionBib.description)
     })
-    it("should not add semicolon if it already is in extent", () => {
-      const bib = new BibDetailsModel({
-        identifier: [{ uri: "123456" }],
-        extent: ["700 sheets of woven gold; "],
-        dimensions: ["1 x 1 in."],
+    it("populates summary with description when summary is not present", () => {
+      const summaryValue = ["summary"]
+      const summaryBibModel = new BibDetailsModel({
+        ...physicalDescriptionBib,
+        summary: summaryValue,
       })
-      expect(bib.extent[0]).toBe("700 sheets of woven gold; 1 x 1 in.")
-    })
-    it("should remove semicolon if there is no dimensions", () => {
-      const bib = new BibDetailsModel({
-        identifier: [{ uri: "123456" }],
-        extent: ["700 sheets of woven gold; "],
-      })
-      const anotherBib = new BibDetailsModel({
-        identifier: [{ uri: "123456" }],
-        extent: ["700 sheets of woven gold;"],
-      })
-      expect(bib.extent[0]).toBe("700 sheets of woven gold")
-      expect(anotherBib.extent[0]).toBe("700 sheets of woven gold")
-    })
-    it("should display dimensions if there are dimensions and no extent", () => {
-      const bib = new BibDetailsModel({
-        identifier: [{ uri: "123456" }],
-        dimensions: ["1,000,000mm x 7ft"],
-      })
-      expect(bib.extent[0]).toBe("1,000,000mm x 7ft")
-    })
-    it("should do nothing if there are no dimensions or extent", () => {
-      const bib = new BibDetailsModel({ identifier: [{ uri: "123456" }] })
-      expect(bib.extent).toBeNull()
+      const summary = summaryBibModel.bottomDetails.find(
+        (detail) => detail.label === "Summary"
+      ).value
+      expect(summary).toStrictEqual(summaryValue)
     })
   })
   describe("standard fields", () => {
