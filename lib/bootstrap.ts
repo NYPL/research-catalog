@@ -1,14 +1,8 @@
 import { config, logger } from "@nypl/node-utils"
 import fs from "fs"
-import path from "path"
 
-console.log("CWD:", process.cwd())
-const configDir = path.join(process.cwd(), "config")
-console.log("Config dir exists:", fs.existsSync(configDir))
-console.log(
-  "Config files:",
-  fs.existsSync(configDir) ? fs.readdirSync(configDir) : []
-)
+const files = fs.existsSync("config") ? fs.readdirSync("config") : []
+console.log("Config files in bundle:", files)
 
 let initialized = false
 

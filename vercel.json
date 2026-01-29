@@ -6,13 +6,11 @@
     }
   ],
   "functions": {
-    "pages/search/index.tsx": {
-      "maxDuration": 60
-    },
-    "pages/api/*.js": {
-      "maxDuration": 60
-    },
     "pages/api/**/*.ts": {
+      "maxDuration": 60,
+      "includeFiles": "config/*.yaml"
+    },
+    "src/server/**/*.ts": {
       "includeFiles": "config/*.yaml"
     }
   }
