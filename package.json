@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "AWS_PROFILE=nypl-digital-dev next dev -p 8080",
     "build": "next build",
-    "vercel-build": "node scripts/generate-config.ts && next build",
+    "vercel-build": "node scripts/generate-config.js && next build",
     "start": "next start -p 8080 -H 0.0.0.0",
     "local-prod": "AWS_PROFILE=nypl-digital-dev next build && next start -p 8080",
     "check-types": "tsc --noemit",
