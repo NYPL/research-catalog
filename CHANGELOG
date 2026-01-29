@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added MARC model [SCC-5106](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5106)
 - Added MARC view page and table [SCC-5107](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5107)
+- Added dependabot.yml [SCC-5146](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5146)
 - Added print styles for MARC table [SCC-5187](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5187)
 
 ## [1.6.6] 2026-01-15
