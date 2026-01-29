@@ -4,6 +4,7 @@ let initialized = false
 
 export async function bootstrapConfig() {
   if (initialized) return
+  console.error("Here")
 
   await config.loadConfig(process.env.APP_ENV || "development")
 

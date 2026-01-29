@@ -50,6 +50,12 @@ export async function fetchSearchResults(
   //  - search results
   //  - aggregations
   console.error("WTF1")
+  console.error(
+    "Investigate vercel aws env",
+    process.env.VERCEL,
+    process.env.AWS_SESSION_TOKEN,
+    process.env.AWS_ACCESS_KEY_ID
+  )
   try {
     // Failure to build client will throw from this:
     await bootstrapConfig()
