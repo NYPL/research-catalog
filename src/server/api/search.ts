@@ -58,8 +58,6 @@ export async function fetchSearchResults(
   )
   try {
     // Failure to build client will throw from this:
-    await bootstrapConfig()
-    console.error("WTF2")
     const client = await nyplApiClient()
 
     const [resultsResponse, aggregationsResponse] = await Promise.allSettled([
