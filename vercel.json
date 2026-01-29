@@ -9,9 +9,6 @@
     "pages/api/**/*.ts": {
       "maxDuration": 60,
       "includeFiles": "config/*.yaml"
-    },
-    "src/server/**/*.ts": {
-      "includeFiles": "config/*.yaml"
     }
   }
 }
