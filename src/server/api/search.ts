@@ -49,10 +49,11 @@ export async function fetchSearchResults(
   // Get the following in parallel:
   //  - search results
   //  - aggregations
+  console.error("WTF1")
   try {
     // Failure to build client will throw from this:
     await bootstrapConfig()
-    console.log("here1")
+    console.error("WTF2")
     const client = await nyplApiClient()
 
     const [resultsResponse, aggregationsResponse] = await Promise.allSettled([
