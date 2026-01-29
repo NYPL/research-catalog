@@ -6,9 +6,9 @@
     }
   ],
   "functions": {
-    "pages/api/**/*.ts": {
-      "maxDuration": 60,
-      "includeFiles": "config/*.yaml"
+    "api/**": {
+      "includeFiles": "config/*.yaml",
+      "maxDuration": 60
     }
   }
 }
