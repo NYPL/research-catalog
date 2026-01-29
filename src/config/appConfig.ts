@@ -1,6 +1,7 @@
 import type { AppConfig, Environment } from "../types/appTypes"
 import type { NYPLocationKey, RecapLocationKey } from "../types/locationTypes"
 
+// Client side environment variables
 export const appConfig: AppConfig = {
   environment:
     (process.env.NEXT_PUBLIC_APP_ENV as Environment) || "development",
@@ -31,6 +32,11 @@ export const appConfig: AppConfig = {
       production: "https://login.nypl.org/auth/logout",
     },
   },
+  searchNotification: {
+    development: "",
+    qa: "Test: Due to winter holiday closures, the delivery time for offsite requests will be delayed from December 22 until early January 2024. Please submit requests for offsite materials as early as possible.",
+    production: "",
+  },
   urls: {
     circulatingCatalog: "https://borrow.nypl.org",
     legacyCatalog: "https://legacycatalog.nypl.org",
@@ -56,6 +62,6 @@ export const appConfig: AppConfig = {
     EQIDAQAB
     -----END PUBLIC KEY-----`,
   features: {},
-  sourceEmail: process.env.SOURCE_EMAIL,
-  libAnswersEmail: process.env.LIB_ANSWERS_EMAIL,
+  sourceEmail: "no-reply@mylibrarynyc.org",
+  libAnswersEmail: "gethelp@libanswers.nypl.org",
 }
