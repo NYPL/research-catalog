@@ -11,6 +11,7 @@ import {
 import { logServerError } from "../../utils/logUtils"
 import nyplApiClient from "../nyplApiClient"
 import type { APIError } from "../../types/appTypes"
+import { bootstrapConfig } from "../../../lib/bootstrap"
 
 export async function fetchSearchResults(
   searchParams: SearchParams
@@ -50,6 +51,8 @@ export async function fetchSearchResults(
   //  - aggregations
   try {
     // Failure to build client will throw from this:
+    await bootstrapConfig()
+    console.log("here1")
     const client = await nyplApiClient()
 
     const [resultsResponse, aggregationsResponse] = await Promise.allSettled([
