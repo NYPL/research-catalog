@@ -3,12 +3,9 @@ import type {
   LinkedBibDetail,
   BibDetail,
   FieldMapping,
-  AnnotatedMarcField,
   BibDetailURL,
-  AnnotatedMarc,
   AnyBibDetail,
   MarcLinkedDetail,
-  MarcDetail,
   AnyMarcDetail,
 } from "../types/bibDetailsTypes"
 import {
@@ -17,6 +14,11 @@ import {
 } from "../utils/appUtils"
 import { getFindingAidFromSupplementaryContent } from "../utils/bibUtils"
 import logger from "../../logger"
+import type {
+  AnnotatedMarc,
+  AnnotatedMarcField,
+  MarcDetail,
+} from "../types/marcTypes"
 
 export default class BibDetails {
   bib: DiscoveryBibResult
@@ -26,9 +28,10 @@ export default class BibDetails {
   bottomDetails: AnyBibDetail[]
   groupedNotes: AnyBibDetail[]
   supplementaryContent: LinkedBibDetail
-  extent: string[]
+  physicalDescription: string[]
   owner: string[]
   findingAid?: string
+  summary: string[]
 
   constructor(
     discoveryBibResult: DiscoveryBibResult,
@@ -39,7 +42,8 @@ export default class BibDetails {
     this.supplementaryContent = this.buildSupplementaryContent()
     this.findingAid = this.buildFindingAid()
     this.groupedNotes = this.buildGroupedNotes()
-    this.extent = this.buildExtent()
+    // TODO: remove || this.bib.description once ES has been updated to replace summary with description
+    this.summary = this.bib.summary || this.bib.description
     this.owner = this.buildOwner()
     // these are the actual arrays of details that will be displayed
     this.annotatedMarcDetails = this.buildAnnotatedMarcDetails(
@@ -170,8 +174,8 @@ export default class BibDetails {
       { field: "placeOfPublication", label: "Place of publication" },
       { field: "partOf", label: "Found in" },
       { field: "serialPublicationDates", label: "Publication date" },
-      { field: "extent", label: "Description" },
-      { field: "description", label: "Summary" },
+      { field: "physicalDescription", label: "Description" },
+      { field: "summary", label: "Summary" },
       { field: "donor", label: "Donor/sponsor" },
       { field: "series", label: "Series" },
       { field: "seriesStatement", label: "Series statement" },
@@ -436,25 +440,6 @@ export default class BibDetails {
     })
 
     return Object.assign({}, bib, ...parallelFieldMatches)
-  }
-
-  buildExtent(): string[] {
-    let modifiedExtent: string[]
-    const { extent, dimensions } = this.bib
-    const removeSemiColon = (extent) => [extent[0].replace(/\s*;\s*$/, "")]
-    const extentExists = extent && extent[0]
-    const dimensionsExists = dimensions && dimensions[0]
-    if (!extentExists && !dimensionsExists) return null
-    if (!extentExists && dimensionsExists) modifiedExtent = dimensions
-    if (extentExists && !dimensionsExists) {
-      modifiedExtent = removeSemiColon(extent)
-    }
-    if (extentExists && dimensionsExists) {
-      const parts = removeSemiColon(extent)
-      parts.push(dimensions[0])
-      modifiedExtent = [parts.join("; ")]
-    }
-    return modifiedExtent
   }
 
   buildSupplementaryContent(): LinkedBibDetail {

@@ -125,8 +125,16 @@ export function getFindingAidFromSupplementaryContent(
   return findingAid?.url || null
 }
 
-export function buildBibMetadataTitle(bibTitle?: string | null): string {
-  const TITLE_SUFFIX = `Item Details | ${SITE_NAME}`
+export function buildBibMetadataTitle({
+  bibTitle,
+  marc = false,
+}: {
+  bibTitle?: string | null
+  marc?: boolean
+}): string {
+  const TITLE_SUFFIX = marc
+    ? `MARC record | ${SITE_NAME}`
+    : `Item Details | ${SITE_NAME}`
   const MAX_LENGTH = 100
   const safeTitle = (bibTitle ?? "").trim()
 
