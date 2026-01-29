@@ -6,7 +6,7 @@
     }
   ],
   "functions": {
-    "api/**": {
+    "pages/api/**/*.js": {
       "includeFiles": "config/*.yaml",
       "maxDuration": 60
     }
