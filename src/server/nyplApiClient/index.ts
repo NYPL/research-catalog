@@ -33,7 +33,6 @@ const nyplApiClient = async ({
 }: NyplApiClientOptions = {}) => {
   const appEnvironment = appConfig.environment
   await bootstrapConfig()
-
   const { PLATFORM_API_CLIENT_ID, PLATFORM_API_CLIENT_SECRET } =
     config.getConfig()
 
