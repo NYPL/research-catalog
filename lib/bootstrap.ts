@@ -1,14 +1,19 @@
 import { config, logger } from "@nypl/node-utils"
 import fs from "fs"
+import path from "path"
 
-const files = fs.existsSync("config") ? fs.readdirSync("config") : []
-console.log("Config files in bundle:", files)
+console.log("CWD:", process.cwd())
+const configDir = path.join(process.cwd(), "config")
+console.log("Config dir exists:", fs.existsSync(configDir))
+console.log(
+  "Config files:",
+  fs.existsSync(configDir) ? fs.readdirSync(configDir) : []
+)
 
 let initialized = false
 
 export async function bootstrapConfig() {
   if (initialized) return
-  console.error("Back")
 
   await config.loadConfig(process.env.APP_ENV || "development")
 
