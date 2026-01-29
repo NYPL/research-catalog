@@ -49,7 +49,3 @@ node_modules/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
-
-/config/development.yaml
-/config/qa.yaml
-/config/production.yaml

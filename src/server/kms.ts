@@ -3,16 +3,23 @@ import { logServerError } from "../utils/logUtils"
 
 const isVercel = !!process.env.VERCEL
 
+console.log(
+  "Investigate vercel aws env",
+  process.env.VERCEL,
+  process.env.AWS_SESSION_TOKEN,
+  process.env.AWS_ACCESS_KEY_ID
+)
+
 const kms: KMS = new KMS({
   region: "us-east-1",
 
-  // // Ignore session token for static creds on Vercel
-  // ...(isVercel && {
-  //   credentials: {
-  //     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  //     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  //   },
-  // }),
+  // Ignore session token for static creds on Vercel
+  ...(isVercel && {
+    credentials: {
+      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    },
+  }),
 })
 
 const decryptKMS = async (key: string): Promise<string | null> => {
