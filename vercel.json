@@ -11,6 +11,11 @@
     },
     "pages/api/*.js": {
       "maxDuration": 60
+    },
+    "functions": {
+      "pages/api/**/*.ts": {
+        "includeFiles": "config/*.yaml"
+      }
     }
   }
 }
