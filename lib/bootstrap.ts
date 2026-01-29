@@ -3,6 +3,8 @@ import fs from "fs"
 
 const files = fs.existsSync("config") ? fs.readdirSync("config") : []
 console.log("Config files in bundle:", files)
+console.log("CWD:", process.cwd())
+console.log("Files:", fs.readdirSync("config"))
 
 let initialized = false
 
