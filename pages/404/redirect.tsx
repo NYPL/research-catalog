@@ -6,7 +6,7 @@ import { useContext } from "react"
 import { FeedbackContext } from "../../src/context/FeedbackContext"
 import Image from "next/image"
 import errorImage from "../../src/assets/errorImage.png"
-import { appConfig } from "../../src/config/config"
+import { appConfig } from "../../src/config/appConfig"
 import Link from "../../src/components/Link/Link"
 
 export default function Redirect404() {

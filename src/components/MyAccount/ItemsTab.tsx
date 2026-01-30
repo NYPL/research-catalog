@@ -1,6 +1,6 @@
 import { Text, Box, Icon, Table } from "@nypl/design-system-react-components"
 import styles from "../../../styles/components/MyAccount.module.scss"
-import { appConfig } from "../../config/config"
+import { appConfig } from "../../config/appConfig"
 import type { RefObject } from "react"
 import Link from "../Link/Link"
 

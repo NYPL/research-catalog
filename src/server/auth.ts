@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 // import type { JWTPayload } from "jose"
 import { importSPKI, jwtVerify, type JWTPayload } from "jose"
-import { appConfig } from "../config/config"
+import { appConfig } from "../config/appConfig"
 import { BASE_URL } from "../config/constants"
 import { useEffect, useState } from "react"
 import { encodeURIComponentWithPeriods } from "../utils/appUtils"

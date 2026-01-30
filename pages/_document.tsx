@@ -1,5 +1,5 @@
 import { Html, Head, Main, NextScript } from "next/document"
-import { appConfig } from "../src/config/config"
+import { appConfig } from "../src/config/appConfig"
 import QABanner from "../src/components/QABanner/QABanner"
 
 export default function Document() {
