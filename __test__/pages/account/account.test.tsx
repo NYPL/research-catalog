@@ -268,4 +268,26 @@ describe("MyAccount page", () => {
     })
     expect(notification).not.toBeInTheDocument()
   })
+
+  it("renders user guide banner", () => {
+    render(
+      <MyAccount
+        isAuthenticated={true}
+        accountData={{
+          pickupLocations: filteredPickupLocations,
+          patron: processedPatron,
+          checkouts: processedCheckouts,
+          holds: processedHolds,
+          fines: { total: 0, entries: [] },
+        }}
+      />
+    )
+    const userGuideText = screen.queryByText(
+      "learn more about using the Research Catalog and requesting research materials",
+      {
+        exact: false,
+      }
+    )
+    expect(userGuideText).toBeInTheDocument()
+  })
 })
