@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+### Updated
+
+- Correct Article(s) Plus banner copy [SCC-5186](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5186)
+
+### Added
+
+- Add User Guide banner to account page [SCC-5185](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5185)
+
 ## [1.7.0] 2026-01-29
 
 ### Updated
