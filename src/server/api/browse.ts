@@ -11,7 +11,8 @@ import type {
 import { getBrowseQuery } from "../../utils/browseUtils"
 import type { APIError } from "../../types/appTypes"
 
-export async function fetchSubjects(
+export async function fetchBrowse(
+  type: "subjects" | "contributors",
   browseParams?: BrowseParams
 ): Promise<DiscoverySubjectsResponse | APIError> {
   const browseQuery = getBrowseQuery(browseParams)
@@ -19,7 +20,7 @@ export async function fetchSubjects(
   try {
     // Failure to build client will throw from this:
     const client = await nyplApiClient()
-    const request = `${DISCOVERY_API_BROWSE_ROUTE}${browseQuery}&per_page=${SUBJECTS_PER_PAGE.toString()}`
+    const request = `${DISCOVERY_API_BROWSE_ROUTE}/${type}/${browseQuery}&per_page=${SUBJECTS_PER_PAGE.toString()}`
     const results = await client.get(request)
 
     // Handle no results (404)

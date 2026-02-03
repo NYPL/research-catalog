@@ -28,7 +28,7 @@ export const PATHS = {
 
 // API Routes
 export const DISCOVERY_API_SEARCH_ROUTE = "/discovery/resources"
-export const DISCOVERY_API_BROWSE_ROUTE = "/discovery/browse/subjects"
+export const DISCOVERY_API_BROWSE_ROUTE = "/discovery/browse"
 
 // Query params
 export const SOURCE_PARAM = "?source=catalog"
