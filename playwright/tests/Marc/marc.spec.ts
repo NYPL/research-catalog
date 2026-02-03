@@ -3,12 +3,12 @@ import { MarcPage } from "../../pages/marc_page"
 
 let marcPage: MarcPage
 
-test.beforeEach(async ({ page }) => {
-  marcPage = new MarcPage(page)
-  await page.goto("bib/b22144813/marc")
-})
-
 test.describe("MARC page elements", () => {
+  test.beforeEach(async ({ page }) => {
+    marcPage = new MarcPage(page)
+    marcPage.navigate("b22144813")
+  })
+
   test("bib link goes to correct page", async () => {
     await expect(marcPage.bibLink).toHaveAttribute(
       "href",
