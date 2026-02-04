@@ -1,21 +1,9 @@
-import { RC_Home_Page } from "../../pages/rc_home_page"
-
-// Helper to start on home, navigate to login, and return AccountPage
-// async function loginAndGetAccountPage(page: Page) {
-//   const homePage = new RC_Home_Page(page)
-//   await page.goto("")
-//   await page.getByRole("link", { name: /my account/i }).click()
-//   const accountPage = new AccountPage(page)
-//   await accountPage.login(username, password)
-//   return accountPage
-// }
 import { test, expect, type Browser, type Page } from "@playwright/test"
 import { AccountPage } from "../../pages/account_page"
 
 let page: Page
 let accountPage: AccountPage
 
-// credentials
 const username = process.env.QA_USERNAME
 const password = process.env.QA_PASSWORD
 
@@ -36,21 +24,16 @@ test.describe.serial("Account page", () => {
     accountPage = new AccountPage(page)
   })
 
-  // test.afterAll(async () => {
-  //   await page.context().close()
-  // })
-
   test.describe("Account info", () => {
     test("should show labels and values", async () => {
       await expect(accountPage.nameLabel).toBeVisible()
       await expect(accountPage.name).toHaveText(process.env.QA_NAME)
       await expect(accountPage.usernameLabel).toBeVisible()
       await expect(accountPage.username).toHaveText(process.env.QA_USERNAME)
-      // await page.pause()
       await expect(accountPage.usernameEditLink).toBeVisible()
       await expect(accountPage.cardnumberLabel).toBeVisible()
       const cardnumberText = await accountPage.cardnumber.textContent()
-      const expectedCardnumber = process.env.QA_CARDNUMBER.replace(/^"|"$/g, "") // Remove surrounding quotes if present
+      const expectedCardnumber = process.env.QA_CARDNUMBER.replace(/^"|"$/g, "")
       expect(cardnumberText.trim().replace(/^"|"$/g, "")).toBe(
         expectedCardnumber
       )
@@ -174,118 +157,95 @@ test.describe.serial("Account page", () => {
       // click the cancel button to close the edit username form
       await accountPage.cancelButton.click()
       await expect(accountPage.usernameEditInput).toHaveCount(0)
+      // Test valid username
+      const newUsername = "usernameedited"
+      await accountPage.usernameEditLink.click()
+      await accountPage.usernameEditInput.fill(newUsername)
+      await expect(accountPage.usernameEditInput).toHaveValue(newUsername)
+      await expect(accountPage.saveChangesButton).toBeEnabled()
+      await accountPage.saveChangesButton.click()
+
+      await expect(accountPage.successMessage).toBeVisible({ timeout: 20000 })
+      await expect(accountPage.username).toHaveText(newUsername, {
+        timeout: 20000,
+      })
+    })
+    test("should successfully edit phone number", async () => {
+      await accountPage.edit_phone_link.click()
+      await accountPage.phoneInput.waitFor({ state: "visible" })
+
+      const newPhoneNumber = "5551234567"
+      await accountPage.phoneInput.fill(newPhoneNumber)
+      await expect(accountPage.saveChangesButton).toBeEnabled()
+      await accountPage.saveChangesButton.click()
+
+      await expect(accountPage.successMessage).toBeVisible({ timeout: 20000 })
+      await expect(accountPage.phoneValue).toContainText(newPhoneNumber, {
+        timeout: 20000,
+      })
+    })
+    test("should successfully edit email address", async () => {
+      await accountPage.edit_email_link.click()
+      await accountPage.emailInput.waitFor({ state: "visible" })
+      const newEmail = "testemail@nypl.org"
+      await accountPage.emailInput.fill(newEmail)
+      await expect(accountPage.saveChangesButton).toBeEnabled()
+      await accountPage.saveChangesButton.click()
+      await expect(accountPage.successMessage).toBeVisible({ timeout: 20000 })
+      const emailLabel = page.locator("p", { hasText: /email/i }).first()
+      const emailValue = emailLabel.locator("xpath=following::div[1]/div/p")
+      await expect(emailValue).toContainText(newEmail, {
+        timeout: 20000,
+      })
+    })
+    test("should successfully edit home library", async () => {
+      await accountPage.edit_home_library_link.click()
+      await accountPage.homeLibrarySelect.waitFor({ state: "visible" })
+      await accountPage.homeLibrarySelect.selectOption({ label: "53rd Street" })
+
+      await expect(accountPage.saveChangesButton).toBeEnabled()
+      await accountPage.saveChangesButton.click()
+
+      await expect(accountPage.successMessage).toBeVisible({ timeout: 20000 })
+      await expect(accountPage.homeLibraryValue).toContainText("53rd Street")
+    })
+    test.afterAll(async () => {
+      // Revert changes to username, phone, email, and home library
+      // Revert username
+      await accountPage.usernameEditLink.click()
+      await accountPage.usernameEditInput.fill(username)
+      await accountPage.saveChangesButton.click()
+      await expect(accountPage.successMessage).toBeVisible({ timeout: 20000 })
+      await expect(accountPage.username).toHaveText(username, {
+        timeout: 20000,
+      })
+      // Revert phone
+      await accountPage.edit_phone_link.click()
+      await accountPage.phoneInput.fill("2125927256")
+      await accountPage.saveChangesButton.click()
+      await expect(accountPage.successMessage).toBeVisible({ timeout: 20000 })
+      await expect(accountPage.phoneValue).toContainText("2125927256", {
+        timeout: 20000,
+      })
+      // Revert email
+      await accountPage.edit_email_link.click()
+      await accountPage.emailInput.fill("chrismulholland@nypl.org")
+      await accountPage.saveChangesButton.click()
+      await expect(accountPage.successMessage).toBeVisible({ timeout: 20000 })
+      const emailLabel = page.locator("p", { hasText: /email/i }).first()
+      const emailValue = emailLabel.locator("xpath=following::div[1]/div/p")
+      await expect(emailValue).toContainText("chrismulholland@nypl.org", {
+        timeout: 20000,
+      })
+      // Revert home library
+      await accountPage.edit_home_library_link.click()
+      await accountPage.homeLibrarySelect.waitFor({ state: "visible" })
+      await accountPage.homeLibrarySelect.selectOption({
+        label: "Allerton",
+      })
+      await accountPage.saveChangesButton.click()
+      await expect(accountPage.successMessage).toBeVisible({ timeout: 20000 })
+      await expect(accountPage.homeLibraryValue).toContainText("Allerton")
     })
   })
-
-  //   // Test valid username
-  //   const newUsername = "usernameedited"
-  //   await accountPage.usernameEditInput.fill(newUsername)
-  //   await expect(accountPage.usernameEditInput).toHaveValue(newUsername)
-  //   await expect(accountPage.saveChangesButton).toBeEnabled()
-  //   await accountPage.saveChangesButton.click()
-
-  //   await expect(accountPage.successMessage).toBeVisible({ timeout: 20000 })
-  //   await expect(accountPage.username).toHaveText(newUsername, {
-  //     timeout: 20000,
-  //   })
-
-  //   // Revert username
-  //   await accountPage.usernameEditLink.click()
-  //   await accountPage.usernameEditInput.fill(process.env.QA_USERNAME || "")
-  //   await accountPage.saveChangesButton.click()
-  //   await expect(accountPage.successMessage).toBeVisible({ timeout: 20000 })
-  //   await expect(accountPage.username).toHaveText(
-  //     process.env.QA_USERNAME || "",
-  //     {
-  //       timeout: 20000,
-  //     }
-  //   )
-  // })
-
-  // test("should successfully edit phone number", async ({ page }) => {
-  //   const accountPage = await loginAndGetAccountPage(page)
-  //   await accountPage.tab_account_settings.click()
-
-  //   await accountPage.edit_phone_link.click()
-  //   await accountPage.phoneInput.waitFor({ state: "visible" })
-
-  //   const newPhoneNumber = "5551234567"
-  //   await accountPage.phoneInput.fill(newPhoneNumber)
-  //   await expect(accountPage.saveChangesButton).toBeEnabled()
-  //   await accountPage.saveChangesButton.click()
-
-  //   await expect(accountPage.successMessage).toBeVisible({ timeout: 20000 })
-  //   await expect(accountPage.phoneValue).toContainText(newPhoneNumber, {
-  //     timeout: 20000,
-  //   })
-
-  //   // Revert phone number
-  //   await accountPage.edit_phone_link.click()
-  //   await accountPage.phoneInput.waitFor({ state: "visible" })
-  //   await accountPage.phoneInput.fill("2125927256")
-  //   await accountPage.saveChangesButton.click()
-  //   await expect(accountPage.successMessage).toBeVisible({ timeout: 20000 })
-  //   await expect(accountPage.phoneValue).toContainText("2125927256", {
-  //     timeout: 20000,
-  //   })
-  // })
-
-  // test("should successfully edit email address", async ({ page }) => {
-  //   const accountPage = await loginAndGetAccountPage(page)
-  //   await accountPage.tab_account_settings.click()
-
-  //   await accountPage.edit_email_link.click()
-  //   await accountPage.emailInput.waitFor({ state: "visible" })
-
-  //   const newEmail = "testemail@nypl.org"
-  //   await accountPage.emailInput.fill(newEmail)
-  //   await expect(accountPage.saveChangesButton).toBeEnabled()
-  //   await accountPage.saveChangesButton.click()
-
-  //   await expect(accountPage.successMessage).toBeVisible({ timeout: 20000 })
-  //   const emailLabel = page.locator("p", { hasText: /email/i }).first()
-  //   const emailValue = emailLabel.locator("xpath=following::div[1]/div/p")
-  //   await expect(emailValue).toContainText(newEmail, {
-  //     timeout: 20000,
-  //   })
-
-  //   // Revert email address
-  //   await accountPage.edit_email_link.click()
-  //   await accountPage.emailInput.waitFor({ state: "visible" })
-  //   await accountPage.emailInput.fill("chrismulholland@nypl.org")
-  //   await accountPage.saveChangesButton.click()
-  //   await expect(accountPage.successMessage).toBeVisible({ timeout: 20000 })
-  //   await expect(emailValue).toContainText("chrismulholland@nypl.org", {
-  //     timeout: 20000,
-  //   })
-  // })
-
-  // test("should successfully edit home library", async ({ page }) => {
-  //   const accountPage = await loginAndGetAccountPage(page)
-  //   await accountPage.tab_account_settings.click()
-
-  //   await accountPage.edit_home_library_link.click()
-  //   await accountPage.homeLibrarySelect.waitFor({ state: "visible" })
-  //   await accountPage.homeLibrarySelect.selectOption({ label: "53rd Street" })
-
-  //   await expect(accountPage.saveChangesButton).toBeEnabled()
-  //   await accountPage.saveChangesButton.click()
-
-  //   await expect(accountPage.successMessage).toBeVisible({ timeout: 20000 })
-  //   // print accountPage.homeLibraryValue to console for debugging
-  //   console.log(await accountPage.homeLibraryValue.textContent())
-  //   await expect(accountPage.homeLibraryValue).toContainText("53rd Street")
-
-  //   // Revert home library
-  //   await accountPage.edit_home_library_link.click()
-  //   await accountPage.homeLibrarySelect.waitFor({ state: "visible" })
-  //   await accountPage.homeLibrarySelect.selectOption({
-  //     label: "Allerton",
-  //   })
-  //   await accountPage.saveChangesButton.click()
-  //   await expect(accountPage.successMessage).toBeVisible({ timeout: 15000 })
-  //   await expect(accountPage.homeLibraryValue).toContainText("Allerton", {
-  //     timeout: 15000,
-  //   })
-  // })
 })
