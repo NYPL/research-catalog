@@ -1,12 +1,10 @@
 import type { Page, Locator } from "@playwright/test"
 import { BasePage } from "./base_page"
-import { start } from "repl"
-import { getByRole } from "../../src/utils/testUtils"
 
 export class AccountPage extends BasePage {
   // log in page locators
   readonly usernameInput: Locator
-  readonly unsernameEditInput: Locator
+  readonly usernameEditInput: Locator
   readonly passwordInput: Locator
   readonly submitButton: Locator
   // account page locators
@@ -38,6 +36,7 @@ export class AccountPage extends BasePage {
   readonly edit_home_library_link: Locator
   readonly edit_notification_preferences_link: Locator
   readonly edit_pin_password_link: Locator
+  readonly cancelButton: Locator
 
   // Add these new locators
   readonly phoneInput: Locator
@@ -62,9 +61,9 @@ export class AccountPage extends BasePage {
     // Use env variable for name value
     this.name = page.getByTestId("Name")
     this.usernameLabel = page.getByText("Username").first()
-    this.username = page.getByText(process.env.QA_USERNAME)
+    this.username = page.getByTestId("Username").getByTestId("ds-text")
     this.usernameEditLink = page.getByRole("button", { name: /edit username/i })
-    this.unsernameEditInput = page.locator("#username-input")
+    this.usernameEditInput = page.locator("#username-input")
     this.cardnumberLabel = page.locator("dt", { hasText: "Card number" })
     this.cardnumber = page.getByTestId("Card number")
     this.barcode = page.getByLabel("barcode")
@@ -103,7 +102,7 @@ export class AccountPage extends BasePage {
       "#edit-notification-button"
     )
     this.edit_pin_password_link = page.locator("#edit-password-button")
-
+    this.cancelButton = page.getByRole("button", { name: /cancel/i })
     // New locators for editing functionality
     this.phoneInput = page.getByRole("textbox", {
       name: "Update primary phone number",
