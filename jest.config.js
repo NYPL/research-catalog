@@ -44,7 +44,7 @@ module.exports = {
     "^.+\\.(js|jsx|ts|tsx)$": ["babel-jest", { presets: ["next/babel"] }],
   },
   transformIgnorePatterns: [
-    "/node_modules/",
+    "/node_modules/(?!(@nypl/node-utils|yaml)/)",
     "^.+\\.module\\.(css|sass|scss)$",
   ],
 }
