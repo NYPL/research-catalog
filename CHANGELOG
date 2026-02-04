@@ -11,10 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added dependabot.yml [SCC-5146](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5146)
 - Added Playwright tests for bib and MARC pages
+- Add User Guide banner to account page [SCC-5185](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5185)
 
 ### Updated
 
-- Updated and removed references to legacy catalog to indicate only onsite access [SCC-5007](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5007), [SCC-5139](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5139)
+- Correct Article(s) Plus banner copy [SCC-5186](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5186)
 
 ## [1.7.0] 2026-01-29
 
