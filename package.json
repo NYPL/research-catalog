@@ -1,6 +1,6 @@
 {
   "name": "research-catalog",
-  "version": "1.6.6",
+  "version": "1.7.0",
   "scripts": {
     "dev": "AWS_PROFILE=nypl-digital-dev next dev -p 8080",
     "build": "next build",
