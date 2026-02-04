@@ -3,13 +3,21 @@
     background: white;
     color: black;
   }
+
   .no-print {
     display: none !important;
   }
+
   .itemTable td:first-child,
   .itemTable th:first-child {
     width: 200px !important;
     min-width: 200px !important;
     max-width: 200px !important;
+  }
+
+  .marcTable {
+    overflow: visible !important;
+    width: 100% !important;
+    table-layout: fixed !important;
   }
 }
