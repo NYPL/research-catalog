@@ -2,7 +2,7 @@
 
 This guide provides detailed technical information for developers working on the NYPL Research Catalog application.
 
-## Table of Contents
+## Table of contents
 
 - [Getting Started](#getting-started)
 - [Development Workflow](#development-workflow)
@@ -24,31 +24,54 @@ This guide provides detailed technical information for developers working on the
 - [Documentation](#documentation)
 - [Accessibility](#accessibility)
 
-## Getting Started
+## Getting started
 
-Before contributing, please read and familiarize yourself with [README.md](README.md) to set up your development environment
+Before contributing, please read and familiarize yourself with [README.md](README.md) to set up your development environment.
 
-## Development Workflow
+## Development workflow
 
-### Deployment Process
+### Deployed environments
 
-The Research Catalog uses GitHub Actions for continuous integration and deployment. The GitHub Actions workflow builds a Docker container and deploys it to Vercel or AWS ECS (`nypl-digital-dev` account) depending on the branch:
+The Research Catalog uses GitHub Actions for continuous integration and deployment. The GitHub Actions workflow tests the code, builds a Docker container, and deploys it to Vercel or AWS ECS (`nypl-digital-dev` account) depending on the branch.
+When code is pushed to the `main` branch, it is automatically deployed to the main [Vercel environment](https://research-catalog.vercel.app/).
+When code is pushed to the `qa` branch, it is automatically deployed to the [QA environment](https://qa-www.nypl.org/research/research-catalog), hosted in the AWS ECS cluster `research-catalog-qa` within the `nypl-digital-dev` account.
+When code is pushed to the `production` branch, it is automatically deployed to the [production environment](https://nypl.org/research/research-catalog), hosted in the AWS ECS cluster `research-catalog-production` within the `nypl-digital-dev` account.
 
-1. When code is pushed to the `main` branch, it is automatically deployed to the main [Vercel environment](https://research-catalog.vercel.app/)
-2. When code is pushed to the `qa` branch, it is automatically deployed to the [test environment](https://qa-www.nypl.org/research/research-catalog), hosted in the AWS ECS cluster `research-catalog-production` within the `nypl-digital-dev` account
-3. When code is pushed to the `production` branch, it is automatically deployed to the [production environment](https://nypl.org/research/research-catalog), hosted in the AWS ECS cluster `research-catalog-qa` within the `nypl-digital-dev` account.
-4. There is a third ECS Cluster reserved for the Research Catalog, `research-catalog-train`, that is used flexibly and is often reserved for testing feature branches, which can be configured in via the [github actions config file](../.github/workflows/deploy_train.yml)
+There is a third ECS Cluster reserved for the Research Catalog, `research-catalog-train`, that is used flexibly and is often reserved for testing feature branches, which can be configured via the [Github Actions config file](../.github/workflows/test-and-deploy.yml)
 
-### Merging Workflow
+### Deployment process
 
-The merging workflow is as follows:
+1.  Feature branches are cut from `main` using
 
-1. Changes are merged into the `main` branch, typically through a pull request.
-2. The changes are merged into the `qa` branch when they are ready to be tested (typically as close to the deployment date as possible).
-3. The changes are tested in the QA environment. Once the changes are approved, they are merged into the `production` branch.
-4. If a hotfix is required, it is merged directly into the production branch and back-synced into the qa and main branches.
+    `git checkout -b SCC-123/feature-name`.
 
-### Feature Branches
+2.  Document your changes in the CHANGELOG.md file under `## Prerelease`. See [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) for formatting docs.
+3.  Create a pull request of the `feature` branch _into_ `main`.
+4.  Once a feature branch has approval, merge into `main`.
+5.  Once work is ready for testing, merge `main` into `qa` (usually feature work will go straight through `main` into `qa`, but `main` is sometimes a handy waiting area). Pushing the changes to the remote branch will automatically trigger a deployment to the [`qa` environment](https://qa-www.nypl.org/research/research-catalog).
+6.  After QA has tested and approved, cut a `release` branch off of `qa`. Name the release branch using our [versioning guidelines](#versioning-guidelines).
+
+    `git checkout -b release/x.y.z`.
+
+7.  Update CHANGELOG.md in the release branch by moving updates from prerelease into the new release section.
+
+    `## [2.4.13] - 04-21-2023`
+
+    Also, update version in the `package.json`.
+
+8.  Commit and push changes to release branch.
+9.  The `production` branch is protected. When the release is ready, create a pull request to merge the `release` branch to `production`. Pushing to `production` will automatically deploy to the production environment.
+10. After merging release to production, confirm changes appear on [production](https://www.nypl.org/research/research-catalog) and check the cluster's task status.
+11. If all clear, finish the release. This is done by backmerging the release to `qa` and `main` followed by creating the tags using these commands:
+
+    `$ git tag -a vx.y.z` (ex. `$ git tag -a v1.2.3`)
+    `$ git push origin --tags`
+
+    Then, go to the repository tags to generate a new release from the tag you just made, titled `vx.y.z`. The release description should be the changelog's release section.
+
+\*\* If a hotfix is required, it is merged directly into the `production` branch and backmerged into the `main` and `qa` branches.
+
+### Feature branches
 
 A feature branch is a separate branch that is created from the main branch, specifically for the purpose of developing a new feature. This branch is used to isolate the changes related to the feature, allowing us to work on it independently of other changes.
 
@@ -58,7 +81,7 @@ Feature branches are useful when:
 2. We want to isolate the changes related to the feature from other changes.
 3. We want to prevent the feature from blocking smaller deployments.
 
-### Branching Strategy
+### Branching strategy
 
 The project follows a feature branch workflow:
 
@@ -68,11 +91,11 @@ The project follows a feature branch workflow:
 
 ## Changelog
 
-### Changelog Process
+### Changelog process
 
 This project maintains a `CHANGELOG.md` file to document all notable changes. The changelog follows the [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) format and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-### Changelog Format
+### Changelog format
 
 Each version entry in the changelog includes:
 
@@ -83,20 +106,20 @@ Each version entry in the changelog includes:
   - **Changed**: Modifications to existing functionality
   - **Fixed**: Bug fixes
 
-### Versioning Guidelines
+### Versioning guidelines
 
 - **Major (X.0.0)**: Significant updates or feature release (e.g. the creation of a new page)
 - **Minor (X.Y.0)**: New features added to existing pages
 - **Patch (X.Y.Z)**: Bug fixes and small changes
 - **Hotfix Releases**: Emergency patches outside the regular release cycle including deployment date (e.g. `[1.4.3] Hotfix YYYY-MM-DD`)
 
-### Contribution Guidelines
+### Contribution guidelines
 
 - All changes must be documented in `CHANGELOG.md` before merging into `main`.
 - Each entry should include a brief description of the change and, when applicable, reference to relevant tickets.
 - Formatting should remain consistent with previous entries
 
-## Coding Standards
+## Coding standards
 
 ### State management
 
@@ -125,18 +148,18 @@ Each version entry in the changelog includes:
 
 ### CSS/SCSS
 
-#### Inline vs. Module
+#### Inline vs. module
 
 - Try to favor styling props over SCSS modules.
 - Use a SCSS module if styles are being reused by more than one component
 - Use a SCSS module if styles wrap to more than one line in a component file
 - Use component-provided styles if they exist (e.g., tableStyles in the Table component)
 
-### Server Error Logging
+### Server error logging
 
-Server error logging is handled by Winston and all API calls should include error logs with relevant metadata.
+All API calls should include error logs with relevant metadata.
 
-Use the logServerError function in appUtils instead of calling the Winston logger directly to enforce error logging standards.
+Use the `logServerError` function in `logUtils` instead of calling the logger directly to enforce error logging standards.
 
 Example:
 
@@ -194,7 +217,7 @@ if (hasData) return <DataComponent data={data} />
 return <EmptyStateComponent />
 ```
 
-### Variable Names
+### Variable names
 
 - Variables should reflect what they are being used for, not how they were derived
 - Choose names that clearly communicate the purpose of the variable
@@ -215,15 +238,13 @@ if (freshSortByQuery) {
 }
 ```
 
-### Directory Structure
+### Directory structure
 
 - Tests go in a test directory in the nearest ancestor, unless a file is an only child
 - The root-level `__test__` directory is used for testing Next.js page components ONLY. This is necessary at the moment due to the inability to run jest tests from the `/pages` directory.
 - Components should have their tests in a `__tests__` directory within the component directory
 
-NB: Test file structure is currently inconsistent, some files are located adjacent to the component, some are in a `/*Tests` directory. This does not affect functionality since the jest config automatically registers any test files found within the app automatically.
-
-TODO: This should be standardized in the future for consistency.
+NB: Test file structure is currently inconsistent, some files are located adjacent to the component, some are in a `/*tests` directory. This does not affect functionality since the Jest config automatically registers any test files found within the app automatically. This should be cleaned up in the future.
 
 Example:
 
@@ -273,7 +294,7 @@ const ParentComponent = ({ data }) => {
 }
 ```
 
-### Code Formatting
+### Code formatting
 
 The project uses ESLint and Prettier for code formatting:
 
@@ -287,21 +308,21 @@ npm run prettier
 
 These checks are automatically run as pre-commit hooks using Husky.
 
-## Testing Guidelines
+## Testing guidelines
 
-### Test Coverage
+### Test coverage
 
 All new code should include appropriate tests:
 
-- Unit tests for utility functions and small components
-- Integration tests for complex components and pages
+- Unit tests for utility functions and small components (Jest)
+- Integration tests for complex components and pages (Playwright)
 
 NB: While we currently do not have a coverage threshold in place (though we may in the future), the current rule of thumb is to add coverage for any practical scenario a user may experience, including edge cases when appropriate.
 
 ### Running Tests
 
 ```bash
-# Run all tests
+# Run all unit tests
 npm test
 
 # Run tests with coverage
@@ -309,6 +330,8 @@ npm run coverage
 
 # Run tests in watch mode
 npm run test-watch
+
+# Run Playwright tests
 ```
 
 ### Test Structure

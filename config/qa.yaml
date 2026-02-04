@@ -1,7 +1,5 @@
 PLAINTEXT_VARIABLES:
   SIERRA_BASE: https://nypl-sierra-test.iii.com/iii/sierra-api/v6/
-  QA_USERNAME:
-  QA_PASSWORD:
   NYPL_HEADER_URL: https://ds-header.nypl.org
   LOG_LEVEL: INFO
 

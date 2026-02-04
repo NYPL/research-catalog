@@ -234,40 +234,6 @@ The application is deployed to:
 
 We deploy (and run automated tests) using [Github Actions](https://github.com/NYPL/research-catalog/blob/main/.github/workflows), which run on `push` to the QA and production branches. We also deploy on `push` to `train`, though it is not part of our usual staging.
 
-To deploy to one of these environments from another branch, update the [deploy workflow](https://github.com/NYPL/research-catalog/blob/main/.github/workflows/test_and_deploy.yml) to include the desired branch, and merge that workflow into the default branch used for deployment (usually `train` for experiments), making sure to escape the branch name (`github.ref_name`) where necessary.
-
-### Deployment process
-
-1.  Feature branches are cut from `main` using
-
-    `git checkout -b SCC-123/feature-name`.
-
-2.  Document your changes in the CHANGELOG.md file under `## Prerelease`. See [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) for formatting docs.
-3.  Create a pull request of the `feature` branch _into_ `main`. 
-4.  Once a feature branch has approval, merge into `main`. 
-5.  Once work is ready for testing, merge `main` into `qa` (usually feature work will go straight through `main` into `qa`, but `main` is sometimes a handy waiting area). Pushing the changes to the remote branch will automatically trigger a deployment to the [`qa` environment](https://qa-www.nypl.org/research/research-catalog).
-6. After QA has tested and approved, cut a `release` branch off of `qa`. Name the release branch using our approximation of [Semantic Versioning](https://semver.org/spec/v2.0.0.html) (no breaking changes in a frontend app, so something like MAJOR OVERHAUL.NEW FEATURE.MINOR CHANGES). 
-
-    `git checkout -b release/x.y.z`.
-
-7.  Update CHANGELOG.md in the release branch by moving updates from prerelease into the new release section.
-
-      `## [2.4.13] - 04-21-2023`
-      
-      Also, update version in the `package.json`.
-8.  Commit and push changes to release branch.
-9.  The `production` branch is protected. When the release is ready, create a pull request to merge the `release` branch to `production`. Pushing to `production` will automatically deploy to the production environment.
-10.  After merging release to production, confirm changes appear on [production](https://www.nypl.org/research/research-catalog) and check the cluster's task status.
-11. If all clear, finish the release. This is done by backmerging the release to `qa` and `main` followed by creating the tags using these commands:
-
-    `$ git tag -a vx.y.z` (ex. `$ git tag -a v1.2.3`)
-    `$ git push origin --tags`
-
-      Then, go to the repository tags to generate a new release from the tag you just made, titled `vx.y.z`. The release description should be the changelog's release section. 
-
-
-
-
 ### Vercel
 
 This repository uses [Vercel](https://vercel.com/nypl/research-catalog) to create preview links for pull requests. This allows developers to preview changes to the application before they are merged into the main branch.
@@ -292,7 +258,7 @@ The Research Catalog is dockerized, which affects how environment variables are 
 2. **Task Definition Updates**: When a new ECS task definition is created during deployment, environment variables are set based on the Terraform configuration
 3. **Manual Changes Overwritten**: Any environment variables manually set in the AWS admin will be overwritten when a new task definition is created
 
-#### Environment Configuration with NEXT_PUBLIC_APP_ENV
+#### Environment configuration with NEXT_PUBLIC_APP_ENV
 
 The application uses the `NEXT_PUBLIC_APP_ENV` environment variable to determine which configuration values to use from `src/config/config.ts`:
 
@@ -324,32 +290,18 @@ const apiUrl = appConfig.apiEndpoints.platform[appConfig.environment]
 
 #### Encrypted Variables in AWS Parameter Store
 
-Sensitive environment variables (such as API keys and secrets) are stored in AWS Parameter Store:
 
-1. **Parameter Store**: Encrypted variables are stored in the AWS Parameter Store
-2. **ECS Task Definition**: The ECS task definition references these parameters
-3. **Decryption**: At runtime, the application uses AWS KMS to decrypt the variables
 
 #### Adding or Changing Environment Variables
 
-When adding new environment variables or changing existing ones:
 
-1. Update the `.env.example` file in the repository to document the variable
-2. Update the [ENVIRONMENT_VARIABLES.md](/docs/ENVIRONMENT_VARIABLES.md) file with a description of the variable
-3. Open a ticket with the DevOps team to add or update the variable in Terraform
-   - For sensitive variables, specify that they should be stored in Parameter Store
-4. Specify the environment (QA, production, or both) and the value for each environment
-5. Wait for confirmation from DevOps before deploying code that relies on the new variable
-
-Failure to update environment variables in Terraform will result in the variables being unavailable or reverting to default values when a new deployment occurs. 
-For variables that only need to be updated temporarily, like `SEARCH_RESULTS_NOTIFICATION`, it may be okay to create and deploy a new task definition revision without updating Terraform, knowing that it will be reverted on the next deployment.
 
 
 ## Logging
 
 The application uses Winston for server-side logging, and New Relic for both server and client-side logging.
 
-### Adding Logs
+### Adding logs
 
 Use (and then remove) console logs for local development. To test New Relic logs, you can run:
 ```
@@ -368,16 +320,16 @@ and view results in New Relic under "Research Catalog [local]".
 
 ## Troubleshooting
 
-### Common Issues
+### Common issues
 
-1. **Authentication Issues**:
+1. **Authentication issues**:
 
    - Ensure your machine's `etc/hosts` file is properly configured for local development
    - Check that you're accessing the site via `local.nypl.org:8080` instead of `localhost:8080`
    - Check that your AWS SSO token is refreshed (`aws sso login --profile nypl-digital-dev`)
       - For more information on issues with KMS and encrypted environment variables, refer to [ENVIRONMENT_VARIABLES.md](/docs/ENVIRONMENT_VARIABLES.md)
 
-2. **API Connection Issues**:
+2. **API connection issues**:
 
    - Verify that client keys/secrets are correctly set and decrypted
    - Check VPN connection (for QA APIs)
