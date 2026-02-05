@@ -3,7 +3,7 @@ import Link from "../components/Link/Link"
 export const BASE_URL = "/research/research-catalog"
 export const SITE_NAME = "Research Catalog | NYPL"
 export const RESULTS_PER_PAGE = 50
-export const SUBJECTS_PER_PAGE = 25
+export const BROWSE_RESULTS_PER_PAGE = 25
 export const ITEMS_PER_SEARCH_RESULT = 3
 export const ITEM_PAGINATION_BATCH_SIZE = 20
 export const ELECTRONIC_RESOURCES_PER_BIB_PAGE = 3
