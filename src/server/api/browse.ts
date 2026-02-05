@@ -7,6 +7,7 @@ import nyplApiClient from "../nyplApiClient"
 import type {
   BrowseParams,
   BrowseType,
+  DiscoveryContributorsResponse,
   DiscoverySubjectsResponse,
 } from "../../types/browseTypes"
 import { getBrowseQuery } from "../../utils/browseUtils"
@@ -15,7 +16,9 @@ import type { APIError } from "../../types/appTypes"
 export async function fetchBrowse(
   browseType: BrowseType,
   browseParams?: BrowseParams
-): Promise<DiscoverySubjectsResponse | APIError> {
+): Promise<
+  DiscoverySubjectsResponse | DiscoveryContributorsResponse | APIError
+> {
   const browseQuery = getBrowseQuery(browseParams)
 
   try {
