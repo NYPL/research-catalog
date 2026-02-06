@@ -16,8 +16,9 @@ import FeedbackForm from "../FeedbackForm/FeedbackForm"
 import type { Aggregation } from "../../types/filterTypes"
 import RCSubNav from "../RCSubNav/RCSubNav"
 import BrowseForm from "../BrowseForm/BrowseForm"
-import SubjectHeadingBanner from "../Banners/SubjectHeadingBanner"
 import SearchBanners from "../Banners/SearchBanners"
+import BrowseBanner from "../Banners/BrowseBanner"
+import type { BrowseType } from "../../types/browseTypes"
 
 interface LayoutProps {
   activePage?: RCPage
@@ -40,10 +41,16 @@ const Layout = ({
   bannerNotification,
 }: PropsWithChildren<LayoutProps>) => {
   const showSearch = activePage === "search" || activePage === ""
-  const showBrowse = activePage === "browse" || activePage === "sh-results"
+  const showBrowse =
+    activePage === "browse-sh" ||
+    activePage === "sh-results" ||
+    activePage === "contributor-results" ||
+    activePage === "browse-contributor"
+  const browseType: BrowseType =
+    activePage === "contributor-results" || activePage === "browse-contributor"
+      ? "contributors"
+      : "subjects"
   const showNotification = activePage === "" || activePage === "search"
-  const showBrowseBanner =
-    activePage === "browse" || activePage === "sh-results"
   return (
     <DSProvider>
       <Template variant="full">
@@ -88,6 +95,7 @@ const Layout = ({
             <RCSubNav
               isAuthenticated={isAuthenticated}
               activePage={activePage}
+              inBrowse={showBrowse}
             />
             {showSearch && (
               <SearchForm
@@ -102,7 +110,7 @@ const Layout = ({
                   aggregations={searchAggregations}
                   searchResultsCount={searchResultsCount}
                 />
-                {showBrowseBanner && <SubjectHeadingBanner />}
+                <BrowseBanner browseType={browseType} />
               </>
             )}
 

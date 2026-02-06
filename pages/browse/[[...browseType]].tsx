@@ -15,6 +15,7 @@ import initializePatronTokenAuth from "../../src/server/auth"
 import type { HTTPStatusCode } from "../../src/types/appTypes"
 import type {
   BrowseSort,
+  DiscoveryContributorsResponse,
   DiscoverySubjectsResponse,
 } from "../../src/types/browseTypes"
 import {
@@ -32,23 +33,27 @@ import type { SortOrder } from "../../src/types/searchTypes"
 import ResultsSort from "../../src/components/SearchResults/ResultsSort"
 
 interface BrowseProps {
-  results: DiscoverySubjectsResponse
+  results: DiscoverySubjectsResponse | DiscoveryContributorsResponse
+  browseType: "subjects" | "contributors"
   isAuthenticated: boolean
   errorStatus?: HTTPStatusCode | null
 }
 
 /**
- * The Browse index page is responsible for fetching and displaying subject headings,
+ * The Browse index page is responsible for fetching and displaying subject headings or contributors
  * as well as displaying and controlling pagination and sort.
  */
 export default function Browse({
   results,
+  browseType,
   isAuthenticated,
   errorStatus = null,
 }: BrowseProps) {
   const metadataTitle = `Browse | ${SITE_NAME}`
   const { query, push } = useRouter()
   const browseParams = mapQueryToBrowseParams(query)
+  const activePage =
+    browseType === "subjects" ? "browse-sh" : "browse-contributor"
 
   const isLoading = useLoading()
   const { setPersistentFocus } = useFocusContext()
@@ -62,7 +67,7 @@ export default function Browse({
   }, [isLoading])
 
   if (errorStatus) {
-    return <ResultsError errorStatus={errorStatus} page="browse" />
+    return <ResultsError errorStatus={errorStatus} page={activePage} />
   }
 
   const handlePageChange = async (page: number) => {
@@ -137,7 +142,11 @@ export default function Browse({
           variant="default"
         />
         <Heading size="heading6" color="section.research.secondary">
-          Use the search bar above to start browsing the Subject Headings index
+          Use the search bar above to start browsing the{" "}
+          {browseType === "subjects"
+            ? "Subject Headings"
+            : "Author/Contributor"}{" "}
+          index
         </Heading>
       </Flex>
     )
@@ -172,8 +181,12 @@ export default function Browse({
         </Flex>
         {isLoading ? (
           loader
+        ) : browseType === "subjects" ? (
+          <SubjectTable
+            subjectTableData={(results as DiscoverySubjectsResponse).subjects}
+          />
         ) : (
-          <SubjectTable subjectTableData={results.subjects} />
+          <></>
         )}
         <Pagination
           id="results-pagination"
@@ -191,18 +204,22 @@ export default function Browse({
   return (
     <>
       <RCHead metadataTitle={metadataTitle} />
-      <Layout activePage="browse" isAuthenticated={isAuthenticated}>
+      <Layout activePage={activePage} isAuthenticated={isAuthenticated}>
         {browseParams.q.length === 0 ? renderEmpty() : renderResults()}
       </Layout>
     </>
   )
 }
 
-export async function getServerSideProps({ req, query }) {
+export async function getServerSideProps({ req, params, query }) {
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
-  const { browseType = "subjects" } = query
+
+  const browseTypeParam = params?.browseType?.[0]
+
+  const browseType = browseTypeParam === "authors" ? "contributors" : "subjects"
 
   const browseParams = mapQueryToBrowseParams(query)
+
   const isAuthenticated = patronTokenResponse.isTokenValid
 
   // Skip request if no keywords
@@ -210,6 +227,7 @@ export async function getServerSideProps({ req, query }) {
     return {
       props: {
         isAuthenticated,
+        browseType,
         results: {},
       },
     }
@@ -224,6 +242,7 @@ export async function getServerSideProps({ req, query }) {
   return {
     props: {
       isAuthenticated,
+      browseType,
       results: response,
     },
   }

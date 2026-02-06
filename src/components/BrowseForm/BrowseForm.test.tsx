@@ -22,7 +22,7 @@ describe("BrowseForm", () => {
     await userEvent.clear(input)
   })
 
-  const component = <BrowseForm activePage="browse" />
+  const component = <BrowseForm activePage="browse-sh" />
 
   it("submits a browse term by default", async () => {
     render(component)

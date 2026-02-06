@@ -1,8 +1,10 @@
 export type RCPage =
   | "search"
   | "advanced"
-  | "browse"
+  | "browse-sh"
+  | "browse-contributor"
   | "sh-results"
+  | "contributor-results"
   | "account"
   | "bib"
   | "marc"
