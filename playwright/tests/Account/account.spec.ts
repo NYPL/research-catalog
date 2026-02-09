@@ -1,10 +1,11 @@
 import { test, expect, type Browser, type Page } from "@playwright/test"
 import { AccountPage } from "../../pages/account_page"
+import { appConfig } from "../../../src/config/config"
 
 let page: Page
 let accountPage: AccountPage
 
-const username = process.env.QA_USERNAME
+const username = appConfig.testUser.username
 const password = process.env.QA_PASSWORD
 
 test.describe.serial("Account page", () => {
@@ -27,13 +28,16 @@ test.describe.serial("Account page", () => {
   test.describe("Account info", () => {
     test("should show labels and values", async () => {
       await expect(accountPage.nameLabel).toBeVisible()
-      await expect(accountPage.name).toHaveText(process.env.QA_NAME)
+      await expect(accountPage.name).toHaveText(appConfig.testUser.name)
       await expect(accountPage.usernameLabel).toBeVisible()
-      await expect(accountPage.username).toHaveText(process.env.QA_USERNAME)
+      await expect(accountPage.username).toHaveText(appConfig.testUser.username)
       await expect(accountPage.usernameEditLink).toBeVisible()
       await expect(accountPage.cardnumberLabel).toBeVisible()
       const cardnumberText = await accountPage.cardnumber.textContent()
-      const expectedCardnumber = process.env.QA_CARDNUMBER.replace(/^"|"$/g, "")
+      const expectedCardnumber = appConfig.testUser.cardNumber.replace(
+        /^"|"$/g,
+        ""
+      )
       expect(cardnumberText.trim().replace(/^"|"$/g, "")).toBe(
         expectedCardnumber
       )

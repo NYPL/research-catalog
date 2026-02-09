@@ -41,6 +41,18 @@ export const appConfig: AppConfig = {
     tokenUrl: "https://isso.nypl.org/",
     renewCard: "https://www.nypl.org/help/library-card/terms-conditions#renew",
   },
+  testUser: {
+    name: process.env.CI
+      ? "PLAYWRIGHT TEST ACCOUNT GHA"
+      : process.env.QA_NAME || "PLAYWRIGHT TEST ACCOUNT LOCAL",
+    cardNumber: process.env.CI
+      ? "2 3333 12428 7325"
+      : process.env.QA_CARDNUMBER || "2 5555 01278 5809",
+    username: process.env.CI
+      ? "playwrightgha"
+      : process.env.QA_USERNAME || "playwrightlocal",
+    password: process.env.QA_PASSWORD,
+  },
   // Array of closed nypl location keys (available options for NYPL locations: all, schwarzman, schomburg, lpa)
   closedLocations: [] as (NYPLocationKey | "all")[],
   // Array of closed recap location keys (only "all" option available for now)

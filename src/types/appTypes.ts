@@ -9,6 +9,12 @@ export interface AppConfig {
   features: Record<string, Features>
   sourceEmail: string
   libAnswersEmail: string
+  testUser: {
+    name: string
+    cardNumber: string
+    username: string
+    password: string
+  }
 }
 export interface APIEndpoints {
   development: string

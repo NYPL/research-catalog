@@ -38,7 +38,6 @@ export class AccountPage extends BasePage {
   readonly edit_pin_password_link: Locator
   readonly cancelButton: Locator
 
-  // Add these new locators
   readonly phoneInput: Locator
   readonly emailInput: Locator
   readonly homeLibrarySelect: Locator
@@ -50,15 +49,11 @@ export class AccountPage extends BasePage {
 
   constructor(page: Page) {
     super(page)
-    // log in page locators
     this.usernameInput = page.getByLabel("Barcode or Username")
     this.passwordInput = page.getByLabel("PIN/ Password")
     this.submitButton = page.getByRole("button", { name: /submit/i })
-    // account page locators
     this.accountHeader = page.getByRole("heading", { name: /my account/i })
     this.nameLabel = page.getByText("Name").first()
-    // Selects the name value as the first div following the 'Name' label
-    // Use env variable for name value
     this.name = page.getByTestId("Name")
     this.usernameLabel = page.getByText("Username").first()
     this.username = page.getByTestId("Username").getByTestId("ds-text")
@@ -116,14 +111,9 @@ export class AccountPage extends BasePage {
     })
     this.successMessage = page.getByText(/your changes were saved/i)
 
-    // Value locators for assertions
     this.phoneValue = page
       .locator("p", { hasText: /phone/i })
       .locator("xpath=following::div[1]")
-    // this.emailValue = page
-    //   .locator("p", { hasText: /email/i })
-    //   .first()
-    //   .locator("xpath=following::div[1]")
     this.homeLibraryValue = page
       .locator("p", { hasText: /home library/i })
       .locator("xpath=following::div[1]")
