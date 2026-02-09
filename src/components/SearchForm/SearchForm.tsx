@@ -1,14 +1,27 @@
-import { getSearchQuery } from "../../utils/searchUtils"
+import {
+  Box,
+  Flex,
+  Icon,
+  Link,
+  SearchBar,
+  Text,
+} from "@nypl/design-system-react-components"
+import { useRouter } from "next/router"
+import {
+  type Dispatch,
+  type SetStateAction,
+  useEffect,
+  useState,
+  type SyntheticEvent,
+} from "react"
+import useLoading from "../../hooks/useLoading"
 import styles from "../../../styles/components/Search.module.scss"
 import { PATHS, SEARCH_FORM_OPTIONS } from "../../config/constants"
-import Link from "../Link/Link"
 import SearchFilterModal from "../SearchFilters/SearchFilterModal"
-import { idConstants } from "../../context/FocusContext"
+import { idConstants, useFocusContext } from "../../context/FocusContext"
 import type { Aggregation } from "../../types/filterTypes"
 import { collapseMultiValueQueryParams } from "../../utils/refineSearchUtils"
-import { useRouter } from "next/router"
-import { useEffect, useState } from "react"
-import SearchBrowseForm from "../SearchBrowseForm/SearchBrowseForm"
+import { getSearchQuery } from "../../utils/searchUtils"
 
 const SearchForm = ({
   aggregations,
@@ -18,43 +31,115 @@ const SearchForm = ({
   searchResultsCount?: number
 }) => {
   const router = useRouter()
+  const isLoading = useLoading()
+  const { setPersistentFocus } = useFocusContext()
+  const [searchTerm, setSearchTerm] = useState((router.query.q as string) || "")
+  const [searchScope, setSearchScope] = useState(
+    (router?.query?.search_scope as string) || "all"
+  )
   const [, setAppliedFilters] = useState(
     collapseMultiValueQueryParams(router.query)
   )
 
   useEffect(() => {
     setAppliedFilters(collapseMultiValueQueryParams(router.query))
+    setSearchScope((router.query.search_scope as string) || "all")
+    setSearchTerm((router.query.q as string) || "")
   }, [router.query])
 
   const displayFilters = !!aggregations?.filter((agg) => agg.values.length)
     .length
 
+  const formattedSelectOptions = Object.keys(SEARCH_FORM_OPTIONS).map(
+    (key) => ({
+      text: SEARCH_FORM_OPTIONS[key].text,
+      value: key,
+    })
+  )
+
+  const placeholder = SEARCH_FORM_OPTIONS[searchScope].placeholder
+  const tipText = SEARCH_FORM_OPTIONS[searchScope].searchTip
+
+  const handleChange = (
+    e: SyntheticEvent,
+    setValue: Dispatch<SetStateAction<string>>
+  ) => {
+    const target = e.target as HTMLInputElement
+    setValue(target.value)
+  }
+
+  const handleSubmit = async (e: SyntheticEvent) => {
+    e.preventDefault()
+
+    const params = {
+      q: searchTerm,
+      field: searchScope,
+    }
+    const queryString = getSearchQuery(params)
+    setPersistentFocus(idConstants.searchResultsHeading)
+    await router.push(`${PATHS.SEARCH}${queryString}`)
+  }
+
   return (
-    <SearchBrowseForm
-      activePage="search"
-      initialScope="all"
-      path={PATHS.SEARCH}
-      tipTitle="Search tip: "
-      selectOptions={SEARCH_FORM_OPTIONS}
-      scopeParamKey="field"
-      getQueryString={getSearchQuery}
-      onSubmitFocusId={idConstants.searchResultsHeading}
-    >
-      <Link
-        className={styles.advancedSearch}
-        href="/search/advanced"
-        isUnderlined={false}
-        mb="xs"
+    <div className={`${styles.searchContainer} no-print`}>
+      <Box
+        sx={{
+          margin: "0 auto",
+          maxWidth: "1280px",
+          px: { base: "s", md: "m", xl: "s" },
+        }}
       >
-        Advanced search
-      </Link>
-      {displayFilters && (
-        <SearchFilterModal
-          aggregations={aggregations}
-          searchResultsCount={searchResultsCount}
+        <Text size="body2" className={styles.searchTip}>
+          <Icon size="medium" name="errorOutline" iconRotation="rotate180" />
+          <Box as="span" className={styles.searchTipText}>
+            <span className={styles.searchTipTitle}>Search tip: </span>
+            {tipText}
+          </Box>
+        </Text>
+
+        <SearchBar
+          id="mainContent"
+          action={PATHS.SEARCH}
+          method="get"
+          onSubmit={handleSubmit}
+          labelText="Search Bar"
+          isDisabled={isLoading}
+          pb="xs"
+          selectProps={{
+            value: searchScope,
+            labelText: "Select a category",
+            name: "field",
+            optionsData: formattedSelectOptions,
+            onChange: (e) => handleChange(e, setSearchScope),
+          }}
+          textInputProps={{
+            isClearable: true,
+            onChange: (e) => handleChange(e, setSearchTerm),
+            isClearableCallback: () => setSearchTerm(""),
+            value: searchTerm,
+            name: "q",
+            placeholder,
+            labelText: tipText,
+          }}
         />
-      )}
-    </SearchBrowseForm>
+        <Flex direction="column">
+          <Link
+            className={styles.advancedSearch}
+            href="/search/advanced"
+            isUnderlined={false}
+            mb="xs"
+          >
+            Advanced search
+          </Link>
+          {displayFilters && (
+            <SearchFilterModal
+              aggregations={aggregations}
+              searchResultsCount={searchResultsCount}
+            />
+          )}
+        </Flex>
+      </Box>
+    </div>
   )
 }
 

@@ -1,4 +1,5 @@
 import Link from "../components/Link/Link"
+import type { BrowseType } from "../types/browseTypes"
 
 export const BASE_URL = "/research/research-catalog"
 export const SITE_NAME = "Research Catalog | NYPL"
@@ -99,17 +100,40 @@ export const SEARCH_FORM_OPTIONS = {
 }
 
 export const BROWSE_FORM_OPTIONS = {
-  has: {
+  subject_has: {
+    browseType: "subjects" as BrowseType,
+    scope: "has",
     text: "Subject Headings containing",
     searchTip:
       "Enter one or more keywords in any order to browse the Subject Headings index.",
     placeholder: "Example: Ornithology or Vietnam War",
   },
-  starts_with: {
+
+  subject_starts_with: {
+    browseType: "subjects" as BrowseType,
+    scope: "starts_with",
     text: "Subject Headings beginning with",
     searchTip:
       "Enter one or more keywords in exact order to browse the Subject Headings index.",
     placeholder: "Example: Ornithology or Vietnam War",
+  },
+
+  contributor_has: {
+    browseType: "contributors" as BrowseType,
+    scope: "has",
+    text: "Author/Contributors containing",
+    searchTip:
+      "Enter the name of an author, contributor, or organization in any order to browse the Author/Contributor index.",
+    placeholder: "Example: Charles Dickens or United Nations",
+  },
+
+  contributor_starts_with: {
+    browseType: "contributors" as BrowseType,
+    scope: "starts_with",
+    text: "Author/Contributors beginning with",
+    searchTip:
+      "Enter the name of an author, contributor, or organization in exact order.",
+    placeholder: "Example: Dickens, Charles or United Nations",
   },
 }
 

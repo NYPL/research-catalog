@@ -7,6 +7,7 @@ import { appConfig } from "../src/config/config"
 import { BASE_URL, SITE_NAME } from "../src/config/constants"
 import { FeedbackProvider } from "../src/context/FeedbackContext"
 import { FocusProvider } from "../src/context/FocusContext"
+import { BrowseProvider } from "../src/context/BrowseContext"
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 function App({ Component, pageProps }) {
@@ -97,7 +98,9 @@ function App({ Component, pageProps }) {
       </Head>
       <FeedbackProvider value={null}>
         <FocusProvider>
-          <Component {...pageProps} />
+          <BrowseProvider>
+            <Component {...pageProps} />
+          </BrowseProvider>
         </FocusProvider>
       </FeedbackProvider>
     </>

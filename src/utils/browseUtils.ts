@@ -1,7 +1,11 @@
-import { BROWSE_RESULTS_PER_PAGE } from "../config/constants"
+import {
+  BROWSE_FORM_OPTIONS,
+  BROWSE_RESULTS_PER_PAGE,
+} from "../config/constants"
 import type {
   BrowseParams,
   BrowseQueryParams,
+  BrowseType,
   DiscoveryPreferredSubjectResult,
   DiscoveryPreferredTermResult,
   DiscoverySubjectResult,
@@ -33,6 +37,21 @@ const getValidParam = (
   return validParams.includes(param as string)
     ? (param as string)
     : defaultParam
+}
+
+/**
+ * Get the selectOption key from a browseType and scope
+ * Returns "subject_has" (default) if not found.
+ */
+export const getBrowseFormKey = (
+  browseType: BrowseType,
+  scope: string
+): string => {
+  const key = Object.keys(BROWSE_FORM_OPTIONS).find((k) => {
+    const option = BROWSE_FORM_OPTIONS[k]
+    return option.browseType === browseType && option.scope === scope
+  })
+  return key || "subject_has"
 }
 
 /**

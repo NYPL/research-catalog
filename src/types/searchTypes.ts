@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+import type { ReactNode } from "react"
 import type { HTTPStatusCode } from "./appTypes"
 import type { DiscoveryBibResult } from "./bibTypes"
 import type { Aggregation } from "./filterTypes"
@@ -41,6 +42,12 @@ export interface SearchParams extends AdvancedSearchQueryParams {
   journalTitle?: string
   page?: number
   identifiers?: Identifiers
+}
+
+export type SearchFormOption = {
+  text: string
+  searchTip: string | ReactNode
+  placeholder: string
 }
 
 export type SortKey = "relevance" | "title" | "date"

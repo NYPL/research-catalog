@@ -3,7 +3,7 @@ import { BROWSE_FORM_OPTIONS, PATHS } from "../../config/constants"
 import { idConstants } from "../../context/FocusContext"
 import SearchBrowseForm from "../SearchBrowseForm/SearchBrowseForm"
 import type { RCPage } from "../../types/pageTypes"
-import { useRouter } from "next-router-mock"
+import { useRouter } from "next/router"
 import { useState, useEffect } from "react"
 import type { Aggregation } from "../../types/filterTypes"
 import { collapseMultiValueQueryParams } from "../../utils/refineSearchUtils"
@@ -32,11 +32,9 @@ const BrowseForm = ({
 
   return (
     <SearchBrowseForm
-      initialScope="has"
       path={PATHS.BROWSE}
       tipTitle="Browse tip: "
       selectOptions={BROWSE_FORM_OPTIONS}
-      scopeParamKey="searchScope"
       getQueryString={getBrowseQuery}
       onSubmitFocusId={idConstants.browseResultsHeading}
       activePage={activePage}

@@ -15,6 +15,7 @@ import initializePatronTokenAuth from "../../src/server/auth"
 import type { HTTPStatusCode } from "../../src/types/appTypes"
 import type {
   BrowseSort,
+  BrowseType,
   DiscoveryContributorsResponse,
   DiscoverySubjectsResponse,
 } from "../../src/types/browseTypes"
@@ -31,10 +32,11 @@ import ResultsError from "../../src/components/Error/ResultsError"
 import { idConstants, useFocusContext } from "../../src/context/FocusContext"
 import type { SortOrder } from "../../src/types/searchTypes"
 import ResultsSort from "../../src/components/SearchResults/ResultsSort"
+import { useBrowseContext } from "../../src/context/BrowseContext"
 
 interface BrowseProps {
   results: DiscoverySubjectsResponse | DiscoveryContributorsResponse
-  browseType: "subjects" | "contributors"
+  browseType: BrowseType
   isAuthenticated: boolean
   errorStatus?: HTTPStatusCode | null
 }
@@ -52,8 +54,14 @@ export default function Browse({
   const metadataTitle = `Browse | ${SITE_NAME}`
   const { query, push } = useRouter()
   const browseParams = mapQueryToBrowseParams(query)
+  const { browseType: contextBrowseType, setBrowseType } = useBrowseContext()
+
+  useEffect(() => {
+    setBrowseType(browseType)
+  }, [browseType])
+
   const activePage =
-    browseType === "subjects" ? "browse-sh" : "browse-contributor"
+    contextBrowseType === "subjects" ? "browse-sh" : "browse-contributor"
 
   const isLoading = useLoading()
   const { setPersistentFocus } = useFocusContext()
@@ -143,7 +151,7 @@ export default function Browse({
         />
         <Heading size="heading6" color="section.research.secondary">
           Use the search bar above to start browsing the{" "}
-          {browseType === "subjects"
+          {contextBrowseType === "subjects"
             ? "Subject Headings"
             : "Author/Contributor"}{" "}
           index
@@ -181,7 +189,7 @@ export default function Browse({
         </Flex>
         {isLoading ? (
           loader
-        ) : browseType === "subjects" ? (
+        ) : contextBrowseType === "subjects" ? (
           <SubjectTable
             subjectTableData={(results as DiscoverySubjectsResponse).subjects}
           />
@@ -215,6 +223,7 @@ export async function getServerSideProps({ req, params, query }) {
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
 
   const browseTypeParam = params?.browseType?.[0]
+  console.log("browseTypeParam", browseTypeParam)
 
   const browseType = browseTypeParam === "authors" ? "contributors" : "subjects"
 
