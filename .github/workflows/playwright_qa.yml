@@ -3,7 +3,7 @@ name: Run Playwright tests
 on:
   push:
     branches:
-      - qa
+      #- qa
       - SCC-5000/playwright-account-editing
   workflow_dispatch:
 
