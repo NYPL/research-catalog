@@ -97,6 +97,7 @@ const Layout = ({
             />
             {showSearch && (
               <SearchForm
+                activePage={activePage}
                 aggregations={searchAggregations}
                 searchResultsCount={searchResultsCount}
               />
