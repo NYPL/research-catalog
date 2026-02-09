@@ -3,14 +3,14 @@ name: Run Playwright tests
 on:
   push:
     branches:
-      - qa
+      #- qa
       - SCC-5000/playwright-account-editing
   workflow_dispatch:
 
 jobs:
   test:
     # Disabled until we have a stable test account
-    if: false
+    # if: false
     runs-on: ubuntu-latest
     env:
       QA_PASSWORD: ${{ secrets.QA_PASSWORD }}
