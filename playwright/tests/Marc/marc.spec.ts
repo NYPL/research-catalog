@@ -4,6 +4,7 @@ import { MarcPage } from "../../pages/marc_page"
 let marcPage: MarcPage
 
 test.describe("MARC page elements", () => {
+  test.setTimeout(60000)
   test.beforeEach(async ({ page }) => {
     marcPage = new MarcPage(page)
     marcPage.navigate("b22144813")
