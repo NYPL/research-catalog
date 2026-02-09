@@ -104,50 +104,9 @@ test.describe.serial("Account page", () => {
   })
 
   test.describe("Account settings", () => {
-    test.beforeAll(async () => {
+    test("should show labels and values for account settings", async () => {
       await accountPage.tab_account_settings.click()
 
-      // Check and fix username if needed
-      const currentUsername = await accountPage.username.textContent()
-      if (currentUsername?.trim() !== username) {
-        await accountPage.usernameEditLink.click()
-        await accountPage.usernameEditInput.fill(username)
-        await accountPage.saveChangesButton.click()
-        await expect(accountPage.successMessage).toBeVisible({ timeout: 20000 })
-      }
-
-      // Check and fix phone if needed
-      const phoneLabel = page.locator("p", { hasText: /phone/i })
-      const phoneValue = phoneLabel.locator("xpath=following::div[1]/div/p")
-      const currentPhone = await phoneValue.textContent()
-      if (!currentPhone?.includes("2125927256")) {
-        await accountPage.edit_phone_link.click()
-        await accountPage.phoneInput.fill("2125927256")
-        await accountPage.saveChangesButton.click()
-        await expect(accountPage.successMessage).toBeVisible({ timeout: 20000 })
-      }
-
-      // Check and fix email if needed
-      const emailLabel = page.locator("p", { hasText: /email/i }).first()
-      const emailValue = emailLabel.locator("xpath=following::div[1]/div/p")
-      const currentEmail = await emailValue.textContent()
-      if (!currentEmail?.includes("chrismulholland@nypl.org")) {
-        await accountPage.edit_email_link.click()
-        await accountPage.emailInput.fill("chrismulholland@nypl.org")
-        await accountPage.saveChangesButton.click()
-        await expect(accountPage.successMessage).toBeVisible({ timeout: 20000 })
-      }
-
-      // Check and fix home library if needed
-      const currentLibrary = await accountPage.homeLibraryValue.textContent()
-      if (!currentLibrary?.includes("Allerton")) {
-        await accountPage.edit_home_library_link.click()
-        await accountPage.homeLibrarySelect.selectOption({ label: "Allerton" })
-        await accountPage.saveChangesButton.click()
-        await expect(accountPage.successMessage).toBeVisible({ timeout: 20000 })
-      }
-    })
-    test("should show labels and values for account settings", async () => {
       const phonelabel = page.locator("p", { hasText: /phone/i })
       await expect(phonelabel).toBeVisible()
       const phoneValue = phonelabel.locator("xpath=following::div[1]/div/p")
