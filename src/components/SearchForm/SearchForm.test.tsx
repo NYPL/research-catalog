@@ -23,7 +23,11 @@ describe("SearchForm", () => {
     await userEvent.clear(input)
   })
   const component = (
-    <SearchForm searchResultsCount={20} aggregations={normalAggs} />
+    <SearchForm
+      searchResultsCount={20}
+      aggregations={normalAggs}
+      activePage="search"
+    />
   )
   it.todo("searches on an empty keyword after clearing the form")
   it.todo("searches for {TBD} on an empty query")
