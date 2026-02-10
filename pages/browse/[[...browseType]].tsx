@@ -223,9 +223,9 @@ export async function getServerSideProps({ req, params, query }) {
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
 
   const browseTypeParam = params?.browseType?.[0]
-  console.log("browseTypeParam", browseTypeParam)
 
-  const browseType = browseTypeParam === "authors" ? "contributors" : "subjects"
+  const browseType =
+    browseTypeParam === "subjects" ? "subjects" : "contributors"
 
   const browseParams = mapQueryToBrowseParams(query)
 
