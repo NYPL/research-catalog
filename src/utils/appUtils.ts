@@ -1,3 +1,5 @@
+import type { BrowseType } from "../types/browseTypes"
+
 /**
  * getPaginationOffsetStrings
  * Used to generate start and end counts for pagination on Search Results and above the
@@ -80,4 +82,10 @@ export function tryInstantiate<T>({
     }
     return null
   }
+}
+
+export function getBrowseTypeFromUrl(query): BrowseType {
+  return query?.browseType && query?.browseType[0] === "authors"
+    ? "contributors"
+    : "subjects"
 }

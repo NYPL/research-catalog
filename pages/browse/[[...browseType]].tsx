@@ -32,11 +32,10 @@ import ResultsError from "../../src/components/Error/ResultsError"
 import { idConstants, useFocusContext } from "../../src/context/FocusContext"
 import type { SortOrder } from "../../src/types/searchTypes"
 import ResultsSort from "../../src/components/SearchResults/ResultsSort"
-import { useBrowseContext } from "../../src/context/BrowseContext"
+import { getBrowseTypeFromUrl } from "../../src/utils/appUtils"
 
 interface BrowseProps {
   results: DiscoverySubjectsResponse | DiscoveryContributorsResponse
-  browseType: BrowseType
   isAuthenticated: boolean
   errorStatus?: HTTPStatusCode | null
 }
@@ -47,21 +46,16 @@ interface BrowseProps {
  */
 export default function Browse({
   results,
-  browseType,
   isAuthenticated,
   errorStatus = null,
 }: BrowseProps) {
   const metadataTitle = `Browse | ${SITE_NAME}`
   const { query, push } = useRouter()
   const browseParams = mapQueryToBrowseParams(query)
-  const { browseType: contextBrowseType, setBrowseType } = useBrowseContext()
-
-  useEffect(() => {
-    setBrowseType(browseType)
-  }, [browseType])
+  const browseType = getBrowseTypeFromUrl(query)
 
   const activePage =
-    contextBrowseType === "subjects" ? "browse-sh" : "browse-contributor"
+    browseType === "subjects" ? "browse-sh" : "browse-contributor"
 
   const isLoading = useLoading()
   const { setPersistentFocus } = useFocusContext()
@@ -151,7 +145,7 @@ export default function Browse({
         />
         <Heading size="heading6" color="section.research.secondary">
           Use the search bar above to start browsing the{" "}
-          {contextBrowseType === "subjects"
+          {browseType === "subjects"
             ? "Subject Headings"
             : "Author/Contributor"}{" "}
           index
@@ -189,7 +183,7 @@ export default function Browse({
         </Flex>
         {isLoading ? (
           loader
-        ) : contextBrowseType === "subjects" ? (
+        ) : browseType === "subjects" ? (
           <SubjectTable
             subjectTableData={(results as DiscoverySubjectsResponse).subjects}
           />
@@ -224,9 +218,9 @@ export async function getServerSideProps({ req, params, query }) {
 
   const browseTypeParam = params?.browseType?.[0]
 
-  const browseType =
-    browseTypeParam === "subjects" ? "subjects" : "contributors"
+  const browseType = browseTypeParam === "authors" ? "contributors" : "subjects"
 
+  console.log("gssp browsetype", browseType)
   const browseParams = mapQueryToBrowseParams(query)
 
   const isAuthenticated = patronTokenResponse.isTokenValid
@@ -236,7 +230,6 @@ export async function getServerSideProps({ req, params, query }) {
     return {
       props: {
         isAuthenticated,
-        browseType,
         results: {},
       },
     }
@@ -251,7 +244,6 @@ export async function getServerSideProps({ req, params, query }) {
   return {
     props: {
       isAuthenticated,
-      browseType,
       results: response,
     },
   }

@@ -19,6 +19,7 @@ import type { RCPage } from "../../types/pageTypes"
 import type { Aggregation } from "../../types/filterTypes"
 import { useBrowseContext } from "../../context/BrowseContext"
 import { BackButton } from "../BackButton/BackButton"
+import { getBrowseTypeFromUrl } from "../../utils/appUtils"
 
 const BrowseForm = ({
   activePage,
@@ -32,7 +33,7 @@ const BrowseForm = ({
   const router = useRouter()
   const isLoading = useLoading()
   const { setPersistentFocus } = useFocusContext()
-  const { browseType, setBrowseType } = useBrowseContext()
+  const browseType = getBrowseTypeFromUrl(router.query)
 
   const [searchTerm, setSearchTerm] = useState((router.query.q as string) || "")
   const [backUrl, setBackUrl] = useState<string | null>(null)
@@ -119,8 +120,7 @@ const BrowseForm = ({
             onChange: (e) => {
               const newValue = (e.target as HTMLSelectElement).value
               const newOption = BROWSE_FORM_OPTIONS[newValue]
-
-              setBrowseType(newOption.browseType)
+              console.log(newOption)
 
               const newBasePath =
                 newOption.browseType === "subjects"

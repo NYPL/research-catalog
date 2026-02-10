@@ -1,4 +1,4 @@
-import { useState, type PropsWithChildren } from "react"
+import { type PropsWithChildren } from "react"
 import {
   Breadcrumbs,
   DSProvider,
@@ -18,7 +18,8 @@ import RCSubNav from "../RCSubNav/RCSubNav"
 import BrowseForm from "../BrowseForm/BrowseForm"
 import SearchBanners from "../Banners/SearchBanners"
 import BrowseBanner from "../Banners/BrowseBanner"
-import { useBrowseContext } from "../../context/BrowseContext"
+import { useRouter } from "next/router"
+import { getBrowseTypeFromUrl } from "../../utils/appUtils"
 
 interface LayoutProps {
   activePage?: RCPage
@@ -41,7 +42,8 @@ const Layout = ({
   bannerNotification,
 }: PropsWithChildren<LayoutProps>) => {
   const showSearch = activePage === "search" || activePage === ""
-  const { browseType } = useBrowseContext()
+  const router = useRouter()
+  const browseType = getBrowseTypeFromUrl(router.query)
   const showBrowse =
     activePage === "browse-sh" ||
     activePage === "sh-results" ||
