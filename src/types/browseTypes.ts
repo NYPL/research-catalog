@@ -46,12 +46,22 @@ export type DiscoveryVariantContributorResult = {
 export type DiscoveryPreferredContributorResult = {
   "@type": string
   termLabel: string
-  roleCounts: DiscoveryContributorRole[]
+  count?: number
+  roleCounts?: ContributorRole[]
+  seeAlso?: DiscoveryPreferredTermResult[]
+  earlierHeadings?: DiscoveryPreferredTermResult[]
+  laterHeadings?: DiscoveryPreferredTermResult[]
 }
 
-export type DiscoveryContributorRole = {
+export type ContributorRole = {
   role: string
-  count?: number
+  count: number
+}
+
+export type ContributorLink = {
+  url: string
+  termLabel: string
+  count?: string
 }
 
 export type DiscoverySubjectResult =
@@ -87,6 +97,17 @@ export type VariantSubject = {
   preferredTerms?: SubjectLink[]
 }
 
+export type VariantContributor = {
+  termLabel: string
+  preferredTerms?: ContributorLink[]
+}
+
+export interface PreferredContributor extends ContributorLink {
+  seeAlso?: { label: string; terms: ContributorLink[] }
+  earlierHeadings?: { label: string; terms: ContributorLink[] }
+  laterHeadings?: { label: string; terms: ContributorLink[] }
+}
+
 export interface PreferredSubject extends SubjectLink {
   seeAlso?: { label: string; terms: SubjectLink[] }
   narrowerTerms?: { label: string; terms: SubjectLink[] }
@@ -94,3 +115,4 @@ export interface PreferredSubject extends SubjectLink {
 }
 
 export type Subject = PreferredSubject | VariantSubject
+export type Contributor = PreferredContributor | VariantContributor

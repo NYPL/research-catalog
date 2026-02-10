@@ -6,6 +6,9 @@ import type {
   BrowseParams,
   BrowseQueryParams,
   BrowseType,
+  ContributorLink,
+  DiscoveryContributorResult,
+  DiscoveryPreferredContributorResult,
   DiscoveryPreferredSubjectResult,
   DiscoveryPreferredTermResult,
   DiscoverySubjectResult,
@@ -118,10 +121,12 @@ export function getBrowseQuery(params: BrowseParams): string {
   return completeQuery ? `?q=${completeQuery}` : ""
 }
 
-export function isPreferredSubject(
-  subject: DiscoverySubjectResult
-): subject is DiscoveryPreferredSubjectResult {
-  return subject["@type"] === "preferredTerm"
+export function isPreferredRecord(
+  record: DiscoverySubjectResult | DiscoveryContributorResult
+): record is
+  | DiscoveryPreferredSubjectResult
+  | DiscoveryPreferredContributorResult {
+  return record["@type"] === "preferredTerm"
 }
 
 export function getSubjectSearchURL(term: string) {
@@ -131,6 +136,15 @@ export function getSubjectSearchURL(term: string) {
 
 export function getSubjectBrowseURL(term: string) {
   return `/browse?q=${term}&search_scope=starts_with`
+}
+
+export function getContributorSearchURL(term: string) {
+  const subject = encodeURIComponentWithPeriods(term).replace(/%2D%2D/g, "--")
+  return `/browse/authors/${subject}`
+}
+
+export function getContributorBrowseURL(term: string) {
+  return `/browse/authors?q=${term}&search_scope=starts_with`
 }
 
 /**
@@ -181,6 +195,21 @@ export function buildSubjectLinks(
     termLinks.push({
       termLabel: termObj.termLabel,
       url: getSubjectBrowseURL(termObj.termLabel),
+      count: termObj.count?.toLocaleString() || "",
+    })
+  }
+  return termLinks
+}
+
+export function buildContributorLinks(
+  terms: DiscoveryPreferredTermResult[]
+): ContributorLink[] {
+  const termLinks: ContributorLink[] = []
+
+  for (const termObj of terms) {
+    termLinks.push({
+      termLabel: termObj.termLabel,
+      url: getContributorBrowseURL(termObj.termLabel),
       count: termObj.count?.toLocaleString() || "",
     })
   }

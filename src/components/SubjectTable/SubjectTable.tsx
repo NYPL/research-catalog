@@ -1,7 +1,7 @@
 import { Table } from "@nypl/design-system-react-components"
 import type { DiscoverySubjectResult } from "../../types/browseTypes"
 import VariantSubjectTableCell from "./VariantSubjectTableCell"
-import { isPreferredSubject } from "../../utils/browseUtils"
+import { isPreferredRecord } from "../../utils/browseUtils"
 import VariantSubject from "../../models/VariantSubject"
 import PreferredSubject from "../../models/PreferredSubject"
 import PreferredSubjectTableCell from "./PreferredSubjectTableCell"
@@ -16,7 +16,7 @@ const SubjectTable = ({
   subjectTableData: DiscoverySubjectResult[]
 }) => {
   function createSubjectCell(subject: DiscoverySubjectResult) {
-    if (isPreferredSubject(subject)) {
+    if (isPreferredRecord(subject)) {
       const newSubject = new PreferredSubject(subject)
       return [
         <PreferredSubjectTableCell

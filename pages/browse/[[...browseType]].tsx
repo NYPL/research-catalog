@@ -33,6 +33,8 @@ import { idConstants, useFocusContext } from "../../src/context/FocusContext"
 import type { SortOrder } from "../../src/types/searchTypes"
 import ResultsSort from "../../src/components/SearchResults/ResultsSort"
 import { useBrowseContext } from "../../src/context/BrowseContext"
+import { discoveryContributorsResult } from "../../__test__/fixtures/contributorFixtures"
+import ContributorTable from "../../src/components/ContributorTable/ContributorTable"
 
 interface BrowseProps {
   results: DiscoverySubjectsResponse | DiscoveryContributorsResponse
@@ -194,7 +196,9 @@ export default function Browse({
             subjectTableData={(results as DiscoverySubjectsResponse).subjects}
           />
         ) : (
-          <></>
+          <ContributorTable
+            contributorTableData={discoveryContributorsResult.contributors}
+          />
         )}
         <Pagination
           id="results-pagination"
@@ -223,9 +227,12 @@ export async function getServerSideProps({ req, params, query }) {
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
 
   const browseTypeParam = params?.browseType?.[0]
+  console.log(browseTypeParam)
 
-  const browseType =
-    browseTypeParam === "subjects" ? "subjects" : "contributors"
+  // If browse type is 'subjects' or undefined, default to subjects
+  const browseType = browseTypeParam === "authors" ? "contributors" : "subjects"
+
+  console.log("browseType in gssp", browseType)
 
   const browseParams = mapQueryToBrowseParams(query)
 
