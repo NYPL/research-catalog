@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added dependabot.yml [SCC-5146](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5146)
 - Add User Guide banner to account page [SCC-5185](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5185)
+- Added author/contributor mode to browse landing [SCC-4966](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4966)
 
 ### Updated
 
