@@ -5,7 +5,7 @@ import type {
   VariantSubject,
 } from "../../types/browseTypes"
 import PreferredSubjectTableCell from "./PreferredSubjectTableCell"
-import VariantSubjectTableCell from "./VariantSubjectTableCell"
+import VariantTableCell from "../ContributorTable/VariantTableCell"
 
 const createPreferredSubject = (
   overrides: Partial<PreferredSubject> = {}
@@ -154,10 +154,10 @@ const createVariantSubject = (
   ...overrides,
 })
 
-describe("VariantSubjectTableCell", () => {
+describe("VariantTableCell", () => {
   it("renders the variant term as plain text", () => {
     const subject = createVariantSubject()
-    render(<VariantSubjectTableCell subject={subject} />)
+    render(<VariantTableCell record={subject} />)
 
     expect(screen.getByText("Dogs")).toBeInTheDocument()
   })
@@ -167,7 +167,7 @@ describe("VariantSubjectTableCell", () => {
       preferredTerms: [createSubjectLink()],
     })
 
-    render(<VariantSubjectTableCell subject={subject} />)
+    render(<VariantTableCell record={subject} />)
 
     const link = screen.getByRole("link", { name: "Beagle" })
     expect(link).toHaveAttribute(
@@ -193,7 +193,7 @@ describe("VariantSubjectTableCell", () => {
 
     const subject = createVariantSubject({ preferredTerms: terms })
 
-    render(<VariantSubjectTableCell subject={subject} />)
+    render(<VariantTableCell record={subject} />)
 
     expect(screen.getAllByText(/See:/)[0]).toBeInTheDocument()
     expect(screen.getByRole("link", { name: "Beagle" })).toBeInTheDocument()
@@ -220,7 +220,7 @@ describe("VariantSubjectTableCell", () => {
 
     const subject = createVariantSubject({ preferredTerms: terms })
 
-    render(<VariantSubjectTableCell subject={subject} />)
+    render(<VariantTableCell record={subject} />)
 
     // Only first 5 terms should appear
     dogTerms.slice(0, 5).forEach((breed) => {

@@ -4,11 +4,11 @@ import {
   getBrowseQuery,
   getBrowseIndexHeading,
   getSubjectSearchURL,
-  isPreferredSubject,
   mapQueryToBrowseParams,
   buildLockedBrowseQuery,
   browseContributorSortOptions,
   getBrowseFormKey,
+  isPreferredRecord,
 } from "../browseUtils"
 
 describe("browseUtils", () => {
@@ -122,15 +122,15 @@ describe("browseUtils", () => {
     })
   })
 
-  describe("isPreferredSubject", () => {
+  describe("isPreferredRecord", () => {
     it("returns true if object has @type preferredTerm", () => {
       const subj = { "@type": "preferredTerm", termLabel: "foo", count: 3 }
-      expect(isPreferredSubject(subj)).toBe(true)
+      expect(isPreferredRecord(subj)).toBe(true)
     })
 
     it("returns false if object has @type variant", () => {
       const subj = { "@type": "variant", termLabel: "foo" }
-      expect(isPreferredSubject(subj)).toBe(false)
+      expect(isPreferredRecord(subj)).toBe(false)
     })
   })
 
