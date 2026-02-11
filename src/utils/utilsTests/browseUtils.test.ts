@@ -8,6 +8,7 @@ import {
   mapQueryToBrowseParams,
   buildLockedBrowseQuery,
   browseContributorSortOptions,
+  getBrowseFormKey,
 } from "../browseUtils"
 
 describe("browseUtils", () => {
@@ -194,6 +195,18 @@ describe("browseUtils", () => {
       expect(results[0].url).toContain("/browse?q=foo&search_scope=starts_with")
 
       expect(results[2].count).toBe("")
+    })
+  })
+
+  describe("getBrowseFormKey", () => {
+    it("returns expected key", () => {
+      const result = getBrowseFormKey("contributors", "has")
+      expect(result).toBe("contributor_has")
+    })
+    it("returns default browse option", () => {
+      // @ts-ignore
+      const result = getBrowseFormKey("xxxx", "xxxxx")
+      expect(result).toBe("subject_has")
     })
   })
 

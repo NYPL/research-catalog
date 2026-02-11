@@ -41,6 +41,7 @@ const getValidParam = (
 }
 
 /**
+ * getBrowseFormKey
  * Get the selectOption key from a browseType and scope
  * Returns "subject_has" (default) if not found.
  */
@@ -172,7 +173,7 @@ export function getBrowseIndexHeading(
 }
 
 /**
- * browseSHSortOptions
+ * browseSubjectSortOptions
  * The allowed keys for the sort field and their respective labels
  */
 export const browseSubjectSortOptions: Record<string, string> = {
