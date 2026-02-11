@@ -1,5 +1,5 @@
 import {
-  browseSortOptions,
+  browseSubjectSortOptions,
   buildSubjectLinks,
   getBrowseQuery,
   getBrowseIndexHeading,
@@ -7,6 +7,7 @@ import {
   isPreferredSubject,
   mapQueryToBrowseParams,
   buildLockedBrowseQuery,
+  browseContributorSortOptions,
 } from "../browseUtils"
 
 describe("browseUtils", () => {
@@ -135,30 +136,45 @@ describe("browseUtils", () => {
   describe("getBrowseIndexHeading", () => {
     it("returns correct heading with totalResults less than BROWSE_RESULTS_PER_PAGE", () => {
       const params = { q: "cats", page: 1, searchScope: "has" }
-      const heading = getBrowseIndexHeading(params, 20)
+      const heading = getBrowseIndexHeading("subjects", params, 20)
       expect(heading).toContain("20")
       expect(heading).toContain('containing "cats"')
     })
 
     it("returns correct heading with totalResults more than BROWSE_RESULTS_PER_PAGE", () => {
       const params = { q: "dogs", page: 2, searchScope: "starts_with" }
-      const heading = getBrowseIndexHeading(params, 200)
+      const heading = getBrowseIndexHeading("subjects", params, 200)
       expect(heading).toContain("26-50")
       expect(heading).toContain('beginning with "dogs"')
     })
 
     it("adds 'over' for 10000 totalResults", () => {
       const params = { q: "", page: 1, searchScope: "has" }
-      const heading = getBrowseIndexHeading(params, 10000)
+      const heading = getBrowseIndexHeading("subjects", params, 10000)
       expect(heading).toContain("over")
+    })
+
+    it("returns correct heading for authors/contributors", () => {
+      const params = { q: "", page: 1, searchScope: "has" }
+      const heading = getBrowseIndexHeading("contributors", params, 10000)
+      expect(heading).toContain("Authors/Contributors")
     })
   })
 
-  describe("browseSortOptions", () => {
-    it("has expected keys and labels", () => {
-      expect(browseSortOptions).toHaveProperty("termLabel_asc")
-      expect(browseSortOptions.termLabel_asc).toBe("Subject Heading (A - Z)")
-      expect(browseSortOptions.count_desc).toBe("Count (High - Low)")
+  describe("browseSortOptions: subject and contributor", () => {
+    it("has expected keys and labels for subject sorts", () => {
+      expect(browseSubjectSortOptions).toHaveProperty("termLabel_asc")
+      expect(browseSubjectSortOptions.termLabel_asc).toBe(
+        "Subject Heading (A - Z)"
+      )
+      expect(browseSubjectSortOptions.count_desc).toBe("Count (High - Low)")
+    })
+    it("has expected keys and labels for contributor sorts", () => {
+      expect(browseContributorSortOptions).toHaveProperty("termLabel_asc")
+      expect(browseContributorSortOptions.termLabel_asc).toBe(
+        "Ascending (A - Z)"
+      )
+      expect(browseContributorSortOptions.count_desc).toBe("Count (High - Low)")
     })
   })
 

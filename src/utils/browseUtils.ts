@@ -172,12 +172,23 @@ export function getBrowseIndexHeading(
 }
 
 /**
- * browseSortOptions
+ * browseSHSortOptions
  * The allowed keys for the sort field and their respective labels
  */
-export const browseSortOptions: Record<string, string> = {
+export const browseSubjectSortOptions: Record<string, string> = {
   termLabel_asc: "Subject Heading (A - Z)",
   termLabel_desc: "Subject Heading (Z - A)",
+  count_desc: "Count (High - Low)",
+  count_asc: "Count (Low - High)",
+}
+
+/**
+ * browseContributorSortOptions
+ * The allowed keys for the sort field and their respective labels
+ */
+export const browseContributorSortOptions: Record<string, string> = {
+  termLabel_asc: "Ascending (A - Z)",
+  termLabel_desc: "Descending (Z - A)",
   count_desc: "Count (High - Low)",
   count_asc: "Count (Low - High)",
 }

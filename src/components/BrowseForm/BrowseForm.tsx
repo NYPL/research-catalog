@@ -33,7 +33,7 @@ const BrowseForm = ({
   const router = useRouter()
   const isLoading = useLoading()
   const { setPersistentFocus } = useFocusContext()
-  const { browseType: contextBrowseType, setBrowseType } = useBrowseContext()
+  const { browseType, setBrowseType } = useBrowseContext()
 
   const [searchTerm, setSearchTerm] = useState((router.query.q as string) || "")
   const [selectedOption, setSelectedOption] = useState(
@@ -76,9 +76,7 @@ const BrowseForm = ({
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
-
-    const basePath =
-      contextBrowseType === "subjects" ? "/browse" : "/browse/authors"
+    const basePath = browseType === "subjects" ? "/browse" : "/browse/authors"
 
     const queryString = getBrowseQuery({
       q: searchTerm,

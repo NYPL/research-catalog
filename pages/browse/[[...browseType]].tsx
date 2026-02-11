@@ -15,16 +15,16 @@ import initializePatronTokenAuth from "../../src/server/auth"
 import type { HTTPStatusCode } from "../../src/types/appTypes"
 import type {
   BrowseSort,
-  BrowseType,
   DiscoveryContributorsResponse,
   DiscoverySubjectsResponse,
 } from "../../src/types/browseTypes"
 import {
-  browseSortOptions,
   getBrowseQuery,
   getBrowseIndexHeading,
   mapQueryToBrowseParams,
   isSubjectResponse,
+  browseContributorSortOptions,
+  browseSubjectSortOptions,
 } from "../../src/utils/browseUtils"
 import { useRouter } from "next/router"
 import useLoading from "../../src/hooks/useLoading"
@@ -33,7 +33,6 @@ import ResultsError from "../../src/components/Error/ResultsError"
 import { idConstants, useFocusContext } from "../../src/context/FocusContext"
 import type { SortOrder } from "../../src/types/searchTypes"
 import ResultsSort from "../../src/components/SearchResults/ResultsSort"
-import { getBrowseTypeFromUrl } from "../../src/utils/appUtils"
 import { useBrowseContext } from "../../src/context/BrowseContext"
 
 interface BrowseProps {
@@ -43,8 +42,9 @@ interface BrowseProps {
 }
 
 /**
- * The Browse index page is responsible for fetching and displaying subject headings or contributors
- * as well as displaying and controlling pagination and sort.
+ * The Browse index page is responsible for fetching and displaying
+ * subject headings or author/contributors, as well as
+ * displaying and controlling pagination and sort.
  */
 export default function Browse({
   results,
@@ -54,9 +54,8 @@ export default function Browse({
   const metadataTitle = `Browse | ${SITE_NAME}`
   const { query, push } = useRouter()
   const browseParams = mapQueryToBrowseParams(query)
-  //const browseType = getBrowseTypeFromUrl(query)
-  const { browseType, setBrowseType } = useBrowseContext()
-
+  // Subjects or contributors, set and synced to URL from BrowseForm dropdown.
+  const { browseType } = useBrowseContext()
   const activePage =
     browseType === "subjects" ? "browse-sh" : "browse-contributor"
 
@@ -86,17 +85,16 @@ export default function Browse({
       BrowseSort,
       SortOrder | undefined
     ]
+    const basePath = browseType === "subjects" ? "/browse" : "/browse/authors"
+    const queryString = getBrowseQuery({
+      ...browseParams,
+      sortBy,
+      order,
+      page: undefined,
+    })
+
     setPersistentFocus(idConstants.browseResultsSort)
-    await push(
-      getBrowseQuery({
-        ...browseParams,
-        sortBy,
-        order,
-        page: undefined,
-      }),
-      undefined,
-      { scroll: false }
-    )
+    await push(`${basePath}${queryString}`, undefined, { scroll: false })
   }
 
   const loader = (
@@ -185,7 +183,11 @@ export default function Browse({
           </Heading>
           <ResultsSort
             params={browseParams}
-            sortOptions={browseSortOptions}
+            sortOptions={
+              resultsType === "subjects"
+                ? browseSubjectSortOptions
+                : browseContributorSortOptions
+            }
             handleSortChange={handleSortChange}
           />
         </Flex>
@@ -228,7 +230,6 @@ export async function getServerSideProps({ req, params, query }) {
 
   const browseType = browseTypeParam === "authors" ? "contributors" : "subjects"
 
-  console.log("gssp browsetype", browseType)
   const browseParams = mapQueryToBrowseParams(query)
 
   const isAuthenticated = patronTokenResponse.isTokenValid
