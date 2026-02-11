@@ -1,10 +1,10 @@
 import { Table } from "@nypl/design-system-react-components"
 import type { DiscoverySubjectResult } from "../../types/browseTypes"
-import VariantSubjectTableCell from "./VariantSubjectTableCell"
 import { isPreferredRecord } from "../../utils/browseUtils"
 import VariantSubject from "../../models/VariantSubject"
 import PreferredSubject from "../../models/PreferredSubject"
 import PreferredSubjectTableCell from "./PreferredSubjectTableCell"
+import VariantTableCell from "../ContributorTable/VariantTableCell"
 
 /**
  * The SubjectTable displays the index of subject headings with their respective
@@ -28,10 +28,7 @@ const SubjectTable = ({
     } else {
       const newSubject = new VariantSubject(subject)
       return [
-        <VariantSubjectTableCell
-          key={newSubject.termLabel}
-          subject={newSubject}
-        />,
+        <VariantTableCell key={newSubject.termLabel} record={newSubject} />,
         "",
       ]
     }

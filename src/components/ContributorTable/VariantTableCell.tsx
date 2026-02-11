@@ -24,6 +24,7 @@ const VariantTableCell = ({
     <Flex flexDir="column" gap="xs">
       <Text>{record.termLabel}</Text>
       <List
+        sx={{ "li::before": { color: "ui.black" } }}
         variant="ul"
         m="0"
         listItems={record.preferredTerms.slice(0, 5).map((term) => (

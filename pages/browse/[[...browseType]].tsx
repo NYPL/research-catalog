@@ -58,6 +58,7 @@ export default function Browse({
   const browseParams = mapQueryToBrowseParams(query)
   // Subjects or contributors, set and synced to URL from BrowseForm dropdown.
   const { browseType } = useBrowseContext()
+  const basePath = browseType === "subjects" ? "/browse" : "/browse/authors"
 
   const isLoading = useLoading()
   const { setPersistentFocus } = useFocusContext()
@@ -75,9 +76,13 @@ export default function Browse({
   }
 
   const handlePageChange = async (page: number) => {
-    const newQuery = getBrowseQuery({ ...browseParams, page })
+    const queryString = getBrowseQuery({
+      ...browseParams,
+      page: page,
+    })
+
     setPersistentFocus(idConstants.browseResultsHeading)
-    await push(newQuery)
+    await push(`${basePath}${queryString}`, undefined, { scroll: false })
   }
 
   const handleSortChange = async (selectedSortOption: string) => {
@@ -85,7 +90,6 @@ export default function Browse({
       BrowseSort,
       SortOrder | undefined
     ]
-    const basePath = browseType === "subjects" ? "/browse" : "/browse/authors"
     const queryString = getBrowseQuery({
       ...browseParams,
       sortBy,
@@ -179,7 +183,7 @@ export default function Browse({
             {getBrowseIndexHeading(
               resultsType,
               browseParams,
-              results.totalResults
+              discoveryContributorsResult.totalResults
             )}
           </Heading>
           <ResultsSort
@@ -209,7 +213,9 @@ export default function Browse({
           className="no-print"
           initialPage={browseParams.page}
           currentPage={browseParams.page}
-          pageCount={Math.ceil(results.totalResults / BROWSE_RESULTS_PER_PAGE)}
+          pageCount={Math.ceil(
+            discoveryContributorsResult.totalResults / BROWSE_RESULTS_PER_PAGE
+          )}
           onPageChange={handlePageChange}
         />
       </Box>
@@ -230,7 +236,6 @@ export async function getServerSideProps({ req, params, query }) {
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
 
   const browseTypeParam = params?.browseType?.[0]
-  console.log(browseTypeParam)
 
   const browseType = browseTypeParam === "authors" ? "contributors" : "subjects"
 

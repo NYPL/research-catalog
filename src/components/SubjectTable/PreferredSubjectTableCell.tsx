@@ -30,11 +30,13 @@ const PreferredSubjectTableCell = ({
       <a href={`${BASE_URL}${subject.url}`}>{subject.termLabel}</a>
       {relatedTerms.length > 0 && (
         <List
+          sx={{ "li::before": { color: "ui.black" } }}
           variant="ul"
           m="0"
           listItems={relatedTerms?.map(({ label, terms }) => (
             <Text size="body2" mt="-23px" key={label}>
-              {label}: {commaSeparatedSubjectLinks(terms)}
+              <span style={{ fontWeight: "bold" }}>{label}:</span>{" "}
+              {commaSeparatedSubjectLinks(terms)}
             </Text>
           ))}
         />

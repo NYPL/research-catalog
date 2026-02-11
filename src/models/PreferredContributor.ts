@@ -26,7 +26,7 @@ export default class PreferredContributor {
   constructor(result?: DiscoveryPreferredContributorResult) {
     this.url = getContributorSearchURL(result.termLabel)
     this.termLabel = result.termLabel
-    this.count = result.count.toLocaleString()
+    this.count = result.count?.toLocaleString() || "xxx"
     this.seeAlso = result.seeAlso?.length && {
       label: "See Also",
       terms: buildContributorLinks(result.seeAlso),
