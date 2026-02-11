@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Updated
 
 - Correct Article(s) Plus banner copy [SCC-5186](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5186)
+- Updated `fetchSubjects` API handler to `fetchBrowse`, now handling contributor results [SCC-4970](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4970)
 
 ## [1.7.0] 2026-01-29
 

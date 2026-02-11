@@ -9,8 +9,8 @@ import {
 import RCHead from "../../src/components/Head/RCHead"
 import Layout from "../../src/components/Layout/Layout"
 import SubjectTable from "../../src/components/SubjectTable/SubjectTable"
-import { SITE_NAME, SUBJECTS_PER_PAGE } from "../../src/config/constants"
-import { fetchSubjects } from "../../src/server/api/browse"
+import { SITE_NAME, BROWSE_RESULTS_PER_PAGE } from "../../src/config/constants"
+import { fetchBrowse } from "../../src/server/api/browse"
 import initializePatronTokenAuth from "../../src/server/auth"
 import type { HTTPStatusCode } from "../../src/types/appTypes"
 import type {
@@ -181,7 +181,7 @@ export default function Browse({
           className="no-print"
           initialPage={browseParams.page}
           currentPage={browseParams.page}
-          pageCount={Math.ceil(results.totalResults / SUBJECTS_PER_PAGE)}
+          pageCount={Math.ceil(results.totalResults / BROWSE_RESULTS_PER_PAGE)}
           onPageChange={handlePageChange}
         />
       </Box>
@@ -215,17 +215,7 @@ export async function getServerSideProps({ req, query }) {
     }
   }
 
-  let response
-
-  switch (browseType) {
-    case "authors":
-      // response = await fetchAuthors(browseParams)
-      break
-    case "subjects":
-    default:
-      response = await fetchSubjects(browseParams)
-      break
-  }
+  const response = await fetchBrowse(browseType, browseParams)
 
   if (response?.status !== 200) {
     return { props: { errorStatus: response.status } }
