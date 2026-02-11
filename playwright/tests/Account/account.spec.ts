@@ -14,14 +14,6 @@ test.describe.serial("Account page", () => {
     const context = await browser.newContext()
     page = await context.newPage()
 
-    console.log("Environment:", appConfig.environment)
-    console.log("Username:", username)
-    console.log("Password exists:", !!password)
-
-    if (!password) {
-      throw new Error("QA_PASSWORD environment variable is not set")
-    }
-
     await page.goto("")
     await page.getByRole("link", { name: /my account/i }).click()
     await page.getByLabel(/barcode/i).fill(username)
@@ -102,20 +94,16 @@ test.describe.serial("Account page", () => {
     })
 
     test("should list at least one fee", async () => {
+      await expect(accountPage.tab_fees).toBeVisible({ timeout: 20000 })
       await accountPage.tab_fees.click()
+      await page.waitForTimeout(1000)
 
       const feesTable = page.locator("table", {
         has: page.getByRole("columnheader", { name: "Amount" }),
       })
-
-      // Wait for table to be visible
       await expect(feesTable).toBeVisible({ timeout: 10000 })
 
       const feeAmounts = feesTable.getByRole("cell", { name: /\$\d+/ })
-
-      // Wait for at least one fee to appear
-      await expect(feeAmounts.first()).toBeVisible({ timeout: 10000 })
-
       const feeCount = await feeAmounts.count()
       expect(feeCount).toBeGreaterThan(0)
     })

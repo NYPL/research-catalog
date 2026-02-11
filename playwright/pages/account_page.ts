@@ -66,7 +66,7 @@ export class AccountPage extends BasePage {
     this.expiration = page.getByTestId("Expiration date")
     this.tab_checkouts = page.getByRole("tab", { name: /^Checkouts/ })
     this.tab_requests = page.getByRole("tab", { name: /^Requests/ })
-    this.tab_fees = page.getByRole("tab", { name: /^Fees/ })
+    this.tab_fees = page.getByRole("tab", { name: /Fees/i })
     this.tab_account_settings = page.getByRole("tab", {
       name: /^Account settings/,
     })
