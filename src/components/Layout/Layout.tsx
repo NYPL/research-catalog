@@ -43,14 +43,8 @@ const Layout = ({
   bannerNotification,
 }: PropsWithChildren<LayoutProps>) => {
   const showSearch = activePage === "search" || activePage === ""
-  //const router = useRouter()
-  const { browseType, setBrowseType } = useBrowseContext()
-  const showBrowse =
-    activePage === "browse-sh" ||
-    activePage === "sh-results" ||
-    activePage === "contributor-results" ||
-    activePage === "browse-contributor"
-
+  const { browseType } = useBrowseContext()
+  const showBrowse = activePage === "browse" || activePage === "browse-results"
   const showNotification = activePage === "" || activePage === "search"
   return (
     <DSProvider>

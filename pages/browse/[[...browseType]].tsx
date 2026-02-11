@@ -56,8 +56,6 @@ export default function Browse({
   const browseParams = mapQueryToBrowseParams(query)
   // Subjects or contributors, set and synced to URL from BrowseForm dropdown.
   const { browseType } = useBrowseContext()
-  const activePage =
-    browseType === "subjects" ? "browse-sh" : "browse-contributor"
 
   const isLoading = useLoading()
   const { setPersistentFocus } = useFocusContext()
@@ -71,7 +69,7 @@ export default function Browse({
   }, [isLoading])
 
   if (errorStatus) {
-    return <ResultsError errorStatus={errorStatus} page={activePage} />
+    return <ResultsError errorStatus={errorStatus} page="browse" />
   }
 
   const handlePageChange = async (page: number) => {
@@ -156,6 +154,7 @@ export default function Browse({
   }
 
   const renderResults = () => {
+    // Separate from the browse type in BrowseProvider context: the browse type of the currently displaying results.
     const resultsType = isSubjectResponse(results) ? "subjects" : "contributors"
     return (
       <Box mb="xxl">
@@ -216,7 +215,7 @@ export default function Browse({
   return (
     <>
       <RCHead metadataTitle={metadataTitle} />
-      <Layout activePage={activePage} isAuthenticated={isAuthenticated}>
+      <Layout activePage="browse" isAuthenticated={isAuthenticated}>
         {browseParams.q.length === 0 ? renderEmpty() : renderResults()}
       </Layout>
     </>

@@ -30,7 +30,7 @@ describe("BrowseForm", () => {
 
   const component = (
     <BrowseProvider>
-      <BrowseForm activePage="browse-sh" />
+      <BrowseForm activePage="browse" />
       <BrowseTypeDebugger />
     </BrowseProvider>
   )

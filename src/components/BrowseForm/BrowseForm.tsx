@@ -145,18 +145,15 @@ const BrowseForm = ({
           justifyContent="space-between"
           mt={{ base: "0", md: "xs" }}
         >
-          {(activePage === "sh-results" ||
-            activePage === "contributor-results") &&
-            backUrl && <BackButton router={router} backUrl={backUrl} />}
-
-          {displayFilters &&
-            (activePage === "sh-results" ||
-              activePage === "contributor-results") && (
-              <SearchFilterModal
-                aggregations={aggregations}
-                searchResultsCount={searchResultsCount}
-              />
-            )}
+          {activePage === "browse-results" && backUrl && (
+            <BackButton router={router} backUrl={backUrl} />
+          )}
+          {displayFilters && activePage === "browse-results" && (
+            <SearchFilterModal
+              aggregations={aggregations}
+              searchResultsCount={searchResultsCount}
+            />
+          )}
         </Flex>
       </Box>
     </div>
