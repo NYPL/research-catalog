@@ -108,7 +108,14 @@ test.describe.serial("Account page", () => {
         has: page.getByRole("columnheader", { name: "Amount" }),
       })
 
+      // Wait for table to be visible
+      await expect(feesTable).toBeVisible({ timeout: 10000 })
+
       const feeAmounts = feesTable.getByRole("cell", { name: /\$\d+/ })
+
+      // Wait for at least one fee to appear
+      await expect(feeAmounts.first()).toBeVisible({ timeout: 10000 })
+
       const feeCount = await feeAmounts.count()
       expect(feeCount).toBeGreaterThan(0)
     })
