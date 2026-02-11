@@ -136,9 +136,9 @@ const SearchForm = ({
           justifyContent="space-between"
           mt={{ base: "0", md: "xs" }}
         >
-          {(activePage === "sh-results" ||
-            activePage === "contributor-results") &&
-            backUrl && <BackButton router={router} backUrl={backUrl} />}
+          {activePage === "browse-results" && backUrl && (
+            <BackButton router={router} backUrl={backUrl} />
+          )}
           <Link
             className={styles.advancedSearch}
             href="/search/advanced"
