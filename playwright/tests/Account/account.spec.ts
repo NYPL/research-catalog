@@ -14,6 +14,14 @@ test.describe.serial("Account page", () => {
     const context = await browser.newContext()
     page = await context.newPage()
 
+    console.log("Environment:", appConfig.environment)
+    console.log("Username:", username)
+    console.log("Password exists:", !!password)
+
+    if (!password) {
+      throw new Error("QA_PASSWORD environment variable is not set")
+    }
+
     await page.goto("")
     await page.getByRole("link", { name: /my account/i }).click()
     await page.getByLabel(/barcode/i).fill(username)
