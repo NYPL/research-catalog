@@ -33,15 +33,23 @@ const BrowseForm = ({
   const router = useRouter()
   const isLoading = useLoading()
   const { setPersistentFocus } = useFocusContext()
-  const browseType = getBrowseTypeFromUrl(router.query)
+  const { browseType: contextBrowseType, setBrowseType } = useBrowseContext()
 
   const [searchTerm, setSearchTerm] = useState((router.query.q as string) || "")
+  const [selectedOption, setSelectedOption] = useState(
+    getBrowseFormKey(
+      getBrowseTypeFromUrl(router.query),
+      (router?.query?.search_scope as string) || "has"
+    )
+  )
+
   const [backUrl, setBackUrl] = useState<string | null>(null)
   const [, setAppliedFilters] = useState(
     collapseMultiValueQueryParams(router.query)
   )
 
   useEffect(() => {
+    setBrowseType(getBrowseTypeFromUrl(router.query))
     setAppliedFilters(collapseMultiValueQueryParams(router.query))
 
     if (typeof window !== "undefined") {
@@ -50,11 +58,7 @@ const BrowseForm = ({
     }
   }, [router.query])
 
-  const scopeFromQuery = (router.query.search_scope as string) || "has"
-  const selectedOption = getBrowseFormKey(browseType, scopeFromQuery)
-
   const optionData = BROWSE_FORM_OPTIONS[selectedOption]
-  const searchScope = optionData.scope
   const placeholder = optionData.placeholder
   const tipText = optionData.searchTip
 
@@ -73,11 +77,12 @@ const BrowseForm = ({
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
 
-    const basePath = browseType === "subjects" ? "/browse" : "/browse/authors"
+    const basePath =
+      contextBrowseType === "subjects" ? "/browse" : "/browse/authors"
 
     const queryString = getBrowseQuery({
       q: searchTerm,
-      searchScope: searchScope,
+      searchScope: optionData.scope,
     })
 
     setPersistentFocus(idConstants.browseResultsHeading)
@@ -120,21 +125,10 @@ const BrowseForm = ({
             onChange: (e) => {
               const newValue = (e.target as HTMLSelectElement).value
               const newOption = BROWSE_FORM_OPTIONS[newValue]
-              console.log(newOption)
 
-              const newBasePath =
-                newOption.browseType === "subjects"
-                  ? "/browse"
-                  : "/browse/authors"
-
-              router.push(
-                {
-                  pathname: newBasePath,
-                  query: { search_scope: newOption.scope },
-                },
-                undefined,
-                { shallow: true, scroll: false }
-              )
+              setBrowseType(newOption.browseType)
+              //setSearchScope(newOption.scope)
+              setSelectedOption(newValue)
             },
           }}
           textInputProps={{

@@ -24,6 +24,7 @@ import {
   getBrowseQuery,
   getBrowseIndexHeading,
   mapQueryToBrowseParams,
+  isSubjectResponse,
 } from "../../src/utils/browseUtils"
 import { useRouter } from "next/router"
 import useLoading from "../../src/hooks/useLoading"
@@ -33,6 +34,7 @@ import { idConstants, useFocusContext } from "../../src/context/FocusContext"
 import type { SortOrder } from "../../src/types/searchTypes"
 import ResultsSort from "../../src/components/SearchResults/ResultsSort"
 import { getBrowseTypeFromUrl } from "../../src/utils/appUtils"
+import { useBrowseContext } from "../../src/context/BrowseContext"
 
 interface BrowseProps {
   results: DiscoverySubjectsResponse | DiscoveryContributorsResponse
@@ -52,7 +54,8 @@ export default function Browse({
   const metadataTitle = `Browse | ${SITE_NAME}`
   const { query, push } = useRouter()
   const browseParams = mapQueryToBrowseParams(query)
-  const browseType = getBrowseTypeFromUrl(query)
+  //const browseType = getBrowseTypeFromUrl(query)
+  const { browseType, setBrowseType } = useBrowseContext()
 
   const activePage =
     browseType === "subjects" ? "browse-sh" : "browse-contributor"
@@ -155,6 +158,7 @@ export default function Browse({
   }
 
   const renderResults = () => {
+    const resultsType = isSubjectResponse(results) ? "subjects" : "contributors"
     return (
       <Box mb="xxl">
         <Flex
@@ -173,7 +177,11 @@ export default function Browse({
             aria-live="polite"
             mb={{ base: "m", md: 0 }}
           >
-            {getBrowseIndexHeading(browseParams, results.totalResults)}
+            {getBrowseIndexHeading(
+              resultsType,
+              browseParams,
+              results.totalResults
+            )}
           </Heading>
           <ResultsSort
             params={browseParams}
@@ -183,7 +191,7 @@ export default function Browse({
         </Flex>
         {isLoading ? (
           loader
-        ) : browseType === "subjects" ? (
+        ) : resultsType === "subjects" ? (
           <SubjectTable
             subjectTableData={(results as DiscoverySubjectsResponse).subjects}
           />

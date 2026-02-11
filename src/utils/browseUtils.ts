@@ -9,6 +9,7 @@ import type {
   DiscoveryPreferredSubjectResult,
   DiscoveryPreferredTermResult,
   DiscoverySubjectResult,
+  DiscoverySubjectsResponse,
   SubjectLink,
 } from "../types/browseTypes"
 import {
@@ -124,6 +125,12 @@ export function isPreferredSubject(
   return subject["@type"] === "preferredTerm"
 }
 
+export function isSubjectResponse(
+  results: any
+): results is DiscoverySubjectsResponse {
+  return "subjects" in results
+}
+
 export function getSubjectSearchURL(term: string) {
   const subject = encodeURIComponentWithPeriods(term).replace(/%2D%2D/g, "--")
   return `/browse/subjects/${subject}`
@@ -138,6 +145,7 @@ export function getSubjectBrowseURL(term: string) {
  * Used to generate the browse index heading text (Displaying 1-30 of 300 Subject Headings containing "cats")
  */
 export function getBrowseIndexHeading(
+  browseType: BrowseType,
   browseParams: BrowseParams,
   totalResults: number
 ): string {
@@ -152,7 +160,9 @@ export function getBrowseIndexHeading(
       : totalResults?.toLocaleString()
   } of${
     totalResults === 10000 ? " over" : ""
-  } ${totalResults?.toLocaleString()} Subject Headings ${
+  } ${totalResults?.toLocaleString()} ${
+    browseType === "subjects" ? "Subject Headings" : "Authors/Contributors"
+  } ${
     browseParams.q.length
       ? `${
           browseParams.searchScope === "has" ? "containing" : "beginning with"

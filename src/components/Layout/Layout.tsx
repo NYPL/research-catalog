@@ -20,6 +20,7 @@ import SearchBanners from "../Banners/SearchBanners"
 import BrowseBanner from "../Banners/BrowseBanner"
 import { useRouter } from "next/router"
 import { getBrowseTypeFromUrl } from "../../utils/appUtils"
+import { useBrowseContext } from "../../context/BrowseContext"
 
 interface LayoutProps {
   activePage?: RCPage
@@ -42,8 +43,8 @@ const Layout = ({
   bannerNotification,
 }: PropsWithChildren<LayoutProps>) => {
   const showSearch = activePage === "search" || activePage === ""
-  const router = useRouter()
-  const browseType = getBrowseTypeFromUrl(router.query)
+  //const router = useRouter()
+  const { browseType, setBrowseType } = useBrowseContext()
   const showBrowse =
     activePage === "browse-sh" ||
     activePage === "sh-results" ||
