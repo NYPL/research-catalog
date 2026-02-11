@@ -13,7 +13,6 @@ describe("Browse index page", () => {
           totalResults: 4,
           subjects: discoverySubjectsResult,
         }}
-        browseType="subjects"
         isAuthenticated={false}
       />
     )

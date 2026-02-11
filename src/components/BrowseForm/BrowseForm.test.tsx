@@ -3,8 +3,13 @@ import mockRouter from "next-router-mock"
 import userEvent from "@testing-library/user-event"
 import BrowseForm from "./BrowseForm"
 import { fireEvent, render, screen } from "../../utils/testUtils"
+import { BrowseProvider, useBrowseContext } from "../../context/BrowseContext"
 
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
+const BrowseTypeDebugger = () => {
+  const { browseType } = useBrowseContext()
+  return <div data-testid="browse-type">{browseType}</div>
+}
 
 describe("BrowseForm", () => {
   const submit = () =>
@@ -23,7 +28,12 @@ describe("BrowseForm", () => {
     await userEvent.clear(input)
   })
 
-  const component = <BrowseForm activePage="browse-sh" />
+  const component = (
+    <BrowseProvider>
+      <BrowseForm activePage="browse" />
+      <BrowseTypeDebugger />
+    </BrowseProvider>
+  )
 
   it("submits a browse term by default", async () => {
     render(component)
@@ -87,14 +97,16 @@ describe("BrowseForm", () => {
 
   it("updates the browse type when changing the dropdown", async () => {
     render(component)
+
     const select = screen.getByLabelText("Select a category")
 
-    // Default is subjects
-    expect(mockRouter.asPath).toBe("/")
+    // Default browseType
+    expect(screen.getByTestId("browse-type")).toHaveTextContent("subjects")
 
+    // Switch to contributors
     await userEvent.selectOptions(select, "contributor_has")
 
-    expect(mockRouter.asPath).toBe("/browse/authors?search_scope=has")
+    expect(screen.getByTestId("browse-type")).toHaveTextContent("contributors")
   })
 
   it("maintains the search term when changing browse type", async () => {
@@ -108,16 +120,5 @@ describe("BrowseForm", () => {
     await userEvent.selectOptions(select, "subject_starts_with")
 
     expect(input).toHaveValue("Ornithology")
-  })
-
-  it("updates URL correctly when switching between subjects and contributors", async () => {
-    render(component)
-    const select = screen.getByLabelText("Select a category")
-
-    await userEvent.selectOptions(select, "contributor_starts_with")
-    expect(mockRouter.asPath).toBe("/browse/authors?search_scope=starts_with")
-
-    await userEvent.selectOptions(select, "subject_has")
-    expect(mockRouter.asPath).toBe("/browse?search_scope=has")
   })
 })

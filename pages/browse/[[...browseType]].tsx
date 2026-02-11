@@ -15,15 +15,16 @@ import initializePatronTokenAuth from "../../src/server/auth"
 import type { HTTPStatusCode } from "../../src/types/appTypes"
 import type {
   BrowseSort,
-  BrowseType,
   DiscoveryContributorsResponse,
   DiscoverySubjectsResponse,
 } from "../../src/types/browseTypes"
 import {
-  browseSortOptions,
   getBrowseQuery,
   getBrowseIndexHeading,
   mapQueryToBrowseParams,
+  isSubjectResponse,
+  browseContributorSortOptions,
+  browseSubjectSortOptions,
 } from "../../src/utils/browseUtils"
 import { useRouter } from "next/router"
 import useLoading from "../../src/hooks/useLoading"
@@ -38,32 +39,25 @@ import ContributorTable from "../../src/components/ContributorTable/ContributorT
 
 interface BrowseProps {
   results: DiscoverySubjectsResponse | DiscoveryContributorsResponse
-  browseType: BrowseType
   isAuthenticated: boolean
   errorStatus?: HTTPStatusCode | null
 }
 
 /**
- * The Browse index page is responsible for fetching and displaying subject headings or contributors
- * as well as displaying and controlling pagination and sort.
+ * The Browse index page is responsible for fetching and displaying
+ * subject headings or author/contributors, as well as
+ * displaying and controlling pagination and sort.
  */
 export default function Browse({
   results,
-  browseType,
   isAuthenticated,
   errorStatus = null,
 }: BrowseProps) {
   const metadataTitle = `Browse | ${SITE_NAME}`
   const { query, push } = useRouter()
   const browseParams = mapQueryToBrowseParams(query)
-  const { browseType: contextBrowseType, setBrowseType } = useBrowseContext()
-
-  useEffect(() => {
-    setBrowseType(browseType)
-  }, [browseType])
-
-  const activePage =
-    contextBrowseType === "subjects" ? "browse-sh" : "browse-contributor"
+  // Subjects or contributors, set and synced to URL from BrowseForm dropdown.
+  const { browseType } = useBrowseContext()
 
   const isLoading = useLoading()
   const { setPersistentFocus } = useFocusContext()
@@ -77,7 +71,7 @@ export default function Browse({
   }, [isLoading])
 
   if (errorStatus) {
-    return <ResultsError errorStatus={errorStatus} page={activePage} />
+    return <ResultsError errorStatus={errorStatus} page="browse" />
   }
 
   const handlePageChange = async (page: number) => {
@@ -91,17 +85,16 @@ export default function Browse({
       BrowseSort,
       SortOrder | undefined
     ]
+    const basePath = browseType === "subjects" ? "/browse" : "/browse/authors"
+    const queryString = getBrowseQuery({
+      ...browseParams,
+      sortBy,
+      order,
+      page: undefined,
+    })
+
     setPersistentFocus(idConstants.browseResultsSort)
-    await push(
-      getBrowseQuery({
-        ...browseParams,
-        sortBy,
-        order,
-        page: undefined,
-      }),
-      undefined,
-      { scroll: false }
-    )
+    await push(`${basePath}${queryString}`, undefined, { scroll: false })
   }
 
   const loader = (
@@ -153,7 +146,7 @@ export default function Browse({
         />
         <Heading size="heading6" color="section.research.secondary">
           Use the search bar above to start browsing the{" "}
-          {contextBrowseType === "subjects"
+          {browseType === "subjects"
             ? "Subject Headings"
             : "Author/Contributor"}{" "}
           index
@@ -163,6 +156,8 @@ export default function Browse({
   }
 
   const renderResults = () => {
+    // Separate from the browse type in BrowseProvider context: the browse type of the currently displaying results.
+    const resultsType = isSubjectResponse(results) ? "subjects" : "contributors"
     return (
       <Box mb="xxl">
         <Flex
@@ -181,17 +176,25 @@ export default function Browse({
             aria-live="polite"
             mb={{ base: "m", md: 0 }}
           >
-            {getBrowseIndexHeading(browseParams, results.totalResults)}
+            {getBrowseIndexHeading(
+              resultsType,
+              browseParams,
+              results.totalResults
+            )}
           </Heading>
           <ResultsSort
             params={browseParams}
-            sortOptions={browseSortOptions}
+            sortOptions={
+              resultsType === "subjects"
+                ? browseSubjectSortOptions
+                : browseContributorSortOptions
+            }
             handleSortChange={handleSortChange}
           />
         </Flex>
         {isLoading ? (
           loader
-        ) : contextBrowseType === "subjects" ? (
+        ) : resultsType === "subjects" ? (
           <SubjectTable
             subjectTableData={(results as DiscoverySubjectsResponse).subjects}
           />
@@ -216,7 +219,7 @@ export default function Browse({
   return (
     <>
       <RCHead metadataTitle={metadataTitle} />
-      <Layout activePage={activePage} isAuthenticated={isAuthenticated}>
+      <Layout activePage="browse" isAuthenticated={isAuthenticated}>
         {browseParams.q.length === 0 ? renderEmpty() : renderResults()}
       </Layout>
     </>
@@ -229,10 +232,7 @@ export async function getServerSideProps({ req, params, query }) {
   const browseTypeParam = params?.browseType?.[0]
   console.log(browseTypeParam)
 
-  // If browse type is 'subjects' or undefined, default to subjects
   const browseType = browseTypeParam === "authors" ? "contributors" : "subjects"
-
-  console.log("browseType in gssp", browseType)
 
   const browseParams = mapQueryToBrowseParams(query)
 
@@ -243,7 +243,6 @@ export async function getServerSideProps({ req, params, query }) {
     return {
       props: {
         isAuthenticated,
-        browseType,
         results: {},
       },
     }
@@ -258,7 +257,6 @@ export async function getServerSideProps({ req, params, query }) {
   return {
     props: {
       isAuthenticated,
-      browseType,
       results: response,
     },
   }

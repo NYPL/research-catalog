@@ -68,7 +68,7 @@ export const SEARCH_FORM_OPTIONS = {
   contributor: {
     text: "Author/contributor",
     searchTip:
-      "Enter the name of an author, contributor, or organization. Use Last Name, First Name for more precise results.",
+      "Enter the name of an author, contributor, or organization. Use Last Name, First Name for more precise results. To browse a list of authors instead, go to Browse the Catalog.",
     placeholder: `${example} Hurston, Zora Neale or New York City Ballet`,
   },
   journal_title: {
@@ -132,7 +132,7 @@ export const BROWSE_FORM_OPTIONS = {
     scope: "starts_with",
     text: "Author/Contributors beginning with",
     searchTip:
-      "Enter the name of an author, contributor, or organization in exact order.",
+      "Enter the name of an author, contributor, or organization in exact order (use Last Name, First Name for authors) to browse the Author/Contributor index. ",
     placeholder: "Example: Dickens, Charles or United Nations",
   },
 }

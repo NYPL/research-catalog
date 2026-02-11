@@ -1,4 +1,4 @@
-import { useState, type PropsWithChildren } from "react"
+import { type PropsWithChildren } from "react"
 import {
   Breadcrumbs,
   DSProvider,
@@ -18,6 +18,8 @@ import RCSubNav from "../RCSubNav/RCSubNav"
 import BrowseForm from "../BrowseForm/BrowseForm"
 import SearchBanners from "../Banners/SearchBanners"
 import BrowseBanner from "../Banners/BrowseBanner"
+import { useRouter } from "next/router"
+import { getBrowseTypeFromUrl } from "../../utils/appUtils"
 import { useBrowseContext } from "../../context/BrowseContext"
 
 interface LayoutProps {
@@ -42,12 +44,7 @@ const Layout = ({
 }: PropsWithChildren<LayoutProps>) => {
   const showSearch = activePage === "search" || activePage === ""
   const { browseType } = useBrowseContext()
-  const showBrowse =
-    activePage === "browse-sh" ||
-    activePage === "sh-results" ||
-    activePage === "contributor-results" ||
-    activePage === "browse-contributor"
-
+  const showBrowse = activePage === "browse" || activePage === "browse-results"
   const showNotification = activePage === "" || activePage === "search"
   return (
     <DSProvider>

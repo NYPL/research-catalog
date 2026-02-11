@@ -73,7 +73,7 @@ export default function SubjectHeadingResults({
       isAuthenticated={isAuthenticated}
       errorStatus={errorStatus}
       metadataTitle={metadataTitle}
-      activePage="sh-results"
+      activePage="browse-results"
       searchParams={searchParams}
       handlePageChange={handlePageChange}
       handleSortChange={handleSortChange}
@@ -108,7 +108,7 @@ export async function getServerSideProps({ req, query, params }) {
       results,
       isAuthenticated: patronTokenResponse.isTokenValid,
       metadataTitle: `Search | ${SITE_NAME}`,
-      activePage: "sh-results",
+      activePage: "browse-results",
       slug,
     },
   }

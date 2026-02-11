@@ -19,6 +19,7 @@ import type { RCPage } from "../../types/pageTypes"
 import type { Aggregation } from "../../types/filterTypes"
 import { useBrowseContext } from "../../context/BrowseContext"
 import { BackButton } from "../BackButton/BackButton"
+import { getBrowseTypeFromUrl } from "../../utils/appUtils"
 
 const BrowseForm = ({
   activePage,
@@ -35,12 +36,20 @@ const BrowseForm = ({
   const { browseType, setBrowseType } = useBrowseContext()
 
   const [searchTerm, setSearchTerm] = useState((router.query.q as string) || "")
+  const [selectedOption, setSelectedOption] = useState(
+    getBrowseFormKey(
+      getBrowseTypeFromUrl(router.query),
+      (router?.query?.search_scope as string) || "has"
+    )
+  )
+
   const [backUrl, setBackUrl] = useState<string | null>(null)
   const [, setAppliedFilters] = useState(
     collapseMultiValueQueryParams(router.query)
   )
 
   useEffect(() => {
+    setBrowseType(getBrowseTypeFromUrl(router.query))
     setAppliedFilters(collapseMultiValueQueryParams(router.query))
 
     if (typeof window !== "undefined") {
@@ -49,11 +58,7 @@ const BrowseForm = ({
     }
   }, [router.query])
 
-  const scopeFromQuery = (router.query.search_scope as string) || "has"
-  const selectedOption = getBrowseFormKey(browseType, scopeFromQuery)
-
   const optionData = BROWSE_FORM_OPTIONS[selectedOption]
-  const searchScope = optionData.scope
   const placeholder = optionData.placeholder
   const tipText = optionData.searchTip
 
@@ -71,12 +76,11 @@ const BrowseForm = ({
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
-
     const basePath = browseType === "subjects" ? "/browse" : "/browse/authors"
 
     const queryString = getBrowseQuery({
       q: searchTerm,
-      searchScope: searchScope,
+      searchScope: optionData.scope,
     })
 
     setPersistentFocus(idConstants.browseResultsHeading)
@@ -121,20 +125,8 @@ const BrowseForm = ({
               const newOption = BROWSE_FORM_OPTIONS[newValue]
 
               setBrowseType(newOption.browseType)
-
-              const newBasePath =
-                newOption.browseType === "subjects"
-                  ? "/browse"
-                  : "/browse/authors"
-
-              router.push(
-                {
-                  pathname: newBasePath,
-                  query: { search_scope: newOption.scope },
-                },
-                undefined,
-                { shallow: true, scroll: false }
-              )
+              //setSearchScope(newOption.scope)
+              setSelectedOption(newValue)
             },
           }}
           textInputProps={{
@@ -153,18 +145,15 @@ const BrowseForm = ({
           justifyContent="space-between"
           mt={{ base: "0", md: "xs" }}
         >
-          {(activePage === "sh-results" ||
-            activePage === "contributor-results") &&
-            backUrl && <BackButton router={router} backUrl={backUrl} />}
-
-          {displayFilters &&
-            (activePage === "sh-results" ||
-              activePage === "contributor-results") && (
-              <SearchFilterModal
-                aggregations={aggregations}
-                searchResultsCount={searchResultsCount}
-              />
-            )}
+          {activePage === "browse-results" && backUrl && (
+            <BackButton router={router} backUrl={backUrl} />
+          )}
+          {displayFilters && activePage === "browse-results" && (
+            <SearchFilterModal
+              aggregations={aggregations}
+              searchResultsCount={searchResultsCount}
+            />
+          )}
         </Flex>
       </Box>
     </div>
