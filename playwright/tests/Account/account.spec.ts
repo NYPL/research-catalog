@@ -5,7 +5,7 @@ import { appConfig } from "../../../src/config/config"
 let page: Page
 let accountPage: AccountPage
 
-const username = appConfig.testUser.username
+const username = appConfig.testUser.username[appConfig.environment]
 const password = process.env.QA_PASSWORD
 
 test.describe.serial("Account page", () => {
@@ -28,13 +28,13 @@ test.describe.serial("Account page", () => {
   test.describe("Account info", () => {
     test("should show labels and values", async () => {
       await expect(accountPage.nameLabel).toBeVisible()
-      await expect(accountPage.name).toHaveText(appConfig.testUser.name)
+      await expect(accountPage.name).toHaveText(appConfig.testUser.name[appConfig.environment])
       await expect(accountPage.usernameLabel).toBeVisible()
-      await expect(accountPage.username).toHaveText(appConfig.testUser.username)
+      await expect(accountPage.username).toHaveText(appConfig.testUser.username[appConfig.environment])
       await expect(accountPage.usernameEditLink).toBeVisible()
       await expect(accountPage.cardnumberLabel).toBeVisible()
       const cardnumberText = await accountPage.cardnumber.textContent()
-      const expectedCardnumber = appConfig.testUser.cardNumber.replace(
+      const expectedCardnumber = appConfig.testUser.cardNumber[appConfig.environment].replace(
         /^"|"$/g,
         ""
       )

@@ -42,15 +42,21 @@ export const appConfig: AppConfig = {
     renewCard: "https://www.nypl.org/help/library-card/terms-conditions#renew",
   },
   testUser: {
-    name: process.env.CI
-      ? "PLAYWRIGHT TEST ACCOUNT GHA"
-      : process.env.QA_NAME || "PLAYWRIGHT TEST ACCOUNT LOCAL",
-    cardNumber: process.env.CI
-      ? "2 3333 12428 7325"
-      : process.env.QA_CARDNUMBER || "2 5555 01278 5809",
-    username: process.env.CI
-      ? "playwrightgha"
-      : process.env.QA_USERNAME || "playwrightlocal",
+    name: {
+      development: "PLAYWRIGHT TEST ACCOUNT LOCAL",
+      qa: "PLAYWRIGHT TEST ACCOUNT GHA",
+      production: "PLAYWRIGHT TEST ACCOUNT GHA",
+    },
+    cardNumber: {
+      development: "2 5555 01278 5809",
+      qa: "2 3333 12428 7325",
+      production: "2 3333 12428 7325",
+    },
+    username: {
+      development: "playwrightlocal",
+      qa: "playwrightgha",
+      production: "playwrightgha",
+    },
     password: process.env.QA_PASSWORD,
   },
   // Array of closed nypl location keys (available options for NYPL locations: all, schwarzman, schomburg, lpa)

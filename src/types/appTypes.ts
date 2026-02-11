@@ -10,10 +10,10 @@ export interface AppConfig {
   sourceEmail: string
   libAnswersEmail: string
   testUser: {
-    name: string
-    cardNumber: string
-    username: string
-    password: string
+    name: APIEndpoints
+    cardNumber: APIEndpoints
+    username: APIEndpoints
+    password: string | undefined
   }
 }
 export interface APIEndpoints {
