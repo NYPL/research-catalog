@@ -186,7 +186,7 @@ test.describe.serial("Account page", () => {
       await accountPage.phoneInput.fill(newPhoneNumber)
       await expect(accountPage.saveChangesButton).toBeEnabled()
       await accountPage.saveChangesButton.click()
-
+      await page.waitForTimeout(1000)
       await expect(accountPage.successMessage).toBeVisible({ timeout: 20000 })
       await expect(accountPage.phoneValue).toContainText(newPhoneNumber, {
         timeout: 20000,
@@ -213,7 +213,7 @@ test.describe.serial("Account page", () => {
 
       await expect(accountPage.saveChangesButton).toBeEnabled()
       await accountPage.saveChangesButton.click()
-
+      await page.waitForTimeout(1000)
       await expect(accountPage.successMessage).toBeVisible({ timeout: 20000 })
       await expect(accountPage.homeLibraryValue).toContainText("53rd Street")
     })
@@ -221,6 +221,7 @@ test.describe.serial("Account page", () => {
       // Revert changes to username, phone, email, and home library
       // Revert username
       await accountPage.usernameEditLink.click()
+      await accountPage.usernameEditInput.waitFor({ state: "visible" })
       await accountPage.usernameEditInput.fill(username)
       await accountPage.saveChangesButton.click()
       await expect(accountPage.successMessage).toBeVisible({ timeout: 20000 })
@@ -229,6 +230,7 @@ test.describe.serial("Account page", () => {
       })
       // Revert phone
       await accountPage.edit_phone_link.click()
+      await accountPage.phoneInput.waitFor({ state: "visible" })
       await accountPage.phoneInput.fill("2125927256")
       await accountPage.saveChangesButton.click()
       await expect(accountPage.successMessage).toBeVisible({ timeout: 20000 })
@@ -237,6 +239,7 @@ test.describe.serial("Account page", () => {
       })
       // Revert email
       await accountPage.edit_email_link.click()
+      await accountPage.emailInput.waitFor({ state: "visible" })
       await accountPage.emailInput.fill("chrismulholland@nypl.org")
       await accountPage.saveChangesButton.click()
       await expect(accountPage.successMessage).toBeVisible({ timeout: 20000 })

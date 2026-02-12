@@ -112,7 +112,7 @@ export class AccountPage extends BasePage {
       .locator("xpath=following::div[1]")
     this.homeLibraryValue = page
       .locator("p", { hasText: /home library/i })
-      .locator("xpath=following::div[1]")
+      .locator("xpath=following::div[1]/div")
   }
 
   async login(username: string, password: string) {
