@@ -133,14 +133,14 @@ describe("browseUtils", () => {
   })
 
   describe("getBrowseIndexHeading", () => {
-    it("returns correct heading with totalResults less than SUBJECTS_PER_PAGE", () => {
+    it("returns correct heading with totalResults less than BROWSE_RESULTS_PER_PAGE", () => {
       const params = { q: "cats", page: 1, searchScope: "has" }
       const heading = getBrowseIndexHeading(params, 20)
       expect(heading).toContain("20")
       expect(heading).toContain('containing "cats"')
     })
 
-    it("returns correct heading with totalResults more than SUBJECTS_PER_PAGE", () => {
+    it("returns correct heading with totalResults more than BROWSE_RESULTS_PER_PAGE", () => {
       const params = { q: "dogs", page: 2, searchScope: "starts_with" }
       const heading = getBrowseIndexHeading(params, 200)
       expect(heading).toContain("26-50")
