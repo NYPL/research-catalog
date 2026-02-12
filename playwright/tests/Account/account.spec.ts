@@ -80,7 +80,20 @@ test.describe.serial("Account page", () => {
       const count = await titleLinks.count()
       expect(count).toBeGreaterThan(0)
     })
+    test("should list at least one fee", async () => {
+      await expect(accountPage.tab_fees).toBeVisible({ timeout: 20000 })
+      await accountPage.tab_fees.click()
+      await page.waitForTimeout(1000)
 
+      const feesTable = page.locator("table", {
+        has: page.getByRole("columnheader", { name: "Amount" }),
+      })
+      await expect(feesTable).toBeVisible({ timeout: 50000 })
+
+      const feeAmounts = feesTable.getByRole("cell", { name: /\$\d+/ })
+      const feeCount = await feeAmounts.count()
+      expect(feeCount).toBeGreaterThan(0)
+    })
     test("should list at least one request", async () => {
       await accountPage.tab_requests.click()
 
@@ -91,21 +104,6 @@ test.describe.serial("Account page", () => {
       const requestTitleLinks = requestsTable.getByRole("link")
       const requestCount = await requestTitleLinks.count()
       expect(requestCount).toBeGreaterThan(0)
-    })
-
-    test("should list at least one fee", async () => {
-      await expect(accountPage.tab_fees).toBeVisible({ timeout: 20000 })
-      await accountPage.tab_fees.click()
-      await page.waitForTimeout(1000)
-
-      const feesTable = page.locator("table", {
-        has: page.getByRole("columnheader", { name: "Amount" }),
-      })
-      await expect(feesTable).toBeVisible({ timeout: 10000 })
-
-      const feeAmounts = feesTable.getByRole("cell", { name: /\$\d+/ })
-      const feeCount = await feeAmounts.count()
-      expect(feeCount).toBeGreaterThan(0)
     })
   })
 

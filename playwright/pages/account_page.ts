@@ -2,12 +2,10 @@ import type { Page, Locator } from "@playwright/test"
 import { BasePage } from "./base_page"
 
 export class AccountPage extends BasePage {
-  // log in page locators
   readonly usernameInput: Locator
   readonly usernameEditInput: Locator
   readonly passwordInput: Locator
   readonly submitButton: Locator
-  // account page locators
   readonly accountHeader: Locator
   readonly nameLabel: Locator
   readonly name: Locator
@@ -29,7 +27,6 @@ export class AccountPage extends BasePage {
   readonly account_items_table_header_callnumber: Locator
   readonly account_items_table_header_due_date: Locator
   readonly account_items_table_header_manage: Locator
-  // account settings edit links
   readonly edit_phone_link: Locator
   readonly removePhoneIcon: Locator
   readonly edit_email_link: Locator
@@ -66,7 +63,7 @@ export class AccountPage extends BasePage {
     this.expiration = page.getByTestId("Expiration date")
     this.tab_checkouts = page.getByRole("tab", { name: /^Checkouts/ })
     this.tab_requests = page.getByRole("tab", { name: /^Requests/ })
-    this.tab_fees = page.getByRole("tab", { name: /Fees/i })
+    this.tab_fees = page.getByRole("tab").filter({ hasText: /^Fees/i })
     this.tab_account_settings = page.getByRole("tab", {
       name: /^Account settings/,
     })
@@ -98,7 +95,6 @@ export class AccountPage extends BasePage {
     )
     this.edit_pin_password_link = page.locator("#edit-password-button")
     this.cancelButton = page.getByRole("button", { name: /cancel/i })
-    // New locators for editing functionality
     this.phoneInput = page.getByRole("textbox", {
       name: "Update primary phone number",
     })
