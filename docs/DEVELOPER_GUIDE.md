@@ -13,7 +13,7 @@ This guide provides technical information required for developers working on the
   - [TypeScript](#typescript)
   - [React](#react)
   - [CSS/SCSS](#cssscss)
-  - [Error handling](#error-handling)
+  - [Error handling and logs](#error-handling-and-logs)
   - [Conditionals](#conditionals)
   - [Variable names](#variable-names)
   - [Types](#types)
@@ -140,7 +140,7 @@ Each version entry in the changelog includes:
 - Use a SCSS module if styles wrap to more than one line in a component file
 - Use component-provided styles if they exist (e.g., tableStyles in the Table component)
 
-### Error handling
+### Error handling and logs
 
 #### Server error logging
 
@@ -163,6 +163,19 @@ logger.error("Something mysterious has gone wrong")
 #### Importing logger in client-side components
 
 NB: Since we are currently using the Next.js Pages router which doesn't support server components, it is necessary to disable a dependency of `node-utils`' Winston logger, (`fs`), on the client-side only in order to prevent an uninformative error that breaks the app when the logger is imported in a client component for use in `getServerSideProps`. It is currently disabled on the webpack build in `next.config.js`.
+
+#### Adding logs
+
+Use (and then remove) console logs for local development. To test New Relic logs, you can run:
+
+```
+export NEW_RELIC_APP_NAME="Research Catalog [local]"
+export NEW_RELIC_LICENSE_KEY="<NEW_RELIC_LICENSE_KEY>"
+
+node server.mjs
+```
+
+and view results in New Relic under "Research Catalog [local]".
 
 ### Conditionals
 

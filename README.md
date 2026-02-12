@@ -241,21 +241,10 @@ const apiUrl = appConfig.apiEndpoints.platform[appConfig.environment]
 
 The application uses `node-utils` (Winston) for server-side logging, and New Relic for both server and client-side logging.
 
-### Adding logs
-
-Use (and then remove) console logs for local development. To test New Relic logs, you can run:
-```
-export NEW_RELIC_APP_NAME="Research Catalog [local]"
-export NEW_RELIC_LICENSE_KEY="<NEW_RELIC_LICENSE_KEY>"
-
-node server.mjs
-```
-and view results in New Relic under "Research Catalog [local]".
-
-### Accessing Logs
+### Accessing logs
 
 - **QA/Production**: AWS CloudWatch under the `nypl-digital-dev` account (search for "research-catalog"), New Relic under "Research Catalog qa" and "Research Catalog prod"
-- **Vercel Deployments**: Console output in the Vercel dashboard
+- **Vercel deployments**: Console output in the Vercel dashboard
 
 ## Troubleshooting
 
