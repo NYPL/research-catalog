@@ -18,7 +18,7 @@
 
 ## AWS ECS Environment Variables
 
-As previously mentioned in the [README](README.md), we are using environment variables to make authorized requests to NYPL's API platform and the Sierra client. In order to be secure, those environment variables are decrypted using AWS KMS in `node-utils`.
+We use environment variables to make authorized requests to NYPL's API platform and the Sierra client. In order to be secure, those encrypted environment variables are stored in `./config.*.yaml`files, and decrypted using AWS KMS by `node-utils`.
 
 **Running this app locally requires you to have an `~/.aws/config` file with SSO configuration for the `nypl-digital-dev` profile.**
 
