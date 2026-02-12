@@ -1,17 +1,8 @@
-import { Flex, List, Text } from "@nypl/design-system-react-components"
-import Link from "../Link/Link"
-import type {
-  SubjectLink,
-  VariantContributor,
-  VariantSubject,
-} from "../../types/browseTypes"
+import { Flex, Link, List, Text } from "@nypl/design-system-react-components"
+import { TermLink, Variant } from "../../types/browseTypes"
 
-const VariantTableCell = ({
-  record,
-}: {
-  record: VariantSubject | VariantContributor
-}) => {
-  const PreferredTermLink = (prefTerm: SubjectLink) => (
+const VariantTableCell = ({ record }: { record: Variant }) => {
+  const PreferredTermLink = (prefTerm: TermLink) => (
     <Text size="body2" mt="-23px">
       <span style={{ fontWeight: "bold" }}>See:</span>{" "}
       <Link href={prefTerm.url} isUnderlined={false}>

@@ -1,23 +1,13 @@
 import { Flex, List, Text } from "@nypl/design-system-react-components"
-import Link from "../Link/Link"
-import type { PreferredSubject, SubjectLink } from "../../types/browseTypes"
-import { BASE_URL } from "../../config/constants"
+import type { PreferredSubject } from "../../../types/browseTypes"
+import { BASE_URL } from "../../../config/constants"
+import { commaSeparatedTermLinks } from "../ContributorTable/PreferredContributorTableCell"
 
 const PreferredSubjectTableCell = ({
   subject,
 }: {
   subject: PreferredSubject
 }) => {
-  const commaSeparatedSubjectLinks = (terms: SubjectLink[]) =>
-    terms.map((term, i) => (
-      <span key={term.url}>
-        <Link href={term.url} isUnderlined={false}>
-          {term.termLabel}
-        </Link>
-        {i < terms.length - 1 && ", "}
-      </span>
-    ))
-
   const relatedTerms = [
     subject.seeAlso,
     subject.broaderTerms,
@@ -36,7 +26,7 @@ const PreferredSubjectTableCell = ({
           listItems={relatedTerms?.map(({ label, terms }) => (
             <Text size="body2" mt="-23px" key={label}>
               <span style={{ fontWeight: "bold" }}>{label}:</span>{" "}
-              {commaSeparatedSubjectLinks(terms)}
+              {commaSeparatedTermLinks(terms)}
             </Text>
           ))}
         />

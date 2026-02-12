@@ -8,7 +8,7 @@ import {
 } from "@nypl/design-system-react-components"
 import RCHead from "../../src/components/Head/RCHead"
 import Layout from "../../src/components/Layout/Layout"
-import SubjectTable from "../../src/components/SubjectTable/SubjectTable"
+import SubjectTable from "../../src/components/BrowseTable/SubjectTable/SubjectTable"
 import { SITE_NAME, BROWSE_RESULTS_PER_PAGE } from "../../src/config/constants"
 import { fetchBrowse } from "../../src/server/api/browse"
 import initializePatronTokenAuth from "../../src/server/auth"
@@ -35,7 +35,7 @@ import type { SortOrder } from "../../src/types/searchTypes"
 import ResultsSort from "../../src/components/SearchResults/ResultsSort"
 import { useBrowseContext } from "../../src/context/BrowseContext"
 import { discoveryContributorsResult } from "../../__test__/fixtures/contributorFixtures"
-import ContributorTable from "../../src/components/ContributorTable/ContributorTable"
+import ContributorTable from "../../src/components/BrowseTable/ContributorTable/ContributorTable"
 
 interface BrowseProps {
   results: DiscoverySubjectsResponse | DiscoveryContributorsResponse
@@ -183,7 +183,7 @@ export default function Browse({
             {getBrowseIndexHeading(
               resultsType,
               browseParams,
-              discoveryContributorsResult.totalResults
+              results.totalResults
             )}
           </Heading>
           <ResultsSort
@@ -204,7 +204,9 @@ export default function Browse({
           />
         ) : (
           <ContributorTable
-            contributorTableData={discoveryContributorsResult.contributors}
+            contributorTableData={
+              (results as DiscoveryContributorsResponse).contributors
+            }
           />
         )}
         <Pagination
@@ -213,9 +215,7 @@ export default function Browse({
           className="no-print"
           initialPage={browseParams.page}
           currentPage={browseParams.page}
-          pageCount={Math.ceil(
-            discoveryContributorsResult.totalResults / BROWSE_RESULTS_PER_PAGE
-          )}
+          pageCount={Math.ceil(results.totalResults / BROWSE_RESULTS_PER_PAGE)}
           onPageChange={handlePageChange}
         />
       </Box>

@@ -6,15 +6,15 @@ import type {
   BrowseParams,
   BrowseQueryParams,
   BrowseType,
-  ContributorLink,
   DiscoveryContributorResult,
   DiscoveryPreferredContributorResult,
   DiscoveryPreferredSubjectResult,
   DiscoveryPreferredTermResult,
   DiscoverySubjectResult,
   DiscoverySubjectsResponse,
-  SubjectLink,
+  TermLink,
 } from "../types/browseTypes"
+import { Link } from "@nypl/design-system-react-components"
 import {
   encodeURIComponentWithPeriods,
   getPaginationOffsetStrings,
@@ -142,17 +142,22 @@ export function getSubjectSearchURL(term: string) {
   return `/browse/subjects/${subject}`
 }
 
-export function getSubjectBrowseURL(term: string) {
-  return `/browse?q=${term}&search_scope=starts_with`
+export function getBrowseUrl(term: string, browseType: BrowseType): string {
+  return `/browse${
+    browseType === "contributors" ? "/authors" : ""
+  }?q=${term}&search_scope=starts_with`
 }
 
 export function getContributorSearchURL(term: string) {
-  const subject = encodeURIComponentWithPeriods(term).replace(/%2D%2D/g, "--")
-  return `/browse/authors/${subject}`
+  const contributor = encodeURIComponentWithPeriods(term)
+  return `/browse/authors/${contributor}`
 }
 
-export function getContributorBrowseURL(term: string) {
-  return `/browse/authors?q=${term}&search_scope=starts_with`
+export function getContributorRoleSearchURL(contributor: string, role: string) {
+  const contributorWithRole = `${encodeURIComponentWithPeriods(
+    contributor
+  )}?role=${encodeURIComponentWithPeriods(role)}`
+  return `/browse/authors/${contributorWithRole}`
 }
 
 /**
@@ -208,30 +213,16 @@ export const browseContributorSortOptions: Record<string, string> = {
   count_asc: "Count (Low - High)",
 }
 
-export function buildSubjectLinks(
+export function buildTermLinks(
+  browseType: BrowseType,
   terms: DiscoveryPreferredTermResult[]
-): SubjectLink[] {
-  const termLinks: SubjectLink[] = []
+): TermLink[] {
+  const termLinks: TermLink[] = []
 
   for (const termObj of terms) {
     termLinks.push({
       termLabel: termObj.termLabel,
-      url: getSubjectBrowseURL(termObj.termLabel),
-      count: termObj.count?.toLocaleString() || "",
-    })
-  }
-  return termLinks
-}
-
-export function buildContributorLinks(
-  terms: DiscoveryPreferredTermResult[]
-): ContributorLink[] {
-  const termLinks: ContributorLink[] = []
-
-  for (const termObj of terms) {
-    termLinks.push({
-      termLabel: termObj.termLabel,
-      url: getContributorBrowseURL(termObj.termLabel),
+      url: getBrowseUrl(termObj.termLabel, browseType),
       count: termObj.count?.toLocaleString() || "",
     })
   }

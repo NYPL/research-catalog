@@ -1,10 +1,10 @@
-import { Table } from "@nypl/design-system-react-components"
-import type { DiscoveryContributorResult } from "../../types/browseTypes"
-import { isPreferredRecord } from "../../utils/browseUtils"
-import VariantContributor from "../../models/VariantContributor"
-import PreferredContributor from "../../models/PreferredContributor"
+import type { DiscoveryContributorResult } from "../../../types/browseTypes"
+import { isPreferredRecord } from "../../../utils/browseUtils"
+import VariantTerm from "../../../models/browse/VariantTerm"
+import PreferredContributor from "../../../models/browse/PreferredContributor"
 import PreferredContributorTableCell from "./PreferredContributorTableCell"
-import VariantTableCell from "./VariantTableCell"
+import VariantTableCell from "../VariantTableCell"
+import BrowseTable from "../BrowseTable"
 
 /**
  * The ContributorTable displays the index of author/contributors with their respective
@@ -26,7 +26,7 @@ const ContributorTable = ({
         newContributor.count,
       ]
     } else {
-      const newContributor = new VariantContributor(contributor)
+      const newContributor = new VariantTerm(contributor, "contributors")
       return [
         <VariantTableCell
           key={newContributor.termLabel}
@@ -37,33 +37,12 @@ const ContributorTable = ({
     }
   }
   return (
-    <Table
-      maxWidth="928px"
-      sx={{
-        td: {
-          ["@media screen and (max-width: 600px)"]: {
-            paddingRight: "xs",
-            paddingLeft: "xs",
-          },
-        },
-        thead: { th: { fontSize: "14px" } },
-      }}
-      columnHeaders={["Author/contributor", "Results"]}
-      isScrollable
-      columnStyles={[
-        { minWidth: "269px" },
-        {
-          minWidth: { base: "84px", md: "160px" },
-          width: "20%",
-          textAlign: "right",
-        },
-      ]}
+    <BrowseTable
       tableData={contributorTableData.map(
         (contributor: DiscoveryContributorResult) =>
           createContributorCell(contributor)
       )}
-      columnHeadersBackgroundColor="ui.bg.default"
-      showRowDividers
+      tableHeading="Author/contributor"
     />
   )
 }
