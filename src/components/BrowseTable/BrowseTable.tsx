@@ -1,5 +1,5 @@
 import { Link, Table } from "@nypl/design-system-react-components"
-import { TermLink } from "../../types/browseTypes"
+import type { TermLink } from "../../types/browseTypes"
 
 export function commaSeparatedTermLinks(terms: TermLink[]) {
   return terms.map((term, i) => (
