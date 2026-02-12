@@ -1,4 +1,16 @@
-import { Table } from "@nypl/design-system-react-components"
+import { Link, Table } from "@nypl/design-system-react-components"
+import { TermLink } from "../../types/browseTypes"
+
+export function commaSeparatedTermLinks(terms: TermLink[]) {
+  return terms.map((term, i) => (
+    <span key={term.url}>
+      <Link href={term.url} isUnderlined={false}>
+        {term.termLabel}
+      </Link>
+      {i < terms.length - 1 && ", "}
+    </span>
+  ))
+}
 
 const BrowseTable = ({
   tableData,

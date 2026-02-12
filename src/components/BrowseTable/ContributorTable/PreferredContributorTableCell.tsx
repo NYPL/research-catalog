@@ -1,22 +1,11 @@
 import { Flex, List, Text } from "@nypl/design-system-react-components"
 import Link from "../../Link/Link"
 import type {
-  TermLink,
   PreferredContributor,
   ContributorRole,
 } from "../../../types/browseTypes"
 import { BASE_URL } from "../../../config/constants"
-
-export function commaSeparatedTermLinks(terms: TermLink[]) {
-  return terms.map((term, i) => (
-    <span key={term.url}>
-      <Link href={term.url} isUnderlined={false}>
-        {term.termLabel}
-      </Link>
-      {i < terms.length - 1 && ", "}
-    </span>
-  ))
-}
+import { commaSeparatedTermLinks } from "../BrowseTable"
 
 const PreferredContributorTableCell = ({
   contributor,

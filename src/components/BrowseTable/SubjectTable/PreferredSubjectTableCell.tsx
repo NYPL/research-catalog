@@ -1,7 +1,7 @@
 import { Flex, List, Text } from "@nypl/design-system-react-components"
 import type { PreferredSubject } from "../../../types/browseTypes"
 import { BASE_URL } from "../../../config/constants"
-import { commaSeparatedTermLinks } from "../ContributorTable/PreferredContributorTableCell"
+import { commaSeparatedTermLinks } from "../BrowseTable"
 
 const PreferredSubjectTableCell = ({
   subject,
