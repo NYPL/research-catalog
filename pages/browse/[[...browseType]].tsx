@@ -34,7 +34,6 @@ import { idConstants, useFocusContext } from "../../src/context/FocusContext"
 import type { SortOrder } from "../../src/types/searchTypes"
 import ResultsSort from "../../src/components/SearchResults/ResultsSort"
 import { useBrowseContext } from "../../src/context/BrowseContext"
-import { discoveryContributorsResult } from "../../__test__/fixtures/contributorFixtures"
 import ContributorTable from "../../src/components/BrowseTable/ContributorTable/ContributorTable"
 
 interface BrowseProps {

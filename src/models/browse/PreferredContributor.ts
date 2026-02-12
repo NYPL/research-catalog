@@ -44,12 +44,10 @@ export default class PreferredContributor {
   }
 
   buildRoles(roleCounts): ContributorRole[] {
-    const roles = roleCounts?.map((role) => ({
+    return roleCounts.map((role) => ({
       roleLabel: role.role,
       url: getContributorRoleSearchURL(this.termLabel, role.role),
       count: role.count,
     }))
-    console.log(roles)
-    return roles
   }
 }
