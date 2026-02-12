@@ -3,10 +3,10 @@
 ## Table of Contents
 
 - [Introduction](#introduction)
-- [Getting Started](#getting-started)
-- [Project Architecture](#project-architecture)
-- [Key Features](#key-features)
-- [API Integration](#api-integration)
+- [Getting started](#getting-started)
+- [Project architecture](#project-architecture)
+- [Key features](#key-features)
+- [API integration](#api-integration)
 - [Authentication](#authentication)
 - [Deployment](#deployment)
 - [Troubleshooting](#troubleshooting)
@@ -17,11 +17,12 @@ The [NYPL Research Catalog](https://www.nypl.org/research/research-catalog) is a
 
 ### Technologies used
 
-- **Frontend Framework**: [Next.js](https://nextjs.org/)
-- **UI Components**: [@nypl/design-system-react-components](https://nypl.github.io/nypl-design-system/reservoir/)
-- **Data Fetching**: Server-side rendering with `getServerSideProps` and client-side fetching with JavaScript's native fetch API
+- **Frontend framework**: [Next.js](https://nextjs.org/)
+- **UI components**: [@nypl/design-system-react-components](https://nypl.github.io/nypl-design-system/reservoir/)
+- **Data fetching**: Server-side rendering with `getServerSideProps` and client-side fetching with JavaScript's native fetch API
 - **Styling**: SCSS modules and inline style props
-- **Testing**: Jest and React Testing Library
+- **Testing**: Jest and React Testing Library, Playwright
+- **Code quality**: ESLint, Prettier, and Husky (Git hooks for pre-commit checks)
 - **Logging**: Winston logging to AWS Cloudwatch and New Relic
 - **Authentication**: JWT-based patron "log in" for developing and testing authenticated features (Account and Hold requests)
 
@@ -29,7 +30,7 @@ The [NYPL Research Catalog](https://www.nypl.org/research/research-catalog) is a
 
 ### Prerequisites
 
-### **Node.js** 
+#### Node.js 
 
 The application requires the Node.js version specified in the `.nvmrc` file. We recommend using [NVM (Node Version Manager)](https://github.com/nvm-sh/nvm) to manage Node.js versions.
 
@@ -39,17 +40,18 @@ The application requires the Node.js version specified in the `.nvmrc` file. We 
    nvm use
    ```
 
-#### Installation
+#### AWS credentials
+
+We store API credentials as KMS encrypted variables. Decryption (and by extension, use of these API clients) requires the user to have AWS credentials configured locally via the AWS CLI. Reach out to DevOps to get this set up and see our guide on [environment variables](docs/ENVIRONMENT_VARIABLES.md).
+
+
+### Installation
 
 1. Clone the repository
 2. Install dependencies:
    ```bash
    npm install
    ```
-
-#### AWS credentials
-
-We store API credentials as KMS encrypted variables. Decryption (and by extension, use of these API clients) requires the user to have AWS credentials configured locally via the AWS CLI. Reach out to DevOps to get this set up and see our guide on [environment variables](docs/ENVIRONMENT_VARIABLES.md). 
 
 ### Local development
 
@@ -97,8 +99,8 @@ With the release of the [browse](https://www.nypl.org/research/research-catalog/
 
 The Research Catalog provides both basic and advanced search capabilities:
 
-- **Basic Search**: Keyword search across all fields used to query and display bib results.
-- **Advanced Search**: Targeted search by title, author, subject, call number, etc.
+- **Basic search**: Keyword search across all fields used to query and display bib results.
+- **Advanced search**: Targeted search by title, author, subject, call number, etc.
 - **Filters**: Refine search results by format, location, status, and date
 
 ### Bib display
@@ -165,13 +167,6 @@ The application uses NYPL's authentication system:
 - JWT-based authentication
 - Cookie-based token storage
 - Server-side validation of authentication tokens
-
-### Code quality tools
-
-- **TypeScript**: Static type checking
-- **ESLint**: Code linting
-- **Prettier**: Code formatting
-- **Husky**: Git hooks for pre-commit checks
 
 ## Deployment
 
