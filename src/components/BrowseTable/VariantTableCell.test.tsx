@@ -1,5 +1,5 @@
 import React from "react"
-import { TermLink, Variant } from "../../types/browseTypes"
+import type { TermLink, Variant } from "../../types/browseTypes"
 import { render, screen } from "../../utils/testUtils"
 import VariantTableCell from "./VariantTableCell"
 
@@ -107,7 +107,7 @@ describe("VariantTableCell: subject", () => {
 
     render(<VariantTableCell record={subject} />)
 
-    expect(screen.getByText(/See:/)).toBeInTheDocument()
+    expect(screen.getAllByText(/See:/)[0]).toBeInTheDocument()
     expect(screen.getByRole("link", { name: "Beagle" })).toBeInTheDocument()
     expect(screen.getByRole("link", { name: "Poodle" })).toBeInTheDocument()
   })

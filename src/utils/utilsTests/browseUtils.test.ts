@@ -1,6 +1,5 @@
 import {
   browseSubjectSortOptions,
-  buildSubjectLinks,
   getBrowseQuery,
   getBrowseIndexHeading,
   getSubjectSearchURL,
@@ -9,6 +8,7 @@ import {
   browseContributorSortOptions,
   getBrowseFormKey,
   isPreferredRecord,
+  buildTermLinks,
 } from "../browseUtils"
 
 describe("browseUtils", () => {
@@ -179,14 +179,14 @@ describe("browseUtils", () => {
     })
   })
 
-  describe("buildSubjectLinks", () => {
+  describe("buildTermLinks", () => {
     it("builds links with termLabel, url, and count", () => {
       const terms = [
         { termLabel: "foo", count: 123 },
         { termLabel: "bar", count: 0 },
         { termLabel: "baz" },
       ]
-      const results = buildSubjectLinks(terms)
+      const results = buildTermLinks("subjects", terms)
       expect(results).toHaveLength(3)
       expect(results[0]).toMatchObject({
         termLabel: "foo",

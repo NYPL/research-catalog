@@ -1,5 +1,5 @@
 import { Flex, Link, List, Text } from "@nypl/design-system-react-components"
-import { TermLink, Variant } from "../../types/browseTypes"
+import type { TermLink, Variant } from "../../types/browseTypes"
 
 const VariantTableCell = ({ record }: { record: Variant }) => {
   const PreferredTermLink = (prefTerm: TermLink) => (
