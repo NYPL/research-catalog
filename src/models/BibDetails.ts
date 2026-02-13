@@ -19,6 +19,7 @@ import type {
   AnnotatedMarcField,
   MarcDetail,
 } from "../types/marcTypes"
+import { getSubjectSearchURL } from "../utils/browseUtils"
 
 export default class BibDetails {
   bib: DiscoveryBibResult
@@ -319,7 +320,7 @@ export default class BibDetails {
         let internalUrl: string
         switch (field) {
           case "subjectLiteral":
-            internalUrl = `/browse/subjects/${encodeURIComponentWithPeriods(v)}`
+            internalUrl = getSubjectSearchURL(v)
             break
           case "creatorLiteral":
             internalUrl = `/search?filters[contributorLiteral][0]=${encodeURIComponentWithPeriods(

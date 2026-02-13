@@ -7,7 +7,7 @@ import {
   buildLockedBrowseQuery,
   browseContributorSortOptions,
   getBrowseFormKey,
-  isPreferredRecord,
+  isPreferredTerm,
   buildTermLinks,
 } from "../browseUtils"
 
@@ -122,15 +122,15 @@ describe("browseUtils", () => {
     })
   })
 
-  describe("isPreferredRecord", () => {
+  describe("isPreferredTerm", () => {
     it("returns true if object has @type preferredTerm", () => {
       const subj = { "@type": "preferredTerm", termLabel: "foo", count: 3 }
-      expect(isPreferredRecord(subj)).toBe(true)
+      expect(isPreferredTerm(subj)).toBe(true)
     })
 
     it("returns false if object has @type variant", () => {
       const subj = { "@type": "variant", termLabel: "foo" }
-      expect(isPreferredRecord(subj)).toBe(false)
+      expect(isPreferredTerm(subj)).toBe(false)
     })
   })
 

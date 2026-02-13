@@ -1,5 +1,5 @@
 import type { DiscoveryContributorResult } from "../../../types/browseTypes"
-import { isPreferredRecord } from "../../../utils/browseUtils"
+import { isPreferredTerm } from "../../../utils/browseUtils"
 import VariantTerm from "../../../models/browse/VariantTerm"
 import PreferredContributor from "../../../models/browse/PreferredContributor"
 import PreferredContributorTableCell from "./PreferredContributorTableCell"
@@ -16,7 +16,7 @@ const ContributorTable = ({
   contributorTableData: DiscoveryContributorResult[]
 }) => {
   function createContributorCell(contributor: DiscoveryContributorResult) {
-    if (isPreferredRecord(contributor)) {
+    if (isPreferredTerm(contributor)) {
       const newContributor = new PreferredContributor(contributor)
       return [
         <PreferredContributorTableCell

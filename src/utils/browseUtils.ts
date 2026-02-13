@@ -123,12 +123,12 @@ export function getBrowseQuery(params: BrowseParams): string {
   return completeQuery ? `?q=${completeQuery}` : ""
 }
 
-export function isPreferredRecord(
-  record: DiscoverySubjectResult | DiscoveryContributorResult
-): record is
+export function isPreferredTerm(
+  term: DiscoverySubjectResult | DiscoveryContributorResult
+): term is
   | DiscoveryPreferredSubjectResult
   | DiscoveryPreferredContributorResult {
-  return record["@type"] === "preferredTerm"
+  return term["@type"] === "preferredTerm"
 }
 
 export function isSubjectResponse(

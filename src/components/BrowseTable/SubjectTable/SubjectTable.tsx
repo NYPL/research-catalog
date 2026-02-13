@@ -1,5 +1,5 @@
 import type { DiscoverySubjectResult } from "../../../types/browseTypes"
-import { isPreferredRecord } from "../../../utils/browseUtils"
+import { isPreferredTerm } from "../../../utils/browseUtils"
 import PreferredSubject from "../../../models/browse/PreferredSubject"
 import PreferredSubjectTableCell from "./PreferredSubjectTableCell"
 import VariantTerm from "../../../models/browse/VariantTerm"
@@ -16,7 +16,7 @@ const SubjectTable = ({
   subjectTableData: DiscoverySubjectResult[]
 }) => {
   function createSubjectCell(subject: DiscoverySubjectResult) {
-    if (isPreferredRecord(subject)) {
+    if (isPreferredTerm(subject)) {
       const newSubject = new PreferredSubject(subject)
       return [
         <PreferredSubjectTableCell
