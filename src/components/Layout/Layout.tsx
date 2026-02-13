@@ -1,4 +1,4 @@
-import type { PropsWithChildren } from "react"
+import { type PropsWithChildren } from "react"
 import {
   Breadcrumbs,
   DSProvider,
@@ -16,8 +16,11 @@ import FeedbackForm from "../FeedbackForm/FeedbackForm"
 import type { Aggregation } from "../../types/filterTypes"
 import RCSubNav from "../RCSubNav/RCSubNav"
 import BrowseForm from "../BrowseForm/BrowseForm"
-import SubjectHeadingBanner from "../Banners/SubjectHeadingBanner"
 import SearchBanners from "../Banners/SearchBanners"
+import BrowseBanner from "../Banners/BrowseBanner"
+import { useRouter } from "next/router"
+import { getBrowseTypeFromUrl } from "../../utils/appUtils"
+import { useBrowseContext } from "../../context/BrowseContext"
 
 interface LayoutProps {
   activePage?: RCPage
@@ -40,10 +43,9 @@ const Layout = ({
   bannerNotification,
 }: PropsWithChildren<LayoutProps>) => {
   const showSearch = activePage === "search" || activePage === ""
-  const showBrowse = activePage === "browse" || activePage === "sh-results"
+  const { browseType } = useBrowseContext()
+  const showBrowse = activePage === "browse" || activePage === "browse-results"
   const showNotification = activePage === "" || activePage === "search"
-  const showBrowseBanner =
-    activePage === "browse" || activePage === "sh-results"
   return (
     <DSProvider>
       <Template variant="full">
@@ -88,6 +90,7 @@ const Layout = ({
             <RCSubNav
               isAuthenticated={isAuthenticated}
               activePage={activePage}
+              inBrowse={showBrowse}
             />
             {showSearch && (
               <SearchForm
@@ -102,7 +105,7 @@ const Layout = ({
                   aggregations={searchAggregations}
                   searchResultsCount={searchResultsCount}
                 />
-                {showBrowseBanner && <SubjectHeadingBanner />}
+                <BrowseBanner browseType={browseType} />
               </>
             )}
 

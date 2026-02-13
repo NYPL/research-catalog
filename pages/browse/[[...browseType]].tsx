@@ -15,13 +15,16 @@ import initializePatronTokenAuth from "../../src/server/auth"
 import type { HTTPStatusCode } from "../../src/types/appTypes"
 import type {
   BrowseSort,
+  DiscoveryContributorsResponse,
   DiscoverySubjectsResponse,
 } from "../../src/types/browseTypes"
 import {
-  browseSortOptions,
   getBrowseQuery,
   getBrowseIndexHeading,
   mapQueryToBrowseParams,
+  isSubjectResponse,
+  browseContributorSortOptions,
+  browseSubjectSortOptions,
 } from "../../src/utils/browseUtils"
 import { useRouter } from "next/router"
 import useLoading from "../../src/hooks/useLoading"
@@ -30,16 +33,18 @@ import ResultsError from "../../src/components/Error/ResultsError"
 import { idConstants, useFocusContext } from "../../src/context/FocusContext"
 import type { SortOrder } from "../../src/types/searchTypes"
 import ResultsSort from "../../src/components/SearchResults/ResultsSort"
+import { useBrowseContext } from "../../src/context/BrowseContext"
 
 interface BrowseProps {
-  results: DiscoverySubjectsResponse
+  results: DiscoverySubjectsResponse | DiscoveryContributorsResponse
   isAuthenticated: boolean
   errorStatus?: HTTPStatusCode | null
 }
 
 /**
- * The Browse index page is responsible for fetching and displaying subject headings,
- * as well as displaying and controlling pagination and sort.
+ * The Browse index page is responsible for fetching and displaying
+ * subject headings or author/contributors, as well as
+ * displaying and controlling pagination and sort.
  */
 export default function Browse({
   results,
@@ -49,6 +54,8 @@ export default function Browse({
   const metadataTitle = `Browse | ${SITE_NAME}`
   const { query, push } = useRouter()
   const browseParams = mapQueryToBrowseParams(query)
+  // Subjects or contributors, set and synced to URL from BrowseForm dropdown.
+  const { browseType } = useBrowseContext()
 
   const isLoading = useLoading()
   const { setPersistentFocus } = useFocusContext()
@@ -76,17 +83,16 @@ export default function Browse({
       BrowseSort,
       SortOrder | undefined
     ]
+    const basePath = browseType === "subjects" ? "/browse" : "/browse/authors"
+    const queryString = getBrowseQuery({
+      ...browseParams,
+      sortBy,
+      order,
+      page: undefined,
+    })
+
     setPersistentFocus(idConstants.browseResultsSort)
-    await push(
-      getBrowseQuery({
-        ...browseParams,
-        sortBy,
-        order,
-        page: undefined,
-      }),
-      undefined,
-      { scroll: false }
-    )
+    await push(`${basePath}${queryString}`, undefined, { scroll: false })
   }
 
   const loader = (
@@ -137,13 +143,19 @@ export default function Browse({
           variant="default"
         />
         <Heading size="heading6" color="section.research.secondary">
-          Use the search bar above to start browsing the Subject Headings index
+          Use the search bar above to start browsing the{" "}
+          {browseType === "subjects"
+            ? "Subject Headings"
+            : "Author/Contributor"}{" "}
+          index
         </Heading>
       </Flex>
     )
   }
 
   const renderResults = () => {
+    // Separate from the browse type in BrowseProvider context: the browse type of the currently displaying results.
+    const resultsType = isSubjectResponse(results) ? "subjects" : "contributors"
     return (
       <Box mb="xxl">
         <Flex
@@ -162,18 +174,30 @@ export default function Browse({
             aria-live="polite"
             mb={{ base: "m", md: 0 }}
           >
-            {getBrowseIndexHeading(browseParams, results.totalResults)}
+            {getBrowseIndexHeading(
+              resultsType,
+              browseParams,
+              results.totalResults
+            )}
           </Heading>
           <ResultsSort
             params={browseParams}
-            sortOptions={browseSortOptions}
+            sortOptions={
+              resultsType === "subjects"
+                ? browseSubjectSortOptions
+                : browseContributorSortOptions
+            }
             handleSortChange={handleSortChange}
           />
         </Flex>
         {isLoading ? (
           loader
+        ) : resultsType === "subjects" ? (
+          <SubjectTable
+            subjectTableData={(results as DiscoverySubjectsResponse).subjects}
+          />
         ) : (
-          <SubjectTable subjectTableData={results.subjects} />
+          <></>
         )}
         <Pagination
           id="results-pagination"
@@ -198,11 +222,15 @@ export default function Browse({
   )
 }
 
-export async function getServerSideProps({ req, query }) {
+export async function getServerSideProps({ req, params, query }) {
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
-  const { browseType = "subjects" } = query
+
+  const browseTypeParam = params?.browseType?.[0]
+
+  const browseType = browseTypeParam === "authors" ? "contributors" : "subjects"
 
   const browseParams = mapQueryToBrowseParams(query)
+
   const isAuthenticated = patronTokenResponse.isTokenValid
 
   // Skip request if no keywords

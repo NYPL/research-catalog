@@ -10,6 +10,7 @@ import NextLink from "next/link"
 
 interface SubNavProps {
   activePage: RCPage
+  inBrowse: boolean
   isAuthenticated?: boolean
 }
 
@@ -17,7 +18,7 @@ interface SubNavProps {
  * The RCSubNav component renders the primary Research Catalog menu
  * and passes the active prop to the correct link based on the route.
  */
-const RCSubNav = ({ activePage, isAuthenticated }: SubNavProps) => {
+const RCSubNav = ({ activePage, isAuthenticated, inBrowse }: SubNavProps) => {
   const logoutLink = useLogoutRedirect()
 
   return (
@@ -51,12 +52,8 @@ const RCSubNav = ({ activePage, isAuthenticated }: SubNavProps) => {
             href="/browse"
             as={NextLink}
             id="subnav-browse"
-            isSelected={activePage === "browse" || activePage === "sh-results"}
-            aria-current={
-              activePage === "browse" || activePage === "sh-results"
-                ? "page"
-                : undefined
-            }
+            isSelected={inBrowse}
+            aria-current={inBrowse ? "page" : undefined}
           >
             Browse the Catalog
           </SubNavLink>

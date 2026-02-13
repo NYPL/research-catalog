@@ -1,4 +1,4 @@
-import Browse from "../../../pages/browse"
+import Browse from "../../../pages/browse/[[...browseType]]"
 import { render, screen } from "../../../src/utils/testUtils"
 import { discoverySubjectsResult } from "../../fixtures/subjectFixtures"
 

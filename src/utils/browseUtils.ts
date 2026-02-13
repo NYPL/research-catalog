@@ -1,10 +1,15 @@
-import { BROWSE_RESULTS_PER_PAGE } from "../config/constants"
+import {
+  BROWSE_FORM_OPTIONS,
+  BROWSE_RESULTS_PER_PAGE,
+} from "../config/constants"
 import type {
   BrowseParams,
   BrowseQueryParams,
+  BrowseType,
   DiscoveryPreferredSubjectResult,
   DiscoveryPreferredTermResult,
   DiscoverySubjectResult,
+  DiscoverySubjectsResponse,
   SubjectLink,
 } from "../types/browseTypes"
 import {
@@ -33,6 +38,22 @@ const getValidParam = (
   return validParams.includes(param as string)
     ? (param as string)
     : defaultParam
+}
+
+/**
+ * getBrowseFormKey
+ * Get the selectOption key from a browseType and scope
+ * Returns "subject_has" (default) if not found.
+ */
+export const getBrowseFormKey = (
+  browseType: BrowseType,
+  scope: string
+): string => {
+  const key = Object.keys(BROWSE_FORM_OPTIONS).find((k) => {
+    const option = BROWSE_FORM_OPTIONS[k]
+    return option.browseType === browseType && option.scope === scope
+  })
+  return key || "subject_has"
 }
 
 /**
@@ -105,6 +126,12 @@ export function isPreferredSubject(
   return subject["@type"] === "preferredTerm"
 }
 
+export function isSubjectResponse(
+  results: any
+): results is DiscoverySubjectsResponse {
+  return "subjects" in results
+}
+
 export function getSubjectSearchURL(term: string) {
   const subject = encodeURIComponentWithPeriods(term).replace(/%2D%2D/g, "--")
   return `/browse/subjects/${subject}`
@@ -119,6 +146,7 @@ export function getSubjectBrowseURL(term: string) {
  * Used to generate the browse index heading text (Displaying 1-30 of 300 Subject Headings containing "cats")
  */
 export function getBrowseIndexHeading(
+  browseType: BrowseType,
   browseParams: BrowseParams,
   totalResults: number
 ): string {
@@ -133,7 +161,9 @@ export function getBrowseIndexHeading(
       : totalResults?.toLocaleString()
   } of${
     totalResults === 10000 ? " over" : ""
-  } ${totalResults?.toLocaleString()} Subject Headings ${
+  } ${totalResults?.toLocaleString()} ${
+    browseType === "subjects" ? "Subject Headings" : "Authors/Contributors"
+  } ${
     browseParams.q.length
       ? `${
           browseParams.searchScope === "has" ? "containing" : "beginning with"
@@ -143,12 +173,23 @@ export function getBrowseIndexHeading(
 }
 
 /**
- * browseSortOptions
+ * browseSubjectSortOptions
  * The allowed keys for the sort field and their respective labels
  */
-export const browseSortOptions: Record<string, string> = {
+export const browseSubjectSortOptions: Record<string, string> = {
   termLabel_asc: "Subject Heading (A - Z)",
   termLabel_desc: "Subject Heading (Z - A)",
+  count_desc: "Count (High - Low)",
+  count_asc: "Count (Low - High)",
+}
+
+/**
+ * browseContributorSortOptions
+ * The allowed keys for the sort field and their respective labels
+ */
+export const browseContributorSortOptions: Record<string, string> = {
+  termLabel_asc: "Ascending (A - Z)",
+  termLabel_desc: "Descending (Z - A)",
   count_desc: "Count (High - Low)",
   count_asc: "Count (Low - High)",
 }
