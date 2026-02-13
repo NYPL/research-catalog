@@ -5,12 +5,10 @@ import { appConfig } from "../../../src/config/config"
 let page: Page
 let accountPage: AccountPage
 
-const username = appConfig.testUser.username["qa"]
+const username = appConfig.testUser.username[appConfig.environment]
 const password = process.env.QA_PASSWORD
-const name = appConfig.testUser.name["qa"]
-const cardNumber = appConfig.testUser.cardNumber["qa"]
-
-test.skip(true, "Skip Account page tests for now")
+const name = appConfig.testUser.name[appConfig.environment]
+const cardNumber = appConfig.testUser.cardNumber[appConfig.environment]
 
 test.describe.serial("Account page", () => {
   // Start on home, navigate to login, and wait for redirect to return to account page
@@ -150,7 +148,7 @@ test.describe.serial("Account page", () => {
       await expect(accountPage.edit_notification_preferences_link).toBeVisible()
       await expect(accountPage.edit_pin_password_link).toBeVisible()
     })
-    test("should successfully edit user name", async () => {
+    test("should prevent invalid user name", async () => {
       await accountPage.usernameEditLink.click()
       await expect(page.getByText("If you delete your username,")).toBeVisible()
       await accountPage.usernameEditInput.waitFor({ state: "visible" })
@@ -163,7 +161,8 @@ test.describe.serial("Account page", () => {
       // Close the edit username form
       await accountPage.cancelButton.click()
       await expect(accountPage.usernameEditInput).toHaveCount(0)
-      // Test valid username
+    })
+    test.skip("should allow valid user name update", async () => {
       const newUsername = "usernameedited"
       await accountPage.usernameEditLink.click()
       await accountPage.usernameEditInput.fill(newUsername)
@@ -216,16 +215,18 @@ test.describe.serial("Account page", () => {
       await expect(accountPage.homeLibraryValue).toContainText("53rd Street")
     })
     test.afterAll(async () => {
-      // Revert changes to username, phone, email, and home library
-      // Revert username
-      await accountPage.usernameEditLink.click()
-      await accountPage.usernameEditInput.waitFor({ state: "visible" })
-      await accountPage.usernameEditInput.fill(username)
-      await accountPage.saveChangesButton.click()
-      await expect(accountPage.successMessage).toBeVisible({ timeout: 20000 })
-      await expect(accountPage.username).toHaveText(username, {
-        timeout: 20000,
-      })
+      // Revert changes to account settings
+
+      // Revert username: username test skipped for now
+      // await accountPage.usernameEditLink.click()
+      // await accountPage.usernameEditInput.waitFor({ state: "visible" })
+      // await accountPage.usernameEditInput.fill(username)
+      // await accountPage.saveChangesButton.click()
+      // await expect(accountPage.successMessage).toBeVisible({ timeout: 20000 })
+      // await expect(accountPage.username).toHaveText(username, {
+      //   timeout: 20000,
+      // })
+
       // Revert phone
       await accountPage.edit_phone_link.click()
       await accountPage.phoneInput.waitFor({ state: "visible" })
