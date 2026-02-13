@@ -198,9 +198,9 @@ The application is hosted on AWS:
 
 The Research Catalog is dockerized, which affects how environment variables are managed:
 
-1. **Terraform Configuration**: Environment variables for QA and production environments are configured by the DevOps team in Terraform
-2. **Task Definition Updates**: When a new ECS task definition is created during deployment, environment variables are set based on the Terraform configuration
-3. **Manual Changes Overwritten**: Any environment variables manually set in the AWS admin will be overwritten when a new task definition is created
+1. **Terraform configuration**: Environment variables for QA and production environments are configured by the DevOps team in Terraform
+2. **Task Definition updates**: When a new ECS task definition is created during deployment, environment variables are set based on the Terraform configuration
+3. **Manual Changes overwritten**: Any environment variables manually set in the AWS admin will be overwritten when a new task definition is created
 
 #### Environment configuration with NEXT_PUBLIC_APP_ENV
 
@@ -234,7 +234,7 @@ const apiUrl = appConfig.apiEndpoints.platform[appConfig.environment]
 
 ## Logging
 
-The application uses `node-utils` (Winston) for server-side logging, and New Relic for both server and client-side logging.
+The application uses the `node-utils` logger (Winston) for server-side logging, and New Relic for both server and client-side logging.
 
 ### Accessing logs
 

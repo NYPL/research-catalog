@@ -31,6 +31,11 @@ export const appConfig: AppConfig = {
       qa: "https://dev-login.nypl.org/auth/logout",
       production: "https://login.nypl.org/auth/logout",
     },
+    sierraBase: {
+      development: "https://nypl-sierra-test.iii.com/iii/sierra-api/v6/",
+      qa: "https://nypl-sierra-test.iii.com/iii/sierra-api/v6/",
+      production: "https://nypl.iii.com:443/iii/sierra-api/v6/",
+    },
   },
   searchNotification: {
     development: "",

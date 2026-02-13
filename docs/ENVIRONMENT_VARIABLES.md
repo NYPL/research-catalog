@@ -3,24 +3,64 @@
 ## Table of contents
 
 - [General information](#general-information)
-- [Application variables](#application-variables)
-- [AWS ECS environment variables](#aws-ecs-environment-variables)
+- [Runtime config](#runtime-config)
+  - [appConfig](#appconfig)
+  - [node-utils config](#node-utils-config)
+- [Build time config](#build-time-config)
+  - AWS
+  - Vercel
+  - Github Actions
+- [Troubleshooting](#troubleshooting)
 
-## General information
+## General information and setup
 
-## Application variables
+The app gets its environment variables from 3 places:
 
-| Variable                | Type   | Value Example              | Description                                                                     |
-| ----------------------- | ------ | -------------------------- | ------------------------------------------------------------------------------- |
-| `NEXT_PUBLIC_APP_ENV`   | string | "development"              | App environment key used to determine various environment-specific app settings |
-| `NEW_RELIC_APP_NAME`    | string | "Research Catalog [Local]" | App name for New Relic                                                          |
-| `NEW_RELIC_LICENSE_KEY` | string | ""                         | Authentication key for New Relic (encrypted)                                    |
+1. Runtime non-secret config: in the [`appConfig`](/src/config/appConfig.ts)
+2. Runtime **secret** config: in [`/config/*.yaml`](/config)
+3. Build time config: in [`.env.local`](/.env.local)
 
-## AWS ECS Environment Variables
+Your `env.local` should copy the [`env.example`](/.env.example), and development should be possible without the New Relic and QA values. Reach out to a team member if they're needed, or check the [troubleshooting](#troubleshooting) guide for more.
 
-We use environment variables to make authorized requests to NYPL's API platform and the Sierra client. In order to be secure, those encrypted environment variables are stored in `./config.*.yaml`files, and decrypted using AWS KMS by `node-utils`.
+## Runtime config
 
-**Running this app locally requires you to have an `~/.aws/config` file with SSO configuration for the `nypl-digital-dev` profile.**
+### appConfig
+
+Most environment-specific variables are set from the `appConfig`, which uses the `.env`'s `NEXT_PUBLIC_APP_ENV` variable (the `NEXT_PUBLIC` prefix exposes this variable to the browser) to set the corresponding value:
+
+```typescript
+// In src/config/appConfig.ts:
+export const appConfig: AppConfig = {
+  environment:
+    (process.env.NEXT_PUBLIC_APP_ENV as Environment) || "development",
+  apiEndpoints: {
+    platform: {
+      development: "https://qa-platform.nypl.org/api",
+      qa: "https://qa-platform.nypl.org/api",
+      production: "https://platform.nypl.org/api",
+    },
+    // Other endpoints with environment-specific values...
+  },
+  // Other configuration values...
+}
+```
+
+This pattern allows the application to use different configuration values based on the environment without requiring code changes. For example:
+
+```typescript
+import { appConfig } from "../config/config"
+
+// This will automatically use the correct URL based on NEXT_PUBLIC_APP_ENV
+const apiUrl = appConfig.apiEndpoints.platform[appConfig.environment]
+```
+
+Any app-wide or environment specific variable that does not need to be encrypted can be set in this file or in [constants](/src/config/constants.tsx).
+
+### node-utils config
+
+We use environment variables to make authorized requests to NYPL's API platform and the Sierra client. In order to be secure, those encrypted environment variables are stored in `./config.*.yaml`files, and decrypted using AWS KMS by the [`node-utils`](https://github.com/NYPL/node-utils) package.
+
+To run the app locally (i.e., decrypt these values and instantiate the [Platform API](/src/server/nyplApiClient/index.ts) and [Sierra](/src/server/sierraClient/index.ts) clients successfully), **you must have an `~/.aws/config` file with SSO configuration for the `nypl-digital-dev` profile.**
 
 | Variable                     | Description                                           |
 | ---------------------------- | ----------------------------------------------------- |
@@ -29,22 +69,25 @@ We use environment variables to make authorized requests to NYPL's API platform 
 | `SIERRA_KEY`                 | Sierra key. This value must be encrypted.             |
 | `SIERRA_SECRET`              | Sierra secret. This value must be encrypted.          |
 
-### Encrypting
+## Build time config
 
-`PLATFORM_API_CLIENT_ID` and `PLATFORM_API_CLIENT_SECRET` are assumed to be encrypted. We need these variables to create an instance of the `nypl-data-api-client` npm package and make authorized requests to the NYPL Digital API endpoints. This is needed for the Discovery UI app to make requests itself to the APIs.
+The critical `.env` variable is `NEXT_PUBLIC_APP_ENV`, which sets the rest of the config in `appConfig`.
+The other variables are exceptions to this rule:
 
-In order to encrypt, please download and install the `aws` [cli tool](https://aws.amazon.com/cli/). The command to encrypt is
+- New Relic (our monitoring platform) requires its config to be initialized before the app starts, so those variables are set here
+- Playwright testing.....
 
-    aws kms encrypt --key-id [your IAM key from AWS] --plaintext [value to encrypt] --output text --query CiphertextBlob
+| Variable                | Type   | Value example                        | Description                                                                     |
+| ----------------------- | ------ | ------------------------------------ | ------------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_APP_ENV`   | string | "development", "qa", or "production" | App environment key used to determine various environment-specific app settings |
+| `NEW_RELIC_APP_NAME`    | string | "Research Catalog [Local]"           | App name for New Relic                                                          |
+| `NEW_RELIC_LICENSE_KEY` | string |                                      | Authentication key for New Relic                                                |
+| `QA_PASSWORD`           | string |                                      | User account password for Playwright testing                                    |
 
-The `aws kms encrypt` commands returns and object with a `CiphertextBlob` property. Since we only want that value, we use the `--query` flag to retrieve just that. This value can be copied and pasted into the AWS ECS configuration in the UI for the app's environment.
+## Troubleshooting
+
+### Encrypting and decrypting
 
 More information can be found in the [encrypt docs](http://docs.aws.amazon.com/cli/latest/reference/kms/encrypt.html).
 
 Alternatively, you can use the [kms-util](https://github.com/NYPL-discovery/kms-util) helper package.
-
-NOTE: This value is base64 encoded, so when decoding make sure to decode using base64.
-
-### Decrypting
-
-In order to decrypt, we are using the `aws-sdk` npm module. Please check the [nyplApiClient](src/server/nyplApiClient/index.ts) file for more information and implementation on decryption.

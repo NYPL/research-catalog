@@ -1,6 +1,7 @@
 import wrapper from "@nypl/sierra-wrapper"
 import { config, logger } from "@nypl/node-utils"
 import { bootstrapConfig } from "../../../lib/bootstrap"
+import { appConfig } from "../../config/appConfig"
 
 export class SierraClientError extends Error {
   constructor(message: string) {
@@ -15,7 +16,8 @@ const CACHE: {
 
 async function buildClient() {
   await bootstrapConfig()
-  const { SIERRA_KEY, SIERRA_SECRET, SIERRA_BASE } = config.getConfig()
+  const { SIERRA_KEY, SIERRA_SECRET } = config.getConfig()
+  const SIERRA_BASE = appConfig.apiEndpoints.sierraBase[appConfig.environment]
 
   if (!SIERRA_KEY || !SIERRA_SECRET || !SIERRA_BASE) {
     console.error("Missing Sierra credentials")
