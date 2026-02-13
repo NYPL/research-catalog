@@ -4,7 +4,7 @@ on:
   push:
     branches:
       #- qa
-      - SCC-5000/playwright-account-editing-test
+      - SCC-5000/playwright-account-editing
   workflow_dispatch:
 
 jobs:
