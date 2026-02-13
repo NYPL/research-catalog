@@ -9,11 +9,8 @@ on:
 
 jobs:
   test:
-    # Disabled until we have a stable test account
-    # if: false
     runs-on: ubuntu-latest
     env:
-      NEXT_PUBLIC_APP_ENV: qa
       QA_PASSWORD: ${{ secrets.QA_PASSWORD }}
       SIERRA_KEY: ${{ secrets.SIERRA_KEY }}
       SIERRA_SECRET: ${{ secrets.SIERRA_SECRET }}
