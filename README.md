@@ -155,7 +155,7 @@ The application integrates with two external APIs through custom client implemen
 
 Both clients:
 
-- Automatically decrypt credentials using AWS KMS
+- Automatically decrypt credentials using `node-utils`' AWS KMS
 - Cache client instances for better performance
 - Use environment-specific configuration based on NEXT_PUBLIC_APP_ENV
 - Include error handling and logging
@@ -186,51 +186,13 @@ When a pull request is opened, Vercel automatically creates a preview link for t
 
 The preview link is then posted as a comment on the PR by the Vercel bot. This allows team members to easily access and test the changes in the PR.
 
-### AWS Infrastructure
+### AWS infrastructure
 
 The application is hosted on AWS:
 
 - **ECS** for container orchestration
 - **CloudWatch** for logging
 - **KMS** for secret management
-
-### Environment management
-
-The Research Catalog is dockerized, which affects how environment variables are managed:
-
-1. **Terraform configuration**: Environment variables for QA and production environments are configured by the DevOps team in Terraform
-2. **Task Definition updates**: When a new ECS task definition is created during deployment, environment variables are set based on the Terraform configuration
-3. **Manual Changes overwritten**: Any environment variables manually set in the AWS admin will be overwritten when a new task definition is created
-
-#### Environment configuration with NEXT_PUBLIC_APP_ENV
-
-The application uses the `NEXT_PUBLIC_APP_ENV` environment variable to determine which configuration values to use from `src/config/config.ts`:
-
-```typescript
-// From src/config/config.ts
-export const appConfig: AppConfig = {
-  environment:
-    (process.env.NEXT_PUBLIC_APP_ENV as Environment) || "development",
-  apiEndpoints: {
-    platform: {
-      development: "https://qa-platform.nypl.org/api",
-      qa: "https://qa-platform.nypl.org/api",
-      production: "https://platform.nypl.org/api",
-    },
-    // Other endpoints with environment-specific values...
-  },
-  // Other configuration...
-}
-```
-
-This pattern allows the application to use different configuration values based on the environment without requiring code changes. When accessing configuration values in the code, you would use:
-
-```typescript
-import { appConfig } from "../config/config"
-
-// This will automatically use the correct URL based on NEXT_PUBLIC_APP_ENV
-const apiUrl = appConfig.apiEndpoints.platform[appConfig.environment]
-```
 
 ## Logging
 

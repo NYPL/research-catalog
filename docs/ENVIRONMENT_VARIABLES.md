@@ -7,10 +7,10 @@
   - [appConfig](#appconfig)
   - [node-utils config](#node-utils-config)
 - [Build time config](#build-time-config)
-  - AWS
-  - Vercel
-  - Github Actions
-- [Troubleshooting](#troubleshooting)
+- [Vercel](#vercel)
+- [Github Actions](#github-actions)
+- [AWS](#github-actions)
+- [Encrypting and decypting](#encrypting-and-decrypting)
 
 ## General information and setup
 
@@ -20,7 +20,7 @@ The app gets its environment variables from 3 places:
 2. Runtime **secret** config: in [`/config/*.yaml`](/config)
 3. Build time config: in [`.env.local`](/.env.local)
 
-Your `env.local` should copy the [`env.example`](/.env.example), and development should be possible without the New Relic and QA values. Reach out to a team member if your work requires them, or check the [troubleshooting](#troubleshooting) guide for more.
+Your `env.local` should copy the [`env.example`](/.env.example), and development should be possible without the New Relic and QA values.
 
 ## Runtime config
 
@@ -54,7 +54,7 @@ import { appConfig } from "../config/config"
 const apiUrl = appConfig.apiEndpoints.platform[appConfig.environment]
 ```
 
-Any app-wide or environment specific variable that does not need to be encrypted can be set in this file or in [constants](/src/config/constants.tsx).
+Any app-wide or environment-specific variable that does not need to be encrypted can be set in this file or in [constants](/src/config/constants.tsx).
 
 ### node-utils config
 
@@ -62,12 +62,12 @@ We use environment variables to make authorized requests to NYPL's API platform 
 
 To run the app locally (i.e., decrypt these values and instantiate the [Platform API](/src/server/nyplApiClient/index.ts) and [Sierra](/src/server/sierraClient/index.ts) clients successfully), **you must have an `~/.aws/config` file with SSO configuration for the `nypl-digital-dev` profile.**
 
-| Variable                     | Description                                           |
-| ---------------------------- | ----------------------------------------------------- |
-| `PLATFORM_API_CLIENT_ID`     | Platform client ID. This value must be encrypted.     |
-| `PLATFORM_API_CLIENT_SECRET` | Platform client secret. This value must be encrypted. |
-| `SIERRA_KEY`                 | Sierra key. This value must be encrypted.             |
-| `SIERRA_SECRET`              | Sierra secret. This value must be encrypted.          |
+| Variable                     | Type   | Description                                           |
+| ---------------------------- | ------ | ----------------------------------------------------- |
+| `PLATFORM_API_CLIENT_ID`     | string | Platform client ID. This value must be encrypted.     |
+| `PLATFORM_API_CLIENT_SECRET` | string | Platform client secret. This value must be encrypted. |
+| `SIERRA_KEY`                 | string | Sierra key. This value must be encrypted.             |
+| `SIERRA_SECRET`              | string | Sierra secret. This value must be encrypted.          |
 
 ## Build time config
 
@@ -75,7 +75,7 @@ The critical `.env` variable is `NEXT_PUBLIC_APP_ENV`, which sets the rest of th
 The other variables are exceptions to this rule:
 
 - New Relic (our monitoring platform) requires its config to be initialized before the app starts, so those variables are set here
-- Playwright testing requires an authenticated user account, so we need a secret password, but we don't want to deal with setting up `node-utils` to decrypt within the Playwright build
+- Playwright testing requires an authenticated user account, but we don't want to deal with setting up `node-utils` to decrypt within the Playwright build– we inject `QA_PASSWORD` using `dotenv`
 
 | Variable                | Type   | Value example                        | Description                                                                     |
 | ----------------------- | ------ | ------------------------------------ | ------------------------------------------------------------------------------- |
@@ -84,23 +84,23 @@ The other variables are exceptions to this rule:
 | `NEW_RELIC_LICENSE_KEY` | string |                                      | Authentication key for New Relic                                                |
 | `QA_PASSWORD`           | string |                                      | User account password for Playwright testing                                    |
 
-### AWS
-
-How does this app build in AWS?
-
-### Vercel
+## Vercel
 
 Our Vercel environment uses an access key and ID for AWS authentication, rather than the refreshable session token used for local development. The AWS key and ID are set in the [environment variables](https://vercel.com/nypl/research-catalog/settings/environment-variables).
-Additionally, since Vercel only bundles files that are statically referenced at build time, we pass the config object to `node-utils` as a JSON ([vercel-config.json](`/config/vercel-config.json`)).
+Additionally, since Vercel only bundles files that are statically referenced at build time, we pass the config object to `node-utils` as a JSON ([vercel-config.json](/config/vercel-config.json)).
 
-### Github Actions
+## Github Actions
 
-Like Vercel, the Github Actions [environment](https://github.com/NYPL/research-catalog/settings/secrets/actions) uses a persisting AWS key and ID rather than a session token. ...
+Like Vercel, the Github Actions [environment](https://github.com/NYPL/research-catalog/settings/secrets/actions) uses a persisting AWS key and ID rather than a session token. We also set `QA_PASSWORD` as a repo-level secret, so it can be injected to the GHA runner for the Playwright test workflow.
 
-## Troubleshooting
+## AWS
 
-### Encrypting and decrypting
+Our QA and production deployments run on AWS ECS. The application is deployed as a containerized service, with ECS task definitions and related infrastructure set through Terraform.
 
-Th information can be found in the [encrypt docs](http://docs.aws.amazon.com/cli/latest/reference/kms/encrypt.html).
+The QA and prod task definitions include the values set in `.env`. AWS will deploy with the latest task definition values by default, but if environment variables need to be permanently added, changed, or removed, DevOps must update them in Terraform.
 
-Alternatively, you can use the [kms-util](https://github.com/NYPL-discovery/kms-util) helper package.
+## Encrypting and decrypting
+
+Under the hood, `node-utils` is using AWS KMS to encrypt and decrypt. More information about this process can be found in the [encrypt docs](http://docs.aws.amazon.com/cli/latest/reference/kms/encrypt.html).
+
+To encrypt/decrypt values yourself, you can use the [kms-util](https://github.com/NYPL-discovery/kms-util) helper package.
