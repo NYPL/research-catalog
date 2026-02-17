@@ -90,10 +90,12 @@ How does this app build in AWS?
 
 ### Vercel
 
-Our Vercel environment uses an access key and ID for AWS authentication, rather than the refreshable session token used for local development. The AWS key and ID are set in the [environment variables](https://vercel.com/nypl/research-catalog/settings/environment-variables), along with `NEXT_PUBLIC_APP_ENV`.
+Our Vercel environment uses an access key and ID for AWS authentication, rather than the refreshable session token used for local development. The AWS key and ID are set in the [environment variables](https://vercel.com/nypl/research-catalog/settings/environment-variables).
 Additionally, since Vercel only bundles files that are statically referenced at build time, we pass the config object to `node-utils` as a JSON ([vercel-config.json](`/config/vercel-config.json`)).
 
 ### Github Actions
+
+Like Vercel, the Github Actions [environment](https://github.com/NYPL/research-catalog/settings/secrets/actions) uses a persisting AWS key and ID rather than a session token. ...
 
 ## Troubleshooting
 
