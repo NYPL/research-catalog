@@ -25,7 +25,7 @@ import {
 export function getSearchResultsHeading(
   searchParams: SearchParams,
   totalResults: number,
-  browseOptions?: { slug: string; browseType: string }
+  browseOptions?: { slug: string; browseType: string; role?: string }
 ): string {
   const [resultsStart, resultsEnd] = getPaginationOffsetStrings(
     searchParams.page,
@@ -34,7 +34,13 @@ export function getSearchResultsHeading(
   )
 
   const queryDisplayString = browseOptions
-    ? ` for ${browseOptions.browseType} "${browseOptions.slug}"`
+    ? ` for ${
+        browseOptions.browseType === "subjects"
+          ? "Subject Heading"
+          : "Author/Contributor"
+      } "${browseOptions.slug}${
+        browseOptions.role ? `, ${browseOptions.role}` : ""
+      }"`
     : buildQueryDisplayString(searchParams)
 
   return `Displaying ${

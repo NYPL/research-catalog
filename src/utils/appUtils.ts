@@ -89,3 +89,7 @@ export function getBrowseTypeFromUrl(query): BrowseType {
     ? "contributors"
     : "subjects"
 }
+
+export function getBrowseTypeFromPath(path): BrowseType {
+  return path.includes("/authors") ? "contributors" : "subjects"
+}

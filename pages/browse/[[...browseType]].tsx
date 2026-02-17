@@ -58,6 +58,7 @@ export default function Browse({
   // Subjects or contributors, set and synced to URL from BrowseForm dropdown.
   const { browseType } = useBrowseContext()
   const basePath = browseType === "subjects" ? "/browse" : "/browse/authors"
+  console.log("on browse index query", query)
 
   const isLoading = useLoading()
   const { setPersistentFocus } = useFocusContext()

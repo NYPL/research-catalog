@@ -19,7 +19,7 @@ import type { RCPage } from "../../types/pageTypes"
 import type { Aggregation } from "../../types/filterTypes"
 import { useBrowseContext } from "../../context/BrowseContext"
 import { BackButton } from "../BackButton/BackButton"
-import { getBrowseTypeFromUrl } from "../../utils/appUtils"
+import { getBrowseTypeFromPath } from "../../utils/appUtils"
 
 const BrowseForm = ({
   activePage,
@@ -38,7 +38,7 @@ const BrowseForm = ({
   const [searchTerm, setSearchTerm] = useState((router.query.q as string) || "")
   const [selectedOption, setSelectedOption] = useState(
     getBrowseFormKey(
-      getBrowseTypeFromUrl(router.query),
+      getBrowseTypeFromPath(router.asPath),
       (router?.query?.search_scope as string) || "has"
     )
   )
@@ -49,7 +49,7 @@ const BrowseForm = ({
   )
 
   useEffect(() => {
-    setBrowseType(getBrowseTypeFromUrl(router.query))
+    setBrowseType(getBrowseTypeFromPath(router.asPath))
     setAppliedFilters(collapseMultiValueQueryParams(router.query))
 
     if (typeof window !== "undefined") {
@@ -125,7 +125,6 @@ const BrowseForm = ({
               const newOption = BROWSE_FORM_OPTIONS[newValue]
 
               setBrowseType(newOption.browseType)
-              //setSearchScope(newOption.scope)
               setSelectedOption(newValue)
             },
           }}
