@@ -10,7 +10,7 @@
 - [Vercel](#vercel)
 - [Github Actions](#github-actions)
 - [AWS](#github-actions)
-- [Encrypting and decypting](#encrypting-and-decrypting)
+- [Encrypting and decrypting](#encrypting-and-decrypting)
 
 ## General information and setup
 
