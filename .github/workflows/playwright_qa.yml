@@ -3,16 +3,13 @@ name: Run Playwright tests
 on:
   push:
     branches:
-      - qa
+      - SCC-5104/node-utils
   workflow_dispatch:
 
 jobs:
   test:
-    # Disabled until we have a stable test account
-    if: false
     runs-on: ubuntu-latest
     env:
-      QA_USERNAME: ${{ secrets.QA_USERNAME }}
       QA_PASSWORD: ${{ secrets.QA_PASSWORD }}
       SIERRA_KEY: ${{ secrets.SIERRA_KEY }}
       SIERRA_SECRET: ${{ secrets.SIERRA_SECRET }}
