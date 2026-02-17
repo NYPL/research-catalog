@@ -6,7 +6,6 @@ import Link from "../Link/Link"
 const FeesBanner = () => {
   return (
     <Banner
-      mb="m"
       variant="negative"
       content={
         <>

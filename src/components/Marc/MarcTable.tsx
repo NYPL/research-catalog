@@ -77,6 +77,7 @@ const MarcTable = ({ marc }: { marc: Marc }) => {
 
   return (
     <div
+      className="marcTable"
       style={{ overflowX: "auto" }}
       {...(!isLargerThanSmallTablet && {
         tabIndex: 0,

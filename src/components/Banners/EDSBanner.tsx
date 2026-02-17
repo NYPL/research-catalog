@@ -19,7 +19,7 @@ const EDSBanner = () => {
             isExternal
             href="https://www.nypl.org/research/collections/online-resources-databases"
           >
-            Article Plus
+            Articles Plus
           </Link>{" "}
           to discover online journals, books, and more from home with your
           library card.

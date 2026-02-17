@@ -186,7 +186,7 @@ When a pull request is opened, Vercel automatically creates a preview link for t
 
 The preview link is then posted as a comment on the PR by the Vercel bot. This allows team members to easily access and test the changes in the PR.
 
-### AWS infrastructure
+### AWS Infrastructure
 
 The application is hosted on AWS:
 
