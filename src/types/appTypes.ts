@@ -1,6 +1,7 @@
 export interface AppConfig {
   environment: Environment
   apiEndpoints: Record<string, APIEndpoints>
+  searchNotification: any
   urls: Record<string, string>
   closedLocations: string[]
   recapClosedLocations: string[]
@@ -21,6 +22,7 @@ export interface APIEndpoints {
   qa: string
   production: string
 }
+
 export interface Features {
   development: boolean
   qa: boolean

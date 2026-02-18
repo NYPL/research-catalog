@@ -8,7 +8,6 @@ import { userEvent } from "@testing-library/user-event"
 import RequestsTab from "./RequestsTab"
 import { PatronDataProvider } from "../../../context/PatronDataContext"
 import { pickupLocations } from "../../../../__test__/fixtures/rawSierraAccountData"
-import logger from "../../../../logger.js"
 
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 

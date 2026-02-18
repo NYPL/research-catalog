@@ -7,7 +7,7 @@ import Link from "../Link/Link"
 import { HoldContactButton } from "./HoldContactButton"
 
 import { PATHS } from "../../config/constants"
-import { appConfig } from "../../config/config"
+import { appConfig } from "../../config/appConfig"
 
 interface PatronIneligibilityErrorsProps {
   patronEligibilityStatus: PatronEligibilityStatus
