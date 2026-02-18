@@ -17,9 +17,7 @@
     "load-search-vocabs": "concurrently -k -n \"NEXT,SCRIPT\" -c \"blue,magenta\" \"npm run dev\" \"npx tsx scripts/load-search-vocabs.ts\""
   },
   "dependencies": {
-    "@aws-sdk/client-kms": "3.921.0",
     "@nypl/design-system-react-components": "4.0.3",
-    "@aws-sdk/client-ses": "3.922.0",
     "@nypl/nypl-data-api-client": "1.0.5",
     "@nypl/pickup-time-estimator": "1.5.2",
     "@nypl/sierra-wrapper": "1.1.0",
@@ -31,18 +29,17 @@
     "iso8601-duration": "2.1.1",
     "jose": "5.2.0",
     "newrelic": "13.6.2",
-    "next": "13.5.9",
-    "qs": "6.11.2",
+    "next": "14.2.35",
+    "qs": "6.14.1",
     "react": "18.2.0",
     "react-barcode": "1.4.6",
     "react-dom": "18.2.0",
     "swr": "2.2.1",
     "ts-jest": "29.1.1",
-    "underscore": "1.13.6",
-    "winston": "3.17.0"
+    "underscore": "1.13.6"
   },
   "devDependencies": {
-    "@playwright/test": "1.53.2",
+    "@playwright/test": "1.58.2",
     "@testing-library/dom": "9.3.3",
     "@testing-library/jest-dom": "6.1.4",
     "@testing-library/react": "14.0.0",
@@ -69,7 +66,7 @@
     "next-router-mock": "^0.9.10",
     "prettier": "^2.8.8",
     "react-element-to-jsx-string": "^15.0.0",
-    "sass": "^1.63.6",
+    "sass": "^1.97.3",
     "typescript": "5.0.4",
     "user-event": "^4.0.0"
   },
