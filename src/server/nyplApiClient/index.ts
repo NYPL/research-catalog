@@ -3,17 +3,7 @@ import { config, logger } from "@nypl/node-utils"
 import { appConfig } from "../../config/appConfig"
 import { bootstrapConfig } from "../../../lib/bootstrap"
 
-interface KMSCache {
-  clients: Record<string, any>
-  id: string | null
-  secret: string | null
-}
-
-const CACHE: KMSCache = {
-  clients: {},
-  id: null,
-  secret: null,
-}
+const CACHE: Record<string, NyplApiClient> = {}
 
 export class NyplApiClientError extends Error {
   constructor(message: string) {
