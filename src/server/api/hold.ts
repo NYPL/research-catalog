@@ -21,9 +21,9 @@ import {
   locationIsClosed,
 } from "../../utils/locationUtils"
 
-import { appConfig } from "../../config/config"
+import { appConfig } from "../../config/appConfig"
 import { logServerError } from "../../utils/logUtils"
-import logger from "../../../logger"
+import { logger } from "@nypl/node-utils"
 
 /**
  * Getter function for hold delivery locations.
