@@ -27,8 +27,9 @@ const nyplApiClient = async ({
     config.getConfig()
 
   const clientCacheKey = `${apiName}${version}`
-  if (CACHE.clients[clientCacheKey]) {
-    return CACHE.clients[clientCacheKey]
+
+  if (CACHE[clientCacheKey]) {
+    return CACHE[clientCacheKey]
   }
 
   if (!PLATFORM_API_CLIENT_ID || !PLATFORM_API_CLIENT_SECRET) {
@@ -65,7 +66,7 @@ const nyplApiClient = async ({
       return originalPost(path, body)
     }
 
-    CACHE.clients[clientCacheKey] = client
+    CACHE[clientCacheKey] = client
     return client
   } catch (error: any) {
     logger.error("Failed to create NYPL API client", {
