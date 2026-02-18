@@ -3,17 +3,7 @@ import { config, logger } from "@nypl/node-utils"
 import { appConfig } from "../../config/appConfig"
 import { bootstrapConfig } from "../../../lib/bootstrap"
 
-interface KMSCache {
-  clients: Record<string, any>
-  id: string | null
-  secret: string | null
-}
-
-const CACHE: KMSCache = {
-  clients: {},
-  id: null,
-  secret: null,
-}
+const CACHE: Record<string, NyplApiClient> = {}
 
 export class NyplApiClientError extends Error {
   constructor(message: string) {
@@ -37,8 +27,9 @@ const nyplApiClient = async ({
     config.getConfig()
 
   const clientCacheKey = `${apiName}${version}`
-  if (CACHE.clients[clientCacheKey]) {
-    return CACHE.clients[clientCacheKey]
+
+  if (CACHE[clientCacheKey]) {
+    return CACHE[clientCacheKey]
   }
 
   if (!PLATFORM_API_CLIENT_ID || !PLATFORM_API_CLIENT_SECRET) {
@@ -75,7 +66,7 @@ const nyplApiClient = async ({
       return originalPost(path, body)
     }
 
-    CACHE.clients[clientCacheKey] = client
+    CACHE[clientCacheKey] = client
     return client
   } catch (error: any) {
     logger.error("Failed to create NYPL API client", {

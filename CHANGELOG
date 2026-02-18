@@ -11,14 +11,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added dependabot.yml [SCC-5146](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5146)
 - Added Playwright tests for bib and MARC pages
+- Added `node-utils` package to reconfigure environment, documentation updated accordingly [SCC-5104](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5104)
 - Added Playwright tests for My Account functionality [SCC-5000](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5000)
 - Added User Guide banner to account page [SCC-5185](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5185)
-- Added `node-utils` package to reconfigure environment, documentation updated accordingly [SCC-5104](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5104)
 
 ### Updated
 
 - Corrected Article(s) Plus banner copy [SCC-5186](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5186)
 - Updated `fetchSubjects` API handler to `fetchBrowse`, now handling contributor results [SCC-4970](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4970)
+- Updated Next.js to `14.2.35` and other dependency versions [SCC-5099](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5099)
 
 ## [1.7.0] 2026-01-29
 

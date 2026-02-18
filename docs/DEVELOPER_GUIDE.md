@@ -40,7 +40,7 @@ When code is pushed to the `qa` branch, it is automatically deployed to the [QA 
 
 When code is pushed to the `production` branch, it is automatically deployed to the [production environment](https://nypl.org/research/research-catalog), hosted in the AWS ECS cluster `research-catalog-production` within the `nypl-digital-dev` account.
 
-There is a third ECS cluster reserved for the Research Catalog, `research-catalog-train`, that is used flexibly and is often reserved for testing feature branches, which can be configured via the [Github Actions config file](../.github/workflows/test-and-deploy.yml).
+There is a third ECS cluster reserved for the Research Catalog, `research-catalog-train`, that is used flexibly and is often reserved for testing feature branches. Deployments to `train` can be configured with the [Github Actions deploy workflow](../.github/workflows/test-and-deploy.yml).
 
 ### Deployment process (staging, releasing, tagging)
 
@@ -75,8 +75,6 @@ There is a third ECS cluster reserved for the Research Catalog, `research-catalo
 \*\* If a hotfix is required, it is merged directly into the `production` branch and backmerged into the `main` and `qa` branches.
 
 ## Changelog
-
-### Changelog process
 
 This project maintains a `CHANGELOG.md` file to document all notable changes. The changelog follows the [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) format and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 

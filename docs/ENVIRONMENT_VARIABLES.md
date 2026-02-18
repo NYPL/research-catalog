@@ -20,7 +20,7 @@ The app gets its environment variables from 3 places:
 2. Runtime **secret** config: in [`/config/*.yaml`](/config)
 3. Build time config: in [`.env.local`](/.env.local)
 
-Your `env.local` should copy the [`env.example`](/.env.example), and development should be possible without the New Relic and QA values.
+Your `env.local` should copy the [`env.example`](/.env.example). Development should be possible without the New Relic and QA values (reach out to a teammate to get them if needed).
 
 ## Runtime config
 
