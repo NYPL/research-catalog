@@ -41,7 +41,6 @@ const SearchResult = ({ bib }: SearchResultProps) => {
   const metadata = [
     bib.format,
     bib.publicationStatement,
-    bib.yearPublished,
     bib.getNumItemsMessage(),
   ].filter(Boolean)
 
