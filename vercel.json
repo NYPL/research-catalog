@@ -6,8 +6,10 @@
     }
   ],
   "functions": {
-    "pages/api/**/*.js": {
-      "includeFiles": "config/*.yaml",
+    "pages/search/index.tsx": {
+      "maxDuration": 60
+    },
+    "pages/api/*.js": {
       "maxDuration": 60
     }
   }

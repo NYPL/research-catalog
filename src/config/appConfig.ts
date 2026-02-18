@@ -1,7 +1,6 @@
 import type { AppConfig, Environment } from "../types/appTypes"
 import type { NYPLocationKey, RecapLocationKey } from "../types/locationTypes"
 
-// Client side environment variables
 export const appConfig: AppConfig = {
   environment:
     (process.env.NEXT_PUBLIC_APP_ENV as Environment) || "development",

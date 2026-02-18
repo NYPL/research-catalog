@@ -20,7 +20,7 @@ async function buildClient() {
   const SIERRA_BASE = appConfig.apiEndpoints.sierraBase[appConfig.environment]
 
   if (!SIERRA_KEY || !SIERRA_SECRET || !SIERRA_BASE) {
-    console.error("Missing Sierra credentials")
+    logger.error("Missing Sierra credentials")
   }
 
   await wrapper.config({
