@@ -8,11 +8,8 @@ on:
 
 jobs:
   test:
-    # Disabled until we have a stable test account
-    if: false
     runs-on: ubuntu-latest
     env:
-      QA_USERNAME: ${{ secrets.QA_USERNAME }}
       QA_PASSWORD: ${{ secrets.QA_PASSWORD }}
       SIERRA_KEY: ${{ secrets.SIERRA_KEY }}
       SIERRA_SECRET: ${{ secrets.SIERRA_SECRET }}
