@@ -207,8 +207,8 @@ export const browseSubjectSortOptions: Record<string, string> = {
  * The allowed keys for the sort field and their respective labels
  */
 export const browseContributorSortOptions: Record<string, string> = {
-  termLabel_asc: "Ascending (A - Z)",
-  termLabel_desc: "Descending (Z - A)",
+  termLabel_asc: "Author/Contributor (A - Z)",
+  termLabel_desc: "Author/Contributor (Z - A)",
   count_desc: "Count (High - Low)",
   count_asc: "Count (Low - High)",
 }
