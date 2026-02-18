@@ -13,7 +13,7 @@ export interface AppConfig {
     name: APIEndpoints
     cardNumber: APIEndpoints
     username: APIEndpoints
-    password: string | undefined
+    password: string
   }
 }
 export interface APIEndpoints {

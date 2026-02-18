@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added dependabot.yml [SCC-5146](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5146)
 - Added Playwright tests for bib and MARC pages
+- Added Playwright tests for My Account functionality [SCC-5000](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5000)
 - Add User Guide banner to account page [SCC-5185](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5185)
 
 ### Updated
