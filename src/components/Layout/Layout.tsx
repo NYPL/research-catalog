@@ -18,8 +18,6 @@ import RCSubNav from "../RCSubNav/RCSubNav"
 import BrowseForm from "../BrowseForm/BrowseForm"
 import SearchBanners from "../Banners/SearchBanners"
 import BrowseBanner from "../Banners/BrowseBanner"
-import { useRouter } from "next/router"
-import { getBrowseTypeFromUrl } from "../../utils/appUtils"
 import { useBrowseContext } from "../../context/BrowseContext"
 
 interface LayoutProps {
@@ -106,11 +104,13 @@ const Layout = ({
                   aggregations={searchAggregations}
                   searchResultsCount={searchResultsCount}
                 />
-                <BrowseBanner browseType={browseType} />
+                {activePage === "browse" && (
+                  <BrowseBanner browseType={browseType} />
+                )}
               </>
             )}
 
-            {showSearch && (
+            {(showSearch || activePage === "browse-results") && (
               <SearchBanners
                 showNotification={showNotification}
                 bannerNotification={bannerNotification}

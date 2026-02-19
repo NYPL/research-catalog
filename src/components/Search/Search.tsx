@@ -32,6 +32,8 @@ import type {
   SearchResultsResponse,
 } from "../../types/searchTypes"
 import type { RCPage } from "../../types/pageTypes"
+import { getBrowseTypeFromPath } from "../../utils/appUtils"
+import { useRouter } from "next/router"
 
 interface SearchProps {
   errorStatus?: HTTPStatusCode | null
@@ -44,6 +46,7 @@ interface SearchProps {
   handlePageChange: (page: number) => Promise<void>
   handleSortChange: (selectedSortOption: string) => Promise<void>
   slug?: string
+  role?: string
 }
 
 const Search = ({
@@ -57,12 +60,15 @@ const Search = ({
   handlePageChange,
   handleSortChange,
   slug,
+  role,
 }: SearchProps) => {
   const isLoading = useLoading()
+  const router = useRouter()
 
   const searchResultsHeadingRef = useRef(null)
   // Ref for accessible announcement of loading state.
   const liveLoadingRegionRef = useRef<HTMLDivElement | null>(null)
+  const resultsType = getBrowseTypeFromPath(router.asPath)
 
   useEffect(() => {
     if (liveLoadingRegionRef.current) {
@@ -154,7 +160,8 @@ const Search = ({
                   slug
                     ? {
                         slug,
-                        browseType: "Subject Heading",
+                        browseType: resultsType,
+                        role,
                       }
                     : undefined
                 )}
