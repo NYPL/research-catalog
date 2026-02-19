@@ -54,7 +54,8 @@ const BrowseForm = ({
 
     if (typeof window !== "undefined") {
       const ref = document.referrer
-      if (ref.includes("/browse?q")) setBackUrl(ref)
+      if (ref.includes("/browse?q") || ref.includes("/browse/authors?q"))
+        setBackUrl(ref)
     }
   }, [router.query])
 
