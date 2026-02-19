@@ -78,12 +78,16 @@ function buildQueryDisplayString(searchParams: SearchParams): string {
     const displayParam = searchFields.find((field) => field.name === param)
     if (displayParam && searchParamsObject[param]) {
       let label = displayParam.label
-      const value = searchParamsObject[param]
-      const plural = label === "keyword" && value.indexOf(" ") > -1 ? "s" : ""
-      // Special case for the author display string for both
+      let value = searchParamsObject[param]
+      let plural = label === "keyword" && value.indexOf(" ") > -1 ? "s" : ""
+      // Special cases for the author display string for both
       // the "contributor" search scope and the "contributorLiteral" filter.
       if (label === "author") {
         label = "author/contributor"
+        if (Array.isArray(value) && value.length > 1) {
+          value = value.join(", ")
+          plural = "s"
+        }
       }
 
       paramsStringCollection[param] = `${label}${plural} "${value}"`
@@ -142,6 +146,25 @@ function getIdentifierQuery(identifiers: Identifiers): string {
 }
 
 /**
+ * getRoleQuery
+ * Check conditions for appending a role and return query string.
+ */
+function getRoleQuery(filters, role): string {
+  let roleQuery = ""
+
+  const contributorLiteral = filters?.contributorLiteral
+
+  const hasSingleContributorLiteral =
+    Array.isArray(contributorLiteral) && contributorLiteral.length === 1
+
+  if (hasSingleContributorLiteral && role) {
+    roleQuery = `&role=${encodeURIComponentWithPeriods(role)}`
+  }
+
+  return roleQuery
+}
+
+/**
  * getFilterQuery
  * Get the search params from the filter values.
  */
@@ -188,12 +211,14 @@ export function getSearchQuery(params: SearchParams): string {
     filters = {},
     identifiers = {},
     q,
+    role,
     page = 1,
   } = params
   const searchKeywordsQuery = encodeURIComponentWithPeriods(q)
   const sortQuery = getSortQuery(sortBy, order)
 
   const filterQuery = getFilterQuery(filters)
+  const roleQuery = getRoleQuery(filters, role)
   const fieldQuery = getFieldQuery(field)
   const identifierQuery = getIdentifierQuery(identifiers)
   const pageQuery = page !== 1 ? `&page=${page}` : ""
@@ -217,7 +242,15 @@ export function getSearchQuery(params: SearchParams): string {
     ? advancedSearchQueryParams
     : ""
 
-  const completeQuery = `${searchKeywordsQuery}${advancedQuery}${filterQuery}${sortQuery}${fieldQuery}${pageQuery}${identifierQuery}`
+  const completeQuery =
+    `${searchKeywordsQuery}` +
+    `${advancedQuery}` +
+    `${filterQuery}` +
+    `${roleQuery}` +
+    `${sortQuery}` +
+    `${fieldQuery}` +
+    `${pageQuery}` +
+    `${identifierQuery}`
   return completeQuery?.length ? `?q=${completeQuery}` : ""
 }
 
@@ -306,6 +339,7 @@ export function mapQueryToSearchParams({
   isbn,
   oclc,
   lccn,
+  role,
   ...queryFilters
 }: SearchQueryParams): SearchParams {
   const hasIdentifiers = issn || isbn || oclc || lccn
@@ -334,6 +368,7 @@ export function mapQueryToSearchParams({
       oclc,
       lccn,
     },
+    role,
   }
 }
 

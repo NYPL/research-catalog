@@ -14,7 +14,6 @@ import type {
   DiscoverySubjectsResponse,
   TermLink,
 } from "../types/browseTypes"
-import { Link } from "@nypl/design-system-react-components"
 import {
   encodeURIComponentWithPeriods,
   getPaginationOffsetStrings,
