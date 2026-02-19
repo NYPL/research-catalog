@@ -8,7 +8,7 @@ import {
 } from "@nypl/design-system-react-components"
 import RCHead from "../../src/components/Head/RCHead"
 import Layout from "../../src/components/Layout/Layout"
-import SubjectTable from "../../src/components/SubjectTable/SubjectTable"
+import SubjectTable from "../../src/components/BrowseTable/SubjectTable/SubjectTable"
 import { SITE_NAME, BROWSE_RESULTS_PER_PAGE } from "../../src/config/constants"
 import { fetchBrowse } from "../../src/server/api/browse"
 import initializePatronTokenAuth from "../../src/server/auth"
@@ -34,6 +34,7 @@ import { idConstants, useFocusContext } from "../../src/context/FocusContext"
 import type { SortOrder } from "../../src/types/searchTypes"
 import ResultsSort from "../../src/components/SearchResults/ResultsSort"
 import { useBrowseContext } from "../../src/context/BrowseContext"
+import ContributorTable from "../../src/components/BrowseTable/ContributorTable/ContributorTable"
 
 interface BrowseProps {
   results: DiscoverySubjectsResponse | DiscoveryContributorsResponse
@@ -56,6 +57,7 @@ export default function Browse({
   const browseParams = mapQueryToBrowseParams(query)
   // Subjects or contributors, set and synced to URL from BrowseForm dropdown.
   const { browseType } = useBrowseContext()
+  const basePath = browseType === "subjects" ? "/browse" : "/browse/authors"
 
   const isLoading = useLoading()
   const { setPersistentFocus } = useFocusContext()
@@ -73,9 +75,13 @@ export default function Browse({
   }
 
   const handlePageChange = async (page: number) => {
-    const newQuery = getBrowseQuery({ ...browseParams, page })
+    const queryString = getBrowseQuery({
+      ...browseParams,
+      page: page,
+    })
+
     setPersistentFocus(idConstants.browseResultsHeading)
-    await push(newQuery)
+    await push(`${basePath}${queryString}`, undefined, { scroll: false })
   }
 
   const handleSortChange = async (selectedSortOption: string) => {
@@ -83,7 +89,6 @@ export default function Browse({
       BrowseSort,
       SortOrder | undefined
     ]
-    const basePath = browseType === "subjects" ? "/browse" : "/browse/authors"
     const queryString = getBrowseQuery({
       ...browseParams,
       sortBy,
@@ -197,7 +202,11 @@ export default function Browse({
             subjectTableData={(results as DiscoverySubjectsResponse).subjects}
           />
         ) : (
-          <></>
+          <ContributorTable
+            contributorTableData={
+              (results as DiscoveryContributorsResponse).contributors
+            }
+          />
         )}
         <Pagination
           id="results-pagination"

@@ -1,23 +1,13 @@
 import { Flex, List, Text } from "@nypl/design-system-react-components"
-import Link from "../Link/Link"
-import type { PreferredSubject, SubjectLink } from "../../types/browseTypes"
-import { BASE_URL } from "../../config/constants"
+import type { PreferredSubject } from "../../../types/browseTypes"
+import { BASE_URL } from "../../../config/constants"
+import { commaSeparatedTermLinks } from "../BrowseTable"
 
 const PreferredSubjectTableCell = ({
   subject,
 }: {
   subject: PreferredSubject
 }) => {
-  const commaSeparatedSubjectLinks = (terms: SubjectLink[]) =>
-    terms.map((term, i) => (
-      <span key={term.url}>
-        <Link href={term.url} isUnderlined={false}>
-          {term.termLabel}
-        </Link>
-        {i < terms.length - 1 && ", "}
-      </span>
-    ))
-
   const relatedTerms = [
     subject.seeAlso,
     subject.broaderTerms,
@@ -30,11 +20,13 @@ const PreferredSubjectTableCell = ({
       <a href={`${BASE_URL}${subject.url}`}>{subject.termLabel}</a>
       {relatedTerms.length > 0 && (
         <List
+          sx={{ "li::before": { color: "ui.black" } }}
           variant="ul"
           m="0"
           listItems={relatedTerms?.map(({ label, terms }) => (
             <Text size="body2" mt="-23px" key={label}>
-              {label}: {commaSeparatedSubjectLinks(terms)}
+              <span style={{ fontWeight: "bold" }}>{label}:</span>{" "}
+              {commaSeparatedTermLinks(terms)}
             </Text>
           ))}
         />

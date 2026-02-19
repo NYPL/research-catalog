@@ -13,6 +13,14 @@ export interface BrowseParams {
   searchScope?: string
 }
 
+export interface BrowseQueryParams {
+  q?: string
+  sort?: BrowseSort
+  sort_direction?: SortOrder
+  search_scope?: BrowseScope
+  page?: string
+}
+
 export interface DiscoverySubjectsResponse {
   status: HTTPStatusCode
   totalResults: number
@@ -25,19 +33,11 @@ export interface DiscoveryContributorsResponse {
   contributors: DiscoveryContributorResult[]
 }
 
-export interface BrowseQueryParams {
-  q?: string
-  sort?: BrowseSort
-  sort_direction?: SortOrder
-  search_scope?: BrowseScope
-  page?: string
-}
-
 export type DiscoveryContributorResult =
-  | DiscoveryVariantContributorResult
+  | DiscoveryVariantResult
   | DiscoveryPreferredContributorResult
 
-export type DiscoveryVariantContributorResult = {
+export type DiscoveryVariantResult = {
   "@type": string
   termLabel: string
   preferredTerms?: DiscoveryPreferredTermResult[]
@@ -46,25 +46,18 @@ export type DiscoveryVariantContributorResult = {
 export type DiscoveryPreferredContributorResult = {
   "@type": string
   termLabel: string
-  roleCounts: DiscoveryContributorRole[]
-}
-
-export type DiscoveryContributorRole = {
-  role: string
   count?: number
+  roleCounts?: { role: string; count: number }[]
+  seeAlso?: DiscoveryPreferredTermResult[]
+  earlierHeadings?: DiscoveryPreferredTermResult[]
+  laterHeadings?: DiscoveryPreferredTermResult[]
 }
 
 export type DiscoverySubjectResult =
-  | DiscoveryVariantSubjectResult
+  | DiscoveryVariantResult
   | DiscoveryPreferredSubjectResult
 
 export type DiscoveryPreferredTermResult = { termLabel: string; count?: number }
-
-export type DiscoveryVariantSubjectResult = {
-  "@type": string
-  termLabel: string
-  preferredTerms?: DiscoveryPreferredTermResult[]
-}
 
 export type DiscoveryPreferredSubjectResult = {
   "@type": string
@@ -76,21 +69,35 @@ export type DiscoveryPreferredSubjectResult = {
   broaderTerms?: DiscoveryPreferredTermResult[]
 }
 
-export type SubjectLink = {
+export type ContributorRole = {
+  roleLabel: string
+  url: string
+  count: number
+}
+
+export type TermLink = {
   url: string
   termLabel: string
   count?: string
 }
 
-export type VariantSubject = {
+export type Variant = {
   termLabel: string
-  preferredTerms?: SubjectLink[]
+  preferredTerms?: TermLink[]
 }
 
-export interface PreferredSubject extends SubjectLink {
-  seeAlso?: { label: string; terms: SubjectLink[] }
-  narrowerTerms?: { label: string; terms: SubjectLink[] }
-  broaderTerms?: { label: string; terms: SubjectLink[] }
+export interface PreferredContributor extends TermLink {
+  roles?: ContributorRole[]
+  seeAlso?: { label: string; terms: TermLink[] }
+  earlierHeadings?: { label: string; terms: TermLink[] }
+  laterHeadings?: { label: string; terms: TermLink[] }
 }
 
-export type Subject = PreferredSubject | VariantSubject
+export interface PreferredSubject extends TermLink {
+  seeAlso?: { label: string; terms: TermLink[] }
+  narrowerTerms?: { label: string; terms: TermLink[] }
+  broaderTerms?: { label: string; terms: TermLink[] }
+}
+
+export type Subject = PreferredSubject | Variant
+export type Contributor = PreferredContributor | Variant
