@@ -1,4 +1,4 @@
-import { SUBJECTS_PER_PAGE } from "../config/constants"
+import { BROWSE_RESULTS_PER_PAGE } from "../config/constants"
 import type {
   BrowseParams,
   BrowseQueryParams,
@@ -7,7 +7,10 @@ import type {
   DiscoverySubjectResult,
   SubjectLink,
 } from "../types/browseTypes"
-import { getPaginationOffsetStrings } from "./appUtils"
+import {
+  encodeURIComponentWithPeriods,
+  getPaginationOffsetStrings,
+} from "./appUtils"
 import {
   buildFilterQuery,
   collapseMultiValueQueryParams,
@@ -87,7 +90,7 @@ export function getBrowseQuery(params: BrowseParams): string {
     order = defaultSort.order
   }
 
-  const browseKeywordsQuery = encodeURIComponent(q)
+  const browseKeywordsQuery = encodeURIComponentWithPeriods(q)
   const sortQuery = `&sort=${sortBy}&sort_direction=${order}`
   const scopeQuery = `&search_scope=${searchScope}`
   const pageQuery = page !== 1 ? `&page=${page}` : ""
@@ -103,7 +106,7 @@ export function isPreferredSubject(
 }
 
 export function getSubjectSearchURL(term: string) {
-  const subject = encodeURIComponent(term).replace(/%2D%2D/g, "--")
+  const subject = encodeURIComponentWithPeriods(term).replace(/%2D%2D/g, "--")
   return `/browse/subjects/${subject}`
 }
 
@@ -122,10 +125,10 @@ export function getBrowseIndexHeading(
   const [resultsStart, resultsEnd] = getPaginationOffsetStrings(
     browseParams.page,
     totalResults,
-    SUBJECTS_PER_PAGE
+    BROWSE_RESULTS_PER_PAGE
   )
   return `Displaying ${
-    totalResults > SUBJECTS_PER_PAGE
+    totalResults > BROWSE_RESULTS_PER_PAGE
       ? `${resultsStart}-${resultsEnd}`
       : totalResults?.toLocaleString()
   } of${

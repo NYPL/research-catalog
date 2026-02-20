@@ -96,22 +96,22 @@ describe("Advanced search form", () => {
       "/search?q=&filters%5Blanguage%5D%5B0%5D=lang%3Aafr&searched_from=advanced"
     )
   })
-  it("can search and select collection checkboxes", async () => {
-    const collectionMultiselect = screen.getByLabelText(/Collection/, {
+  it("can search and select division checkboxes", async () => {
+    const divisionMultiselect = screen.getByLabelText(/Division/, {
       selector: "button",
     })
-    expect(collectionMultiselect).toHaveAttribute("aria-expanded", "false")
-    await userEvent.click(collectionMultiselect)
-    expect(collectionMultiselect).toHaveAttribute("aria-expanded", "true")
+    expect(divisionMultiselect).toHaveAttribute("aria-expanded", "false")
+    await userEvent.click(divisionMultiselect)
+    expect(divisionMultiselect).toHaveAttribute("aria-expanded", "true")
 
-    const collectionFilterSearch = screen.getByLabelText(/Search collections/, {
+    const divisionFilterSearch = screen.getByLabelText(/Search divisions/, {
       selector: "input",
     })
     const milsteinDivisionOption = screen.getByLabelText(/Milstein Division/, {
       selector: "input",
     })
     expect(milsteinDivisionOption).toBeInTheDocument()
-    await userEvent.type(collectionFilterSearch, "Jean")
+    await userEvent.type(divisionFilterSearch, "Jean")
     expect(milsteinDivisionOption).not.toBeInTheDocument()
     await userEvent.click(
       screen.getByLabelText(
@@ -126,10 +126,10 @@ describe("Advanced search form", () => {
   })
 
   it("can clear the form", async () => {
-    const collectionMultiselect = screen.getByLabelText(/Collection/, {
+    const divisionMultiselect = screen.getByLabelText(/Division/, {
       selector: "button",
     })
-    await userEvent.click(collectionMultiselect)
+    await userEvent.click(divisionMultiselect)
     const milsteinDivisionOption = screen.getByLabelText(/Milstein Division/, {
       selector: "input",
     })
@@ -138,9 +138,9 @@ describe("Advanced search form", () => {
     const [subjectInput, keywordInput, titleInput, contributorInput] =
       await updateAllFields()
 
-    expect(collectionMultiselect).toHaveAttribute(
+    expect(divisionMultiselect).toHaveAttribute(
       "aria-label",
-      "Collection multiselect, 1 item selected"
+      "Division multiselect, 1 item selected"
     )
     await userEvent.click(screen.getByText("Clear fields"))
     ;[subjectInput, keywordInput, titleInput, contributorInput].forEach(
@@ -148,9 +148,9 @@ describe("Advanced search form", () => {
         expect(input).toBeEmptyDOMElement()
       }
     )
-    expect(collectionMultiselect).toHaveAttribute(
+    expect(divisionMultiselect).toHaveAttribute(
       "aria-label",
-      "Collection multiselect, 0 items selected"
+      "Division multiselect, 0 items selected"
     )
 
     submit()

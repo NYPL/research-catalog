@@ -7,6 +7,8 @@ import {
   bibWithSubjectHeadings,
   bibNoItems,
   princetonRecord,
+  bibWithItems,
+  physicalDescriptionBib,
 } from "../../../__test__/fixtures/bibFixtures"
 import type { LinkedBibDetail } from "../../types/bibDetailsTypes"
 import BibDetailsModel from "../BibDetails"
@@ -15,6 +17,11 @@ describe("Bib Details model", () => {
   const bibWithSupContentModel = new BibDetailsModel(
     bibWithSupplementaryContent.resource,
     bibWithSupplementaryContent.annotatedMarc
+  )
+
+  const bibWithItemsModel = new BibDetailsModel(
+    bibWithItems.resource,
+    bibWithItems.annotatedMarc
   )
   const bibWithFindingAid = new BibDetailsModel(
     bibWithFindingAidAndTOC.resource,
@@ -76,53 +83,39 @@ describe("Bib Details model", () => {
       ])
     })
   })
-  describe("extent", () => {
-    it("should add a semicolon after extent if there is not one already", () => {
-      const bib = new BibDetailsModel({
-        identifier: [{ uri: "123456" }],
-        extent: ["99 bottles of beer"],
-        dimensions: ["99 x 99 cm"],
-      })
-      expect(bib.extent[0].includes("; "))
+  describe("Description", () => {
+    const physicalDescriptionBibModel = new BibDetailsModel(
+      physicalDescriptionBib
+    )
+    it("populates Description with physicalDescription", () => {
+      const description = physicalDescriptionBibModel.bottomDetails.find(
+        (detail) => detail.label === "Description"
+      ).value
+      expect(description).toStrictEqual(
+        physicalDescriptionBib.physicalDescription
+      )
     })
-    it("should append dimensions to extent", () => {
-      const bib = new BibDetailsModel({
-        identifier: [{ uri: "123456" }],
-        extent: ["99 bottles of beer"],
-        dimensions: ["99 x 99 cm"],
-      })
-      expect(bib.extent[0]).toBe("99 bottles of beer; 99 x 99 cm")
+  })
+  describe("Summary", () => {
+    const physicalDescriptionBibModel = new BibDetailsModel(
+      physicalDescriptionBib
+    )
+    it("populates summary with summary instead of description", () => {
+      const summary = physicalDescriptionBibModel.bottomDetails.find(
+        (detail) => detail.label === "Summary"
+      ).value
+      expect(summary).toStrictEqual(physicalDescriptionBib.description)
     })
-    it("should not add semicolon if it already is in extent", () => {
-      const bib = new BibDetailsModel({
-        identifier: [{ uri: "123456" }],
-        extent: ["700 sheets of woven gold; "],
-        dimensions: ["1 x 1 in."],
+    it("populates summary with description when summary is not present", () => {
+      const summaryValue = ["summary"]
+      const summaryBibModel = new BibDetailsModel({
+        ...physicalDescriptionBib,
+        summary: summaryValue,
       })
-      expect(bib.extent[0]).toBe("700 sheets of woven gold; 1 x 1 in.")
-    })
-    it("should remove semicolon if there is no dimensions", () => {
-      const bib = new BibDetailsModel({
-        identifier: [{ uri: "123456" }],
-        extent: ["700 sheets of woven gold; "],
-      })
-      const anotherBib = new BibDetailsModel({
-        identifier: [{ uri: "123456" }],
-        extent: ["700 sheets of woven gold;"],
-      })
-      expect(bib.extent[0]).toBe("700 sheets of woven gold")
-      expect(anotherBib.extent[0]).toBe("700 sheets of woven gold")
-    })
-    it("should display dimensions if there are dimensions and no extent", () => {
-      const bib = new BibDetailsModel({
-        identifier: [{ uri: "123456" }],
-        dimensions: ["1,000,000mm x 7ft"],
-      })
-      expect(bib.extent[0]).toBe("1,000,000mm x 7ft")
-    })
-    it("should do nothing if there are no dimensions or extent", () => {
-      const bib = new BibDetailsModel({ identifier: [{ uri: "123456" }] })
-      expect(bib.extent).toBeNull()
+      const summary = summaryBibModel.bottomDetails.find(
+        (detail) => detail.label === "Summary"
+      ).value
+      expect(summary).toStrictEqual(summaryValue)
     })
   })
   describe("standard fields", () => {
@@ -136,9 +129,9 @@ describe("Bib Details model", () => {
     it("builds standard fields", () => {
       expect(
         bibWithSupContentModel.bottomDetails.find(
-          (detail) => detail.label === "Genre/Form"
+          (detail) => detail.label === "Language"
         )
-      ).toStrictEqual({ label: "Genre/Form", value: ["Humorous fiction."] })
+      ).toStrictEqual({ label: "Language", value: ["English"] })
     })
   })
   describe("combined bottom details", () => {
@@ -148,11 +141,12 @@ describe("Bib Details model", () => {
       )
       expect(subject).toHaveLength(1)
       const genreForm = bibWithSupContentModel.bottomDetails.filter(
-        (detail) => detail.label === "Genre/Form"
+        (detail) => detail.label === "Genre/form"
       )
       expect(genreForm).toHaveLength(1)
     })
   })
+
   describe("external linking fields", () => {
     it("can handle missing fields", () => {
       expect(bibWithParallelsModel.supplementaryContent).toBeNull()
@@ -198,6 +192,39 @@ describe("Bib Details model", () => {
     })
   })
   describe("internal linking fields", () => {
+    it("links expected resource fields with search filters", () => {
+      const placeOfPublication = bibWithItemsModel.bottomDetails.filter(
+        (detail) => detail.label === "Place of publication"
+      )
+      expect(placeOfPublication).toStrictEqual([
+        {
+          link: "internal",
+          label: "Place of publication",
+          value: [
+            {
+              url: "/search?filters[placeOfPublication][0]=Mansfield%2C%20Ohio",
+              urlLabel: "Mansfield, Ohio",
+            },
+          ],
+        },
+      ])
+      const donor = bibWithItemsModel.bottomDetails.filter(
+        (detail) => detail.label === "Donor/sponsor"
+      )
+      expect(donor).toStrictEqual([
+        {
+          link: "internal",
+          label: "Donor/sponsor",
+          value: [
+            {
+              url: "/search?filters[donor][0]=Gift%20of%20the%20DeWitt%20Wallace%20Endowment%20Fund%2C%20named%20in%20honor%20of%20the%20founder%20of%20Reader's%20Digest",
+              urlLabel:
+                "Gift of the DeWitt Wallace Endowment Fund, named in honor of the founder of Reader's Digest",
+            },
+          ],
+        },
+      ])
+    })
     it("can handle missing fields", () => {
       const bogusBib = new BibDetailsModel({
         ...parallelsBib.resource,
@@ -220,7 +247,7 @@ describe("Bib Details model", () => {
         value: [
           {
             urlLabel: "Watson, Tom, 1965-",
-            url: "/search?filters[creatorLiteral][0]=Watson%2C%20Tom%2C%201965-",
+            url: "/search?filters[contributorLiteral][0]=Watson%2C%20Tom%2C%201965-",
           },
         ],
       })

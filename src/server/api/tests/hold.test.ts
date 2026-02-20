@@ -215,6 +215,7 @@ describe("postHoldRequest", () => {
       itemId: "123",
       patronId: "456",
       source: "source",
+      bibId: "789",
       pickupLocation: "schwarzman",
     })) as HoldPostResult
 
@@ -226,6 +227,7 @@ describe("postHoldRequest", () => {
       itemId: "123",
       patronId: "456",
       source: "source",
+      bibId: "789",
       pickupLocation: "schwarzman",
     })) as HoldPostResult
 
@@ -239,6 +241,7 @@ describe("postEDDRequest", () => {
       itemId: "123",
       patronId: "456",
       source: "source",
+      bibId: "789",
       emailAddress: "test@test.com",
       startPage: "1",
       endPage: "2",
@@ -254,6 +257,7 @@ describe("postEDDRequest", () => {
       itemId: "123",
       patronId: "456",
       source: "source",
+      bibId: "789",
       // @ts-ignore: Invalid pick up location for a non EDD hold.
       pickupLocation: "edd",
     })) as HoldPostResult

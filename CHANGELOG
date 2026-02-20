@@ -7,9 +7,90 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+### Added
+
+- Added dependabot.yml [SCC-5146](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5146)
+- Added Playwright tests for bib and MARC pages
+- Added Playwright tests for My Account functionality [SCC-5000](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5000)
+- Added User Guide banner to account page [SCC-5185](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5185)
+
+### Updated
+
+- Corrected Article(s) Plus banner copy [SCC-5186](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5186)
+- Updated `fetchSubjects` API handler to `fetchBrowse`, now handling contributor results [SCC-4970](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4970)
+
+## [1.7.0] 2026-01-29
+
+### Updated
+
+- Updated Summary and Description values in BibDetails [SCC-4784](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4784)
+
+### Added
+
+- Added MARC model [SCC-5106](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5106)
+- Added MARC view page and table [SCC-5107](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5107)
+- Added print styles for MARC table [SCC-5187](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5187)
+
+## [1.6.7] 2026-01-21 (Hotfix)
+
+- Updated legacy deprecation messaging
+
+## [1.6.6] 2026-01-15
+
+### Updated
+
+- Updated KMS decryption to ignore session token in Vercel
+- Updated `contributorLiteral` filter to display in results string, not in filter tags [SCC-5120](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5120)
+- Passed bibId into hold request service. [SCC-5132](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5132)
+
+## [1.6.5] 2026-01-08
+
+### Updated
+
+- Updated filter tags to clear without removing un-tagged filters [SCC-5116](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5116)
+- Fixed call number/volume to not appear as string-coerced 'null' [SCC-5121](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5121)
+
+### Added
+
+- Added volume/date to feedback form item metadata [SCC-4252](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4252)
+- Added periods to URI encoding [SCC-5064](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5064)
+- Added URI encoding to advanced search filter values [SCC-5122](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5122)
+
+## [1.6.4] 2025-12-22
+
+### Updated
+
+- Updated landing page legacy deprecation date to January 22, 2026 [SCC-5119](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5119)
+
+## [1.6.3] 2025-12-18
+
+### Updated
+
+- Updated bib author to use `contributorLiteral` filter [SCC-4929](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4929)
+- Updated landing page legacy deprecation date to January 2026 [SCC-5112](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5112)
+- Updated collection filter to display as "Division" [SCC-5080](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5080)
+- Updated landing page legacy deprecation date to January 2026 [SCC-5112](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5112)
+
+### Added
+
+- Added workflow to run Playwright tests on `qa` [SCC-4993](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4993)
+- Added search filter links to bib's `addedAuthorTitle`, `placeOfPublication`, `series`, `uniformTitle`, `titleAlt`, and `donor` fields [SCC-4921](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4921)
+
+## [1.6.2] 2025-12-11
+
+### Updated
+
+- Updated search result card and finding aid/electronic resource styling [SCC-5038](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5038)
+
+### Added
+
+- Added user guide banner [SCC-5060](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5060)
+- Added volume to checkout/hold title display in My Account [SCC-5067](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5067)
+- Added volume to call number display on search result card [SCC-5079](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5079)
+
 ## Removed
 
-- Removed batched item fetch on bibs since `all_items` param is supported (SCC-4183)(https://newyorkpubliclibrary.atlassian.net/browse/SCC-4183)
+- Removed batched item fetch on bibs since `all_items` param is supported [SCC-4183](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4183)
 - Removed Adobe Analytics and reverse proxy/SHEP environment variables [SCC-5036](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5036)
 
 ## [1.6.1] 2025-11-13

@@ -21,7 +21,7 @@ describe("browseUtils", () => {
           "X, Malcolm, 1925-1965 -- Political and social views."
         )
       ).toBe(
-        "/browse/subjects/X%2C%20Malcolm%2C%201925-1965%20--%20Political%20and%20social%20views."
+        "/browse/subjects/X%2C%20Malcolm%2C%201925-1965%20--%20Political%20and%20social%20views%2E"
       )
     })
   })
@@ -133,14 +133,14 @@ describe("browseUtils", () => {
   })
 
   describe("getBrowseIndexHeading", () => {
-    it("returns correct heading with totalResults less than SUBJECTS_PER_PAGE", () => {
+    it("returns correct heading with totalResults less than BROWSE_RESULTS_PER_PAGE", () => {
       const params = { q: "cats", page: 1, searchScope: "has" }
       const heading = getBrowseIndexHeading(params, 20)
       expect(heading).toContain("20")
       expect(heading).toContain('containing "cats"')
     })
 
-    it("returns correct heading with totalResults more than SUBJECTS_PER_PAGE", () => {
+    it("returns correct heading with totalResults more than BROWSE_RESULTS_PER_PAGE", () => {
       const params = { q: "dogs", page: 2, searchScope: "starts_with" }
       const heading = getBrowseIndexHeading(params, 200)
       expect(heading).toContain("26-50")

@@ -50,7 +50,13 @@ export default class ItemTableData {
         ...(this.showAccessColumn()
           ? [ItemTableCell({ children: item.accessMessage })]
           : []),
-        ItemTableCell({ children: item.callNumber }),
+        ItemTableCell({
+          children: item.callNumber
+            ? `${item.callNumber}${
+                item.volume && !this.showVolumeColumn() ? ` ${item.volume}` : ""
+              }`
+            : "",
+        }),
         ItemTableCell({ children: item.location.prefLabel }),
       ]
     })

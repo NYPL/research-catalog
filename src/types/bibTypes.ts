@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import type { DiscoveryItemResult, JSONLDValue } from "./itemTypes"
-import type { AnnotatedMarc } from "./bibDetailsTypes"
 import type { Aggregation, ItemFilterQueryParams } from "./filterTypes"
 import type { HTTPStatusCode } from "./appTypes"
+import type { AnnotatedMarc } from "./marcTypes"
 
 export interface DiscoveryBibResult {
   extent?: string[]
@@ -31,6 +31,9 @@ export interface DiscoveryBibResult {
   holdings?: object
   owner?: { "@id": string; prefLabel: string }
   hasItemDates?: boolean
+  description?: string[]
+  summary?: string[]
+  physicalDescription?: string[]
 }
 
 // export interface Holding {

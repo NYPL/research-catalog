@@ -7,6 +7,7 @@ import {
   Box,
   Banner,
   StatusBadge,
+  Flex,
 } from "@nypl/design-system-react-components"
 import Layout from "../../../src/components/Layout/Layout"
 import {
@@ -33,7 +34,7 @@ import type {
   DiscoveryBibResult,
   BibQueryParams,
 } from "../../../src/types/bibTypes"
-import type { AnnotatedMarc } from "../../../src/types/bibDetailsTypes"
+import type { AnnotatedMarc } from "../../../src/types/marcTypes"
 import Bib from "../../../src/models/Bib"
 import initializePatronTokenAuth from "../../../src/server/auth"
 import type { ItemFilterQueryParams } from "../../../src/types/filterTypes"
@@ -48,6 +49,7 @@ import { tryInstantiate } from "../../../src/utils/appUtils"
 import Link from "../../../src/components/Link/Link"
 import type { HTTPStatusCode } from "../../../src/types/appTypes"
 import PageError from "../../../src/components/Error/PageError"
+import UserGuideBanner from "../../../src/components/Banners/UserGuideBanner"
 
 interface BibPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -79,7 +81,7 @@ export default function BibPage({
     })
   )
 
-  const metadataTitle = buildBibMetadataTitle(bib?.title)
+  const metadataTitle = buildBibMetadataTitle({ bibTitle: bib?.title })
   const [itemsLoading, setItemsLoading] = useState(false)
   const [itemFetchError, setItemFetchError] = useState(false)
 
@@ -226,9 +228,12 @@ export default function BibPage({
     <>
       <RCHead metadataTitle={metadataTitle} />
       <Layout isAuthenticated={isAuthenticated} activePage="bib">
+        <Box mb="l">
+          <UserGuideBanner />
+        </Box>
         {findingAid && (
           <StatusBadge mb="s" variant="informative">
-            FINDING AID AVAILABLE
+            Finding aid available
           </StatusBadge>
         )}
         <Heading level="h2" size="heading3" mb="-m">
@@ -259,20 +264,6 @@ export default function BibPage({
             >
               Items in the library and offsite
             </Heading>
-            <Banner
-              content={
-                <Link
-                  isExternal
-                  href="https://www.nypl.org/help/request-research-materials"
-                >
-                  How do I request and pick up research materials for onsite
-                  use?
-                </Link>
-              }
-              isDismissible
-              mb="s"
-              className="no-print"
-            />
             <ItemFilters
               itemAggregations={bib.itemAggregations}
               handleFiltersChange={handleFiltersChange}
@@ -337,17 +328,29 @@ export default function BibPage({
             key="bottom-details"
             details={bottomDetails}
           />
-          {displayLegacyCatalogLink ? (
+          <Flex flexDirection="column">
+            {displayLegacyCatalogLink ? (
+              <Link
+                isExternal
+                id="legacy-catalog-link"
+                href={`${appConfig.urls.legacyCatalog}/record=${bib.id}`}
+                variant="standalone"
+                width="max-content"
+                mt="s"
+              >
+                View in legacy catalog
+              </Link>
+            ) : null}
             <Link
-              isExternal
-              id="legacy-catalog-link"
-              href={`${appConfig.urls.legacyCatalog}/record=${bib.id}`}
+              id="marc-link"
+              href={`/bib/${bib.id}/marc`}
               variant="standalone"
+              width="max-content"
               mt="s"
             >
-              View in legacy catalog
+              View MARC record
             </Link>
-          ) : null}
+          </Flex>
         </Box>
       </Layout>
     </>

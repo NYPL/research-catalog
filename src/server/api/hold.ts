@@ -22,7 +22,7 @@ import {
 } from "../../utils/locationUtils"
 
 import { appConfig } from "../../config/config"
-import { logServerError } from "../../utils/appUtils"
+import { logServerError } from "../../utils/logUtils"
 import logger from "../../../logger"
 
 /**
@@ -83,15 +83,17 @@ export async function fetchDeliveryLocations(
 export async function postHoldRequest(
   holdRequestParams: HoldRequestParams
 ): Promise<HoldPostResult> {
-  const { itemId, patronId, source, pickupLocation } = holdRequestParams
+  const { itemId, patronId, source, bibId, pickupLocation } = holdRequestParams
 
   // Remove non-numeric characters from item ID
   const itemIdNumeric = itemId.replace(/\D/g, "")
+  const bibIdNumeric = bibId.replace(/\D/g, "")
 
   const holdPostParams: DiscoveryHoldPostParams = {
     patron: patronId,
     record: itemIdNumeric,
     nyplSource: source,
+    bibId: parseInt(bibIdNumeric),
     requestType: "hold",
     recordType: "i",
     pickupLocation,
@@ -129,15 +131,17 @@ export async function postHoldRequest(
 export async function postEDDRequest(
   eddRequestParams: EDDRequestParams
 ): Promise<HoldPostResult> {
-  const { itemId, patronId, source, ...rest } = eddRequestParams
+  const { itemId, patronId, source, bibId, ...rest } = eddRequestParams
 
   // Remove non-numeric characters from item ID
   const itemIdNumeric = itemId.replace(/\D/g, "")
+  const bibIdNumeric = bibId.replace(/\D/g, "")
 
   const eddPostParams: DiscoveryHoldPostParams = {
     patron: patronId,
     record: itemIdNumeric,
     nyplSource: source,
+    bibId: parseInt(bibIdNumeric),
     requestType: "edd",
     recordType: "i",
     docDeliveryData: {
@@ -214,7 +218,6 @@ export async function fetchPatronEligibility(
       cache: false,
     })
 
-    logger.info(`fetchPatronEligibility: Got result for ${patronId}:`, eligibilityResult)
     // There should always be en eligibilty boolean attribute returned from Discovery API
     if (eligibilityResult.eligibility === undefined) {
       throw new Error("Improperly formatted eligibility from Discovery API")

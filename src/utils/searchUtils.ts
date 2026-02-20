@@ -11,7 +11,10 @@ import type {
 import SearchResultsBib from "../models/SearchResultsBib"
 import { RESULTS_PER_PAGE } from "../config/constants"
 import { collapseMultiValueQueryParams } from "./refineSearchUtils"
-import { getPaginationOffsetStrings } from "./appUtils"
+import {
+  encodeURIComponentWithPeriods,
+  getPaginationOffsetStrings,
+} from "./appUtils"
 
 /**
  * getSearchResultsHeading
@@ -51,7 +54,7 @@ function buildQueryDisplayString(searchParams: SearchParams): string {
     .concat([
       { name: "journal_title", label: "journal title" },
       { name: "standard_number", label: "standard number" },
-      { name: "creatorLiteral", label: "author" },
+      { name: "contributorLiteral", label: "author" },
       { name: "oclc", label: "OCLC" },
       { name: "isbn", label: "ISBN" },
       { name: "issn", label: "ISSN" },
@@ -72,8 +75,8 @@ function buildQueryDisplayString(searchParams: SearchParams): string {
       const value = searchParamsObject[param]
       const plural = label === "keyword" && value.indexOf(" ") > -1 ? "s" : ""
       // Special case for the author display string for both
-      // the "contributor" field and the "creatorLiteral" filter.
-      if (label === "author" && displayParam.name !== "creatorLiteral") {
+      // the "contributor" search scope and the "contributorLiteral" filter.
+      if (label === "author") {
         label = "author/contributor"
       }
 
@@ -145,19 +148,21 @@ function getFilterQuery(filters: SearchFilters) {
       if (val?.length && isArray(val)) {
         forEach(val, (filter, index) => {
           if (filter.value && filter.value !== "") {
-            filterQuery += `&filters[${key}][${index}]=${encodeURIComponent(
+            filterQuery += `&filters[${key}][${index}]=${encodeURIComponentWithPeriods(
               filter.value
             )}`
           } else if (typeof filter === "string") {
-            filterQuery += `&filters[${key}][${index}]=${encodeURIComponent(
+            filterQuery += `&filters[${key}][${index}]=${encodeURIComponentWithPeriods(
               filter
             )}`
           }
         })
       } else if (val?.value && val.value !== "") {
-        filterQuery += `&filters[${key}]=${encodeURIComponent(val.value)}`
+        filterQuery += `&filters[${key}]=${encodeURIComponentWithPeriods(
+          val.value
+        )}`
       } else if (val && typeof val === "string") {
-        filterQuery += `&filters[${key}]=${encodeURIComponent(val)}`
+        filterQuery += `&filters[${key}]=${encodeURIComponentWithPeriods(val)}`
       }
     })
   }
@@ -179,7 +184,7 @@ export function getSearchQuery(params: SearchParams): string {
     q,
     page = 1,
   } = params
-  const searchKeywordsQuery = encodeURIComponent(q)
+  const searchKeywordsQuery = encodeURIComponentWithPeriods(q)
   const sortQuery = getSortQuery(sortBy, order)
 
   const filterQuery = getFilterQuery(filters)
@@ -191,7 +196,9 @@ export function getSearchQuery(params: SearchParams): string {
     .map(({ name: advancedSearchParam }) => {
       if (advancedSearchParam === "q") return
       return params[advancedSearchParam]
-        ? `&${advancedSearchParam}=${params[advancedSearchParam]}`
+        ? `&${advancedSearchParam}=${encodeURIComponentWithPeriods(
+            params[advancedSearchParam]
+          )}`
         : ""
     })
     .join("")

@@ -3,17 +3,22 @@ import type {
   LinkedBibDetail,
   BibDetail,
   FieldMapping,
-  AnnotatedMarcField,
   BibDetailURL,
-  AnnotatedMarc,
   AnyBibDetail,
   MarcLinkedDetail,
-  MarcDetail,
   AnyMarcDetail,
 } from "../types/bibDetailsTypes"
-import { convertToSentenceCase } from "../utils/appUtils"
+import {
+  convertToSentenceCase,
+  encodeURIComponentWithPeriods,
+} from "../utils/appUtils"
 import { getFindingAidFromSupplementaryContent } from "../utils/bibUtils"
 import logger from "../../logger"
+import type {
+  AnnotatedMarc,
+  AnnotatedMarcField,
+  MarcDetail,
+} from "../types/marcTypes"
 
 export default class BibDetails {
   bib: DiscoveryBibResult
@@ -23,9 +28,10 @@ export default class BibDetails {
   bottomDetails: AnyBibDetail[]
   groupedNotes: AnyBibDetail[]
   supplementaryContent: LinkedBibDetail
-  extent: string[]
+  physicalDescription: string[]
   owner: string[]
   findingAid?: string
+  summary: string[]
 
   constructor(
     discoveryBibResult: DiscoveryBibResult,
@@ -36,7 +42,8 @@ export default class BibDetails {
     this.supplementaryContent = this.buildSupplementaryContent()
     this.findingAid = this.buildFindingAid()
     this.groupedNotes = this.buildGroupedNotes()
-    this.extent = this.buildExtent()
+    // TODO: remove || this.bib.description once ES has been updated to replace summary with description
+    this.summary = this.bib.summary || this.bib.description
     this.owner = this.buildOwner()
     // these are the actual arrays of details that will be displayed
     this.annotatedMarcDetails = this.buildAnnotatedMarcDetails(
@@ -150,19 +157,33 @@ export default class BibDetails {
   }
 
   buildBottomDetails(): AnyBibDetail[] {
+    const linkedFields = [
+      "contributorLiteral",
+      "addedAuthorTitle",
+      "placeOfPublication",
+      "series",
+      "uniformTitle",
+      "subjectLiteral",
+      "titleAlt",
+      "donor",
+      "genreForm",
+    ]
     const resourceFields = [
       { field: "contributorLiteral", label: "Additional authors" },
+      { field: "addedAuthorTitle", label: "Author added title" },
+      { field: "placeOfPublication", label: "Place of publication" },
       { field: "partOf", label: "Found in" },
       { field: "serialPublicationDates", label: "Publication date" },
-      { field: "extent", label: "Description" },
-      { field: "description", label: "Summary" },
-      { field: "donor", label: "Donor/Sponsor" },
+      { field: "physicalDescription", label: "Description" },
+      { field: "summary", label: "Summary" },
+      { field: "donor", label: "Donor/sponsor" },
+      { field: "series", label: "Series" },
       { field: "seriesStatement", label: "Series statement" },
       { field: "uniformTitle", label: "Uniform title" },
       { field: "titleAlt", label: "Alternative title" },
       { field: "formerTitle", label: "Former title" },
       { field: "subjectLiteral", label: "Subject" },
-      { field: "genreForm", label: "Genre/Form" },
+      { field: "genreForm", label: "Genre/form" },
       { field: "tableOfContents", label: "Contents" },
       { field: "shelfMark", label: "Call number" },
       { field: "isbn", label: "ISBN" },
@@ -173,13 +194,10 @@ export default class BibDetails {
       { field: "language", label: "Language" },
     ]
       .map((fieldMapping: FieldMapping): AnyBibDetail => {
-        let detail: AnyBibDetail
-        if (
-          fieldMapping.field === "contributorLiteral" ||
-          fieldMapping.field === "subjectLiteral"
-        )
-          detail = this.buildSearchFilterUrl(fieldMapping)
-        else detail = this.buildStandardDetail(fieldMapping)
+        const isLinked = linkedFields.includes(fieldMapping.field)
+        const detail = isLinked
+          ? this.buildSearchFilterUrl(fieldMapping)
+          : this.buildStandardDetail(fieldMapping)
         return detail
       })
       .filter((f) => f)
@@ -297,13 +315,22 @@ export default class BibDetails {
       link: "internal",
       label: convertToSentenceCase(fieldMapping.label),
       value: value.map((v: string) => {
-        // subjectLiteral links to browse
-        const internalUrl =
-          fieldMapping.field === "subjectLiteral"
-            ? `/browse/subjects/${encodeURIComponent(v)}`
-            : `/search?filters[${fieldMapping.field}][0]=${encodeURIComponent(
-                v
-              )}`
+        const { field } = fieldMapping
+        let internalUrl: string
+        switch (field) {
+          case "subjectLiteral":
+            internalUrl = `/browse/subjects/${encodeURIComponentWithPeriods(v)}`
+            break
+          case "creatorLiteral":
+            internalUrl = `/search?filters[contributorLiteral][0]=${encodeURIComponentWithPeriods(
+              v
+            )}`
+            break
+          default:
+            internalUrl = `/search?filters[${field}][0]=${encodeURIComponentWithPeriods(
+              v
+            )}`
+        }
         return { url: internalUrl, urlLabel: v }
       }),
     }
@@ -413,25 +440,6 @@ export default class BibDetails {
     })
 
     return Object.assign({}, bib, ...parallelFieldMatches)
-  }
-
-  buildExtent(): string[] {
-    let modifiedExtent: string[]
-    const { extent, dimensions } = this.bib
-    const removeSemiColon = (extent) => [extent[0].replace(/\s*;\s*$/, "")]
-    const extentExists = extent && extent[0]
-    const dimensionsExists = dimensions && dimensions[0]
-    if (!extentExists && !dimensionsExists) return null
-    if (!extentExists && dimensionsExists) modifiedExtent = dimensions
-    if (extentExists && !dimensionsExists) {
-      modifiedExtent = removeSemiColon(extent)
-    }
-    if (extentExists && dimensionsExists) {
-      const parts = removeSemiColon(extent)
-      parts.push(dimensions[0])
-      modifiedExtent = [parts.join("; ")]
-    }
-    return modifiedExtent
   }
 
   buildSupplementaryContent(): LinkedBibDetail {

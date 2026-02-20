@@ -1,5 +1,5 @@
 # Run tests and deploy to research-catalog-qa, research-catalog-train, or research-catalog-production based on branch
-name: deploy
+name: Test and deploy
 
 on:
   push:

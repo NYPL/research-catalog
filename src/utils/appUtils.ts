@@ -1,12 +1,3 @@
-import logger from "../../logger"
-
-export const logServerError = (
-  errorLocation: string,
-  errorMessage: string
-): void => {
-  logger.error(`Error in ${errorLocation}: ${errorMessage}`)
-}
-
 /**
  * getPaginationOffsetStrings
  * Used to generate start and end counts for pagination on Search Results and above the
@@ -31,6 +22,14 @@ export function getPaginationOffsetStrings(
  */
 export const encodeHTML = (str: string) =>
   str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;")
+
+/**
+ * encodeURIComponentWithPeriods
+ * Return a URI-encoded string that also encodes periods
+ */
+export const encodeURIComponentWithPeriods = (str: string) => {
+  return encodeURIComponent(str).replace(/\./g, "%2E")
+}
 
 /**
  * convertToSentenceCase

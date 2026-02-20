@@ -1,6 +1,7 @@
 import { Banner, Flex } from "@nypl/design-system-react-components"
 import EDSBanner from "./EDSBanner"
 import styles from "../../../styles/components/Layout.module.scss"
+import UserGuideBanner from "./UserGuideBanner"
 
 const SearchBanners = ({
   showNotification,
@@ -20,15 +21,16 @@ const SearchBanners = ({
         pb: "xs",
       }}
     >
-      <EDSBanner />
       {showNotification && bannerNotification && (
         <Banner
           mt="0"
           className={`${styles.banner} no-print`}
-          heading="New Service Announcement"
+          heading="Service announcement"
           content={bannerNotification}
         />
       )}
+      <EDSBanner />
+      <UserGuideBanner />
     </Flex>
   )
 }
