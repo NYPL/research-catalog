@@ -10,6 +10,7 @@ import type {
 } from "../../types/bibDetailsTypes"
 import { rtlOrLtr } from "../../utils/bibUtils"
 import { Fragment, type ReactNode } from "react"
+import type { BrowseType } from "../../types/browseTypes"
 
 interface BibDetailsProps {
   details: AnyBibDetail[]
@@ -34,10 +35,15 @@ const BibDetails = ({ details, heading }: BibDetailsProps) =>
       {details.map((detail: BibDetail | LinkedBibDetail) => {
         if (!detail) return
         if ("link" in detail)
-          return LinkedDetailElement(
-            detail as LinkedBibDetail,
-            detail.label === "Subject"
+          if (
+            detail.label === "Subject" ||
+            detail.label === "Additional authors"
           )
+            return BrowseLinkDetailElement(
+              detail as LinkedBibDetail,
+              detail.label === "Subject" ? "subjects" : "contributors"
+            )
+          else return LinkedDetailElement(detail as LinkedBibDetail)
         return PlainTextElement(detail as BibDetail)
       })}
     </List>
@@ -64,29 +70,43 @@ export const PlainTextElement = ({ label, value }: BibDetail) =>
     ))
   )
 
-export const LinkedDetailElement = (
+export const LinkedDetailElement = (field: LinkedBibDetail) =>
+  DetailElement(
+    field.label,
+    field.value.map((urlInfo, i) => (
+      <li key={`${kebabCase(field.label)}-${i}`}>
+        {LinkElement(urlInfo, field.link)}
+      </li>
+    ))
+  )
+
+export const BrowseLinkDetailElement = (
   field: LinkedBibDetail,
-  withIndexLink = false
+  browseType: BrowseType
 ) =>
   DetailElement(
     field.label,
     field.value.map((urlInfo, i) => (
       <li key={`${kebabCase(field.label)}-${i}`}>
         {LinkElement(urlInfo, field.link)}
-        {withIndexLink && (
-          <>
-            {" - "}
-            {LinkElement(
-              {
-                url: `/browse?q=${urlInfo.urlLabel}&search_scope=starts_with`,
-                urlLabel: "[Browse in index]",
-              },
-              "internal",
-              true,
-              `Browse in index for "${urlInfo.urlLabel}"`
-            )}
-          </>
-        )}
+        <>
+          {" - "}
+          {LinkElement(
+            {
+              url: `/browse${browseType === "subjects" ? "" : "/authors/"}?q=${
+                urlInfo.urlLabel
+              }&search_scope=starts_with`,
+              urlLabel: `[Browse in ${
+                browseType === "subjects" ? "subject" : "author"
+              } index]`,
+            },
+            "internal",
+            true,
+            `Browse in ${
+              browseType === "subjects" ? "subject" : "author"
+            } index for "${urlInfo.urlLabel}"`
+          )}
+        </>
       </li>
     ))
   )

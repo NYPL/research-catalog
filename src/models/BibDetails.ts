@@ -66,6 +66,10 @@ export default class BibDetails {
     if (owner) return [owner]
   }
 
+  buildAuthorRoles(): string[] {
+    console.log(this.bib)
+  }
+
   buildAnnotatedMarcDetails(
     annotatedMarc: AnnotatedMarcField[]
   ): AnyMarcDetail[] {
