@@ -25,7 +25,7 @@ describe("Layout", () => {
     render(<Layout activePage="search"></Layout>)
     expect(screen.getByLabelText(searchLabel)).toBeInTheDocument()
   })
-  it("should show search banners", () => {
+  it.skip("should show search banners", () => {
     render(<Layout activePage="search"></Layout>)
     expect(screen.getAllByRole("complementary")).toHaveLength(2)
   })

@@ -8,6 +8,7 @@ import {
   Heading,
   SimpleGrid,
   Pagination,
+  Text,
 } from "@nypl/design-system-react-components"
 import { RESULTS_PER_PAGE } from "../../config/constants"
 import type SearchResultsBib from "../../models/SearchResultsBib"
@@ -32,6 +33,7 @@ import type {
   SearchResultsResponse,
 } from "../../types/searchTypes"
 import type { RCPage } from "../../types/pageTypes"
+import ParsedQuery from "../ParsedCQLQuery/ParsedQuery"
 
 interface SearchProps {
   errorStatus?: HTTPStatusCode | null
@@ -44,10 +46,12 @@ interface SearchProps {
   handlePageChange: (page: number) => Promise<void>
   handleSortChange: (selectedSortOption: string) => Promise<void>
   slug?: string
+  errorMessage?: string
 }
 
 const Search = ({
   errorStatus,
+  errorMessage,
   results,
   metadataTitle,
   activePage,
@@ -71,11 +75,18 @@ const Search = ({
   }, [isLoading])
 
   if (errorStatus) {
-    return <ResultsError errorStatus={errorStatus} page={activePage} />
+    return (
+      <ResultsError
+        errorStatus={errorStatus}
+        page={activePage}
+        errorMessage={errorMessage}
+      />
+    )
   }
 
   const { itemListElement: searchResultsElements, totalResults } =
     results.results
+  const parsedQuery = results?.results?.debug?.parsed
 
   const aggs = results?.aggregations?.itemListElement
   // if there are no results, then applied filters correspond to aggregations
@@ -128,6 +139,9 @@ const Search = ({
           ) : null}
 
           <Flex flexDir="column" width="100%" mb="xl">
+            {parsedQuery && searchParams.field === "cql" && (
+              <ParsedQuery parsed={parsedQuery} />
+            )}
             {displayAppliedFilters && <AppliedFilters aggregations={aggs} />}
             <Flex
               justifyContent="space-between"

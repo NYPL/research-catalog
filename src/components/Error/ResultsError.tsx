@@ -14,10 +14,15 @@ import Link from "../Link/Link"
 type ResultsErrorProps = {
   page: RCPage
   errorStatus: HTTPStatusCode
+  errorMessage?: string
 }
 
 /* Display error state that replaces browse/search results. */
-export default function ResultsError({ errorStatus, page }: ResultsErrorProps) {
+export default function ResultsError({
+  errorStatus,
+  errorMessage,
+  page,
+}: ResultsErrorProps) {
   const { openFeedbackFormWithError } = useContext(FeedbackContext)
   let metadataTitle = "Error"
   let errorContent
@@ -28,6 +33,13 @@ export default function ResultsError({ errorStatus, page }: ResultsErrorProps) {
       metadataTitle = "Results not found"
       errorContent = (
         <>
+          <Image
+            src={errorImage}
+            alt="Error image"
+            width={96}
+            height={64}
+            style={{ marginBottom: "48px" }}
+          />
           <Heading level="h3" tabIndex={-1} id={headingID} mb="s">
             No results found
           </Heading>
@@ -60,6 +72,13 @@ export default function ResultsError({ errorStatus, page }: ResultsErrorProps) {
     case 500:
       errorContent = (
         <>
+          <Image
+            src={errorImage}
+            alt="Error image"
+            width={96}
+            height={64}
+            style={{ marginBottom: "48px" }}
+          />
           <Heading level="h3" tabIndex={-1} id={headingID} mb="s">
             Something went wrong on our end
           </Heading>
@@ -79,11 +98,27 @@ export default function ResultsError({ errorStatus, page }: ResultsErrorProps) {
         </>
       )
       break
+    case 400:
+      errorContent = (
+        <>
+          <Text tabIndex={-1} id={headingID} mb="s">
+            IndexSearchError: {errorMessage}
+          </Text>
+        </>
+      )
+      break
 
     // 4xx
     default:
       errorContent = (
         <>
+          <Image
+            src={errorImage}
+            alt="Error image"
+            width={96}
+            height={64}
+            style={{ marginBottom: "48px" }}
+          />
           <Heading level="h3" tabIndex={-1} id={headingID} mb="s">
             There was an unexpected error
           </Heading>
@@ -119,13 +154,6 @@ export default function ResultsError({ errorStatus, page }: ResultsErrorProps) {
           justifyContent="center"
           textAlign="center"
         >
-          <Image
-            src={errorImage}
-            alt="Error image"
-            width={96}
-            height={64}
-            style={{ marginBottom: "48px" }}
-          />
           {errorContent}
         </Flex>
       </Layout>

@@ -106,12 +106,12 @@ const Layout = ({
               </>
             )}
 
-            {showSearch && (
+            {/* {showSearch && (
               <SearchBanners
                 showNotification={showNotification}
                 bannerNotification={bannerNotification}
               />
-            )}
+            )} */}
           </>
         </TemplateBreakout>
         <TemplateMain>
