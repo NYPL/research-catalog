@@ -1,6 +1,6 @@
-import SubjectHeadingResults, {
+import ContributorResults, {
   getServerSideProps,
-} from "../../../../pages/browse/subjects/[slug]"
+} from "../../../../pages/browse/authors/[slug]"
 import { fireEvent, render, screen } from "../../../../src/utils/testUtils"
 import mockRouter from "next-router-mock"
 import { fetchSearchResults } from "../../../../src/server/api/search"
@@ -12,13 +12,14 @@ jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 jest.mock("../../../../src/server/auth")
 jest.mock("../../../../src/server/api/search")
 
-describe("Browse subject heading results page", () => {
-  it("displays bibs and heading", async () => {
+describe("Browse author/contributor results page", () => {
+  it("displays bibs and contributor heading", async () => {
     await mockRouter.push({
-      pathname: "/browse/subjects/test",
+      pathname: "/browse/authors/test",
     })
+
     render(
-      <SubjectHeadingResults
+      <ContributorResults
         slug="test"
         isAuthenticated={true}
         results={{ results, status: 200 }}
@@ -26,7 +27,7 @@ describe("Browse subject heading results page", () => {
     )
 
     const displayingText = screen.queryByText(
-      'Displaying 1-50 of 423 results for Subject Heading "test"'
+      'Displaying 1-50 of 423 results for Author/Contributor "test"'
     )
     expect(displayingText).toBeInTheDocument()
 
@@ -36,10 +37,11 @@ describe("Browse subject heading results page", () => {
 
   it("displays pagination and updates the router on page button clicks", async () => {
     await mockRouter.push({
-      pathname: "/browse/subjects/test",
+      pathname: "/browse/authors/test",
     })
+
     render(
-      <SubjectHeadingResults
+      <ContributorResults
         isAuthenticated={true}
         slug="test"
         results={{ results, status: 200 }}
@@ -48,27 +50,52 @@ describe("Browse subject heading results page", () => {
 
     const pageButton = screen.getByLabelText("Page 2")
     fireEvent.click(pageButton)
-    expect(mockRouter.asPath).toBe("/browse/subjects/test?page=2")
+
+    expect(mockRouter.asPath).toBe("/browse/authors/test?page=2")
   })
 
   it("renders the sort select fields and updates the query string in the url on changes", async () => {
     await mockRouter.push({
-      pathname: "/browse/subjects/test",
+      pathname: "/browse/authors/test",
     })
+
     render(
-      <SubjectHeadingResults
+      <ContributorResults
         isAuthenticated={true}
         slug="test"
         results={{ results, status: 200 }}
       />
     )
+
     const sortBy = screen.getAllByLabelText("Sort by", { exact: false })[0]
     userEvent.click(sortBy)
+
     await userEvent.click(screen.getByText("Title (A - Z)"))
+
     expect(sortBy).toHaveTextContent("Sort by: Title (A - Z)")
     expect(mockRouter.asPath).toBe(
-      "/browse/subjects/test?sort=title&sort_direction=asc&page=1"
+      "/browse/authors/test?sort=title&sort_direction=asc&page=1"
     )
+  })
+
+  it("passes and displays role", async () => {
+    await mockRouter.push({
+      pathname: "/browse/authors/test?role=performer",
+    })
+
+    render(
+      <ContributorResults
+        isAuthenticated={true}
+        slug="test"
+        role="performer"
+        results={{ results, status: 200 }}
+      />
+    )
+
+    const displayingText = screen.queryByText(
+      'Displaying 1-50 of 423 results for Author/Contributor "test, performer"'
+    )
+    expect(displayingText).toBeInTheDocument()
   })
 })
 
@@ -91,6 +118,7 @@ describe("getServerSideProps", () => {
     }
 
     const result = await getServerSideProps(args as any)
+
     expect(result).toEqual({ props: { errorStatus: 500 } })
   })
 
@@ -101,7 +129,7 @@ describe("getServerSideProps", () => {
     })
 
     const params = { slug: "test" }
-    const query = { page: "2" }
+    const query = { page: "2", role: "performer" }
     const req = { cookies: {} }
 
     await getServerSideProps({ req, query, params })
@@ -109,8 +137,9 @@ describe("getServerSideProps", () => {
     expect(fetchSearchResults).toHaveBeenNthCalledWith(
       2,
       expect.objectContaining({
-        filters: { subjectLiteral: ["test"] },
+        filters: { contributorLiteral: ["test"] },
         page: 2,
+        role: "performer",
       })
     )
   })
