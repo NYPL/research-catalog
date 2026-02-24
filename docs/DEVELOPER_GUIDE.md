@@ -54,7 +54,7 @@ There is a third ECS cluster reserved for the Research Catalog, `research-catalo
 5.  Once work is ready for testing, merge `main` into `qa` (usually feature work will go straight through `main` into `qa`, but `main` is sometimes a handy waiting area). Pushing the changes to the remote branch will automatically trigger a deployment to the [`qa` environment](https://qa-www.nypl.org/research/research-catalog).
 6.  After QA has tested and approved, cut a `release` branch off of `qa`. Name the release branch using our [versioning guidelines](#versioning-guidelines).
 
-    `git checkout -b release/x.y.z`.
+    `git checkout -b release/vx.y.z`.
 
 7.  Update `CHANGELOG.md` in the release branch by moving updates from prerelease into the new release section.
 
@@ -98,8 +98,8 @@ Each version entry in the changelog includes:
 
 ### Contribution guidelines
 
-- All changes must be documented in `CHANGELOG.md` before merging into `main`.
-- Each entry should include a brief description of the change and, when applicable, reference to relevant tickets.
+- All changes must be documented in `CHANGELOG.md` before merging into `main`
+- Each entry should include a brief description of the change and, when applicable, reference to relevant tickets
 - Formatting should remain consistent with previous entries
 
 ## Coding standards
@@ -423,8 +423,8 @@ When making significant changes, update the relevant documentation:
 
 - `README.md`: Overview and basic usage
 - `DEVELOPER_GUIDE.md`: Technical details for developers
-- `ENVIRONMENT_VARIABLES.md`: Details pertaining environment variables
-- `MY_ACCOUNT.md`: Details pertaining My Account
+- `ENVIRONMENT_VARIABLES.md`: Details pertaining to environment variables
+- `MY_ACCOUNT.md`: Details pertaining to My Account
 
 ## Accessibility
 
