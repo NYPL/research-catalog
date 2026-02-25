@@ -6,12 +6,15 @@ import type {
   BrowseParams,
   BrowseQueryParams,
   BrowseType,
+  DiscoveryContributorResult,
+  DiscoveryPreferredContributorResult,
   DiscoveryPreferredSubjectResult,
   DiscoveryPreferredTermResult,
   DiscoverySubjectResult,
   DiscoverySubjectsResponse,
-  SubjectLink,
+  TermLink,
 } from "../types/browseTypes"
+import { Link } from "@nypl/design-system-react-components"
 import {
   encodeURIComponentWithPeriods,
   getPaginationOffsetStrings,
@@ -120,10 +123,12 @@ export function getBrowseQuery(params: BrowseParams): string {
   return completeQuery ? `?q=${completeQuery}` : ""
 }
 
-export function isPreferredSubject(
-  subject: DiscoverySubjectResult
-): subject is DiscoveryPreferredSubjectResult {
-  return subject["@type"] === "preferredTerm"
+export function isPreferredTerm(
+  term: DiscoverySubjectResult | DiscoveryContributorResult
+): term is
+  | DiscoveryPreferredSubjectResult
+  | DiscoveryPreferredContributorResult {
+  return term["@type"] === "preferredTerm"
 }
 
 export function isSubjectResponse(
@@ -137,8 +142,22 @@ export function getSubjectSearchURL(term: string) {
   return `/browse/subjects/${subject}`
 }
 
-export function getSubjectBrowseURL(term: string) {
-  return `/browse?q=${term}&search_scope=starts_with`
+export function getBrowseUrl(term: string, browseType: BrowseType): string {
+  return `/browse${
+    browseType === "contributors" ? "/authors" : ""
+  }?q=${term}&search_scope=starts_with`
+}
+
+export function getContributorSearchURL(term: string) {
+  const contributor = encodeURIComponentWithPeriods(term)
+  return `/browse/authors/${contributor}`
+}
+
+export function getContributorRoleSearchURL(contributor: string, role: string) {
+  const contributorWithRole = `${encodeURIComponentWithPeriods(
+    contributor
+  )}?role=${encodeURIComponentWithPeriods(role)}`
+  return `/browse/authors/${contributorWithRole}`
 }
 
 /**
@@ -194,15 +213,16 @@ export const browseContributorSortOptions: Record<string, string> = {
   count_asc: "Count (Low - High)",
 }
 
-export function buildSubjectLinks(
+export function buildTermLinks(
+  browseType: BrowseType,
   terms: DiscoveryPreferredTermResult[]
-): SubjectLink[] {
-  const termLinks: SubjectLink[] = []
+): TermLink[] {
+  const termLinks: TermLink[] = []
 
   for (const termObj of terms) {
     termLinks.push({
       termLabel: termObj.termLabel,
-      url: getSubjectBrowseURL(termObj.termLabel),
+      url: getBrowseUrl(termObj.termLabel, browseType),
       count: termObj.count?.toLocaleString() || "",
     })
   }

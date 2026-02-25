@@ -1,14 +1,14 @@
 import {
   browseSubjectSortOptions,
-  buildSubjectLinks,
   getBrowseQuery,
   getBrowseIndexHeading,
   getSubjectSearchURL,
-  isPreferredSubject,
   mapQueryToBrowseParams,
   buildLockedBrowseQuery,
   browseContributorSortOptions,
   getBrowseFormKey,
+  isPreferredTerm,
+  buildTermLinks,
 } from "../browseUtils"
 
 describe("browseUtils", () => {
@@ -122,15 +122,15 @@ describe("browseUtils", () => {
     })
   })
 
-  describe("isPreferredSubject", () => {
+  describe("isPreferredTerm", () => {
     it("returns true if object has @type preferredTerm", () => {
       const subj = { "@type": "preferredTerm", termLabel: "foo", count: 3 }
-      expect(isPreferredSubject(subj)).toBe(true)
+      expect(isPreferredTerm(subj)).toBe(true)
     })
 
     it("returns false if object has @type variant", () => {
       const subj = { "@type": "variant", termLabel: "foo" }
-      expect(isPreferredSubject(subj)).toBe(false)
+      expect(isPreferredTerm(subj)).toBe(false)
     })
   })
 
@@ -179,14 +179,14 @@ describe("browseUtils", () => {
     })
   })
 
-  describe("buildSubjectLinks", () => {
+  describe("buildTermLinks", () => {
     it("builds links with termLabel, url, and count", () => {
       const terms = [
         { termLabel: "foo", count: 123 },
         { termLabel: "bar", count: 0 },
         { termLabel: "baz" },
       ]
-      const results = buildSubjectLinks(terms)
+      const results = buildTermLinks("subjects", terms)
       expect(results).toHaveLength(3)
       expect(results[0]).toMatchObject({
         termLabel: "foo",
