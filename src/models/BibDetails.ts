@@ -67,18 +67,45 @@ export default class BibDetails {
   }
 
   // For author and additional authors, link to author/contributor index and add roles.
-  buildLinkedAuthorDetail(fieldMapping: {
-    field: string
-    label: string
-  }): LinkedBibDetail {
-    //if (fieldMapping.label === "Author") {
-    const ex = {
-      value: [{ url: "hello", urlLabel: "hello" }],
-      label: "author",
-    } as LinkedBibDetail
-    return ex
+  buildLinkedAuthorDetail(bib: any): LinkedBibDetail {
+    const creatorLiteral: string[] = []
+    const contributorLiteral: string[] = []
 
-    //}
+    // Helper to parse packed fields into "name, role" if exists
+    function parsePacked(
+      packedArray: string[],
+      literalArray: string[]
+    ): string[] {
+      return literalArray.map((name) => {
+        const packedEntry = packedArray.find((p) => p.startsWith(name + "||"))
+        if (packedEntry) {
+          const parts = packedEntry.split("||")
+          if (parts[1]) {
+            return parts[1].replace(/\.$/, "")
+          }
+        }
+        return name
+      })
+    }
+
+    // creators
+    if (bib.creatorsPacked && bib.creatorLiteral) {
+      creatorLiteral.push(
+        ...parsePacked(bib.creatorsPacked, bib.creatorLiteral)
+      )
+    } else if (bib.creatorLiteral) {
+      creatorLiteral.push(...bib.creatorLiteral)
+    }
+
+    // contributors
+    if (bib.contributorsPacked && bib.contributorLiteral) {
+      contributorLiteral.push(
+        ...parsePacked(bib.contributorsPacked, bib.contributorLiteral)
+      )
+    } else if (bib.contributorLiteral) {
+      contributorLiteral.push(...bib.contributorLiteral)
+    }
+    console.log({ creatorLiteral, contributorLiteral })
   }
 
   buildAnnotatedMarcDetails(
@@ -326,7 +353,6 @@ export default class BibDetails {
   }): LinkedBibDetail {
     const value = this.bib[fieldMapping.field]
     if (!value?.length) return null
-
     return {
       link: "internal",
       label: convertToSentenceCase(fieldMapping.label),
