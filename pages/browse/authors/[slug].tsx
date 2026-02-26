@@ -12,7 +12,7 @@ import { useRouter } from "next/router"
 import { idConstants, useFocusContext } from "../../../src/context/FocusContext"
 import { buildLockedBrowseQuery } from "../../../src/utils/browseUtils"
 
-interface ContributorSearchProps {
+interface ContributorResultsProps {
   bannerNotification?: string
   results: SearchResultsResponse
   isAuthenticated: boolean
@@ -35,7 +35,7 @@ export default function ContributorResults({
   metadataTitle,
   slug,
   role,
-}: ContributorSearchProps) {
+}: ContributorResultsProps) {
   const { pathname, push, query } = useRouter()
 
   const { setPersistentFocus } = useFocusContext()

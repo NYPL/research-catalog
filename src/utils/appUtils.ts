@@ -84,12 +84,6 @@ export function tryInstantiate<T>({
   }
 }
 
-export function getBrowseTypeFromUrl(query): BrowseType {
-  return query?.browseType && query?.browseType[0] === "authors"
-    ? "contributors"
-    : "subjects"
-}
-
 export function getBrowseTypeFromPath(path): BrowseType {
   return path.includes("/authors") ? "contributors" : "subjects"
 }
