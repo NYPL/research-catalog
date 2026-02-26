@@ -10,6 +10,7 @@ import { PatronDataProvider } from "../../src/context/PatronDataContext"
 import { getPatronData } from "../api/account/[id]"
 import RCHead from "../../src/components/Head/RCHead"
 import TimedLogoutModal from "../../src/components/MyAccount/TimedLogoutModal"
+import { bootstrapConfig } from "../../lib/bootstrap"
 
 interface MyAccountPropsType {
   accountData: MyAccountPatronData
@@ -64,6 +65,8 @@ export default function MyAccount({
 }
 
 export async function getServerSideProps({ req, res }) {
+  // Ensure config is loaded before initializing Sierra client.
+  await bootstrapConfig()
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const isAuthenticated = patronTokenResponse.isTokenValid
   const redirectTrackerCookie = req.cookies["nyplAccountRedirects"]
