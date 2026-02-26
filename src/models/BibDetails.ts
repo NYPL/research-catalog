@@ -66,8 +66,19 @@ export default class BibDetails {
     if (owner) return [owner]
   }
 
-  buildAuthorRoles(): string[] {
-    console.log(this.bib)
+  // For author and additional authors, link to author/contributor index and add roles.
+  buildLinkedAuthorDetail(fieldMapping: {
+    field: string
+    label: string
+  }): LinkedBibDetail {
+    //if (fieldMapping.label === "Author") {
+    const ex = {
+      value: [{ url: "hello", urlLabel: "hello" }],
+      label: "author",
+    } as LinkedBibDetail
+    return ex
+
+    //}
   }
 
   buildAnnotatedMarcDetails(
@@ -153,7 +164,7 @@ export default class BibDetails {
           case "supplementaryContent":
             return this.supplementaryContent
           case "creatorLiteral":
-            return this.buildSearchFilterUrl(fieldMapping)
+            return this.buildLinkedAuthorDetail(fieldMapping)
           default:
             return this.buildStandardDetail(fieldMapping)
         }
