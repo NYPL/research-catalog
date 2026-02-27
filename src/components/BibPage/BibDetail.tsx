@@ -40,10 +40,11 @@ const BibDetails = ({ details, heading }: BibDetailsProps) =>
             detail.label === "Additional authors" ||
             detail.label === "Author"
           )
-            return BrowseLinkDetailElement(
-              detail as LinkedBibDetail,
-              detail.label === "Subject" ? "subjects" : "contributors"
-            )
+            return BrowseLinkDetailElement({
+              field: detail as LinkedBibDetail,
+              browseType:
+                detail.label === "Subject" ? "subjects" : "contributors",
+            })
           else return LinkedDetailElement(detail as LinkedBibDetail)
         return PlainTextElement(detail as BibDetail)
       })}
@@ -81,11 +82,17 @@ export const LinkedDetailElement = (field: LinkedBibDetail) =>
     ))
   )
 
-export const BrowseLinkDetailElement = (
-  field: LinkedBibDetail,
+export const BrowseLinkDetailElement = ({
+  field,
+  browseType,
+}: {
+  field: LinkedBibDetail
   browseType: BrowseType
-) =>
-  DetailElement(
+}) => {
+  const indexLinkLabel = `Browse in ${
+    browseType === "subjects" ? "subject" : "author"
+  } index`
+  return DetailElement(
     field.label,
     field.value.map((urlInfo, i) => (
       <li key={`${kebabCase(field.label)}-${i}`}>
@@ -97,20 +104,17 @@ export const BrowseLinkDetailElement = (
               url: `/browse${browseType === "subjects" ? "" : "/authors/"}?q=${
                 urlInfo.urlLabel
               }&search_scope=starts_with`,
-              urlLabel: `[Browse in ${
-                browseType === "subjects" ? "subject" : "author"
-              } index]`,
+              urlLabel: `[${indexLinkLabel}]`,
             },
             "internal",
             true,
-            `Browse in ${
-              browseType === "subjects" ? "subject" : "author"
-            } index for "${urlInfo.urlLabel}"`
+            `${indexLinkLabel} for "${urlInfo.urlLabel}"`
           )}
         </>
       </li>
     ))
   )
+}
 
 const LinkElement = (
   url: BibDetailURL,

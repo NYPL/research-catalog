@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added author/contributor mode to browse landing [SCC-4966](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4966)
 - Added author/contributor models and table [SCC-4969](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4969)
 - Added author/contributor index and search results pages, with role handling [SCC-4967](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4967)
+- Added browse links, roles to author/additional author fields on bib page [SCC-4968](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4968)
 
 ### Updated
 

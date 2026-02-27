@@ -112,7 +112,7 @@ export default class BibDetails {
         personMap.set(name, [])
       }
 
-      const existingRoles = personMap.get(name)!
+      const existingRoles = personMap.get(name)
       roles.forEach((role) => {
         if (!existingRoles.includes(role)) {
           existingRoles.push(role)
@@ -335,12 +335,12 @@ export default class BibDetails {
     })
 
     if (Object.keys(keptByLabel).length > 0) {
-      // console.log(
-      //   `Bib details: Keeping annotated MARC fields on ${this.bib["@id"]}`,
-      //   {
-      //     keptMarcFields: keptByLabel,
-      //   }
-      // )
+      console.log(
+        `Bib details: Keeping annotated MARC fields on ${this.bib["@id"]}`,
+        {
+          keptMarcFields: keptByLabel,
+        }
+      )
     }
 
     return resourceEndpointDetails.concat(filteredMarc)
