@@ -8776,6 +8776,11 @@ export const noParallels = {
     createdString: ["2005"],
     createdYear: 2005,
     creatorLiteral: ["Cortanze, Gérard de."],
+    creatorsPacked: [
+      "Cortanze, Gérard de.||Cortanze, Gérard de., arranger of music,, composer,, conductor.",
+    ],
+    contributorLiteral: ["Smith, John"],
+    contributorsPacked: ["Smith, John||Smith, John, ballet dancer."],
     dateStartYear: 2005,
     dateString: ["2005"],
     dimensions: ["19 cm."],

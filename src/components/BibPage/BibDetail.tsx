@@ -37,7 +37,8 @@ const BibDetails = ({ details, heading }: BibDetailsProps) =>
         if ("link" in detail)
           if (
             detail.label === "Subject" ||
-            detail.label === "Additional authors"
+            detail.label === "Additional authors" ||
+            detail.label === "Author"
           )
             return BrowseLinkDetailElement(
               detail as LinkedBibDetail,
@@ -118,17 +119,20 @@ const LinkElement = (
   ariaLabel?: string
 ) => {
   return (
-    <Link
-      dir={rtlOrLtr(url.urlLabel)}
-      href={url.url}
-      key={url.url}
-      isExternal={linkType === "external"}
-      fontWeight={isBold ? "700" : "400"}
-      textDecoration="none"
-      aria-label={ariaLabel}
-    >
-      {url.urlLabel}
-    </Link>
+    <>
+      <Link
+        dir={rtlOrLtr(url.urlLabel)}
+        href={url.url}
+        key={url.url}
+        isExternal={linkType === "external"}
+        fontWeight={isBold ? "700" : "400"}
+        textDecoration="none"
+        aria-label={ariaLabel}
+      >
+        {url.urlLabel}
+      </Link>
+      {url.text && <span>, {url.text}</span>}
+    </>
   )
 }
 

@@ -39,6 +39,8 @@ export interface MarcLinkedDetail {
 export interface BibDetailURL {
   url: string
   urlLabel?: string
+  // Unlinked text following the URL
+  text?: string
 }
 
 export interface FieldMapping {

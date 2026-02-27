@@ -18,7 +18,10 @@ import type {
   AnnotatedMarcField,
   MarcDetail,
 } from "../types/marcTypes"
-import { getSubjectSearchURL } from "../utils/browseUtils"
+import {
+  getContributorSearchURL,
+  getSubjectSearchURL,
+} from "../utils/browseUtils"
 
 export default class BibDetails {
   bib: DiscoveryBibResult
@@ -65,46 +68,71 @@ export default class BibDetails {
     if (owner) return [owner]
   }
 
-  // For author and additional authors, link to author/contributor index and add roles.
-  buildLinkedAuthorDetail(bib: any): LinkedBibDetail {
-    const creatorLiteral: string[] = []
-    const contributorLiteral: string[] = []
+  buildLinkedContributorDetail(
+    literalField: "creatorLiteral" | "contributorLiteral",
+    label: string
+  ): LinkedBibDetail | null {
+    const packedField =
+      literalField === "creatorLiteral"
+        ? "creatorsPacked"
+        : "contributorsPacked"
 
-    // Helper to parse packed fields into "name, role" if exists
-    function parsePacked(
-      packedArray: string[],
-      literalArray: string[]
-    ): string[] {
-      return literalArray.map((name) => {
-        const packedEntry = packedArray.find((p) => p.startsWith(name + "||"))
-        if (packedEntry) {
-          const parts = packedEntry.split("||")
-          if (parts[1]) {
-            return parts[1].replace(/\.$/, "")
-          }
+    const packedArray: string[] = this.bib?.[packedField] ?? []
+    const literalArray: string[] = this.bib?.[literalField] ?? []
+
+    if (!literalArray.length) return null
+
+    const personMap = new Map<string, string[]>()
+
+    literalArray.forEach((name) => {
+      const packedEntries = packedArray.filter((p) => p.startsWith(name + "||"))
+
+      const roles = packedEntries
+        .map((entry) => {
+          const raw = entry.split("||")[1] || ""
+          const cleaned = raw.replace(/\.$/, "").trim()
+
+          // Remove duplicate name prefix
+          const namePrefix = `${name}, `
+          const stripped = cleaned.startsWith(namePrefix)
+            ? cleaned.slice(namePrefix.length)
+            : cleaned
+
+          if (!stripped || stripped === name) return null
+          return stripped
+        })
+        .filter(Boolean)
+        // Split roles on commas in case of multiple roles
+        .flatMap((r) => r.split(",").map((role) => role.trim()))
+        .filter(Boolean) // remove empty strings
+        // deduplicate roles
+        .filter((role, idx, arr) => arr.indexOf(role) === idx)
+
+      if (!personMap.has(name)) {
+        personMap.set(name, [])
+      }
+
+      const existingRoles = personMap.get(name)!
+      roles.forEach((role) => {
+        if (!existingRoles.includes(role)) {
+          existingRoles.push(role)
         }
-        return name
       })
-    }
+    })
 
-    // creators
-    if (bib.creatorsPacked && bib.creatorLiteral) {
-      creatorLiteral.push(
-        ...parsePacked(bib.creatorsPacked, bib.creatorLiteral)
-      )
-    } else if (bib.creatorLiteral) {
-      creatorLiteral.push(...bib.creatorLiteral)
-    }
+    const value: BibDetailURL[] = Array.from(personMap.entries()).map(
+      ([name, roles]) => ({
+        url: getContributorSearchURL(name),
+        urlLabel: name,
+        text: roles.length ? roles.join(", ") : undefined,
+      })
+    )
 
-    // contributors
-    if (bib.contributorsPacked && bib.contributorLiteral) {
-      contributorLiteral.push(
-        ...parsePacked(bib.contributorsPacked, bib.contributorLiteral)
-      )
-    } else if (bib.contributorLiteral) {
-      contributorLiteral.push(...bib.contributorLiteral)
+    return {
+      label,
+      link: "internal",
+      value,
     }
-    console.log({ creatorLiteral, contributorLiteral })
   }
 
   buildAnnotatedMarcDetails(
@@ -190,7 +218,7 @@ export default class BibDetails {
           case "supplementaryContent":
             return this.supplementaryContent
           case "creatorLiteral":
-            return this.buildLinkedAuthorDetail(fieldMapping)
+            return this.buildLinkedContributorDetail("creatorLiteral", "Author")
           default:
             return this.buildStandardDetail(fieldMapping)
         }
@@ -307,12 +335,12 @@ export default class BibDetails {
     })
 
     if (Object.keys(keptByLabel).length > 0) {
-      console.log(
-        `Bib details: Keeping annotated MARC fields on ${this.bib["@id"]}`,
-        {
-          keptMarcFields: keptByLabel,
-        }
-      )
+      // console.log(
+      //   `Bib details: Keeping annotated MARC fields on ${this.bib["@id"]}`,
+      //   {
+      //     keptMarcFields: keptByLabel,
+      //   }
+      // )
     }
 
     return resourceEndpointDetails.concat(filteredMarc)
@@ -352,6 +380,12 @@ export default class BibDetails {
   }): LinkedBibDetail {
     const value = this.bib[fieldMapping.field]
     if (!value?.length) return null
+    if (fieldMapping.field === "contributorLiteral") {
+      return this.buildLinkedContributorDetail(
+        "contributorLiteral",
+        "Additional authors"
+      )
+    }
     return {
       link: "internal",
       label: convertToSentenceCase(fieldMapping.label),
@@ -361,11 +395,6 @@ export default class BibDetails {
         switch (field) {
           case "subjectLiteral":
             internalUrl = getSubjectSearchURL(v)
-            break
-          case "creatorLiteral":
-            internalUrl = `/search?filters[contributorLiteral][0]=${encodeURIComponentWithPeriods(
-              v
-            )}`
             break
           default:
             internalUrl = `/search?filters[${field}][0]=${encodeURIComponentWithPeriods(
