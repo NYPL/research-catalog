@@ -30,6 +30,16 @@ export const appConfig: AppConfig = {
       qa: "https://dev-login.nypl.org/auth/logout",
       production: "https://login.nypl.org/auth/logout",
     },
+    sierraBase: {
+      development: "https://nypl-sierra-test.iii.com/iii/sierra-api/v6/",
+      qa: "https://nypl-sierra-test.iii.com/iii/sierra-api/v6/",
+      production: "https://nypl.iii.com:443/iii/sierra-api/v6/",
+    },
+  },
+  searchNotification: {
+    development: "",
+    qa: "Test: Due to winter holiday closures, the delivery time for offsite requests will be delayed from December 22 until early January 2024. Please submit requests for offsite materials as early as possible.",
+    production: "",
   },
   urls: {
     circulatingCatalog: "https://borrow.nypl.org",
@@ -40,6 +50,24 @@ export const appConfig: AppConfig = {
       "https://www.nypl.org/help/request-research-materials",
     tokenUrl: "https://isso.nypl.org/",
     renewCard: "https://www.nypl.org/help/library-card/terms-conditions#renew",
+  },
+  testUser: {
+    name: {
+      development: "PLAYWRIGHT TEST ACCOUNT LOCAL",
+      qa: "PLAYWRIGHT TEST ACCOUNT GHA",
+      production: "PLAYWRIGHT TEST ACCOUNT GHA",
+    },
+    cardNumber: {
+      development: "2 5555 01278 5809",
+      qa: "2 3333 12428 7325",
+      production: "2 3333 12428 7325",
+    },
+    username: {
+      development: "playwrightlocal",
+      qa: "playwrightgha",
+      production: "playwrightgha",
+    },
+    password: process.env.QA_PASSWORD,
   },
   // Array of closed nypl location keys (available options for NYPL locations: all, schwarzman, schomburg, lpa)
   closedLocations: [] as (NYPLocationKey | "all")[],
@@ -56,6 +84,6 @@ export const appConfig: AppConfig = {
     EQIDAQAB
     -----END PUBLIC KEY-----`,
   features: {},
-  sourceEmail: process.env.SOURCE_EMAIL,
-  libAnswersEmail: process.env.LIB_ANSWERS_EMAIL,
+  sourceEmail: "no-reply@mylibrarynyc.org",
+  libAnswersEmail: "gethelp@libanswers.nypl.org",
 }
