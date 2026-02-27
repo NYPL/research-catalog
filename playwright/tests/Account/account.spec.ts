@@ -1,6 +1,6 @@
 import { test, expect, type Browser, type Page } from "@playwright/test"
 import { AccountPage } from "../../pages/account_page"
-import { appConfig } from "../../../src/config/config"
+import { appConfig } from "../../../src/config/appConfig"
 
 let page: Page
 let accountPage: AccountPage

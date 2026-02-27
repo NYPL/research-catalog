@@ -11,6 +11,7 @@ import {
 import { logServerError } from "../../utils/logUtils"
 import nyplApiClient from "../nyplApiClient"
 import type { APIError } from "../../types/appTypes"
+import { bootstrapConfig } from "../../../lib/bootstrap"
 
 export async function fetchSearchResults(
   searchParams: SearchParams
@@ -45,7 +46,6 @@ export async function fetchSearchResults(
   }
   const aggregationQuery = `/aggregations${queryString}`
   const searchQuery = `${queryString}&per_page=${RESULTS_PER_PAGE.toString()}`
-
   // Get the following in parallel:
   //  - search results
   //  - aggregations
