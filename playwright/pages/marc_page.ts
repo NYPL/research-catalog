@@ -17,6 +17,9 @@ export class MarcPage extends BasePage {
     this.marcTable = page.getByRole("table")
   }
   async navigate(id: string) {
-    await this.page.goto(`bib/${id}/marc`)
+    await this.page.goto(`bib/${id}/marc`, {
+      waitUntil: "domcontentloaded",
+    })
+    await this.marcTable.waitFor({ state: "visible" })
   }
 }

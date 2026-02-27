@@ -1,6 +1,6 @@
 import { Heading, Flex, Text } from "@nypl/design-system-react-components"
 import type { HTTPStatusCode } from "../../types/appTypes"
-import { appConfig } from "../../config/config"
+import { appConfig } from "../../config/appConfig"
 import { SITE_NAME } from "../../config/constants"
 import RCHead from "../Head/RCHead"
 import Layout from "../Layout/Layout"

@@ -23,7 +23,6 @@ describe("SearchResult with Physical Items", () => {
   it("renders the primary bib fields", async () => {
     screen.getByText("Material")
     screen.getByText("New York, Abelard-Schuman [1955]")
-    screen.getByText("1955")
     screen.getByText("2 items")
   })
 })

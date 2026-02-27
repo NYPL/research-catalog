@@ -2,7 +2,7 @@ import React from "react"
 import { render, screen, within } from "../../../src/utils/testUtils"
 import Custom404 from "../../../pages/404/index"
 import Redirect404 from "../../../pages/404/redirect"
-import { appConfig } from "../../../src/config/config"
+import { appConfig } from "../../../src/config/appConfig"
 
 describe("404", () => {
   it("should display 404 text", () => {

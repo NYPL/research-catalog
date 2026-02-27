@@ -1,6 +1,7 @@
 export interface AppConfig {
   environment: Environment
   apiEndpoints: Record<string, APIEndpoints>
+  searchNotification: any
   urls: Record<string, string>
   closedLocations: string[]
   recapClosedLocations: string[]
@@ -9,12 +10,19 @@ export interface AppConfig {
   features: Record<string, Features>
   sourceEmail: string
   libAnswersEmail: string
+  testUser: {
+    name: APIEndpoints
+    cardNumber: APIEndpoints
+    username: APIEndpoints
+    password: string
+  }
 }
 export interface APIEndpoints {
   development: string
   qa: string
   production: string
 }
+
 export interface Features {
   development: boolean
   qa: boolean

@@ -1,6 +1,6 @@
 import { Text } from "@nypl/design-system-react-components"
 
-import { appConfig } from "../../config/config"
+import { appConfig } from "../../config/appConfig"
 import type Item from "../../models/Item"
 import { AVAILABILITY_KEYS } from "../../config/constants"
 import {
