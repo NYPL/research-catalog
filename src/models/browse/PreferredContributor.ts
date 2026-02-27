@@ -28,7 +28,7 @@ export default class PreferredContributor {
     this.url = getContributorSearchURL(result.termLabel)
     this.termLabel = result.termLabel
     this.roles = result.roleCounts?.length && this.buildRoles(result.roleCounts)
-    this.count = result.count?.toLocaleString() || ""
+    this.count = result.count?.toLocaleString()
     this.seeAlso = result.seeAlso?.length && {
       label: "See also",
       terms: buildTermLinks("contributors", result.seeAlso),

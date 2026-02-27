@@ -85,6 +85,18 @@ describe("searchUtils", () => {
         })
       ).toBe(true)
     })
+
+    it("appends role when there's one contributor literal filter and a role is passed", () => {
+      const testQuery =
+        "?q=merrily&filters[contributorLiteral][0]=Sondheim%2C%20Stephen&role=lyricist%2E"
+      expect(
+        checkQueryParamsEquality(testQuery, {
+          q: "merrily",
+          filters: { contributorLiteral: ["Sondheim, Stephen"] },
+          role: "lyricist.",
+        })
+      ).toBe(true)
+    })
   })
   describe("mapQueryToSearchParams", () => {
     it("should consolidate identifiers, change some keys, and initializes the page number to 1", () => {
@@ -178,11 +190,11 @@ describe("searchUtils", () => {
     })
     it("handles the special case for the contributorLiteral filter", () => {
       const heading = getSearchResultsHeading(
-        { filters: { contributorLiteral: ["spaghetti"] } },
+        { filters: { contributorLiteral: ["spaghetti", "pasta"] } },
         100
       )
       expect(heading).toEqual(
-        'Displaying 1-50 of 100 results for author/contributor "spaghetti"'
+        'Displaying 1-50 of 100 results for author/contributors "spaghetti, pasta"'
       )
     })
     it("displays all of the values from advanced search and nothing else", () => {
@@ -266,13 +278,24 @@ describe("searchUtils", () => {
       })
     })
     describe("browse result searches", () => {
-      it("returns heading with browseOptions when slug and browseType are provided", () => {
+      it("returns subject heading", () => {
         const heading = getSearchResultsHeading({ page: 1, q: "" }, 100, {
           slug: "History",
-          browseType: "Subject Heading",
+          browseType: "subjects",
         })
         expect(heading).toContain(
           'Displaying 1-50 of 100 results for Subject Heading "History"'
+        )
+      })
+
+      it("returns heading with contributor and role", () => {
+        const heading = getSearchResultsHeading({ page: 1, q: "" }, 100, {
+          slug: "Sondheim, Stephen",
+          browseType: "contributors",
+          role: "editor.",
+        })
+        expect(heading).toContain(
+          'Displaying 1-50 of 100 results for Author/Contributor "Sondheim, Stephen, editor."'
         )
       })
     })

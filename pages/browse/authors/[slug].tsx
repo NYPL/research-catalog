@@ -12,28 +12,30 @@ import { useRouter } from "next/router"
 import { idConstants, useFocusContext } from "../../../src/context/FocusContext"
 import { buildLockedBrowseQuery } from "../../../src/utils/browseUtils"
 
-interface SubjectHeadingResultsProps {
+interface ContributorResultsProps {
   bannerNotification?: string
   results: SearchResultsResponse
   isAuthenticated: boolean
   slug: string
   errorStatus?: HTTPStatusCode | null
   metadataTitle?: string
+  role?: string
 }
 
 /**
- * The Browse subject headings bib results page is responsible for fetching and displaying bib results
- * filtered by at least one subject heading, as well as displaying and controlling pagination, sort,
+ * The Browse contributors bib results page is responsible for fetching and displaying bib results
+ * filtered by at least one author/contributor, with or without a role. Also displays and controls pagination, sort,
  * and other filters.
  */
-export default function SubjectHeadingResults({
+export default function ContributorResults({
   bannerNotification,
   results,
   isAuthenticated,
   errorStatus = null,
   metadataTitle,
   slug,
-}: SubjectHeadingResultsProps) {
+  role,
+}: ContributorResultsProps) {
   const { pathname, push, query } = useRouter()
 
   const { setPersistentFocus } = useFocusContext()
@@ -78,6 +80,7 @@ export default function SubjectHeadingResults({
       handlePageChange={handlePageChange}
       handleSortChange={handleSortChange}
       slug={slug}
+      role={role}
     />
   )
 }
@@ -86,11 +89,12 @@ export async function getServerSideProps({ req, query, params }) {
   const bannerNotification = process.env.SEARCH_RESULTS_NOTIFICATION || ""
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const slug: string = params.slug as string
+  const role = typeof query.role === "string" ? query.role : null
 
   const baseQuery = buildLockedBrowseQuery({
     slug,
     query,
-    field: "subjectLiteral",
+    field: "contributorLiteral",
   })
 
   const results = await fetchSearchResults(mapQueryToSearchParams(baseQuery))
@@ -110,6 +114,7 @@ export async function getServerSideProps({ req, query, params }) {
       metadataTitle: `Search | ${SITE_NAME}`,
       activePage: "browse-results",
       slug,
+      ...(role ? { role } : {}),
     },
   }
 }

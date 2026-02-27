@@ -36,6 +36,7 @@ export interface Identifiers {
 export interface SearchParams extends AdvancedSearchQueryParams {
   q?: string
   field?: string
+  role?: string
   sortBy?: SortKey
   order?: SortOrder
   filters?: SearchFilters
@@ -106,4 +107,5 @@ export interface SearchQueryParams
   sort_direction?: SortOrder
   search_scope?: string
   page?: string
+  role?: string
 }

@@ -173,7 +173,7 @@ describe("browseUtils", () => {
     it("has expected keys and labels for contributor sorts", () => {
       expect(browseContributorSortOptions).toHaveProperty("termLabel_asc")
       expect(browseContributorSortOptions.termLabel_asc).toBe(
-        "Ascending (A - Z)"
+        "Author/Contributor (A - Z)"
       )
       expect(browseContributorSortOptions.count_desc).toBe("Count (High - Low)")
     })
