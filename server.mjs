@@ -5,7 +5,8 @@ if (process.env.NEW_RELIC_LICENSE_KEY) {
 import next from "next"
 import http from "http"
 
-const dev = process.env.NEXT_PUBLIC_APP_ENV !== "production"
+console.log("NODE_ENV:", process.env.NODE_ENV)
+const dev = process.env.NODE_ENV === "development"
 const app = next({ dev })
 const handle = app.getRequestHandler()
 
