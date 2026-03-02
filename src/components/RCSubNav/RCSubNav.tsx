@@ -6,6 +6,7 @@ import {
   SubNavLink,
   Text,
 } from "@nypl/design-system-react-components"
+import NextLink from "next/link"
 
 interface SubNavProps {
   activePage: RCPage
@@ -28,11 +29,18 @@ const RCSubNav = ({ activePage, isAuthenticated }: SubNavProps) => {
       primaryActions={
         <>
           <SubNavLink
-            href="/research/research-catalog/"
+            href="/"
             id="subnav-search"
-            isSelected={activePage === "search" || activePage === "advanced"}
+            as={NextLink}
+            isSelected={
+              activePage === "search" ||
+              activePage === "advanced" ||
+              activePage === ""
+            }
             aria-current={
-              activePage === "search" || activePage === "advanced"
+              activePage === "search" ||
+              activePage === "advanced" ||
+              activePage === ""
                 ? "page"
                 : undefined
             }
@@ -40,12 +48,17 @@ const RCSubNav = ({ activePage, isAuthenticated }: SubNavProps) => {
             Search the Catalog
           </SubNavLink>
           <SubNavLink
-            href="/research/research-catalog/subject_headings"
+            href="/browse"
+            as={NextLink}
             id="subnav-browse"
-            isSelected={activePage === "shep"}
-            aria-current={activePage === "shep" ? "page" : undefined}
+            isSelected={activePage === "browse" || activePage === "sh-results"}
+            aria-current={
+              activePage === "browse" || activePage === "sh-results"
+                ? "page"
+                : undefined
+            }
           >
-            Subject Heading Explorer
+            Browse the Catalog
           </SubNavLink>
         </>
       }
@@ -61,7 +74,8 @@ const RCSubNav = ({ activePage, isAuthenticated }: SubNavProps) => {
             </SubNavLink>
           </div>
           <SubNavLink
-            href="/research/research-catalog/account"
+            href="/account"
+            as={NextLink}
             id="subnav-account"
             isOutlined
             isSelected={activePage === "account"}
@@ -70,7 +84,6 @@ const RCSubNav = ({ activePage, isAuthenticated }: SubNavProps) => {
           >
             <Icon name="actionIdentityFilled" size="medium" />
             <Text
-              noSpace
               __css={{
                 display: "none",
                 ["@media screen and (min-width: 600px)"]: {

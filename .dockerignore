@@ -2,3 +2,4 @@ node_modules
 .dockerignore
 .next
 Dockerfile
+pages/api/vocabularies

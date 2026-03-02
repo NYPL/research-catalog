@@ -1,9 +1,11 @@
 export type RCPage =
   | "search"
   | "advanced"
-  | "shep"
+  | "browse"
+  | "sh-results"
   | "account"
   | "bib"
+  | "marc"
   | "hold"
   | "404"
   | ""

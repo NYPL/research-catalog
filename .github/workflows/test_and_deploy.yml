@@ -1,5 +1,5 @@
 # Run tests and deploy to research-catalog-qa, research-catalog-train, or research-catalog-production based on branch
-name: deploy
+name: Test and deploy
 
 on:
   push:
@@ -53,8 +53,7 @@ jobs:
 
       - name: Set environment-specific variables
         run: |
-          # When building train, use APP_ENV=qa
-          echo "APP_ENV=${GITHUB_REF_NAME/train/qa}" >> $GITHUB_ENV
+          echo "APP_ENV=${GITHUB_REF_NAME}" >> $GITHUB_ENV
           echo "ECR_TAG=${GITHUB_REF_NAME}-latest" >> $GITHUB_ENV
           echo "PREVIOUS_TAG=${GITHUB_REF_NAME}-previous" >> $GITHUB_ENV
           echo "CLUSTER=research-catalog-${GITHUB_REF_NAME}" >> $GITHUB_ENV

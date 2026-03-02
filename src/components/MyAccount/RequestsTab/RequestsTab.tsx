@@ -5,7 +5,6 @@ import {
   Text,
 } from "@nypl/design-system-react-components"
 
-import ExternalLink from "../../Links/ExternalLink/ExternalLink"
 import type { Hold } from "../../../types/myAccountTypes"
 import ItemsTab from "../ItemsTab"
 import CancelButton from "./CancelButton"
@@ -14,6 +13,7 @@ import UpdateLocation from "./UpdateLocation"
 import styles from "../../../../styles/components/MyAccount.module.scss"
 import { useContext, useEffect, useRef, useState } from "react"
 import { PatronDataContext } from "../../../context/PatronDataContext"
+import Link from "../../Link/Link"
 
 const RequestsTab = () => {
   const tabRef = useRef(null)
@@ -28,13 +28,24 @@ const RequestsTab = () => {
     // If item is research/circ
     if (hold.catalogHref) {
       return (
-        <ExternalLink isUnderlined={false} href={hold.catalogHref}>
+        <Link
+          isExternal
+          whiteSpace="pre-line"
+          isUnderlined={false}
+          href={hold.catalogHref}
+        >
           {hold.title}
-        </ExternalLink>
+          {hold.volume && `\n${hold.volume}`}
+        </Link>
       )
     } else {
       // Item is a partner record
-      return <Text>{hold.title}</Text>
+      return (
+        <Text whiteSpace="pre-line">
+          {hold.title}
+          {hold.volume && `\n${hold.volume}`}
+        </Text>
+      )
     }
   }
   const holdsHeaders = [
@@ -100,13 +111,13 @@ const RequestsTab = () => {
   function getStatusBadge(status) {
     if (status == "READY FOR PICKUP") {
       return (
-        <StatusBadge className={styles.statusBadge} type="positive">
+        <StatusBadge className={styles.statusBadge} variant="positive">
           {status}
         </StatusBadge>
       )
     }
     return (
-      <StatusBadge className={styles.statusBadge} type="neutral">
+      <StatusBadge className={styles.statusBadge} variant="neutral">
         {status}
       </StatusBadge>
     )

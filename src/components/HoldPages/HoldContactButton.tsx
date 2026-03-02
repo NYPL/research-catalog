@@ -30,10 +30,11 @@ export const HoldContactButton = ({
           barcode: item.barcode,
           callNumber: item.callNumber,
           bibId: item.bibId,
+          volume: item.volume,
           notificationText: `Request failed for call number ${item.callNumber}`,
         })
       }
-      buttonType="link"
+      variant="text"
       // TODO: Ask DS team to make button link variant match the default link styles
       sx={{
         display: "inline",

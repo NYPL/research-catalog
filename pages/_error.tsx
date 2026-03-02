@@ -7,14 +7,17 @@ import Image from "next/image"
 import errorImage from "../src/assets/errorImage.png"
 import { useContext } from "react"
 import { FeedbackContext } from "../src/context/FeedbackContext"
+import type { HTTPStatusCode } from "../src/types/appTypes"
 
 type ErrorPageProps = {
   activePage: RCPage
+  statusCode?: HTTPStatusCode | null
 }
 
-function Error({ activePage }: ErrorPageProps) {
-  const metadataTitle = `500 | ${SITE_NAME}`
-  const { onOpen } = useContext(FeedbackContext)
+// Global catch-all for unhandled errors.
+function Error({ activePage, statusCode }: ErrorPageProps) {
+  const metadataTitle = `Error | ${SITE_NAME}`
+  const { openFeedbackFormWithError } = useContext(FeedbackContext)
   return (
     <>
       <RCHead metadataTitle={metadataTitle} />
@@ -36,13 +39,18 @@ function Error({ activePage }: ErrorPageProps) {
             height={68}
             style={{ marginBottom: "48px" }}
           />
-          <Heading level="h3">Something went wrong on our end</Heading>
+          <Heading level="h3" mb="s">
+            Something went wrong on our end
+          </Heading>
           <Text marginBottom="0">
             We encountered an error while trying to load the page.
           </Text>
           <Text marginBottom="0">
             Try refreshing the page or{" "}
-            <Link onClick={onOpen} id="feedback-link">
+            <Link
+              onClick={() => openFeedbackFormWithError(statusCode)}
+              id="feedback-link"
+            >
               contact us
             </Link>{" "}
             if the error persists.
@@ -51,6 +59,11 @@ function Error({ activePage }: ErrorPageProps) {
       </Layout>
     </>
   )
+}
+
+Error.getInitialProps = ({ res, err }: { res?: any; err?: any }) => {
+  const statusCode = res?.statusCode ?? err?.statusCode ?? 500
+  return { statusCode }
 }
 
 export default Error

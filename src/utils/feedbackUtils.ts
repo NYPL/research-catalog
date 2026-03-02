@@ -1,5 +1,5 @@
 import type { FeedbackMetadataAndComment } from "../types/feedbackTypes"
-import { type SendEmailRequest } from "aws-sdk/clients/ses"
+import { type SendEmailRequest } from "@aws-sdk/client-ses"
 import { encodeHTML } from "./appUtils"
 
 /**
@@ -42,6 +42,20 @@ export const getFeedbackEmailHTML = (
         </dl>
       </div>
     `
+
+export const maskEmail = (email: string) => {
+  return email
+    .split("@")
+    .map((chunk, i) =>
+      i == 0
+        ? chunk
+            .split("")
+            .map((char, j) => (j === 0 ? char : "*"))
+            .join("")
+        : chunk
+    )
+    .join("@")
+}
 /**
  * getEmailParams
  * Get the params for Feedback email submission as expected by SES

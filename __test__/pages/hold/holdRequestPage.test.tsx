@@ -184,7 +184,7 @@ describe("Hold Request page", () => {
 
     it("renders an H2", () => {
       expect(screen.getByRole("heading", { level: 2 })).toHaveTextContent(
-        "Request for on-site use"
+        "Request for onsite use"
       )
     })
 
@@ -423,13 +423,14 @@ describe("Hold Request page", () => {
         patronId="123"
         deliveryLocations={undefined}
         isAuthenticated={true}
-        notFound={true}
+        bibItemErrorStatus={404}
       />
     )
     expect(screen.getByText("We couldn't find that page")).toBeInTheDocument()
   })
   describe("Hold request already completed renders warning banner", () => {
-    sessionStorage.setItem("holdCompleted", "true")
+    // Item ID from bibWithItems
+    sessionStorage.setItem("holdCompleted-i39333697", "true")
     render(
       <HoldRequestPage
         discoveryBibResult={bibWithItems.resource}
@@ -451,9 +452,6 @@ describe("Hold Request page", () => {
     ).toBeInTheDocument()
     const banner = screen.getByTestId("hold-request-completed")
     const accountLink = within(banner).getByText("patron account")
-    expect(accountLink).toHaveAttribute(
-      "href",
-      "/research/research-catalog/account"
-    )
+    expect(accountLink).toHaveAttribute("href", "/account")
   })
 })

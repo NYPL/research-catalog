@@ -41,10 +41,6 @@ describe("SearchResultsBib model", () => {
       expect(bibWithNoTitle.title).toBe("[Untitled]")
     })
 
-    it("initializes the yearPublished based on dateStartYear and dateEndYear", () => {
-      expect(searchResultsBib.yearPublished).toBe("1999-present")
-    })
-
     it("initializes the publicationStatement based on bib result's publicationStatement if present", () => {
       expect(searchResultsBib.publicationStatement).toBe(
         "Mansfield, Ohio : Urban Spaghetti, [1999?-"

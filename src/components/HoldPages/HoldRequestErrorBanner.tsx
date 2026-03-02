@@ -31,7 +31,7 @@ const HoldRequestErrorBanner = ({
 }: HoldRequestErrorBannerProps) => {
   return (
     <Banner
-      type="negative"
+      variant="negative"
       heading={HOLD_PAGE_ERROR_HEADINGS?.[errorStatus] || null}
       data-testid="hold-request-error"
       mb="l"
@@ -45,7 +45,7 @@ const HoldRequestErrorBanner = ({
       content={
         <Box>
           {HOLD_PAGE_CONTACT_PREFIXES?.[errorStatus] && (
-            <Text noSpace mt="xs">
+            <Text>
               {HOLD_PAGE_CONTACT_PREFIXES?.[errorStatus]}
               {" Please "}
               <HoldContactButton item={item}>contact us</HoldContactButton> for

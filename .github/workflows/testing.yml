@@ -1,6 +1,12 @@
-name: Unit Tests
+name: Unit tests
 
-on: [push]
+on:
+  push:
+    branches-ignore:
+      # These branches run tests as part of their deployment
+      - qa
+      - production
+      - train
 
 jobs:
   tests:

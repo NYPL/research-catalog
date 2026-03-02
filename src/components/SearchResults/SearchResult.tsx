@@ -7,13 +7,14 @@ import {
   CardActions,
   SimpleGrid,
   StatusBadge,
+  Icon,
 } from "@nypl/design-system-react-components"
-import RCLink from "../Links/RCLink/RCLink"
+import Link from "../Link/Link"
 import ElectronicResourcesLink from "./ElectronicResourcesLink"
-import ItemTable from "../ItemTable/ItemTable"
 import type SearchResultsBib from "../../models/SearchResultsBib"
 import { PATHS } from "../../config/constants"
 import FindingAid from "../BibPage/FindingAid"
+import SearchResultItems from "./SearchResultItems"
 
 interface SearchResultProps {
   bib: SearchResultsBib
@@ -23,12 +24,43 @@ interface SearchResultProps {
  * The SearchResult component displays a single search result element.
  */
 const SearchResult = ({ bib }: SearchResultProps) => {
+  const separatingDot = (i) => (
+    // @ts-ignore
+    <Icon key={`dot-${i}`} size="xxsmall" ml="xs" mr="xs" pb="xxs">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="4"
+        height="4"
+        viewBox="0 0 4 4"
+        fill="#000"
+      >
+        <circle cx="2" cy="2" r="2" fill="#000" />
+      </svg>
+    </Icon>
+  )
+  const metadata = [
+    bib.format,
+    bib.publicationStatement,
+    bib.getNumItemsMessage(),
+  ].filter(Boolean)
+
+  const joinedMetadata = metadata.reduce((acc, piece, i) => {
+    if (i > 0) acc.push(separatingDot(i))
+    acc.push(<Text key={i}>{piece}</Text>)
+    return acc
+  }, [])
+
   return (
     <Card
+      key={bib.id}
       sx={{
-        borderBottom: "1px solid var(--nypl-colors-ui-border-default)",
-        paddingBottom: "l",
-        " > div": {
+        borderRadius: "8px",
+        border: "1px solid var(--ui-gray-medium, #BDBDBD)",
+        paddingLeft: "m",
+        paddingRight: "m",
+        paddingTop: "l",
+        paddingBottom: bib.itemTables?.length > 0 ? 0 : "m",
+        "[data-body]": {
           width: "100% !important",
         },
       }}
@@ -39,63 +71,83 @@ const SearchResult = ({ bib }: SearchResultProps) => {
         sx={{ a: { textDecoration: "none" } }}
       >
         {bib.findingAid && (
-          <StatusBadge type="informative" mb="s">
-            FINDING AID AVAILABLE
+          <StatusBadge variant="informative" mb="s">
+            Finding aid available
           </StatusBadge>
         )}
-        <RCLink href={`${PATHS.BIB}/${bib.id}`}>{bib.titleDisplay}</RCLink>
+        <Link href={`${PATHS.BIB}/${bib.id}`}>{bib.titleDisplay}</Link>
       </CardHeading>
       <CardContent data-testid="card-content">
         <Box
           sx={{
-            p: { display: "inline-block", marginRight: "s", marginBottom: "s" },
+            p: {
+              display: "inline-block",
+            },
           }}
         >
-          {bib.format && <Text>{bib.format}</Text>}
-          {bib.publicationStatement && <Text>{bib.publicationStatement}</Text>}
-          {bib.yearPublished && <Text>{bib.yearPublished}</Text>}
-          <Text>{bib.getNumItemsMessage()}</Text>
+          {joinedMetadata}
         </Box>
-        {bib.findingAid ? (
-          <FindingAid
-            findingAidURL={bib.findingAid}
-            hasElectronicResources={bib.hasElectronicResources}
-          />
-        ) : null}
-        {bib.hasElectronicResources ? (
-          <ElectronicResourcesLink
-            bibUrl={bib.url}
-            electronicResources={bib.electronicResources}
-          />
-        ) : null}
-        <SimpleGrid columns={1} mt="l" gap="grid.l">
-          {bib.itemTables && (
+        {(bib.findingAid || bib.hasElectronicResources) && (
+          <Box width="100%" mt="s">
+            {bib.findingAid ? (
+              <FindingAid
+                findingAidURL={bib.findingAid}
+                hasElectronicResources={bib.hasElectronicResources}
+              />
+            ) : null}
+            {bib.hasElectronicResources ? (
+              <ElectronicResourcesLink
+                bibUrl={bib.url}
+                electronicResources={bib.electronicResources}
+              />
+            ) : null}
+          </Box>
+        )}
+        {bib.itemTables?.length > 0 && (
+          <SimpleGrid
+            columns={1}
+            gap="grid.m"
+            mt="s"
+            sx={{
+              "*:first-of-type table": {
+                borderTop: "none !important",
+                paddingTop: "xs !important",
+              },
+              paddingBottom: bib.showViewAllItemsLink() ? "s" : "m",
+            }}
+          >
             <>
               {bib.itemTables.map((itemTableData) => (
-                <ItemTable
+                <SearchResultItems
                   itemTableData={itemTableData}
                   key={`search-results-item-${itemTableData.items[0].id}`}
                 />
               ))}
-              {bib.showViewAllItemsLink() && (
-                <CardActions>
-                  <RCLink
-                    href={`${bib.url}#item-table`}
-                    fontSize={{
-                      base: "mobile.body.body2",
-                      md: "desktop.body.body2",
-                    }}
-                    fontWeight="medium"
-                    type="standalone"
-                  >
-                    {`View all ${bib.getNumItemsMessage()} `}
-                  </RCLink>
-                </CardActions>
-              )}
             </>
-          )}
-        </SimpleGrid>
+          </SimpleGrid>
+        )}
       </CardContent>
+      {bib.showViewAllItemsLink() && (
+        <CardActions
+          sx={{
+            paddingTop: "s",
+            paddingBottom: "s",
+            borderTop: "1px dashed var(--nypl-colors-ui-bg-active)",
+          }}
+        >
+          <Link
+            href={`${bib.url}#item-table`}
+            fontSize={{
+              base: "mobile.body.body2",
+              md: "desktop.body.body2",
+            }}
+            fontWeight="medium"
+            variant="standalone"
+          >
+            {`View all ${bib.getNumItemsMessage()} `}
+          </Link>
+        </CardActions>
+      )}
     </Card>
   )
 }

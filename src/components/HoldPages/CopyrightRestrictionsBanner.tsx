@@ -3,16 +3,16 @@ import { Box, Text, Banner } from "@nypl/design-system-react-components"
 export const CopyrightRestrictionsBanner = () => {
   return (
     <Banner
-      type="neutral"
+      variant="neutral"
       heading="Copyright restrictions"
       content={
         <Box mt="xs">
-          <Text>
+          <Text mb="s">
             The copyright law of the United States (Title 17, United States
             Code) governs the making of photocopies or other reproductions of
             copyrighted material.
           </Text>
-          <Text>
+          <Text mb="s">
             Under certain conditions specified in the law, libraries and
             archives are authorized to furnish a photocopy or other
             reproduction. One of these specific conditions is that the photocopy
@@ -22,7 +22,7 @@ export const CopyrightRestrictionsBanner = () => {
             excess of “fair use,” that user may be liable for copyright
             infringement.
           </Text>
-          <Text>
+          <Text mb="s">
             This institution reserves the right to refuse to accept a copying
             order if, in its judgment, fulfillment of the order would involve
             violation of copyright law.

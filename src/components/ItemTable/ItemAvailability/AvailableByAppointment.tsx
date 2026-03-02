@@ -1,6 +1,6 @@
-import { Box, Text } from "@nypl/design-system-react-components"
-import { appConfig } from "../../../config/config"
-import ExternalLink from "../../Links/ExternalLink/ExternalLink"
+import { Box } from "@nypl/design-system-react-components"
+import { appConfig } from "../../../config/appConfig"
+import Link from "../../Link/Link"
 
 const AvailableByAppointment = ({ displayPeriod = false }) => {
   return (
@@ -15,9 +15,9 @@ const AvailableAtLink = ({ location }) => {
   return (
     <>
       {" at "}
-      <ExternalLink href={`${appConfig.urls.locations}${location.endpoint}`}>
+      <Link isExternal href={`${appConfig.urls.locations}${location.endpoint}`}>
         {location.prefLabel + "."}
-      </ExternalLink>
+      </Link>
     </>
   )
 }

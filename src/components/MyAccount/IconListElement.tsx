@@ -19,7 +19,7 @@ export const IconListElement = ({
   return (
     <>
       <dt className={styles.iconDt}>
-        <Icon size="large" name={icon} />
+        {icon && <Icon size="large" name={icon} />}
         {term}
       </dt>
       <dd data-testid={term} className={styles.iconDd}>

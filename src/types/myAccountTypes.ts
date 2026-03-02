@@ -98,6 +98,7 @@ export interface Checkout {
   isResearch: boolean
   patron: string | null
   title: string
+  volume: string | null
   bibId?: string
   isNyplOwned: boolean
   catalogHref: string
@@ -109,6 +110,7 @@ export interface SierraCodeName {
 }
 
 export interface Hold {
+  itemId: string
   pickupByDate: string | null
   id: string | null
   canFreeze: boolean
@@ -118,6 +120,7 @@ export interface Hold {
   frozen: boolean
   patron: string | null
   title: string
+  volume: string | null
   bibId: string
   isNyplOwned: boolean
   catalogHref: string

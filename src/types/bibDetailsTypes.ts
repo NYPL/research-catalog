@@ -1,4 +1,8 @@
+import type { MarcDetail } from "./marcTypes"
+
 export type AnyBibDetail = BibDetail | LinkedBibDetail | SubjectHeadingDetail
+
+export type AnyMarcDetail = MarcDetail | MarcLinkedDetail
 
 export interface SubjectHeadingDetail {
   value: BibDetailURL[][]
@@ -21,6 +25,17 @@ export interface LinkedBibDetail {
   link?: "internal" | "external"
 }
 
+export interface MarcLinkedDetail {
+  value: BibDetailURL[]
+  // label is the formatted name of the field, such as "Author"
+  label: string
+  // indicates if a linked bib detail is internal, like a link to a creator
+  // literal search, or external, like supplementary content
+  link?: "internal" | "external"
+  // associated marc tags on this field– since this detail comes from the annotated MARC
+  marcTags: string[]
+}
+
 export interface BibDetailURL {
   url: string
   urlLabel?: string
@@ -29,33 +44,4 @@ export interface BibDetailURL {
 export interface FieldMapping {
   label: string
   field: string
-}
-
-export interface AnnotatedMarc {
-  id: string
-  nyplSource: string
-  fields: AnnotatedMarcField[]
-}
-
-export interface AnnotatedMarcField {
-  label: string
-  values: AnnotatedMarcFieldValue[]
-}
-
-export interface AnnotatedMarcFieldValue {
-  label?: string
-  content: string
-  source: {
-    fieldTag: string
-    marcTag: string
-    ind1?: string
-    ind2?: string
-    content: string | null
-    subfields: MarcSubfield[]
-  }
-}
-
-export interface MarcSubfield {
-  tag: string
-  content: string
 }

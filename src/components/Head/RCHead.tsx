@@ -1,4 +1,4 @@
-import { appConfig } from "../../config/config"
+import { appConfig } from "../../config/appConfig"
 import Head from "next/head"
 
 export default function RCHead({ metadataTitle }) {

@@ -2,9 +2,15 @@ import {
   getFeedbackEmailText,
   getFeedbackEmailHTML,
   getEmailParams,
+  maskEmail,
 } from "../feedbackUtils"
 
 describe("feedbackUtils", () => {
+  describe("maskEmail", () => {
+    it("parses and returns a masked email", () => {
+      expect(maskEmail("spaghetti@nypl.org")).toBe("s********@nypl.org")
+    })
+  })
   describe("getFeedbackEmailText", () => {
     it("correctly formats the feedback email text given a full url and a fields object", () => {
       expect(
@@ -12,11 +18,12 @@ describe("feedbackUtils", () => {
           category: "category",
           comment: "comment",
           id: "b12345678",
+          volume: "Volume 4",
           email: "test@nypl.org",
           barcode: "12345678",
         })
       ).toBe(
-        "Question/Feedback from Research Catalog (SCC): category: category, comment: comment, id: b12345678, email: test@nypl.org, barcode: 12345678 URL: https://www.nypl.org"
+        "Question/Feedback from Research Catalog (SCC): category: category, comment: comment, id: b12345678, volume: Volume 4, email: test@nypl.org, barcode: 12345678 URL: https://www.nypl.org"
       )
     })
     it("correctly format the feedback email text given a full url and a fields object with just a comment and email", () => {
@@ -37,6 +44,7 @@ describe("feedbackUtils", () => {
           category: "category",
           comment: "comment",
           id: "b12345678",
+          volume: "Volume 4",
           email: "test@nypl.org",
           barcode: "12345678",
         })
@@ -54,6 +62,9 @@ describe("feedbackUtils", () => {
           
             <dt>id:</dt>
             <dd>b12345678</dd>
+          
+            <dt>volume:</dt>
+            <dd>Volume 4</dd>
           
             <dt>email:</dt>
             <dd>test@nypl.org</dd>

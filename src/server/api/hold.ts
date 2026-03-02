@@ -21,8 +21,9 @@ import {
   locationIsClosed,
 } from "../../utils/locationUtils"
 
-import { appConfig } from "../../config/config"
-import { logServerError } from "../../utils/appUtils"
+import { appConfig } from "../../config/appConfig"
+import { logServerError } from "../../utils/logUtils"
+import { logger } from "@nypl/node-utils"
 
 /**
  * Getter function for hold delivery locations.
@@ -82,15 +83,17 @@ export async function fetchDeliveryLocations(
 export async function postHoldRequest(
   holdRequestParams: HoldRequestParams
 ): Promise<HoldPostResult> {
-  const { itemId, patronId, source, pickupLocation } = holdRequestParams
+  const { itemId, patronId, source, bibId, pickupLocation } = holdRequestParams
 
   // Remove non-numeric characters from item ID
   const itemIdNumeric = itemId.replace(/\D/g, "")
+  const bibIdNumeric = bibId.replace(/\D/g, "")
 
   const holdPostParams: DiscoveryHoldPostParams = {
     patron: patronId,
     record: itemIdNumeric,
     nyplSource: source,
+    bibId: parseInt(bibIdNumeric),
     requestType: "hold",
     recordType: "i",
     pickupLocation,
@@ -128,15 +131,17 @@ export async function postHoldRequest(
 export async function postEDDRequest(
   eddRequestParams: EDDRequestParams
 ): Promise<HoldPostResult> {
-  const { itemId, patronId, source, ...rest } = eddRequestParams
+  const { itemId, patronId, source, bibId, ...rest } = eddRequestParams
 
   // Remove non-numeric characters from item ID
   const itemIdNumeric = itemId.replace(/\D/g, "")
+  const bibIdNumeric = bibId.replace(/\D/g, "")
 
   const eddPostParams: DiscoveryHoldPostParams = {
     patron: patronId,
     record: itemIdNumeric,
     nyplSource: source,
+    bibId: parseInt(bibIdNumeric),
     requestType: "edd",
     recordType: "i",
     docDeliveryData: {
@@ -224,7 +229,7 @@ export async function fetchPatronEligibility(
 
     return { status: 200, ...eligibilityResult }
   } catch (error) {
-    console.error(
+    logger.error(
       `Error fetching hold request eligibility in fetchPatronEligibility server function, patronId: ${patronId}`,
       error.message
     )

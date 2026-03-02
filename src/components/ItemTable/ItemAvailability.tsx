@@ -1,7 +1,6 @@
 import { Text } from "@nypl/design-system-react-components"
 
-import ExternalLink from "../Links/ExternalLink/ExternalLink"
-import { appConfig } from "../../config/config"
+import { appConfig } from "../../config/appConfig"
 import type Item from "../../models/Item"
 import { AVAILABILITY_KEYS } from "../../config/constants"
 import {
@@ -13,6 +12,7 @@ import AvailableOnsite from "./ItemAvailability/AvailableOnsite"
 import NotAvailable from "./ItemAvailability/NotAvailable"
 import FindingAid from "./ItemAvailability/FindingAid"
 import ContactALibrarian from "./ItemAvailability/ContactALibrarian"
+import Link from "../Link/Link"
 
 interface ItemAvailabilityProps {
   item: Item
@@ -45,18 +45,20 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
     id: item.id,
     barcode: item.barcode,
     callNumber: item.callNumber,
+    volume: item.volume,
     bibId: item.bibId,
   }
   switch (item.availability.key) {
     case RECAP_GENERAL_COLLECTIONS:
       return (
-        <ExternalLink
+        <Link
+          isExternal
           href={appConfig.urls.researchMaterialsHelp}
           fontSize="sm"
           className="no-print"
         >
           How do I pick up this item and when will it be ready?
-        </ExternalLink>
+        </Link>
       )
     case EDGE_CASE:
       message = <ContactALibrarian item={itemMetadata} />

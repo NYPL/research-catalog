@@ -50,6 +50,7 @@ export const searchResultManyPhysicalItems = {
         },
       ],
       eddRequestable: false,
+      enumerationChronology: ["Volume 4"],
       holdingLocation: [
         {
           "@id": "loc:macc2",

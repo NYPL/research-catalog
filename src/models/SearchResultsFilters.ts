@@ -1,9 +1,9 @@
+import { searchVocabularies } from "../../data/searchVocabularies"
 import type {
   AggregationOption,
   Aggregation,
   Option,
 } from "../types/filterTypes"
-import { searchAggregations } from "../config/aggregations"
 
 class SearchResultsFilters {
   options: AggregationOption[]
@@ -24,7 +24,7 @@ class SearchResultsFilters {
   }
   getLabel(option, field) {
     if (field.value === "buildingLocation") {
-      return searchAggregations.buildingLocation.find(
+      return searchVocabularies.buildingLocations.find(
         (loc) => loc.value === option.value
       ).label
     } else return this.labelTransformations[option.label] || option.label

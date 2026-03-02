@@ -1,5 +1,4 @@
 import React, { useContext, useState } from "react"
-
 import { FeedbackContext } from "../../context/FeedbackContext"
 import type { FeedbackMetadataAndComment } from "../../types/feedbackTypes"
 import { BASE_URL } from "../../config/constants"
@@ -17,9 +16,15 @@ const FeedbackForm = () => {
     onOpen,
     itemMetadata,
     setItemMetadata,
+    errorStatus,
+    setErrorStatus,
+    openFeedbackFormWithError,
   } = useContext(FeedbackContext)
-  const closeAndResetItemMetadata = () => {
-    if (itemMetadata) setItemMetadata(null)
+
+  const closeAndResetFeedbackData = () => {
+    setItemMetadata(null)
+
+    setErrorStatus(null)
     onClose()
     setFeedbackFormScreen("form")
 
@@ -32,6 +37,7 @@ const FeedbackForm = () => {
       }
     }, 250)
   }
+
   const submitFeedback = async (
     metadataAndComment: FeedbackMetadataAndComment
   ) => {
@@ -54,23 +60,29 @@ const FeedbackForm = () => {
       setFeedbackFormScreen("error")
     }
   }
+
+  const notificationText = errorStatus
+    ? "You are asking for help or information about a page error"
+    : itemMetadata?.notificationText
+    ? itemMetadata.notificationText
+    : itemMetadata?.callNumber
+    ? `You are asking for help or information about ${itemMetadata.callNumber} in this record.`
+    : null
+
   return (
     <FeedbackBox
       onSubmit={submitFeedback}
       isOpen={isOpen}
-      onClose={closeAndResetItemMetadata}
+      onClose={closeAndResetFeedbackData}
       onOpen={onOpen}
       descriptionText="We are here to help!"
       title="Help and Feedback"
       showEmailField
-      hiddenFields={itemMetadata}
-      notificationText={
-        itemMetadata?.notificationText
-          ? itemMetadata.notificationText
-          : itemMetadata?.callNumber
-          ? `You are asking for help or information about ${itemMetadata.callNumber} in this record.`
-          : null
-      }
+      hiddenFields={{
+        ...itemMetadata,
+        ...(errorStatus != null && { error: String(errorStatus) }),
+      }}
+      notificationText={notificationText}
       view={feedbackFormScreen}
       className="no-print"
     />

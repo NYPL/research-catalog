@@ -90,7 +90,7 @@ const ProfileHeader = ({ patron }: { patron: Patron }) => {
         className={styles.myAccountList}
         id="my-account-profile-header"
         title="My Account"
-        type="dl"
+        variant="dl"
         sx={{
           border: "none",
           h2: { border: "none", paddingTop: 0 },

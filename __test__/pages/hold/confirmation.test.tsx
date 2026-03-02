@@ -128,7 +128,7 @@ describe("Hold Confirmation page", () => {
     })
   })
 
-  describe("On-site Confirmation page UI", () => {
+  describe("Onsite Confirmation page UI", () => {
     beforeEach(() => {
       render(
         <HoldConfirmationPage
@@ -140,7 +140,7 @@ describe("Hold Confirmation page", () => {
 
     it("renders an H2", () => {
       expect(screen.getAllByRole("heading", { level: 2 })[0]).toHaveTextContent(
-        "Request for on-site use"
+        "Request for onsite use"
       )
     })
 
@@ -158,12 +158,9 @@ describe("Hold Confirmation page", () => {
       ).toBeInTheDocument()
 
       const bibLink = screen.getByText("Urban spaghetti.")
-      expect(bibLink).toHaveAttribute(
-        "href",
-        "/research/research-catalog/bib/b15080796"
-      )
+      expect(bibLink).toHaveAttribute("href", "/bib/b15080796")
     })
-    it("renders an item details table with a pickup location for on-site holds", () => {
+    it("renders an item details table with a pickup location for onsite holds", () => {
       expect(screen.getByTestId("pickup-location")).toHaveTextContent(
         "Schwarzman Building"
       )
@@ -172,12 +169,12 @@ describe("Hold Confirmation page", () => {
       )
       expect(screen.getByTestId("barcode")).toHaveTextContent("33433130221975")
     })
-    it("renders an on-site specific faq accordion", () => {
-      expect(screen.getByTestId("on-site-confirmation-faq")).toBeInTheDocument()
+    it("renders an onsite specific faq accordion", () => {
+      expect(screen.getByTestId("onsite-confirmation-faq")).toBeInTheDocument()
     })
     it("renders a back to search link", () => {
       const searchLink = screen.getByText("Start a new search")
-      expect(searchLink).toHaveAttribute("href", "/research/research-catalog/")
+      expect(searchLink).toHaveAttribute("href", "/")
     })
   })
   describe("Electronic Delivery Confirmation page UI", () => {
@@ -186,6 +183,7 @@ describe("Hold Confirmation page", () => {
         <HoldConfirmationPage
           discoveryBibResult={bibWithItems.resource}
           isEDD
+          itemId="test"
         />
       )
     })
@@ -210,10 +208,7 @@ describe("Hold Confirmation page", () => {
       ).toBeInTheDocument()
 
       const bibLink = screen.getByText("Urban spaghetti.")
-      expect(bibLink).toHaveAttribute(
-        "href",
-        "/research/research-catalog/bib/b15080796"
-      )
+      expect(bibLink).toHaveAttribute("href", "/bib/b15080796")
     })
     it("renders an item details table without a pickup location for EDD holds", () => {
       expect(screen.queryByTestId("pickup-location")).not.toBeInTheDocument()
@@ -227,10 +222,10 @@ describe("Hold Confirmation page", () => {
     })
     it("renders a back to search link", () => {
       const searchLink = screen.getByText("Start a new search")
-      expect(searchLink).toHaveAttribute("href", "/research/research-catalog/")
+      expect(searchLink).toHaveAttribute("href", "/")
     })
-    it("sets sessionStorage key 'holdCompleted' to true on mount", () => {
-      expect(sessionStorage.getItem("holdCompleted")).toBe("true")
+    it("sets sessionStorage key 'holdCompleted' with item ID to true on mount", () => {
+      expect(sessionStorage.getItem("holdCompleted-test")).toBe("true")
     })
   })
   describe("Hold confirmation not found", () => {
@@ -238,7 +233,7 @@ describe("Hold Confirmation page", () => {
       <HoldConfirmationPage
         discoveryBibResult={undefined}
         pickupLocationLabel={undefined}
-        notFound={true}
+        errorStatus={404}
       />
     )
     expect(screen.getByText("We couldn't find that page")).toBeInTheDocument()
