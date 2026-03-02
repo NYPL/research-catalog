@@ -15,6 +15,7 @@ import initializePatronTokenAuth from "../../src/server/auth"
 import { useFocusContext, idConstants } from "../../src/context/FocusContext"
 import type { APIError, HTTPStatusCode } from "../../src/types/appTypes"
 import Search from "../../src/components/Search/Search"
+import { appConfig } from "../../src/config/appConfig"
 
 interface SearchPageProps {
   bannerNotification?: string
@@ -29,7 +30,6 @@ interface SearchPageProps {
  * as well as displaying and controlling pagination and search filters.
  */
 export default function SearchPage({
-  bannerNotification,
   results,
   isAuthenticated,
   errorStatus = null,
@@ -72,7 +72,7 @@ export default function SearchPage({
       results={results}
       metadataTitle={`Search | ${SITE_NAME}`}
       activePage="search"
-      bannerNotification={bannerNotification}
+      bannerNotification={appConfig.searchNotification[appConfig.environment]}
       isAuthenticated={isAuthenticated}
       searchParams={searchParams}
       handlePageChange={handlePageChange}
@@ -82,7 +82,6 @@ export default function SearchPage({
 }
 
 export async function getServerSideProps({ req, query }) {
-  const bannerNotification = process.env.SEARCH_RESULTS_NOTIFICATION || ""
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
 
   const results = await fetchSearchResults(mapQueryToSearchParams(query))
@@ -107,7 +106,6 @@ export async function getServerSideProps({ req, query }) {
 
   return {
     props: {
-      bannerNotification,
       results,
       isAuthenticated,
       activePage: "search",
