@@ -1,4 +1,4 @@
-import { SUBJECTS_PER_PAGE } from "../config/constants"
+import { BROWSE_RESULTS_PER_PAGE } from "../config/constants"
 import type {
   BrowseParams,
   BrowseQueryParams,
@@ -125,10 +125,10 @@ export function getBrowseIndexHeading(
   const [resultsStart, resultsEnd] = getPaginationOffsetStrings(
     browseParams.page,
     totalResults,
-    SUBJECTS_PER_PAGE
+    BROWSE_RESULTS_PER_PAGE
   )
   return `Displaying ${
-    totalResults > SUBJECTS_PER_PAGE
+    totalResults > BROWSE_RESULTS_PER_PAGE
       ? `${resultsStart}-${resultsEnd}`
       : totalResults?.toLocaleString()
   } of${

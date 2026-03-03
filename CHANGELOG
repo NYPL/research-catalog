@@ -7,7 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
-- Updated and removed references to legacy catalog to indicate only onsite access [SCC-5007](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5007), [SCC-5139](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5139)
+## [1.8.0] 2026-03-02
+
+### Added
+
+- Added dependabot.yml [SCC-5146](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5146)
+- Added Playwright tests for bib and MARC pages
+- Added `node-utils` package to reconfigure environment, documentation updated accordingly [SCC-5104](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5104)
+- Added Playwright tests for My Account functionality [SCC-5000](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5000)
+- Added User Guide banner to account page [SCC-5185](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5185)
+
+### Updated
+
+- Corrected Article(s) Plus banner copy [SCC-5186](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5186)
+- Updated `fetchSubjects` API handler to `fetchBrowse`, now handling contributor results [SCC-4970](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4970)
+- Updated Next.js to `14.2.35` and other dependency versions [SCC-5099](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5099)
+
+### Removed
+
+- Remove `yearPublished` field from search result bib [SCC-5137](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5137)
 
 ## [1.7.0] 2026-01-29
 
@@ -23,7 +41,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.6.7] 2026-01-21 (Hotfix)
 
-- Update legacy deprecation messaging
+- Updated legacy deprecation messaging
 
 ## [1.6.6] 2026-01-15
 

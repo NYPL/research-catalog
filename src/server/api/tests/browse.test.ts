@@ -1,5 +1,8 @@
-import { fetchSubjects } from "../browse"
-import type { DiscoverySubjectsResponse } from "../../../types/browseTypes"
+import { fetchBrowse } from "../browse"
+import type {
+  DiscoveryContributorsResponse,
+  DiscoverySubjectsResponse,
+} from "../../../types/browseTypes"
 
 jest.mock("../../nyplApiClient")
 import nyplApiClient from "../../nyplApiClient"
@@ -13,33 +16,78 @@ beforeEach(() => {
   ;(nyplApiClient as jest.Mock).mockResolvedValue(mockClient)
 })
 
-describe("fetchSubjects", () => {
+describe("fetchBrowse: subjects", () => {
   it("fetches valid subject heading results", async () => {
     mockClient.get.mockResolvedValue({
       subjects: [{}, {}, {}, {}],
       totalResults: 4,
     })
 
-    const response = (await fetchSubjects({
+    const response = (await fetchBrowse("subjects", {
       q: "cat",
     })) as DiscoverySubjectsResponse
 
     expect(response.subjects.length).toBe(4)
   })
 
+  it("handles valid response but no results", async () => {
+    mockClient.get.mockResolvedValueOnce({
+      subjects: [],
+      totalResults: 0,
+    })
+
+    const response = await fetchBrowse("subjects", { q: "empty" })
+    expect(response).toEqual({
+      status: 404,
+      error:
+        "No results found for /discovery/browse/subjects?q=empty&search_scope=has&sort=count&sort_direction=desc&per_page=25",
+    })
+  })
+})
+
+describe("fetchBrowse: contributors", () => {
+  it("fetches valid subject heading results", async () => {
+    mockClient.get.mockResolvedValue({
+      contributors: [{}, {}, {}, {}, {}],
+      totalResults: 5,
+    })
+
+    const response = (await fetchBrowse("contributors", {
+      q: "cat",
+    })) as DiscoveryContributorsResponse
+
+    expect(response.contributors.length).toBe(5)
+  })
+
+  it("handles valid response but no results", async () => {
+    mockClient.get.mockResolvedValueOnce({
+      contributors: [],
+      totalResults: 0,
+    })
+
+    const response = await fetchBrowse("contributors", { q: "empty" })
+    expect(response).toEqual({
+      status: 404,
+      error:
+        "No results found for /discovery/browse/contributors?q=empty&search_scope=has&sort=count&sort_direction=desc&per_page=25",
+    })
+  })
+})
+
+describe("fetchBrowse errors", () => {
   it("returns 500 if the client fails to initialize", async () => {
     ;(nyplApiClient as jest.Mock).mockImplementationOnce(() => {
       throw new Error("Bad API URL")
     })
 
-    const response = await fetchSubjects({ q: "cat" })
+    const response = await fetchBrowse("subjects", { q: "cat" })
     expect(response).toEqual({ status: 500, error: "Bad API URL" })
   })
 
   it("returns 500 if API call fails", async () => {
     mockClient.get.mockRejectedValueOnce(new Error("Server error"))
 
-    const response = await fetchSubjects({ q: "cat" })
+    const response = await fetchBrowse("subjects", { q: "cat" })
     expect(response).toEqual({
       status: 500,
       error: "Server error",
@@ -52,24 +100,10 @@ describe("fetchSubjects", () => {
       error: "test",
     })
 
-    const response = await fetchSubjects({ q: "unknown" })
+    const response = await fetchBrowse("contributors", { q: "unknown" })
     expect(response).toEqual({
       status: 404,
       error: "test",
-    })
-  })
-
-  it("handles valid response but no results", async () => {
-    mockClient.get.mockResolvedValueOnce({
-      subjects: [],
-      totalResults: 0,
-    })
-
-    const response = await fetchSubjects({ q: "empty" })
-    expect(response).toEqual({
-      status: 404,
-      error:
-        "No results found for /discovery/browse/subjects?q=empty&search_scope=has&sort=count&sort_direction=desc&per_page=25",
     })
   })
 })

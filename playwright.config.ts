@@ -17,7 +17,7 @@ export default defineConfig({
   reporter: "html",
 
   use: {
-    baseURL: "http://local.nypl.org:8080/research/research-catalog",
+    baseURL: "http://local.nypl.org:8080/research/research-catalog/",
     trace: "on-first-retry",
     screenshot: "only-on-failure",
   },

@@ -1,6 +1,7 @@
 import type { HTTPStatusCode } from "./appTypes"
 import type { SortOrder } from "./searchTypes"
 
+export type BrowseType = "subjects" | "contributors"
 export type BrowseSort = "termLabel" | "count"
 export type BrowseScope = "has" | "starts_with"
 
@@ -18,12 +19,39 @@ export interface DiscoverySubjectsResponse {
   subjects: DiscoverySubjectResult[]
 }
 
+export interface DiscoveryContributorsResponse {
+  status: HTTPStatusCode
+  totalResults: number
+  contributors: DiscoveryContributorResult[]
+}
+
 export interface BrowseQueryParams {
   q?: string
   sort?: BrowseSort
   sort_direction?: SortOrder
   search_scope?: BrowseScope
   page?: string
+}
+
+export type DiscoveryContributorResult =
+  | DiscoveryVariantContributorResult
+  | DiscoveryPreferredContributorResult
+
+export type DiscoveryVariantContributorResult = {
+  "@type": string
+  termLabel: string
+  preferredTerms?: DiscoveryPreferredTermResult[]
+}
+
+export type DiscoveryPreferredContributorResult = {
+  "@type": string
+  termLabel: string
+  roleCounts: DiscoveryContributorRole[]
+}
+
+export type DiscoveryContributorRole = {
+  role: string
+  count?: number
 }
 
 export type DiscoverySubjectResult =

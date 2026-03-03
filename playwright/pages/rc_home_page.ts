@@ -45,7 +45,7 @@ export class RC_Home_Page extends BasePage {
     this.advanced_search_link = page.getByRole("link", {
       name: "Advanced Search",
     })
-    this.info_banner = page.getByText("Try Article Plus to discover")
+    this.info_banner = page.getByText("Try Articles Plus to discover")
     this.body_main_heading = page.getByRole("heading", {
       name: "Explore the Library's Vast Research Collections & More",
     })

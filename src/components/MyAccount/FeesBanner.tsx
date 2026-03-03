@@ -1,12 +1,11 @@
 import { Banner, Text } from "@nypl/design-system-react-components"
 
-import { appConfig } from "../../config/config"
+import { appConfig } from "../../config/appConfig"
 import Link from "../Link/Link"
 
 const FeesBanner = () => {
   return (
     <Banner
-      mb="m"
       variant="negative"
       content={
         <>

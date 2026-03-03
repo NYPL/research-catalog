@@ -24,9 +24,9 @@ interface SearchResultProps {
  * The SearchResult component displays a single search result element.
  */
 const SearchResult = ({ bib }: SearchResultProps) => {
-  const separatingDot = (
+  const separatingDot = (i) => (
     // @ts-ignore
-    <Icon size="xxsmall" ml="xs" mr="xs" pb="xxs">
+    <Icon key={`dot-${i}`} size="xxsmall" ml="xs" mr="xs" pb="xxs">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="4"
@@ -41,12 +41,11 @@ const SearchResult = ({ bib }: SearchResultProps) => {
   const metadata = [
     bib.format,
     bib.publicationStatement,
-    bib.yearPublished,
     bib.getNumItemsMessage(),
   ].filter(Boolean)
 
   const joinedMetadata = metadata.reduce((acc, piece, i) => {
-    if (i > 0) acc.push(separatingDot)
+    if (i > 0) acc.push(separatingDot(i))
     acc.push(<Text key={i}>{piece}</Text>)
     return acc
   }, [])
