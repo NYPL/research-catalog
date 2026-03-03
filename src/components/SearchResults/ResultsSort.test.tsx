@@ -47,7 +47,7 @@ describe("ResultsSort for browse", () => {
     render(
       <ResultsSort
         sortOptions={browseSortOptions}
-        params={{ sortBy: "count_asc" }}
+        params={{ sortBy: "count", order: "asc" }}
         handleSortChange={onChange}
         defaultSort="count_desc"
       />
