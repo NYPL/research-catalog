@@ -9,7 +9,7 @@ export async function bootstrapConfig() {
     await config.loadConfigFromObject(configJson)
   } else {
     await config.loadConfig(
-      process.env.NODE_ENV || process.env.APP_ENV || "development"
+      process.env.APP_ENV || process.env.NODE_ENV || "development"
     )
   }
 
