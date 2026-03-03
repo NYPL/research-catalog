@@ -163,6 +163,7 @@ const Search = ({
                 sortOptions={sortOptions}
                 params={searchParams}
                 handleSortChange={handleSortChange}
+                defaultSort="relevance"
               />
             </Flex>
             {isLoading ? (

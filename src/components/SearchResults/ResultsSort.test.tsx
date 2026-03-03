@@ -13,6 +13,7 @@ describe("ResultsSort for search", () => {
         sortOptions={sortOptions}
         params={{}}
         handleSortChange={onChange}
+        defaultSort="relevance"
       />
     )
     const sortSelect = screen.getByLabelText("Sort by:", { exact: false })
@@ -33,6 +34,7 @@ describe("ResultsSort for browse", () => {
         sortOptions={browseSortOptions}
         params={{}}
         handleSortChange={onChange}
+        defaultSort="count_desc"
       />
     )
     const sortSelect = screen.getByLabelText("Sort by:", { exact: false })
@@ -47,6 +49,7 @@ describe("ResultsSort for browse", () => {
         sortOptions={browseSortOptions}
         params={{ sortBy: "count_asc" }}
         handleSortChange={onChange}
+        defaultSort="count_desc"
       />
     )
     const sortSelect = screen.getByLabelText("Sort by: Count (Low - High)", {
@@ -54,8 +57,9 @@ describe("ResultsSort for browse", () => {
     })
     expect(sortSelect).toBeInTheDocument()
     await userEvent.click(sortSelect)
-    expect(screen.getByText("Subject Heading (A - Z)")).toBeInTheDocument()
-    await userEvent.click(screen.getByText("Subject Heading (A - Z)"))
+    const countDescOption = screen.getByText("Count (High - Low)")
+    expect(countDescOption).toBeInTheDocument()
+    await userEvent.click(countDescOption)
     expect(onChange).toHaveBeenCalled()
   })
 })
