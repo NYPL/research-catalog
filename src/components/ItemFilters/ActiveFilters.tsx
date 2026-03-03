@@ -21,6 +21,7 @@ const ActiveFilters = ({ filterName, onClick, tagSetData }) => {
         pt="xxs"
         whiteSpace="nowrap"
         lineHeight="--nypl-lineHeights-taller"
+        height="28px"
       >
         Active filters
       </Text>
