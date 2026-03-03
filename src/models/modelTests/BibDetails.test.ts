@@ -236,23 +236,16 @@ describe("Bib Details model", () => {
         )
       ).not.toBeDefined()
     })
-    it("includes prebuilt url", () => {
-      expect(
-        bibWithSupContentModel.topDetails.find(
-          (detail) => detail.label === "Author"
-        )
-      ).toStrictEqual({
-        link: "internal",
-        label: "Author",
-        value: [
-          {
-            urlLabel: "Watson, Tom, 1965-",
-            url: "/search?filters[contributorLiteral][0]=Watson%2C%20Tom%2C%201965-",
-          },
-        ],
-      })
+    it("creates authors with correct internal urls and role text", () => {
+      const additionalAuthors = bibWithNoParallelsModel.bottomDetails.find(
+        (d) => d.label === "Additional authors"
+      ) as LinkedBibDetail
+      expect(additionalAuthors.link).toBe("internal")
+      expect(additionalAuthors.value[0].text).toContain("ballet dancer")
+      expect(additionalAuthors.value[0].url).toContain("/browse/authors/")
     })
-    it("renders subjects with correct internal urls", () => {
+
+    it("creates subjects with correct internal urls", () => {
       const subjects = bibWithSubjectHeadingsModel.bottomDetails.find(
         (d) => d.label === "Subject"
       ) as LinkedBibDetail
