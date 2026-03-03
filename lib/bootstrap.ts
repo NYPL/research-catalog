@@ -8,7 +8,9 @@ export async function bootstrapConfig() {
   if (process.env.VERCEL) {
     await config.loadConfigFromObject(configJson)
   } else {
-    await config.loadConfig(process.env.APP_ENV || "development")
+    await config.loadConfig(
+      process.env.NODE_ENV || process.env.APP_ENV || "development"
+    )
   }
 
   logger.initialize({
