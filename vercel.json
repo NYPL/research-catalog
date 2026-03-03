@@ -7,9 +7,15 @@
   ],
   "functions": {
     "pages/search/index.tsx": {
+      "runtime": "nodejs18.x",
       "maxDuration": 60
     },
     "pages/api/*.js": {
+      "runtime": "nodejs18.x",
+      "maxDuration": 60
+    },
+    "pages/api/**/*.ts": {
+      "runtime": "nodejs18.x",
       "maxDuration": 60
     }
   }
