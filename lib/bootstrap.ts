@@ -8,6 +8,7 @@ export async function bootstrapConfig() {
   if (process.env.VERCEL) {
     await config.loadConfigFromObject(configJson)
   } else {
+    console.log("BOOTSTRAP START", Date.now())
     console.log(process.env.NEXT_PUBLIC_APP_ENV, process.env.NODE_ENV)
     await config.loadConfig(process.env.NEXT_PUBLIC_APP_ENV || "development")
   }
