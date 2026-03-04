@@ -76,7 +76,9 @@ There is a third ECS cluster reserved for the Research Catalog, `research-catalo
 ## Hotfixes and rolling back
 
 When possible, roll "forward" with a hotfix. **Merge the hotfix branch directly into the `production` branch and then backmerge into `main` and `qa` branches.**
+
 If the introduced issue(s) are too urgent to resolve with a hotfix, [manually trigger the rollback workflow](https://github.com/NYPL/research-catalog/actions/workflows/rollback_prod.yml) to immediately deploy the previous image to `production`.
+
 Note: this rollback only changes the running image in the ECS deployment, it does **not** revert the code in the `production` branch.
 
 ## Changelog
