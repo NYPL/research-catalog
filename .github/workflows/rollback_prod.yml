@@ -1,0 +1,70 @@
+# Roll back production to the previous image
+name: Rollback production
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AWS_DEFAULT_REGION: us-east-1
+  ECR_REPOSITORY: research-catalog
+  # ENVIRONMENT: production
+  # CLUSTER: research-catalog-production
+  # SERVICE: research-catalog-production
+  # ECR_TAG: production-latest
+  # PREVIOUS_TAG: production-previous
+  CLUSTER: research-catalog-qa
+  SERVICE: research-catalog-qa
+  ECR_TAG: qa-latest
+  PREVIOUS_TAG: qa-previous
+
+jobs:
+  rollback:
+    runs-on: ubuntu-latest
+    name: Roll back research-catalog-production
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::946183545209:role/GithubActionsDeployerRole
+          aws-region: us-east-1
+
+      - name: Log in to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Check previous production image exists
+        id: verify-image
+        run: |
+          IMAGE_EXISTS=$(aws ecr describe-images \
+            --repository-name $ECR_REPOSITORY \
+            --image-ids imageTag=$PREVIOUS_TAG \
+            --query 'imageDetails[0].imageTags[0]' \
+            --output text 2>/dev/null || echo "NOT_FOUND")
+
+          if [ "$IMAGE_EXISTS" = "NOT_FOUND" ] || [ "$IMAGE_EXISTS" = "None" ]; then
+            echo "No previous production image found ($PREVIOUS_TAG), aborting rollback"
+            exit 1
+          fi
+          echo "Previous production image found"
+
+      - name: Restore previous production image
+        run: |
+          ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }}
+
+          docker pull $ECR_REGISTRY/$ECR_REPOSITORY:$PREVIOUS_TAG
+          docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$PREVIOUS_TAG $ECR_REGISTRY/$ECR_REPOSITORY:$ECR_TAG
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$ECR_TAG
+
+      - name: Update ECS service
+        run: |
+          aws ecs update-service \
+            --cluster $CLUSTER \
+            --service $SERVICE \
+            --force-new-deployment
