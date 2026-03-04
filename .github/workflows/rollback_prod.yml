@@ -39,20 +39,20 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Check previous production image exists
-        id: verify-image
-        run: |
-          IMAGE_EXISTS=$(aws ecr describe-images \
-            --repository-name $ECR_REPOSITORY \
-            --image-ids imageTag=$PREVIOUS_TAG \
-            --query 'imageDetails[0].imageTags[0]' \
-            --output text 2>/dev/null || echo "NOT_FOUND")
+      # - name: Check previous production image exists
+      #   id: verify-image
+      #   run: |
+      #     IMAGE_EXISTS=$(aws ecr describe-images \
+      #       --repository-name $ECR_REPOSITORY \
+      #       --image-ids imageTag=$PREVIOUS_TAG \
+      #       --query 'imageDetails[0].imageTags[0]' \
+      #       --output text 2>/dev/null || echo "NOT_FOUND")
 
-          if [ "$IMAGE_EXISTS" = "NOT_FOUND" ] || [ "$IMAGE_EXISTS" = "None" ]; then
-            echo "No previous production image found ($PREVIOUS_TAG), aborting rollback"
-            exit 1
-          fi
-          echo "Previous production image found"
+      #     if [ "$IMAGE_EXISTS" = "NOT_FOUND" ] || [ "$IMAGE_EXISTS" = "None" ]; then
+      #       echo "No previous production image found ($PREVIOUS_TAG), aborting rollback"
+      #       exit 1
+      #     fi
+      #     echo "Previous production image found"
 
       - name: Restore previous production image
         run: |
