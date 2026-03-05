@@ -49,7 +49,7 @@ describe("ResultsSort for browse", () => {
         handleSortChange={onChange}
       />
     )
-    const sortSelect = screen.getByLabelText("Sort by: Count (Low - High)", {
+    const sortSelect = screen.getByLabelText("Sort by: Results (Low - High)", {
       exact: false,
     })
     expect(sortSelect).toBeInTheDocument()

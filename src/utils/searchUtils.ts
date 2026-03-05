@@ -79,14 +79,14 @@ function buildQueryDisplayString(searchParams: SearchParams): string {
     if (displayParam && searchParamsObject[param]) {
       let label = displayParam.label
       let value = searchParamsObject[param]
-      let plural = label === "keyword" && value.indexOf(" ") > -1 ? "s" : ""
+      const plural = label === "keyword" && value.indexOf(" ") > -1 ? "s" : ""
       // Special cases for the author display string for both
       // the "contributor" search scope and the "contributorLiteral" filter.
       if (label === "author") {
         label = "author/contributor"
         if (Array.isArray(value) && value.length > 1) {
           value = value.join(", ")
-          plural = "s"
+          label = "authors/contributors"
         }
       }
 
