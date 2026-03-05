@@ -185,7 +185,7 @@ describe("searchUtils", () => {
     it("handles the special case for the author search scope", () => {
       const heading = getSearchResultsHeading({ contributor: "spaghetti" }, 100)
       expect(heading).toEqual(
-        'Displaying 1-50 of 100 results for author/contributor "spaghetti"'
+        'Displaying 1-50 of 100 results for Author/Contributor "spaghetti"'
       )
     })
     it("handles the special case for the contributorLiteral filter", () => {
@@ -194,7 +194,7 @@ describe("searchUtils", () => {
         100
       )
       expect(heading).toEqual(
-        'Displaying 1-50 of 100 results for authors/contributors "spaghetti, pasta"'
+        'Displaying 1-50 of 100 results for Authors/Contributors "spaghetti, pasta"'
       )
     })
     it("displays all of the values from advanced search and nothing else", () => {
@@ -210,7 +210,7 @@ describe("searchUtils", () => {
         100
       )
       expect(heading).toEqual(
-        'Displaying 1-50 of 100 results for keyword "spaghetti" and title "ricotta" and author/contributor "pasta mama" and subject "italian"'
+        'Displaying 1-50 of 100 results for keyword "spaghetti" and title "ricotta" and Author/Contributor "pasta mama" and subject "italian"'
       )
     })
     it("displays the appropriate string for certain values", () => {
