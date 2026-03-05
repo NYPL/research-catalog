@@ -56,7 +56,7 @@ const BrowseBanner = ({ browseType }: BrowseBannerProps) => {
               Browsing is an effective strategy for gaining a comprehensive
               sense of the NYPL Research Catalog. The{" "}
               <span style={{ fontWeight: "bold" }}>
-                Author/contributor index
+                Author/Contributor index
               </span>{" "}
               draws from the Library of Congress Names (
               <Link
@@ -74,8 +74,8 @@ const BrowseBanner = ({ browseType }: BrowseBannerProps) => {
               Congress and used by libraries to group similar materials together
               by names of persons, organizations, events, places, and titles.
               Each item in the catalog is typically assigned at least one
-              relevant Author/contributor, and clicking through the hyperlinked
-              Author/contributors is a great way to discover more materials by
+              relevant Author/Contributor, and clicking through the hyperlinked
+              Authors/Contributors is a great way to discover more materials by
               that entity.
             </>
           )

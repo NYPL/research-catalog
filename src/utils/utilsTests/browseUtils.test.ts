@@ -168,14 +168,16 @@ describe("browseUtils", () => {
       expect(browseSubjectSortOptions.termLabel_asc).toBe(
         "Subject Heading (A - Z)"
       )
-      expect(browseSubjectSortOptions.count_desc).toBe("Count (High - Low)")
+      expect(browseSubjectSortOptions.count_desc).toBe("Results (High - Low)")
     })
     it("has expected keys and labels for contributor sorts", () => {
       expect(browseContributorSortOptions).toHaveProperty("termLabel_asc")
       expect(browseContributorSortOptions.termLabel_asc).toBe(
         "Author/Contributor (A - Z)"
       )
-      expect(browseContributorSortOptions.count_desc).toBe("Count (High - Low)")
+      expect(browseContributorSortOptions.count_desc).toBe(
+        "Results (High - Low)"
+      )
     })
   })
 

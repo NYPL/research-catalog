@@ -7,7 +7,7 @@ import VariantTableCell from "../VariantTableCell"
 import BrowseTable from "../BrowseTable"
 
 /**
- * The ContributorTable displays the index of author/contributors with their respective
+ * The ContributorTable displays the index of authors/contributors with their respective
  * counts, roles, and related terms, or variants with their related terms
  */
 const ContributorTable = ({
@@ -42,7 +42,7 @@ const ContributorTable = ({
         (contributor: DiscoveryContributorResult) =>
           createContributorCell(contributor)
       )}
-      tableHeading="Author/contributor"
+      tableHeading="Author/Contributor"
     />
   )
 }

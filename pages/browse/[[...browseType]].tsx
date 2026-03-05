@@ -44,7 +44,7 @@ interface BrowseProps {
 
 /**
  * The Browse index page is responsible for fetching and displaying
- * subject headings or author/contributors, as well as
+ * subject headings or authors/contributors, as well as
  * displaying and controlling pagination and sort.
  */
 export default function Browse({

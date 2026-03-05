@@ -194,7 +194,7 @@ describe("searchUtils", () => {
         100
       )
       expect(heading).toEqual(
-        'Displaying 1-50 of 100 results for author/contributors "spaghetti, pasta"'
+        'Displaying 1-50 of 100 results for Authors/Contributors "spaghetti, pasta"'
       )
     })
     it("displays all of the values from advanced search and nothing else", () => {

@@ -197,8 +197,8 @@ export function getBrowseIndexHeading(
 export const browseSubjectSortOptions: Record<string, string> = {
   termLabel_asc: "Subject Heading (A - Z)",
   termLabel_desc: "Subject Heading (Z - A)",
-  count_desc: "Count (High - Low)",
-  count_asc: "Count (Low - High)",
+  count_desc: "Results (High - Low)",
+  count_asc: "Results (Low - High)",
 }
 
 /**
@@ -208,8 +208,8 @@ export const browseSubjectSortOptions: Record<string, string> = {
 export const browseContributorSortOptions: Record<string, string> = {
   termLabel_asc: "Author/Contributor (A - Z)",
   termLabel_desc: "Author/Contributor (Z - A)",
-  count_desc: "Count (High - Low)",
-  count_asc: "Count (Low - High)",
+  count_desc: "Results (High - Low)",
+  count_asc: "Results (Low - High)",
 }
 
 export function buildTermLinks(
