@@ -45,15 +45,15 @@ export const discoverySubjectsResult = [
     count: 1,
     broaderTerms: [
       {
-        label: "The Beatles",
+        termLabel: "The Beatles",
       },
     ],
     seeAlso: [
       {
-        label: "Founder: Roach, Max, 1924-2007",
+        termLabel: "Founder: Roach, Max, 1924-2007",
       },
       {
-        label: "2007 (Year)",
+        termLabel: "2007 (Year)",
       },
     ],
     uri: 13002932,
@@ -64,10 +64,10 @@ export const discoverySubjectsResult = [
     count: 8900,
     seeAlso: [
       {
-        label: "John Lennon",
+        termLabel: "John Lennon",
       },
       {
-        label: "Paul McCartney",
+        termLabel: "Paul McCartney",
       },
     ],
   },

@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react"
 import ResultsSort from "./ResultsSort"
 import userEvent from "@testing-library/user-event"
 import { sortOptions } from "../../utils/searchUtils"
-import { browseSortOptions } from "../../utils/browseUtils"
+import { browseSubjectSortOptions } from "../../utils/browseUtils"
 
 describe("ResultsSort for search", () => {
   it("calls the callback function when changed", async () => {
@@ -30,7 +30,7 @@ describe("ResultsSort for browse", () => {
     const onChange = jest.fn()
     render(
       <ResultsSort
-        sortOptions={browseSortOptions}
+        sortOptions={browseSubjectSortOptions}
         params={{}}
         handleSortChange={onChange}
       />
@@ -44,12 +44,12 @@ describe("ResultsSort for browse", () => {
     const onChange = jest.fn()
     render(
       <ResultsSort
-        sortOptions={browseSortOptions}
+        sortOptions={browseSubjectSortOptions}
         params={{ sortBy: "count_asc" }}
         handleSortChange={onChange}
       />
     )
-    const sortSelect = screen.getByLabelText("Sort by: Count (Low - High)", {
+    const sortSelect = screen.getByLabelText("Sort by: Results (Low - High)", {
       exact: false,
     })
     expect(sortSelect).toBeInTheDocument()

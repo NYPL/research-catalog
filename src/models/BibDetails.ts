@@ -18,6 +18,10 @@ import type {
   AnnotatedMarcField,
   MarcDetail,
 } from "../types/marcTypes"
+import {
+  getContributorSearchURL,
+  getSubjectSearchURL,
+} from "../utils/browseUtils"
 
 export default class BibDetails {
   bib: DiscoveryBibResult
@@ -62,6 +66,73 @@ export default class BibDetails {
     // Only consider items with an `owner` (should be all, in practice)
     const owner = firstRecapItem?.owner?.[0]?.prefLabel
     if (owner) return [owner]
+  }
+
+  buildLinkedContributorDetail(
+    literalField: "creatorLiteral" | "contributorLiteral",
+    label: string
+  ): LinkedBibDetail | null {
+    const packedField =
+      literalField === "creatorLiteral"
+        ? "creatorsPacked"
+        : "contributorsPacked"
+
+    const packedArray: string[] = this.bib?.[packedField] ?? []
+    const literalArray: string[] = this.bib?.[literalField] ?? []
+
+    if (!literalArray.length) return null
+
+    const personMap = new Map<string, string[]>()
+
+    literalArray.forEach((name) => {
+      const packedEntries = packedArray.filter((p) => p.startsWith(name + "||"))
+
+      const roles = packedEntries
+        .map((entry) => {
+          const raw = entry.split("||")[1] || ""
+          const cleaned = raw.replace(/\.$/, "").trim()
+
+          // Remove duplicate name prefix
+          const namePrefix = `${name}, `
+          const stripped = cleaned.startsWith(namePrefix)
+            ? cleaned.slice(namePrefix.length)
+            : cleaned
+
+          if (!stripped || stripped === name) return null
+          return stripped
+        })
+        .filter(Boolean)
+        // Split roles on commas in case of multiple roles
+        .flatMap((r) => r.split(",").map((role) => role.trim()))
+        .filter(Boolean) // remove empty strings
+        // deduplicate roles
+        .filter((role, idx, arr) => arr.indexOf(role) === idx)
+
+      if (!personMap.has(name)) {
+        personMap.set(name, [])
+      }
+
+      const existingRoles = personMap.get(name)
+      roles.forEach((role) => {
+        if (!existingRoles.includes(role)) {
+          existingRoles.push(role)
+        }
+      })
+    })
+
+    const value: BibDetailURL[] = Array.from(personMap.entries()).map(
+      ([name, roles]) => ({
+        url: getContributorSearchURL(name),
+        urlLabel: name,
+        text: roles.length ? roles.join(", ") : undefined,
+      })
+    )
+
+    return {
+      label,
+      link: "internal",
+      value,
+    }
   }
 
   buildAnnotatedMarcDetails(
@@ -147,7 +218,7 @@ export default class BibDetails {
           case "supplementaryContent":
             return this.supplementaryContent
           case "creatorLiteral":
-            return this.buildSearchFilterUrl(fieldMapping)
+            return this.buildLinkedContributorDetail("creatorLiteral", "Author")
           default:
             return this.buildStandardDetail(fieldMapping)
         }
@@ -309,7 +380,12 @@ export default class BibDetails {
   }): LinkedBibDetail {
     const value = this.bib[fieldMapping.field]
     if (!value?.length) return null
-
+    if (fieldMapping.field === "contributorLiteral") {
+      return this.buildLinkedContributorDetail(
+        "contributorLiteral",
+        "Additional authors"
+      )
+    }
     return {
       link: "internal",
       label: convertToSentenceCase(fieldMapping.label),
@@ -318,12 +394,7 @@ export default class BibDetails {
         let internalUrl: string
         switch (field) {
           case "subjectLiteral":
-            internalUrl = `/browse/subjects/${encodeURIComponentWithPeriods(v)}`
-            break
-          case "creatorLiteral":
-            internalUrl = `/search?filters[contributorLiteral][0]=${encodeURIComponentWithPeriods(
-              v
-            )}`
+            internalUrl = getSubjectSearchURL(v)
             break
           default:
             internalUrl = `/search?filters[${field}][0]=${encodeURIComponentWithPeriods(
