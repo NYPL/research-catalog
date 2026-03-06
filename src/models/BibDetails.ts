@@ -92,13 +92,15 @@ export default class BibDetails {
           const raw = entry.split("||")[1] || ""
           const cleaned = raw.replace(/\.$/, "").trim()
 
-          // Remove duplicate name prefix
+          // Remove role if packed contributor has been indexed as
+          // John||John or John.||John
           const namePrefix = `${name}, `
           const stripped = cleaned.startsWith(namePrefix)
             ? cleaned.slice(namePrefix.length)
             : cleaned
 
-          if (!stripped || stripped === name) return null
+          if (!stripped || stripped === name || `${stripped}.` === name)
+            return null
           return stripped
         })
         .filter(Boolean)
