@@ -9249,7 +9249,12 @@ export const yiddishBib = {
         prefLabel: "volume",
       },
     ],
-    contributorLiteral: ["Sztokfisz, David."],
+    contributorLiteral: ["Sztokfisz, David.", "Yiddish Author. N."],
+    contributorsPacked: [
+      "Yiddish Author. N.||Yiddish Author. N",
+      "Yiddish Author. N.||Yiddish Author. N.",
+      "Sztokfisz, David.",
+    ],
     createdString: ["1968"],
     createdYear: 1968,
     dateStartYear: 1968,

@@ -92,8 +92,8 @@ export default class BibDetails {
           const raw = entry.split("||")[1] || ""
           const cleaned = raw.replace(/\.$/, "").trim()
 
-          // Remove role if packed contributor has been indexed as
-          // John||John or John.||John
+          // Remove role if packed contributor has been indexed
+          // as name||name
           const namePrefix = `${name}, `
           const stripped = cleaned.startsWith(namePrefix)
             ? cleaned.slice(namePrefix.length)

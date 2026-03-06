@@ -245,6 +245,16 @@ describe("Bib Details model", () => {
       expect(additionalAuthors.value[0].url).toContain("/browse/authors/")
     })
 
+    it("drops roles that duplicate the author's name ", () => {
+      const authorsWithNoRoles = bibWithRtlParallelsModel.bottomDetails.find(
+        (d) => d.label === "Additional authors"
+      ) as LinkedBibDetail
+      expect(authorsWithNoRoles.link).toBe("internal")
+      expect(authorsWithNoRoles.value[0].text).toBeUndefined()
+      expect(authorsWithNoRoles.value[1].text).toBeUndefined()
+      expect(authorsWithNoRoles.value[2].text).toBeUndefined()
+    })
+
     it("creates subjects with correct internal urls", () => {
       const subjects = bibWithSubjectHeadingsModel.bottomDetails.find(
         (d) => d.label === "Subject"
