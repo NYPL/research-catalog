@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+### Added
+
+- Added rollback workflow for production deployments [SCC-5066](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5066)
+
 ## [1.8.0] 2026-03-02
 
 ### Added
