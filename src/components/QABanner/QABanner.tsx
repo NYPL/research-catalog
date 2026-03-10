@@ -29,7 +29,7 @@ const QABanner = () => {
       </svg>
       <div style={{ textAlign: "center" }}>
         <span style={{ fontWeight: "bold", fontSize: "20px" }}>
-          EMMA TESTING ROLLBACK
+          This is a test site.
         </span>
         <br />
         This version of the Research Catalog website is used for internal
