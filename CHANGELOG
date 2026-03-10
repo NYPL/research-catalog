@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+### Updated
+
+- Updated item table whitespace for ease of copying [SCC-5068](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5068)
+
 ### Added
 
 - Added rollback workflow for production deployments [SCC-5066](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5066)
