@@ -52,6 +52,10 @@ We store API credentials as KMS encrypted variables. Decryption (and by extensio
    ```bash
    npm install
    ```
+3. Set up your local `.env`
+   ```bash
+   cp .env.example .env
+   ```
 
 ### Local development
 
