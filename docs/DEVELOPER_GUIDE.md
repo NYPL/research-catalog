@@ -6,6 +6,7 @@ This guide provides technical information required for developers working on the
 
 - [Getting started](#getting-started)
 - [Development workflow](#development-workflow)
+- [Hotfixes and rolling back](#hotfixes-and-rolling-back)
 - [Changelog](#changelog)
 - [Coding standards](#coding-standards)
   - [State management](#state-management)
@@ -72,7 +73,13 @@ There is a third ECS cluster reserved for the Research Catalog, `research-catalo
 
     Then, go to the repository tags to generate a new release from the tag you just made, titled `vx.y.z`. The release description should be the changelog's release section.
 
-\*\* If a hotfix is required, it is merged directly into the `production` branch and backmerged into the `main` and `qa` branches.
+## Hotfixes and rolling back
+
+When possible, roll "forward" with a hotfix. **Merge the hotfix branch directly into the `production` branch and then backmerge into `main` and `qa` branches.**
+
+If the introduced issue(s) are too urgent to resolve with a hotfix, [manually trigger the rollback workflow](https://github.com/NYPL/research-catalog/actions/workflows/rollback_prod.yml) to immediately deploy the previous image to `production`.
+
+Note: this rollback only changes the running image in the ECS deployment, it does **not** revert the code in the `production` branch.
 
 ## Changelog
 
