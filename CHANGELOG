@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Hot fix 2026-03-12
 
-- `logger.warning` instead of `warn` breaking the following circ redirect [SCC-5284](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5284)
+- `logger.warning` instead of `info` breaking the following circ redirect [SCC-5284](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5284)
 
 ## [1.8.0] 2026-03-02
 
