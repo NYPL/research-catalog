@@ -170,6 +170,20 @@ jest.mock("../../nyplApiClient", () => {
     })
 })
 
+jest.mock("@nypl/node-utils", () => ({
+  logger: {
+    info: jest.fn(),
+    warn: jest.fn(),
+    error: jest.fn(),
+    debug: jest.fn(),
+  },
+}))
+import { logger } from "@nypl/node-utils"
+
+beforeEach(() => {
+  jest.clearAllMocks()
+})
+
 describe("fetchDeliveryLocations", () => {
   it("should return delivery location data from Discovery API", async () => {
     const deliveryLocationResults = (await fetchDeliveryLocations(
@@ -285,11 +299,11 @@ describe("fetchHoldDetails", () => {
 
 describe("fetchPatronEligibility", () => {
   it("should return a patron's hold eligibility status from Discovery API", async () => {
-    const patonEligibility = (await fetchPatronEligibility(
+    const patronEligibility = (await fetchPatronEligibility(
       "123"
     )) as PatronEligibilityStatus
 
-    expect(patonEligibility).toEqual({
+    expect(patronEligibility).toEqual({
       status: 200,
       eligibility: true,
       expired: false,
@@ -299,17 +313,21 @@ describe("fetchPatronEligibility", () => {
     })
   })
   it("should return a 401 status if the patron is ineligibile", async () => {
-    const patonEligibility = (await fetchPatronEligibility(
+    const patronEligibility = (await fetchPatronEligibility(
       "123"
     )) as PatronEligibilityStatus
 
-    expect(patonEligibility.status).toEqual(401)
+    expect(patronEligibility.status).toEqual(401)
   })
   it("should return a 500 status if there was an error", async () => {
-    const patonEligibility = (await fetchPatronEligibility(
+    const patronEligibility = (await fetchPatronEligibility(
       "123"
     )) as PatronEligibilityStatus
 
-    expect(patonEligibility.status).toEqual(500)
+    expect(patronEligibility.status).toEqual(500)
+    expect(logger.error).toHaveBeenCalledWith(
+      "Error fetching hold request eligibility in fetchPatronEligibility server function, patronId: 123",
+      "Error getting patron eligibility status"
+    )
   })
 })

@@ -8,6 +8,16 @@ const mockClient = {
   get: jest.fn(),
 }
 
+jest.mock("@nypl/node-utils", () => ({
+  logger: {
+    info: jest.fn(),
+    warn: jest.fn(),
+    error: jest.fn(),
+    debug: jest.fn(),
+  },
+}))
+import { logger } from "@nypl/node-utils"
+
 beforeEach(() => {
   jest.clearAllMocks()
   ;(nyplApiClient as jest.Mock).mockResolvedValue(mockClient)
@@ -47,6 +57,9 @@ describe("fetchSearchResults", () => {
       status: 500,
       error: expect.stringContaining("No connection"),
     })
+    expect(logger.error).toHaveBeenCalledWith(
+      "Error in fetchSearchResults: No connection Requests: search ?q=cat&per_page=50, aggregations /aggregations?q=cat"
+    )
   })
 
   it("returns 200 if only aggregations API call fails", async () => {
@@ -77,6 +90,9 @@ describe("fetchSearchResults", () => {
       status: 422,
       error: "Invalid query",
     })
+    expect(logger.error).toHaveBeenCalledWith(
+      "Error in fetchSearchResults: Invalid query Requests: search ?q=!!!&per_page=50, aggregations /aggregations?q=!!!"
+    )
   })
 
   it("handles valid response but no results", async () => {

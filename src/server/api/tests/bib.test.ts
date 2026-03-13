@@ -4,6 +4,16 @@ import type { BibResponse } from "../../../types/bibTypes"
 jest.mock("../../nyplApiClient")
 import nyplApiClient from "../../nyplApiClient"
 
+jest.mock("@nypl/node-utils", () => ({
+  logger: {
+    info: jest.fn(),
+    warn: jest.fn(),
+    error: jest.fn(),
+    debug: jest.fn(),
+  },
+}))
+import { logger } from "@nypl/node-utils"
+
 const mockClient = {
   get: jest.fn(),
 }
@@ -72,6 +82,9 @@ describe("fetchBib", () => {
 
     const bibResponse = (await fetchBib("b17418167")) as BibResponse
 
+    expect(logger.warn).toHaveBeenCalledWith(
+      "Missing discoveryBibResult for id b17418167, or id does not match uri on returned result"
+    )
     expect(bibResponse.status).toBe(307)
     expect(bibResponse.redirectUrl).toBe(
       "https://borrow.nypl.org/search/card?recordId=17418167"

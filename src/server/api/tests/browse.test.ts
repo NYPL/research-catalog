@@ -11,6 +11,16 @@ const mockClient = {
   get: jest.fn(),
 }
 
+jest.mock("@nypl/node-utils", () => ({
+  logger: {
+    info: jest.fn(),
+    warn: jest.fn(),
+    error: jest.fn(),
+    debug: jest.fn(),
+  },
+}))
+import { logger } from "@nypl/node-utils"
+
 beforeEach(() => {
   jest.clearAllMocks()
   ;(nyplApiClient as jest.Mock).mockResolvedValue(mockClient)
@@ -92,6 +102,9 @@ describe("fetchBrowse errors", () => {
       status: 500,
       error: "Server error",
     })
+    expect(logger.error).toHaveBeenCalledWith(
+      "Error in fetchBrowse: subjects: Server error"
+    )
   })
 
   it("handles 404 response", async () => {

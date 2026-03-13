@@ -218,7 +218,7 @@ export async function fetchPatronEligibility(
       cache: false,
     })
 
-    // There should always be en eligibilty boolean attribute returned from Discovery API
+    // There should always be en eligibility boolean attribute returned from Discovery API
     if (eligibilityResult.eligibility === undefined) {
       throw new Error("Improperly formatted eligibility from Discovery API")
     }
