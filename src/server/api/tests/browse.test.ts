@@ -16,7 +16,6 @@ jest.mock("@nypl/node-utils", () => ({
     info: jest.fn(),
     warn: jest.fn(),
     error: jest.fn(),
-    debug: jest.fn(),
   },
 }))
 import { logger } from "@nypl/node-utils"
