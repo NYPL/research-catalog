@@ -74,7 +74,7 @@ export async function fetchBib(
       !discoveryBibResult.uri ||
       !id.includes(discoveryBibResult.uri)
     ) {
-      logger.warning(
+      logger.info(
         `Missing discoveryBibResult for id ${id}, or id does not match uri on returned result`
       )
       const sierraBibResponse = await client.get(
